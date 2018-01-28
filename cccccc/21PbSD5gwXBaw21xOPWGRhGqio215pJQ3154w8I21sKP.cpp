@@ -1,161 +1,194 @@
-inline bool ParseInternalKey(const Slice& internal_key,
-                             ParsedInternalKey* result) {
-  const size_t n = internal_key.size();
-  if (n < 8) return false;
-  uint64_t num = DecodeFixed64(internal_key.data() + n - 8);
-  unsigned char c = num & 0xff;
-  result->sequence = num >> 8;
-  result->type = static_cast<ValueType>(c);
-  result->user_key = Slice(internal_key.data(), n - 8);
-  return (c <= static_cast<unsigned char>(kTypeValue));
-}
+
+        
+        void StyledStreamWriter::indent() { indentString_ += indentation_; }
     
-    TEST(FormatTest, InternalKeyShortestSuccessor) {
-  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
-            ShortSuccessor(IKey('foo', 100, kTypeValue)));
-  ASSERT_EQ(IKey('\xff\xff', 100, kTypeValue),
-            ShortSuccessor(IKey('\xff\xff', 100, kTypeValue)));
-}
     
-    // Return the name of a temporary file owned by the db named 'dbname'.
-// The result will be prefixed with 'dbname'.
-extern std::string TempFileName(const std::string& dbname, uint64_t number);
-    
-      std::string const dbname_;
-  Env* const env_;
-  InternalKeyComparator const icmp_;
-  InternalFilterPolicy const ipolicy_;
-  Options const options_;
-  bool owns_info_log_;
-  bool owns_cache_;
-  TableCache* table_cache_;
-  VersionEdit edit_;
-    
-      // Evict any entry for the specified file number
-  void Evict(uint64_t file_number);
-    
-    void VersionEdit::Clear() {
-  comparator_.clear();
-  log_number_ = 0;
-  prev_log_number_ = 0;
-  last_sequence_ = 0;
-  next_file_number_ = 0;
-  has_comparator_ = false;
-  has_log_number_ = false;
-  has_prev_log_number_ = false;
-  has_next_file_number_ = false;
-  has_last_sequence_ = false;
-  deleted_files_.clear();
-  new_files_.clear();
-}
-    
-    struct FileMetaData {
-  int refs;
-  int allowed_seeks;          // Seeks allowed until compaction
-  uint64_t number;
-  uint64_t file_size;         // File size in bytes
-  InternalKey smallest;       // Smallest internal key served by table
-  InternalKey largest;        // Largest internal key served by table
-    }
-    
-      void Add(const char* smallest, const char* largest,
-           SequenceNumber smallest_seq = 100,
-           SequenceNumber largest_seq = 100) {
-    FileMetaData* f = new FileMetaData;
-    f->number = files_.size() + 1;
-    f->smallest = InternalKey(smallest, smallest_seq, kTypeValue);
-    f->largest = InternalKey(largest, largest_seq, kTypeValue);
-    files_.push_back(f);
-  }
-    
-    TEST(WriteBatchTest, Append) {
-  WriteBatch b1, b2;
-  WriteBatchInternal::SetSequence(&b1, 200);
-  WriteBatchInternal::SetSequence(&b2, 300);
-  WriteBatchInternal::Append(&b1, &b2);
-  ASSERT_EQ('',
-            PrintContents(&b1));
-  b2.Put('a', 'va');
-  WriteBatchInternal::Append(&b1, &b2);
-  ASSERT_EQ('Put(a, va)@200',
-            PrintContents(&b1));
-  b2.Clear();
-  b2.Put('b', 'vb');
-  WriteBatchInternal::Append(&b1, &b2);
-  ASSERT_EQ('Put(a, va)@200'
-            'Put(b, vb)@201',
-            PrintContents(&b1));
-  b2.Delete('foo');
-  WriteBatchInternal::Append(&b1, &b2);
-  ASSERT_EQ('Put(a, va)@200'
-            'Put(b, vb)@202'
-            'Put(b, vb)@201'
-            'Delete(foo)@203',
-            PrintContents(&b1));
-}
-    
-    namespace leveldb {
-    }
-    
-    static int kImplVersion = -1;  // -1 means 'Unspecified by compiler flags'.
-    
-      // This is the top-level C++ Message object that owns the whole
-  // proto tree.  Every Python RepeatedScalarContainer holds a
-  // reference to it in order to keep it alive as long as there's a
-  // Python object that references any part of the tree.
-  shared_ptr<Message> owner;
-    
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CPP_GENERATOR_H__
-#define GOOGLE_PROTOBUF_COMPILER_CPP_GENERATOR_H__
-    
-    class MapFieldGenerator : public FieldGeneratorBase {
- public:
-  MapFieldGenerator(const FieldDescriptor* descriptor,
-                    int fieldOrdinal,
-                    const Options* options);
-  ~MapFieldGenerator();
-    }
-    
-    #include <string>
-    
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
-}
-    
-      // Gets the outcome of the test part.
-  Type type() const { return type_; }
-    
-    // Suppresses MSVC warnings 4072 (unreachable code) for the code following
-// statement if it returns or throws (or doesn't return or throw in some
-// situations).
-#define GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement) \
-  if (::testing::internal::AlwaysTrue()) { statement; }
-    
-    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_LINKED_PTR_H_
+    {}  // namespace google
+#endif  // GOOGLE_PROTOBUF_PYTHON_CPP_REPEATED_SCALAR_CONTAINER_H__
 
     
-    // The maximum number a BiggestInt can represent.  This definition
-// works no matter BiggestInt is represented in one's complement or
-// two's complement.
-//
-// We cannot rely on numeric_limits in STL, as __int64 and long long
-// are not part of standard C++ and numeric_limits doesn't need to be
-// defined for them.
-const BiggestInt kMaxBiggestInt =
-    ~(static_cast<BiggestInt>(1) << (8*sizeof(BiggestInt) - 1));
     
-      // Try to divide n by every odd number i, starting from 3
-  for (int i = 3; ; i += 2) {
-    // We only have to try i up to the squre root of n
-    if (i > n/i) break;
+    
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_REFLECTION_CLASS_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_REFLECTION_CLASS_H__
+    
+    String TimeStamp::CurrentMicroTime() {
+  struct timeval tp;
+  gettimeofday(&tp, nullptr);
+  char ret[100];
+  snprintf(ret, 100, '%.8F %ld', (double)tp.tv_usec / 1000000, tp.tv_sec);
+  return String(ret, CopyString);
+}
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    
+    {///////////////////////////////////////////////////////////////////////////////
+}
+    
+      mpz_clear(gmpData);
+  mpz_clear(gmpReturn);
+    
+      void registerFactory(const std::string &name,
+                       const ServerFactoryPtr &factory);
+    
+    #endif
+#endif
+
+    
+    ALWAYS_INLINE
+void MixedArray::getArrayElm(ssize_t pos,
+                            TypedValue* valOut,
+                            TypedValue* keyOut) const {
+  assert(size_t(pos) < m_used);
+  auto& elm = data()[pos];
+  auto const cur = tvToCell(&elm.data);
+  cellDup(*cur, *valOut);
+  cellCopy(getElmKey(elm), *keyOut);
+}
+    
+      {2,0,32,  &_residue_44_mid,
+   &_huff_book__16c1_s_long,&_huff_book__16c1_s_long,
+   &_resbook_16s_1,&_resbook_16s_1}
+};
+static const vorbis_residue_template _res_16s_2[]={
+  {2,0,32,  &_residue_44_high,
+   &_huff_book__16c2_s_short,&_huff_book__16c2_s_short,
+   &_resbook_16s_2,&_resbook_16s_2},
+    
+      {2,0,32,  &_residue_44_high,
+   &_huff_book__44c6_s_long,&_huff_book__44c6_s_long,
+   &_resbook_44s_6,&_resbook_44s_6}
+};
+static const vorbis_residue_template _res_44s_7[]={
+  {2,0,16,  &_residue_44_high,
+   &_huff_book__44c7_s_short,&_huff_book__44c7_s_short,
+   &_resbook_44s_7,&_resbook_44s_7},
+    
+    	for (j=0; j<6; j++)
+		{
+		for (i=0; i<1000; i++) /**/
+			{
+			CAST_encrypt(&data[0],&key);
+			GetTSC(s1);
+			CAST_encrypt(&data[0],&key);
+			CAST_encrypt(&data[0],&key);
+			CAST_encrypt(&data[0],&key);
+			GetTSC(e1);
+			GetTSC(s2);
+			CAST_encrypt(&data[0],&key);
+			CAST_encrypt(&data[0],&key);
+			CAST_encrypt(&data[0],&key);
+			CAST_encrypt(&data[0],&key);
+			GetTSC(e2);
+			CAST_encrypt(&data[0],&key);
+			}
     }
     
-      void operator delete(void* block, size_t /* allocation_size */) {
-    allocated_--;
-    free(block);
+    	xlogger_Write(&xlog_info, log_jst.GetChar());
+    
+    
+    {    pclose(stream);
+}
+    
+    #include 'wakeuplock.h'
+#include 'assert/__assert.h'
+#include 'xlogger/xlogger.h'
+    
+    //
+//  boost_exception.cpp
+//  comm
+//
+//  Created by yanguoyue on 16/5/20.
+//
+    
+        void __DelOlderTouchTime(uint64_t _time);
+    
+        Spy* GetSpy(const char* _name) const
+    { return m_strmap.find(_name)->second; }
+    
+    //
+//  testspy.h
+//  PublicComponent
+//
+//  Created by yerungui on 14-5-13.
+//
+    
+    
+#define DEFINE_HAS_MEMBER_WITH_TYPE(member_name, member_type) \
+    template <typename T>\
+    class has_##member_name {\
+      private:\
+        struct yes_type { char x[1]; };\
+        struct no_type { char x[2]; };\
+        template <member_type (T::*)> struct tester;\
+        template <typename U> static yes_type test(tester<&U::member_name>*);\
+        template <typename U> static no_type test(...);\
+      public:\
+        static const bool value = (sizeof(test<T>(0)) == sizeof(yes_type));\
+    };
+    
+    class ScopeJEnv {
+  public:
+    ScopeJEnv(JavaVM* jvm, jint _capacity = 16);
+    ~ScopeJEnv();
+    }
+    
+        /*!
+    @brief constructor for a given JSON instance
+    @param[in] object  pointer to a JSON object for this iterator
+    @pre object != nullptr
+    @post The iterator is initialized; i.e. `m_object != nullptr`.
+    */
+    explicit iter_impl(pointer object) noexcept : m_object(object)
+    {
+        assert(m_object != nullptr);
+    }
+    
+        /// add to iterator
+    json_reverse_iterator operator+(difference_type i) const
+    {
+        return static_cast<json_reverse_iterator>(base_iterator::operator+(i));
+    }
+    
+      void DeleteInput(size_t Idx) {
+    InputInfo &II = *Inputs[Idx];
+    if (!OutputCorpus.empty() && II.MayDeleteFile)
+      RemoveFile(DirPlusFile(OutputCorpus, Sha1ToString(II.Sha1)));
+    Unit().swap(II.U);
+    if (FeatureDebug)
+      Printf('EVICTED %zd\n', Idx);
   }
+    
+    #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <cstring>
+#include <string>
+#include <vector>
+    
+    #include 'FuzzerExtFunctions.def'
+    
+    #include 'FuzzerExtFunctions.h'
+#include 'FuzzerIO.h'
+#include <dlfcn.h>
+    
+    #include 'FuzzerExtFunctions.h'
+#include 'FuzzerIO.h'
+#include <cstdarg>
+#include <cstdio>
+#include <dirent.h>
+#include <fstream>
+#include <iterator>
+#include <libgen.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+    
+    
+    {
+    {      ListFilesInDirRecursive(FileName, Epoch, V, false);
+    }
+    else if (IsFile(FileName, FindInfo.dwFileAttributes))
+      V->push_back(FileName);
+  } while (FindNextFileA(FindHandle, &FindInfo));
