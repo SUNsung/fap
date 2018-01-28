@@ -1,109 +1,108 @@
-  def describe_system_ruby
-    s = ''
-    case RUBY_VERSION
-    when /^1\.[89]/, /^2\.0/
-      s << '#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}'
-    else
-      s << RUBY_VERSION
+
+        
+          describe '.all' do
+    it 'uses the client to fetch all keys' do
+      mock_client_response(:list_keys, with: no_args) do
+        [
+          {
+            canDownload: false,
+            canRevoke: true,
+            keyId: 'some-key-id',
+            keyName: 'Test Key via fastlane',
+            servicesCount: 2
+          },
+          {
+            canDownload: true,
+            canRevoke: true,
+            keyId: 'B92NE4F7RG',
+            keyName: 'Test Key via browser',
+            servicesCount: 2
+          }
+        ]
+      end
+    
+          {
+          author: last_git_commit_formatted_with('%an'),
+          message: last_git_commit_formatted_with('%B'),
+          commit_hash: last_git_commit_formatted_with('%H'),
+          abbreviated_commit_hash: last_git_commit_formatted_with('%h')
+      }
     end
     
-    class PrettyListing
-  def initialize(path)
-    Pathname.new(path).children.sort_by { |p| p.to_s.downcase }.each do |pn|
-      case pn.basename.to_s
-      when 'bin', 'sbin'
-        pn.find { |pnn| puts pnn unless pnn.directory? }
-      when 'lib'
-        print_dir pn do |pnn|
-          # dylibs have multiple symlinks and we don't care about them
-          (pnn.extname == '.dylib' || pnn.extname == '.pc') && !pnn.symlink?
-        end
-      else
-        if pn.directory?
-          if pn.symlink?
-            puts '#{pn} -> #{pn.readlink}'
-          else
-            print_dir pn
-          end
-        elsif Metafiles.list?(pn.basename.to_s)
-          puts pn
-        end
+          def load_all_devices
+        self.devices = []
+    
+          # Read-only path to the shell-escaped gradle script, suitable for use in shell commands
+      attr_reader :escaped_gradle_path
+    
+      def collection_presenter
+    ActivityPub::CollectionPresenter.new(
+      id: tag_url(@tag),
+      type: :ordered,
+      size: @tag.statuses.count,
+      items: @statuses.map { |s| ActivityPub::TagManager.instance.uri_for(s) }
+    )
+  end
+    
+          format.json do
+        render json: collection_presenter,
+               serializer: ActivityPub::CollectionSerializer,
+               adapter: ActivityPub::Adapter,
+               content_type: 'application/activity+json'
       end
     end
   end
     
-        if registration
-      u2f.authenticate!(challenges, response, Base64.decode64(registration.public_key), registration.counter)
-      registration.update(counter: response.counter)
-      true
+          expect(response).to redirect_to(settings_preferences_path)
+      user.reload
+      expect(user.locale).to eq 'en'
+      expect(user.filtered_languages).to eq ['es', 'fr']
     end
-  rescue JSON::ParserError, NoMethodError, ArgumentError, U2F::Error
-    false
+    
+          it 'creates mention for target account' do
+        expect(account.mentions.count).to eq 1
+      end
+    end
+    
+    desc 'Initial setup for Octopress: copies the default theme into the path of Jekyll's generator. Rake install defaults to rake install[classic] to install a different theme run rake install[some_theme_name]'
+task :install, :theme do |t, args|
+  if File.directory?(source_dir) || File.directory?('sass')
+    abort('rake aborted!') if ask('A theme is already installed, proceeding will overwrite existing files. Are you sure?', ['y', 'n']) == 'n'
   end
+  # copy theme into working Jekyll directories
+  theme = args.theme || 'classic'
+  puts '## Copying '+theme+' theme into ./#{source_dir} and ./sass'
+  mkdir_p source_dir
+  cp_r '#{themes_dir}/#{theme}/source/.', source_dir
+  mkdir_p 'sass'
+  cp_r '#{themes_dir}/#{theme}/sass/.', 'sass'
+  mkdir_p '#{source_dir}/#{posts_dir}'
+  mkdir_p public_dir
 end
-
     
-        def add(path, content)
-      @pages[path] = content
-    end
+      get(/.+/) do
+    send_sinatra_file(request.path) {404}
+  end
     
-          respond_with do |format|
-        format.html { redirect_to admin_pods_path }
-        format.json { render json: PodPresenter.new(pod).as_json }
+        def handle_gist_redirecting(data)
+      redirected_url = data.header['Location']
+      if redirected_url.nil? || redirected_url.empty?
+        raise ArgumentError, 'GitHub replied with a 302 but didn't provide a location in the response headers.'
+      end
+    
+          Dir.chdir(code_path) do
+        code = file.read
+        @filetype = file.extname.sub('.','') if @filetype.nil?
+        title = @title ? '#{@title} (#{file.basename})' : file.basename
+        url = '/#{code_dir}/#{@file}'
+        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
+        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
+        TemplateWrapper::safe_wrap(source)
       end
     end
   end
-end
-
     
-        @selected_week = params[:week] || @created_users_by_week.keys.last
-    @counter = @created_users_by_week[@selected_week].count
-  end
-    
-        it 'returns false if osxfuse include directory is a symlink' do
-      allow(File).to receive(:exist?).and_return(true)
-      allow(File).to receive(:symlink?).and_return(true)
-      expect(described_class).not_to be_binary_osxfuse_installed
+      class PostFilters < Octopress::Hooks::Post
+    def pre_render(post)
+      OctopressFilters::pre_filter(post)
     end
-  end
-    
-    end
-    
-            # Prints the list of specs & pod cache dirs for a single pod name.
-        #
-        # This output is valid YAML so it can be parsed with 3rd party tools
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        The various infos about a pod cache. Keys are
-        #        :spec_file, :version, :release and :slug
-        #
-        def print_pod_cache_infos(pod_name, cache_descriptors)
-          UI.puts '#{pod_name}:'
-          cache_descriptors.each do |desc|
-            if @short_output
-              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
-            end
-            UI.puts('  - Version: #{desc[:version]}')
-            UI.puts('    Type:    #{pod_type(desc)}')
-            UI.puts('    Spec:    #{desc[:spec_file]}')
-            UI.puts('    Pod:     #{desc[:slug]}')
-          end
-        end
-      end
-    end
-  end
-end
-
-    
-            target_module << if app.resolved_build_setting('SWIFT_OPTIMIZATION_LEVEL').values.any?
-                           <<-RUBY
-  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
-  use_frameworks!
-    
-            self.summary = 'The repl listens to commands on standard input'
-        self.description = <<-DESC
-          The repl listens to commands on standard input and prints their
-          result to standard output.
-          It accepts all the other ipc subcommands. The repl will signal the
-          end of output with the the ASCII CR+LF `\\n\\r`.
-        DESC
