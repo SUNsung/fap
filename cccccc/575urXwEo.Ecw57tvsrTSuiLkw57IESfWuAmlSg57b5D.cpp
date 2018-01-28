@@ -1,58 +1,90 @@
-namespace {
-// TODO(suharshs): Move this to a common location to allow other part of the
-// repo to use it.
-template <typename T, typename... Args>
-std::unique_ptr<T> MakeUnique(Args&&... args) {
-  return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+
+        
+        
+    {
+    {}  // namespace internal
+}  // namespace testing
+    
+    #if GTEST_HAS_PARAM_TEST
+    
+    TEST_P(FooTest, DoesBlah) {
+  // Inside a test, access the test parameter with the GetParam() method
+  // of the TestWithParam<T> class:
+  EXPECT_TRUE(foo.Blah(GetParam()));
+  ...
 }
-}  // namespace
     
-    TEST_P(StatusPropagationTest, ExecutorDoneFirst) {
-  // Tests error propagation when ExecutorDone is called first.
-  StatusTestParam param = GetParam();
-  int step_id = 1;
+      // Returns true if pathname describes a root directory. (Windows has one
+  // root directory per disk drive.)
+  bool IsRootDirectory() const;
+    
+    // Used in the Values() function to provide polymorphic capabilities.
+template <typename T1>
+class ValueArray1 {
+ public:
+  explicit ValueArray1(T1 v1) : v1_(v1) {}
     }
     
-    #include 'third_party/eigen3/unsupported/Eigen/CXX11/Tensor'
-#include 'tensorflow/core/framework/tensor_types.h'
-#include 'tensorflow/core/framework/types.h'
-#include 'tensorflow/core/kernels/scatter_functor.h'
-    
-    bool SubProcess::Start() {
-  mutex_lock procLock(proc_mu_);
-  mutex_lock dataLock(data_mu_);
-  if (running_) {
-    LOG(ERROR) << 'Start called after the process was started.';
-    return false;
-  }
-  if ((exec_path_ == nullptr) || (exec_argv_ == nullptr)) {
-    LOG(ERROR) << 'Start called without setting a program.';
-    return false;
-  }
+    ]]
+      ComputeCurrentValue();
     }
-    
-    TEST_F(NodeDefBuilderTest, TypeListTwice) {
-  Op(OpDefBuilder('TypeListTwice')
-         .Input('a: T')
-         .Input('b: T')
-         .Attr('T: list(type) >= 0'));
+    virtual ParamIteratorInterface<ParamType>* Clone() const {
+      return new Iterator(*this);
     }
+    virtual const ParamType* Current() const { return &current_value_; }
+    virtual bool Equals(const ParamIteratorInterface<ParamType>& other) const {
+      // Having the same base generator guarantees that the other
+      // iterator is of the same type and we can downcast.
+      GTEST_CHECK_(BaseGenerator() == other.BaseGenerator())
+          << 'The program attempted to compare iterators '
+          << 'from different generators.' << std::endl;
+      const Iterator* typed_other =
+          CheckedDowncastToActualType<const Iterator>(&other);
+      // We must report iterators equal if they both point beyond their
+      // respective ranges. That can happen in a variety of fashions,
+      // so we have to consult AtEnd().
+      return (AtEnd() && typed_other->AtEnd()) ||
+         ($for j  && [[
     
-    #include 'tensorflow/core/lib/core/status.h'
-#include 'tensorflow/core/lib/core/stringpiece.h'
-#if !defined(IS_SLIM_BUILD)
-#include 'tensorflow/core/lib/io/zlib_compression_options.h'
-#include 'tensorflow/core/lib/io/zlib_outputbuffer.h'
-#endif  // IS_SLIM_BUILD
-#include 'tensorflow/core/platform/macros.h'
-#include 'tensorflow/core/platform/types.h'
+      DBWrapper* db_wrapper = ObjectWrap::Unwrap<DBWrapper>(args.This());
+  rocksdb::Slice begin  = *v8::String::Utf8Value(args[0]->ToString());
+  rocksdb::Slice end    = *v8::String::Utf8Value(args[1]->ToString());
+  std::string cf        = *v8::String::Utf8Value(args[2]->ToString());
+  db_wrapper->status_    = db_wrapper->db_->CompactRange(
+      db_wrapper->columnFamilies_[cf], &begin, &end);
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    #else  // !ROCKSDB_LITE
+    
+    /*
+ * Class:     org_rocksdb_DirectComparator
+ * Method:    createNewDirectComparator0
+ * Signature: ()J
+ */
+jlong Java_org_rocksdb_DirectComparator_createNewDirectComparator0(
+    JNIEnv* env, jobject jobj, jlong copt_handle) {
+  auto* copt =
+      reinterpret_cast<rocksdb::ComparatorJniCallbackOptions*>(copt_handle);
+  auto* c =
+      new rocksdb::DirectComparatorJniCallback(env, jobj, copt);
+  return reinterpret_cast<jlong>(c);
+}
+// </editor-fold>
+
+    
+    /*
+ * Class:     org_rocksdb_ColumnFamilyOptions
+ * Method:    setTargetFileSizeBase
+ * Signature: (JJ)V
+ */
+void Java_org_rocksdb_ColumnFamilyOptions_setTargetFileSizeBase(
+    JNIEnv* env, jobject jobj, jlong jhandle,
+    jlong jtarget_file_size_base) {
+  reinterpret_cast<rocksdb::ColumnFamilyOptions*>(jhandle)->
+      target_file_size_base = static_cast<uint64_t>(jtarget_file_size_base);
+}
     
     
-    {}  // namespace tensorflow
+    {  rocksdb::SstFileWriter *sst_file_writer =
+      new rocksdb::SstFileWriter(*env_options, *options, comparator);
+  return reinterpret_cast<jlong>(sst_file_writer);
+}
