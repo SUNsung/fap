@@ -1,168 +1,200 @@
-    # Returns the current git branch - can be replaced using the environment variable `GIT_BRANCH`
-    def self.git_branch
-      return ENV['GIT_BRANCH'] if ENV['GIT_BRANCH'].to_s.length > 0 # set by Jenkins
-      s = Actions.sh('git rev-parse --abbrev-ref HEAD', log: false).chomp
-      return s.to_s.strip if s.to_s.length > 0
-      nil
-    rescue
-      nil
-    end
-    
-        def render(options, screenshots)
-      Dir.mktmpdir do |dir|
-        path = generator.render(options, screenshots, dir)
-        return File.read(path)
-      end
-    end
-  end
-    
-          def initialize(serial: nil)
-        self.serial = serial
-      end
-    end
-    
-            expect(result).to eq('/usr/local/bin/cloc  --by-file  --out=build/cloc.txt')
-      end
-    end
-  end
-end
 
+        
+          def self.authenticate(user, app_id, json_response, challenges)
+    response = U2F::SignResponse.load_from_json(json_response)
+    registration = user.u2f_registrations.find_by_key_handle(response.key_handle)
+    u2f = U2F::U2F.new(app_id)
     
-    xml = File.open OUTPUT_FILENAME do |f|
-  Nokogiri::XML(f)
-end if File.exist? OUTPUT_FILENAME
-    
-          def create
-        req = Rack::Request.new(request.env)
-        if req['client_assertion_type'] == 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
-          handle_jwt_bearer(req)
-        end
-        self.status, headers, self.response_body = Api::OpenidConnect::TokenEndpoint.new.call(request.env)
-        headers.each {|name, value| response.headers[name] = value }
-        nil
-      end
-    
-          # A string representation of the importer.
-      # Should be overridden by subclasses.
-      #
-      # This is used to help debugging,
-      # and should usually just show the load path encapsulated by this importer.
-      #
-      # @return [String]
-      def to_s
-        Sass::Util.abstract(self)
-      end
-    
-      # Creates a delayed logger wrapping `inner`.
+      # Open3.pipeline_w starts a list of commands as a pipeline with a pipe
+  # which connects to stdin of the first command.
   #
-  # @param inner [Sass::Logger::Base] The wrapped logger.
-  def initialize(inner)
-    self.log_level = inner.log_level
-    @inner = inner
-    @messages = []
+  #   Open3.pipeline_w(cmd1, cmd2, ... [, opts]) {|first_stdin, wait_threads|
+  #     ...
+  #   }
+  #
+  #   first_stdin, wait_threads = Open3.pipeline_w(cmd1, cmd2, ... [, opts])
+  #   ...
+  #   first_stdin.close
+  #
+  # Each cmd is a string or an array.
+  # If it is an array, the elements are passed to Process.spawn.
+  #
+  #   cmd:
+  #     commandline                              command line string which is passed to a shell
+  #     [env, commandline, opts]                 command line string which is passed to a shell
+  #     [env, cmdname, arg1, ..., opts]          command name and one or more arguments (no shell)
+  #     [env, [cmdname, argv0], arg1, ..., opts] command name and arguments including argv[0] (no shell)
+  #
+  #   Note that env and opts are optional, as for Process.spawn.
+  #
+  # Example:
+  #
+  #   Open3.pipeline_w('bzip2 -c', :out=>'/tmp/hello.bz2') {|i, ts|
+  #     i.puts 'hello'
+  #   }
+  #
+  def pipeline_w(*cmds, **opts, &block)
+    in_r, in_w = IO.pipe
+    opts[:in] = in_r
+    in_w.sync = true
+    
+      def test_popen2
+    with_pipe {|r, w|
+      with_reopen(STDERR, w) {|old|
+        w.close
+        Open3.popen2(RUBY, '-e', 's=STDIN.read; STDOUT.print s+'o'; STDERR.print s+'e'') {|i,o,t|
+          assert_kind_of(Thread, t)
+          i.print 'z'
+          i.close
+          STDERR.reopen(old)
+          assert_equal('zo', o.read)
+          assert_equal('ze', r.read)
+        }
+      }
+    }
   end
     
-      describe 'environment' do
-    it 'adds the fuse directories to the appropriate paths' do
-      expect(ENV).to receive(:append_path).with('PKG_CONFIG_PATH', any_args)
-      expect(ENV).to receive(:append_path).with('HOMEBREW_LIBRARY_PATHS', any_args)
-      expect(ENV).to receive(:append_path).with('HOMEBREW_INCLUDE_PATHS', any_args)
-      subject.modify_build_environment
-    end
-  end
-end
-    
-          parent = metadata_timestamped_path(version: version, timestamp: timestamp, create: create)
-    
-        # Get rid of any info 'dir' files, so they don't conflict at the link stage
-    info_dir_file = @f.info + 'dir'
-    if info_dir_file.file? && !@f.skip_clean?(info_dir_file)
-      observe_file_removal info_dir_file
-    end
-    
-    (allow file-write*
-  (literal
-    '/dev/dtracehelper'
-    '/dev/null'
-  )
-  (regex
-    #'^<%= Pod::Config.instance.project_root %>'
-    #'^<%= Pod::Config.instance.repos_dir %>'
-    #'^/Users/[^.]+/Library/Caches/CocoaPods/*'
-    #'^/dev/tty'
-    #'^/private/var'
-  )
-)
-    
-            # Removes the specified cache
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        An array of caches to remove, each specified with the same
-        #        hash as cache_descriptors_per_pod especially :spec_file and :slug
-        #
-        def remove_caches(cache_descriptors)
-          cache_descriptors.each do |desc|
-            UI.message('Removing spec #{desc[:spec_file]} (v#{desc[:version]})') do
-              FileUtils.rm(desc[:spec_file])
-            end
-            UI.message('Removing cache #{desc[:slug]}') do
-              FileUtils.rm_rf(desc[:slug])
-            end
-          end
-        end
-    
-            def execute_repl_command(repl_command)
-          unless repl_command == '\n'
-            repl_commands = repl_command.split
-            subcommand = repl_commands.shift.capitalize
-            arguments = repl_commands
-            subcommand_class = Pod::Command::IPC.const_get(subcommand)
-            subcommand_class.new(CLAide::ARGV.new(arguments)).run
-            signal_end_of_output
-          end
-        end
-      end
-    end
-  end
-end
+    Test::Unit::Runner.autorun
 
     
-          def self.options
-        [
-          ['--update', 'Run `pod repo update` before listing'],
-          ['--stats',  'Show additional stats (like GitHub watchers and forks)'],
-        ].concat(super)
-      end
+    assert_equal 'ok', %q{
+  require 'tmpdir'
+  begin
+    tmpname = '#{Dir.tmpdir}/ruby-btest-#{$$}-#{rand(0x100000000).to_s(36)}'
+    rw = File.open(tmpname, File::RDWR|File::CREAT|File::EXCL)
+  rescue Errno::EEXIST
+    retry
+  end
+  save = STDIN.dup
+  STDIN.reopen(rw)
+  STDIN.print 'a'
+  STDIN.reopen(save)
+  rw.close
+  File.unlink(tmpname)
+  :ok
+}
     
-    ERR
-      end
-    end
-    
-      class IncludeArrayTag < Liquid::Tag
-    Syntax = /(#{Liquid::QuotedFragment}+)/
-    def initialize(tag_name, markup, tokens)
-      if markup =~ Syntax
-        @array_name = $1
-      else
-        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
-      end
-    
-          Dir.chdir(code_path) do
-        code = file.read
-        @filetype = file.extname.sub('.','') if @filetype.nil?
-        title = @title ? '#{@title} (#{file.basename})' : file.basename
-        url = '/#{code_dir}/#{@file}'
-        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
-        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
-        TemplateWrapper::safe_wrap(source)
-      end
+      def allow_addr?(addr)
+    case @order
+    when DENY_ALLOW
+      return true if @allow.match(addr)
+      return false if @deny.match(addr)
+      return true
+    when ALLOW_DENY
+      return false if @deny.match(addr)
+      return true if @allow.match(addr)
+      return false
+    else
+      false
     end
   end
     
-        def sizes
-      attrs = 'width='#{@sizes[0]}'' if @sizes[0]
-      attrs += ' height='#{@sizes[1]}'' if @sizes[1]
-      attrs
+      unless defined?(File::NULL)
+    if File.exist?('/dev/null')
+      File::NULL = '/dev/null'
+    end
+  end
+    
+    module Capistrano
+  module Doctor
+    # Prints table of all Capistrano-related gems and their version numbers. If
+    # there is a newer version of a gem available, call attention to it.
+    class GemsDoctor
+      include Capistrano::Doctor::OutputHelpers
+    
+          def collect_rows(records)
+        records.map do |rec|
+          Row.new.tap { |row| yield(rec, row) }
+        end
+      end
+    
+            on roles(target_roles) do
+          unless test '[ -f #{file.to_s.shellescape} ]'
+            info 'Uploading #{prerequisite_file} to #{file}'
+            upload! File.open(prerequisite_file), file
+          end
+        end
+      end
+    end
+    
+    # IMPORTANT: The Capistrano::Plugin system is not yet considered a stable,
+# public API, and is subject to change without notice. Eventually it will be
+# officially documented and supported, but for now, use it at your own risk.
+#
+# Base class for Capistrano plugins. Makes building a Capistrano plugin as easy
+# as writing a `Capistrano::Plugin` subclass and overriding any or all of its
+# three template methods:
+#
+# * set_defaults
+# * register_hooks
+# * define_tasks
+#
+# Within the plugin you can use any methods of the Rake or Capistrano DSLs, like
+# `fetch`, `invoke`, etc. In cases when you need to use SSHKit's backend outside
+# of an `on` block, use the `backend` convenience method. E.g. `backend.test`,
+# `backend.execute`, or `backend.capture`.
+#
+# Package up and distribute your plugin class as a gem and you're good to go!
+#
+# To use a plugin, all a user has to do is install it in the Capfile, like this:
+#
+#   # Capfile
+#   require 'capistrano/superfancy'
+#   install_plugin Capistrano::Superfancy
+#
+# Or, to install the plugin without its hooks:
+#
+#   # Capfile
+#   require 'capistrano/superfancy'
+#   install_plugin Capistrano::Superfancy, load_hooks: false
+#
+class Capistrano::Plugin < Rake::TaskLib
+  include Capistrano::DSL
+    
+        # @abstract
+    #
+    # Create a (new) clone of the remote-repository on the deployment target
+    #
+    # @return void
+    #
+    def clone
+      raise NotImplementedError, 'Your SCM strategy module should provide a #clone method'
+    end
+    
+      deploy_rb = File.expand_path('../../templates/deploy.rb.erb', __FILE__)
+  stage_rb = File.expand_path('../../templates/stage.rb.erb', __FILE__)
+  capfile = File.expand_path('../../templates/Capfile', __FILE__)
+    
+      it 'overrides the rake method, but still prints the rake version' do
+    out, _err = capture_io do
+      flags '--version', '-V'
+    end
+    expect(out).to match(/\bCapistrano Version\b/)
+    expect(out).to match(/\b#{Capistrano::VERSION}\b/)
+    expect(out).to match(/\bRake Version\b/)
+    expect(out).to match(/\b#{Rake::VERSION}\b/)
+  end
+    
+      context 'called with null values' do
+    it 'writes rules for other three' do
+      ruleset = 'border-top-color: #0f0; ' +
+                'border-right-color: #ff0; ' +
+                'border-left-color: #00f;'
+      bad_rule = 'border-bottom-color: null;'
+    
+      context 'called with two styles' do
+    it 'applies to alternating sides' do
+      rule = 'border-style: dotted dashed'
+    
+      context 'called with one size' do
+    it 'applies same width to all sides' do
+      ruleset = 'position: fixed; ' +
+                'top: 1em; ' +
+                'right: 1em; ' +
+                'bottom: 1em; ' +
+                'left: 1em;'
+    
+          expect('.all-text-inputs-invalid').to have_ruleset(ruleset)
     end
   end
 end
