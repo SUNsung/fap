@@ -1,118 +1,65 @@
-def rev_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
-    ref = 'http://hg.scrapy.org/scrapy/changeset/' + text
-    set_classes(options)
-    node = nodes.reference(rawtext, 'r' + text, refuri=ref, **options)
-    return [node], []
 
+        
+            old_layer = keras.layers.Deconvolution2D(5, 3, 3,
+                                             output_shape=(6, 7, 5),
+                                             init='normal',
+                                             subsample=(2, 2),
+                                             border_mode='valid',
+                                             dim_ordering='th',
+                                             W_regularizer='l1',
+                                             b_regularizer='l2',
+                                             W_constraint='maxnorm',
+                                             b_constraint='unitnorm',
+                                             name='conv')
+    new_layer = keras.layers.Conv2DTranspose(
+        5, (3, 3),
+        kernel_initializer='normal',
+        strides=(2, 2),
+        padding='valid',
+        kernel_regularizer='l1',
+        bias_regularizer='l2',
+        kernel_constraint='max_norm',
+        bias_constraint='unit_norm',
+        data_format='channels_first',
+        name='conv')
+    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
     
     
-# contracts
-class UrlContract(Contract):
-    ''' Contract to set the url of the request (mandatory)
-        @url http://scrapy.org
-    '''
+@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
+def test_he_normal(tensor_shape):
+    fan_in, _ = initializers._compute_fans(tensor_shape)
+    scale = np.sqrt(2. / fan_in)
+    _runner(initializers.he_normal(), tensor_shape,
+            target_mean=0., target_std=None, target_max=2 * scale)
     
-        If you have already calculated the mean of the data, you can pass it as
-    the optional second argument to avoid recalculating it:
+            # Test equivalence of convert_dense_weights_data_format
+        out1 = model1.predict(x)
+        layer_utils.convert_dense_weights_data_format(model1.layers[2], prev_shape, target_data_format)
+        for (src, dst) in zip(model1.layers, model2.layers):
+            dst.set_weights(src.get_weights())
+        out2 = model2.predict(transpose(x))
     
-        def seek(self, pos, whence=0):
-        '''Seek to specified position into the chunk.
-        Default position is 0 (start of chunk).
-        If the file is not seekable, this will result in an error.
-        '''
     
-    def _decode_uXXXX(s, pos):
-    esc = s[pos + 1:pos + 5]
-    if len(esc) == 4 and esc[1] not in 'xX':
-        try:
-            return int(esc, 16)
-        except ValueError:
-            pass
-    msg = 'Invalid \\uXXXX escape'
-    raise JSONDecodeError(msg, s, pos)
+def test_cifar():
+    # only run data download tests 20% of the time
+    # to speed up frequent testing
+    random.seed(time.time())
+    if random.random() > 0.8:
+        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+        assert len(x_train) == len(y_train) == 50000
+        assert len(x_test) == len(y_test) == 10000
+        (x_train, y_train), (x_test, y_test) = cifar100.load_data('fine')
+        assert len(x_train) == len(y_train) == 50000
+        assert len(x_test) == len(y_test) == 10000
+        (x_train, y_train), (x_test, y_test) = cifar100.load_data('coarse')
+        assert len(x_train) == len(y_train) == 50000
+        assert len(x_test) == len(y_test) == 10000
     
-            Returns a (response, lines) tuple where `response` is a unicode
-        string and `lines` is a list of bytes objects.
-        If `file` is a file-like object, it must be open in binary mode.
-        '''
-    
-    def get_colordb(file, filetype=None):
-    colordb = None
-    fp = open(file)
-    try:
-        line = fp.readline()
-        if not line:
-            return None
-        # try to determine the type of RGB file it is
-        if filetype is None:
-            filetypes = FILETYPES
+            if data_format == 'channels_first':
+            inputs = np.random.rand(num_samples, sequence_len,
+                                    input_channel,
+                                    input_num_row, input_num_col)
         else:
-            filetypes = [filetype]
-        for typere, class_ in filetypes:
-            mo = typere.search(line)
-            if mo:
-                break
-        else:
-            # no matching type
-            return None
-        # we know the type and the class to grok the type, so suck it in
-        colordb = class_(fp)
-    finally:
-        fp.close()
-    # save a global copy
-    global DEFAULT_DB
-    DEFAULT_DB = colordb
-    return colordb
-    
-    class PyNoneStructPtr(PyObjectPtr):
-    '''
-    Class wrapping a gdb.Value that's a PyObject* pointing to the
-    singleton (we hope) _Py_NoneStruct with ob_type PyNone_Type
-    '''
-    _typename = 'PyObject'
-    
-        def test_help_flag(self):
-        rc, out, err = assert_python_ok('-m', 'json.tool', '-h')
-        self.assertEqual(rc, 0)
-        self.assertTrue(out.startswith(b'usage: '))
-        self.assertEqual(err, b'')
-    
-            a = -sys.maxsize
-        b = sys.maxsize
-        expected_len = b - a
-        x = range(a, b)
-        self.assertIn(a, x)
-        self.assertNotIn(b, x)
-        self.assertRaises(OverflowError, len, x)
-        self.assertTrue(x)
-        self.assertEqual(_range_len(x), expected_len)
-        self.assertEqual(x[0], a)
-        idx = sys.maxsize+1
-        self.assertEqual(x[idx], a+idx)
-        self.assertEqual(x[idx:idx+1][0], a+idx)
-        with self.assertRaises(IndexError):
-            x[-expected_len-1]
-        with self.assertRaises(IndexError):
-            x[expected_len]
-    
-        def test_data_value_shall_be_changeable(cls):
-        cls.sub.data = 20
-        cls.assertEqual(cls.sub._data, 20)
-    
-    
-class BaseRegisteredClass(object):
-    __metaclass__ = RegistryHolder
-    '''
-        Any class that will inherits from BaseRegisteredClass will be included
-        inside the dict RegistryHolder.REGISTRY, the key being the name of the
-        class and the associated value, the class itself.
-    '''
-    pass
-    
-        def test_house_size(self):
-        self.assertEqual(self.building.size, 'Small')
-    
-    class ConstructorInjectionTest(unittest.TestCase):
-    
-    
-class ConcreteHandler3(Handler):
+            inputs = np.random.rand(num_samples, sequence_len,
+                                    input_num_row, input_num_col,
+                                    input_channel)
