@@ -1,37 +1,53 @@
-        expect_any_instance_of(ActivityPub::LinkedDataSignature).to receive(:verify_account!).and_return(nil)
-        expect(ActivityPub::Activity).not_to receive(:factory)
+
+        
+                def apply_scope(scope, table, key, value)
+          if scope.table == table
+            scope.where!(key => value)
+          else
+            scope.where!(table.name => { key => value })
+          end
+        end
     
-      describe 'GET #show' do
-    let!(:tag)     { Fabricate(:tag, name: 'test') }
-    let!(:local)   { Fabricate(:status, tags: [tag], text: 'local #test') }
-    let!(:remote)  { Fabricate(:status, tags: [tag], text: 'remote #test', account: Fabricate(:account, domain: 'remote')) }
-    let!(:late)    { Fabricate(:status, tags: [tag], text: 'late #test') }
+            @disable_request_forgery_protection = false
+        @allow_same_origin_as_host = true
+      end
     
-      def page_url(page)
-    account_following_index_url(@account, page: page) unless page.nil?
-  end
+    require 'abstract_unit'
     
-      def summary
-    object.spoiler_text.presence
-  end
+              subscriptions.unsubscribe_from_all
+          unsubscribe_from_internal_channel
     
-        def default_tasks
-      %w{install}
+              send(name, *args, &block)
+        end
     end
     
-        # @abstract
-    #
-    # Your implementation should check the existence of a cache repository on
-    # the deployment target
-    #
-    # @return [Boolean]
-    #
-    def test
-      raise NotImplementedError, 'Your SCM strategy module should provide a #test method'
+      s.license = 'MIT'
+    
+        def schemes=(schemes)
+      @schemes = schemes ? schemes.compact : nil
     end
     
-      %w(quiet silent verbose).each do |switch|
-    it 'doesn't include --#{switch} in help' do
-      expect(help_output).not_to match(/--#{switch}/)
+          it 'raises an exception when xcode project path wasn't found' do
+        expect do
+          Fastlane::FastFile.new.parse('lane :test do
+            increment_version_number(xcodeproj: '/nothere')
+          end').runner.execute(:test)
+        end.to raise_error('Could not find Xcode project')
+      end
+    
+          { :title => 'Event', :entries => present_hash(payload) }
+    else
+      { :title => payload.to_s, :entries => [] }
     end
   end
+    
+        validate :validate_evernote_options
+    
+        respond_to do |format|
+      format.html { redirect_to jobs_path, notice: 'All jobs removed.' }
+      format.json { head :no_content }
+    end
+  end
+    
+    Note that you will likely need to have opened the app at least
+once for any login items to be present.
