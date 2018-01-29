@@ -1,97 +1,90 @@
 
         
-        
-class HTTPieHelpFormatter(RawDescriptionHelpFormatter):
-    '''A nicer help formatter.
+            exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
     
-        '''
+        # By default the `-a` argument is parsed for `username:password`.
+    # Set this to `False` to disable the parsing and error handling.
+    auth_parse = True
     
+        return lexer
     
-def _lookup_app_object(name):
-    top = _app_ctx_stack.top
-    if top is None:
-        raise RuntimeError(_app_ctx_err_msg)
-    return getattr(top, name)
+        >>> humanize_bytes(1)
+    '1 B'
+    >>> humanize_bytes(1024, precision=1)
+    '1.0 kB'
+    >>> humanize_bytes(1024 * 123, precision=1)
+    '123.0 kB'
+    >>> humanize_bytes(1024 * 12342, precision=1)
+    '12.1 MB'
+    >>> humanize_bytes(1024 * 12342, precision=2)
+    '12.05 MB'
+    >>> humanize_bytes(1024 * 1234, precision=2)
+    '1.21 MB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
+    '1.31 GB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
+    '1.3 GB'
     
-        class Index2(flask.views.View):
-        methods = ['OPTIONS']
-        provide_automatic_options = True
+      # You shouldn't have spaces before your brackets, except maybe after
+  # 'delete []' or 'return []() {};'
+  if Search(r'\w\s+\[', line) and not Search(r'(?:delete|return)\s+\[', line):
+    error(filename, linenum, 'whitespace/braces', 5,
+          'Extra space before [')
     
-    '''
+            def is_finalizing():
+            # Not referencing any globals here
+            return L != []
     
-    Base = declarative_base()
+                def data_received(self, data):
+                body.append(data)
     
-    '''
-    
-        try:
-        fk_columns = generic_find_constraint_name(
-            table='columns', columns={'datasource_name'},
-            referenced='datasources', db=db)
-        with op.batch_alter_table('columns') as batch_op:
-            batch_op.drop_constraint(fk_columns, type_='foreignkey')
-    except Exception as e:
-        logging.warning(str(e))
-    
-    from alembic import op
-import sqlalchemy as sa
-    
-    from alembic import op
-import sqlalchemy as sa
-    
-    def downgrade():
-    op.drop_column('slices', 'description')
+                sockets = bind_sockets(0, address='127.0.0.1')
+            fork_processes(3)
+            server = TCPServer()
+            server.add_sockets(sockets)
+            IOLoop.current().run_sync(lambda: None)
+            print(task_id(), end='')
+        ''')
+        out = self.run_subproc(code)
+        self.assertEqual(''.join(sorted(out)), '012')
 
     
-            d = deque('abc', maxlen=5)
-        self.assertEqual(d * -5, deque())
-        self.assertEqual(d * 0, deque())
-        self.assertEqual(d * 1, deque('abc'))
-        self.assertEqual(d * 2, deque('bcabc'))
-        self.assertEqual(d * 30, deque('bcabc'))
+        @gen.coroutine
+    def post(self):
+        if self.any_author_exists():
+            raise tornado.web.HTTPError(400, 'author already created')
+        hashed_password = yield executor.submit(
+            bcrypt.hashpw, tornado.escape.utf8(self.get_argument('password')),
+            bcrypt.gensalt())
+        author_id = self.db.execute(
+            'INSERT INTO authors (email, name, hashed_password) '
+            'VALUES (%s, %s, %s)',
+            self.get_argument('email'), self.get_argument('name'),
+            hashed_password)
+        self.set_secure_cookie('blogdemo_user', str(author_id))
+        self.redirect(self.get_argument('next', '/'))
     
-            'replace':  a[i1:i2] should be replaced by b[j1:j2]
-        'delete':   a[i1:i2] should be deleted.
-                    Note that j1==j2 in this case.
-        'insert':   b[j1:j2] should be inserted at a[i1:i1].
-                    Note that i1==i2 in this case.
-        'equal':    a[i1:i2] == b[j1:j2]
+    latex_documents = [
+    ('index', 'tornado.tex', 'Tornado Documentation', 'The Tornado Authors', 'manual', False),
+]
     
-            '''
-        self.object_hook = object_hook
-        self.parse_float = parse_float or float
-        self.parse_int = parse_int or int
-        self.parse_constant = parse_constant or _CONSTANTS.__getitem__
-        self.strict = strict
-        self.object_pairs_hook = object_pairs_hook
-        self.parse_object = JSONObject
-        self.parse_array = JSONArray
-        self.parse_string = scanstring
-        self.memo = {}
-        self.scan_once = scanner.make_scanner(self)
+            res = AdminPage(content = AdminAwardGive(award, recipient, desc,
+                                                 url, hours),
+                        title='give an award').render()
+        return res
     
-            if nextchar == ''':
-            return parse_string(string, idx + 1, strict)
-        elif nextchar == '{':
-            return parse_object((string, idx + 1), strict,
-                _scan_once, object_hook, object_pairs_hook, memo)
-        elif nextchar == '[':
-            return parse_array((string, idx + 1), _scan_once)
-        elif nextchar == 'n' and string[idx:idx + 4] == 'null':
-            return None, idx + 4
-        elif nextchar == 't' and string[idx:idx + 4] == 'true':
-            return True, idx + 4
-        elif nextchar == 'f' and string[idx:idx + 5] == 'false':
-            return False, idx + 5
-    }
-    
-    >>> from nntplib import NNTP
->>> s = NNTP('news')
->>> resp, count, first, last, name = s.group('comp.lang.python')
->>> print('Group', name, 'has', count, 'articles, range', first, 'to', last)
-Group comp.lang.python has 51 articles, range 5770 to 5821
->>> resp, subs = s.xhdr('subject', '{0}-{1}'.format(first, last))
->>> resp = s.quit()
->>>
-    
-        def test_oldargs0_2_kw(self):
-        self.assertRaises(TypeError, {}.keys, x=2, y=2)
+        try:
+        return fp, proxyurl(u)
+    except HTTPError, e:
+        if e.code != 404:
+            print 'error %s' % e.code
+            print e.fp.read()
+        return (None, None)
