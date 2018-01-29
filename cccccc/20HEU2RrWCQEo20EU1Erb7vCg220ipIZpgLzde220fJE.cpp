@@ -1,175 +1,135 @@
-#include <fstream>
-    
-     public:
-  /**
-   * @brief The std::thread entrypoint.
-   *
-   * This is used by the Dispatcher only.
-   */
-  virtual void run() final;
-    
-    /**
- * @brief These tables populate the 'host_details' content.
- *
- * Enrollment plugins should send 'default' host details to enroll request
- * endpoints. This allows the enrollment service to identify the new node.
- */
-extern const std::set<std::string> kEnrollHostDetails;
-    
-      /// Disable event expiration for this subscriber.
-  void doNotExpire() {
-    expire_events_ = false;
-  }
-    
-      /**
-   * @brief A feature method to decide if events should be forwarded.
-   *
-   * See the optional logEvent method.
-   *
-   * @return false if this logger plugin should NOT handle events directly.
-   */
-  virtual bool usesLogEvent() {
-    return false;
-  }
-    
-      /// Get the registry external status.
-  bool external() {
-    return external_;
-  }
-    
-    #ifndef OSQUERY_BUILD_SDK
-#define OSQUERY_BUILD_SDK
-#endif
-    
-    /**
- * @brief Iterate the discovered decorators for a given point type.
- *
- * The configuration maintains various sources, each may contain a set of
- * decorators. The source tracking is abstracted for the decorator iterator.
- *
- * @param point request execution of decorators for this given point.
- * @param time an optional time for points using intervals.
- * @param source restrict run to a specific config source.
- */
-void runDecorators(DecorationPoint point,
-                   size_t time = 0,
-                   const std::string& source = '');
-    
-    
-    {  c.reset();
-}
-    
-        // We should have a property tree of pack content mimicking embedded
-    // configuration packs, ready to parse as a string.
-    std::ostringstream output;
-    pt::write_json(output, multi_pack, false);
-    pack = output.str();
-    if (pack.empty()) {
-      return Status(1, 'Multi-pack content empty');
-    }
-    
-    #ifndef WAKEUPLOCK_H_
-#define WAKEUPLOCK_H_
-    
-    #include <exception>
-#include 'comm/xlogger/xlogger.h'
-    
-        bool Check();  // true pass, false limit
-    
-    
-    {
-    {        if (JNI_OK == status_) {
-            we_attach_ = true;
-            pthread_setspecific(g_env_key, env_);
-        } else {
-            ASSERT2(false, 'vm:%p, env:%p, status:%d', vm_, env_, status_);
-            env_ = NULL;
-            return;
-        }
-    } while (false);
-    
-    jint ret = env_->PushLocalFrame(_capacity);
-    ASSERT2(0 == ret, 'ret:%d', ret);
-}
-    
-    
-    {  bool cas(T& u, T& v) {
-    DEBUG_PRINT(this << ' ' << u << ' ' << v);
-    Node* n = new Node(v);
-    hazptr_holder hptr;
-    Node* p;
-    do {
-      p = hptr.get_protected(p_);
-      if (p->val_ != u) { delete n; return false; }
-      if (p_.compare_exchange_weak(p, n)) {
-        break;
-      }
-    } while (true);
-    hptr.reset();
-    p->retire();
-    DEBUG_PRINT(this << ' ' << p << ' ' << u << ' ' << n << ' ' << v);
-    return true;
-  }
-};
-    
-      std::atomic<Node2*> shared0 = {node0};
-  std::atomic<Node2*> shared1 = {node1};
-  std::atomic<Node2*> shared2 = {node2};
-  std::atomic<Node2*> shared3 = {node3};
-    
-    /**
- * An AsyncIOOp represents a pending operation.  You may set a notification
- * callback or you may use this class's methods directly.
- *
- * The op must remain allocated until it is completed or canceled.
- */
-class AsyncIOOp : private boost::noncopyable {
-  friend class AsyncIO;
-  friend std::ostream& operator<<(std::ostream& stream, const AsyncIOOp& o);
-    }
-    
-    #include <folly/experimental/io/FsUtil.h>
-    
-    class FileHandlerFactory::WriterFactory
-    : public StandardLogHandlerFactory::WriterFactory {
- public:
-  bool processOption(StringPiece name, StringPiece value) override {
-    if (name == 'path') {
-      path_ = value.str();
-      return true;
-    }
-    }
-    }
-    
-    
-    {} // namespace folly
 
+        
+        
+    {  // Set up scripts on all of the words that did not get sent to
+  // ambigs_classify_and_output.  They all should have, but if all the
+  // werd_res's don't get uch_sets, tesseract will crash when you try
+  // to iterate over them. :-(
+  int total_words = 0;
+  for (page_res_it.restart_page(); page_res_it.block() != NULL;
+       page_res_it.forward()) {
+    if (page_res_it.word()) {
+      if (page_res_it.word()->uch_set == NULL)
+        page_res_it.word()->SetupFake(unicharset);
+      total_words++;
+    }
+  }
+  if (examined_words < 0.85 * total_words) {
+    tprintf('TODO(antonova): clean up recog_training_segmented; '
+            ' It examined only a small fraction of the ambigs image.\n');
+  }
+  tprintf('recog_training_segmented: examined %d / %d words.\n',
+          examined_words, total_words);
+}
     
-      // Format the data into a buffer.
-  std::string buffer;
-  StringPiece msgData{message.getMessage()};
-  if (message.containsNewlines()) {
-    // If there are multiple lines in the log message, add a header
-    // before each one.
-    std::string header;
-    header.reserve(headerLengthGuess);
-    headerFormatter.appendTo(header);
+    
+    {  if (word->word->flag(W_DONT_CHOP)) {
+    saved_enable_assoc = wordrec_enable_assoc;
+    saved_chop_enable = chop_enable;
+    wordrec_enable_assoc.set_value(0);
+    chop_enable.set_value(0);
+  }
+  if (pass_n == 1)
+    set_pass1();
+  else
+    set_pass2();
+  recog_word(word);
+  if (word->best_choice == NULL)
+    word->SetupFake(*word->uch_set);
+  if (word->word->flag(W_DONT_CHOP)) {
+    wordrec_enable_assoc.set_value(saved_enable_assoc);
+    chop_enable.set_value(saved_chop_enable);
+  }
+}
+    
+      // If a blob with the same bounding box as one of the truth character
+  // bounding boxes is not classified as the corresponding truth character
+  // blames character classifier for incorrect answer.
+  void BlameClassifier(const UNICHARSET& unicharset,
+                       const TBOX& blob_box,
+                       const BLOB_CHOICE_LIST& choices,
+                       bool debug);
+    
+    // The number of points to consider at each end.
+const int kNumEndPoints = 3;
+// The minimum number of points at which to switch to number of points
+// for badly fitted lines.
+// To ensure a sensible error metric, kMinPointsForErrorCount should be at
+// least kMaxRealDistance / (1 - %ile) where %ile is the fractile used in
+// ComputeUpperQuartileError.
+const int kMinPointsForErrorCount = 16;
+// The maximum real distance to use before switching to number of
+// mis-fitted points, which will get square-rooted for true distance.
+const int kMaxRealDistance = 2.0;
+    
+    
+    {  result.xcoord = -src.ycoord;
+  result.ycoord = src.xcoord;
+  return result;
+}
+    
+    static void MissingExternalApiFunction(const char *FnName) {
+  Printf('ERROR: %s is not defined. Exiting.\n'
+         'Did you use -fsanitize-coverage=... to build your code?\n',
+         FnName);
+  exit(1);
+}
+    
+    
+    {  // Execute the inner process untill it passes.
+  // Every inner process should execute at least one input.
+  std::string BaseCmd = CloneArgsWithoutX(Args, 'keep-all-flags');
+  for (size_t i = 1; i <= AllFiles.size(); i++) {
+    Printf('MERGE-OUTER: attempt %zd\n', i);
+    auto ExitCode =
+        ExecuteCommand(BaseCmd + ' -merge_control_file=' + CFPath);
+    if (!ExitCode) {
+      Printf('MERGE-OUTER: succesfull in %zd attempt(s)\n', i);
+      break;
+    }
+  }
+  // Read the control file and do the merge.
+  Merger M;
+  std::ifstream IF(CFPath);
+  M.ParseOrExit(IF, true);
+  IF.close();
+  std::vector<std::string> NewFiles;
+  size_t NumNewFeatures = M.Merge(&NewFiles);
+  Printf('MERGE-OUTER: %zd new files with %zd new features added\n',
+         NewFiles.size(), NumNewFeatures);
+  for (auto &F: NewFiles)
+    WriteToOutputCorpus(FileToVector(F));
+  // We are done, delete the control file.
+  RemoveFile(CFPath);
+}
+    
+    MutationDispatcher::MutationDispatcher(Random &Rand,
+                                       const FuzzingOptions &Options)
+    : Rand(Rand), Options(Options) {
+  DefaultMutators.insert(
+      DefaultMutators.begin(),
+      {
+          {&MutationDispatcher::Mutate_EraseBytes, 'EraseBytes'},
+          {&MutationDispatcher::Mutate_InsertByte, 'InsertByte'},
+          {&MutationDispatcher::Mutate_InsertRepeatedBytes,
+           'InsertRepeatedBytes'},
+          {&MutationDispatcher::Mutate_ChangeByte, 'ChangeByte'},
+          {&MutationDispatcher::Mutate_ChangeBit, 'ChangeBit'},
+          {&MutationDispatcher::Mutate_ShuffleBytes, 'ShuffleBytes'},
+          {&MutationDispatcher::Mutate_ChangeASCIIInteger, 'ChangeASCIIInt'},
+          {&MutationDispatcher::Mutate_ChangeBinaryInteger, 'ChangeBinInt'},
+          {&MutationDispatcher::Mutate_CopyPart, 'CopyPart'},
+          {&MutationDispatcher::Mutate_CrossOver, 'CrossOver'},
+          {&MutationDispatcher::Mutate_AddWordFromManualDictionary,
+           'ManualDict'},
+          {&MutationDispatcher::Mutate_AddWordFromTemporaryAutoDictionary,
+           'TempAutoDict'},
+          {&MutationDispatcher::Mutate_AddWordFromPersistentAutoDictionary,
+           'PersAutoDict'},
+      });
+  if(Options.UseCmp)
+    DefaultMutators.push_back(
+        {&MutationDispatcher::Mutate_AddWordFromTORC, 'CMP'});
     }
     
-    namespace folly {
-    }
-    
-      // TODO: In the future it would be nice to build a better mechanism so that
-  // additional LogHandlerFactory objects could be automatically registered on
-  // startup if they are linked into our current executable.
-  //
-  // For now we register only the StreamHandlerFactory.  There is a
-  // FileHandlerFactory, but we do not register it by default: it allows
-  // appending to arbitrary files based on the config settings, and we do not
-  // want to allow this by default for security reasons.  (In the future
-  // maybe it would be worth enabling the FileHandlerFactory by default if we
-  // confirm that we are not a setuid or setgid binary.  i.e., if the real
-  // UID+GID is the same as the effective UID+GID.)
-    
-    namespace folly {
-    }
+      void SetCorpus(const InputCorpus *Corpus) { this->Corpus = Corpus; }
