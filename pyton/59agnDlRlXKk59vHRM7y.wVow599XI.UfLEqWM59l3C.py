@@ -1,87 +1,262 @@
 
         
-        entry_template = textwrap.dedent('''
-    <entry>
-        <id>https://yt-dl.org/feed/youtube-dl-updates-feed/youtube-dl-@VERSION@</id>
-        <title>New version @VERSION@</title>
-        <link href='http://rg3.github.io/youtube-dl' />
-        <content type='xhtml'>
-            <div xmlns='http://www.w3.org/1999/xhtml'>
-                Downloads available at <a href='https://yt-dl.org/downloads/@VERSION@/'>https://yt-dl.org/downloads/@VERSION@/</a>
-            </div>
-        </content>
-        <author>
-            <name>The youtube-dl maintainers</name>
-        </author>
-        <updated>@TIMESTAMP@</updated>
-    </entry>
-    ''')
+                headers = [
+            '%s: %s' % (
+                name,
+                value if isinstance(value, str) else value.decode('utf8')
+            )
+            for name, value in headers.items()
+        ]
+    
+        return chain(*output)
     
     
-def format_size(bytes):
-    return '%s (%d bytes)' % (format_bytes(bytes), bytes)
-    
-    
-if __name__ == '__main__':
-    unittest.main()
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
 
     
+        # If both `auth_parse` and `prompt_password` are set to `True`,
+    # and the value of `-a` lacks the password part,
+    # then the user will be prompted to type the password in.
+    prompt_password = True
+    
+            name=HTTPie  language=Python  description='CLI HTTP client'
+    
+        for factor, suffix in abbrevs:
+        if n >= factor:
+            break
+    
+    signature = hexlify(rsa.pkcs1.sign(json.dumps(versions_info, sort_keys=True).encode('utf-8'), privkey, 'SHA-256')).decode()
+print('signature: ' + signature)
+    
+    versions_info = json.load(open('update/versions.json'))
+versions = list(versions_info['versions'].keys())
+versions.sort()
+    
+        out = issue_template_tmpl % {'version': locals()['__version__']}
+    
+    import io
+import sys
+import re
+    
+        def test_youtube_extract(self):
+        assertExtractId = lambda url, id: self.assertEqual(YoutubeIE.extract_id(url), id)
+        assertExtractId('http://www.youtube.com/watch?&v=BaW_jenozKc', 'BaW_jenozKc')
+        assertExtractId('https://www.youtube.com/watch?&v=BaW_jenozKc', 'BaW_jenozKc')
+        assertExtractId('https://www.youtube.com/watch?feature=player_embedded&v=BaW_jenozKc', 'BaW_jenozKc')
+        assertExtractId('https://www.youtube.com/watch_popup?v=BaW_jenozKc', 'BaW_jenozKc')
+        assertExtractId('http://www.youtube.com/watch?v=BaW_jenozKcsharePLED17F32AD9753930', 'BaW_jenozKc')
+        assertExtractId('BaW_jenozKc', 'BaW_jenozKc')
+    
+        def test_secondary_proxy_http(self):
+        params = self._check_params(['secondary_proxy', 'secondary_server_ip'])
+        if params is None:
+            return
+        ydl = FakeYDL()
+        req = compat_urllib_request.Request('http://yt-dl.org/ip')
+        req.add_header('Ytdl-request-proxy', params['secondary_proxy'])
+        self.assertEqual(
+            ydl.urlopen(req).read().decode('utf-8'),
+            params['secondary_server_ip'])
+    
+    
+def gen_extractors():
+    ''' Return a list of an instance of every supported extractor.
+    The order does matter; the first extractor matched is the one handling the URL.
+    '''
+    return [klass() for klass in gen_extractor_classes()]
+    
+        _TEST = {
+        'url': 'http://www.anitube.se/video/36621',
+        'md5': '59d0eeae28ea0bc8c05e7af429998d43',
+        'info_dict': {
+            'id': '36621',
+            'ext': 'mp4',
+            'title': 'Recorder to Randoseru 01',
+            'duration': 180.19,
+        },
+        'skip': 'Blocked in the US',
+    }
+    
+    
+class AudiomackIE(InfoExtractor):
+    _VALID_URL = r'https?://(?:www\.)?audiomack\.com/song/(?P<id>[\w/-]+)'
+    IE_NAME = 'audiomack'
+    _TESTS = [
+        # hosted on audiomack
+        {
+            'url': 'http://www.audiomack.com/song/roosh-williams/extraordinary',
+            'info_dict':
+            {
+                'id': '310086',
+                'ext': 'mp3',
+                'uploader': 'Roosh Williams',
+                'title': 'Extraordinary'
+            }
+        },
+        # audiomack wrapper around soundcloud song
+        {
+            'add_ie': ['Soundcloud'],
+            'url': 'http://www.audiomack.com/song/hip-hop-daily/black-mamba-freestyle',
+            'info_dict': {
+                'id': '258901379',
+                'ext': 'mp3',
+                'description': 'mamba day freestyle for the legend Kobe Bryant ',
+                'title': 'Black Mamba Freestyle [Prod. By Danny Wolf]',
+                'uploader': 'ILOVEMAKONNEN',
+                'upload_date': '20160414',
+            }
+        },
+    ]
+    
+    
+import argparse
+import collections
+import os
+import sys
+    
+    
+def print_host(host):
+    data = get_serf_members_data()
+    meta = get_meta(data)
+    print(json.dumps(meta['hostvars'][host]))
+    
+        try:
+        s1 = os.lstat(path)
+    except OSError:
+        # the OSError should be handled with more care
+        # it could be a 'permission denied' but path is still a mount
+        return False
+    else:
+        # A symlink can never be a mount point
+        if os.path.stat.S_ISLNK(s1.st_mode):
+            return False
+    
+    
+#
+# Backwards compat functions.  Some modules include md5s in their return values
+# Continue to support that for now.  As of ansible-1.8, all of those modules
+# should also return 'checksum' (sha1 for now)
+# Do not use md5 unless it is needed for:
+# 1) Optional backwards compatibility
+# 2) Compliance with a third party protocol
+#
+# MD5 will not work on systems which are FIPS-140-2 compliant.
+#
+    
     import re
+from ansible.errors import AnsibleParserError, AnsibleError
     
-            runtime = self._search_regex(
-            r'Runtime\s*:\s*(.+?) \|', webpage, 'duration', default=None)
-        if runtime:
-            runtime = re.sub(r'[\s-]', '', runtime)
-        duration = parse_duration(runtime)
-        view_count = int_or_none(self._search_regex(
-            r'Views\s*:\s*(\d+)', webpage, 'view count', default=None))
-        comment_count = int_or_none(self._search_regex(
-            r'Comments\s*:\s*(\d+)', webpage, 'comment count', default=None))
+    def get_extension(link):
+    extension = os.path.splitext(link)[1][1:]
+    if extension in ['pdf', 'html']:
+        return extension
+    if 'pdf' in extension:
+        return 'pdf'    
+    return 'pdf'    
     
-            self.addr_defined = Addr.fromstring('127.0.0.1:443')
-        self.addr_default = Addr.fromstring('_default_:443')
+    print 'JS_OUTPUTS := ' + ' '.join(outputs)
+print 'DEFS_SUCCESS := 1'
+
     
-        def load_config(self):
-        '''Returns the next config directory to be tested'''
-        shutil.rmtree(self.le_config.work_dir, ignore_errors=True)
-        backup = os.path.join(self.le_config.work_dir, constants.BACKUP_DIR)
-        os.makedirs(backup)
-        return self._configs.pop()
-    
-        @mock.patch(
-        'certbot_compatibility_test.validator.crypto_util.probe_sni')
-    def test_certificate_error(self, mock_probe_sni):
-        cert = OpenSSL.crypto.X509()
-        mock_probe_sni.side_effect = [acme_errors.Error]
-        self.assertFalse(self.validator.certificate(
-            cert, 'test.com', '127.0.0.1'))
-    
-    # If false, no module index is generated.
-#texinfo_domain_indices = True
-    
-        @require_oauth2_scope('mysubreddits')
-    @validate(
-        VUser(),
-        friend_rel=VFriendOfMine('username'),
+        @csrf_exempt
+    @json_validate(
+        signature=VSigned(),
+        user=VThrottledLogin(['user', 'passwd']),
     )
-    @api_doc(api_section.users, uri='/api/v1/me/friends/{username}')
-    def GET_friends(self, friend_rel):
-        '''Get information about a specific 'friend', such as notes.'''
-        rel_view = FriendTableItem(friend_rel)
-        return self.api_wrapper(FriendTableItemJsonTemplate().data(rel_view))
+    def POST_login(self, responder, user, **kwargs):
+        kwargs.update(dict(
+            controller=self,
+            form=responder('noop'),
+            responder=responder,
+            user=user,
+        ))
+        return handle_login(**kwargs)
     
-        def GET_button_demo_page(self):
-        # no buttons for domain listings -> redirect to top level
-        if isinstance(c.site, DomainSR):
-            return self.redirect('/buttons')
-        return BoringPage(_('reddit buttons'),
-                          show_sidebar = False, 
-                          content=ButtonDemoPanel()).render()
+            return self.redirect('/static/button/button%s.js' % buttontype,
+                             code=301)
     
-    from r2.controllers.reddit_base import RedditController
-from r2.lib.base import proxyurl
-from r2.lib.csrf import csrf_exempt
-from r2.lib.template_helpers import get_domain
-from r2.lib.pages import Embed, BoringPage, HelpPage
-from r2.lib.filters import websafe, SC_OFF, SC_ON
-from r2.lib.memoize import memoize
+    
+def handle_awful_failure(fail_text):
+    '''
+    Makes sure that no errors generated in the error handler percolate
+    up to the user unless debug is enabled.
+    '''
+    if g.debug:
+        import sys
+        s = sys.exc_info()
+        # reraise the original error with the original stack trace
+        raise s[1], None, s[2]
+    try:
+        # log the traceback, and flag the 'path' as the error location
+        import traceback
+        log.write_error_summary(fail_text)
+        for line in traceback.format_exc().splitlines():
+            g.log.error(line)
+        return redditbroke % (make_failien_url(), websafe(fail_text))
+    except:
+        # we are doomed.  Admit defeat
+        return 'This is an error that should never occur.  You win.'
+
+    
+    - single source 'message type' for state transition changes
+- message type considered, messages (comment) not considered to avoid complexity
+'''
+    
+        def test_sequential_undo(self):
+        self.command_stack = list(reversed(self.command_stack))
+        self.command_stack[0].undo()
+        output_after_first_undo = os.listdir(self.test_dir)
+        self.assertEqual(output_after_first_undo[0], 'bar.txt')
+        self.command_stack[1].undo()
+        output_after_second_undo = os.listdir(self.test_dir)
+        self.assertEqual(output_after_second_undo[0], 'foo.txt')
+    
+        def subscribe(self, msg, subscriber):
+        self.subscribers.setdefault(msg, []).append(subscriber)
+    
+        def setUp(self):
+        self.director = Director()
+        self.director.builder = BuilderFlat()
+        self.director.construct_building()
+        self.building = self.director.get_building()
+    
+    
+class RadioTest(unittest.TestCase):
+    '''
+    Attention: Test case results depend on test case execution. The test cases
+    in this integration test class should be executed in an explicit order:
+    http://stackoverflow.com/questions/5387299/python-unittest-testcase-execution-order
+    '''
+    
+        def setUp(self):
+        self.tc1 = TC1()
+        self.tc2 = TC2()
+        self.tc3 = TC3()
+        self.average_result_tc1 = '###### In Test 1 ######\n' + \
+                                  'Setting up\n' + \
+                                  'Running test\n' + \
+                                  'Tearing down\n' + \
+                                  'Test Finished'
+        self.average_result_tc2 = '###### In Test 2 ######\n' + \
+                                  'Setting up\n' + \
+                                  'Running test\n' + \
+                                  'Tearing down\n' + \
+                                  'Test Finished'
+        self.average_result_tc3 = '###### In Test 3 ######\n' + \
+                                  'Setting up\n' + \
+                                  'Running test\n' + \
+                                  'Tearing down\n' + \
+                                  'Test Finished'
+        self.runner = TestRunner()
+        self.out = StringIO()
+        self.saved_stdout = sys.stdout
+        sys.stdout = self.out
