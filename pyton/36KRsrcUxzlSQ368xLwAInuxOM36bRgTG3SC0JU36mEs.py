@@ -1,287 +1,173 @@
 
-@pytest.mark.functional
-def test_without_confirmation(proc, TIMEOUT):
-    without_confirmation(proc, TIMEOUT)
+        
+            for strides in [(1, 1), (2, 2)]:
+        layer_test(local.LocallyConnected2D,
+                   kwargs={'filters': filters,
+                           'kernel_size': 3,
+                           'padding': padding,
+                           'kernel_regularizer': 'l2',
+                           'bias_regularizer': 'l2',
+                           'activity_regularizer': 'l2',
+                           'strides': strides,
+                           'data_format': 'channels_last'},
+                   input_shape=(num_samples, num_row, num_col, stack_size))
     
     
-def test_urls(client):
-    r = client.get('/')
-    assert r.status_code == 200
+def assert_args_presence(args, doc, member, name):
+    args_not_in_doc = [arg not in doc for arg in args]
+    if any(args_not_in_doc):
+        raise ValueError(
+            '{} {} arguments are not present in documentation '.format(name, list(
+                compress(args, args_not_in_doc))), member.__module__)
+    words = doc.replace('*', '').split()
+    # Check arguments styling
+    styles = [arg + ':' not in words for arg in args]
+    if any(styles):
+        raise ValueError(
+            '{} {} are not style properly 'argument': documentation'.format(name, list(
+                compress(args, styles))), member.__module__)
     
-        :copyright: (c) 2015 by Armin Ronacher.
-    :license: BSD, see LICENSE for more details.
-'''
-    
-        def get_source(self, environment, template):
-        if self.app.config['EXPLAIN_TEMPLATE_LOADING']:
-            return self._get_source_explained(environment, template)
-        return self._get_source_fast(environment, template)
-    
-        class _FakeSignal(object):
-        '''If blinker is unavailable, create a fake class with the same
-        interface that allows sending of signals but will fail with an
-        error on anything else.  Instead of doing anything on send, it
-        will just ignore the arguments and do nothing instead.
-        '''
+    # get tensor representations of our images
+base_image = K.variable(preprocess_image(base_image_path))
+style_reference_image = K.variable(preprocess_image(style_reference_image_path))
     
     
-username = get_config('ANSIBLE_OPENSHIFT_USERNAME', 'default_rhlogin')
-password = get_config('ANSIBLE_OPENSHIFT_PASSWORD', 'password')
-broker_url = 'https://%s/broker/rest/' % get_config('ANSIBLE_OPENSHIFT_BROKER', 'libra_server')
-    
-    import tensorflow as tf
-    
-      Args:
-    raw_data: one of the raw data outputs from ptb_raw_data.
-    batch_size: int, the batch size.
-    num_steps: int, the number of unrolls.
-    name: the name of this operation (optional).
-    
-    '''Tests for word2vec module.'''
-    
-    import iris_data
-import custom_estimator
-import premade_estimator
-    
-      We assume the vocabulary is stored one-item-per-line, so a file:
-    dog
-    cat
-  will result in a vocabulary {'dog': 0, 'cat': 1}, and this function will
-  also return the reversed-vocabulary ['dog', 'cat'].
-    
-        model.compile(loss='categorical_crossentropy',
-                  optimizer='adadelta',
-                  metrics=['accuracy'])
+def _runner(init, shape, target_mean=None, target_std=None,
+            target_max=None, target_min=None):
+    variable = K.variable(init(shape))
+    output = K.get_value(variable)
+    lim = 3e-2
+    if target_std is not None:
+        assert abs(output.std() - target_std) < lim
+    if target_mean is not None:
+        assert abs(output.mean() - target_mean) < lim
+    if target_max is not None:
+        assert abs(output.max() - target_max) < lim
+    if target_min is not None:
+        assert abs(output.min() - target_min) < lim
     
     
+@pytest.mark.skipif(K.backend() != 'tensorflow', reason='Requires TensorFlow backend')
 @keras_test
-def test_locallyconnected_2d():
-    num_samples = 5
-    filters = 3
-    stack_size = 4
-    num_row = 6
-    num_col = 8
-    padding = 'valid'
+def test_embedding_with_clipnorm():
+    model = Sequential()
+    model.add(layers.Embedding(input_dim=1, output_dim=1))
+    model.compile(optimizer=optimizers.SGD(clipnorm=0.1), loss='mse')
+    model.fit(np.array([[0]]), np.array([[[0.5]]]), epochs=1)
     
-    x_train = x_train.reshape(x_train.shape[0], -1, 1)
-x_test = x_test.reshape(x_test.shape[0], -1, 1)
-x_train = x_train.astype('float32')
-x_test = x_test.astype('float32')
-x_train /= 255
-x_test /= 255
-print('x_train shape:', x_train.shape)
-print(x_train.shape[0], 'train samples')
-print(x_test.shape[0], 'test samples')
+    from .theplatform import theplatform_download_by_pid
     
-    # Save config file, if possible.
-if not os.path.exists(_keras_dir):
-    try:
-        os.makedirs(_keras_dir)
-    except OSError:
-        # Except permission denied and potential race conditions
-        # in multi-threaded environments.
-        pass
+        video_url = match1(html, r'filepath=(.+)&sec')
+    video_url = video_url.replace('&mid', '?mid')
     
     
-def test_fashion_mnist():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
-        assert len(x_train) == len(y_train) == 60000
-        assert len(x_test) == len(y_test) == 10000
+def extract_board_data(url):
+    json_data = extract_json_data(url, limit=LIMIT)
+    pin_list = json_data['pins']
+    title = json_data['title']
+    pin_count = json_data['pin_count']
+    pin_count -= len(pin_list)
     
-    if __name__ == '__main__':
-    pytest.main([__file__])
-
+    __all__ = ['showroom_download']
     
-            # put all lines in the file into a Python list
-        strings = f.readlines()
-        
-        # above line leaves trailing newline characters; strip them out
-        strings = [x.strip(u'\n') for x in strings]
-        
-        # remove empty-lines and comments
-        strings = [x for x in strings if x and not x.startswith(u'#')]
-        
-        # insert empty string since all are being removed
-        strings.insert(0, u'')
+    import os
+import sys
+import unittest
     
-        def browse_file(self):
-        filetypes = [
-            ('HTML Files', '*.htm *.html', 'TEXT'),
-            ('PDF Files', '*.pdf', 'TEXT'),
-            ('Windows Help Files', '*.chm'),
-            ('Text Files', '*.txt', 'TEXT'),
-            ('All Files', '*')]
-        path = self.pathvar.get()
-        if path:
-            dir, base = os.path.split(path)
+    class Chunk:
+    def __init__(self, file, align=True, bigendian=True, inclheader=False):
+        import struct
+        self.closed = False
+        self.align = align      # whether to align to word (2-byte) boundaries
+        if bigendian:
+            strflag = '>'
         else:
-            base = None
-            if platform[:3] == 'win':
-                dir = os.path.join(os.path.dirname(executable), 'Doc')
-                if not os.path.isdir(dir):
-                    dir = os.getcwd()
+            strflag = '<'
+        self.file = file
+        self.chunkname = file.read(4)
+        if len(self.chunkname) < 4:
+            raise EOFError
+        try:
+            self.chunksize = struct.unpack_from(strflag+'L', file.read(4))[0]
+        except struct.error:
+            raise EOFError from None
+        if inclheader:
+            self.chunksize = self.chunksize - 8 # subtract header
+        self.size_read = 0
+        try:
+            self.offset = self.file.tell()
+        except (AttributeError, OSError):
+            self.seekable = False
+        else:
+            self.seekable = True
+    
+            Note, this function is purposefully not defined at the module scope so
+        that data it needs from its parent function (within whose context it
+        is defined) does not need to be of module scope.
+        '''
+        line_iterator = _line_iterator()
+        fromlines,tolines=[],[]
+        while True:
+            # Collecting lines of text until we have a from/to pair
+            while (len(fromlines)==0 or len(tolines)==0):
+                try:
+                    from_line, to_line, found_diff = next(line_iterator)
+                except StopIteration:
+                    return
+                if from_line is not None:
+                    fromlines.append((from_line,found_diff))
+                if to_line is not None:
+                    tolines.append((to_line,found_diff))
+            # Once we have a pair, remove them from the collection and yield it
+            from_line, fromDiff = fromlines.pop(0)
+            to_line, to_diff = tolines.pop(0)
+            yield (from_line,to_line,fromDiff or to_diff)
+    
+    
+class JSONDecoder(object):
+    '''Simple JSON <http://json.org> decoder
+    
+    >>> from nntplib import NNTP
+>>> s = NNTP('news')
+>>> resp, count, first, last, name = s.group('comp.lang.python')
+>>> print('Group', name, 'has', count, 'articles, range', first, 'to', last)
+Group comp.lang.python has 51 articles, range 5770 to 5821
+>>> resp, subs = s.xhdr('subject', '{0}-{1}'.format(first, last))
+>>> resp = s.quit()
+>>>
+    
+        def setFeature(self, name, state):
+        if self.supportsFeature(name):
+            state = state and 1 or 0
+            try:
+                settings = self._settings[(_name_xform(name), state)]
+            except KeyError:
+                raise xml.dom.NotSupportedErr(
+                    'unsupported feature: %r' % (name,)) from None
             else:
-                dir = os.getcwd()
-        file = self.askfilename(filetypes, dir, base)
-        if file:
-            self.pathvar.set(file)
+                for name, value in settings:
+                    setattr(self._options, name, value)
+        else:
+            raise xml.dom.NotFoundErr('unknown feature: ' + repr(name))
     
-    to_benchmark = [pi_float, pi_decimal]
-if C is not None:
-    to_benchmark.insert(1, pi_cdecimal)
+        def find_byrgb(self, rgbtuple):
+        '''Return name for rgbtuple'''
+        try:
+            return self.__byrgb[rgbtuple]
+        except KeyError:
+            raise BadColor(rgbtuple) from None
     
-    if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        zones = TZInfo.zonelist()
-        for z in zones:
-            print(z)
-        sys.exit()
-    filepath = sys.argv[1]
-    if not filepath.startswith('/'):
-        filepath = os.path.join('/usr/share/zoneinfo', filepath)
-    with open(filepath, 'rb') as fileobj:
-        tzi = TZInfo.fromfile(fileobj)
-    tzi.dump(sys.stdout)
-
+            # Check that the path is legal
+        if not self.is_rpc_path_valid():
+            self.report_404()
+            return
     
-                self.assertIn('Project-Id-Version', header)
-            self.assertIn('POT-Creation-Date', header)
-            self.assertIn('PO-Revision-Date', header)
-            self.assertIn('Last-Translator', header)
-            self.assertIn('Language-Team', header)
-            self.assertIn('MIME-Version', header)
-            self.assertIn('Content-Type', header)
-            self.assertIn('Content-Transfer-Encoding', header)
-            self.assertIn('Generated-By', header)
+            a = int(10 * sys.maxsize)
+        b = int(100 * sys.maxsize)
+        c = int(50 * sys.maxsize)
     
-    The __init__ method has one required argument, a file-like object
-(including a chunk instance), and one optional argument, a flag which
-specifies whether or not chunks are aligned on 2-byte boundaries.  The
-default is 1, i.e. aligned.
-'''
-    
-        def _longcmd(self, line, file=None):
-        '''Internal: send a command and get the response plus following text.
-        Same return value as _getlongresp().'''
-        self._putcmd(line)
-        return self._getlongresp(file)
-    
-            y = X.from_buffer_copy(a)
-        self.assertEqual(y.c_int, a[0])
-        self.assertFalse(y.init_called)
-    
-                for future in finished:
-                yield future
-                pending.remove(future)
-    
-        sqrt_n = int(math.floor(math.sqrt(n)))
-    for i in range(3, sqrt_n + 1, 2):
-        if n % i == 0:
-            return False
-    return True
-    
-    
-class CommandRequest( BaseRequest ):
-  def __init__( self, arguments, completer_target = None, extra_data = None ):
-    super( CommandRequest, self ).__init__()
-    self._arguments = _EnsureBackwardsCompatibility( arguments )
-    self._completer_target = ( completer_target if completer_target
-                               else 'filetype_default' )
-    self._extra_data = extra_data
-    self._response = None
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-        current_ref = get_current_ref()
-    base_ref = get_merge_base()
-    if options.files:
-        files = options.files
-    else:
-        files = get_changed_files(base_ref, current_ref)
-        logging.debug('files changed: %r', files)
-    
-    import r2.lib.helpers
-from r2.config.paths import (
-    get_r2_path,
-    get_built_statics_path,
-    get_raw_statics_path,
-)
-from r2.config.routing import make_map
-from r2.lib.app_globals import Globals
-from r2.lib.configparse import ConfigValue
-    
-    extension_mapping = {
-    'rss': ('xml', 'application/atom+xml; charset=UTF-8'),
-    'xml': ('xml', 'application/atom+xml; charset=UTF-8'),
-    'js': ('js', 'text/javascript; charset=UTF-8'),
-    'embed': ('htmllite', 'text/javascript; charset=UTF-8'),
-    'mobile': ('mobile', 'text/html; charset=UTF-8'),
-    'png': ('png', 'image/png'),
-    'css': ('css', 'text/css'),
-    'csv': ('csv', 'text/csv; charset=UTF-8'),
-    'api': (api_type(), 'application/json; charset=UTF-8'),
-    'json-html': (api_type('html'), 'application/json; charset=UTF-8'),
-    'json-compact': (api_type('compact'), 'application/json; charset=UTF-8'),
-    'compact': ('compact', 'text/html; charset=UTF-8'),
-    'json': (api_type(), 'application/json; charset=UTF-8'),
-    'i': ('compact', 'text/html; charset=UTF-8'),
-}
-    
-            ext = None
-        if path_ext in extension_mapping:
-            ext = path_ext
-            # Strip off the extension.
-            environ['PATH_INFO'] = path[:-(len(ext) + 1)]
-        elif domain_ext in extension_mapping:
-            ext = domain_ext
-    
-                send_gift(
-                buyer=buyer,
-                recipient=recipient,
-                months=months,
-                days=months * 31,
-                signed=False,
-                giftmessage=None,
-                thing_fullname=thing_fullname,
-                note=note,
-            )
-    
-        def rendercontent(self, input, fp):
-        soup = BeautifulSoup(input)
-    
-            MinimalController.pre(self)
-    
-        def test_data_change_shall_notify_all_observers_once(cls):
-        with patch.object(cls.dec_obs, 'update') as mock_dec_obs_update,\
-                patch.object(cls.hex_obs, 'update') as mock_hex_obs_update:
-            cls.sub.data = 10
-            cls.assertEqual(mock_dec_obs_update.call_count, 1)
-            cls.assertEqual(mock_hex_obs_update.call_count, 1)
-    
-        def __new__(cls, name, bases, attrs):
-        new_cls = type.__new__(cls, name, bases, attrs)
-        '''
-            Here the name of the class is used as key but it could be any class
-            parameter.
-        '''
-        cls.REGISTRY[new_cls.__name__] = new_cls
-        return new_cls
-    
-            for i in range(3):
-            num_obj.increment()
-            print(num_obj)
-        num_obj.value += 'x'  # will fail
-        print(num_obj)
-    except Exception as e:
-        a_transaction.rollback()
-        print('-- rolled back')
-    print(num_obj)
+        def test_from_buffer_memoryview(self):
+        a = [c_char.from_buffer(memoryview(bytearray(b'a')))]
+        a.append(a)
+        del a
+        gc.collect()  # Should not crash
