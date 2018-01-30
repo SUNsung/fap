@@ -1,22 +1,40 @@
-#include 'guetzli/jpeg_data_reader.h'
+
+        
+          brightray::ContentClient content_client_;
+  std::unique_ptr<content::ContentBrowserClient> browser_client_;
+  std::unique_ptr<content::ContentRendererClient> renderer_client_;
+  std::unique_ptr<content::ContentUtilityClient> utility_client_;
     
     
-    {}  // namespace guetzli
+    {  DISALLOW_COPY_AND_ASSIGN(WebRequest);
+};
     
-    #include <stdint.h>
+    void Event::SetSenderAndMessage(content::WebContents* sender,
+                                IPC::Message* message) {
+  DCHECK(!sender_);
+  DCHECK(!message_);
+  sender_ = sender;
+  message_ = message;
+    }
     
-    static const int kIQuantBits = 16;
-// Output of the DCT is upscaled by 16.
-static const int kDCTBits = kIQuantBits + 4;
-static const int kBias = 0x80 << (kDCTBits - 8);
     
-    #include 'guetzli/jpeg_data.h'
+    {  return v8::Local<v8::ObjectTemplate>::New(
+      isolate, event_template)->NewInstance();
+}
     
-    // Builds jpeg-style Huffman lookup table from the given symbols.
-// The symbols are in order of increasing bit lengths. The number of symbols
-// with bit length n is given in counts[n] for each n >= 1.
-// Returns the size of the lookup table.
-int BuildJpegHuffmanTable(const int* counts, const int* symbols,
-                          HuffmanTableEntry* lut);
+    #include 'storage/common/quota/quota_types.h'
     
-    // Preprocesses U and V channel for better results after downsampling.
+     private:
+  std::string mime_type_;
+  std::string charset_;
+  std::string data_;
+    
+    int LaunchProgram(const StringVector& relauncher_args,
+                  const StringVector& argv) {
+  // Redirect the stdout of child process to /dev/null, otherwise after
+  // relaunch the child process will raise exception when writing to stdout.
+  base::ScopedFD devnull(HANDLE_EINTR(open('/dev/null', O_WRONLY)));
+  base::FileHandleMappingVector no_stdout;
+  no_stdout.push_back(std::make_pair(devnull.get(), STDERR_FILENO));
+  no_stdout.push_back(std::make_pair(devnull.get(), STDOUT_FILENO));
+    }
