@@ -1,153 +1,169 @@
-#if GTEST_HAS_STD_WSTRING
-  // Converts the given wide string to a narrow string using the UTF-8
-  // encoding, and streams the result to this Message object.
-  Message& operator <<(const ::std::wstring& wstr);
-#endif  // GTEST_HAS_STD_WSTRING
+
+        
+          void Compute(OpKernelContext* context) override LOCKS_EXCLUDED(mu_) {
+    mutex_lock l(mu_);
+    if (resource_ == nullptr) {
+      ResourceMgr* mgr = context->resource_manager();
+      OP_REQUIRES_OK(context, cinfo_.Init(mgr, def()));
+    }
+    }
     
-      // Returns true iff the test part passed.
-  bool passed() const { return type_ == kSuccess; }
+    #ifndef TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
+#define TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
     
-    // Makes sure this header is not included before gtest.h.
-#ifndef GTEST_INCLUDE_GTEST_GTEST_H_
-# error Do not include gtest_pred_impl.h directly.  Include gtest.h instead.
-#endif  // GTEST_INCLUDE_GTEST_GTEST_H_
+      // Converts binary example labels from 0.0 or 1.0 to -1.0 or 1.0 respectively
+  // as expected by smooth hinge loss.
+  Status ConvertLabel(float* const example_label) const final {
+    if (*example_label == 0.0) {
+      *example_label = -1;
+      return Status::OK();
+    }
+    if (*example_label == 1.0) {
+      return Status::OK();
+    }
+    return errors::InvalidArgument(
+        'Only labels of 0.0 or 1.0 are supported right now. '
+        'Found example with label: ',
+        *example_label);
+  }
     
-    // Protects copying of all linked_ptr objects.
-GTEST_API_ GTEST_DECLARE_STATIC_MUTEX_(g_linked_ptr_mutex);
+      // Polls the CUDA platform for the event's current status.
+  Event::Status PollForStatus();
     
-    // Sleeps for (roughly) n milli-seconds.  This function is only for
-// testing Google Test's own constructs.  Don't use it in user tests,
-// either directly or indirectly.
-inline void SleepMilliseconds(int n) {
-  const timespec time = {
-    0,                  // 0 seconds.
-    n * 1000L * 1000L,  // And n ms.
-  };
-  nanosleep(&time, NULL);
+    Status RecordWriter::Close() {
+#if !defined(IS_SLIM_BUILD)
+  if (IsZlibCompressed(options_)) {
+    Status s = dest_->Close();
+    delete dest_;
+    dest_ = nullptr;
+    return s;
+  }
+#endif  // IS_SLIM_BUILD
+  return Status::OK();
 }
     
+    #include 'tensorflow/core/common_runtime/device.h'
+#include 'tensorflow/core/framework/device_base.h'
     
-    {
-    {      // Marks all multiples of i (except i itself) as non-prime.
-      for (int j = 2*i; j <= max; j += i) {
-        is_prime_[j] = false;
-      }
+    // See docs in ../ops/io_ops.cc.
+    
+      // Compute the number of unichars in the label.
+  GenericVector<UNICHAR_ID> encoding;
+  if (!unicharset.encode_string(label, true, &encoding, NULL, NULL)) {
+    tprintf('Not outputting illegal unichar %s\n', label);
+    return;
+  }
+    
+    void FullPageBlock(int width, int height, BLOCK_LIST *blocks) {
+  BLOCK_IT block_it(blocks);
+  BLOCK* block = new BLOCK('', TRUE, 0, 0, 0, 0, width, height);
+  block_it.add_to_end(block);
+}
+
+    
+    // A CostFunc that takes the variance of step into account in the cost.
+inT64 DPPoint::CostWithVariance(const DPPoint* prev) {
+  if (prev == NULL || prev == this) {
+    UpdateIfBetter(0, 1, NULL, 0, 0, 0);
+    return 0;
+  }
     }
+    
+    // Because it involves 2𝜃 , Eq 2 has 2 solutions 90 degrees apart, but which
+// is the min and which is the max? From Eq1:
+// E/N = Var(xi)sin²𝜃  - 2Covar(xi, yi)sin𝜃 cos𝜃  + Var(yi)cos²𝜃
+// and 90 degrees away, using sin/cos equivalences:
+// E'/N = Var(xi)cos²𝜃  + 2Covar(xi, yi)sin𝜃 cos𝜃  + Var(yi)sin²𝜃
+// The second error is smaller (making it the minimum) iff
+// E'/N < E/N ie:
+// (Var(xi) - Var(yi))(cos²𝜃 - sin²𝜃) < -4Covar(xi, yi)sin𝜃 cos𝜃
+// Using double angles:
+// (Var(xi) - Var(yi))cos2𝜃  < -2Covar(xi, yi)sin2𝜃  (InEq 1)
+// But atan2(2Covar(xi, yi), Var(xi) - Var(yi)) picks 2𝜃  such that:
+// sgn(cos2𝜃) = sgn(Var(xi) - Var(yi)) and sgn(sin2𝜃) = sgn(Covar(xi, yi))
+// so InEq1 can *never* be true, making the atan2 result *always* the min!
+// In the degenerate case, where Covar(xi, yi) = 0 AND Var(xi) = Var(yi),
+// the 2 solutions have equal error and the inequality is still false.
+// Therefore the solution really is as trivial as Eq 3.
+    
+      // Calculate y-shift
+  int bln_yshift = 0, bottom_shift = 0, top_shift = 0;
+  if (bottom < min_bottom - tolerance) {
+    bottom_shift = bottom - min_bottom;
+  } else if (bottom > max_bottom + tolerance) {
+    bottom_shift = bottom - max_bottom;
+  }
+  if (top < min_top - tolerance) {
+    top_shift = top - min_top;
+  } else if (top > max_top + tolerance) {
+    top_shift = top - max_top;
+  }
+  if ((top_shift >= 0 && bottom_shift > 0) ||
+      (top_shift < 0 && bottom_shift < 0)) {
+    bln_yshift = (top_shift + bottom_shift) / 2;
+  }
+  *yshift = bln_yshift * yscale;
+    
+    // Refreshes the words in the block_list by using blobs in the
+// new_blobs list.
+// Block list must have word segmentation in it.
+// It consumes the blobs provided in the new_blobs list. The blobs leftover in
+// the new_blobs list after the call weren't matched to any blobs of the words
+// in block list.
+// The output not_found_blobs is a list of blobs from the original segmentation
+// in the block_list for which no corresponding new blobs were found.
+void RefreshWordBlobsFromNewBlobs(BLOCK_LIST* block_list,
+                                  C_BLOB_LIST* new_blobs,
+                                  C_BLOB_LIST* not_found_blobs);
+    
+      tesseract::ParagraphJustification justification() const {
+    return justification_;
+  }
+  int margin() const { return margin_; }
+  int first_indent() const { return first_indent_; }
+  int body_indent() const { return body_indent_; }
+  int tolerance() const { return tolerance_; }
+  bool is_flush() const {
+    return (justification_ == tesseract::JUSTIFICATION_LEFT ||
+            justification_ == tesseract::JUSTIFICATION_RIGHT) &&
+        abs(first_indent_ - body_indent_) <= tolerance_;
   }
     
     
-    {}  // namespace
-    
-    // Step 3. Call RUN_ALL_TESTS() in main().
-//
-// We do this by linking in src/gtest_main.cc file, which consists of
-// a main() function which calls RUN_ALL_TESTS() for us.
-//
-// This runs all the tests you've defined, prints the result, and
-// returns 0 if successful, or 1 otherwise.
-//
-// Did you notice that we didn't register the tests?  The
-// RUN_ALL_TESTS() macro magically knows about all the tests we
-// defined.  Isn't this convenient?
-
-    
-        if (index >= JPGD_MAX_HUFF_TABLES)
-      stop_decoding(JPGD_BAD_DHT_INDEX);
-    
-      public:
-    jpeg_decoder_mem_stream() : m_pSrc_data(NULL), m_ofs(0), m_size(0) { }
-    jpeg_decoder_mem_stream(const uint8 *pSrc_data, uint size) : m_pSrc_data(pSrc_data), m_ofs(0), m_size(size) { }
-    
-    
-# if defined(OC_CLZ32)
-/**
- * OC_ILOGNZ_32 - Integer binary logarithm of a non-zero 32-bit value.
- * @_v: A non-zero 32-bit value.
- * Returns floor(log2(_v))+1.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * If _v is zero, the return value is undefined; use OC_ILOG_32() instead.
- */
-#  define OC_ILOGNZ_32(_v) (OC_CLZ32_OFFS-OC_CLZ32(_v))
-/**
- * OC_ILOG_32 - Integer binary logarithm of a 32-bit value.
- * @_v: A 32-bit value.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- */
-#  define OC_ILOG_32(_v)   (OC_ILOGNZ_32(_v)&-!!(_v))
-# else
-#  define OC_ILOGNZ_32(_v) (oc_ilog32(_v))
-#  define OC_ILOG_32(_v)   (oc_ilog32(_v))
-# endif
-    
-    /***** residue backends *********************************************/
-    
-    # if !defined(__ARM_MAX_ARCH__)
-#  define __ARM_MAX_ARCH__ __ARM_ARCH__
-# endif
-    
-    	for (j=0; j<6; j++)
-		{
-		for (i=0; i<1000; i++) /**/
-			{
-			des_encrypt1(&data[0],key,1);
-			GetTSC(s1);
-			des_encrypt1(&data[0],key,1);
-			des_encrypt1(&data[0],key,1);
-			des_encrypt1(&data[0],key,1);
-			GetTSC(e1);
-			GetTSC(s2);
-			des_encrypt1(&data[0],key,1);
-			des_encrypt1(&data[0],key,1);
-			des_encrypt1(&data[0],key,1);
-			des_encrypt1(&data[0],key,1);
-			GetTSC(e2);
-			des_encrypt1(&data[0],key,1);
-			}
+    {
+    {
+    {    /// return the value of an iterator
+    reference value() const
+    {
+        auto it = --this->base();
+        return it.operator * ();
     }
-    
-    // GLFW callbacks (registered by default to GLFW if you enable 'install_callbacks' during initialization)
-// Provided here if you want to chain callbacks yourself. You may also handle inputs yourself and use those as a reference.
-IMGUI_API void        ImGui_ImplGlfwGL2_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-IMGUI_API void        ImGui_ImplGlfwGL2_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-IMGUI_API void        ImGui_ImplGlfwGL2_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-IMGUI_API void        ImGui_ImplGlfwGL2_CharCallback(GLFWwindow* window, unsigned int c);
+};
+}
+}
 
     
-    void CleanupRenderTarget()
+    namespace nlohmann
 {
-    if (g_mainRenderTargetView) { g_mainRenderTargetView->Release(); g_mainRenderTargetView = NULL; }
-}
-    
-    
-    {    return 0;
-}
-    
-        // Setup inputs
-    // (we already got mouse wheel, keyboard keys & characters from glfw callbacks polled in glfwPollEvents())
-    if (glfwGetWindowAttrib(g_Window, GLFW_FOCUSED))
-    {
-        if (io.WantMoveMouse)
-        {
-            glfwSetCursorPos(g_Window, (double)io.MousePos.x, (double)io.MousePos.y);   // Set mouse position if requested by io.WantMoveMouse flag (used when io.NavMovesTrue is enabled by user and using directional navigation)
-        }
-        else
-        {
-            double mouse_x, mouse_y;
-            glfwGetCursorPos(g_Window, &mouse_x, &mouse_y);
-            io.MousePos = ImVec2((float)mouse_x, (float)mouse_y);
-        }
+namespace detail
+{
+///////////////////////////
+// JSON type enumeration //
+///////////////////////////
     }
-    else
-    {
-        io.MousePos = ImVec2(-FLT_MAX,-FLT_MAX);
     }
     
-        for (int i = 0; i < 3; i++)
-    {
-        // If a mouse press event came, always pass it as 'mouse held this frame', so we don't miss click-release events that are shorter than 1 frame.
-        io.MouseDown[i] = g_MouseJustPressed[i] || glfwGetMouseButton(g_Window, i) != 0;
-        g_MouseJustPressed[i] = false;
+    Unit FileToVector(const std::string &Path, size_t MaxSize = 0,
+                  bool ExitOnError = true);
+    
+    void ListFilesInDirRecursive(const std::string &Dir, long *Epoch,
+                             std::vector<std::string> *V, bool TopDir) {
+  auto E = GetEpoch(Dir);
+  if (Epoch)
+    if (E && *Epoch >= E) return;
     }
+    
+      bool InFuzzingThread() const { return IsMyThread; }
+  size_t GetCurrentUnitInFuzzingThead(const uint8_t **Data) const;
+  void TryDetectingAMemoryLeak(const uint8_t *Data, size_t Size,
+                               bool DuringInitialCorpusExecution);
