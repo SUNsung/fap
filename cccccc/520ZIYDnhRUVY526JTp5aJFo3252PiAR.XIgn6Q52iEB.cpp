@@ -1,188 +1,356 @@
 
         
-        
-    {  DISALLOW_COPY_AND_ASSIGN(AtomMainDelegate);
-};
+        #include <string>
     
-    // static
-Handle<Event> Event::Create(v8::Isolate* isolate) {
-  return mate::CreateHandle(isolate, new Event(isolate));
+      // RenderViewHostObserver implementation.
+  // WebContentsObserver implementation:
+  bool OnMessageReceived(
+                         content::RenderViewHost* render_view_host,
+                         const IPC::Message& message) override;
+    
+    void Menu::Call(const std::string& method,
+                const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  if (method == 'Append') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    Append(object_manager()->GetApiObject<MenuItem>(object_id));
+  } else if (method == 'Insert') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Remove') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Popup') {
+    int x = 0;
+    arguments.GetInteger(0, &x);
+    int y = 0;
+    arguments.GetInteger(1, &y);
+    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
+    DCHECK(web_contents);
+    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
+    }
+    }
+    
+    
+    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  return item->is_checked_;
 }
     
-    namespace auto_updater {
+    void convert_dataset(const char* image_filename, const char* label_filename,
+        const char* db_filename) {
+  // Open files
+  std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
+  std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
+  CHECK(image_file) << 'Unable to open file ' << image_filename;
+  CHECK(label_file) << 'Unable to open file ' << label_filename;
+  // Read the magic and the meta data
+  uint32_t magic;
+  uint32_t num_items;
+  uint32_t num_labels;
+  uint32_t rows;
+  uint32_t cols;
     }
     
-    namespace atom {
+     protected:
+  /// @copydoc AbsValLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    #ifndef CPU_ONLY
+  void forward_gpu_gemm(const Dtype* col_input, const Dtype* weights,
+      Dtype* output, bool skip_im2col = false);
+  void forward_gpu_bias(Dtype* output, const Dtype* bias);
+  void backward_gpu_gemm(const Dtype* input, const Dtype* weights,
+      Dtype* col_output);
+  void weight_gpu_gemm(const Dtype* col_input, const Dtype* output, Dtype*
+      weights);
+  void backward_gpu_bias(Dtype* bias, const Dtype* input);
+#endif
+    
+      // algorithms for forward and backwards convolutions
+  cudnnConvolutionFwdAlgo_t *fwd_algo_;
+  cudnnConvolutionBwdFilterAlgo_t *bwd_filter_algo_;
+  cudnnConvolutionBwdDataAlgo_t *bwd_data_algo_;
+    
+    namespace caffe {
     }
     
-    #endif  // ATOM_BROWSER_NET_URL_REQUEST_BUFFER_JOB_H_
-
+      virtual inline const char* type() const { return 'Dropout'; }
     
-    // relauncher implements main browser application relaunches across platforms.
-// When a browser wants to relaunch itself, it can't simply fork off a new
-// process and exec a new browser from within. That leaves open a window
-// during which two browser applications might be running concurrently. If
-// that happens, each will wind up with a distinct Dock icon, which is
-// especially bad if the user expected the Dock icon to be persistent by
-// choosing Keep in Dock from the icon's contextual menu.
-//
-// relauncher approaches this problem by introducing an intermediate
-// process (the 'relauncher') in between the original browser ('parent') and
-// replacement browser ('relaunched'). The helper executable is used for the
-// relauncher process; because it's an LSUIElement, it doesn't get a Dock
-// icon and isn't visible as a running application at all. The parent will
-// start a relauncher process, giving it the 'writer' side of a pipe that it
-// retains the 'reader' end of. When the relauncher starts up, it will
-// establish a kqueue to wait for the parent to exit, and will then write to
-// the pipe. The parent, upon reading from the pipe, is free to exit. When the
-// relauncher is notified via its kqueue that the parent has exited, it
-// proceeds, launching the relaunched process. The handshake to synchronize
-// the parent with the relauncher is necessary to avoid races: the relauncher
-// needs to be sure that it's monitoring the parent and not some other process
-// in light of PID reuse, so the parent must remain alive long enough for the
-// relauncher to set up its kqueue.
-    
-    
-    {  if (event.filter != EVFILT_PROC ||
-      event.fflags != NOTE_EXIT ||
-      event.ident != static_cast<uintptr_t>(parent_pid)) {
-    LOG(ERROR) << 'kevent (monitor): unexpected event, filter ' << event.filter
-               << ', fflags ' << event.fflags << ', ident ' << event.ident;
-    return;
-  }
-}
-    
-    void RenderProcessPreferences::RemoveEntry(int id) {
-  cache_needs_update_ = true;
-  entries_.erase(id);
-}
-    
-    OCL_PERF_TEST_P(StereoBMFixture, StereoBM, ::testing::Combine(OCL_PERF_ENUM(32, 64, 128), OCL_PERF_ENUM(11,21) ) )
-{
-    const int n_disp = get<0>(GetParam()), winSize = get<1>(GetParam());
-    UMat left, right, disp;
-    }
-    
-        declare.in(points3d, points2d);
-    declare.time(100);
-    
-        Vec3d ex(p10.x - p00.x, p10.y - p00.y, p10.z - p00.z);
-    Vec3d ey(p01.x - p00.x, p01.y - p00.y, p01.z - p00.z);
-    Vec3d ez = ex.cross(ey);
-    
-    
-void CV_RodriguesTest::fill_array( int test_case_idx, int i, int j, Mat& arr )
-{
-    if( i == INPUT && j == 0 )
-    {
-        double r[3], theta0, theta1, f;
-        Mat _r( arr.rows, arr.cols, CV_MAKETYPE(CV_64F,arr.channels()), r );
-        RNG& rng = ts->get_rng();
-    }
-    }
-    
-    // Add a second service with one sync streamed unary method.
-class StreamedUnaryDupPkg
-    : public duplicate::EchoTestService::WithStreamedUnaryMethod_Echo<
-          TestServiceImplDupPkg> {
+    /**
+ * @brief Computes the Euclidean (L2) loss @f$
+ *          E = \frac{1}{2N} \sum\limits_{n=1}^N \left| \left| \hat{y}_n - y_n
+ *        \right| \right|_2^2 @f$ for real-valued regression tasks.
+ *
+ * @param bottom input Blob vector (length 2)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the predictions @f$ \hat{y} \in [-\infty, +\infty]@f$
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the targets @f$ y \in [-\infty, +\infty]@f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+ *      the computed Euclidean loss: @f$ E =
+ *          \frac{1}{2n} \sum\limits_{n=1}^N \left| \left| \hat{y}_n - y_n
+ *        \right| \right|_2^2 @f$
+ *
+ * This can be used for least-squares regression tasks.  An InnerProductLayer
+ * input to a EuclideanLossLayer exactly formulates a linear least squares
+ * regression problem. With non-zero weight decay the problem becomes one of
+ * ridge regression -- see src/caffe/test/test_sgd_solver.cpp for a concrete
+ * example wherein we check that the gradients computed for a Net with exactly
+ * this structure match hand-computed gradient formulas for ridge regression.
+ *
+ * (Note: Caffe, and SGD in general, is certainly \b not the best way to solve
+ * linear least squares problems! We use it only as an instructive example.)
+ */
+template <typename Dtype>
+class EuclideanLossLayer : public LossLayer<Dtype> {
  public:
-  Status StreamedEcho(
-      ServerContext* context,
-      ServerUnaryStreamer<EchoRequest, EchoResponse>* stream) override {
-    EchoRequest req;
-    EchoResponse resp;
-    uint32_t next_msg_sz;
-    stream->NextMessageSize(&next_msg_sz);
-    gpr_log(GPR_INFO, 'Streamed Unary Next Message Size is %u', next_msg_sz);
-    GPR_ASSERT(stream->Read(&req));
-    resp.set_message(req.message() + '_dup');
-    GPR_ASSERT(stream->Write(resp));
-    return Status::OK;
-  }
-};
-    
-      bool FinalizeResult(void** tag, bool* status) override {
-    this->Op1::FinishOp(status);
-    this->Op2::FinishOp(status);
-    this->Op3::FinishOp(status);
-    this->Op4::FinishOp(status);
-    this->Op5::FinishOp(status);
-    this->Op6::FinishOp(status);
-    *tag = return_tag_;
+  explicit EuclideanLossLayer(const LayerParameter& param)
+      : LossLayer<Dtype>(param), diff_() {}
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-    int grpc_compression_options_is_algorithm_enabled(
-    const grpc_compression_options* opts,
-    grpc_compression_algorithm algorithm) {
-  return GPR_BITGET(opts->enabled_algorithms_bitset, algorithm);
+    // WorkloadStats is used to track per request timing for different states
+// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
+// should be made to guard the state change with appropriate timers and
+// counters.
+//
+// The states tracked are:
+//  - In a request (this is a superset of the interpreter state)
+//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
+//  - In the JIT (currently tracks time inside the translate routine)
+//
+// Note the time in the TC is not tracked.  This is roughly:
+//   Time in request - Time in interp
+//
+// This gives us the relative interp time formula of:
+//   Relative interp time = Time in interp / Time in request
+struct WorkloadStats final {
+  enum State {
+    InRequest,
+    // -> InInterp   Okay (entering Dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InInterp,
+    // -> InRequest  Okay (leaving the dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InTrans,
+    // -> InRequest  Okay (leaving translate)
+    // -> InInterp   Okay (leaving translate)
+  };
+    }
+    
+    #include <folly/portability/SysTime.h>
+    
+    // Sends a copy of the given command to the associated client
+// using the buffer in m_thrift. Returns false if an exception
+// occurs during the send (typically a socket error).
+bool DebuggerProxy::sendToClient(DebuggerCommand *cmd) {
+  TRACE(2, 'DebuggerProxy::sendToClient\n');
+  return cmd->send(m_thrift);
 }
     
-    int grpc_msg_decompress(grpc_message_compression_algorithm algorithm,
-                        grpc_slice_buffer* input, grpc_slice_buffer* output) {
-  switch (algorithm) {
-    case GRPC_MESSAGE_COMPRESS_NONE:
-      return copy(input, output);
-    case GRPC_MESSAGE_COMPRESS_DEFLATE:
-      return zlib_decompress(input, output, 0);
-    case GRPC_MESSAGE_COMPRESS_GZIP:
-      return zlib_decompress(input, output, 1);
-    case GRPC_MESSAGE_COMPRESS_ALGORITHMS_COUNT:
-      break;
+    /*
+ * This function is like a request-agnostic version of
+ * server_warmup_status().
+ * Three conditions necessary for the jit to qualify as 'warmed-up':
+ * 1. Has HHVM evaluated enough requests?
+ * 2. Has retranslateAll happened yet?
+ * 3. Has code size plateaued? Is the rate of new code emission flat?
+ * If the jit is warmed up, this function returns the empty string.
+ */
+std::string warmupStatusString();
+    
+      if (!charset.empty()) {
+    charsetenc = mbfl_name2no_encoding(charset.data());
+    if (charsetenc == mbfl_no_encoding_invalid) {
+      raise_warning('Unknown encoding \'%s\'', charset.data());
+      return false;
+    }
+  } else {
+    const mbfl_language *lang = mbfl_no2language(MBSTRG(current_language));
+    if (lang != nullptr) {
+      charsetenc = lang->mail_charset;
+      transenc = lang->mail_header_encoding;
+    }
   }
-  gpr_log(GPR_ERROR, 'invalid compression algorithm %d', algorithm);
-  return 0;
+    
+    #endif
+
+    
+    jit::vector<Vlabel> Clusterizer::getBlockList() const {
+  jit::vector<Vlabel> list;
+  for (auto cid : m_clusterOrder) {
+    for (auto b : m_clusters[cid]) {
+      list.push_back(b);
+    }
+  }
+  return list;
 }
+    
+    void HttpServer::EvictFileCache() {
+  // In theory, the kernel should do just as well even if we don't
+  // explicitly advise files out.  But we can do it anyway when we
+  // need more free memory, e.g., when a new instance of the server is
+  // about to start.
+  advise_out(RuntimeOption::RepoLocalPath);
+  advise_out(RuntimeOption::FileCache);
+  apc_advise_out();
+}
+    
+    
+    {
+    {} // namespace asio
+} // namespace boost
+    
+    #endif // BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
 
     
     
-    {  return 0;
-}
-
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
     
     
-    {  flatbuffers::grpc::MessageBuilder mb_;
-};
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
     
-    #include 'src/compiler/config.h'
+    #define BOOST_ASIO_DEFINE_HANDLER_PTR(op) \
+  struct ptr \
+  { \
+    Handler* h; \
+    void* v; \
+    op* p; \
+    ~ptr() \
+    { \
+      reset(); \
+    } \
+    void reset() \
+    { \
+      if (p) \
+      { \
+        p->~op(); \
+        p = 0; \
+      } \
+      if (v) \
+      { \
+        boost_asio_handler_alloc_helpers::deallocate(v, sizeof(op), *h); \
+        v = 0; \
+      } \
+    } \
+  } \
+  /**/
     
-        if (status.ok()) {
-      auto resp = response.GetRoot()->id();
-      std::cout << 'RPC response: ' << resp->str() << std::endl;
-    } else {
-      std::cout << 'RPC failed' << std::endl;
+    #define BOOST_ASIO_SIGNAL_HANDLER_CHECK( \
+    handler_type, handler) \
+  \
+  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
+      void(boost::system::error_code, int)) \
+    asio_true_handler_type; \
+  \
+  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
+      sizeof(boost::asio::detail::two_arg_handler_test( \
+          boost::asio::detail::clvref< \
+            asio_true_handler_type>(), \
+          static_cast<const boost::system::error_code*>(0), \
+          static_cast<const int*>(0))) == 1, \
+      'SignalHandler type requirements not met') \
+  \
+  typedef boost::asio::detail::handler_type_requirements< \
+      sizeof( \
+        boost::asio::detail::argbyv( \
+          boost::asio::detail::clvref< \
+            asio_true_handler_type>())) + \
+      sizeof( \
+        boost::asio::detail::lvref< \
+          asio_true_handler_type>()( \
+            boost::asio::detail::lvref<const boost::system::error_code>(), \
+            boost::asio::detail::lvref<const int>()), \
+        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
+    
+      virtual grpc::Status SayManyHellos(
+      grpc::ServerContext *context,
+      const flatbuffers::grpc::Message<ManyHellosRequest> *request_msg,
+      grpc::ServerWriter<flatbuffers::grpc::Message<HelloReply>> *writer)
+      override {
+    // The streaming usage below is simply a combination of standard gRPC
+    // streaming with the FlatBuffers usage shown above.
+    const ManyHellosRequest *request = request_msg->GetRoot();
+    const std::string &name = request->name()->str();
+    int num_greetings = request->num_greetings();
     }
-  }
+    
+    inline flatbuffers::TypeTable *TableInNestedNSTypeTable();
+    
+    namespace MyGame {
+namespace Example {
+    }
+    }
+    
+    class LogHelper {
+  std::ostream* os_;
+    }
+    
+    #if !FLATBUFFERS_GRPC_DISABLE_AUTO_VERIFICATION
   {
+    // Test that an invalid request errors out correctly
     grpc::ClientContext context;
-    fbb.Clear();
-    auto stat_offset = CreateStat(fbb, fbb.CreateString('Fred'));
-    fbb.Finish(stat_offset);
-    auto request = fbb.ReleaseMessage<Stat>();
+    flatbuffers::grpc::Message<Monster> request;  // simulate invalid message
+    flatbuffers::grpc::Message<Stat> response;
+    auto status = stub->Store(&context, request, &response);
+    // The rpc status should be INTERNAL to indicate a verification error. This
+    // matches the protobuf gRPC status code for an unparseable message.
+    assert(!status.ok());
+    assert(status.error_code() == ::grpc::StatusCode::INTERNAL);
+    assert(strcmp(status.error_message().c_str(),
+                  'Message verification failed') == 0);
+  }
+#endif
     
-    // Get any table field as a 64bit int, regardless of what type it is.
-inline int64_t GetAnyFieldI(const Table &table,
-                            const reflection::Field &field) {
-  auto field_ptr = table.GetAddressOf(field.offset());
-  return field_ptr ? GetAnyValueI(field.type()->base_type(), field_ptr)
-                   : field.default_integer();
+     protected:
+  BaseGenerator(const Parser &parser, const std::string &path,
+                const std::string &file_name,
+                const std::string qualifying_start,
+                const std::string qualifying_separator)
+      : parser_(parser),
+        path_(path),
+        file_name_(file_name),
+        qualifying_start_(qualifying_start),
+        qualifying_separator_(qualifying_separator) {}
+  virtual ~BaseGenerator() {}
+    
+    inline int32_t LookupEnum(int32_t enum_val, const int32_t *values,
+                          size_t num_values) {
+  if (!values) return enum_val;
+  for (size_t i = 0; i < num_values; i++) {
+    if (enum_val == values[i]) return static_cast<int32_t>(i);
+  }
+  return -1;  // Unknown enum value.
 }
     
-      // Get and test a field of the FlatBuffer's `struct`.
-  auto pos = monster->pos();
-  assert(pos);
-  assert(pos->z() == 3.0f);
-  (void)pos;
-    
-    // This is an example of parsing text straight into a buffer and then
-// generating flatbuffer (JSON) text from the buffer.
-int main(int /*argc*/, const char * /*argv*/ []) {
-  // load FlatBuffer schema (.fbs) and JSON from disk
-  std::string schemafile;
-  std::string jsonfile;
-  bool ok = flatbuffers::LoadFile('samples/monster.fbs', false, &schemafile) &&
-            flatbuffers::LoadFile('samples/monsterdata.json', false, &jsonfile);
-  if (!ok) {
-    printf('couldn't load files!\n');
-    return 1;
-  }
-    }
+    // Get any table field as a string, regardless of what type it is.
+// You may pass nullptr for the schema if you don't care to have fields that
+// are of table type pretty-printed.
+inline std::string GetAnyFieldS(const Table &table,
+                                const reflection::Field &field,
+                                const reflection::Schema *schema) {
+  auto field_ptr = table.GetAddressOf(field.offset());
+  return field_ptr ? GetAnyValueS(field.type()->base_type(), field_ptr, schema,
+                                  field.type()->index())
+                   : '';
+}
