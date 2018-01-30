@@ -1,53 +1,57 @@
 
         
-                def apply_scope(scope, table, key, value)
-          if scope.table == table
-            scope.where!(key => value)
-          else
-            scope.where!(table.name => { key => value })
+            brew cask install mactex
+    EOS
+  when 'pip' then <<-EOS.undent
+    Homebrew provides pip via: `brew install python`. However you will then
+    have two Pythons installed on your Mac, so alternatively you can install
+    pip via the instructions at:
+    
+      def fetch_checksum_for(tag)
+    tag = find_matching_tag(tag)
+    return self[tag], tag if tag
+  end
+    
+      def merge(*args)
+    @settings.merge(*args)
+    self
+  end
+    
+      # @private
+  def used_options
+    @options & @args
+  end
+    
+        def self.cleanup_cache
+      return unless HOMEBREW_CACHE.directory?
+      HOMEBREW_CACHE.children.each do |path|
+        if path.to_s.end_with? '.incomplete'
+          cleanup_path(path) { path.unlink }
+          next
+        end
+        if path.basename.to_s == 'java_cache' && path.directory?
+          cleanup_path(path) { FileUtils.rm_rf path }
+          next
+        end
+        if prune?(path)
+          if path.file?
+            cleanup_path(path) { path.unlink }
+          elsif path.directory? && path.to_s.include?('--')
+            cleanup_path(path) { FileUtils.rm_rf path }
           end
+          next
         end
     
-            @disable_request_forgery_protection = false
-        @allow_same_origin_as_host = true
-      end
+    module Homebrew
+  def doctor
+    checks = Diagnostic::Checks.new
     
-    require 'abstract_unit'
-    
-              subscriptions.unsubscribe_from_all
-          unsubscribe_from_internal_channel
-    
-              send(name, *args, &block)
+            def run
+          print_version
+          signal_end_of_output
+          listen
         end
-    end
     
-      s.license = 'MIT'
-    
-        def schemes=(schemes)
-      @schemes = schemes ? schemes.compact : nil
-    end
-    
-          it 'raises an exception when xcode project path wasn't found' do
-        expect do
-          Fastlane::FastFile.new.parse('lane :test do
-            increment_version_number(xcodeproj: '/nothere')
-          end').runner.execute(:test)
-        end.to raise_error('Could not find Xcode project')
-      end
-    
-          { :title => 'Event', :entries => present_hash(payload) }
-    else
-      { :title => payload.to_s, :entries => [] }
+          expect('.border-width-all').to have_rule(rule)
     end
   end
-    
-        validate :validate_evernote_options
-    
-        respond_to do |format|
-      format.html { redirect_to jobs_path, notice: 'All jobs removed.' }
-      format.json { head :no_content }
-    end
-  end
-    
-    Note that you will likely need to have opened the app at least
-once for any login items to be present.
