@@ -1,0 +1,15 @@
+{
+  "options": {
+    "work_and_magick": true
+  },
+  "git": {
+    "url": "https://api.github.com",
+    "key": "",
+    "tree": ""
+  },
+  "language": {
+    "url_lg": [],
+    "seach_lg": [],
+    "name_lg": []
+  }
+}
