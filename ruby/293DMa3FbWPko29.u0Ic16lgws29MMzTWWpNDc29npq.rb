@@ -1,141 +1,94 @@
 
         
-        def site_configuration(overrides = {})
-  build_configs({
-    'source'      => source_dir,
-    'destination' => dest_dir
-  }, build_configs(overrides))
-end
+          config.vm.provider :virtualbox do |v|
+    # This setting gives the VM 1024MB of RAM instead of the default 384.
+    v.customize ['modifyvm', :id, '--memory', [ENV['DISCOURSE_VM_MEM'].to_i, 1024].max]
     
-              # If it's a directory they want to exclude, AKA
-          # ends with a '/' then we will go on to check and
-          # see if the entry falls within that path and
-          # exclude it if that's the case.
-    
-        # Check if excerpt includes a string
-    #
-    # Returns true if the string passed in
-    def include?(something)
-      (output && output.include?(something)) || content.include?(something)
+          topic.feature_topic_users(args)
     end
     
-      def dry_run!(event = nil)
-    @dry_run = true
+      def create
+    return render_404 unless can_read?(resource)
     
-      def reemit
-    @event.reemit!
-    respond_to do |format|
-      format.html { redirect_back event_path(@event), notice: 'Event re-emitted.' }
+        begin
+      response = U2F::RegisterResponse.load_from_json(params[:device_response])
+      registration_data = u2f.register!(challenges, response)
+      registration.update(certificate: registration_data.certificate,
+                          key_handle: registration_data.key_handle,
+                          public_key: registration_data.public_key,
+                          counter: registration_data.counter,
+                          user: user,
+                          name: params[:name])
+    rescue JSON::ParserError, NoMethodError, ArgumentError
+      registration.errors.add(:base, 'Your U2F device did not send a valid JSON response.')
+    rescue U2F::Error => e
+      registration.errors.add(:base, e.message)
     end
-  end
     
-                sequence_base := (
-              'x' ||
-              -- Take the first two bytes (four hex characters)
-              substr(
-                -- Of the MD5 hash of the data we documented
-                md5(table_name ||
-                  '#{SecureRandom.hex(16)}' ||
-                  time_part::text
-                ),
-                1, 4
-              )
-            -- And turn it into a bigint
-            )::bit(16)::bigint;
+      fd.close
     
-      task :define_timestamp_id do
-    each_schema_load_environment do
-      Mastodon::Snowflake.define_timestamp_id
-    end
-  end
+            report_auth_info(s.merge({:active => false}))
+        print_status('Failed IMAP Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]} (#{s[:banner].strip})')
     
-      describe 'GET #show' do
-    let!(:tag)     { Fabricate(:tag, name: 'test') }
-    let!(:local)   { Fabricate(:status, tags: [tag], text: 'local #test') }
-    let!(:remote)  { Fabricate(:status, tags: [tag], text: 'remote #test', account: Fabricate(:account, domain: 'remote')) }
-    let!(:late)    { Fabricate(:status, tags: [tag], text: 'late #test') }
+          # Get the publicly-visible URL for an imported file. This URL is used by
+      # source maps to link to the source stylesheet. This may return `nil` to
+      # indicate that no public URL is available; however, this will cause
+      # sourcemap generation to fail if any CSS is generated from files imported
+      # from this importer.
+      #
+      # If an absolute 'file:' URI can be produced for an imported file, that
+      # should be preferred to returning `nil`. However, a URL relative to
+      # `sourcemap_directory` should be preferred over an absolute 'file:' URI.
+      #
+      # @param uri [String] A URI known to be valid for this importer.
+      # @param sourcemap_directory [String, NilClass] The absolute path to a
+      #   directory on disk where the sourcemap will be saved. If uri refers to
+      #   a file on disk that's accessible relative to sourcemap_directory, this
+      #   may return a relative URL. This may be `nil` if the sourcemap's
+      #   eventual location is unknown.
+      # @return [String?] The publicly-visible URL for this file, or `nil`
+      #   indicating that no publicly-visible URL exists. This should be
+      #   appropriately URL-escaped.
+      def public_url(uri, sourcemap_directory)
+        return if @public_url_warning_issued
+        @public_url_warning_issued = true
+        Sass::Util.sass_warn <<WARNING
+WARNING: #{self.class.name} should define the #public_url method.
+WARNING
+        nil
+      end
     
-      def collection_presenter
-    page = ActivityPub::CollectionPresenter.new(
-      id: account_followers_url(@account, page: params.fetch(:page, 1)),
-      type: :ordered,
-      size: @account.followers_count,
-      items: @follows.map { |f| ActivityPub::TagManager.instance.uri_for(f.account) },
-      part_of: account_followers_url(@account),
-      next: page_url(@follows.next_page),
-      prev: page_url(@follows.prev_page)
-    )
-    if params[:page].present?
-      page
-    else
-      ActivityPub::CollectionPresenter.new(
-        id: account_followers_url(@account),
-        type: :ordered,
-        size: @account.followers_count,
-        first: page
-      )
+          def safe?(env)
+        %w[GET HEAD OPTIONS TRACE].include? env['REQUEST_METHOD']
+      end
+    
+            modes       = Array options[:escape]
+        @escaper    = options[:escaper]
+        @html       = modes.include? :html
+        @javascript = modes.include? :javascript
+        @url        = modes.include? :url
+    
+        it 'Returns nil when Referer header is invalid' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
+      expect(subject.referrer(env)).to be_nil
     end
   end
 end
 
     
-        OStatus::TagManager.instance.uri_for(object.thread)
-  end
-    
-        it 'updates user settings' do
-      user.settings['boost_modal'] = false
-      user.settings['delete_modal'] = true
-    
-          def origin(env)
-        env['HTTP_ORIGIN'] || env['HTTP_X_ORIGIN']
-      end
-    
-          def session_key
-        @session_key ||= options[:session_key]
-      end
-    end
-  end
-end
-
-    
-        it 'Reads referrer from Host header when Referer header is relative' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => '/valid'}
-      expect(subject.referrer(env)).to eq('foo.com')
-    end
-    
-        it 'leaves normal params untouched' do
+      context 'escaping' do
+    it 'escapes html entities' do
       mock_app do |env|
         request = Rack::Request.new(env)
         [200, {'Content-Type' => 'text/plain'}, [request.params['foo']]]
       end
-      get '/', :foo => 'bar'
-      expect(body).to eq('bar')
+      get '/', :foo => '<bar>'
+      expect(body).to eq('&lt;bar&gt;')
     end
     
       it 'should allow changing the protection mode' do
     # I have no clue what other modes are available
     mock_app do
-      use Rack::Protection::FrameOptions, :frame_options => :deny
+      use Rack::Protection::XSSHeader, :xss_mode => :foo
       run DummyApp
     end
-    
-      describe '#html?' do
-    context 'given an appropriate content-type header' do
-      subject { Rack::Protection::Base.new(nil).html? 'content-type' => 'text/html' }
-      it { is_expected.to be_truthy }
-    end
-    
-      it 'should not override the header if already set' do
-    mock_app with_headers('X-XSS-Protection' => '0')
-    expect(get('/', {}, 'wants' => 'text/html').headers['X-XSS-Protection']).to eq('0')
-  end
-    
-            def create
-          authorize! :create, StockMovement
-          @stock_movement = scope.new(stock_movement_params)
-          if @stock_movement.save
-            respond_with(@stock_movement, status: 201, default_template: :show)
-          else
-            invalid_resource!(@stock_movement)
-          end
-        end
