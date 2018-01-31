@@ -1,58 +1,94 @@
-        def transform_value(value)
-          value_transformation.call(value)
-        end
+
+        
+          # Asynchronously send an email
+  class TestEmail < Jobs::Base
     
-            def method_missing(name, *args, &block)
-          # Caches the method definition as a singleton method of the receiver.
-          #
-          # By letting #delegate handle it, we avoid an enclosure that'll capture args.
-          singleton_class.delegate name, to: :instance
+      def grant_moderation!
+    set_permission('moderator', true)
+  end
     
-    require 'active_job'
-    
-        # An email was generated.
-    def process(event)
-      debug do
-        mailer = event.payload[:mailer]
-        action = event.payload[:action]
-        '#{mailer}##{action}: processed outbound mail in #{event.duration.round(1)}ms'
+          it 'splits correctly' do
+        expected = [
+          'One',
+          'Two',
+          'Three',
+          'Four Token',
+          'Or',
+          'Newlines',
+          'Everywhere'
+        ]
+        expect(generator.split_keywords(keywords)).to eq(expected)
       end
-    end
-    
-      # Finds the groups of the source user, optionally limited to those visible to
-  # the current user.
-  def execute(current_user = nil)
-    segments = all_groups(current_user)
-    
-    # grab name/url pairings from README.md
-contents = File.read INPUT_FILENAME
-matches = contents.scan(/\* (.*) (http.*)/)
-# All blogs that do not respond
-unavailable = []
-temp_ignores = [
-  'AdRoll',
-  'Buzzfeed',
-  'SourceClear',
-  'TaskRabbit',
-  'theScore',
-  'Trivago',
-  'Xmartlabs',
-  'WyeWorks',
-  'Zoosk',
-  'Rudolf Olah'
-]
-    
-    describe 'buttons' do
-  before(:all) do
-    ParserSupport.parse_file('library/buttons')
-    
-          expect('.prefix--moz-ms').to have_ruleset(rule)
     end
   end
 end
 
     
-          expect('.all-text-inputs-invalid').to have_ruleset(ruleset)
+          # Run a certain action
+      def trigger(command: nil, serial: nil)
+        android_serial = serial != '' ? 'ANDROID_SERIAL=#{serial}' : nil
+        command = [android_serial, adb_path, command].join(' ')
+        Action.sh(command)
+      end
+    
+    module Fastlane
+  class CrashlyticsProjectParser
+    # @param project_file_path path to a .xcodeproj file
+    def initialize(config = {})
+      FastlaneCore::Project.detect_projects(config)
+      @project = FastlaneCore::Project.new(config, xcodebuild_list_silent: true, xcodebuild_suppress_stderr: true)
+    
+          it 'does set the source directory' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            cloc(source_directory: 'MyCoolApp')
+          end').runner.execute(:test)
+    
+              expect(result).to eq(true)
+        end
+      end
+    
+        def already_defined?
+      connection.execute(<<~SQL).values.first.first
+        SELECT EXISTS(
+          SELECT * FROM pg_proc WHERE proname = 'timestamp_id'
+        );
+      SQL
+    end
+    
+      def updated
+    object.updated_at.iso8601
+  end
+    
+        attributes :type, :href, :name
+    
+      before do
+    sign_in user, scope: :user
+  end
+    
+      def payload
+    @_payload ||= request.body.read
+  end
+    
+          expect('.border-color-all').to have_rule(rule)
     end
   end
-end
+    
+        @buttons_list = %w(
+      button
+      [type='button']
+      [type='reset']
+      [type='submit']
+    )
+  end
+    
+    describe 'margin' do
+  before(:all) do
+    ParserSupport.parse_file('library/margin')
+  end
+    
+      context 'called with null values' do
+    it 'writes rules for others' do
+      ruleset = 'position: static; ' +
+                'top: 11px; ' +
+                'left: 13px;'
+      bad_rule = 'position-bottom: null; position-right: null;'
