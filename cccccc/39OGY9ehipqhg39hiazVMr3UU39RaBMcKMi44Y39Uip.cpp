@@ -1,217 +1,293 @@
 
         
-        #include 'caffe/layers/neuron_layer.hpp'
-    
-    
-    {  /**
-   * @brief Computes the error gradient w.r.t. the BNLL inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
-    
-      /**
-   * @brief Computes the Contrastive error gradient w.r.t. the inputs.
-   *
-   * Computes the gradients with respect to the two input vectors (bottom[0] and
-   * bottom[1]), but not the similarity label (bottom[2]).
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
-   *      This Blob's diff will simply contain the loss_weight* @f$ \lambda @f$,
-   *      as @f$ \lambda @f$ is the coefficient of this layer's output
-   *      @f$\ell_i@f$ in the overall Net loss
-   *      @f$ E = \lambda_i \ell_i + \mbox{other loss terms}@f$; hence
-   *      @f$ \frac{\partial E}{\partial \ell_i} = \lambda_i @f$.
-   *      (*Assuming that this top Blob is not used as a bottom (input) by any
-   *      other layer of the Net.)
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times 1 \times 1) @f$
-   *      the features @f$a@f$; Backward fills their diff with
-   *      gradients if propagate_down[0]
-   *   -# @f$ (N \times C \times 1 \times 1) @f$
-   *      the features @f$b@f$; Backward fills their diff with gradients if
-   *      propagate_down[1]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include <vector>
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of PoolingLayer.
- *        Fallback to PoolingLayer for CPU mode.
-*/
-template <typename Dtype>
-class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
+        class Event : public Wrappable<Event>,
+              public content::WebContentsObserver {
  public:
-  explicit CuDNNPoolingLayer(const LayerParameter& param)
-      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNPoolingLayer();
-  // Currently, cuDNN does not support the extra top blob.
-  virtual inline int MinTopBlobs() const { return -1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
+  static Handle<Event> Create(v8::Isolate* isolate);
     }
     
+      // net::URLRequestJobFactory::ProtocolHandler:
+  net::URLRequestJob* MaybeCreateJob(
+      net::URLRequest* request,
+      net::NetworkDelegate* network_delegate) const override;
+  bool IsSafeRedirectTarget(const GURL& location) const override;
     
-    {  /// when divided by UINT_MAX, the randomly generated values @f$u\sim U(0,1)@f$
-  Blob<unsigned int> rand_vec_;
-  /// the probability @f$ p @f$ of dropping any input
-  Dtype threshold_;
-  /// the scale for undropped inputs at train time @f$ 1 / (1 - p) @f$
-  Dtype scale_;
-  unsigned int uint_thres_;
-};
-    
-    /**
- * @brief Compute elementwise operations, such as product and sum,
- *        along multiple input Blobs.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-template <typename Dtype>
-class EltwiseLayer : public Layer<Dtype> {
- public:
-  explicit EltwiseLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+    namespace relauncher {
     }
+    
+    // only copy a complete independent tree
+// when node name exists
+void ComputationNetwork::CopySubTree(const ComputationNetwork& fromNet,
+                                     const std::wstring fromName, std::wstring toNamePrefix,
+                                     const CopyNodeFlags flags)
+{
+    InvalidateCompiledNetwork();
+    }
+    
+    #include 'PostComputingActions.h'
+    
+    #pragma once
+    
+            // if we have more than one matching parameter
+        if (singleInputMultiOutput)
+        {
+            auto nodeIn = nodes[0];
+            vector<ComputationNodeBasePtr> nodesOut = netNdlOut->cn->GetNodesFromName(nameOut);
+    }
+    
+      memset(lotsa_as, 'a', 512 * sizeof(lotsa_as[0]));
+  memset(lotsa_bs, 'b', 1024 * sizeof(lotsa_bs[0]));
+  /* use slices large enough to overflow inlining */
+  slices[0] = grpc_slice_malloc(512);
+  memcpy(GRPC_SLICE_START_PTR(slices[0]), lotsa_as, 512);
+  slices[1] = grpc_slice_malloc(1024);
+  memcpy(GRPC_SLICE_START_PTR(slices[1]), lotsa_bs, 1024);
+    
+    
+    { private:
+  static void CheckDone(grpc::Status s, SimpleResponse* response) {}
+  static std::unique_ptr<grpc::ClientAsyncWriter<SimpleRequest>> PrepareReq(
+      BenchmarkService::Stub* stub, grpc::ClientContext* ctx,
+      SimpleResponse* resp, CompletionQueue* cq) {
+    auto stream = stub->PrepareAsyncStreamingFromClient(ctx, resp, cq);
+    return stream;
+  };
+  static ClientRpcContext* SetupCtx(BenchmarkService::Stub* stub,
+                                    std::function<gpr_timespec()> next_issue,
+                                    const SimpleRequest& req) {
+    return new ClientRpcContextStreamingFromClientImpl<SimpleRequest,
+                                                       SimpleResponse>(
+        stub, req, next_issue, AsyncStreamingFromClientClient::PrepareReq,
+        AsyncStreamingFromClientClient::CheckDone);
+  }
+};
     
      protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-        60,30,500,   1.,18.,  128
-  },
-  /* 3: 256 x 7 */
-  {
-    2,{0,1},{3,4},{2,2},{0,1},
-    {{-1,2,3,4},{-1,5,6,7}},
-    4,{0,256, 28,8,116, 4,16,56,180},
-    
-    static inline float unitnorm(float x){
-  union {
-    ogg_uint32_t i;
-    float f;
-  } ix;
-  ix.f = x;
-  ix.i = (ix.i & 0x80000000U) | (0x3f800000U);
-  return ix.f;
-}
-    
-    # undef l2n
-# define l2n(l,c)        (*((c)++)=(unsigned char)(((l)>>24L)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>>16L)&0xff), \
-                         *((c)++)=(unsigned char)(((l)>> 8L)&0xff), \
-                         *((c)++)=(unsigned char)(((l)     )&0xff))
-    
-    	for (j=0; j<6; j++)
-		{
-		for (i=0; i<1000; i++) /**/
-			{
-			BF_encrypt(&data[0],&key);
-			GetTSC(s1);
-			BF_encrypt(&data[0],&key);
-			BF_encrypt(&data[0],&key);
-			BF_encrypt(&data[0],&key);
-			GetTSC(e1);
-			GetTSC(s2);
-			BF_encrypt(&data[0],&key);
-			BF_encrypt(&data[0],&key);
-			BF_encrypt(&data[0],&key);
-			BF_encrypt(&data[0],&key);
-			GetTSC(e2);
-			BF_encrypt(&data[0],&key);
-			}
-    }
-    
-    	CAST_set_key(&key, 16,d);
-    
-        // Setup display size (every frame to accommodate for window resizing)
-    RECT rect;
-    GetClientRect(g_hWnd, &rect);
-    io.DisplaySize = ImVec2((float)(rect.right - rect.left), (float)(rect.bottom - rect.top));
-    
-    
-    {    switch (msg)
-    {
-    case WM_SIZE:
-        if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
-        {
-            ImGui_ImplDX10_InvalidateDeviceObjects();
-            CleanupRenderTarget();
-            g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
-            CreateRenderTarget();
-            ImGui_ImplDX10_CreateDeviceObjects();
+  // WaitToIssue returns false if we realize that we need to break out
+  bool WaitToIssue(int thread_idx) {
+    if (!closed_loop_) {
+      const gpr_timespec next_issue_time = NextIssueTime(thread_idx);
+      // Avoid sleeping for too long continuously because we might
+      // need to terminate before then. This is an issue since
+      // exponential distribution can occasionally produce bad outliers
+      while (true) {
+        const gpr_timespec one_sec_delay =
+            gpr_time_add(gpr_now(GPR_CLOCK_MONOTONIC),
+                         gpr_time_from_seconds(1, GPR_TIMESPAN));
+        if (gpr_time_cmp(next_issue_time, one_sec_delay) <= 0) {
+          gpr_sleep_until(next_issue_time);
+          return true;
+        } else {
+          gpr_sleep_until(one_sec_delay);
+          if (gpr_atm_acq_load(&thread_pool_done_) != static_cast<gpr_atm>(0)) {
+            return false;
+          }
         }
-        return 0;
-    case WM_SYSCOMMAND:
-        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
-            return 0;
-        break;
-    case WM_DESTROY:
-        PostQuitMessage(0);
-        return 0;
+      }
     }
-    return DefWindowProc(hWnd, msg, wParam, lParam);
-}
+    return true;
+  }
     
-        // Setup render state
-    const float blend_factor[4] = { 0.f, 0.f, 0.f, 0.f };
-    ctx->OMSetBlendState(g_pBlendState, blend_factor, 0xffffffff);
-    ctx->OMSetDepthStencilState(g_pDepthStencilState, 0);
-    ctx->RSSetState(g_pRasterizerState);
+    #endif // BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
+
     
-    static bool IsAnyMouseButtonDown()
+    #include <boost/asio/detail/config.hpp>
+    
+    
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
+    
+    
+    {    // Make the upcall if required.
+    if (owner)
+    {
+      fenced_block b(fenced_block::half);
+      BOOST_ASIO_HANDLER_INVOCATION_BEGIN((handler.arg1_, handler.arg2_));
+      boost_asio_handler_invoke_helpers::invoke(handler, handler.handler_);
+      BOOST_ASIO_HANDLER_INVOCATION_END;
+    }
+  }
+    
+      static bool do_perform(reactor_op* base)
+  {
+    descriptor_write_op_base* o(static_cast<descriptor_write_op_base*>(base));
+    }
+    
+    #include <boost/asio/detail/posix_fd_set_adapter.hpp>
+#include <boost/asio/detail/win_fd_set_adapter.hpp>
+    
+    dev_poll_reactor::dev_poll_reactor(boost::asio::io_service& io_service)
+  : boost::asio::detail::service_base<dev_poll_reactor>(io_service),
+    io_service_(use_service<io_service_impl>(io_service)),
+    mutex_(),
+    dev_poll_fd_(do_dev_poll_create()),
+    interrupter_(),
+    shutdown_(false)
 {
-    ImGuiIO& io = ImGui::GetIO();
-    for (int n = 0; n < IM_ARRAYSIZE(io.MouseDown); n++)
-        if (io.MouseDown[n])
-            return true;
-    return false;
+  // Add the interrupter's descriptor to /dev/poll.
+  ::pollfd ev = { 0, 0, 0 };
+  ev.fd = interrupter_.read_descriptor();
+  ev.events = POLLIN | POLLERR;
+  ev.revents = 0;
+  ::write(dev_poll_fd_, &ev, sizeof(ev));
 }
     
-    // Data
-static double       g_Time = 0.0f;
-static bool         g_MousePressed[3] = { false, false, false };
-static CIwTexture*  g_FontTexture = NULL;
-static char*        g_ClipboardText = NULL;
-static bool         g_osdKeyboardEnabled = false;
+    FilterBlockReader::FilterBlockReader(const FilterPolicy* policy,
+                                     const Slice& contents)
+    : policy_(policy),
+      data_(NULL),
+      offset_(NULL),
+      num_(0),
+      base_lg_(0) {
+  size_t n = contents.size();
+  if (n < 5) return;  // 1 byte for base_lg_ and 4 for start of offset array
+  base_lg_ = contents[n-1];
+  uint32_t last_word = DecodeFixed32(contents.data() + n - 5);
+  if (last_word > n - 5) return;
+  data_ = contents.data();
+  offset_ = data_ + last_word;
+  num_ = (n - 5 - last_word) / 4;
+}
     
-        // Build atlas
-    unsigned char* tex_pixels = NULL;
-    int tex_w, tex_h;
-    io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
+      void Delete(const SnapshotImpl* s) {
+    assert(s->list_ == this);
+    s->prev_->next_ = s->next_;
+    s->next_->prev_ = s->prev_;
+    delete s;
+  }
+    
+      void Add(const char* smallest, const char* largest,
+           SequenceNumber smallest_seq = 100,
+           SequenceNumber largest_seq = 100) {
+    FileMetaData* f = new FileMetaData;
+    f->number = files_.size() + 1;
+    f->smallest = InternalKey(smallest, smallest_seq, kTypeValue);
+    f->largest = InternalKey(largest, largest_seq, kTypeValue);
+    files_.push_back(f);
+  }
+    
+      static Status InsertInto(const WriteBatch* batch, MemTable* memtable);
+    
+     public:
+  RandomGenerator() {
+    // We use a limited amount of data over and over again and ensure
+    // that it is larger than the compression window (32KB), and also
+    // large enough to serve all typical value sizes we want to write.
+    Random rnd(301);
+    std::string piece;
+    while (data_.size() < 1048576) {
+      // Add a short fragment that is as compressible as specified
+      // by FLAGS_compression_ratio.
+      test::CompressibleString(&rnd, FLAGS_compression_ratio, 100, &piece);
+      data_.append(piece);
+    }
+    pos_ = 0;
+  }
+    
+      std::string write_data;
+  for (size_t i = 0; i < kWriteSize; ++i) {
+    write_data.append(1, static_cast<char>(i));
+  }
+    
+      // Third filter is empty
+    
+    #endif  // STORAGE_LEVELDB_TABLE_ITERATOR_WRAPPER_H_
+
+    
+      virtual Slice key() const {
+    assert(Valid());
+    return current_->key();
+  }
+    
+    
+    { private:
+  // synchronizer
+  std::unique_ptr<TreeUpdater> syncher;
+  // training parameter
+  TrainParam param;
+};
+    
+      uint32_t uint32_t2[2] = {1U, 2U};
+  EXPECT_EQ(info.base_margin.size(), 0);
+  info.SetInfo('base_margin', uint32_t2, xgboost::kUInt32, 2);
+  EXPECT_EQ(info.base_margin.size(), 2);
+    
+    
+    { private:
+  inline static void AddStats(const RegTree &tree,
+                              const RegTree::FVec &feat,
+                              const std::vector<bst_gpair> &gpair,
+                              const MetaInfo &info,
+                              const bst_uint ridx,
+                              TStats *gstats) {
+    // start from groups that belongs to current data
+    int pid = static_cast<int>(info.GetRoot(ridx));
+    gstats[pid].Add(gpair, info, ridx);
+    // tranverse tree
+    while (!tree[pid].is_leaf()) {
+      unsigned split_index = tree[pid].split_index();
+      pid = tree.GetNext(pid, feat.fvalue(split_index), feat.is_missing(split_index));
+      gstats[pid].Add(gpair, info, ridx);
+    }
+  }
+  inline void Refresh(const TStats *gstats,
+                      int nid, RegTree *p_tree) {
+    RegTree &tree = *p_tree;
+    tree.stat(nid).base_weight = static_cast<bst_float>(gstats[nid].CalcWeight(param));
+    tree.stat(nid).sum_hess = static_cast<bst_float>(gstats[nid].sum_hess);
+    gstats[nid].SetLeafVec(param, tree.leafvec(nid));
+    if (tree[nid].is_leaf()) {
+      if (param.refresh_leaf) {
+        tree[nid].set_leaf(tree.stat(nid).base_weight * param.learning_rate);
+      }
+    } else {
+      tree.stat(nid).loss_chg = static_cast<bst_float>(
+          gstats[tree[nid].cleft()].CalcGain(param) +
+          gstats[tree[nid].cright()].CalcGain(param) -
+          gstats[nid].CalcGain(param));
+      this->Refresh(gstats, tree[nid].cleft(), p_tree);
+      this->Refresh(gstats, tree[nid].cright(), p_tree);
+    }
+  }
+  // training parameter
+  TrainParam param;
+  // reducer
+  rabit::Reducer<TStats, TStats::Reduce> reducer;
+};
+    
+    // This is a helpful data structure to define parameters
+// You do not have to use it.
+// see http://dmlc-core.readthedocs.org/en/latest/parameter.html
+// for introduction of this module.
+struct MyLogisticParam : public dmlc::Parameter<MyLogisticParam> {
+  float scale_neg_weight;
+  // declare parameters
+  DMLC_DECLARE_PARAMETER(MyLogisticParam) {
+    DMLC_DECLARE_FIELD(scale_neg_weight).set_default(1.0f).set_lower_bound(0.0f)
+        .describe('Scale the weight of negative examples by this factor');
+  }
+};
+    
+    
+    {#undef EXT_FUNC
+}
+    
+    #include 'FuzzerIO.h'
+#include 'FuzzerDefs.h'
+#include 'FuzzerExtFunctions.h'
+#include <algorithm>
+#include <cstdarg>
+#include <fstream>
+#include <iterator>
+#include <sys/stat.h>
+#include <sys/types.h>
+    
+    void MutationDispatcher::ClearAutoDictionary() {
+  TempAutoDictionary.clear();
+}
+    
+    #ifndef LLVM_FUZZER_OPTIONS_H
+#define LLVM_FUZZER_OPTIONS_H
