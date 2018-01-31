@@ -1,297 +1,318 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    #include 'tensorflow/core/lib/core/notification.h'
-#include 'tensorflow/core/platform/test.h'
-    
-    // ResourceOpKernel<T> is a virtual base class for resource op implementing
-// interface type T. The inherited op looks up the resource name (determined by
-// ContainerInfo), and creates a new resource if necessary.
-//
-// Requirements:
-//  - Op must be marked as stateful.
-//  - Op must have `container` and `shared_name` attributes. Empty `container`
-//  means using the default container. Empty `shared_name` means private
-//  resource.
-//  - Subclass must override CreateResource().
-//  - Subclass is encouraged to override VerifyResource().
-template <typename T>
-class ResourceOpKernel : public OpKernel {
- public:
-  explicit ResourceOpKernel(OpKernelConstruction* context) : OpKernel(context) {
-    OP_REQUIRES_OK(context,
-                   context->allocate_persistent(DT_STRING, TensorShape({2}),
-                                                &handle_, nullptr));
-  }
-    }
-    
-      bool ret = false;
-  if (running && (pid > 1)) {
-    pid_t cpid;
-    int cstat;
-    bool done = false;
-    while (!done) {
-      cpid = waitpid(pid, &cstat, 0);
-      if ((cpid < 0) && !retry(errno)) {
-        done = true;
-      } else if ((cpid == pid) && (WIFEXITED(cstat) || WIFSIGNALED(cstat))) {
-        *status = cstat;
-        ret = true;
-        done = true;
-      }
-    }
-  }
-    
-    TEST_F(NodeDefBuilderTest, PolymorphicDefaultOut) {
-  Op(OpDefBuilder('PolymorphicDefaultOut')
-         .Output('out: T')
-         .Attr('T: type = DT_STRING'));
-    }
+        Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
     
-    { private:
-  GraphDef gdef_;
-  std::unique_ptr<Graph> g_;
-  DeviceAttributes device_info_;
+    {  virtual ~SessionFactory() {}
+  static void Register(const string& runtime_type, SessionFactory* factory);
+  static Status GetFactory(const SessionOptions& options,
+                           SessionFactory** out_factory);
 };
     
-    static uint32 MaskedCrc(const char* data, size_t n) {
-  return crc32c::Mask(crc32c::Value(data, n));
+      string name() const override { return 'model_pruner'; };
+    
+    
+    {}  // namespace tensorflow
+    
+    namespace tensorflow {
+namespace functor {
+    }
+    }
+    
+    
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
 }
-    
-    // Prefetching support
-//
-// Defined behavior on some of the uarchs:
-// PREFETCH_HINT_T0:
-//   prefetch to all levels of the hierarchy (except on p4: prefetch to L2)
-// PREFETCH_HINT_NTA:
-//   p4: fetch to L2, but limit to 1 way (out of the 8 ways)
-//   core: skip L2, go directly to L1
-//   k8 rev E and later: skip L2, can go to either of the 2-ways in L1
-enum PrefetchHint {
-  PREFETCH_HINT_T0 = 3,  // More temporal locality
-  PREFETCH_HINT_T1 = 2,
-  PREFETCH_HINT_T2 = 1,  // Less temporal locality
-  PREFETCH_HINT_NTA = 0  // No temporal locality
-};
-template <PrefetchHint hint>
-void prefetch(const void* x);
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-      void documentCallback(const char* ev, blink::WebLocalFrame* frame);
     
     // static
-void
-DispatcherBindings::GetAbsolutePath(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  FilePath path = FilePath::FromUTF8Unsafe(*v8::String::Utf8Value(args[0]));
-  MakePathAbsolute(&path);
-#if defined(OS_POSIX)
-  args.GetReturnValue().Set(v8::String::NewFromUtf8(isolate, path.value().c_str()));
-#else
-  args.GetReturnValue().Set(v8::String::NewFromUtf8(isolate, path.AsUTF8Unsafe().c_str()));
-#endif
+Base* DispatcherHost::GetApiObject(int id) {
+  return objects_registry_.Lookup(id);
 }
     
     
-namespace nwapi {
+    {  template<typename T> bool RemoveListener() {
+    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
+    if (i!=listerners_.end()) {
+      delete i->second;
+      listerners_.erase(i);
+      return true;
     }
-    
-     private:
-  ObjectManager* object_manager_;
-    
-    void MenuItem::Create(const base::DictionaryValue& option) {
-  is_modified_ = false;
-  is_checked_ = false;
-  is_enabled_ = true;
-  type_ = 'normal';
-  submenu_ = NULL;
-  meta_down_flag_ = false;
-    }
-    
-      for(auto& data : params->data) {
-    if (!writer->Write(data)) {
-      *error = writer->error();
-      writer->Reset();
-      return false;
-    }
+    return false;
   }
+private:
+  DISALLOW_COPY_AND_ASSIGN(EventListener);
+};
     
-      // Find a file by file name.
-  bool FindFileByName(const string& filename,
-                      FileDescriptorProto* output);
-    
-    // Appends the scalar 'item' to the end of the container 'self'.
-//
-// Returns None if successful; returns NULL and sets an exception if
-// unsuccessful.
-PyObject* Append(RepeatedScalarContainer* self, PyObject* item);
-    
-    
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-    
-    #include <string>
-    
-    SourceGeneratorBase::SourceGeneratorBase(const FileDescriptor* descriptor,
-                                         const Options *options)
-    : descriptor_(descriptor), options_(options) {
-}
+    #include 'base/values.h'
+#include 'components/zoom/zoom_controller.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/common/page_zoom.h'
+#include 'ui/views/controls/menu/menu_runner.h'
     
     
-    {}  // namespace google
-#endif  // GOOGLE_PROTOBUF_COMPILER_JAVA_DOC_COMMENT_H__
+    {}  // namespace nwapi
 
     
-    // Author: kenton@google.com (Kenton Varda)
+    #include <string.h>
     
+    #include 'content/nw/src/api/menuitem/menuitem.h'
     
-    {  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ImmutableExtensionLiteGenerator);
-};
-    
-    namespace osquery {
-namespace tables {
-    }
-    }
-    
-      /**
-   * @brief Suggested entrypoint for table generation.
-   *
-   * The EventSubscriber is a convention that removes a lot of boilerplate event
-   * 'subscribing' and acting. The `genTable` static entrypoint is the
-   * suggested method for table specs.
-   *
-   * @param yield The Row yield method.
-   * @param ctx The query context (used for time windows).
-   * @return The query-time table data, retrieved from a backing store.
-   */
-  virtual void genTable(RowYield& yield, QueryContext& ctx) USED_SYMBOL;
-    
-      /**
-   * @brief A synonym for osquery::Status::getMessage()
-   *
-   * @see getMessage()
-   */
-  std::string toString() const { return getMessage(); }
-  std::string what() const { return getMessage(); }
-    
-    static int osquery_open(dev_t dev, int oflags, int devtype, struct proc *p) {
-  // Close is not working so leave these out for now.
-  int err = 0;
-  lck_mtx_lock(osquery.mtx);
-  if (osquery.open_count == 0) {
-    osquery.open_count++;
-  }
-#ifndef KERNEL_TEST
-  else {
-    err = -EACCES;
-  }
-#endif // !KERNEL_TEST
-    }
-    
-    /// Enforce specific types of decoration.
-enum DecorationPoint {
-  DECORATE_LOAD,
-  DECORATE_ALWAYS,
-  DECORATE_INTERVAL,
-};
-    
-    #ifndef DUMPCRASHSTACK_H_
-#define DUMPCRASHSTACK_H_
-    
-    #ifndef CORESERVICEBASE_H_
-#define CORESERVICEBASE_H_
-    
-    
-    static bool SpyHookLogFunc(struct XLoggerInfo_t& _info, std::string& _log);
-    void TestFun0();
-    int __TestFun1(int i);
-    
-    jbyteArray JNU_Buffer2JbyteArray(JNIEnv* _env, const AutoBuffer& ab);
-jbyteArray JNU_Buffer2JbyteArray(JNIEnv* _env, const void* _buffer, size_t _length);
-void JNU_FreeJbyteArray(JNIEnv* _env, jbyteArray bytes);
-    
-    #include <jni.h>
-    
-    
-    {  tls_sched = this;
+    NwAppClearAppCacheFunction::~NwAppClearAppCacheFunction() {
 }
     
-    template <class... Ts>
-struct MakeMembers {
-  template <Ts... Vs>
-  using Members = PolyMembers<Member<Ts, Vs>...>;
+      if (flags.bit (CHECK_AMBIG_WERD) &&
+      word->best_choice->dangerous_ambig_found()) {
+    if (tessedit_adaption_debug) tprintf('word is ambiguous\n');
+    return FALSE;
+  }
+    
+    // Fixxht overview.
+// Premise: Initial estimate of x-height is adequate most of the time, but
+// occasionally it is incorrect. Most notable causes of failure are:
+// 1. Small caps, where the top of the caps is the same as the body text
+// xheight. For small caps words the xheight needs to be reduced to correctly
+// recognize the caps in the small caps word.
+// 2. All xheight lines, such as summer. Here the initial estimate will have
+// guessed that the blob tops are caps and will have placed the xheight too low.
+// 3. Noise/logos beside words, or changes in font size on a line. Such
+// things can blow the statistics and cause an incorrect estimate.
+// 4. Incorrect baseline. Can happen when 2 columns are incorrectly merged.
+// In this case the x-height is often still correct.
+//
+// Algorithm.
+// Compare the vertical position (top only) of alphnumerics in a word with
+// the range of positions in training data (in the unicharset).
+// See CountMisfitTops. If any characters disagree sufficiently with the
+// initial xheight estimate, then recalculate the xheight, re-run OCR on
+// the word, and if the number of vertical misfits goes down, along with
+// either the word rating or certainty, then keep the new xheight.
+// The new xheight is calculated as follows:ComputeCompatibleXHeight
+// For each alphanumeric character that has a vertically misplaced top
+// (a misfit), yet its bottom is within the acceptable range (ie it is not
+// likely a sub-or super-script) calculate the range of acceptable xheight
+// positions from its range of tops, and give each value in the range a
+// number of votes equal to the distance of its top from its acceptance range.
+// The x-height position with the median of the votes becomes the new
+// x-height. This assumes that most characters will be correctly recognized
+// even if the x-height is incorrect. This is not a terrible assumption, but
+// it is not great. An improvement would be to use a classifier that does
+// not care about vertical position or scaling at all.
+// Separately collect stats on shifted baselines and apply the same logic to
+// computing a best-fit shift to fix the error. If the baseline needs to be
+// shifted, but the x-height is OK, returns the original x-height along with
+// the baseline shift to indicate that recognition needs to re-run.
+    
+    
+    {    // Restore the normal y-position penalties.
+    classify_class_pruner_multiplier.set_value(saved_cp_multiplier);
+    classify_integer_matcher_multiplier.set_value(saved_im_multiplier);
+  }
+    
+    // Prints the content of the DENORM for debug purposes.
+void DENORM::Print() const {
+  if (pix_ != NULL) {
+    tprintf('Pix dimensions %d x %d x %d\n',
+            pixGetWidth(pix_), pixGetHeight(pix_), pixGetDepth(pix_));
+  }
+  if (inverse_)
+    tprintf('Inverse\n');
+  if (block_ && block_->re_rotation().x() != 1.0f) {
+    tprintf('Block rotation %g, %g\n',
+            block_->re_rotation().x(), block_->re_rotation().y());
+  }
+  tprintf('Input Origin = (%g, %g)\n', x_origin_, y_origin_);
+  if (x_map_ != NULL && y_map_ != NULL) {
+    tprintf('x map:\n');
+    for (int x = 0; x < x_map_->size(); ++x) {
+      tprintf('%g ', (*x_map_)[x]);
+    }
+    tprintf('\ny map:\n');
+    for (int y = 0; y < y_map_->size(); ++y) {
+      tprintf('%g ', (*y_map_)[y]);
+    }
+    tprintf('\n');
+  } else {
+    tprintf('Scale = (%g, %g)\n', x_scale_, y_scale_);
+    if (rotation_ != NULL)
+      tprintf('Rotation = (%g, %g)\n', rotation_->x(), rotation_->y());
+  }
+  tprintf('Final Origin = (%g, %g)\n', final_xshift_, final_xshift_);
+  if (predecessor_ != NULL) {
+    tprintf('Predecessor:\n');
+    predecessor_->Print();
+  }
+}
+    
+        void set_lmargin(inT16 lmargin) {
+      lmargin_ = lmargin;
+    }
+    void set_rmargin(inT16 rmargin) {
+      rmargin_ = rmargin;
+    }
+    inT16 lmargin() const {
+      return lmargin_;
+    }
+    inT16 rmargin() const {
+      return rmargin_;
+    }
+    
+        GradientsUpdateType GradUpdateType() const
+    {
+        return m_gradType.type;
+    }
+    double GradientUpdateNoiseStd() const
+    {
+        return m_gradType.gaussianNoiseInjectStd;
+    }
+    
+        mBsparse.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseCSR, true);
+    Matrix<float>::ScaleAndAdd(alpha, mAdense, mBsparse);
+    
+    
+    {
+    {        // the rest is done in a lambda that is only evaluated when a virgin network is needed
+        // Note that evaluating the BrainScript *is* instantiating the network, so the evaluate call must be inside the lambda.
+        createNetworkFn = [expr](DEVICEID_TYPE /*deviceId*/)
+        {
+            // evaluate the parse tree, particularly the top-level field 'network'
+            // Evaluating it will create the network.
+            let object = EvaluateField(expr, L'network');                   // this comes back as a BS::Object
+            let network = dynamic_pointer_cast<ComputationNetwork>(object); // cast it
+            if (!network)
+                LogicError('BuildNetworkFromDescription: ComputationNetwork not what it was meant to be');
+            return network;
+        };
+        return true;
+    }
+    else
+        return false;
+}
+    
+        // helpers for pretty-printing errors: Show source-code line with ...^ under it to mark up the point of error
+    static void PrintIssue(const vector<TextLocation>& locations, const wchar_t* errorKind, const wchar_t* kind, const wchar_t* what);
+    static std::wstring CreateIssueMessage(const vector<TextLocation>& locations, const wchar_t* errorKind, const wchar_t* kind, const wchar_t* what);
+    static void Trace(TextLocation, const wchar_t* traceKind, const wchar_t* op, const wchar_t* exprPath);
+    
+        // SaveData - save data in the file/files
+    // recordStart - Starting record number
+    // matricies - a map of section name (section:subsection) to data pointer. Data sepcifications from config file will be used to determine where and how to save data
+    // numRecords - number of records we are saving, can be zero if not applicable
+    // datasetSize - size of the dataset (in records)
+    // byteVariableSized - for variable sized data, size of current block to be written, zero when not used, or ignored if not variable sized data
+    virtual bool SaveData(size_t recordStart, const std::map<std::wstring, void*, nocase_compare>& matrices, size_t numRecords, size_t datasetSize, size_t byteVariableSized = 0);
+    
+    #endif  // STORAGE_LEVELDB_DB_SNAPSHOT_H_
+
+    
+    // Use the db with the following name.
+static const char* FLAGS_db = NULL;
+    
+    namespace leveldb {
+    }
+    
+    // 1-byte type + 32-bit crc
+static const size_t kBlockTrailerSize = 5;
+    
+    
+    {  // Which direction is the iterator moving?
+  enum Direction {
+    kForward,
+    kReverse
+  };
+  Direction direction_;
 };
     
-      template <class Comp>
-  bool equals(const const_range_type& other, Comp&& eq) const {
-    return size() == other.size() &&
-        std::equal(begin(), end(), other.begin(), std::forward<Comp>(eq));
+      // Get an integral value, 0 or 1, for whether a syscall table pointer is modified.
+  auto f1 = osquery::readFile(kKernelSyscallAddrModifiedPath, content);
+  if (f1.ok()) {
+    boost::trim(content);
+    syscall_addr_modified = content;
+  } else {
+    VLOG(1) << 'Cannot read file: ' << kKernelSyscallAddrModifiedPath;
+    return results;
   }
     
-    TEST(StringPiece, split_step_char_delimiter) {
-  //              0         1         2
-  //              012345678901234567890123456
-  auto const s = 'this is just  a test string';
-  auto const e = std::next(s, std::strlen(s));
-  EXPECT_EQ('\0', *e);
-    }
+      /**
+   * @brief Plan the best set of indexes for event record access.
+   *
+   * @param start an inclusive time to begin searching.
+   * @param stop an inclusive time to end searching.
+   * @param sort if true the indexes will be sorted.
+   *
+   * @return List of 'index.step' index strings.
+   */
+  std::vector<std::string> getIndexes(EventTime start,
+                                      EventTime stop,
+                                      bool sort = true);
     
-    namespace {
-  void printWithBackSlashes(std::string str) {
-    for (std::string::size_type i = 0; i < str.size(); i++) {
-      if (str[i] == '\\' || str[i] == ''') {
-        std::cout << '\\';
-      }
-    }
-    }
-    }
-    
-        // Helper methods
-    static bool HasFamilyNamed(std::string& name, DBWrapper* db);
-    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
-        Handle<Array> array);
-    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
-        Handle<Array> array, DBWrapper* db_wrapper, std::string cf);
-    static Handle<Value> CompactRangeDefault(const v8::Arguments& args);
-    static Handle<Value> CompactColumnFamily(const Arguments& args);
-    static Handle<Value> CompactOptions(const Arguments& args);
-    static Handle<Value> CompactAll(const Arguments& args);
-    
-    
-unsigned int XXH32_intermediateDigest (void* state);
-/*
-This function does the same as XXH32_digest(), generating a 32-bit hash,
-but preserve memory context.
-This way, it becomes possible to generate intermediate hashes, and then continue feeding data with XXH32_update().
-To free memory context, use XXH32_digest(), or free().
-*/
-    
-      // Returns the list of strings associated with key (or '' if does not exist)
-  bool Get(const std::string& key, std::string* const result){
-    assert(result != nullptr); // we should have a place to store the result
-    auto s = db_->Get(get_option_, key, result);
-    }
-    
-      // Insert the new element at the current position (the end)
-  it.InsertElement(value);
-    
-      virtual void SetPinnedItersMgr(
-      PinnedIteratorsManager* pinned_iters_mgr) override {
-    pinned_iters_mgr_ = pinned_iters_mgr;
-    for (auto& child : children_) {
-      child.SetPinnedItersMgr(pinned_iters_mgr);
-    }
+    /**
+ * @brief Helper accessor/assignment alias class to support deprecated flags.
+ *
+ * This templated class wraps Flag::updateValue and Flag::getValue to 'alias'
+ * a deprecated flag name as the updated name. The helper macro FLAG_ALIAS
+ * will create a global variable instances of this wrapper using the same
+ * Gflags naming scheme to prevent collisions and support existing callsites.
+ */
+template <typename T>
+class FlagAlias {
+ public:
+  FlagAlias& operator=(T const& v) {
+    Flag::updateValue(name_, boost::lexical_cast<std::string>(v));
+    return *this;
   }
+    }
+    
+      /// See DropPrivileges::dropToParent but explicitiy set the UID and GID.
+  bool dropTo(const std::string& uid, const std::string& gid);
+    
+    /**
+ * @brief Create an osquery extension 'module'.
+ *
+ * This helper macro creates a constructor to declare an osquery module is
+ * loading. The osquery registry is set up when modules (shared objects) are
+ * discovered via search paths and opened. At that phase the registry is locked
+ * meaning no additional plugins can be registered. To unlock the registry
+ * for modifications a module must call Registry::declareModule. This declares
+ * and any plugins added will use the metadata in the declare to determine:
+ *  - The name of the module adding the plugin
+ *  - The SDK version the module was built with, to determine compatibility
+ *  - The minimum SDK the module requires from osquery core
+ *
+ * The registry is again locked when the module load is complete and a well
+ * known module-exported symbol is called.
+ */
+#define CREATE_MODULE(name, version, min_sdk_version)                          \
+  extern 'C' EXPORT_FUNCTION void initModule(void);                            \
+  struct osquery_InternalStructCreateModule {                                  \
+    osquery_InternalStructCreateModule(void) {                                 \
+      Registry::get().declareModule(                                           \
+          name, version, min_sdk_version, OSQUERY_SDK_VERSION);                \
+    }                                                                          \
+  };                                                                           \
+  static osquery_InternalStructCreateModule osquery_internal_module_instance_;
+    
+    class Initializer : private boost::noncopyable {
+ public:
+  /**
+   * @brief Sets up various aspects of osquery execution state.
+   *
+   * osquery needs a few things to happen as soon as the process begins
+   * executing. Initializer takes care of setting up the relevant parameters.
+   * Initializer should be called in an executable's `main()` function.
+   *
+   * @param argc the number of elements in argv
+   * @param argv the command-line arguments passed to `main()`
+   * @param tool the type of osquery main (daemon, shell, test, extension).
+   */
+  Initializer(int& argc, char**& argv, ToolType tool = ToolType::TEST);
+    }
+    
+    template <typename T>
+void do_release_std(typename std::shared_ptr<T> const&, T*) {}
