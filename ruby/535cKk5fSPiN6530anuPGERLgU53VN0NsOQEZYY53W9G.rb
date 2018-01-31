@@ -1,110 +1,102 @@
 
         
-          # Make it so that network access from the vagrant guest is able to
-  # use SSH private keys that are present on the host without copying
-  # them into the VM.
-  config.ssh.forward_agent = true
+                # Helper method to get access to the class variable. This is mostly
+        # exposed for tests. This shouldn't be mucked with directly, since it's
+        # structure may change at any time.
+        def registered; @@registered; end
+      end
+    end
+  end
+end
+
     
-            # Defines additional communicators to be available. Communicators
-        # should be returned by a block passed to this method. This is done
-        # to ensure that the class is lazy loaded, so if your class inherits
-        # from or uses any Vagrant internals specific to Vagrant 1.0, then
-        # the plugin can still be defined without breaking anything in future
-        # versions of Vagrant.
-        #
-        # @param [String] name Communicator name.
-        def self.communicator(name=UNSET_VALUE, &block)
-          data[:communicator] ||= Registry.new
+    RSpec.describe TagsController, type: :controller do
+  render_views
     
-            # This is called early, before a machine is instantiated, to check
-        # if this provider is usable. This should return true or false.
-        #
-        # If raise_error is true, then instead of returning false, this
-        # should raise an error with a helpful message about why this
-        # provider cannot be used.
-        #
-        # @param [Boolean] raise_error If true, raise exception if not usable.
-        # @return [Boolean]
-        def self.usable?(raise_error=false)
-          # Return true by default for backwards compat since this was
-          # introduced long after providers were being written.
-          true
+      def type
+    'Emoji'
+  end
+    
+      def cc
+    ActivityPub::TagManager.instance.cc(object)
+  end
+    
+          def validate!
+        super
+        raise Informative, 'Existing Podfile found in directory' unless config.podfile_path_in_dir(Pathname.pwd).nil?
+        if @project_path
+          help! 'Xcode project at #{@project_path} does not exist' unless File.exist? @project_path
+          project_path = @project_path
+        else
+          raise Informative, 'No Xcode project found, please specify one' unless @project_paths.length > 0
+          raise Informative, 'Multiple Xcode projects found, please specify one' unless @project_paths.length == 1
+          project_path = @project_paths.first
         end
-    
-          class << self
-        # Mark a given block of code as a 'busy' block of code, which will
-        # register a SIGINT handler for the duration of the block. When a
-        # SIGINT occurs, the `sig_callback` proc will be called. It is up
-        # to the callback to behave properly and exit the application.
-        def busy(sig_callback)
-          register(sig_callback)
-          return yield
-        ensure
-          unregister(sig_callback)
-        end
-    
-            hash.each do |key, value|
-          self[convert_key(key)] = value
-        end
+        @xcode_project = Xcodeproj::Project.open(project_path)
       end
     
-          # This returns the keys (or ids) that are in the string.
-      #
-      # @return [<Array<String>]
-      def keys
-        regexp = /^#\s*VAGRANT-BEGIN:\s*(.+?)$\r?\n?(.*)$\r?\n?^#\s*VAGRANT-END:\s(\1)$/m
-        @value.scan(regexp).map do |match|
-          match[0]
+            def print_version
+          output_pipe.puts 'version: '#{Pod::VERSION}''
+        end
+    
+            # Runs the template configuration utilities.
+        #
+        # @return [void]
+        #
+        def configure_template
+          UI.section('Configuring #{@name} template.') do
+            Dir.chdir(@name) do
+              if File.exist?('configure')
+                system({ 'COCOAPODS_VERSION' => Pod::VERSION }, './configure', @name, *@additional_args)
+              else
+                UI.warn 'Template does not have a configure file.'
+              end
+            end
+          end
+        end
+    
+        def ensure_required_accessors! #:nodoc:
+      %w(file_name).each do |field|
+        unless @instance.respond_to?('#{@name_string}_#{field}') && @instance.respond_to?('#{@name_string}_#{field}=')
+          raise Paperclip::Error.new('#{@instance.class} model missing required attr_accessor for '#{@name_string}_#{field}'')
         end
       end
-    
-        def puts(*args)
-      STDERR.puts *args unless @silence
     end
     
-      # Eager load code on boot. This eager loads most of Rails and
-  # your application in memory, allowing both thread web servers
-  # and those relying on copy on write to perform better.
-  # Rake tasks automatically ignore this option for performance.
-  config.eager_load = true
+      # Defines the geometry of an image.
+  class Geometry
+    attr_accessor :height, :width, :modifier
     
-      # Disable request forgery protection in test environment.
-  config.action_controller.allow_forgery_protection = false
+        def geometry_string
+      begin
+        orientation = Paperclip.options[:use_exif_orientation] ?
+          '%[exif:orientation]' : '1'
+        Paperclip.run(
+          'identify',
+          '-format '%wx%h,#{orientation}' :file', {
+            :file => '#{path}[0]'
+          }, {
+            :swallow_stderr => true
+          }
+        )
+      rescue Cocaine::ExitStatusError
+        ''
+      rescue Cocaine::CommandNotFoundError => e
+        raise_because_imagemagick_missing
+      end
+    end
     
-            def method_argument?
-          argument? && %i[def defs].include?(@scope.node.type)
+            def no_error_when_valid?
+          @file = StringIO.new('.')
+          @subject.send(@attachment_name).assign(@file)
+          @subject.valid?
+          expected_message = [
+            @attachment_name.to_s.titleize,
+            I18n.t(:blank, scope: [:errors, :messages])
+          ].join(' ')
+          @subject.errors.full_messages.exclude?(expected_message)
         end
-    
-    module RuboCop
-  module Cop
-    module Lint
-      # Don't omit the accumulator when calling `next` in a `reduce` block.
-      #
-      # @example
-      #
-      #   # bad
-      #
-      #   result = (1..4).reduce(0) do |acc, i|
-      #     next if i.odd?
-      #     acc + i
-      #   end
-      #
-      # @example
-      #
-      #   # good
-      #
-      #   result = (1..4).reduce(0) do |acc, i|
-      #     next acc if i.odd?
-      #     acc + i
-      #   end
-      class NextWithoutAccumulator < Cop
-        MSG = 'Use `next` with an accumulator argument in a `reduce`.'.freeze
-    
-            def nested_variable_comparison?(node)
-          return false unless nested_comparison?(node)
-          variables_in_node(node).count == 1
-        end
-    
-            def on_send(node)
-          return unless node.receiver && node.method?(:freeze) &&
-                        immutable_literal?(node.receiver)
+      end
+    end
+  end
+end
