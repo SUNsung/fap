@@ -1,77 +1,110 @@
 
         
-              def remember_key(resource, scope)
-        resource.rememberable_options.fetch(:key, 'remember_#{scope}_token')
-      end
-    end
-  end
-end
-
+          # Make it so that network access from the vagrant guest is able to
+  # use SSH private keys that are present on the host without copying
+  # them into the VM.
+  config.ssh.forward_agent = true
     
-        # Try retrieving the URL options from the parent controller (usually
-    # ApplicationController). Instance methods are not supported at the moment,
-    # so only the class-level attribute is used.
-    def self.default_url_options(*args)
-      if defined?(Devise.parent_controller.constantize)
-        Devise.parent_controller.constantize.try(:default_url_options) || {}
-      else
-        {}
-      end
-    end
+            # Defines additional communicators to be available. Communicators
+        # should be returned by a block passed to this method. This is done
+        # to ensure that the class is lazy loaded, so if your class inherits
+        # from or uses any Vagrant internals specific to Vagrant 1.0, then
+        # the plugin can still be defined without breaking anything in future
+        # versions of Vagrant.
+        #
+        # @param [String] name Communicator name.
+        def self.communicator(name=UNSET_VALUE, &block)
+          data[:communicator] ||= Registry.new
     
-      validate :enough_poll_answers
-  validates :question, presence: true
+            # This is called early, before a machine is instantiated, to check
+        # if this provider is usable. This should return true or false.
+        #
+        # If raise_error is true, then instead of returning false, this
+        # should raise an error with a helpful message about why this
+        # provider cannot be used.
+        #
+        # @param [Boolean] raise_error If true, raise exception if not usable.
+        # @return [Boolean]
+        def self.usable?(raise_error=false)
+          # Return true by default for backwards compat since this was
+          # introduced long after providers were being written.
+          true
+        end
     
-          users = User.arel_table
-      people = Person.arel_table
-      profiles = Profile.arel_table
-      res = User.joins(person: :profile)
-      res = res.where(users[:username].matches('%#{username}%')) unless username.blank?
-      res = res.where(users[:email].matches('%#{email}%')) unless email.blank?
-      res = res.where(people[:guid].matches('%#{guid}%')) unless guid.blank?
-      res = res.where(profiles[:birthday].gt(Date.today-13.years)) if under13 == '1'
-      res
-    end
-  end
-end
-
+          class << self
+        # Mark a given block of code as a 'busy' block of code, which will
+        # register a SIGINT handler for the duration of the block. When a
+        # SIGINT occurs, the `sig_callback` proc will be called. It is up
+        # to the callback to behave properly and exit the application.
+        def busy(sig_callback)
+          register(sig_callback)
+          return yield
+        ensure
+          unregister(sig_callback)
+        end
     
-          def handle_params_error_when_client_id_and_redirect_uri_exists(error, error_description)
-        app = Api::OpenidConnect::OAuthApplication.find_by(client_id: params[:client_id])
-        if app && app.redirect_uris.include?(params[:redirect_uri])
-          redirect_prompt_error_display(error, error_description)
-        else
-          render_error I18n.t('api.openid_connect.error_page.could_not_authorize'),
-                       'Invalid client id or redirect uri'
+            hash.each do |key, value|
+          self[convert_key(key)] = value
         end
       end
     
-            # Removes the specified cache
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        An array of caches to remove, each specified with the same
-        #        hash as cache_descriptors_per_pod especially :spec_file and :slug
-        #
-        def remove_caches(cache_descriptors)
-          cache_descriptors.each do |desc|
-            UI.message('Removing spec #{desc[:spec_file]} (v#{desc[:version]})') do
-              FileUtils.rm(desc[:spec_file])
-            end
-            UI.message('Removing cache #{desc[:slug]}') do
-              FileUtils.rm_rf(desc[:slug])
-            end
-          end
+          # This returns the keys (or ids) that are in the string.
+      #
+      # @return [<Array<String>]
+      def keys
+        regexp = /^#\s*VAGRANT-BEGIN:\s*(.+?)$\r?\n?(.*)$\r?\n?^#\s*VAGRANT-END:\s(\1)$/m
+        @value.scan(regexp).map do |match|
+          match[0]
+        end
+      end
+    
+        def puts(*args)
+      STDERR.puts *args unless @silence
+    end
+    
+      # Eager load code on boot. This eager loads most of Rails and
+  # your application in memory, allowing both thread web servers
+  # and those relying on copy on write to perform better.
+  # Rake tasks automatically ignore this option for performance.
+  config.eager_load = true
+    
+      # Disable request forgery protection in test environment.
+  config.action_controller.allow_forgery_protection = false
+    
+            def method_argument?
+          argument? && %i[def defs].include?(@scope.node.type)
         end
     
-      context 'called with three colors' do
-    it 'applies second color to left and right' do
-      rule = 'border-color: #f00 #0f0 #00f'
+    module RuboCop
+  module Cop
+    module Lint
+      # Don't omit the accumulator when calling `next` in a `reduce` block.
+      #
+      # @example
+      #
+      #   # bad
+      #
+      #   result = (1..4).reduce(0) do |acc, i|
+      #     next if i.odd?
+      #     acc + i
+      #   end
+      #
+      # @example
+      #
+      #   # good
+      #
+      #   result = (1..4).reduce(0) do |acc, i|
+      #     next acc if i.odd?
+      #     acc + i
+      #   end
+      class NextWithoutAccumulator < Cop
+        MSG = 'Use `next` with an accumulator argument in a `reduce`.'.freeze
     
-          expect('.border-style-alternate').to have_rule(rule)
-    end
-  end
+            def nested_variable_comparison?(node)
+          return false unless nested_comparison?(node)
+          variables_in_node(node).count == 1
+        end
     
-      context 'called with one prefix' do
-    it 'applies the prefix to the property' do
-      rule = '-webkit-appearance: none; ' +
-             'appearance: none;'
+            def on_send(node)
+          return unless node.receiver && node.method?(:freeze) &&
+                        immutable_literal?(node.receiver)
