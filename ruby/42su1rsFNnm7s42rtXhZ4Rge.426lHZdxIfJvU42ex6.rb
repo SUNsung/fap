@@ -1,92 +1,149 @@
-    keys.find do |key|
-      if key.to_s.end_with?('_or_later')
-        later_tag = key.to_s[/(\w+)_or_later$/, 1].to_sym
-        MacOS::Version.from_symbol(later_tag) <= tag_version
+
+        
+            def variant
+      ActiveStorage::Variant.new(image, variation).processed
+    end
+    
+          protected
+        attr_reader :alias_tracker, :base_klass, :join_root
+    
+        test 'head :processing (102) does not return a content-type header' do
+      headers = HeadController.action(:processing).call(Rack::MockRequest.env_for('/')).second
+      assert_nil headers['Content-Type']
+      assert_nil headers['Content-Length']
+    end
+    
+            assert_equal 'summary, title', @controller.response.body
+        assert @controller.params.has_key?(:summary)
+        assert @controller.params.has_key?(:title)
+        assert_equal 'content...', @controller.params['summary']
+        assert_equal 'JSON', @controller.params['title']
+      end
+    end
+  end
+    
+        def perform(mailer, mail_method, delivery_method, *args) #:nodoc:
+      mailer.constantize.public_send(mail_method, *args).send(delivery_method)
+    end
+    
+        # Validates that {#boundary} is {#valid_ip_or_range? a valid IP address or
+    # IP address range}. Due to this not being tested before it was moved here
+    # from Mdm, the default workspace does not validate. We always validate boundaries
+    # and a workspace may have a blank default boundary.
+    #
+    # @return [void]
+    def boundary_must_be_ip_range
+      unless boundary.blank?
+        begin
+          boundaries = Shellwords.split(boundary)
+        rescue ArgumentError
+          boundaries = []
+        end
+    
+    lib_path = root.join('lib').to_path
+    
+    require 'rubygems'  # install rubygems
+require 'hpricot'   # gem install hpricot
+require 'uri'
+require 'timeout'
+    
+          when :banner
+        # Because some ftp server send multiple banner we take only the first one and ignore the rest
+        if not (s[:info])
+          s[:info] = matches
+          report_service(s)
+        end
+    
+      def parse(pkt)
+    # We want to return immediantly if	we do not have a packet which is handled by us
+    return unless pkt.is_tcp?
+    return if (pkt.tcp_sport != 80 and pkt.tcp_dport != 80)
+    s = find_session((pkt.tcp_sport == 80) ? get_session_src(pkt) : get_session_dst(pkt))
+    
+    
+# replace calls, jmps, and read/write handle/filename references
+replaces = []
+asm.each_line { |ln|
+	if ln =~ /call /
+		parts = ln.split(' ')
+		if (parts[0] == 'call' and parts[2] == ';call')
+			old = parts[1]
+			func = parts[3]
+			new = addrs[func]
+			#puts '%32s: %s -> %x' % [func, old, new]
+			replaces << [func, old, new.to_s(16)]
+		end
+	end
+    }
+    
+    puts '* Closing socket'
+    
+          opts.on('-T', '--to FORMAT',
+        'The format to convert to. Can be scss or sass.',
+        'By default, this is inferred from the output filename.',
+        'If there is none, defaults to sass.') do |name|
+        @options[:to] = name.downcase.to_sym
+        unless [:scss, :sass].include?(@options[:to])
+          raise 'Unknown format for sass-convert --to: #{name}'
+        end
+      end
+    
+            def define_logger(name, options = {})
+          class_eval <<-RUBY, __FILE__, __LINE__ + 1
+            def #{name}(message)
+              #{options.fetch(:to, :log)}(#{name.inspect}, message)
+            end
+          RUBY
+        end
       end
     end
   end
 end
 
     
-      formula = ARGV.formulae.first
-  options = Options.create(ARGV.flags_only)
-  build   = Build.new(formula, options)
-  build.install
-rescue Exception => e
-  Marshal.dump(e, error_pipe)
-  error_pipe.close
-  exit! 1
-end
-
+      Sass::Plugin.options.merge!(config)
     
-      def python_caveats
-    return unless keg
-    return unless keg.python_site_packages_installed?
+        def parse_input(environment, text)
+      case text
+      when Script::MATCH
+        name = $1
+        guarded = !!$3
+        val = Script::Parser.parse($2, @line, text.size - ($3 || '').size - $2.size)
     
-      def external_commands
-    paths.reduce([]) do |cmds, path|
-      Dir['#{path}/brew-*'].each do |file|
-        next unless File.executable?(file)
-        cmd = File.basename(file, '.rb')[5..-1]
-        cmds << cmd unless cmd.include?('.')
-      end
-      cmds
-    end.sort
-  end
-    
-          begin
-        result = Formulary.factory(query).name
-      rescue FormulaUnavailableError
-        result = search_tap(user, repo, name)
-      end
-    
-    # See browser for an example
-class GithubGistFormula < ScriptFileFormula
-  def self.url(val)
-    super
-    version File.basename(File.dirname(val))[0, 6]
+    # usage rake isolate[my-post]
+desc 'Move all other posts than the one currently being worked on to a temporary stash location (stash) so regenerating the site happens much more quickly.'
+task :isolate, :filename do |t, args|
+  stash_dir = '#{source_dir}/#{stash_dir}'
+  FileUtils.mkdir(stash_dir) unless File.exist?(stash_dir)
+  Dir.glob('#{source_dir}/#{posts_dir}/*.*') do |post|
+    FileUtils.mv post, stash_dir unless post.include?(args.filename)
   end
 end
     
-            # This is called early, before a machine is instantiated, to check
-        # if this provider is installed. This should return true or false.
-        #
-        # If the provider is not installed and Vagrant determines it is
-        # able to install this provider, then it will do so. Installation
-        # is done by calling Environment.install_provider.
-        #
-        # If Environment.can_install_provider? returns false, then an error
-        # will be shown to the user.
-        def self.installed?
-          # By default return true for backwards compat so all providers
-          # continue to work.
-          true
-        end
-    
-          def merge(other)
-        dup.merge!(other)
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
       end
     
-                  # An IO::WaitReadable means there may be more IO but this
-              # IO object is not ready to be read from yet. No problem,
-              # we read as much as we can, so we break.
-              breakable = true
-            elsif e.is_a?(Errno::EAGAIN)
-              # Otherwise, we just look for the EAGAIN error which should be
-              # all that IO::WaitReadable does in Ruby 1.9.
-              breakable = true
-            end
+    module Jekyll
     
-    module LogStash::Api::AppHelpers
-  # This method handle both of the normal flow *happy path*
-  # and the display or errors, if more custom logic is added here
-  # it will make sense to separate them.
-  #
-  # See `#error` method in the `LogStash::Api::Module::Base`
-  def respond_with(data, options={})
-    as     = options.fetch(:as, :json)
-    filter = options.fetch(:filter, '')
+      def default_metadata
+    @factory.build(:default_metadata).all
+  end
     
-          def snapshot
-        agent.metric.collector.snapshot_metric
-      end
+    module LogStash
+  module Api
+    module Commands
+      module System
+        class Plugins < Commands::Base
+          def run
+            { :total => plugins.count, :plugins => plugins }
+          end
+    
+    # This is the base class for logstash codecs.
+module LogStash::Codecs; class Base < LogStash::Plugin
+  include LogStash::Config::Mixin
