@@ -1,90 +1,124 @@
 
         
-        
-    {
-    {}  // namespace internal
-}  // namespace testing
+          // Publish metadata about the debugged Session::Run() call.
+  //
+  // See the doc string of DebuggerStateInterface::PublishDebugMetadata() for
+  // details.
+  Status PublishDebugMetadata(const int64 global_step,
+                              const int64 session_run_count,
+                              const int64 executor_step_count,
+                              const std::vector<string>& input_names,
+                              const std::vector<string>& output_names,
+                              const std::vector<string>& target_names) override;
     
-    #if GTEST_HAS_PARAM_TEST
+      CancellationManager* cancellation_manager;
+  partial_run_mgr_.FindOrCreate(step_id, &cancellation_manager);
     
-    TEST_P(FooTest, DoesBlah) {
-  // Inside a test, access the test parameter with the GetParam() method
-  // of the TestWithParam<T> class:
-  EXPECT_TRUE(foo.Blah(GetParam()));
-  ...
+    // TODO(zongheng): this should be a general functor that powers SparseAdd and
+// ScatterNd ops.  It should be moved to its own head file, once the other ops
+// are implemented.
+template <typename Device, typename T, typename Index, int NDIMS,
+          scatter_op::UpdateOp op>
+struct ScatterNdFunctor {
+  // Returns -1 on success or a nonnegative i s.t. indices[i] is a bad index.
+  Index operator()(const Device& d, typename TTypes<Index>::ConstMatrix indices,
+                   typename TTypes<T>::ConstFlat updates,
+                   typename TTypes<T, NDIMS>::Tensor out);
+};
+    
+    TEST_F(NodeDefBuilderTest, NIntsOutDefault) {
+  Op(OpDefBuilder('NIntsOutDefault')
+         .Output('a: N*int32')
+         .Attr('N: int >= 2 = 3'));
+    }
+    
+        // Find node in graph with that name.
+    auto iter = name_index->find(id.first);
+    if (iter == name_index->end()) {
+      return errors::NotFound('FetchOutputs node ', t, ': not found');
+    }
+    Node* n = iter->second;
+    DCHECK_EQ(n->name(), id.first);
+    VLOG(2) << 'Found fetch node for ' << t;
+    
+    // ---------------------------------------------------------------------------
+// Inline implementation
+// ---------------------------------------------------------------------------
+template <PrefetchHint hint>
+inline void prefetch(const void* x) {
+// Check of COMPILER_GCC macro below is kept only for backward-compatibility
+// reasons. COMPILER_GCC3 is the macro that actually enables prefetch.
+#if defined(__llvm__) || defined(COMPILER_GCC) || defined(COMPILER_GCC3)
+  __builtin_prefetch(x, 0, hint);
+#else
+// You get no effect.  Feel free to add more sections above.
+#endif
 }
     
-      // Returns true if pathname describes a root directory. (Windows has one
-  // root directory per disk drive.)
-  bool IsRootDirectory() const;
     
-    // Used in the Values() function to provide polymorphic capabilities.
-template <typename T1>
-class ValueArray1 {
- public:
-  explicit ValueArray1(T1 v1) : v1_(v1) {}
-    }
-    
-    ]]
-      ComputeCurrentValue();
-    }
-    virtual ParamIteratorInterface<ParamType>* Clone() const {
-      return new Iterator(*this);
-    }
-    virtual const ParamType* Current() const { return &current_value_; }
-    virtual bool Equals(const ParamIteratorInterface<ParamType>& other) const {
-      // Having the same base generator guarantees that the other
-      // iterator is of the same type and we can downcast.
-      GTEST_CHECK_(BaseGenerator() == other.BaseGenerator())
-          << 'The program attempted to compare iterators '
-          << 'from different generators.' << std::endl;
-      const Iterator* typed_other =
-          CheckedDowncastToActualType<const Iterator>(&other);
-      // We must report iterators equal if they both point beyond their
-      // respective ranges. That can happen in a variety of fashions,
-      // so we have to consult AtEnd().
-      return (AtEnd() && typed_other->AtEnd()) ||
-         ($for j  && [[
-    
-      DBWrapper* db_wrapper = ObjectWrap::Unwrap<DBWrapper>(args.This());
-  rocksdb::Slice begin  = *v8::String::Utf8Value(args[0]->ToString());
-  rocksdb::Slice end    = *v8::String::Utf8Value(args[1]->ToString());
-  std::string cf        = *v8::String::Utf8Value(args[2]->ToString());
-  db_wrapper->status_    = db_wrapper->db_->CompactRange(
-      db_wrapper->columnFamilies_[cf], &begin, &end);
-    
-    #else  // !ROCKSDB_LITE
-    
-    /*
- * Class:     org_rocksdb_DirectComparator
- * Method:    createNewDirectComparator0
- * Signature: ()J
- */
-jlong Java_org_rocksdb_DirectComparator_createNewDirectComparator0(
-    JNIEnv* env, jobject jobj, jlong copt_handle) {
-  auto* copt =
-      reinterpret_cast<rocksdb::ComparatorJniCallbackOptions*>(copt_handle);
-  auto* c =
-      new rocksdb::DirectComparatorJniCallback(env, jobj, copt);
-  return reinterpret_cast<jlong>(c);
-}
-// </editor-fold>
+    {}  // namespace xla
 
     
-    /*
- * Class:     org_rocksdb_ColumnFamilyOptions
- * Method:    setTargetFileSizeBase
- * Signature: (JJ)V
- */
-void Java_org_rocksdb_ColumnFamilyOptions_setTargetFileSizeBase(
-    JNIEnv* env, jobject jobj, jlong jhandle,
-    jlong jtarget_file_size_base) {
-  reinterpret_cast<rocksdb::ColumnFamilyOptions*>(jhandle)->
-      target_file_size_base = static_cast<uint64_t>(jtarget_file_size_base);
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+      // Loads JPEG file from a jpeg_decoder_stream.
+  unsigned char *decompress_jpeg_image_from_stream(jpeg_decoder_stream *pStream, int *width, int *height, int *actual_comps, int req_comps);
+    
+    ogg_int64_t oc_bexp64(ogg_int64_t _z);
+ogg_int64_t oc_blog64(ogg_int64_t _w);
+    
+        2,{0,128,  8,33,  4,16,70,  2,6,12,  23,46,90},
+    
+    /* Segher was off (too high) by ~ .3 decibel.  Center the conversion correctly. */
+static inline float todB(const float *x){
+  union {
+    ogg_uint32_t i;
+    float f;
+  } ix;
+  ix.f = *x;
+  ix.i = ix.i&0x7fffffff;
+  return (float)(ix.i * 7.17711438e-7f -764.6161886f);
 }
     
+    #  ifndef BF_LONG_LOG2
+#   define BF_LONG_LOG2  2      /* default to BF_LONG being 32 bits */
+#  endif
+#  define BF_M  (0xFF<<BF_LONG_LOG2)
+#  define BF_0  (24-BF_LONG_LOG2)
+#  define BF_1  (16-BF_LONG_LOG2)
+#  define BF_2  ( 8-BF_LONG_LOG2)
+#  define BF_3  BF_LONG_LOG2    /* left shift */
     
-    {  rocksdb::SstFileWriter *sst_file_writer =
-      new rocksdb::SstFileWriter(*env_options, *options, comparator);
-  return reinterpret_cast<jlong>(sst_file_writer);
+    
+    
+      PeerConnection* getPeerConnection() const { return peerConnection_; }
+    
+    AbstractHttpServerResponseCommand::~AbstractHttpServerResponseCommand()
+{
+  if (readCheck_) {
+    e_->deleteSocketForReadCheck(socket_, this);
+  }
+  if (writeCheck_) {
+    e_->deleteSocketForWriteCheck(socket_, this);
+  }
 }
+    
+      int64_t offset_;
+    
+    
+    {  return false;
+}
+    
+      AnnounceTier(std::deque<std::string> urls);
+    
+    class ApiCallbackDownloadEventListener : public DownloadEventListener {
+public:
+  ApiCallbackDownloadEventListener(Session* session,
+                                   DownloadEventCallback callback,
+                                   void* userData);
+  virtual ~ApiCallbackDownloadEventListener();
+  virtual void onEvent(DownloadEvent event,
+                       const RequestGroup* group) CXX11_OVERRIDE;
+    }
