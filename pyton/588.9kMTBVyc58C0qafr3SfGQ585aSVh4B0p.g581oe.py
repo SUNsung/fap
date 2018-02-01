@@ -1,128 +1,86 @@
 
         
-        
-def get_json_from_api(url, username, password):
-    headers = {'Accept': 'application/json; version=1.5'}
-    response = open_url(url, headers=headers, url_username=username, url_password=password)
-    return json.loads(response.read())['data']
+            def iter_body(self, chunk_size):
+        '''Return an iterator over the body.'''
+        raise NotImplementedError()
     
-        if s1.st_dev != s2.st_dev:
-        return True     # path/.. on a different device as path
-    if s1.st_ino == s2.st_ino:
-        return True     # path/.. is the same i-node as path, i.e. path=='/'
-    return False
+            for response in responses:
+    
+    
+def get_unique_filename(filename, exists=os.path.exists):
+    attempt = 0
+    while True:
+        suffix = '-' + str(attempt) if attempt > 0 else ''
+        try_filename = trim_filename_if_needed(filename, extra=len(suffix))
+        try_filename += suffix
+        if not exists(try_filename):
+            return try_filename
+        attempt += 1
+    
+    
+class ExitStatus:
+    '''Exit status code constants.'''
+    OK = 0
+    ERROR = 1
+    PLUGIN_ERROR = 7
+    
+    filenames = {
+    'bin': 'youtube-dl',
+    'exe': 'youtube-dl.exe',
+    'tar': 'youtube-dl-%s.tar.gz' % version}
+build_dir = os.path.join('..', '..', 'build', version)
+for key, filename in filenames.items():
+    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
+    fn = os.path.join(build_dir, filename)
+    with open(fn, 'rb') as f:
+        data = f.read()
+    if not data:
+        raise ValueError('File %s is empty!' % fn)
+    sha256sum = hashlib.sha256(data).hexdigest()
+    new_version[key] = (url, sha256sum)
+    
+    
+from youtube_dl import YoutubeDL
+    
+    
+def _is_empty(d):
+    return not bool(os.listdir(d))
+    
+        def setUp(self):
+        if self._SKIP_SOCKS_TEST:
+            return
+    
+            categories = re.findall(
+            r'<a href='http://anysex\.com/categories/[^']+' title='[^']*'>([^<]+)</a>', webpage)
+    
+            raw_payload = self._search_regex([
+            r'class='amtv-embed'[^>]+id='([^']+)'',
+            r'class=\\'amtv-embed\\'[^>]+id=\\'([^']+)\\'',
+        ], webpage, 'raw payload')
+        _, stage_mode, video_id, lang = raw_payload.split('-')
+    
+            return {
+            'id': info['vid'],
+            'title': info['Subject'],
+            'duration': int(info['duration']) / 1000.0,
+            'formats': formats,
+            'thumbnail': info.get('bimg') or info.get('img'),
+        }
 
     
+        click_count += 1
+    if click_count > 1:
+        click_count = 0
+        cor1 = cor.pop()
+        cor2 = cor.pop()
     
-#
-# Backwards compat functions.  Some modules include md5s in their return values
-# Continue to support that for now.  As of ansible-1.8, all of those modules
-# should also return 'checksum' (sha1 for now)
-# Do not use md5 unless it is needed for:
-# 1) Optional backwards compatibility
-# 2) Compliance with a third party protocol
-#
-# MD5 will not work on systems which are FIPS-140-2 compliant.
-#
-    
-        path = os.path.join(os.environ['HOME'], '.shippable.key')
-    
-    patterns = {
-    # This matches a square-bracketed expression with a port specification. What
-    # is inside the square brackets is validated later.
-    }
-    
-        try:
-        return json.dumps(result, sort_keys=True, indent=indent, ensure_ascii=False)
-    except UnicodeDecodeError:
-        return json.dumps(result, sort_keys=True, indent=indent)
-
-    
-    
-@keras_test
-def test_dropout_legacy_interface():
-    old_layer = keras.layers.Dropout(p=3, name='drop')
-    new_layer_1 = keras.layers.Dropout(rate=3, name='drop')
-    new_layer_2 = keras.layers.Dropout(3, name='drop')
-    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer_1.get_config())
-    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer_2.get_config())
-    
-        model = Sequential()
-    model.add(Conv2D(filters, kernel_size,
-                     padding='valid',
-                     input_shape=input_shape))
-    model.add(Activation('relu'))
-    model.add(Conv2D(filters, kernel_size))
-    model.add(Activation('relu'))
-    model.add(MaxPooling2D(pool_size=pool_size))
-    model.add(Dropout(0.25))
-    
-    print('Vectorizing sequence data...')
-tokenizer = Tokenizer(num_words=max_words)
-x_train = tokenizer.sequences_to_matrix(x_train, mode='binary')
-x_test = tokenizer.sequences_to_matrix(x_test, mode='binary')
-print('x_train shape:', x_train.shape)
-print('x_test shape:', x_test.shape)
-    
-            # Test equivalence of convert_dense_weights_data_format
-        out1 = model1.predict(x)
-        layer_utils.convert_dense_weights_data_format(model1.layers[2], prev_shape, target_data_format)
-        for (src, dst) in zip(model1.layers, model2.layers):
-            dst.set_weights(src.get_weights())
-        out2 = model2.predict(transpose(x))
-    
-    
-if __name__ == '__main__':
-    pytest.main([__file__])
-
-    
-        @mock.patch('certbot.display.enhancements.util')
-    def test_cancel(self, mock_util):
-        mock_util().menu.return_value = (display_util.CANCEL, 1)
-        self.assertFalse(self._call())
-    
-    
-def import_object(name):
-    # type: (_BaseString) -> Any
-    '''Imports an object by name.
-    
-        @gen_test
-    def test_nonblocking_put_with_getters(self):
-        q = queues.Queue()
-        get0 = q.get()
-        get1 = q.get()
-        q.put_nowait(0)
-        # put_nowait does *not* immediately unblock getters.
-        yield gen.moment
-        self.assertEqual(0, (yield get0))
-        q.put_nowait(1)
-        yield gen.moment
-        self.assertEqual(1, (yield get1))
-    
-            if maxsize < 0:
-            raise ValueError('maxsize can't be negative')
-    
-        def test_advanced(self):
-        code = textwrap.dedent('''
-            from __future__ import print_function
-            from tornado.ioloop import IOLoop
-            from tornado.netutil import bind_sockets
-            from tornado.process import fork_processes, task_id
-            from tornado.ioloop import IOLoop
-            from tornado.tcpserver import TCPServer
-    
-    import bcrypt
-import concurrent.futures
-import MySQLdb
-import markdown
-import os.path
-import re
-import subprocess
-import torndb
-import tornado.escape
-from tornado import gen
-import tornado.httpserver
-import tornado.ioloop
-import tornado.options
-import tornado.web
-import unicodedata
+        # 从上顶点往下 +274 的位置开始向上找颜色与上顶点一样的点，为下顶点
+    # 该方法对所有纯色平面和部分非纯色平面有效，对高尔夫草坪面、木纹桌面、
+    # 药瓶和非菱形的碟机（好像是）会判断错误
+    for k in range(i+274, i, -1):  # 274 取开局时最大的方块的上下顶点距离
+        pixel = im_pixel[board_x, k]
+        if abs(pixel[0] - last_pixel[0]) \
+                + abs(pixel[1] - last_pixel[1]) \
+                + abs(pixel[2] - last_pixel[2]) < 10:
+            break
+    board_y = int((i+k) / 2)
