@@ -1,107 +1,93 @@
 
         
-        def fixture_site(overrides = {})
-  Jekyll::Site.new(site_configuration(overrides))
+        def source_dir(*subdirs)
+  test_dir('source', *subdirs)
 end
     
-      next if extensions.empty?
-  mimes[mime] = [] if mimes[mime].nil?
-  mimes[mime].concat extensions
-end
+        # Initialize a new Layout.
+    #
+    # site - The Site.
+    # base - The String path to the source.
+    # name - The String filename of the post file.
+    def initialize(site, base, name)
+      @site = site
+      @base = base
+      @name = name
     
-        def process(args)
-      arg_is_present? args, '--server', 'The --server command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
-                          use the 'build' subcommand.'
-      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
-                          '--watch'.'
-      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
-                          the '--watch' switch.'
-      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
-                          favour of 'highlighter'.'
-      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
-                          your config files.'
-      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
-                          config files.'
-      no_subcommand(args)
-    end
+          # Topic may be hard deleted due to spam, no point complaining
+      # we would have to look at the topics table id sequence to find cases
+      # where this was called with an invalid id, no point really
+      return unless topic.present?
     
-          #
-      # Require a gem or gems. If it's not present, show a very nice error
-      # message that explains everything and is much more helpful than the
-      # normal LoadError.
-      #
-      # names - a string gem name or array of gem names
-      #
-      def require_with_graceful_fail(names)
-        Array(names).each do |name|
-          begin
-            Jekyll.logger.debug 'Requiring:', name.to_s
-            require name
-          rescue LoadError => e
-            Jekyll.logger.error 'Dependency Error:', <<-MSG
-Yikes! It looks like you don't have #{name} or one of its dependencies installed.
-In order to use Jekyll as currently configured, you'll need to install this gem.
+            if keychain_path.nil?
+          UI.user_error!('You either have to set :name or :path')
+        end
     
-          private
-      def grouped_array(groups)
-        groups.each_with_object([]) do |item, array|
-          array << {
-            'name'  => item.first,
-            'items' => item.last,
-            'size'  => item.last.size,
-          }
+          it 'logs the command if verbose' do
+        with_verbose(true) do
+          allow(Fastlane::Actions).to receive(:sh).with(anything, { log: true }).and_return('')
+          result = Fastlane::FastFile.new.parse('lane :test do
+            git_tag_exists(tag: '1.2.0')
+          end').runner.execute(:test)
         end
       end
+    
+          it 'returns the new version as return value' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          increment_version_number(bump_type: 'major')
+        end').runner.execute(:test)
+    
+      def failure
+    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
+    redirect_to after_omniauth_failure_path_for(resource_name)
+  end
+    
+          class << self
+        # Mark a given block of code as a 'busy' block of code, which will
+        # register a SIGINT handler for the duration of the block. When a
+        # SIGINT occurs, the `sig_callback` proc will be called. It is up
+        # to the callback to behave properly and exit the application.
+        def busy(sig_callback)
+          register(sig_callback)
+          return yield
+        ensure
+          unregister(sig_callback)
+        end
+    
+          # This gets the value of the block with the given key.
+      def get(key)
+        key    = Regexp.quote(key)
+        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$\r?\n?(.*?)\r?\n?^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
+        match  = regexp.match(@value)
+        return nil if !match
+        match[1]
+      end
+    
+    require_relative 'converter/fonts_conversion'
+require_relative 'converter/less_conversion'
+require_relative 'converter/js_conversion'
+require_relative 'converter/logger'
+require_relative 'converter/network'
+    
+        def log_transform(*args, from: caller[1][/`.*'/][1..-2].sub(/^block in /, ''))
+      puts '    #{cyan from}#{cyan ': #{args * ', '}' unless args.empty?}'
     end
+    
+      # Disable request forgery protection in test environment.
+  config.action_controller.allow_forgery_protection = false
+    
+    desc 'Dumps output to a CSS file for testing'
+task :debug do
+  require 'sass'
+  path = Bootstrap.stylesheets_path
+  %w(bootstrap).each do |file|
+    engine = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
+    File.open('./#{file}.css', 'w') { |f| f.write(engine.render) }
   end
 end
-
     
-            # Defines additional configuration keys to be available in the
-        # Vagrantfile. The configuration class should be returned by a
-        # block passed to this method. This is done to ensure that the class
-        # is lazy loaded, so if your class inherits from any classes that
-        # are specific to Vagrant 1.0, then the plugin can still be defined
-        # without breaking anything in future versions of Vagrant.
-        #
-        # @param [String] name Configuration key.
-        def self.config(name, scope=nil, &block)
-          scope ||= :top
-          components.configs[scope].register(name.to_sym, &block)
-          nil
-        end
-    
-            # Registers a SIGINT handler. This typically is called from {busy}.
-        # Callbacks are only registered once, so calling this multiple times
-        # with the same callback has no consequence.
-        def register(sig_callback)
-          @@mutex.synchronize do
-            registered << sig_callback
-            registered.uniq!
-    
-            self.summary = 'The repl listens to commands on standard input'
-        self.description = <<-DESC
-          The repl listens to commands on standard input and prints their
-          result to standard output.
-          It accepts all the other ipc subcommands. The repl will signal the
-          end of output with the the ASCII CR+LF `\\n\\r`.
-        DESC
-    
-      private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_book
-      @book = Book.find(params[:id])
-    end
-    
-            def name
-          @node.children.first
-        end
-    
-            def_node_matcher :redundant_regex?, <<-PATTERN
-          {(send $!nil? {:match :=~} (regexp (str $#literal_at_start?) (regopt)))
-           (send (regexp (str $#literal_at_start?) (regopt)) {:match :=~} $_)}
-        PATTERN
+      desc 'update main and version in bower.json'
+  task :generate do
+    require 'bootstrap-sass'
+    Dir.chdir Bootstrap.gem_path do
+      spec       = JSON.parse(File.read 'bower.json')
