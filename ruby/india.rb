@@ -1,45 +1,11 @@
 
         
-        puts 'Stackprof Mode: #{MODE}'
+        # puts '\nDone.'
+
     
-      next if extensions.empty?
-  mimes[mime] = [] if mimes[mime].nil?
-  mimes[mime].concat extensions
-end
-    
-      Jekyll::Command.subclasses.each { |c| c.init_with_program(p) }
-    
-    require 'erb'
-    
-          key = Spaceship::Portal::Key.create(name: 'New Key', apns: true, device_check: true, music_id: 'some-music-id')
-      expect(key).to be_instance_of(Spaceship::Portal::Key)
-      expect(key.id).to eq('a-new-key-id')
+        def tasks_without_stage_dependency
+      stages + default_tasks
     end
-  end
-    
-    describe Deliver::HtmlGenerator do
-  let(:generator) { Deliver::HtmlGenerator.new }
-    
-          def load_all_devices
-        self.devices = []
-    
-          it 'logs the command if verbose' do
-        with_verbose(true) do
-          allow(Fastlane::Actions).to receive(:sh).with(anything, { log: true }).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_tag_exists(tag: '1.2.0')
-          end').runner.execute(:test)
-        end
-      end
-    
-    unless invalids.empty?
-  puts '\n\nFailed links:'
-  invalids.each do |link|
-    puts '- #{link}'
-  end
-  puts 'Done with errors.'
-  exit(1)
-end
     
         if run? && ARGV.any?
       require 'optparse'
@@ -54,37 +20,47 @@ end
     end
   end
     
+          def accepts?(env)
+        cookie_header = env['HTTP_COOKIE']
+        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
+        cookies.each do |k, v|
+          if k == session_key && Array(v).size > 1
+            bad_cookies << k
+          elsif k != session_key && Rack::Utils.unescape(k) == session_key
+            bad_cookies << k
+          end
+        end
+        bad_cookies.empty?
+      end
+    
     module Rack
   module Protection
     ##
-    # Prevented attack::   Cookie Tossing
+    # Prevented attack::   XSS
     # Supported browsers:: all
-    # More infos::         https://github.com/blog/1466-yummy-cookies-across-domains
+    # More infos::         http://en.wikipedia.org/wiki/Cross-site_scripting
     #
-    # Does not accept HTTP requests if the HTTP_COOKIE header contains more than one
-    # session cookie. This does not protect against a cookie overflow attack.
+    # Automatically escapes Rack::Request#params so they can be embedded in HTML
+    # or JavaScript without any further issues. Calls +html_safe+ on the escaped
+    # strings if defined, to avoid double-escaping in Rails.
     #
     # Options:
-    #
-    # session_key:: The name of the session cookie (default: 'rack.session')
-    class CookieTossing < Base
-      default_reaction :deny
+    # escape:: What escaping modes to use, should be Symbol or Array of Symbols.
+    #          Available: :html (default), :javascript, :url
+    class EscapedParams < Base
+      extend Rack::Utils
     
-        it 'Reads referrer from Host header when Referer header is relative' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => '/valid'}
-      expect(subject.referrer(env)).to eq('foo.com')
+        it 'leaves TempFiles untouched' do
+      mock_app do |env|
+        request = Rack::Request.new(env)
+        [200, {'Content-Type' => 'text/plain'}, [request.params['file'][:filename] + '\n' + \
+                                                 request.params['file'][:tempfile].read + '\n' + \
+                                                 request.params['other']]]
+      end
+    
+        %w[/foo/bar /foo/bar/ / /.f /a.x].each do |path|
+      it('does not touch #{path.inspect}') { expect(get(path).body).to eq(path) }
     end
     
-        it 'should be able to deal with PATH_INFO = nil (fcgi?)' do
-      app = Rack::Protection::PathTraversal.new(proc { 42 })
-      expect(app.call({})).to eq(42)
-    end
+        expect(get('/').headers['X-Content-Type-Options']).to be_nil
   end
-    
-      describe '#html?' do
-    context 'given an appropriate content-type header' do
-      subject { Rack::Protection::Base.new(nil).html? 'content-type' => 'text/html' }
-      it { is_expected.to be_truthy }
-    end
-    
-    Dir[File.expand_path('../support/**/*.rb', __FILE__)].each { |f| require f }
