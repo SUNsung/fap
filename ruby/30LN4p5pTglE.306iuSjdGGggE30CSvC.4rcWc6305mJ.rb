@@ -1,119 +1,43 @@
 
         
-          bottle_ext = filename[bottle_native_regex, 1]
-  bottle_url_ext = f.bottle.url[bottle_native_regex, 1]
+          def self.register(user, app_id, params, challenges)
+    u2f = U2F::U2F.new(app_id)
+    registration = self.new
     
-      def xcode
-    if instance_variable_defined?(:@xcode)
-      @xcode
-    elsif MacOS::Xcode.installed?
-      @xcode = MacOS::Xcode.version
-      @xcode += ' => #{MacOS::Xcode.prefix}' unless MacOS::Xcode.default_prefix?
-      @xcode
-    end
-  end
+    module Vagrant
+  module Plugin
+    module V2
+      # This is the base class for a provider for the V2 API. A provider
+      # is responsible for creating compute resources to match the needs
+      # of a Vagrant-configured system.
+      class Provider
+        include CapabilityHost
     
-      def updated?
-    initial_revision != current_revision
-  end
-    
-      def self.all
-    opoo 'Formula.all is deprecated, use Formula.map instead'
-    map
-  end
-    
-    end
-
-    
-    end
-
-    
-      def include_enabled_setting?
-    enabled_setting.present?
-  end
-    
-        describe '#download' do
-      it 'returns the p8 file' do
-        mock_client_response(:download_key) do
-          %{
------BEGIN PRIVATE KEY-----
-this is the encoded private key contents
------END PRIVATE KEY-----
-          }
-        end
-        p8_string = key.download
-        expect(p8_string).to include('PRIVATE KEY')
-      end
-    end
-    
-          def self.example_code
-        [
-          'create_keychain(
-            name: 'KeychainName',
-            default_keychain: true,
-            unlock: true,
-            timeout: 3600,
-            lock_when_sleeps: true
-          )'
-        ]
+          def delete(key)
+        super(convert_key(key))
       end
     
-          # All available devices
-      attr_accessor :devices
-    
-          if valid_type?(type)
-        type.constantize.new(attributes).tap do |instance|
-          instance.user = user if instance.respond_to?(:user=)
-        end
-      else
-        const_get(:BASE_CLASS_NAME).constantize.new(attributes).tap do |instance|
-          instance.type = type
-          instance.user = user if instance.respond_to?(:user=)
-        end
-      end
-    end
-  end
-end
-    
-      def evernote_consumer_secret
-    (config = Devise.omniauth_configs[:evernote]) && config.strategy.consumer_secret
-  end
-    
-        def insert_after(index, *names)
-      insert assert_index(index) + 1, *names
-    end
-    
-        def as_json
-      indexed_docs.map do |doc|
-        json = doc.as_json
-        json[:mtime] = doc_mtime(doc)
-        json[:db_size] = doc_db_size(doc)
-        json
-      end
-    end
-    
-        def type=(value)
-      @type = value.try :strip
-    end
-    
-          def merge(other)
-        dup.merge!(other)
+          # This deletes the block with the given key if it exists.
+      def delete(key)
+        key    = Regexp.quote(key)
+        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$.*^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
+        @value.gsub!(regexp, '')
       end
     
-      def to
-    ActivityPub::TagManager.instance.to(object)
-  end
+          opts.on('-g', '--debug-info',
+              'Emit output that can be used by the FireSass Firebug plugin.') do
+        @options[:for_engine][:debug_info] = true
+      end
     
-      describe 'GET #show' do
-    it 'returns http success' do
-      get :show
-      expect(response).to have_http_status(:success)
-    end
-  end
+      context 'called with null values' do
+    it 'writes rules for other three' do
+      ruleset = 'margin-top: 11px; ' +
+                'margin-right: 12px; ' +
+                'margin-left: 13px;'
+      bad_rule = 'margin-bottom: null;'
     
-      describe 'GET #show' do
-    it 'returns http success' do
-      get :show
-      expect(response).to have_http_status(:success)
-    end
-  end
+      context 'called with multiple prefixes' do
+    it 'applies the prefixes to the property' do
+      rule = '-moz-appearance: none; ' +
+             '-ms-appearance: none; ' +
+             'appearance: none;'
