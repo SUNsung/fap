@@ -1,88 +1,119 @@
 
         
-        # TODO: ensure that history changes.
+        
+def format_size(bytes):
+    return '%s (%d bytes)' % (format_bytes(bytes), bytes)
+    
+    
+def get_params(override=None):
+    PARAMETERS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                   'parameters.json')
+    LOCAL_PARAMETERS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                         'local_parameters.json')
+    with io.open(PARAMETERS_FILE, encoding='utf-8') as pf:
+        parameters = json.load(pf)
+    if os.path.exists(LOCAL_PARAMETERS_FILE):
+        with io.open(LOCAL_PARAMETERS_FILE, encoding='utf-8') as pf:
+            parameters.update(json.load(pf))
+    if override:
+        parameters.update(override)
+    return parameters
+    
+            self.port = random.randint(20000, 30000)
+        self.server_process = subprocess.Popen([
+            'srelay', '-f', '-i', '127.0.0.1:%d' % self.port],
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    
+            with open(swf_file, 'rb') as swf_f:
+            swf_content = swf_f.read()
+        swfi = SWFInterpreter(swf_content)
+    
+    from .common import InfoExtractor
+from ..utils import (
+    parse_duration,
+    int_or_none,
+)
+    
+            return {
+            'id': flv_id,
+            'url': rtmp_url,
+            'ext': 'flv',
+            'no_resume': True,
+            'title': title,
+            'description': description,
+            'duration': duration,
+            'view_count': view_count,
+            'comment_count': comment_count,
+            'uploader': uploader,
+            'upload_date': upload_date,
+        }
 
     
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+            # because special names such as Name.Class, Name.Function, etc.
+        # are not recognized as such later in the parsing, we choose them
+        # to look the same as ordinary variables.
+        Name:                      '#000000',        # class: 'n'
+        Name.Attribute:            '#c4a000',        # class: 'na' - to be revised
+        Name.Builtin:              '#004461',        # class: 'nb'
+        Name.Builtin.Pseudo:       '#3465a4',        # class: 'bp'
+        Name.Class:                '#000000',        # class: 'nc' - to be revised
+        Name.Constant:             '#000000',        # class: 'no' - to be revised
+        Name.Decorator:            '#888',           # class: 'nd' - to be revised
+        Name.Entity:               '#ce5c00',        # class: 'ni'
+        Name.Exception:            'bold #cc0000',   # class: 'ne'
+        Name.Function:             '#000000',        # class: 'nf'
+        Name.Property:             '#000000',        # class: 'py'
+        Name.Label:                '#f57900',        # class: 'nl'
+        Name.Namespace:            '#000000',        # class: 'nn' - to be revised
+        Name.Other:                '#000000',        # class: 'nx'
+        Name.Tag:                  'bold #004461',   # class: 'nt' - like a keyword
+        Name.Variable:             '#000000',        # class: 'nv' - to be revised
+        Name.Variable.Class:       '#000000',        # class: 'vc' - to be revised
+        Name.Variable.Global:      '#000000',        # class: 'vg' - to be revised
+        Name.Variable.Instance:    '#000000',        # class: 'vi' - to be revised
     
-      def testPtbRawData(self):
-    tmpdir = tf.test.get_temp_dir()
-    for suffix in 'train', 'valid', 'test':
-      filename = os.path.join(tmpdir, 'ptb.%s.txt' % suffix)
-      with tf.gfile.GFile(filename, 'w') as fh:
-        fh.write(self._string_data)
-    # Smoke test
-    output = reader.ptb_raw_data(tmpdir)
-    self.assertEqual(len(output), 4)
+        return request('put', url, data=data, **kwargs)
+    
+            if nonce == self._thread_local.last_nonce:
+            self._thread_local.nonce_count += 1
+        else:
+            self._thread_local.nonce_count = 1
+        ncvalue = '%08x' % self._thread_local.nonce_count
+        s = str(self._thread_local.nonce_count).encode('utf-8')
+        s += nonce.encode('utf-8')
+        s += time.ctime().encode('utf-8')
+        s += os.urandom(8)
+    
+        if implementation == 'CPython':
+        implementation_version = platform.python_version()
+    elif implementation == 'PyPy':
+        implementation_version = '%s.%s.%s' % (sys.pypy_version_info.major,
+                                               sys.pypy_version_info.minor,
+                                               sys.pypy_version_info.micro)
+        if sys.pypy_version_info.releaselevel != 'final':
+            implementation_version = ''.join([
+                implementation_version, sys.pypy_version_info.releaselevel
+            ])
+    elif implementation == 'Jython':
+        implementation_version = platform.python_version()  # Complete Guess
+    elif implementation == 'IronPython':
+        implementation_version = platform.python_version()  # Complete Guess
+    else:
+        implementation_version = 'Unknown'
     
     
-def csv_input_fn(csv_path, batch_size):
-    # Create a dataset containing the text lines.
-    dataset = tf.data.TextLineDataset(csv_path).skip(1)
-    
-        # Generate predictions from the model
-    expected = ['Setosa', 'Versicolor', 'Virginica']
-    predict_x = {
-        'SepalLength': [5.1, 5.9, 6.9],
-        'SepalWidth': [3.3, 3.0, 3.1],
-        'PetalLength': [1.7, 4.2, 5.4],
-        'PetalWidth': [0.5, 1.5, 2.1],
-    }
-    
-    exports_files(['LICENSE'])
-    
-    PAD_ID = 0
-GO_ID = 1
-EOS_ID = 2
-UNK_ID = 3
-    
-          # Create target_weights to be 0 for targets that are padding.
-      batch_weight = np.ones(self.batch_size, dtype=np.float32)
-      for batch_idx in xrange(self.batch_size):
-        # We set weight to 0 if the corresponding target is a PAD symbol.
-        # The corresponding target is decoder_input shifted by 1 forward.
-        if length_idx < decoder_size - 1:
-          target = decoder_inputs[batch_idx][length_idx + 1]
-        if length_idx == decoder_size - 1 or target == data_utils.PAD_ID:
-          batch_weight[batch_idx] = 0.0
-      batch_weights.append(batch_weight)
-    return batch_encoder_inputs, batch_decoder_inputs, batch_weights
+def test_idna_with_version_attribute(mocker):
+    '''Verify we're actually setting idna version when it should be available.'''
+    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
+    assert info()['idna'] == {'version': '2.6'}
 
     
-    CIFAR_FILENAME = 'cifar-10-python.tar.gz'
-CIFAR_DOWNLOAD_URL = 'https://www.cs.toronto.edu/~kriz/' + CIFAR_FILENAME
-CIFAR_LOCAL_FOLDER = 'cifar-10-batches-py'
-    
-        def extract(self, **kwargs):
-        for i in self.streams:
-            s = self.streams[i]
-            _, s['container'], s['size'] = url_info(s['url'])
-            s['src'] = [s['url']]
-    
-    
-def extract_board_data(url):
-    json_data = extract_json_data(url, limit=LIMIT)
-    pin_list = json_data['pins']
-    title = json_data['title']
-    pin_count = json_data['pin_count']
-    pin_count -= len(pin_list)
-    
-    from ..common import *
-    
-        for i in range(10, 30):
-        url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
-            i = i,
-            p = preview
-        )
-        try:
-            mime, ext, size = url_info(url)
-            break
-        except: continue
-    
-    
-def mtv81_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_content(url)
-    title = HTMLParser().unescape(
-        '|'.join(match1(html, r'<title>(.*?)</title>').split('|')[:-2]))
+        def __init__(self, *args, **kwargs):
+        '''Initialize RequestException with `request` and `response` objects.'''
+        response = kwargs.pop('response', None)
+        self.response = response
+        self.request = kwargs.pop('request', None)
+        if (response is not None and not self.request and
+                hasattr(response, 'request')):
+            self.request = self.response.request
+        super(RequestException, self).__init__(*args, **kwargs)
