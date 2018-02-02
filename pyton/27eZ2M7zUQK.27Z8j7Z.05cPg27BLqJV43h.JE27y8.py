@@ -1,81 +1,93 @@
 
         
-                '''
-        available_plugins = plugin_manager.get_formatters_grouped()
-        self.enabled_plugins = []
-        for group in groups:
-            for cls in available_plugins[group]:
-                p = cls(env=env, **kwargs)
-                if p.enabled:
-                    self.enabled_plugins.append(p)
-    
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
-    
-    
-def test_unicode_basic_auth(httpbin):
-    # it doesn't really authenticate us because httpbin
-    # doesn't interpret the utf8-encoded auth
-    http('--verbose', '--auth', u'test:%s' % UNICODE,
-         httpbin.url + u'/basic-auth/test/' + UNICODE)
-    
-        def _get_path(self):
-        return os.path.join(self.directory, self.name + '.json')
-    
-                plugin.raw_auth = self.args.auth
-            self.args.auth_plugin = plugin
-            already_parsed = isinstance(self.args.auth, AuthCredentials)
-    
+            def short_desc(self):
         '''
-    # Constants, depending only on the floating-point format in use.
-    # We use an extra 2 bits of precision for rounding purposes.
-    PRECISION = sys.float_info.mant_dig + 2
-    SHIFT_MAX = sys.float_info.max_exp - PRECISION
-    Q_MAX = 1 << PRECISION
-    ROUND_HALF_TO_EVEN_CORRECTION = [0, -1, -2, 1, 0, -1, 2, 1]
-    
-            Otherwise leave dialog open for user to correct entry or cancel.
+        A short description of the command
         '''
-        entry = self.entry_ok()
-        if entry is not None:
-            self.result = entry
-            self.destroy()
-        else:
-            # [Ok] moves focus.  (<Return> does not.)  Move it back.
-            self.entry.focus_set()
+        return ''
     
-        This calculates the median as the 50th percentile, and should be
-    used when your data is continuous and grouped. In the above example,
-    the values 1, 2, 3, etc. actually represent the midpoint of classes
-    0.5-1.5, 1.5-2.5, 2.5-3.5, etc. The middle value falls somewhere in
-    class 3.5-4.5, and interpolation is used to estimate it.
     
-        def test_extra_data(self):
-        s = '[1, 2, 3]5'
-        msg = 'Extra data'
-        self.assertRaisesRegex(self.JSONDecodeError, msg, self.loads, s)
     
-        def __init__(self):
-        self.byteStream = None
-        self.characterStream = None
-        self.stringData = None
-        self.encoding = None
-        self.publicId = None
-        self.systemId = None
-        self.baseURI = None
+        @property
+    def templates_dir(self):
+        _templates_base_dir = self.settings['TEMPLATES_DIR'] or \
+            join(scrapy.__path__[0], 'templates')
+        return join(_templates_base_dir, 'spiders')
+
     
+            cb = request.callback
+    
+    
+class ScrapesContract(Contract):
+    ''' Contract to check presence of fields in scraped items
+        @scrapes page_name page_body
     '''
     
-            contents = []
-        method_items = sorted(methods.items())
-        for key, value in method_items:
-            contents.append(self.docroutine(value, key, funcs=fdict))
-        result = result + self.bigsection(
-            'Methods', '#ffffff', '#eeaa77', ''.join(contents))
+        # For pickling to work, the __module__ variable needs to be set to the frame
+    # where the named tuple is created.  Bypass this step in enviroments where
+    # sys._getframe is not defined (Jython for example).
+    if hasattr(_sys, '_getframe'):
+        result.__module__ = _sys._getframe(1).f_globals.get('__name__', '__main__')
+    
+            result_item = result_queue.get(block=True)
+        if result_item is not None:
+            work_item = pending_work_items[result_item.work_id]
+            del pending_work_items[result_item.work_id]
+    
+            self.assertEqual(set([SUCCESSFUL_FUTURE,
+                              CANCELLED_AND_NOTIFIED_FUTURE,
+                              future1]), finished)
+        self.assertEqual(set([CANCELLED_FUTURE, future2]), pending)
+    
+    
+  # These two methods exist to avoid importing the requests module at startup;
+  # reducing loading time since this module is slow to import.
+  @classmethod
+  def Requests( cls ):
+    try:
+      return cls.requests
+    except AttributeError:
+      import requests
+      cls.requests = requests
+      return requests
+    
+            present_dialog.assert_has_exact_calls( [
+          PresentDialog_Confirm_Call( MESSAGE ),
+        ] )
+        load_extra_conf.assert_has_exact_calls( [
+          call( FILE_NAME ),
+        ] )
+    
+    
+class WSGIApplicationTest(AsyncHTTPTestCase):
+    def get_app(self):
+        class HelloHandler(RequestHandler):
+            def get(self):
+                self.write('Hello world!')
+    
+        This is a non-blocking and non-threaded resolver.  It may not produce
+    the same results as the system resolver, but can be used for non-blocking
+    resolution when threads cannot be used.
+    
+    # This import will fail if path is not set up correctly
+import testapp
+    
+            'ExceptionBenchmark().enter_exit(50)',
+        'ExceptionBenchmark().call_wrapped(50)',
+        'ExceptionBenchmark().enter_exit(500)',
+        'ExceptionBenchmark().call_wrapped(500)',
+    ]
+    for cmd in cmds:
+        print(cmd)
+        subprocess.check_call(base_cmd + [cmd])
+    
+    
+class FeedHandler(BaseHandler):
+    def get(self):
+        entries = self.db.query('SELECT * FROM entries ORDER BY published '
+                                'DESC LIMIT 10')
+        self.set_header('Content-Type', 'application/atom+xml')
+        self.render('feed.xml', entries=entries)
+    
+    project = 'Tornado'
+copyright = '2009-%s, The Tornado Authors' % time.strftime('%Y')
