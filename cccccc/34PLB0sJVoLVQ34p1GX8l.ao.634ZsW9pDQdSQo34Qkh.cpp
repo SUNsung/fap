@@ -1,101 +1,142 @@
 
         
-        #include 'swift/AST/DebuggerClient.h'
-#include 'swift/SIL/SILLocation.h'
-#include 'swift/SIL/SILValue.h'
+        HINSTANCE g_hInst = NULL;
+D3D_DRIVER_TYPE g_driverType = D3D_DRIVER_TYPE_NULL;
+D3D_FEATURE_LEVEL g_featureLevel = D3D_FEATURE_LEVEL_11_0;
+ID3D11Device* g_pd3dDevice = NULL;
+ID3D11DeviceContext* g_pImmediateContext = NULL;
+IDXGISwapChain* g_pSwapChain = NULL;
     
-    #include 'swift/AST/SyntaxASTMap.h'
-#include 'swift/AST/Expr.h'
-#include 'swift/AST/Decl.h'
-#include 'swift/AST/Stmt.h'
-#include 'swift/Syntax/Syntax.h'
+    typedef std::tr1::tuple<int, int> StereoBMFixture_t;
+typedef TestBaseWithParam<StereoBMFixture_t> StereoBMFixture;
     
-    SWIFT_DISPATCH_SOURCE_TYPE(DATA_ADD)
-SWIFT_DISPATCH_SOURCE_TYPE(DATA_OR)
-SWIFT_DISPATCH_SOURCE_TYPE(DATA_REPLACE)
-SWIFT_DISPATCH_SOURCE_TYPE(MACH_SEND)
-SWIFT_DISPATCH_SOURCE_TYPE(MACH_RECV)
-SWIFT_DISPATCH_SOURCE_TYPE(MEMORYPRESSURE)
-SWIFT_DISPATCH_SOURCE_TYPE(PROC)
-SWIFT_DISPATCH_SOURCE_TYPE(READ)
-SWIFT_DISPATCH_SOURCE_TYPE(SIGNAL)
-SWIFT_DISPATCH_SOURCE_TYPE(TIMER)
-SWIFT_DISPATCH_SOURCE_TYPE(VNODE)
-SWIFT_DISPATCH_SOURCE_TYPE(WRITE)
+        if( !*state )
+        return;
     
-        GraphemeClusterBreakProperty GCBForC1 =
-        getGraphemeClusterBreakProperty(C[1]);
-    if (isExtendedGraphemeClusterBoundary(GCBForC0, GCBForC1) &&
-        !graphemeBreakOverride(C[0], C[1]))
-      return S.slice(0, C1Offset);
-    
-    
-    {
-    {} // end namespace index
-} // end namespace swift
-    
-      std::string error;
-  if (unitWriter.write(error)) {
-    diags.diagnose(SourceLoc(), diag::error_write_index_unit, error);
-    return true;
-  }
-    
-    ////////////////////////////////////////////////////////////////////////////////
-/// Disclaimer: This is intended only as a partial stand-in for
-/// std::pmr::memory_resource (C++17) as needed for developing a
-/// hazptr prototype.
-////////////////////////////////////////////////////////////////////////////////
-    
-    AsyncIOQueue::~AsyncIOQueue() {
-  CHECK_EQ(asyncIO_->pending(), 0);
-}
-    
-    inline bool operator<(const HugePageSize& a, const HugePageSize& b) {
-  return a.size < b.size;
+    cv::Mat dls::roty(const double t)
+{
+    // roty: rotation about y-axis
+    double ct = cos(t);
+    double st = sin(t);
+    return (cv::Mat_<double>(3,3) << ct, 0, st, 0, 1, 0, -st, 0, ct);
 }
     
     
-    {    return fileWriterFactory_.processOption(name, value);
+    {        left.copyTo(uleft);
+        right.copyTo(uright);
+    }
+    
+        camMat << 300.f, 0.f, imgSize.width/2.f, 0, 300.f, imgSize.height/2.f, 0.f, 0.f, 1.f;
+    distCoeffs0 << 1.2f, 0.2f, 0.f, 0.f, 0.f;
+    
+    #include 'opencv2/calib3d.hpp'
+    
+                    matJ = cvMat( 9, 3, CV_64FC1, J );
+    
+      /*
+   * @brief Access value for a flag name.
+   *
+   * @param name the flag name.
+   * @param value output parameter filled with the flag value on success.
+   * @return status of the flag did exist.
+   */
+  static Status getDefaultValue(const std::string& name, std::string& value);
+    
+      /// Check if effective privileges do not match real.
+  bool dropped() {
+    return (getuid() != geteuid() || getgid() != getegid());
   }
     
-    #include <folly/Optional.h>
-#include <folly/Range.h>
-#include <memory>
+      /**
+   * @brief Cleanly wait for all services and components to shutdown.
+   *
+   * Enter a join of all services followed by a sync wait for event loops.
+   * If the main thread is out of actions it can call #waitForShutdown.
+   */
+  static void waitForShutdown();
     
-    #include <folly/Format.h>
-#include <folly/experimental/logging/LogLevel.h>
-#include <folly/experimental/logging/LogMessage.h>
-#include <folly/portability/Time.h>
+      /*
+   * @brief a variable tracking all of the paths we attempt to carve
+   *
+   * This is a globbed set of file paths that we're expecting will be
+   * carved.
+   */
+  std::set<boost::filesystem::path> carvePaths_;
     
+    namespace osquery {
+    }
     
-    {void ImmediateFileWriter::flush() {}
-} // namespace folly
+    /// Safely convert a string representation of an integer base.
+inline Status safeStrtol(const std::string& rep, size_t base, long int& out) {
+  char* end{nullptr};
+  out = strtol(rep.c_str(), &end, static_cast<int>(base));
+  if (end == nullptr || end == rep.c_str() || *end != '\0' ||
+      ((out == LONG_MIN || out == LONG_MAX) && errno == ERANGE)) {
+    out = 0;
+    return Status(1);
+  }
+  return Status(0);
+}
+    
+    #endif /* WAKEUPLOCK_H_ */
 
     
-     private:
-  ImmediateFileWriter(ImmediateFileWriter const&) = delete;
-  ImmediateFileWriter& operator=(ImmediateFileWriter const&) = delete;
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
     
-    #include <folly/experimental/logging/LogConfig.h>
-#include <folly/experimental/logging/LogConfigParser.h>
-#include <folly/experimental/logging/LoggerDB.h>
-#include <folly/experimental/logging/StreamHandlerFactory.h>
-    
-    LogCategoryConfig::LogCategoryConfig(LogLevel l, bool inherit)
-    : level{l}, inheritParentLevel{inherit} {}
+      private:
+    CommFrequencyLimit(CommFrequencyLimit&);
+    CommFrequencyLimit& operator=(CommFrequencyLimit&);
     
     
-    {} // namespace folly
-
+    {  private:
+    TServicesMap m_services;
+    TServicesMap m_publicservices;
+    std::vector<ServiceBase*> m_releasevec;
+};
     
-    dynamic logConfigToDynamic(const LogHandlerConfig& config) {
-  dynamic options = dynamic::object;
-  for (const auto& opt : config.options) {
-    options.insert(opt.first, opt.second);
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    
+    static bool SpyHookLogFunc(struct XLoggerInfo_t& _info, std::string& _log);
+    void TestFun0();
+    int __TestFun1(int i);
+    
+    #ifndef COMM_HAS_MEMBER_H_
+#define COMM_HAS_MEMBER_H_
+    
+    namespace aria2 {
+    }
+    
+    AbstractAuthResolver::~AbstractAuthResolver() = default;
+    
+      const std::shared_ptr<Option>& getOption() const;
+    
+      std::shared_ptr<HttpConnection> httpConnection_;
+    
+    bool AnnounceList::currentTierAcceptsStoppedEvent() const
+{
+  if (currentTrackerInitialized_) {
+    return FindStoppedAllowedTier()(*currentTier_);
   }
-  auto result = dynamic::object('options', options);
-  if (config.type.hasValue()) {
-    result('type', config.type.value());
+    }
+    
+    std::string errToString(OSStatus err)
+{
+  std::string rv = 'Unkown error';
+  CFRef<CFStringRef> cerr(SecCopyErrorMessageString(err, nullptr));
+  if (!cerr) {
+    return rv;
   }
-  return std::move(result);
+  size_t len = CFStringGetLength(cerr.get()) * 4;
+  auto buf = make_unique<char[]>(len);
+  if (CFStringGetCString(cerr.get(), buf.get(), len, kCFStringEncodingUTF8)) {
+    rv = buf.get();
+  }
+  return rv;
 }
