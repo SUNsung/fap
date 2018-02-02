@@ -1,120 +1,81 @@
 
-def get_info(package_name):
-    api_url = 'https://pypi.python.org/pypi/{}/json'.format(package_name)
-    resp = requests.get(api_url).json()
-    hasher = hashlib.sha256()
-    for release in resp['urls']:
-        download_url = release['url']
-        if download_url.endswith('.tar.gz'):
-            hasher.update(requests.get(download_url).content)
-            return {
-                'name': package_name,
-                'url': download_url,
-                'sha256': hasher.hexdigest(),
-            }
-    else:
-        raise RuntimeError(
-            '{}: download not found: {}'.format(package_name, resp))
+        
+                '''
+        available_plugins = plugin_manager.get_formatters_grouped()
+        self.enabled_plugins = []
+        for group in groups:
+            for cls in available_plugins[group]:
+                p = cls(env=env, **kwargs)
+                if p.enabled:
+                    self.enabled_plugins.append(p)
     
-        # noinspection PyProtectedMember
-    @property
-    def headers(self):
-        original = self._orig.raw._original_response
-    
-    
-@mock.patch('httpie.core.get_response')
-def test_error_traceback(get_response):
-    exc = ConnectionError('Connection aborted')
+        exc = ConnectionError('Connection aborted')
     exc.request = Request(method='GET', url='http://www.google.com')
     get_response.side_effect = exc
-    with raises(ConnectionError):
-        main(['--ignore-stdin', '--traceback', 'www.google.com'])
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
     
     
-def test_follow_all_output_options_used_for_redirects(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 3
-    assert HTTP_OK not in r
+def test_unicode_basic_auth(httpbin):
+    # it doesn't really authenticate us because httpbin
+    # doesn't interpret the utf8-encoded auth
+    http('--verbose', '--auth', u'test:%s' % UNICODE,
+         httpbin.url + u'/basic-auth/test/' + UNICODE)
     
-            if color_scheme != PRESET_STYLE and env.colors == 256:
-            fmt_class = Terminal256Formatter
+        def _get_path(self):
+        return os.path.join(self.directory, self.name + '.json')
+    
+                plugin.raw_auth = self.args.auth
+            self.args.auth_plugin = plugin
+            already_parsed = isinstance(self.args.auth, AuthCredentials)
+    
+        '''
+    # Constants, depending only on the floating-point format in use.
+    # We use an extra 2 bits of precision for rounding purposes.
+    PRECISION = sys.float_info.mant_dig + 2
+    SHIFT_MAX = sys.float_info.max_exp - PRECISION
+    Q_MAX = 1 << PRECISION
+    ROUND_HALF_TO_EVEN_CORRECTION = [0, -1, -2, 1, 0, -1, 2, 1]
+    
+            Otherwise leave dialog open for user to correct entry or cancel.
+        '''
+        entry = self.entry_ok()
+        if entry is not None:
+            self.result = entry
+            self.destroy()
         else:
-            fmt_class = TerminalFormatter
-        self.formatter = fmt_class(style=style_class)
+            # [Ok] moves focus.  (<Return> does not.)  Move it back.
+            self.entry.focus_set()
     
-        # noinspection PyUnboundLocalVariable
-    return '%.*f %s' % (precision, n / factor, suffix)
-
+        This calculates the median as the 50th percentile, and should be
+    used when your data is continuous and grouped. In the above example,
+    the values 1, 2, 3, etc. actually represent the midpoint of classes
+    0.5-1.5, 1.5-2.5, 2.5-3.5, etc. The middle value falls somewhere in
+    class 3.5-4.5, and interpolation is used to estimate it.
     
+        def test_extra_data(self):
+        s = '[1, 2, 3]5'
+        msg = 'Extra data'
+        self.assertRaisesRegex(self.JSONDecodeError, msg, self.loads, s)
     
-class TestResult(object):
+        def __init__(self):
+        self.byteStream = None
+        self.characterStream = None
+        self.stringData = None
+        self.encoding = None
+        self.publicId = None
+        self.systemId = None
+        self.baseURI = None
     
-        from config_module_app import app
-    assert app.instance_path == str(modules_tmpdir.join('instance'))
+    '''
     
-    def _read_words(filename):
-  with tf.gfile.GFile(filename, 'r') as f:
-    if Py3:
-      return f.read().replace('\n', '<eos>').split()
-    else:
-      return f.read().decode('utf-8').replace('\n', '<eos>').split()
-    
-        # Compute predictions.
-    predicted_classes = tf.argmax(logits, 1)
-    if mode == tf.estimator.ModeKeys.PREDICT:
-        predictions = {
-            'class_ids': predicted_classes[:, tf.newaxis],
-            'probabilities': tf.nn.softmax(logits),
-            'logits': logits,
-        }
-        return tf.estimator.EstimatorSpec(mode, predictions=predictions)
-    
-    from six.moves import StringIO
-    
-    
-class Options(object):
-  '''Options used by our word2vec model.'''
-    
-    
-def fake_data(num_images):
-  '''Generate a fake dataset that matches the dimensions of MNIST.'''
-  data = numpy.ndarray(
-      shape=(num_images, IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS),
-      dtype=numpy.float32)
-  labels = numpy.zeros(shape=(num_images,), dtype=numpy.int64)
-  for image in xrange(num_images):
-    label = image % 2
-    data[image, :, :, 0] = label - 0.5
-    labels[image] = label
-  return data, labels
-    
-    # URLs for WMT data.
-_WMT_ENFR_TRAIN_URL = 'http://www.statmt.org/wmt10/training-giga-fren.tar'
-_WMT_ENFR_DEV_URL = 'http://www.statmt.org/wmt15/dev-v2.tgz'
-    
-        Args:
-      data: a tuple of size len(self.buckets) in which each element contains
-        lists of pairs of input and output data that we use to create a batch.
-      bucket_id: integer, which bucket to get the batch for.
-    
-    
-def convert_to_tfrecord(input_files, output_file):
-  '''Converts a file to TFRecords.'''
-  print('Generating %s' % output_file)
-  with tf.python_io.TFRecordWriter(output_file) as record_writer:
-    for input_file in input_files:
-      data_dict = read_pickle_from_file(input_file)
-      data = data_dict['data']
-      labels = data_dict['labels']
-      num_entries_in_batch = len(labels)
-      for i in range(num_entries_in_batch):
-        example = tf.train.Example(features=tf.train.Features(
-            feature={
-                'image': _bytes_feature(data[i].tobytes()),
-                'label': _int64_feature(labels[i])
-            }))
-        record_writer.write(example.SerializeToString())
+            contents = []
+        method_items = sorted(methods.items())
+        for key, value in method_items:
+            contents.append(self.docroutine(value, key, funcs=fdict))
+        result = result + self.bigsection(
+            'Methods', '#ffffff', '#eeaa77', ''.join(contents))
