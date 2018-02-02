@@ -1,250 +1,161 @@
-#if GTEST_OS_SYMBIAN
-  // Streams a value (either a pointer or not) to this object.
-  template <typename T>
-  inline Message& operator <<(const T& value) {
-    StreamHelper(typename internal::is_pointer<T>::type(), value);
-    return *this;
-  }
-#else
-  // Streams a non-pointer value to this object.
-  template <typename T>
-  inline Message& operator <<(const T& val) {
-    // Some libraries overload << for STL containers.  These
-    // overloads are defined in the global namespace instead of ::std.
-    //
-    // C++'s symbol lookup rule (i.e. Koenig lookup) says that these
-    // overloads are visible in either the std namespace or the global
-    // namespace, but not other namespaces, including the testing
-    // namespace which Google Test's Message class is in.
-    //
-    // To allow STL containers (and other types that has a << operator
-    // defined in the global namespace) to be used in Google Test
-    // assertions, testing::Message must access the custom << operator
-    // from the global namespace.  With this using declaration,
-    // overloads of << defined in the global namespace and those
-    // visible via Koenig lookup are both exposed in this function.
-    using ::operator <<;
-    *ss_ << val;
-    return *this;
-  }
+
+        
+        OCL_PERF_TEST_P(StereoBMFixture, StereoBM, ::testing::Combine(OCL_PERF_ENUM(32, 64, 128), OCL_PERF_ENUM(11,21) ) )
+{
+    const int n_disp = get<0>(GetParam()), winSize = get<1>(GetParam());
+    UMat left, right, disp;
+    }
     
-    template <$for j, [[typename Generator$j]]>
-internal::CartesianProductHolder$i<$for j, [[Generator$j]]> Combine(
-    $for j, [[const Generator$j& g$j]]) {
-  return internal::CartesianProductHolder$i<$for j, [[Generator$j]]>(
-      $for j, [[g$j]]);
+    using namespace std;
+using namespace cv;
+using namespace perf;
+using std::tr1::make_tuple;
+using std::tr1::get;
+    
+        struct C_Caller
+    {
+        CvMat* objPts;
+        CvMat* imgPts;
+        CvMat* npoints;
+        Size imageSize;
+        CvMat *cameraMatrix;
+        CvMat *distCoeffs;
+        CvMat *rvecs;
+        CvMat *tvecs;
+        int flags;
+    }
+    
+        drawCorners = true;
+    Mat cvdrawCornImg(img.size(), CV_8UC2);
+    drawCorImg = cvdrawCornImg;
+    was_found = true;
+    errors += run_test_case( CV_StsUnsupportedFormat, '2 channel image' );
+    
+            const char* imgname = cvReadString((CvFileNode*)cvGetSeqElem(board_list->data.seq,idx*4), 'dummy.txt');
+        int is_chessboard = cvReadInt((CvFileNode*)cvGetSeqElem(board_list->data.seq,idx*4+1), 0);
+        pattern_size.width = cvReadInt((CvFileNode*)cvGetSeqElem(board_list->data.seq,idx*4 + 2), -1);
+        pattern_size.height = cvReadInt((CvFileNode*)cvGetSeqElem(board_list->data.seq,idx*4 + 3), -1);
+    
+    extern JSClass  *jsb_cocos2d_NavMeshObstacle_class;
+extern JSObject *jsb_cocos2d_NavMeshObstacle_prototype;
+    
+    extern JSClass  *jsb_cocostudio_ComExtensionData_class;
+extern JSObject *jsb_cocostudio_ComExtensionData_prototype;
+    
+    
+    
+    
+    
+    #ifdef __cplusplus
+extern 'C' {
+#endif
+#include 'tolua++.h'
+#ifdef __cplusplus
 }
+#endif
     
-    #ifndef GTEST_INCLUDE_GTEST_GTEST_TEST_PART_H_
-#define GTEST_INCLUDE_GTEST_GTEST_TEST_PART_H_
+    
+    
+    
+    {			b2PolygonShape shape;
+			shape.SetAsBox(0.5f, 2.0f);
+			m_attachment->CreateFixture(&shape, 2.0f);
+		}
+    
+    		b2BodyDef bd;
+		bd.type = b2_dynamicBody;
+		bd.position = body1->GetPosition();
+		bd.angle = body1->GetAngle();
     
     
     {
-    {}  // namespace internal
-}  // namespace testing
+    {			m_bullet->SetLinearVelocity(b2Vec2(0.0f, -50.0f));
+		}
+	}
     
-    // The base case for the compile time recursion.
-template <GTEST_TEMPLATE_ Fixture, class TestSel>
-class TypeParameterizedTest<Fixture, TestSel, Types0> {
- public:
-  static bool Register(const char* /*prefix*/, const char* /*case_name*/,
-                       const char* /*test_names*/, int /*index*/) {
-    return true;
-  }
+    static const int kCrToRedTable[256] = {
+  -179, -178, -177, -175, -174, -172, -171, -170, -168, -167, -165, -164,
+  -163, -161, -160, -158, -157, -156, -154, -153, -151, -150, -149, -147,
+  -146, -144, -143, -142, -140, -139, -137, -136, -135, -133, -132, -130,
+  -129, -128, -126, -125, -123, -122, -121, -119, -118, -116, -115, -114,
+  -112, -111, -109, -108, -107, -105, -104, -102, -101, -100,  -98,  -97,
+   -95,  -94,  -93,  -91,  -90,  -88,  -87,  -86,  -84,  -83,  -81,  -80,
+   -79,  -77,  -76,  -74,  -73,  -72,  -70,  -69,  -67,  -66,  -64,  -63,
+   -62,  -60,  -59,  -57,  -56,  -55,  -53,  -52,  -50,  -49,  -48,  -46,
+   -45,  -43,  -42,  -41,  -39,  -38,  -36,  -35,  -34,  -32,  -31,  -29,
+   -28,  -27,  -25,  -24,  -22,  -21,  -20,  -18,  -17,  -15,  -14,  -13,
+   -11,  -10,   -8,   -7,   -6,   -4,   -3,   -1,    0,    1,    3,    4,
+     6,    7,    8,   10,   11,   13,   14,   15,   17,   18,   20,   21,
+    22,   24,   25,   27,   28,   29,   31,   32,   34,   35,   36,   38,
+    39,   41,   42,   43,   45,   46,   48,   49,   50,   52,   53,   55,
+    56,   57,   59,   60,   62,   63,   64,   66,   67,   69,   70,   72,
+    73,   74,   76,   77,   79,   80,   81,   83,   84,   86,   87,   88,
+    90,   91,   93,   94,   95,   97,   98,  100,  101,  102,  104,  105,
+   107,  108,  109,  111,  112,  114,  115,  116,  118,  119,  121,  122,
+   123,  125,  126,  128,  129,  130,  132,  133,  135,  136,  137,  139,
+   140,  142,  143,  144,  146,  147,  149,  150,  151,  153,  154,  156,
+   157,  158,  160,  161,  163,  164,  165,  167,  168,  170,  171,  172,
+   174,  175,  177,  178
 };
     
-    // Protects copying of all linked_ptr objects.
-GTEST_API_ GTEST_DECLARE_STATIC_MUTEX_(g_linked_ptr_mutex);
-    
-    
-    {
-    {}  // namespace internal
-}  // namespace testing
-    
-    // We don't want to require the users to write TypesN<...> directly,
-// as that would require them to count the length.  Types<...> is much
-// easier to write, but generates horrible messages when there is a
-// compiler error, as gcc insists on printing out each template
-// argument, even if it has the default value (this means Types<int>
-// will appear as Types<int, None, None, ..., None> in the compiler
-// errors).
-//
-// Our solution is to combine the best part of the two approaches: a
-// user would write Types<T1, ..., TN>, and Google Test will translate
-// that to TypesN<T1, ..., TN> internally to make error messages
-// readable.  The translation is done by the 'type' member of the
-// Types template.
-    
-      virtual bool IsPrime(int n) const {
-    return 0 <= n && n < is_prime_size_ && is_prime_[n];
-  }
-    
-      // Now, we have that n is odd and n >= 3.
-    
-      /**
-   * @brief The std::thread's interruption point.
-   */
-  virtual void interrupt() final;
-    
-    
-    {/**
- * @brief Read the enrollment secret from disk.
- *
- * We suspect multiple enrollment types may require an apriori, and enterprise
- * shared, secret. Use of this enroll or deployment secret is an optional choice
- * made by the enroll plugin type.
- *
- * @return enroll_secret The trimmed content read from FLAGS_enroll_secret_path.
- */
-const std::string getEnrollSecret();
-}
-
-    
-      // Getter for the carver status
-  Status getStatus() {
-    return status_;
-  }
-    
-    #include <osquery/config.h>
-#include <osquery/dispatcher.h>
-    
-      DBWrapper* db_wrapper = ObjectWrap::Unwrap<DBWrapper>(args.This());
-  rocksdb::Slice begin     = *v8::String::Utf8Value(args[0]->ToString());
-  rocksdb::Slice end       = *v8::String::Utf8Value(args[1]->ToString());
-  db_wrapper->status_    = db_wrapper->db_->CompactRange(&end, &begin);
-    
-    // InsertBefore and InsertAfter are simply wrappers around the Insert function.
-int RedisLists::InsertBefore(const std::string& key, const std::string& pivot,
-                             const std::string& value) {
-  return Insert(key, pivot, value, false);
-}
-    
-      jstring jname =
-      (jstring)env->CallObjectMethod(m_jcallback_obj, jname_method_id);
-  if(env->ExceptionCheck()) {
-    // exception thrown
-    return;
-  }
-  jboolean has_exception = JNI_FALSE;
-  m_name = JniUtil::copyString(env, jname, &has_exception);  // also releases jname
-  if (has_exception == JNI_TRUE) {
-    // exception thrown
-    return;
-  }
-    
-      m_jFindShortestSeparatorMethodId =
-    AbstractComparatorJni::getFindShortestSeparatorMethodId(env);
-  if(m_jFindShortestSeparatorMethodId == nullptr) {
-    // exception thrown: NoSuchMethodException or OutOfMemoryError
-    return;
-  }
-    
-    /*
- * Class:     org_rocksdb_WriteBatchWithIndex
- * Method:    deleteRange
- * Signature: (J[BI[BIJ)V
- */
-void Java_org_rocksdb_WriteBatchWithIndex_deleteRange__J_3BI_3BIJ(
-    JNIEnv* env, jobject jobj, jlong jwbwi_handle, jbyteArray jbegin_key,
-    jint jbegin_key_len, jbyteArray jend_key, jint jend_key_len,
-    jlong jcf_handle) {
-  auto* wbwi = reinterpret_cast<rocksdb::WriteBatchWithIndex*>(jwbwi_handle);
-  assert(wbwi != nullptr);
-  auto* cf_handle = reinterpret_cast<rocksdb::ColumnFamilyHandle*>(jcf_handle);
-  assert(cf_handle != nullptr);
-  auto deleteRange = [&wbwi, &cf_handle](rocksdb::Slice beginKey,
-                                         rocksdb::Slice endKey) {
-    wbwi->DeleteRange(cf_handle, beginKey, endKey);
-  };
-  rocksdb::JniUtil::kv_op(deleteRange, env, jobj, jbegin_key, jbegin_key_len,
-                          jend_key, jend_key_len);
-}
-    
-      m_env->CallVoidMethod(
-      m_jcallback_obj,
-      m_jLogDataMethodId,
-      j_blob);
-  if(m_env->ExceptionCheck()) {
-    // exception thrown
-    m_env->ExceptionDescribe();
-    if(j_blob != nullptr) {
-      m_env->DeleteLocalRef(j_blob);
+    namespace guetzli {
     }
-    return;
-  }
     
-    inline flatbuffers::Offset<EnumVal> CreateEnumValDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    const char *name = nullptr,
-    int64_t value = 0,
-    flatbuffers::Offset<Object> object = 0,
-    flatbuffers::Offset<Type> union_type = 0) {
-  return reflection::CreateEnumVal(
-      _fbb,
-      name ? _fbb.CreateString(name) : 0,
-      value,
-      object,
-      union_type);
-}
-    
-    ::grpc::Status MonsterStorage::Service::Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) {
-  (void) context;
-  (void) request;
-  (void) response;
-  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
-}
+    namespace guetzli {
+    }
     
     
-    {
-    {}  // namespace Example
-}  // namespace MyGame
+    {}  // namespace
     
-    inline void IterateObject(const uint8_t *obj, const TypeTable *type_table,
-                          IterationVisitor *visitor) {
-  visitor->StartSequence();
-  const uint8_t *prev_val = nullptr;
-  size_t set_idx = 0;
-  for (size_t i = 0; i < type_table->num_elems; i++) {
-    auto type_code = type_table->type_codes[i];
-    auto type = static_cast<ElementaryType>(type_code.base_type);
-    auto is_vector = type_code.is_vector != 0;
-    auto ref_idx = type_code.sequence_ref;
-    const TypeTable *ref = nullptr;
-    if (ref_idx >= 0) { ref = type_table->type_refs[ref_idx](); }
-    auto name = type_table->names ? type_table->names[i] : nullptr;
-    const uint8_t *val = nullptr;
-    if (type_table->st == ST_TABLE) {
-      val = reinterpret_cast<const Table *>(obj)->GetAddressOf(
-          FieldIndexToOffset(static_cast<voffset_t>(i)));
+      // Snapshot should still be the same. Should ignore a4 and v4.
+  first = true;
+  for (it->Seek(k1); it->Valid(); it->Next()) {
+    res = it->value().ToString();
+    if (first) {
+      ASSERT_EQ(res, 'v1,v2,v3');
+      first = false;
     } else {
-      val = obj + type_table->values[i];
+      ASSERT_EQ(res, 'a1,a2,a3');
     }
-    visitor->Field(i, set_idx, type, is_vector, ref, name, val);
-    if (val) {
-      set_idx++;
-      if (is_vector) {
-        val += ReadScalar<uoffset_t>(val);
-        auto vec = reinterpret_cast<const Vector<uint8_t> *>(val);
-        visitor->StartVector();
-        auto elem_ptr = vec->Data();
-        for (size_t j = 0; j < vec->size(); j++) {
-          visitor->Element(j, type, ref, elem_ptr);
-          IterateValue(type, elem_ptr, ref, prev_val, static_cast<soffset_t>(j),
-                       visitor);
-          elem_ptr += InlineSize(type, ref);
-        }
-        visitor->EndVector();
-      } else {
-        IterateValue(type, val, ref, prev_val, -1, visitor);
-      }
-    }
-    prev_val = val;
   }
-  visitor->EndSequence();
+    
+      // If we actually found the index
+  if (curIndex == index && !it.Done()) {
+    Slice elem;
+    it.GetCurrent(&elem);
+    if (result != NULL) {
+      *result = elem.ToString();
+    }
+    }
+    
+    void BlockIter::SeekToLast() {
+  if (data_ == nullptr) {  // Not init yet
+    return;
+  }
+  SeekToRestartPoint(num_restarts_ - 1);
+  while (ParseNextKey() && NextEntryOffset() < restarts_) {
+    // Keep skipping
+  }
 }
     
-    // Get any vector element as a 64bit int, regardless of what type it is.
-inline int64_t GetAnyVectorElemI(const VectorOfAny *vec,
-                                 reflection::BaseType elem_type, size_t i) {
-  return GetAnyValueI(elem_type, vec->Data() + GetTypeSize(elem_type) * i);
-}
+    
+    {  // Bitmap used to record the bytes that we read, use atomic to protect
+  // against multiple threads updating the same bit
+  std::atomic<uint32_t>* bitmap_;
+  // (1 << bytes_per_bit_pow_) is bytes_per_bit. Use power of 2 to optimize
+  // muliplication and division
+  uint8_t bytes_per_bit_pow_;
+  // Pointer to DB Statistics object, Since this bitmap may outlive the DB
+  // this pointer maybe invalid, but the DB will update it to a valid pointer
+  // by using SetStatistics() before calling Mark()
+  std::atomic<Statistics*> statistics_;
+  uint32_t rnd_;
+};
+    
+      class StatisticsJni : public StatisticsImpl {
+   public:
+     StatisticsJni(std::shared_ptr<Statistics> stats);
+     StatisticsJni(std::shared_ptr<Statistics> stats,
+         const std::set<uint32_t> ignore_histograms);
+     virtual bool HistEnabledForType(uint32_t type) const override;
+    }
