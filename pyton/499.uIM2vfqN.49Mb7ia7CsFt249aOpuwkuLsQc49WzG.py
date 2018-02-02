@@ -1,6 +1,112 @@
 
         
-        filenames = {
+            plugin_manager.register(Plugin)
+    try:
+        r = http(
+            httpbin + BASIC_AUTH_URL,
+            '--auth-type',
+            Plugin.auth_type,
+            '--auth',
+            BASIC_AUTH_HEADER_VALUE,
+        )
+        assert HTTP_OK in r
+        assert r.json == AUTH_OK
+    finally:
+        plugin_manager.unregister(Plugin)
+    
+                yield line.decode(self.msg.encoding) \
+                      .encode(self.output_encoding, 'replace') + lf
+    
+        try:
+        parsed_args = parser.parse_args(args=args, env=env)
+    except KeyboardInterrupt:
+        env.stderr.write('\n')
+        if include_traceback:
+            raise
+        exit_status = ExitStatus.ERROR_CTRL_C
+    except SystemExit as e:
+        if e.code != ExitStatus.OK:
+            env.stderr.write('\n')
+            if include_traceback:
+                raise
+            exit_status = ExitStatus.ERROR
+    else:
+        try:
+            exit_status = program(
+                args=parsed_args,
+                env=env,
+                log_error=log_error,
+            )
+        except KeyboardInterrupt:
+            env.stderr.write('\n')
+            if include_traceback:
+                raise
+            exit_status = ExitStatus.ERROR_CTRL_C
+        except SystemExit as e:
+            if e.code != ExitStatus.OK:
+                env.stderr.write('\n')
+                if include_traceback:
+                    raise
+                exit_status = ExitStatus.ERROR
+        except requests.Timeout:
+            exit_status = ExitStatus.ERROR_TIMEOUT
+            log_error('Request timed out (%ss).', parsed_args.timeout)
+        except requests.TooManyRedirects:
+            exit_status = ExitStatus.ERROR_TOO_MANY_REDIRECTS
+            log_error('Too many redirects (--max-redirects=%s).',
+                      parsed_args.max_redirects)
+        except Exception as e:
+            # TODO: Further distinction between expected and unexpected errors.
+            msg = str(e)
+            if hasattr(e, 'request'):
+                request = e.request
+                if hasattr(request, 'url'):
+                    msg += ' while doing %s request to URL: %s' % (
+                        request.method, request.url)
+            log_error('%s: %s', type(e).__name__, msg)
+            if include_traceback:
+                raise
+            exit_status = ExitStatus.ERROR
+    
+        Uses threading to periodically update the status (speed, ETA, etc.).
+    
+    
+@pytest.mark.parametrize('ssl_version', SSL_VERSION_ARG_MAPPING.keys())
+def test_ssl_version(httpbin_secure, ssl_version):
+    try:
+        r = http(
+            '--ssl', ssl_version,
+            httpbin_secure + '/get'
+        )
+        assert HTTP_OK in r
+    except SSLError as e:
+        if ssl_version == 'ssl3':
+            # pytest-httpbin doesn't support ssl3
+            assert 'SSLV3_ALERT_HANDSHAKE_FAILURE' in str(e)
+        else:
+            raise
+    
+        >>> humanize_bytes(1)
+    '1 B'
+    >>> humanize_bytes(1024, precision=1)
+    '1.0 kB'
+    >>> humanize_bytes(1024 * 123, precision=1)
+    '123.0 kB'
+    >>> humanize_bytes(1024 * 12342, precision=1)
+    '12.1 MB'
+    >>> humanize_bytes(1024 * 12342, precision=2)
+    '12.05 MB'
+    >>> humanize_bytes(1024 * 1234, precision=2)
+    '1.21 MB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
+    '1.31 GB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
+    '1.3 GB'
+    
+        def get_auth_plugin_mapping(self):
+        return {plugin.auth_type: plugin for plugin in self.get_auth_plugins()}
+    
+    filenames = {
     'bin': 'youtube-dl',
     'exe': 'youtube-dl.exe',
     'tar': 'youtube-dl-%s.tar.gz' % version}
@@ -15,143 +121,128 @@ for key, filename in filenames.items():
     sha256sum = hashlib.sha256(data).hexdigest()
     new_version[key] = (url, sha256sum)
     
-    try:
-    from .lazy_extractors import *
-    from .lazy_extractors import _ALL_CLASSES
-    _LAZY_LOADER = True
-except ImportError:
-    _LAZY_LOADER = False
-    from .extractors import *
+        with io.open(infile, encoding='utf-8') as inf:
+        issue_template_tmpl = inf.read()
     
-        def _real_extract(self, url):
-        display_id = self._match_id(url)
+    header = oldreadme[:oldreadme.index('# OPTIONS')]
+footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
     
-        if not os.path.exists(to_bytes(filename, errors='surrogate_or_strict')) or os.path.isdir(to_bytes(filename, errors='strict')):
-        return None
-    digest = hash_func()
-    blocksize = 64 * 1024
-    try:
-        infile = open(to_bytes(filename, errors='surrogate_or_strict'), 'rb')
-        block = infile.read(blocksize)
-        while block:
-            digest.update(block)
-            block = infile.read(blocksize)
-        infile.close()
-    except IOError as e:
-        raise AnsibleError('error while accessing the file %s, error was: %s' % (filename, e))
-    return digest.hexdigest()
-    
-    
-def parse_address(address, allow_ranges=False):
-    '''
-    Takes a string and returns a (host, port) tuple. If the host is None, then
-    the string could not be parsed as a host identifier with an optional port
-    specification. If the port is None, then no port was specified.
-    
-            # test exceptions
-        no_projects_input_url = 'https://www.googleapis.com/compute/v1/not-projects/myproject/global/backendServices/mybackendservice/getHealth'
-        no_resource_input_url = 'https://www.googleapis.com/compute/v1/not-projects/myproject/global'
-    
-            print('benchmarking scikit-learn: ')
-        scikit_results.append(bench(ScikitLasso, X, Y, X_test, Y_test, coef_))
-        print('benchmarking glmnet: ')
-        glmnet_results.append(bench(GlmnetLasso, X, Y, X_test, Y_test, coef_))
-    
-    from sklearn.datasets import make_multilabel_classification
-from sklearn.metrics import (f1_score, accuracy_score, hamming_loss,
-                             jaccard_similarity_score)
-from sklearn.utils.testing import ignore_warnings
-    
-    from sklearn.cluster import AgglomerativeClustering
-    
-    for s, p in zip(sentences, predicted):
-    print(u'The language of '%s' is '%s'' % (s, dataset.target_names[p]))
+    compat_print('total downloads traffic: %s' % format_size(total_bytes))
 
     
-    Sentiment analysis can be casted as a binary text classification problem,
-that is fitting a linear classifier on features extracted from the text
-of the user messages so as to guess wether the opinion of the author is
-positive or negative.
+        def test_yahoo_https(self):
+        # https://github.com/rg3/youtube-dl/issues/2701
+        self.assertMatch(
+            'https://screen.yahoo.com/smartwatches-latest-wearable-gadgets-163745379-cbs.html',
+            ['Yahoo'])
     
-        # Print and plot the confusion matrix
-    cm = metrics.confusion_matrix(y_test, y_predicted)
-    print(cm)
+    import shutil
     
-        acc_clf1.append(score_clf1 / n_averages)
-    acc_clf2.append(score_clf2 / n_averages)
-    
-        description = proj_info['description'],
-    keywords = proj_info['keywords'],
-    
-    from ..common import *
-    
-    def kugou_download_by_hash(title,hash_val,output_dir = '.', merge = True, info_only = False):
-    #sample
-    #url_sample:http://www.kugou.com/yy/album/single/536957.html
-    #hash ->key  md5(hash+kgcloud')->key  decompile swf
-    #cmd 4 for mp3 cmd 3 for m4a
-    key=hashlib.new('md5',(hash_val+'kgcloud').encode('utf-8')).hexdigest()
-    html=get_html('http://trackercdn.kugou.com/i/?pid=6&key=%s&acceptMp3=1&cmd=4&hash=%s'%(key,hash_val))
-    j=loads(html)
-    url=j['url']
-    songtype, ext, size = url_info(url)
-    print_info(site_info, title, songtype, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge=merge)
-    
-    def mixcloud_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url, faker=True)
-    title = r1(r'<meta property='og:title' content='([^']*)'', html)
-    preview_url = r1(r'm-preview=\'([^\']+)\'', html)
-    preview = r1(r'previews(.*)\.mp3$', preview_url)
-    
-        # mgid%3Auma%3Avideo%3Amtv81.com%3A897974
-    vid = match1(html, r'getTheVideo\('(.*?)'')
-    xml = parseString(
-        get_content('http://intl.esperanto.mtvi.com/www/xml/media/mediaGen.jhtml?uri={}&flashPlayer=LNX%2013,0,0,206&geo=CN&sid=123456'.format(vid)))
-    
-        # ordered list of supported stream types / qualities on this site
-    # order: high quality -> low quality
-    stream_types = [
-        {'id': 'original'}, # contains an 'id' or 'itag' field at minimum
-        {'id': 'small'},
-    ]
-    
-        #title
-    title = ''
-    profile_api = 'https://www.showroom-live.com/api/room/profile?room_id={room_id}'.format(room_id = room_id)
-    html = loads(get_content(profile_api))
-    try:
-        title = html['main_name']
-    except KeyError:
-        title = 'Showroom_{room_id}'.format(room_id = room_id)
+        def test_secondary_proxy_https(self):
+        params = self._check_params(['secondary_proxy', 'secondary_server_ip'])
+        if params is None:
+            return
+        ydl = FakeYDL()
+        req = compat_urllib_request.Request('https://yt-dl.org/ip')
+        req.add_header('Ytdl-request-proxy', params['secondary_proxy'])
+        self.assertEqual(
+            ydl.urlopen(req).read().decode('utf-8'),
+            params['secondary_server_ip'])
     
     
-from __future__ import absolute_import, division, print_function
-from datetime import timedelta
-from random import random
+def list_extractors(age_limit):
+    '''
+    Return a list of extractors that are suitable for the given age,
+    sorted by extractor ID.
+    '''
     
-            self.reader, addr = a.accept()
-        set_close_exec(self.reader.fileno())
-        self.reader.setblocking(0)
-        self.writer.setblocking(0)
-        a.close()
-        self.reader_fd = self.reader.fileno()
+            runtime = self._search_regex(
+            r'Runtime\s*:\s*(.+?) \|', webpage, 'duration', default=None)
+        if runtime:
+            runtime = re.sub(r'[\s-]', '', runtime)
+        duration = parse_duration(runtime)
+        view_count = int_or_none(self._search_regex(
+            r'Views\s*:\s*(\d+)', webpage, 'view count', default=None))
+        comment_count = int_or_none(self._search_regex(
+            r'Comments\s*:\s*(\d+)', webpage, 'comment count', default=None))
+    
+    from keras.models import Sequential
+from keras.engine.training import _weighted_masked_objective
+from keras.layers import TimeDistributed, Masking, Dense
+from keras.utils.test_utils import keras_test
+from keras import losses
+from keras import backend as K
+    
+            layer_test(local.LocallyConnected2D,
+                   kwargs={'filters': filters,
+                           'kernel_size': (3, 3),
+                           'padding': padding,
+                           'kernel_regularizer': 'l2',
+                           'bias_regularizer': 'l2',
+                           'activity_regularizer': 'l2',
+                           'strides': strides,
+                           'data_format': 'channels_first'},
+                   input_shape=(num_samples, stack_size, num_row, num_col))
+    
+    x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
+x_train /= 255
+x_test /= 255
+print('x_train shape:', x_train.shape)
+print(x_train.shape[0], 'train samples')
+print(x_test.shape[0], 'test samples')
     
     
-@gen.coroutine
-def put(filenames):
-    client = httpclient.AsyncHTTPClient()
-    for filename in filenames:
-        mtype = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
-        headers = {'Content-Type': mtype}
-        producer = partial(raw_producer, filename)
-        url_path = quote(os.path.basename(filename))
-        response = yield client.fetch('http://localhost:8888/%s' % url_path,
-                                      method='PUT',
-                                      headers=headers,
-                                      body_producer=producer)
-        print(response)
+def handle_module(mod):
+    for name, mem in inspect.getmembers(mod):
+        if inspect.isclass(mem):
+            handle_class(name, mem)
+        elif inspect.isfunction(mem):
+            handle_function(name, mem)
+        elif 'keras' in name and inspect.ismodule(mem):
+            # Only test keras' modules
+            handle_module(mem)
     
-        logging.info('Listening on http://localhost:%d' % options.port)
-    IOLoop.current().start()
+    
+@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
+def test_uniform(tensor_shape):
+    _runner(initializers.RandomUniform(minval=-1, maxval=1), tensor_shape,
+            target_mean=0., target_max=1, target_min=-1)
+    
+        outer_model = models.Model([a, b, c], o)
+    outer_model.compile(optimizer='rmsprop',
+                        loss='categorical_crossentropy',
+                        metrics=['accuracy'])
+    outer_model.fit([x, y, z], labels, epochs=1)
+    
+    
+def test_get_fn():
+    '''Activations has a convenience 'get' function. All paths of this
+    function are tested here, although the behaviour in some instances
+    seems potentially surprising (e.g. situation 3)
+    '''
+    
+    x_train = x_train.reshape(60000, 784)
+x_test = x_test.reshape(10000, 784)
+x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
+x_train /= 255
+x_test /= 255
+print(x_train.shape[0], 'train samples')
+print(x_test.shape[0], 'test samples')
+    
+        def setUp(self):
+        from acme.errors import BadNonce
+        self.error = BadNonce(nonce='xxx', error='error')
+    
+        def test_repr(self):
+        self.assertEqual(repr(self.addr2), 'certbot_apache.obj.Addr(('127.0.0.1', '443'))')
+    
+    # If true, an OpenSearch description file will be output, and all pages will
+# contain a <link> tag referring to it.  The value of this option must be the
+# base URL from which the finished HTML is served.
+#html_use_opensearch = ''
+    
+    
+def pull_screenshot():
+    c.screenshot('autojump.png')
