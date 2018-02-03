@@ -1,91 +1,268 @@
 
         
-        try:
-    input = raw_input
-except NameError:
-    pass
+            def process_body(self, chunk):
+        if not isinstance(chunk, str):
+            # Text when a converter has been used,
+            # otherwise it will always be bytes.
+            chunk = chunk.decode(self.msg.encoding, 'replace')
+        chunk = self.formatting.format_body(content=chunk, mime=self.mime)
+        return chunk.encode(self.output_encoding, 'replace')
     
-    import io
-import sys
-import re
     
-                    m = re.search(r'(?<=\s)u[\''](?!\)|,|$)', code)
-                if m is not None:
-                    self.assertTrue(
-                        m is None,
-                        'u present in %s, around %s' % (
-                            fn, code[m.start() - 10:m.end() + 10]))
+with codecs.open(FILE_PATH, encoding='utf8') as f:
+    # Strip because we don't want new lines in the data so that we can
+    # easily count occurrences also when embedded in JSON (where the new
+    # line would be escaped).
+    FILE_CONTENT = f.read().strip()
     
-            return {
-            '_type': 'playlist',
-            'id': playlist_id,
-            'title': title,
-            'description': description,
-            'entries': entries,
+    
+def test_unicode_form_item(httpbin):
+    r = http('--form', 'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
+    assert HTTP_OK in r
+    assert r.json['form'] == {'test': UNICODE}
+    
+        http://docs.python-requests.org/en/latest/user/advanced/#transport-adapters
+    
+        def test_self_signed_server_cert_by_default_raises_ssl_error(
+            self,
+            httpbin_secure_untrusted):
+        with pytest.raises(SSLError):
+            http(httpbin_secure_untrusted.url + '/get')
+    
+    
+def import_state_tuples(state_tuples, name, num_replicas):
+  restored = []
+  for i in range(len(state_tuples) * num_replicas):
+    c = tf.get_collection_ref(name)[2 * i + 0]
+    h = tf.get_collection_ref(name)[2 * i + 1]
+    restored.append(tf.contrib.rnn.LSTMStateTuple(c, h))
+  return tuple(restored)
+    
+        # Compute predictions.
+    predicted_classes = tf.argmax(logits, 1)
+    if mode == tf.estimator.ModeKeys.PREDICT:
+        predictions = {
+            'class_ids': predicted_classes[:, tf.newaxis],
+            'probabilities': tf.nn.softmax(logits),
+            'logits': logits,
         }
+        return tf.estimator.EstimatorSpec(mode, predictions=predictions)
+    
+        # Batch the examples
+    assert batch_size is not None, 'batch_size must not be None'
+    dataset = dataset.batch(batch_size)
+    
+    This program creates a graph from a saved GraphDef protocol buffer,
+and runs inference on an input JPEG image. It outputs human readable
+strings of the top 5 predictions along with their probabilities.
+    
+          # Get a batch and make a step.
+      start_time = time.time()
+      encoder_inputs, decoder_inputs, target_weights = model.get_batch(
+          train_set, bucket_id)
+      _, step_loss, _ = model.step(sess, encoder_inputs, decoder_inputs,
+                                   target_weights, bucket_id, False)
+      step_time += (time.time() - start_time) / FLAGS.steps_per_checkpoint
+      loss += step_loss / FLAGS.steps_per_checkpoint
+      current_step += 1
+    
+    # Regular expressions used to tokenize.
+_WORD_SPLIT = re.compile(b'([.,!?\'':;)(])')
+_DIGIT_RE = re.compile(br'\d')
+    
+    Forward-backward pass:
+Run on Tesla K40c: 480 +/- 48 ms / batch
+Run on Titan X:    244 +/- 30 ms / batch
+'''
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+    
+    from __future__ import print_function
+import numpy as np
+    
+        dense_layer_sizes: List of layer sizes.
+        This list has one number for each layer
+    filters: Number of convolutional filters in each convolutional layer
+    kernel_size: Convolutional kernel size
+    pool_size: Size of pooling area for max pooling
+    '''
+    
+    
+@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
+def test_one(tensor_shape):
+    _runner(initializers.ones(), tensor_shape,
+            target_mean=1., target_max=1.)
+    
+    
+@keras_test
+def test_convert_weights():
+    def get_model(shape, data_format):
+        model = Sequential()
+        model.add(Conv2D(filters=2,
+                         kernel_size=(4, 3),
+                         input_shape=shape,
+                         data_format=data_format))
+        model.add(Flatten())
+        model.add(Dense(5))
+        return model
+    
+    
+if __name__ == '__main__':
+    pytest.main([__file__])
 
     
-            # API is inconsistent with errors
-        if 'url' not in api_response or not api_response['url'] or 'error' in api_response:
-            raise ExtractorError('Invalid url %s' % url)
+            #out = subprocess.check_output(cmd, startupinfo=startupinfo)
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, startupinfo=startupinfo)
+        out, unused_err = process.communicate()
+        retcode = process.poll()
+        if retcode:
+            return out + '\n retcode:%s\n unused_err:%s\n' % (retcode, unused_err)
+    except Exception as e:
+        out = 'Exception:%r' % e
     
-    import re
+        def __init__(self):
+        self.reset_appid()
     
-    from .onet import OnetBaseIE
+                https_manager.save_ssl_connection_for_reuse(response.ssl_sock, host)
+            response.close()
+            xlog.info('DIRECT chucked t:%d s:%d %d %s %s', (time.time()-time_request)*1000, length, response.status, host, url)
+            return
+    
+            if self.input is None:
+            return None
+        
+        return self.input.substring(self.start, self.stop)
+    
+            # larger second argument
+        self.assertEqual(round(-150, -2), -200)
+        self.assertEqual(round(-149, -2), -100)
+        self.assertEqual(round(-51, -2), -100)
+        self.assertEqual(round(-50, -2), 0)
+        self.assertEqual(round(-49, -2), 0)
+        self.assertEqual(round(-1, -2), 0)
+        self.assertEqual(round(0, -2), 0)
+        self.assertEqual(round(1, -2), 0)
+        self.assertEqual(round(49, -2), 0)
+        self.assertEqual(round(50, -2), 0)
+        self.assertEqual(round(51, -2), 100)
+        self.assertEqual(round(149, -2), 100)
+        self.assertEqual(round(150, -2), 200)
+        self.assertEqual(round(250, -2), 200)
+        self.assertEqual(round(251, -2), 300)
+        self.assertEqual(round(172500, -3), 172000)
+        self.assertEqual(round(173500, -3), 174000)
+        self.assertEqual(round(31415926535, -1), 31415926540)
+        self.assertEqual(round(31415926535, -2), 31415926500)
+        self.assertEqual(round(31415926535, -3), 31415927000)
+        self.assertEqual(round(31415926535, -4), 31415930000)
+        self.assertEqual(round(31415926535, -5), 31415900000)
+        self.assertEqual(round(31415926535, -6), 31416000000)
+        self.assertEqual(round(31415926535, -7), 31420000000)
+        self.assertEqual(round(31415926535, -8), 31400000000)
+        self.assertEqual(round(31415926535, -9), 31000000000)
+        self.assertEqual(round(31415926535, -10), 30000000000)
+        self.assertEqual(round(31415926535, -11), 0)
+        self.assertEqual(round(31415926535, -12), 0)
+        self.assertEqual(round(31415926535, -999), 0)
+    
+        def test_create_widgets(self):
+        self.dialog.create_entries = Func()
+        self.dialog.create_option_buttons = Func()
+        self.dialog.create_other_buttons = Func()
+        self.dialog.create_command_buttons = Func()
+    
+        def entry_ok(self):
+        'Return sensible ConfigParser section name or None.'
+        self.entry_error['text'] = ''
+        name = self.entry.get().strip()
+        if not name:
+            self.showerror('no name specified.')
+            return None
+        elif len(name)>30:
+            self.showerror('name is longer than 30 characters.')
+            return None
+        elif name in self.used_names:
+            self.showerror('name is already in use.')
+            return None
+        return name
+    
+        def test_empty(self):
+        r = range(0)
+        self.assertNotIn(0, r)
+        self.assertNotIn(1, r)
+    
+    _STATE_TO_DESCRIPTION_MAP = {
+    PENDING: 'pending',
+    RUNNING: 'running',
+    CANCELLED: 'cancelled',
+    CANCELLED_AND_NOTIFIED: 'cancelled',
+    FINISHED: 'finished'
+}
+    
+    import sys, os
+    
+    def is_prime(n):
+    if n % 2 == 0:
+        return False
+    
+        def test_pending_calls_race(self):
+        # Issue #14406: multi-threaded race condition when waiting on all
+        # futures.
+        event = threading.Event()
+        def future_func():
+            event.wait()
+        oldswitchinterval = sys.getcheckinterval()
+        sys.setcheckinterval(1)
+        try:
+            fs = set(self.executor.submit(future_func) for i in range(100))
+            event.set()
+            futures.wait(fs, return_when=futures.ALL_COMPLETED)
+        finally:
+            sys.setcheckinterval(oldswitchinterval)
+    
+      with patch( 'ycm.client.event_notification.EventNotification.'
+              'PostDataToHandlerAsync' ) as post_data_to_handler_async:
+    with CurrentWorkingDirectory( unicode_dir ):
+      with MockVimBuffers( [ current_buffer ], current_buffer, ( 1, 5 ) ):
+        ycm.OnFileReadyToParse()
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
     
-def secure_hash(filename, hash_func=sha1):
-    ''' Return a secure hash hex digest of local file, None if file is not present or a directory. '''
+def main():
+    options = parse_args(sys.argv[1:])
+    if options.report == 'regression':
+        command = regression_report
+    elif options.report == 'junit':
+        command = junit_report
+    elif options.report == 'report':
+        command = human_report
+    assert_tools_available()
+    sys.exit(command(options))
     
-    AnsibleDumper.add_representer(
-    AnsibleMapping,
-    yaml.representer.SafeRepresenter.represent_dict,
-)
+        if setup_globals:
+        g.setup_complete()
     
-    import random
-import threading
-import time
+        def current_subdomain(self):
+        return self.stacked_proxy_safe_get(c, 'subdomain')
     
-    # change to False when exit: system tray exit menu, or Ctrl+C in console
-# then GoAgent will quit
-# Every long running thread should check it and exit when False
-# gae_proxy/local/proxy.py will check 'keep_running' continuously in a loop
-# if gae_proxy wants to be up, 'keep_running' should NOT be False
-keep_running = True
+        from pylons import tmpl_context as c
     
-                to_read = end - start + 1
-            data = response.read(to_read)
-            if not data:
-                if time.time() - time_last_read > 20:
-                    google_ip.report_connect_closed(response.ssl_sock.ip, 'receive fail')
-                    response.close()
-                    xlog.warn('read timeout t:%d len:%d left:%d %s %s', (time.time()-time_request)*1000, length, (end-start), host, url)
-                    return
-                else:
-                    time.sleep(0.1)
-                    continue
-    
-    
-mimetypes.init()
-    
-        def __call__(self, environ, start_response):
-        def safe_start_response(status, headers, exc_info=None):
-            sanitized = []
-            for name, value in headers:
-                if self.has_bad_characters.search(value):
-                    value = self.sanitizer.sub('', value)
-                sanitized.append((name, value))
-            return start_response(status, sanitized, exc_info)
-        return self.app(environ, safe_start_response)
-    
-    
-def register_api_templates(template_name, template_class):
-    for style in ('api', 'api-html', 'api-compact'):
-        tpm.add_handler(
-            name=template_name,
-            style=style,
-            handler=template_class,
-        )
+        @validate(VAdmin(),
+              award = VAwardByCodename('awardcn'),
+              recipient = nop('recipient'),
+              desc = nop('desc'),
+              url = nop('url'),
+              hours = nop('hours'))
+    def GET_give(self, award, recipient, desc, url, hours):
+        if award is None:
+            abort(404, 'page not found')
     
     class CaptchaController(RedditController):
     @allow_oauth2_access
@@ -94,16 +271,14 @@ def register_api_templates(template_name, template_class):
         '''
         Request a CAPTCHA image given an `iden`.
     
-        def __call__(self, environ, start_response):
-        try:
-            return RedditController.__call__(self, environ, start_response)
-        except Exception as e:
-            return handle_awful_failure('ErrorController.__call__: %r' % e)
+        def test_car_shall_make_loud_noise(self):
+        noise = self.car.make_noise(1)
+        expected_noise = 'vroom!'
+        self.assertEqual(noise, expected_noise)
     
+        def test_parrot_eng_localization(self):
+        self.assertEqual(self.e.get('parrot'), 'parrot')
     
-class GoogleTagManagerController(MinimalController):
-    def pre(self):
-        if request.host != g.media_domain:
-            # don't serve up untrusted content except on our
-            # specifically untrusted domain
-            self.abort404()
+        def update(self, subject):
+        print(u'HexViewer: Subject %s has data 0x%x' %
+              (subject.name, subject.data))
