@@ -1,43 +1,59 @@
-      context('when the tag doesn't exist') do
-        before do
-          allow(Fastlane::Actions).to receive(:sh).with('git rev-parse -q --verify refs/tags/1.2.0 || true', { log: nil }).and_return('')
+
+        
+            sidekiq_options queue: 'critical'
+    
+          when :login_pass
+        if(s[:user] and s[:pass])
+          report_auth_info(s)
+          print_status('Successful FTP Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]}')
+          # Remove it form the session objects so freeup memory
+          sessions.delete(s[:session])
+          return
         end
     
-                -- Return the time part and the sequence part. OR appears
-            -- faster here than addition, but they're equivalent:
-            -- time_part has no trailing two bytes, and tail is only
-            -- the last two bytes.
-            RETURN time_part | tail;
-          END
-        $$ LANGUAGE plpgsql VOLATILE;
-      SQL
-    end
     
-      # Before we load the schema, define the timestamp_id function.
-  # Idiomatically, we might do this in a migration, but then it
-  # wouldn't end up in schema.rb, so we'd need to figure out a way to
-  # get it in before doing db:setup as well. This is simpler, and
-  # ensures it's always in place.
-  Rake::Task['db:schema:load'].enhance ['db:define_timestamp_id']
-    
-    RSpec.describe ActivityPub::ProcessCollectionService do
-  let(:actor) { Fabricate(:account, domain: 'example.com', uri: 'http://example.com/account') }
-    
-      describe 'PUT #update' do
-    it 'updates the user record' do
-      put :update, params: { user: { locale: 'en', filtered_languages: ['es', 'fr', ''] } }
-    
-          when nil
-        # No matches, no saved state
-      else
-        sessions[s[:session]].merge!({k => matches})
-      end # end case matched
-    end # end of each_key
-  end # end of parse
-end
-    
-    meterp.core.use('Stdapi')
-    
-    		self.block[-1] << ';'
-		self.block[-1] << ''
+    {	if ln =~ /;(read|write)_(handle|filename)=/
+		parts = ln.split(' ')
+		if (parts[0] == 'mov')
+			parts2 = parts[2].split('=')
+			label = parts2[0]
+			label.slice!(0,1)
+			old = parts2[1]
+			new = addrs[label]
+			#puts '%32s: %s -> %x' % [label, old, new]
+			replaces << [label, old, new.to_s(16)]
+		end
 	end
+}
+    
+    clsCreateJar._invoke('createJarArchive', 'Ljava.io.File;[Ljava.io.File;', fileOutJar, filesIn)
+    
+      when '5.3.10', '5.3.9', '5.3.8', '5.3.7'
+    __NR_execve      = 6
+    __NR_getpeername = 198
+    __NR_accept      = 214
+    __NR_listen      = 215
+    __NR_bind        = 216
+    __NR_socket      = 217
+    __NR_connect     = 218
+    __NR_close       = 245
+    __NR_kfcntl      = 493
+    
+          if create && !subdir.directory?
+        odebug 'Creating metadata subdirectory #{subdir}.'
+        subdir.mkpath
+      end
+    
+          def to_yaml
+        @pairs.to_yaml
+      end
+    
+      def as_boolean(string)
+    return true   if string == true   || string =~ (/(true|t|yes|y|1)$/i)
+    return false  if string == false  || string.blank? || string =~ (/(false|f|no|n|0)$/i)
+    raise ArgumentError.new('invalid value for Boolean: \'#{string}\'')
+  end
+    
+          def snapshot
+        agent.metric.collector.snapshot_metric
+      end
