@@ -1,10 +1,15 @@
 
         
-            This also works with nominal (non-numeric) data:
+                    if args.check_status or downloader:
+                exit_status = get_exit_status(
+                    http_status=response.status_code,
+                    follow=args.follow
+                )
+                if not env.stdout_isatty and exit_status != ExitStatus.OK:
+                    log_error(
+                        'HTTP %s %s', response.raw.status, response.raw.reason,
+                        level='warning'
+                    )
     
-            class complex2(complex): pass
-        self.assertAlmostEqual(complex(complex2(1+1j)), 1+1j)
-        self.assertAlmostEqual(complex(real=17, imag=23), 17+23j)
-        self.assertAlmostEqual(complex(real=17+23j), 17+23j)
-        self.assertAlmostEqual(complex(real=17+23j, imag=23), 17+46j)
-        self.assertAlmostEqual(complex(real=1+2j, imag=3+4j), -3+5j)
+        # 128+2 SIGINT <http://www.tldp.org/LDP/abs/html/exitcodes.html>
+    ERROR_CTRL_C = 130
