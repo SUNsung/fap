@@ -1,195 +1,109 @@
 
         
-        README_FILE = 'README.md'
-helptext = sys.stdin.read()
+        try:
+    input = raw_input
+except NameError:
+    pass
     
-    import itertools
-import json
-import os
-import re
+    import io
 import sys
+import re
     
-                    if ''' not in code and ''' not in code:
+                    m = re.search(r'(?<=\s)u[\''](?!\)|,|$)', code)
+                if m is not None:
+                    self.assertTrue(
+                        m is None,
+                        'u present in %s, around %s' % (
+                            fn, code[m.start() - 10:m.end() + 10]))
+    
+            return {
+            '_type': 'playlist',
+            'id': playlist_id,
+            'title': title,
+            'description': description,
+            'entries': entries,
+        }
+
+    
+            # API is inconsistent with errors
+        if 'url' not in api_response or not api_response['url'] or 'error' in api_response:
+            raise ExtractorError('Invalid url %s' % url)
+    
+    import re
+    
+    from .onet import OnetBaseIE
+    
+    
+def secure_hash(filename, hash_func=sha1):
+    ''' Return a secure hash hex digest of local file, None if file is not present or a directory. '''
+    
+    AnsibleDumper.add_representer(
+    AnsibleMapping,
+    yaml.representer.SafeRepresenter.represent_dict,
+)
+    
+    import random
+import threading
+import time
+    
+    # change to False when exit: system tray exit menu, or Ctrl+C in console
+# then GoAgent will quit
+# Every long running thread should check it and exit when False
+# gae_proxy/local/proxy.py will check 'keep_running' continuously in a loop
+# if gae_proxy wants to be up, 'keep_running' should NOT be False
+keep_running = True
+    
+                to_read = end - start + 1
+            data = response.read(to_read)
+            if not data:
+                if time.time() - time_last_read > 20:
+                    google_ip.report_connect_closed(response.ssl_sock.ip, 'receive fail')
+                    response.close()
+                    xlog.warn('read timeout t:%d len:%d left:%d %s %s', (time.time()-time_request)*1000, length, (end-start), host, url)
+                    return
+                else:
+                    time.sleep(0.1)
                     continue
-                assertRegexpMatches(
-                    self,
-                    code,
-                    r'(?:(?:#.*?|\s*)\n)*from __future__ import (?:[a-z_]+,\s*)*unicode_literals',
-                    'unicode_literals import  missing in %s' % fn)
     
     
-def gen_extractor_classes():
-    ''' Return a list of supported extractors.
-    The order does matter; the first extractor matched is the one handling the URL.
-    '''
-    return _ALL_CLASSES
+mimetypes.init()
     
-        _TEST = {
-        'url': 'http://www.anitube.se/video/36621',
-        'md5': '59d0eeae28ea0bc8c05e7af429998d43',
-        'info_dict': {
-            'id': '36621',
-            'ext': 'mp4',
-            'title': 'Recorder to Randoseru 01',
-            'duration': 180.19,
-        },
-        'skip': 'Blocked in the US',
-    }
-    
-        # To avoid having to always use the '|safe' filter in flatpage templates,
-    # mark the title and content as already safe (since they are raw HTML
-    # content in the first place).
-    f.title = mark_safe(f.title)
-    f.content = mark_safe(f.content)
-    
-        data_train = fetch_20newsgroups_vectorized(subset='train')
-    data_test = fetch_20newsgroups_vectorized(subset='test')
-    X_train = check_array(data_train.data, dtype=np.float32,
-                          accept_sparse='csc')
-    X_test = check_array(data_test.data, dtype=np.float32, accept_sparse='csr')
-    y_train = data_train.target
-    y_test = data_test.target
-    
-    from sklearn.datasets import make_multilabel_classification
-from sklearn.metrics import (f1_score, accuracy_score, hamming_loss,
-                             jaccard_similarity_score)
-from sklearn.utils.testing import ignore_warnings
-    
-        samples_range = np.linspace(10, 2000, 5).astype(np.int)
-    features_range = np.linspace(10, 2000, 5).astype(np.int)
-    results = compute_bench(samples_range, features_range)
-    
-            descr_string = ''
-    
-    import matplotlib.pyplot as plt
-import numpy as np
-import random
-    
-        package is the name of the root module of the package
+        def __call__(self, environ, start_response):
+        def safe_start_response(status, headers, exc_info=None):
+            sanitized = []
+            for name, value in headers:
+                if self.has_bad_characters.search(value):
+                    value = self.sanitizer.sub('', value)
+                sanitized.append((name, value))
+            return start_response(status, sanitized, exc_info)
+        return self.app(environ, safe_start_response)
     
     
-if not os.path.exists(DATA_FOLDER):
+def register_api_templates(template_name, template_class):
+    for style in ('api', 'api-html', 'api-compact'):
+        tpm.add_handler(
+            name=template_name,
+            style=style,
+            handler=template_class,
+        )
     
-    # TASK: Predict the outcome on the testing set in a variable named y_predicted
-    
-    In both examples below, the main result is that the empirical covariance
-estimate, as a non-robust one, is highly influenced by the heterogeneous
-structure of the observations. Although the robust covariance estimate is
-able to focus on the main mode of the data distribution, it sticks to the
-assumption that the data should be Gaussian distributed, yielding some biased
-estimation of the data structure, but yet accurate to some extent.
-The One-Class SVM does not assume any parametric form of the data distribution
-and can therefore model the complex shape of the data much better.
-    
-    The data is generated with the ``make_checkerboard`` function, then
-shuffled and passed to the Spectral Biclustering algorithm. The rows
-and columns of the shuffled matrix are rearranged to show the
-biclusters found by the algorithm.
-    
-        def set(self, results, query):
-        '''Set the result for the given query key in the cache.
-        
-        When updating an entry, updates its position to the front of the LRU list.
-        If the entry is new and the cache is at capacity, removes the oldest entry
-        before the new entry is added.
+    class CaptchaController(RedditController):
+    @allow_oauth2_access
+    @api_doc(api_section.captcha, uri='/captcha/{iden}')
+    def GET_captchaimg(self, iden):
         '''
-        node = self.lookup[query]
-        if node is not None:
-            # Key exists in cache, update the value
-            node.results = results
-            self.linked_list.move_to_front(node)
-        else:
-            # Key does not exist in cache
-            if self.size == self.MAX_SIZE:
-                # Remove the oldest entry from the linked list and lookup
-                self.lookup.pop(self.linked_list.tail.query, None)
-                self.linked_list.remove_from_tail()
-            else:
-                self.size += 1
-            # Add the new key and value
-            new_node = Node(results)
-            self.linked_list.append_to_front(new_node)
-            self.lookup[query] = new_node
+        Request a CAPTCHA image given an `iden`.
     
-        def extract_year_month(self, timestamp):
-        '''Return the year and month portions of the timestamp.'''
-        ...
-    
-        def test_simple(self):
-        response = self.fetch('/')
-        self.assertEqual(response.body, b'Hello world!')
-    
-            p = Popen(
-            [sys.executable, '-m', 'testapp'], stdout=subprocess.PIPE,
-            cwd=path, env=dict(os.environ, PYTHONPATH=pythonpath),
-            universal_newlines=True)
-        out = p.communicate()[0]
-        self.assertEqual(out, 'Starting\nStarting\n')
-
+        def __call__(self, environ, start_response):
+        try:
+            return RedditController.__call__(self, environ, start_response)
+        except Exception as e:
+            return handle_awful_failure('ErrorController.__call__: %r' % e)
     
     
-class RootHandler(RequestHandler):
-    def get(self):
-        self.write('Hello, world')
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-    
-def main():
-    parse_command_line()
-    app = tornado.web.Application(
-        [
-            (r'/', MainHandler),
-            (r'/a/message/new', MessageNewHandler),
-            (r'/a/message/updates', MessageUpdatesHandler),
-        ],
-        cookie_secret='__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__',
-        template_path=os.path.join(os.path.dirname(__file__), 'templates'),
-        static_path=os.path.join(os.path.dirname(__file__), 'static'),
-        xsrf_cookies=True,
-        debug=options.debug,
-    )
-    app.listen(options.port)
-    tornado.ioloop.IOLoop.current().start()
-    
-            AJAX login handler, used by both login and register to set the
-        user cookie and send back a redirect.
-        '''
-        c.user = user
-        c.user_is_loggedin = True
-        self.login(user, rem=rem)
-    
-        c = Controller(blackboard)
-    contributions = c.run_loop()
-    
-    from __future__ import print_function
-    
-        def test_bear_greek_localization(self):
-        self.assertEqual(self.g.get('bear'), 'bear')
-
-    
-    
-class RadioTest(unittest.TestCase):
-    '''
-    Attention: Test case results depend on test case execution. The test cases
-    in this integration test class should be executed in an explicit order:
-    http://stackoverflow.com/questions/5387299/python-unittest-testcase-execution-order
-    '''
-    
-        def test_display_current_time_at_midnight(self):
-        class_under_test = TimeDisplay()
-        expected_time = '24:01'
-        result = class_under_test.get_current_time_as_as_html_fragment()
-        self.assertEqual(result, expected_time)
-'''
-    
-        print('-- now doing stuff ...')
-    try:
-        num_obj.do_stuff()
-    except Exception as e:
-        print('-> doing stuff failed!')
-        import sys
-        import traceback
+class GoogleTagManagerController(MinimalController):
+    def pre(self):
+        if request.host != g.media_domain:
+            # don't serve up untrusted content except on our
+            # specifically untrusted domain
+            self.abort404()
