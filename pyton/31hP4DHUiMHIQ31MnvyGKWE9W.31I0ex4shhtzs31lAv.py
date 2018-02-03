@@ -1,153 +1,132 @@
-_key = 'landscape'
+
+        
+            i = tf.train.range_input_producer(epoch_size, shuffle=False).dequeue()
+    x = tf.strided_slice(data, [0, i * num_steps],
+                         [batch_size, (i + 1) * num_steps])
+    x.set_shape([batch_size, num_steps])
+    y = tf.strided_slice(data, [0, i * num_steps + 1],
+                         [batch_size, (i + 1) * num_steps + 1])
+    y.set_shape([batch_size, num_steps])
+    return x, y
+
     
-        # If we get to this point, we know that any included ranges are valid.
-    # If the caller is prepared to handle them, all is well.
-    # Otherwise we treat it as a parse failure.
-    if not allow_ranges and '[' in host:
-        raise AnsibleParserError('Detected range in host but was asked to ignore ranges')
+    filegroup(
+    name = 'all_files',
+    srcs = glob(
+        ['**/*'],
+        exclude = [
+            '**/METADATA',
+            '**/OWNERS',
+        ],
+    ),
+    visibility = ['//tensorflow:__subpackages__'],
+)
+
     
-        def __init__(self):
-        self.settings = None  # set in scrapy.cmdline
+        node_def = op if isinstance(op, node_def_pb2.NodeDef) else op.node_def
+    if node_def.op in ps_ops:
+      ps_device_spec = pydev.DeviceSpec.from_string(
+          '/{}:{}'.format(ps_device_type, ps_strategy(op)))
     
-            start = datetime.now()
-        ridge = linear_model.Ridge(alpha=1.)
-        ridge.fit(X, Y)
-        time_ridge[i] = total_seconds(datetime.now() - start)
+        print('Classifier Training')
+    print('===================')
+    accuracy, train_time, test_time = {}, {}, {}
+    for name in sorted(args['estimators']):
+        clf = ESTIMATORS[name]
+        try:
+            clf.set_params(random_state=0)
+        except (TypeError, ValueError):
+            pass
     
-        Uses the last ([-1]) value of other fields
-    '''
-    column_width = max(max(len(k) for k in formats) + 1, 8)
-    first_width = max(len(k) for k in metrics)
-    head_fmt = ('{:<{fw}s}' + '{:>{cw}s}' * len(formats))
-    row_fmt = ('{:<{fw}s}' + '{:>{cw}.3f}' * len(formats))
-    print(head_fmt.format('Metric', *formats,
-                          cw=column_width, fw=first_width))
-    for metric, row in zip(metrics, results[:, :, -1, -1, -1]):
-        print(row_fmt.format(metric, *row,
-                             cw=column_width, fw=first_width))
-    
-    
-def rbf_kernels(X, n_jobs):
-    return pairwise_kernels(X, metric='rbf', n_jobs=n_jobs, gamma=0.1)
-    
-    n_samples = np.logspace(.5, 3, 9)
-n_features = np.logspace(1, 3.5, 7)
-N_samples, N_features = np.meshgrid(n_samples,
-                                    n_features)
-scikits_time = np.zeros(N_samples.shape)
-scipy_time = np.zeros(N_samples.shape)
-    
-        print('Benchmarks')
-    print('===========================')
-    print('Generate dataset benchmarks... ', end='')
-    X_dense, X_sparse = make_sparse_random_data(opts.n_samples,
-                                                opts.n_features,
-                                                n_nonzeros,
-                                                random_state=opts.random_seed)
-    X = X_dense if opts.dense else X_sparse
-    print('done')
-    
-    import codecs
-    
-    import os
-import tarfile
-from contextlib import closing
-try:
-    from urllib import urlopen
-except ImportError:
-    from urllib.request import urlopen
+        plt.figure('scikit-learn GLM benchmark results')
+    plt.xlabel('Dimensions')
+    plt.ylabel('Time (s)')
+    plt.plot(dimensions, time_ridge, color='r')
+    plt.plot(dimensions, time_ols, color='g')
+    plt.plot(dimensions, time_lasso, color='b')
     
     
-if not os.path.exists(TRAIN_FOLDER) or not os.path.exists(TEST_FOLDER):
+def plot_batch_errors(all_errors, n_features, all_batch_sizes, data):
+    plt.figure()
+    plot_results(all_batch_sizes, all_errors['pca'], label='PCA')
+    plot_results(all_batch_sizes, all_errors['ipca'], label='IncrementalPCA')
+    plt.legend(loc='lower left')
+    plt.suptitle('Algorithm error vs. batch_size for n_components %i\n \
+                 LFW, size %i x %i' % (
+                 n_features, data.shape[0], data.shape[1]))
+    plt.xlabel('Batch size')
+    plt.ylabel('Mean absolute error')
     
-    from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import Perceptron
-from sklearn.pipeline import Pipeline
-from sklearn.datasets import load_files
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
+        fig = plt.figure('scikit-learn Lasso path benchmark results')
+    i = 1
+    for c, (label, timings) in zip('bcry', sorted(results.items())):
+        ax = fig.add_subplot(2, 2, i, projection='3d')
+        X, Y = np.meshgrid(samples_range, features_range)
+        Z = np.asarray(timings).reshape(samples_range.shape[0],
+                                        features_range.shape[0])
     
-    import sys
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import LinearSVC
-from sklearn.pipeline import Pipeline
-from sklearn.model_selection import GridSearchCV
-from sklearn.datasets import load_files
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
     
-        def dispatch_call(self, call):
-        if call.rank not in (Rank.OPERATOR, Rank.SUPERVISOR, Rank.DIRECTOR):
-            raise ValueError('Invalid call rank: {}'.format(call.rank))
-        employee = None
-        if call.rank == Rank.OPERATOR:
-            employee = self._dispatch_call(call, self.operators)
-        if call.rank == Rank.SUPERVISOR or employee is None:
-            employee = self._dispatch_call(call, self.supervisors)
-        if call.rank == Rank.DIRECTOR or employee is None:
-            employee = self._dispatch_call(call, self.directors)
-        if employee is None:
-            self.queued_calls.append(call)
+def bench_sample(sampling, n_population, n_samples):
+    gc.collect()
+    # start time
+    t_start = datetime.now()
+    sampling(n_population, n_samples)
+    delta = (datetime.now() - t_start)
+    # stop time
+    time = compute_time(t_start, delta)
+    return time
     
-            (category1, 1), product4
-        (category1, 2), product1
-        (category1, 3), product2
-        (category2, 3), product1
-        (category2, 7), product3
-        '''
-        category, product_id = key
-        quantity = value
-        yield (category, quantity), product_id
+        # TASK: Predict the outcome on the testing set and store it in a variable
+    # named y_predicted
+    y_predicted = grid_search.predict(docs_test)
     
-        def bfs(self, source, dest):
-        if source is None:
+        def plot_support_vectors(self, support_vectors):
+        '''Plot the support vectors by placing circles over the
+        corresponding data points and adds the circle collection
+        to the contours list.'''
+        cs = self.ax.scatter(support_vectors[:, 0], support_vectors[:, 1],
+                             s=80, edgecolors='k', facecolors='none')
+        self.contours.append(cs)
+    
+    # Illustrate calibrator
+plt.figure(1)
+# generate grid over 2-simplex
+p1d = np.linspace(0, 1, 20)
+p0, p1 = np.meshgrid(p1d, p1d)
+p2 = 1 - p0 - p1
+p = np.c_[p0.ravel(), p1.ravel(), p2.ravel()]
+p = p[p[:, 2] >= 0]
+    
+    Only adjusted measures can hence safely be used as a consensus index
+to evaluate the average stability of clustering algorithms for a given
+value of k on various overlapping sub-samples of the dataset.
+    
+        def user_has_beta_enabled(self, user):
+        if not user:
             return False
-        queue = deque()
-        queue.append(source)
-        source.visit_state = State.visited
-        while queue:
-            node = queue.popleft()
-            print(node)
-            if dest is node:
-                return True
-            for adjacent_node in node.adj_nodes.values():
-                if adjacent_node.visit_state == State.unvisited:
-                    queue.append(adjacent_node)
-                    adjacent_node.visit_state = State.visited
-        return False
+        return user.pref_beta
     
+    from r2.config.extensions import set_extension
+from r2.controllers.reddit_base import RedditController, generate_modhash
+from r2.controllers.login import handle_login, handle_register
+from r2.lib.csrf import csrf_exempt
+from r2.lib.validator import (
+    json_validate,
+    ValidEmail,
+    VPasswordChange,
+    VRatelimit,
+    VSigned,
+    VThrottledLogin,
+    VUname,
+)
     
-class RemoveDuplicateUrls(MRJob):
+        @validate(
+        container_id=VGTMContainerId('id')
+    )
+    def GET_gtm(self, container_id):
+        return GoogleTagManager(container_id=container_id).render()
+
     
-    
-class Crawler(object):
-    
-    
-def is_translated(msg):
-    if isinstance(msg.string, basestring):
-        return bool(msg.string)
-    for item in msg.string:
-        if not item:
-            return False
-    return True
-    
-    from r2.lib.translation import I18N_PATH
-from r2.lib.plugin import PluginLoader
-from r2.lib import js
-    
-        @validate(VAdmin(),
-              award = VAwardByCodename('awardcn'),
-              recipient = nop('recipient'),
-              desc = nop('desc'),
-              url = nop('url'),
-              hours = nop('hours'))
-    def GET_give(self, award, recipient, desc, url, hours):
-        if award is None:
-            abort(404, 'page not found')
-    
-    class CaptchaController(RedditController):
-    @allow_oauth2_access
-    @api_doc(api_section.captcha, uri='/captcha/{iden}')
-    def GET_captchaimg(self, iden):
-        '''
-        Request a CAPTCHA image given an `iden`.
+    template = cv2.imread('character.png')
+template = cv2.resize(template, (0, 0), fx=scale, fy=scale)
+template_size = template.shape[:2]
