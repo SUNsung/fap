@@ -1,172 +1,122 @@
 
         
-          </body>
-</html>
-HTML
-CONTENT_NOT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+          private
     
-    def dest_dir(*subdirs)
-  test_dir('dest', *subdirs)
-end
+        def ==(other)
+      other.name == name && other.path == path && other.type == type
+    end
     
-      # If a given extension is listed multiple times, prefer the first one listed
-  extensions.reject! { |extension| mimes.values.flatten.include?(extension) }
+        def initialize
+      @pages = {}
+    end
     
-      # reset variable to default state on Windows
-  ENV['TZ'] = nil
-  dst
+              if %w(Events Sync).include?(type)
+            name.prepend 'Backbone.'
+          elsif type == 'History'
+            name.prepend 'Backbone.history.'
+          elsif name == 'extend'
+            name.prepend '#{type}.'
+          elsif name.start_with? 'constructor'
+            name = type
+          elsif type != 'Utility'
+            name.prepend '#{type.downcase}.'
+          end
+    
+    if profile_filename = ENV['PROFILE']
+  require 'ruby-prof'
+  reporter =
+    case (profile_extname = File.extname(profile_filename))
+    when '.txt'
+      RubyProf::FlatPrinterWithLineNumbers
+    when '.html'
+      RubyProf::GraphHtmlPrinter
+    when '.callgrind'
+      RubyProf::CallTreePrinter
+    else
+      raise 'Unknown profiler format indicated by extension: #{profile_extname}'
+    end
+  File.open(profile_filename, 'w') do |io|
+    reporter.new(RubyProf.profile { Pod::Command.run(ARGV) }).print(io)
+  end
+else
+  Pod::Command.run(ARGV)
 end
 
     
-          https://pip.readthedocs.org/en/stable/installing/#install-pip
-    EOS
-  when 'pil' then <<-EOS.undent
-    Instead of PIL, consider `pip install pillow` or `brew install Homebrew/python/pillow`.
-    EOS
-  when 'macruby' then <<-EOS.undent
-    MacRuby works better when you install their package:
-      http://www.macruby.org/
-    EOS
-  when /(lib)?lzma/
-    'lzma is now part of the xz formula.'
-  when 'xcode'
-    if MacOS.version >= :lion
-      <<-EOS.undent
-      Xcode can be installed from the App Store.
-      EOS
-    else
-      <<-EOS.undent
-      Xcode can be installed from https://developer.apple.com/xcode/downloads/
-      EOS
-    end
-  when 'gtest', 'googletest', 'google-test' then <<-EOS.undent
-    Installing gtest system-wide is not recommended; it should be vendored
-    in your projects that use it.
-    EOS
-  when 'gmock', 'googlemock', 'google-mock' then <<-EOS.undent
-    Installing gmock system-wide is not recommended; it should be vendored
-    in your projects that use it.
-    EOS
-  when 'sshpass' then <<-EOS.undent
-    We won't add sshpass because it makes it too easy for novice SSH users to
-    ruin SSH's security.
-    EOS
-  when 'gsutil' then <<-EOS.undent
-    Install gsutil with `pip install gsutil`
-    EOS
-  when 'clojure' then <<-EOS.undent
-    Clojure isn't really a program but a library managed as part of a
-    project and Leiningen is the user interface to that library.
+    (deny default)
+EOS
     
-      def fixopt(f)
-    path = if f.linked_keg.directory? && f.linked_keg.symlink?
-      f.linked_keg.resolved_path
-    elsif f.prefix.directory?
-      f.prefix
-    elsif (kids = f.rack.children).size == 1 && kids.first.directory?
-      kids.first
-    else
-      raise
-    end
-    Keg.new(path).optlink
-  rescue StandardError
-    raise '#{f.opt_prefix} not present or broken\nPlease reinstall #{f.full_name}. Sorry :('
-  end
-end
-    
-        keys.each do |key|
-      value = env[key]
-      s = '#{key}: #{value}'
-      case key
-      when 'CC', 'CXX', 'LD'
-        s << ' => #{Pathname.new(value).realpath}' if File.symlink?(value)
-      end
-      f.puts s
-    end
-  end
-end
-
-    
-      def describe_python
-    python = which 'python'
-    return 'N/A' if python.nil?
-    python_binary = Utils.popen_read python, '-c', 'import sys; sys.stdout.write(sys.executable)'
-    python_binary = Pathname.new(python_binary).realpath
-    if python == python_binary
-      python
-    else
-      '#{python} => #{python_binary}'
-    end
-  end
-    
-      def migrate_tap_migration
-    report[:D].each do |full_name|
-      name = full_name.split('/').last
-      next unless (dir = HOMEBREW_CELLAR/name).exist? # skip if formula is not installed.
-      next unless new_tap_name = tap.tap_migrations[name] # skip if formula is not in tap_migrations list.
-      tabs = dir.subdirs.map { |d| Tab.for_keg(Keg.new(d)) }
-      next unless tabs.first.tap == tap # skip if installed formula is not from this tap.
-      new_tap = Tap.fetch(new_tap_name)
-      new_tap.install unless new_tap.installed?
-      # update tap for each Tab
-      tabs.each { |tab| tab.tap = new_tap }
-      tabs.each(&:write)
-    end
-  end
-    
-      def self.all
-    opoo 'Formula.all is deprecated, use Formula.map instead'
-    map
-  end
-    
-            # Defines a capability for the given host. The block should return
-        # a class/module that has a method with the capability name, ready
-        # to be executed. This means that if it is an instance method,
-        # the block should return an instance of the class.
-        #
-        # @param [String] host The name of the host
-        # @param [String] cap The name of the capability
-        def self.host_capability(host, cap, &block)
-          components.host_capabilities[host.to_sym].register(cap.to_sym, &block)
-          nil
+            def run
+          if @pod_name.nil?
+            # Note: at that point, @wipe_all is always true (thanks to `validate!`)
+            # Remove all
+            clear_cache
+          else
+            # Remove only cache for this pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            elsif cache_descriptors.count > 1 && !@wipe_all
+              # Ask which to remove
+              choices = cache_descriptors.map { |c| '#{@pod_name} v#{c[:version]} (#{pod_type(c)})' }
+              index = UI.choose_from_array(choices, 'Which pod cache do you want to remove?')
+              remove_caches([cache_descriptors[index]])
+            else
+              # Remove all found cache of this pod
+              remove_caches(cache_descriptors)
+            end
+          end
         end
     
-          def delete(key)
-        super(convert_key(key))
-      end
+            def self.options
+          [[
+            '--short', 'Only print the path relative to the cache root'
+          ]].concat(super)
+        end
     
-          # This returns the keys (or ids) that are in the string.
-      #
-      # @return [<Array<String>]
-      def keys
-        regexp = /^#\s*VAGRANT-BEGIN:\s*(.+?)$\r?\n?(.*)$\r?\n?^#\s*VAGRANT-END:\s(\1)$/m
-        @value.scan(regexp).map do |match|
-          match[0]
+    module Pod
+  class Command
+    class Env < Command
+      self.summary = 'Display pod environment'
+      self.description = 'Display pod environment.'
+    
+          def update_if_necessary!
+        if @update && config.verbose?
+          UI.section('\nUpdating Spec Repositories\n'.yellow) do
+            Repo.new(ARGV.new(['update'])).run
+          end
         end
       end
     
-        def configure_sass
-      require 'sass'
-    
-        def replace_vars(less)
-      less = less.dup
-      # skip header comment
-      less =~ %r(\A/\*(.*?)\*/)m
-      from           = $~ ? $~.to_s.length : 0
-      less[from..-1] = less[from..-1].
-          gsub(/(?!@mixin|@media|@page|@keyframes|@font-face|@-\w)@/, '$').
-          # variables that would be ignored by gsub above: e.g. @page-header-border-color
-          gsub(/@(page[\w-]+)/, '$\1')
-      less
+        # @abstract
+    #
+    # Your implementation should check if the specified remote-repository is
+    # available.
+    #
+    # @return [Boolean]
+    #
+    def check
+      raise NotImplementedError, 'Your SCM strategy module should provide a #check method'
     end
+    
+      deploy_rb = File.expand_path('../../templates/deploy.rb.erb', __FILE__)
+  stage_rb = File.expand_path('../../templates/stage.rb.erb', __FILE__)
+  capfile = File.expand_path('../../templates/Capfile', __FILE__)
+    
+          if File.directory?(source_entry)
+        FileUtils.mkdir(target_entry) unless File.exists?(target_entry)
+        transform_r(source_entry, target_entry)
+      else
+        # copy the new file, in case of being an .erb file should render first
+        if source_entry.end_with?('erb')
+          target_entry = target_entry.gsub(/.erb$/,'').gsub('example', name)
+          File.open(target_entry, 'w') { |f| f.write(render(source_entry)) }
+        else
+          FileUtils.cp(source_entry, target_entry)
+        end
+        puts '\t create #{File.join(full_plugin_name, Pathname.new(target_entry).relative_path_from(Pathname.new(@target_path)))}'
+      end
+    end
+  end
+    
+      alias_method :<<, :decode
