@@ -1,93 +1,129 @@
 
         
-        def source_dir(*subdirs)
-  test_dir('source', *subdirs)
-end
+        module Vagrant
+  module Plugin
+    module V2
+      # This is the base class for a provider for the V2 API. A provider
+      # is responsible for creating compute resources to match the needs
+      # of a Vagrant-configured system.
+      class Provider
+        include CapabilityHost
     
-        # Initialize a new Layout.
-    #
-    # site - The Site.
-    # base - The String path to the source.
-    # name - The String filename of the post file.
-    def initialize(site, base, name)
-      @site = site
-      @base = base
-      @name = name
+                  # Read!
+              data << io.readpartial(READ_CHUNK_SIZE).encode('UTF-8', Encoding.default_external)
+            else
+              # Do a simple non-blocking read on the IO object
+              data << io.read_nonblock(READ_CHUNK_SIZE)
+            end
+          rescue Exception => e
+            # The catch-all rescue here is to support multiple Ruby versions,
+            # since we use some Ruby 1.9 specific exceptions.
     
-          # Topic may be hard deleted due to spam, no point complaining
-      # we would have to look at the topics table id sequence to find cases
-      # where this was called with an invalid id, no point really
-      return unless topic.present?
+    Note that you will likely need to have opened the app at least
+once for any login items to be present.
     
-            if keychain_path.nil?
-          UI.user_error!('You either have to set :name or :path')
-        end
+            begin
+          yield
+        rescue ActiveRecord::RecordNotUnique
+          raise if tries > 100
     
-          it 'logs the command if verbose' do
-        with_verbose(true) do
-          allow(Fastlane::Actions).to receive(:sh).with(anything, { log: true }).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_tag_exists(tag: '1.2.0')
-          end').runner.execute(:test)
-        end
-      end
-    
-          it 'returns the new version as return value' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number(bump_type: 'major')
-        end').runner.execute(:test)
-    
-      def failure
-    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
-    redirect_to after_omniauth_failure_path_for(resource_name)
+      def set_instance_presenter
+    @instance_presenter = InstancePresenter.new
   end
     
-          class << self
-        # Mark a given block of code as a 'busy' block of code, which will
-        # register a SIGINT handler for the duration of the block. When a
-        # SIGINT occurs, the `sig_callback` proc will be called. It is up
-        # to the callback to behave properly and exit the application.
-        def busy(sig_callback)
-          register(sig_callback)
-          return yield
-        ensure
-          unregister(sig_callback)
+      def collection_presenter
+    page = ActivityPub::CollectionPresenter.new(
+      id: account_followers_url(@account, page: params.fetch(:page, 1)),
+      type: :ordered,
+      size: @account.followers_count,
+      items: @follows.map { |f| ActivityPub::TagManager.instance.uri_for(f.account) },
+      part_of: account_followers_url(@account),
+      next: page_url(@follows.next_page),
+      prev: page_url(@follows.prev_page)
+    )
+    if params[:page].present?
+      page
+    else
+      ActivityPub::CollectionPresenter.new(
+        id: account_followers_url(@account),
+        type: :ordered,
+        size: @account.followers_count,
+        first: page
+      )
+    end
+  end
+end
+
+    
+      def index
+    @follows = Follow.where(account: @account).recent.page(params[:page]).per(FOLLOW_PER_PAGE).preload(:target_account)
+    
+    require 'cocoapods'
+    
+            def initialize(argv)
+          @pod_name = argv.shift_argument
+          @short_output = argv.flag?('short')
+          super
         end
     
-          # This gets the value of the block with the given key.
-      def get(key)
-        key    = Regexp.quote(key)
-        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$\r?\n?(.*?)\r?\n?^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
-        match  = regexp.match(@value)
-        return nil if !match
-        match[1]
-      end
+          private
     
-    require_relative 'converter/fonts_conversion'
-require_relative 'converter/less_conversion'
-require_relative 'converter/js_conversion'
-require_relative 'converter/logger'
-require_relative 'converter/network'
-    
-        def log_transform(*args, from: caller[1][/`.*'/][1..-2].sub(/^block in /, ''))
-      puts '    #{cyan from}#{cyan ': #{args * ', '}' unless args.empty?}'
+        # Call test in context
+    def test!(*args)
+      context.test(*args)
     end
     
-      # Disable request forgery protection in test environment.
-  config.action_controller.allow_forgery_protection = false
+          describe 'fetching filtered servers by role' do
+        subject { dsl.roles(:app, filter: :active) }
     
-    desc 'Dumps output to a CSS file for testing'
-task :debug do
-  require 'sass'
-  path = Bootstrap.stylesheets_path
-  %w(bootstrap).each do |file|
-    engine = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
-    File.open('./#{file}.css', 'w') { |f| f.write(engine.render) }
+        # True if the dimensions represent a square
+    def square?
+      height == width
+    end
+    
+        def geometry_string
+      begin
+        orientation = Paperclip.options[:use_exif_orientation] ?
+          '%[exif:orientation]' : '1'
+        Paperclip.run(
+          'identify',
+          '-format '%wx%h,#{orientation}' :file', {
+            :file => '#{path}[0]'
+          }, {
+            :swallow_stderr => true
+          }
+        )
+      rescue Cocaine::ExitStatusError
+        ''
+      rescue Cocaine::CommandNotFoundError => e
+        raise_because_imagemagick_missing
+      end
+    end
+    
+        # Returns the pluralized form of the attachment name. e.g.
+    # 'avatars' for an attachment of :avatar
+    def attachment attachment, style_name
+      plural_cache.pluralize_symbol(attachment.name)
+    end
+    
+        Hash.new.tap do |missing_styles|
+      current_styles.each do |klass, attachment_definitions|
+        attachment_definitions.each do |attachment_name, styles|
+          registered = registered_styles[klass][attachment_name] || [] rescue []
+          missed = styles - registered
+          if missed.present?
+            klass_sym = klass.to_s.to_sym
+            missing_styles[klass_sym] ||= Hash.new
+            missing_styles[klass_sym][attachment_name.to_sym] ||= Array.new
+            missing_styles[klass_sym][attachment_name.to_sym].concat(missed.to_a)
+            missing_styles[klass_sym][attachment_name.to_sym].map!(&:to_s).sort!.map!(&:to_sym).uniq!
+          end
+        end
+      end
+    end
   end
 end
+
     
-      desc 'update main and version in bower.json'
-  task :generate do
-    require 'bootstrap-sass'
-    Dir.chdir Bootstrap.gem_path do
-      spec       = JSON.parse(File.read 'bower.json')
+            run(node_var)
+      end
