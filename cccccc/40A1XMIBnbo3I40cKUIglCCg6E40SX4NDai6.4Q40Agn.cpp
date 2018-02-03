@@ -1,217 +1,298 @@
 
         
-        
-    {}  // namespace api
+        // Generate destructors.
+#include 'ipc/struct_destructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
     
-    class WebRequest : public mate::TrackableObject<WebRequest> {
+    class Dispatcher : public content::RenderViewObserver {
  public:
-  static mate::Handle<WebRequest> Create(v8::Isolate* isolate,
-                                         AtomBrowserContext* browser_context);
+  explicit Dispatcher(content::RenderView* render_view);
+  ~Dispatcher() final;
     }
     
-    bool Event::SendReply(const base::string16& json) {
-  if (message_ == nullptr || sender_ == nullptr)
-    return false;
+      bool handled = true;
+  base::ThreadRestrictions::ScopedAllowIO allow_io;
+  base::ThreadRestrictions::ScopedAllowWait allow_wait;
+  IPC_BEGIN_MESSAGE_MAP(DispatcherHost, message)
+    IPC_MESSAGE_HANDLER(ShellViewHostMsg_Allocate_Object, OnAllocateObject)
+    IPC_MESSAGE_HANDLER(ShellViewHostMsg_Deallocate_Object, OnDeallocateObject)
+    IPC_MESSAGE_HANDLER(ShellViewHostMsg_Call_Object_Method, OnCallObjectMethod)
+    IPC_MESSAGE_HANDLER(ShellViewHostMsg_Call_Object_Method_Sync,
+                        OnCallObjectMethodSync)
+    IPC_MESSAGE_HANDLER(ShellViewHostMsg_Call_Static_Method, OnCallStaticMethod)
+    IPC_MESSAGE_HANDLER(ShellViewHostMsg_Call_Static_Method_Sync,
+                        OnCallStaticMethodSync)
+    IPC_MESSAGE_HANDLER(ShellViewHostMsg_UncaughtException,
+                        OnUncaughtException);
+    IPC_MESSAGE_HANDLER(ShellViewHostMsg_GetShellId, OnGetShellId);
+    IPC_MESSAGE_HANDLER(ShellViewHostMsg_CreateShell, OnCreateShell);
+    IPC_MESSAGE_HANDLER(ShellViewHostMsg_AllocateId, OnAllocateId);
+    IPC_MESSAGE_HANDLER(ShellViewHostMsg_SetForceClose, OnSetForceClose);
+    IPC_MESSAGE_UNHANDLED(handled = false)
+  IPC_END_MESSAGE_MAP()
+    
+      static void ClearObjectRegistry();
+    
+    
+namespace nwapi {
     }
     
-    
-    {}  // namespace api
-    
-    namespace base {
-class TaskRunner;
+    Menu::~Menu() {
+  Destroy();
 }
     
-      // URLRequestSimpleJob:
-  int GetData(std::string* mime_type,
-              std::string* charset,
-              std::string* data,
-              const net::CompletionCallback& callback) const override;
     
-    void convert_dataset(const char* image_filename, const char* label_filename,
-        const char* db_filename) {
-  // Open files
-  std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
-  std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
-  CHECK(image_file) << 'Unable to open file ' << image_filename;
-  CHECK(label_file) << 'Unable to open file ' << label_filename;
-  // Read the magic and the meta data
-  uint32_t magic;
-  uint32_t num_items;
-  uint32_t num_labels;
-  uint32_t rows;
-  uint32_t cols;
-    }
-    
-    /**
- * @brief Index into the input blob along its first axis.
- *
- * This layer can be used to select, reorder, and even replicate examples in a
- * batch.  The second blob is cast to int and treated as an index into the
- * first axis of the first blob.
- */
-template <typename Dtype>
-class BatchReindexLayer : public Layer<Dtype> {
- public:
-  explicit BatchReindexLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
-  cudnnPoolingDescriptor_t  pooling_desc_;
-  cudnnPoolingMode_t        mode_;
-};
-#endif
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #include 'caffe/layers/loss_layer.hpp'
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the computed outputs @f$
-   *        y = \gamma ^ {\alpha x + \beta}
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    // Google Test - The Google C++ Testing Framework
-//
-// This file implements a universal value printer that can print a
-// value of any type T:
-//
-//   void ::testing::internal::UniversalPrinter<T>::Print(value, ostream_ptr);
-//
-// A user can teach this function how to print a class type T by
-// defining either operator<<() or PrintTo() in the namespace that
-// defines T.  More specifically, the FIRST defined function in the
-// following list will be used (assuming T is defined in namespace
-// foo):
-//
-//   1. foo::PrintTo(const T&, ostream*)
-//   2. operator<<(ostream&, const T&) defined in either foo or the
-//      global namespace.
-//
-// If none of the above is defined, it will print the debug string of
-// the value if it is a protocol buffer, or print the raw bytes in the
-// value otherwise.
-//
-// To aid debugging: when T is a reference type, the address of the
-// value is also printed; when T is a (const) char pointer, both the
-// pointer value and the NUL-terminated string it points to are
-// printed.
-//
-// We also provide some convenient wrappers:
-//
-//   // Prints a value to a string.  For a (const or not) char
-//   // pointer, the NUL-terminated string (but not the pointer) is
-//   // printed.
-//   std::string ::testing::PrintToString(const T& value);
-//
-//   // Prints a value tersely: for a reference type, the referenced
-//   // value (but not the address) is printed; for a (const or not) char
-//   // pointer, the NUL-terminated string (but not the pointer) is
-//   // printed.
-//   void ::testing::internal::UniversalTersePrint(const T& value, ostream*);
-//
-//   // Prints value using the type inferred by the compiler.  The difference
-//   // from UniversalTersePrint() is that this function prints both the
-//   // pointer and the NUL-terminated string for a (const or not) char pointer.
-//   void ::testing::internal::UniversalPrint(const T& value, ostream*);
-//
-//   // Prints the fields of a tuple tersely to a string vector, one
-//   // element for each field. Tuple support must be enabled in
-//   // gtest-port.h.
-//   std::vector<string> UniversalTersePrintTupleFieldsToStrings(
-//       const Tuple& value);
-//
-// Known limitation:
-//
-// The print primitives print the elements of an STL-style container
-// using the compiler-inferred type of *iter where iter is a
-// const_iterator of the container.  When const_iterator is an input
-// iterator but not a forward iterator, this inferred type may not
-// match value_type, and the print output may be incorrect.  In
-// practice, this is rarely a problem as for most containers
-// const_iterator is a forward iterator.  We'll fix this if there's an
-// actual need for it.  Note that this fix cannot rely on value_type
-// being defined as many user-defined container types don't have
-// value_type.
-    
-      // Returns a copy of the FilePath with the case-insensitive extension removed.
-  // Example: FilePath('dir/file.exe').RemoveExtension('EXE') returns
-  // FilePath('dir/file'). If a case-insensitive extension is not
-  // found, returns a copy of the original FilePath.
-  FilePath RemoveExtension(const char* extension) const;
-    
-    // A handy wrapper around RemoveReference that works when the argument
-// T depends on template parameters.
-#define GTEST_REMOVE_REFERENCE_(T) \
-    typename ::testing::internal::RemoveReference<T>::type
-    
-    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_LINKED_PTR_H_
+    {}  // namespace nw
 
     
-    // Tests factorial of positive numbers.
-TEST(FactorialTest, Positive) {
-  EXPECT_EQ(1, Factorial(1));
-  EXPECT_EQ(2, Factorial(2));
-  EXPECT_EQ(6, Factorial(3));
-  EXPECT_EQ(40320, Factorial(8));
+    void MenuItem::SetChecked(bool checked) {
+  // Set active will cause 'activate' to be emitted, so block here
+  block_active_ = true;
+  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menu_item_), checked);
+  block_active_ = false;
 }
     
-      if (flags.bit (CHECK_DAWGS) &&
-    (word->best_choice->permuter () != SYSTEM_DAWG_PERM) &&
-    (word->best_choice->permuter () != FREQ_DAWG_PERM) &&
-    (word->best_choice->permuter () != USER_DAWG_PERM) &&
-    (word->best_choice->permuter () != NUMBER_PERM)) {
-    if (tessedit_adaption_debug) tprintf('word not in dawgs\n');
-    return FALSE;
+      base::ThreadRestrictions::ScopedAllowWait allow_wait;
+    
+      for(auto& data : params->data) {
+    if (!reader->Read(data)) {
+      *error = reader->error();
+      return false;
+    }
+    response->Append(data.ToValue());
   }
     
-     private:
-  void SetBlame(IncorrectResultReason irr, const STRING &msg,
-                const WERD_CHOICE *choice, bool debug) {
-    incorrect_result_reason_ = irr;
-    debug_ = IncorrectReason();
-    debug_ += ' to blame: ';
-    FillDebugString(msg, choice, &debug_);
-    if (debug) tprintf('SetBlame(): %s', debug_.string());
+        // Finish and check for builder errors
+    if (s.ok()) {
+      s = builder->Finish();
+      if (s.ok()) {
+        meta->file_size = builder->FileSize();
+        assert(meta->file_size > 0);
+      }
+    } else {
+      builder->Abandon();
+    }
+    delete builder;
+    
+    
+    {}  // namespace leveldb
+    
+    struct leveldb_filterpolicy_t : public FilterPolicy {
+  void* state_;
+  void (*destructor_)(void*);
+  const char* (*name_)(void*);
+  char* (*create_)(
+      void*,
+      const char* const* key_array, const size_t* key_length_array,
+      int num_keys,
+      size_t* filter_length);
+  unsigned char (*key_match_)(
+      void*,
+      const char* key, size_t length,
+      const char* filter, size_t filter_length);
+    }
+    
+    #ifndef STORAGE_LEVELDB_DB_DB_ITER_H_
+#define STORAGE_LEVELDB_DB_DB_ITER_H_
+    
+    // A helper class useful for DBImpl::Get()
+class LookupKey {
+ public:
+  // Initialize *this for looking up user_key at a snapshot with
+  // the specified sequence number.
+  LookupKey(const Slice& user_key, SequenceNumber sequence);
+    }
+    
+    std::string TempFileName(const std::string& dbname, uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(dbname, number, 'dbtmp');
+}
+    
+    
+    {  ASSERT_TRUE(! Overlaps(NULL, 'j'));
+  ASSERT_TRUE(! Overlaps('r', NULL));
+  ASSERT_TRUE(Overlaps(NULL, 'p'));
+  ASSERT_TRUE(Overlaps(NULL, 'p1'));
+  ASSERT_TRUE(Overlaps('q', NULL));
+  ASSERT_TRUE(Overlaps(NULL, NULL));
+}
+    
+    void WriteBatch::Put(const Slice& key, const Slice& value) {
+  WriteBatchInternal::SetCount(this, WriteBatchInternal::Count(this) + 1);
+  rep_.push_back(static_cast<char>(kTypeValue));
+  PutLengthPrefixedSlice(&rep_, key);
+  PutLengthPrefixedSlice(&rep_, value);
+}
+    
+            // Create values for key-value pair
+        const int k = (order == SEQUENTIAL) ? i + j :
+                      (rand_.Next() % num_entries);
+        char key[100];
+        snprintf(key, sizeof(key), '%016d', k);
+    
+      /// Construct a buffer to represent a given memory range.
+  const_buffer(const void* data, std::size_t size)
+    : data_(data),
+      size_(size)
+  {
   }
     
-    #include          <stdlib.h>
-#ifdef __UNIX__
-#include          <assert.h>
-#endif
-#include          'scanutils.h'
-#include          'fileerr.h'
-#include          'blread.h'
+    #include <boost/asio/detail/pop_options.hpp>
     
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+typedef long atomic_count;
+inline void increment(atomic_count& a, long b) { a += b; }
+#elif defined(BOOST_ASIO_HAS_STD_ATOMIC)
+typedef std::atomic<long> atomic_count;
+inline void increment(atomic_count& a, long b) { a += b; }
+#else // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+typedef boost::detail::atomic_count atomic_count;
+inline void increment(atomic_count& a, long b) { while (b > 0) ++a, --b; }
+#endif // defined(BOOST_ASIO_HAS_STD_ATOMIC)
     
-/**********************************************************************
- * LLSQ::remove
- *
- * Delete an element from the acculuator.
- **********************************************************************/
+    #endif // BOOST_ASIO_DETAIL_CALL_STACK_HPP
+
     
-      BLOCK& operator=(const BLOCK & source);
+    #if !defined(BOOST_ASIO_WINDOWS_RUNTIME)
+    
+    #endif // BOOST_ASIO_DETAIL_HANDLER_INVOKE_HELPERS_HPP
+
+    
+    void buffer_sequence_adapter_base::init_native_buffer(
+    buffer_sequence_adapter_base::native_buffer_type& buf,
+    const boost::asio::mutable_buffer& buffer)
+{
+  std::memset(&buf, 0, sizeof(native_buffer_type));
+  Microsoft::WRL::ComPtr<IInspectable> insp
+    = Microsoft::WRL::Make<winrt_buffer_impl>(buffer);
+  buf = reinterpret_cast<Windows::Storage::Streams::IBuffer^>(insp.Get());
+}
+    
+      sorted_vector_map<int, Movable> vmap(
+      std::make_move_iterator(s.begin()), std::make_move_iterator(s.end()));
+    
+      __m128i arr1;
+  if (HAYSTACK_ALIGNED) {
+    arr1 = _mm_load_si128(
+        reinterpret_cast<const __m128i*>(haystack.data() + blockStartIdx));
+  } else {
+    arr1 = _mm_loadu_si128(
+        reinterpret_cast<const __m128i*>(haystack.data() + blockStartIdx));
+  }
+    
+    #pragma once
+    
+    TEST_F(MockEnvTest, Corrupt) {
+  const std::string kGood = 'this is a good string, synced to disk';
+  const std::string kCorrupted = 'this part may be corrupted';
+  const std::string kFileName = '/dir/f';
+  unique_ptr<WritableFile> writable_file;
+  ASSERT_OK(env_->NewWritableFile(kFileName, &writable_file, soptions_));
+  ASSERT_OK(writable_file->Append(kGood));
+  ASSERT_TRUE(writable_file->GetFileSize() == kGood.size());
+    }
+    
+      virtual bool Merge(const Slice& key,
+                     const Slice* existing_value,
+                     const Slice& value,
+                     std::string* new_value,
+                     Logger* logger) const override;
+    
+      // size amplification = percentage of additional size
+  if (candidate_size * 100 < ratio * earliest_file_size) {
+    ROCKS_LOG_BUFFER(
+        log_buffer,
+        '[%s] Universal: size amp not needed. newer-files-total-size %' PRIu64
+        ' earliest-file-size %' PRIu64,
+        cf_name.c_str(), candidate_size, earliest_file_size);
+    return nullptr;
+  } else {
+    ROCKS_LOG_BUFFER(
+        log_buffer,
+        '[%s] Universal: size amp needed. newer-files-total-size %' PRIu64
+        ' earliest-file-size %' PRIu64,
+        cf_name.c_str(), candidate_size, earliest_file_size);
+  }
+  assert(start_index < sorted_runs.size() - 1);
+    
+      // Write 8 files in L0
+  for (int i = 0; i < 8; i++) {
+    GenerateNewRandomFile(&rnd);
+  }
+  dbfull()->TEST_WaitForCompact();
+    
+    inline size_t Roundup(size_t x, size_t y) {
+  return ((x + y - 1) / y) * y;
+}
+    
+      // Helper functions for DumpTable()
+  Status DumpIndexBlock(WritableFile* out_file);
+  Status DumpDataBlocks(WritableFile* out_file);
+  void DumpKeyValue(const Slice& key, const Slice& value,
+                    WritableFile* out_file);
+    
+      // REQUIRES: The client must provide a merge operator if Merge operation
+  // needs to be accessed. Calling Merge on a DB without a merge operator
+  // would result in Status::NotSupported. The client must ensure that the
+  // merge operator supplied here has the same name and *exactly* the same
+  // semantics as the merge operator provided to previous open calls on
+  // the same DB. The only exception is reserved for upgrade, where a DB
+  // previously without a merge operator is introduced to Merge operation
+  // for the first time. It's necessary to specify a merge operator when
+  // opening the DB in this case.
+  // Default: nullptr
+  std::shared_ptr<MergeOperator> merge_operator = nullptr;
+    
+    bool nextConnection(int tid)
+{
+    m.lock();
+    int socketfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (socketfd == -1) {
+        cout << 'FD error, connections: ' << connections << endl;
+        return false;
+    }
+    }
+    
+    int getKb(int pid) {
+    std::string line;
+    std::ifstream self((std::string('/proc/') + std::to_string(pid) + std::string('/status')).c_str());
+    int vmRSS;
+    while(!self.eof()) {
+        std::getline(self, line, ':');
+        if (line == 'VmRSS') {
+            self >> vmRSS;
+        }
+        std::getline(self, line);
+    }
+    return vmRSS;
+}
+    
+        // Format message frame(s)
+    unsigned char *framePackBufferOffset = framePackBuffer;
+    for (int i = 0; i < framesPerSend; i++) {
+        framePackBufferOffset[0] = 130;
+        if (byteSize < 126) {
+            framePackBufferLength += byteSize + 6;
+            framePackBufferOffset[1] = 128 | byteSize;
+            framePackBufferOffset += byteSize + 6;
+        } else if (byteSize <= UINT16_MAX) {
+            framePackBufferLength += byteSize + 8;
+            framePackBufferOffset[1] = 128 | 126;
+            *((uint16_t *) &framePackBufferOffset[2]) = htons(byteSize);
+            framePackBufferOffset += byteSize + 8;
+        } else {
+            framePackBufferLength += byteSize + 14;
+            framePackBufferOffset[1] = 128 | 127;
+            *((uint64_t *) &framePackBufferOffset[2]) = htobe64(byteSize);
+            framePackBufferOffset += byteSize + 14;
+        }
+    }
+    
+    #endif // EXTENSIONS_UWS_H
+
+    
+        Hub(int extensionOptions = 0, bool useDefaultLoop = false, unsigned int maxPayload = 16777216) : uS::Node(LARGE_BUFFER_SIZE, WebSocketProtocol<SERVER, WebSocket<SERVER>>::CONSUME_PRE_PADDING, WebSocketProtocol<SERVER, WebSocket<SERVER>>::CONSUME_POST_PADDING, useDefaultLoop),
+                                             Group<SERVER>(extensionOptions, maxPayload, this, nodeData), Group<CLIENT>(0, maxPayload, this, nodeData) {
+        inflateInit2(&inflationStream, -15);
+        inflationBuffer = new char[LARGE_BUFFER_SIZE];
+    }
