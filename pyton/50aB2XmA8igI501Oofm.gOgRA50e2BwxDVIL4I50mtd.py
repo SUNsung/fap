@@ -1,92 +1,135 @@
 
         
-        import pytest
-from requests.compat import urljoin
+            create_tox_ini(checkout_path, interpreters, flask_dep)
+    rv = subprocess.call(['tox', '-c', 'tox-flask-test.ini'], cwd=checkout_path)
+    return TestResult(name, checkout_path, rv, interpreters)
     
-        :param str u_string: unicode string to check. Must be unicode
-        and not Python 2 `str`.
-    :rtype: bool
-    '''
-    assert isinstance(u_string, str)
-    try:
-        u_string.encode('ascii')
-        return True
-    except UnicodeEncodeError:
-        return False
-
+        :copyright: (c) 2015 by Armin Ronacher.
+    :license: BSD, see LICENSE for more details.
+'''
+signals_available = False
+try:
+    from blinker import Namespace
+    signals_available = True
+except ImportError:
+    class Namespace(object):
+        def signal(self, name, doc=None):
+            return _FakeSignal(name, doc)
     
-        def __repr__(self):
-        return '<lookup \'%s\'>' % (self.name)
+    # We're not exposing the actual json module but a convenient wrapper around
+# it.
+from . import json
     
-        def test_lower_items(self):
-        assert list(self.case_insensitive_dict.lower_items()) == [('accept', 'application/json')]
+            buf.append('  Make sure to directly send your %s-request to this URL '
+                   'since we can\'t make browsers or HTTP clients redirect '
+                   'with form data reliably or without user interaction.' %
+                   request.method)
+        buf.append('\n\nNote: this exception is only raised in debug mode')
+        AssertionError.__init__(self, ''.join(buf).encode('utf-8'))
     
-            if not qop:
-            respdig = KD(HA1, '%s:%s' % (nonce, HA2))
-        elif qop == 'auth' or 'auth' in qop.split(','):
-            noncebit = '%s:%s:%s:%s:%s' % (
-                nonce, ncvalue, cnonce, 'auth', HA2
-            )
-            respdig = KD(HA1, noncebit)
+        :copyright: (c) 2015 by Armin Ronacher.
+    :license: BSD, see LICENSE for more details.
+'''
+import sys
+    
+    
+@bp.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != current_app.config['USERNAME']:
+            error = 'Invalid username'
+        elif request.form['password'] != current_app.config['PASSWORD']:
+            error = 'Invalid password'
         else:
-            # XXX handle auth-int.
-            return None
-    
-    import pytest
-    
-        def __getstate__(self):
-        return dict((attr, getattr(self, attr, None)) for attr in
-                    self.__attrs__)
+            session['logged_in'] = True
+            flash('You were logged in')
+            return redirect(url_for('flaskr.show_entries'))
+    return render_template('login.html', error=error)
     
     
-class ConnectionError(RequestException):
-    '''A Connection error occurred.'''
+class NodeLookup(object):
+  '''Converts integer node ID's to human readable labels.'''
     
-            '''
-        try:
-            return getattr(stacked_proxy, key)
-        except TypeError:
-            return default
+      def train(self):
+    '''Train the model.'''
+    opts = self._options
     
-    from r2.lib.manager import tp_manager
-from r2.lib.jsontemplates import *
+    SOURCE_URL = 'http://yann.lecun.com/exdb/mnist/'
+WORK_DIRECTORY = 'data'
+IMAGE_SIZE = 28
+NUM_CHANNELS = 1
+PIXEL_DEPTH = 255
+NUM_LABELS = 10
+VALIDATION_SIZE = 5000  # Size of the validation set.
+SEED = 66478  # Set to None for random seed.
+BATCH_SIZE = 64
+NUM_EPOCHS = 10
+EVAL_BATCH_SIZE = 64
+EVAL_FREQUENCY = 100  # Number of steps between evaluations.
     
-        @require_oauth2_scope('account')
-    @validate(
-        VUser(),
-        validated_prefs=PREFS_JSON_VALIDATOR,
-    )
-    @api_doc(api_section.account, json_model=PREFS_JSON_VALIDATOR,
-             uri='/api/v1/me/prefs')
-    def PATCH_prefs(self, validated_prefs):
-        user_prefs = c.user.preferences()
-        for short_name, new_value in validated_prefs.iteritems():
-            pref_name = 'pref_' + short_name
-            user_prefs[pref_name] = new_value
-        vprefs.filter_prefs(user_prefs, c.user)
-        vprefs.set_prefs(c.user, user_prefs)
-        c.user._commit()
-        return self.api_wrapper(PrefsJsonTemplate().data(c.user))
+            # put all lines in the file into a Python list
+        strings = f.readlines()
+        
+        # above line leaves trailing newline characters; strip them out
+        strings = [x.strip(u'\n') for x in strings]
+        
+        # remove empty-lines and comments
+        strings = [x for x in strings if x and not x.startswith(u'#')]
+        
+        # insert empty string since all are being removed
+        strings.insert(0, u'')
     
-    from pylons import request
-from pylons import app_globals as g
-from reddit_base import RedditController
-from r2.lib.pages import AdminPage, AdminAwards
-from r2.lib.pages import AdminAwardGive, AdminAwardWinners
-from r2.lib.validator import *
+        def setUp(self):
+        from acme.errors import MissingNonce
+        self.response = mock.MagicMock(headers={})
+        self.response.request.method = 'FOO'
+        self.error = MissingNonce(self.response)
     
-    from r2.controllers.reddit_base import RedditController
-from r2.lib.base import proxyurl
-from r2.lib.csrf import csrf_exempt
-from r2.lib.template_helpers import get_domain
-from r2.lib.pages import Embed, BoringPage, HelpPage
-from r2.lib.filters import websafe, SC_OFF, SC_ON
-from r2.lib.memoize import memoize
     
-        def send429(self):
-        retry_after = request.environ.get('retry_after')
-        if retry_after:
-            response.headers['Retry-After'] = str(retry_after)
-            template_name = '/ratelimit_toofast.html'
-        else:
-            template_name = '/ratelimit_throttled.html'
+class VirtualHostTest(unittest.TestCase):
+    '''Test the VirtualHost class.'''
+    
+    # http://docs.readthedocs.org/en/latest/theme.html#how-do-i-use-this-locally-and-on-read-the-docs
+# on_rtd is whether we are on readthedocs.org
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+if not on_rtd:  # only import and set the theme if we're building docs locally
+    import sphinx_rtd_theme
+    html_theme = 'sphinx_rtd_theme'
+    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+# otherwise, readthedocs.org uses their theme by default, so no need to specify it
+    
+        def tearDown(self):
+        logging.disable(logging.NOTSET)
+    
+    from certbot import interfaces
+from certbot.plugins import common
+    
+    print 'PLUGIN_I18N_PATHS := ' + ','.join(os.path.relpath(plugin.path)
+                                         for plugin in plugins
+                                         if plugin.needs_translation)
+    
+        report = []
+    for filepath in select_files(files):
+        command = TOOLS[toolname] + [filepath]
+        logging.info(' '.join(command))
+        process = subprocess.Popen(
+            command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+    
+    # class specific overrides
+api('link',          LinkJsonTemplate)
+api('promotedlink',  PromotedLinkJsonTemplate)
+api('message',       MessageJsonTemplate)
+api('subreddit',     SubredditJsonTemplate)
+api('labeledmulti',  LabeledMultiJsonTemplate)
+api('reddit',        RedditJsonTemplate)
+api('panestack',     PanestackJsonTemplate)
+api('htmlpanestack', NullJsonTemplate)
+api('listing',       ListingJsonTemplate)
+api('searchlisting', SearchListingJsonTemplate)
+api('userlisting',   UserListingJsonTemplate)
+api('usertableitem', UserTableItemJsonTemplate)
+api('account',       AccountJsonTemplate)
