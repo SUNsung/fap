@@ -1,104 +1,132 @@
-    You can read more about this change at:
-      https://www.playframework.com/documentation/2.3.x/Migration23
-      https://www.playframework.com/documentation/2.3.x/Highlights23
-    EOS
-  when 'haskell-platform' then <<-EOS.undent
-    We no longer package haskell-platform. Consider installing ghc
-    and cabal-install instead:
-      brew install ghc cabal-install
+
+        
+            valid_oauth_providers :tumblr
+  end
     
-        if superenv?
-      ENV.keg_only_deps = keg_only_deps
-      ENV.deps = formula_deps
-      ENV.x11 = reqs.any? { |rq| rq.is_a?(X11Requirement) }
-      ENV.setup_build_environment(formula)
-      post_superenv_hacks
-      reqs.each(&:modify_build_environment)
-      deps.each(&:modify_build_environment)
-    else
-      ENV.setup_build_environment(formula)
-      reqs.each(&:modify_build_environment)
-      deps.each(&:modify_build_environment)
-    
-      def describe_python
-    python = which 'python'
-    return 'N/A' if python.nil?
-    python_binary = Utils.popen_read python, '-c', 'import sys; sys.stdout.write(sys.executable)'
-    python_binary = Pathname.new(python_binary).realpath
-    if python == python_binary
-      python
-    else
-      '#{python} => #{python_binary}'
+        # next matching brace for brace at from
+    def close_brace_pos(css, from, depth = 0)
+      s = CharStringScanner.new(css[from..-1])
+      while (b = s.scan_next(BRACE_RE))
+        depth += (b == '}' ? -1 : +1)
+        break if depth.zero?
+      end
+      raise 'match not found for {' unless depth.zero?
+      from + s.pos - 1
     end
-  end
     
-      def self.path(name)
-    Formulary.core_path(name)
-  end
+        def log_processing(name)
+      puts yellow '  #{File.basename(name)}'
+    end
     
-    def check_link(uri)
-  HTTParty.head(uri, :verify => false).code.to_i.tap do |status|
-    if (400..422).include?(status)
-      if status != 403 && !uri.exclude?('udemy.com')
-        raise 'Request had status #{status}'
-      else
-        putc('S')
+    desc 'Test all Gemfiles from test/*.gemfile'
+task :test_all_gemfiles do
+  require 'term/ansicolor'
+  require 'pty'
+  require 'shellwords'
+  cmd      = 'bundle install --quiet && bundle exec rake --trace'
+  statuses = Dir.glob('./test/gemfiles/*{[!.lock]}').map do |gemfile|
+    env = {'BUNDLE_GEMFILE' => gemfile}
+    cmd_with_env = '  (#{env.map { |k, v| 'export #{k}=#{Shellwords.escape v}' } * ' '}; #{cmd})'
+    $stderr.puts Term::ANSIColor.cyan('Testing\n#{cmd_with_env}')
+    PTY.spawn(env, cmd) do |r, _w, pid|
+      begin
+        r.each_line { |l| puts l }
+      rescue Errno::EIO
+        # Errno:EIO error means that the process has finished giving output.
+      ensure
+        ::Process.wait pid
       end
     end
+    [$? && $?.exitstatus == 0, cmd_with_env]
+  end
+  failed_cmds = statuses.reject(&:first).map { |(_status, cmd_with_env)| cmd_with_env }
+  if failed_cmds.empty?
+    $stderr.puts Term::ANSIColor.green('Tests pass with all gemfiles')
+  else
+    $stderr.puts Term::ANSIColor.red('Failing (#{failed_cmds.size} / #{statuses.size})\n#{failed_cmds * '\n'}')
+    exit 1
   end
 end
     
-    require 'erubis'
+          spec['main'] =
+          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
+          find_files.(Bootstrap.fonts_path) +
+          %w(assets/javascripts/bootstrap.js)
     
-            def print(s)
-          case s
-          when /\A(.*\#.*) = \z/
-            runner.new_test($1)
-          when /\A(.* s) = \z/
-            runner.add_status(' = #$1')
-          when /\A\.+\z/
-            runner.succeed
-          when /\A[EFS]\z/
-            runner.failed(s)
-          else
-            $stdout.print(s)
-          end
-        end
-      end
+          timestamp.concat(fraction)
+    end
+  end
+end
+
+    
+        # Get rid of any info 'dir' files, so they don't conflict at the link stage
+    info_dir_file = @f.info + 'dir'
+    if info_dir_file.file? && !@f.skip_clean?(info_dir_file)
+      observe_file_removal info_dir_file
     end
     
-          def EnumKey(hkey, index)
-        name = WCHAR_NUL * Constants::MAX_KEY_LENGTH
-        size = packdw(Constants::MAX_KEY_LENGTH)
-        wtime = ' ' * 8
-        check RegEnumKeyExW.call(hkey, index, name, size, 0, 0, 0, wtime)
-        [ name.byteslice(0, unpackdw(size) * WCHAR_SIZE), unpackqw(wtime) ]
+        it 'leaves normal params untouched' do
+      mock_app do |env|
+        request = Rack::Request.new(env)
+        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']]]
       end
+      get '/', :foo => 'bar'
+      expect(body).to eq('bar')
+    end
     
-      def test_block
-    r = Open3.popen3(RUBY, '-e', 'STDOUT.print STDIN.read') {|i,o,e,t|
-      i.print 'baz'
-      i.close
-      assert_equal('baz', o.read)
-      'qux'
-    }
-    assert_equal('qux', r)
+      it 'should set the X-Frame-Options' do
+    expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('SAMEORIGIN')
   end
     
-          def def_explicit_clean_other_accessor(klass, full_name)
-        klass.def_other_element(full_name)
-        klass.module_eval(<<-EOC, __FILE__, __LINE__ + 1)
-          def #{full_name}?
-            Utils::ExplicitCleanOther.parse(#{full_name})
-          end
-        EOC
-      end
+      # GET /books/new
+  def new
+    @book = Book.new
+  end
     
-            def update
-          authorize! :update, stock_location
-          if stock_location.update_attributes(stock_location_params)
-            respond_with(stock_location, status: 200, default_template: :show)
-          else
-            invalid_resource!(stock_location)
-          end
-        end
+              new_source =
+            node.receiver.source + ' =~ ' + node.first_argument.source
+    
+            def_node_matcher :on_body_of_reduce, <<-PATTERN
+          (block (send _recv {:reduce :inject} !sym) _blockargs $(begin ...))
+        PATTERN
+    
+            def_node_matcher :simple_double_comparison?, '(send $lvar :== $lvar)'
+        def_node_matcher :simple_comparison?, <<-PATTERN
+          {(send $lvar :== _)
+           (send _ :== $lvar)}
+        PATTERN
+    
+    module RuboCop
+  module Cop
+    module Style
+      # This cop check for uses of Object#freeze on immutable objects.
+      #
+      # @example
+      #   # bad
+      #   CONST = 1.freeze
+      #
+      #   # good
+      #   CONST = 1
+      class RedundantFreeze < Cop
+        include FrozenStringLiteral
+    
+          expect('.border-style-alternate').to have_rule(rule)
+    end
+  end
+    
+      context 'called with arguments (1, $value: 3em)' do
+    it 'outputs triple the first value from the default scale' do
+      expect('.one-base-three').to have_rule('font-size: 3.75em')
+    end
+  end
+    
+    describe 'prefixer' do
+  before(:all) do
+    ParserSupport.parse_file('library/prefixer')
+  end
+    
+      context 'expands invalid text inputs' do
+    it 'finds selectors' do
+      list = @inputs_list.map { |input| '#{input}:invalid' }
+      list = list.join(', ')
+      ruleset = 'content: #{list};'
