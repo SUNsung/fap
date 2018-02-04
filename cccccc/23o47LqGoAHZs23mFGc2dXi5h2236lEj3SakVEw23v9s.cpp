@@ -1,181 +1,169 @@
- private:
-  atom::RenderProcessPreferences preferences_;
-    
-    namespace mate {
+
+        
+        class TestRandomAccessFile : public RandomAccessFile {
+  // The file contents is 10 bytes of all A's
+  Status Read(uint64 offset, size_t n, StringPiece* result,
+              char* scratch) const override {
+    Status s;
+    for (int i = 0; i < n; ++i) {
+      if (offset + i >= 10) {
+        n = i;
+        s = errors::OutOfRange('EOF');
+        break;
+      }
+      scratch[i] = 'A';
     }
-    
-    // A self-destroyed class for handling save page request.
-class SavePageHandler : public content::DownloadManager::Observer,
-                        public content::DownloadItem::Observer {
- public:
-  using SavePageCallback = base::Callback<void(v8::Local<v8::Value>)>;
-    }
-    
-    namespace atom {
-    }
-    
-    #include 'atom/browser/net/asar/asar_protocol_handler.h'
-    
-      // net::URLRequestJobFactory::ProtocolHandler:
-  net::URLRequestJob* MaybeCreateJob(
-      net::URLRequest* request,
-      net::NetworkDelegate* network_delegate) const override;
-    
-    // Like URLRequestAsarJob, but asks the JavaScript handler for file path.
-class URLRequestAsyncAsarJob : public JsAsker<asar::URLRequestAsarJob> {
- public:
-  URLRequestAsyncAsarJob(net::URLRequest*, net::NetworkDelegate*);
-    }
-    
-    namespace atom {
-    }
-    
-    void RenderProcessPreferences::UpdateCache() {
-  if (!cache_needs_update_)
-    return;
-    }
-    
-    namespace base {
-class ListValue;
-}
-    
-    // Similar to node's `require` function, save functions in `exports`.
-void RequireFromResource(v8::Handle<v8::Object> root,
-                         v8::Handle<v8::Object> gui,
-                         v8::Handle<v8::Object> window,
-                         v8::Handle<v8::String> name,
-                         int resource_id) {
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  v8::HandleScope handle_scope(isolate);
-    }
-    
-    EventListener::EventListener(int id,
-  const base::WeakPtr<DispatcherHost>& dispatcher_host,
-  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
-    }
-    
-    #include 'content/nw/src/api/menu/menu.h'
-    
-    namespace ui {
-    }
-    
-    
-    { protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
-   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
-   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
-   *      the computed outputs @f$
-   *       y_n = \arg\max\limits_i x_{ni}
-   *      @f$ (for @f$ K = 1 @f$).
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  /// @brief Not implemented (non-differentiable function)
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-    NOT_IMPLEMENTED;
+    *result = StringPiece(scratch, n);
+    return s;
   }
-  bool out_max_val_;
-  size_t top_k_;
-  bool has_axis_;
-  int axis_;
 };
     
-      /// @brief The spatial dimensions of a filter kernel.
-  Blob<int> kernel_shape_;
-  /// @brief The spatial dimensions of the stride.
-  Blob<int> stride_;
-  /// @brief The spatial dimensions of the padding.
-  Blob<int> pad_;
-  /// @brief The spatial dimensions of the dilation.
-  Blob<int> dilation_;
-  /// @brief The spatial dimensions of the convolution input.
-  Blob<int> conv_input_shape_;
-  /// @brief The spatial dimensions of the col_buffer.
-  vector<int> col_buffer_shape_;
-  /// @brief The spatial dimensions of the output.
-  vector<int> output_shape_;
-  const vector<int>* bottom_shape_;
+    #include <string>
     
-      /**
-   * @brief Computes the error gradient w.r.t. the concatenate inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *        respect to the outputs
-   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
-   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length K), into which the top gradient
-   *        @f$ \frac{\partial E}{\partial y} @f$ is deconcatenated back to the
-   *        inputs @f$
-   *        \left[ \begin{array}{cccc}
-   *          \frac{\partial E}{\partial x_1} &
-   *          \frac{\partial E}{\partial x_2} &
-   *          ... &
-   *          \frac{\partial E}{\partial x_K}
-   *        \end{array} \right] =
-   *        \frac{\partial E}{\partial y}
-   *        @f$
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+      double SmoothnessConstant() const final { return gamma; }
     
-      /**
-   * @brief Computes the Contrastive error gradient w.r.t. the inputs.
-   *
-   * Computes the gradients with respect to the two input vectors (bottom[0] and
-   * bottom[1]), but not the similarity label (bottom[2]).
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
-   *      This Blob's diff will simply contain the loss_weight* @f$ \lambda @f$,
-   *      as @f$ \lambda @f$ is the coefficient of this layer's output
-   *      @f$\ell_i@f$ in the overall Net loss
-   *      @f$ E = \lambda_i \ell_i + \mbox{other loss terms}@f$; hence
-   *      @f$ \frac{\partial E}{\partial \ell_i} = \lambda_i @f$.
-   *      (*Assuming that this top Blob is not used as a bottom (input) by any
-   *      other layer of the Net.)
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times 1 \times 1) @f$
-   *      the features @f$a@f$; Backward fills their diff with
-   *      gradients if propagate_down[0]
-   *   -# @f$ (N \times C \times 1 \times 1) @f$
-   *      the features @f$b@f$; Backward fills their diff with gradients if
-   *      propagate_down[1]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+      // A separate index mapping name to Node*, for use by FeedInputs,
+  // FetchOutputs, and PruneForTargets
+  NameIndex name_index;
+  name_index.reserve(g->num_nodes());
+  for (Node* n : g->nodes()) {
+    name_index[n->name()] = n;
+  }
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    class TextLineReader : public ReaderBase {
+ public:
+  TextLineReader(const string& node_name, int skip_header_lines, Env* env)
+      : ReaderBase(strings::StrCat('TextLineReader '', node_name, ''')),
+        skip_header_lines_(skip_header_lines),
+        env_(env),
+        line_number_(0) {}
+    }
+    
+    leveldb_env_t* leveldb_create_default_env() {
+  leveldb_env_t* result = new leveldb_env_t;
+  result->rep = Env::Default();
+  result->is_default = true;
+  return result;
+}
+    
+    namespace leveldb {
+    }
+    
+      // If a seek to internal key 'k' in specified file finds an entry,
+  // call (*handle_result)(arg, found_key, found_value).
+  Status Get(const ReadOptions& options,
+             uint64_t file_number,
+             uint64_t file_size,
+             const Slice& k,
+             void* arg,
+             void (*handle_result)(void*, const Slice&, const Slice&));
+    
+    TEST(FindFileTest, Single) {
+  Add('p', 'q');
+  ASSERT_EQ(0, Find('a'));
+  ASSERT_EQ(0, Find('p'));
+  ASSERT_EQ(0, Find('p1'));
+  ASSERT_EQ(0, Find('q'));
+  ASSERT_EQ(1, Find('q1'));
+  ASSERT_EQ(1, Find('z'));
+    }
+    
+      // The name of the comparator.  Used to check for comparator
+  // mismatches (i.e., a DB created with one comparator is
+  // accessed using a different comparator.
+  //
+  // The client of this package should switch to a new name whenever
+  // the comparator implementation changes in a way that will cause
+  // the relative ordering of any two keys to change.
+  //
+  // Names starting with 'leveldb.' are reserved and should not be used
+  // by any clients of this package.
+  virtual const char* Name() const = 0;
+    
+    // modelParallelSGD can be combined with dataParallelSGD/modelAveragingSGD/blockMomentumSGD 
+// but dataParallelSGD/modelAveragingSGD/blockMomentumSGD are mutually exclusive (at least at the moment)
+// we assign the lower 8 bits to the enumerate data parallelization methods 
+// and next 8 bits to model parallelization methods
+enum class ParallelizationMethod : int
+{
+    none = 0,
+    dataParallelSGD = 1,
+    modelAveragingSGD = 2,
+    blockMomentumSGD = 3,
+    dataParallelASGD = 4,
+    modelParallelSGD = (1 << 8) // Currently unsupported
+};
+    
+    #include <vector>
+    
+    function<ComputationNetworkPtr(DEVICEID_TYPE)> GetCreateNetworkFn(const ScriptableObjects::IConfigRecord& config)
+{
+    // createNetwork() is a BrainScript lambda that creates the model
+    // We create a C++ wrapper around it, which we then pass to Train().
+    auto createNetworkConfigLambda = config[L'createNetwork'].AsPtr<ScriptableObjects::ConfigLambda>();
+    return [createNetworkConfigLambda](DEVICEID_TYPE /*deviceId*/)
+    {
+        // execute the lambda
+        vector<ScriptableObjects::ConfigValuePtr> args; // this lambda has no arguments
+        ScriptableObjects::ConfigLambda::NamedParams namedArgs;
+        let netValue = createNetworkConfigLambda->Apply(move(args), move(namedArgs), L'BuildNetworkFromDescription');
+        // typecast the result to the desired type
+        return netValue.AsPtr<ComputationNetwork>();
+    };
+}
     
     
-    {}  // namespace caffe
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #endif  // CAFFE_CUDNN_SIGMOID_LAYER_HPP_
-
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    {    // write dbn file
+    net->SaveToDbnFile<ElemType>(net, dbnModelPath);
+}
     
     
-    {}  // namespace caffe
+    {    return std::equal(s1.begin(), s1.end(), s2.begin(), [](const TElement& a, const TElement& b)
+    {
+        return std::tolower(a) == std::tolower(b);
+    });
+}
+    
+    #include 'ComputationNode.h'
+#include 'InputAndParamNodes.h'
+#include 'ComputationNetworkBuilder.h' // TODO: We should only pull in NewComputationNodeFromConfig(). Nodes should not know about network at large.
+#include 'TensorShape.h'
+    
+        void Dump(const std::string& _processname);
+    const std::vector<std::string>& StackList() const;
+    
+        void Lock(int64_t _timelock);  // ms
+    void Lock();
+    void Unlock();
+    bool IsLocking();
+    
+    template <class T>
+inline void SimplePack(const void* _data, size_t _datalen, AutoBuffer& _outbuf) {
+    _outbuf.Write(hton(SimplePackLength<T>(_datalen)));
+    _outbuf.Write(_data, _datalen);
+}
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    class Test_Spy_Sample {
+  public:
+    Test_Spy_Sample();
+    ~Test_Spy_Sample();
+    }
+    
+    
+    static bool SpyHookLogFunc(struct XLoggerInfo_t& _info, std::string& _log);
+    void TestFun0();
+    int __TestFun1(int i);
+    
+    jbyteArray JNU_Buffer2JbyteArray(JNIEnv* _env, const AutoBuffer& ab);
+jbyteArray JNU_Buffer2JbyteArray(JNIEnv* _env, const void* _buffer, size_t _length);
+void JNU_FreeJbyteArray(JNIEnv* _env, jbyteArray bytes);
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
