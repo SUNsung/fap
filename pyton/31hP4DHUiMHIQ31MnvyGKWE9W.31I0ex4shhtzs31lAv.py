@@ -1,132 +1,118 @@
 
         
-            i = tf.train.range_input_producer(epoch_size, shuffle=False).dequeue()
-    x = tf.strided_slice(data, [0, i * num_steps],
-                         [batch_size, (i + 1) * num_steps])
-    x.set_shape([batch_size, num_steps])
-    y = tf.strided_slice(data, [0, i * num_steps + 1],
-                         [batch_size, (i + 1) * num_steps + 1])
-    y.set_shape([batch_size, num_steps])
-    return x, y
-
+            def short_desc(self):
+        '''
+        A short description of the command
+        '''
+        return ''
     
-    filegroup(
-    name = 'all_files',
-    srcs = glob(
-        ['**/*'],
-        exclude = [
-            '**/METADATA',
-            '**/OWNERS',
-        ],
-    ),
-    visibility = ['//tensorflow:__subpackages__'],
-)
-
+    '''
     
-        node_def = op if isinstance(op, node_def_pb2.NodeDef) else op.node_def
-    if node_def.op in ps_ops:
-      ps_device_spec = pydev.DeviceSpec.from_string(
-          '/{}:{}'.format(ps_device_type, ps_strategy(op)))
+    class User(Base):
+    '''Declarative class to do query in upgrade'''
+    __tablename__ = 'ab_user'
+    id = Column(Integer, primary_key=True)
     
-        print('Classifier Training')
-    print('===================')
-    accuracy, train_time, test_time = {}, {}, {}
-    for name in sorted(args['estimators']):
-        clf = ESTIMATORS[name]
-        try:
-            clf.set_params(random_state=0)
-        except (TypeError, ValueError):
-            pass
-    
-        plt.figure('scikit-learn GLM benchmark results')
-    plt.xlabel('Dimensions')
-    plt.ylabel('Time (s)')
-    plt.plot(dimensions, time_ridge, color='r')
-    plt.plot(dimensions, time_ols, color='g')
-    plt.plot(dimensions, time_lasso, color='b')
+    # revision identifiers, used by Alembic.
+revision = '3c3ffe173e4f'
+down_revision = 'ad82a75afd82'
     
     
-def plot_batch_errors(all_errors, n_features, all_batch_sizes, data):
-    plt.figure()
-    plot_results(all_batch_sizes, all_errors['pca'], label='PCA')
-    plot_results(all_batch_sizes, all_errors['ipca'], label='IncrementalPCA')
-    plt.legend(loc='lower left')
-    plt.suptitle('Algorithm error vs. batch_size for n_components %i\n \
-                 LFW, size %i x %i' % (
-                 n_features, data.shape[0], data.shape[1]))
-    plt.xlabel('Batch size')
-    plt.ylabel('Mean absolute error')
-    
-        fig = plt.figure('scikit-learn Lasso path benchmark results')
-    i = 1
-    for c, (label, timings) in zip('bcry', sorted(results.items())):
-        ax = fig.add_subplot(2, 2, i, projection='3d')
-        X, Y = np.meshgrid(samples_range, features_range)
-        Z = np.asarray(timings).reshape(samples_range.shape[0],
-                                        features_range.shape[0])
+def downgrade():
+    try:
+        op.drop_column('dbs', 'allow_run_sync')
+        op.drop_column('dbs', 'allow_run_async')
+    except Exception:
+        pass
     
     
-def bench_sample(sampling, n_population, n_samples):
-    gc.collect()
-    # start time
-    t_start = datetime.now()
-    sampling(n_population, n_samples)
-    delta = (datetime.now() - t_start)
-    # stop time
-    time = compute_time(t_start, delta)
-    return time
-    
-        # TASK: Predict the outcome on the testing set and store it in a variable
-    # named y_predicted
-    y_predicted = grid_search.predict(docs_test)
-    
-        def plot_support_vectors(self, support_vectors):
-        '''Plot the support vectors by placing circles over the
-        corresponding data points and adds the circle collection
-        to the contours list.'''
-        cs = self.ax.scatter(support_vectors[:, 0], support_vectors[:, 1],
-                             s=80, edgecolors='k', facecolors='none')
-        self.contours.append(cs)
-    
-    # Illustrate calibrator
-plt.figure(1)
-# generate grid over 2-simplex
-p1d = np.linspace(0, 1, 20)
-p0, p1 = np.meshgrid(p1d, p1d)
-p2 = 1 - p0 - p1
-p = np.c_[p0.ravel(), p1.ravel(), p2.ravel()]
-p = p[p[:, 2] >= 0]
-    
-    Only adjusted measures can hence safely be used as a consensus index
-to evaluate the average stability of clustering algorithms for a given
-value of k on various overlapping sub-samples of the dataset.
-    
-        def user_has_beta_enabled(self, user):
-        if not user:
-            return False
-        return user.pref_beta
-    
-    from r2.config.extensions import set_extension
-from r2.controllers.reddit_base import RedditController, generate_modhash
-from r2.controllers.login import handle_login, handle_register
-from r2.lib.csrf import csrf_exempt
-from r2.lib.validator import (
-    json_validate,
-    ValidEmail,
-    VPasswordChange,
-    VRatelimit,
-    VSigned,
-    VThrottledLogin,
-    VUname,
-)
-    
-        @validate(
-        container_id=VGTMContainerId('id')
+def upgrade():
+    op.create_table('dashboard_user',
+        sa.Column('id', sa.Integer(), nullable=False),
+        sa.Column('user_id', sa.Integer(), nullable=True),
+        sa.Column('dashboard_id', sa.Integer(), nullable=True),
+        sa.ForeignKeyConstraint(['dashboard_id'], [u'dashboards.id'], ),
+        sa.ForeignKeyConstraint(['user_id'], [u'ab_user.id'], ),
+        sa.PrimaryKeyConstraint('id'),
     )
-    def GET_gtm(self, container_id):
-        return GoogleTagManager(container_id=container_id).render()
+    op.create_table('slice_user',
+        sa.Column('id', sa.Integer(), nullable=False),
+        sa.Column('user_id', sa.Integer(), nullable=True),
+        sa.Column('slice_id', sa.Integer(), nullable=True),
+        sa.ForeignKeyConstraint(['slice_id'], [u'slices.id'], ),
+        sa.ForeignKeyConstraint(['user_id'], [u'ab_user.id'], ),
+        sa.PrimaryKeyConstraint('id'),
+    )
+    
+    # revision identifiers, used by Alembic.
+revision = '7dbf98566af7'
+down_revision = '8e80a26a31db'
+    
+        def test_cat_adapter_shall_make_noise(self):
+        cat = Cat()
+        cat_adapter = Adapter(cat, make_noise=cat.meow)
+        noise = cat_adapter.make_noise()
+        expected_noise = 'meow!'
+        self.assertEqual(noise, expected_noise)
+    
+        def test_sequential_undo(self):
+        self.command_stack = list(reversed(self.command_stack))
+        self.command_stack[0].undo()
+        output_after_first_undo = os.listdir(self.test_dir)
+        self.assertEqual(output_after_first_undo[0], 'bar.txt')
+        self.command_stack[1].undo()
+        output_after_second_undo = os.listdir(self.test_dir)
+        self.assertEqual(output_after_second_undo[0], 'foo.txt')
+    
+        def test_sales_manager_shall_talk_through_proxy_with_delay(cls):
+        cls.p.busy = 'No'
+        start_time = time()
+        cls.p.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+Sales Manager ready to talk\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
+    
+        def test_num_floor_in_house(self):
+        self.assertEqual(self.building.floor, 'More than One')
 
     
-    template = cv2.imread('character.png')
-template = cv2.resize(template, (0, 0), fx=scale, fy=scale)
-template_size = template.shape[:2]
+        def test_parrot_eng_localization(self):
+        self.assertEqual(self.e.get('parrot'), 'parrot')
+    
+        def test_shall_toggle_from_fm_to_am(self):
+        self.radio.toggle_amfm()
+        state = self.radio.state.name
+        expected_state_name = 'AM'
+        self.assertEqual(state, expected_state_name)
+
+    
+        def test_display_current_time_at_midnight(self):
+        class_under_test = TimeDisplay()
+        expected_time = '24:01'
+        result = class_under_test.get_current_time_as_as_html_fragment()
+        self.assertEqual(result, expected_time)
+'''
+    
+    '''
+Port of the Java example of 'Constructor Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050)
+    
+    if __name__ == '__main__':
+    main()
+    
+        def setTC(self, tc):
+        self._tc = tc
+    
+    update = True
+    
+            distance = (cor1[0][0] - cor2[0][0])**2 + (cor1[0][1] - cor2[0][1])**2
+        distance = distance ** 0.5
+        print('distance = ', distance)
+        jump(distance)
+        update = True
