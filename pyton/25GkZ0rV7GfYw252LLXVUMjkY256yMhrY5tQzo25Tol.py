@@ -1,284 +1,163 @@
 
         
-            def process_body(self, chunk):
-        if not isinstance(chunk, str):
-            # Text when a converter has been used,
-            # otherwise it will always be bytes.
-            chunk = chunk.decode(self.msg.encoding, 'replace')
-        chunk = self.formatting.format_body(content=chunk, mime=self.mime)
-        return chunk.encode(self.output_encoding, 'replace')
+        
+def test_max_redirects(httpbin):
+    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
+             error_exit_ok=True)
+    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+
     
     
-with codecs.open(FILE_PATH, encoding='utf8') as f:
-    # Strip because we don't want new lines in the data so that we can
-    # easily count occurrences also when embedded in JSON (where the new
-    # line would be escaped).
-    FILE_CONTENT = f.read().strip()
-    
-    
-def test_unicode_form_item(httpbin):
-    r = http('--form', 'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
+def test_unicode_headers_verbose(httpbin):
+    # httpbin doesn't interpret utf8 headers
+    r = http('--verbose', httpbin.url + '/headers', u'Test:%s' % UNICODE)
     assert HTTP_OK in r
-    assert r.json['form'] == {'test': UNICODE}
+    assert UNICODE in r
     
-        http://docs.python-requests.org/en/latest/user/advanced/#transport-adapters
+    from httpie.output.streams import RawStream
+from httpie.models import HTTPResponse
+from httpie.utils import humanize_bytes
+from httpie.compat import urlsplit
     
-        def test_self_signed_server_cert_by_default_raises_ssl_error(
-            self,
-            httpbin_secure_untrusted):
-        with pytest.raises(SSLError):
-            http(httpbin_secure_untrusted.url + '/get')
+                else:
+                # Set the URL correctly
+                self.args.url = self.args.method
+                # Infer the method
+                has_data = (
+                    (not self.args.ignore_stdin and
+                     not self.env.stdin_isatty) or
+                    any(item.sep in SEP_GROUP_DATA_ITEMS
+                        for item in self.args.items)
+                )
+                self.args.method = HTTP_POST if has_data else HTTP_GET
+    
+        def unregister(self, plugin):
+        self._plugins.remove(plugin)
     
     
-def import_state_tuples(state_tuples, name, num_replicas):
-  restored = []
-  for i in range(len(state_tuples) * num_replicas):
-    c = tf.get_collection_ref(name)[2 * i + 0]
-    h = tf.get_collection_ref(name)[2 * i + 1]
-    restored.append(tf.contrib.rnn.LSTMStateTuple(c, h))
-  return tuple(restored)
+@pytest.mark.functional
+def test_refuse_with_confirmation(proc, TIMEOUT):
+    refuse_with_confirmation(proc, TIMEOUT)
     
-        # Compute predictions.
-    predicted_classes = tf.argmax(logits, 1)
-    if mode == tf.estimator.ModeKeys.PREDICT:
-        predictions = {
-            'class_ids': predicted_classes[:, tf.newaxis],
-            'probabilities': tf.nn.softmax(logits),
-            'logits': logits,
-        }
-        return tf.estimator.EstimatorSpec(mode, predictions=predictions)
     
-        # Batch the examples
-    assert batch_size is not None, 'batch_size must not be None'
-    dataset = dataset.batch(batch_size)
-    
-    This program creates a graph from a saved GraphDef protocol buffer,
-and runs inference on an input JPEG image. It outputs human readable
-strings of the top 5 predictions along with their probabilities.
-    
-          # Get a batch and make a step.
-      start_time = time.time()
-      encoder_inputs, decoder_inputs, target_weights = model.get_batch(
-          train_set, bucket_id)
-      _, step_loss, _ = model.step(sess, encoder_inputs, decoder_inputs,
-                                   target_weights, bucket_id, False)
-      step_time += (time.time() - start_time) / FLAGS.steps_per_checkpoint
-      loss += step_loss / FLAGS.steps_per_checkpoint
-      current_step += 1
-    
-    # Regular expressions used to tokenize.
-_WORD_SPLIT = re.compile(b'([.,!?\'':;)(])')
-_DIGIT_RE = re.compile(br'\d')
-    
-    Forward-backward pass:
-Run on Tesla K40c: 480 +/- 48 ms / batch
-Run on Titan X:    244 +/- 30 ms / batch
-'''
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-    
-    from __future__ import print_function
-import numpy as np
-    
-        dense_layer_sizes: List of layer sizes.
-        This list has one number for each layer
-    filters: Number of convolutional filters in each convolutional layer
-    kernel_size: Convolutional kernel size
-    pool_size: Size of pooling area for max pooling
+class Environment(BaseEnvironment):
+    '''Works like a regular Jinja2 environment but has some additional
+    knowledge of how Flask's blueprint works so that it can prepend the
+    name of the blueprint to referenced templates if necessary.
     '''
     
     
-@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
-def test_one(tensor_shape):
-    _runner(initializers.ones(), tensor_shape,
-            target_mean=1., target_max=1.)
+def test_explicit_instance_paths(modules_tmpdir):
+    with pytest.raises(ValueError) as excinfo:
+        flask.Flask(__name__, instance_path='instance')
+    assert 'must be absolute' in str(excinfo.value)
     
+        styles = {
+        # No corresponding class for the following:
+        #Text:                     '', # class:  ''
+        Whitespace:                'underline #f8f8f8',      # class: 'w'
+        Error:                     '#a40000 border:#ef2929', # class: 'err'
+        Other:                     '#000000',                # class 'x'
+    }
     
-@keras_test
-def test_convert_weights():
-    def get_model(shape, data_format):
-        model = Sequential()
-        model.add(Conv2D(filters=2,
-                         kernel_size=(4, 3),
-                         input_shape=shape,
-                         data_format=data_format))
-        model.add(Flatten())
-        model.add(Dense(5))
-        return model
+        return inner
     
-    
-if __name__ == '__main__':
-    pytest.main([__file__])
+        :param str u_string: unicode string to check. Must be unicode
+        and not Python 2 `str`.
+    :rtype: bool
+    '''
+    assert isinstance(u_string, str)
+    try:
+        u_string.encode('ascii')
+        return True
+    except UnicodeEncodeError:
+        return False
 
     
-            #out = subprocess.check_output(cmd, startupinfo=startupinfo)
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, startupinfo=startupinfo)
-        out, unused_err = process.communicate()
-        retcode = process.poll()
-        if retcode:
-            return out + '\n retcode:%s\n unused_err:%s\n' % (retcode, unused_err)
-    except Exception as e:
-        out = 'Exception:%r' % e
+        def test_text_response(self):
+        '''the text_response_server sends the given text'''
+        server = Server.text_response_server(
+            'HTTP/1.1 200 OK\r\n' +
+            'Content-Length: 6\r\n' +
+            '\r\nroflol'
+        )
     
-        def __init__(self):
-        self.reset_appid()
-    
-                https_manager.save_ssl_connection_for_reuse(response.ssl_sock, host)
-            response.close()
-            xlog.info('DIRECT chucked t:%d s:%d %d %s %s', (time.time()-time_request)*1000, length, response.status, host, url)
-            return
-    
-            if self.input is None:
-            return None
-        
-        return self.input.substring(self.start, self.stop)
-    
-            # larger second argument
-        self.assertEqual(round(-150, -2), -200)
-        self.assertEqual(round(-149, -2), -100)
-        self.assertEqual(round(-51, -2), -100)
-        self.assertEqual(round(-50, -2), 0)
-        self.assertEqual(round(-49, -2), 0)
-        self.assertEqual(round(-1, -2), 0)
-        self.assertEqual(round(0, -2), 0)
-        self.assertEqual(round(1, -2), 0)
-        self.assertEqual(round(49, -2), 0)
-        self.assertEqual(round(50, -2), 0)
-        self.assertEqual(round(51, -2), 100)
-        self.assertEqual(round(149, -2), 100)
-        self.assertEqual(round(150, -2), 200)
-        self.assertEqual(round(250, -2), 200)
-        self.assertEqual(round(251, -2), 300)
-        self.assertEqual(round(172500, -3), 172000)
-        self.assertEqual(round(173500, -3), 174000)
-        self.assertEqual(round(31415926535, -1), 31415926540)
-        self.assertEqual(round(31415926535, -2), 31415926500)
-        self.assertEqual(round(31415926535, -3), 31415927000)
-        self.assertEqual(round(31415926535, -4), 31415930000)
-        self.assertEqual(round(31415926535, -5), 31415900000)
-        self.assertEqual(round(31415926535, -6), 31416000000)
-        self.assertEqual(round(31415926535, -7), 31420000000)
-        self.assertEqual(round(31415926535, -8), 31400000000)
-        self.assertEqual(round(31415926535, -9), 31000000000)
-        self.assertEqual(round(31415926535, -10), 30000000000)
-        self.assertEqual(round(31415926535, -11), 0)
-        self.assertEqual(round(31415926535, -12), 0)
-        self.assertEqual(round(31415926535, -999), 0)
-    
-        def test_create_widgets(self):
-        self.dialog.create_entries = Func()
-        self.dialog.create_option_buttons = Func()
-        self.dialog.create_other_buttons = Func()
-        self.dialog.create_command_buttons = Func()
-    
-        def entry_ok(self):
-        'Return sensible ConfigParser section name or None.'
-        self.entry_error['text'] = ''
-        name = self.entry.get().strip()
-        if not name:
-            self.showerror('no name specified.')
-            return None
-        elif len(name)>30:
-            self.showerror('name is longer than 30 characters.')
-            return None
-        elif name in self.used_names:
-            self.showerror('name is already in use.')
-            return None
-        return name
-    
-        def test_empty(self):
-        r = range(0)
-        self.assertNotIn(0, r)
-        self.assertNotIn(1, r)
-    
-    _STATE_TO_DESCRIPTION_MAP = {
-    PENDING: 'pending',
-    RUNNING: 'running',
-    CANCELLED: 'cancelled',
-    CANCELLED_AND_NOTIFIED: 'cancelled',
-    FINISHED: 'finished'
-}
-    
-    import sys, os
-    
-    def is_prime(n):
-    if n % 2 == 0:
-        return False
-    
-        def test_pending_calls_race(self):
-        # Issue #14406: multi-threaded race condition when waiting on all
-        # futures.
-        event = threading.Event()
-        def future_func():
-            event.wait()
-        oldswitchinterval = sys.getcheckinterval()
-        sys.setcheckinterval(1)
-        try:
-            fs = set(self.executor.submit(future_func) for i in range(100))
-            event.set()
-            futures.wait(fs, return_when=futures.ALL_COMPLETED)
-        finally:
-            sys.setcheckinterval(oldswitchinterval)
-    
-      with patch( 'ycm.client.event_notification.EventNotification.'
-              'PostDataToHandlerAsync' ) as post_data_to_handler_async:
-    with CurrentWorkingDirectory( unicode_dir ):
-      with MockVimBuffers( [ current_buffer ], current_buffer, ( 1, 5 ) ):
-        ycm.OnFileReadyToParse()
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    
-def main():
-    options = parse_args(sys.argv[1:])
-    if options.report == 'regression':
-        command = regression_report
-    elif options.report == 'junit':
-        command = junit_report
-    elif options.report == 'report':
-        command = human_report
-    assert_tools_available()
-    sys.exit(command(options))
-    
-        if setup_globals:
-        g.setup_complete()
-    
-        def current_subdomain(self):
-        return self.stacked_proxy_safe_get(c, 'subdomain')
-    
-        from pylons import tmpl_context as c
-    
-        @validate(VAdmin(),
-              award = VAwardByCodename('awardcn'),
-              recipient = nop('recipient'),
-              desc = nop('desc'),
-              url = nop('url'),
-              hours = nop('hours'))
-    def GET_give(self, award, recipient, desc, url, hours):
-        if award is None:
-            abort(404, 'page not found')
-    
-    class CaptchaController(RedditController):
-    @allow_oauth2_access
-    @api_doc(api_section.captcha, uri='/captcha/{iden}')
-    def GET_captchaimg(self, iden):
+            .. seealso:: keys() and values().
         '''
-        Request a CAPTCHA image given an `iden`.
+        return list(self.iteritems())
     
-        def test_car_shall_make_loud_noise(self):
-        noise = self.car.make_noise(1)
-        expected_noise = 'vroom!'
-        self.assertEqual(noise, expected_noise)
+    '''
+requests.compat
+~~~~~~~~~~~~~~~
     
-        def test_parrot_eng_localization(self):
-        self.assertEqual(self.e.get('parrot'), 'parrot')
     
-        def update(self, subject):
-        print(u'HexViewer: Subject %s has data 0x%x' %
-              (subject.name, subject.data))
+@pytest.mark.skipif(sys.version_info[:2] != (2,6), reason='Only run on Python 2.6')
+def test_system_ssl_py26():
+    '''OPENSSL_VERSION_NUMBER isn't provided in Python 2.6, verify we don't
+    blow up in this case.
+    '''
+    assert info()['system_ssl'] == {'version': ''}
+    
+        def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+    
+      user_options_store.SetAll( base.BuildServerConf() )
+    
+        def __enter__(self):
+        for future in self.futures:
+            future._condition.acquire()
+    
+        # Create and fill-in the class template
+    numfields = len(field_names)
+    argtxt = repr(field_names).replace(''', '')[1:-1]   # tuple repr without parens or quotes
+    reprtxt = ', '.join('%s=%%r' % name for name in field_names)
+    dicttxt = ', '.join('%r: t[%d]' % (name, pos) for pos, name in enumerate(field_names))
+    template = '''class %(typename)s(tuple):
+        '%(typename)s(%(argtxt)s)' \n
+        __slots__ = () \n
+        _fields = %(field_names)r \n
+        def __new__(_cls, %(argtxt)s):
+            return _tuple.__new__(_cls, (%(argtxt)s)) \n
+        @classmethod
+        def _make(cls, iterable, new=tuple.__new__, len=len):
+            'Make a new %(typename)s object from a sequence or iterable'
+            result = new(cls, iterable)
+            if len(result) != %(numfields)d:
+                raise TypeError('Expected %(numfields)d arguments, got %%d' %% len(result))
+            return result \n
+        def __repr__(self):
+            return '%(typename)s(%(reprtxt)s)' %% self \n
+        def _asdict(t):
+            'Return a new dict which maps field names to their values'
+            return {%(dicttxt)s} \n
+        def _replace(_self, **kwds):
+            'Return a new %(typename)s object replacing specified fields with new values'
+            result = _self._make(map(kwds.pop, %(field_names)r, _self))
+            if kwds:
+                raise ValueError('Got unexpected field names: %%r' %% kwds.keys())
+            return result \n
+        def __getnewargs__(self):
+            return tuple(self) \n\n''' % locals()
+    for i, name in enumerate(field_names):
+        template += '        %s = _property(_itemgetter(%d))\n' % (name, i)
+    
+        def test_processes_terminate(self):
+        self.executor.submit(mul, 21, 2)
+        self.executor.submit(mul, 6, 7)
+        self.executor.submit(mul, 3, 14)
+        self.assertEqual(len(self.executor._processes), 5)
+        processes = self.executor._processes
+        self.executor.shutdown()
+    
+    
+class DebugInfoRequest( BaseRequest ):
+  def __init__( self, extra_data = None ):
+    super( DebugInfoRequest, self ).__init__()
+    self._extra_data = extra_data
+    self._response = None
+    
+    
+def Main():
+  build_file = p.join( DIR_OF_THIS_SCRIPT, 'third_party', 'ycmd', 'build.py' )
