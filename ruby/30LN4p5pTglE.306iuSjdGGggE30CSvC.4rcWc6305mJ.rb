@@ -1,43 +1,45 @@
 
         
-          def self.register(user, app_id, params, challenges)
-    u2f = U2F::U2F.new(app_id)
-    registration = self.new
-    
-    module Vagrant
-  module Plugin
-    module V2
-      # This is the base class for a provider for the V2 API. A provider
-      # is responsible for creating compute resources to match the needs
-      # of a Vagrant-configured system.
-      class Provider
-        include CapabilityHost
-    
-          def delete(key)
-        super(convert_key(key))
+          def resource
+    @resource ||=
+      if params[:project_id].present?
+        Project.find(params[:project_id])
+      elsif params[:namespace_id].present?
+        Group.find(params[:namespace_id])
       end
+  end
     
-          # This deletes the block with the given key if it exists.
-      def delete(key)
-        key    = Regexp.quote(key)
-        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$.*^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
-        @value.gsub!(regexp, '')
-      end
+        find_union(segments, Project).includes(:namespace).order_id_desc
+  end
     
-          opts.on('-g', '--debug-info',
-              'Emit output that can be used by the FireSass Firebug plugin.') do
-        @options[:for_engine][:debug_info] = true
-      end
+        if registration
+      u2f.authenticate!(challenges, response, Base64.decode64(registration.public_key), registration.counter)
+      registration.update(counter: response.counter)
+      true
+    end
+  rescue JSON::ParserError, NoMethodError, ArgumentError, U2F::Error
+    false
+  end
+end
+
     
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'margin-top: 11px; ' +
-                'margin-right: 12px; ' +
-                'margin-left: 13px;'
-      bad_rule = 'margin-bottom: null;'
+        uninstall login_item: 'login item name'
     
-      context 'called with multiple prefixes' do
-    it 'applies the prefixes to the property' do
-      rule = '-moz-appearance: none; ' +
-             '-ms-appearance: none; ' +
-             'appearance: none;'
+    def excluded_bundle_id(bundle_id)
+  %r{^com\.apple\.}.match(bundle_id)
+end
+    
+            def show
+          @stock_movement = scope.find(params[:id])
+          respond_with(@stock_movement)
+        end
+    
+      context 'called with arguments (1, $value: 2em)' do
+    it 'outputs double the first value from the default scale' do
+      expect('.one-base-two').to have_rule('font-size: 2.5em')
+    end
+  end
+    
+          expect('.padding-explicit').to have_rule(rule)
+    end
+  end
