@@ -1,317 +1,194 @@
 
         
-        class DebugGraphDecorator : public DebugGraphDecoratorInterface {
- public:
-  DebugGraphDecorator(const DebugOptions& debug_options)
-      : debug_options_(debug_options) {}
-  virtual ~DebugGraphDecorator() {}
+        static void findCorner(const std::vector<Point2f>& contour, Point2f point, Point2f& corner)
+{
+    // find the nearest point
+    double min_dist = std::numeric_limits<double>::max();
+    int min_idx = -1;
     }
     
-    class TestRandomAccessFile : public RandomAccessFile {
-  // The file contents is 10 bytes of all A's
-  Status Read(uint64 offset, size_t n, StringPiece* result,
-              char* scratch) const override {
-    Status s;
-    for (int i = 0; i < n; ++i) {
-      if (offset + i >= 10) {
-        n = i;
-        s = errors::OutOfRange('EOF');
-        break;
-      }
-      scratch[i] = 'A';
-    }
-    *result = StringPiece(scratch, n);
-    return s;
-  }
-};
-    
-    
-    {
-    {  PersistentTensor handle_ GUARDED_BY(mu_);
-};
-}  // namespace tensorflow
-    
-    #include 'tensorflow/core/grappler/optimizers/graph_optimizer.h'
-    
-      // Sets the appropriate library kind to that passed in.
-  PluginConfig& SetBlas(PluginId blas);
-  PluginConfig& SetDnn(PluginId dnn);
-  PluginConfig& SetFft(PluginId fft);
-  PluginConfig& SetRng(PluginId rng);
-    
-      ExpectFailure(
-      Builder().Input(FakeInput(2, DT_INT32)).Input(FakeInput(2, DT_STRING)),
-      'Inconsistent values for attr 'T' DT_INT32 vs. DT_STRING while');
-    
-    
-    {
-    {
-    {      // Process the node 'out'.
-      if (IsEnter(out)) {
-        if (is_visited) {
-          const string& parent_frame = (*info)[out_parent->id()].frame_name;
-          if (parent_frame != frame_name) {
-            return errors::InvalidArgument(
-                'The node '', out->name(),
-                '' has inputs from different '
-                'frames. The input '',
-                curr_node->name(), '' is in frame '', frame_name,
-                ''. The input '', parent_nodes[out->id()]->name(),
-                '' is in frame '', parent_frame, ''.');
-          }
-        } else {
-          out_info->frame = out;
-          out_info->parent_frame = frame;
-          TF_RETURN_IF_ERROR(
-              GetNodeAttr(out->attrs(), 'frame_name', &out_info->frame_name));
-          if (out_info->frame_name.empty()) {
-            return errors::InvalidArgument('The Enter node ', out->name(),
-                                           ' must have a frame name.');
-          }
-        }
-      } else {
-        if (is_visited) {
-          if (out_info->frame_name != frame_name) {
-            return errors::InvalidArgument(
-                'The node '', out->name(),
-                '' has inputs from different '
-                'frames. The input '',
-                curr_node->name(), '' is in frame '', frame_name,
-                ''. The input '', parent_nodes[out->id()]->name(),
-                '' is in frame '', out_info->frame_name, ''.');
-          }
-        } else {
-          out_info->frame = frame;
-          out_info->parent_frame = parent;
-          out_info->frame_name = frame_name;
-        }
-      }
-    }
-  }
-  return Status::OK();
-}
-    
-    #include 'tensorflow/core/lib/core/status.h'
-#include 'tensorflow/core/lib/core/stringpiece.h'
-#if !defined(IS_SLIM_BUILD)
-#include 'tensorflow/core/lib/io/zlib_compression_options.h'
-#include 'tensorflow/core/lib/io/zlib_outputbuffer.h'
-#endif  // IS_SLIM_BUILD
-#include 'tensorflow/core/platform/macros.h'
-#include 'tensorflow/core/platform/types.h'
-    
-    namespace internal {
-template <typename Scalar>
-struct functor_traits<scalar_clip_op<Scalar> > {
-  enum {
-    Cost = NumTraits<Scalar>::AddCost * 3,
-    PacketAccess = packet_traits<Scalar>::HasMax &&
-                   packet_traits<Scalar>::HasMin &&
-                   packet_traits<Scalar>::HasNegate
-  };
-};
-}  // namespace internal
-    
-    REGISTER_KERNEL_BUILDER(Name('TextLineReader').Device(DEVICE_CPU),
-                        TextLineReaderOp);
-REGISTER_KERNEL_BUILDER(Name('TextLineReaderV2').Device(DEVICE_CPU),
-                        TextLineReaderOp);
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-      // If instruction is part of inputs, don't reset the bit_vector.
-  if (std::find(inputs.begin(), inputs.end(), instruction) == inputs.end()) {
-    bit_vector.SetToZero();
-  }
-  bit_vector.Set(GetIndex(instruction));
-  for (const HloInstruction* input : inputs) {
-    bit_vector.OrWith(GetBitVector(input));
-  }
-    
-      /// DebuggerClient is asked to emit SIL references to locals,
-  /// permitting SILGen to access them like any other variables.
-  /// This avoids generation of properties.
-  virtual SILValue emitLValueForVariable(VarDecl *var,
-                                         SILBuilder &builder) = 0;
-    
-    void
-SyntaxASTMap::recordSyntaxMapping(RC<syntax::SyntaxData> FromNode,
-                                  ASTNode ToNode) {
-  if (FromNode->getKind() == SyntaxKind::Unknown) {
-    return;
-  }
+    TEST_F(cameraCalibrationTiltTest, undistortPoints)
+{
+    cv::Vec<double, NUM_DIST_COEFF_TILT> coeffNoiseHalfWidth(
+        .2, .1, // k1 k2
+        .01, .01, // p1 p2
+        .01, .01, .01, .01, // k3 k4 k5 k6
+        .001, .001, .001, .001, // s1 s2 s3 s4
+        .001, .001); // tauX tauY
+    double step = 99;
+    double toleranceBackProjection = 1e-5;
     }
     
-    static inline void _swift_dispatch_after(
-    dispatch_time_t when,
-    dispatch_queue_t queue,
-    __swift_shims_dispatch_block_t block) {
-  dispatch_after(when, queue, block);
-}
-    
-        // Finish and check for builder errors
-    if (s.ok()) {
-      s = builder->Finish();
-      if (s.ok()) {
-        meta->file_size = builder->FileSize();
-        assert(meta->file_size > 0);
-      }
-    } else {
-      builder->Abandon();
-    }
-    delete builder;
-    
-    class Env;
-class Iterator;
-class TableCache;
-class VersionEdit;
+    static const int kBlockSize = 32768;
     
     namespace leveldb {
     }
     
-    // Return a new iterator that converts internal keys (yielded by
-// '*internal_iter') that were live at the specified 'sequence' number
-// into appropriate user keys.
-extern Iterator* NewDBIterator(
-    DBImpl* db,
-    const Comparator* user_key_comparator,
-    Iterator* internal_iter,
-    SequenceNumber sequence,
-    uint32_t seed);
-    
-    void InternalKeyComparator::FindShortestSeparator(
-      std::string* start,
-      const Slice& limit) const {
-  // Attempt to shorten the user portion of the key
-  Slice user_start = ExtractUserKey(*start);
-  Slice user_limit = ExtractUserKey(limit);
-  std::string tmp(user_start.data(), user_start.size());
-  user_comparator_->FindShortestSeparator(&tmp, user_limit);
-  if (tmp.size() < user_start.size() &&
-      user_comparator_->Compare(user_start, tmp) < 0) {
-    // User key has become shorter physically, but larger logically.
-    // Tack on the earliest possible number to the shortened user key.
-    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
-    assert(this->Compare(*start, tmp) < 0);
-    assert(this->Compare(tmp, limit) < 0);
-    start->swap(tmp);
-  }
-}
-    
-    // Called on every log record (each one of which is a WriteBatch)
-// found in a kDescriptorFile.
-static void VersionEditPrinter(uint64_t pos, Slice record, WritableFile* dst) {
-  std::string r = '--- offset ';
-  AppendNumberTo(&r, pos);
-  r += '; ';
-  VersionEdit edit;
-  Status s = edit.DecodeFrom(record);
-  if (!s.ok()) {
-    r += s.ToString();
-    r.push_back('\n');
-  } else {
-    r += edit.DebugString();
-  }
-  dst->Append(r);
-}
-    
-    // Return the legacy file name for an sstable with the specified number
-// in the db named by 'dbname'. The result will be prefixed with
-// 'dbname'.
-extern std::string SSTTableFileName(const std::string& dbname, uint64_t number);
-    
-            // Bind KV values into replace_stmt
-        status = sqlite3_bind_blob(replace_stmt, 1, key, 16, SQLITE_STATIC);
-        ErrorCheck(status);
-        status = sqlite3_bind_blob(replace_stmt, 2, value,
-                                   value_size, SQLITE_STATIC);
-        ErrorCheck(status);
-    
-    
-// //////////////////////////////////////////////////////////////////////
-// Beginning of content of file: include/json/value.h
-// //////////////////////////////////////////////////////////////////////
-    
-    namespace enum_descriptor {
-PyObject* NewEnumValuesByName(const EnumDescriptor* descriptor);
-PyObject* NewEnumValuesByNumber(const EnumDescriptor* descriptor);
-PyObject* NewEnumValuesSeq(const EnumDescriptor* descriptor);
-}  // namespace enum_descriptor
-    
-    #include <google/protobuf/stubs/logging.h>
-#include <google/protobuf/stubs/common.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/pyext/message.h>
-#include <google/protobuf/pyext/scoped_pyobject_ptr.h>
-    
-    
-    {
-    {
-    {}  // namespace cpp
-}  // namespace compiler
-}  // namespace protobuf
-    
-    void RepeatedMessageFieldGenerator::GenerateMergingCode(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    '$name$_.Add(other.$name$_);\n');
-}
-    
-      virtual void WriteHash(io::Printer* printer);
-  virtual void WriteEquals(io::Printer* printer);
-  virtual void WriteToString(io::Printer* printer);
-    
-    void WriteMessageDocComment(io::Printer* printer, const Descriptor* message);
-void WriteFieldDocComment(io::Printer* printer, const FieldDescriptor* field);
-void WriteEnumDocComment(io::Printer* printer, const EnumDescriptor* enum_);
-void WriteEnumValueDocComment(io::Printer* printer,
-                              const EnumValueDescriptor* value);
-void WriteServiceDocComment(io::Printer* printer,
-                            const ServiceDescriptor* service);
-void WriteMethodDocComment(io::Printer* printer,
-                           const MethodDescriptor* method);
-    
-    
-    {  name += UNLV_EXT;              //add extension
-  if ((pdfp = fopen (name.string (), 'rb')) == NULL) {
-    return false;                //didn't read one
-  } else {
-    while (tfscanf(pdfp, '%d %d %d %d %*s', &x, &y, &width, &height) >= 4) {
-                                 //make rect block
-      block = new BLOCK (name.string (), TRUE, 0, 0,
-                         (inT16) x, (inT16) (ysize - y - height),
-                         (inT16) (x + width), (inT16) (ysize - y));
-                                 //on end of list
-      block_it.add_to_end (block);
+    // Snapshots are kept in a doubly-linked list in the DB.
+// Each SnapshotImpl corresponds to a particular sequence number.
+class SnapshotImpl : public Snapshot {
+ public:
+  SequenceNumber number_;  // const after creation
     }
-    fclose(pdfp);
+    
+    inline
+static void DBSynchronize(kyotocabinet::TreeDB* db_)
+{
+  // Synchronize will flush writes to disk
+  if (!db_->synchronize()) {
+    fprintf(stderr, 'synchronize error: %s\n', db_->error().name());
   }
-  return true;
 }
     
-    inline ICOORD
-operator- (                      //subtract vectors
-const ICOORD & op1,              //operands
-const ICOORD & op2) {
-  ICOORD sum;                    //result
+      DBImpl* dbi = reinterpret_cast<DBImpl*>(db);
+  ASSERT_OK(dbi->TEST_CompactMemTable());
+    
+    void BlockBuilder::Reset() {
+  buffer_.clear();
+  restarts_.clear();
+  restarts_.push_back(0);       // First restart point is at offset 0
+  counter_ = 0;
+  finished_ = false;
+  last_key_.clear();
+}
+    
+    class FilterBlockReader {
+ public:
+ // REQUIRES: 'contents' and *policy must stay live while *this is live.
+  FilterBlockReader(const FilterPolicy* policy, const Slice& contents);
+  bool KeyMayMatch(uint64_t block_offset, const Slice& key);
+    }
+    
+    namespace {
+class EmptyIterator : public Iterator {
+ public:
+  EmptyIterator(const Status& s) : status_(s) { }
+  virtual bool Valid() const { return false; }
+  virtual void Seek(const Slice& target) { }
+  virtual void SeekToFirst() { }
+  virtual void SeekToLast() { }
+  virtual void Next() { assert(false); }
+  virtual void Prev() { assert(false); }
+  Slice key() const { assert(false); return Slice(); }
+  Slice value() const { assert(false); return Slice(); }
+  virtual Status status() const { return status_; }
+ private:
+  Status status_;
+};
+}  // namespace
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_API void        ImGui_ImplGlfwVulkan_InvalidateFontUploadObjects();
+IMGUI_API void        ImGui_ImplGlfwVulkan_InvalidateDeviceObjects();
+IMGUI_API bool        ImGui_ImplGlfwVulkan_CreateFontsTexture(VkCommandBuffer command_buffer);
+IMGUI_API bool        ImGui_ImplGlfwVulkan_CreateDeviceObjects();
+    
+        // Create the blending setup
+    {
+        D3D10_BLEND_DESC desc;
+        ZeroMemory(&desc, sizeof(desc));
+        desc.AlphaToCoverageEnable = false;
+        desc.BlendEnable[0] = true;
+        desc.SrcBlend = D3D10_BLEND_SRC_ALPHA;
+        desc.DestBlend = D3D10_BLEND_INV_SRC_ALPHA;
+        desc.BlendOp = D3D10_BLEND_OP_ADD;
+        desc.SrcBlendAlpha = D3D10_BLEND_INV_SRC_ALPHA;
+        desc.DestBlendAlpha = D3D10_BLEND_ZERO;
+        desc.BlendOpAlpha = D3D10_BLEND_OP_ADD;
+        desc.RenderTargetWriteMask[0] = D3D10_COLOR_WRITE_ENABLE_ALL;
+        g_pd3dDevice->CreateBlendState(&desc, &g_pBlendState);
+    }
+    
+    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+bool ImGui_ImplA5_ProcessEvent(ALLEGRO_EVENT *ev)
+{
+    ImGuiIO &io = ImGui::GetIO();
+    }
+    
+        if (!g_DescriptorSetLayout)
+    {
+        VkSampler sampler[1] = {g_FontSampler};
+        VkDescriptorSetLayoutBinding binding[1] = {};
+        binding[0].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        binding[0].descriptorCount = 1;
+        binding[0].stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+        binding[0].pImmutableSamplers = sampler;
+        VkDescriptorSetLayoutCreateInfo info = {};
+        info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+        info.bindingCount = 1;
+        info.pBindings = binding;
+        err = vkCreateDescriptorSetLayout(g_Device, &info, g_Allocator, &g_DescriptorSetLayout);
+        ImGui_ImplGlfwVulkan_VkResult(err);
     }
     
     
-// ============== Private Code ======================
+    {        // Rendering
+        int display_w, display_h;
+        glfwGetFramebufferSize(window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+        glClear(GL_COLOR_BUFFER_BIT);
+        ImGui::Render();
+        glfwSwapBuffers(window);
+    }
     
-    // Refreshes the words in the block_list by using blobs in the
-// new_blobs list.
-// Block list must have word segmentation in it.
-// It consumes the blobs provided in the new_blobs list. The blobs leftover in
-// the new_blobs list after the call weren't matched to any blobs of the words
-// in block list.
-// The output not_found_blobs is a list of blobs from the original segmentation
-// in the block_list for which no corresponding new blobs were found.
-void RefreshWordBlobsFromNewBlobs(BLOCK_LIST* block_list,
-                                  C_BLOB_LIST* new_blobs,
-                                  C_BLOB_LIST* not_found_blobs);
+    #include 'imgui.h'
+#include 'imgui_impl_sdl_gl3.h'
+#include <stdio.h>
+#include <GL/gl3w.h>    // This example is using gl3w to access OpenGL functions (because it is small). You may use glew/glad/glLoadGen/etc. whatever already works for you.
+#include <SDL.h>
+    
+    static VkClearValue             g_ClearValue = {};
+    
+    
+    {    YGNodeReset(m_node);
+}
+    
+    #pragma once
+    
+    struct Value
+{
+    static Value fromYGValue(YGValue const & ygValue)
+    {
+        return Value(static_cast<int>(ygValue.unit), ygValue.value);
+    }
+    }
+    
+    TEST(YogaTest, computed_layout_margin) {
+  const YGNodeRef root = YGNodeNew();
+  YGNodeStyleSetWidth(root, 100);
+  YGNodeStyleSetHeight(root, 100);
+  YGNodeStyleSetMarginPercent(root, YGEdgeStart, 10);
+    }
+    
+      ASSERT_FLOAT_EQ(10, YGNodeLayoutGetPadding(root, YGEdgeLeft));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetPadding(root, YGEdgeRight));
+    
+      ASSERT_FLOAT_EQ(0, YGNodeLayoutGetLeft(root));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root));
+  ASSERT_FLOAT_EQ(100, YGNodeLayoutGetWidth(root));
+  ASSERT_FLOAT_EQ(100, YGNodeLayoutGetHeight(root));
+    
+      ASSERT_FLOAT_EQ(0, YGNodeLayoutGetLeft(root));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root));
+  ASSERT_FLOAT_EQ(100, YGNodeLayoutGetWidth(root));
+  ASSERT_FLOAT_EQ(100, YGNodeLayoutGetHeight(root));
+    
+      bool hasOnlyOneRef() const {
+    return m_refcount == 1;
+  }
+    
+      // Creates a strong reference from a raw pointer, assuming that is already
+  // referenced from some other RefPtr. This should be used sparingly.
+  static inline RefPtr<T> assumeAlreadyReffed(T* ptr) {
+    return RefPtr<T>(ptr, ConstructionMode::External);
+  }
+    
+      template <typename ...Args>
+  void initialize(Args&&... arguments) {
+    FBASSERT(!m_instance);
+    m_instance = new T(std::forward<Args>(arguments)...);
+  }
