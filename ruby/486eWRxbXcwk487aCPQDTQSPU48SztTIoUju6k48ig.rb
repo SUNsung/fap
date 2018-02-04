@@ -1,55 +1,85 @@
 
         
-          def import
-    if params[:file]
-      file = params[:file]
-      content = JSON.parse(file.read)
-      new_credentials = content.map do |hash|
-        current_user.user_credentials.build(hash.slice('credential_name', 'credential_value', 'mode'))
-      end
-    
-      # if rss_url already in existing opml file, use that; otherwise, do a lookup
-  rss_url = nil
-  existing_blog = xml.xpath('//outline[@htmlUrl='#{web_url}']').first if xml
-  if existing_blog
-    rss_url = existing_blog.attr('xmlUrl')
-    puts '#{name}: ALREADY HAVE'
-  end
-    
-            on roles(target_roles) do
-          unless test '[ -f #{file.to_s.shellescape} ]'
-            info 'Uploading #{prerequisite_file} to #{file}'
-            upload! File.open(prerequisite_file), file
-          end
+              # Resend confirmation token.
+      # Regenerates the token if the period is expired.
+      def resend_confirmation_instructions
+        pending_any_confirmation do
+          send_confirmation_instructions
         end
       end
-    end
     
-        # @abstract
-    #
-    # Identify the SHA of the commit that will be deployed.  This will most likely involve SshKit's capture method.
-    #
-    # @return void
-    #
-    def fetch_revision
-      raise NotImplementedError, 'Your SCM strategy module should provide a #fetch_revision method'
+    class Devise::OmniauthCallbacksController < DeviseController
+  prepend_before_action { request.env['devise.skip_timeout'] = true }
+    
+    group :test do
+  gem 'omniauth-facebook'
+  gem 'omniauth-openid'
+  gem 'webrat', '0.7.3', require: false
+  gem 'mocha', '~> 1.1', require: false
+end
+    
+        def translation_scope
+      'devise.passwords'
     end
-  end
 end
 
     
-      it 'overrides the rake method, but still prints the rake version' do
-    out, _err = capture_io do
-      flags '--version', '-V'
+        def email_changed(record, opts={})
+      devise_mail(record, :email_changed, opts)
     end
-    expect(out).to match(/\bCapistrano Version\b/)
-    expect(out).to match(/\b#{Capistrano::VERSION}\b/)
-    expect(out).to match(/\bRake Version\b/)
-    expect(out).to match(/\b#{Rake::VERSION}\b/)
-  end
     
-      context 'expands invalid text inputs' do
-    it 'finds selectors' do
-      list = @inputs_list.map { |input| '#{input}:invalid' }
-      list = list.join(', ')
-      ruleset = 'content: #{list};'
+    class ApplicationController < ActionController::Base
+end
+    
+      # Defines if email should be reconfirmable.
+  mattr_accessor :reconfirmable
+  @@reconfirmable = true
+    
+          # Check if flash messages should be emitted. Default is to do it on
+      # navigational formats
+      def is_flashing_format?
+        is_navigational_format?
+      end
+    
+    module Devise
+  module Controllers
+    # Create url helpers to be used with resource/scope configuration. Acts as
+    # proxies to the generated routes created by devise.
+    # Resource param can be a string or symbol, a class, or an instance object.
+    # Example using a :user resource:
+    #
+    #   new_session_path(:user)      => new_user_session_path
+    #   session_path(:user)          => user_session_path
+    #   destroy_session_path(:user)  => destroy_user_session_path
+    #
+    #   new_password_path(:user)     => new_user_password_path
+    #   password_path(:user)         => user_password_path
+    #   edit_password_path(:user)    => edit_user_password_path
+    #
+    #   new_confirmation_path(:user) => new_user_confirmation_path
+    #   confirmation_path(:user)     => user_confirmation_path
+    #
+    # Those helpers are included by default to ActionController::Base.
+    #
+    # In case you want to add such helpers to another class, you can do
+    # that as long as this new class includes both url_helpers and
+    # mounted_helpers. Example:
+    #
+    #     include Rails.application.routes.url_helpers
+    #     include Rails.application.routes.mounted_helpers
+    #
+    module UrlHelpers
+      def self.remove_helpers!
+        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
+          remove_method method
+        end
+      end
+    
+    unless invalids.empty?
+  puts '\n\nFailed links:'
+  invalids.each do |link|
+    puts '- #{link}'
+  end
+  puts 'Done with errors.'
+  exit(1)
+end
