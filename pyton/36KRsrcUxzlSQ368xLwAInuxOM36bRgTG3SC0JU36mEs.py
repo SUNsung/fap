@@ -1,148 +1,57 @@
 
         
-                def get_auth(self, username=None, password=None):
-            assert self.raw_auth is None
-            assert username is None
-            assert password is None
-            return basic_auth()
+            # Parse and validate the field names.  Validation serves two purposes,
+    # generating informative error messages and preventing template injection attacks.
+    if isinstance(field_names, basestring):
+        field_names = field_names.replace(',', ' ').split() # names separated by whitespace and/or commas
+    field_names = tuple(map(str, field_names))
+    for name in (typename,) + field_names:
+        if not all(c.isalnum() or c=='_' for c in name):
+            raise ValueError('Type names and field names can only contain alphanumeric characters and underscores: %r' % name)
+        if _iskeyword(name):
+            raise ValueError('Type names and field names cannot be a keyword: %r' % name)
+        if name[0].isdigit():
+            raise ValueError('Type names and field names cannot start with a number: %r' % name)
+    seen_names = set()
+    for name in field_names:
+        if name.startswith('_'):
+            raise ValueError('Field names cannot start with an underscore: %r' % name)
+        if name in seen_names:
+            raise ValueError('Encountered duplicate field name: %r' % name)
+        seen_names.add(name)
     
-            '''
-        available_plugins = plugin_manager.get_formatters_grouped()
-        self.enabled_plugins = []
-        for group in groups:
-            for cls in available_plugins[group]:
-                p = cls(env=env, **kwargs)
-                if p.enabled:
-                    self.enabled_plugins.append(p)
-    
-    
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
-
-    
-            self.status.started(
-            resumed_from=self._resumed_from,
-            total_size=total_size
-        )
-    
-    from httpie import ExitStatus
-from httpie.input import SSL_VERSION_ARG_MAPPING
-from utils import http, HTTP_OK, TESTS_ROOT
-    
-        >>> humanize_bytes(1)
-    '1 B'
-    >>> humanize_bytes(1024, precision=1)
-    '1.0 kB'
-    >>> humanize_bytes(1024 * 123, precision=1)
-    '123.0 kB'
-    >>> humanize_bytes(1024 * 12342, precision=1)
-    '12.1 MB'
-    >>> humanize_bytes(1024 * 12342, precision=2)
-    '12.05 MB'
-    >>> humanize_bytes(1024 * 1234, precision=2)
-    '1.21 MB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
-    '1.31 GB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
-    '1.3 GB'
-    
-            # FIXME: False positive, e.g., 'localhost' matches but is a valid URL.
-        elif not re.match('^[a-zA-Z]+$', self.args.method):
-            # Invoked as `http URL item+'. The URL is now in `args.method`
-            # and the first ITEM is now incorrectly in `args.url`.
-            try:
-                # Parse the URL as an ITEM and store it as the first ITEM arg.
-                self.args.items.insert(0, KeyValueArgType(
-                    *SEP_GROUP_ALL_ITEMS).__call__(self.args.url))
-    
-        parser = argparse.ArgumentParser()
-    parser.add_argument('-e', '--estimators', nargs='+', required=True,
-                        choices=ESTIMATORS)
-    args = vars(parser.parse_args())
+            finished, pending = futures.wait(
+                 [EXCEPTION_FUTURE, future1],
+                 return_when=futures.FIRST_EXCEPTION)
     
     
-def plot_feature_errors(all_errors, batch_size, all_components, data):
-    plt.figure()
-    plot_results(all_components, all_errors['pca'], label='PCA')
-    plot_results(all_components, all_errors['ipca'],
-                 label='IncrementalPCA, bsize=%i' % batch_size)
-    plot_results(all_components, all_errors['rpca'], label='RandomizedPCA')
-    plt.legend(loc='lower left')
-    plt.suptitle('Algorithm error vs. n_components\n'
-                 'LFW, size %i x %i' % data.shape)
-    plt.xlabel('Number of components (out of max %i)' % data.shape[1])
-    plt.ylabel('Mean absolute error')
+class EventNotification( BaseRequest ):
+  def __init__( self, event_name, buffer_number = None, extra_data = None ):
+    super( EventNotification, self ).__init__()
+    self._event_name = event_name
+    self._buffer_number = buffer_number
+    self._extra_data = extra_data
+    self._response_future = None
+    self._cached_response = None
     
-        for i, DD in enumerate(Drange):
-        print('D = %i (%i out of %i)' % (DD, i + 1, len(Drange)))
-        X = get_data(N, DD, dataset)
-        for algorithm in algorithms:
-            nbrs = neighbors.NearestNeighbors(n_neighbors=k,
-                                              algorithm=algorithm,
-                                              leaf_size=leaf_size)
-            t0 = time()
-            nbrs.fit(X)
-            t1 = time()
-            nbrs.kneighbors(X)
-            t2 = time()
-    
-        clf = clone(transfomer)
-    
-    
-if __name__ == '__main__':
-    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
-    # block to be able to use a multi-core grid search that also works under
-    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
-    # The multiprocessing module is used as the backend of joblib.Parallel
-    # that is used when n_jobs != 1 in GridSearchCV
-    
-    # Learn a frontier for outlier detection with several classifiers
-xx1, yy1 = np.meshgrid(np.linspace(-8, 28, 500), np.linspace(3, 40, 500))
-xx2, yy2 = np.meshgrid(np.linspace(3, 10, 500), np.linspace(-5, 45, 500))
-for i, (clf_name, clf) in enumerate(classifiers.items()):
-    plt.figure(1)
-    clf.fit(X1)
-    Z1 = clf.decision_function(np.c_[xx1.ravel(), yy1.ravel()])
-    Z1 = Z1.reshape(xx1.shape)
-    legend1[clf_name] = plt.contour(
-        xx1, yy1, Z1, levels=[0], linewidths=2, colors=colors[i])
-    plt.figure(2)
-    clf.fit(X2)
-    Z2 = clf.decision_function(np.c_[xx2.ravel(), yy2.ravel()])
-    Z2 = Z2.reshape(xx2.shape)
-    legend2[clf_name] = plt.contour(
-        xx2, yy2, Z2, levels=[0], linewidths=2, colors=colors[i])
-    
-    from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
-from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.gaussian_process.kernels import RBF
-from sklearn import datasets
-    
-        def __init__(self):
-        self.reset_appid()
-    
-    
-from connect_manager import https_manager
-    
-        version_string = 'Version:%d-%d; Build:%d; Platform:%d; CSD:%s; ServicePack:%d-%d; Suite:%d; ProductType:%d' %  (
-        os_version.dwMajorVersion, os_version.dwMinorVersion,
-        os_version.dwBuildNumber,
-        os_version.dwPlatformId,
-        os_version.szCSDVersion,
-        os_version.wServicePackMajor, os_version.wServicePackMinor,
-        os_version.wSuiteMask,
-        os_version.wReserved
-    )
-    
-            self.log_fd = open(self.log_path, 'a')
-    
-            Using setter/getter methods is deprecated. Use o.index instead.'''
+      If the test fails (for the correct reason), then it is marked as skipped.
+  If it fails for any other reason, it is marked as failed.
+  If the test passes, then it is also marked as failed.'''
+  def decorator( test ):
+    @functools.wraps( test )
+    def Wrapper( *args, **kwargs ):
+      try:
+        test( *args, **kwargs )
+      except Exception as test_exception:
+        # Ensure that we failed for the right reason
+        test_exception_message = ToUnicode( test_exception )
+        try:
+          for matcher in exception_matchers:
+            assert_that( test_exception_message, matcher )
+        except AssertionError:
+          # Failed for the wrong reason!
+          import traceback
+          print( 'Test failed for the wrong reason: ' + traceback.format_exc() )
+          # Real failure reason is the *original* exception, we're only trapping
+          # and ignoring the exception that is expected.
+          raise test_exception
