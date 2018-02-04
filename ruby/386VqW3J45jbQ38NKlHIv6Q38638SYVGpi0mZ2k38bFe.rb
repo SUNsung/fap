@@ -1,70 +1,58 @@
-module Jekyll
-  binding.pry
-end
 
+        
+            brew cask install mactex
+    EOS
+  when 'pip' then <<-EOS.undent
+    Homebrew provides pip via: `brew install python`. However you will then
+    have two Pythons installed on your Mac, so alternatively you can install
+    pip via the instructions at:
     
-        def defaults_deprecate_type(old, current)
-      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
-      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
-                        'type: #{current}'.'
-    end
-  end
-end
-
-    
-      config.vm.provider :virtualbox do |v|
-    # This setting gives the VM 1024MB of RAM instead of the default 384.
-    v.customize ['modifyvm', :id, '--memory', [ENV['DISCOURSE_VM_MEM'].to_i, 1024].max]
-    
-          { :title => 'Event', :entries => present_hash(payload) }
-    else
-      { :title => payload.to_s, :entries => [] }
-    end
+      def internal_commands
+    find_internal_commands HOMEBREW_LIBRARY_PATH/'cmd'
   end
     
-      def tumblr
-    Tumblr.configure do |config|
-      config.consumer_key = tumblr_consumer_key
-      config.consumer_secret = tumblr_consumer_secret
-      config.oauth_token = tumblr_oauth_token
-      config.oauth_token_secret = tumblr_oauth_token_secret
-    end
+            # Find a user by its confirmation token and try to confirm it.
+        # If no user is found, returns a new user with an error.
+        # If the user is already confirmed, create an error for the user
+        # Options must have the confirmation_token
+        def confirm_by_token(confirmation_token)
+          confirmable = find_first_by_auth_conditions(confirmation_token: confirmation_token)
+          unless confirmable
+            confirmation_digest = Devise.token_generator.digest(self, :confirmation_token, confirmation_token)
+            confirmable = find_or_initialize_with_error_by(:confirmation_token, confirmation_digest)
+          end
     
-    Tumblr::Client.new
-  end
-end
+      # POST /resource/confirmation
+  def create
+    self.resource = resource_class.send_confirmation_instructions(resource_params)
+    yield resource if block_given?
     
-      def load_event
-    @event = current_user.events.find(params[:id])
-  end
-end
-
-    
-    ###
-### methods
-###
-    
-        # Returns true if there are changes that need to be saved.
-    def dirty?
-      @dirty
-    end
-    
-        def define
-      define_flush_errors
-      define_getters
-      define_setter
-      define_query
-      register_new_attachment
-      add_active_record_callbacks
-      add_paperclip_callbacks
-      add_required_validations
-    end
-    
-            def rejected_types_rejected?
-          @missing_rejected_types ||= @rejected_types.select { |type| type_allowed?(type) }
-          @missing_rejected_types.none?
-        end
+        # Check if a reset_password_token is provided in the request
+    def assert_reset_token_passed
+      if params[:reset_password_token].blank?
+        set_flash_message(:alert, :no_token)
+        redirect_to new_session_path(resource_name)
       end
     end
+    
+      # GET /resource/unlock/new
+  def new
+    self.resource = resource_class.new
+  end
+    
+        def password_change(record, opts={})
+      devise_mail(record, :password_change, opts)
+    end
   end
 end
+
+    
+    require 'minitest/autorun'
+    
+            def address_params
+          params.require(:address).permit(permitted_address_attributes)
+        end
+    
+        def _2
+      elements[2]
+    end
