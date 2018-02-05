@@ -1,26 +1,128 @@
 
         
-          private
+        end
+
     
-        def ==(other)
-      other.name == name && other.path == path && other.type == type
+        def empty?
+      @entries.empty?
     end
     
-        def initialize
-      @pages = {}
+            # Helper method to get access to the class variable. This is mostly
+        # exposed for tests. This shouldn't be mucked with directly, since it's
+        # structure may change at any time.
+        def registered; @@registered; end
+      end
+    end
+  end
+end
+
+    
+                  # Read!
+              data << io.readpartial(READ_CHUNK_SIZE).encode('UTF-8', Encoding.default_external)
+            else
+              # Do a simple non-blocking read on the IO object
+              data << io.read_nonblock(READ_CHUNK_SIZE)
+            end
+          rescue Exception => e
+            # The catch-all rescue here is to support multiple Ruby versions,
+            # since we use some Ruby 1.9 specific exceptions.
+    
+          # This gets the value of the block with the given key.
+      def get(key)
+        key    = Regexp.quote(key)
+        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$\r?\n?(.*?)\r?\n?^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
+        match  = regexp.match(@value)
+        return nil if !match
+        match[1]
+      end
+    
+            # Render a given string and return the result. This method optionally
+        # takes a block which will be passed the renderer prior to rendering, which
+        # allows the caller to set any view variables within the renderer itself.
+        #
+        # @param [String] template The template data string.
+        # @return [String] Rendered template
+        def render_string(*args)
+          render_with(:render_string, *args)
+        end
+    
+      def test_font_helper_without_suffix
+    assert_match %r(url\(['']?/assets/.*eot['']?\)), @css
+  end
+    
+        private
+    
+      def collection_presenter
+    ActivityPub::CollectionPresenter.new(
+      id: tag_url(@tag),
+      type: :ordered,
+      size: @tag.statuses.count,
+      items: @statuses.map { |s| ActivityPub::TagManager.instance.uri_for(s) }
+    )
+  end
+    
+      def collection_presenter
+    page = ActivityPub::CollectionPresenter.new(
+      id: account_followers_url(@account, page: params.fetch(:page, 1)),
+      type: :ordered,
+      size: @account.followers_count,
+      items: @follows.map { |f| ActivityPub::TagManager.instance.uri_for(f.account) },
+      part_of: account_followers_url(@account),
+      next: page_url(@follows.next_page),
+      prev: page_url(@follows.prev_page)
+    )
+    if params[:page].present?
+      page
+    else
+      ActivityPub::CollectionPresenter.new(
+        id: account_followers_url(@account),
+        type: :ordered,
+        size: @account.followers_count,
+        first: page
+      )
+    end
+  end
+end
+
+    
+        respond_to do |format|
+      format.html
+    
+        def href
+      tag_url(object)
     end
     
-              if %w(Events Sync).include?(type)
-            name.prepend 'Backbone.'
-          elsif type == 'History'
-            name.prepend 'Backbone.history.'
-          elsif name == 'extend'
-            name.prepend '#{type}.'
-          elsif name.start_with? 'constructor'
-            name = type
-          elsif type != 'Utility'
-            name.prepend '#{type.downcase}.'
-          end
+      describe 'POST #update' do
+    context 'with valid post data' do
+      before do
+        request.env['RAW_POST_DATA'] = File.read(File.join(Rails.root, 'spec', 'fixtures', 'salmon', 'mention.xml'))
+        post :update, params: { id: account.id }
+      end
+    
+                  s[:proto] = 'tcp'
+              s[:name]  = 'pop3'
+              s[:extra] = 'Successful Login. Banner: #{s[:banner]}'
+              report_auth_info(s)
+              print_status('Successful POP3 Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]} (#{s[:banner].strip})')
+    
+    classNames.each { |name|
+	codez << %Q^
+public class #{name} {
+	public static void main(String args[]) {
+		System.out.println('This is from #{name}.');
+	}
+}^}
+    
+    # This is a completely hackish way to do this, and could break with future
+# versions of the JDK.  Need to find a better way to use sun.security.tools.KeyTool
+# and .JarSigner than modifying the source.  These rely on internal APIs that may
+# change.
+signer = Rjb::import('javaCompile.SignJar')
+#clsKeyTool = Rjb::import('sun.security.tools.KeyTool')
+#clsKeyTool = Rjb::import('sun.security.tools.KeyToolMSF')
+#clsJarSigner = Rjb::import('javaCompile.SignJar.JarSignerMSF')
+#clsJarSigner = Rjb::import('sun.security.tools.JarSigner')
+#clsJarSigner = Rjb::import('sun.security.tools.JarSignerMSF')
     
     if profile_filename = ENV['PROFILE']
   require 'ruby-prof'
@@ -43,80 +145,7 @@ else
 end
 
     
-    (deny default)
-EOS
-    
-            def run
-          if @pod_name.nil?
-            # Note: at that point, @wipe_all is always true (thanks to `validate!`)
-            # Remove all
-            clear_cache
-          else
-            # Remove only cache for this pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            elsif cache_descriptors.count > 1 && !@wipe_all
-              # Ask which to remove
-              choices = cache_descriptors.map { |c| '#{@pod_name} v#{c[:version]} (#{pod_type(c)})' }
-              index = UI.choose_from_array(choices, 'Which pod cache do you want to remove?')
-              remove_caches([cache_descriptors[index]])
-            else
-              # Remove all found cache of this pod
-              remove_caches(cache_descriptors)
-            end
-          end
-        end
-    
-            def self.options
-          [[
-            '--short', 'Only print the path relative to the cache root'
-          ]].concat(super)
-        end
-    
-    module Pod
-  class Command
-    class Env < Command
-      self.summary = 'Display pod environment'
-      self.description = 'Display pod environment.'
-    
-          def update_if_necessary!
-        if @update && config.verbose?
-          UI.section('\nUpdating Spec Repositories\n'.yellow) do
-            Repo.new(ARGV.new(['update'])).run
-          end
-        end
+          def self.options
+        options = []
+        options.concat(super.reject { |option, _| option == '--silent' })
       end
-    
-        # @abstract
-    #
-    # Your implementation should check if the specified remote-repository is
-    # available.
-    #
-    # @return [Boolean]
-    #
-    def check
-      raise NotImplementedError, 'Your SCM strategy module should provide a #check method'
-    end
-    
-      deploy_rb = File.expand_path('../../templates/deploy.rb.erb', __FILE__)
-  stage_rb = File.expand_path('../../templates/stage.rb.erb', __FILE__)
-  capfile = File.expand_path('../../templates/Capfile', __FILE__)
-    
-          if File.directory?(source_entry)
-        FileUtils.mkdir(target_entry) unless File.exists?(target_entry)
-        transform_r(source_entry, target_entry)
-      else
-        # copy the new file, in case of being an .erb file should render first
-        if source_entry.end_with?('erb')
-          target_entry = target_entry.gsub(/.erb$/,'').gsub('example', name)
-          File.open(target_entry, 'w') { |f| f.write(render(source_entry)) }
-        else
-          FileUtils.cp(source_entry, target_entry)
-        end
-        puts '\t create #{File.join(full_plugin_name, Pathname.new(target_entry).relative_path_from(Pathname.new(@target_path)))}'
-      end
-    end
-  end
-    
-      alias_method :<<, :decode
