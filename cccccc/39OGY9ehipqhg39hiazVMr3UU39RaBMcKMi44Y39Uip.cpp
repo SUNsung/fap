@@ -1,293 +1,291 @@
 
         
-        class Event : public Wrappable<Event>,
-              public content::WebContentsObserver {
- public:
-  static Handle<Event> Create(v8::Isolate* isolate);
+        void SyntaxASTMap::dumpSyntaxMap() const {
+  for (const auto &SyntaxAndSemaNode : SyntaxMap) {
+    auto SyntaxNode = SyntaxAndSemaNode.getFirst();
+    auto SemanticNode = SyntaxAndSemaNode.getSecond();
+    }
     }
     
-      // net::URLRequestJobFactory::ProtocolHandler:
-  net::URLRequestJob* MaybeCreateJob(
-      net::URLRequest* request,
-      net::NetworkDelegate* network_delegate) const override;
-  bool IsSafeRedirectTarget(const GURL& location) const override;
     
-    namespace relauncher {
-    }
-    
-    // only copy a complete independent tree
-// when node name exists
-void ComputationNetwork::CopySubTree(const ComputationNetwork& fromNet,
-                                     const std::wstring fromName, std::wstring toNamePrefix,
-                                     const CopyNodeFlags flags)
-{
-    InvalidateCompiledNetwork();
-    }
-    
-    #include 'PostComputingActions.h'
-    
-    #pragma once
-    
-            // if we have more than one matching parameter
-        if (singleInputMultiOutput)
-        {
-            auto nodeIn = nodes[0];
-            vector<ComputationNodeBasePtr> nodesOut = netNdlOut->cn->GetNodesFromName(nameOut);
-    }
-    
-      memset(lotsa_as, 'a', 512 * sizeof(lotsa_as[0]));
-  memset(lotsa_bs, 'b', 1024 * sizeof(lotsa_bs[0]));
-  /* use slices large enough to overflow inlining */
-  slices[0] = grpc_slice_malloc(512);
-  memcpy(GRPC_SLICE_START_PTR(slices[0]), lotsa_as, 512);
-  slices[1] = grpc_slice_malloc(1024);
-  memcpy(GRPC_SLICE_START_PTR(slices[1]), lotsa_bs, 1024);
-    
-    
-    { private:
-  static void CheckDone(grpc::Status s, SimpleResponse* response) {}
-  static std::unique_ptr<grpc::ClientAsyncWriter<SimpleRequest>> PrepareReq(
-      BenchmarkService::Stub* stub, grpc::ClientContext* ctx,
-      SimpleResponse* resp, CompletionQueue* cq) {
-    auto stream = stub->PrepareAsyncStreamingFromClient(ctx, resp, cq);
-    return stream;
-  };
-  static ClientRpcContext* SetupCtx(BenchmarkService::Stub* stub,
-                                    std::function<gpr_timespec()> next_issue,
-                                    const SimpleRequest& req) {
-    return new ClientRpcContextStreamingFromClientImpl<SimpleRequest,
-                                                       SimpleResponse>(
-        stub, req, next_issue, AsyncStreamingFromClientClient::PrepareReq,
-        AsyncStreamingFromClientClient::CheckDone);
-  }
-};
-    
-     protected:
-  // WaitToIssue returns false if we realize that we need to break out
-  bool WaitToIssue(int thread_idx) {
-    if (!closed_loop_) {
-      const gpr_timespec next_issue_time = NextIssueTime(thread_idx);
-      // Avoid sleeping for too long continuously because we might
-      // need to terminate before then. This is an issue since
-      // exponential distribution can occasionally produce bad outliers
-      while (true) {
-        const gpr_timespec one_sec_delay =
-            gpr_time_add(gpr_now(GPR_CLOCK_MONOTONIC),
-                         gpr_time_from_seconds(1, GPR_TIMESPAN));
-        if (gpr_time_cmp(next_issue_time, one_sec_delay) <= 0) {
-          gpr_sleep_until(next_issue_time);
-          return true;
-        } else {
-          gpr_sleep_until(one_sec_delay);
-          if (gpr_atm_acq_load(&thread_pool_done_) != static_cast<gpr_atm>(0)) {
-            return false;
-          }
-        }
-      }
-    }
-    return true;
-  }
-    
-    #endif // BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
+    {  // The length of the transcoded string in UTF-16 code points.
+  Length = toPtr - &buffer[0];
+  return Length;
+}
 
     
-    #include <boost/asio/detail/config.hpp>
+      friend class llvm::PointerLikeTypeTraits<ConcreteDeclRef>;
+    
+      /// Treat all warnings as errors
+  bool WarningsAsErrors = false;
+    
+    #endif
+
+    
+    // Find the file which defines an extension extending the given message type
+// with the given field number.
+// Python DescriptorDatabases are not required to implement this method.
+bool PyDescriptorDatabase::FindFileContainingExtension(
+    const string& containing_type, int field_number,
+    FileDescriptorProto* output) {
+  ScopedPyObjectPtr py_method(
+      PyObject_GetAttrString(py_database_, 'FindFileContainingExtension'));
+  if (py_method == NULL) {
+    // This method is not implemented, returns without error.
+    PyErr_Clear();
+    return false;
+  }
+  ScopedPyObjectPtr py_descriptor(
+      PyObject_CallFunction(py_method.get(), 's#i', containing_type.c_str(),
+                            containing_type.size(), field_number));
+  return GetFileDescriptorProto(py_descriptor.get(), output);
+}
+    
+    TEST(AnyTest, TestIs) {
+  protobuf_unittest::TestAny submessage;
+  submessage.set_int32_value(12345);
+  google::protobuf::Any any;
+  any.PackFrom(submessage);
+  ASSERT_TRUE(any.ParseFromString(any.SerializeAsString()));
+  EXPECT_TRUE(any.Is<protobuf_unittest::TestAny>());
+  EXPECT_FALSE(any.Is<google::protobuf::Any>());
+    }
+    
+      void WriteIntroduction(io::Printer* printer);
+  void WriteDescriptor(io::Printer* printer);
+  void WriteGeneratedCodeInfo(const Descriptor* descriptor,
+                              io::Printer* printer,
+                              bool last);
+    
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+    
+      void SendEcho() {
+    EchoRequest send_request;
+    EchoResponse recv_response;
+    ClientContext cli_ctx;
+    cli_ctx.set_wait_for_ready(true);
+    send_request.set_message('Hello');
+    Status recv_status = stub_->Echo(&cli_ctx, send_request, &recv_response);
+    EXPECT_EQ(send_request.message(), recv_response.message());
+    EXPECT_TRUE(recv_status.ok());
+  }
     
     
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
+    {  // Client request should succeed.
+  SendRpc(1);
+}
     
+    // In some distros, gflags is in the namespace google, and in some others,
+// in gflags. This hack is enabling us to find both.
+namespace google {}
+namespace gflags {}
+using namespace google;
+using namespace gflags;
     
-    {    // Make the upcall if required.
-    if (owner)
-    {
-      fenced_block b(fenced_block::half);
-      BOOST_ASIO_HANDLER_INVOCATION_BEGIN((handler.arg1_, handler.arg2_));
-      boost_asio_handler_invoke_helpers::invoke(handler, handler.handler_);
-      BOOST_ASIO_HANDLER_INVOCATION_END;
+    /* Returns true if the |stream| was successfully started and is now done
+ * (succeeded, canceled, or failed).
+ * Returns false if the |stream| stream is not yet started or is in progress.
+ */
+GRPC_SUPPORT_EXPORT
+bool bidirectional_stream_is_done(bidirectional_stream* stream);
+    
+    static int zlib_body(z_stream* zs, grpc_slice_buffer* input,
+                     grpc_slice_buffer* output,
+                     int (*flate)(z_stream* zs, int flush)) {
+  int r;
+  int flush;
+  size_t i;
+  grpc_slice outbuf = GRPC_SLICE_MALLOC(OUTPUT_BLOCK_SIZE);
+  const uInt uint_max = ~(uInt)0;
+    }
+    
+    int grpc_byte_buffer_reader_next(grpc_byte_buffer_reader* reader,
+                                 grpc_slice* slice) {
+  switch (reader->buffer_in->type) {
+    case GRPC_BB_RAW: {
+      grpc_slice_buffer* slice_buffer;
+      slice_buffer = &reader->buffer_out->data.raw.slice_buffer;
+      if (reader->current.index < slice_buffer->count) {
+        *slice = grpc_slice_ref_internal(
+            slice_buffer->slices[reader->current.index]);
+        reader->current.index += 1;
+        return 1;
+      }
+      break;
     }
   }
+  return 0;
+}
+    
+    static void test_compression_enable_disable_algorithm(void) {
+  grpc_compression_options options;
+  grpc_compression_algorithm algorithm;
+    }
+    
+      /// Perform an IO control command on the acceptor.
+  /**
+   * This function is used to execute an IO control command on the acceptor.
+   *
+   * @param command The IO control command to be performed on the acceptor.
+   *
+   * @throws boost::system::system_error Thrown on failure.
+   *
+   * @sa IoControlCommand @n
+   * boost::asio::socket_base::non_blocking_io
+   *
+   * @par Example
+   * Getting the number of bytes ready to read:
+   * @code
+   * boost::asio::ip::tcp::acceptor acceptor(io_service);
+   * ...
+   * boost::asio::ip::tcp::acceptor::non_blocking_io command(true);
+   * socket.io_control(command);
+   * @endcode
+   */
+  template <typename IoControlCommand>
+  void io_control(IoControlCommand& command)
+  {
+    boost::system::error_code ec;
+    this->get_service().io_control(this->get_implementation(), command, ec);
+    boost::asio::detail::throw_error(ec, 'io_control');
+  }
+    
+    #ifndef BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
+#define BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
+    
+    #include <boost/asio/detail/config.hpp>
     
       static bool do_perform(reactor_op* base)
   {
     descriptor_write_op_base* o(static_cast<descriptor_write_op_base*>(base));
     }
     
-    #include <boost/asio/detail/posix_fd_set_adapter.hpp>
-#include <boost/asio/detail/win_fd_set_adapter.hpp>
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
     
-    dev_poll_reactor::dev_poll_reactor(boost::asio::io_service& io_service)
-  : boost::asio::detail::service_base<dev_poll_reactor>(io_service),
-    io_service_(use_service<io_service_impl>(io_service)),
-    mutex_(),
-    dev_poll_fd_(do_dev_poll_create()),
-    interrupter_(),
-    shutdown_(false)
+    template <typename Time_Traits>
+std::size_t epoll_reactor::cancel_timer(timer_queue<Time_Traits>& queue,
+    typename timer_queue<Time_Traits>::per_timer_data& timer,
+    std::size_t max_cancelled)
 {
-  // Add the interrupter's descriptor to /dev/poll.
-  ::pollfd ev = { 0, 0, 0 };
-  ev.fd = interrupter_.read_descriptor();
-  ev.events = POLLIN | POLLERR;
-  ev.revents = 0;
-  ::write(dev_poll_fd_, &ev, sizeof(ev));
+  mutex::scoped_lock lock(mutex_);
+  op_queue<operation> ops;
+  std::size_t n = queue.cancel_timer(timer, ops, max_cancelled);
+  lock.unlock();
+  io_service_.post_deferred_completions(ops);
+  return n;
 }
     
-    FilterBlockReader::FilterBlockReader(const FilterPolicy* policy,
-                                     const Slice& contents)
-    : policy_(policy),
-      data_(NULL),
-      offset_(NULL),
-      num_(0),
-      base_lg_(0) {
-  size_t n = contents.size();
-  if (n < 5) return;  // 1 byte for base_lg_ and 4 for start of offset array
-  base_lg_ = contents[n-1];
-  uint32_t last_word = DecodeFixed32(contents.data() + n - 5);
-  if (last_word > n - 5) return;
-  data_ = contents.data();
-  offset_ = data_ + last_word;
-  num_ = (n - 5 - last_word) / 4;
+    #include <folly/experimental/hazptr/debug.h>
+    
+      enum class State {
+    UNINITIALIZED,
+    INITIALIZED,
+    PENDING,
+    COMPLETED,
+    CANCELED,
+  };
+    
+    #include <folly/Exception.h>
+    
+    /**
+ * Get the path to the current executable.
+ *
+ * Note that this is not reliable and not recommended in general; it may not be
+ * implemented on your platform (in which case it will throw), the executable
+ * might have been moved or replaced while running, and applications comprising
+ * of multiple executables should use some form of configuration system to
+ * find the other executables rather than relying on relative paths from one
+ * to another.
+ *
+ * So this should only be used for tests, logging, or other innocuous purposes.
+ */
+path executable_path();
+    
+    namespace {
+// We cannot use EXPECT_EQ(a, b) due to a bug in gtest 1.6.0: gtest wants
+// to print path as a container even though it has operator<< defined,
+// and as path is a container of path, this leads to infinite
+// recursion.
+void expectPathEq(const path& a, const path& b) {
+  EXPECT_TRUE(a == b) << 'expected path=' << a << '\nactual path=' << b;
 }
+} // namespace
     
-      void Delete(const SnapshotImpl* s) {
-    assert(s->list_ == this);
-    s->prev_->next_ = s->next_;
-    s->next_->prev_ = s->prev_;
-    delete s;
-  }
-    
-      void Add(const char* smallest, const char* largest,
-           SequenceNumber smallest_seq = 100,
-           SequenceNumber largest_seq = 100) {
-    FileMetaData* f = new FileMetaData;
-    f->number = files_.size() + 1;
-    f->smallest = InternalKey(smallest, smallest_seq, kTypeValue);
-    f->largest = InternalKey(largest, largest_seq, kTypeValue);
-    files_.push_back(f);
-  }
-    
-      static Status InsertInto(const WriteBatch* batch, MemTable* memtable);
-    
-     public:
-  RandomGenerator() {
-    // We use a limited amount of data over and over again and ensure
-    // that it is larger than the compression window (32KB), and also
-    // large enough to serve all typical value sizes we want to write.
-    Random rnd(301);
-    std::string piece;
-    while (data_.size() < 1048576) {
-      // Add a short fragment that is as compressible as specified
-      // by FLAGS_compression_ratio.
-      test::CompressibleString(&rnd, FLAGS_compression_ratio, 100, &piece);
-      data_.append(piece);
-    }
-    pos_ = 0;
-  }
-    
-      std::string write_data;
-  for (size_t i = 0; i < kWriteSize; ++i) {
-    write_data.append(1, static_cast<char>(i));
-  }
-    
-      // Third filter is empty
-    
-    #endif  // STORAGE_LEVELDB_TABLE_ITERATOR_WRAPPER_H_
-
-    
-      virtual Slice key() const {
-    assert(Valid());
-    return current_->key();
-  }
+      void writeMessage(folly::StringPiece buffer, uint32_t flags = 0) override;
+  void writeMessage(std::string&& buffer, uint32_t flags = 0) override;
     
     
-    { private:
-  // synchronizer
-  std::unique_ptr<TreeUpdater> syncher;
-  // training parameter
-  TrainParam param;
+    {  std::string path_;
+  FileWriterFactory fileWriterFactory_;
 };
     
-      uint32_t uint32_t2[2] = {1U, 2U};
-  EXPECT_EQ(info.base_margin.size(), 0);
-  info.SetInfo('base_margin', uint32_t2, xgboost::kUInt32, 2);
-  EXPECT_EQ(info.base_margin.size(), 2);
-    
-    
-    { private:
-  inline static void AddStats(const RegTree &tree,
-                              const RegTree::FVec &feat,
-                              const std::vector<bst_gpair> &gpair,
-                              const MetaInfo &info,
-                              const bst_uint ridx,
-                              TStats *gstats) {
-    // start from groups that belongs to current data
-    int pid = static_cast<int>(info.GetRoot(ridx));
-    gstats[pid].Add(gpair, info, ridx);
-    // tranverse tree
-    while (!tree[pid].is_leaf()) {
-      unsigned split_index = tree[pid].split_index();
-      pid = tree.GetNext(pid, feat.fvalue(split_index), feat.is_missing(split_index));
-      gstats[pid].Add(gpair, info, ridx);
+    /**
+ * FileHandlerFactory is a LogHandlerFactory that constructs log handlers
+ * that write to a file.
+ *
+ * Note that FileHandlerFactory allows opening and appending to arbitrary files
+ * based on the handler options.  This may make it unsafe to use
+ * FileHandlerFactory in some contexts: for instance, a setuid binary should
+ * generally avoid registering the FileHandlerFactory if they allow log
+ * handlers to be configured via command line parameters, since otherwise this
+ * may allow non-root users to append to files that they otherwise would not
+ * have write permissions for.
+ */
+class FileHandlerFactory : public LogHandlerFactory {
+ public:
+  StringPiece getType() const override {
+    return 'file';
+  }
     }
-  }
-  inline void Refresh(const TStats *gstats,
-                      int nid, RegTree *p_tree) {
-    RegTree &tree = *p_tree;
-    tree.stat(nid).base_weight = static_cast<bst_float>(gstats[nid].CalcWeight(param));
-    tree.stat(nid).sum_hess = static_cast<bst_float>(gstats[nid].sum_hess);
-    gstats[nid].SetLeafVec(param, tree.leafvec(nid));
-    if (tree[nid].is_leaf()) {
-      if (param.refresh_leaf) {
-        tree[nid].set_leaf(tree.stat(nid).base_weight * param.learning_rate);
-      }
-    } else {
-      tree.stat(nid).loss_chg = static_cast<bst_float>(
-          gstats[tree[nid].cleft()].CalcGain(param) +
-          gstats[tree[nid].cright()].CalcGain(param) -
-          gstats[nid].CalcGain(param));
-      this->Refresh(gstats, tree[nid].cleft(), p_tree);
-      this->Refresh(gstats, tree[nid].cright(), p_tree);
-    }
-  }
-  // training parameter
-  TrainParam param;
-  // reducer
-  rabit::Reducer<TStats, TStats::Reduce> reducer;
-};
     
-    // This is a helpful data structure to define parameters
-// You do not have to use it.
-// see http://dmlc-core.readthedocs.org/en/latest/parameter.html
-// for introduction of this module.
-struct MyLogisticParam : public dmlc::Parameter<MyLogisticParam> {
-  float scale_neg_weight;
-  // declare parameters
-  DMLC_DECLARE_PARAMETER(MyLogisticParam) {
-    DMLC_DECLARE_FIELD(scale_neg_weight).set_default(1.0f).set_lower_bound(0.0f)
-        .describe('Scale the weight of negative examples by this factor');
-  }
-};
-    
-    
-    {#undef EXT_FUNC
+    void Node::setMarginPercent(int edge, double margin)
+{
+    YGNodeStyleSetMarginPercent(m_node, static_cast<YGEdge>(edge), margin);
 }
     
-    #include 'FuzzerIO.h'
-#include 'FuzzerDefs.h'
-#include 'FuzzerExtFunctions.h'
-#include <algorithm>
-#include <cstdarg>
-#include <fstream>
-#include <iterator>
-#include <sys/stat.h>
-#include <sys/types.h>
+    #include <nbind/api.h>
+#include <nbind/BindDefiner.h>
     
-    void MutationDispatcher::ClearAutoDictionary() {
-  TempAutoDictionary.clear();
-}
+    TEST(YogaTest, computed_layout_margin) {
+  const YGNodeRef root = YGNodeNew();
+  YGNodeStyleSetWidth(root, 100);
+  YGNodeStyleSetHeight(root, 100);
+  YGNodeStyleSetMarginPercent(root, YGEdgeStart, 10);
+    }
     
-    #ifndef LLVM_FUZZER_OPTIONS_H
-#define LLVM_FUZZER_OPTIONS_H
+      YGNodeCalculateLayout(root, 100, 100, YGDirectionLTR);
+    
+      ASSERT_FLOAT_EQ(45, YGNodeLayoutGetLeft(root_child0));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root_child0));
+  ASSERT_FLOAT_EQ(10, YGNodeLayoutGetWidth(root_child0));
+  ASSERT_FLOAT_EQ(10, YGNodeLayoutGetHeight(root_child0));
+    
+      ASSERT_FLOAT_EQ(0, YGNodeLayoutGetLeft(root_child0));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root_child0));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetWidth(root_child0));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetHeight(root_child0));
+    
+      const YGNodeRef root_child2 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetHeight(root_child2, 10);
+  YGNodeInsertChild(root, root_child2, 2);
+  YGNodeCalculateLayout(root, YGUndefined, YGUndefined, YGDirectionLTR);
+    
+      ASSERT_FLOAT_EQ(10, YGNodeLayoutGetLeft(root_child0));
+  ASSERT_FLOAT_EQ(10, YGNodeLayoutGetTop(root_child0));
+  ASSERT_FLOAT_EQ(80, YGNodeLayoutGetWidth(root_child0));
+  ASSERT_FLOAT_EQ(10, YGNodeLayoutGetHeight(root_child0));
