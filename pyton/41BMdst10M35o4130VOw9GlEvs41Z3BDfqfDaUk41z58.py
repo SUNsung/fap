@@ -1,239 +1,147 @@
 
         
-        
-def test_idna_with_version_attribute(mocker):
-    '''Verify we're actually setting idna version when it should be available.'''
-    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
-    assert info()['idna'] == {'version': '2.6'}
-
+            def reraise(tp, value, tb=None):
+        if value.__traceback__ is not tb:
+            raise value.with_traceback(tb)
+        raise value
     
-    Requests is an HTTP library, written in Python, for human beings. Basic GET
-usage:
     
-        def test_invalid(self):
-        with pytest.raises(ValueError):
-            to_key_val_list('string')
+def init_db():
+    '''Initializes the database.'''
+    db = get_db()
+    with current_app.open_resource('schema.sql', mode='r') as f:
+        db.cursor().executescript(f.read())
+    db.commit()
     
-        __attrs__ = [
-        'headers', 'cookies', 'auth', 'proxies', 'hooks', 'params', 'verify',
-        'cert', 'prefetch', 'adapters', 'stream', 'trust_env',
-        'max_redirects',
+        old_layer = keras.layers.GlobalMaxPooling3D(dim_ordering='default', name='global_maxpool3d')
+    new_layer = keras.layers.GlobalMaxPool3D(name='global_maxpool3d')
+    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
+    
+        >>> create_ngram_set([1, 4, 9, 4, 1, 4], ngram_value=3)
+    [(1, 4, 9), (4, 9, 4), (9, 4, 1), (4, 1, 4)]
+    '''
+    return set(zip(*[input_list[i:] for i in range(ngram_value)]))
+    
+        # Normally the trailing 1 is added by standardize_weights
+    weights = np.ones((3,))
+    mask = np.ones((3, 4))
+    mask[1, 0] = 0
+    
+    Run the script with:
+```
+python neural_style_transfer.py path_to_your_base_image.jpg path_to_your_reference.jpg prefix_for_results
+```
+e.g.:
+```
+python neural_style_transfer.py img/tuebingen.jpg img/starry_night.jpg results/my_result
+```
+Optional parameters:
+```
+--iter, To specify the number of iterations the style transfer takes place (Default is 10)
+--content_weight, The weight given to the content loss (Default is 0.025)
+--style_weight, The weight given to the style loss (Default is 1.0)
+--tv_weight, The weight given to the total variation loss (Default is 1.0)
+```
+    
+    
+@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
+def test_one(tensor_shape):
+    _runner(initializers.ones(), tensor_shape,
+            target_mean=1., target_max=1.)
+    
+            # Test equivalence of convert_all_kernels_in_model
+        convout1 = conv([x])[0]
+        layer_utils.convert_all_kernels_in_model(model1)
+        convout2 = flip(conv([flip(x)])[0])
+    
+    from ..common import *
+    
+        # ordered list of supported stream types / qualities on this site
+    # order: high quality -> low quality
+    stream_types = [
+        {'id': 'original'}, # contains an 'id' or 'itag' field at minimum
+        {'id': 'small'},
     ]
     
+    def pi_decimal():
+    '''decimal'''
+    D = P.Decimal
+    lasts, t, s, n, na, d, da = D(0), D(3), D(3), D(1), D(0), D(0), D(24)
+    while s != lasts:
+        lasts = s
+        n, na = n+na, na+8
+        d, da = d+da, da+32
+        t = (t * n) / d
+        s += t
+    return s
     
-class Word2VecTest(tf.test.TestCase):
-    
-      def _record(self, label, red, green, blue):
-    image_size = 32 * 32
-    record = bytes(bytearray([label] + [red] * image_size +
-                             [green] * image_size + [blue] * image_size))
-    expected = [[[red, green, blue]] * 32] * 32
-    return record, expected
-    
-    from six.moves import StringIO
-    
-        return train_path, test_path
-    
-    py_binary(
-    name = 'cifar10_eval',
-    srcs = [
-        'cifar10_eval.py',
-    ],
-    srcs_version = 'PY2AND3',
-    visibility = ['//tensorflow:__subpackages__'],
-    deps = [
-        ':cifar10',
-    ],
-)
-    
-    # pylint: disable=line-too-long
-DATA_URL = 'http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz'
-# pylint: enable=line-too-long
-    
-        # Nodes for computing neighbors for a given word according to
-    # their cosine distance.
-    nearby_word = tf.placeholder(dtype=tf.int32)  # word id
-    nearby_emb = tf.gather(nemb, nearby_word)
-    nearby_dist = tf.matmul(nearby_emb, nemb, transpose_b=True)
-    nearby_val, nearby_idx = tf.nn.top_k(nearby_dist,
-                                         min(1000, opts.vocab_size))
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-    
-        def handle_budget_notifications(self, key, total):
-        '''Call notification API if nearing or exceeded budget.'''
-        ...
-    
-    
-if __name__ == '__main__':
-    HitCounts.run()
+    if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        zones = TZInfo.zonelist()
+        for z in zones:
+            print(z)
+        sys.exit()
+    filepath = sys.argv[1]
+    if not filepath.startswith('/'):
+        filepath = os.path.join('/usr/share/zoneinfo', filepath)
+    with open(filepath, 'rb') as fileobj:
+        tzi = TZInfo.fromfile(fileobj)
+    tzi.dump(sys.stdout)
 
     
-        def __init__(self):
-        self.head = None
-        self.tail = None
+        def get_header(self, data):
+        ''' utility: return the header of a .po file as a dictionary '''
+        headers = {}
+        for line in data.split('\n'):
+            if not line or line.startswith(('#', 'msgid','msgstr')):
+                continue
+            line = line.strip(''')
+            key, val = line.split(':',1)
+            headers[key] = val.strip()
+        return headers
     
-        def mapper(self, _, line):
-        yield line, 1
-    
-    __all__ = ['cbs_download']
-    
-    
-site_info = 'kugou.com'
-download = kugou_download
-# download_playlist = playlist_not_supported('kugou')
-download_playlist=kugou_download_playlist
-
-    
-    
-def mtv81_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_content(url)
-    title = HTMLParser().unescape(
-        '|'.join(match1(html, r'<title>(.*?)</title>').split('|')[:-2]))
-    
-    from concurrent.futures import _base
-    
-    def download_urls_sequential(urls, timeout=60):
-    url_to_content = {}
-    for url in urls:
-        try:
-            url_to_content[url] = load_url(url, timeout=timeout)
-        except:
-            pass
-    return url_to_content
-    
-    
-def SendEventNotificationAsync( event_name,
-                                buffer_number = None,
-                                extra_data = None ):
-  event = EventNotification( event_name, buffer_number, extra_data )
-  event.Start()
-
-    
-    
-def _FormatCompleterDebugInfo( completer ):
-  message = '{0} completer debug information:\n'.format( completer[ 'name' ] )
-  for server in completer[ 'servers' ]:
-    name = server[ 'name' ]
-    if server[ 'is_running' ]:
-      address = server[ 'address' ]
-      port = server[ 'port' ]
-      if address and port:
-        message += '  {0} running at: http://{1}:{2}\n'.format( name,
-                                                                address,
-                                                                port )
-      else:
-        message += '  {0} running\n'.format( name )
-      message += '  {0} process ID: {1}\n'.format( name, server[ 'pid' ] )
-    else:
-      message += '  {0} not running\n'.format( name )
-    message += '  {0} executable: {1}\n'.format( name, server[ 'executable'] )
-    logfiles = server[ 'logfiles' ]
-    if logfiles:
-      message += '  {0} logfiles:\n'.format( name )
-      for logfile in logfiles:
-        message += '    {0}\n'.format( logfile )
-    else:
-      message += '  No logfiles available\n'
-    if 'extras' in server:
-      for extra in server[ 'extras' ]:
-        message += '  {0} {1}: {2}\n'.format( name,
-                                              extra[ 'key' ],
-                                              extra[ 'value' ] )
-  for item in completer[ 'items' ]:
-    message += '  {0}: {1}\n'.format( item[ 'key' ].capitalize(),
-                                      item[ 'value' ] )
-  return message
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    js.load_plugin_modules(plugins)
-modules = dict((k, m) for k, m in js.module.iteritems())
-print 'JS_MODULES := ' + ' '.join(modules.iterkeys())
-outputs = []
-for name, module in modules.iteritems():
-    outputs.extend(module.outputs)
-    print 'JS_MODULE_OUTPUTS_%s := %s' % (name, ' '.join(module.outputs))
-    print 'JS_MODULE_DEPS_%s := %s' % (name, ' '.join(module.dependencies))
-    
-    def get_api_subtype():
-    if is_api() and c.render_style.startswith('api-'):
-        return c.render_style[4:]
-    
-        def send503(self):
-        retry_after = request.environ.get('retry_after')
-        if retry_after:
-            response.headers['Retry-After'] = str(retry_after)
-        return request.environ['usable_error_content']
-    
-        @classmethod
-    def setUpClass(self):
+            This function will determine if the input text line needs to be
+        wrapped (split) into separate lines.  If so, the first wrap point
+        will be determined and the first line appended to the output
+        text line list.  This function is used recursively to handle
+        the second part of the split line to further split it.
         '''
-        - Create a temporary directory and file
-        /test_command
-           /foo.txt
-        - get the temporary test directory
-        - and initializes the command stack.
-        '''
-        os.mkdir('tests/test_command')
-        open('tests/test_command/foo.txt', 'w').close()
-        self.__get_test_directory()
-        self.command_stack = []
-        self.command_stack.append(MoveFileCommand(os.path.join(
-            self.test_dir, 'foo.txt'), os.path.join(self.test_dir, 'bar.txt')))
-        self.command_stack.append(MoveFileCommand(os.path.join(
-            self.test_dir, 'bar.txt'), os.path.join(self.test_dir, 'baz.txt')))
+        # if blank line or context separator, just add it to the output list
+        if not line_num:
+            data_list.append((line_num,text))
+            return
     
-        def test_sales_manager_shall_respond_through_proxy_with_delay(cls):
-        cls.p.busy = 'Yes'
-        start_time = time()
-        cls.p.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-Sales Manager is busy\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time*10), expected_execution_time)
+        def __init__(self, *, object_hook=None, parse_float=None,
+            parse_int=None, parse_constant=None, strict=True,
+            object_pairs_hook=None):
+        '''``object_hook``, if specified, will be called with the result
+        of every JSON object decoded and its return value will be used in
+        place of the given ``dict``.  This can be used to provide custom
+        deserializations (e.g. to support JSON-RPC class hinting).
+    
+        def _become_message(self, message):
+        '''Assume the non-format-specific state of message.'''
+        type_specific = getattr(message, '_type_specific_attributes', [])
+        for name in message.__dict__:
+            if name not in type_specific:
+                self.__dict__[name] = message.__dict__[name]
     
     
-class RadioTest(unittest.TestCase):
-    '''
-    Attention: Test case results depend on test case execution. The test cases
-    in this integration test class should be executed in an explicit order:
-    http://stackoverflow.com/questions/5387299/python-unittest-testcase-execution-order
-    '''
+    print('# As the target uses Python%s.dll, we must use this compiler option!' % version_suffix)
+    print('cdl = /MD')
+    print()
+    print('all: $(target)$(debug_suffix)%s' % (target_ext))
+    print()
     
-    class TimeDisplay(object):
+    # pure Python implementations (3 args only), for comparison
+def pyrange(start, stop, step):
+    if (start - stop) // step < 0:
+        # replace stop with next element in the sequence of integers
+        # that are congruent to start modulo step.
+        stop += (start - stop) % step
+        while start != stop:
+            yield start
+            start += step
     
-    ### OUTPUT ###
-# Setting up the Test
-# Inserting the execution begin status in the Database
-# Executing the test
-# Tearing down
-# Updating the test results in Database
-# Reporting the results of Test
-# Setting up the Test
-# Inserting the execution begin status in the Database
-# Reporter Class is preparing to report the results
-# Problem in setup. Test not executed.
-# Test not executed. No tear down required.
-# Setting up the Test
-# Inserting the execution begin status in the Database
-# Executing the test
-# Tearing down
-# Updating the test results in Database
-# Reporting the results of Test
-
-    
-        def attach(self, observer):
-        if observer not in self._observers:
-            self._observers.append(observer)
+        def _login(self, responder, user, rem=None):
+        '''Login the user.
