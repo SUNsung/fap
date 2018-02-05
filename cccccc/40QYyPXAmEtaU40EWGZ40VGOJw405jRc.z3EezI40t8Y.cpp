@@ -1,158 +1,395 @@
 
         
-        /*
- * Record translation for gdb debugging of the tc.
- */
-void recordGdbTranslation(SrcKey sk, const Func* srcFunc, const CodeBlock& cb,
-                          const TCA start, const TCA end, bool exit,
-                          bool inPrologue);
+        namespace api {
+    }
     
-    #ifndef incl_HPHP_SWEEPABLE_H_
-#define incl_HPHP_SWEEPABLE_H_
+    void Event::SetSenderAndMessage(content::WebContents* sender,
+                                IPC::Message* message) {
+  DCHECK(!sender_);
+  DCHECK(!message_);
+  sender_ = sender;
+  message_ = message;
+    }
     
-    struct InvalidMethodException : ServerException {
-  explicit InvalidMethodException(const char *msg)
-    : ServerException('Invalid method: %s', msg) {
+    namespace IPC {
+class Message;
+}
+    
+      bool Handle(const base::FilePath& full_path,
+              const content::SavePageType& save_type);
+    
+    #ifndef ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
+#define ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
+    
+    void AutoUpdater::SetFeedURL(const std::string& url,
+                             const HeaderMap& requestHeaders) {
+}
+    
+    net::URLRequestJob* AsarProtocolHandler::MaybeCreateJob(
+    net::URLRequest* request,
+    net::NetworkDelegate* network_delegate) const {
+  base::FilePath full_path;
+  net::FileURLToFilePath(request->url(), &full_path);
+  auto* job = new URLRequestAsarJob(request, network_delegate);
+  job->Initialize(file_task_runner_, full_path);
+  return job;
+}
+    
+      // URLRequestJob:
+  void GetResponseInfo(net::HttpResponseInfo* info) override;
+    
+    #include 'atom/browser/net/js_asker.h'
+#include 'base/memory/ref_counted_memory.h'
+#include 'net/http/http_status_code.h'
+#include 'net/url_request/url_request_simple_job.h'
+    
+      // URLRequestJob:
+  void GetResponseInfo(net::HttpResponseInfo* info) override;
+    
+    namespace internal {
+    }
+    
+    #include 'base/files/file_util.h'
+#include 'base/files/scoped_file.h'
+#include 'base/logging.h'
+#include 'base/posix/eintr_wrapper.h'
+#include 'base/process/launch.h'
+    
+    void SyntaxASTMap::dumpSyntaxMap() const {
+  for (const auto &SyntaxAndSemaNode : SyntaxMap) {
+    auto SyntaxNode = SyntaxAndSemaNode.getFirst();
+    auto SemanticNode = SyntaxAndSemaNode.getSecond();
+    }
+    }
+    
+    /// A utility for finding dead-end blocks.
+///
+/// Dead-end blocks are blocks from which there is no path to the function exit
+/// (either return or throw). These are blocks which end with an unreachable
+/// instruction and blocks from which all paths end in 'unreachable' blocks.
+/// This utility is needed to determine if the a value definition can have a
+/// lack of users ignored along a specific path.
+class DeadEndBlocks {
+  llvm::SetVector<const SILBasicBlock *> ReachableBlocks;
+  const SILFunction *F;
+  bool isComputed = false;
+    }
+    
+    #include 'swift/SIL/SILDebugScope.h'
+#include 'swift/SIL/SILFunction.h'
+    
+      public:
+    static inline void *
+    getAsVoidPointer(swift::ConcreteDeclRef ref) {
+      return ref.Data.getOpaqueValue();
+    }
+    
+        ComputationNodeBasePtr fromRoot = fromNet.GetNodeFromName(fromName);
+    
+        // compute after single pass
+    double m_mean; // mean of all values
+    double m_rms;  // root mean square
+    
+        bool GetOptionalIncludeDataValue(const ConfigParamList& params, const size_t numFixedParams)
+    {
+        bool includeData = false;
+        for (size_t paramNumber = params.size(); paramNumber > numFixedParams; paramNumber--)
+        {
+            // process optional parameter if it exists
+            std::string propName, value;
+            if (OptionalParameter(params[paramNumber - 1], propName, value))
+            {
+                if (EqualInsensitive(propName, 'includeData'))
+                {
+                    includeData = ConfigValue(value);
+                }
+                else
+                {
+                    RuntimeError('Invalid optional parameter %s, valid optional parameters: includeData=(false|true)', propName.c_str());
+                }
+            }
+        }
+    }
+    
+    // The following ifdef block is the standard way of creating macros which make exporting
+// from a DLL simpler. All files within this DLL are compiled with the DATAWRITER_EXPORTS
+// symbol defined on the command line. This symbol should not be defined on any project
+// that uses this DLL. This way any other project whose source files include this file see
+// DATAWRITER_API functions as being imported from a DLL, whereas this DLL sees symbols
+// defined with this macro as being exported.
+#ifdef _WIN32
+#if defined(DATAWRITER_EXPORTS)
+#define DATAWRITER_API __declspec(dllexport)
+#elif defined(DATAWRITER_LOCAL)
+#define DATAWRITER_API
+#else
+#define DATAWRITER_API __declspec(dllimport)
+#endif
+#else
+#define DATAWRITER_API
+#endif
+    
+    #include <string>
+    
+    // Add a second service with one sync streamed unary method.
+class StreamedUnaryDupPkg
+    : public duplicate::EchoTestService::WithStreamedUnaryMethod_Echo<
+          TestServiceImplDupPkg> {
+ public:
+  Status StreamedEcho(
+      ServerContext* context,
+      ServerUnaryStreamer<EchoRequest, EchoResponse>* stream) override {
+    EchoRequest req;
+    EchoResponse resp;
+    uint32_t next_msg_sz;
+    stream->NextMessageSize(&next_msg_sz);
+    gpr_log(GPR_INFO, 'Streamed Unary Next Message Size is %u', next_msg_sz);
+    GPR_ASSERT(stream->Read(&req));
+    resp.set_message(req.message() + '_dup');
+    GPR_ASSERT(stream->Write(resp));
+    return Status::OK;
   }
 };
     
-    template <class K>
-ArrayData* MixedArray::updateWithRef(K k, TypedValue data) {
-  assert(!isFull());
-  auto p = insert(k);
-  if (p.found) {
-    // TODO(#3888164): We should restructure things so we don't have to check
-    // KindOfUninit here.
-    setElemWithRef(p.tv, data);
-    return this;
-  }
-  // TODO(#3888164): We should restructure things so we don't have to check
-  // KindOfUninit here.
-  tvDupWithRef(data, p.tv);
-  if (p.tv.m_type == KindOfUninit) p.tv.m_type = KindOfNull;
-  return this;
+    #endif  // GRPC_TEST_CPP_UTIL_BENCHMARK_CONFIG_H
+
+    
+    bool grpc_parse_slice_to_uint32(grpc_slice str, uint32_t* result) {
+  return gpr_parse_bytes_to_uint32((const char*)GRPC_SLICE_START_PTR(str),
+                                   GRPC_SLICE_LENGTH(str), result) != 0;
+}
+
+    
+    static void test_compression_algorithm_parse(void) {
+  size_t i;
+  const char* valid_names[] = {'identity', 'message/gzip', 'message/deflate',
+                               'stream/gzip'};
+  const grpc_compression_algorithm valid_algorithms[] = {
+      GRPC_COMPRESS_NONE, GRPC_COMPRESS_MESSAGE_GZIP,
+      GRPC_COMPRESS_MESSAGE_DEFLATE, GRPC_COMPRESS_STREAM_GZIP};
+  const char* invalid_names[] = {'gzip2', 'foo', '', '2gzip'};
+    }
+    
+    int getifaddrs(struct ifaddrs** result) {
+	int fd = socket(PF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
+	if (fd < 0) {
+		return -1;
+	}
+	netlinkrequest ifaddr_request;
+	memset(&ifaddr_request, 0, sizeof(ifaddr_request));
+	ifaddr_request.header.nlmsg_flags = NLM_F_ROOT | NLM_F_REQUEST;
+	ifaddr_request.header.nlmsg_type = RTM_GETADDR;
+	ifaddr_request.header.nlmsg_len = NLMSG_LENGTH(sizeof(ifaddrmsg));
+	ssize_t count = send(fd, &ifaddr_request, ifaddr_request.header.nlmsg_len, 0);
+	if (static_cast<size_t>(count) != ifaddr_request.header.nlmsg_len) {
+		close(fd);
+		return -1;
+	}
+	struct ifaddrs* start = NULL;
+	struct ifaddrs* current = NULL;
+	char buf[kMaxReadSize];
+	ssize_t amount_read = recv(fd, &buf, kMaxReadSize, 0);
+	while (amount_read > 0) {
+		nlmsghdr* header = reinterpret_cast<nlmsghdr*>(&buf[0]);
+		size_t header_size = static_cast<size_t>(amount_read);
+		for ( ; NLMSG_OK(header, header_size);
+		      header = NLMSG_NEXT(header, header_size)) {
+			switch (header->nlmsg_type) {
+			case NLMSG_DONE:
+				// Success. Return.
+				*result = start;
+				close(fd);
+				return 0;
+			case NLMSG_ERROR:
+				close(fd);
+				freeifaddrs(start);
+				return -1;
+			case RTM_NEWADDR: {
+				ifaddrmsg* address_msg =
+						reinterpret_cast<ifaddrmsg*>(NLMSG_DATA(header));
+				rtattr* rta = IFA_RTA(address_msg);
+				ssize_t payload_len = IFA_PAYLOAD(header);
+				while (RTA_OK(rta, payload_len)) {
+					if (rta->rta_type == IFA_ADDRESS) {
+						int family = address_msg->ifa_family;
+						if (family == AF_INET || family == AF_INET6) {
+							ifaddrs* newest = new ifaddrs;
+							memset(newest, 0, sizeof(ifaddrs));
+							if (current) {
+								current->ifa_next = newest;
+							} else {
+								start = newest;
+							}
+							if (populate_ifaddrs(newest, address_msg, RTA_DATA(rta),
+									     RTA_PAYLOAD(rta)) != 0) {
+								freeifaddrs(start);
+								*result = NULL;
+								return -1;
+							}
+							current = newest;
+						}
+					}
+					rta = RTA_NEXT(rta, payload_len);
+				}
+				break;
+			}
+			}
+		}
+		amount_read = recv(fd, &buf, kMaxReadSize, 0);
+	}
+	close(fd);
+	freeifaddrs(start);
+	return -1;
 }
     
-      // SnapshotImpl is kept in a doubly-linked circular list
-  SnapshotImpl* prev_;
-  SnapshotImpl* next_;
+    # if defined(CLZ64)
+/**
+ * OC_ILOGNZ_64 - Integer binary logarithm of a non-zero 64-bit value.
+ * @_v: A non-zero 64-bit value.
+ * Returns floor(log2(_v))+1.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * If _v is zero, the return value is undefined; use OC_ILOG_64() instead.
+ */
+#  define OC_ILOGNZ_64(_v) (CLZ64_OFFS-CLZ64(_v))
+/**
+ * OC_ILOG_64 - Integer binary logarithm of a 64-bit value.
+ * @_v: A 64-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ */
+#  define OC_ILOG_64(_v)   (OC_ILOGNZ_64(_v)&-!!(_v))
+# else
+#  define OC_ILOGNZ_64(_v) (oc_ilog64(_v))
+#  define OC_ILOG_64(_v)   (oc_ilog64(_v))
+# endif
     
-    class Env;
+    /* mapping conventions:
+   only one submap (this would change for efficient 5.1 support for example)*/
+/* Four psychoacoustic profiles are used, one for each blocktype */
+static const vorbis_info_mapping0 _map_nominal_u[2]={
+  {1, {0,0,0,0,0,0}, {0}, {0}, 0,{0},{0}},
+  {1, {0,0,0,0,0,0}, {1}, {1}, 0,{0},{0}}
+};
     
+    static const vorbis_residue_template _res_8s_0[]={
+  {2,0,32,  &_residue_44_mid,
+   &_huff_book__8c0_s_single,&_huff_book__8c0_s_single,
+   &_resbook_8s_0,&_resbook_8s_0},
+};
+static const vorbis_residue_template _res_8s_1[]={
+  {2,0,32,  &_residue_44_mid,
+   &_huff_book__8c1_s_single,&_huff_book__8c1_s_single,
+   &_resbook_8s_1,&_resbook_8s_1},
+};
     
-TEST(FindFileTest, Multiple) {
-  Add('150', '200');
-  Add('200', '250');
-  Add('300', '350');
-  Add('400', '450');
-  ASSERT_EQ(0, Find('100'));
-  ASSERT_EQ(0, Find('150'));
-  ASSERT_EQ(0, Find('151'));
-  ASSERT_EQ(0, Find('199'));
-  ASSERT_EQ(0, Find('200'));
-  ASSERT_EQ(1, Find('201'));
-  ASSERT_EQ(1, Find('249'));
-  ASSERT_EQ(1, Find('250'));
-  ASSERT_EQ(2, Find('251'));
-  ASSERT_EQ(2, Find('299'));
-  ASSERT_EQ(2, Find('300'));
-  ASSERT_EQ(2, Find('349'));
-  ASSERT_EQ(2, Find('350'));
-  ASSERT_EQ(3, Find('351'));
-  ASSERT_EQ(3, Find('400'));
-  ASSERT_EQ(3, Find('450'));
-  ASSERT_EQ(4, Find('451'));
+    typedef ogg_int16_t vorbis_fpu_control;
+    
+    # undef n2l
+# define n2l(c,l)        (l =((unsigned long)(*((c)++)))<<24L, \
+                         l|=((unsigned long)(*((c)++)))<<16L, \
+                         l|=((unsigned long)(*((c)++)))<< 8L, \
+                         l|=((unsigned long)(*((c)++))))
+    
+    	for (j=0; j<6; j++)
+		{
+		for (i=0; i<1000; i++) /**/
+			{
+			des_encrypt1(&data[0],key,1);
+			GetTSC(s1);
+			des_encrypt1(&data[0],key,1);
+			des_encrypt1(&data[0],key,1);
+			des_encrypt1(&data[0],key,1);
+			GetTSC(e1);
+			GetTSC(s2);
+			des_encrypt1(&data[0],key,1);
+			des_encrypt1(&data[0],key,1);
+			des_encrypt1(&data[0],key,1);
+			des_encrypt1(&data[0],key,1);
+			GetTSC(e2);
+			des_encrypt1(&data[0],key,1);
+			}
     }
     
-      Status Read(uint64_t offset, size_t n, Slice* result, char* scratch) const {
-    if (offset > size_) {
-      return Status::IOError('Offset greater than file size.');
-    }
-    const uint64_t available = size_ - offset;
-    if (n > available) {
-      n = static_cast<size_t>(available);
-    }
-    if (n == 0) {
-      *result = Slice();
-      return Status::OK();
-    }
-    }
+    #include <osquery/config.h>
+#include <osquery/core.h>
+#include <osquery/database.h>
+#include <osquery/events.h>
+#include <osquery/extensions.h>
+#include <osquery/filesystem.h>
+#include <osquery/flags.h>
+#include <osquery/logger.h>
+#include <osquery/registry.h>
+#include <osquery/sql.h>
+#include <osquery/status.h>
+#include <osquery/tables.h>
     
-      // count the keys
-  leveldb::Iterator* iter = db->NewIterator(leveldb::ReadOptions());
-  size_t num_keys = 0;
-  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-    num_keys++;
+      if (osquery.md) {
+    osquery.md->release();
+    osquery.md = NULL;
   }
-  delete iter;
-  ASSERT_EQ(kNumKeys, num_keys) << 'Bad number of keys';
     
-      WriteOptions write_options;
-  ASSERT_OK(db->Put(write_options, '1', 'b'));
-  ASSERT_OK(db->Put(write_options, '2', 'c'));
-  ASSERT_OK(db->Put(write_options, '3', 'd'));
-  ASSERT_OK(db->Put(write_options, '4', 'e'));
-  ASSERT_OK(db->Put(write_options, '5', 'f'));
+      /*
+   * @brief a variable to keep track of the temp fs used in carving
+   *
+   * This variable represents the location in which we store all of our carved
+   * files. When a carve has completed all of the desired files, as well
+   * as the tar archive should reside in this directory
+   */
+  boost::filesystem::path carveDir_;
     
-    void BlockBuilder::Add(const Slice& key, const Slice& value) {
-  Slice last_key_piece(last_key_);
-  assert(!finished_);
-  assert(counter_ <= options_->block_restart_interval);
-  assert(buffer_.empty() // No values yet?
-         || options_->comparator->Compare(key, last_key_piece) > 0);
-  size_t shared = 0;
-  if (counter_ < options_->block_restart_interval) {
-    // See how much sharing to do with previous string
-    const size_t min_length = std::min(last_key_piece.size(), key.size());
-    while ((shared < min_length) && (last_key_piece[shared] == key[shared])) {
-      shared++;
-    }
-  } else {
-    // Restart compression
-    restarts_.push_back(buffer_.size());
-    counter_ = 0;
-  }
-  const size_t non_shared = key.size() - shared;
-    }
+    class FilesystemConfigPlugin : public ConfigPlugin {
+ public:
+  Status genConfig(std::map<std::string, std::string>& config);
+  Status genPack(const std::string& name,
+                 const std::string& value,
+                 std::string& pack);
+};
     
-    Iterator* NewErrorIterator(const Status& status) {
-  return new EmptyIterator(status);
+      status = tls_config_plugin->setUp();
+  ASSERT_TRUE(status.ok());
+    
+      flatbuffers::FlatBufferBuilder builder;
+  auto name = builder.CreateString('Dog');
+  auto sound = builder.CreateString('Bark');
+  auto animal_buffer = sample::CreateAnimal(builder, name, sound);
+  builder.Finish(animal_buffer);
+    
+    inline flatbuffers::Offset<Monster> CreateMonsterDirect(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    const Vec3 *pos = 0,
+    int16_t mana = 150,
+    int16_t hp = 100,
+    const char *name = nullptr,
+    const std::vector<uint8_t> *inventory = nullptr,
+    Color color = Color_Blue,
+    const std::vector<flatbuffers::Offset<Weapon>> *weapons = nullptr,
+    Equipment equipped_type = Equipment_NONE,
+    flatbuffers::Offset<void> equipped = 0) {
+  return MyGame::Sample::CreateMonster(
+      _fbb,
+      pos,
+      mana,
+      hp,
+      name ? _fbb.CreateString(name) : 0,
+      inventory ? _fbb.CreateVector<uint8_t>(*inventory) : 0,
+      color,
+      weapons ? _fbb.CreateVector<flatbuffers::Offset<Weapon>>(*weapons) : 0,
+      equipped_type,
+      equipped);
 }
     
-    #define VERIFY_MARKER_END()                                             \
-  if (start_pos + marker_len != *pos) {                                 \
-    fprintf(stderr, 'Invalid marker length: declared=%d actual=%d\n',   \
-            static_cast<int>(marker_len),                               \
-            static_cast<int>(*pos - start_pos));                        \
-    jpg->error = JPEG_WRONG_MARKER_SIZE;                                \
-    return false;                                                       \
-  }
-    
-    // Performs in-place floating point 8x8 DCT on block[0..63].
-// Note that the DCT used here is the DCT-2 with the first term multiplied by
-// 1/sqrt(2) and the result scaled by 1/2.
-void ComputeBlockDCTDouble(double block[64]);
-    
-    
-    {
-    {
-    {      // Add back the last sentinel node.
-      tree[j_end + 1] = sentinel;
-    }
-    if (SetDepth(static_cast<int>(2 * n - 1), &tree[0], depth, tree_limit)) {
-      /* We need to pack the Huffman tree in tree_limit bits. If this was not
-         successful, add fake entities to the lowest values and retry. */
-      break;
-    }
-  }
+    MonsterStorage::Service::~Service() {
 }
     
-    // Fills in 'result' with the inverse DCT of 'block'.
-// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
-// a row-by-row memory layout.
-void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
+    // A common interface for objects having comments in the source.
+// Return formatted comments to be inserted in generated code.
+struct CommentHolder {
+  virtual ~CommentHolder() {}
+  virtual grpc::string GetLeadingComments(const grpc::string prefix) const = 0;
+  virtual grpc::string GetTrailingComments(const grpc::string prefix) const = 0;
+  virtual std::vector<grpc::string> GetAllComments() const = 0;
+};
     
-    // Library to decode jpeg coefficients into an RGB image.
-    
-    
-    {}  // namespace guetzli
+    using namespace MyGame::Sample;
