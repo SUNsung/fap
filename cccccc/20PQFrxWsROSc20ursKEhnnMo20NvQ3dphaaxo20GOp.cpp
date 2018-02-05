@@ -1,335 +1,229 @@
 
         
-        #endif  // ATOM_APP_ATOM_MAIN_DELEGATE_H_
-
-    
-    namespace mate {
-class Arguments;
-}
-    
-    #include 'atom/browser/api/trackable_object.h'
-#include 'atom/browser/net/atom_network_delegate.h'
-#include 'native_mate/arguments.h'
-#include 'native_mate/handle.h'
-    
-     protected:
-  explicit Event(v8::Isolate* isolate);
-  ~Event() override;
-    
-    namespace {
-    }
-    
-    // Like URLRequestAsarJob, but asks the JavaScript handler for file path.
-class URLRequestAsyncAsarJob : public JsAsker<asar::URLRequestAsarJob> {
- public:
-  URLRequestAsyncAsarJob(net::URLRequest*, net::NetworkDelegate*);
-    }
-    
-    #ifndef ATOM_BROWSER_NET_URL_REQUEST_STRING_JOB_H_
-#define ATOM_BROWSER_NET_URL_REQUEST_STRING_JOB_H_
-    
-    // relauncher implements main browser application relaunches across platforms.
-// When a browser wants to relaunch itself, it can't simply fork off a new
-// process and exec a new browser from within. That leaves open a window
-// during which two browser applications might be running concurrently. If
-// that happens, each will wind up with a distinct Dock icon, which is
-// especially bad if the user expected the Dock icon to be persistent by
-// choosing Keep in Dock from the icon's contextual menu.
-//
-// relauncher approaches this problem by introducing an intermediate
-// process (the 'relauncher') in between the original browser ('parent') and
-// replacement browser ('relaunched'). The helper executable is used for the
-// relauncher process; because it's an LSUIElement, it doesn't get a Dock
-// icon and isn't visible as a running application at all. The parent will
-// start a relauncher process, giving it the 'writer' side of a pipe that it
-// retains the 'reader' end of. When the relauncher starts up, it will
-// establish a kqueue to wait for the parent to exit, and will then write to
-// the pipe. The parent, upon reading from the pipe, is free to exit. When the
-// relauncher is notified via its kqueue that the parent has exited, it
-// proceeds, launching the relaunched process. The handshake to synchronize
-// the parent with the relauncher is necessary to avoid races: the relauncher
-// needs to be sure that it's monitoring the parent and not some other process
-// in light of PID reuse, so the parent must remain alive long enough for the
-// relauncher to set up its kqueue.
-    
-    void MapFieldGenerator::GenerateSerializedSizeCode(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'size += $name$_.CalculateSize(_map_$name$_codec);\n');
-}
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
-    
-    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_REFLECTION_CLASS_H__
-
-    
-    
-    
-    SourceGeneratorBase::SourceGeneratorBase(const FileDescriptor* descriptor,
-                                         const Options *options)
-    : descriptor_(descriptor), options_(options) {
-}
-    
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
-}
-    
-      caffe::Datum datum;
-  datum.set_channels(2);  // one channel for each image in the pair
-  datum.set_height(rows);
-  datum.set_width(cols);
-  LOG(INFO) << 'A total of ' << num_items << ' items.';
-  LOG(INFO) << 'Rows: ' << rows << ' Cols: ' << cols;
-  for (int itemid = 0; itemid < num_items; ++itemid) {
-    int i = caffe::caffe_rng_rand() % num_items;  // pick a random  pair
-    int j = caffe::caffe_rng_rand() % num_items;
-    read_image(&image_file, &label_file, i, rows, cols,
-        pixels, &label_i);
-    read_image(&image_file, &label_file, j, rows, cols,
-        pixels + (rows * cols), &label_j);
-    datum.set_data(pixels, 2*rows*cols);
-    if (label_i  == label_j) {
-      datum.set_label(1);
-    } else {
-      datum.set_label(0);
-    }
-    datum.SerializeToString(&value);
-    std::string key_str = caffe::format_int(itemid, 8);
-    db->Put(leveldb::WriteOptions(), key_str, value);
-  }
-    
-      virtual inline const char* type() const { return 'Convolution'; }
-    
-      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
-  cudnnTensorDescriptor_t    bias_desc_;
-  cudnnFilterDescriptor_t      filter_desc_;
-  vector<cudnnConvolutionDescriptor_t> conv_descs_;
-  int bottom_offset_, top_offset_, bias_offset_;
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {}  // namespace caffe
-    
-      virtual inline const char* type() const { return 'Embed'; }
-  virtual inline int ExactNumBottomBlobs() const { return 1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    
-    #include <vector>
-    
-    // A CostFunc that takes the variance of step into account in the cost.
-inT64 DPPoint::CostWithVariance(const DPPoint* prev) {
-  if (prev == NULL || prev == this) {
-    UpdateIfBetter(0, 1, NULL, 0, 0, 0);
-    return 0;
-  }
-    }
-    
-    
-    {  // We shouldn't try calculations if the characters are very short (for example
-  // for punctuation).
-  if (min_height > kBlnXHeight / 8 && height > 0) {
-    float result = height * kBlnXHeight * yscale / min_height;
-    *max_xht = result + kFinalPixelTolerance;
-    result = height * kBlnXHeight * yscale / max_height;
-    *min_xht = result - kFinalPixelTolerance;
-  }
-}
-    
-      STRING ToString() const;
-    
-    class ROW:public ELIST_LINK
+        CvRect cvGetValidDisparityROI( CvRect roi1, CvRect roi2, int minDisparity,
+                              int numberOfDisparities, int SADWindowSize )
 {
-  friend void tweak_row_baseline(ROW *, double, double);
-  public:
-    ROW() {
-    }                            //empty constructor
-    ROW(                    //constructor
-        inT32 spline_size,  //no of segments
-        inT32 *xstarts,     //segment boundaries
-        double *coeffs,     //coefficients //ascender size
-        float x_height,
-        float ascenders,
-        float descenders,   //descender size
-        inT16 kern,         //char gap
-        inT16 space);       //word gap
-    ROW(               //constructor
-        TO_ROW *row,   //textord row
-        inT16 kern,    //char gap
-        inT16 space);  //word gap
-    }
-    
-    // redirect the messages to R's console.
-namespace dmlc {
-void CustomLogMessage::Log(const std::string& msg) {
-  Rprintf('%s\n', msg.c_str());
-}
-}  // namespace dmlc
-    
-    /*!
- * \brief Input stream that support additional PeekRead
- *  operation, besides read.
- */
-class PeekableInStream : public dmlc::Stream {
- public:
-  explicit PeekableInStream(dmlc::Stream* strm)
-      : strm_(strm), buffer_ptr_(0) {}
-    }
-    
-      // construct column matrix from GHistIndexMatrix
-  inline void Init(const GHistIndexMatrix& gmat,
-                   const FastHistParam& param) {
-    this->dtype = static_cast<DataType>(param.colmat_dtype);
-    /* if dtype is smaller than uint32_t, multiple bin_id's will be stored in each
-       slot of internal buffer. */
-    packing_factor_ = sizeof(uint32_t) / static_cast<size_t>(this->dtype);
-    }
-    
-    // make column page from subset of rowbatchs
-void SimpleDMatrix::MakeColPage(const RowBatch& batch,
-                                size_t buffer_begin,
-                                const std::vector<bool>& enabled,
-                                SparsePage* pcol) {
-  const int nthread = std::min(omp_get_max_threads(), std::max(omp_get_num_procs() / 2 - 2, 1));
-  pcol->Clear();
-  common::ParallelGroupBuilder<SparseBatch::Entry>
-      builder(&pcol->offset, &pcol->data);
-  builder.InitBudget(info().num_col, nthread);
-  bst_omp_uint ndata = static_cast<bst_uint>(batch.size);
-  #pragma omp parallel for schedule(static) num_threads(nthread)
-  for (bst_omp_uint i = 0; i < ndata; ++i) {
-    int tid = omp_get_thread_num();
-    RowBatch::Inst inst = batch[i];
-    for (bst_uint j = 0; j < inst.length; ++j) {
-      const SparseBatch::Entry &e = inst[j];
-      if (enabled[e.index]) {
-        builder.AddBudget(e.index, tid);
-      }
-    }
-  }
-  builder.InitStorage();
-  #pragma omp parallel for schedule(static) num_threads(nthread)
-  for (bst_omp_uint i = 0; i < ndata; ++i) {
-    int tid = omp_get_thread_num();
-    RowBatch::Inst inst = batch[i];
-    for (bst_uint j = 0; j < inst.length; ++j) {
-      const SparseBatch::Entry &e = inst[j];
-      builder.Push(
-          e.index,
-          SparseBatch::Entry(buffered_rowset_[i + buffer_begin], e.fvalue),
-          tid);
-    }
-  }
-  CHECK_EQ(pcol->Size(), info().num_col);
-  // sort columns
-  bst_omp_uint ncol = static_cast<bst_omp_uint>(pcol->Size());
-  #pragma omp parallel for schedule(dynamic, 1) num_threads(nthread)
-  for (bst_omp_uint i = 0; i < ncol; ++i) {
-    if (pcol->offset[i] < pcol->offset[i + 1]) {
-      std::sort(dmlc::BeginPtr(pcol->data) + pcol->offset[i],
-                dmlc::BeginPtr(pcol->data) + pcol->offset[i + 1],
-                SparseBatch::Entry::CmpValue);
-    }
-  }
+    return (CvRect)cv::getValidDisparityROI( roi1, roi2, minDisparity,
+                                            numberOfDisparities, SADWindowSize );
 }
     
-      bool Next() override {
-    if (!parser_->Next()) return false;
-    const RowBlock<IndexType>& batch = parser_->Value();
-    LOG(INFO) << batch.size;
-    dense_index_.resize(num_col_ * batch.size);
-    dense_value_.resize(num_col_ * batch.size);
-    std::fill(dense_value_.begin(), dense_value_.end(), 0.0);
-    offset_.resize(batch.size + 1);
-    offset_[0] = 0;
+        Mat black_comp, white_comp;
+    for(int i = 0; i < ncorners; i++)
+    {
+        int channels = 0;
+        Rect roi(cvRound(corners[i].x - region_size.width), cvRound(corners[i].y - region_size.height),
+            region_size.width*2 + 1, region_size.height*2 + 1);
+        Mat img_roi = img(roi);
+        calcHist(&img_roi, 1, &channels, Mat(), hist, 1, &nbins, &_ranges);
     }
     
-    // Define a customized logistic regression objective in C++.
-// Implement the interface.
-class MyLogistic : public ObjFunction {
- public:
-  void Configure(const std::vector<std::pair<std::string, std::string> >& args) override {
-    param_.InitAllowUnknown(args);
-  }
-  void GetGradient(const std::vector<bst_float> &preds,
-                   const MetaInfo &info,
-                   int iter,
-                   std::vector<bst_gpair> *out_gpair) override {
-    out_gpair->resize(preds.size());
-    for (size_t i = 0; i < preds.size(); ++i) {
-      bst_float w = info.GetWeight(i);
-      // scale the negative examples!
-      if (info.labels[i] == 0.0f) w *= param_.scale_neg_weight;
-      // logistic transformation
-      bst_float p = 1.0f / (1.0f + std::exp(-preds[i]));
-      // this is the gradient
-      bst_float grad = (p - info.labels[i]) * w;
-      // this is the second order gradient
-      bst_float hess = p * (1.0f - p) * w;
-      out_gpair->at(i) = bst_gpair(grad, hess);
-    }
-  }
-  const char* DefaultEvalMetric() const override {
-    return 'error';
-  }
-  void PredTransform(std::vector<bst_float> *io_preds) override {
-    // transform margin value to probability.
-    std::vector<bst_float> &preds = *io_preds;
-    for (size_t i = 0; i < preds.size(); ++i) {
-      preds[i] = 1.0f / (1.0f + std::exp(-preds[i]));
-    }
-  }
-  bst_float ProbToMargin(bst_float base_score) const override {
-    // transform probability to margin value
-    return -std::log(1.0f / base_score - 1.0f);
-  }
+            vector<Point2f> corners_art, corners_fcb;
+        for(size_t i = 0; i < brdsNum; ++i)
+        {
+            for(;;)
+            {
+                boards[i] = cbg(bg, camMat, distCoeffs, sqSile, corners_art);
+                if(findChessboardCorners(boards[i], cornersSize, corners_fcb))
+                    break;
+            }
     }
     
-    XXH32_sizeofState() is used to know how much space must be allocated for the xxHash 32-bits state.
-Note that the state must be aligned to access 'long long' fields. Memory must be allocated and referenced by a pointer.
-This pointer must then be provided as 'state' into XXH32_resetState(), which initializes the state.
+            // undistort
+        cv::undistortPoints(distorted,
+            normalizedUndistorted,
+            m_cameraMatrix,
+            distortionCoeff);
     
-        // When we find the element, insert the element and mark found
-    if (elem == pivot) {                // Found it!
-      found = true;
-      if (insert_after == true) {       // Skip one more, if inserting after it
-        it.Push();
-      }
-      it.InsertElement(value);
-    } else {
-      it.Push();
+        mutable std::vector<Point3f> corners3d;
+private:
+    void generateEdge(const Point3f& p1, const Point3f& p2, std::vector<Point3f>& out) const;
+    Mat generateChessBoard(const Mat& bg, const Mat& camMat, const Mat& distCoeffs,
+        const Point3f& zero, const Point3f& pb1, const Point3f& pb2,
+        float sqWidth, float sqHeight, const std::vector<Point3f>& whole, std::vector<Point2f>& corners) const;
+    void generateBasis(Point3f& pb1, Point3f& pb2) const;
+    
+    /* ///////////////////// chess_corner_test ///////////////////////// */
+void CV_ChessboardDetectorBadArgTest::run( int /*start_from */)
+{
+    Mat bg(800, 600, CV_8U, Scalar(0));
+    Mat_<float> camMat(3, 3);
+    camMat << 300.f, 0.f, bg.cols/2.f, 0, 300.f, bg.rows/2.f, 0.f, 0.f, 1.f;
+    Mat_<float> distCoeffs(1, 5);
+    distCoeffs << 1.2f, 0.2f, 0.f, 0.f, 0.f;
     }
     
-      virtual bool Valid() const override { return (current_ != nullptr); }
+    TEST(Calib3d_DecomposeProjectionMatrix, accuracy)
+{
+    CV_DecomposeProjectionMatrixTest test;
+    test.safe_run();
+}
+
     
-      m_jSliceB = env->NewGlobalRef(SliceJni::construct0(env));
-  if(m_jSliceB == nullptr) {
-    // exception thrown: OutOfMemoryError
-    return;
+    namespace HPHP {
+    }
+    
+    int64_t TimeStamp::Get(bool &error, int hou, int min, int sec, int mon, int day,
+                   int yea, bool gmt) {
+  auto dt = req::make<DateTime>(Current());
+  if (gmt) {
+    dt->setTimezone(req::make<TimeZone>('UTC'));
+  }
+  dt->set(hou, min, sec, mon, day, yea);
+  return dt->toTimeStamp(error);
+}
+    
+    Variant HHVM_FUNCTION(xhprof_sample_disable) {
+  return s_profiler_factory->stop();
+}
+    
+      int64_t getTime() const;
+    
+    
+    {
+    {///////////////////////////////////////////////////////////////////////////////
+}}
+
+    
+      /* see if we encountered an error */
+  if (err <= -2) {
+    OnigUChar err_str[ONIG_MAX_ERROR_MESSAGE_LEN];
+    onig_error_code_to_str(err_str, err);
+    raise_warning('mbregex search failure in mbsplit(): %s', err_str);
+    return false;
   }
     
+    #ifndef incl_HPHP_SWEEPABLE_H_
+#define incl_HPHP_SWEEPABLE_H_
     
-    {class DirectComparatorJniCallback : public BaseComparatorJniCallback {
- public:
-      DirectComparatorJniCallback(
-        JNIEnv* env, jobject jComparator,
-        const ComparatorJniCallbackOptions* copt);
-      ~DirectComparatorJniCallback();
+    template <class F, bool inc>
+void PackedArray::IterateV(const ArrayData* arr, F fn) {
+  assert(checkInvariants(arr));
+  auto elm = packedData(arr);
+  if (inc) arr->incRefCount();
+  SCOPE_EXIT { if (inc) decRefArr(const_cast<ArrayData*>(arr)); };
+  for (auto i = arr->m_size; i--; elm++) {
+    if (ArrayData::call_helper(fn, *elm)) break;
+  }
+}
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    
+      /**
+   * Sub-class handles a request by implementing this function. This is called
+   * when the server determines this request should not be processed (e.g., due
+   * to timeout).
+   */
+  virtual void abortRequest(Transport* transport) = 0;
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    
+      /// Perform a blocking wait on the timer.
+  /**
+   * This function is used to wait for the timer to expire. This function
+   * blocks and does not return until the timer has expired.
+   *
+   * @throws boost::system::system_error Thrown on failure.
+   */
+  void wait()
+  {
+    boost::system::error_code ec;
+    this->service.wait(this->implementation, ec);
+    boost::asio::detail::throw_error(ec, 'wait');
+  }
+    
+      /// Start an asynchronous fill.
+  template <typename ReadHandler>
+  BOOST_ASIO_INITFN_RESULT_TYPE(ReadHandler,
+      void (boost::system::error_code, std::size_t))
+  async_fill(BOOST_ASIO_MOVE_ARG(ReadHandler) handler);
+    
+    
+    {
+    {} // namespace asio
+} // namespace boost
+    
+    
+    {private:
+  CompletionCondition completion_condition_;
 };
-}  // namespace rocksdb
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+# include <boost/asio/detail/null_event.hpp>
+#elif defined(BOOST_ASIO_WINDOWS)
+# include <boost/asio/detail/win_event.hpp>
+#elif defined(BOOST_ASIO_HAS_PTHREADS)
+# include <boost/asio/detail/posix_event.hpp>
+#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
+# include <boost/asio/detail/std_event.hpp>
+#else
+# error Only Windows, POSIX and std::condition_variable are supported!
+#endif
+    
+    
+    {} // namespace boost_asio_handler_invoke_helpers
+    
+    namespace boost {
+namespace asio {
+namespace detail {
+    }
+    }
+    }
+    
+    
+void DBWrapper::Init(Handle<Object> exports) {
+  Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
+  tpl->SetClassName(String::NewSymbol('DBWrapper'));
+  tpl->InstanceTemplate()->SetInternalFieldCount(8);
+  tpl->PrototypeTemplate()->Set(String::NewSymbol('open'),
+      FunctionTemplate::New(Open)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol('get'),
+      FunctionTemplate::New(Get)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol('put'),
+      FunctionTemplate::New(Put)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol('delete'),
+      FunctionTemplate::New(Delete)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol('dump'),
+      FunctionTemplate::New(Dump)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol('createColumnFamily'),
+      FunctionTemplate::New(CreateColumnFamily)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol('writeBatch'),
+      FunctionTemplate::New(WriteBatch)->GetFunction());
+  tpl->PrototypeTemplate()->Set(String::NewSymbol('compactRange'),
+      FunctionTemplate::New(CompactRange)->GetFunction());
+    }
+    
+        // Helper methods
+    static bool HasFamilyNamed(std::string& name, DBWrapper* db);
+    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
+        Handle<Array> array);
+    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
+        Handle<Array> array, DBWrapper* db_wrapper, std::string cf);
+    static Handle<Value> CompactRangeDefault(const v8::Arguments& args);
+    static Handle<Value> CompactColumnFamily(const Arguments& args);
+    static Handle<Value> CompactOptions(const Arguments& args);
+    static Handle<Value> CompactAll(const Arguments& args);
+    
+      /// If list is empty, return false and leave *result unchanged.
+  /// Else, remove the first/last elem, store it in *result, and return true
+  bool PopLeft(const std::string& key, std::string* result);  // First
+  bool PopRight(const std::string& key, std::string* result); // Last
+    
+      if (left == right) {
+    // In one of the two following cases:
+    // (1) left is the first one of block_ids
+    // (2) there is a gap of blocks between block of `left` and `left-1`.
+    // we can further distinguish the case of key in the block or key not
+    // existing, by comparing the target key and the key of the previous
+    // block to the left of the block found.
+    if (block_ids[left] > 0 &&
+        (left == left_bound || block_ids[left - 1] != block_ids[left] - 1) &&
+        CompareBlockKey(block_ids[left] - 1, target) > 0) {
+      current_ = restarts_;
+      return false;
+    }
+    }
+    
+    
+    {   private:
+     const std::set<uint32_t> m_ignore_histograms;
+ };
