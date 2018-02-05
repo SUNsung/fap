@@ -1,113 +1,170 @@
 
         
-        CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
-    
-          self.data = {}
-    
-        find_union(segments, Project).includes(:namespace).order_id_desc
-  end
-    
-        # Check if a reset_password_token is provided in the request
-    def assert_reset_token_passed
-      if params[:reset_password_token].blank?
-        set_flash_message(:alert, :no_token)
-        redirect_to new_session_path(resource_name)
-      end
+          private
+    def processed?
+      image.attached?
     end
     
-      def serialize_options(resource)
-    methods = resource_class.authentication_keys.dup
-    methods = methods.keys if methods.is_a?(Hash)
-    methods << :password if resource.respond_to?(:password)
-    { methods: methods, only: [:password] }
+          def scope(association)
+        klass = association.klass
+        reflection = association.reflection
+        scope = klass.unscoped
+        owner = association.owner
+        chain = get_chain(reflection, association, scope.alias_tracker)
+    
+              def method_missing(called, *args, &block)
+            tag_string(called, *args, &block)
+          end
+      end
+    
+          # Need to experiment if this priority is the best one: rendered => output_buffer
+      def document_root_element
+        Nokogiri::HTML::Document.parse(@rendered.blank? ? @output_buffer : @rendered).root
+      end
+    
+      def test_redirect_to_with_block
+    get :redirect_to_with_block
+    assert_response :redirect
+    assert_redirected_to 'http://www.rubyonrails.org/'
   end
     
-      # GET /resource/unlock/new
-  def new
-    self.resource = resource_class.new
+          private
+        def listener
+          @listener || @server.mutex.synchronize { @listener ||= Listener.new(self, @server.event_loop) }
+        end
+    
+    class TestResponseTest < ActiveSupport::TestCase
+  def assert_response_code_range(range, predicate)
+    response = ActionDispatch::TestResponse.new
+    (0..599).each do |status|
+      response.status = status
+      assert_equal range.include?(status), response.send(predicate),
+                   'ActionDispatch::TestResponse.new(#{status}).#{predicate}'
+    end
   end
     
-      devise_scope :user do
-    get '/some/route' => 'some_devise_controller'
-  end
+          def reset_all # :nodoc:
+        current_instances.each_value(&:reset)
+      end
     
-          def remember_key(resource, scope)
-        resource.rememberable_options.fetch(:key, 'remember_#{scope}_token')
+        def dump_params_keys(hash = params)
+      hash.keys.sort.inject('') do |s, k|
+        value = hash[k]
+    
+        rescue_from StandardError, with: :handle_exception_with_mailer_class
+    
+        def process(args)
+      arg_is_present? args, '--server', 'The --server command has been replaced by the \
+                          'serve' subcommand.'
+      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
+                          'serve' subcommand.'
+      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
+                          use the 'build' subcommand.'
+      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
+                          '--watch'.'
+      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
+                          the '--watch' switch.'
+      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
+                          favour of 'highlighter'.'
+      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
+                          your config files.'
+      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
+                          config files.'
+      no_subcommand(args)
+    end
+    
+          # Group an array of items by an expression
+      #
+      # input - the object array
+      # variable - the variable to assign each item to in the expression
+      # expression -a Liquid comparison expression passed in as a string
+      #
+      # Returns the filtered array of objects
+      def group_by_exp(input, variable, expression)
+        return input unless groupable?(input)
+    
+      private
+    
+      # Finds the groups of the source user, optionally limited to those visible to
+  # the current user.
+  def execute(current_user = nil)
+    segments = all_groups(current_user)
+    
+            # Initialize the provider to represent the given machine.
+        #
+        # @param [Vagrant::Machine] machine The machine that this provider
+        #   is responsible for.
+        def initialize(machine)
+        end
+    
+            # Helper method to get access to the class variable. This is mostly
+        # exposed for tests. This shouldn't be mucked with directly, since it's
+        # structure may change at any time.
+        def registered; @@registered; end
       end
     end
   end
 end
 
     
-      class << self
-    # Our ID will be composed of the following:
-    # 6 bytes (48 bits) of millisecond-level timestamp
-    # 2 bytes (16 bits) of sequence data
-    #
-    # The 'sequence data' is intended to be unique within a
-    # given millisecond, yet obscure the 'serial number' of
-    # this row.
-    #
-    # To do this, we hash the following data:
-    # * Table name (if provided, skipped if not)
-    # * Secret salt (should not be guessable)
-    # * Timestamp (again, millisecond-level granularity)
-    #
-    # We then take the first two bytes of that value, and add
-    # the lowest two bytes of the table ID sequence number
-    # (`table_name`_id_seq). This means that even if we insert
-    # two rows at the same millisecond, they will have
-    # distinct 'sequence data' portions.
-    #
-    # If this happens, and an attacker can see both such IDs,
-    # they can determine which of the two entries was inserted
-    # first, but not the total number of entries in the table
-    # (even mod 2**16).
-    #
-    # The table name is included in the hash to ensure that
-    # different tables derive separate sequence bases so rows
-    # inserted in the same millisecond in different tables do
-    # not reveal the table ID sequence number for one another.
-    #
-    # The secret salt is included in the hash to ensure that
-    # external users cannot derive the sequence base given the
-    # timestamp and table name, which would allow them to
-    # compute the table ID sequence number.
-    def define_timestamp_id
-      return if already_defined?
+        name_width ||= @results.map {|v, result|
+      v.size + (case v; when /^vm1_/; @loop_wl1; when /^vm2_/; @loop_wl2; end ? 1 : 0)
+    }.max
+    minwidth ||= 7
+    width = @execs.map{|(_, v)| [v.size, minwidth].max}
     
-          it 'does not process payload if invalid signature exists' do
-        payload['signature'] = {'type' => 'RsaSignature2017'}
+        # convert grid mixins LESS when => Sass @if
+    def convert_grid_mixins(file)
+      file = replace_rules file, /@mixin make-grid-columns/, comments: false do |css, pos|
+        mixin_all_grid_columns css, selector: '.col-xs-#{$i}, .col-sm-#{$i}, .col-md-#{$i}, .col-lg-#{$i}', to: '$grid-columns'
+      end
+      file = replace_rules file, /@mixin float-grid-columns/, comments: false do |css, pos|
+        mixin_all_grid_columns css, selector: '.col-#{$class}-#{$i}', to: '$grid-columns'
+      end
+      file = replace_rules file, /@mixin calc-grid-column/ do |css|
+        css = indent css.gsub(/.*when (.*?) {/, '@if \1 {').gsub(/(\$[\w-]+)\s+=\s+(\w+)/, '\1 == \2').gsub(/(?<=-)(\$[a-z]+)/, '#{\1}')
+        if css =~ /== width/
+          css = '@mixin calc-grid-column($index, $class, $type) {\n#{css}'
+        elsif css =~ /== offset/
+          css += '\n}'
+        end
+        css
+      end
+      file = replace_rules file, /@mixin loop-grid-columns/ do |css|
+        unindent <<-SASS, 8
+        // [converter] This is defined recursively in LESS, but Sass supports real loops
+        @mixin loop-grid-columns($columns, $class, $type) {
+          @for $i from 0 through $columns {
+            @include calc-grid-column($i, $class, $type);
+          }
+        }
+        SASS
+      end
+      file
+    end
+    }
+    }
     
-      def updated
-    object.updated_at.iso8601
+        def metadata_subdir(leaf, version: self.version, timestamp: :latest, create: false)
+      if create && timestamp == :latest
+        raise CaskError, 'Cannot create metadata subdir when timestamp is :latest.'
+      end
+    
+          attr_accessor(*VALID_KEYS)
+      attr_accessor :pairs
+    
+          def installed_gem_version(gem_name)
+        Gem.loaded_specs[gem_name].version
+      end
+    
+        # @abstract
+    #
+    # Identify the SHA of the commit that will be deployed.  This will most likely involve SshKit's capture method.
+    #
+    # @return void
+    #
+    def fetch_revision
+      raise NotImplementedError, 'Your SCM strategy module should provide a #fetch_revision method'
+    end
   end
-    
-          it 'creates mention for target account' do
-        expect(account.mentions.count).to eq 1
-      end
-    end
-    
-          path = if timestamp == :latest
-        Pathname.glob(metadata_versioned_path(version: version).join('*')).sort.last
-      else
-        timestamp = new_timestamp if timestamp == :now
-        metadata_versioned_path(version: version).join(timestamp)
-      end
-    
-        # Get rid of any info 'dir' files, so they don't conflict at the link stage
-    info_dir_file = @f.info + 'dir'
-    if info_dir_file.file? && !@f.skip_clean?(info_dir_file)
-      observe_file_removal info_dir_file
-    end
+end
