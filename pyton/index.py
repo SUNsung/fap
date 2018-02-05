@@ -1,252 +1,171 @@
 
         
-        
-def assertRegexpMatches(self, text, regexp, msg=None):
-    if hasattr(self, 'assertRegexp'):
-        return self.assertRegexp(text, regexp, msg)
-    else:
-        m = re.match(regexp, text)
-        if not m:
-            note = 'Regexp didn\'t match: %r not found' % (regexp)
-            if len(text) < 1000:
-                note += ' in %r' % text
-            if msg is None:
-                msg = note
-            else:
-                msg = note + ', ' + msg
-            self.assertTrue(m, msg)
+        containers = (('thefuck/python3-tcsh',
+               u'''FROM python:3
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'),
+              ('thefuck/python2-tcsh',
+               u'''FROM python:2
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'))
     
+            Args:
+            max_workers: The maximum number of threads that can be used to
+                execute the given calls.
+        '''
+        self._max_workers = max_workers
+        self._work_queue = queue.Queue()
+        self._threads = set()
+        self._shutdown = False
+        self._shutdown_lock = threading.Lock()
     
-class TestCache(unittest.TestCase):
-    def setUp(self):
-        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
-        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
-        _mkdir(TESTDATA_DIR)
-        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
-        self.tearDown()
+    # Workers are created as daemon threads. This is done to allow the interpreter
+# to exit when there are still idle threads in a ThreadPoolExecutor's thread
+# pool (i.e. shutdown() was not called). However, allowing workers to die with
+# the interpreter has two undesirable properties:
+#   - The workers would still be running during interpretor shutdown,
+#     meaning that they would fail in unpredictable ways.
+#   - The workers could be killed while evaluating a work item, which could
+#     be bad if the callable being evaluated has external side-effects e.g.
+#     writing to a file.
+#
+# To work around this problem, an exit handler is installed which tells the
+# workers to exit when their work queues are empty and then waits until the
+# threads finish.
     
-        def test_socks5(self):
-        self.assertTrue(isinstance(self._get_ip('socks5'), compat_str))
+    def download_urls_with_executor(urls, executor, timeout=60):
+    try:
+        url_to_content = {}
+        future_to_url = dict((executor.submit(load_url, url, timeout), url)
+                             for url in urls)
     
-    import re
-    
-            return info_dict
+    if __name__ == '__main__':
+    main()
 
     
-        # If it isn't any of the above, we don't understand it.
-    if not host:
-        raise AnsibleError('Not a valid network hostname: %s' % address)
+    _HEADERS = {'content-type': 'application/json'}
+_CONNECT_TIMEOUT_SEC = 0.01
+# Setting this to None seems to screw up the Requests/urllib3 libs.
+_READ_TIMEOUT_SEC = 30
+_HMAC_HEADER = 'x-ycm-hmac'
+_logger = logging.getLogger( __name__ )
     
-      def testSimple(self):
-    labels = [9, 3, 0]
-    records = [self._record(labels[0], 0, 128, 255),
-               self._record(labels[1], 255, 0, 1),
-               self._record(labels[2], 254, 255, 0)]
-    contents = b''.join([record for record, _ in records])
-    expected = [expected for _, expected in records]
-    filename = os.path.join(self.get_temp_dir(), 'cifar')
-    open(filename, 'wb').write(contents)
+          # When the user rejects the extra conf, we reject it
+      with patch( 'ycm.vimsupport.PresentDialog',
+                  return_value = 1,
+                  new_callable = ExtendedMock ) as present_dialog:
+        ycm.OnFileReadyToParse()
+        ok_( ycm.FileParseRequestReady() )
+        ycm.HandleFileParseRequest()
     
-    def four_lines_data():
-  text = StringIO(FOUR_LINES)
-    
-      def __init__(self,
-               label_lookup_path=None,
-               uid_lookup_path=None):
-    if not label_lookup_path:
-      label_lookup_path = os.path.join(
-          FLAGS.model_dir, 'imagenet_2012_challenge_label_map_proto.pbtxt')
-    if not uid_lookup_path:
-      uid_lookup_path = os.path.join(
-          FLAGS.model_dir, 'imagenet_synset_to_human_label_map.txt')
-    self.node_lookup = self.load(label_lookup_path, uid_lookup_path)
-    
-    package(default_visibility = ['//visibility:public'])
-    
-    
-def fake_data(num_images):
-  '''Generate a fake dataset that matches the dimensions of MNIST.'''
-  data = numpy.ndarray(
-      shape=(num_images, IMAGE_SIZE, IMAGE_SIZE, NUM_CHANNELS),
-      dtype=numpy.float32)
-  labels = numpy.zeros(shape=(num_images,), dtype=numpy.int64)
-  for image in xrange(num_images):
-    label = image % 2
-    data[image, :, :, 0] = label - 0.5
-    labels[image] = label
-  return data, labels
-    
-    
-tf.app.flags.DEFINE_float('learning_rate', 0.5, 'Learning rate.')
-tf.app.flags.DEFINE_float('learning_rate_decay_factor', 0.99,
-                          'Learning rate decays by this much.')
-tf.app.flags.DEFINE_float('max_gradient_norm', 5.0,
-                          'Clip gradients to this norm.')
-tf.app.flags.DEFINE_integer('batch_size', 64,
-                            'Batch size to use during training.')
-tf.app.flags.DEFINE_integer('size', 1024, 'Size of each model layer.')
-tf.app.flags.DEFINE_integer('num_layers', 3, 'Number of layers in the model.')
-tf.app.flags.DEFINE_integer('from_vocab_size', 40000, 'English vocabulary size.')
-tf.app.flags.DEFINE_integer('to_vocab_size', 40000, 'French vocabulary size.')
-tf.app.flags.DEFINE_string('data_dir', '/tmp', 'Data directory')
-tf.app.flags.DEFINE_string('train_dir', '/tmp', 'Training directory.')
-tf.app.flags.DEFINE_string('from_train_data', None, 'Training data.')
-tf.app.flags.DEFINE_string('to_train_data', None, 'Training data.')
-tf.app.flags.DEFINE_string('from_dev_data', None, 'Training data.')
-tf.app.flags.DEFINE_string('to_dev_data', None, 'Training data.')
-tf.app.flags.DEFINE_integer('max_train_data_size', 0,
-                            'Limit on the size of training data (0: no limit).')
-tf.app.flags.DEFINE_integer('steps_per_checkpoint', 200,
-                            'How many training steps to do per checkpoint.')
-tf.app.flags.DEFINE_boolean('decode', False,
-                            'Set to True for interactive decoding.')
-tf.app.flags.DEFINE_boolean('self_test', False,
-                            'Run a self-test if this is set to True.')
-tf.app.flags.DEFINE_boolean('use_fp16', False,
-                            'Train using fp16 instead of fp32.')
-    
-        To feed data in step(..) it must be a list of batch-major vectors, while
-    data here contains single length-major cases. So the main logic of this
-    function is to re-index data cases to be in the proper format for feeding.
-    
-        parser = argparse.ArgumentParser()
-    parser.add_argument('-e', '--estimators', nargs='+', required=True,
-                        choices=ESTIMATORS)
-    args = vars(parser.parse_args())
-    
-        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
-    plt.plot(sample_sizes, one_core, label='one core')
-    plt.plot(sample_sizes, multi_core, label='multi core')
-    plt.xlabel('n_samples')
-    plt.ylabel('Time (s)')
-    plt.title('Parallel %s' % func.__name__)
-    plt.legend()
-    
-    ward = AgglomerativeClustering(n_clusters=3, linkage='ward')
-    
-        fn = os.path.relpath(fn,
-                         start=os.path.dirname(__import__(package).__file__))
-    try:
-        lineno = inspect.getsourcelines(obj)[1]
-    except Exception:
-        lineno = ''
-    return url_fmt.format(revision=revision, package=package,
-                          path=fn, lineno=lineno)
-    
-            # split the paragraph into fake smaller paragraphs to make the
-        # problem harder e.g. more similar to tweets
-        if lang in ('zh', 'ja'):
-        # FIXME: whitespace tokenizing does not work on chinese and japanese
-            continue
-        words = content.split()
-        n_groups = len(words) / n_words_per_short_text
-        if n_groups < 1:
-            continue
-        groups = np.array_split(words, n_groups)
-    
-    The goal of this exercise is to train a linear classifier on text features
-that represent sequences of up to 3 consecutive characters so as to be
-recognize natural languages by using the frequencies of short character
-sequences as 'fingerprints'.
-    
-    
-if __name__ == '__main__':
-    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
-    # block to be able to use a multi-core grid search that also works under
-    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
-    # The multiprocessing module is used as the backend of joblib.Parallel
-    # that is used when n_jobs != 1 in GridSearchCV
-    
-    The second figure shows the calibration curve of a linear support-vector
-classifier (LinearSVC). LinearSVC shows the opposite behavior as Gaussian
-naive Bayes: the calibration curve has a sigmoid curve, which is typical for
-an under-confident classifier. In the case of LinearSVC, this is caused by the
-margin property of the hinge loss, which lets the model focus on hard samples
-that are close to the decision boundary (the support vectors).
-    
-    from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
-from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.gaussian_process.kernels import RBF
-from sklearn import datasets
-    
+      If the test fails (for the correct reason), then it is marked as skipped.
+  If it fails for any other reason, it is marked as failed.
+  If the test passes, then it is also marked as failed.'''
+  def decorator( test ):
+    @functools.wraps( test )
+    def Wrapper( *args, **kwargs ):
+      try:
+        test( *args, **kwargs )
+      except Exception as test_exception:
+        # Ensure that we failed for the right reason
+        test_exception_message = ToUnicode( test_exception )
         try:
-        # hide console in MS windows
-        startupinfo = subprocess.STARTUPINFO()
-        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-        startupinfo.wShowWindow = subprocess.SW_HIDE
+          for matcher in exception_matchers:
+            assert_that( test_exception_message, matcher )
+        except AssertionError:
+          # Failed for the wrong reason!
+          import traceback
+          print( 'Test failed for the wrong reason: ' + traceback.format_exc() )
+          # Real failure reason is the *original* exception, we're only trapping
+          # and ignoring the exception that is expected.
+          raise test_exception
     
-        def set_appid_not_exist(self, appid):
-        xlog.warn('APPID_manager, set_appid_not_exist %s', appid)
-        with self.lock:
-            if appid not in self.not_exist_appids:
-                self.not_exist_appids.append(appid)
-                try:
-                    config.GAE_APPIDS.remove(appid)
-                except:
-                    pass
-    
-    
-from xlog import getLogger
-xlog = getLogger('gae_proxy')
-from config import config
-    
-    from antlr3 import runtime_version, runtime_version_str
-from antlr3.constants import DEFAULT_CHANNEL, HIDDEN_CHANNEL, EOF, \
-     EOR_TOKEN_TYPE, INVALID_TOKEN_TYPE
-from antlr3.exceptions import RecognitionException, MismatchedTokenException, \
-     MismatchedRangeException, MismatchedTreeNodeException, \
-     NoViableAltException, EarlyExitException, MismatchedSetException, \
-     MismatchedNotSetException, FailedPredicateException, \
-     BacktrackingFailed, UnwantedTokenException, MissingTokenException
-from antlr3.tokens import CommonToken, EOF_TOKEN, SKIP_TOKEN
-from antlr3.compat import set, frozenset, reversed
-    
-        If you don't use named rewrite streams, a 'default' stream is used as
-    the first example shows.
-    '''
-    
-    DEFAULT_PROGRAM_NAME = 'default'
-    MIN_TOKEN_INDEX = 0
+        # If not a dictionary or a list, the response is necessarily a
+    # scalar: boolean, number, string, etc. In this case, we print
+    # it to the user.
+    if not isinstance( self._response, ( dict, list ) ):
+      return self._HandleBasicResponse()
     
     
-    def getInputStream(self):
-        return None
+class DebugInfoRequest( BaseRequest ):
+  def __init__( self, extra_data = None ):
+    super( DebugInfoRequest, self ).__init__()
+    self._extra_data = extra_data
+    self._response = None
     
-        @gen_test
-    def test_wait_timeout(self):
-        c = locks.Condition()
-        wait = c.wait(timedelta(seconds=0.01))
-        self.io_loop.call_later(0.02, c.notify)  # Too late.
-        yield gen.sleep(0.03)
-        self.assertFalse((yield wait))
+    import os
+import subprocess
+import sys
+import os.path as p
+import glob
     
-    .. warning::
+    from ycm.client.base_request import ( BaseRequest, BuildRequestData,
+                                      HandleServerException )
     
-    from tornado.escape import utf8, to_unicode
-from tornado import gen
-from tornado.iostream import IOStream
-from tornado.log import app_log
-from tornado.stack_context import NullContext
-from tornado.tcpserver import TCPServer
-from tornado.test.util import skipBefore35, skipIfNonUnix, exec_test, unittest
-from tornado.testing import AsyncTestCase, ExpectLog, bind_unused_port, gen_test
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
+        c-ares fails to resolve some names when ``family`` is ``AF_UNSPEC``,
+    so it is only recommended for use in ``AF_INET`` (i.e. IPv4).  This is
+    the default for ``tornado.simple_httpclient``, but other libraries
+    may default to ``AF_UNSPEC``.
     
-class MainHandler(BaseHandler, tornado.auth.FacebookGraphMixin):
-    @tornado.web.authenticated
-    @tornado.web.asynchronous
-    def get(self):
-        self.facebook_request('/me/home', self._on_stream,
-                              access_token=self.current_user['access_token'])
+       Unlike the standard library's `queue` module, the classes defined here
+   are *not* thread-safe. To use these queues from another thread,
+   use `.IOLoop.add_callback` to transfer control to the `.IOLoop` thread
+   before calling any queue methods.
+'''
     
-        def test_sequential_execution(self):
-        self.command_stack[0].execute()
-        output_after_first_execution = os.listdir(self.test_dir)
-        self.assertEqual(output_after_first_execution[0], 'bar.txt')
-        self.command_stack[1].execute()
-        output_after_second_execution = os.listdir(self.test_dir)
-        self.assertEqual(output_after_second_execution[0], 'baz.txt')
+            server = client = None
+        try:
+            sock, port = bind_unused_port()
+            with NullContext():
+                server = TestServer()
+                server.add_socket(sock)
+            client = IOStream(socket.socket())
+            with ExpectLog(app_log, 'Exception in callback'):
+                yield client.connect(('localhost', port))
+                yield client.write(b'hello')
+                yield client.read_until_close()
+                yield gen.moment
+        finally:
+            if server is not None:
+                server.stop()
+            if client is not None:
+                client.close()
+    
+    import logging
+from tornado.curl_httpclient import CurlAsyncHTTPClient
+from tornado.simple_httpclient import SimpleAsyncHTTPClient
+from tornado.ioloop import IOLoop
+from tornado.options import define, options, parse_command_line
+from tornado.web import RequestHandler, Application
+    
+        def on_operator_inservice(self):
+        super(Suspect, self).abort_diagnostics()
+        super(Suspect, self).on_operator_inservice()  # message ignored
+    
+        def test_sales_manager_shall_respond_through_proxy_with_delay(cls):
+        cls.p.busy = 'Yes'
+        start_time = time()
+        cls.p.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+Sales Manager is busy\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
+    
+            def __init__(self, *args, **kwargs):
+            pass
     
     
 class RadioTest(unittest.TestCase):
@@ -256,39 +175,29 @@ class RadioTest(unittest.TestCase):
     http://stackoverflow.com/questions/5387299/python-unittest-testcase-execution-order
     '''
     
-        def test_display_current_time_at_midnight(self):
-        '''
-        Would almost always fail (despite of right at/after midnight) if
-        untestable production code would have been used.
-        '''
-        time_provider_stub = MidnightTimeProvider()
-        class_under_test = TimeDisplay()
-        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(time_provider_stub), expected_time)
+    class TimeDisplay(object):
     
-    ### OUTPUT ###
-# request 2 handled in handler 1
-# request 5 handled in handler 1
-# request 14 handled in handler 2
-# request 22 handled in handler 3
-# request 18 handled in handler 2
-# request 3 handled in handler 1
-# end of chain, no handler for 35
-# request 27 handled in handler 3
-# request 20 handled in handler 2
-# ------------------------------
-# request 2 handled in coroutine 1
-# request 5 handled in coroutine 1
-# request 14 handled in coroutine 2
-# request 22 handled in coroutine 3
-# request 18 handled in coroutine 2
-# request 3 handled in coroutine 1
-# end of chain, no coroutine for 35
-# request 27 handled in coroutine 3
-# request 20 handled in coroutine 2
-# (0.2369999885559082, 0.16199994087219238)
-
     
-    *TL;DR80
-Traverses a container and accesses the container's elements.
-'''
+def main():
+    '''
+    >>> c = Catalog('param_value_1').main_method()
+    executed method 1!
+    >>> Catalog('param_value_2').main_method()
+    executed method 2!
+    '''
+    
+    
+class Transaction(object):
+    '''A transaction guard.
+    
+    
+# Example usage...
+def main():
+    data1 = Data('Data 1')
+    data2 = Data('Data 2')
+    view1 = DecimalViewer()
+    view2 = HexViewer()
+    data1.attach(view1)
+    data1.attach(view2)
+    data2.attach(view2)
+    data2.attach(view1)
