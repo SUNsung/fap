@@ -1,149 +1,103 @@
 
         
-            return groups
+        
+def test_unicode_form_item_verbose(httpbin):
+    r = http('--verbose', '--form',
+             'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
+    assert HTTP_OK in r
+    assert UNICODE in r
     
-    from ansible.plugins.action import ActionBase
+        def load(self):
+        try:
+            with open(self.path, 'rt') as f:
+                try:
+                    data = json.load(f)
+                except ValueError as e:
+                    raise ValueError(
+                        'Invalid %s JSON: %s [%s]' %
+                        (type(self).__name__, str(e), self.path)
+                    )
+                self.update(data)
+        except IOError as e:
+            if e.errno != errno.ENOENT:
+                raise
     
-            if not args.test:
-            with open(path, 'w') as metadata_fd:
-                metadata_fd.write(contents)
     
-        def remove_role(self, role_name):
-        del self.roles[role_name]
+EXIT_STATUS_LABELS = {
+    value: key
+    for key, value in ExitStatus.__dict__.items()
+    if key.isupper()
+}
 
     
-        # Generate predictions from the model
-    expected = ['Setosa', 'Versicolor', 'Virginica']
-    predict_x = {
-        'SepalLength': [5.1, 5.9, 6.9],
-        'SepalWidth': [3.3, 3.0, 3.1],
-        'PetalLength': [1.7, 4.2, 5.4],
-        'PetalWidth': [0.5, 1.5, 2.1],
-    }
+    # TODO: Use MultiDict for headers once added to `requests`.
+# https://github.com/jakubroztocil/httpie/issues/130
+from httpie.plugins import plugin_manager
+from requests.structures import CaseInsensitiveDict
     
-        # For each question (row in dist), find the top 4 words.
-    _, pred_idx = tf.nn.top_k(dist, 4)
-    
-        # A bucket scale is a list of increasing numbers from 0 to 1 that we'll use
-    # to select a bucket. Length of [scale[i], scale[i+1]] is proportional to
-    # the size if i-th training bucket, as used later.
-    train_buckets_scale = [sum(train_bucket_sizes[:i + 1]) / train_total_size
-                           for i in xrange(len(train_bucket_sizes))]
-    
-    
-def get_wmt_enfr_train_set(directory):
-  '''Download the WMT en-fr training corpus to directory unless it's there.'''
-  train_path = os.path.join(directory, 'giga-fren.release2.fixed')
-  if not (gfile.Exists(train_path +'.fr') and gfile.Exists(train_path +'.en')):
-    corpus_file = maybe_download(directory, 'training-giga-fren.tar',
-                                 _WMT_ENFR_TRAIN_URL)
-    print('Extracting tar file %s' % corpus_file)
-    with tarfile.open(corpus_file, 'r') as corpus_tar:
-      corpus_tar.extractall(directory)
-    gunzip_file(train_path + '.fr.gz', train_path + '.fr')
-    gunzip_file(train_path + '.en.gz', train_path + '.en')
-  return train_path
-    
-    # Print results
-tf.logging.info('Predictions on memory')
-for idx, prediction in enumerate(predict_results):
-    type = prediction['class_ids']  # Get the predicted class (index)
-    if type == 0:
-        tf.logging.info('...I think: {}, is Iris Setosa'.format(prediction_input[idx]))
-    elif type == 1:
-        tf.logging.info('...I think: {}, is Iris Versicolor'.format(prediction_input[idx]))
-    else:
-        tf.logging.info('...I think: {}, is Iris Virginica'.format(prediction_input[idx]))
-
-    
-        Total time is tracked and then divided by the total number of steps
-    to get the average step time and then batch_size is used to determine
-    the running average of examples per second. The examples per second for the
-    most recent interval is also logged.
-  '''
-    
-        plot_feature_times(all_times, batch_size, all_features, data)
-    plot_feature_errors(all_errors, batch_size, all_features, data)
-    
-        ax.set_xlabel('ratio of n_sample / n_population')
-    ax.set_ylabel('Time (s)')
-    ax.legend()
-    
-        class_name = info['fullname'].split('.')[0]
-    if type(class_name) != str:
-        # Python 2 only
-        class_name = class_name.encode('utf-8')
-    module = __import__(info['module'], fromlist=[class_name])
-    obj = attrgetter(info['fullname'])(module)
-    
-        print('Decompressing %s' % ARCHIVE_NAME)
-    with closing(tarfile.open(ARCHIVE_NAME, 'r:gz')) as archive:
-        archive.extractall(path='.')
-    os.remove(ARCHIVE_NAME)
-
-    
-    import os
-import tarfile
-from contextlib import closing
-    
-            valbox = Tk.Frame(fm)
-        controller.complexity = Tk.StringVar()
-        controller.complexity.set('1.0')
-        c = Tk.Frame(valbox)
-        Tk.Label(c, text='C:', anchor='e', width=7).pack(side=Tk.LEFT)
-        Tk.Entry(c, width=6, textvariable=controller.complexity).pack(
-            side=Tk.LEFT)
-        c.pack()
-    
-    The outer product of the row and column label vectors shows a
-representation of the checkerboard structure.
-    
-    np.random.seed(0)
-    
-    #----------------------------------------------------------------------
-def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    '''wrapper'''
-    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
-    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
-    hostname = urlparse(url).hostname
-    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
-        return False
-    upid = match1(url, r'.+/content/(\w+)')
-    
-        print_info(site_info, title, ext, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir=output_dir, merge=merge)
-    
-    
-def SetUpYCM():
-  from ycm import base
-  from ycmd import user_options_store
-  from ycm.youcompleteme import YouCompleteMe
-    
-    from concurrent.futures import _base
-    
-    The follow diagram and text describe the data-flow through the system:
-    
-    def main():
-    for name, fn in [('sequential', sequential),
-                     ('processes', with_process_pool_executor),
-                     ('threads', with_thread_pool_executor)]:
-        sys.stdout.write('%s: ' % name.ljust(12))
-        start = time.time()
-        if fn() != [True] * len(PRIMES):
-            sys.stdout.write('failed\n')
+        def __exit__(self, exc_type, exc_value, traceback):
+        if exc_type is None:
+            self.stop_event.wait(self.WAIT_EVENT_TIMEOUT)
         else:
-            sys.stdout.write('%.2f seconds\n' % (time.time() - start))
+            if self.wait_to_close_event:
+                # avoid server from waiting for event timeouts
+                # if an exception is found in the main thread
+                self.wait_to_close_event.set()
+    
+        :param str u_string: unicode string to check. Must be unicode
+        and not Python 2 `str`.
+    :rtype: bool
+    '''
+    assert isinstance(u_string, str)
+    try:
+        u_string.encode('ascii')
+        return True
+    except UnicodeEncodeError:
+        return False
+
+    
+    Data structures that power Requests.
+'''
     
     
-  # This returns a future! Use JsonFromFuture to get the value.
-  # |timeout| is num seconds to tolerate no response from server before giving
-  # up; see Requests docs for details (we just pass the param along).
-  @staticmethod
-  def PostDataToHandlerAsync( data, handler, timeout = _READ_TIMEOUT_SEC ):
-    return BaseRequest._TalkToHandlerAsync( data, handler, 'POST', timeout )
+class AuthBase(object):
+    '''Base class that all auth implementations derive from'''
     
-        if 'fixits' in self._response:
-      return self._HandleFixitResponse()
+        def set_cookie(self, cookie, *args, **kwargs):
+        if hasattr(cookie.value, 'startswith') and cookie.value.startswith(''') and cookie.value.endswith('''):
+            cookie.value = cookie.value.replace('\\'', '')
+        return super(RequestsCookieJar, self).set_cookie(cookie, *args, **kwargs)
+    
+        from urllib3.packages.ordered_dict import OrderedDict
+    
+            try:
+            internetSettings = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
+                r'Software\Microsoft\Windows\CurrentVersion\Internet Settings')
+            # ProxyEnable could be REG_SZ or REG_DWORD, normalizing it
+            proxyEnable = int(winreg.QueryValueEx(internetSettings,
+                                              'ProxyEnable')[0])
+            # ProxyOverride is almost always a string
+            proxyOverride = winreg.QueryValueEx(internetSettings,
+                                                'ProxyOverride')[0]
+        except OSError:
+            return False
+        if not proxyEnable or not proxyOverride:
+            return False
+    
+        auth = requests.auth.HTTPDigestAuth('user', 'pass')
+    
+        return groups
+    
+        parser.add_argument('-t', '--test',
+                        dest='test',
+                        action='store_true',
+                        help='show what would be downloaded without downloading')
+    
+    AnsibleDumper.add_representer(
+    HostVars,
+    represent_hostvars,
+)
+    
+    
+def naughty_strings(filepath=FILEPATH):
+    '''Get the list of naughty_strings.
