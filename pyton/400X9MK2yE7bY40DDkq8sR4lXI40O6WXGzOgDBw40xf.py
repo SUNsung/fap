@@ -1,155 +1,149 @@
 
         
-        
-PACKAGES = [
-    'httpie',
-    'requests',
-    'pygments',
-]
+            return groups
     
-            '''
-        available_plugins = plugin_manager.get_formatters_grouped()
-        self.enabled_plugins = []
-        for group in groups:
-            for cls in available_plugins[group]:
-                p = cls(env=env, **kwargs)
-                if p.enabled:
-                    self.enabled_plugins.append(p)
+    from ansible.plugins.action import ActionBase
     
-    error_msg = None
+            if not args.test:
+            with open(path, 'w') as metadata_fd:
+                metadata_fd.write(contents)
     
-    
-def test_max_redirects(httpbin):
-    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
-             error_exit_ok=True)
-    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+        def remove_role(self, role_name):
+        del self.roles[role_name]
 
     
-        ERROR_TIMEOUT = 2
-    ERROR_TOO_MANY_REDIRECTS = 6
+        # Generate predictions from the model
+    expected = ['Setosa', 'Versicolor', 'Virginica']
+    predict_x = {
+        'SepalLength': [5.1, 5.9, 6.9],
+        'SepalWidth': [3.3, 3.0, 3.1],
+        'PetalLength': [1.7, 4.2, 5.4],
+        'PetalWidth': [0.5, 1.5, 2.1],
+    }
     
-        def get_auth_plugin(self, auth_type):
-        return self.get_auth_plugin_mapping()[auth_type]
+        # For each question (row in dist), find the top 4 words.
+    _, pred_idx = tf.nn.top_k(dist, 4)
     
-        def add_options(self, parser):
-        '''
-        Populate option parse with options available for this command
-        '''
-        group = OptionGroup(parser, 'Global Options')
-        group.add_option('--logfile', metavar='FILE',
-            help='log file. if omitted stderr will be used')
-        group.add_option('-L', '--loglevel', metavar='LEVEL', default=None,
-            help='log level (default: %s)' % self.settings['LOG_LEVEL'])
-        group.add_option('--nolog', action='store_true',
-            help='disable logging completely')
-        group.add_option('--profile', metavar='FILE', default=None,
-            help='write python cProfile stats to FILE')
-        group.add_option('--pidfile', metavar='FILE',
-            help='write process ID to FILE')
-        group.add_option('-s', '--set', action='append', default=[], metavar='NAME=VALUE',
-            help='set/override setting (may be repeated)')
-        group.add_option('--pdb', action='store_true', help='enable pdb on failure')
+        # A bucket scale is a list of increasing numbers from 0 to 1 that we'll use
+    # to select a bucket. Length of [scale[i], scale[i+1]] is proportional to
+    # the size if i-th training bucket, as used later.
+    train_buckets_scale = [sum(train_bucket_sizes[:i + 1]) / train_total_size
+                           for i in xrange(len(train_bucket_sizes))]
     
-        def short_desc(self):
-        return 'Run quick benchmark test'
     
-        @property
-    def templates_dir(self):
-        _templates_base_dir = self.settings['TEMPLATES_DIR'] or \
-            join(scrapy.__path__[0], 'templates')
-        return join(_templates_base_dir, 'spiders')
+def get_wmt_enfr_train_set(directory):
+  '''Download the WMT en-fr training corpus to directory unless it's there.'''
+  train_path = os.path.join(directory, 'giga-fren.release2.fixed')
+  if not (gfile.Exists(train_path +'.fr') and gfile.Exists(train_path +'.en')):
+    corpus_file = maybe_download(directory, 'training-giga-fren.tar',
+                                 _WMT_ENFR_TRAIN_URL)
+    print('Extracting tar file %s' % corpus_file)
+    with tarfile.open(corpus_file, 'r') as corpus_tar:
+      corpus_tar.extractall(directory)
+    gunzip_file(train_path + '.fr.gz', train_path + '.fr')
+    gunzip_file(train_path + '.en.gz', train_path + '.en')
+  return train_path
+    
+    # Print results
+tf.logging.info('Predictions on memory')
+for idx, prediction in enumerate(predict_results):
+    type = prediction['class_ids']  # Get the predicted class (index)
+    if type == 0:
+        tf.logging.info('...I think: {}, is Iris Setosa'.format(prediction_input[idx]))
+    elif type == 1:
+        tf.logging.info('...I think: {}, is Iris Versicolor'.format(prediction_input[idx]))
+    else:
+        tf.logging.info('...I think: {}, is Iris Virginica'.format(prediction_input[idx]))
 
     
-        def add_user(self, user):  # ...
-    def remove_user(self, user):  # ... 
+        Total time is tracked and then divided by the total number of steps
+    to get the average step time and then batch_size is used to determine
+    the running average of examples per second. The examples per second for the
+    most recent interval is also logged.
+  '''
     
+        plot_feature_times(all_times, batch_size, all_features, data)
+    plot_feature_errors(all_errors, batch_size, all_features, data)
     
+        ax.set_xlabel('ratio of n_sample / n_population')
+    ax.set_ylabel('Time (s)')
+    ax.legend()
     
-            (2016-01, url0), 2
-        (2016-01, url1), 1
-        '''
-        yield key, sum(values)
+        class_name = info['fullname'].split('.')[0]
+    if type(class_name) != str:
+        # Python 2 only
+        class_name = class_name.encode('utf-8')
+    module = __import__(info['module'], fromlist=[class_name])
+    obj = attrgetter(info['fullname'])(module)
     
-        def remove_from_tail(self):
-        ...
-    
-            (category1, 1), product4
-        (category1, 2), product1
-        (category1, 3), product2
-        (category2, 3), product1
-        (category2, 7), product3
-        '''
-        category, product_id = key
-        quantity = value
-        yield (category, quantity), product_id
-    
-    Revision ID: 12d55656cbca
-Revises: 55179c7f25c7
-Create Date: 2015-12-14 13:37:17.374852
-    
-    '''
-    
-    
-def downgrade():
-    op.drop_column('table_columns', 'expression')
+        print('Decompressing %s' % ARCHIVE_NAME)
+    with closing(tarfile.open(ARCHIVE_NAME, 'r:gz')) as archive:
+        archive.extractall(path='.')
+    os.remove(ARCHIVE_NAME)
 
     
+    import os
+import tarfile
+from contextlib import closing
     
-def downgrade():
-  with op.batch_alter_table('tables') as batch_op:
-    batch_op.drop_constraint('user_id', type_='foreignkey')
-    batch_op.drop_column('user_id')
-
+            valbox = Tk.Frame(fm)
+        controller.complexity = Tk.StringVar()
+        controller.complexity.set('1.0')
+        c = Tk.Frame(valbox)
+        Tk.Label(c, text='C:', anchor='e', width=7).pack(side=Tk.LEFT)
+        Tk.Entry(c, width=6, textvariable=controller.complexity).pack(
+            side=Tk.LEFT)
+        c.pack()
+    
+    The outer product of the row and column label vectors shows a
+representation of the checkerboard structure.
+    
+    np.random.seed(0)
+    
+    #----------------------------------------------------------------------
+def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    '''wrapper'''
+    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
+    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
+    hostname = urlparse(url).hostname
+    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
+        return False
+    upid = match1(url, r'.+/content/(\w+)')
+    
+        print_info(site_info, title, ext, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir=output_dir, merge=merge)
     
     
-def downgrade():
-    op.drop_column('tables', 'offset')
-    op.drop_column('datasources', 'offset')
-
+def SetUpYCM():
+  from ycm import base
+  from ycmd import user_options_store
+  from ycm.youcompleteme import YouCompleteMe
     
-    Revision ID: 33d996bcc382
-Revises: 41f6a59a61f2
-Create Date: 2016-09-07 23:50:59.366779
+    from concurrent.futures import _base
+    
+    The follow diagram and text describe the data-flow through the system:
+    
+    def main():
+    for name, fn in [('sequential', sequential),
+                     ('processes', with_process_pool_executor),
+                     ('threads', with_thread_pool_executor)]:
+        sys.stdout.write('%s: ' % name.ljust(12))
+        start = time.time()
+        if fn() != [True] * len(PRIMES):
+            sys.stdout.write('failed\n')
+        else:
+            sys.stdout.write('%.2f seconds\n' % (time.time() - start))
     
     
-def upgrade():
-    op.add_column('dashboards', sa.Column('json_metadata', sa.Text(), nullable=True))
+  # This returns a future! Use JsonFromFuture to get the value.
+  # |timeout| is num seconds to tolerate no response from server before giving
+  # up; see Requests docs for details (we just pass the param along).
+  @staticmethod
+  def PostDataToHandlerAsync( data, handler, timeout = _READ_TIMEOUT_SEC ):
+    return BaseRequest._TalkToHandlerAsync( data, handler, 'POST', timeout )
     
-    '''
-    
-    Local worker thread:
-- reads work ids from the 'Work Ids' queue and looks up the corresponding
-  WorkItem from the 'Work Items' dict: if the work item has been cancelled then
-  it is simply removed from the dict, otherwise it is repackaged as a
-  _CallItem and put in the 'Call Q'. New _CallItems are put in the 'Call Q'
-  until 'Call Q' is full. NOTE: the size of the 'Call Q' is kept small because
-  calls placed in the 'Call Q' can no longer be cancelled with Future.cancel().
-- reads _ResultItems from 'Result Q', updates the future stored in the
-  'Work Items' dict and deletes the dict entry
-    
-    # If true, the index is split into individual pages for each letter.
-#html_split_index = False
-    
-    def sequential():
-    return list(map(is_prime, PRIMES))
-    
-      with MockArbitraryBuffer( 'javascript' ):
-    with MockEventNotification( UnknownExtraConfResponse ):
-    
-        for completion in completions:
-      word = utils.ToUnicode(
-          ConvertCompletionDataToVimData( completion )[ 'word' ] )
-      if reject_exact_match and word == completed_word:
-        continue
-      if word.startswith( completed_word ):
-        return True
-    return False
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    TIMEOUT_SECONDS = 0.1
+        if 'fixits' in self._response:
+      return self._HandleFixitResponse()
