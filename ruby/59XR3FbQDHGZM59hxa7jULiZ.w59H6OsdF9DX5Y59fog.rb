@@ -1,50 +1,39 @@
 
         
-        def site_configuration(overrides = {})
-  build_configs({
-    'source'      => source_dir,
-    'destination' => dest_dir
-  }, build_configs(overrides))
-end
-    
-        Jekyll::Commands::Build.process({'source' => 'docs'})
-    
-    Jekyll::Deprecator.process(ARGV)
-    
-      def all_groups(current_user)
-    groups = []
-    
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
-      else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
-      end
+        invalids = []
+Parallel.each(links, in_threads: 4) do |link|
+  href = link.attribute('href').to_s
+  begin
+    case check_link(URI.join(BASE_URI, href))
+    when (200...300)
+      putc('.')
+    when (300..302)
+      putc('w')
     end
+  rescue => e
+    putc('F')
+    invalids << '#{href} (reason: #{e.message})'
   end
 end
     
-          super
-    end
+      # Implemented by subclasses to provide default values for settings needed by
+  # this plugin. Typically done using the `set_if_empty` Capistrano DSL method.
+  #
+  # Example:
+  #
+  #   def set_defaults
+  #     set_if_empty :my_plugin_option, true
+  #   end
+  #
+  def set_defaults; end
     
-          if File.symlink?(code_path)
-        return 'Code directory '#{code_path}' cannot be a symlink'
-      end
+      if File.exist?('Capfile')
+    warn '[skip] Capfile already exists'
+  else
+    FileUtils.cp(capfile, 'Capfile')
+    puts I18n.t(:written_file, scope: :capistrano, file: 'Capfile')
+  end
     
-            def show
-          @stock_movement = scope.find(params[:id])
-          respond_with(@stock_movement)
-        end
-    
-      config_name 'codec'
-    
-      def _nt_in_expression
-    start_index = index
-    if node_cache[:in_expression].has_key?(index)
-      cached = node_cache[:in_expression][index]
-      if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
-        @index = cached.interval.end
-      end
-      return cached
+        it 'sets the default env' do
+      expect(config.default_env).to eq default_env
     end
