@@ -1,95 +1,68 @@
-      keys = Spaceship::Portal::Key.all
-      expect(keys.size).to eq(2)
-      expect(keys.sample).to be_instance_of(Spaceship::Portal::Key)
-    end
-  end
-    
-          def self.category
-        :misc
-      end
-    end
-  end
-end
 
+        
+        #
+def run_in_shell(*args)
+  p, output = Jekyll::Utils::Exec.run(*args)
     
-    module Fastlane
-  class CrashlyticsProjectParser
-    # @param project_file_path path to a .xcodeproj file
-    def initialize(config = {})
-      FastlaneCore::Project.detect_projects(config)
-      @project = FastlaneCore::Project.new(config, xcodebuild_list_silent: true, xcodebuild_suppress_stderr: true)
-    
-            expect(result).to eq('git rev-parse --short HEAD')
-        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('git rev-parse --short HEAD')
+        def no_subcommand(args)
+      unless args.empty? ||
+          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
+        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
+                          Run `jekyll help` to find out more.'
+        abort
       end
     end
     
-    require_relative 'converter/fonts_conversion'
-require_relative 'converter/less_conversion'
-require_relative 'converter/js_conversion'
-require_relative 'converter/logger'
-require_relative 'converter/network'
+        # Gets the name of this layout.
+    attr_reader :name
     
-          less.gsub /&:extend\((#{SELECTOR_RE})(?: all)?\)/ do
-        selector = $1
-        selector =~ /\.([\w-]+)/
-        mixin    = $1
-        if mixin && mixin_names.include?(mixin)
-          '@include #{mixin}'
-        else
-          '@extend #{selector}'
+            # This should return an action callable for the given name.
+        #
+        # @param [Symbol] name Name of the action.
+        # @return [Object] A callable action sequence object, whether it
+        #   is a proc, object, etc.
+        def action(name)
+          nil
         end
-      end
+    
+          # Renders the template using the class intance as the binding. Because the
+      # renderer inherits from `OpenStruct`, additional view variables can be
+      # added like normal accessors.
+      #
+      # @return [String]
+      def render
+        old_template = template
+        result = nil
+        File.open(full_template_path, 'r') do |f|
+          self.template = f.read
+          result = render_string
+        end
+    
+    EOS
+end
+    
+      Sass::Plugin.options.merge!(config)
+    
+        def paragraphize(input)
+      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
     end
-    
-        def log_processed(name)
-      puts green '    #{name}'
-    end
-    
-      # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = false
-    
-      # Show full error reports and disable caching.
-  config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
-    
-    module Sinatra
-  class Application < Base
-    
-      it 'should not override the header if already set' do
-    mock_app with_headers('X-Frame-Options' => 'allow')
-    expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('allow')
   end
 end
-
     
-        { # yes, this is ugly, feel free to change that
-      '/..' => '/', '/a/../b' => '/b', '/a/../b/' => '/b/', '/a/.' => '/a/',
-      '/%2e.' => '/', '/a/%2E%2e/b' => '/b', '/a%2f%2E%2e%2Fb/' => '/b/',
-      '//' => '/', '/%2fetc%2Fpasswd' => '/etc/passwd'
-    }.each do |a, b|
-      it('replaces #{a.inspect} with #{b.inspect}') { expect(get(a).body).to eq(b) }
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+        end
+        @img['class'].gsub!(/'/, '') if @img['class']
+      end
+      super
     end
     
-      it 'should allow changing the protection mode' do
-    # I have no clue what other modes are available
-    mock_app do
-      use Rack::Protection::XSSHeader, :xss_mode => :foo
-      run DummyApp
-    end
-    
-          content_type 'application/json'
-      LogStash::Json.dump(data, {:pretty => pretty?})
-    else
-      content_type 'text/plain'
-      data.to_s
-    end
-  end
-    
-              def plugins
-            @plugins ||= find_plugins_gem_specs.map do |spec|
-              { :name => spec.name, :version => spec.version.to_s }
-            end.sort_by do |spec|
-              spec[:name]
-            end
-          end
+        def render(context)
+      file_dir = (context.registers[:site].source || 'source')
+      file_path = Pathname.new(file_dir).expand_path
+      file = file_path + @file
