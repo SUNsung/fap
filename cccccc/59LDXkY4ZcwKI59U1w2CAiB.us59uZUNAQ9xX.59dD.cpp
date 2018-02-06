@@ -1,106 +1,153 @@
 
         
-        void read_image(std::ifstream* image_file, std::ifstream* label_file,
-        uint32_t index, uint32_t rows, uint32_t cols,
-        char* pixels, char* label) {
-  image_file->seekg(index * rows * cols + 16);
-  image_file->read(pixels, rows * cols);
-  label_file->seekg(index + 8);
-  label_file->read(label, 1);
-}
-    
-      /**
-   * @brief Computes the Contrastive error gradient w.r.t. the inputs.
+        
+    {  /**
+   * @brief Populate a property tree with host details.
    *
-   * Computes the gradients with respect to the two input vectors (bottom[0] and
-   * bottom[1]), but not the similarity label (bottom[2]).
+   * This will use kEnrollHostDetails to select from each table and
+   * construct a property tree from the results of the first row of each.
+   * The input property tree will have a key set for each table.
    *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
-   *      This Blob's diff will simply contain the loss_weight* @f$ \lambda @f$,
-   *      as @f$ \lambda @f$ is the coefficient of this layer's output
-   *      @f$\ell_i@f$ in the overall Net loss
-   *      @f$ E = \lambda_i \ell_i + \mbox{other loss terms}@f$; hence
-   *      @f$ \frac{\partial E}{\partial \ell_i} = \lambda_i @f$.
-   *      (*Assuming that this top Blob is not used as a bottom (input) by any
-   *      other layer of the Net.)
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times 1 \times 1) @f$
-   *      the features @f$a@f$; Backward fills their diff with
-   *      gradients if propagate_down[0]
-   *   -# @f$ (N \times C \times 1 \times 1) @f$
-   *      the features @f$b@f$; Backward fills their diff with gradients if
-   *      propagate_down[1]
+   * @param host_details An output property tree containing each table.
    */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #endif  // CAFFE_CUDNN_SIGMOID_LAYER_HPP_
-
-    
-    
-    { protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual inline bool reverse_dimensions() { return true; }
-  virtual void compute_output_shape();
+  void genHostDetails(boost::property_tree::ptree& host_details);
 };
     
-      /**
-   * @brief Computes the error gradient w.r.t. the exp inputs.
+     private:
+  /*
+   * @brief When `get`ing event results, return EventID%s from time indexes.
    *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x} =
-   *            \frac{\partial E}{\partial y} y \alpha \log_e(gamma)
-   *      @f$ if propagate_down[0]
+   * Used by EventSubscriber::get to retrieve EventID, EventTime indexes. This
+   * applies the lookup-efficiency checks for time list appropriate bins.
+   * If the time range in 24 hours and there is a 24-hour list bin it will
+   * be queried using a single backing store `Get` followed by two `Get`s of
+   * the most-specific boundary lists.
+   *
+   * @param index the set of index to scan.
+   * @param optimize if true apply optimization checks.
+   *
+   * @return List of EventID, EventTime%s
    */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  std::vector<EventRecord> getRecords(const std::vector<std::string>& indexes,
+                                      bool optimize = true);
     
-                progress = update_progress(progress, r, repeat_num, 0);
-            ts->printf( cvtest::TS::LOG, '\n');
-            prepareForTest(bg, camMat, distCoeffs, brds_num, cbg);
+      /*
+   * @brief Print help-style output to stdout for a given flag set.
+   *
+   * @param shell Only print shell flags.
+   * @param external Only print external flags (from extensions).
+   */
+  static void printFlags(bool shell = false,
+                         bool external = false,
+                         bool cli = false);
     
-            bad_caller = caller;
-        bad_caller.dpdr = &bad_dpdr_c3;
-        errors += run_test_case( CV_StsBadArg, 'Bad dpdr format', bad_caller );
-    
-    
-    {
-    {        std::vector<cv::Point2d>::const_iterator it0 = pix0.begin();
-        std::vector<cv::Point2d>::const_iterator it1 = pix1.begin();
-        int row = 0;
-        for (;it0 != pix0.end(); ++it0, ++it1)
-        {
-            cv::Point2d d = invEps*(*it0 - *it1);
-            jac.at<double>(row, col) = d.x;
-            ++row;
-            jac.at<double>(row, col) = d.y;
-            ++row;
-        }
+    class TLSConfigPlugin : public ConfigPlugin,
+                        public std::enable_shared_from_this<TLSConfigPlugin> {
+ public:
+  Status setUp() override;
+  Status genConfig(std::map<std::string, std::string>& config) override;
     }
+    
+      ASSERT_FLOAT_EQ(0, YGNodeLayoutGetLeft(root));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root));
+  ASSERT_FLOAT_EQ(100, YGNodeLayoutGetWidth(root));
+  ASSERT_FLOAT_EQ(100, YGNodeLayoutGetHeight(root));
+    
+      bool operator==(const ProgramLocation& other) const {
+    // Assumes that the strings are static
+    return (m_functionName == other.m_functionName) && (m_fileName == other.m_fileName) && m_lineNumber == other.m_lineNumber;
+  }
+    
+    // Contains all the parameters that are parsed from the command line.
+struct Parameters {
+  // Puts the service into a namespace
+  grpc::string services_namespace;
+  // Use system includes (<>) or local includes ('')
+  bool use_system_headers;
+  // Prefix to any grpc include
+  grpc::string grpc_search_path;
+  // Generate GMOCK code to facilitate unit testing.
+  bool generate_mock_code;
+};
+    
+    void GenerateServerMethod(const grpc_generator::Method *method, grpc_generator::Printer *printer,
+                          std::map<grpc::string, grpc::string> vars) {
+	vars['Method'] = exportName(method->name());
+	vars['Request'] = method->get_input_type_name();
+	vars['Response'] = (vars['CustomMethodIO'] == '') ? method->get_output_type_name() : vars['CustomMethodIO'];
+	vars['FullMethodName'] = '/' + vars['Package'] + '.' + vars['Service'] + '/' + vars['Method'];
+	vars['Handler'] = '_' + vars['Service'] + '_' + vars['Method'] + '_Handler';
+	if (method->NoStreaming()) {
+		printer->Print(vars, 'func $Handler$(srv interface{}, ctx $context$.Context,\n\tdec func(interface{}) error, interceptor $grpc$.UnaryServerInterceptor) (interface{}, error) {\n');
+		printer->Indent();
+		printer->Print(vars, 'in := new($Request$)\n');
+		printer->Print('if err := dec(in); err != nil { return nil, err }\n');
+		printer->Print(vars, 'if interceptor == nil { return srv.($Service$Server).$Method$(ctx, in) }\n');
+		printer->Print(vars, 'info := &$grpc$.UnaryServerInfo{\n');
+		printer->Indent();
+		printer->Print('Server: srv,\n');
+		printer->Print(vars, 'FullMethod: \'$FullMethodName$\',\n');
+		printer->Outdent();
+		printer->Print('}\n\n');
+		printer->Print(vars, 'handler := func(ctx $context$.Context, req interface{}) (interface{}, error) {\n');
+		printer->Indent();
+		printer->Print(vars, 'return srv.($Service$Server).$Method$(ctx, req.(* $Request$))\n');
+		printer->Outdent();
+		printer->Print('}\n');
+		printer->Print('return interceptor(ctx, in, info, handler)\n');
+		printer->Outdent();
+		printer->Print('}\n\n');
+		return;
+	}
+	vars['StreamType'] = vars['ServiceUnexported'] + vars['Method'] + 'Server';
+	printer->Print(vars, 'func $Handler$(srv interface{}, stream $grpc$.ServerStream) error {\n');
+	printer->Indent();
+	if (ServerOnlyStreaming(method)) {
+		printer->Print(vars, 'm := new($Request$)\n');
+		printer->Print(vars, 'if err := stream.RecvMsg(m); err != nil { return err }\n');
+		printer->Print(vars, 'return srv.($Service$Server).$Method$(m, &$StreamType${stream})\n');
+	} else {
+		printer->Print(vars, 'return srv.($Service$Server).$Method$(&$StreamType${stream})\n');
+	}
+	printer->Outdent();
+	printer->Print('}\n\n');
+    }
+    
+    
+#ifndef FLATBUFFERS_GENERATED_MONSTER_MYGAME_SAMPLE_H_
+#define FLATBUFFERS_GENERATED_MONSTER_MYGAME_SAMPLE_H_
+    
+      // tracks the current namespace for early exit in WrapInNameSpace
+  // c++, java and csharp returns a different namespace from
+  // the following default (no early exit, always fully qualify),
+  // which works for js and php
+  virtual const Namespace *CurrentNameSpace() const { return nullptr; }
+    
+    // Get the inline-address of a vector element. Useful for Structs (pass Struct
+// as template arg), or being able to address a range of scalars in-line.
+// Get elem_size from GetTypeSizeInline().
+// Note: little-endian data on all platforms, use EndianScalar() instead of
+// raw pointer access with scalars).
+template<typename T>
+T *GetAnyVectorElemAddressOf(const VectorOfAny *vec, size_t i,
+                             size_t elem_size) {
+  // C-cast to allow const conversion.
+  return (T *)(vec->Data() + elem_size * i);
 }
     
-            Mat_<double> dr3_dt2, dt3_dt2;
-           diff.dTv2(dr3_dt2, dt3_dt2);
+      // Converts a binary buffer to text using one of the schemas in the registry,
+  // use the file_identifier to indicate which.
+  // If DetachedBuffer::data() is null then parsing failed.
+  DetachedBuffer TextToFlatBuffer(const char *text,
+                                  const char *file_identifier) {
+    // Load and parse the schema.
+    Parser parser;
+    if (!LoadSchema(file_identifier, &parser)) return DetachedBuffer();
+    // Parse the text.
+    if (!parser.Parse(text)) {
+      lasterror_ = parser.error_;
+      return DetachedBuffer();
+    }
+    // We have a valid FlatBuffer. Detach it from the builder and return.
+    return parser.builder_.ReleaseBufferPointer();
+  }
