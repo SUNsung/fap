@@ -1,103 +1,126 @@
 
         
-        
-def test_unicode_form_item_verbose(httpbin):
-    r = http('--verbose', '--form',
-             'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
-    assert HTTP_OK in r
-    assert UNICODE in r
+          def testPtbProducer(self):
+    raw_data = [4, 3, 2, 1, 0, 5, 6, 1, 1, 1, 1, 0, 3, 4, 1]
+    batch_size = 3
+    num_steps = 2
+    x, y = reader.ptb_producer(raw_data, batch_size, num_steps)
+    with self.test_session() as session:
+      coord = tf.train.Coordinator()
+      tf.train.start_queue_runners(session, coord=coord)
+      try:
+        xval, yval = session.run([x, y])
+        self.assertAllEqual(xval, [[4, 3], [5, 6], [1, 0]])
+        self.assertAllEqual(yval, [[3, 2], [6, 1], [0, 3]])
+        xval, yval = session.run([x, y])
+        self.assertAllEqual(xval, [[2, 1], [1, 1], [3, 4]])
+        self.assertAllEqual(yval, [[1, 0], [1, 1], [4, 1]])
+      finally:
+        coord.request_stop()
+        coord.join()
     
-        def load(self):
-        try:
-            with open(self.path, 'rt') as f:
-                try:
-                    data = json.load(f)
-                except ValueError as e:
-                    raise ValueError(
-                        'Invalid %s JSON: %s [%s]' %
-                        (type(self).__name__, str(e), self.path)
-                    )
-                self.update(data)
-        except IOError as e:
-            if e.errno != errno.ENOENT:
-                raise
+    import iris_data
     
     
-EXIT_STATUS_LABELS = {
-    value: key
-    for key, value in ExitStatus.__dict__.items()
-    if key.isupper()
-}
+if __name__ == '__main__':
+    tf.logging.set_verbosity(tf.logging.INFO)
+    tf.app.run(main)
 
     
-    # TODO: Use MultiDict for headers once added to `requests`.
-# https://github.com/jakubroztocil/httpie/issues/130
-from httpie.plugins import plugin_manager
-from requests.structures import CaseInsensitiveDict
-    
-        def __exit__(self, exc_type, exc_value, traceback):
-        if exc_type is None:
-            self.stop_event.wait(self.WAIT_EVENT_TIMEOUT)
-        else:
-            if self.wait_to_close_event:
-                # avoid server from waiting for event timeouts
-                # if an exception is found in the main thread
-                self.wait_to_close_event.set()
-    
-        :param str u_string: unicode string to check. Must be unicode
-        and not Python 2 `str`.
-    :rtype: bool
-    '''
-    assert isinstance(u_string, str)
-    try:
-        u_string.encode('ascii')
-        return True
-    except UnicodeEncodeError:
-        return False
-
-    
-    Data structures that power Requests.
-'''
-    
-    
-class AuthBase(object):
-    '''Base class that all auth implementations derive from'''
-    
-        def set_cookie(self, cookie, *args, **kwargs):
-        if hasattr(cookie.value, 'startswith') and cookie.value.startswith(''') and cookie.value.endswith('''):
-            cookie.value = cookie.value.replace('\\'', '')
-        return super(RequestsCookieJar, self).set_cookie(cookie, *args, **kwargs)
-    
-        from urllib3.packages.ordered_dict import OrderedDict
-    
-            try:
-            internetSettings = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
-                r'Software\Microsoft\Windows\CurrentVersion\Internet Settings')
-            # ProxyEnable could be REG_SZ or REG_DWORD, normalizing it
-            proxyEnable = int(winreg.QueryValueEx(internetSettings,
-                                              'ProxyEnable')[0])
-            # ProxyOverride is almost always a string
-            proxyOverride = winreg.QueryValueEx(internetSettings,
-                                                'ProxyOverride')[0]
-        except OSError:
-            return False
-        if not proxyEnable or not proxyOverride:
-            return False
-    
-        auth = requests.auth.HTTPDigestAuth('user', 'pass')
-    
-        return groups
-    
-        parser.add_argument('-t', '--test',
-                        dest='test',
-                        action='store_true',
-                        help='show what would be downloaded without downloading')
-    
-    AnsibleDumper.add_representer(
-    HostVars,
-    represent_hostvars,
+    py_binary(
+    name = 'cifar10_train',
+    srcs = [
+        'cifar10_train.py',
+    ],
+    srcs_version = 'PY2AND3',
+    visibility = ['//tensorflow:__subpackages__'],
+    deps = [
+        ':cifar10',
+    ],
 )
     
     
-def naughty_strings(filepath=FILEPATH):
-    '''Get the list of naughty_strings.
+def get_wmt_enfr_dev_set(directory):
+  '''Download the WMT en-fr training corpus to directory unless it's there.'''
+  dev_name = 'newstest2013'
+  dev_path = os.path.join(directory, dev_name)
+  if not (gfile.Exists(dev_path + '.fr') and gfile.Exists(dev_path + '.en')):
+    dev_file = maybe_download(directory, 'dev-v2.tgz', _WMT_ENFR_DEV_URL)
+    print('Extracting tgz file %s' % dev_file)
+    with tarfile.open(dev_file, 'r:gz') as dev_tar:
+      fr_dev_file = dev_tar.getmember('dev/' + dev_name + '.fr')
+      en_dev_file = dev_tar.getmember('dev/' + dev_name + '.en')
+      fr_dev_file.name = dev_name + '.fr'  # Extract without 'dev/' prefix.
+      en_dev_file.name = dev_name + '.en'
+      dev_tar.extract(fr_dev_file, directory)
+      dev_tar.extract(en_dev_file, directory)
+  return dev_path
+    
+        # Output feed: depends on whether we do a backward step or not.
+    if not forward_only:
+      output_feed = [self.updates[bucket_id],  # Update Op that does SGD.
+                     self.gradient_norms[bucket_id],  # Gradient norm.
+                     self.losses[bucket_id]]  # Loss for this batch.
+    else:
+      output_feed = [self.losses[bucket_id]]  # Loss for this batch.
+      for l in xrange(decoder_size):  # Output logits.
+        output_feed.append(self.outputs[bucket_id][l])
+    
+      # conv4
+  with tf.name_scope('conv4') as scope:
+    kernel = tf.Variable(tf.truncated_normal([3, 3, 384, 256],
+                                             dtype=tf.float32,
+                                             stddev=1e-1), name='weights')
+    conv = tf.nn.conv2d(conv3, kernel, [1, 1, 1, 1], padding='SAME')
+    biases = tf.Variable(tf.constant(0.0, shape=[256], dtype=tf.float32),
+                         trainable=True, name='biases')
+    bias = tf.nn.bias_add(conv, biases)
+    conv4 = tf.nn.relu(bias, name=scope)
+    parameters += [kernel, biases]
+    print_activations(conv4)
+    
+            # put all lines in the file into a Python list
+        strings = f.readlines()
+        
+        # above line leaves trailing newline characters; strip them out
+        strings = [x.strip(u'\n') for x in strings]
+        
+        # remove empty-lines and comments
+        strings = [x for x in strings if x and not x.startswith(u'#')]
+        
+        # insert empty string since all are being removed
+        strings.insert(0, u'')
+    
+        Args:
+        executor_reference: A weakref.ref to the ProcessPoolExecutor that owns
+            this thread. Used to determine if the ProcessPoolExecutor has been
+            garbage collected and that this function can exit.
+        process: A list of the multiprocessing.Process instances used as
+            workers.
+        pending_work_items: A dict mapping work ids to _WorkItems e.g.
+            {5: <_WorkItem...>, 6: <_WorkItem...>, ...}
+        work_ids_queue: A queue.Queue of work ids e.g. Queue([5, 6, ...]).
+        call_queue: A multiprocessing.Queue that will be filled with _CallItems
+            derived from _WorkItems for processing by the process workers.
+        result_queue: A multiprocessing.Queue of _ResultItems generated by the
+            process workers.
+    '''
+    nb_shutdown_processes = [0]
+    def shutdown_one_process():
+        '''Tell a worker to terminate, which will in turn wake us again'''
+        call_queue.put(None)
+        nb_shutdown_processes[0] += 1
+    while True:
+        _add_call_item_to_queue(pending_work_items,
+                                work_ids_queue,
+                                call_queue)
+    
+    try:
+    from urllib2 import urlopen
+except ImportError:
+    from urllib.request import urlopen
+    
+            file_handle = msvcrt.get_osfhandle( file_object.fileno() )
+        windll.kernel32.SetHandleInformation( file_handle,
+                                              HANDLE_FLAG_INHERIT,
+                                              0 )
