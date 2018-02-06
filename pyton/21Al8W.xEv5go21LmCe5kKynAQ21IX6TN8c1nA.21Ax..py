@@ -1,162 +1,82 @@
 
         
-        
-collect_ignore = [
-    # deprecated or moved modules
-    'scrapy/conf.py',
-    'scrapy/stats.py',
-    'scrapy/project.py',
-    'scrapy/utils/decorator.py',
-    'scrapy/statscol.py',
-    'scrapy/squeue.py',
-    'scrapy/log.py',
-    'scrapy/dupefilter.py',
-    'scrapy/command.py',
-    'scrapy/linkextractor.py',
-    'scrapy/spider.py',
+            # Sorting the libraries
+    inner_blocks = sorted(blocks[0].split('##'))
+    for i in range(1 , len(inner_blocks)):
+        if inner_blocks[i][0] != '#':
+            inner_blocks[i] = '##' + inner_blocks[i]
+    inner_blocks=''.join(inner_blocks)
     
-        def render(self, request):
-        now = time()
-        delta = now - self.lasttime
+    from sklearn import neighbors, datasets
     
-            parser.add_option_group(group)
+        ###########################################################################
+    # Perform benchmark
+    ###########################################################################
+    time_fit = collections.defaultdict(list)
+    time_transform = collections.defaultdict(list)
     
-    import scrapy
-from scrapy.commands import ScrapyCommand
-from scrapy.linkextractors import LinkExtractor
-    
-    # revision identifiers, used by Alembic.
-revision = '1a48a5411020'
-down_revision = '289ce07647b'
-    
-    Revision ID: 2591d77e9831
-Revises: 12d55656cbca
-Create Date: 2015-12-15 17:02:45.128709
-    
-        try:
-        with op.batch_alter_table('slices') as batch_op:
-            batch_op.add_column(sa.Column(
-                'table_id', mysql.INTEGER(display_width=11),
-                autoincrement=False, nullable=True))
-            batch_op.add_column(sa.Column(
-                'druid_datasource_id', sa.Integer(), autoincrement=False,
-                nullable=True))
-            batch_op.create_foreign_key(
-                'slices_ibfk_1', 'datasources', ['druid_datasource_id'],
-                ['id'])
-            batch_op.create_foreign_key(
-                'slices_ibfk_2', 'tables', ['table_id'], ['id'])
-    except Exception as e:
-        logging.warning(str(e))
-    
-    from alembic import op
-import sqlalchemy as sa
-    
-            i = myint2.from_bytes(b'\x01', 'big')
-        self.assertIs(type(i), myint2)
-        self.assertEqual(i, 2)
-    
-            self.assertTrue(self.dialog.create_entries.called)
-        self.assertTrue(self.dialog.create_option_buttons.called)
-        self.assertTrue(self.dialog.create_other_buttons.called)
-        self.assertTrue(self.dialog.create_command_buttons.called)
-    
-        @unittest.skipIf(sys.platform.startswith('aix'),
-                     'bpo-29972: broken test on AIX')
-    def test_POT_Creation_Date(self):
-        ''' Match the date format from xgettext for POT-Creation-Date '''
-        from datetime import datetime
-        with temp_cwd(None) as cwd:
-            assert_python_ok(self.script)
-            with open('messages.pot') as fp:
-                data = fp.read()
-            header = self.get_header(data)
-            creationDate = header['POT-Creation-Date']
-    
-        Note that Differ makes no claim to produce a *minimal* diff.  To the
-    contrary, minimal diffs are often counter-intuitive, because they synch
-    up anywhere possible, sometimes accidental matches 100 pages apart.
-    Restricting synch points to contiguous matches preserves some notion of
-    locality, at the occasional cost of producing a longer diff.
-    
-    simple_escapes = {'a': '\a',
-                  'b': '\b',
-                  'f': '\f',
-                  'n': '\n',
-                  'r': '\r',
-                  't': '\t',
-                  'v': '\v',
-                  ''': ''',
-                  ''': ''',
-                  '\\': '\\'}
-    
-    class NNTPDataError(NNTPError):
-    '''Error in response data'''
-    pass
-    
-        def acceptNode(self, element):
-        return self.FILTER_ACCEPT
-    
-            # C type static method: METH_FASTCALL | METH_CLASS
-        (int.from_bytes, (b'\x01\x00',), {'byteorder': 'little'}, 1),
-        (int.from_bytes, (), {'bytes': b'\x01\x00', 'byteorder': 'little'}, 1),
-    )
-    
-        def __init__(self, addr, requestHandler=SimpleXMLRPCRequestHandler,
-                 logRequests=True, allow_none=False, encoding=None,
-                 bind_and_activate=True, use_builtin_types=False):
-        self.logRequests = logRequests
-    
-    import tornado.httpserver
-import tornado.ioloop
-import tornado.options
-import tornado.web
-    
-                def data_received(self, data):
-                body.append(data)
+    from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import Perceptron
+from sklearn.pipeline import Pipeline
+from sklearn.datasets import load_files
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
     
     
-class WSGIContainerTest(AsyncHTTPTestCase):
-    def wsgi_app(self, environ, start_response):
-        status = '200 OK'
-        response_headers = [('Content-Type', 'text/plain')]
-        start_response(status, response_headers)
-        return [b'Hello world!']
+if __name__ == '__main__':
+    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
+    # block to be able to use a multi-core grid search that also works under
+    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
+    # The multiprocessing module is used as the backend of joblib.Parallel
+    # that is used when n_jobs != 1 in GridSearchCV
     
-            count = 0
-        while 1:
-            count += 1
-            # Bind to a local port; for efficiency, let the OS pick
-            # a free port for us.
-            # Unfortunately, stress tests showed that we may not
-            # be able to connect to that port ('Address already in
-            # use') despite that the OS picked it.  This appears
-            # to be a race bug in the Windows socket implementation.
-            # So we loop until a connect() succeeds (almost always
-            # on the first try).  See the long thread at
-            # http://mail.zope.org/pipermail/zope/2005-July/160433.html
-            # for hideous details.
-            a = socket.socket()
-            set_close_exec(a.fileno())
-            a.bind(('127.0.0.1', 0))
-            a.listen(1)
-            connect_address = a.getsockname()  # assigned (host, port) pair
-            try:
-                self.writer.connect(connect_address)
-                break    # success
-            except socket.error as detail:
-                if (not hasattr(errno, 'WSAEADDRINUSE') or
-                        errno_from_exception(detail) != errno.WSAEADDRINUSE):
-                    # 'Address already in use' is the only error
-                    # I've seen on two WinXP Pro SP2 boxes, under
-                    # Pythons 2.3.5 and 2.4.1.
-                    raise
-                # (10048, 'Address already in use')
-                # assert count <= 2 # never triggered in Tim's tests
-                if count >= 10:  # I've never seen it go above 2
-                    a.close()
-                    self.writer.close()
-                    raise socket.error('Cannot bind trigger!')
-                # Close `a` and try again.  Note:  I originally put a short
-                # sleep() here, but it didn't appear to help or hurt.
-                a.close()
+    Both kinds of calibration can fix this issue and yield nearly identical
+results. This shows that sigmoid calibration can deal with situations where
+the calibration curve of the base classifier is sigmoid (e.g., for LinearSVC)
+but not where it is transposed-sigmoid (e.g., Gaussian naive Bayes).
+'''
+print(__doc__)
+    
+        # View probabilities=
+    probas = classifier.predict_proba(Xfull)
+    n_classes = np.unique(y_pred).size
+    for k in range(n_classes):
+        plt.subplot(n_classifiers, n_classes, index * n_classes + k + 1)
+        plt.title('Class %d' % k)
+        if k == 0:
+            plt.ylabel(name)
+        imshow_handle = plt.imshow(probas[:, k].reshape((100, 100)),
+                                   extent=(3, 9, 1, 5), origin='lower')
+        plt.xticks(())
+        plt.yticks(())
+        idx = (y_pred == k)
+        if idx.any():
+            plt.scatter(X[idx, 0], X[idx, 1], marker='o', c='k')
+    
+    from tornado.http1connection import HTTP1Connection
+from tornado.httputil import HTTPMessageDelegate
+from tornado.iostream import IOStream
+from tornado.locks import Event
+from tornado.netutil import add_accept_handler
+from tornado.testing import AsyncTestCase, bind_unused_port, gen_test
+    
+        def _handle_events(self, fd, events):
+        read_fd = pycares.ARES_SOCKET_BAD
+        write_fd = pycares.ARES_SOCKET_BAD
+        if events & IOLoop.READ:
+            read_fd = fd
+        if events & IOLoop.WRITE:
+            write_fd = fd
+        self.channel.process_fd(read_fd, write_fd)
+    
+            self._maxsize = maxsize
+        self._init()
+        self._getters = collections.deque([])  # Futures.
+        self._putters = collections.deque([])  # Pairs of (item, Future).
+        self._unfinished_tasks = 0
+        self._finished = Event()
+        self._finished.set()
+    
+        def get_compression_options(self):
+        # Non-None enables compression with default options.
+        return {}
