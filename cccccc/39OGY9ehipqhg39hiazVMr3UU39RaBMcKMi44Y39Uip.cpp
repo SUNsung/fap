@@ -7,285 +7,412 @@
     }
     }
     
-    
-    {  // The length of the transcoded string in UTF-16 code points.
-  Length = toPtr - &buffer[0];
-  return Length;
+    bool CodeCompletionView::walk(CodeCompletionView::Walker &walker) const {
+  assert(rootGroup);
+  return walkRecursive(walker, rootGroup);
 }
+    
+    #pragma mark - NSData verification
+    
+    /// A reference to a concrete representation of a particular declaration,
+/// providing substitutions for all type parameters of the original,
+/// underlying declaration.
+class ConcreteDeclRef {
+  /// A specialized declaration reference, which provides substitutions
+  /// that fully specialize a generic declaration.
+  class SpecializedDeclRef final :
+      private llvm::TrailingObjects<SpecializedDeclRef, Substitution> {
+    friend TrailingObjects;
+    }
+    }
+    
+    /* Map whose keys are pointers, but are compared by their dereferenced values.
+ *
+ * Differs from a plain std::map<const K*, T, DereferencingComparator<K*> > in
+ * that methods that take a key for comparison take a K rather than taking a K*
+ * (taking a K* would be confusing, since it's the value rather than the address
+ * of the object for comparison that matters due to the dereferencing comparator).
+ *
+ * Objects pointed to by keys must not be modified in any way that changes the
+ * result of DereferencingComparator.
+ */
+template <class K, class T>
+class indirectmap {
+private:
+    typedef std::map<const K*, T, DereferencingComparator<const K*> > base;
+    base m;
+public:
+    typedef typename base::iterator iterator;
+    typedef typename base::const_iterator const_iterator;
+    typedef typename base::size_type size_type;
+    typedef typename base::value_type value_type;
+    }
+    
+    std::string SSTTableFileName(const std::string& name, uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(name, number, 'sst');
+}
+    
+    
+    {  fname = TempFileName('tmp', 999);
+  ASSERT_EQ('tmp/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(999, number);
+  ASSERT_EQ(kTempFile, type);
+}
+    
+    Iterator* TableCache::NewIterator(const ReadOptions& options,
+                                  uint64_t file_number,
+                                  uint64_t file_size,
+                                  Table** tableptr) {
+  if (tableptr != NULL) {
+    *tableptr = NULL;
+  }
+    }
+    
+    
+    {
+    {  virtual void Put(const Slice& key, const Slice& value) {
+    mem_->Add(sequence_, kTypeValue, key, value);
+    sequence_++;
+  }
+  virtual void Delete(const Slice& key) {
+    mem_->Add(sequence_, kTypeDeletion, key, Slice());
+    sequence_++;
+  }
+};
+}  // namespace
+    
+    TEST(WriteBatchTest, Append) {
+  WriteBatch b1, b2;
+  WriteBatchInternal::SetSequence(&b1, 200);
+  WriteBatchInternal::SetSequence(&b2, 300);
+  WriteBatchInternal::Append(&b1, &b2);
+  ASSERT_EQ('',
+            PrintContents(&b1));
+  b2.Put('a', 'va');
+  WriteBatchInternal::Append(&b1, &b2);
+  ASSERT_EQ('Put(a, va)@200',
+            PrintContents(&b1));
+  b2.Clear();
+  b2.Put('b', 'vb');
+  WriteBatchInternal::Append(&b1, &b2);
+  ASSERT_EQ('Put(a, va)@200'
+            'Put(b, vb)@201',
+            PrintContents(&b1));
+  b2.Delete('foo');
+  WriteBatchInternal::Append(&b1, &b2);
+  ASSERT_EQ('Put(a, va)@200'
+            'Put(b, vb)@202'
+            'Put(b, vb)@201'
+            'Delete(foo)@203',
+            PrintContents(&b1));
+}
+    
+    
+    {}  // namespace google
 
     
-      friend class llvm::PointerLikeTypeTraits<ConcreteDeclRef>;
+    void MapFieldGenerator::WriteToString(io::Printer* printer) {
+    // TODO: If we ever actually use ToString, we'll need to impleme this...
+}
     
-      /// Treat all warnings as errors
-  bool WarningsAsErrors = false;
+      void Generate(io::Printer* printer);
     
-    #endif
+    
+    {
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
 
     
-    // Find the file which defines an extension extending the given message type
-// with the given field number.
-// Python DescriptorDatabases are not required to implement this method.
-bool PyDescriptorDatabase::FindFileContainingExtension(
-    const string& containing_type, int field_number,
-    FileDescriptorProto* output) {
-  ScopedPyObjectPtr py_method(
-      PyObject_GetAttrString(py_database_, 'FindFileContainingExtension'));
-  if (py_method == NULL) {
-    // This method is not implemented, returns without error.
-    PyErr_Clear();
-    return false;
-  }
-  ScopedPyObjectPtr py_descriptor(
-      PyObject_CallFunction(py_method.get(), 's#i', containing_type.c_str(),
-                            containing_type.size(), field_number));
-  return GetFileDescriptorProto(py_descriptor.get(), output);
-}
     
-    TEST(AnyTest, TestIs) {
-  protobuf_unittest::TestAny submessage;
-  submessage.set_int32_value(12345);
-  google::protobuf::Any any;
-  any.PackFrom(submessage);
-  ASSERT_TRUE(any.ParseFromString(any.SerializeAsString()));
-  EXPECT_TRUE(any.Is<protobuf_unittest::TestAny>());
-  EXPECT_FALSE(any.Is<google::protobuf::Any>());
-    }
-    
-      void WriteIntroduction(io::Printer* printer);
-  void WriteDescriptor(io::Printer* printer);
-  void WriteGeneratedCodeInfo(const Descriptor* descriptor,
-                              io::Printer* printer,
-                              bool last);
-    
-      virtual void GenerateCloningCode(io::Printer* printer);
-  virtual void GenerateFreezingCode(io::Printer* printer);
-  virtual void GenerateMembers(io::Printer* printer);
-  virtual void GenerateMergingCode(io::Printer* printer);
-  virtual void GenerateParsingCode(io::Printer* printer);
-  virtual void GenerateSerializationCode(io::Printer* printer);
-  virtual void GenerateSerializedSizeCode(io::Printer* printer);
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-    
-      void SendEcho() {
-    EchoRequest send_request;
-    EchoResponse recv_response;
-    ClientContext cli_ctx;
-    cli_ctx.set_wait_for_ready(true);
-    send_request.set_message('Hello');
-    Status recv_status = stub_->Echo(&cli_ctx, send_request, &recv_response);
-    EXPECT_EQ(send_request.message(), recv_response.message());
-    EXPECT_TRUE(recv_status.ok());
-  }
-    
-    
-    {  // Client request should succeed.
-  SendRpc(1);
-}
-    
-    // In some distros, gflags is in the namespace google, and in some others,
-// in gflags. This hack is enabling us to find both.
-namespace google {}
-namespace gflags {}
-using namespace google;
-using namespace gflags;
-    
-    /* Returns true if the |stream| was successfully started and is now done
- * (succeeded, canceled, or failed).
- * Returns false if the |stream| stream is not yet started or is in progress.
- */
-GRPC_SUPPORT_EXPORT
-bool bidirectional_stream_is_done(bidirectional_stream* stream);
-    
-    static int zlib_body(z_stream* zs, grpc_slice_buffer* input,
-                     grpc_slice_buffer* output,
-                     int (*flate)(z_stream* zs, int flush)) {
-  int r;
-  int flush;
-  size_t i;
-  grpc_slice outbuf = GRPC_SLICE_MALLOC(OUTPUT_BLOCK_SIZE);
-  const uInt uint_max = ~(uInt)0;
-    }
-    
-    int grpc_byte_buffer_reader_next(grpc_byte_buffer_reader* reader,
-                                 grpc_slice* slice) {
-  switch (reader->buffer_in->type) {
-    case GRPC_BB_RAW: {
-      grpc_slice_buffer* slice_buffer;
-      slice_buffer = &reader->buffer_out->data.raw.slice_buffer;
-      if (reader->current.index < slice_buffer->count) {
-        *slice = grpc_slice_ref_internal(
-            slice_buffer->slices[reader->current.index]);
-        reader->current.index += 1;
-        return 1;
-      }
-      break;
-    }
-  }
-  return 0;
-}
-    
-    static void test_compression_enable_disable_algorithm(void) {
-  grpc_compression_options options;
-  grpc_compression_algorithm algorithm;
-    }
-    
-      /// Perform an IO control command on the acceptor.
-  /**
-   * This function is used to execute an IO control command on the acceptor.
-   *
-   * @param command The IO control command to be performed on the acceptor.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   *
-   * @sa IoControlCommand @n
-   * boost::asio::socket_base::non_blocking_io
-   *
-   * @par Example
-   * Getting the number of bytes ready to read:
-   * @code
-   * boost::asio::ip::tcp::acceptor acceptor(io_service);
-   * ...
-   * boost::asio::ip::tcp::acceptor::non_blocking_io command(true);
-   * socket.io_control(command);
-   * @endcode
-   */
-  template <typename IoControlCommand>
-  void io_control(IoControlCommand& command)
-  {
-    boost::system::error_code ec;
-    this->get_service().io_control(this->get_implementation(), command, ec);
-    boost::asio::detail::throw_error(ec, 'io_control');
-  }
-    
-    #ifndef BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
-#define BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
-    
-    #include <boost/asio/detail/config.hpp>
-    
-      static bool do_perform(reactor_op* base)
-  {
-    descriptor_write_op_base* o(static_cast<descriptor_write_op_base*>(base));
-    }
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    template <typename Time_Traits>
-std::size_t epoll_reactor::cancel_timer(timer_queue<Time_Traits>& queue,
-    typename timer_queue<Time_Traits>::per_timer_data& timer,
-    std::size_t max_cancelled)
-{
-  mutex::scoped_lock lock(mutex_);
-  op_queue<operation> ops;
-  std::size_t n = queue.cancel_timer(timer, ops, max_cancelled);
-  lock.unlock();
-  io_service_.post_deferred_completions(ops);
-  return n;
-}
-    
-    #include <folly/experimental/hazptr/debug.h>
-    
-      enum class State {
-    UNINITIALIZED,
-    INITIALIZED,
-    PENDING,
-    COMPLETED,
-    CANCELED,
-  };
-    
-    #include <folly/Exception.h>
-    
-    /**
- * Get the path to the current executable.
- *
- * Note that this is not reliable and not recommended in general; it may not be
- * implemented on your platform (in which case it will throw), the executable
- * might have been moved or replaced while running, and applications comprising
- * of multiple executables should use some form of configuration system to
- * find the other executables rather than relying on relative paths from one
- * to another.
- *
- * So this should only be used for tests, logging, or other innocuous purposes.
- */
-path executable_path();
-    
-    namespace {
-// We cannot use EXPECT_EQ(a, b) due to a bug in gtest 1.6.0: gtest wants
-// to print path as a container even though it has operator<< defined,
-// and as path is a container of path, this leads to infinite
-// recursion.
-void expectPathEq(const path& a, const path& b) {
-  EXPECT_TRUE(a == b) << 'expected path=' << a << '\nactual path=' << b;
-}
-} // namespace
-    
-      void writeMessage(folly::StringPiece buffer, uint32_t flags = 0) override;
-  void writeMessage(std::string&& buffer, uint32_t flags = 0) override;
-    
-    
-    {  std::string path_;
-  FileWriterFactory fileWriterFactory_;
+    { private:
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(RepeatedMessageFieldGenerator);
 };
     
-    /**
- * FileHandlerFactory is a LogHandlerFactory that constructs log handlers
- * that write to a file.
- *
- * Note that FileHandlerFactory allows opening and appending to arbitrary files
- * based on the handler options.  This may make it unsafe to use
- * FileHandlerFactory in some contexts: for instance, a setuid binary should
- * generally avoid registering the FileHandlerFactory if they allow log
- * handlers to be configured via command line parameters, since otherwise this
- * may allow non-root users to append to files that they otherwise would not
- * have write permissions for.
- */
-class FileHandlerFactory : public LogHandlerFactory {
- public:
-  StringPiece getType() const override {
-    return 'file';
-  }
+    namespace grpc {
     }
     
-    void Node::setMarginPercent(int edge, double margin)
-{
-    YGNodeStyleSetMarginPercent(m_node, static_cast<YGEdge>(edge), margin);
+    struct TableInCBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_refer_to_a1(flatbuffers::Offset<NamespaceA::TableInFirstNS> refer_to_a1) {
+    fbb_.AddOffset(TableInC::VT_REFER_TO_A1, refer_to_a1);
+  }
+  void add_refer_to_a2(flatbuffers::Offset<NamespaceA::SecondTableInA> refer_to_a2) {
+    fbb_.AddOffset(TableInC::VT_REFER_TO_A2, refer_to_a2);
+  }
+  explicit TableInCBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  TableInCBuilder &operator=(const TableInCBuilder &);
+  flatbuffers::Offset<TableInC> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<TableInC>(end);
+    return o;
+  }
+};
+    
+    
+    { public:
+  Vec3() {
+    memset(this, 0, sizeof(Vec3));
+  }
+  Vec3(float _x, float _y, float _z)
+      : x_(flatbuffers::EndianScalar(_x)),
+        y_(flatbuffers::EndianScalar(_y)),
+        z_(flatbuffers::EndianScalar(_z)) {
+  }
+  float x() const {
+    return flatbuffers::EndianScalar(x_);
+  }
+  void mutate_x(float _x) {
+    flatbuffers::WriteScalar(&x_, _x);
+  }
+  float y() const {
+    return flatbuffers::EndianScalar(y_);
+  }
+  void mutate_y(float _y) {
+    flatbuffers::WriteScalar(&y_, _y);
+  }
+  float z() const {
+    return flatbuffers::EndianScalar(z_);
+  }
+  void mutate_z(float _z) {
+    flatbuffers::WriteScalar(&z_, _z);
+  }
+};
+STRUCT_END(Vec3, 12);
+    
+    inline flatbuffers::Offset<Movie> CreateMovie(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    Character main_character_type = Character_NONE,
+    flatbuffers::Offset<void> main_character = 0,
+    flatbuffers::Offset<flatbuffers::Vector<uint8_t>> characters_type = 0,
+    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<void>>> characters = 0) {
+  MovieBuilder builder_(_fbb);
+  builder_.add_characters(characters);
+  builder_.add_characters_type(characters_type);
+  builder_.add_main_character(main_character);
+  builder_.add_main_character_type(main_character_type);
+  return builder_.Finish();
 }
     
-    #include <nbind/api.h>
-#include <nbind/BindDefiner.h>
+    class MonsterStorage final {
+ public:
+  static constexpr char const* service_full_name() {
+    return 'MyGame.Example.MonsterStorage';
+  }
+  class StubInterface {
+   public:
+    virtual ~StubInterface() {}
+    virtual ::grpc::Status Store(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, flatbuffers::grpc::Message<Stat>* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>> AsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>>(AsyncStoreRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>> PrepareAsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>>(PrepareAsyncStoreRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientReaderInterface< flatbuffers::grpc::Message<Monster>>> Retrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) {
+      return std::unique_ptr< ::grpc::ClientReaderInterface< flatbuffers::grpc::Message<Monster>>>(RetrieveRaw(context, request));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>> AsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>>(AsyncRetrieveRaw(context, request, cq, tag));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>> PrepareAsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>>(PrepareAsyncRetrieveRaw(context, request, cq));
+    }
+  private:
+    virtual ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>* AsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>* PrepareAsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientReaderInterface< flatbuffers::grpc::Message<Monster>>* RetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) = 0;
+    virtual ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>* AsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
+    virtual ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>* PrepareAsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) = 0;
+  };
+  class Stub final : public StubInterface {
+   public:
+    Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel);
+    ::grpc::Status Store(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, flatbuffers::grpc::Message<Stat>* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>> AsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>>(AsyncStoreRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>> PrepareAsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>>(PrepareAsyncStoreRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientReader< flatbuffers::grpc::Message<Monster>>> Retrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) {
+      return std::unique_ptr< ::grpc::ClientReader< flatbuffers::grpc::Message<Monster>>>(RetrieveRaw(context, request));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>> AsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>>(AsyncRetrieveRaw(context, request, cq, tag));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>> PrepareAsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>>(PrepareAsyncRetrieveRaw(context, request, cq));
+    }
+  
+   private:
+    std::shared_ptr< ::grpc::ChannelInterface> channel_;
+    ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>* AsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>* PrepareAsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientReader< flatbuffers::grpc::Message<Monster>>* RetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) override;
+    ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>* AsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) override;
+    ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>* PrepareAsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) override;
+    const ::grpc::internal::RpcMethod rpcmethod_Store_;
+    const ::grpc::internal::RpcMethod rpcmethod_Retrieve_;
+  };
+  static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
+  
+  class Service : public ::grpc::Service {
+   public:
+    Service();
+    virtual ~Service();
+    virtual ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response);
+    virtual ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer);
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_Store : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithAsyncMethod_Store() {
+      ::grpc::Service::MarkMethodAsync(0);
+    }
+    ~WithAsyncMethod_Store() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+    void RequestStore(::grpc::ServerContext* context, flatbuffers::grpc::Message<Monster>* request, ::grpc::ServerAsyncResponseWriter< flatbuffers::grpc::Message<Stat>>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_Retrieve : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithAsyncMethod_Retrieve() {
+      ::grpc::Service::MarkMethodAsync(1);
+    }
+    ~WithAsyncMethod_Retrieve() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+    void RequestRetrieve(::grpc::ServerContext* context, flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerAsyncWriter< flatbuffers::grpc::Message<Monster>>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncServerStreaming(1, context, request, writer, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef   WithAsyncMethod_Store<  WithAsyncMethod_Retrieve<  Service   >   >   AsyncService;
+  template <class BaseClass>
+  class WithGenericMethod_Store : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithGenericMethod_Store() {
+      ::grpc::Service::MarkMethodGeneric(0);
+    }
+    ~WithGenericMethod_Store() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_Retrieve : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithGenericMethod_Retrieve() {
+      ::grpc::Service::MarkMethodGeneric(1);
+    }
+    ~WithGenericMethod_Retrieve() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_Store : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithStreamedUnaryMethod_Store() {
+      ::grpc::Service::MarkMethodStreamed(0,
+        new ::grpc::internal::StreamedUnaryHandler< flatbuffers::grpc::Message<Monster>, flatbuffers::grpc::Message<Stat>>(std::bind(&WithStreamedUnaryMethod_Store<BaseClass>::StreamedStore, this, std::placeholders::_1, std::placeholders::_2)));
+    }
+    ~WithStreamedUnaryMethod_Store() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedStore(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< flatbuffers::grpc::Message<Monster>,flatbuffers::grpc::Message<Stat>>* server_unary_streamer) = 0;
+  };
+  typedef   WithStreamedUnaryMethod_Store<  Service   >   StreamedUnaryService;
+  template <class BaseClass>
+  class WithSplitStreamingMethod_Retrieve : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithSplitStreamingMethod_Retrieve() {
+      ::grpc::Service::MarkMethodStreamed(1,
+        new ::grpc::internal::SplitServerStreamingHandler< flatbuffers::grpc::Message<Stat>, flatbuffers::grpc::Message<Monster>>(std::bind(&WithSplitStreamingMethod_Retrieve<BaseClass>::StreamedRetrieve, this, std::placeholders::_1, std::placeholders::_2)));
+    }
+    ~WithSplitStreamingMethod_Retrieve() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+    // replace default version of method with split streamed
+    virtual ::grpc::Status StreamedRetrieve(::grpc::ServerContext* context, ::grpc::ServerSplitStreamer< flatbuffers::grpc::Message<Stat>,flatbuffers::grpc::Message<Monster>>* server_split_streamer) = 0;
+  };
+  typedef   WithSplitStreamingMethod_Retrieve<  Service   >   SplitStreamedService;
+  typedef   WithStreamedUnaryMethod_Store<  WithSplitStreamingMethod_Retrieve<  Service   >   >   StreamedService;
+};
     
-    TEST(YogaTest, computed_layout_margin) {
-  const YGNodeRef root = YGNodeNew();
-  YGNodeStyleSetWidth(root, 100);
-  YGNodeStyleSetHeight(root, 100);
-  YGNodeStyleSetMarginPercent(root, YGEdgeStart, 10);
+    class LogHelper {
+  std::ostream* os_;
     }
     
-      YGNodeCalculateLayout(root, 100, 100, YGDirectionLTR);
+      // tracks the current namespace for early exit in WrapInNameSpace
+  // c++, java and csharp returns a different namespace from
+  // the following default (no early exit, always fully qualify),
+  // which works for js and php
+  virtual const Namespace *CurrentNameSpace() const { return nullptr; }
     
-      ASSERT_FLOAT_EQ(45, YGNodeLayoutGetLeft(root_child0));
-  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root_child0));
-  ASSERT_FLOAT_EQ(10, YGNodeLayoutGetWidth(root_child0));
-  ASSERT_FLOAT_EQ(10, YGNodeLayoutGetHeight(root_child0));
-    
-      ASSERT_FLOAT_EQ(0, YGNodeLayoutGetLeft(root_child0));
-  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root_child0));
-  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetWidth(root_child0));
-  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetHeight(root_child0));
-    
-      const YGNodeRef root_child2 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetHeight(root_child2, 10);
-  YGNodeInsertChild(root, root_child2, 2);
-  YGNodeCalculateLayout(root, YGUndefined, YGUndefined, YGDirectionLTR);
-    
-      ASSERT_FLOAT_EQ(10, YGNodeLayoutGetLeft(root_child0));
-  ASSERT_FLOAT_EQ(10, YGNodeLayoutGetTop(root_child0));
-  ASSERT_FLOAT_EQ(80, YGNodeLayoutGetWidth(root_child0));
-  ASSERT_FLOAT_EQ(10, YGNodeLayoutGetHeight(root_child0));
+    class FlatCompiler {
+ public:
+  // Output generator for the various programming languages and formats we
+  // support.
+  struct Generator {
+    typedef bool (*GenerateFn)(const flatbuffers::Parser &parser,
+                               const std::string &path,
+                               const std::string &file_name);
+    typedef std::string (*MakeRuleFn)(const flatbuffers::Parser &parser,
+                                      const std::string &path,
+                                      const std::string &file_name);
+    }
+    }
