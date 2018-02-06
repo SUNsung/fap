@@ -1,21 +1,52 @@
-    begin
-      response = U2F::RegisterResponse.load_from_json(params[:device_response])
-      registration_data = u2f.register!(challenges, response)
-      registration.update(certificate: registration_data.certificate,
-                          key_handle: registration_data.key_handle,
-                          public_key: registration_data.public_key,
-                          counter: registration_data.counter,
-                          user: user,
-                          name: params[:name])
-    rescue JSON::ParserError, NoMethodError, ArgumentError
-      registration.errors.add(:base, 'Your U2F device did not send a valid JSON response.')
-    rescue U2F::Error => e
-      registration.errors.add(:base, e.message)
-    end
+
+        
+                  adapter_method = '#{spec[:adapter]}_connection'
     
-            def literal_at_end?(regex_str)
-          # is this regexp 'literal' in the sense of only matching literal
-          # chars, rather than using metachars like . and * and so on?
-          # also, is it anchored at the end of the string?
-          regex_str =~ /\A(?:#{LITERAL_REGEX})+\\z\z/
+    class TestResponseTest < ActiveSupport::TestCase
+  def assert_response_code_range(range, predicate)
+    response = ActionDispatch::TestResponse.new
+    (0..599).each do |status|
+      response.status = status
+      assert_equal range.include?(status), response.send(predicate),
+                   'ActionDispatch::TestResponse.new(#{status}).#{predicate}'
+    end
+  end
+    
+            def current_instances
+          Thread.current[:current_attributes_instances] ||= {}
         end
+    
+    require 'active_job'
+    
+    module ActionMailer
+  # This module handles everything related to mail delivery, from registering
+  # new delivery methods to configuring the mail object to be sent.
+  module DeliveryMethods
+    extend ActiveSupport::Concern
+    
+      test 'should find a admin by send confirmation instructions with unconfirmed_email' do
+    admin = create_admin
+    assert admin.confirm
+    assert admin.update_attributes(email: 'new_test@example.com')
+    confirmation_admin = Admin.send_confirmation_instructions(email: admin.unconfirmed_email)
+    assert_equal confirmation_admin, admin
+  end
+    
+      def failure
+    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
+    redirect_to after_omniauth_failure_path_for(resource_name)
+  end
+    
+      # Sets the resource creating an instance variable
+  def resource=(new_resource)
+    instance_variable_set(:'@#{resource_name}', new_resource)
+  end
+    
+          if context.respond_to?(route)
+        context.send(route, opts)
+      elsif respond_to?(:root_url)
+        root_url(opts)
+      else
+        '/'
+      end
+    end
