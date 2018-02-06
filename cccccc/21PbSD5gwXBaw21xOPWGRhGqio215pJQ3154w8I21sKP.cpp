@@ -1,112 +1,119 @@
 
         
-        #include 'hphp/runtime/vm/jit/abi.h'
-#include 'hphp/runtime/vm/jit/arg-group.h'
-#include 'hphp/runtime/vm/jit/fixup.h'
-#include 'hphp/runtime/vm/jit/phys-reg-saver.h'
-#include 'hphp/runtime/vm/jit/vasm-gen.h'
-#include 'hphp/runtime/vm/jit/vasm-instr.h'
-#include 'hphp/runtime/vm/jit/vasm-reg.h'
+        class AtomMainDelegate : public brightray::MainDelegate {
+ public:
+  AtomMainDelegate();
+  ~AtomMainDelegate();
+    }
     
-    const StaticString s_pagelet('pagelet');
+      // DesktopMediaListObserver overrides.
+  void OnSourceAdded(int index) override;
+  void OnSourceRemoved(int index) override;
+  void OnSourceMoved(int old_index, int new_index) override;
+  void OnSourceNameChanged(int index) override;
+  void OnSourceThumbnailChanged(int index) override;
+  bool OnRefreshFinished() override;
     
-    void numa_bind_to(void* start, size_t size, int node) {
-  if (!use_numa) return;
-  numa_tonode_memory(start, size, node);
+    void GlobalShortcut::Unregister(const ui::Accelerator& accelerator) {
+  if (!ContainsKey(accelerator_callback_map_, accelerator))
+    return;
+    }
+    
+    class GlobalShortcut : public extensions::GlobalShortcutListener::Observer,
+                       public mate::TrackableObject<GlobalShortcut> {
+ public:
+  static mate::Handle<GlobalShortcut> Create(v8::Isolate* isolate);
+    }
+    
+    class Event : public Wrappable<Event>,
+              public content::WebContentsObserver {
+ public:
+  static Handle<Event> Create(v8::Isolate* isolate);
+    }
+    
+    SavePageHandler::SavePageHandler(content::WebContents* web_contents,
+                                 const SavePageCallback& callback)
+    : web_contents_(web_contents),
+      callback_(callback) {
 }
     
-    #ifndef ROCKSDB_LITE
-#include 'redis_lists.h'
+      AtomQuotaPermissionContext();
+  virtual ~AtomQuotaPermissionContext();
     
-      // Link WAL files. Copy exact size of last one because it is the only one
-  // that has changes after the last flush.
-  for (size_t i = 0; s.ok() && i < wal_size; ++i) {
-    if ((live_wal_files[i]->Type() == kAliveLogFile) &&
-        (!flush_memtable ||
-         live_wal_files[i]->StartSequence() >= *sequence_number ||
-         live_wal_files[i]->LogNumber() >= min_log_num)) {
-      if (i + 1 == wal_size) {
-        s = copy_file_cb(db_options.wal_dir, live_wal_files[i]->PathName(),
-                         live_wal_files[i]->SizeFileBytes(), kLogFile);
-        break;
-      }
-      if (same_fs) {
-        // we only care about live log files
-        s = link_file_cb(db_options.wal_dir, live_wal_files[i]->PathName(),
-                         kLogFile);
-        if (s.IsNotSupported()) {
-          same_fs = false;
-          s = Status::OK();
-        }
-      }
-      if (!same_fs) {
-        s = copy_file_cb(db_options.wal_dir, live_wal_files[i]->PathName(), 0,
-                         kLogFile);
-      }
+    #include 'atom/browser/net/js_asker.h'
+#include 'net/url_request/url_request_simple_job.h'
+    
+    #include <vector>
+#include <string>
+    
+    void WakeUpLock::Unlock() {
+    ::wakeupLock_Unlock(object_);
+}
+    
+    void Packer_Pack(const char* _url, unsigned int _sequence, const void* _data, size_t _datalen, AutoBuffer& _outbuf, bool _dohash) {
+    ASSERT(_url);
+    size_t url_size = strnlen(_url, 128);
+    ASSERT(0xFF >= sizeof(LongLinkPack) + url_size);
     }
+    
+    //
+//  testspy.h
+//  PublicComponent
+//
+//  Created by yerungui on 14-5-13.
+//
+    
+    #include <jni.h>
+#include <string>
+struct JniMethodInfo;
+class AutoBuffer;
+    
+    #include <folly/synchronization/ParkingLot.h>
+    
+      T exchange(T v, std::memory_order mo = std::memory_order_seq_cst) noexcept {
+    DeterministicSchedule::beforeSharedAccess();
+    T rv = data.exchange(v, mo);
+    FOLLY_TEST_DSCHED_VLOG(this << '.exchange(' << std::hex << v << ') -> '
+                                << std::hex << rv);
+    DeterministicSchedule::afterSharedAccess(true);
+    return rv;
   }
     
-    struct Layout
-{
-    double left;
-    double right;
-    }
-    
-        Size(double width, double height)
-    : width(width)
-    , height(height)
-    {
-    }
-    
-    
-    {  YGNodeFreeRecursive(root);
+    /**
+ * For all other iterators, we need to use the decrement operator.
+ */
+template <class Iter>
+typename std::enable_if<
+    !std::is_same<
+        typename std::iterator_traits<Iter>::iterator_category,
+        std::random_access_iterator_tag>::value,
+    typename std::iterator_traits<Iter>::reference>::type
+value_before(Iter i) {
+  return *--i;
 }
-
     
-      const YGNodeRef root_child0 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetFlexBasisPercent(root_child0, 100);
-  YGNodeInsertChild(root, root_child0, 0);
-    
-      const YGNodeRef root_child0_child0 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(root_child0_child0, 100);
-  YGNodeStyleSetHeight(root_child0_child0, 200);
-  YGNodeInsertChild(root_child0, root_child0_child0, 0);
-  YGNodeCalculateLayout(root, YGUndefined, YGUndefined, YGDirectionLTR);
-    
-    
-    {  template <typename T> friend class RefPtr;
-  std::atomic<int> m_refcount;
-};
-    
-        if (connections >= totalConnections - THREADS + 1) {
-        m.unlock();
-        return false;
+    TEST(CoreAllocator, Basic) {
+  CoreAllocator<32> alloc;
+  auto a = alloc.get(0);
+  auto res = a->allocate(8);
+  memset(res, 0, 8);
+  a->deallocate(res);
+  res = a->allocate(8);
+  EXPECT_TRUE((intptr_t)res % 8 == 0); // check alignment
+  memset(res, 0, 8);
+  a->deallocate(res);
+  res = a->allocate(12);
+  EXPECT_TRUE((intptr_t)res % 16 == 0); // check alignment
+  memset(res, 0, 12);
+  a->deallocate(res);
+  res = a->allocate(257);
+  memset(res, 0, 257);
+  a->deallocate(res);
     }
     
-    bool nextConnection(int tid)
-{
-    m.lock();
-    int socketfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (socketfd == -1) {
-        cout << 'FD error, connections: ' << connections << endl;
-        return false;
-    }
-    }
+    #include <folly/container/SparseByteSet.h>
     
-        SSL_CTX_set_options(context.context, SSL_OP_NO_SSLv3);
-    
-    template <bool isServer>
-class ExtensionsNegotiator {
-protected:
-    int options;
-public:
-    ExtensionsNegotiator(int wantedOptions);
-    std::string generateOffer();
-    void readOffer(std::string offer);
-    int getNegotiatedOptions();
-};
-    
-        bool listen(int port, uS::TLS::Context sslContext = nullptr, int options = 0, Group<SERVER> *eh = nullptr);
-    bool listen(const char *host, int port, uS::TLS::Context sslContext = nullptr, int options = 0, Group<SERVER> *eh = nullptr);
-    void connect(std::string uri, void *user = nullptr, std::map<std::string, std::string> extraHeaders = {}, int timeoutMs = 5000, Group<CLIENT> *eh = nullptr);
-    void upgrade(uv_os_sock_t fd, const char *secKey, SSL *ssl, const char *extensions, size_t extensionsLength, const char *subprotocol, size_t subprotocolLength, Group<SERVER> *serverGroup = nullptr);
+      if (!kIsSanitize) { // asan allocator raises SIGABRT instead
+    EXPECT_EQ(EINVAL, (trial(2), errno)) << 'too small';
+    EXPECT_EQ(EINVAL, (trial(513), errno)) << 'not power of two';
+  }
