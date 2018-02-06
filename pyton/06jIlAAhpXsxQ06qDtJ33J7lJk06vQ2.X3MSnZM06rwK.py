@@ -1,144 +1,87 @@
 
         
-        import io
-import optparse
+        AnsibleDumper.add_representer(
+    AnsibleUnicode,
+    represent_unicode,
+)
     
-    with io.open(README_FILE, 'w', encoding='utf-8') as f:
-    f.write(header)
-    f.write(options)
-    f.write(footer)
+    
+def auto_parallel(metagraph, model):
+  from tensorflow.python.grappler import tf_optimizer
+  rewriter_config = rewriter_config_pb2.RewriterConfig()
+  rewriter_config.optimizers.append('autoparallel')
+  rewriter_config.auto_parallel.enable = True
+  rewriter_config.auto_parallel.num_replicas = FLAGS.num_gpus
+  optimized_graph = tf_optimizer.OptimizeGraph(rewriter_config, metagraph)
+  metagraph.graph_def.CopyFrom(optimized_graph)
+  UpdateCollection(metagraph, model)
 
     
+      @tf.test.mock.patch.dict(custom_estimator.__dict__,
+                           {'load_data': four_lines_data})
+  def test_custom_estimator(self):
+    custom_estimator.main([None, '--train_steps=1'])
     
-def list_extractors(age_limit):
-    '''
-    Return a list of extractors that are suitable for the given age,
-    sorted by extractor ID.
-    '''
+    import numpy as np
+from six.moves import urllib
+import tensorflow as tf
     
+        # Read data into buckets and compute their sizes.
+    print ('Reading development and training data (limit: %d).'
+           % FLAGS.max_train_data_size)
+    dev_set = read_data(from_dev, to_dev)
+    train_set = read_data(from_train, to_train, FLAGS.max_train_data_size)
+    train_bucket_sizes = [len(train_set[b]) for b in xrange(len(_buckets))]
+    train_total_size = float(sum(train_bucket_sizes))
     
-class AcademicEarthCourseIE(InfoExtractor):
-    _VALID_URL = r'^https?://(?:www\.)?academicearth\.org/playlists/(?P<id>[^?#/]+)'
-    IE_NAME = 'AcademicEarth:Course'
-    _TEST = {
-        'url': 'http://academicearth.org/playlists/laws-of-nature/',
-        'info_dict': {
-            'id': 'laws-of-nature',
-            'title': 'Laws of Nature',
-            'description': 'Introduce yourself to the laws of nature with these free online college lectures from Yale, Harvard, and MIT.',
-        },
-        'playlist_count': 3,
-    }
+      Returns:
+    A tuple of 6 elements:
+      (1) path to the token-ids for English training data-set,
+      (2) path to the token-ids for French training data-set,
+      (3) path to the token-ids for English development data-set,
+      (4) path to the token-ids for French development data-set,
+      (5) path to the English vocabulary file,
+      (6) path to the French vocabulary file.
+  '''
+  # Get wmt data to the specified directory.
+  train_path = get_wmt_enfr_train_set(data_dir)
+  dev_path = get_wmt_enfr_dev_set(data_dir)
     
-        _TESTS = [{
-        'url': 'http://camwithher.tv/view_video.php?viewkey=6e9a24e2c0e842e1f177&page=&viewtype=&category=',
-        'info_dict': {
-            'id': '5644',
-            'ext': 'flv',
-            'title': 'Periscope Tease',
-            'description': 'In the clouds teasing on periscope to my favorite song',
-            'duration': 240,
-            'view_count': int,
-            'comment_count': int,
-            'uploader': 'MileenaK',
-            'upload_date': '20160322',
-        },
-        'params': {
-            'skip_download': True,
-        }
-    }, {
-        'url': 'http://camwithher.tv/view_video.php?viewkey=6dfd8b7c97531a459937',
-        'only_matching': True,
-    }, {
-        'url': 'http://camwithher.tv/view_video.php?page=&viewkey=6e9a24e2c0e842e1f177&viewtype=&category=',
-        'only_matching': True,
-    }, {
-        'url': 'http://camwithher.tv/view_video.php?viewkey=b6c3b5bea9515d1a1fc4&page=&viewtype=&category=mv',
-        'only_matching': True,
-    }]
+            self.assertIn(entry.get(), 'hello')
+        egi = entry.grid_info()
+        equal(int(egi['row']), 0)
+        equal(int(egi['column']), 1)
+        equal(int(egi['rowspan']), 1)
+        equal(int(egi['columnspan']), 1)
+        equal(self.dialog.row, 1)
     
-        def short_desc(self):
-        '''
-        A short description of the command
-        '''
-        return ''
-    
-        def syntax(self):
-        return '[options] <spider>'
-    
-        def run(self, args, opts):
-        if opts.list:
-            self._list_templates()
-            return
-        if opts.dump:
-            template_file = self._find_template(opts.dump)
-            if template_file:
-                with open(template_file, 'r') as f:
-                    print(f.read())
-            return
-        if len(args) != 2:
-            raise UsageError()
-    
-            return request
-    
-    # The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
-#
-# The short X.Y version.
-version = '0'
-# The full version, including alpha/beta/rc tags.
-release = '0'
-    
-        @classmethod
-    def _call(cls, enhancement):
-        from certbot.display.enhancements import ask
-        return ask(enhancement)
-    
-    def downgrade():
-    constraint = find_constraint_name(False) or 'fk_columns_datasource_name_datasources'
-    with op.batch_alter_table('columns',
-        naming_convention=naming_convention) as batch_op:
-        batch_op.drop_constraint(constraint, type_='foreignkey')
-        batch_op.create_foreign_key(
-            'fk_columns_column_name_datasources',
-            'datasources',
-            ['column_name'], ['datasource_name'])
-
-    
-    def upgrade():
-    op.add_column('dashboards', sa.Column('slug', sa.String(length=255), nullable=True))
-    try:
-        op.create_unique_constraint('idx_unique_slug', 'dashboards', ['slug'])
-    except:
-        pass
-    
-    from alembic import op
-import sqlalchemy as sa
-    
-    Revision ID: 43df8de3a5f4
-Revises: 7dbf98566af7
-Create Date: 2016-01-18 23:43:16.073483
-    
-    # A list of ignored prefixes for module index sorting.
-#modindex_common_prefix = []
-    
-      The parameters are:
-    - |reason| a textual description of the reason for the known issue. This
-               is used for the skip reason
-    - |exception_matchers| additional arguments are hamcrest matchers to apply
-                 to the exception thrown. If the matchers don't match, then the
-                 test is marked as error, with the original exception.
+                {'data': 'keebler='E=mc2; L=\\'Loves\\'; fudge=\\012;'',
+             'dict': {'keebler' : 'E=mc2; L='Loves'; fudge=\012;'},
+             'repr': '''<SimpleCookie: keebler='E=mc2; L='Loves'; fudge=\\n;'>''',
+             'output': 'Set-Cookie: keebler='E=mc2; L=\\'Loves\\'; fudge=\\012;''},
     
     
-  def Start( self ):
-    request_data = BuildRequestData()
-    if self._extra_data:
-      request_data.update( self._extra_data )
-    request_data.update( {
-      'completer_target': self._completer_target,
-      'command_arguments': self._arguments
-    } )
-    with HandleServerException():
-      self._response = self.PostDataToHandler( request_data,
-                                               'run_completer_command' )
+class TestDecode:
+    def test_decimal(self):
+        rval = self.loads('1.1', parse_float=decimal.Decimal)
+        self.assertTrue(isinstance(rval, decimal.Decimal))
+        self.assertEqual(rval, decimal.Decimal('1.1'))
+    
+        # override in derived classes
+    def _extractrgb(self, mo):
+        return [int(x) for x in mo.group('red', 'green', 'blue')]
+    
+            # bpo-30524: Test that calling a C type static method with no argument
+        # doesn't crash (ignore the result): METH_FASTCALL | METH_CLASS
+        (datetime.datetime.now, (), IGNORE_RESULT),
+    )
+    
+            digits = [long(ob_digit[i]) * 2**(SHIFT*i)
+                  for i in safe_range(abs(ob_size))]
+        result = sum(digits)
+        if ob_size < 0:
+            result = -result
+        return result
+    
+            a[0], a[-1] = 200, -200
+        self.assertEqual(x[:], list(range(16)))
