@@ -1,142 +1,176 @@
 
         
-        HINSTANCE g_hInst = NULL;
-D3D_DRIVER_TYPE g_driverType = D3D_DRIVER_TYPE_NULL;
-D3D_FEATURE_LEVEL g_featureLevel = D3D_FEATURE_LEVEL_11_0;
-ID3D11Device* g_pd3dDevice = NULL;
-ID3D11DeviceContext* g_pImmediateContext = NULL;
-IDXGISwapChain* g_pSwapChain = NULL;
+        Status BuildTable(const std::string& dbname,
+                  Env* env,
+                  const Options& options,
+                  TableCache* table_cache,
+                  Iterator* iter,
+                  FileMetaData* meta) {
+  Status s;
+  meta->file_size = 0;
+  iter->SeekToFirst();
+    }
     
-    typedef std::tr1::tuple<int, int> StereoBMFixture_t;
-typedef TestBaseWithParam<StereoBMFixture_t> StereoBMFixture;
-    
-        if( !*state )
-        return;
-    
-    cv::Mat dls::roty(const double t)
-{
-    // roty: rotation about y-axis
-    double ct = cos(t);
-    double st = sin(t);
-    return (cv::Mat_<double>(3,3) << ct, 0, st, 0, 1, 0, -st, 0, ct);
+    void leveldb_iter_seek_to_last(leveldb_iterator_t* iter) {
+  iter->rep->SeekToLast();
 }
     
     
-    {        left.copyTo(uleft);
-        right.copyTo(uright);
-    }
-    
-        camMat << 300.f, 0.f, imgSize.width/2.f, 0, 300.f, imgSize.height/2.f, 0.f, 0.f, 1.f;
-    distCoeffs0 << 1.2f, 0.2f, 0.f, 0.f, 0.f;
-    
-    #include 'opencv2/calib3d.hpp'
-    
-                    matJ = cvMat( 9, 3, CV_64FC1, J );
-    
-      /*
-   * @brief Access value for a flag name.
-   *
-   * @param name the flag name.
-   * @param value output parameter filled with the flag value on success.
-   * @return status of the flag did exist.
-   */
-  static Status getDefaultValue(const std::string& name, std::string& value);
-    
-      /// Check if effective privileges do not match real.
-  bool dropped() {
-    return (getuid() != geteuid() || getgid() != getegid());
-  }
-    
-      /**
-   * @brief Cleanly wait for all services and components to shutdown.
-   *
-   * Enter a join of all services followed by a sync wait for event loops.
-   * If the main thread is out of actions it can call #waitForShutdown.
-   */
-  static void waitForShutdown();
-    
-      /*
-   * @brief a variable tracking all of the paths we attempt to carve
-   *
-   * This is a globbed set of file paths that we're expecting will be
-   * carved.
-   */
-  std::set<boost::filesystem::path> carvePaths_;
-    
-    namespace osquery {
-    }
-    
-    /// Safely convert a string representation of an integer base.
-inline Status safeStrtol(const std::string& rep, size_t base, long int& out) {
-  char* end{nullptr};
-  out = strtol(rep.c_str(), &end, static_cast<int>(base));
-  if (end == nullptr || end == rep.c_str() || *end != '\0' ||
-      ((out == LONG_MIN || out == LONG_MAX) && errno == ERANGE)) {
-    out = 0;
-    return Status(1);
-  }
-  return Status(0);
+    {  ASSERT_TRUE(!ParseInternalKey(Slice('bar'), &decoded));
 }
     
-    #endif /* WAKEUPLOCK_H_ */
+    
+// Owned filenames have the form:
+//    dbname/CURRENT
+//    dbname/LOCK
+//    dbname/LOG
+//    dbname/LOG.old
+//    dbname/MANIFEST-[0-9]+
+//    dbname/[0-9]+.(log|sst|ldb)
+bool ParseFileName(const std::string& fname,
+                   uint64_t* number,
+                   FileType* type) {
+  Slice rest(fname);
+  if (rest == 'CURRENT') {
+    *number = 0;
+    *type = kCurrentFile;
+  } else if (rest == 'LOCK') {
+    *number = 0;
+    *type = kDBLockFile;
+  } else if (rest == 'LOG' || rest == 'LOG.old') {
+    *number = 0;
+    *type = kInfoLogFile;
+  } else if (rest.starts_with('MANIFEST-')) {
+    rest.remove_prefix(strlen('MANIFEST-'));
+    uint64_t num;
+    if (!ConsumeDecimalNumber(&rest, &num)) {
+      return false;
+    }
+    if (!rest.empty()) {
+      return false;
+    }
+    *type = kDescriptorFile;
+    *number = num;
+  } else {
+    // Avoid strtoull() to keep filename format independent of the
+    // current locale
+    uint64_t num;
+    if (!ConsumeDecimalNumber(&rest, &num)) {
+      return false;
+    }
+    Slice suffix = rest;
+    if (suffix == Slice('.log')) {
+      *type = kLogFile;
+    } else if (suffix == Slice('.sst') || suffix == Slice('.ldb')) {
+      *type = kTableFile;
+    } else if (suffix == Slice('.dbtmp')) {
+      *type = kTempFile;
+    } else {
+      return false;
+    }
+    *number = num;
+  }
+  return true;
+}
+    
+    // Return the name of the info log file for 'dbname'.
+extern std::string InfoLogFileName(const std::string& dbname);
+    
+    
+    {  // Errors
+  static const char* errors[] = {
+    '',
+    'foo',
+    'foo-dx-100.log',
+    '.log',
+    '',
+    'manifest',
+    'CURREN',
+    'CURRENTX',
+    'MANIFES',
+    'MANIFEST',
+    'MANIFEST-',
+    'XMANIFEST-3',
+    'MANIFEST-3x',
+    'LOC',
+    'LOCKx',
+    'LO',
+    'LOGx',
+    '18446744073709551616.log',
+    '184467440737095516150.log',
+    '100',
+    '100.',
+    '100.lop'
+  };
+  for (int i = 0; i < sizeof(errors) / sizeof(errors[0]); i++) {
+    std::string f = errors[i];
+    ASSERT_TRUE(!ParseFileName(f, &number, &type)) << f;
+  }
+}
+    
+        // Copy data.
+    Iterator* iter = NewTableIterator(t.meta);
+    int counter = 0;
+    for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
+      builder->Add(iter->key(), iter->value());
+      counter++;
+    }
+    delete iter;
+    
+    
+    {}  // namespace leveldb
+    
+      Benchmark()
+  : db_(NULL),
+    db_num_(0),
+    num_(FLAGS_num),
+    reads_(FLAGS_reads < 0 ? FLAGS_num : FLAGS_reads),
+    bytes_(0),
+    rand_(301) {
+    std::vector<std::string> files;
+    std::string test_dir;
+    Env::Default()->GetTestDirectory(&test_dir);
+    Env::Default()->GetChildren(test_dir, &files);
+    if (!FLAGS_use_existing_db) {
+      for (int i = 0; i < files.size(); i++) {
+        if (Slice(files[i]).starts_with('dbbench_sqlite3')) {
+          std::string file_name(test_dir);
+          file_name += '/';
+          file_name += files[i];
+          Env::Default()->DeleteFile(file_name.c_str());
+        }
+      }
+    }
+  }
+    
+    // Return a builtin comparator that uses lexicographic byte-wise
+// ordering.  The result remains the property of this module and
+// must not be deleted.
+extern const Comparator* BytewiseComparator();
+    
+    #endif  // STORAGE_LEVELDB_INCLUDE_DUMPFILE_H_
 
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-      private:
-    CommFrequencyLimit(CommFrequencyLimit&);
-    CommFrequencyLimit& operator=(CommFrequencyLimit&);
-    
-    
-    {  private:
-    TServicesMap m_services;
-    TServicesMap m_publicservices;
-    std::vector<ServiceBase*> m_releasevec;
-};
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    
-    static bool SpyHookLogFunc(struct XLoggerInfo_t& _info, std::string& _log);
-    void TestFun0();
-    int __TestFun1(int i);
-    
-    #ifndef COMM_HAS_MEMBER_H_
-#define COMM_HAS_MEMBER_H_
-    
-    namespace aria2 {
-    }
-    
-    AbstractAuthResolver::~AbstractAuthResolver() = default;
-    
-      const std::shared_ptr<Option>& getOption() const;
-    
-      std::shared_ptr<HttpConnection> httpConnection_;
-    
-    bool AnnounceList::currentTierAcceptsStoppedEvent() const
-{
-  if (currentTrackerInitialized_) {
-    return FindStoppedAllowedTier()(*currentTier_);
+    // Computes all the cross product distances of the points perpendicular to
+// the given direction, ignoring distances outside of the give distance range,
+// storing the actual (signed) cross products in distances_.
+void DetLineFit::ComputeConstrainedDistances(const FCOORD& direction,
+                                             double min_dist, double max_dist) {
+  distances_.truncate(0);
+  square_length_ = direction.sqlength();
+  // Compute the distance of each point from the line.
+  for (int i = 0; i < pts_.size(); ++i) {
+    FCOORD pt_vector = pts_[i].pt;
+    // Compute |line_vector||pt_vector|sin(angle between)
+    double dist = direction * pt_vector;
+    if (min_dist <= dist && dist <= max_dist)
+      distances_.push_back(DistPointPair(dist, pts_[i].pt));
   }
-    }
-    
-    std::string errToString(OSStatus err)
-{
-  std::string rv = 'Unkown error';
-  CFRef<CFStringRef> cerr(SecCopyErrorMessageString(err, nullptr));
-  if (!cerr) {
-    return rv;
-  }
-  size_t len = CFStringGetLength(cerr.get()) * 4;
-  auto buf = make_unique<char[]>(len);
-  if (CFStringGetCString(cerr.get(), buf.get(), len, kCFStringEncodingUTF8)) {
-    rv = buf.get();
-  }
-  return rv;
 }
+    
+    
+    {}  // namespace tesseract.
+    
+    #include <stdio.h>
+#include 'genericvector.h'
+#include 'host.h'
