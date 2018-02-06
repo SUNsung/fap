@@ -1,86 +1,105 @@
 
         
-            def iter_body(self, chunk_size):
-        '''Return an iterator over the body.'''
-        raise NotImplementedError()
-    
-            for response in responses:
-    
-    
-def get_unique_filename(filename, exists=os.path.exists):
-    attempt = 0
-    while True:
-        suffix = '-' + str(attempt) if attempt > 0 else ''
-        try_filename = trim_filename_if_needed(filename, extra=len(suffix))
-        try_filename += suffix
-        if not exists(try_filename):
-            return try_filename
-        attempt += 1
+        
+httpie_info = packages.pop('httpie')
+print('''
+  url '{url}'
+  sha256 '{sha256}'
+'''.format(**httpie_info))
     
     
-class ExitStatus:
-    '''Exit status code constants.'''
-    OK = 0
-    ERROR = 1
-    PLUGIN_ERROR = 7
-    
-    filenames = {
-    'bin': 'youtube-dl',
-    'exe': 'youtube-dl.exe',
-    'tar': 'youtube-dl-%s.tar.gz' % version}
-build_dir = os.path.join('..', '..', 'build', version)
-for key, filename in filenames.items():
-    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
-    fn = os.path.join(build_dir, filename)
-    with open(fn, 'rb') as f:
-        data = f.read()
-    if not data:
-        raise ValueError('File %s is empty!' % fn)
-    sha256sum = hashlib.sha256(data).hexdigest()
-    new_version[key] = (url, sha256sum)
+@mock.patch('httpie.core.get_response')
+def test_error_traceback(get_response):
+    exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    with raises(ConnectionError):
+        main(['--ignore-stdin', '--traceback', 'www.google.com'])
     
     
-from youtube_dl import YoutubeDL
-    
-    
-def _is_empty(d):
-    return not bool(os.listdir(d))
-    
-        def setUp(self):
-        if self._SKIP_SOCKS_TEST:
-            return
-    
-            categories = re.findall(
-            r'<a href='http://anysex\.com/categories/[^']+' title='[^']*'>([^<]+)</a>', webpage)
-    
-            raw_payload = self._search_regex([
-            r'class='amtv-embed'[^>]+id='([^']+)'',
-            r'class=\\'amtv-embed\\'[^>]+id=\\'([^']+)\\'',
-        ], webpage, 'raw payload')
-        _, stage_mode, video_id, lang = raw_payload.split('-')
-    
-            return {
-            'id': info['vid'],
-            'title': info['Subject'],
-            'duration': int(info['duration']) / 1000.0,
-            'formats': formats,
-            'thumbnail': info.get('bimg') or info.get('img'),
-        }
+def test_unicode_digest_auth(httpbin):
+    # it doesn't really authenticate us because httpbin
+    # doesn't interpret the utf8-encoded auth
+    http('--auth-type=digest',
+         '--auth', u'test:%s' % UNICODE,
+         httpbin.url + u'/digest-auth/auth/test/' + UNICODE)
 
     
-        click_count += 1
-    if click_count > 1:
-        click_count = 0
-        cor1 = cor.pop()
-        cor2 = cor.pop()
     
-        # 从上顶点往下 +274 的位置开始向上找颜色与上顶点一样的点，为下顶点
-    # 该方法对所有纯色平面和部分非纯色平面有效，对高尔夫草坪面、木纹桌面、
-    # 药瓶和非菱形的碟机（好像是）会判断错误
-    for k in range(i+274, i, -1):  # 274 取开局时最大的方块的上下顶点距离
-        pixel = im_pixel[board_x, k]
-        if abs(pixel[0] - last_pixel[0]) \
-                + abs(pixel[1] - last_pixel[1]) \
-                + abs(pixel[2] - last_pixel[2]) < 10:
-            break
-    board_y = int((i+k) / 2)
+class Downloader(object):
+    
+    import pygments.lexer
+import pygments.token
+import pygments.styles
+import pygments.lexers
+import pygments.style
+from pygments.formatters.terminal import TerminalFormatter
+from pygments.formatters.terminal256 import Terminal256Formatter
+from pygments.lexers.special import TextLexer
+from pygments.lexers.text import HttpLexer as PygmentsHttpLexer
+from pygments.util import ClassNotFound
+    
+        def test_cert_file_not_found(self, httpbin_secure):
+        r = http(httpbin_secure + '/get',
+                 '--cert', '/__not_found__',
+                 error_exit_ok=True)
+        assert r.exit_status == ExitStatus.ERROR
+        assert 'No such file or directory' in r.stderr
+    
+    
+def repr_dict_nice(d):
+    def prepare_dict(d):
+        for k, v in d.items():
+            if isinstance(v, dict):
+                v = dict(prepare_dict(v))
+            elif isinstance(v, bytes):
+                v = v.decode('utf8')
+            elif not isinstance(v, (int, str)):
+                v = repr(v)
+            yield k, v
+    return json.dumps(
+        dict(prepare_dict(d)),
+        indent=4, sort_keys=True,
+    )
+    
+    import os
+    
+      def setUp(self):
+    self._string_data = '\n'.join(
+        [' hello there i am',
+         ' rain as day',
+         ' want some cheesy puffs ?'])
+    
+    py_binary(
+    name = 'cifar10_eval',
+    srcs = [
+        'cifar10_eval.py',
+    ],
+    srcs_version = 'PY2AND3',
+    visibility = ['//tensorflow:__subpackages__'],
+    deps = [
+        ':cifar10',
+    ],
+)
+    
+        # Loads mapping from string UID to human-readable string
+    proto_as_ascii_lines = tf.gfile.GFile(uid_lookup_path).readlines()
+    uid_to_human = {}
+    p = re.compile(r'[n\d]*[ \S,]*')
+    for line in proto_as_ascii_lines:
+      parsed_items = p.findall(line)
+      uid = parsed_items[0]
+      human_string = parsed_items[2]
+      uid_to_human[uid] = human_string
+    
+    py_library(
+    name = 'rnn_cell',
+    srcs = [
+        'rnn_cell.py',
+    ],
+    srcs_version = 'PY2AND3',
+    deps = [
+        ':linear',
+        '//tensorflow:tensorflow_py',
+    ],
+)
