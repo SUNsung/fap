@@ -1,444 +1,444 @@
 
         
-        
-    {}  // namespace tensorflow
-
-    
-    #include 'tensorflow/core/framework/tensor.h'
-#include 'tensorflow/core/grappler/costs/cost_estimator.h'
-#include 'tensorflow/core/lib/core/status.h'
-#include 'tensorflow/core/lib/core/threadpool.h'
-#include 'tensorflow/core/platform/types.h'
-    
-    // Prune a model to make it more efficient:
-// * Remove unnecessary operations.
-// * Optimize gradient computations.
-class ModelPruner : public GraphOptimizer {
- public:
-  ModelPruner() {}
-  ~ModelPruner() override {}
+        bool IsWebContents(v8::Isolate* isolate, content::RenderProcessHost* process) {
+  content::WebContents* web_contents =
+      static_cast<AtomBrowserClient*>(AtomBrowserClient::Get())->
+          GetWebContentsFromProcessID(process->GetID());
+  if (!web_contents)
+    return false;
     }
     
-    namespace tensorflow {
-    }
-    
-    #include <deque>
-#include <vector>
-    
-    #include 'tensorflow/core/lib/core/coding.h'
-#include 'tensorflow/core/lib/hash/crc32c.h'
-#include 'tensorflow/core/lib/io/compression.h'
-#include 'tensorflow/core/platform/env.h'
-    
-    /** scalar_tanh_fast_derivative_op
-  * \ingroup CXX11_NeuralNetworks_Module
-  * \brief Template functor to compute the fast derivative of a tanh
-  *
-  * Input should be the backpropagated gradient.
-  *
-  * \sa class CwiseUnaryOp, Cwise::tanh_fast_derivative()
-  */
-template <typename T>
-struct scalar_tanh_fast_derivative_op {
-  EIGEN_EMPTY_STRUCT_CTOR(scalar_tanh_fast_derivative_op)
-  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE T operator()(const T& y) const {
-    const T one = T(1);
-    return one - (y * y);
-  }
-    }
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    
-    {    input_buffer_.reset(new io::InputBuffer(file_.get(), kBufferSize));
-    for (; line_number_ < skip_header_lines_; ++line_number_) {
-      string line_contents;
-      Status status = input_buffer_->ReadLine(&line_contents);
-      if (errors::IsOutOfRange(status)) {
-        // We ignore an end of file error when skipping header lines.
-        // We will end up skipping this file.
-        return Status::OK();
-      }
-      TF_RETURN_IF_ERROR(status);
-    }
-    return Status::OK();
-  }
-    
-    namespace api {
-    }
-    
-    
-    {
-    {    // We really should be dead by now.  For whatever reason, we're not. Exit
-    // immediately, with the exit status set to the signal number with bit 8
-    // set.  On the systems that we care about, this exit status is what is
-    // normally used to indicate an exit by this signal's default handler.
-    // This mechanism isn't a de jure standard, but even in the worst case, it
-    // should at least result in an immediate exit.
-    RAW_LOG(WARNING, 'Still here, exiting really ungracefully.');
-    _exit(signal | (1 << 7));
-  }
-  ExitPosted();
+    void SavePageHandler::OnDownloadCreated(content::DownloadManager* manager,
+                                        content::DownloadItem* item) {
+  // OnDownloadCreated is invoked during WebContents::SavePage, so the |item|
+  // here is the one stated by WebContents::SavePage.
+  item->AddObserver(this);
 }
     
-    #endif  // ATOM_BROWSER_RELAUNCHER_H_
-
+    #ifndef ATOM_BROWSER_NET_ASAR_ASAR_PROTOCOL_HANDLER_H_
+#define ATOM_BROWSER_NET_ASAR_ASAR_PROTOCOL_HANDLER_H_
+    
+    #include 'net/url_request/url_request_job_factory.h'
     
     #include 'base/files/file_util.h'
-#include 'base/files/scoped_file.h'
 #include 'base/logging.h'
+#include 'base/mac/mac_logging.h'
 #include 'base/posix/eintr_wrapper.h'
 #include 'base/process/launch.h'
+#include 'base/strings/sys_string_conversions.h'
     
-      // PID 1 identifies init. launchd, that is. launchd never starts the
-  // relauncher process directly, having this parent_pid means that the parent
-  // already exited and launchd 'inherited' the relauncher as its child.
-  // There's no reason to synchronize with launchd.
-  if (parent_pid == 1) {
-    LOG(ERROR) << 'unexpected parent_pid';
-    return;
-  }
+        base::win::ShortcutProperties props;
+    base::string16 appID;
+    if (content::Shell::GetPackage()->root()->GetString('app-id', &appID) == false)
+      content::Shell::GetPackage()->root()->GetString(switches::kmName, &appID);
+    const std::wstring appName = base::UTF8ToWide(content::Shell::GetPackage()->GetName());
+    props.set_app_id(appID);
+    
+    #include 'base/strings/string_piece.h'
+#include 'v8/include/v8.h'
+    
+      // RenderViewHostObserver implementation.
+  // WebContentsObserver implementation:
+  bool OnMessageReceived(
+                         content::RenderViewHost* render_view_host,
+                         const IPC::Message& message) override;
     
     
-    {  UpdateCache();
-  process->Send(new AtomMsg_UpdatePreferences(cached_entries_));
-}
+#include 'content/nw/src/api/event/event.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/dispatcher_host.h'
+#include 'ui/gfx/screen.h'
     
-    // Generate param traits write methods.
-#include 'ipc/param_traits_write_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
+    public:
+  EventListener(int id,
+                const base::WeakPtr<DispatcherHost>& dispatcher_host,
+                const base::DictionaryValue& option);
     
-    namespace nwapi {
+    void Menu::Popup(int x, int y, content::Shell* shell) {
+  GdkEventButton* event = NULL; //FIXME: shell->web_contents()->GetRenderWidgetHostView()->GetLastMouseDown();
+  uint32_t triggering_event_time = event ? event->time : GDK_CURRENT_TIME;
+  gfx::Point point;
+  if (!event) {
+    // gfx::Rect bounds = shell->web_contents()->GetRenderWidgetHostView()->GetViewBounds();
+    // point = gfx::Point(x + bounds.x(), y + bounds.y());
+    DVLOG(1) << 'no last mouse down event';
+    point = gfx::Point(x, y);
+  }else
+    point = gfx::Point(event->x_root, event->y_root);
     }
     
-      // Remote objects.
-  static void AllocateId(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void AllocateObject(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void DeallocateObject(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void CallObjectMethod(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void CallObjectMethodSync(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void CallStaticMethod(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void CallStaticMethodSync(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void CrashRenderer(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void SetCrashDumpDir(const v8::FunctionCallbackInfo<v8::Value>& args);
-#if defined(OS_MACOSX)
-  static void InitMsgIDMap();
-  static void GetNSStringWithFixup(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void GetNSStringFWithFixup(const v8::FunctionCallbackInfo<v8::Value>& args);
-#endif
     
-    // Popup menus may get squished if they open up too close to the bottom of the
-// screen. This function takes the size of the screen, the size of the menu,
-// an optional widget, the Y position of the mouse click, and adjusts the popup
-// menu's Y position to make it fit if it's possible to do so.
-// Returns the new Y position of the popup menu.
-int CalculateMenuYPosition(const GdkRectangle* screen_rect,
-                           const GtkRequisition* menu_req,
-                           GtkWidget* widget, const int y) {
-  CHECK(screen_rect);
-  CHECK(menu_req);
-  // If the menu would run off the bottom of the screen, and there is enough
-  // screen space upwards to accommodate the menu, then pop upwards. If there
-  // is a widget, then also move the anchor point to the top of the widget
-  // rather than the bottom.
-  const int screen_top = screen_rect->y;
-  const int screen_bottom = screen_rect->y + screen_rect->height;
-  const int menu_bottom = y + menu_req->height;
-  int alternate_y = y - menu_req->height;
-  if (widget) {
-    GtkAllocation allocation;
-    gtk_widget_get_allocation(widget, &allocation);
-    alternate_y -= allocation.height;
-  }
-  if (menu_bottom >= screen_bottom && alternate_y >= screen_top)
-    return alternate_y;
-  return y;
+    {  submenu_ = menu;
 }
     
     
-    {
-  DECLARE_EXTENSION_FUNCTION('nw.App.getArgvSync', UNKNOWN)
+    {  // ExtensionFunction:
+  bool RunAsync() override;
+  DECLARE_EXTENSION_FUNCTION('nw.App.quit', UNKNOWN)
  private:
-  DISALLOW_COPY_AND_ASSIGN(NwAppGetArgvSyncFunction);
+  void Callback();
 };
     
-    class NwClipboardSetListSyncFunction : public NWSyncExtensionFunction {
- public:
-  NwClipboardSetListSyncFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
+          // strip off data uri header if raw is set
+      if (!(data.raw.get() && *(data.raw))) {
+        if (data.type == TYPE_PNG && base::StartsWith(content, kPNGDataUriPrefix, base::CompareCase::INSENSITIVE_ASCII)) {
+          content = content.substr(strlen(kPNGDataUriPrefix));
+        } else if (data.type == TYPE_JPEG && base::StartsWith(content, kJPEGDataUriPrefix, base::CompareCase::INSENSITIVE_ASCII)) {
+          content = content.substr(strlen(kJPEGDataUriPrefix));
+        } else {
+          error_ = base::StringPrintf('Invalid data URI. Only \'%s\' or \'%s\' is accepted.', kPNGDataUriPrefix, kJPEGDataUriPrefix);
+          return false;
+        }
+      }
     
-    #include          'ocrblock.h'
-#include          'ocrrow.h'
-#include          'werd.h'
-#include          'rect.h'
-#include          'params.h'
-#include          'tesseractclass.h'
+    PyObject* NewFileServicesByName(const FileDescriptor* descriptor);
     
-      //  Recognize the pieces in turn.
-  int saved_cp_multiplier = classify_class_pruner_multiplier;
-  int saved_im_multiplier = classify_integer_matcher_multiplier;
-  if (prefix) {
-    // Turn off Tesseract's y-position penalties for the leading superscript.
-    classify_class_pruner_multiplier.set_value(0);
-    classify_integer_matcher_multiplier.set_value(0);
-    }
-    
-    CCStruct::CCStruct() {}
-    
-    
-/**********************************************************************
- * operator*
- *
- * Scalar multiply of an ICOORD.
- **********************************************************************/
-    
-      // Returns the covariance.
-  double covariance() const {
-    if (total_weight > 0.0)
-      return (sigxy - sigx * sigy / total_weight) / total_weight;
-    else
-      return 0.0;
-  }
-  double x_variance() const {
-    if (total_weight > 0.0)
-      return (sigxx - sigx * sigx / total_weight) / total_weight;
-    else
-      return 0.0;
-  }
-  double y_variance() const {
-    if (total_weight > 0.0)
-      return (sigyy - sigy * sigy / total_weight) / total_weight;
-    else
-      return 0.0;
-  }
+    #include <google/protobuf/stubs/logging.h>
+#include <google/protobuf/stubs/common.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/pyext/message.h>
+#include <google/protobuf/pyext/scoped_pyobject_ptr.h>
     
     
     { private:
-  tesseract::ParagraphJustification justification_;
-  int margin_;
-  int first_indent_;
-  int body_indent_;
-  int tolerance_;
+  // The python object that implements the database. The reference is owned.
+  PyObject* py_database_;
 };
-    
-    ELISTIZE (ROW)
-/**********************************************************************
- * ROW::ROW
- *
- * Constructor to build a ROW. Only the stats stuff are given here.
- * The words are added directly.
- **********************************************************************/
-ROW::ROW (                       //constructor
-inT32 spline_size,               //no of segments
-inT32 * xstarts,                 //segment boundaries
-double *coeffs,                  //coefficients
-float x_height,                  //line height
-float ascenders,                 //ascender size
-float descenders,                //descender drop
-inT16 kern,                      //char gap
-inT16 space                      //word gap
-)
-    : baseline(spline_size, xstarts, coeffs),
-      para_(NULL) {
-  kerning = kern;                //just store stuff
-  spacing = space;
-  xheight = x_height;
-  ascrise = ascenders;
-  bodysize = 0.0f;
-  descdrop = descenders;
-  has_drop_cap_ = false;
-  lmargin_ = 0;
-  rmargin_ = 0;
-}
-    
-      explicit WorkloadStats(State guardedState);
-  ~WorkloadStats();
-    
-      switch (ar.tag()) {
-  case T::Packed:
-    for (auto i = uint32_t{0}; i < ar.size(); ++i) {
-      ret += show(ar.packedElem(i));
-      if (i != ar.size() - 1) ret += ',';
-    }
-    break;
-  case T::PackedN:
-    folly::format(&ret, '[{}]', show(ar.elemType()));
-    break;
-  }
-    
-      if (!getenv('HHVM_JIT_TIMER_NO_SORT')) {
-    auto totalSort = [] (const TimerName& a, const TimerName& b) {
-      return s_counters[a.name].total > s_counters[b.name].total;
-    };
-    std::sort(begin(names_copy), end(names_copy), totalSort);
-  }
-    
-    
-static void HHVM_METHOD(GMP, unserialize,
-                        const Variant& data) {
-  String serialData = data.toString();
-  VariableUnserializer unserializer(serialData.data(),
-                                    serialData.length(),
-                                    VariableUnserializer::Type::Serialize);
-    }
-    
-    #include <boost/dynamic_bitset.hpp>
-#include <folly/Range.h>
-#include <iosfwd>
-    
-        case KindOfDict:
-      source->m_type = KindOfPersistentDict;
-      // Fall-through.
-    case KindOfPersistentDict: {
-      auto& ad = source->m_data.parr;
-      assert(ad->isDict());
-      if (ad->isStatic()) break;
-      else if (ad->empty()) ad = staticEmptyDictArray();
-      else ad = MixedArray::MakeUncounted(ad);
-      break;
-    }
-    
-    
-    {  return std::shared_ptr<Reporter>(composite_reporter);
-}
-    
-    namespace grpc {
-namespace testing {
-    }
-    }
-    
-    #include 'src/core/lib/compression/compression_internal.h'
-    
-    #include <string.h>
     
     
     {
-    {                grpc_compression_algorithm_to_message_compression_algorithm(
-                    reader->buffer_in->data.raw.compression),
-                &reader->buffer_in->data.raw.slice_buffer,
-                &decompressed_slices_buffer) == 0) {
-          gpr_log(GPR_ERROR,
-                  'Unexpected error decompressing data for algorithm with enum '
-                  'value '%d'.',
-                  reader->buffer_in->data.raw.compression);
-          memset(reader, 0, sizeof(*reader));
-          return 0;
-        } else { /* all fine */
-          reader->buffer_out =
-              grpc_raw_byte_buffer_create(decompressed_slices_buffer.slices,
-                                          decompressed_slices_buffer.count);
-        }
-        grpc_slice_buffer_destroy_internal(&decompressed_slices_buffer);
-      } else { /* not compressed, use the input buffer as output */
-        reader->buffer_out = reader->buffer_in;
-      }
-      reader->current.index = 0;
-      break;
-  }
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
     
-      rc->path = grpc_mdelem_from_slices(
-      GRPC_MDSTR_PATH,
-      grpc_slice_intern(grpc_slice_from_static_string(method)));
-  rc->authority =
-      host ? grpc_mdelem_from_slices(
-                 GRPC_MDSTR_AUTHORITY,
-                 grpc_slice_intern(grpc_slice_from_static_string(host)))
-           : GRPC_MDNULL;
-  gpr_mu_lock(&channel->registered_call_mu);
-  rc->next = channel->registered_calls;
-  channel->registered_calls = rc;
-  gpr_mu_unlock(&channel->registered_call_mu);
-    
-    const uint32_t message_prefix_length = 8;
-const uint32_t stream_prefix_length = 7;
-static void test_algorithm_mesh(void) {
-  int i;
-    }
-    
-    static void test_bad_decompression_data_crc(void) {
-  grpc_slice_buffer input;
-  grpc_slice_buffer corrupted;
-  grpc_slice_buffer output;
-  size_t idx;
-  const uint32_t bad = 0xdeadbeef;
-    }
-    
-      error =
-      grpc_server_request_call(f.server, &s, &call_details,
-                               &request_metadata_recv, f.cq, f.cq, tag(101));
-  GPR_ASSERT(GRPC_CALL_OK == error);
-  CQ_EXPECT_COMPLETION(cqv, tag(101), 1);
-  cq_verify(cqv);
-    
-    enum RecordType {
-  // Zero is reserved for preallocated files
-  kZeroType = 0,
-    }
-    
-    
-    {  static void SetFileLimits(int read_only_file_limit, int mmap_limit) {
-    EnvPosixTestHelper::SetReadOnlyFDLimit(read_only_file_limit);
-    EnvPosixTestHelper::SetReadOnlyMMapLimit(mmap_limit);
-  }
-};
-    
-    #endif  // STORAGE_LEVELDB_DB_SNAPSHOT_H_
-
-    
-      void SetComparatorName(const Slice& name) {
-    has_comparator_ = true;
-    comparator_ = name.ToString();
-  }
-  void SetLogNumber(uint64_t num) {
-    has_log_number_ = true;
-    log_number_ = num;
-  }
-  void SetPrevLogNumber(uint64_t num) {
-    has_prev_log_number_ = true;
-    prev_log_number_ = num;
-  }
-  void SetNextFile(uint64_t num) {
-    has_next_file_number_ = true;
-    next_file_number_ = num;
-  }
-  void SetLastSequence(SequenceNumber seq) {
-    has_last_sequence_ = true;
-    last_sequence_ = seq;
-  }
-  void SetCompactPointer(int level, const InternalKey& key) {
-    compact_pointers_.push_back(std::make_pair(level, key));
-  }
-    
-    TEST(FindFileTest, OverlapSequenceChecks) {
-  Add('200', '200', 5000, 3000);
-  ASSERT_TRUE(! Overlaps('199', '199'));
-  ASSERT_TRUE(! Overlaps('201', '300'));
-  ASSERT_TRUE(Overlaps('200', '200'));
-  ASSERT_TRUE(Overlaps('190', '200'));
-  ASSERT_TRUE(Overlaps('200', '210'));
+    void RepeatedMessageFieldGenerator::WriteHash(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    'hash ^= $name$_.GetHashCode();\n');
 }
     
+      virtual void WriteHash(io::Printer* printer);
+  virtual void WriteEquals(io::Printer* printer);
+  virtual void WriteToString(io::Printer* printer);
     
-    {}  // namespace leveldb
+    RepeatedPrimitiveFieldGenerator::~RepeatedPrimitiveFieldGenerator() {
+    }
+    
+    class RepeatedPrimitiveFieldGenerator : public FieldGeneratorBase {
+ public:
+  RepeatedPrimitiveFieldGenerator(const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options);
+  ~RepeatedPrimitiveFieldGenerator();
+    }
+    
+    #include <google/protobuf/compiler/java/java_doc_comment.h>
+    
+    
+/// Reference : Eric W. Weisstein. 'Cubic Equation.' From MathWorld--A Wolfram Web Resource.
+/// http://mathworld.wolfram.com/CubicEquation.html
+/// \return Number of real roots found.
+int solve_deg3(double a, double b, double c, double d,
+               double & x0, double & x1, double & x2)
+{
+  if (a == 0) {
+    // Solve second order sytem
+    if (b == 0)	{
+      // Solve first order system
+      if (c == 0)
+    return 0;
+    }
+    }
+    }
+    
+    #if GTEST_HAS_STD_WSTRING
+  // Converts the given wide string to a narrow string using the UTF-8
+  // encoding, and streams the result to this Message object.
+  Message& operator <<(const ::std::wstring& wstr);
+#endif  // GTEST_HAS_STD_WSTRING
+    
+     private:
+  friend class TestCase;
+  friend class TestInfo;
+  friend class internal::DefaultGlobalTestPartResultReporter;
+  friend class internal::NoExecDeathTest;
+  friend class internal::TestEventListenersAccessor;
+  friend class internal::UnitTestImpl;
+    
+    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_FILEPATH_H_
 
     
-    #include 'table/block_builder.h'
+        const ParamGeneratorInterface<ParamType>* const base_;
+    // begin[i]_ and end[i]_ define the i-th range that Iterator traverses.
+    // current[i]_ is the actual traversing iterator.
+$for j [[
+    
+    // SameSizeTuplePrefixComparator<k, k>::Eq(t1, t2) returns true if the
+// first k fields of t1 equals the first k fields of t2.
+// SameSizeTuplePrefixComparator(k1, k2) would be a compiler error if
+// k1 != k2.
+template <int kSize1, int kSize2>
+struct SameSizeTuplePrefixComparator;
     
     
-    {  // No copying allowed
-  FilterBlockBuilder(const FilterBlockBuilder&);
-  void operator=(const FilterBlockBuilder&);
+$range i 0..n-1
+$range j 0..n
+$range k 1..n
+// GTEST_n_TUPLE_(T) is the type of an n-tuple.
+#define GTEST_0_TUPLE_(T) tuple<>
+    
+    
+    {    // Now, we have i <= n/i < n.
+    // If n is divisible by i, n is not prime.
+    if (n % i == 0) return false;
+  }
+    
+    namespace boost {
+namespace asio {
+    }
+    }
+    
+    #endif // BOOST_ASIO_DETAIL_BASE_FROM_COMPLETION_COND_HPP
+
+    
+      static void init_native_buffer(iovec& iov,
+      const boost::asio::mutable_buffer& buffer)
+  {
+    init_iov_base(iov.iov_base, boost::asio::buffer_cast<void*>(buffer));
+    iov.iov_len = boost::asio::buffer_size(buffer);
+  }
+    
+        // Pop the key/value pair from the stack.
+    ~context()
+    {
+      call_stack<Key, Value>::top_ = next_;
+    }
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    #if defined(BOOST_ASIO_HAS_STD_FUNCTION)
+# include <functional>
+#else // defined(BOOST_ASIO_HAS_STD_FUNCTION)
+# include <boost/function.hpp>
+#endif // defined(BOOST_ASIO_HAS_STD_FUNCTION)
+    
+    // With C++0x we can use a combination of enhanced SFINAE and static_assert to
+// generate better template error messages. As this technique is not yet widely
+// portable, we'll only enable it for tested compilers.
+#if !defined(BOOST_ASIO_DISABLE_HANDLER_TYPE_REQUIREMENTS_ASSERT)
+# if defined(__GNUC__)
+#  if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 5)) || (__GNUC__ > 4)
+#   if defined(__GXX_EXPERIMENTAL_CXX0X__)
+#    define BOOST_ASIO_ENABLE_HANDLER_TYPE_REQUIREMENTS_ASSERT 1
+#   endif // defined(__GXX_EXPERIMENTAL_CXX0X__)
+#  endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 5)) || (__GNUC__ > 4)
+# endif // defined(__GNUC__)
+# if defined(BOOST_ASIO_MSVC)
+#  if (_MSC_VER >= 1600)
+#   define BOOST_ASIO_ENABLE_HANDLER_TYPE_REQUIREMENTS_ASSERT 1
+#  endif // (_MSC_VER >= 1600)
+# endif // defined(BOOST_ASIO_MSVC)
+# if defined(__clang__)
+#  if __has_feature(__cxx_static_assert__)
+#   define BOOST_ASIO_ENABLE_HANDLER_TYPE_REQUIREMENTS_ASSERT 1
+#  endif // __has_feature(cxx_static_assert)
+# endif // defined(__clang__)
+#endif // !defined(BOOST_ASIO_DISABLE_HANDLER_TYPE_REQUIREMENTS)
+    
+    void buffer_sequence_adapter_base::init_native_buffer(
+    buffer_sequence_adapter_base::native_buffer_type& buf,
+    const boost::asio::const_buffer& buffer)
+{
+  std::memset(&buf, 0, sizeof(native_buffer_type));
+  Microsoft::WRL::ComPtr<IInspectable> insp
+    = Microsoft::WRL::Make<winrt_buffer_impl>(buffer);
+  Platform::Object^ buf_obj = reinterpret_cast<Platform::Object^>(insp.Get());
+  buf = reinterpret_cast<Windows::Storage::Streams::IBuffer^>(insp.Get());
+}
+    
+    int ioctl(int d, state_type& state, long cmd,
+    ioctl_arg_type* arg, boost::system::error_code& ec)
+{
+  if (d == -1)
+  {
+    ec = boost::asio::error::bad_descriptor;
+    return -1;
+  }
+    }
+    
+    template <typename Time_Traits>
+void dev_poll_reactor::schedule_timer(timer_queue<Time_Traits>& queue,
+    const typename Time_Traits::time_type& time,
+    typename timer_queue<Time_Traits>::per_timer_data& timer, wait_op* op)
+{
+  boost::asio::detail::mutex::scoped_lock lock(mutex_);
+    }
+    
+    template <typename Time_Traits>
+void epoll_reactor::schedule_timer(timer_queue<Time_Traits>& queue,
+    const typename Time_Traits::time_type& time,
+    typename timer_queue<Time_Traits>::per_timer_data& timer, wait_op* op)
+{
+  mutex::scoped_lock lock(mutex_);
+    }
+    
+    bool js_cocos2dx_physics3d_Physics3DComponent_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DComponent_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DComponent(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DComponent_syncNodeToPhysics(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_addToPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_syncPhysicsToNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_getPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_setPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_setTransformInPhysics(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_getPhysics3DComponentName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_Physics3DComponent(JSContext *cx, uint32_t argc, jsval *vp);
+    
+        return 0;
+}
+int lua_cocos2dx_cocosdenshion_SimpleAudioEngine_resumeBackgroundMusic(lua_State* tolua_S)
+{
+    int argc = 0;
+    CocosDenshion::SimpleAudioEngine* cobj = nullptr;
+    bool ok  = true;
+    
+    
+    
+    struct b2AABB;
+    
+    
+    {		m_debugDraw.DrawString(5, m_textLine, 'step [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.step, aveProfile.step, m_maxProfile.step);
+		m_textLine += DRAW_STRING_NEW_LINE;
+		m_debugDraw.DrawString(5, m_textLine, 'collide [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.collide, aveProfile.collide, m_maxProfile.collide);
+		m_textLine += DRAW_STRING_NEW_LINE;
+		m_debugDraw.DrawString(5, m_textLine, 'solve [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solve, aveProfile.solve, m_maxProfile.solve);
+		m_textLine += DRAW_STRING_NEW_LINE;
+		m_debugDraw.DrawString(5, m_textLine, 'solve init [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solveInit, aveProfile.solveInit, m_maxProfile.solveInit);
+		m_textLine += DRAW_STRING_NEW_LINE;
+		m_debugDraw.DrawString(5, m_textLine, 'solve velocity [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solveVelocity, aveProfile.solveVelocity, m_maxProfile.solveVelocity);
+		m_textLine += DRAW_STRING_NEW_LINE;
+		m_debugDraw.DrawString(5, m_textLine, 'solve position [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solvePosition, aveProfile.solvePosition, m_maxProfile.solvePosition);
+		m_textLine += DRAW_STRING_NEW_LINE;
+		m_debugDraw.DrawString(5, m_textLine, 'solveTOI [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solveTOI, aveProfile.solveTOI, m_maxProfile.solveTOI);
+		m_textLine += DRAW_STRING_NEW_LINE;
+		m_debugDraw.DrawString(5, m_textLine, 'broad-phase [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.broadphase, aveProfile.broadphase, m_maxProfile.broadphase);
+		m_textLine += DRAW_STRING_NEW_LINE;
+	}
+    
+    
+    {
+    {			float minX = -6.0f;
+			float maxX = 0.0f;
+			float minY = 4.0f;
+			float maxY = 6.0f;
+			
+			for (int32 i = 0; i < 400; ++i)
+			{
+				b2BodyDef bd;
+				bd.type = b2_dynamicBody;
+				bd.position = b2Vec2(RandomFloat(minX,maxX),RandomFloat(minY,maxY));
+				b2Body* body = m_world->CreateBody(&bd);
+				body->CreateFixture(&shape, 0.01f);
+			}
+		}
+		
+		{
+			b2PolygonShape shape;
+			shape.SetAsBox(1.5f, 1.5f);
+			b2BodyDef bd;
+			bd.type = b2_dynamicBody;
+			bd.position.Set(-40.0f,5.0f);
+			bd.bullet = true;
+			b2Body* body = m_world->CreateBody(&bd);
+			body->CreateFixture(&shape, 1.0f);
+			body->SetLinearVelocity(b2Vec2(150.0f, 0.0f));
+		}
+	}
+    
+    		{
+			b2PolygonShape shape;
+			shape.SetAsBox(0.5f, 0.5f);
+    }
+    
+    
+    {			m_speed = 3.0f;
+		}
+    
+    		if (b2_toiCalls > 0)
+		{
+			m_debugDraw.DrawString(5, m_textLine, 'toi calls = %d, ave toi iters = %3.1f, max toi iters = %d',
+				b2_toiCalls, b2_toiIters / float32(b2_toiCalls), b2_toiMaxRootIters);
+			m_textLine += DRAW_STRING_NEW_LINE;
+    }
+    
+    
+#endif /* COMM_COMM_DNS_H_ */
+
+    
+    #endif /* WAKEUPLOCK_H_ */
+
+    
+    
+    {  private:
+    TServicesMap m_services;
+    TServicesMap m_publicservices;
+    std::vector<ServiceBase*> m_releasevec;
 };
     
-      // We might want to use a heap in case there are lots of children.
-  // For now we use a simple array since we expect a very small number
-  // of children in leveldb.
-  const Comparator* comparator_;
-  IteratorWrapper* children_;
-  int n_;
-  IteratorWrapper* current_;
+    class ServiceBase {
+  public:
+    virtual ~ServiceBase() {}
+    void DependServices(const TServicesMap& _dependservices) { m_dependservices = _dependservices;}
+    const char* ServiceName() const { return m_servicename.c_str();}
+    }
+    
+        void TestFun0();
+    void TestFun2()  {__TestFun1(1);}
+    
+    #include 'comm/debugger/spy.inl'
+    
+    double Node::getComputedWidth(void) const
+{
+    return YGNodeLayoutGetWidth(m_node);
+}
+    
+        Value getFlexBasis(void) const;
+    double getFlexGrow(void) const;
+    double getFlexShrink(void) const;
+    
+    
+    {    void toJS(nbind::cbOutput expose) const
+    {
+        expose(width, height);
+    }
+};
+
+    
+    TEST(YogaTest, computed_layout_margin) {
+  const YGNodeRef root = YGNodeNew();
+  YGNodeStyleSetWidth(root, 100);
+  YGNodeStyleSetHeight(root, 100);
+  YGNodeStyleSetMarginPercent(root, YGEdgeStart, 10);
+    }
+    
+      const YGNodeRef root_child0 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetAlignSelf(root_child0, YGAlignFlexEnd);
+  YGNodeStyleSetWidth(root_child0, 10);
+  YGNodeStyleSetHeight(root_child0, 10);
+  YGNodeInsertChild(root, root_child0, 0);
+  YGNodeCalculateLayout(root, YGUndefined, YGUndefined, YGDirectionLTR);
+    
+      ASSERT_FLOAT_EQ(0, YGNodeLayoutGetLeft(root_child1));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root_child1));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetWidth(root_child1));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetHeight(root_child1));
+    
+      YGNodeFreeRecursive(root);
+    
+    #define FROM_HERE facebook::ProgramLocation(__FUNCTION__, __FILE__, __LINE__)
