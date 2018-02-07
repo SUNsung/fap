@@ -1,370 +1,313 @@
 
         
-          /// Build the components of an Objective-C method descriptor for the given
-  /// subscript's method implementations.
-  void emitObjCSetterDescriptorParts(IRGenModule &IGM,
-                                     SubscriptDecl *subscript,
-                                     llvm::Constant *&selectorRef,
-                                     llvm::Constant *&atEncoding,
-                                     llvm::Constant *&impl);
+        char* grpc_dump_slice(grpc_slice s, uint32_t flags) {
+  return gpr_dump((const char*)GRPC_SLICE_START_PTR(s), GRPC_SLICE_LENGTH(s),
+                  flags);
+}
     
-        // Quickly see if copy has only one use and that use is a destroy_value. In
-    // such a case, we can always eliminate both the copy and the destroy.
-    if (auto *Op = CVI->getSingleUse()) {
-      if (auto *DVI = dyn_cast<DestroyValueInst>(Op->getUser())) {
-        DVI->eraseFromParent();
-        CVI->eraseFromParent();
-        NumEliminatedInsts += 2;
-        continue;
+    #include 'test/core/end2end/end2end_tests.h'
+    
+    static void* zalloc_aligned(size_t size) {
+  void* ptr = gpr_malloc_aligned(size, GPR_MAX_ALIGNMENT);
+  memset(ptr, 0, size);
+  return ptr;
+}
+    
+    static void test_custom_allocs() {
+  const gpr_allocation_functions default_fns = gpr_get_allocation_functions();
+  intptr_t addr_to_free = 0;
+  char* i;
+  gpr_allocation_functions fns = {fake_malloc, nullptr, fake_realloc,
+                                  fake_free};
+    }
+    
+      // Sets *pos to the next stream position where parsing should continue.
+  // Returns false if the stream ended too early.
+  bool FinishStream(size_t* pos) {
+    // Give back some bytes that we did not use.
+    int unused_bytes_left = bits_left_ >> 3;
+    while (unused_bytes_left-- > 0) {
+      --pos_;
+      // If we give back a 0 byte, we need to check if it was a 0xff/0x00 escape
+      // sequence, and if yes, we need to give back one more byte.
+      if (pos_ < next_marker_pos_ &&
+          data_[pos_] == 0 && data_[pos_ - 1] == 0xff) {
+        --pos_;
       }
     }
-    
-      llvm::SetVector<const clang::FileEntry *> fileDependencies;
-  // FIXME: This is not desirable because:
-  // 1. It picks shim header files as file dependencies
-  // 2. Having all the other swift files of the module as file dependencies ends
-  //   up making all of them associated with all the other files as main files.
-  //   It's better to associate each swift file with the unit that recorded it
-  //   as the main one.
-  // Keeping the code in case we want to revisit.
-#if 0
-  auto *module = primarySourceFile->getParentModule();
-  collectFileDependencies(fileDependencies, dependencyTracker, module, fileMgr);
-#endif
-    
-    /// Profile the substitution list for use in a folding set.
-void profileSubstitutionList(llvm::FoldingSetNodeID &id, SubstitutionList subs);
-    
-    
-    {  bool operator==(ConcreteDeclRef rhs) const {
-    return Data == rhs.Data;
+    if (pos_ > next_marker_pos_) {
+      // Data ran out before the scan was complete.
+      fprintf(stderr, 'Unexpected end of scan.\n');
+      return false;
+    }
+    *pos = pos_;
+    return true;
   }
-  
-  /// Dump a debug representation of this reference.
-  void dump(raw_ostream &os);
-  void dump() LLVM_ATTRIBUTE_USED;
-};
     
-    #endif // SWIFT_BASIC_DIAGNOSTICOPTIONS_H
-
-    
-    #endif
-
-    
-    void SetProxyConfigCallback(
-    base::WaitableEvent* done,
-    net::URLRequestContextGetter* url_request_context_getter,
-    const net::ProxyConfig& proxy_config) {
-  net::ProxyService* proxy_service =
-      url_request_context_getter->GetURLRequestContext()->proxy_service();
-  proxy_service->ResetConfigService(
-      new net::ProxyConfigServiceFixed(proxy_config));
-  done->Signal();
+    std::vector<float> LinearlyDownsample2x2(const std::vector<float>& rgb_in,
+                                         const int width, const int height) {
+  assert(rgb_in.size() == 3 * width * height);
+  int w = (width + 1) / 2;
+  int h = (height + 1) / 2;
+  std::vector<float> rgb_out(3 * w * h);
+  for (int y = 0, p = 0; y < h; ++y) {
+    for (int x = 0; x < w; ++x) {
+      for (int i = 0; i < 3; ++i, ++p) {
+        rgb_out[p] = 0.0;
+        for (int iy = 0; iy < 2; ++iy) {
+          for (int ix = 0; ix < 2; ++ix) {
+            int yy = std::min(height - 1, 2 * y + iy);
+            int xx = std::min(width - 1, 2 * x + ix);
+            rgb_out[p] += GammaToLinear(rgb_in[3 * (yy * width + xx) + i]);
+          }
+        }
+        rgb_out[p] = LinearToGamma(0.25f * rgb_out[p]);
+      }
+    }
+  }
+  return rgb_out;
 }
     
-    namespace nwapi {
+    void ComputeBlockIDCT(const coeff_t* block, uint8_t* out) {
+  coeff_t colidcts[kDCTBlockSize];
+  const int kColScale = 11;
+  const int kColRound = 1 << (kColScale - 1);
+  for (int x = 0; x < 8; ++x) {
+    int colbuf[8] = { 0 };
+    Compute1dIDCT(&block[x], 8, colbuf);
+    for (int y = 0; y < 8; ++y) {
+      colidcts[8 * y + x] = (colbuf[y] + kColRound) >> kColScale;
     }
-    
-    void DispatcherHost::OnSetForceClose(bool force, int* ret) {
-  content::Shell* shell =
-      content::Shell::FromRenderViewHost(render_view_host());
-  shell->set_force_close(force);
-  *ret = 0;
+  }
+  const int kRowScale = 18;
+  const int kRowRound = 257 << (kRowScale - 1);  // includes offset by 128
+  for (int y = 0; y < 8; ++y) {
+    const int rowidx = 8 * y;
+    int rowbuf[8] = { 0 };
+    Compute1dIDCT(&colidcts[rowidx], 1, rowbuf);
+    for (int x = 0; x < 8; ++x) {
+      out[rowidx + x] =
+          std::max(0, std::min(255, (rowbuf[x] + kRowRound) >> kRowScale));
+    }
+  }
 }
     
-       bool HasIcon(int command_id) override;
+    // Returns the table width of the next 2nd level table, count is the histogram
+// of bit lengths for the remaining symbols, len is the code length of the next
+// processed symbol.
+static inline int NextTableBitSize(const int* count, int len) {
+  int left = 1 << (len - kJpegHuffmanRootTableBits);
+  while (len < kJpegHuffmanMaxBitLength) {
+    left -= count[len];
+    if (left <= 0) break;
+    ++len;
+    left <<= 1;
+  }
+  return len - kJpegHuffmanRootTableBits;
+}
     
-     protected:
-  ~NwClipboardReadAvailableTypesFunction() override;
-    
-      /**
-   * @brief Applies the same transformation defined in the data layer's
-   * transform_param block to all the num images in a input_blob.
-   *
-   * @param input_blob
-   *    A Blob containing the data to be transformed. It applies the same
-   *    transformation to all the num images in the blob.
-   * @param transformed_blob
-   *    This is destination blob, it will contain as many images as the
-   *    input blob. It can be part of top blob's data.
-   */
-  void Transform(Blob<Dtype>* input_blob, Blob<Dtype>* transformed_blob);
-    
-    #ifndef CAFFE_LAYER_FACTORY_H_
-#define CAFFE_LAYER_FACTORY_H_
-    
-    
-    { private:
-  struct pair_sort_first {
-    bool operator()(const std::pair<int, int> &left,
-                    const std::pair<int, int> &right) {
-      return left.first < right.first;
-    }
+      // If sharpen or blur are enabled, preprocesses image before downsampling U or
+  // V to improve butteraugli score and/or reduce file size.
+  // u_sharpen: sharpen the u channel in red areas to improve score (not as
+  // effective as v_sharpen, blue is not so important)
+  // u_blur: blur the u channel in some areas to reduce file size
+  // v_sharpen: sharpen the v channel in red areas to improve score
+  // v_blur: blur the v channel in some areas to reduce file size
+  struct DownsampleConfig {
+    // Default is YUV420.
+    DownsampleConfig() : u_factor_x(2), u_factor_y(2),
+                         v_factor_x(2), v_factor_y(2),
+                         u_sharpen(true), u_blur(true),
+                         v_sharpen(true), v_blur(true),
+                         use_silver_screen(false) {}
+    int u_factor_x;
+    int u_factor_y;
+    int v_factor_x;
+    int v_factor_y;
+    bool u_sharpen;
+    bool u_blur;
+    bool v_sharpen;
+    bool v_blur;
+    bool use_silver_screen;
   };
-  void check_batch_reindex(int initial_num, int final_num,
-                           const Dtype* ridx_data);
+    
+    // Butteraugli scores that correspond to JPEG quality levels, starting at
+// kLowestQuality. They were computed by taking median BA scores of JPEGs
+// generated using libjpeg-turbo at given quality from a set of PNGs.
+// The scores above quality level 100 are just linearly decreased so that score
+// for 110 is 90% of the score for 100.
+const double kScoreForQuality[] = {
+  2.810761,  // 70
+  2.729300,
+  2.689687,
+  2.636811,
+  2.547863,
+  2.525400,
+  2.473416,
+  2.366133,
+  2.338078,
+  2.318654,
+  2.201674,  // 80
+  2.145517,
+  2.087322,
+  2.009328,
+  1.945456,
+  1.900112,
+  1.805701,
+  1.750194,
+  1.644175,
+  1.562165,
+  1.473608,  // 90
+  1.382021,
+  1.294298,
+  1.185402,
+  1.066781,
+  0.971769,  // 95
+  0.852901,
+  0.724544,
+  0.611302,
+  0.443185,
+  0.211578,  // 100
+  0.209462,
+  0.207346,
+  0.205230,
+  0.203114,
+  0.200999,  // 105
+  0.198883,
+  0.196767,
+  0.194651,
+  0.192535,
+  0.190420,  // 110
+  0.190420,
 };
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include 'caffe/layers/lrn_layer.hpp'
-    
-     protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-     protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #endif
-
-    
-    String TimeStamp::CurrentMicroTime() {
-  struct timeval tp;
-  gettimeofday(&tp, nullptr);
-  char ret[100];
-  snprintf(ret, 100, '%.8F %ld', (double)tp.tv_usec / 1000000, tp.tv_sec);
-  return String(ret, CopyString);
-}
-    
-    //////////////////////////////////////////////////////////////////////
-    
-      if ((noffset > 0 && noffset > mbfl_strlen(&mbs_haystack)) ||
-      (noffset < 0 && -noffset > mbfl_strlen(&mbs_haystack))) {
-    raise_notice('Offset is greater than the length of haystack string');
-    return false;
+    namespace xgboost {
+namespace common {
+/*! \brief buffer reader of the stream that allows you to get */
+class StreamBufferReader {
+ public:
+  explicit StreamBufferReader(size_t buffer_size)
+      :stream_(NULL),
+       read_len_(1), read_ptr_(1) {
+    buffer_.resize(buffer_size);
   }
-    
-    #include 'hphp/util/type-scan.h'
-    
-    ALWAYS_INLINE
-void MixedArray::getArrayElm(ssize_t pos,
-                            TypedValue* valOut,
-                            TypedValue* keyOut) const {
-  assert(size_t(pos) < m_used);
-  auto& elm = data()[pos];
-  auto const cur = tvToCell(&elm.data);
-  cellDup(*cur, *valOut);
-  cellCopy(getElmKey(elm), *keyOut);
-}
+  /*!
+   * \brief set input stream
+   */
+  inline void set_stream(dmlc::Stream *stream) {
+    stream_ = stream;
+    read_len_ = read_ptr_ = 1;
+  }
+  /*!
+   * \brief allows quick read using get char
+   */
+  inline char GetChar(void) {
+    while (true) {
+      if (read_ptr_ < read_len_) {
+        return buffer_[read_ptr_++];
+      } else {
+        read_len_ = stream_->Read(&buffer_[0], buffer_.length());
+        if (read_len_ == 0) return EOF;
+        read_ptr_ = 0;
+      }
+    }
+  }
+  /*! \brief whether we are reaching the end of file */
+  inline bool AtEnd(void) const {
+    return read_len_ == 0;
+  }
+    }
+    }
+    }
     
     
     {
-    {} // namespace fs
-} // namespace folly
-
-    
-    // Parse the value of a pagesize mount option
-// Format: number, optional K/M/G/T suffix, trailing junk allowed
-size_t parsePageSizeValue(StringPiece value) {
-  static const boost::regex regex(R'!((\d+)([kmgt])?.*)!', boost::regex::icase);
-  boost::cmatch match;
-  if (!boost::regex_match(value.begin(), value.end(), match, regex)) {
-    throw std::runtime_error('Invalid pagesize option');
-  }
-  char c = '\0';
-  if (match.length(2) != 0) {
-    c = char(tolower(value[size_t(match.position(2))]));
-  }
-  StringPiece numStr(value.data() + match.position(1), size_t(match.length(1)));
-  auto const size = to<size_t>(numStr);
-  auto const mult = [c] {
-    switch (c) {
-      case 't':
-        return 1ull << 40;
-      case 'g':
-        return 1ull << 30;
-      case 'm':
-        return 1ull << 20;
-      case 'k':
-        return 1ull << 10;
-      default:
-        return 1ull << 0;
-    }
-  }();
-  return size * mult;
-}
-    
-    
-    {  size_t size = 0;
-  fs::path mountPoint;
-  dev_t device = 0;
+    {
+    { private:
+  /*! \brief input stream */
+  dmlc::Stream *strm_;
+  /*! \brief current buffer pointer */
+  size_t buffer_ptr_;
+  /*! \brief internal buffer */
+  std::string buffer_;
 };
-    
-      std::shared_ptr<LogHandler> createHandler(const Options& options) override;
-    
-    
-    {} // namespace folly
+}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_IO_H_
 
     
-    LogCategory::LogCategory(StringPiece name, LogCategory* parent)
-    : effectiveLevel_{parent->getEffectiveLevel()},
-      level_{static_cast<uint32_t>(LogLevel::MAX_LEVEL) | FLAG_INHERIT},
-      parent_{parent},
-      name_{LogName::canonicalize(name)},
-      db_{parent->getDB()},
-      nextSibling_{parent_->firstChild_} {
-  parent_->firstChild_ = this;
-}
-    
-      /**
-   * Whether this category should inherit its effective log level from its
-   * parent category, if the parent category has a more verbose log level.
-   */
-  bool inheritParentLevel{true};
-    
-    namespace folly {
-    }
-    
-    #include 'FuzzerDefs.h'
-#include 'FuzzerIO.h'
-#include 'FuzzerRandom.h'
-#include 'FuzzerSHA1.h'
-#include 'FuzzerTracePC.h'
-#include <numeric>
-#include <random>
-#include <unordered_set>
-    
-    #define LIBFUZZER_POSIX LIBFUZZER_APPLE || LIBFUZZER_LINUX
-    
-    #include 'FuzzerDefs.h'
-#include 'FuzzerIO.h'
-#include 'FuzzerUtil.h'
-#include <algorithm>
-#include <limits>
-    
-    #endif
-
-    
-      DWORD LastError = GetLastError();
-  if (LastError != ERROR_NO_MORE_FILES)
-    Printf('FindNextFileA failed (Error code: %lu).\n', LastError);
-    
-    void Fuzzer::RereadOutputCorpus(size_t MaxSize) {
-  if (Options.OutputCorpus.empty() || !Options.ReloadIntervalSec) return;
-  std::vector<Unit> AdditionalCorpus;
-  ReadDirToVectorOfUnits(Options.OutputCorpus.c_str(), &AdditionalCorpus,
-                         &EpochOfLastReadOfOutputCorpus, MaxSize,
-                         /*ExitOnError*/ false);
-  if (Options.Verbosity >= 2)
-    Printf('Reload: read %zd new units.\n', AdditionalCorpus.size());
-  bool Reloaded = false;
-  for (auto &U : AdditionalCorpus) {
-    if (U.size() > MaxSize)
-      U.resize(MaxSize);
-    if (!Corpus.HasUnit(U)) {
-      if (size_t NumFeatures = RunOne(U)) {
-        CheckExitOnSrcPosOrItem();
-        Corpus.AddToCorpus(U, NumFeatures);
-        Reloaded = true;
+        // want to compute storage boundary for each feature
+    // using variants of prefix sum scan
+    boundary_.resize(nfeature);
+    size_t accum_index_ = 0;
+    size_t accum_row_ind_ = 0;
+    for (bst_uint fid = 0; fid < nfeature; ++fid) {
+      boundary_[fid].index_begin = accum_index_;
+      boundary_[fid].row_ind_begin = accum_row_ind_;
+      if (type_[fid] == kDenseColumn) {
+        accum_index_ += static_cast<size_t>(nrow);
+      } else {
+        accum_index_ += feature_counts_[fid];
+        accum_row_ind_ += feature_counts_[fid];
       }
+      boundary_[fid].index_end = accum_index_;
+      boundary_[fid].row_ind_end = accum_row_ind_;
     }
-  }
-  if (Reloaded)
-    PrintStats('RELOAD');
-}
     
     
-    {  std::ofstream OF(CFPath, std::ofstream::out | std::ofstream::app);
-  for (size_t i = M.FirstNotProcessedFile; i < M.Files.size(); i++) {
-    auto U = FileToVector(M.Files[i].Name);
-    if (U.size() > MaxInputLen) {
-      U.resize(MaxInputLen);
-      U.shrink_to_fit();
-    }
-    std::ostringstream StartedLine;
-    // Write the pre-run marker.
-    OF << 'STARTED ' << std::dec << i << ' ' << U.size() << '\n';
-    OF.flush();  // Flush is important since ExecuteCommand may crash.
-    // Run.
-    TPC.ResetMaps();
-    ExecuteCallback(U.data(), U.size());
-    // Collect coverage.
-    std::set<size_t> Features;
-    TPC.CollectFeatures([&](size_t Feature) -> bool {
-      Features.insert(Feature);
-      return true;
-    });
-    // Show stats.
-    TotalNumberOfRuns++;
-    if (!(TotalNumberOfRuns & (TotalNumberOfRuns - 1)))
-      PrintStats('pulse ');
-    // Write the post-run marker and the coverage.
-    OF << 'DONE ' << i;
-    for (size_t F : Features)
-      OF << ' ' << std::hex << F;
-    OF << '\n';
-  }
-}
-    
-    struct FuzzingOptions {
-  int Verbosity = 1;
-  size_t MaxLen = 0;
-  int UnitTimeoutSec = 300;
-  int TimeoutExitCode = 77;
-  int ErrorExitCode = 77;
-  int MaxTotalTimeSec = 0;
-  int RssLimitMb = 0;
-  bool DoCrossOver = true;
-  int MutateDepth = 5;
-  bool UseCounters = false;
-  bool UseIndirCalls = true;
-  bool UseMemcmp = true;
-  bool UseMemmem = true;
-  bool UseCmp = false;
-  bool UseValueProfile = false;
-  bool Shrink = false;
-  int ReloadIntervalSec = 1;
-  bool ShuffleAtStartUp = true;
-  bool PreferSmall = true;
-  size_t MaxNumberOfRuns = -1L;
-  int ReportSlowUnits = 10;
-  bool OnlyASCII = false;
-  std::string OutputCorpus;
-  std::string ArtifactPrefix = './';
-  std::string ExactArtifactPath;
-  std::string ExitOnSrcPos;
-  std::string ExitOnItem;
-  bool SaveArtifacts = true;
-  bool PrintNEW = true; // Print a status line when new units are found;
-  bool OutputCSV = false;
-  bool PrintNewCovPcs = false;
-  bool PrintFinalStats = false;
-  bool PrintCorpusStats = false;
-  bool PrintCoverage = false;
-  bool DumpCoverage = false;
-  bool DetectLeaks = true;
-  int  TraceMalloc = 0;
-  bool HandleAbrt = false;
-  bool HandleBus = false;
-  bool HandleFpe = false;
-  bool HandleIll = false;
-  bool HandleInt = false;
-  bool HandleSegv = false;
-  bool HandleTerm = false;
+    {  std::string defaultUser_;
+  std::string defaultPassword_;
 };
     
-    namespace fuzzer {
+    AbstractHttpServerResponseCommand::~AbstractHttpServerResponseCommand()
+{
+  if (readCheck_) {
+    e_->deleteSocketForReadCheck(socket_, this);
+  }
+  if (writeCheck_) {
+    e_->deleteSocketForWriteCheck(socket_, this);
+  }
+}
+    
+    std::string AbstractOptionHandler::toTagString() const
+{
+  std::string s;
+  for (int i = 0; i < MAX_HELP_TAG; ++i) {
+    if (tags_ & (1 << i)) {
+      s += strHelpTag(i);
+      s += ', ';
     }
+  }
+  if (!s.empty()) {
+    s.resize(s.size() - 2);
+  }
+  return s;
+}
     
-    static TraceState *TS;
+    namespace {
+class FindStoppedAllowedTier {
+public:
+  bool operator()(const std::shared_ptr<AnnounceTier>& tier) const
+  {
+    switch (tier->event) {
+    case AnnounceTier::DOWNLOADING:
+    case AnnounceTier::STOPPED:
+    case AnnounceTier::COMPLETED:
+    case AnnounceTier::SEEDING:
+      return true;
+    default:
+      return false;
+    }
+  }
+};
+} // namespace
     
-    // There is no header for this on macOS so declare here
-extern 'C' char **environ;
+    
+    {private:
+  Session* session_;
+  DownloadEventCallback callback_;
+  void* userData_;
+};
+    
+    
+    {} // namespace aria2
