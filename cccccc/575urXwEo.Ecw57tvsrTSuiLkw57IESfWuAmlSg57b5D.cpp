@@ -1,313 +1,240 @@
 
         
-        char* grpc_dump_slice(grpc_slice s, uint32_t flags) {
-  return gpr_dump((const char*)GRPC_SLICE_START_PTR(s), GRPC_SLICE_LENGTH(s),
-                  flags);
-}
-    
-    #include 'test/core/end2end/end2end_tests.h'
-    
-    static void* zalloc_aligned(size_t size) {
-  void* ptr = gpr_malloc_aligned(size, GPR_MAX_ALIGNMENT);
-  memset(ptr, 0, size);
-  return ptr;
-}
-    
-    static void test_custom_allocs() {
-  const gpr_allocation_functions default_fns = gpr_get_allocation_functions();
-  intptr_t addr_to_free = 0;
-  char* i;
-  gpr_allocation_functions fns = {fake_malloc, nullptr, fake_realloc,
-                                  fake_free};
+          // Calculate D^2 and E^2
+  double D2, E2;
+  if (R < 10E-12) {
+    double temp = r0 * r0 - 4 * e;
+    if (temp < 0)
+      D2 = E2 = -1;
+    else {
+      double sqrt_temp = sqrt(temp);
+      D2 = 0.75 * b2 - 2 * c + 2 * sqrt_temp;
+      E2 = D2 - 4 * sqrt_temp;
     }
-    
-      // Sets *pos to the next stream position where parsing should continue.
-  // Returns false if the stream ended too early.
-  bool FinishStream(size_t* pos) {
-    // Give back some bytes that we did not use.
-    int unused_bytes_left = bits_left_ >> 3;
-    while (unused_bytes_left-- > 0) {
-      --pos_;
-      // If we give back a 0 byte, we need to check if it was a 0xff/0x00 escape
-      // sequence, and if yes, we need to give back one more byte.
-      if (pos_ < next_marker_pos_ &&
-          data_[pos_] == 0 && data_[pos_ - 1] == 0xff) {
-        --pos_;
-      }
-    }
-    if (pos_ > next_marker_pos_) {
-      // Data ran out before the scan was complete.
-      fprintf(stderr, 'Unexpected end of scan.\n');
-      return false;
-    }
-    *pos = pos_;
-    return true;
+  }
+  else {
+    double u = 0.75 * b2 - 2 * c - R2,
+      v = 0.25 * inv_R * (4 * bc - 8 * d - b3);
+    D2 = u + v;
+    E2 = u - v;
   }
     
-    std::vector<float> LinearlyDownsample2x2(const std::vector<float>& rgb_in,
-                                         const int width, const int height) {
-  assert(rgb_in.size() == 3 * width * height);
-  int w = (width + 1) / 2;
-  int h = (height + 1) / 2;
-  std::vector<float> rgb_out(3 * w * h);
-  for (int y = 0, p = 0; y < h; ++y) {
-    for (int x = 0; x < w; ++x) {
-      for (int i = 0; i < 3; ++i, ++p) {
-        rgb_out[p] = 0.0;
-        for (int iy = 0; iy < 2; ++iy) {
-          for (int ix = 0; ix < 2; ++ix) {
-            int yy = std::min(height - 1, 2 * y + iy);
-            int xx = std::min(width - 1, 2 * x + ix);
-            rgb_out[p] += GammaToLinear(rgb_in[3 * (yy * width + xx) + i]);
-          }
+    
+double CV_ModelEstimator2_Test::get_success_error_level( int /*test_case_idx*/, int /*i*/, int /*j*/ )
+{
+    return 0;
+}
+    
+    
+    {            ptr[tid] = partial = partial + ptr[tid + 16];
+            ptr[tid] = partial = partial + ptr[tid + 8];
+            ptr[tid] = partial = partial + ptr[tid + 4];
+            ptr[tid] = partial = partial + ptr[tid + 2];
+            ptr[tid] = partial = partial + ptr[tid + 1];
         }
-        rgb_out[p] = LinearToGamma(0.25f * rgb_out[p]);
-      }
+    
+    namespace cv
+{
     }
+    
+        if ((new_cn > total_width || total_width % new_cn != 0) && new_rows == 0)
+        new_rows = rows * total_width / new_cn;
+    
+    void cv::cuda::DeviceInfo::queryMemory(size_t& _totalMemory, size_t& _freeMemory) const
+{
+#ifndef HAVE_CUDA
+    (void) _totalMemory;
+    (void) _freeMemory;
+    throw_no_cuda();
+#else
+    int prevDeviceID = getDevice();
+    if (prevDeviceID != device_id_)
+        setDevice(device_id_);
+    }
+    
+      //   The text of a paragraph typically starts with the start of an idea and
+  // ends with the end of an idea.  Here we define paragraph as something that
+  // may have a first line indent and a body indent which may be different.
+  // Typical words that start an idea are:
+  //   1. Words in western scripts that start with
+  //      a capital letter, for example 'The'
+  //   2. Bulleted or numbered list items, for
+  //      example '2.'
+  // Typical words which end an idea are words ending in punctuation marks. In
+  // this vocabulary, each list item is represented as a paragraph.
+  bool lword_indicates_list_item;
+  bool lword_likely_starts_idea;
+  bool lword_likely_ends_idea;
+    
+      // Splits *this into two pieces in bundle1 and bundle2 (preallocated, empty
+  // bundles) where the right edge/ of the left-hand word is word1_right,
+  // and the left edge of the right-hand word is word2_left.
+  void SplitBundle(int word1_right, int word2_left, bool debug,
+                   BlamerBundle* bundle1, BlamerBundle* bundle2) const;
+  // 'Joins' the blames from bundle1 and bundle2 into *this.
+  void JoinBlames(const BlamerBundle& bundle1, const BlamerBundle& bundle2,
+                  bool debug);
+    
+    // Backwards compatible fit returning a gradient and constant.
+// Deprecated. Prefer Fit(ICOORD*, ICOORD*) where possible, but use this
+// function in preference to the LMS class.
+double DetLineFit::Fit(float* m, float* c) {
+  ICOORD start, end;
+  double error = Fit(&start, &end);
+  if (end.x() != start.x()) {
+    *m = static_cast<float>(end.y() - start.y()) / (end.x() - start.x());
+    *c = start.y() - *m * start.x();
+  } else {
+    *m = 0.0f;
+    *c = 0.0f;
   }
-  return rgb_out;
+  return error;
 }
     
-    void ComputeBlockIDCT(const coeff_t* block, uint8_t* out) {
-  coeff_t colidcts[kDCTBlockSize];
-  const int kColScale = 11;
-  const int kColRound = 1 << (kColScale - 1);
-  for (int x = 0; x < 8; ++x) {
-    int colbuf[8] = { 0 };
-    Compute1dIDCT(&block[x], 8, colbuf);
-    for (int y = 0; y < 8; ++y) {
-      colidcts[8 * y + x] = (colbuf[y] + kColRound) >> kColScale;
-    }
+      Pix* pix() const {
+    return pix_;
   }
-  const int kRowScale = 18;
-  const int kRowRound = 257 << (kRowScale - 1);  // includes offset by 128
-  for (int y = 0; y < 8; ++y) {
-    const int rowidx = 8 * y;
-    int rowbuf[8] = { 0 };
-    Compute1dIDCT(&colidcts[rowidx], 1, rowbuf);
-    for (int x = 0; x < 8; ++x) {
-      out[rowidx + x] =
-          std::max(0, std::min(255, (rowbuf[x] + kRowRound) >> kRowScale));
-    }
+  void set_pix(Pix* pix) {
+    pix_ = pix;
   }
-}
-    
-    // Returns the table width of the next 2nd level table, count is the histogram
-// of bit lengths for the remaining symbols, len is the code length of the next
-// processed symbol.
-static inline int NextTableBitSize(const int* count, int len) {
-  int left = 1 << (len - kJpegHuffmanRootTableBits);
-  while (len < kJpegHuffmanMaxBitLength) {
-    left -= count[len];
-    if (left <= 0) break;
-    ++len;
-    left <<= 1;
+  bool inverse() const {
+    return inverse_;
   }
-  return len - kJpegHuffmanRootTableBits;
-}
+  void set_inverse(bool value) {
+    inverse_ = value;
+  }
+  const DENORM* RootDenorm() const {
+    if (predecessor_ != NULL)
+      return predecessor_->RootDenorm();
+    return this;
+  }
+  const DENORM* predecessor() const {
+    return predecessor_;
+  }
+  // Accessors - perhaps should not be needed.
+  float x_scale() const {
+    return x_scale_;
+  }
+  float y_scale() const {
+    return y_scale_;
+  }
+  const BLOCK* block() const {
+    return block_;
+  }
+  void set_block(const BLOCK* block) {
+    block_ = block;
+  }
     
-      // If sharpen or blur are enabled, preprocesses image before downsampling U or
-  // V to improve butteraugli score and/or reduce file size.
-  // u_sharpen: sharpen the u channel in red areas to improve score (not as
-  // effective as v_sharpen, blue is not so important)
-  // u_blur: blur the u channel in some areas to reduce file size
-  // v_sharpen: sharpen the v channel in red areas to improve score
-  // v_blur: blur the v channel in some areas to reduce file size
-  struct DownsampleConfig {
-    // Default is YUV420.
-    DownsampleConfig() : u_factor_x(2), u_factor_y(2),
-                         v_factor_x(2), v_factor_y(2),
-                         u_sharpen(true), u_blur(true),
-                         v_sharpen(true), v_blur(true),
-                         use_silver_screen(false) {}
-    int u_factor_x;
-    int u_factor_y;
-    int v_factor_x;
-    int v_factor_y;
-    bool u_sharpen;
-    bool u_blur;
-    bool v_sharpen;
-    bool v_blur;
-    bool use_silver_screen;
-  };
-    
-    // Butteraugli scores that correspond to JPEG quality levels, starting at
-// kLowestQuality. They were computed by taking median BA scores of JPEGs
-// generated using libjpeg-turbo at given quality from a set of PNGs.
-// The scores above quality level 100 are just linearly decreased so that score
-// for 110 is 90% of the score for 100.
-const double kScoreForQuality[] = {
-  2.810761,  // 70
-  2.729300,
-  2.689687,
-  2.636811,
-  2.547863,
-  2.525400,
-  2.473416,
-  2.366133,
-  2.338078,
-  2.318654,
-  2.201674,  // 80
-  2.145517,
-  2.087322,
-  2.009328,
-  1.945456,
-  1.900112,
-  1.805701,
-  1.750194,
-  1.644175,
-  1.562165,
-  1.473608,  // 90
-  1.382021,
-  1.294298,
-  1.185402,
-  1.066781,
-  0.971769,  // 95
-  0.852901,
-  0.724544,
-  0.611302,
-  0.443185,
-  0.211578,  // 100
-  0.209462,
-  0.207346,
-  0.205230,
-  0.203114,
-  0.200999,  // 105
-  0.198883,
-  0.196767,
-  0.194651,
-  0.192535,
-  0.190420,  // 110
-  0.190420,
-};
-    
-    namespace xgboost {
-namespace common {
-/*! \brief buffer reader of the stream that allows you to get */
-class StreamBufferReader {
+    // A geometric model of paragraph indentation and alignment.
+//
+// Measurements are in pixels. The meaning of the integer arguments changes
+// depending upon the value of justification.  Distances less than or equal
+// to tolerance apart we take as 'equivalent' for the purpose of model
+// matching, and in the examples below, we assume tolerance is zero.
+//
+// justification = LEFT:
+//   margin       the 'ignored' margin to the left block edge.
+//   first_indent indent from the left margin to a typical first text line.
+//   body_indent  indent from the left margin of a typical body text line.
+//
+// justification = RIGHT:
+//   margin       the 'ignored' margin to the right block edge.
+//   first_indent indent from the right margin to a typical first text line.
+//   body_indent  indent from the right margin of a typical body text line.
+//
+// justification = CENTER:
+//   margin       ignored
+//   first_indent ignored
+//   body_indent  ignored
+//
+//  ====== Extended example, assuming each letter is ten pixels wide: =======
+//
+// +--------------------------------+
+// |      Awesome                   | ParagraphModel(CENTER, 0, 0, 0)
+// |   Centered Title               |
+// | Paragraph Detection            |
+// |      OCR TEAM                  |
+// |  10 November 2010              |
+// |                                |
+// |  Look here, I have a paragraph.| ParagraphModel(LEFT, 0, 20, 0)
+// |This paragraph starts at the top|
+// |of the page and takes 3 lines.  |
+// |  Here I have a second paragraph| ParagraphModel(LEFT, 0, 20, 0)
+// |which indicates that the first  |
+// |paragraph is not a continuation |
+// |from a previous page, as it is  |
+// |indented just like this second  |
+// |paragraph.                      |
+// |   Here is a block quote. It    | ParagraphModel(LEFT, 30, 0, 0)
+// |   looks like the prior text    |
+// |   but it  is indented  more    |
+// |   and is fully justified.      |
+// |  So how does one deal with     | ParagraphModel(LEFT, 0, 20, 0)
+// |centered text, block quotes,    |
+// |normal paragraphs, and lists    |
+// |like what follows?              |
+// |1. Make a plan.                 | ParagraphModel(LEFT, 0, 0, 30)
+// |2. Use a heuristic, for example,| ParagraphModel(LEFT, 0, 0, 30)
+// |   looking for lines where the  |
+// |   first word of the next line  |
+// |   would fit on the previous    |
+// |   line.                        |
+// |8. Try to implement the plan in | ParagraphModel(LEFT, 0, 0, 30)
+// |   Python and try it out.       |
+// |4. Determine how to fix the     | ParagraphModel(LEFT, 0, 0, 30)
+// |   mistakes.                    |
+// |5. Repeat.                      | ParagraphModel(LEFT, 0, 0, 30)
+// |  For extra painful penalty work| ParagraphModel(LEFT, 0, 20, 0)
+// |you can try to identify source  |
+// |code.  Ouch!                    |
+// +--------------------------------+
+class ParagraphModel {
  public:
-  explicit StreamBufferReader(size_t buffer_size)
-      :stream_(NULL),
-       read_len_(1), read_ptr_(1) {
-    buffer_.resize(buffer_size);
-  }
-  /*!
-   * \brief set input stream
-   */
-  inline void set_stream(dmlc::Stream *stream) {
-    stream_ = stream;
-    read_len_ = read_ptr_ = 1;
-  }
-  /*!
-   * \brief allows quick read using get char
-   */
-  inline char GetChar(void) {
-    while (true) {
-      if (read_ptr_ < read_len_) {
-        return buffer_[read_ptr_++];
-      } else {
-        read_len_ = stream_->Read(&buffer_[0], buffer_.length());
-        if (read_len_ == 0) return EOF;
-        read_ptr_ = 0;
-      }
-    }
-  }
-  /*! \brief whether we are reaching the end of file */
-  inline bool AtEnd(void) const {
-    return read_len_ == 0;
+  ParagraphModel(tesseract::ParagraphJustification justification,
+                 int margin,
+                 int first_indent,
+                 int body_indent,
+                 int tolerance)
+      : justification_(justification),
+        margin_(margin),
+        first_indent_(first_indent),
+        body_indent_(body_indent),
+        tolerance_(tolerance) {
+    // Make one of {first_indent, body_indent} is 0.
+    int added_margin = first_indent;
+    if (body_indent < added_margin)
+      added_margin = body_indent;
+    margin_ += added_margin;
+    first_indent_ -= added_margin;
+    body_indent_ -= added_margin;
   }
     }
-    }
-    }
     
-    
-    {
-    {
-    { private:
-  /*! \brief input stream */
-  dmlc::Stream *strm_;
-  /*! \brief current buffer pointer */
-  size_t buffer_ptr_;
-  /*! \brief internal buffer */
-  std::string buffer_;
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_IO_H_
-
-    
-        // want to compute storage boundary for each feature
-    // using variants of prefix sum scan
-    boundary_.resize(nfeature);
-    size_t accum_index_ = 0;
-    size_t accum_row_ind_ = 0;
-    for (bst_uint fid = 0; fid < nfeature; ++fid) {
-      boundary_[fid].index_begin = accum_index_;
-      boundary_[fid].row_ind_begin = accum_row_ind_;
-      if (type_[fid] == kDenseColumn) {
-        accum_index_ += static_cast<size_t>(nrow);
-      } else {
-        accum_index_ += feature_counts_[fid];
-        accum_row_ind_ += feature_counts_[fid];
-      }
-      boundary_[fid].index_end = accum_index_;
-      boundary_[fid].row_ind_end = accum_row_ind_;
+      /* Fetch an individual column. This code should be used with XGBOOST_TYPE_SWITCH
+     to determine type of bin id's */
+  template<typename T>
+  inline Column<T> GetColumn(unsigned fid) const {
+    const bool valid_type = std::is_same<T, uint32_t>::value
+                          || std::is_same<T, uint16_t>::value
+                          || std::is_same<T, uint8_t>::value;
+    CHECK(valid_type);
     }
     
+      EXPECT_EQ(dmat->GetColSize(0), 2);
+  EXPECT_EQ(dmat->GetColSize(1), 1);
+  EXPECT_EQ(dmat->GetColDensity(0), 1);
+  EXPECT_EQ(dmat->GetColDensity(1), 0.5);
     
-    {  std::string defaultUser_;
-  std::string defaultPassword_;
-};
-    
-    AbstractHttpServerResponseCommand::~AbstractHttpServerResponseCommand()
-{
-  if (readCheck_) {
-    e_->deleteSocketForReadCheck(socket_, this);
-  }
-  if (writeCheck_) {
-    e_->deleteSocketForWriteCheck(socket_, this);
-  }
-}
-    
-    std::string AbstractOptionHandler::toTagString() const
-{
-  std::string s;
-  for (int i = 0; i < MAX_HELP_TAG; ++i) {
-    if (tags_ & (1 << i)) {
-      s += strHelpTag(i);
-      s += ', ';
+    void SimpleDMatrix::MakeManyBatch(const std::vector<bool>& enabled,
+                                  float pkeep,
+                                  size_t max_row_perbatch) {
+  size_t btop = 0;
+  std::bernoulli_distribution coin_flip(pkeep);
+  auto& rnd = common::GlobalRandom();
+  buffered_rowset_.clear();
+  // internal temp cache
+  SparsePage tmp; tmp.Clear();
+  // start working
+  dmlc::DataIter<RowBatch>* iter = this->RowIterator();
+  iter->BeforeFirst();
     }
-  }
-  if (!s.empty()) {
-    s.resize(s.size() - 2);
-  }
-  return s;
-}
-    
-    namespace {
-class FindStoppedAllowedTier {
-public:
-  bool operator()(const std::shared_ptr<AnnounceTier>& tier) const
-  {
-    switch (tier->event) {
-    case AnnounceTier::DOWNLOADING:
-    case AnnounceTier::STOPPED:
-    case AnnounceTier::COMPLETED:
-    case AnnounceTier::SEEDING:
-      return true;
-    default:
-      return false;
-    }
-  }
-};
-} // namespace
-    
-    
-    {private:
-  Session* session_;
-  DownloadEventCallback callback_;
-  void* userData_;
-};
-    
-    
-    {} // namespace aria2
