@@ -1,175 +1,258 @@
 
         
-        // Reads the Start of Frame (SOF) marker segment and fills in *jpg with the
-// parsed data.
-bool ProcessSOF(const uint8_t* data, const size_t len,
-                JpegReadMode mode, size_t* pos, JPEGData* jpg) {
-  if (jpg->width != 0) {
-    fprintf(stderr, 'Duplicate SOF marker.\n');
-    jpg->error = JPEG_DUPLICATE_SOF;
-    return false;
-  }
-  const size_t start_pos = *pos;
-  VERIFY_LEN(8);
-  size_t marker_len = ReadUint16(data, pos);
-  int precision = ReadUint8(data, pos);
-  int height = ReadUint16(data, pos);
-  int width = ReadUint16(data, pos);
-  int num_components = ReadUint8(data, pos);
-  VERIFY_INPUT(precision, 8, 8, PRECISION);
-  VERIFY_INPUT(height, 1, 65535, HEIGHT);
-  VERIFY_INPUT(width, 1, 65535, WIDTH);
-  VERIFY_INPUT(num_components, 1, kMaxComponents, NUMCOMP);
-  VERIFY_LEN(3 * num_components);
-  jpg->height = height;
-  jpg->width = width;
-  jpg->components.resize(num_components);
-    }
-    
-    std::vector<float> LinearlyAveragedLuma(const std::vector<float>& rgb) {
-  assert(rgb.size() % 3 == 0);
-  std::vector<float> y(rgb.size() / 3);
-  for (size_t i = 0, p = 0; p < rgb.size(); ++i, p += 3) {
-    y[i] = LinearToGamma(RGBToY(GammaToLinear(rgb[p + 0]),
-                                GammaToLinear(rgb[p + 1]),
-                                GammaToLinear(rgb[p + 2])));
-  }
-  return y;
-}
-    
-    #endif  // GUETZLI_FAST_LOG_H_
-
-    
-    #include <cmath>
-    
-    // Computes out[x] = sum{kIDCTMatrix[8*x+u]*in[u*stride]; for u in [0..7]}
-inline void Compute1dIDCT(const coeff_t* in, const int stride, int out[8]) {
-  int tmp0, tmp1, tmp2, tmp3, tmp4;
-    }
-    
-    // Fills in 'result' with the inverse DCT of 'block'.
-// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
-// a row-by-row memory layout.
-void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
-    
-    bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
-                     const int* quant, JPEGData* jpg) {
-  if (w < 0 || w >= 1 << 16 || h < 0 || h >= 1 << 16 ||
-      rgb.size() != 3 * w * h) {
-    return false;
-  }
-  InitJPEGDataForYUV444(w, h, jpg);
-  AddApp0Data(jpg);
-    }
-    
-    #include 'guetzli/jpeg_data.h'
-    
-    #include 'guetzli/jpeg_data.h'
-    
-    // Definition of error codes for parsing jpeg files.
-    
-    
-    {  uint8_t bits;     // number of bits used for this symbol
-  uint16_t value;   // symbol value or table offset
-};
-    
-    
-    {} // namespace rocksdb
-
-    
-    /// The Redis functionality (see http://redis.io/commands#list)
-/// All functions may THROW a RedisListException
-class RedisLists {
- public: // Constructors / Destructors
-  /// Construct a new RedisLists database, with name/path of db.
-  /// Will clear the database on open iff destructive is true (default false).
-  /// Otherwise, it will restore saved changes.
-  /// May throw RedisListException
-  RedisLists(const std::string& db_path,
-             Options options, bool destructive = false);
-    }
-    
-    void UniversalCompactionPicker::SortedRun::Dump(char* out_buf,
-                                                size_t out_buf_size,
-                                                bool print_path) const {
-  if (level == 0) {
-    assert(file != nullptr);
-    if (file->fd.GetPathId() == 0 || !print_path) {
-      snprintf(out_buf, out_buf_size, 'file %' PRIu64, file->fd.GetNumber());
+        
+    {  // Iterate through the remaining bytes.
+  int32_t dstPosBytes = srcPosBytes; // already copied srcPosBytes
+  for (/* already init'd */; srcPosBytes < srcLenBytes; /* see U8_NEXT */) {
+    UChar32 curCodePoint;
+    // This is lame, but gcc doesn't optimize U8_NEXT very well
+    if (srcBuf[srcPosBytes] != 0 && !(srcBuf[srcPosBytes] & 0x80)) {
+      curCodePoint = srcBuf[srcPosBytes++]; // U8_NEXT would increment
     } else {
-      snprintf(out_buf, out_buf_size, 'file %' PRIu64
-                                      '(path '
-                                      '%' PRIu32 ')',
-               file->fd.GetNumber(), file->fd.GetPathId());
+      U8_NEXT(srcBuf, srcPosBytes, srcLenBytes, curCodePoint);
     }
-  } else {
-    snprintf(out_buf, out_buf_size, 'level %d', level);
+    if (curCodePoint <= 0) {
+      // Invalid UTF-8 sequence.
+      // N.B. We consider a null byte an invalid sequence.
+      if (!RuntimeOption::Utf8izeReplace) {
+        continue; // Omit invalid sequence
+      }
+      curCodePoint = SUBSTITUTION_CHARACTER; // Replace invalid sequences
+    }
+    // We know that resultBuffer > total possible length.
+    U8_APPEND_UNSAFE(dstBuf, dstPosBytes, curCodePoint);
+  }
+  assert(dstPosBytes <= dstMaxLenBytes);
+  input.assignIfRef(dstStr.shrink(dstPosBytes));
+  return true;
+}
+    
+    int64_t getWallClockMicros() {
+  return RuntimeOption::EvalJitTimer ? HPHP::Timer::GetCurrentTimeMicros() :
+         -1;
+}
+    
+    private:
+  std::atomic<int> m_refCount;
+  int m_timeoutSeconds;
+    
+        HHVM_FE(gmp_abs);
+    HHVM_FE(gmp_add);
+    HHVM_FE(gmp_and);
+    HHVM_FE(gmp_clrbit);
+    HHVM_FE(gmp_cmp);
+    HHVM_FE(gmp_com);
+    HHVM_FE(gmp_div_q);
+    HHVM_FALIAS(gmp_div, gmp_div_q);
+    HHVM_FE(gmp_div_qr);
+    HHVM_FE(gmp_div_r);
+    HHVM_FE(gmp_divexact);
+    HHVM_FE(gmp_fact);
+    HHVM_FE(gmp_gcd);
+    HHVM_FE(gmp_gcdext);
+    HHVM_FE(gmp_hamdist);
+    HHVM_FE(gmp_init);
+    HHVM_FE(gmp_intval);
+    HHVM_FE(gmp_invert);
+    HHVM_FE(gmp_jacobi);
+    HHVM_FE(gmp_legendre);
+    HHVM_FE(gmp_mod);
+    HHVM_FE(gmp_mul);
+    HHVM_FE(gmp_neg);
+    HHVM_FE(gmp_nextprime);
+    HHVM_FE(gmp_or);
+    HHVM_FE(gmp_perfect_square);
+    HHVM_FE(gmp_popcount);
+    HHVM_FE(gmp_pow);
+    HHVM_FE(gmp_powm);
+    HHVM_FE(gmp_prob_prime);
+    HHVM_FE(gmp_random);
+    HHVM_FE(gmp_root);
+    HHVM_FE(gmp_rootrem);
+    HHVM_FE(gmp_scan0);
+    HHVM_FE(gmp_scan1);
+    HHVM_FE(gmp_setbit);
+    HHVM_FE(gmp_sign);
+    HHVM_FE(gmp_sqrt);
+    HHVM_FE(gmp_sqrtrem);
+    HHVM_FE(gmp_strval);
+    HHVM_FE(gmp_sub);
+    HHVM_FE(gmp_testbit);
+    HHVM_FE(gmp_xor);
+    
+    #include 'hphp/runtime/vm/jit/types.h'
+#include 'hphp/runtime/vm/jit/containers.h'
+    
+    std::string PageletTransport::getHeader(const char *name) {
+  assert(name && *name);
+  HeaderMap::const_iterator iter = m_requestHeaders.find(name);
+  if (iter != m_requestHeaders.end()) {
+    return iter->second[0];
+  }
+  return '';
+}
+    
+    void ThriftBuffer::read(Variant &data) {
+  String sdata;
+  read(sdata);
+  data = unserialize_with_no_notice(sdata);
+}
+    
+    // Functions defined in this file are meant to extend the
+// boost::filesystem library; functions will be named according to boost's
+// naming conventions instead of ours.  For convenience, import the
+// boost::filesystem namespace into folly::fs.
+using namespace ::boost::filesystem;
+    
+    
+    {        // Store mount point
+        fs::path path(parts[1].begin(), parts[1].end());
+        struct stat st;
+        const int ret = stat(path.string().c_str(), &st);
+        if (ret == -1 && errno == ENOENT) {
+          return;
+        }
+        checkUnixError(ret, 'stat hugepage mountpoint failed');
+        pos->mountPoint = fs::canonical(path);
+        pos->device = st.st_dev;
+      };
+    
+    namespace folly {
+    }
+    
+    #include <folly/Optional.h>
+#include <folly/Range.h>
+#include <memory>
+    
+    void LogConfig::update(const LogConfig& other) {
+  // Update handlerConfigs_ with all of the entries from the other LogConfig.
+  // Any entries already present in our handlerConfigs_ are replaced wholesale.
+  for (const auto& entry : other.handlerConfigs_) {
+    if (entry.second.type.hasValue()) {
+      // This is a complete LogHandlerConfig that should be inserted
+      // or completely replace an existing handler config with this name.
+      auto result = handlerConfigs_.insert(entry);
+      if (!result.second) {
+        result.first->second = entry.second;
+      }
+    } else {
+      // This config is updating an existing LogHandlerConfig rather than
+      // completely replacing it.
+      auto iter = handlerConfigs_.find(entry.first);
+      if (iter == handlerConfigs_.end()) {
+        throw std::invalid_argument(to<std::string>(
+            'cannot update configuration for unknown log handler \'',
+            entry.first,
+            '\''));
+      }
+      iter->second.update(entry.second);
+    }
+  }
+    }
+    
+    /**
+ * LogHandler represents a generic API for processing log messages.
+ *
+ * LogHandlers have an associated log level.  The LogHandler will discard any
+ * messages below its log level.  This allows specific LogHandlers to perform
+ * additional filtering of messages even if the messages were enabled at the
+ * LogCategory level.  For instance, a single LogCategory may have two
+ * LogHandlers attached, one that logs locally to a file, and one that sends
+ * messages to a remote logging service.  The local LogHandler may be
+ * configured to record all messages, but the remote LogHandler may want to
+ * only process ERROR messages and above, even when debug logging is enabled
+ * for this LogCategory.
+ *
+ * By default the LogHandler level is set to LogLevel::NONE, which means that
+ * all log messages will be processed.
+ */
+class LogHandler {
+ public:
+  virtual ~LogHandler() = default;
+    }
+    
+     private:
+  // A version of PartialMerge that actually performs 'partial merging'.
+  // Use this to simulate the exact behaviour of the StringAppendOperator.
+  bool _AssocPartialMergeMulti(const Slice& key,
+                               const std::deque<Slice>& operand_list,
+                               std::string* new_value, Logger* logger) const;
+    
+      // Specify the file access pattern once a compaction is started.
+  // It will be applied to all input files of a compaction.
+  // Default: NORMAL
+  enum AccessHint {
+      NONE,
+      NORMAL,
+      SEQUENTIAL,
+      WILLNEED
+  };
+  AccessHint access_hint_on_compaction_start = NORMAL;
+    
+      virtual bool IsValuePinned() const override { return true; }
+    
+    #include <assert.h>
+#include 'rocksjni/jnicallback.h'
+#include 'rocksjni/portal.h'
+    
+    Value Node::getMinHeight(void) const
+{
+    return Value::fromYGValue(YGNodeStyleGetMinHeight(m_node));
+}
+    
+    #pragma once
+    
+    struct Size
+{
+    double width;
+    double height;
+    }
+    
+      ASSERT_FLOAT_EQ(10, YGNodeLayoutGetPadding(root, YGEdgeLeft));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetPadding(root, YGEdgeRight));
+    
+      const YGNodeRef root = YGNodeNewWithConfig(config);
+  YGNodeStyleSetBorder(root, YGEdgeLeft, 10);
+  YGNodeStyleSetBorder(root, YGEdgeTop, 10);
+  YGNodeStyleSetBorder(root, YGEdgeRight, 10);
+  YGNodeStyleSetBorder(root, YGEdgeBottom, 10);
+  YGNodeCalculateLayout(root, YGUndefined, YGUndefined, YGDirectionLTR);
+    
+      ASSERT_FLOAT_EQ(0, YGNodeLayoutGetLeft(root_child0));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root_child0));
+  ASSERT_FLOAT_EQ(100, YGNodeLayoutGetWidth(root_child0));
+  ASSERT_FLOAT_EQ(100, YGNodeLayoutGetHeight(root_child0));
+    
+    #include <cstdarg>
+#include <stdio.h>
+    
+    // Creates a strong reference from a raw pointer, assuming that it points to a
+// freshly-created object. See the documentation for RefPtr for usage.
+template <typename T>
+static inline RefPtr<T> adoptRef(T* ptr) {
+  return RefPtr<T>::adoptRef(ptr);
+}
+    
+    #include <string>
+    
+    
+    {} // namespace aria2
+    
+    #endif // D_ADAPTIVE_FILE_ALLOCATION_ITERATOR_H
+
+    
+    void AnnounceList::shuffle()
+{
+  for (const auto& tier : tiers_) {
+    auto& urls = tier->urls;
+    std::shuffle(std::begin(urls), std::end(urls),
+                 *SimpleRandomizer::getInstance());
   }
 }
     
     
-    {    for (auto fl : {ci.input_files, ci.output_files}) {
-      for (auto fn : fl) {
-        auto it = ci.table_properties.find(fn);
-        ASSERT_NE(it, ci.table_properties.end());
-        auto tp = it->second;
-        ASSERT_TRUE(tp != nullptr);
-        ASSERT_EQ(tp->user_collected_properties.find('0')->second, '1');
-      }
+    {} // namespace aria2
+
+    
+    namespace aria2 {
     }
-  }
-    
-    void BlockIter::Seek(const Slice& target) {
-  PERF_TIMER_GUARD(block_seek_nanos);
-  if (data_ == nullptr) {  // Not init yet
-    return;
-  }
-  uint32_t index = 0;
-  bool ok = false;
-  if (prefix_index_) {
-    ok = PrefixSeek(target, &index);
-  } else {
-    ok = BinarySeek(target, 0, num_restarts_ - 1, &index);
-  }
-    }
-    
-    
-    {}  // namespace rocksdb
-    
-      void ResetFeatureSet() {
-    assert(Inputs.empty());
-    memset(InputSizesPerFeature, 0, sizeof(InputSizesPerFeature));
-    memset(SmallestElementPerFeature, 0, sizeof(SmallestElementPerFeature));
-  }
-    
-    void Printf(const char *Fmt, ...);
-    
-    #include 'FuzzerDefs.h'
-#include <cstddef>
-#include <stdint.h>
-    
-    #include 'FuzzerDefs.h'
-#include 'FuzzerValueBitMap.h'
-#include <set>
-    
-    void PrintHexArray(const uint8_t *Data, size_t Size,
-                   const char *PrintAfter) {
-  for (size_t i = 0; i < Size; i++)
-    Printf('0x%x,', (unsigned)Data[i]);
-  Printf('%s', PrintAfter);
-}
-    
-    void PrintASCII(const Unit &U, const char *PrintAfter = '');
-    
-          if (sigaction(SIGINT, &IgnoreSignalAction, &OldSigIntAction) == -1) {
-        Printf('Failed to ignore SIGINT\n');
-        (void)posix_spawnattr_destroy(&SpawnAttributes);
-        return -1;
-      }
-      if (sigaction(SIGQUIT, &IgnoreSignalAction, &OldSigQuitAction) == -1) {
-        Printf('Failed to ignore SIGQUIT\n');
-        // Try our best to restore the signal handlers.
-        (void)sigaction(SIGINT, &OldSigIntAction, NULL);
-        (void)posix_spawnattr_destroy(&SpawnAttributes);
-        return -1;
-      }
