@@ -1,65 +1,123 @@
 
         
-            def __init__(self, value, suit):
-        self.value = value
-        self.suit = suit
-        self.is_available = True
-    
-        def set(self, results, query):
-        '''Set the result for the given query key in the cache.
         
-        When updating an entry, updates its position to the front of the LRU list.
-        If the entry is new and the cache is at capacity, removes the oldest entry
-        before the new entry is added.
-        '''
-        node = self.lookup[query]
-        if node is not None:
-            # Key exists in cache, update the value
-            node.results = results
-            self.linked_list.move_to_front(node)
-        else:
-            # Key does not exist in cache
-            if self.size == self.MAX_SIZE:
-                # Remove the oldest entry from the linked list and lookup
-                self.lookup.pop(self.linked_list.tail.query, None)
-                self.linked_list.remove_from_tail()
-            else:
-                self.size += 1
-            # Add the new key and value
-            new_node = Node(results)
-            self.linked_list.append_to_front(new_node)
-            self.lookup[query] = new_node
+@for_app('tar')
+def match(command):
+    return ('-C' not in command.script
+            and _is_tar_extract(command.script)
+            and _tar_file(command.script_parts) is not None)
+    
+    # TODO: ensure that history changes.
+
     
     
-class PrivateChat(Chat):
+@pytest.fixture(params=containers)
+def proc(request, spawnu, TIMEOUT):
+    proc = spawnu(*request.param)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(u'tcsh')
+    proc.sendline(u'setenv PYTHONIOENCODING utf8')
+    proc.sendline(u'eval `thefuck --alias`')
+    return proc
     
-            Emit key value pairs of the form:
+        return lasso_results, lars_lasso_results
+    
+            # dummy point plot to stick the legend to since surface plot do not
+        # support legends (yet?)
+        # ax.plot([1], [1], [1], color=c, label=label)
     
     
-class Budget(object):
+def bench_scikit_transformer(X, transfomer):
+    gc.collect()
     
-    define('ioloop', type=str, default=None)
+        return delta.seconds + delta.microseconds / mu_second
     
-        @classmethod
-    def __get_test_directory(self):
-        '''
-        Get the temporary directory for the tests.
-        '''
-        self.test_dir = os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), 'test_command')
     
-    if __name__ == '__main__':
+def make_linkcode_resolve(package, url_fmt):
+    '''Returns a linkcode_resolve function for the given URL format
     
-        @classmethod
-    def get_registry(cls):
-        return dict(cls.REGISTRY)
+        if not os.path.exists(ARCHIVE_NAME):
+        print('Downloading dataset from %s (14 MB)' % URL)
+        opener = urlopen(URL)
+        with open(ARCHIVE_NAME, 'wb') as archive:
+            archive.write(opener.read())
+    
+    import sys
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.svm import LinearSVC
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
+from sklearn.datasets import load_files
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
+    
+    model = SpectralBiclustering(n_clusters=n_clusters, method='log',
+                             random_state=0)
+model.fit(data)
+score = consensus_score(model.biclusters_,
+                        (rows[:, row_idx], columns[:, col_idx]))
+    
+    # Train random forest classifier, calibrate on validation data and evaluate
+# on test data
+clf = RandomForestClassifier(n_estimators=25)
+clf.fit(X_train, y_train)
+clf_probs = clf.predict_proba(X_test)
+sig_clf = CalibratedClassifierCV(clf, method='sigmoid', cv='prefit')
+sig_clf.fit(X_valid, y_valid)
+sig_clf_probs = sig_clf.predict_proba(X_test)
+sig_score = log_loss(y_test, sig_clf_probs)
+    
+    for index, (name, classifier) in enumerate(classifiers.items()):
+    classifier.fit(X, y)
+    
+    Shows how shrinkage improves classification.
+'''
+    
+        def deal_card():
+        try:
+            card = self.cards[self.deal_index]
+            card.is_available = False
+            self.deal_index += 1
+        except IndexError:
+            return None
+        return card
+    
+    
+class Level(object):
+    
+        def __init__(self, seller_category_map, seller_category_overrides_map):
+        self.seller_category_map = seller_category_map
+        self.seller_category_overrides_map = seller_category_overrides_map
+    
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer),
+            self.mr(mapper=self.mapper_sort,
+                    reducer=self.reducer_identity),
+        ]
+    
+    
+def find_constraint_name(upgrade=True):
+    cols = {'column_name'} if upgrade else {'datasource_name'}
+    return generic_find_constraint_name(
+        table='columns', columns=cols, referenced='datasources', db=db)
+    
+    def upgrade():
+    op.add_column('table_columns', sa.Column('expression', sa.Text(), nullable=True))
+    
+    
+def downgrade():
+    op.drop_table('logs')
+
+    
+    from alembic import op
+import sqlalchemy as sa
+    
+    Revision ID: 55179c7f25c7
+Revises: 315b3f4da9b0
+Create Date: 2015-12-13 08:38:43.704145
     
     '''
-Port of the Java example of 'Setter Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
-http://xunitpatterns.com/Dependency%20Injection.html.
-    
-        def __init__(self):
-        self.handler = ConcreteHandler1(
-            ConcreteHandler3(ConcreteHandler2(DefaultHandler())))
