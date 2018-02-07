@@ -1,260 +1,293 @@
 
         
-          /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to the data.
-   *
-   * @param datum
-   *    Datum containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See data_layer.cpp for an example.
-   */
-  void Transform(const Datum& datum, Blob<Dtype>* transformed_blob);
-    
-    
-    {}  // namespace caffe
-    
-    namespace caffe {
-    }
-    
-    
-    {  int size_;
-  Dtype alpha_, beta_, k_;
-};
-#endif
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    { protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual inline bool reverse_dimensions() { return true; }
-  virtual void compute_output_shape();
-};
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the exp inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x} =
-   *            \frac{\partial E}{\partial y} y \alpha \log_e(gamma)
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    TEST(LogTest, RandomRead) {
-  const int N = 500;
-  Random write_rnd(301);
-  for (int i = 0; i < N; i++) {
-    Write(RandomSkewedString(i, &write_rnd));
-  }
-  Random read_rnd(301);
-  for (int i = 0; i < N; i++) {
-    ASSERT_EQ(RandomSkewedString(i, &read_rnd), Read());
-  }
-  ASSERT_EQ('EOF', Read());
+        TEST(PartialRunMgrFindOrCreate, NewCreate) {
+  // Test that PartialRunMgr creates a new CancellationManager for new steps.
+  PartialRunMgr partial_run_mgr;
+  int step_id = 1;
+  CancellationManager* cancellation_manager;
+  partial_run_mgr.FindOrCreate(step_id, &cancellation_manager);
+  // FindOrCreate on a new step should return a new cancellation_manager.
+  int new_step_id = 2;
+  CancellationManager* new_cancellation_manager;
+  partial_run_mgr.FindOrCreate(new_step_id, &new_cancellation_manager);
+  EXPECT_NE(cancellation_manager, new_cancellation_manager);
 }
     
-    #include 'db/version_edit.h'
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+      bool operator==(const PluginConfig& rhs) const;
+    
+      // Redundant attr
+  ExpectSuccess(Builder().Attr('T', DT_FLOAT).Attr('T', DT_FLOAT), {},
+                {DT_FLOAT}, R'proto(
+      op: 'PolymorphicOut'
+      attr { key: 'T' value { type: DT_FLOAT } } )proto');
+    
+    TEST_F(SubgraphTest, FedOutputs2_FunctionConvention) {
+  ExpectOK(
+      'node { name: 'W1' op: 'TestParams' }'
+      'node { name: 'W2' op: 'TestParams' }'
+      'node { name: 'input' op: 'TestInput' }'
+      'node { name: 't1' op: 'TestMul' input: [ 'W1', 'input:1' ] }'
+      'node { name: 't2' op: 'TestMul' input: [ 'W2', 't1' ] }'
+      'node { name: 't3_a' op: 'TestRelu' input: 't2' }'
+      'node { name: 't3_b' op: 'TestRelu' input: 't2' }');
+  // We feed input:1, but nothing connects to it, so the _recv(input:1)
+  // node also disappears.
+  EXPECT_EQ('OK', Subgraph('input:1,t1,W2', '', 't2',
+                           true /* use_function_convention */));
+  ExpectNodes('_arg_t1_0_1,_arg_W2_0_2,t2');
+}
+    
+      static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
+    
+    #include <string>
+    
+      AtomQuotaPermissionContext();
+  virtual ~AtomQuotaPermissionContext();
+    
+    
+    {}  // namespace atom
+    
+    
+    { private:
+  DISALLOW_COPY_AND_ASSIGN(URLRequestAsyncAsarJob);
+};
+    
+    // Return a new iterator that converts internal keys (yielded by
+// '*internal_iter') that were live at the specified 'sequence' number
+// into appropriate user keys.
+extern Iterator* NewDBIterator(
+    DBImpl* db,
+    const Comparator* user_key_comparator,
+    Iterator* internal_iter,
+    SequenceNumber sequence,
+    uint32_t seed);
+    
+    #include 'db/dbformat.h'
+#include 'port/port.h'
+#include 'util/logging.h'
 #include 'util/testharness.h'
     
-    class Env;
+          case kCompactPointer:
+        if (GetLevel(&input, &level) &&
+            GetInternalKey(&input, &key)) {
+          compact_pointers_.push_back(std::make_pair(level, key));
+        } else {
+          msg = 'compaction pointer';
+        }
+        break;
     
-    class MemEnvTest {
- public:
-  Env* env_;
-    }
-    
-        glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
-    
-    	uint32 flags = 0;
-	flags += settings->drawShapes			* b2Draw::e_shapeBit;
-	flags += settings->drawJoints			* b2Draw::e_jointBit;
-	flags += settings->drawAABBs			* b2Draw::e_aabbBit;
-	flags += settings->drawCOMs				* b2Draw::e_centerOfMassBit;
-	m_debugDraw.SetFlags(flags);
-    
-    	static Test* Create()
-	{
-		return new ApplyForce;
-	}
-    
-    	void Keyboard(unsigned char key)
-	{
-		switch (key)
-		{
-		case 'd':
-			m_platform->SetType(b2_dynamicBody);
-			break;
-    }
-    }
-    
-    
-    {	b2Body* m_body;
-	b2Body* m_bullet;
-	float32 m_x;
-};
-    
-    			b2FixtureDef fd;
-			fd.shape = &shape;
-			fd.density = 1.0f;
-			fd.friction = 0.6f;
-    
-    
-    {    // If we are within the deletion range and equal to value, drop it.
-    // Otherwise, append/keep/push it.
-    if (elem == value) {
-      if (numKept < totalOccs - num) {
-        it.Push();
-        ++numKept;
-      } else {
-        it.Skip();
-      }
-    } else {
-      // Always append the others
-      it.Push();
-    }
-  }
-    
-      virtual const char* Name() const override {
-    return 'TestTablePropertiesCollector';
-  }
-    
-    
-    {  while (ParseNextKey() && Compare(key_.GetInternalKey(), target) < 0) {
-  }
-  if (!Valid()) {
-    SeekToLast();
-  } else {
-    while (Valid() && Compare(key_.GetInternalKey(), target) > 0) {
-      Prev();
-    }
-  }
+    void WriteBatchInternal::Append(WriteBatch* dst, const WriteBatch* src) {
+  SetCount(dst, Count(dst) + Count(src));
+  assert(src->rep_.size() >= kHeader);
+  dst->rep_.append(src->rep_.data() + kHeader, src->rep_.size() - kHeader);
 }
     
-      static Slice GetCacheKey(const char* cache_key_prefix,
-                           size_t cache_key_prefix_size,
-                           const BlockHandle& handle, char* cache_key);
+      // keys[0,n-1] contains a list of keys (potentially with duplicates)
+  // that are ordered according to the user supplied comparator.
+  // Append a filter that summarizes keys[0,n-1] to *dst.
+  //
+  // Warning: do not change the initial contents of *dst.  Instead,
+  // append the newly constructed filter to *dst.
+  virtual void CreateFilter(const Slice* keys, int n, std::string* dst)
+      const = 0;
     
     
-    {  // Note: we may want to access the Java callback object instance
-  // across multiple method calls, so we create a global ref
-  assert(jcallback_obj != nullptr);
-  m_jcallback_obj = env->NewGlobalRef(jcallback_obj);
-  if(jcallback_obj == nullptr) {
-    // exception thrown: OutOfMemoryError
-    return;
-  }
+static Variant HHVM_FUNCTION(gmp_add,
+                             const Variant& dataA,
+                             const Variant& dataB) {
+  mpz_t gmpDataA, gmpDataB, gmpReturn;
+    }
+    
+    
+    {std::string AsyncFileWriter::getNumDiscardedMsg(size_t numDiscarded) {
+  // We may want to make this customizable in the future (e.g., to allow it to
+  // conform to the LogFormatter style being used).
+  // For now just return a simple fixed message.
+  return folly::to<std::string>(
+      numDiscarded,
+      ' log messages discarded: logging faster than we can write\n');
+}
+} // namespace folly
+
+    
+    std::shared_ptr<LogHandler> FileHandlerFactory::createHandler(
+    const Options& options) {
+  WriterFactory writerFactory;
+  return StandardLogHandlerFactory::createHandler(
+      getType(), &writerFactory, options);
 }
     
-    namespace rocksdb {
-    }
     
-    void Node::reset(void)
-{
-    m_measureFunc.reset(nullptr);
-    }
-    
-    class Node {
-    }
-    
-    
-    {    void toJS(nbind::cbOutput expose) const
-    {
-        expose(unit, value);
-    }
-};
-
-    
-      const YGNodeRef root = YGNodeNewWithConfig(config);
-  YGNodeStyleSetFlexDirection(root, YGFlexDirectionRow);
-  YGNodeStyleSetAlignContent(root, YGAlignStretch);
-  YGNodeStyleSetFlexWrap(root, YGWrapWrap);
-  YGNodeStyleSetWidth(root, 150);
-  YGNodeStyleSetHeight(root, 100);
-    
-    
-    {  template <typename T> friend class RefPtr;
-  std::atomic<int> m_refcount;
+    { private:
+  bool async_{true};
+  Optional<size_t> maxBufferSize_;
 };
     
-      // Creates a strong reference from a raw pointer, assuming that is already
-  // referenced from some other RefPtr. This should be used sparingly.
-  static inline RefPtr<T> assumeAlreadyReffed(T* ptr) {
-    return RefPtr<T>(ptr, ConstructionMode::External);
+    
+    {StringPiece getGlogLevelName(LogLevel level) {
+  if (level < LogLevel::INFO) {
+    return 'VERBOSE';
+  } else if (level < LogLevel::WARN) {
+    return 'INFO';
+  } else if (level < LogLevel::ERR) {
+    return 'WARNING';
+  } else if (level < LogLevel::CRITICAL) {
+    return 'ERROR';
   }
+  return 'CRITICAL';
+}
+} // namespace
     
-      // Resets request_. This method is more efficient than
-  // setRequest(std::shared_ptr<Request>());
-  void resetRequest();
+      using LogWriter::writeMessage;
+  void writeMessage(folly::StringPiece buffer, uint32_t flags = 0) override;
+  void flush() override;
     
-    protected:
-  DownloadEngine* getDownloadEngine() { return e_; }
-  // Called after content body is completely sent.
-  virtual void afterSend(const std::shared_ptr<HttpServer>& httpServer,
-                         DownloadEngine* e) = 0;
-    
-    bool AbstractOptionHandler::isHidden() const { return flags_ & FLAG_HIDDEN; }
-    
-    #endif // D_ABSTRACT_PROXY_REQUEST_COMMAND_H
-
-    
-    class AdaptiveFileAllocationIterator : public FileAllocationIterator {
-private:
-  std::unique_ptr<FileAllocationIterator> allocator_;
-    }
-    
-    namespace aria2 {
-    }
-    
-    
-    {  virtual std::unique_ptr<DiskWriter>
-  newDiskWriter(const std::string& filename) CXX11_OVERRIDE
+    void LogCategory::clearHandlers() {
+  std::vector<std::shared_ptr<LogHandler>> emptyHandlersList;
+  // Swap out the handlers list with the handlers_ lock held.
   {
-    return make_unique<DiskWriterType>();
+    auto handlers = handlers_.wlock();
+    handlers->swap(emptyHandlersList);
+  }
+  // Destroy emptyHandlersList now that the handlers_ lock is released.
+  // This way we don't hold the handlers_ lock while invoking any of the
+  // LogHandler destructors.
+}
+    
+    
+    {  // Update categoryConfigs_ with all of the entries from the other LogConfig.
+  //
+  // Any entries already present in our categoryConfigs_ are merged: if the new
+  // configuration does not include handler settings our entry's settings are
+  // maintained.
+  for (const auto& entry : other.categoryConfigs_) {
+    auto result = categoryConfigs_.insert(entry);
+    if (!result.second) {
+      auto* existingEntry = &result.first->second;
+      auto oldHandlers = std::move(existingEntry->handlers);
+      *existingEntry = entry.second;
+      if (!existingEntry->handlers.hasValue()) {
+        existingEntry->handlers = std::move(oldHandlers);
+      }
+    }
+  }
+}
+    
+    /**
+ * Parse a folly::dynamic object.
+ *
+ * The input should be an object data type, and is parsed the same as a JSON
+ * object accpted by parseLogConfigJson().
+ */
+LogConfig parseLogConfigDynamic(const dynamic& value);
+    
+      /// Push / Insert value at beginning/end of the list. Return the length.
+  /// May throw RedisListException
+  int PushLeft(const std::string& key, const std::string& value);
+  int PushRight(const std::string& key, const std::string& value);
+    
+     private:
+  const Comparator* comparator_;
+  const char* data_;       // underlying block contents
+  uint32_t restarts_;      // Offset of restart array (list of fixed32)
+  uint32_t num_restarts_;  // Number of uint32_t entries in restart array
+    
+      // Same as bytes_per_sync, but applies to WAL files
+  // Default: 0, turned off
+  uint64_t wal_bytes_per_sync = 0;
+    
+    /*
+ * Class:     org_rocksdb_IngestExternalFileOptions
+ * Method:    snapshotConsistency
+ * Signature: (J)Z
+ */
+jboolean Java_org_rocksdb_IngestExternalFileOptions_snapshotConsistency(
+    JNIEnv* env, jobject jobj, jlong jhandle) {
+  auto* options =
+      reinterpret_cast<rocksdb::IngestExternalFileOptions*>(jhandle);
+  return static_cast<jboolean>(options->snapshot_consistency);
+}
+    
+      StatisticsJni::StatisticsJni(std::shared_ptr<Statistics> stats)
+      : StatisticsImpl(stats, false), m_ignore_histograms() {
+  }
+    
+      grpc::ServerBuilder builder;
+  builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+  builder.RegisterService(&service);
+  std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
+  std::cerr << 'Server listening on ' << server_address << std::endl;
+    
+    
+    { public:
+  StructInNestedNS() {
+    memset(this, 0, sizeof(StructInNestedNS));
+  }
+  StructInNestedNS(int32_t _a, int32_t _b)
+      : a_(flatbuffers::EndianScalar(_a)),
+        b_(flatbuffers::EndianScalar(_b)) {
+  }
+  int32_t a() const {
+    return flatbuffers::EndianScalar(a_);
+  }
+  void mutate_a(int32_t _a) {
+    flatbuffers::WriteScalar(&a_, _a);
+  }
+  int32_t b() const {
+    return flatbuffers::EndianScalar(b_);
+  }
+  void mutate_b(int32_t _b) {
+    flatbuffers::WriteScalar(&b_, _b);
   }
 };
+STRUCT_END(StructInNestedNS, 8);
     
-      A2_LOG_ERROR(
-      fmt('Failed to lookup %s in your KeyChain', fingerprint.c_str()));
-  return false;
+    typedef uintmax_t largest_scalar_t;
+    
+    // Parses one dictionary entry.
+// If successfull, write the enty to Unit and returns true,
+// otherwise returns false.
+bool ParseOneDictionaryEntry(const std::string &Str, Unit *U);
+// Parses the dictionary file, fills Units, returns true iff all lines
+// were parsed succesfully.
+bool ParseDictionaryFile(const std::string &Text, std::vector<Unit> *Units);
+    
+    #endif
+
+    
+    Unit FileToVector(const std::string &Path, size_t MaxSize, bool ExitOnError) {
+  std::ifstream T(Path);
+  if (ExitOnError && !T) {
+    Printf('No such directory: %s; exiting\n', Path.c_str());
+    exit(1);
+  }
+    }
+    
+    void ListFilesInDirRecursive(const std::string &Dir, long *Epoch,
+                             std::vector<std::string> *V, bool TopDir);
+    
+    std::string Sha1ToString(const uint8_t Sha1[kSHA1NumBytes]);
+    
+    int ExecuteCommand(const std::string &Command);
     
     
-    {  std::shared_ptr<AsyncNameResolver> asyncNameResolver_[2];
-  size_t numResolver_;
-  int resolverCheck_;
-  bool ipv4_;
-  bool ipv6_;
-};
-    
-    #include <ostream>
+    {
+    {      (void)sigemptyset(&BlockedSignalsSet);
+      (void)sigaddset(&BlockedSignalsSet, SIGCHLD);
+      if (sigprocmask(SIG_BLOCK, &BlockedSignalsSet, &OldBlockedSignalsSet) ==
+          -1) {
+        Printf('Failed to block SIGCHLD\n');
+        // Try our best to restore the signal handlers.
+        (void)sigaction(SIGQUIT, &OldSigQuitAction, NULL);
+        (void)sigaction(SIGINT, &OldSigIntAction, NULL);
+        (void)posix_spawnattr_destroy(&SpawnAttributes);
+        return -1;
+      }
+    }
+    ++ActiveThreadCount;
+  }
