@@ -1,308 +1,293 @@
 
         
-        
+        Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    namespace tensorflow {
+    }
+    
+          T* resource;
+      OP_REQUIRES_OK(
+          context,
+          mgr->LookupOrCreate<T>(cinfo_.container(), cinfo_.name(), &resource,
+                                 [this](T** ret) EXCLUSIVE_LOCKS_REQUIRED(mu_) {
+                                   Status s = CreateResource(ret);
+                                   if (!s.ok() && *ret != nullptr) {
+                                     CHECK((*ret)->Unref());
+                                   }
+                                   return s;
+                                 }));
+    
+    #include <string>
+    
+    
     {
-    {#ifdef __cplusplus
-}} // extern 'C', namespace swift
-#endif
-    
-      void compute();
-    
-    namespace swift {
-class DependencyTracker;
-class ModuleDecl;
-class SourceFile;
-    }
-    
-    class List final : public MarkupASTNode,
-    private llvm::TrailingObjects<List, MarkupASTNode *> {
-  friend TrailingObjects;
-    }
-    
-    
-    {  const SILDebugScope *Scope = this;
-  while (Scope->Parent.is<const SILDebugScope *>())
-    Scope = Scope->Parent.get<const SILDebugScope *>();
-  assert(Scope->Parent.is<SILFunction *>() && 'orphaned scope');
-  return Scope->Parent.get<SILFunction *>();
-}
-    
-      virtual void handleDiagnostic(SourceManager &SM, SourceLoc Loc,
-                                DiagnosticKind Kind,
-                                StringRef FormatString,
-                                ArrayRef<DiagnosticArgument> FormatArgs,
-                                const DiagnosticInfo &Info) override;
-    
-    // Build a Table file from the contents of *iter.  The generated file
-// will be named according to meta->number.  On success, the rest of
-// *meta will be filled with metadata about the generated table.
-// If no data is present in *iter, meta->file_size will be set to
-// zero, and no Table file will be produced.
-extern Status BuildTable(const std::string& dbname,
-                         Env* env,
-                         const Options& options,
-                         TableCache* table_cache,
-                         Iterator* iter,
-                         FileMetaData* meta);
-    
-      DBIter(DBImpl* db, const Comparator* cmp, Iterator* iter, SequenceNumber s,
-         uint32_t seed)
-      : db_(db),
-        user_comparator_(cmp),
-        iter_(iter),
-        sequence_(s),
-        direction_(kForward),
-        valid_(false),
-        rnd_(seed),
-        bytes_counter_(RandomPeriod()) {
-  }
-  virtual ~DBIter() {
-    delete iter_;
-  }
-  virtual bool Valid() const { return valid_; }
-  virtual Slice key() const {
-    assert(valid_);
-    return (direction_ == kForward) ? ExtractUserKey(iter_->key()) : saved_key_;
-  }
-  virtual Slice value() const {
-    assert(valid_);
-    return (direction_ == kForward) ? iter_->value() : saved_value_;
-  }
-  virtual Status status() const {
-    if (status_.ok()) {
-      return iter_->status();
-    } else {
-      return status_;
+    {      case ACTION_CLOSE:
+      default:
+        // Do not close stdin/out/err, instead redirect them to /dev/null so
+        // their file descriptors remain unavailable for reuse by open(), etc.
+        if (i <= CHAN_STDERR) {
+          if (devnull_fd < 0) {
+            while ((devnull_fd = open('/dev/null', O_RDWR, 0)) < 0) {
+              if (!retry(errno)) {
+                _exit(1);
+              }
+            }
+          }
+          while (dup2(devnull_fd, i) < 0) {
+            if (!retry(errno)) {
+              _exit(1);
+            }
+          }
+        } else {
+          close(i);
+        }
+        break;
     }
   }
     
-    
-    {}  // namespace leveldb
-    
-    static std::string MakeFileName(const std::string& name, uint64_t number,
-                                const char* suffix) {
-  char buf[100];
-  snprintf(buf, sizeof(buf), '/%06llu.%s',
-           static_cast<unsigned long long>(number),
-           suffix);
-  return name + buf;
-}
-    
-    WriteBatch::Handler::~Handler() { }
-    
-        if (bytes_ > 0) {
-      char rate[100];
-      snprintf(rate, sizeof(rate), '%6.1f MB/s',
-               (bytes_ / 1048576.0) / (finish - start_));
-      if (!message_.empty()) {
-        message_  = std::string(rate) + ' ' + message_;
-      } else {
-        message_ = rate;
-      }
-    }
-    
-      // keys[0,n-1] contains a list of keys (potentially with duplicates)
-  // that are ordered according to the user supplied comparator.
-  // Append a filter that summarizes keys[0,n-1] to *dst.
+    class Diagnostician {
+ public:
+  // Logs diagnostic information when CUDA appears to be misconfigured (e.g. is
+  // not initializing).
   //
-  // Warning: do not change the initial contents of *dst.  Instead,
-  // append the newly constructed filter to *dst.
-  virtual void CreateFilter(const Slice* keys, int n, std::string* dst)
-      const = 0;
-    
-    
-    {  int width = input_layer->width();
-  int height = input_layer->height();
-  float* input_data = input_layer->mutable_cpu_data();
-  for (int i = 0; i < input_layer->channels(); ++i) {
-    cv::Mat channel(height, width, CV_32FC1, input_data);
-    input_channels->push_back(channel);
-    input_data += width * height;
-  }
-}
-    
-      void Transform(const Datum& datum, Dtype* transformed_data);
-  // Tranformation parameters
-  TransformationParameter param_;
-    
-      /// @brief The spatial dimensions of a filter kernel.
-  Blob<int> kernel_shape_;
-  /// @brief The spatial dimensions of the stride.
-  Blob<int> stride_;
-  /// @brief The spatial dimensions of the padding.
-  Blob<int> pad_;
-  /// @brief The spatial dimensions of the dilation.
-  Blob<int> dilation_;
-  /// @brief The spatial dimensions of the convolution input.
-  Blob<int> conv_input_shape_;
-  /// @brief The spatial dimensions of the col_buffer.
-  vector<int> col_buffer_shape_;
-  /// @brief The spatial dimensions of the output.
-  vector<int> output_shape_;
-  const vector<int>* bottom_shape_;
-    
-    #include <vector>
-    
-      virtual inline const char* type() const { return 'Convolution'; }
-    
-      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
-  cudnnTensorDescriptor_t    bias_desc_;
-  cudnnFilterDescriptor_t      filter_desc_;
-  vector<cudnnConvolutionDescriptor_t> conv_descs_;
-  int bottom_offset_, top_offset_, bias_offset_;
-    
-    #include <vector>
-    
-    namespace caffe {
+  // Note: if we're running on a machine that has no GPUs, we don't want to
+  // produce very much log spew beyond saying, 'looks like there's no CUDA
+  // kernel
+  // module running'.
+  //
+  // Note: we use non-Google-File:: API here because we may be called before
+  // InitGoogle has completed.
+  static void LogDiagnosticInformation();
     }
     
-    #endif  // CAFFE_DECONV_LAYER_HPP_
+      ExpectSuccess(Builder().Input(FakeInput(2, DT_BOOL)), {DT_BOOL, DT_BOOL}, {},
+                R'proto(
+      op: 'NPolymorphicRestrictIn' input: ['a', 'a:1']
+      attr { key: 'N' value { i: 2 } }
+      attr { key: 'T' value { type: DT_BOOL } } )proto');
+    
+    #endif  // TENSORFLOW_COMMON_RUNTIME_SYCL_SYCL_DEVICE_CONTEXT_H_
 
+    
+        OP_REQUIRES(context, TensorShapeUtils::IsMatrix(contents.shape()),
+                errors::InvalidArgument(
+                    'sampled_audio must be a rank-2 tensor but got shape ',
+                    contents.shape().DebugString()));
+    OP_REQUIRES(
+        context, contents.NumElements() <= std::numeric_limits<int32>::max(),
+        errors::InvalidArgument(
+            'sampled_audio cannot have more than 2^31 entries. Shape = ',
+            contents.shape().DebugString()));
+    OP_REQUIRES(context, TensorShapeUtils::IsScalar(file_format_tensor.shape()),
+                errors::InvalidArgument(
+                    'file_format must be a rank-0 tensor but got shape ',
+                    file_format_tensor.shape().DebugString()));
+    OP_REQUIRES(context,
+                TensorShapeUtils::IsScalar(samples_per_second_tensor.shape()),
+                errors::InvalidArgument(
+                    'samples_per_second must be a rank-0 tensor but got shape ',
+                    samples_per_second_tensor.shape().DebugString()));
+    OP_REQUIRES(context,
+                TensorShapeUtils::IsScalar(bits_per_second_tensor.shape()),
+                errors::InvalidArgument(
+                    'bits_per_second must be a rank-0 tensor but got shape ',
+                    bits_per_second_tensor.shape().DebugString()));
+    
+    #define OC_Q57(_v) ((ogg_int64_t)(_v)<<57)
+    
+        2,{0,128,  8,33,  4,16,70,  2,6,12,  23,46,90},
+    
+    
+    {  {1,0,32,  &_residue_44_mid_un,
+   &_huff_book__44u7__long,&_huff_book__44u7__long,
+   &_resbook_44u_7,&_resbook_44u_7}
+};
+    
+       all f in Hz, z in Bark */
+    
+    # if defined(BF_PTR2)
+    
+    #if defined(__WATCOMC__)
+void GetTSC(unsigned long&);
+#pragma aux GetTSC = 0x0f 0x31 'mov [edi], eax' parm [edi] modify [edx eax];
+#elif defined(__GNUC__)
+inline
+void GetTSC(unsigned long& tsc)
+{
+  asm volatile('.byte 15, 49\n\t'
+	       : '=eax' (tsc)
+	       :
+	       : '%edx', '%eax');
+}
+#elif defined(_MSC_VER)
+inline
+void GetTSC(unsigned long& tsc)
+{
+  unsigned long a;
+  __asm _emit 0fh
+  __asm _emit 31h
+  __asm mov a, eax;
+  tsc=a;
+}
+#endif      
+    
+    extern JSClass  *jsb_cocos2d_Physics3DObject_class;
+extern JSObject *jsb_cocos2d_Physics3DObject_prototype;
+    
+    bool js_cocos2dx_studio_Frame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_Frame_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_Frame(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_Frame_clone(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_setTweenType(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_setNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_setTimeline(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_isEnterWhenPassed(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_getTweenType(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_getFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_apply(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_isTween(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_setFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_setTween(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_getTimeline(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_getNode(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+    
+    
+    	m_world->SetAllowSleeping(settings->enableSleep > 0);
+	m_world->SetWarmStarting(settings->enableWarmStarting > 0);
+	m_world->SetContinuousPhysics(settings->enableContinuous > 0);
+	m_world->SetSubStepping(settings->enableSubStepping > 0);
+    
+    
+    {	b2Vec2 viewCenter;
+	float32 hz;
+	int32 velocityIterations;
+	int32 positionIterations;
+	int32 drawShapes;
+	int32 drawJoints;
+	int32 drawAABBs;
+	int32 drawContactPoints;
+	int32 drawContactNormals;
+	int32 drawContactImpulse;
+	int32 drawFrictionImpulse;
+	int32 drawCOMs;
+	int32 drawStats;
+	int32 drawProfile;
+	int32 enableWarmStarting;
+	int32 enableContinuous;
+	int32 enableSubStepping;
+	int32 enableSleep;
+	int32 pause;
+	int32 singleStep;
+};
+    
+    			b2FixtureDef sd2;
+			sd2.shape = &poly2;
+			sd2.density = 2.0f;
+    
+    namespace xgboost {
+    }
+    
+    template<typename DType>
+inline void CompressArray<DType>::Write(dmlc::Stream* fo) {
+  encoded_chunks_.clear();
+  encoded_chunks_.push_back(0);
+  for (size_t i = 0; i < out_buffer_.size(); ++i) {
+    encoded_chunks_.push_back(encoded_chunks_.back() + out_buffer_[i].length());
+  }
+  fo->Write(raw_chunks_);
+  fo->Write(encoded_chunks_);
+  for (const std::string& buf : out_buffer_) {
+    fo->Write(dmlc::BeginPtr(buf), buf.length());
+  }
+}
     
      protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    /**
- * @brief Exponential Linear Unit non-linearity @f$
- *        y = \left\{
- *        \begin{array}{lr}
- *            x                  & \mathrm{if} \; x > 0 \\
- *            \alpha (\exp(x)-1) & \mathrm{if} \; x \le 0
- *        \end{array} \right.
- *      @f$.  
- */
-template <typename Dtype>
-class ELULayer : public NeuronLayer<Dtype> {
- public:
-  /**
-   * @param param provides ELUParameter elu_param,
-   *     with ELULayer options:
-   *   - alpha (\b optional, default 1).
-   *     the value @f$ \alpha @f$ by which controls saturation for negative inputs.
+  /*!
+   * \brief to be implemented by subclass,
+   * get next token, return EOF if end of file
    */
-  explicit ELULayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-    }
-    }
+  virtual char GetChar(void) = 0;
+  /*! \brief to be implemented by child, check if end of stream */
+  virtual bool IsEnd(void) = 0;
     
-    // Returns the number of misfit blob tops in this word.
-int Tesseract::CountMisfitTops(WERD_RES *word_res) {
-  int bad_blobs = 0;
-  int num_blobs = word_res->rebuild_word->NumBlobs();
-  for (int blob_id = 0; blob_id < num_blobs; ++blob_id) {
-    TBLOB* blob = word_res->rebuild_word->blobs[blob_id];
-    UNICHAR_ID class_id = word_res->best_choice->unichar_id(blob_id);
-    if (unicharset.get_isalpha(class_id) || unicharset.get_isdigit(class_id)) {
-      int top = blob->bounding_box().top();
-      if (top >= INT_FEAT_RANGE)
-        top = INT_FEAT_RANGE - 1;
-      int min_bottom, max_bottom, min_top, max_top;
-      unicharset.get_top_bottom(class_id, &min_bottom, &max_bottom,
-                                &min_top, &max_top);
-      if (max_top - min_top > kMaxCharTopRange)
-        continue;
-      bool bad =  top < min_top - x_ht_acceptance_tolerance ||
-                  top > max_top + x_ht_acceptance_tolerance;
-      if (bad)
-        ++bad_blobs;
-      if (debug_x_ht_level >= 1) {
-        tprintf('Class %s is %s with top %d vs limits of %d->%d, +/-%d\n',
-                unicharset.id_to_unichar(class_id),
-                bad ? 'Misfit' : 'OK', top, min_top, max_top,
-                static_cast<int>(x_ht_acceptance_tolerance));
-      }
-    }
+      vals_in.clear(); ss.flush(); ss.clear(); ss.str('');
+  ss << ' ( 3, 2,1 ) ';
+  ss >> vals_in;
+  EXPECT_EQ(vals_in, vals);
+    
+    dmlc::DataIter<ColBatch>* SimpleDMatrix::ColIterator(const std::vector<bst_uint>&fset) {
+  size_t ncol = this->info().num_col;
+  col_iter_.col_index_.resize(0);
+  for (size_t i = 0; i < fset.size(); ++i) {
+    if (fset[i] < ncol) col_iter_.col_index_.push_back(fset[i]);
   }
-  return bad_blobs;
+  col_iter_.BeforeFirst();
+  return &col_iter_;
 }
     
-    #ifndef           PGEDIT_H
-#define           PGEDIT_H
-    
-    // Runs classify_word_pass1() on the current word. Outputs Tesseract's
-// raw choice as a result of the classification. For words labeled with a
-// single unichar also outputs all alternatives from blob_choices of the
-// best choice.
-void Tesseract::ambigs_classify_and_output(const char *label,
-                                           PAGE_RES_IT* pr_it,
-                                           FILE *output_file) {
-  // Classify word.
-  fflush(stdout);
-  WordData word_data(*pr_it);
-  SetupWordPassN(1, &word_data);
-  classify_word_and_language(1, pr_it, &word_data);
-  WERD_RES* werd_res = word_data.word;
-  WERD_CHOICE *best_choice = werd_res->best_choice;
-  ASSERT_HOST(best_choice != NULL);
-    }
-    
-    
-/**********************************************************************
- * operator*=
- *
- * Scalar multiply of an ICOORD.
- **********************************************************************/
-    
-    enum NDK_CRASH_PARSER_STATE {
-    EXPECTS_CRASH_DUMP,
-    EXPECTS_CRASH_DUMP_HEADER,
-    EXPECTS_CRASH_DUMP_CONTENT,
-    EXPECTS_CRASH_DUMP_END,
+    // This is a helpful data structure to define parameters
+// You do not have to use it.
+// see http://dmlc-core.readthedocs.org/en/latest/parameter.html
+// for introduction of this module.
+struct MyLogisticParam : public dmlc::Parameter<MyLogisticParam> {
+  float scale_neg_weight;
+  // declare parameters
+  DMLC_DECLARE_PARAMETER(MyLogisticParam) {
+    DMLC_DECLARE_FIELD(scale_neg_weight).set_default(1.0f).set_lower_bound(0.0f)
+        .describe('Scale the weight of negative examples by this factor');
+  }
 };
     
+      void setUserDefinedCred(std::string user, std::string password);
     
-    {    void throw_exception( std::exception const & e ) {
-        xfatal2(TSF'boost exception:%_', e.what());
-        
-#ifdef ANDROID
-        char stack[4096] = {0};
-        android_callstack(stack, sizeof(stack));
-        xfatal2(TSF'%_', stack);
-#endif
-    }
-}
-
+      virtual ~AbstractProxyResponseCommand();
     
+      /**
+   * Returns announce URL.
+   */
+  std::string getAnnounce() const;
     
-    {        if (_name) m_strmap[_name] = _spy;
-    }
-    
-    
-    {  return Pos;
-}
-    
-      if (Options.UseCounters) {
-    uint64_t CounterDelta =
-        EF->__sanitizer_update_counter_bitset_and_clear_counters(
-            C->CounterBitmap.data());
-    if (CounterDelta > 0) {
-      Res = true;
-      C->CounterBitmapBits += CounterDelta;
-    }
+    void AnnounceTier::nextEvent()
+{
+  switch (event) {
+  case STARTED:
+    event = DOWNLOADING;
+    break;
+  case STARTED_AFTER_COMPLETION:
+    event = SEEDING;
+    break;
+  case STOPPED:
+    event = HALTED;
+    break;
+  case COMPLETED:
+    event = SEEDING;
+    break;
+  default:
+    break;
   }
-    
-    
-    {  bool Parse(std::istream &IS, bool ParseCoverage);
-  bool Parse(const std::string &Str, bool ParseCoverage);
-  void ParseOrExit(std::istream &IS, bool ParseCoverage);
-  size_t Merge(std::vector<std::string> *NewFiles);
-};
-    
-    unsigned NumberOfCpuCores() {
-  unsigned N = std::thread::hardware_concurrency();
-  if (!N) {
-    Printf('WARNING: std::thread::hardware_concurrency not well defined for '
-           'your platform. Assuming CPU count of 1.\n');
-    N = 1;
-  }
-  return N;
 }
     
-    #endif // LIBFUZZER_APPLE
+    // DiskwriterFactory class template to create DiskWriter derived
+// object, ignoring filename.
+template <class DiskWriterType>
+class AnonDiskWriterFactory : public DiskWriterFactory {
+public:
+  AnonDiskWriterFactory() = default;
+  virtual ~AnonDiskWriterFactory() = default;
+    }
+    
+    
+    {} // namespace aria2
