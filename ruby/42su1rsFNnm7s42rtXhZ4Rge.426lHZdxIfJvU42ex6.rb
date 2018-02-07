@@ -1,98 +1,81 @@
 
         
-        require 'pry'
-$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
-require 'jekyll'
-    
-        # --
-    # NOTE: Pathutil#in_path? gets the realpath.
-    # @param [<Anything>] entry the entry you want to validate.
-    # Check if a path is outside of our given root.
-    # --
-    def symlink_outside_site_source?(entry)
-      !Pathutil.new(entry).in_path?(
-        site.in_source_dir
-      )
-    end
-    
-      included do |base|
-    AgentRunner.register(base)
-  end
-    
-        respond_to do |format|
-      if !running? && @job.update_attributes!(run_at: Time.now, failed_at: nil)
-        format.html { redirect_to jobs_path, notice: 'Job enqueued.' }
-        format.json { render json: @job, status: :ok }
-      else
-        format.html { redirect_to jobs_path, alert: 'Can not enqueue a running job.' }
-        format.json { render json: @job.errors, status: :unprocessable_entity }
+            def no_subcommand(args)
+      unless args.empty? ||
+          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
+        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
+                          Run `jekyll help` to find out more.'
+        abort
       end
     end
-  end
     
-        respond_to do |format|
-      format.html
-      format.json { render json: @user_credential }
-    end
-  end
+        @notification_setting = current_user.notification_settings_for(resource)
+    @saved = @notification_setting.update_attributes(notification_setting_params)
     
-        # Returns the Sass/SCSS code for the media query list.
-    #
-    # @param options [{Symbol => Object}] An options hash (see {Sass::CSS#initialize}).
-    # @return [String]
-    def to_src(options)
-      queries.map {|q| q.to_src(options)}.join(', ')
-    end
+        projects << @user.personal_projects.visible_to_user(current_user) if current_user
+    projects << @user.personal_projects.public_to_user(current_user)
     
-        it 'returns false if osxfuse include directory is a symlink' do
-      allow(File).to receive(:exist?).and_return(true)
-      allow(File).to receive(:symlink?).and_return(true)
-      expect(described_class).not_to be_binary_osxfuse_installed
-    end
+    unless dups.empty?
+  puts '\nDuplicate links:'
+  dups.each do |link|
+    puts '- #{link}'
+    puts `grep -nr '#{link}' README.md`
   end
-    
-          timestamp.concat(fraction)
-    end
-  end
+  puts '\nDone with errors.'
+  exit(1)
 end
-
     
-          def initialize(pairs = {})
-        @pairs = pairs
-        pairs.each do |key, value|
-          raise 'invalid container key: '#{key.inspect}'' unless VALID_KEYS.include?(key)
-          send(:'#{key}=', value)
+    unless invalids.empty?
+  puts '\n\nFailed links:'
+  invalids.each do |link|
+    puts '- #{link}'
+  end
+  puts 'Done with errors.'
+  exit(1)
+end
+    
+        def process_response?(response)
+      response.body.present?
+    end
+    
+            css('code').each do |node|
+          node.inner_html = node.inner_html.squish
         end
     
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
+            %w(modals dropdowns scrollspy tabs tooltips popovers alerts buttons collapse carousel affix).each do |dom_id|
+          css('##{dom_id}-options + p + div tbody td:first-child').each do |node|
+            name = node.content.strip
+            id = node.parent['id'] = '#{dom_id}-#{name.parameterize}-option'
+            name.prepend '#{dom_id.singularize.titleize}: '
+            name << ' (option)'
+            entries << [name, id]
+          end
+    
+    module Capistrano
+  module Doctor
+    # Prints table of all Capistrano-related gems and their version numbers. If
+    # there is a newer version of a gem available, call attention to it.
+    class GemsDoctor
+      include Capistrano::Doctor::OutputHelpers
+    
+          # Override `Kernel#puts` to prepend four spaces to each line.
+      def puts(string=nil)
+        $stdout.puts(string.to_s.gsub(/^/, '    '))
       end
-      super
+    
+        def ensure_stage
+      Rake::Task.define_task(:ensure_stage) do
+        unless stage_set?
+          puts t(:stage_not_set)
+          exit 1
+        end
+      end
     end
     
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
-    end
+      desc 'Finished'
+  task :finished do
   end
+    
+        it 'sets the backend pty' do
+      expect(backend.pty).to be_truthy
+    end
