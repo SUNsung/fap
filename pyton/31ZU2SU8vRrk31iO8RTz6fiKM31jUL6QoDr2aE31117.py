@@ -1,136 +1,142 @@
 
         
-            with io.open(outfile, 'w', encoding='utf-8') as outf:
-        outf.write(out)
+            r = client.get('/hello')
+    assert r.status_code == 200
     
-    header = oldreadme[:oldreadme.index('# OPTIONS')]
-footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
+        Implements signals based on blinker if available, otherwise
+    falls silently back to a noop.
     
-    for page in itertools.count(1):
-    releases = json.loads(compat_urllib_request.urlopen(
-        'https://api.github.com/repos/rg3/youtube-dl/releases?page=%s' % page
-    ).read().decode('utf-8'))
+            for line in _dump_loader_info(loader):
+            info.append('       %s' % line)
     
-                    if ''' not in code and ''' not in code:
-                    continue
-                assertRegexpMatches(
-                    self,
-                    code,
-                    r'(?:(?:#.*?|\s*)\n)*from __future__ import (?:[a-z_]+,\s*)*unicode_literals',
-                    'unicode_literals import  missing in %s' % fn)
+        :copyright: (c) 2015 by Armin Ronacher.
+    :license: BSD, see LICENSE for more details.
+'''
+import sys
     
-            if check_executable('mplayer', ['-h']):
-            args = [
-                'mplayer', '-really-quiet', '-vo', 'null', '-vc', 'dummy',
-                '-dumpstream', '-dumpfile', tmpfilename, url]
-        elif check_executable('mpv', ['-h']):
-            args = [
-                'mpv', '-really-quiet', '--vo=null', '--stream-dump=' + tmpfilename, url]
-        else:
-            self.report_error('MMS or RTSP download detected but neither 'mplayer' nor 'mpv' could be run. Please install any.')
-            return False
+      def testWord2VecOptimized(self):
+    FLAGS.batch_size = 5
+    FLAGS.num_neg_samples = 10
+    FLAGS.epochs_to_train = 1
+    FLAGS.min_count = 0
+    word2vec_optimized.main([])
     
+    FOUR_LINES = '\n'.join([
+    '1,52.40, 2823,152,2',
+    '164, 99.80,176.60,66.20,1',
+    '176,2824, 136,3.19,0',
+    '2,177.30,66.30, 53.10,1',])
     
-class AcademicEarthCourseIE(InfoExtractor):
-    _VALID_URL = r'^https?://(?:www\.)?academicearth\.org/playlists/(?P<id>[^?#/]+)'
-    IE_NAME = 'AcademicEarth:Course'
-    _TEST = {
-        'url': 'http://academicearth.org/playlists/laws-of-nature/',
-        'info_dict': {
-            'id': 'laws-of-nature',
-            'title': 'Laws of Nature',
-            'description': 'Introduce yourself to the laws of nature with these free online college lectures from Yale, Harvard, and MIT.',
-        },
-        'playlist_count': 3,
-    }
+    import argparse
+import tensorflow as tf
     
-            duration = parse_duration(self._search_regex(
-            r'<b>Duration:</b> (?:<q itemprop='duration'>)?(\d+:\d+)', webpage, 'duration', fatal=False))
-        view_count = int_or_none(self._html_search_regex(
-            r'<b>Views:</b> (\d+)', webpage, 'view count', fatal=False))
+        Args:
+      label_lookup_path: string UID to integer node ID.
+      uid_lookup_path: string UID to human-readable string.
     
-            mvp_id = self._search_mvp_id(webpage)
+      Returns:
+    data_set: a list of length len(_buckets); data_set[n] contains a list of
+      (source, target) pairs read from the provided data files that fit
+      into the n-th bucket, i.e., such that len(source) < _buckets[n][0] and
+      len(target) < _buckets[n][1]; source and target are lists of token-ids.
+  '''
+  data_set = [[] for _ in _buckets]
+  with tf.gfile.GFile(source_path, mode='r') as source_file:
+    with tf.gfile.GFile(target_path, mode='r') as target_file:
+      source, target = source_file.readline(), target_file.readline()
+      counter = 0
+      while source and target and (not max_size or counter < max_size):
+        counter += 1
+        if counter % 100000 == 0:
+          print('  reading data line %d' % counter)
+          sys.stdout.flush()
+        source_ids = [int(x) for x in source.split()]
+        target_ids = [int(x) for x in target.split()]
+        target_ids.append(data_utils.EOS_ID)
+        for bucket_id, (source_size, target_size) in enumerate(_buckets):
+          if len(source_ids) < source_size and len(target_ids) < target_size:
+            data_set[bucket_id].append([source_ids, target_ids])
+            break
+        source, target = source_file.readline(), target_file.readline()
+  return data_set
     
-    
-@pytest.mark.functional
-def test_refuse_with_confirmation(proc, TIMEOUT):
-    refuse_with_confirmation(proc, TIMEOUT)
-    
-        for node in doctree.traverse(settingslist_node):
-        settings_list = nodes.bullet_list()
-        settings_list.extend([make_setting_element(d, app, fromdocname)
-                              for d in sorted(env.scrapy_all_settings,
-                                              key=itemgetter('setting_name'))
-                              if fromdocname != d['docname']])
-        node.replace_self(settings_list)
-    
-                tested_methods = conman.tested_methods_from_spidercls(spidercls)
-            if opts.list:
-                for method in tested_methods:
-                    contract_reqs[spidercls.name].append(method)
-            elif tested_methods:
-                self.crawler_process.crawl(spidercls)
-    
-                @wraps(cb)
-            def wrapper(response):
-                try:
-                    results.startTest(self.testcase_pre)
-                    self.pre_process(response)
-                    results.stopTest(self.testcase_pre)
-                except AssertionError:
-                    results.addFailure(self.testcase_pre, sys.exc_info())
-                except Exception:
-                    results.addError(self.testcase_pre, sys.exc_info())
-                else:
-                    results.addSuccess(self.testcase_pre)
-                finally:
-                    return list(iterate_spider_output(cb(response)))
-    
-    __all__ = ['fc2video_download']
-    
-            # cookie handler
-        ssl_context = request.HTTPSHandler(
-            context=ssl.SSLContext(ssl.PROTOCOL_TLSv1))
-        cookie_handler = request.HTTPCookieProcessor()
-        opener = request.build_opener(ssl_context, cookie_handler)
-        opener.addheaders = [
-            ('Referer', self.url),
-            ('Cookie',
-             'CloudFront-Policy=%s;CloudFront-Signature=%s;CloudFront-Key-Pair-Id=%s' % (scp, scs, sck))
-        ]
-        request.install_opener(opener)
-    
-        def contribute(self):
-        self.blackboard.common_state['problems'] += random.randint(10, 20)
-        self.blackboard.common_state['suggestions'] += random.randint(10, 20)
-        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
-        self.blackboard.common_state['progress'] += random.randint(10, 30)
-    
-        def tearDown(self):
-        self.out.close()
-        sys.stdout = self.saved_stdout
+            Args:
+            max_workers: The maximum number of threads that can be used to
+                execute the given calls.
+        '''
+        self._max_workers = max_workers
+        self._work_queue = queue.Queue()
+        self._threads = set()
+        self._shutdown = False
+        self._shutdown_lock = threading.Lock()
     
     
-class CatalogClass(object):
+class EventNotification( BaseRequest ):
+  def __init__( self, event_name, buffer_number = None, extra_data = None ):
+    super( EventNotification, self ).__init__()
+    self._event_name = event_name
+    self._buffer_number = buffer_number
+    self._extra_data = extra_data
+    self._response_future = None
+    self._cached_response = None
     
-    ### OUTPUT ###
-# request 2 handled in handler 1
-# request 5 handled in handler 1
-# request 14 handled in handler 2
-# request 22 handled in handler 3
-# request 18 handled in handler 2
-# request 3 handled in handler 1
-# end of chain, no handler for 35
-# request 27 handled in handler 3
-# request 20 handled in handler 2
-# ------------------------------
-# request 2 handled in coroutine 1
-# request 5 handled in coroutine 1
-# request 14 handled in coroutine 2
-# request 22 handled in coroutine 3
-# request 18 handled in coroutine 2
-# request 3 handled in coroutine 1
-# end of chain, no coroutine for 35
-# request 27 handled in coroutine 3
-# request 20 handled in coroutine 2
-# (0.2369999885559082, 0.16199994087219238)
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+            # When there are multiple fixit suggestions, present them as a list to
+        # the user hand have her choose which one to apply.
+        if len( self._response[ 'fixits' ] ) > 1:
+          fixit_index = vimsupport.SelectFromList(
+            'Multiple FixIt suggestions are available at this location. '
+            'Which one would you like to apply?',
+            [ fixit[ 'text' ] for fixit in self._response[ 'fixits' ] ] )
+    
+    
+def SendCompleterAvailableRequest( filetypes ):
+  request = CompleterAvailableRequest( filetypes )
+  # This is a blocking call.
+  request.Start()
+  return request.Response()
+
+    
+        def test_car_adapter_shall_make_loud_noise(self):
+        car = Car()
+        car_adapter = Adapter(car, make_noise=car.make_noise)
+        noise = car_adapter.make_noise(1)
+        expected_noise = 'vroom!'
+        self.assertEqual(noise, expected_noise)
+    
+        def test_sequential_undo(self):
+        self.command_stack = list(reversed(self.command_stack))
+        self.command_stack[0].undo()
+        output_after_first_undo = os.listdir(self.test_dir)
+        self.assertEqual(output_after_first_undo[0], 'bar.txt')
+        self.command_stack[1].undo()
+        output_after_second_undo = os.listdir(self.test_dir)
+        self.assertEqual(output_after_second_undo[0], 'foo.txt')
+    
+        def test_sales_manager_shall_talk_through_proxy_with_delay(cls):
+        cls.p.busy = 'No'
+        start_time = time()
+        cls.p.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+Sales Manager ready to talk\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
+    
+        def test_am_station_overflow_after_scan(self):
+        self.radio.scan()
+        station = self.radio.state.stations[self.radio.state.pos]
+        expected_station = '1250'
+        self.assertEqual(station, expected_station)
+    
+        def __init__(self):
+        self.time_provider = datetime.datetime
