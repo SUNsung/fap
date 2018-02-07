@@ -1,217 +1,185 @@
 
         
-        module Jekyll
-  binding.pry
-end
-
-    
-          theme.create!
-      Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
-        ' is ready for you in #{theme.path.to_s.cyan}!'
-      Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
-    end
-    # rubocop:enable Metrics/AbcSize
+          def participation_answer(user)
+    poll_participations.find_by(author_id: user.person.id)
   end
-end
-
     
-        # --
-    # Check if a file is a symlink.
-    # NOTE: This can be converted to allowing even in safe,
-    #   since we use Pathutil#in_path? now.
-    # --
-    def symlink?(entry)
-      site.safe && File.symlink?(entry) && symlink_outside_site_source?(entry)
+          def handle_confirmation_endpoint_response(endpoint)
+        _status, header, _response = endpoint.call(request.env)
+        delete_authorization_session_variables
+        redirect_to header['Location']
+      end
+    
+          rescue_from OpenIDConnect::ValidationFailed,
+                  ActiveRecord::RecordInvalid, Api::OpenidConnect::Error::InvalidSectorIdentifierUri do |e|
+        validation_fail_as_json(e)
+      end
+    
+          def fetch_public_key(o_auth_app, jwt)
+        public_key = fetch_public_key_from_json(o_auth_app.jwks, jwt)
+        if public_key.empty? && o_auth_app.jwks_uri
+          response = Faraday.get(o_auth_app.jwks_uri)
+          public_key = fetch_public_key_from_json(response.body, jwt)
+        end
+        raise Rack::OAuth2::Server::Authorize::BadRequest(:unauthorized_client) if public_key.empty?
+        public_key
+      end
+    
+        def split_colon_path(path)
+      one, two = path.split(':', 2)
+      if one && two && Sass::Util.windows? &&
+          one =~ /\A[A-Za-z]\Z/ && two =~ %r{\A[/\\]}
+        # If we're on Windows and we were passed a drive letter path,
+        # don't split on that colon.
+        one2, two = two.split(':', 2)
+        one = one + ':' + one2
+      end
+      return one, two
     end
     
-        # Gets the name of this layout.
-    attr_reader :name
+    # A logger that delays messages until they're explicitly flushed to an inner
+# logger.
+#
+# This can be installed around the current logger by calling \{#install!}, and
+# the original logger can be replaced by calling \{#uninstall!}. The log
+# messages can be flushed by calling \{#flush}.
+class Sass::Logger::Delayed < Sass::Logger::Base
+  # Installs a new delayed logger as the current Sass logger, wrapping the
+  # original logger.
+  #
+  # This can be undone by calling \{#uninstall!}.
+  #
+  # @return [Sass::Logger::Delayed] The newly-created logger.
+  def self.install!
+    logger = Sass::Logger::Delayed.new(Sass.logger)
+    Sass.logger = logger
+    logger
+  end
     
-        # Returns the current git branch - can be replaced using the environment variable `GIT_BRANCH`
-    def self.git_branch
-      return ENV['GIT_BRANCH'] if ENV['GIT_BRANCH'].to_s.length > 0 # set by Jenkins
-      s = Actions.sh('git rev-parse --abbrev-ref HEAD', log: false).chomp
-      return s.to_s.strip if s.to_s.length > 0
-      nil
-    rescue
-      nil
-    end
-    
-            command = [escaped_gradle_path, 'tasks', '--console=plain'].join(' ')
-        output = Action.sh(command, print_command: false, print_command_output: false)
-        output.split('\n').each do |line|
-          if (result = line.match(/(\w+)\s\-\s([\w\s]+)/))
-            self.tasks << GradleTask.new(title: result[1], description: result[2])
-          end
+          module ClassMethods
+        def inherited(subclass)
+          subclass.log_levels = subclass.superclass.log_levels.dup
         end
     
-            expect(result).to eq('svn info | grep Revision | egrep -o '[0-9]+'')
-        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('svn info | grep Revision | egrep -o '[0-9]+'')
-      end
-    end
+        # The type of the query (e.g. `'screen'` or `'print'`).
+    #
+    # When parsed as Sass code, this contains strings and SassScript nodes. When
+    # parsed as CSS, it contains a single string (accessible via
+    # \{#resolved_type}).
+    #
+    # @return [Array<String, Sass::Script::Tree::Node>]
+    attr_accessor :type
     
-          it 'gets the correct version number for 'TargetA'' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          get_version_number(xcodeproj: '.xcproject', target: 'TargetA')
-        end').runner.execute(:test)
-        expect(result).to eq('4.3.2')
-      end
-    
-          it 'properly removes new lines of the build number' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          increment_build_number(build_number: '24\n', xcodeproj: '.xcproject')
-        end').runner.execute(:test)
-    
-      def test_enable
-    @opt.parse!(%w'--enable-foo')
-    assert_equal(true, @foo)
-    @opt.parse!(%w'--enable-bar')
-    assert_equal(true, @bar)
-  end
-    
-      def test_permute
-    assert_equal(%w'', no_error {@opt.permute!(%w'')})
-    assert_equal(self.class, @flag)
-    assert_equal(%w'foo bar', no_error {@opt.permute!(%w'foo bar')})
-    assert_equal(self.class, @flag)
-    assert_equal(%w'- foo bar', no_error {@opt.permute!(%w'- foo bar')})
-    assert_equal(self.class, @flag)
-    assert_equal(%w'foo bar', no_error {@opt.permute!(%w'-- foo bar')})
-    assert_equal(self.class, @flag)
-    assert_equal(%w'foo - bar', no_error {@opt.permute!(%w'foo - bar')})
-    assert_equal(self.class, @flag)
-    assert_equal(%w'foo bar', no_error {@opt.permute!(%w'foo -- bar')})
-    assert_equal(self.class, @flag)
-    assert_equal(%w'foo --help bar', no_error {@opt.permute!(%w'foo -- --help bar')})
-    assert_equal(self.class, @flag)
-  end
-    
-      #
-  # Returns a string which represents the time as date-time defined by RFC 2822:
-  #
-  #   day-of-week, DD month-name CCYY hh:mm:ss zone
-  #
-  # where zone is [+-]hhmm.
-  #
-  # If +self+ is a UTC time, -0000 is used as zone.
-  #
-  # You must require 'time' to use this method.
-  #
-  def rfc2822
-    sprintf('%s, %02d %s %0*d %02d:%02d:%02d ',
-      RFC2822_DAY_NAME[wday],
-      day, RFC2822_MONTH_NAME[mon-1], year < 0 ? 5 : 4, year,
-      hour, min, sec) <<
-    if utc?
-      '-0000'
-    else
-      off = utc_offset
-      sign = off < 0 ? '-' : '+'
-      sprintf('%s%02d%02d', sign, *(off.abs / 60).divmod(60))
-    end
-  end
-  alias rfc822 rfc2822
-    
-        def split_arguments(arguments, sep=',')
-      return [] if arguments.strip == 'void'
-      arguments.scan(/([\w\*\s]+\(\*\w*\)\(.*?\)|[\w\*\s\[\]]+)(?:#{sep}\s*|$)/).collect {|m| m[0]}
-    end
-    
-      self.each_test do |test, i|
-    define_method('test_#{i}') do ||
-      Tempfile.create('iotest.dat') do |fh|
-        fh.print test[1]
-        fh.rewind
-        assert_equal(test[2], fh.scanf(test[0]))
-      end
-    end
-  end
-end
-
-    
-          def def_csv_accessor(klass, full_name)
-        klass.def_csv_element(full_name)
-      end
-    
-      def test_font_helper_without_suffix
-    assert_match %r(url\(['']?/assets/.*eot['']?\)), @css
-  end
-    
-          File.open('bower.json', 'w') do |f|
-        f.puts JSON.pretty_generate(spec)
-      end
-    end
-  end
-end
-
-    
-      def collection_presenter
-    page = ActivityPub::CollectionPresenter.new(
-      id: account_following_index_url(@account, page: params.fetch(:page, 1)),
-      type: :ordered,
-      size: @account.following_count,
-      items: @follows.map { |f| ActivityPub::TagManager.instance.uri_for(f.target_account) },
-      part_of: account_following_index_url(@account),
-      next: page_url(@follows.next_page),
-      prev: page_url(@follows.prev_page)
-    )
-    if params[:page].present?
-      page
-    else
-      ActivityPub::CollectionPresenter.new(
-        id: account_following_index_url(@account),
-        type: :ordered,
-        size: @account.following_count,
-        first: page
-      )
-    end
-  end
-end
-
-    
-      class MediaAttachmentSerializer < ActiveModel::Serializer
-    include RoutingHelper
-    
-          out =
-        Sass::Util.silence_sass_warnings do
-          if @options[:from] == :css
-            require 'sass/css'
-            Sass::CSS.new(read(input), @options[:for_tree]).render(@options[:to])
+            def run
+          if @pod_name.nil?
+            # Note: at that point, @wipe_all is always true (thanks to `validate!`)
+            # Remove all
+            clear_cache
           else
-            if input_path
-              Sass::Engine.for_file(input_path, @options[:for_engine])
+            # Remove only cache for this pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            elsif cache_descriptors.count > 1 && !@wipe_all
+              # Ask which to remove
+              choices = cache_descriptors.map { |c| '#{@pod_name} v#{c[:version]} (#{pod_type(c)})' }
+              index = UI.choose_from_array(choices, 'Which pod cache do you want to remove?')
+              remove_caches([cache_descriptors[index]])
             else
-              Sass::Engine.new(read(input), @options[:for_engine])
-            end.to_tree.send('to_#{@options[:to]}', @options[:for_tree])
+              # Remove all found cache of this pod
+              remove_caches(cache_descriptors)
+            end
           end
         end
     
-          # This is optional for backwards-compatibility with Sass 3.3, which didn't
-      # enable sourcemaps by default and instead used '--sourcemap' to do so.
-      opts.on(:OPTIONAL, '--sourcemap=TYPE',
-          'How to link generated output to the source files.',
-          '  auto (default): relative paths where possible, file URIs elsewhere',
-          '  file: always absolute file URIs',
-          '  inline: include the source text in the sourcemap',
-          '  none: no sourcemaps') do |type|
-        if type && !%w(auto file inline none).include?(type)
-          $stderr.puts 'Unknown sourcemap type #{type}.\n\n'
-          $stderr.puts opts
-          exit
-        elsif type.nil?
-          Sass::Util.sass_warn <<MESSAGE.rstrip
-DEPRECATION WARNING: Passing --sourcemap without a value is deprecated.
-Sourcemaps are now generated by default, so this flag has no effect.
-MESSAGE
+          # @param  [[Xcodeproj::PBXTarget]] targets
+      #         An array which always has a target as its first item
+      #         and may optionally contain a second target as its test target
+      #
+      # @return [String] the text for the target module
+      #
+      def template_contents(path, prefix, fallback)
+        if path.exist?
+          path.read.chomp.lines.map { |line| '#{prefix}#{line}' }.join('\n')
+        else
+          '#{prefix}# #{fallback}'
+        end
+      end
+    end
+  end
+end
+
+    
+        # Gives a Geometry representing the given height and width
+    def initialize(width = nil, height = nil, modifier = nil)
+      if width.is_a?(Hash)
+        options = width
+        @height = options[:height].to_f
+        @width = options[:width].to_f
+        @modifier = options[:modifier]
+        @orientation = options[:orientation].to_i
+      else
+        @height = height.to_f
+        @width  = width.to_f
+        @modifier = modifier
+      end
+    end
+    
+        def add_required_validations
+      options = Paperclip::Attachment.default_options.deep_merge(@options)
+      if options[:validate_media_type] != false
+        name = @name
+        @klass.validates_media_type_spoof_detection name,
+          :if => ->(instance){ instance.send(name).dirty? }
+      end
+    end
+    
+            def matches? subject
+          @subject = subject
+          @subject = @subject.new if @subject.class == Class
+          lower_than_low? && higher_than_low? && lower_than_high? && higher_than_high?
         end
     
-        # Starts the read-eval-print loop.
-    def run
-      environment = Environment.new
-      @line = 0
-      loop do
-        @line += 1
-        unless (text = Readline.readline('>> '))
-          puts
-          return
+    
+    {
+    {  # Returns hash with styles for all classes using Paperclip.
+  # Unfortunately current version does not work with lambda styles:(
+  #   {
+  #     :User => {:avatar => [:small, :big]},
+  #     :Book => {
+  #       :cover => [:thumb, :croppable]},
+  #       :sample => [:thumb, :big]},
+  #     }
+  #   }
+  def self.current_attachments_styles
+    Hash.new.tap do |current_styles|
+      Paperclip::AttachmentRegistry.each_definition do |klass, attachment_name, attachment_attributes|
+        # TODO: is it even possible to take into account Procs?
+        next if attachment_attributes[:styles].kind_of?(Proc)
+        attachment_attributes[:styles].try(:keys).try(:each) do |style_name|
+          klass_sym = klass.to_s.to_sym
+          current_styles[klass_sym] ||= Hash.new
+          current_styles[klass_sym][attachment_name.to_sym] ||= Array.new
+          current_styles[klass_sym][attachment_name.to_sym] << style_name.to_sym
+          current_styles[klass_sym][attachment_name.to_sym].map!(&:to_s).sort!.map!(&:to_sym).uniq!
         end
+      end
+    end
+  end
+  private_class_method :current_attachments_styles
+    
+            required = directories.map do |directory|
+          pathname = File.expand_path(Rails.root.join(directory, filename))
+          file_exists = File.exist?(pathname)
+          require pathname if file_exists
+          file_exists
+        end
+    
+      context 'called with two sizes' do
+    it 'applies to alternating sides' do
+      rule = 'margin: 2px 3px'
+    
+      context 'expands plain text inputs' do
+    it 'finds selectors' do
+      list = @inputs_list.join(', ')
+      ruleset = 'content: #{list};'
