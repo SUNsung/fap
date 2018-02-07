@@ -1,93 +1,92 @@
-import tensorflow as tf
-    
-    # `tf.parse_csv` sets the types of the outputs to match the examples given in
-#     the `record_defaults` argument.
-CSV_TYPES = [[0.0], [0.0], [0.0], [0.0], [0]]
-    
-    
-if __name__ == '__main__':
-  parser = argparse.ArgumentParser()
-  # classify_image_graph_def.pb:
-  #   Binary representation of the GraphDef protocol buffer.
-  # imagenet_synset_to_human_label_map.txt:
-  #   Map from synset ID to a human readable string.
-  # imagenet_2012_challenge_label_map_proto.pbtxt:
-  #   Text representation of a protocol buffer mapping a label to synset ID.
-  parser.add_argument(
-      '--model_dir',
-      type=str,
-      default='/tmp/imagenet',
-      help='''\
-      Path to classify_image_graph_def.pb,
-      imagenet_synset_to_human_label_map.txt, and
-      imagenet_2012_challenge_label_map_proto.pbtxt.\
-      '''
-  )
-  parser.add_argument(
-      '--image_file',
-      type=str,
-      default='',
-      help='Absolute path to image file.'
-  )
-  parser.add_argument(
-      '--num_top_predictions',
-      type=int,
-      default=5,
-      help='Display this many predictions.'
-  )
-  FLAGS, unparsed = parser.parse_known_args()
-  tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
 
+        
+            with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(out)
     
-    py_test(
-    name = 'translate_test',
-    size = 'medium',
-    srcs = [
-        'translate.py',
-    ],
-    args = [
-        '--self_test=True',
-    ],
-    main = 'translate.py',
-    srcs_version = 'PY2AND3',
-    deps = [
-        ':data_utils',
-        ':seq2seq_model',
-        '//tensorflow:tensorflow_py',
-    ],
-)
+    header = oldreadme[:oldreadme.index('# OPTIONS')]
+footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
+    
+    for page in itertools.count(1):
+    releases = json.loads(compat_urllib_request.urlopen(
+        'https://api.github.com/repos/rg3/youtube-dl/releases?page=%s' % page
+    ).read().decode('utf-8'))
+    
+                    if ''' not in code and ''' not in code:
+                    continue
+                assertRegexpMatches(
+                    self,
+                    code,
+                    r'(?:(?:#.*?|\s*)\n)*from __future__ import (?:[a-z_]+,\s*)*unicode_literals',
+                    'unicode_literals import  missing in %s' % fn)
+    
+            if check_executable('mplayer', ['-h']):
+            args = [
+                'mplayer', '-really-quiet', '-vo', 'null', '-vc', 'dummy',
+                '-dumpstream', '-dumpfile', tmpfilename, url]
+        elif check_executable('mpv', ['-h']):
+            args = [
+                'mpv', '-really-quiet', '--vo=null', '--stream-dump=' + tmpfilename, url]
+        else:
+            self.report_error('MMS or RTSP download detected but neither 'mplayer' nor 'mpv' could be run. Please install any.')
+            return False
     
     
-if __name__ == '__main__':
-  parser = argparse.ArgumentParser()
-  parser.add_argument(
-      '--use_fp16',
-      default=False,
-      help='Use half floats instead of full floats if True.',
-      action='store_true')
-  parser.add_argument(
-      '--self_test',
-      default=False,
-      action='store_true',
-      help='True if running a self test.')
+class AcademicEarthCourseIE(InfoExtractor):
+    _VALID_URL = r'^https?://(?:www\.)?academicearth\.org/playlists/(?P<id>[^?#/]+)'
+    IE_NAME = 'AcademicEarth:Course'
+    _TEST = {
+        'url': 'http://academicearth.org/playlists/laws-of-nature/',
+        'info_dict': {
+            'id': 'laws-of-nature',
+            'title': 'Laws of Nature',
+            'description': 'Introduce yourself to the laws of nature with these free online college lectures from Yale, Harvard, and MIT.',
+        },
+        'playlist_count': 3,
+    }
     
-        # A bucket scale is a list of increasing numbers from 0 to 1 that we'll use
-    # to select a bucket. Length of [scale[i], scale[i+1]] is proportional to
-    # the size if i-th training bucket, as used later.
-    train_buckets_scale = [sum(train_bucket_sizes[:i + 1]) / train_total_size
-                           for i in xrange(len(train_bucket_sizes))]
+            duration = parse_duration(self._search_regex(
+            r'<b>Duration:</b> (?:<q itemprop='duration'>)?(\d+:\d+)', webpage, 'duration', fatal=False))
+        view_count = int_or_none(self._html_search_regex(
+            r'<b>Views:</b> (\d+)', webpage, 'view count', fatal=False))
     
-    Forward-backward pass:
-Run on Tesla K40c: 480 +/- 48 ms / batch
-Run on Titan X:    244 +/- 30 ms / batch
-'''
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+            mvp_id = self._search_mvp_id(webpage)
     
-        entry_points = {'console_scripts': proj_info['console_scripts']}
-)
-
+    
+@pytest.mark.functional
+def test_refuse_with_confirmation(proc, TIMEOUT):
+    refuse_with_confirmation(proc, TIMEOUT)
+    
+        for node in doctree.traverse(settingslist_node):
+        settings_list = nodes.bullet_list()
+        settings_list.extend([make_setting_element(d, app, fromdocname)
+                              for d in sorted(env.scrapy_all_settings,
+                                              key=itemgetter('setting_name'))
+                              if fromdocname != d['docname']])
+        node.replace_self(settings_list)
+    
+                tested_methods = conman.tested_methods_from_spidercls(spidercls)
+            if opts.list:
+                for method in tested_methods:
+                    contract_reqs[spidercls.name].append(method)
+            elif tested_methods:
+                self.crawler_process.crawl(spidercls)
+    
+                @wraps(cb)
+            def wrapper(response):
+                try:
+                    results.startTest(self.testcase_pre)
+                    self.pre_process(response)
+                    results.stopTest(self.testcase_pre)
+                except AssertionError:
+                    results.addFailure(self.testcase_pre, sys.exc_info())
+                except Exception:
+                    results.addError(self.testcase_pre, sys.exc_info())
+                else:
+                    results.addSuccess(self.testcase_pre)
+                finally:
+                    return list(iterate_spider_output(cb(response)))
+    
+    __all__ = ['fc2video_download']
     
             # cookie handler
         ssl_context = request.HTTPSHandler(
@@ -101,63 +100,37 @@ from __future__ import print_function
         ]
         request.install_opener(opener)
     
-    def kugou_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    if url.lower().find('5sing')!=-1:
-        #for 5sing.kugou.com
-        html=get_html(url)
-        ticket=r1(r''ticket':\s*'(.*)'',html)
-        j=loads(str(b64decode(ticket),encoding='utf-8'))
-        url=j['file']
-        title=j['songName']
-        songtype, ext, size = url_info(url)
-        print_info(site_info, title, songtype, size)
-        if not info_only:
-            download_urls([url], title, ext, size, output_dir, merge=merge)
-    else:
-        #for the www.kugou.com/
-        return kugou_download_playlist(url, output_dir=output_dir, merge=merge, info_only=info_only)
-        # raise NotImplementedError(url)       
+        def contribute(self):
+        self.blackboard.common_state['problems'] += random.randint(10, 20)
+        self.blackboard.common_state['suggestions'] += random.randint(10, 20)
+        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
+        self.blackboard.common_state['progress'] += random.randint(10, 30)
     
-    from .tudou import tudou_download_by_id
-from .youku import youku_download_by_vid
-from xml.dom.minidom import parseString
-    
-        def test_make_entry(self):
-        equal = self.assertEqual
-        self.dialog.row = 0
-        self.dialog.top = self.root
-        entry, label = self.dialog.make_entry('Test:', 'hello')
-        equal(label['text'], 'Test:')
-    
-        def entry_ok(self):
-        'Return apparently valid (name, path) or None'
-        self.entry_error['text'] = ''
-        self.path_error['text'] = ''
-        name = self.item_ok()
-        path = self.path_ok()
-        return None if name is None or path is None else (name, path)
-    
-        print('n = %d\n' % n)
-    
-        def get_file(self, key):
-        '''Return a file-like representation or raise a KeyError.'''
-        f = open(os.path.join(self._path, self._lookup(key)), 'rb')
-        return _ProxyFile(f)
+        def tearDown(self):
+        self.out.close()
+        sys.stdout = self.saved_stdout
     
     
-def _name_xform(name):
-    return name.lower().replace('-', '_')
+class CatalogClass(object):
     
-    int main( int argc, char **argv)
-{
-    PyImport_FrozenModules = _PyImport_FrozenModules;
-    return PythonService_main(argc, argv);
-}
-'''
-    
-            pyop_attr_dict = self.get_attr_dict()
-        if pyop_attr_dict:
-            attr_dict = pyop_attr_dict.proxyval(visited)
-        else:
-            attr_dict = {}
-        tp_name = self.safe_tp_name()
+    ### OUTPUT ###
+# request 2 handled in handler 1
+# request 5 handled in handler 1
+# request 14 handled in handler 2
+# request 22 handled in handler 3
+# request 18 handled in handler 2
+# request 3 handled in handler 1
+# end of chain, no handler for 35
+# request 27 handled in handler 3
+# request 20 handled in handler 2
+# ------------------------------
+# request 2 handled in coroutine 1
+# request 5 handled in coroutine 1
+# request 14 handled in coroutine 2
+# request 22 handled in coroutine 3
+# request 18 handled in coroutine 2
+# request 3 handled in coroutine 1
+# end of chain, no coroutine for 35
+# request 27 handled in coroutine 3
+# request 20 handled in coroutine 2
+# (0.2369999885559082, 0.16199994087219238)
