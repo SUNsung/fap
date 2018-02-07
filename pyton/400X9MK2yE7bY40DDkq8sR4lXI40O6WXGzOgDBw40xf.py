@@ -1,126 +1,53 @@
 
         
-          def testPtbProducer(self):
-    raw_data = [4, 3, 2, 1, 0, 5, 6, 1, 1, 1, 1, 0, 3, 4, 1]
-    batch_size = 3
-    num_steps = 2
-    x, y = reader.ptb_producer(raw_data, batch_size, num_steps)
-    with self.test_session() as session:
-      coord = tf.train.Coordinator()
-      tf.train.start_queue_runners(session, coord=coord)
-      try:
-        xval, yval = session.run([x, y])
-        self.assertAllEqual(xval, [[4, 3], [5, 6], [1, 0]])
-        self.assertAllEqual(yval, [[3, 2], [6, 1], [0, 3]])
-        xval, yval = session.run([x, y])
-        self.assertAllEqual(xval, [[2, 1], [1, 1], [3, 4]])
-        self.assertAllEqual(yval, [[1, 0], [1, 1], [4, 1]])
-      finally:
-        coord.request_stop()
-        coord.join()
-    
-    import iris_data
-    
-    
-if __name__ == '__main__':
-    tf.logging.set_verbosity(tf.logging.INFO)
-    tf.app.run(main)
+            @property
+    def body(self):
+        body = self._orig.body
+        if isinstance(body, str):
+            # Happens with JSON/form request data parsed from the command line.
+            body = body.encode('utf8')
+        return body or b''
 
     
-    py_binary(
-    name = 'cifar10_train',
-    srcs = [
-        'cifar10_train.py',
-    ],
-    srcs_version = 'PY2AND3',
-    visibility = ['//tensorflow:__subpackages__'],
-    deps = [
-        ':cifar10',
-    ],
+    
+@mock.patch('httpie.core.get_response')
+def test_timeout(get_response):
+    def error(msg, *args, **kwargs):
+        global error_msg
+        error_msg = msg % args
+    
+                    if not speed:
+                    eta = '-:--:--'
+                else:
+                    s = int((self.status.total_size - downloaded) / speed)
+                    h, s = divmod(s, 60 * 60)
+                    m, s = divmod(s, 60)
+                    eta = '{0}:{1:0>2}:{2:0>2}'.format(h, m, s)
+    
+        @staticmethod
+    def make_header(username, password):
+        credentials = u'%s:%s' % (username, password)
+        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
+        return 'Basic %s' % token
+    
+        '''
 )
+troubleshooting.add_argument(
+    '--default-scheme',
+    default='http',
+    help='''
+    The default scheme to use if not specified in the URL.
     
+    import pytest
+import pytest_httpbin.certs
+from requests.exceptions import SSLError
     
-def get_wmt_enfr_dev_set(directory):
-  '''Download the WMT en-fr training corpus to directory unless it's there.'''
-  dev_name = 'newstest2013'
-  dev_path = os.path.join(directory, dev_name)
-  if not (gfile.Exists(dev_path + '.fr') and gfile.Exists(dev_path + '.en')):
-    dev_file = maybe_download(directory, 'dev-v2.tgz', _WMT_ENFR_DEV_URL)
-    print('Extracting tgz file %s' % dev_file)
-    with tarfile.open(dev_file, 'r:gz') as dev_tar:
-      fr_dev_file = dev_tar.getmember('dev/' + dev_name + '.fr')
-      en_dev_file = dev_tar.getmember('dev/' + dev_name + '.en')
-      fr_dev_file.name = dev_name + '.fr'  # Extract without 'dev/' prefix.
-      en_dev_file.name = dev_name + '.en'
-      dev_tar.extract(fr_dev_file, directory)
-      dev_tar.extract(en_dev_file, directory)
-  return dev_path
+        def live_config_iteritems(self):
+        live = self.stacked_proxy_safe_get(g, 'live_config', {})
+        return live.iteritems()
     
-        # Output feed: depends on whether we do a backward step or not.
-    if not forward_only:
-      output_feed = [self.updates[bucket_id],  # Update Op that does SGD.
-                     self.gradient_norms[bucket_id],  # Gradient norm.
-                     self.losses[bucket_id]]  # Loss for this batch.
-    else:
-      output_feed = [self.losses[bucket_id]]  # Loss for this batch.
-      for l in xrange(decoder_size):  # Output logits.
-        output_feed.append(self.outputs[bucket_id][l])
+    api('trophy', TrophyJsonTemplate)
+api('rules', RulesJsonTemplate)
     
-      # conv4
-  with tf.name_scope('conv4') as scope:
-    kernel = tf.Variable(tf.truncated_normal([3, 3, 384, 256],
-                                             dtype=tf.float32,
-                                             stddev=1e-1), name='weights')
-    conv = tf.nn.conv2d(conv3, kernel, [1, 1, 1, 1], padding='SAME')
-    biases = tf.Variable(tf.constant(0.0, shape=[256], dtype=tf.float32),
-                         trainable=True, name='biases')
-    bias = tf.nn.bias_add(conv, biases)
-    conv4 = tf.nn.relu(bias, name=scope)
-    parameters += [kernel, biases]
-    print_activations(conv4)
-    
-            # put all lines in the file into a Python list
-        strings = f.readlines()
-        
-        # above line leaves trailing newline characters; strip them out
-        strings = [x.strip(u'\n') for x in strings]
-        
-        # remove empty-lines and comments
-        strings = [x for x in strings if x and not x.startswith(u'#')]
-        
-        # insert empty string since all are being removed
-        strings.insert(0, u'')
-    
-        Args:
-        executor_reference: A weakref.ref to the ProcessPoolExecutor that owns
-            this thread. Used to determine if the ProcessPoolExecutor has been
-            garbage collected and that this function can exit.
-        process: A list of the multiprocessing.Process instances used as
-            workers.
-        pending_work_items: A dict mapping work ids to _WorkItems e.g.
-            {5: <_WorkItem...>, 6: <_WorkItem...>, ...}
-        work_ids_queue: A queue.Queue of work ids e.g. Queue([5, 6, ...]).
-        call_queue: A multiprocessing.Queue that will be filled with _CallItems
-            derived from _WorkItems for processing by the process workers.
-        result_queue: A multiprocessing.Queue of _ResultItems generated by the
-            process workers.
-    '''
-    nb_shutdown_processes = [0]
-    def shutdown_one_process():
-        '''Tell a worker to terminate, which will in turn wake us again'''
-        call_queue.put(None)
-        nb_shutdown_processes[0] += 1
-    while True:
-        _add_call_item_to_queue(pending_work_items,
-                                work_ids_queue,
-                                call_queue)
-    
-    try:
-    from urllib2 import urlopen
-except ImportError:
-    from urllib.request import urlopen
-    
-            file_handle = msvcrt.get_osfhandle( file_object.fileno() )
-        windll.kernel32.SetHandleInformation( file_handle,
-                                              HANDLE_FLAG_INHERIT,
-                                              0 )
+    import json
+import os
