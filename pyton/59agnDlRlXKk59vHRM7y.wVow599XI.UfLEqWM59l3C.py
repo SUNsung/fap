@@ -1,236 +1,164 @@
 
         
-            # not a test, but looks like a test
-    'scrapy/utils/testsite.py',
+        DEFAULT_REDIRECT_LIMIT = 30
+CONTENT_CHUNK_SIZE = 10 * 1024
+ITER_CHUNK_SIZE = 512
     
-        def process_options(self, args, opts):
-        ScrapyCommand.process_options(self, args, opts)
+            assert server.handler_results[0] == data
+    
+    import sys
+    
+    
+class InvalidHeader(RequestException, ValueError):
+    '''The header value provided was somehow invalid.'''
+    
+        scikit_results = []
+    glmnet_results = []
+    n = 20
+    step = 500
+    n_features = 1000
+    n_informative = n_features / 10
+    n_test_samples = 1000
+    for i in range(1, n + 1):
+        print('==================')
+        print('Iteration %s of %s' % (i, n))
+        print('==================')
+    
+        for ns in n_samples:
+        for nf in n_features:
+            it += 1
+            print('==================')
+            print('Iteration %s of %s' % (it, max(len(n_samples),
+                                          len(n_features))))
+            print('==================')
+            n_informative = nf // 10
+            X, Y, coef_ = make_regression(n_samples=ns, n_features=nf,
+                                          n_informative=n_informative,
+                                          noise=0.1, coef=True)
+    
+                short_text_filename = os.path.join(short_text_lang_folder,
+                                               '%s_%04d.txt' % (lang, j))
+            print('Writing %s' % short_text_filename)
+            open(short_text_filename, 'wb').write(
+                small_content.encode('utf-8', 'ignore'))
+            j += 1
+            if j >= 1000:
+                break
+    
+        print('Decompressing %s' % ARCHIVE_NAME)
+    with closing(tarfile.open(ARCHIVE_NAME, 'r:gz')) as archive:
+        archive.extractall(path='.')
+    os.remove(ARCHIVE_NAME)
+
+    
+            C = float(self.complexity.get())
+        gamma = float(self.gamma.get())
+        coef0 = float(self.coef0.get())
+        degree = int(self.degree.get())
+        kernel_map = {0: 'linear', 1: 'rbf', 2: 'poly'}
+        if len(np.unique(y)) == 1:
+            clf = svm.OneClassSVM(kernel=kernel_map[self.kernel.get()],
+                                  gamma=gamma, coef0=coef0, degree=degree)
+            clf.fit(X)
+        else:
+            clf = svm.SVC(kernel=kernel_map[self.kernel.get()], C=C,
+                          gamma=gamma, coef0=coef0, degree=degree)
+            clf.fit(X, y)
+        if hasattr(clf, 'score'):
+            print('Accuracy:', clf.score(X, y) * 100)
+        X1, X2, Z = self.decision_surface(clf)
+        self.model.clf = clf
+        self.model.set_surface((X1, X2, Z))
+        self.model.surface_type = self.surface_type.get()
+        self.fitted = True
+        self.model.changed('surface')
+    
+    '''
+print(__doc__)
+    
+    # Plot changes in predicted probabilities via arrows
+plt.figure(0)
+colors = ['r', 'g', 'b']
+for i in range(clf_probs.shape[0]):
+    plt.arrow(clf_probs[i, 0], clf_probs[i, 1],
+              sig_clf_probs[i, 0] - clf_probs[i, 0],
+              sig_clf_probs[i, 1] - clf_probs[i, 1],
+              color=colors[y_test[i]], head_width=1e-2)
+    
+    import numpy as np
+import matplotlib.pyplot as plt
+    
+    # Max number of base BASE digits to use in test cases.  Doubling
+# this will more than double the runtime.
+MAXDIGITS = 15
+    
+            d = deque('abc', maxlen=5)
+        self.assertEqual(d * -5, deque())
+        self.assertEqual(d * 0, deque())
+        self.assertEqual(d * 1, deque('abc'))
+        self.assertEqual(d * 2, deque('bcabc'))
+        self.assertEqual(d * 30, deque('bcabc'))
+    
+        @classmethod
+    def zonelist(cls, zonedir='/usr/share/zoneinfo'):
+        zones = []
+        for root, _, files in os.walk(zonedir):
+            for f in files:
+                p = os.path.join(root, f)
+                with open(p, 'rb') as o:
+                    magic =  o.read(4)
+                if magic == b'TZif':
+                    zones.append(p[len(zonedir) + 1:])
+        return zones
+    
+    class Chunk:
+    def __init__(self, file, align=True, bigendian=True, inclheader=False):
+        import struct
+        self.closed = False
+        self.align = align      # whether to align to word (2-byte) boundaries
+        if bigendian:
+            strflag = '>'
+        else:
+            strflag = '<'
+        self.file = file
+        self.chunkname = file.read(4)
+        if len(self.chunkname) < 4:
+            raise EOFError
         try:
-            opts.spargs = arglist_to_dict(opts.spargs)
-        except ValueError:
-            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
-        if opts.output:
-            if opts.output == '-':
-                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
+            self.chunksize = struct.unpack_from(strflag+'L', file.read(4))[0]
+        except struct.error:
+            raise EOFError from None
+        if inclheader:
+            self.chunksize = self.chunksize - 8 # subtract header
+        self.size_read = 0
+        try:
+            self.offset = self.file.tell()
+        except (AttributeError, OSError):
+            self.seekable = False
+        else:
+            self.seekable = True
+    
+    import re
+    
+    
+class RangeTest(unittest.TestCase):
+    def assert_iterators_equal(self, xs, ys, test_id, limit=None):
+        # check that an iterator xs matches the expected results ys,
+        # up to a given limit.
+        if limit is not None:
+            xs = itertools.islice(xs, limit)
+            ys = itertools.islice(ys, limit)
+        sentinel = object()
+        pairs = itertools.zip_longest(xs, ys, fillvalue=sentinel)
+        for i, (x, y) in enumerate(pairs):
+            if x == y:
+                continue
+            elif x == sentinel:
+                self.fail('{}: iterator ended unexpectedly '
+                          'at position {}; expected {}'.format(test_id, i, y))
+            elif y == sentinel:
+                self.fail('{}: unexpected excess element {} at '
+                          'position {}'.format(test_id, x, i))
             else:
-                self.settings.set('FEED_URI', opts.output, priority='cmdline')
-            feed_exporters = without_none_values(
-                self.settings.getwithbase('FEED_EXPORTERS'))
-            valid_output_formats = feed_exporters.keys()
-            if not opts.output_format:
-                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
-            if opts.output_format not in valid_output_formats:
-                raise UsageError('Unrecognized output format '%s', set one'
-                                 ' using the '-t' switch or as a file extension'
-                                 ' from the supported list %s' % (opts.output_format,
-                                                                  tuple(valid_output_formats)))
-            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
-    
-    
-def downgrade():
-  with op.batch_alter_table('tables') as batch_op:
-    batch_op.drop_constraint('user_id', type_='foreignkey')
-    batch_op.drop_column('user_id')
-
-    
-    Revision ID: 27ae655e4247
-Revises: d8bc074f7aad
-Create Date: 2016-06-27 08:43:52.592242
-    
-    # revision identifiers, used by Alembic.
-revision = '43df8de3a5f4'
-down_revision = '7dbf98566af7'
-    
-    
-def upgrade():
-    ### commands auto generated by Alembic - please adjust! ###
-    op.create_table('clusters',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('cluster_name', sa.String(length=250), nullable=True),
-    sa.Column('coordinator_host', sa.String(length=255), nullable=True),
-    sa.Column('coordinator_port', sa.Integer(), nullable=True),
-    sa.Column('coordinator_endpoint', sa.String(length=255), nullable=True),
-    sa.Column('broker_host', sa.String(length=255), nullable=True),
-    sa.Column('broker_port', sa.Integer(), nullable=True),
-    sa.Column('broker_endpoint', sa.String(length=255), nullable=True),
-    sa.Column('metadata_last_refreshed', sa.DateTime(), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('cluster_name')
-    )
-    op.create_table('dashboards',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('dashboard_title', sa.String(length=500), nullable=True),
-    sa.Column('position_json', sa.Text(), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('dbs',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('database_name', sa.String(length=250), nullable=True),
-    sa.Column('sqlalchemy_uri', sa.String(length=1024), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('database_name')
-    )
-    op.create_table('datasources',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('datasource_name', sa.String(length=255), nullable=True),
-    sa.Column('is_featured', sa.Boolean(), nullable=True),
-    sa.Column('is_hidden', sa.Boolean(), nullable=True),
-    sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('default_endpoint', sa.Text(), nullable=True),
-    sa.Column('user_id', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('cluster_name', sa.String(length=250), sa.ForeignKey('clusters.cluster_name'), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('datasource_name')
-    )
-    op.create_table('tables',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('table_name', sa.String(length=250), nullable=True),
-    sa.Column('main_dttm_col', sa.String(length=250), nullable=True),
-    sa.Column('default_endpoint', sa.Text(), nullable=True),
-    sa.Column('database_id', sa.Integer(), sa.ForeignKey('dbs.id'), nullable=False),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('table_name')
-    )
-    op.create_table('columns',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('datasource_name', sa.String(length=255), nullable=True),
-    sa.Column('column_name', sa.String(length=255), nullable=True),
-    sa.Column('is_active', sa.Boolean(), nullable=True),
-    sa.Column('type', sa.String(length=32), nullable=True),
-    sa.Column('groupby', sa.Boolean(), nullable=True),
-    sa.Column('count_distinct', sa.Boolean(), nullable=True),
-    sa.Column('sum', sa.Boolean(), nullable=True),
-    sa.Column('max', sa.Boolean(), nullable=True),
-    sa.Column('min', sa.Boolean(), nullable=True),
-    sa.Column('filterable', sa.Boolean(), nullable=True),
-    sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('metrics',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('metric_name', sa.String(length=512), nullable=True),
-    sa.Column('verbose_name', sa.String(length=1024), nullable=True),
-    sa.Column('metric_type', sa.String(length=32), nullable=True),
-    sa.Column('datasource_name', sa.String(length=255), sa.ForeignKey('datasources.datasource_name'), nullable=True),
-    sa.Column('json', sa.Text(), nullable=True),
-    sa.Column('description', sa.Text(), nullable=True),
-    sa.ForeignKeyConstraint(['datasource_name'], ['datasources.datasource_name'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('slices',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('slice_name', sa.String(length=250), nullable=True),
-    sa.Column('druid_datasource_id', sa.Integer(), sa.ForeignKey('datasources.id'), nullable=True),
-    sa.Column('table_id', sa.Integer(), sa.ForeignKey('tables.id'), nullable=True),
-    sa.Column('datasource_type', sa.String(length=200), nullable=True),
-    sa.Column('datasource_name', sa.String(length=2000), nullable=True),
-    sa.Column('viz_type', sa.String(length=250), nullable=True),
-    sa.Column('params', sa.Text(), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('sql_metrics',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('metric_name', sa.String(length=512), nullable=True),
-    sa.Column('verbose_name', sa.String(length=1024), nullable=True),
-    sa.Column('metric_type', sa.String(length=32), nullable=True),
-    sa.Column('table_id', sa.Integer(), sa.ForeignKey('tables.id'), nullable=True),
-    sa.Column('expression', sa.Text(), nullable=True),
-    sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('table_columns',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('table_id', sa.Integer(), sa.ForeignKey('tables.id'), nullable=True),
-    sa.Column('column_name', sa.String(length=255), nullable=True),
-    sa.Column('is_dttm', sa.Boolean(), nullable=True),
-    sa.Column('is_active', sa.Boolean(), nullable=True),
-    sa.Column('type', sa.String(length=32), nullable=True),
-    sa.Column('groupby', sa.Boolean(), nullable=True),
-    sa.Column('count_distinct', sa.Boolean(), nullable=True),
-    sa.Column('sum', sa.Boolean(), nullable=True),
-    sa.Column('max', sa.Boolean(), nullable=True),
-    sa.Column('min', sa.Boolean(), nullable=True),
-    sa.Column('filterable', sa.Boolean(), nullable=True),
-    sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('dashboard_slices',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('dashboard_id', sa.Integer(), sa.ForeignKey('dashboards.id'), nullable=True),
-    sa.Column('slice_id', sa.Integer(), sa.ForeignKey('slices.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    ### end Alembic commands ###
-    
-    
-def upgrade():
-    op.add_column('tables', sa.Column('description', sa.Text(), nullable=True))
-    
-    # revision identifiers, used by Alembic.
-revision = '7dbf98566af7'
-down_revision = '8e80a26a31db'
-    
-    
-def upgrade():
-    op.add_column('query', sa.Column('results_key', sa.String(length=64), nullable=True))
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-        def new_messages(self, messages):
-        logging.info('Sending new message to %r listeners', len(self.waiters))
-        for future in self.waiters:
-            future.set_result(messages)
-        self.waiters = set()
-        self.cache.extend(messages)
-        if len(self.cache) > self.cache_size:
-            self.cache = self.cache[-self.cache_size:]
-    
-    
-c = wda.Client()
-s = c.session()
-    
-    
-def on_click(event):
-    global update
-    global ix, iy
-    global click_count
-    global cor
+                self.fail('{}: wrong element at position {};'
+                          'expected {}, got {}'.format(test_id, i, y, x))
