@@ -1,154 +1,307 @@
 
         
-        
-    {}  // namespace atom
+        #include <string>
     
-      void Attach(mate::Arguments* args);
-  bool IsAttached();
-  void Detach();
-  void SendCommand(mate::Arguments* args);
-    
-    namespace api {
-    }
-    
-      static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
-    
-    // The OSX fork() implementation can crash in the child process before
-// fork() returns.  In that case, the shutdown pipe will still be
-// shared with the parent process.  To prevent child crashes from
-// causing parent shutdowns, |g_pipe_pid| is the pid for the process
-// which registered |g_shutdown_pipe_write_fd|.
-// See <http://crbug.com/175341>.
-pid_t g_pipe_pid = -1;
-int g_shutdown_pipe_write_fd = -1;
-int g_shutdown_pipe_read_fd = -1;
-    
-    
-    {}  // namespace atom
-
-    
-    
-    { private:
-  DISALLOW_COPY_AND_ASSIGN(AtomQuotaPermissionContext);
-};
-    
-    void AutoUpdater::SetFeedURL(const std::string& url,
-                             const HeaderMap& requestHeaders) {
+    void Initialize(v8::Local<v8::Object> exports, v8::Local<v8::Value> unused,
+                v8::Local<v8::Context> context, void* priv) {
+  v8::Isolate* isolate = context->GetIsolate();
+  mate::Dictionary dict(isolate, exports);
+  dict.Set('globalShortcut', atom::api::GlobalShortcut::Create(isolate));
 }
     
-      // URLRequestJob:
-  void GetResponseInfo(net::HttpResponseInfo* info) override;
-    
-      /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a cv::Mat
-   *
-   * @param cv_img
-   *    cv::Mat containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See image_data_layer.cpp for an example.
-   */
-  void Transform(const cv::Mat& cv_img, Blob<Dtype>* transformed_blob);
-#endif  // USE_OPENCV
-    
-      static vector<string> LayerTypeList() {
-    CreatorRegistry& registry = Registry();
-    vector<string> layer_types;
-    for (typename CreatorRegistry::iterator iter = registry.begin();
-         iter != registry.end(); ++iter) {
-      layer_types.push_back(iter->first);
+    namespace atom {
     }
-    return layer_types;
+    
+    v8::Persistent<v8::ObjectTemplate> event_template;
+    
+      AtomQuotaPermissionContext();
+  virtual ~AtomQuotaPermissionContext();
+    
+    #ifndef GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_DATABASE_H__
+#define GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_DATABASE_H__
+    
+    #include <Python.h>
+    
+    
+    {  printer->Print(
+    variables_,
+    'private static readonly pbc::MapField<$key_type_name$, $value_type_name$>.Codec _map_$name$_codec\n'
+    '    = new pbc::MapField<$key_type_name$, $value_type_name$>.Codec(');
+  key_generator->GenerateCodecCode(printer);
+  printer->Print(', ');
+  value_generator->GenerateCodecCode(printer);
+  printer->Print(
+    variables_,
+    ', $tag$);\n'
+    'private readonly pbc::MapField<$key_type_name$, $value_type_name$> $name$_ = new pbc::MapField<$key_type_name$, $value_type_name$>();\n');
+  WritePropertyDocComment(printer, descriptor_);
+  AddPublicMemberAttributes(printer);
+  printer->Print(
+    variables_,
+    '$access_level$ pbc::MapField<$key_type_name$, $value_type_name$> $property_name$ {\n'
+    '  get { return $name$_; }\n'
+    '}\n');
+}
+    
+    // Generator options (used by csharp_generator.cc):
+struct Options {
+  Options() :
+      file_extension('.cs'),
+      base_namespace(''),
+      base_namespace_specified(false),
+      internal_access(false) {
   }
-    
-    
-    {  Blob<Dtype> col_buffer_;
-  Blob<Dtype> bias_multiplier_;
+  // Extension of the generated file. Defaults to '.cs'
+  string file_extension;
+  // Base namespace to use to create directory hierarchy. Defaults to ''.
+  // This option allows the simple creation of a conventional C# file layout,
+  // where directories are created relative to a project-specific base
+  // namespace. For example, in a project with a base namespace of PetShop, a
+  // proto of user.proto with a C# namespace of PetShop.Model.Shared would
+  // generate Model/Shared/User.cs underneath the specified --csharp_out
+  // directory.
+  //
+  // If no base namespace is specified, all files are generated in the
+  // --csharp_out directory, with no subdirectories created automatically.
+  string base_namespace;
+  // Whether the base namespace has been explicitly specified by the user.
+  // This is required as the base namespace can be explicitly set to the empty
+  // string, meaning 'create a full directory hierarchy, starting from the first
+  // segment of the namespace.'
+  bool base_namespace_specified;
+  // Whether the generated classes should have accessibility level of 'internal'.
+  // Defaults to false that generates 'public' classes.
+  bool internal_access;
 };
     
-      bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnLRNDescriptor_t norm_desc_;
-  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    namespace caffe {
+    class RepeatedPrimitiveFieldGenerator : public FieldGeneratorBase {
+ public:
+  RepeatedPrimitiveFieldGenerator(const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options);
+  ~RepeatedPrimitiveFieldGenerator();
     }
     
-      virtual inline const char* type() const { return 'Exp'; }
+    std::string SourceGeneratorBase::class_access_level() {
+  return (IsDescriptorProto(descriptor_) || this->options()->internal_access) ? 'internal' : 'public';
+}
+    
+    /** Max number of blobs to classify together in FindSegmentation. */
+const int kMaxGroupSize = 4;
+/// Max fraction of median allowed as deviation in xheight before switching
+/// to median.
+const double kMaxXHeightDeviationFraction = 0.125;
+    
+    // This structure captures all information needed about a text line for the
+// purposes of paragraph detection.  It is meant to be exceedingly light-weight
+// so that we can easily test paragraph detection independent of the rest of
+// Tesseract.
+class RowInfo {
+ public:
+  // Constant data derived from Tesseract output.
+  STRING text;        // the full UTF-8 text of the line.
+  bool ltr;           // whether the majority of the text is left-to-right
+                      // TODO(eger) make this more fine-grained.
+    }
+    
+    // Runs classify_word_pass1() on the current word. Outputs Tesseract's
+// raw choice as a result of the classification. For words labeled with a
+// single unichar also outputs all alternatives from blob_choices of the
+// best choice.
+void Tesseract::ambigs_classify_and_output(const char *label,
+                                           PAGE_RES_IT* pr_it,
+                                           FILE *output_file) {
+  // Classify word.
+  fflush(stdout);
+  WordData word_data(*pr_it);
+  SetupWordPassN(1, &word_data);
+  classify_word_and_language(1, pr_it, &word_data);
+  WERD_RES* werd_res = word_data.word;
+  WERD_CHOICE *best_choice = werd_res->best_choice;
+  ASSERT_HOST(best_choice != NULL);
+    }
+    
+    /**********************************************************************
+ * read_unlv_file
+ *
+ * Read a whole unlv zone file to make a list of blocks.
+ **********************************************************************/
+    
+    namespace tesseract {
+    }
     
     
+/**********************************************************************
+ * operator*=
+ *
+ * Scalar multiply of an ICOORD.
+ **********************************************************************/
     
+    // Prints the content of the DENORM for debug purposes.
+void DENORM::Print() const {
+  if (pix_ != NULL) {
+    tprintf('Pix dimensions %d x %d x %d\n',
+            pixGetWidth(pix_), pixGetHeight(pix_), pixGetDepth(pix_));
+  }
+  if (inverse_)
+    tprintf('Inverse\n');
+  if (block_ && block_->re_rotation().x() != 1.0f) {
+    tprintf('Block rotation %g, %g\n',
+            block_->re_rotation().x(), block_->re_rotation().y());
+  }
+  tprintf('Input Origin = (%g, %g)\n', x_origin_, y_origin_);
+  if (x_map_ != NULL && y_map_ != NULL) {
+    tprintf('x map:\n');
+    for (int x = 0; x < x_map_->size(); ++x) {
+      tprintf('%g ', (*x_map_)[x]);
+    }
+    tprintf('\ny map:\n');
+    for (int y = 0; y < y_map_->size(); ++y) {
+      tprintf('%g ', (*y_map_)[y]);
+    }
+    tprintf('\n');
+  } else {
+    tprintf('Scale = (%g, %g)\n', x_scale_, y_scale_);
+    if (rotation_ != NULL)
+      tprintf('Rotation = (%g, %g)\n', rotation_->x(), rotation_->y());
+  }
+  tprintf('Final Origin = (%g, %g)\n', final_xshift_, final_xshift_);
+  if (predecessor_ != NULL) {
+    tprintf('Predecessor:\n');
+    predecessor_->Print();
+  }
+}
     
+    // WorkloadStats is used to track per request timing for different states
+// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
+// should be made to guard the state change with appropriate timers and
+// counters.
+//
+// The states tracked are:
+//  - In a request (this is a superset of the interpreter state)
+//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
+//  - In the JIT (currently tracks time inside the translate routine)
+//
+// Note the time in the TC is not tracked.  This is roughly:
+//   Time in request - Time in interp
+//
+// This gives us the relative interp time formula of:
+//   Relative interp time = Time in interp / Time in request
+struct WorkloadStats final {
+  enum State {
+    InRequest,
+    // -> InInterp   Okay (entering Dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InInterp,
+    // -> InRequest  Okay (leaving the dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InTrans,
+    // -> InRequest  Okay (leaving translate)
+    // -> InInterp   Okay (leaving translate)
+  };
+    }
     
-    #if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
+    struct IRGS;
+    
+      template<
+    class E,
+    class Enable = typename std::enable_if<std::is_enum<E>::value>::type
+  >
+  explicit Vconst(E e) : Vconst(typename std::underlying_type<E>::type(e)) {}
+    
+      void delist() {
+    auto n = m_next, p = m_prev;
+    n->m_prev = p;
+    p->m_next = n;
+  }
+    
+    void Clusterizer::initClusters() {
+  m_clusters.resize(m_unit.blocks.size());
+  m_blockCluster.resize(m_unit.blocks.size());
+  for (auto b : m_blocks) {
+    m_clusters[b].push_back(b);
+    m_blockCluster[b] = b;
+  }
+}
+    
+    #include 'hphp/util/numa.h'
+#include 'hphp/util/portability.h'
+#include <folly/Bits.h>
+    
+    public:
+  void scan(type_scan::Scanner& scanner) const {
+    auto const elms = data();
+    scanner.scan(*elms, m_used * sizeof(*elms));
+  }
+    
+    namespace HPHP {
+    }
     
     
     {
-    {			body->CreateFixture(&fd);
-		}
-	}
+    {}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_RANDOM_H_
+
     
-      std::vector<std::string> line_exports;
-  unsigned int readonly = 0;
-  int options_index = -1;
-    
-    using SubscriptionRef = std::shared_ptr<Subscription>;
-using BaseEventPublisher = EventPublisher<SubscriptionContext, EventContext>;
-using EventPublisherRef = std::shared_ptr<BaseEventPublisher>;
-using SubscriptionContextRef = std::shared_ptr<SubscriptionContext>;
-using EventContextRef = std::shared_ptr<EventContext>;
-using BaseEventSubscriber = EventSubscriber<BaseEventPublisher>;
-using EventSubscriberRef = std::shared_ptr<EventSubscriber<BaseEventPublisher>>;
-    
-    /**
- * @brief Perform an action while waiting for an the extension timeout.
- *
- * We define a 'global' extension timeout using CLI flags.
- * There are several locations where code may act assuming an extension has
- * loaded or broadcasted a registry.
- *
- * @param predicate return true or set stop to end the timeout loop.
- * @return the last status from the predicate.
- */
-Status applyExtensionDelay(std::function<Status(bool& stop)> predicate);
-    
-    /**
- * @brief Create an alias to a command line flag.
- *
- * Like OSQUERY_FLAG, do not use this in the osquery codebase. Use the derived
- * macros that abstract the tail of boolean arguments.
- */
-#define OSQUERY_FLAG_ALIAS(t, a, n, s, e)                                      \
-  FlagAlias<t> FLAGS_##a(#a, #t, #n, &FLAGS_##n);                              \
-  namespace flags {                                                            \
-  static GFLAGS_NAMESPACE::FlagRegisterer oflag_##a(                           \
-      #a, #a, #a, &FLAGS_##n, &FLAGS_##n);                                     \
-  const int flag_alias_##a = Flag::createAlias(#a, {#n, s, e, 0, 1});          \
-  }
-    
-    kern_return_t OsqueryStart(kmod_info_t *ki, void *d) {
-  dbg_printf('Kernel module starting!\n');
+        // want to compute storage boundary for each feature
+    // using variants of prefix sum scan
+    boundary_.resize(nfeature);
+    size_t accum_index_ = 0;
+    size_t accum_row_ind_ = 0;
+    for (bst_uint fid = 0; fid < nfeature; ++fid) {
+      boundary_[fid].index_begin = accum_index_;
+      boundary_[fid].row_ind_begin = accum_row_ind_;
+      if (type_[fid] == kDenseColumn) {
+        accum_index_ += static_cast<size_t>(nrow);
+      } else {
+        accum_index_ += feature_counts_[fid];
+        accum_row_ind_ += feature_counts_[fid];
+      }
+      boundary_[fid].index_end = accum_index_;
+      boundary_[fid].row_ind_end = accum_row_ind_;
     }
     
-    #include <osquery/config.h>
-#include <osquery/dispatcher.h>
-    
-    /// Safely convert a string representation of an integer base.
-inline Status safeStrtoll(const std::string& rep, size_t base, long long& out) {
-  char* end{nullptr};
-  out = strtoll(rep.c_str(), &end, static_cast<int>(base));
-  if (end == nullptr || end == rep.c_str() || *end != '\0' ||
-      ((out == LLONG_MIN || out == LLONG_MAX) && errno == ERANGE)) {
-    out = 0;
-    return Status(1);
+      dmlc::DataIter<xgboost::ColBatch> * col_iter = dmat->ColIterator();
+  // Loop over the batches and assert the data is as expected
+  long num_col_batch = 0;
+  col_iter->BeforeFirst();
+  while (col_iter->Next()) {
+    num_col_batch += 1;
+    EXPECT_EQ(col_iter->Value().size, dmat->info().num_col)
+      << 'Expected batch size to be same as num_cols as max_row_perbatch is 1.';
   }
-  return Status(0);
+  EXPECT_EQ(num_col_batch, dmat->info().num_row)
+    << 'Expected num batches to be same as num_rows as max_row_perbatch is 1';
+  col_iter = nullptr;
+    
+      vals_in.clear(); ss.flush(); ss.clear(); ss.str('');
+  ss << '(3.0,2,1)';
+  ss >> vals_in;
+  EXPECT_NE(vals_in, vals);
+    
+    
+    {template<typename IndexType>
+Parser<IndexType> *
+CreateDenseLibSVMParser(const std::string& path,
+                        const std::map<std::string, std::string>& args,
+                        unsigned part_index,
+                        unsigned num_parts) {
+  CHECK_NE(args.count('num_col'), 0) << 'expect num_col in dense_libsvm';
+  return new DensifyParser<IndexType>(
+            Parser<IndexType>::Create(path.c_str(), part_index, num_parts, 'libsvm'),
+           uint32_t(atoi(args.at('num_col').c_str())));
 }
+}  // namespace data
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
