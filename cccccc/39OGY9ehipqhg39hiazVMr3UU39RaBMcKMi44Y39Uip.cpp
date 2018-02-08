@@ -1,65 +1,117 @@
 
         
-        void SyntaxASTMap::dumpSyntaxMap() const {
-  for (const auto &SyntaxAndSemaNode : SyntaxMap) {
-    auto SyntaxNode = SyntaxAndSemaNode.getFirst();
-    auto SemanticNode = SyntaxAndSemaNode.getSecond();
-    }
-    }
+            http://www.apache.org/licenses/LICENSE-2.0
     
-    bool CodeCompletionView::walk(CodeCompletionView::Walker &walker) const {
-  assert(rootGroup);
-  return walkRecursive(walker, rootGroup);
+    
+    {  // Run constant folding operations on the given module. Returns whether the
+  // module was changed (constant expressions folded).
+  StatusOr<bool> Run(HloModule* module) override;
+};
+    
+      // Initializes the estimator for the specified grappler item.
+  // This implementation always returns OK.
+  Status Initialize(const GrapplerItem& item) override;
+    
+      double ComputePrimalLoss(const double wx, const double example_label,
+                           const double example_weight) const final {
+    const double y_wx = example_label * wx;
+    if (y_wx >= 1) return 0;
+    if (y_wx <= 1 - gamma) return (1 - y_wx - gamma / 2) * example_weight;
+    return (1 - y_wx) * (1 - y_wx) * example_weight * 0.5 / gamma;
+  }
+    
+    void SubProcess::ClosePipes() {
+  for (int i = 0; i < kNFds; i++) {
+    if (parent_pipe_[i] >= 0) {
+      close(parent_pipe_[i]);
+      parent_pipe_[i] = -1;
+    }
+    if (child_pipe_[i] >= 0) {
+      close(child_pipe_[i]);
+      child_pipe_[i] = -1;
+    }
+  }
 }
     
-    #pragma mark - NSData verification
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    /// A reference to a concrete representation of a particular declaration,
-/// providing substitutions for all type parameters of the original,
-/// underlying declaration.
-class ConcreteDeclRef {
-  /// A specialized declaration reference, which provides substitutions
-  /// that fully specialize a generic declaration.
-  class SpecializedDeclRef final :
-      private llvm::TrailingObjects<SpecializedDeclRef, Substitution> {
-    friend TrailingObjects;
+        if (!use_function_convention) {
+      TF_RETURN_IF_ERROR(
+          NodeBuilder(strings::StrCat('_recv_', id.first, '_', id.second),
+                      '_Recv')
+              .Attr('tensor_type', BaseType(n->output_type(id.second)))
+              .Attr('tensor_name', t)
+              .Attr('send_device', device_info.name())
+              .Attr('recv_device', device_info.name())
+              .Attr('send_device_incarnation',
+                    static_cast<int64>(device_info.incarnation()))
+              .Attr('client_terminated', true)
+              .Finalize(g, &recv_node));
+    } else {
+      // NOTE(mrry): We must include the index as part of the node
+      // name, because _Arg is a 'stateful' kernel and therefore
+      // its name must uniquely identify a kernel instance across all
+      // graphs in the same session.
+      TF_RETURN_IF_ERROR(NodeBuilder(strings::StrCat('_arg_', id.first, '_',
+                                                     id.second, '_', i),
+                                     '_Arg')
+                             .Attr('T', BaseType(n->output_type(id.second)))
+                             .Attr('index', static_cast<int32>(i))
+                             .Finalize(g, &recv_node));
     }
+    recv_node->set_assigned_device_name(device_info.name());
+    
+    static void BM_Subgraph(int iters, int num_nodes) {
+  BM_SubgraphHelper(iters, num_nodes, false /* use_function_convention */);
+}
+static void BM_SubgraphFunctionConvention(int iters, int num_nodes) {
+  BM_SubgraphHelper(iters, num_nodes, true /* use_function_convention */);
+}
+BENCHMARK(BM_Subgraph)->Arg(100)->Arg(1000)->Arg(10000)->Arg(100000);
+BENCHMARK(BM_SubgraphFunctionConvention)
+    ->Arg(100)
+    ->Arg(1000)
+    ->Arg(10000)
+    ->Arg(100000);
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    namespace tensorflow {
     }
     
-    /* Map whose keys are pointers, but are compared by their dereferenced values.
- *
- * Differs from a plain std::map<const K*, T, DereferencingComparator<K*> > in
- * that methods that take a key for comparison take a K rather than taking a K*
- * (taking a K* would be confusing, since it's the value rather than the address
- * of the object for comparison that matters due to the dereferencing comparator).
- *
- * Objects pointed to by keys must not be modified in any way that changes the
- * result of DereferencingComparator.
- */
-template <class K, class T>
-class indirectmap {
-private:
-    typedef std::map<const K*, T, DereferencingComparator<const K*> > base;
-    base m;
-public:
-    typedef typename base::iterator iterator;
-    typedef typename base::const_iterator const_iterator;
-    typedef typename base::size_type size_type;
-    typedef typename base::value_type value_type;
-    }
+    #endif  // STORAGE_LEVELDB_DB_LOG_FORMAT_H_
+
     
-    std::string SSTTableFileName(const std::string& name, uint64_t number) {
-  assert(number > 0);
-  return MakeFileName(name, number, 'sst');
+    TEST(LogTest, RandomRead) {
+  const int N = 500;
+  Random write_rnd(301);
+  for (int i = 0; i < N; i++) {
+    Write(RandomSkewedString(i, &write_rnd));
+  }
+  Random read_rnd(301);
+  for (int i = 0; i < N; i++) {
+    ASSERT_EQ(RandomSkewedString(i, &read_rnd), Read());
+  }
+  ASSERT_EQ('EOF', Read());
 }
     
-    
-    {  fname = TempFileName('tmp', 999);
-  ASSERT_EQ('tmp/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(999, number);
-  ASSERT_EQ(kTempFile, type);
-}
+    class SnapshotList {
+ public:
+  SnapshotList() {
+    list_.prev_ = &list_;
+    list_.next_ = &list_;
+  }
+    }
     
     Iterator* TableCache::NewIterator(const ReadOptions& options,
                                   uint64_t file_number,
@@ -70,349 +122,77 @@ public:
   }
     }
     
+      // Return an iterator for the specified file number (the corresponding
+  // file length must be exactly 'file_size' bytes).  If 'tableptr' is
+  // non-NULL, also sets '*tableptr' to point to the Table object
+  // underlying the returned iterator, or NULL if no Table object underlies
+  // the returned iterator.  The returned '*tableptr' object is owned by
+  // the cache and should not be deleted, and is valid for as long as the
+  // returned iterator is live.
+  Iterator* NewIterator(const ReadOptions& options,
+                        uint64_t file_number,
+                        uint64_t file_size,
+                        Table** tableptr = NULL);
     
-    {
-    {  virtual void Put(const Slice& key, const Slice& value) {
-    mem_->Add(sequence_, kTypeValue, key, value);
-    sequence_++;
-  }
-  virtual void Delete(const Slice& key) {
-    mem_->Add(sequence_, kTypeDeletion, key, Slice());
-    sequence_++;
-  }
-};
-}  // namespace
+      std::string comparator_;
+  uint64_t log_number_;
+  uint64_t prev_log_number_;
+  uint64_t next_file_number_;
+  SequenceNumber last_sequence_;
+  bool has_comparator_;
+  bool has_log_number_;
+  bool has_prev_log_number_;
+  bool has_next_file_number_;
+  bool has_last_sequence_;
     
-    TEST(WriteBatchTest, Append) {
-  WriteBatch b1, b2;
-  WriteBatchInternal::SetSequence(&b1, 200);
-  WriteBatchInternal::SetSequence(&b2, 300);
-  WriteBatchInternal::Append(&b1, &b2);
-  ASSERT_EQ('',
-            PrintContents(&b1));
-  b2.Put('a', 'va');
-  WriteBatchInternal::Append(&b1, &b2);
-  ASSERT_EQ('Put(a, va)@200',
-            PrintContents(&b1));
-  b2.Clear();
-  b2.Put('b', 'vb');
-  WriteBatchInternal::Append(&b1, &b2);
-  ASSERT_EQ('Put(a, va)@200'
-            'Put(b, vb)@201',
-            PrintContents(&b1));
-  b2.Delete('foo');
-  WriteBatchInternal::Append(&b1, &b2);
-  ASSERT_EQ('Put(a, va)@200'
-            'Put(b, vb)@202'
-            'Put(b, vb)@201'
-            'Delete(foo)@203',
-            PrintContents(&b1));
-}
-    
-    
-    {}  // namespace google
-
-    
-    void MapFieldGenerator::WriteToString(io::Printer* printer) {
-    // TODO: If we ever actually use ToString, we'll need to impleme this...
-}
-    
-      void Generate(io::Printer* printer);
-    
-    
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
-    
-    
-    { private:
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(RepeatedMessageFieldGenerator);
-};
-    
-    namespace grpc {
-    }
-    
-    struct TableInCBuilder {
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_refer_to_a1(flatbuffers::Offset<NamespaceA::TableInFirstNS> refer_to_a1) {
-    fbb_.AddOffset(TableInC::VT_REFER_TO_A1, refer_to_a1);
-  }
-  void add_refer_to_a2(flatbuffers::Offset<NamespaceA::SecondTableInA> refer_to_a2) {
-    fbb_.AddOffset(TableInC::VT_REFER_TO_A2, refer_to_a2);
-  }
-  explicit TableInCBuilder(flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  TableInCBuilder &operator=(const TableInCBuilder &);
-  flatbuffers::Offset<TableInC> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<TableInC>(end);
-    return o;
-  }
-};
-    
-    
-    { public:
-  Vec3() {
-    memset(this, 0, sizeof(Vec3));
-  }
-  Vec3(float _x, float _y, float _z)
-      : x_(flatbuffers::EndianScalar(_x)),
-        y_(flatbuffers::EndianScalar(_y)),
-        z_(flatbuffers::EndianScalar(_z)) {
-  }
-  float x() const {
-    return flatbuffers::EndianScalar(x_);
-  }
-  void mutate_x(float _x) {
-    flatbuffers::WriteScalar(&x_, _x);
-  }
-  float y() const {
-    return flatbuffers::EndianScalar(y_);
-  }
-  void mutate_y(float _y) {
-    flatbuffers::WriteScalar(&y_, _y);
-  }
-  float z() const {
-    return flatbuffers::EndianScalar(z_);
-  }
-  void mutate_z(float _z) {
-    flatbuffers::WriteScalar(&z_, _z);
-  }
-};
-STRUCT_END(Vec3, 12);
-    
-    inline flatbuffers::Offset<Movie> CreateMovie(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    Character main_character_type = Character_NONE,
-    flatbuffers::Offset<void> main_character = 0,
-    flatbuffers::Offset<flatbuffers::Vector<uint8_t>> characters_type = 0,
-    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<void>>> characters = 0) {
-  MovieBuilder builder_(_fbb);
-  builder_.add_characters(characters);
-  builder_.add_characters_type(characters_type);
-  builder_.add_main_character(main_character);
-  builder_.add_main_character_type(main_character_type);
-  return builder_.Finish();
-}
-    
-    class MonsterStorage final {
+    // WriteBatchInternal provides static methods for manipulating a
+// WriteBatch that we don't want in the public WriteBatch interface.
+class WriteBatchInternal {
  public:
-  static constexpr char const* service_full_name() {
-    return 'MyGame.Example.MonsterStorage';
-  }
-  class StubInterface {
-   public:
-    virtual ~StubInterface() {}
-    virtual ::grpc::Status Store(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, flatbuffers::grpc::Message<Stat>* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>> AsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>>(AsyncStoreRaw(context, request, cq));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>> PrepareAsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>>(PrepareAsyncStoreRaw(context, request, cq));
-    }
-    std::unique_ptr< ::grpc::ClientReaderInterface< flatbuffers::grpc::Message<Monster>>> Retrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) {
-      return std::unique_ptr< ::grpc::ClientReaderInterface< flatbuffers::grpc::Message<Monster>>>(RetrieveRaw(context, request));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>> AsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) {
-      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>>(AsyncRetrieveRaw(context, request, cq, tag));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>> PrepareAsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>>(PrepareAsyncRetrieveRaw(context, request, cq));
-    }
-  private:
-    virtual ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>* AsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>* PrepareAsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientReaderInterface< flatbuffers::grpc::Message<Monster>>* RetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) = 0;
-    virtual ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>* AsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
-    virtual ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>* PrepareAsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) = 0;
-  };
-  class Stub final : public StubInterface {
-   public:
-    Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel);
-    ::grpc::Status Store(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, flatbuffers::grpc::Message<Stat>* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>> AsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>>(AsyncStoreRaw(context, request, cq));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>> PrepareAsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>>(PrepareAsyncStoreRaw(context, request, cq));
-    }
-    std::unique_ptr< ::grpc::ClientReader< flatbuffers::grpc::Message<Monster>>> Retrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) {
-      return std::unique_ptr< ::grpc::ClientReader< flatbuffers::grpc::Message<Monster>>>(RetrieveRaw(context, request));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>> AsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) {
-      return std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>>(AsyncRetrieveRaw(context, request, cq, tag));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>> PrepareAsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>>(PrepareAsyncRetrieveRaw(context, request, cq));
-    }
-  
-   private:
-    std::shared_ptr< ::grpc::ChannelInterface> channel_;
-    ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>* AsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>* PrepareAsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientReader< flatbuffers::grpc::Message<Monster>>* RetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) override;
-    ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>* AsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) override;
-    ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>* PrepareAsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) override;
-    const ::grpc::internal::RpcMethod rpcmethod_Store_;
-    const ::grpc::internal::RpcMethod rpcmethod_Retrieve_;
-  };
-  static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
-  
-  class Service : public ::grpc::Service {
-   public:
-    Service();
-    virtual ~Service();
-    virtual ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response);
-    virtual ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer);
-  };
-  template <class BaseClass>
-  class WithAsyncMethod_Store : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
-   public:
-    WithAsyncMethod_Store() {
-      ::grpc::Service::MarkMethodAsync(0);
-    }
-    ~WithAsyncMethod_Store() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) final override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
-    }
-    void RequestStore(::grpc::ServerContext* context, flatbuffers::grpc::Message<Monster>* request, ::grpc::ServerAsyncResponseWriter< flatbuffers::grpc::Message<Stat>>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
-    }
-  };
-  template <class BaseClass>
-  class WithAsyncMethod_Retrieve : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
-   public:
-    WithAsyncMethod_Retrieve() {
-      ::grpc::Service::MarkMethodAsync(1);
-    }
-    ~WithAsyncMethod_Retrieve() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer) final override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
-    }
-    void RequestRetrieve(::grpc::ServerContext* context, flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerAsyncWriter< flatbuffers::grpc::Message<Monster>>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncServerStreaming(1, context, request, writer, new_call_cq, notification_cq, tag);
-    }
-  };
-  typedef   WithAsyncMethod_Store<  WithAsyncMethod_Retrieve<  Service   >   >   AsyncService;
-  template <class BaseClass>
-  class WithGenericMethod_Store : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
-   public:
-    WithGenericMethod_Store() {
-      ::grpc::Service::MarkMethodGeneric(0);
-    }
-    ~WithGenericMethod_Store() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) final override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
-    }
-  };
-  template <class BaseClass>
-  class WithGenericMethod_Retrieve : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
-   public:
-    WithGenericMethod_Retrieve() {
-      ::grpc::Service::MarkMethodGeneric(1);
-    }
-    ~WithGenericMethod_Retrieve() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer) final override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
-    }
-  };
-  template <class BaseClass>
-  class WithStreamedUnaryMethod_Store : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
-   public:
-    WithStreamedUnaryMethod_Store() {
-      ::grpc::Service::MarkMethodStreamed(0,
-        new ::grpc::internal::StreamedUnaryHandler< flatbuffers::grpc::Message<Monster>, flatbuffers::grpc::Message<Stat>>(std::bind(&WithStreamedUnaryMethod_Store<BaseClass>::StreamedStore, this, std::placeholders::_1, std::placeholders::_2)));
-    }
-    ~WithStreamedUnaryMethod_Store() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable regular version of this method
-    ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) final override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
-    }
-    // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedStore(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< flatbuffers::grpc::Message<Monster>,flatbuffers::grpc::Message<Stat>>* server_unary_streamer) = 0;
-  };
-  typedef   WithStreamedUnaryMethod_Store<  Service   >   StreamedUnaryService;
-  template <class BaseClass>
-  class WithSplitStreamingMethod_Retrieve : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
-   public:
-    WithSplitStreamingMethod_Retrieve() {
-      ::grpc::Service::MarkMethodStreamed(1,
-        new ::grpc::internal::SplitServerStreamingHandler< flatbuffers::grpc::Message<Stat>, flatbuffers::grpc::Message<Monster>>(std::bind(&WithSplitStreamingMethod_Retrieve<BaseClass>::StreamedRetrieve, this, std::placeholders::_1, std::placeholders::_2)));
-    }
-    ~WithSplitStreamingMethod_Retrieve() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable regular version of this method
-    ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer) final override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
-    }
-    // replace default version of method with split streamed
-    virtual ::grpc::Status StreamedRetrieve(::grpc::ServerContext* context, ::grpc::ServerSplitStreamer< flatbuffers::grpc::Message<Stat>,flatbuffers::grpc::Message<Monster>>* server_split_streamer) = 0;
-  };
-  typedef   WithSplitStreamingMethod_Retrieve<  Service   >   SplitStreamedService;
-  typedef   WithStreamedUnaryMethod_Store<  WithSplitStreamingMethod_Retrieve<  Service   >   >   StreamedService;
-};
-    
-    class LogHelper {
-  std::ostream* os_;
+  // Return the number of entries in the batch.
+  static int Count(const WriteBatch* batch);
     }
     
-      // tracks the current namespace for early exit in WrapInNameSpace
-  // c++, java and csharp returns a different namespace from
-  // the following default (no early exit, always fully qualify),
-  // which works for js and php
-  virtual const Namespace *CurrentNameSpace() const { return nullptr; }
+    // Returns a new environment that stores its data in memory and delegates
+// all non-file-storage tasks to base_env. The caller must delete the result
+// when it is no longer needed.
+// *base_env must remain live while the result is in use.
+Env* NewMemEnv(Env* base_env);
     
-    class FlatCompiler {
- public:
-  // Output generator for the various programming languages and formats we
-  // support.
-  struct Generator {
-    typedef bool (*GenerateFn)(const flatbuffers::Parser &parser,
-                               const std::string &path,
-                               const std::string &file_name);
-    typedef std::string (*MakeRuleFn)(const flatbuffers::Parser &parser,
-                                      const std::string &path,
-                                      const std::string &file_name);
-    }
-    }
+    Mutex::~Mutex() { PthreadCall('destroy mutex', pthread_mutex_destroy(&mu_)); }
+    
+      // current_ is offset in data_ of current entry.  >= restarts_ if !Valid
+  uint32_t current_;
+  uint32_t restart_index_;  // Index of restart block in which current_ falls
+  std::string key_;
+  Slice value_;
+  Status status_;
+    
+    
+  // Iterator interface methods
+  bool Valid() const        { return valid_; }
+  Slice key() const         { assert(Valid()); return key_; }
+  Slice value() const       { assert(Valid()); return iter_->value(); }
+  // Methods below require iter() != NULL
+  Status status() const     { assert(iter_); return iter_->status(); }
+  void Next()               { assert(iter_); iter_->Next();        Update(); }
+  void Prev()               { assert(iter_); iter_->Prev();        Update(); }
+  void Seek(const Slice& k) { assert(iter_); iter_->Seek(k);       Update(); }
+  void SeekToFirst()        { assert(iter_); iter_->SeekToFirst(); Update(); }
+  void SeekToLast()         { assert(iter_); iter_->SeekToLast();  Update(); }
+    
+        // Determine area to update.
+    int xmin = std::max(block_x * 16 - 1, 0);
+    int xmax = std::min(block_x * 16 + 16, width_ - 1);
+    int ymin = std::max(block_y * 16 - 1, 0);
+    int ymax = std::min(block_y * 16 + 16, height_ - 1);
+    
+    // Computes the DCT (Discrete Cosine Transform) of the 8x8 array in 'block',
+// scaled up by a factor of 16. The values in 'block' are laid out row-by-row
+// and the result is written to the same memory area.
+void ComputeBlockDCT(coeff_t* block);
+    
+    // Preprocesses the u (1) or v (2) channel of the given YUV image (range 0-255).
+std::vector<std::vector<float>> PreProcessChannel(
+    int w, int h, int channel, float sigma, float amount, bool blur,
+    bool sharpen, const std::vector<std::vector<float>>& image);
