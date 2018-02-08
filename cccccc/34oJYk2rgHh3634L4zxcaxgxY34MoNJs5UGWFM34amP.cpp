@@ -1,183 +1,290 @@
 
         
-          // Get an integral value, 0 or 1, for whether a syscall table pointer is modified.
-  auto f1 = osquery::readFile(kKernelSyscallAddrModifiedPath, content);
-  if (f1.ok()) {
-    boost::trim(content);
-    syscall_addr_modified = content;
-  } else {
-    VLOG(1) << 'Cannot read file: ' << kKernelSyscallAddrModifiedPath;
-    return results;
-  }
+        #include 'swift/AST/SyntaxASTMap.h'
+#include 'swift/AST/Expr.h'
+#include 'swift/AST/Decl.h'
+#include 'swift/AST/Stmt.h'
+#include 'swift/Syntax/Syntax.h'
     
-     protected:
-  /**
-   * @brief Perform enrollment on the request of a config/logger.
-   *
-   * The single 'enroll' plugin request action will call EnrollPlugin::enroll
-   *
-   * @return An enrollment secret or key material or identifier.
-   */
-  virtual std::string enroll() = 0;
-    
-    #include <boost/lexical_cast.hpp>
-#include <boost/noncopyable.hpp>
-#include <utility>
-    
-    #include <set>
-#include <string>
-    
-      std::string carveFSPath = carve.getCarveDir().string();
-  auto paths = platformGlob(carveFSPath + '/*');
-  std::set<fs::path> carves;
-  for (const auto& p : paths) {
-    carves.insert(fs::path(p));
-  }
-    
-    
-    {      multi_pack.put_child(fs::path(path).stem().string(), single_pack);
+    namespace swift {
     }
     
-      // Verify that the setup call resulted in no remote requests.
-  pt::ptree response_tree;
-  std::string test_read_uri =
-      'https://' + Flag::getValue('tls_hostname') + '/test_read_requests';
+      bool isEmpty() const {
+    return Parts.isEmpty();
+  }
+    
+      /// Retrieve a reference to the declaration this one overrides.
+  ConcreteDeclRef
+  getOverriddenDecl(ASTContext &ctx) const;
+    
+      bool haveLastDiag() {
+    return LastDiagBufferID >= 0;
+  }
+  void clearLastDiag() {
+    LastDiagBufferID = -1;
+  }
+  DiagnosticEntryInfo &getLastDiag() {
+    assert(haveLastDiag());
+    return BufferDiagnostics[LastDiagBufferID][LastDiagIndex];
+  }
+    
+    
+    {  /**
+   * @brief Computes the error gradient w.r.t. the absolute value inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x} =
+   *            \mathrm{sign}(x) \frac{\partial E}{\partial y}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+};
+    
+    #endif  // CAFFE_CONTRASTIVE_LOSS_LAYER_HPP_
+
+    
+    #ifdef USE_CUDNN
+/**
+ * @brief CuDNN acceleration of TanHLayer.
+ */
+template <typename Dtype>
+class CuDNNTanHLayer : public TanHLayer<Dtype> {
+ public:
+  explicit CuDNNTanHLayer(const LayerParameter& param)
+      : TanHLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNTanHLayer();
+    }
+    
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
     
     {
-    {  return '0';
+    {} // namespace asio
+} // namespace boost
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+      static void validate(const boost::array<Elem, 2>& buffer_sequence)
+  {
+    boost::asio::buffer_cast<const void*>(buffer_sequence[0]);
+    boost::asio::buffer_cast<const void*>(buffer_sequence[1]);
+  }
+    
+    
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
+    
+      STDMETHODIMP get_Capacity(UINT32* value)
+  {
+    *value = capacity_;
+    return S_OK;
+  }
+    
+    #include 'port/port.h'
+#include 'util/testharness.h'
+#include 'util/env_posix_test_helper.h'
+    
+      void SetComparatorName(const Slice& name) {
+    has_comparator_ = true;
+    comparator_ = name.ToString();
+  }
+  void SetLogNumber(uint64_t num) {
+    has_log_number_ = true;
+    log_number_ = num;
+  }
+  void SetPrevLogNumber(uint64_t num) {
+    has_prev_log_number_ = true;
+    prev_log_number_ = num;
+  }
+  void SetNextFile(uint64_t num) {
+    has_next_file_number_ = true;
+    next_file_number_ = num;
+  }
+  void SetLastSequence(SequenceNumber seq) {
+    has_last_sequence_ = true;
+    last_sequence_ = seq;
+  }
+  void SetCompactPointer(int level, const InternalKey& key) {
+    compact_pointers_.push_back(std::make_pair(level, key));
+  }
+    
+      // Store the specified number as the sequence number for the start of
+  // this batch.
+  static void SetSequence(WriteBatch* batch, SequenceNumber seq);
+    
+    #include 'leveldb/env.h'
+#include 'leveldb/status.h'
+#include 'port/port.h'
+#include 'util/mutexlock.h'
+#include <map>
+#include <string.h>
+#include <string>
+#include <vector>
+    
+      // count the keys
+  leveldb::Iterator* iter = db->NewIterator(leveldb::ReadOptions());
+  size_t num_keys = 0;
+  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
+    num_keys++;
+  }
+  delete iter;
+  ASSERT_EQ(kNumKeys, num_keys) << 'Bad number of keys';
+    
+    void CondVar::Wait() {
+  PthreadCall('wait', pthread_cond_wait(&cv_, &mu_->mu_));
 }
+    
+    class FilterBlockReader {
+ public:
+ // REQUIRES: 'contents' and *policy must stay live while *this is live.
+  FilterBlockReader(const FilterPolicy* policy, const Slice& contents);
+  bool KeyMayMatch(uint64_t block_offset, const Slice& key);
+    }
+    
+    Status BlockHandle::DecodeFrom(Slice* input) {
+  if (GetVarint64(input, &offset_) &&
+      GetVarint64(input, &size_)) {
+    return Status::OK();
+  } else {
+    return Status::Corruption('bad block handle');
+  }
+}
+    
+      // Takes ownership of 'iter' and will delete it when destroyed, or
+  // when Set() is invoked again.
+  void Set(Iterator* iter) {
+    delete iter_;
+    iter_ = iter;
+    if (iter_ == NULL) {
+      valid_ = false;
+    } else {
+      Update();
+    }
+  }
+    
+        Size(double width, double height)
+    : width(width)
+    , height(height)
+    {
+    }
+    
+    TEST(YogaTest, computed_layout_padding) {
+  const YGNodeRef root = YGNodeNew();
+  YGNodeStyleSetWidth(root, 100);
+  YGNodeStyleSetHeight(root, 100);
+  YGNodeStyleSetPaddingPercent(root, YGEdgeStart, 10);
+    }
+    
+      ASSERT_FLOAT_EQ(30, YGNodeLayoutGetLeft(root_child1));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root_child1));
+  ASSERT_FLOAT_EQ(50, YGNodeLayoutGetWidth(root_child1));
+  ASSERT_FLOAT_EQ(10, YGNodeLayoutGetHeight(root_child1));
+    
+    
+    {  YGConfigFree(config);
 }
 
     
-    bool js_cocos2dx_studio_ComAudio_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_ComAudio_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_ComAudio(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_ComAudio_stopAllEffects(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_getEffectsVolume(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_stopEffect(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_getBackgroundMusicVolume(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_willPlayBackgroundMusic(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_setBackgroundMusicVolume(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_end(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_start(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_stopBackgroundMusic(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_pauseBackgroundMusic(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_isBackgroundMusicPlaying(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_isLoop(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_resumeAllEffects(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_pauseAllEffects(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_preloadBackgroundMusic(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_playBackgroundMusic(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_stop(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_playEffect(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_preloadEffect(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_setLoop(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_unloadEffect(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_rewindBackgroundMusic(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_pauseEffect(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_resumeBackgroundMusic(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_setFile(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_setEffectsVolume(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_getFile(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_resumeEffect(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ComAudio_ComAudio(JSContext *cx, uint32_t argc, jsval *vp);
+      const YGNodeRef root_child2 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetFlexGrow(root_child2, 1);
+  YGNodeStyleSetFlexShrink(root_child2, 1);
+  YGNodeStyleSetFlexBasisPercent(root_child2, 0);
+  YGNodeInsertChild(root, root_child2, 2);
+  YGNodeCalculateLayout(root, YGUndefined, YGUndefined, YGDirectionLTR);
     
+      ASSERT_FLOAT_EQ(0, YGNodeLayoutGetLeft(root));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root));
+  ASSERT_FLOAT_EQ(100, YGNodeLayoutGetWidth(root));
+  ASSERT_FLOAT_EQ(100, YGNodeLayoutGetHeight(root));
     
-    
-    
-    
-    
-    
-    #if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,'#ferror in function 'lua_cocos2dx_physics_PhysicsJointRotaryLimit_getMax'.',&tolua_err);
-#endif
-    
-    extern TestEntry g_testEntries[];
-// This is called when a joint in the world is implicitly destroyed
-// because an attached body is destroyed. This gives us a chance to
-// nullify the mouse joint.
-class DestructionListener : public b2DestructionListener
-{
-public:
-	void SayGoodbye(b2Fixture* fixture) { B2_NOT_USED(fixture); }
-	void SayGoodbye(b2Joint* joint);
+    namespace facebook {
+namespace alog {
+    }
     }
     
-    		extern int32 b2_gjkCalls, b2_gjkIters, b2_gjkMaxIters;
-		extern int32 b2_toiCalls, b2_toiIters, b2_toiMaxIters;
-		extern int32 b2_toiRootIters, b2_toiMaxRootIters;
     
-    			b2FixtureDef fd;
-			fd.shape = &shape;
-			fd.density = 0.0f;
-			fd.friction = 0.6f;
+    {private:
+  const char* m_functionName;
+  const char* m_fileName;
+  int m_lineNumber;
+};
     
-    void AbstractBtMessage::setBtMessageFactory(BtMessageFactory* factory)
-{
-  messageFactory_ = factory;
+    template <typename T>
+inline bool operator!=(const RefPtr<T>& ref, std::nullptr_t ptr) {
+  return ref.get() != ptr;
 }
     
-      void setWriteCheckSocket(const std::shared_ptr<SocketCore>& socket);
-    
-    
-    {} // namespace aria2
-    
-    #include <memory>
-    
-      virtual bool getChangeGlobalOption() const CXX11_OVERRIDE;
-    
-    bool AbstractProxyRequestCommand::executeInternal()
+    bool nextConnection(int tid)
 {
-  // socket->setBlockingMode();
-  if (httpConnection_->sendBufferIsEmpty()) {
-    auto httpRequest = make_unique<HttpRequest>();
-    httpRequest->setUserAgent(getOption()->get(PREF_USER_AGENT));
-    httpRequest->setRequest(getRequest());
-    httpRequest->setProxyRequest(proxyRequest_);
+    m.lock();
+    int socketfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (socketfd == -1) {
+        cout << 'FD error, connections: ' << connections << endl;
+        return false;
     }
     }
     
-    namespace aria2 {
-    }
-    
-      virtual void allocateChunk() CXX11_OVERRIDE;
-    
-    namespace {
-class FindStoppedAllowedTier {
-public:
-  bool operator()(const std::shared_ptr<AnnounceTier>& tier) const
-  {
-    switch (tier->event) {
-    case AnnounceTier::DOWNLOADING:
-    case AnnounceTier::STOPPED:
-    case AnnounceTier::COMPLETED:
-    case AnnounceTier::SEEDING:
-      return true;
-    default:
-      return false;
-    }
-  }
-};
-} // namespace
-    
-    bool AppleTLSContext::tryAsPKCS12(const std::string& certfile)
+    Context::Context(const Context &other)
 {
-#if defined(__MAC_10_6)
-  std::stringstream ss;
-  BufferedFile(certfile.c_str(), BufferedFile::READ).transfer(ss);
-  auto data = ss.str();
-  if (data.empty()) {
-    A2_LOG_ERROR('Couldn't read certificate file.');
-    return false;
-  }
-  CFRef<CFDataRef> dataRef(
-      CFDataCreate(nullptr, (const UInt8*)data.c_str(), data.size()));
-  if (!dataRef) {
-    A2_LOG_ERROR('Couldn't allocate PKCS12 data');
-    return false;
-  }
+    if (other.context) {
+        context = other.context;
+        SSL_CTX_up_ref(context);
+    }
+}
+    
+    #ifdef UWS_THREADSAFE
+    std::lock_guard<std::recursive_mutex> lockGuard(*nodeData->asyncMutex);
+    if (isClosed()) {
+        if (callback) {
+            callback(this, callbackData, true, nullptr);
+        }
+        return;
+    }
+#endif
+    
+        void destroy() {
+        delete this;
+    }
+    
+        Async(Loop *loop) : Poll(loop, ::eventfd(0, EFD_CLOEXEC)) {
+        this->loop = loop;
     }
