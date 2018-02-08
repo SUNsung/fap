@@ -1,142 +1,141 @@
 
         
-            r = client.get('/hello')
-    assert r.status_code == 200
+        # (c) 2015, Marc Abramowitz <marca@surveymonkey.com>
+#
+# This file is part of Ansible.
+#
+# Ansible is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Ansible is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Ansible. If not, see <http://www.gnu.org/licenses/>.
     
-        Implements signals based on blinker if available, otherwise
-    falls silently back to a noop.
-    
-            for line in _dump_loader_info(loader):
-            info.append('       %s' % line)
-    
-        :copyright: (c) 2015 by Armin Ronacher.
-    :license: BSD, see LICENSE for more details.
-'''
-import sys
-    
-      def testWord2VecOptimized(self):
-    FLAGS.batch_size = 5
-    FLAGS.num_neg_samples = 10
-    FLAGS.epochs_to_train = 1
-    FLAGS.min_count = 0
-    word2vec_optimized.main([])
-    
-    FOUR_LINES = '\n'.join([
-    '1,52.40, 2823,152,2',
-    '164, 99.80,176.60,66.20,1',
-    '176,2824, 136,3.19,0',
-    '2,177.30,66.30, 53.10,1',])
-    
-    import argparse
-import tensorflow as tf
-    
-        Args:
-      label_lookup_path: string UID to integer node ID.
-      uid_lookup_path: string UID to human-readable string.
-    
-      Returns:
-    data_set: a list of length len(_buckets); data_set[n] contains a list of
-      (source, target) pairs read from the provided data files that fit
-      into the n-th bucket, i.e., such that len(source) < _buckets[n][0] and
-      len(target) < _buckets[n][1]; source and target are lists of token-ids.
-  '''
-  data_set = [[] for _ in _buckets]
-  with tf.gfile.GFile(source_path, mode='r') as source_file:
-    with tf.gfile.GFile(target_path, mode='r') as target_file:
-      source, target = source_file.readline(), target_file.readline()
-      counter = 0
-      while source and target and (not max_size or counter < max_size):
-        counter += 1
-        if counter % 100000 == 0:
-          print('  reading data line %d' % counter)
-          sys.stdout.flush()
-        source_ids = [int(x) for x in source.split()]
-        target_ids = [int(x) for x in target.split()]
-        target_ids.append(data_utils.EOS_ID)
-        for bucket_id, (source_size, target_size) in enumerate(_buckets):
-          if len(source_ids) < source_size and len(target_ids) < target_size:
-            data_set[bucket_id].append([source_ids, target_ids])
-            break
-        source, target = source_file.readline(), target_file.readline()
-  return data_set
-    
-            Args:
-            max_workers: The maximum number of threads that can be used to
-                execute the given calls.
-        '''
-        self._max_workers = max_workers
-        self._work_queue = queue.Queue()
-        self._threads = set()
-        self._shutdown = False
-        self._shutdown_lock = threading.Lock()
+    # (c) 2016 Red Hat, Inc.
+#
+# This file is part of Ansible
+#
+# Ansible is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Ansible is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
+'''CLI tool for starting new Shippable CI runs.'''
     
     
-class EventNotification( BaseRequest ):
-  def __init__( self, event_name, buffer_number = None, extra_data = None ):
-    super( EventNotification, self ).__init__()
-    self._event_name = event_name
-    self._buffer_number = buffer_number
-    self._extra_data = extra_data
-    self._response_future = None
-    self._cached_response = None
+# Note: only want to represent the encrypted data
+def represent_vault_encrypted_unicode(self, data):
+    return self.represent_scalar(u'!vault', data._ciphertext.decode(), style='|')
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+        # max_features is the highest integer that could be found in the dataset.
+    max_features = np.max(list(indice_token.keys())) + 1
     
-            # When there are multiple fixit suggestions, present them as a list to
-        # the user hand have her choose which one to apply.
-        if len( self._response[ 'fixits' ] ) > 1:
-          fixit_index = vimsupport.SelectFromList(
-            'Multiple FixIt suggestions are available at this location. '
-            'Which one would you like to apply?',
-            [ fixit[ 'text' ] for fixit in self._response[ 'fixits' ] ] )
+    import numpy as np
+import keras
+from keras.datasets import reuters
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation
+from keras.preprocessing.text import Tokenizer
     
+        for data_format in ['channels_first', 'channels_last']:
+        if data_format == 'channels_first':
+            shape = (3, 5, 5)
+            target_shape = (5, 5, 3)
+            prev_shape = (2, 3, 2)
+            flip = lambda x: np.flip(np.flip(x, axis=2), axis=3)
+            transpose = lambda x: np.transpose(x, (0, 2, 3, 1))
+            target_data_format = 'channels_last'
+        elif data_format == 'channels_last':
+            shape = (5, 5, 3)
+            target_shape = (3, 5, 5)
+            prev_shape = (2, 2, 3)
+            flip = lambda x: np.flip(np.flip(x, axis=1), axis=2)
+            transpose = lambda x: np.transpose(x, (0, 3, 1, 2))
+            target_data_format = 'channels_first'
     
-def SendCompleterAvailableRequest( filetypes ):
-  request = CompleterAvailableRequest( filetypes )
-  # This is a blocking call.
-  request.Start()
-  return request.Response()
+    all_metrics = [
+    metrics.binary_accuracy,
+    metrics.categorical_accuracy,
+    metrics.mean_squared_error,
+    metrics.mean_absolute_error,
+    metrics.mean_absolute_percentage_error,
+    metrics.mean_squared_logarithmic_error,
+    metrics.squared_hinge,
+    metrics.hinge,
+    metrics.categorical_crossentropy,
+    metrics.binary_crossentropy,
+    metrics.poisson,
+    metrics.cosine_proximity,
+    metrics.logcosh,
+]
+    
+    history = model.fit(x_train, y_train,
+                    batch_size=batch_size,
+                    epochs=epochs,
+                    verbose=1,
+                    validation_data=(x_test, y_test))
+score = model.evaluate(x_test, y_test, verbose=0)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
 
     
-        def test_car_adapter_shall_make_loud_noise(self):
-        car = Car()
-        car_adapter = Adapter(car, make_noise=car.make_noise)
-        noise = car_adapter.make_noise(1)
-        expected_noise = 'vroom!'
-        self.assertEqual(noise, expected_noise)
+      from ycmd import server_utils as su
+  su.AddNearestThirdPartyFoldersToSysPath( DIR_OF_CURRENT_SCRIPT )
+  # We need to import ycmd's third_party folders as well since we import and
+  # use ycmd code in the client.
+  su.AddNearestThirdPartyFoldersToSysPath( su.__file__ )
     
-        def test_sequential_undo(self):
-        self.command_stack = list(reversed(self.command_stack))
-        self.command_stack[0].undo()
-        output_after_first_undo = os.listdir(self.test_dir)
-        self.assertEqual(output_after_first_undo[0], 'bar.txt')
-        self.command_stack[1].undo()
-        output_after_second_undo = os.listdir(self.test_dir)
-        self.assertEqual(output_after_second_undo[0], 'foo.txt')
     
-        def test_sales_manager_shall_talk_through_proxy_with_delay(cls):
-        cls.p.busy = 'No'
-        start_time = time()
-        cls.p.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-Sales Manager ready to talk\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time*10), expected_execution_time)
+def _worker(executor_reference, work_queue):
+    try:
+        while True:
+            work_item = work_queue.get(block=True)
+            if work_item is not None:
+                work_item.run()
+                continue
+            executor = executor_reference()
+            # Exit if:
+            #   - The executor that owns the worker has been collected OR
+            #   - The executor that owns the worker has been shutdown.
+            if executor is None or executor._shutdown:
+                # Notice other workers
+                work_queue.put(None)
+                return
+            del executor
+    except BaseException:
+        _base.LOGGER.critical('Exception in worker', exc_info=True)
     
-        def test_am_station_overflow_after_scan(self):
-        self.radio.scan()
-        station = self.radio.state.stations[self.radio.state.pos]
-        expected_station = '1250'
-        self.assertEqual(station, expected_station)
+        # Execute the template string in a temporary namespace and
+    # support tracing utilities by setting a value for frame.f_globals['__name__']
+    namespace = dict(_itemgetter=_itemgetter, __name__='namedtuple_%s' % typename,
+                     _property=property, _tuple=tuple)
+    try:
+        exec(template, namespace)
+    except SyntaxError:
+        e = _sys.exc_info()[1]
+        raise SyntaxError(e.message + ':\n' + template)
+    result = namespace[typename]
     
-        def __init__(self):
-        self.time_provider = datetime.datetime
+    def main():
+    for name, fn in [('sequential', sequential),
+                     ('processes', with_process_pool_executor),
+                     ('threads', with_thread_pool_executor)]:
+        sys.stdout.write('%s: ' % name.ljust(12))
+        start = time.time()
+        if fn() != [True] * len(PRIMES):
+            sys.stdout.write('failed\n')
+        else:
+            sys.stdout.write('%.2f seconds\n' % (time.time() - start))
