@@ -1,87 +1,95 @@
 
         
-        AnsibleDumper.add_representer(
-    AnsibleUnicode,
-    represent_unicode,
-)
+        # TODO: response is the only one
+    
+            # Send the request.
+        send_kwargs = {
+            'timeout': timeout,
+            'allow_redirects': allow_redirects,
+        }
+        send_kwargs.update(settings)
+        resp = self.send(prep, **send_kwargs)
     
     
-def auto_parallel(metagraph, model):
-  from tensorflow.python.grappler import tf_optimizer
-  rewriter_config = rewriter_config_pb2.RewriterConfig()
-  rewriter_config.optimizers.append('autoparallel')
-  rewriter_config.auto_parallel.enable = True
-  rewriter_config.auto_parallel.num_replicas = FLAGS.num_gpus
-  optimized_graph = tf_optimizer.OptimizeGraph(rewriter_config, metagraph)
-  metagraph.graph_def.CopyFrom(optimized_graph)
-  UpdateCollection(metagraph, model)
-
+def get_from_rhc_config(variable):
+    global configparser
+    CONF_FILE = os.path.expanduser('~/.openshift/express.conf')
+    if os.path.exists(CONF_FILE):
+        if not configparser:
+            ini_str = '[root]\n' + open(CONF_FILE, 'r').read()
+            configparser = ConfigParser.SafeConfigParser()
+            configparser.readfp(StringIO.StringIO(ini_str))
+        try:
+            return configparser.get('root', variable)
+        except ConfigParser.NoOptionError:
+            return None
     
-      @tf.test.mock.patch.dict(custom_estimator.__dict__,
-                           {'load_data': four_lines_data})
-  def test_custom_estimator(self):
-    custom_estimator.main([None, '--train_steps=1'])
+        old_runs_prefix = 'https://app.shippable.com/runs/'
     
-    import numpy as np
-from six.moves import urllib
-import tensorflow as tf
+            spider_loader = self.crawler_process.spider_loader
     
-        # Read data into buckets and compute their sizes.
-    print ('Reading development and training data (limit: %d).'
-           % FLAGS.max_train_data_size)
-    dev_set = read_data(from_dev, to_dev)
-    train_set = read_data(from_train, to_train, FLAGS.max_train_data_size)
-    train_bucket_sizes = [len(train_set[b]) for b in xrange(len(_buckets))]
-    train_total_size = float(sum(train_bucket_sizes))
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
+                          help='set spider argument (may be repeated)')
+        parser.add_option('-o', '--output', metavar='FILE',
+                          help='dump scraped items into FILE (use - for stdout)')
+        parser.add_option('-t', '--output-format', metavar='FORMAT',
+                          help='format to use for dumping items with -o')
     
-      Returns:
-    A tuple of 6 elements:
-      (1) path to the token-ids for English training data-set,
-      (2) path to the token-ids for French training data-set,
-      (3) path to the token-ids for English development data-set,
-      (4) path to the token-ids for French development data-set,
-      (5) path to the English vocabulary file,
-      (6) path to the French vocabulary file.
-  '''
-  # Get wmt data to the specified directory.
-  train_path = get_wmt_enfr_train_set(data_dir)
-  dev_path = get_wmt_enfr_dev_set(data_dir)
+    # If true, show URL addresses after external links.
+#man_show_urls = False
     
-            self.assertIn(entry.get(), 'hello')
-        egi = entry.grid_info()
-        equal(int(egi['row']), 0)
-        equal(int(egi['column']), 1)
-        equal(int(egi['rowspan']), 1)
-        equal(int(egi['columnspan']), 1)
-        equal(self.dialog.row, 1)
+        @mock.patch(
+        'certbot_compatibility_test.validator.crypto_util.probe_sni')
+    def test_certificate_failure(self, mock_probe_sni):
+        cert = OpenSSL.crypto.X509()
+        cert.set_serial_number(1337)
+        mock_probe_sni.return_value = OpenSSL.crypto.X509()
+        self.assertFalse(self.validator.certificate(
+            cert, 'test.com', '127.0.0.1'))
     
-                {'data': 'keebler='E=mc2; L=\\'Loves\\'; fudge=\\012;'',
-             'dict': {'keebler' : 'E=mc2; L='Loves'; fudge=\012;'},
-             'repr': '''<SimpleCookie: keebler='E=mc2; L='Loves'; fudge=\\n;'>''',
-             'output': 'Set-Cookie: keebler='E=mc2; L=\\'Loves\\'; fudge=\\012;''},
+    # Add any paths that contain custom static files (such as style sheets) here,
+# relative to this directory. They are copied after the builtin static files,
+# so a file named 'default.css' will overwrite the builtin 'default.css'.
+html_static_path = ['_static']
     
     
-class TestDecode:
-    def test_decimal(self):
-        rval = self.loads('1.1', parse_float=decimal.Decimal)
-        self.assertTrue(isinstance(rval, decimal.Decimal))
-        self.assertEqual(rval, decimal.Decimal('1.1'))
+def win32_version_string():
+    import ctypes
+    class OSVERSIONINFOEXW(ctypes.Structure):
+        _fields_ = [('dwOSVersionInfoSize', ctypes.c_ulong),
+                    ('dwMajorVersion', ctypes.c_ulong),
+                    ('dwMinorVersion', ctypes.c_ulong),
+                    ('dwBuildNumber', ctypes.c_ulong),
+                    ('dwPlatformId', ctypes.c_ulong),
+                    ('szCSDVersion', ctypes.c_wchar*128),
+                    ('wServicePackMajor', ctypes.c_ushort),
+                    ('wServicePackMinor', ctypes.c_ushort),
+                    ('wSuiteMask', ctypes.c_ushort),
+                    ('wProductType', ctypes.c_byte),
+                    ('wReserved', ctypes.c_byte)]
+    '''
+    Get's the OS major and minor versions.  Returns a tuple of
+    (OS_MAJOR, OS_MINOR).
+    '''
+    os_version = OSVERSIONINFOEXW()
+    os_version.dwOSVersionInfoSize = ctypes.sizeof(os_version)
+    retcode = ctypes.windll.Ntdll.RtlGetVersion(ctypes.byref(os_version))
+    if retcode != 0:
+        raise Exception('Failed to get OS version')
     
-        # override in derived classes
-    def _extractrgb(self, mo):
-        return [int(x) for x in mo.group('red', 'green', 'blue')]
+            If you override, make sure to update syntaxErrors if you care about
+        that.
+        
+        '''
+        
+        # if we've already reported an error and have not matched a token
+        # yet successfully, don't report any errors.
+        if self._state.errorRecovery:
+            return
     
-            # bpo-30524: Test that calling a C type static method with no argument
-        # doesn't crash (ignore the result): METH_FASTCALL | METH_CLASS
-        (datetime.datetime.now, (), IGNORE_RESULT),
-    )
+            raise NotImplementedError
     
-            digits = [long(ob_digit[i]) * 2**(SHIFT*i)
-                  for i in safe_range(abs(ob_size))]
-        result = sum(digits)
-        if ob_size < 0:
-            result = -result
-        return result
-    
-            a[0], a[-1] = 200, -200
-        self.assertEqual(x[:], list(range(16)))
+    def setTokenIndex(self, index):
+        '''@brief Set the index in the input stream.
