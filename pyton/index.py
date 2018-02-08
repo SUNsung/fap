@@ -1,203 +1,280 @@
 
         
-        containers = (('thefuck/python3-tcsh',
-               u'''FROM python:3
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'),
-              ('thefuck/python2-tcsh',
-               u'''FROM python:2
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'))
+        
+tar_extensions = ('.tar', '.tar.Z', '.tar.bz2', '.tar.gz', '.tar.lz',
+                  '.tar.lzma', '.tar.xz', '.taz', '.tb2', '.tbz', '.tbz2',
+                  '.tgz', '.tlz', '.txz', '.tz')
     
-            Args:
-            max_workers: The maximum number of threads that can be used to
-                execute the given calls.
-        '''
-        self._max_workers = max_workers
-        self._work_queue = queue.Queue()
-        self._threads = set()
-        self._shutdown = False
-        self._shutdown_lock = threading.Lock()
     
-    # Workers are created as daemon threads. This is done to allow the interpreter
-# to exit when there are still idle threads in a ThreadPoolExecutor's thread
-# pool (i.e. shutdown() was not called). However, allowing workers to die with
-# the interpreter has two undesirable properties:
-#   - The workers would still be running during interpretor shutdown,
-#     meaning that they would fail in unpredictable ways.
-#   - The workers could be killed while evaluating a work item, which could
-#     be bad if the callable being evaluated has external side-effects e.g.
-#     writing to a file.
-#
-# To work around this problem, an exit handler is installed which tells the
-# workers to exit when their work queues are empty and then waits until the
-# threads finish.
+def compute_bench(alpha, n_samples, n_features, precompute):
+    lasso_results = []
+    lars_lasso_results = []
     
-    def download_urls_with_executor(urls, executor, timeout=60):
+        Parameters
+    ----------
+    metrics : array-like of callables (1d or 0d)
+        The metric functions to time.
+    
+            start = time.time()
+        func(X, n_jobs=1)
+        one_core.append(time.time() - start)
+    
+    
+def _get_git_revision():
     try:
-        url_to_content = {}
-        future_to_url = dict((executor.submit(load_url, url, timeout), url)
-                             for url in urls)
+        revision = subprocess.check_output(REVISION_CMD.split()).strip()
+    except (subprocess.CalledProcessError, OSError):
+        print('Failed to execute git to get revision')
+        return None
+    return revision.decode('utf-8')
     
-    if __name__ == '__main__':
-    main()
+        if f == os.path.basename(__file__):
+        continue
+    
+        def set_surface(self, surface):
+        self.surface = surface
+    
+    Both kinds of calibration can fix this issue and yield nearly identical
+results. This shows that sigmoid calibration can deal with situations where
+the calibration curve of the base classifier is sigmoid (e.g., for LinearSVC)
+but not where it is transposed-sigmoid (e.g., Gaussian naive Bayes).
+'''
+print(__doc__)
+    
+    This example illustrates how sigmoid calibration changes predicted
+probabilities for a 3-class classification problem. Illustrated is the
+standard 2-simplex, where the three corners correspond to the three classes.
+Arrows point from the probability vectors predicted by an uncalibrated
+classifier to the probability vectors predicted by the same classifier after
+sigmoid calibration on a hold-out validation set. Colors indicate the true
+class of an instance (red: class 1, green: class 2, blue: class 3).
+    
+            X, y = generate_data(n_test, n_features)
+        score_clf1 += clf1.score(X, y)
+        score_clf2 += clf2.score(X, y)
+    
+    
+def downgrade():
+    op.drop_column('tables', 'offset')
+    op.drop_column('datasources', 'offset')
 
     
-    _HEADERS = {'content-type': 'application/json'}
-_CONNECT_TIMEOUT_SEC = 0.01
-# Setting this to None seems to screw up the Requests/urllib3 libs.
-_READ_TIMEOUT_SEC = 30
-_HMAC_HEADER = 'x-ycm-hmac'
-_logger = logging.getLogger( __name__ )
     
-          # When the user rejects the extra conf, we reject it
-      with patch( 'ycm.vimsupport.PresentDialog',
-                  return_value = 1,
-                  new_callable = ExtendedMock ) as present_dialog:
-        ycm.OnFileReadyToParse()
-        ok_( ycm.FileParseRequestReady() )
-        ycm.HandleFileParseRequest()
+def upgrade():
+    op.create_table('logs',
+        sa.Column('id', sa.Integer(), nullable=False),
+        sa.Column('action', sa.String(length=512), nullable=True),
+        sa.Column('user_id', sa.Integer(), nullable=True),
+        sa.Column('json', sa.Text(), nullable=True),
+        sa.Column('dttm', sa.DateTime(), nullable=True),
+        sa.ForeignKeyConstraint(['user_id'], ['ab_user.id'], ),
+        sa.PrimaryKeyConstraint('id')
+    )
     
-      If the test fails (for the correct reason), then it is marked as skipped.
-  If it fails for any other reason, it is marked as failed.
-  If the test passes, then it is also marked as failed.'''
-  def decorator( test ):
-    @functools.wraps( test )
-    def Wrapper( *args, **kwargs ):
-      try:
-        test( *args, **kwargs )
-      except Exception as test_exception:
-        # Ensure that we failed for the right reason
-        test_exception_message = ToUnicode( test_exception )
+    
+def downgrade():
+    bind = op.get_bind()
+    session = db.Session(bind=bind)
+    for slc in session.query(Slice).all():
+        if slc.datasource_type == 'druid':
+            slc.druid_datasource_id = slc.datasource_id
+        if slc.datasource_type == 'table':
+            slc.table_id = slc.datasource_id
+        session.merge(slc)
+        session.commit()
+    session.close()
+    op.drop_column('slices', 'datasource_id')
+
+    
+    
+def downgrade():
+    op.drop_column('dashboards', 'json_metadata')
+
+    
+    from alembic import op
+import sqlalchemy as sa
+    
+    
+def upgrade():
+    op.create_table('dashboard_user',
+        sa.Column('id', sa.Integer(), nullable=False),
+        sa.Column('user_id', sa.Integer(), nullable=True),
+        sa.Column('dashboard_id', sa.Integer(), nullable=True),
+        sa.ForeignKeyConstraint(['dashboard_id'], [u'dashboards.id'], ),
+        sa.ForeignKeyConstraint(['user_id'], [u'ab_user.id'], ),
+        sa.PrimaryKeyConstraint('id'),
+    )
+    op.create_table('slice_user',
+        sa.Column('id', sa.Integer(), nullable=False),
+        sa.Column('user_id', sa.Integer(), nullable=True),
+        sa.Column('slice_id', sa.Integer(), nullable=True),
+        sa.ForeignKeyConstraint(['slice_id'], [u'slices.id'], ),
+        sa.ForeignKeyConstraint(['user_id'], [u'ab_user.id'], ),
+        sa.PrimaryKeyConstraint('id'),
+    )
+    
+    
+def downgrade():
+    op.drop_column('metrics', 'created_on')
+    op.drop_column('metrics', 'created_by_fk')
+    op.drop_column('metrics', 'changed_on')
+    op.drop_column('metrics', 'changed_by_fk')
+    try:
+        op.alter_column('url', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+        op.alter_column('url', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+        op.alter_column('tables', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+        op.alter_column('tables', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+        op.alter_column('table_columns', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+        op.alter_column('table_columns', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+        op.alter_column('sql_metrics', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+        op.alter_column('sql_metrics', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+        op.alter_column('slices', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+        op.alter_column('slices', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+        op.drop_constraint(None, 'metrics', type_='foreignkey')
+        op.drop_constraint(None, 'metrics', type_='foreignkey')
+        op.alter_column('dbs', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+        op.alter_column('dbs', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+        op.alter_column('datasources', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+        op.alter_column('datasources', 'created_by_fk',
+                   existing_type=sa.INTEGER(),
+                   nullable=False)
+        op.alter_column('datasources', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+        op.alter_column('datasources', 'changed_by_fk',
+                   existing_type=sa.INTEGER(),
+                   nullable=False)
+        op.alter_column('dashboards', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+        op.alter_column('dashboards', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+        op.alter_column('css_templates', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+        op.alter_column('css_templates', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+        op.alter_column('columns', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+        op.alter_column('columns', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=False)
+    except:
+        pass
+
+    
+                elif opt in ('-g', '--gui'):
+                # Run using GUI.
+                conf['gui'] = True
+    
+    def ehow_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+	
+	assert re.search(r'http://www.ehow.com/video_', url), 'URL you entered is not supported'
+    
+    ttinfo = namedtuple('ttinfo', ['tt_gmtoff', 'tt_isdst', 'tt_abbrind'])
+    
+        def _scan_once(string, idx):
         try:
-          for matcher in exception_matchers:
-            assert_that( test_exception_message, matcher )
-        except AssertionError:
-          # Failed for the wrong reason!
-          import traceback
-          print( 'Test failed for the wrong reason: ' + traceback.format_exc() )
-          # Real failure reason is the *original* exception, we're only trapping
-          # and ignoring the exception that is expected.
-          raise test_exception
+            nextchar = string[idx]
+        except IndexError:
+            raise StopIteration(idx) from None
     
-        # If not a dictionary or a list, the response is necessarily a
-    # scalar: boolean, number, string, etc. In this case, we print
-    # it to the user.
-    if not isinstance( self._response, ( dict, list ) ):
-      return self._HandleBasicResponse()
+        The DOMBuilder class uses an instance of this class to pass settings to
+    the ExpatBuilder class.
+    '''
     
+        @support.requires_IEEE_754
+    def test_negated_imaginary_literal(self):
+        z0 = -0j
+        z1 = -7j
+        z2 = -1e1000j
+        # Note: In versions of Python < 3.2, a negated imaginary literal
+        # accidentally ended up with real part 0.0 instead of -0.0, thanks to a
+        # modification during CST -> AST translation (see issue #9011).  That's
+        # fixed in Python 3.2.
+        self.assertFloatsAreIdentical(z0.real, -0.0)
+        self.assertFloatsAreIdentical(z0.imag, -0.0)
+        self.assertFloatsAreIdentical(z1.real, -0.0)
+        self.assertFloatsAreIdentical(z1.imag, -7.0)
+        self.assertFloatsAreIdentical(z2.real, -0.0)
+        self.assertFloatsAreIdentical(z2.imag, -INF)
     
-class DebugInfoRequest( BaseRequest ):
-  def __init__( self, extra_data = None ):
-    super( DebugInfoRequest, self ).__init__()
-    self._extra_data = extra_data
-    self._response = None
+        def _create_infile(self):
+        infile = support.TESTFN
+        with open(infile, 'w') as fp:
+            self.addCleanup(os.remove, infile)
+            fp.write(self.data)
+        return infile
     
-    import os
-import subprocess
-import sys
-import os.path as p
-import glob
+    def print_title(title, pattern = '-'):
+    print('\n'.join(('', title, pattern * len(title)))) 
     
-    from ycm.client.base_request import ( BaseRequest, BuildRequestData,
-                                      HandleServerException )
+            return user.gold
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+            responder._send_data(modhash=generate_modhash())
+        responder._send_data(cookie=user.make_cookie())
+
     
-        c-ares fails to resolve some names when ``family`` is ``AF_UNSPEC``,
-    so it is only recommended for use in ``AF_INET`` (i.e. IPv4).  This is
-    the default for ``tornado.simple_httpclient``, but other libraries
-    may default to ``AF_UNSPEC``.
+        @require_oauth2_scope('account')
+    @validate(
+        VUser(),
+        validated_prefs=PREFS_JSON_VALIDATOR,
+    )
+    @api_doc(api_section.account, json_model=PREFS_JSON_VALIDATOR,
+             uri='/api/v1/me/prefs')
+    def PATCH_prefs(self, validated_prefs):
+        user_prefs = c.user.preferences()
+        for short_name, new_value in validated_prefs.iteritems():
+            pref_name = 'pref_' + short_name
+            user_prefs[pref_name] = new_value
+        vprefs.filter_prefs(user_prefs, c.user)
+        vprefs.set_prefs(c.user, user_prefs)
+        c.user._commit()
+        return self.api_wrapper(PrefsJsonTemplate().data(c.user))
     
-       Unlike the standard library's `queue` module, the classes defined here
-   are *not* thread-safe. To use these queues from another thread,
-   use `.IOLoop.add_callback` to transfer control to the `.IOLoop` thread
-   before calling any queue methods.
-'''
-    
-            server = client = None
+    class ButtonsController(RedditController):
+    def get_wrapped_link(self, url, link = None, wrapper = None):
         try:
-            sock, port = bind_unused_port()
-            with NullContext():
-                server = TestServer()
-                server.add_socket(sock)
-            client = IOStream(socket.socket())
-            with ExpectLog(app_log, 'Exception in callback'):
-                yield client.connect(('localhost', port))
-                yield client.write(b'hello')
-                yield client.read_until_close()
-                yield gen.moment
-        finally:
-            if server is not None:
-                server.stop()
-            if client is not None:
-                client.close()
-    
-    import logging
-from tornado.curl_httpclient import CurlAsyncHTTPClient
-from tornado.simple_httpclient import SimpleAsyncHTTPClient
-from tornado.ioloop import IOLoop
-from tornado.options import define, options, parse_command_line
-from tornado.web import RequestHandler, Application
-    
-        def on_operator_inservice(self):
-        super(Suspect, self).abort_diagnostics()
-        super(Suspect, self).on_operator_inservice()  # message ignored
-    
-        def test_sales_manager_shall_respond_through_proxy_with_delay(cls):
-        cls.p.busy = 'Yes'
-        start_time = time()
-        cls.p.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-Sales Manager is busy\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time*10), expected_execution_time)
-    
-            def __init__(self, *args, **kwargs):
-            pass
+            links = []
+            if link:
+                links = [link]
+            else:
+                sr = None if isinstance(c.site, FakeSubreddit) else c.site
+                try:
+                    links = Link._by_url(url, sr)
+                except NotFound:
+                    pass
     
     
-class RadioTest(unittest.TestCase):
-    '''
-    Attention: Test case results depend on test case execution. The test cases
-    in this integration test class should be executed in an explicit order:
-    http://stackoverflow.com/questions/5387299/python-unittest-testcase-execution-order
-    '''
-    
-    class TimeDisplay(object):
-    
-    
-def main():
-    '''
-    >>> c = Catalog('param_value_1').main_method()
-    executed method 1!
-    >>> Catalog('param_value_2').main_method()
-    executed method 2!
-    '''
-    
-    
-class Transaction(object):
-    '''A transaction guard.
-    
-    
-# Example usage...
-def main():
-    data1 = Data('Data 1')
-    data2 = Data('Data 2')
-    view1 = DecimalViewer()
-    view2 = HexViewer()
-    data1.attach(view1)
-    data1.attach(view2)
-    data2.attach(view2)
-    data2.attach(view1)
+class HealthController(MinimalController):
+    def pre(self):
+        pass
