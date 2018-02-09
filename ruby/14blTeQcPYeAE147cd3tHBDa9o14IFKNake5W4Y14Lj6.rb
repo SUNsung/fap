@@ -1,41 +1,64 @@
-      # bootstrap requires minimum precision of 8, see https://github.com/twbs/bootstrap-sass/issues/409
-      ::Sass::Script::Number.precision = [8, ::Sass::Script::Number.precision].max
-    end
+
+        
+        def bottle_file_outdated?(f, file)
+  filename = file.basename.to_s
+  return unless f.bottle && filename.match(Pathname::BOTTLE_EXTNAME_RX)
     
-          less.gsub(regx, tmp)
-    end
+      def cxxstdlib_check(check_type)
+    self.class.cxxstdlib_check check_type
+  end
     
-        def log_processing(name)
-      puts yellow '  #{File.basename(name)}'
-    end
-    
-    class NodeMincerTest < Minitest::Test
-  DUMMY_PATH = 'test/dummy_node_mincer'
-    
-          spec['main'] =
-          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
-          find_files.(Bootstrap.fonts_path) +
-          %w(assets/javascripts/bootstrap.js)
-    
-    module Jekyll
-  class GistTag < Liquid::Tag
-    def initialize(tag_name, text, token)
-      super
-      @text           = text
-      @cache_disabled = false
-      @cache_folder   = File.expand_path '../.gist-cache', File.dirname(__FILE__)
-      FileUtils.mkdir_p @cache_folder
-    end
-    
-          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
-        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
-        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
-          @img['title']  = title
-          @img['alt']    = alt
-        else
-          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
-        end
-        @img['class'].gsub!(/'/, '') if @img['class']
+          it 'splits correctly' do
+        expected = ['One', 'Two', 'Three', 'Four Token']
+        expect(generator.split_keywords(keywords)).to eq(expected)
       end
-      super
     end
+    
+          xcode_project = Xcodeproj::Project.open(@project_file_path)
+      target = xcode_project.targets.find { |t| t.name == @target_name }
+    
+          it 'does set the source directory' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            cloc(source_directory: 'MyCoolApp')
+          end').runner.execute(:test)
+    
+          it 'gets the correct version number for 'TargetBTests'' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          get_version_number(xcodeproj: '.xcproject', target: 'TargetBTests')
+        end').runner.execute(:test)
+        expect(result).to eq('5.4.3')
+      end
+    
+          context('when the tag exists') do
+        before do
+          allow(Fastlane::Actions).to receive(:sh).with('git rev-parse -q --verify refs/tags/1.2.0 || true', { log: nil }).and_return('41215512353215321')
+        end
+    
+    # A logger that delays messages until they're explicitly flushed to an inner
+# logger.
+#
+# This can be installed around the current logger by calling \{#install!}, and
+# the original logger can be replaced by calling \{#uninstall!}. The log
+# messages can be flushed by calling \{#flush}.
+class Sass::Logger::Delayed < Sass::Logger::Base
+  # Installs a new delayed logger as the current Sass logger, wrapping the
+  # original logger.
+  #
+  # This can be undone by calling \{#uninstall!}.
+  #
+  # @return [Sass::Logger::Delayed] The newly-created logger.
+  def self.install!
+    logger = Sass::Logger::Delayed.new(Sass.logger)
+    Sass.logger = logger
+    logger
+  end
+    
+      def as_boolean(string)
+    return true   if string == true   || string =~ (/(true|t|yes|y|1)$/i)
+    return false  if string == false  || string.blank? || string =~ (/(false|f|no|n|0)$/i)
+    raise ArgumentError.new('invalid value for Boolean: \'#{string}\'')
+  end
+    
+          def started?
+        true
+      end
