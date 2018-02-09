@@ -1,403 +1,306 @@
 
         
-        #endif  // TENSORFLOW_KERNELS_SPARSE_TENSOR_DENSE_ADD_OP_H_
-
+            D3D_FEATURE_LEVEL featureLevels[] =
+    {
+        D3D_FEATURE_LEVEL_11_0,
+        D3D_FEATURE_LEVEL_10_1,
+        D3D_FEATURE_LEVEL_10_0,
+    };
+    UINT numFeatureLevels = ARRAYSIZE(featureLevels);
     
-    namespace perftools {
-namespace gputools {
-namespace cuda {
-    }
-    }
-    }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    namespace xla {
-    }
-    
-    class TFRecordReader : public ReaderBase {
- public:
-  TFRecordReader(const string& node_name, const string& compression_type,
-                 Env* env)
-      : ReaderBase(strings::StrCat('TFRecordReader '', node_name, ''')),
-        env_(env),
-        offset_(0),
-        compression_type_(compression_type) {}
-    }
-    
-        // pass address (value interface)
-    iterator find(const K& key)                     { return m.find(&key); }
-    const_iterator find(const K& key) const         { return m.find(&key); }
-    iterator lower_bound(const K& key)              { return m.lower_bound(&key); }
-    const_iterator lower_bound(const K& key) const  { return m.lower_bound(&key); }
-    size_type erase(const K& key)                   { return m.erase(&key); }
-    size_type count(const K& key) const             { return m.count(&key); }
-    
-    // Maximum level to which a new compacted memtable is pushed if it
-// does not create overlap.  We try to push to level 2 to avoid the
-// relatively expensive level 0=>1 compactions and to avoid some
-// expensive manifest file operations.  We do not push all the way to
-// the largest level since that can generate a lot of wasted disk
-// space if the same key space is being repeatedly overwritten.
-static const int kMaxMemCompactLevel = 2;
-    
-      // Successful parses
-  static struct {
-    const char* fname;
-    uint64_t number;
-    FileType type;
-  } cases[] = {
-    { '100.log',            100,   kLogFile },
-    { '0.log',              0,     kLogFile },
-    { '0.sst',              0,     kTableFile },
-    { '0.ldb',              0,     kTableFile },
-    { 'CURRENT',            0,     kCurrentFile },
-    { 'LOCK',               0,     kDBLockFile },
-    { 'MANIFEST-2',         2,     kDescriptorFile },
-    { 'MANIFEST-7',         7,     kDescriptorFile },
-    { 'LOG',                0,     kInfoLogFile },
-    { 'LOG.old',            0,     kInfoLogFile },
-    { '18446744073709551615.log', 18446744073709551615ull, kLogFile },
-  };
-  for (int i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
-    std::string f = cases[i].fname;
-    ASSERT_TRUE(ParseFileName(f, &number, &type)) << f;
-    ASSERT_EQ(cases[i].type, type) << f;
-    ASSERT_EQ(cases[i].number, number) << f;
-  }
-    
-      void Start() {
-    start_ = Env::Default()->NowMicros() * 1e-6;
-    bytes_ = 0;
-    message_.clear();
-    last_op_finish_ = start_;
-    hist_.Clear();
-    done_ = 0;
-    next_report_ = 100;
-  }
-    
-      // Three-way comparison.  Returns value:
-  //   < 0 iff 'a' < 'b',
-  //   == 0 iff 'a' == 'b',
-  //   > 0 iff 'a' > 'b'
-  virtual int Compare(const Slice& a, const Slice& b) const = 0;
-    
-      /* Convert from BlobProto to Blob<float> */
-  Blob<float> mean_blob;
-  mean_blob.FromProto(blob_proto);
-  CHECK_EQ(mean_blob.channels(), num_channels_)
-    << 'Number of channels of mean file doesn't match input layer.';
-    
-    int main(int argc, char** argv) {
-  if (argc != 4) {
-    printf('This script converts the MNIST dataset to the leveldb format used\n'
-           'by caffe to train a siamese network.\n'
-           'Usage:\n'
-           '    convert_mnist_data input_image_file input_label_file '
-           'output_db_file\n'
-           'The MNIST dataset could be downloaded at\n'
-           '    http://yann.lecun.com/exdb/mnist/\n'
-           'You should gunzip them after downloading.\n');
-  } else {
-    google::InitGoogleLogging(argv[0]);
-    convert_dataset(argv[1], argv[2], argv[3]);
-  }
-  return 0;
+    cv::Mat dls::skewsymm(const cv::Mat * X1)
+{
+    cv::MatConstIterator_<double> it = X1->begin<double>();
+    return (cv::Mat_<double>(3,3) <<        0, -*(it+2),  *(it+1),
+                                      *(it+2),        0, -*(it+0),
+                                     -*(it+1),  *(it+0),       0);
 }
-#else
-int main(int argc, char** argv) {
-  LOG(FATAL) << 'This example requires LevelDB; compile with USE_LEVELDB.';
-}
-#endif  // USE_LEVELDB
-
+    
+      // Calculate the normalized form x^3 + a2 * x^2 + a1 * x + a0 = 0
+  double inv_a = 1. / a;
+  double b_a = inv_a * b, b_a2 = b_a * b_a;
+  double c_a = inv_a * c;
+  double d_a = inv_a * d;
     
     
-    { protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
-   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
-   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
-   *      the computed outputs @f$
-   *       y_n = \arg\max\limits_i x_{ni}
-   *      @f$ (for @f$ K = 1 @f$).
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  /// @brief Not implemented (non-differentiable function)
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-    NOT_IMPLEMENTED;
-  }
-  bool out_max_val_;
-  size_t top_k_;
-  bool has_axis_;
-  int axis_;
+    {    bool checkSubsetPublic( const CvMat* ms1, int count, bool checkPartialSubset );
 };
     
-      /// @brief The spatial dimensions of the input.
-  inline int input_shape(int i) {
-    return (*bottom_shape_)[channel_axis_ + i];
-  }
-  // reverse_dimensions should return true iff we are implementing deconv, so
-  // that conv helpers know which dimensions are which.
-  virtual bool reverse_dimensions() = 0;
-  // Compute height_out_ and width_out_ from other parameters.
-  virtual void compute_output_shape() = 0;
+        // Extension: ARB_framebuffer_object
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of TanHLayer.
- */
-template <typename Dtype>
-class CuDNNTanHLayer : public TanHLayer<Dtype> {
- public:
-  explicit CuDNNTanHLayer(const LayerParameter& param)
-      : TanHLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNTanHLayer();
+        // assign a part of the matrix (used for parallelized data copying--our matrices can be 32 MB and more)
+    void assign(const ssematrixbase &other, size_t i, size_t n)
+    {
+        assert(cols() == other.cols() && rows() == other.rows());
+        assert(i < n);
+        const size_t j0 = numcols * i / n;
+        const size_t j1 = numcols * (i + 1) / n;
+        const size_t totalelem = colstride * (j1 - j0);
+        if (totalelem > 0)
+            memcpy(&(*this)(0, j0), &other(0, j0), totalelem * sizeof(*p));
     }
     
-    /**
- * @brief A layer for learning 'embeddings' of one-hot vector input.
- *        Equivalent to an InnerProductLayer with one-hot vectors as input, but
- *        for efficiency the input is the 'hot' index of each column itself.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-template <typename Dtype>
-class EmbedLayer : public Layer<Dtype> {
- public:
-  explicit EmbedLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
+        Matrix<float> mBdense(c_deviceIdZero);
+    mBdense.AssignTruncateBottomOf(Matrix<float>::RandomUniform(dim2, dim1, c_deviceIdZero, -5.0f, 0.4f, IncrementCounter()), 0);
+    Matrix<float> mBsparse(mBdense.DeepClone());
+    mBsparse.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseCSR, true);
     
-    //////////////////////////////////////////////////////////////////////
+        StreamMinibatchInputs inputMatrices;
+    for (auto& node : featureNodes)
+        inputMatrices.AddInput(node->NodeName(), node->ValuePtr(), node->GetMBLayout(), node->GetSampleLayout());
     
-    String TimeStamp::CurrentMicroTime() {
-  struct timeval tp;
-  gettimeofday(&tp, nullptr);
-  char ret[100];
-  snprintf(ret, 100, '%.8F %ld', (double)tp.tv_usec / 1000000, tp.tv_sec);
-  return String(ret, CopyString);
-}
-    
-    /*
- * Timing execution of block of codes.
- */
-struct Timer {
-  enum Type {
-    WallTime,
-    SystemCPU,
-    UserCPU,
-    TotalCPU,
-  };
-  enum ReportType {
-    Log,
-    Stderr,
-    Trace,
-  };
-  enum Who {
-    Self = RUSAGE_SELF,
-    Children = RUSAGE_CHILDREN,
-#ifdef RUSAGE_THREAD
-    Thread = RUSAGE_THREAD,
-#endif
-  };
-    }
-    
-    
-    {///////////////////////////////////////////////////////////////////////////////
-}
-    
-    /*
- * This function is like a request-agnostic version of
- * server_warmup_status().
- * Three conditions necessary for the jit to qualify as 'warmed-up':
- * 1. Has HHVM evaluated enough requests?
- * 2. Has retranslateAll happened yet?
- * 3. Has code size plateaued? Is the rate of new code emission flat?
- * If the jit is warmed up, this function returns the empty string.
- */
-std::string warmupStatusString();
-    
-    #include 'hphp/util/assertions.h'
-#include 'hphp/util/type-scan.h'
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    
-        const char *rdata = ret.data();
-    int rsize = ret.size();
-    
-    namespace boost {
-    }
-    
-      /// Clear the buffer.
-  void clear()
-  {
-    begin_offset_ = 0;
-    end_offset_ = 0;
-  }
-    
-    #if defined(BOOST_ASIO_HAS_STD_FUNCTION)
-# include <functional>
-#else // defined(BOOST_ASIO_HAS_STD_FUNCTION)
-# include <boost/function.hpp>
-#endif // defined(BOOST_ASIO_HAS_STD_FUNCTION)
-    
-    #ifndef BOOST_ASIO_DETAIL_HANDLER_ALLOC_HELPERS_HPP
-#define BOOST_ASIO_DETAIL_HANDLER_ALLOC_HELPERS_HPP
-    
-    int poll_read(int d, state_type state, boost::system::error_code& ec)
+    template <class ConfigRecordType, typename ElemType>
+ComputationNetworkPtr GetModelFromConfig(const ConfigRecordType& config, const wstring& outputNodeNamesConfig, vector<wstring>& outputNodeNamesVector)
 {
-  if (d == -1)
-  {
-    ec = boost::asio::error::bad_descriptor;
-    return -1;
-  }
+    DEVICEID_TYPE deviceId = DeviceFromConfig(config);
     }
     
-    template <typename Time_Traits>
-void dev_poll_reactor::schedule_timer(timer_queue<Time_Traits>& queue,
-    const typename Time_Traits::time_type& time,
-    typename timer_queue<Time_Traits>::per_timer_data& timer, wait_op* op)
+    
+    {    return std::equal(s1.begin(), s1.end(), s2.begin(), [](const TElement& a, const TElement& b)
+    {
+        return std::tolower(a) == std::tolower(b);
+    });
+}
+    
+    
+    {public:
+    inline const_array_ref(const _T* ptr, size_t size) throw()
+        : data(ptr), n(size)
+    {
+    }
+    inline const_array_ref() throw()
+        : data(NULL), n(0)
+    {
+    } // in case we have a vector of this
+    inline const _T& operator[](size_t i) const throw()
+    {
+        check_index(i);
+        return data[i];
+    }
+    inline size_t size() const throw()
+    {
+        return n;
+    }
+    inline const _T* begin()
+    {
+        return data;
+    }
+    inline const _T* end()
+    {
+        return data + n;
+    }
+    inline const _T& front() const throw()
+    {
+        check_index(0);
+        return data[0];
+    }
+    inline const _T& back() const throw()
+    {
+        check_index(0);
+        return data[n - 1];
+    }
+    // construct from other vector types
+    template <class _V>
+    inline const_array_ref(const _V& v)
+        : data(v.size() > 0 ? &v[0] : NULL), n((size_t) v.size())
+    {
+    }
+};
+    
+    class float4
 {
-  boost::asio::detail::mutex::scoped_lock lock(mutex_);
+    __m128 v; // value
+private:
+    // return the low 'float'
+    float f0() const
+    {
+        float f;
+        _mm_store_ss(&f, v);
+        return f;
+    }
+    // construct from a __m128, assuming it is a f32 vector (needed for directly returning __m128 below)
+    float4(const __m128& v)
+        : v(v)
+    {
+    }
+    // return as a __m128 --should this be a reference?
+    operator __m128() const
+    {
+        return v;
+    }
+    // assign a __m128 (needed for using nested float4 objects inside this class, e.g. sum())
+    float4& operator=(const __m128& other)
+    {
+        v = other;
+        return *this;
+    }
     }
     
-    template <typename Time_Traits>
-void epoll_reactor::add_timer_queue(timer_queue<Time_Traits>& queue)
-{
-  do_add_timer_queue(queue);
-}
+    namespace guetzli {
+    }
     
-    extern JSClass  *jsb_cocosbuilder_CCBReader_class;
-extern JSObject *jsb_cocosbuilder_CCBReader_prototype;
+    typedef void (*Transform1d)(const double* in, int stride, double* out);
     
     
+    {}  // namespace guetzli
     
-    #ifdef __cplusplus
-extern 'C' {
-#endif
-#include 'tolua++.h'
-#ifdef __cplusplus
-}
-#endif
+    #ifndef GUETZLI_FDCT_H_
+#define GUETZLI_FDCT_H_
     
+    // Butteraugli scores that correspond to JPEG quality levels, starting at
+// kLowestQuality. They were computed by taking median BA scores of JPEGs
+// generated using libjpeg-turbo at given quality from a set of PNGs.
+// The scores above quality level 100 are just linearly decreased so that score
+// for 110 is 90% of the score for 100.
+const double kScoreForQuality[] = {
+  2.810761,  // 70
+  2.729300,
+  2.689687,
+  2.636811,
+  2.547863,
+  2.525400,
+  2.473416,
+  2.366133,
+  2.338078,
+  2.318654,
+  2.201674,  // 80
+  2.145517,
+  2.087322,
+  2.009328,
+  1.945456,
+  1.900112,
+  1.805701,
+  1.750194,
+  1.644175,
+  1.562165,
+  1.473608,  // 90
+  1.382021,
+  1.294298,
+  1.185402,
+  1.066781,
+  0.971769,  // 95
+  0.852901,
+  0.724544,
+  0.611302,
+  0.443185,
+  0.211578,  // 100
+  0.209462,
+  0.207346,
+  0.205230,
+  0.203114,
+  0.200999,  // 105
+  0.198883,
+  0.196767,
+  0.194651,
+  0.192535,
+  0.190420,  // 110
+  0.190420,
+};
     
-    
-    
-    
-    
-    {	for (int32 i = 0; i < manifold->pointCount && m_pointCount < k_maxContactPoints; ++i)
-	{
-		ContactPoint* cp = m_points + m_pointCount;
-		cp->fixtureA = fixtureA;
-		cp->fixtureB = fixtureB;
-		cp->position = worldManifold.points[i];
-		cp->normal = worldManifold.normal;
-		cp->state = state2[i];
-		cp->normalImpulse = manifold->points[i].normalImpulse;
-		cp->tangentImpulse = manifold->points[i].tangentImpulse;
-		cp->separation = worldManifold.separations[i];
-		++m_pointCount;
+    	if (genSend) {
+		printer->Print(vars, 'func (x *$StreamType$) Send(m *$Request$) error {\n');
+		printer->Indent();
+		printer->Print('return x.ClientStream.SendMsg(m)\n');
+		printer->Outdent();
+		printer->Print('}\n\n');
 	}
+    
+    
+    {    auto stream = stub_->SayManyHellos(&context, request_msg);
+    while (stream->Read(&response_msg)) {
+      const HelloReply *response = response_msg.GetRoot();
+      callback(response->message()->str());
+    }
+    auto status = stream->Finish();
+    if (!status.ok()) {
+      std::cerr << status.error_code() << ': ' << status.error_message()
+                << std::endl;
+      callback('RPC failed');
+    }
+  }
+    
+    ::grpc::Status MonsterStorage::Service::Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
 }
     
-    class Bridge : public Test
-{
-public:
-    }
-    
-    // Platform detection.
-#ifdef __linux__
-#define LIBFUZZER_APPLE 0
-#define LIBFUZZER_LINUX 1
-#define LIBFUZZER_WINDOWS 0
-#elif __APPLE__
-#define LIBFUZZER_APPLE 1
-#define LIBFUZZER_LINUX 0
-#define LIBFUZZER_WINDOWS 0
-#elif _WIN32
-#define LIBFUZZER_APPLE 0
-#define LIBFUZZER_LINUX 0
-#define LIBFUZZER_WINDOWS 1
+    #if defined(ARDUINO) && !defined(ARDUINOSTL_M_H)
+  #include <utility.h>
 #else
-#error 'Support for your platform has not been implemented'
+  #include <utility>
 #endif
     
-    static void CheckFnPtr(void *FnPtr, const char *FnName, bool WarnIfMissing) {
-  if (FnPtr == nullptr && WarnIfMissing) {
-    Printf('WARNING: Failed to find function \'%s\'.\n', FnName);
-  }
+    
+    {}  // namespace flatbuffers
+    
+    // Get any table field as a string, regardless of what type it is.
+// You may pass nullptr for the schema if you don't care to have fields that
+// are of table type pretty-printed.
+inline std::string GetAnyFieldS(const Table &table,
+                                const reflection::Field &field,
+                                const reflection::Schema *schema) {
+  auto field_ptr = table.GetAddressOf(field.offset());
+  return field_ptr ? GetAnyValueS(field.type()->base_type(), field_ptr, schema,
+                                  field.type()->index())
+                   : '';
 }
-    
-    
-    {  // Mutate the integer value.
-  switch(Rand(5)) {
-    case 0: Val++; break;
-    case 1: Val--; break;
-    case 2: Val /= 2; break;
-    case 3: Val *= 2; break;
-    case 4: Val = Rand(Val * Val); break;
-    default: assert(0);
-  }
-  // Just replace the bytes with the new ones, don't bother moving bytes.
-  for (size_t i = B; i < E; i++) {
-    size_t Idx = E + B - i - 1;
-    assert(Idx >= B && Idx < E);
-    Data[Idx] = (Val % 10) + '0';
-    Val /= 10;
-  }
-  return Size;
-}
-    
-    // Private copy of SHA1 implementation.
-static const int kSHA1NumBytes = 20;
-    
-      void AddValueForMemcmp(void *caller_pc, const void *s1, const void *s2,
-                         size_t n);
-  void AddValueForStrcmp(void *caller_pc, const char *s1, const char *s2,
-                         size_t n);
     
     
     {
-    {      (void)sigemptyset(&BlockedSignalsSet);
-      (void)sigaddset(&BlockedSignalsSet, SIGCHLD);
-      if (sigprocmask(SIG_BLOCK, &BlockedSignalsSet, &OldBlockedSignalsSet) ==
-          -1) {
-        Printf('Failed to block SIGCHLD\n');
-        // Try our best to restore the signal handlers.
-        (void)sigaction(SIGQUIT, &OldSigQuitAction, NULL);
-        (void)sigaction(SIGINT, &OldSigIntAction, NULL);
-        (void)posix_spawnattr_destroy(&SpawnAttributes);
-        return -1;
-      }
+    {        // Start the ASIO io_service run loop
+        echo_server.run();
+    } catch (websocketpp::exception const & e) {
+        std::cout << e.what() << std::endl;
+    } catch (...) {
+        std::cout << 'other exception' << std::endl;
     }
-    ++ActiveThreadCount;
-  }
+}
+
+    
+    int totalConnections = 500000;
+int port = 3000;
+    
+    template <bool isServer>
+void Group<isServer>::addHttpSocket(HttpSocket<isServer> *httpSocket) {
+    if (httpSocketHead) {
+        httpSocketHead->prev = httpSocket;
+        httpSocket->next = httpSocketHead;
+    } else {
+        httpSocket->next = nullptr;
+        // start timer
+        httpTimer = new uS::Timer(hub->getLoop());
+        httpTimer->setData(this);
+        httpTimer->start([](uS::Timer *httpTimer) {
+            Group<isServer> *group = (Group<isServer> *) httpTimer->getData();
+            group->forEachHttpSocket([](HttpSocket<isServer> *httpSocket) {
+                if (httpSocket->missedDeadline) {
+                    httpSocket->terminate();
+                } else if (!httpSocket->outstandingResponsesHead) {
+                    httpSocket->missedDeadline = true;
+                }
+            });
+        }, 1000, 1000);
+    }
+    httpSocketHead = httpSocket;
+    httpSocket->prev = nullptr;
+}
+    
+            if (status < 0) {
+            STATE::onEnd((Socket *) p);
+            return;
+        }
+    
+    enum HttpMethod {
+    METHOD_GET,
+    METHOD_POST,
+    METHOD_PUT,
+    METHOD_DELETE,
+    METHOD_PATCH,
+    METHOD_OPTIONS,
+    METHOD_HEAD,
+    METHOD_TRACE,
+    METHOD_CONNECT,
+    METHOD_INVALID
+};
