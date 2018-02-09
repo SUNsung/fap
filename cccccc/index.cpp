@@ -1,152 +1,220 @@
 
         
-        namespace google {
-namespace protobuf {
-namespace {
-    }
-    }
-    }
-    
-    class MapFieldGenerator : public FieldGeneratorBase {
- public:
-  MapFieldGenerator(const FieldDescriptor* descriptor,
-                    int fieldOrdinal,
-                    const Options* options);
-  ~MapFieldGenerator();
-    }
+        THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
     
     
-    {}
+int             oc_has_mode_metrics;
+oc_mode_metrics OC_MODE_METRICS[64][3][2][OC_SAD_BINS];
+# endif
     
-    void WriteMessageDocComment(io::Printer* printer, const Descriptor* message);
-void WriteFieldDocComment(io::Printer* printer, const FieldDescriptor* field);
-void WriteEnumDocComment(io::Printer* printer, const EnumDescriptor* enum_);
-void WriteEnumValueDocComment(io::Printer* printer,
-                              const EnumValueDescriptor* value);
-void WriteServiceDocComment(io::Printer* printer,
-                            const ServiceDescriptor* service);
-void WriteMethodDocComment(io::Printer* printer,
-                           const MethodDescriptor* method);
+      {1,0,32,  &_residue_44_low_un,
+   &_huff_book__44u3__long,&_huff_book__44u3__long,
+   &_resbook_44u_3,&_resbook_44u_3}
+};
+static const vorbis_residue_template _res_44u_4[]={
+  {1,0,16,  &_residue_44_low_un,
+   &_huff_book__44u4__short,&_huff_book__44u4__short,
+   &_resbook_44u_4,&_resbook_44u_4},
     
-     private:
-  template <
-      template <typename> class Atom,
-      typename Deadline,
-      typename IdleTime>
-  static bool futexWaitPreIdle(
-      FutexResult& _ret,
-      Futex<Atom>& fut,
-      uint32_t expected,
-      Deadline const& deadline,
-      uint32_t waitMask,
-      IdleTime idleTimeout,
-      size_t stackToRetain,
-      float timeoutVariationFrac) {
-    // idleTimeout < 0 means no flush behavior
-    if (idleTimeout < IdleTime::zero()) {
-      return false;
-    }
-    }
+    static const vorbis_residue_template _res_8u_0[]={
+  {1,0,32,  &_residue_44_low_un,
+   &_huff_book__8u0__single,&_huff_book__8u0__single,
+   &_resbook_8u_0,&_resbook_8u_0},
+};
+static const vorbis_residue_template _res_8u_1[]={
+  {1,0,32,  &_residue_44_mid_un,
+   &_huff_book__8u1__single,&_huff_book__8u1__single,
+   &_resbook_8u_1,&_resbook_8u_1},
+};
     
-      auto seq2 = folly::index_sequence<0, 4, 3>();
-  EXPECT_EQ(3, seq2.size());
-    
-      T* address(T& x) const {
-    return std::addressof(x);
-  }
-    
-    #if !__clang__ || __CLANG_PREREQ(3, 7) // Clang 3.6 crashes on this line
-  /* implicit */ Range(std::nullptr_t) = delete;
+    #if defined(__SYMBIAN32__) && defined(__WINS__)
+void *_alloca(size_t size);
+#  define alloca _alloca
 #endif
     
-      /// Always claims to be on CPU zero, node zero
-  static int degenerateGetcpu(unsigned* cpu, unsigned* node, void*) {
-    if (cpu != nullptr) {
-      *cpu = 0;
-    }
-    if (node != nullptr) {
-      *node = 0;
-    }
-    return 0;
+    # if !defined(__ARM_MAX_ARCH__)
+#  define __ARM_MAX_ARCH__ __ARM_ARCH__
+# endif
+    
+    #  define BF_ENC(LL,R,S,P) ( \
+        LL^=P, \
+        LL^= (((*(BF_LONG *)((unsigned char *)&(S[  0])+((R>>BF_0)&BF_M))+ \
+                *(BF_LONG *)((unsigned char *)&(S[256])+((R>>BF_1)&BF_M)))^ \
+                *(BF_LONG *)((unsigned char *)&(S[512])+((R>>BF_2)&BF_M)))+ \
+                *(BF_LONG *)((unsigned char *)&(S[768])+((R<<BF_3)&BF_M))) \
+        )
+# else
+    
+      /// Perform an IO control command on the acceptor.
+  /**
+   * This function is used to execute an IO control command on the acceptor.
+   *
+   * @param command The IO control command to be performed on the acceptor.
+   *
+   * @param ec Set to indicate what error occurred, if any.
+   *
+   * @sa IoControlCommand @n
+   * boost::asio::socket_base::non_blocking_io
+   *
+   * @par Example
+   * Getting the number of bytes ready to read:
+   * @code
+   * boost::asio::ip::tcp::acceptor acceptor(io_service);
+   * ...
+   * boost::asio::ip::tcp::acceptor::non_blocking_io command(true);
+   * boost::system::error_code ec;
+   * socket.io_control(command, ec);
+   * if (ec)
+   * {
+   *   // An error occurred.
+   * }
+   * @endcode
+   */
+  template <typename IoControlCommand>
+  boost::system::error_code io_control(IoControlCommand& command,
+      boost::system::error_code& ec)
+  {
+    return this->get_service().io_control(
+        this->get_implementation(), command, ec);
   }
     
-    template <typename F>
-using ScopeGuardImplDecay = ScopeGuardImpl<typename std::decay<F>::type>;
+    template <typename Stream>
+class buffered_read_stream;
     
-        int getOverflow(void) const;
-    int getDisplay(void) const;
+      friend class context;
     
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+# include <boost/asio/detail/null_event.hpp>
+#elif defined(BOOST_ASIO_WINDOWS)
+# include <boost/asio/detail/win_event.hpp>
+#elif defined(BOOST_ASIO_HAS_PTHREADS)
+# include <boost/asio/detail/posix_event.hpp>
+#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
+# include <boost/asio/detail/std_event.hpp>
+#else
+# error Only Windows, POSIX and std::condition_variable are supported!
+#endif
     
-    {    void toJS(nbind::cbOutput expose) const
+    #include <boost/asio/detail/config.hpp>
+    
+    #include <boost/asio/detail/pop_options.hpp>
+    
+      // Insert a new entry into the map.
+  std::pair<iterator, bool> insert(const value_type& v)
+  {
+    if (size_ + 1 >= num_buckets_)
+      rehash(hash_size(size_ + 1));
+    size_t bucket = calculate_hash_value(v.first) % num_buckets_;
+    iterator it = buckets_[bucket].first;
+    if (it == values_.end())
     {
-        expose(left, right, top, bottom, width, height);
+      buckets_[bucket].first = buckets_[bucket].last =
+        values_insert(values_.end(), v);
+      ++size_;
+      return std::pair<iterator, bool>(buckets_[bucket].last, true);
     }
-};
-
+    iterator end_it = buckets_[bucket].last;
+    ++end_it;
+    while (it != end_it)
+    {
+      if (it->first == v.first)
+        return std::pair<iterator, bool>(it, false);
+      ++it;
+    }
+    buckets_[bucket].last = values_insert(end_it, v);
+    ++size_;
+    return std::pair<iterator, bool>(buckets_[bucket].last, true);
+  }
     
-    #pragma once
+    void buffer_sequence_adapter_base::init_native_buffer(
+    buffer_sequence_adapter_base::native_buffer_type& buf,
+    const boost::asio::mutable_buffer& buffer)
+{
+  std::memset(&buf, 0, sizeof(native_buffer_type));
+  Microsoft::WRL::ComPtr<IInspectable> insp
+    = Microsoft::WRL::Make<winrt_buffer_impl>(buffer);
+  buf = reinterpret_cast<Windows::Storage::Streams::IBuffer^>(insp.Get());
+}
+    
+        // Setup display size (every frame to accommodate for window resizing)
+    int w, h;
+    w = al_get_display_width(g_Display);
+    h = al_get_display_height(g_Display);
+    io.DisplaySize = ImVec2((float)w, (float)h);
+    
+        // Initialize Direct3D
+    LPDIRECT3D9 pD3D;
+    if ((pD3D = Direct3DCreate9(D3D_SDK_VERSION)) == NULL)
+    {
+        UnregisterClass(_T('ImGui Example'), wc.hInstance);
+        return 0;
+    }
+    ZeroMemory(&g_d3dpp, sizeof(g_d3dpp));
+    g_d3dpp.Windowed = TRUE;
+    g_d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
+    g_d3dpp.BackBufferFormat = D3DFMT_UNKNOWN;
+    g_d3dpp.EnableAutoDepthStencil = TRUE;
+    g_d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
+    g_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_ONE; // Present with vsync
+    //g_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE; // Present without vsync, maximum unthrottled framerate
+    
+    int32 ImGui_Marmalade_CharCallback(void* SystemData, void* userData)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    s3eKeyboardCharEvent* e = (s3eKeyboardCharEvent*)SystemData;
+    if ((e->m_Char > 0 && e->m_Char < 0x10000))
+        io.AddInputCharacter((unsigned short)e->m_Char);
+    }
+    
+    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
+// **Prefer using the code in the opengl3_example/ folder**
+// See imgui_impl_glfw.cpp for details.
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+    #include <gtest/gtest.h>
+#include <yoga/Yoga.h>
     
       const YGNodeRef root_child0 = YGNodeNew();
   YGNodeStyleSetFlexGrow(root_child0, 1);
   YGNodeStyleSetMargin(root_child0, YGEdgeHorizontal, 10);
-  YGNodeStyleSetMargin(root_child0, YGEdgeAll, 20);
+  YGNodeStyleSetMargin(root_child0, YGEdgeLeft, 20);
   YGNodeInsertChild(root, root_child0, 0);
     
-      ASSERT_FLOAT_EQ(0, YGNodeLayoutGetLeft(root_child2));
-  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root_child2));
-  ASSERT_FLOAT_EQ(50, YGNodeLayoutGetWidth(root_child2));
-  ASSERT_FLOAT_EQ(50, YGNodeLayoutGetHeight(root_child2));
+      YGNodeFreeRecursive(root);
     
-      const YGNodeRef root_child0 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(root_child0, 10);
-  YGNodeStyleSetHeight(root_child0, 10);
-  YGNodeInsertChild(root, root_child0, 0);
-  YGNodeCalculateLayout(root, YGUndefined, YGUndefined, YGDirectionLTR);
-    
-      const YGNodeRef root = YGNodeNewWithConfig(config);
-  YGNodeStyleSetHeightPercent(root, 100);
-  YGNodeStyleSetWidthPercent(root, 100);
-    
-      if (InitialCorpus.empty()) {
-    InitialCorpus.push_back(Unit({'\n'}));  // Valid ASCII input.
-    if (Options.Verbosity)
-      Printf('INFO: A corpus is not provided, starting from an empty corpus\n');
-  }
-  F->ShuffleAndMinimize(&InitialCorpus);
-  InitialCorpus.clear();  // Don't need this memory any more.
-  F->Loop();
-    
-    namespace fuzzer {
+    void assertInternal(const char* formatstr ...) {
+    va_list va_args;
+    va_start(va_args, formatstr);
+    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
+    va_end(va_args);
+    if (gAssertHandler != NULL) {
+        gAssertHandler(sAssertBuf);
     }
+    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
+    // crash at this specific address so that we can find our crashes easier
+    *(int*)0xdeadb00c = 0;
+    // let the compiler know we won't reach the end of the function
+     __builtin_unreachable();
+}
     
-    namespace fuzzer {
-    }
-    
-    namespace fuzzer {
-    }
-    
-    #ifndef LLVM_FUZZER_TRACE_PC
-#define LLVM_FUZZER_TRACE_PC
-    
-    // This is a reimplementation of Libc's `system()`. On Darwin the Libc
-// implementation contains a mutex which prevents it from being used
-// concurrently. This implementation **can** be used concurrently. It sets the
-// signal handlers when the first thread enters and restores them when the last
-// thread finishes execution of the function and ensures this is not racey by
-// using a mutex.
-int ExecuteCommand(const std::string &Command) {
-  posix_spawnattr_t SpawnAttributes;
-  if (posix_spawnattr_init(&SpawnAttributes))
-    return -1;
-  // Block and ignore signals of the current process when the first thread
-  // enters.
-  {
-    std::lock_guard<std::mutex> Lock(SignalMutex);
-    if (ActiveThreadCount == 0) {
-      static struct sigaction IgnoreSignalAction;
-      sigset_t BlockedSignalsSet;
-      memset(&IgnoreSignalAction, 0, sizeof(IgnoreSignalAction));
-      IgnoreSignalAction.sa_handler = SIG_IGN;
+    namespace facebook {
+namespace alog {
     }
     }
-    }
+    
+    
+    {}
+
+    
+      template <typename U> friend class RefPtr;
