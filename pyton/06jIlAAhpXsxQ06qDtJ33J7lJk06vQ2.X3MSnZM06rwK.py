@@ -1,95 +1,105 @@
 
         
-        # TODO: response is the only one
-    
-            # Send the request.
-        send_kwargs = {
-            'timeout': timeout,
-            'allow_redirects': allow_redirects,
-        }
-        send_kwargs.update(settings)
-        resp = self.send(prep, **send_kwargs)
+        
+@pytest.mark.functional
+def test_without_confirmation(proc, TIMEOUT):
+    without_confirmation(proc, TIMEOUT)
     
     
-def get_from_rhc_config(variable):
-    global configparser
-    CONF_FILE = os.path.expanduser('~/.openshift/express.conf')
-    if os.path.exists(CONF_FILE):
-        if not configparser:
-            ini_str = '[root]\n' + open(CONF_FILE, 'r').read()
-            configparser = ConfigParser.SafeConfigParser()
-            configparser.readfp(StringIO.StringIO(ini_str))
+@pytest.fixture
+def client(app):
+    return app.test_client()
+    
+        A simple application that shows how Flask and jQuery get along.
+    
+    
+def import_state_tuples(state_tuples, name, num_replicas):
+  restored = []
+  for i in range(len(state_tuples) * num_replicas):
+    c = tf.get_collection_ref(name)[2 * i + 0]
+    h = tf.get_collection_ref(name)[2 * i + 1]
+    restored.append(tf.contrib.rnn.LSTMStateTuple(c, h))
+  return tuple(restored)
+    
+    FLAGS = flags.FLAGS
+    
+    See the following papers for more information on neural translation models.
+ * http://arxiv.org/abs/1409.3215
+ * http://arxiv.org/abs/1409.0473
+ * http://arxiv.org/abs/1412.2007
+'''
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+    
+      def make_batch(self, batch_size):
+    '''Read the images and labels from 'filenames'.'''
+    filenames = self.get_filenames()
+    # Repeat infinitely.
+    dataset = tf.contrib.data.TFRecordDataset(filenames).repeat()
+    
+    if os.path.isfile(log_file):
+    os.remove(log_file)
+    
+        def log(self, level, fmt, *args, **kwargs):
+        string = '%s - [%s] %s\n' % (time.ctime()[4:-5], level, fmt % args)
+        #print string
+        #sys.stderr.write(string)
+        self.log_fd.write(string)
         try:
-            return configparser.get('root', variable)
-        except ConfigParser.NoOptionError:
-            return None
+            self.log_fd.flush()
+        except:
+            pass
     
-        old_runs_prefix = 'https://app.shippable.com/runs/'
-    
-            spider_loader = self.crawler_process.spider_loader
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
-                          help='set spider argument (may be repeated)')
-        parser.add_option('-o', '--output', metavar='FILE',
-                          help='dump scraped items into FILE (use - for stdout)')
-        parser.add_option('-t', '--output-format', metavar='FORMAT',
-                          help='format to use for dumping items with -o')
-    
-    # If true, show URL addresses after external links.
-#man_show_urls = False
-    
-        @mock.patch(
-        'certbot_compatibility_test.validator.crypto_util.probe_sni')
-    def test_certificate_failure(self, mock_probe_sni):
-        cert = OpenSSL.crypto.X509()
-        cert.set_serial_number(1337)
-        mock_probe_sni.return_value = OpenSSL.crypto.X509()
-        self.assertFalse(self.validator.certificate(
-            cert, 'test.com', '127.0.0.1'))
-    
-    # Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named 'default.css' will overwrite the builtin 'default.css'.
-html_static_path = ['_static']
+    \note Please be warned that the line numbers in the API documentation do not
+match the real locations in the source code of the package. This is an
+unintended artifact of doxygen, which I could only convince to use the
+correct module names by concatenating all files from the package into a single
+module file...
     
     
-def win32_version_string():
-    import ctypes
-    class OSVERSIONINFOEXW(ctypes.Structure):
-        _fields_ = [('dwOSVersionInfoSize', ctypes.c_ulong),
-                    ('dwMajorVersion', ctypes.c_ulong),
-                    ('dwMinorVersion', ctypes.c_ulong),
-                    ('dwBuildNumber', ctypes.c_ulong),
-                    ('dwPlatformId', ctypes.c_ulong),
-                    ('szCSDVersion', ctypes.c_wchar*128),
-                    ('wServicePackMajor', ctypes.c_ushort),
-                    ('wServicePackMinor', ctypes.c_ushort),
-                    ('wSuiteMask', ctypes.c_ushort),
-                    ('wProductType', ctypes.c_byte),
-                    ('wReserved', ctypes.c_byte)]
-    '''
-    Get's the OS major and minor versions.  Returns a tuple of
-    (OS_MAJOR, OS_MINOR).
-    '''
-    os_version = OSVERSIONINFOEXW()
-    os_version.dwOSVersionInfoSize = ctypes.sizeof(os_version)
-    retcode = ctypes.windll.Ntdll.RtlGetVersion(ctypes.byref(os_version))
-    if retcode != 0:
-        raise Exception('Failed to get OS version')
-    
-            If you override, make sure to update syntaxErrors if you care about
-        that.
-        
+    def alreadyParsedRule(self, input, ruleIndex):
         '''
-        
-        # if we've already reported an error and have not matched a token
-        # yet successfully, don't report any errors.
-        if self._state.errorRecovery:
-            return
+        Has this rule already parsed input at the current index in the
+        input stream?  Return the stop token index or MEMO_RULE_UNKNOWN.
+        If we attempted but failed to parse properly before, return
+        MEMO_RULE_FAILED.
     
             raise NotImplementedError
     
-    def setTokenIndex(self, index):
-        '''@brief Set the index in the input stream.
+    print 'PLUGIN_I18N_PATHS := ' + ','.join(os.path.relpath(plugin.path)
+                                         for plugin in plugins
+                                         if plugin.needs_translation)
+    
+        @require_oauth2_scope('creddits')
+    @validate(
+        VUser(),
+        target=VByName('fullname'),
+    )
+    @api_doc(
+        api_section.gold,
+        uri='/api/v1/gold/gild/{fullname}',
+    )
+    def POST_gild(self, target):
+        if not isinstance(target, (Comment, Link)):
+            err = RedditError('NO_THING_ID')
+            self.on_validation_error(err)
+    
+    from r2.controllers.reddit_base import RedditController
+from r2.lib.base import proxyurl
+from r2.lib.csrf import csrf_exempt
+from r2.lib.template_helpers import get_domain
+from r2.lib.pages import Embed, BoringPage, HelpPage
+from r2.lib.filters import websafe, SC_OFF, SC_ON
+from r2.lib.memoize import memoize
+    
+    
+def updatefig(*args):
+    global update
+    
+        for i in range(int(h / 3), int(h * 2 / 3)):
+        last_pixel = im_pixel[0, i]
+        if board_x or board_y:
+            break
+        board_x_sum = 0
+        board_x_c = 0
