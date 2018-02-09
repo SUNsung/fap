@@ -1,80 +1,277 @@
 
         
-        namespace {
+        #if defined(BOOST_ASIO_MSVC)
+# if defined(_HAS_ITERATOR_DEBUGGING) && (_HAS_ITERATOR_DEBUGGING != 0)
+#  if !defined(BOOST_ASIO_DISABLE_BUFFER_DEBUGGING)
+#   define BOOST_ASIO_ENABLE_BUFFER_DEBUGGING
+#  endif // !defined(BOOST_ASIO_DISABLE_BUFFER_DEBUGGING)
+# endif // defined(_HAS_ITERATOR_DEBUGGING)
+#endif // defined(BOOST_ASIO_MSVC)
+    
+      /// Start an asynchronous write. The data being written must be valid for the
+  /// lifetime of the asynchronous operation.
+  template <typename ConstBufferSequence, typename WriteHandler>
+  BOOST_ASIO_INITFN_RESULT_TYPE(WriteHandler,
+      void (boost::system::error_code, std::size_t))
+  async_write_some(const ConstBufferSequence& buffers,
+      BOOST_ASIO_MOVE_ARG(WriteHandler) handler)
+  {
+    detail::async_result_init<
+      WriteHandler, void (boost::system::error_code, std::size_t)> init(
+        BOOST_ASIO_MOVE_CAST(WriteHandler)(handler));
     }
     
+    #ifndef BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
+#define BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
     
-    {}  // namespace atom
+    #endif // BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
+
     
+    #include <boost/asio/detail/config.hpp>
+#include <boost/asio/buffer.hpp>
+#include <boost/asio/detail/array_fwd.hpp>
+#include <boost/asio/detail/socket_types.hpp>
     
-    {}  // namespace mate
+      // Obtain the value at the top of the stack.
+  static Value* top()
+  {
+    context* elem = top_;
+    return elem ? elem->value_ : 0;
+  }
     
-    namespace {
+      static bool do_perform(reactor_op* base)
+  {
+    descriptor_read_op_base* o(static_cast<descriptor_read_op_base*>(base));
     }
     
-        // The signal may be handled on another thread.  Give that a chance to
-    // happen.
-    sleep(3);
+    #endif // !defined(BOOST_ASIO_WINDOWS_RUNTIME)
     
-    class AtomQuotaPermissionContext : public content::QuotaPermissionContext {
- public:
-  typedef content::QuotaPermissionContext::QuotaPermissionResponse response;
+      // Insert a new entry into the map.
+  std::pair<iterator, bool> insert(const value_type& v)
+  {
+    if (size_ + 1 >= num_buckets_)
+      rehash(hash_size(size_ + 1));
+    size_t bucket = calculate_hash_value(v.first) % num_buckets_;
+    iterator it = buckets_[bucket].first;
+    if (it == values_.end())
+    {
+      buckets_[bucket].first = buckets_[bucket].last =
+        values_insert(values_.end(), v);
+      ++size_;
+      return std::pair<iterator, bool>(buckets_[bucket].last, true);
     }
+    iterator end_it = buckets_[bucket].last;
+    ++end_it;
+    while (it != end_it)
+    {
+      if (it->first == v.first)
+        return std::pair<iterator, bool>(it, false);
+      ++it;
+    }
+    buckets_[bucket].last = values_insert(end_it, v);
+    ++size_;
+    return std::pair<iterator, bool>(buckets_[bucket].last, true);
+  }
     
-    
-    {  if (request_) {
-    request_->CancelAuth();
-    // Verify that CancelAuth doesn't destroy the request via our delegate.
-    DCHECK(request_ != nullptr);
-    ResetLoginHandlerForRequest(request_);
+    void IDCT1d(const double* in, int stride, double* out) {
+  for (int x = 0; x < 8; ++x) {
+    out[x * stride] = 0.0;
+    for (int u = 0; u < 8; ++u) {
+      out[x * stride] += kDCTMatrix[8 * u + x] * in[u * stride];
+    }
   }
 }
     
-    // Like URLRequestAsarJob, but asks the JavaScript handler for file path.
-class URLRequestAsyncAsarJob : public JsAsker<asar::URLRequestAsarJob> {
+        // The nodes are:
+    // [0, n): the sorted leaf nodes that we start with.
+    // [n]: we add a sentinel here.
+    // [n + 1, 2n): new parent nodes are added here, starting from
+    //              (n+1). These are naturally in ascending order.
+    // [2n]: we add a sentinel at the end as well.
+    // There will be (2n+1) elements at the end.
+    const HuffmanTree sentinel(~static_cast<uint32_t>(0), -1, -1);
+    tree[n] = sentinel;
+    tree[n + 1] = sentinel;
+    
+    // Mimic libjpeg's heuristics to guess jpeg color space.
+// Requires that the jpg has 3 components.
+bool HasYCbCrColorSpace(const JPEGData& jpg) {
+  bool has_Adobe_marker = false;
+  uint8_t Adobe_transform = 0;
+  for (const std::string& app : jpg.app_data) {
+    if (static_cast<uint8_t>(app[0]) == 0xe0) {
+      return true;
+    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
+      has_Adobe_marker = true;
+      Adobe_transform = app[14];
+    }
+  }
+  if (has_Adobe_marker) {
+    return (Adobe_transform != 0);
+  }
+  const int cid0 = jpg.components[0].id;
+  const int cid1 = jpg.components[1].id;
+  const int cid2 = jpg.components[2].id;
+  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
+}
+    
+    // Butteraugli scores that correspond to JPEG quality levels, starting at
+// kLowestQuality. They were computed by taking median BA scores of JPEGs
+// generated using libjpeg-turbo at given quality from a set of PNGs.
+// The scores above quality level 100 are just linearly decreased so that score
+// for 110 is 90% of the score for 100.
+const double kScoreForQuality[] = {
+  2.810761,  // 70
+  2.729300,
+  2.689687,
+  2.636811,
+  2.547863,
+  2.525400,
+  2.473416,
+  2.366133,
+  2.338078,
+  2.318654,
+  2.201674,  // 80
+  2.145517,
+  2.087322,
+  2.009328,
+  1.945456,
+  1.900112,
+  1.805701,
+  1.750194,
+  1.644175,
+  1.562165,
+  1.473608,  // 90
+  1.382021,
+  1.294298,
+  1.185402,
+  1.066781,
+  0.971769,  // 95
+  0.852901,
+  0.724544,
+  0.611302,
+  0.443185,
+  0.211578,  // 100
+  0.209462,
+  0.207346,
+  0.205230,
+  0.203114,
+  0.200999,  // 105
+  0.198883,
+  0.196767,
+  0.194651,
+  0.192535,
+  0.190420,  // 110
+  0.190420,
+};
+    
+    // Functions defined in this file are meant to extend the
+// boost::filesystem library; functions will be named according to boost's
+// naming conventions instead of ours.  For convenience, import the
+// boost::filesystem namespace into folly::fs.
+using namespace ::boost::filesystem;
+    
+      size_t defaultHugePageSize = getDefaultHugePageSize();
+    
+      std::vector<std::unique_ptr<AsyncIO::Op>> ops;
+  std::vector<ManagedBuffer> bufs;
+  const auto schedule = [&](size_t n) {
+    for (size_t i = 0; i < n; ++i) {
+      const size_t size = 2 * kAlign;
+      bufs.push_back(allocateAligned(size));
+    }
+    }
+    
+    std::shared_ptr<LogHandler> FileHandlerFactory::createHandler(
+    const Options& options) {
+  WriterFactory writerFactory;
+  return StandardLogHandlerFactory::createHandler(
+      getType(), &writerFactory, options);
+}
+    
+    /**
+ * A LogWriter implementation that immediately writes to a file descriptor when
+ * it is invoked.
+ *
+ * The downside of this class is that logging I/O occurs directly in your
+ * normal program threads, so that logging I/O may block or slow down normal
+ * processing.
+ *
+ * However, one benefit of this class is that log messages are written out
+ * immediately, so if your program crashes, all log messages generated before
+ * the crash will have already been written, and no messages will be lost.
+ */
+class ImmediateFileWriter : public LogWriter {
  public:
-  URLRequestAsyncAsarJob(net::URLRequest*, net::NetworkDelegate*);
+  /**
+   * Construct an ImmediateFileWriter that appends to the file at the specified
+   * path.
+   */
+  explicit ImmediateFileWriter(folly::StringPiece path);
     }
     
-    #include <string>
+    #include <folly/ConstexprMath.h>
+#include <folly/ExceptionString.h>
+#include <folly/FileUtil.h>
+#include <folly/MapUtil.h>
+#include <folly/experimental/logging/LogHandler.h>
+#include <folly/experimental/logging/LogMessage.h>
+#include <folly/experimental/logging/LogName.h>
+#include <folly/experimental/logging/LoggerDB.h>
     
+    #include <folly/Conv.h>
     
-    {}  // namespace atom
-
-    
-    #include 'db/compaction_picker_universal.h'
-#ifndef ROCKSDB_LITE
-    
-      bool BinaryBlockIndexSeek(const Slice& target, uint32_t* block_ids,
-                            uint32_t left, uint32_t right,
-                            uint32_t* index);
-    
-        if (s.ok() && db_options.allow_2pc) {
-      // If 2PC is enabled, we need to get minimum log number after the flush.
-      // Need to refetch the live files to recapture the snapshot.
-      if (!db_->GetIntProperty(DB::Properties::kMinLogNumberToKeep,
-                               &min_log_num)) {
-        return Status::InvalidArgument(
-            '2PC enabled but cannot fine the min log number to keep.');
-      }
-      // We need to refetch live files with flush to handle this case:
-      // A previous 000001.log contains the prepare record of transaction tnx1.
-      // The current log file is 000002.log, and sequence_number points to this
-      // file.
-      // After calling GetLiveFiles(), 000003.log is created.
-      // Then tnx1 is committed. The commit record is written to 000003.log.
-      // Now we fetch min_log_num, which will be 3.
-      // Then only 000002.log and 000003.log will be copied, and 000001.log will
-      // be skipped. 000003.log contains commit message of tnx1, but we don't
-      // have respective prepare record for it.
-      // In order to avoid this situation, we need to force flush to make sure
-      // all transactions committed before getting min_log_num will be flushed
-      // to SST files.
-      // We cannot get min_log_num before calling the GetLiveFiles() for the
-      // first time, because if we do that, all the logs files will be included,
-      // far more than needed.
-      s = db_->GetLiveFiles(live_files, &manifest_file_size, flush_memtable);
+    /**
+ * LogConfig contains configuration for the LoggerDB.
+ *
+ * This includes information about the log levels for log categories,
+ * as well as what log handlers are configured and which categories they are
+ * attached to.
+ */
+class LogConfig {
+ public:
+  using CategoryConfigMap = std::unordered_map<std::string, LogCategoryConfig>;
+  using HandlerConfigMap = std::unordered_map<std::string, LogHandlerConfig>;
     }
+    
+      StringPiece handlerName;
+  Optional<StringPiece> handlerType(in_place);
+  if (!splitNameValue(namePortion, &handlerName, &handlerType.value())) {
+    handlerName = trimWhitespace(namePortion);
+    handlerType = folly::none;
+  }
+    
+    #include <memory>
+#include <string>
+    
+      /// Remove the first (or last) num occurrences of value from the list (key)
+  /// Return the number of elements removed.
+  /// May throw RedisListException
+  int Remove(const std::string& key, int32_t num,
+             const std::string& value);
+  int RemoveFirst(const std::string& key, int32_t num,
+                  const std::string& value);
+  int RemoveLast(const std::string& key, int32_t num,
+                 const std::string& value);
+    
+    
+    {  // Bitmap used to record the bytes that we read, use atomic to protect
+  // against multiple threads updating the same bit
+  std::atomic<uint32_t>* bitmap_;
+  // (1 << bytes_per_bit_pow_) is bytes_per_bit. Use power of 2 to optimize
+  // muliplication and division
+  uint8_t bytes_per_bit_pow_;
+  // Pointer to DB Statistics object, Since this bitmap may outlive the DB
+  // this pointer maybe invalid, but the DB will update it to a valid pointer
+  // by using SetStatistics() before calling Mark()
+  std::atomic<Statistics*> statistics_;
+  uint32_t rnd_;
+};
+    
+      // Trigger compaction if size amplification exceeds 110%
+  options.compaction_options_universal.max_size_amplification_percent = 110;
+  options = CurrentOptions(options);
+  ReopenWithColumnFamilies({'default', 'pikachu'}, options);
     
     
     {  // Note: we may want to access the Java callback object instance
@@ -87,57 +284,17 @@ class URLRequestAsyncAsarJob : public JsAsker<asar::URLRequestAsarJob> {
   }
 }
     
-      bool StatisticsJni::HistEnabledForType(uint32_t type) const {
-    if (type >= HISTOGRAM_ENUM_MAX) {
-      return false;
+      class StatisticsJni : public StatisticsImpl {
+   public:
+     StatisticsJni(std::shared_ptr<Statistics> stats);
+     StatisticsJni(std::shared_ptr<Statistics> stats,
+         const std::set<uint32_t> ignore_histograms);
+     virtual bool HistEnabledForType(uint32_t type) const override;
     }
     
-    if (m_ignore_histograms.count(type) > 0) {
-        return false;
-    }
-    }
     
-    #endif  // GRPC_INTERNAL_COMPILER_CPP_GENERATOR_H
-
-    
-      int num_greetings = 10;
-  greeter.SayManyHellos(name, num_greetings, [](const std::string &message) {
-    std::cerr << 'Greeter received: ' << message << std::endl;
-  });
-    
-    #if !defined(__clang__) && \
-    defined(__GNUC__) && \
-    (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__ < 40600)
-  // Backwards compatability for g++ 4.4, and 4.5 which don't have the nullptr
-  // and constexpr keywords. Note the __clang__ check is needed, because clang
-  // presents itself as an older GNUC compiler.
-  #ifndef nullptr_t
-    const class nullptr_t {
-    public:
-      template<class T> inline operator T*() const { return 0; }
-    private:
-      void operator&() const;
-    } nullptr = {};
-  #endif
-  #ifndef constexpr
-    #define constexpr const
-  #endif
-#endif
-    
-      // If schemas used contain include statements, call this function for every
-  // directory the parser should search them for.
-  void AddIncludeDirectory(const char *path) { include_paths_.push_back(path); }
-    
-      // ** file/network code goes here :) **
-  // access builder.GetBufferPointer() for builder.GetSize() bytes
-    
-      virtual void closeFile() CXX11_OVERRIDE;
-    
-    // DiskwriterFactory class template to create DiskWriter derived
-// object, ignoring filename.
-template <class DiskWriterType>
-class AnonDiskWriterFactory : public DiskWriterFactory {
-public:
-  AnonDiskWriterFactory() = default;
-  virtual ~AnonDiskWriterFactory() = default;
-    }
+    {  std::string expected_unused_bucket = GetInternalKey('key00', true);
+  expected_unused_bucket += std::string(values[0].size(), 'a');
+  CheckFileContents(keys, values, expected_locations,
+      expected_unused_bucket, expected_table_size, 4, false);
+}
