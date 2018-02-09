@@ -1,61 +1,18 @@
 
         
-              plist_filename = if f.plist
-        f.plist_path.basename
-      else
-        File.basename Dir['#{keg}/*.plist'].first
-      end
-      plist_link = '#{destination}/#{plist_filename}'
-      plist_domain = f.plist_path.basename('.plist')
-      destination_path = Pathname.new File.expand_path destination
-      plist_path = destination_path/plist_filename
-    
-    puts 'Deduping #{links.size} links...'
-    
-        def as_json
-      @pages
+            def register(klass, attachment_name, attachment_options)
+      @attachments ||= {}
+      @attachments[klass] ||= {}
+      @attachments[klass][attachment_name] = attachment_options
     end
     
-        def initialize(*args)
-      if args.empty?
-        super(*Array.new(9))
-      elsif args.length == 1 && args.first.is_a?(Hash)
-        args.first.assert_valid_keys URI::Generic::COMPONENT
-        super(*args.first.values_at(*URI::Generic::COMPONENT))
-      else
-        super
-      end
-    end
-    
-          def stack
-        UI::ErrorReport.stack
-      end
-    
-            def initialize(argv)
-          @name = argv.shift_argument
-          @template_url = argv.option('template-url', TEMPLATE_REPO)
-          super
-          @additional_args = argv.remainder!
+            def allowed_types_allowed?
+          @missing_allowed_types ||= @allowed_types.reject { |type| type_allowed?(type) }
+          @missing_allowed_types.none?
         end
     
-          def update_if_necessary!
-        if @update && config.verbose?
-          UI.section('\nUpdating Spec Repositories\n'.yellow) do
-            Repo.new(ARGV.new(['update'])).run
-          end
+            def error_when_not_valid?
+          @subject.send(@attachment_name).assign(nil)
+          @subject.valid?
+          @subject.errors[:'#{@attachment_name}'].present?
         end
-      end
-    
-            def show
-          @stock_movement = scope.find(params[:id])
-          respond_with(@stock_movement)
-        end
-    
-      def pretty?
-    params.has_key?('pretty')
-  end
-    
-    module LogStash
-  module Api
-    class Service
-      include LogStash::Util::Loggable
