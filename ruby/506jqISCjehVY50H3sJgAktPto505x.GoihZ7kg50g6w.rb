@@ -1,142 +1,101 @@
 
         
-            brew cask install mactex
-    EOS
-  when 'pip' then <<-EOS.undent
-    Homebrew provides pip via: `brew install python`. However you will then
-    have two Pythons installed on your Mac, so alternatively you can install
-    pip via the instructions at:
+            def self.parse(url)
+      return url if url.kind_of? self
+      new(*PARSER.split(url), PARSER)
+    end
     
-      # True if a {Formula} is being built without a specific option.
-  # <pre>args << '--no-spam-plz' if build.without? 'spam'
-  def without?(val)
-    !with?(val)
+    def list_login_items_for_app(app_path)
+  out, err, status = Open3.capture3(
+    '/usr/bin/osascript', '-e',
+    'tell application \'System Events\' to get the name of every login item ' \
+    'whose path contains \'#{File.basename(app_path)}\''
+  )
+  if status.exitstatus > 0
+    $stderr.puts err
+    exit status.exitstatus
   end
+  puts out.gsub(', ', '\n')
+end
     
-        def self.cleanup_lockfiles
-      return unless HOMEBREW_CACHE_FORMULA.directory?
-      candidates = HOMEBREW_CACHE_FORMULA.children
-      lockfiles  = candidates.select { |f| f.file? && f.extname == '.brewing' }
-      lockfiles.each do |file|
-        next unless file.readable?
-        file.open.flock(File::LOCK_EX | File::LOCK_NB) && file.unlink
+              retry
+        end
       end
     end
-    
-      def xcode
-    if instance_variable_defined?(:@xcode)
-      @xcode
-    elsif MacOS::Xcode.installed?
-      @xcode = MacOS::Xcode.version
-      @xcode += ' => #{MacOS::Xcode.prefix}' unless MacOS::Xcode.default_prefix?
-      @xcode
-    end
   end
     
-        names = @@remote_tap_formulae['#{user}/#{repo}']
-    user = user.downcase if user == 'Homebrew' # special handling for the Homebrew organization
-    names.select { |name| rx === name }.map { |name| '#{user}/#{repo}/#{name}' }
-  rescue GitHub::HTTPNotFoundError => e
-    opoo 'Failed to search tap: #{user}/#{repo}. Please run `brew update`'
-    []
-  rescue GitHub::Error => e
-    SEARCH_ERROR_QUEUE << e
-    []
-  end
+          it 'processes payload with sender if no signature exists' do
+        expect_any_instance_of(ActivityPub::LinkedDataSignature).not_to receive(:verify_account!)
+        expect(ActivityPub::Activity).to receive(:factory).with(instance_of(Hash), forwarder, instance_of(Hash))
     
-        initial_revision = ENV['HOMEBREW_UPDATE_BEFORE'].to_s
-    current_revision = ENV['HOMEBREW_UPDATE_AFTER'].to_s
-    if initial_revision.empty? || current_revision.empty?
-      odie 'update-report should not be called directly!'
-    end
-    
-      # if rss_url already in existing opml file, use that; otherwise, do a lookup
-  rss_url = nil
-  existing_blog = xml.xpath('//outline[@htmlUrl='#{web_url}']').first if xml
-  if existing_blog
-    rss_url = existing_blog.attr('xmlUrl')
-    puts '#{name}: ALREADY HAVE'
-  end
-    
-            def responds?
-          methods = @subject.instance_methods.map(&:to_s)
-          methods.include?('#{@attachment_name}') &&
-            methods.include?('#{@attachment_name}=') &&
-            methods.include?('#{@attachment_name}?')
-        end
-    
-            required = directories.map do |directory|
-          pathname = File.expand_path(Rails.root.join(directory, filename))
-          file_exists = File.exist?(pathname)
-          require pathname if file_exists
-          file_exists
-        end
-    
-              new_source =
-            node.receiver.source + ' =~ ' + node.first_argument.source
-    
-    module RuboCop
-  module Cop
-    module Lint
-      # This cop checks that there are no repeated conditions
-      # used in case 'when' expressions.
-      #
-      # @example
-      #
-      #   # bad
-      #
-      #   case x
-      #   when 'first'
-      #     do_something
-      #   when 'first'
-      #     do_something_else
-      #   end
-      #
-      # @example
-      #
-      #   # good
-      #
-      #   case x
-      #   when 'first'
-      #     do_something
-      #   when 'second'
-      #     do_something_else
-      #   end
-      class DuplicateCaseCondition < Cop
-        MSG = 'Duplicate `when` condition detected.'.freeze
-    
-            def variables_in_simple_node(node)
-          simple_double_comparison?(node) do |var1, var2|
-            return [variable_name(var1), variable_name(var2)]
-          end
-          simple_comparison?(node) do |var|
-            return [variable_name(var)]
-          end
-          []
-        end
-    
-          expect('.border-width-implied-left').to have_rule(rule)
-    end
-  end
-    
-    describe 'buttons' do
-  before(:all) do
-    ParserSupport.parse_file('library/buttons')
-    
-          expect('.margin-false-third').to have_ruleset(ruleset)
-      expect('.margin-false-third').to_not have_rule(bad_rule)
+      def collection_presenter
+    page = ActivityPub::CollectionPresenter.new(
+      id: account_followers_url(@account, page: params.fetch(:page, 1)),
+      type: :ordered,
+      size: @account.followers_count,
+      items: @follows.map { |f| ActivityPub::TagManager.instance.uri_for(f.account) },
+      part_of: account_followers_url(@account),
+      next: page_url(@follows.next_page),
+      prev: page_url(@follows.prev_page)
+    )
+    if params[:page].present?
+      page
+    else
+      ActivityPub::CollectionPresenter.new(
+        id: account_followers_url(@account),
+        type: :ordered,
+        size: @account.followers_count,
+        first: page
+      )
     end
   end
 end
 
     
-          expect('.padding-implied-left').to have_rule(rule)
+          format.json do
+        render json: collection_presenter,
+               serializer: ActivityPub::CollectionSerializer,
+               adapter: ActivityPub::Adapter,
+               content_type: 'application/activity+json'
+      end
     end
   end
     
-      context 'called with null values' do
-    it 'writes rules for others' do
-      ruleset = 'position: static; ' +
-                'top: 11px; ' +
-                'left: 13px;'
-      bad_rule = 'position-bottom: null; position-right: null;'
+      def icon
+    object.image
+  end
+    
+        HTTP.get(source).to_s.split('\n').each do |line|
+      next if line.start_with? '#'
+      parts = line.split(';').map(&:strip)
+      next if parts.size < 2
+      codes << [parts[0], parts[1].start_with?('fully-qualified')]
+    end
+    
+      #forward some requests to status message, because a poll is just attached to a status message and is not sharable itself
+  delegate :author_id, :diaspora_handle, :public?, :subscribers, to: :status_message
+    
+          private
+    
+          def all_gem_names
+        core_gem_names + plugin_gem_names
+      end
+    
+        # @abstract
+    #
+    # Update the clone on the deployment target
+    #
+    # @return void
+    #
+    def update
+      raise NotImplementedError, 'Your SCM strategy module should provide a #update method'
+    end
+    
+          describe 'using the :port property' do
+        it 'takes precedence over in the host string' do
+          dsl.server 'db@example1.com:9090', roles: %w{db}, active: true, port: 1234
+          expect(subject).to eq('db@example1.com:1234')
+        end
+      end
+    end
+  end
