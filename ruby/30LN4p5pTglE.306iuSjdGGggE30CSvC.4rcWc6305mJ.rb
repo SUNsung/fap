@@ -1,79 +1,84 @@
 
         
-          def validate_type
-    errors.add(:type, 'cannot be changed once an instance has been created') if type_changed? && !new_record?
-    errors.add(:type, 'is not a valid type') unless self.class.valid_type?(type)
-  end
-    
-      def tumblr
-    Tumblr.configure do |config|
-      config.consumer_key = tumblr_consumer_key
-      config.consumer_secret = tumblr_consumer_secret
-      config.oauth_token = tumblr_oauth_token
-      config.oauth_token_secret = tumblr_oauth_token_secret
+            # Fetch YAML front-matter data from related doc, without layout key
+    #
+    # Returns Hash of doc data
+    def data
+      @data ||= doc.data.dup
+      @data.delete('layout')
+      @data.delete('excerpt')
+      @data
     end
     
-    Tumblr::Client.new
-  end
-end
-    
-        respond_to do |format|
-      format.html { redirect_to services_path }
-      format.json { render json: @service }
-    end
-  end
-end
-
-    
-                [block.call, parent]
-          end
-          nil
-        end
-    
-            # This is called early, before a machine is instantiated, to check
-        # if this provider is installed. This should return true or false.
-        #
-        # If the provider is not installed and Vagrant determines it is
-        # able to install this provider, then it will do so. Installation
-        # is done by calling Environment.install_provider.
-        #
-        # If Environment.can_install_provider? returns false, then an error
-        # will be shown to the user.
-        def self.installed?
-          # By default return true for backwards compat so all providers
-          # continue to work.
-          true
-        end
-    
-            # Registers a SIGINT handler. This typically is called from {busy}.
-        # Callbacks are only registered once, so calling this multiple times
-        # with the same callback has no consequence.
-        def register(sig_callback)
-          @@mutex.synchronize do
-            registered << sig_callback
-            registered.uniq!
-    
-          def merge!(other)
-        other.each do |key, value|
-          self[convert_key(key)] = value
-        end
-        self
+    module Jekyll
+  module External
+    class << self
+      #
+      # Gems that, if installed, should be loaded.
+      # Usually contain subcommands.
+      #
+      def blessed_gems
+        %w(
+          jekyll-docs
+          jekyll-import
+        )
       end
     
-                  # An IO::WaitReadable means there may be more IO but this
-              # IO object is not ready to be read from yet. No problem,
-              # we read as much as we can, so we break.
-              breakable = true
-            elsif e.is_a?(Errno::EAGAIN)
-              # Otherwise, we just look for the EAGAIN error which should be
-              # all that IO::WaitReadable does in Ruby 1.9.
-              breakable = true
-            end
+      module ClassMethods
+    def load_types_in(module_name, my_name = module_name.singularize)
+      const_set(:MODULE_NAME, module_name)
+      const_set(:BASE_CLASS_NAME, my_name)
+      const_set(:TYPES, Dir[Rails.root.join('app', 'models', module_name.underscore, '*.rb')].map { |path| module_name + '::' + File.basename(path, '.rb').camelize })
+    end
     
-    require_relative 'converter/fonts_conversion'
-require_relative 'converter/less_conversion'
-require_relative 'converter/js_conversion'
-require_relative 'converter/logger'
-require_relative 'converter/network'
+        def run!
+      @thread = Thread.new do
+        Thread.current[:name] = '#{id}-#{Time.now}'
+        begin
+          run
+        rescue SignalException, SystemExit
+          stop!
+        rescue StandardError => e
+          message = '#{id} Exception #{e.message}:\n#{e.backtrace.first(10).join('\n')}'
+          AgentRunner.with_connection do
+            agent.error(message)
+          end
+        end
+      end
+    end
     
-      config.active_support.test_order = :random
+        respond_to do |format|
+      format.html
+      format.json {
+        send_data Utils.pretty_jsonify(@user_credentials.limit(nil).as_json), disposition: 'attachment'
+      }
+    end
+  end
+    
+      context 'called with one color' do
+    it 'applies same color to all sides' do
+      rule = 'border-color: #f00'
+    
+          expect('.border-width-implied-left').to have_rule(rule)
+    end
+  end
+    
+        @inputs_list = %w(
+      [type='color']
+      [type='date']
+      [type='datetime']
+      [type='datetime-local']
+      [type='email']
+      [type='month']
+      [type='number']
+      [type='password']
+      [type='search']
+      [type='tel']
+      [type='text']
+      [type='time']
+      [type='url']
+      [type='week']
+      input:not([type])
+      textarea
+    )
+  end
