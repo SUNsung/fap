@@ -1,164 +1,166 @@
 
         
-            # Assign additional cores to the guest OS.
-    v.customize ['modifyvm', :id, '--cpus', cpu_count]
-    v.customize ['modifyvm', :id, '--ioapic', 'on']
-    
-          topic.feature_topic_users(args)
-    end
-    
-        self.base_url = 'http://localhost/'
-    
-          if options && options[:ignore_case]
-        base = base.downcase
-        dest = dest.downcase
+              included do
+        setup :setup_with_controller
+        ActiveSupport.run_load_hooks(:action_view_test_case, self)
       end
     
-            css('> .section', '#preamble', 'a[href*='dict.html']', 'code var', 'code strong').each do |node|
-          node.before(node.children).remove
+              # Require the adapter itself and give useful feedback about
+          #   1. Missing adapter gems and
+          #   2. Adapter gems' missing dependencies.
+          path_to_adapter = 'active_record/connection_adapters/#{spec[:adapter]}_adapter'
+          begin
+            require path_to_adapter
+          rescue LoadError => e
+            # We couldn't require the adapter itself. Raise an exception that
+            # points out config typos and missing gems.
+            if e.path == path_to_adapter
+              # We can assume that a non-builtin adapter was specified, so it's
+              # either misspelled or missing from Gemfile.
+              raise e.class, 'Could not load the '#{spec[:adapter]}' Active Record adapter. Ensure that the adapter is spelled correctly in config/database.yml and that you've added the necessary adapter gem to your Gemfile.', e.backtrace
+    
+      def popen_run(cmd, opts, child_io, parent_io) # :nodoc:
+    if last = Hash.try_convert(cmd.last)
+      opts = opts.merge(last)
+      cmd.pop
+    end
+    pid = spawn(*cmd, opts)
+    wait_thr = Process.detach(pid)
+    child_io.each(&:close)
+    result = [*parent_io, wait_thr]
+    if defined? yield
+      begin
+        return yield(*result)
+      ensure
+        parent_io.each(&:close)
+        wait_thr.join
+      end
+    end
+    result
+  end
+  module_function :popen_run
+  class << self
+    private :popen_run
+  end
+    
+      def test_popen2
+    with_pipe {|r, w|
+      with_reopen(STDERR, w) {|old|
+        w.close
+        Open3.popen2(RUBY, '-e', 's=STDIN.read; STDOUT.print s+'o'; STDERR.print s+'e'') {|i,o,t|
+          assert_kind_of(Thread, t)
+          i.print 'z'
+          i.close
+          STDERR.reopen(old)
+          assert_equal('zo', o.read)
+          assert_equal('ze', r.read)
+        }
+      }
+    }
+  end
+    
+    # Testing 'c'
+      [ '%3c', 'abc', [ 'abc' ] ],
+      [ '%3c', 'a\nb', [ 'a\nb' ] ],
+      [ '%3c', 'a\nbcd', [ 'a\nb' ] ],
+      [ '%c\n\n', 'x\n\n', [ 'x' ] ],
+      [ '%c', '\n', [ '\n' ] ],
+      [ '%c', 'x\n', [ 'x' ] ],
+      [ '%2c', ' 123', [' 1'] ],
+      [ ' %c', ' x', ['x'] ],
+      [ '%c', ' x', [' '] ],
+      [ '%c', '123', ['1'] ],
+      [ '%2c', '123', ['12'] ],
+      [ '%5c', 'a\nb\n\n', [ 'a\nb\n\n' ] ],
+      [ '%6c', 'a\nb\n\nx', [ 'a\nb\n\nx' ] ],
+      [ '%5c', 'ab\ncd', [ 'ab\ncd' ] ],
+    
+      def test_session_timeout
+    sess = OpenSSL::SSL::Session.new(DUMMY_SESSION_NO_EXT)
+    assert_raise(TypeError) do
+      sess.timeout = Time.now
+    end
+    sess.timeout = 1
+    assert_equal(1, sess.timeout.to_i)
+    sess.timeout = 1.2345
+    assert_equal(1, sess.timeout.to_i)
+    sess.timeout = 2**31 - 1
+    assert_equal(2**31 - 1, sess.timeout.to_i)
+  end
+    
+        ##
+    # Matches +addr+ against this entry.
+    
+              fd.write(res)
         end
-    
-      class DummyOutput < String
-    alias write concat
-  end
-  def assert_no_error(*args)
-    $stderr, stderr = DummyOutput.new, $stderr
-    assert_nothing_raised(*args) {return yield}
-  ensure
-    stderr, $stderr = $stderr, stderr
-    $!.backtrace.delete_if {|e| /\A#{Regexp.quote(__FILE__)}:#{__LINE__-2}/o =~ e} if $!
-    assert_empty(stderr)
-  end
-  alias no_error assert_no_error
-    
-        def make_time(date, year, mon, day, hour, min, sec, sec_fraction, zone, now)
-      if !year && !mon && !day && !hour && !min && !sec && !sec_fraction
-        raise ArgumentError, 'no time information in #{date.inspect}'
       end
-    
-      # Open3.pipeline_start starts a list of commands as a pipeline.
-  # No pipes are created for stdin of the first command and
-  # stdout of the last command.
-  #
-  #   Open3.pipeline_start(cmd1, cmd2, ... [, opts]) {|wait_threads|
-  #     ...
-  #   }
-  #
-  #   wait_threads = Open3.pipeline_start(cmd1, cmd2, ... [, opts])
-  #   ...
-  #
-  # Each cmd is a string or an array.
-  # If it is an array, the elements are passed to Process.spawn.
-  #
-  #   cmd:
-  #     commandline                              command line string which is passed to a shell
-  #     [env, commandline, opts]                 command line string which is passed to a shell
-  #     [env, cmdname, arg1, ..., opts]          command name and one or more arguments (no shell)
-  #     [env, [cmdname, argv0], arg1, ..., opts] command name and arguments including argv[0] (no shell)
-  #
-  #   Note that env and opts are optional, as for Process.spawn.
-  #
-  # Example:
-  #
-  #   # Run xeyes in 10 seconds.
-  #   Open3.pipeline_start('xeyes') {|ts|
-  #     sleep 10
-  #     t = ts[0]
-  #     Process.kill('TERM', t.pid)
-  #     p t.value #=> #<Process::Status: pid 911 SIGTERM (signal 15)>
-  #   }
-  #
-  #   # Convert pdf to ps and send it to a printer.
-  #   # Collect error message of pdftops and lpr.
-  #   pdf_file = 'paper.pdf'
-  #   printer = 'printer-name'
-  #   err_r, err_w = IO.pipe
-  #   Open3.pipeline_start(['pdftops', pdf_file, '-'],
-  #                        ['lpr', '-P#{printer}'],
-  #                        :err=>err_w) {|ts|
-  #     err_w.close
-  #     p err_r.read # error messages of pdftops and lpr.
-  #   }
-  #
-  def pipeline_start(*cmds, **opts, &block)
-    if block
-      pipeline_run(cmds, opts, [], [], &block)
-    else
-      ts, = pipeline_run(cmds, opts, [], [])
-      ts
+      break
+    rescue ::Timeout::Error
+      $stderr.puts '#{prefix}#{site} timed out'
+    rescue ::Interrupt
+      raise $!
+    rescue ::Exception => e
+      $stderr.puts '#{prefix}#{site} #{e.class} #{e}'
     end
   end
-  module_function :pipeline_start
     
-      def test_block
-    r = Open3.popen3(RUBY, '-e', 'STDOUT.print STDIN.read') {|i,o,e,t|
-      i.print 'baz'
-      i.close
-      assert_equal('baz', o.read)
-      'qux'
-    }
-    assert_equal('qux', r)
-  end
+          when :login_pass
     
-        def test_crc
-      Tempfile.create('test_zlib_gzip_file_crc') {|t|
-        t.close
-        Zlib::GzipWriter.open(t.path) {|gz| gz.print('foo') }
-    }
-    
-            def to_feed(feed, current)
-          if current.respond_to?(:itunes_owner=)
-            _not_set_required_variables = not_set_required_variables
-            if (required_variable_names - _not_set_required_variables).empty?
-              return
+            # Prints the list of specs & pod cache dirs for a single pod name.
+        #
+        # This output is valid YAML so it can be parsed with 3rd party tools
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
+        #
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
             end
-    
-    def process_args
-  if ARGV.first =~ %r{^-+h(?:elp)?$}
-    puts usage
-    exit 0
-  elsif ARGV.length == 1
-    $app_path = ARGV.first
-  else
-    puts usage
-    exit 1
-  end
-end
-    
-          def call
-        title('Gems')
-        table(all_gem_names) do |gem, row|
-          row.yellow if update_available?(gem)
-          row << gem
-          row << installed_gem_version(gem)
-          row << '(update available)' if update_available?(gem)
-        end
-      end
-    
-          def calculate_column_widths(rows)
-        num_columns = rows.map { |row| row.values.length }.max
-        Array.new(num_columns) do |col|
-          rows.map { |row| row.values[col].to_s.length }.max
-        end
-      end
-    
-            on roles(target_roles) do
-          unless test '[ -f #{file.to_s.shellescape} ]'
-            info 'Uploading #{prerequisite_file} to #{file}'
-            upload! File.open(prerequisite_file), file
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
           end
         end
       end
     end
-    
-    desc 'Deploy a new release.'
-task :deploy do
-  set(:deploying, true)
-  %w{ starting started
-      updating updated
-      publishing published
-      finishing finished }.each do |task|
-    invoke 'deploy:#{task}'
   end
 end
-task default: :deploy
+
+    
+            self.description = <<-DESC
+          Creates a scaffold for the development of a new Pod named `NAME`
+          according to the CocoaPods best practices.
+          If a `TEMPLATE_URL`, pointing to a git repo containing a compatible
+          template, is specified, it will be used in place of the default one.
+        DESC
+    
+        def initialize(tag_name, markup, tokens)
+      @by = nil
+      @source = nil
+      @title = nil
+      if markup =~ FullCiteWithTitle
+        @by = $1
+        @source = $2 + $3
+        @title = $4.titlecase.strip
+      elsif markup =~ FullCite
+        @by = $1
+        @source = $2 + $3
+      elsif markup =~ AuthorTitle
+        @by = $1
+        @title = $2.titlecase.strip
+      elsif markup =~ Author
+        @by = $1
+      end
+      super
+    end
+    
+            def destroy
+          authorize! :destroy, stock_location
+          stock_location.destroy
+          respond_with(stock_location, status: 204)
+        end
