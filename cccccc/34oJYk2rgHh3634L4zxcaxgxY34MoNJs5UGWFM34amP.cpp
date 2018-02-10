@@ -1,300 +1,370 @@
 
         
-        #if defined(BOOST_ASIO_MSVC)
-# if defined(_HAS_ITERATOR_DEBUGGING) && (_HAS_ITERATOR_DEBUGGING != 0)
-#  if !defined(BOOST_ASIO_DISABLE_BUFFER_DEBUGGING)
-#   define BOOST_ASIO_ENABLE_BUFFER_DEBUGGING
-#  endif // !defined(BOOST_ASIO_DISABLE_BUFFER_DEBUGGING)
-# endif // defined(_HAS_ITERATOR_DEBUGGING)
-#endif // defined(BOOST_ASIO_MSVC)
-    
-      /// Start an asynchronous write. The data being written must be valid for the
-  /// lifetime of the asynchronous operation.
-  template <typename ConstBufferSequence, typename WriteHandler>
-  BOOST_ASIO_INITFN_RESULT_TYPE(WriteHandler,
-      void (boost::system::error_code, std::size_t))
-  async_write_some(const ConstBufferSequence& buffers,
-      BOOST_ASIO_MOVE_ARG(WriteHandler) handler)
-  {
-    detail::async_result_init<
-      WriteHandler, void (boost::system::error_code, std::size_t)> init(
-        BOOST_ASIO_MOVE_CAST(WriteHandler)(handler));
-    }
-    
-    #ifndef BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
-#define BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
-    
-    #endif // BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
+        int main(int argc, char** argv) {
+  if (argc != 4) {
+    printf('This script converts the MNIST dataset to the leveldb format used\n'
+           'by caffe to train a siamese network.\n'
+           'Usage:\n'
+           '    convert_mnist_data input_image_file input_label_file '
+           'output_db_file\n'
+           'The MNIST dataset could be downloaded at\n'
+           '    http://yann.lecun.com/exdb/mnist/\n'
+           'You should gunzip them after downloading.\n');
+  } else {
+    google::InitGoogleLogging(argv[0]);
+    convert_dataset(argv[1], argv[2], argv[3]);
+  }
+  return 0;
+}
+#else
+int main(int argc, char** argv) {
+  LOG(FATAL) << 'This example requires LevelDB; compile with USE_LEVELDB.';
+}
+#endif  // USE_LEVELDB
 
     
-    #include <boost/asio/detail/config.hpp>
-#include <boost/asio/buffer.hpp>
-#include <boost/asio/detail/array_fwd.hpp>
-#include <boost/asio/detail/socket_types.hpp>
+      virtual inline const char* type() const { return 'AbsVal'; }
+  virtual inline int ExactNumBottomBlobs() const { return 1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
     
-      // Obtain the value at the top of the stack.
-  static Value* top()
-  {
-    context* elem = top_;
-    return elem ? elem->value_ : 0;
-  }
-    
-      static bool do_perform(reactor_op* base)
-  {
-    descriptor_read_op_base* o(static_cast<descriptor_read_op_base*>(base));
-    }
-    
-    #endif // !defined(BOOST_ASIO_WINDOWS_RUNTIME)
-    
-      // Insert a new entry into the map.
-  std::pair<iterator, bool> insert(const value_type& v)
-  {
-    if (size_ + 1 >= num_buckets_)
-      rehash(hash_size(size_ + 1));
-    size_t bucket = calculate_hash_value(v.first) % num_buckets_;
-    iterator it = buckets_[bucket].first;
-    if (it == values_.end())
-    {
-      buckets_[bucket].first = buckets_[bucket].last =
-        values_insert(values_.end(), v);
-      ++size_;
-      return std::pair<iterator, bool>(buckets_[bucket].last, true);
-    }
-    iterator end_it = buckets_[bucket].last;
-    ++end_it;
-    while (it != end_it)
-    {
-      if (it->first == v.first)
-        return std::pair<iterator, bool>(it, false);
-      ++it;
-    }
-    buckets_[bucket].last = values_insert(end_it, v);
-    ++size_;
-    return std::pair<iterator, bool>(buckets_[bucket].last, true);
-  }
-    
-    void IDCT1d(const double* in, int stride, double* out) {
-  for (int x = 0; x < 8; ++x) {
-    out[x * stride] = 0.0;
-    for (int u = 0; u < 8; ++u) {
-      out[x * stride] += kDCTMatrix[8 * u + x] * in[u * stride];
-    }
-  }
-}
-    
-        // The nodes are:
-    // [0, n): the sorted leaf nodes that we start with.
-    // [n]: we add a sentinel here.
-    // [n + 1, 2n): new parent nodes are added here, starting from
-    //              (n+1). These are naturally in ascending order.
-    // [2n]: we add a sentinel at the end as well.
-    // There will be (2n+1) elements at the end.
-    const HuffmanTree sentinel(~static_cast<uint32_t>(0), -1, -1);
-    tree[n] = sentinel;
-    tree[n + 1] = sentinel;
-    
-    // Mimic libjpeg's heuristics to guess jpeg color space.
-// Requires that the jpg has 3 components.
-bool HasYCbCrColorSpace(const JPEGData& jpg) {
-  bool has_Adobe_marker = false;
-  uint8_t Adobe_transform = 0;
-  for (const std::string& app : jpg.app_data) {
-    if (static_cast<uint8_t>(app[0]) == 0xe0) {
-      return true;
-    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
-      has_Adobe_marker = true;
-      Adobe_transform = app[14];
-    }
-  }
-  if (has_Adobe_marker) {
-    return (Adobe_transform != 0);
-  }
-  const int cid0 = jpg.components[0].id;
-  const int cid1 = jpg.components[1].id;
-  const int cid2 = jpg.components[2].id;
-  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
-}
-    
-    // Butteraugli scores that correspond to JPEG quality levels, starting at
-// kLowestQuality. They were computed by taking median BA scores of JPEGs
-// generated using libjpeg-turbo at given quality from a set of PNGs.
-// The scores above quality level 100 are just linearly decreased so that score
-// for 110 is 90% of the score for 100.
-const double kScoreForQuality[] = {
-  2.810761,  // 70
-  2.729300,
-  2.689687,
-  2.636811,
-  2.547863,
-  2.525400,
-  2.473416,
-  2.366133,
-  2.338078,
-  2.318654,
-  2.201674,  // 80
-  2.145517,
-  2.087322,
-  2.009328,
-  1.945456,
-  1.900112,
-  1.805701,
-  1.750194,
-  1.644175,
-  1.562165,
-  1.473608,  // 90
-  1.382021,
-  1.294298,
-  1.185402,
-  1.066781,
-  0.971769,  // 95
-  0.852901,
-  0.724544,
-  0.611302,
-  0.443185,
-  0.211578,  // 100
-  0.209462,
-  0.207346,
-  0.205230,
-  0.203114,
-  0.200999,  // 105
-  0.198883,
-  0.196767,
-  0.194651,
-  0.192535,
-  0.190420,  // 110
-  0.190420,
-};
-    
-    // Functions defined in this file are meant to extend the
-// boost::filesystem library; functions will be named according to boost's
-// naming conventions instead of ours.  For convenience, import the
-// boost::filesystem namespace into folly::fs.
-using namespace ::boost::filesystem;
-    
-      size_t defaultHugePageSize = getDefaultHugePageSize();
-    
-      std::vector<std::unique_ptr<AsyncIO::Op>> ops;
-  std::vector<ManagedBuffer> bufs;
-  const auto schedule = [&](size_t n) {
-    for (size_t i = 0; i < n; ++i) {
-      const size_t size = 2 * kAlign;
-      bufs.push_back(allocateAligned(size));
-    }
-    }
-    
-    std::shared_ptr<LogHandler> FileHandlerFactory::createHandler(
-    const Options& options) {
-  WriterFactory writerFactory;
-  return StandardLogHandlerFactory::createHandler(
-      getType(), &writerFactory, options);
-}
-    
-    /**
- * A LogWriter implementation that immediately writes to a file descriptor when
- * it is invoked.
- *
- * The downside of this class is that logging I/O occurs directly in your
- * normal program threads, so that logging I/O may block or slow down normal
- * processing.
- *
- * However, one benefit of this class is that log messages are written out
- * immediately, so if your program crashes, all log messages generated before
- * the crash will have already been written, and no messages will be lost.
- */
-class ImmediateFileWriter : public LogWriter {
- public:
+      virtual inline int ExactNumBottomBlobs() const { return 3; }
+  virtual inline const char* type() const { return 'ContrastiveLoss'; }
   /**
-   * Construct an ImmediateFileWriter that appends to the file at the specified
-   * path.
+   * Unlike most loss layers, in the ContrastiveLossLayer we can backpropagate
+   * to the first two inputs.
    */
-  explicit ImmediateFileWriter(folly::StringPiece path);
-    }
+  virtual inline bool AllowForceBackward(const int bottom_index) const {
+    return bottom_index != 2;
+  }
     
-    #include <folly/ConstexprMath.h>
-#include <folly/ExceptionString.h>
-#include <folly/FileUtil.h>
-#include <folly/MapUtil.h>
-#include <folly/experimental/logging/LogHandler.h>
-#include <folly/experimental/logging/LogMessage.h>
-#include <folly/experimental/logging/LogName.h>
-#include <folly/experimental/logging/LoggerDB.h>
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    #include <folly/Conv.h>
-    
-    /**
- * LogConfig contains configuration for the LoggerDB.
- *
- * This includes information about the log levels for log categories,
- * as well as what log handlers are configured and which categories they are
- * attached to.
- */
-class LogConfig {
+    #ifdef USE_CUDNN
+template <typename Dtype>
+class CuDNNLRNLayer : public LRNLayer<Dtype> {
  public:
-  using CategoryConfigMap = std::unordered_map<std::string, LogCategoryConfig>;
-  using HandlerConfigMap = std::unordered_map<std::string, LogHandlerConfig>;
+  explicit CuDNNLRNLayer(const LayerParameter& param)
+      : LRNLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNLRNLayer();
     }
     
-      StringPiece handlerName;
-  Optional<StringPiece> handlerType(in_place);
-  if (!splitNameValue(namePortion, &handlerName, &handlerType.value())) {
-    handlerName = trimWhitespace(namePortion);
-    handlerType = folly::none;
-  }
+    #endif  // CAFFE_CUDNN_POOLING_LAYER_HPP_
+
     
-    #include <memory>
-#include <string>
-    
-      /// Remove the first (or last) num occurrences of value from the list (key)
-  /// Return the number of elements removed.
-  /// May throw RedisListException
-  int Remove(const std::string& key, int32_t num,
-             const std::string& value);
-  int RemoveFirst(const std::string& key, int32_t num,
-                  const std::string& value);
-  int RemoveLast(const std::string& key, int32_t num,
-                 const std::string& value);
+    #include <vector>
     
     
-    {  // Bitmap used to record the bytes that we read, use atomic to protect
-  // against multiple threads updating the same bit
-  std::atomic<uint32_t>* bitmap_;
-  // (1 << bytes_per_bit_pow_) is bytes_per_bit. Use power of 2 to optimize
-  // muliplication and division
-  uint8_t bytes_per_bit_pow_;
-  // Pointer to DB Statistics object, Since this bitmap may outlive the DB
-  // this pointer maybe invalid, but the DB will update it to a valid pointer
-  // by using SetStatistics() before calling Mark()
-  std::atomic<Statistics*> statistics_;
-  uint32_t rnd_;
+    {  bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnTensorDescriptor_t bottom_desc_;
+  cudnnTensorDescriptor_t top_desc_;
+  cudnnActivationDescriptor_t activ_desc_;
 };
-    
-      // Trigger compaction if size amplification exceeds 110%
-  options.compaction_options_universal.max_size_amplification_percent = 110;
-  options = CurrentOptions(options);
-  ReopenWithColumnFamilies({'default', 'pikachu'}, options);
+#endif
     
     
-    {  // Note: we may want to access the Java callback object instance
-  // across multiple method calls, so we create a global ref
-  assert(jcallback_obj != nullptr);
-  m_jcallback_obj = env->NewGlobalRef(jcallback_obj);
-  if(jcallback_obj == nullptr) {
-    // exception thrown: OutOfMemoryError
-    return;
+    {    int nindex = index_.num_chunk();
+    int nvalue = value_.num_chunk();
+    int ntotal = nindex + nvalue;
+    #pragma omp parallel for schedule(dynamic, 1)  num_threads(nthread_write_)
+    for (int i = 0; i < ntotal; ++i) {
+      if (i < nindex) {
+        index_.Compress(i, use_lz4_hc_);
+      } else {
+        value_.Compress(i - nindex, use_lz4_hc_);
+      }
+    }
+    index_.Write(fo);
+    value_.Write(fo);
+    // statistics
+    raw_bytes_index_ += index_.RawBytes() * sizeof(bst_uint) / sizeof(StorageIndex);
+    raw_bytes_value_ += value_.RawBytes();
+    encoded_bytes_index_ += index_.EncodedBytes();
+    encoded_bytes_value_ += value_.EncodedBytes();
+    raw_bytes_ += page.offset.size() * sizeof(size_t);
+  }
+    
+      inline void ParseStr(std::string *tok) {
+    while ((ch_buf = this->GetChar()) != EOF) {
+      switch (ch_buf) {
+        case '\\': *tok += this->GetChar(); break;
+        case '\'': return;
+        case '\r':
+        case '\n': LOG(FATAL)<< 'ConfigReader: unterminated string';
+        default: *tok += ch_buf;
+      }
+    }
+    LOG(FATAL) << 'ConfigReader: unterminated string';
+  }
+  inline void ParseStrML(std::string *tok) {
+    while ((ch_buf = this->GetChar()) != EOF) {
+      switch (ch_buf) {
+        case '\\': *tok += this->GetChar(); break;
+        case '\'': return;
+        default: *tok += ch_buf;
+      }
+    }
+    LOG(FATAL) << 'unterminated string';
+  }
+  // return newline
+  inline bool GetNextToken(std::string *tok) {
+    tok->clear();
+    bool new_line = false;
+    while (ch_buf != EOF) {
+      switch (ch_buf) {
+        case '#' : SkipLine(); new_line = true; break;
+        case '\'':
+          if (tok->length() == 0) {
+            ParseStr(tok); ch_buf = this->GetChar(); return new_line;
+          } else {
+            LOG(FATAL) << 'ConfigReader: token followed directly by string';
+          }
+        case '\'':
+          if (tok->length() == 0) {
+            ParseStrML(tok); ch_buf = this->GetChar(); return new_line;
+          } else {
+            LOG(FATAL) << 'ConfigReader: token followed directly by string';
+          }
+        case '=':
+          if (tok->length() == 0) {
+            ch_buf = this->GetChar();
+            *tok = '=';
+          }
+          return new_line;
+        case '\r':
+        case '\n':
+          if (tok->length() == 0) new_line = true;
+        case '\t':
+        case ' ' :
+          ch_buf = this->GetChar();
+          if (tok->length() != 0) return new_line;
+          break;
+        default:
+          *tok += ch_buf;
+          ch_buf = this->GetChar();
+          break;
+      }
+    }
+    if (tok->length() == 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+};
+/*!
+ * \brief an iterator use stream base, allows use all types of istream
+ */
+class ConfigStreamReader: public ConfigReaderBase {
+ public:
+  /*!
+   * \brief constructor
+   * \param fin istream input stream
+   */
+  explicit ConfigStreamReader(std::istream &fin) : fin(fin) {}
+    
+    #include <random>
+#include <limits>
+    
+    #include '../helpers.h'
+    
+    
+    {  col_iter_.cpages_.clear();
+  if (info().num_row < max_row_perbatch) {
+    std::unique_ptr<SparsePage> page(new SparsePage());
+    this->MakeOneBatch(enabled, pkeep, page.get());
+    col_iter_.cpages_.push_back(std::move(page));
+  } else {
+    this->MakeManyBatch(enabled, pkeep, max_row_perbatch);
+  }
+  // setup col-size
+  col_size_.resize(info().num_col);
+  std::fill(col_size_.begin(), col_size_.end(), 0);
+  for (size_t i = 0; i < col_iter_.cpages_.size(); ++i) {
+    SparsePage *pcol = col_iter_.cpages_[i].get();
+    for (size_t j = 0; j < pcol->Size(); ++j) {
+      col_size_[j] += pcol->offset[j + 1] - pcol->offset[j];
+    }
   }
 }
     
-      class StatisticsJni : public StatisticsImpl {
-   public:
-     StatisticsJni(std::shared_ptr<Statistics> stats);
-     StatisticsJni(std::shared_ptr<Statistics> stats,
-         const std::set<uint32_t> ignore_histograms);
-     virtual bool HistEnabledForType(uint32_t type) const override;
+    
+    {template<typename IndexType>
+Parser<IndexType> *
+CreateDenseLibSVMParser(const std::string& path,
+                        const std::map<std::string, std::string>& args,
+                        unsigned part_index,
+                        unsigned num_parts) {
+  CHECK_NE(args.count('num_col'), 0) << 'expect num_col in dense_libsvm';
+  return new DensifyParser<IndexType>(
+            Parser<IndexType>::Create(path.c_str(), part_index, num_parts, 'libsvm'),
+           uint32_t(atoi(args.at('num_col').c_str())));
+}
+}  // namespace data
+    
+    // Define a customized logistic regression objective in C++.
+// Implement the interface.
+class MyLogistic : public ObjFunction {
+ public:
+  void Configure(const std::vector<std::pair<std::string, std::string> >& args) override {
+    param_.InitAllowUnknown(args);
+  }
+  void GetGradient(const std::vector<bst_float> &preds,
+                   const MetaInfo &info,
+                   int iter,
+                   std::vector<bst_gpair> *out_gpair) override {
+    out_gpair->resize(preds.size());
+    for (size_t i = 0; i < preds.size(); ++i) {
+      bst_float w = info.GetWeight(i);
+      // scale the negative examples!
+      if (info.labels[i] == 0.0f) w *= param_.scale_neg_weight;
+      // logistic transformation
+      bst_float p = 1.0f / (1.0f + std::exp(-preds[i]));
+      // this is the gradient
+      bst_float grad = (p - info.labels[i]) * w;
+      // this is the second order gradient
+      bst_float hess = p * (1.0f - p) * w;
+      out_gpair->at(i) = bst_gpair(grad, hess);
+    }
+  }
+  const char* DefaultEvalMetric() const override {
+    return 'error';
+  }
+  void PredTransform(std::vector<bst_float> *io_preds) override {
+    // transform margin value to probability.
+    std::vector<bst_float> &preds = *io_preds;
+    for (size_t i = 0; i < preds.size(); ++i) {
+      preds[i] = 1.0f / (1.0f + std::exp(-preds[i]));
+    }
+  }
+  bst_float ProbToMargin(bst_float base_score) const override {
+    // transform probability to margin value
+    return -std::log(1.0f / base_score - 1.0f);
+  }
     }
     
     
-    {  std::string expected_unused_bucket = GetInternalKey('key00', true);
-  expected_unused_bucket += std::string(values[0].size(), 'a');
-  CheckFileContents(keys, values, expected_locations,
-      expected_unused_bucket, expected_table_size, 4, false);
+    {    // Return an OK status.
+    return grpc::Status::OK;
+  }
+    
+    inline flatbuffers::Offset<Enum> CreateEnumDirect(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    const char *name = nullptr,
+    const std::vector<flatbuffers::Offset<EnumVal>> *values = nullptr,
+    bool is_union = false,
+    flatbuffers::Offset<Type> underlying_type = 0,
+    const std::vector<flatbuffers::Offset<KeyValue>> *attributes = nullptr,
+    const std::vector<flatbuffers::Offset<flatbuffers::String>> *documentation = nullptr) {
+  return reflection::CreateEnum(
+      _fbb,
+      name ? _fbb.CreateString(name) : 0,
+      values ? _fbb.CreateVector<flatbuffers::Offset<EnumVal>>(*values) : 0,
+      is_union,
+      underlying_type,
+      attributes ? _fbb.CreateVector<flatbuffers::Offset<KeyValue>>(*attributes) : 0,
+      documentation ? _fbb.CreateVector<flatbuffers::Offset<flatbuffers::String>>(*documentation) : 0);
 }
+    
+    inline const char **EnumNamesEnumInNestedNS() {
+  static const char *names[] = {
+    'A',
+    'B',
+    'C',
+    nullptr
+  };
+  return names;
+}
+    
+      virtual grpc::string input_type_name() const = 0;
+  virtual grpc::string output_type_name() const = 0;
+    
+     private:
+  const uint8_t *Indirect() const {
+    return flexbuffers::Indirect(data_, parent_width_);
+  }
+    
+    // Get a field, if you know it's floating point and its exact type.
+template<typename T>
+T GetFieldF(const Table &table, const reflection::Field &field) {
+  assert(sizeof(T) == GetTypeSize(field.type()->base_type()));
+  return table.GetField<T>(field.offset(),
+                           static_cast<T>(field.default_real()));
+}
+    
+      // here, parser.builder_ contains a binary buffer that is the parsed data.
+    
+                        cout << 'Connections: ' << sockets.size() << endl;
+    
+        framePack.base = (char *) framePackBuffer;
+    framePack.len = framePackBufferLength;
+    
+    namespace uS {
+    }
+    
+            if (ssl) {
+            if (!h.listen(3000,
+                          uS::TLS::createContext('misc/ssl/cert.pem',
+                          'misc/ssl/key.pem', '1234'))) {
+                std::cerr << 'FAILURE: Cannot listen!' << std::endl;
+                exit(-1);
+            }
+            h.connect('wss://localhost:3000', nullptr);
+        } else {
+            if (!h.listen(3000)) {
+                std::cerr << 'FAILURE: Cannot listen!' << std::endl;
+                exit(-1);
+            }
+            h.connect('ws://localhost:3000', nullptr);
+        }
+    
+    
+    {
+    {
+    {
+    {                    return webSocket;
+                } else {
+                    httpSocket->onEnd(httpSocket);
+                }
+                return httpSocket;
+            }
+        } else {
+            if (!httpSocket->httpBuffer.length()) {
+                if (length > MAX_HEADER_BUFFER_SIZE) {
+                    httpSocket->onEnd(httpSocket);
+                } else {
+                    httpSocket->httpBuffer.append(lastCursor, end - lastCursor);
+                }
+            }
+            return httpSocket;
+        }
+    } while(cursor != end);
+    
+        void enqueue(Queue::Message *message) {
+        messageQueue.push(message);
+    }
+    
+    
+    {            static size_t transform(const char *src, char *dst, size_t length, int transformData) {
+                memcpy(dst, src, length);
+                return length;
+            }
+        };
+    
+            Timepoint t = {cb, this, timepoint, repeat};
+        loop->timers.insert(
+            std::upper_bound(loop->timers.begin(), loop->timers.end(), t, [](const Timepoint &a, const Timepoint &b) {
+                return a.timepoint < b.timepoint;
+            }),
+            t
+        );
+    
+    #endif // HUB_UWS_H
