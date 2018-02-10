@@ -1,377 +1,277 @@
 
         
-        #include 'tensorflow/core/distributed_runtime/partial_run_mgr.h'
+        DEFINE_string(test_name, '', 'Name of the test being executed');
     
-    #include 'tensorflow/core/grappler/optimizers/graph_optimizer.h'
-    
-    #include 'third_party/eigen3/unsupported/Eigen/CXX11/Tensor'
-#include 'tensorflow/core/framework/tensor_types.h'
-#include 'tensorflow/core/framework/types.h'
-#include 'tensorflow/core/kernels/scatter_functor.h'
-    
-      // Sets the appropriate library kind to that passed in.
-  PluginConfig& SetBlas(PluginId blas);
-  PluginConfig& SetDnn(PluginId dnn);
-  PluginConfig& SetFft(PluginId fft);
-  PluginConfig& SetRng(PluginId rng);
-    
-      ExpectSuccess(
-      Builder().Input(FakeInput(2, DT_INT32)).Input(FakeInput(2, DT_BOOL)),
-      {DT_INT32, DT_INT32, DT_BOOL, DT_BOOL}, {}, R'proto(
-      op: 'NInTwoTypeVariables'
-      input: ['a', 'a:1', 'b', 'b:1']
-      attr { key: 'N' value { i: 2 } }
-      attr { key: 'S' value { type: DT_INT32 } }
-      attr { key: 'T' value { type: DT_BOOL } } )proto');
-    
-      for (const auto& fetch : fetch_outputs) {
-    if (endpoints.count(fetch) > 0) {
-      return errors::InvalidArgument(fetch, ' is both fed and fetched.');
-    }
-  }
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    /**
- * \ingroup CXX11_NeuralNetworks_Module
- * \brief Template functor to clip the magnitude of the first scalar.
+    /** Returns the benchmark Reporter instance.
  *
- * \sa class CwiseBinaryOp, MatrixBase::Clip
- */
-template <typename Scalar>
-struct scalar_clip_op {
-  EIGEN_EMPTY_STRUCT_CTOR(scalar_clip_op)
-  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const Scalar
-  operator()(const Scalar& a, const Scalar& b) const {
-    return numext::mini(numext::maxi(a, -b), b);
+ * The returned instance will take care of generating reports for all the actual
+ * reporters configured via the 'enable_*_reporter' command line flags (see
+ * benchmark_config.cc). */
+std::shared_ptr<Reporter> GetReporter();
+    
+      void push_back(T&& value) { emplace_back(std::move(value)); }
+    
+    
+    {    HistogramEntry entry;
+    HistogramEntry* entry_ptr = &entry;
+    if (!cli_cqs_[cq_[thread_idx]]->Next(&got_tag, &ok)) {
+      return;
+    }
+    std::mutex* shutdown_mu = &shutdown_state_[thread_idx]->mutex;
+    shutdown_mu->lock();
+    ClientRpcContext* ctx = ProcessTag(thread_idx, got_tag);
+    if (ctx == nullptr) {
+      shutdown_mu->unlock();
+      return;
+    }
+    while (cli_cqs_[cq_[thread_idx]]->DoThenAsyncNext(
+        [&, ctx, ok, entry_ptr, shutdown_mu]() {
+          if (!ctx->RunNextState(ok, entry_ptr)) {
+            // The RPC and callback are done, so clone the ctx
+            // and kickstart the new one
+            ctx->StartNewClone(cli_cqs_[cq_[thread_idx]].get());
+            delete ctx;
+          }
+          shutdown_mu->unlock();
+        },
+        &got_tag, &ok, gpr_inf_future(GPR_CLOCK_REALTIME))) {
+      t->UpdateHistogram(entry_ptr);
+      entry = HistogramEntry();
+      shutdown_mu->lock();
+      ctx = ProcessTag(thread_idx, got_tag);
+      if (ctx == nullptr) {
+        shutdown_mu->unlock();
+        return;
+      }
+    }
   }
-  template <typename Packet>
-  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const Packet
-  packetOp(const Packet& a, const Packet& b) const {
-    return internal::pmin(internal::pmax(a, internal::pnegate(b)), b);
+    
+        gpr_sleep_until(gpr_time_add(
+        gpr_now(GPR_CLOCK_MONOTONIC),
+        gpr_time_from_micros(server_delay_before_return_us, GPR_TIMESPAN)));
+    
+    const int kServerDefaultResponseStreamsToSend = 3;
+const char* const kServerResponseStreamsToSend = 'server_responses_to_send';
+const char* const kServerTryCancelRequest = 'server_try_cancel';
+const char* const kDebugInfoTrailerKey = 'debug-info-bin';
+const char* const kServerFinishAfterNReads = 'server_finish_after_n_reads';
+const char* const kServerUseCoalescingApi = 'server_use_coalescing_api';
+    
+    namespace grpc {
+namespace testing {
+    }
+    }
+    
+      const auto result =
+      RunScenario(client_config, 1, server_config, 1, WARMUP, BENCHMARK, -2, '',
+                  kInsecureCredentialsType, true);
+    
+    using grpc::Server;
+using grpc::ServerAsyncResponseWriter;
+using grpc::ServerBuilder;
+using grpc::ServerContext;
+using grpc::ServerCompletionQueue;
+using grpc::Status;
+using helloworld::HelloRequest;
+using helloworld::HelloReply;
+using helloworld::Greeter;
+    
+    int main(int argc, char* argv[]) {
+  gflags::ParseCommandLineFlags(&argc, &argv, true);
+  if (FLAGS_cp) {
+    if (argc != 3) {
+      usage(argv[0]);
+    }
+    copy(argv[1], argv[2]);
+  } else {
+    if (argc != 1) {
+      usage(argv[0]);
+    }
+    list();
   }
-};
-    
-    namespace tensorflow {
-    }
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    
-/// Reference : Eric W. Weisstein. 'Cubic Equation.' From MathWorld--A Wolfram Web Resource.
-/// http://mathworld.wolfram.com/CubicEquation.html
-/// \return Number of real roots found.
-int solve_deg3(double a, double b, double c, double d,
-               double & x0, double & x1, double & x2)
-{
-  if (a == 0) {
-    // Solve second order sytem
-    if (b == 0)	{
-      // Solve first order system
-      if (c == 0)
-    return 0;
-    }
-    }
-    }
-    
-    
-    {}
-    
-            struct glob
-        {
-            static __device__ __forceinline__ int atomicAdd(int* address, int val)
-            {
-                return ::atomicAdd(address, val);
-            }
-            static __device__ __forceinline__ unsigned int atomicAdd(unsigned int* address, unsigned int val)
-            {
-                return ::atomicAdd(address, val);
-            }
-            static __device__ __forceinline__ float atomicAdd(float* address, float val)
-            {
-            #if __CUDA_ARCH__ >= 200
-                return ::atomicAdd(address, val);
-            #else
-                int* address_as_i = (int*) address;
-                int old = *address_as_i, assumed;
-                do {
-                    assumed = old;
-                    old = ::atomicCAS(address_as_i, assumed,
-                        __float_as_int(val + __int_as_float(assumed)));
-                } while (assumed != old);
-                return __int_as_float(old);
-            #endif
-            }
-            static __device__ __forceinline__ double atomicAdd(double* address, double val)
-            {
-            #if __CUDA_ARCH__ >= 130
-                unsigned long long int* address_as_ull = (unsigned long long int*) address;
-                unsigned long long int old = *address_as_ull, assumed;
-                do {
-                    assumed = old;
-                    old = ::atomicCAS(address_as_ull, assumed,
-                        __double_as_longlong(val + __longlong_as_double(assumed)));
-                } while (assumed != old);
-                return __longlong_as_double(old);
-            #else
-                (void) address;
-                (void) val;
-                return 0.0;
-            #endif
-            }
-    }
-    
-    OpenCV Error: Assertion failed (dims <= 2 && data && (unsigned)i0 < (unsigned)(s ize.p[0] * size.p[1])
-&& elemSize() == (((((DataType<_Tp>::type) & ((512 - 1) << 3)) >> 3) + 1) << ((((sizeof(size_t)/4+1)16384|0x3a50)
->> ((DataType<_Tp>::typ e) & ((1 << 3) - 1))2) & 3))) in Mat::at,
-file C:\builds\master_PackSlave-w in32-vc12-shared\opencv\modules\core\include\opencv2/core/mat.inl.hpp, line 893
-    
-     protected:
-  /// The database was opened in a ReadOnly mode.
-  bool read_only_{false};
-    
-    
-    {  /// Wait for notification or a pause expiration.
-  std::condition_variable condition_;
-};
-    
-    /// Status get a list of active extenions.
-Status getExtensions(ExtensionList& extensions);
-    
-    #include <osquery/config.h>
-#include <osquery/core.h>
-#include <osquery/database.h>
-#include <osquery/events.h>
-#include <osquery/extensions.h>
-#include <osquery/filesystem.h>
-#include <osquery/flags.h>
-#include <osquery/logger.h>
-#include <osquery/registry.h>
-#include <osquery/sql.h>
-#include <osquery/status.h>
-#include <osquery/tables.h>
-    
-    
-    {/**
- * @brief Start a file carve of the given paths
- *
- * @return A status returning if the carves were started successfully
- */
-Status carvePaths(const std::set<std::string>& paths);
-} // namespace osquery
+  return 0;
+}
 
     
-    Status FilesystemConfigPlugin::genPack(const std::string& name,
-                                       const std::string& value,
-                                       std::string& pack) {
-  if (name == '*') {
-    // The config requested a multi-pack.
-    std::vector<std::string> paths;
-    resolveFilePattern(value, paths);
+    #include <boost/operators.hpp>
+    
+    std::shared_ptr<LogWriter> FileWriterFactory::createWriter(File file) {
+  // Determine whether we should use ImmediateFileWriter or AsyncFileWriter
+  if (async_) {
+    auto asyncWriter = make_shared<AsyncFileWriter>(std::move(file));
+    if (maxBufferSize_.hasValue()) {
+      asyncWriter->setMaxBufferSize(maxBufferSize_.value());
     }
+    return asyncWriter;
+  } else {
+    if (maxBufferSize_.hasValue()) {
+      throw std::invalid_argument(to<string>(
+          'the \'max_buffer_size\' option is only valid for async file '
+          'handlers'));
+    }
+    return make_shared<ImmediateFileWriter>(std::move(file));
+  }
+}
+    
+        for (const auto& entry : categories->items()) {
+      if (!entry.first.isString()) {
+        // This shouldn't really ever happen.
+        // We deserialize the json with allow_non_string_keys set to False.
+        throw LogConfigParseError{'category name must be a string'};
+      }
+      auto categoryName = entry.first.asString();
+      auto categoryConfig = parseJsonCategoryConfig(entry.second, categoryName);
     }
     
-    Status TLSConfigPlugin::setUp() {
-  if (FLAGS_enroll_always && !FLAGS_disable_enrollment) {
-    // clear any cached node key
-    clearNodeKey();
-    auto node_key = getNodeKey('tls');
-    if (node_key.size() == 0) {
-      // Could not generate a node key, continue logging to stderr.
-      return Status(1, 'No node key, TLS config failed.');
-    }
-  }
+    /**
+ * Parse a log configuration string.
+ *
+ * See the documentation in logging/docs/Config.md for a description of the
+ * configuration string syntax.
+ *
+ * Throws a LogConfigParseError on error.
+ */
+LogConfig parseLogConfig(StringPiece value);
+    
+    TEST_F(MockEnvTest, Corrupt) {
+  const std::string kGood = 'this is a good string, synced to disk';
+  const std::string kCorrupted = 'this part may be corrupted';
+  const std::string kFileName = '/dir/f';
+  unique_ptr<WritableFile> writable_file;
+  ASSERT_OK(env_->NewWritableFile(kFileName, &writable_file, soptions_));
+  ASSERT_OK(writable_file->Append(kGood));
+  ASSERT_TRUE(writable_file->GetFileSize() == kGood.size());
     }
     
-    XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(lz4hc)
-.describe('Apply LZ4 binary data compression(high compression ratio) for ext memory.')
-.set_body([]() {
-    return new SparsePageLZ4Format<bst_uint>(true);
-  });
+    using namespace v8;
     
-      inline void ParseStr(std::string *tok) {
-    while ((ch_buf = this->GetChar()) != EOF) {
-      switch (ch_buf) {
-        case '\\': *tok += this->GetChar(); break;
-        case '\'': return;
-        case '\r':
-        case '\n': LOG(FATAL)<< 'ConfigReader: unterminated string';
-        default: *tok += ch_buf;
-      }
-    }
-    LOG(FATAL) << 'ConfigReader: unterminated string';
+    #pragma once
+#include 'rocksdb/merge_operator.h'
+#include 'rocksdb/slice.h'
+    
+    
+    {  std::string res;
+  slists.Get('random_key', &res);
+  ASSERT_EQ(res, 'single_val');
+}
+    
+      AlignedBuffer& operator=(AlignedBuffer&& o) ROCKSDB_NOEXCEPT {
+    alignment_ = std::move(o.alignment_);
+    buf_ = std::move(o.buf_);
+    capacity_ = std::move(o.capacity_);
+    cursize_ = std::move(o.cursize_);
+    bufstart_ = std::move(o.bufstart_);
+    return *this;
   }
-  inline void ParseStrML(std::string *tok) {
-    while ((ch_buf = this->GetChar()) != EOF) {
-      switch (ch_buf) {
-        case '\\': *tok += this->GetChar(); break;
-        case '\'': return;
-        default: *tok += ch_buf;
-      }
-    }
-    LOG(FATAL) << 'unterminated string';
+    
+      std::shared_ptr<Cache> cache = NewLRUCache(0, 0, false);
+  table_options.block_cache = cache;
+  options.table_factory.reset(new BlockBasedTableFactory(table_options));
+  Reopen(options);
+  RecordCacheCounters(options);
+    
+      // Create a reader that will return log records from '*file'.
+  // '*file' must remain live while this Reader is in use.
+  //
+  // If 'reporter' is non-nullptr, it is notified whenever some data is
+  // dropped due to a detected corruption.  '*reporter' must remain
+  // live while this Reader is in use.
+  //
+  // If 'checksum' is true, verify checksums if available.
+  //
+  // The Reader will start reading at the first record located at physical
+  // position >= initial_offset within the file.
+  Reader(std::shared_ptr<Logger> info_log,
+  // @lint-ignore TXT2 T25377293 Grandfathered in
+	 unique_ptr<SequentialFileReader>&& file,
+         Reporter* reporter, bool checksum, uint64_t initial_offset,
+         uint64_t log_num);
+    
+      std::string GetInternalKey(Slice user_key, bool zero_seqno) {
+    IterKey ikey;
+    ikey.SetInternalKey(user_key, zero_seqno ? 0 : 1000, kTypeValue);
+    return ikey.GetInternalKey().ToString();
   }
-  // return newline
-  inline bool GetNextToken(std::string *tok) {
-    tok->clear();
-    bool new_line = false;
-    while (ch_buf != EOF) {
-      switch (ch_buf) {
-        case '#' : SkipLine(); new_line = true; break;
-        case '\'':
-          if (tok->length() == 0) {
-            ParseStr(tok); ch_buf = this->GetChar(); return new_line;
-          } else {
-            LOG(FATAL) << 'ConfigReader: token followed directly by string';
-          }
-        case '\'':
-          if (tok->length() == 0) {
-            ParseStrML(tok); ch_buf = this->GetChar(); return new_line;
-          } else {
-            LOG(FATAL) << 'ConfigReader: token followed directly by string';
-          }
-        case '=':
-          if (tok->length() == 0) {
-            ch_buf = this->GetChar();
-            *tok = '=';
-          }
-          return new_line;
-        case '\r':
-        case '\n':
-          if (tok->length() == 0) new_line = true;
-        case '\t':
-        case ' ' :
-          ch_buf = this->GetChar();
-          if (tok->length() != 0) return new_line;
-          break;
-        default:
-          *tok += ch_buf;
-          ch_buf = this->GetChar();
-          break;
-      }
+    
+    
+    {}  // namespace grpc_cpp_generator
+    
+    	int unary_methods = 0, streaming_methods = 0;
+	vars['ServiceDesc'] = '_' + vars['Service'] + '_serviceDesc';
+	for (int i = 0; i < service->method_count(); i++) {
+		auto method = service->method(i);
+		if (method->NoStreaming()) {
+			vars['MethodDesc'] = vars['ServiceDesc'] + '.Method[' + as_string(unary_methods) + ']';
+			unary_methods++;
+		} else {
+			vars['MethodDesc'] = vars['ServiceDesc'] + '.Streams[' + as_string(streaming_methods) + ']';
+			streaming_methods++;
+		}
+		GenerateClientMethod(method.get(), printer, vars);
+	}
+    
+      std::string SayHello(const std::string &name) {
+    flatbuffers::grpc::MessageBuilder mb;
+    auto name_offset = mb.CreateString(name);
+    auto request_offset = CreateHelloRequest(mb, name_offset);
+    mb.Finish(request_offset);
+    auto request_msg = mb.ReleaseMessage<HelloRequest>();
     }
-    if (tok->length() == 0) {
-      return true;
-    } else {
+    
+    
+    {}  // namespace NamespaceC
+    
+    struct TableInNestedNSBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_foo(int32_t foo) {
+    fbb_.AddElement<int32_t>(TableInNestedNS::VT_FOO, foo, 0);
+  }
+  explicit TableInNestedNSBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  TableInNestedNSBuilder &operator=(const TableInNestedNSBuilder &);
+  flatbuffers::Offset<TableInNestedNS> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<TableInNestedNS>(end);
+    return o;
+  }
+};
+    
+    class LogMessageVoidify {
+ public:
+  LogMessageVoidify() {}
+  // This has to be an operator with a precedence lower than << but
+  // higher than ?:
+  void operator&(std::ostream&) {}
+};
+    
+    namespace flatbuffers {
+    }
+    
+     private:
+  bool LoadSchema(const std::string &ident, Parser *parser) {
+    // Find the schema, if not, exit.
+    auto it = schemas_.find(ident);
+    if (it == schemas_.end()) {
+      // Don't attach the identifier, since it may not be human readable.
+      lasterror_ = 'identifier for this buffer not in the registry';
       return false;
     }
-  }
-};
-/*!
- * \brief an iterator use stream base, allows use all types of istream
- */
-class ConfigStreamReader: public ConfigReaderBase {
- public:
-  /*!
-   * \brief constructor
-   * \param fin istream input stream
-   */
-  explicit ConfigStreamReader(std::istream &fin) : fin(fin) {}
-    
-      size_t PeekRead(void* dptr, size_t size) {
-    size_t nbuffer = buffer_.length() - buffer_ptr_;
-    if (nbuffer < size) {
-      buffer_ = buffer_.substr(buffer_ptr_, buffer_.length());
-      buffer_ptr_ = 0;
-      buffer_.resize(size);
-      size_t nadd = strm_->Read(dmlc::BeginPtr(buffer_) + nbuffer, size - nbuffer);
-      buffer_.resize(nbuffer + nadd);
-      std::memcpy(dptr, dmlc::BeginPtr(buffer_), buffer_.length());
-      return buffer_.length();
-    } else {
-      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, size);
-      return size;
+    auto &schema = it->second;
+    // Load the schema from disk. If not, exit.
+    std::string schematext;
+    if (!LoadFile(schema.path_.c_str(), false, &schematext)) {
+      lasterror_ = 'could not load schema: ' + schema.path_;
+      return false;
     }
-  }
-    
-    #if XGBOOST_CUSTOMIZE_GLOBAL_PRNG
-/*!
- * \brief An customized random engine, used to be plugged in PRNG from other systems.
- *  The implementation of this library is not provided by xgboost core library.
- *  Instead the other library can implement this class, which will be used as GlobalRandomEngine
- *  If XGBOOST_RANDOM_CUSTOMIZE = 1, by default this is switched off.
- */
-class CustomGlobalRandomEngine {
- public:
-  /*! \brief The result type */
-  typedef size_t result_type;
-  /*! \brief The minimum of random numbers generated */
-  inline static constexpr result_type min() {
-    return 0;
-  }
-  /*! \brief The maximum random numbers generated */
-  inline static constexpr result_type max() {
-    return std::numeric_limits<size_t>::max();
-  }
-  /*!
-   * \brief seed function, to be implemented
-   * \param val The value of the seed.
-   */
-  void seed(result_type val);
-  /*!
-   * \return next random number.
-   */
-  result_type operator()();
-};
-    
-            memset(&Info, 0, sizeof(Info));
-        SetPixelHeight((uint32_t)cfg.SizePixels);
-    
-        ALLEGRO_MOUSE_STATE mouse;
-    if (keys.display == g_Display)
-    {
-        al_get_mouse_state(&mouse);
-        io.MousePos = ImVec2((float)mouse.x, (float)mouse.y);
+    // Parse schema.
+    parser->opts = opts_;
+    if (!parser->Parse(schematext.c_str(), vector_data(include_paths_),
+                       schema.path_.c_str())) {
+      lasterror_ = parser->error_;
+      return false;
     }
-    else
-    {
-        io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
-    }
-    
-    HRESULT CreateDeviceD3D(HWND hWnd)
-{
-    // Setup swap chain
-    DXGI_SWAP_CHAIN_DESC sd;
-    ZeroMemory(&sd, sizeof(sd));
-    sd.BufferCount = 2;
-    sd.BufferDesc.Width = 0;
-    sd.BufferDesc.Height = 0;
-    sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    sd.BufferDesc.RefreshRate.Numerator = 60;
-    sd.BufferDesc.RefreshRate.Denominator = 1;
-    sd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    sd.OutputWindow = hWnd;
-    sd.SampleDesc.Count = 1;
-    sd.SampleDesc.Quality = 0;
-    sd.Windowed = TRUE;
-    sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-    }
-    
-        ImGuiIO& io = ImGui::GetIO();
-    io.KeyMap[ImGuiKey_Tab] = GLFW_KEY_TAB;                     // Keyboard mapping. ImGui will use those indices to peek into the io.KeyDown[] array.
-    io.KeyMap[ImGuiKey_LeftArrow] = GLFW_KEY_LEFT;
-    io.KeyMap[ImGuiKey_RightArrow] = GLFW_KEY_RIGHT;
-    io.KeyMap[ImGuiKey_UpArrow] = GLFW_KEY_UP;
-    io.KeyMap[ImGuiKey_DownArrow] = GLFW_KEY_DOWN;
-    io.KeyMap[ImGuiKey_PageUp] = GLFW_KEY_PAGE_UP;
-    io.KeyMap[ImGuiKey_PageDown] = GLFW_KEY_PAGE_DOWN;
-    io.KeyMap[ImGuiKey_Home] = GLFW_KEY_HOME;
-    io.KeyMap[ImGuiKey_End] = GLFW_KEY_END;
-    io.KeyMap[ImGuiKey_Insert] = GLFW_KEY_INSERT;
-    io.KeyMap[ImGuiKey_Delete] = GLFW_KEY_DELETE;
-    io.KeyMap[ImGuiKey_Backspace] = GLFW_KEY_BACKSPACE;
-    io.KeyMap[ImGuiKey_Space] = GLFW_KEY_SPACE;
-    io.KeyMap[ImGuiKey_Enter] = GLFW_KEY_ENTER;
-    io.KeyMap[ImGuiKey_Escape] = GLFW_KEY_ESCAPE;
-    io.KeyMap[ImGuiKey_A] = GLFW_KEY_A;
-    io.KeyMap[ImGuiKey_C] = GLFW_KEY_C;
-    io.KeyMap[ImGuiKey_V] = GLFW_KEY_V;
-    io.KeyMap[ImGuiKey_X] = GLFW_KEY_X;
-    io.KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
-    io.KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
+    return true;
+  }
