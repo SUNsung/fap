@@ -1,58 +1,57 @@
 
         
-            brew cask install mactex
-    EOS
-  when 'pip' then <<-EOS.undent
-    Homebrew provides pip via: `brew install python`. However you will then
-    have two Pythons installed on your Mac, so alternatively you can install
-    pip via the instructions at:
+          # Finds the projects belonging to the user in '@user', limited to either
+  # public projects or projects visible to the given user.
+  #
+  # current_user - When given the list of projects is limited to those only
+  #                visible by this user.
+  #
+  # Returns an ActiveRecord::Relation.
+  def execute(current_user = nil)
+    segments = all_projects(current_user)
     
-      def internal_commands
-    find_internal_commands HOMEBREW_LIBRARY_PATH/'cmd'
-  end
-    
-            # Find a user by its confirmation token and try to confirm it.
-        # If no user is found, returns a new user with an error.
-        # If the user is already confirmed, create an error for the user
-        # Options must have the confirmation_token
-        def confirm_by_token(confirmation_token)
-          confirmable = find_first_by_auth_conditions(confirmation_token: confirmation_token)
-          unless confirmable
-            confirmation_digest = Devise.token_generator.digest(self, :confirmation_token, confirmation_token)
-            confirmable = find_or_initialize_with_error_by(:confirmation_token, confirmation_digest)
+            # Registers additional pushes to be available.
+        #
+        # @param [String] name Name of the push.
+        # @param [Hash] options List of options for the push.
+        def self.push(name, options=nil, &block)
+          components.pushes.register(name.to_sym) do
+            [block.call, options]
           end
     
-      # POST /resource/confirmation
-  def create
-    self.resource = resource_class.send_confirmation_instructions(resource_params)
-    yield resource if block_given?
-    
-        # Check if a reset_password_token is provided in the request
-    def assert_reset_token_passed
-      if params[:reset_password_token].blank?
-        set_flash_message(:alert, :no_token)
-        redirect_to new_session_path(resource_name)
+          replace_rules file do |rule|
+        replace_properties rule do |props|
+          props.gsub /(?<!\w)([\w-]+):(.*?);/ do |m|
+            prop, vals = $1, split_prop_val.call($2)
+            next m unless vals.length >= 2 && vals.any? { |v| v =~ /^[\+\-]\$/ }
+            transformed = vals.map { |v| v.strip =~ %r(^\(.*\)$) ? v : '(#{v})' }
+            log_transform 'property #{prop}: #{transformed * ' '}', from: 'wrap_calculation'
+            '#{prop}: #{transformed * ' '};'
+          end
+        end
       end
     end
     
-      # GET /resource/unlock/new
-  def new
-    self.resource = resource_class.new
+        alias log puts
+    
+      # Configure static asset server for tests with Cache-Control for performance.
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
   end
+  config.static_cache_control = 'public, max-age=3600'
     
-        def password_change(record, opts={})
-      devise_mail(record, :password_change, opts)
-    end
-  end
-end
-
-    
-    require 'minitest/autorun'
-    
-            def address_params
-          params.require(:address).permit(permitted_address_attributes)
-        end
-    
-        def _2
-      elements[2]
+        # Provide a wrapper for the SCM that loads a strategy for the user.
+    #
+    # @param [Rake] context     The context in which the strategy should run
+    # @param [Module] strategy  A module to include into the SCM instance. The
+    #    module should provide the abstract methods of Capistrano::SCM
+    #
+    def initialize(context, strategy)
+      @context = context
+      singleton = class << self; self; end
+      singleton.send(:include, strategy)
     end
