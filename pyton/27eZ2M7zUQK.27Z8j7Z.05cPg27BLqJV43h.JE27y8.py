@@ -1,85 +1,96 @@
 
         
-        print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
-    
-    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
-    # Allow direct execution
-import os
-import sys
-import unittest
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
-    from .common import InfoExtractor
-from ..utils import (
-    int_or_none,
-    parse_duration,
-    unified_strdate,
-)
-    
-        # by setting the `trainable` argument, in Model
-    x = Input(shape=(1,))
-    layer = Dense(2)
-    y = layer(x)
-    model = Model(x, y)
-    assert model.trainable_weights == layer.trainable_weights
-    layer.trainable = False
-    assert model.trainable_weights == []
-    
-    from __future__ import print_function
-import keras
-from keras.datasets import mnist
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten
-from keras.layers import Conv2D, MaxPooling2D
-from keras import backend as K
-    
-    # the data, shuffled and split between train and test sets
-(x_train, y_train), (x_test, y_test) = mnist.load_data()
-    
-            # Test equivalence of convert_dense_weights_data_format
-        out1 = model1.predict(x)
-        layer_utils.convert_dense_weights_data_format(model1.layers[2], prev_shape, target_data_format)
-        for (src, dst) in zip(model1.layers, model2.layers):
-            dst.set_weights(src.get_weights())
-        out2 = model2.predict(transpose(x))
+        with io.open('update/releases.atom', 'w', encoding='utf-8') as atom_file:
+    atom_file.write(atom_template)
+
     
     
-def test_sigmoid():
-    '''Test using a numerically stable reference sigmoid implementation.
-    '''
-    def ref_sigmoid(x):
-        if x >= 0:
-            return 1 / (1 + np.exp(-x))
-        else:
-            z = np.exp(x)
-            return z / (1 + z)
-    sigmoid = np.vectorize(ref_sigmoid)
+class TestCache(unittest.TestCase):
+    def setUp(self):
+        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
+        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
+        _mkdir(TESTDATA_DIR)
+        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
+        self.tearDown()
     
-    model = Sequential()
-model.add(Dense(512, activation='relu', input_shape=(784,)))
-model.add(Dropout(0.2))
-model.add(Dense(512, activation='relu'))
-model.add(Dropout(0.2))
-model.add(Dense(num_classes, activation='softmax'))
+        def test_proxy_http(self):
+        params = self._check_params(['primary_proxy', 'primary_server_ip'])
+        if params is None:
+            return
+        ydl = FakeYDL({
+            'proxy': params['primary_proxy']
+        })
+        self.assertEqual(
+            ydl.urlopen('http://yt-dl.org/ip').read().decode('utf-8'),
+            params['primary_server_ip'])
     
-            try:
-            # use repr so that we can distinguish between -0.0 and 0.0
-            expected = repr(truediv(a, b))
-        except OverflowError:
-            expected = 'overflow'
-        except ZeroDivisionError:
-            expected = 'zerodivision'
+            with io.open(as_file, 'r', encoding='utf-8') as as_f:
+            as_content = as_f.read()
+    
+                # Total failure, only occurs when url is totally wrong
+            # Won't happen in middle of valid playlist (next case)
+            if 'url' not in api_response or 'error' in api_response:
+                raise ExtractorError('Invalid url for track %d of album url %s' % (track_no, url))
+            # URL is good but song id doesn't exist - usually means end of playlist
+            elif not api_response['url']:
+                break
+            else:
+                # Pull out the album metadata and add to result (if it exists)
+                for resultkey, apikey in [('id', 'album_id'), ('title', 'album_title')]:
+                    if apikey in api_response and resultkey not in result:
+                        result[resultkey] = api_response[apikey]
+                song_id = url_basename(api_response['url']).rpartition('.')[0]
+                result['entries'].append({
+                    'id': compat_str(api_response.get('id', song_id)),
+                    'uploader': api_response.get('artist'),
+                    'title': api_response.get('title', song_id),
+                    'url': api_response['url'],
+                })
+        return result
+
+    
+            page = self._download_json(
+            'http://vxml.56.com/json/%s/' % text_id, text_id, 'Downloading video info')
+    
+    
+def best_server():
+    # TODO: find and use the best server
+    # teredo.remlab.net / teredo - debian.remlab.net(Germany)
+    # teredo.ngix.ne.kr(South Korea)
+    # teredo.managemydedi.com(USA, Chicago)
+    # teredo.trex.fi(Finland)
+    # win8.ipv6.microsoft.com(The Teredo server hidden in Windows RT 8.1) of which Windows 7 has no knowledge.
+    # win10.ipv6.microsoft.com
+    return 'teredo.remlab.net'
+    
+        win_version = env_info.win32_version()
+    if win_version == 10:
+        xlog.info('detected Win10, enable connect concurrency control, interval:%d', config.connect_interval)
+        return config.connect_interval
+    
+        version_string = 'Version:%d-%d; Build:%d; Platform:%d; CSD:%s; ServicePack:%d-%d; Suite:%d; ProductType:%d' %  (
+        os_version.dwMajorVersion, os_version.dwMinorVersion,
+        os_version.dwBuildNumber,
+        os_version.dwPlatformId,
+        os_version.szCSDVersion,
+        os_version.wServicePackMajor, os_version.wServicePackMinor,
+        os_version.wSuiteMask,
+        os_version.wReserved
+    )
+    
+    
+class MismatchedNotSetException(MismatchedSetException):
+    '''@brief Used for remote debugger deserialization'''
+    
+    def __str__(self):
+        return 'MismatchedNotSetException(%r!=%r)' % (
+            self.getUnexpectedType(), self.expecting
+            )
+    __repr__ = __str__
+    
+    This should be interpreted in this way: you have two data points in the class
+interval 1.5-2.5, three data points in the class interval 2.5-3.5, and one in
+the class interval 3.5-4.5. The median of these data points is 2.8333...
     
         def test_secure_httponly_true_if_have_value(self):
         # This isn't really valid, but demonstrates what the current code
@@ -93,108 +104,18 @@ model.add(Dense(num_classes, activation='softmax'))
         self.assertEqual(C['eggs']['httponly'], 'foo')
         self.assertEqual(C['eggs']['secure'], 'bar')
     
-    class TZInfo:
-    def __init__(self, transitions, type_indices, ttis, abbrs):
-        self.transitions = transitions
-        self.type_indices = type_indices
-        self.ttis = ttis
-        self.abbrs = abbrs
+    from heapq import nlargest as _nlargest
+from collections import namedtuple as _namedtuple
     
+        # override in derived classes
+    def _extractrgb(self, mo):
+        return [int(x) for x in mo.group('red', 'green', 'blue')]
     
-class Test_pygettext(unittest.TestCase):
-    '''Tests for the pygettext.py tool'''
+        def test_oldargs1_0(self):
+        msg = r'count\(\) takes exactly one argument \(0 given\)'
+        self.assertRaisesRegex(TypeError, msg, [].count)
     
-        >>> diff = ndiff('one\ntwo\nthree\n'.splitlines(keepends=True),
-    ...              'ore\ntree\nemu\n'.splitlines(keepends=True))
-    >>> diff = list(diff)
-    >>> print(''.join(restore(diff, 1)), end='')
-    one
-    two
-    three
-    >>> print(''.join(restore(diff, 2)), end='')
-    ore
-    tree
-    emu
-    '''
-    try:
-        tag = {1: '- ', 2: '+ '}[int(which)]
-    except KeyError:
-        raise ValueError('unknown delta choice (must be 1 or 2): %r'
-                           % which) from None
-    prefixes = ('  ', tag)
-    for line in delta:
-        if line[:2] in prefixes:
-            yield line[2:]
-    
-        Returns a tuple of the decoded string and the index of the character in s
-    after the end quote.'''
-    chunks = []
-    _append = chunks.append
-    begin = end - 1
-    while 1:
-        chunk = _m(s, end)
-        if chunk is None:
-            raise JSONDecodeError('Unterminated string starting at', s, begin)
-        end = chunk.end()
-        content, terminator = chunk.groups()
-        # Content is contains zero or more unescaped string characters
-        if content:
-            _append(content)
-        # Terminator is the end of string, a literal control character,
-        # or a backslash denoting that an escape sequence follows
-        if terminator == ''':
-            break
-        elif terminator != '\\':
-            if strict:
-                #msg = 'Invalid control character %r at' % (terminator,)
-                msg = 'Invalid control character {0!r} at'.format(terminator)
-                raise JSONDecodeError(msg, s, end)
-            else:
-                _append(terminator)
-                continue
-        try:
-            esc = s[end]
-        except IndexError:
-            raise JSONDecodeError('Unterminated string starting at',
-                                  s, begin) from None
-        # If not a unicode escape sequence, must be in the lookup table
-        if esc != 'u':
-            try:
-                char = _b[esc]
-            except KeyError:
-                msg = 'Invalid \\escape: {0!r}'.format(esc)
-                raise JSONDecodeError(msg, s, end)
-            end += 1
-        else:
-            uni = _decode_uXXXX(s, end)
-            end += 5
-            if 0xd800 <= uni <= 0xdbff and s[end:end + 2] == '\\u':
-                uni2 = _decode_uXXXX(s, end + 1)
-                if 0xdc00 <= uni2 <= 0xdfff:
-                    uni = 0x10000 + (((uni - 0xd800) << 10) | (uni2 - 0xdc00))
-                    end += 6
-            char = chr(uni)
-        _append(char)
-    return ''.join(chunks), end
-    
-        def _statparse(self, resp):
-        '''Internal: parse the response line of a STAT, NEXT, LAST,
-        ARTICLE, HEAD or BODY command.'''
-        if not resp.startswith('22'):
-            raise NNTPReplyError(resp)
-        words = resp.split()
-        art_num = int(words[1])
-        message_id = words[2]
-        return resp, art_num, message_id
-    
-        FILTER_ACCEPT = 1
-    FILTER_REJECT = 2
-    FILTER_SKIP = 3
-    FILTER_INTERRUPT = 4
-    
-    
-@cpython_only
-class FastCallTests(unittest.TestCase):
-    # Test calls with positional arguments
-    CALLS_POSARGS = (
-        # (func, args: tuple, result)
+    This module can be used to create simple XML-RPC servers
+by creating a server and either installing functions, a
+class instance, or by extending the SimpleXMLRPCServer
+class.
