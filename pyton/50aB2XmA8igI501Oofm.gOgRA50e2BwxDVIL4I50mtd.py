@@ -1,19 +1,38 @@
 
         
-        
-def mtv81_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_content(url)
-    title = HTMLParser().unescape(
-        '|'.join(match1(html, r'<title>(.*?)</title>').split('|')[:-2]))
+        atom_template = atom_template.replace('@TIMESTAMP@', now_iso)
     
-    import json
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
     
-#----------------------------------------------------------------------
-def showroom_download(url, output_dir = '.', merge = False, info_only = False, **kwargs):
-    ''''''
-    if re.match( r'(\w+)://www.showroom-live.com/([-\w]+)', url):
-        room_url_key = match1(url, r'\w+://www.showroom-live.com/([-\w]+)')
-        room_id = showroom_get_roomid_by_room_url_key(room_url_key)
-        showroom_download_by_room_id(room_id, output_dir, merge,
-                                    info_only)
+class AcademicEarthCourseIE(InfoExtractor):
+    _VALID_URL = r'^https?://(?:www\.)?academicearth\.org/playlists/(?P<id>[^?#/]+)'
+    IE_NAME = 'AcademicEarth:Course'
+    _TEST = {
+        'url': 'http://academicearth.org/playlists/laws-of-nature/',
+        'info_dict': {
+            'id': 'laws-of-nature',
+            'title': 'Laws of Nature',
+            'description': 'Introduce yourself to the laws of nature with these free online college lectures from Yale, Harvard, and MIT.',
+        },
+        'playlist_count': 3,
+    }
+    
+            return info_dict
+
+    
+        Reference: Armin Ronacher, 'Flask for Fun and for Profit' PyBay 2016.
+    '''
+    for name in find_modules('flaskr.blueprints'):
+        mod = import_string(name)
+        if hasattr(mod, 'bp'):
+            app.register_blueprint(mod.bp)
+    return None
+    
+    
+def updatefig(*args):
+    global update
