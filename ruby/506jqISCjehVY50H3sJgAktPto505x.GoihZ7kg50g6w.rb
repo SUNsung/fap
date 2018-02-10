@@ -1,101 +1,146 @@
 
         
-            def self.parse(url)
-      return url if url.kind_of? self
-      new(*PARSER.split(url), PARSER)
-    end
-    
-    def list_login_items_for_app(app_path)
-  out, err, status = Open3.capture3(
-    '/usr/bin/osascript', '-e',
-    'tell application \'System Events\' to get the name of every login item ' \
-    'whose path contains \'#{File.basename(app_path)}\''
-  )
-  if status.exitstatus > 0
-    $stderr.puts err
-    exit status.exitstatus
+          def initialize(blob, variation_or_variation_key)
+    @blob, @variation = blob, ActiveStorage::Variation.wrap(variation_or_variation_key)
   end
-  puts out.gsub(', ', '\n')
-end
     
-              retry
+      def persisted?
+    id.present?
+  end
+    
+            # Require the adapter itself and give useful feedback about
+        #   1. Missing adapter gems and
+        #   2. Adapter gems' missing dependencies.
+        path_to_adapter = 'action_cable/subscription_adapter/#{adapter}'
+        begin
+          require path_to_adapter
+        rescue LoadError => e
+          # We couldn't require the adapter itself. Raise an exception that
+          # points out config typos and missing gems.
+          if e.path == path_to_adapter
+            # We can assume that a non-builtin adapter was specified, so it's
+            # either misspelled or missing from Gemfile.
+            raise e.class, 'Could not load the '#{adapter}' Action Cable pubsub adapter. Ensure that the adapter is spelled correctly in config/cable.yml and that you've added the necessary adapter gem to your Gemfile.', e.backtrace
+    
+              proto = Rack::Request.new(env).ssl? ? 'https' : 'http'
+          if server.config.allow_same_origin_as_host && env['HTTP_ORIGIN'] == '#{proto}://#{env['HTTP_HOST']}'
+            true
+          elsif Array(server.config.allowed_request_origins).any? { |allowed_origin|  allowed_origin === env['HTTP_ORIGIN'] }
+            true
+          else
+            logger.error('Request origin not allowed: #{env['HTTP_ORIGIN']}')
+            false
+          end
+        end
+    
+          def handle_exception_with_mailer_class(exception)
+        if klass = mailer_class
+          klass.handle_exception exception
+        else
+          raise exception
         end
       end
-    end
   end
+end
+
     
-          it 'processes payload with sender if no signature exists' do
-        expect_any_instance_of(ActivityPub::LinkedDataSignature).not_to receive(:verify_account!)
-        expect(ActivityPub::Activity).to receive(:factory).with(instance_of(Hash), forwarder, instance_of(Hash))
+            mail.perform_deliveries    = perform_deliveries
+        mail.raise_delivery_errors = raise_delivery_errors
+      end
+    end
     
-      def collection_presenter
-    page = ActivityPub::CollectionPresenter.new(
-      id: account_followers_url(@account, page: params.fetch(:page, 1)),
-      type: :ordered,
-      size: @account.followers_count,
-      items: @follows.map { |f| ActivityPub::TagManager.instance.uri_for(f.account) },
-      part_of: account_followers_url(@account),
-      next: page_url(@follows.next_page),
-      prev: page_url(@follows.prev_page)
-    )
-    if params[:page].present?
-      page
-    else
-      ActivityPub::CollectionPresenter.new(
-        id: account_followers_url(@account),
-        type: :ordered,
-        size: @account.followers_count,
-        first: page
-      )
+      </body>
+</html>
+HTML
+CONTENT_NOT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+    
+    #
+def run_in_shell(*args)
+  p, output = Jekyll::Utils::Exec.run(*args)
+    
+          new_theme_name = args.join('_')
+      theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
+      if theme.path.exist?
+        Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.'
+      end
+    
+        def no_subcommand(args)
+      unless args.empty? ||
+          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
+        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
+                          Run `jekyll help` to find out more.'
+        abort
+      end
+    end
+    
+        def initialize
+      @pages = {}
+    end
+    
+            css('.bs-docs-sidenav > li').each do |node|
+          link = node.at_css('a')
+          name = link.content
+          next if IGNORE_ENTRIES.include?(name)
+    
+        def initialize(tag_name, markup, tokens)
+      @by = nil
+      @source = nil
+      @title = nil
+      if markup =~ FullCiteWithTitle
+        @by = $1
+        @source = $2 + $3
+        @title = $4.titlecase.strip
+      elsif markup =~ FullCite
+        @by = $1
+        @source = $2 + $3
+      elsif markup =~ AuthorTitle
+        @by = $1
+        @title = $2.titlecase.strip
+      elsif markup =~ Author
+        @by = $1
+      end
+      super
+    end
+    
+        def handle_gist_redirecting(data)
+      redirected_url = data.header['Location']
+      if redirected_url.nil? || redirected_url.empty?
+        raise ArgumentError, 'GitHub replied with a 302 but didn't provide a location in the response headers.'
+      end
+    
+          unless file.file?
+        return 'File #{file} could not be found'
+      end
+    
+    
+    
+        def raise_because_imagemagick_missing
+      raise Errors::CommandNotFoundError.new('Could not run the `identify` command. Please install ImageMagick.')
     end
   end
 end
 
     
-          format.json do
-        render json: collection_presenter,
-               serializer: ActivityPub::CollectionSerializer,
-               adapter: ActivityPub::Adapter,
-               content_type: 'application/activity+json'
+        # Returns the id of the instance in a split path form. e.g. returns
+    # 000/001/234 for an id of 1234.
+    def id_partition attachment, style_name
+      case id = attachment.instance.id
+      when Integer
+        ('%09d'.freeze % id).scan(/\d{3}/).join('/'.freeze)
+      when String
+        id.scan(/.{3}/).first(3).join('/'.freeze)
+      else
+        nil
       end
     end
-  end
-    
-      def icon
-    object.image
-  end
-    
-        HTTP.get(source).to_s.split('\n').each do |line|
-      next if line.start_with? '#'
-      parts = line.split(';').map(&:strip)
-      next if parts.size < 2
-      codes << [parts[0], parts[1].start_with?('fully-qualified')]
-    end
-    
-      #forward some requests to status message, because a poll is just attached to a status message and is not sharable itself
-  delegate :author_id, :diaspora_handle, :public?, :subscribers, to: :status_message
-    
-          private
-    
-          def all_gem_names
-        core_gem_names + plugin_gem_names
-      end
-    
-        # @abstract
-    #
-    # Update the clone on the deployment target
-    #
-    # @return void
-    #
-    def update
-      raise NotImplementedError, 'Your SCM strategy module should provide a #update method'
-    end
-    
-          describe 'using the :port property' do
-        it 'takes precedence over in the host string' do
-          dsl.server 'db@example1.com:9090', roles: %w{db}, active: true, port: 1234
-          expect(subject).to eq('db@example1.com:1234')
-        end
-      end
-    end
-  end
