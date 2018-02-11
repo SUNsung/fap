@@ -1,233 +1,196 @@
 
         
-            http://www.apache.org/licenses/LICENSE-2.0
+        using extensions::GlobalShortcutListener;
     
-    namespace internal {
-template <typename Scalar>
-struct functor_traits<scalar_clip_op<Scalar> > {
-  enum {
-    Cost = NumTraits<Scalar>::AddCost * 3,
-    PacketAccess = packet_traits<Scalar>::HasMax &&
-                   packet_traits<Scalar>::HasMin &&
-                   packet_traits<Scalar>::HasNegate
-  };
-};
-}  // namespace internal
+     protected:
+  WebRequest(v8::Isolate* isolate, AtomBrowserContext* browser_context);
+  ~WebRequest() override;
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
     
-    namespace tensorflow {
+    {  AtomViewHostMsg_Message_Sync::WriteReplyParams(message_, json);
+  bool success = sender_->Send(message_);
+  message_ = nullptr;
+  sender_ = nullptr;
+  return success;
+}
+    
+    
+    {}  // namespace
+    
+    #include 'net/url_request/url_request_http_job.h'
+    
+      // JsAsker:
+  void StartAsync(std::unique_ptr<base::Value> options) override;
+    
+    namespace atom {
     }
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+    #include 'base/logging.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/nw/src/nw_shell.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/browser/render_widget_host_view.h'
+#include 'ui/gfx/point.h'
+#include 'vector'
+#include 'gtk/gtk.h'
     
-    #include <vector>
-#include <string>
-    
-    #include <osquery/core.h>
-    
-    DECLARE_string(extensions_socket);
-DECLARE_string(extensions_autoload);
-DECLARE_string(extensions_timeout);
-DECLARE_bool(disable_extensions);
-    
-      /**
-   * @brief A convenience method to check if the return code is 0
-   *
-   * @code{.cpp}
-   *   auto s = doSomething();
-   *   if (s.ok()) {
-   *     LOG(INFO) << 'doing work';
-   *   } else {
-   *     LOG(ERROR) << s.toString();
-   *   }
-   * @endcode
-   *
-   * @return a boolean which is true if the status code is 0, false otherwise.
-   */
-  bool ok() const { return getCode() == 0; }
-    
-    
-    {/**
- * @brief Start a file carve of the given paths
- *
- * @return A status returning if the carves were started successfully
- */
-Status carvePaths(const std::set<std::string>& paths);
-} // namespace osquery
-
-    
-    std::string genGuid() {
-  return boost::uuids::to_string(boost::uuids::random_generator()());
-};
-    
-    /// Enforce specific types of decoration.
-enum DecorationPoint {
-  DECORATE_LOAD,
-  DECORATE_ALWAYS,
-  DECORATE_INTERVAL,
-};
-    
-    CLI_FLAG(uint64,
-         config_tls_max_attempts,
-         3,
-         'Number of attempts to retry a TLS config/enroll request');
-    
-    
-    {  // Support a signed 64, a double, and treat everything else as a signed int.
-  if (type == kCFNumberSInt64Type) {
-    long long int value;
-    if (CFNumberGetValue((CFNumberRef)cf_number, type, &value)) {
-      return boost::lexical_cast<std::string>(value);
+    void Menu::Append(MenuItem* menu_item) {
+  if (menu_item->submenu_)
+    menu_model_->AddSubMenu(menu_item->id(), menu_item->label_,
+                            menu_item->submenu_->menu_model_.get());
+  else if (menu_item->type_ == 'normal')
+    menu_model_->AddItem(menu_item->id(), menu_item->label_);
+  else if (menu_item->type_ == 'checkbox')
+    menu_model_->AddCheckItem(menu_item->id(), menu_item->label_);
+  else if (menu_item->type_ == 'separator')
+    menu_model_->AddSeparator(ui::NORMAL_SEPARATOR);
     }
-  } else if (type == kCFNumberDoubleType) {
-    double value;
-    if (CFNumberGetValue((CFNumberRef)cf_number, type, &value)) {
-      return boost::lexical_cast<std::string>(value);
-    }
-  } else {
-    unsigned int value;
-    if (CFNumberGetValue((CFNumberRef)cf_number, type, &value)) {
-      return boost::lexical_cast<std::string>(value);
-    }
+    
+    
+    {  gfx::Image originImage;
+  nw::Package* package = nw::InitNWPackage();
+  if (nw::GetImage(package, base::FilePath::FromUTF8Unsafe(icon), &originImage)) {
+    const gfx::ImageSkia* originImageSkia = originImage.ToImageSkia();
+    gfx::ImageSkia resizedImageSkia = gfx::ImageSkiaOperations::CreateResizedImage(*originImageSkia,
+                                                                                   skia::ImageOperations::RESIZE_GOOD,
+                                                                                   gfx::Size(kIconWidth, kIconHeight));
+    icon_ = gfx::Image(resizedImageSkia);
   }
-  // Cast as a string.
-  return '0';
 }
     
-    #include <vector>
-#include <string>
-    
-    #include 'platform_comm.h'
-    
-    
-/*
- * WakeUpLock.h
- *
- *  Created on: 2012-9-28
- *      Author: yerungui
- */
-    
-    void CommFrequencyLimit::__DelOlderTouchTime(uint64_t _time) {
-    for (std::list<uint64_t>::iterator iter = touch_times_.begin(); iter != touch_times_.end();) {
-        if ((_time - (*iter)) > time_span_) {
-            iter = touch_times_.erase(iter);
-            continue;
-        }
-    }
-    }
-    
-    
-class ServiceBase;
-typedef std::map<std::string, ServiceBase*> TServicesMap;
-    
-    int TSpy::__TestFun1(int i)
-{
-    return reinterpret_cast<Test_Spy_Sample*>(This())->__TestFun1(i);
+    bool NwClipboardClearSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  clipboard->Clear(ui::CLIPBOARD_TYPE_COPY_PASTE);
+  return true;
 }
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
+    #include 'caffe/proto/caffe.pb.h'
+#include 'caffe/util/format.hpp'
+#include 'caffe/util/math_functions.hpp'
     
-        // clear() empties the vector, but the allocated capacity remains so we can
-    // just reuse it without having to re-allocate in most cases.
-    ioQueue->clear();
-    
-    /**
- * A helper class for creating an AsyncFileWriter or ImmediateFileWriter based
- * on log handler options settings.
- *
- * This is used by StreamHandlerFactory and FileHandlerFactory.
- */
-class FileWriterFactory {
- public:
-  bool processOption(StringPiece name, StringPiece value);
-  std::shared_ptr<LogWriter> createWriter(File file);
+    namespace caffe {
     }
     
-    #include <folly/FileUtil.h>
-#include <folly/String.h>
-#include <folly/experimental/logging/LoggerDB.h>
-    
-      bool operator==(const LogConfig& other) const;
-  bool operator!=(const LogConfig& other) const;
-    
-      LogConfig::HandlerConfigMap handlerConfigs;
-  auto* handlers = value.get_ptr('handlers');
-  if (handlers) {
-    if (!handlers->isObject()) {
-      throw LogConfigParseError{to<string>(
-          'unexpected data type for log handlers config: got ',
-          dynamicTypename(*handlers),
-          ', expected an object')};
-    }
-    }
-    
-    /*
- * This file contains utility functions for parsing and serializing
- * LogConfig strings.
- *
- * This is separate from the LogConfig class itself, to reduce the dependencies
- * of the core logging library.  Other code that wants to use the logging
- * library to log messages but does not need to parse log config strings
- * therefore does not need to depend on the folly JSON library.
- */
-    
-    Node * Node::getChild(unsigned index)
-{
-    auto nodePtr = YGNodeGetChild(m_node, index);
-    }
-    
-    struct Layout
-{
-    double left;
-    double right;
-    }
-    
-    #pragma once
-    
-    
-    {  YGNodeFreeRecursive(root);
-}
+    #endif  // CAFFE_ARGMAX_LAYER_HPP_
 
     
-      const YGNodeRef child = YGNodeNew();
-  YGNodeInsertChild(root, child, 0);
-  YGNodeStyleSetWidth(child, 100);
-  YGNodeStyleSetHeight(child, 100);
-  YGNodeStyleSetMargin(child, YGEdgeTop, 10);
-  YGNodeStyleSetPadding(child, YGEdgeTop, 10);
+    #endif  // CAFFE_BNLL_LAYER_HPP_
+
     
-      const YGNodeRef root_child0 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetFlexGrow(root_child0, 1);
-  YGNodeStyleSetWidth(root_child0, 10);
-  YGNodeInsertChild(root, root_child0, 0);
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    namespace caffe {
+    }
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the computed outputs @f$
+   *        y = \gamma ^ {\alpha x + \beta}
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    #endif // __cocos2dx_builder_h__
+
+    
+    #endif // __cocos2dx_physics3d_h__
+#endif //#if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
+
+    
+    bool js_cocos2dx_studio_ContourData_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_ContourData_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_ContourData(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_ContourData_init(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ContourData_addVertex(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ContourData_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ContourData_ContourData(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    #if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+    
+    
+    
+    
+    
+        virtual void DrawTransform(const b2Transform& xf);
+    
+    namespace xgboost {
+namespace common {
+typedef rabit::utils::MemoryFixSizeBuffer MemoryFixSizeBuffer;
+typedef rabit::utils::MemoryBufferStream MemoryBufferStream;
+    }
+    }
+    
+    
+    { private:
+  // synchronizer
+  std::unique_ptr<TreeUpdater> syncher;
+  // training parameter
+  TrainParam param;
+};
+    
+      vals_in.clear(); ss.flush(); ss.clear(); ss.str('');
+  ss << '(3.0,2,1)';
+  ss >> vals_in;
+  EXPECT_NE(vals_in, vals);
+    
+    
+    {
+    {XGBOOST_REGISTER_TREE_UPDATER(TreeRefresher, 'refresh')
+.describe('Refresher that refreshes the weight and statistics according to data.')
+.set_body([]() {
+    return new TreeRefresher<GradStats>();
+  });
+}  // namespace tree
+}  // namespace xgboost
+
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    
+    {
+    {        if (JNI_OK == status_) {
+            we_attach_ = true;
+            pthread_setspecific(g_env_key, env_);
+        } else {
+            ASSERT2(false, 'vm:%p, env:%p, status:%d', vm_, env_, status_);
+            env_ = NULL;
+            return;
+        }
+    } while (false);
+    
+    jint ret = env_->PushLocalFrame(_capacity);
+    ASSERT2(0 == ret, 'ret:%d', ret);
+}
+    
+      ASSERT_FLOAT_EQ(50, YGNodeLayoutGetLeft(root_child2));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root_child2));
+  ASSERT_FLOAT_EQ(50, YGNodeLayoutGetWidth(root_child2));
+  ASSERT_FLOAT_EQ(100, YGNodeLayoutGetHeight(root_child2));
+    
+      YGNodeStyleSetMinHeight(root_child0, YGUndefined);
   YGNodeCalculateLayout(root, YGUndefined, YGUndefined, YGDirectionLTR);
     
-      ASSERT_FLOAT_EQ(0, YGNodeLayoutGetLeft(root_child0));
-  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root_child0));
-  ASSERT_FLOAT_EQ(100, YGNodeLayoutGetWidth(root_child0));
-  ASSERT_FLOAT_EQ(100, YGNodeLayoutGetHeight(root_child0));
+    #include <fb/visibility.h>
     
-    #include <gtest/gtest.h>
-#include <yoga/Yoga.h>
-    
-      ASSERT_FLOAT_EQ(0, YGNodeLayoutGetLeft(root));
-  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root));
-  ASSERT_FLOAT_EQ(100, YGNodeLayoutGetWidth(root));
-  ASSERT_FLOAT_EQ(100, YGNodeLayoutGetHeight(root));
-    
-    #include <cstdarg>
-#include <stdio.h>
-    
-    
-    {}
+    class ProgramLocation {
+public:
+  ProgramLocation() : m_functionName('Unspecified'), m_fileName('Unspecified'), m_lineNumber(0) {}
+    }
