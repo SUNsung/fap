@@ -1,33 +1,52 @@
 
         
-        void StmtBuilder::printLiteralString(StringRef Str, SourceLoc Loc) {
-  Expr *PrintFn = buildPrintRefExpr(Loc);
-  Expr *PrintStr = new (Context) StringLiteralExpr(Str, Loc);
-  addToBody(CallExpr::createImplicit(Context, PrintFn, { PrintStr }, { }));
-}
+          /// True if the ConstructorDecl requires an ObjC method descriptor.
+  bool requiresObjCMethodDescriptor(ConstructorDecl *constructor);
     
-    #pragma mark - NSCalendar verification
-    
-    namespace swift {
-class DependencyTracker;
-class ModuleDecl;
-class SourceFile;
+    /// A utility for finding dead-end blocks.
+///
+/// Dead-end blocks are blocks from which there is no path to the function exit
+/// (either return or throw). These are blocks which end with an unreachable
+/// instruction and blocks from which all paths end in 'unreachable' blocks.
+/// This utility is needed to determine if the a value definition can have a
+/// lack of users ignored along a specific path.
+class DeadEndBlocks {
+  llvm::SetVector<const SILBasicBlock *> ReachableBlocks;
+  const SILFunction *F;
+  bool isComputed = false;
     }
     
-    /// A SyntaxRewriter for applying a set of formatting rules to a Syntax tree.
-struct FormatSyntaxRewriter : public SyntaxRewriter {
-  virtual StructDeclSyntax
-  rewriteStructDecl(StructDeclSyntax Struct) override;
-};
+    class StdlibGroupsIndexRecordingConsumer : public IndexDataConsumer {
+  llvm::StringMap<std::unique_ptr<SymbolTracker>> TrackerByGroup;
+  // Keep a USR map to uniquely identify Decls.
+  // FIXME: if we just passed the original Decl * through we could use that,
+  // which would also let us avoid producing the USR/Name/etc. for decls unless
+  // we actually need it (once per Decl instead of once per occurrence).
+  std::vector<IndexSymbol> symbolStack;
+    }
     
     
-    {
-    {  bool didErrorOccur() {
-    return DidErrorOccur;
+    {  static bool classof(const MarkupASTNode *N) {
+    return N->getKind() == ASTNodeKind::Code;
   }
 };
-  
+    
+    SILDebugScope::SILDebugScope(SILLocation Loc, SILFunction *SILFn,
+                             const SILDebugScope *ParentScope ,
+                             const SILDebugScope *InlinedCallSite)
+    : Loc(Loc), InlinedCallSite(InlinedCallSite) {
+  if (ParentScope)
+    Parent = ParentScope;
+  else {
+    assert(SILFn && 'no parent provided');
+    Parent = SILFn;
+  }
 }
+    
+    #include 'swift/Syntax/Rewriter.h'
+    
+    
+    {} // end namespace swift
     
     class EditorDiagConsumer : public swift::DiagnosticConsumer {
   typedef std::vector<DiagnosticEntryInfo> DiagnosticsTy;
@@ -36,266 +55,384 @@ struct FormatSyntaxRewriter : public SyntaxRewriter {
   llvm::DenseMap<unsigned, DiagnosticsTy> BufferDiagnostics;
     }
     
-      // These two overloads allow streaming a wide C string to a Message
-  // using the UTF-8 encoding.
-  Message& operator <<(const wchar_t* wide_c_str);
-  Message& operator <<(wchar_t* wide_c_str);
     
-    // Implements printing an array type T[N].
-template <typename T, size_t N>
-class UniversalPrinter<T[N]> {
- public:
-  // Prints the given array, omitting some elements when there are too
-  // many.
-  static void Print(const T (&a)[N], ::std::ostream* os) {
-    UniversalPrintArray(a, N, os);
-  }
-};
-    
-    // Next, associate a list of types with the test case, which will be
-// repeated for each type in the list.  The typedef is necessary for
-// the macro to parse correctly.
-typedef testing::Types<char, int, unsigned int> MyTypes;
-TYPED_TEST_CASE(FooTest, MyTypes);
-    
-    // This flag enables using colors in terminal output. Available values are
-// 'yes' to enable colors, 'no' (disable colors), or 'auto' (the default)
-// to let Google Test decide.
-GTEST_DECLARE_string_(color);
-    
-    // A concrete DeathTestFactory implementation for normal use.
-class DefaultDeathTestFactory : public DeathTestFactory {
- public:
-  virtual bool Create(const char* statement, const RE* regex,
-                      const char* file, int line, DeathTest** test);
-};
-    
-    // A helper for implementing tuple_element<k, T>.  kIndexValid is true
-// iff k < the number of fields in tuple type T.
-template <bool kIndexValid, int kIndex, class Tuple>
-struct TupleElement;
-    
-      // Returns true iff n is a prime number.
-  virtual bool IsPrime(int n) const = 0;
-    
-      // operator new and operator delete help us control water allocation.
-  void* operator new(size_t allocation_size) {
-    allocated_++;
-    return malloc(allocation_size);
-  }
-    
-        // insert the node in the network
-    AddNodeToNet(newNode);
-    
-            // after finished statistics, the mean and variance of the bn node should be freezd.
-        bnNode->FreezeParameters();
-    
-    #pragma once
-    
-    TEST(LogTest, ReadWrite) {
-  Write('foo');
-  Write('bar');
-  Write('');
-  Write('xxxx');
-  ASSERT_EQ('foo', Read());
-  ASSERT_EQ('bar', Read());
-  ASSERT_EQ('', Read());
-  ASSERT_EQ('xxxx', Read());
-  ASSERT_EQ('EOF', Read());
-  ASSERT_EQ('EOF', Read());  // Make sure reads at eof work
+    {    return 1; // success
 }
     
-    // Snapshots are kept in a doubly-linked list in the DB.
-// Each SnapshotImpl corresponds to a particular sequence number.
-class SnapshotImpl : public Snapshot {
- public:
-  SequenceNumber number_;  // const after creation
+    //---- Don't define obsolete functions names. Consider enabling from time to time or when updating to reduce likelihood of using already obsolete function/names
+//#define IMGUI_DISABLE_OBSOLETE_FUNCTIONS
+    
+    #include <stdint.h>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
+#include 'imgui.h'
+#include 'imgui_impl_a5.h'
+    
+        // Setup ImGui binding
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGui_ImplDX11_Init(hwnd, g_pd3dDevice, g_pd3dDeviceContext);
+    //io.NavFlags |= ImGuiNavFlags_EnableKeyboard;  // Enable Keyboard Controls
+    
+    int32 ImGui_Marmalade_CharCallback(void* SystemData, void* userData)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    s3eKeyboardCharEvent* e = (s3eKeyboardCharEvent*)SystemData;
+    if ((e->m_Char > 0 && e->m_Char < 0x10000))
+        io.AddInputCharacter((unsigned short)e->m_Char);
     }
     
-      void SetComparatorName(const Slice& name) {
-    has_comparator_ = true;
-    comparator_ = name.ToString();
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_API void        ImGui_Marmalade_InvalidateDeviceObjects();
+IMGUI_API bool        ImGui_Marmalade_CreateDeviceObjects();
+    
+            static float f = 0.0f;
+        ImGui::Text('Hello, world!');
+        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
+        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
+        ImGui::ShowDemoWindow(NULL);
+    
+        const GLchar* fragment_shader =
+        '#version 150\n'
+        'uniform sampler2D Texture;\n'
+        'in vec2 Frag_UV;\n'
+        'in vec4 Frag_Color;\n'
+        'out vec4 Out_Color;\n'
+        'void main()\n'
+        '{\n'
+        '	Out_Color = Frag_Color * texture( Texture, Frag_UV.st);\n'
+        '}\n';
+    
+    // Return the services for generated source file.
+grpc::string GetSourceServices(grpc_generator::File *file,
+                               const Parameters &params);
+    
+      void SayManyHellos(const std::string &name, int num_greetings,
+                     std::function<void(const std::string &)> callback) {
+    flatbuffers::grpc::MessageBuilder mb;
+    auto name_offset = mb.CreateString(name);
+    auto request_offset =
+        CreateManyHellosRequest(mb, name_offset, num_greetings);
+    mb.Finish(request_offset);
+    auto request_msg = mb.ReleaseMessage<ManyHellosRequest>();
+    }
+    
+    struct EnumBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_name(flatbuffers::Offset<flatbuffers::String> name) {
+    fbb_.AddOffset(Enum::VT_NAME, name);
   }
-  void SetLogNumber(uint64_t num) {
-    has_log_number_ = true;
-    log_number_ = num;
+  void add_values(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<EnumVal>>> values) {
+    fbb_.AddOffset(Enum::VT_VALUES, values);
   }
-  void SetPrevLogNumber(uint64_t num) {
-    has_prev_log_number_ = true;
-    prev_log_number_ = num;
+  void add_is_union(bool is_union) {
+    fbb_.AddElement<uint8_t>(Enum::VT_IS_UNION, static_cast<uint8_t>(is_union), 0);
   }
-  void SetNextFile(uint64_t num) {
-    has_next_file_number_ = true;
-    next_file_number_ = num;
+  void add_underlying_type(flatbuffers::Offset<Type> underlying_type) {
+    fbb_.AddOffset(Enum::VT_UNDERLYING_TYPE, underlying_type);
   }
-  void SetLastSequence(SequenceNumber seq) {
-    has_last_sequence_ = true;
-    last_sequence_ = seq;
+  void add_attributes(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<KeyValue>>> attributes) {
+    fbb_.AddOffset(Enum::VT_ATTRIBUTES, attributes);
   }
-  void SetCompactPointer(int level, const InternalKey& key) {
-    compact_pointers_.push_back(std::make_pair(level, key));
+  void add_documentation(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>> documentation) {
+    fbb_.AddOffset(Enum::VT_DOCUMENTATION, documentation);
+  }
+  EnumBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  EnumBuilder &operator=(const EnumBuilder &);
+  flatbuffers::Offset<Enum> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<Enum>(end);
+    fbb_.Required(o, Enum::VT_NAME);
+    fbb_.Required(o, Enum::VT_VALUES);
+    fbb_.Required(o, Enum::VT_UNDERLYING_TYPE);
+    return o;
+  }
+};
+    
+    class MonsterStorage final {
+ public:
+  static constexpr char const* service_full_name() {
+    return 'MyGame.Example.MonsterStorage';
+  }
+  class StubInterface {
+   public:
+    virtual ~StubInterface() {}
+    virtual ::grpc::Status Store(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, flatbuffers::grpc::Message<Stat>* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>> AsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>>(AsyncStoreRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>> PrepareAsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>>(PrepareAsyncStoreRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientReaderInterface< flatbuffers::grpc::Message<Monster>>> Retrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) {
+      return std::unique_ptr< ::grpc::ClientReaderInterface< flatbuffers::grpc::Message<Monster>>>(RetrieveRaw(context, request));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>> AsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>>(AsyncRetrieveRaw(context, request, cq, tag));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>> PrepareAsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>>(PrepareAsyncRetrieveRaw(context, request, cq));
+    }
+  private:
+    virtual ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>* AsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>* PrepareAsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientReaderInterface< flatbuffers::grpc::Message<Monster>>* RetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) = 0;
+    virtual ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>* AsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
+    virtual ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>* PrepareAsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) = 0;
+  };
+  class Stub final : public StubInterface {
+   public:
+    Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel);
+    ::grpc::Status Store(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, flatbuffers::grpc::Message<Stat>* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>> AsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>>(AsyncStoreRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>> PrepareAsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>>(PrepareAsyncStoreRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientReader< flatbuffers::grpc::Message<Monster>>> Retrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) {
+      return std::unique_ptr< ::grpc::ClientReader< flatbuffers::grpc::Message<Monster>>>(RetrieveRaw(context, request));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>> AsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>>(AsyncRetrieveRaw(context, request, cq, tag));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>> PrepareAsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>>(PrepareAsyncRetrieveRaw(context, request, cq));
+    }
+  
+   private:
+    std::shared_ptr< ::grpc::ChannelInterface> channel_;
+    ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>* AsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>* PrepareAsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientReader< flatbuffers::grpc::Message<Monster>>* RetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) override;
+    ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>* AsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) override;
+    ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>* PrepareAsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) override;
+    const ::grpc::internal::RpcMethod rpcmethod_Store_;
+    const ::grpc::internal::RpcMethod rpcmethod_Retrieve_;
+  };
+  static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
+  
+  class Service : public ::grpc::Service {
+   public:
+    Service();
+    virtual ~Service();
+    virtual ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response);
+    virtual ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer);
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_Store : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithAsyncMethod_Store() {
+      ::grpc::Service::MarkMethodAsync(0);
+    }
+    ~WithAsyncMethod_Store() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+    void RequestStore(::grpc::ServerContext* context, flatbuffers::grpc::Message<Monster>* request, ::grpc::ServerAsyncResponseWriter< flatbuffers::grpc::Message<Stat>>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_Retrieve : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithAsyncMethod_Retrieve() {
+      ::grpc::Service::MarkMethodAsync(1);
+    }
+    ~WithAsyncMethod_Retrieve() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+    void RequestRetrieve(::grpc::ServerContext* context, flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerAsyncWriter< flatbuffers::grpc::Message<Monster>>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncServerStreaming(1, context, request, writer, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef   WithAsyncMethod_Store<  WithAsyncMethod_Retrieve<  Service   >   >   AsyncService;
+  template <class BaseClass>
+  class WithGenericMethod_Store : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithGenericMethod_Store() {
+      ::grpc::Service::MarkMethodGeneric(0);
+    }
+    ~WithGenericMethod_Store() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_Retrieve : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithGenericMethod_Retrieve() {
+      ::grpc::Service::MarkMethodGeneric(1);
+    }
+    ~WithGenericMethod_Retrieve() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_Store : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithStreamedUnaryMethod_Store() {
+      ::grpc::Service::MarkMethodStreamed(0,
+        new ::grpc::internal::StreamedUnaryHandler< flatbuffers::grpc::Message<Monster>, flatbuffers::grpc::Message<Stat>>(std::bind(&WithStreamedUnaryMethod_Store<BaseClass>::StreamedStore, this, std::placeholders::_1, std::placeholders::_2)));
+    }
+    ~WithStreamedUnaryMethod_Store() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedStore(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< flatbuffers::grpc::Message<Monster>,flatbuffers::grpc::Message<Stat>>* server_unary_streamer) = 0;
+  };
+  typedef   WithStreamedUnaryMethod_Store<  Service   >   StreamedUnaryService;
+  template <class BaseClass>
+  class WithSplitStreamingMethod_Retrieve : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithSplitStreamingMethod_Retrieve() {
+      ::grpc::Service::MarkMethodStreamed(1,
+        new ::grpc::internal::SplitServerStreamingHandler< flatbuffers::grpc::Message<Stat>, flatbuffers::grpc::Message<Monster>>(std::bind(&WithSplitStreamingMethod_Retrieve<BaseClass>::StreamedRetrieve, this, std::placeholders::_1, std::placeholders::_2)));
+    }
+    ~WithSplitStreamingMethod_Retrieve() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+    // replace default version of method with split streamed
+    virtual ::grpc::Status StreamedRetrieve(::grpc::ServerContext* context, ::grpc::ServerSplitStreamer< flatbuffers::grpc::Message<Stat>,flatbuffers::grpc::Message<Monster>>* server_split_streamer) = 0;
+  };
+  typedef   WithSplitStreamingMethod_Retrieve<  Service   >   SplitStreamedService;
+  typedef   WithStreamedUnaryMethod_Store<  WithSplitStreamingMethod_Retrieve<  Service   >   >   StreamedService;
+};
+    
+    
+    {
+    {    for (auto part = parts.begin(); part != parts.end(); part++) {
+      temp.append('}  // namespace ');
+      temp.append(*part);
+      temp.append('\n');
+    }
+    temp.append('\n');
   }
     
-    static void TestEncodeDecode(const VersionEdit& edit) {
-  std::string encoded, encoded2;
-  edit.EncodeTo(&encoded);
-  VersionEdit parsed;
-  Status s = parsed.DecodeFrom(encoded);
-  ASSERT_TRUE(s.ok()) << s.ToString();
-  parsed.EncodeTo(&encoded2);
-  ASSERT_EQ(encoded, encoded2);
+      server_instance->Shutdown();
+    
+    
+    { private:
+  std::map<std::string, std::string> value_map_;
+  std::stringstream stream_;
+};
+    
+      // If schemas used contain include statements, call this function for every
+  // directory the parser should search them for.
+  void AddIncludeDirectory(const char *path) { include_paths_.push_back(path); }
+    
+    #include 'flatbuffers/idl.h'
+#include 'flatbuffers/util.h'
+    
+    // Platform detection.
+#ifdef __linux__
+#define LIBFUZZER_APPLE 0
+#define LIBFUZZER_LINUX 1
+#define LIBFUZZER_WINDOWS 0
+#elif __APPLE__
+#define LIBFUZZER_APPLE 1
+#define LIBFUZZER_LINUX 0
+#define LIBFUZZER_WINDOWS 0
+#elif _WIN32
+#define LIBFUZZER_APPLE 0
+#define LIBFUZZER_LINUX 0
+#define LIBFUZZER_WINDOWS 1
+#else
+#error 'Support for your platform has not been implemented'
+#endif
+    
+    
+    {  Printf(' exec/s: %zd', ExecPerSec);
+  Printf(' rss: %zdMb', GetPeakRSSMb());
+  Printf('%s', End);
 }
     
-      virtual Status LockFile(const std::string& fname, FileLock** lock) {
-    *lock = new FileLock;
-    return Status::OK();
-  }
+      /// Applies one of the configured mutations.
+  /// Returns the new size of data which could be up to MaxSize.
+  size_t Mutate(uint8_t *Data, size_t Size, size_t MaxSize);
+  /// Applies one of the default mutations. Provided as a service
+  /// to mutation authors.
+  size_t DefaultMutate(uint8_t *Data, size_t Size, size_t MaxSize);
     
+    typedef struct sha1nfo {
+	uint32_t buffer[BLOCK_LENGTH/4];
+	uint32_t state[HASH_LENGTH/4];
+	uint32_t byteCount;
+	uint8_t bufferOffset;
+	uint8_t keyBuffer[BLOCK_LENGTH];
+	uint8_t innerHash[HASH_LENGTH];
+} sha1nfo;
     
-    {    int nindex = index_.num_chunk();
-    int nvalue = value_.num_chunk();
-    int ntotal = nindex + nvalue;
-    #pragma omp parallel for schedule(dynamic, 1) num_threads(nthread_)
-    for (int i = 0; i < ntotal; ++i) {
-      if (i < nindex) {
-        index_.Decompress(i);
-      } else {
-        value_.Decompress(i - nindex);
-      }
-    }
-  }
-    
-      inline void ParseStr(std::string *tok) {
-    while ((ch_buf = this->GetChar()) != EOF) {
-      switch (ch_buf) {
-        case '\\': *tok += this->GetChar(); break;
-        case '\'': return;
-        case '\r':
-        case '\n': LOG(FATAL)<< 'ConfigReader: unterminated string';
-        default: *tok += ch_buf;
-      }
-    }
-    LOG(FATAL) << 'ConfigReader: unterminated string';
-  }
-  inline void ParseStrML(std::string *tok) {
-    while ((ch_buf = this->GetChar()) != EOF) {
-      switch (ch_buf) {
-        case '\\': *tok += this->GetChar(); break;
-        case '\'': return;
-        default: *tok += ch_buf;
-      }
-    }
-    LOG(FATAL) << 'unterminated string';
-  }
-  // return newline
-  inline bool GetNextToken(std::string *tok) {
-    tok->clear();
-    bool new_line = false;
-    while (ch_buf != EOF) {
-      switch (ch_buf) {
-        case '#' : SkipLine(); new_line = true; break;
-        case '\'':
-          if (tok->length() == 0) {
-            ParseStr(tok); ch_buf = this->GetChar(); return new_line;
-          } else {
-            LOG(FATAL) << 'ConfigReader: token followed directly by string';
-          }
-        case '\'':
-          if (tok->length() == 0) {
-            ParseStrML(tok); ch_buf = this->GetChar(); return new_line;
-          } else {
-            LOG(FATAL) << 'ConfigReader: token followed directly by string';
-          }
-        case '=':
-          if (tok->length() == 0) {
-            ch_buf = this->GetChar();
-            *tok = '=';
-          }
-          return new_line;
-        case '\r':
-        case '\n':
-          if (tok->length() == 0) new_line = true;
-        case '\t':
-        case ' ' :
-          ch_buf = this->GetChar();
-          if (tok->length() != 0) return new_line;
-          break;
-        default:
-          *tok += ch_buf;
-          ch_buf = this->GetChar();
-          break;
-      }
-    }
-    if (tok->length() == 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-};
-/*!
- * \brief an iterator use stream base, allows use all types of istream
- */
-class ConfigStreamReader: public ConfigReaderBase {
- public:
-  /*!
-   * \brief constructor
-   * \param fin istream input stream
-   */
-  explicit ConfigStreamReader(std::istream &fin) : fin(fin) {}
-    
-    /*!
- * \brief Input stream that support additional PeekRead
- *  operation, besides read.
- */
-class PeekableInStream : public dmlc::Stream {
- public:
-  explicit PeekableInStream(dmlc::Stream* strm)
-      : strm_(strm), buffer_ptr_(0) {}
-    }
-    
-    /*! \brief pruner that prunes a tree after growing finishes */
-class TreePruner: public TreeUpdater {
- public:
-  TreePruner() {
-    syncher.reset(TreeUpdater::Create('sync'));
-  }
-  // set training parameter
-  void Init(const std::vector<std::pair<std::string, std::string> >& args) override {
-    param.InitAllowUnknown(args);
-    syncher->Init(args);
-  }
-  // update the tree, do pruning
-  void Update(const std::vector<bst_gpair> &gpair,
-              DMatrix *p_fmat,
-              const std::vector<RegTree*> &trees) override {
-    // rescale learning rate according to size of trees
-    float lr = param.learning_rate;
-    param.learning_rate = lr / trees.size();
-    for (size_t i = 0; i < trees.size(); ++i) {
-      this->DoPrune(*trees[i]);
-    }
-    param.learning_rate = lr;
-    syncher->Update(gpair, p_fmat, trees);
-  }
-    }
-    
-    /*! \brief a column storage, to be used with ApplySplit. Note that each
-    bin id is stored as index[i] + index_base. */
-template<typename T>
-class Column {
- public:
-  ColumnType type;
-  const T* index;
-  uint32_t index_base;
-  const size_t* row_ind;
-  size_t len;
-};
-    
-    TEST(SparsePageDMatrix, ColAcess) {
-  std::string tmp_file = CreateSimpleTestData();
-  xgboost::DMatrix * dmat = xgboost::DMatrix::Load(
-    tmp_file + '#' + tmp_file + '.cache', true, false);
-  std::remove(tmp_file.c_str());
-  EXPECT_FALSE(FileExists(tmp_file + '.cache.col.page'));
-    }
+    __attribute__((visibility('default')))
+void __sanitizer_cov_trace_switch(uint64_t Val, uint64_t *Cases) {
+  // Updates the value profile based on the relative position of Val and Cases.
+  // We want to handle one random case at every call (handling all is slow).
+  // Since none of the arguments contain any random bits we use a thread-local
+  // counter to choose the random case to handle.
+  static thread_local size_t Counter;
+  Counter++;
+  uint64_t N = Cases[0];
+  uint64_t *Vals = Cases + 2;
+  char *PC = (char*)__builtin_return_address(0);
+  // We need a random number < N using Counter as a seed. But w/o DIV.
+  // * find a power of two >= N
+  // * mask Counter with this power of two.
+  // * maybe subtract N.
+  size_t Nlog = sizeof(long) * 8 - __builtin_clzl((long)N);
+  size_t PowerOfTwoGeN = 1U << Nlog;
+  assert(PowerOfTwoGeN >= N);
+  size_t Idx = Counter & (PowerOfTwoGeN - 1);
+  if (Idx >= N)
+    Idx -= N;
+  assert(Idx < N);
+  uint64_t TwoIn32 = 1ULL << 32;
+  if ((Val | Vals[Idx]) < TwoIn32)
+    fuzzer::TPC.HandleCmp(PC + Idx, static_cast<uint32_t>(Val),
+                          static_cast<uint32_t>(Vals[Idx]));
+  else
+    fuzzer::TPC.HandleCmp(PC + Idx, Val, Vals[Idx]);
+}
