@@ -1,293 +1,301 @@
 
         
-        Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+        void StmtBuilder::printLiteralString(StringRef Str, SourceLoc Loc) {
+  Expr *PrintFn = buildPrintRefExpr(Loc);
+  Expr *PrintStr = new (Context) StringLiteralExpr(Str, Loc);
+  addToBody(CallExpr::createImplicit(Context, PrintFn, { PrintStr }, { }));
+}
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    #pragma mark - NSCalendar verification
     
-    namespace tensorflow {
+    namespace swift {
+class DependencyTracker;
+class ModuleDecl;
+class SourceFile;
     }
     
-          T* resource;
-      OP_REQUIRES_OK(
-          context,
-          mgr->LookupOrCreate<T>(cinfo_.container(), cinfo_.name(), &resource,
-                                 [this](T** ret) EXCLUSIVE_LOCKS_REQUIRED(mu_) {
-                                   Status s = CreateResource(ret);
-                                   if (!s.ok() && *ret != nullptr) {
-                                     CHECK((*ret)->Unref());
-                                   }
-                                   return s;
-                                 }));
-    
-    #include <string>
+    /// A SyntaxRewriter for applying a set of formatting rules to a Syntax tree.
+struct FormatSyntaxRewriter : public SyntaxRewriter {
+  virtual StructDeclSyntax
+  rewriteStructDecl(StructDeclSyntax Struct) override;
+};
     
     
     {
-    {      case ACTION_CLOSE:
-      default:
-        // Do not close stdin/out/err, instead redirect them to /dev/null so
-        // their file descriptors remain unavailable for reuse by open(), etc.
-        if (i <= CHAN_STDERR) {
-          if (devnull_fd < 0) {
-            while ((devnull_fd = open('/dev/null', O_RDWR, 0)) < 0) {
-              if (!retry(errno)) {
-                _exit(1);
-              }
-            }
-          }
-          while (dup2(devnull_fd, i) < 0) {
-            if (!retry(errno)) {
-              _exit(1);
-            }
-          }
-        } else {
-          close(i);
-        }
-        break;
-    }
+    {  bool didErrorOccur() {
+    return DidErrorOccur;
   }
+};
+  
+}
     
-    class Diagnostician {
+    class EditorDiagConsumer : public swift::DiagnosticConsumer {
+  typedef std::vector<DiagnosticEntryInfo> DiagnosticsTy;
+  /// Maps from a BufferID to the diagnostics that were emitted inside that
+  /// buffer.
+  llvm::DenseMap<unsigned, DiagnosticsTy> BufferDiagnostics;
+    }
+    
+      // These two overloads allow streaming a wide C string to a Message
+  // using the UTF-8 encoding.
+  Message& operator <<(const wchar_t* wide_c_str);
+  Message& operator <<(wchar_t* wide_c_str);
+    
+    // Implements printing an array type T[N].
+template <typename T, size_t N>
+class UniversalPrinter<T[N]> {
  public:
-  // Logs diagnostic information when CUDA appears to be misconfigured (e.g. is
-  // not initializing).
-  //
-  // Note: if we're running on a machine that has no GPUs, we don't want to
-  // produce very much log spew beyond saying, 'looks like there's no CUDA
-  // kernel
-  // module running'.
-  //
-  // Note: we use non-Google-File:: API here because we may be called before
-  // InitGoogle has completed.
-  static void LogDiagnosticInformation();
-    }
-    
-      ExpectSuccess(Builder().Input(FakeInput(2, DT_BOOL)), {DT_BOOL, DT_BOOL}, {},
-                R'proto(
-      op: 'NPolymorphicRestrictIn' input: ['a', 'a:1']
-      attr { key: 'N' value { i: 2 } }
-      attr { key: 'T' value { type: DT_BOOL } } )proto');
-    
-    #endif  // TENSORFLOW_COMMON_RUNTIME_SYCL_SYCL_DEVICE_CONTEXT_H_
-
-    
-        OP_REQUIRES(context, TensorShapeUtils::IsMatrix(contents.shape()),
-                errors::InvalidArgument(
-                    'sampled_audio must be a rank-2 tensor but got shape ',
-                    contents.shape().DebugString()));
-    OP_REQUIRES(
-        context, contents.NumElements() <= std::numeric_limits<int32>::max(),
-        errors::InvalidArgument(
-            'sampled_audio cannot have more than 2^31 entries. Shape = ',
-            contents.shape().DebugString()));
-    OP_REQUIRES(context, TensorShapeUtils::IsScalar(file_format_tensor.shape()),
-                errors::InvalidArgument(
-                    'file_format must be a rank-0 tensor but got shape ',
-                    file_format_tensor.shape().DebugString()));
-    OP_REQUIRES(context,
-                TensorShapeUtils::IsScalar(samples_per_second_tensor.shape()),
-                errors::InvalidArgument(
-                    'samples_per_second must be a rank-0 tensor but got shape ',
-                    samples_per_second_tensor.shape().DebugString()));
-    OP_REQUIRES(context,
-                TensorShapeUtils::IsScalar(bits_per_second_tensor.shape()),
-                errors::InvalidArgument(
-                    'bits_per_second must be a rank-0 tensor but got shape ',
-                    bits_per_second_tensor.shape().DebugString()));
-    
-    #define OC_Q57(_v) ((ogg_int64_t)(_v)<<57)
-    
-        2,{0,128,  8,33,  4,16,70,  2,6,12,  23,46,90},
-    
-    
-    {  {1,0,32,  &_residue_44_mid_un,
-   &_huff_book__44u7__long,&_huff_book__44u7__long,
-   &_resbook_44u_7,&_resbook_44u_7}
+  // Prints the given array, omitting some elements when there are too
+  // many.
+  static void Print(const T (&a)[N], ::std::ostream* os) {
+    UniversalPrintArray(a, N, os);
+  }
 };
     
-       all f in Hz, z in Bark */
+    // Next, associate a list of types with the test case, which will be
+// repeated for each type in the list.  The typedef is necessary for
+// the macro to parse correctly.
+typedef testing::Types<char, int, unsigned int> MyTypes;
+TYPED_TEST_CASE(FooTest, MyTypes);
     
-    # if defined(BF_PTR2)
+    // This flag enables using colors in terminal output. Available values are
+// 'yes' to enable colors, 'no' (disable colors), or 'auto' (the default)
+// to let Google Test decide.
+GTEST_DECLARE_string_(color);
     
-    #if defined(__WATCOMC__)
-void GetTSC(unsigned long&);
-#pragma aux GetTSC = 0x0f 0x31 'mov [edi], eax' parm [edi] modify [edx eax];
-#elif defined(__GNUC__)
-inline
-void GetTSC(unsigned long& tsc)
-{
-  asm volatile('.byte 15, 49\n\t'
-	       : '=eax' (tsc)
-	       :
-	       : '%edx', '%eax');
-}
-#elif defined(_MSC_VER)
-inline
-void GetTSC(unsigned long& tsc)
-{
-  unsigned long a;
-  __asm _emit 0fh
-  __asm _emit 31h
-  __asm mov a, eax;
-  tsc=a;
-}
-#endif      
-    
-    extern JSClass  *jsb_cocos2d_Physics3DObject_class;
-extern JSObject *jsb_cocos2d_Physics3DObject_prototype;
-    
-    bool js_cocos2dx_studio_Frame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_Frame_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_Frame(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_Frame_clone(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_setTweenType(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_setNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_setTimeline(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_isEnterWhenPassed(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_getTweenType(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_getFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_apply(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_isTween(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_setFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_setTween(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_getTimeline(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_getNode(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    
-    
-    
-    	m_world->SetAllowSleeping(settings->enableSleep > 0);
-	m_world->SetWarmStarting(settings->enableWarmStarting > 0);
-	m_world->SetContinuousPhysics(settings->enableContinuous > 0);
-	m_world->SetSubStepping(settings->enableSubStepping > 0);
-    
-    
-    {	b2Vec2 viewCenter;
-	float32 hz;
-	int32 velocityIterations;
-	int32 positionIterations;
-	int32 drawShapes;
-	int32 drawJoints;
-	int32 drawAABBs;
-	int32 drawContactPoints;
-	int32 drawContactNormals;
-	int32 drawContactImpulse;
-	int32 drawFrictionImpulse;
-	int32 drawCOMs;
-	int32 drawStats;
-	int32 drawProfile;
-	int32 enableWarmStarting;
-	int32 enableContinuous;
-	int32 enableSubStepping;
-	int32 enableSleep;
-	int32 pause;
-	int32 singleStep;
+    // A concrete DeathTestFactory implementation for normal use.
+class DefaultDeathTestFactory : public DeathTestFactory {
+ public:
+  virtual bool Create(const char* statement, const RE* regex,
+                      const char* file, int line, DeathTest** test);
 };
     
-    			b2FixtureDef sd2;
-			sd2.shape = &poly2;
-			sd2.density = 2.0f;
+    // A helper for implementing tuple_element<k, T>.  kIndexValid is true
+// iff k < the number of fields in tuple type T.
+template <bool kIndexValid, int kIndex, class Tuple>
+struct TupleElement;
     
-    namespace xgboost {
-    }
+      // Returns true iff n is a prime number.
+  virtual bool IsPrime(int n) const = 0;
     
-    template<typename DType>
-inline void CompressArray<DType>::Write(dmlc::Stream* fo) {
-  encoded_chunks_.clear();
-  encoded_chunks_.push_back(0);
-  for (size_t i = 0; i < out_buffer_.size(); ++i) {
-    encoded_chunks_.push_back(encoded_chunks_.back() + out_buffer_[i].length());
+      // operator new and operator delete help us control water allocation.
+  void* operator new(size_t allocation_size) {
+    allocated_++;
+    return malloc(allocation_size);
   }
-  fo->Write(raw_chunks_);
-  fo->Write(encoded_chunks_);
-  for (const std::string& buf : out_buffer_) {
-    fo->Write(dmlc::BeginPtr(buf), buf.length());
-  }
+    
+        // insert the node in the network
+    AddNodeToNet(newNode);
+    
+            // after finished statistics, the mean and variance of the bn node should be freezd.
+        bnNode->FreezeParameters();
+    
+    #pragma once
+    
+    TEST(LogTest, ReadWrite) {
+  Write('foo');
+  Write('bar');
+  Write('');
+  Write('xxxx');
+  ASSERT_EQ('foo', Read());
+  ASSERT_EQ('bar', Read());
+  ASSERT_EQ('', Read());
+  ASSERT_EQ('xxxx', Read());
+  ASSERT_EQ('EOF', Read());
+  ASSERT_EQ('EOF', Read());  // Make sure reads at eof work
 }
     
-     protected:
+    // Snapshots are kept in a doubly-linked list in the DB.
+// Each SnapshotImpl corresponds to a particular sequence number.
+class SnapshotImpl : public Snapshot {
+ public:
+  SequenceNumber number_;  // const after creation
+    }
+    
+      void SetComparatorName(const Slice& name) {
+    has_comparator_ = true;
+    comparator_ = name.ToString();
+  }
+  void SetLogNumber(uint64_t num) {
+    has_log_number_ = true;
+    log_number_ = num;
+  }
+  void SetPrevLogNumber(uint64_t num) {
+    has_prev_log_number_ = true;
+    prev_log_number_ = num;
+  }
+  void SetNextFile(uint64_t num) {
+    has_next_file_number_ = true;
+    next_file_number_ = num;
+  }
+  void SetLastSequence(SequenceNumber seq) {
+    has_last_sequence_ = true;
+    last_sequence_ = seq;
+  }
+  void SetCompactPointer(int level, const InternalKey& key) {
+    compact_pointers_.push_back(std::make_pair(level, key));
+  }
+    
+    static void TestEncodeDecode(const VersionEdit& edit) {
+  std::string encoded, encoded2;
+  edit.EncodeTo(&encoded);
+  VersionEdit parsed;
+  Status s = parsed.DecodeFrom(encoded);
+  ASSERT_TRUE(s.ok()) << s.ToString();
+  parsed.EncodeTo(&encoded2);
+  ASSERT_EQ(encoded, encoded2);
+}
+    
+      virtual Status LockFile(const std::string& fname, FileLock** lock) {
+    *lock = new FileLock;
+    return Status::OK();
+  }
+    
+    
+    {    int nindex = index_.num_chunk();
+    int nvalue = value_.num_chunk();
+    int ntotal = nindex + nvalue;
+    #pragma omp parallel for schedule(dynamic, 1) num_threads(nthread_)
+    for (int i = 0; i < ntotal; ++i) {
+      if (i < nindex) {
+        index_.Decompress(i);
+      } else {
+        value_.Decompress(i - nindex);
+      }
+    }
+  }
+    
+      inline void ParseStr(std::string *tok) {
+    while ((ch_buf = this->GetChar()) != EOF) {
+      switch (ch_buf) {
+        case '\\': *tok += this->GetChar(); break;
+        case '\'': return;
+        case '\r':
+        case '\n': LOG(FATAL)<< 'ConfigReader: unterminated string';
+        default: *tok += ch_buf;
+      }
+    }
+    LOG(FATAL) << 'ConfigReader: unterminated string';
+  }
+  inline void ParseStrML(std::string *tok) {
+    while ((ch_buf = this->GetChar()) != EOF) {
+      switch (ch_buf) {
+        case '\\': *tok += this->GetChar(); break;
+        case '\'': return;
+        default: *tok += ch_buf;
+      }
+    }
+    LOG(FATAL) << 'unterminated string';
+  }
+  // return newline
+  inline bool GetNextToken(std::string *tok) {
+    tok->clear();
+    bool new_line = false;
+    while (ch_buf != EOF) {
+      switch (ch_buf) {
+        case '#' : SkipLine(); new_line = true; break;
+        case '\'':
+          if (tok->length() == 0) {
+            ParseStr(tok); ch_buf = this->GetChar(); return new_line;
+          } else {
+            LOG(FATAL) << 'ConfigReader: token followed directly by string';
+          }
+        case '\'':
+          if (tok->length() == 0) {
+            ParseStrML(tok); ch_buf = this->GetChar(); return new_line;
+          } else {
+            LOG(FATAL) << 'ConfigReader: token followed directly by string';
+          }
+        case '=':
+          if (tok->length() == 0) {
+            ch_buf = this->GetChar();
+            *tok = '=';
+          }
+          return new_line;
+        case '\r':
+        case '\n':
+          if (tok->length() == 0) new_line = true;
+        case '\t':
+        case ' ' :
+          ch_buf = this->GetChar();
+          if (tok->length() != 0) return new_line;
+          break;
+        default:
+          *tok += ch_buf;
+          ch_buf = this->GetChar();
+          break;
+      }
+    }
+    if (tok->length() == 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+};
+/*!
+ * \brief an iterator use stream base, allows use all types of istream
+ */
+class ConfigStreamReader: public ConfigReaderBase {
+ public:
   /*!
-   * \brief to be implemented by subclass,
-   * get next token, return EOF if end of file
+   * \brief constructor
+   * \param fin istream input stream
    */
-  virtual char GetChar(void) = 0;
-  /*! \brief to be implemented by child, check if end of stream */
-  virtual bool IsEnd(void) = 0;
+  explicit ConfigStreamReader(std::istream &fin) : fin(fin) {}
     
-      vals_in.clear(); ss.flush(); ss.clear(); ss.str('');
-  ss << ' ( 3, 2,1 ) ';
-  ss >> vals_in;
-  EXPECT_EQ(vals_in, vals);
-    
-    dmlc::DataIter<ColBatch>* SimpleDMatrix::ColIterator(const std::vector<bst_uint>&fset) {
-  size_t ncol = this->info().num_col;
-  col_iter_.col_index_.resize(0);
-  for (size_t i = 0; i < fset.size(); ++i) {
-    if (fset[i] < ncol) col_iter_.col_index_.push_back(fset[i]);
-  }
-  col_iter_.BeforeFirst();
-  return &col_iter_;
-}
-    
-    // This is a helpful data structure to define parameters
-// You do not have to use it.
-// see http://dmlc-core.readthedocs.org/en/latest/parameter.html
-// for introduction of this module.
-struct MyLogisticParam : public dmlc::Parameter<MyLogisticParam> {
-  float scale_neg_weight;
-  // declare parameters
-  DMLC_DECLARE_PARAMETER(MyLogisticParam) {
-    DMLC_DECLARE_FIELD(scale_neg_weight).set_default(1.0f).set_lower_bound(0.0f)
-        .describe('Scale the weight of negative examples by this factor');
-  }
-};
-    
-      void setUserDefinedCred(std::string user, std::string password);
-    
-      virtual ~AbstractProxyResponseCommand();
-    
-      /**
-   * Returns announce URL.
-   */
-  std::string getAnnounce() const;
-    
-    void AnnounceTier::nextEvent()
-{
-  switch (event) {
-  case STARTED:
-    event = DOWNLOADING;
-    break;
-  case STARTED_AFTER_COMPLETION:
-    event = SEEDING;
-    break;
-  case STOPPED:
-    event = HALTED;
-    break;
-  case COMPLETED:
-    event = SEEDING;
-    break;
-  default:
-    break;
-  }
-}
-    
-    // DiskwriterFactory class template to create DiskWriter derived
-// object, ignoring filename.
-template <class DiskWriterType>
-class AnonDiskWriterFactory : public DiskWriterFactory {
-public:
-  AnonDiskWriterFactory() = default;
-  virtual ~AnonDiskWriterFactory() = default;
+    /*!
+ * \brief Input stream that support additional PeekRead
+ *  operation, besides read.
+ */
+class PeekableInStream : public dmlc::Stream {
+ public:
+  explicit PeekableInStream(dmlc::Stream* strm)
+      : strm_(strm), buffer_ptr_(0) {}
     }
     
+    /*! \brief pruner that prunes a tree after growing finishes */
+class TreePruner: public TreeUpdater {
+ public:
+  TreePruner() {
+    syncher.reset(TreeUpdater::Create('sync'));
+  }
+  // set training parameter
+  void Init(const std::vector<std::pair<std::string, std::string> >& args) override {
+    param.InitAllowUnknown(args);
+    syncher->Init(args);
+  }
+  // update the tree, do pruning
+  void Update(const std::vector<bst_gpair> &gpair,
+              DMatrix *p_fmat,
+              const std::vector<RegTree*> &trees) override {
+    // rescale learning rate according to size of trees
+    float lr = param.learning_rate;
+    param.learning_rate = lr / trees.size();
+    for (size_t i = 0; i < trees.size(); ++i) {
+      this->DoPrune(*trees[i]);
+    }
+    param.learning_rate = lr;
+    syncher->Update(gpair, p_fmat, trees);
+  }
+    }
     
-    {} // namespace aria2
+    /*! \brief a column storage, to be used with ApplySplit. Note that each
+    bin id is stored as index[i] + index_base. */
+template<typename T>
+class Column {
+ public:
+  ColumnType type;
+  const T* index;
+  uint32_t index_base;
+  const size_t* row_ind;
+  size_t len;
+};
+    
+    TEST(SparsePageDMatrix, ColAcess) {
+  std::string tmp_file = CreateSimpleTestData();
+  xgboost::DMatrix * dmat = xgboost::DMatrix::Load(
+    tmp_file + '#' + tmp_file + '.cache', true, false);
+  std::remove(tmp_file.c_str());
+  EXPECT_FALSE(FileExists(tmp_file + '.cache.col.page'));
+    }
