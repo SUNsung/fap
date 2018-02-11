@@ -1,68 +1,66 @@
 
         
-            def log_http_get_file(url, cached = false)
-      s = '  #{'CACHED ' if cached}GET #{url}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
-      end
-    end
+            To install Clojure you should install Leiningen:
+      brew install leiningen
+    and then follow the tutorial:
+      https://github.com/technomancy/leiningen/blob/stable/doc/TUTORIAL.md
+    EOS
+  when 'osmium' then <<-EOS.undent
+    The creator of Osmium requests that it not be packaged and that people
+    use the GitHub master branch instead.
+    EOS
+  when 'gfortran' then <<-EOS.undent
+    GNU Fortran is now provided as part of GCC, and can be installed with:
+      brew install gcc
+    EOS
+  when 'play' then <<-EOS.undent
+    Play 2.3 replaces the play command with activator:
+      brew install typesafe-activator
     
-      def pod_prefix
-    File.expand_path('../..', pod_bin)
+      def fetch_checksum_for(tag)
+    tag = find_matching_tag(tag)
+    return self[tag], tag if tag
   end
     
-          def stack
-        UI::ErrorReport.stack
-      end
+          return false unless prune_time
     
-            def execute_repl_command(repl_command)
-          unless repl_command == '\n'
-            repl_commands = repl_command.split
-            subcommand = repl_commands.shift.capitalize
-            arguments = repl_commands
-            subcommand_class = Pod::Command::IPC.const_get(subcommand)
-            subcommand_class.new(CLAide::ARGV.new(arguments)).run
-            signal_end_of_output
-          end
-        end
-      end
+      def find_internal_commands(directory)
+    directory.children.reduce([]) do |cmds, f|
+      cmds << f.basename.to_s.sub(/\.(?:rb|sh)$/, '') if f.file?
+      cmds
     end
   end
 end
 
     
-            private
-    
-    When /^(?:|I )press '([^']*)'$/ do |button|
-  click_button(button)
+      def python(_options = {}, &block)
+    opoo 'Formula#python is deprecated and will go away shortly.'
+    block.call if block_given?
+    PythonRequirement.new
+  end
+  alias_method :python2, :python
+  alias_method :python3, :python
 end
+
     
-        def assign_fingerprint
-      if instance_respond_to?(:fingerprint)
-        instance_write(:fingerprint, yield)
-      end
-    end
+    module Api
+  module OpenidConnect
+    class ClientsController < ApplicationController
+      skip_before_action :verify_authenticity_token
     
-            def failure_message_when_negated
-          'Attachment #{@attachment_name} should not be required'
+          def create
+        req = Rack::Request.new(request.env)
+        if req['client_assertion_type'] == 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
+          handle_jwt_bearer(req)
         end
-        alias negative_failure_message failure_message_when_negated
+        self.status, headers, self.response_body = Api::OpenidConnect::TokenEndpoint.new.call(request.env)
+        headers.each {|name, value| response.headers[name] = value }
+        nil
+      end
     
-          expect('.border-color-explicit').to have_rule(rule)
-    end
-  end
-    
-          expect('.all-buttons-active').to have_ruleset(ruleset)
-    end
-  end
-    
-      context 'called with two sizes' do
-    it 'applies to alternating sides' do
-      rule = 'padding: 2px 3px'
-    
-    describe 'size' do
-  before(:all) do
-    ParserSupport.parse_file('library/size')
-  end
+            def initialize(name, declaration_node, scope)
+          unless VARIABLE_DECLARATION_TYPES.include?(declaration_node.type)
+            raise ArgumentError,
+                  'Node type must be any of #{VARIABLE_DECLARATION_TYPES}, ' \
+                  'passed #{declaration_node.type}'
+          end
