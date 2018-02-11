@@ -1,251 +1,198 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+        
+    {} // namespace swift
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+      // Overwrite the body of the existing TopLevelCodeDecl.
+  TLCD->setBody(BraceStmt::create(Context,
+                                  metavarBinding->getStartLoc(),
+                                  ASTNode(metavarBinding),
+                                  metavarBinding->getEndLoc(),
+                                  /*implicit*/true));
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
     
-    // TODO(zongheng): this should be a general functor that powers SparseAdd and
-// ScatterNd ops.  It should be moved to its own head file, once the other ops
-// are implemented.
-template <typename Device, typename T, typename Index, int NDIMS,
-          scatter_op::UpdateOp op>
-struct ScatterNdFunctor {
-  // Returns -1 on success or a nonnegative i s.t. indices[i] is a bad index.
-  Index operator()(const Device& d, typename TTypes<Index>::ConstMatrix indices,
-                   typename TTypes<T>::ConstFlat updates,
-                   typename TTypes<T, NDIMS>::Tensor out);
+llvm::Optional<ASTNode>
+SyntaxASTMap::getNodeForSyntax(syntax::Syntax SyntaxNode) const {
+  auto Found = SyntaxMap.find(SyntaxNode.Root);
+  if (Found == SyntaxMap.end()) {
+    return None;
+  }
+  return Found->getSecond();
+}
+    
+    @interface ImmutableDataVerifier : NSData {
+    ObjectBehaviorVerifier *_verifier;
+    NSData *_data;
+}
+@property (readonly) ObjectBehaviorVerifier *verifier;
+@end
+    
+      /// Suppress all warnings
+  bool SuppressWarnings = false;
+    
+      using A = RepoAuthType::Array;
+  using T = A::Tag;
+  switch (ar.emptiness()) {
+  case A::Empty::No:
+    ret += 'N(';    // non-empty
+    break;
+  case A::Empty::Maybe:
+    ret += '(';
+    break;
+  }
+    
+    namespace irgen {
+    }
+    
+      bool operator==(Vconst other) const {
+    return kind == other.kind &&
+      ((isUndef && other.isUndef) || val == other.val);
+  }
+    
+    bool HHVM_FUNCTION(mb_parse_str,
+                   const String& encoded_string,
+                   VRefParam result /* = null */) {
+  php_mb_encoding_handler_info_t info;
+  info.data_type              = PARSE_STRING;
+  info.separator              = '&';
+  info.force_register_globals = false;
+  info.report_errors          = 1;
+  info.to_encoding            = MBSTRG(current_internal_encoding);
+  info.to_language            = MBSTRG(current_language);
+  info.from_encodings         = MBSTRG(http_input_list);
+  info.num_from_encodings     = MBSTRG(http_input_list_size);
+  info.from_language          = MBSTRG(current_language);
+    }
+    
+      // Cluster the blocks based on weights and sort the clusters.
+  Clusterizer clusterizer(unit, scale);
+  auto labels = clusterizer.getBlockList();
+    
+      /**
+   * Destructor.
+   */
+  ~Server() override {}
+    
+      int max_node = numa_max_node();
+  if (!max_node || max_node >= 32) return;
+    
+    ThriftBuffer::ThriftBuffer(int size,
+                           VariableSerializer::Type sType /* = Serialize*/)
+  : m_size(size), m_safe(false), m_serializerType(sType) {
+  m_buf = (char *)malloc(m_size + 1);
+  if (!m_buf) throwOutOfMemory();
+  m_pEnd = m_buf + m_size;
+  m_pSafe = m_pEnd - sizeof(int64_t) - 1;
+  m_p = m_buf;
+}
+    
+      switch (file_fsmagic(ms, inname, &sb, stream)) {
+  case -1:    /* error */
+    goto done;
+  case 0:      /* nothing found */
+    break;
+  default:    /* matched it and printed type */
+    rv = 0;
+    goto done;
+  }
+    
+    /*static*/ struct DataReaderHelpers
+{
+    template <class ElemType>
+    static void NotifyChangedNodes(ComputationNetworkPtr net, StreamMinibatchInputs& inputMatrices)
+    {
+        // reader will have resized input node's m_value directly. Nodes must be notified to do necessary internal state updates from that.
+        // TODO: This is a stopgap. SGD will at some point change from sets of matrices to sets of nodes. Then this will become much simpler.
+        std::set<MatrixBasePtr> matrices;
+        for (const auto& iter : inputMatrices)
+            matrices.insert(iter.second.matrix);
+        for (auto& node : net->FeatureNodes())
+            if (matrices.find(node->As<ComputationNode<ElemType>>()->ValuePtr()) != matrices.end())
+                node->NotifyFunctionValuesMBSizeModified();
+        for (auto& node : net->LabelNodes())
+            if (matrices.find(node->As<ComputationNode<ElemType>>()->ValuePtr()) != matrices.end())
+                node->NotifyFunctionValuesMBSizeModified();
+    }
+    }
+    
+    private:
+    // guess how many columns of this matrix will fit into the cache
+    // This is a helper function for matrix matprod and variants.
+    // Result also gets aligned to 4 because matprod benefits from it.
+    size_t cacheablecols() const
+    {
+        // cache info for 48-core Dell:
+        //  - L1: 64 K per core   --we want to fit in here!
+        //  - L2: 512 K per core
+        //  - L3: 10 MB total
+    }
+    
+        bool transposeA = false, transposeB = false;
+    float alpha = 0.3f;
+    float beta = 0.0f;
+    Matrix<float>::MultiplyAndWeightedAdd(alpha, mB, transposeA, mAdense, transposeB, beta, mC);
+    Matrix<float>::MultiplyAndWeightedAdd(alpha, mB, transposeA, mAsparse, transposeB, beta, mD);
+    
+    void GranularGPUDataTransferer::WaitForSyncPointOnFetchStreamAsync()
+{
+    PrepareDevice(m_deviceId);
+    cudaStreamWaitEvent(GetFetchStream(), m_syncEvent, 0 /*flags 'must be 0'*/) || 'cudaStreamWaitEvent failed';
+}
+    
+    #include 'stdafx.h'
+#include 'Basics.h'
+#include 'Actions.h'
+#include 'ComputationNetwork.h'
+#include 'ComputationNode.h'
+#include 'DataReader.h'
+#include 'DataWriter.h'
+#include 'SimpleNetworkBuilder.h'
+#include 'Config.h'
+#include 'ScriptableObjects.h'
+    
+    #pragma once
+    
+        // construct from a single float, copy to all components
+    float4(float f)
+        : v(_mm_load1_ps(&f))
+    {
+    }
+    // float4 (float f) : v (_mm_set_ss (f)) {}  // code seems more complex than _mm_load1_ps()
+    
+    	bool genSend = method->BidiStreaming() || ServerOnlyStreaming(method);
+	bool genRecv = method->BidiStreaming() || ClientOnlyStreaming(method);
+	bool genSendAndClose = ClientOnlyStreaming(method);
+    
+    struct AttackerBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_sword_attack_damage(int32_t sword_attack_damage) {
+    fbb_.AddElement<int32_t>(Attacker::VT_SWORD_ATTACK_DAMAGE, sword_attack_damage, 0);
+  }
+  explicit AttackerBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  AttackerBuilder &operator=(const AttackerBuilder &);
+  flatbuffers::Offset<Attacker> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<Attacker>(end);
+    return o;
+  }
 };
     
-    
-    {
-    {      case ACTION_CLOSE:
-      default:
-        // Do not close stdin/out/err, instead redirect them to /dev/null so
-        // their file descriptors remain unavailable for reuse by open(), etc.
-        if (i <= CHAN_STDERR) {
-          if (devnull_fd < 0) {
-            while ((devnull_fd = open('/dev/null', O_RDWR, 0)) < 0) {
-              if (!retry(errno)) {
-                _exit(1);
-              }
-            }
-          }
-          while (dup2(devnull_fd, i) < 0) {
-            if (!retry(errno)) {
-              _exit(1);
-            }
-          }
-        } else {
-          close(i);
-        }
-        break;
-    }
-  }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    
-    {
-    {}  // namespace io
-}  // namespace tensorflow
-    
-    #ifndef TENSORFLOW_PLATFORM_PREFETCH_H_
-#define TENSORFLOW_PLATFORM_PREFETCH_H_
-    
-    #include 'tensorflow/core/common_runtime/dma_helper.h'
-#include 'tensorflow/core/common_runtime/sycl/sycl_device_context.h'
-    
-    class SYCLDeviceContext : public DeviceContext {
- public:
-  SYCLDeviceContext() {}
+    // An abstract interface representing a service.
+struct Service : public CommentHolder {
+  virtual ~Service() {}
     }
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    
-    {
-    {
-    {      auto output = merged->template flat<T>().data();
-      DynamicStitchGPUImpl<T>(c->eigen_gpu_device(), slice_size, first_dim_size,
-                              indices_flat.data(), data_flat.data(), output);
-    }
+      // Get and test the `weapons` FlatBuffers's `vector`.
+  std::string expected_weapon_names[] = { 'Sword', 'Axe' };
+  short expected_weapon_damages[] = { 3, 5 };
+  auto weps = monster->weapons();
+  for (unsigned int i = 0; i < weps->size(); i++) {
+    assert(weps->Get(i)->name()->str() == expected_weapon_names[i]);
+    assert(weps->Get(i)->damage() == expected_weapon_damages[i]);
   }
-};
-    
-    
-    {
-    {}  // namespace testing
-}  // namespace grpc
-
-    
-     protected:
-  void AddOp(grpc_op* ops, size_t* nops) {
-    if (!send_) return;
-    grpc_op* op = &ops[(*nops)++];
-    op->op = GRPC_OP_SEND_CLOSE_FROM_CLIENT;
-    op->flags = 0;
-    op->reserved = NULL;
-  }
-  void FinishOp(bool* status) { send_ = false; }
-    
-    static void grpc_slice_split_inner(grpc_slice str, const char* sep,
-                                   grpc_slice_buffer* dst, bool no_space) {
-  const size_t sep_len = strlen(sep);
-  size_t begin, end;
-  const uint8_t* str_buffer = GRPC_SLICE_START_PTR(str);
-  size_t sep_pos;
-    }
-    
-    Status TestServiceImpl::RequestStream(ServerContext* context,
-                                      ServerReader<EchoRequest>* reader,
-                                      EchoResponse* response) {
-  // If 'server_try_cancel' is set in the metadata, the RPC is cancelled by
-  // the server by calling ServerContext::TryCancel() depending on the value:
-  //   CANCEL_BEFORE_PROCESSING: The RPC is cancelled before the server reads
-  //   any message from the client
-  //   CANCEL_DURING_PROCESSING: The RPC is cancelled while the server is
-  //   reading messages from the client
-  //   CANCEL_AFTER_PROCESSING: The RPC is cancelled after the server reads
-  //   all the messages from the client
-  int server_try_cancel = GetIntValueFromMetadata(
-      kServerTryCancelRequest, context->client_metadata(), DO_NOT_CANCEL);
-    }
-    
-    
-    {
-    {}  // namespace testing
-}  // namespace grpc
-    
-      // For now, we do not support copying.
-  InlinedVector(const InlinedVector&) = delete;
-  InlinedVector& operator=(const InlinedVector&) = delete;
-    
-    #include <gtest/gtest.h>
-    
-    gpr_once g_once_init_add_prod_ssl_provider = GPR_ONCE_INIT;
-// Register ssl with non-test roots type to the credentials provider.
-void AddProdSslType() {
-  testing::GetCredentialsProvider()->AddSecureType(
-      kProdTlsCredentialsType, std::unique_ptr<testing::CredentialTypeProvider>(
-                                   new SslCredentialProvider));
-}
-    
-    extern std::vector<grpc::testing::Server*>* g_inproc_servers;
-    
-                if (EXPECTS_CRASH_DUMP_CONTENT == _state) {
-                _state = EXPECTS_CRASH_DUMP_HEADER;
-                return 0;
-            }
-    
-    #endif
-
-    
-    namespace mars_boost {} namespace boost = mars_boost; namespace mars_boost {
-    }
-    
-        bool Check();  // true pass, false limit
-    
-    
-/*
- * ServiceBase.h
- *
- *  Created on: 2013-6-20
- *      Author: yerungui
- */
-    
-      private:
-    SpyCore() {}
-    ~SpyCore() {}
-    
-    #include 'comm/debugger/test_spy_sample.h'
-#include 'comm/xlogger/xlogger.h'
-    
-    jvalue JNU_CallMethodByName(JNIEnv* _env, jobject obj, const char* _name, const char* descriptor, ...);
-jvalue JNU_CallStaticMethodByName(JNIEnv* _env, jclass clazz, const char* _name, const char* descriptor, ...);
-jvalue JNU_CallStaticMethodByName(JNIEnv* _env, const char* _class_name, const char* _name, const char* descriptor, ...);
-jvalue JNU_CallStaticMethodByMethodInfo(JNIEnv* _env, JniMethodInfo _method_info, ...);
-jvalue JNU_GetStaticField(JNIEnv* _env, jclass clazz, const char* _name, const char* sig);
-jvalue JNU_GetField(JNIEnv* _env, jobject obj, const char* _name, const char* sig);
-    
-    inline flatbuffers::Offset<EnumVal> CreateEnumValDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    const char *name = nullptr,
-    int64_t value = 0,
-    flatbuffers::Offset<Object> object = 0,
-    flatbuffers::Offset<Type> union_type = 0) {
-  return reflection::CreateEnumVal(
-      _fbb,
-      name ? _fbb.CreateString(name) : 0,
-      value,
-      object,
-      union_type);
-}
-    
-    bool VerifyCharacter(flatbuffers::Verifier &verifier, const void *obj, Character type);
-bool VerifyCharacterVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
-    
-      // Start the server. Lock to change the variable we're changing.
-  wait_for_server.lock();
-  server_instance = builder.BuildAndStart().release();
-  wait_for_server.unlock();
-  server_instance_cv.notify_one();
-    
-    // Computes how many bytes you'd have to pad to be able to write an
-// 'scalar_size' scalar if the buffer had grown to 'buf_size' (downwards in
-// memory).
-inline size_t PaddingBytes(size_t buf_size, size_t scalar_size) {
-  return ((~buf_size) + 1) & (scalar_size - 1);
-}
-    
-      static TypedVector EmptyTypedVector() {
-    static const uint8_t empty_typed_vector[] = { 0 /*len*/ };
-    return TypedVector(empty_typed_vector + 1, 1, TYPE_INT);
-  }
-  bool IsTheEmptyVector() const {
-    return data_ == TypedVector::EmptyTypedVector().data_;
-  }
-    
-    // Set any struct field as a 64bit int, regardless of type what it is.
-inline void SetAnyFieldI(Struct *st, const reflection::Field &field,
-                         int64_t val) {
-  SetAnyValueI(field.type()->base_type(), st->GetAddressOf(field.offset()),
-               val);
-}
-    
-      // to ensure it is correct, we now generate text back from the binary,
-  // and compare the two:
-  std::string jsongen;
-  if (!GenerateText(parser, parser.builder_.GetBufferPointer(), &jsongen)) {
-    printf('Couldn't serialize parsed data to JSON!\n');
-    return 1;
-  }
+  (void)expected_weapon_names;
+  (void)expected_weapon_damages;
