@@ -1,444 +1,377 @@
 
         
-        bool IsWebContents(v8::Isolate* isolate, content::RenderProcessHost* process) {
-  content::WebContents* web_contents =
-      static_cast<AtomBrowserClient*>(AtomBrowserClient::Get())->
-          GetWebContentsFromProcessID(process->GetID());
-  if (!web_contents)
-    return false;
-    }
+        // Appends all the elements in the input iterator to the container.
+//
+// Returns None if successful; returns NULL and sets an exception if
+// unsuccessful.
+PyObject* Extend(RepeatedScalarContainer* self, PyObject* value);
     
-    void SavePageHandler::OnDownloadCreated(content::DownloadManager* manager,
-                                        content::DownloadItem* item) {
-  // OnDownloadCreated is invoked during WebContents::SavePage, so the |item|
-  // here is the one stated by WebContents::SavePage.
-  item->AddObserver(this);
-}
+    // Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// Generates C++ code for a given .proto file.
     
-    #ifndef ATOM_BROWSER_NET_ASAR_ASAR_PROTOCOL_HANDLER_H_
-#define ATOM_BROWSER_NET_ASAR_ASAR_PROTOCOL_HANDLER_H_
-    
-    #include 'net/url_request/url_request_job_factory.h'
-    
-    #include 'base/files/file_util.h'
-#include 'base/logging.h'
-#include 'base/mac/mac_logging.h'
-#include 'base/posix/eintr_wrapper.h'
-#include 'base/process/launch.h'
-#include 'base/strings/sys_string_conversions.h'
-    
-        base::win::ShortcutProperties props;
-    base::string16 appID;
-    if (content::Shell::GetPackage()->root()->GetString('app-id', &appID) == false)
-      content::Shell::GetPackage()->root()->GetString(switches::kmName, &appID);
-    const std::wstring appName = base::UTF8ToWide(content::Shell::GetPackage()->GetName());
-    props.set_app_id(appID);
-    
-    #include 'base/strings/string_piece.h'
-#include 'v8/include/v8.h'
-    
-      // RenderViewHostObserver implementation.
-  // WebContentsObserver implementation:
-  bool OnMessageReceived(
-                         content::RenderViewHost* render_view_host,
-                         const IPC::Message& message) override;
-    
-    
-#include 'content/nw/src/api/event/event.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/dispatcher_host.h'
-#include 'ui/gfx/screen.h'
-    
-    public:
-  EventListener(int id,
-                const base::WeakPtr<DispatcherHost>& dispatcher_host,
-                const base::DictionaryValue& option);
-    
-    void Menu::Popup(int x, int y, content::Shell* shell) {
-  GdkEventButton* event = NULL; //FIXME: shell->web_contents()->GetRenderWidgetHostView()->GetLastMouseDown();
-  uint32_t triggering_event_time = event ? event->time : GDK_CURRENT_TIME;
-  gfx::Point point;
-  if (!event) {
-    // gfx::Rect bounds = shell->web_contents()->GetRenderWidgetHostView()->GetViewBounds();
-    // point = gfx::Point(x + bounds.x(), y + bounds.y());
-    DVLOG(1) << 'no last mouse down event';
-    point = gfx::Point(x, y);
-  }else
-    point = gfx::Point(event->x_root, event->y_root);
-    }
-    
-    
-    {  submenu_ = menu;
-}
-    
-    
-    {  // ExtensionFunction:
-  bool RunAsync() override;
-  DECLARE_EXTENSION_FUNCTION('nw.App.quit', UNKNOWN)
- private:
-  void Callback();
-};
-    
-          // strip off data uri header if raw is set
-      if (!(data.raw.get() && *(data.raw))) {
-        if (data.type == TYPE_PNG && base::StartsWith(content, kPNGDataUriPrefix, base::CompareCase::INSENSITIVE_ASCII)) {
-          content = content.substr(strlen(kPNGDataUriPrefix));
-        } else if (data.type == TYPE_JPEG && base::StartsWith(content, kJPEGDataUriPrefix, base::CompareCase::INSENSITIVE_ASCII)) {
-          content = content.substr(strlen(kJPEGDataUriPrefix));
-        } else {
-          error_ = base::StringPrintf('Invalid data URI. Only \'%s\' or \'%s\' is accepted.', kPNGDataUriPrefix, kJPEGDataUriPrefix);
-          return false;
-        }
-      }
-    
-    PyObject* NewFileServicesByName(const FileDescriptor* descriptor);
-    
-    #include <google/protobuf/stubs/logging.h>
-#include <google/protobuf/stubs/common.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/pyext/message.h>
-#include <google/protobuf/pyext/scoped_pyobject_ptr.h>
-    
-    
-    { private:
-  // The python object that implements the database. The reference is owned.
-  PyObject* py_database_;
-};
-    
-    
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-    
-    void RepeatedMessageFieldGenerator::WriteHash(io::Printer* printer) {
+    void RepeatedMessageFieldGenerator::GenerateParsingCode(io::Printer* printer) {
   printer->Print(
     variables_,
-    'hash ^= $name$_.GetHashCode();\n');
+    '$name$_.AddEntriesFrom(input, _repeated_$name$_codec);\n');
 }
     
-      virtual void WriteHash(io::Printer* printer);
-  virtual void WriteEquals(io::Printer* printer);
-  virtual void WriteToString(io::Printer* printer);
-    
-    RepeatedPrimitiveFieldGenerator::~RepeatedPrimitiveFieldGenerator() {
-    }
-    
-    class RepeatedPrimitiveFieldGenerator : public FieldGeneratorBase {
- public:
-  RepeatedPrimitiveFieldGenerator(const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options);
-  ~RepeatedPrimitiveFieldGenerator();
-    }
-    
-    #include <google/protobuf/compiler/java/java_doc_comment.h>
-    
-    
-/// Reference : Eric W. Weisstein. 'Cubic Equation.' From MathWorld--A Wolfram Web Resource.
-/// http://mathworld.wolfram.com/CubicEquation.html
-/// \return Number of real roots found.
-int solve_deg3(double a, double b, double c, double d,
-               double & x0, double & x1, double & x2)
-{
-  if (a == 0) {
-    // Solve second order sytem
-    if (b == 0)	{
-      // Solve first order system
-      if (c == 0)
-    return 0;
-    }
-    }
-    }
-    
-    #if GTEST_HAS_STD_WSTRING
-  // Converts the given wide string to a narrow string using the UTF-8
-  // encoding, and streams the result to this Message object.
-  Message& operator <<(const ::std::wstring& wstr);
-#endif  // GTEST_HAS_STD_WSTRING
+    void RepeatedPrimitiveFieldGenerator::GenerateMergingCode(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    '$name$_.Add(other.$name$_);\n');
+}
     
      private:
-  friend class TestCase;
-  friend class TestInfo;
-  friend class internal::DefaultGlobalTestPartResultReporter;
-  friend class internal::NoExecDeathTest;
-  friend class internal::TestEventListenersAccessor;
-  friend class internal::UnitTestImpl;
+  const FileDescriptor* descriptor_;
+  const Options *options_;
     
-    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_FILEPATH_H_
-
+        txn->Put(key_str, value);
     
-        const ParamGeneratorInterface<ParamType>* const base_;
-    // begin[i]_ and end[i]_ define the i-th range that Iterator traverses.
-    // current[i]_ is the actual traversing iterator.
-$for j [[
+      /**
+   * @brief Initialize the Random number generations if needed by the
+   *    transformation.
+   */
+  void InitRand();
     
-    // SameSizeTuplePrefixComparator<k, k>::Eq(t1, t2) returns true if the
-// first k fields of t1 equals the first k fields of t2.
-// SameSizeTuplePrefixComparator(k1, k2) would be a compiler error if
-// k1 != k2.
-template <int kSize1, int kSize2>
-struct SameSizeTuplePrefixComparator;
+     protected:
+  // Helper functions that abstract away the column buffer and gemm arguments.
+  // The last argument in forward_cpu_gemm is so that we can skip the im2col if
+  // we just called weight_cpu_gemm with the same input.
+  void forward_cpu_gemm(const Dtype* input, const Dtype* weights,
+      Dtype* output, bool skip_im2col = false);
+  void forward_cpu_bias(Dtype* output, const Dtype* bias);
+  void backward_cpu_gemm(const Dtype* input, const Dtype* weights,
+      Dtype* output);
+  void weight_cpu_gemm(const Dtype* input, const Dtype* output, Dtype*
+      weights);
+  void backward_cpu_bias(Dtype* bias, const Dtype* input);
     
-    
-$range i 0..n-1
-$range j 0..n
-$range k 1..n
-// GTEST_n_TUPLE_(T) is the type of an n-tuple.
-#define GTEST_0_TUPLE_(T) tuple<>
-    
-    
-    {    // Now, we have i <= n/i < n.
-    // If n is divisible by i, n is not prime.
-    if (n % i == 0) return false;
-  }
-    
-    namespace boost {
-namespace asio {
+    /**
+ * @brief Computes @f$ y = x + \log(1 + \exp(-x)) @f$ if @f$ x > 0 @f$;
+ *        @f$ y = \log(1 + \exp(x)) @f$ otherwise.
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$
+ *      y = \left\{
+ *         \begin{array}{ll}
+ *            x + \log(1 + \exp(-x)) & \mbox{if } x > 0 \\
+ *            \log(1 + \exp(x)) & \mbox{otherwise}
+ *         \end{array} \right.
+ *      @f$
+ */
+template <typename Dtype>
+class BNLLLayer : public NeuronLayer<Dtype> {
+ public:
+  explicit BNLLLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
     }
     }
     
-    #endif // BOOST_ASIO_DETAIL_BASE_FROM_COMPLETION_COND_HPP
-
-    
-      static void init_native_buffer(iovec& iov,
-      const boost::asio::mutable_buffer& buffer)
-  {
-    init_iov_base(iov.iov_base, boost::asio::buffer_cast<void*>(buffer));
-    iov.iov_len = boost::asio::buffer_size(buffer);
-  }
-    
-        // Pop the key/value pair from the stack.
-    ~context()
-    {
-      call_stack<Key, Value>::top_ = next_;
+    namespace caffe {
     }
     
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-    #if defined(BOOST_ASIO_HAS_STD_FUNCTION)
-# include <functional>
-#else // defined(BOOST_ASIO_HAS_STD_FUNCTION)
-# include <boost/function.hpp>
-#endif // defined(BOOST_ASIO_HAS_STD_FUNCTION)
     
-    // With C++0x we can use a combination of enhanced SFINAE and static_assert to
-// generate better template error messages. As this technique is not yet widely
-// portable, we'll only enable it for tested compilers.
-#if !defined(BOOST_ASIO_DISABLE_HANDLER_TYPE_REQUIREMENTS_ASSERT)
-# if defined(__GNUC__)
-#  if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 5)) || (__GNUC__ > 4)
-#   if defined(__GXX_EXPERIMENTAL_CXX0X__)
-#    define BOOST_ASIO_ENABLE_HANDLER_TYPE_REQUIREMENTS_ASSERT 1
-#   endif // defined(__GXX_EXPERIMENTAL_CXX0X__)
-#  endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 5)) || (__GNUC__ > 4)
-# endif // defined(__GNUC__)
-# if defined(BOOST_ASIO_MSVC)
-#  if (_MSC_VER >= 1600)
-#   define BOOST_ASIO_ENABLE_HANDLER_TYPE_REQUIREMENTS_ASSERT 1
-#  endif // (_MSC_VER >= 1600)
-# endif // defined(BOOST_ASIO_MSVC)
-# if defined(__clang__)
-#  if __has_feature(__cxx_static_assert__)
-#   define BOOST_ASIO_ENABLE_HANDLER_TYPE_REQUIREMENTS_ASSERT 1
-#  endif // __has_feature(cxx_static_assert)
-# endif // defined(__clang__)
-#endif // !defined(BOOST_ASIO_DISABLE_HANDLER_TYPE_REQUIREMENTS)
+    {}  // namespace caffe
     
-    void buffer_sequence_adapter_base::init_native_buffer(
-    buffer_sequence_adapter_base::native_buffer_type& buf,
-    const boost::asio::const_buffer& buffer)
-{
-  std::memset(&buf, 0, sizeof(native_buffer_type));
-  Microsoft::WRL::ComPtr<IInspectable> insp
-    = Microsoft::WRL::Make<winrt_buffer_impl>(buffer);
-  Platform::Object^ buf_obj = reinterpret_cast<Platform::Object^>(insp.Get());
-  buf = reinterpret_cast<Windows::Storage::Streams::IBuffer^>(insp.Get());
+    /**
+ * @brief Takes two+ Blobs, interprets last Blob as a selector and
+ *  filter remaining Blobs accordingly with selector data (0 means that
+ * the corresponding item has to be filtered, non-zero means that corresponding
+ * item needs to stay).
+ */
+template <typename Dtype>
+class FilterLayer : public Layer<Dtype> {
+ public:
+  explicit FilterLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+            for(int i=0;i<SEC_METHOD_ITERATIONS;i++){
+            _f->getGradient((double*)x.data,(double*)buf1.data);
+            dprintf(('buf1:\n'));
+            print_matrix(buf1);
+            x=x+sigma*d;
+            _f->getGradient((double*)x.data,(double*)buf2.data);
+            dprintf(('buf2:\n'));
+            print_matrix(buf2);
+            double d1=buf1.dot(d), d2=buf2.dot(d);
+            if((d1-d2)==0){
+                break;
+            }
+            double alpha=-sigma*d1/(d2-d1);
+            dprintf(('(buf2.dot(d)-buf1.dot(d))=%f\nalpha=%f\n',(buf2.dot(d)-buf1.dot(d)),alpha));
+            x=x+(alpha-sigma)*d;
+            sigma=-alpha;
+        }
+    
+            if (_nettosize != (int64)nettosize)
+            CV_Error(cv::Error::StsNoMem, 'Too big buffer is allocated');
+    
+    // Prints a value using the type inferred by the compiler.  The
+// difference between this and UniversalTersePrint() is that for a
+// (const) char pointer, this prints both the pointer and the
+// NUL-terminated string.
+template <typename T>
+void UniversalPrint(const T& value, ::std::ostream* os) {
+  // A workarond for the bug in VC++ 7.1 that prevents us from instantiating
+  // UniversalPrinter with T directly.
+  typedef T T1;
+  UniversalPrinter<T1>::Print(value, os);
 }
     
-    int ioctl(int d, state_type& state, long cmd,
-    ioctl_arg_type* arg, boost::system::error_code& ec)
-{
-  if (d == -1)
-  {
-    ec = boost::asio::error::bad_descriptor;
-    return -1;
+    // This helper class is used by {ASSERT|EXPECT}_NO_FATAL_FAILURE to check if a
+// statement generates new fatal failures. To do so it registers itself as the
+// current test part result reporter. Besides checking if fatal failures were
+// reported, it only delegates the reporting to the former result reporter.
+// The original result reporter is restored in the destructor.
+// INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
+class GTEST_API_ HasNewFatalFailureHelper
+    : public TestPartResultReporterInterface {
+ public:
+  HasNewFatalFailureHelper();
+  virtual ~HasNewFatalFailureHelper();
+  virtual void ReportTestPartResult(const TestPartResult& result);
+  bool has_new_fatal_failure() const { return has_new_fatal_failure_; }
+ private:
+  bool has_new_fatal_failure_;
+  TestPartResultReporterInterface* original_reporter_;
+    }
+    
+    
+    {  // With this overloaded version, we allow anonymous enums to be used
+  // in {ASSERT|EXPECT}_EQ when compiled with gcc 4, as anonymous
+  // enums can be implicitly cast to BiggestInt.
+  //
+  // Even though its body looks the same as the above version, we
+  // cannot merge the two, as it will make anonymous enums unhappy.
+  static AssertionResult Compare(const char* expected_expression,
+                                 const char* actual_expression,
+                                 BiggestInt expected,
+                                 BiggestInt actual) {
+    return CmpHelperEQ(expected_expression, actual_expression, expected,
+                       actual);
   }
-    }
-    
-    template <typename Time_Traits>
-void dev_poll_reactor::schedule_timer(timer_queue<Time_Traits>& queue,
-    const typename Time_Traits::time_type& time,
-    typename timer_queue<Time_Traits>::per_timer_data& timer, wait_op* op)
-{
-  boost::asio::detail::mutex::scoped_lock lock(mutex_);
-    }
-    
-    template <typename Time_Traits>
-void epoll_reactor::schedule_timer(timer_queue<Time_Traits>& queue,
-    const typename Time_Traits::time_type& time,
-    typename timer_queue<Time_Traits>::per_timer_data& timer, wait_op* op)
-{
-  mutex::scoped_lock lock(mutex_);
-    }
-    
-    bool js_cocos2dx_physics3d_Physics3DComponent_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DComponent_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DComponent(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DComponent_syncNodeToPhysics(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_addToPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_syncPhysicsToNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_getPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_setPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_setTransformInPhysics(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_getPhysics3DComponentName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_Physics3DComponent(JSContext *cx, uint32_t argc, jsval *vp);
-    
-        return 0;
-}
-int lua_cocos2dx_cocosdenshion_SimpleAudioEngine_resumeBackgroundMusic(lua_State* tolua_S)
-{
-    int argc = 0;
-    CocosDenshion::SimpleAudioEngine* cobj = nullptr;
-    bool ok  = true;
-    
-    
-    
-    struct b2AABB;
-    
-    
-    {		m_debugDraw.DrawString(5, m_textLine, 'step [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.step, aveProfile.step, m_maxProfile.step);
-		m_textLine += DRAW_STRING_NEW_LINE;
-		m_debugDraw.DrawString(5, m_textLine, 'collide [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.collide, aveProfile.collide, m_maxProfile.collide);
-		m_textLine += DRAW_STRING_NEW_LINE;
-		m_debugDraw.DrawString(5, m_textLine, 'solve [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solve, aveProfile.solve, m_maxProfile.solve);
-		m_textLine += DRAW_STRING_NEW_LINE;
-		m_debugDraw.DrawString(5, m_textLine, 'solve init [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solveInit, aveProfile.solveInit, m_maxProfile.solveInit);
-		m_textLine += DRAW_STRING_NEW_LINE;
-		m_debugDraw.DrawString(5, m_textLine, 'solve velocity [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solveVelocity, aveProfile.solveVelocity, m_maxProfile.solveVelocity);
-		m_textLine += DRAW_STRING_NEW_LINE;
-		m_debugDraw.DrawString(5, m_textLine, 'solve position [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solvePosition, aveProfile.solvePosition, m_maxProfile.solvePosition);
-		m_textLine += DRAW_STRING_NEW_LINE;
-		m_debugDraw.DrawString(5, m_textLine, 'solveTOI [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solveTOI, aveProfile.solveTOI, m_maxProfile.solveTOI);
-		m_textLine += DRAW_STRING_NEW_LINE;
-		m_debugDraw.DrawString(5, m_textLine, 'broad-phase [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.broadphase, aveProfile.broadphase, m_maxProfile.broadphase);
-		m_textLine += DRAW_STRING_NEW_LINE;
-	}
-    
-    
-    {
-    {			float minX = -6.0f;
-			float maxX = 0.0f;
-			float minY = 4.0f;
-			float maxY = 6.0f;
-			
-			for (int32 i = 0; i < 400; ++i)
-			{
-				b2BodyDef bd;
-				bd.type = b2_dynamicBody;
-				bd.position = b2Vec2(RandomFloat(minX,maxX),RandomFloat(minY,maxY));
-				b2Body* body = m_world->CreateBody(&bd);
-				body->CreateFixture(&shape, 0.01f);
-			}
-		}
-		
-		{
-			b2PolygonShape shape;
-			shape.SetAsBox(1.5f, 1.5f);
-			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.position.Set(-40.0f,5.0f);
-			bd.bullet = true;
-			b2Body* body = m_world->CreateBody(&bd);
-			body->CreateFixture(&shape, 1.0f);
-			body->SetLinearVelocity(b2Vec2(150.0f, 0.0f));
-		}
-	}
-    
-    		{
-			b2PolygonShape shape;
-			shape.SetAsBox(0.5f, 0.5f);
-    }
-    
-    
-    {			m_speed = 3.0f;
-		}
-    
-    		if (b2_toiCalls > 0)
-		{
-			m_debugDraw.DrawString(5, m_textLine, 'toi calls = %d, ave toi iters = %3.1f, max toi iters = %d',
-				b2_toiCalls, b2_toiIters / float32(b2_toiCalls), b2_toiMaxRootIters);
-			m_textLine += DRAW_STRING_NEW_LINE;
-    }
-    
-    
-#endif /* COMM_COMM_DNS_H_ */
-
-    
-    #endif /* WAKEUPLOCK_H_ */
-
-    
-    
-    {  private:
-    TServicesMap m_services;
-    TServicesMap m_publicservices;
-    std::vector<ServiceBase*> m_releasevec;
 };
     
-    class ServiceBase {
-  public:
-    virtual ~ServiceBase() {}
-    void DependServices(const TServicesMap& _dependservices) { m_dependservices = _dependservices;}
-    const char* ServiceName() const { return m_servicename.c_str();}
+    // Returns the current OS stack trace as an std::string.
+//
+// The maximum number of stack frames to be included is specified by
+// the gtest_stack_trace_depth flag.  The skip_count parameter
+// specifies the number of top frames to be skipped, which doesn't
+// count against the number of frames to be included.
+//
+// For example, if Foo() calls Bar(), which in turn calls
+// GetCurrentOsStackTraceExceptTop(..., 1), Foo() will be included in
+// the trace but Bar() and GetCurrentOsStackTraceExceptTop() won't.
+GTEST_API_ std::string GetCurrentOsStackTraceExceptTop(
+    UnitTest* unit_test, int skip_count);
+    
+      void depart() {
+    if (link_.depart()) delete value_;
+  }
+    
+    template <typename T>
+struct IteratorTraits<const T*> {
+  typedef T value_type;
+};
+    
+    #include <string.h>
+#include <string>
+    
+      GTEST_DECLARE_TUPLE_AS_FRIEND_
+    
+    // Tests negative input.
+TEST(IsPrimeTest, Negative) {
+  // This test belongs to the IsPrimeTest test case.
     }
     
-        void TestFun0();
-    void TestFun2()  {__TestFun1(1);}
+    namespace grpc {
+    }
     
-    #include 'comm/debugger/spy.inl'
+    #include <grpc++/create_channel.h>
+#include <grpc++/security/credentials.h>
+#include <grpc/support/log.h>
     
-    double Node::getComputedWidth(void) const
+    
+    {
+}  // namespace routeguide
+    
+    # ifdef __GNUC_PREREQ
+#  if __GNUC_PREREQ(3,4)
+#   include <limits.h>
+/*Note the casts to (int) below: this prevents OC_CLZ{32|64}_OFFS from
+   'upgrading' the type of an entire expression to an (unsigned) size_t.*/
+#   if INT_MAX>=2147483647
+#    define OC_CLZ32_OFFS ((int)sizeof(unsigned)*CHAR_BIT)
+#    define OC_CLZ32(_x) (__builtin_clz(_x))
+#   elif LONG_MAX>=2147483647L
+#    define OC_CLZ32_OFFS ((int)sizeof(unsigned long)*CHAR_BIT)
+#    define OC_CLZ32(_x) (__builtin_clzl(_x))
+#   endif
+#   if INT_MAX>=9223372036854775807LL
+#    define OC_CLZ64_OFFS ((int)sizeof(unsigned)*CHAR_BIT)
+#    define OC_CLZ64(_x) (__builtin_clz(_x))
+#   elif LONG_MAX>=9223372036854775807LL
+#    define OC_CLZ64_OFFS ((int)sizeof(unsigned long)*CHAR_BIT)
+#    define OC_CLZ64(_x) (__builtin_clzl(_x))
+#   elif LLONG_MAX>=9223372036854775807LL|| \
+     __LONG_LONG_MAX__>=9223372036854775807LL
+#    define OC_CLZ64_OFFS ((int)sizeof(unsigned long long)*CHAR_BIT)
+#    define OC_CLZ64(_x) (__builtin_clzll(_x))
+#   endif
+#  endif
+# endif
+    
+    
+    
+    /* mapping conventions:
+   only one submap (this would change for efficient 5.1 support for example)*/
+/* Four psychoacoustic profiles are used, one for each blocktype */
+static const vorbis_info_mapping0 _map_nominal_u[2]={
+  {1, {0,0,0,0,0,0}, {0}, {0}, 0,{0},{0}},
+  {1, {0,0,0,0,0,0}, {1}, {1}, 0,{0},{0}}
+};
+    
+    #ifndef _V_SCALES_H_
+#define _V_SCALES_H_
+    
+    # ifdef OPENSSL_FIPSCANISTER
+#  include <openssl/fipssyms.h>
+# endif
+    
+    #if defined(__WATCOMC__)
+void GetTSC(unsigned long&);
+#pragma aux GetTSC = 0x0f 0x31 'mov [edi], eax' parm [edi] modify [edx eax];
+#elif defined(__GNUC__)
+inline
+void GetTSC(unsigned long& tsc)
 {
-    return YGNodeLayoutGetWidth(m_node);
+  asm volatile('.byte 15, 49\n\t'
+	       : '=eax' (tsc)
+	       :
+	       : '%edx', '%eax');
+}
+#elif defined(_MSC_VER)
+inline
+void GetTSC(unsigned long& tsc)
+{
+  unsigned long a;
+  __asm _emit 0fh
+  __asm _emit 31h
+  __asm mov a, eax;
+  tsc=a;
+}
+#endif      
+    
+      /// Expire all datums within a bin.
+  void expireRecords(const std::string& list_type,
+                     const std::string& index,
+                     bool all);
+    
+    /// Status get a list of active extenions.
+Status getExtensions(ExtensionList& extensions);
+    
+    struct FlagDetail {
+  std::string description;
+  bool shell;
+  bool external;
+  bool cli;
+  bool hidden;
+};
+    
+      // All control should be from a single daemon.
+  // Wrap all IOCTL API handling in locks to guarantee proper use.
+  lck_mtx_lock(osquery.mtx);
+  switch (cmd) {
+  // Daemon is requesting a new subscription (e.g., monitored path).
+  case OSQUERY_IOCTL_SUBSCRIPTION:
+    sub = (osquery_subscription_args_t *)data;
+    if ((err = subscribe_to_event(sub->event, sub->subscribe))) {
+      goto error_exit;
+    }
+    break;
+    }
+    
+      /*
+   * @brief a variable tracking all of the paths we attempt to carve
+   *
+   * This is a globbed set of file paths that we're expecting will be
+   * carved.
+   */
+  std::set<boost::filesystem::path> carvePaths_;
+    
+    TEST_F(TLSConfigTests, test_runner_and_scheduler) {
+  Flag::updateValue('config_tls_endpoint', '/config');
+  // Will cause another enroll.
+  Registry::get().setActive('config', 'tls');
+    }
+    
+    
+    {  uri_ = TLSRequestHelper::makeURI(FLAGS_config_tls_endpoint);
+  return Status(0, 'OK');
 }
     
-        Value getFlexBasis(void) const;
-    double getFlexGrow(void) const;
-    double getFlexShrink(void) const;
-    
-    
-    {    void toJS(nbind::cbOutput expose) const
-    {
-        expose(width, height);
+    std::string stringFromCFAbsoluteTime(const CFDataRef& cf_abstime) {
+  double value;
+  if (CFNumberGetValue((CFNumberRef)cf_abstime, kCFNumberFloat64Type, &value)) {
+    // Add seconds difference between CFAbsoluteTime and UNIX times.
+    value += kCFAbsoluteTimeIntervalSince1970;
     }
-};
-
-    
-    TEST(YogaTest, computed_layout_margin) {
-  const YGNodeRef root = YGNodeNew();
-  YGNodeStyleSetWidth(root, 100);
-  YGNodeStyleSetHeight(root, 100);
-  YGNodeStyleSetMarginPercent(root, YGEdgeStart, 10);
     }
     
-      const YGNodeRef root_child0 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetAlignSelf(root_child0, YGAlignFlexEnd);
-  YGNodeStyleSetWidth(root_child0, 10);
-  YGNodeStyleSetHeight(root_child0, 10);
-  YGNodeInsertChild(root, root_child0, 0);
-  YGNodeCalculateLayout(root, YGUndefined, YGUndefined, YGDirectionLTR);
+    void BuildSequentialHuffmanCodes(
+    const JPEGData& jpg,
+    std::vector<HuffmanCodeTable>* dc_huffman_code_tables,
+    std::vector<HuffmanCodeTable>* ac_huffman_code_tables) {
+  JPEGOutput out(NullOut, nullptr);
+  BuildAndEncodeHuffmanCodes(jpg, out, dc_huffman_code_tables,
+                             ac_huffman_code_tables);
+}
     
-      ASSERT_FLOAT_EQ(0, YGNodeLayoutGetLeft(root_child1));
-  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root_child1));
-  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetWidth(root_child1));
-  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetHeight(root_child1));
+        size_t i = 0;      // Points to the next leaf node.
+    size_t j = n + 1;  // Points to the next non-leaf node.
+    for (size_t k = n - 1; k != 0; --k) {
+      size_t left, right;
+      if (tree[i].total_count_ <= tree[j].total_count_) {
+        left = i;
+        ++i;
+      } else {
+        left = j;
+        ++j;
+      }
+      if (tree[i].total_count_ <= tree[j].total_count_) {
+        right = i;
+        ++i;
+      } else {
+        right = j;
+        ++j;
+      }
+    }
     
-      YGNodeFreeRecursive(root);
-    
-    #define FROM_HERE facebook::ProgramLocation(__FUNCTION__, __FILE__, __LINE__)
+    void AddApp0Data(JPEGData* jpg) {
+  const unsigned char kApp0Data[] = {
+      0xe0, 0x00, 0x10,              // APP0
+      0x4a, 0x46, 0x49, 0x46, 0x00,  // 'JFIF'
+      0x01, 0x01,                    // v1.01
+      0x00, 0x00, 0x01, 0x00, 0x01,  // aspect ratio = 1:1
+      0x00, 0x00                     // thumbnail width/height
+  };
+  jpg->app_data.push_back(
+      std::string(reinterpret_cast<const char*>(kApp0Data),
+                                 sizeof(kApp0Data)));
+}
