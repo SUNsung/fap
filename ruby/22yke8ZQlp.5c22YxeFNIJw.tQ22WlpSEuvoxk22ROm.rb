@@ -1,54 +1,53 @@
 
         
-          # True if a {Formula} is being built universally.
-  # e.g. on newer Intel Macs this means a combined x86_64/x86 binary/library.
-  # <pre>args << '--universal-binary' if build.universal?</pre>
-  def universal?
-    include?('universal') && option_defined?('universal')
+            Or via the Cask:
+      brew cask install ngrok
+    EOS
   end
-    
-      def xcode
-    if instance_variable_defined?(:@xcode)
-      @xcode
-    elsif MacOS::Xcode.installed?
-      @xcode = MacOS::Xcode.version
-      @xcode += ' => #{MacOS::Xcode.prefix}' unless MacOS::Xcode.default_prefix?
-      @xcode
-    end
-  end
-    
-      def self.factory(name)
-    Formulary.factory(name)
-  end
-    
-          ::Sass.load_paths << stylesheets_path
-    
-        def log_file_info(s)
-      puts '    #{magenta s}'
-    end
-    
-    require 'rake/testtask'
-Rake::TestTask.new do |t|
-  t.libs << 'test'
-  t.test_files = FileList['test/**/*_test.rb']
-  t.verbose = true
 end
-    
-          # Inspired by https://github.com/nov/openid_connect_sample/blob/master/app/controllers/connect/clients_controller.rb#L24
-      def create
-        registrar = OpenIDConnect::Client::Registrar.new(request.url, params)
-        client = Api::OpenidConnect::OAuthApplication.register! registrar
-        render json: client.as_json(root: false)
-      end
-    
-    Liquid::Template.register_tag('blockquote', Jekyll::Blockquote)
 
     
-    require 'pathname'
-require './plugins/octopress_filters'
+      # True if a {Formula} is being built with a specific option.
+  # <pre>args << '--i-want-spam' if build.with? 'spam'
+  #
+  # args << '--qt-gui' if build.with? 'qt' # '--with-qt' ==> build.with? 'qt'
+  #
+  # # If a formula presents a user with a choice, but the choice must be fulfilled:
+  # if build.with? 'example2'
+  #   args << '--with-example2'
+  # else
+  #   args << '--with-example1'
+  # end</pre>
+  def with?(val)
+    option_names = val.respond_to?(:option_names) ? val.option_names : [val]
     
-      class VideoTag < Liquid::Tag
-    @video = nil
-    @poster = ''
-    @height = ''
-    @width = ''
+          # Find commands in Homebrew/dev-cmd
+      if ARGV.homebrew_developer?
+        puts
+        puts 'Built-in development commands'
+        puts_columns internal_development_commands
+      end
+    
+      def last_commit
+    Homebrew.git_last_commit || 'never'
+  end
+    
+        results.map do |name|
+      begin
+        formula = Formulary.factory(name)
+        canonical_name = formula.name
+        canonical_full_name = formula.full_name
+      rescue
+        canonical_name = canonical_full_name = name
+      end
+      # Ignore aliases from results when the full name was also found
+      if aliases.include?(name) && results.include?(canonical_full_name)
+        next
+      elsif (HOMEBREW_CELLAR/canonical_name).directory?
+        pretty_installed(name)
+      else
+        name
+      end
+    end.compact
+  end
+end
