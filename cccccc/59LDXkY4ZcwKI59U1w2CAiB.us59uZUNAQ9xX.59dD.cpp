@@ -1,293 +1,287 @@
 
         
-        TEST(PartialRunMgrFindOrCreate, NewCreate) {
-  // Test that PartialRunMgr creates a new CancellationManager for new steps.
-  PartialRunMgr partial_run_mgr;
-  int step_id = 1;
-  CancellationManager* cancellation_manager;
-  partial_run_mgr.FindOrCreate(step_id, &cancellation_manager);
-  // FindOrCreate on a new step should return a new cancellation_manager.
-  int new_step_id = 2;
-  CancellationManager* new_cancellation_manager;
-  partial_run_mgr.FindOrCreate(new_step_id, &new_cancellation_manager);
-  EXPECT_NE(cancellation_manager, new_cancellation_manager);
-}
+        #include 'brightray/common/content_client.h'
+#include 'brightray/common/main_delegate.h'
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-      bool operator==(const PluginConfig& rhs) const;
-    
-      // Redundant attr
-  ExpectSuccess(Builder().Attr('T', DT_FLOAT).Attr('T', DT_FLOAT), {},
-                {DT_FLOAT}, R'proto(
-      op: 'PolymorphicOut'
-      attr { key: 'T' value { type: DT_FLOAT } } )proto');
-    
-    TEST_F(SubgraphTest, FedOutputs2_FunctionConvention) {
-  ExpectOK(
-      'node { name: 'W1' op: 'TestParams' }'
-      'node { name: 'W2' op: 'TestParams' }'
-      'node { name: 'input' op: 'TestInput' }'
-      'node { name: 't1' op: 'TestMul' input: [ 'W1', 'input:1' ] }'
-      'node { name: 't2' op: 'TestMul' input: [ 'W2', 't1' ] }'
-      'node { name: 't3_a' op: 'TestRelu' input: 't2' }'
-      'node { name: 't3_b' op: 'TestRelu' input: 't2' }');
-  // We feed input:1, but nothing connects to it, so the _recv(input:1)
-  // node also disappears.
-  EXPECT_EQ('OK', Subgraph('input:1,t1,W2', '', 't2',
-                           true /* use_function_convention */));
-  ExpectNodes('_arg_t1_0_1,_arg_W2_0_2,t2');
-}
-    
-      static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
-    
-    #include <string>
-    
-      AtomQuotaPermissionContext();
-  virtual ~AtomQuotaPermissionContext();
-    
-    
-    {}  // namespace atom
-    
-    
-    { private:
-  DISALLOW_COPY_AND_ASSIGN(URLRequestAsyncAsarJob);
-};
-    
-    // Return a new iterator that converts internal keys (yielded by
-// '*internal_iter') that were live at the specified 'sequence' number
-// into appropriate user keys.
-extern Iterator* NewDBIterator(
-    DBImpl* db,
-    const Comparator* user_key_comparator,
-    Iterator* internal_iter,
-    SequenceNumber sequence,
-    uint32_t seed);
-    
-    #include 'db/dbformat.h'
-#include 'port/port.h'
-#include 'util/logging.h'
-#include 'util/testharness.h'
-    
-          case kCompactPointer:
-        if (GetLevel(&input, &level) &&
-            GetInternalKey(&input, &key)) {
-          compact_pointers_.push_back(std::make_pair(level, key));
-        } else {
-          msg = 'compaction pointer';
-        }
-        break;
-    
-    void WriteBatchInternal::Append(WriteBatch* dst, const WriteBatch* src) {
-  SetCount(dst, Count(dst) + Count(src));
-  assert(src->rep_.size() >= kHeader);
-  dst->rep_.append(src->rep_.data() + kHeader, src->rep_.size() - kHeader);
-}
-    
-      // keys[0,n-1] contains a list of keys (potentially with duplicates)
-  // that are ordered according to the user supplied comparator.
-  // Append a filter that summarizes keys[0,n-1] to *dst.
-  //
-  // Warning: do not change the initial contents of *dst.  Instead,
-  // append the newly constructed filter to *dst.
-  virtual void CreateFilter(const Slice* keys, int n, std::string* dst)
-      const = 0;
-    
-    
-static Variant HHVM_FUNCTION(gmp_add,
-                             const Variant& dataA,
-                             const Variant& dataB) {
-  mpz_t gmpDataA, gmpDataB, gmpReturn;
-    }
-    
-    
-    {std::string AsyncFileWriter::getNumDiscardedMsg(size_t numDiscarded) {
-  // We may want to make this customizable in the future (e.g., to allow it to
-  // conform to the LogFormatter style being used).
-  // For now just return a simple fixed message.
-  return folly::to<std::string>(
-      numDiscarded,
-      ' log messages discarded: logging faster than we can write\n');
-}
-} // namespace folly
+    #endif  // ATOM_BROWSER_API_ATOM_API_RENDER_PROCESS_PREFERENCES_H_
 
     
-    std::shared_ptr<LogHandler> FileHandlerFactory::createHandler(
-    const Options& options) {
-  WriterFactory writerFactory;
-  return StandardLogHandlerFactory::createHandler(
-      getType(), &writerFactory, options);
+    // static
+Handle<Event> Event::Create(v8::Isolate* isolate) {
+  return mate::CreateHandle(isolate, new Event(isolate));
 }
     
-    
-    { private:
-  bool async_{true};
-  Optional<size_t> maxBufferSize_;
-};
-    
-    
-    {StringPiece getGlogLevelName(LogLevel level) {
-  if (level < LogLevel::INFO) {
-    return 'VERBOSE';
-  } else if (level < LogLevel::WARN) {
-    return 'INFO';
-  } else if (level < LogLevel::ERR) {
-    return 'WARNING';
-  } else if (level < LogLevel::CRITICAL) {
-    return 'ERROR';
-  }
-  return 'CRITICAL';
-}
-} // namespace
-    
-      using LogWriter::writeMessage;
-  void writeMessage(folly::StringPiece buffer, uint32_t flags = 0) override;
-  void flush() override;
-    
-    void LogCategory::clearHandlers() {
-  std::vector<std::shared_ptr<LogHandler>> emptyHandlersList;
-  // Swap out the handlers list with the handlers_ lock held.
-  {
-    auto handlers = handlers_.wlock();
-    handlers->swap(emptyHandlersList);
-  }
-  // Destroy emptyHandlersList now that the handlers_ lock is released.
-  // This way we don't hold the handlers_ lock while invoking any of the
-  // LogHandler destructors.
+    bool SavePageHandler::Handle(const base::FilePath& full_path,
+                             const content::SavePageType& save_type) {
+  auto download_manager = content::BrowserContext::GetDownloadManager(
+      web_contents_->GetBrowserContext());
+  download_manager->AddObserver(this);
+  // Chromium will create a 'foo_files' directory under the directory of saving
+  // page 'foo.html' for holding other resource files of 'foo.html'.
+  base::FilePath saved_main_directory_path = full_path.DirName().Append(
+      full_path.RemoveExtension().BaseName().value() +
+      FILE_PATH_LITERAL('_files'));
+  bool result = web_contents_->SavePage(full_path,
+                                        saved_main_directory_path,
+                                        save_type);
+  download_manager->RemoveObserver(this);
+  // If initialization fails which means fail to create |DownloadItem|, we need
+  // to delete the |SavePageHandler| instance to avoid memory-leak.
+  if (!result)
+    delete this;
+  return result;
 }
     
-    
-    {  // Update categoryConfigs_ with all of the entries from the other LogConfig.
-  //
-  // Any entries already present in our categoryConfigs_ are merged: if the new
-  // configuration does not include handler settings our entry's settings are
-  // maintained.
-  for (const auto& entry : other.categoryConfigs_) {
-    auto result = categoryConfigs_.insert(entry);
-    if (!result.second) {
-      auto* existingEntry = &result.first->second;
-      auto oldHandlers = std::move(existingEntry->handlers);
-      *existingEntry = entry.second;
-      if (!existingEntry->handlers.hasValue()) {
-        existingEntry->handlers = std::move(oldHandlers);
-      }
-    }
-  }
+    void AtomQuotaPermissionContext::RequestQuotaPermission(
+    const content::StorageQuotaParams& params,
+    int render_process_id,
+    const PermissionCallback& callback) {
+  callback.Run(response::QUOTA_PERMISSION_RESPONSE_ALLOW);
 }
     
-    /**
- * Parse a folly::dynamic object.
- *
- * The input should be an object data type, and is parsed the same as a JSON
- * object accpted by parseLogConfigJson().
- */
-LogConfig parseLogConfigDynamic(const dynamic& value);
-    
-      /// Push / Insert value at beginning/end of the list. Return the length.
-  /// May throw RedisListException
-  int PushLeft(const std::string& key, const std::string& value);
-  int PushRight(const std::string& key, const std::string& value);
-    
-     private:
-  const Comparator* comparator_;
-  const char* data_;       // underlying block contents
-  uint32_t restarts_;      // Offset of restart array (list of fixed32)
-  uint32_t num_restarts_;  // Number of uint32_t entries in restart array
-    
-      // Same as bytes_per_sync, but applies to WAL files
-  // Default: 0, turned off
-  uint64_t wal_bytes_per_sync = 0;
-    
-    /*
- * Class:     org_rocksdb_IngestExternalFileOptions
- * Method:    snapshotConsistency
- * Signature: (J)Z
- */
-jboolean Java_org_rocksdb_IngestExternalFileOptions_snapshotConsistency(
-    JNIEnv* env, jobject jobj, jlong jhandle) {
-  auto* options =
-      reinterpret_cast<rocksdb::IngestExternalFileOptions*>(jhandle);
-  return static_cast<jboolean>(options->snapshot_consistency);
+    Delegate* AutoUpdater::GetDelegate() {
+  return delegate_;
 }
     
-      StatisticsJni::StatisticsJni(std::shared_ptr<Statistics> stats)
-      : StatisticsImpl(stats, false), m_ignore_histograms() {
-  }
+      // net::URLRequestJobFactory::ProtocolHandler:
+  net::URLRequestJob* MaybeCreateJob(
+      net::URLRequest* request,
+      net::NetworkDelegate* network_delegate) const override;
+  bool IsSafeRedirectTarget(const GURL& location) const override;
     
-      grpc::ServerBuilder builder;
-  builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
-  builder.RegisterService(&service);
-  std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
-  std::cerr << 'Server listening on ' << server_address << std::endl;
+      // URLRequestSimpleJob:
+  int GetRefCountedData(std::string* mime_type,
+                        std::string* charset,
+                        scoped_refptr<base::RefCountedMemory>* data,
+                        const net::CompletionCallback& callback) const override;
     
-    
-    { public:
-  StructInNestedNS() {
-    memset(this, 0, sizeof(StructInNestedNS));
-  }
-  StructInNestedNS(int32_t _a, int32_t _b)
-      : a_(flatbuffers::EndianScalar(_a)),
-        b_(flatbuffers::EndianScalar(_b)) {
-  }
-  int32_t a() const {
-    return flatbuffers::EndianScalar(a_);
-  }
-  void mutate_a(int32_t _a) {
-    flatbuffers::WriteScalar(&a_, _a);
-  }
-  int32_t b() const {
-    return flatbuffers::EndianScalar(b_);
-  }
-  void mutate_b(int32_t _b) {
-    flatbuffers::WriteScalar(&b_, _b);
-  }
-};
-STRUCT_END(StructInNestedNS, 8);
-    
-    typedef uintmax_t largest_scalar_t;
-    
-    // Parses one dictionary entry.
-// If successfull, write the enty to Unit and returns true,
-// otherwise returns false.
-bool ParseOneDictionaryEntry(const std::string &Str, Unit *U);
-// Parses the dictionary file, fills Units, returns true iff all lines
-// were parsed succesfully.
-bool ParseDictionaryFile(const std::string &Text, std::vector<Unit> *Units);
-    
-    #endif
-
-    
-    Unit FileToVector(const std::string &Path, size_t MaxSize, bool ExitOnError) {
-  std::ifstream T(Path);
-  if (ExitOnError && !T) {
-    Printf('No such directory: %s; exiting\n', Path.c_str());
-    exit(1);
-  }
+    namespace swift {
     }
     
-    void ListFilesInDirRecursive(const std::string &Dir, long *Epoch,
-                             std::vector<std::string> *V, bool TopDir);
-    
-    std::string Sha1ToString(const uint8_t Sha1[kSHA1NumBytes]);
-    
-    int ExecuteCommand(const std::string &Command);
+        llvm::errs() << '\n=====================================================\n';
+    SyntaxNode->dump(llvm::errs());
+    llvm::errs() << '\n\n---- Maps to semantic node: ----\n\n';
     
     
+    {  bool checkValue(SILValue Value);
+};
+    
+      // Only allow allocation using the allocator in MarkupContext or by
+  // placement new.
+  void *operator new(size_t Bytes, swift::markup::MarkupContext &MC,
+                     unsigned Alignment = alignof(DocComment));
+  void *operator new(size_t Bytes, void *Mem) {
+    assert(Mem);
+    return Mem;
+  }
+    
+    namespace swift {
+namespace syntax {
+    }
+    }
+    
+    namespace llvm {
+  template<> class PointerLikeTypeTraits<swift::ConcreteDeclRef> {
+    typedef llvm::PointerUnion<swift::ValueDecl *,
+                               swift::ConcreteDeclRef::SpecializedDeclRef *>
+      DataPointer;
+    typedef PointerLikeTypeTraits<DataPointer> DataTraits;
+    }
+    }
+    
+    namespace cv { namespace cuda { namespace device
+{
+    struct Emulation
     {
-    {      (void)sigemptyset(&BlockedSignalsSet);
-      (void)sigaddset(&BlockedSignalsSet, SIGCHLD);
-      if (sigprocmask(SIG_BLOCK, &BlockedSignalsSet, &OldBlockedSignalsSet) ==
-          -1) {
-        Printf('Failed to block SIGCHLD\n');
-        // Try our best to restore the signal handlers.
-        (void)sigaction(SIGQUIT, &OldSigQuitAction, NULL);
-        (void)sigaction(SIGINT, &OldSigIntAction, NULL);
-        (void)posix_spawnattr_destroy(&SpawnAttributes);
-        return -1;
-      }
     }
-    ++ActiveThreadCount;
-  }
+    }
+    }
+    }
+    
+    //! @endcond
+    
+    namespace cv {
+    }
+    
+    #define SEC_METHOD_ITERATIONS 4
+#define INITIAL_SEC_METHOD_SIGMA 0.1
+    class ConjGradSolverImpl : public ConjGradSolver
+    {
+    public:
+        Ptr<Function> getFunction() const;
+        void setFunction(const Ptr<Function>& f);
+        TermCriteria getTermCriteria() const;
+        ConjGradSolverImpl();
+        void setTermCriteria(const TermCriteria& termcrit);
+        double minimize(InputOutputArray x);
+    protected:
+        Ptr<MinProblemSolver::Function> _Function;
+        TermCriteria _termcrit;
+        Mat_<double> d,r,buf_x,r_old;
+        Mat_<double> minimizeOnTheLine_buf1,minimizeOnTheLine_buf2;
+    private:
+        static void minimizeOnTheLine(Ptr<MinProblemSolver::Function> _f,Mat_<double>& x,const Mat_<double>& d,Mat_<double>& buf1,Mat_<double>& buf2);
+    };
+    
+    Vec3i cv::cuda::DeviceInfo::maxTexture3D() const
+{
+#ifndef HAVE_CUDA
+    throw_no_cuda();
+    return Vec3i();
+#else
+    return Vec3i(deviceProps().get(device_id_)->maxTexture3D);
+#endif
+}
+    
+        static void CODEGEN_FUNCPTR Switch_UniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
+    {
+        UniformMatrix4x3fv = (PFNUNIFORMMATRIX4X3FVPROC)IntGetProcAddress('glUniformMatrix4x3fv');
+        UniformMatrix4x3fv(location, count, transpose, value);
+    }
+    
+            void Init(ComputationNetworkPtr& net,
+                  const std::list<ComputationNodeBasePtr>& learnableNodes,
+                  const std::vector<ComputationNodeBasePtr>& criterionNodes,
+                  const std::vector<ComputationNodeBasePtr>& evaluationNodes)
+        {
+            m_MBLayoutCache = make_shared<MBLayout>();
+            m_netCriterionAccumulator = make_shared<Matrix<ElemType>>(1, 1, net->GetDeviceId());
+            m_netEvaluationAccumulator = make_shared<Matrix<ElemType>>(1, evaluationNodes.size(), net->GetDeviceId());
+            // remember ptrs to learnable nodes
+            for (auto x : learnableNodes)
+            {
+                shared_ptr<ComputationNode<ElemType>> pLearnableNode = dynamic_pointer_cast<ComputationNode<ElemType>>(x);
+                wstring nodename = x->NodeName();
+                m_LearnableNodePtr[nodename] = pLearnableNode;
+            }
+            for (auto& x : criterionNodes)
+            {
+                m_netCriterionNodes.push_back(dynamic_pointer_cast<ComputationNode<ElemType>>(x));
+            }
+            for (auto& x : evaluationNodes)
+            {
+                m_netEvaluationNodes.push_back(dynamic_pointer_cast<ComputationNode<ElemType>>(x));
+            }
+            m_netCriterionAccumulator->SetValue((ElemType) 0);
+            m_netEvaluationAccumulator->SetValue((ElemType) 0);
+    }
+    
+        wstring nodeName = featureNode->NodeName();
+    if (!NodeNameExists(nodeName))
+        RuntimeError('RemoveFeatureNode: feature node does not exist.');
+    
+        // ProcessPassNDLScript - Process a pass of the NDL script
+    // script - NDL Script to process
+    // ndlPass - complete processing for this pass, all passes if ndlPassAll
+    // skipThrough - for iterative processing, skip through this node in the script (used for in-line MEL processing)
+    // fullValidate - validate as a complete network? (false if this might be a snippet of a full network)
+    // returns: last NDL node processed
+    NDLNode<ElemType>* ProcessPassNDLScript(NDLScript<ElemType>* script, NDLPass ndlPass, NDLNode<ElemType>* skipThrough = nullptr, bool fullValidate = false, const std::wstring& dumpFileName = L'')
+    {
+        if (ndlPass == ndlPassFinal)
+        {
+            // make sure to clear the caches so we pick up the new nodes
+            m_net->InvalidateCompiledNetwork();
+            // if requested then dump the nodes
+            // Note: This happens on the invalidated network.
+            if (dumpFileName != L'')
+                m_net->DumpAllNodesToFile(false, true, dumpFileName);
+        }
+        NDLNodeEvaluatorImpl<ElemType> ndlEvaluator(m_net);
+        NDLNode<ElemType>* lastNode = script->Evaluate(ndlEvaluator, L'', ndlPass, skipThrough);
+        if (ndlPass == ndlPassResolve)
+            SetOutputNodes(script);
+        return lastNode;
+    }
+    
+    template <typename ElemType>
+void DoExportToDbn(const ConfigParameters& config)
+{
+    DEVICEID_TYPE deviceID = DeviceFromConfig(config);
+    }
+    
+    // type of data in this section
+enum SectionType
+{
+    sectionTypeNull = 0,
+    sectionTypeFile = 1,          // file header
+    sectionTypeData = 2,          // data section
+    sectionTypeLabel = 3,         // label data
+    sectionTypeLabelMapping = 4,  // label mapping table (array of strings)
+    sectionTypeStats = 5,         // data statistics
+    sectionTypeCategoryLabel = 6, // labels in category format (float type, all zeros with a single 1.0 per column)
+    sectionTypeMax
+};
+    
+    template <class _T, int _N>
+class hardcoded_array
+{
+    _T data[_N];
+    inline void check_index(size_t i) const
+    {
+        i;
+        assert(i < _N);
+    }
+    inline void check_size(size_t n) const
+    {
+        n;
+        assert(n == _N);
+    }
+    }
+    
+    using namespace folly;
+    
+      testReads(
+      {{0, 5 * 1024 * 1024}, {kAlign, 5 * 1024 * 1024}}, AsyncIO::NOT_POLLABLE);
+    
+    #include <folly/portability/GTest.h>
+    
+    namespace folly {
+    }
+    
+    LogCategoryConfig::LogCategoryConfig(
+    LogLevel l,
+    bool inherit,
+    std::vector<std::string> h)
+    : level{l}, inheritParentLevel{inherit}, handlers{h} {}
+    
+      /**
+   * Block until all messages that have already been sent to this LogHandler
+   * have been processed.
+   *
+   * For LogHandlers that perform asynchronous processing of log messages,
+   * this ensures that messages already sent to this handler have finished
+   * being processed.
+   *
+   * Other threads may still call handleMessage() while flush() is running.
+   * handleMessage() calls that did not complete before the flush() call
+   * started will not necessarily be processed by the flush call.
+   */
+  virtual void flush() = 0;
+    
+      YGNodeCalculateLayout(root, 100, 100, YGDirectionLTR);
+    
+    
+    {  YGConfigFree(config);
+}
+    
+    
+    {  // There are subtle issues with calling the next functions directly. It is
+  // much better to always use a ThreadScope to manage attaching/detaching for
+  // you.
+  FBEXPORT static JNIEnv* ensureCurrentThreadIsAttached();
+  FBEXPORT static void detachCurrentThread();
+};
+    
+    class ProgramLocation {
+public:
+  ProgramLocation() : m_functionName('Unspecified'), m_fileName('Unspecified'), m_lineNumber(0) {}
+    }
+    
+    template <typename T>
+inline bool operator==(const RefPtr<T>& ref, std::nullptr_t ptr) {
+  return ref.get() == ptr;
+}
+    
+    namespace facebook {
+    }
