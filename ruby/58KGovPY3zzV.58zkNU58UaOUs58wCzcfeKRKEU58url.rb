@@ -1,128 +1,182 @@
 
         
-          def initialize(blob, variation_or_variation_key)
-    @blob, @variation = blob, ActiveStorage::Variation.wrap(variation_or_variation_key)
+              keys = Spaceship::Portal::Key.all
+      expect(keys.size).to eq(2)
+      expect(keys.sample).to be_instance_of(Spaceship::Portal::Key)
+    end
   end
     
-          def perform_action(data)
-        find(data).perform_action ActiveSupport::JSON.decode(data['data'])
+        context 'minimal configuration' do
+      let(:options) do
+        {
+          name: { 'en-US' => 'Fastlane Demo' },
+          description: { 'en-US' => 'Demo description' }
+        }
       end
     
-          # Returns an escaped version of +html+ without affecting existing escaped entities.
-      #
-      #   escape_once('1 < 2 &amp; 3')
-      #   # => '1 &lt; 2 &amp; 3'
-      #
-      #   escape_once('&lt;&lt; Accept & Checkout')
-      #   # => '&lt;&lt; Accept &amp; Checkout'
-      def escape_once(html)
-        ERB::Util.html_escape_once(html)
+          def device_avalaible?(serial)
+        load_all_devices
+        return devices.map(&:serial).include?(serial)
       end
     
-          # Returns constant of subscription adapter specified in config/cable.yml.
-      # If the adapter cannot be found, this will default to the Redis adapter.
-      # Also makes sure proper dependencies are required.
-      def pubsub_adapter
-        adapter = (cable.fetch('adapter') { 'redis' })
+          it 'does set the exclude directories' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            cloc(exclude_dir: 'test1,test2,build')
+          end').runner.execute(:test)
     
-            def cast_value(value)
-          case value
-          when true then 1
-          when false then 0
-          else
-            value.to_i rescue nil
-          end
+          it 'properly removes new lines of the build number' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          increment_build_number(build_number: '24\n', xcodeproj: '.xcproject')
+        end').runner.execute(:test)
+    
+    unless dups.empty?
+  puts '\nDuplicate links:'
+  dups.each do |link|
+    puts '- #{link}'
+    puts `grep -nr '#{link}' README.md`
+  end
+  puts '\nDone with errors.'
+  exit(1)
+end
+    
+              # Return the registry
+          data[:provisioners]
         end
     
-      def test_helper_attr
-    assert_nothing_raised { @controller_class.helper_attr :delegate_attr }
-    assert_includes master_helper_methods, :delegate_attr
-    assert_includes master_helper_methods, :delegate_attr=
+    module Vagrant
+  module Plugin
+    module V2
+      # This is the base class for a provider for the V2 API. A provider
+      # is responsible for creating compute resources to match the needs
+      # of a Vagrant-configured system.
+      class Provider
+        include CapabilityHost
+    
+            @template_root = data.delete(:template_root)
+        @template_root ||= Vagrant.source_root.join('templates')
+        @template_root = Pathname.new(@template_root)
+    
+    require 'test/unit'
+require 'mkmf'
+require 'tmpdir'
+    
+      #
+  # Returns a string which represents the time as a dateTime defined by XML
+  # Schema:
+  #
+  #   CCYY-MM-DDThh:mm:ssTZD
+  #   CCYY-MM-DDThh:mm:ss.sssTZD
+  #
+  # where TZD is Z or [+-]hh:mm.
+  #
+  # If self is a UTC time, Z is used as TZD.  [+-]hh:mm is used otherwise.
+  #
+  # +fractional_digits+ specifies a number of digits to use for fractional
+  # seconds.  Its default value is 0.
+  #
+  # You must require 'time' to use this method.
+  #
+  def xmlschema(fraction_digits=0)
+    fraction_digits = fraction_digits.to_i
+    s = strftime('%FT%T')
+    if fraction_digits > 0
+      s << strftime('.%#{fraction_digits}N')
+    end
+    s << (utc? ? 'Z' : strftime('%:z'))
   end
-    
-        test 'the middleware stack is exposed as 'middleware' in the controller' do
-      result = @app.call(env_for('/'))
-      assert_equal 'First!', result[1]['Middleware-Order']
-    end
-    
-          debug { event.payload[:mail] }
-    end
-    
-        class AdbHelper
-      # Path to the adb binary
-      attr_accessor :adb_path
-    
-          private
-    
-      def failure
-    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
-    redirect_to after_omniauth_failure_path_for(resource_name)
-  end
-    
-      # POST /resource/password
-  def create
-    self.resource = resource_class.send_reset_password_instructions(resource_params)
-    yield resource if block_given?
-    
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
-    end
-    
-    require 'rack/test'
-require 'action_controller/railtie'
-require 'active_record'
-require 'devise/rails/routes'
-require 'devise/rails/warden_compat'
-    
-        def silence_log
-      @silence = true
-      yield
-    ensure
-      @silence = false
-    end
-  end
+  alias iso8601 xmlschema
 end
-
     
-      # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
-end
-
-    
-      # Configure static asset server for tests with Cache-Control for performance.
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
+      def test_exit_status
+    Open3.popen3(RUBY, '-e', 'exit true') {|i,o,e,t|
+      assert_equal(true, t.value.success?)
+    }
+    Open3.popen3(RUBY, '-e', 'exit false') {|i,o,e,t|
+      assert_equal(false, t.value.success?)
+    }
   end
-  config.static_cache_control = 'public, max-age=3600'
     
-          alias default_reaction deny
+            opts.on '--no-retry', 'Disable --retry' do
+          options[:retry] = false
+        end
     
-          def escape_string(str)
-        str = @escaper.escape_url(str)        if @url
-        str = @escaper.escape_html(str)       if @html
-        str = @escaper.escape_javascript(str) if @javascript
-        str
+        #
+    # Replace %\w+% into the environment value of what is contained between the %'s
+    # This method is used for REG_EXPAND_SZ.
+    #
+    # For detail, see expandEnvironmentStrings[http://msdn.microsoft.com/library/en-us/sysinfo/base/expandenvironmentstrings.asp] \Win32 \API.
+    #
+    def self.expand_environ(str)
+      str.gsub(Regexp.compile('%([^%]+)%'.encode(str.encoding))) {
+        v = $1.encode(LOCALE)
+        (e = ENV[v] || ENV[v.upcase]; e.encode(str.encoding) if e) ||
+        $&
+      }
+    end
+    
+    
+    {    r1, w1 = IO.pipe
+    r2, w2 = IO.pipe
+    t1 = Thread.new { w1 << megacontent; w1.close }
+    t2 = Thread.new { r2.read; r2.close }
+    IO.copy_stream(r1, w2) rescue nil
+    w2.close
+    r1.close
+    t1.join
+    t2.join
+  }, 'megacontent-copy_stream', ['INT'], :timeout => 10 or break
+end
+    
+    require_relative 'converter/fonts_conversion'
+require_relative 'converter/less_conversion'
+require_relative 'converter/js_conversion'
+require_relative 'converter/logger'
+require_relative 'converter/network'
+    
+      # Disable automatic flushing of the log to improve performance.
+  # config.autoflush_log = false
+    
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
+    
+        def cache(gist, file, data)
+      cache_file = get_cache_file_for gist, file
+      File.open(cache_file, 'w') do |io|
+        io.write data
       end
     end
-  end
-end
-
     
-          get '/?95df8d9bf5237ad08df3115ee74dcb10'
-      expect(body).to eq('hi')
-    end
-    
-      if ''.respond_to?(:encoding)  # Ruby 1.9+ M17N
-    context 'PATH_INFO's encoding' do
-      before do
-        @app = Rack::Protection::PathTraversal.new(proc { |e| [200, {'Content-Type' => 'text/plain'}, [e['PATH_INFO'].encoding.to_s]] })
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
       end
     
-      it 'should set the X-Content-Type-Options' do
-    expect(get('/', {}, 'wants' => 'text/html').header['X-Content-Type-Options']).to eq('nosniff')
-  end
+      class IncludeCodeTag < Liquid::Tag
+    def initialize(tag_name, markup, tokens)
+      @title = nil
+      @file = nil
+      if markup.strip =~ /\s*lang:(\S+)/i
+        @filetype = $1
+        markup = markup.strip.sub(/lang:\S+/i,'')
+      end
+      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
+        @title = $1 || nil
+        @file = $3
+      end
+      super
+    end
+    
+          def get_shallow(*path)
+        snapshot.metric_store.get_shallow(*path)
+      end
+    
+        def _1
+      elements[1]
+    end
