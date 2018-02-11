@@ -1,66 +1,54 @@
 
         
-            To install Clojure you should install Leiningen:
-      brew install leiningen
-    and then follow the tutorial:
-      https://github.com/technomancy/leiningen/blob/stable/doc/TUTORIAL.md
-    EOS
-  when 'osmium' then <<-EOS.undent
-    The creator of Osmium requests that it not be packaged and that people
-    use the GitHub master branch instead.
-    EOS
-  when 'gfortran' then <<-EOS.undent
-    GNU Fortran is now provided as part of GCC, and can be installed with:
-      brew install gcc
-    EOS
-  when 'play' then <<-EOS.undent
-    Play 2.3 replaces the play command with activator:
-      brew install typesafe-activator
-    
-      def fetch_checksum_for(tag)
-    tag = find_matching_tag(tag)
-    return self[tag], tag if tag
+          # True if a {Formula} is being built universally.
+  # e.g. on newer Intel Macs this means a combined x86_64/x86 binary/library.
+  # <pre>args << '--universal-binary' if build.universal?</pre>
+  def universal?
+    include?('universal') && option_defined?('universal')
   end
     
-          return false unless prune_time
-    
-      def find_internal_commands(directory)
-    directory.children.reduce([]) do |cmds, f|
-      cmds << f.basename.to_s.sub(/\.(?:rb|sh)$/, '') if f.file?
-      cmds
+      def xcode
+    if instance_variable_defined?(:@xcode)
+      @xcode
+    elsif MacOS::Xcode.installed?
+      @xcode = MacOS::Xcode.version
+      @xcode += ' => #{MacOS::Xcode.prefix}' unless MacOS::Xcode.default_prefix?
+      @xcode
     end
   end
-end
-
     
-      def python(_options = {}, &block)
-    opoo 'Formula#python is deprecated and will go away shortly.'
-    block.call if block_given?
-    PythonRequirement.new
+      def self.factory(name)
+    Formulary.factory(name)
   end
-  alias_method :python2, :python
-  alias_method :python3, :python
+    
+          ::Sass.load_paths << stylesheets_path
+    
+        def log_file_info(s)
+      puts '    #{magenta s}'
+    end
+    
+    require 'rake/testtask'
+Rake::TestTask.new do |t|
+  t.libs << 'test'
+  t.test_files = FileList['test/**/*_test.rb']
+  t.verbose = true
 end
-
     
-    module Api
-  module OpenidConnect
-    class ClientsController < ApplicationController
-      skip_before_action :verify_authenticity_token
-    
-          def create
-        req = Rack::Request.new(request.env)
-        if req['client_assertion_type'] == 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
-          handle_jwt_bearer(req)
-        end
-        self.status, headers, self.response_body = Api::OpenidConnect::TokenEndpoint.new.call(request.env)
-        headers.each {|name, value| response.headers[name] = value }
-        nil
+          # Inspired by https://github.com/nov/openid_connect_sample/blob/master/app/controllers/connect/clients_controller.rb#L24
+      def create
+        registrar = OpenIDConnect::Client::Registrar.new(request.url, params)
+        client = Api::OpenidConnect::OAuthApplication.register! registrar
+        render json: client.as_json(root: false)
       end
     
-            def initialize(name, declaration_node, scope)
-          unless VARIABLE_DECLARATION_TYPES.include?(declaration_node.type)
-            raise ArgumentError,
-                  'Node type must be any of #{VARIABLE_DECLARATION_TYPES}, ' \
-                  'passed #{declaration_node.type}'
-          end
+    Liquid::Template.register_tag('blockquote', Jekyll::Blockquote)
+
+    
+    require 'pathname'
+require './plugins/octopress_filters'
+    
+      class VideoTag < Liquid::Tag
+    @video = nil
+    @poster = ''
+    @height = ''
+    @width = ''
