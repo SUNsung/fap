@@ -1,54 +1,103 @@
 
         
-            with app.app_context():
-        init_db()
-        yield app
+                # put all lines in the file into a Python list
+        strings = f.readlines()
+        
+        # above line leaves trailing newline characters; strip them out
+        strings = [x.strip(u'\n') for x in strings]
+        
+        # remove empty-lines and comments
+        strings = [x for x in strings if x and not x.startswith(u'#')]
+        
+        # insert empty string since all are being removed
+        strings.insert(0, u'')
     
-        # now unfollow and check if that worked
-    rv = client.get('/foo/unfollow', follow_redirects=True)
-    assert b'You are no longer following &#34;foo&#34;' in rv.data
-    rv = client.get('/')
-    assert b'the message by foo' not in rv.data
-    assert b'the message by bar' in rv.data
+            morsel_b = cookies.Morsel()
+        morsel_b.update(attribs)
+        morsel_b.set(*base_case)
+        morsel_b['comment'] = 'bar'
+        self.assertFalse(morsel_a == morsel_b)
+        self.assertTrue(morsel_a != morsel_b)
+    
+    if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        zones = TZInfo.zonelist()
+        for z in zones:
+            print(z)
+        sys.exit()
+    filepath = sys.argv[1]
+    if not filepath.startswith('/'):
+        filepath = os.path.join('/usr/share/zoneinfo', filepath)
+    with open(filepath, 'rb') as fileobj:
+        tzi = TZInfo.fromfile(fileobj)
+    tzi.dump(sys.stdout)
 
     
-        try:
-        return json.dumps(result, sort_keys=True, indent=indent, ensure_ascii=False)
-    except UnicodeDecodeError:
-        return json.dumps(result, sort_keys=True, indent=indent)
-
+        def test_header(self):
+        '''Make sure the required fields are in the header, according to:
+           http://www.gnu.org/software/gettext/manual/gettext.html#Header-Entry
+        '''
+        with temp_cwd(None) as cwd:
+            assert_python_ok(self.script)
+            with open('messages.pot') as fp:
+                data = fp.read()
+            header = self.get_header(data)
     
-      def testPtbRawData(self):
-    tmpdir = tf.test.get_temp_dir()
-    for suffix in 'train', 'valid', 'test':
-      filename = os.path.join(tmpdir, 'ptb.%s.txt' % suffix)
-      with tf.gfile.GFile(filename, 'w') as fh:
-        fh.write(self._string_data)
-    # Smoke test
-    output = reader.ptb_raw_data(tmpdir)
-    self.assertEqual(len(output), 4)
+    +----------------+
+| ID (4 bytes)   |
++----------------+
+| size (4 bytes) |
++----------------+
+| data           |
+| ...            |
++----------------+
     
-        optimizer = tf.train.AdagradOptimizer(learning_rate=0.1)
-    train_op = optimizer.minimize(loss, global_step=tf.train.get_global_step())
-    return tf.estimator.EstimatorSpec(mode, loss=loss, train_op=train_op)
+        def flush(self):
+        '''Write any pending changes to the disk.'''
+        raise NotImplementedError('Method must be implemented by subclass')
     
-        # class_ids will be the model prediction for the class (Iris flower type)
-    # The output node with the highest value is our prediction
-    predictions = { 'class_ids': tf.argmax(input=logits, axis=1) }
+        def test_oldargs1_1_kw(self):
+        self.assertRaises(TypeError, [].count, {}, x=2)
     
-    Forward-backward pass:
-Run on Tesla K40c: 480 +/- 48 ms / batch
-Run on Titan X:    244 +/- 30 ms / batch
+        def write(self, data):
+        if self.maxlen:
+            if len(data) + len(self._val) > self.maxlen:
+                # Truncation:
+                self._val += data[0:self.maxlen - len(self._val)]
+                raise StringTruncated()
+    
+        @gen_test
+    def asyncSetUp(self):
+        listener, port = bind_unused_port()
+        event = Event()
+    
+    
+# This is kind of hacky, but run some of the HTTPServer and web tests
+# through WSGIContainer and WSGIApplication to make sure everything
+# survives repeated disassembly and reassembly.
+class WSGIConnectionTest(httpserver_test.HTTPConnectionTest):
+    def get_app(self):
+        return WSGIContainer(validator(WSGIApplication(self.get_handlers())))
+    
+            # Make sure the tornado module under test is available to the test
+        # application
+        pythonpath = os.getcwd()
+        if 'PYTHONPATH' in os.environ:
+            pythonpath += os.pathsep + os.environ['PYTHONPATH']
+    
+    See file_uploader.py in this directory for code that uploads files in this format.
 '''
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
     
-        def run(self, args, opts):
-        if len(args) < 1:
-            raise UsageError()
-        elif len(args) > 1:
-            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
-        spname = args[0]
+        app = Application(
+        [
+            ('/', MainHandler),
+            ('/login', LoginHandler),
+            ('/logout', LogoutHandler),
+        ],
+        login_url='/login',
+        **options.group_dict('application'))
+    app.listen(options.port)
     
-        forbidden_extensions = ['html', 'htm'] if results.nohtml else []
+    
+if __name__ == '__main__':
+    main()
