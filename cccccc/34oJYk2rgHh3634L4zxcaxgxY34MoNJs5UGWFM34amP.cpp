@@ -1,159 +1,131 @@
 
         
-            state->preFilterType = CV_STEREO_BM_XSOBEL; //CV_STEREO_BM_NORMALIZED_RESPONSE;
-    state->preFilterSize = 9;
-    state->preFilterCap = 31;
-    state->SADWindowSize = 15;
-    state->minDisparity = 0;
-    state->numberOfDisparities = numberOfDisparities > 0 ? numberOfDisparities : 64;
-    state->textureThreshold = 10;
-    state->uniquenessRatio = 15;
-    state->speckleRange = state->speckleWindowSize = 0;
-    state->trySmallerWindows = 0;
-    state->roi1 = state->roi2 = cvRect(0,0,0,0);
-    state->disp12MaxDiff = -1;
+        #include <memory>
     
-    
-    {
-    {            low_sum = quantile_sum;
-            start_x = x;
-        }
-    }
-    
-    
-    {            ptr[tid] = partial = partial + ptr[tid + 16];
-            ptr[tid] = partial = partial + ptr[tid + 8];
-            ptr[tid] = partial = partial + ptr[tid + 4];
-            ptr[tid] = partial = partial + ptr[tid + 2];
-            ptr[tid] = partial = partial + ptr[tid + 1];
-        }
-    
-    
-    {} // namespace
-    
-      explicit WorkloadStats(State guardedState);
-  ~WorkloadStats();
-    
-    namespace HPHP { namespace jit {
-    }
-    }
-    
-      // ref counting
-  void incRefCount();
-  void decRefCount();
-    
-    /**
- * A registry mapping server type names to ServerFactory objects.
- *
- * This allows new server types to be plugged in dynamically, without having to
- * hard code the list of all possible server types.
+    /* Starts the stream by sending request to |url| using |method| and |headers|.
+ * If |end_of_stream| is true, then no data is expected to be written. The
+ * |method| is HTTP verb, with PUT having a special meaning to mark idempotent
+ * request, which could use QUIC 0-RTT.
  */
-struct ServerFactoryRegistry {
-  ServerFactoryRegistry();
+GRPC_SUPPORT_EXPORT
+int bidirectional_stream_start(bidirectional_stream* stream,
+                               const char* url,
+                               int priority,
+                               const char* method,
+                               const bidirectional_stream_header_array* headers,
+                               bool end_of_stream);
+    
+        EchoRequest request;
+    while (server_return_after_n_reads--) {
+      EXPECT_TRUE(reader->Read(&request));
     }
     
-    inline void initNuma() {}
-inline constexpr int next_numa_node(std::atomic_int& curr_node) { return 0; }
-inline constexpr int num_numa_nodes() { return 1; }
-inline void numa_interleave(void* start, size_t size) {}
-inline void numa_bind_to(void* start, size_t size, int node) {}
-inline constexpr bool numa_node_allowed(int node) { return true; }
+    static int is_compressed(grpc_byte_buffer* buffer) {
+  switch (buffer->type) {
+    case GRPC_BB_RAW:
+      if (buffer->data.raw.compression == GRPC_COMPRESS_NONE) {
+        return 0 /* GPR_FALSE */;
+      }
+      break;
+  }
+  return 1 /* GPR_TRUE */;
+}
     
-      if (rl.rlim_max == RLIM_INFINITY) {
-    ret.set(hardStr, 'unlimited');
-  } else {
-    ret.set(hardStr, (int)rl.rlim_max);
+      // Shut down everything properly.
+  gpr_log(GPR_INFO, 'Shutting down.');
+  {
+    std::lock_guard<std::mutex> lock(mu);
+    shutting_down = true;
+  }
+  server->Shutdown();
+  cq->Shutdown();
+  server->Wait();
+    
+    gpr_once g_once_init_add_prod_ssl_provider = GPR_ONCE_INIT;
+// Register ssl with non-test roots type to the credentials provider.
+void AddProdSslType() {
+  testing::GetCredentialsProvider()->AddSecureType(
+      kProdTlsCredentialsType, std::unique_ptr<testing::CredentialTypeProvider>(
+                                   new SslCredentialProvider));
+}
+    
+    namespace grpc {
+namespace testing {
+    }
+    }
+    
+      bool Finished() {
+    return current_ >= db_.size();
   }
     
-    namespace irgen {
-    }
+        ImGuiIO& io = ImGui::GetIO();
+    io.KeyMap[ImGuiKey_Tab] = ALLEGRO_KEY_TAB;
+    io.KeyMap[ImGuiKey_LeftArrow] = ALLEGRO_KEY_LEFT;
+    io.KeyMap[ImGuiKey_RightArrow] = ALLEGRO_KEY_RIGHT;
+    io.KeyMap[ImGuiKey_UpArrow] = ALLEGRO_KEY_UP;
+    io.KeyMap[ImGuiKey_DownArrow] = ALLEGRO_KEY_DOWN;
+    io.KeyMap[ImGuiKey_PageUp] = ALLEGRO_KEY_PGUP;
+    io.KeyMap[ImGuiKey_PageDown] = ALLEGRO_KEY_PGDN;
+    io.KeyMap[ImGuiKey_Home] = ALLEGRO_KEY_HOME;
+    io.KeyMap[ImGuiKey_End] = ALLEGRO_KEY_END;
+    io.KeyMap[ImGuiKey_Insert] = ALLEGRO_KEY_INSERT;
+    io.KeyMap[ImGuiKey_Delete] = ALLEGRO_KEY_DELETE;
+    io.KeyMap[ImGuiKey_Backspace] = ALLEGRO_KEY_BACKSPACE;
+    io.KeyMap[ImGuiKey_Space] = ALLEGRO_KEY_SPACE;
+    io.KeyMap[ImGuiKey_Enter] = ALLEGRO_KEY_ENTER;
+    io.KeyMap[ImGuiKey_Escape] = ALLEGRO_KEY_ESCAPE;
+    io.KeyMap[ImGuiKey_A] = ALLEGRO_KEY_A;
+    io.KeyMap[ImGuiKey_C] = ALLEGRO_KEY_C;
+    io.KeyMap[ImGuiKey_V] = ALLEGRO_KEY_V;
+    io.KeyMap[ImGuiKey_X] = ALLEGRO_KEY_X;
+    io.KeyMap[ImGuiKey_Y] = ALLEGRO_KEY_Y;
+    io.KeyMap[ImGuiKey_Z] = ALLEGRO_KEY_Z;
     
-    QueryData genKernelIntegrity(QueryContext &context) {
-  QueryData results;
-  Row r;
-  std::string content;
-  std::string text_segment_hash;
-  std::string syscall_addr_modified;
-    }
+            // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
     
-     public:
-  /// Database-specific workflow: reset the originally request instance.
-  Status reset();
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
     
-      /// An Event ID is assigned by the EventPublisher within the EventContext.
-  /// This is not used to store event date in the backing store.
-  std::atomic<EventContextID> next_ec_id_{0};
+    #include 'imgui.h'
+#include 'imgui_impl_sdl_gl2.h'
+#include <stdio.h>
+#include <SDL.h>
+#include <SDL_opengl.h>
     
-    // Borrowed from VirtualBox
-#if !defined(RT_GCC_SUPPORTS_VISIBILITY_HIDDEN) || \
-    defined(RT_NO_VISIBILITY_HIDDEN)
-#define DECLHIDDEN(type) type
-#else
-#define DECLHIDDEN(type) __attribute__((visibility('hidden'))) type
-#endif
-    
-    Status FilesystemConfigPlugin::genConfig(
-    std::map<std::string, std::string>& config) {
-  boost::system::error_code ec;
-  if (!fs::is_regular_file(FLAGS_config_path, ec) ||
-      ec.value() != errc::success) {
-    return Status(1, 'config file does not exist: ' + FLAGS_config_path);
-  }
-    }
-    
-    
+        // Main loop
+    bool done = false;
+    while (!done)
     {
-    {  return '0';
-}
-}
-
-    
-    	XLoggerInfo xlog_info;
-	gettimeofday(&xlog_info.timeval, NULL);
-	xlog_info.level = (TLogLevel)_level;
-	xlog_info.line = (int)_line;
-	xlog_info.pid = (int)_pid;
-	xlog_info.tid = LONGTHREADID2INT(_tid);
-	xlog_info.maintid = LONGTHREADID2INT(_maintid);
-    
-    void Test_Spy_Sample::TestFun0()
-{
-    SPY_HOOK_THIS_API(TestFun0);
-    int i = 0;
-    SPY_ATTACH_VARIABLE('TestFun0 i', i);
-    i++;
-    xinfo2(TSF'Test');
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            ImGui_ImplSdlGL3_ProcessEvent(&event);
+            if (event.type == SDL_QUIT)
+                done = true;
+        }
+        ImGui_ImplSdlGL3_NewFrame(window);
     }
     
-    //
-//  testspy.h
-//  PublicComponent
-//
-//  Created by yerungui on 14-5-13.
-//
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-        jobject     (*AllocObject)(JNIEnv*, jclass);
-    jobject     (*NewObject)(JNIEnv*, jclass, jmethodID, ...);
-    jobject     (*NewObjectV)(JNIEnv*, jclass, jmethodID, va_list);
-    jobject     (*NewObjectA)(JNIEnv*, jclass, jmethodID, jvalue*);
-    
-    #include <gtest/gtest.h>
-#include <yoga/Yoga.h>
-    
-      const YGNodeRef root_child0 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(root_child0, 10);
-  YGNodeStyleSetHeight(root_child0, 10);
-  YGNodeInsertChild(root, root_child0, 0);
-  YGNodeCalculateLayout(root, YGUndefined, YGUndefined, YGDirectionLTR);
-    
-      ASSERT_FLOAT_EQ(0, YGNodeLayoutGetLeft(root_child0));
-  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root_child0));
-  ASSERT_FLOAT_EQ(100, YGNodeLayoutGetWidth(root_child0));
-  ASSERT_FLOAT_EQ(100, YGNodeLayoutGetHeight(root_child0));
-    
-    
-    {}
+            // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
