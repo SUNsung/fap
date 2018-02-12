@@ -1,148 +1,161 @@
 
         
-            # Returns the unwrapped subject and body of the last commit
-    # <b>DEPRECATED:</b> Use <tt>last_git_commit_message</tt> instead.
-    def self.last_git_commit
-      UI.important('`last_git_commit` is deprecated. Please use `last_git_commit_message` instead.')
-      last_git_commit_message
-    end
+        # Some non-image blobs can be previewed: that is, they can be presented as images. A video blob can be previewed by
+# extracting its first frame, and a PDF blob can be previewed by extracting its first page.
+#
+# A previewer extracts a preview image from a blob. Active Storage provides previewers for videos and PDFs:
+# ActiveStorage::Previewer::VideoPreviewer and ActiveStorage::Previewer::PDFPreviewer. Build custom previewers by
+# subclassing ActiveStorage::Previewer and implementing the requisite methods. Consult the ActiveStorage::Previewer
+# documentation for more details on what's required of previewers.
+#
+# To choose the previewer for a blob, Active Storage calls +accept?+ on each registered previewer in order. It uses the
+# first previewer for which +accept?+ returns true when given the blob. In a Rails application, add or remove previewers
+# by manipulating +Rails.application.config.active_storage.previewers+ in an initializer:
+#
+#   Rails.application.config.active_storage.previewers
+#   # => [ ActiveStorage::Previewer::PDFPreviewer, ActiveStorage::Previewer::VideoPreviewer ]
+#
+#   # Add a custom previewer for Microsoft Office documents:
+#   Rails.application.config.active_storage.previewers << DOCXPreviewer
+#   # => [ ActiveStorage::Previewer::PDFPreviewer, ActiveStorage::Previewer::VideoPreviewer, DOCXPreviewer ]
+#
+# Outside of a Rails application, modify +ActiveStorage.previewers+ instead.
+#
+# The built-in previewers rely on third-party system libraries:
+#
+# * {ffmpeg}[https://www.ffmpeg.org]
+# * {mupdf}[https://mupdf.com]
+#
+# These libraries are not provided by Rails. You must install them yourself to use the built-in previewers. Before you
+# install and use third-party software, make sure you understand the licensing implications of doing so.
+class ActiveStorage::Preview
+  class UnprocessedError < StandardError; end
     
-          it 'renders HTML' do
-        expect(render(options, screenshots)).to match(/<html>/)
+            attr_reader :value_transformation
+    
+            def test_url_from_environment
+          spec = resolve :production, 'production' => 'abstract://foo?encoding=utf8'
+          assert_equal({
+            'adapter'  =>  'abstract',
+            'host'     =>  'foo',
+            'encoding' => 'utf8',
+            'name'     => 'production' }, spec)
+        end
+    
+          test 'when a callback is modified in a child with :only, it works for the :only action' do
+        @controller.process(:index)
+        assert_equal 'Hello world', @controller.response_body
       end
-    end
     
-          xcode_project = Xcodeproj::Project.open(@project_file_path)
-      target = xcode_project.targets.find { |t| t.name == @target_name }
-    
-            expect(result).to eq('hg parent --template '{node|short}'')
-        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('hg parent --template '{node|short}'')
+        private
+      # 'Deserialize' the mailer class name by hand in case another argument
+      # (like a Global ID reference) raised DeserializationError.
+      def mailer_class
+        if mailer = Array(@serialized_arguments).first || Array(arguments).first
+          mailer.constantize
+        end
       end
     
-          it 'gets the correct version number for 'TargetATests'' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          get_version_number(xcodeproj: '.xcproject', target: 'TargetATests')
-        end').runner.execute(:test)
-        expect(result).to eq('4.3.2')
-      end
+      private
     
-      class Worker
-    attr_reader :thread, :id, :agent, :config, :mutex, :scheduler, :restarting
-    
-      included do
-    include Oauthable
-    
-        # replace CSS rule blocks matching rule_prefix with yield(rule_block, rule_pos)
-    # will also include immediately preceding comments in rule_block
-    #
-    # option :comments -- include immediately preceding comments in rule_block
-    #
-    # replace_rules('.a{ \n .b{} }', '.b') { |rule, pos| '>#{rule}<'  } #=> '.a{ \n >.b{}< }'
-    def replace_rules(less, selector = SELECTOR_RE, options = {}, &block)
-      options       = {prefix: true, comments: true}.merge(options || {})
-      less          = less.dup
-      s             = CharStringScanner.new(less)
-      rule_re       = if options[:prefix]
-                        /(?:#{selector}[#{SELECTOR_CHAR})=(\s]*?#{RULE_OPEN_BRACE_RE})/
-                      else
-                        /#{selector}[\s]*#{RULE_OPEN_BRACE_RE}/
-                      end
-      rule_start_re = if options[:comments]
-                        /(?:#{COMMENT_RE}*)^#{rule_re}/
-                      else
-                        /^#{rule_re}/
-                      end
-    
-      def test_font_helper_without_suffix
-    assert_match %r(url\(['']?/assets/.*eot['']?\)), @css
+      def head
+    Homebrew.git_head || '(none)'
   end
     
-          metadata_master_container_path.join(cask_version)
-    end
+      UNBREWED_EXCLUDE_FILES = %w[.DS_Store]
+  UNBREWED_EXCLUDE_PATHS = %w[
+    .github/*
+    bin/brew
+    lib/gdk-pixbuf-2.0/*
+    lib/gio/*
+    lib/node_modules/*
+    lib/python[23].[0-9]/*
+    lib/pypy/*
+    lib/pypy3/*
+    lib/ruby/gems/[12].*
+    lib/ruby/site_ruby/[12].*
+    lib/ruby/vendor_ruby/[12].*
+    share/pypy/*
+    share/pypy3/*
+    share/doc/homebrew/*
+    share/info/dir
+    share/man/man1/brew.1
+    share/man/whatis
+  ]
     
-    module Hbc
-  class DSL
-    class Container
-      VALID_KEYS = Set.new [
-        :type,
-        :nested,
-      ]
-    
-        export LANG=en_US.UTF-8
-    DOC
-  else
-    STDERR.puts <<-DOC
-    \e[33mWARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
-    Consider adding the following to ~/.profile:
-    
-              If there is multiple cache for various versions of the requested pod,
-          you will be asked which one to clean. Use `--all` to clean them all.
-    
-            # Split out the targets into app and test targets
-        test_targets, app_targets = project.native_targets.
-                              sort_by { |t| t.name.downcase }.
-                              partition(&:test_target_type?)
-    
-            TEMPLATE_REPO = 'https://github.com/CocoaPods/pod-template.git'.freeze
-        TEMPLATE_INFO_URL = 'https://github.com/CocoaPods/pod-template'.freeze
-        CREATE_NEW_POD_INFO_URL = 'http://guides.cocoapods.org/making/making-a-cocoapod'.freeze
-    
-          def self.options
-        [
-          ['--update', 'Run `pod repo update` before listing'],
-          ['--stats',  'Show additional stats (like GitHub watchers and forks)'],
-        ].concat(super)
+        def render(options, screenshots)
+      Dir.mktmpdir do |dir|
+        path = generator.render(options, screenshots, dir)
+        return File.read(path)
       end
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   XSS
-    # Supported browsers:: all
-    # More infos::         http://en.wikipedia.org/wiki/Cross-site_scripting
-    #
-    # Automatically escapes Rack::Request#params so they can be embedded in HTML
-    # or JavaScript without any further issues. Calls +html_safe+ on the escaped
-    # strings if defined, to avoid double-escaping in Rails.
-    #
-    # Options:
-    # escape:: What escaping modes to use, should be Symbol or Array of Symbols.
-    #          Available: :html (default), :javascript, :url
-    class EscapedParams < Base
-      extend Rack::Utils
-    
-        it 'accepts requests with a single session cookie' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=SESSION_TOKEN'
-      expect(last_response).to be_ok
-    end
-    
-      %w(GET HEAD).each do |method|
-    it 'accepts #{method} requests with non-whitelisted Origin' do
-      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://malicious.com')).to be_ok
     end
   end
     
-          it 'should remain unchanged as ASCII-8BIT' do
-        body = @app.call({ 'PATH_INFO' => '/'.encode('ASCII-8BIT') })[2][0]
-        expect(body).to eq('ASCII-8BIT')
+          # Run a certain action
+      def trigger(command: nil, serial: nil)
+        android_serial = serial != '' ? 'ANDROID_SERIAL=#{serial}' : nil
+        command = [android_serial, adb_path, command].join(' ')
+        Action.sh(command)
+      end
+    
+        def schemes_valid?
+      !schemes.nil? && schemes.size == 1 && !schemes.first.empty?
+    end
+    
+      def translation_scope
+    'devise.omniauth_callbacks'
+  end
+end
+
+    
+      # Store scopes mappings.
+  mattr_reader :mappings
+  @@mappings = {}
+    
+          def remember_key(resource, scope)
+        resource.rememberable_options.fetch(:key, 'remember_#{scope}_token')
       end
     end
   end
 end
 
     
-      it 'accepts requests with the same Accept-Language header' do
-    session = {:foo => :bar}
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'a'
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'a'
-    expect(session).not_to be_empty
-  end
+          private
     
-            def update
-          authorize! :update, stock_location
-          if stock_location.update_attributes(stock_location_params)
-            respond_with(stock_location, status: 200, default_template: :show)
-          else
-            invalid_resource!(stock_location)
-          end
-        end
+    input = ARGV.shift() || usage()
+    
+    # Copyright (C) 2008 Rapid7, Inc.
+    
+    
+# extract label addresses
+addrs = {}
+dtrans.each_line { |ln|
+	if ln =~ /;[^ ].*:/
+		parts = ln.split(' ')
+		label = parts[1]
+		label = label.slice(1,label.index(':')-1)
+		addr = parts[0].split(':')[1].to_i(16)
+		#puts '%s => %x' % [label, addr]
+		one = { label => addr }
+		addrs.merge!(one)
+	end
+}
+#puts addrs.inspect
+    
+      def parse
+    __NC_execve      = -(__CAL - __NR_execve)
+    __NC_getpeername = -(__CAL - __NR_getpeername)
+    __NC_accept      = -(__CAL - __NR_accept)
+    __NC_listen      = -(__CAL - __NR_listen)
+    __NC_bind        = -(__CAL - __NR_bind)
+    __NC_socket      = -(__CAL - __NR_socket)
+    __NC_connect     = -(__CAL - __NR_connect)
+    __NC_close       = -(__CAL - __NR_close)
+    __NC_kfcntl      = -(__CAL - __NR_kfcntl)
+    
+        def metadata_subdir(leaf, version: self.version, timestamp: :latest, create: false)
+      if create && timestamp == :latest
+        raise CaskError, 'Cannot create metadata subdir when timestamp is :latest.'
+      end
+    
+        node_cache[:string][start_index] = r0
