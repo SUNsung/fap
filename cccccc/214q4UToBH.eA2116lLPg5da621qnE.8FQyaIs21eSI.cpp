@@ -1,362 +1,362 @@
 
         
-          if (flags.bit (CHECK_DAWGS) &&
-    (word->best_choice->permuter () != SYSTEM_DAWG_PERM) &&
-    (word->best_choice->permuter () != FREQ_DAWG_PERM) &&
-    (word->best_choice->permuter () != USER_DAWG_PERM) &&
-    (word->best_choice->permuter () != NUMBER_PERM)) {
-    if (tessedit_adaption_debug) tprintf('word not in dawgs\n');
-    return FALSE;
+        
+    {  if (word->word->flag(W_DONT_CHOP)) {
+    saved_enable_assoc = wordrec_enable_assoc;
+    saved_chop_enable = chop_enable;
+    wordrec_enable_assoc.set_value(0);
+    chop_enable.set_value(0);
   }
-    
-      for (int i = 0; i < boxes.size() - 1; i++) {
-    bool foundit = false;
-    if (page_res != NULL) {
-      if (i == 0) {
-        foundit = ResegmentCharBox(page_res, NULL, boxes[i], boxes[i + 1],
-                                   full_texts[i].string());
-      } else {
-        foundit = ResegmentCharBox(page_res, &boxes[i-1], boxes[i],
-                                   boxes[i + 1], full_texts[i].string());
-      }
-    } else {
-      foundit = ResegmentWordBox(block_list, boxes[i], boxes[i + 1],
-                                 texts[i].string());
-    }
-    if (!foundit) {
-      box_failures++;
-      ReportFailedBox(i, boxes[i], texts[i].string(),
-                      'FAILURE! Couldn't find a matching blob');
-    }
-  }
-    
-    // Returns the x,y means as an FCOORD.
-FCOORD LLSQ::mean_point() const {
-  if (total_weight > 0.0) {
-    return FCOORD(sigx / total_weight, sigy / total_weight);
-  } else {
-    return FCOORD(0.0f, 0.0f);
+  if (pass_n == 1)
+    set_pass1();
+  else
+    set_pass2();
+  recog_word(word);
+  if (word->best_choice == NULL)
+    word->SetupFake(*word->uch_set);
+  if (word->word->flag(W_DONT_CHOP)) {
+    wordrec_enable_assoc.set_value(saved_enable_assoc);
+    chop_enable.set_value(saved_chop_enable);
   }
 }
     
-      Pix* render_mask(TBOX* mask_box) {
-    return PDBLK::render_mask(re_rotation_, mask_box);
+      // Backwards compatible fit returning a gradient and constant.
+  // Deprecated. Prefer Fit(ICOORD*, ICOORD*) where possible, but use this
+  // function in preference to the LMS class.
+  double Fit(float* m, float* c);
+    
+    // Update the other members if the cost is lower.
+void DPPoint::UpdateIfBetter(inT64 cost, inT32 steps, const DPPoint* prev,
+                             inT32 n, inT32 sig_x, inT64 sig_xsq) {
+  if (cost < total_cost_) {
+    total_cost_ = cost;
+    total_steps_ = steps;
+    best_prev_ = prev;
+    n_ = n;
+    sig_x_ = sig_x;
+    sig_xsq_ = sig_xsq;
+  }
+}
+    
+    
+    {  auto const ret = make_map_array(
+    s_sec, (int)tp.tv_sec,
+    s_usec, (int)tp.tv_usec,
+    s_minuteswest, (int)(-offset->offset / 60),
+    s_dsttime, (int)offset->is_dst
+  );
+  timelib_time_offset_dtor(offset);
+  return ret;
+}
+    
+    namespace {
+///////////////////////////////////////////////////////////////////////////////
+    }
+    
+    
+    {
+    {}}
+
+    
+    SSATmp* implInstanceOfD(IRGS& env, SSATmp* src, const StringData* className);
+    
+      if (!variantToGMPData('gmp_pow', gmpData, data)) {
+    return false;
   }
     
-    void ROW::recalc_bounding_box() {  //recalculate BB
-  WERD *word;                    //current word
-  WERD_IT it = &words;           //words of ROW
-  inT16 left;                    //of word
-  inT16 prev_left;               //old left
-    }
+    // MaxSizeIndex corresponds to HashTableCommon::MaxSize - 1 (which is the same
+// as MixedArray::MaxSize - 1) because HashTableCommon::MaxSize - 1 exactly fits
+// into a MM size class, PackedArray::capacity is a function of MM size class,
+// and we can't allow a capacity > MaxSize since most operations only check
+// that size <= capacity stays true (and don't explicitly check size <= MaxSize)
+static_assert(
+  kSizeIndex2PackedArrayCapacity[PackedArray::MaxSizeIndex]
+    == array::HashTableCommon::MaxSize - 1,
+  'MaxSizeIndex must be the largest possible size class index for PackedArrays'
+);
     
-    
-    {    // also update node groups
-    for (auto nodeTag : newNodeTags)
-    {
-        AddToNodeGroup(nodeTag, newNode);
-    }
+    String PageletServer::TaskResult(const Resource& task, Array &headers, int &code,
+                                 int64_t timeout_ms) {
+  auto ptask = cast<PageletTask>(task);
+  return ptask->getJob()->getResults(headers, code, timeout_ms);
 }
     
-    void GranularGPUDataTransferer::WaitForSyncPointOnAssignStreamAsync()
-{
-    PrepareDevice(m_deviceId);
-    cudaStreamWaitEvent(GetAssignStream(), m_syncEvent, 0 /*flags 'must be 0'*/) || 'cudaStreamWaitEvent failed';
-}
     
-        // prepare features
-    auto& featureNodes = m_net->FeatureNodes();
-    
-    // ===========================================================================
-// DoExportToDbn() - implements CNTK 'exportdbn' command
-// ===========================================================================
-    
-    #include 'Basics.h'
-#include <chrono>
-#include 'TimerUtility.h'
-#include <string>
-    
-    namespace msra { namespace dbn {
-    }
-    }
-    
-    template <class _T>
-class array_ref
-{
-    _T* data;
-    size_t n;
-    inline void check_index(size_t i) const
-    {
-        i;
-        assert(i < n);
-    }
-    inline void check_ptr() const
-    {
-        n;
-        data;
-        assert(n == 0 || data != NULL);
-    }
-    }
-    
-    /**
- * @brief An osquery backing storage (database) type that persists executions.
- *
- * The osquery tools need a high-performance storage and indexing mechanism for
- * storing intermediate results from EventPublisher%s, persisting one-time
- * generated values, and performing non-memory backed differentials.
- *
- * Practically, osquery is built around RocksDB's performance guarantees and
- * all of the internal APIs expect RocksDB's indexing and read performance.
- * However, access to this representation of a backing-store is still abstracted
- * to removing RocksDB as a dependency for the osquery SDK.
- */
-class DatabasePlugin : public Plugin {
- public:
-  /**
-   * @brief Perform a domain and key lookup from the backing store.
-   *
-   * Database value access indexing is abstracted into domains and keys.
-   * Both are string values but exist separately for simple indexing without
-   * API-enforcing tokenization. In some cases we do add a component-specific
-   * tokeninzation to keys.
-   *
-   * @param domain A string value representing abstract storage indexing.
-   * @param key A string value representing the lookup/retrieval key.
-   * @param value The output parameter, left empty if the key does not exist.
-   * @return Failure if the data could not be accessed. It is up to the plugin
-   * to determine if a missing key means a non-success status.
-   */
-  virtual Status get(const std::string& domain,
-                     const std::string& key,
-                     std::string& value) const = 0;
-    }
-    
-      /**
-   * @brief The std::thread's interruption point.
-   */
-  virtual void interrupt() final;
-    
-      /*
-   * @brief Print help-style output to stdout for a given flag set.
-   *
-   * @param shell Only print shell flags.
-   * @param external Only print external flags (from extensions).
-   */
-  static void printFlags(bool shell = false,
-                         bool external = false,
-                         bool cli = false);
-    
-      /**
-   * @brief A constructor which can be used to concisely express the status of
-   * an operation.
-   *
-   * @param c a status code. The idiom is that a zero status code indicates a
-   * successful operation and a non-zero status code indicates a failed
-   * operation.
-   * @param m a message indicating some extra detail regarding the operation.
-   * If all operations were successful, this message should be 'OK'.
-   * Otherwise, it doesn't matter what the string is, as long as both the
-   * setter and caller agree.
-   */
-  Status(int c, std::string m) : code_(c), message_(std::move(m)) {}
-    
-    /**
- * @brief Generate a new generic UUID
- *
- * @return a string containing a random UUID
- */
-std::string generateNewUUID();
-    
-    #include <osquery/sql.h>
-    
-      status = tls_config_plugin->setUp();
-  ASSERT_TRUE(status.ok());
-    
-    #include 'jsapi.h'
-#include 'jsfriendapi.h'
-    
-    bool js_cocos2dx_navmesh_NavMeshObstacle_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_navmesh_NavMeshObstacle_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_navmesh_NavMeshObstacle(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_navmesh(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_initWith(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_syncToObstacle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_syncToNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getHeight(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getRadius(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getNavMeshObstacleComponentName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_NavMeshObstacle(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    
-    
-    
-        GLESDebugDraw( float32 ratio );
-    
-    struct TestEntry
-{
-	const char *name;
-	TestCreateFcn *createFcn;
+    {private:
+  int m_timeout;
 };
-    
-    
-    {			b2PolygonShape shape;
-			shape.SetAsBox(0.5f, 2.0f);
-			m_attachment->CreateFixture(&shape, 2.0f);
-		}
-    
-    // Compare target key and the block key of the block of `block_index`.
-// Return -1 if error.
-int BlockIter::CompareBlockKey(uint32_t block_index, const Slice& target) {
-  uint32_t region_offset = GetRestartPoint(block_index);
-  uint32_t shared, non_shared, value_length;
-  const char* key_ptr = DecodeEntry(data_ + region_offset, data_ + restarts_,
-                                    &shared, &non_shared, &value_length);
-  if (key_ptr == nullptr || (shared != 0)) {
-    CorruptionError();
-    return 1;  // Return target is smaller
-  }
-  Slice block_key(key_ptr, non_shared);
-  return Compare(block_key, target);
-}
-    
-     private:
-  BlockContents contents_;
-  const char* data_;            // contents_.data.data()
-  size_t size_;                 // contents_.data.size()
-  uint32_t restart_offset_;     // Offset in data_ of restart array
-  std::unique_ptr<BlockPrefixIndex> prefix_index_;
-  std::unique_ptr<BlockReadAmpBitmap> read_amp_bitmap_;
-  // All keys in the block will have seqno = global_seqno_, regardless of
-  // the encoded value (kDisableGlobalSequenceNumber means disabled)
-  const SequenceNumber global_seqno_;
     
     /*
- * Class:     org_rocksdb_IngestExternalFileOptions
- * Method:    allowGlobalSeqNo
- * Signature: (J)Z
+ * Determine the next NUMA node according to state maintained in `curr_node`.
  */
-jboolean Java_org_rocksdb_IngestExternalFileOptions_allowGlobalSeqNo(
-    JNIEnv* env, jobject jobj, jlong jhandle) {
-  auto* options =
-      reinterpret_cast<rocksdb::IngestExternalFileOptions*>(jhandle);
-  return static_cast<jboolean>(options->allow_global_seqno);
+int next_numa_node(std::atomic_int& curr_node);
+/*
+ * The number of numa nodes in the system
+ */
+inline int num_numa_nodes() {
+  return use_numa ? numa_num_nodes : 1;
+}
+/*
+ * Enable numa interleaving for the specified address range
+ */
+void numa_interleave(void* start, size_t size);
+/*
+ * Allocate the specified address range on the given node
+ */
+void numa_bind_to(void* start, size_t size, int node);
+/*
+ * Return true if node is part of the allowed set of numa nodes
+ */
+inline bool numa_node_allowed(int node) {
+  if (numa_node_set == 0) return true;
+  return numa_node_set & (1u << node);
 }
     
-      auto animal = sample::GetAnimal(builder.GetBufferPointer());
     
-    struct EnumValBuilder {
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_name(flatbuffers::Offset<flatbuffers::String> name) {
-    fbb_.AddOffset(EnumVal::VT_NAME, name);
+    {  /* We cannot open it, but we were able to stat it. */
+  if (access(file, W_OK) == 0)
+    if (file_printf(ms, 'writable, ') == -1)
+      return -1;
+  if (access(file, X_OK) == 0)
+    if (file_printf(ms, 'executable, ') == -1)
+      return -1;
+  if (S_ISREG(md))
+    if (file_printf(ms, 'regular file, ') == -1)
+      return -1;
+  if (file_printf(ms, 'no read permission') == -1)
+    return -1;
+  return 0;
+}
+    
+    
+    {  String ttyname(ttyname_maxlen, ReserveString);
+  char *p = ttyname.mutableData();
+  if (ttyname_r(php_posix_get_fd(fd), p, ttyname_maxlen)) {
+    return false;
   }
-  void add_value(int64_t value) {
-    fbb_.AddElement<int64_t>(EnumVal::VT_VALUE, value, 0);
+  ttyname.setSize(strlen(p));
+  return ttyname;
+}
+    
+    /*
+ * Helpers for unconditional and conditional jumps.
+ */
+void surpriseCheck(IRGS&);
+void surpriseCheck(IRGS&, Offset);
+void jmpImpl(IRGS&, Offset);
+void implCondJmp(IRGS&, Offset taken, bool negate, SSATmp*);
+    
+        void TrainOneMiniEpochAndReloadModel(ComputationNetworkPtr net,
+                                         ComputationNetworkPtr refNet,
+                                         const ComputationNodeBasePtr& refNode, const int epochNumber,
+                                         const size_t epochSize, IDataReader* trainSetDataReader,
+                                         const double learnRatePerSample,
+                                         const size_t minibatchSize,
+                                         const std::vector<ComputationNodeBasePtr>& featureNodes,
+                                         const std::vector<ComputationNodeBasePtr>& labelNodes,
+                                         const std::vector<ComputationNodeBasePtr>& criterionNodes,
+                                         const std::vector<ComputationNodeBasePtr>& evaluationNodes,
+                                         StreamMinibatchInputs* inputMatrices,
+                                         const std::list<ComputationNodeBasePtr>& learnableNodes,
+                                         std::list<Matrix<ElemType>>& smoothedGradients, std::vector<double> smoothedCounts,
+                                         /*out*/ EpochCriterion& epochCriterion,
+                                         /*out*/ std::vector<EpochCriterion>& epochEvalErrors,
+                                         std::string prefixMsg,
+                                         const size_t maxNumOfSamples);
+    
+        // relink the input of those nodes whose child is oldNode to point to the new one instead
+    for (auto nodeIter = m_nameToNodeMap.begin(); nodeIter != m_nameToNodeMap.end(); nodeIter++)
+    {
+        ComputationNodeBasePtr node = nodeIter->second;
+        for (int i = 0; i < node->GetNumInputs(); i++)
+            if (node->GetInputs()[i] == oldNode)
+                node->SetInput(i, newNode);
+    }
+    
+    #include <vector>
+    
+    void OutputImageComponent::CopyFromJpegComponent(const JPEGComponent& comp,
+                                                 int factor_x, int factor_y,
+                                                 const int* quant) {
+  Reset(factor_x, factor_y);
+  assert(width_in_blocks_ <= comp.width_in_blocks);
+  assert(height_in_blocks_ <= comp.height_in_blocks);
+  const size_t src_row_size = comp.width_in_blocks * kDCTBlockSize;
+  for (int block_y = 0; block_y < height_in_blocks_; ++block_y) {
+    const coeff_t* src_coeffs = &comp.coeffs[block_y * src_row_size];
+    for (int block_x = 0; block_x < width_in_blocks_; ++block_x) {
+      coeff_t block[kDCTBlockSize];
+      for (int i = 0; i < kDCTBlockSize; ++i) {
+        block[i] = src_coeffs[i] * quant[i];
+      }
+      SetCoeffBlock(block_x, block_y, block);
+      src_coeffs += kDCTBlockSize;
+    }
   }
-  void add_object(flatbuffers::Offset<Object> object) {
-    fbb_.AddOffset(EnumVal::VT_OBJECT, object);
-  }
-  void add_union_type(flatbuffers::Offset<Type> union_type) {
-    fbb_.AddOffset(EnumVal::VT_UNION_TYPE, union_type);
-  }
-  EnumValBuilder(flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  EnumValBuilder &operator=(const EnumValBuilder &);
-  flatbuffers::Offset<EnumVal> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<EnumVal>(end);
-    fbb_.Required(o, EnumVal::VT_NAME);
-    return o;
-  }
+  memcpy(quant_, quant, sizeof(quant_));
+}
+    
+    // kDCTMatrix[8*u+x] = 0.5*alpha(u)*cos((2*x+1)*u*M_PI/16),
+// where alpha(0) = 1/sqrt(2) and alpha(u) = 1 for u > 0.
+static const double kDCTMatrix[64] = {
+  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
+  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
+  0.4903926402,  0.4157348062,  0.2777851165,  0.0975451610,
+ -0.0975451610, -0.2777851165, -0.4157348062, -0.4903926402,
+  0.4619397663,  0.1913417162, -0.1913417162, -0.4619397663,
+ -0.4619397663, -0.1913417162,  0.1913417162,  0.4619397663,
+  0.4157348062, -0.0975451610, -0.4903926402, -0.2777851165,
+  0.2777851165,  0.4903926402,  0.0975451610, -0.4157348062,
+  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
+  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
+  0.2777851165, -0.4903926402,  0.0975451610,  0.4157348062,
+ -0.4157348062, -0.0975451610,  0.4903926402, -0.2777851165,
+  0.1913417162, -0.4619397663,  0.4619397663, -0.1913417162,
+ -0.1913417162,  0.4619397663, -0.4619397663,  0.1913417162,
+  0.0975451610, -0.2777851165,  0.4157348062, -0.4903926402,
+  0.4903926402, -0.4157348062,  0.2777851165, -0.0975451610,
 };
     
-    inline flatbuffers::Offset<TableInC> CreateTableInC(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<NamespaceA::TableInFirstNS> refer_to_a1 = 0,
-    flatbuffers::Offset<NamespaceA::SecondTableInA> refer_to_a2 = 0) {
-  TableInCBuilder builder_(_fbb);
-  builder_.add_refer_to_a2(refer_to_a2);
-  builder_.add_refer_to_a1(refer_to_a1);
-  return builder_.Finish();
-}
+          // The sentinel node becomes the parent node.
+      size_t j_end = 2 * n - k;
+      tree[j_end].total_count_ =
+          tree[left].total_count_ + tree[right].total_count_;
+      tree[j_end].index_left_ = static_cast<int16_t>(left);
+      tree[j_end].index_right_or_value_ = static_cast<int16_t>(right);
     
-    inline const char **EnumNamesCharacter() {
-  static const char *names[] = {
-    'NONE',
-    'MuLan',
-    'Rapunzel',
-    'Belle',
-    'BookFan',
-    'Other',
-    'Unused',
-    nullptr
+    void AddApp0Data(JPEGData* jpg) {
+  const unsigned char kApp0Data[] = {
+      0xe0, 0x00, 0x10,              // APP0
+      0x4a, 0x46, 0x49, 0x46, 0x00,  // 'JFIF'
+      0x01, 0x01,                    // v1.01
+      0x00, 0x00, 0x01, 0x00, 0x01,  // aspect ratio = 1:1
+      0x00, 0x00                     // thumbnail width/height
   };
-  return names;
+  jpg->app_data.push_back(
+      std::string(reinterpret_cast<const char*>(kApp0Data),
+                                 sizeof(kApp0Data)));
 }
     
-    namespace grpc_java_generator {
-struct Parameters {
-  //        //Defines the custom parameter types for methods
-  //        //eg: flatbuffers uses flatbuffers.Builder as input for the client
-  //        and output for the server grpc::string custom_method_io_type;
-    }
-    }
     
-    #define FLATBUFFERS_VERSION_MAJOR 1
-#define FLATBUFFERS_VERSION_MINOR 8
-#define FLATBUFFERS_VERSION_REVISION 0
-#define FLATBUFFERS_STRING_EXPAND(X) #X
-#define FLATBUFFERS_STRING(X) FLATBUFFERS_STRING_EXPAND(X)
+    {  return p;
+}
     
-    inline void IterateObject(const uint8_t *obj, const TypeTable *type_table,
-                          IterationVisitor *visitor) {
-  visitor->StartSequence();
-  const uint8_t *prev_val = nullptr;
-  size_t set_idx = 0;
-  for (size_t i = 0; i < type_table->num_elems; i++) {
-    auto type_code = type_table->type_codes[i];
-    auto type = static_cast<ElementaryType>(type_code.base_type);
-    auto is_vector = type_code.is_vector != 0;
-    auto ref_idx = type_code.sequence_ref;
-    const TypeTable *ref = nullptr;
-    if (ref_idx >= 0) { ref = type_table->type_refs[ref_idx](); }
-    auto name = type_table->names ? type_table->names[i] : nullptr;
-    const uint8_t *val = nullptr;
-    if (type_table->st == ST_TABLE) {
-      val = reinterpret_cast<const Table *>(obj)->GetAddressOf(
-          FieldIndexToOffset(static_cast<voffset_t>(i)));
-    } else {
-      val = obj + type_table->values[i];
-    }
-    visitor->Field(i, set_idx, type, is_vector, ref, name, val);
-    if (val) {
-      set_idx++;
-      if (is_vector) {
-        val += ReadScalar<uoffset_t>(val);
-        auto vec = reinterpret_cast<const Vector<uint8_t> *>(val);
-        visitor->StartVector();
-        auto elem_ptr = vec->Data();
-        for (size_t j = 0; j < vec->size(); j++) {
-          visitor->Element(j, type, ref, elem_ptr);
-          IterateValue(type, elem_ptr, ref, prev_val, static_cast<soffset_t>(j),
-                       visitor);
-          elem_ptr += InlineSize(type, ref);
-        }
-        visitor->EndVector();
-      } else {
-        IterateValue(type, val, ref, prev_val, -1, visitor);
+      /**
+   * Construct an ImmediateFileWriter that writes to the specified File object.
+   */
+  explicit ImmediateFileWriter(folly::File&& file);
+    
+    LogCategoryConfig::LogCategoryConfig(LogLevel l, bool inherit)
+    : level{l}, inheritParentLevel{inherit} {}
+    
+    void LogConfig::update(const LogConfig& other) {
+  // Update handlerConfigs_ with all of the entries from the other LogConfig.
+  // Any entries already present in our handlerConfigs_ are replaced wholesale.
+  for (const auto& entry : other.handlerConfigs_) {
+    if (entry.second.type.hasValue()) {
+      // This is a complete LogHandlerConfig that should be inserted
+      // or completely replace an existing handler config with this name.
+      auto result = handlerConfigs_.insert(entry);
+      if (!result.second) {
+        result.first->second = entry.second;
       }
+    } else {
+      // This config is updating an existing LogHandlerConfig rather than
+      // completely replacing it.
+      auto iter = handlerConfigs_.find(entry.first);
+      if (iter == handlerConfigs_.end()) {
+        throw std::invalid_argument(to<std::string>(
+            'cannot update configuration for unknown log handler \'',
+            entry.first,
+            '\''));
+      }
+      iter->second.update(entry.second);
     }
-    prev_val = val;
   }
-  visitor->EndSequence();
+    }
+    
+    void AbstractAuthResolver::setDefaultCred(std::string user,
+                                          std::string password)
+{
+  defaultUser_ = std::move(user);
+  defaultPassword_ = std::move(password);
 }
     
-    namespace flatbuffers {
+    void AbstractBtMessage::setBtRequestFactory(BtRequestFactory* factory)
+{
+  requestFactory_ = factory;
+}
+    
+      const char* name_;
+    
+      // Returns proxy method for given protocol. Either V_GET or V_TUNNEL
+  // is returned.  For HTTPS, always returns V_TUNNEL.
+  const std::string& resolveProxyMethod(const std::string& protocol) const;
+    
+    AbstractHttpServerResponseCommand::AbstractHttpServerResponseCommand(
+    cuid_t cuid, const std::shared_ptr<HttpServer>& httpServer,
+    DownloadEngine* e, const std::shared_ptr<SocketCore>& socket)
+    : Command(cuid),
+      e_(e),
+      socket_(socket),
+      httpServer_(httpServer),
+      readCheck_(false),
+      writeCheck_(true)
+{
+  setStatus(Command::STATUS_ONESHOT_REALTIME);
+  e_->addSocketForWriteCheck(socket_, this);
+}
+    
+    void AbstractOptionHandler::hide() { updateFlags(FLAG_HIDDEN, true); }
+    
+      const std::shared_ptr<Request>& getProxyRequest() const
+  {
+    return proxyRequest_;
+  }
+    
+      virtual bool execute() CXX11_OVERRIDE;
+    
+    void AdaptiveFileAllocationIterator::allocateChunk()
+{
+  if (!allocator_) {
+#ifdef HAVE_FALLOCATE
+    try {
+      A2_LOG_DEBUG('Testing file system supports fallocate.');
+      if (offset_ < totalLength_) {
+        int64_t len =
+            std::min(totalLength_ - offset_, static_cast<int64_t>(4_k));
+        stream_->allocate(offset_, len, false);
+        offset_ += len;
+      }
+      A2_LOG_DEBUG('File system supports fallocate.');
+      allocator_ = make_unique<FallocFileAllocationIterator>(stream_, offset_,
+                                                             totalLength_);
     }
+    catch (RecoverableException& e) {
+      A2_LOG_DEBUG('File system does not support fallocate.');
+      auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
+                                                              totalLength_);
+      salloc->init();
+      allocator_ = std::move(salloc);
+    }
+#else  // !HAVE_FALLOCATE
+    auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
+                                                            totalLength_);
+    salloc->init();
+    allocator_ = std::move(salloc);
+#endif // !HAVE_FALLOCATE
+    allocator_->allocateChunk();
+  }
+  else {
+    allocator_->allocateChunk();
+  }
+}
+    
+    #include 'common.h'
+    
+      virtual ~AppleTLSContext();
+    
+    AuthConfig::AuthConfig(std::string user, std::string password)
+    : user_(std::move(user)), password_(std::move(password))
+{
+}
