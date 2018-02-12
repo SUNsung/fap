@@ -1,78 +1,68 @@
 
         
-        
+            def setUp(self):
+        from acme.errors import PollError
+        self.timeout = PollError(
+            exhausted=set([mock.sentinel.AR]),
+            updated={})
+        self.invalid = PollError(exhausted=set(), updated={
+            mock.sentinel.AR: mock.sentinel.AR2})
+    
+    # The suffix(es) of source filenames.
+# You can specify multiple suffix as a list of string:
+# source_suffix = ['.rst', '.md']
+source_suffix = '.rst'
+    
+    from alembic import op
+import sqlalchemy as sa
+    
+    '''
+    
+    '''
+    
+    '''
+    
+    from alembic import op
+from superset import db
+from superset.utils import generic_find_constraint_name, table_has_constraint
+import logging
+import sqlalchemy as sa
+from sqlalchemy.dialects import mysql
+    
+    
 def downgrade():
-    op.drop_constraint(None, 'dashboards', type_='unique')
-    op.drop_column('dashboards', 'slug')
+    op.drop_table('slice_user')
+    op.drop_table('dashboard_user')
 
     
     # revision identifiers, used by Alembic.
-revision = '2929af7925ed'
-down_revision = '1e2841a4128'
-    
-    from alembic import op
-import sqlalchemy as sa
-    
-    from alembic import op
-import sqlalchemy as sa
+revision = '55179c7f25c7'
+down_revision = '315b3f4da9b0'
     
     # revision identifiers, used by Alembic.
-revision = '430039611635'
-down_revision = 'd827694c7555'
+revision = '7e3ddad2a00b'
+down_revision = 'b46fa1b0b39e'
     
+        def wake(self):
+        try:
+            self.writer.send(b'x')
+        except (IOError, socket.error, ValueError):
+            pass
     
-def upgrade():
-    op.add_column('dbs', sa.Column('allow_run_async', sa.Boolean(), nullable=True))
-    op.add_column('dbs', sa.Column('allow_run_sync', sa.Boolean(), nullable=True))
+            yield write(b'\r\n')
     
+        logging.info('Listening on http://localhost:%d' % options.port)
+    IOLoop.current().start()
     
-def upgrade():
-    op.create_table('dashboard_user',
-        sa.Column('id', sa.Integer(), nullable=False),
-        sa.Column('user_id', sa.Integer(), nullable=True),
-        sa.Column('dashboard_id', sa.Integer(), nullable=True),
-        sa.ForeignKeyConstraint(['dashboard_id'], [u'dashboards.id'], ),
-        sa.ForeignKeyConstraint(['user_id'], [u'ab_user.id'], ),
-        sa.PrimaryKeyConstraint('id'),
-    )
-    op.create_table('slice_user',
-        sa.Column('id', sa.Integer(), nullable=False),
-        sa.Column('user_id', sa.Integer(), nullable=True),
-        sa.Column('slice_id', sa.Integer(), nullable=True),
-        sa.ForeignKeyConstraint(['slice_id'], [u'slices.id'], ),
-        sa.ForeignKeyConstraint(['user_id'], [u'ab_user.id'], ),
-        sa.PrimaryKeyConstraint('id'),
-    )
+    plugins = PluginLoader()
+print 'PLUGINS := ' + ' '.join(plugin.name for plugin in plugins
+                               if plugin.needs_static_build)
     
-    # revision identifiers, used by Alembic.
-revision = '763d4b211ec9'
-down_revision = 'd2424a248d63'
+                if not c.user.employee:
+                c.user.gold_creddits -= months
+                c.user._commit()
     
-            return link_list
-    
-    site_info = 'FC2Video'
-download = fc2video_download
-download_playlist = playlist_not_supported('fc2video')
-
-    
-    def kuwo_playlist_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    html=get_content(url)
-    matched=set(re.compile('yinyue/(\d+)').findall(html))#reduce duplicated
-    for rid in matched:
-        kuwo_download_by_rid(rid,output_dir,merge,info_only)
-    
-            # extract raw urls
-        orig_img = match1(content,
-                         r'<meta itemprop='image' content='([^']+/originals/[^']+)'')
-        twit_img = match1(content,
-                          r'<meta property='twitter:image:src' name='twitter:image:src' content='([^']+)'')
-    
-    
-#----------------------------------------------------------------------
-def showroom_download(url, output_dir = '.', merge = False, info_only = False, **kwargs):
-    ''''''
-    if re.match( r'(\w+)://www.showroom-live.com/([-\w]+)', url):
-        room_url_key = match1(url, r'\w+://www.showroom-live.com/([-\w]+)')
-        room_id = showroom_get_roomid_by_room_url_key(room_url_key)
-        showroom_download_by_room_id(room_id, output_dir, merge,
-                                    info_only)
+            res = AdminPage(content = AdminAwardGive(award, recipient, desc,
+                                                 url, hours),
+                        title='give an award').render()
+        return res
