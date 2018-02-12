@@ -1,161 +1,96 @@
 
         
-        # Some non-image blobs can be previewed: that is, they can be presented as images. A video blob can be previewed by
-# extracting its first frame, and a PDF blob can be previewed by extracting its first page.
-#
-# A previewer extracts a preview image from a blob. Active Storage provides previewers for videos and PDFs:
-# ActiveStorage::Previewer::VideoPreviewer and ActiveStorage::Previewer::PDFPreviewer. Build custom previewers by
-# subclassing ActiveStorage::Previewer and implementing the requisite methods. Consult the ActiveStorage::Previewer
-# documentation for more details on what's required of previewers.
-#
-# To choose the previewer for a blob, Active Storage calls +accept?+ on each registered previewer in order. It uses the
-# first previewer for which +accept?+ returns true when given the blob. In a Rails application, add or remove previewers
-# by manipulating +Rails.application.config.active_storage.previewers+ in an initializer:
-#
-#   Rails.application.config.active_storage.previewers
-#   # => [ ActiveStorage::Previewer::PDFPreviewer, ActiveStorage::Previewer::VideoPreviewer ]
-#
-#   # Add a custom previewer for Microsoft Office documents:
-#   Rails.application.config.active_storage.previewers << DOCXPreviewer
-#   # => [ ActiveStorage::Previewer::PDFPreviewer, ActiveStorage::Previewer::VideoPreviewer, DOCXPreviewer ]
-#
-# Outside of a Rails application, modify +ActiveStorage.previewers+ instead.
-#
-# The built-in previewers rely on third-party system libraries:
-#
-# * {ffmpeg}[https://www.ffmpeg.org]
-# * {mupdf}[https://mupdf.com]
-#
-# These libraries are not provided by Rails. You must install them yourself to use the built-in previewers. Before you
-# install and use third-party software, make sure you understand the licensing implications of doing so.
-class ActiveStorage::Preview
-  class UnprocessedError < StandardError; end
+              def load_all_devices
+        self.devices = []
     
-            attr_reader :value_transformation
+        attr_accessor :crashlytics_path
+    attr_accessor :api_key
+    attr_accessor :build_secret
+    attr_accessor :emails
+    attr_accessor :groups
+    attr_accessor :schemes
+    attr_accessor :export_method
     
-            def test_url_from_environment
-          spec = resolve :production, 'production' => 'abstract://foo?encoding=utf8'
-          assert_equal({
-            'adapter'  =>  'abstract',
-            'host'     =>  'foo',
-            'encoding' => 'utf8',
-            'name'     => 'production' }, spec)
+            expect(result).to eq('svn info | grep Revision | egrep -o '[0-9]+'')
+        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('svn info | grep Revision | egrep -o '[0-9]+'')
+      end
+    end
+    
+          included do
+        before_create :generate_confirmation_token, if: :confirmation_required?
+        after_create :skip_reconfirmation_in_callback!, if: :send_confirmation_notification?
+        if defined?(ActiveRecord) && self < ActiveRecord::Base # ActiveRecord
+          after_commit :send_on_create_confirmation_instructions, on: :create, if: :send_confirmation_notification?
+          after_commit :send_reconfirmation_instructions, on: :update, if: :reconfirmation_required?
+        else # Mongoid
+          after_create :send_on_create_confirmation_instructions, if: :send_confirmation_notification?
+          after_update :send_reconfirmation_instructions, if: :reconfirmation_required?
         end
-    
-          test 'when a callback is modified in a child with :only, it works for the :only action' do
-        @controller.process(:index)
-        assert_equal 'Hello world', @controller.response_body
+        before_update :postpone_email_change_until_confirmation_and_regenerate_confirmation_token, if: :postpone_email_change?
       end
     
-        private
-      # 'Deserialize' the mailer class name by hand in case another argument
-      # (like a Global ID reference) raised DeserializationError.
-      def mailer_class
-        if mailer = Array(@serialized_arguments).first || Array(arguments).first
-          mailer.constantize
-        end
-      end
-    
-      private
-    
-      def head
-    Homebrew.git_head || '(none)'
-  end
-    
-      UNBREWED_EXCLUDE_FILES = %w[.DS_Store]
-  UNBREWED_EXCLUDE_PATHS = %w[
-    .github/*
-    bin/brew
-    lib/gdk-pixbuf-2.0/*
-    lib/gio/*
-    lib/node_modules/*
-    lib/python[23].[0-9]/*
-    lib/pypy/*
-    lib/pypy3/*
-    lib/ruby/gems/[12].*
-    lib/ruby/site_ruby/[12].*
-    lib/ruby/vendor_ruby/[12].*
-    share/pypy/*
-    share/pypy3/*
-    share/doc/homebrew/*
-    share/info/dir
-    share/man/man1/brew.1
-    share/man/whatis
-  ]
-    
-        def render(options, screenshots)
-      Dir.mktmpdir do |dir|
-        path = generator.render(options, screenshots, dir)
-        return File.read(path)
-      end
+      test 'should send email instructions for the user confirm its email' do
+    user = create_user
+    assert_email_sent user.email do
+      User.send_confirmation_instructions(email: user.email)
     end
   end
     
-          # Run a certain action
-      def trigger(command: nil, serial: nil)
-        android_serial = serial != '' ? 'ANDROID_SERIAL=#{serial}' : nil
-        command = [android_serial, adb_path, command].join(' ')
-        Action.sh(command)
+      # POST /resource/unlock
+  def create
+    self.resource = resource_class.send_unlock_instructions(resource_params)
+    yield resource if block_given?
+    
+          def remember_me_is_active?(resource)
+        return false unless resource.respond_to?(:remember_me)
+        scope = Devise::Mapping.find_scope!(resource)
+        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
+        resource.remember_me?(token, generated_at)
       end
     
-        def schemes_valid?
-      !schemes.nil? && schemes.size == 1 && !schemes.first.empty?
-    end
+            routes.each do |module_name, actions|
+          [:path, :url].each do |path_or_url|
+            actions.each do |action|
+              action = action ? '#{action}_' : ''
+              method = :'#{action}#{module_name}_#{path_or_url}'
     
-      def translation_scope
-    'devise.omniauth_callbacks'
-  end
-end
-
+            if b_length > a_length
+          (b_length - a_length).times { a_split.insert(-2, 0) }
+        elsif a_length > b_length
+          (a_length - b_length).times { b_split.insert(-2, 0) }
+        end
     
-      # Store scopes mappings.
-  mattr_reader :mappings
-  @@mappings = {}
-    
-          def remember_key(resource, scope)
-        resource.rememberable_options.fetch(:key, 'remember_#{scope}_token')
-      end
+        def assert_index(index)
+      i = index.is_a?(Integer) ? index : @filters.index(filter_const(index))
+      raise 'No such filter to insert: #{index}' unless i
+      i
     end
   end
 end
 
     
-          private
+        delegate :empty?, :blank?, to: :pages
     
-    input = ARGV.shift() || usage()
+        def read_file(path)
+      File.read(path) rescue nil
+    end
+  end
+end
+
     
-    # Copyright (C) 2008 Rapid7, Inc.
-    
-    
-# extract label addresses
-addrs = {}
-dtrans.each_line { |ln|
-	if ln =~ /;[^ ].*:/
-		parts = ln.split(' ')
-		label = parts[1]
-		label = label.slice(1,label.index(':')-1)
-		addr = parts[0].split(':')[1].to_i(16)
-		#puts '%s => %x' % [label, addr]
-		one = { label => addr }
-		addrs.merge!(one)
-	end
-}
-#puts addrs.inspect
-    
-      def parse
-    __NC_execve      = -(__CAL - __NR_execve)
-    __NC_getpeername = -(__CAL - __NR_getpeername)
-    __NC_accept      = -(__CAL - __NR_accept)
-    __NC_listen      = -(__CAL - __NR_listen)
-    __NC_bind        = -(__CAL - __NR_bind)
-    __NC_socket      = -(__CAL - __NR_socket)
-    __NC_connect     = -(__CAL - __NR_connect)
-    __NC_close       = -(__CAL - __NR_close)
-    __NC_kfcntl      = -(__CAL - __NR_kfcntl)
-    
-        def metadata_subdir(leaf, version: self.version, timestamp: :latest, create: false)
-      if create && timestamp == :latest
-        raise CaskError, 'Cannot create metadata subdir when timestamp is :latest.'
-      end
-    
-        node_cache[:string][start_index] = r0
+      public
+  # Relies on the codec being synchronous (which they all are!)
+  # We need a better long term design here, but this is an improvement
+  # over the current API for shared plugins
+  # It is best if the codec implements this directly
+  def multi_encode(events)
+    if @has_encode_sync              
+      events.map {|event| [event, self.encode_sync(event)]}
+    else
+      batch = Thread.current[:logstash_output_codec_batch] ||= []
+      batch.clear
+      
+      events.each {|event| self.encode(event) }
+      batch
+    end
+  end
