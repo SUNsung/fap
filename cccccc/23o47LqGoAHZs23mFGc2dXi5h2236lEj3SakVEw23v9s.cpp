@@ -1,377 +1,392 @@
 
         
-        // Appends all the elements in the input iterator to the container.
-//
-// Returns None if successful; returns NULL and sets an exception if
-// unsuccessful.
-PyObject* Extend(RepeatedScalarContainer* self, PyObject* value);
+        namespace atom {
+    }
     
-    // Author: kenton@google.com (Kenton Varda)
-//  Based on original Protocol Buffers design by
-//  Sanjay Ghemawat, Jeff Dean, and others.
-//
-// Generates C++ code for a given .proto file.
+    class Debugger: public mate::TrackableObject<Debugger>,
+                public content::DevToolsAgentHostClient {
+ public:
+  using SendCommandCallback =
+      base::Callback<void(const base::DictionaryValue&,
+                          const base::DictionaryValue&)>;
+    }
     
-    void RepeatedMessageFieldGenerator::GenerateParsingCode(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    '$name$_.AddEntriesFrom(input, _repeated_$name$_codec);\n');
-}
     
-    void RepeatedPrimitiveFieldGenerator::GenerateMergingCode(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    '$name$_.Add(other.$name$_);\n');
-}
+    {  DISALLOW_COPY_AND_ASSIGN(RenderProcessPreferences);
+};
+    
+    void Event::SetSenderAndMessage(content::WebContents* sender,
+                                IPC::Message* message) {
+  DCHECK(!sender_);
+  DCHECK(!message_);
+  sender_ = sender;
+  message_ = message;
+    }
     
      private:
-  const FileDescriptor* descriptor_;
-  const Options *options_;
+  // Replyer for the synchronous messages.
+  content::WebContents* sender_;
+  IPC::Message* message_;
     
-        txn->Put(key_str, value);
+      // Fill request details on IO thread.
+  std::unique_ptr<base::DictionaryValue> request_details(
+      new base::DictionaryValue);
+  FillRequestDetails(request_details.get(), request_);
     
-      /**
-   * @brief Initialize the Random number generations if needed by the
-   *    transformation.
-   */
-  void InitRand();
-    
-     protected:
-  // Helper functions that abstract away the column buffer and gemm arguments.
-  // The last argument in forward_cpu_gemm is so that we can skip the im2col if
-  // we just called weight_cpu_gemm with the same input.
-  void forward_cpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* output, bool skip_im2col = false);
-  void forward_cpu_bias(Dtype* output, const Dtype* bias);
-  void backward_cpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* output);
-  void weight_cpu_gemm(const Dtype* input, const Dtype* output, Dtype*
-      weights);
-  void backward_cpu_bias(Dtype* bias, const Dtype* input);
-    
-    /**
- * @brief Computes @f$ y = x + \log(1 + \exp(-x)) @f$ if @f$ x > 0 @f$;
- *        @f$ y = \log(1 + \exp(x)) @f$ otherwise.
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$
- *      y = \left\{
- *         \begin{array}{ll}
- *            x + \log(1 + \exp(-x)) & \mbox{if } x > 0 \\
- *            \log(1 + \exp(x)) & \mbox{otherwise}
- *         \end{array} \right.
- *      @f$
- */
-template <typename Dtype>
-class BNLLLayer : public NeuronLayer<Dtype> {
+    class AsarProtocolHandler : public net::URLRequestJobFactory::ProtocolHandler {
  public:
-  explicit BNLLLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-    }
-    }
-    
-    namespace caffe {
+  explicit AsarProtocolHandler(
+      const scoped_refptr<base::TaskRunner>& file_task_runner);
+  virtual ~AsarProtocolHandler();
     }
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
+    // Identical to RelaunchApp, but uses |helper| as the path to the relauncher
+// process, and allows additional arguments to be supplied to the relauncher
+// process in relauncher_args. Unlike args[0], |helper| must be a pathname to
+// an executable file. The helper path given must be from the same version of
+// Chrome as the running parent browser process, as there are no guarantees
+// that the parent and relauncher processes from different versions will be
+// able to communicate with one another. This variant can be useful to
+// relaunch the same version of Chrome from another location, using that
+// location's helper.
+bool RelaunchAppWithHelper(const base::FilePath& helper,
+                           const StringVector& relauncher_args,
+                           const StringVector& args);
     
-    
-    {}  // namespace caffe
-    
-    /**
- * @brief Takes two+ Blobs, interprets last Blob as a selector and
- *  filter remaining Blobs accordingly with selector data (0 means that
- * the corresponding item has to be filtered, non-zero means that corresponding
- * item needs to stay).
- */
-template <typename Dtype>
-class FilterLayer : public Layer<Dtype> {
- public:
-  explicit FilterLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+    void RelauncherSynchronizeWithParent() {
+  base::ScopedFD relauncher_sync_fd(kRelauncherSyncFD);
     }
     
-            for(int i=0;i<SEC_METHOD_ITERATIONS;i++){
-            _f->getGradient((double*)x.data,(double*)buf1.data);
-            dprintf(('buf1:\n'));
-            print_matrix(buf1);
-            x=x+sigma*d;
-            _f->getGradient((double*)x.data,(double*)buf2.data);
-            dprintf(('buf2:\n'));
-            print_matrix(buf2);
-            double d1=buf1.dot(d), d2=buf2.dot(d);
-            if((d1-d2)==0){
-                break;
-            }
-            double alpha=-sigma*d1/(d2-d1);
-            dprintf(('(buf2.dot(d)-buf1.dot(d))=%f\nalpha=%f\n',(buf2.dot(d)-buf1.dot(d)),alpha));
-            x=x+(alpha-sigma)*d;
-            sigma=-alpha;
-        }
+    HINSTANCE g_hInst = NULL;
+D3D_DRIVER_TYPE g_driverType = D3D_DRIVER_TYPE_NULL;
+D3D_FEATURE_LEVEL g_featureLevel = D3D_FEATURE_LEVEL_11_0;
+ID3D11Device* g_pd3dDevice = NULL;
+ID3D11DeviceContext* g_pImmediateContext = NULL;
+IDXGISwapChain* g_pSwapChain = NULL;
     
-            if (_nettosize != (int64)nettosize)
-            CV_Error(cv::Error::StsNoMem, 'Too big buffer is allocated');
+    void CalibrateExtrinsics(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
+                         const IntrinsicParams& param, const int check_cond,
+                         const double thresh_cond, InputOutputArray omc, InputOutputArray Tc);
     
-    // Prints a value using the type inferred by the compiler.  The
-// difference between this and UniversalTersePrint() is that for a
-// (const) char pointer, this prints both the pointer and the
-// NUL-terminated string.
-template <typename T>
-void UniversalPrint(const T& value, ::std::ostream* os) {
-  // A workarond for the bug in VC++ 7.1 that prevents us from instantiating
-  // UniversalPrinter with T directly.
-  typedef T T1;
-  UniversalPrinter<T1>::Print(value, os);
+    /// Reference : Eric W. Weisstein. 'Quartic Equation.' From MathWorld--A Wolfram Web Resource.
+/// http://mathworld.wolfram.com/QuarticEquation.html
+/// \return Number of real roots found.
+int solve_deg4(double a, double b, double c, double d, double e,
+               double & x0, double & x1, double & x2, double & x3)
+{
+  if (a == 0) {
+    x3 = 0;
+    return solve_deg3(b, c, d, e, x0, x1, x2);
+  }
+    }
+    
+        void ConjGradSolverImpl::minimizeOnTheLine(Ptr<MinProblemSolver::Function> _f,Mat_<double>& x,const Mat_<double>& d,Mat_<double>& buf1,
+            Mat_<double>& buf2){
+        double sigma=INITIAL_SEC_METHOD_SIGMA;
+        buf1=0.0;
+        buf2=0.0;
+    }
+    
+      if (flags.bit (ADAPTABLE_WERD)) {
+    status |= word->tess_would_adapt;  // result of Classify::AdaptableWord()
+    if (tessedit_adaption_debug && !status) {
+      tprintf('tess_would_adapt bit is false\n');
+    }
+  }
+    
+    class MutableIterator;
+    
+    static int LeadingUnicharsToChopped(WERD_RES *word, int num_unichars) {
+  int num_chopped = 0;
+  for (int i = 0; i < num_unichars; i++)
+    num_chopped += word->best_state[i];
+  return num_chopped;
 }
     
-    // This helper class is used by {ASSERT|EXPECT}_NO_FATAL_FAILURE to check if a
-// statement generates new fatal failures. To do so it registers itself as the
-// current test part result reporter. Besides checking if fatal failures were
-// reported, it only delegates the reporting to the former result reporter.
-// The original result reporter is restored in the destructor.
-// INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
-class GTEST_API_ HasNewFatalFailureHelper
-    : public TestPartResultReporterInterface {
- public:
-  HasNewFatalFailureHelper();
-  virtual ~HasNewFatalFailureHelper();
-  virtual void ReportTestPartResult(const TestPartResult& result);
-  bool has_new_fatal_failure() const { return has_new_fatal_failure_; }
- private:
-  bool has_new_fatal_failure_;
-  TestPartResultReporterInterface* original_reporter_;
+    namespace tesseract {
+void Tesseract::tess_segment_pass_n(int pass_n, WERD_RES *word) {
+  int saved_enable_assoc = 0;
+  int saved_chop_enable = 0;
+    }
     }
     
+      // Appends choice and truth details to the given debug string.
+  void FillDebugString(const STRING &msg, const WERD_CHOICE *choice,
+                       STRING *debug);
     
-    {  // With this overloaded version, we allow anonymous enums to be used
-  // in {ASSERT|EXPECT}_EQ when compiled with gcc 4, as anonymous
-  // enums can be implicitly cast to BiggestInt.
-  //
-  // Even though its body looks the same as the above version, we
-  // cannot merge the two, as it will make anonymous enums unhappy.
-  static AssertionResult Compare(const char* expected_expression,
-                                 const char* actual_expression,
-                                 BiggestInt expected,
-                                 BiggestInt actual) {
-    return CmpHelperEQ(expected_expression, actual_expression, expected,
-                       actual);
-  }
-};
+      // Computes all the cross product distances of the points perpendicular to
+  // the given direction, ignoring distances outside of the give distance range,
+  // storing the actual (signed) cross products in distances_.
+  void ComputeConstrainedDistances(const FCOORD& direction,
+                                   double min_dist, double max_dist);
     
-    // Returns the current OS stack trace as an std::string.
-//
-// The maximum number of stack frames to be included is specified by
-// the gtest_stack_trace_depth flag.  The skip_count parameter
-// specifies the number of top frames to be skipped, which doesn't
-// count against the number of frames to be included.
-//
-// For example, if Foo() calls Bar(), which in turn calls
-// GetCurrentOsStackTraceExceptTop(..., 1), Foo() will be included in
-// the trace but Bar() and GetCurrentOsStackTraceExceptTop() won't.
-GTEST_API_ std::string GetCurrentOsStackTraceExceptTop(
-    UnitTest* unit_test, int skip_count);
+    inline FCOORD &
+operator-= (                     //sum vectors
+FCOORD & op1,                    //operands
+const FCOORD & op2) {
+  op1.xcoord -= op2.xcoord;
+  op1.ycoord -= op2.ycoord;
+  return op1;
+}
     
-      void depart() {
-    if (link_.depart()) delete value_;
-  }
-    
-    template <typename T>
-struct IteratorTraits<const T*> {
-  typedef T value_type;
-};
-    
-    #include <string.h>
-#include <string>
-    
-      GTEST_DECLARE_TUPLE_AS_FRIEND_
-    
-    // Tests negative input.
-TEST(IsPrimeTest, Negative) {
-  // This test belongs to the IsPrimeTest test case.
+    void ROW::plot(               //draw it
+               ScrollView* window  //window to draw in
+              ) {
+  WERD *word;                    //current word
+  WERD_IT it = &words;           //words of ROW
     }
-    
-    namespace grpc {
-    }
-    
-    #include <grpc++/create_channel.h>
-#include <grpc++/security/credentials.h>
-#include <grpc/support/log.h>
     
     
     {
-}  // namespace routeguide
+    {        if (flags & CopyNodeFlags::copyNodeInputLinks)
+        {
+            // copy the children structure but use the new nodes generated
+            for (int i = 0; i < fromNode->GetNumInputs(); i++)
+                toNode->SetInput(i, GetNodeFromName(toNamePrefix + fromNode->GetInputs()[i]->NodeName()));
+        }
+    }
+}
     
-    # ifdef __GNUC_PREREQ
-#  if __GNUC_PREREQ(3,4)
-#   include <limits.h>
-/*Note the casts to (int) below: this prevents OC_CLZ{32|64}_OFFS from
-   'upgrading' the type of an entire expression to an (unsigned) size_t.*/
-#   if INT_MAX>=2147483647
-#    define OC_CLZ32_OFFS ((int)sizeof(unsigned)*CHAR_BIT)
-#    define OC_CLZ32(_x) (__builtin_clz(_x))
-#   elif LONG_MAX>=2147483647L
-#    define OC_CLZ32_OFFS ((int)sizeof(unsigned long)*CHAR_BIT)
-#    define OC_CLZ32(_x) (__builtin_clzl(_x))
-#   endif
-#   if INT_MAX>=9223372036854775807LL
-#    define OC_CLZ64_OFFS ((int)sizeof(unsigned)*CHAR_BIT)
-#    define OC_CLZ64(_x) (__builtin_clz(_x))
-#   elif LONG_MAX>=9223372036854775807LL
-#    define OC_CLZ64_OFFS ((int)sizeof(unsigned long)*CHAR_BIT)
-#    define OC_CLZ64(_x) (__builtin_clzl(_x))
-#   elif LLONG_MAX>=9223372036854775807LL|| \
-     __LONG_LONG_MAX__>=9223372036854775807LL
-#    define OC_CLZ64_OFFS ((int)sizeof(unsigned long long)*CHAR_BIT)
-#    define OC_CLZ64(_x) (__builtin_clzll(_x))
-#   endif
-#  endif
-# endif
+        // dense for comparison
+    mC.Resize(dim1, dim1);
+    mC.SetValue(0.0f);
+    Matrix<float>::MultiplyAndAdd(mAdense, transposeA, mAdense, transposeB, mC);
+    Matrix<float>::MultiplyAndWeightedAdd(alpha, mAdense, transposeA, mA2dense, transposeB, beta, mC);
+    
+        // ProcessNDLScript - Process the NDL script
+    // netNdl - netNDL structure
+    // ndlPassUntil - complete processing through this pass, all passes if ndlPassAll
+    // fullValidate - validate as a complete network? (false if this might be a snippet of a full network)
+    void ProcessNDLScript(NetNdl<ElemType>* netNdl, NDLPass ndlPassUntil = ndlPassAll, bool fullValidate = false)
+    {
+        ProcessNDLScript(netNdl->ndl, ndlPassUntil, netNdl->lastNode, fullValidate);
+    }
+    
+    public:
+    // DataWriter Constructor
+    // config - [in] configuration parameters for the datareader
+    template <class ConfigRecordType>
+    DataWriter(const ConfigRecordType& config);
+    // constructor from Scripting
+    DataWriter(const ScriptableObjects::IConfigRecordPtr configp)
+        : DataWriter(*configp)
+    {
+    }
+    virtual ~DataWriter();
     
     
-    
-    /* mapping conventions:
-   only one submap (this would change for efficient 5.1 support for example)*/
-/* Four psychoacoustic profiles are used, one for each blocktype */
-static const vorbis_info_mapping0 _map_nominal_u[2]={
-  {1, {0,0,0,0,0,0}, {0}, {0}, 0,{0},{0}},
-  {1, {0,0,0,0,0,0}, {1}, {1}, 0,{0},{0}}
+    {public:
+    inline const_array_ref(const _T* ptr, size_t size) throw()
+        : data(ptr), n(size)
+    {
+    }
+    inline const_array_ref() throw()
+        : data(NULL), n(0)
+    {
+    } // in case we have a vector of this
+    inline const _T& operator[](size_t i) const throw()
+    {
+        check_index(i);
+        return data[i];
+    }
+    inline size_t size() const throw()
+    {
+        return n;
+    }
+    inline const _T* begin()
+    {
+        return data;
+    }
+    inline const _T* end()
+    {
+        return data + n;
+    }
+    inline const _T& front() const throw()
+    {
+        check_index(0);
+        return data[0];
+    }
+    inline const _T& back() const throw()
+    {
+        check_index(0);
+        return data[n - 1];
+    }
+    // construct from other vector types
+    template <class _V>
+    inline const_array_ref(const _V& v)
+        : data(v.size() > 0 ? &v[0] : NULL), n((size_t) v.size())
+    {
+    }
 };
     
-    #ifndef _V_SCALES_H_
-#define _V_SCALES_H_
+        // return the horizontal sum of all 4 components
+    // ... return float4, use another mechanism to store the low word
+    float sum() const
+    {
+        float4 hsum = _mm_hadd_ps(v, v);
+        hsum = _mm_hadd_ps(hsum, hsum);
+        return hsum.f0();
+    }
     
-    # ifdef OPENSSL_FIPSCANISTER
-#  include <openssl/fipssyms.h>
-# endif
+      kFullType = 1,
     
-    #if defined(__WATCOMC__)
-void GetTSC(unsigned long&);
-#pragma aux GetTSC = 0x0f 0x31 'mov [edi], eax' parm [edi] modify [edx eax];
-#elif defined(__GNUC__)
-inline
-void GetTSC(unsigned long& tsc)
-{
-  asm volatile('.byte 15, 49\n\t'
-	       : '=eax' (tsc)
-	       :
-	       : '%edx', '%eax');
+    
+    {
+    {}  // namespace port
+}  // namespace leveldb
+    
+    int main(int argc, char** argv) {
+  // All tests currently run with the same read-only file limits.
+  leveldb::EnvPosixTest::SetFileLimits(leveldb::kReadOnlyFileLimit,
+                                       leveldb::kMMapLimit);
+  return leveldb::test::RunAllTests();
 }
-#elif defined(_MSC_VER)
-inline
-void GetTSC(unsigned long& tsc)
-{
-  unsigned long a;
-  __asm _emit 0fh
-  __asm _emit 31h
-  __asm mov a, eax;
-  tsc=a;
+
+    
+    #ifndef STORAGE_LEVELDB_DB_TABLE_CACHE_H_
+#define STORAGE_LEVELDB_DB_TABLE_CACHE_H_
+    
+    void Mutex::Unlock() { PthreadCall('unlock', pthread_mutex_unlock(&mu_)); }
+    
+      bool ParseNextKey() {
+    current_ = NextEntryOffset();
+    const char* p = data_ + current_;
+    const char* limit = data_ + restarts_;  // Restarts come right after data
+    if (p >= limit) {
+      // No more entries to return.  Mark as invalid.
+      current_ = restarts_;
+      restart_index_ = num_restarts_;
+      return false;
+    }
+    }
+    
+    /// Inspect the number of active internal status log sender threads.
+size_t queuedSenders();
+    
+    /**
+ * @brief Converts a struct tm into a human-readable format. This expected the
+ * struct tm to be already in UTC time/
+ *
+ * @param tm_time the time/date to convert to ASCII
+ *
+ * @return the data/time of tm_time in the format: 'Wed Sep 21 10:27:52 2011'
+ */
+std::string toAsciiTime(const struct tm* tm_time);
+    
+      // Tear down device node data.
+  if (!(osquery.major_number < 0)) {
+    if (cdevsw_remove(osquery.major_number, &osquery_cdevsw) < 0) {
+      panic('osquery kext: Cannot remove osquery from cdevsw');
+    }
+  }
+    
+    TEST_F(ViewsConfigParserPluginTests, test_swap_view) {
+  Config c;
+  std::vector<std::string> old_views_vec;
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  old_views_vec.clear();
+  auto s = c.update(getTestConfigMap('view_test.conf'));
+  EXPECT_TRUE(s.ok());
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  EXPECT_EQ(old_views_vec[0], 'config_views.kernel_hashes_new');
+    }
+    
+    #include <gtest/gtest.h>
+    
+    void EncodeDCTBlockSequential(const coeff_t* coeffs,
+                              const HuffmanCodeTable& dc_huff,
+                              const HuffmanCodeTable& ac_huff,
+                              coeff_t* last_dc_coeff,
+                              BitWriter* bw) {
+  coeff_t temp2;
+  coeff_t temp;
+  temp2 = coeffs[0];
+  temp = temp2 - *last_dc_coeff;
+  *last_dc_coeff = temp2;
+  temp2 = temp;
+  if (temp < 0) {
+    temp = -temp;
+    temp2--;
+  }
+  int nbits = Log2Floor(temp) + 1;
+  bw->WriteBits(dc_huff.depth[nbits], dc_huff.code[nbits]);
+  if (nbits > 0) {
+    bw->WriteBits(nbits, temp2 & ((1 << nbits) - 1));
+  }
+  int r = 0;
+  for (int k = 1; k < 64; ++k) {
+    if ((temp = coeffs[kJPEGNaturalOrder[k]]) == 0) {
+      r++;
+      continue;
+    }
+    if (temp < 0) {
+      temp = -temp;
+      temp2 = ~temp;
+    } else {
+      temp2 = temp;
+    }
+    while (r > 15) {
+      bw->WriteBits(ac_huff.depth[0xf0], ac_huff.code[0xf0]);
+      r -= 16;
+    }
+    int nbits = Log2FloorNonZero(temp) + 1;
+    int symbol = (r << 4) + nbits;
+    bw->WriteBits(ac_huff.depth[symbol], ac_huff.code[symbol]);
+    bw->WriteBits(nbits, temp2 & ((1 << nbits) - 1));
+    r = 0;
+  }
+  if (r > 0) {
+    bw->WriteBits(ac_huff.depth[0], ac_huff.code[0]);
+  }
 }
-#endif      
     
-      /// Expire all datums within a bin.
-  void expireRecords(const std::string& list_type,
-                     const std::string& index,
-                     bool all);
-    
-    /// Status get a list of active extenions.
-Status getExtensions(ExtensionList& extensions);
-    
-    struct FlagDetail {
-  std::string description;
-  bool shell;
-  bool external;
-  bool cli;
-  bool hidden;
-};
-    
-      // All control should be from a single daemon.
-  // Wrap all IOCTL API handling in locks to guarantee proper use.
-  lck_mtx_lock(osquery.mtx);
-  switch (cmd) {
-  // Daemon is requesting a new subscription (e.g., monitored path).
-  case OSQUERY_IOCTL_SUBSCRIPTION:
-    sub = (osquery_subscription_args_t *)data;
-    if ((err = subscribe_to_event(sub->event, sub->subscribe))) {
-      goto error_exit;
-    }
-    break;
-    }
-    
-      /*
-   * @brief a variable tracking all of the paths we attempt to carve
-   *
-   * This is a globbed set of file paths that we're expecting will be
-   * carved.
-   */
-  std::set<boost::filesystem::path> carvePaths_;
-    
-    TEST_F(TLSConfigTests, test_runner_and_scheduler) {
-  Flag::updateValue('config_tls_endpoint', '/config');
-  // Will cause another enroll.
-  Registry::get().setActive('config', 'tls');
-    }
-    
-    
-    {  uri_ = TLSRequestHelper::makeURI(FLAGS_config_tls_endpoint);
-  return Status(0, 'OK');
+    inline void ColorTransformYCbCrToRGB(uint8_t* pixel) {
+  int y  = pixel[0];
+  int cb = pixel[1];
+  int cr = pixel[2];
+  pixel[0] = kRangeLimit[y + kCrToRedTable[cr]];
+  pixel[1] = kRangeLimit[y +
+                         ((kCrToGreenTable[cr] + kCbToGreenTable[cb]) >> 16)];
+  pixel[2] = kRangeLimit[y + kCbToBlueTable[cb]];
 }
     
-    std::string stringFromCFAbsoluteTime(const CFDataRef& cf_abstime) {
-  double value;
-  if (CFNumberGetValue((CFNumberRef)cf_abstime, kCFNumberFloat64Type, &value)) {
-    // Add seconds difference between CFAbsoluteTime and UNIX times.
-    value += kCFAbsoluteTimeIntervalSince1970;
-    }
-    }
-    
-    void BuildSequentialHuffmanCodes(
-    const JPEGData& jpg,
-    std::vector<HuffmanCodeTable>* dc_huffman_code_tables,
-    std::vector<HuffmanCodeTable>* ac_huffman_code_tables) {
-  JPEGOutput out(NullOut, nullptr);
-  BuildAndEncodeHuffmanCodes(jpg, out, dc_huffman_code_tables,
-                             ac_huffman_code_tables);
+    inline int Log2FloorNonZero(uint32_t n) {
+#ifdef __GNUC__
+  return 31 ^ __builtin_clz(n);
+#else
+  unsigned int result = 0;
+  while (n >>= 1) result++;
+  return result;
+#endif
 }
     
-        size_t i = 0;      // Points to the next leaf node.
-    size_t j = n + 1;  // Points to the next non-leaf node.
-    for (size_t k = n - 1; k != 0; --k) {
-      size_t left, right;
-      if (tree[i].total_count_ <= tree[j].total_count_) {
-        left = i;
-        ++i;
-      } else {
-        left = j;
-        ++j;
-      }
-      if (tree[i].total_count_ <= tree[j].total_count_) {
-        right = i;
-        ++i;
-      } else {
-        right = j;
-        ++j;
-      }
-    }
+        int getAlignContent(void) const;
+    int getAlignItems(void) const;
+    int getAlignSelf(void) const;
+    int getFlexDirection(void) const;
+    int getFlexWrap(void) const;
+    int getJustifyContent(void) const;
     
-    void AddApp0Data(JPEGData* jpg) {
-  const unsigned char kApp0Data[] = {
-      0xe0, 0x00, 0x10,              // APP0
-      0x4a, 0x46, 0x49, 0x46, 0x00,  // 'JFIF'
-      0x01, 0x01,                    // v1.01
-      0x00, 0x00, 0x01, 0x00, 0x01,  // aspect ratio = 1:1
-      0x00, 0x00                     // thumbnail width/height
-  };
-  jpg->app_data.push_back(
-      std::string(reinterpret_cast<const char*>(kApp0Data),
-                                 sizeof(kApp0Data)));
-}
+        double width;
+    double height;
+    
+      YGNodeCalculateLayout(root, YGUndefined, YGUndefined, YGDirectionRTL);
+    
+      const YGNodeRef root_child0 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetFlexGrow(root_child0, 1);
+  YGNodeInsertChild(root, root_child0, 0);
+    
+    #include <gtest/gtest.h>
+#include <yoga/Yoga.h>
+    
+      ASSERT_FLOAT_EQ(0, YGNodeLayoutGetLeft(root_child0));
+  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetTop(root_child0));
+  ASSERT_FLOAT_EQ(100, YGNodeLayoutGetWidth(root_child0));
+  ASSERT_FLOAT_EQ(200, YGNodeLayoutGetHeight(root_child0));
+    
+    private:
+  void ref() {
+    ++m_refcount;
+  }
