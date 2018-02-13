@@ -1,335 +1,377 @@
 
         
-        
-  // Checks whether chops were made at all the character bounding box
-  // boundaries in word->truth_word. If not - blames the chopper for an
-  // incorrect answer.
-  void SetChopperBlame(const WERD_RES* word, bool debug);
-  // Blames the classifier or the language model if, after running only the
-  // chopper, best_choice is incorrect and no blame has been yet set.
-  // Blames the classifier if best_choice is classifier's top choice and is a
-  // dictionary word (i.e. language model could not have helped).
-  // Otherwise, blames the language model (formerly permuter word adjustment).
-  void BlameClassifierOrLangModel(
-      const WERD_RES* word,
-      const UNICHARSET& unicharset, bool valid_permuter, bool debug);
-  // Sets up the correct_segmentation_* to mark the correct bounding boxes.
-  void SetupCorrectSegmentation(const TWERD* word, bool debug);
+          /// When evaluating an expression in the context of an existing source file,
+  /// we may want to prefer declarations from that source file.
+  /// The DebuggerClient can return a private-discriminator to tell lookup to
+  /// prefer these certain decls.
+  virtual Identifier getPreferredPrivateDiscriminator() = 0;
     
-    /**********************************************************************
- * read_unlv_file
+    void SyntaxASTMap::clearSyntaxMap() {
+  SyntaxMap.shrink_and_clear();
+}
+    
+      /// True if the FuncDecl requires an ObjC method descriptor.
+  bool requiresObjCMethodDescriptor(FuncDecl *method);
+    
+      if (worklist.empty())
+    return;
+    
+    SWIFT_DISPATCH_SOURCE_TYPE(DATA_ADD)
+SWIFT_DISPATCH_SOURCE_TYPE(DATA_OR)
+SWIFT_DISPATCH_SOURCE_TYPE(DATA_REPLACE)
+SWIFT_DISPATCH_SOURCE_TYPE(MACH_SEND)
+SWIFT_DISPATCH_SOURCE_TYPE(MACH_RECV)
+SWIFT_DISPATCH_SOURCE_TYPE(MEMORYPRESSURE)
+SWIFT_DISPATCH_SOURCE_TYPE(PROC)
+SWIFT_DISPATCH_SOURCE_TYPE(READ)
+SWIFT_DISPATCH_SOURCE_TYPE(SIGNAL)
+SWIFT_DISPATCH_SOURCE_TYPE(TIMER)
+SWIFT_DISPATCH_SOURCE_TYPE(VNODE)
+SWIFT_DISPATCH_SOURCE_TYPE(WRITE)
+    
+    #pragma mark - NSData verification
+    
+      llvm::hash_code hashRecord() const { return recordHash; }
+    
+      // Only allow allocation using the allocator in MarkupContext or by
+  // placement new.
+  void *operator new(size_t Bytes, swift::markup::MarkupContext &MC,
+                     unsigned Alignment = alignof(DocComment));
+  void *operator new(size_t Bytes, void *Mem) {
+    assert(Mem);
+    return Mem;
+  }
+    
+    
+    {  bool hasFunctionDocumentation() const {
+    return !ParamFields.empty() ||
+             ReturnsField.hasValue() ||
+             ThrowsField.hasValue();
+  }
+};
+    
+      bool isInputBufferID(unsigned BufferID) const {
+    return std::binary_search(InputBufIDs.begin(), InputBufIDs.end(), BufferID);
+  }
+    
+    // class PathArgument
+// //////////////////////////////////////////////////////////////////
+    
+    // Find the file that declares the given fully-qualified symbol name.
+bool PyDescriptorDatabase::FindFileContainingSymbol(
+    const string& symbol_name, FileDescriptorProto* output) {
+  ScopedPyObjectPtr py_descriptor(
+      PyObject_CallMethod(py_database_, 'FindFileContainingSymbol', 's#',
+                          symbol_name.c_str(), symbol_name.size()));
+  return GetFileDescriptorProto(py_descriptor.get(), output);
+}
+    
+    
+    {  // Pointer to the parent's descriptor that describes this
+  // field.  Used together with the parent's message when making a
+  // default message instance mutable.
+  // The pointer is owned by the global DescriptorPool.
+  const FieldDescriptor* parent_field_descriptor;
+} RepeatedScalarContainer;
+    
+    #include <string>
+    
+    void RepeatedMessageFieldGenerator::WriteToString(io::Printer* printer) {
+  variables_['field_name'] = GetFieldName(descriptor_);
+  printer->Print(
+    variables_,
+    'PrintField(\'$field_name$\', $name$_, writer);\n');
+}
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/csharp/csharp_field_base.h>
+    
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
+    
+    #include <sstream>
+    
+    #include <string>
+    
+     private:
+  const FieldDescriptor* descriptor_;
+  Context* context_;
+  ClassNameResolver* name_resolver_;
+  string scope_;
+    
+      /**
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to the data.
+   *
+   * @param datum
+   *    Datum containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See data_layer.cpp for an example.
+   */
+  void Transform(const Datum& datum, Blob<Dtype>* transformed_blob);
+    
+      virtual inline const char* type() const { return 'BNLL'; }
+    
+    
+    {  /// when divided by UINT_MAX, the randomly generated values @f$u\sim U(0,1)@f$
+  Blob<unsigned int> rand_vec_;
+  /// the probability @f$ p @f$ of dropping any input
+  Dtype threshold_;
+  /// the scale for undropped inputs at train time @f$ 1 / (1 - p) @f$
+  Dtype scale_;
+  unsigned int uint_thres_;
+};
+    
+    /**
+ * @brief Compute elementwise operations, such as product and sum,
+ *        along multiple input Blobs.
  *
- * Read a whole unlv zone file to make a list of blocks.
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+template <typename Dtype>
+class EltwiseLayer : public Layer<Dtype> {
+ public:
+  explicit EltwiseLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    
+    {}  // namespace
+    
+    
+/**********************************************************************
+ * operator-
+ *
+ * Unary minus of an FCOORD.
  **********************************************************************/
     
-    // Returns true if there were enough points at the last call to Fit or
-// ConstrainedFit for the fitted points to be used on a badly fitted line.
-bool DetLineFit::SufficientPointsForIndependentFit() const {
-  return distances_.size() >= kMinPointsForErrorCount;
+    
+/**********************************************************************
+ * LLSQ::remove
+ *
+ * Delete an element from the acculuator.
+ **********************************************************************/
+    
+      // To help very high cap/xheight ratio fonts accept the correct x-height,
+  // and to allow the large caps in small caps to accept the xheight of the
+  // small caps, add kBlnBaselineOffset to chars with a maximum max, and have
+  // a top already at a significantly high position.
+  if (max_top == kBlnCellHeight - 1 &&
+      top > kBlnCellHeight - kBlnBaselineOffset / 2)
+    max_top += kBlnBaselineOffset;
+  top -= bln_yshift;
+  int height = top - kBlnBaselineOffset;
+  double min_height = min_top - kBlnBaselineOffset - tolerance;
+  double max_height = max_top - kBlnBaselineOffset + tolerance;
+    
+    namespace tesseract {
+    }
+    
+    template<class SerDe>
+typename std::enable_if<!SerDe::deserializing>::type
+ArrayTypeTable::serde(SerDe& sd) {
+  always_assert(m_arrTypes.size() < std::numeric_limits<uint32_t>::max());
+  uint32_t const size = m_arrTypes.size();
+  sd(size);
+  for (auto i = uint32_t{0}; i < size; ++i) {
+    m_arrTypes[i]->serialize(sd);
+  }
 }
     
-     public:
-  BLOCK()
-    : re_rotation_(1.0f, 0.0f),
-      classify_rotation_(1.0f, 0.0f),
-      skew_(1.0f, 0.0f) {
-    right_to_left_ = false;
-    hand_poly = NULL;
-  }
-  BLOCK(const char *name,  //< filename
-        BOOL8 prop,        //< proportional
-        inT16 kern,        //< kerning
-        inT16 space,       //< spacing
-        inT16 xmin,        //< bottom left
-        inT16 ymin,
-        inT16 xmax,        //< top right
-        inT16 ymax);
-    
-        // U8_NEXT() advances sourceBytePos by 1-4 each time it's invoked.
-    UChar32 curCodePoint;
-    U8_NEXT(srcBuf, srcPosBytes, srcLenBytes, curCodePoint);
-    
-    #define PRINT_MSG(...)                          \
-  switch (m_report) {                           \
-    case Log:                                   \
-      Logger::Info(__VA_ARGS__);                \
-      break;                                    \
-    case Stderr:                                \
-      fprintf(stderr, __VA_ARGS__);             \
-      break;                                    \
-    case Trace:                                 \
-      Trace::traceRelease(__VA_ARGS__);         \
-      break;                                    \
-    default: not_reached();                     \
+      using A = RepoAuthType::Array;
+  using T = A::Tag;
+  switch (ar.emptiness()) {
+  case A::Empty::No:
+    ret += 'N(';    // non-empty
+    break;
+  case A::Empty::Maybe:
+    ret += '(';
+    break;
   }
     
-    #include <folly/Optional.h>
     
-    struct Clusterizer {
-  Clusterizer(Vunit& unit, const Scale& scale)
-      : m_unit(unit)
-      , m_scale(scale)
-      , m_blocks(sortBlocks(unit)) {
-    initClusters();
-    clusterize();
-    sortClusters();
-    splitHotColdClusters();
-    FTRACE(1, '{}', toString());
-  }
+    {  if (flags & XhpTrace) {
+    s_profiler_factory->start(ProfilerKind::Trace, flags);
+  } else if (flags & Memo) {
+    flags = 0;  /* flags are not used by MemoProfiler::MemoProfiler */
+    s_profiler_factory->start(ProfilerKind::Memo, flags);
+  } else if (flags & External) {
+    for (ArrayIter iter(args); iter; ++iter) {
+      if (iter.first().toInt32() == 0) {
+         flags = iter.second().toInt32();
+      }
     }
-    
-      PageletTask(const String& url, const Array& headers, const String& post_data,
-              const String& remote_host,
-              const std::set<std::string> &rfc1867UploadedFiles,
-              const Array& files, int timeoutSeconds) {
-    m_job = new PageletTransport(url, headers, remote_host, post_data,
-                                 rfc1867UploadedFiles, files, timeoutSeconds);
-    m_job->incRefCount();
+    s_profiler_factory->start(ProfilerKind::External, flags);
+  } else {
+    s_profiler_factory->start(ProfilerKind::Hierarchical, flags);
   }
-    
-    struct Server;
-struct ServerFactory;
-using ServerPtr = std::unique_ptr<Server>;
-using ServerFactoryPtr = std::shared_ptr<ServerFactory>;
-    
-    
-    {  return getegid();
 }
     
-    #ifndef BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
-#define BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    #if !defined(BOOST_ASIO_WINDOWS) && !defined(__CYGWIN__)
-    
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
-    }
-    
-    template <typename Handler>
-inline void deallocate(void* p, std::size_t s, Handler& h)
-{
-#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
-  ::operator delete(p);
-#else
-  using boost::asio::asio_handler_deallocate;
-  asio_handler_deallocate(p, s, boost::asio::detail::addressof(h));
-#endif
+    SlowTimer::SlowTimer(int64_t msThreshold, const char *location, const char *info)
+  : m_timer(Timer::WallTime), m_msThreshold(msThreshold) {
+  if (location) m_location = location;
+  if (info) m_info = info;
 }
     
-        // Operation failed.
-    if ((state & user_set_non_blocking)
-        || (ec != boost::asio::error::would_block
-          && ec != boost::asio::error::try_again))
-      return 0;
+    struct SlowTimer {
+  SlowTimer(int64_t msThreshold, const char *location, const char *info);
+  ~SlowTimer();
+    }
     
-      if (shutdown_)
-  {
-    post_immediate_completion(op, is_continuation);
-    return;
+      CmdAuth cmd;
+  cmd.setSandboxPath(sandboxPath);
+  if (!cmd.onServer(*this)) {
+    TRACE_RB(2, 'DebuggerProxy::requestAuthToken: '
+             'Failed to send CmdAuth to client\n');
+    return '';
   }
+    
+    namespace jit {
+    }
+    
+    /*
+ * Vasm constant.
+ *
+ * Either a 1, 4, or 8 byte unsigned value, 8 byte double, or the disp32 part
+ * of a thread-local address of an immutable constant that varies by thread.
+ * Constants may also represent an undefined value, indicated by the isUndef
+ * member.
+ *
+ * Also contains convenience constructors for various pointer and enum types.
+ */
+struct Vconst {
+  enum Kind { Quad, Long, Byte, Double };
+    }
+    
+    /*
+ * Make block weights more consistent by enforcing that the weight of each block
+ * doesn't exceed the sums of the weights of its predecessors or its successors.
+ */
+void fixBlockWeights(Vunit& unit);
+    
+      if (asprintf(&hmagicpath, '%s/.magic.mgc', home) < 0)
+    return MAGIC;
+  if (stat(hmagicpath, &st) == -1) {
+    free(hmagicpath);
+  if (asprintf(&hmagicpath, '%s/.magic', home) < 0)
+    return MAGIC;
+  if (stat(hmagicpath, &st) == -1)
+    goto out;
+  if (S_ISDIR(st.st_mode)) {
+    free(hmagicpath);
+    if (asprintf(&hmagicpath, '%s/%s', home, hmagic) < 0)
+      return MAGIC;
+    if (access(hmagicpath, R_OK) == -1)
+      goto out;
+  }
+  }
+    
+    #include <folly/String.h>
+    
+    
+    {  if (rv == 0) {
+    return FutexResult::AWOKEN;
+  } else {
+    switch(errno) {
+      case ETIMEDOUT:
+        assert(timeout != nullptr);
+        return FutexResult::TIMEDOUT;
+      case EINTR:
+        return FutexResult::INTERRUPTED;
+      case EWOULDBLOCK:
+        return FutexResult::VALUE_CHANGED;
+      default:
+        assert(false);
+        // EINVAL, EACCESS, or EFAULT.  EINVAL means there was an invalid
+        // op (should be impossible) or an invalid timeout (should have
+        // been sanitized by timeSpecFromTimePoint).  EACCESS or EFAULT
+        // means *addr points to invalid memory, which is unlikely because
+        // the caller should have segfaulted already.  We can either
+        // crash, or return a value that lets the process continue for
+        // a bit. We choose the latter. VALUE_CHANGED probably turns the
+        // caller into a spin lock.
+        return FutexResult::VALUE_CHANGED;
+    }
+  }
+}
+    
+    template <>
+CacheLocality const& CacheLocality::system<test::DeterministicAtomic>() {
+  static CacheLocality cache(CacheLocality::uniform(16));
+  return cache;
+}
+    
+    template <class... Ts>
+struct MakeMembers {
+  template <Ts... Vs>
+  using Members = PolyMembers<Member<Ts, Vs>...>;
+};
+    
+      static bool initialize() {
+    getcpuFunc = pickGetcpuFunc();
+    }
+    
+    namespace detail {
+    }
     
     
     {
-    {    if (!s.ok()) {
-      assert(table == NULL);
-      delete file;
-      // We do not cache error results so that if the error is transient,
-      // or somebody repairs the file, we recover automatically.
-    } else {
-      TableAndFile* tf = new TableAndFile;
-      tf->file = file;
-      tf->table = table;
-      *handle = cache_->Insert(key, tf, 1, &DeleteEntry);
+    {inline size_t qfind_first_byte_of_nosse(
+    const StringPieceLite haystack,
+    const StringPieceLite needles) {
+  if (UNLIKELY(needles.empty() || haystack.empty())) {
+    return std::string::npos;
+  }
+  // The thresholds below were empirically determined by benchmarking.
+  // This is not an exact science since it depends on the CPU, the size of
+  // needles, and the size of haystack.
+  if ((needles.size() >= 4 && haystack.size() <= 10) ||
+      (needles.size() >= 16 && haystack.size() <= 64) || needles.size() >= 32) {
+    return qfind_first_byte_of_byteset(haystack, needles);
+  }
+  return qfind_first_byte_of_std(haystack, needles);
+}
+} // namespace detail
+} // namespace folly
+
+    
+      size_t i = nextAlignedIndex(haystack.data());
+  for (; i < haystack.size(); i += 16) {
+    ret = scanHaystackBlock<true>(haystack, needles, i);
+    if (ret != std::string::npos) {
+      return ret;
     }
   }
-  return s;
+    
+    
+    {  auto s = std::allocate_shared<std::string>(
+    rebind_allocator<std::string>(alloc), 'HELLO, WORLD'
+  );
+  ASSERT_NE(nullptr, s.get());
+  EXPECT_EQ('HELLO, WORLD', *s);
+  s.reset();
+  ASSERT_EQ(nullptr, s.get());
 }
     
-          case kNextFileNumber:
-        if (GetVarint64(&input, &next_file_number_)) {
-          has_next_file_number_ = true;
-        } else {
-          msg = 'next file number';
-        }
-        break;
     
-    
-    {    FILE* cpuinfo = fopen('/proc/cpuinfo', 'r');
-    if (cpuinfo != NULL) {
-      char line[1000];
-      int num_cpus = 0;
-      std::string cpu_type;
-      std::string cache_size;
-      while (fgets(line, sizeof(line), cpuinfo) != NULL) {
-        const char* sep = strchr(line, ':');
-        if (sep == NULL) {
-          continue;
-        }
-        Slice key = TrimSpace(Slice(line, sep - 1 - line));
-        Slice val = TrimSpace(Slice(sep + 1));
-        if (key == 'model name') {
-          ++num_cpus;
-          cpu_type = val.ToString();
-        } else if (key == 'cache size') {
-          cache_size = val.ToString();
-        }
-      }
-      fclose(cpuinfo);
-      fprintf(stderr, 'CPU:            %d * %s\n', num_cpus, cpu_type.c_str());
-      fprintf(stderr, 'CPUCache:       %s\n', cache_size.c_str());
-    }
-#endif
-  }
-    
-    // Returns a new environment that stores its data in memory and delegates
-// all non-file-storage tasks to base_env. The caller must delete the result
-// when it is no longer needed.
-// *base_env must remain live while the result is in use.
-Env* NewMemEnv(Env* base_env);
-    
-    
-    {  // These are no-ops, but we test they return success.
-  ASSERT_OK(writable_file->Sync());
-  ASSERT_OK(writable_file->Flush());
-  ASSERT_OK(writable_file->Close());
-  delete writable_file;
-}
-    
-    void Mutex::Lock() { PthreadCall('lock', pthread_mutex_lock(&mu_)); }
-    
-      virtual bool Valid() const { return current_ < restarts_; }
-  virtual Status status() const { return status_; }
-  virtual Slice key() const {
-    assert(Valid());
-    return key_;
-  }
-  virtual Slice value() const {
-    assert(Valid());
-    return value_;
-  }
-    
-    
-    {  Iterator* iter_;
-  bool valid_;
-  Slice key_;
+    { private:
+  template <typename Fn>
+  using IsMemFn = typename boost::function_types::template is_member_pointer<
+    decltype(&Fn::operator())
+  >;
+  template <typename Fn>
+  constexpr static typename std::enable_if<IsMemFn<Fn>::value, Kind>::type
+  test(IsMemFn<Fn>*) { return IdentifyCallable::Kind::MemberFunction; }
+  template <typename>
+  constexpr static Kind test(...) { return IdentifyCallable::Kind::Function; }
 };
-    
-    void OutputImage::Downsample(const DownsampleConfig& cfg) {
-  if (components_[1].IsAllZero() && components_[2].IsAllZero()) {
-    // If the image is already grayscale, nothing to do.
-    return;
-  }
-  if (cfg.use_silver_screen &&
-      cfg.u_factor_x == 2 && cfg.u_factor_y == 2 &&
-      cfg.v_factor_x == 2 && cfg.v_factor_y == 2) {
-    std::vector<uint8_t> rgb = ToSRGB();
-    std::vector<std::vector<float> > yuv = RGBToYUV420(rgb, width_, height_);
-    SetDownsampledCoefficients(yuv[0], 1, 1, &components_[0]);
-    SetDownsampledCoefficients(yuv[1], 2, 2, &components_[1]);
-    SetDownsampledCoefficients(yuv[2], 2, 2, &components_[2]);
-    return;
-  }
-  // Get the floating-point precision YUV array represented by the set of
-  // DCT coefficients.
-  std::vector<std::vector<float> > yuv(3, std::vector<float>(width_ * height_));
-  for (int c = 0; c < 3; ++c) {
-    components_[c].ToFloatPixels(&yuv[c][0], 1);
-  }
-    }
-    
-    void ComputeBlockIDCTDouble(double block[64]) {
-  TransformBlock(block, IDCT1d);
-}
-    
-    inline int Log2Floor(uint32_t n) {
-  return n == 0 ? -1 : Log2FloorNonZero(n);
-}
-    
-    namespace guetzli {
-    }
-    
-    #include 'guetzli/jpeg_data.h'
-    
-    namespace guetzli {
-    }
-    
-    namespace guetzli {
-    }
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    namespace design_patterns {
-    }
-    
-    ScopeJEnv::~ScopeJEnv() {
-    if (NULL != env_) {
-        env_->PopLocalFrame(NULL);
-    }
-}
-    
-    #include 'db/_wrapper.h'
-#include 'rocksdb/db.h'
-#include 'rocksdb/options.h'
-#include 'rocksdb/slice.h'
-    
-    namespace rocksdb {
-    }
-    
-      virtual bool PartialMergeMulti(const Slice& key,
-                                 const std::deque<Slice>& operand_list,
-                                 std::string* new_value, Logger* logger) const
-      override;
-    
-    
-    {    TEST_SYNC_POINT('CheckpointImpl::CreateCheckpoint:SavedLiveFiles1');
-    TEST_SYNC_POINT('CheckpointImpl::CreateCheckpoint:SavedLiveFiles2');
-    db_->FlushWAL(false /* sync */);
-  }
-  // if we have more than one column family, we need to also get WAL files
-  if (s.ok()) {
-    s = db_->GetSortedWalFiles(live_wal_files);
-  }
-  if (!s.ok()) {
-    return s;
-  }
-    
-    
-    {  // Note: we may want to access the Java callback object instance
-  // across multiple method calls, so we create a global ref
-  assert(jcallback_obj != nullptr);
-  m_jcallback_obj = env->NewGlobalRef(jcallback_obj);
-  if(jcallback_obj == nullptr) {
-    // exception thrown: OutOfMemoryError
-    return;
-  }
-}
-    
-      class StatisticsJni : public StatisticsImpl {
-   public:
-     StatisticsJni(std::shared_ptr<Statistics> stats);
-     StatisticsJni(std::shared_ptr<Statistics> stats,
-         const std::set<uint32_t> ignore_histograms);
-     virtual bool HistEnabledForType(uint32_t type) const override;
-    }
-    
-    
-    {        ImGui::Render();
-    }
-    
-            // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
