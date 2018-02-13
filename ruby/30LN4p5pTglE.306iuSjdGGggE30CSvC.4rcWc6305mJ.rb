@@ -1,84 +1,60 @@
 
         
-            # Fetch YAML front-matter data from related doc, without layout key
-    #
-    # Returns Hash of doc data
-    def data
-      @data ||= doc.data.dup
-      @data.delete('layout')
-      @data.delete('excerpt')
-      @data
-    end
-    
-    module Jekyll
-  module External
-    class << self
-      #
-      # Gems that, if installed, should be loaded.
-      # Usually contain subcommands.
-      #
-      def blessed_gems
-        %w(
-          jekyll-docs
-          jekyll-import
-        )
+              def request_authorization_consent_form
+        add_claims_to_scopes
+        endpoint = Api::OpenidConnect::AuthorizationPoint::EndpointStartPoint.new(current_user)
+        handle_start_point_response(endpoint)
       end
     
-      module ClassMethods
-    def load_types_in(module_name, my_name = module_name.singularize)
-      const_set(:MODULE_NAME, module_name)
-      const_set(:BASE_CLASS_NAME, my_name)
-      const_set(:TYPES, Dir[Rails.root.join('app', 'models', module_name.underscore, '*.rb')].map { |path| module_name + '::' + File.basename(path, '.rb').camelize })
-    end
+          # Find a Sass file, if it exists.
+      #
+      # This is the primary entry point of the Importer.
+      # It corresponds directly to an `@import` statement in Sass.
+      # It should do three basic things:
+      #
+      # * Determine if the URI is in this importer's format.
+      #   If not, return nil.
+      # * Determine if the file indicated by the URI actually exists and is readable.
+      #   If not, return nil.
+      # * Read the file and place the contents in a {Sass::Engine}.
+      #   Return that engine.
+      #
+      # If this importer's format allows for file extensions,
+      # it should treat them the same way as the default {Filesystem} importer.
+      # If the URI explicitly has a `.sass` or `.scss` filename,
+      # the importer should look for that exact file
+      # and import it as the syntax indicated.
+      # If it doesn't exist, the importer should return nil.
+      #
+      # If the URI doesn't have either of these extensions,
+      # the importer should look for files with the extensions.
+      # If no such files exist, it should return nil.
+      #
+      # The {Sass::Engine} to be returned should be passed `options`,
+      # with a few modifications. `:syntax` should be set appropriately,
+      # `:filename` should be set to `uri`,
+      # and `:importer` should be set to this importer.
+      #
+      # @param uri [String] The URI to import.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` that's currently being resolved.
+      #   This is safe for subclasses to modify destructively.
+      #   Callers should only pass in a value they don't mind being destructively modified.
+      # @return [Sass::Engine, nil] An Engine containing the imported file,
+      #   or nil if it couldn't be found or was in the wrong format.
+      def find(uri, options)
+        Sass::Util.abstract(self)
+      end
     
-        def run!
-      @thread = Thread.new do
-        Thread.current[:name] = '#{id}-#{Time.now}'
-        begin
-          run
-        rescue SignalException, SystemExit
-          stop!
-        rescue StandardError => e
-          message = '#{id} Exception #{e.message}:\n#{e.backtrace.first(10).join('\n')}'
-          AgentRunner.with_connection do
-            agent.error(message)
-          end
+      module Sass::Plugin::Configuration
+    # Different default options in a m environment.
+    def default_options
+      @default_options ||= begin
+        version = Merb::VERSION.split('.').map {|n| n.to_i}
+        if version[0] <= 0 && version[1] < 5
+          root = MERB_ROOT
+          env  = MERB_ENV
+        else
+          root = Merb.root.to_s
+          env  = Merb.environment
         end
-      end
-    end
-    
-        respond_to do |format|
-      format.html
-      format.json {
-        send_data Utils.pretty_jsonify(@user_credentials.limit(nil).as_json), disposition: 'attachment'
-      }
-    end
-  end
-    
-      context 'called with one color' do
-    it 'applies same color to all sides' do
-      rule = 'border-color: #f00'
-    
-          expect('.border-width-implied-left').to have_rule(rule)
-    end
-  end
-    
-        @inputs_list = %w(
-      [type='color']
-      [type='date']
-      [type='datetime']
-      [type='datetime-local']
-      [type='email']
-      [type='month']
-      [type='number']
-      [type='password']
-      [type='search']
-      [type='tel']
-      [type='text']
-      [type='time']
-      [type='url']
-      [type='week']
-      input:not([type])
-      textarea
-    )
-  end
