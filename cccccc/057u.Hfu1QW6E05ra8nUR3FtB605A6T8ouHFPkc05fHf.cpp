@@ -1,136 +1,191 @@
 
         
-          OurReader(OurFeatures const& features);
-  bool parse(const char* beginDoc,
-             const char* endDoc,
-             Value& root,
-             bool collectComments = true);
-  std::string getFormattedErrorMessages() const;
-  std::vector<StructuredError> getStructuredErrors() const;
-  bool pushError(const Value& value, const std::string& message);
-  bool pushError(const Value& value, const std::string& message, const Value& extra);
-  bool good() const;
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
+        namespace testing {
     }
     
+    // Unary predicate assertion macros.
+#define EXPECT_PRED_FORMAT1(pred_format, v1) \
+  GTEST_PRED_FORMAT1_(pred_format, v1, GTEST_NONFATAL_FAILURE_)
+#define EXPECT_PRED1(pred, v1) \
+  GTEST_PRED1_(pred, v1, GTEST_NONFATAL_FAILURE_)
+#define ASSERT_PRED_FORMAT1(pred_format, v1) \
+  GTEST_PRED_FORMAT1_(pred_format, v1, GTEST_FATAL_FAILURE_)
+#define ASSERT_PRED1(pred, v1) \
+  GTEST_PRED1_(pred, v1, GTEST_FATAL_FAILURE_)
     
-    {
-}  // namespace google
-#endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
+    #if GTEST_HAS_GLOBAL_STRING
+    
+    int Water::allocated_ = 0;
+    
+    // Tests positive input.
+TEST(IsPrimeTest, Positive) {
+  EXPECT_FALSE(IsPrime(4));
+  EXPECT_TRUE(IsPrime(5));
+  EXPECT_FALSE(IsPrime(6));
+  EXPECT_TRUE(IsPrime(23));
+}
+    
+      //   The text of a paragraph typically starts with the start of an idea and
+  // ends with the end of an idea.  Here we define paragraph as something that
+  // may have a first line indent and a body indent which may be different.
+  // Typical words that start an idea are:
+  //   1. Words in western scripts that start with
+  //      a capital letter, for example 'The'
+  //   2. Bulleted or numbered list items, for
+  //      example '2.'
+  // Typical words which end an idea are words ending in punctuation marks. In
+  // this vocabulary, each list item is represented as a paragraph.
+  bool lword_indicates_list_item;
+  bool lword_likely_starts_idea;
+  bool lword_likely_ends_idea;
+    
+    // This function takes tif/box pair of files and runs recognition on the image,
+// while making sure that the word bounds that tesseract identified roughly
+// match to those specified by the input box file. For each word (ngram in a
+// single bounding box from the input box file) it outputs the ocred result,
+// the correct label, rating and certainty.
+void Tesseract::recog_training_segmented(const STRING &fname,
+                                         PAGE_RES *page_res,
+                                         volatile ETEXT_DESC *monitor,
+                                         FILE *output_file) {
+  STRING box_fname = fname;
+  const char *lastdot = strrchr(box_fname.string(), '.');
+  if (lastdot != NULL) box_fname[lastdot - box_fname.string()] = '\0';
+  box_fname += '.box';
+  // ReadNextBox() will close box_file
+  FILE *box_file = open_file(box_fname.string(), 'r');
+    }
+    
+    
+    {  name += UNLV_EXT;              //add extension
+  if ((pdfp = fopen (name.string (), 'rb')) == NULL) {
+    return false;                //didn't read one
+  } else {
+    while (tfscanf(pdfp, '%d %d %d %d %*s', &x, &y, &width, &height) >= 4) {
+                                 //make rect block
+      block = new BLOCK (name.string (), TRUE, 0, 0,
+                         (inT16) x, (inT16) (ysize - y - height),
+                         (inT16) (x + width), (inT16) (ysize - y));
+                                 //on end of list
+      block_it.add_to_end (block);
+    }
+    fclose(pdfp);
+  }
+  return true;
+}
+    
+    // APPROXIMATIONS of the fractions of the character cell taken by
+// the descenders, ascenders, and x-height.
+const double CCStruct::kDescenderFraction = 0.25;
+const double CCStruct::kXHeightFraction = 0.5;
+const double CCStruct::kAscenderFraction = 0.25;
+const double CCStruct::kXHeightCapRatio = CCStruct::kXHeightFraction /
+    (CCStruct::kXHeightFraction + CCStruct::kAscenderFraction);
+    
+    // Computes all the cross product distances of the points perpendicular to
+// the given direction, ignoring distances outside of the give distance range,
+// storing the actual (signed) cross products in distances_.
+void DetLineFit::ComputeConstrainedDistances(const FCOORD& direction,
+                                             double min_dist, double max_dist) {
+  distances_.truncate(0);
+  square_length_ = direction.sqlength();
+  // Compute the distance of each point from the line.
+  for (int i = 0; i < pts_.size(); ++i) {
+    FCOORD pt_vector = pts_[i].pt;
+    // Compute |line_vector||pt_vector|sin(angle between)
+    double dist = direction * pt_vector;
+    if (min_dist <= dist && dist <= max_dist)
+      distances_.push_back(DistPointPair(dist, pts_[i].pt));
+  }
+}
+    
+    
 
     
-    // Author: kenton@google.com (Kenton Varda)
-//  Based on original Protocol Buffers design by
-//  Sanjay Ghemawat, Jeff Dean, and others.
-    
-    #include <map>
-#include <string>
-    
-    static int make_prefixes(struct ifaddrs* ifaddr, int family, int prefixlen) {
-	char* prefix = NULL;
-	if (family == AF_INET) {
-		sockaddr_in* mask = new sockaddr_in;
-		mask->sin_family = AF_INET;
-		memset(&mask->sin_addr, 0, sizeof(in_addr));
-		ifaddr->ifa_netmask = reinterpret_cast<sockaddr*>(mask);
-		if (prefixlen > 32) {
-			prefixlen = 32;
-		}
-		prefix = reinterpret_cast<char*>(&mask->sin_addr);
-	} else if (family == AF_INET6) {
-		sockaddr_in6* mask = new sockaddr_in6;
-		mask->sin6_family = AF_INET6;
-		memset(&mask->sin6_addr, 0, sizeof(in6_addr));
-		ifaddr->ifa_netmask = reinterpret_cast<sockaddr*>(mask);
-		if (prefixlen > 128) {
-			prefixlen = 128;
-		}
-		prefix = reinterpret_cast<char*>(&mask->sin6_addr);
-	} else {
-		return -1;
-	}
-	for (int i = 0; i < (prefixlen / 8); i++) {
-		*prefix++ = 0xFF;
-	}
-	char remainder = 0xff;
-	remainder <<= (8 - prefixlen % 8);
-	*prefix = remainder;
-	return 0;
+    // Solve the dynamic programming problem for the given array of points, with
+// the given size and cost function.
+// Steps backwards are limited to being between min_step and max_step
+// inclusive.
+// The return value is the tail of the best path.
+DPPoint* DPPoint::Solve(int min_step, int max_step, bool debug,
+                        CostFunc cost_func, int size, DPPoint* points) {
+  if (size <= 0 || max_step < min_step || min_step >= size)
+    return NULL;  // Degenerate, but not necessarily an error.
+  ASSERT_HOST(min_step > 0);  // Infinite loop possible if this is not true.
+  if (debug)
+    tprintf('min = %d, max=%d\n',
+            min_step, max_step);
+  // Evaluate the total cost at each point.
+  for (int i = 0; i < size; ++i) {
+    for (int offset = min_step; offset <= max_step; ++offset) {
+      DPPoint* prev = offset <= i ? points + i - offset : NULL;
+      inT64 new_cost = (points[i].*cost_func)(prev);
+      if (points[i].best_prev_ != NULL && offset > min_step * 2 &&
+          new_cost > points[i].total_cost_)
+        break;  // Find only the first minimum if going over twice the min.
+    }
+    points[i].total_cost_ += points[i].local_cost_;
+    if (debug) {
+      tprintf('At point %d, local cost=%d, total_cost=%d, steps=%d\n',
+              i, points[i].local_cost_, points[i].total_cost_,
+              points[i].total_steps_);
+    }
+  }
+  // Now find the end of the best path and return it.
+  int best_cost = points[size - 1].total_cost_;
+  int best_end = size - 1;
+  for (int end = best_end - 1; end >= size - min_step; --end) {
+    int cost = points[end].total_cost_;
+    if (cost < best_cost) {
+      best_cost = cost;
+      best_end = end;
+    }
+  }
+  return points + best_end;
 }
     
+    /**********************************************************************
+ * LLSQ::clear
+ *
+ * Function to initialize a LLSQ.
+ **********************************************************************/
     
-    {  {2,0,32,  &_residue_44_high,
-   &_huff_book__16c2_s_long,&_huff_book__16c2_s_long,
-   &_resbook_16s_2,&_resbook_16s_2}
+    #include 'allheaders.h'
+#include 'blobs.h'
+#include 'helpers.h'
+#include 'matrix.h'
+#include 'ocrblock.h'
+#include 'unicharset.h'
+#include 'werd.h'
+    
+    
+    {  // Best available image.
+  Pix* pix_;
+  // True if the source image is white-on-black.
+  bool inverse_;
+  // Block the word came from. If not null, block->re_rotation() takes the
+  // 'untransformed' coordinates even further back to the original image.
+  // Used only on the first DENORM in a chain.
+  const BLOCK* block_;
+  // Rotation to apply between translation to the origin and scaling.
+  const FCOORD* rotation_;
+  // Previous transformation in a chain.
+  const DENORM* predecessor_;
+  // Non-linear transformation maps directly from each integer offset from the
+  // origin to the corresponding x-coord. Owned by the DENORM.
+  GenericVector<float>* x_map_;
+  // Non-linear transformation maps directly from each integer offset from the
+  // origin to the corresponding y-coord. Owned by the DENORM.
+  GenericVector<float>* y_map_;
+  // x-coordinate to be mapped to final_xshift_ in the result.
+  float x_origin_;
+  // y-coordinate to be mapped to final_yshift_ in the result.
+  float y_origin_;
+  // Scale factors for x and y coords. Applied to pre-rotation system.
+  float x_scale_;
+  float y_scale_;
+  // Destination coords of the x_origin_ and y_origin_.
+  float final_xshift_;
+  float final_yshift_;
 };
-    
-    static const vorbis_residue_template _res_8s_0[]={
-  {2,0,32,  &_residue_44_mid,
-   &_huff_book__8c0_s_single,&_huff_book__8c0_s_single,
-   &_resbook_8s_0,&_resbook_8s_0},
-};
-static const vorbis_residue_template _res_8s_1[]={
-  {2,0,32,  &_residue_44_mid,
-   &_huff_book__8c1_s_single,&_huff_book__8c1_s_single,
-   &_resbook_8s_1,&_resbook_8s_1},
-};
-    
-    #if defined(__WATCOMC__)
-void GetTSC(unsigned long&);
-#pragma aux GetTSC = 0x0f 0x31 'mov [edi], eax' parm [edi] modify [edx eax];
-#elif defined(__GNUC__)
-inline
-void GetTSC(unsigned long& tsc)
-{
-  asm volatile('.byte 15, 49\n\t'
-	       : '=eax' (tsc)
-	       :
-	       : '%edx', '%eax');
-}
-#elif defined(_MSC_VER)
-inline
-void GetTSC(unsigned long& tsc)
-{
-  unsigned long a;
-  __asm _emit 0fh
-  __asm _emit 31h
-  __asm mov a, eax;
-  tsc=a;
-}
-#endif      
-    
-    
-    
-        using uS::Node::run;
-    using uS::Node::poll;
-    using uS::Node::getLoop;
-    using Group<SERVER>::onConnection;
-    using Group<CLIENT>::onConnection;
-    using Group<SERVER>::onTransfer;
-    using Group<CLIENT>::onTransfer;
-    using Group<SERVER>::onMessage;
-    using Group<CLIENT>::onMessage;
-    using Group<SERVER>::onDisconnection;
-    using Group<CLIENT>::onDisconnection;
-    using Group<SERVER>::onPing;
-    using Group<CLIENT>::onPing;
-    using Group<SERVER>::onPong;
-    using Group<CLIENT>::onPong;
-    using Group<SERVER>::onError;
-    using Group<CLIENT>::onError;
-    using Group<SERVER>::onHttpRequest;
-    using Group<SERVER>::onHttpData;
-    using Group<SERVER>::onHttpConnection;
-    using Group<SERVER>::onHttpDisconnection;
-    using Group<SERVER>::onHttpUpgrade;
-    using Group<SERVER>::onCancelledHttpRequest;
-    
-        Group(int extensionOptions, unsigned int maxPayload, Hub *hub, uS::NodeData *nodeData);
-    void stopListening();
+#endif
