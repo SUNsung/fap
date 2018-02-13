@@ -1,92 +1,37 @@
 
         
-            @property
-    def config(self):
-        if not hasattr(self, '_config'):
-            self._config = Config(directory=self.config_dir)
-            if self._config.is_new():
-                self._config.save()
-            else:
-                self._config.load()
-        return self._config
+            READY = 0
+    IN_PROGRESS = 1
+    COMPLETE = 2
     
-    
-MIME_RE = re.compile(r'^[^/]+/[^/]+$')
-    
-    
-def get_exit_status(http_status, follow=False):
-    '''Translate HTTP status code to exit status code.'''
-    if 300 <= http_status <= 399 and not follow:
-        # Redirect
-        return ExitStatus.ERROR_HTTP_3XX
-    elif 400 <= http_status <= 499:
-        # Client Error
-        return ExitStatus.ERROR_HTTP_4XX
-    elif 500 <= http_status <= 599:
-        # Server Error
-        return ExitStatus.ERROR_HTTP_5XX
-    else:
-        return ExitStatus.OK
-    
-    import requests.auth
-    
-        exitcode = 0
-    
-    from six.moves.urllib.parse import urlencode
-    
-        def remove(self, key):
-        hash_index = self._hash_function(key)
-        for index, item in enumerate(self.table[hash_index]):
-            if item.key == key:
-                del self.table[hash_index][index]
-                return
-        raise KeyError('Key not found')
-    
-        def __init__(self, user_id, name, pass_hash):
-        self.user_id = user_id
-        self.name = name
-        self.pass_hash = pass_hash
-        self.friends_by_id = {}  # key: friend id, value: User
-        self.friend_ids_to_private_chats = {}  # key: friend id, value: private chats
-        self.group_chats_by_id = {}  # key: chat id, value: GroupChat
-        self.received_friend_requests_by_friend_id = {}  # key: friend id, value: AddRequest
-        self.sent_friend_requests_by_friend_id = {}  # key: friend id, value: AddRequest
-    
-        MOTORCYCLE = 0
-    COMPACT = 1
-    LARGE = 2
-    
-            (2016-01, url0), 2
-        (2016-01, url1), 1
+        def get(self, query)
+        '''Get the stored query result from the cache.
+        
+        Accessing a node updates its position to the front of the LRU list.
         '''
-        yield key, sum(values)
+        node = self.lookup[query]
+        if node is None:
+            return None
+        self.linked_list.move_to_front(node)
+        return node.results
     
-        def add_link_to_crawl(self, url):
-        '''Add the given link to `links_to_crawl`.'''
-        ...
+        def __init__(self, memory_cache, reverse_index_cluster):
+        self.memory_cache = memory_cache
+        self.reverse_index_cluster = reverse_index_cluster
     
-            if 'note' in notes_json:
-            note = notes_json['note'] or ''
-            if not rel_exists:
-                # If this is a newly created friend relationship,
-                # the cache needs to be updated before a note can
-                # be applied
-                c.user.friend_rels_cache(_update=True)
-            c.user.add_friend_note(friend, note)
-        rel_view = FriendTableItem(friend_rel)
-        return self.api_wrapper(FriendTableItemJsonTemplate().data(rel_view))
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer),
+            self.mr(mapper=self.mapper_sort,
+                    reducer=self.reducer_identity),
+        ]
     
-            To request a new CAPTCHA,
-        use [/api/new_captcha](#POST_api_new_captcha).
-        '''
-        image = captcha.get_image(iden)
-        f = StringIO.StringIO()
-        image.save(f, 'PNG')
-        response.content_type = 'image/png;'
-        return f.getvalue()
-    
-
-    
-                if (error_name == 'IN_TIMEOUT' and
-                    not 'usable_error_content' in request.environ):
-                timeout_days_remaining = c.user.days_remaining_in_timeout
+        def crawl_page(self, page):
+        for url in page.child_urls:
+            self.data_store.add_link_to_crawl(url)
+        self.reverse_index_queue.generate(page)
+        self.doc_index_queue.generate(page)
+        self.data_store.remove_link_to_crawl(page.url)
+        self.data_store.insert_crawled_link(page.url, page.signature)
