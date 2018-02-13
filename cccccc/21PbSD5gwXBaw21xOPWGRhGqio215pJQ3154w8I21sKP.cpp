@@ -1,264 +1,339 @@
 
         
-          // Solve the cubic equation
-  double Q = (3 * c_a - b_a2) / 9;
-  double R = (9 * b_a * c_a - 27 * d_a - 2 * b_a * b_a2) / 54;
-  double Q3 = Q * Q * Q;
-  double D = Q3 + R * R;
-  double b_a_3 = (1. / 3.) * b_a;
-    
-            template<int CTA_SIZE>
-        static __forceinline__ __device__ int Ballot(int predicate)
-        {
-#if defined (__CUDA_ARCH__) && (__CUDA_ARCH__ >= 200)
-            return __ballot(predicate);
-#else
-            __shared__ volatile int cta_buffer[CTA_SIZE];
-    }
-    
-    
-    {} // namespace
-    
-    namespace
-{
-    template <class ObjType>
-    void ensureSizeIsEnoughImpl(int rows, int cols, int type, ObjType& obj)
-    {
-        if (obj.empty() || obj.type() != type || obj.data != obj.datastart)
-        {
-            obj.create(rows, cols, type);
-        }
-        else
-        {
-            const size_t esz = obj.elemSize();
-            const ptrdiff_t delta2 = obj.dataend - obj.datastart;
-    }
-    }
-    }
-    
-        // Extension: 3.1
-    extern void (CODEGEN_FUNCPTR *DrawArraysInstanced)(GLenum mode, GLint first, GLsizei count, GLsizei instancecount);
-    extern void (CODEGEN_FUNCPTR *DrawElementsInstanced)(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLsizei instancecount);
-    extern void (CODEGEN_FUNCPTR *TexBuffer)(GLenum target, GLenum internalformat, GLuint buffer);
-    extern void (CODEGEN_FUNCPTR *PrimitiveRestartIndex)(GLuint index);
-    
-    // To write value-parameterized tests, first you should define a fixture
-// class. It is usually derived from testing::TestWithParam<T> (see below for
-// another inheritance scheme that's sometimes useful in more complicated
-// class hierarchies), where the type of your parameter values.
-// TestWithParam<T> is itself derived from testing::Test. T can be any
-// copyable type. If it's a raw pointer, you are responsible for managing the
-// lifespan of the pointed values.
-    
-        void ComputeCurrentValue() {
-      if (!AtEnd())
-        current_value_ = ParamType($for j, [[*current$(j)_]]);
-    }
-    bool AtEnd() const {
-      // We must report iterator past the end of the range when either of the
-      // component iterators has reached the end of its range.
-      return
-$for j  || [[
-    }
-    
-    template <GTEST_8_TYPENAMES_(T)>
-inline GTEST_8_TUPLE_(T) make_tuple(const T0& f0, const T1& f1, const T2& f2,
-    const T3& f3, const T4& f4, const T5& f5, const T6& f6, const T7& f7) {
-  return GTEST_8_TUPLE_(T)(f0, f1, f2, f3, f4, f5, f6, f7);
+        
+    {  // Open test file some number above the sum of the two limits to force
+  // open-on-read behavior of POSIX Env leveldb::RandomAccessFile.
+  const int kNumFiles = kReadOnlyFileLimit + kMMapLimit + 5;
+  leveldb::RandomAccessFile* files[kNumFiles] = {0};
+  for (int i = 0; i < kNumFiles; i++) {
+    ASSERT_OK(env_->NewRandomAccessFile(test_file, &files[i]));
+  }
+  char scratch;
+  Slice read_result;
+  for (int i = 0; i < kNumFiles; i++) {
+    ASSERT_OK(files[i]->Read(i, 1, &read_result, &scratch));
+    ASSERT_EQ(kFileData[i], read_result[0]);
+  }
+  for (int i = 0; i < kNumFiles; i++) {
+    delete files[i];
+  }
+  ASSERT_OK(env_->DeleteFile(test_file));
 }
     
-        int traceLevel = config(L'traceLevel', 0);
-    if (config.Exists(L'createNetwork'))
-    {
-        createNetworkFn = GetCreateNetworkFn(config); // (we need a separate function needed due to template code)
-        return true;
+      void WriteInitialOffsetLog() {
+    for (int i = 0; i < num_initial_offset_records_; i++) {
+      std::string record(initial_offset_record_sizes_[i],
+                         static_cast<char>('a' + i));
+      Write(record);
     }
-    else if (config.Exists(L'SimpleNetworkBuilder'))
-    {
-        const ConfigRecordType& simpleNetworkBuilderConfig(config(L'SimpleNetworkBuilder'));
-        auto netBuilder = make_shared<SimpleNetworkBuilder<ElemType>>(simpleNetworkBuilderConfig); // parses the configuration and stores it in the SimpleNetworkBuilder object
-        createNetworkFn = [netBuilder, traceLevel](DEVICEID_TYPE deviceId)
-        {
-            auto net = shared_ptr<ComputationNetwork>(netBuilder->BuildNetworkFromDescription()); // this operates based on the configuration saved above
-            net->SetTraceLevel(traceLevel);
-            return net;
-        };
-        return true;
-    }
-    // legacy NDL
-    else if (config.Exists(L'NDLNetworkBuilder'))
-    {
-        const ConfigRecordType& ndlNetworkBuilderConfig(config(L'NDLNetworkBuilder'));
-        shared_ptr<NDLBuilder<ElemType>> netBuilder = make_shared<NDLBuilder<ElemType>>(ndlNetworkBuilderConfig);
-        createNetworkFn = [netBuilder, traceLevel](DEVICEID_TYPE deviceId)
-        {
-            auto net = shared_ptr<ComputationNetwork>(netBuilder->BuildNetworkFromDescription());
-            net->SetTraceLevel(traceLevel);
-            return net;
-        };
-        return true;
-    }
-    // legacy test mode for BrainScript. Will go away once we fully integrate with BS.
-    else if (config.Exists(L'BrainScriptNetworkBuilder') || config.Exists(L'ExperimentalNetworkBuilder' /*legacy name*/))
-    {
-        // We interface with outer old CNTK config by taking the inner part, which we get as a string, as BrainScript.
-        // We prepend a few standard definitions, and also definition of deviceId and precision, which all objects will pull out again when they are being constructed.
-        // BUGBUG: We are not getting TextLocations right in this way! Do we need to inject location markers into the source? Moot once we fully switch to BS
-        wstring sourceOfNetwork = config.Exists(L'BrainScriptNetworkBuilder') ? config(L'BrainScriptNetworkBuilder') : config(L'ExperimentalNetworkBuilder');
-        if (sourceOfNetwork.find_first_of(L'([{') != 0)
-            InvalidArgument('BrainScript network description must be either a BS expression in ( ) or a config record in { }');
-    }
-    }
-    
-    template <class _T>
-class const_array_ref
-{
-    const _T* data;
-    size_t n;
-    inline void check_index(size_t i) const
-    {
-        i;
-        assert(i < n);
-    }
-    inline void check_ptr() const
-    {
-        n;
-        data;
-        assert(n == 0 || data != NULL);
-    }
-    }
-    
-    TEST(LogTest, ManyBlocks) {
-  for (int i = 0; i < 100000; i++) {
-    Write(NumberString(i));
   }
-  for (int i = 0; i < 100000; i++) {
-    ASSERT_EQ(NumberString(i), Read());
+    
+    
+    {
+    {    if (!s.ok()) {
+      assert(table == NULL);
+      delete file;
+      // We do not cache error results so that if the error is transient,
+      // or somebody repairs the file, we recover automatically.
+    } else {
+      TableAndFile* tf = new TableAndFile;
+      tf->file = file;
+      tf->table = table;
+      *handle = cache_->Insert(key, tf, 1, &DeleteEntry);
+    }
   }
-  ASSERT_EQ('EOF', Read());
+  return s;
 }
     
-      VersionEdit edit;
-  for (int i = 0; i < 4; i++) {
-    TestEncodeDecode(edit);
-    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
-                 InternalKey('foo', kBig + 500 + i, kTypeValue),
-                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
-    edit.DeleteFile(4, kBig + 700 + i);
-    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
-  }
     
-    class Env;
+    {}  // namespace leveldb
     
-      DBImpl* dbi = reinterpret_cast<DBImpl*>(db);
-  ASSERT_OK(dbi->TEST_CompactMemTable());
+    #include 'db/dbformat.h'
+#include 'leveldb/write_batch.h'
     
-    TEST(Issue200, Test) {
-  // Get rid of any state from an old run.
-  std::string dbpath = test::TmpDir() + '/leveldb_issue200_test';
-  DestroyDB(dbpath, Options());
+      virtual Status NewWritableFile(const std::string& fname,
+                                 WritableFile** result) {
+    MutexLock lock(&mutex_);
+    if (file_map_.find(fname) != file_map_.end()) {
+      DeleteFileInternal(fname);
+    }
     }
     
-    static void PthreadCall(const char* label, int result) {
-  if (result != 0) {
-    fprintf(stderr, 'pthread %s: %s\n', label, strerror(result));
-    abort();
+      virtual void Prev() {
+    assert(Valid());
+    }
+    
+    
+    {
+    {
+    {  inline void PutChar(char ch) {
+    out_buf += ch;
+    if (out_buf.length() >= kBufferSize) Flush();
   }
+  inline void Flush(void) {
+    if (out_buf.length() != 0) {
+      fp->Write(&out_buf[0], out_buf.length());
+      out_buf.clear();
+    }
+  }
+};
+}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_BASE64_H_
+
+    
+    TEST(SparsePageDMatrix, ColAcess) {
+  std::string tmp_file = CreateSimpleTestData();
+  xgboost::DMatrix * dmat = xgboost::DMatrix::Load(
+    tmp_file + '#' + tmp_file + '.cache', true, false);
+  std::remove(tmp_file.c_str());
+  EXPECT_FALSE(FileExists(tmp_file + '.cache.col.page'));
+    }
+    
+    DMLC_REGISTRY_FILE_TAG(updater_refresh);
+    
+    #include 'src/compiler/config.h'
+#include 'src/compiler/schema_interface.h'
+    
+    class MonsterStorage final {
+ public:
+  static constexpr char const* service_full_name() {
+    return 'MyGame.Example.MonsterStorage';
+  }
+  class StubInterface {
+   public:
+    virtual ~StubInterface() {}
+    virtual ::grpc::Status Store(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, flatbuffers::grpc::Message<Stat>* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>> AsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>>(AsyncStoreRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>> PrepareAsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>>(PrepareAsyncStoreRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientReaderInterface< flatbuffers::grpc::Message<Monster>>> Retrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) {
+      return std::unique_ptr< ::grpc::ClientReaderInterface< flatbuffers::grpc::Message<Monster>>>(RetrieveRaw(context, request));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>> AsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>>(AsyncRetrieveRaw(context, request, cq, tag));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>> PrepareAsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>>(PrepareAsyncRetrieveRaw(context, request, cq));
+    }
+  private:
+    virtual ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>* AsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>* PrepareAsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientReaderInterface< flatbuffers::grpc::Message<Monster>>* RetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) = 0;
+    virtual ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>* AsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
+    virtual ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>* PrepareAsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) = 0;
+  };
+  class Stub final : public StubInterface {
+   public:
+    Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel);
+    ::grpc::Status Store(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, flatbuffers::grpc::Message<Stat>* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>> AsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>>(AsyncStoreRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>> PrepareAsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>>(PrepareAsyncStoreRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientReader< flatbuffers::grpc::Message<Monster>>> Retrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) {
+      return std::unique_ptr< ::grpc::ClientReader< flatbuffers::grpc::Message<Monster>>>(RetrieveRaw(context, request));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>> AsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>>(AsyncRetrieveRaw(context, request, cq, tag));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>> PrepareAsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>>(PrepareAsyncRetrieveRaw(context, request, cq));
+    }
+  
+   private:
+    std::shared_ptr< ::grpc::ChannelInterface> channel_;
+    ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>* AsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>* PrepareAsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientReader< flatbuffers::grpc::Message<Monster>>* RetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) override;
+    ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>* AsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) override;
+    ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>* PrepareAsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) override;
+    const ::grpc::internal::RpcMethod rpcmethod_Store_;
+    const ::grpc::internal::RpcMethod rpcmethod_Retrieve_;
+  };
+  static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
+  
+  class Service : public ::grpc::Service {
+   public:
+    Service();
+    virtual ~Service();
+    virtual ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response);
+    virtual ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer);
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_Store : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithAsyncMethod_Store() {
+      ::grpc::Service::MarkMethodAsync(0);
+    }
+    ~WithAsyncMethod_Store() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+    void RequestStore(::grpc::ServerContext* context, flatbuffers::grpc::Message<Monster>* request, ::grpc::ServerAsyncResponseWriter< flatbuffers::grpc::Message<Stat>>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_Retrieve : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithAsyncMethod_Retrieve() {
+      ::grpc::Service::MarkMethodAsync(1);
+    }
+    ~WithAsyncMethod_Retrieve() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+    void RequestRetrieve(::grpc::ServerContext* context, flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerAsyncWriter< flatbuffers::grpc::Message<Monster>>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncServerStreaming(1, context, request, writer, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef   WithAsyncMethod_Store<  WithAsyncMethod_Retrieve<  Service   >   >   AsyncService;
+  template <class BaseClass>
+  class WithGenericMethod_Store : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithGenericMethod_Store() {
+      ::grpc::Service::MarkMethodGeneric(0);
+    }
+    ~WithGenericMethod_Store() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_Retrieve : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithGenericMethod_Retrieve() {
+      ::grpc::Service::MarkMethodGeneric(1);
+    }
+    ~WithGenericMethod_Retrieve() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_Store : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithStreamedUnaryMethod_Store() {
+      ::grpc::Service::MarkMethodStreamed(0,
+        new ::grpc::internal::StreamedUnaryHandler< flatbuffers::grpc::Message<Monster>, flatbuffers::grpc::Message<Stat>>(std::bind(&WithStreamedUnaryMethod_Store<BaseClass>::StreamedStore, this, std::placeholders::_1, std::placeholders::_2)));
+    }
+    ~WithStreamedUnaryMethod_Store() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedStore(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< flatbuffers::grpc::Message<Monster>,flatbuffers::grpc::Message<Stat>>* server_unary_streamer) = 0;
+  };
+  typedef   WithStreamedUnaryMethod_Store<  Service   >   StreamedUnaryService;
+  template <class BaseClass>
+  class WithSplitStreamingMethod_Retrieve : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service *service) {}
+   public:
+    WithSplitStreamingMethod_Retrieve() {
+      ::grpc::Service::MarkMethodStreamed(1,
+        new ::grpc::internal::SplitServerStreamingHandler< flatbuffers::grpc::Message<Stat>, flatbuffers::grpc::Message<Monster>>(std::bind(&WithSplitStreamingMethod_Retrieve<BaseClass>::StreamedRetrieve, this, std::placeholders::_1, std::placeholders::_2)));
+    }
+    ~WithSplitStreamingMethod_Retrieve() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer) final override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+    }
+    // replace default version of method with split streamed
+    virtual ::grpc::Status StreamedRetrieve(::grpc::ServerContext* context, ::grpc::ServerSplitStreamer< flatbuffers::grpc::Message<Stat>,flatbuffers::grpc::Message<Monster>>* server_split_streamer) = 0;
+  };
+  typedef   WithSplitStreamingMethod_Retrieve<  Service   >   SplitStreamedService;
+  typedef   WithStreamedUnaryMethod_Store<  WithSplitStreamingMethod_Retrieve<  Service   >   >   StreamedService;
+};
+    
+      // Now connect the client.
+  auto channel = grpc::CreateChannel('localhost:50051',
+                                     grpc::InsecureChannelCredentials());
+  auto stub = MyGame::Example::MonsterStorage::NewStub(channel);
+    
+    #if defined(FLATBUFFERS_MEMORY_LEAK_TRACKING) && \
+    defined(_MSC_VER) && defined(_DEBUG)
+  #include <crtdbg.h>
+  #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+  #define new DEBUG_NEW
+#endif
+    
+      // Parameters required to initialize the FlatCompiler.
+  struct InitParams {
+    InitParams()
+        : generators(nullptr),
+          num_generators(0),
+          warn_fn(nullptr),
+          error_fn(nullptr) {}
+    }
+    
+      // parse schema first, so we can use it to parse the data after
+  flatbuffers::Parser parser;
+  const char *include_directories[] = { 'samples', nullptr };
+  ok = parser.Parse(schemafile.c_str(), include_directories) &&
+       parser.Parse(jsonfile.c_str(), include_directories);
+  assert(ok);
+    
+    using namespace fuzzer;
+    
+    
+    {    size_t BlockCoverage;
+    size_t CallerCalleeCoverage;
+    // Precalculated number of bits in CounterBitmap.
+    size_t CounterBitmapBits;
+    std::vector<uint8_t> CounterBitmap;
+    ValueBitMap VPMap;
+  };
+    
+    
+    {}  // namespace fuzzer
+    
+    void PrintASCIIByte(uint8_t Byte) {
+  if (Byte == '\\')
+    Printf('\\\\');
+  else if (Byte == ''')
+    Printf('\\\'');
+  else if (Byte >= 32 && Byte < 127)
+    Printf('%c', Byte);
+  else
+    Printf('\\x%02x', Byte);
 }
-    
-    class FilterBlockReader {
- public:
- // REQUIRES: 'contents' and *policy must stay live while *this is live.
-  FilterBlockReader(const FilterPolicy* policy, const Slice& contents);
-  bool KeyMayMatch(uint64_t block_offset, const Slice& key);
-    }
-    
-    Status ReadBlock(RandomAccessFile* file,
-                 const ReadOptions& options,
-                 const BlockHandle& handle,
-                 BlockContents* result) {
-  result->data = Slice();
-  result->cachable = false;
-  result->heap_allocated = false;
-    }
-    
-    
-    
-    
-    
-        virtual void DrawString(int x, int y, const char* string, ...); 
-    
-    			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.angularDamping = 2.0f;
-			bd.linearDamping = 0.5f;
-    
-    
-    {		body2->SetAngularVelocity(m_angularVelocity);
-		body2->SetLinearVelocity(velocity2);
-	}
-    
-    			float32 x = 20.0f, y1 = 0.0f, dx = 5.0f;
-    
-    
-    {        // Store mount point
-        fs::path path(parts[1].begin(), parts[1].end());
-        struct stat st;
-        const int ret = stat(path.string().c_str(), &st);
-        if (ret == -1 && errno == ENOENT) {
-          return;
-        }
-        checkUnixError(ret, 'stat hugepage mountpoint failed');
-        pos->mountPoint = fs::canonical(path);
-        pos->device = st.st_dev;
-      };
-    
-    /**
- * FileHandlerFactory is a LogHandlerFactory that constructs log handlers
- * that write to a file.
- *
- * Note that FileHandlerFactory allows opening and appending to arbitrary files
- * based on the handler options.  This may make it unsafe to use
- * FileHandlerFactory in some contexts: for instance, a setuid binary should
- * generally avoid registering the FileHandlerFactory if they allow log
- * handlers to be configured via command line parameters, since otherwise this
- * may allow non-root users to append to files that they otherwise would not
- * have write permissions for.
- */
-class FileHandlerFactory : public LogHandlerFactory {
- public:
-  StringPiece getType() const override {
-    return 'file';
-  }
-    }
-    
-    /**
- * A helper class for creating an AsyncFileWriter or ImmediateFileWriter based
- * on log handler options settings.
- *
- * This is used by StreamHandlerFactory and FileHandlerFactory.
- */
-class FileWriterFactory {
- public:
-  bool processOption(StringPiece name, StringPiece value);
-  std::shared_ptr<LogWriter> createWriter(File file);
-    }
-    
-      /**
-   * Whether this category should inherit its effective log level from its
-   * parent category, if the parent category has a more verbose log level.
-   */
-  bool inheritParentLevel{true};
-    
-        // Parse the levelString into a LogLevel
-    levelString = trimWhitespace(levelString);
-    try {
-      categoryConfig.level = stringToLogLevel(levelString);
-    } catch (const std::exception&) {
-      throw LogConfigParseError{to<string>(
-          'invalid log level \'',
-          levelString,
-          '\' for category \'',
-          categoryName,
-          '\'')};
-    }
