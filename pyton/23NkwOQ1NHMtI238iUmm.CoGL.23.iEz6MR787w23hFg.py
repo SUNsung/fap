@@ -1,34 +1,35 @@
 
         
-        
-def test_urls(client):
-    r = client.get('/')
-    assert r.status_code == 200
+          @tf.test.mock.patch.dict(premade_estimator.__dict__,
+                           {'load_data': four_lines_data})
+  def test_premade_estimator(self):
+    premade_estimator.main([None, '--train_steps=1'])
     
-        app.config.update(dict(
-        DATABASE=os.path.join(app.root_path, 'flaskr.db'),
-        DEBUG=True,
-        SECRET_KEY=b'_5#y2L'F4Q8z\n\xec]/',
-        USERNAME='admin',
-        PASSWORD='default'
-    ))
-    app.config.update(config or {})
-    app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+        for pred_dict, expec in zip(predictions, expected):
+        template = ('\nPrediction is '{}' ({:.1f}%), expected '{}'')
     
-    # Additional templates that should be rendered to pages, maps page names to
-# template names.
-#html_additional_pages = {}
+    py_test(
+    name = 'cifar10_input_test',
+    size = 'small',
+    srcs = ['cifar10_input_test.py'],
+    srcs_version = 'PY2AND3',
+    deps = [
+        ':cifar10_input',
+        '//tensorflow:tensorflow_py',
+        '//tensorflow/python:framework_test_lib',
+        '//tensorflow/python:platform_test',
+    ],
+)
     
-        @mock.patch('certbot.notify.smtplib.LMTP')
-    @mock.patch('certbot.notify.subprocess.Popen')
-    def test_smtp_failure(self, mock_popen, mock_lmtp):
-        from certbot.notify import notify
-        lmtp_obj = mock.MagicMock()
-        mock_lmtp.return_value = lmtp_obj
-        lmtp_obj.sendmail.side_effect = socket.error(17)
-        proc = mock.MagicMock()
-        mock_popen.return_value = proc
-        self.assertTrue(notify('Goose', 'auntrhody@example.com',
-                               'The old grey goose is dead.'))
-        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
-        self.assertEqual(proc.communicate.call_count, 1)
+        # class_ids will be the model prediction for the class (Iris flower type)
+    # The output node with the highest value is our prediction
+    predictions = { 'class_ids': tf.argmax(input=logits, axis=1) }
+    
+        global_step = run_values.results
+    if self._timer.should_trigger_for_step(global_step):
+      elapsed_time, elapsed_steps = self._timer.update_last_triggered_step(
+          global_step)
+      if elapsed_time is not None:
+        steps_per_sec = elapsed_steps / elapsed_time
+        self._step_train_time += elapsed_time
+        self._total_steps += elapsed_steps
