@@ -1,64 +1,45 @@
-    def save(options = {})
-      return super unless dry_run?
-      perform_validations(options)
-    end
-    
-      private
-    
-          if options[:type] == :array && (options[:values].blank? || !options[:values].is_a?(Array))
-        raise ArgumentError.new('When using :array as :type you need to provide the :values as an Array')
-      end
-    
-      def tumblr
-    Tumblr.configure do |config|
-      config.consumer_key = tumblr_consumer_key
-      config.consumer_secret = tumblr_consumer_secret
-      config.oauth_token = tumblr_oauth_token
-      config.oauth_token_secret = tumblr_oauth_token_secret
-    end
-    
-    Tumblr::Client.new
-  end
+
+        
+                      s[:proto]='pop3'
+              s[:extra]='Failed Login. Banner: #{s[:banner]}'
+              report_auth_info(s)
+              print_status('Invalid POP3 Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]} (#{s[:banner].strip})')
+              s[:pass]=''
+          end
+        when nil
+          # No matches, no saved state
+        else
+          s[:last]=matched
+          sessions[s[:session]].merge!({k => matches})
+      end # end case matched
+    end # end of each_key
+  end # end of parse
 end
     
-        # The release path according to the context
-    def release_path
-      context.release_path
+    sock = TCPSocket.new(ip, port)
+    
+    clsJavaCompile 	= Rjb::import('javaCompile.CompileSourceInMemory')
+clsCreateJar	= Rjb::import('javaCompile.CreateJarFile')
+clsFile			= Rjb::import('java.io.File')
+system			= Rjb::import('java.lang.System')
+#clsString	= Rjb::import('java.lang.String')
+    
+        _cal[ver].each_pair do |key, value|
+      cal[ver][key] = Array.new
+      cal[ver][key] << String.new
+      cal[ver][key][-1] << '#ifdef AIX%s' % ver.delete('.')
+      cal[ver][key][-1] << '\n'
+      cal[ver][key][-1] << '''.rjust(5)
+      value.each_byte do |c|
+        cal[ver][key][-1] << '\x%02x' % c
+      end
+      cal[ver][key][-1] << '''.ljust(7)
+      cal[ver][key][-1] << '/*  cal     r2,-%d(r29)' %
+          (65536 - value.unpack('nn')[1])
+      cal[ver][key][-1] << '*/'.rjust(15)
+      cal[ver][key][-1] << '\n'
+      cal[ver][key][-1] << '#endif'
+      cal[ver][key][-1] << '\n'
     end
     
-    post '/' do
-  connections.each { |out| out << 'data: #{params[:msg]}\n\n' }
-  204 # response without entity body
-end
-    
-          def referrer(env)
-        ref = env['HTTP_REFERER'].to_s
-        return if !options[:allow_empty_referrer] and ref.empty?
-        URI.parse(ref).host || Request.new(env).host
-      rescue URI::InvalidURIError
-      end
-    
-            modes       = Array options[:escape]
-        @escaper    = options[:escaper]
-        @html       = modes.include? :html
-        @javascript = modes.include? :javascript
-        @url        = modes.include? :url
-    
-        it 'leaves cache-breaker params untouched' do
-      mock_app do |env|
-        [200, {'Content-Type' => 'text/plain'}, ['hi']]
-      end
-    
-      it 'accepts requests with the same Accept-Language header' do
-    session = {:foo => :bar}
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'a'
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'a'
-    expect(session).not_to be_empty
-  end
-    
-          class ValidateAttachmentContentTypeMatcher
-        def initialize attachment_name
-          @attachment_name = attachment_name
-          @allowed_types = []
-          @rejected_types = []
-        end
+    	attr_accessor :file, :block, :block_size
