@@ -1,250 +1,214 @@
 
         
-        void PartialRunMgr::ExecutorDone(int step_id, const Status& executor_status) {
-  StatusCallback done;
-  Status callback_status;
-  {
-    mutex_lock l(mu_);
-    auto run_it = step_id_to_partial_run_.find(step_id);
-    if (run_it == step_id_to_partial_run_.end()) {
-      return;
-    }
-    // If we found the partial_run, we call the final callback, if it
-    // exists.
-    // It is guaranteed that run_it->second->final_callback is left empty
-    // after the std::move call.
-    done = std::move(run_it->second->final_callback);
-    if (!executor_status.ok()) {
-      run_it->second->final_status = executor_status;
-    }
-    callback_status = run_it->second->final_status;
-    run_it->second->executor_done = true;
-  }
-  if (done != nullptr) {
-    done(callback_status);
-    mutex_lock l(mu_);
-    step_id_to_partial_run_.erase(step_id);
-  }
+        
+    {}  // namespace nwapi
+    
+    void Base::CallSync(const std::string& method,
+                    const base::ListValue& arguments,
+                    base::ListValue* result) {
+  NOTREACHED() << 'Uncatched callAsync in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
 }
     
     
-    {  // Calling ExecutorDone and PartialRunDone on the step_id should still only
-  // result in the callback being called once.
-  // This proves that the original PartialRun has been removed.
-  partial_run_mgr.PartialRunDone(
-      step_id, [&called](Status status) { called++; }, Status::OK());
-  partial_run_mgr.ExecutorDone(step_id, Status::OK());
-  EXPECT_EQ(1, called);
+    {  template<typename T> bool RemoveListener() {
+    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
+    if (i!=listerners_.end()) {
+      delete i->second;
+      listerners_.erase(i);
+      return true;
+    }
+    return false;
+  }
+private:
+  DISALLOW_COPY_AND_ASSIGN(EventListener);
+};
+    
+       bool GetAcceleratorForCommandId(
+      int command_id,
+      ui::Accelerator* accelerator) const override;
+    
+    void Menu::Create(const base::DictionaryValue& option) {
+  gtk_accel_group = NULL;
+  std::string type;
+  if (option.GetString('type', &type) && type == 'menubar')
+    menu_ = gtk_menu_bar_new();
+  else
+    menu_ = gtk_menu_new();
+    }
+    
+    #include 'content/nw/src/api/menuitem/menuitem.h'
+    
+    bool NwAppQuitFunction::RunAsync() {
+  ExtensionService* service =
+    ExtensionSystem::Get(browser_context())->extension_service();
+  base::MessageLoop::current()->task_runner()->PostTask(
+        FROM_HERE,
+        base::Bind(&ExtensionService::TerminateExtension,
+                   service->AsWeakPtr(),
+                   extension_id()));
+  return true;
 }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    NwClipboardSetListSyncFunction::~NwClipboardSetListSyncFunction() {
+}
     
-      // Logs information about the dev nodes present on this machine: their
-  // existence, permissions, accessibility from this uid/gid.
-  static void LogDevNodeDiagnosticInformation();
     
-          // Skip Sink/Source nodes.
-      if (!out->IsOp()) continue;
+    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.setListSync', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwClipboardSetListSyncFunction);
+};
     
-    class SYCLDeviceContext : public DeviceContext {
+    void RepeatedMessageFieldGenerator::GenerateCloningCode(io::Printer* printer) {
+  printer->Print(variables_,
+    '$name$_ = other.$name$_.Clone();\n');
+}
+    
+    class RepeatedPrimitiveFieldGenerator : public FieldGeneratorBase {
  public:
-  SYCLDeviceContext() {}
+  RepeatedPrimitiveFieldGenerator(const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options);
+  ~RepeatedPrimitiveFieldGenerator();
     }
     
-    string VersionedComputationHandle::ToString() const {
-  return tensorflow::strings::StrCat(handle.handle(), ':v', version);
-}
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
     
-    namespace swift {
+    // Generates code for a lite extension, which may be within the scope of some
+// message or may be at file scope.  This is much simpler than FieldGenerator
+// since extensions are just simple identifiers with interesting types.
+class ImmutableExtensionLiteGenerator : public ExtensionGenerator {
+ public:
+  explicit ImmutableExtensionLiteGenerator(const FieldDescriptor* descriptor,
+                                           Context* context);
+  virtual ~ImmutableExtensionLiteGenerator();
     }
-    
-    namespace swift {
-    }
-    
-    namespace swift {
-    }
-    
-    namespace index {
-    }
-    
-    public:
-  static CodeBlock *create(MarkupContext &MC, StringRef LiteralContent,
-                           StringRef Language);
-    
-    /// A SyntaxRewriter for applying a set of formatting rules to a Syntax tree.
-struct FormatSyntaxRewriter : public SyntaxRewriter {
-  virtual StructDeclSyntax
-  rewriteStructDecl(StructDeclSyntax Struct) override;
-};
-    
-    #include 'llvm/ADT/Hashing.h'
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-    #include <boost/asio/detail/config.hpp>
-    
-      // Constructor for a half fenced block.
-  explicit gcc_arm_fenced_block(half_t)
-  {
-  }
-    
-    #ifndef BOOST_ASIO_DETAIL_IMPL_EPOLL_REACTOR_HPP
-#define BOOST_ASIO_DETAIL_IMPL_EPOLL_REACTOR_HPP
-    
-     private:
-  /// The set of shared osquery service threads.
-  std::vector<InternalThreadRef> service_threads_;
-    
-    /// External (extensions) SQL implementation of the osquery query API.
-Status queryExternal(const std::string& query, QueryData& results);
-    
-    struct FlagDetail {
-  std::string description;
-  bool shell;
-  bool external;
-  bool cli;
-  bool hidden;
-};
-    
-    class DropPrivileges;
-using DropPrivilegesRef = std::shared_ptr<DropPrivileges>;
-    
-      /**
-   * @brief the distributed work ID of a carve
-   *
-   * This value should be used by the TLS endpoints where carve data is
-   * aggregated, to tie together a distributed query with the carve data
-   */
-  std::string requestId_;
     
     /**
- * @brief Iterate the discovered decorators for a given point type.
+ * @brief Delete the existing node key from the persistent storage
  *
- * The configuration maintains various sources, each may contain a set of
- * decorators. The source tracking is abstracted for the decorator iterator.
- *
- * @param point request execution of decorators for this given point.
- * @param time an optional time for points using intervals.
- * @param source restrict run to a specific config source.
+ * @return a Status indicating the success or failure of the operation
  */
-void runDecorators(DecorationPoint point,
-                   size_t time = 0,
-                   const std::string& source = '');
+Status clearNodeKey();
     
-    namespace osquery {
+    /**
+ * @brief Access the internal storage of the Decorator parser.
+ *
+ * The decoration set is a map of column name to value. It contains the opaque
+ * set of decoration point results.
+ *
+ * Decorations are applied to log items before they are sent to the downstream
+ * logging APIs: logString, logSnapshot, etc.
+ *
+ * @param results the output parameter to write decorations.
+ */
+void getDecorations(std::map<std::string, std::string>& results);
+    
+    #ifndef COMM_COMM_DNS_H_
+#define COMM_COMM_DNS_H_
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    class Test_Spy_Sample {
+  public:
+    Test_Spy_Sample();
+    ~Test_Spy_Sample();
     }
     
-    bool js_cocos2dx_physics3d_Physics3DHingeConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DHingeConstraint_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DHingeConstraint(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getHingeAngle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetA(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetB(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_enableAngularMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getUpperLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getLowerLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getEnableAngularMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_enableMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getBFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setFrames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setAngularOnly(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setMotorTarget(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getAngularOnly(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setAxis(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getAFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_Physics3DHingeConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+        // stop short of the end so we don't scan off the end doing
+    // the hashing; this means we won't compress the last few bytes
+    // unless they were part of something longer
+    while (q < start+length && q+12 < end) {
+        int m;
+        stb_uint h1,h2,h3,h4, h;
+        stb_uchar *t;
+        int best = 2, dist=0;
+    }
     
+    struct IDirect3DDevice9;
     
+        // Start the frame. This call will update the io.WantCaptureMouse, io.WantCaptureKeyboard flag that you can use to dispatch inputs (or not) to your application.
+    ImGui::NewFrame();
     
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_API void        ImGui_Marmalade_InvalidateDeviceObjects();
+IMGUI_API bool        ImGui_Marmalade_CreateDeviceObjects();
     
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
     
-    
-#endif // __cocos2dx_navmesh_h__
-#endif //#if CC_USE_NAVMESH
-
-    
-        GLfloat    glVertices[] = 
+        for (int i = 0; i < 3; i++)
     {
-        p1.x * mRatio, p1.y * mRatio,
-        p2.x * mRatio, p2.y * mRatio
-    };
-    glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, 0, glVertices);
-    
-    	m_world->Step(timeStep, settings->velocityIterations, settings->positionIterations);
-    
-    struct TestEntry
-{
-	const char *name;
-	TestCreateFcn *createFcn;
-};
-    
-    		b2Body* body2 = m_world->CreateBody(&bd);
-		m_piece2 = body2->CreateFixture(&m_shape2, 1.0f);
-    
-    
-    {			b2Vec2 anchor(-15.0f + 1.0f * e_count, 5.0f);
-			jd.Initialize(prevBody, ground, anchor);
-			m_world->CreateJoint(&jd);
-		}
-    
-    
-    {  size_t read = 0;
-  std::string read_data;
-  while (read < kWriteSize) {
-    ASSERT_OK(seq_file->Read(kWriteSize - read, &result, scratch));
-    read_data.append(result.data(), result.size());
-    read += result.size();
-  }
-  ASSERT_TRUE(write_data == read_data);
-  delete [] scratch;
-}
-    
-      virtual const char* Name() const override;
-    
-        if (first_iter) {
-      prev = curr;
-      first_iter = 0;
-    } else {
-      if (comparator->Compare(prev.f->largest.user_key(),
-                              curr.f->smallest.user_key()) >= 0) {
-        // found overlapping files, return false
-        return false;
-      }
-      assert(comparator->Compare(curr.f->largest.user_key(),
-                                 prev.f->largest.user_key()) > 0);
-      prev = curr;
+        // If a mouse press event came, always pass it as 'mouse held this frame', so we don't miss click-release events that are shorter than 1 frame.
+        io.MouseDown[i] = g_MouseJustPressed[i] || glfwGetMouseButton(g_Window, i) != 0;
+        g_MouseJustPressed[i] = false;
     }
     
-    /*
- * Class:     org_rocksdb_IngestExternalFileOptions
- * Method:    setMoveFiles
- * Signature: (JZ)V
- */
-void Java_org_rocksdb_IngestExternalFileOptions_setMoveFiles(
-    JNIEnv* env, jobject jobj, jlong jhandle, jboolean jmove_files) {
-  auto* options =
-      reinterpret_cast<rocksdb::IngestExternalFileOptions*>(jhandle);
-  options->move_files = static_cast<bool>(jmove_files);
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    
+    {        // Rendering
+        int display_w, display_h;
+        glfwGetFramebufferSize(window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+        glClear(GL_COLOR_BUFFER_BIT);
+        ImGui::Render();
+        glfwSwapBuffers(window);
+    }
+    
+    
+    {    // Restore modified state
+    glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glBindTexture(GL_TEXTURE_2D, (GLuint)last_texture);
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glPopAttrib();
+    glPolygonMode(GL_FRONT, last_polygon_mode[0]); glPolygonMode(GL_BACK, last_polygon_mode[1]);
+    glViewport(last_viewport[0], last_viewport[1], (GLsizei)last_viewport[2], (GLsizei)last_viewport[3]);
+    glScissor(last_scissor_box[0], last_scissor_box[1], (GLsizei)last_scissor_box[2], (GLsizei)last_scissor_box[3]);
 }
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
