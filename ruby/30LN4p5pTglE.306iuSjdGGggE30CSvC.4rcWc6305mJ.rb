@@ -1,60 +1,96 @@
 
         
-              def request_authorization_consent_form
-        add_claims_to_scopes
-        endpoint = Api::OpenidConnect::AuthorizationPoint::EndpointStartPoint.new(current_user)
-        handle_start_point_response(endpoint)
-      end
-    
-          # Find a Sass file, if it exists.
-      #
-      # This is the primary entry point of the Importer.
-      # It corresponds directly to an `@import` statement in Sass.
-      # It should do three basic things:
-      #
-      # * Determine if the URI is in this importer's format.
-      #   If not, return nil.
-      # * Determine if the file indicated by the URI actually exists and is readable.
-      #   If not, return nil.
-      # * Read the file and place the contents in a {Sass::Engine}.
-      #   Return that engine.
-      #
-      # If this importer's format allows for file extensions,
-      # it should treat them the same way as the default {Filesystem} importer.
-      # If the URI explicitly has a `.sass` or `.scss` filename,
-      # the importer should look for that exact file
-      # and import it as the syntax indicated.
-      # If it doesn't exist, the importer should return nil.
-      #
-      # If the URI doesn't have either of these extensions,
-      # the importer should look for files with the extensions.
-      # If no such files exist, it should return nil.
-      #
-      # The {Sass::Engine} to be returned should be passed `options`,
-      # with a few modifications. `:syntax` should be set appropriately,
-      # `:filename` should be set to `uri`,
-      # and `:importer` should be set to this importer.
-      #
-      # @param uri [String] The URI to import.
-      # @param options [{Symbol => Object}] Options for the Sass file
-      #   containing the `@import` that's currently being resolved.
-      #   This is safe for subclasses to modify destructively.
-      #   Callers should only pass in a value they don't mind being destructively modified.
-      # @return [Sass::Engine, nil] An Engine containing the imported file,
-      #   or nil if it couldn't be found or was in the wrong format.
-      def find(uri, options)
-        Sass::Util.abstract(self)
-      end
-    
-      module Sass::Plugin::Configuration
-    # Different default options in a m environment.
-    def default_options
-      @default_options ||= begin
-        version = Merb::VERSION.split('.').map {|n| n.to_i}
-        if version[0] <= 0 && version[1] < 5
-          root = MERB_ROOT
-          env  = MERB_ENV
-        else
-          root = Merb.root.to_s
-          env  = Merb.environment
+              def serialize(value)
+        result = cast(value)
+        if result
+          ensure_in_range(result)
         end
+        result
+      end
+    
+            def successful_request_message
+          'Successfully upgraded to WebSocket (REQUEST_METHOD: %s, HTTP_CONNECTION: %s, HTTP_UPGRADE: %s)' % [
+            env['REQUEST_METHOD'], env['HTTP_CONNECTION'], env['HTTP_UPGRADE']
+          ]
+        end
+    end
+  end
+end
+
+    
+    class WebServiceTest < ActionDispatch::IntegrationTest
+  class TestController < ActionController::Base
+    def assign_parameters
+      if params[:full]
+        render plain: dump_params_keys
+      else
+        render plain: (params.keys - ['controller', 'action']).sort.join(', ')
+      end
+    end
+    
+          class_attribute :delivery_methods, default: {}.freeze
+      class_attribute :delivery_method, default: :smtp
+    
+        class GradleHelper
+      # Path to the gradle script
+      attr_accessor :gradle_path
+    
+            expect(result).to eq(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::VERSION_NUMBER])
+      end
+    
+      def setup
+    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
+    success = Dir.chdir DUMMY_PATH do
+      silence_stdout_if !ENV['VERBOSE'] do
+        system 'node', 'manifest.js', tmp_dir
+      end
+    end
+    assert success, 'Node.js Mincer compilation failed'
+    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
+    css_name = manifest['assets']['application.css']
+    @css = File.read('#{tmp_dir}/#{css_name}')
+  end
+end
+
+    
+          # Prints a table for a given array of records. For each record, the block
+      # is yielded two arguments: the record and a Row object. To print values
+      # for that record, add values using `row << 'some value'`. A row can
+      # optionally be highlighted in yellow using `row.yellow`.
+      def table(records, &block)
+        return if records.empty?
+        rows = collect_rows(records, &block)
+        col_widths = calculate_column_widths(rows)
+    
+      # Implemented by subclasses to define Rake tasks. Typically a plugin will call
+  # `eval_rakefile` to load Rake tasks from a separate .rake file.
+  #
+  # Example:
+  #
+  #   def define_tasks
+  #     eval_rakefile File.expand_path('../tasks.rake', __FILE__)
+  #   end
+  #
+  # For simple tasks, you can define them inline. No need for a separate file.
+  #
+  #   def define_tasks
+  #     desc 'Do something fantastic.'
+  #     task 'my_plugin:fantastic' do
+  #       ...
+  #     end
+  #   end
+  #
+  def define_tasks; end
+    
+        # Returns a String describing the file's content type
+    def detect
+      if blank_name?
+        SENSIBLE_DEFAULT
+      elsif empty_file?
+        EMPTY_TYPE
+      elsif calculated_type_matches.any?
+        calculated_type_matches.first
+      else
+        type_from_file_contents || SENSIBLE_DEFAULT
+      end.to_s
+    end
