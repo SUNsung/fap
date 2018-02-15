@@ -1,14 +1,45 @@
 
         
-        from flask import Flask, jsonify, render_template, request
-app = Flask(__name__)
+        response = get_json_from_api('%s/domains/%s/applications' %
+                             (broker_url, response[0]['id']), username, password)
     
-        Returns:
-        An iterator that yields the given Futures as they complete (finished or
-        cancelled).
+    # (c) 2016 Red Hat, Inc.
+#
+# This file is part of Ansible
+#
+# Ansible is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Ansible is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
+'''CLI tool for starting new Shippable CI runs.'''
     
-    class ThreadPoolExecutor(_base.Executor):
-    def __init__(self, max_workers):
-        '''Initializes a new ThreadPoolExecutor instance.
+    # Make coding more python3-ish
+from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
     
-    from ycm.client.base_request import BaseRequest, HandleServerException
+    import os
+    
+    import json
+    
+        terminal_stderr_re = [
+        re.compile(r'% ?Error: '),
+        re.compile(r'^% \w+', re.M),
+        re.compile(r'% ?Bad secret'),
+        re.compile(r'invalid input', re.I),
+        re.compile(r'(?:incomplete|ambiguous) command', re.I),
+        re.compile(r'connection timed out', re.I),
+        re.compile(r'[^\r\n]+ not found', re.I),
+        re.compile(r''[^']' +returned error code: ?\d+'),
+        re.compile(r'syntax error'),
+        re.compile(r'unknown command'),
+        re.compile(r'Error\[\d+\]: ', re.I),
+        re.compile(r'Error:', re.I)
+    ]
