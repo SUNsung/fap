@@ -1,54 +1,46 @@
 
         
-            def merge!(hash)
-      return super unless hash.is_a? Hash
-      hash.assert_valid_keys URI::Generic::COMPONENT
-      hash.each_pair do |key, value|
-        send '#{key}=', value
-      end
-      self
+        unless invalids.empty?
+  puts '\n\nFailed links:'
+  invalids.each do |link|
+    puts '- #{link}'
+  end
+  puts 'Done with errors.'
+  exit(1)
+end
+    
+      // writing
+  $('form').on('submit',function(e) {
+    $.post('/', {msg: '<%= user %>: ' + $('#msg').val()});
+    $('#msg').val(''); $('#msg').focus();
+    e.preventDefault();
+  });
+</script>
+    
+      it 'should allow changing the protection mode' do
+    # I have no clue what other modes are available
+    mock_app do
+      use Rack::Protection::FrameOptions, :frame_options => :deny
+      run DummyApp
     end
     
-              # Underscore methods
-          if name.start_with?('Underscore')
-            node.at_css('~ ul').css('li').each do |li|
-              name = [type.downcase, li.at_css('a').content.split.first].join('.')
-              id = name.parameterize
-              li['id'] = id
-              entries << [name, id, type]
-            end
-            next
-          end
+      %w(POST PUT DELETE).each do |method|
+    it 'denies #{method} requests with non-whitelisted Origin' do
+      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://malicious.com')).not_to be_ok
+    end
     
-      # Implemented by subclasses to provide default values for settings needed by
-  # this plugin. Typically done using the `set_if_empty` Capistrano DSL method.
-  #
-  # Example:
-  #
-  #   def set_defaults
-  #     set_if_empty :my_plugin_option, true
-  #   end
-  #
-  def set_defaults; end
-    
-              it 'returns all release servers that match the property filter' do
-            expect(subject.map(&:hostname)).to eq %w{example1.com example3.com}
-          end
-        end
       end
     
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   Cookie Tossing
-    # Supported browsers:: all
-    # More infos::         https://github.com/blog/1466-yummy-cookies-across-domains
-    #
-    # Does not accept HTTP requests if the HTTP_COOKIE header contains more than one
-    # session cookie. This does not protect against a cookie overflow attack.
-    #
-    # Options:
-    #
-    # session_key:: The name of the session cookie (default: 'rack.session')
-    class CookieTossing < Base
-      default_reaction :deny
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
+    
+      class GistTagNoCache < GistTag
+    def initialize(tag_name, text, token)
+      super
+      @cache_disabled = true
+    end
+  end
+end
