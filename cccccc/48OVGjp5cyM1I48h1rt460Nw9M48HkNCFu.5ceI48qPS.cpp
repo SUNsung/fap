@@ -1,184 +1,182 @@
 
         
-        /**
- * @brief Computes @f$ y = |x| @f$
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$ y = |x| @f$
- */
-template <typename Dtype>
-class AbsValLayer : public NeuronLayer<Dtype> {
- public:
-  explicit AbsValLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+        #include 'base/values.h'
+#include 'extensions/common/draggable_region.h'
+#include 'content/public/common/common_param_traits.h'
+#include 'ipc/ipc_message_macros.h'
+#include 'ui/gfx/ipc/gfx_param_traits.h'
+    
+      // Post 'reopen' event.
+  // (This event is received when the user clicked the icon in the Dock).
+  static void EmitReopenEvent();
+    
+    namespace remote {
     }
     
-    #include <vector>
-    
-    #endif  // CAFFE_CONV_LAYER_HPP_
-
     
     
-    {  size_t *workspace_fwd_sizes_;
-  size_t *workspace_bwd_data_sizes_;
-  size_t *workspace_bwd_filter_sizes_;
-  size_t workspaceSizeInBytes;  // size of underlying storage
-  void *workspaceData;  // underlying storage
-  void **workspace;  // aliases into workspaceData
-};
-#endif
+       bool IsItemForCommandIdDynamic(int command_id) const override;
+   base::string16 GetLabelForCommandId(int command_id) const override;
+   bool GetIconForCommandId(int command_id,
+                                   gfx::Image* icon) const override;
     
-    
-    {}  // namespace caffe
-    
-    #include 'caffe/layers/softmax_layer.hpp'
-    
-    #include <vector>
-    
-    #include <vector>
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #endif  // CAFFE_EXP_LAYER_HPP_
-
-    
-        // these are used in pretty-printing
-    TextLocation where() const
-    {
-        return locations.front();
-    }                                        // where the error happened
-    virtual const wchar_t* kind() const = 0; // e.g. 'warning' or 'error'
-    
-    // GetFileConfigNames - determine the names of the features and labels sections in the config file
-// features - [in,out] a vector of feature name strings
-// labels - [in,out] a vector of label name strings
-template <class ConfigRecordType>
-void GetFileConfigNames(const ConfigRecordType& config, std::vector<std::wstring>& features, std::vector<std::wstring>& labels)
-{
-    for (const auto& id : config.GetMemberIds())
-    {
-        if (!config.CanBeConfigRecord(id))
-            continue;
-        const ConfigRecordType& temp = config(id);
-        // ############### BREAKING ############
-        // Before it required a 'dim' parameter, but that was unused for labels.
-        // ############### BREAKING ############
-        //// see if we have a config parameters that contains a 'dim' element, it's a sub key, use it
-        //if (temp.ExistsCurrent(L'dim'))
-        //{
-        // any sub-dictionary that contains any relevant entries is considered an input stream, either label or features
-        if (temp.ExistsCurrent(L'labelMappingFile') || temp.ExistsCurrent(L'labelDim') || temp.ExistsCurrent(L'labelType') || (temp.ExistsCurrent(L'sectionType') && (const wstring&) temp(L'sectionType') == L'labels'))
-            labels.push_back(id);
-        else if (temp.ExistsCurrent(L'dim'))
-            features.push_back(id);
-        //}
-    }
-}
-    
-    template<class TString>
-inline bool AreEqualIgnoreCase(
-    const TString& s1,
-    const typename TString::value_type* s2pointer)
-{
-    return AreEqualIgnoreCase(s1, TString(s2pointer));
-}
-    
-        // save a float4 to RAM bypassing the cache ('without polluting the cache')
-    void storewithoutcache(float4& r4) const
-    {
-        // _mm_stream_ps ((float*) &r4, v);
-        r4 = v;
-    }
-    
-    #define _CRT_SECURE_NO_WARNINGS // 'secure' CRT not available on all platforms  --add this at the top of all CPP files that give 'function or variable may be unsafe' warnings
-    
-    #include 'ifaddrs_android.h'
-#include <stdlib.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/utsname.h>
-#include <sys/ioctl.h>
-#include <netinet/in.h>
-#include <net/if.h>
-#include <unistd.h>
-#include <errno.h>
-#include <linux/netlink.h>
-#include <linux/rtnetlink.h>
-    
-      {2,0,30,  &_residue_44p,
-   &_huff_book__44p2_long,&_huff_book__44p2_long,
-   &_resbook_44p_2,&_resbook_44p_2},
-    
-    #include <stdio.h>
-#include <stdlib.h>
-#include <openssl/des.h>
-    
-    const std::vector<std::string>& DumpCrashStack::StackList() const {
-    return vecdump_;
-}
-
-    
-    #ifndef COMM_COMM_FREQUENCY_LIMIT_H_
-#define COMM_COMM_FREQUENCY_LIMIT_H_
-    
-    #include 'comm/corepattern/service_base.h'
-    
-    Test_Spy_Sample::~Test_Spy_Sample()
-{
-    SPY_DETACH_CLASS();
-}
-    
-    
-#endif /* defined(__PublicComponent__testspy__) */
-
-    
-    
-/*
- * scop_jenv.cpp
- *
- *  Created on: 2012-8-21
- *      Author: yanguoyue
- */
-    
-    
-#endif /* SCOP_JENV_H_ */
-
-    
-    #ifndef _WIN32
-struct Init {
-    Init() {signal(SIGPIPE, SIG_IGN);}
-} init;
-#endif
-    
-    enum Options : unsigned int {
-    NO_OPTIONS = 0,
-    PERMESSAGE_DEFLATE = 1,
-    SERVER_NO_CONTEXT_TAKEOVER = 2,
-    CLIENT_NO_CONTEXT_TAKEOVER = 4,
-    NO_DELAY = 8
+    static KeyMap keymap = {
+  {'`'    , 'Backquote'},
+  {'\\'   , 'Backslash'},
+  {'['    , 'BracketLeft'},
+  {']'    , 'BracketRight'},
+  {','    , 'Comma'},
+  {'='    , 'Equal'},
+  {'-'    , 'Minus'},
+  {'.'    , 'Period'},
+  {'''    , 'Quote'},
+  {';'    , 'Semicolon'},
+  {'/'    , 'Slash'},
+  {'\n'   , 'Enter'},
+  {'\t'   , 'Tab'},
+  {'UP'   , 'ArrowUp'},
+  {'DOWN' , 'ArrowDown'},
+  {'LEFT' , 'ArrowLeft'},
+  {'RIGHT', 'ArrowRight'},
+  {'ESC'  , 'Escape'},
+  {'MEDIANEXTTRACK', 'MediaTrackNext'},
+  {'MEDIAPREVTRACK', 'MediaTrackPrevious'}
 };
     
-            struct HttpTransformer {
-    }
-    
-            State() {
-            wantsHead = true;
-            spillLength = 0;
-            opStack = -1;
-            lastFin = true;
-        }
+    static const int kIconWidth = 16;
+static const int kIconHeight = 16;
     
     
-    {    void close() {
-        delete this;
-    }
+    {  std::string document_;
+  bool yamlCompatiblityEnabled_;
+  bool dropNullPlaceholders_;
+  bool omitEndingLineFeed_;
 };
+    
+      switch (token.type_) {
+  case tokenObjectBegin:
+    successful = readObject(token);
+    currentValue().setOffsetLimit(current_ - begin_);
+    break;
+  case tokenArrayBegin:
+    successful = readArray(token);
+    currentValue().setOffsetLimit(current_ - begin_);
+    break;
+  case tokenNumber:
+    successful = decodeNumber(token);
+    break;
+  case tokenString:
+    successful = decodeString(token);
+    break;
+  case tokenTrue:
+    {
+    Value v(true);
+    currentValue().swapPayload(v);
+    currentValue().setOffsetStart(token.start_ - begin_);
+    currentValue().setOffsetLimit(token.end_ - begin_);
+    }
+    break;
+  case tokenFalse:
+    {
+    Value v(false);
+    currentValue().swapPayload(v);
+    currentValue().setOffsetStart(token.start_ - begin_);
+    currentValue().setOffsetLimit(token.end_ - begin_);
+    }
+    break;
+  case tokenNull:
+    {
+    Value v;
+    currentValue().swapPayload(v);
+    currentValue().setOffsetStart(token.start_ - begin_);
+    currentValue().setOffsetLimit(token.end_ - begin_);
+    }
+    break;
+  case tokenArraySeparator:
+  case tokenObjectEnd:
+  case tokenArrayEnd:
+    if (features_.allowDroppedNullPlaceholders_) {
+      // 'Un-read' the current token and mark the current value as a null
+      // token.
+      current_--;
+      Value v;
+      currentValue().swapPayload(v);
+      currentValue().setOffsetStart(current_ - begin_ - 1);
+      currentValue().setOffsetLimit(current_ - begin_);
+      break;
+    } // Else, fall through...
+  default:
+    currentValue().setOffsetStart(token.start_ - begin_);
+    currentValue().setOffsetLimit(token.end_ - begin_);
+    return addError('Syntax error: value, object or array expected.', token);
+  }
+    
+    #include <Python.h>
+    
+    #include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/io/printer.h>
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
+    }
+    
+    
+    
+    #include <google/protobuf/compiler/java/java_doc_comment.h>
+    
+    #include <string>
+#include <chrono>
+#include <algorithm>
+#include <vector>
+#include <iostream>
+#include <queue>
+#include <set>
+#include <memory>
+    
+    
+    {
+}
+    
+    void WakeUpLock::Lock() {
+    ::wakeupLock_Lock(object_);
+}
+    
+    int SimpleIntUnpack(const void* _rawbuf, size_t _rawlen, size_t& _packlen, PtrBuffer& _data) {
+    return SimpleUnpack<unsigned int>(_rawbuf, _rawlen, _packlen, _data);
+}
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    CommFrequencyLimit::~CommFrequencyLimit()
+{}
+    
+      private:
+    CommFrequencyLimit(CommFrequencyLimit&);
+    CommFrequencyLimit& operator=(CommFrequencyLimit&);
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+        void* This() const {return m_this;}
+    
+    //
+//  testspy.cpp
+//  PublicComponent
+//
+//  Created by yerungui on 14-5-13.
+//
+    
+        void TestFun0();
+    void TestFun2()  {__TestFun1(1);}
