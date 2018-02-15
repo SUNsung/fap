@@ -1,52 +1,64 @@
 
         
-            attr_accessor :name, :type, :path
+        # Create an array of vendored mimetype => [extensions]
+mimes = {}
+json = open('https://raw.githubusercontent.com/jshttp/mime-db/master/db.json').read
+data = JSON.parse(json)
+data.reject! { |mime, meta| meta['extensions'].nil? || meta['extensions'].empty? }
+data.each do |mime, meta|
+  # Normalize extensions and mime-types
+  mime = mime.downcase.strip
+  extensions = meta['extensions'].map { |e| e.downcase.strip }.compact
     
-    Given an Application (app) bundle directory on disk, find all
-login items associated with that app, which you can use in a
-Cask uninstall stanza, eg
+    Jekyll::Deprecator.process(ARGV)
     
+          return false unless prune_time
     
-require 'uri'
-require 'cgi'
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'support', 'paths'))
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'support', 'selectors'))
-    
-        # resize to a new geometry
-    # @param geometry [String] the Paperclip geometry definition to resize to
-    # @example
-    #   Paperclip::Geometry.new(150, 150).resize_to('50x50!')
-    #   #=> Paperclip::Geometry(50, 50)
-    def resize_to(geometry)
-      new_geometry = Paperclip::Geometry.parse geometry
-      case new_geometry.modifier
-      when '!', '#'
-        new_geometry
-      when '>'
-        if new_geometry.width >= self.width && new_geometry.height >= self.height
-          self
-        else
-          scale_to new_geometry
-        end
-      when '<'
-        if new_geometry.width <= self.width || new_geometry.height <= self.height
-          self
-        else
-          scale_to new_geometry
-        end
-      else
-        scale_to new_geometry
-      end
-    end
-    
-            def matches? subject
-          @subject = subject
-          @subject = @subject.new if @subject.class == Class
-          lower_than_low? && higher_than_low? && lower_than_high? && higher_than_high?
-        end
-    
-      context 'called with arguments (1, $ratio: $golden-ratio)' do
-    it 'output the first value from the golden ratio scale' do
-      expect('.one-golden-ratio').to have_rule('font-size: 1.618em')
+      def print_remaining_files(files, root, other = '')
+    case files.length
+    when 0
+      # noop
+    when 1
+      puts files
+    else
+      puts '#{root}/ (#{files.length} #{other}files)'
     end
   end
+end
+
+    
+      def python(_options = {}, &block)
+    opoo 'Formula#python is deprecated and will go away shortly.'
+    block.call if block_given?
+    PythonRequirement.new
+  end
+  alias_method :python2, :python
+  alias_method :python3, :python
+end
+
+    
+          To export the needed variables, add them to your dotfiles.
+       * On Bash, add them to `~/.bash_profile`.
+       * On Zsh, add them to `~/.zprofile` instead.
+    
+        inp.attributes.keys.each do |ikey|
+      if (ikey.downcase == 'value')
+        inp[ikey] = ''
+        next
+      end
+    
+        self.sigs.each_key do |k|
+    
+    
+signer._invoke('KeyToolMSF','[Ljava.lang.String;',keytoolOpts)
+    
+      when '6.1.0'
+    __NR_execve      = 6
+    __NR_getpeername = 203
+    __NR_accept      = 229
+    __NR_listen      = 232
+    __NR_bind        = 234
+    __NR_socket      = 235
+    __NR_connect     = 236
+    __NR_close       = 269
+    __NR_kfcntl      = 617
