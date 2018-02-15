@@ -1,392 +1,435 @@
 
         
-        /// Consume all source blobs that strongly overlap the given box,
-/// putting them into a new word, with the correct_text label.
-/// Fights over which box owns which blobs are settled by
-/// applying the blobs to box or next_box with the least non-overlap.
-/// @return false if the box was in error, which can only be caused by
-/// failing to find an overlapping blob for a box.
-bool Tesseract::ResegmentWordBox(BLOCK_LIST *block_list,
-                                 const TBOX& box, const TBOX& next_box,
-                                 const char* correct_text) {
-  if (applybox_debug > 1) {
-    tprintf('\nAPPLY_BOX: in ResegmentWordBox() for %s\n', correct_text);
+          DebuggerClient(ASTContext &C) : Ctx(C) { }
+  virtual ~DebuggerClient() = default;
+  
+  // DebuggerClient is consulted at the beginning of the parsing
+  // of various DeclKinds to see whether the decl should be parsed
+  // in the global context rather than the current context.
+  // This question will only be asked if the decl's current context
+  // is a function marked with the LLDBDebuggerFunction attribute.
+  virtual bool shouldGlobalize(Identifier Name, DeclKind kind) = 0;
+  
+  virtual void didGlobalize (Decl *Decl) = 0;
+    
+    
+    {  inline SILDebuggerClient *getAsSILDebuggerClient() {
+    return this;
   }
-  WERD* new_word = NULL;
-  BLOCK_IT b_it(block_list);
-  for (b_it.mark_cycle_pt(); !b_it.cycled_list(); b_it.forward()) {
-    BLOCK* block = b_it.data();
-    if (!box.major_overlap(block->bounding_box()))
-      continue;
-    ROW_IT r_it(block->row_list());
-    for (r_it.mark_cycle_pt(); !r_it.cycled_list(); r_it.forward()) {
-      ROW* row = r_it.data();
-      if (!box.major_overlap(row->bounding_box()))
-        continue;
-      WERD_IT w_it(row->word_list());
-      for (w_it.mark_cycle_pt(); !w_it.cycled_list(); w_it.forward()) {
-        WERD* word = w_it.data();
-        if (applybox_debug > 2) {
-          tprintf('Checking word:');
-          word->bounding_box().print();
-        }
-        if (word->text() != NULL && word->text()[0] != '\0')
-          continue;  // Ignore words that are already done.
-        if (!box.major_overlap(word->bounding_box()))
-          continue;
-        C_BLOB_IT blob_it(word->cblob_list());
-        for (blob_it.mark_cycle_pt(); !blob_it.cycled_list();
-             blob_it.forward()) {
-          C_BLOB* blob = blob_it.data();
-          TBOX blob_box = blob->bounding_box();
-          if (!blob_box.major_overlap(box))
-            continue;
-          double current_box_miss_metric = BoxMissMetric(blob_box, box);
-          double next_box_miss_metric = BoxMissMetric(blob_box, next_box);
-          if (applybox_debug > 2) {
-            tprintf('Checking blob:');
-            blob_box.print();
-            tprintf('Current miss metric = %g, next = %g\n',
-                    current_box_miss_metric, next_box_miss_metric);
-          }
-          if (current_box_miss_metric > next_box_miss_metric)
-            continue;  // Blob is a better match for next box.
-          if (applybox_debug > 2) {
-            tprintf('Blob match: blob:');
-            blob_box.print();
-            tprintf('Matches box:');
-            box.print();
-            tprintf('With next box:');
-            next_box.print();
-          }
-          if (new_word == NULL) {
-            // Make a new word with a single blob.
-            new_word = word->shallow_copy();
-            new_word->set_text(correct_text);
-            w_it.add_to_end(new_word);
-          }
-          C_BLOB_IT new_blob_it(new_word->cblob_list());
-          new_blob_it.add_to_end(blob_it.extract());
-        }
-      }
-    }
-  }
-  if (new_word == NULL && applybox_debug > 0) tprintf('FAIL!\n');
-  return new_word != NULL;
+private:
+  virtual void anchor();
+};
+    
+    #include 'swift/AST/SyntaxASTMap.h'
+#include 'swift/AST/Expr.h'
+#include 'swift/AST/Decl.h'
+#include 'swift/AST/Stmt.h'
+#include 'swift/Syntax/Syntax.h'
+    
+    //===----------------------------------------------------------------------===//
+// CodeCompletionOrganizer implementation
+//===----------------------------------------------------------------------===//
+    
+        GraphemeClusterBreakProperty GCBForC1 =
+        getGraphemeClusterBreakProperty(C[1]);
+    if (isExtendedGraphemeClusterBoundary(GCBForC0, GCBForC1) &&
+        !graphemeBreakOverride(C[0], C[1]))
+      return S.slice(0, C1Offset);
+    
+    SILFunction *SILDebugScope::getParentFunction() const {
+  if (InlinedCallSite)
+    return InlinedCallSite->getParentFunction();
+  if (auto *ParentScope = Parent.dyn_cast<const SILDebugScope *>())
+    return ParentScope->getParentFunction();
+  return Parent.get<SILFunction *>();
 }
-    
-    // This structure captures all information needed about a text line for the
-// purposes of paragraph detection.  It is meant to be exceedingly light-weight
-// so that we can easily test paragraph detection independent of the rest of
-// Tesseract.
-class RowInfo {
- public:
-  // Constant data derived from Tesseract output.
-  STRING text;        // the full UTF-8 text of the line.
-  bool ltr;           // whether the majority of the text is left-to-right
-                      // TODO(eger) make this more fine-grained.
-    }
-    
-    
-    {}  // namespace tesseract.
 
     
+    #include 'swift/Basic/LLVM.h'
+#include 'swift/AST/DiagnosticConsumer.h'
     
-/**********************************************************************
- * operator-
- *
- * Subtract 2 FCOORDS.
- **********************************************************************/
+        if (s)
+    {
+      if ((k += r) > 63)
+        pD->stop_decoding(JPGD_DECODE_ERROR);
+    }
     
-      // Make list of keys from flattened key structure
-  start_.push_back(keys_.size());  // Simplify length computation
-  tmp_keys_.resize(num_keys);
-  for (size_t i = 0; i < num_keys; i++) {
-    const char* base = keys_.data() + start_[i];
-    size_t length = start_[i+1] - start_[i];
-    tmp_keys_[i] = Slice(base, length);
-  }
+    static const static_bookblock _resbook_44p_ln1={
+  {
+    {&_44pn1_l0_0,&_44pn1_l0_1,0},
+    {&_44pn1_l1_0,&_44pn1_p6_1,&_44pn1_p6_2},
+   }
+};
+static const static_bookblock _resbook_44p_l0={
+  {
+    {&_44p0_l0_0,&_44p0_l0_1,0},
+    {&_44p0_l1_0,&_44p0_p6_1,&_44p0_p6_2},
+   }
+};
+static const static_bookblock _resbook_44p_l1={
+  {
+    {&_44p1_l0_0,&_44p1_l0_1,0},
+    {&_44p1_l1_0,&_44p1_p6_1,&_44p1_p6_2},
+   }
+};
+static const static_bookblock _resbook_44p_l2={
+  {
+    {&_44p2_l0_0,&_44p2_l0_1,0},
+    {&_44p2_l1_0,&_44p2_p7_2,&_44p2_p7_3},
+   }
+};
+static const static_bookblock _resbook_44p_l3={
+  {
+    {&_44p3_l0_0,&_44p3_l0_1,0},
+    {&_44p3_l1_0,&_44p3_p7_2,&_44p3_p7_3},
+   }
+};
+static const static_bookblock _resbook_44p_l4={
+  {
+    {&_44p4_l0_0,&_44p4_l0_1,0},
+    {&_44p4_l1_0,&_44p4_p7_2,&_44p4_p7_3},
+   }
+};
+static const static_bookblock _resbook_44p_l5={
+  {
+    {&_44p5_l0_0,&_44p5_l0_1,0},
+    {&_44p5_l1_0,&_44p5_p7_2,&_44p5_p7_3},
+   }
+};
+static const static_bookblock _resbook_44p_l6={
+  {
+    {&_44p6_l0_0,&_44p6_l0_1,0},
+    {&_44p6_l1_0,&_44p6_p7_2,&_44p6_p7_3},
+   }
+};
+static const static_bookblock _resbook_44p_l7={
+  {
+    {&_44p7_l0_0,&_44p7_l0_1,0},
+    {&_44p7_l1_0,&_44p7_p7_2,&_44p7_p7_3},
+   }
+};
+static const static_bookblock _resbook_44p_l8={
+  {
+    {&_44p8_l0_0,&_44p8_l0_1,0},
+    {&_44p8_l1_0,&_44p8_p7_2,&_44p8_p7_3},
+   }
+};
+static const static_bookblock _resbook_44p_l9={
+  {
+    {&_44p9_l0_0,&_44p9_l0_1,0},
+    {&_44p9_l1_0,&_44p9_p7_2,&_44p9_p7_3},
+   }
+};
     
-    // A type that holds a pointer that can be read or written atomically
-// (i.e., without word-tearing.)
-class AtomicPointer {
- private:
-  intptr_t rep_;
+    #include 'x86/x86cpu.h'
+/* We currently support 5 x86 variants:
+ * arch[0] -> non-sse
+ * arch[1] -> sse
+ * arch[2] -> sse2
+ * arch[3] -> sse4.1
+ * arch[4] -> avx
+ */
+#define OPUS_ARCHMASK 7
+int opus_select_arch(void);
+    
+    #undef MULT16_32_Q15_ADD
+static inline int MULT16_32_Q15_ADD(int a, int b, int c, int d) {
+    int m;
+    asm volatile('MULT $ac1, %0, %1' : : 'r' ((int)a), 'r' ((int)b));
+    asm volatile('madd $ac1, %0, %1' : : 'r' ((int)c), 'r' ((int)d));
+    asm volatile('EXTR.W %0,$ac1, %1' : '=r' (m): 'i' (15));
+    return m;
+}
+    
+    struct FileMetaData {
+  int refs;
+  int allowed_seeks;          // Seeks allowed until compaction
+  uint64_t number;
+  uint64_t file_size;         // File size in bytes
+  InternalKey smallest;       // Smallest internal key served by table
+  InternalKey largest;        // Largest internal key served by table
+    }
+    
+    // WriteBatchInternal provides static methods for manipulating a
+// WriteBatch that we don't want in the public WriteBatch interface.
+class WriteBatchInternal {
  public:
-  // Initialize to arbitrary value
-  AtomicPointer();
+  // Return the number of entries in the batch.
+  static int Count(const WriteBatch* batch);
     }
     
+    // Number of key/values to place in database
+static int FLAGS_num = 1000000;
     
-    {  // Open test file some number above the sum of the two limits to force
-  // open-on-read behavior of POSIX Env leveldb::RandomAccessFile.
-  const int kNumFiles = kReadOnlyFileLimit + kMMapLimit + 5;
-  leveldb::RandomAccessFile* files[kNumFiles] = {0};
-  for (int i = 0; i < kNumFiles; i++) {
-    ASSERT_OK(env_->NewRandomAccessFile(test_file, &files[i]));
-  }
-  char scratch;
-  Slice read_result;
-  for (int i = 0; i < kNumFiles; i++) {
-    ASSERT_OK(files[i]->Read(i, 1, &read_result, &scratch));
-    ASSERT_EQ(kFileData[i], read_result[0]);
-  }
-  for (int i = 0; i < kNumFiles; i++) {
-    delete files[i];
-  }
-  ASSERT_OK(env_->DeleteFile(test_file));
+    #include 'helpers/memenv/memenv.h'
+    
+    int main(int argc, char** argv) {
+  return leveldb::test::RunAllTests();
 }
+
     
-    namespace leveldb {
-    }
-    
-    void TableCache::Evict(uint64_t file_number) {
-  char buf[sizeof(file_number)];
-  EncodeFixed64(buf, file_number);
-  cache_->Erase(Slice(buf, sizeof(buf)));
-}
-    
-    static bool GetLevel(Slice* input, int* level) {
-  uint32_t v;
-  if (GetVarint32(input, &v) &&
-      v < config::kNumLevels) {
-    *level = v;
-    return true;
-  } else {
-    return false;
-  }
+    void InitOnce(OnceType* once, void (*initializer)()) {
+  PthreadCall('once', pthread_once(once, initializer));
 }
     
     
-    {        // Reset SQLite statement for another use
-        status = sqlite3_clear_bindings(read_stmt);
-        ErrorCheck(status);
-        status = sqlite3_reset(read_stmt);
-        ErrorCheck(status);
-        FinishedSingleOp();
-      }
-    
-      // count the keys
-  leveldb::Iterator* iter = db->NewIterator(leveldb::ReadOptions());
-  size_t num_keys = 0;
-  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-    num_keys++;
+    {  Status result = metaindex_handle_.DecodeFrom(input);
+  if (result.ok()) {
+    result = index_handle_.DecodeFrom(input);
   }
-  delete iter;
-  ASSERT_EQ(kNumKeys, num_keys) << 'Bad number of keys';
-    
-    void CondVar::SignalAll() {
-  PthreadCall('broadcast', pthread_cond_broadcast(&cv_));
+  if (result.ok()) {
+    // We skip over any leftover data (just padding for now) in 'input'
+    const char* end = magic_ptr + 8;
+    *input = Slice(end, input->data() + input->size() - end);
+  }
+  return result;
 }
     
-      // Check the crc of the type and the block contents
-  const char* data = contents.data();    // Pointer to where Read put the data
-  if (options.verify_checksums) {
-    const uint32_t crc = crc32c::Unmask(DecodeFixed32(data + n + 1));
-    const uint32_t actual = crc32c::Value(data, n + 1);
-    if (actual != crc) {
-      delete[] buf;
-      s = Status::Corruption('block checksum mismatch');
-      return s;
-    }
+    class Block;
+class RandomAccessFile;
+struct ReadOptions;
+    
+    Iterator* NewErrorIterator(const Status& status) {
+  return new EmptyIterator(status);
+}
+    
+    #ifndef STORAGE_LEVELDB_TABLE_MERGER_H_
+#define STORAGE_LEVELDB_TABLE_MERGER_H_
+    
+      // Compares img with the baseline image and saves the resulting distance map
+  // inside the object. The provided image must have the same dimensions as the
+  // baseline image.
+  virtual void Compare(const OutputImage& img) = 0;
+    
+    void OutputImage::Downsample(const DownsampleConfig& cfg) {
+  if (components_[1].IsAllZero() && components_[2].IsAllZero()) {
+    // If the image is already grayscale, nothing to do.
+    return;
   }
-    
-      // Takes ownership of 'iter' and will delete it when destroyed, or
-  // when Set() is invoked again.
-  void Set(Iterator* iter) {
-    delete iter_;
-    iter_ = iter;
-    if (iter_ == NULL) {
-      valid_ = false;
-    } else {
-      Update();
-    }
+  if (cfg.use_silver_screen &&
+      cfg.u_factor_x == 2 && cfg.u_factor_y == 2 &&
+      cfg.v_factor_x == 2 && cfg.v_factor_y == 2) {
+    std::vector<uint8_t> rgb = ToSRGB();
+    std::vector<std::vector<float> > yuv = RGBToYUV420(rgb, width_, height_);
+    SetDownsampledCoefficients(yuv[0], 1, 1, &components_[0]);
+    SetDownsampledCoefficients(yuv[1], 2, 2, &components_[1]);
+    SetDownsampledCoefficients(yuv[2], 2, 2, &components_[2]);
+    return;
   }
+  // Get the floating-point precision YUV array represented by the set of
+  // DCT coefficients.
+  std::vector<std::vector<float> > yuv(3, std::vector<float>(width_ * height_));
+  for (int c = 0; c < 3; ++c) {
+    components_[c].ToFloatPixels(&yuv[c][0], 1);
+  }
+    }
     
-      r['sycall_addr_modified'] = syscall_addr_modified;
-  r['text_segment_hash'] = text_segment_hash;
-  results.push_back(r);
+    std::vector<float> LinearlyAveragedLuma(const std::vector<float>& rgb) {
+  assert(rgb.size() % 3 == 0);
+  std::vector<float> y(rgb.size() / 3);
+  for (size_t i = 0, p = 0; p < rgb.size(); ++i, p += 3) {
+    y[i] = LinearToGamma(RGBToY(GammaToLinear(rgb[p + 0]),
+                                GammaToLinear(rgb[p + 1]),
+                                GammaToLinear(rgb[p + 2])));
+  }
+  return y;
+}
     
-      /// Deregister an EventPublisher by publisher name.
-  static Status deregisterEventPublisher(const std::string& type_id);
+    #ifndef GUETZLI_FDCT_H_
+#define GUETZLI_FDCT_H_
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg) {
+  if (jpg.components.size() == 1 ||
+      (jpg.components.size() == 3 &&
+       HasYCbCrColorSpace(jpg) && (jpg.Is420() || jpg.Is444()))) {
+    OutputImage img(jpg.width, jpg.height);
+    img.CopyFromJpegData(jpg);
+    return img.ToSRGB();
+  }
+  return std::vector<uint8_t>();
+}
+    
+    // Decodes the parsed jpeg coefficients into an RGB image.
+// There can be only either 1 or 3 image components, in either case, an RGB
+// output image will be generated.
+// Only YUV420 and YUV444 sampling factors are supported.
+// Vector will be empty if a decoding error occurred.
+std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
+    
+      void SaveToJpegData(JPEGData* jpg) const;
+    
+    #ifdef ANDROID
+#include <jni.h>
+    
+    Test_Spy_Sample::~Test_Spy_Sample()
+{
+    SPY_DETACH_CLASS();
+}
+    
+    void TSpy::TestFun0()
+{
+    return reinterpret_cast<Test_Spy_Sample*>(This())->TestFun0();
+}
+    
+    #ifndef _COMM_FUNCTION_H_
+#define _COMM_FUNCTION_H_
+    
+        // Create texture
+    int flags = al_get_new_bitmap_flags();
+    int fmt = al_get_new_bitmap_format();
+    al_set_new_bitmap_flags(ALLEGRO_MEMORY_BITMAP|ALLEGRO_MIN_LINEAR|ALLEGRO_MAG_LINEAR);
+    al_set_new_bitmap_format(ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE);
+    ALLEGRO_BITMAP* img = al_create_bitmap(width, height);
+    al_set_new_bitmap_flags(flags);
+    al_set_new_bitmap_format(fmt);
+    if (!img)
+        return false;
+    
+    // Handler for Win32 messages, update mouse/keyboard data.
+// You may or not need this for your implementation, but it can serve as reference for handling inputs.
+// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
+/*
+IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+*/
+
+    
+    // Implemented features:
+//  [X] User texture binding. Use 'CIwTexture*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
     
     
-    {  Status getQueryColumns(const std::string& query,
-                         TableColumns& columns) const override {
-    return getQueryColumnsExternal(query, columns);
+    {        ImGui::Render();
+    }
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
+// **Prefer using the code in the opengl3_example/ folder**
+// See imgui_impl_glfw.cpp for details.
+    
+    void ImGui_ImplDX9_InvalidateDeviceObjects()
+{
+    if (!g_pd3dDevice)
+        return;
+    if (g_pVB)
+    {
+        g_pVB->Release();
+        g_pVB = NULL;
+    }
+    if (g_pIB)
+    {
+        g_pIB->Release();
+        g_pIB = NULL;
+    }
+    }
+    
+      std::string SayHello(const std::string &name) {
+    flatbuffers::grpc::MessageBuilder mb;
+    auto name_offset = mb.CreateString(name);
+    auto request_offset = CreateHelloRequest(mb, name_offset);
+    mb.Finish(request_offset);
+    auto request_msg = mb.ReleaseMessage<HelloRequest>();
+    }
+    
+      virtual grpc::Status SayManyHellos(
+      grpc::ServerContext *context,
+      const flatbuffers::grpc::Message<ManyHellosRequest> *request_msg,
+      grpc::ServerWriter<flatbuffers::grpc::Message<HelloReply>> *writer)
+      override {
+    // The streaming usage below is simply a combination of standard gRPC
+    // streaming with the FlatBuffers usage shown above.
+    const ManyHellosRequest *request = request_msg->GetRoot();
+    const std::string &name = request->name()->str();
+    int num_greetings = request->num_greetings();
+    }
+    
+    inline flatbuffers::Offset<Enum> CreateEnum(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    flatbuffers::Offset<flatbuffers::String> name = 0,
+    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<EnumVal>>> values = 0,
+    bool is_union = false,
+    flatbuffers::Offset<Type> underlying_type = 0,
+    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<KeyValue>>> attributes = 0,
+    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>> documentation = 0) {
+  EnumBuilder builder_(_fbb);
+  builder_.add_documentation(documentation);
+  builder_.add_attributes(attributes);
+  builder_.add_underlying_type(underlying_type);
+  builder_.add_values(values);
+  builder_.add_name(name);
+  builder_.add_is_union(is_union);
+  return builder_.Finish();
+}
+    
+    
+    {}  // namespace NamespaceA
+    
+    
+    { public:
+  StructInNestedNS() {
+    memset(this, 0, sizeof(StructInNestedNS));
+  }
+  StructInNestedNS(int32_t _a, int32_t _b)
+      : a_(flatbuffers::EndianScalar(_a)),
+        b_(flatbuffers::EndianScalar(_b)) {
+  }
+  int32_t a() const {
+    return flatbuffers::EndianScalar(a_);
+  }
+  void mutate_a(int32_t _a) {
+    flatbuffers::WriteScalar(&a_, _a);
+  }
+  int32_t b() const {
+    return flatbuffers::EndianScalar(b_);
+  }
+  void mutate_b(int32_t _b) {
+    flatbuffers::WriteScalar(&b_, _b);
+  }
+};
+STRUCT_END(StructInNestedNS, 8);
+    
+    
+    {  WeaponT *AsWeapon() {
+    return type == Equipment_Weapon ?
+      reinterpret_cast<WeaponT *>(value) : nullptr;
+  }
+  const WeaponT *AsWeapon() const {
+    return type == Equipment_Weapon ?
+      reinterpret_cast<const WeaponT *>(value) : nullptr;
   }
 };
     
-      /**
-   * @brief Bind this plugin to an external plugin reference.
-   *
-   * Allow a specialized plugin type to act when an external plugin is
-   * registered (e.g., a TablePlugin will attach the table name).
-   *
-   * @param name The broadcasted name of the plugin.
-   * @param info The routing info for the owning extension.
-   */
-  static Status addExternal(const std::string& name,
-                            const PluginResponse& info) {
-    (void)name;
-    (void)info;
-    return Status(0, 'Not used');
-  }
+    #include 'monster_test_generated.h'
+#include 'flatbuffers/grpc.h'
     
-    #pragma once
     
-      /**
-   * @brief Cleanly wait for all services and components to shutdown.
-   *
-   * Enter a join of all services followed by a sync wait for event loops.
-   * If the main thread is out of actions it can call #waitForShutdown.
-   */
-  static void waitForShutdown();
-    
-        pt::ptree multi_pack;
-    for (const auto& path : paths) {
-      std::string content;
-      if (!readFile(path, content)) {
-        LOG(WARNING) << 'Cannot read multi-pack file: ' << path;
-        continue;
+    {
+    {      for (auto part = parts.rbegin(); part != parts.rend(); part++) {
+        vars['part'] = *part;
+        printer->Print(vars, '}  // namespace $part$\n');
       }
+      printer->Print(vars, '\n');
     }
     
-    #include <vector>
-#include <string>
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-        while (-1 != __ParseStack(stream, state, strcache, strstack)) {
-        if (!_processname.empty() && std::string::npos == strstack.find(processname, 0)) {
-            strstack.clear();
-            continue;
-        }
+      flatbuffers::grpc::MessageBuilder fbb;
+  {
+    grpc::ClientContext context;
+    // Build a request with the name set.
+    auto monster_offset = CreateMonster(fbb, 0, 0, 0, fbb.CreateString('Fred'));
+    fbb.Finish(monster_offset);
+    auto request = fbb.ReleaseMessage<Monster>();
+    flatbuffers::grpc::Message<Stat> response;
     }
     
-    #include <vector>
-#include <string>
+    #if defined(FLATBUFFERS_MEMORY_LEAK_TRACKING) && \
+    defined(_MSC_VER) && defined(_DEBUG)
+  #include <crtdbg.h>
+  #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+  #define new DEBUG_NEW
+#endif
     
-        if (((st.head_length + st.url_length + st.total_length) & 0xFF) != st.magic) return __LINE__;
-    
-    #include 'comm/comm_frequency_limit.h'
-#include 'comm/xlogger/xlogger.h'
-#include 'comm/time_utils.h'
-    
-        Spy* GetSpy(const void* _this) const
-    { return m_thismap.find(_this)->second; }
-    
-    
-    
-    
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    XXH32_sizeofState() is used to know how much space must be allocated for the xxHash 32-bits state.
-Note that the state must be aligned to access 'long long' fields. Memory must be allocated and referenced by a pointer.
-This pointer must then be provided as 'state' into XXH32_resetState(), which initializes the state.
-    
-    namespace rocksdb {
-    }
-    
-      std::vector<CompactionInputFiles> inputs(vstorage->num_levels());
-  for (size_t i = 0; i < inputs.size(); ++i) {
-    inputs[i].level = start_level + static_cast<int>(i);
-  }
-  // We always compact all the files, so always compress.
-  for (size_t loop = start_index; loop < sorted_runs.size(); loop++) {
-    auto& picking_sr = sorted_runs[loop];
-    if (picking_sr.level == 0) {
-      FileMetaData* f = picking_sr.file;
-      inputs[0].files.push_back(f);
-    } else {
-      auto& files = inputs[picking_sr.level - start_level].files;
-      for (auto* f : vstorage->LevelFiles(picking_sr.level)) {
-        files.push_back(f);
-      }
-    }
-    char file_num_buf[256];
-    picking_sr.DumpSizeInfo(file_num_buf, sizeof(file_num_buf), loop);
-    ROCKS_LOG_BUFFER(log_buffer, '[%s] Universal: size amp picking %s',
-                     cf_name.c_str(), file_num_buf);
-  }
-    
-      std::vector<std::string> cf_names = {
-      'pikachu', 'ilya', 'muromec', 'dobrynia',
-      'nikitich', 'alyosha', 'popovich'};
-    
-    
-    {    int cmp = CompareBlockKey(block_ids[mid], target);
-    if (!status_.ok()) {
-      return false;
-    }
-    if (cmp < 0) {
-      // Key at 'target' is larger than 'mid'. Therefore all
-      // blocks before or at 'mid' are uninteresting.
-      left = mid + 1;
-    } else {
-      // Key at 'target' is <= 'mid'. Therefore all blocks
-      // after 'mid' are uninteresting.
-      // If there is only one block left, we found it.
-      if (left == right) break;
-      right = mid;
-    }
-  }
-    
-      // copy/hard link live_files
-  std::string manifest_fname, current_fname;
-  for (size_t i = 0; s.ok() && i < live_files.size(); ++i) {
-    uint64_t number;
-    FileType type;
-    bool ok = ParseFileName(live_files[i], &number, &type);
-    if (!ok) {
-      s = Status::Corruption('Can't parse file name. This is very bad');
-      break;
-    }
-    // we should only get sst, options, manifest and current files here
-    assert(type == kTableFile || type == kDescriptorFile ||
-           type == kCurrentFile || type == kOptionsFile);
-    assert(live_files[i].size() > 0 && live_files[i][0] == '/');
-    if (type == kCurrentFile) {
-      // We will craft the current file manually to ensure it's consistent with
-      // the manifest number. This is necessary because current's file contents
-      // can change during checkpoint creation.
-      current_fname = live_files[i];
-      continue;
-    } else if (type == kDescriptorFile) {
-      manifest_fname = live_files[i];
-    }
-    std::string src_fname = live_files[i];
-    }
-    
-      // Offset of the last record returned by ReadRecord.
-  uint64_t last_record_offset_;
-  // Offset of the first location past the end of buffer_.
-  uint64_t end_of_buffer_offset_;
-    
-      unique_ptr<WritableFile> writable_file;
-  fname = test::TmpDir() + '/WithCollisionPathFullKey';
-  ASSERT_OK(env_->NewWritableFile(fname, &writable_file, env_options_));
-  unique_ptr<WritableFileWriter> file_writer(
-      new WritableFileWriter(std::move(writable_file), EnvOptions()));
-  CuckooTableBuilder builder(file_writer.get(), kHashTableRatio, num_hash_fun,
-                             100, BytewiseComparator(), 1, false, false,
-                             GetSliceHash, 0 /* column_family_id */,
-                             kDefaultColumnFamilyName);
-  ASSERT_OK(builder.status());
-  for (uint32_t i = 0; i < user_keys.size(); i++) {
-    builder.Add(Slice(keys[i]), Slice(values[i]));
-    ASSERT_EQ(builder.NumEntries(), i + 1);
-    ASSERT_OK(builder.status());
-  }
-  size_t bucket_size = keys[0].size() + values[0].size();
-  ASSERT_EQ(expected_table_size * bucket_size - 1, builder.FileSize());
-  ASSERT_OK(builder.Finish());
-  ASSERT_OK(file_writer->Close());
-  ASSERT_LE(expected_table_size * bucket_size, builder.FileSize());
+    // Example how to use FlatBuffers to create and read binary buffers.
