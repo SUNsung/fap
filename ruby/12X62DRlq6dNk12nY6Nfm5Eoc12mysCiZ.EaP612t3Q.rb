@@ -1,178 +1,175 @@
-def bottle_tag
-  if MacOS.version >= :lion
-    MacOS.cat
-  elsif MacOS.version == :snow_leopard
-    Hardware::CPU.is_64_bit? ? :snow_leopard : :snow_leopard_32
-  else
-    # Return, e.g., :tiger_g3, :leopard_g5_64, :leopard_64 (which is Intel)
-    if Hardware::CPU.type == :ppc
-      tag = '#{MacOS.cat}_#{Hardware::CPU.family}'.to_sym
-    else
-      tag = MacOS.cat
+
+        
+          describe 'instance methods' do
+    let(:key_attributes) do # these keys are intentionally strings.
+      {
+        'canDownload' => false,
+        'canRevoke' => true,
+        'keyId' => 'some-key-id',
+        'keyName' => 'fastlane',
+        'servicesCount' => 3,
+        'services' => [
+          {
+            'name' => 'APNS',
+            'id' => 'U27F4V844T',
+            'configurations' => []
+          },
+          {
+            'name' => 'MusicKit',
+            'id' => '6A7HVUVQ3M',
+            'configurations' => [
+              {
+                'name' => 'music id test',
+                'identifier' => 'music.com.snatchev.test',
+                'type' => 'music',
+                'prefix' => 'some-prefix-id',
+                'id' => 'some-music-kit-id'
+              }
+            ]
+          },
+          {
+            'name' => 'DeviceCheck',
+            'id' => 'DQ8HTZ7739',
+            'configurations' => []
+          }
+        ]
+      }
     end
-    MacOS.prefer_64_bit? ? '#{tag}_64'.to_sym : tag
-  end
-end
     
-          keg_only_deps.each do |dep|
-        ENV.prepend_path 'PATH', dep.opt_bin.to_s
-        ENV.prepend_path 'PKG_CONFIG_PATH', '#{dep.opt_lib}/pkgconfig'
-        ENV.prepend_path 'PKG_CONFIG_PATH', '#{dep.opt_share}/pkgconfig'
-        ENV.prepend_path 'ACLOCAL_PATH', '#{dep.opt_share}/aclocal'
-        ENV.prepend_path 'CMAKE_PREFIX_PATH', dep.opt_prefix.to_s
-        ENV.prepend 'LDFLAGS', '-L#{dep.opt_lib}' if dep.opt_lib.directory?
-        ENV.prepend 'CPPFLAGS', '-I#{dep.opt_include}' if dep.opt_include.directory?
+            expect(result).to eq('git svn info | grep Revision | egrep -o '[0-9]+'')
+        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('git svn info | grep Revision | egrep -o '[0-9]+'')
       end
     end
     
-      def print_dir(root)
-    dirs = []
-    remaining_root_files = []
-    other = ''
+          it 'pass a custom build number to the tool' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          increment_build_number(build_number: 24, xcodeproj: '.xcproject')
+        end').runner.execute(:test)
     
-    # See chcase for an example
-class ScriptFileFormula < Formula
-  def install
-    bin.install Dir['*']
+              self.confirmed_at = Time.now.utc
+    
+      test 'should find admin with email in unconfirmed_emails' do
+    admin = create_admin
+    admin.unconfirmed_email = 'new_test@email.com'
+    assert admin.save
+    admin = Admin.find_by_unconfirmed_email_with_errors(email: 'new_test@email.com')
+    assert admin.persisted?
   end
-end
     
-        @notification_setting = current_user.notification_settings_for(resource)
-    @saved = @notification_setting.update_attributes(notification_setting_params)
-    
-        groups << @user.authorized_groups.visible_to_user(current_user) if current_user
-    groups << @user.authorized_groups.public_to_user(current_user)
-    
-                  # Read!
-              data << io.readpartial(READ_CHUNK_SIZE).encode('UTF-8', Encoding.default_external)
-            else
-              # Do a simple non-blocking read on the IO object
-              data << io.read_nonblock(READ_CHUNK_SIZE)
-            end
-          rescue Exception => e
-            # The catch-all rescue here is to support multiple Ruby versions,
-            # since we use some Ruby 1.9 specific exceptions.
-    
-        if extension_pathname.readable?
-      ENV['BUNDLE_GEMFILE'] = extension_pathname.to_path
-      break
-    end
+      def failure_message
+    exception = request.respond_to?(:get_header) ? request.get_header('omniauth.error') : request.env['omniauth.error']
+    error   = exception.error_reason if exception.respond_to?(:error_reason)
+    error ||= exception.error        if exception.respond_to?(:error)
+    error ||= (request.respond_to?(:get_header) ? request.get_header('omniauth.error.type') : request.env['omniauth.error.type']).to_s
+    error.to_s.humanize if error
   end
-end
+    
+    source 'https://rubygems.org'
+    
+    class Devise::ConfirmationsController < DeviseController
+  # GET /resource/confirmation/new
+  def new
+    self.resource = resource_class.new
+  end
+    
+    class Devise::PasswordsController < DeviseController
+  prepend_before_action :require_no_authentication
+  # Render the #edit only if coming from a reset password email link
+  append_before_action :assert_reset_token_passed, only: :edit
+    
+            routes.each do |module_name, actions|
+          [:path, :url].each do |path_or_url|
+            actions.each do |action|
+              action = action ? '#{action}_' : ''
+              method = :'#{action}#{module_name}_#{path_or_url}'
+    
+      end
+    
+          rescue_from OpenSSL::SSL::SSLError do |e|
+        validation_fail_as_json(e)
+      end
+    
+        private
+    
+          when :banner
+        # Because some ftp server send multiple banner we take only the first one and ignore the rest
+        if not (s[:info])
+          s[:info] = matches
+          report_service(s)
+        end
     
       def parse(pkt)
     # We want to return immediatly if we do not have a packet which is handled by us
     return unless pkt.is_tcp?
-    return if (pkt.tcp_sport != 21 and pkt.tcp_dport != 21)
-    s = find_session((pkt.tcp_sport == 21) ? get_session_src(pkt) : get_session_dst(pkt))
-    s[:sname] ||= 'ftp'
+    return if (pkt.tcp_sport != 110 and pkt.tcp_dport != 110)
+    s = find_session((pkt.tcp_sport == 110) ? get_session_src(pkt) : get_session_dst(pkt))
     
-            when :err
-          case s[:last]
-            when :pass
-              # Oops got a -ERR after a pass so its crap ignore the pass
-              # But report it, might be helpfull for guessing :-)
-    
-    
-# replace calls, jmps, and read/write handle/filename references
-replaces = []
-asm.each_line { |ln|
-	if ln =~ /call /
-		parts = ln.split(' ')
-		if (parts[0] == 'call' and parts[2] == ';call')
-			old = parts[1]
-			func = parts[3]
-			new = addrs[func]
-			#puts '%32s: %s -> %x' % [func, old, new]
-			replaces << [func, old, new.to_s(16)]
-		end
-	end
-    }
-    
-    classNames = [ 'HelloWorld1', 'HelloWorld2' ]
-    
-    		if temp.length == 3
-			temp[2].strip!
-			temp[2] = temp[2].scan(/[$%()+,\-\.<>\w]+/)
-    
-          # Find a Sass file, if it exists.
-      #
-      # This is the primary entry point of the Importer.
-      # It corresponds directly to an `@import` statement in Sass.
-      # It should do three basic things:
-      #
-      # * Determine if the URI is in this importer's format.
-      #   If not, return nil.
-      # * Determine if the file indicated by the URI actually exists and is readable.
-      #   If not, return nil.
-      # * Read the file and place the contents in a {Sass::Engine}.
-      #   Return that engine.
-      #
-      # If this importer's format allows for file extensions,
-      # it should treat them the same way as the default {Filesystem} importer.
-      # If the URI explicitly has a `.sass` or `.scss` filename,
-      # the importer should look for that exact file
-      # and import it as the syntax indicated.
-      # If it doesn't exist, the importer should return nil.
-      #
-      # If the URI doesn't have either of these extensions,
-      # the importer should look for files with the extensions.
-      # If no such files exist, it should return nil.
-      #
-      # The {Sass::Engine} to be returned should be passed `options`,
-      # with a few modifications. `:syntax` should be set appropriately,
-      # `:filename` should be set to `uri`,
-      # and `:importer` should be set to this importer.
-      #
-      # @param uri [String] The URI to import.
-      # @param options [{Symbol => Object}] Options for the Sass file
-      #   containing the `@import` that's currently being resolved.
-      #   This is safe for subclasses to modify destructively.
-      #   Callers should only pass in a value they don't mind being destructively modified.
-      # @return [Sass::Engine, nil] An Engine containing the imported file,
-      #   or nil if it couldn't be found or was in the wrong format.
-      def find(uri, options)
-        Sass::Util.abstract(self)
+          if(pkt.payload =~ self.sigs[k])
+        matched = k
+        matches = $1
+        sessions[s[:session]].merge!({k => matches})
       end
     
-            def define_logger(name, options = {})
-          class_eval <<-RUBY, __FILE__, __LINE__ + 1
-            def #{name}(message)
-              #{options.fetch(:to, :log)}(#{name.inspect}, message)
-            end
-          RUBY
+    Rjb::load(ENV['JAVA_HOME'] + '/lib/tools.jar:.',jvmargs=[])
+    
+      when '6.1.3'
+    __NR_execve      = 7
+    __NR_getpeername = 205
+    __NR_accept      = 232
+    __NR_listen      = 235
+    __NR_bind        = 237
+    __NR_socket      = 238
+    __NR_connect     = 239
+    __NR_close       = 272
+    __NR_kfcntl      = 644
+    
+            def log_levels
+          @log_levels ||= {}
         end
-      end
-    end
+    
+        # Starts the read-eval-print loop.
+    def run
+      environment = Environment.new
+      @line = 0
+      loop do
+        @line += 1
+        unless (text = Readline.readline('>> '))
+          puts
+          return
+        end
+    
+      context 'called with null values' do
+    it 'writes rules for other three' do
+      ruleset = 'border-top-style: inset; ' +
+                'border-right-style: none; ' +
+                'border-left-style: double;'
+      bad_rule = 'border-bottom-style: null;'
+    
+    describe 'margin' do
+  before(:all) do
+    ParserSupport.parse_file('library/margin')
   end
-end
-
     
-    if $PROGRAM_NAME == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
-  ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
-  require 'rubygems'
-  require 'bundler/setup'
-  $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-elsif ENV['COCOAPODS_NO_BUNDLER']
-  require 'rubygems'
-  gem 'cocoapods'
-end
+      context 'called with no prefixes' do
+    it 'outputs the spec' do
+      rule = 'appearance: none;'
     
-            def initialize(argv)
-          @pod_name = argv.shift_argument
-          @wipe_all = argv.flag?('all')
-          super
-        end
-    
-        # Outputs a single category as an <a> link.
-    #
-    #  +category+ is a category string to format as an <a> link
-    #
-    # Returns string
-    #
-    def category_link(category)
-      dir = @context.registers[:site].config['category_dir']
-      '<a class='category' href='/#{dir}/#{category.to_url}/'>#{category}</a>'
-    end
-    
-    Liquid::Template.register_tag('render_partial', Jekyll::RenderPartialTag)
+        @inputs_list = %w(
+      [type='color']
+      [type='date']
+      [type='datetime']
+      [type='datetime-local']
+      [type='email']
+      [type='month']
+      [type='number']
+      [type='password']
+      [type='search']
+      [type='tel']
+      [type='text']
+      [type='time']
+      [type='url']
+      [type='week']
+      input:not([type])
+      textarea
+    )
+  end
