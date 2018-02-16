@@ -1,45 +1,92 @@
 
         
-        response = get_json_from_api('%s/domains/%s/applications' %
-                             (broker_url, response[0]['id']), username, password)
+            # Train the Model.
+    classifier.train(
+        input_fn=lambda:iris_data.train_input_fn(train_x, train_y,
+                                                 args.batch_size),
+        steps=args.train_steps)
     
-    # (c) 2016 Red Hat, Inc.
-#
-# This file is part of Ansible
-#
-# Ansible is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Ansible is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
-'''CLI tool for starting new Shippable CI runs.'''
+        # The text file for eval.
+    self.eval_data = FLAGS.eval_data
     
-    # Make coding more python3-ish
-from __future__ import (absolute_import, division, print_function)
-__metaclass__ = type
     
-    import os
+tf.app.flags.DEFINE_float('learning_rate', 0.5, 'Learning rate.')
+tf.app.flags.DEFINE_float('learning_rate_decay_factor', 0.99,
+                          'Learning rate decays by this much.')
+tf.app.flags.DEFINE_float('max_gradient_norm', 5.0,
+                          'Clip gradients to this norm.')
+tf.app.flags.DEFINE_integer('batch_size', 64,
+                            'Batch size to use during training.')
+tf.app.flags.DEFINE_integer('size', 1024, 'Size of each model layer.')
+tf.app.flags.DEFINE_integer('num_layers', 3, 'Number of layers in the model.')
+tf.app.flags.DEFINE_integer('from_vocab_size', 40000, 'English vocabulary size.')
+tf.app.flags.DEFINE_integer('to_vocab_size', 40000, 'French vocabulary size.')
+tf.app.flags.DEFINE_string('data_dir', '/tmp', 'Data directory')
+tf.app.flags.DEFINE_string('train_dir', '/tmp', 'Training directory.')
+tf.app.flags.DEFINE_string('from_train_data', None, 'Training data.')
+tf.app.flags.DEFINE_string('to_train_data', None, 'Training data.')
+tf.app.flags.DEFINE_string('from_dev_data', None, 'Training data.')
+tf.app.flags.DEFINE_string('to_dev_data', None, 'Training data.')
+tf.app.flags.DEFINE_integer('max_train_data_size', 0,
+                            'Limit on the size of training data (0: no limit).')
+tf.app.flags.DEFINE_integer('steps_per_checkpoint', 200,
+                            'How many training steps to do per checkpoint.')
+tf.app.flags.DEFINE_boolean('decode', False,
+                            'Set to True for interactive decoding.')
+tf.app.flags.DEFINE_boolean('self_test', False,
+                            'Run a self-test if this is set to True.')
+tf.app.flags.DEFINE_boolean('use_fp16', False,
+                            'Train using fp16 instead of fp32.')
     
-    import json
+      if ps_strategy is None:
+    ps_strategy = device_setter._RoundRobinStrategy(num_devices)
+  if not six.callable(ps_strategy):
+    raise TypeError('ps_strategy must be callable')
     
-        terminal_stderr_re = [
-        re.compile(r'% ?Error: '),
-        re.compile(r'^% \w+', re.M),
-        re.compile(r'% ?Bad secret'),
-        re.compile(r'invalid input', re.I),
-        re.compile(r'(?:incomplete|ambiguous) command', re.I),
-        re.compile(r'connection timed out', re.I),
-        re.compile(r'[^\r\n]+ not found', re.I),
-        re.compile(r''[^']' +returned error code: ?\d+'),
-        re.compile(r'syntax error'),
-        re.compile(r'unknown command'),
-        re.compile(r'Error\[\d+\]: ', re.I),
-        re.compile(r'Error:', re.I)
-    ]
+        def syntax(self):
+        '''
+        Command syntax (preferably one-line). Do not include command name.
+        '''
+        return ''
+    
+            for spidername in args or spider_loader.list():
+            spidercls = spider_loader.load(spidername)
+            spidercls.start_requests = lambda s: conman.from_spider(s, result)
+    
+    
+def sanitize_module_name(module_name):
+    '''Sanitize the given module name, by replacing dashes and points
+    with underscores and prefixing it with a letter if it doesn't start
+    with one
+    '''
+    module_name = module_name.replace('-', '_').replace('.', '_')
+    if module_name[0] not in string.ascii_letters:
+        module_name = 'a' + module_name
+    return module_name
+    
+    '''
+    
+    Revision ID: 2591d77e9831
+Revises: 12d55656cbca
+Create Date: 2015-12-15 17:02:45.128709
+    
+    
+class Slice(Base):
+    '''Declarative class to do query in upgrade'''
+    __tablename__ = 'slices'
+    id = Column(Integer, primary_key=True)
+    datasource_id = Column(Integer)
+    druid_datasource_id = Column(Integer)
+    table_id = Column(Integer)
+    datasource_type = Column(String(200))
+    
+    '''
+    
+    '''
+    
+    # revision identifiers, used by Alembic.
+revision = '763d4b211ec9'
+down_revision = 'd2424a248d63'
+    
+    def downgrade():
+    op.drop_column('slices', 'description')
