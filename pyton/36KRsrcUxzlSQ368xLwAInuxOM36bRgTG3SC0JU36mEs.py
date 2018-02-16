@@ -1,103 +1,75 @@
 
         
-                # put all lines in the file into a Python list
-        strings = f.readlines()
-        
-        # above line leaves trailing newline characters; strip them out
-        strings = [x.strip(u'\n') for x in strings]
-        
-        # remove empty-lines and comments
-        strings = [x for x in strings if x and not x.startswith(u'#')]
-        
-        # insert empty string since all are being removed
-        strings.insert(0, u'')
+        import rsa
+import json
+from binascii import hexlify
     
-            morsel_b = cookies.Morsel()
-        morsel_b.update(attribs)
-        morsel_b.set(*base_case)
-        morsel_b['comment'] = 'bar'
-        self.assertFalse(morsel_a == morsel_b)
-        self.assertTrue(morsel_a != morsel_b)
+            def _find_spec(key):
+            m = re.search(
+                r'(?m)^//\s*%s:\s*(.*?)\n' % re.escape(key), as_content)
+            if not m:
+                raise ValueError('Cannot find %s in %s' % (key, testfile))
+            return json.loads(m.group(1))
     
-    if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        zones = TZInfo.zonelist()
-        for z in zones:
-            print(z)
-        sys.exit()
-    filepath = sys.argv[1]
-    if not filepath.startswith('/'):
-        filepath = os.path.join('/usr/share/zoneinfo', filepath)
-    with open(filepath, 'rb') as fileobj:
-        tzi = TZInfo.fromfile(fileobj)
-    tzi.dump(sys.stdout)
-
+            self._debug_cmd(args)
     
-        def test_header(self):
-        '''Make sure the required fields are in the header, according to:
-           http://www.gnu.org/software/gettext/manual/gettext.html#Header-Entry
+        _TEST = {
+        'url': 'http://www.anitube.se/video/36621',
+        'md5': '59d0eeae28ea0bc8c05e7af429998d43',
+        'info_dict': {
+            'id': '36621',
+            'ext': 'mp4',
+            'title': 'Recorder to Randoseru 01',
+            'duration': 180.19,
+        },
+        'skip': 'Blocked in the US',
+    }
+    
+            video_url = self._html_search_regex(r'video_url\s*:\s*'([^']+)'', webpage, 'video URL')
+    
+    # encoding=utf8  
+import sys  
+    
+            :arg rules: a list of `Rule` instances or tuples of `Rule`
+            constructor arguments.
         '''
-        with temp_cwd(None) as cwd:
-            assert_python_ok(self.script)
-            with open('messages.pot') as fp:
-                data = fp.read()
-            header = self.get_header(data)
+        self.rules = []  # type: typing.List[Rule]
+        if rules:
+            self.add_rules(rules)
     
-    +----------------+
-| ID (4 bytes)   |
-+----------------+
-| size (4 bytes) |
-+----------------+
-| data           |
-| ...            |
-+----------------+
+        def test_static_invalid_range(self):
+        response = self.get_and_head('/static/robots.txt', headers={
+            'Range': 'asdf'})
+        self.assertEqual(response.code, 200)
     
-        def flush(self):
-        '''Write any pending changes to the disk.'''
-        raise NotImplementedError('Method must be implemented by subclass')
-    
-        def test_oldargs1_1_kw(self):
-        self.assertRaises(TypeError, [].count, {}, x=2)
-    
-        def write(self, data):
-        if self.maxlen:
-            if len(data) + len(self._val) > self.maxlen:
-                # Truncation:
-                self._val += data[0:self.maxlen - len(self._val)]
-                raise StringTruncated()
-    
-        @gen_test
-    def asyncSetUp(self):
-        listener, port = bind_unused_port()
-        event = Event()
+            This class method may be overridden by subclasses.  Note that its
+        signature is different from other overridable class methods
+        (no ``settings`` argument); this is deliberate to ensure that
+        ``abspath`` is able to stand on its own as a cache key.
     
     
-# This is kind of hacky, but run some of the HTTPServer and web tests
-# through WSGIContainer and WSGIApplication to make sure everything
-# survives repeated disassembly and reassembly.
-class WSGIConnectionTest(httpserver_test.HTTPConnectionTest):
-    def get_app(self):
-        return WSGIContainer(validator(WSGIApplication(self.get_handlers())))
+class PriorityQueueJoinTest(QueueJoinTest):
+    queue_class = queues.PriorityQueue
     
-            # Make sure the tornado module under test is available to the test
-        # application
-        pythonpath = os.getcwd()
-        if 'PYTHONPATH' in os.environ:
-            pythonpath += os.pathsep + os.environ['PYTHONPATH']
+        .. versionchanged:: 5.0
+       The ``io_loop`` argument (deprecated since version 4.1) has been removed.
+    '''
+    def initialize(self):
+        self.io_loop = IOLoop.current()
+        self.channel = pycares.Channel(sock_state_cb=self._sock_state_cb)
+        self.fds = {}
     
-    See file_uploader.py in this directory for code that uploads files in this format.
-'''
-    
-        app = Application(
-        [
-            ('/', MainHandler),
-            ('/login', LoginHandler),
-            ('/logout', LogoutHandler),
-        ],
-        login_url='/login',
-        **options.group_dict('application'))
-    app.listen(options.port)
+            @gen.coroutine
+        def main():
+            # Start consumer without waiting (since it never finishes).
+            IOLoop.current().spawn_callback(consumer)
+            yield producer()     # Wait for producer to put all tasks.
+            yield q.join()       # Wait for consumer to finish all tasks.
+            print('Done')
     
     
-if __name__ == '__main__':
-    main()
+class ArchiveHandler(BaseHandler):
+    def get(self):
+        entries = self.db.query('SELECT * FROM entries ORDER BY published '
+                                'DESC')
+        self.render('archive.html', entries=entries)
