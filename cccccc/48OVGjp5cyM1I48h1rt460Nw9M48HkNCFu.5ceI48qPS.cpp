@@ -1,182 +1,118 @@
 
         
-        #include 'base/values.h'
-#include 'extensions/common/draggable_region.h'
-#include 'content/public/common/common_param_traits.h'
-#include 'ipc/ipc_message_macros.h'
-#include 'ui/gfx/ipc/gfx_param_traits.h'
+        cv::Mat dls::skewsymm(const cv::Mat * X1)
+{
+    cv::MatConstIterator_<double> it = X1->begin<double>();
+    return (cv::Mat_<double>(3,3) <<        0, -*(it+2),  *(it+1),
+                                      *(it+2),        0, -*(it+0),
+                                     -*(it+1),  *(it+0),       0);
+}
     
-      // Post 'reopen' event.
-  // (This event is received when the user clicked the icon in the Dock).
-  static void EmitReopenEvent();
     
-    namespace remote {
+    {        findLinesCrossPoint(origin1, dir1, origin2, dir2, corners[i]);
     }
     
+    #include 'opencv2/core/bufferpool.hpp'
     
-    
-       bool IsItemForCommandIdDynamic(int command_id) const override;
-   base::string16 GetLabelForCommandId(int command_id) const override;
-   bool GetIconForCommandId(int command_id,
-                                   gfx::Image* icon) const override;
-    
-    static KeyMap keymap = {
-  {'`'    , 'Backquote'},
-  {'\\'   , 'Backslash'},
-  {'['    , 'BracketLeft'},
-  {']'    , 'BracketRight'},
-  {','    , 'Comma'},
-  {'='    , 'Equal'},
-  {'-'    , 'Minus'},
-  {'.'    , 'Period'},
-  {'''    , 'Quote'},
-  {';'    , 'Semicolon'},
-  {'/'    , 'Slash'},
-  {'\n'   , 'Enter'},
-  {'\t'   , 'Tab'},
-  {'UP'   , 'ArrowUp'},
-  {'DOWN' , 'ArrowDown'},
-  {'LEFT' , 'ArrowLeft'},
-  {'RIGHT', 'ArrowRight'},
-  {'ESC'  , 'Escape'},
-  {'MEDIANEXTTRACK', 'MediaTrackNext'},
-  {'MEDIAPREVTRACK', 'MediaTrackPrevious'}
-};
-    
-    static const int kIconWidth = 16;
-static const int kIconHeight = 16;
-    
-    
-    {  std::string document_;
-  bool yamlCompatiblityEnabled_;
-  bool dropNullPlaceholders_;
-  bool omitEndingLineFeed_;
-};
-    
-      switch (token.type_) {
-  case tokenObjectBegin:
-    successful = readObject(token);
-    currentValue().setOffsetLimit(current_ - begin_);
-    break;
-  case tokenArrayBegin:
-    successful = readArray(token);
-    currentValue().setOffsetLimit(current_ - begin_);
-    break;
-  case tokenNumber:
-    successful = decodeNumber(token);
-    break;
-  case tokenString:
-    successful = decodeString(token);
-    break;
-  case tokenTrue:
+        if (new_rows != 0 && new_rows != rows)
     {
-    Value v(true);
-    currentValue().swapPayload(v);
-    currentValue().setOffsetStart(token.start_ - begin_);
-    currentValue().setOffsetLimit(token.end_ - begin_);
+        int total_size = total_width * rows;
     }
-    break;
-  case tokenFalse:
+    
+      Status Echo(ServerContext* context, const EchoRequest* request,
+              EchoResponse* response) override {
     {
-    Value v(false);
-    currentValue().swapPayload(v);
-    currentValue().setOffsetStart(token.start_ - begin_);
-    currentValue().setOffsetLimit(token.end_ - begin_);
+      std::unique_lock<std::mutex> lock(mu_);
+      ++request_count_;
     }
-    break;
-  case tokenNull:
-    {
-    Value v;
-    currentValue().swapPayload(v);
-    currentValue().setOffsetStart(token.start_ - begin_);
-    currentValue().setOffsetLimit(token.end_ - begin_);
-    }
-    break;
-  case tokenArraySeparator:
-  case tokenObjectEnd:
-  case tokenArrayEnd:
-    if (features_.allowDroppedNullPlaceholders_) {
-      // 'Un-read' the current token and mark the current value as a null
-      // token.
-      current_--;
-      Value v;
-      currentValue().swapPayload(v);
-      currentValue().setOffsetStart(current_ - begin_ - 1);
-      currentValue().setOffsetLimit(current_ - begin_);
-      break;
-    } // Else, fall through...
-  default:
-    currentValue().setOffsetStart(token.start_ - begin_);
-    currentValue().setOffsetLimit(token.end_ - begin_);
-    return addError('Syntax error: value, object or array expected.', token);
+    return TestServiceImpl::Echo(context, request, response);
   }
     
-    #include <Python.h>
+    #include <cassert>
     
-    #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/io/printer.h>
+      // Allow a limit on number of messages in a stream
+  int messages_per_stream_;
+  int messages_issued_;
     
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
+    #endif /* GRPC_CORE_LIB_COMPRESSION_MESSAGE_COMPRESS_H */
+
+    
+    
+    
+    namespace routeguide {
+class Feature;
     }
-    }
-    }
-    }
     
     
-    
-    #include <google/protobuf/compiler/java/java_doc_comment.h>
-    
-    #include <string>
-#include <chrono>
-#include <algorithm>
-#include <vector>
-#include <iostream>
-#include <queue>
-#include <set>
-#include <memory>
-    
-    
-    {
+float ConvertToRadians(float num) {
+  return num * 3.1415926 /180;
 }
     
-    void WakeUpLock::Lock() {
-    ::wakeupLock_Lock(object_);
-}
+    // Reads the Start of Scan (SOS) marker segment and fills in *scan_info with the
+// parsed data.
+bool ProcessSOS(const uint8_t* data, const size_t len, size_t* pos,
+                JPEGData* jpg) {
+  const size_t start_pos = *pos;
+  VERIFY_LEN(3);
+  size_t marker_len = ReadUint16(data, pos);
+  int comps_in_scan = ReadUint8(data, pos);
+  VERIFY_INPUT(comps_in_scan, 1, static_cast<int>(jpg->components.size()),
+               COMPS_IN_SCAN);
+    }
     
-    int SimpleIntUnpack(const void* _rawbuf, size_t _rawlen, size_t& _packlen, PtrBuffer& _data) {
-    return SimpleUnpack<unsigned int>(_rawbuf, _rawlen, _packlen, _data);
-}
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
+    {}  // namespace guetzli
     
-    CommFrequencyLimit::~CommFrequencyLimit()
-{}
+    #include 'guetzli/gamma_correct.h'
     
-      private:
-    CommFrequencyLimit(CommFrequencyLimit&);
-    CommFrequencyLimit& operator=(CommFrequencyLimit&);
+      tmp0 = in[stride];
+  tmp1 = kIDCTMatrix[ 1] * tmp0;
+  tmp2 = kIDCTMatrix[ 9] * tmp0;
+  tmp3 = kIDCTMatrix[17] * tmp0;
+  tmp4 = kIDCTMatrix[25] * tmp0;
+  out[0] += tmp1;
+  out[1] += tmp2;
+  out[2] += tmp3;
+  out[3] += tmp4;
+  out[4] -= tmp4;
+  out[5] -= tmp3;
+  out[6] -= tmp2;
+  out[7] -= tmp1;
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
+    namespace guetzli {
+    }
     
-        void* This() const {return m_this;}
+    // Mimic libjpeg's heuristics to guess jpeg color space.
+// Requires that the jpg has 3 components.
+bool HasYCbCrColorSpace(const JPEGData& jpg);
     
-    //
-//  testspy.cpp
-//  PublicComponent
-//
-//  Created by yerungui on 14-5-13.
-//
+    // Creates a JPEG from the rgb pixel data. Returns true on success.
+bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     JPEGData* jpg);
     
-        void TestFun0();
-    void TestFun2()  {__TestFun1(1);}
+    namespace guetzli {
+    }
+    
+    // Handler for Win32 messages, update mouse/keyboard data.
+// You may or not need this for your implementation, but it can serve as reference for handling inputs.
+// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
+/*
+IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+*/
+
+    
+    // callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_API int32       ImGui_Marmalade_PointerButtonEventCallback(void* SystemData, void* pUserData);
+IMGUI_API int32       ImGui_Marmalade_KeyCallback(void* SystemData, void* userData);
+IMGUI_API int32       ImGui_Marmalade_CharCallback(void* SystemData, void* userData);
+
+    
+    // Backup and restore just enough data to be able to use IsItemHovered() on item A after another B in the same window has overwritten the data.  
+struct ImGuiItemHoveredDataBackup
+{
+    ImGuiID                 LastItemId;
+    ImGuiItemStatusFlags    LastItemStatusFlags;
+    ImRect                  LastItemRect;
+    ImRect                  LastItemDisplayRect;
+    }
