@@ -1,193 +1,176 @@
-    with self.test_session() as sess:
-      q = tf.FIFOQueue(99, [tf.string], shapes=())
-      q.enqueue([filename]).run()
-      q.close().run()
-      result = cifar10_input.read_cifar10(q)
+
+        
+        error_msg = None
     
-      df = pd.read_csv(text, names=iris_data.CSV_COLUMN_NAMES)
     
-    py_library(
-    name = 'rnn',
-    srcs = [
-        'rnn.py',
-    ],
-    srcs_version = 'PY2AND3',
-    deps = [
-        ':rnn_cell',
-        '//tensorflow:tensorflow_py',
-    ],
+def test_max_redirects(httpbin):
+    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
+             error_exit_ok=True)
+    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+
+    
+        if custom_log_error:
+        log_error = custom_log_error
+    
+            :param headers: The headers as text.
+    
+    
+# noinspection PyAbstractClass
+class BuiltinAuthPlugin(AuthPlugin):
+    
+        '''
 )
     
     
-def get_wmt_enfr_dev_set(directory):
-  '''Download the WMT en-fr training corpus to directory unless it's there.'''
-  dev_name = 'newstest2013'
-  dev_path = os.path.join(directory, dev_name)
-  if not (gfile.Exists(dev_path + '.fr') and gfile.Exists(dev_path + '.en')):
-    dev_file = maybe_download(directory, 'dev-v2.tgz', _WMT_ENFR_DEV_URL)
-    print('Extracting tgz file %s' % dev_file)
-    with tarfile.open(dev_file, 'r:gz') as dev_tar:
-      fr_dev_file = dev_tar.getmember('dev/' + dev_name + '.fr')
-      en_dev_file = dev_tar.getmember('dev/' + dev_name + '.en')
-      fr_dev_file.name = dev_name + '.fr'  # Extract without 'dev/' prefix.
-      en_dev_file.name = dev_name + '.en'
-      dev_tar.extract(fr_dev_file, directory)
-      dev_tar.extract(en_dev_file, directory)
-  return dev_path
-    
-    # Predict the type of some Iris flowers.
-# Let's predict the examples in FILE_TEST, repeat only once.
-predict_results = classifier.predict(
-    input_fn=lambda: my_input_fn(FILE_TEST, 1))
-tf.logging.info('Prediction on test file')
-for prediction in predict_results:
-    # Will print the predicted class, i.e: 0, 1, or 2 if the prediction
-    # is Iris Setosa, Vericolor, Virginica, respectively.
-    tf.logging.info('...{}'.format(prediction['class_ids']))
-    
-      # conv3
-  with tf.name_scope('conv3') as scope:
-    kernel = tf.Variable(tf.truncated_normal([3, 3, 192, 384],
-                                             dtype=tf.float32,
-                                             stddev=1e-1), name='weights')
-    conv = tf.nn.conv2d(pool2, kernel, [1, 1, 1, 1], padding='SAME')
-    biases = tf.Variable(tf.constant(0.0, shape=[384], dtype=tf.float32),
-                         trainable=True, name='biases')
-    bias = tf.nn.bias_add(conv, biases)
-    conv3 = tf.nn.relu(bias, name=scope)
-    parameters += [kernel, biases]
-    print_activations(conv3)
-    
-    
-# TODO(b/64848083) Remove once uid bug is fixed
-class RunConfig(tf.contrib.learn.RunConfig): 
-  def uid(self, whitelist=None):
-    '''Generates a 'Unique Identifier' based on all internal fields.
-    Caller should use the uid string to check `RunConfig` instance integrity
-    in one session use, but should not rely on the implementation details, which
-    is subject to change.
-    Args:
-      whitelist: A list of the string names of the properties uid should not
-        include. If `None`, defaults to `_DEFAULT_UID_WHITE_LIST`, which
-        includes most properties user allowes to change.
-    Returns:
-      A uid string.
+class ColorFormatter(FormatterPlugin):
     '''
-    if whitelist is None:
-      whitelist = run_config._DEFAULT_UID_WHITE_LIST
+    Colorize using Pygments
     
+        Assumes `from __future__ import division`.
     
-def setup(app):
-    app.add_crossref_type(
-        directivename = 'setting',
-        rolename      = 'setting',
-        indextemplate = 'pair: %s; setting',
-    )
-    app.add_crossref_type(
-        directivename = 'signal',
-        rolename      = 'signal',
-        indextemplate = 'pair: %s; signal',
-    )
-    app.add_crossref_type(
-        directivename = 'command',
-        rolename      = 'command',
-        indextemplate = 'pair: %s; command',
-    )
-    app.add_crossref_type(
-        directivename = 'reqmeta',
-        rolename      = 'reqmeta',
-        indextemplate = 'pair: %s; reqmeta',
-    )
-    app.add_role('source', source_role)
-    app.add_role('commit', commit_role)
-    app.add_role('issue', issue_role)
-    app.add_role('rev', rev_role)
+        def get_formatters_grouped(self):
+        groups = {}
+        for group_name, group in groupby(
+                self.get_formatters(),
+                key=lambda p: getattr(p, 'group_name', 'format')):
+            groups[group_name] = list(group)
+        return groups
     
-        def run(self, args, opts):
-        '''
-        Entry point for running commands
-        '''
-        raise NotImplementedError
-
+        to remove replace in this file ismount( -> os.path.ismount( and remove this
+    function'''
     
-    from scrapy.commands import ScrapyCommand
-from scrapy.contracts import ContractsManager
-from scrapy.utils.misc import load_object
-from scrapy.utils.conf import build_component_list
+            # load data path for resource usage
+        this_dir, this_filename = os.path.split(__file__)
+        type_path = 'container_enabled' if getattr(self.options, 'container_enabled', False) else 'default'
+        self.DATA_PATH = os.path.join(this_dir, 'data', type_path)
     
-        def _find_template(self, template):
-        template_file = join(self.templates_dir, '%s.tmpl' % template)
-        if exists(template_file):
-            return template_file
-        print('Unable to find template: %s\n' % template)
-        print('Use 'scrapy genspider --list' to see all available templates.')
-    
-        def __init__(self, num_levels):
-        self.num_levels = num_levels
-        self.levels = []  # List of Levels
-    
-            Emit key value pairs of the form:
-    
-    
-if __name__ == '__main__':
-    HitCounts.run()
+        @g_connect
+    def delete_role(self, github_user, github_repo):
+        url = '%s/removerole/?github_user=%s&github_repo=%s' % (self.baseurl, github_user, github_repo)
+        data = self.__call_galaxy(url, headers=self.__auth_header(), method='DELETE')
+        return data
 
     
     
-class RemoveDuplicateUrls(MRJob):
+root = Root()
+factory = Site(root)
+reactor.listenTCP(8880, factory)
+reactor.run()
+
     
-        def crawl_page(self, page):
-        for url in page.child_urls:
-            self.data_store.add_link_to_crawl(url)
-        self.reverse_index_queue.generate(page)
-        self.doc_index_queue.generate(page)
-        self.data_store.remove_link_to_crawl(page.url)
-        self.data_store.insert_crawled_link(page.url, page.signature)
     
-      base.LoadJsonDefaultsIntoVim()
+class Command(ScrapyCommand):
     
+            e.g.:
+        @returns request
+        @returns request 2
+        @returns request 2 10
+        @returns request 0 10
+    '''
+    
+        def dispatch_call(self, call):
+        if call.rank not in (Rank.OPERATOR, Rank.SUPERVISOR, Rank.DIRECTOR):
+            raise ValueError('Invalid call rank: {}'.format(call.rank))
+        employee = None
+        if call.rank == Rank.OPERATOR:
+            employee = self._dispatch_call(call, self.operators)
+        if call.rank == Rank.SUPERVISOR or employee is None:
+            employee = self._dispatch_call(call, self.supervisors)
+        if call.rank == Rank.DIRECTOR or employee is None:
+            employee = self._dispatch_call(call, self.directors)
+        if employee is None:
+            self.queued_calls.append(call)
+    
+    
+class UserService(object):
+    
+        def extract_year_month(self, line):
+        '''Return the year and month portions of the timestamp.'''
+        pass
+    
+            When updating an entry, updates its position to the front of the LRU list.
+        If the entry is new and the cache is at capacity, removes the oldest entry
+        before the new entry is added.
         '''
+        node = self.map[query]
+        if node is not None:
+            # Key exists in cache, update the value
+            node.results = results
+            self.linked_list.move_to_front(node)
+        else:
+            # Key does not exist in cache
+            if self.size == self.MAX_SIZE:
+                # Remove the oldest entry from the linked list and lookup
+                self.lookup.pop(self.linked_list.tail.query, None)
+                self.linked_list.remove_from_tail()
+            else:
+                self.size += 1
+            # Add the new key and value
+            new_node = Node(query, results)
+            self.linked_list.append_to_front(new_node)
+            self.lookup[query] = new_node
+
     
-    Executor.submit() called:
-- creates a uniquely numbered _WorkItem and adds it to the 'Work Items' dict
-- adds the id of the _WorkItem to the 'Work Ids' queue
+        def mapper_sort(self, key, value):
+        '''Construct key to ensure proper sorting.
     
-    # The name of an image file (relative to this directory) to place at the top of
-# the title page.
-#latex_logo = None
+    site = Bigthink()
+download = site.download_by_url
+
     
-        sqrt_n = int(math.floor(math.sqrt(n)))
-    for i in range(3, sqrt_n + 1, 2):
-        if n % i == 0:
-            return False
-    return True
+        def __init__(self, pin_json):
+        img_file = pin_json['file']
+        self.id = str(pin_json['pin_id'])
+        self.url = urlparse.urljoin(self.host, img_file['key'])
+        self.ext = img_file['type'].split('/')[-1]
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+    def kugou_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    if url.lower().find('5sing')!=-1:
+        #for 5sing.kugou.com
+        html=get_html(url)
+        ticket=r1(r''ticket':\s*'(.*)'',html)
+        j=loads(str(b64decode(ticket),encoding='utf-8'))
+        url=j['file']
+        title=j['songName']
+        songtype, ext, size = url_info(url)
+        print_info(site_info, title, songtype, size)
+        if not info_only:
+            download_urls([url], title, ext, size, output_dir, merge=merge)
+    else:
+        #for the www.kugou.com/
+        return kugou_download_playlist(url, output_dir=output_dir, merge=merge, info_only=info_only)
+        # raise NotImplementedError(url)       
     
-    import os
-import subprocess
-import sys
-import os.path as p
-import glob
+    def mixcloud_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html(url, faker=True)
+    title = r1(r'<meta property='og:title' content='([^']*)'', html)
+    preview_url = r1(r'm-preview=\'([^\']+)\'', html)
+    preview = r1(r'previews(.*)\.mp3$', preview_url)
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+    '''
+@author: Eugene Duboviy <eugene.dubovoy@gmail.com> | github.com/duboviy
+    
+        def test_sales_manager_shall_not_respond_through_proxy_with_delay(cls):
+        cls.ntp.busy = 'Yes'
+        start_time = time()
+        cls.ntp.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+This Sales Manager will not talk to you whether he/she is busy or not\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
+
+    
+        def test_tc1_output(self):
+        self.tc1.run()
+        output = self.out.getvalue().strip()
+        self.assertEqual(output, self.average_result_tc1)
     
     
-def _ConnectGroupChildren( group_name_to_group ):
-  def GetParentNames( group ):
-    links_to     = 'links to '
-    parent_names = []
-    for line in group.lines:
-      if line.startswith( links_to ):
-        parent_names.append( line[ len( links_to ): ] )
-    return parent_names
+class ConcreteHandler1(Handler):
+    
+        def setReporter(self, reporter):
+        self._reporter = reporter
