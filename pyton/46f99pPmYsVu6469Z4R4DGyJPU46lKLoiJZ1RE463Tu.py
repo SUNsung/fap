@@ -1,189 +1,146 @@
 
         
-                '''
-        assert with_headers or with_body
-        self.msg = msg
-        self.with_headers = with_headers
-        self.with_body = with_body
-        self.on_body_chunk_downloaded = on_body_chunk_downloaded
+            params = {
+        'age_limit': age,
+        'skip_download': True,
+        'writeinfojson': True,
+        'outtmpl': '%(id)s.%(ext)s',
+    }
+    ydl = YoutubeDL(params)
+    ydl.add_default_info_extractors()
+    json_filename = os.path.splitext(filename)[0] + '.info.json'
+    try_rm(json_filename)
+    ydl.download([url])
+    res = os.path.exists(json_filename)
+    try_rm(json_filename)
+    return res
     
     
-def test_follow_redirect_output_options(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=h',
-             '--history-print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 2
-    assert 'HTTP/1.1 302 FOUND' not in r
-    assert HTTP_OK in r
+if __name__ == '__main__':
+    unittest.main()
+
     
-        # The name of the plugin, eg. 'My auth'.
-    name = None
+                    m = re.search(r'(?<=\s)u[\''](?!\)|,|$)', code)
+                if m is not None:
+                    self.assertTrue(
+                        m is None,
+                        'u present in %s, around %s' % (
+                            fn, code[m.start() - 10:m.end() + 10]))
     
-    # FIXME:
-# We test against a local httpbin instance which uses a self-signed cert.
-# Requests without --verify=<CA_BUNDLE> will fail with a verification error.
-# See: https://github.com/kevin1024/pytest-httpbin#https-support
-CA_BUNDLE = pytest_httpbin.certs.where()
-    
-        def load_installed_plugins(self):
-        for entry_point_name in ENTRY_POINT_NAMES:
-            for entry_point in iter_entry_points(entry_point_name):
-                plugin = entry_point.load()
-                plugin.package_name = entry_point.dist.key
-                self.register(entry_point.load())
-    
-    This typically means that you attempted to use functionality that needed
-an active HTTP request.  Consult the documentation on testing for
-information about how to avoid this problem.\
-'''
-_app_ctx_err_msg = '''\
-Working outside of application context.
+            retval = subprocess.call(args)
+        if retval == 0:
+            fsize = os.path.getsize(encodeFilename(tmpfilename))
+            self.to_screen('\r[%s] %s bytes' % (args[0], fsize))
+            self.try_rename(tmpfilename, filename)
+            self._hook_progress({
+                'downloaded_bytes': fsize,
+                'total_bytes': fsize,
+                'filename': filename,
+                'status': 'finished',
+            })
+            return True
+        else:
+            self.to_stderr('\n')
+            self.report_error('%s exited with code %d' % (args[0], retval))
+            return False
+
     
     
-def create_tdir():
-    try:
-        shutil.rmtree(tdir)
-    except Exception:
-        pass
-    os.mkdir(tdir)
+class Card(metaclass=ABCMeta):
     
-    # utilities we import from Werkzeug and Jinja2 that are unused
-# in the module but are exported as public interface.
-from werkzeug.exceptions import abort
-from werkzeug.utils import redirect
-from jinja2 import Markup, escape
+        def __init__(self, results):
+        self.results = results
+        self.next = next
     
-        app.add_url_rule('/', view_func=Index.as_view('index'))
-    rv = client.get('/')
-    assert rv.data == b'Blub'
-    assert rv.headers['X-Method'] == 'GET'
-    rv = client.head('/')
-    assert rv.data == b''
-    assert rv.headers['X-Method'] == 'HEAD'
+        def __init__(self, license_plate):
+        super(Bus, self).__init__(VehicleSize.LARGE, license_plate, spot_size=5)
     
+        def __init__(self, seller_category_map, seller_category_overrides_map):
+        self.seller_category_map = seller_category_map
+        self.seller_category_overrides_map = seller_category_overrides_map
     
-def with_metaclass(meta, *bases):
-    '''Create a base class with a metaclass.'''
-    # This requires a bit of explanation: the basic idea is to make a
-    # dummy metaclass for one level of class instantiation that replaces
-    # itself with the actual metaclass.
-    class metaclass(type):
-        def __new__(cls, name, this_bases, d):
-            return meta(name, bases, d)
-    return type.__new__(metaclass, 'temporary_class', (), {})
+        def create_signature(self):
+        # Create signature based on url and contents
+        ...
     
-        # To avoid having to always use the '|safe' filter in flatpage templates,
-    # mark the title and content as already safe (since they are raw HTML
-    # content in the first place).
-    f.title = mark_safe(f.title)
-    f.content = mark_safe(f.content)
+            # Since text parameter of .open is not used in base class,
+        # pass dummy 'text' instead of tk.Text().
+        self.dialog.open('text')
+        self.assertEqual(self.dialog.top.state(), 'normal')
+        self.dialog.close()
+        self.assertEqual(self.dialog.top.state(), 'withdrawn')
     
+        def test_float(self):
+        rval = self.loads('1', parse_int=float)
+        self.assertTrue(isinstance(rval, float))
+        self.assertEqual(rval, 1.0)
     
-def prepare_url(value):
-    # Issue #1483: Make sure the URL always has a trailing slash
-    httpbin_url = value.url.rstrip('/') + '/'
+    if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        zones = TZInfo.zonelist()
+        for z in zones:
+            print(z)
+        sys.exit()
+    filepath = sys.argv[1]
+    if not filepath.startswith('/'):
+        filepath = os.path.join('/usr/share/zoneinfo', filepath)
+    with open(filepath, 'rb') as fileobj:
+        tzi = TZInfo.fromfile(fileobj)
+    tzi.dump(sys.stdout)
+
     
-            return content
+            # don't synch up unless the lines have a similarity score of at
+        # least cutoff; best_ratio tracks the best score seen so far
+        best_ratio, cutoff = 0.74, 0.75
+        cruncher = SequenceMatcher(self.charjunk)
+        eqi, eqj = None, None   # 1st indices of equal lines (if any)
     
-    This module handles import compatibility issues between Python 2 and
-Python 3.
-'''
+        def raw_decode(self, s, idx=0):
+        '''Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
     
+            m = match_number(string, idx)
+        if m is not None:
+            integer, frac, exp = m.groups()
+            if frac or exp:
+                res = parse_float(integer + (frac or '') + (exp or ''))
+            else:
+                res = parse_int(integer)
+            return res, m.end()
+        elif nextchar == 'N' and string[idx:idx + 3] == 'NaN':
+            return parse_constant('NaN'), idx + 3
+        elif nextchar == 'I' and string[idx:idx + 8] == 'Infinity':
+            return parse_constant('Infinity'), idx + 8
+        elif nextchar == '-' and string[idx:idx + 9] == '-Infinity':
+            return parse_constant('-Infinity'), idx + 9
+        else:
+            raise StopIteration(idx)
     
-@pytest.mark.skipif(sys.version_info < (2,7), reason='Only run on Python 2.7+')
-def test_system_ssl():
-    '''Verify we're actually setting system_ssl when it should be available.'''
-    assert info()['system_ssl']['version'] != ''
+        def _get_whatToShow(self):
+        return self.whatToShow
     
-        Requests that produced this error are safe to retry.
-    '''
+        def test_getnewargs(self):
+        self.assertEqual((1+2j).__getnewargs__(), (1.0, 2.0))
+        self.assertEqual((1-2j).__getnewargs__(), (1.0, -2.0))
+        self.assertEqual((2j).__getnewargs__(), (0.0, 2.0))
+        self.assertEqual((-0j).__getnewargs__(), (0.0, -0.0))
+        self.assertEqual(complex(0, INF).__getnewargs__(), (0.0, INF))
+        self.assertEqual(complex(INF, 0).__getnewargs__(), (INF, 0.0))
     
-    
-    {    # Server Error.
-    500: ('internal_server_error', 'server_error', '/o\\', '✗'),
-    501: ('not_implemented',),
-    502: ('bad_gateway',),
-    503: ('service_unavailable', 'unavailable'),
-    504: ('gateway_timeout',),
-    505: ('http_version_not_supported', 'http_version'),
-    506: ('variant_also_negotiates',),
-    507: ('insufficient_storage',),
-    509: ('bandwidth_limit_exceeded', 'bandwidth'),
-    510: ('not_extended',),
-    511: ('network_authentication_required', 'network_auth', 'network_authentication'),
-}
-    
-    
-def guess_json_utf(data):
-    '''
-    :rtype: str
-    '''
-    # JSON always starts with two ASCII characters, so detection is as
-    # easy as counting the nulls and from their location and count
-    # determine the encoding. Also detect a BOM, if present.
-    sample = data[:4]
-    if sample in (codecs.BOM_UTF32_LE, codecs.BOM_UTF32_BE):
-        return 'utf-32'     # BOM included
-    if sample[:3] == codecs.BOM_UTF8:
-        return 'utf-8-sig'  # BOM included, MS style (discouraged)
-    if sample[:2] in (codecs.BOM_UTF16_LE, codecs.BOM_UTF16_BE):
-        return 'utf-16'     # BOM included
-    nullcount = sample.count(_null)
-    if nullcount == 0:
-        return 'utf-8'
-    if nullcount == 2:
-        if sample[::2] == _null2:   # 1st and 3rd are null
-            return 'utf-16-be'
-        if sample[1::2] == _null2:  # 2nd and 4th are null
-            return 'utf-16-le'
-        # Did not detect 2 valid UTF-16 ascii-range characters
-    if nullcount == 3:
-        if sample[:3] == _null3:
-            return 'utf-32-be'
-        if sample[1:] == _null3:
-            return 'utf-32-le'
-        # Did not detect a valid UTF-32 ascii-range character
-    return None
-    
-        for i, DD in enumerate(Drange):
-        print('D = %i (%i out of %i)' % (DD, i + 1, len(Drange)))
-        X = get_data(N, DD, dataset)
-        for algorithm in algorithms:
-            nbrs = neighbors.NearestNeighbors(n_neighbors=k,
-                                              algorithm=algorithm,
-                                              leaf_size=leaf_size)
-            t0 = time()
-            nbrs.fit(X)
-            t1 = time()
-            nbrs.kneighbors(X)
-            t2 = time()
+                # 修掉圆顶的时候一条线导致的小 bug，这个颜色判断应该 OK，暂时不提出来
+            if abs(pixel[0] - last_pixel[0]) \
+                    + abs(pixel[1] - last_pixel[1]) \
+                    + abs(pixel[2] - last_pixel[2]) > 10:
+                board_x_sum += j
+                board_x_c += 1
     
     
-def euclidean_distances(X, n_jobs):
-    return pairwise_distances(X, metric='euclidean', n_jobs=n_jobs)
+def update_data():
+    return np.array(Image.open('autojump.png'))
     
-    from sklearn import clone
-from sklearn.externals.six.moves import xrange
-from sklearn.random_projection import (SparseRandomProjection,
-                                       GaussianRandomProjection,
-                                       johnson_lindenstrauss_min_dim)
     
-    print('consensus score: {:.1f}'.format(score))
-    
-    # Train uncalibrated random forest classifier on whole train and validation
-# data and evaluate on test data
-clf = RandomForestClassifier(n_estimators=25)
-clf.fit(X_train_valid, y_train_valid)
-clf_probs = clf.predict_proba(X_test)
-score = log_loss(y_test, clf_probs)
-    
-    plt.title('Clustering measures for random uniform labeling\n'
-          'against reference assignment with %d classes' % n_classes)
-plt.xlabel('Number of clusters (Number of samples is fixed to %d)' % n_samples)
-plt.ylabel('Score value')
-plt.ylim(ymin=-0.05, ymax=1.05)
-plt.legend(plots, names)
-plt.show()
+fig = plt.figure()
+pull_screenshot()
+img = np.array(Image.open('autojump.png'))
+im = plt.imshow(img, animated=True)
