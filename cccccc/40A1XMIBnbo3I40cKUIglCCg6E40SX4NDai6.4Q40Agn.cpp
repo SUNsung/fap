@@ -1,307 +1,316 @@
 
         
-        #include <string>
-    
-    void Initialize(v8::Local<v8::Object> exports, v8::Local<v8::Value> unused,
-                v8::Local<v8::Context> context, void* priv) {
-  v8::Isolate* isolate = context->GetIsolate();
-  mate::Dictionary dict(isolate, exports);
-  dict.Set('globalShortcut', atom::api::GlobalShortcut::Create(isolate));
-}
-    
-    namespace atom {
+        namespace swift {
     }
     
-    v8::Persistent<v8::ObjectTemplate> event_template;
+    #pragma mark - NSNumber verification
     
-      AtomQuotaPermissionContext();
-  virtual ~AtomQuotaPermissionContext();
+    void JRodriguesMatlab(const Mat& src, Mat& dst);
     
-    #ifndef GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_DATABASE_H__
-#define GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_DATABASE_H__
+            if(black_contours.size() < 5 || white_contours.size() < 5) continue;
     
-    #include <Python.h>
+            static __device__ __forceinline__ int syncthreadsOr(int pred)
+        {
+#if defined (__CUDA_ARCH__) && (__CUDA_ARCH__ < 200)
+                // just campilation stab
+                return 0;
+#else
+                return __syncthreads_or(pred);
+#endif
+        }
     
+        static void CODEGEN_FUNCPTR Switch_BindRenderbuffer(GLenum target, GLuint renderbuffer)
+    {
+        BindRenderbuffer = (PFNBINDRENDERBUFFERPROC)IntGetProcAddress('glBindRenderbuffer');
+        BindRenderbuffer(target, renderbuffer);
+    }
     
-    {  printer->Print(
-    variables_,
-    'private static readonly pbc::MapField<$key_type_name$, $value_type_name$>.Codec _map_$name$_codec\n'
-    '    = new pbc::MapField<$key_type_name$, $value_type_name$>.Codec(');
-  key_generator->GenerateCodecCode(printer);
-  printer->Print(', ');
-  value_generator->GenerateCodecCode(printer);
-  printer->Print(
-    variables_,
-    ', $tag$);\n'
-    'private readonly pbc::MapField<$key_type_name$, $value_type_name$> $name$_ = new pbc::MapField<$key_type_name$, $value_type_name$>();\n');
-  WritePropertyDocComment(printer, descriptor_);
-  AddPublicMemberAttributes(printer);
-  printer->Print(
-    variables_,
-    '$access_level$ pbc::MapField<$key_type_name$, $value_type_name$> $property_name$ {\n'
-    '  get { return $name$_; }\n'
-    '}\n');
+    #ifndef GL_ARB_shader_objects
+    // GL types for program/shader text and shader object handles
+    typedef char GLcharARB;
+    typedef unsigned int GLhandleARB;
+#endif
+    
+    #ifdef HAVE_LAPACK
+    
+    static const int kBlockSize = 32768;
+    
+    void FilterBlockBuilder::StartBlock(uint64_t block_offset) {
+  uint64_t filter_index = (block_offset / kFilterBase);
+  assert(filter_index >= filter_offsets_.size());
+  while (filter_index > filter_offsets_.size()) {
+    GenerateFilter();
+  }
 }
     
-    // Generator options (used by csharp_generator.cc):
-struct Options {
-  Options() :
-      file_extension('.cs'),
-      base_namespace(''),
-      base_namespace_specified(false),
-      internal_access(false) {
+    Status TableCache::Get(const ReadOptions& options,
+                       uint64_t file_number,
+                       uint64_t file_size,
+                       const Slice& k,
+                       void* arg,
+                       void (*saver)(void*, const Slice&, const Slice&)) {
+  Cache::Handle* handle = NULL;
+  Status s = FindTable(file_number, file_size, &handle);
+  if (s.ok()) {
+    Table* t = reinterpret_cast<TableAndFile*>(cache_->Value(handle))->table;
+    s = t->InternalGet(options, k, arg, saver);
+    cache_->Release(handle);
   }
-  // Extension of the generated file. Defaults to '.cs'
-  string file_extension;
-  // Base namespace to use to create directory hierarchy. Defaults to ''.
-  // This option allows the simple creation of a conventional C# file layout,
-  // where directories are created relative to a project-specific base
-  // namespace. For example, in a project with a base namespace of PetShop, a
-  // proto of user.proto with a C# namespace of PetShop.Model.Shared would
-  // generate Model/Shared/User.cs underneath the specified --csharp_out
-  // directory.
-  //
-  // If no base namespace is specified, all files are generated in the
-  // --csharp_out directory, with no subdirectories created automatically.
-  string base_namespace;
-  // Whether the base namespace has been explicitly specified by the user.
-  // This is required as the base namespace can be explicitly set to the empty
-  // string, meaning 'create a full directory hierarchy, starting from the first
-  // segment of the namespace.'
-  bool base_namespace_specified;
-  // Whether the generated classes should have accessibility level of 'internal'.
-  // Defaults to false that generates 'public' classes.
-  bool internal_access;
+  return s;
+}
+    
+    #include <set>
+#include <utility>
+#include <vector>
+#include 'db/dbformat.h'
+    
+      // The following fields are not protected by any mutex. They are only mutable
+  // while the file is being written, and concurrent access is not allowed
+  // to writable files.
+  std::vector<char*> blocks_;
+  uint64_t size_;
+    
+    Block::Block(const BlockContents& contents)
+    : data_(contents.data.data()),
+      size_(contents.data.size()),
+      owned_(contents.heap_allocated) {
+  if (size_ < sizeof(uint32_t)) {
+    size_ = 0;  // Error marker
+  } else {
+    size_t max_restarts_allowed = (size_-sizeof(uint32_t)) / sizeof(uint32_t);
+    if (NumRestarts() > max_restarts_allowed) {
+      // The size is too small for NumRestarts()
+      size_ = 0;
+    } else {
+      restart_offset_ = size_ - (1 + NumRestarts()) * sizeof(uint32_t);
+    }
+  }
+}
+    
+    
+    {  virtual bool KeyMayMatch(const Slice& key, const Slice& filter) const {
+    uint32_t h = Hash(key.data(), key.size(), 1);
+    for (size_t i = 0; i + 4 <= filter.size(); i += 4) {
+      if (h == DecodeFixed32(filter.data() + i)) {
+        return true;
+      }
+    }
+    return false;
+  }
 };
     
-    class RepeatedPrimitiveFieldGenerator : public FieldGeneratorBase {
- public:
-  RepeatedPrimitiveFieldGenerator(const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options);
-  ~RepeatedPrimitiveFieldGenerator();
-    }
-    
-    std::string SourceGeneratorBase::class_access_level() {
-  return (IsDescriptorProto(descriptor_) || this->options()->internal_access) ? 'internal' : 'public';
-}
-    
-    /** Max number of blobs to classify together in FindSegmentation. */
-const int kMaxGroupSize = 4;
-/// Max fraction of median allowed as deviation in xheight before switching
-/// to median.
-const double kMaxXHeightDeviationFraction = 0.125;
-    
-    // This structure captures all information needed about a text line for the
-// purposes of paragraph detection.  It is meant to be exceedingly light-weight
-// so that we can easily test paragraph detection independent of the rest of
-// Tesseract.
-class RowInfo {
- public:
-  // Constant data derived from Tesseract output.
-  STRING text;        // the full UTF-8 text of the line.
-  bool ltr;           // whether the majority of the text is left-to-right
-                      // TODO(eger) make this more fine-grained.
-    }
-    
-    // Runs classify_word_pass1() on the current word. Outputs Tesseract's
-// raw choice as a result of the classification. For words labeled with a
-// single unichar also outputs all alternatives from blob_choices of the
-// best choice.
-void Tesseract::ambigs_classify_and_output(const char *label,
-                                           PAGE_RES_IT* pr_it,
-                                           FILE *output_file) {
-  // Classify word.
-  fflush(stdout);
-  WordData word_data(*pr_it);
-  SetupWordPassN(1, &word_data);
-  classify_word_and_language(1, pr_it, &word_data);
-  WERD_RES* werd_res = word_data.word;
-  WERD_CHOICE *best_choice = werd_res->best_choice;
-  ASSERT_HOST(best_choice != NULL);
-    }
-    
-    /**********************************************************************
- * read_unlv_file
- *
- * Read a whole unlv zone file to make a list of blocks.
- **********************************************************************/
-    
-    namespace tesseract {
-    }
-    
-    
-/**********************************************************************
- * operator*=
- *
- * Scalar multiply of an ICOORD.
- **********************************************************************/
-    
-    // Prints the content of the DENORM for debug purposes.
-void DENORM::Print() const {
-  if (pix_ != NULL) {
-    tprintf('Pix dimensions %d x %d x %d\n',
-            pixGetWidth(pix_), pixGetHeight(pix_), pixGetDepth(pix_));
-  }
-  if (inverse_)
-    tprintf('Inverse\n');
-  if (block_ && block_->re_rotation().x() != 1.0f) {
-    tprintf('Block rotation %g, %g\n',
-            block_->re_rotation().x(), block_->re_rotation().y());
-  }
-  tprintf('Input Origin = (%g, %g)\n', x_origin_, y_origin_);
-  if (x_map_ != NULL && y_map_ != NULL) {
-    tprintf('x map:\n');
-    for (int x = 0; x < x_map_->size(); ++x) {
-      tprintf('%g ', (*x_map_)[x]);
-    }
-    tprintf('\ny map:\n');
-    for (int y = 0; y < y_map_->size(); ++y) {
-      tprintf('%g ', (*y_map_)[y]);
-    }
-    tprintf('\n');
+    void Iterator::RegisterCleanup(CleanupFunction func, void* arg1, void* arg2) {
+  assert(func != NULL);
+  Cleanup* c;
+  if (cleanup_.function == NULL) {
+    c = &cleanup_;
   } else {
-    tprintf('Scale = (%g, %g)\n', x_scale_, y_scale_);
-    if (rotation_ != NULL)
-      tprintf('Rotation = (%g, %g)\n', rotation_->x(), rotation_->y());
+    c = new Cleanup;
+    c->next = cleanup_.next;
+    cleanup_.next = c;
   }
-  tprintf('Final Origin = (%g, %g)\n', final_xshift_, final_xshift_);
-  if (predecessor_ != NULL) {
-    tprintf('Predecessor:\n');
-    predecessor_->Print();
-  }
+  c->function = func;
+  c->arg1 = arg1;
+  c->arg2 = arg2;
 }
     
-    // WorkloadStats is used to track per request timing for different states
-// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
-// should be made to guard the state change with appropriate timers and
-// counters.
-//
-// The states tracked are:
-//  - In a request (this is a superset of the interpreter state)
-//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
-//  - In the JIT (currently tracks time inside the translate routine)
-//
-// Note the time in the TC is not tracked.  This is roughly:
-//   Time in request - Time in interp
-//
-// This gives us the relative interp time formula of:
-//   Relative interp time = Time in interp / Time in request
-struct WorkloadStats final {
-  enum State {
-    InRequest,
-    // -> InInterp   Okay (entering Dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InInterp,
-    // -> InRequest  Okay (leaving the dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InTrans,
-    // -> InRequest  Okay (leaving translate)
-    // -> InInterp   Okay (leaving translate)
-  };
+        jobject     (*AllocObject)(JNIEnv*, jclass);
+    jobject     (*NewObject)(JNIEnv*, jclass, jmethodID, ...);
+    jobject     (*NewObjectV)(JNIEnv*, jclass, jmethodID, va_list);
+    jobject     (*NewObjectA)(JNIEnv*, jclass, jmethodID, jvalue*);
+    
+      auto i = 0;
+  out << 'Backtrace:\n';
+  for (auto& elm : trace) {
+    out << '    #' << dec << setfill('0') << setw(2) << i++ << ' ' << elm << '\n';
+  }
+    
+    TEST_F(YogaTest_HadOverflowTests, spacing_overflow_no_wrap_and_no_flex_children) {
+  const YGNodeRef child0 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child0, 80);
+  YGNodeStyleSetHeight(child0, 40);
+  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
+  YGNodeStyleSetMargin(child0, YGEdgeBottom, 10);
+  YGNodeInsertChild(root, child0, 0);
+  const YGNodeRef child1 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child1, 80);
+  YGNodeStyleSetHeight(child1, 40);
+  YGNodeStyleSetMargin(child1, YGEdgeBottom, 5);
+  YGNodeInsertChild(root, child1, 1);
     }
     
-    struct IRGS;
+        Config(Config const &) = delete;
     
-      template<
-    class E,
-    class Enable = typename std::enable_if<std::is_enum<E>::value>::type
-  >
-  explicit Vconst(E e) : Vconst(typename std::underlying_type<E>::type(e)) {}
-    
-      void delist() {
-    auto n = m_next, p = m_prev;
-    n->m_prev = p;
-    p->m_next = n;
-  }
-    
-    void Clusterizer::initClusters() {
-  m_clusters.resize(m_unit.blocks.size());
-  m_blockCluster.resize(m_unit.blocks.size());
-  for (auto b : m_blocks) {
-    m_clusters[b].push_back(b);
-    m_blockCluster[b] = b;
-  }
+    void assertInternal(const char* formatstr ...) {
+    va_list va_args;
+    va_start(va_args, formatstr);
+    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
+    va_end(va_args);
+    if (gAssertHandler != NULL) {
+        gAssertHandler(sAssertBuf);
+    }
+    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
+    // crash at this specific address so that we can find our crashes easier
+    *(int*)0xdeadb00c = 0;
+    // let the compiler know we won't reach the end of the function
+     __builtin_unreachable();
 }
     
-    #include 'hphp/util/numa.h'
-#include 'hphp/util/portability.h'
-#include <folly/Bits.h>
-    
-    public:
-  void scan(type_scan::Scanner& scanner) const {
-    auto const elms = data();
-    scanner.scan(*elms, m_used * sizeof(*elms));
-  }
-    
-    namespace HPHP {
+    // Keeps a thread-local reference to the current thread's JNIEnv.
+struct Environment {
+  // May be null if this thread isn't attached to the JVM
+  FBEXPORT static JNIEnv* current();
+  static void initialize(JavaVM* vm);
     }
     
+      const char* functionName() const { return m_functionName; }
+  const char* fileName() const { return m_fileName; }
+  int lineNumber() const { return m_lineNumber; }
     
-    {
-    {}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_RANDOM_H_
-
+      void reset(T* other = NULL) {
+    T* old = (T*)pthread_getspecific(m_key);
+    if (old != other) {
+      FBASSERT(m_cleanup);
+      m_cleanup(old);
+      pthread_setspecific(m_key, other);
+    }
+  }
     
-        // want to compute storage boundary for each feature
-    // using variants of prefix sum scan
-    boundary_.resize(nfeature);
-    size_t accum_index_ = 0;
-    size_t accum_row_ind_ = 0;
-    for (bst_uint fid = 0; fid < nfeature; ++fid) {
-      boundary_[fid].index_begin = accum_index_;
-      boundary_[fid].row_ind_begin = accum_row_ind_;
-      if (type_[fid] == kDenseColumn) {
-        accum_index_ += static_cast<size_t>(nrow);
-      } else {
-        accum_index_ += feature_counts_[fid];
-        accum_row_ind_ += feature_counts_[fid];
+    #if ENABLE_FBASSERT
+#define FBASSERTMSGF(expr, msg, ...) !(expr) ? facebook::assertInternal('Assert (%s:%d): ' msg, __FILE__, __LINE__, ##__VA_ARGS__) : (void) 0
+#else
+#define FBASSERTMSGF(expr, msg, ...)
+#endif // ENABLE_FBASSERT
+    
+      assert(animal->name()->str() == 'Dog');
+  assert(animal->sound()->str() == 'Bark');
+  (void)animal; // To silence 'Unused Variable' warnings.
+    
+    
+    {	printer->Print(vars, 'x := &$StreamType${stream}\n');
+	if (ServerOnlyStreaming(method)) {
+		printer->Print('if err := x.ClientStream.SendMsg(in); err != nil { return nil, err }\n');
+		printer->Print('if err := x.ClientStream.CloseSend(); err != nil { return nil, err }\n');
+	}
+	printer->Print('return x,nil\n');
+	printer->Outdent();
+	printer->Print('}\n\n');
+    
+    ::grpc::Status MonsterStorage::Service::Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
+}
+    
+        vars['filename'] = file->filename();
+    vars['filename_identifier'] = FilenameIdentifier(file->filename());
+    vars['filename_base'] = file->filename_without_ext();
+    vars['message_header_ext'] = message_header_ext();
+    
+    class LogHelper {
+  std::ostream* os_;
+    }
+    
+    // The callback implementation of our server, that derives from the generated
+// code. It implements all rpcs specified in the FlatBuffers schema.
+class ServiceImpl final : public MyGame::Example::MonsterStorage::Service {
+  virtual ::grpc::Status Store(
+      ::grpc::ServerContext *context,
+      const flatbuffers::grpc::Message<Monster> *request,
+      flatbuffers::grpc::Message<Stat> *response) override {
+    // Create a response from the incoming request name.
+    fbb_.Clear();
+    auto stat_offset = CreateStat(
+        fbb_, fbb_.CreateString('Hello, ' + request->GetRoot()->name()->str()));
+    fbb_.Finish(stat_offset);
+    // Transfer ownership of the message to gRPC
+    *response = fbb_.ReleaseMessage<Stat>();
+    return grpc::Status::OK;
+  }
+  virtual ::grpc::Status Retrieve(
+      ::grpc::ServerContext *context,
+      const flatbuffers::grpc::Message<Stat> *request,
+      ::grpc::ServerWriter<flatbuffers::grpc::Message<Monster>> *writer)
+      override {
+    for (int i = 0; i < 10; i++) {
+      fbb_.Clear();
+      // Create 10 monsters for resposne.
+      auto monster_offset =
+          CreateMonster(fbb_, 0, 0, 0,
+                        fbb_.CreateString(request->GetRoot()->id()->str() +
+                                          ' No.' + std::to_string(i)));
+      fbb_.Finish(monster_offset);
+    }
+    }
+    }
+    
+      // Appends the given text to the generated code as well as a newline
+  // character.  Any text within {{ and }} delimeters is replaced by values
+  // previously stored in the CodeWriter by calling SetValue above.  The newline
+  // will be suppressed if the text ends with the \\ character.
+  void operator+=(std::string text);
+    
+    // Flags that configure how the Builder behaves.
+// The 'Share' flags determine if the Builder automatically tries to pool
+// this type. Pooling can reduce the size of serialized data if there are
+// multiple maps of the same kind, at the expense of slightly slower
+// serialization (the cost of lookups) and more memory use (std::set).
+// By default this is on for keys, but off for strings.
+// Turn keys off if you have e.g. only one map.
+// Turn strings on if you expect many non-unique string values.
+// Additionally, sharing key vectors can save space if you have maps with
+// identical field populations.
+enum BuilderFlag {
+  BUILDER_FLAG_NONE = 0,
+  BUILDER_FLAG_SHARE_KEYS = 1,
+  BUILDER_FLAG_SHARE_STRINGS = 2,
+  BUILDER_FLAG_SHARE_KEYS_AND_STRINGS = 3,
+  BUILDER_FLAG_SHARE_KEY_VECTORS = 4,
+  BUILDER_FLAG_SHARE_ALL = 7,
+};
+    
+    inline NamedHashFunction<uint32_t>::HashFunction FindHashFunction32(
+    const char *name) {
+  std::size_t size = sizeof(kHashFunctions32) / sizeof(kHashFunctions32[0]);
+  for (std::size_t i = 0; i < size; ++i) {
+    if (std::strcmp(name, kHashFunctions32[i].name) == 0) {
+      return kHashFunctions32[i].function;
+    }
+  }
+  return nullptr;
+}
+    
+    inline size_t InlineSize(ElementaryType type, const TypeTable *type_table) {
+  switch (type) {
+    case ET_UTYPE:
+    case ET_BOOL:
+    case ET_CHAR:
+    case ET_UCHAR: return 1;
+    case ET_SHORT:
+    case ET_USHORT: return 2;
+    case ET_INT:
+    case ET_UINT:
+    case ET_FLOAT:
+    case ET_STRING: return 4;
+    case ET_LONG:
+    case ET_ULONG:
+    case ET_DOUBLE: return 8;
+    case ET_SEQUENCE:
+      switch (type_table->st) {
+        case ST_TABLE:
+        case ST_UNION: return 4;
+        case ST_STRUCT: return type_table->values[type_table->num_elems];
+        default: assert(false); return 1;
       }
-      boundary_[fid].index_end = accum_index_;
-      boundary_[fid].row_ind_end = accum_row_ind_;
-    }
-    
-      dmlc::DataIter<xgboost::ColBatch> * col_iter = dmat->ColIterator();
-  // Loop over the batches and assert the data is as expected
-  long num_col_batch = 0;
-  col_iter->BeforeFirst();
-  while (col_iter->Next()) {
-    num_col_batch += 1;
-    EXPECT_EQ(col_iter->Value().size, dmat->info().num_col)
-      << 'Expected batch size to be same as num_cols as max_row_perbatch is 1.';
+    default: assert(false); return 1;
   }
-  EXPECT_EQ(num_col_batch, dmat->info().num_row)
-    << 'Expected num batches to be same as num_rows as max_row_perbatch is 1';
-  col_iter = nullptr;
-    
-      vals_in.clear(); ss.flush(); ss.clear(); ss.str('');
-  ss << '(3.0,2,1)';
-  ss >> vals_in;
-  EXPECT_NE(vals_in, vals);
-    
-    
-    {template<typename IndexType>
-Parser<IndexType> *
-CreateDenseLibSVMParser(const std::string& path,
-                        const std::map<std::string, std::string>& args,
-                        unsigned part_index,
-                        unsigned num_parts) {
-  CHECK_NE(args.count('num_col'), 0) << 'expect num_col in dense_libsvm';
-  return new DensifyParser<IndexType>(
-            Parser<IndexType>::Create(path.c_str(), part_index, num_parts, 'libsvm'),
-           uint32_t(atoi(args.at('num_col').c_str())));
 }
-}  // namespace data
     
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
+    // Get a field's default, if you know it's floating point and its exact type.
+template<typename T> T GetFieldDefaultF(const reflection::Field &field) {
+  assert(sizeof(T) == GetTypeSize(field.type()->base_type()));
+  return static_cast<T>(field.default_real());
+}
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
+    #include 'monster_generated.h'  // Already includes 'flatbuffers/flatbuffers.h'.
