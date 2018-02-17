@@ -1,214 +1,193 @@
 
         
-        
-    {}  // namespace nwapi
+        using namespace std;
     
-    void Base::CallSync(const std::string& method,
-                    const base::ListValue& arguments,
-                    base::ListValue* result) {
-  NOTREACHED() << 'Uncatched callAsync in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
+            std::vector<std::vector<Point> > white_contours, black_contours;
+        std::vector<Vec4i> white_hierarchy, black_hierarchy;
+        findContours(black_comp, black_contours, black_hierarchy, RETR_LIST, CHAIN_APPROX_SIMPLE);
+        findContours(white_comp, white_contours, white_hierarchy, RETR_LIST, CHAIN_APPROX_SIMPLE);
     
+    #include 'opencv2/core.hpp'
     
-    {  template<typename T> bool RemoveListener() {
-    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
-    if (i!=listerners_.end()) {
-      delete i->second;
-      listerners_.erase(i);
-      return true;
-    }
-    return false;
-  }
-private:
-  DISALLOW_COPY_AND_ASSIGN(EventListener);
-};
+    #ifndef __OPENCV_CORE_BUFFER_POOL_IMPL_HPP__
+#define __OPENCV_CORE_BUFFER_POOL_IMPL_HPP__
     
-       bool GetAcceleratorForCommandId(
-      int command_id,
-      ui::Accelerator* accelerator) const override;
+    #endif //HAVE_LAPACK
+#endif //OPENCV_CORE_HAL_INTERNAL_HPP
+
     
-    void Menu::Create(const base::DictionaryValue& option) {
-  gtk_accel_group = NULL;
-  std::string type;
-  if (option.GetString('type', &type) && type == 'menubar')
-    menu_ = gtk_menu_bar_new();
-  else
-    menu_ = gtk_menu_new();
-    }
+        bool TryLoadCheckPointInfo(const size_t epochNumber,
+                               /*out*/ size_t& totalSamplesSeen,
+                               /*out*/ double& learnRatePerSample,
+                               std::list<Matrix<ElemType>>& smoothedGradients,
+                               std::vector<double>& smoothedCounts,
+                               /*out*/ double& prevCriterion,
+                               /*out*/ size_t& minibatchSize);
+    void LoadCheckPointInfo(const size_t epochNumber,
+                            /*out*/ size_t& totalSamplesSeen,
+                            /*out*/ double& learnRatePerSample,
+                            std::list<Matrix<ElemType>>& smoothedGradients,
+                            std::vector<double>& smoothedCounts,
+                            /*out*/ double& prevCriterion,
+                            /*out*/ size_t& minibatchSize);
     
-    #include 'content/nw/src/api/menuitem/menuitem.h'
-    
-    bool NwAppQuitFunction::RunAsync() {
-  ExtensionService* service =
-    ExtensionSystem::Get(browser_context())->extension_service();
-  base::MessageLoop::current()->task_runner()->PostTask(
-        FROM_HERE,
-        base::Bind(&ExtensionService::TerminateExtension,
-                   service->AsWeakPtr(),
-                   extension_id()));
-  return true;
-}
-    
-    NwClipboardSetListSyncFunction::~NwClipboardSetListSyncFunction() {
-}
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.setListSync', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwClipboardSetListSyncFunction);
-};
-    
-    void RepeatedMessageFieldGenerator::GenerateCloningCode(io::Printer* printer) {
-  printer->Print(variables_,
-    '$name$_ = other.$name$_.Clone();\n');
-}
-    
-    class RepeatedPrimitiveFieldGenerator : public FieldGeneratorBase {
- public:
-  RepeatedPrimitiveFieldGenerator(const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options);
-  ~RepeatedPrimitiveFieldGenerator();
+    // only copy a complete independent tree
+// when node name exists
+void ComputationNetwork::CopySubTree(const ComputationNetwork& fromNet,
+                                     const std::wstring fromName, std::wstring toNamePrefix,
+                                     const CopyNodeFlags flags)
+{
+    InvalidateCompiledNetwork();
     }
     
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
-    
-    // Generates code for a lite extension, which may be within the scope of some
-// message or may be at file scope.  This is much simpler than FieldGenerator
-// since extensions are just simple identifiers with interesting types.
-class ImmutableExtensionLiteGenerator : public ExtensionGenerator {
- public:
-  explicit ImmutableExtensionLiteGenerator(const FieldDescriptor* descriptor,
-                                           Context* context);
-  virtual ~ImmutableExtensionLiteGenerator();
-    }
-    
-    /**
- * @brief Delete the existing node key from the persistent storage
- *
- * @return a Status indicating the success or failure of the operation
- */
-Status clearNodeKey();
-    
-    /**
- * @brief Access the internal storage of the Decorator parser.
- *
- * The decoration set is a map of column name to value. It contains the opaque
- * set of decoration point results.
- *
- * Decorations are applied to log items before they are sent to the downstream
- * logging APIs: logString, logSnapshot, etc.
- *
- * @param results the output parameter to write decorations.
- */
-void getDecorations(std::map<std::string, std::string>& results);
-    
-    #ifndef COMM_COMM_DNS_H_
-#define COMM_COMM_DNS_H_
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    class Test_Spy_Sample {
-  public:
-    Test_Spy_Sample();
-    ~Test_Spy_Sample();
-    }
-    
-        // stop short of the end so we don't scan off the end doing
-    // the hashing; this means we won't compress the last few bytes
-    // unless they were part of something longer
-    while (q < start+length && q+12 < end) {
-        int m;
-        stb_uint h1,h2,h3,h4, h;
-        stb_uchar *t;
-        int best = 2, dist=0;
-    }
-    
-    struct IDirect3DDevice9;
-    
-        // Start the frame. This call will update the io.WantCaptureMouse, io.WantCaptureKeyboard flag that you can use to dispatch inputs (or not) to your application.
-    ImGui::NewFrame();
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_API void        ImGui_Marmalade_InvalidateDeviceObjects();
-IMGUI_API bool        ImGui_Marmalade_CreateDeviceObjects();
-    
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-        for (int i = 0; i < 3; i++)
+        size_t GetNumParallelSequencesForFixingBPTTMode()
     {
-        // If a mouse press event came, always pass it as 'mouse held this frame', so we don't miss click-release events that are shorter than 1 frame.
-        io.MouseDown[i] = g_MouseJustPressed[i] || glfwGetMouseButton(g_Window, i) != 0;
-        g_MouseJustPressed[i] = false;
+        return 1;
+    }
+    void SetNumParallelSequences(const size_t){};
+    void CopyMBLayoutTo(MBLayoutPtr pMBLayout)
+    {
+        pMBLayout->CopyFrom(m_pMBLayout);
+        NOT_IMPLEMENTED;
+    }
+    virtual const std::map<LabelIdType, LabelType>& GetLabelMapping(const std::wstring& sectionName);
+    virtual void SetLabelMapping(const std::wstring& sectionName, const std::map<typename BinaryReader<ElemType>::LabelIdType, typename BinaryReader<ElemType>::LabelType>& labelMapping);
+    virtual bool GetData(const std::wstring& sectionName, size_t numRecords, void* data, size_t& dataBufferSize, size_t recordStart = 0);
+    
+    BOOST_FIXTURE_TEST_CASE(MatrixDensePlusSparse, RandomSeedFixture)
+{
+    std::mt19937 rng(0);
+    Matrix<float> mAdense(c_deviceIdZero);
+    mAdense.AssignTruncateBottomOf(Matrix<float>::RandomUniform(dim1, dim2, c_deviceIdZero, -3.0f, 0.1f, IncrementCounter()), 0);
     }
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    
-    {        // Rendering
-        int display_w, display_h;
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
-        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-        ImGui::Render();
-        glfwSwapBuffers(window);
+        // EvaluateNDLSnippet - evaluate the passed snippet of NDL into a computational network
+    // script - [in] text of the NDL snippet
+    // network - [in/out] computation network to insert NDL into
+    void EvaluateNDLSnippet(const ConfigValue& script, ComputationNetworkPtr network)
+    {
+        NDLUtil<ElemType> ndlUtil(network);
+        ndlUtil.ProcessNDLConfig(script);
     }
     
+    template void FindConfigNames<ConfigParameters>(const ConfigParameters&, std::string key, std::vector<std::wstring>& names);
+template void FindConfigNames<ScriptableObjects::IConfigRecord>(const ScriptableObjects::IConfigRecord&, std::string key, std::vector<std::wstring>& names);
     
-    {    // Restore modified state
-    glDisableClientState(GL_COLOR_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glBindTexture(GL_TEXTURE_2D, (GLuint)last_texture);
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glPopAttrib();
-    glPolygonMode(GL_FRONT, last_polygon_mode[0]); glPolygonMode(GL_BACK, last_polygon_mode[1]);
-    glViewport(last_viewport[0], last_viewport[1], (GLsizei)last_viewport[2], (GLsizei)last_viewport[3]);
-    glScissor(last_scissor_box[0], last_scissor_box[1], (GLsizei)last_scissor_box[2], (GLsizei)last_scissor_box[3]);
-}
+        page->offset.clear();
+    page->offset.push_back(0);
+    for (bst_uint cid : sorted_index_set) {
+      page->offset.push_back(
+          page->offset.back() + disk_offset_[cid + 1] - disk_offset_[cid]);
+    }
+    page->data.resize(page->offset.back());
+    CHECK_EQ(index_.data.size(), value_.data.size());
+    CHECK_EQ(index_.data.size(), disk_offset_.back());
     
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
+      /* Fetch an individual column. This code should be used with XGBOOST_TYPE_SWITCH
+     to determine type of bin id's */
+  template<typename T>
+  inline Column<T> GetColumn(unsigned fid) const {
+    const bool valid_type = std::is_same<T, uint32_t>::value
+                          || std::is_same<T, uint16_t>::value
+                          || std::is_same<T, uint8_t>::value;
+    CHECK(valid_type);
+    }
+    
+    TEST(Param, VectorIOStream) {
+  std::vector<int> vals = {3, 2, 1};
+  std::stringstream ss;
+  std::vector<int> vals_in;
+  
+  ss << vals;
+  EXPECT_EQ(ss.str(), '(3,2,1)');
+    }
+    
+    /*! \brief pruner that prunes a tree after growing finishs */
+template<typename TStats>
+class TreeRefresher: public TreeUpdater {
+ public:
+  void Init(const std::vector<std::pair<std::string, std::string> >& args) override {
+    param.InitAllowUnknown(args);
+  }
+  // update the tree, do pruning
+  void Update(const std::vector<bst_gpair> &gpair,
+              DMatrix *p_fmat,
+              const std::vector<RegTree*> &trees) override {
+    if (trees.size() == 0) return;
+    // number of threads
+    // thread temporal space
+    std::vector<std::vector<TStats> > stemp;
+    std::vector<RegTree::FVec> fvec_temp;
+    // setup temp space for each thread
+    const int nthread = omp_get_max_threads();
+    fvec_temp.resize(nthread, RegTree::FVec());
+    stemp.resize(nthread, std::vector<TStats>());
+    #pragma omp parallel
+    {
+      int tid = omp_get_thread_num();
+      int num_nodes = 0;
+      for (size_t i = 0; i < trees.size(); ++i) {
+        num_nodes += trees[i]->param.num_nodes;
+      }
+      stemp[tid].resize(num_nodes, TStats(param));
+      std::fill(stemp[tid].begin(), stemp[tid].end(), TStats(param));
+      fvec_temp[tid].Init(trees[0]->param.num_feature);
+    }
+    // if it is C++11, use lazy evaluation for Allreduce,
+    // to gain speedup in recovery
+#if __cplusplus >= 201103L
+    auto lazy_get_stats = [&]()
+#endif
+    {
+      const MetaInfo &info = p_fmat->info();
+      // start accumulating statistics
+      dmlc::DataIter<RowBatch> *iter = p_fmat->RowIterator();
+      iter->BeforeFirst();
+      while (iter->Next()) {
+        const RowBatch &batch = iter->Value();
+        CHECK_LT(batch.size, std::numeric_limits<unsigned>::max());
+        const bst_omp_uint nbatch = static_cast<bst_omp_uint>(batch.size);
+        #pragma omp parallel for schedule(static)
+        for (bst_omp_uint i = 0; i < nbatch; ++i) {
+          RowBatch::Inst inst = batch[i];
+          const int tid = omp_get_thread_num();
+          const bst_uint ridx = static_cast<bst_uint>(batch.base_rowid + i);
+          RegTree::FVec &feats = fvec_temp[tid];
+          feats.Fill(inst);
+          int offset = 0;
+          for (size_t j = 0; j < trees.size(); ++j) {
+            AddStats(*trees[j], feats, gpair, info, ridx,
+                     dmlc::BeginPtr(stemp[tid]) + offset);
+            offset += trees[j]->param.num_nodes;
+          }
+          feats.Drop(inst);
+        }
+      }
+      // aggregate the statistics
+      int num_nodes = static_cast<int>(stemp[0].size());
+      #pragma omp parallel for schedule(static)
+      for (int nid = 0; nid < num_nodes; ++nid) {
+        for (int tid = 1; tid < nthread; ++tid) {
+          stemp[0][nid].Add(stemp[tid][nid]);
+        }
+      }
+    };
+#if __cplusplus >= 201103L
+    reducer.Allreduce(dmlc::BeginPtr(stemp[0]), stemp[0].size(), lazy_get_stats);
+#else
+    reducer.Allreduce(dmlc::BeginPtr(stemp[0]), stemp[0].size());
+#endif
+    // rescale learning rate according to size of trees
+    float lr = param.learning_rate;
+    param.learning_rate = lr / trees.size();
+    int offset = 0;
+    for (size_t i = 0; i < trees.size(); ++i) {
+      for (int rid = 0; rid < trees[i]->param.num_roots; ++rid) {
+        this->Refresh(dmlc::BeginPtr(stemp[0]) + offset, rid, trees[i]);
+      }
+      offset += trees[i]->param.num_nodes;
+    }
+    // set learning rate back
+    param.learning_rate = lr;
+  }
+    }
