@@ -1,145 +1,74 @@
-containers = (('thefuck/python3-fish',
-               u'''FROM python:3
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'),
-              ('thefuck/python2-fish',
-               u'''FROM python:2
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'))
+
+        
+            def remove_from_tail(self):
+        ...
     
-        def _dispatch_call(self, call, employees):
-        for employee in employees:
-            if employee.call is None:
-                employee.take_call(call)
-                return employee
-        return None
+        def __init__(self, pages, data_store, reverse_index_queue, doc_index_queue):
+        self.pages = pages
+        self.data_store = data_store
+        self.reverse_index_queue = reverse_index_queue
+        self.doc_index_queue = doc_index_queue
     
-        def shuffle(self):  # ...
+        def consume(self):
+        try:
+            while True:
+                result = self.reader.recv(1024)
+                if not result:
+                    break
+        except (IOError, socket.error):
+            pass
     
-            (2016-01, shopping), 125
-        (2016-01, gas), 50
-        '''
-        total = sum(values)
-        self.handle_budget_notifications(key, total)
-        yield key, sum(values)
+            with ExceptionStackContext(error_handler):
+            request = HTTPRequest(self.get_url('/custom_reason'),
+                                  prepare_curl_callback=lambda curl: 1 / 0)
+        yield [error_event.wait(), self.http_client.fetch(request)]
+        self.assertEqual(1, len(exc_info))
+        self.assertIs(exc_info[0][0], ZeroDivisionError)
     
+        In Python 3.5, `Queue` implements the async iterator protocol, so
+    ``consumer()`` could be rewritten as::
     
-class Categorizer(object):
+        def test_sales_manager_shall_respond_through_proxy_with_delay(cls):
+        cls.p.busy = 'Yes'
+        start_time = time()
+        cls.p.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+Sales Manager is busy\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
     
+        def test_bear_greek_localization(self):
+        self.assertEqual(self.g.get('bear'), 'bear')
+
     
-def upgrade():
-    try:
-        op.alter_column(
-            'clusters', 'changed_on',
-            existing_type=sa.DATETIME(),
-            nullable=True)
-        op.alter_column(
-            'clusters', 'created_on',
-            existing_type=sa.DATETIME(), nullable=True)
-        op.drop_constraint(None, 'columns', type_='foreignkey')
-        op.drop_constraint(None, 'columns', type_='foreignkey')
-        op.drop_column('columns', 'created_on')
-        op.drop_column('columns', 'created_by_fk')
-        op.drop_column('columns', 'changed_on')
-        op.drop_column('columns', 'changed_by_fk')
-        op.alter_column('css_templates', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('css_templates', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dashboards', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dashboards', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.create_unique_constraint(None, 'dashboards', ['slug'])
-        op.alter_column('datasources', 'changed_by_fk',
-                   existing_type=sa.INTEGER(),
-                   nullable=True)
-        op.alter_column('datasources', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('datasources', 'created_by_fk',
-                   existing_type=sa.INTEGER(),
-                   nullable=True)
-        op.alter_column('datasources', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dbs', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dbs', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('slices', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('slices', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('sql_metrics', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('sql_metrics', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('table_columns', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('table_columns', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('tables', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('tables', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('url', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('url', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        ### end Alembic commands ###
-    except:
-        pass
+        def test_display_current_time_at_midnight(self):
+        class_under_test = TimeDisplay()
+        expected_time = '24:01'
+        result = class_under_test.get_current_time_as_as_html_fragment()
+        self.assertEqual(result, expected_time)
+'''
     
+        def get_current_time_as_html_fragment(self, time_provider):
+        current_time = time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
     
-def upgrade():
-    op.add_column('logs', sa.Column('dt', sa.Date(), nullable=True))
-    
-        objects = session.query(Slice).all()
-    objects += session.query(Dashboard).all()
-    for obj in objects:
-        if obj.created_by and obj.created_by not in obj.owners:
-            obj.owners.append(obj.created_by)
-        session.commit()
-    session.close()
-    
-    # revision identifiers, used by Alembic.
-revision = '430039611635'
-down_revision = 'd827694c7555'
-    
-    Revision ID: 43df8de3a5f4
-Revises: 7dbf98566af7
-Create Date: 2016-01-18 23:43:16.073483
-    
-    
-def pull_screenshot():
-    c.screenshot('1.png')
-    
-        ix, iy = event.xdata, event.ydata
-    coords = [(ix, iy)]
-    print('now = ', coords)
-    cor.append(coords)
+        print(u'Setting Data 1 = 10')
+    data1.data = 10
+    print(u'Setting Data 2 = 15')
+    data2.data = 15
+    print(u'Setting Data 1 = 3')
+    data1.data = 3
+    print(u'Setting Data 2 = 5')
+    data2.data = 5
+    print(u'Detach HexViewer from data1 and data2.')
+    data1.detach(view2)
+    data2.detach(view2)
+    print(u'Setting Data 1 = 10')
+    data1.data = 10
+    print(u'Setting Data 2 = 15')
+    data2.data = 15
