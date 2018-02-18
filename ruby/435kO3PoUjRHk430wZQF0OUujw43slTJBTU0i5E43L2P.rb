@@ -1,33 +1,58 @@
 
         
-                  table = reflection.aliased_table
-          value = transform_value(owner[foreign_key])
-          scope = apply_scope(scope, table, key, value)
-    
-                def when_connected(&block)
-              if @raw_client
-                block.call
-              else
-                @when_connected << block
-              end
-            end
-    
-      def test_helper_proxy
-    methods = AllHelpersController.helpers.methods
-    
-      s.metadata = {
-    'source_code_uri' => 'https://github.com/rails/rails/tree/v#{version}/actionmailer',
-    'changelog_uri'   => 'https://github.com/rails/rails/blob/v#{version}/actionmailer/CHANGELOG.md'
-  }
-    
-        private
-      # 'Deserialize' the mailer class name by hand in case another argument
-      # (like a Global ID reference) raised DeserializationError.
-      def mailer_class
-        if mailer = Array(@serialized_arguments).first || Array(arguments).first
-          mailer.constantize
+                def boolean_tag_option(key)
+          %(#{key}='#{key}')
         end
-      end
+    
+      def test_redirect_to_params
+    error = assert_raise(ActionController::UnfilteredParameters) do
+      get :redirect_to_params
+    end
+    assert_equal 'unable to convert unpermitted parameters to hash', error.message
+  end
+    
+            def spec(spec, config = {})
+          Resolver.new(config).spec(spec)
+        end
+    
+              # Returns fully resolved connection, accepts hash, string or symbol.
+          # Always returns a hash.
+          #
+          # == Examples
+          #
+          # Symbol representing current environment.
+          #
+          #   Resolver.new('production' => {}).resolve_connection(:production)
+          #   # => {}
+          #
+          # One layer deep hash of connection values.
+          #
+          #   Resolver.new({}).resolve_connection('adapter' => 'sqlite3')
+          #   # => { 'adapter' => 'sqlite3' }
+          #
+          # Connection URL.
+          #
+          #   Resolver.new({}).resolve_connection('postgresql://localhost/foo')
+          #   # => { 'host' => 'localhost', 'database' => 'foo', 'adapter' => 'postgresql' }
+          #
+          def resolve_connection(spec)
+            case spec
+            when Symbol
+              resolve_symbol_connection spec
+            when String
+              resolve_url_connection spec
+            when Hash
+              resolve_hash_connection spec
+            end
+          end
+    
+        test 'response_body value is wrapped in an array when the value is a String' do
+      controller = BareController.new
+      controller.set_request!(ActionDispatch::Request.empty)
+      controller.set_response!(BareController.make_response!(controller.request))
+      controller.index
+      assert_equal ['Hello world'], controller.response_body
+    end
     
         # An email was generated.
     def process(event)
@@ -38,74 +63,82 @@
       end
     end
     
-    class Jekyll::Commands::NewTheme < Jekyll::Command
-  class << self
-    def init_with_program(prog)
-      prog.command(:'new-theme') do |c|
-        c.syntax 'new-theme NAME'
-        c.description 'Creates a new Jekyll theme scaffold'
-        c.option 'code_of_conduct', \
-          '-c', '--code-of-conduct', \
-          'Include a Code of Conduct. (defaults to false)'
+    FIXTURE_LOAD_PATH = File.expand_path('fixtures', __dir__)
+ActionMailer::Base.view_paths = FIXTURE_LOAD_PATH
     
-              # If it's a directory they want to exclude, AKA
-          # ends with a '/' then we will go on to check and
-          # see if the entry falls within that path and
-          # exclude it if that's the case.
-    
-        # Check if excerpt includes a string
-    #
-    # Returns true if the string passed in
-    def include?(something)
-      (output && output.include?(something)) || content.include?(something)
+    def bottle_tag
+  if MacOS.version >= :lion
+    MacOS.cat
+  elsif MacOS.version == :snow_leopard
+    Hardware::CPU.is_64_bit? ? :snow_leopard : :snow_leopard_32
+  else
+    # Return, e.g., :tiger_g3, :leopard_g5_64, :leopard_64 (which is Intel)
+    if Hardware::CPU.type == :ppc
+      tag = '#{MacOS.cat}_#{Hardware::CPU.family}'.to_sym
+    else
+      tag = MacOS.cat
     end
+    MacOS.prefer_64_bit? ? '#{tag}_64'.to_sym : tag
+  end
+end
     
-        # Gets/Sets the extension of this layout.
-    attr_accessor :ext
-    
-      # Make it so that network access from the vagrant guest is able to
-  # use SSH private keys that are present on the host without copying
-  # them into the VM.
-  config.ssh.forward_agent = true
-    
-            css('.toplang', '#quickview', '.top').remove
-    
-        # apply general less to scss conversion
-    def convert_to_scss(file)
-      # get local mixin names before converting the definitions
-      mixins = shared_mixins + read_mixins(file)
-      file   = replace_vars(file)
-      file   = replace_mixin_definitions(file)
-      file   = replace_mixins(file, mixins)
-      file   = extract_mixins_from_selectors(file, CLASSES_TO_MIXINS.inject({}) { |h, cl| h.update('.#{cl}' => cl) })
-      file   = replace_spin(file)
-      file   = replace_fadein(file)
-      file   = replace_image_urls(file)
-      file   = replace_escaping(file)
-      file   = convert_less_ampersand(file)
-      file   = deinterpolate_vararg_mixins(file)
-      file   = replace_calculation_semantics(file)
-      file   = replace_file_imports(file)
-      file   = wrap_at_groups_with_at_root(file)
-      file
-    end
-    
-    class NodeMincerTest < Minitest::Test
-  DUMMY_PATH = 'test/dummy_node_mincer'
-    
-      # Read and eval a .rake file in such a way that `self` within the .rake file
-  # refers to this plugin instance. This gives the tasks in the file access to
-  # helper methods defined by the plugin.
-  def eval_rakefile(path)
-    contents = IO.read(path)
-    instance_eval(contents, path, 1)
+      def <<(o)
+    @settings << o
+    self
   end
     
-        it 'yields the properties for a single role' do
-      recipient = mock('recipient')
-      recipient.expects(:doit).with('example1.com', :redis, port: 6379, type: :slave)
-      recipient.expects(:doit).with('example2.com', :redis, port: 6379, type: :master)
-      dsl.role_properties(:redis) do |host, role, props|
-        recipient.doit(host, role, props)
+      def find_internal_commands(directory)
+    directory.children.reduce([]) do |cmds, f|
+      cmds << f.basename.to_s.sub(/\.(?:rb|sh)$/, '') if f.file?
+      cmds
+    end
+  end
+end
+
+    
+        first_warning = true
+    methods.each do |method|
+      unless checks.respond_to?(method)
+        Homebrew.failed = true
+        puts 'No check available by the name: #{method}'
+        next
+      end
+    
+    require 'formula_versions'
+require 'migrator'
+require 'formulary'
+require 'descriptions'
+    
+          To export the needed variables, add them to your dotfiles.
+       * On Bash, add them to `~/.bash_profile`.
+       * On Zsh, add them to `~/.zprofile` instead.
+    
+      def process_bootstrap
+    log_status 'Convert Bootstrap LESS to Sass'
+    puts ' repo   : #@repo_url'
+    puts ' branch : #@branch_sha #@repo_url/tree/#@branch'
+    puts ' save to: #{@save_to.to_json}'
+    puts ' twbs cache: #{@cache_path}'
+    puts '-' * 60
+    
+        def read(file)
+      if file.respond_to?(:read)
+        file.read
+      else
+        open(file, 'rb') {|f| f.read}
       end
     end
+  end
+end
+
+    
+          # Prints a title in blue with surrounding newlines.
+      def title(text)
+        # Use $stdout directly to bypass the indentation that our `puts` does.
+        $stdout.puts(color.colorize('\n#{text}\n', :blue))
+      end
+    
+        describe 'when setting user and port' do
+      subject { dsl.roles(:all).map { |server| '#{server.user}@#{server.hostname}:#{server.port}' }.first }
+    
+      it 'provides a --format option which enables the choice of output formatting'
