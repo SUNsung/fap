@@ -1,466 +1,237 @@
-  // content::DownloadItem::Observer:
-  void OnDownloadUpdated(content::DownloadItem* item) override;
-    
-    
-    { private:
-  DISALLOW_COPY_AND_ASSIGN(URLRequestAsyncAsarJob);
-};
-    
-      // URLRequestSimpleJob:
-  int GetData(std::string* mime_type,
-              std::string* charset,
-              std::string* data,
-              const net::CompletionCallback& callback) const override;
-    
-    RenderProcessPreferences::RenderProcessPreferences(const Predicate& predicate)
-    : predicate_(predicate),
-      next_id_(0),
-      cache_needs_update_(true) {
-  registrar_.Add(this,
-                 content::NOTIFICATION_RENDERER_PROCESS_CREATED,
-                 content::NotificationService::AllBrowserContextsAndSources());
-}
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(RenderProcessPreferences);
-};
-    
-    Completion *CompletionBuilder::finish() {
-  SwiftResult base = current;
-  llvm::SmallString<64> nameStorage;
-  StringRef name = getOriginalName();
-  if (modified) {
-    // We've modified the original result, so build a new one.
-    auto opKind = CodeCompletionOperatorKind::None;
-    if (current.isOperator())
-      opKind = current.getOperatorKind();
-    }
+
+        
+        struct leveldb_comparator_t : public Comparator {
+  void* state_;
+  void (*destructor_)(void*);
+  int (*compare_)(
+      void*,
+      const char* a, size_t alen,
+      const char* b, size_t blen);
+  const char* (*name_)(void*);
     }
     
-    #pragma mark - NSData verification
-    
-      // Only allow allocation using the allocator in MarkupContext or by
-  // placement new.
-  void *operator new(size_t Bytes, swift::markup::MarkupContext &MC,
-                     unsigned Alignment = alignof(DocComment));
-  void *operator new(size_t Bytes, void *Mem) {
-    assert(Mem);
-    return Mem;
+      ReadOptions ro;
+  ro.fill_cache = false;
+  Iterator* iter = table->NewIterator(ro);
+  std::string r;
+  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
+    r.clear();
+    ParsedInternalKey key;
+    if (!ParseInternalKey(iter->key(), &key)) {
+      r = 'badkey '';
+      AppendEscapedStringTo(&r, iter->key());
+      r += '' => '';
+      AppendEscapedStringTo(&r, iter->value());
+      r += ''\n';
+      dst->Append(r);
+    } else {
+      r = ''';
+      AppendEscapedStringTo(&r, key.user_key);
+      r += '' @ ';
+      AppendNumberTo(&r, key.sequence);
+      r += ' : ';
+      if (key.type == kTypeDeletion) {
+        r += 'del';
+      } else if (key.type == kTypeValue) {
+        r += 'val';
+      } else {
+        AppendNumberTo(&r, key.type);
+      }
+      r += ' => '';
+      AppendEscapedStringTo(&r, iter->value());
+      r += ''\n';
+      dst->Append(r);
+    }
+  }
+  s = iter->status();
+  if (!s.ok()) {
+    dst->Append('iterator error: ' + s.ToString() + '\n');
   }
     
-    namespace swift {
+    #include 'db/version_edit.h'
+#include 'util/testharness.h'
+    
+      ASSERT_TRUE(! Overlaps('a', 'b'));
+  ASSERT_TRUE(! Overlaps('z1', 'z2'));
+  ASSERT_TRUE(Overlaps('a', 'p'));
+  ASSERT_TRUE(Overlaps('a', 'q'));
+  ASSERT_TRUE(Overlaps('a', 'z'));
+  ASSERT_TRUE(Overlaps('p', 'p1'));
+  ASSERT_TRUE(Overlaps('p', 'q'));
+  ASSERT_TRUE(Overlaps('p', 'z'));
+  ASSERT_TRUE(Overlaps('p1', 'p2'));
+  ASSERT_TRUE(Overlaps('p1', 'z'));
+  ASSERT_TRUE(Overlaps('q', 'q'));
+  ASSERT_TRUE(Overlaps('q', 'q1'));
+    
+    
+    {  input.remove_prefix(kHeader);
+  Slice key, value;
+  int found = 0;
+  while (!input.empty()) {
+    found++;
+    char tag = input[0];
+    input.remove_prefix(1);
+    switch (tag) {
+      case kTypeValue:
+        if (GetLengthPrefixedSlice(&input, &key) &&
+            GetLengthPrefixedSlice(&input, &value)) {
+          handler->Put(key, value);
+        } else {
+          return Status::Corruption('bad WriteBatch Put');
+        }
+        break;
+      case kTypeDeletion:
+        if (GetLengthPrefixedSlice(&input, &key)) {
+          handler->Delete(key);
+        } else {
+          return Status::Corruption('bad WriteBatch Delete');
+        }
+        break;
+      default:
+        return Status::Corruption('unknown WriteBatch tag');
     }
-    
-    #include 'llvm/ADT/Hashing.h'
-    
-    
-    {
-    {  bool didErrorOccur() {
-    return DidErrorOccur;
   }
-};
-  
-}
-    
-    using clang::index::SymbolKind;
-using clang::index::SymbolLanguage;
-using clang::index::SymbolSubKind;
-using clang::index::SymbolProperty;
-using clang::index::SymbolPropertySet;
-using clang::index::SymbolRole;
-using clang::index::SymbolRoleSet;
-using clang::index::SymbolRelation;
-using clang::index::SymbolInfo;
-    
-      // This is the top-level C++ Message object that owns the whole
-  // proto tree.  Every Python RepeatedScalarContainer holds a
-  // reference to it in order to keep it alive as long as there's a
-  // Python object that references any part of the tree.
-  shared_ptr<Message> owner;
-    
-    
-    {  ASSERT_TRUE(message.ParseFromString(data));
-  EXPECT_TRUE(message.has_any_value());
-  ASSERT_TRUE(message.any_value().UnpackTo(&any));
-  ASSERT_TRUE(any.UnpackTo(&submessage));
-  EXPECT_EQ(12345, submessage.int32_value());
-}
-    
-    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_ENUM_FIELD_H__
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/wire_format.h>
-    
-    // Fixxht overview.
-// Premise: Initial estimate of x-height is adequate most of the time, but
-// occasionally it is incorrect. Most notable causes of failure are:
-// 1. Small caps, where the top of the caps is the same as the body text
-// xheight. For small caps words the xheight needs to be reduced to correctly
-// recognize the caps in the small caps word.
-// 2. All xheight lines, such as summer. Here the initial estimate will have
-// guessed that the blob tops are caps and will have placed the xheight too low.
-// 3. Noise/logos beside words, or changes in font size on a line. Such
-// things can blow the statistics and cause an incorrect estimate.
-// 4. Incorrect baseline. Can happen when 2 columns are incorrectly merged.
-// In this case the x-height is often still correct.
-//
-// Algorithm.
-// Compare the vertical position (top only) of alphnumerics in a word with
-// the range of positions in training data (in the unicharset).
-// See CountMisfitTops. If any characters disagree sufficiently with the
-// initial xheight estimate, then recalculate the xheight, re-run OCR on
-// the word, and if the number of vertical misfits goes down, along with
-// either the word rating or certainty, then keep the new xheight.
-// The new xheight is calculated as follows:ComputeCompatibleXHeight
-// For each alphanumeric character that has a vertically misplaced top
-// (a misfit), yet its bottom is within the acceptable range (ie it is not
-// likely a sub-or super-script) calculate the range of acceptable xheight
-// positions from its range of tops, and give each value in the range a
-// number of votes equal to the distance of its top from its acceptance range.
-// The x-height position with the median of the votes becomes the new
-// x-height. This assumes that most characters will be correctly recognized
-// even if the x-height is incorrect. This is not a terrible assumption, but
-// it is not great. An improvement would be to use a classifier that does
-// not care about vertical position or scaling at all.
-// Separately collect stats on shifted baselines and apply the same logic to
-// computing a best-fit shift to fix the error. If the baseline needs to be
-// shifted, but the x-height is OK, returns the original x-height along with
-// the baseline shift to indicate that recognition needs to re-run.
-    
-    ScrollView* bln_word_window_handle();  //return handle
-void build_image_window(int width, int height);
-void display_bln_lines(ScrollView window,
-                       ScrollView::Color colour,
-                       float scale_factor,
-                       float y_offset,
-                       float minx,
-                       float maxx);
-                                 //function to call
-void pgeditor_msg(  //message display
-                  const char *msg);
-void pgeditor_show_point(  //display coords
-                         SVEvent *event);
-                                 //put bln word in       box
-void show_point(PAGE_RES* page_res, float x, float y);
-    
-    void LLSQ::add(double x, double y) {          // add an element
-  total_weight++;                           // count elements
-  sigx += x;                     // update accumulators
-  sigy += y;
-  sigxx += x * x;
-  sigxy += x * y;
-  sigyy += y * y;
-}
-// Adds an element with a specified weight.
-void LLSQ::add(double x, double y, double weight) {
-  total_weight += weight;
-  sigx += x * weight;                     // update accumulators
-  sigy += y * weight;
-  sigxx += x * x * weight;
-  sigxy += x * y * weight;
-  sigyy += y * y * weight;
-}
-// Adds a whole LLSQ.
-void LLSQ::add(const LLSQ& other) {
-  total_weight += other.total_weight;
-  sigx += other.sigx;                     // update accumulators
-  sigy += other.sigy;
-  sigxx += other.sigxx;
-  sigxy += other.sigxy;
-  sigyy += other.sigyy;
-}
-    
-    int decreasing_top_order(const void *row1, const void *row2);
-    
-      tesseract::ParagraphJustification justification() const {
-    return justification_;
+  if (found != WriteBatchInternal::Count(this)) {
+    return Status::Corruption('WriteBatch has wrong count');
+  } else {
+    return Status::OK();
   }
-  int margin() const { return margin_; }
-  int first_indent() const { return first_indent_; }
-  int body_indent() const { return body_indent_; }
-  int tolerance() const { return tolerance_; }
-  bool is_flush() const {
-    return (justification_ == tesseract::JUSTIFICATION_LEFT ||
-            justification_ == tesseract::JUSTIFICATION_RIGHT) &&
-        abs(first_indent_ - body_indent_) <= tolerance_;
+}
+    
+      void PrintHeader() {
+    const int kKeySize = 16;
+    PrintEnvironment();
+    fprintf(stdout, 'Keys:       %d bytes each\n', kKeySize);
+    fprintf(stdout, 'Values:     %d bytes each\n', FLAGS_value_size);
+    fprintf(stdout, 'Entries:    %d\n', num_);
+    fprintf(stdout, 'RawSize:    %.1f MB (estimated)\n',
+            ((static_cast<int64_t>(kKeySize + FLAGS_value_size) * num_)
+             / 1048576.0));
+    PrintWarnings();
+    fprintf(stdout, '------------------------------------------------\n');
   }
     
-    void ROW::recalc_bounding_box() {  //recalculate BB
-  WERD *word;                    //current word
-  WERD_IT it = &words;           //words of ROW
-  inT16 left;                    //of word
-  inT16 prev_left;               //old left
+      // If *start < limit, changes *start to a short string in [start,limit).
+  // Simple comparator implementations may return with *start unchanged,
+  // i.e., an implementation of this method that does nothing is correct.
+  virtual void FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const = 0;
+    
+    namespace leveldb {
     }
     
-    // WorkloadStats is used to track per request timing for different states
-// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
-// should be made to guard the state change with appropriate timers and
-// counters.
-//
-// The states tracked are:
-//  - In a request (this is a superset of the interpreter state)
-//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
-//  - In the JIT (currently tracks time inside the translate routine)
-//
-// Note the time in the TC is not tracked.  This is roughly:
-//   Time in request - Time in interp
-//
-// This gives us the relative interp time formula of:
-//   Relative interp time = Time in interp / Time in request
-struct WorkloadStats final {
-  enum State {
-    InRequest,
-    // -> InInterp   Okay (entering Dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InInterp,
-    // -> InRequest  Okay (leaving the dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InTrans,
-    // -> InRequest  Okay (leaving translate)
-    // -> InInterp   Okay (leaving translate)
-  };
-    }
+      /**
+   * @brief Applies the same transformation defined in the data layer's
+   * transform_param block to all the num images in a input_blob.
+   *
+   * @param input_blob
+   *    A Blob containing the data to be transformed. It applies the same
+   *    transformation to all the num images in the blob.
+   * @param transformed_blob
+   *    This is destination blob, it will contain as many images as the
+   *    input blob. It can be part of top blob's data.
+   */
+  void Transform(Blob<Dtype>* input_blob, Blob<Dtype>* transformed_blob);
     
-    bool HHVM_FUNCTION(fb_intercept, const String& name, const Variant& handler,
-                                 const Variant& data /* = uninit_variant */) {
-  return register_intercept(name, handler, data);
-}
+      virtual inline const char* type() const { return 'Concat'; }
+  virtual inline int MinBottomBlobs() const { return 1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
     
-    String TimeStamp::CurrentMicroTime() {
-  struct timeval tp;
-  gettimeofday(&tp, nullptr);
-  char ret[100];
-  snprintf(ret, 100, '%.8F %ld', (double)tp.tv_usec / 1000000, tp.tv_sec);
-  return String(ret, CopyString);
-}
+      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
+  cudnnTensorDescriptor_t    bias_desc_;
+  cudnnFilterDescriptor_t      filter_desc_;
+  vector<cudnnConvolutionDescriptor_t> conv_descs_;
+  int bottom_offset_, top_offset_, bias_offset_;
     
-    const char *Timer::getName() const {
-  switch (m_type) {
-  case WallTime:  return 'wall time';
-  case SystemCPU: return 'system cpu';
-  case UserCPU:   return 'user cpu';
-  case TotalCPU:  return 'total cpu';
-  default: assert(false);
-  }
-  return nullptr;
-}
-    
-    
-    {  v << vcall{
-    CallSpec::direct(pthread_getspecific),
-    v.makeVcallArgs({{v.cns(datum.tls->m_key)}}),
-    v.makeTuple({d}),
-    Fixup{},
-    DestType::SSA
-  };
-}
-    
-    namespace jit {
-    }
-    
-      /////////////////////////////////////////////////////////////////////////////
-    
-      PackedArrayInit returnArray(2);
-  returnArray.appendWithRef(mpzToGMPObject(gmpReturnQ));
-  returnArray.appendWithRef(mpzToGMPObject(gmpReturnR));
-    
-    
-    {  const Vunit&                     m_unit;
-  const jit::vector<Vlabel>        m_blocks;
-  const PredVector                 m_preds;
-  jit::hash_map<uint64_t, int64_t> m_arcWgts; // keyed using arcId()
-};
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    
-    /*
- * Returns an IR block corresponding to the given bytecode offset. If the block
- * starts with a DefLabel expecting a StkPtr, this function will return an
- * intermediate block that passes the current sp.
- */
-Block* getBlock(IRGS& env, Offset offset);
-    
-    /// Create a new non-modifiable buffer that represents the given POD array.
-/**
- * @returns A const_buffers_1 value equivalent to:
- * @code const_buffers_1(
- *     data.data(),
- *     data.size() * sizeof(PodType)); @endcode
- */
-template <typename PodType, std::size_t N>
-inline const_buffers_1 buffer(const std::array<PodType, N>& data)
-{
-  return const_buffers_1(
-      const_buffer(data.data(), data.size() * sizeof(PodType)));
-}
-    
-      /// Get a const reference to the lowest layer.
-  const lowest_layer_type& lowest_layer() const
-  {
-    return next_layer_.lowest_layer();
-  }
-    
-    
-    {
-    {} // namespace asio
-} // namespace boost
-    
-        // Push the key/value pair on to the stack.
-    context(Key* k, Value& v)
-      : key_(k),
-        value_(&v),
-        next_(call_stack<Key, Value>::top_)
-    {
-      call_stack<Key, Value>::top_ = this;
-    }
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-    #ifndef BOOST_ASIO_DETAIL_HANDLER_INVOKE_HELPERS_HPP
-#define BOOST_ASIO_DETAIL_HANDLER_INVOKE_HELPERS_HPP
-    
-    template <typename Handler, typename Arg1, typename Arg2>
-auto two_arg_handler_test(Handler h, Arg1* a1, Arg2* a2)
-  -> decltype(
-    sizeof(Handler(static_cast<const Handler&>(h))),
-    ((h)(*a1, *a2)),
-    char(0));
-    
-    void dev_poll_reactor::shutdown_service()
-{
-  boost::asio::detail::mutex::scoped_lock lock(mutex_);
-  shutdown_ = true;
-  lock.unlock();
-    }
-    
-    #endif // defined(BOOST_ASIO_HAS_EPOLL)
-    
-    This pointer must be provided as 'void* state' parameter for XXH32_update().
-XXH32_update() can be called as many times as necessary.
-The user must provide a valid (allocated) input.
-The function returns an error code, with 0 meaning OK, and any other value meaning there is an error.
-Note that 'len' is type 'int', which means it is limited to 2^31-1.
-If your data is larger, it is recommended to chunk your data into blocks
-of size for example 2^30 (1GB) to avoid any 'int' overflow issue.
-    
-      // Store the name of the database
-  db_name_ = db_path;
-    
-    #include <algorithm>
-#include 'port/port.h'
-    
-      virtual size_t GetPinnedUsage() const override {
-    return cache_->GetPinnedUsage();
-  }
-    
-     public: // Style getters
-    
-        int unit;
-    double value;
-    
-      ASSERT_FLOAT_EQ(10, YGNodeLayoutGetMargin(root, YGEdgeLeft));
-  ASSERT_FLOAT_EQ(0, YGNodeLayoutGetMargin(root, YGEdgeRight));
-    
-    #include <gtest/gtest.h>
-#include <yoga/Yoga.h>
-    
-    // @Generated by gentest/gentest.rb from gentest/fixtures/YGBorderTest.html
-    
-      ASSERT_FLOAT_EQ(10, YGNodeLayoutGetLeft(root_child0));
-  ASSERT_FLOAT_EQ(10, YGNodeLayoutGetTop(root_child0));
-  ASSERT_FLOAT_EQ(10, YGNodeLayoutGetWidth(root_child0));
-  ASSERT_FLOAT_EQ(80, YGNodeLayoutGetHeight(root_child0));
-    
-    
-    {} // namespace facebook
+    #endif  // CAFFE_CUDNN_LCN_LAYER_HPP_
 
     
-    // Define a callback to handle incoming messages
-void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
-    try {
-        s->send(hdl, msg->get_payload(), msg->get_opcode());
-    } catch (const websocketpp::lib::error_code& e) {
-    }
-    }
+    #endif  // CAFFE_CUDNN_POOLING_LAYER_HPP_
+
     
-        int err = connect(socketfd, (sockaddr *) &addr, sizeof(addr));
-    if (err) {
-        cout << 'Connection error, connections: ' << connections << endl;
-        return false;
-    }
-    send(socketfd, buf, strlen(buf), 0);
-    memset(message, 0, 1024);
-    size_t length;
-    do {
-        length = recv(socketfd, message, sizeof(message), 0);
-    }
-    while (strncmp(&message[length - 4], '\r\n\r\n', 4));
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-        // Not thread safe
-    void sendPrepared(PreparedMessage *preparedMessage, void *callbackData = nullptr);
-    static void finalizeMessage(PreparedMessage *preparedMessage);
-    void close(int code = 1000, const char *message = nullptr, size_t length = 0);
-    void transfer(Group<isServer> *group);
+    inline float YUVToG(float y, float u, float v) {
+  return y - 0.344136f * (u - 128.0f) - 0.714136f * (v - 128.0f);
+}
     
-        const char *closeMessage = 'I'm closing now';
-    size_t closeMessageLength = strlen(closeMessage);
+    // This function will create a Huffman tree.
+//
+// The (data,length) contains the population counts.
+// The tree_limit is the maximum bit depth of the Huffman codes.
+//
+// The depth contains the tree, i.e., how many bits are used for
+// the symbol.
+//
+// The actual Huffman tree is constructed in the tree[] array, which has to
+// be at least 2 * length + 1 long.
+//
+// See http://en.wikipedia.org/wiki/Huffman_coding
+void CreateHuffmanTree(const uint32_t *data,
+                       const size_t length,
+                       const int tree_limit,
+                       HuffmanTree* tree,
+                       uint8_t *depth);
     
-            if (!socket->messageQueue.empty() && ((events & UV_WRITABLE) || SSL_want(socket->ssl) == SSL_READING)) {
-            socket->cork(true);
-            while (true) {
-                Queue::Message *messagePtr = socket->messageQueue.front();
-                int sent = SSL_write(socket->ssl, messagePtr->data, (int) messagePtr->length);
-                if (sent == (ssize_t) messagePtr->length) {
-                    if (messagePtr->callback) {
-                        messagePtr->callback(p, messagePtr->callbackData, false, messagePtr->reserved);
-                    }
-                    socket->messageQueue.pop();
-                    if (socket->messageQueue.empty()) {
-                        if ((socket->state.poll & UV_WRITABLE) && SSL_want(socket->ssl) != SSL_WRITING) {
-                            socket->change(socket->nodeData->loop, socket, socket->setPoll(UV_READABLE));
-                        }
-                        break;
-                    }
-                } else if (sent <= 0) {
-                    switch (SSL_get_error(socket->ssl, sent)) {
-                    case SSL_ERROR_WANT_READ:
-                        break;
-                    case SSL_ERROR_WANT_WRITE:
-                        if ((socket->getPoll() & UV_WRITABLE) == 0) {
-                            socket->change(socket->nodeData->loop, socket, socket->setPoll(socket->getPoll() | UV_WRITABLE));
-                        }
-                        break;
-                    default:
-                        STATE::onEnd((Socket *) p);
-                        return;
-                    }
-                    break;
-                }
-            }
-            socket->cork(false);
-        }
+    inline int Log2FloorNonZero(uint32_t n) {
+#ifdef __GNUC__
+  return 31 ^ __builtin_clz(n);
+#else
+  unsigned int result = 0;
+  while (n >>= 1) result++;
+  return result;
+#endif
+}
     
-    void Hub::onClientConnection(uS::Socket *s, bool error) {
-    HttpSocket<CLIENT> *httpSocket = (HttpSocket<CLIENT> *) s;
+    
+    {  tmp0 = in[7 * stride];
+  tmp1 = kIDCTMatrix[ 7] * tmp0;
+  tmp2 = kIDCTMatrix[15] * tmp0;
+  tmp3 = kIDCTMatrix[23] * tmp0;
+  tmp4 = kIDCTMatrix[31] * tmp0;
+  out[0] += tmp1;
+  out[1] += tmp2;
+  out[2] += tmp3;
+  out[3] += tmp4;
+  out[4] -= tmp4;
+  out[5] -= tmp3;
+  out[6] -= tmp2;
+  out[7] -= tmp1;
+}
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    namespace grpc_cpp_generator {
     }
     
-        for (int i = 0; i < numFdReady; i++) {
-        Poll *poll = (Poll *) readyEvents[i].data.ptr;
-        int status = -bool(readyEvents[i].events & EPOLLERR);
-        callbacks[poll->state.cbIndex](poll, status, readyEvents[i].events);
+    
+    {  //Package name for the service
+  grpc::string package_name;
+};
+    
+      virtual grpc::Status SayManyHellos(
+      grpc::ServerContext *context,
+      const flatbuffers::grpc::Message<ManyHellosRequest> *request_msg,
+      grpc::ServerWriter<flatbuffers::grpc::Message<HelloReply>> *writer)
+      override {
+    // The streaming usage below is simply a combination of standard gRPC
+    // streaming with the FlatBuffers usage shown above.
+    const ManyHellosRequest *request = request_msg->GetRoot();
+    const std::string &name = request->name()->str();
+    int num_greetings = request->num_greetings();
     }
     
-        nodeData->loop = loop;
-    nodeData->asyncMutex = &asyncMutex;
+    // A common interface for objects having comments in the source.
+// Return formatted comments to be inserted in generated code.
+struct CommentHolder {
+  virtual ~CommentHolder() {}
+  virtual grpc::string GetLeadingComments(const grpc::string prefix) const = 0;
+  virtual grpc::string GetTrailingComments(const grpc::string prefix) const = 0;
+  virtual std::vector<grpc::string> GetAllComments() const = 0;
+};
