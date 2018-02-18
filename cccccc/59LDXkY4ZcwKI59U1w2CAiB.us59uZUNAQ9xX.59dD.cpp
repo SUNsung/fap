@@ -1,508 +1,305 @@
 
         
-        void StyledStreamWriter::writeValue(const Value& value) {
-  switch (value.type()) {
-  case nullValue:
-    pushValue('null');
-    break;
-  case intValue:
-    pushValue(valueToString(value.asLargestInt()));
-    break;
-  case uintValue:
-    pushValue(valueToString(value.asLargestUInt()));
-    break;
-  case realValue:
-    pushValue(valueToString(value.asDouble()));
-    break;
-  case stringValue:
-  {
-    // Is NULL possible for value.string_?
-    char const* str;
-    char const* end;
-    bool ok = value.getString(&str, &end);
-    if (ok) pushValue(valueToQuotedStringN(str, static_cast<unsigned>(end-str)));
-    else pushValue('');
-    break;
-  }
-  case booleanValue:
-    pushValue(valueToString(value.asBool()));
-    break;
-  case arrayValue:
-    writeArrayValue(value);
-    break;
-  case objectValue: {
-    Value::Members members(value.getMemberNames());
-    if (members.empty())
-      pushValue('{}');
-    else {
-      writeWithIndent('{');
-      indent();
-      Value::Members::iterator it = members.begin();
-      for (;;) {
-        const std::string& name = *it;
-        const Value& childValue = value[name];
-        writeCommentBeforeValue(childValue);
-        writeWithIndent(valueToQuotedString(name.c_str()));
-        *document_ << ' : ';
-        writeValue(childValue);
-        if (++it == members.end()) {
-          writeCommentAfterValueOnSameLine(childValue);
-          break;
-        }
-        *document_ << ',';
-        writeCommentAfterValueOnSameLine(childValue);
-      }
-      unindent();
-      writeWithIndent('}');
-    }
-  } break;
-  }
-}
+        // Instantiate tests for all error orderings, for both call orders of
+// ExecutorDone and PartialRunDone.
+Status ExecutorError() { return errors::Internal('executor error'); }
+Status PartialRunError() { return errors::Internal('partial run error'); }
+INSTANTIATE_TEST_CASE_P(
+    PartialRunMgr, StatusPropagationTest,
+    ::testing::Values(
+        StatusTestParam{Status::OK(), Status::OK(), Status::OK()},
+        StatusTestParam{ExecutorError(), Status::OK(), ExecutorError()},
+        StatusTestParam{Status::OK(), PartialRunError(), PartialRunError()},
+        StatusTestParam{ExecutorError(), PartialRunError(), ExecutorError()}));
     
-    class PyDescriptorDatabase : public DescriptorDatabase {
+    // A pass which performs constant folding in order to avoid unnecessary
+// computation on constants.
+class HloConstantFolding : public HloPassInterface {
  public:
-  explicit PyDescriptorDatabase(PyObject* py_database);
-  ~PyDescriptorDatabase();
+  tensorflow::StringPiece name() const override { return 'constant_folding'; }
     }
     
-    // Accesses messages in the container.
-//
-// Returns a new reference to the message for an integer parameter.
-// Returns a new reference to a list of messages for a slice.
-PyObject* Subscript(RepeatedCompositeContainer* self, PyObject* slice);
+      // Runs the optimized version of the graph on the cluster, measure
+  // the runtimes of each operation, and annotated the CostGraphDef
+  // with the corresponding measurements.
+  // Returns the average latency for the whole graph.
+  Status PredictCosts(const GraphDef& optimized_graph, CostGraphDef* cost_graph,
+                      Costs* overall_cost) const override;
     
-    #include <string>
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
-    
-    #include <google/protobuf/descriptor.h>
-    
-    static HRESULT InitDevice()
-{
-    HRESULT hr = S_OK;
-    }
-    
-    #include <math.h>
-#include <iostream>
-    
-        // Extension: 3.0
-    PFNCOLORMASKIPROC ColorMaski;
-    PFNGETBOOLEANI_VPROC GetBooleani_v;
-    PFNGETINTEGERI_VPROC GetIntegeri_v;
-    PFNENABLEIPROC Enablei;
-    PFNDISABLEIPROC Disablei;
-    PFNISENABLEDIPROC IsEnabledi;
-    PFNBEGINTRANSFORMFEEDBACKPROC BeginTransformFeedback;
-    PFNENDTRANSFORMFEEDBACKPROC EndTransformFeedback;
-    PFNBINDBUFFERRANGEPROC BindBufferRange;
-    PFNBINDBUFFERBASEPROC BindBufferBase;
-    PFNTRANSFORMFEEDBACKVARYINGSPROC TransformFeedbackVaryings;
-    PFNGETTRANSFORMFEEDBACKVARYINGPROC GetTransformFeedbackVarying;
-    PFNCLAMPCOLORPROC ClampColor;
-    PFNBEGINCONDITIONALRENDERPROC BeginConditionalRender;
-    PFNENDCONDITIONALRENDERPROC EndConditionalRender;
-    PFNVERTEXATTRIBIPOINTERPROC VertexAttribIPointer;
-    PFNGETVERTEXATTRIBIIVPROC GetVertexAttribIiv;
-    PFNGETVERTEXATTRIBIUIVPROC GetVertexAttribIuiv;
-    PFNVERTEXATTRIBI1IPROC VertexAttribI1i;
-    PFNVERTEXATTRIBI2IPROC VertexAttribI2i;
-    PFNVERTEXATTRIBI3IPROC VertexAttribI3i;
-    PFNVERTEXATTRIBI4IPROC VertexAttribI4i;
-    PFNVERTEXATTRIBI1UIPROC VertexAttribI1ui;
-    PFNVERTEXATTRIBI2UIPROC VertexAttribI2ui;
-    PFNVERTEXATTRIBI3UIPROC VertexAttribI3ui;
-    PFNVERTEXATTRIBI4UIPROC VertexAttribI4ui;
-    PFNVERTEXATTRIBI1IVPROC VertexAttribI1iv;
-    PFNVERTEXATTRIBI2IVPROC VertexAttribI2iv;
-    PFNVERTEXATTRIBI3IVPROC VertexAttribI3iv;
-    PFNVERTEXATTRIBI4IVPROC VertexAttribI4iv;
-    PFNVERTEXATTRIBI1UIVPROC VertexAttribI1uiv;
-    PFNVERTEXATTRIBI2UIVPROC VertexAttribI2uiv;
-    PFNVERTEXATTRIBI3UIVPROC VertexAttribI3uiv;
-    PFNVERTEXATTRIBI4UIVPROC VertexAttribI4uiv;
-    PFNVERTEXATTRIBI4BVPROC VertexAttribI4bv;
-    PFNVERTEXATTRIBI4SVPROC VertexAttribI4sv;
-    PFNVERTEXATTRIBI4UBVPROC VertexAttribI4ubv;
-    PFNVERTEXATTRIBI4USVPROC VertexAttribI4usv;
-    PFNGETUNIFORMUIVPROC GetUniformuiv;
-    PFNBINDFRAGDATALOCATIONPROC BindFragDataLocation;
-    PFNGETFRAGDATALOCATIONPROC GetFragDataLocation;
-    PFNUNIFORM1UIPROC Uniform1ui;
-    PFNUNIFORM2UIPROC Uniform2ui;
-    PFNUNIFORM3UIPROC Uniform3ui;
-    PFNUNIFORM4UIPROC Uniform4ui;
-    PFNUNIFORM1UIVPROC Uniform1uiv;
-    PFNUNIFORM2UIVPROC Uniform2uiv;
-    PFNUNIFORM3UIVPROC Uniform3uiv;
-    PFNUNIFORM4UIVPROC Uniform4uiv;
-    PFNTEXPARAMETERIIVPROC TexParameterIiv;
-    PFNTEXPARAMETERIUIVPROC TexParameterIuiv;
-    PFNGETTEXPARAMETERIIVPROC GetTexParameterIiv;
-    PFNGETTEXPARAMETERIUIVPROC GetTexParameterIuiv;
-    PFNCLEARBUFFERIVPROC ClearBufferiv;
-    PFNCLEARBUFFERUIVPROC ClearBufferuiv;
-    PFNCLEARBUFFERFVPROC ClearBufferfv;
-    PFNCLEARBUFFERFIPROC ClearBufferfi;
-    PFNGETSTRINGIPROC GetStringi;
-    
-    #ifdef HAVE_CLAMDBLAS
-    
-    /// - Counts up the labelled words and the blobs within.
-/// - Deletes all unused or emptied words, counting the unused ones.
-/// - Resets W_BOL and W_EOL flags correctly.
-/// - Builds the rebuild_word and rebuilds the box_word and the best_choice.
-void Tesseract::TidyUp(PAGE_RES* page_res) {
-  int ok_blob_count = 0;
-  int bad_blob_count = 0;
-  int ok_word_count = 0;
-  int unlabelled_words = 0;
-  PAGE_RES_IT pr_it(page_res);
-  WERD_RES* word_res;
-  for (; (word_res = pr_it.word()) != NULL; pr_it.forward()) {
-    int ok_in_word = 0;
-    int blob_count = word_res->correct_text.size();
-    WERD_CHOICE* word_choice = new WERD_CHOICE(word_res->uch_set, blob_count);
-    word_choice->set_permuter(TOP_CHOICE_PERM);
-    for (int c = 0; c < blob_count; ++c) {
-      if (word_res->correct_text[c].length() > 0) {
-        ++ok_in_word;
-      }
-      // Since we only need a fake word_res->best_choice, the actual
-      // unichar_ids do not matter. Which is fortunate, since TidyUp()
-      // can be called while training Tesseract, at the stage where
-      // unicharset is not meaningful yet.
-      word_choice->append_unichar_id_space_allocated(
-          INVALID_UNICHAR_ID, word_res->best_state[c], 1.0f, -1.0f);
-    }
-    if (ok_in_word > 0) {
-      ok_blob_count += ok_in_word;
-      bad_blob_count += word_res->correct_text.size() - ok_in_word;
-      word_res->LogNewRawChoice(word_choice);
-      word_res->LogNewCookedChoice(1, false, word_choice);
-    } else {
-      ++unlabelled_words;
-      if (applybox_debug > 0) {
-        tprintf('APPLY_BOXES: Unlabelled word at :');
-        word_res->word->bounding_box().print();
-      }
-      pr_it.DeleteCurrentWord();
-      delete word_choice;
-    }
-  }
-  pr_it.restart_page();
-  for (; (word_res = pr_it.word()) != NULL; pr_it.forward()) {
-    // Denormalize back to a BoxWord.
-    word_res->RebuildBestState();
-    word_res->SetupBoxWord();
-    word_res->word->set_flag(W_BOL, pr_it.prev_row() != pr_it.row());
-    word_res->word->set_flag(W_EOL, pr_it.next_row() != pr_it.row());
-  }
-  if (applybox_debug > 0) {
-    tprintf('   Found %d good blobs.\n', ok_blob_count);
-    if (bad_blob_count > 0) {
-      tprintf('   Leaving %d unlabelled blobs in %d words.\n',
-              bad_blob_count, ok_word_count);
-    }
-    if (unlabelled_words > 0)
-      tprintf('   %d remaining unlabelled words deleted.\n', unlabelled_words);
-  }
-}
-    
-      // Returns true if a guided segmentation search is needed.
-  bool GuidedSegsearchNeeded(const WERD_CHOICE *best_choice) const;
-  // Setup ready to guide the segmentation search to the correct segmentation.
-  // The callback pp_cb is used to avoid a cyclic dependency.
-  // It calls into LMPainPoints::GenerateForBlamer by pre-binding the
-  // WERD_RES, and the LMPainPoints itself.
-  // pp_cb must be a permanent callback, and should be deleted by the caller.
-  void InitForSegSearch(const WERD_CHOICE *best_choice,
-                        MATRIX* ratings, UNICHAR_ID wildcard_id,
-                        bool debug, STRING *debug_str,
-                        TessResultCallback2<bool, int, int>* pp_cb);
-  // Returns true if the guided segsearch is in progress.
-  bool GuidedSegsearchStillGoing() const;
-  // The segmentation search has ended. Sets the blame appropriately.
-  void FinishSegSearch(const WERD_CHOICE *best_choice,
-                       bool debug, STRING *debug_str);
-    
-    
-    {  name += UNLV_EXT;              //add extension
-  if ((pdfp = fopen (name.string (), 'rb')) == NULL) {
-    return false;                //didn't read one
-  } else {
-    while (tfscanf(pdfp, '%d %d %d %d %*s', &x, &y, &width, &height) >= 4) {
-                                 //make rect block
-      block = new BLOCK (name.string (), TRUE, 0, 0,
-                         (inT16) x, (inT16) (ysize - y - height),
-                         (inT16) (x + width), (inT16) (ysize - y));
-                                 //on end of list
-      block_it.add_to_end (block);
-    }
-    fclose(pdfp);
-  }
-  return true;
-}
-    
-    // Computes all the cross product distances of the points perpendicular to
-// the given direction, ignoring distances outside of the give distance range,
-// storing the actual (signed) cross products in distances_.
-void DetLineFit::ComputeConstrainedDistances(const FCOORD& direction,
-                                             double min_dist, double max_dist) {
-  distances_.truncate(0);
-  square_length_ = direction.sqlength();
-  // Compute the distance of each point from the line.
-  for (int i = 0; i < pts_.size(); ++i) {
-    FCOORD pt_vector = pts_[i].pt;
-    // Compute |line_vector||pt_vector|sin(angle between)
-    double dist = direction * pt_vector;
-    if (min_dist <= dist && dist <= max_dist)
-      distances_.push_back(DistPointPair(dist, pts_[i].pt));
-  }
-}
-    
-    // This class fits a line to a set of ICOORD points.
-// There is no restriction on the direction of the line, as it
-// uses a vector method, ie no concern over infinite gradients.
-// The fitted line has the least upper quartile of squares of perpendicular
-// distances of all source points from the line, subject to the constraint
-// that the line is made from one of the pairs of [{p1,p2,p3},{pn-2, pn-1, pn}]
-// i.e. the 9 combinations of one of the first 3 and last 3 points.
-// A fundamental assumption of this algorithm is that one of the first 3 and
-// one of the last 3 points are near the best line fit.
-// The points must be Added in line order for the algorithm to work properly.
-// No floating point calculations are needed* to make an accurate fit,
-// and no random numbers are needed** so the algorithm is deterministic,
-// architecture-stable, and compiler-stable as well as stable to minor
-// changes in the input.
-// *A single floating point division is used to compute each line's distance.
-// This is unlikely to result in choice of a different line, but if it does,
-// it would be easy to replace with a 64 bit integer calculation.
-// **Random numbers are used in the nth_item function, but the worst
-// non-determinism that can result is picking a different result among equals,
-// and that wouldn't make any difference to the end-result distance, so the
-// randomness does not affect the determinism of the algorithm. The random
-// numbers are only there to guarantee average linear time.
-// Fitting time is linear, but with a high constant, as it tries 9 different
-// lines and computes the distance of all points each time.
-// This class is aimed at replacing the LLSQ (linear least squares) and
-// LMS (least median of squares) classes that are currently used for most
-// of the line fitting in Tesseract.
-class DetLineFit {
+    class TextLineReader : public ReaderBase {
  public:
-  DetLineFit();
-  ~DetLineFit();
+  TextLineReader(const string& node_name, int skip_header_lines, Env* env)
+      : ReaderBase(strings::StrCat('TextLineReader '', node_name, ''')),
+        skip_header_lines_(skip_header_lines),
+        env_(env),
+        line_number_(0) {}
     }
     
-    // replace a named node by newNode of the same type under the same name, including moving over all network links
-// This is used in 
-// 1. Update nodes to quantized versions.
-// 2. The KL-reg based adaptation to reduce feature copy (deprecated)
-// need to update all the mappings as well childrens.
-void ComputationNetwork::ReplaceNode(wstring nodeName, ComputationNodeBasePtr newNode)
-{
-    ComputationNodeBasePtr oldNode = GetNodeFromName(nodeName);
-    }
-    
-                        Matrix<float> mB = Matrix<float>::RandomGaussian(dim1, dim2, 1, 4, IncrementCounter(), CPUDEVICE);
-                    Matrix<float> mC = Matrix<float>::RandomGaussian(dim1, dim1, 1, 2, IncrementCounter(), CPUDEVICE);
-                    Matrix<float> mDblock(CPUDEVICE);
-                    mDblock.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseBlockCol, true);
-    
-    using namespace std;
-using namespace Microsoft::MSR::ScriptableObjects;
-    
-        // This prints a PROGRESS message with a percentage value of 0 to prevent timeouts on Philly
-    // when executing long running non-training operations like PreCompute, CV, Eval, and Write
-    static size_t TraceFakeProgress(size_t numIterationsBeforePrintingProgress, size_t numItersSinceLastPrintOfProgress)
-    {
-        size_t newNumItersSinceLastPrintOfProgress = numItersSinceLastPrintOfProgress;
-        if (GetTracingFlag())
-        {
-            newNumItersSinceLastPrintOfProgress++;
-            if (newNumItersSinceLastPrintOfProgress >= numIterationsBeforePrintingProgress)
-            {
-                printf('PROGRESS: %.2f%%\n', 0.0f);
-                newNumItersSinceLastPrintOfProgress = 0;
-            }
-        }
-    }
-    
-    
-    {
-    {
-    {}}}
+    #endif // __OPENCV_CORE_BUFFER_POOL_IMPL_HPP__
 
     
-    public:
-    typedef msra::dbn::latticepair latticepair;
-    latticesource(std::pair<std::vector<std::wstring>, std::vector<std::wstring>> latticetocs, const std::unordered_map<std::string, size_t>& modelsymmap, std::wstring RootPathInToc)
-        : numlattices(latticetocs.first, modelsymmap, RootPathInToc), denlattices(latticetocs.second, modelsymmap, RootPathInToc), verbosity(0)
-    {
-    }
     
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the 'Software'), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-        if ((m_in_buf_left < 2) || (m_pIn_buf_ofs[0] == 0xFF) || (m_pIn_buf_ofs[1] == 0xFF))
-    {
-      uint c1 = get_octet();
-      uint c2 = get_octet();
-      m_bit_buf |= (c1 << 8) | c2;
-    }
-    else
-    {
-      m_bit_buf |= ((uint)m_pIn_buf_ofs[0] << 8) | m_pIn_buf_ofs[1];
-      m_in_buf_left -= 2;
-      m_pIn_buf_ofs += 2;
-    }
-    
-    
-    
-    #if defined(__WATCOMC__)
-void GetTSC(unsigned long&);
-#pragma aux GetTSC = 0x0f 0x31 'mov [edi], eax' parm [edi] modify [edx eax];
-#elif defined(__GNUC__)
-inline
-void GetTSC(unsigned long& tsc)
-{
-  asm volatile('.byte 15, 49\n\t'
-	       : '=eax' (tsc)
-	       :
-	       : '%edx', '%eax');
-}
-#elif defined(_MSC_VER)
-inline
-void GetTSC(unsigned long& tsc)
-{
-  unsigned long a;
-  __asm _emit 0fh
-  __asm _emit 31h
-  __asm mov a, eax;
-  tsc=a;
-}
-#endif      
-    
-    bool js_cocos2dx_builder_CCBReader_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_builder_CCBReader_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_builder_CCBReader(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_builder_CCBReader_getAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readSoundKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readUTF8(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readCallbackKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getAnimationManagersForNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getNodesWithAnimationManagers(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setResolutionScale(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_CCBReader(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    extern JSClass  *jsb_cocostudio_timeline_EventFrame_class;
-extern JSObject *jsb_cocostudio_timeline_EventFrame_prototype;
-    
-    
-    
-        virtual void DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color);
-    
-    	static Test* Create()
-	{
-		return new Bridge;
-	}
-    
-    			b2FixtureDef fd;
-			fd.shape = &circle;
-			fd.density = 1.0f;
-			fd.friction = 0.9f;
-    
-        for (thread *t : threads) {
-        t->join();
-    }
-    
-        connections = atoi(argv[1]);
-    byteSize = 20; // we can only do 20 bytes in this version!
-    framesPerSend = atoi(argv[3]);
-    int port = atoi(argv[4]);
-    
-    
-    {
-    {
-    {            if (extensionsParser.serverNoContextTakeover) {
-                options |= SERVER_NO_CONTEXT_TAKEOVER;
-            } else {
-                options &= ~SERVER_NO_CONTEXT_TAKEOVER;
-            }
-        } else {
-            options &= ~PERMESSAGE_DEFLATE;
-        }
-    } else {
-        // todo!
-    }
-}
-    
-        WebSocket(bool perMessageDeflate, uS::Socket *socket) : uS::Socket(std::move(*socket)) {
-        compressionStatus = perMessageDeflate ? CompressionStatus::ENABLED : CompressionStatus::DISABLED;
-    }
-    
-    
-    {                group->messageHandler(webSocket, data, length, (OpCode) opCode);
-                if (webSocket->isClosed() || webSocket->isShuttingDown()) {
-                    return true;
-                }
-                webSocket->fragmentBuffer.clear();
-            }
-        }
-    } else {
-        if (!remainingBytes && fin && !webSocket->controlTipLength) {
-            if (opCode == CLOSE) {
-                typename WebSocketProtocol<isServer, WebSocket<isServer>>::CloseFrame closeFrame = WebSocketProtocol<isServer, WebSocket<isServer>>::parseClosePayload(data, length);
-                webSocket->close(closeFrame.code, closeFrame.message, closeFrame.length);
-                return true;
-            } else {
-                if (opCode == PING) {
-                    webSocket->send(data, length, (OpCode) OpCode::PONG);
-                    group->pingHandler(webSocket, data, length);
-                    if (webSocket->isClosed() || webSocket->isShuttingDown()) {
-                        return true;
-                    }
-                } else if (opCode == PONG) {
-                    group->pongHandler(webSocket, data, length);
-                    if (webSocket->isClosed() || webSocket->isShuttingDown()) {
-                        return true;
-                    }
-                }
-            }
-        } else {
-            webSocket->fragmentBuffer.append(data, length);
-            webSocket->controlTipLength += length;
-    
-    
-    {
-    {    }
+    {private:
+    unsigned int flags_;
 };
     
-    #include 'WebSocket.h'
-#include 'HTTPSocket.h'
-#include 'Extensions.h'
-#include <functional>
-#include <stack>
+        // Extension: 3.1
+    extern void (CODEGEN_FUNCPTR *DrawArraysInstanced)(GLenum mode, GLint first, GLsizei count, GLsizei instancecount);
+    extern void (CODEGEN_FUNCPTR *DrawElementsInstanced)(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLsizei instancecount);
+    extern void (CODEGEN_FUNCPTR *TexBuffer)(GLenum target, GLenum internalformat, GLuint buffer);
+    extern void (CODEGEN_FUNCPTR *PrimitiveRestartIndex)(GLuint index);
+    
+    namespace HPHP {
+    }
+    
+    
+    {  m_arrTypes.resize(builder.m_impl->nextId);
+  for (auto& ty : builder.m_impl->types) {
+    assert(m_arrTypes[ty->id()] == nullptr);
+    m_arrTypes[ty->id()] = ty;
+  }
+  if (debug) {
+    for (auto& t : m_arrTypes) {
+      always_assert(t != nullptr);
+    }
+  }
+}
+    
+      static constexpr int Top = -1;
+    
+      /*
+   * There is no default behavior. Make sure this function frees all
+   * only non-request-allocated resources.
+   */
+  virtual void sweep() = 0;
+  virtual void* owner() = 0; // return ptr to object
+    
+    
+static Variant HHVM_FUNCTION(gmp_strval,
+                             const Variant& data,
+                             const int64_t base /* = 10 */) {
+  mpz_t gmpData;
+    }
+    
+    #include 'hphp/runtime/base/packed-array.h'
+    
+      if (m_visited.test(cid)) return;
+  m_visited.set(cid);
+  m_list.push_back(Vlabel(cid));
+    
+    const void *PageletTransport::getPostData(size_t &size) {
+  size = m_postData.size();
+  return m_postData.data();
+}
+    
+      /**
+   * ...so that we can grarefully stop these servers on signals.
+   */
+  static void InstallStopSignalHandlers(ServerPtr server);
+    
+    #ifdef HAVE_NUMA
+    
+    /*
+ * Determine the next NUMA node according to state maintained in `curr_node`.
+ */
+int next_numa_node(std::atomic_int& curr_node);
+/*
+ * The number of numa nodes in the system
+ */
+inline int num_numa_nodes() {
+  return use_numa ? numa_num_nodes : 1;
+}
+/*
+ * Enable numa interleaving for the specified address range
+ */
+void numa_interleave(void* start, size_t size);
+/*
+ * Allocate the specified address range on the given node
+ */
+void numa_bind_to(void* start, size_t size, int node);
+/*
+ * Return true if node is part of the allowed set of numa nodes
+ */
+inline bool numa_node_allowed(int node) {
+  if (numa_node_set == 0) return true;
+  return numa_node_set & (1u << node);
+}
+    
+          if (bounded && val.caseIdx == iv.size() - 2) {
+        // If we haven't checked bounds yet and this is the 'first non-zero'
+        // case, we have to skip it. This case is only hit for non-Int input
+        // types anyway.
+        continue;
+      }
+    
+    bool js_cocos2dx_builder_CCBAnimationManager_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_builder_CCBAnimationManager_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_builder_CCBAnimationManager(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_builder_CCBAnimationManager_moveAnimationsFromNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_setAutoPlaySequenceId(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_actionForSoundChannel(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_setBaseValue(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getDocumentOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getLastCompletedSequenceName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_setRootNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceNamedTweenDuration(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_addDocumentOutletName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getRootContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_setDocumentControllerName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_setObject(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_actionForCallbackChannel(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getDocumentOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_init(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getKeyframeCallbacks(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_setRootContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceIdTweenDuration(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getRunningSequenceName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getAutoPlaySequenceId(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getRootNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_addDocumentOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_setDelegate(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getSequenceDuration(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceNamed(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getSequenceId(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_setCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_setSequences(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_debug(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getDocumentControllerName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_CCBAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    bool js_cocos2dx_navmesh_NavMesh_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_navmesh_NavMesh_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_navmesh_NavMesh(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_navmesh(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_navmesh_NavMesh_removeNavMeshObstacle(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_removeNavMeshAgent(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_update(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_isDebugDrawEnabled(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_addNavMeshAgent(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_addNavMeshObstacle(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_setDebugDrawEnable(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_debugDraw(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_NavMesh(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    bool js_cocos2dx_studio_BlendFuncFrame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_BlendFuncFrame_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_BlendFuncFrame(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_BlendFuncFrame_getBlendFunc(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BlendFuncFrame_setBlendFunc(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BlendFuncFrame_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_BlendFuncFrame_BlendFuncFrame(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+        cobj = (CocosDenshion::SimpleAudioEngine*)tolua_tousertype(tolua_S,1,0);
+    
+    #ifdef __cplusplus
+extern 'C' {
+#endif
+#include 'tolua++.h'
+#ifdef __cplusplus
+}
+#endif
+    
+    #ifndef AddPair_H
+#define AddPair_H
+    
+    				b2Vec2 anchor(160.0f + 2.0f * i, -0.125f);
+				jd.Initialize(prevBody, body, anchor);
+				m_world->CreateJoint(&jd);
+    
+    void AbstractHttpServerResponseCommand::updateReadWriteCheck()
+{
+  if (httpServer_->wantRead()) {
+    if (!readCheck_) {
+      readCheck_ = true;
+      e_->addSocketForReadCheck(socket_, this);
+    }
+  }
+  else if (readCheck_) {
+    readCheck_ = false;
+    e_->deleteSocketForReadCheck(socket_, this);
+  }
+  if (httpServer_->wantWrite()) {
+    if (!writeCheck_) {
+      writeCheck_ = true;
+      e_->addSocketForWriteCheck(socket_, this);
+    }
+  }
+  else if (writeCheck_) {
+    writeCheck_ = false;
+    e_->deleteSocketForWriteCheck(socket_, this);
+  }
+}
+    
+    AbstractProxyRequestCommand::AbstractProxyRequestCommand(
+    cuid_t cuid, const std::shared_ptr<Request>& req,
+    const std::shared_ptr<FileEntry>& fileEntry, RequestGroup* requestGroup,
+    DownloadEngine* e, const std::shared_ptr<Request>& proxyRequest,
+    const std::shared_ptr<SocketCore>& s)
+    : AbstractCommand(cuid, req, fileEntry, requestGroup, e, s),
+      proxyRequest_(proxyRequest),
+      httpConnection_(std::make_shared<HttpConnection>(
+          cuid, s, std::make_shared<SocketRecvBuffer>(s)))
+{
+  setTimeout(std::chrono::seconds(getOption()->getAsInt(PREF_CONNECT_TIMEOUT)));
+  disableReadCheckSocket();
+  setWriteCheckSocket(getSocket());
+}
+    
+      virtual ~AbstractProxyResponseCommand();
+    
+    int64_t AdaptiveFileAllocationIterator::getTotalLength()
+{
+  return totalLength_;
+}
+    
+    namespace aria2 {
+    }
+    
+    AnnounceTier::AnnounceTier(std::deque<std::string> urls)
+    : event(STARTED), urls(std::move(urls))
+{
+}
+    
+    private:
+  TLSSessionSide side_;
+  TLSVersion minTLSVer_;
+  bool verifyPeer_;
+  SecIdentityRef credentials_;
+    
+    private:
+  void startAsyncFamily(const std::string& hostname, int family,
+                        DownloadEngine* e, Command* command);
+  void setNameResolverCheck(size_t resolverIndex, DownloadEngine* e,
+                            Command* command);
+  void disableNameResolverCheck(size_t index, DownloadEngine* e,
+                                Command* command);
+    
+    std::unique_ptr<AuthConfig> AuthConfig::create(std::string user,
+                                               std::string password)
+{
+  if (user.empty()) {
+    return nullptr;
+  }
+  else {
+    return make_unique<AuthConfig>(std::move(user), std::move(password));
+  }
+}
