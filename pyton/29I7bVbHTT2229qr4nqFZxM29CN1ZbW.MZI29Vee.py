@@ -1,84 +1,105 @@
 
         
-        
-# create our blueprint :)
-bp = Blueprint('flaskr', __name__)
+            def iter_lines(self, chunk_size):
+        yield self.body, b''
+    
+            '''
+        available_plugins = plugin_manager.get_formatters_grouped()
+        self.enabled_plugins = []
+        for group in groups:
+            for cls in available_plugins[group]:
+                p = cls(env=env, **kwargs)
+                if p.enabled:
+                    self.enabled_plugins.append(p)
     
     
-def test_messages(client, app):
-    '''Test that messages work'''
-    login(client, app.config['USERNAME'],
-          app.config['PASSWORD'])
-    rv = client.post('/add', data=dict(
-        title='<Hello>',
-        text='<strong>HTML</strong> allowed here'
-    ), follow_redirects=True)
-    assert b'No entries here so far' not in rv.data
-    assert b'&lt;Hello&gt;' in rv.data
-    assert b'<strong>HTML</strong> allowed here' in rv.data
-
+def test_unicode_raw_json_item(httpbin):
+    r = http('--json', 'POST', httpbin.url + '/post',
+             u'test:={ '%s' : [ '%s' ] }' % (UNICODE, UNICODE))
+    assert HTTP_OK in r
+    assert r.json['json'] == {'test': {UNICODE: [UNICODE]}}
     
-        :copyright: © 2010 by the Pallets team.
-    :license: BSD, see LICENSE for more details.
-'''
+        '''
+)
+positional.add_argument(
+    'items',
+    metavar='REQUEST_ITEM',
+    nargs=ZERO_OR_MORE,
+    default=None,
+    type=KeyValueArgType(*SEP_GROUP_ALL_ITEMS),
+    help=r'''
+    Optional key-value pairs to be included in the request. The separator used
+    determines the type:
     
-        return inner
+        ERROR_TIMEOUT = 2
+    ERROR_TOO_MANY_REDIRECTS = 6
+    
+        @classmethod
+    def __get_test_directory(self):
+        '''
+        Get the temporary directory for the tests.
+        '''
+        self.test_dir = os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), 'test_command')
+    
+        def test_b_observers_shall_be_attachable(cls):
+        cls.s.attach(cls.dec_obs)
+        cls.assertEqual(isinstance(cls.s._observers[0], DecimalViewer), True)
+        cls.assertEqual(len(cls.s._observers), 1)
+        cls.s.attach(cls.hex_obs)
+        cls.assertEqual(isinstance(cls.s._observers[1], HexViewer), True)
+        cls.assertEqual(len(cls.s._observers), 2)
+    
+        def __init__(self, name, action):
+        self.name = name
+        self.action = action
+    
+        def setUp(self):
+        self.tc1 = TC1()
+        self.tc2 = TC2()
+        self.tc3 = TC3()
+        self.average_result_tc1 = '###### In Test 1 ######\n' + \
+                                  'Setting up\n' + \
+                                  'Running test\n' + \
+                                  'Tearing down\n' + \
+                                  'Test Finished'
+        self.average_result_tc2 = '###### In Test 2 ######\n' + \
+                                  'Setting up\n' + \
+                                  'Running test\n' + \
+                                  'Tearing down\n' + \
+                                  'Test Finished'
+        self.average_result_tc3 = '###### In Test 3 ######\n' + \
+                                  'Setting up\n' + \
+                                  'Running test\n' + \
+                                  'Tearing down\n' + \
+                                  'Test Finished'
+        self.runner = TestRunner()
+        self.out = StringIO()
+        self.saved_stdout = sys.stdout
+        sys.stdout = self.out
+    
+    Test code which will almost always fail (if not exactly 12:01) when untestable
+production code (have a look into constructor_injection.py) is used:
     
     
-USER = PASSWORD = '%!*'();:@&=+$,/?#[] '
-ENCODED_USER = compat.quote(USER, '')
-ENCODED_PASSWORD = compat.quote(PASSWORD, '')
+def count_to(count):
+    '''Counts by word numbers, up to a maximum of five'''
+    numbers = ['one', 'two', 'three', 'four', 'five']
+    for number in numbers[:count]:
+        yield number
     
-                if proxy:
-                new_proxies.setdefault(scheme, proxy)
-    
-        auth = requests.auth.HTTPDigestAuth('user', 'pass')
-    
-            d1 = dict(jar)
-        d2 = dict(jar.iteritems())
-        d3 = dict(jar.items())
-    
-        # a Model inside a Model
-    x = Input(shape=(1,))
-    y = Dense(2)(x)
-    inner_model = Model(x, y)
-    x = Input(shape=(1,))
-    y = inner_model(x)
-    outer_model = Model(x, y)
-    assert outer_model.trainable_weights == inner_model.trainable_weights
-    inner_model.trainable = False
-    assert outer_model.trainable_weights == []
-    inner_model.trainable = True
-    inner_model.layers[-1].trainable = False
-    assert outer_model.trainable_weights == []
-    
-        # Normally the trailing 1 is added by standardize_weights
-    weights = np.ones((3,))
-    mask = np.ones((3, 4))
-    mask[1, 0] = 0
-    
-    x_train = x_train.reshape(x_train.shape[0], -1, 1)
-x_test = x_test.reshape(x_test.shape[0], -1, 1)
-x_train = x_train.astype('float32')
-x_test = x_test.astype('float32')
-x_train /= 255
-x_test /= 255
-print('x_train shape:', x_train.shape)
-print(x_train.shape[0], 'train samples')
-print(x_test.shape[0], 'test samples')
-    
-                # check that container-level reset_states() works
-            model.reset_states()
-            out4 = model.predict(np.ones_like(inputs))
-            assert_allclose(out3, out4, atol=1e-5)
-    
-    
-class VirtualHostTest(unittest.TestCase):
-    '''Test the VirtualHost class.'''
-    
-        @mock.patch('certbot_compatibility_test.validator.requests.get')
-    def test_redirect_with_headers(self, mock_get_request):
-        mock_get_request.return_value = create_response(
-            301, {'location': 'https://test.com'})
-        self.assertTrue(self.validator.redirect(
-            'test.com', headers={'Host': 'test.com'}))
+        print(u'Setting Data 1 = 10')
+    data1.data = 10
+    print(u'Setting Data 2 = 15')
+    data2.data = 15
+    print(u'Setting Data 1 = 3')
+    data1.data = 3
+    print(u'Setting Data 2 = 5')
+    data2.data = 5
+    print(u'Detach HexViewer from data1 and data2.')
+    data1.detach(view2)
+    data2.detach(view2)
+    print(u'Setting Data 1 = 10')
+    data1.data = 10
+    print(u'Setting Data 2 = 15')
+    data2.data = 15
