@@ -1,81 +1,66 @@
-    def find_handler(self, request, **kwargs):
-        for rule in self.rules:
-            target_params = rule.matcher.match(request)
-            if target_params is not None:
-                if rule.target_kwargs:
-                    target_params['target_kwargs'] = rule.target_kwargs
+
+        
+        
+def create_app(config=None):
+    app = Flask('flaskr')
     
-        @classmethod
-    def configurable_base(cls):
-        # type: () -> Any
-        # TODO: This class needs https://github.com/python/typing/issues/107
-        # to be fully typeable.
-        '''Returns the base class of a configurable hierarchy.
+        # Parse and validate the field names.  Validation serves two purposes,
+    # generating informative error messages and preventing template injection attacks.
+    if isinstance(field_names, basestring):
+        field_names = field_names.replace(',', ' ').split() # names separated by whitespace and/or commas
+    field_names = tuple(map(str, field_names))
+    for name in (typename,) + field_names:
+        if not all(c.isalnum() or c=='_' for c in name):
+            raise ValueError('Type names and field names can only contain alphanumeric characters and underscores: %r' % name)
+        if _iskeyword(name):
+            raise ValueError('Type names and field names cannot be a keyword: %r' % name)
+        if name[0].isdigit():
+            raise ValueError('Type names and field names cannot start with a number: %r' % name)
+    seen_names = set()
+    for name in field_names:
+        if name.startswith('_'):
+            raise ValueError('Field names cannot start with an underscore: %r' % name)
+        if name in seen_names:
+            raise ValueError('Encountered duplicate field name: %r' % name)
+        seen_names.add(name)
     
+    '''Implements ProcessPoolExecutor.
     
-class QueueBasicTest(AsyncTestCase):
-    def test_repr_and_str(self):
-        q = queues.Queue(maxsize=1)
-        self.assertIn(hex(id(q)), repr(q))
-        self.assertNotIn(hex(id(q)), str(q))
-        q.get()
+    from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
     
-        @gen_test
-    def test_notify(self):
-        c = locks.Condition()
-        self.io_loop.call_later(0.01, c.notify)
-        yield c.wait()
-    
-        @gen_test
-    def test_stop_in_callback(self):
-        # Issue #2069: calling server.stop() in a loop callback should not
-        # raise EBADF when the loop handles other server connection
-        # requests in the same loop iteration
-    
-    
-def run():
-    io_loop = IOLoop(make_current=True)
-    app = Application([('/', RootHandler)])
-    port = random.randrange(options.min_port, options.max_port)
-    app.listen(port, address='127.0.0.1')
-    signal.signal(signal.SIGCHLD, handle_sigchld)
-    args = ['ab']
-    args.extend(['-n', str(options.n)])
-    args.extend(['-c', str(options.c)])
-    if options.keepalive:
-        args.append('-k')
-    if options.quiet:
-        # just stops the progress messages printed to stderr
-        args.append('-q')
-    args.append('http://127.0.0.1:%d/' % port)
-    subprocess.Popen(args)
-    io_loop.start()
-    io_loop.close()
-    io_loop.clear_current()
+      # We ignore the exception about the file already being parsed since it comes
+  # up often and isn't something that's actionable by the user.
+  if 'already being parsed' in serialized_exception:
+    return
+  vimsupport.PostVimMessage( serialized_exception, truncate = truncate )
     
     
-class ExceptionBenchmark(Benchmark):
-    def make_context(self):
-        return stack_context.ExceptionStackContext(self.__handle_exception)
+  def Response( self ):
+    if self._cached_response:
+      return self._cached_response
     
-    js.load_plugin_modules(plugins)
-modules = dict((k, m) for k, m in js.module.iteritems())
-print 'JS_MODULES := ' + ' '.join(modules.iterkeys())
-outputs = []
-for name, module in modules.iteritems():
-    outputs.extend(module.outputs)
-    print 'JS_MODULE_OUTPUTS_%s := %s' % (name, ' '.join(module.outputs))
-    print 'JS_MODULE_DEPS_%s := %s' % (name, ' '.join(module.dependencies))
-    
-            res = AdminPage(content = AdminAwardWinners(award),
-                        title='award winners').render()
-        return res
+          with HandleServerException( display = False ):
+        BaseRequest.GetDataFromHandler( 'healthy' )
 
     
-    from r2.controllers.reddit_base import RedditController
-from r2.lib.base import proxyurl
-from r2.lib.csrf import csrf_exempt
-from r2.lib.template_helpers import get_domain
-from r2.lib.pages import Embed, BoringPage, HelpPage
-from r2.lib.filters import websafe, SC_OFF, SC_ON
-from r2.lib.memoize import memoize
+    
+def KeywordsFromSyntaxListOutput_StatementAndTypeHierarchy_test():
+  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
+tBaa xxx foo bar
+         links to tFoo
+tFoo xxx zoo goo
+         links to tBar
+tBar xxx qux moo
+         links to Type
+sBaa xxx na bar
+         links to sFoo
+sFoo xxx zoo nb
+         links to sBar
+sBar xxx qux nc
+         links to Statement''' ),
+              contains_inanyorder( 'foo', 'bar', 'zoo', 'goo', 'qux', 'moo',
+                                   'na', 'nb', 'nc' ) )
+    
+    
+def _IsReady():
+  return BaseRequest.GetDataFromHandler( 'ready' )
