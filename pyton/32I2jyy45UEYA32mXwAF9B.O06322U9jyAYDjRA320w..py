@@ -1,195 +1,113 @@
 
         
-            Reference: Armin Ronacher, 'Flask for Fun and for Profit' PyBay 2016.
-    '''
-    for name in find_modules('flaskr.blueprints'):
-        mod = import_string(name)
-        if hasattr(mod, 'bp'):
-            app.register_blueprint(mod.bp)
-    return None
-    
-        # To avoid having to always use the '|safe' filter in flatpage templates,
-    # mark the title and content as already safe (since they are raw HTML
-    # content in the first place).
-    f.title = mark_safe(f.title)
-    f.content = mark_safe(f.content)
-    
-        def test_not_equal(self):
-        self.assertFalse(self.addr1 != self.addr2)
-        self.assertTrue(self.addr != self.addr1)
-    
-        def has_more_configs(self):
-        '''Returns true if there are more configs to test'''
-        return bool(self._configs)
-    
-    # Add any extra paths that contain custom files (such as robots.txt or
-# .htaccess) here, relative to this directory. These files are copied
-# directly to the root of the documentation.
-#html_extra_path = []
+        # (c) 2015, Marc Abramowitz <marca@surveymonkey.com>
+#
+# This file is part of Ansible.
+#
+# Ansible is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Ansible is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Ansible. If not, see <http://www.gnu.org/licenses/>.
     
     
-class NotifyTests(unittest.TestCase):
-    '''Tests for the notifier.'''
+#
+# Backwards compat functions.  Some modules include md5s in their return values
+# Continue to support that for now.  As of ansible-1.8, all of those modules
+# should also return 'checksum' (sha1 for now)
+# Do not use md5 unless it is needed for:
+# 1) Optional backwards compatibility
+# 2) Compliance with a third party protocol
+#
+# MD5 will not work on systems which are FIPS-140-2 compliant.
+#
     
-    if os.path.isfile(log_file):
-    os.remove(log_file)
+            if search:
+            search_url += '&autocomplete=' + urlquote(search)
     
-        if WSAStringToAddressA(
-            ip_string,
-            address_family,
-            None,
-            ctypes.byref(addr),
-            ctypes.byref(addr_size)
-    ) != 0:
-        raise socket.error(ctypes.FormatError())
+            # global, resource, entity
+        input_url = 'https://www.googleapis.com/compute/v1/projects/myproject/global/urlMaps/my-url-map'
+        actual = GCPUtils.parse_gcp_url(input_url)
+        self.assertEquals('myproject', actual['project'])
+        self.assertTrue('global' in actual)
+        self.assertTrue(actual['global'])
+        self.assertEquals('v1', actual['api_version'])
+        self.assertEquals('compute', actual['service'])
     
+        terminal_stderr_re = [
+        re.compile(r'% ?Error: '),
+        re.compile(r'^% \w+', re.M),
+        re.compile(r'% ?Bad secret'),
+        re.compile(r'invalid input', re.I),
+        re.compile(r'(?:incomplete|ambiguous) command', re.I),
+        re.compile(r'connection timed out', re.I),
+        re.compile(r'[^\r\n]+ not found', re.I),
+        re.compile(r''[^']' +returned error code: ?\d+'),
+        re.compile(r'syntax error'),
+        re.compile(r'unknown command'),
+        re.compile(r'Error\[\d+\]: ', re.I),
+        re.compile(r'Error:', re.I)
+    ]
     
-def allow_scan():
-    global scan_allow_time
-    if not allow_connect:
-        return False
-    if time.time() < scan_allow_time:
-        return False
-    else:
-        return True
-    
-        try:
-        send_to_browser = True
-        try:
-            response_headers = dict((k.title(), v) for k, v in response.getheaders())
-            wfile.write('HTTP/1.1 %d %s\r\n' % (response.status, response.reason))
-            for key, value in response.getheaders():
-                send_header(wfile, key, value)
-            wfile.write('\r\n')
-        except Exception as e:
-            send_to_browser = False
-            wait_time = time.time()-time_request
-            xlog.info('direct_handler.handler send response fail. t:%d e:%r %s%s', wait_time, e, host, url)
-    
-            self.decisionNumber = decisionNumber
-        self.eot = eot
-        self.eof = eof
-        self.min = min
-        self.max = max
-        self.accept = accept
-        self.special = special
-        self.transition = transition
-    
-            return ''.join([t.text for t in self.tokens[start:stop+1]])
-    
-            raise NotImplementedError
-    
-    def setCharPositionInLine(self, pos):
-        '''@brief Set the column of the tokens first character,
-    
-    # revision identifiers, used by Alembic.
-revision = '1226819ee0e3'
-down_revision = '956a063c52b3'
-    
-    Revision ID: 18e88e1cc004
-Revises: 430039611635
-Create Date: 2016-03-13 21:30:24.833107
-    
-    '''
-    
-    class Dashboard(Base, AuditMixin):
-    '''Declarative class to do query in upgrade'''
-    __tablename__ = 'dashboards'
-    id = Column(Integer, primary_key=True)
-    owners = relationship('User', secondary=dashboard_user)
-    
-        for slc in session.query(Slice).all():
-        if slc.druid_datasource_id:
-            slc.datasource_id = slc.druid_datasource_id
-        if slc.table_id:
-            slc.datasource_id = slc.table_id
-        session.merge(slc)
-        session.commit()
-    session.close()
+            namespace = {'huge': huge, 'mhuge': mhuge}
     
     
-def upgrade():
-    op.create_table('dashboard_user',
-        sa.Column('id', sa.Integer(), nullable=False),
-        sa.Column('user_id', sa.Integer(), nullable=True),
-        sa.Column('dashboard_id', sa.Integer(), nullable=True),
-        sa.ForeignKeyConstraint(['dashboard_id'], [u'dashboards.id'], ),
-        sa.ForeignKeyConstraint(['user_id'], [u'ab_user.id'], ),
-        sa.PrimaryKeyConstraint('id'),
-    )
-    op.create_table('slice_user',
-        sa.Column('id', sa.Integer(), nullable=False),
-        sa.Column('user_id', sa.Integer(), nullable=True),
-        sa.Column('slice_id', sa.Integer(), nullable=True),
-        sa.ForeignKeyConstraint(['slice_id'], [u'slices.id'], ),
-        sa.ForeignKeyConstraint(['user_id'], [u'ab_user.id'], ),
-        sa.PrimaryKeyConstraint('id'),
-    )
+class Test_pygettext(unittest.TestCase):
+    '''Tests for the pygettext.py tool'''
     
-    Revision ID: 55179c7f25c7
-Revises: 315b3f4da9b0
-Create Date: 2015-12-13 08:38:43.704145
+        def _get_whatToShow(self):
+        return self.whatToShow
     
-    # revision identifiers, used by Alembic.
-revision = '7e3ddad2a00b'
-down_revision = 'b46fa1b0b39e'
+                # generate response
+            if dispatch_method is not None:
+                response = dispatch_method(method, params)
+            else:
+                response = self._dispatch(method, params)
+            # wrap response in a singleton tuple
+            response = (response,)
+            response = dumps(response, methodresponse=1,
+                             allow_none=self.allow_none, encoding=self.encoding)
+        except Fault as fault:
+            response = dumps(fault, allow_none=self.allow_none,
+                             encoding=self.encoding)
+        except:
+            # report exception back to server
+            exc_type, exc_value, exc_tb = sys.exc_info()
+            try:
+                response = dumps(
+                    Fault(1, '%s:%s' % (exc_type, exc_value)),
+                    encoding=self.encoding, allow_none=self.allow_none,
+                    )
+            finally:
+                # Break reference cycle
+                exc_type = exc_value = exc_tb = None
     
-    from concurrent.futures import (as_completed, ThreadPoolExecutor,
-                                ProcessPoolExecutor)
+        def _format(self):
+        result = 'maxsize=%r' % (self.maxsize, )
+        if getattr(self, '_queue', None):
+            result += ' queue=%r' % self._queue
+        if self._getters:
+            result += ' getters[%s]' % len(self._getters)
+        if self._putters:
+            result += ' putters[%s]' % len(self._putters)
+        if self._unfinished_tasks:
+            result += ' tasks=%s' % self._unfinished_tasks
+        return result
     
+            class TestServer(TCPServer):
+            @gen.coroutine
+            def handle_stream(self, stream, address):
+                server.stop()
+                yield stream.read_until_close()
     
-def reap_threads(func):
-    '''Use this function when threads are being used.  This will
-    ensure that the threads are cleaned up even when the test fails.
-    If threading is unavailable this function does nothing.
-    '''
-    @functools.wraps(func)
-    def decorator(*args): 
-        key = test_support.threading_setup()
-        try:
-            return func(*args)
-        finally:
-            test_support.threading_cleanup(*key)
-    return decorator
-    
-    
-def SendCompleterAvailableRequest( filetypes ):
-  request = CompleterAvailableRequest( filetypes )
-  # This is a blocking call.
-  request.Start()
-  return request.Response()
-
-    
-    
-  def Start( self ):
-    self._keepalive_thread.start()
-    
-    from future.utils import iterkeys, iteritems
-from ycm import vimsupport
-import re
-    
-    api('modaction', ModActionTemplate)
-    
-        @require_oauth2_scope('account')
-    @validate(
-        VUser(),
-        validated_prefs=PREFS_JSON_VALIDATOR,
-    )
-    @api_doc(api_section.account, json_model=PREFS_JSON_VALIDATOR,
-             uri='/api/v1/me/prefs')
-    def PATCH_prefs(self, validated_prefs):
-        user_prefs = c.user.preferences()
-        for short_name, new_value in validated_prefs.iteritems():
-            pref_name = 'pref_' + short_name
-            user_prefs[pref_name] = new_value
-        vprefs.filter_prefs(user_prefs, c.user)
-        vprefs.set_prefs(c.user, user_prefs)
-        c.user._commit()
-        return self.api_wrapper(PrefsJsonTemplate().data(c.user))
-    
-        @csrf_exempt
-    def renderurl(self, override=None):
-        if override:
-            path = override
-        else:
-            path = request.path
+    # Repeat the entire benchmark this many times (on different ports)
+# This gives JITs time to warm up, etc.  Pypy needs 3-5 runs at
+# --n=15000 for its JIT to reach full effectiveness
+define('num_runs', type=int, default=1)
