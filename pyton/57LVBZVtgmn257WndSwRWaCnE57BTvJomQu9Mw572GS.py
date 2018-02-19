@@ -1,66 +1,44 @@
 
         
-        
-def create_app(config=None):
-    app = Flask('flaskr')
-    
-        # Parse and validate the field names.  Validation serves two purposes,
-    # generating informative error messages and preventing template injection attacks.
-    if isinstance(field_names, basestring):
-        field_names = field_names.replace(',', ' ').split() # names separated by whitespace and/or commas
-    field_names = tuple(map(str, field_names))
-    for name in (typename,) + field_names:
-        if not all(c.isalnum() or c=='_' for c in name):
-            raise ValueError('Type names and field names can only contain alphanumeric characters and underscores: %r' % name)
-        if _iskeyword(name):
-            raise ValueError('Type names and field names cannot be a keyword: %r' % name)
-        if name[0].isdigit():
-            raise ValueError('Type names and field names cannot start with a number: %r' % name)
-    seen_names = set()
-    for name in field_names:
-        if name.startswith('_'):
-            raise ValueError('Field names cannot start with an underscore: %r' % name)
-        if name in seen_names:
-            raise ValueError('Encountered duplicate field name: %r' % name)
-        seen_names.add(name)
-    
-    '''Implements ProcessPoolExecutor.
-    
-    from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
-    
-      # We ignore the exception about the file already being parsed since it comes
-  # up often and isn't something that's actionable by the user.
-  if 'already being parsed' in serialized_exception:
-    return
-  vimsupport.PostVimMessage( serialized_exception, truncate = truncate )
-    
-    
-  def Response( self ):
-    if self._cached_response:
-      return self._cached_response
-    
-          with HandleServerException( display = False ):
-        BaseRequest.GetDataFromHandler( 'healthy' )
+        model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=epochs,
+          verbose=1,
+          validation_data=(x_test, y_test))
+score = model.evaluate(x_test, y_test, verbose=0)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
 
     
     
-def KeywordsFromSyntaxListOutput_StatementAndTypeHierarchy_test():
-  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
-tBaa xxx foo bar
-         links to tFoo
-tFoo xxx zoo goo
-         links to tBar
-tBar xxx qux moo
-         links to Type
-sBaa xxx na bar
-         links to sFoo
-sFoo xxx zoo nb
-         links to sBar
-sBar xxx qux nc
-         links to Statement''' ),
-              contains_inanyorder( 'foo', 'bar', 'zoo', 'goo', 'qux', 'moo',
-                                   'na', 'nb', 'nc' ) )
+def total_variation_loss(x):
+    assert K.ndim(x) == 4
+    if K.image_data_format() == 'channels_first':
+        a = K.square(x[:, :, :img_nrows - 1, :img_ncols - 1] - x[:, :, 1:, :img_ncols - 1])
+        b = K.square(x[:, :, :img_nrows - 1, :img_ncols - 1] - x[:, :, :img_nrows - 1, 1:])
+    else:
+        a = K.square(x[:, :img_nrows - 1, :img_ncols - 1, :] - x[:, 1:, :img_ncols - 1, :])
+        b = K.square(x[:, :img_nrows - 1, :img_ncols - 1, :] - x[:, :img_nrows - 1, 1:, :])
+    return K.sum(K.pow(a + b, 1.25))
     
     
-def _IsReady():
-  return BaseRequest.GetDataFromHandler( 'ready' )
+@keras_test
+def test_min_max_norm():
+    array = get_example_array()
+    for m in get_test_values():
+        norm_instance = constraints.min_max_norm(min_value=m, max_value=m * 2)
+        normed = norm_instance(K.variable(array))
+        value = K.eval(normed)
+        l2 = np.sqrt(np.sum(np.square(value), axis=0))
+        assert not l2[l2 < m]
+        assert not l2[l2 > m * 2 + 1e-5]
+    
+        def __init__(self, futures):
+        self.futures = sorted(futures, key=id)
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
