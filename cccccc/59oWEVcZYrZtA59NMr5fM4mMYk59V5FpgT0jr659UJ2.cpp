@@ -1,146 +1,174 @@
 
-    { protected:
-  std::ostringstream log_stream_;
-};
-    
-      uint64_t uint64_t2[2] = {1U, 2U};
-  EXPECT_EQ(info.group_ptr.size(), 0);
-  info.SetInfo('group', uint64_t2, xgboost::kUInt64, 2);
-  ASSERT_EQ(info.group_ptr.size(), 3);
-  EXPECT_EQ(info.group_ptr[2], 3);
-    
-      vals_in.clear(); ss.flush(); ss.clear(); ss.str('');
-  ss << '1a';
-  ss >> vals_in;
-  EXPECT_NE(vals_in, vals);
-    
-    DMLC_REGISTRY_FILE_TAG(updater_refresh);
-    
-      XGBOOST_DEVICE float GetGrad() const { return grad_; }
-  XGBOOST_DEVICE float GetHess() const { return hess_; }
-    
-    memory_resource* get_default_resource();
-void set_default_resource(memory_resource*);
-memory_resource* new_delete_resource();
-    
-    #include <folly/Range.h>
-#include <folly/experimental/io/FsUtil.h>
-#include <folly/portability/Unistd.h>
-    
-    namespace {
-// We cannot use EXPECT_EQ(a, b) due to a bug in gtest 1.6.0: gtest wants
-// to print path as a container even though it has operator<< defined,
-// and as path is a container of path, this leads to infinite
-// recursion.
-void expectPathEq(const path& a, const path& b) {
-  EXPECT_TRUE(a == b) << 'expected path=' << a << '\nactual path=' << b;
-}
-} // namespace
-    
-    
-    {std::string AsyncFileWriter::getNumDiscardedMsg(size_t numDiscarded) {
-  // We may want to make this customizable in the future (e.g., to allow it to
-  // conform to the LogFormatter style being used).
-  // For now just return a simple fixed message.
-  return folly::to<std::string>(
-      numDiscarded,
-      ' log messages discarded: logging faster than we can write\n');
-}
-} // namespace folly
-
-    
-        jbooleanArray NewBooleanArray(jsize length)
-    { return functions->NewBooleanArray(this, length); }
-    jbyteArray NewByteArray(jsize length)
-    { return functions->NewByteArray(this, length); }
-    jcharArray NewCharArray(jsize length)
-    { return functions->NewCharArray(this, length); }
-    jshortArray NewShortArray(jsize length)
-    { return functions->NewShortArray(this, length); }
-    jintArray NewIntArray(jsize length)
-    { return functions->NewIntArray(this, length); }
-    jlongArray NewLongArray(jsize length)
-    { return functions->NewLongArray(this, length); }
-    jfloatArray NewFloatArray(jsize length)
-    { return functions->NewFloatArray(this, length); }
-    jdoubleArray NewDoubleArray(jsize length)
-    { return functions->NewDoubleArray(this, length); }
-    
-    // In order to avoid potentially filling the jni locals table,
-// temporary objects (right now, this is just jstrings) need to be
-// released. This is done by returning a holder which autoconverts to
-// jstring.
-template <typename T>
-inline T callToJni(T&& t) {
-  return t;
-}
-    
-    TEST_F(YogaTest_HadOverflowTests, no_overflow_no_wrap_and_flex_children) {
-  const YGNodeRef child0 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child0, 80);
-  YGNodeStyleSetHeight(child0, 40);
-  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
-  YGNodeStyleSetMargin(child0, YGEdgeBottom, 10);
-  YGNodeInsertChild(root, child0, 0);
-  const YGNodeRef child1 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child1, 80);
-  YGNodeStyleSetHeight(child1, 40);
-  YGNodeStyleSetMargin(child1, YGEdgeBottom, 5);
-  YGNodeStyleSetFlexShrink(child1, 1);
-  YGNodeInsertChild(root, child1, 1);
-    }
-    
-    
-    {  if (logger) {
-    if (!context) {
-      context = new YGConfigContext();
-      YGConfigSetContext(config, context);
-    }
-    context->logger = new global_ref<jobject>(make_global(logger));
-    YGConfigSetLogger(config, YGJNILogFunc);
+        
+        void HHVM_FUNCTION(fb_setprofile,
+  const Variant& callback,
+  int64_t flags = EventHook::ProfileDefault
+) {
+  if (ThreadInfo::s_threadInfo->m_profiler != nullptr) {
+    // phpprof is enabled, don't let PHP code override it
+    return;
+  }
+  g_context->m_setprofileCallback = callback;
+  g_context->m_setprofileFlags = flags;
+  if (callback.isNull()) {
+    HPHP::EventHook::Disable();
   } else {
-    YGConfigSetLogger(config, NULL);
+    HPHP::EventHook::Enable();
   }
 }
     
-        Config const & operator=(Config const &) = delete;
+    __thread int64_t s_extra_request_nanoseconds;
     
-    // Keeps a thread-local reference to the current thread's JNIEnv.
-struct Environment {
-  // May be null if this thread isn't attached to the JVM
-  FBEXPORT static JNIEnv* current();
-  static void initialize(JavaVM* vm);
-    }
+    #ifdef USE_GCC_FAST_TLS
+    
+    #endif
+
     
     
-    {  pthread_key_t m_key;
-  CleanupFunction m_cleanup;
+    {  return ret;
+}
+    
+    static_assert(
+  kSizeIndex2PackedArrayCapacity[PackedArray::SmallSizeIndex]
+    == PackedArray::SmallSize,
+  'SmallSizeIndex must be MM size class index for array of SmallSize'
+);
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    
+    
+    {private:
+  int m_timeout;
 };
     
-    #define FBCRASH(msg, ...) facebook::assertInternal('Fatal error (%s:%d): ' msg, __FILE__, __LINE__, ##__VA_ARGS__)
-#define FBUNREACHABLE() facebook::assertInternal('This code should be unreachable (%s:%d)', __FILE__, __LINE__)
+    void initNuma();
     
+      String softStr(soft, CopyString);
+  String hardStr(hard, CopyString);
     
-    {    if (addr.ss_family == AF_INET) {
-        sockaddr_in *ipv4 = (sockaddr_in *) &addr;
-        inet_ntop(AF_INET, &ipv4->sin_addr, buf, sizeof(buf));
-        return {ntohs(ipv4->sin_port), buf, 'IPv4'};
-    } else {
-        sockaddr_in6 *ipv6 = (sockaddr_in6 *) &addr;
-        inet_ntop(AF_INET6, &ipv6->sin6_addr, buf, sizeof(buf));
-        return {ntohs(ipv6->sin6_port), buf, 'IPv6'};
-    }
+      Offset defaultOff = bcOff(env) + iv.vec32()[iv.size() - 1];
+  Offset zeroOff = 0;
+  if (base <= 0 && (base + nTargets) > 0) {
+    zeroOff = bcOff(env) + iv.vec32()[0 - base];
+  } else {
+    zeroOff = defaultOff;
+  }
+    
+    FilterBlockBuilder::FilterBlockBuilder(const FilterPolicy* policy)
+    : policy_(policy) {
 }
     
+    Iterator* TableCache::NewIterator(const ReadOptions& options,
+                                  uint64_t file_number,
+                                  uint64_t file_size,
+                                  Table** tableptr) {
+  if (tableptr != NULL) {
+    *tableptr = NULL;
+  }
+    }
     
-    {    httpSocket->setState<HttpSocket<SERVER>>();
-    httpSocket->start(httpSocket->nodeData->loop, httpSocket, httpSocket->setPoll(UV_READABLE));
-    httpSocket->setNoDelay(true);
-    Group<SERVER>::from(httpSocket)->addHttpSocket(httpSocket);
-    Group<SERVER>::from(httpSocket)->httpConnectionHandler(httpSocket);
+      // Delete the specified 'file' from the specified 'level'.
+  void DeleteFile(int level, uint64_t file) {
+    deleted_files_.insert(std::make_pair(level, file));
+  }
+    
+    namespace {
+class EmptyIterator : public Iterator {
+ public:
+  EmptyIterator(const Status& s) : status_(s) { }
+  virtual bool Valid() const { return false; }
+  virtual void Seek(const Slice& target) { }
+  virtual void SeekToFirst() { }
+  virtual void SeekToLast() { }
+  virtual void Next() { assert(false); }
+  virtual void Prev() { assert(false); }
+  Slice key() const { assert(false); return Slice(); }
+  Slice value() const { assert(false); return Slice(); }
+  virtual Status status() const { return status_; }
+ private:
+  Status status_;
+};
+}  // namespace
+    
+    namespace folly {
+namespace fs {
+    }
+    }
+    
+    DEFINE_bool(cp, false, 'Copy file');
+    
+          buffer.append(header);
+      auto line = msgData.subpiece(idx, end - idx);
+      buffer.append(line.data(), line.size());
+      buffer.push_back('\n');
+    
+    /**
+ * A LogWriter implementation that immediately writes to a file descriptor when
+ * it is invoked.
+ *
+ * The downside of this class is that logging I/O occurs directly in your
+ * normal program threads, so that logging I/O may block or slow down normal
+ * processing.
+ *
+ * However, one benefit of this class is that log messages are written out
+ * immediately, so if your program crashes, all log messages generated before
+ * the crash will have already been written, and no messages will be lost.
+ */
+class ImmediateFileWriter : public LogWriter {
+ public:
+  /**
+   * Construct an ImmediateFileWriter that appends to the file at the specified
+   * path.
+   */
+  explicit ImmediateFileWriter(folly::StringPiece path);
+    }
+    
+    
+    {  // If this is a fatal message, flush the handlers to make sure the log
+  // message was written out, then crash.
+  if (isLogLevelFatal(message.getLevel())) {
+    auto numHandlers = db_->flushAllHandlers();
+    if (numHandlers == 0) {
+      // No log handlers were configured.
+      // Print the message to stderr, to make sure we always print the reason
+      // we are crashing somewhere.
+      auto msg = folly::to<std::string>(
+          'FATAL:',
+          message.getFileName(),
+          ':',
+          message.getLineNumber(),
+          ': ',
+          message.getMessage(),
+          '\n');
+      folly::writeFull(STDERR_FILENO, msg.data(), msg.size());
+    }
+    std::abort();
+  }
 }
     
-        void start(void (*cb)(Timer *), int timeout, int repeat) {
-        loop->timepoint = std::chrono::system_clock::now();
-        std::chrono::system_clock::time_point timepoint = loop->timepoint + std::chrono::milliseconds(timeout);
+    namespace folly {
     }
+    
+      // Parse the handler options
+  auto* options = value.get_ptr('options');
+  if (options) {
+    if (!options->isObject()) {
+      throw LogConfigParseError{to<string>(
+          'unexpected data type for \'options\' field of handler \'',
+          handlerName,
+          '\': got ',
+          dynamicTypename(*options),
+          ', expected an object')};
+    }
+    }
+    
+    /**
+ * Parse a JSON configuration string.
+ *
+ * See the documentation in logging/docs/Config.md for a description of the
+ * JSON configuration object format.
+ *
+ * This function uses relaxed JSON parsing, allowing C and C++ style
+ * comments, as well as trailing commas.
+ */
+LogConfig parseLogConfigJson(StringPiece value);
