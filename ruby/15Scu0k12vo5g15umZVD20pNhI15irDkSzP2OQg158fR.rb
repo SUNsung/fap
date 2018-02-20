@@ -1,111 +1,86 @@
 
         
-        module Homebrew
-  def build_env_keys(env)
-    %w[
-      CC CXX LD OBJC OBJCXX
-      HOMEBREW_CC HOMEBREW_CXX
-      CFLAGS CXXFLAGS CPPFLAGS LDFLAGS SDKROOT MAKEFLAGS
-      CMAKE_PREFIX_PATH CMAKE_INCLUDE_PATH CMAKE_LIBRARY_PATH CMAKE_FRAMEWORK_PATH
-      MACOSX_DEPLOYMENT_TARGET PKG_CONFIG_PATH PKG_CONFIG_LIBDIR
-      HOMEBREW_DEBUG HOMEBREW_MAKE_JOBS HOMEBREW_VERBOSE
-      HOMEBREW_SVN HOMEBREW_GIT
-      HOMEBREW_SDKROOT HOMEBREW_BUILD_FROM_SOURCE
-      MAKE GIT CPP
-      ACLOCAL_PATH PATH CPATH].select { |key| env.key?(key) }
-  end
-    
-    gem 'rails-controller-testing'
-    
-    class Devise::UnlocksController < DeviseController
-  prepend_before_action :require_no_authentication
-    
-        def password_change(record, opts={})
-      devise_mail(record, :password_change, opts)
-    end
-  end
-end
-
-    
           module ClassMethods
-        # Define authentication filters and accessor helpers for a group of mappings.
-        # These methods are useful when you are working with multiple mappings that
-        # share some functionality. They are pretty much the same as the ones
-        # defined for normal mappings.
-        #
-        # Example:
-        #
-        #   inside BlogsController (or any other controller, it doesn't matter which):
-        #     devise_group :blogger, contains: [:user, :admin]
-        #
-        #   Generated methods:
-        #     authenticate_blogger!  # Redirects unless user or admin are signed in
-        #     blogger_signed_in?     # Checks whether there is either a user or an admin signed in
-        #     current_blogger        # Currently signed in user or admin
-        #     current_bloggers       # Currently signed in user and admin
-        #
-        #   Use:
-        #     before_action :authenticate_blogger!              # Redirects unless either a user or an admin are authenticated
-        #     before_action ->{ authenticate_blogger! :admin }  # Redirects to the admin login page
-        #     current_blogger :user                             # Preferably returns a User if one is signed in
-        #
-        def devise_group(group_name, opts={})
-          mappings = '[#{ opts[:contains].map { |m| ':#{m}' }.join(',') }]'
-    
-        private
-    
-      # Update version.rb file with BOOTSTRAP_SHA
-  def store_version
-    path    = 'lib/bootstrap-sass/version.rb'
-    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
-    File.open(path, 'w') { |f| f.write(content) }
-  end
-end
-
-    
-        def log_status(status)
-      puts bold status
+    def load_types_in(module_name, my_name = module_name.singularize)
+      const_set(:MODULE_NAME, module_name)
+      const_set(:BASE_CLASS_NAME, my_name)
+      const_set(:TYPES, Dir[Rails.root.join('app', 'models', module_name.underscore, '*.rb')].map { |path| module_name + '::' + File.basename(path, '.rb').camelize })
     end
     
-            @normalized_styles = styles.dup
-        styles.each_pair do |name, options|
-          @normalized_styles[name.to_sym] = Paperclip::Style.new(name.to_sym, options.dup, self)
-        end
+      def present(payload)
+    if payload.is_a?(Hash)
+      payload = ActiveSupport::HashWithIndifferentAccess.new(payload)
+      MAIN_KEYS.each do |key|
+        return { :title => payload[key].to_s, :entries => present_hash(payload, key) } if payload.has_key?(key)
       end
-      @normalized_styles
-    end
     
-        def self.names_for(klass)
-      instance.names_for(klass)
-    end
-    
-        def possible_types
-      MIME::Types.type_for(@filepath).collect(&:content_type)
-    end
-    
-        def define_getters
-      define_instance_getter
-      define_class_getter
-    end
-    
-            def no_error_when_valid?
-          @file = StringIO.new('.')
-          @subject.send(@attachment_name).assign(@file)
-          @subject.valid?
-          expected_message = [
-            @attachment_name.to_s.titleize,
-            I18n.t(:blank, scope: [:errors, :messages])
-          ].join(' ')
-          @subject.errors.full_messages.exclude?(expected_message)
-        end
-      end
+      def complete_option(method)
+    if self.respond_to? 'complete_#{method}'.to_sym
+      self.send('complete_#{method}'.to_sym)
     end
   end
-end
-
     
-            def matches? subject
-          @subject = subject
-          @subject = @subject.new if @subject.class == Class
-          lower_than_low? && higher_than_low? && lower_than_high? && higher_than_high?
+        @user_credentials = current_user.user_credentials.reorder(table_sort).page(params[:page])
+    
+            # Defines a capability for the given guest. The block should return
+        # a class/module that has a method with the capability name, ready
+        # to be executed. This means that if it is an instance method,
+        # the block should return an instance of the class.
+        #
+        # @param [String] guest The name of the guest
+        # @param [String] cap The name of the capability
+        def self.guest_capability(guest, cap, &block)
+          components.guest_capabilities[guest.to_sym].register(cap.to_sym, &block)
+          nil
         end
+    
+                  # An IO::WaitReadable means there may be more IO but this
+              # IO object is not ready to be read from yet. No problem,
+              # we read as much as we can, so we break.
+              breakable = true
+            elsif e.is_a?(Errno::EAGAIN)
+              # Otherwise, we just look for the EAGAIN error which should be
+              # all that IO::WaitReadable does in Ruby 1.9.
+              breakable = true
+            end
+    
+          # This inserts a block with the given key and value.
+      #
+      # @param [String] key
+      # @param [String] value
+      def insert(key, value)
+        # Insert the new block into the value
+        new_block = <<BLOCK
+# VAGRANT-BEGIN: #{key}
+#{value.strip}
+# VAGRANT-END: #{key}
+BLOCK
+    
+            @template_root = data.delete(:template_root)
+        @template_root ||= Vagrant.source_root.join('templates')
+        @template_root = Pathname.new(@template_root)
+    
+          respond_with do |format|
+        format.html do
+          gon.preloads[:pods] = pods_json
+          gon.unchecked_count = Pod.unchecked.count
+          gon.version_failed_count = Pod.version_failed.count
+          gon.error_count = Pod.check_failed.count
+    
+          def http_error_page_as_json(e)
+        render json: {error: :invalid_request, error_description: e.message}, status: 400
+      end
+    
+        it 'redirects requests with duplicate session cookies' do
+      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
+      expect(last_response).to be_redirect
+      expect(last_response.location).to eq('/')
+    end
+    
+        { # yes, this is ugly, feel free to change that
+      '/..' => '/', '/a/../b' => '/b', '/a/../b/' => '/b/', '/a/.' => '/a/',
+      '/%2e.' => '/', '/a/%2E%2e/b' => '/b', '/a%2f%2E%2e%2Fb/' => '/b/',
+      '//' => '/', '/%2fetc%2Fpasswd' => '/etc/passwd'
+    }.each do |a, b|
+      it('replaces #{a.inspect} with #{b.inspect}') { expect(get(a).body).to eq(b) }
+    end
