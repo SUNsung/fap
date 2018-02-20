@@ -1,104 +1,260 @@
 
         
-        
-    {}  // namespace testing
+          /// DebuggerClient is asked to emit SIL references to locals,
+  /// permitting SILGen to access them like any other variables.
+  /// This avoids generation of properties.
+  virtual SILValue emitLValueForVariable(VarDecl *var,
+                                         SILBuilder &builder) = 0;
     
-    #endif  // GTEST_INCLUDE_GTEST_GTEST_TEST_PART_H_
-
+      /// Get the type encoding for an ObjC property.
+  void getObjCEncodingForPropertyType(IRGenModule &IGM, VarDecl *property,
+                                      std::string &s);
+  
+  /// Produces extended encoding of ObjC block signature.
+  /// \returns the encoded type.
+  llvm::Constant *getBlockTypeExtendedEncoding(IRGenModule &IGM,
+                                               CanSILFunctionType invokeTy);
+  
+  /// Produces extended encoding of method type.
+  /// \returns the encoded type.
+  llvm::Constant *getMethodTypeExtendedEncoding(IRGenModule &IGM,
+                                                AbstractFunctionDecl *method);
+  
+  /// Build an Objective-C method descriptor for the given getter method.
+  void emitObjCGetterDescriptor(IRGenModule &IGM,
+                                ConstantArrayBuilder &descriptors,
+                                AbstractStorageDecl *storage);
     
-    
-    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(AssertHelper);
-};
-    
-      FilePath& operator=(const FilePath& rhs) {
-    Set(rhs);
-    return *this;
-  }
-    
-    // String - an abstract class holding static string utilities.
-class GTEST_API_ String {
- public:
-  // Static utility methods
+        // Temporarily copy the first result to temporary storage.
+    SmallVector<Item *, 16> firstResults;
+    for (unsigned i = 0; i < endNewIndex; ++i) {
+      firstResults.push_back(contents[i].release());
     }
     
-    template <GTEST_10_TYPENAMES_(T)>
-struct TupleElement<true, 3, GTEST_10_TUPLE_(T) > {
-  typedef T3 type;
+    namespace swift {
+class Decl;
+class DocComment;
+struct RawComment;
+    }
+    
+    public:
+  static BlockQuote *create(MarkupContext &MC, ArrayRef<MarkupASTNode *> Children);
+    
+    
+    {  const SILDebugScope *Scope = this;
+  while (Scope->Parent.is<const SILDebugScope *>())
+    Scope = Scope->Parent.get<const SILDebugScope *>();
+  assert(Scope->Parent.is<SILFunction *>() && 'orphaned scope');
+  return Scope->Parent.get<SILFunction *>();
+}
+    
+    #ifndef SWIFT_SYNTAX_FORMAT_H
+#define SWIFT_SYNTAX_FORMAT_H
+    
+    #include 'swift/Basic/LLVM.h'
+#include 'swift/AST/DiagnosticConsumer.h'
+    
+    
+    {    result->AppendBoolean(success);
+    return;
+  } else if (method == 'UnregisterGlobalHotKey') {
+    int object_id = -1;
+    arguments.GetInteger(0, &object_id);
+    Shortcut* shortcut =
+        static_cast<Shortcut*>(DispatcherHost::GetApiObject(object_id));
+    GlobalShortcutListener::GetInstance()->UnregisterAccelerator(
+        shortcut->GetAccelerator(), shortcut);
+    return;
+  } else if (method == 'SetProxyConfig') {
+    std::string proxy_config;
+    arguments.GetString(0, &proxy_config);
+    SetProxyConfig(GetRenderProcessHost(), proxy_config);
+    return;
+  } else if (method == 'DoneMenuShow') {
+    dispatcher_host->quit_run_loop();
+    return;
+  }
+    
+    // Tell browser to allocate a new object.
+// function AllocateObject(id, name, options);
+v8::Handle<v8::Value> AllocateObject(int routing_id,
+                                     int object_id,
+                                     const std::string& type,
+                                     v8::Handle<v8::Value> options);
+    
+      v8::Local<v8::Array> args = v8::Array::New(isolate);
+  v8::Handle<v8::Value> element = v8::Null(isolate);
+  blink::LocalFrame* core_frame = blink::toWebLocalFrameImpl(frame)->frame();
+  if (core_frame->deprecatedLocalOwner()) {
+    element = blink::toV8((blink::HTMLElement*)core_frame->deprecatedLocalOwner(),
+                            frame->mainWorldScriptContext()->Global(),
+                            frame->mainWorldScriptContext()->GetIsolate());
+  }
+  args->Set(0, element);
+  v8::Handle<v8::Value> argv[] = {val, v8_str(ev), args };
+    
+    EventListener::~EventListener() {
+  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
+    delete i->second;
+  }
+}
+    
+      template<typename T> T* AddListener() {
+    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
+    if (i==listerners_.end()) {
+      T* listener_object = new T(this);
+      listerners_[T::id] = listener_object;
+      return listener_object;
+    }
+    return NULL;
+  }
+    
+    
+    {}  // namespace nwapi
+
+    
+        std::string tooltip;
+    if (option.GetString('tooltip', &tooltip))
+      SetTooltip(tooltip);
+    
+    
+    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.readAvailableTypes', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwClipboardReadAvailableTypesFunction);
 };
     
-    // A helper for implementing tuple_element<k, T>.  kIndexValid is true
-// iff k < the number of fields in tuple type T.
-template <bool kIndexValid, int kIndex, class Tuple>
-struct TupleElement;
-    
-    // We don't want to require the users to write TypesN<...> directly,
-// as that would require them to count the length.  Types<...> is much
-// easier to write, but generates horrible messages when there is a
-// compiler error, as gcc insists on printing out each template
-// argument, even if it has the default value (this means Types<int>
-// will appear as Types<int, None, None, ..., None> in the compiler
-// errors).
-//
-// Our solution is to combine the best part of the two approaches: a
-// user would write Types<T1, ..., TN>, and Google Test will translate
-// that to TypesN<T1, ..., TN> internally to make error messages
-// readable.  The translation is done by the 'type' member of the
-// Types template.
+    namespace rabit {
+namespace utils {
+extern 'C' {
+  void (*Printf)(const char *fmt, ...) = Rprintf;
+  void (*Assert)(int exp, const char *fmt, ...) = XGBoostAssert_R;
+  void (*Check)(int exp, const char *fmt, ...) = XGBoostCheck_R;
+  void (*Error)(const char *fmt, ...) = error;
+}
+}
+}
     
     
     {
-    {    // Adds the leak checker to the end of the test event listener list,
-    // after the default text output printer and the default XML report
-    // generator.
-    //
-    // The order is important - it ensures that failures generated in the
-    // leak checker's OnTestEnd() method are processed by the text and XML
-    // printers *before* their OnTestEnd() methods are called, such that
-    // they are attributed to the right test. Remember that a listener
-    // receives an OnXyzStart event *after* listeners preceding it in the
-    // list received that event, and receives an OnXyzEnd event *before*
-    // listeners preceding it.
-    //
-    // We don't need to worry about deleting the new listener later, as
-    // Google Test will do it.
-    listeners.Append(new LeakChecker);
-  }
-  return RUN_ALL_TESTS();
-}
+    {
+    { private:
+  /*! \brief input stream */
+  dmlc::Stream *strm_;
+  /*! \brief current buffer pointer */
+  size_t buffer_ptr_;
+  /*! \brief internal buffer */
+  std::string buffer_;
+};
+}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_IO_H_
 
     
-    // Tests some trivial cases.
-TEST(IsPrimeTest, Trivial) {
-  EXPECT_FALSE(IsPrime(0));
-  EXPECT_FALSE(IsPrime(1));
-  EXPECT_TRUE(IsPrime(2));
-  EXPECT_TRUE(IsPrime(3));
+      /* Fetch an individual column. This code should be used with XGBOOST_TYPE_SWITCH
+     to determine type of bin id's */
+  template<typename T>
+  inline Column<T> GetColumn(unsigned fid) const {
+    const bool valid_type = std::is_same<T, uint32_t>::value
+                          || std::is_same<T, uint16_t>::value
+                          || std::is_same<T, uint8_t>::value;
+    CHECK(valid_type);
+    }
+    
+    #include '../helpers.h'
+    
+    
+    {  vals_in.clear(); ss.flush(); ss.clear(); ss.str('');
+  ss << '(3,2,1';
+  ss >> vals_in;
+  EXPECT_NE(vals_in, vals);
+}
+    
+      XGBOOST_DEVICE bst_gpair_internal<T> operator+(
+      const bst_gpair_internal<T> &rhs) const {
+    bst_gpair_internal<T> g;
+    g.grad_ = grad_ + rhs.grad_;
+    g.hess_ = hess_ + rhs.hess_;
+    return g;
+  }
+    
+    std::ostream& operator<<(std::ostream& os, AsyncIOOp::State state) {
+  return os << asyncIoOpStateToString(state);
 }
     
     
+    {  if (error) {
+    throw std::runtime_error('Can't find default huge page size');
+  }
+  return pageSize;
+}
     
-        cobj = (CocosDenshion::SimpleAudioEngine*)tolua_tousertype(tolua_S,1,0);
+    void ImmediateFileWriter::writeMessage(
+    StringPiece buffer,
+    uint32_t /* flags */) {
+  // Write the data.
+  // We are doing direct file descriptor writes here, so there is no buffering
+  // of log message data.  Each message is immediately written to the output.
+  auto ret = folly::writeFull(file_.fd(), buffer.data(), buffer.size());
+  if (ret < 0) {
+    int errnum = errno;
+    LoggerDB::internalWarning(
+        __FILE__,
+        __LINE__,
+        'error writing to log file ',
+        file_.fd(),
+        ': ',
+        errnoStr(errnum));
+  }
+}
     
-    #include 'Box2D/Box2D.h'
-#include 'cocos2d.h'
-    
-    
-    {		Test::Step(settings);
-	}
-    
-    			b2PolygonShape box;
-			box.SetAsBox(2.0f, 0.1f);
-    
-    			b2Body* prevBody = ground;
-			for (int32 i = 0; i < e_count; ++i)
-			{
-				b2BodyDef bd;
-				bd.type = b2_dynamicBody;
-				bd.position.Set(5.5f + 1.0f * i, 10.0f);
-				b2Body* body = m_world->CreateBody(&bd);
-				body->CreateFixture(&fd);
+    void LogCategory::processMessage(const LogMessage& message) const {
+  // Make a copy of any attached LogHandlers, so we can release the handlers_
+  // lock before holding them.
+  //
+  // In the common case there will only be a small number of handlers.  Use a
+  // std::array in this case to avoid a heap allocation for the vector.
+  const std::shared_ptr<LogHandler>* handlers = nullptr;
+  size_t numHandlers = 0;
+  constexpr uint32_t kSmallOptimizationSize = 5;
+  std::array<std::shared_ptr<LogHandler>, kSmallOptimizationSize> handlersArray;
+  std::vector<std::shared_ptr<LogHandler>> handlersVector;
+  {
+    auto lockedHandlers = handlers_.rlock();
+    numHandlers = lockedHandlers->size();
+    if (numHandlers <= kSmallOptimizationSize) {
+      for (size_t n = 0; n < numHandlers; ++n) {
+        handlersArray[n] = (*lockedHandlers)[n];
+      }
+      handlers = handlersArray.data();
+    } else {
+      handlersVector = *lockedHandlers;
+      handlers = handlersVector.data();
+    }
+  }
     }
     
-    			x += 20.0f;
-			shape.Set(b2Vec2(x, 0.0f), b2Vec2(x + 40.0f, 0.0f));
-			ground->CreateFixture(&fd);
+    
+    {  // Update categoryConfigs_ with all of the entries from the other LogConfig.
+  //
+  // Any entries already present in our categoryConfigs_ are merged: if the new
+  // configuration does not include handler settings our entry's settings are
+  // maintained.
+  for (const auto& entry : other.categoryConfigs_) {
+    auto result = categoryConfigs_.insert(entry);
+    if (!result.second) {
+      auto* existingEntry = &result.first->second;
+      auto oldHandlers = std::move(existingEntry->handlers);
+      *existingEntry = entry.second;
+      if (!existingEntry->handlers.hasValue()) {
+        existingEntry->handlers = std::move(oldHandlers);
+      }
+    }
+  }
+}
+    
+    dynamic logConfigToDynamic(const LogConfig& config) {
+  dynamic categories = dynamic::object;
+  for (const auto& entry : config.getCategoryConfigs()) {
+    categories.insert(entry.first, logConfigToDynamic(entry.second));
+  }
+    }
