@@ -1,189 +1,103 @@
 
         
-          // mate::TrackableObject:
-  static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
-    
-    namespace api {
-    }
-    
-    namespace api {
-    }
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(RenderProcessPreferences);
-};
-    
-    
-    {}  // namespace mate
-
-    
-      static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
-    
-    v8::Local<v8::Object> CreateCustomEvent(
-    v8::Isolate* isolate,
-    v8::Local<v8::Object> object,
-    v8::Local<v8::Object> custom_event) {
-  v8::Local<v8::Object> event = CreateEventObject(isolate);
-  (void)event->SetPrototype(custom_event->CreationContext(), custom_event);
-  mate::Dictionary(isolate, event).Set('sender', object);
-  return event;
-}
-    
-     protected:
-  ~LoginHandler() override;
-    
-    #ifndef ATOM_BROWSER_NET_ASAR_ASAR_PROTOCOL_HANDLER_H_
-#define ATOM_BROWSER_NET_ASAR_ASAR_PROTOCOL_HANDLER_H_
-    
-    class HttpProtocolHandler : public net::URLRequestJobFactory::ProtocolHandler {
- public:
-  explicit HttpProtocolHandler(const std::string&);
-  virtual ~HttpProtocolHandler();
-    }
-    
-      // JsAsker:
-  void StartAsync(std::unique_ptr<base::Value> options) override;
-    
-    
-    {}  // namespace internal
-    
-    #include 'atom/browser/relauncher.h'
-    
-    #include 'atom/common/api/api_messages.h'
-#include 'content/public/browser/notification_service.h'
-#include 'content/public/browser/notification_types.h'
-#include 'content/public/browser/render_process_host.h'
-    
-    // Trigger command from the accelerators table.
-bool TriggerAcceleratorTableCommand(AcceleratorTable* table,
-                                    const ui::Accelerator& accelerator);
-    
-    #endif
-
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    const StaticString
-  s_sec('sec'),
-  s_usec('usec'),
-  s_minuteswest('minuteswest'),
-  s_dsttime('dsttime');
-    
-      /**
-   * Query if a task is finished. This is non-blocking and can be called as
-   * many times as desired.
-   */
-  static int64_t TaskStatus(const Resource& task);
-    
-    #include <folly/Optional.h>
-    
-    TRACE_SET_MOD(layout);
-    
-      /**
-   * Sub-class handles a request by implementing this function. This is called
-   * when the server determines this request should not be processed (e.g., due
-   * to timeout).
-   */
-  virtual void abortRequest(Transport* transport) = 0;
-    
-    FT_BEGIN_HEADER
-    
-    #endif
+        
+    {}  // namespace google
 
     
     
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
     
-    static const vorbis_residue_template _res_8u_0[]={
-  {1,0,32,  &_residue_44_low_un,
-   &_huff_book__8u0__single,&_huff_book__8u0__single,
-   &_resbook_8u_0,&_resbook_8u_0},
-};
-static const vorbis_residue_template _res_8u_1[]={
-  {1,0,32,  &_residue_44_mid_un,
-   &_huff_book__8u1__single,&_huff_book__8u1__single,
-   &_resbook_8u_1,&_resbook_8u_1},
-};
+    #include <sstream>
     
-    /* Approximation of square root                                          */
-/* Accuracy: < +/- 10%  for output values > 15                           */
-/*           < +/- 2.5% for output values > 120                          */
-static OPUS_INLINE opus_int32 silk_SQRT_APPROX( opus_int32 x )
-{
-    opus_int32 y, lz, frac_Q7;
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
+    
+        for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
+    {
+        g_driverType = driverTypes[driverTypeIndex];
+        hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
+                D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
+        if (SUCCEEDED(hr))
+            break;
+    }
+    if (FAILED(hr))
+        return hr;
+    
+        cv::Ptr<cv::StereoBM> sm = cv::StereoBM::create(state->numberOfDisparities,
+                                                       state->SADWindowSize);
+    sm->setPreFilterType(state->preFilterType);
+    sm->setPreFilterSize(state->preFilterSize);
+    sm->setPreFilterCap(state->preFilterCap);
+    sm->setBlockSize(state->SADWindowSize);
+    sm->setNumDisparities(state->numberOfDisparities > 0 ? state->numberOfDisparities : 64);
+    sm->setTextureThreshold(state->textureThreshold);
+    sm->setUniquenessRatio(state->uniquenessRatio);
+    sm->setSpeckleRange(state->speckleRange);
+    sm->setSpeckleWindowSize(state->speckleWindowSize);
+    sm->setDisp12MaxDiff(state->disp12MaxDiff);
+    
+    void JRodriguesMatlab(const Mat& src, Mat& dst);
+    
+    CV_EXPORTS_W void divide(InputArray src1, Scalar src2, OutputArray dst, double scale=1, int dtype=-1);
+    
+        static void CODEGEN_FUNCPTR Switch_BeginTransformFeedback(GLenum primitiveMode)
+    {
+        BeginTransformFeedback = (PFNBEGINTRANSFORMFEEDBACKPROC)IntGetProcAddress('glBeginTransformFeedback');
+        BeginTransformFeedback(primitiveMode);
     }
     
-    #undef    silk_LSHIFT8
-static OPUS_INLINE opus_int8 silk_LSHIFT8(opus_int8 a, opus_int32 shift){
-    opus_int8 ret;
-    ops_count += 1;
-    ret = a << shift;
-    return ret;
-}
-#undef    silk_LSHIFT16
-static OPUS_INLINE opus_int16 silk_LSHIFT16(opus_int16 a, opus_int32 shift){
-    opus_int16 ret;
-    ops_count += 1;
-    ret = a << shift;
-    return ret;
-}
-#undef    silk_LSHIFT32
-static OPUS_INLINE opus_int32 silk_LSHIFT32(opus_int32 a, opus_int32 shift){
-    opus_int32 ret;
-    ops_count += 1;
-    ret = a << shift;
-    return ret;
-}
-#undef    silk_LSHIFT64
-static OPUS_INLINE opus_int64 silk_LSHIFT64(opus_int64 a, opus_int shift){
-    ops_count += 1;
-    return a << shift;
-}
+    static void* openclamdfft_check_fn(int ID);
     
-    /// Remove a range of keys in domain.
-Status deleteDatabaseRange(const std::string& domain,
-                           const std::string& low,
-                           const std::string& high);
-    
-    /**
- * @brief Perform an action while waiting for an the extension timeout.
- *
- * We define a 'global' extension timeout using CLI flags.
- * There are several locations where code may act assuming an extension has
- * loaded or broadcasted a registry.
- *
- * @param predicate return true or set stop to end the timeout loop.
- * @return the last status from the predicate.
- */
-Status applyExtensionDelay(std::function<Status(bool& stop)> predicate);
-    
-      /*
-   * @brief a variable tracking all of the paths we attempt to carve
-   *
-   * This is a globbed set of file paths that we're expecting will be
-   * carved.
-   */
-  std::set<boost::filesystem::path> carvePaths_;
-    
-    TEST_F(ViewsConfigParserPluginTests, test_update_view) {
-  Config c;
-  std::vector<std::string> old_views_vec;
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  old_views_vec.clear();
-  auto s = c.update(getTestConfigMap('view_test2.conf'));
-  EXPECT_TRUE(s.ok());
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  std::string query;
-  getDatabaseValue(kQueries, 'config_views.kernel_hashes_new', query);
-  EXPECT_EQ(query,
-            'select hash.path as binary, version, hash.sha256 as SHA256, '
-            'hash.sha1 as SHA1, hash.md5 as MD5 from (select path || '
-            ''/Contents/MacOS/' as directory, name, version from '
-            'kernel_extensions) join hash using (directory)');
+    std::vector<float> Blur(const std::vector<float>& image, int w, int h) {
+    // This is only made for small sigma, e.g. 1.3.
+    static const double kSigma = 1.3;
+    std::vector<double> kernel(5);
+    for (size_t i = 0; i < kernel.size(); i++) {
+      kernel[i] = Normal(1.0 * i - kernel.size() / 2, kSigma);
+    }
     }
     
-      EXPECT_EQ('d9b4a05d914c81a1ed4ce129928e2d9a0309c753',
-            c.getHash('tls_plugin'));
+    // Performs in-place floating point 8x8 inverse DCT on block[0..63].
+void ComputeBlockIDCTDouble(double block[64]);
+    
+    #ifndef GUETZLI_JPEG_DATA_DECODER_H_
+#define GUETZLI_JPEG_DATA_DECODER_H_
+    
+    
+    {}  // namespace guetzli
+
+    
+    
+// Adds APP0 header data.
+void AddApp0Data(JPEGData* jpg);
+    
+      // Special case code with only one value.
+  if (total_count == 1) {
+    code.bits = 0;
+    code.value = symbols[0];
+    for (key = 0; key < total_size; ++key) {
+      table[key] = code;
+    }
+    return total_size;
+  }
+    
+    struct HuffmanTableEntry {
+  // Initialize the value to an invalid symbol so that we can recognize it
+  // when reading the bit stream using a Huffman code with space > 0.
+  HuffmanTableEntry() : bits(0), value(0xffff) {}
+    }
+    
+    #ifndef GUETZLI_PREPROCESS_DOWNSAMPLE_H_
+#define GUETZLI_PREPROCESS_DOWNSAMPLE_H_
