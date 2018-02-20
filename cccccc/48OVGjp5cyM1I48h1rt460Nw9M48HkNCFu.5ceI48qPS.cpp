@@ -1,118 +1,257 @@
 
         
-        cv::Mat dls::skewsymm(const cv::Mat * X1)
-{
-    cv::MatConstIterator_<double> it = X1->begin<double>();
-    return (cv::Mat_<double>(3,3) <<        0, -*(it+2),  *(it+1),
-                                      *(it+2),        0, -*(it+0),
-                                     -*(it+1),  *(it+0),       0);
+        
+    {}  // namespace api
+    
+      // event.PreventDefault().
+  void PreventDefault(v8::Isolate* isolate);
+    
+    v8::Persistent<v8::ObjectTemplate> event_template;
+    
+    
+    {}  // namespace atom
+
+    
+    namespace atom {
+    }
+    
+    // The 'type' argument identifying a relauncher process ('--type=relauncher').
+extern const CharType* kRelauncherTypeArg;
+    
+    
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
+}
+    
+    #include 'base/memory/weak_ptr.h'
+    
+    std::string Clipboard::GetText() {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  base::string16 text;
+  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+  return base::UTF16ToUTF8(text);
 }
     
     
-    {        findLinesCrossPoint(origin1, dir1, origin2, dir2, corners[i]);
+    {}  // namespace nwapi
+    
+      node::MakeCallback(isolate, objects_registry, 'handleEvent', 3, argv);
+  v8::Local<v8::Value> manifest_val = policy_obj->Get(v8_str('manifest'));
+    
+    void DispatcherHost::OnAllocateObject(int object_id,
+                                      const std::string& type,
+                                      const base::DictionaryValue& option) {
+  DVLOG(1) << 'OnAllocateObject: object_id:' << object_id
+             << ' type:' << type
+             << ' option:' << option;
     }
     
-    #include 'opencv2/core/bufferpool.hpp'
+    namespace content {
+class Shell;
+}
     
-        if (new_rows != 0 && new_rows != rows)
+    EventListener::~EventListener() {
+  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
+    delete i->second;
+  }
+}
+    
+       void ExecuteCommand(int command_id, int event_flags) override;
+    
+    
+    {}  // namespace nwapi
+
+    
+    void MenuItem::SetIcon(const std::string& icon) {
+  if (icon.empty()) {
+    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_), NULL); 
+  } else {
+    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item_),
+                                  gtk_image_new_from_file(icon.c_str()));
+    gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(menu_item_),
+                                              TRUE);
+  }
+}
+    
+        case FB_CS_STRING_1:
+    case FB_CS_STRING_N:
     {
-        int total_size = total_width * rows;
+      int64_t len = 1;
+      if (code == FB_CS_STRING_N) {
+        int err = fb_compact_unserialize_int64_from_buffer(len, buf, n, p);
+        if (err) {
+          return err;
+        }
+      }
     }
     
-      Status Echo(ServerContext* context, const EchoRequest* request,
-              EchoResponse* response) override {
-    {
-      std::unique_lock<std::mutex> lock(mu_);
-      ++request_count_;
-    }
-    return TestServiceImpl::Echo(context, request, response);
+    
+    {  v << vcall{
+    CallSpec::direct(pthread_getspecific),
+    v.makeVcallArgs({{v.cns(datum.tls->m_key)}}),
+    v.makeTuple({d}),
+    Fixup{},
+    DestType::SSA
+  };
+}
+    
+      void finish() {
+    markAsFinished();
   }
     
-    #include <cassert>
-    
-      // Allow a limit on number of messages in a stream
-  int messages_per_stream_;
-  int messages_issued_;
-    
-    #endif /* GRPC_CORE_LIB_COMPRESSION_MESSAGE_COMPRESS_H */
-
-    
-    
-    
-    namespace routeguide {
-class Feature;
+    /*
+ * This method creates a weighted graph of the clusters, and sorts
+ * them according to a DFS pre-order that prioritizes the arcs with
+ * heaviest weights, so as to try to have a cluster be followed by its
+ * mostly likely successor cluster.
+ */
+void Clusterizer::sortClusters() {
+  jit::vector<SuccInfos> clusterGraph;
+  clusterGraph.resize(m_unit.blocks.size());
     }
     
     
-float ConvertToRadians(float num) {
-  return num * 3.1415926 /180;
+    {  return PackedArrayInit(3)
+    .append(results)
+    .append(next_event
+      ? make_tv<KindOfObject>(next_event->getWaitHandle())
+      : make_tv<KindOfNull>())
+    .append(make_tv<KindOfInt64>(code))
+    .toArray();
 }
     
-    // Reads the Start of Scan (SOS) marker segment and fills in *scan_info with the
-// parsed data.
-bool ProcessSOS(const uint8_t* data, const size_t len, size_t* pos,
-                JPEGData* jpg) {
-  const size_t start_pos = *pos;
-  VERIFY_LEN(3);
-  size_t marker_len = ReadUint16(data, pos);
-  int comps_in_scan = ReadUint8(data, pos);
-  VERIFY_INPUT(comps_in_scan, 1, static_cast<int>(jpg->components.size()),
-               COMPS_IN_SCAN);
-    }
+    
+    {  return make_map_array(
+    s_ticks,  (int)ticks,        /* clock ticks */
+    s_utime,  (int)t.tms_utime,  /* user time */
+    s_stime,  (int)t.tms_stime,  /* system time */
+    s_cutime, (int)t.tms_cutime, /* user time of children */
+    s_cstime, (int)t.tms_cstime  /* system time of children */
+  );
+}
+    
+      /// Construct an open acceptor.
+  /**
+   * This constructor creates an acceptor and automatically opens it.
+   *
+   * @param io_service The io_service object that the acceptor will use to
+   * dispatch handlers for any asynchronous operations performed on the
+   * acceptor.
+   *
+   * @param protocol An object specifying protocol parameters to be used.
+   *
+   * @throws boost::system::system_error Thrown on failure.
+   */
+  basic_socket_acceptor(boost::asio::io_service& io_service,
+      const protocol_type& protocol)
+    : basic_io_object<SocketAcceptorService>(io_service)
+  {
+    boost::system::error_code ec;
+    this->get_service().open(this->get_implementation(), protocol, ec);
+    boost::asio::detail::throw_error(ec, 'open');
+  }
+    
+    #ifndef BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
+#define BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
+    
+    } // namespace date_time
+namespace posix_time {
+    
+      descriptor_read_op(int descriptor,
+      const MutableBufferSequence& buffers, Handler& handler)
+    : descriptor_read_op_base<MutableBufferSequence>(
+        descriptor, buffers, &descriptor_read_op::do_complete),
+      handler_(BOOST_ASIO_MOVE_CAST(Handler)(handler))
+  {
+  }
+    
+    #endif // !defined(BOOST_ASIO_WINDOWS) && !defined(__CYGWIN__)
+    
+    #if defined(BOOST_ASIO_WINDOWS) || defined(__CYGWIN__)
+typedef win_fd_set_adapter fd_set_adapter;
+#else
+typedef posix_fd_set_adapter fd_set_adapter;
+#endif
     
     
-    {}  // namespace guetzli
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
     
-    #include 'guetzli/gamma_correct.h'
-    
-      tmp0 = in[stride];
-  tmp1 = kIDCTMatrix[ 1] * tmp0;
-  tmp2 = kIDCTMatrix[ 9] * tmp0;
-  tmp3 = kIDCTMatrix[17] * tmp0;
-  tmp4 = kIDCTMatrix[25] * tmp0;
-  out[0] += tmp1;
-  out[1] += tmp2;
-  out[2] += tmp3;
-  out[3] += tmp4;
-  out[4] -= tmp4;
-  out[5] -= tmp3;
-  out[6] -= tmp2;
-  out[7] -= tmp1;
-    
-    namespace guetzli {
-    }
-    
-    // Mimic libjpeg's heuristics to guess jpeg color space.
-// Requires that the jpg has 3 components.
-bool HasYCbCrColorSpace(const JPEGData& jpg);
-    
-    // Creates a JPEG from the rgb pixel data. Returns true on success.
-bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
-                     JPEGData* jpg);
-    
-    namespace guetzli {
-    }
-    
-    // Handler for Win32 messages, update mouse/keyboard data.
-// You may or not need this for your implementation, but it can serve as reference for handling inputs.
-// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
-/*
-IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-*/
-
-    
-    // callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_API int32       ImGui_Marmalade_PointerButtonEventCallback(void* SystemData, void* pUserData);
-IMGUI_API int32       ImGui_Marmalade_KeyCallback(void* SystemData, void* userData);
-IMGUI_API int32       ImGui_Marmalade_CharCallback(void* SystemData, void* userData);
-
-    
-    // Backup and restore just enough data to be able to use IsItemHovered() on item A after another B in the same window has overwritten the data.  
-struct ImGuiItemHoveredDataBackup
+    template <typename Handler>
+inline void* allocate(std::size_t s, Handler& h)
 {
-    ImGuiID                 LastItemId;
-    ImGuiItemStatusFlags    LastItemStatusFlags;
-    ImRect                  LastItemRect;
-    ImRect                  LastItemDisplayRect;
+#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
+  return ::operator new(s);
+#else
+  using boost::asio::asio_handler_allocate;
+  return asio_handler_allocate(s, boost::asio::detail::addressof(h));
+#endif
+}
+    
+    // Newer gcc, clang need special treatment to suppress unused typedef warnings.
+#if defined(__clang__)
+# if defined(__apple_build_version__)
+#  if (__clang_major__ >= 7)
+#   define BOOST_ASIO_UNUSED_TYPEDEF __attribute__((__unused__))
+#  endif // (__clang_major__ >= 7)
+# elif ((__clang_major__ == 3) && (__clang_minor__ >= 6)) \
+    || (__clang_major__ > 3)
+#  define BOOST_ASIO_UNUSED_TYPEDEF __attribute__((__unused__))
+# endif // ((__clang_major__ == 3) && (__clang_minor__ >= 6))
+        //   || (__clang_major__ > 3)
+#elif defined(__GNUC__)
+# if ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4)
+#  define BOOST_ASIO_UNUSED_TYPEDEF __attribute__((__unused__))
+# endif // ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)) || (__GNUC__ > 4)
+#endif // defined(__GNUC__)
+#if !defined(BOOST_ASIO_UNUSED_TYPEDEF)
+# define BOOST_ASIO_UNUSED_TYPEDEF
+#endif // !defined(BOOST_ASIO_UNUSED_TYPEDEF)
+    
+    
+    {} // namespace A2STR
+    
+    class AbstractAuthResolver : public AuthResolver {
+public:
+  AbstractAuthResolver();
     }
+    
+    bool AbstractOptionHandler::hasTag(uint32_t tag) const
+{
+  return (tags_ & (1 << tag));
+}
+    
+    protected:
+  virtual bool executeInternal() CXX11_OVERRIDE;
+    
+    void AnnounceList::shuffle()
+{
+  for (const auto& tier : tiers_) {
+    auto& urls = tier->urls;
+    std::shuffle(std::begin(urls), std::end(urls),
+                 *SimpleRandomizer::getInstance());
+  }
+}
+    
+      ~AnnounceTier();
+    
+    // DiskwriterFactory class template to create DiskWriter derived
+// object, ignoring filename.
+template <class DiskWriterType>
+class AnonDiskWriterFactory : public DiskWriterFactory {
+public:
+  AnonDiskWriterFactory() = default;
+  virtual ~AnonDiskWriterFactory() = default;
+    }
+    
+    #endif // DOWNLOAD_EVENT_LISTENER_H
+
+    
+    #include 'TLSContext.h'
+#include 'DlAbortEx.h'
