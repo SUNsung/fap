@@ -1,36 +1,25 @@
 
         
-          end
+          private
     
-        def to_json
-      JSON.generate(as_json)
+          expect(response).to redirect_to(settings_notifications_path)
+      user.reload
+      expect(user.settings['notification_emails']['follow']).to be true
+      expect(user.settings['interactions']['must_be_follower']).to be false
     end
+  end
+end
+
     
-        def initialize(name = nil, path = nil, type = nil)
-      self.name = name
-      self.path = path
-      self.type = type
-    
-              # Underscore methods
-          if name.start_with?('Underscore')
-            node.at_css('~ ul').css('li').each do |li|
-              name = [type.downcase, li.at_css('a').content.split.first].join('.')
-              id = name.parameterize
-              li['id'] = id
-              entries << [name, id, type]
-            end
-            next
-          end
-    
-      %w(POST PUT DELETE).each do |method|
-    it 'denies #{method} requests with non-whitelisted Origin' do
-      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://malicious.com')).not_to be_ok
+          def to_s
+        @pairs.inspect
+      end
     end
+  end
+end
+
     
-        { # yes, this is ugly, feel free to change that
-      '/..' => '/', '/a/../b' => '/b', '/a/../b/' => '/b/', '/a/.' => '/a/',
-      '/%2e.' => '/', '/a/%2E%2e/b' => '/b', '/a%2f%2E%2e%2Fb/' => '/b/',
-      '//' => '/', '/%2fetc%2Fpasswd' => '/etc/passwd'
-    }.each do |a, b|
-      it('replaces #{a.inspect} with #{b.inspect}') { expect(get(a).body).to eq(b) }
-    end
+            opts.on('--cache-location PATH',
+                'The path to save parsed Sass files. Defaults to .sass-cache.') do |loc|
+          @options[:for_engine][:cache_location] = loc
+        end
