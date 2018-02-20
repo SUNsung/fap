@@ -1,191 +1,189 @@
 
         
-          // Fill database
-  for (int i = 0; i < kCount; i++) {
-    ASSERT_OK(db_->Put(WriteOptions(), Key(i), value));
-  }
-  ASSERT_OK(dbi->TEST_CompactMemTable());
+          // mate::TrackableObject:
+  static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
     
-        // Finish and check for file errors
-    if (s.ok()) {
-      s = file->Sync();
-    }
-    if (s.ok()) {
-      s = file->Close();
-    }
-    delete file;
-    file = NULL;
-    
-    
-    {}  // namespace leveldb
-    
-    // Maximum level to which a new compacted memtable is pushed if it
-// does not create overlap.  We try to push to level 2 to avoid the
-// relatively expensive level 0=>1 compactions and to avoid some
-// expensive manifest file operations.  We do not push all the way to
-// the largest level since that can generate a lot of wasted disk
-// space if the same key space is being repeatedly overwritten.
-static const int kMaxMemCompactLevel = 2;
-    
-    namespace {
+    namespace api {
     }
     
-    // Return the name of the descriptor file for the db named by
-// 'dbname' and the specified incarnation number.  The result will be
-// prefixed with 'dbname'.
-extern std::string DescriptorFileName(const std::string& dbname,
-                                      uint64_t number);
+    namespace api {
+    }
     
     
-    {  // Errors
-  static const char* errors[] = {
-    '',
-    'foo',
-    'foo-dx-100.log',
-    '.log',
-    '',
-    'manifest',
-    'CURREN',
-    'CURRENTX',
-    'MANIFES',
-    'MANIFEST',
-    'MANIFEST-',
-    'XMANIFEST-3',
-    'MANIFEST-3x',
-    'LOC',
-    'LOCKx',
-    'LO',
-    'LOGx',
-    '18446744073709551616.log',
-    '184467440737095516150.log',
-    '100',
-    '100.',
-    '100.lop'
-  };
-  for (int i = 0; i < sizeof(errors) / sizeof(errors[0]); i++) {
-    std::string f = errors[i];
-    ASSERT_TRUE(!ParseFileName(f, &number, &type)) << f;
-  }
+    {  DISALLOW_COPY_AND_ASSIGN(RenderProcessPreferences);
+};
+    
+    
+    {}  // namespace mate
+
+    
+      static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
+    
+    v8::Local<v8::Object> CreateCustomEvent(
+    v8::Isolate* isolate,
+    v8::Local<v8::Object> object,
+    v8::Local<v8::Object> custom_event) {
+  v8::Local<v8::Object> event = CreateEventObject(isolate);
+  (void)event->SetPrototype(custom_event->CreationContext(), custom_event);
+  mate::Dictionary(isolate, event).Set('sender', object);
+  return event;
 }
     
-      Status FindFiles() {
-    std::vector<std::string> filenames;
-    Status status = env_->GetChildren(dbname_, &filenames);
-    if (!status.ok()) {
-      return status;
+     protected:
+  ~LoginHandler() override;
+    
+    #ifndef ATOM_BROWSER_NET_ASAR_ASAR_PROTOCOL_HANDLER_H_
+#define ATOM_BROWSER_NET_ASAR_ASAR_PROTOCOL_HANDLER_H_
+    
+    class HttpProtocolHandler : public net::URLRequestJobFactory::ProtocolHandler {
+ public:
+  explicit HttpProtocolHandler(const std::string&);
+  virtual ~HttpProtocolHandler();
     }
-    if (filenames.empty()) {
-      return Status::IOError(dbname_, 'repair found no files');
-    }
-    }
     
-      Cache::Handle* handle = NULL;
-  Status s = FindTable(file_number, file_size, &handle);
-  if (!s.ok()) {
-    return NewErrorIterator(s);
-  }
+      // JsAsker:
+  void StartAsync(std::unique_ptr<base::Value> options) override;
     
     
-    {}  // namespace leveldb
+    {}  // namespace internal
     
-      /// See `add`, but services are not limited to a thread poll size.
-  static Status addService(InternalRunnableRef service);
+    #include 'atom/browser/relauncher.h'
+    
+    #include 'atom/common/api/api_messages.h'
+#include 'content/public/browser/notification_service.h'
+#include 'content/public/browser/notification_types.h'
+#include 'content/public/browser/render_process_host.h'
+    
+    // Trigger command from the accelerators table.
+bool TriggerAcceleratorTableCommand(AcceleratorTable* table,
+                                    const ui::Accelerator& accelerator);
+    
+    #endif
+
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    const StaticString
+  s_sec('sec'),
+  s_usec('usec'),
+  s_minuteswest('minuteswest'),
+  s_dsttime('dsttime');
     
       /**
-   * @brief Implement a 'step' of an optional run loop.
-   *
-   * @return A SUCCESS status will immediately call `run` again. A FAILED status
-   * will exit the run loop and the thread.
+   * Query if a task is finished. This is non-blocking and can be called as
+   * many times as desired.
    */
-  virtual Status run() {
-    return Status(1, 'No run loop required');
-  }
+  static int64_t TaskStatus(const Resource& task);
+    
+    #include <folly/Optional.h>
+    
+    TRACE_SET_MOD(layout);
+    
+      /**
+   * Sub-class handles a request by implementing this function. This is called
+   * when the server determines this request should not be processed (e.g., due
+   * to timeout).
+   */
+  virtual void abortRequest(Transport* transport) = 0;
+    
+    FT_BEGIN_HEADER
+    
+    #endif
+
     
     
-    {/**
- * @brief Getter for determining Admin status
+    
+    static const vorbis_residue_template _res_8u_0[]={
+  {1,0,32,  &_residue_44_low_un,
+   &_huff_book__8u0__single,&_huff_book__8u0__single,
+   &_resbook_8u_0,&_resbook_8u_0},
+};
+static const vorbis_residue_template _res_8u_1[]={
+  {1,0,32,  &_residue_44_mid_un,
+   &_huff_book__8u1__single,&_huff_book__8u1__single,
+   &_resbook_8u_1,&_resbook_8u_1},
+};
+    
+    /* Approximation of square root                                          */
+/* Accuracy: < +/- 10%  for output values > 15                           */
+/*           < +/- 2.5% for output values > 120                          */
+static OPUS_INLINE opus_int32 silk_SQRT_APPROX( opus_int32 x )
+{
+    opus_int32 y, lz, frac_Q7;
+    }
+    
+    #undef    silk_LSHIFT8
+static OPUS_INLINE opus_int8 silk_LSHIFT8(opus_int8 a, opus_int32 shift){
+    opus_int8 ret;
+    ops_count += 1;
+    ret = a << shift;
+    return ret;
+}
+#undef    silk_LSHIFT16
+static OPUS_INLINE opus_int16 silk_LSHIFT16(opus_int16 a, opus_int32 shift){
+    opus_int16 ret;
+    ops_count += 1;
+    ret = a << shift;
+    return ret;
+}
+#undef    silk_LSHIFT32
+static OPUS_INLINE opus_int32 silk_LSHIFT32(opus_int32 a, opus_int32 shift){
+    opus_int32 ret;
+    ops_count += 1;
+    ret = a << shift;
+    return ret;
+}
+#undef    silk_LSHIFT64
+static OPUS_INLINE opus_int64 silk_LSHIFT64(opus_int64 a, opus_int shift){
+    ops_count += 1;
+    return a << shift;
+}
+    
+    /// Remove a range of keys in domain.
+Status deleteDatabaseRange(const std::string& domain,
+                           const std::string& low,
+                           const std::string& high);
+    
+    /**
+ * @brief Perform an action while waiting for an the extension timeout.
  *
- * @return A bool indicating if the current process is running as admin
+ * We define a 'global' extension timeout using CLI flags.
+ * There are several locations where code may act assuming an extension has
+ * loaded or broadcasted a registry.
+ *
+ * @param predicate return true or set stop to end the timeout loop.
+ * @return the last status from the predicate.
  */
-bool isUserAdmin();
-} // namespace osquery
-
+Status applyExtensionDelay(std::function<Status(bool& stop)> predicate);
     
-      IOMemoryDescriptor *md;
-  IOMemoryMap *mm;
-  void *devfs;
-  int major_number;
-  int open_count;
+      /*
+   * @brief a variable tracking all of the paths we attempt to carve
+   *
+   * This is a globbed set of file paths that we're expecting will be
+   * carved.
+   */
+  std::set<boost::filesystem::path> carvePaths_;
     
-    
-    {    return Status(0);
-  }
-    
-    class TLSConfigPlugin : public ConfigPlugin,
-                        public std::enable_shared_from_this<TLSConfigPlugin> {
- public:
-  Status setUp() override;
-  Status genConfig(std::map<std::string, std::string>& config) override;
+    TEST_F(ViewsConfigParserPluginTests, test_update_view) {
+  Config c;
+  std::vector<std::string> old_views_vec;
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  old_views_vec.clear();
+  auto s = c.update(getTestConfigMap('view_test2.conf'));
+  EXPECT_TRUE(s.ok());
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  std::string query;
+  getDatabaseValue(kQueries, 'config_views.kernel_hashes_new', query);
+  EXPECT_EQ(query,
+            'select hash.path as binary, version, hash.sha256 as SHA256, '
+            'hash.sha1 as SHA1, hash.md5 as MD5 from (select path || '
+            ''/Contents/MacOS/' as directory, name, version from '
+            'kernel_extensions) join hash using (directory)');
     }
     
-    class BaseLogger {
- public:
-  BaseLogger() {
-#if XGBOOST_LOG_WITH_TIME
-    log_stream_ << '[' << dmlc::DateLogger().HumanDate() << '] ';
-#endif
-  }
-  std::ostream& stream() { return log_stream_; }
-    }
-    
-    XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(lz4hc)
-.describe('Apply LZ4 binary data compression(high compression ratio) for ext memory.')
-.set_body([]() {
-    return new SparsePageLZ4Format<bst_uint>(true);
-  });
-    
-    
-    {
-    {
-    { private:
-  /*! \brief input stream */
-  dmlc::Stream *strm_;
-  /*! \brief current buffer pointer */
-  size_t buffer_ptr_;
-  /*! \brief internal buffer */
-  std::string buffer_;
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_IO_H_
-
-    
-      std::unique_ptr<AuthConfig> getUserDefinedAuthConfig() const;
-    
-      const std::shared_ptr<Peer>& getPeer() const { return peer_; }
-    
-      virtual void openExistingFile(int64_t totalLength = 0) CXX11_OVERRIDE;
-    
-    #include <memory>
-    
-    namespace aria2 {
-    }
-    
-    
-    {  virtual std::unique_ptr<Command> getNextCommand() = 0;
-};
-    
-    
-    {} // namespace aria2
-    
-    #include 'DiskWriterFactory.h'
-#include 'a2functional.h'
-    
-    
-    {private:
-  Session* session_;
-  DownloadEventCallback callback_;
-  void* userData_;
-};
-    
-      bool tryAsFingerprint(const std::string& fingerprint);
+      EXPECT_EQ('d9b4a05d914c81a1ed4ce129928e2d9a0309c753',
+            c.getHash('tls_plugin'));
