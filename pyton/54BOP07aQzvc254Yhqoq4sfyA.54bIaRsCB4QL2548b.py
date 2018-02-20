@@ -1,314 +1,107 @@
 
-def test_auth_plugin_parse_auth_false(httpbin):
+        
+            def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
+                          help='set spider argument (may be repeated)')
+        parser.add_option('-o', '--output', metavar='FILE',
+                          help='dump scraped items into FILE (use - for stdout)')
+        parser.add_option('-t', '--output-format', metavar='FORMAT',
+                          help='format to use for dumping items with -o')
+    
+    try:
+    import queue
+except ImportError:
+    import Queue as queue
+    
+    def with_thread_pool_executor():
+    with ThreadPoolExecutor(10) as executor:
+        return list(executor.map(is_prime, PRIMES))
     
     
-@mock.patch('httpie.core.get_response')
-def test_error_traceback(get_response):
-    exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    with raises(ConnectionError):
-        main(['--ignore-stdin', '--traceback', 'www.google.com'])
-    
-            if downloader and exit_status == ExitStatus.OK:
-            # Last response body download.
-            download_stream, download_to = downloader.start(final_response)
-            write_stream(
-                stream=download_stream,
-                outfile=download_to,
-                flush=False,
-            )
-            downloader.finish()
-            if downloader.interrupted:
-                exit_status = ExitStatus.ERROR
-                log_error('Incomplete download: size=%d; downloaded=%d' % (
-                    downloader.status.total_size,
-                    downloader.status.downloaded
-                ))
-        return exit_status
+  def Response( self ):
+    return self._response
     
     
-def trim_filename_if_needed(filename, directory='.', extra=0):
-    max_len = get_filename_max_length(directory) - extra
-    if len(filename) > max_len:
-        filename = trim_filename(filename, max_len)
-    return filename
-    
-        @staticmethod
-    def make_header(username, password):
-        credentials = u'%s:%s' % (username, password)
-        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
-        return 'Basic %s' % token
-    
-        # Try to resolve the right lexer.
-    lexer = None
-    for mime_type in mime_types:
-        try:
-            lexer = pygments.lexers.get_lexer_for_mimetype(mime_type)
-            break
-        except ClassNotFound:
-            pass
-    else:
-        for name in lexer_names:
-            try:
-                lexer = pygments.lexers.get_lexer_by_name(name)
-            except ClassNotFound:
-                pass
-    
-            if opts.nolog:
-            self.settings.set('LOG_ENABLED', False, priority='cmdline')
-    
-            try:
-            self.min_bound = int(self.args[1])
-        except IndexError:
-            self.min_bound = 1
-    
-    # revision identifiers, used by Alembic.
-revision = 'b318dfe5fb6c'
-down_revision = 'd6db5a5cdb5d'
-    
-    from alembic import op
-import sqlalchemy as sa
-    
-    Revision ID: 1a48a5411020
-Revises: 289ce07647b
-Create Date: 2015-12-04 09:42:16.973264
-    
-    Revision ID: 1d2ddd543133
-Revises: d2424a248d63
-Create Date: 2016-03-25 14:35:44.642576
-    
-    Revision ID: 1e2841a4128
-Revises: 5a7bad26f2a7
-Create Date: 2015-10-05 22:11:00.537054
+  def Start( self ):
+    request_data = BuildRequestData()
+    request_data.update( { 'filetypes': self.filetypes } )
+    with HandleServerException():
+      self._response = self.PostDataToHandler( request_data,
+                                               'semantic_completion_available' )
     
     
-class Slice(Base):
-    '''Declarative class to do query in upgrade'''
-    __tablename__ = 'slices'
-    id = Column(Integer, primary_key=True)
-    datasource_id = Column(Integer)
-    druid_datasource_id = Column(Integer)
-    table_id = Column(Integer)
-    datasource_type = Column(String(200))
+class ShutdownRequest( BaseRequest ):
+  def __init__( self ):
+    super( BaseRequest, self ).__init__()
+    
+      assert_that( filter.IsAllowed( text_or_obj ), equal_to( expected ) )
     
     
+def ExtractKeywordsFromGroup_WithLinksTo_test():
+  assert_that( syntax_parse._ExtractKeywordsFromGroup(
+                 syntax_parse.SyntaxGroup( '', [
+                   'foo bar',
+                   'zoo goo',
+                   'links to Statement'
+                 ] ) ),
+               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
+    
+        def test_sales_manager_shall_respond_through_proxy_with_delay(cls):
+        cls.p.busy = 'Yes'
+        start_time = time()
+        cls.p.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+Sales Manager is busy\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
+    
+        fftv.publish('cartoon')
+    fftv.publish('music')
+    fftv.publish('ads')
+    fftv.publish('movie')
+    fftv.publish('cartoon')
+    fftv.publish('cartoon')
+    fftv.publish('movie')
+    fftv.publish('blank')
+    
+        def setUp(self):
+        self.sample_queue = queue.Queue()
+        self.sample_queue.put('first')
+        self.sample_queue.put('second')
+    
+        def test_tc3_output(self):
+        self.tc3.run()
+        output = self.out.getvalue().strip()
+        self.assertEqual(output, self.average_result_tc3)
+    
+    from contextlib import contextmanager
+import os
+import sys
+import time
+import abc
+    
+        def rename(self, src, dest):
+        print(u'renaming %s to %s' % (src, dest))
+        os.rename(src, dest)
+    
+        def update(self, subject):
+        print(u'DecimalViewer: Subject %s has data %d' %
+              (subject.name, subject.data))
     
     
-def upgrade():
-    ### commands auto generated by Alembic - please adjust! ###
-    op.create_table('clusters',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('cluster_name', sa.String(length=250), nullable=True),
-    sa.Column('coordinator_host', sa.String(length=255), nullable=True),
-    sa.Column('coordinator_port', sa.Integer(), nullable=True),
-    sa.Column('coordinator_endpoint', sa.String(length=255), nullable=True),
-    sa.Column('broker_host', sa.String(length=255), nullable=True),
-    sa.Column('broker_port', sa.Integer(), nullable=True),
-    sa.Column('broker_endpoint', sa.String(length=255), nullable=True),
-    sa.Column('metadata_last_refreshed', sa.DateTime(), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('cluster_name')
-    )
-    op.create_table('dashboards',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('dashboard_title', sa.String(length=500), nullable=True),
-    sa.Column('position_json', sa.Text(), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('dbs',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('database_name', sa.String(length=250), nullable=True),
-    sa.Column('sqlalchemy_uri', sa.String(length=1024), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('database_name')
-    )
-    op.create_table('datasources',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('datasource_name', sa.String(length=255), nullable=True),
-    sa.Column('is_featured', sa.Boolean(), nullable=True),
-    sa.Column('is_hidden', sa.Boolean(), nullable=True),
-    sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('default_endpoint', sa.Text(), nullable=True),
-    sa.Column('user_id', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('cluster_name', sa.String(length=250), sa.ForeignKey('clusters.cluster_name'), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('datasource_name')
-    )
-    op.create_table('tables',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('table_name', sa.String(length=250), nullable=True),
-    sa.Column('main_dttm_col', sa.String(length=250), nullable=True),
-    sa.Column('default_endpoint', sa.Text(), nullable=True),
-    sa.Column('database_id', sa.Integer(), sa.ForeignKey('dbs.id'), nullable=False),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('table_name')
-    )
-    op.create_table('columns',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('datasource_name', sa.String(length=255), nullable=True),
-    sa.Column('column_name', sa.String(length=255), nullable=True),
-    sa.Column('is_active', sa.Boolean(), nullable=True),
-    sa.Column('type', sa.String(length=32), nullable=True),
-    sa.Column('groupby', sa.Boolean(), nullable=True),
-    sa.Column('count_distinct', sa.Boolean(), nullable=True),
-    sa.Column('sum', sa.Boolean(), nullable=True),
-    sa.Column('max', sa.Boolean(), nullable=True),
-    sa.Column('min', sa.Boolean(), nullable=True),
-    sa.Column('filterable', sa.Boolean(), nullable=True),
-    sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('metrics',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('metric_name', sa.String(length=512), nullable=True),
-    sa.Column('verbose_name', sa.String(length=1024), nullable=True),
-    sa.Column('metric_type', sa.String(length=32), nullable=True),
-    sa.Column('datasource_name', sa.String(length=255), sa.ForeignKey('datasources.datasource_name'), nullable=True),
-    sa.Column('json', sa.Text(), nullable=True),
-    sa.Column('description', sa.Text(), nullable=True),
-    sa.ForeignKeyConstraint(['datasource_name'], ['datasources.datasource_name'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('slices',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('slice_name', sa.String(length=250), nullable=True),
-    sa.Column('druid_datasource_id', sa.Integer(), sa.ForeignKey('datasources.id'), nullable=True),
-    sa.Column('table_id', sa.Integer(), sa.ForeignKey('tables.id'), nullable=True),
-    sa.Column('datasource_type', sa.String(length=200), nullable=True),
-    sa.Column('datasource_name', sa.String(length=2000), nullable=True),
-    sa.Column('viz_type', sa.String(length=250), nullable=True),
-    sa.Column('params', sa.Text(), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('sql_metrics',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('metric_name', sa.String(length=512), nullable=True),
-    sa.Column('verbose_name', sa.String(length=1024), nullable=True),
-    sa.Column('metric_type', sa.String(length=32), nullable=True),
-    sa.Column('table_id', sa.Integer(), sa.ForeignKey('tables.id'), nullable=True),
-    sa.Column('expression', sa.Text(), nullable=True),
-    sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('table_columns',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('table_id', sa.Integer(), sa.ForeignKey('tables.id'), nullable=True),
-    sa.Column('column_name', sa.String(length=255), nullable=True),
-    sa.Column('is_dttm', sa.Boolean(), nullable=True),
-    sa.Column('is_active', sa.Boolean(), nullable=True),
-    sa.Column('type', sa.String(length=32), nullable=True),
-    sa.Column('groupby', sa.Boolean(), nullable=True),
-    sa.Column('count_distinct', sa.Boolean(), nullable=True),
-    sa.Column('sum', sa.Boolean(), nullable=True),
-    sa.Column('max', sa.Boolean(), nullable=True),
-    sa.Column('min', sa.Boolean(), nullable=True),
-    sa.Column('filterable', sa.Boolean(), nullable=True),
-    sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('dashboard_slices',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('dashboard_id', sa.Integer(), sa.ForeignKey('dashboards.id'), nullable=True),
-    sa.Column('slice_id', sa.Integer(), sa.ForeignKey('slices.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    ### end Alembic commands ###
+def jump(distance):
+    press_time = distance * 1.35
+    press_time = int(press_time)
+    cmd = 'adb shell input swipe 320 410 320 410 ' + str(press_time)
+    print(cmd)
+    os.system(cmd)
     
-    # revision identifiers, used by Alembic.
-revision = '4fa88fe24e94'
-down_revision = 'b4456560d4f3'
-    
-    # Aliases for types that are spelled differently in different Python
-# versions. bytes_type is deprecated and no longer used in Tornado
-# itself but is left in case anyone outside Tornado is using it.
-bytes_type = bytes
-if PY3:
-    unicode_type = str
-    basestring_type = str
-else:
-    # The names unicode and basestring don't exist in py3 so silence flake8.
-    unicode_type = unicode  # noqa
-    basestring_type = basestring  # noqa
-    
-    from tornado.http1connection import HTTP1Connection
-from tornado.httputil import HTTPMessageDelegate
-from tornado.iostream import IOStream
-from tornado.locks import Event
-from tornado.netutil import add_accept_handler
-from tornado.testing import AsyncTestCase, bind_unused_port, gen_test
-    
-            # We don't yield between get() and task_done(), so get() must wait for
-        # the next tick. Otherwise we'd immediately call task_done and unblock
-        # join() before q.put() resumes, and we'd only process the first four
-        # items.
-        @gen.coroutine
-        def consumer():
-            while True:
-                history.append((yield q.get()))
-                q.task_done()
-    
-        @gen.coroutine
-    def resolve(self, host, port, family=0):
-        if is_valid_ip(host):
-            addresses = [host]
-        else:
-            # gethostbyname doesn't take callback as a kwarg
-            self.channel.gethostbyname(host, family, (yield gen.Callback(1)))
-            callback_args = yield gen.Wait(1)
-            assert isinstance(callback_args, gen.Arguments)
-            assert not callback_args.kwargs
-            result, error = callback_args.args
-            if error:
-                raise IOError('C-Ares returned error %s: %s while resolving %s' %
-                              (error, pycares.errno.strerror(error), host))
-            addresses = result.addresses
-        addrinfo = []
-        for address in addresses:
-            if '.' in address:
-                address_family = socket.AF_INET
-            elif ':' in address:
-                address_family = socket.AF_INET6
-            else:
-                address_family = socket.AF_UNSPEC
-            if family != socket.AF_UNSPEC and family != address_family:
-                raise IOError('Requested socket family %d but got %d' %
-                              (family, address_family))
-            addrinfo.append((address_family, (address, port)))
-        raise gen.Return(addrinfo)
+        img = cv2.imread('./autojump.png')
+    img = cv2.resize(img, (0, 0), fx=scale, fy=scale)
+    img, src_x, src_y = search(img)
+    return img
