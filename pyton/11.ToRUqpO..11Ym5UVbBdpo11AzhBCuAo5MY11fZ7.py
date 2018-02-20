@@ -1,81 +1,95 @@
-    def __exit__(self, exc_type, exc_value, traceback):
-        self.proc.kill()
-        self.proc.wait()
-        time.sleep(0.2)
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-l', '--list', dest='list', action='store_true',
-                          help='only list contracts, without checking them')
-        parser.add_option('-v', '--verbose', dest='verbose', default=False, action='store_true',
-                          help='print contract tests for all spiders')
-    
-        def run(self, args, opts):
-        if len(args) < 1:
-            raise UsageError()
-        elif len(args) > 1:
-            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
-        spname = args[0]
-    
-            return request
-    
-        return strings
 
+        
+                # because special names such as Name.Class, Name.Function, etc.
+        # are not recognized as such later in the parsing, we choose them
+        # to look the same as ordinary variables.
+        Name:                      '#000000',        # class: 'n'
+        Name.Attribute:            '#c4a000',        # class: 'na' - to be revised
+        Name.Builtin:              '#004461',        # class: 'nb'
+        Name.Builtin.Pseudo:       '#3465a4',        # class: 'bp'
+        Name.Class:                '#000000',        # class: 'nc' - to be revised
+        Name.Constant:             '#000000',        # class: 'no' - to be revised
+        Name.Decorator:            '#888',           # class: 'nd' - to be revised
+        Name.Entity:               '#ce5c00',        # class: 'ni'
+        Name.Exception:            'bold #cc0000',   # class: 'ne'
+        Name.Function:             '#000000',        # class: 'nf'
+        Name.Property:             '#000000',        # class: 'py'
+        Name.Label:                '#f57900',        # class: 'nl'
+        Name.Namespace:            '#000000',        # class: 'nn' - to be revised
+        Name.Other:                '#000000',        # class: 'nx'
+        Name.Tag:                  'bold #004461',   # class: 'nt' - like a keyword
+        Name.Variable:             '#000000',        # class: 'nv' - to be revised
+        Name.Variable.Class:       '#000000',        # class: 'vc' - to be revised
+        Name.Variable.Global:      '#000000',        # class: 'vg' - to be revised
+        Name.Variable.Instance:    '#000000',        # class: 'vi' - to be revised
     
-        class GetResource(RequestHandler):
-        def get(self, path):
-            if path not in resources:
-                raise HTTPError(404)
-    
-        @gen.coroutine
-    def resolve(self, host, port, family=0):
-        if is_valid_ip(host):
-            addresses = [host]
+        def __exit__(self, exc_type, exc_value, traceback):
+        if exc_type is None:
+            self.stop_event.wait(self.WAIT_EVENT_TIMEOUT)
         else:
-            # gethostbyname doesn't take callback as a kwarg
-            self.channel.gethostbyname(host, family, (yield gen.Callback(1)))
-            callback_args = yield gen.Wait(1)
-            assert isinstance(callback_args, gen.Arguments)
-            assert not callback_args.kwargs
-            result, error = callback_args.args
-            if error:
-                raise IOError('C-Ares returned error %s: %s while resolving %s' %
-                              (error, pycares.errno.strerror(error), host))
-            addresses = result.addresses
-        addrinfo = []
-        for address in addresses:
-            if '.' in address:
-                address_family = socket.AF_INET
-            elif ':' in address:
-                address_family = socket.AF_INET6
-            else:
-                address_family = socket.AF_UNSPEC
-            if family != socket.AF_UNSPEC and family != address_family:
-                raise IOError('Requested socket family %d but got %d' %
-                              (family, address_family))
-            addrinfo.append((address_family, (address, port)))
-        raise gen.Return(addrinfo)
-
-    
-        logging.warning('Starting fetch with curl client')
-    curl_client = CurlAsyncHTTPClient()
-    curl_client.fetch('http://localhost:%d/' % options.port,
-                      callback=callback)
-    IOLoop.current().start()
+            if self.wait_to_close_event:
+                # avoid server from waiting for event timeouts
+                # if an exception is found in the main thread
+                self.wait_to_close_event.set()
     
     
-class MessageNewHandler(tornado.web.RequestHandler):
-    def post(self):
-        message = {
-            'id': str(uuid.uuid4()),
-            'body': self.get_argument('body'),
-        }
-        # to_basestring is necessary for Python 3's json encoder,
-        # which doesn't accept byte strings.
-        message['html'] = tornado.escape.to_basestring(
-            self.render_string('message.html', message=message))
-        if self.get_argument('next', None):
-            self.redirect(self.get_argument('next'))
-        else:
-            self.write(message)
-        global_message_buffer.new_messages([message])
+class Timeout(RequestException):
+    '''The request timed out.
+    
+    packages = ['requests']
+    
+    
+class TestAddressInNetwork:
+    
+        def load_config(self):
+        '''Returns the next config directory to be tested'''
+        shutil.rmtree(self.le_config.work_dir, ignore_errors=True)
+        backup = os.path.join(self.le_config.work_dir, constants.BACKUP_DIR)
+        os.makedirs(backup)
+        return self._configs.pop()
+    
+        @mock.patch(
+        'certbot_compatibility_test.validator.crypto_util.probe_sni')
+    def test_certificate_success(self, mock_probe_sni):
+        cert = OpenSSL.crypto.X509()
+        mock_probe_sni.return_value = cert
+        self.assertTrue(self.validator.certificate(
+            cert, 'test.com', '127.0.0.1'))
+    
+            html = get_content(endpoint, headers= fake_header_id)
+        html_json = json.loads(html)
+    
+    #----------------------------------------------------------------------
+def makeMimi(upid):
+    '''From http://cdn37.atwikiimg.com/sitescript/pub/dksitescript/FC2.site.js
+    Also com.hps.util.fc2.FC2EncrptUtil.makeMimiLocal
+    L110'''
+    strSeed = 'gGddgPfeaf_gzyr'
+    prehash = upid + '_' + strSeed
+    return md5(prehash.encode('utf-8')).hexdigest()
+    
+        while pin_count > 0:
+        json_data = extract_json_data(url, max=pin_list[-1]['pin_id'],
+                                      limit=LIMIT)
+        pins = json_data['pins']
+        pin_list += pins
+        pin_count -= len(pins)
+    
+    #----------------------------------------------------------------------
+def sina_xml_to_url_list(xml_data):
+    '''str->list
+    Convert XML to URL List.
+    From Biligrab.
+    '''
+    rawurl = []
+    dom = parseString(xml_data)
+    for node in dom.getElementsByTagName('durl'):
+        url = node.getElementsByTagName('url')[0]
+        rawurl.append(url.childNodes[0].data)
+    return rawurl
+    
+            # extract raw urls
+        orig_img = match1(content,
+                         r'<meta itemprop='image' content='([^']+/originals/[^']+)'')
+        twit_img = match1(content,
+                          r'<meta property='twitter:image:src' name='twitter:image:src' content='([^']+)'')
