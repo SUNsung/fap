@@ -1,198 +1,301 @@
 
         
-        class SILDebuggerClient;
+          Slice user_key() const { return ExtractUserKey(rep_); }
     
-      void visitTuplePattern(TuplePattern *P) {
-    // We print tuples as '(x, y)'.
-    ResultString += '(';
-    for (unsigned i = 0, e = P->getNumElements(); i != e; ++i) {
-      visit(P->getElement(i).getPattern());
-      if (i + 1 != e)
-        ResultString += ', ';
+    
+    {  // When limit user key is prefix of start user key
+  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
+            Shorten(IKey('foobar', 100, kTypeValue),
+                    IKey('foo', 200, kTypeValue)));
+}
+    
+    Status DumpTable(Env* env, const std::string& fname, WritableFile* dst) {
+  uint64_t file_size;
+  RandomAccessFile* file = NULL;
+  Table* table = NULL;
+  Status s = env->GetFileSize(fname, &file_size);
+  if (s.ok()) {
+    s = env->NewRandomAccessFile(fname, &file);
+  }
+  if (s.ok()) {
+    // We use the default comparator, which may or may not match the
+    // comparator used in this database. However this should not cause
+    // problems since we only use Table operations that do not require
+    // any comparisons.  In particular, we do not call Seek or Prev.
+    s = Table::Open(Options(), file, file_size, &table);
+  }
+  if (!s.ok()) {
+    delete table;
+    delete file;
+    return s;
+  }
     }
-    ResultString += ')';
-  }
-  void visitNamedPattern(NamedPattern *P) {
-    ResultString += P->getBoundName().str();
-  }
-  void visitAnyPattern(AnyPattern *P) {
-    ResultString += '_';
-  }
-  void visitVarPattern(VarPattern *P) {
-    visit(P->getSubPattern());
-  }
     
-        // Quickly see if copy has only one use and that use is a destroy_value. In
-    // such a case, we can always eliminate both the copy and the destroy.
-    if (auto *Op = CVI->getSingleUse()) {
-      if (auto *DVI = dyn_cast<DestroyValueInst>(Op->getUser())) {
-        DVI->eraseFromParent();
-        CVI->eraseFromParent();
-        NumEliminatedInsts += 2;
-        continue;
+     private:
+  Env* const env_;
+  const std::string dbname_;
+  const Options* options_;
+  Cache* cache_;
+    
+    static void TestEncodeDecode(const VersionEdit& edit) {
+  std::string encoded, encoded2;
+  edit.EncodeTo(&encoded);
+  VersionEdit parsed;
+  Status s = parsed.DecodeFrom(encoded);
+  ASSERT_TRUE(s.ok()) << s.ToString();
+  parsed.EncodeTo(&encoded2);
+  ASSERT_EQ(encoded, encoded2);
+}
+    
+    TEST(WriteBatchTest, Multiple) {
+  WriteBatch batch;
+  batch.Put(Slice('foo'), Slice('bar'));
+  batch.Delete(Slice('box'));
+  batch.Put(Slice('baz'), Slice('boo'));
+  WriteBatchInternal::SetSequence(&batch, 100);
+  ASSERT_EQ(100, WriteBatchInternal::Sequence(&batch));
+  ASSERT_EQ(3, WriteBatchInternal::Count(&batch));
+  ASSERT_EQ('Put(baz, boo)@102'
+            'Delete(box)@101'
+            'Put(foo, bar)@100',
+            PrintContents(&batch));
+}
+    
+    
+    {    FILE* cpuinfo = fopen('/proc/cpuinfo', 'r');
+    if (cpuinfo != NULL) {
+      char line[1000];
+      int num_cpus = 0;
+      std::string cpu_type;
+      std::string cache_size;
+      while (fgets(line, sizeof(line), cpuinfo) != NULL) {
+        const char* sep = strchr(line, ':');
+        if (sep == NULL) {
+          continue;
+        }
+        Slice key = TrimSpace(Slice(line, sep - 1 - line));
+        Slice val = TrimSpace(Slice(sep + 1));
+        if (key == 'model name') {
+          ++num_cpus;
+          cpu_type = val.ToString();
+        } else if (key == 'cache size') {
+          cache_size = val.ToString();
+        }
       }
+      fclose(cpuinfo);
+      fprintf(stderr, 'CPU:            %d * %s\n', num_cpus, cpu_type.c_str());
+      fprintf(stderr, 'CPUCache:       %s\n', cache_size.c_str());
     }
-    
-        size_t C1Offset = SourceNext - SourceStart;
-    ConvertUTF8toUTF32(&SourceNext, SourceStart + S.size(), &TargetStart, C + 2,
-                       llvm::lenientConversion);
-    
-    /// Index the given module and store the results to \p indexStorePath.
-///
-/// \param module The module to index.
-///
-/// \param indexUnitTokens A list of unique identifiers for the index units to
-/// be written. This may either be one unit per source file of \p module, or it
-/// may be a single unit, in which case all the index information will be
-/// combined into a single unit.
-///
-/// \param moduleUnitToken A unique identifier for this module unit in the form
-/// of a file path. Only used if \p indexUnitTokens are specified for each
-/// source file, otherwise the single \p indexUnitTokens value is used instead.
-///
-/// \param indexStorePath The location to write the indexing data to.
-///
-/// \param indexSystemModules If true, emit index data for imported serialized
-/// swift system modules.
-///
-/// \param isDebugCompilation true for non-optimized compiler invocation.
-///
-/// \param targetTriple The target for this compilation.
-///
-/// \param dependencyTracker The set of dependencies seen while building.
-bool indexAndRecord(ModuleDecl *module, ArrayRef<std::string> indexUnitTokens,
-                    StringRef moduleUnitToken, StringRef indexStorePath,
-                    bool indexSystemModules, bool isDebugCompilation,
-                    StringRef targetTriple,
-                    const DependencyTracker &dependencyTracker);
-// FIXME: indexUnitTokens could be StringRef, but that creates an impedance
-// mismatch in the caller.
-    
-    #ifndef SWIFT_PRINTINGDIAGNOSTICCONSUMER_H
-#define SWIFT_PRINTINGDIAGNOSTICCONSUMER_H
-    
-    // Overloads for other simple built-in types.
-inline void PrintTo(bool x, ::std::ostream* os) {
-  *os << (x ? 'true' : 'false');
-}
-    
-    #define EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS(statement, substr) \
-  do {\
-    ::testing::TestPartResultArray gtest_failures;\
-    ::testing::internal::SingleFailureChecker gtest_checker(\
-        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
-        (substr));\
-    {\
-      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
-          ::testing::ScopedFakeTestPartResultReporter::INTERCEPT_ALL_THREADS, \
-          &gtest_failures);\
-      if (::testing::internal::AlwaysTrue()) { statement; }\
-    }\
-  } while (::testing::internal::AlwaysFalse())
-    
-    // Type-parameterized tests are abstract test patterns parameterized
-// by a type.  Compared with typed tests, type-parameterized tests
-// allow you to define the test pattern without knowing what the type
-// parameters are.  The defined pattern can be instantiated with
-// different types any number of times, in any number of translation
-// units.
-//
-// If you are designing an interface or concept, you can define a
-// suite of type-parameterized tests to verify properties that any
-// valid implementation of the interface/concept should have.  Then,
-// each implementation can easily instantiate the test suite to verify
-// that it conforms to the requirements, without having to write
-// similar tests repeatedly.  Here's an example:
-    
-    $for j [[
-    
-      template <GTEST_1_TYPENAMES_(U)>
-  tuple& CopyFrom(const GTEST_1_TUPLE_(U)& t) {
-    f0_ = t.f0_;
-    return *this;
+#endif
   }
     
     
-    {  // <TechnicalDetails>
-  //
-  // EXPECT_EQ(expected, actual) is the same as
-  //
-  //   EXPECT_TRUE((expected) == (actual))
-  //
-  // except that it will print both the expected value and the actual
-  // value when the assertion fails.  This is very helpful for
-  // debugging.  Therefore in this case EXPECT_EQ is preferred.
-  //
-  // On the other hand, EXPECT_TRUE accepts any Boolean expression,
-  // and is thus more general.
-  //
-  // </TechnicalDetails>
+    {}  // namespace leveldb
+    
+      std::string comparator_;
+  uint64_t log_number_;
+  uint64_t prev_log_number_;
+  uint64_t next_file_number_;
+  SequenceNumber last_sequence_;
+  bool has_comparator_;
+  bool has_log_number_;
+  bool has_prev_log_number_;
+  bool has_next_file_number_;
+  bool has_last_sequence_;
+    
+      static Slice Contents(const WriteBatch* batch) {
+    return Slice(batch->rep_);
+  }
+    
+        // Change SQLite cache size
+    char cache_size[100];
+    snprintf(cache_size, sizeof(cache_size), 'PRAGMA cache_size = %d',
+             FLAGS_num_pages);
+    status = sqlite3_exec(db_, cache_size, NULL, NULL, &err_msg);
+    ExecErrorCheck(status, err_msg);
+    
+      // Check that opening non-existent file fails.
+  SequentialFile* seq_file;
+  RandomAccessFile* rand_file;
+  ASSERT_TRUE(!env_->NewSequentialFile('/dir/non_existent', &seq_file).ok());
+  ASSERT_TRUE(!seq_file);
+  ASSERT_TRUE(!env_->NewRandomAccessFile('/dir/non_existent', &rand_file).ok());
+  ASSERT_TRUE(!rand_file);
+    
+    
+    {  // Check last filter
+  ASSERT_TRUE(reader.KeyMayMatch(9000, 'box'));
+  ASSERT_TRUE(reader.KeyMayMatch(9000, 'hello'));
+  ASSERT_TRUE(! reader.KeyMayMatch(9000, 'foo'));
+  ASSERT_TRUE(! reader.KeyMayMatch(9000, 'bar'));
 }
     
-    namespace guetzli {
-    }
+      // The block handle for the index block of the table
+  const BlockHandle& index_handle() const {
+    return index_handle_;
+  }
+  void set_index_handle(const BlockHandle& h) {
+    index_handle_ = h;
+  }
     
-    namespace guetzli {
-    }
     
-    #ifdef ANDROID
+    {}  // namespace leveldb
+    
+    // Return an iterator that provided the union of the data in
+// children[0,n-1].  Takes ownership of the child iterators and
+// will delete them when the result iterator is deleted.
+//
+// The result does no duplicate suppression.  I.e., if a particular
+// key is present in K child iterators, it will be yielded K times.
+//
+// REQUIRES: n >= 0
+extern Iterator* NewMergingIterator(
+    const Comparator* comparator, Iterator** children, int n);
+    
+    
+    {}
     
     
     {
-    {        if (JNI_OK == status_) {
-            we_attach_ = true;
-            pthread_setspecific(g_env_key, env_);
-        } else {
-            ASSERT2(false, 'vm:%p, env:%p, status:%d', vm_, env_, status_);
-            env_ = NULL;
-            return;
-        }
-    } while (false);
-    
-    jint ret = env_->PushLocalFrame(_capacity);
-    ASSERT2(0 == ret, 'ret:%d', ret);
+    {}
 }
     
-    uv_loop_t *loop;
-uv_buf_t upgradeHeader;
-uv_buf_t framePack;
-    
-    #ifdef _WIN32
-#pragma comment(lib, 'Ws2_32.lib')
-    
-    template <bool isServer>
-void *Group<isServer>::getUserData() {
-    return userData;
-}
+    #ifndef DUMPCRASHSTACK_H_
+#define DUMPCRASHSTACK_H_
     
     
-    {    }
+/*
+ * WakeUpLock.cpp
+ *
+ *  Created on: 2012-9-28
+ *      Author: yerungui
+ */
     
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
     
-    {    // this is not correct, but it works for now
-    // think about transfer - should allow one to not delete
-    // but in this case it doesn't matter at all
-    void close(Loop *loop, void (*cb)(Poll *)) {
-        socket->release();
-        socket->get_io_service().post([cb, this]() {
-            cb(this);
-        });
-        delete socket;
-        socket = nullptr;
+      private:
+    virtual void __OnAttach(const char* _key) = 0;
+    virtual void __OnDetach(const char* _key) = 0;
+    
+    #ifndef _COMM_FUNCTION_H_
+#define _COMM_FUNCTION_H_
+    
+    typedef GRPC_CUSTOM_STRING string;
+    
+      std::string SayHello(const std::string &name) {
+    flatbuffers::grpc::MessageBuilder mb;
+    auto name_offset = mb.CreateString(name);
+    auto request_offset = CreateHelloRequest(mb, name_offset);
+    mb.Finish(request_offset);
+    auto request_msg = mb.ReleaseMessage<HelloRequest>();
     }
+    
+        // `flatbuffers::grpc::MessageBuilder` is a `FlatBufferBuilder` with a
+    // special allocator for efficient gRPC buffer transfer, but otherwise
+    // usage is the same as usual.
+    auto msg_offset = mb_.CreateString('Hello, ' + name);
+    auto hello_offset = CreateHelloReply(mb_, msg_offset);
+    mb_.Finish(hello_offset);
+    
+      // If schemas used contain include statements, call this function for every
+  // directory the parser should search them for.
+  void AddIncludeDirectory(const char *path) { include_paths_.push_back(path); }
+    
+    #ifndef LLVM_FUZZER_EXT_FUNCTIONS_H
+#define LLVM_FUZZER_EXT_FUNCTIONS_H
+    
+    std::string FileToString(const std::string &Path);
+    
+      // Merge Corpora[1:] into Corpora[0].
+  void Merge(const std::vector<std::string> &Corpora);
+  void CrashResistantMerge(const std::vector<std::string> &Args,
+                           const std::vector<std::string> &Corpora);
+  void CrashResistantMergeInternalStep(const std::string &ControlFilePath);
+  // Returns a subset of 'Extra' that adds coverage to 'Initial'.
+  UnitVector FindExtraUnits(const UnitVector &Initial, const UnitVector &Extra);
+  MutationDispatcher &GetMD() { return MD; }
+  void PrintFinalStats();
+  void SetMaxInputLen(size_t MaxInputLen);
+  void SetMaxMutationLen(size_t MaxMutationLen);
+  void RssLimitCallback();
+    
+    struct FuzzingOptions {
+  int Verbosity = 1;
+  size_t MaxLen = 0;
+  int UnitTimeoutSec = 300;
+  int TimeoutExitCode = 77;
+  int ErrorExitCode = 77;
+  int MaxTotalTimeSec = 0;
+  int RssLimitMb = 0;
+  bool DoCrossOver = true;
+  int MutateDepth = 5;
+  bool UseCounters = false;
+  bool UseIndirCalls = true;
+  bool UseMemcmp = true;
+  bool UseMemmem = true;
+  bool UseCmp = false;
+  bool UseValueProfile = false;
+  bool Shrink = false;
+  int ReloadIntervalSec = 1;
+  bool ShuffleAtStartUp = true;
+  bool PreferSmall = true;
+  size_t MaxNumberOfRuns = -1L;
+  int ReportSlowUnits = 10;
+  bool OnlyASCII = false;
+  std::string OutputCorpus;
+  std::string ArtifactPrefix = './';
+  std::string ExactArtifactPath;
+  std::string ExitOnSrcPos;
+  std::string ExitOnItem;
+  bool SaveArtifacts = true;
+  bool PrintNEW = true; // Print a status line when new units are found;
+  bool OutputCSV = false;
+  bool PrintNewCovPcs = false;
+  bool PrintFinalStats = false;
+  bool PrintCorpusStats = false;
+  bool PrintCoverage = false;
+  bool DumpCoverage = false;
+  bool DetectLeaks = true;
+  int  TraceMalloc = 0;
+  bool HandleAbrt = false;
+  bool HandleBus = false;
+  bool HandleFpe = false;
+  bool HandleIll = false;
+  bool HandleInt = false;
+  bool HandleSegv = false;
+  bool HandleTerm = false;
 };
     
-        Poll(const Poll &other) = delete;
-    
-    
-    {    int indices = NodeData::getMemoryBlockIndex(NodeData::preAllocMaxSize) + 1;
-    for (int i = 0; i < indices; i++) {
-        if (nodeData->preAlloc[i]) {
-            delete [] nodeData->preAlloc[i];
-        }
-    }
-    delete [] nodeData->preAlloc;
-    delete nodeData->netContext;
-    delete nodeData;
-    loop->destroy();
+    std::string Hash(const Unit &U) {
+  uint8_t Hash[kSHA1NumBytes];
+  ComputeSHA1(U.data(), U.size(), Hash);
+  return Sha1ToString(Hash);
 }
+    
+    // Value profile.
+// We keep track of various values that affect control flow.
+// These values are inserted into a bit-set-based hash map.
+// Every new bit in the map is treated as a new coverage.
+//
+// For memcmp/strcmp/etc the interesting value is the length of the common
+// prefix of the parameters.
+// For cmp instructions the interesting value is a XOR of the parameters.
+// The interesting value is mixed up with the PC and is then added to the map.
+    
+      // We don't want to create too many trace-based mutations as it is both
+  // expensive and useless. So after some number of mutations is collected,
+  // start rejecting some of them. The more there are mutations the more we
+  // reject.
+  bool WantToHandleOneMoreMutation() {
+    const size_t FirstN = 64;
+    // Gladly handle first N mutations.
+    if (NumMutations <= FirstN) return true;
+    size_t Diff = NumMutations - FirstN;
+    size_t DiffLog = sizeof(long) * 8 - __builtin_clzl((long)Diff);
+    assert(DiffLog > 0 && DiffLog < 64);
+    bool WantThisOne = MD.GetRand()(1 << DiffLog) == 0;  // 1 out of DiffLog.
+    return WantThisOne;
+  }
