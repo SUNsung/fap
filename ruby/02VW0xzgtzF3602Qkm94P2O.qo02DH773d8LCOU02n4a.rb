@@ -1,67 +1,42 @@
-    # Extracts the Geometry from a 'WxH,O' string
-    # Where W is the width, H is the height,
-    # and O is the EXIF orientation
-    def self.parse(string)
-      GeometryParser.new(string).make
-    end
+
+        
+        # No trailing slash
+Benchmark.ips do |x|
+  path = '/some/very/very/long/path/to/a/file/i/like/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
+end
+
     
-        def geometry_string
-      begin
-        orientation = Paperclip.options[:use_exif_orientation] ?
-          '%[exif:orientation]' : '1'
-        Paperclip.run(
-          'identify',
-          '-format '%wx%h,#{orientation}' :file', {
-            :file => '#{path}[0]'
-          }, {
-            :swallow_stderr => true
-          }
-        )
-      rescue Cocaine::ExitStatusError
-        ''
-      rescue Cocaine::CommandNotFoundError => e
-        raise_because_imagemagick_missing
+          if site.theme && site.theme.layouts_path.eql?(base)
+        @base_dir = site.theme.root
+        @path = site.in_theme_dir(base, name)
+      else
+        @base_dir = site.source
+        @path = site.in_source_dir(base, name)
+      end
+      @relative_path = @path.sub(@base_dir, '')
+    
+          attr_accessor :description
+    
+            expect(result).to eq('/usr/local/bin/cloc  --by-file --xml  --out=build/cloc.xml')
+      end
+    
+          it 'get HG revision number' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          get_build_number_repository(
+            use_hg_revision_number: true
+          )
+        end').runner.execute(:test)
+    
+          def plugin_gem_names
+        (Gem.loaded_specs.keys - ['capistrano']).grep(/capistrano/).sort
       end
     end
-    
-            def matches? subject
-          @subject = subject
-          @subject = @subject.new if @subject.class == Class
-          lower_than_low? && higher_than_low? && lower_than_high? && higher_than_high?
-        end
-    
-      # GET /books/1/edit
-  def edit
   end
+end
+
     
-            # This is a convenient way to check whether the variable is used
-        # in its entire variable lifetime.
-        # For more precise usage check, refer Assignment#used?.
-        #
-        # Once the variable is captured by a block, we have no idea
-        # when, where and how many times the block would be invoked
-        # and it means we cannot track the usage of the variable.
-        # So we consider it's used to suppress false positive offenses.
-        def used?
-          @captured_by_block || referenced?
-        end
-    
-    module RuboCop
-  module Cop
-    module Layout
-      # Checks for unnecessary additional spaces inside array percent literals
-      # (i.e. %i/%w).
-      #
-      # @example
-      #
-      #   # bad
-      #   %w(foo  bar  baz)
-      #   # good
-      #   %i(foo bar baz)
-      class SpaceInsideArrayPercentLiteral < Cop
-        include MatchRange
-        include PercentLiteral
-    
-            def on_send(node)
-          return unless node.receiver && node.method?(:freeze) &&
-                        immutable_literal?(node.receiver)
+      mkdir_p tasks_dir
