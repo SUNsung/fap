@@ -1,137 +1,88 @@
 
         
-            # Get rid of any info 'dir' files, so they don't conflict at the link stage
-    info_dir_file = @f.info + 'dir'
-    if info_dir_file.file? && !@f.skip_clean?(info_dir_file)
-      observe_file_removal info_dir_file
+              # Topic may be hard deleted due to spam, no point complaining
+      # we would have to look at the topics table id sequence to find cases
+      # where this was called with an invalid id, no point really
+      return unless topic.present?
+    
+      private
+    
+      def retry_queued
+    @jobs = Delayed::Job.awaiting_retry.update_all(run_at: Time.zone.now)
+    
+    respond_to do |format|
+      format.html { redirect_to jobs_path, notice: 'Queued jobs getting retried.' }
+      format.json { head :no_content }
     end
+  end
     
-          path_modified_time = path.mtime
-      days_default = options[:days_default]
-    
-        first_warning = true
-    methods.each do |method|
-      unless checks.respond_to?(method)
-        Homebrew.failed = true
-        puts 'No check available by the name: #{method}'
-        next
+        # replace in the top-level selector
+    # replace_in_selector('a {a: {a: a} } a {}', /a/, 'b') => 'b {a: {a: a} } b {}'
+    def replace_in_selector(css, pattern, sub)
+      # scan for selector positions in css
+      s        = CharStringScanner.new(css)
+      prev_pos = 0
+      sel_pos  = []
+      while (brace = s.scan_next(RULE_OPEN_BRACE_RE))
+        pos = s.pos
+        sel_pos << (prev_pos .. pos - 1)
+        s.pos    = close_brace_pos(css, s.pos - 1) + 1
+        prev_pos = pos
       end
-    
-        # Exclude cache, logs, and repository, if they are located under the prefix.
-    [HOMEBREW_CACHE, HOMEBREW_LOGS, HOMEBREW_REPOSITORY].each do |dir|
-      dirs.delete dir.relative_path_from(HOMEBREW_PREFIX).to_s
-    end
-    dirs.delete 'etc'
-    dirs.delete 'var'
-    
-          if $stdout.tty?
-        count = local_results.length + tap_results.length
-    
-        @report
-  end
-    
-    class Devise::UnlocksController < DeviseController
-  prepend_before_action :require_no_authentication
-    
-      def respond_with_navigational(*args, &block)
-    respond_with(*args) do |format|
-      format.any(*navigational_formats, &block)
-    end
-  end
-    
-      def test_returns_success
-    Warden.test_mode!
-    
-          def self.generate_helpers!(routes=nil)
-        routes ||= begin
-          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
-          Devise::URL_HELPERS.slice(*mappings)
-        end
-    
-      def user_search
-    if params[:admins_controller_user_search]
-      search_params = params.require(:admins_controller_user_search)
-                            .permit(:username, :email, :guid, :under13)
-      @search = UserSearch.new(search_params)
-      @users = @search.perform
+      replace_substrings_at(css, sel_pos) { |s| s.gsub(pattern, sub) }
     end
     
-          def create
-        req = Rack::Request.new(request.env)
-        if req['client_assertion_type'] == 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
-          handle_jwt_bearer(req)
-        end
-        self.status, headers, self.response_body = Api::OpenidConnect::TokenEndpoint.new.call(request.env)
-        headers.each {|name, value| response.headers[name] = value }
-        nil
-      end
+      # Show full error reports and disable caching.
+  config.consider_all_requests_local       = true
+  config.action_controller.perform_caching = false
     
-          private
-    
-    desc 'Deploy a new release.'
-task :deploy do
-  set(:deploying, true)
-  %w{ starting started
-      updating updated
-      publishing published
-      finishing finished }.each do |task|
-    invoke 'deploy:#{task}'
-  end
+    desc 'Start a dummy (test) Rails app server'
+task :dummy_rails do
+  require 'rack'
+  require 'term/ansicolor'
+  port = ENV['PORT'] || 9292
+  puts %Q(Starting on #{Term::ANSIColor.cyan 'http://localhost:#{port}'})
+  Rack::Server.start(
+    config: 'test/dummy_rails/config.ru',
+    Port: port)
 end
-task default: :deploy
-
     
-      deploy_rb = File.expand_path('../../templates/deploy.rb.erb', __FILE__)
-  stage_rb = File.expand_path('../../templates/stage.rb.erb', __FILE__)
-  capfile = File.expand_path('../../templates/Capfile', __FILE__)
-    
-        # Hash access of interpolations. Included only for compatibility,
-    # and is not intended for normal use.
-    def self.[] name
-      method(name)
-    end
-    
-            def autocorrect(node)
-          redundant_regex?(node) do |receiver, regex_str|
-            receiver, regex_str = regex_str, receiver if receiver.is_a?(String)
-            regex_str = regex_str[0..-3] # drop \Z anchor
-            regex_str = interpret_string_escapes(regex_str)
+            def_node_matcher :redundant_regex?, <<-PATTERN
+          {(send $!nil? {:match :=~} (regexp (str $#literal_at_start?) (regopt)))
+           (send (regexp (str $#literal_at_start?) (regopt)) {:match :=~} $_)}
+        PATTERN
     
     module RuboCop
   module Cop
-    module Performance
-      # This cop identifies the use of `Regexp#match` or `String#match`, which
-      # returns `#<MatchData>`/`nil`. The return value of `=~` is an integral
-      # index/`nil` and is more performant.
+    module Lint
+      # Don't omit the accumulator when calling `next` in a `reduce` block.
       #
       # @example
+      #
       #   # bad
-      #   do_something if str.match(/regex/)
-      #   while regex.match('str')
-      #     do_something
+      #
+      #   result = (1..4).reduce(0) do |acc, i|
+      #     next if i.odd?
+      #     acc + i
       #   end
       #
-      #   # good
-      #   method(str =~ /regex/)
-      #   return value unless regex =~ 'str'
-      class RedundantMatch < Cop
-        MSG = 'Use `=~` in places where the `MatchData` returned by ' \
-              '`#match` will not be used.'.freeze
-    
-    module RuboCop
-  module Cop
-    module Style
-      # This cop checks against comparing a variable with multiple items, where
-      # `Array#include?` could be used instead to avoid code repetition.
-      #
       # @example
-      #   # bad
-      #   a = 'a'
-      #   foo if a == 'a' || a == 'b' || a == 'c'
       #
       #   # good
-      #   a = 'a'
-      #   foo if ['a', 'b', 'c'].include?(a)
-      class MultipleComparison < Cop
-        MSG = 'Avoid comparing a variable with multiple items ' \
-          'in a conditional, use `Array#include?` instead.'.freeze
+      #
+      #   result = (1..4).reduce(0) do |acc, i|
+      #     next acc if i.odd?
+      #     acc + i
+      #   end
+      class NextWithoutAccumulator < Cop
+        MSG = 'Use `next` with an accumulator argument in a `reduce`.'.freeze
+    
+            def each_misplaced_optional_arg(arguments)
+          optarg_positions, arg_positions = argument_positions(arguments)
+          return if optarg_positions.empty? || arg_positions.empty?
+    
+          expect('.border-width-false-third').to have_ruleset(ruleset)
+      expect('.border-width-false-third').to_not have_rule(bad_rule)
+    end
+  end
+end
