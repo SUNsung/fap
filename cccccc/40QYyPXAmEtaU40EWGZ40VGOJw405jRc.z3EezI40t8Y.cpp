@@ -1,103 +1,248 @@
 
         
-        
-    {}  // namespace google
+        namespace tensorflow {
+    }
+    
+      int called = 0;
+  partial_run_mgr.PartialRunDone(
+      step_id, [&called](Status status) { called++; }, Status::OK());
+  partial_run_mgr.ExecutorDone(step_id, Status::OK());
+    
+    #endif  // TENSORFLOW_FRAMEWORK_RESOURCE_OP_KERNEL_H_
 
     
-    
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-    
-    #include <sstream>
-    
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
-    
-        for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
-    {
-        g_driverType = driverTypes[driverTypeIndex];
-        hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-                D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
-        if (SUCCEEDED(hr))
-            break;
+        // Find node in graph with that name.
+    auto iter = name_index->find(id.first);
+    if (iter == name_index->end()) {
+      return errors::NotFound('FetchOutputs node ', t, ': not found');
     }
-    if (FAILED(hr))
-        return hr;
+    Node* n = iter->second;
+    DCHECK_EQ(n->name(), id.first);
+    VLOG(2) << 'Found fetch node for ' << t;
     
-        cv::Ptr<cv::StereoBM> sm = cv::StereoBM::create(state->numberOfDisparities,
-                                                       state->SADWindowSize);
-    sm->setPreFilterType(state->preFilterType);
-    sm->setPreFilterSize(state->preFilterSize);
-    sm->setPreFilterCap(state->preFilterCap);
-    sm->setBlockSize(state->SADWindowSize);
-    sm->setNumDisparities(state->numberOfDisparities > 0 ? state->numberOfDisparities : 64);
-    sm->setTextureThreshold(state->textureThreshold);
-    sm->setUniquenessRatio(state->uniquenessRatio);
-    sm->setSpeckleRange(state->speckleRange);
-    sm->setSpeckleWindowSize(state->speckleWindowSize);
-    sm->setDisp12MaxDiff(state->disp12MaxDiff);
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    void JRodriguesMatlab(const Mat& src, Mat& dst);
-    
-    CV_EXPORTS_W void divide(InputArray src1, Scalar src2, OutputArray dst, double scale=1, int dtype=-1);
-    
-        static void CODEGEN_FUNCPTR Switch_BeginTransformFeedback(GLenum primitiveMode)
-    {
-        BeginTransformFeedback = (PFNBEGINTRANSFORMFEEDBACKPROC)IntGetProcAddress('glBeginTransformFeedback');
-        BeginTransformFeedback(primitiveMode);
-    }
-    
-    static void* openclamdfft_check_fn(int ID);
-    
-    std::vector<float> Blur(const std::vector<float>& image, int w, int h) {
-    // This is only made for small sigma, e.g. 1.3.
-    static const double kSigma = 1.3;
-    std::vector<double> kernel(5);
-    for (size_t i = 0; i < kernel.size(); i++) {
-      kernel[i] = Normal(1.0 * i - kernel.size() / 2, kSigma);
+    namespace tensorflow {
+namespace port {
     }
     }
     
-    // Performs in-place floating point 8x8 inverse DCT on block[0..63].
-void ComputeBlockIDCTDouble(double block[64]);
-    
-    #ifndef GUETZLI_JPEG_DATA_DECODER_H_
-#define GUETZLI_JPEG_DATA_DECODER_H_
-    
-    
-    {}  // namespace guetzli
-
-    
-    
-// Adds APP0 header data.
-void AddApp0Data(JPEGData* jpg);
-    
-      // Special case code with only one value.
-  if (total_count == 1) {
-    code.bits = 0;
-    code.value = symbols[0];
-    for (key = 0; key < total_size; ++key) {
-      table[key] = code;
+    namespace xla {
     }
-    return total_size;
+    
+    
+    {  ChildValues childValues_;
+  std::ostream* document_;
+  std::string indentString_;
+  int rightMargin_;
+  std::string indentation_;
+  bool addChildValues_ : 1;
+  bool indented_ : 1;
+};
+    
+    // Builds a RepeatedScalarContainer object, from a parent message and a
+// field descriptor.
+extern PyObject *NewContainer(
+    CMessage* parent, const FieldDescriptor* parent_field_descriptor);
+    
+    
+    {}
+    
+    #include <string>
+    
+    #ifdef USE_OPENCV
+  /**
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to a vector of Mat.
+   *
+   * @param mat_vector
+   *    A vector of Mat containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See memory_layer.cpp for an example.
+   */
+  void Transform(const vector<cv::Mat> & mat_vector,
+                Blob<Dtype>* transformed_blob);
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the reordered input.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient
+   *        with respect to the outputs
+   *   -# @f$ (M \times ...) @f$:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2):
+   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
+   *     required) back to the input x_1
+   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
+   *     false.
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    
+    {}  // namespace caffe
+    
+      /**
+   * @brief Computes the Contrastive error gradient w.r.t. the inputs.
+   *
+   * Computes the gradients with respect to the two input vectors (bottom[0] and
+   * bottom[1]), but not the similarity label (bottom[2]).
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+   *      This Blob's diff will simply contain the loss_weight* @f$ \lambda @f$,
+   *      as @f$ \lambda @f$ is the coefficient of this layer's output
+   *      @f$\ell_i@f$ in the overall Net loss
+   *      @f$ E = \lambda_i \ell_i + \mbox{other loss terms}@f$; hence
+   *      @f$ \frac{\partial E}{\partial \ell_i} = \lambda_i @f$.
+   *      (*Assuming that this top Blob is not used as a bottom (input) by any
+   *      other layer of the Net.)
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$a@f$; Backward fills their diff with
+   *      gradients if propagate_down[0]
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$b@f$; Backward fills their diff with gradients if
+   *      propagate_down[1]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+      virtual inline const char* type() const { return 'Convolution'; }
+    
+      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
+  cudnnTensorDescriptor_t    bias_desc_;
+  cudnnFilterDescriptor_t      filter_desc_;
+  vector<cudnnConvolutionDescriptor_t> conv_descs_;
+  int bottom_offset_, top_offset_, bias_offset_;
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #include 'caffe/layers/pooling_layer.hpp'
+    
+    
+    {}  // namespace caffe
+    
+      /// Perform a blocking wait on the timer.
+  /**
+   * This function is used to wait for the timer to expire. This function
+   * blocks and does not return until the timer has expired.
+   *
+   * @throws boost::system::system_error Thrown on failure.
+   */
+  void wait()
+  {
+    boost::system::error_code ec;
+    this->service.wait(this->implementation, ec);
+    boost::asio::detail::throw_error(ec, 'wait');
   }
     
-    struct HuffmanTableEntry {
-  // Initialize the value to an invalid symbol so that we can recognize it
-  // when reading the bit stream using a Huffman code with space > 0.
-  HuffmanTableEntry() : bits(0), value(0xffff) {}
+    namespace boost {
+namespace asio {
+    }
     }
     
-    #ifndef GUETZLI_PREPROCESS_DOWNSAMPLE_H_
-#define GUETZLI_PREPROCESS_DOWNSAMPLE_H_
+    #include <boost/asio/detail/push_options.hpp>
+    
+    class ptime;
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    #include <boost/asio/detail/push_options.hpp>
+    
+    #endif // BOOST_ASIO_DETAIL_IMPL_BUFFER_SEQUENCE_ADAPTER_IPP
+
+    
+      if (result >= 0)
+  {
+    ec = boost::system::error_code();
+    if (value)
+      state |= user_set_non_blocking;
+    else
+    {
+      // Clearing the user-set non-blocking mode always overrides any
+      // internally-set non-blocking flag. Any subsequent asynchronous
+      // operations will need to re-enable non-blocking I/O.
+      state &= ~(user_set_non_blocking | internal_non_blocking);
+    }
+    return true;
+  }
+    
+    
+    
+    
+    
+    
+    
+        void initShader( void );
+public:
+    GLESDebugDraw();
+    
+    	b2FixtureDef fd;
+	fd.shape = &circle;
+	fd.density = 20.0f;
+	fd.restitution = 0.0f;
+	
+	b2Vec2 minV = position - b2Vec2(0.3f,0.3f);
+	b2Vec2 maxV = position + b2Vec2(0.3f,0.3f);
+	
+	b2AABB aabb;
+	aabb.lowerBound = minV;
+	aabb.upperBound = maxV;
+    
+    #endif
+
+    
+    
+    {			if ((p.x < -10.0f && v.x < 0.0f) ||
+				(p.x > 10.0f && v.x > 0.0f))
+			{
+				v.x = -v.x;
+				m_platform->SetLinearVelocity(v);
+			}
+		}
+    
+    		// Compute consistent velocities for new bodies based on
+		// cached velocity.
+		b2Vec2 center1 = body1->GetWorldCenter();
+		b2Vec2 center2 = body2->GetWorldCenter();
+		
+		b2Vec2 velocity1 = m_velocity + b2Cross(m_angularVelocity, center1 - center);
+		b2Vec2 velocity2 = m_velocity + b2Cross(m_angularVelocity, center2 - center);
+    
+    			bd.position.Set(230.0f, 2.5f);
+			body = m_world->CreateBody(&bd);
+			body->CreateFixture(&box, 0.5f);
+    
+      void setDefaultCred(std::string user, std::string password);
+    
+    
+    {} // namespace aria2
+
+    
+    class ApiCallbackDownloadEventListener : public DownloadEventListener {
+public:
+  ApiCallbackDownloadEventListener(Session* session,
+                                   DownloadEventCallback callback,
+                                   void* userData);
+  virtual ~ApiCallbackDownloadEventListener();
+  virtual void onEvent(DownloadEvent event,
+                       const RequestGroup* group) CXX11_OVERRIDE;
+    }
+    
+    #include 'common.h'
