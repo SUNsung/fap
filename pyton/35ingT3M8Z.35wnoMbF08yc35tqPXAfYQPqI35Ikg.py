@@ -1,186 +1,102 @@
 
         
-        
-def import_state_tuples(state_tuples, name, num_replicas):
-  restored = []
-  for i in range(len(state_tuples) * num_replicas):
-    c = tf.get_collection_ref(name)[2 * i + 0]
-    h = tf.get_collection_ref(name)[2 * i + 1]
-    restored.append(tf.contrib.rnn.LSTMStateTuple(c, h))
-  return tuple(restored)
+        # Make coding more python3-ish
+from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
     
-      # Empirical testing showed that including batch_normalization variables
-  # in the calculation of regularized loss helped validation accuracy
-  # for the CIFAR-10 dataset, perhaps because the regularization prevents
-  # overfitting on the small data set. We therefore include all vars when
-  # regularizing and computing loss during training.
-  def loss_filter_fn(name):
-    return True
-    
-      Returns:
-    image_paths: List of image paths.
-  '''
-  with tf.gfile.GFile(list_path, 'r') as f:
-    image_paths = f.readlines()
-  image_paths = [entry.rstrip() for entry in image_paths]
-  return image_paths
-    
-      tf.logging.info('Found %d inliers' % sum(inliers))
-    
-        if config.delf_local_config.use_pca:
-      # Load PCA parameters.
-      pca_mean = tf.constant(
-          datum_io.ReadFromFile(
-              config.delf_local_config.pca_parameters.mean_path),
-          dtype=tf.float32)
-      pca_matrix = tf.constant(
-          datum_io.ReadFromFile(
-              config.delf_local_config.pca_parameters.projection_matrix_path),
-          dtype=tf.float32)
-      pca_dim = config.delf_local_config.pca_parameters.pca_dim
-      pca_variances = None
-      if config.delf_local_config.pca_parameters.use_whitening:
-        pca_variances = tf.constant(
-            datum_io.ReadFromFile(
-                config.delf_local_config.pca_parameters.pca_variances_path),
-            dtype=tf.float32)
-    
-      Returns:
-    locations: [N, 2] float array which denotes the selected keypoint
-      locations. N is the number of features.
-    scales: [N] float array with feature scales.
-    descriptors: [N, depth] float array with DELF descriptors.
-    attention: [N] float array with attention scores.
-    orientations: [N] float array with orientations.
-  '''
-  num_features = len(delf_features.feature)
-  if num_features == 0:
-    return np.array([]), np.array([]), np.array([]), np.array([])
-    
-        # Generate predictions from the model
-    expected = ['Setosa', 'Versicolor', 'Virginica']
-    predict_x = {
-        'SepalLength': [5.1, 5.9, 6.9],
-        'SepalWidth': [3.3, 3.0, 3.1],
-        'PetalLength': [1.7, 4.2, 5.4],
-        'PetalWidth': [0.5, 1.5, 2.1],
-    }
+            If the return values are relative paths, they will be passed to
+        `RequestHandler.static_url`; otherwise they will be used as-is.
+        '''
+        return None
     
     
-def upgrade():
-    try:
-        op.alter_column(
-            'clusters', 'changed_on',
-            existing_type=sa.DATETIME(),
-            nullable=True)
-        op.alter_column(
-            'clusters', 'created_on',
-            existing_type=sa.DATETIME(), nullable=True)
-        op.drop_constraint(None, 'columns', type_='foreignkey')
-        op.drop_constraint(None, 'columns', type_='foreignkey')
-        op.drop_column('columns', 'created_on')
-        op.drop_column('columns', 'created_by_fk')
-        op.drop_column('columns', 'changed_on')
-        op.drop_column('columns', 'changed_by_fk')
-        op.alter_column('css_templates', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('css_templates', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dashboards', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dashboards', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.create_unique_constraint(None, 'dashboards', ['slug'])
-        op.alter_column('datasources', 'changed_by_fk',
-                   existing_type=sa.INTEGER(),
-                   nullable=True)
-        op.alter_column('datasources', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('datasources', 'created_by_fk',
-                   existing_type=sa.INTEGER(),
-                   nullable=True)
-        op.alter_column('datasources', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dbs', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dbs', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('slices', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('slices', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('sql_metrics', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('sql_metrics', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('table_columns', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('table_columns', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('tables', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('tables', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('url', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('url', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        ### end Alembic commands ###
-    except:
-        pass
+def re_unescape(s):
+    # type: (str) -> str
+    '''Unescape a string escaped by `re.escape`.
     
-    class Slice(Base, AuditMixin):
-    '''Declarative class to do query in upgrade'''
-    __tablename__ = 'slices'
-    id = Column(Integer, primary_key=True)
-    owners = relationship('User', secondary=slice_user)
+    from tornado.escape import json_decode
+from tornado.test.httpserver_test import TypeCheckHandler
+from tornado.testing import AsyncHTTPTestCase
+from tornado.web import RequestHandler, Application
+from tornado.wsgi import WSGIApplication, WSGIContainer, WSGIAdapter
+    
+            with ExceptionStackContext(error_handler):
+            request = HTTPRequest(self.get_url('/custom_reason'),
+                                  prepare_curl_callback=lambda curl: 1 / 0)
+        yield [error_event.wait(), self.http_client.fetch(request)]
+        self.assertEqual(1, len(exc_info))
+        self.assertIs(exc_info[0][0], ZeroDivisionError)
+    
+        @gen_test
+    def test_stop_in_callback(self):
+        # Issue #2069: calling server.stop() in a loop callback should not
+        # raise EBADF when the loop handles other server connection
+        # requests in the same loop iteration
+    
+        def call_wrapped_inner(self, queue, count):
+        if count < 0:
+            return
+        with self.make_context():
+            queue.append(stack_context.wrap(
+                functools.partial(self.call_wrapped_inner, queue, count - 1)))
     
     
-class Slice(Base):
-    '''Declarative class to do query in upgrade'''
-    __tablename__ = 'slices'
-    id = Column(Integer, primary_key=True)
-    datasource_id = Column(Integer)
-    druid_datasource_id = Column(Integer)
-    table_id = Column(Integer)
-    datasource_type = Column(String(200))
+class BaseRegisteredClass(object):
+    __metaclass__ = RegistryHolder
+    '''
+        Any class that will inherits from BaseRegisteredClass will be included
+        inside the dict RegistryHolder.REGISTRY, the key being the name of the
+        class and the associated value, the class itself.
+    '''
+    pass
     
-    
-def downgrade():
-    try:
-        with op.batch_alter_table('tables') as batch_op:
-            batch_op.create_index('table_name', ['table_name'], unique=True)
-    except Exception as e:
-        logging.warning(str(e))
+        def test_dog_greek_localization(self):
+        self.assertEqual(self.g.get('dog'), 'σκύλος')
     
     '''
+Port of the Java example of 'Setter Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
+http://xunitpatterns.com/Dependency%20Injection.html.
+    
+    from __future__ import print_function
+    
+        def not_specification(self):
+        return NotSpecification(self)
+    
+    
+def get_data(file_name):
+    data = pandas.read_csv(file_name)
+    distance_array = []
+    press_time_array = []
+    for distance, press_time in zip(data['Distance'], data['Press_time']):
+        distance_array.append([float(distance.strip().strip('[]'))])
+        press_time_array.append([float(press_time.strip().strip('[]'))])
+    return distance_array, press_time_array
+    
+    template = cv2.imread('./resource/image/character.png')
+template = cv2.resize(template, (0, 0), fx=scale, fy=scale)
+template_size = template.shape[:2]
     
     '''
+=== 思路 ===
+核心：每次落稳之后截图，根据截图算出棋子的坐标和下一个块顶面的中点坐标，
+    根据两个点的距离乘以一个时间系数获得长按的时间
+识别棋子：靠棋子的颜色来识别位置，通过截图发现最下面一行大概是一条
+    直线，就从上往下一行一行遍历，比较颜色（颜色用了一个区间来比较）
+    找到最下面的那一行的所有点，然后求个中点，求好之后再让 Y 轴坐标
+    减小棋子底盘的一半高度从而得到中心点的坐标
+识别棋盘：靠底色和方块的色差来做，从分数之下的位置开始，一行一行扫描，
+    由于圆形的块最顶上是一条线，方形的上面大概是一个点，所以就
+    用类似识别棋子的做法多识别了几个点求中点，这时候得到了块中点的 X
+    轴坐标，这时候假设现在棋子在当前块的中心，根据一个通过截图获取的
+    固定的角度来推出中点的 Y 坐标
+最后：根据两点的坐标算距离乘以系数来获取长按时间（似乎可以直接用 X 轴距离）
+'''
     
-            self.title = match1(html, r'<meta property='og:title' content='([^']*)'')
+    '''
+##基于python3.5(64位)
+###如果缺少scikit-image库，建议进下面网址下载whl直接安装
+##https://www.lfd.uci.edu/~gohlke/pythonlibs/#scikit-image
     
-    __all__ = ['ehow_download']
-    
-    def mixcloud_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url, faker=True)
-    title = r1(r'<meta property='og:title' content='([^']*)'', html)
-    preview_url = r1(r'm-preview=\'([^\']+)\'', html)
-    preview = r1(r'previews(.*)\.mp3$', preview_url)
+        # 寻找棋子 ◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
