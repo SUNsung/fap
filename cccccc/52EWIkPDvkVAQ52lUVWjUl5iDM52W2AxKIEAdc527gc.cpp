@@ -1,39 +1,84 @@
 
-    {}  // namespace nw
+        
+          // Adds a creator.
+  static void AddCreator(const string& type, Creator creator) {
+    CreatorRegistry& registry = Registry();
+    CHECK_EQ(registry.count(type), 0)
+        << 'Layer type ' << type << ' already registered.';
+    registry[type] = creator;
+  }
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_2 @f$
+   *   -# ...
+   *   - K @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_K @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
+   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
+   *      the concatenated output @f$
+   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+      virtual inline int ExactNumBottomBlobs() const { return 3; }
+  virtual inline const char* type() const { return 'ContrastiveLoss'; }
+  /**
+   * Unlike most loss layers, in the ContrastiveLossLayer we can backpropagate
+   * to the first two inputs.
+   */
+  virtual inline bool AllowForceBackward(const int bottom_index) const {
+    return bottom_index != 2;
+  }
+    
+    #endif  // CAFFE_CUDNN_RELU_LAYER_HPP_
 
     
-    namespace nwapi {
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    /**
+ * @brief During training only, sets a random portion of @f$x@f$ to 0, adjusting
+ *        the rest of the vector magnitude accordingly.
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$ y = |x| @f$
+ */
+template <typename Dtype>
+class DropoutLayer : public NeuronLayer<Dtype> {
+ public:
+  /**
+   * @param param provides DropoutParameter dropout_param,
+   *     with DropoutLayer options:
+   *   - dropout_ratio (\b optional, default 0.5).
+   *     Sets the probability @f$ p @f$ that any given unit is dropped.
+   */
+  explicit DropoutLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-      v8::Handle<v8::String> source = v8::String::NewExternal(isolate,
-                                                          new extensions::StaticV8ExternalOneByteStringResource(
-          GetStringResource(resource_id)));
-  v8::Handle<v8::String> wrapped_source = WrapSource(source);
-    
-    
-    {} // namespace nwapi
-
-    
-    #include <map>
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(MenuDelegate);
-};
-    
-      gfx::Point* point = reinterpret_cast<gfx::Point*>(userdata);
-  *x = point->x();
-  *y = point->y();
-    
-    
-#define REGISTER_LAYER_CREATOR(type, creator)                                  \
-  static LayerRegisterer<float> g_creator_f_##type(#type, creator<float>);     \
-  static LayerRegisterer<double> g_creator_d_##type(#type, creator<double>)    \
-    
-    #include <vector>
-    
-    
-    {  /**
-   * @brief Computes the error gradient w.r.t. the BNLL inputs.
+      /**
+   * @brief Computes the error gradient w.r.t. the exp inputs.
    *
    * @param top output Blob vector (length 1), providing the error gradient with
    *      respect to the outputs
@@ -41,266 +86,48 @@
    *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
    *      with respect to computed outputs @f$ y @f$
    * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
+   * @param bottom input Blob vector (length 1)
    *   -# @f$ (N \times C \times H \times W) @f$
    *      the inputs @f$ x @f$; Backward fills their diff with
    *      gradients @f$
-   *        \frac{\partial E}{\partial x}
+   *        \frac{\partial E}{\partial x} =
+   *            \frac{\partial E}{\partial y} y \alpha \log_e(gamma)
    *      @f$ if propagate_down[0]
    */
   virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
   virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
     
-    
-    {  WorkloadStats (const WorkloadStats&) = delete;
-  WorkloadStats& operator=(const WorkloadStats&) = delete;
-};
-    
-    
-    {  m_arrTypes.resize(builder.m_impl->nextId);
-  for (auto& ty : builder.m_impl->types) {
-    assert(m_arrTypes[ty->id()] == nullptr);
-    m_arrTypes[ty->id()] = ty;
-  }
-  if (debug) {
-    for (auto& t : m_arrTypes) {
-      always_assert(t != nullptr);
+        int err = connect(socketfd, (sockaddr *) &addr, sizeof(addr));
+    if (err) {
+        cout << 'Connection error, connections: ' << connections << endl;
+        return false;
     }
-  }
-}
+    send(socketfd, buf, strlen(buf), 0);
+    memset(message, 0, 1024);
+    size_t length;
+    do {
+        length = recv(socketfd, message, sizeof(message), 0);
+    }
+    while (strncmp(&message[length - 4], '\r\n\r\n', 4));
     
-    double TimeStamp::CurrentSecond() {
-  auto now_ns = gettime_ns(CLOCK_REALTIME);
-  using DoubleSeconds =
-    std::chrono::duration<double, std::chrono::seconds::period>;
-  auto now_double_secs = DoubleSeconds(std::chrono::nanoseconds(now_ns));
-  return now_double_secs.count();
-}
-    
-    
-    {  /**
-   * Check active threads and queued requests
-   */
-  static int GetActiveWorker();
-  static int GetQueuedJobs();
-};
-    
-    
-    {  return false;
-}
-    
-      std::string toString() const;
-    
-    /*
- * Get the successors of a block or instruction.  If given a non-const
- * reference, the resulting Range will allow mutation of the Vlabels.
- */
-folly::Range<Vlabel*> succs(Vinstr& inst);
-folly::Range<Vlabel*> succs(Vblock& block);
-folly::Range<const Vlabel*> succs(const Vinstr& inst);
-folly::Range<const Vlabel*> succs(const Vblock& block);
-    
-                // Verify that there's indeed a single layout
-            for (const auto& iter : inputMatrices)
-            {
-                assert(iter.second.pMBLayout == pMBLayout);
-                // TODO: This must be a runtime check, not an assert().
-                UNUSED(iter);
-            }
-    
-        InvalidateCompiledNetwork();
-    
-    // understand and execute from the syntactic expression tree
-ConfigValuePtr Evaluate(ExpressionPtr);                               // evaluate the expression tree
-void Do(ExpressionPtr e);                                             // evaluate e.do
-shared_ptr<Object> EvaluateField(ExpressionPtr e, const wstring& id); // for experimental CNTK integration
-    
-    #include <string>
-    
-    /// Remove a range of keys in domain.
-Status deleteDatabaseRange(const std::string& domain,
-                           const std::string& low,
-                           const std::string& high);
-    
-    /**
- * @brief Initialize the extensions socket path variable for osqueryi.
- *
- * If the shell is invoked with a default extensions_socket flag there is a
- * chance the path is 'overloaded' by multiple shells, use this method to
- * determine a unique user-local path.
- *
- * @param home to user's home directory.
- */
-void initShellSocket(const std::string& home);
-    
-    struct FlagInfo {
-  std::string type;
-  std::string description;
-  std::string default_value;
-  std::string value;
-  FlagDetail detail;
-};
-    
-    /// Database domain where we store carve table entries
-const std::string kCarveDbDomain = 'carves';
-    
-    /// Prefix used for posix tar archive.
-const std::string kTestCarveNamePrefix = 'carve_';
-    
-    Status TLSConfigPlugin::genConfig(std::map<std::string, std::string>& config) {
-  std::string json;
-  pt::ptree params;
-  if (FLAGS_tls_node_api) {
-    // The TLS node API morphs some verbs and variables.
-    params.put('_get', true);
-  }
+    Node::~Node() {
+    delete [] nodeData->recvBufferMemoryBlock;
+    SSL_CTX_free(nodeData->clientContext);
     }
     
-            ok &= luaval_to_number(tolua_S, 4,&arg2, 'cc.SimpleAudioEngine:playEffect');
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_playEffect'', nullptr);
-            return 0;
-        }
-        unsigned int ret = cobj->playEffect(arg0, arg1, arg2);
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    if (argc == 4) 
-    {
-        const char* arg0;
-        bool arg1;
-        double arg2;
-        double arg3;
-    
-    
-    {    virtual void DrawAABB(b2AABB* aabb, const b2Color& color);
-};
-    
-    
-    {	b2Vec2 m_point;
-	b2Fixture* m_fixture;
-};
-    
-    
-    {
-    {// use R's PRNG to replacd
-CustomGlobalRandomEngine::result_type
-CustomGlobalRandomEngine::operator()() {
-  return static_cast<result_type>(
-      std::floor(unif_rand() * CustomGlobalRandomEngine::max()));
-}
-}  // namespace common
-}  // namespace xgboost
-
-    
-    
-    {
-    {
-    {  inline void PutChar(char ch) {
-    out_buf += ch;
-    if (out_buf.length() >= kBufferSize) Flush();
-  }
-  inline void Flush(void) {
-    if (out_buf.length() != 0) {
-      fp->Write(&out_buf[0], out_buf.length());
-      out_buf.clear();
-    }
-  }
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_BASE64_H_
-
-    
-    
-    {
-    {
-    { private:
-  /*! \brief input stream */
-  dmlc::Stream *strm_;
-  /*! \brief current buffer pointer */
-  size_t buffer_ptr_;
-  /*! \brief internal buffer */
-  std::string buffer_;
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_IO_H_
-
-    
-        // store least bin id for each feature
-    index_base_.resize(nfeature);
-    for (bst_uint fid = 0; fid < nfeature; ++fid) {
-      index_base_[fid] = gmat.cut->row_ptr[fid];
-    }
-    
-    
-    {DMLC_REGISTER_DATA_PARSER(uint32_t, dense_libsvm, data::CreateDenseLibSVMParser<uint32_t>);
-}  // namespace dmlc
-
-    
-      delete ObjectWrap::Unwrap<DBWrapper>(args.This());
-    
-    
-    {  // Add new data and corrupt it
-  ASSERT_OK(writable_file->Append(kCorrupted));
-  ASSERT_TRUE(writable_file->GetFileSize() == kGood.size() + kCorrupted.size());
-  result.clear();
-  ASSERT_OK(rand_file->Read(kGood.size(), kCorrupted.size(),
-            &result, &(scratch[0])));
-  ASSERT_EQ(result.compare(kCorrupted), 0);
-  // Corrupted
-  ASSERT_OK(dynamic_cast<MockEnv*>(env_)->CorruptBuffer(kFileName));
-  result.clear();
-  ASSERT_OK(rand_file->Read(kGood.size(), kCorrupted.size(),
-            &result, &(scratch[0])));
-  ASSERT_NE(result.compare(kCorrupted), 0);
-}
-    
-    // Used to encapsulate a particular instance of an opened database.
-//
-// This object should not be used directly in C++; it exists solely to provide
-// a mapping from a JavaScript object to a C++ code that can use the RocksDB
-// API.
-class DBWrapper : public node::ObjectWrap {
-  public:
-    static void Init(Handle<Object> exports);
-    }
-    
-    
-    
-     private:
-  char delim_;         // The delimiter is inserted between elements
-    
-     public: // Delete / Remove / Pop / Trim
-  /// Trim (list: key) so that it will only contain the indices from start..stop
-  /// Returns true on success
-  /// May throw RedisListException
-  bool Trim(const std::string& key, int32_t start, int32_t stop);
-    
-      // If hash index lookup is enabled and `use_hash_index` is true. This block
-  // will do hash lookup for the key prefix.
-  //
-  // NOTE: for the hash based lookup, if a key prefix doesn't match any key,
-  // the iterator will simply be set as 'invalid', rather than returning
-  // the key that is just pass the target key.
-  //
-  // If iter is null, return new Iterator
-  // If iter is not null, update this one and return it as Iterator*
-  //
-  // If total_order_seek is true, hash_index_ and prefix_index_ are ignored.
-  // This option only applies for index block. For data block, hash_index_
-  // and prefix_index_ are null, so this option does not matter.
-  BlockIter* NewIterator(const Comparator* comparator,
-                         BlockIter* iter = nullptr,
-                         bool total_order_seek = true,
-                         Statistics* stats = nullptr);
-  void SetBlockPrefixIndex(BlockPrefixIndex* prefix_index);
-    
-    
-    {    StopLoggingInternal();
-  }
+    public:
+    void onConnection(std::function<void(WebSocket<isServer> *, HttpRequest)> handler);
+    void onTransfer(std::function<void(WebSocket<isServer> *)> handler);
+    void onMessage(std::function<void(WebSocket<isServer> *, char *, size_t, OpCode)> handler);
+    void onDisconnection(std::function<void(WebSocket<isServer> *, int code, char *message, size_t length)> handler);
+    void onPing(std::function<void(WebSocket<isServer> *, char *, size_t)> handler);
+    void onPong(std::function<void(WebSocket<isServer> *, char *, size_t)> handler);
+    void onError(std::function<void(errorType)> handler);
+    void onHttpConnection(std::function<void(HttpSocket<isServer> *)> handler);
+    void onHttpRequest(std::function<void(HttpResponse *, HttpRequest, char *data, size_t length, size_t remainingBytes)> handler);
+    void onHttpData(std::function<void(HttpResponse *, char *data, size_t length, size_t remainingBytes)> handler);
+    void onHttpDisconnection(std::function<void(HttpSocket<isServer> *)> handler);
+    void onCancelledHttpRequest(std::function<void(HttpResponse *)> handler);
+    void onHttpUpgrade(std::function<void(HttpSocket<isServer> *, HttpRequest)> handler);
