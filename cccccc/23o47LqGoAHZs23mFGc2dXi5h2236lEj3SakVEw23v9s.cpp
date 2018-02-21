@@ -1,193 +1,313 @@
 
         
-        using namespace std;
+        IPC_MESSAGE_ROUTED4(ShellViewHostMsg_Call_Object_Method,
+                    int /* object id */,
+                    std::string /* type name */,
+                    std::string /* method name */,
+                    base::ListValue /* arguments */)
     
-            std::vector<std::vector<Point> > white_contours, black_contours;
-        std::vector<Vec4i> white_hierarchy, black_hierarchy;
-        findContours(black_comp, black_contours, black_hierarchy, RETR_LIST, CHAIN_APPROX_SIMPLE);
-        findContours(white_comp, white_contours, white_hierarchy, RETR_LIST, CHAIN_APPROX_SIMPLE);
+    v8::Handle<v8::Value> AllocateObject(int routing_id,
+                                     int object_id,
+                                     const std::string& type,
+                                     v8::Handle<v8::Value> options) {
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  v8::EscapableHandleScope handle_scope(isolate);
+    }
     
-    #include 'opencv2/core.hpp'
+    namespace nwapi {
+    }
     
-    #ifndef __OPENCV_CORE_BUFFER_POOL_IMPL_HPP__
-#define __OPENCV_CORE_BUFFER_POOL_IMPL_HPP__
+    namespace blink {
+class WebFrame;
+class WebURLRequest;
+class WebView;
+}
     
-    #endif //HAVE_LAPACK
-#endif //OPENCV_CORE_HAL_INTERNAL_HPP
+    #endif //CONTENT_NW_SRC_API_EVENT_EVENT_H_
 
     
-        bool TryLoadCheckPointInfo(const size_t epochNumber,
-                               /*out*/ size_t& totalSamplesSeen,
-                               /*out*/ double& learnRatePerSample,
-                               std::list<Matrix<ElemType>>& smoothedGradients,
-                               std::vector<double>& smoothedCounts,
-                               /*out*/ double& prevCriterion,
-                               /*out*/ size_t& minibatchSize);
-    void LoadCheckPointInfo(const size_t epochNumber,
-                            /*out*/ size_t& totalSamplesSeen,
-                            /*out*/ double& learnRatePerSample,
-                            std::list<Matrix<ElemType>>& smoothedGradients,
-                            std::vector<double>& smoothedCounts,
-                            /*out*/ double& prevCriterion,
-                            /*out*/ size_t& minibatchSize);
     
-    // only copy a complete independent tree
-// when node name exists
-void ComputationNetwork::CopySubTree(const ComputationNetwork& fromNet,
-                                     const std::wstring fromName, std::wstring toNamePrefix,
-                                     const CopyNodeFlags flags)
-{
-    InvalidateCompiledNetwork();
+    {  *icon = item->icon_;
+  return true;
+}
+    
+    
+    {  gtk_widget_show(menu_);
+  g_object_ref_sink(G_OBJECT(menu_));
+}
+    
+    void MenuItem::SetIconIsTemplate(bool isTemplate) {
+}
+    
+    namespace nw {
     }
     
-        size_t GetNumParallelSequencesForFixingBPTTMode()
-    {
-        return 1;
-    }
-    void SetNumParallelSequences(const size_t){};
-    void CopyMBLayoutTo(MBLayoutPtr pMBLayout)
-    {
-        pMBLayout->CopyFrom(m_pMBLayout);
-        NOT_IMPLEMENTED;
-    }
-    virtual const std::map<LabelIdType, LabelType>& GetLabelMapping(const std::wstring& sectionName);
-    virtual void SetLabelMapping(const std::wstring& sectionName, const std::map<typename BinaryReader<ElemType>::LabelIdType, typename BinaryReader<ElemType>::LabelType>& labelMapping);
-    virtual bool GetData(const std::wstring& sectionName, size_t numRecords, void* data, size_t& dataBufferSize, size_t recordStart = 0);
+    using namespace extensions::nwapi::nw__app;
     
-    BOOST_FIXTURE_TEST_CASE(MatrixDensePlusSparse, RandomSeedFixture)
-{
-    std::mt19937 rng(0);
-    Matrix<float> mAdense(c_deviceIdZero);
-    mAdense.AssignTruncateBottomOf(Matrix<float>::RandomUniform(dim1, dim2, c_deviceIdZero, -3.0f, 0.1f, IncrementCounter()), 0);
-    }
     
-        // EvaluateNDLSnippet - evaluate the passed snippet of NDL into a computational network
-    // script - [in] text of the NDL snippet
-    // network - [in/out] computation network to insert NDL into
-    void EvaluateNDLSnippet(const ConfigValue& script, ComputationNetworkPtr network)
-    {
-        NDLUtil<ElemType> ndlUtil(network);
-        ndlUtil.ProcessNDLConfig(script);
-    }
+    {  DECLARE_EXTENSION_FUNCTION('nw.App.clearAppCache', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwAppClearAppCacheFunction);
+};
     
-    template void FindConfigNames<ConfigParameters>(const ConfigParameters&, std::string key, std::vector<std::wstring>& names);
-template void FindConfigNames<ScriptableObjects::IConfigRecord>(const ScriptableObjects::IConfigRecord&, std::string key, std::vector<std::wstring>& names);
-    
-        page->offset.clear();
-    page->offset.push_back(0);
-    for (bst_uint cid : sorted_index_set) {
-      page->offset.push_back(
-          page->offset.back() + disk_offset_[cid + 1] - disk_offset_[cid]);
-    }
-    page->data.resize(page->offset.back());
-    CHECK_EQ(index_.data.size(), value_.data.size());
-    CHECK_EQ(index_.data.size(), disk_offset_.back());
-    
-      /* Fetch an individual column. This code should be used with XGBOOST_TYPE_SWITCH
-     to determine type of bin id's */
-  template<typename T>
-  inline Column<T> GetColumn(unsigned fid) const {
-    const bool valid_type = std::is_same<T, uint32_t>::value
-                          || std::is_same<T, uint16_t>::value
-                          || std::is_same<T, uint8_t>::value;
-    CHECK(valid_type);
-    }
-    
-    TEST(Param, VectorIOStream) {
-  std::vector<int> vals = {3, 2, 1};
-  std::stringstream ss;
-  std::vector<int> vals_in;
-  
-  ss << vals;
-  EXPECT_EQ(ss.str(), '(3,2,1)');
-    }
-    
-    /*! \brief pruner that prunes a tree after growing finishs */
-template<typename TStats>
-class TreeRefresher: public TreeUpdater {
- public:
-  void Init(const std::vector<std::pair<std::string, std::string> >& args) override {
-    param.InitAllowUnknown(args);
-  }
-  // update the tree, do pruning
-  void Update(const std::vector<bst_gpair> &gpair,
-              DMatrix *p_fmat,
-              const std::vector<RegTree*> &trees) override {
-    if (trees.size() == 0) return;
-    // number of threads
-    // thread temporal space
-    std::vector<std::vector<TStats> > stemp;
-    std::vector<RegTree::FVec> fvec_temp;
-    // setup temp space for each thread
-    const int nthread = omp_get_max_threads();
-    fvec_temp.resize(nthread, RegTree::FVec());
-    stemp.resize(nthread, std::vector<TStats>());
-    #pragma omp parallel
-    {
-      int tid = omp_get_thread_num();
-      int num_nodes = 0;
-      for (size_t i = 0; i < trees.size(); ++i) {
-        num_nodes += trees[i]->param.num_nodes;
+          if (bitmap.isNull()) {
+        return true;
       }
-      stemp[tid].resize(num_nodes, TStats(param));
-      std::fill(stemp[tid].begin(), stemp[tid].end(), TStats(param));
-      fvec_temp[tid].Init(trees[0]->param.num_feature);
+    
+    
+    {}  // namespace caffe
+    
+    
+    {}  // namespace caffe
+    
+    
+    { protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
+   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
+   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
+   *      the computed outputs @f$
+   *       y_n = \arg\max\limits_i x_{ni}
+   *      @f$ (for @f$ K = 1 @f$).
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  /// @brief Not implemented (non-differentiable function)
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
+    NOT_IMPLEMENTED;
+  }
+  bool out_max_val_;
+  size_t top_k_;
+  bool has_axis_;
+  int axis_;
+};
+    
+    namespace caffe {
     }
-    // if it is C++11, use lazy evaluation for Allreduce,
-    // to gain speedup in recovery
-#if __cplusplus >= 201103L
-    auto lazy_get_stats = [&]()
+    
+    
+    {}  // namespace caffe
+    
+    #include <vector>
+    
+    #include 'caffe/layers/neuron_layer.hpp'
+#include 'caffe/layers/relu_layer.hpp'
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #ifdef __UNIX__
+#include          <assert.h>
 #endif
-    {
-      const MetaInfo &info = p_fmat->info();
-      // start accumulating statistics
-      dmlc::DataIter<RowBatch> *iter = p_fmat->RowIterator();
-      iter->BeforeFirst();
-      while (iter->Next()) {
-        const RowBatch &batch = iter->Value();
-        CHECK_LT(batch.size, std::numeric_limits<unsigned>::max());
-        const bst_omp_uint nbatch = static_cast<bst_omp_uint>(batch.size);
-        #pragma omp parallel for schedule(static)
-        for (bst_omp_uint i = 0; i < nbatch; ++i) {
-          RowBatch::Inst inst = batch[i];
-          const int tid = omp_get_thread_num();
-          const bst_uint ridx = static_cast<bst_uint>(batch.base_rowid + i);
-          RegTree::FVec &feats = fvec_temp[tid];
-          feats.Fill(inst);
-          int offset = 0;
-          for (size_t j = 0; j < trees.size(); ++j) {
-            AddStats(*trees[j], feats, gpair, info, ridx,
-                     dmlc::BeginPtr(stemp[tid]) + offset);
-            offset += trees[j]->param.num_nodes;
-          }
-          feats.Drop(inst);
+#include          <ctype.h>
+#include          <string.h>
+#include          'tessbox.h'
+#include          'tessvars.h'
+#include          'memry.h'
+#include          'reject.h'
+#include          'control.h'
+#include          'stopper.h'
+#include          'tesseractclass.h'
+    
+    // Fits a line to the points, ignoring the skip_first initial points and the
+// skip_last final points, returning the fitted line as a pair of points,
+// and the upper quartile error.
+double DetLineFit::Fit(int skip_first, int skip_last,
+                       ICOORD* pt1, ICOORD* pt2) {
+  // Do something sensible with no points.
+  if (pts_.empty()) {
+    pt1->set_x(0);
+    pt1->set_y(0);
+    *pt2 = *pt1;
+    return 0.0;
+  }
+  // Count the points and find the first and last kNumEndPoints.
+  int pt_count = pts_.size();
+  ICOORD* starts[kNumEndPoints];
+  if (skip_first >= pt_count) skip_first = pt_count - 1;
+  int start_count = 0;
+  int end_i = MIN(skip_first + kNumEndPoints, pt_count);
+  for (int i = skip_first; i < end_i; ++i) {
+    starts[start_count++] = &pts_[i].pt;
+  }
+  ICOORD* ends[kNumEndPoints];
+  if (skip_last >= pt_count) skip_last = pt_count - 1;
+  int end_count = 0;
+  end_i = MAX(0, pt_count - kNumEndPoints - skip_last);
+  for (int i = pt_count - 1 - skip_last; i >= end_i; --i) {
+    ends[end_count++] = &pts_[i].pt;
+  }
+  // 1 or 2 points need special treatment.
+  if (pt_count <= 2) {
+    *pt1 = *starts[0];
+    if (pt_count > 1)
+      *pt2 = *ends[0];
+    else
+      *pt2 = *pt1;
+    return 0.0;
+  }
+  // Although with between 2 and 2*kNumEndPoints-1 points, there will be
+  // overlap in the starts, ends sets, this is OK and taken care of by the
+  // if (*start != *end) test below, which also tests for equal input points.
+  double best_uq = -1.0;
+  // Iterate each pair of points and find the best fitting line.
+  for (int i = 0; i < start_count; ++i) {
+    ICOORD* start = starts[i];
+    for (int j = 0; j < end_count; ++j) {
+      ICOORD* end = ends[j];
+      if (*start != *end) {
+        ComputeDistances(*start, *end);
+        // Compute the upper quartile error from the line.
+        double dist = EvaluateLineFit();
+        if (dist < best_uq || best_uq < 0.0) {
+          best_uq = dist;
+          *pt1 = *start;
+          *pt2 = *end;
         }
       }
-      // aggregate the statistics
-      int num_nodes = static_cast<int>(stemp[0].size());
-      #pragma omp parallel for schedule(static)
-      for (int nid = 0; nid < num_nodes; ++nid) {
-        for (int tid = 1; tid < nthread; ++tid) {
-          stemp[0][nid].Add(stemp[tid][nid]);
-        }
-      }
-    };
-#if __cplusplus >= 201103L
-    reducer.Allreduce(dmlc::BeginPtr(stemp[0]), stemp[0].size(), lazy_get_stats);
-#else
-    reducer.Allreduce(dmlc::BeginPtr(stemp[0]), stemp[0].size());
-#endif
-    // rescale learning rate according to size of trees
-    float lr = param.learning_rate;
-    param.learning_rate = lr / trees.size();
-    int offset = 0;
-    for (size_t i = 0; i < trees.size(); ++i) {
-      for (int rid = 0; rid < trees[i]->param.num_roots; ++rid) {
-        this->Refresh(dmlc::BeginPtr(stemp[0]) + offset, rid, trees[i]);
-      }
-      offset += trees[i]->param.num_nodes;
     }
-    // set learning rate back
-    param.learning_rate = lr;
   }
+  // Finally compute the square root to return the true distance.
+  return best_uq > 0.0 ? sqrt(best_uq) : best_uq;
+}
+    
+      // Computes all the cross product distances of the points from the line,
+  // storing the actual (signed) cross products in distances_.
+  // Ignores distances of points that are further away than the previous point,
+  // and overlaps the previous point by at least half.
+  void ComputeDistances(const ICOORD& start, const ICOORD& end);
+    
+    
+/**********************************************************************
+ * LLSQ::pearson
+ *
+ * Return the pearson product moment correlation coefficient.
+ **********************************************************************/
+    
+    // Transforms the given coords one step forward to normalized space, without
+// using any block rotation or predecessor.
+void DENORM::LocalNormTransform(const TPOINT& pt, TPOINT* transformed) const {
+  FCOORD src_pt(pt.x, pt.y);
+  FCOORD float_result;
+  LocalNormTransform(src_pt, &float_result);
+  transformed->x = IntCastRounded(float_result.x());
+  transformed->y = IntCastRounded(float_result.y());
+}
+void DENORM::LocalNormTransform(const FCOORD& pt, FCOORD* transformed) const {
+  FCOORD translated(pt.x() - x_origin_, pt.y() - y_origin_);
+  if (x_map_ != NULL && y_map_ != NULL) {
+    int x = ClipToRange(IntCastRounded(translated.x()), 0, x_map_->size()-1);
+    translated.set_x((*x_map_)[x]);
+    int y = ClipToRange(IntCastRounded(translated.y()), 0, y_map_->size()-1);
+    translated.set_y((*y_map_)[y]);
+  } else {
+    translated.set_x(translated.x() * x_scale_);
+    translated.set_y(translated.y() * y_scale_);
+    if (rotation_ != NULL)
+      translated.rotate(*rotation_);
+  }
+  transformed->set_x(translated.x() + final_xshift_);
+  transformed->set_y(translated.y() + final_yshift_);
+}
+    
+      Pix* pix() const {
+    return pix_;
+  }
+  void set_pix(Pix* pix) {
+    pix_ = pix;
+  }
+  bool inverse() const {
+    return inverse_;
+  }
+  void set_inverse(bool value) {
+    inverse_ = value;
+  }
+  const DENORM* RootDenorm() const {
+    if (predecessor_ != NULL)
+      return predecessor_->RootDenorm();
+    return this;
+  }
+  const DENORM* predecessor() const {
+    return predecessor_;
+  }
+  // Accessors - perhaps should not be needed.
+  float x_scale() const {
+    return x_scale_;
+  }
+  float y_scale() const {
+    return y_scale_;
+  }
+  const BLOCK* block() const {
+    return block_;
+  }
+  void set_block(const BLOCK* block) {
+    block_ = block;
+  }
+    
+    
+    {  m_total_bytes_read -= m_in_buf_left;
+}
+    
+    # if defined(OC_COLLECT_METRICS)
+struct oc_mode_metrics{
+  double fragw;
+  double satd;
+  double rate;
+  double rmse;
+  double satd2;
+  double satdrate;
+  double rate2;
+  double satdrmse;
+  double rmse2;
+};
+    
+      {1,2,6,  &_residue_44p_lfe,
+   &_huff_book__44p3_lfe,&_huff_book__44p3_lfe,
+   &_resbook_44p_l3,&_resbook_44p_l3}
+};
+static const vorbis_residue_template _res_44p51_4[]={
+  {2,0,15,  &_residue_44p,
+   &_huff_book__44p4_short,&_huff_book__44p4_short,
+   &_resbook_44p_4,&_resbook_44p_4},
+    
+    
+    {  {1,0,32,  &_residue_44_mid_un,
+   &_huff_book__44u5__long,&_huff_book__44u5__long,
+   &_resbook_44u_5,&_resbook_44u_5}
+};
+    
+    
+#if !defined(FFT_ARM_H)
+#define FFT_ARM_H
+    
+    #undef MULT16_32_P16
+static inline int MULT16_32_P16(int a, int b)
+{
+    int c;
+    asm volatile('MULT $ac1, %0, %1' : : 'r' (a), 'r' (b));
+    asm volatile('EXTR_R.W %0,$ac1, %1' : '=r' (c): 'i' (16));
+    return c;
+}
+    
+    
+    {    /* Convert to Qres domain */
+    lshift = 61 - b_headrm - Qres;
+    if( lshift <= 0 ) {
+        return silk_LSHIFT_SAT32(result, -lshift);
+    } else {
+        if( lshift < 32){
+            return silk_RSHIFT(result, lshift);
+        }else{
+            /* Avoid undefined result */
+            return 0;
+        }
     }
+}
