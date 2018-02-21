@@ -1,117 +1,35 @@
 
         
         
-MIME_RE = re.compile(r'^[^/]+/[^/]+$')
+from xlog import getLogger
+xlog = getLogger('gae_proxy')
+from config import config
     
-        return chain(*output)
+    ##
+# imaginary tree navigation type; traverse 'get child' link
+DOWN = 2
+##
+#imaginary tree navigation type; finish with a child list
+UP = 3
     
-    import pytest
+    def upgrade():
+    op.add_column('table_columns', sa.Column('expression', sa.Text(), nullable=True))
     
+    Revision ID: 2591d77e9831
+Revises: 12d55656cbca
+Create Date: 2015-12-15 17:02:45.128709
     
-@mock.patch('httpie.core.get_response')
-def test_error_traceback(get_response):
-    exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    with raises(ConnectionError):
-        main(['--ignore-stdin', '--traceback', 'www.google.com'])
+        try:
+        # wasn't created for some databases in the migration b4456560d4f3
+        if not table_has_constraint('tables', '_customer_location_uc', db):
+            with op.batch_alter_table('tables') as batch_op:
+                batch_op.create_unique_constraint(
+                    '_customer_location_uc',
+                    ['database_id', 'schema', 'table_name'])
+                batch_op.drop_index('table_name')
+    except Exception as e:
+        logging.warning(str(e))
     
-    
-def test_follow_all_output_options_used_for_redirects(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 3
-    assert HTTP_OK not in r
-    
-    
-def test_unicode_url_query_arg_item(httpbin):
-    r = http(httpbin.url + '/get', u'test==%s' % UNICODE)
-    assert HTTP_OK in r
-    assert r.json['args'] == {'test': UNICODE}, r
-    
-            self.status.started(
-            resumed_from=self._resumed_from,
-            total_size=total_size
-        )
-    
-        package_name = '(builtin)'
-    
-        >>> humanize_bytes(1)
-    '1 B'
-    >>> humanize_bytes(1024, precision=1)
-    '1.0 kB'
-    >>> humanize_bytes(1024 * 123, precision=1)
-    '123.0 kB'
-    >>> humanize_bytes(1024 * 12342, precision=1)
-    '12.1 MB'
-    >>> humanize_bytes(1024 * 12342, precision=2)
-    '12.05 MB'
-    >>> humanize_bytes(1024 * 1234, precision=2)
-    '1.21 MB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
-    '1.31 GB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
-    '1.3 GB'
-    
-        def __init__(self, employee_id, name, rank, call_center):
-        self.employee_id = employee_id
-        self.name = name
-        self.rank = rank
-        self.call = None
-        self.call_center = call_center
-    
-            Accessing a node updates its position to the front of the LRU list.
-        '''
-        node = self.lookup[query]
-        if node is None:
-            return None
-        self.linked_list.move_to_front(node)
-        return node.results
-    
-            (foo, 2), p1
-        (bar, 3), p1
-        (foo, 3), p2
-        (bar, 10), p3
-        (foo, 1), p4
-    
-                            #print 'no viable alt'
-                        self.noViableAlt(s, input)
-                        return 0
-    
-    
-    
-    plugins = PluginLoader()
-print 'PLUGINS := ' + ' '.join(plugin.name for plugin in plugins
-                               if plugin.needs_static_build)
-    
-        def __call__(self, environ, start_response):
-        def safe_start_response(status, headers, exc_info=None):
-            sanitized = []
-            for name, value in headers:
-                if self.has_bad_characters.search(value):
-                    value = self.sanitizer.sub('', value)
-                sanitized.append((name, value))
-            return start_response(status, sanitized, exc_info)
-        return self.app(environ, safe_start_response)
-    
-        @csrf_exempt
-    @json_validate(
-        VRatelimit(rate_ip=True, prefix='rate_register_'),
-        signature=VSigned(),
-        name=VUname(['user']),
-        email=ValidEmail('email'),
-        password=VPasswordChange(['passwd', 'passwd2']),
-    )
-    def POST_register(self, responder, name, email, password, **kwargs):
-        kwargs.update(dict(
-            controller=self,
-            form=responder('noop'),
-            responder=responder,
-            name=name,
-            email=email,
-            password=password,
-        ))
-        return handle_register(**kwargs)
+    Revision ID: 430039611635
+Revises: d827694c7555
+Create Date: 2016-02-10 08:47:28.950891
