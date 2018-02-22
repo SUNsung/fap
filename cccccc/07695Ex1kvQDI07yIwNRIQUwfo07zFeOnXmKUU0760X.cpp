@@ -1,214 +1,195 @@
-  bool recordHash(StringRef hash, bool isKnown) override { return true; }
-  bool startDependency(StringRef name, StringRef path, bool isClangModule,
-                       bool isSystem, StringRef hash) override {
-    return true;
-  }
-  bool finishDependency(bool isClangModule) override { return true; }
-  Action startSourceEntity(const IndexSymbol &symbol) override {
-    symbolStack.push_back(symbol);
-    return Action::Continue;
-  }
-  bool finishSourceEntity(SymbolInfo sym, SymbolRoleSet roles) override {
-    IndexSymbol symbol = std::move(symbolStack.back());
-    symbolStack.pop_back();
-    assert(!symbol.USR.empty());
-    record.addOccurrence(symbol);
-    return true;
-  }
-    
-      /// Indicates whether to allow diagnostics for \c <unknown> locations if
-  /// \c VerifyMode is not \c NoVerify.
-  bool VerifyIgnoreUnknown = false;
-    
-    public:
-  void setInputBufferIDs(ArrayRef<unsigned> BufferIDs) {
-    InputBufIDs.append(BufferIDs.begin(), BufferIDs.end());
-    std::sort(InputBufIDs.begin(), InputBufIDs.end());
-  }
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include 'caffe/layers/neuron_layer.hpp'
-#include 'caffe/layers/sigmoid_layer.hpp'
-    
-    /**
- * @brief During training only, sets a random portion of @f$x@f$ to 0, adjusting
- *        the rest of the vector magnitude accordingly.
+
+        
+        /* Map whose keys are pointers, but are compared by their dereferenced values.
  *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$ y = |x| @f$
+ * Differs from a plain std::map<const K*, T, DereferencingComparator<K*> > in
+ * that methods that take a key for comparison take a K rather than taking a K*
+ * (taking a K* would be confusing, since it's the value rather than the address
+ * of the object for comparison that matters due to the dereferencing comparator).
+ *
+ * Objects pointed to by keys must not be modified in any way that changes the
+ * result of DereferencingComparator.
  */
-template <typename Dtype>
-class DropoutLayer : public NeuronLayer<Dtype> {
- public:
-  /**
-   * @param param provides DropoutParameter dropout_param,
-   *     with DropoutLayer options:
-   *   - dropout_ratio (\b optional, default 0.5).
-   *     Sets the probability @f$ p @f$ that any given unit is dropped.
-   */
-  explicit DropoutLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+template <class K, class T>
+class indirectmap {
+private:
+    typedef std::map<const K*, T, DereferencingComparator<const K*> > base;
+    base m;
+public:
+    typedef typename base::iterator iterator;
+    typedef typename base::const_iterator const_iterator;
+    typedef typename base::size_type size_type;
+    typedef typename base::value_type value_type;
     }
     
-    #endif  // CAFFE_ELTWISE_LAYER_HPP_
+        // Finish and check for builder errors
+    if (s.ok()) {
+      s = builder->Finish();
+      if (s.ok()) {
+        meta->file_size = builder->FileSize();
+        assert(meta->file_size > 0);
+      }
+    } else {
+      builder->Abandon();
+    }
+    delete builder;
+    
+     private:
+  // We construct a char array of the form:
+  //    klength  varint32               <-- start_
+  //    userkey  char[klength]          <-- kstart_
+  //    tag      uint64
+  //                                    <-- end_
+  // The array is a suitable MemTable key.
+  // The suffix starting with 'userkey' can be used as an InternalKey.
+  const char* start_;
+  const char* kstart_;
+  const char* end_;
+  char space_[200];      // Avoid allocation for short keys
+    
+      // When user keys are different, but correctly ordered
+  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('hello', 200, kTypeValue)));
+    
+    // Return the legacy file name for an sstable with the specified number
+// in the db named by 'dbname'. The result will be prefixed with
+// 'dbname'.
+extern std::string SSTTableFileName(const std::string& dbname, uint64_t number);
+    
+    #endif  // STORAGE_LEVELDB_DB_TABLE_CACHE_H_
 
     
-    namespace caffe {
-    }
+      for (size_t i = 0; i < compact_pointers_.size(); i++) {
+    PutVarint32(dst, kCompactPointer);
+    PutVarint32(dst, compact_pointers_[i].first);  // level
+    PutLengthPrefixedSlice(dst, compact_pointers_[i].second.Encode());
+  }
     
+      void EncodeTo(std::string* dst) const;
+  Status DecodeFrom(const Slice& src);
     
-    {  Dtype inner_scale_, outer_scale_;
-};
-    
-        D3D_DRIVER_TYPE driverTypes[] =
-    {
-        D3D_DRIVER_TYPE_HARDWARE,
-        D3D_DRIVER_TYPE_WARP,
-        D3D_DRIVER_TYPE_REFERENCE,
-    };
-    UINT numDriverTypes = ARRAYSIZE(driverTypes);
-    
-    
-    {                return (count & TAG_MASK) - val;
+        // Adds the module variable 'api_version'.
+    if (PyModule_AddIntConstant(
+        module,
+        const_cast<char*>(kImplVersionName),
+        kImplVersion))
+#if PY_MAJOR_VERSION < 3
+      return;
 #else
-                return ::atomicAdd(address, val);
-#endif
-            }
+      { Py_DECREF(module); return NULL; }
     
-    #undef cv_hal_QR32f
-#define cv_hal_QR32f lapack_QR32f
-#undef cv_hal_QR64f
-#define cv_hal_QR64f lapack_QR64f
     
-        static void* GetProcAddress (const char* name)
+    {  printer->Print(
+    variables_,
+    'private static readonly pbc::MapField<$key_type_name$, $value_type_name$>.Codec _map_$name$_codec\n'
+    '    = new pbc::MapField<$key_type_name$, $value_type_name$>.Codec(');
+  key_generator->GenerateCodecCode(printer);
+  printer->Print(', ');
+  value_generator->GenerateCodecCode(printer);
+  printer->Print(
+    variables_,
+    ', $tag$);\n'
+    'private readonly pbc::MapField<$key_type_name$, $value_type_name$> $name$_ = new pbc::MapField<$key_type_name$, $value_type_name$>();\n');
+  WritePropertyDocComment(printer, descriptor_);
+  AddPublicMemberAttributes(printer);
+  printer->Print(
+    variables_,
+    '$access_level$ pbc::MapField<$key_type_name$, $value_type_name$> $property_name$ {\n'
+    '  get { return $name$_; }\n'
+    '}\n');
+}
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
+    }
+    
+    
+    {}  // namespace guetzli
+
+    
+    inline void ColorTransformYCbCrToRGB(uint8_t* pixel) {
+  int y  = pixel[0];
+  int cb = pixel[1];
+  int cr = pixel[2];
+  pixel[0] = kRangeLimit[y + kCrToRedTable[cr]];
+  pixel[1] = kRangeLimit[y +
+                         ((kCrToGreenTable[cr] + kCbToGreenTable[cb]) >> 16)];
+  pixel[2] = kRangeLimit[y + kCbToBlueTable[cb]];
+}
+    
+    
     {
-        static void* h = NULL;
-        if (!h)
-        {
-            h = dlopen('libclAmdFft.Runtime.so', RTLD_LAZY | RTLD_GLOBAL);
-            if (!h)
-                return NULL;
-        }
+    {
+    {      // Add back the last sentinel node.
+      tree[j_end + 1] = sentinel;
     }
-    
-    
-    
-    
-    {	if (callback.m_fixture)
-	{
-		b2Body* body = callback.m_fixture->GetBody();
-		b2MouseJointDef md;
-		md.bodyA = m_groundBody;
-		md.bodyB = body;
-		md.target = p;
-		md.maxForce = 1000.0f * body->GetMass();
-		m_mouseJoint = (b2MouseJoint*)m_world->CreateJoint(&md);
-		body->SetAwake(true);
-        return true;
-	}
-    
-    return false;
-}
-    
-    
-    {	static Test* Create()
-	{
-		return new AddPair;
-	}
-};
-    
-    		for (int32 i = 0; i < 2; ++i)
-		{
-			b2Vec2 vertices[3];
-			vertices[0].Set(-0.5f, 0.0f);
-			vertices[1].Set(0.5f, 0.0f);
-			vertices[2].Set(0.0f, 1.5f);
-    }
-    
-    namespace rabit {
-namespace utils {
-extern 'C' {
-  void (*Printf)(const char *fmt, ...) = Rprintf;
-  void (*Assert)(int exp, const char *fmt, ...) = XGBoostAssert_R;
-  void (*Check)(int exp, const char *fmt, ...) = XGBoostCheck_R;
-  void (*Error)(const char *fmt, ...) = error;
-}
-}
-}
-    
-    template<typename StorageIndex>
-class SparsePageLZ4Format : public SparsePage::Format {
- public:
-  explicit SparsePageLZ4Format(bool use_lz4_hc)
-      : use_lz4_hc_(use_lz4_hc) {
-    raw_bytes_ = raw_bytes_value_ = raw_bytes_index_ = 0;
-    encoded_bytes_value_ = encoded_bytes_index_ = 0;
-    nthread_ = dmlc::GetEnv('XGBOOST_LZ4_DECODE_NTHREAD', 4);
-    nthread_write_ = dmlc::GetEnv('XGBOOST_LZ4_COMPRESS_NTHREAD', 12);
-  }
-  virtual ~SparsePageLZ4Format() {
-    size_t encoded_bytes = raw_bytes_ +  encoded_bytes_value_ + encoded_bytes_index_;
-    raw_bytes_ += raw_bytes_value_ + raw_bytes_index_;
-    if (raw_bytes_ != 0) {
-      LOG(CONSOLE) << 'raw_bytes=' << raw_bytes_
-                   << ', encoded_bytes=' << encoded_bytes
-                   << ', ratio=' << double(encoded_bytes) / raw_bytes_
-                   << ', ratio-index=' << double(encoded_bytes_index_) /raw_bytes_index_
-                   << ', ratio-value=' << double(encoded_bytes_value_) /raw_bytes_value_;
+    if (SetDepth(static_cast<int>(2 * n - 1), &tree[0], depth, tree_limit)) {
+      /* We need to pack the Huffman tree in tree_limit bits. If this was not
+         successful, add fake entities to the lowest values and retry. */
+      break;
     }
   }
-    }
-    
-      size_t Read(void* dptr, size_t size) override {
-    size_t nbuffer = buffer_.length() - buffer_ptr_;
-    if (nbuffer == 0) return strm_->Read(dptr, size);
-    if (nbuffer < size) {
-      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, nbuffer);
-      buffer_ptr_ += nbuffer;
-      return nbuffer + strm_->Read(reinterpret_cast<char*>(dptr) + nbuffer,
-                                   size - nbuffer);
-    } else {
-      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, size);
-      buffer_ptr_ += size;
-      return size;
-    }
-  }
-    
-      auto context = reinterpret_cast<YGConfigContext*>(YGConfigGetContext(config));
-  auto javaConfig = context->config;
-    
-    int Node::getJustifyContent(void) const
-{
-    return YGNodeStyleGetJustifyContent(m_node);
 }
+    
+    
+    {}  // namespace guetzli
+    
+    // Mimic libjpeg's heuristics to guess jpeg color space.
+// Requires that the jpg has 3 components.
+bool HasYCbCrColorSpace(const JPEGData& jpg);
+    
+    
+    {  return true;
+}
+    
+    int BuildJpegHuffmanTable(const int* count_in, const int* symbols,
+                          HuffmanTableEntry* lut) {
+  HuffmanTableEntry code;    // current table entry
+  HuffmanTableEntry* table;  // next available space in table
+  int len;         // current code length
+  int idx;         // symbol index
+  int key;         // prefix code
+  int reps;        // number of replicate key values in current table
+  int low;         // low bits for current root entry
+  int table_bits;  // key length of current table
+  int table_size;  // size of current table
+  int total_size;  // sum of root table size and 2nd level table sizes
+    }
+    
+    // Preprocesses the u (1) or v (2) channel of the given YUV image (range 0-255).
+std::vector<std::vector<float>> PreProcessChannel(
+    int w, int h, int channel, float sigma, float amount, bool blur,
+    bool sharpen, const std::vector<std::vector<float>>& image);
+    
+    #include 'comm/corepattern/service_base.h'
+    
+    
+class ServiceBase;
+typedef std::map<std::string, ServiceBase*> TServicesMap;
+    
+    class Spy {
+  public:
+    Spy(void* _this): m_this(_this) {}
+    virtual ~Spy() {}
+    }
+    
+    //
+//  testspy_spy.cpp
+//  PublicComponent
+//
+//  Created by yerungui on 14-5-14.
+//
+    
+    //============================================================================
+// Name        : has_member.h
+// Author      :
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
