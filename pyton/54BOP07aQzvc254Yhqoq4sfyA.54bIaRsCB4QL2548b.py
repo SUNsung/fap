@@ -1,107 +1,152 @@
 
         
-            def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
-                          help='set spider argument (may be repeated)')
-        parser.add_option('-o', '--output', metavar='FILE',
-                          help='dump scraped items into FILE (use - for stdout)')
-        parser.add_option('-t', '--output-format', metavar='FORMAT',
-                          help='format to use for dumping items with -o')
+            for i, NN in enumerate(Nrange):
+        print('N = %i (%i out of %i)' % (NN, i + 1, len(Nrange)))
+        X = get_data(NN, D, dataset)
+        for algorithm in algorithms:
+            nbrs = neighbors.NearestNeighbors(n_neighbors=min(NN, k),
+                                              algorithm=algorithm,
+                                              leaf_size=leaf_size)
+            t0 = time()
+            nbrs.fit(X)
+            t1 = time()
+            nbrs.kneighbors(X)
+            t2 = time()
     
+    for i, n in enumerate(n_samples):
+    for j, p in enumerate(n_features):
+        X = np.random.normal(size=(n, p))
+        t0 = time.time()
+        ward.fit(X)
+        scikits_time[j, i] = time.time() - t0
+        t0 = time.time()
+        hierarchy.ward(X)
+        scipy_time[j, i] = time.time() - t0
+    
+    In the second benchmark, we increase the number of dimensions of the
+training set, classify a sample and plot the time taken as a function
+of the number of dimensions.
+'''
+import numpy as np
+import matplotlib.pyplot as plt
+import gc
+from datetime import datetime
+    
+        fn = os.path.relpath(fn,
+                         start=os.path.dirname(__import__(package).__file__))
     try:
-    import queue
-except ImportError:
-    import Queue as queue
+        lineno = inspect.getsourcelines(obj)[1]
+    except Exception:
+        lineno = ''
+    return url_fmt.format(revision=revision, package=package,
+                          path=fn, lineno=lineno)
     
-    def with_thread_pool_executor():
-    with ThreadPoolExecutor(10) as executor:
-        return list(executor.map(is_prime, PRIMES))
+    ARCHIVE_NAME = URL.rsplit('/', 1)[1]
+DATA_FOLDER = 'txt_sentoken'
     
+    plt.matshow(fit_data, cmap=plt.cm.Blues)
+plt.title('After biclustering; rearranged to show biclusters')
     
-  def Response( self ):
-    return self._response
+    plt.show()
+
     
+    features_samples_ratio = np.array(n_features_range) / n_train
     
-  def Start( self ):
-    request_data = BuildRequestData()
-    request_data.update( { 'filetypes': self.filetypes } )
-    with HandleServerException():
-      self._response = self.PostDataToHandler( request_data,
-                                               'semantic_completion_available' )
+    The following plots demonstrate the impact of the number of clusters and
+number of samples on various clustering performance evaluation metrics.
     
-    
-class ShutdownRequest( BaseRequest ):
-  def __init__( self ):
-    super( BaseRequest, self ).__init__()
-    
-      assert_that( filter.IsAllowed( text_or_obj ), equal_to( expected ) )
+        (x_train, y_train), _, (sample_weight, _, _) = _get_test_data()
     
     
-def ExtractKeywordsFromGroup_WithLinksTo_test():
-  assert_that( syntax_parse._ExtractKeywordsFromGroup(
-                 syntax_parse.SyntaxGroup( '', [
-                   'foo bar',
-                   'zoo goo',
-                   'links to Statement'
-                 ] ) ),
-               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
+@keras_test
+def test_nested_model_trainability():
+    # a Sequential inside a Model
+    inner_model = Sequential()
+    inner_model.add(Dense(2, input_dim=1))
     
-        def test_sales_manager_shall_respond_through_proxy_with_delay(cls):
-        cls.p.busy = 'Yes'
-        start_time = time()
-        cls.p.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-Sales Manager is busy\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time*10), expected_execution_time)
+    from keras.models import Sequential
+from keras.engine.training import _weighted_masked_objective
+from keras.layers import TimeDistributed, Masking, Dense
+from keras.utils.test_utils import keras_test
+from keras import losses
+from keras import backend as K
     
-        fftv.publish('cartoon')
-    fftv.publish('music')
-    fftv.publish('ads')
-    fftv.publish('movie')
-    fftv.publish('cartoon')
-    fftv.publish('cartoon')
-    fftv.publish('movie')
-    fftv.publish('blank')
-    
-        def setUp(self):
-        self.sample_queue = queue.Queue()
-        self.sample_queue.put('first')
-        self.sample_queue.put('second')
-    
-        def test_tc3_output(self):
-        self.tc3.run()
-        output = self.out.getvalue().strip()
-        self.assertEqual(output, self.average_result_tc3)
-    
-    from contextlib import contextmanager
-import os
-import sys
-import time
-import abc
-    
-        def rename(self, src, dest):
-        print(u'renaming %s to %s' % (src, dest))
-        os.rename(src, dest)
-    
-        def update(self, subject):
-        print(u'DecimalViewer: Subject %s has data %d' %
-              (subject.name, subject.data))
+            layer_test(local.LocallyConnected2D,
+                   kwargs={'filters': filters,
+                           'kernel_size': (3, 3),
+                           'padding': padding,
+                           'kernel_regularizer': 'l2',
+                           'bias_regularizer': 'l2',
+                           'activity_regularizer': 'l2',
+                           'strides': strides,
+                           'data_format': 'channels_first'},
+                   input_shape=(num_samples, stack_size, num_row, num_col))
     
     
-def jump(distance):
-    press_time = distance * 1.35
-    press_time = int(press_time)
-    cmd = 'adb shell input swipe 320 410 320 410 ' + str(press_time)
-    print(cmd)
-    os.system(cmd)
+@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
+def test_constant(tensor_shape):
+    _runner(initializers.Constant(2), tensor_shape,
+            target_mean=2, target_max=2, target_min=2)
     
-        img = cv2.imread('./autojump.png')
-    img = cv2.resize(img, (0, 0), fx=scale, fy=scale)
-    img, src_x, src_y = search(img)
-    return img
+    history = model.fit(x_train, y_train,
+                    batch_size=batch_size,
+                    epochs=epochs,
+                    verbose=1,
+                    validation_data=(x_test, y_test))
+score = model.evaluate(x_test, y_test, verbose=0)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
+
+    
+        def __init__(self, from_user_id, to_user_id, request_status, timestamp):
+        self.from_user_id = from_user_id
+        self.to_user_id = to_user_id
+        self.request_status = request_status
+        self.timestamp = timestamp
+    
+        def take_spot(self, spot):
+        self.spots_taken.append(spot)
+    
+            Emit key value pairs of the form:
+    
+    
+class Transaction(object):
+    
+            try:
+            response = fetch(method, host, url, headers, body)
+            if response:
+                if response.status > 400:
+                    server_type = response.getheader('Server', '')
+    
+        def getStart(self):
+        '''Return the start token or tree.'''
+        return None
+    
+    
+            rewrites = self.programs.get(programName)
+        if rewrites is None or len(rewrites) == 0:
+            # no instructions to execute
+            return self.toOriginalString(start, end)
+        
+        buf = StringIO()
+    
+            total_count = 0
+        translated_count = 0
+        with open(fn) as f:
+            catalog = read_po(f)
+            for msg in catalog:
+                total_count += 1
+                if is_translated(msg):
+                    translated_count += 1
+        pct = translated_count / float(total_count) * 100
+        click.echo('% -7s % 2d%%' % (
+            locale,
+            pct,
+        ), err=True)
+        if pct >= MINIMUM and locale not in rv:
+            rv.append(locale)
+    with open(catalog_file, 'w') as f:
+        json.dump({
+            'supported_locales': sorted(rv)
+        }, f, indent=2)
+        f.write('\n')
