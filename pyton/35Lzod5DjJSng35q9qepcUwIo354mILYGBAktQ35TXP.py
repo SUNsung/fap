@@ -1,46 +1,134 @@
 
         
-            # Replacing the non-sorted libraries by the sorted ones and gathering all at the final_README file
-    blocks[0] = inner_blocks
-    final_README = table_of_contents + '- - -' + ''.join(blocks)
+        containers = (('thefuck/python3-fish',
+               u'''FROM python:3
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'),
+              ('thefuck/python2-fish',
+               u'''FROM python:2
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'))
     
-            ydl = FakeYDL({
-            'proxy': '%s://127.0.0.1:%d' % (protocol, self.port),
-        })
-        return ydl.urlopen('http://yt-dl.org/ip').read().decode('utf-8')
+                c_bar = plt.bar(xvals, build_time[alg] - bottom,
+                            width, bottom, color='r')
+            q_bar = plt.bar(xvals, query_time[alg],
+                            width, build_time[alg], color='b')
     
+        if revision is None:
+        return
+    if domain not in ('py', 'pyx'):
+        return
+    if not info.get('module') or not info.get('fullname'):
+        return
     
-class AudiMediaIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?audi-mediacenter\.com/(?:en|de)/audimediatv/(?P<id>[^/?#]+)'
-    _TEST = {
-        'url': 'https://www.audi-mediacenter.com/en/audimediatv/60-seconds-of-audi-sport-104-2015-wec-bahrain-rookie-test-1467',
-        'md5': '79a8b71c46d49042609795ab59779b66',
-        'info_dict': {
-            'id': '1565',
-            'ext': 'mp4',
-            'title': '60 Seconds of Audi Sport 104/2015 - WEC Bahrain, Rookie Test',
-            'description': 'md5:60e5d30a78ced725f7b8d34370762941',
-            'upload_date': '20151124',
-            'timestamp': 1448354940,
-            'duration': 74022,
-            'view_count': int,
-        }
+        # TASK: Build a grid search to find out whether unigrams or bigrams are
+    # more useful.
+    # Fit the pipeline on the training set using grid search for the parameters
+    parameters = {
+        'vect__ngram_range': [(1, 1), (1, 2)],
     }
-    # extracted from https://audimedia.tv/assets/embed/embedded-player.js (dataSourceAuthToken)
-    _AUTH_TOKEN = 'e25b42847dba18c6c8816d5d8ce94c326e06823ebf0859ed164b3ba169be97f2'
+    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1)
+    grid_search.fit(docs_train, y_train)
+    
+    from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.gaussian_process.kernels import RBF
+from sklearn import datasets
+    
+        def get(self, key):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                return item.value
+        raise KeyError('Key not found')
+    
+    from mrjob.job import MRJob
+    
+            Accessing a node updates its position to the front of the LRU list.
+        '''
+        node = self.lookup[query]
+        if node is None:
+            return None
+        self.linked_list.move_to_front(node)
+        return node.results
     
     
-def jump(distance):
-    press_time = distance * 1.35
-    press_time = int(press_time)
-    cmd = 'adb shell input swipe 320 410 320 410 ' + str(press_time)
-    print(cmd)
-    os.system(cmd)
+class RemoveDuplicateUrls(MRJob):
+    
+    PROJ_METADATA = '%s.json' % PROJ_NAME
+    
+    #----------------------------------------------------------------------
+def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    '''wrapper'''
+    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
+    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
+    hostname = urlparse(url).hostname
+    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
+        return False
+    upid = match1(url, r'.+/content/(\w+)')
+    
+        while pin_count > 0:
+        json_data = extract_json_data(url, max=pin_list[-1]['pin_id'],
+                                      limit=LIMIT)
+        pins = json_data['pins']
+        pin_list += pins
+        pin_count -= len(pins)
+    
+        for i in range(10, 30):
+        url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
+            i = i,
+            p = preview
+        )
+        try:
+            mime, ext, size = url_info(url)
+            break
+        except: continue
+    
+        def test_human_adapter_shall_make_noise(self):
+        human = Human()
+        human_adapter = Adapter(human, make_noise=human.speak)
+        noise = human_adapter.make_noise()
+        expected_noise = ''hello''
+        self.assertEqual(noise, expected_noise)
+    
+        def test_c_observers_shall_be_detachable(cls):
+        cls.s.detach(cls.dec_obs)
+        # hex viewer shall be remaining if dec viewer is detached first
+        cls.assertEqual(isinstance(cls.s._observers[0], HexViewer), True)
+        cls.assertEqual(len(cls.s._observers), 1)
+        cls.s.detach(cls.hex_obs)
+        cls.assertEqual(len(cls.s._observers), 0)
+    
+        def test_sales_manager_shall_not_talk_through_proxy_with_delay(cls):
+        cls.ntp.busy = 'No'
+        start_time = time()
+        cls.ntp.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+This Sales Manager will not talk to you whether he/she is busy or not\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
+    
+    ### OUTPUT ###
+# Jack move 5m then stop
+
     
     
-def computing_k_b_v(target_distance):
-    result = linear_model_main(distances, press_times, target_distance)
-    b = result['intercept']
-    k = result['coefficient']
-    v = result['value']
-    return k[0], b[0], v[0]
+class MoveFileCommand(object):
+    
+        def and_specification(self, candidate):
+        raise NotImplementedError()
