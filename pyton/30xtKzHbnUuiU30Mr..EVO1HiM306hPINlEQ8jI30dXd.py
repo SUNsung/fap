@@ -1,50 +1,76 @@
-    def test_get_sni_addr(self):
-        from certbot_apache.obj import Addr
-        self.assertEqual(
-            self.addr.get_sni_addr('443'), Addr.fromstring('*:443'))
-        self.assertEqual(
-            self.addr.get_sni_addr('225'), Addr.fromstring('*:225'))
-        self.assertEqual(
-            self.addr1.get_sni_addr('443'), Addr.fromstring('127.0.0.1'))
-    
-    # One entry per manual page. List of tuples
-# (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'certbot-apache', u'certbot-apache Documentation',
-     [author], 1)
-]
-    
-    # List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-exclude_patterns = ['_build']
-    
-    def os_detail():
-    if sys.platform == 'win32':
-        return win32_version_string()
-    elif sys.platform.startswith('linux'):
-        distname,version,id = platform.linux_distribution()
-        return 'Dist:%s; Version:%s; ID:%s' % (distname,version,id)
-    elif sys.platform == 'darwin':
-        release, versioninfo, machine = platform.mac_ver()
-        return 'Release:%s; Version:%s Machine:%s' % (release, versioninfo, machine)
-    else:
-        return 'None'
+
+        
+        
+def side_effect(old_cmd, command):
+    with tarfile.TarFile(_tar_file(old_cmd.script_parts)[0]) as archive:
+        for file in archive.getnames():
+            try:
+                os.remove(file)
+            except OSError:
+                # does not try to remove directories as we cannot know if they
+                # already existed before
+                pass
 
     
-    scan_ip_log = Scan_ip_log()
+    
+@pytest.mark.functional
+def test_without_confirmation(proc, TIMEOUT):
+    without_confirmation(proc, TIMEOUT)
+    
+        def __eq__(self, other):
+        if isinstance(other, collections.Mapping):
+            other = CaseInsensitiveDict(other)
+        else:
+            return NotImplemented
+        # Compare insensitively
+        return dict(self.lower_items()) == dict(other.lower_items())
     
     
-@section Exceptions
+def remove_cookie_by_name(cookiejar, name, domain=None, path=None):
+    '''Unsets a cookie by name, by default over all domains and paths.
     
-        author = proj_info['author'],
-    author_email = proj_info['author_email'],
-    url = proj_info['url'],
-    license = proj_info['license'],
+    #: Python 2.x?
+is_py2 = (_ver[0] == 2)
     
-    def cbs_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    '''Downloads CBS videos by URL.
-    '''
+    >>> requests.codes['temporary_redirect']
+307
+>>> requests.codes.teapot
+418
+>>> requests.codes['\o/']
+200
     
-    from ..common import *
+    def kuwo_download_by_rid(rid, output_dir = '.', merge = True, info_only = False):
+    html=get_content('http://player.kuwo.cn/webmusic/st/getNewMuiseByRid?rid=MUSIC_%s'%rid)
+    title=match1(html,r'<name>(.*)</name>')
+    #to get title
+    #format =aac|mp3 ->to get aac format=mp3 ->to get mp3
+    url=get_content('http://antiserver.kuwo.cn/anti.s?format=mp3&rid=MUSIC_%s&type=convert_url&response=url'%rid)
+    songtype, ext, size = url_info(url)
+    print_info(site_info, title, songtype, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir)
     
-    LIMIT = 100
+    from .tudou import tudou_download_by_id
+from .youku import youku_download_by_vid
+from xml.dom.minidom import parseString
+    
+        # Execute the template string in a temporary namespace and
+    # support tracing utilities by setting a value for frame.f_globals['__name__']
+    namespace = dict(_itemgetter=_itemgetter, __name__='namedtuple_%s' % typename,
+                     _property=property, _tuple=tuple)
+    try:
+        exec(template, namespace)
+    except SyntaxError:
+        e = _sys.exc_info()[1]
+        raise SyntaxError(e.message + ':\n' + template)
+    result = namespace[typename]
+    
+    # List of directories, relative to source directory, that shouldn't be searched
+# for source files.
+exclude_trees = ['_build']
+    
+    def is_prime(n):
+    if n % 2 == 0:
+        return False
+    
+        from ycm.tests import YouCompleteMeInstance
