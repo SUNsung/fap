@@ -1,82 +1,149 @@
-module ActionCable
-  module Connection
-    # Collection class for all the channel subscriptions established on a given connection. Responsible for routing incoming commands that arrive on
-    # the connection to the proper channel.
-    class Subscriptions # :nodoc:
-      def initialize(connection)
-        @connection = connection
-        @subscriptions = {}
+
+        
+          def find_matching_tag(tag)
+    if key?(tag)
+      tag
+    else
+      find_altivec_tag(tag) || find_or_later_tag(tag)
+    end
+  end
+    
+      private
+    
+      def recipients(payload = {})
+    emails = interpolated(payload)['recipients']
+    if emails.present?
+      if emails.is_a?(String)
+        [emails]
+      else
+        emails
+      end
+    else
+      [user.email]
+    end
+  end
+    
+      class Worker < LongRunnable::Worker
+    # Optional
+    #   Called after initialization of the Worker class, use this method as an initializer.
+    def setup; end
+    
+            # Defines an additionally available host implementation with
+        # the given key.
+        #
+        # @param [String] name Name of the host.
+        # @param [String] parent Name of the parent host (if any)
+        def self.host(name, parent=nil, &block)
+          components.hosts.register(name.to_sym) do
+            parent = parent.to_sym if parent
+    
+    module Vagrant
+  module Plugin
+    module V2
+      # This is the base class for a provider for the V2 API. A provider
+      # is responsible for creating compute resources to match the needs
+      # of a Vagrant-configured system.
+      class Provider
+        include CapabilityHost
+    
+            hash.each do |key, value|
+          self[convert_key(key)] = value
+        end
       end
     
-              def remove_channel(channel)
-            @subscription_lock.synchronize do
-              when_connected { send_command('unsubscribe', channel) }
-            end
+            # Method used internally to DRY out the other renderers. This method
+        # creates and sets up the renderer before calling a specified method on it.
+        def render_with(method, template, data={})
+          renderer = new(template, data)
+          yield renderer if block_given?
+          renderer.send(method.to_sym)
+        end
+      end
+    
+          path = if timestamp == :latest
+        Pathname.glob(metadata_versioned_path(version: version).join('*')).sort.last
+      else
+        timestamp = new_timestamp if timestamp == :now
+        metadata_versioned_path(version: version).join(timestamp)
+      end
+    
+          def initialize(pairs = {})
+        @pairs = pairs
+        pairs.each do |key, value|
+          raise 'invalid container key: '#{key.inspect}'' unless VALID_KEYS.include?(key)
+          send(:'#{key}=', value)
+        end
+    
+          files.map! do |from, to|
+        to ||= from.gsub(/\.[^.]*?$/, '.css')
+        sourcemap = Sass::Util.sourcemap_name(to) if @options[:sourcemap]
+        [from, to, sourcemap]
+      end
+      dirs.map! {|from, to| [from, to || from]}
+      Sass::Plugin.options[:template_location] = dirs
+    
+            def log_level(name, options = {})
+          if options[:prepend]
+            level = log_levels.values.min
+            level = level.nil? ? 0 : level - 1
+          else
+            level = log_levels.values.max
+            level = level.nil? ? 0 : level + 1
           end
+          log_levels.update(name => level)
+          define_logger(name)
+        end
     
-      def test_default_helpers_only
-    assert_equal [JustMeHelper], JustMeController._helpers.ancestors.reject(&:anonymous?)
-    assert_equal [MeTooHelper, JustMeHelper], MeTooController._helpers.ancestors.reject(&:anonymous?)
-  end
+        # @param modifier [Array<String, Sass::Script::Tree::Node>] See \{#modifier}
+    # @param type [Array<String, Sass::Script::Tree::Node>] See \{#type}
+    # @param expressions [Array<Array<String, Sass::Script::Tree::Node>>] See \{#expressions}
+    def initialize(modifier, type, expressions)
+      @modifier = modifier
+      @type = type
+      @expressions = expressions
+    end
     
-      class BareTest < ActiveSupport::TestCase
-    test 'response body is a Rack-compatible response' do
-      status, headers, body = BareController.action(:index).call(Rack::MockRequest.env_for('/'))
-      assert_equal 200, status
-      string = ''.dup
-    
-            s += ', ' unless s.empty?
-        s += '#{k}#{value}'
+            p environment.var(name)
+      else
+        p Script::Parser.parse(text, @line, 0).perform(environment)
+      end
+    rescue Sass::SyntaxError => e
+      puts 'SyntaxError: #{e.message}'
+      if @options[:trace]
+        e.backtrace.each do |line|
+          puts '\tfrom #{line}'
+        end
       end
     end
   end
+end
+
     
-    require 'active_support/log_subscriber'
+             RUBY
+                         else
+                           <<-RUBY
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
     
-    options = {
-  sort: true,
-  limit: 30,
-  format: :text,
-}
+              add_offense(node)
+        end
     
-    require 'json'
-require 'open-uri'
+            def autocorrect(node)
+          center = multiple_compare?(node)
+          new_center = '#{center.source} && #{center.source}'
     
-      Jekyll::Command.subclasses.each { |c| c.init_with_program(p) }
+      context 'called with three styles' do
+    it 'applies second style to left and right' do
+      rule = 'border-style: dashed double solid'
     
-        def build_for_type(type, user, attributes = {})
-      attributes.delete(:type)
-    
-      included do
-    include Oauthable
-    
-      def retry_queued
-    @jobs = Delayed::Job.awaiting_retry.update_all(run_at: Time.zone.now)
-    
-    respond_to do |format|
-      format.html { redirect_to jobs_path, notice: 'Queued jobs getting retried.' }
-      format.json { head :no_content }
+          expect('.border-width-all').to have_rule(rule)
     end
   end
     
-    invalids = []
-Parallel.each(links, in_threads: 4) do |link|
-  href = link.attribute('href').to_s
-  begin
-    case check_link(URI.join(BASE_URI, href))
-    when (200...300)
-      putc('.')
-    when (300..302)
-      putc('w')
+          expect('.all-buttons-active').to have_ruleset(ruleset)
     end
-  rescue => e
-    putc('F')
-    invalids << '#{href} (reason: #{e.message})'
   end
-end
     
-    desc 'LESS to stdin -> Sass to stdout'
-task :less_to_scss, :branch do |t, args|
-  require './tasks/converter'
-  puts Converter.new(branch: args[:branch]).convert_less(STDIN.read)
-end
+          expect('.all-text-inputs-focus').to have_ruleset(ruleset)
+    end
+  end
