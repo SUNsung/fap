@@ -1,25 +1,24 @@
 
         
-          private
-    
-          expect(response).to redirect_to(settings_notifications_path)
-      user.reload
-      expect(user.settings['notification_emails']['follow']).to be true
-      expect(user.settings['interactions']['must_be_follower']).to be false
-    end
+          # any user that is either a moderator or an admin
+  def staff?
+    admin || moderator
   end
-end
-
     
-          def to_s
-        @pairs.inspect
-      end
-    end
-  end
-end
-
+            attr_writer :log_levels
     
-            opts.on('--cache-location PATH',
-                'The path to save parsed Sass files. Defaults to .sass-cache.') do |loc|
-          @options[:for_engine][:cache_location] = loc
+    (import 'mDNSResponder.sb')
+    
+            private
+    
+            def initialize(argv)
+          @name = argv.shift_argument
+          @template_url = argv.option('template-url', TEMPLATE_REPO)
+          super
+          @additional_args = argv.remainder!
         end
+    
+            sets = config.sources_manager.aggregate.all_sets
+        sets.each { |set| UI.pod(set, :name_and_version) }
+        UI.puts '\n#{sets.count} pods were found'
+      end
