@@ -1,415 +1,483 @@
 
         
-          /// DebuggerClient is consulted at two times during name
-  /// lookup.  This is the first time: after all names in a
-  /// source file have been checked but before external
-  /// Modules are checked.  The results in the ResultVector will
-  /// be consulted first.  Return true if results have been added
-  /// to RV.
-  /// FIXME: I don't think this ever does anything useful.
-  virtual bool lookupOverrides(DeclBaseName Name, DeclContext *DC,
-                               SourceLoc Loc, bool IsTypeLookup,
-                               ResultVector &RV) = 0;
+        #include 'tensorflow/core/framework/op_kernel.h'
+#include 'tensorflow/core/framework/resource_mgr.h'
+#include 'tensorflow/core/framework/tensor_shape.h'
+#include 'tensorflow/core/platform/logging.h'
+#include 'tensorflow/core/platform/mutex.h'
+#include 'tensorflow/core/platform/thread_annotations.h'
+#include 'tensorflow/core/platform/types.h'
     
     
-static inline __swift_shims_dispatch_block_t
-_swift_dispatch_block_create_with_qos_class(
-    dispatch_block_flags_t flags,
-    qos_class_t qos,
-    int relative_priority,
-    __swift_shims_dispatch_block_t _Nonnull block) {
-  return dispatch_block_create_with_qos_class(
-      flags, qos, relative_priority, block);
-}
-    
-      void compute();
-    
-    StringRef swift::unicode::extractFirstExtendedGraphemeCluster(StringRef S) {
-  // Extended grapheme cluster segmentation algorithm as described in Unicode
-  // Standard Annex #29.
-  if (S.empty())
-    return StringRef();
+    {
+    {      case ACTION_CLOSE:
+      default:
+        // Do not close stdin/out/err, instead redirect them to /dev/null so
+        // their file descriptors remain unavailable for reuse by open(), etc.
+        if (i <= CHAN_STDERR) {
+          if (devnull_fd < 0) {
+            while ((devnull_fd = open('/dev/null', O_RDWR, 0)) < 0) {
+              if (!retry(errno)) {
+                _exit(1);
+              }
+            }
+          }
+          while (dup2(devnull_fd, i) < 0) {
+            if (!retry(errno)) {
+              _exit(1);
+            }
+          }
+        } else {
+          close(i);
+        }
+        break;
     }
+  }
     
-    namespace leveldb {
-    }
+    #include 'tensorflow/core/lib/strings/strcat.h'
     
-    // Return the length of the encoding of 'key'.
-inline size_t InternalKeyEncodingLength(const ParsedInternalKey& key) {
-  return key.user_key.size() + 8;
+    const int kCIFARSize = 32;
+const int kCIFARImageNBytes = 3072;
+const int kCIFARBatchSize = 10000;
+const int kCIFARTrainBatches = 5;
+    
+    uint32_t swap_endian(uint32_t val) {
+    val = ((val << 8) & 0xFF00FF00) | ((val >> 8) & 0xFF00FF);
+    return (val << 16) | (val >> 16);
 }
-    
-    struct TableAndFile {
-  RandomAccessFile* file;
-  Table* table;
-};
-    
-    #include <vector>
     
     namespace caffe {
     }
     
+    /**
+ * @brief Computes the contrastive loss @f$
+ *          E = \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
+ *              \left(1-y\right) \max \left(margin-d, 0\right)^2
+ *          @f$ where @f$
+ *          d = \left| \left| a_n - b_n \right| \right|_2 @f$. This can be
+ *          used to train siamese networks.
+ *
+ * @param bottom input Blob vector (length 3)
+ *   -# @f$ (N \times C \times 1 \times 1) @f$
+ *      the features @f$ a \in [-\infty, +\infty]@f$
+ *   -# @f$ (N \times C \times 1 \times 1) @f$
+ *      the features @f$ b \in [-\infty, +\infty]@f$
+ *   -# @f$ (N \times 1 \times 1 \times 1) @f$
+ *      the binary similarity @f$ s \in [0, 1]@f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+ *      the computed contrastive loss: @f$ E =
+ *          \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
+ *          \left(1-y\right) \max \left(margin-d, 0\right)^2
+ *          @f$ where @f$
+ *          d = \left| \left| a_n - b_n \right| \right|_2 @f$.
+ * This can be used to train siamese networks.
+ */
+template <typename Dtype>
+class ContrastiveLossLayer : public LossLayer<Dtype> {
+ public:
+  explicit ContrastiveLossLayer(const LayerParameter& param)
+      : LossLayer<Dtype>(param), diff_() {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
     
-    {}  // namespace caffe
-    
-    #endif  // CAFFE_DECONV_LAYER_HPP_
-
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the exp inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x} =
-   *            \frac{\partial E}{\partial y} y \alpha \log_e(gamma)
-   *      @f$ if propagate_down[0]
+    /**
+ * @brief Convolves the input image with a bank of learned filters,
+ *        and (optionally) adds biases.
+ *
+ *   Caffe convolves by reduction to matrix multiplication. This achieves
+ *   high-throughput and generality of input and filter dimensions but comes at
+ *   the cost of memory for matrices. This makes use of efficiency in BLAS.
+ *
+ *   The input is 'im2col' transformed to a channel K' x H x W data matrix
+ *   for multiplication with the N x K' x H x W filter matrix to yield a
+ *   N' x H x W output matrix that is then 'col2im' restored. K' is the
+ *   input channel * kernel height * kernel width dimension of the unrolled
+ *   inputs so that the im2col matrix has a column for each input region to
+ *   be filtered. col2im restores the output spatial structure by rolling up
+ *   the output channel N' columns of the output matrix.
+ */
+template <typename Dtype>
+class ConvolutionLayer : public BaseConvolutionLayer<Dtype> {
+ public:
+  /**
+   * @param param provides ConvolutionParameter convolution_param,
+   *    with ConvolutionLayer options:
+   *  - num_output. The number of filters.
+   *  - kernel_size / kernel_h / kernel_w. The filter dimensions, given by
+   *  kernel_size for square filters or kernel_h and kernel_w for rectangular
+   *  filters.
+   *  - stride / stride_h / stride_w (\b optional, default 1). The filter
+   *  stride, given by stride_size for equal dimensions or stride_h and stride_w
+   *  for different strides. By default the convolution is dense with stride 1.
+   *  - pad / pad_h / pad_w (\b optional, default 0). The zero-padding for
+   *  convolution, given by pad for equal dimensions or pad_h and pad_w for
+   *  different padding. Input padding is computed implicitly instead of
+   *  actually padding.
+   *  - dilation (\b optional, default 1). The filter
+   *  dilation, given by dilation_size for equal dimensions for different
+   *  dilation. By default the convolution has dilation 1.
+   *  - group (\b optional, default 1). The number of filter groups. Group
+   *  convolution is a method for reducing parameterization by selectively
+   *  connecting input and output channels. The input and output channel dimensions must be divisible
+   *  by the number of groups. For group @f$ \geq 1 @f$, the
+   *  convolutional filters' input and output channels are separated s.t. each
+   *  group takes 1 / group of the input channels and makes 1 / group of the
+   *  output channels. Concretely 4 input channels, 8 output channels, and
+   *  2 groups separate input channels 1-2 and output channels 1-4 into the
+   *  first group and input channels 3-4 and output channels 5-8 into the second
+   *  group.
+   *  - bias_term (\b optional, default true). Whether to have a bias.
+   *  - engine: convolution has CAFFE (matrix multiplication) and CUDNN (library
+   *    kernels + stream parallelism) engines.
    */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  explicit ConvolutionLayer(const LayerParameter& param)
+      : BaseConvolutionLayer<Dtype>(param) {}
+    }
+    
+    #include 'caffe/layers/lrn_layer.hpp'
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
     
-    {}  // namespace caffe
+    {  int M_;
+  int K_;
+  int N_;
+  bool bias_term_;
+  Blob<Dtype> bias_multiplier_;
+};
     
-    void GPUDataTransferer::CopyCPUToGPUAsync(void* cpuBuffer, size_t totalSize, void* gpuBuffer)
-{
-    m_inner->CopyCPUToGPUAsync(cpuBuffer, 1, totalSize, gpuBuffer);
-    m_inner->RecordCPUToGPUCopy();
+    
+    {
+    {        // same node. no copy needed
+        if (pFromNode == pToNode)
+            LogicError('CopyNode: You are copying the node to the same network with same node name.');
+        else
+            pFromNode->CopyTo(pToNode, toName, flags); // blast it over the existing node
+    }
+    return pToNode;
 }
     
-        int traceLevel = config(L'traceLevel', 0);
-    if (config.Exists(L'createNetwork'))
+        // EvaluateNDLSnippet - evaluate the passed snippet of NDL into a computational network
+    // script - [in] text of the NDL snippet
+    // network - [in/out] computation network to insert NDL into
+    void EvaluateNDLSnippet(const ConfigValue& script, ComputationNetworkPtr network)
     {
-        createNetworkFn = GetCreateNetworkFn(config); // (we need a separate function needed due to template code)
-        return true;
-    }
-    else if (config.Exists(L'SimpleNetworkBuilder'))
-    {
-        const ConfigRecordType& simpleNetworkBuilderConfig(config(L'SimpleNetworkBuilder'));
-        auto netBuilder = make_shared<SimpleNetworkBuilder<ElemType>>(simpleNetworkBuilderConfig); // parses the configuration and stores it in the SimpleNetworkBuilder object
-        createNetworkFn = [netBuilder, traceLevel](DEVICEID_TYPE deviceId)
-        {
-            auto net = shared_ptr<ComputationNetwork>(netBuilder->BuildNetworkFromDescription()); // this operates based on the configuration saved above
-            net->SetTraceLevel(traceLevel);
-            return net;
-        };
-        return true;
-    }
-    // legacy NDL
-    else if (config.Exists(L'NDLNetworkBuilder'))
-    {
-        const ConfigRecordType& ndlNetworkBuilderConfig(config(L'NDLNetworkBuilder'));
-        shared_ptr<NDLBuilder<ElemType>> netBuilder = make_shared<NDLBuilder<ElemType>>(ndlNetworkBuilderConfig);
-        createNetworkFn = [netBuilder, traceLevel](DEVICEID_TYPE deviceId)
-        {
-            auto net = shared_ptr<ComputationNetwork>(netBuilder->BuildNetworkFromDescription());
-            net->SetTraceLevel(traceLevel);
-            return net;
-        };
-        return true;
-    }
-    // legacy test mode for BrainScript. Will go away once we fully integrate with BS.
-    else if (config.Exists(L'BrainScriptNetworkBuilder') || config.Exists(L'ExperimentalNetworkBuilder' /*legacy name*/))
-    {
-        // We interface with outer old CNTK config by taking the inner part, which we get as a string, as BrainScript.
-        // We prepend a few standard definitions, and also definition of deviceId and precision, which all objects will pull out again when they are being constructed.
-        // BUGBUG: We are not getting TextLocations right in this way! Do we need to inject location markers into the source? Moot once we fully switch to BS
-        wstring sourceOfNetwork = config.Exists(L'BrainScriptNetworkBuilder') ? config(L'BrainScriptNetworkBuilder') : config(L'ExperimentalNetworkBuilder');
-        if (sourceOfNetwork.find_first_of(L'([{') != 0)
-            InvalidArgument('BrainScript network description must be either a BS expression in ( ) or a config record in { }');
-    }
+        NDLUtil<ElemType> ndlUtil(network);
+        ndlUtil.ProcessNDLConfig(script);
     }
     
-    class ConfigException : public Microsoft::MSR::ScriptableObjects::ScriptingException
+    // LoadConfigFiles - load multiple configuration file, and adds to config parameters
+// filePaths - A '+' delimited list of file paths, corresponding to config files to load
+// configStringToAppend - A config string which should be processed together with the config files
+void ConfigParser::LoadConfigFiles(const std::wstring& filePaths, const std::string* configStringToAppend)
 {
-    vector<TextLocation> locations; // error location (front()) and evaluation parents (upper)
-public:
-    // Note: All our Error objects use wide strings, which we round-trip through runtime_error as utf8.
-    ConfigException(const wstring& msg, TextLocation where)
-        : Microsoft::MSR::ScriptableObjects::ScriptingException(msra::strfun::utf8(msg))
+    std::string configString = ReadConfigFiles(filePaths);
+    if (configStringToAppend != nullptr)
     {
-        locations.push_back(where);
+        configString += *configStringToAppend;
     }
     }
     
-        // parse a 'key=value' pair and create the appropriate node for what was seen
-    // key=Function(x,y,z) - function with return
-    // Function(x,y,z) - function with no return
-    // HDim = 256 - inline NDL command
-    // model1=[...] - Embedded NDL script
-    std::string::size_type ParseValue(const std::string& stringParse, std::string::size_type tokenStart, std::string::size_type tokenEnd)
-    {
-        // skip leading spaces
-        tokenStart = stringParse.find_first_not_of(' \t', tokenStart);
-        auto keyEnd = stringParse.find_first_of(OPENBRACES '=', tokenStart);
-        bool equalFound = (keyEnd != npos && keyEnd < tokenEnd && stringParse[keyEnd] == '=');
-        std::string key = stringParse.substr(tokenStart, keyEnd - tokenStart);
-        Trim(key);
-    }
-    
-    public:
-    float4()
-    {
-    } // uninitialized
-    float4(const float4& f4)
-        : v(f4.v)
-    {
-    }
-    float4& operator=(const float4& other)
-    {
-        v = other.v;
-        return *this;
-    }
-    
-    Status TestServiceImpl::Echo(ServerContext* context, const EchoRequest* request,
-                             EchoResponse* response) {
-  // A bit of sleep to make sure that short deadline tests fail
-  if (request->has_param() && request->param().server_sleep_us() > 0) {
-    gpr_sleep_until(
-        gpr_time_add(gpr_now(GPR_CLOCK_MONOTONIC),
-                     gpr_time_from_micros(request->param().server_sleep_us(),
-                                          GPR_TIMESPAN)));
-  }
-    }
-    
-    std::shared_ptr<Channel> CreateTestChannel(
-    const grpc::string& server, const grpc::string& override_hostname,
-    bool enable_ssl, bool use_prod_roots);
-    
-    TEST(ServerRequestCallTest, ShortDeadlineDoesNotCauseOkayFalse) {
-  std::mutex mu;
-  bool shutting_down = false;
-    }
-    
-    std::unique_ptr<ScenarioResult> RunScenario(
-    const grpc::testing::ClientConfig& client_config, size_t num_clients,
-    const grpc::testing::ServerConfig& server_config, size_t num_servers,
-    int warmup_seconds, int benchmark_seconds, int spawn_local_worker_count,
-    const grpc::string& qps_server_target_override,
-    const grpc::string& credential_type, bool run_inproc);
-    
-    #ifdef BAZEL_BUILD
-#include 'examples/protos/helloworld.grpc.pb.h'
+    // The following ifdef block is the standard way of creating macros which make exporting
+// from a DLL simpler. All files within this DLL are compiled with the DATAWRITER_EXPORTS
+// symbol defined on the command line. This symbol should not be defined on any project
+// that uses this DLL. This way any other project whose source files include this file see
+// DATAWRITER_API functions as being imported from a DLL, whereas this DLL sees symbols
+// defined with this macro as being exported.
+#ifdef _WIN32
+#if defined(DATAWRITER_EXPORTS)
+#define DATAWRITER_API __declspec(dllexport)
+#elif defined(DATAWRITER_LOCAL)
+#define DATAWRITER_API
 #else
-#include 'helloworld.grpc.pb.h'
+#define DATAWRITER_API __declspec(dllimport)
+#endif
+#else
+#define DATAWRITER_API
 #endif
     
-    using grpc::Channel;
-using grpc::ClientContext;
-using grpc::ClientReader;
-using grpc::ClientReaderWriter;
-using grpc::ClientWriter;
-using grpc::Status;
-using routeguide::Point;
-using routeguide::Feature;
-using routeguide::Rectangle;
-using routeguide::RouteSummary;
-using routeguide::RouteNote;
-using routeguide::RouteGuide;
-    
-    namespace grpc_node_generator {
-    }
-    
-      static bool all_empty(const boost::asio::mutable_buffers_1& buffer_sequence)
-  {
-    return boost::asio::buffer_size(buffer_sequence) == 0;
-  }
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    #ifndef BOOST_ASIO_DETAIL_EVENT_HPP
-#define BOOST_ASIO_DETAIL_EVENT_HPP
-    
-    #endif // BOOST_ASIO_DETAIL_FD_SET_ADAPTER_HPP
-
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    void buffer_sequence_adapter_base::init_native_buffer(
-    buffer_sequence_adapter_base::native_buffer_type& buf,
-    const boost::asio::mutable_buffer& buffer)
+    template <class _T>
+class array_ref
 {
-  std::memset(&buf, 0, sizeof(native_buffer_type));
-  Microsoft::WRL::ComPtr<IInspectable> insp
-    = Microsoft::WRL::Make<winrt_buffer_impl>(buffer);
-  buf = reinterpret_cast<Windows::Storage::Streams::IBuffer^>(insp.Get());
-}
-    
-    namespace boost {
-namespace asio {
-namespace detail {
+    _T* data;
+    size_t n;
+    inline void check_index(size_t i) const
+    {
+        i;
+        assert(i < n);
+    }
+    inline void check_ptr() const
+    {
+        n;
+        data;
+        assert(n == 0 || data != NULL);
     }
     }
-    }
     
+    // In some distros, gflags is in the namespace google, and in some others,
+// in gflags. This hack is enabling us to find both.
+namespace google {}
+namespace gflags {}
+using namespace google;
+using namespace gflags;
     
-    {// Enable LOG(CONSOLE) for print messages to console.
-#define LOG_CONSOLE ::xgboost::ConsoleLogger()
-// Enable LOG(TRACKER) for print messages to tracker
-#define LOG_TRACKER ::xgboost::TrackerLogger()
-}  // namespace xgboost.
-#endif  // XGBOOST_LOGGING_H_
-
+    #ifndef GRPC_CORE_LIB_COMPRESSION_MESSAGE_COMPRESS_H
+#define GRPC_CORE_LIB_COMPRESSION_MESSAGE_COMPRESS_H
     
+      Status RequestStream(ServerContext* context,
+                       ServerReader<EchoRequest>* reader,
+                       EchoResponse* response) override;
     
-    {    // loop over all rows and fill column entries
-    // num_nonzeros[fid] = how many nonzeros have this feature accumulated so far?
-    std::vector<size_t> num_nonzeros;
-    num_nonzeros.resize(nfeature);
-    std::fill(num_nonzeros.begin(), num_nonzeros.end(), 0);
-    for (size_t rid = 0; rid < nrow; ++rid) {
-      const size_t ibegin = gmat.row_ptr[rid];
-      const size_t iend = gmat.row_ptr[rid + 1];
-      size_t fid = 0;
-      for (size_t i = ibegin; i < iend; ++i) {
-        const uint32_t bin_id = gmat.index[i];
-        while (bin_id >= gmat.cut->row_ptr[fid + 1]) {
-          ++fid;
+      template <typename... Args>
+  void emplace_back(Args&&... args) {
+    if (size_ < N) {
+      new (&inline_[size_]) T(std::forward<Args>(args)...);
+    } else {
+      if (size_ - N == dynamic_capacity_) {
+        size_t new_capacity =
+            dynamic_capacity_ == 0 ? 2 : dynamic_capacity_ * 2;
+        T* new_dynamic = static_cast<T*>(gpr_malloc(sizeof(T) * new_capacity));
+        for (size_t i = 0; i < dynamic_capacity_; ++i) {
+          new (&new_dynamic[i]) T(std::move(dynamic_[i]));
+          dynamic_[i].~T();
         }
-        if (type_[fid] == kDenseColumn) {
-          XGBOOST_TYPE_SWITCH(this->dtype, {
-            const size_t block_offset = boundary_[fid].index_begin / packing_factor_;
-            const size_t elem_offset = boundary_[fid].index_begin % packing_factor_;
-            DType* begin = reinterpret_cast<DType*>(&index_[block_offset]) + elem_offset;
-            begin[rid] = static_cast<DType>(bin_id - index_base_[fid]);
-          });
-        } else {
-          XGBOOST_TYPE_SWITCH(this->dtype, {
-            const size_t block_offset = boundary_[fid].index_begin / packing_factor_;
-            const size_t elem_offset = boundary_[fid].index_begin % packing_factor_;
-            DType* begin = reinterpret_cast<DType*>(&index_[block_offset]) + elem_offset;
-            begin[num_nonzeros[fid]] = static_cast<DType>(bin_id - index_base_[fid]);
-          });
-          row_ind_[boundary_[fid].row_ind_begin + num_nonzeros[fid]] = rid;
-          ++num_nonzeros[fid];
-        }
+        gpr_free(dynamic_);
+        dynamic_ = new_dynamic;
+        dynamic_capacity_ = new_capacity;
       }
+      new (&dynamic_[size_ - N]) T(std::forward<Args>(args)...);
     }
+    ++size_;
   }
     
-    #if defined(__GNUC__) && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 8) || __GNUC__ > 4) && \
-    !defined(__CUDACC__)
-#include <parallel/algorithm>
-#define XGBOOST_PARALLEL_SORT(X, Y, Z) __gnu_parallel::sort((X), (Y), (Z))
-#define XGBOOST_PARALLEL_STABLE_SORT(X, Y, Z) \
-  __gnu_parallel::stable_sort((X), (Y), (Z))
-#elif defined(_MSC_VER) && (!__INTEL_COMPILER)
-#include <ppl.h>
-#define XGBOOST_PARALLEL_SORT(X, Y, Z) concurrency::parallel_sort((X), (Y), (Z))
-#define XGBOOST_PARALLEL_STABLE_SORT(X, Y, Z) std::stable_sort((X), (Y), (Z))
-#else
-#define XGBOOST_PARALLEL_SORT(X, Y, Z) std::sort((X), (Y), (Z))
-#define XGBOOST_PARALLEL_STABLE_SORT(X, Y, Z) std::stable_sort((X), (Y), (Z))
-#endif
     
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
+    {  return CreateTestChannel(server, type, override_hostname, use_prod_roots,
+                           creds, args);
+}
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
     
-    #endif
+    {  GetReporter()->ReportQPS(*result);
+  GetReporter()->ReportLatency(*result);
+}
+    
+    #include <grpc++/grpc++.h>
+#include <grpc/support/log.h>
+    
+    #endif  // GRPC_INTERNAL_COMPILER_NODE_GENERATOR_HELPERS_H
 
     
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
+    inline flatbuffers::Offset<EnumVal> CreateEnumVal(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    flatbuffers::Offset<flatbuffers::String> name = 0,
+    int64_t value = 0,
+    flatbuffers::Offset<Object> object = 0,
+    flatbuffers::Offset<Type> union_type = 0) {
+  EnumValBuilder builder_(_fbb);
+  builder_.add_value(value);
+  builder_.add_union_type(union_type);
+  builder_.add_object(object);
+  builder_.add_name(name);
+  return builder_.Finish();
+}
     
-    // CHANGELOG
-// (minor and older changes stripped away, please see git history for details)
-//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplGlfwGL3_RenderDrawData() in the .h file so you can call it yourself.
-//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
-//  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
-//  2018-01-25: Inputs: Added gamepad support if ImGuiNavFlags_EnableGamepad is set.
-//  2018-01-25: Inputs: Honoring the io.WantMoveMouse by repositioning the mouse by using navigation and ImGuiNavFlags_MoveMouse is set.
-//  2018-01-20: Inputs: Added Horizontal Mouse Wheel support.
-//  2018-01-18: Inputs: Added mapping for ImGuiKey_Insert.
-//  2018-01-07: OpenGL: Changed GLSL shader version from 330 to 150. (Also changed GL context from 3.3 to 3.2 in example's main.cpp)
-//  2017-09-01: OpenGL: Save and restore current bound sampler. Save and restore current polygon mode.
-//  2017-08-25: Inputs: MousePos set to -FLT_MAX,-FLT_MAX when mouse is unavailable/missing (instead of -1,-1).
-//  2017-05-01: OpenGL: Fixed save and restore of current blend function state.
-//  2016-10-15: Misc: Added a void* user_data parameter to Clipboard function handlers.
-//  2016-09-05: OpenGL: Fixed save and restore of current scissor rectangle.
-//  2016-04-30: OpenGL: Fixed save and restore of current GL_ACTIVE_TEXTURE.
+    ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>* MonsterStorage::Stub::PrepareAsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderFactory< flatbuffers::grpc::Message<Stat>>::Create(channel_.get(), cq, rpcmethod_Store_, context, request, false);
+}
     
-        ALLEGRO_LOCKED_REGION *locked_img = al_lock_bitmap(img, al_get_bitmap_format(img), ALLEGRO_LOCK_WRITEONLY);
-    if (!locked_img)
+    
     {
-        al_destroy_bitmap(img);
+    {      for (auto part = parts.rbegin(); part != parts.rend(); part++) {
+        vars['part'] = *part;
+        printer->Print(vars, '}  // namespace $part$\n');
+      }
+      printer->Print(vars, '\n');
+    }
+    
+          flatbuffers::grpc::Message<Monster> monster =
+          fbb_.ReleaseMessage<Monster>();
+    
+      const flatbuffers::FlatCompiler::Generator generators[] = {
+    { flatbuffers::GenerateBinary, '-b', '--binary', 'binary', false, nullptr,
+      flatbuffers::IDLOptions::kBinary,
+      'Generate wire format binaries for any data definitions',
+      flatbuffers::BinaryMakeRule },
+    { flatbuffers::GenerateTextFile, '-t', '--json', 'text', false, nullptr,
+      flatbuffers::IDLOptions::kJson,
+      'Generate text output for any data definitions',
+      flatbuffers::TextMakeRule },
+    { flatbuffers::GenerateCPP, '-c', '--cpp', 'C++', true,
+      flatbuffers::GenerateCppGRPC, flatbuffers::IDLOptions::kCpp,
+      'Generate C++ headers for tables/structs', flatbuffers::CPPMakeRule },
+    { flatbuffers::GenerateGo, '-g', '--go', 'Go', true,
+      flatbuffers::GenerateGoGRPC, flatbuffers::IDLOptions::kGo,
+      'Generate Go files for tables/structs', flatbuffers::GeneralMakeRule },
+    { flatbuffers::GenerateGeneral, '-j', '--java', 'Java', true,
+      flatbuffers::GenerateJavaGRPC, flatbuffers::IDLOptions::kJava,
+      'Generate Java classes for tables/structs',
+      flatbuffers::GeneralMakeRule },
+    { flatbuffers::GenerateJS, '-s', '--js', 'JavaScript', true, nullptr,
+      flatbuffers::IDLOptions::kJs,
+      'Generate JavaScript code for tables/structs', flatbuffers::JSMakeRule },
+    { flatbuffers::GenerateJS, '-T', '--ts', 'TypeScript', true, nullptr,
+      flatbuffers::IDLOptions::kTs,
+      'Generate TypeScript code for tables/structs', flatbuffers::JSMakeRule },
+    { flatbuffers::GenerateGeneral, '-n', '--csharp', 'C#', true, nullptr,
+      flatbuffers::IDLOptions::kCSharp,
+      'Generate C# classes for tables/structs', flatbuffers::GeneralMakeRule },
+    { flatbuffers::GeneratePython, '-p', '--python', 'Python', true, nullptr,
+      flatbuffers::IDLOptions::kPython,
+      'Generate Python files for tables/structs',
+      flatbuffers::GeneralMakeRule },
+    { flatbuffers::GeneratePhp, nullptr, '--php', 'PHP', true, nullptr,
+      flatbuffers::IDLOptions::kPhp, 'Generate PHP files for tables/structs',
+      flatbuffers::GeneralMakeRule },
+    { flatbuffers::GenerateJsonSchema, nullptr, '--jsonschema', 'JsonSchema',
+      true, nullptr, flatbuffers::IDLOptions::kJsonSchema,
+      'Generate Json schema', flatbuffers::GeneralMakeRule },
+  };
+    
+    bool nextConnection(int tid)
+{
+    m.lock();
+    int socketfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (socketfd == -1) {
+        cout << 'FD error, connections: ' << connections << endl;
         return false;
     }
-    memcpy(locked_img->data, pixels, sizeof(int)*width*height);
-    al_unlock_bitmap(img);
+    }
     
-        // End packing
-    stbtt_PackEnd(&spc);
-    ImGui::MemFree(buf_rects);
-    buf_rects = NULL;
+        if (SSL_CTX_use_certificate_chain_file(context.context, certChainFileName.c_str()) != 1) {
+        return nullptr;
+    } else if (SSL_CTX_use_PrivateKey_file(context.context, keyFileName.c_str(), SSL_FILETYPE_PEM) != 1) {
+        return nullptr;
+    }
     
-        // Main loop
-    bool running = true;
-    while (running)
-    {
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        ALLEGRO_EVENT ev;
-        while (al_get_next_event(queue, &ev))
-        {
-            ImGui_ImplA5_ProcessEvent(&ev);
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
-                running = false;
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE)
-            {
-                ImGui_ImplA5_InvalidateDeviceObjects();
-                al_acknowledge_resize(display);
-                Imgui_ImplA5_CreateDeviceObjects();
+    template <bool isServer>
+void Group<isServer>::close(int code, char *message, size_t length) {
+    forEach([code, message, length](uWS::WebSocket<isServer> *ws) {
+        ws->close(code, message, length);
+    });
+    stopListening();
+    if (timer) {
+        timer->stop();
+        timer->close();
+    }
+}
+    
+    // WIP - add excluded messages!
+void testMessageBatch() {
+    uWS::Hub h;
+    }
+    
+    void Hub::upgrade(uv_os_sock_t fd, const char *secKey, SSL *ssl, const char *extensions, size_t extensionsLength, const char *subprotocol, size_t subprotocolLength, Group<SERVER> *serverGroup) {
+    if (!serverGroup) {
+        serverGroup = &getDefaultGroup<SERVER>();
+    }
+    }
+    
+        int numFdReady = epoll_wait(epfd, readyEvents, 1024, epollTimeout);
+    timepoint = std::chrono::system_clock::now();
+    
+    
+    {    nodeData->clientContext = SSL_CTX_new(SSLv23_client_method());
+    SSL_CTX_set_options(nodeData->clientContext, SSL_OP_NO_SSLv3);
+}
+    
+            for (addrinfo *a = result; a && listenFd == SOCKET_ERROR; a = a->ai_next) {
+            if (a->ai_family == AF_INET) {
+                listenFd = netContext->createSocket(a->ai_family, a->ai_socktype, a->ai_protocol);
+                listenAddr = a;
             }
         }
-        ImGui_ImplA5_NewFrame();
-    }
     
-    // Data
-static HWND                     g_hWnd = 0;
-static INT64                    g_Time = 0;
-static INT64                    g_TicksPerSecond = 0;
-static LPDIRECT3DDEVICE9        g_pd3dDevice = NULL;
-static LPDIRECT3DVERTEXBUFFER9  g_pVB = NULL;
-static LPDIRECT3DINDEXBUFFER9   g_pIB = NULL;
-static LPDIRECT3DTEXTURE9       g_FontTexture = NULL;
-static int                      g_VertexBufferSize = 5000, g_IndexBufferSize = 10000;
+    public:
+    void onConnection(std::function<void(WebSocket<isServer> *, HttpRequest)> handler);
+    void onTransfer(std::function<void(WebSocket<isServer> *)> handler);
+    void onMessage(std::function<void(WebSocket<isServer> *, char *, size_t, OpCode)> handler);
+    void onDisconnection(std::function<void(WebSocket<isServer> *, int code, char *message, size_t length)> handler);
+    void onPing(std::function<void(WebSocket<isServer> *, char *, size_t)> handler);
+    void onPong(std::function<void(WebSocket<isServer> *, char *, size_t)> handler);
+    void onError(std::function<void(errorType)> handler);
+    void onHttpConnection(std::function<void(HttpSocket<isServer> *)> handler);
+    void onHttpRequest(std::function<void(HttpResponse *, HttpRequest, char *data, size_t length, size_t remainingBytes)> handler);
+    void onHttpData(std::function<void(HttpResponse *, char *data, size_t length, size_t remainingBytes)> handler);
+    void onHttpDisconnection(std::function<void(HttpSocket<isServer> *)> handler);
+    void onCancelledHttpRequest(std::function<void(HttpResponse *)> handler);
+    void onHttpUpgrade(std::function<void(HttpSocket<isServer> *, HttpRequest)> handler);
     
-    extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+    #endif // D_ABSTRACT_AUTH_RESOLVER_H
+
+    
+    bool AbstractHttpServerResponseCommand::execute()
 {
-    if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
-        return true;
+  if (e_->getRequestGroupMan()->downloadFinished() || e_->isHaltRequested()) {
+    return true;
+  }
+  try {
+    ssize_t len = httpServer_->sendResponse();
+    if (len > 0) {
+      timeoutTimer_ = global::wallclock();
+    }
+  }
+  catch (RecoverableException& e) {
+    A2_LOG_INFO_EX(fmt('CUID#%' PRId64
+                       ' - Error occurred while transmitting response body.',
+                       getCuid()),
+                   e);
+    return true;
+  }
+  if (httpServer_->sendBufferIsEmpty()) {
+    A2_LOG_INFO(fmt('CUID#%' PRId64 ' - HttpServer: all response transmitted.',
+                    getCuid()));
+    afterSend(httpServer_, e_);
+    return true;
+  }
+  else {
+    if (timeoutTimer_.difference(global::wallclock()) >= 30_s) {
+      A2_LOG_INFO(fmt('CUID#%' PRId64
+                      ' - HttpServer: Timeout while trasmitting response.',
+                      getCuid()));
+      return true;
+    }
+    else {
+      updateReadWriteCheck();
+      e_->addCommand(std::unique_ptr<Command>(this));
+      return false;
+    }
+  }
+}
+    
+    #include 'Command.h'
+    
+    bool AbstractProxyRequestCommand::executeInternal()
+{
+  // socket->setBlockingMode();
+  if (httpConnection_->sendBufferIsEmpty()) {
+    auto httpRequest = make_unique<HttpRequest>();
+    httpRequest->setUserAgent(getOption()->get(PREF_USER_AGENT));
+    httpRequest->setRequest(getRequest());
+    httpRequest->setProxyRequest(proxyRequest_);
+    }
     }
     
-    // Implemented features:
-//  [X] User texture binding. Cast 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+      std::shared_ptr<HttpConnection> httpConnection_;
     
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
+    #include 'Command.h'
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
+    class BinaryStream;
+    
+    static inline std::string stripWhitespace(std::string str)
+{
+  str.erase(std::remove_if(std::begin(str), std::end(str), isWhitespace),
+            std::end(str));
+  return str;
+}
+    
+      virtual void setVerifyPeer(bool verify) CXX11_OVERRIDE
+  {
+    verifyPeer_ = verify;
+  }
