@@ -1,236 +1,256 @@
 
         
-          caffe::Datum datum;
-  datum.set_channels(2);  // one channel for each image in the pair
-  datum.set_height(rows);
-  datum.set_width(cols);
-  LOG(INFO) << 'A total of ' << num_items << ' items.';
-  LOG(INFO) << 'Rows: ' << rows << ' Cols: ' << cols;
-  for (int itemid = 0; itemid < num_items; ++itemid) {
-    int i = caffe::caffe_rng_rand() % num_items;  // pick a random  pair
-    int j = caffe::caffe_rng_rand() % num_items;
-    read_image(&image_file, &label_file, i, rows, cols,
-        pixels, &label_i);
-    read_image(&image_file, &label_file, j, rows, cols,
-        pixels + (rows * cols), &label_j);
-    datum.set_data(pixels, 2*rows*cols);
-    if (label_i  == label_j) {
-      datum.set_label(1);
-    } else {
-      datum.set_label(0);
-    }
-    datum.SerializeToString(&value);
-    std::string key_str = caffe::format_int(itemid, 8);
-    db->Put(leveldb::WriteOptions(), key_str, value);
-  }
-    
-     private:
-  // wrap im2col/col2im so we don't have to remember the (long) argument lists
-  inline void conv_im2col_cpu(const Dtype* data, Dtype* col_buff) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      im2col_cpu(data, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
-    } else {
-      im2col_nd_cpu(data, num_spatial_axes_, conv_input_shape_.cpu_data(),
-          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
-          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), col_buff);
-    }
-  }
-  inline void conv_col2im_cpu(const Dtype* col_buff, Dtype* data) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      col2im_cpu(col_buff, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
-    } else {
-      col2im_nd_cpu(col_buff, num_spatial_axes_, conv_input_shape_.cpu_data(),
-          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
-          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), data);
-    }
-  }
-#ifndef CPU_ONLY
-  inline void conv_im2col_gpu(const Dtype* data, Dtype* col_buff) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      im2col_gpu(data, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
-    } else {
-      im2col_nd_gpu(data, num_spatial_axes_, num_kernels_im2col_,
-          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
-          kernel_shape_.gpu_data(), pad_.gpu_data(),
-          stride_.gpu_data(), dilation_.gpu_data(), col_buff);
-    }
-  }
-  inline void conv_col2im_gpu(const Dtype* col_buff, Dtype* data) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      col2im_gpu(col_buff, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
-    } else {
-      col2im_nd_gpu(col_buff, num_spatial_axes_, num_kernels_col2im_,
-          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
-          kernel_shape_.gpu_data(), pad_.gpu_data(), stride_.gpu_data(),
-          dilation_.gpu_data(), data);
-    }
-  }
-#endif
-    
-    namespace caffe {
-    }
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of ConvolutionLayer.
- *        Fallback to ConvolutionLayer for CPU mode.
- *
- * cuDNN accelerates convolution through forward kernels for filtering and bias
- * plus backward kernels for the gradient w.r.t. the filters, biases, and
- * inputs. Caffe + cuDNN further speeds up the computation through forward
- * parallelism across groups and backward parallelism across gradients.
- *
- * The CUDNN engine does not have memory overhead for matrix buffers. For many
- * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
- * but for fully-convolutional models and large inputs the CAFFE engine can be
- * faster as long as it fits in memory.
-*/
-template <typename Dtype>
-class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
- public:
-  explicit CuDNNConvolutionLayer(const LayerParameter& param)
-      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNConvolutionLayer();
-    }
-    
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of ReLULayer.
- */
-template <typename Dtype>
-class CuDNNReLULayer : public ReLULayer<Dtype> {
- public:
-  explicit CuDNNReLULayer(const LayerParameter& param)
-      : ReLULayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNReLULayer();
-    }
-    
-    
-    {}  // namespace caffe
-    
-    
+        static void frame_begin()
+{
+    VkResult err;
+    for (;;)
     {
-}  // namespace caffe
-    
-    /**
- * @brief A layer for learning 'embeddings' of one-hot vector input.
- *        Equivalent to an InnerProductLayer with one-hot vectors as input, but
- *        for efficiency the input is the 'hot' index of each column itself.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-template <typename Dtype>
-class EmbedLayer : public Layer<Dtype> {
- public:
-  explicit EmbedLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+        err = vkWaitForFences(g_Device, 1, &g_Fence[g_FrameIndex], VK_TRUE, 100);
+        if (err == VK_SUCCESS) break;
+        if (err == VK_TIMEOUT) continue;
+        check_vk_result(err);
     }
-    
-    enum RecordType {
-  // Zero is reserved for preallocated files
-  kZeroType = 0,
+    {
+        err = vkAcquireNextImageKHR(g_Device, g_Swapchain, UINT64_MAX, g_PresentCompleteSemaphore[g_FrameIndex], VK_NULL_HANDLE, &g_BackbufferIndices[g_FrameIndex]);
+        check_vk_result(err);
     }
+    {
+        err = vkResetCommandPool(g_Device, g_CommandPool[g_FrameIndex], 0);
+        check_vk_result(err);
+        VkCommandBufferBeginInfo info = {};
+        info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        info.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        err = vkBeginCommandBuffer(g_CommandBuffer[g_FrameIndex], &info);
+        check_vk_result(err);
+    }
+    {
+        VkRenderPassBeginInfo info = {};
+        info.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+        info.renderPass = g_RenderPass;
+        info.framebuffer = g_Framebuffer[g_BackbufferIndices[g_FrameIndex]];
+        info.renderArea.extent.width = fb_width;
+        info.renderArea.extent.height = fb_height;
+        info.clearValueCount = 1;
+        info.pClearValues = &g_ClearValue;
+        vkCmdBeginRenderPass(g_CommandBuffer[g_FrameIndex], &info, VK_SUBPASS_CONTENTS_INLINE);
+    }
+}
     
-      // If a seek to internal key 'k' in specified file finds an entry,
-  // call (*handle_result)(arg, found_key, found_value).
-  Status Get(const ReadOptions& options,
-             uint64_t file_number,
-             uint64_t file_size,
-             const Slice& k,
-             void* arg,
-             void (*handle_result)(void*, const Slice&, const Slice&));
+        // Cleanup
+    ImGui_ImplA5_Shutdown();
+    ImGui::DestroyContext();
+    al_destroy_event_queue(queue);
+    al_destroy_display(display);
     
-    // Test for issue 200: when iterator switches direction from backward
-// to forward, the current key can be yielded unexpectedly if a new
-// mutation has been added just before the current key.
     
-    #endif  // STORAGE_LEVELDB_TABLE_FILTER_BLOCK_H_
-
-    
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
+    {    return 0;
 }
 
     
-      switch (data[n]) {
-    case kNoCompression:
-      if (data != buf) {
-        // File implementation gave us pointer to some other data.
-        // Use it directly under the assumption that it will be live
-        // while the file is open.
-        delete[] buf;
-        result->data = Slice(data, n);
-        result->heap_allocated = false;
-        result->cachable = false;  // Do not double-cache
-      } else {
-        result->data = Slice(buf, n);
-        result->heap_allocated = true;
-        result->cachable = true;
-      }
-    }
+                    // Copy rasterized pixels to main texture
+                uint8_t* blit_dst = atlas->TexPixelsAlpha8 + rect.y * atlas->TexWidth + rect.x;
+                font_face.BlitGlyph(ft_glyph_bitmap, blit_dst, atlas->TexWidth, multiply_enabled ? multiply_table : NULL);
+                FT_Done_Glyph(ft_glyph);
     
-    	XLoggerInfo xlog_info;
-	gettimeofday(&xlog_info.timeval, NULL);
-	xlog_info.level = (TLogLevel)_level;
-	xlog_info.line = (int)_line;
-	xlog_info.pid = (int)_pid;
-	xlog_info.tid = LONGTHREADID2INT(_tid);
-	xlog_info.maintid = LONGTHREADID2INT(_maintid);
+    // DirectX data
+static ID3D11Device*            g_pd3dDevice = NULL;
+static ID3D11DeviceContext*     g_pd3dDeviceContext = NULL;
+static ID3D11Buffer*            g_pVB = NULL;
+static ID3D11Buffer*            g_pIB = NULL;
+static ID3D10Blob *             g_pVertexShaderBlob = NULL;
+static ID3D11VertexShader*      g_pVertexShader = NULL;
+static ID3D11InputLayout*       g_pInputLayout = NULL;
+static ID3D11Buffer*            g_pVertexConstantBuffer = NULL;
+static ID3D10Blob *             g_pPixelShaderBlob = NULL;
+static ID3D11PixelShader*       g_pPixelShader = NULL;
+static ID3D11SamplerState*      g_pFontSampler = NULL;
+static ID3D11ShaderResourceView*g_pFontTextureView = NULL;
+static ID3D11RasterizerState*   g_pRasterizerState = NULL;
+static ID3D11BlendState*        g_pBlendState = NULL;
+static ID3D11DepthStencilState* g_pDepthStencilState = NULL;
+static int                      g_VertexBufferSize = 5000, g_IndexBufferSize = 10000;
     
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    #include 'wakeuplock.h'
-#include 'assert/__assert.h'
-#include 'xlogger/xlogger.h'
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    #endif
+    // GLFW callbacks (registered by default to GLFW if you enable 'install_callbacks' during initialization)
+// Provided here if you want to chain callbacks yourself. You may also handle inputs yourself and use those as a reference.
+IMGUI_API void        ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+IMGUI_API void        ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+IMGUI_API void        ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+IMGUI_API void        ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
 
     
-    // bool JNU_Jstring2Wstring( JNIEnv* _env, const jstring jstr, std::wstring& wstr); //in linux sizeof(wchar_t)==4 but sizeof(jchar)==2
-wchar_t* JNU_Jstring2Wchar(JNIEnv* _env, const jstring jstr);
-void JNU_FreeWchar(JNIEnv* _env, jstring str, wchar_t* wchar);
-jstring JNU_Wstring2Jstring(JNIEnv* _env, const std::wstring& wstr);
-jstring JNU_Wchar2JString(JNIEnv* _env, wchar_t* wchar);
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_API void        ImGui_ImplGlfwGL3_InvalidateDeviceObjects();
+IMGUI_API bool        ImGui_ImplGlfwGL3_CreateDeviceObjects();
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+        if (connections % 1000 == 0 || connections < 1000) {
+        cout << 'Connections: ' << connections << endl;
+    }
+    
+    template <bool isServer>
+void ExtensionsNegotiator<isServer>::readOffer(std::string offer) {
+    if (isServer) {
+        ExtensionsParser extensionsParser(offer.data(), offer.length());
+        if ((options & PERMESSAGE_DEFLATE) && extensionsParser.perMessageDeflate) {
+            if (extensionsParser.clientNoContextTakeover || (options & CLIENT_NO_CONTEXT_TAKEOVER)) {
+                options |= CLIENT_NO_CONTEXT_TAKEOVER;
+            }
+    }
+    }
+    }
+    
+    template <bool isServer>
+void Group<isServer>::timerCallback(uS::Timer *timer) {
+    Group<isServer> *group = (Group<isServer> *) timer->getData();
+    }
+    
+        while (httpSocket->outstandingResponsesHead) {
+        Group<isServer>::from(httpSocket)->httpCancelledRequestHandler(httpSocket->outstandingResponsesHead);
+        HttpResponse *next = httpSocket->outstandingResponsesHead->next;
+        delete httpSocket->outstandingResponsesHead;
+        httpSocket->outstandingResponsesHead = next;
+    }
+    
+    #include <string>
+    
+        // same as listen(TRANSFERS), backwards compatible API for now
+    void addAsync() {
+        if (!async) {
+            NodeData::addAsync();
+        }
+    }
+    
+        // todo: asio is thread safe, use it!
+    bool threadSafeChange(Loop *loop, Poll *self, int events) {
+        return false;
+    }
+    
+        void start(Loop *loop, Poll *self, int events) {
+        epoll_event event;
+        event.events = events;
+        event.data.ptr = self;
+        epoll_ctl(loop->epfd, EPOLL_CTL_ADD, state.fd, &event);
+    }
+    
+    namespace fuzzer {
+    }
+    
+    namespace fuzzer {
+// A simple POD sized array of bytes.
+template <size_t kMaxSize> class FixedWord {
+public:
+  FixedWord() {}
+  FixedWord(const uint8_t *B, uint8_t S) { Set(B, S); }
+    }
+    }
+    
+    #endif // LIBFUZZER_WINDOWS
+
+    
+      Fuzzer(UserCallback CB, InputCorpus &Corpus, MutationDispatcher &MD,
+         FuzzingOptions Options);
+  ~Fuzzer();
+  void Loop();
+  void MinimizeCrashLoop(const Unit &U);
+  void ShuffleAndMinimize(UnitVector *V);
+  void InitializeTraceState();
+  void RereadOutputCorpus(size_t MaxSize);
+    
+    
+    {  std::vector<Mutator> Mutators;
+  std::vector<Mutator> DefaultMutators;
+};
+    
+      void StopTraceRecording() {
+    if (!RecordingMemcmp)
+      return;
+    RecordingMemcmp = false;
+    for (size_t i = 0; i < NumMutations; i++) {
+      auto &M = Mutations[i];
+      if (Options.Verbosity >= 2) {
+        AutoDictUnitCounts[M.W]++;
+        AutoDictAdds++;
+        if ((AutoDictAdds & (AutoDictAdds - 1)) == 0) {
+          typedef std::pair<size_t, Word> CU;
+          std::vector<CU> CountedUnits;
+          for (auto &I : AutoDictUnitCounts)
+            CountedUnits.push_back(std::make_pair(I.second, I.first));
+          std::sort(CountedUnits.begin(), CountedUnits.end(),
+                    [](const CU &a, const CU &b) { return a.first > b.first; });
+          Printf('AutoDict:\n');
+          for (auto &I : CountedUnits) {
+            Printf('   %zd ', I.first);
+            PrintASCII(I.second.data(), I.second.size());
+            Printf('\n');
+          }
+        }
+      }
+      MD.AddWordToAutoDictionary({M.W, M.Pos});
+    }
+    for (auto &W : InterestingWords)
+      MD.AddWordToAutoDictionary({W});
+  }
+    
+    namespace aria2 {
+    }
+    
+      void setUserDefinedCred(std::string user, std::string password);
+    
+      virtual void openFile(int64_t totalLength = 0) CXX11_OVERRIDE;
+    
+    std::string AbstractOptionHandler::toTagString() const
+{
+  std::string s;
+  for (int i = 0; i < MAX_HELP_TAG; ++i) {
+    if (tags_ & (1 << i)) {
+      s += strHelpTag(i);
+      s += ', ';
+    }
+  }
+  if (!s.empty()) {
+    s.resize(s.size() - 2);
+  }
+  return s;
+}
+    
+    AbstractProxyRequestCommand::AbstractProxyRequestCommand(
+    cuid_t cuid, const std::shared_ptr<Request>& req,
+    const std::shared_ptr<FileEntry>& fileEntry, RequestGroup* requestGroup,
+    DownloadEngine* e, const std::shared_ptr<Request>& proxyRequest,
+    const std::shared_ptr<SocketCore>& s)
+    : AbstractCommand(cuid, req, fileEntry, requestGroup, e, s),
+      proxyRequest_(proxyRequest),
+      httpConnection_(std::make_shared<HttpConnection>(
+          cuid, s, std::make_shared<SocketRecvBuffer>(s)))
+{
+  setTimeout(std::chrono::seconds(getOption()->getAsInt(PREF_CONNECT_TIMEOUT)));
+  disableReadCheckSocket();
+  setWriteCheckSocket(getSocket());
+}
+    
+    void AnnounceList::moveToStoppedAllowedTier()
+{
+  auto itr = find_wrap_if(std::begin(tiers_), std::end(tiers_), currentTier_,
+                          FindStoppedAllowedTier());
+  setCurrentTier(std::move(itr));
+}
+    
+      void nextEvent();
+    
+    // DiskwriterFactory class template to create DiskWriter derived
+// object, ignoring filename.
+template <class DiskWriterType>
+class AnonDiskWriterFactory : public DiskWriterFactory {
+public:
+  AnonDiskWriterFactory() = default;
+  virtual ~AnonDiskWriterFactory() = default;
+    }
+    
+    AuthConfig::AuthConfig(std::string user, std::string password)
+    : user_(std::move(user)), password_(std::move(password))
+{
+}
