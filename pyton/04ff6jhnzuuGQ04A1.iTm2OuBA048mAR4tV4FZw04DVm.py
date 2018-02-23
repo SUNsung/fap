@@ -1,148 +1,113 @@
-    return request('post', url, data=data, json=json, **kwargs)
+
+        
+            # a Sequential inside a Sequential
+    inner_model = Sequential()
+    inner_model.add(Dense(2, input_dim=1))
+    outer_model = Sequential()
+    outer_model.add(inner_model)
+    assert outer_model.trainable_weights == inner_model.trainable_weights
+    inner_model.trainable = False
+    assert outer_model.trainable_weights == []
+    inner_model.trainable = True
+    inner_model.layers[-1].trainable = False
+    assert outer_model.trainable_weights == []
     
+    # Embedding
+max_features = 20000
+maxlen = 100
+embedding_size = 128
     
-class Server(threading.Thread):
-    '''Dummy server using for unit testing'''
-    WAIT_EVENT_TIMEOUT = 5
+        if member.__doc__ is None and not member_too_small(member):
+        raise ValueError('{} class doesn't have any documentation'.format(name),
+                         member.__module__, inspect.getmodule(member).__file__)
+    for n, met in inspect.getmembers(member):
+        if inspect.ismethod(met):
+            handle_method(n, met)
     
-            This attribute checks if the status code of the response is between
-        400 and 600 to see if there was a client error or a server error. If
-        the status code, is between 200 and 400, this will return True. This
-        is **not** a check to see if the response code is ``200 OK``.
+            # Test equivalence of convert_dense_weights_data_format
+        out1 = model1.predict(x)
+        layer_utils.convert_dense_weights_data_format(model1.layers[2], prev_shape, target_data_format)
+        for (src, dst) in zip(model1.layers, model2.layers):
+            dst.set_weights(src.get_weights())
+        out2 = model2.predict(transpose(x))
+    
         '''
-        return self.ok
+    model = Sequential()
+    model.add(layers.Embedding(10, 10, mask_zero=True))
+    model.add(layers.Activation('softmax'))
+    model.compile(loss='categorical_crossentropy',
+                  optimizer='adam')
     
-        def doc(code):
-        names = ', '.join('``%s``' % n for n in _codes[code])
-        return '* %d: %s' % (code, names)
-    
-    
-@pytest.mark.parametrize('var,scheme', _proxy_combos)
-def test_use_proxy_from_environment(httpbin, var, scheme):
-    url = '{0}://httpbin.org'.format(scheme)
-    fake_proxy = Server()  # do nothing with the requests; just close the socket
-    with fake_proxy as (host, port):
-        proxy_url = 'socks5://{0}:{1}'.format(host, port)
-        kwargs = {var: proxy_url}
-        with override_environ(**kwargs):
-            # fake proxy's lack of response will cause a ConnectionError
-            with pytest.raises(requests.exceptions.ConnectionError):
-                requests.get(url)
-    
-        def create_widgets(self):
-        super().create_widgets()
-        frame = self.frame
-        pathlabel = Label(frame, anchor='w', justify='left',
-                          text='Help File Path: Enter URL or browse for file')
-        self.pathvar = StringVar(self, self.filepath)
-        self.path = Entry(frame, textvariable=self.pathvar, width=40)
-        browse = Button(frame, text='Browse', width=8,
-                        command=self.browse_file)
-        self.path_error = Label(frame, text=' ', foreground='red',
-                                font=self.error_font)
-    
-            self.assertEqual(deque() * 0, deque())
-        self.assertEqual(deque() * 1, deque())
-        self.assertEqual(deque() * 5, deque())
-    
-        def check_keys_reuse(self, source, loads):
-        rval = loads(source)
-        (a, b), (c, d) = sorted(rval[0]), sorted(rval[1])
-        self.assertIs(a, c)
-        self.assertIs(b, d)
-    
-    class TZInfo:
-    def __init__(self, transitions, type_indices, ttis, abbrs):
-        self.transitions = transitions
-        self.type_indices = type_indices
-        self.ttis = ttis
-        self.abbrs = abbrs
+        def fn_output_shape(tup):
+        s1, s2 = tup
+        return (s1[0], s1[1] + s2[1]) + s1[2:]
     
     
-    {        if nextchar == '}':
-            break
-        elif nextchar != ',':
-            raise JSONDecodeError('Expecting ',' delimiter', s, end - 1)
-        end = _w(s, end).end()
-        nextchar = s[end:end + 1]
-        end += 1
-        if nextchar != ''':
-            raise JSONDecodeError(
-                'Expecting property name enclosed in double quotes', s, end - 1)
-    if object_pairs_hook is not None:
-        result = object_pairs_hook(pairs)
-        return result, end
-    pairs = dict(pairs)
-    if object_hook is not None:
-        pairs = object_hook(pairs)
-    return pairs, end
-    
-            # 'MODE READER' is sometimes necessary to enable 'reader' mode.
-        # However, the order in which 'MODE READER' and 'AUTHINFO' need to
-        # arrive differs between some NNTP servers. If _setreadermode() fails
-        # with an authorization failed error, it will set this to True;
-        # the login() routine will interpret that as a request to try again
-        # after performing its normal function.
-        # Enable only if we're not already in READER mode anyway.
-        self.readermode_afterauth = False
-        if readermode and 'READER' not in self._caps:
-            self._setreadermode()
-            if not self.readermode_afterauth:
-                # Capabilities might have changed after MODE READER
-                self._caps = None
-                self.getcapabilities()
-    
-    subsystem_details = {
-    # -s flag        : (C entry point template), (is it __main__?), (is it a DLL?)
-    'console'        : (None,                    1,                 0),
-    'windows'        : (WINMAINTEMPLATE,         1,                 0),
-    'service'        : (SERVICETEMPLATE,         0,                 0),
-    'com_dll'        : ('',                      0,                 1),
-}
-    
-        def unique_names(self):
-        # sorted
-        if not self.__allnames:
-            self.__allnames = []
-            for name, aliases in self.__byrgb.values():
-                self.__allnames.append(name)
-            self.__allnames.sort(key=str.lower)
-        return self.__allnames
-    
-            # C type static method: METH_FASTCALL | METH_CLASS
-        (int.from_bytes, (b'\x01\x00',), {'byteorder': 'little'}, 1),
-        (int.from_bytes, (), {'bytes': b'\x01\x00', 'byteorder': 'little'}, 1),
-    )
-    
-            out.write(self.safe_tp_name())
-        self.write_field_repr('args', out, visited)
-    
-            a = sys.maxsize**10
-        b = 0
-        c = -2*sys.maxsize
-        expected_len = 1 + (b - a) // c
-        x = range(a, b, c)
-        self.assertIn(a, x)
-        self.assertNotIn(b, x)
-        self.assertRaises(OverflowError, len, x)
-        self.assertTrue(x)
-        self.assertEqual(_range_len(x), expected_len)
-        self.assertEqual(x[0], a)
-        idx = sys.maxsize+1
-        self.assertEqual(x[idx], a+(idx*c))
-        self.assertEqual(x[idx:idx+1][0], a+(idx*c))
-        with self.assertRaises(IndexError):
-            x[-expected_len-1]
-        with self.assertRaises(IndexError):
-            x[expected_len]
-    
-        test = CatalogInstance('param_value_1')
-    test.main_method()
-    
-    
-def timeit(func):
-    
-        This is, in fact, just syntactic sugar around a memento closure.
+@keras_test
+def test_vector_regression():
     '''
-    deep = False
-    states = []
+    Perform float data prediction (regression) using 2 layer MLP
+    with tanh and sigmoid activations.
+    '''
+    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=500,
+                                                         num_test=200,
+                                                         input_shape=(20,),
+                                                         output_shape=(num_classes,),
+                                                         classification=False)
+    
+    from keras.models import Sequential
+from keras.layers import Dense, Activation
+from keras.legacy.layers import Merge
+from keras.utils import np_utils
+from keras.utils.test_utils import get_test_data, keras_test
+from keras.models import model_from_json, model_from_yaml
+    
+        def can_fit_vehicle(self, vehicle):
+        if self.vehicle is not None:
+            return False
+        return vehicle.can_fit_in_spot(self)
+    
+        @mock.patch('certbot_compatibility_test.validator.requests.get')
+    def test_succesful_redirect(self, mock_get_request):
+        mock_get_request.return_value = create_response(
+            301, {'location': 'https://test.com'})
+        self.assertTrue(self.validator.redirect('test.com'))
+    
+    
+def downgrade():
+    op.drop_column('tables', 'is_featured')
+    
+    
+def downgrade():
+    op.drop_constraint(None, 'dashboards', type_='unique')
+    op.drop_column('dashboards', 'slug')
+
+    
+    
+def downgrade():
+    pass
+
+    
+    
+def downgrade():
+    op.drop_column('logs', 'slice_id')
+    op.drop_column('logs', 'dashboard_id')
+
+    
+    # revision identifiers, used by Alembic.
+revision = '4500485bde7d'
+down_revision = '41f6a59a61f2'
+    
+    
+def downgrade():
+    op.drop_table('slice_user')
+    op.drop_table('dashboard_user')
+
+    
+    Revision ID: 55179c7f25c7
+Revises: 315b3f4da9b0
+Create Date: 2015-12-13 08:38:43.704145
+    
+    
+def downgrade():
+    op.drop_column('query', 'results_key')
