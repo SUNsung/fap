@@ -1,134 +1,177 @@
 
         
-        containers = (('thefuck/python3-fish',
-               u'''FROM python:3
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'),
-              ('thefuck/python2-fish',
-               u'''FROM python:2
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'))
+            def iter_lines(self, chunk_size):
+        return ((line, b'\n') for line in self._orig.iter_lines(chunk_size))
     
-                c_bar = plt.bar(xvals, build_time[alg] - bottom,
-                            width, bottom, color='r')
-            q_bar = plt.bar(xvals, query_time[alg],
-                            width, build_time[alg], color='b')
-    
-        if revision is None:
-        return
-    if domain not in ('py', 'pyx'):
-        return
-    if not info.get('module') or not info.get('fullname'):
-        return
-    
-        # TASK: Build a grid search to find out whether unigrams or bigrams are
-    # more useful.
-    # Fit the pipeline on the training set using grid search for the parameters
-    parameters = {
-        'vect__ngram_range': [(1, 1), (1, 2)],
-    }
-    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1)
-    grid_search.fit(docs_train, y_train)
-    
-    from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
-from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.gaussian_process.kernels import RBF
-from sklearn import datasets
-    
-        def get(self, key):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                return item.value
-        raise KeyError('Key not found')
-    
-    from mrjob.job import MRJob
-    
-            Accessing a node updates its position to the front of the LRU list.
-        '''
-        node = self.lookup[query]
-        if node is None:
-            return None
-        self.linked_list.move_to_front(node)
-        return node.results
+        Useful for long-lived HTTP responses that stream by lines
+    such as the Twitter streaming API.
     
     
-class RemoveDuplicateUrls(MRJob):
-    
-    PROJ_METADATA = '%s.json' % PROJ_NAME
-    
-    #----------------------------------------------------------------------
-def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    '''wrapper'''
-    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
-    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
-    hostname = urlparse(url).hostname
-    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
-        return False
-    upid = match1(url, r'.+/content/(\w+)')
-    
-        while pin_count > 0:
-        json_data = extract_json_data(url, max=pin_list[-1]['pin_id'],
-                                      limit=LIMIT)
-        pins = json_data['pins']
-        pin_list += pins
-        pin_count -= len(pins)
-    
-        for i in range(10, 30):
-        url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
-            i = i,
-            p = preview
-        )
-        try:
-            mime, ext, size = url_info(url)
-            break
-        except: continue
-    
-        def test_human_adapter_shall_make_noise(self):
-        human = Human()
-        human_adapter = Adapter(human, make_noise=human.speak)
-        noise = human_adapter.make_noise()
-        expected_noise = ''hello''
-        self.assertEqual(noise, expected_noise)
-    
-        def test_c_observers_shall_be_detachable(cls):
-        cls.s.detach(cls.dec_obs)
-        # hex viewer shall be remaining if dec viewer is detached first
-        cls.assertEqual(isinstance(cls.s._observers[0], HexViewer), True)
-        cls.assertEqual(len(cls.s._observers), 1)
-        cls.s.detach(cls.hex_obs)
-        cls.assertEqual(len(cls.s._observers), 0)
-    
-        def test_sales_manager_shall_not_talk_through_proxy_with_delay(cls):
-        cls.ntp.busy = 'No'
-        start_time = time()
-        cls.ntp.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-This Sales Manager will not talk to you whether he/she is busy or not\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time*10), expected_execution_time)
-    
-    ### OUTPUT ###
-# Jack move 5m then stop
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
 
     
+        '''
+)
+output_options.add_argument(
+    '--output', '-o',
+    type=FileType('a+b'),
+    dest='output_file',
+    metavar='FILE',
+    help='''
+    Save output to FILE instead of stdout. If --download is also set, then only
+    the response body is saved to FILE. Other parts of the HTTP exchange are
+    printed to stderr.
     
-class MoveFileCommand(object):
     
-        def and_specification(self, candidate):
-        raise NotImplementedError()
+def repr_dict_nice(d):
+    def prepare_dict(d):
+        for k, v in d.items():
+            if isinstance(v, dict):
+                v = dict(prepare_dict(v))
+            elif isinstance(v, bytes):
+                v = v.decode('utf8')
+            elif not isinstance(v, (int, str)):
+                v = repr(v)
+            yield k, v
+    return json.dumps(
+        dict(prepare_dict(d)),
+        indent=4, sort_keys=True,
+    )
+    
+        indent = None
+    if format:
+        indent = 4
+    
+        def remove_role(self, role_name):
+        del self.roles[role_name]
+
+    
+        def process_options(self, args, opts):
+        try:
+            self.settings.setdict(arglist_to_dict(opts.set),
+                                  priority='cmdline')
+        except ValueError:
+            raise UsageError('Invalid -s value, use -s NAME=VALUE', print_help=False)
+    
+        def _list_templates(self):
+        print('Available templates:')
+        for filename in sorted(os.listdir(self.templates_dir)):
+            if filename.endswith('.tmpl'):
+                print('  %s' % splitext(filename)[0])
+    
+        def post_process(self, output):
+        occurrences = 0
+        for x in output:
+            if isinstance(x, self.obj_type):
+                occurrences += 1
+    
+        def deploy_cert(self, domain, cert_path, key_path, chain_path=None,
+                    fullchain_path=None):
+        '''Installs cert'''
+        cert_path, key_path, chain_path = self.copy_certs_and_keys(
+            cert_path, key_path, chain_path)
+        self._configurator.deploy_cert(
+            domain, cert_path, key_path, chain_path, fullchain_path)
+
+    
+    '''
+    
+    # revision identifiers, used by Alembic.
+revision = '1e2841a4128'
+down_revision = '5a7bad26f2a7'
+    
+    slice_user = Table('slice_user', Base.metadata,
+    Column('id', Integer, primary_key=True),
+    Column('user_id', Integer, ForeignKey('ab_user.id')),
+    Column('slice_id', Integer, ForeignKey('slices.id'))
+)
+    
+    def upgrade():
+    op.add_column('datasources', sa.Column('offset', sa.Integer(), nullable=True))
+    op.add_column('tables', sa.Column('offset', sa.Integer(), nullable=True))
+    
+    # revision identifiers, used by Alembic.
+revision = '3c3ffe173e4f'
+down_revision = 'ad82a75afd82'
+    
+    Revision ID: 4fa88fe24e94
+Revises: b4456560d4f3
+Create Date: 2016-04-15 17:58:33.842012
+    
+        platforms = 'any',
+    zip_safe = True,
+    include_package_data = True,
+    
+    #----------------------------------------------------------------------
+def showroom_get_roomid_by_room_url_key(room_url_key):
+    '''str->str'''
+    fake_headers_mobile = {
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Charset': 'UTF-8,*;q=0.5',
+        'Accept-Encoding': 'gzip,deflate,sdch',
+        'Accept-Language': 'en-US,en;q=0.8',
+        'User-Agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36'
+    }
+    webpage_url = 'https://www.showroom-live.com/' + room_url_key
+    html = get_content(webpage_url, headers = fake_headers_mobile)
+    roomid = match1(html, r'room\?room_id\=(\d+)')
+    assert roomid
+    return roomid
+    
+    class _WorkItem(object):
+    def __init__(self, future, fn, args, kwargs):
+        self.future = future
+        self.fn = fn
+        self.args = args
+        self.kwargs = kwargs
+    
+    def download_urls_sequential(urls, timeout=60):
+    url_to_content = {}
+    for url in urls:
+        try:
+            url_to_content[url] = load_url(url, timeout=timeout)
+        except:
+            pass
+    return url_to_content
+    
+    def main():
+    for name, fn in [('sequential', sequential),
+                     ('processes', with_process_pool_executor),
+                     ('threads', with_thread_pool_executor)]:
+        sys.stdout.write('%s: ' % name.ljust(12))
+        start = time.time()
+        if fn() != [True] * len(PRIMES):
+            sys.stdout.write('failed\n')
+        else:
+            sys.stdout.write('%.2f seconds\n' % (time.time() - start))
+    
+    from __future__ import print_function
+from __future__ import division
+from __future__ import unicode_literals
+from __future__ import absolute_import
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+    
+def YouCompleteMeInstance( custom_options = {} ):
+  '''Defines a decorator function for tests that passes a unique YouCompleteMe
+  instance as a parameter. This instance is initialized with the default options
+  `DEFAULT_CLIENT_OPTIONS`. Use the optional parameter |custom_options| to give
+  additional options and/or override the already existing ones.
+    
+    
+MINIMUM = 80
