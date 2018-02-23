@@ -1,83 +1,46 @@
 
         
-        module ActionView
-  # = Action View Tag Helpers
-  module Helpers #:nodoc:
-    # Provides methods to generate HTML tags programmatically both as a modern
-    # HTML5 compliant builder style and legacy XHTML compliant tags.
-    module TagHelper
-      extend ActiveSupport::Concern
-      include CaptureHelper
-      include OutputSafetyHelper
-    
-    module ActionCable
-  module Server
-    # An instance of this configuration object is available via ActionCable.server.config, which allows you to tweak Action Cable configuration
-    # in a Rails config initializer.
-    class Configuration
-      attr_accessor :logger, :log_tags
-      attr_accessor :connection_class, :worker_pool_size
-      attr_accessor :disable_request_forgery_protection, :allowed_request_origins, :allow_same_origin_as_host
-      attr_accessor :cable, :url, :mount_path
-    
-          def self.make_tree(associations)
-        hash = {}
-        walk_tree associations, hash
-        hash
-      end
-    
-        test 'head :no_content (204) does not return a content-type header' do
-      headers = HeadController.action(:no_content).call(Rack::MockRequest.env_for('/')).second
-      assert_nil headers['Content-Type']
-      assert_nil headers['Content-Length']
-    end
-    
-            s += ', ' unless s.empty?
-        s += '#{k}#{value}'
-      end
-    end
+        unless invalids.empty?
+  puts '\n\nFailed links:'
+  invalids.each do |link|
+    puts '- #{link}'
   end
+  puts 'Done with errors.'
+  exit(1)
+end
     
-    require 'active_job'
+        # @see \{MediaQuery#to\_a}
+    def to_a
+      res = []
+      res += modifier
+      res << ' ' unless modifier.empty?
+      res += type
+      res << ' and ' unless type.empty? || expressions.empty?
+      res += Sass::Util.intersperse(expressions, ' and ').flatten
+      res
+    end
     
-          def wrap_delivery_behavior(mail, method = nil, options = nil) # :nodoc:
-        method ||= delivery_method
-        mail.delivery_handler = self
-    
-            def charset
-          'UTF-8'
+            def run
+          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
+          if @pod_name.nil? # Print all
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
+            end
+          else # Print only for the requested pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            else
+              print_pod_cache_infos(@pod_name, cache_descriptors)
+            end
+          end
         end
     
-    module Rails
-  module Generators
-    class MailerGenerator < NamedBase
-      source_root File.expand_path('templates', __dir__)
+        # The repository path according to the context
+    def repo_path
+      context.repo_path
+    end
     
-      def translation_scope
-    'devise.omniauth_callbacks'
+      desc 'Revert server(s) to previous release.'
+  task :reverting do
   end
-end
-
-    
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
-    end
-    
-      # The default method used while signing out
-  mattr_accessor :sign_out_via
-  @@sign_out_via = :delete
-    
-            routes.each do |module_name, actions|
-          [:path, :url].each do |path_or_url|
-            actions.each do |action|
-              action = action ? '#{action}_' : ''
-              method = :'#{action}#{module_name}_#{path_or_url}'
-    
-        # It doesn't make sense to send authenticate headers in AJAX requests
-    # or if the user disabled them.
-    def http_auth_header?
-      scope_class.http_authenticatable && !request.xhr?
-    end
-    
-      before_action :upgrade_warning, only: :index
