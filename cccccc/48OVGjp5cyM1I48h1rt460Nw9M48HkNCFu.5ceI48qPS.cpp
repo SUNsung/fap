@@ -1,230 +1,313 @@
 
         
-        CV_EXPORTS void  EstimateUncertainties(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
-                           const IntrinsicParams& params, InputArray omc, InputArray Tc,
-                           IntrinsicParams& errors, Vec2d& std_err, double thresh_cond, int check_cond, double& rms);
-    
-        Mat black_comp, white_comp;
-    for(int i = 0; i < ncorners; i++)
-    {
-        int channels = 0;
-        Rect roi(cvRound(corners[i].x - region_size.width), cvRound(corners[i].y - region_size.height),
-            region_size.width*2 + 1, region_size.height*2 + 1);
-        Mat img_roi = img(roi);
-        calcHist(&img_roi, 1, &channels, Mat(), hist, 1, &nbins, &_ranges);
-    }
-    
-        static void CODEGEN_FUNCPTR Switch_VertexAttribI3i(GLuint index, GLint x, GLint y, GLint z)
-    {
-        VertexAttribI3i = (PFNVERTEXATTRIBI3IPROC)IntGetProcAddress('glVertexAttribI3i');
-        VertexAttribI3i(index, x, y, z);
-    }
-    
-            // Core Extension: ARB_map_buffer_range
-        MAP_READ_BIT                     = 0x0001,
-        MAP_WRITE_BIT                    = 0x0002,
-        MAP_INVALIDATE_RANGE_BIT         = 0x0004,
-        MAP_INVALIDATE_BUFFER_BIT        = 0x0008,
-        MAP_FLUSH_EXPLICIT_BIT           = 0x0010,
-        MAP_UNSYNCHRONIZED_BIT           = 0x0020,
-    
-    static void* openclamdblas_check_fn(int ID);
-    
-    public:
-    SectionLabel(SectionFile* file, Section* parentSection, SectionHeader* sectionHeader, size_t filePosition, MappingType mappingType = mappingParent, size_t size = 0);
-    SectionLabel(SectionFile* file, Section* parentSection, size_t filePosition, MappingType mappingType = mappingParent, size_t size = 0);
-    
-    template <class ConfigRecordType, typename ElemType>
-ComputationNetworkPtr GetModelFromConfig(const ConfigRecordType& config, const wstring& outputNodeNamesConfig, vector<wstring>& outputNodeNamesVector)
-{
-    DEVICEID_TYPE deviceId = DeviceFromConfig(config);
-    }
-    
-    // ---------------------------------------------------------------------------
-// Expression -- the entire config is a tree of Expression types
-// We don't use polymorphism here because C++ is so verbose...
-// ---------------------------------------------------------------------------
-    
-    public:
-    // DataWriter Constructor
-    // config - [in] configuration parameters for the datareader
-    template <class ConfigRecordType>
-    DataWriter(const ConfigRecordType& config);
-    // constructor from Scripting
-    DataWriter(const ScriptableObjects::IConfigRecordPtr configp)
-        : DataWriter(*configp)
-    {
-    }
-    virtual ~DataWriter();
-    
-    /** Returns the benchmark Reporter instance.
- *
- * The returned instance will take care of generating reports for all the actual
- * reporters configured via the 'enable_*_reporter' command line flags (see
- * benchmark_config.cc). */
-std::shared_ptr<Reporter> GetReporter();
-    
-    #include 'src/core/lib/compression/compression_internal.h'
-    
-    // NOTE: We eventually want to use absl::InlinedVector here.  However,
-// there are currently build problems that prevent us from using absl.
-// In the interim, we define a custom implementation as a place-holder,
-// with the intent to eventually replace this with the absl
-// implementation.
-//
-// This place-holder implementation does not implement the full set of
-// functionality from the absl version; it has just the methods that we
-// currently happen to need in gRPC.  If additional functionality is
-// needed before this gets replaced with the absl version, it can be
-// added, with the following proviso:
-//
-// ANY METHOD ADDED HERE MUST COMPLY WITH THE INTERFACE IN THE absl
-// IMPLEMENTATION!
-//
-// TODO(nnoble, roth): Replace this with absl::InlinedVector once we
-// integrate absl into the gRPC build system in a usable way.
-template <typename T, size_t N>
-class InlinedVector {
- public:
-  InlinedVector() { init_data(); }
-  ~InlinedVector() { destroy_elements(); }
-    }
-    
-    std::shared_ptr<Channel> CreateTestChannel(
-    const grpc::string& server, const grpc::string& cred_type,
-    const grpc::string& override_hostname, bool use_prod_roots,
-    const std::shared_ptr<CallCredentials>& creds,
-    const ChannelArguments& args);
-    
-          EXPECT_EQ((void*)1, tag);
-      // If not shutting down, ok must be true for new requests.
-      {
-        std::lock_guard<std::mutex> lock(mu);
-        if (!shutting_down && !ok) {
-          gpr_log(GPR_INFO, '!ok on request %d', n);
-          abort();
-        }
-        if (shutting_down && !ok) {
-          // Failed connection due to shutdown, continue flushing the CQ.
-          continue;
-        }
-      }
-    
-      ClientConfig client_config;
-  client_config.set_client_type(SYNC_CLIENT);
-  client_config.set_outstanding_rpcs_per_channel(1);
-  client_config.set_client_channels(1);
-  client_config.set_rpc_type(UNARY);
-  client_config.mutable_load_params()->mutable_closed_loop();
-    
-    #ifdef BAZEL_BUILD
-#include 'examples/protos/helloworld.grpc.pb.h'
-#else
-#include 'helloworld.grpc.pb.h'
-#endif
-    
-    #endif /* GRPC_IMPL_CODEGEN_SYNC_POSIX_H */
-
-    
-    template <bool isServer>
-std::string ExtensionsNegotiator<isServer>::generateOffer() {
-    std::string extensionsOffer;
-    if (options & Options::PERMESSAGE_DEFLATE) {
-        extensionsOffer += 'permessage-deflate';
-    }
-    }
-    
-    
-    {    typename WebSocket<isServer>::PreparedMessage *preparedMessage = WebSocket<isServer>::prepareMessage((char *) message, length, opCode, false);
-    forEach([preparedMessage](uWS::WebSocket<isServer> *ws) {
-        ws->sendPrepared(preparedMessage);
-    });
-    WebSocket<isServer>::finalizeMessage(preparedMessage);
-}
-    
-            if (events & UV_READABLE) {
-            int length = (int) recv(socket->getFd(), nodeData->recvBuffer, nodeData->recvLength, 0);
-            if (length > 0) {
-                STATE::onData((Socket *) p, nodeData->recvBuffer, length);
-            } else if (length <= 0 || (length == SOCKET_ERROR && !netContext->wouldBlock())) {
-                STATE::onEnd((Socket *) p);
-            }
-        }
-    
-            Timepoint t = {cb, this, timepoint, repeat};
-        loop->timers.insert(
-            std::upper_bound(loop->timers.begin(), loop->timers.end(), t, [](const Timepoint &a, const Timepoint &b) {
-                return a.timepoint < b.timepoint;
-            }),
-            t
-        );
-    
-    #ifdef UWS_THREADSAFE
-        getLoop()->preCbData = nodeData;
-        getLoop()->preCb = [](void *nodeData) {
-            static_cast<uS::NodeData *>(nodeData)->asyncMutex->lock();
-        };
-    
-        unsigned int maxPayload;
-    Hub *hub;
-    int extensionOptions;
-    uS::Timer *timer = nullptr, *httpTimer = nullptr;
-    std::string userPingMessage;
-    std::stack<uS::Poll *> iterators;
-    
-    namespace fuzzer {
-    }
-    
-    struct FuzzingOptions {
-  int Verbosity = 1;
-  size_t MaxLen = 0;
-  int UnitTimeoutSec = 300;
-  int TimeoutExitCode = 77;
-  int ErrorExitCode = 77;
-  int MaxTotalTimeSec = 0;
-  int RssLimitMb = 0;
-  bool DoCrossOver = true;
-  int MutateDepth = 5;
-  bool UseCounters = false;
-  bool UseIndirCalls = true;
-  bool UseMemcmp = true;
-  bool UseMemmem = true;
-  bool UseCmp = false;
-  bool UseValueProfile = false;
-  bool Shrink = false;
-  int ReloadIntervalSec = 1;
-  bool ShuffleAtStartUp = true;
-  bool PreferSmall = true;
-  size_t MaxNumberOfRuns = -1L;
-  int ReportSlowUnits = 10;
-  bool OnlyASCII = false;
-  std::string OutputCorpus;
-  std::string ArtifactPrefix = './';
-  std::string ExactArtifactPath;
-  std::string ExitOnSrcPos;
-  std::string ExitOnItem;
-  bool SaveArtifacts = true;
-  bool PrintNEW = true; // Print a status line when new units are found;
-  bool OutputCSV = false;
-  bool PrintNewCovPcs = false;
-  bool PrintFinalStats = false;
-  bool PrintCorpusStats = false;
-  bool PrintCoverage = false;
-  bool DumpCoverage = false;
-  bool DetectLeaks = true;
-  int  TraceMalloc = 0;
-  bool HandleAbrt = false;
-  bool HandleBus = false;
-  bool HandleFpe = false;
-  bool HandleIll = false;
-  bool HandleInt = false;
-  bool HandleSegv = false;
-  bool HandleTerm = false;
+        
+    {  bool rword_indicates_list_item;
+  bool rword_likely_starts_idea;
+  bool rword_likely_ends_idea;
 };
     
+    bool read_unlv_file(                    //print list of sides
+                     STRING name,        //basename of file
+                     inT32 xsize,        //image size
+                     inT32 ysize,        //image size
+                     BLOCK_LIST *blocks  //output list
+                    ) {
+  FILE *pdfp;                    //file pointer
+  BLOCK *block;                  //current block
+  int x;                         //current top-down coords
+  int y;
+  int width;                     //of current block
+  int height;
+  BLOCK_IT block_it = blocks;    //block iterator
+    }
     
-    {	// Return pointer to hash (20 characters)
-	return (uint8_t*) s->state;
+    // APPROXIMATIONS of the fractions of the character cell taken by
+// the descenders, ascenders, and x-height.
+const double CCStruct::kDescenderFraction = 0.25;
+const double CCStruct::kXHeightFraction = 0.5;
+const double CCStruct::kAscenderFraction = 0.25;
+const double CCStruct::kXHeightCapRatio = CCStruct::kXHeightFraction /
+    (CCStruct::kXHeightFraction + CCStruct::kAscenderFraction);
+    
+    // Returns the number of sample points that have an error more than threshold.
+int DetLineFit::NumberOfMisfittedPoints(double threshold) const {
+  int num_misfits = 0;
+  int num_dists = distances_.size();
+  // Get the absolute values of the errors.
+  for (int i = 0; i < num_dists; ++i) {
+    if (distances_[i].key > threshold)
+      ++num_misfits;
+  }
+  return num_misfits;
 }
     
-    std::string DescribePC(const char *SymbolizedFMT, uintptr_t PC);
+      // Returns the direction of the fitted line as a unit vector, using the
+  // least mean squared perpendicular distance. The line runs through the
+  // mean_point, i.e. a point p on the line is given by:
+  // p = mean_point() + lambda * vector_fit() for some real number lambda.
+  // Note that the result (0<=x<=1, -1<=y<=-1) is directionally ambiguous
+  // and may be negated without changing its meaning, since a line is only
+  // unique to a range of pi radians.
+  // Modernists prefer to think of this as an Eigenvalue problem, but
+  // Pearson had the simple solution in 1901.
+  //
+  // Note that this is equivalent to returning the Principal Component in PCA,
+  // or the eigenvector corresponding to the largest eigenvalue in the
+  // covariance matrix.
+  FCOORD vector_fit() const;
+    
+      tesseract::ParagraphJustification justification() const {
+    return justification_;
+  }
+  int margin() const { return margin_; }
+  int first_indent() const { return first_indent_; }
+  int body_indent() const { return body_indent_; }
+  int tolerance() const { return tolerance_; }
+  bool is_flush() const {
+    return (justification_ == tesseract::JUSTIFICATION_LEFT ||
+            justification_ == tesseract::JUSTIFICATION_RIGHT) &&
+        abs(first_indent_ - body_indent_) <= tolerance_;
+  }
+    
+        void set_para(PARA *p) {
+      para_ = p;
+    }
+    PARA *para() const {
+      return para_;
+    }
+    
+    
+    {
+    {    if (!s.ok()) {
+      assert(table == NULL);
+      delete file;
+      // We do not cache error results so that if the error is transient,
+      // or somebody repairs the file, we recover automatically.
+    } else {
+      TableAndFile* tf = new TableAndFile;
+      tf->file = file;
+      tf->table = table;
+      *handle = cache_->Insert(key, tf, 1, &DeleteEntry);
+    }
+  }
+  return s;
+}
+    
+      // Return an iterator for the specified file number (the corresponding
+  // file length must be exactly 'file_size' bytes).  If 'tableptr' is
+  // non-NULL, also sets '*tableptr' to point to the Table object
+  // underlying the returned iterator, or NULL if no Table object underlies
+  // the returned iterator.  The returned '*tableptr' object is owned by
+  // the cache and should not be deleted, and is valid for as long as the
+  // returned iterator is live.
+  Iterator* NewIterator(const ReadOptions& options,
+                        uint64_t file_number,
+                        uint64_t file_size,
+                        Table** tableptr = NULL);
+    
+      for (DeletedFileSet::const_iterator iter = deleted_files_.begin();
+       iter != deleted_files_.end();
+       ++iter) {
+    PutVarint32(dst, kDeletedFile);
+    PutVarint32(dst, iter->first);   // level
+    PutVarint64(dst, iter->second);  // file number
+  }
+    
+    TEST(FindFileTest, Empty) {
+  ASSERT_EQ(0, Find('foo'));
+  ASSERT_TRUE(! Overlaps('a', 'z'));
+  ASSERT_TRUE(! Overlaps(NULL, 'z'));
+  ASSERT_TRUE(! Overlaps('a', NULL));
+  ASSERT_TRUE(! Overlaps(NULL, NULL));
+}
+    
+    namespace {
+    }
+    
+      // Check second filter
+  ASSERT_TRUE(reader.KeyMayMatch(3100, 'box'));
+  ASSERT_TRUE(! reader.KeyMayMatch(3100, 'foo'));
+  ASSERT_TRUE(! reader.KeyMayMatch(3100, 'bar'));
+  ASSERT_TRUE(! reader.KeyMayMatch(3100, 'hello'));
+    
+    Iterator::~Iterator() {
+  if (cleanup_.function != NULL) {
+    (*cleanup_.function)(cleanup_.arg1, cleanup_.arg2);
+    for (Cleanup* c = cleanup_.next; c != NULL; ) {
+      (*c->function)(c->arg1, c->arg2);
+      Cleanup* next = c->next;
+      delete c;
+      c = next;
+    }
+  }
+}
+    
+    
+    {    current_->Next();
+    FindSmallest();
+  }
+    
+    bool js_cocos2dx_studio_RotationFrame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_RotationFrame_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_RotationFrame(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_RotationFrame_setRotation(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_RotationFrame_getRotation(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_RotationFrame_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_RotationFrame_RotationFrame(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+        glDrawArrays(GL_POINTS, 0, 1);
+    //    glPointSize(1.0f);
+    
+    
+    {	b2Vec2 viewCenter;
+	float32 hz;
+	int32 velocityIterations;
+	int32 positionIterations;
+	int32 drawShapes;
+	int32 drawJoints;
+	int32 drawAABBs;
+	int32 drawContactPoints;
+	int32 drawContactNormals;
+	int32 drawContactImpulse;
+	int32 drawFrictionImpulse;
+	int32 drawCOMs;
+	int32 drawStats;
+	int32 drawProfile;
+	int32 enableWarmStarting;
+	int32 enableContinuous;
+	int32 enableSubStepping;
+	int32 enableSleep;
+	int32 pause;
+	int32 singleStep;
+};
+    
+    				b2Vec2 anchor(-15.0f + 1.0f * i, 5.0f);
+				jd.Initialize(prevBody, body, anchor);
+				m_world->CreateJoint(&jd);
+    
+    int main(int argc, const char *argv[]) {
+  RunServer();
+  return 0;
+}
+
+    
+    #include <grpc++/impl/codegen/async_stream.h>
+#include <grpc++/impl/codegen/async_unary_call.h>
+#include <grpc++/impl/codegen/method_handler_impl.h>
+#include <grpc++/impl/codegen/proto_utils.h>
+#include <grpc++/impl/codegen/rpc_method.h>
+#include <grpc++/impl/codegen/service_type.h>
+#include <grpc++/impl/codegen/status.h>
+#include <grpc++/impl/codegen/stub_options.h>
+#include <grpc++/impl/codegen/sync_stream.h>
+    
+      struct {
+    grpc::string prefix;
+    grpc::string method_params;  // extra arguments to method
+    int extra_method_param_count;
+  } async_prefixes[] = {{'Async', ', void* tag', 1}, {'PrepareAsync', '', 0}};
+    
+    
+    { public:
+  LogHelper(std::ostream* os) : os_(os) {}
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning( \
+    disable : 4722)  // the flow of control terminates in a destructor
+  // (needed to compile ~LogHelper where destructor emits abort intentionally -
+  // inherited from grpc/java code generator).
+#endif
+  ~LogHelper() {
+    *os_ << std::endl;
+    ::abort();
+  }
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
+  std::ostream& get_os() const { return *os_; }
+};
+    
+    typedef uintmax_t largest_scalar_t;
+    
+    
+    {}  // namespace flatbuffers
+    
+      Value CreateVector(size_t start, size_t vec_len, size_t step, bool typed,
+                     bool fixed, const Value *keys = nullptr) {
+    // Figure out smallest bit width we can store this vector with.
+    auto bit_width = (std::max)(force_min_bit_width_, WidthU(vec_len));
+    auto prefix_elems = 1;
+    if (keys) {
+      // If this vector is part of a map, we will pre-fix an offset to the keys
+      // to this vector.
+      bit_width = (std::max)(bit_width, keys->ElemWidth(buf_.size(), 0));
+      prefix_elems += 2;
+    }
+    Type vector_type = TYPE_KEY;
+    // Check bit widths and types for all elements.
+    for (size_t i = start; i < stack_.size(); i += step) {
+      auto elem_width = stack_[i].ElemWidth(buf_.size(), i + prefix_elems);
+      bit_width = (std::max)(bit_width, elem_width);
+      if (typed) {
+        if (i == start) {
+          vector_type = stack_[i].type_;
+        } else {
+          // If you get this assert, you are writing a typed vector with
+          // elements that are not all the same type.
+          assert(vector_type == stack_[i].type_);
+        }
+      }
+    }
+    // If you get this assert, your fixed types are not one of:
+    // Int / UInt / Float / Key.
+    assert(IsTypedVectorElementType(vector_type));
+    auto byte_width = Align(bit_width);
+    // Write vector. First the keys width/offset if available, and size.
+    if (keys) {
+      WriteOffset(keys->u_, byte_width);
+      Write<uint64_t>(1ULL << keys->min_bit_width_, byte_width);
+    }
+    if (!fixed) Write<uint64_t>(vec_len, byte_width);
+    // Then the actual data.
+    auto vloc = buf_.size();
+    for (size_t i = start; i < stack_.size(); i += step) {
+      WriteAny(stack_[i], byte_width);
+    }
+    // Then the types.
+    if (!typed) {
+      for (size_t i = start; i < stack_.size(); i += step) {
+        buf_.push_back(stack_[i].StoredPackedType(bit_width));
+      }
+    }
+    return Value(static_cast<uint64_t>(vloc),
+                 keys ? TYPE_MAP
+                      : (typed ? ToTypedVector(vector_type, fixed ? vec_len : 0)
+                               : TYPE_VECTOR),
+                 bit_width);
+  }
+    
+    // Get a field, if you know it's a struct.
+inline const Struct *GetFieldStruct(const Table &table,
+                                    const reflection::Field &field) {
+  // TODO: This does NOT check if the field is a table or struct, but we'd need
+  // access to the schema to check the is_struct flag.
+  assert(field.type()->base_type() == reflection::Obj);
+  return table.GetStruct<const Struct *>(field.offset());
+}
+    
+    #include 'flatbuffers/idl.h'
+#include 'flatbuffers/util.h'
+    
+    // independent from idl_parser, since this code is not needed for most clients
+    
+    // Most field accessors need to retrieve and test the field offset first,
+// this is the prefix code for that.
+std::string OffsetPrefix(const FieldDef &field) {
+  return '{\n\to := flatbuffers.UOffsetT(rcv._tab.Offset(' +
+         NumToString(field.value.offset) + '))\n\tif o != 0 {\n';
+}
+    }
+    }
