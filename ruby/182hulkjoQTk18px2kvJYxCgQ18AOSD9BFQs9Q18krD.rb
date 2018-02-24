@@ -1,115 +1,64 @@
 
         
-            context 'only newlines' do
-      let(:keywords) { 'One\nTwo\r\nThree\nFour Token\n' }
-    
-          it 'it increments all targets patch version number' do
-        Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number
-        end').runner.execute(:test)
-    
-        find_union(segments, Project).includes(:namespace).order_id_desc
+          test 'helpers' do
+    assert_response_code_range 200..299, :successful?
+    assert_response_code_range [404],    :not_found?
+    assert_response_code_range 300..399, :redirection?
+    assert_response_code_range 500..599, :server_error?
+    assert_response_code_range 400..499, :client_error?
   end
     
-                -- Finally, add our sequence number to our base, and chop
-            -- it to the last two bytes
-            tail := (
-              (sequence_base + nextval(table_name || '_id_seq'))
-              & 65535);
+          # Calls this block after #reset is called on the instance. Used for resetting external collaborators, like Time.zone.
+      def resets(&block)
+        set_callback :reset, :after, &block
+      end
     
-    require_relative '../mastodon/snowflake'
-    
-      def remote_url
-    object.remote_url.presence
-  end
-    
-      def in_reply_to
-    return unless object.reply? && !object.thread.nil?
-    
-      describe 'PUT #update' do
-    it 'updates notifications settings' do
-      user.settings['notification_emails'] = user.settings['notification_emails'].merge('follow' => false)
-      user.settings['interactions'] = user.settings['interactions'].merge('must_be_follower' => true)
-    
-          expect(response).to redirect_to(settings_preferences_path)
-      user.reload
-      expect(user.settings['boost_modal']).to be true
-      expect(user.settings['delete_modal']).to be false
-    end
-  end
-end
-
-    
-        existence_maps.each do |group|
-      existing_one = group.key(true)
-    
-    $stdout.puts res
-
-    
-        end # end of each_key
-  end # end of parse
-end
-    
-    puts '* Initializing Meterpreter'
-    
-          def initialize(pairs = {})
-        @pairs = pairs
-        pairs.each do |key, value|
-          raise 'invalid container key: '#{key.inspect}'' unless VALID_KEYS.include?(key)
-          send(:'#{key}=', value)
-        end
-    
-    module Capistrano
-  module Doctor
-    # Prints table of all Capistrano-related gems and their version numbers. If
-    # there is a newer version of a gem available, call attention to it.
-    class GemsDoctor
-      include Capistrano::Doctor::OutputHelpers
-    
-        # Initializes a new CategoryIndex.
-    #
-    #  +base+         is the String path to the <source>.
-    #  +category_dir+ is the String path between <source> and the category folder.
-    #  +category+     is the category currently being processed.
-    def initialize(site, base, category_dir, category)
-      @site = site
-      @base = base
-      @dir  = category_dir
-      @name = 'index.html'
-      self.process(@name)
-      # Read the YAML data from the layout page.
-      self.read_yaml(File.join(base, '_layouts'), 'category_index.html')
-      self.data['category']    = category
-      # Set the title for this page.
-      title_prefix             = site.config['category_title_prefix'] || 'Category: '
-      self.data['title']       = '#{title_prefix}#{category}'
-      # Set the meta-description for this page.
-      meta_description_prefix  = site.config['category_meta_description_prefix'] || 'Category: '
-      self.data['description'] = '#{meta_description_prefix}#{category}'
+          def set_body
+        self.response_body = 'Success'
+      end
     end
     
-      class GistTagNoCache < GistTag
-    def initialize(tag_name, text, token)
-      super
-      @cache_disabled = true
+    class WebServiceTest < ActionDispatch::IntegrationTest
+  class TestController < ActionController::Base
+    def assign_parameters
+      if params[:full]
+        render plain: dump_params_keys
+      else
+        render plain: (params.keys - ['controller', 'action']).sort.join(', ')
+      end
     end
+    
+    module ActionMailer
+  # Implements the ActiveSupport::LogSubscriber for logging notifications when
+  # email is delivered or received.
+  class LogSubscriber < ActiveSupport::LogSubscriber
+    # An email was delivered.
+    def deliver(event)
+      info do
+        recipients = Array(event.payload[:to]).join(', ')
+        'Sent mail to #{recipients} (#{event.duration.round(1)}ms)'
+      end
+    
+    # Emulate AV railtie
+require 'action_view'
+ActionMailer::Base.include(ActionView::Layouts)
+    
+          if cask_version.empty?
+        raise CaskError, 'Cannot create metadata path with empty version.'
+      end
+    
+    desc 'Initial setup for Octopress: copies the default theme into the path of Jekyll's generator. Rake install defaults to rake install[classic] to install a different theme run rake install[some_theme_name]'
+task :install, :theme do |t, args|
+  if File.directory?(source_dir) || File.directory?('sass')
+    abort('rake aborted!') if ask('A theme is already installed, proceeding will overwrite existing files. Are you sure?', ['y', 'n']) == 'n'
   end
+  # copy theme into working Jekyll directories
+  theme = args.theme || 'classic'
+  puts '## Copying '+theme+' theme into ./#{source_dir} and ./sass'
+  mkdir_p source_dir
+  cp_r '#{themes_dir}/#{theme}/source/.', source_dir
+  mkdir_p 'sass'
+  cp_r '#{themes_dir}/#{theme}/sass/.', 'sass'
+  mkdir_p '#{source_dir}/#{posts_dir}'
+  mkdir_p public_dir
 end
-    
-        def render(context)
-      includes_dir = File.join(context.registers[:site].source, '_includes')
-    
-    
-    
-            def_node_matcher :simple_double_comparison?, '(send $lvar :== $lvar)'
-        def_node_matcher :simple_comparison?, <<-PATTERN
-          {(send $lvar :== _)
-           (send _ :== $lvar)}
-        PATTERN
-    
-                yield arguments[optarg_position]
-          end
-        end
-    
-            MSG = 'Do not freeze immutable objects, as freezing them has no ' \
-              'effect.'.freeze
