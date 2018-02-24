@@ -1,277 +1,426 @@
 
         
-          //   The text of a paragraph typically starts with the start of an idea and
-  // ends with the end of an idea.  Here we define paragraph as something that
-  // may have a first line indent and a body indent which may be different.
-  // Typical words that start an idea are:
-  //   1. Words in western scripts that start with
-  //      a capital letter, for example 'The'
-  //   2. Bulleted or numbered list items, for
-  //      example '2.'
-  // Typical words which end an idea are words ending in punctuation marks. In
-  // this vocabulary, each list item is represented as a paragraph.
-  bool lword_indicates_list_item;
-  bool lword_likely_starts_idea;
-  bool lword_likely_ends_idea;
+        
+    {  class JSON_API Factory {
+  public:
+    virtual ~Factory() {}
+    /** \brief Allocate a CharReader via operator new().
+     * \throw std::exception if something goes wrong (e.g. invalid settings)
+     */
+    virtual CharReader* newCharReader() const = 0;
+  };  // Factory
+};  // CharReader
     
-    // This function takes tif/box pair of files and runs recognition on the image,
-// while making sure that the word bounds that tesseract identified roughly
-// match to those specified by the input box file. For each word (ngram in a
-// single bounding box from the input box file) it outputs the ocred result,
-// the correct label, rating and certainty.
-void Tesseract::recog_training_segmented(const STRING &fname,
-                                         PAGE_RES *page_res,
-                                         volatile ETEXT_DESC *monitor,
-                                         FILE *output_file) {
-  STRING box_fname = fname;
-  const char *lastdot = strrchr(box_fname.string(), '.');
-  if (lastdot != NULL) box_fname[lastdot - box_fname.string()] = '\0';
-  box_fname += '.box';
-  // ReadNextBox() will close box_file
-  FILE *box_file = open_file(box_fname.string(), 'r');
-    }
+    #include <string>
     
-    
-  // Checks whether chops were made at all the character bounding box
-  // boundaries in word->truth_word. If not - blames the chopper for an
-  // incorrect answer.
-  void SetChopperBlame(const WERD_RES* word, bool debug);
-  // Blames the classifier or the language model if, after running only the
-  // chopper, best_choice is incorrect and no blame has been yet set.
-  // Blames the classifier if best_choice is classifier's top choice and is a
-  // dictionary word (i.e. language model could not have helped).
-  // Otherwise, blames the language model (formerly permuter word adjustment).
-  void BlameClassifierOrLangModel(
-      const WERD_RES* word,
-      const UNICHARSET& unicharset, bool valid_permuter, bool debug);
-  // Sets up the correct_segmentation_* to mark the correct bounding boxes.
-  void SetupCorrectSegmentation(const TWERD* word, bool debug);
-    
-    // Solve the dynamic programming problem for the given array of points, with
-// the given size and cost function.
-// Steps backwards are limited to being between min_step and max_step
-// inclusive.
-// The return value is the tail of the best path.
-DPPoint* DPPoint::Solve(int min_step, int max_step, bool debug,
-                        CostFunc cost_func, int size, DPPoint* points) {
-  if (size <= 0 || max_step < min_step || min_step >= size)
-    return NULL;  // Degenerate, but not necessarily an error.
-  ASSERT_HOST(min_step > 0);  // Infinite loop possible if this is not true.
-  if (debug)
-    tprintf('min = %d, max=%d\n',
-            min_step, max_step);
-  // Evaluate the total cost at each point.
-  for (int i = 0; i < size; ++i) {
-    for (int offset = min_step; offset <= max_step; ++offset) {
-      DPPoint* prev = offset <= i ? points + i - offset : NULL;
-      inT64 new_cost = (points[i].*cost_func)(prev);
-      if (points[i].best_prev_ != NULL && offset > min_step * 2 &&
-          new_cost > points[i].total_cost_)
-        break;  // Find only the first minimum if going over twice the min.
-    }
-    points[i].total_cost_ += points[i].local_cost_;
-    if (debug) {
-      tprintf('At point %d, local cost=%d, total_cost=%d, steps=%d\n',
-              i, points[i].local_cost_, points[i].total_cost_,
-              points[i].total_steps_);
-    }
+    void RepeatedMessageFieldGenerator::GenerateMembers(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    'private static readonly pb::FieldCodec<$type_name$> _repeated_$name$_codec\n'
+    '    = ');
+  // Don't want to duplicate the codec code here... maybe we should have a
+  // 'create single field generator for this repeated field'
+  // function, but it doesn't seem worth it for just this.
+  if (IsWrapperType(descriptor_)) {
+    scoped_ptr<FieldGeneratorBase> single_generator(
+      new WrapperFieldGenerator(descriptor_, fieldOrdinal_, this->options()));
+    single_generator->GenerateCodecCode(printer);
+  } else {
+    scoped_ptr<FieldGeneratorBase> single_generator(
+      new MessageFieldGenerator(descriptor_, fieldOrdinal_, this->options()));
+    single_generator->GenerateCodecCode(printer);
   }
-  // Now find the end of the best path and return it.
-  int best_cost = points[size - 1].total_cost_;
-  int best_end = size - 1;
-  for (int end = best_end - 1; end >= size - min_step; --end) {
-    int cost = points[end].total_cost_;
-    if (cost < best_cost) {
-      best_cost = cost;
-      best_end = end;
-    }
-  }
-  return points + best_end;
+  printer->Print(';\n');
+  printer->Print(
+    variables_,
+    'private readonly pbc::RepeatedField<$type_name$> $name$_ = new pbc::RepeatedField<$type_name$>();\n');
+  WritePropertyDocComment(printer, descriptor_);
+  AddPublicMemberAttributes(printer);
+  printer->Print(
+    variables_,
+    '$access_level$ pbc::RepeatedField<$type_name$> $property_name$ {\n'
+    '  get { return $name$_; }\n'
+    '}\n');
 }
     
-    // Because it involves 2𝜃 , Eq 2 has 2 solutions 90 degrees apart, but which
-// is the min and which is the max? From Eq1:
-// E/N = Var(xi)sin²𝜃  - 2Covar(xi, yi)sin𝜃 cos𝜃  + Var(yi)cos²𝜃
-// and 90 degrees away, using sin/cos equivalences:
-// E'/N = Var(xi)cos²𝜃  + 2Covar(xi, yi)sin𝜃 cos𝜃  + Var(yi)sin²𝜃
-// The second error is smaller (making it the minimum) iff
-// E'/N < E/N ie:
-// (Var(xi) - Var(yi))(cos²𝜃 - sin²𝜃) < -4Covar(xi, yi)sin𝜃 cos𝜃
-// Using double angles:
-// (Var(xi) - Var(yi))cos2𝜃  < -2Covar(xi, yi)sin2𝜃  (InEq 1)
-// But atan2(2Covar(xi, yi), Var(xi) - Var(yi)) picks 2𝜃  such that:
-// sgn(cos2𝜃) = sgn(Var(xi) - Var(yi)) and sgn(sin2𝜃) = sgn(Covar(xi, yi))
-// so InEq1 can *never* be true, making the atan2 result *always* the min!
-// In the degenerate case, where Covar(xi, yi) = 0 AND Var(xi) = Var(yi),
-// the 2 solutions have equal error and the inequality is still false.
-// Therefore the solution really is as trivial as Eq 3.
-    
-                if (!m_netCriterionNodes.empty())
-            {
-                // m_netCriterionNodes[0]->Value().SetValue((ElemType)0);
-                Matrix<ElemType>::AddElementToElement(*m_netCriterionAccumulator, 0, 0,
-                                                      m_netCriterionNodes[0]->Value(), 0, 0);
-            }
-            m_netCriterionAccumulator->SetValue(0);
-    
-    
-    {    return std::equal(s1.begin(), s1.end(), s2.begin(), [](const TElement& a, const TElement& b)
-    {
-        return std::tolower(a) == std::tolower(b);
-    });
-}
-    
-    vector<wstring> /*IConfigRecord::*/ ComputationNodeBase::GetMemberIds() const
-{
-    return vector<wstring>{ L'name', L'operation', L'dim', L'dims', /*L'tag', */L'inputs', OperationName() + L'Args' };
+    void RepeatedPrimitiveFieldGenerator::GenerateMembers(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    'private static readonly pb::FieldCodec<$type_name$> _repeated_$name$_codec\n'
+    '    = pb::FieldCodec.For$capitalized_type_name$($tag$);\n');
+  printer->Print(variables_,
+    'private readonly pbc::RepeatedField<$type_name$> $name$_ = new pbc::RepeatedField<$type_name$>();\n');
+  WritePropertyDocComment(printer, descriptor_);
+  AddPublicMemberAttributes(printer);
+  printer->Print(
+    variables_,
+    '$access_level$ pbc::RepeatedField<$type_name$> $property_name$ {\n'
+    '  get { return $name$_; }\n'
+    '}\n');
 }
     
     /**
- * oc_ilog32 - Integer binary logarithm of a 32-bit value.
- * @_v: A 32-bit value.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * The OC_ILOG_32() or OC_ILOGNZ_32() macros may be able to use a builtin
- *  function instead, which should be faster.
- */
-int oc_ilog32(ogg_uint32_t _v);
-/**
- * oc_ilog64 - Integer binary logarithm of a 64-bit value.
- * @_v: A 64-bit value.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * The OC_ILOG_64() or OC_ILOGNZ_64() macros may be able to use a builtin
- *  function instead, which should be faster.
- */
-int oc_ilog64(ogg_int64_t _v);
-    
-    /*Some specific platforms may have optimized intrinsic or inline assembly
-   versions of these functions which can substantially improve performance.
-  We define macros for them to allow easy incorporation of these non-ANSI
-   features.*/
-    
-        60,30,500,    3,18.,  2048
-  },
-  /* 9: 512 x 17 */
-  {
-    6,{0,1,1,2,3,3},{2,3,3,3},{0,1,2,2},{-1,0,1,2},
-    {{3},{4,5},{-1,6,7,8},{-1,9,10,11}},
-    2,{0,512,  46,186,  16,33,65,  93,130,278,
-       7,23,39,  55,79,110,  156,232,360},
-    
-     ********************************************************************/
-    
-      {2,0,32,  &_residue_44_low,
-   &_huff_book__44c0_s_long,&_huff_book__44c0_sm_long,
-   &_resbook_44s_0,&_resbook_44sm_0}
-};
-static const vorbis_residue_template _res_44s_1[]={
-  {2,0,16,  &_residue_44_low,
-   &_huff_book__44c1_s_short,&_huff_book__44c1_sm_short,
-   &_resbook_44s_1,&_resbook_44sm_1},
-    
-    /* mapping conventions:
-   only one submap (this would change for efficient 5.1 support for example)*/
-/* Four psychoacoustic profiles are used, one for each blocktype */
-static const vorbis_info_mapping0 _map_nominal_u[2]={
-  {1, {0,0,0,0,0,0}, {0}, {0}, 0,{0},{0}},
-  {1, {0,0,0,0,0,0}, {1}, {1}, 0,{0},{0}}
-};
-    
-    #ifdef DJGPP
-#  define rint(x)   (floor((x)+0.5f))
-#endif
-    
-    #endif
-    
-    #if !defined(OPUS_HAVE_RTCD)
-#define OVERRIDE_OPUS_FFT (1)
-    
-    #if defined(OPUS_HAVE_RTCD) && \
-  (defined(OPUS_ARM_ASM) || defined(OPUS_ARM_MAY_HAVE_NEON_INTR))
-#include 'arm/armcpu.h'
-    
-       - Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
-    
-    
-    {    * lz = lzeros;
-    * frac_Q7 = silk_ROR32(in, 24 - lzeros) & 0x7f;
-}
-    
-    
-/*
- * WakeUpLock.cpp
+ * @brief Compute the index of the @f$ K @f$ max values for each datum across
+ *        all dimensions @f$ (C \times H \times W) @f$.
  *
- *  Created on: 2012-9-28
- *      Author: yerungui
+ * Intended for use after a classification layer to produce a prediction.
+ * If parameter out_max_val is set to true, output is a vector of pairs
+ * (max_ind, max_val) for each image. The axis parameter specifies an axis
+ * along which to maximise.
+ *
+ * NOTE: does not implement Backwards operation.
  */
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    //============================================================================
-// Name        : has_member.h
-// Author      :
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-//============================================================================
-    
-    jvalue JNU_CallMethodByName(JNIEnv* _env, jobject obj, const char* _name, const char* descriptor, ...);
-jvalue JNU_CallStaticMethodByName(JNIEnv* _env, jclass clazz, const char* _name, const char* descriptor, ...);
-jvalue JNU_CallStaticMethodByName(JNIEnv* _env, const char* _class_name, const char* _name, const char* descriptor, ...);
-jvalue JNU_CallStaticMethodByMethodInfo(JNIEnv* _env, JniMethodInfo _method_info, ...);
-jvalue JNU_GetStaticField(JNIEnv* _env, jclass clazz, const char* _name, const char* sig);
-jvalue JNU_GetField(JNIEnv* _env, jobject obj, const char* _name, const char* sig);
-    
-    
-#endif /* SCOP_JENV_H_ */
-
-    
-        case LWS_CALLBACK_ESTABLISHED:
-    {
-        new (ext) SocketExtension;
-        break;
+template <typename Dtype>
+class ArgMaxLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides ArgMaxParameter argmax_param,
+   *     with ArgMaxLayer options:
+   *   - top_k (\b optional uint, default 1).
+   *     the number @f$ K @f$ of maximal items to output.
+   *   - out_max_val (\b optional bool, default false).
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
+   */
+  explicit ArgMaxLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-    int getKb(int pid) {
-    std::string line;
-    std::ifstream self((std::string('/proc/') + std::to_string(pid) + std::string('/status')).c_str());
-    int vmRSS;
-    while(!self.eof()) {
-        std::getline(self, line, ':');
-        if (line == 'VmRSS') {
-            self >> vmRSS;
+    #include <vector>
+    
+    #if GTEST_HAS_DEATH_TEST
+    
+      // How many ULP's (Units in the Last Place) we want to tolerate when
+  // comparing two numbers.  The larger the value, the more error we
+  // allow.  A 0 value means that two numbers must be exactly the same
+  // to be considered equal.
+  //
+  // The maximum error of a single floating-point operation is 0.5
+  // units in the last place.  On Intel CPU's, all floating-point
+  // calculations are done with 80-bit precision, while double has 64
+  // bits.  Therefore, 4 should be enough for ordinary use.
+  //
+  // See the following article for more details on ULP:
+  // http://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
+  static const size_t kMaxUlps = 4;
+    
+      bool operator==(T* p) const { return value_ == p; }
+  bool operator!=(T* p) const { return value_ != p; }
+  template <typename U>
+  bool operator==(linked_ptr<U> const& ptr) const {
+    return value_ == ptr.get();
+  }
+  template <typename U>
+  bool operator!=(linked_ptr<U> const& ptr) const {
+    return value_ != ptr.get();
+  }
+    
+    #endif  // GTEST_HAS_GLOBAL_STRING
+    
+      // Returns true iff n is a prime number.
+  virtual bool IsPrime(int n) const = 0;
+    
+      // operator new and operator delete help us control water allocation.
+  void* operator new(size_t allocation_size) {
+    allocated_++;
+    return malloc(allocation_size);
+  }
+    
+    // WorkloadStats is used to track per request timing for different states
+// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
+// should be made to guard the state change with appropriate timers and
+// counters.
+//
+// The states tracked are:
+//  - In a request (this is a superset of the interpreter state)
+//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
+//  - In the JIT (currently tracks time inside the translate routine)
+//
+// Note the time in the TC is not tracked.  This is roughly:
+//   Time in request - Time in interp
+//
+// This gives us the relative interp time formula of:
+//   Relative interp time = Time in interp / Time in request
+struct WorkloadStats final {
+  enum State {
+    InRequest,
+    // -> InInterp   Okay (entering Dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InInterp,
+    // -> InRequest  Okay (leaving the dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InTrans,
+    // -> InRequest  Okay (leaving translate)
+    // -> InInterp   Okay (leaving translate)
+  };
+    }
+    
+    #include 'hphp/util/logger.h'
+#include 'hphp/util/trace.h'
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    VcallArgsId Vunit::makeVcallArgs(VcallArgs&& args) {
+  VcallArgsId i(vcallArgs.size());
+  vcallArgs.emplace_back(std::move(args));
+  return i;
+}
+    
+      LdSSwitchData data;
+  data.numCases   = numCases;
+  data.cases      = &cases[0];
+  data.defaultSk  = SrcKey{curSrcKey(env),
+                           bcOff(env) + iv.strvec()[iv.size() - 1].dest};
+  data.bcSPOff    = spOffBCFromFP(env);
+    
+    namespace xgboost {
+ConsoleLogger::~ConsoleLogger() {
+  dmlc::CustomLogMessage::Log(log_stream_.str());
+}
+TrackerLogger::~TrackerLogger() {
+  dmlc::CustomLogMessage::Log(log_stream_.str());
+}
+}  // namespace xgboost
+    
+     protected:
+  /*!
+   * \brief to be implemented by subclass,
+   * get next token, return EOF if end of file
+   */
+  virtual char GetChar(void) = 0;
+  /*! \brief to be implemented by child, check if end of stream */
+  virtual bool IsEnd(void) = 0;
+    
+      size_t PeekRead(void* dptr, size_t size) {
+    size_t nbuffer = buffer_.length() - buffer_ptr_;
+    if (nbuffer < size) {
+      buffer_ = buffer_.substr(buffer_ptr_, buffer_.length());
+      buffer_ptr_ = 0;
+      buffer_.resize(size);
+      size_t nadd = strm_->Read(dmlc::BeginPtr(buffer_) + nbuffer, size - nbuffer);
+      buffer_.resize(nbuffer + nadd);
+      std::memcpy(dptr, dmlc::BeginPtr(buffer_), buffer_.length());
+      return buffer_.length();
+    } else {
+      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, size);
+      return size;
+    }
+  }
+    
+    #if XGBOOST_CUSTOMIZE_GLOBAL_PRNG
+/*!
+ * \brief An customized random engine, used to be plugged in PRNG from other systems.
+ *  The implementation of this library is not provided by xgboost core library.
+ *  Instead the other library can implement this class, which will be used as GlobalRandomEngine
+ *  If XGBOOST_RANDOM_CUSTOMIZE = 1, by default this is switched off.
+ */
+class CustomGlobalRandomEngine {
+ public:
+  /*! \brief The result type */
+  typedef size_t result_type;
+  /*! \brief The minimum of random numbers generated */
+  inline static constexpr result_type min() {
+    return 0;
+  }
+  /*! \brief The maximum random numbers generated */
+  inline static constexpr result_type max() {
+    return std::numeric_limits<size_t>::max();
+  }
+  /*!
+   * \brief seed function, to be implemented
+   * \param val The value of the seed.
+   */
+  void seed(result_type val);
+  /*!
+   * \return next random number.
+   */
+  result_type operator()();
+};
+    
+      double double2[2] = {1.0, 2.0};
+  EXPECT_EQ(info.GetRoot(1), 0)
+    << 'When no root_index is given, was expecting default value 0';
+  info.SetInfo('root_index', double2, xgboost::kDouble, 2);
+  EXPECT_EQ(info.GetRoot(1), 2.0f);
+    
+    
+    {  vals_in.clear(); ss.flush(); ss.clear(); ss.str('');
+  ss << '(3,2,1';
+  ss >> vals_in;
+  EXPECT_NE(vals_in, vals);
+}
+    
+            // Start the server accept loop
+        echo_server.start_accept();
+    
+        lws_protocols protocols[] = {
+        {'default', callback, sizeof(SocketExtension)},
+        {nullptr, nullptr, 0}
+    };
+    
+    
+    {    if (addr.ss_family == AF_INET) {
+        sockaddr_in *ipv4 = (sockaddr_in *) &addr;
+        inet_ntop(AF_INET, &ipv4->sin_addr, buf, sizeof(buf));
+        return {ntohs(ipv4->sin_port), buf, 'IPv4'};
+    } else {
+        sockaddr_in6 *ipv6 = (sockaddr_in6 *) &addr;
+        inet_ntop(AF_INET6, &ipv6->sin6_addr, buf, sizeof(buf));
+        return {ntohs(ipv6->sin6_port), buf, 'IPv6'};
+    }
+}
+    
+                    bool wasTransferred;
+                if (write(messagePtr, wasTransferred)) {
+                    if (!wasTransferred) {
+                        nodeData->freeSmallMemoryBlock((char *) messagePtr, memoryIndex);
+                        if (callback) {
+                            callback(this, callbackData, false, nullptr);
+                        }
+                    } else {
+                        messagePtr->callback = callback;
+                        messagePtr->callbackData = callbackData;
+                    }
+                } else {
+                    nodeData->freeSmallMemoryBlock((char *) messagePtr, memoryIndex);
+                    if (callback) {
+                        callback(this, callbackData, true, nullptr);
+                    }
+                }
+            } else {
+                Queue::Message *messagePtr = allocMessage(estimatedLength - sizeof(Queue::Message));
+                messagePtr->length = T::transform(message, (char *) messagePtr->data, length, transformData);
+    
+    
+    {    // this is not correct, but it works for now
+    // think about transfer - should allow one to not delete
+    // but in this case it doesn't matter at all
+    void close(Loop *loop, void (*cb)(Poll *)) {
+        socket->release();
+        socket->get_io_service().post([cb, this]() {
+            cb(this);
+        });
+        delete socket;
+        socket = nullptr;
+    }
+};
+    
+    
+    {        loop->delay = -1;
+        if (loop->timers.size()) {
+            loop->delay = std::max<int>(std::chrono::duration_cast<std::chrono::milliseconds>(loop->timers[0].timepoint - loop->timepoint).count(), 0);
         }
-        std::getline(self, line);
     }
-    return vmRSS;
+    
+      if (InitialCorpus.empty()) {
+    InitialCorpus.push_back(Unit({'\n'}));  // Valid ASCII input.
+    if (Options.Verbosity)
+      Printf('INFO: A corpus is not provided, starting from an empty corpus\n');
+  }
+  F->ShuffleAndMinimize(&InitialCorpus);
+  InitialCorpus.clear();  // Don't need this memory any more.
+  F->Loop();
+    
+    
+    {
+    {#undef EXT_FUNC
+};
+} // namespace fuzzer
+    
+    // Overwrites part of To[0,ToSize) with a part of From[0,FromSize).
+// Returns ToSize.
+size_t MutationDispatcher::CopyPartOf(const uint8_t *From, size_t FromSize,
+                                      uint8_t *To, size_t ToSize) {
+  // Copy From[FromBeg, FromBeg + CopySize) into To[ToBeg, ToBeg + CopySize).
+  size_t ToBeg = Rand(ToSize);
+  size_t CopySize = Rand(ToSize - ToBeg) + 1;
+  assert(ToBeg + CopySize <= ToSize);
+  CopySize = std::min(CopySize, FromSize);
+  size_t FromBeg = Rand(FromSize - CopySize + 1);
+  assert(FromBeg + CopySize <= FromSize);
+  memmove(To + ToBeg, From + FromBeg, CopySize);
+  return ToSize;
+}
+    
+    namespace fuzzer {
+    }
+    
+    
+    {	a=s->state[0];
+	b=s->state[1];
+	c=s->state[2];
+	d=s->state[3];
+	e=s->state[4];
+	for (i=0; i<80; i++) {
+		if (i>=16) {
+			t = s->buffer[(i+13)&15] ^ s->buffer[(i+8)&15] ^ s->buffer[(i+2)&15] ^ s->buffer[i&15];
+			s->buffer[i&15] = sha1_rol32(t,1);
+		}
+		if (i<20) {
+			t = (d ^ (b & (c ^ d))) + SHA1_K0;
+		} else if (i<40) {
+			t = (b ^ c ^ d) + SHA1_K20;
+		} else if (i<60) {
+			t = ((b & c) | (d & (b | c))) + SHA1_K40;
+		} else {
+			t = (b ^ c ^ d) + SHA1_K60;
+		}
+		t+=sha1_rol32(a,5) + e + s->buffer[i&15];
+		e=d;
+		d=c;
+		c=sha1_rol32(b,30);
+		b=a;
+		a=t;
+	}
+	s->state[0] += a;
+	s->state[1] += b;
+	s->state[2] += c;
+	s->state[3] += d;
+	s->state[4] += e;
+}
+    
+    static bool IsInterestingCoverageFile(std::string &File) {
+  if (File.find('compiler-rt/lib/') != std::string::npos)
+    return false; // sanitizer internal.
+  if (File.find('/usr/lib/') != std::string::npos)
+    return false;
+  if (File.find('/usr/include/') != std::string::npos)
+    return false;
+  if (File == '<null>')
+    return false;
+  return true;
 }
     
     
-    {    return context;
+    {  // Restore the signal handlers of the current process when the last thread
+  // using this function finishes.
+  {
+    std::lock_guard<std::mutex> Lock(SignalMutex);
+    --ActiveThreadCount;
+    if (ActiveThreadCount == 0) {
+      bool FailedRestore = false;
+      if (sigaction(SIGINT, &OldSigIntAction, NULL) == -1) {
+        Printf('Failed to restore SIGINT handling\n');
+        FailedRestore = true;
+      }
+      if (sigaction(SIGQUIT, &OldSigQuitAction, NULL) == -1) {
+        Printf('Failed to restore SIGQUIT handling\n');
+        FailedRestore = true;
+      }
+      if (sigprocmask(SIG_BLOCK, &OldBlockedSignalsSet, NULL) == -1) {
+        Printf('Failed to unblock SIGCHLD\n');
+        FailedRestore = true;
+      }
+      if (FailedRestore)
+        ProcessStatus = -1;
+    }
+  }
+  return ProcessStatus;
 }
-    
-        // Thread safe
-    void terminate();
-    void ping(const char *message) {send(message, OpCode::PING);}
-    void send(const char *message, OpCode opCode = OpCode::TEXT) {send(message, strlen(message), opCode);}
-    void send(const char *message, size_t length, OpCode opCode, void(*callback)(WebSocket<isServer> *webSocket, void *data, bool cancelled, void *reserved) = nullptr, void *callbackData = nullptr);
-    static PreparedMessage *prepareMessage(char *data, size_t length, OpCode opCode, bool compressed, void(*callback)(WebSocket<isServer> *webSocket, void *data, bool cancelled, void *reserved) = nullptr);
-    static PreparedMessage *prepareMessageBatch(std::vector<std::string> &messages, std::vector<int> &excludedMessages,
-                                                OpCode opCode, bool compressed, void(*callback)(WebSocket<isServer> *webSocket, void *data, bool cancelled, void *reserved) = nullptr);
-    
-        ~Hub() {
-        inflateEnd(&inflationStream);
-        delete [] inflationBuffer;
-    }
-    
-        for (Poll *p : nodeData->changePollQueue) {
-        Socket *s = (Socket *) p;
-        s->change(s->nodeData->loop, s, s->getPoll());
-    }
