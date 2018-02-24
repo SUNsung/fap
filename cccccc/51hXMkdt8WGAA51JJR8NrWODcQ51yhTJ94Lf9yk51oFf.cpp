@@ -1,274 +1,231 @@
 
         
-        #include 'tensorflow/core/lib/core/notification.h'
-#include 'tensorflow/core/platform/test.h'
-    
-     private:
-    
-      PluginId blas() const { return blas_; }
-  PluginId dnn() const { return dnn_; }
-  PluginId fft() const { return fft_; }
-  PluginId rng() const { return rng_; }
+        // Get basic type definitions.
+#define IPC_MESSAGE_IMPL
+#include 'content/nw/src/common/common_message_generator.h'
     
     
-    {
-    {}  // namespace io
-}  // namespace tensorflow
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
+}
     
-    namespace internal {
-template <typename Scalar>
-struct functor_traits<scalar_clip_op<Scalar> > {
-  enum {
-    Cost = NumTraits<Scalar>::AddCost * 3,
-    PacketAccess = packet_traits<Scalar>::HasMax &&
-                   packet_traits<Scalar>::HasMin &&
-                   packet_traits<Scalar>::HasNegate
-  };
-};
-}  // namespace internal
-    
-    namespace tensorflow {
+    v8::Handle<v8::Value> CallObjectMethod(int routing_id,
+                                       int object_id,
+                                       const std::string& type,
+                                       const std::string& method,
+                                       v8::Handle<v8::Value> args) {
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  scoped_ptr<V8ValueConverter> converter(V8ValueConverter::create());
     }
     
-    
-#ifndef PCFREAD_H_
-#define PCFREAD_H_
-    
-            bool has_extrabits = false;
-				int extra_bits = 0;
-        int num_extra_bits = i & 15;
-    
-        // Returns the total number of bytes actually consumed by the decoder (which should equal the actual size of the JPEG file).
-    inline int get_total_bytes_read() const { return m_total_bytes_read; }
-    
-  private:
-    jpeg_decoder(const jpeg_decoder &);
-    jpeg_decoder &operator =(const jpeg_decoder &);
+    #include 'content/nw/src/api/menu/menu_delegate.h'
     
     
-    
-    /*All of these macros should expect floats as arguments.*/
-#define OC_MAXF(_a,_b)      ((_a)<(_b)?(_b):(_a))
-#define OC_MINF(_a,_b)      ((_a)>(_b)?(_b):(_a))
-#define OC_CLAMPF(_a,_b,_c) (OC_MINF(_a,OC_MAXF(_b,_c)))
-#define OC_FABSF(_f)        ((float)fabs(_f))
-#define OC_SQRTF(_f)        ((float)sqrt(_f))
-#define OC_POWF(_b,_e)      ((float)pow(_b,_e))
-#define OC_LOGF(_f)         ((float)log(_f))
-#define OC_IFLOORF(_f)      ((int)floor(_f))
-#define OC_ICEILF(_f)       ((int)ceil(_f))
-    
-    #else
-    
-    #if XGBOOST_CUSTOMIZE_GLOBAL_PRNG
-/*!
- * \brief An customized random engine, used to be plugged in PRNG from other systems.
- *  The implementation of this library is not provided by xgboost core library.
- *  Instead the other library can implement this class, which will be used as GlobalRandomEngine
- *  If XGBOOST_RANDOM_CUSTOMIZE = 1, by default this is switched off.
- */
-class CustomGlobalRandomEngine {
- public:
-  /*! \brief The result type */
-  typedef size_t result_type;
-  /*! \brief The minimum of random numbers generated */
-  inline static constexpr result_type min() {
-    return 0;
-  }
-  /*! \brief The maximum random numbers generated */
-  inline static constexpr result_type max() {
-    return std::numeric_limits<size_t>::max();
-  }
-  /*!
-   * \brief seed function, to be implemented
-   * \param val The value of the seed.
-   */
-  void seed(result_type val);
-  /*!
-   * \return next random number.
-   */
-  result_type operator()();
-};
-    
-    
-    {  EXPECT_TRUE(se1.NeedReplace(3, 1));
-}
+    {}  // namespace nw
 
     
-    Range<AsyncIO::Op**> AsyncIO::doWait(
-    WaitType type,
-    size_t minRequests,
-    size_t maxRequests,
-    std::vector<Op*>& result) {
-  io_event events[maxRequests];
-    }
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+typedef long atomic_count;
+inline void increment(atomic_count& a, long b) { a += b; }
+#elif defined(BOOST_ASIO_HAS_STD_ATOMIC)
+typedef std::atomic<long> atomic_count;
+inline void increment(atomic_count& a, long b) { a += b; }
+#else // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+typedef boost::detail::atomic_count atomic_count;
+inline void increment(atomic_count& a, long b) { while (b > 0) ++a, --b; }
+#endif // defined(BOOST_ASIO_HAS_STD_ATOMIC)
     
-    void copy(const char* srcFile, const char* dest) {
-  fs::path destPath(dest);
-  if (!destPath.is_absolute()) {
-    auto hp = getHugePageSize();
-    CHECK(hp) << 'no huge pages available';
-    destPath = fs::canonical_parent(destPath, hp->mountPoint);
+      static bool all_empty(const boost::array<Elem, 2>& buffer_sequence)
+  {
+    return boost::asio::buffer_size(buffer_sequence[0]) == 0
+      && boost::asio::buffer_size(buffer_sequence[1]) == 0;
   }
-    }
     
-    
-    {  return sizeVec;
-}
-    
-    
-    {
-    {    for (size_t i = 0; i < nrRead; i++) {
-      int id = completed[i] - ops.get();
-      EXPECT_GE(id, 0);
-      EXPECT_LT(id, specs.size());
-      EXPECT_TRUE(pending[id]);
-      pending[id] = false;
-      ssize_t res = ops[id].result();
-      EXPECT_LE(0, res) << folly::errnoStr(-res);
-      EXPECT_EQ(specs[id].size, res);
-    }
+      // Is there no unread data in the buffer.
+  bool empty() const
+  {
+    return begin_offset_ == end_offset_;
   }
-  EXPECT_EQ(specs.size(), aioReader.totalSubmits());
-  EXPECT_EQ(aioReader.pending(), 0);
-  EXPECT_EQ(aioQueue.queued(), 0);
-  for (size_t i = 0; i < pending.size(); i++) {
-    EXPECT_FALSE(pending[i]);
-  }
-}
     
-    TEST(Simple, Path) {
-  path root('/');
-  path abs1('/hello/world');
-  path rel1('meow');
-  EXPECT_TRUE(starts_with(abs1, root));
-  EXPECT_FALSE(starts_with(rel1, root));
-  expectPathEq(path('hello/world'), remove_prefix(abs1, root));
-  EXPECT_THROW({ remove_prefix(rel1, root); }, filesystem_error);
-    }
-    
-      while (true) {
-    // With the lock held, grab a pointer to the current queue, then increment
-    // the ioThreadCounter index so that other threads will write into the
-    // other queue as we process this one.
-    std::vector<std::string>* ioQueue;
-    size_t numDiscarded;
-    bool stop;
-    {
-      auto data = data_.lock();
-      ioQueue = data->getCurrentQueue();
-      while (ioQueue->empty() && !data->stop) {
-        messageReady_.wait(data.getUniqueLock());
-      }
-    }
-    }
-    
-    
-    {} // namespace folly
-
-    
-    void LogConfig::update(const LogConfig& other) {
-  // Update handlerConfigs_ with all of the entries from the other LogConfig.
-  // Any entries already present in our handlerConfigs_ are replaced wholesale.
-  for (const auto& entry : other.handlerConfigs_) {
-    if (entry.second.type.hasValue()) {
-      // This is a complete LogHandlerConfig that should be inserted
-      // or completely replace an existing handler config with this name.
-      auto result = handlerConfigs_.insert(entry);
-      if (!result.second) {
-        result.first->second = entry.second;
-      }
-    } else {
-      // This config is updating an existing LogHandlerConfig rather than
-      // completely replacing it.
-      auto iter = handlerConfigs_.find(entry.first);
-      if (iter == handlerConfigs_.end()) {
-        throw std::invalid_argument(to<std::string>(
-            'cannot update configuration for unknown log handler \'',
-            entry.first,
-            '\''));
-      }
-      iter->second.update(entry.second);
-    }
-  }
-    }
-    
-    /**
- * LogConfig contains configuration for the LoggerDB.
- *
- * This includes information about the log levels for log categories,
- * as well as what log handlers are configured and which categories they are
- * attached to.
- */
-class LogConfig {
- public:
-  using CategoryConfigMap = std::unordered_map<std::string, LogCategoryConfig>;
-  using HandlerConfigMap = std::unordered_map<std::string, LogHandlerConfig>;
-    }
-    
-        static __thread char buf[INET6_ADDRSTRLEN];
-    
-                if (ssl) {
-                sent = SSL_write(ssl, message->data, (int) message->length);
-                if (sent == (ssize_t) message->length) {
-                    wasTransferred = false;
-                    return true;
-                } else if (sent < 0) {
-                    switch (SSL_get_error(ssl, (int) sent)) {
-                    case SSL_ERROR_WANT_READ:
-                        break;
-                    case SSL_ERROR_WANT_WRITE:
-                        if ((getPoll() & UV_WRITABLE) == 0) {
-                            setPoll(getPoll() | UV_WRITABLE);
-                            changePoll(this);
-                        }
-                        break;
-                    default:
-                        return false;
-                    }
-                }
-            } else {
-                sent = ::send(getFd(), message->data, message->length, MSG_NOSIGNAL);
-                if (sent == (ssize_t) message->length) {
-                    wasTransferred = false;
-                    return true;
-                } else if (sent == SOCKET_ERROR) {
-                    if (!nodeData->netContext->wouldBlock()) {
-                        return false;
-                    }
-                } else {
-                    message->length -= sent;
-                    message->data += sent;
-                }
-    }
-    
-    bool parseURI(std::string &uri, bool &secure, std::string &hostname, int &port, std::string &path) {
-    port = 80;
-    secure = false;
-    size_t offset = 5;
-    if (!uri.compare(0, 6, 'wss://')) {
-        port = 443;
-        secure = true;
-        offset = 6;
-    } else if (uri.compare(0, 5, 'ws://')) {
-        return false;
-    }
-    }
-    
-    // this should be put in the Loop as a general 'post' function always available
-struct Async : Poll {
-    void (*cb)(Async *);
-    Loop *loop;
-    void *data;
-    }
-    
-    template <bool isServer>
-class ExtensionsNegotiator {
-protected:
-    int options;
+    template <typename ConstBufferSequence, typename Handler>
+class descriptor_write_op
+  : public descriptor_write_op_base<ConstBufferSequence>
+{
 public:
-    ExtensionsNegotiator(int wantedOptions);
-    std::string generateOffer();
-    void readOffer(std::string offer);
-    int getNegotiatedOptions();
+  BOOST_ASIO_DEFINE_HANDLER_PTR(descriptor_write_op);
+    }
+    
+    #if !defined(BOOST_ASIO_WINDOWS_RUNTIME)
+    
+    namespace boost {
+namespace asio {
+namespace detail {
+    }
+    }
+    }
+    
+    template <typename Function, typename Context>
+inline void invoke(const Function& function, Context& context)
+{
+#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
+  Function tmp(function);
+  tmp();
+#else
+  using boost::asio::asio_handler_invoke;
+  asio_handler_invoke(function, boost::asio::detail::addressof(context));
+#endif
+}
+    
+    namespace boost {
+namespace asio {
+namespace detail {
+    }
+    }
+    }
+    
+    // LogTest::initial_offset_last_record_offsets_ must be defined before this.
+int LogTest::num_initial_offset_records_ =
+    sizeof(LogTest::initial_offset_last_record_offsets_)/sizeof(uint64_t);
+    
+      const SnapshotImpl* New(SequenceNumber seq) {
+    SnapshotImpl* s = new SnapshotImpl;
+    s->number_ = seq;
+    s->list_ = this;
+    s->next_ = &list_;
+    s->prev_ = list_.prev_;
+    s->prev_->next_ = s;
+    s->next_->prev_ = s;
+    return s;
+  }
+    
+      // Return an iterator for the specified file number (the corresponding
+  // file length must be exactly 'file_size' bytes).  If 'tableptr' is
+  // non-NULL, also sets '*tableptr' to point to the Table object
+  // underlying the returned iterator, or NULL if no Table object underlies
+  // the returned iterator.  The returned '*tableptr' object is owned by
+  // the cache and should not be deleted, and is valid for as long as the
+  // returned iterator is live.
+  Iterator* NewIterator(const ReadOptions& options,
+                        uint64_t file_number,
+                        uint64_t file_size,
+                        Table** tableptr = NULL);
+    
+    // Returns a new environment that stores its data in memory and delegates
+// all non-file-storage tasks to base_env. The caller must delete the result
+// when it is no longer needed.
+// *base_env must remain live while the result is in use.
+Env* NewMemEnv(Env* base_env);
+    
+      // Random reads.
+  ASSERT_OK(env_->NewRandomAccessFile('/dir/f', &rand_file));
+  ASSERT_OK(rand_file->Read(6, 5, &result, scratch)); // Read 'world'.
+  ASSERT_EQ(0, result.compare('world'));
+  ASSERT_OK(rand_file->Read(0, 5, &result, scratch)); // Read 'hello'.
+  ASSERT_EQ(0, result.compare('hello'));
+  ASSERT_OK(rand_file->Read(10, 100, &result, scratch)); // Read 'd'.
+  ASSERT_EQ(0, result.compare('d'));
+    
+    
+    {
+    {    // Decode next entry
+    uint32_t shared, non_shared, value_length;
+    p = DecodeEntry(p, limit, &shared, &non_shared, &value_length);
+    if (p == NULL || key_.size() < shared) {
+      CorruptionError();
+      return false;
+    } else {
+      key_.resize(shared);
+      key_.append(p, non_shared);
+      value_ = Slice(p + non_shared, value_length);
+      while (restart_index_ + 1 < num_restarts_ &&
+             GetRestartPoint(restart_index_ + 1) < current_) {
+        ++restart_index_;
+      }
+      return true;
+    }
+  }
 };
+    
+    
+    {}  // namespace leveldb
+    
+    Status Footer::DecodeFrom(Slice* input) {
+  const char* magic_ptr = input->data() + kEncodedLength - 8;
+  const uint32_t magic_lo = DecodeFixed32(magic_ptr);
+  const uint32_t magic_hi = DecodeFixed32(magic_ptr + 4);
+  const uint64_t magic = ((static_cast<uint64_t>(magic_hi) << 32) |
+                          (static_cast<uint64_t>(magic_lo)));
+  if (magic != kTableMagicNumber) {
+    return Status::Corruption('not an sstable (bad magic number)');
+  }
+    }
+    
+    #include 'leveldb/iterator.h'
+    
+    const std::string kKernelSyscallAddrModifiedPath = '/sys/kernel/camb/syscall_addr_modified';
+const std::string kKernelTextHashPath = '/sys/kernel/camb/text_segment_hash';
+    
+     public:
+  /**
+   * @brief The std::thread entrypoint.
+   *
+   * This is used by the Dispatcher only.
+   */
+  virtual void run() final;
+    
+      /**
+   * @brief A synonym for osquery::Status::getMessage()
+   *
+   * @see getMessage()
+   */
+  std::string toString() const { return getMessage(); }
+  std::string what() const { return getMessage(); }
+    
+      /**
+   * @brief Move a function callable into the initializer to be called.
+   *
+   * Install an optional platform method to call when waiting for shutdown.
+   * This exists for Windows when the daemon must wait for the service to stop.
+   */
+  void installShutdown(std::function<void()>& handler);
+    
+    #include 'osquery/core/json.h'
+    
+    namespace osquery {
+    }
+    
+    std::string stringFromCFAbsoluteTime(const CFDataRef& cf_abstime) {
+  double value;
+  if (CFNumberGetValue((CFNumberRef)cf_abstime, kCFNumberFloat64Type, &value)) {
+    // Add seconds difference between CFAbsoluteTime and UNIX times.
+    value += kCFAbsoluteTimeIntervalSince1970;
+    }
+    }
+    
+    #include <yoga/Yoga.h>
+    
+        Size callMeasureFunc(double width, int widthMode, double height, int heightMode) const;
+    
+    #include <nbind/api.h>
+#include <nbind/BindDefiner.h>
+    
+    #pragma once
+    
+    
+    {}
+
+    
+    
+    {  // There are subtle issues with calling the next functions directly. It is
+  // much better to always use a ThreadScope to manage attaching/detaching for
+  // you.
+  FBEXPORT static JNIEnv* ensureCurrentThreadIsAttached();
+  FBEXPORT static void detachCurrentThread();
+};
+    
+    #pragma once
+    
+    FBEXPORT void assertInternal(const char* formatstr, ...) __attribute__((noreturn));
