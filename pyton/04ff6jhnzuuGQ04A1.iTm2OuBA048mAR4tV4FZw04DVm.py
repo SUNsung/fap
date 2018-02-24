@@ -1,113 +1,124 @@
 
         
-            # a Sequential inside a Sequential
-    inner_model = Sequential()
-    inner_model.add(Dense(2, input_dim=1))
-    outer_model = Sequential()
-    outer_model.add(inner_model)
-    assert outer_model.trainable_weights == inner_model.trainable_weights
-    inner_model.trainable = False
-    assert outer_model.trainable_weights == []
-    inner_model.trainable = True
-    inner_model.layers[-1].trainable = False
-    assert outer_model.trainable_weights == []
+            out = issue_template_tmpl % {'version': locals()['__version__']}
     
-    # Embedding
-max_features = 20000
-maxlen = 100
-embedding_size = 128
     
-        if member.__doc__ is None and not member_too_small(member):
-        raise ValueError('{} class doesn't have any documentation'.format(name),
-                         member.__module__, inspect.getmodule(member).__file__)
-    for n, met in inspect.getmembers(member):
-        if inspect.ismethod(met):
-            handle_method(n, met)
+total_bytes = 0
     
-            # Test equivalence of convert_dense_weights_data_format
-        out1 = model1.predict(x)
-        layer_utils.convert_dense_weights_data_format(model1.layers[2], prev_shape, target_data_format)
-        for (src, dst) in zip(model1.layers, model2.layers):
-            dst.set_weights(src.get_weights())
-        out2 = model2.predict(transpose(x))
+    from test.helper import try_rm
     
+        def _real_extract(self, url):
+        mobj = re.match(self._VALID_URL, url)
+        video_id = mobj.group('id')
+    
+            # API is inconsistent with errors
+        if 'url' not in api_response or not api_response['url'] or 'error' in api_response:
+            raise ExtractorError('Invalid url %s' % url)
+    
+            info = page['info']
+    
+    
+def test_unicode_digest_auth(httpbin):
+    # it doesn't really authenticate us because httpbin
+    # doesn't interpret the utf8-encoded auth
+    http('--auth-type=digest',
+         '--auth', u'test:%s' % UNICODE,
+         httpbin.url + u'/digest-auth/auth/test/' + UNICODE)
+
+    
+        def __init__(self, output_file=None,
+                 resume=False, progress_file=sys.stderr):
         '''
-    model = Sequential()
-    model.add(layers.Embedding(10, 10, mask_zero=True))
-    model.add(layers.Activation('softmax'))
-    model.compile(loss='categorical_crossentropy',
-                  optimizer='adam')
+        :param resume: Should the download resume if partial download
+                       already exists.
+        :type resume: bool
     
-        def fn_output_shape(tup):
-        s1, s2 = tup
-        return (s1[0], s1[1] + s2[1]) + s1[2:]
+        # 128+2 SIGINT <http://www.tldp.org/LDP/abs/html/exitcodes.html>
+    ERROR_CTRL_C = 130
+    
+    Py3 = sys.version_info[0] == 3
     
     
-@keras_test
-def test_vector_regression():
+def test(model, dataset):
+  '''Perform an evaluation of `model` on the examples from `dataset`.'''
+  avg_loss = tfe.metrics.Mean('loss')
+  accuracy = tfe.metrics.Accuracy('accuracy')
+    
+    import os
+    
+        # Get options and arguments.
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], _short_options, _options)
+    except getopt.GetoptError as e:
+        log.wtf('''
+    [Fatal] {}.
+    Try '{} --help' for more options.'''.format(e, script_name))
+    
+    def kugou_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    if url.lower().find('5sing')!=-1:
+        #for 5sing.kugou.com
+        html=get_html(url)
+        ticket=r1(r''ticket':\s*'(.*)'',html)
+        j=loads(str(b64decode(ticket),encoding='utf-8'))
+        url=j['file']
+        title=j['songName']
+        songtype, ext, size = url_info(url)
+        print_info(site_info, title, songtype, size)
+        if not info_only:
+            download_urls([url], title, ext, size, output_dir, merge=merge)
+    else:
+        #for the www.kugou.com/
+        return kugou_download_playlist(url, output_dir=output_dir, merge=merge, info_only=info_only)
+        # raise NotImplementedError(url)       
+    
+    def kuwo_playlist_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    html=get_content(url)
+    matched=set(re.compile('yinyue/(\d+)').findall(html))#reduce duplicated
+    for rid in matched:
+        kuwo_download_by_rid(rid,output_dir,merge,info_only)
+    
+        print_info(site_info, title, ext, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir=output_dir, merge=merge)
+    
+    from html.parser import HTMLParser
+    
+        @classmethod
+    def setUpClass(cls):
+        cls.dec_obs = DecimalViewer()
+        cls.hex_obs = HexViewer()
+        cls.sub = Data('Data')
+        # inherited behavior already tested with TestSubject
+        cls.sub.attach(cls.dec_obs)
+        cls.sub.attach(cls.hex_obs)
+    
+        def __init__(self, msg_center):
+        self.provider = msg_center
+    
+    
+class BaseRegisteredClass(object):
+    __metaclass__ = RegistryHolder
     '''
-    Perform float data prediction (regression) using 2 layer MLP
-    with tanh and sigmoid activations.
+        Any class that will inherits from BaseRegisteredClass will be included
+        inside the dict RegistryHolder.REGISTRY, the key being the name of the
+        class and the associated value, the class itself.
     '''
-    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=500,
-                                                         num_test=200,
-                                                         input_shape=(20,),
-                                                         output_shape=(num_classes,),
-                                                         classification=False)
-    
-    from keras.models import Sequential
-from keras.layers import Dense, Activation
-from keras.legacy.layers import Merge
-from keras.utils import np_utils
-from keras.utils.test_utils import get_test_data, keras_test
-from keras.models import model_from_json, model_from_yaml
-    
-        def can_fit_vehicle(self, vehicle):
-        if self.vehicle is not None:
-            return False
-        return vehicle.can_fit_in_spot(self)
-    
-        @mock.patch('certbot_compatibility_test.validator.requests.get')
-    def test_succesful_redirect(self, mock_get_request):
-        mock_get_request.return_value = create_response(
-            301, {'location': 'https://test.com'})
-        self.assertTrue(self.validator.redirect('test.com'))
-    
-    
-def downgrade():
-    op.drop_column('tables', 'is_featured')
-    
-    
-def downgrade():
-    op.drop_constraint(None, 'dashboards', type_='unique')
-    op.drop_column('dashboards', 'slug')
-
-    
-    
-def downgrade():
     pass
-
     
+        def test_3rd_am_station_after_scan(self):
+        self.radio.scan()
+        station = self.radio.state.stations[self.radio.state.pos]
+        expected_station = '1510'
+        self.assertEqual(station, expected_station)
     
-def downgrade():
-    op.drop_column('logs', 'slice_id')
-    op.drop_column('logs', 'dashboard_id')
-
+        def main_method(self):
+        '''will execute either _static_method_1 or _static_method_2
     
-    # revision identifiers, used by Alembic.
-revision = '4500485bde7d'
-down_revision = '41f6a59a61f2'
-    
-    
-def downgrade():
-    op.drop_table('slice_user')
-    op.drop_table('dashboard_user')
-
-    
-    Revision ID: 55179c7f25c7
-Revises: 315b3f4da9b0
-Create Date: 2015-12-13 08:38:43.704145
-    
-    
-def downgrade():
-    op.drop_column('query', 'results_key')
+        # 优先获取执行文件目录的配置文件
+    here = sys.path[0]
+    for file in os.listdir(here):
+        if re.match(r'(.+)\.json', file):
+            file_name = os.path.join(here, file)
+            with open(file_name, 'r') as f:
+                print('Load config file from {}'.format(file_name))
+                return json.load(f)
