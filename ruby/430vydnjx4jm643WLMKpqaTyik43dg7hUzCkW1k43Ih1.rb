@@ -1,179 +1,196 @@
 
         
-            # Returns the unwrapped subject and body of the last commit
-    # <b>DEPRECATED:</b> Use <tt>last_git_commit_message</tt> instead.
-    def self.last_git_commit
-      UI.important('`last_git_commit` is deprecated. Please use `last_git_commit_message` instead.')
-      last_git_commit_message
-    end
-    
-          def self.available_options
-        [
-          FastlaneCore::ConfigItem.new(key: :name,
-                                       env_name: 'KEYCHAIN_NAME',
-                                       description: 'Keychain name',
-                                       conflicting_options: [:path],
-                                       is_string: true,
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :path,
-                                       env_name: 'KEYCHAIN_PATH',
-                                       description: 'Path to keychain',
-                                       is_string: true,
-                                       conflicting_options: [:name],
-                                       optional: true),
-          FastlaneCore::ConfigItem.new(key: :password,
-                                       env_name: 'KEYCHAIN_PASSWORD',
-                                       description: 'Password for the keychain',
-                                       sensitive: true,
-                                       optional: false),
-          FastlaneCore::ConfigItem.new(key: :default_keychain,
-                                       description: 'Should the newly created Keychain be the new system default keychain',
-                                       is_string: false,
-                                       default_value: false),
-          FastlaneCore::ConfigItem.new(key: :unlock,
-                                       description: 'Unlock keychain after create',
-                                       is_string: false,
-                                       default_value: false),
-          FastlaneCore::ConfigItem.new(key: :timeout,
-                                       description: 'timeout interval in seconds. Set `false` if you want to specify 'no time-out'',
-                                       is_string: false,
-                                       default_value: 300),
-          FastlaneCore::ConfigItem.new(key: :lock_when_sleeps,
-                                       description: 'Lock keychain when the system sleeps',
-                                       is_string: false,
-                                       default_value: false),
-          FastlaneCore::ConfigItem.new(key: :lock_after_timeout,
-                                       description: 'Lock keychain after timeout interval',
-                                       is_string: false,
-                                       default_value: false),
-          FastlaneCore::ConfigItem.new(key: :add_to_search_list,
-                                       description: 'Add keychain to search list',
-                                       is_string: false,
-                                       default_value: true)
-        ]
-      end
-    
-          it 'gets the correct version number for 'TargetATests'' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          get_version_number(xcodeproj: '.xcproject', target: 'TargetATests')
-        end').runner.execute(:test)
-        expect(result).to eq('4.3.2')
-      end
-    
-            if b_length > a_length
-          (b_length - a_length).times { a_split.insert(-2, 0) }
-        elsif a_length > b_length
-          (a_length - b_length).times { b_split.insert(-2, 0) }
-        end
-    
-        def type=(value)
-      @type = value.try :strip
-    end
-    
-        delegate :empty?, :blank?, to: :pages
-    
-        def request_one(url)
-      Response.new read_file(file_path_for(url)), URL.parse(url)
-    end
-    
-              # Built-in events
-          if node['id'] == 'Events-catalog'
-            node.next_element.css('li').each do |li|
-              name = '#{li.at_css('b').content.delete(''').strip} event'
-              id = name.parameterize
-              li['id'] = id
-              entries << [name, id, type] unless name == entries.last[0]
-            end
-            next
-          end
-    
-              css('##{dom_id}-methods ~ h4 code').each do |node|
-            next unless name = node.content[/\('(\w+)'\)/, 1]
-            id = node.parent['id'] = '#{dom_id}-#{name.parameterize}-method'
-            name.prepend '#{dom_id.singularize.titleize}: '
-            name << ' (method)'
-            entries << [name, id]
-          end
-        end
-    
-    ###
-### methods
-###
-    
-        def new_timestamp(time = Time.now)
-      time = time.utc
-    
-        # Creates an Attachment object. +name+ is the name of the attachment,
-    # +instance+ is the model object instance it's attached to, and
-    # +options+ is the same as the hash passed to +has_attached_file+.
-    #
-    # Options include:
-    #
-    # +url+ - a relative URL of the attachment. This is interpolated using +interpolator+
-    # +path+ - where on the filesystem to store the attachment. This is interpolated using +interpolator+
-    # +styles+ - a hash of options for processing the attachment. See +has_attached_file+ for the details
-    # +only_process+ - style args to be run through the post-processor. This defaults to the empty list (which is
-    #                  a special case that indicates all styles should be processed)
-    # +default_url+ - a URL for the missing image
-    # +default_style+ - the style to use when an argument is not specified e.g. #url, #path
-    # +storage+ - the storage mechanism. Defaults to :filesystem
-    # +use_timestamp+ - whether to append an anti-caching timestamp to image URLs. Defaults to true
-    # +whiny+, +whiny_thumbnails+ - whether to raise when thumbnailing fails
-    # +use_default_time_zone+ - related to +use_timestamp+. Defaults to true
-    # +hash_digest+ - a string representing a class that will be used to hash URLs for obfuscation
-    # +hash_data+ - the relative URL for the hash data. This is interpolated using +interpolator+
-    # +hash_secret+ - a secret passed to the +hash_digest+
-    # +convert_options+ - flags passed to the +convert+ command for processing
-    # +source_file_options+ - flags passed to the +convert+ command that controls how the file is read
-    # +processors+ - classes that transform the attachment. Defaults to [:thumbnail]
-    # +preserve_files+ - whether to keep files on the filesystem when deleting or clearing the attachment. Defaults to false
-    # +filename_cleaner+ - An object that responds to #call(filename) that will strip unacceptable charcters from filename
-    # +interpolator+ - the object used to interpolate filenames and URLs. Defaults to Paperclip::Interpolations
-    # +url_generator+ - the object used to generate URLs, using the interpolator. Defaults to Paperclip::UrlGenerator
-    # +escape_url+ - Perform URI escaping to URLs. Defaults to true
-    def initialize(name, instance, options = {})
-      @name              = name.to_sym
-      @name_string       = name.to_s
-      @instance          = instance
-    
-        def each_definition
-      @attachments.each do |klass, attachments|
-        attachments.each do |name, options|
-          yield klass, name, options
-        end
-      end
-    end
-    
-        def type_from_mime_magic
-      @type_from_mime_magic ||= File.open(@filepath) do |file|
-        MimeMagic.by_magic(file).try(:type)
-      end
-    end
-    
-        # Returns the #to_param of the instance.
-    def param attachment, style_name
-      attachment.instance.to_param
-    end
-    
-          class ValidateAttachmentContentTypeMatcher
-        def initialize attachment_name
-          @attachment_name = attachment_name
-          @allowed_types = []
-          @rejected_types = []
-        end
-    
-              @subject.send(@attachment_name).post_processing = false
-          @subject.send(@attachment_name).assign(file)
-          @subject.valid?
-          @subject.errors[:'#{@attachment_name}_file_size'].blank?
-        ensure
-          @subject.send(@attachment_name).post_processing = true
-        end
-    
-      # Get list of styles saved on previous deploy (running rake paperclip:refresh:missing_styles)
-  def self.get_registered_attachments_styles
-    YAML.load_file(Paperclip.registered_attachments_styles_path)
-  rescue Errno::ENOENT
-    nil
+            assert_equal 'foo', output_buffer, 'javascript_tag without a block should not concat to output_buffer'
   end
-  private_class_method :get_registered_attachments_styles
+    
+    require 'rails-dom-testing'
+    
+            def test_url_sub_key_for_sqlite3
+          spec = resolve :production, 'production' => { 'url' => 'sqlite3:foo?encoding=utf8' }
+          assert_equal({
+            'adapter'  => 'sqlite3',
+            'database' => 'foo',
+            'encoding' => 'utf8',
+            'name'     => 'production' }, spec)
+        end
+    
+            def columns
+          @tables.flat_map(&:column_aliases)
+        end
+    
+      test 'helpers' do
+    assert_response_code_range 200..299, :successful?
+    assert_response_code_range [404],    :not_found?
+    assert_response_code_range 300..399, :redirection?
+    assert_response_code_range 500..599, :server_error?
+    assert_response_code_range 400..499, :client_error?
+  end
+    
+          def index
+        self.response_body = @list.join(', ')
+      end
+    
+        included do
+      # Do not make this inheritable, because we always want it to propagate
+      cattr_accessor :raise_delivery_errors, default: true
+      cattr_accessor :perform_deliveries, default: true
+      cattr_accessor :deliver_later_queue_name, default: :mailers
+    
+        # Returns +text+ wrapped at +len+ columns and indented +indent+ spaces.
+    # By default column length +len+ equals 72 characters and indent
+    # +indent+ equal two spaces.
+    #
+    #   my_text = 'Here is a sample text with more than 40 characters'
+    #
+    #   format_paragraph(my_text, 25, 4)
+    #   # => '    Here is a sample text with\n    more than 40 characters'
+    def format_paragraph(text, len = 72, indent = 2)
+      sentences = [[]]
+    
+          module ClassMethods
+        def tests(mailer)
+          case mailer
+          when String, Symbol
+            self._mailer_class = mailer.to_s.camelize.constantize
+          when Module
+            self._mailer_class = mailer
+          else
+            raise NonInferrableMailerError.new(mailer)
+          end
+        end
+    
+    def each_schema_load_environment
+  # If we're in development, also run this for the test environment.
+  # This is a somewhat hacky way to do this, so here's why:
+  # 1. We have to define this before we load the schema, or we won't
+  #    have a timestamp_id function when we get to it in the schema.
+  # 2. db:setup calls db:schema:load_if_ruby, which calls
+  #    db:schema:load, which we define above as having a prerequisite
+  #    of this task.
+  # 3. db:schema:load ends up running
+  #    ActiveRecord::Tasks::DatabaseTasks.load_schema_current, which
+  #    calls a private method `each_current_configuration`, which
+  #    explicitly also does the loading for the `test` environment
+  #    if the current environment is `development`, so we end up
+  #    needing to do the same, and we can't even use the same method
+  #    to do it.
+    
+    describe Settings::PreferencesController do
+  render_views
+    
+        grouped_codes = codes.reduce([]) do |agg, current|
+      if current[1]
+        agg << [current[0]]
+      else
+        agg.last << current[0]
+        agg
+      end
+    end
+    
+    describe OsxfuseRequirement do
+  subject { described_class.new([]) }
+    
+            def initialize
+          @values = []
+        end
+    
+          def stage_set?
+        !!fetch(:stage, false)
+      end
+    
+      desc 'Revert server(s) to previous release.'
+  task :reverting do
+  end
+    
+      entries.each do |entry|
+    if File.exist?(entry[:file])
+      warn '[skip] #{entry[:file]} already exists'
+    else
+      File.open(entry[:file], 'w+') do |f|
+        f.write(ERB.new(File.read(entry[:template])).result(binding))
+        puts I18n.t(:written_file, scope: :capistrano, file: entry[:file])
+      end
+    end
+  end
+    
+      it 'provides a --format option which enables the choice of output formatting'
+    
+        if run? && ARGV.any?
+      require 'optparse'
+      OptionParser.new { |op|
+        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
+        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
+        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
+        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
+        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
+        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
+      }.parse!(ARGV.dup)
+    end
+  end
+    
+          def call(env)
+        status, headers, body = super
+        response = Rack::Response.new(body, status, headers)
+        request = Rack::Request.new(env)
+        remove_bad_cookies(request, response)
+        response.finish
+      end
+    
+    
+  it 'should allow changing the protection mode to a string' do
+    # I have no clue what other modes are available
+    mock_app do
+      use Rack::Protection::FrameOptions, :frame_options => 'ALLOW-FROM foo'
+      run DummyApp
+    end
+    
+      it 'should set the X-XSS-Protection' do
+    expect(get('/', {}, 'wants' => 'text/html;charset=utf-8').headers['X-XSS-Protection']).to eq('1; mode=block')
+  end
+    
+        def definitions_for(klass)
+      parent_classes = klass.ancestors.reverse
+      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
+        inherited_definitions.deep_merge! @attachments[ancestor]
+      end
+    end
+  end
+end
+
+    
+        def type_from_file_contents
+      type_from_mime_magic || type_from_file_command
+    rescue Errno::ENOENT => e
+      Paperclip.log('Error while determining content type: #{e}')
+      SENSIBLE_DEFAULT
+    end
+    
+        def cropping dst, ratio, scale
+      if ratio.horizontal? || ratio.square?
+        '%dx%d+%d+%d' % [ dst.width, dst.height, 0, (self.height * scale - dst.height) / 2 ]
+      else
+        '%dx%d+%d+%d' % [ dst.width, dst.height, (self.width * scale - dst.width) / 2, 0 ]
+      end
+    end
+    
+        def define_instance_getter
+      name = @name
+      options = @options
+    
+            def expected_attachment
+          'Expected #{@attachment_name}:\n'
+        end
+    
+        def load_processor(name)
+      if defined?(Rails.root) && Rails.root
+        filename = '#{name.to_s.underscore}.rb'
+        directories = %w(lib/paperclip lib/paperclip_processors)
+    
+          expect('.all-buttons').to have_ruleset(ruleset)
+    end
+  end
+    
+    describe 'margin' do
+  before(:all) do
+    ParserSupport.parse_file('library/margin')
+  end
