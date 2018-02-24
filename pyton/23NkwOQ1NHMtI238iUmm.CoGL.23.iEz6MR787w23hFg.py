@@ -1,68 +1,148 @@
 
         
         
-def add_error(line_num, message):
-    '''adds an error to the dynamic error list'''
-    err = '(L{:03d}) {}'.format(line_num + 1, message)
-    errors.append(err)
+PACKAGES = [
+    'httpie',
+    'requests',
+    'pygments',
+]
     
-            X_test = X[-n_test_samples:]
-        Y_test = Y[-n_test_samples:]
-        X = X[:(i * step)]
-        Y = Y[:(i * step)]
+    
+with codecs.open(FILE_PATH, encoding='utf8') as f:
+    # Strip because we don't want new lines in the data so that we can
+    # easily count occurrences also when embedded in JSON (where the new
+    # line would be escaped).
+    FILE_CONTENT = f.read().strip()
+    
+    
+def rst_filenames():
+    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
+        if '.tox' not in root:
+            for filename in fnmatch.filter(filenames, '*.rst'):
+                yield os.path.join(root, filename)
+    
+    
+def test_max_redirects(httpbin):
+    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
+             error_exit_ok=True)
+    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+
+    
+            Referer:http://httpie.org  Cookie:foo=bar  User-Agent:bacon/1.0
+    
+        def has_password(self):
+        return self.value is not None
+    
+    
+def main():
+    num_args = len(sys.argv)
+    if num_args < 2:
+        print('No file passed (file should contain Markdown table syntax)')
+        sys.exit(1)
+    
+        data_train = fetch_20newsgroups_vectorized(subset='train')
+    data_test = fetch_20newsgroups_vectorized(subset='test')
+    X_train = check_array(data_train.data, dtype=np.float32,
+                          accept_sparse='csc')
+    X_test = check_array(data_test.data, dtype=np.float32, accept_sparse='csr')
+    y_train = data_train.target
+    y_test = data_test.target
+    
+        it = 0
+    
+            start = time.time()
+        func(X, n_jobs=1)
+        one_core.append(time.time() - start)
     
     
 if __name__ == '__main__':
-    from mpl_toolkits.mplot3d import axes3d  # register the 3d projection
-    import matplotlib.pyplot as plt
+    ###########################################################################
+    # Option parser
+    ###########################################################################
+    op = optparse.OptionParser()
+    op.add_option('--n-times',
+                  dest='n_times', default=5, type=int,
+                  help='Benchmark results are average over n_times experiments')
     
-        #------------------------------------------------------------
-    # varying k
-    k_results_build = dict([(alg, np.zeros(len(krange)))
-                            for alg in algorithms])
-    k_results_query = dict([(alg, np.zeros(len(krange)))
-                            for alg in algorithms])
+        package is the name of the root module of the package
     
-        op.add_option('--eps',
-                  dest='eps', default=0.5, type=float,
-                  help='See the documentation of the underlying transformers.')
+    try:
+    from urllib import urlopen
+except ImportError:
+    from urllib.request import urlopen
     
-       ###########################################################################
-    # Set custom automatic method selection
-    sampling_algorithm['custom-auto'] = \
-        lambda n_population, n_samples, random_state=None: \
-            sample_without_replacement(n_population,
-                                       n_samples,
-                                       method='auto',
-                                       random_state=random_state)
+            clf_score = brier_score_loss(y_test, prob_pos, pos_label=y.max())
+        print('%s:' % name)
+        print('\tBrier: %1.3f' % (clf_score))
+        print('\tPrecision: %1.3f' % precision_score(y_test, y_pred))
+        print('\tRecall: %1.3f' % recall_score(y_test, y_pred))
+        print('\tF1: %1.3f\n' % f1_score(y_test, y_pred))
+    
+        t0 = time()
+    scores = uniform_labelings_scores(score_func, n_samples, n_clusters_range)
+    print('done in %0.3fs' % (time() - t0))
+    plots.append(plt.errorbar(
+        n_clusters_range, np.median(scores, axis=1), scores.std(axis=1))[0])
+    names.append(score_func.__name__)
+    
+        def test_conflicts(self):
+        # Note: Defined IP is more important than defined port in match
+        self.assertTrue(self.addr.conflicts(self.addr1))
+        self.assertTrue(self.addr.conflicts(self.addr2))
+        self.assertTrue(self.addr.conflicts(self.addr_defined))
+        self.assertFalse(self.addr.conflicts(self.addr_default))
+    
+    For full examples, see `certbot.plugins`.
+    
+        long_description = README,
+    
+        stream_types = [
+        {'id': '720p HD'},
+        {'id': '360p SD'},
+    ]
+    
+    from ..common import *
+from ..extractor import VideoExtractor
+    
+    print 'PLUGIN_I18N_PATHS := ' + ','.join(os.path.relpath(plugin.path)
+                                         for plugin in plugins
+                                         if plugin.needs_translation)
+    
+        def setup_app_env(self, environ, start_response):
+        PylonsApp.setup_app_env(self, environ, start_response)
+    
+    api('wikipagelisting', WikiPageListingJsonTemplate)
+api('wikipagediscussions', WikiJsonTemplate)
+api('wikipagesettings', WikiSettingsJsonTemplate)
+    
+            An iden is given as the `captcha` field with a `BAD_CAPTCHA`
+        error, you should use this endpoint if you get a
+        `BAD_CAPTCHA` error response.
+    
+        allowed_render_styles = ('html', 'xml', 'js', 'embed', '', 'compact', 'api')
+    # List of admins to blame (skip the first admin, 'reddit')
+    # If list is empty, just blame 'an admin'
+    admins = g.admins[1:] or ['an admin']
+    def __before__(self):
+        try:
+            c.error_page = True
+            RedditController.__before__(self)
+        except (HTTPMovedPermanently, HTTPFound):
+            # ignore an attempt to redirect from an error page
+            pass
+        except Exception as e:
+            handle_awful_failure('ErrorController.__before__: %r' % e)
+    
+        def post(self):
+        pass
     
     
-if not os.path.exists(DATA_FOLDER):
-    
-        # Print and plot the confusion matrix
-    cm = metrics.confusion_matrix(y_test, y_predicted)
-    print(cm)
-    
-    plt.matshow(data, cmap=plt.cm.Blues)
-plt.title('Original dataset')
-    
-    ax = plt.axes([0.15, 0.04, 0.7, 0.05])
-plt.title('Probability')
-plt.colorbar(imshow_handle, cax=ax, orientation='horizontal')
-    
-    
-class ShutdownRequest( BaseRequest ):
-  def __init__( self ):
-    super( BaseRequest, self ).__init__()
-    
-    
-  def _ThreadMain( self ):
-    while True:
-      time.sleep( self._ping_interval_seconds )
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+def open_accordant_config():
+    '''
+    调用配置文件
+    '''
+    screen_size = _get_screen_size()
+    config_file = '{path}/config/{screen_size}/config.json'.format(
+        path=sys.path[0],
+        screen_size=screen_size
+    )
