@@ -1,56 +1,49 @@
 
         
-        #include <osquery/registry.h>
-#include <osquery/status.h>
+          void emitObjCGetterDescriptorParts(IRGenModule &IGM,
+                                     AbstractStorageDecl *subscript,
+                                     llvm::Constant *&selectorRef,
+                                     llvm::Constant *&atEncoding,
+                                     llvm::Constant *&impl);
     
-      /// Protector for broadcast lookups and external registry mutations.
-  mutable Mutex mutex_;
+    /// A utility for finding dead-end blocks.
+///
+/// Dead-end blocks are blocks from which there is no path to the function exit
+/// (either return or throw). These are blocks which end with an unreachable
+/// instruction and blocks from which all paths end in 'unreachable' blocks.
+/// This utility is needed to determine if the a value definition can have a
+/// lack of users ignored along a specific path.
+class DeadEndBlocks {
+  llvm::SetVector<const SILBasicBlock *> ReachableBlocks;
+  const SILFunction *F;
+  bool isComputed = false;
+    }
+    
+    #ifndef SWIFT_AST_SUBSTITUTION_LIST_H
+#define SWIFT_AST_SUBSTITUTION_LIST_H
+    
+    #include 'llvm/Support/raw_ostream.h'
     
     /**
- * @brief Mimic the REGISTER macro, extensions should use this helper.
+ * @brief Initialize the extensions socket path variable for osqueryi.
  *
- * The SDK does not provide a REGISTER macro for modules or extensions.
- * Tools built with the osquery SDK should use REGISTER_EXTERNAL to add to
- * their own 'external' registry. This registry will broadcast to the osquery
- * extension manager (core) in an extension.
+ * If the shell is invoked with a default extensions_socket flag there is a
+ * chance the path is 'overloaded' by multiple shells, use this method to
+ * determine a unique user-local path.
  *
- * osquery 'modules' should not construct their plugin registrations in
- * global scope (global construction time). Instead they should use the
- * module call-in well defined symbol, declare their SDK constraints, then
- * use the REGISTER_MODULE call within `initModule`.
+ * @param home to user's home directory.
  */
-#define REGISTER_EXTERNAL(t, r, n)                                             \
-  namespace registries {                                                       \
-  const ::osquery::registries::PI<t> k##ExtensionRegistryItem##t(r, n, false); \
-  }
+void initShellSocket(const std::string& home);
     
-    /**
- * @brief Converts a struct tm to ASCII time UTC by converting the tm_time to
- * epoch and then running gmtime() on the new epoch
- *
- * @param tm_time the local time/date to covert to UTC ASCII time
- *
- * @return the data/time of tm_time in the format: 'Wed Sep 21 10:27:52 2011'
- */
-std::string toAsciiTimeUTC(const struct tm* tm_time);
-    
-    #pragma once
-    
-    
-    {
-    {  return readFile(value, pack);
-}
-}
-
-    
-    #include 'osquery/config/plugins/tls_config.h'
-#include 'osquery/core/conversions.h'
-#include 'osquery/core/json.h'
-#include 'osquery/dispatcher/scheduler.h'
-#include 'osquery/remote/requests.h'
-#include 'osquery/remote/serializers/json.h'
-#include 'osquery/remote/transports/tls.h'
-#include 'osquery/remote/utility.h'
+      /**
+   * @brief Attempt to drop privileges to that of the parent of a given path.
+   *
+   * This will return false if privileges could not be dropped or there was
+   * an previous, and still active, request for dropped privileges.
+   *
+   * @return success if privileges were dropped, otherwise false.
+   */
+  bool dropToParent(const boost::filesystem::path& path);
     
     Status TLSConfigPlugin::setUp() {
   if (FLAGS_enroll_always && !FLAGS_disable_enrollment) {
@@ -64,57 +57,68 @@ std::string toAsciiTimeUTC(const struct tm* tm_time);
   }
     }
     
-      std::stringstream result;
-  CFDataGetBytes(cf_data, range, (UInt8*)buffer);
-  for (CFIndex i = 0; i < range.length; ++i) {
-    uint8_t byte = buffer[i];
-    if (isprint(byte)) {
-      result << byte;
-    } else if (buffer[i] == 0) {
-      result << ' ';
-    } else {
-      result << '%' << std::setfill('0') << std::setw(2) << std::hex
-             << (int)byte;
-    }
-  }
-    
-                ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our windows open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-        if (pEvent->m_Pressed == 1)
+    int main(int argc, char** argv)
+{
+    if (argc < 3)
     {
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_LEFTMOUSE)
-            g_MousePressed[0] = true;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_RIGHTMOUSE)
-            g_MousePressed[1] = true;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_MIDDLEMOUSE)
-            g_MousePressed[2] = true;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_MOUSEWHEELUP)
-            io.MouseWheel += pEvent->m_y;
-        if (pEvent->m_Button == S3E_POINTER_BUTTON_MOUSEWHEELDOWN)
-            io.MouseWheel += pEvent->m_y;
+        printf('Syntax: %s [-base85] [-nocompress] <inputfile> <symbolname>\n', argv[0]);
+        return 0;
+    }
     }
     
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_API void        ImGui_Marmalade_InvalidateDeviceObjects();
-IMGUI_API bool        ImGui_Marmalade_CreateDeviceObjects();
+    //---- Don't implement demo windows functionality (ShowDemoWindow()/ShowStyleEditor()/ShowUserGuide() methods will be empty)
+//---- It is very strongly recommended to NOT disable the demo windows. Please read the comment at the top of imgui_demo.cpp.
+//#define IMGUI_DISABLE_DEMO_WINDOWS
+    
+        // Cleanup
+    ImGui_ImplGlfwGL2_Shutdown();
+    ImGui::DestroyContext();
+    glfwTerminate();
     
     
-    {    // At this point note that we set ImGui::GetIO().Fonts->TexID to be == g_FontTexture, so clear both.
-    ImGuiIO& io = ImGui::GetIO();
-    IM_ASSERT(g_FontTexture == io.Fonts->TexID);
-    if (g_FontTexture)
-        g_FontTexture->Release();
-    g_FontTexture = NULL;
-    io.Fonts->TexID = NULL;
-}
+    {        // Rendering
+        int display_w, display_h;
+        glfwGetFramebufferSize(window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+        glClear(GL_COLOR_BUFFER_BIT);
+        ImGui::Render();
+        ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+        glfwSwapBuffers(window);
+    }
     
-    struct GLFWwindow;
+        // Render command lists
+    int vtx_offset = 0;
+    int idx_offset = 0;
+    for (int n = 0; n < draw_data->CmdListsCount; n++)
+    {
+        const ImDrawList* cmd_list = draw_data->CmdLists[n];
+        for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
+        {
+            const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
+            if (pcmd->UserCallback)
+            {
+                pcmd->UserCallback(cmd_list, pcmd);
+            }
+            else
+            {
+                const D3D10_RECT r = { (LONG)pcmd->ClipRect.x, (LONG)pcmd->ClipRect.y, (LONG)pcmd->ClipRect.z, (LONG)pcmd->ClipRect.w };
+                ctx->PSSetShaderResources(0, 1, (ID3D10ShaderResourceView**)&pcmd->TextureId);
+                ctx->RSSetScissorRects(1, &r);
+                ctx->DrawIndexed(pcmd->ElemCount, idx_offset, vtx_offset);
+            }
+            idx_offset += pcmd->ElemCount;
+        }
+        vtx_offset += cmd_list->VtxBuffer.Size;
+    }
+    
+    // GLFW callbacks (registered by default to GLFW if you enable 'install_callbacks' during initialization)
+// Provided here if you want to chain callbacks yourself. You may also handle inputs yourself and use those as a reference.
+IMGUI_API void        ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+IMGUI_API void        ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+IMGUI_API void        ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+IMGUI_API void        ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+
     
     // GLFW callbacks (installed by default if you enable 'install_callbacks' during initialization)
 // Provided here if you want to chain callbacks.
@@ -125,4 +129,41 @@ IMGUI_API void        ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, in
 IMGUI_API void        ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
 
     
-        g_Window = window;
+        // Setup display size (every frame to accommodate for window resizing)
+    int w, h;
+    int display_w, display_h;
+    glfwGetWindowSize(g_Window, &w, &h);
+    glfwGetFramebufferSize(g_Window, &display_w, &display_h);
+    io.DisplaySize = ImVec2((float)w, (float)h);
+    io.DisplayFramebufferScale = ImVec2(w > 0 ? ((float)display_w / w) : 0, h > 0 ? ((float)display_h / h) : 0);
+    
+    TEST_F(StringAppendOperatorTest, PersistentFlushAndCompaction) {
+  // Perform the following operations in limited scope
+  {
+    auto db = OpenDb('\n');
+    StringLists slists(db);
+    std::string a, b, c;
+    bool success;
+    }
+    }
+    
+    JNIEnv* JniCallback::getJniEnv(jboolean* attached) const {
+  return JniUtil::getJniEnv(m_jvm, attached);
+}
+    
+      virtual Status GetUpdatesSince(
+      SequenceNumber seq_number, unique_ptr<TransactionLogIterator>* iter,
+      const TransactionLogIterator::ReadOptions& read_options) override {
+    return db_->GetUpdatesSince(seq_number, iter, read_options);
+  }
+    
+    Status DateTieredDBImpl::Put(const WriteOptions& options, const Slice& key,
+                             const Slice& val) {
+  int64_t timestamp = 0;
+  Status s;
+  s = GetTimestamp(key, &timestamp);
+  if (!s.ok()) {
+    return s;
+  }
+  DropObsoleteColumnFamilies();
+    }
