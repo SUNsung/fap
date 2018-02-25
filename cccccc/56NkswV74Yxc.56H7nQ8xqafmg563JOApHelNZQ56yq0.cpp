@@ -1,99 +1,184 @@
-#include <boost/algorithm/string/join.hpp>
-#include <boost/algorithm/string/predicate.hpp>
+
+        
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-      // Get the hash value for the kernel's .text memory segment
-  auto f2 = osquery::readFile(kKernelTextHashPath, content);
-  if (f2.ok()) {
-    boost::trim(content);
-    text_segment_hash = content;
-  } else {
-    VLOG(1) << 'Cannot read file: ' << kKernelTextHashPath;
-    return results;
-  }
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    /// Get a list of keys for a given domain.
-Status scanDatabaseKeys(const std::string& domain,
-                        std::vector<std::string>& keys,
-                        const std::string& prefix,
-                        size_t max = 0);
-    
-    #include <boost/property_tree/ptree.hpp>
-    
-    /**
- * @brief Converts struct tm to a size_t
- *
- * @param tm_time the time/date to convert to UNIX epoch time
- *
- * @return an int representing the UNIX epoch time of the struct tm
- */
-size_t toUnixTime(const struct tm* tm_time);
-    
-      ~Carver();
-    
-    /**
- * @brief Access the internal storage of the Decorator parser.
- *
- * The decoration set is a map of column name to value. It contains the opaque
- * set of decoration point results.
- *
- * Decorations are applied to log items before they are sent to the downstream
- * logging APIs: logString, logSnapshot, etc.
- *
- * @param results the output parameter to write decorations.
- */
-void getDecorations(std::map<std::string, std::string>& results);
-    
-    TEST_F(ViewsConfigParserPluginTests, test_update_view) {
-  Config c;
-  std::vector<std::string> old_views_vec;
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  old_views_vec.clear();
-  auto s = c.update(getTestConfigMap('view_test2.conf'));
-  EXPECT_TRUE(s.ok());
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  std::string query;
-  getDatabaseValue(kQueries, 'config_views.kernel_hashes_new', query);
-  EXPECT_EQ(query,
-            'select hash.path as binary, version, hash.sha256 as SHA256, '
-            'hash.sha1 as SHA1, hash.md5 as MD5 from (select path || '
-            ''/Contents/MacOS/' as directory, name, version from '
-            'kernel_extensions) join hash using (directory)');
+    int SubProcess::Communicate(const string* stdin_input, string* stdout_output,
+                            string* stderr_output) {
+  struct pollfd fds[kNFds];
+  size_t nbytes[kNFds];
+  string* iobufs[kNFds];
+  int fd_count = 0;
     }
     
-      // TLSConfigPlugin::setUp wih enroll_always set to true
-  //
-  // Set the enroll_always flag to true. This should force the
-  // tls_config_plugin->setUp to go through TLS enrollment
-  FLAGS_enroll_always = true;
-  status = tls_config_plugin->setUp();
-  ASSERT_TRUE(status.ok());
+    /**
+ * \ingroup CXX11_NeuralNetworks_Module
+ * \brief Template functor to clip the magnitude of the first scalar.
+ *
+ * \sa class CwiseBinaryOp, MatrixBase::Clip
+ */
+template <typename Scalar>
+struct scalar_clip_op {
+  EIGEN_EMPTY_STRUCT_CTOR(scalar_clip_op)
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const Scalar
+  operator()(const Scalar& a, const Scalar& b) const {
+    return numext::mini(numext::maxi(a, -b), b);
+  }
+  template <typename Packet>
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const Packet
+  packetOp(const Packet& a, const Packet& b) const {
+    return internal::pmin(internal::pmax(a, internal::pnegate(b)), b);
+  }
+};
     
-    #include 'osquery/core/conversions.h'
-#include 'osquery/core/json.h'
-#include 'osquery/remote/requests.h'
-#include 'osquery/remote/serializers/json.h'
-#include 'osquery/remote/utility.h'
     
-    #include <vector>
+    { private:
+  Env* const env_;
+  uint64 offset_;
+  std::unique_ptr<RandomAccessFile> file_;
+  std::unique_ptr<io::RecordReader> reader_;
+  string compression_type_ = '';
+};
+    
+        void SetName(const std::wstring& name)
+    {
+        m_name = name;
+    }
+    const std::wstring& GetName();
+    int GetSectionCount() const
+    {
+        return m_sectionHeader->dataSections;
+    }
+    size_t GetRecordCount() const
+    {
+        return m_sectionHeader->elementsPerRecord != 0 ? m_sectionHeader->elementsCount / m_sectionHeader->elementsPerRecord : m_sectionHeader->elementsCount;
+    }
+    
+        mAsparse.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseCSR, true);
+    mBsparse.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseCSR, true);
+    Matrix<float>::ScaleAndAdd(alpha, mAsparse, mBsparse);
+    
+    #pragma once
+    
+    #include 'Basics.h'
+#include 'Matrix.h'
+#include 'Config.h' // for ConfigParameters
+#include 'ScriptableObjects.h'
+#include <map>
 #include <string>
     
-    #endif /* WAKEUPLOCK_H_ */
-
+        // other goodies I came across (intrin.h):
+    //  - _mm_prefetch
+    //  - _mm_stream_ps --store without polluting cache
+    //  - unknown: _mm_addsub_ps, _mm_hsub_ps, _mm_movehdup_ps, _mm_moveldup_ps, _mm_blend_ps, _mm_blendv_ps, _mm_insert_ps, _mm_extract_ps, _mm_round_ps
+    //  - _mm_dp_ps dot product! http://msdn.microsoft.com/en-us/library/bb514054.aspx
+    //    Not so interesting for long vectors, we get better numerical precision with parallel adds and hadd at the end
     
-    // true pass, false limit
-bool CommFrequencyLimit::Check() {
-    uint64_t now = ::gettickcount();
-    if (!touch_times_.empty() && (now<touch_times_.front()) ) { //if user modify the time, amend it
-    	xwarn2(TSF'Must be modified time.now=%_', now);
-    	size_t size = touch_times_.size();
-    	touch_times_.clear();
-    	for (size_t i=0; i<size; ++i) {
-    		touch_times_.push_back(now-1);
-    	}
+    #ifndef let
+#define let const auto
+#endif
+    
+      void Add(const char* smallest, const char* largest,
+           SequenceNumber smallest_seq = 100,
+           SequenceNumber largest_seq = 100) {
+    FileMetaData* f = new FileMetaData;
+    f->number = files_.size() + 1;
+    f->smallest = InternalKey(smallest, smallest_seq, kTypeValue);
+    f->largest = InternalKey(largest, largest_seq, kTypeValue);
+    files_.push_back(f);
+  }
+    
+    struct BlockContents {
+  Slice data;           // Actual contents of data
+  bool cachable;        // True iff data can be cached
+  bool heap_allocated;  // True iff caller should delete[] data.data()
+};
+    
+    bool js_cocos2dx_navmesh_NavMeshObstacle_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_navmesh_NavMeshObstacle_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_navmesh_NavMeshObstacle(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_navmesh(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_navmesh_NavMeshObstacle_getSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_initWith(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_syncToObstacle(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_syncToNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_getHeight(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_getRadius(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_getNavMeshObstacleComponentName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_NavMeshObstacle(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+    #if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+    
+    
+    
+        mShaderProgram->setUniformLocationWith4f(mColorLocation, color.r, color.g, color.b, 1);
+    
+    
+    {
+    {
+    {			if (settings->drawFrictionImpulse == 1)
+			{
+				b2Vec2 tangent = b2Cross(point->normal, 1.0f);
+				b2Vec2 p1 = point->position;
+				b2Vec2 p2 = p1 + k_impulseScale * point->tangentImpulse * tangent;
+				m_debugDraw.DrawSegment(p1, p2, b2Color(0.9f, 0.9f, 0.3f));
+			}
+		}
+	}
+}
+    
+    #define	RAND_LIMIT	32767
+#define DRAW_STRING_NEW_LINE 25
+    
+        CALL_STATIC_TYPE(jobject, Object)
+    CALL_STATIC_TYPE(jboolean, Boolean)
+    CALL_STATIC_TYPE(jbyte, Byte)
+    CALL_STATIC_TYPE(jchar, Char)
+    CALL_STATIC_TYPE(jshort, Short)
+    CALL_STATIC_TYPE(jint, Int)
+    CALL_STATIC_TYPE(jlong, Long)
+    CALL_STATIC_TYPE(jfloat, Float)
+    CALL_STATIC_TYPE(jdouble, Double)
+    
+      InstructionPointer absoluteProgramCounter() const noexcept {
+    return absoluteProgramCounter_;
+  }
+    
+    TEST_F(YogaTest_HadOverflowTests, spacing_overflow_in_nested_nodes) {
+  const YGNodeRef child0 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child0, 80);
+  YGNodeStyleSetHeight(child0, 40);
+  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
+  YGNodeStyleSetMargin(child0, YGEdgeBottom, 10);
+  YGNodeInsertChild(root, child0, 0);
+  const YGNodeRef child1 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child1, 80);
+  YGNodeStyleSetHeight(child1, 40);
+  YGNodeInsertChild(root, child1, 1);
+  const YGNodeRef child1_1 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child1_1, 80);
+  YGNodeStyleSetHeight(child1_1, 40);
+  YGNodeStyleSetMargin(child1_1, YGEdgeBottom, 5);
+  YGNodeInsertChild(child1, child1_1, 0);
     }
-    }
     
+        void setExperimentalFeatureEnabled(int feature, bool enabled);
+    void setPointScaleFactor(float pixelsInPoint);
+ 
+ public: // Getters
     
-#endif /* defined(__PublicComponent__testspy__) */
+        // The following functions cannot be const because they could discard const qualifiers (ex: constNode->getChild(0)->getParent() wouldn't be const)
