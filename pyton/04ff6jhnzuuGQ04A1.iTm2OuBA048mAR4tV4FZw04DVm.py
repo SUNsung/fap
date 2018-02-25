@@ -1,40 +1,139 @@
 
         
-            # Separating the 'table of contents' from the contents (blocks)
-    table_of_contents = ''.join(read_me.split('- - -')[0])
-    blocks = ''.join(read_me.split('- - -')[1]).split('\n# ')
-    for i in range(len(blocks)):
-        if i == 0:
-            blocks[i] = blocks[i] + '\n'
-        else:
-            blocks[i] = '# ' + blocks[i] + '\n'
+        entries_str = textwrap.indent(''.join(entries), '\t')
+atom_template = atom_template.replace('@ENTRIES@', entries_str)
     
     
-def get_stream_type(env, args):
-    '''Pick the right stream type based on `env` and `args`.
-    Wrap it in a partial with the type-specific args so that
-    we don't need to think what stream we are dealing with.
+from test.helper import FakeYDL
+from youtube_dl.cache import Cache
+    
+                    fn = os.path.join(dirpath, basename)
+                with io.open(fn, encoding='utf-8') as inf:
+                    code = inf.read()
+    
+        _ALL_CLASSES = [
+        klass
+        for name, klass in globals().items()
+        if name.endswith('IE') and name != 'GenericIE'
+    ]
+    _ALL_CLASSES.append(GenericIE)
+    
+            title = self._html_search_regex(r'<title>(.*?)</title>', webpage, 'title')
+        description = self._html_search_regex(
+            r'<div class='description'[^>]*>([^<]+)</div>', webpage, 'description', fatal=False)
+        thumbnail = self._html_search_regex(
+            r'preview_url\s*:\s*\'(.*?)\'', webpage, 'thumbnail', fatal=False)
+    
+            # Request the extended version of the api for extra fields like artist and title
+        api_response = self._download_json(
+            'http://www.audiomack.com/api/music/url/song/%s?extended=1&_=%d' % (
+                album_url_tag, time.time()),
+            album_url_tag)
     
     
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
+class ClipRsIE(OnetBaseIE):
+    _VALID_URL = r'https?://(?:www\.)?clip\.rs/(?P<id>[^/]+)/\d+'
+    _TEST = {
+        'url': 'http://www.clip.rs/premijera-frajle-predstavljaju-novi-spot-za-pesmu-moli-me-moli/3732',
+        'md5': 'c412d57815ba07b56f9edc7b5d6a14e5',
+        'info_dict': {
+            'id': '1488842.1399140381',
+            'ext': 'mp4',
+            'title': 'PREMIJERA Frajle predstavljaju novi spot za pesmu Moli me, moli',
+            'description': 'md5:56ce2c3b4ab31c5a2e0b17cb9a453026',
+            'duration': 229,
+            'timestamp': 1459850243,
+            'upload_date': '20160405',
+        }
+    }
     
-            :param progress_file: Where to report download progress.
+    # Virtual adversarial training parameters
+flags.DEFINE_integer('num_power_iteration', 1, 'The number of power iteration')
+flags.DEFINE_float('small_constant_for_finite_diff', 1e-1,
+                   'Small constant for finite difference method')
+    
+      def __init__(self):
+    super(MNISTArgParser, self).__init__()
     
     
-def humanize_bytes(n, precision=2):
-    # Author: Doug Latornell
-    # Licence: MIT
-    # URL: http://code.activestate.com/recipes/577081/
-    '''Return a humanized string representation of a number of bytes.
+def device():
+  return '/device:GPU:0' if tfe.num_gpus() else '/device:CPU:0'
+    
+    import reader
+    
+      @tf.test.mock.patch.dict(custom_estimator.__dict__,
+                           {'load_data': four_lines_data})
+  def test_custom_estimator(self):
+    custom_estimator.main([None, '--train_steps=1'])
+    
+    exports_files(['LICENSE'])
+    
+        # Subsampling threshold for word occurrence.
+    self.subsample = FLAGS.subsample
     
     
-def downgrade():
-    op.drop_column('columns', 'verbose_name')
-
+def get_args(args_list):
+    parser = argparse.ArgumentParser(
+        description='ansible inventory script reading from landscape cluster')
+    mutex_group = parser.add_mutually_exclusive_group(required=True)
+    help_list = 'list all hosts from landscape cluster'
+    mutex_group.add_argument('--list', action='store_true', help=help_list)
+    help_host = 'display variables for a host'
+    mutex_group.add_argument('--host', help=help_host)
+    return parser.parse_args(args_list)
+    
+    # (c) 2015, Marc Abramowitz <marca@surveymonkey.com>
+#
+# This file is part of Ansible.
+#
+# Ansible is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Ansible is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Ansible. If not, see <http://www.gnu.org/licenses/>.
+    
+    # The checksum algorithm must match with the algorithm in ShellModule.checksum() method
+checksum = secure_hash
+checksum_s = secure_hash_s
+    
+        host = None
+    for matching in ['ipv4', 'ipv6', 'hostname']:
+        m = patterns[matching].match(address)
+        if m:
+            host = address
+            continue
+    
+            expected = {
+            'name': 'myhealthcheck',
+            'checkIntervalSec': 5,
+            'port': 443,
+            'unhealthyThreshold': 2,
+            'healthyThreshold': 2,
+            'host': '',
+            'timeoutSec': 5,
+            'requestPath': '/'}
+    
+        terminal_stderr_re = [
+        re.compile(r'% ?Error: '),
+        re.compile(r'^% \w+', re.M),
+        re.compile(r'% ?Bad secret'),
+        re.compile(r'invalid input', re.I),
+        re.compile(r'(?:incomplete|ambiguous) command', re.I),
+        re.compile(r'connection timed out', re.I),
+        re.compile(r'[^\r\n]+ not found', re.I),
+        re.compile(r''[^']' +returned error code: ?\d+'),
+        re.compile(r'syntax error'),
+        re.compile(r'unknown command'),
+        re.compile(r'Error\[\d+\]: ', re.I),
+        re.compile(r'Error:', re.I)
+    ]
     
     
 def upgrade():
@@ -117,139 +216,128 @@ def upgrade():
     except:
         pass
     
-    '''
-    
-        try:
-        # wasn't created for some databases in the migration b4456560d4f3
-        if not table_has_constraint('tables', '_customer_location_uc', db):
-            with op.batch_alter_table('tables') as batch_op:
-                batch_op.create_unique_constraint(
-                    '_customer_location_uc',
-                    ['database_id', 'schema', 'table_name'])
-                batch_op.drop_index('table_name')
-    except Exception as e:
-        logging.warning(str(e))
+    from alembic import op
+import sqlalchemy as sa
     
     
-def upgrade():
-    op.add_column('tables', sa.Column('sql', sa.Text(), nullable=True))
-    
-        @support.cpython_only
-    @support.bigmemtest(sys.maxsize + 500, memuse=2/15, dry_run=False)
-    def test_huge_rshift_of_huge(self, size):
-        huge = ((1 << 500) + 11) << sys.maxsize
-        self.assertEqual(huge >> (sys.maxsize + 1), (1 << 499) + 5)
-        self.assertEqual(huge >> (sys.maxsize + 1000), 0)
-    
-        For this base class, accept any non-blank string.
-    '''
-    def __init__(self, parent, title, message, *, text0='', used_names={},
-                 _htest=False, _utest=False):
-        '''Create popup, do not return until tk widget destroyed.
-    
-        def test_pickle(self):
-        morsel_a = cookies.Morsel()
-        morsel_a.set('foo', 'bar', 'baz')
-        morsel_a.update({
-            'version': 2,
-            'comment': 'foo',
-        })
-        for proto in range(pickle.HIGHEST_PROTOCOL + 1):
-            with self.subTest(proto=proto):
-                morsel_b = pickle.loads(pickle.dumps(morsel_a, proto))
-                self.assertIsInstance(morsel_b, cookies.Morsel)
-                self.assertEqual(morsel_b, morsel_a)
-                self.assertEqual(str(morsel_b), str(morsel_a))
-    
-        def dump(self, stream, start=None, end=None):
-        for j, (trans, i) in enumerate(zip(self.transitions, self.type_indices)):
-            utc = datetime.utcfromtimestamp(trans)
-            tti = self.ttis[i]
-            lmt = datetime.utcfromtimestamp(trans + tti.tt_gmtoff)
-            abbrind = tti.tt_abbrind
-            abbr = self.abbrs[abbrind:self.abbrs.find(0, abbrind)].decode()
-            if j > 0:
-                prev_tti = self.ttis[self.type_indices[j - 1]]
-                shift = ' %+g' % ((tti.tt_gmtoff - prev_tti.tt_gmtoff) / 3600)
-            else:
-                shift = ''
-            print('%s UTC = %s %-5s isdst=%d' % (utc, lmt, abbr, tti[1]) + shift, file=stream)
-    
-    def py_make_scanner(context):
-    parse_object = context.parse_object
-    parse_array = context.parse_array
-    parse_string = context.parse_string
-    match_number = NUMBER_RE.match
-    strict = context.strict
-    parse_float = context.parse_float
-    parse_int = context.parse_int
-    parse_constant = context.parse_constant
-    object_hook = context.object_hook
-    object_pairs_hook = context.object_pairs_hook
-    memo = context.memo
-    
-        def _lookup(self, key=None):
-        '''Return (start, stop) or raise KeyError.'''
-        if self._toc is None:
-            self._generate_toc()
-        if key is not None:
-            try:
-                return self._toc[key]
-            except KeyError:
-                raise KeyError('No message with key: %s' % key) from None
-    
-        def post(self, data):
-        '''Process a POST command.  Arguments:
-        - data: bytes object, iterable or file containing the article
-        Returns:
-        - resp: server response if successful'''
-        return self._post('POST', data)
-    
-    if __name__ == '__main__':
-    test_main()
+def downgrade():
+    op.drop_table('logs')
 
     
-        def test_comparison(self):
-        test_ranges = [range(0), range(0, -1), range(1, 1, 3),
-                       range(1), range(5, 6), range(5, 6, 2),
-                       range(5, 7, 2), range(2), range(0, 4, 2),
-                       range(0, 5, 2), range(0, 6, 2)]
-        test_tuples = list(map(tuple, test_ranges))
+        for slc in session.query(Slice).all():
+        if slc.druid_datasource_id:
+            slc.datasource_id = slc.druid_datasource_id
+        if slc.table_id:
+            slc.datasource_id = slc.table_id
+        session.merge(slc)
+        session.commit()
+    session.close()
     
-            self.assertEqual(x[:], a.tolist()[1:])
-        with self.assertRaises(ValueError):
-            c_int.from_buffer(a, -1)
-        with self.assertRaises(ValueError):
-            (c_int * 16).from_buffer(a, sizeof(c_int))
-        with self.assertRaises(ValueError):
-            (c_int * 1).from_buffer(a, 16 * sizeof(c_int))
+    from alembic import op
+import sqlalchemy as sa
     
-        def get_screen(self):
-        process = os.popen(self.adb_path + ' shell wm size')
-        output = process.read()
-        return output
-    
-    
-def open_accordant_config():
     '''
-    调用配置文件
-    '''
-    screen_size = _get_screen_size()
-    config_file = '{path}/config/{screen_size}/config.json'.format(
-        path=sys.path[0],
-        screen_size=screen_size
-    )
     
-    def set_button_position(im):
+    #----------------------------------------------------------------------
+def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    '''wrapper'''
+    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
+    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
+    hostname = urlparse(url).hostname
+    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
+        return False
+    upid = match1(url, r'.+/content/(\w+)')
+    
+    from html.parser import HTMLParser
+    
+    from ..common import *
+from ..extractor import VideoExtractor
+    
+        @classmethod
+    def __get_test_directory(self):
+        '''
+        Get the temporary directory for the tests.
+        '''
+        self.test_dir = os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), 'test_command')
+    
+        def test_bear_eng_localization(self):
+        self.assertEqual(self.e.get('bear'), 'bear')
+    
+        def test_display_current_time_at_current_time(self):
+        '''
+        Just as justification for working example with the time provider used in
+        production. (Will always pass.)
+        '''
+        production_code_time_provider = ProductionCodeTimeProvider()
+        class_under_test = TimeDisplay()
+        current_time = datetime.datetime.now()
+        expected_time = '<span class=\'tinyBoldText\'>{}:{}</span>'.format(current_time.hour, current_time.minute)
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(production_code_time_provider), expected_time)
+    
+        @staticmethod
+    def _static_method_1():
+        print('executed method 1!')
+    
     '''
-    将 swipe 设置为 `再来一局` 按钮的位置
+*TL;DR80
+Encapsulates all information needed to perform an action or trigger an event.
+'''
+    
+    print('Counting to five...')
+for number in count_to_five():
+    print(number, end=' ')
+    
+        def __init__(self):
+        self._tm = None
+        self._bProblem = 0
+    
+    *TL;DR80
+Provides the ability to restore an object to its previous state.
+'''
+    
+    API_TYPES = ('api', 'json')
+RSS_TYPES = ('rss', 'xml')
+    
+        @validate(VAdmin())
+    def GET_index(self):
+        res = AdminPage(content = AdminAwards(),
+                        title = 'awards').render()
+        return res
+    
+    class ButtonsController(RedditController):
+    def get_wrapped_link(self, url, link = None, wrapper = None):
+        try:
+            links = []
+            if link:
+                links = [link]
+            else:
+                sr = None if isinstance(c.site, FakeSubreddit) else c.site
+                try:
+                    links = Link._by_url(url, sr)
+                except NotFound:
+                    pass
+    
+            Responds with a 120x50 `image/png` which should be displayed
+        to the user.
+    
+    
+class GoogleTagManagerController(MinimalController):
+    def pre(self):
+        if request.host != g.media_domain:
+            # don't serve up untrusted content except on our
+            # specifically untrusted domain
+            self.abort404()
+    
+    
+def _get_screen_size():
     '''
-    global swipe_x1, swipe_y1, swipe_x2, swipe_y2
-    w, h = im.size
-    left = int(w / 2)
-    top = int(1584 * (h / 1920.0))
-    left = int(random.uniform(left - 100, left + 100))
-    top = int(random.uniform(top - 100, top + 100))  # 随机防 ban
-    after_top = int(random.uniform(top - 100, top + 100))
-    after_left = int(random.uniform(left - 100, left + 100))
-    swipe_x1, swipe_y1, swipe_x2, swipe_y2 = left, top, after_left, after_top
+    获取手机屏幕大小
+    '''
+    size_str = adb.get_screen()
+    m = re.search(r'(\d+)x(\d+)', size_str)
+    if m:
+        return '{height}x{width}'.format(height=m.group(2), width=m.group(1))
+    return '1920x1080'
