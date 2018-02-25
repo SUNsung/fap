@@ -1,57 +1,72 @@
-      topic = Topic.find_by(id: topic_id)
-    
-      def validate_type
-    errors.add(:type, 'cannot be changed once an instance has been created') if type_changed? && !new_record?
-    errors.add(:type, 'is not a valid type') unless self.class.valid_type?(type)
-  end
-    
-      included do
-    include Oauthable
-    
-      delegate :form_configurable_attributes, to: :class
-  delegate :form_configurable_fields, to: :class
-    
-      protected
-    
-    module LogStash::Api::AppHelpers
-  # This method handle both of the normal flow *happy path*
-  # and the display or errors, if more custom logic is added here
-  # it will make sense to separate them.
-  #
-  # See `#error` method in the `LogStash::Api::Module::Base`
-  def respond_with(data, options={})
-    as     = options.fetch(:as, :json)
-    filter = options.fetch(:filter, '')
-    
-        on_event do |event, data|
-      Thread.current[:logstash_output_codec_batch] << [event, data]
+
+        
+              configure_sass
     end
+    
+        # margin: a -b
+    # LESS: sets 2 values
+    # Sass: sets 1 value (a-b)
+    # This wraps a and -b so they evaluates to 2 values in Sass
+    def replace_calculation_semantics(file)
+      # split_prop_val.call('(@navbar-padding-vertical / 2) -@navbar-padding-horizontal')
+      # #=> ['(navbar-padding-vertical / 2)', '-navbar-padding-horizontal']
+      split_prop_val = proc { |val|
+        s         = CharStringScanner.new(val)
+        r         = []
+        buff      = ''
+        d         = 0
+        prop_char = %r([\$\w\-/\*\+%!])
+        while (token = s.scan_next(/([\)\(]|\s+|#{prop_char}+)/))
+          buff << token
+          case token
+            when '('
+              d += 1
+            when ')'
+              d -= 1
+              if d == 0
+                r << buff
+                buff = ''
+              end
+            when /\s/
+              if d == 0 && !buff.strip.empty?
+                r << buff
+                buff = ''
+              end
+          end
+        end
+        r << buff unless buff.empty?
+        r.map(&:strip)
+      }
+    
+    namespace :bower do
+    
+      def text_url
+    object.local? ? medium_url(object) : nil
   end
     
-          expect('.border-style-implied-left').to have_rule(rule)
-    end
-  end
+      private
     
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'border-top-width: 11px; ' +
-                'border-right-width: 12px; ' +
-                'border-left-width: 13px;'
-      bad_rule = 'border-bottom-width: null;'
+      def index
+    @follows = Follow.where(account: @account).recent.page(params[:page]).per(FOLLOW_PER_PAGE).preload(:target_account)
     
-          expect('.all-buttons-active').to have_ruleset(ruleset)
-    end
-  end
+            def meta_assignment_node
+          unless instance_variable_defined?(:@meta_assignment_node)
+            @meta_assignment_node =
+              operator_assignment_node || multiple_assignment_node
+          end
     
-          expect('.padding-all').to have_rule(rule)
-    end
-  end
+            def_node_matcher :only_truthiness_matters?, <<-PATTERN
+          ^({if while until case while_post until_post} equal?(%0) ...)
+        PATTERN
     
-      context 'called with auto' do
-    it 'applies to auto to height' do
-      rule = 'height: auto; width: 100px;'
+            private
     
-          expect('.all-text-inputs-invalid').to have_ruleset(ruleset)
-    end
-  end
-end
+      context 'called with two styles' do
+    it 'applies to alternating sides' do
+      rule = 'border-style: dotted dashed'
+    
+      context 'called with multiple prefixes' do
+    it 'applies the prefixes to the property' do
+      rule = '-moz-appearance: none; ' +
+             '-ms-appearance: none; ' +
+             'appearance: none;'
