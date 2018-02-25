@@ -1,167 +1,164 @@
-    CHUNK_SIZE = 1
+
+        
+            default_settings = {
+        'LOG_LEVEL': 'INFO',
+        'LOGSTATS_INTERVAL': 1,
+        'CLOSESPIDER_TIMEOUT': 10,
+    }
     
     
-@mock.patch('httpie.core.get_response')
-def test_error_traceback(get_response):
-    exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    with raises(ConnectionError):
-        main(['--ignore-stdin', '--traceback', 'www.google.com'])
+def run_cmds(cmds):
+    log = Log()
+    cmd_pl = cmds.split('\n')
+    outs = []
+    for cmd in cmd_pl:
+        if not cmd:
+            continue
     
     
-@pytest.mark.parametrize('ssl_version', SSL_VERSION_ARG_MAPPING.keys())
-def test_ssl_version(httpbin_secure, ssl_version):
-    try:
-        r = http(
-            '--ssl', ssl_version,
-            httpbin_secure + '/get'
-        )
-        assert HTTP_OK in r
-    except SSLError as e:
-        if ssl_version == 'ssl3':
-            # pytest-httpbin doesn't support ssl3
-            assert 'SSLV3_ALERT_HANDSHAKE_FAILURE' in str(e)
-        else:
-            raise
+class sockaddr(ctypes.Structure):
+    _fields_ = [('sa_family', ctypes.c_short),
+                ('__pad1', ctypes.c_ushort),
+                ('ipv4_addr', ctypes.c_byte * 4),
+                ('ipv6_addr', ctypes.c_byte * 16),
+                ('__pad2', ctypes.c_ulong)]
     
-        def _migrate_implicit_content_type(self):
-        '''Migrate the removed implicit_content_type config option'''
+    
+def fall_into_honeypot():
+    xlog.warn('fall_into_honeypot.')
+    global connect_allow_time
+    connect_allow_time = time.time() + block_delay
+    
+    
+from xlog import getLogger
+xlog = getLogger('gae_proxy')
+from config import config
+    
+                if isinstance(self.input, TokenStream):
+                self.token = self.input.LT(1)
+                self.line = self.token.line
+                self.charPositionInLine = self.token.charPositionInLine
+    
+    '''
+    
+    class User(Base):
+    '''Declarative class to do query in upgrade'''
+    __tablename__ = 'ab_user'
+    id = Column(Integer, primary_key=True)
+    
+    '''
+    
+    # revision identifiers, used by Alembic.
+revision = '3c3ffe173e4f'
+down_revision = 'ad82a75afd82'
+    
+    Revision ID: 4e6a06bad7a8
+Revises: None
+Create Date: 2015-09-21 17:30:38.442998
+    
+    '''
+    
+    # revision identifiers, used by Alembic.
+revision = '7e3ddad2a00b'
+down_revision = 'b46fa1b0b39e'
+    
+    import tornado.httpserver
+import tornado.ioloop
+import tornado.options
+import tornado.web
+    
+    import socket
+    
+        @gen_test
+    def test_get_with_putters(self):
+        q = queues.Queue(1)
+        q.put_nowait(0)
+        put = q.put(1)
+        self.assertEqual(0, (yield q.get()))
+        self.assertIsNone((yield put))
+    
+    
+class CaresResolver(Resolver):
+    '''Name resolver based on the c-ares library.
+    
+        def consume(self):
         try:
-            implicit_content_type = self.pop('implicit_content_type')
-        except KeyError:
-            self.save()
-        else:
-            if implicit_content_type == 'form':
-                self['default_options'].insert(0, '--form')
-            self.save()
-            self.load()
+            while True:
+                result = self.reader.recv(1024)
+                if not result:
+                    break
+        except (IOError, socket.error):
+            pass
+    
+    
+class DummyHandler(web.RequestHandler):
+    @gen.coroutine
+    def get(self):
+        self.write('ok\n')
+    
+        def contribute(self):
+        self.blackboard.common_state['problems'] += random.randint(10, 20)
+        self.blackboard.common_state['suggestions'] += random.randint(10, 20)
+        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
+        self.blackboard.common_state['progress'] += random.randint(10, 30)
+    
+        def test_frozen_pool(self):
+        with ObjectPool(self.sample_queue) as pool:
+            self.assertEqual(pool, 'first')
+            self.assertEqual(pool, 'first')
+        self.assertTrue(self.sample_queue.get() == 'second')
+        self.assertFalse(self.sample_queue.empty())
+        self.assertTrue(self.sample_queue.get() == 'first')
+        self.assertTrue(self.sample_queue.empty())
+    
+        def test_bunch_launch(self):
+        self.runner.runAll()
+        output = self.out.getvalue().strip()
+        self.assertEqual(output, str(self.average_result_tc1 + '\n\n' +
+                         self.average_result_tc2 + '\n\n' +
+                         self.average_result_tc3))
 
     
+        def test_display_current_time_at_midnight(self):
         '''
-    abbrevs = [
-        (1 << 50, 'PB'),
-        (1 << 40, 'TB'),
-        (1 << 30, 'GB'),
-        (1 << 20, 'MB'),
-        (1 << 10, 'kB'),
-        (1, 'B')
-    ]
+        Would almost always fail (despite of right at/after midnight) if
+        untestable production code would have been used.
+        '''
+        time_provider_stub = MidnightTimeProvider()
+        class_under_test = TimeDisplay()
+        class_under_test.set_time_provider(time_provider_stub)
+        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
     
-        def test_youtube_matching(self):
-        self.assertTrue(YoutubeIE.suitable('PLtS2H6bU1M'))
-        self.assertFalse(YoutubeIE.suitable('https://www.youtube.com/watch?v=AV6J6_AeFEQ&playnext=1&list=PL4023E734DA416012'))  # 668
-        self.assertMatch('http://youtu.be/BaW_jenozKc', ['youtube'])
-        self.assertMatch('http://www.youtube.com/v/BaW_jenozKc', ['youtube'])
-        self.assertMatch('https://youtube.googleapis.com/v/BaW_jenozKc', ['youtube'])
-        self.assertMatch('http://www.cleanvideosearch.com/media/action/yt/watch?videoId=8v_4O44sfjM', ['youtube'])
+        def test_display_current_time_at_midnight(self):
+        class_under_test = TimeDisplay()
+        expected_time = '24:01'
+        result = class_under_test.get_current_time_as_as_html_fragment()
+        self.assertEqual(result, expected_time)
+'''
     
-    from test.helper import (
-    FakeYDL,
-    get_params,
-)
-from youtube_dl.compat import (
-    compat_str,
-    compat_urllib_request,
-)
+        _static_method_choices = {'param_value_1': _static_method_1,
+                              'param_value_2': _static_method_2}
     
-            title = self._html_search_regex(
-            r'<div[^>]+style='float:left'[^>]*>\s*<h2>(.+?)</h2>', webpage, 'title')
-        description = self._html_search_regex(
-            r'>Description:</span>(.+?)</div>', webpage, 'description', default=None)
+        @abc.abstractmethod
+    def _handle(self, request):
+        raise NotImplementedError('Must provide implementation in subclass.')
     
-    from .onet import OnetBaseIE
+    import random
+import time
     
-        def run(self, args, opts):
-        # load contracts
-        contracts = build_component_list(self.settings.getwithbase('SPIDER_CONTRACTS'))
-        conman = ContractsManager(load_object(c) for c in contracts)
-        runner = TextTestRunner(verbosity=2 if opts.verbose else 1)
-        result = TextTestResult(runner.stream, runner.descriptions, runner.verbosity)
-    
-                    # execute pre and post hooks in order
-                for contract in reversed(contracts):
-                    request = contract.add_pre_hook(request, results)
-                for contract in contracts:
-                    request = contract.add_post_hook(request, results)
-    
-    from sklearn.datasets import fetch_20newsgroups_vectorized
-from sklearn.metrics import accuracy_score
-from sklearn.utils.validation import check_array
-    
-        alpha = 0.01  # regularization parameter
-    
-        for n_components in [i.astype(int) for i in
-                         np.linspace(data.shape[1] // 10,
-                                     data.shape[1], num=4)]:
-        all_times = defaultdict(list)
-        all_errors = defaultdict(list)
-        pca = PCA(n_components=n_components)
-        rpca = RandomizedPCA(n_components=n_components, random_state=1999)
-        results_dict = {k: benchmark(est, data) for k, est in [('pca', pca),
-                                                               ('rpca', rpca)]}
-    
-            start = time.time()
-        func(X, n_jobs=1)
-        one_core.append(time.time() - start)
-    
-    solutions = os.listdir(exercise_dir)
-    
-    data, rows, columns = make_biclusters(
-    shape=(300, 300), n_clusters=5, noise=5,
-    shuffle=False, random_state=0)
-    
-    if K.image_data_format() == 'channels_first':
-    x_train = x_train.reshape(x_train.shape[0], 1, img_rows, img_cols)
-    x_test = x_test.reshape(x_test.shape[0], 1, img_rows, img_cols)
-    input_shape = (1, img_rows, img_cols)
-else:
-    x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1)
-    x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, 1)
-    input_shape = (img_rows, img_cols, 1)
-    
-    x_train = x_train.reshape(x_train.shape[0], -1, 1)
-x_test = x_test.reshape(x_test.shape[0], -1, 1)
-x_train = x_train.astype('float32')
-x_test = x_test.astype('float32')
-x_train /= 255
-x_test /= 255
-print('x_train shape:', x_train.shape)
-print(x_train.shape[0], 'train samples')
-print(x_test.shape[0], 'test samples')
-    
-    import numpy as np
-import keras
-from keras.datasets import reuters
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation
-from keras.preprocessing.text import Tokenizer
-    
-    
-@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
-def test_uniform(tensor_shape):
-    _runner(initializers.RandomUniform(minval=-1, maxval=1), tensor_shape,
-            target_mean=0., target_max=1, target_min=-1)
-    
-    - We start with input sequences from a domain (e.g. English sentences)
-    and correspding target sequences from another domain
-    (e.g. French sentences).
-- An encoder LSTM turns input sequences to 2 state vectors
-    (we keep the last LSTM state and discard the outputs).
-- A decoder LSTM is trained to turn the target sequences into
-    the same sequence but offset by one timestep in the future,
-    a training process called 'teacher forcing' in this context.
-    Is uses as initial state the state vectors from the encoder.
-    Effectively, the decoder learns to generate `targets[t+1...]`
-    given `targets[...t]`, conditioned on the input sequence.
-- In inference mode, when we want to decode unknown input sequences, we:
-    - Encode the input sequence into state vectors
-    - Start with a target sequence of size 1
-        (just the start-of-sequence character)
-    - Feed the state vectors and 1-char target sequence
-        to the decoder to produce predictions for the next character
-    - Sample the next character using these predictions
-        (we simply use argmax).
-    - Append the sampled character to the target sequence
-    - Repeat until we generate the end-of-sequence character or we
-        hit the character limit.
+        print(u'Setting Data 1 = 10')
+    data1.data = 10
+    print(u'Setting Data 2 = 15')
+    data2.data = 15
+    print(u'Setting Data 1 = 3')
+    data1.data = 3
+    print(u'Setting Data 2 = 5')
+    data2.data = 5
+    print(u'Detach HexViewer from data1 and data2.')
+    data1.detach(view2)
+    data2.detach(view2)
+    print(u'Setting Data 1 = 10')
+    data1.data = 10
+    print(u'Setting Data 2 = 15')
+    data2.data = 15
