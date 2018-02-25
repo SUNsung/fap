@@ -1,226 +1,272 @@
 
         
-          Slice user_key() const { return ExtractUserKey(rep_); }
-    
-    
-    {  // When limit user key is prefix of start user key
-  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
-            Shorten(IKey('foobar', 100, kTypeValue),
-                    IKey('foo', 200, kTypeValue)));
-}
-    
-    Status DumpTable(Env* env, const std::string& fname, WritableFile* dst) {
-  uint64_t file_size;
-  RandomAccessFile* file = NULL;
-  Table* table = NULL;
-  Status s = env->GetFileSize(fname, &file_size);
-  if (s.ok()) {
-    s = env->NewRandomAccessFile(fname, &file);
-  }
-  if (s.ok()) {
-    // We use the default comparator, which may or may not match the
-    // comparator used in this database. However this should not cause
-    // problems since we only use Table operations that do not require
-    // any comparisons.  In particular, we do not call Seek or Prev.
-    s = Table::Open(Options(), file, file_size, &table);
-  }
-  if (!s.ok()) {
-    delete table;
-    delete file;
-    return s;
-  }
+        void convert_dataset(const char* image_filename, const char* label_filename,
+        const char* db_filename) {
+  // Open files
+  std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
+  std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
+  CHECK(image_file) << 'Unable to open file ' << image_filename;
+  CHECK(label_file) << 'Unable to open file ' << label_filename;
+  // Read the magic and the meta data
+  uint32_t magic;
+  uint32_t num_items;
+  uint32_t num_labels;
+  uint32_t rows;
+  uint32_t cols;
     }
     
-     private:
-  Env* const env_;
-  const std::string dbname_;
-  const Options* options_;
-  Cache* cache_;
-    
-    static void TestEncodeDecode(const VersionEdit& edit) {
-  std::string encoded, encoded2;
-  edit.EncodeTo(&encoded);
-  VersionEdit parsed;
-  Status s = parsed.DecodeFrom(encoded);
-  ASSERT_TRUE(s.ok()) << s.ToString();
-  parsed.EncodeTo(&encoded2);
-  ASSERT_EQ(encoded, encoded2);
-}
-    
-    TEST(WriteBatchTest, Multiple) {
-  WriteBatch batch;
-  batch.Put(Slice('foo'), Slice('bar'));
-  batch.Delete(Slice('box'));
-  batch.Put(Slice('baz'), Slice('boo'));
-  WriteBatchInternal::SetSequence(&batch, 100);
-  ASSERT_EQ(100, WriteBatchInternal::Sequence(&batch));
-  ASSERT_EQ(3, WriteBatchInternal::Count(&batch));
-  ASSERT_EQ('Put(baz, boo)@102'
-            'Delete(box)@101'
-            'Put(foo, bar)@100',
-            PrintContents(&batch));
-}
-    
-    
-    {    FILE* cpuinfo = fopen('/proc/cpuinfo', 'r');
-    if (cpuinfo != NULL) {
-      char line[1000];
-      int num_cpus = 0;
-      std::string cpu_type;
-      std::string cache_size;
-      while (fgets(line, sizeof(line), cpuinfo) != NULL) {
-        const char* sep = strchr(line, ':');
-        if (sep == NULL) {
-          continue;
-        }
-        Slice key = TrimSpace(Slice(line, sep - 1 - line));
-        Slice val = TrimSpace(Slice(sep + 1));
-        if (key == 'model name') {
-          ++num_cpus;
-          cpu_type = val.ToString();
-        } else if (key == 'cache size') {
-          cache_size = val.ToString();
-        }
-      }
-      fclose(cpuinfo);
-      fprintf(stderr, 'CPU:            %d * %s\n', num_cpus, cpu_type.c_str());
-      fprintf(stderr, 'CPUCache:       %s\n', cache_size.c_str());
-    }
-#endif
-  }
-    
-    
-    {}  // namespace leveldb
-    
-      std::string comparator_;
-  uint64_t log_number_;
-  uint64_t prev_log_number_;
-  uint64_t next_file_number_;
-  SequenceNumber last_sequence_;
-  bool has_comparator_;
-  bool has_log_number_;
-  bool has_prev_log_number_;
-  bool has_next_file_number_;
-  bool has_last_sequence_;
-    
-      static Slice Contents(const WriteBatch* batch) {
-    return Slice(batch->rep_);
-  }
-    
-        // Change SQLite cache size
-    char cache_size[100];
-    snprintf(cache_size, sizeof(cache_size), 'PRAGMA cache_size = %d',
-             FLAGS_num_pages);
-    status = sqlite3_exec(db_, cache_size, NULL, NULL, &err_msg);
-    ExecErrorCheck(status, err_msg);
-    
-      // Check that opening non-existent file fails.
-  SequentialFile* seq_file;
-  RandomAccessFile* rand_file;
-  ASSERT_TRUE(!env_->NewSequentialFile('/dir/non_existent', &seq_file).ok());
-  ASSERT_TRUE(!seq_file);
-  ASSERT_TRUE(!env_->NewRandomAccessFile('/dir/non_existent', &rand_file).ok());
-  ASSERT_TRUE(!rand_file);
-    
-    
-    {  // Check last filter
-  ASSERT_TRUE(reader.KeyMayMatch(9000, 'box'));
-  ASSERT_TRUE(reader.KeyMayMatch(9000, 'hello'));
-  ASSERT_TRUE(! reader.KeyMayMatch(9000, 'foo'));
-  ASSERT_TRUE(! reader.KeyMayMatch(9000, 'bar'));
-}
-    
-      // The block handle for the index block of the table
-  const BlockHandle& index_handle() const {
-    return index_handle_;
-  }
-  void set_index_handle(const BlockHandle& h) {
-    index_handle_ = h;
-  }
-    
-    
-    {}  // namespace leveldb
-    
-    // Return an iterator that provided the union of the data in
-// children[0,n-1].  Takes ownership of the child iterators and
-// will delete them when the result iterator is deleted.
-//
-// The result does no duplicate suppression.  I.e., if a particular
-// key is present in K child iterators, it will be yielded K times.
-//
-// REQUIRES: n >= 0
-extern Iterator* NewMergingIterator(
-    const Comparator* comparator, Iterator** children, int n);
-    
-    
-    {}
-    
-    
-    {
-    {}
-}
-    
-    #ifndef DUMPCRASHSTACK_H_
-#define DUMPCRASHSTACK_H_
-    
-    
-/*
- * WakeUpLock.cpp
+    /**
+ * @brief Computes @f$ y = |x| @f$
  *
- *  Created on: 2012-9-28
- *      Author: yerungui
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$ y = |x| @f$
  */
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-      private:
-    virtual void __OnAttach(const char* _key) = 0;
-    virtual void __OnDetach(const char* _key) = 0;
-    
-    #ifndef _COMM_FUNCTION_H_
-#define _COMM_FUNCTION_H_
-    
-    typedef GRPC_CUSTOM_STRING string;
-    
-      std::string SayHello(const std::string &name) {
-    flatbuffers::grpc::MessageBuilder mb;
-    auto name_offset = mb.CreateString(name);
-    auto request_offset = CreateHelloRequest(mb, name_offset);
-    mb.Finish(request_offset);
-    auto request_msg = mb.ReleaseMessage<HelloRequest>();
+template <typename Dtype>
+class AbsValLayer : public NeuronLayer<Dtype> {
+ public:
+  explicit AbsValLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-        // `flatbuffers::grpc::MessageBuilder` is a `FlatBufferBuilder` with a
-    // special allocator for efficient gRPC buffer transfer, but otherwise
-    // usage is the same as usual.
-    auto msg_offset = mb_.CreateString('Hello, ' + name);
-    auto hello_offset = CreateHelloReply(mb_, msg_offset);
-    mb_.Finish(hello_offset);
+    /**
+ * @brief Compute the index of the @f$ K @f$ max values for each datum across
+ *        all dimensions @f$ (C \times H \times W) @f$.
+ *
+ * Intended for use after a classification layer to produce a prediction.
+ * If parameter out_max_val is set to true, output is a vector of pairs
+ * (max_ind, max_val) for each image. The axis parameter specifies an axis
+ * along which to maximise.
+ *
+ * NOTE: does not implement Backwards operation.
+ */
+template <typename Dtype>
+class ArgMaxLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides ArgMaxParameter argmax_param,
+   *     with ArgMaxLayer options:
+   *   - top_k (\b optional uint, default 1).
+   *     the number @f$ K @f$ of maximal items to output.
+   *   - out_max_val (\b optional bool, default false).
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
+   */
+  explicit ArgMaxLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
     
-      // If schemas used contain include statements, call this function for every
-  // directory the parser should search them for.
-  void AddIncludeDirectory(const char *path) { include_paths_.push_back(path); }
+    namespace caffe {
+    }
     
-    #ifndef LLVM_FUZZER_EXT_FUNCTIONS_H
-#define LLVM_FUZZER_EXT_FUNCTIONS_H
+      virtual inline const char* type() const { return 'Convolution'; }
     
-    std::string FileToString(const std::string &Path);
+    #include 'caffe/layers/neuron_layer.hpp'
     
-      // Merge Corpora[1:] into Corpora[0].
-  void Merge(const std::vector<std::string> &Corpora);
-  void CrashResistantMerge(const std::vector<std::string> &Args,
-                           const std::vector<std::string> &Corpora);
-  void CrashResistantMergeInternalStep(const std::string &ControlFilePath);
-  // Returns a subset of 'Extra' that adds coverage to 'Initial'.
-  UnitVector FindExtraUnits(const UnitVector &Initial, const UnitVector &Extra);
-  MutationDispatcher &GetMD() { return MD; }
-  void PrintFinalStats();
-  void SetMaxInputLen(size_t MaxInputLen);
-  void SetMaxMutationLen(size_t MaxMutationLen);
-  void RssLimitCallback();
+    #endif // __cocos2dx_builder_h__
+
+    
+    bool js_cocos2dx_navmesh_NavMeshAgent_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_navmesh_NavMeshAgent_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_navmesh_NavMeshAgent(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_navmesh(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_navmesh_NavMeshAgent_setMaxSpeed(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_syncToNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_completeOffMeshLink(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getSeparationWeight(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_setAutoTraverseOffMeshLink(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getCurrentVelocity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_syncToAgent(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_isOnOffMeshLink(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_setSeparationWeight(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_pause(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_setAutoOrientation(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getHeight(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getMaxSpeed(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getCurrentOffMeshLinkData(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getRadius(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_resume(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_stop(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_setMaxAcceleration(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_setOrientationRefAxes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getMaxAcceleration(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_setHeight(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getObstacleAvoidanceType(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getVelocity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_setRadius(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_setObstacleAvoidanceType(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getNavMeshAgentComponentName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_NavMeshAgent(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    bool js_cocos2dx_physics3d_Physics3DConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DConstraint_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DConstraint(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DConstraint_setEnabled(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConstraint_setBreakingImpulse(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConstraint_getUserData(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConstraint_getBreakingImpulse(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConstraint_getBodyA(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConstraint_isEnabled(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConstraint_getOverrideNumSolverIterations(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConstraint_getBodyB(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConstraint_setOverrideNumSolverIterations(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConstraint_getConstraintType(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConstraint_setUserData(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConstraint_getbtContraint(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    int register_all_cocos2dx_cocosbuilder(lua_State* tolua_S);
+    
+    
+    
+    
+    
+    
+    
+    void Test::LaunchBomb()
+{
+	b2Vec2 p(RandomFloat(-15.0f, 15.0f), 30.0f);
+	b2Vec2 v = -5.0f * p;
+	LaunchBomb(p, v);
+}
+    
+    /// Random floating point number in range [lo, hi]
+inline float32 RandomFloat(float32 lo, float32 hi)
+{
+	float32 r = (float32)(std::rand() & (RAND_LIMIT));
+	r /= RAND_LIMIT;
+	r = (hi - lo) * r + lo;
+	return r;
+}
+    
+    	static Test* Create()
+	{
+		return new ApplyForce;
+	}
+    
+    	b2Body* m_body1;
+	b2Vec2 m_velocity;
+	float32 m_angularVelocity;
+	b2PolygonShape m_shape1;
+	b2PolygonShape m_shape2;
+	b2Fixture* m_piece1;
+	b2Fixture* m_piece2;
+    
+    /**
+ * Get the path to the current executable.
+ *
+ * Note that this is not reliable and not recommended in general; it may not be
+ * implemented on your platform (in which case it will throw), the executable
+ * might have been moved or replaced while running, and applications comprising
+ * of multiple executables should use some form of configuration system to
+ * find the other executables rather than relying on relative paths from one
+ * to another.
+ *
+ * So this should only be used for tests, logging, or other innocuous purposes.
+ */
+path executable_path();
+    
+    namespace {
+    }
+    
+      // Read and parse /proc/mounts
+  std::vector<StringPiece> parts;
+  std::vector<StringPiece> options;
+    
+    // Temporary file that is NOT kept open but is deleted on exit.
+// Generate random-looking but reproduceable data.
+class TemporaryFile {
+ public:
+  explicit TemporaryFile(size_t size);
+  ~TemporaryFile();
+    }
+    
+    void AsyncFileWriter::performIO(std::vector<std::string>* ioQueue) {
+  // kNumIovecs controls the maximum number of strings we write at once in a
+  // single writev() call.
+  constexpr int kNumIovecs = 64;
+  std::array<iovec, kNumIovecs> iovecs;
+    }
+    
+    
+    {StringPiece getGlogLevelName(LogLevel level) {
+  if (level < LogLevel::INFO) {
+    return 'VERBOSE';
+  } else if (level < LogLevel::WARN) {
+    return 'INFO';
+  } else if (level < LogLevel::ERR) {
+    return 'WARNING';
+  } else if (level < LogLevel::CRITICAL) {
+    return 'ERROR';
+  }
+  return 'CRITICAL';
+}
+} // namespace
+    
+    
+    {  // Propagate the message up to our parent LogCategory.
+  //
+  // Maybe in the future it might be worth adding a flag to control if a
+  // LogCategory should propagate messages to its parent or not.  (This would
+  // be similar to log4j's 'additivity' flag.)
+  // For now I don't have a strong use case for this.
+  if (parent_) {
+    parent_->processMessage(message);
+  }
+}
+    
+    namespace folly {
+    }
+    
+    /**
+ * Configuration for a LogCategory
+ */
+class LogCategoryConfig {
+ public:
+  explicit LogCategoryConfig(
+      LogLevel level = LogLevel::WARNING,
+      bool inheritParentLevel = true);
+  LogCategoryConfig(
+      LogLevel level,
+      bool inheritParentLevel,
+      std::vector<std::string> handlers);
+    }
+    
+    namespace folly {
+    }
+    
+    void ListFilesInDirRecursive(const std::string &Dir, long *Epoch,
+                             std::vector<std::string> *V, bool TopDir);
+    
+    #include 'FuzzerExtFunctions.h'
+#include 'FuzzerIO.h'
+#include <cstdarg>
+#include <cstdio>
+#include <dirent.h>
+#include <fstream>
+#include <iterator>
+#include <libgen.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+    
+    
+    {}  // namespace fuzzer
     
     struct FuzzingOptions {
   int Verbosity = 1;
@@ -269,33 +315,42 @@ extern Iterator* NewMergingIterator(
   bool HandleTerm = false;
 };
     
-    std::string Hash(const Unit &U) {
-  uint8_t Hash[kSHA1NumBytes];
-  ComputeSHA1(U.data(), U.size(), Hash);
-  return Sha1ToString(Hash);
+    #ifndef LLVM_FUZZER_TRACE_PC
+#define LLVM_FUZZER_TRACE_PC
+    
+    bool ToASCII(uint8_t *Data, size_t Size) {
+  bool Changed = false;
+  for (size_t i = 0; i < Size; i++) {
+    uint8_t &X = Data[i];
+    auto NewX = X;
+    NewX &= 127;
+    if (!isspace(NewX) && !isprint(NewX))
+      NewX = ' ';
+    Changed |= NewX != X;
+    X = NewX;
+  }
+  return Changed;
 }
     
-    // Value profile.
-// We keep track of various values that affect control flow.
-// These values are inserted into a bit-set-based hash map.
-// Every new bit in the map is treated as a new coverage.
-//
-// For memcmp/strcmp/etc the interesting value is the length of the common
-// prefix of the parameters.
-// For cmp instructions the interesting value is a XOR of the parameters.
-// The interesting value is mixed up with the PC and is then added to the map.
+    unsigned long GetPid();
     
-      // We don't want to create too many trace-based mutations as it is both
-  // expensive and useless. So after some number of mutations is collected,
-  // start rejecting some of them. The more there are mutations the more we
-  // reject.
-  bool WantToHandleOneMoreMutation() {
-    const size_t FirstN = 64;
-    // Gladly handle first N mutations.
-    if (NumMutations <= FirstN) return true;
-    size_t Diff = NumMutations - FirstN;
-    size_t DiffLog = sizeof(long) * 8 - __builtin_clzl((long)Diff);
-    assert(DiffLog > 0 && DiffLog < 64);
-    bool WantThisOne = MD.GetRand()(1 << DiffLog) == 0;  // 1 out of DiffLog.
-    return WantThisOne;
-  }
+    
+    {} // namespace A2STR
+    
+    private:
+  std::string userDefinedUser_;
+  std::string userDefinedPassword_;
+    
+      std::chrono::seconds interval_;
+  DownloadEngine* e_;
+  Timer checkPoint_;
+  int numNewConnection_; // the number of the connection to establish.
+public:
+  ActivePeerConnectionCommand(cuid_t cuid, RequestGroup* requestGroup,
+                              DownloadEngine* e, std::chrono::seconds interval);
+    
+    AdaptiveFileAllocationIterator::~AdaptiveFileAllocationIterator() = default;
+    
+      virtual void allocateChunk() CXX11_OVERRIDE;
+    
+      AnnounceTier::AnnounceEvent getEvent() const;
