@@ -1,85 +1,372 @@
 
         
-        from flask import Flask, jsonify, render_template, request
-app = Flask(__name__)
+        versions_info['versions'][version] = new_version
+versions_info['latest'] = version
     
+        def test_vimeo_matching(self):
+        self.assertMatch('https://vimeo.com/channels/tributes', ['vimeo:channel'])
+        self.assertMatch('https://vimeo.com/channels/31259', ['vimeo:channel'])
+        self.assertMatch('https://vimeo.com/channels/31259/53576664', ['vimeo'])
+        self.assertMatch('https://vimeo.com/user7108434', ['vimeo:user'])
+        self.assertMatch('https://vimeo.com/user7108434/videos', ['vimeo:user'])
+        self.assertMatch('https://vimeo.com/user21297594/review/75524534/3c257a1b5d', ['vimeo:review'])
     
-def jsonify(result, format=False):
-    ''' format JSON output (uncompressed or uncompressed) '''
+        def tearDown(self):
+        if os.path.exists(self.test_dir):
+            shutil.rmtree(self.test_dir)
     
-        def __init__(self, options):
+                for video_version in json_data.get('video_versions'):
+                video_version_url = video_version.get('download_url') or video_version.get('stream_url')
+                if not video_version_url:
+                    continue
+                f = {
+                    'url': video_version_url,
+                    'width': int_or_none(video_version.get('width')),
+                    'height': int_or_none(video_version.get('height')),
+                    'abr': int_or_none(video_version.get('audio_bitrate')),
+                    'vbr': int_or_none(video_version.get('video_bitrate')),
+                }
+                bitrate = self._search_regex(r'(\d+)k', video_version_url, 'bitrate', default=None)
+                if bitrate:
+                    f.update({
+                        'format_id': 'http-%s' % bitrate,
+                    })
+                formats.append(f)
+            self._sort_formats(formats)
     
-        def test_order(self):
-        q = queues.Queue()
-        for i in [1, 3, 2]:
-            q.put_nowait(i)
-    
-        @gen.coroutine
-    def resolve(self, host, port, family=0):
-        if is_valid_ip(host):
-            addresses = [host]
-        else:
-            # gethostbyname doesn't take callback as a kwarg
-            self.channel.gethostbyname(host, family, (yield gen.Callback(1)))
-            callback_args = yield gen.Wait(1)
-            assert isinstance(callback_args, gen.Arguments)
-            assert not callback_args.kwargs
-            result, error = callback_args.args
-            if error:
-                raise IOError('C-Ares returned error %s: %s while resolving %s' %
-                              (error, pycares.errno.strerror(error), host))
-            addresses = result.addresses
-        addrinfo = []
-        for address in addresses:
-            if '.' in address:
-                address_family = socket.AF_INET
-            elif ':' in address:
-                address_family = socket.AF_INET6
-            else:
-                address_family = socket.AF_UNSPEC
-            if family != socket.AF_UNSPEC and family != address_family:
-                raise IOError('Requested socket family %d but got %d' %
-                              (family, address_family))
-            addrinfo.append((address_family, (address, port)))
-        raise gen.Return(addrinfo)
+        r = client.get('/pages/world')
+    assert r.status_code == 200
 
     
     
-class DigestAuthHandler(RequestHandler):
-    def get(self):
-        realm = 'test'
-        opaque = 'asdf'
-        # Real implementations would use a random nonce.
-        nonce = '1234'
-        username = 'foo'
-        password = 'bar'
+@app.route('/public')
+def public_timeline():
+    '''Displays the latest messages of all users.'''
+    return render_template('timeline.html', messages=query_db('''
+        select message.*, user.* from message, user
+        where message.author_id = user.user_id
+        order by message.pub_date desc limit ?''', [PER_PAGE]))
     
-        def record_done(self, future, key):
-        '''Record the resolution of a Future returned by Condition.wait.'''
-        def callback(_):
-            if not future.result():
-                # wait() resolved to False, meaning it timed out.
-                self.history.append('timeout')
-            else:
-                self.history.append(key)
-        future.add_done_callback(callback)
+        model.train_on_batch(x_train[:32], y_train[:32],
+                         sample_weight=sample_weight[:32])
+    model.test_on_batch(x_train[:32], y_train[:32],
+                        sample_weight=sample_weight[:32])
     
-            sock, port = bind_unused_port()
-        server = namespace['TestServer']()
-        server.add_socket(sock)
-        client = IOStream(socket.socket())
-        yield client.connect(('localhost', port))
-        result = yield client.read_until_close()
-        self.assertEqual(result, b'data')
-        server.stop()
-        client.close()
+    print('Building model...')
+model = Sequential()
+model.add(Dense(512, input_shape=(max_words,)))
+model.add(Activation('relu'))
+model.add(Dropout(0.5))
+model.add(Dense(num_classes))
+model.add(Activation('softmax'))
     
     
-class ComposeHandler(BaseHandler):
-    @tornado.web.authenticated
-    def get(self):
-        id = self.get_argument('id', None)
-        entry = None
-        if id:
-            entry = self.db.get('SELECT * FROM entries WHERE id = %s', int(id))
-        self.render('compose.html', entry=entry)
+def handle_method(name, member):
+    if name in accepted_name or member.__module__ in accepted_module:
+        return
+    handle_function(name, member)
+    
+        for data_format in ['channels_first', 'channels_last']:
+        if data_format == 'channels_first':
+            shape = (3, 5, 5)
+            target_shape = (5, 5, 3)
+            prev_shape = (2, 3, 2)
+            flip = lambda x: np.flip(np.flip(x, axis=2), axis=3)
+            transpose = lambda x: np.transpose(x, (0, 2, 3, 1))
+            target_data_format = 'channels_last'
+        elif data_format == 'channels_last':
+            shape = (5, 5, 3)
+            target_shape = (3, 5, 5)
+            prev_shape = (2, 2, 3)
+            flip = lambda x: np.flip(np.flip(x, axis=1), axis=2)
+            transpose = lambda x: np.transpose(x, (0, 3, 1, 2))
+            target_data_format = 'channels_first'
+    
+            mock.return_value = 'n'
+        assert not ask_to_proceed_with_overwrite('/tmp/not_exists')
+    
+        def __init__(self, operators, supervisors, directors):
+        self.operators = operators
+        self.supervisors = supervisors
+        self.directors = directors
+        self.queued_calls = deque()
+    
+        def take_spot(self, spot):
+        self.spots_taken.append(spot)
+    
+        def bfs(self, source, dest):
+        # Use self.visited_ids to track visited nodes
+        # Use self.lookup to translate a person_id to a Person
+
+    
+    Revision ID: b318dfe5fb6c
+Revises: d6db5a5cdb5d
+Create Date: 2017-03-08 11:48:10.835741
+    
+    
+def find_constraint_name(upgrade=True):
+    cols = {'column_name'} if upgrade else {'datasource_name'}
+    return generic_find_constraint_name(
+        table='columns', columns=cols, referenced='datasources', db=db)
+    
+    from alembic import op
+import sqlalchemy as sa
+    
+    def upgrade():
+    bind = op.get_bind()
+    session = db.Session(bind=bind)
+    
+    
+def downgrade():
+    op.drop_table('logs')
+
+    
+        op.add_column(
+        'query', sa.Column('name', sa.String(length=256), nullable=True))
+    try:
+        with op.batch_alter_table('query') as batch_op:
+            batch_op.drop_constraint('client_id', type_='unique')
+    except Exception as e:
+        logging.warning(str(e))
+
+    
+    from alembic import op
+import sqlalchemy as sa
+    
+    
+def upgrade():
+    ### commands auto generated by Alembic - please adjust! ###
+    op.create_table('clusters',
+    sa.Column('created_on', sa.DateTime(), nullable=False),
+    sa.Column('changed_on', sa.DateTime(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('cluster_name', sa.String(length=250), nullable=True),
+    sa.Column('coordinator_host', sa.String(length=255), nullable=True),
+    sa.Column('coordinator_port', sa.Integer(), nullable=True),
+    sa.Column('coordinator_endpoint', sa.String(length=255), nullable=True),
+    sa.Column('broker_host', sa.String(length=255), nullable=True),
+    sa.Column('broker_port', sa.Integer(), nullable=True),
+    sa.Column('broker_endpoint', sa.String(length=255), nullable=True),
+    sa.Column('metadata_last_refreshed', sa.DateTime(), nullable=True),
+    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
+    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('cluster_name')
+    )
+    op.create_table('dashboards',
+    sa.Column('created_on', sa.DateTime(), nullable=False),
+    sa.Column('changed_on', sa.DateTime(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('dashboard_title', sa.String(length=500), nullable=True),
+    sa.Column('position_json', sa.Text(), nullable=True),
+    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
+    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('dbs',
+    sa.Column('created_on', sa.DateTime(), nullable=False),
+    sa.Column('changed_on', sa.DateTime(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('database_name', sa.String(length=250), nullable=True),
+    sa.Column('sqlalchemy_uri', sa.String(length=1024), nullable=True),
+    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
+    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('database_name')
+    )
+    op.create_table('datasources',
+    sa.Column('created_on', sa.DateTime(), nullable=False),
+    sa.Column('changed_on', sa.DateTime(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('datasource_name', sa.String(length=255), nullable=True),
+    sa.Column('is_featured', sa.Boolean(), nullable=True),
+    sa.Column('is_hidden', sa.Boolean(), nullable=True),
+    sa.Column('description', sa.Text(), nullable=True),
+    sa.Column('default_endpoint', sa.Text(), nullable=True),
+    sa.Column('user_id', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
+    sa.Column('cluster_name', sa.String(length=250), sa.ForeignKey('clusters.cluster_name'), nullable=True),
+    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
+    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('datasource_name')
+    )
+    op.create_table('tables',
+    sa.Column('created_on', sa.DateTime(), nullable=False),
+    sa.Column('changed_on', sa.DateTime(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('table_name', sa.String(length=250), nullable=True),
+    sa.Column('main_dttm_col', sa.String(length=250), nullable=True),
+    sa.Column('default_endpoint', sa.Text(), nullable=True),
+    sa.Column('database_id', sa.Integer(), sa.ForeignKey('dbs.id'), nullable=False),
+    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
+    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('table_name')
+    )
+    op.create_table('columns',
+    sa.Column('created_on', sa.DateTime(), nullable=False),
+    sa.Column('changed_on', sa.DateTime(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('datasource_name', sa.String(length=255), nullable=True),
+    sa.Column('column_name', sa.String(length=255), nullable=True),
+    sa.Column('is_active', sa.Boolean(), nullable=True),
+    sa.Column('type', sa.String(length=32), nullable=True),
+    sa.Column('groupby', sa.Boolean(), nullable=True),
+    sa.Column('count_distinct', sa.Boolean(), nullable=True),
+    sa.Column('sum', sa.Boolean(), nullable=True),
+    sa.Column('max', sa.Boolean(), nullable=True),
+    sa.Column('min', sa.Boolean(), nullable=True),
+    sa.Column('filterable', sa.Boolean(), nullable=True),
+    sa.Column('description', sa.Text(), nullable=True),
+    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
+    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('metrics',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('metric_name', sa.String(length=512), nullable=True),
+    sa.Column('verbose_name', sa.String(length=1024), nullable=True),
+    sa.Column('metric_type', sa.String(length=32), nullable=True),
+    sa.Column('datasource_name', sa.String(length=255), sa.ForeignKey('datasources.datasource_name'), nullable=True),
+    sa.Column('json', sa.Text(), nullable=True),
+    sa.Column('description', sa.Text(), nullable=True),
+    sa.ForeignKeyConstraint(['datasource_name'], ['datasources.datasource_name'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('slices',
+    sa.Column('created_on', sa.DateTime(), nullable=False),
+    sa.Column('changed_on', sa.DateTime(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('slice_name', sa.String(length=250), nullable=True),
+    sa.Column('druid_datasource_id', sa.Integer(), sa.ForeignKey('datasources.id'), nullable=True),
+    sa.Column('table_id', sa.Integer(), sa.ForeignKey('tables.id'), nullable=True),
+    sa.Column('datasource_type', sa.String(length=200), nullable=True),
+    sa.Column('datasource_name', sa.String(length=2000), nullable=True),
+    sa.Column('viz_type', sa.String(length=250), nullable=True),
+    sa.Column('params', sa.Text(), nullable=True),
+    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
+    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('sql_metrics',
+    sa.Column('created_on', sa.DateTime(), nullable=False),
+    sa.Column('changed_on', sa.DateTime(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('metric_name', sa.String(length=512), nullable=True),
+    sa.Column('verbose_name', sa.String(length=1024), nullable=True),
+    sa.Column('metric_type', sa.String(length=32), nullable=True),
+    sa.Column('table_id', sa.Integer(), sa.ForeignKey('tables.id'), nullable=True),
+    sa.Column('expression', sa.Text(), nullable=True),
+    sa.Column('description', sa.Text(), nullable=True),
+    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
+    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('table_columns',
+    sa.Column('created_on', sa.DateTime(), nullable=False),
+    sa.Column('changed_on', sa.DateTime(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('table_id', sa.Integer(), sa.ForeignKey('tables.id'), nullable=True),
+    sa.Column('column_name', sa.String(length=255), nullable=True),
+    sa.Column('is_dttm', sa.Boolean(), nullable=True),
+    sa.Column('is_active', sa.Boolean(), nullable=True),
+    sa.Column('type', sa.String(length=32), nullable=True),
+    sa.Column('groupby', sa.Boolean(), nullable=True),
+    sa.Column('count_distinct', sa.Boolean(), nullable=True),
+    sa.Column('sum', sa.Boolean(), nullable=True),
+    sa.Column('max', sa.Boolean(), nullable=True),
+    sa.Column('min', sa.Boolean(), nullable=True),
+    sa.Column('filterable', sa.Boolean(), nullable=True),
+    sa.Column('description', sa.Text(), nullable=True),
+    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
+    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('dashboard_slices',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('dashboard_id', sa.Integer(), sa.ForeignKey('dashboards.id'), nullable=True),
+    sa.Column('slice_id', sa.Integer(), sa.ForeignKey('slices.id'), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
+    ### end Alembic commands ###
+    
+    
+def upgrade():
+    op.add_column('metrics', sa.Column('changed_by_fk', sa.Integer(), nullable=True))
+    op.add_column('metrics', sa.Column('changed_on', sa.DateTime(), nullable=True))
+    op.add_column('metrics', sa.Column('created_by_fk', sa.Integer(), nullable=True))
+    op.add_column('metrics', sa.Column('created_on', sa.DateTime(), nullable=True))
+    try:
+        op.alter_column('columns', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.alter_column('columns', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.alter_column('css_templates', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.alter_column('css_templates', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.alter_column('dashboards', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.alter_column('dashboards', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.alter_column('datasources', 'changed_by_fk',
+                   existing_type=sa.INTEGER(),
+                   nullable=True)
+        op.alter_column('datasources', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.alter_column('datasources', 'created_by_fk',
+                   existing_type=sa.INTEGER(),
+                   nullable=True)
+        op.alter_column('datasources', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.alter_column('dbs', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.alter_column('dbs', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.alter_column('slices', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.alter_column('slices', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.alter_column('sql_metrics', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.alter_column('sql_metrics', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.alter_column('table_columns', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.alter_column('table_columns', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.alter_column('tables', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.alter_column('tables', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.alter_column('url', 'changed_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.alter_column('url', 'created_on',
+                   existing_type=sa.DATETIME(),
+                   nullable=True)
+        op.create_foreign_key(None, 'metrics', 'ab_user', ['changed_by_fk'], ['id'])
+        op.create_foreign_key(None, 'metrics', 'ab_user', ['created_by_fk'], ['id'])
+    except:
+        pass
+    
+    def upgrade():
+    op.add_column('slices', sa.Column('description', sa.Text(), nullable=True))
