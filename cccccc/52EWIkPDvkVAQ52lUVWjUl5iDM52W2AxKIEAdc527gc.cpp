@@ -1,240 +1,209 @@
 
         
-         private:
-  using PendingRequestMap = std::map<int, SendCommandCallback>;
+        ScrollView* bln_word_window_handle();  //return handle
+void build_image_window(int width, int height);
+void display_bln_lines(ScrollView window,
+                       ScrollView::Color colour,
+                       float scale_factor,
+                       float y_offset,
+                       float minx,
+                       float maxx);
+                                 //function to call
+void pgeditor_msg(  //message display
+                  const char *msg);
+void pgeditor_show_point(  //display coords
+                         SVEvent *event);
+                                 //put bln word in       box
+void show_point(PAGE_RES* page_res, float x, float y);
     
-    namespace mate {
-    }
+    #define UNLV_EXT  '.uzn'  // unlv zone file
     
-    SavePageHandler::SavePageHandler(content::WebContents* web_contents,
-                                 const SavePageCallback& callback)
-    : web_contents_(web_contents),
-      callback_(callback) {
-}
+    #include 'ccstruct.h'
     
-      AtomQuotaPermissionContext();
-  virtual ~AtomQuotaPermissionContext();
-    
-    net::URLRequestJob* AsarProtocolHandler::MaybeCreateJob(
-    net::URLRequest* request,
-    net::NetworkDelegate* network_delegate) const {
-  base::FilePath full_path;
-  net::FileURLToFilePath(request->url(), &full_path);
-  auto* job = new URLRequestAsarJob(request, network_delegate);
-  job->Initialize(file_task_runner_, full_path);
-  return job;
-}
-    
-    #include 'atom/browser/net/http_protocol_handler.h'
-    
-    #include <string>
-#include <vector>
-    
-    // Saves the COM marker segment as a string to *jpg.
-bool ProcessCOM(const uint8_t* data, const size_t len, size_t* pos,
-                JPEGData* jpg) {
-  VERIFY_LEN(2);
-  size_t marker_len = ReadUint16(data, pos);
-  VERIFY_INPUT(marker_len, 2, 65535, MARKER_LEN);
-  VERIFY_LEN(marker_len - 2);
-  std::string com_str(reinterpret_cast<const char*>(
-      &data[*pos - 2]), marker_len);
-  *pos += marker_len - 2;
-  jpg->com_data.push_back(com_str);
-  return true;
-}
-    
-    
-    {  // Returns a heuristic cutoff on block errors in the sense that we won't
-  // consider distortions where a block error is greater than this.
-  virtual float BlockErrorLimit() const = 0;
-  // Given the search direction (+1 for upwards and -1 for downwards) and the
-  // current distance map, fills in *block_weight image with the relative block
-  // error adjustment weights.
-  // The target_mul param has the same semantics as in DistanceOK().
-  // Note that this is essentially a static function in the sense that it does
-  // not depend on the last Compare() call.
-  virtual void ComputeBlockErrorAdjustmentWeights(
-      int direction, int max_block_dist, double target_mul, int factor_x,
-      int factor_y, const std::vector<float>& distmap,
-      std::vector<float>* block_weight) = 0;
-};
-    
-    
-    {}  // namespace
-    
-    static const int kCrToRedTable[256] = {
-  -179, -178, -177, -175, -174, -172, -171, -170, -168, -167, -165, -164,
-  -163, -161, -160, -158, -157, -156, -154, -153, -151, -150, -149, -147,
-  -146, -144, -143, -142, -140, -139, -137, -136, -135, -133, -132, -130,
-  -129, -128, -126, -125, -123, -122, -121, -119, -118, -116, -115, -114,
-  -112, -111, -109, -108, -107, -105, -104, -102, -101, -100,  -98,  -97,
-   -95,  -94,  -93,  -91,  -90,  -88,  -87,  -86,  -84,  -83,  -81,  -80,
-   -79,  -77,  -76,  -74,  -73,  -72,  -70,  -69,  -67,  -66,  -64,  -63,
-   -62,  -60,  -59,  -57,  -56,  -55,  -53,  -52,  -50,  -49,  -48,  -46,
-   -45,  -43,  -42,  -41,  -39,  -38,  -36,  -35,  -34,  -32,  -31,  -29,
-   -28,  -27,  -25,  -24,  -22,  -21,  -20,  -18,  -17,  -15,  -14,  -13,
-   -11,  -10,   -8,   -7,   -6,   -4,   -3,   -1,    0,    1,    3,    4,
-     6,    7,    8,   10,   11,   13,   14,   15,   17,   18,   20,   21,
-    22,   24,   25,   27,   28,   29,   31,   32,   34,   35,   36,   38,
-    39,   41,   42,   43,   45,   46,   48,   49,   50,   52,   53,   55,
-    56,   57,   59,   60,   62,   63,   64,   66,   67,   69,   70,   72,
-    73,   74,   76,   77,   79,   80,   81,   83,   84,   86,   87,   88,
-    90,   91,   93,   94,   95,   97,   98,  100,  101,  102,  104,  105,
-   107,  108,  109,  111,  112,  114,  115,  116,  118,  119,  121,  122,
-   123,  125,  126,  128,  129,  130,  132,  133,  135,  136,  137,  139,
-   140,  142,  143,  144,  146,  147,  149,  150,  151,  153,  154,  156,
-   157,  158,  160,  161,  163,  164,  165,  167,  168,  170,  171,  172,
-   174,  175,  177,  178
-};
-    
-    
-    {}  // namespace guetzli
-
-    
-    // Butteraugli scores that correspond to JPEG quality levels, starting at
-// kLowestQuality. They were computed by taking median BA scores of JPEGs
-// generated using libjpeg-turbo at given quality from a set of PNGs.
-// The scores above quality level 100 are just linearly decreased so that score
-// for 110 is 90% of the score for 100.
-const double kScoreForQuality[] = {
-  2.810761,  // 70
-  2.729300,
-  2.689687,
-  2.636811,
-  2.547863,
-  2.525400,
-  2.473416,
-  2.366133,
-  2.338078,
-  2.318654,
-  2.201674,  // 80
-  2.145517,
-  2.087322,
-  2.009328,
-  1.945456,
-  1.900112,
-  1.805701,
-  1.750194,
-  1.644175,
-  1.562165,
-  1.473608,  // 90
-  1.382021,
-  1.294298,
-  1.185402,
-  1.066781,
-  0.971769,  // 95
-  0.852901,
-  0.724544,
-  0.611302,
-  0.443185,
-  0.211578,  // 100
-  0.209462,
-  0.207346,
-  0.205230,
-  0.203114,
-  0.200999,  // 105
-  0.198883,
-  0.196767,
-  0.194651,
-  0.192535,
-  0.190420,  // 110
-  0.190420,
-};
-    
-    void DebugHUD_DoInterface(DebugHUD *hud)
-{
-    // 1. Show a simple window.
-    // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-    {
-        static float f = 0.0f;
-        static int counter = 0;
-        ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-        ImGui::ColorEdit3('clear color', hud->clearColor);      // Edit 3 floats representing a color
-    }
-    }
-    
-        for (int n = 0; n < 50; n++)
-    {
-        printf('NewFrame() %d\n', n);
-        io.DisplaySize = ImVec2(1920, 1080);
-        io.DeltaTime = 1.0f / 60.0f;
-        ImGui::NewFrame();
-    }
-    
-    #include 'imgui.h'
-#include 'imgui_impl_dx9.h'
-    
-    static VkCommandBuffer        g_CommandBuffer = VK_NULL_HANDLE;
-static VkDeviceSize           g_BufferMemoryAlignment = 256;
-static VkPipelineCreateFlags  g_PipelineCreateFlags = 0;
-static int                    g_FrameIndex = 0;
-    
-    void ListFilesInDirRecursive(const std::string &Dir, long *Epoch,
-                             std::vector<std::string> *V, bool TopDir) {
-  auto E = GetEpoch(Dir);
-  if (Epoch)
-    if (E && *Epoch >= E) return;
-    }
-    
-    size_t MutationDispatcher::Mutate_ChangeBinaryInteger(uint8_t *Data,
-                                                      size_t Size,
-                                                      size_t MaxSize) {
-  if (Size > MaxSize) return 0;
-  switch (Rand(4)) {
-    case 3: return ChangeBinaryInteger<uint64_t>(Data, Size, Rand);
-    case 2: return ChangeBinaryInteger<uint32_t>(Data, Size, Rand);
-    case 1: return ChangeBinaryInteger<uint16_t>(Data, Size, Rand);
-    case 0: return ChangeBinaryInteger<uint8_t>(Data, Size, Rand);
-    default: assert(0);
+    // Fits a line to the points, ignoring the skip_first initial points and the
+// skip_last final points, returning the fitted line as a pair of points,
+// and the upper quartile error.
+double DetLineFit::Fit(int skip_first, int skip_last,
+                       ICOORD* pt1, ICOORD* pt2) {
+  // Do something sensible with no points.
+  if (pts_.empty()) {
+    pt1->set_x(0);
+    pt1->set_y(0);
+    *pt2 = *pt1;
+    return 0.0;
   }
-  return 0;
+  // Count the points and find the first and last kNumEndPoints.
+  int pt_count = pts_.size();
+  ICOORD* starts[kNumEndPoints];
+  if (skip_first >= pt_count) skip_first = pt_count - 1;
+  int start_count = 0;
+  int end_i = MIN(skip_first + kNumEndPoints, pt_count);
+  for (int i = skip_first; i < end_i; ++i) {
+    starts[start_count++] = &pts_[i].pt;
+  }
+  ICOORD* ends[kNumEndPoints];
+  if (skip_last >= pt_count) skip_last = pt_count - 1;
+  int end_count = 0;
+  end_i = MAX(0, pt_count - kNumEndPoints - skip_last);
+  for (int i = pt_count - 1 - skip_last; i >= end_i; --i) {
+    ends[end_count++] = &pts_[i].pt;
+  }
+  // 1 or 2 points need special treatment.
+  if (pt_count <= 2) {
+    *pt1 = *starts[0];
+    if (pt_count > 1)
+      *pt2 = *ends[0];
+    else
+      *pt2 = *pt1;
+    return 0.0;
+  }
+  // Although with between 2 and 2*kNumEndPoints-1 points, there will be
+  // overlap in the starts, ends sets, this is OK and taken care of by the
+  // if (*start != *end) test below, which also tests for equal input points.
+  double best_uq = -1.0;
+  // Iterate each pair of points and find the best fitting line.
+  for (int i = 0; i < start_count; ++i) {
+    ICOORD* start = starts[i];
+    for (int j = 0; j < end_count; ++j) {
+      ICOORD* end = ends[j];
+      if (*start != *end) {
+        ComputeDistances(*start, *end);
+        // Compute the upper quartile error from the line.
+        double dist = EvaluateLineFit();
+        if (dist < best_uq || best_uq < 0.0) {
+          best_uq = dist;
+          *pt1 = *start;
+          *pt2 = *end;
+        }
+      }
+    }
+  }
+  // Finally compute the square root to return the true distance.
+  return best_uq > 0.0 ? sqrt(best_uq) : best_uq;
 }
     
-    struct FuzzingOptions {
-  int Verbosity = 1;
-  size_t MaxLen = 0;
-  int UnitTimeoutSec = 300;
-  int TimeoutExitCode = 77;
-  int ErrorExitCode = 77;
-  int MaxTotalTimeSec = 0;
-  int RssLimitMb = 0;
-  bool DoCrossOver = true;
-  int MutateDepth = 5;
-  bool UseCounters = false;
-  bool UseIndirCalls = true;
-  bool UseMemcmp = true;
-  bool UseMemmem = true;
-  bool UseCmp = false;
-  bool UseValueProfile = false;
-  bool Shrink = false;
-  int ReloadIntervalSec = 1;
-  bool ShuffleAtStartUp = true;
-  bool PreferSmall = true;
-  size_t MaxNumberOfRuns = -1L;
-  int ReportSlowUnits = 10;
-  bool OnlyASCII = false;
-  std::string OutputCorpus;
-  std::string ArtifactPrefix = './';
-  std::string ExactArtifactPath;
-  std::string ExitOnSrcPos;
-  std::string ExitOnItem;
-  bool SaveArtifacts = true;
-  bool PrintNEW = true; // Print a status line when new units are found;
-  bool OutputCSV = false;
-  bool PrintNewCovPcs = false;
-  bool PrintFinalStats = false;
-  bool PrintCorpusStats = false;
-  bool PrintCoverage = false;
-  bool DumpCoverage = false;
-  bool DetectLeaks = true;
-  int  TraceMalloc = 0;
-  bool HandleAbrt = false;
-  bool HandleBus = false;
-  bool HandleFpe = false;
-  bool HandleIll = false;
-  bool HandleInt = false;
-  bool HandleSegv = false;
-  bool HandleTerm = false;
-};
+    // Returns the sqrt of the mean squared error measured perpendicular from the
+// line through mean_point() in the direction dir.
+//
+// Derivation:
+//   Lemma:  Let v and x_i (i=1..N) be a k-dimensional vectors (1xk matrices).
+//     Let % be dot product and ' be transpose.  Note that:
+//      Sum[i=1..N] (v % x_i)^2
+//         = v * [x_1' x_2' ... x_N'] * [x_1' x_2' .. x_N']' * v'
+//     If x_i have average 0 we have:
+//       = v * (N * COVARIANCE_MATRIX(X)) * v'
+//     Expanded for the case that k = 2, where we treat the dimensions
+//     as x_i and y_i, this is:
+//       = v * (N * [VAR(X), COV(X,Y); COV(X,Y) VAR(Y)]) * v'
+//  Now, we are trying to calculate the mean squared error, where v is
+//  perpendicular to our line of interest:
+//    Mean squared error
+//      = E [ (v % (x_i - x_avg))) ^2 ]
+//      = Sum (v % (x_i - x_avg))^2 / N
+//      = v * N * [VAR(X) COV(X,Y); COV(X,Y) VAR(Y)] / N * v'
+//      = v * [VAR(X) COV(X,Y); COV(X,Y) VAR(Y)] * v'
+//      = code below
+double LLSQ::rms_orth(const FCOORD &dir) const {
+  FCOORD v = !dir;
+  v.normalise();
+  return sqrt(v.x() * v.x() * x_variance() +
+              2 * v.x() * v.y() * covariance() +
+              v.y() * v.y() * y_variance());
+}
+    
+    #include 'leveldb/env.h'
+    
+          case kPrevLogNumber:
+        if (GetVarint64(&input, &prev_log_number_)) {
+          has_prev_log_number_ = true;
+        } else {
+          msg = 'previous log number';
+        }
+        break;
+    
+    #include <stddef.h>
+#include <stdint.h>
+#include <string>
+#include <vector>
+#include 'leveldb/slice.h'
+#include 'util/hash.h'
+    
+    TEST(FilterBlockTest, SingleChunk) {
+  FilterBlockBuilder builder(&policy_);
+  builder.StartBlock(100);
+  builder.AddKey('foo');
+  builder.AddKey('bar');
+  builder.AddKey('box');
+  builder.StartBlock(200);
+  builder.AddKey('box');
+  builder.StartBlock(300);
+  builder.AddKey('hello');
+  Slice block = builder.Finish();
+  FilterBlockReader reader(&policy_, block);
+  ASSERT_TRUE(reader.KeyMayMatch(100, 'foo'));
+  ASSERT_TRUE(reader.KeyMayMatch(100, 'bar'));
+  ASSERT_TRUE(reader.KeyMayMatch(100, 'box'));
+  ASSERT_TRUE(reader.KeyMayMatch(100, 'hello'));
+  ASSERT_TRUE(reader.KeyMayMatch(100, 'foo'));
+  ASSERT_TRUE(! reader.KeyMayMatch(100, 'missing'));
+  ASSERT_TRUE(! reader.KeyMayMatch(100, 'other'));
+}
+    
+      // Encoded length of a Footer.  Note that the serialization of a
+  // Footer will always occupy exactly this many bytes.  It consists
+  // of two block handles and a magic number.
+  enum {
+    kEncodedLength = 2*BlockHandle::kMaxEncodedLength + 8
+  };
+    
+    Iterator* NewErrorIterator(const Status& status) {
+  return new EmptyIterator(status);
+}
+    
+        // Compress
+    int maxlen = data_sz + 512 + (data_sz >> 2) + sizeof(int); // total guess
+    char* compressed = use_compression ? new char[maxlen] : data;
+    int compressed_sz = use_compression ? stb_compress((stb_uchar*)compressed, (stb_uchar*)data, data_sz) : data_sz;
+    if (use_compression)
+		memset(compressed + compressed_sz, 0, maxlen - compressed_sz);
+    
+    #if !defined(IMGUI_DISABLE_OBSOLETE_FUNCTIONS) && defined(IMGUI_DISABLE_TEST_WINDOWS) && !defined(IMGUI_DISABLE_DEMO_WINDOWS)   // Obsolete name since 1.53, TEST->DEMO
+#define IMGUI_DISABLE_DEMO_WINDOWS
+#endif
+    
+    
+    {        // Rendering
+        glViewport(0, 0, (int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y);
+        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+        glClear(GL_COLOR_BUFFER_BIT);
+        //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
+        ImGui::Render();
+        ImGui_ImplSdlGL2_RenderDrawData(ImGui::GetDrawData());
+        SDL_GL_SwapWindow(window);
+    }
+    
+            // 1. Show a simple window.
+        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
+            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    }
+    
+    
+    {    // Restore modified state
+    glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glBindTexture(GL_TEXTURE_2D, (GLuint)last_texture);
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glPopAttrib();
+    glPolygonMode(GL_FRONT, (GLenum)last_polygon_mode[0]); glPolygonMode(GL_BACK, (GLenum)last_polygon_mode[1]);
+    glViewport(last_viewport[0], last_viewport[1], (GLsizei)last_viewport[2], (GLsizei)last_viewport[3]);
+    glScissor(last_scissor_box[0], last_scissor_box[1], (GLsizei)last_scissor_box[2], (GLsizei)last_scissor_box[3]);
+}
