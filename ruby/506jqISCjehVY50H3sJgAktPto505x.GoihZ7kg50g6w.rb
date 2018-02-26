@@ -1,58 +1,71 @@
 
         
-        end
-
-    
-      end
-    
-      included do
-    scope :admins, -> { where(admin: true) }
-    scope :moderators, -> { where(moderator: true) }
-    scope :staff, -> { where('moderator or admin ') }
+          def tumblr_oauth_token_secret
+    service.secret
   end
     
-    module Docs
-  class Entry
-    class Invalid < StandardError; end
+      def load_event
+    @event = current_user.events.find(params[:id])
+  end
+end
+
     
-    #
-# Railties
-#
-    
-    asm = nil
-File.open('h2b.com.dbg.in', 'rb') { |fd|
-	asm = fd.read(fd.stat.size)
-}
-    
-    class Source < Template
-  attr_accessor :__CAL
-  attr_accessor :__NR_execve
-  attr_accessor :__NR_getpeername
-  attr_accessor :__NR_accept
-  attr_accessor :__NR_listen
-  attr_accessor :__NR_bind
-  attr_accessor :__NR_socket
-  attr_accessor :__NR_connect
-  attr_accessor :__NR_close
-  attr_accessor :__NR_kfcntl
-  attr_accessor :__cal
-  attr_accessor :_cal
-  attr_accessor :cal
-  attr_accessor :ver
-    
-      # Uninstalls this logger from \{Sass.logger\}. This should only be called if
-  # the logger was installed using \{#install!}
-  def uninstall!
-    if Sass.logger != self
-      throw Exception.new('Can't uninstall a logger that's not currently installed.')
+        respond_to do |format|
+      if !running? && @job.destroy
+        format.html { redirect_to jobs_path, notice: 'Job deleted.' }
+        format.json { head :no_content }
+      else
+        format.html { redirect_to jobs_path, alert: 'Can not delete a running job.' }
+        format.json { render json: @job.errors, status: :unprocessable_entity }
+      end
     end
+  end
     
-            def define_logger(name, options = {})
-          class_eval <<-RUBY, __FILE__, __LINE__ + 1
-            def #{name}(message)
-              #{options.fetch(:to, :log)}(#{name.inspect}, message)
+    def check_link(uri)
+  HTTParty.head(uri, :verify => false).code.to_i.tap do |status|
+    if (400..422).include?(status)
+      if status != 403 && !uri.exclude?('udemy.com')
+        raise 'Request had status #{status}'
+      else
+        putc('S')
+      end
+    end
+  end
+end
+    
+      if ARGV.include? '--no-ansi'
+    STDERR.puts <<-DOC
+    WARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
+    Consider adding the following to ~/.profile:
+    
+            def run
+          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
+          if @pod_name.nil? # Print all
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
             end
-          RUBY
+          else # Print only for the requested pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            else
+              print_pod_cache_infos(@pod_name, cache_descriptors)
+            end
+          end
+        end
+    
+            def run
+          print_version
+          signal_end_of_output
+          listen
+        end
+    
+            # Checks if a template URL is given else returns the TEMPLATE_REPO URL
+        #
+        # @return String
+        #
+        def template_repo_url
+          @template_url || TEMPLATE_REPO
         end
       end
     end
@@ -60,38 +73,34 @@ File.open('h2b.com.dbg.in', 'rb') { |fd|
 end
 
     
-        # Returns the Sass/SCSS code for the media query list.
-    #
-    # @param options [{Symbol => Object}] An options hash (see {Sass::CSS#initialize}).
-    # @return [String]
-    def to_src(options)
-      queries.map {|q| q.to_src(options)}.join(', ')
-    end
+          def call(env)
+        unless accepts? env
+          instrument env
+          result = react env
+        end
+        result or app.call(env)
+      end
     
-        def self.run
-      # Apparently there's no better way than this to add Sass
-      # to Merb's Rack stack.
-      Merb::Config[:app] = Sass::Plugin::Rack.new(Merb::Config[:app])
+          post('/', {}, 'HTTP_REFERER' => 'http://example.com/foo', 'HTTP_HOST' => 'example.org')
+      expect(last_response).to be_ok
     end
   end
 end
 
     
-        # Same as to_s
-    def inspect
-      to_s
+    module Jekyll
+    
+      # Improved version of Liquid's truncatewords:
+  # - Uses typographically correct ellipsis (…) insted of '...'
+  def truncatewords(input, length)
+    truncate = input.split(' ')
+    if truncate.length > length
+      truncate[0..length-1].join(' ').strip + ' &hellip;'
+    else
+      input
     end
+  end
     
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'padding-top: 11px; ' +
-                'padding-right: 12px; ' +
-                'padding-left: 13px;'
-      bad_rule = 'padding-bottom: null;'
-    
-      context 'called with null values' do
-    it 'writes rules for others' do
-      ruleset = 'position: static; ' +
-                'top: 11px; ' +
-                'left: 13px;'
-      bad_rule = 'position-bottom: null; position-right: null;'
+          unless file.file?
+        return 'File #{file} could not be found'
+      end
