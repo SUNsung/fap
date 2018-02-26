@@ -1,126 +1,103 @@
-    let(:key) { Spaceship::Portal::Key.new(key_attributes) }
-    
-          it 'splits correctly' do
-        expected = [
-          'One',
-          'Two',
-          'Three',
-          'Four Token',
-          'Or',
-          'Newlines',
-          'Everywhere'
-        ]
-        expect(generator.split_keywords(keywords)).to eq(expected)
+
+        
+            # Remove directories opposite from traversal, so that a subtree with no
+    # actual files gets removed correctly.
+    dirs.reverse_each do |d|
+      if d.children.empty?
+        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
+        d.rmdir
       end
     end
-  end
-end
-
     
-              expect(result).to eq(true)
-        end
+        def boolify(value)
+      agent.send(:boolify, value)
+    end
+    
+        if params[:sort].present?
+      attribute, direction = params[:sort].downcase.split('.')
+      unless valid_sorts.include?(attribute)
+        attribute, direction = default.to_a.first
       end
-    
-          it 'pass a custom build number to the tool' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          increment_build_number(build_number: 24, xcodeproj: '.xcproject')
-        end').runner.execute(:test)
-    
-              self.confirmed_at = Time.now.utc
-    
-      test 'should send confirmation instructions by email after changing email from nil' do
-    admin = create_admin(email: nil)
-    assert_email_sent 'new_test@example.com' do
-      assert admin.update_attributes(email: 'new_test@example.com')
+    else
+      attribute, direction = default.to_a.first
     end
-    assert_match 'new_test@example.com', ActionMailer::Base.deliveries.last.body.encoded
-  end
-    
-      protected
-    
-    class Devise::PasswordsController < DeviseController
-  prepend_before_action :require_no_authentication
-  # Render the #edit only if coming from a reset password email link
-  append_before_action :assert_reset_token_passed, only: :edit
-    
-      def respond_to_on_destroy
-    # We actually need to hardcode this as Rails default responder doesn't
-    # support returning empty response on GET request
-    respond_to do |format|
-      format.all { head :no_content }
-      format.any(*navigational_formats) { redirect_to after_sign_out_path_for(resource_name) }
-    end
-  end
-end
-
-    
-      it 'doesn't handle foreign base specifiers when base is > 0' do
-    [2, 3, 4, 8, 10].each do |base|
-      '0111'.to_i(base).should == '111'.to_i(base)
-    
-        it 'returns a frozen copy if the String is not frozen' do
-      input  = 'foo'
-      output = -input
-    
-      it 'normalizes code points in the string according to the form that is specified' do
-    @accented_f.unicode_normalize(:nfc).should == '\u1e9b\u0323'
-    @accented_f.unicode_normalize(:nfd).should == '\u017f\u0323\u0307'
-    @accented_f.unicode_normalize(:nfkc).should == '\u1e69'
-    @accented_f.unicode_normalize(:nfkd).should == '\u0073\u0323\u0307'
-  end
-    
-      it 'decodes the remaining bytes when passed the '*' modifier' do
-    'abc'.unpack(unpack_format('*')).should == [97, 98, 99]
-  end
-    
-      class Callbacks
-    def self.around_create(record)
-      now = Time.now.utc
-    
-      # Before we load the schema, define the timestamp_id function.
-  # Idiomatically, we might do this in a migration, but then it
-  # wouldn't end up in schema.rb, so we'd need to figure out a way to
-  # get it in before doing db:setup as well. This is simpler, and
-  # ensures it's always in place.
-  Rake::Task['db:schema:load'].enhance ['db:define_timestamp_id']
     
         respond_to do |format|
-      format.html
-    
-        attributes :type, :href, :name
-    
-        HTTP.get(source).to_s.split('\n').each do |line|
-      next if line.start_with? '#'
-      parts = line.split(';').map(&:strip)
-      next if parts.size < 2
-      codes << [parts[0], parts[1].start_with?('fully-qualified')]
+      format.html { redirect_to jobs_path, notice: 'All jobs removed.' }
+      format.json { head :no_content }
     end
-    
-            def show
-          authorize! :read, @order, order_token
-          @address = find_address
-          respond_with(@address)
-        end
-    
-        @buttons_list = %w(
-      button
-      [type='button']
-      [type='reset']
-      [type='submit']
-    )
   end
     
-          expect('.margin-false-third').to have_ruleset(ruleset)
-      expect('.margin-false-third').to_not have_rule(bad_rule)
+        respond_to do |format|
+      format.html { redirect_to services_path }
+      format.json { render json: @service }
     end
   end
 end
 
     
-          expect('.padding-implied-left').to have_rule(rule)
+        def tasks_without_stage_dependency
+      stages + default_tasks
+    end
+    
+    # IMPORTANT: The Capistrano::Plugin system is not yet considered a stable,
+# public API, and is subject to change without notice. Eventually it will be
+# officially documented and supported, but for now, use it at your own risk.
+#
+# Base class for Capistrano plugins. Makes building a Capistrano plugin as easy
+# as writing a `Capistrano::Plugin` subclass and overriding any or all of its
+# three template methods:
+#
+# * set_defaults
+# * register_hooks
+# * define_tasks
+#
+# Within the plugin you can use any methods of the Rake or Capistrano DSLs, like
+# `fetch`, `invoke`, etc. In cases when you need to use SSHKit's backend outside
+# of an `on` block, use the `backend` convenience method. E.g. `backend.test`,
+# `backend.execute`, or `backend.capture`.
+#
+# Package up and distribute your plugin class as a gem and you're good to go!
+#
+# To use a plugin, all a user has to do is install it in the Capfile, like this:
+#
+#   # Capfile
+#   require 'capistrano/superfancy'
+#   install_plugin Capistrano::Superfancy
+#
+# Or, to install the plugin without its hooks:
+#
+#   # Capfile
+#   require 'capistrano/superfancy'
+#   install_plugin Capistrano::Superfancy, load_hooks: false
+#
+class Capistrano::Plugin < Rake::TaskLib
+  include Capistrano::DSL
+    
+        # Provide a wrapper for the SCM that loads a strategy for the user.
+    #
+    # @param [Rake] context     The context in which the strategy should run
+    # @param [Module] strategy  A module to include into the SCM instance. The
+    #    module should provide the abstract methods of Capistrano::SCM
+    #
+    def initialize(context, strategy)
+      @context = context
+      singleton = class << self; self; end
+      singleton.send(:include, strategy)
+    end
+    
+      tasks_dir = Pathname.new('lib/capistrano/tasks')
+  config_dir = Pathname.new('config')
+  deploy_dir = config_dir.join('deploy')
+    
+    Liquid::Template.register_tag('config_tag', ConfigTag)
+    
+        def render(context)
+      if @img
+        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      else
+        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+      end
     end
   end
-    
-      context 'called with auto' do
-    it 'applies to auto to height' do
-      rule = 'height: auto; width: 100px;'
+end
