@@ -1,76 +1,134 @@
 
         
-        
-def side_effect(old_cmd, command):
-    with tarfile.TarFile(_tar_file(old_cmd.script_parts)[0]) as archive:
-        for file in archive.getnames():
-            try:
-                os.remove(file)
-            except OSError:
-                # does not try to remove directories as we cannot know if they
-                # already existed before
-                pass
-
+        new_version = {}
     
+        def test_youporn(self):
+        self._assert_restricted(
+            'http://www.youporn.com/watch/505835/sex-ed-is-it-safe-to-masturbate-daily/',
+            '505835.mp4', 2, old_age=25)
     
-@pytest.mark.functional
-def test_without_confirmation(proc, TIMEOUT):
-    without_confirmation(proc, TIMEOUT)
-    
-        def __eq__(self, other):
-        if isinstance(other, collections.Mapping):
-            other = CaseInsensitiveDict(other)
+            if check_executable('mplayer', ['-h']):
+            args = [
+                'mplayer', '-really-quiet', '-vo', 'null', '-vc', 'dummy',
+                '-dumpstream', '-dumpfile', tmpfilename, url]
+        elif check_executable('mpv', ['-h']):
+            args = [
+                'mpv', '-really-quiet', '--vo=null', '--stream-dump=' + tmpfilename, url]
         else:
-            return NotImplemented
-        # Compare insensitively
-        return dict(self.lower_items()) == dict(other.lower_items())
+            self.report_error('MMS or RTSP download detected but neither 'mplayer' nor 'mpv' could be run. Please install any.')
+            return False
+    
+    from .common import InfoExtractor
+    
+    from httpie.compat import is_windows
+from httpie.config import DEFAULT_CONFIG_DIR, Config
     
     
-def remove_cookie_by_name(cookiejar, name, domain=None, path=None):
-    '''Unsets a cookie by name, by default over all domains and paths.
+with codecs.open(FILE_PATH, encoding='utf8') as f:
+    # Strip because we don't want new lines in the data so that we can
+    # easily count occurrences also when embedded in JSON (where the new
+    # line would be escaped).
+    FILE_CONTENT = f.read().strip()
     
-    #: Python 2.x?
-is_py2 = (_ver[0] == 2)
     
-    >>> requests.codes['temporary_redirect']
-307
->>> requests.codes.teapot
-418
->>> requests.codes['\o/']
-200
+def rst_filenames():
+    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
+        if '.tox' not in root:
+            for filename in fnmatch.filter(filenames, '*.rst'):
+                yield os.path.join(root, filename)
     
-    def kuwo_download_by_rid(rid, output_dir = '.', merge = True, info_only = False):
-    html=get_content('http://player.kuwo.cn/webmusic/st/getNewMuiseByRid?rid=MUSIC_%s'%rid)
-    title=match1(html,r'<name>(.*)</name>')
-    #to get title
-    #format =aac|mp3 ->to get aac format=mp3 ->to get mp3
-    url=get_content('http://antiserver.kuwo.cn/anti.s?format=mp3&rid=MUSIC_%s&type=convert_url&response=url'%rid)
-    songtype, ext, size = url_info(url)
-    print_info(site_info, title, songtype, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir)
+        '''
+    # The value that should be passed to --auth-type
+    # to use this auth plugin. Eg. 'my-auth'
+    auth_type = None
     
-    from .tudou import tudou_download_by_id
-from .youku import youku_download_by_vid
-from xml.dom.minidom import parseString
+    # -- Options for LaTeX output ---------------------------------------------
     
-        # Execute the template string in a temporary namespace and
-    # support tracing utilities by setting a value for frame.f_globals['__name__']
-    namespace = dict(_itemgetter=_itemgetter, __name__='namedtuple_%s' % typename,
-                     _property=property, _tuple=tuple)
-    try:
-        exec(template, namespace)
-    except SyntaxError:
-        e = _sys.exc_info()[1]
-        raise SyntaxError(e.message + ':\n' + template)
-    result = namespace[typename]
     
-    # List of directories, relative to source directory, that shouldn't be searched
-# for source files.
-exclude_trees = ['_build']
+GIT_SHA = get_git_sha()
+version_info = {
+    'GIT_SHA': GIT_SHA,
+    'version': version_string,
+}
+print('-==-' * 15)
+print('VERSION: ' + version_string)
+print('GIT SHA: ' + GIT_SHA)
+print('-==-' * 15)
     
-    def is_prime(n):
-    if n % 2 == 0:
-        return False
+        print('Loading [Misc Charts] dashboard')
+    data.load_misc_dashboard()
     
-        from ycm.tests import YouCompleteMeInstance
+    # Provide a callable that receives a tracking_url and returns another
+# URL. This is used to translate internal Hadoop job tracker URL
+# into a proxied one
+TRACKING_URL_TRANSFORMER = lambda x: x  # noqa: E731
+    
+        '''Interface for Metrics'''
+    
+            upload_prefix = app.config['CSV_TO_HIVE_UPLOAD_DIRECTORY']
+        dest_path = os.path.join(table_name, filename)
+    
+    
+def import_from_dict(session, data, sync=[]):
+    '''Imports databases and druid clusters from dictionary'''
+    if isinstance(data, dict):
+        logging.info('Importing %d %s',
+                     len(data.get(DATABASES_KEY, [])),
+                     DATABASES_KEY)
+        for database in data.get(DATABASES_KEY, []):
+            Database.import_from_dict(session, database, sync=sync)
+    
+            # Compare builtin float conversion with pure Python int_to_float
+        # function above.
+        test_values = [
+            int_dbl_max-1, int_dbl_max, int_dbl_max+1,
+            halfway-1, halfway, halfway + 1,
+            top_power-1, top_power, top_power+1,
+            2*top_power-1, 2*top_power, top_power*top_power,
+        ]
+        test_values.extend(exact_values)
+        for p in range(-4, 8):
+            for x in range(-128, 128):
+                test_values.append(2**(p+53) + x)
+        for value in test_values:
+            self.check_float_conversion(value)
+            self.check_float_conversion(-value)
+    
+            side -- 0 or 1 indicating 'from' or 'to' text
+        flag -- indicates if difference on line
+        linenum -- line number (used for line number column)
+        text -- line text to be marked up
+        '''
+        try:
+            linenum = '%d' % linenum
+            id = ' id='%s%s'' % (self._prefix[side],linenum)
+        except TypeError:
+            # handle blank lines where linenum is '>' or ''
+            id = ''
+        # replace those things that would get confused with HTML symbols
+        text=text.replace('&','&amp;').replace('>','&gt;').replace('<','&lt;')
+    
+            if nextchar == ''':
+            return parse_string(string, idx + 1, strict)
+        elif nextchar == '{':
+            return parse_object((string, idx + 1), strict,
+                _scan_once, object_hook, object_pairs_hook, memo)
+        elif nextchar == '[':
+            return parse_array((string, idx + 1), _scan_once)
+        elif nextchar == 'n' and string[idx:idx + 4] == 'null':
+            return None, idx + 4
+        elif nextchar == 't' and string[idx:idx + 4] == 'true':
+            return True, idx + 4
+        elif nextchar == 'f' and string[idx:idx + 5] == 'false':
+            return False, idx + 5
+    }
+    
+        def _extractname(self, mo):
+        return mo.group('name')
+    
+        def assertFloatsAreIdentical(self, x, y):
+        '''assert that floats x and y are identical, in the sense that:
+        (1) both x and y are nans, or
+        (2) both x and y are infinities, with the same sign, or
+        (3) both x and y are zeros, with the same sign, or
+        (4) x and y are both finite and nonzero, and x == y
