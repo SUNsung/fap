@@ -1,67 +1,132 @@
 
         
-            import matplotlib.pyplot as plt
+        
+@pytest.fixture
+def client():
+    return blueprintexample.app.test_client()
     
-        ratio = n_samples / opts.n_population
+        A microblog example application written as Flask tutorial with
+    Flask and sqlite3.
     
-        # TASK: print the mean and std for each candidate along with the parameter
-    # settings for all the candidates explored by grid search.
-    n_candidates = len(grid_search.cv_results_['params'])
-    for i in range(n_candidates):
-        print(i, 'params - %s; mean - %0.2f; std - %0.2f'
-                 % (grid_search.cv_results_['params'][i],
-                    grid_search.cv_results_['mean_test_score'][i],
-                    grid_search.cv_results_['std_test_score'][i]))
+        A simple application that shows how Flask and jQuery get along.
     
-    First example
--------------
-The first example illustrates how robust covariance estimation can help
-concentrating on a relevant cluster when another one exists. Here, many
-observations are confounded into one and break down the empirical covariance
-estimation.
-Of course, some screening tools would have pointed out the presence of two
-clusters (Support Vector Machines, Gaussian Mixture Models, univariate
-outlier detection, ...). But had it been a high-dimensional example, none
-of these could be applied that easily.
+      perturbs = [_scale_l2(d, FLAGS.perturb_norm_length) for d in perturbs]
+  vadv_logits = logits_from_embedding_fn(
+      [emb + d for (emb, d) in zip(embedded, perturbs)])
+  return _kl_divergence_with_logits(logits, vadv_logits, weights)
     
-            controller.coef0 = Tk.StringVar()
-        controller.coef0.set('0')
-        r = Tk.Frame(valbox)
-        Tk.Label(r, text='coef0:', anchor='e', width=7).pack(side=Tk.LEFT)
-        Tk.Entry(r, width=6, textvariable=controller.coef0).pack(side=Tk.LEFT)
-        r.pack()
-        valbox.pack(side=Tk.LEFT)
+      def add_token(self, token):
+    self._token.int64_list.value.append(token)
+    return self
     
-            fraction_of_positives, mean_predicted_value = \
-            calibration_curve(y_test, prob_pos, n_bins=10)
     
-        def on_operator_inservice(self):
-        self._hsm.on_switchover()  # message ignored
-        self._hsm.send_operator_inservice_response()
-        self._hsm.next_state('suspect')
+def evaluate(defun=False):
+  model = mnist.Model(data_format())
+  dataset = random_dataset()
+  if defun:
+    model.call = tfe.defun(model.call)
+  with tf.device(device()):
+    mnist_eager.test(model, dataset)
     
-        def test_cat_adapter_shall_make_noise(self):
-        cat = Cat()
-        cat_adapter = Adapter(cat, make_noise=cat.meow)
-        noise = cat_adapter.make_noise()
-        expected_noise = 'meow!'
-        self.assertEqual(noise, expected_noise)
+    import tensorflow as tf
     
-    Test code which will almost always fail (if not exactly 12:01) when untestable
-production code (have a look into constructor_injection.py) is used:
+      @tf.test.mock.patch.dict(premade_estimator.__dict__,
+                           {'load_data': four_lines_data})
+  def test_premade_estimator(self):
+    premade_estimator.main([None, '--train_steps=1'])
     
-    class TimeDisplay(object):
+        # Train the Model.
+    classifier.train(
+        input_fn=lambda:iris_data.train_input_fn(train_x, train_y,
+                                                 args.batch_size),
+        steps=args.train_steps)
     
-        def main_method(self):
-        '''will execute either _instance_method_1 or _instance_method_2
+    flags.DEFINE_string('checkpoint_dir', '/tmp/text_train',
+                    'Directory where to read model checkpoints.')
+flags.DEFINE_integer('eval_interval_secs', 60, 'How often to run the eval.')
+flags.DEFINE_integer('num_examples', 32, 'Number of examples to run.')
+flags.DEFINE_bool('run_once', False, 'Whether to run eval only once.')
     
-        def tearDown(self):
-        if not self._bProblem:
-            print('Tearing down')
-            time.sleep(0.1)
-            self._tm.publishReport()
-        else:
-            print('Test not executed. No tear down required.')
+        # Build and write sequence files.
+    vocab_ids = _build_random_vocabulary(FLAGS.vocab_size)
+    seqs = [_build_random_sequence(vocab_ids) for _ in range(5)]
+    seqs_label = [
+        data.build_labeled_sequence(seq, random.choice([True, False]))
+        for seq in seqs
+    ]
+    seqs_lm = [data.build_lm_sequence(seq) for seq in seqs]
+    seqs_ae = [data.build_seq_ae_sequence(seq) for seq in seqs]
+    seqs_rev = [data.build_reverse_sequence(seq) for seq in seqs]
+    seqs_bidir = [
+        data.build_bidirectional_seq(seq, rev)
+        for seq, rev in zip(seqs, seqs_rev)
+    ]
+    seqs_bidir_label = [
+        data.build_labeled_sequence(bd_seq, random.choice([True, False]))
+        for bd_seq in seqs_bidir
+    ]
     
-        def or_specification(self, candidate):
-        raise NotImplementedError()
+      def save_state(self, value):
+    # LSTM tuple states
+    state_names = _get_tuple_state_names(self._num_states, self._state_name)
+    save_ops = []
+    for (c_state, h_state), (c_name, h_name) in zip(value, state_names):
+      save_ops.append(self._batch.save_state(c_name, c_state))
+      save_ops.append(self._batch.save_state(h_name, h_state))
+    return tf.group(*save_ops)
+    
+    
+def _summarize_vars_and_grads(grads_and_vars):
+  tf.logging.info('Trainable variables:')
+  tf.logging.info('-' * 60)
+  for grad, var in grads_and_vars:
+    tf.logging.info(var)
+    
+    FLAGS = tf.app.flags.FLAGS
+    
+    
+class Cache(object):
+    
+        def __init__(self, person_ids, lookup):
+        self.lookup = lookup
+        self.person_ids = person_ids
+        self.visited_ids = set()
+    
+        def extract_max_priority_page(self):
+        '''Return the highest priority link in `links_to_crawl`.'''
+        ...
+    
+    
+class NoTalkProxyTest(unittest.TestCase):
+    
+        jim = Subscriber('jim', message_center)
+    jim.subscribe('cartoon')
+    jack = Subscriber('jack', message_center)
+    jack.subscribe('music')
+    gee = Subscriber('gee', message_center)
+    gee.subscribe('movie')
+    vani = Subscriber('vani', message_center)
+    vani.subscribe('movie')
+    vani.unsubscribe('movie')
+    
+        def test_shall_toggle_from_am_to_fm(self):
+        self.radio.toggle_amfm()
+        state = self.radio.state.name
+        expected_state_name = 'FM'
+        self.assertEqual(state, expected_state_name)
+    
+        def test_display_current_time_at_current_time(self):
+        '''
+        Just as justification for working example. (Will always pass.)
+        '''
+        production_code_time_provider = ProductionCodeTimeProvider()
+        class_under_test = TimeDisplay(production_code_time_provider)
+        current_time = datetime.datetime.now()
+        expected_time = '<span class=\'tinyBoldText\'>{}:{}</span>'.format(current_time.hour, current_time.minute)
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
+    
+    
+class ConcreteHandler1(Handler):
+    
+    
+class MoveFileCommand(object):
