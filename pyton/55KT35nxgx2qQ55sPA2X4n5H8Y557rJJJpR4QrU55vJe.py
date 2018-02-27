@@ -1,184 +1,164 @@
 
         
-                if high_prior_connecting_num + low_prior_connecting_num < config.https_max_connect_thread:
-            if len(high_prior_lock):
-                atom_lock = high_prior_lock.pop()
-                atom_lock.release()
-                return
+        
+FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
+FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
+JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
+BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
     
-            if 'Transfer-Encoding' in response_headers:
-            length = 0
-            while True:
-                try:
-                    data = response.read(8192)
-                except httplib.IncompleteRead, e:
-                    data = e.partial
-                except Exception as e:
-                    google_ip.report_connect_closed(response.ssl_sock.ip, 'receive fail')
-                    xlog.warn('direct_handler.handler send Transfer-Encoding t:%d e:%r %s/%s', time.time()-time_request, e, host, url)
-                    response.close()
-                    return
+        def log_error(msg, *args, **kwargs):
+        msg = msg % args
+        level = kwargs.get('level', 'error')
+        assert level in ['error', 'warning']
+        env.stderr.write('\nhttp: %s: %s\n' % (level, msg))
     
-        def __init__(self, expecting, input, inserted):
-        MismatchedTokenException.__init__(self, expecting, input)
+        return lexer
     
-    import json
+        # 128+2 SIGINT <http://www.tldp.org/LDP/abs/html/exitcodes.html>
+    ERROR_CTRL_C = 130
     
-        theplatform_download_by_pid(pid, title, output_dir=output_dir, merge=merge, info_only=info_only)
     
-    def ehow_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-	
-	assert re.search(r'http://www.ehow.com/video_', url), 'URL you entered is not supported'
+def check_alphabetical(lines):
+    '''
+    checks if all entries per section are in alphabetical order based in entry title
+    '''
+    sections = {}
+    section_line_num = {}
+    for line_num, line in enumerate(lines):
+        if line.startswith(anchor):
+            category = line.split(anchor)[1].strip()
+            sections[category] = []
+            section_line_num[category] = line_num
+            continue
+        if not line.startswith('|') or line.startswith('|---'):
+            continue
+        title = [x.strip() for x in line.split('|')[1:-1]][0].upper()
+        sections[category].append(title)
     
-        def prepare(self, **kwargs):
-        content = get_content(self.url)
-        self.title = match1(content, r'<title>([^<]+)</title>')
-        s = match1(content, r'P\.s\s*=\s*\'([^\']+)\'')
-        scp = match1(content, r'InfoQConstants\.scp\s*=\s*\'([^\']+)\'')
-        scs = match1(content, r'InfoQConstants\.scs\s*=\s*\'([^\']+)\'')
-        sck = match1(content, r'InfoQConstants\.sck\s*=\s*\'([^\']+)\'')
+    # Custom sidebar templates, maps document names to template names.
+html_sidebars = {
+    'index': [
+        'sidebarintro.html',
+        'sourcelink.html',
+        'searchbox.html'
+    ],
+    '**': [
+        'sidebarlogo.html',
+        'localtoc.html',
+        'relations.html',
+        'sourcelink.html',
+        'searchbox.html'
+    ]
+}
     
-    def kuwo_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    if 'www.kuwo.cn/yinyue' in url:
-        rid=match1(url,'yinyue/(\d+)')
-        kuwo_download_by_rid(rid,output_dir, merge, info_only)
-    else:
-        kuwo_playlist_download(url,output_dir,merge,info_only)
+        return inner
     
-    from ..common import *
+            self.wait_to_close_event = wait_to_close_event
+        self.ready_event = threading.Event()
+        self.stop_event = threading.Event()
     
-        def __init__(self, parent, title, message, used_names,
-                 *, _htest=False, _utest=False):
-        super().__init__(parent, title, message, used_names=used_names,
-                         _htest=_htest, _utest=_utest)
+        def test_repr(self):
+        assert repr(self.case_insensitive_dict) == '{'Accept': 'application/json'}'
     
-        # Python integers
-    start_calc = time.time()
-    y = factorial(n, 0)
-    end_calc = time.time()
-    start_conv = time.time()
-    sy = str(y)
-    end_conv =  time.time()
     
-            Note, this function is purposefully not defined at the module scope so
-        that data it needs from its parent function (within whose context it
-        is defined) does not need to be of module scope.
+def _check_cryptography(cryptography_version):
+    # cryptography < 1.3.4
+    try:
+        cryptography_version = list(map(int, cryptography_version.split('.')))
+    except ValueError:
+        return
+    
+    
+class ChunkedEncodingError(RequestException):
+    '''The server declared chunked encoding but sent an invalid chunk.'''
+    
+    
+def test_digestauth_401_only_sent_once():
+    '''Ensure we correctly respond to a 401 challenge once, and then
+    stop responding if challenged again.
+    '''
+    text_401 = (b'HTTP/1.1 401 UNAUTHORIZED\r\n'
+                b'Content-Length: 0\r\n'
+                b'WWW-Authenticate: Digest nonce='6bf5d6e4da1ce66918800195d6b9130d''
+                b', opaque='372825293d1c26955496c80ed6426e9e', '
+                b'realm='me@kennethreitz.com', qop=auth\r\n\r\n')
+    
+    
+class Level(object):
+    
+        def __init__(self, categorizer):
+        self.categorizer = categorizer
+        ...
+    
+            When updating an entry, updates its position to the front of the LRU list.
+        If the entry is new and the cache is at capacity, removes the oldest entry
+        before the new entry is added.
         '''
-        lines = []
-        num_blanks_pending, num_blanks_to_yield = 0, 0
-        while True:
-            # Load up next 4 lines so we can look ahead, create strings which
-            # are a concatenation of the first character of each of the 4 lines
-            # so we can do some very readable comparisons.
-            while len(lines) < 4:
-                lines.append(next(diff_lines_iterator, 'X'))
-            s = ''.join([line[0] for line in lines])
-            if s.startswith('X'):
-                # When no more lines, pump out any remaining blank lines so the
-                # corresponding add/delete lines get a matching blank line so
-                # all line pairs get yielded at the next level.
-                num_blanks_to_yield = num_blanks_pending
-            elif s.startswith('-?+?'):
-                # simple intraline change
-                yield _make_line(lines,'?',0), _make_line(lines,'?',1), True
-                continue
-            elif s.startswith('--++'):
-                # in delete block, add block coming: we do NOT want to get
-                # caught up on blank lines yet, just process the delete line
-                num_blanks_pending -= 1
-                yield _make_line(lines,'-',0), None, True
-                continue
-            elif s.startswith(('--?+', '--+', '- ')):
-                # in delete block and see an intraline change or unchanged line
-                # coming: yield the delete line and then blanks
-                from_line,to_line = _make_line(lines,'-',0), None
-                num_blanks_to_yield,num_blanks_pending = num_blanks_pending-1,0
-            elif s.startswith('-+?'):
-                # intraline change
-                yield _make_line(lines,None,0), _make_line(lines,'?',1), True
-                continue
-            elif s.startswith('-?+'):
-                # intraline change
-                yield _make_line(lines,'?',0), _make_line(lines,None,1), True
-                continue
-            elif s.startswith('-'):
-                # delete FROM line
-                num_blanks_pending -= 1
-                yield _make_line(lines,'-',0), None, True
-                continue
-            elif s.startswith('+--'):
-                # in add block, delete block coming: we do NOT want to get
-                # caught up on blank lines yet, just process the add line
-                num_blanks_pending += 1
-                yield None, _make_line(lines,'+',1), True
-                continue
-            elif s.startswith(('+ ', '+-')):
-                # will be leaving an add block: yield blanks then add line
-                from_line, to_line = None, _make_line(lines,'+',1)
-                num_blanks_to_yield,num_blanks_pending = num_blanks_pending+1,0
-            elif s.startswith('+'):
-                # inside an add block, yield the add line
-                num_blanks_pending += 1
-                yield None, _make_line(lines,'+',1), True
-                continue
-            elif s.startswith(' '):
-                # unchanged text, yield it to both sides
-                yield _make_line(lines[:],None,0),_make_line(lines,None,1),False
-                continue
-            # Catch up on the blank lines so when we yield the next from/to
-            # pair, they are lined up.
-            while(num_blanks_to_yield < 0):
-                num_blanks_to_yield += 1
-                yield None,('','\n'),True
-            while(num_blanks_to_yield > 0):
-                num_blanks_to_yield -= 1
-                yield ('','\n'),None,True
-            if s.startswith('X'):
-                return
+        node = self.map[query]
+        if node is not None:
+            # Key exists in cache, update the value
+            node.results = results
+            self.linked_list.move_to_front(node)
+        else:
+            # Key does not exist in cache
+            if self.size == self.MAX_SIZE:
+                # Remove the oldest entry from the linked list and lookup
+                self.lookup.pop(self.linked_list.tail.query, None)
+                self.linked_list.remove_from_tail()
             else:
-                yield from_line,to_line,True
+                self.size += 1
+            # Add the new key and value
+            new_node = Node(query, results)
+            self.linked_list.append_to_front(new_node)
+            self.lookup[query] = new_node
+
     
-    def _decode_uXXXX(s, pos):
-    esc = s[pos + 1:pos + 5]
-    if len(esc) == 4 and esc[1] not in 'xX':
-        try:
-            return int(esc, 16)
-        except ValueError:
-            pass
-    msg = 'Invalid \\uXXXX escape'
-    raise JSONDecodeError(msg, s, pos)
     
-    def test():
-    for i in range(256):
-        c = chr(i)
-        s = repr(c)
-        e = evalString(s)
-        if e != c:
-            print(i, c, s, e)
+class UserGraphService(object):
     
-        def _extractname(self, mo):
-        return mo.group('hexrgb').upper()
+            #out = subprocess.check_output(cmd, startupinfo=startupinfo)
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, startupinfo=startupinfo)
+        out, unused_err = process.communicate()
+        retcode = process.poll()
+        if retcode:
+            return out + '\n retcode:%s\n unused_err:%s\n' % (retcode, unused_err)
+    except Exception as e:
+        out = 'Exception:%r' % e
     
-        def test_varargs3(self):
-        msg = r'^from_bytes\(\) takes at most 2 positional arguments \(3 given\)'
-        self.assertRaisesRegex(TypeError, msg, int.from_bytes, b'a', 'little', False)
+        def open_log(self):
+        if os.path.isfile(self.log_path):
+            with open(self.log_path, 'r') as fd:
+                lines = fd.readlines()
+                line_num = len(lines)
+            if line_num >= self.max_lines_per_log_file:
+                self.roll_log()
     
-        def test_infile_outfile(self):
-        infile = self._create_infile()
-        outfile = support.TESTFN + '.out'
-        rc, out, err = assert_python_ok('-m', 'json.tool', infile, outfile)
-        self.addCleanup(os.remove, outfile)
-        with open(outfile, 'r') as fp:
-            self.assertEqual(fp.read(), self.expect)
-        self.assertEqual(rc, 0)
-        self.assertEqual(out, b'')
-        self.assertEqual(err, b'')
+    \note Please be warned that the line numbers in the API documentation do not
+match the real locations in the source code of the package. This is an
+unintended artifact of doxygen, which I could only convince to use the
+correct module names by concatenating all files from the package into a single
+module file...
     
-    from tornado.options import define, options
+      user_options_store.SetAll( base.BuildServerConf() )
     
-                stack.append(item)
-            stack_ids.add(item_id)
-            inner(gc.get_referents(item))
-            stack.pop()
-            stack_ids.remove(item_id)
-            visited_ids.add(item_id)
+    from concurrent.futures import _base
+    
+        sqrt_n = int(math.floor(math.sqrt(n)))
+    for i in range(3, sqrt_n + 1, 2):
+        if n % i == 0:
+            return False
+    return True
+    
+    from ycm.client.base_request import ( BaseRequest, BuildRequestData,
+                                      HandleServerException )
+    
+    
+  def Start( self ):
+    with HandleServerException( display = False ):
+      self.PostDataToHandler( {}, 'shutdown', TIMEOUT_SECONDS )
+    
+    
+def KeywordsFromSyntaxListOutput_PhpSyntax_ContainsPreProc_test():
+  assert_that( syntax_parse._KeywordsFromSyntaxListOutput(
+                   ContentsOfTestFile( 'php_syntax' ) ),
+               has_items( 'skip', 'function' ) )
