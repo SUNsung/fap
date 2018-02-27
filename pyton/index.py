@@ -1,251 +1,484 @@
 
         
-        with open('update/LATEST_VERSION', 'w') as f:
-    f.write(version)
+        
+def get_json_from_api(url, username, password):
+    headers = {'Accept': 'application/json; version=1.5'}
+    response = open_url(url, headers=headers, url_username=username, url_password=password)
+    return json.loads(response.read())['data']
+    
+        try:
+        s1 = os.lstat(path)
+    except OSError:
+        # the OSError should be handled with more care
+        # it could be a 'permission denied' but path is still a mount
+        return False
+    else:
+        # A symlink can never be a mount point
+        if os.path.stat.S_ISLNK(s1.st_mode):
+            return False
+    
+    # Backwards compat only
+try:
+    from hashlib import md5 as _md5
+except ImportError:
+    try:
+        from md5 import md5 as _md5
+    except ImportError:
+        # Assume we're running in FIPS mode here
+        _md5 = None
+    
+        def on_open_shell(self):
+        try:
+            self._exec_cli_command('screen-length 0 temporary')
+        except AnsibleConnectionFailure:
+            raise AnsibleConnectionFailure('unable to set terminal parameters')
+
+    
+        model.train_on_batch(x_train[:32], y_train[:32],
+                         sample_weight=sample_weight[:32])
+    model.test_on_batch(x_train[:32], y_train[:32],
+                        sample_weight=sample_weight[:32])
+    score = model.evaluate(x_test[test_ids, :], y_test[test_ids, :], verbose=0)
+    assert(score < standard_score_sequential)
+    
+        # by setting the `trainable` argument, in Model
+    x = Input(shape=(1,))
+    layer = Dense(2)
+    y = layer(x)
+    model = Model(x, y)
+    assert model.trainable_weights == layer.trainable_weights
+    layer.trainable = False
+    assert model.trainable_weights == []
+    
+    
+def create_ngram_set(input_list, ngram_value=2):
+    '''
+    Extract a set of n-grams from a list of integers.
+    
+        layer_test(local.LocallyConnected1D,
+               kwargs={'filters': filters,
+                       'kernel_size': filter_length,
+                       'padding': padding,
+                       'kernel_regularizer': 'l2',
+                       'bias_regularizer': 'l2',
+                       'activity_regularizer': 'l2',
+                       'strides': strides},
+               input_shape=(num_samples, num_steps, input_dim))
+    
+    
+def handle_module(mod):
+    for name, mem in inspect.getmembers(mod):
+        if inspect.isclass(mem):
+            handle_class(name, mem)
+        elif inspect.isfunction(mem):
+            handle_function(name, mem)
+        elif 'keras' in name and inspect.ismodule(mem):
+            # Only test keras' modules
+            handle_module(mem)
+    
+    
+@pytest.mark.parametrize('tensor_shape', [(100, 100), (1, 2, 3, 4)], ids=['FC', 'CONV'])
+def test_identity(tensor_shape):
+    if len(tensor_shape) > 2:
+        with pytest.raises(ValueError):
+            _runner(initializers.identity(), tensor_shape,
+                    target_mean=1. / tensor_shape[0], target_max=1.)
+    else:
+        _runner(initializers.identity(), tensor_shape,
+                target_mean=1. / tensor_shape[0], target_max=1.)
+    
+    
+def test_time_distributed_softmax():
+    x = K.placeholder(shape=(1, 1, 5))
+    f = K.function([x], [activations.softmax(x)])
+    test_values = get_standard_values()
+    test_values = np.reshape(test_values, (1, 1, np.size(test_values)))
+    f([test_values])[0]
+    
+                # if the state is not reset, output should be different
+            assert(out1.max() != out2.max())
+    
+        intermediate = Sequential()
+    intermediate.add(Merge([left, right], mode='sum'))
+    intermediate.add(Dense(num_hidden))
+    intermediate.add(Activation('relu'))
+    
+        def is_face_card(self):
+        '''Jack = 11, Queen = 12, King = 13'''
+        return True if 10 < self._value <= 13 else False
+    
+        def get(self, query)
+        '''Get the stored query result from the cache.
+        
+        Accessing a node updates its position to the front of the LRU list.
+        '''
+        node = self.lookup[query]
+        if node is None:
+            return None
+        self.linked_list.move_to_front(node)
+        return node.results
+    
+        defaults = {
+        'compare_lag': '10',
+        'compare_suffix': 'o10Y',
+        'limit': '25',
+        'granularity': 'year',
+        'groupby': [],
+        'metric': 'sum__SP_POP_TOTL',
+        'metrics': ['sum__SP_POP_TOTL'],
+        'row_limit': config.get('ROW_LIMIT'),
+        'since': '2014-01-01',
+        'until': '2014-01-02',
+        'where': '',
+        'markup_type': 'markdown',
+        'country_fieldtype': 'cca3',
+        'secondary_metric': 'sum__SP_POP_TOTL',
+        'entity': 'country_code',
+        'show_bubbles': True,
+    }
+    
+        # placeholder for a relationship to a derivative of BaseColumn
+    columns = []
+    # placeholder for a relationship to a derivative of BaseMetric
+    metrics = []
+    
+        @classmethod
+    def get_all_datasources(cls, session):
+        datasources = []
+        for source_type in ConnectorRegistry.sources:
+            datasources.extend(
+                session.query(ConnectorRegistry.sources[source_type]).all())
+        return datasources
+    
+        def get_aggregations(self, all_metrics):
+        aggregations = OrderedDict()
+        for m in self.metrics:
+            if m.metric_name in all_metrics:
+                aggregations[m.metric_name] = m.json_obj
+        return aggregations
+    
+    from ..common import *
+from hashlib import md5
+from urllib.parse import urlparse
+import re
+    
+    
+def huaban_download(url, output_dir='.', **kwargs):
+    if re.match(r'http://huaban\.com/boards/\d+/', url):
+        huaban_download_board(url, output_dir, **kwargs)
+    else:
+        print('Only board (画板) pages are supported currently')
+        print('ex: http://huaban.com/boards/12345678/')
+    
+        for i in range(10, 30):
+        url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
+            i = i,
+            p = preview
+        )
+        try:
+            mime, ext, size = url_info(url)
+            break
+        except: continue
+    
+        type_, ext, size = url_info(stream_url)
+    print_info(site_info, title, type_, size)
+    if not info_only:
+        download_url_ffmpeg(url=stream_url, title=title, ext= 'mp4', output_dir=output_dir)
+    
+            # Exercise all the code paths not involving Gb-sized ints.
+        # ... divisions involving zero
+        self.check_truediv(123, 0)
+        self.check_truediv(-456, 0)
+        self.check_truediv(0, 3)
+        self.check_truediv(0, -3)
+        self.check_truediv(0, 0)
+        # ... overflow or underflow by large margin
+        self.check_truediv(671 * 12345 * 2**DBL_MAX_EXP, 12345)
+        self.check_truediv(12345, 345678 * 2**(DBL_MANT_DIG - DBL_MIN_EXP))
+        # ... a much larger or smaller than b
+        self.check_truediv(12345*2**100, 98765)
+        self.check_truediv(12345*2**30, 98765*7**81)
+        # ... a / b near a boundary: one of 1, 2**DBL_MANT_DIG, 2**DBL_MIN_EXP,
+        #                 2**DBL_MAX_EXP, 2**(DBL_MIN_EXP-DBL_MANT_DIG)
+        bases = (0, DBL_MANT_DIG, DBL_MIN_EXP,
+                 DBL_MAX_EXP, DBL_MIN_EXP - DBL_MANT_DIG)
+        for base in bases:
+            for exp in range(base - 15, base + 15):
+                self.check_truediv(75312*2**max(exp, 0), 69187*2**max(-exp, 0))
+                self.check_truediv(69187*2**max(exp, 0), 75312*2**max(-exp, 0))
+    
+    Coverage: 99%. The only thing not covered is inconsequential --
+testing skipping of suite when self.needwrapbutton is false.
+'''
+import unittest
+from test.support import requires
+from tkinter import Tk, Frame  ##, BooleanVar, StringVar
+from idlelib import searchengine as se
+from idlelib import searchbase as sdb
+from idlelib.idle_test.mock_idle import Func
+## from idlelib.idle_test.mock_tk import Var
+    
+        def test_quoted_meta(self):
+        # Try cookie with quoted meta-data
+        C = cookies.SimpleCookie()
+        C.load('Customer='WILE_E_COYOTE'; Version='1'; Path='/acme'')
+        self.assertEqual(C['Customer'].value, 'WILE_E_COYOTE')
+        self.assertEqual(C['Customer']['version'], '1')
+        self.assertEqual(C['Customer']['path'], '/acme')
+    
+        def skip(self):
+        '''Skip the rest of the chunk.
+        If you are not interested in the contents of the chunk,
+        this method should be called so that the file points to
+        the start of the next chunk.
+        '''
+    
+        def _explain_to(self, message):
+        '''Copy Babyl-specific state to message insofar as possible.'''
+        if isinstance(message, MaildirMessage):
+            labels = set(self.get_labels())
+            if 'unseen' in labels:
+                message.set_subdir('cur')
+            else:
+                message.set_subdir('cur')
+                message.add_flag('S')
+            if 'forwarded' in labels or 'resent' in labels:
+                message.add_flag('P')
+            if 'answered' in labels:
+                message.add_flag('R')
+            if 'deleted' in labels:
+                message.add_flag('T')
+        elif isinstance(message, _mboxMMDFMessage):
+            labels = set(self.get_labels())
+            if 'unseen' not in labels:
+                message.add_flag('RO')
+            else:
+                message.add_flag('O')
+            if 'deleted' in labels:
+                message.add_flag('D')
+            if 'answered' in labels:
+                message.add_flag('A')
+        elif isinstance(message, MHMessage):
+            labels = set(self.get_labels())
+            if 'unseen' in labels:
+                message.add_sequence('unseen')
+            if 'answered' in labels:
+                message.add_sequence('replied')
+        elif isinstance(message, BabylMessage):
+            message.set_visible(self.get_visible())
+            for label in self.get_labels():
+                message.add_label(label)
+        elif isinstance(message, Message):
+            pass
+        else:
+            raise TypeError('Cannot convert to specified type: %s' %
+                            type(message))
+    
+        Handles all HTTP GET requests and interprets them as requests
+    for documentation.
+    '''
+    
+        def proxyval(self, visited):
+        # Guard against infinite loops:
+        if self.as_address() in visited:
+            return ProxyAlreadyVisited('(...)')
+        visited.add(self.as_address())
+        arg_proxy = self.pyop_field('args').proxyval(visited)
+        return ProxyException(self.safe_tp_name(),
+                              arg_proxy)
+    
+        def test_hash(self):
+        for x in range(-30, 30):
+            self.assertEqual(hash(x), hash(complex(x, 0)))
+            x /= 3.0    # now check against floating point
+            self.assertEqual(hash(x), hash(complex(x, 0.)))
+    
+            wndclass = WNDCLASS()
+        wndclass.lpfnWndProc = WNDPROC(wndproc)
+    
+    reload(sys)  
+sys.setdefaultencoding('utf8')
+    
+        # Create and fill-in the class template
+    numfields = len(field_names)
+    argtxt = repr(field_names).replace(''', '')[1:-1]   # tuple repr without parens or quotes
+    reprtxt = ', '.join('%s=%%r' % name for name in field_names)
+    dicttxt = ', '.join('%r: t[%d]' % (name, pos) for pos, name in enumerate(field_names))
+    template = '''class %(typename)s(tuple):
+        '%(typename)s(%(argtxt)s)' \n
+        __slots__ = () \n
+        _fields = %(field_names)r \n
+        def __new__(_cls, %(argtxt)s):
+            return _tuple.__new__(_cls, (%(argtxt)s)) \n
+        @classmethod
+        def _make(cls, iterable, new=tuple.__new__, len=len):
+            'Make a new %(typename)s object from a sequence or iterable'
+            result = new(cls, iterable)
+            if len(result) != %(numfields)d:
+                raise TypeError('Expected %(numfields)d arguments, got %%d' %% len(result))
+            return result \n
+        def __repr__(self):
+            return '%(typename)s(%(reprtxt)s)' %% self \n
+        def _asdict(t):
+            'Return a new dict which maps field names to their values'
+            return {%(dicttxt)s} \n
+        def _replace(_self, **kwds):
+            'Return a new %(typename)s object replacing specified fields with new values'
+            result = _self._make(map(kwds.pop, %(field_names)r, _self))
+            if kwds:
+                raise ValueError('Got unexpected field names: %%r' %% kwds.keys())
+            return result \n
+        def __getnewargs__(self):
+            return tuple(self) \n\n''' % locals()
+    for i, name in enumerate(field_names):
+        template += '        %s = _property(_itemgetter(%d))\n' % (name, i)
+    
+    PRIMES = [
+    112272535095293,
+    112582705942171,
+    112272535095293,
+    115280095190773,
+    115797848077099,
+    117450548693743,
+    993960000099397]
+    
+        def test_map_exception(self):
+        i = self.executor.map(divmod, [1, 1, 1, 1], [2, 3, 0, 5])
+        self.assertEqual(next(i), (0, 1))
+        self.assertEqual(next(i), (0, 1))
+        self.assertRaises(ZeroDivisionError, next, i)
+    
+      return {
+    'filepath': current_filepath,
+    'line_num': line + 1,
+    'column_num': column + 1,
+    'working_dir': working_dir,
+    'file_data': vimsupport.GetUnsavedAndSpecifiedBufferData( current_buffer,
+                                                              current_filepath )
+  }
     
     if __name__ == '__main__':
-    main()
+  Main()
 
     
-    from youtube_dl.compat import (
-    compat_print,
-    compat_urllib_request,
-)
-from youtube_dl.utils import format_bytes
     
-        def test_tumblr(self):
-        self.assertMatch('http://tatianamaslanydaily.tumblr.com/post/54196191430/orphan-black-dvd-extra-behind-the-scenes', ['Tumblr'])
-        self.assertMatch('http://tatianamaslanydaily.tumblr.com/post/54196191430', ['Tumblr'])
+  def Response( self ):
+    return self._response
     
+      opts = _JavaFilter( { 'regex' : '.*taco.*',
+                        'level' : 'warning' } )
+  f = _CreateFilterForTypes( opts, [ 'java' ] )
     
-class TestCache(unittest.TestCase):
-    def setUp(self):
-        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
-        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
-        _mkdir(TESTDATA_DIR)
-        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
-        self.tearDown()
+      Do NOT attach it to test generators but directly to the yielded tests.
     
     
-def gen_extractor_classes():
-    ''' Return a list of supported extractors.
-    The order does matter; the first extractor matched is the one handling the URL.
-    '''
-    return _ALL_CLASSES
-    
-            formats = [
-            {
-                'format_id': f['type'],
-                'filesize': int(f['filesize']),
-                'url': f['url']
-            } for f in info['rfiles']
-        ]
-        self._sort_formats(formats)
-    
-            runtime = self._search_regex(
-            r'Runtime\s*:\s*(.+?) \|', webpage, 'duration', default=None)
-        if runtime:
-            runtime = re.sub(r'[\s-]', '', runtime)
-        duration = parse_duration(runtime)
-        view_count = int_or_none(self._search_regex(
-            r'Views\s*:\s*(\d+)', webpage, 'view count', default=None))
-        comment_count = int_or_none(self._search_regex(
-            r'Comments\s*:\s*(\d+)', webpage, 'comment count', default=None))
-    
-    
-@pytest.fixture
-def client():
-    return blueprintexample.app.test_client()
-    
-    
-def get_user_id(username):
-    '''Convenience method to look up the id for a username.'''
-    rv = query_db('select user_id from user where username = ?',
-                  [username], one=True)
-    return rv[0] if rv else None
-    
-    
-class Server(threading.Thread):
-    '''Dummy server using for unit testing'''
-    WAIT_EVENT_TIMEOUT = 5
-    
-        def __init__(self, name=None):
-        self.name = name
-        super(LookupDict, self).__init__()
-    
-        def test_repr(self):
-        assert repr(self.lookup_dict) == '<lookup 'test'>'
-    
-    
-def _landscape_client():
-    env = EnvironmentConfig()
-    return API(
-        uri=env.uri,
-        access_key=env.access_key,
-        secret_key=env.secret_key,
-        ssl_ca_file=env.ssl_ca_file)
-    
-    # Note, sha1 is the only hash algorithm compatible with python2.4 and with
-# FIPS-140 mode (as of 11-2014)
-try:
-    from hashlib import sha1 as sha1
-except ImportError:
-    from sha import sha as sha1
-    
-    if PY3:
-    represent_unicode = yaml.representer.SafeRepresenter.represent_str
-else:
-    represent_unicode = yaml.representer.SafeRepresenter.represent_unicode
-    
-            url = '%s/roles/?owner__username=%s&name=%s' % (self.baseurl, user_name, role_name)
-        data = self.__call_galaxy(url)
-        if len(data['results']) != 0:
-            return data['results'][0]
+def extract_line_info(reportline, filepath, tool):
+    if tool == 'pep257' and reportline.startswith('Note: checks'):
         return None
+    file_info, sep, violation = reportline.partition(': ')
+    if not sep:
+        return None
+    file_info = file_info.split(':')
+    if len(file_info) < 2:
+        logging.warn('I don't understand this report line: %r', reportline)
+        line_num = ''
+    else:
+        line_num = file_info[1]
+    report_entry = {
+        'file': filepath,
+        'test_class': make_test_class(tool, filepath),
+        'line': line_num,
+        'violation': violation,
+        'errtype': extract_errtype(violation, tool),
+        'tool': tool,
+    }
+    return report_entry
     
-    import re
-    
-      def replicate_states(self, state_coll_name):
-    state_list = self._metagraph.collection_def[state_coll_name]
-    num_states = len(state_list.node_list.value)
-    for replica_id in range(1, FLAGS.num_gpus):
-      for i in range(num_states):
-        state_list.node_list.value.append(state_list.node_list.value[i])
-    for replica_id in range(FLAGS.num_gpus):
-      for i in range(num_states):
-        index = replica_id * num_states + i
-        state_list.node_list.value[index] = with_autoparallel_prefix(
-            replica_id, state_list.node_list.value[index])
-    
-    filegroup(
-    name = 'all_files',
-    srcs = glob(
-        ['**/*'],
-        exclude = [
-            '**/METADATA',
-            '**/OWNERS',
-        ],
-    ),
-    visibility = ['//tensorflow:__subpackages__'],
+    import r2.lib.helpers
+from r2.config.paths import (
+    get_r2_path,
+    get_built_statics_path,
+    get_raw_statics_path,
 )
-
+from r2.config.routing import make_map
+from r2.lib.app_globals import Globals
+from r2.lib.configparse import ConfigValue
     
-      # The variables below hold all the trainable weights. They are passed an
-  # initial value which will be assigned when we call:
-  # {tf.global_variables_initializer().run()}
-  conv1_weights = tf.Variable(
-      tf.truncated_normal([5, 5, NUM_CHANNELS, 32],  # 5x5 filter, depth 32.
-                          stddev=0.1,
-                          seed=SEED, dtype=data_type()))
-  conv1_biases = tf.Variable(tf.zeros([32], dtype=data_type()))
-  conv2_weights = tf.Variable(tf.truncated_normal(
-      [5, 5, 32, 64], stddev=0.1,
-      seed=SEED, dtype=data_type()))
-  conv2_biases = tf.Variable(tf.constant(0.1, shape=[64], dtype=data_type()))
-  fc1_weights = tf.Variable(  # fully connected, depth 512.
-      tf.truncated_normal([IMAGE_SIZE // 4 * IMAGE_SIZE // 4 * 64, 512],
-                          stddev=0.1,
-                          seed=SEED,
-                          dtype=data_type()))
-  fc1_biases = tf.Variable(tf.constant(0.1, shape=[512], dtype=data_type()))
-  fc2_weights = tf.Variable(tf.truncated_normal([512, NUM_LABELS],
-                                                stddev=0.1,
-                                                seed=SEED,
-                                                dtype=data_type()))
-  fc2_biases = tf.Variable(tf.constant(
-      0.1, shape=[NUM_LABELS], dtype=data_type()))
+    def get_api_subtype():
+    if is_api() and c.render_style.startswith('api-'):
+        return c.render_style[4:]
     
-        # Batch encoder inputs are just re-indexed encoder_inputs.
-    for length_idx in xrange(encoder_size):
-      batch_encoder_inputs.append(
-          np.array([encoder_inputs[batch_idx][length_idx]
-                    for batch_idx in xrange(self.batch_size)], dtype=np.int32))
+        has_bad_characters = re.compile('[\r\n]')
+    sanitizer = re.compile('[\r\n]+[ \t]*')
     
-        # Return training operations: loss and train_op
-    return tf.estimator.EstimatorSpec(
-        mode,
-        loss=loss,
-        train_op=train_op)
+    api('organiclisting',       OrganicListingJsonTemplate)
+api('subreddittraffic', TrafficJsonTemplate)
+api('takedownpane', TakedownJsonTemplate)
+api('policyview', PolicyViewJsonTemplate)
     
-      Args:
-    session: the TensorFlow session to run the computation under.
-    target: the target Tensor that is passed to the session's run() function.
-    info_string: a string summarizing this run, to be printed with the stats.
+        @csrf_exempt
+    @json_validate(
+        signature=VSigned(),
+        user=VThrottledLogin(['user', 'passwd']),
+    )
+    def POST_login(self, responder, user, **kwargs):
+        kwargs.update(dict(
+            controller=self,
+            form=responder('noop'),
+            responder=responder,
+            user=user,
+        ))
+        return handle_login(**kwargs)
     
-    from tensorflow.python.platform import tf_logging as logging
-from tensorflow.core.framework import node_def_pb2
-from tensorflow.python.framework import device as pydev
-from tensorflow.python.training import basic_session_run_hooks
-from tensorflow.python.training import session_run_hook
-from tensorflow.python.training import training_util
-from tensorflow.python.training import device_setter
-from tensorflow.contrib.learn.python.learn import run_config
+        @require_oauth2_scope('account')
+    @validate(
+        VUser(),
+        validated_prefs=PREFS_JSON_VALIDATOR,
+    )
+    @api_doc(api_section.account, json_model=PREFS_JSON_VALIDATOR,
+             uri='/api/v1/me/prefs')
+    def PATCH_prefs(self, validated_prefs):
+        user_prefs = c.user.preferences()
+        for short_name, new_value in validated_prefs.iteritems():
+            pref_name = 'pref_' + short_name
+            user_prefs[pref_name] = new_value
+        vprefs.filter_prefs(user_prefs, c.user)
+        vprefs.set_prefs(c.user, user_prefs)
+        c.user._commit()
+        return self.api_wrapper(PrefsJsonTemplate().data(c.user))
     
-        def spot_freed(self):
-        self.available_spots += 1
+            The user's response to the CAPTCHA should be sent as `captcha`
+        along with your request.
     
-            Emit key value pairs of the form:
+        POST_document = GET_document
+    PUT_document = GET_document
+    PATCH_document = GET_document
+    DELETE_document = GET_document
     
     
-if __name__ == '__main__':
-    HitCounts.run()
-
+class GoogleTagManagerController(MinimalController):
+    def pre(self):
+        if request.host != g.media_domain:
+            # don't serve up untrusted content except on our
+            # specifically untrusted domain
+            self.abort404()
     
-        def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
+        # 优先获取执行文件目录的配置文件
+    here = sys.path[0]
+    for file in os.listdir(here):
+        if re.match(r'(.+)\.json', file):
+            file_name = os.path.join(here, file)
+            with open(file_name, 'r') as f:
+                print('Load config file from {}'.format(file_name))
+                return json.load(f)
     
-        def test_get_sni_addr(self):
-        from certbot_apache.obj import Addr
-        self.assertEqual(
-            self.addr.get_sni_addr('443'), Addr.fromstring('*:443'))
-        self.assertEqual(
-            self.addr.get_sni_addr('225'), Addr.fromstring('*:225'))
-        self.assertEqual(
-            self.addr1.get_sni_addr('443'), Addr.fromstring('127.0.0.1'))
-    
-        @mock.patch('certbot_compatibility_test.validator.requests.get')
-    def test_redirect_wrong_status_code(self, mock_get_request):
-        mock_get_request.return_value = create_response(
-            201, {'location': 'https://test.com'})
-        self.assertFalse(self.validator.redirect('test.com'))
-    
-        @mock.patch('certbot.notify.smtplib.LMTP')
-    def test_smtp_success(self, mock_lmtp):
-        from certbot.notify import notify
-        lmtp_obj = mock.MagicMock()
-        mock_lmtp.return_value = lmtp_obj
-        self.assertTrue(notify('Goose', 'auntrhody@example.com',
-                               'The old grey goose is dead.'))
-        self.assertEqual(lmtp_obj.connect.call_count, 1)
-        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
-    
-        # Static files
-    static_app = StaticURLParser(config['pylons.paths']['static_files'])
-    static_cascade = [static_app, app]
-    
-                if links:
-                kw = {}
-                if wrapper:
-                    links = wrap_links(links, wrapper = wrapper)
-                else:
-                    links = wrap_links(links)
-                links = list(links)
-                links = max(links, key = lambda x: x._score) if links else None
-            if not links and wrapper:
-                return wrapper(None)
-            return links
-            # note: even if _by_url successed or a link was passed in,
-            # it is possible link_listing.things is empty if the
-            # link(s) is/are members of a private reddit
-            # return the link with the highest score (if more than 1)
-        except:
-            #we don't want to return 500s in other people's pages.
-            import traceback
-            g.log.debug('FULLPATH: get_link error in buttons code')
-            g.log.debug(traceback.format_exc())
-            if wrapper:
-                return wrapper(None)
+        # 从上顶点往下 +274 的位置开始向上找颜色与上顶点一样的点，为下顶点
+    # 该方法对所有纯色平面和部分非纯色平面有效，对高尔夫草坪面、木纹桌面、
+    # 药瓶和非菱形的碟机（好像是）会判断错误
+    for k in range(i+274, i, -1):  # 274 取开局时最大的方块的上下顶点距离
+        pixel = im_pixel[board_x, k]
+        if abs(pixel[0] - last_pixel[0]) \
+                + abs(pixel[1] - last_pixel[1]) \
+                + abs(pixel[2] - last_pixel[2]) < 10:
+            break
+    board_y = int((i+k) / 2)
