@@ -1,194 +1,352 @@
-TEST(AnyTest, TestPackAndUnpack) {
-  protobuf_unittest::TestAny submessage;
-  submessage.set_int32_value(12345);
-  protobuf_unittest::TestAny message;
-  message.mutable_any_value()->PackFrom(submessage);
-    }
-    
-      // implements CodeGenerator ----------------------------------------
-  bool Generate(const FileDescriptor* file,
-                const string& parameter,
-                GeneratorContext* generator_context,
-                string* error) const;
-    
-    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_REFLECTION_CLASS_H__
 
+        
+          /**
+   * @brief Computes the error gradient w.r.t. the concatenate inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *        respect to the outputs
+   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
+   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length K), into which the top gradient
+   *        @f$ \frac{\partial E}{\partial y} @f$ is deconcatenated back to the
+   *        inputs @f$
+   *        \left[ \begin{array}{cccc}
+   *          \frac{\partial E}{\partial x_1} &
+   *          \frac{\partial E}{\partial x_2} &
+   *          ... &
+   *          \frac{\partial E}{\partial x_K}
+   *        \end{array} \right] =
+   *        \frac{\partial E}{\partial y}
+   *        @f$
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    SourceGeneratorBase::SourceGeneratorBase(const FileDescriptor* descriptor,
-                                         const Options *options)
-    : descriptor_(descriptor), options_(options) {
+    
+    {}  // namespace caffe
+    
+    #include <vector>
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the forwarded inputs.
+   *
+   * @param top output Blob vector (length 1+), providing the error gradient with
+   *        respect to the outputs
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2+), into which the top error
+   *        gradient is copied
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+    const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22>
+internal::ValueArray22<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
+    T14, T15, T16, T17, T18, T19, T20, T21, T22> Values(T1 v1, T2 v2, T3 v3,
+    T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12,
+    T13 v13, T14 v14, T15 v15, T16 v16, T17 v17, T18 v18, T19 v19, T20 v20,
+    T21 v21, T22 v22) {
+  return internal::ValueArray22<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>(v1, v2, v3, v4,
+      v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19,
+      v20, v21, v22);
 }
     
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_SOURCE_GENERATOR_BASE_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_SOURCE_GENERATOR_BASE_H__
+       private:
+    Iterator(const Iterator& other)
+        : base_(other.base_),
+        begin1_(other.begin1_),
+        end1_(other.end1_),
+        current1_(other.current1_),
+        begin2_(other.begin2_),
+        end2_(other.end2_),
+        current2_(other.current2_),
+        begin3_(other.begin3_),
+        end3_(other.end3_),
+        current3_(other.current3_),
+        begin4_(other.begin4_),
+        end4_(other.end4_),
+        current4_(other.current4_),
+        begin5_(other.begin5_),
+        end5_(other.end5_),
+        current5_(other.current5_),
+        begin6_(other.begin6_),
+        end6_(other.end6_),
+        current6_(other.current6_),
+        begin7_(other.begin7_),
+        end7_(other.end7_),
+        current7_(other.current7_) {
+      ComputeCurrentValue();
+    }
     
     
     {
-    {}  // namespace log
-}  // namespace leveldb
+    {
+    {        int i = 0;
+        for (typename ParamGenerator<ParamType>::iterator param_it =
+                 generator.begin();
+             param_it != generator.end(); ++param_it, ++i) {
+          Message test_name_stream;
+          test_name_stream << test_info->test_base_name << '/' << i;
+          MakeAndRegisterTestInfo(
+              test_case_name.c_str(),
+              test_name_stream.GetString().c_str(),
+              NULL,  // No type parameter.
+              PrintToString(*param_it).c_str(),
+              GetTestCaseTypeId(),
+              TestCase::SetUpTestCase,
+              TestCase::TearDownTestCase,
+              test_info->test_meta_factory->CreateTestFactory(*param_it));
+        }  // for param_it
+      }  // for gen_it
+    }  // for test_it
+  }  // RegisterTests
     
-    namespace leveldb {
+      // Formats a byte as '%02X'.
+  static std::string FormatByte(unsigned char value);
+    
+    // This event listener monitors how many Water objects are created and
+// destroyed by each test, and reports a failure if a test leaks some Water
+// objects. It does this by comparing the number of live Water objects at
+// the beginning of a test and at the end of a test.
+class LeakChecker : public EmptyTestEventListener {
+ private:
+  // Called before a test starts.
+  virtual void OnTestStart(const TestInfo& /* test_info */) {
+    initially_allocated_ = Water::allocated();
+  }
     }
     
-    inline
-static void DBSynchronize(kyotocabinet::TreeDB* db_)
-{
-  // Synchronize will flush writes to disk
-  if (!db_->synchronize()) {
-    fprintf(stderr, 'synchronize error: %s\n', db_->error().name());
-  }
+    
+    {  EXPECT_FALSE(IsPrime(-1));
+  EXPECT_FALSE(IsPrime(-2));
+  EXPECT_FALSE(IsPrime(INT_MIN));
 }
     
+    /**
+ * @name tess_segment_pass_n
+ *
+ * Segment a word using the pass_n conditions of the tess segmenter.
+ * @param pass_n pass number
+ * @param word word to do
+ */
     
-    {  return Status::OK();
+      // If the bundle is null or still does not indicate the correct result,
+  // fix it and use some backup reason for the blame.
+  static void LastChanceBlame(bool debug, WERD_RES* word);
+    
+    
+/**********************************************************************
+ * LLSQ::add
+ *
+ * Add an element to the accumulator.
+ **********************************************************************/
+    
+    
+DENORM & DENORM::operator=(const DENORM & src) {
+  Clear();
+  inverse_ = src.inverse_;
+  predecessor_ = src.predecessor_;
+  pix_ = src.pix_;
+  block_ = src.block_;
+  if (src.rotation_ == NULL)
+    rotation_ = NULL;
+  else
+    rotation_ = new FCOORD(*src.rotation_);
+  x_origin_ = src.x_origin_;
+  y_origin_ = src.y_origin_;
+  x_scale_ = src.x_scale_;
+  y_scale_ = src.y_scale_;
+  final_xshift_ = src.final_xshift_;
+  final_yshift_ = src.final_yshift_;
+  return *this;
 }
     
+            // get data as long vectors
+        // ... why do I need to explicitly use operator T ()?
+        array_ref<msra::math::float4> us4(us.operator array_ref<msra::math::float4>());
+        array_ref<msra::math::float4> refs4(refs.operator array_ref<msra::math::float4>());
     
+        void* EnsureMapped(void* start, size_t size);
+    // subsection functions
+    Section* ReadSection(size_t index, MappingType mappingType = mappingParent, size_t size = 0);
+    Section* AddSection(Section* sectionToAdd);
     
-    #endif // __cocos2dx_cocosdenshion_h__
+        // ProcessNDLConfig - Process the NDL script from a configuration string value
+    // config - configuration string containing script
+    void ProcessNDLConfig(const ConfigValue& config, bool fullValidate = false)
+    {
+        NDLScript<ElemType> script(config);
+        ProcessNDLScript(&script, ndlPassAll, nullptr, fullValidate);
+    }
+    
+        int traceLevel = config(L'traceLevel', 0);
+    if (config.Exists(L'createNetwork'))
+    {
+        createNetworkFn = GetCreateNetworkFn(config); // (we need a separate function needed due to template code)
+        return true;
+    }
+    else if (config.Exists(L'SimpleNetworkBuilder'))
+    {
+        const ConfigRecordType& simpleNetworkBuilderConfig(config(L'SimpleNetworkBuilder'));
+        auto netBuilder = make_shared<SimpleNetworkBuilder<ElemType>>(simpleNetworkBuilderConfig); // parses the configuration and stores it in the SimpleNetworkBuilder object
+        createNetworkFn = [netBuilder, traceLevel](DEVICEID_TYPE deviceId)
+        {
+            auto net = shared_ptr<ComputationNetwork>(netBuilder->BuildNetworkFromDescription()); // this operates based on the configuration saved above
+            net->SetTraceLevel(traceLevel);
+            return net;
+        };
+        return true;
+    }
+    // legacy NDL
+    else if (config.Exists(L'NDLNetworkBuilder'))
+    {
+        const ConfigRecordType& ndlNetworkBuilderConfig(config(L'NDLNetworkBuilder'));
+        shared_ptr<NDLBuilder<ElemType>> netBuilder = make_shared<NDLBuilder<ElemType>>(ndlNetworkBuilderConfig);
+        createNetworkFn = [netBuilder, traceLevel](DEVICEID_TYPE deviceId)
+        {
+            auto net = shared_ptr<ComputationNetwork>(netBuilder->BuildNetworkFromDescription());
+            net->SetTraceLevel(traceLevel);
+            return net;
+        };
+        return true;
+    }
+    // legacy test mode for BrainScript. Will go away once we fully integrate with BS.
+    else if (config.Exists(L'BrainScriptNetworkBuilder') || config.Exists(L'ExperimentalNetworkBuilder' /*legacy name*/))
+    {
+        // We interface with outer old CNTK config by taking the inner part, which we get as a string, as BrainScript.
+        // We prepend a few standard definitions, and also definition of deviceId and precision, which all objects will pull out again when they are being constructed.
+        // BUGBUG: We are not getting TextLocations right in this way! Do we need to inject location markers into the source? Moot once we fully switch to BS
+        wstring sourceOfNetwork = config.Exists(L'BrainScriptNetworkBuilder') ? config(L'BrainScriptNetworkBuilder') : config(L'ExperimentalNetworkBuilder');
+        if (sourceOfNetwork.find_first_of(L'([{') != 0)
+            InvalidArgument('BrainScript network description must be either a BS expression in ( ) or a config record in { }');
+    }
+    }
+    
+        bool haslattice(std::wstring key) const
+    {
+#ifdef NONUMLATTICEMMI
+        return denlattices.haslattice(key);
+#else
+        return numlattices.haslattice(key) && denlattices.haslattice(key);
+#endif
+    }
+    
+      {2,0,32,  &_residue_44_mid,
+   &_huff_book__44c2_s_long,&_huff_book__44c2_s_long,
+   &_resbook_44s_2,&_resbook_44s_2}
+};
+static const vorbis_residue_template _res_44s_3[]={
+  {2,0,16,  &_residue_44_mid,
+   &_huff_book__44c3_s_short,&_huff_book__44c3_s_short,
+   &_resbook_44s_3,&_resbook_44s_3},
+    
+    static const vorbis_mapping_template _mapres_template_44_uncoupled[]={
+  { _map_nominal_u, _res_44u_n1 }, /* -1 */
+  { _map_nominal_u, _res_44u_0 }, /* 0 */
+  { _map_nominal_u, _res_44u_1 }, /* 1 */
+  { _map_nominal_u, _res_44u_2 }, /* 2 */
+  { _map_nominal_u, _res_44u_3 }, /* 3 */
+  { _map_nominal_u, _res_44u_4 }, /* 4 */
+  { _map_nominal_u, _res_44u_5 }, /* 5 */
+  { _map_nominal_u, _res_44u_6 }, /* 6 */
+  { _map_nominal_u, _res_44u_7 }, /* 7 */
+  { _map_nominal_u, _res_44u_8 }, /* 8 */
+  { _map_nominal_u, _res_44u_9 }, /* 9 */
+};
 
     
-    int register_all_cocos2dx_physics3d(lua_State* tolua_S);
+    typedef ogg_int16_t vorbis_fpu_control;
     
+    /* Frequency to octave.  We arbitrarily declare 63.5 Hz to be octave
+   0.0 */
     
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
     
-    #ifndef RENDER_H
-#define RENDER_H
+    #if defined(OPUS_HAVE_RTCD) && \
+  (defined(OPUS_ARM_ASM) || defined(OPUS_ARM_MAY_HAVE_NEON_INTR))
+#include 'arm/armcpu.h'
     
-    	Test();
-	virtual ~Test();
-    
-    
-    {	b2Body* m_body;
-};
-    
-    		for (int32 i = 0; i < 3; ++i)
-		{
-			b2CircleShape shape;
-			shape.m_radius = 0.5f;
+        if( x <= 0 ) {
+        return 0;
     }
     
-    static const uint8_t kRangeLimitLut[4 * 256] = {
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
-  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
-  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
-  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
-  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
-  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
-  96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
- 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
- 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
- 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
- 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
- 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
- 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
- 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
- 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
- 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-};
+    static const int kDelayMicros = 100000;
+static const int kReadOnlyFileLimit = 4;
+static const int kMMapLimit = 4;
     
-    void ComputeBlockIDCTDouble(double block[64]) {
-  TransformBlock(block, IDCT1d);
+    
+    {
+    {    if (!s.ok()) {
+      assert(table == NULL);
+      delete file;
+      // We do not cache error results so that if the error is transient,
+      // or somebody repairs the file, we recover automatically.
+    } else {
+      TableAndFile* tf = new TableAndFile;
+      tf->file = file;
+      tf->table = table;
+      *handle = cache_->Insert(key, tf, 1, &DeleteEntry);
+    }
+  }
+  return s;
 }
     
+    #include <set>
+#include <utility>
+#include <vector>
+#include 'db/dbformat.h'
     
-    {}  // namespace guetzli
+    class VersionEditTest { };
     
-    #include 'guetzli/jpeg_data.h'
+    #ifndef STORAGE_LEVELDB_HELPERS_MEMENV_MEMENV_H_
+#define STORAGE_LEVELDB_HELPERS_MEMENV_MEMENV_H_
     
-    
-    {}  // namespace guetzli
-
-    
-    #include <stdint.h>
-    
-    #include <string>
-    
-    namespace guetzli {
+    TEST(MemEnvTest, ReadWrite) {
+  WritableFile* writable_file;
+  SequentialFile* seq_file;
+  RandomAccessFile* rand_file;
+  Slice result;
+  char scratch[100];
     }
     
-    using namespace fuzzer;
+    BlockBuilder::BlockBuilder(const Options* options)
+    : options_(options),
+      restarts_(),
+      counter_(0),
+      finished_(false) {
+  assert(options->block_restart_interval >= 1);
+  restarts_.push_back(0);       // First restart point is at offset 0
+}
     
-    #include 'FuzzerExtFunctions.h'
-#include 'FuzzerIO.h'
-#include <cstdarg>
-#include <cstdio>
-#include <dirent.h>
-#include <fstream>
-#include <iterator>
-#include <libgen.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-    
-      // Parse NumFiles.
-  if (!std::getline(IS, Line, '\n')) return false;
-  std::istringstream L1(Line);
-  size_t NumFiles = 0;
-  L1 >> NumFiles;
-  if (NumFiles == 0 || NumFiles > 10000000) return false;
-    
-      // Dictionary provided by the user via -dict=DICT_FILE.
-  Dictionary ManualDictionary;
-  // Temporary dictionary modified by the fuzzer itself,
-  // recreated periodically.
-  Dictionary TempAutoDictionary;
-  // Persistent dictionary modified by the fuzzer, consists of
-  // entries that led to successfull discoveries in the past mutations.
-  Dictionary PersistentAutoDictionary;
-    
-      std::string CoveredDirsStr;
-  for (auto &Dir : CoveredDirs) {
-    if (!CoveredDirsStr.empty())
-      CoveredDirsStr += ',';
-    CoveredDirsStr += Dir;
+    Status Footer::DecodeFrom(Slice* input) {
+  const char* magic_ptr = input->data() + kEncodedLength - 8;
+  const uint32_t magic_lo = DecodeFixed32(magic_ptr);
+  const uint32_t magic_hi = DecodeFixed32(magic_ptr + 4);
+  const uint64_t magic = ((static_cast<uint64_t>(magic_hi) << 32) |
+                          (static_cast<uint64_t>(magic_lo)));
+  if (magic != kTableMagicNumber) {
+    return Status::Corruption('not an sstable (bad magic number)');
   }
-  Printf('COVERED_DIRS: %s\n', CoveredDirsStr.c_str());
+    }
