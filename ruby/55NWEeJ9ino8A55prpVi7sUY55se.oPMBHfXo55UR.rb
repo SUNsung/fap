@@ -1,48 +1,33 @@
 
         
-                        on.unsubscribe do |chan, count|
-                  if count == 0
-                    @subscription_lock.synchronize do
-                      @raw_client = nil
-                    end
-                  end
-                end
-              end
-            end
-          end
-    
-              if node.reflection.collection?
-            other.target.push(model)
-          else
-            other.target = model
-          end
-    
-        def call(env)
-      result = @app.call(env)
-      result[1]['Middleware-Test'] = 'Success'
-      result[1]['Middleware-Order'] = 'First'
-      result
+              # Find commands in the path
+      unless (exts = external_commands).empty?
+        puts
+        puts 'External commands'
+        puts_columns exts
+      end
     end
   end
     
-        private
-      # 'Deserialize' the mailer class name by hand in case another argument
-      # (like a Global ID reference) raised DeserializationError.
-      def mailer_class
-        if mailer = Array(@serialized_arguments).first || Array(arguments).first
-          mailer.constantize
-        end
-      end
+      def core_tap_origin
+    CoreTap.instance.remote || '(none)'
+  end
     
-        # An email was generated.
-    def process(event)
-      debug do
-        mailer = event.payload[:mailer]
-        action = event.payload[:action]
-        '#{mailer}##{action}: processed outbound mail in #{event.duration.round(1)}ms'
-      end
+        args = dirs + %w[-type f (]
+    args.concat UNBREWED_EXCLUDE_FILES.flat_map { |f| %W[! -name #{f}] }
+    args.concat UNBREWED_EXCLUDE_PATHS.flat_map { |d| %W[! -path #{d}] }
+    args.concat %w[)]
+    
+        unless updated_taps.empty?
+      puts 'Updated #{updated_taps.size} tap#{plural(updated_taps.size)} ' \
+           '(#{updated_taps.join(', ')}).'
+      updated = true
     end
     
-      option '--type', 'TYPE', 'Type of the plugin {input, filter, codec, output}s', :required => true
-  option '--name', 'PLUGIN', 'Name of the new plugin', :required => true
-  option '--path', 'PATH', 'Location where the plugin skeleton will be created', :default => Dir.pwd
+          respond_with do |format|
+        format.html { redirect_to admin_pods_path }
+        format.json { render json: PodPresenter.new(pod).as_json }
+      end
+    end
+  end
+end
