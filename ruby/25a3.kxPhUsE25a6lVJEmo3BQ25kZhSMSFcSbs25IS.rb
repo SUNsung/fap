@@ -1,85 +1,140 @@
 
         
-              def gradle_path=(gradle_path)
-        @gradle_path = gradle_path
-        @escaped_gradle_path = gradle_path.shellescape
+        CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+    
+    require 'pry'
+$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
+require 'jekyll'
+    
+    config = File.expand_path '../lib/jekyll/mime.types', __dir__
+    
+    module Jekyll
+  module Deprecator
+    extend self
+    
+    puts 'Deduping #{links.size} links...'
+    
+    html_readme = '<html>#{Kramdown::Document.new(open('README.md').read).to_html}</html>'
+readme_doctree = REXML::Document.new(html_readme)
+links = REXML::XPath.match(readme_doctree, '//a')
+    
+        # .visible-sm { @include responsive-visibility() }
+    # to:
+    # @include responsive-visibility('.visible-sm')
+    def apply_mixin_parent_selector(file, rule_sel)
+      log_transform rule_sel
+      replace_rules file, '\s*' + rule_sel, comments: false do |rule, rule_pos, css|
+        body = unwrap_rule_block(rule.dup).strip
+        next rule unless body =~ /^@include \w+/m || body =~ /^@media/ && body =~ /\{\s*@include/
+        rule =~ /(#{COMMENT_RE}*)([#{SELECTOR_CHAR}\s*]+?)#{RULE_OPEN_BRACE_RE}/
+        cmt, sel = $1, $2.strip
+        # take one up selector chain if this is an &. selector
+        if sel.start_with?('&')
+          parent_sel = selector_for_pos(css, rule_pos.begin)
+          sel        = parent_sel + sel[1..-1]
+        end
+        # unwrap, and replace @include
+        unindent unwrap_rule_block(rule).gsub(/(@include [\w-]+)\(?([\$\w\-,\s]*)\)?/) {
+          name, args = $1, $2
+          sel.gsub(/\s+/, ' ').split(/,\s*/ ).map { |sel_part|
+            '#{cmt}#{name}('#{sel_part}'#{', ' if args && !args.empty?}#{args})'
+          }.join(';\n')
+        }
       end
+    end
+    }
     
-          UI.crash!('Unable to locate a target by the name of #{@target_name}') if target.nil?
+        def log_http_get_files(files, from, cached = false)
+      return if files.empty?
+      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
+      end
+    end
     
-          it 'does switch to plain text when xml is toggled off' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            cloc(xml: false)
-          end').runner.execute(:test)
-    
-            it 'returns true' do
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_tag_exists(tag: '1.2.0')
-          end').runner.execute(:test)
-    
-    module Devise
-  class Engine < ::Rails::Engine
-    config.devise = Devise
-    
-          # Sign in a user that already was authenticated. This helper is useful for logging
-      # users in after sign up. All options given to sign_in is passed forward
-      # to the set_user method in warden.
-      #
-      # Examples:
-      #
-      #   sign_in :user, @user                      # sign_in(scope, resource)
-      #   sign_in @user                             # sign_in(resource)
-      #   sign_in @user, event: :authentication     # sign_in(resource, options)
-      #   sign_in @user, store: false               # sign_in(resource, options)
-      #
-      def sign_in(resource_or_scope, *args)
-        options  = args.extract_options!
-        scope    = Devise::Mapping.find_scope!(resource_or_scope)
-        resource = args.last || resource_or_scope
-    
-    group :test do
-  gem 'omniauth-facebook'
-  gem 'omniauth-openid'
-  gem 'webrat', '0.7.3', require: false
-  gem 'mocha', '~> 1.1', require: false
+      path = 'assets/stylesheets'
+  css_path = args.with_defaults(css_path: 'tmp')[:css_path]
+  puts Term::ANSIColor.bold 'Compiling SCSS in #{path}'
+  Dir.mkdir(css_path) unless File.directory?(css_path)
+  %w(_bootstrap bootstrap/_theme).each do |file|
+    save_path = '#{css_path}/#{file.sub(/(^|\/)?_+/, '\1').sub('/', '-')}.css'
+    puts Term::ANSIColor.cyan('  #{save_path}') + '...'
+    engine    = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
+    css       = engine.render
+    File.open(save_path, 'w') { |f| f.write css }
+  end
 end
     
-      # POST /resource/password
-  def create
-    self.resource = resource_class.send_reset_password_instructions(resource_params)
-    yield resource if block_given?
+        def metadata_subdir(leaf, version: self.version, timestamp: :latest, create: false)
+      if create && timestamp == :latest
+        raise CaskError, 'Cannot create metadata subdir when timestamp is :latest.'
+      end
     
-      def respond_to_on_destroy
-    # We actually need to hardcode this as Rails default responder doesn't
-    # support returning empty response on GET request
-    respond_to do |format|
-      format.all { head :no_content }
-      format.any(*navigational_formats) { redirect_to after_sign_out_path_for(resource_name) }
+        # @abstract
+    #
+    # Identify the SHA of the commit that will be deployed.  This will most likely involve SshKit's capture method.
+    #
+    # @return void
+    #
+    def fetch_revision
+      raise NotImplementedError, 'Your SCM strategy module should provide a #fetch_revision method'
     end
   end
 end
 
     
-        # The path used after unlocking the resource
-    def after_unlock_path_for(resource)
-      new_session_path(resource)  if is_navigational_format?
-    end
-    
-        def password_change(record, opts={})
-      devise_mail(record, :password_change, opts)
-    end
+      desc 'Published'
+  task :published do
   end
-end
-
     
-      # Private methods to interface with Warden.
-  mattr_accessor :warden_config
-  @@warden_config = nil
-  @@warden_config_blocks = []
+      deploy_rb = File.expand_path('../../templates/deploy.rb.erb', __FILE__)
+  stage_rb = File.expand_path('../../templates/stage.rb.erb', __FILE__)
+  capfile = File.expand_path('../../templates/Capfile', __FILE__)
     
-          def remember_me_is_active?(resource)
-        return false unless resource.respond_to?(:remember_me)
-        scope = Devise::Mapping.find_scope!(resource)
-        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
-        resource.remember_me?(token, generated_at)
-      end
+    module RuboCop
+  module Cop
+    module Layout
+      # Checks for unnecessary additional spaces inside array percent literals
+      # (i.e. %i/%w).
+      #
+      # @example
+      #
+      #   # bad
+      #   %w(foo  bar  baz)
+      #   # good
+      #   %i(foo bar baz)
+      class SpaceInsideArrayPercentLiteral < Cop
+        include MatchRange
+        include PercentLiteral
+    
+            def on_case(case_node)
+          case_node.when_branches.each_with_object([]) do |when_node, previous|
+            when_node.each_condition do |condition|
+              next unless repeated_condition?(previous, condition)
+    
+            def variables_in_simple_node(node)
+          simple_double_comparison?(node) do |var1, var2|
+            return [variable_name(var1), variable_name(var2)]
+          end
+          simple_comparison?(node) do |var|
+            return [variable_name(var)]
+          end
+          []
+        end
+    
+    # This is the base class for logstash codecs.
+module LogStash::Codecs; class Base < LogStash::Plugin
+  include LogStash::Config::Mixin
