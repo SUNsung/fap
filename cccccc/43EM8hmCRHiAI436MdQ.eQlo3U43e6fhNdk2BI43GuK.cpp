@@ -1,13 +1,45 @@
-Licensed under the Apache License, Version 2.0 (the 'License');
+
+        
+        Licensed under the Apache License, Version 2.0 (the 'License');
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
     
-    // A pass which performs constant folding in order to avoid unnecessary
-// computation on constants.
-class HloConstantFolding : public HloPassInterface {
+    // ResourceOpKernel<T> is a virtual base class for resource op implementing
+// interface type T. The inherited op looks up the resource name (determined by
+// ContainerInfo), and creates a new resource if necessary.
+//
+// Requirements:
+//  - Op must be marked as stateful.
+//  - Op must have `container` and `shared_name` attributes. Empty `container`
+//  means using the default container. Empty `shared_name` means private
+//  resource.
+//  - Subclass must override CreateResource().
+//  - Subclass is encouraged to override VerifyResource().
+template <typename T>
+class ResourceOpKernel : public OpKernel {
  public:
-  tensorflow::StringPiece name() const override { return 'constant_folding'; }
+  explicit ResourceOpKernel(OpKernelConstruction* context) : OpKernel(context) {
+    OP_REQUIRES_OK(context,
+                   context->allocate_persistent(DT_STRING, TensorShape({2}),
+                                                &handle_, nullptr));
+  }
     }
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+      double ComputeDualLoss(const double current_dual, const double example_label,
+                         const double example_weight) const final {
+    // For binary classification, there are 2 conjugate functions, one per
+    // label value (-1 and 1).
+    const double y_alpha = current_dual * example_label;  // y \alpha
+    if (y_alpha < 0 || y_alpha > 1.0) {
+      return std::numeric_limits<double>::max();
+    }
+    return (-y_alpha + 0.5 * gamma * current_dual * current_dual) *
+           example_weight;
+  }
     
     class Diagnostician {
  public:
@@ -24,448 +56,185 @@ class HloConstantFolding : public HloPassInterface {
   static void LogDiagnosticInformation();
     }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-        if (!use_function_convention) {
-      TF_RETURN_IF_ERROR(
-          NodeBuilder(strings::StrCat('_recv_', id.first, '_', id.second),
-                      '_Recv')
-              .Attr('tensor_type', BaseType(n->output_type(id.second)))
-              .Attr('tensor_name', t)
-              .Attr('send_device', device_info.name())
-              .Attr('recv_device', device_info.name())
-              .Attr('send_device_incarnation',
-                    static_cast<int64>(device_info.incarnation()))
-              .Attr('client_terminated', true)
-              .Finalize(g, &recv_node));
-    } else {
-      // NOTE(mrry): We must include the index as part of the node
-      // name, because _Arg is a 'stateful' kernel and therefore
-      // its name must uniquely identify a kernel instance across all
-      // graphs in the same session.
-      TF_RETURN_IF_ERROR(NodeBuilder(strings::StrCat('_arg_', id.first, '_',
-                                                     id.second, '_', i),
-                                     '_Arg')
-                             .Attr('T', BaseType(n->output_type(id.second)))
-                             .Attr('index', static_cast<int32>(i))
-                             .Finalize(g, &recv_node));
-    }
-    recv_node->set_assigned_device_name(device_info.name());
-    
-    // Prefetching support
-//
-// Defined behavior on some of the uarchs:
-// PREFETCH_HINT_T0:
-//   prefetch to all levels of the hierarchy (except on p4: prefetch to L2)
-// PREFETCH_HINT_NTA:
-//   p4: fetch to L2, but limit to 1 way (out of the 8 ways)
-//   core: skip L2, go directly to L1
-//   k8 rev E and later: skip L2, can go to either of the 2-ways in L1
-enum PrefetchHint {
-  PREFETCH_HINT_T0 = 3,  // More temporal locality
-  PREFETCH_HINT_T1 = 2,
-  PREFETCH_HINT_T2 = 1,  // Less temporal locality
-  PREFETCH_HINT_NTA = 0  // No temporal locality
-};
-template <PrefetchHint hint>
-void prefetch(const void* x);
-    
-    void SYCLDeviceContext::CopyDeviceTensorToCPU(const Tensor *device_tensor,
-                                              StringPiece edge_name,
-                                              Device *device,
-                                              Tensor *cpu_tensor,
-                                              StatusCallback done) {
-  const int64 total_bytes = device_tensor->TotalBytes();
-  if (total_bytes > 0) {
-    const void *src_ptr = DMAHelper::base(device_tensor);
-    void *dst_ptr = DMAHelper::base(cpu_tensor);
-    switch (device_tensor->dtype()) {
-      case DT_FLOAT:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<float *>(dst_ptr), static_cast<const float *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_DOUBLE:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<double *>(dst_ptr),
-            static_cast<const double *>(src_ptr), total_bytes);
-        break;
-      case DT_INT32:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<int32 *>(dst_ptr), static_cast<const int32 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT64:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<int64 *>(dst_ptr), static_cast<const int64 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_HALF:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<Eigen::half *>(dst_ptr),
-            static_cast<const Eigen::half *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX64:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<std::complex<float> *>(dst_ptr),
-            static_cast<const std::complex<float> *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX128:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<std::complex<double> *>(dst_ptr),
-            static_cast<const std::complex<double> *>(src_ptr), total_bytes);
-        break;
-      case DT_INT8:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<int8 *>(dst_ptr), static_cast<const int8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT16:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<int16 *>(dst_ptr), static_cast<const int16 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT8:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<uint8 *>(dst_ptr), static_cast<const uint8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT16:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<uint16 *>(dst_ptr),
-            static_cast<const uint16 *>(src_ptr), total_bytes);
-        break;
-      case DT_BOOL:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<bool *>(dst_ptr), static_cast<const bool *>(src_ptr),
-            total_bytes);
-        break;
-      default:
-        assert(false && 'unsupported type');
-    }
-  }
-  device->eigen_sycl_device()->synchronize();
-  done(Status::OK());
-}
-    
-    #include 'tensorflow/core/lib/strings/strcat.h'
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    namespace tensorflow {
-    }
-    
-    using namespace swift;
-using namespace swift::syntax;
-    
-        GraphemeClusterBreakProperty GCBForC1 =
-        getGraphemeClusterBreakProperty(C[1]);
-    if (isExtendedGraphemeClusterBoundary(GCBForC0, GCBForC1) &&
-        !graphemeBreakOverride(C[0], C[1]))
-      return S.slice(0, C1Offset);
-    
-    /// Attempt to get a doc comment from the declaration, or other inherited
-/// sources, like from base classes or protocols.
-Optional<DocComment *> getCascadingDocComment(swift::markup::MarkupContext &MC,
-                                             const Decl *D);
-    
-    SILFunction *SILDebugScope::getParentFunction() const {
-  if (InlinedCallSite)
-    return InlinedCallSite->getParentFunction();
-  if (auto *ParentScope = Parent.dyn_cast<const SILDebugScope *>())
-    return ParentScope->getParentFunction();
-  return Parent.get<SILFunction *>();
-}
-
-    
-    using clang::index::SymbolKind;
-using clang::index::SymbolLanguage;
-using clang::index::SymbolSubKind;
-using clang::index::SymbolProperty;
-using clang::index::SymbolPropertySet;
-using clang::index::SymbolRole;
-using clang::index::SymbolRoleSet;
-using clang::index::SymbolRelation;
-using clang::index::SymbolInfo;
-    
-    // Tell browser to allocate a new object.
-// function AllocateObject(id, name, options);
-v8::Handle<v8::Value> AllocateObject(int routing_id,
-                                     int object_id,
-                                     const std::string& type,
-                                     v8::Handle<v8::Value> options);
-    
-      v8::Local<v8::Array> args = v8::Array::New(isolate);
-  v8::Handle<v8::Value> element = v8::Null(isolate);
-  blink::LocalFrame* core_frame = blink::toWebLocalFrameImpl(frame)->frame();
-  if (core_frame->deprecatedLocalOwner()) {
-    element = blink::toV8((blink::HTMLElement*)core_frame->deprecatedLocalOwner(),
-                            frame->mainWorldScriptContext()->Global(),
-                            frame->mainWorldScriptContext()->GetIsolate());
-  }
-  args->Set(0, element);
-  v8::Handle<v8::Value> argv[] = {val, v8_str(ev), args };
+    #ifndef TENSORFLOW_COMMON_RUNTIME_SYCL_SYCL_DEVICE_CONTEXT_H_
+#define TENSORFLOW_COMMON_RUNTIME_SYCL_SYCL_DEVICE_CONTEXT_H_
     
     
-    
-    
-    {    ui::Clipboard* clipboard_;
-    std::string error_;
-  };
-    
-    void leveldb_options_set_create_if_missing(
-    leveldb_options_t* opt, unsigned char v) {
-  opt->rep.create_if_missing = v;
-}
-    
-      // Return a key suitable for lookup in a MemTable.
-  Slice memtable_key() const { return Slice(start_, end_ - start_); }
-    
-    std::string TempFileName(const std::string& dbname, uint64_t number) {
-  assert(number > 0);
-  return MakeFileName(dbname, number, 'dbtmp');
-}
-    
-    // If filename is a leveldb file, store the type of the file in *type.
-// The number encoded in the filename is stored in *number.  If the
-// filename was successfully parsed, returns true.  Else return false.
-extern bool ParseFileName(const std::string& filename,
-                          uint64_t* number,
-                          FileType* type);
-    
-      fname = LogFileName('foo', 192);
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(192, number);
-  ASSERT_EQ(kLogFile, type);
-    
-      for (DeletedFileSet::const_iterator iter = deleted_files_.begin();
-       iter != deleted_files_.end();
-       ++iter) {
-    PutVarint32(dst, kDeletedFile);
-    PutVarint32(dst, iter->first);   // level
-    PutVarint64(dst, iter->second);  // file number
-  }
-    
-    int main(int argc, char** argv) {
-  std::string default_db_path;
-  for (int i = 1; i < argc; i++) {
-    double d;
-    int n;
-    char junk;
-    if (leveldb::Slice(argv[i]).starts_with('--benchmarks=')) {
-      FLAGS_benchmarks = argv[i] + strlen('--benchmarks=');
-    } else if (sscanf(argv[i], '--compression_ratio=%lf%c', &d, &junk) == 1) {
-      FLAGS_compression_ratio = d;
-    } else if (sscanf(argv[i], '--histogram=%d%c', &n, &junk) == 1 &&
-               (n == 0 || n == 1)) {
-      FLAGS_histogram = n;
-    } else if (sscanf(argv[i], '--num=%d%c', &n, &junk) == 1) {
-      FLAGS_num = n;
-    } else if (sscanf(argv[i], '--reads=%d%c', &n, &junk) == 1) {
-      FLAGS_reads = n;
-    } else if (sscanf(argv[i], '--value_size=%d%c', &n, &junk) == 1) {
-      FLAGS_value_size = n;
-    } else if (sscanf(argv[i], '--cache_size=%d%c', &n, &junk) == 1) {
-      FLAGS_cache_size = n;
-    } else if (sscanf(argv[i], '--page_size=%d%c', &n, &junk) == 1) {
-      FLAGS_page_size = n;
-    } else if (sscanf(argv[i], '--compression=%d%c', &n, &junk) == 1 &&
-               (n == 0 || n == 1)) {
-      FLAGS_compression = (n == 1) ? true : false;
-    } else if (strncmp(argv[i], '--db=', 5) == 0) {
-      FLAGS_db = argv[i] + 5;
-    } else {
-      fprintf(stderr, 'Invalid flag '%s'\n', argv[i]);
-      exit(1);
-    }
-  }
-    }
-    
-    
-    {}  // namespace leveldb
-    
-      // If *start < limit, changes *start to a short string in [start,limit).
-  // Simple comparator implementations may return with *start unchanged,
-  // i.e., an implementation of this method that does nothing is correct.
-  virtual void FindShortestSeparator(
-      std::string* start,
-      const Slice& limit) const = 0;
-    
-    #endif  // STORAGE_LEVELDB_INCLUDE_DUMPFILE_H_
-
-    
-      // keys[0,n-1] contains a list of keys (potentially with duplicates)
-  // that are ordered according to the user supplied comparator.
-  // Append a filter that summarizes keys[0,n-1] to *dst.
-  //
-  // Warning: do not change the initial contents of *dst.  Instead,
-  // append the newly constructed filter to *dst.
-  virtual void CreateFilter(const Slice* keys, int n, std::string* dst)
-      const = 0;
-    
-      // Return true iff the length of the referenced data is zero
-  bool empty() const { return size_ == 0; }
-    
-      Status Echo(ServerContext* context, const EchoRequest* request,
-              EchoResponse* response) override {
-    {
-      std::unique_lock<std::mutex> lock(mu_);
-      ++request_count_;
-    }
-    return TestServiceImpl::Echo(context, request, response);
-  }
-    
-    DEFINE_string(rpc_reporter_server_address, '',
-              'Server address for rpc reporter to send results to');
-    
-    #include <stddef.h>
-    
-    TEST(InlinedVectorTest, PushBackWithMove) {
-  InlinedVector<UniquePtr<int>, 1> v;
-  UniquePtr<int> i = MakeUnique<int>(3);
-  v.push_back(std::move(i));
-  EXPECT_EQ(nullptr, i.get());
-  EXPECT_EQ(1UL, v.size());
-  EXPECT_EQ(3, *v[0]);
-}
-    
-    /* decompress 'input' to 'output' using 'algorithm'.
-   On success, appends slices to output and returns 1.
-   On failure, output is unchanged, and returns 0. */
-int grpc_msg_decompress(grpc_message_compression_algorithm algorithm,
-                        grpc_slice_buffer* input, grpc_slice_buffer* output);
-    
-    
-    {
-    {}  // namespace testing
-}  // namespace grpc
-    
-    class GreeterClient {
- public:
-  GreeterClient(std::shared_ptr<Channel> channel)
-      : stub_(Greeter::NewStub(channel)) {}
-    }
-    
-    using grpc::Server;
-using grpc::ServerBuilder;
-using grpc::ServerContext;
-using grpc::Status;
-using helloworld::HelloRequest;
-using helloworld::HelloReply;
-using helloworld::Greeter;
-    
-    void ParseDb(const std::string& db, std::vector<Feature>* feature_list);
-    
-      bool Generate(const grpc::protobuf::FileDescriptor* file,
-                const grpc::string& parameter,
-                grpc::protobuf::compiler::GeneratorContext* context,
-                grpc::string* error) const;
-    
-    typedef GRPC_CUSTOM_STRING string;
-    
-    
-    {    // Return an OK status.
-    return grpc::Status::OK;
-  }
-    
-    struct TypeBuilder {
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_base_type(BaseType base_type) {
-    fbb_.AddElement<int8_t>(Type::VT_BASE_TYPE, static_cast<int8_t>(base_type), 0);
-  }
-  void add_element(BaseType element) {
-    fbb_.AddElement<int8_t>(Type::VT_ELEMENT, static_cast<int8_t>(element), 0);
-  }
-  void add_index(int32_t index) {
-    fbb_.AddElement<int32_t>(Type::VT_INDEX, index, -1);
-  }
-  TypeBuilder(flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  TypeBuilder &operator=(const TypeBuilder &);
-  flatbuffers::Offset<Type> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<Type>(end);
-    return o;
-  }
+    { private:
+  enum { kBufferSize = 256 << 10 /* 256 kB */ };
+  const int skip_header_lines_;
+  Env* const env_;
+  int64 line_number_;
+  std::unique_ptr<RandomAccessFile> file_;  // must outlive input_buffer_
+  std::unique_ptr<io::InputBuffer> input_buffer_;
 };
     
-      // Ensure that a type is prefixed with its namespace whenever it is used
-  // outside of its namespace.
-  std::string WrapInNameSpace(const Namespace *ns,
-                              const std::string &name) const;
-    
-    class Map : public Vector {
+    class Clipboard : public Base {
  public:
-  Map(const uint8_t *data, uint8_t byte_width) : Vector(data, byte_width) {}
+  Clipboard(int id,
+            const base::WeakPtr<DispatcherHost>& dispatcher_host,
+            const base::DictionaryValue& option);
+  ~Clipboard() override;
     }
     
-    inline void IterateObject(const uint8_t *obj, const TypeTable *type_table,
-                          IterationVisitor *visitor) {
-  visitor->StartSequence();
-  const uint8_t *prev_val = nullptr;
-  size_t set_idx = 0;
-  for (size_t i = 0; i < type_table->num_elems; i++) {
-    auto type_code = type_table->type_codes[i];
-    auto type = static_cast<ElementaryType>(type_code.base_type);
-    auto is_vector = type_code.is_vector != 0;
-    auto ref_idx = type_code.sequence_ref;
-    const TypeTable *ref = nullptr;
-    if (ref_idx >= 0) { ref = type_table->type_refs[ref_idx](); }
-    auto name = type_table->names ? type_table->names[i] : nullptr;
-    const uint8_t *val = nullptr;
-    if (type_table->st == ST_TABLE) {
-      val = reinterpret_cast<const Table *>(obj)->GetAddressOf(
-          FieldIndexToOffset(static_cast<voffset_t>(i)));
-    } else {
-      val = obj + type_table->values[i];
+    class BaseEvent {
+  friend class EventListener;
+  DISALLOW_COPY_AND_ASSIGN(BaseEvent);
     }
-    visitor->Field(i, set_idx, type, is_vector, ref, name, val);
-    if (val) {
-      set_idx++;
-      if (is_vector) {
-        val += ReadScalar<uoffset_t>(val);
-        auto vec = reinterpret_cast<const Vector<uint8_t> *>(val);
-        visitor->StartVector();
-        auto elem_ptr = vec->Data();
-        for (size_t j = 0; j < vec->size(); j++) {
-          visitor->Element(j, type, ref, elem_ptr);
-          IterateValue(type, elem_ptr, ref, prev_val, static_cast<soffset_t>(j),
-                       visitor);
-          elem_ptr += InlineSize(type, ref);
+    
+    
+    {  // Convert from content coordinates to window coordinates.
+  // This code copied from chrome_web_contents_view_delegate_views.cc
+  aura::Window* target_window = GetActiveNativeView(rfh);
+  aura::Window* root_window = target_window->GetRootWindow();
+  views::Widget* top_level_widget =
+    views::Widget::GetTopLevelWidgetForNativeView(target_window);
+  aura::client::ScreenPositionClient* screen_position_client =
+        aura::client::GetScreenPositionClient(root_window);
+  if (screen_position_client) {
+    screen_position_client->ConvertPointToScreen(target_window,
+             &screen_point);
+  }
+  set_delay_destruction(true);
+  menu_runner_.reset(new views::MenuRunner(menu_model_.get(), views::MenuRunner::CONTEXT_MENU,
+                                           base::Bind(&Menu::OnMenuClosed, base::Unretained(this))));
+  menu_runner_->RunMenuAt(top_level_widget,
+                       nullptr,
+                       gfx::Rect(screen_point, gfx::Size()),
+                       views::MENU_ANCHOR_TOPRIGHT,
+                       ui::MENU_SOURCE_NONE);
+  // It is possible for the same MenuMessageLoopAura to start a nested
+  // message-loop while it is already running a nested loop. So make
+  // sure the quit-closure gets reset to the outer loop's quit-closure
+  // once the innermost loop terminates.
+  {
+    base::AutoReset<base::Closure> reset_quit_closure(&message_loop_quit_,
+                                                      base::Closure());
+  
+    base::MessageLoop* loop = base::MessageLoop::current();
+    base::MessageLoop::ScopedNestableTaskAllower allow(loop);
+    base::RunLoop run_loop;
+    message_loop_quit_ = run_loop.QuitClosure();
+  
+    run_loop.Run();
+  }
+  set_delay_destruction(false);
+  if (pending_destruction())
+    object_manager_->OnDeallocateObject(id_);
+}
+    
+    
+    {            size_t stFrame = 0;
+            for (size_t iUtt = 0; iUtt < extraMaps.size(); iUtt++)
+            {
+                size_t numFramesInThisUtterance = lattices[iUtt]->getnumframes();
+                size_t iParallelSeq = extraMaps[iUtt]; // i-th utterance belongs to iParallelSeq-th parallel sequence
+                if (iParallelSeq >= parallelSeqStId && iParallelSeq < parallelSeqEnId)
+                {
+                    // this utterance has been selected
+                    decimatedLattices->push_back(lattices[iUtt]);
+                    decimatedBoundaryPtr->insert(decimatedBoundaryPtr->end(), boundaries.begin() + stFrame, boundaries.begin() + stFrame + numFramesInThisUtterance);
+                    decimatedUidPtr->insert(decimatedUidPtr->end(), uids.begin() + stFrame, uids.begin() + stFrame + numFramesInThisUtterance);
+                    decimatedExtraMapPtr->push_back(extraMaps[iUtt] - parallelSeqStId);
+                }
+                stFrame += numFramesInThisUtterance;
+            }
         }
-        visitor->EndVector();
-      } else {
-        IterateValue(type, val, ref, prev_val, -1, visitor);
-      }
+    
+    #include 'stdafx.h'
+#include 'Basics.h'
+#include 'Actions.h'
+#include 'ComputationNetwork.h'
+#include 'ComputationNode.h'
+#include 'DataReader.h'
+#include 'DataWriter.h'
+#include 'SimpleNetworkBuilder.h'
+#include 'Config.h'
+#include 'ScriptableObjects.h'
+    
+    #pragma once
+    
+    struct SourceFile // content of one source file  (only in this header because TextLocation's private member uses it)
+{
+    /*const*/ wstring path;                     // where it came from
+    /*const*/ vector<wstring> lines;            // source code lines
+    SourceFile(wstring location, wstring text); // from string, e.g. command line
+    SourceFile(wstring path);                   // from file
+};
+    
+    // type of data in this section
+enum SectionType
+{
+    sectionTypeNull = 0,
+    sectionTypeFile = 1,          // file header
+    sectionTypeData = 2,          // data section
+    sectionTypeLabel = 3,         // label data
+    sectionTypeLabelMapping = 4,  // label mapping table (array of strings)
+    sectionTypeStats = 5,         // data statistics
+    sectionTypeCategoryLabel = 6, // labels in category format (float type, all zeros with a single 1.0 per column)
+    sectionTypeMax
+};
+    
+    
+    {public:
+    inline array_ref(_T* ptr, size_t size) throw()
+        : data(ptr), n(size)
+    {
     }
-    prev_val = val;
-  }
-  visitor->EndSequence();
-}
+    inline array_ref() throw()
+        : data(NULL), n(0)
+    {
+    } // in case we have a vector of this
+    inline _T& operator[](size_t i) throw()
+    {
+        check_index(i);
+        return data[i];
+    }
+    inline const _T& operator[](size_t i) const throw()
+    {
+        check_index(i);
+        return data[i];
+    }
+    inline size_t size() const throw()
+    {
+        return n;
+    }
+    inline _T* begin()
+    {
+        return data;
+    }
+    inline _T* end()
+    {
+        return data + n;
+    }
+    inline void resize(size_t sz)
+    {
+        sz;
+        assert(n == sz);
+    } // allow compatibility with some functions
+    // construct from other vector types
+    template <class _V>
+    inline array_ref(_V& v)
+        : data(v.size() > 0 ? &v[0] : NULL), n((size_t) v.size())
+    {
+    }
+};
     
-      // parse schema first, so we can use it to parse the data after
-  flatbuffers::Parser parser;
-  const char *include_directories[] = { 'samples', nullptr };
-  ok = parser.Parse(schemafile.c_str(), include_directories) &&
-       parser.Parse(jsonfile.c_str(), include_directories);
-  assert(ok);
+        float4 operator>=(const float4& other) const
+    {
+        return _mm_cmpge_ps(v, other);
+    }
+    float4 operator<=(const float4& other) const
+    {
+        return _mm_cmple_ps(v, other);
+    }
     
-      flatbuffers::FlatCompiler::InitParams params;
-  params.generators = generators;
-  params.num_generators = sizeof(generators) / sizeof(generators[0]);
-  params.warn_fn = Warn;
-  params.error_fn = Error;
+    static bool got_sigint = false;
+    
+            // The actual processing.
+        std::string prefix('Hello ');
+        reply_.set_message(prefix + request_.name());
+    
+    #include <iostream>
+#include <memory>
+#include <string>
