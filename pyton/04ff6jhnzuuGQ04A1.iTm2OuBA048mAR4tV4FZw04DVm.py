@@ -1,327 +1,262 @@
 
         
-        entries_str = textwrap.indent(''.join(entries), '\t')
-atom_template = atom_template.replace('@ENTRIES@', entries_str)
-    
-    
-from test.helper import FakeYDL
-from youtube_dl.cache import Cache
-    
-                    fn = os.path.join(dirpath, basename)
-                with io.open(fn, encoding='utf-8') as inf:
-                    code = inf.read()
-    
-        _ALL_CLASSES = [
-        klass
-        for name, klass in globals().items()
-        if name.endswith('IE') and name != 'GenericIE'
-    ]
-    _ALL_CLASSES.append(GenericIE)
-    
-            title = self._html_search_regex(r'<title>(.*?)</title>', webpage, 'title')
-        description = self._html_search_regex(
-            r'<div class='description'[^>]*>([^<]+)</div>', webpage, 'description', fatal=False)
-        thumbnail = self._html_search_regex(
-            r'preview_url\s*:\s*\'(.*?)\'', webpage, 'thumbnail', fatal=False)
-    
-            # Request the extended version of the api for extra fields like artist and title
-        api_response = self._download_json(
-            'http://www.audiomack.com/api/music/url/song/%s?extended=1&_=%d' % (
-                album_url_tag, time.time()),
-            album_url_tag)
-    
-    
-class ClipRsIE(OnetBaseIE):
-    _VALID_URL = r'https?://(?:www\.)?clip\.rs/(?P<id>[^/]+)/\d+'
-    _TEST = {
-        'url': 'http://www.clip.rs/premijera-frajle-predstavljaju-novi-spot-za-pesmu-moli-me-moli/3732',
-        'md5': 'c412d57815ba07b56f9edc7b5d6a14e5',
-        'info_dict': {
-            'id': '1488842.1399140381',
-            'ext': 'mp4',
-            'title': 'PREMIJERA Frajle predstavljaju novi spot za pesmu Moli me, moli',
-            'description': 'md5:56ce2c3b4ab31c5a2e0b17cb9a453026',
-            'duration': 229,
-            'timestamp': 1459850243,
-            'upload_date': '20160405',
-        }
+            params = {
+        'age_limit': age,
+        'skip_download': True,
+        'writeinfojson': True,
+        'outtmpl': '%(id)s.%(ext)s',
     }
+    ydl = YoutubeDL(params)
+    ydl.add_default_info_extractors()
+    json_filename = os.path.splitext(filename)[0] + '.info.json'
+    try_rm(json_filename)
+    ydl.download([url])
+    res = os.path.exists(json_filename)
+    try_rm(json_filename)
+    return res
     
-    # Virtual adversarial training parameters
-flags.DEFINE_integer('num_power_iteration', 1, 'The number of power iteration')
-flags.DEFINE_float('small_constant_for_finite_diff', 1e-1,
-                   'Small constant for finite difference method')
-    
-      def __init__(self):
-    super(MNISTArgParser, self).__init__()
-    
-    
-def device():
-  return '/device:GPU:0' if tfe.num_gpus() else '/device:CPU:0'
-    
-    import reader
-    
-      @tf.test.mock.patch.dict(custom_estimator.__dict__,
-                           {'load_data': four_lines_data})
-  def test_custom_estimator(self):
-    custom_estimator.main([None, '--train_steps=1'])
-    
-    exports_files(['LICENSE'])
-    
-        # Subsampling threshold for word occurrence.
-    self.subsample = FLAGS.subsample
-    
-    
-def get_args(args_list):
-    parser = argparse.ArgumentParser(
-        description='ansible inventory script reading from landscape cluster')
-    mutex_group = parser.add_mutually_exclusive_group(required=True)
-    help_list = 'list all hosts from landscape cluster'
-    mutex_group.add_argument('--list', action='store_true', help=help_list)
-    help_host = 'display variables for a host'
-    mutex_group.add_argument('--host', help=help_host)
-    return parser.parse_args(args_list)
-    
-    # (c) 2015, Marc Abramowitz <marca@surveymonkey.com>
-#
-# This file is part of Ansible.
-#
-# Ansible is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Ansible is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Ansible. If not, see <http://www.gnu.org/licenses/>.
-    
-    # The checksum algorithm must match with the algorithm in ShellModule.checksum() method
-checksum = secure_hash
-checksum_s = secure_hash_s
-    
-        host = None
-    for matching in ['ipv4', 'ipv6', 'hostname']:
-        m = patterns[matching].match(address)
-        if m:
-            host = address
-            continue
-    
-            expected = {
-            'name': 'myhealthcheck',
-            'checkIntervalSec': 5,
-            'port': 443,
-            'unhealthyThreshold': 2,
-            'healthyThreshold': 2,
-            'host': '',
-            'timeoutSec': 5,
-            'requestPath': '/'}
-    
-        terminal_stderr_re = [
-        re.compile(r'% ?Error: '),
-        re.compile(r'^% \w+', re.M),
-        re.compile(r'% ?Bad secret'),
-        re.compile(r'invalid input', re.I),
-        re.compile(r'(?:incomplete|ambiguous) command', re.I),
-        re.compile(r'connection timed out', re.I),
-        re.compile(r'[^\r\n]+ not found', re.I),
-        re.compile(r''[^']' +returned error code: ?\d+'),
-        re.compile(r'syntax error'),
-        re.compile(r'unknown command'),
-        re.compile(r'Error\[\d+\]: ', re.I),
-        re.compile(r'Error:', re.I)
-    ]
-    
-    
-def upgrade():
-    try:
-        op.alter_column(
-            'clusters', 'changed_on',
-            existing_type=sa.DATETIME(),
-            nullable=True)
-        op.alter_column(
-            'clusters', 'created_on',
-            existing_type=sa.DATETIME(), nullable=True)
-        op.drop_constraint(None, 'columns', type_='foreignkey')
-        op.drop_constraint(None, 'columns', type_='foreignkey')
-        op.drop_column('columns', 'created_on')
-        op.drop_column('columns', 'created_by_fk')
-        op.drop_column('columns', 'changed_on')
-        op.drop_column('columns', 'changed_by_fk')
-        op.alter_column('css_templates', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('css_templates', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dashboards', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dashboards', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.create_unique_constraint(None, 'dashboards', ['slug'])
-        op.alter_column('datasources', 'changed_by_fk',
-                   existing_type=sa.INTEGER(),
-                   nullable=True)
-        op.alter_column('datasources', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('datasources', 'created_by_fk',
-                   existing_type=sa.INTEGER(),
-                   nullable=True)
-        op.alter_column('datasources', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dbs', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dbs', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('slices', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('slices', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('sql_metrics', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('sql_metrics', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('table_columns', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('table_columns', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('tables', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('tables', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('url', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('url', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        ### end Alembic commands ###
-    except:
-        pass
-    
-    from alembic import op
-import sqlalchemy as sa
-    
-    
-def downgrade():
-    op.drop_table('logs')
+            return {
+            '_type': 'playlist',
+            'id': playlist_id,
+            'title': title,
+            'description': description,
+            'entries': entries,
+        }
 
     
-        for slc in session.query(Slice).all():
-        if slc.druid_datasource_id:
-            slc.datasource_id = slc.druid_datasource_id
-        if slc.table_id:
-            slc.datasource_id = slc.table_id
-        session.merge(slc)
-        session.commit()
-    session.close()
+                stream_url_hds = json_data.get('stream_url_hds')
+            if stream_url_hds:
+                formats.extend(self._extract_f4m_formats(
+                    stream_url_hds + '?hdcore=3.4.0',
+                    video_id, f4m_id='hds', fatal=False))
     
-    from alembic import op
-import sqlalchemy as sa
+        def _real_extract(self, url):
+        # URLs end with [uploader name]/[uploader title]
+        # this title is whatever the user types in, and is rarely
+        # the proper song title.  Real metadata is in the api response
+        album_url_tag = self._match_id(url)
+        result = {'_type': 'playlist', 'entries': []}
+        # There is no one endpoint for album metadata - instead it is included/repeated in each song's metadata
+        # Therefore we don't know how many songs the album has and must infi-loop until failure
+        for track_no in itertools.count():
+            # Get song's metadata
+            api_response = self._download_json(
+                'http://www.audiomack.com/api/music/url/album/%s/%d?extended=1&_=%d'
+                % (album_url_tag, track_no, time.time()), album_url_tag,
+                note='Querying song information (%d)' % (track_no + 1))
     
+    
+@bp.route('/add', methods=['POST'])
+def add_entry():
+    if not session.get('logged_in'):
+        abort(401)
+    db = get_db()
+    db.execute('insert into entries (title, text) values (?, ?)',
+               [request.form['title'], request.form['text']])
+    db.commit()
+    flash('New entry was successfully posted')
+    return redirect(url_for('flaskr.show_entries'))
+    
+    
+@app.route('/')
+def index():
+    return render_template('index.html')
+    
+    
+# add some filters to jinja
+app.jinja_env.filters['datetimeformat'] = format_datetime
+app.jinja_env.filters['gravatar'] = gravatar_url
+
+    
+        :param url: URL for the new :class:`Request` object.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
     '''
     
-    #----------------------------------------------------------------------
-def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    '''wrapper'''
-    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
-    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
-    hostname = urlparse(url).hostname
-    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
-        return False
-    upid = match1(url, r'.+/content/(\w+)')
     
-    from html.parser import HTMLParser
+def to_native_string(string, encoding='ascii'):
+    '''Given a string object, regardless of type, returns a representation of
+    that string in the native string type, encoding and decoding where
+    necessary. This assumes ASCII unless told otherwise.
+    '''
+    if isinstance(string, builtin_str):
+        out = string
+    else:
+        if is_py2:
+            out = string.encode(encoding)
+        else:
+            out = string.decode(encoding)
     
-    from ..common import *
-from ..extractor import VideoExtractor
+        def __repr__(self):
+        return '<PreparedRequest [%s]>' % (self.method)
+    
+    # Syntax sugar.
+_ver = sys.version_info
+    
+    
+def test_idna_without_version_attribute(mocker):
+    '''Older versions of IDNA don't provide a __version__ attribute, verify
+    that if we have such a package, we don't blow up.
+    '''
+    mocker.patch('requests.help.idna', new=None)
+    assert info()['idna'] == {'version': ''}
+    
+    DOCUMENTATION = '''
+---
+inventory: openshift
+short_description: Openshift gears external inventory script
+description:
+  - Generates inventory of Openshift gears using the REST interface
+  - this permit to reuse playbook to setup an Openshift gear
+version_added: None
+author: Michael Scherer
+'''
+    
+    
+def print_list():
+    data = get_serf_members_data()
+    nodes = get_nodes(data)
+    groups = get_groups(data)
+    meta = get_meta(data)
+    inventory_data = {_key: nodes, '_meta': meta}
+    inventory_data.update(groups)
+    print(json.dumps(inventory_data))
+    
+    import os
+    
+    # Note, sha1 is the only hash algorithm compatible with python2.4 and with
+# FIPS-140 mode (as of 11-2014)
+try:
+    from hashlib import sha1 as sha1
+except ImportError:
+    from sha import sha as sha1
+    
+        args = parser.parse_args()
+    
+        name = None  # can be a Column or a property pointing to one
     
         @classmethod
-    def __get_test_directory(self):
-        '''
-        Get the temporary directory for the tests.
-        '''
-        self.test_dir = os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), 'test_command')
+    def get_eager_datasource(cls, session, datasource_type, datasource_id):
+        '''Returns datasource with columns and metrics.'''
+        datasource_class = ConnectorRegistry.sources[datasource_type]
+        return (
+            session.query(datasource_class)
+            .options(
+                subqueryload(datasource_class.columns),
+                subqueryload(datasource_class.metrics),
+            )
+            .filter_by(id=datasource_id)
+            .one()
+        )
     
-        def test_bear_eng_localization(self):
-        self.assertEqual(self.e.get('bear'), 'bear')
+        add_columns = [
+        'verbose_name', 'coordinator_host', 'coordinator_port',
+        'coordinator_endpoint', 'broker_host', 'broker_port',
+        'broker_endpoint', 'cache_timeout', 'cluster_name',
+    ]
+    edit_columns = add_columns
+    list_columns = ['cluster_name', 'metadata_last_refreshed']
+    search_columns = ('cluster_name',)
+    label_columns = {
+        'cluster_name': _('Cluster'),
+        'coordinator_host': _('Coordinator Host'),
+        'coordinator_port': _('Coordinator Port'),
+        'coordinator_endpoint': _('Coordinator Endpoint'),
+        'broker_host': _('Broker Host'),
+        'broker_port': _('Broker Port'),
+        'broker_endpoint': _('Broker Endpoint'),
+    }
     
-        def test_display_current_time_at_current_time(self):
-        '''
-        Just as justification for working example with the time provider used in
-        production. (Will always pass.)
-        '''
-        production_code_time_provider = ProductionCodeTimeProvider()
-        class_under_test = TimeDisplay()
-        current_time = datetime.datetime.now()
-        expected_time = '<span class=\'tinyBoldText\'>{}:{}</span>'.format(current_time.hour, current_time.minute)
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(production_code_time_provider), expected_time)
+        @classmethod
+    def select_star(cls, my_db, table_name, schema=None, limit=100,
+                    show_cols=False, indent=True, latest_partition=True):
+        fields = '*'
+        cols = []
+        if show_cols or latest_partition:
+            cols = my_db.get_table(table_name, schema=schema).columns
     
-        @staticmethod
-    def _static_method_1():
-        print('executed method 1!')
     
-    '''
-*TL;DR80
-Encapsulates all information needed to perform an action or trigger an event.
-'''
+def export_to_dict(session,
+                   recursive,
+                   back_references,
+                   include_defaults):
+    '''Exports databases and druid clusters to a dictionary'''
+    logging.info('Starting export')
+    dbs = session.query(Database)
+    databases = [database.export_to_dict(recursive=recursive,
+                 include_parent_ref=back_references,
+                 include_defaults=include_defaults) for database in dbs]
+    logging.info('Exported %d %s', len(databases), DATABASES_KEY)
+    cls = session.query(DruidCluster)
+    clusters = [cluster.export_to_dict(recursive=recursive,
+                include_parent_ref=back_references,
+                include_defaults=include_defaults) for cluster in cls]
+    logging.info('Exported %d %s', len(clusters), DRUID_CLUSTERS_KEY)
+    data = dict()
+    if databases:
+        data[DATABASES_KEY] = databases
+    if clusters:
+        data[DRUID_CLUSTERS_KEY] = clusters
+    return data
     
-    print('Counting to five...')
-for number in count_to_five():
-    print(number, end=' ')
+            d[k] = v
+    if 'filters' not in d:
+        d = cast_filter_data(d)
+    for k in list(d.keys()):
+        if k not in FORM_DATA_KEY_WHITELIST:
+            del d[k]
+    return d
+
     
-        def __init__(self):
-        self._tm = None
-        self._bProblem = 0
+    from .theplatform import theplatform_download_by_pid
     
-    *TL;DR80
-Provides the ability to restore an object to its previous state.
-'''
+    def kugou_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    if url.lower().find('5sing')!=-1:
+        #for 5sing.kugou.com
+        html=get_html(url)
+        ticket=r1(r''ticket':\s*'(.*)'',html)
+        j=loads(str(b64decode(ticket),encoding='utf-8'))
+        url=j['file']
+        title=j['songName']
+        songtype, ext, size = url_info(url)
+        print_info(site_info, title, songtype, size)
+        if not info_only:
+            download_urls([url], title, ext, size, output_dir, merge=merge)
+    else:
+        #for the www.kugou.com/
+        return kugou_download_playlist(url, output_dir=output_dir, merge=merge, info_only=info_only)
+        # raise NotImplementedError(url)       
     
-    API_TYPES = ('api', 'json')
-RSS_TYPES = ('rss', 'xml')
+    def kuwo_download_by_rid(rid, output_dir = '.', merge = True, info_only = False):
+    html=get_content('http://player.kuwo.cn/webmusic/st/getNewMuiseByRid?rid=MUSIC_%s'%rid)
+    title=match1(html,r'<name>(.*)</name>')
+    #to get title
+    #format =aac|mp3 ->to get aac format=mp3 ->to get mp3
+    url=get_content('http://antiserver.kuwo.cn/anti.s?format=mp3&rid=MUSIC_%s&type=convert_url&response=url'%rid)
+    songtype, ext, size = url_info(url)
+    print_info(site_info, title, songtype, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir)
     
-        @validate(VAdmin())
-    def GET_index(self):
-        res = AdminPage(content = AdminAwards(),
-                        title = 'awards').render()
-        return res
     
-    class ButtonsController(RedditController):
-    def get_wrapped_link(self, url, link = None, wrapper = None):
-        try:
-            links = []
-            if link:
-                links = [link]
-            else:
-                sr = None if isinstance(c.site, FakeSubreddit) else c.site
-                try:
-                    links = Link._by_url(url, sr)
-                except NotFound:
-                    pass
+class APIv1LoginController(RedditController):
     
-            Responds with a 120x50 `image/png` which should be displayed
-        to the user.
+        @require_oauth2_scope('identity')
+    @validate(
+        VUser(),
+    )
+    @api_doc(
+        section=api_section.account,
+        uri='/api/v1/me/trophies',
+    )
+    def GET_trophies(self):
+        '''Return a list of trophies for the current user.'''
+        return self.api_wrapper(get_usertrophies(c.oauth_user))
+    
+            An iden is given as the `captcha` field with a `BAD_CAPTCHA`
+        error, you should use this endpoint if you get a
+        `BAD_CAPTCHA` error response.
     
     
 class GoogleTagManagerController(MinimalController):
@@ -330,14 +265,3 @@ class GoogleTagManagerController(MinimalController):
             # don't serve up untrusted content except on our
             # specifically untrusted domain
             self.abort404()
-    
-    
-def _get_screen_size():
-    '''
-    获取手机屏幕大小
-    '''
-    size_str = adb.get_screen()
-    m = re.search(r'(\d+)x(\d+)', size_str)
-    if m:
-        return '{height}x{width}'.format(height=m.group(2), width=m.group(1))
-    return '1920x1080'
