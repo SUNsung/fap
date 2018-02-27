@@ -1,209 +1,255 @@
 
         
-        ScrollView* bln_word_window_handle();  //return handle
-void build_image_window(int width, int height);
-void display_bln_lines(ScrollView window,
-                       ScrollView::Color colour,
-                       float scale_factor,
-                       float y_offset,
-                       float minx,
-                       float maxx);
-                                 //function to call
-void pgeditor_msg(  //message display
-                  const char *msg);
-void pgeditor_show_point(  //display coords
-                         SVEvent *event);
-                                 //put bln word in       box
-void show_point(PAGE_RES* page_res, float x, float y);
+        namespace mate {
+class Arguments;
+}
     
-    #define UNLV_EXT  '.uzn'  // unlv zone file
+      static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
     
-    #include 'ccstruct.h'
     
-    // Fits a line to the points, ignoring the skip_first initial points and the
-// skip_last final points, returning the fitted line as a pair of points,
-// and the upper quartile error.
-double DetLineFit::Fit(int skip_first, int skip_last,
-                       ICOORD* pt1, ICOORD* pt2) {
-  // Do something sensible with no points.
-  if (pts_.empty()) {
-    pt1->set_x(0);
-    pt1->set_y(0);
-    *pt2 = *pt1;
-    return 0.0;
-  }
-  // Count the points and find the first and last kNumEndPoints.
-  int pt_count = pts_.size();
-  ICOORD* starts[kNumEndPoints];
-  if (skip_first >= pt_count) skip_first = pt_count - 1;
-  int start_count = 0;
-  int end_i = MIN(skip_first + kNumEndPoints, pt_count);
-  for (int i = skip_first; i < end_i; ++i) {
-    starts[start_count++] = &pts_[i].pt;
-  }
-  ICOORD* ends[kNumEndPoints];
-  if (skip_last >= pt_count) skip_last = pt_count - 1;
-  int end_count = 0;
-  end_i = MAX(0, pt_count - kNumEndPoints - skip_last);
-  for (int i = pt_count - 1 - skip_last; i >= end_i; --i) {
-    ends[end_count++] = &pts_[i].pt;
-  }
-  // 1 or 2 points need special treatment.
-  if (pt_count <= 2) {
-    *pt1 = *starts[0];
-    if (pt_count > 1)
-      *pt2 = *ends[0];
-    else
-      *pt2 = *pt1;
-    return 0.0;
-  }
-  // Although with between 2 and 2*kNumEndPoints-1 points, there will be
-  // overlap in the starts, ends sets, this is OK and taken care of by the
-  // if (*start != *end) test below, which also tests for equal input points.
-  double best_uq = -1.0;
-  // Iterate each pair of points and find the best fitting line.
-  for (int i = 0; i < start_count; ++i) {
-    ICOORD* start = starts[i];
-    for (int j = 0; j < end_count; ++j) {
-      ICOORD* end = ends[j];
-      if (*start != *end) {
-        ComputeDistances(*start, *end);
-        // Compute the upper quartile error from the line.
-        double dist = EvaluateLineFit();
-        if (dist < best_uq || best_uq < 0.0) {
-          best_uq = dist;
-          *pt1 = *start;
-          *pt2 = *end;
-        }
-      }
+    { private:
+  DISALLOW_COPY_AND_ASSIGN(AtomQuotaPermissionContext);
+};
+    
+    
+    {}  // namespace atom
+
+    
+    class HttpProtocolHandler : public net::URLRequestJobFactory::ProtocolHandler {
+ public:
+  explicit HttpProtocolHandler(const std::string&);
+  virtual ~HttpProtocolHandler();
     }
-  }
-  // Finally compute the square root to return the true distance.
-  return best_uq > 0.0 ? sqrt(best_uq) : best_uq;
+    
+    #endif  // ATOM_BROWSER_RELAUNCHER_H_
+
+    
+    
+    {  UpdateCache();
+  process->Send(new AtomMsg_UpdatePreferences(cached_entries_));
 }
     
-    // Returns the sqrt of the mean squared error measured perpendicular from the
-// line through mean_point() in the direction dir.
+    #ifndef ATOM_BROWSER_UI_TRAY_ICON_GTK_H_
+#define ATOM_BROWSER_UI_TRAY_ICON_GTK_H_
+    
+    // Generate param traits read methods.
+#include 'ipc/param_traits_read_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
+    
+        base::FilePath shortcutPath(path);
+    result->AppendBoolean(base::win::CreateOrUpdateShortcutLink(shortcutPath, props, 
+      base::PathExists(shortcutPath) ? base::win::SHORTCUT_UPDATE_EXISTING : base::win::SHORTCUT_CREATE_ALWAYS));
+#else
+    result->AppendBoolean(false);
+#endif
+    return;
+  } else if (method == 'GetPackage') {
+    result->AppendString(shell->GetPackage()->package_string());
+    return;
+  } else if (method == 'SetCrashDumpDir') {
+    std::string path;
+    arguments.GetString(0, &path);
+    //FIXME: result->AppendBoolean(SetCrashDumpPath(path.c_str()));
+    return;
+  } else if (method == 'RegisterGlobalHotKey') {
+    int object_id = -1;
+    arguments.GetInteger(0, &object_id);
+    Shortcut* shortcut =
+        static_cast<Shortcut*>(DispatcherHost::GetApiObject(object_id));
+    bool success = GlobalShortcutListener::GetInstance()->RegisterAccelerator(
+                       shortcut->GetAccelerator(), shortcut);
+    if (!success)
+      shortcut->OnFailed('Register global desktop keyboard shortcut failed.');
+    
+    Base::Base(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+	   const std::string& extension_id)
+    : extension_id_(extension_id),
+      id_(id),
+      delay_destruction_(false),
+      pending_destruction_(false),
+      object_manager_(object_manager) {
+}
+    
+    #ifndef CONTENT_SHELL_PATHS_MAC_H_
+#define CONTENT_SHELL_PATHS_MAC_H_
+    
+    class Clipboard : public Base {
+ public:
+  Clipboard(int id,
+            const base::WeakPtr<DispatcherHost>& dispatcher_host,
+            const base::DictionaryValue& option);
+  ~Clipboard() override;
+    }
+    
+    #define V8_USE_UNSAFE_HANDLES
+    
+    #endif  // CONTENT_NW_SRC_API_DISPATCHER_H_
+    
+      if (type == 'App' && method == 'AddOriginAccessWhitelistEntry') {
+    std::string sourceOrigin        = *v8::String::Utf8Value(args[2]);
+    std::string destinationProtocol = *v8::String::Utf8Value(args[3]);
+    std::string destinationHost     = *v8::String::Utf8Value(args[4]);
+    bool allowDestinationSubdomains = args[5]->ToBoolean()->Value();
+    }
+    
+    Menu::Menu(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+           const std::string& extension_id)
+  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
+  Create(option);
+}
+    
+    static KeyMap keymap = {
+  {'`'    , 'Backquote'},
+  {'\\'   , 'Backslash'},
+  {'['    , 'BracketLeft'},
+  {']'    , 'BracketRight'},
+  {','    , 'Comma'},
+  {'='    , 'Equal'},
+  {'-'    , 'Minus'},
+  {'.'    , 'Period'},
+  {'''    , 'Quote'},
+  {';'    , 'Semicolon'},
+  {'/'    , 'Slash'},
+  {'\n'   , 'Enter'},
+  {'\t'   , 'Tab'},
+  {'UP'   , 'ArrowUp'},
+  {'DOWN' , 'ArrowDown'},
+  {'LEFT' , 'ArrowLeft'},
+  {'RIGHT', 'ArrowRight'},
+  {'ESC'  , 'Escape'},
+  {'MEDIANEXTTRACK', 'MediaTrackNext'},
+  {'MEDIAPREVTRACK', 'MediaTrackPrevious'}
+};
+    
+    
+    {    } else {
+      enable_shortcut = false;
+    }
+    
+    // This flag controls the style of death tests.  Valid values are 'threadsafe',
+// meaning that the death test child process will re-execute the test binary
+// from the start, running only a single death test, or 'fast',
+// meaning that the child process will execute the test logic immediately
+// after forking.
+GTEST_DECLARE_string_(death_test_style);
+    
+    
+    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(HasNewFatalFailureHelper);
+};
+    
+     private:
+  std::string file_;
+  int line_;
+  int index_;
+  int write_fd_;
+    
+      // Returns the fraction bits of this number.
+  Bits fraction_bits() const { return kFractionBitMask & u_.bits_; }
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32, typename T33>
+class ValueArray33 {
+ public:
+  ValueArray33(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
+      T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25,
+      T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31, T32 v32,
+      T33 v33) : v1_(v1), v2_(v2), v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7),
+      v8_(v8), v9_(v9), v10_(v10), v11_(v11), v12_(v12), v13_(v13), v14_(v14),
+      v15_(v15), v16_(v16), v17_(v17), v18_(v18), v19_(v19), v20_(v20),
+      v21_(v21), v22_(v22), v23_(v23), v24_(v24), v25_(v25), v26_(v26),
+      v27_(v27), v28_(v28), v29_(v29), v30_(v30), v31_(v31), v32_(v32),
+      v33_(v33) {}
+    }
+    
+      // Returns true iff the given string ends with the given suffix, ignoring
+  // case. Any string is considered to end with an empty suffix.
+  static bool EndsWithCaseInsensitive(
+      const std::string& str, const std::string& suffix);
+    
+      GTEST_DECLARE_TUPLE_AS_FRIEND_
+    
+    ]]
+    
+    // Type utilities needed for implementing typed and type-parameterized
+// tests.  This file is generated by a SCRIPT.  DO NOT EDIT BY HAND!
 //
-// Derivation:
-//   Lemma:  Let v and x_i (i=1..N) be a k-dimensional vectors (1xk matrices).
-//     Let % be dot product and ' be transpose.  Note that:
-//      Sum[i=1..N] (v % x_i)^2
-//         = v * [x_1' x_2' ... x_N'] * [x_1' x_2' .. x_N']' * v'
-//     If x_i have average 0 we have:
-//       = v * (N * COVARIANCE_MATRIX(X)) * v'
-//     Expanded for the case that k = 2, where we treat the dimensions
-//     as x_i and y_i, this is:
-//       = v * (N * [VAR(X), COV(X,Y); COV(X,Y) VAR(Y)]) * v'
-//  Now, we are trying to calculate the mean squared error, where v is
-//  perpendicular to our line of interest:
-//    Mean squared error
-//      = E [ (v % (x_i - x_avg))) ^2 ]
-//      = Sum (v % (x_i - x_avg))^2 / N
-//      = v * N * [VAR(X) COV(X,Y); COV(X,Y) VAR(Y)] / N * v'
-//      = v * [VAR(X) COV(X,Y); COV(X,Y) VAR(Y)] * v'
-//      = code below
-double LLSQ::rms_orth(const FCOORD &dir) const {
-  FCOORD v = !dir;
-  v.normalise();
-  return sqrt(v.x() * v.x() * x_variance() +
-              2 * v.x() * v.y() * covariance() +
-              v.y() * v.y() * y_variance());
-}
+// Currently we support at most 50 types in a list, and at most 50
+// type-parameterized tests in one type-parameterized test case.
+// Please contact googletestframework@googlegroups.com if you need
+// more.
     
-    #include 'leveldb/env.h'
+    int main(int argc, char **argv) {
+  InitGoogleTest(&argc, argv);
+    }
     
-          case kPrevLogNumber:
-        if (GetVarint64(&input, &prev_log_number_)) {
-          has_prev_log_number_ = true;
-        } else {
-          msg = 'previous log number';
-        }
-        break;
-    
-    #include <stddef.h>
-#include <stdint.h>
-#include <string>
-#include <vector>
-#include 'leveldb/slice.h'
-#include 'util/hash.h'
-    
-    TEST(FilterBlockTest, SingleChunk) {
-  FilterBlockBuilder builder(&policy_);
-  builder.StartBlock(100);
-  builder.AddKey('foo');
-  builder.AddKey('bar');
-  builder.AddKey('box');
-  builder.StartBlock(200);
-  builder.AddKey('box');
-  builder.StartBlock(300);
-  builder.AddKey('hello');
-  Slice block = builder.Finish();
-  FilterBlockReader reader(&policy_, block);
-  ASSERT_TRUE(reader.KeyMayMatch(100, 'foo'));
-  ASSERT_TRUE(reader.KeyMayMatch(100, 'bar'));
-  ASSERT_TRUE(reader.KeyMayMatch(100, 'box'));
-  ASSERT_TRUE(reader.KeyMayMatch(100, 'hello'));
-  ASSERT_TRUE(reader.KeyMayMatch(100, 'foo'));
-  ASSERT_TRUE(! reader.KeyMayMatch(100, 'missing'));
-  ASSERT_TRUE(! reader.KeyMayMatch(100, 'other'));
-}
-    
-      // Encoded length of a Footer.  Note that the serialization of a
-  // Footer will always occupy exactly this many bytes.  It consists
-  // of two block handles and a magic number.
-  enum {
-    kEncodedLength = 2*BlockHandle::kMaxEncodedLength + 8
-  };
-    
-    Iterator* NewErrorIterator(const Status& status) {
-  return new EmptyIterator(status);
-}
-    
-        // Compress
-    int maxlen = data_sz + 512 + (data_sz >> 2) + sizeof(int); // total guess
-    char* compressed = use_compression ? new char[maxlen] : data;
-    int compressed_sz = use_compression ? stb_compress((stb_uchar*)compressed, (stb_uchar*)data, data_sz) : data_sz;
-    if (use_compression)
-		memset(compressed + compressed_sz, 0, maxlen - compressed_sz);
-    
-    #if !defined(IMGUI_DISABLE_OBSOLETE_FUNCTIONS) && defined(IMGUI_DISABLE_TEST_WINDOWS) && !defined(IMGUI_DISABLE_DEMO_WINDOWS)   // Obsolete name since 1.53, TEST->DEMO
-#define IMGUI_DISABLE_DEMO_WINDOWS
+    #if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,'invalid 'cobj' in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_resumeAllEffects'', nullptr);
+        return 0;
+    }
 #endif
     
     
-    {        // Rendering
-        glViewport(0, 0, (int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y);
-        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-        //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
-        ImGui::Render();
-        ImGui_ImplSdlGL2_RenderDrawData(ImGui::GetDrawData());
-        SDL_GL_SwapWindow(window);
+    
+    
+    
+    
+    
+    
+    
+    	// Make a small box.
+	b2AABB aabb;
+	b2Vec2 d;
+	d.Set(0.001f, 0.001f);
+	aabb.lowerBound = p - d;
+	aabb.upperBound = p + d;
+    
+    			b2EdgeShape shape;
+    
+      virtual grpc::Status SayManyHellos(
+      grpc::ServerContext *context,
+      const flatbuffers::grpc::Message<ManyHellosRequest> *request_msg,
+      grpc::ServerWriter<flatbuffers::grpc::Message<HelloReply>> *writer)
+      override {
+    // The streaming usage below is simply a combination of standard gRPC
+    // streaming with the FlatBuffers usage shown above.
+    const ManyHellosRequest *request = request_msg->GetRoot();
+    const std::string &name = request->name()->str();
+    int num_greetings = request->num_greetings();
     }
     
-            // 1. Show a simple window.
-        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    class LogMessageVoidify {
+ public:
+  LogMessageVoidify() {}
+  // This has to be an operator with a precedence lower than << but
+  // higher than ?:
+  void operator&(std::ostream&) {}
+};
+    
+        if (status.ok()) {
+      auto resp = response.GetRoot()->id();
+      std::cout << 'RPC response: ' << resp->str() << std::endl;
+    } else {
+      std::cout << 'RPC failed' << std::endl;
     }
-    
-    
-    {    // Restore modified state
-    glDisableClientState(GL_COLOR_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glBindTexture(GL_TEXTURE_2D, (GLuint)last_texture);
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glPopAttrib();
-    glPolygonMode(GL_FRONT, (GLenum)last_polygon_mode[0]); glPolygonMode(GL_BACK, (GLenum)last_polygon_mode[1]);
-    glViewport(last_viewport[0], last_viewport[1], (GLsizei)last_viewport[2], (GLsizei)last_viewport[3]);
-    glScissor(last_scissor_box[0], last_scissor_box[1], (GLsizei)last_scissor_box[2], (GLsizei)last_scissor_box[3]);
-}
+  }
+  {
+    grpc::ClientContext context;
+    fbb.Clear();
+    auto stat_offset = CreateStat(fbb, fbb.CreateString('Fred'));
+    fbb.Finish(stat_offset);
+    auto request = fbb.ReleaseMessage<Stat>();
