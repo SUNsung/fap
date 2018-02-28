@@ -1,372 +1,112 @@
 
         
-        versions_info['versions'][version] = new_version
-versions_info['latest'] = version
+                complex_vh = VirtualHost(
+            'fp', 'vhp',
+            set([Addr.fromstring('*:443'), Addr.fromstring('1.2.3.4:443')]),
+            False, False)
+        self.assertTrue(complex_vh.conflicts([self.addr1]))
+        self.assertTrue(complex_vh.conflicts([self.addr2]))
+        self.assertFalse(complex_vh.conflicts([self.addr_default]))
     
-        def test_vimeo_matching(self):
-        self.assertMatch('https://vimeo.com/channels/tributes', ['vimeo:channel'])
-        self.assertMatch('https://vimeo.com/channels/31259', ['vimeo:channel'])
-        self.assertMatch('https://vimeo.com/channels/31259/53576664', ['vimeo'])
-        self.assertMatch('https://vimeo.com/user7108434', ['vimeo:user'])
-        self.assertMatch('https://vimeo.com/user7108434/videos', ['vimeo:user'])
-        self.assertMatch('https://vimeo.com/user21297594/review/75524534/3c257a1b5d', ['vimeo:review'])
+    # The theme to use for HTML and HTML Help pages.  See the documentation for
+# a list of builtin themes.
     
-        def tearDown(self):
-        if os.path.exists(self.test_dir):
-            shutil.rmtree(self.test_dir)
+    from certbot import interfaces
+from certbot.plugins import common
     
-                for video_version in json_data.get('video_versions'):
-                video_version_url = video_version.get('download_url') or video_version.get('stream_url')
-                if not video_version_url:
+    # If true, an OpenSearch description file will be output, and all pages will
+# contain a <link> tag referring to it.  The value of this option must be the
+# base URL from which the finished HTML is served.
+#html_use_opensearch = ''
+    
+    # Timeout duration for SQL Lab synchronous queries
+SQLLAB_TIMEOUT = 30
+    
+            verbose_map = {'__timestamp': 'Time'}
+        verbose_map.update({
+            o.metric_name: o.verbose_name or o.metric_name
+            for o in self.metrics
+        })
+        verbose_map.update({
+            o.column_name: o.verbose_name or o.column_name
+            for o in self.columns
+        })
+        return {
+            'all_cols': utils.choicify(self.column_names),
+            'column_formats': self.column_formats,
+            'database': self.database.data,  # pylint: disable=no-member
+            'edit_url': self.url,
+            'filter_select': self.filter_select_enabled,
+            'filterable_cols': utils.choicify(self.filterable_column_names),
+            'gb_cols': utils.choicify(self.groupby_column_names),
+            'id': self.id,
+            'metrics_combo': self.metrics_combo,
+            'name': self.name,
+            'order_by_choices': order_by_choices,
+            'type': self.type,
+            'metrics': [o.data for o in self.metrics],
+            'columns': [o.data for o in self.columns],
+            'verbose_map': verbose_map,
+        }
+    
+        def values_for_column(self, column_name, limit=10000):
+        '''Runs query against sqla to retrieve some
+        sample values for the given column.
+        '''
+        cols = {col.column_name: col for col in self.columns}
+        target_col = cols[column_name]
+        tp = self.get_template_processor()
+        db_engine_spec = self.database.db_engine_spec
+    
+        @classmethod
+    def extra_table_metadata(cls, database, table_name, schema_name):
+        indexes = database.get_indexes(table_name, schema_name)
+        if not indexes:
+            return {}
+        cols = indexes[0].get('column_names', [])
+        full_table_name = table_name
+        if schema_name and '.' not in table_name:
+            full_table_name = '{}.{}'.format(schema_name, table_name)
+        pql = cls._partition_query(full_table_name)
+        col_name, latest_part = cls.latest_partition(
+            table_name, schema_name, database, show_first=True)
+        return {
+            'partitions': {
+                'cols': cols,
+                'latest': {col_name: latest_part},
+                'partitionQuery': pql,
+            },
+        }
+    
+            event = Event()
+        test = self
+        body = []
+    
+        def test_device_detail(self):
+        process = os.popen(self.adb_path + ' shell getprop ro.product.device')
+        output = process.read()
+        return output
+    
+                for j in range(w):
+                pixel = im_pixel[j, i]
+                # 修掉脑袋比下一个小格子还高的情况的 bug
+                if abs(j - piece_x) < piece_body_width:
                     continue
-                f = {
-                    'url': video_version_url,
-                    'width': int_or_none(video_version.get('width')),
-                    'height': int_or_none(video_version.get('height')),
-                    'abr': int_or_none(video_version.get('audio_bitrate')),
-                    'vbr': int_or_none(video_version.get('video_bitrate')),
-                }
-                bitrate = self._search_regex(r'(\d+)k', video_version_url, 'bitrate', default=None)
-                if bitrate:
-                    f.update({
-                        'format_id': 'http-%s' % bitrate,
-                    })
-                formats.append(f)
-            self._sort_formats(formats)
     
-        r = client.get('/pages/world')
-    assert r.status_code == 200
-
+        # 从 scan_start_y 开始往下扫描，棋子应位于屏幕上半部分，这里暂定不超过 2/3
+    for i in range(scan_start_y, int(h * 2 / 3)):
+        # 横坐标方面也减少了一部分扫描开销
+        for j in range(scan_x_border, w - scan_x_border):
+            pixel = im_pixel[j, i]
+            # 根据棋子的最低行的颜色判断，找最后一行那些点的平均值，这个颜
+            # 色这样应该 OK，暂时不提出来
+            if (50 < pixel[0] < 60) \
+                    and (53 < pixel[1] < 63) \
+                    and (95 < pixel[2] < 110):
+                piece_x_sum += j
+                piece_x_c += 1
+                piece_y_max = max(i, piece_y_max)
     
     
-@app.route('/public')
-def public_timeline():
-    '''Displays the latest messages of all users.'''
-    return render_template('timeline.html', messages=query_db('''
-        select message.*, user.* from message, user
-        where message.author_id = user.user_id
-        order by message.pub_date desc limit ?''', [PER_PAGE]))
-    
-        model.train_on_batch(x_train[:32], y_train[:32],
-                         sample_weight=sample_weight[:32])
-    model.test_on_batch(x_train[:32], y_train[:32],
-                        sample_weight=sample_weight[:32])
-    
-    print('Building model...')
-model = Sequential()
-model.add(Dense(512, input_shape=(max_words,)))
-model.add(Activation('relu'))
-model.add(Dropout(0.5))
-model.add(Dense(num_classes))
-model.add(Activation('softmax'))
-    
-    
-def handle_method(name, member):
-    if name in accepted_name or member.__module__ in accepted_module:
-        return
-    handle_function(name, member)
-    
-        for data_format in ['channels_first', 'channels_last']:
-        if data_format == 'channels_first':
-            shape = (3, 5, 5)
-            target_shape = (5, 5, 3)
-            prev_shape = (2, 3, 2)
-            flip = lambda x: np.flip(np.flip(x, axis=2), axis=3)
-            transpose = lambda x: np.transpose(x, (0, 2, 3, 1))
-            target_data_format = 'channels_last'
-        elif data_format == 'channels_last':
-            shape = (5, 5, 3)
-            target_shape = (3, 5, 5)
-            prev_shape = (2, 2, 3)
-            flip = lambda x: np.flip(np.flip(x, axis=1), axis=2)
-            transpose = lambda x: np.transpose(x, (0, 3, 1, 2))
-            target_data_format = 'channels_first'
-    
-            mock.return_value = 'n'
-        assert not ask_to_proceed_with_overwrite('/tmp/not_exists')
-    
-        def __init__(self, operators, supervisors, directors):
-        self.operators = operators
-        self.supervisors = supervisors
-        self.directors = directors
-        self.queued_calls = deque()
-    
-        def take_spot(self, spot):
-        self.spots_taken.append(spot)
-    
-        def bfs(self, source, dest):
-        # Use self.visited_ids to track visited nodes
-        # Use self.lookup to translate a person_id to a Person
-
-    
-    Revision ID: b318dfe5fb6c
-Revises: d6db5a5cdb5d
-Create Date: 2017-03-08 11:48:10.835741
-    
-    
-def find_constraint_name(upgrade=True):
-    cols = {'column_name'} if upgrade else {'datasource_name'}
-    return generic_find_constraint_name(
-        table='columns', columns=cols, referenced='datasources', db=db)
-    
-    from alembic import op
-import sqlalchemy as sa
-    
-    def upgrade():
-    bind = op.get_bind()
-    session = db.Session(bind=bind)
-    
-    
-def downgrade():
-    op.drop_table('logs')
-
-    
-        op.add_column(
-        'query', sa.Column('name', sa.String(length=256), nullable=True))
-    try:
-        with op.batch_alter_table('query') as batch_op:
-            batch_op.drop_constraint('client_id', type_='unique')
-    except Exception as e:
-        logging.warning(str(e))
-
-    
-    from alembic import op
-import sqlalchemy as sa
-    
-    
-def upgrade():
-    ### commands auto generated by Alembic - please adjust! ###
-    op.create_table('clusters',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('cluster_name', sa.String(length=250), nullable=True),
-    sa.Column('coordinator_host', sa.String(length=255), nullable=True),
-    sa.Column('coordinator_port', sa.Integer(), nullable=True),
-    sa.Column('coordinator_endpoint', sa.String(length=255), nullable=True),
-    sa.Column('broker_host', sa.String(length=255), nullable=True),
-    sa.Column('broker_port', sa.Integer(), nullable=True),
-    sa.Column('broker_endpoint', sa.String(length=255), nullable=True),
-    sa.Column('metadata_last_refreshed', sa.DateTime(), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('cluster_name')
-    )
-    op.create_table('dashboards',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('dashboard_title', sa.String(length=500), nullable=True),
-    sa.Column('position_json', sa.Text(), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('dbs',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('database_name', sa.String(length=250), nullable=True),
-    sa.Column('sqlalchemy_uri', sa.String(length=1024), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('database_name')
-    )
-    op.create_table('datasources',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('datasource_name', sa.String(length=255), nullable=True),
-    sa.Column('is_featured', sa.Boolean(), nullable=True),
-    sa.Column('is_hidden', sa.Boolean(), nullable=True),
-    sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('default_endpoint', sa.Text(), nullable=True),
-    sa.Column('user_id', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('cluster_name', sa.String(length=250), sa.ForeignKey('clusters.cluster_name'), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('datasource_name')
-    )
-    op.create_table('tables',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('table_name', sa.String(length=250), nullable=True),
-    sa.Column('main_dttm_col', sa.String(length=250), nullable=True),
-    sa.Column('default_endpoint', sa.Text(), nullable=True),
-    sa.Column('database_id', sa.Integer(), sa.ForeignKey('dbs.id'), nullable=False),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('table_name')
-    )
-    op.create_table('columns',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('datasource_name', sa.String(length=255), nullable=True),
-    sa.Column('column_name', sa.String(length=255), nullable=True),
-    sa.Column('is_active', sa.Boolean(), nullable=True),
-    sa.Column('type', sa.String(length=32), nullable=True),
-    sa.Column('groupby', sa.Boolean(), nullable=True),
-    sa.Column('count_distinct', sa.Boolean(), nullable=True),
-    sa.Column('sum', sa.Boolean(), nullable=True),
-    sa.Column('max', sa.Boolean(), nullable=True),
-    sa.Column('min', sa.Boolean(), nullable=True),
-    sa.Column('filterable', sa.Boolean(), nullable=True),
-    sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('metrics',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('metric_name', sa.String(length=512), nullable=True),
-    sa.Column('verbose_name', sa.String(length=1024), nullable=True),
-    sa.Column('metric_type', sa.String(length=32), nullable=True),
-    sa.Column('datasource_name', sa.String(length=255), sa.ForeignKey('datasources.datasource_name'), nullable=True),
-    sa.Column('json', sa.Text(), nullable=True),
-    sa.Column('description', sa.Text(), nullable=True),
-    sa.ForeignKeyConstraint(['datasource_name'], ['datasources.datasource_name'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('slices',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('slice_name', sa.String(length=250), nullable=True),
-    sa.Column('druid_datasource_id', sa.Integer(), sa.ForeignKey('datasources.id'), nullable=True),
-    sa.Column('table_id', sa.Integer(), sa.ForeignKey('tables.id'), nullable=True),
-    sa.Column('datasource_type', sa.String(length=200), nullable=True),
-    sa.Column('datasource_name', sa.String(length=2000), nullable=True),
-    sa.Column('viz_type', sa.String(length=250), nullable=True),
-    sa.Column('params', sa.Text(), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('sql_metrics',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('metric_name', sa.String(length=512), nullable=True),
-    sa.Column('verbose_name', sa.String(length=1024), nullable=True),
-    sa.Column('metric_type', sa.String(length=32), nullable=True),
-    sa.Column('table_id', sa.Integer(), sa.ForeignKey('tables.id'), nullable=True),
-    sa.Column('expression', sa.Text(), nullable=True),
-    sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('table_columns',
-    sa.Column('created_on', sa.DateTime(), nullable=False),
-    sa.Column('changed_on', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('table_id', sa.Integer(), sa.ForeignKey('tables.id'), nullable=True),
-    sa.Column('column_name', sa.String(length=255), nullable=True),
-    sa.Column('is_dttm', sa.Boolean(), nullable=True),
-    sa.Column('is_active', sa.Boolean(), nullable=True),
-    sa.Column('type', sa.String(length=32), nullable=True),
-    sa.Column('groupby', sa.Boolean(), nullable=True),
-    sa.Column('count_distinct', sa.Boolean(), nullable=True),
-    sa.Column('sum', sa.Boolean(), nullable=True),
-    sa.Column('max', sa.Boolean(), nullable=True),
-    sa.Column('min', sa.Boolean(), nullable=True),
-    sa.Column('filterable', sa.Boolean(), nullable=True),
-    sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('created_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.Column('changed_by_fk', sa.Integer(), sa.ForeignKey('ab_user.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('dashboard_slices',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('dashboard_id', sa.Integer(), sa.ForeignKey('dashboards.id'), nullable=True),
-    sa.Column('slice_id', sa.Integer(), sa.ForeignKey('slices.id'), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    ### end Alembic commands ###
-    
-    
-def upgrade():
-    op.add_column('metrics', sa.Column('changed_by_fk', sa.Integer(), nullable=True))
-    op.add_column('metrics', sa.Column('changed_on', sa.DateTime(), nullable=True))
-    op.add_column('metrics', sa.Column('created_by_fk', sa.Integer(), nullable=True))
-    op.add_column('metrics', sa.Column('created_on', sa.DateTime(), nullable=True))
-    try:
-        op.alter_column('columns', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('columns', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('css_templates', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('css_templates', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dashboards', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dashboards', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('datasources', 'changed_by_fk',
-                   existing_type=sa.INTEGER(),
-                   nullable=True)
-        op.alter_column('datasources', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('datasources', 'created_by_fk',
-                   existing_type=sa.INTEGER(),
-                   nullable=True)
-        op.alter_column('datasources', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dbs', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dbs', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('slices', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('slices', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('sql_metrics', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('sql_metrics', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('table_columns', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('table_columns', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('tables', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('tables', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('url', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('url', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.create_foreign_key(None, 'metrics', 'ab_user', ['changed_by_fk'], ['id'])
-        op.create_foreign_key(None, 'metrics', 'ab_user', ['created_by_fk'], ['id'])
-    except:
-        pass
-    
-    def upgrade():
-    op.add_column('slices', sa.Column('description', sa.Text(), nullable=True))
+with open('config.json', 'r') as f:
+    config = json.load(f)
