@@ -1,69 +1,48 @@
 
         
-            initializer 'devise.omniauth', after: :load_config_initializers, before: :build_middleware_stack do |app|
-      Devise.omniauth_configs.each do |provider, config|
-        app.middleware.use config.strategy_class, *config.args do |strategy|
-          config.strategy = strategy
+            get :redirect_back_with_status
+    
+            def test_url_sub_key_merges_correctly
+          hash = { 'url' => 'abstract://foo?encoding=utf8&', 'adapter' => 'sqlite3', 'host' => 'bar', 'pool' => '3' }
+          spec = resolve :production, 'production' => hash
+          assert_equal({
+            'adapter'  => 'abstract',
+            'host'     => 'foo',
+            'encoding' => 'utf8',
+            'pool'     => '3',
+            'name'     => 'production' }, spec)
         end
+    
+        class Callback2 < ControllerWithCallbacks
+      before_action :first
+      after_action :second
+      around_action :aroundz
+    
+    require 'abstract_unit'
+    
+            assert_equal 'summary, title', @controller.response.body
+        assert @controller.params.has_key?(:summary)
+        assert @controller.params.has_key?(:title)
+        assert_equal 'content...', @controller.params['summary']
+        assert_equal 'JSON', @controller.params['title']
       end
-    
-    class Devise::OmniauthCallbacksController < DeviseController
-  prepend_before_action { request.env['devise.skip_timeout'] = true }
-    
-        def password_change(record, opts={})
-      devise_mail(record, :password_change, opts)
     end
   end
+    
+      list = rss_url && !rss_url.empty? ? blogs : unavailable
+  list.push(Struct::Blog.new(name, web_url, rss_url))
 end
-
     
-    class DeviseCreateUsers < ActiveRecord::Migration
-  def change
-    create_table(:users) do |t|
-      t.string :email,              null: false
-      t.string :encrypted_password, null: true
-      t.timestamps null: false
-    end
+      desc 'Build all spree gems'
+  task :build do
+    pkgdir = File.expand_path('../pkg', __FILE__)
+    FileUtils.mkdir_p pkgdir
     
-        def ==(other)
-      other.name == name && other.path == path && other.type == type
-    end
-    
-              node.css('> ul > li > a').each do |link|
-            n = link.content
-            next if n.start_with?('Ex: ') || n.start_with?('Default ') || n =~ /example/i || IGNORE_ENTRIES.include?(n)
-            id = link['href'].remove('#')
-            n.downcase!
-            n.prepend '#{name}: '
-            entries << [n, id]
-          end
+            def find_order
+          @order = Spree::Order.find_by!(number: order_id)
         end
     
-            css('.class').each do |node|
-          class_name = node.at_css('dt > .descname').content
-          class_id = node.at_css('dt[id]')['id']
-          entries << [class_name, class_id]
-    
-            expect_any_instance_of(ActivityPub::LinkedDataSignature).to receive(:verify_account!).and_return(actor)
-        expect(ActivityPub::Activity).to receive(:factory).with(instance_of(Hash), actor, instance_of(Hash))
-    
-      describe 'GET #show' do
-    let!(:tag)     { Fabricate(:tag, name: 'test') }
-    let!(:local)   { Fabricate(:status, tags: [tag], text: 'local #test') }
-    let!(:remote)  { Fabricate(:status, tags: [tag], text: 'remote #test', account: Fabricate(:account, domain: 'remote')) }
-    let!(:late)    { Fabricate(:status, tags: [tag], text: 'late #test') }
-    
-        def type
-      'Hashtag'
-    end
-    
-      describe 'GET #show' do
-    it 'returns http success' do
-      get :show
-      expect(response).to have_http_status(:success)
-    end
-  end
-    
-            def print_version
-          output_pipe.puts 'version: '#{Pod::VERSION}''
+            def show
+          @stock_movement = scope.find(params[:id])
+          respond_with(@stock_movement)
         end
