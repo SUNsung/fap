@@ -1,123 +1,119 @@
 
         
-          Raises:
-    tf.errors.InvalidArgumentError: if batch_size or num_steps are too high.
-  '''
-  with tf.name_scope(name, 'PTBProducer', [raw_data, batch_size, num_steps]):
-    raw_data = tf.convert_to_tensor(raw_data, name='raw_data', dtype=tf.int32)
-    
-        Args:
-      dataset: the labeled dataset to evaluate, {'train', 'test', 'valid'}.
-    
-          tf.summary.histogram(tag('gradient'), grad_values)
-      tf.summary.scalar(tag('gradient_norm'), tf.global_norm([grad_values]))
-    else:
-      tf.logging.info('Var %s has no gradient', var.op.name)
-
+        versions_info = json.load(open('update/versions.json'))
+if 'signature' in versions_info:
+    del versions_info['signature']
     
     
-def random_dataset():
-  batch_size = 64
-  images = tf.random_normal([batch_size, 784])
-  labels = tf.random_uniform([batch_size], minval=0, maxval=10, dtype=tf.int32)
-  return tf.data.Dataset.from_tensors((images, labels))
+def _mkdir(d):
+    if not os.path.exists(d):
+        os.mkdir(d)
     
-    
-if __name__ == '__main__':
-  tf.test.main()
-
-    
-            print(template.format(iris_data.SPECIES[class_id],
-                              100 * probability, expec))
-    
-      xy = (df, df.pop('Species'))
-  return xy, xy
-    
-    filegroup(
-    name = 'all_files',
-    srcs = glob(
-        ['**/*'],
-        exclude = [
-            '**/METADATA',
-            '**/OWNERS',
-        ],
-    ),
-    visibility = ['//tensorflow:__subpackages__'],
-)
-
-    
-        @value.setter
-    def value(self, new_value):
-        if 1 <= new_value <= 13:
-            self._value = new_value
+            if check_executable('mplayer', ['-h']):
+            args = [
+                'mplayer', '-really-quiet', '-vo', 'null', '-vc', 'dummy',
+                '-dumpstream', '-dumpfile', tmpfilename, url]
+        elif check_executable('mpv', ['-h']):
+            args = [
+                'mpv', '-really-quiet', '--vo=null', '--stream-dump=' + tmpfilename, url]
         else:
-            raise ValueError('Invalid card value: {}'.format(new_value))
+            self.report_error('MMS or RTSP download detected but neither 'mplayer' nor 'mpv' could be run. Please install any.')
+            return False
     
-        def __init__(self, template_categories_to_budget_map):
-        self.categories_to_budget_map = template_categories_to_budget_map
+    import re
     
-            (category1, 1), product4
-        (category1, 2), product1
-        (category1, 3), product2
-        (category2, 3), product1
-        (category2, 7), product3
+            title = self._html_search_regex(r'<title>(.*?)</title>', webpage, 'title')
+        description = self._html_search_regex(
+            r'<div class='description'[^>]*>([^<]+)</div>', webpage, 'description', fatal=False)
+        thumbnail = self._html_search_regex(
+            r'preview_url\s*:\s*\'(.*?)\'', webpage, 'thumbnail', fatal=False)
+    
+    from .common import InfoExtractor
+from ..utils import (
+    int_or_none,
+    parse_iso8601,
+    sanitized_Request,
+)
+    
+            uploader = self._search_regex(
+            r'Added by\s*:\s*<a[^>]+>([^<]+)</a>', webpage, 'uploader', default=None)
+        upload_date = unified_strdate(self._search_regex(
+            r'Added on\s*:\s*([\d-]+)', webpage, 'upload date', default=None))
+    
+        parser.add_argument('-v', '--verbose',
+                        dest='verbose',
+                        action='store_true',
+                        help='show what is being downloaded')
+    
+    label = r'''
+    (?:[\w]|{range})                    # Starts with an alphanumeric or a range
+    (?:[\w_-]|{range})*                 # Then zero or more of the same or [_-]
+    (?<![_-])                           # ...as long as it didn't end with [_-]
+'''.format(range=alphanumeric_range)
+    
+        @g_connect
+    def create_import_task(self, github_user, github_repo, reference=None, role_name=None):
         '''
-        category, product_id = key
-        quantity = value
-        yield (category, quantity), product_id
+        Post an import request
+        '''
+        url = '%s/imports/' % self.baseurl
+        args = {
+            'github_user': github_user,
+            'github_repo': github_repo,
+            'github_reference': reference if reference else ''
+        }
+        if role_name:
+            args['alternate_role_name'] = role_name
+        elif github_repo.startswith('ansible-role'):
+            args['alternate_role_name'] = github_repo[len('ansible-role') + 1:]
+        data = self.__call_galaxy(url, args=urlencode(args))
+        if data.get('results', None):
+            return data['results']
+        return data
     
-                        if 'G' not in server_type and 'g' not in server_type and server_type not in google_server_types:
-                        xlog.warn('IP:%s host:%s not support GAE, server type:%s status:%d', response.ssl_sock.ip, host, server_type, response.status)
-                        google_ip.report_connect_fail(response.ssl_sock.ip)
-                        response.close()
-                        continue
-                break
-        except OpenSSL.SSL.SysCallError as e:
-            errors.append(e)
-            xlog.warn('direct_handler.handler err:%r %s/%s', e, host, url)
-        except Exception as e:
-            errors.append(e)
-            xlog.exception('direct_handler.handler %r %s %s , retry...', e, host, url)
+    import os, json, imp
+here = os.path.abspath(os.path.dirname(__file__))
+proj_info = json.loads(open(os.path.join(here, PROJ_METADATA), encoding='utf-8').read())
+try:
+    README = open(os.path.join(here, 'README.rst'), encoding='utf-8').read()
+except:
+    README = ''
+CHANGELOG = open(os.path.join(here, 'CHANGELOG.rst'), encoding='utf-8').read()
+VERSION = imp.load_source('version', os.path.join(here, 'src/%s/version.py' % PACKAGE_NAME)).__version__
     
-        version_string = 'Version:%d-%d; Build:%d; Platform:%d; CSD:%s; ServicePack:%d-%d; Suite:%d; ProductType:%d' %  (
-        os_version.dwMajorVersion, os_version.dwMinorVersion,
-        os_version.dwBuildNumber,
-        os_version.dwPlatformId,
-        os_version.szCSDVersion,
-        os_version.wServicePackMajor, os_version.wServicePackMinor,
-        os_version.wSuiteMask,
-        os_version.wReserved
-    )
+    #----------------------------------------------------------------------
+def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    '''wrapper'''
+    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
+    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
+    hostname = urlparse(url).hostname
+    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
+        return False
+    upid = match1(url, r'.+/content/(\w+)')
     
-            I.i.u = insert u before op @ index i
-        R.x-y.u = replace x-y indexed tokens with u
+        while pin_count > 0:
+        json_data = extract_json_data(url, max=pin_list[-1]['pin_id'],
+                                      limit=LIMIT)
+        pins = json_data['pins']
+        pin_list += pins
+        pin_count -= len(pins)
     
-    class ClassicToken(Token):
-    '''@brief Alternative token implementation.
+            pdf = match1(content, r'name='filename'\s*value='([^']+\.pdf)'')
+        if pdf: pdf = 'http://res.infoq.com/downloads/pdfdownloads/%s' % pdf
     
-    A Token object like we'd use in ANTLR 2.x; has an actual string created
-    and associated with this object.  These objects are needed for imaginary
-    tree nodes that have payload objects.  We need to create a Token object
-    that has a string; the tree node will point at this token.  CommonToken
-    has indexes into a char stream and hence cannot be used to introduce
-    new strings.
-    '''
     
-    from ..common import *
-from ..extractor import VideoExtractor
+site_info = 'kugou.com'
+download = kugou_download
+# download_playlist = playlist_not_supported('kugou')
+download_playlist=kugou_download_playlist
+
     
-        for i in range(10, 30):
-        url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
-            i = i,
-            p = preview
-        )
-        try:
-            mime, ext, size = url_info(url)
-            break
-        except: continue
-    
-        def prepare(self, **kwargs):
-        content = get_content(self.url)
+        # mgid%3Auma%3Avideo%3Amtv81.com%3A897974
+    vid = match1(html, r'getTheVideo\('(.*?)'')
+    xml = parseString(
+        get_content('http://intl.esperanto.mtvi.com/www/xml/media/mediaGen.jhtml?uri={}&flashPlayer=LNX%2013,0,0,206&geo=CN&sid=123456'.format(vid)))
     
         def extract(self, **kwargs):
         for i in self.streams:
@@ -129,11 +125,18 @@ from ..extractor import VideoExtractor
             # usually derived from 'url'
             s['src'] = [s['url']]
     
-        #title
-    title = ''
-    profile_api = 'https://www.showroom-live.com/api/room/profile?room_id={room_id}'.format(room_id = room_id)
-    html = loads(get_content(profile_api))
-    try:
-        title = html['main_name']
-    except KeyError:
-        title = 'Showroom_{room_id}'.format(room_id = room_id)
+    #----------------------------------------------------------------------
+def showroom_get_roomid_by_room_url_key(room_url_key):
+    '''str->str'''
+    fake_headers_mobile = {
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Charset': 'UTF-8,*;q=0.5',
+        'Accept-Encoding': 'gzip,deflate,sdch',
+        'Accept-Language': 'en-US,en;q=0.8',
+        'User-Agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36'
+    }
+    webpage_url = 'https://www.showroom-live.com/' + room_url_key
+    html = get_content(webpage_url, headers = fake_headers_mobile)
+    roomid = match1(html, r'room\?room_id\=(\d+)')
+    assert roomid
+    return roomid
