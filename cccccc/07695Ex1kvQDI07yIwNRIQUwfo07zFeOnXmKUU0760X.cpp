@@ -1,195 +1,172 @@
 
         
-        /* Map whose keys are pointers, but are compared by their dereferenced values.
- *
- * Differs from a plain std::map<const K*, T, DereferencingComparator<K*> > in
- * that methods that take a key for comparison take a K rather than taking a K*
- * (taking a K* would be confusing, since it's the value rather than the address
- * of the object for comparison that matters due to the dereferencing comparator).
- *
- * Objects pointed to by keys must not be modified in any way that changes the
- * result of DereferencingComparator.
- */
-template <class K, class T>
-class indirectmap {
-private:
-    typedef std::map<const K*, T, DereferencingComparator<const K*> > base;
-    base m;
-public:
-    typedef typename base::iterator iterator;
-    typedef typename base::const_iterator const_iterator;
-    typedef typename base::size_type size_type;
-    typedef typename base::value_type value_type;
+        namespace tensorflow {
     }
     
-        // Finish and check for builder errors
-    if (s.ok()) {
-      s = builder->Finish();
-      if (s.ok()) {
-        meta->file_size = builder->FileSize();
-        assert(meta->file_size > 0);
-      }
-    } else {
-      builder->Abandon();
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    #include 'tensorflow/compiler/xla/service/hlo_module.h'
+#include 'tensorflow/compiler/xla/service/hlo_pass_interface.h'
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    Status FetchOutputs(Graph* g, const DeviceAttributes& device_info,
+                    const gtl::ArraySlice<string>& fetch_outputs,
+                    bool use_function_convention, NameIndex* name_index,
+                    std::vector<Node*>* out_fetch_nodes,
+                    DataTypeVector* out_fetch_types) {
+  out_fetch_nodes->clear();
+  out_fetch_nodes->reserve(fetch_outputs.size());
+  for (size_t i = 0; i < fetch_outputs.size(); ++i) {
+    const string& t = fetch_outputs[i];
     }
-    delete builder;
+    }
     
-     private:
-  // We construct a char array of the form:
-  //    klength  varint32               <-- start_
-  //    userkey  char[klength]          <-- kstart_
-  //    tag      uint64
-  //                                    <-- end_
-  // The array is a suitable MemTable key.
-  // The suffix starting with 'userkey' can be used as an InternalKey.
-  const char* start_;
-  const char* kstart_;
-  const char* end_;
-  char space_[200];      // Avoid allocation for short keys
+    namespace tensorflow {
+namespace port {
+    }
+    }
     
-      // When user keys are different, but correctly ordered
-  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('hello', 200, kTypeValue)));
+        // Validate that data[i].shape = indices[i].shape + constant
+    OP_REQUIRES_OK(c, c->input_list('data', data_inputs));
+    const Tensor& data0 = (*data_inputs)[0];
+    const Tensor& indices0 = (*indices_inputs)[0];
+    for (int input_num = 0; input_num < indices_inputs->size(); input_num++) {
+      const Tensor& indices = (*indices_inputs)[input_num];
+      const Tensor& data = (*data_inputs)[input_num];
+      OP_REQUIRES(
+          c, TensorShapeUtils::StartsWith(data.shape(), indices.shape()),
+          errors::InvalidArgument('data[', input_num,
+                                  '].shape = ', data.shape().DebugString(),
+                                  ' does not start with indices[', input_num,
+                                  '].shape = ', indices.shape().DebugString()));
+      OP_REQUIRES(
+          c, input_num == 0 || SameExtraShape(data0, indices0, data, indices),
+          errors::InvalidArgument(
+              'Need data[0].shape[', indices0.dims(), ':] = data[', input_num,
+              '].shape[', indices.dims(),
+              ':], got data[0].shape = ', data0.shape().DebugString(),
+              ', data[', input_num, '].shape = ', data.shape().DebugString(),
+              ', indices[0].shape = ', indices0.shape().DebugString(),
+              ', indices[', input_num,
+              '].shape = ', indices.shape().DebugString()));
+    }
     
-    // Return the legacy file name for an sstable with the specified number
-// in the db named by 'dbname'. The result will be prefixed with
-// 'dbname'.
-extern std::string SSTTableFileName(const std::string& dbname, uint64_t number);
+      /// Build an Objective-C method descriptor for the ivar initializer
+  /// or destroyer of a class (-.cxx_construct or -.cxx_destruct).
+  void emitObjCIVarInitDestroyDescriptor(IRGenModule &IGM,
+                                         ConstantArrayBuilder &descriptors,
+                                         ClassDecl *cd,
+                                         llvm::Function *impl,
+                                         bool isDestroyer);
     
-    #endif  // STORAGE_LEVELDB_DB_TABLE_CACHE_H_
-
+      const llvm::UTF8 *SourceStart =
+    reinterpret_cast<const llvm::UTF8 *>(S.data());
     
-      for (size_t i = 0; i < compact_pointers_.size(); i++) {
-    PutVarint32(dst, kCompactPointer);
-    PutVarint32(dst, compact_pointers_[i].first);  // level
-    PutLengthPrefixedSlice(dst, compact_pointers_[i].second.Encode());
+    
+    {private:
+  llvm::DenseMap<const char *, size_t> USRToSymbol;
+  std::vector<Symbol> symbols;
+  std::vector<SymbolOccurrence> occurrences;
+  bool sorted = false;
+  llvm::hash_code recordHash = 0;
+};
+    
+    
+    {} // end namespace swift
+    
+        SpecializedDeclRef(ValueDecl *decl, SubstitutionList substitutions)
+      : TheDecl(decl), NumSubstitutions(substitutions.size())
+    {
+      std::uninitialized_copy(substitutions.begin(), substitutions.end(),
+                              getTrailingObjects<Substitution>());
+    }
+    
+    #ifndef GUETZLI_FDCT_H_
+#define GUETZLI_FDCT_H_
+    
+    std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg) {
+  if (jpg.components.size() == 1 ||
+      (jpg.components.size() == 3 &&
+       HasYCbCrColorSpace(jpg) && (jpg.Is420() || jpg.Is444()))) {
+    OutputImage img(jpg.width, jpg.height);
+    img.CopyFromJpegData(jpg);
+    return img.ToSRGB();
   }
-    
-      void EncodeTo(std::string* dst) const;
-  Status DecodeFrom(const Slice& src);
-    
-        // Adds the module variable 'api_version'.
-    if (PyModule_AddIntConstant(
-        module,
-        const_cast<char*>(kImplVersionName),
-        kImplVersion))
-#if PY_MAJOR_VERSION < 3
-      return;
-#else
-      { Py_DECREF(module); return NULL; }
-    
-    
-    {  printer->Print(
-    variables_,
-    'private static readonly pbc::MapField<$key_type_name$, $value_type_name$>.Codec _map_$name$_codec\n'
-    '    = new pbc::MapField<$key_type_name$, $value_type_name$>.Codec(');
-  key_generator->GenerateCodecCode(printer);
-  printer->Print(', ');
-  value_generator->GenerateCodecCode(printer);
-  printer->Print(
-    variables_,
-    ', $tag$);\n'
-    'private readonly pbc::MapField<$key_type_name$, $value_type_name$> $name$_ = new pbc::MapField<$key_type_name$, $value_type_name$>();\n');
-  WritePropertyDocComment(printer, descriptor_);
-  AddPublicMemberAttributes(printer);
-  printer->Print(
-    variables_,
-    '$access_level$ pbc::MapField<$key_type_name$, $value_type_name$> $property_name$ {\n'
-    '  get { return $name$_; }\n'
-    '}\n');
+  return std::vector<uint8_t>();
 }
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
     
     
     {}  // namespace guetzli
-
     
-    inline void ColorTransformYCbCrToRGB(uint8_t* pixel) {
-  int y  = pixel[0];
-  int cb = pixel[1];
-  int cr = pixel[2];
-  pixel[0] = kRangeLimit[y + kCrToRedTable[cr]];
-  pixel[1] = kRangeLimit[y +
-                         ((kCrToGreenTable[cr] + kCbToGreenTable[cb]) >> 16)];
-  pixel[2] = kRangeLimit[y + kCbToBlueTable[cb]];
+    double ButteraugliScoreForQuality(double quality) {
+  if (quality < kLowestQuality) quality = kLowestQuality;
+  if (quality > kHighestQuality) quality = kHighestQuality;
+  int index = static_cast<int>(quality);
+  double mix = quality - index;
+  return kScoreForQuality[index - kLowestQuality] * (1 - mix) +
+      kScoreForQuality[index - kLowestQuality + 1] * mix;
 }
     
-    
-    {
-    {
-    {      // Add back the last sentinel node.
-      tree[j_end + 1] = sentinel;
+    namespace fuzzer {
     }
-    if (SetDepth(static_cast<int>(2 * n - 1), &tree[0], depth, tree_limit)) {
-      /* We need to pack the Huffman tree in tree_limit bits. If this was not
-         successful, add fake entities to the lowest values and retry. */
+    
+    // Returns the name of the dir, similar to the 'dirname' utility.
+std::string DirName(const std::string &FileName);
+    
+    bool Merger::Parse(const std::string &Str, bool ParseCoverage) {
+  std::istringstream SS(Str);
+  return Parse(SS, ParseCoverage);
+}
+    
+    // Mutates Data in place, returns new size.
+size_t MutationDispatcher::MutateImpl(uint8_t *Data, size_t Size,
+                                      size_t MaxSize,
+                                      const std::vector<Mutator> &Mutators) {
+  assert(MaxSize > 0);
+  if (Size == 0) {
+    for (size_t i = 0; i < MaxSize; i++)
+      Data[i] = RandCh(Rand);
+    if (Options.OnlyASCII)
+      ToASCII(Data, MaxSize);
+    return MaxSize;
+  }
+  assert(Size > 0);
+  // Some mutations may fail (e.g. can't insert more bytes if Size == MaxSize),
+  // in which case they will return 0.
+  // Try several times before returning un-mutated data.
+  for (int Iter = 0; Iter < 100; Iter++) {
+    auto M = Mutators[Rand(Mutators.size())];
+    size_t NewSize = (this->*(M.Fn))(Data, Size, MaxSize);
+    if (NewSize && NewSize <= MaxSize) {
+      if (Options.OnlyASCII)
+        ToASCII(Data, NewSize);
+      CurrentMutatorSequence.push_back(M);
+      return NewSize;
+    }
+  }
+  return std::min(Size, MaxSize);
+}
+    
+    ATTRIBUTE_NO_SANITIZE_MEMORY
+void TracePC::AddValueForStrcmp(void *caller_pc, const char *s1, const char *s2,
+                              size_t n) {
+  if (!n) return;
+  size_t Len = std::min(n, (size_t)32);
+  const uint8_t *A1 = reinterpret_cast<const uint8_t *>(s1);
+  const uint8_t *A2 = reinterpret_cast<const uint8_t *>(s2);
+  size_t I = 0;
+  for (; I < Len; I++)
+    if (A1[I] != A2[I] || A1[I] == 0)
       break;
-    }
-  }
+  size_t PC = reinterpret_cast<size_t>(caller_pc);
+  size_t Idx = I;
+  // if (I < Len && A1[I])
+  //  Idx += __builtin_popcountl((A1[I] ^ A2[I])) - 1;
+  TPC.HandleValueProfile((PC & 4095) | (Idx << 12));
 }
-    
-    
-    {}  // namespace guetzli
-    
-    // Mimic libjpeg's heuristics to guess jpeg color space.
-// Requires that the jpg has 3 components.
-bool HasYCbCrColorSpace(const JPEGData& jpg);
-    
-    
-    {  return true;
-}
-    
-    int BuildJpegHuffmanTable(const int* count_in, const int* symbols,
-                          HuffmanTableEntry* lut) {
-  HuffmanTableEntry code;    // current table entry
-  HuffmanTableEntry* table;  // next available space in table
-  int len;         // current code length
-  int idx;         // symbol index
-  int key;         // prefix code
-  int reps;        // number of replicate key values in current table
-  int low;         // low bits for current root entry
-  int table_bits;  // key length of current table
-  int table_size;  // size of current table
-  int total_size;  // sum of root table size and 2nd level table sizes
-    }
-    
-    // Preprocesses the u (1) or v (2) channel of the given YUV image (range 0-255).
-std::vector<std::vector<float>> PreProcessChannel(
-    int w, int h, int channel, float sigma, float amount, bool blur,
-    bool sharpen, const std::vector<std::vector<float>>& image);
-    
-    #include 'comm/corepattern/service_base.h'
-    
-    
-class ServiceBase;
-typedef std::map<std::string, ServiceBase*> TServicesMap;
-    
-    class Spy {
-  public:
-    Spy(void* _this): m_this(_this) {}
-    virtual ~Spy() {}
-    }
-    
-    //
-//  testspy_spy.cpp
-//  PublicComponent
-//
-//  Created by yerungui on 14-5-14.
-//
-    
-    //============================================================================
-// Name        : has_member.h
-// Author      :
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-//============================================================================
