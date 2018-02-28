@@ -1,206 +1,140 @@
 
         
-            cmd = cmd.split()
-    
-    
-def get_args(args_list):
-    parser = argparse.ArgumentParser(
-        description='ansible inventory script reading from landscape cluster')
-    mutex_group = parser.add_mutually_exclusive_group(required=True)
-    help_list = 'list all hosts from landscape cluster'
-    mutex_group.add_argument('--list', action='store_true', help=help_list)
-    help_host = 'display variables for a host'
-    mutex_group.add_argument('--host', help=help_host)
-    return parser.parse_args(args_list)
-    
-        args = parser.parse_args()
-    
-    
-class TerminalModule(TerminalBase):
-    
-            start = time.time()
-        func(X, n_jobs=1)
-        one_core.append(time.time() - start)
-    
-        print('Benchmarks')
-    print('===========================')
-    print('Generate dataset benchmarks... ', end='')
-    X_dense, X_sparse = make_sparse_random_data(opts.n_samples,
-                                                opts.n_features,
-                                                n_nonzeros,
-                                                random_state=opts.random_seed)
-    X = X_dense if opts.dense else X_sparse
-    print('done')
-    
-    # to store the results
-scikit_classifier_results = []
-scikit_regressor_results = []
-    
         try:
-        fn = inspect.getsourcefile(obj)
-    except Exception:
-        fn = None
-    if not fn:
-        try:
-            fn = inspect.getsourcefile(sys.modules[obj.__module__])
-        except Exception:
-            fn = None
-    if not fn:
-        return
+    input = raw_input
+except NameError:
+    pass
     
-    import codecs
+        entry = entry_template.replace('@TIMESTAMP@', timestamp)
+    entry = entry.replace('@VERSION@', v)
+    entries.append(entry)
     
+    if isinstance(helptext, bytes):
+    helptext = helptext.decode('utf-8')
+    
+        def test_youtube_search_matching(self):
+        self.assertMatch('http://www.youtube.com/results?search_query=making+mustard', ['youtube:search_url'])
+        self.assertMatch('https://www.youtube.com/results?baz=bar&search_query=youtube-dl+test+video&filters=video&lclk=video', ['youtube:search_url'])
+    
+    
+class TestCache(unittest.TestCase):
+    def setUp(self):
+        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
+        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
+        _mkdir(TESTDATA_DIR)
+        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
+        self.tearDown()
+    
+    
+if __name__ == '__main__':
+    unittest.main()
+
+    
+    
+class AcademicEarthCourseIE(InfoExtractor):
+    _VALID_URL = r'^https?://(?:www\.)?academicearth\.org/playlists/(?P<id>[^?#/]+)'
+    IE_NAME = 'AcademicEarth:Course'
+    _TEST = {
+        'url': 'http://academicearth.org/playlists/laws-of-nature/',
+        'info_dict': {
+            'id': 'laws-of-nature',
+            'title': 'Laws of Nature',
+            'description': 'Introduce yourself to the laws of nature with these free online college lectures from Yale, Harvard, and MIT.',
+        },
+        'playlist_count': 3,
+    }
+    
+        def _real_extract(self, url):
+        # URLs end with [uploader name]/[uploader title]
+        # this title is whatever the user types in, and is rarely
+        # the proper song title.  Real metadata is in the api response
+        album_url_tag = self._match_id(url)
+    
+    
+class C56IE(InfoExtractor):
+    _VALID_URL = r'https?://(?:(?:www|player)\.)?56\.com/(?:.+?/)?(?:v_|(?:play_album.+-))(?P<textid>.+?)\.(?:html|swf)'
+    IE_NAME = '56.com'
+    _TESTS = [{
+        'url': 'http://www.56.com/u39/v_OTM0NDA3MTY.html',
+        'md5': 'e59995ac63d0457783ea05f93f12a866',
+        'info_dict': {
+            'id': '93440716',
+            'ext': 'flv',
+            'title': '网事知多少 第32期：车怒',
+            'duration': 283.813,
+        },
+    }, {
+        'url': 'http://www.56.com/u47/v_MTM5NjQ5ODc2.html',
+        'md5': '',
+        'info_dict': {
+            'id': '82247482',
+            'title': '爱的诅咒之杜鹃花开',
+        },
+        'playlist_count': 7,
+        'add_ie': ['Sohu'],
+    }]
+    
+    # Workers are created as daemon threads and processes. This is done to allow the
+# interpreter to exit when there are still idle processes in a
+# ProcessPoolExecutor's process pool (i.e. shutdown() was not called). However,
+# allowing workers to die with the interpreter has two undesirable properties:
+#   - The workers would still be running during interpretor shutdown,
+#     meaning that they would fail in unpredictable ways.
+#   - The workers could be killed while evaluating a work item, which could
+#     be bad if the callable being evaluated has external side-effects e.g.
+#     writing to a file.
+#
+# To work around this problem, an exit handler is installed which tells the
+# workers to exit when their work queues are empty and then waits until the
+# threads/processes finish.
+    
+    from concurrent.futures import _base
+    
+    URLS = ['http://www.google.com/',
+        'http://www.apple.com/',
+        'http://www.ibm.com',
+        'http://www.thisurlprobablydoesnotexist.com',
+        'http://www.slashdot.org/',
+        'http://www.python.org/',
+        'http://www.bing.com/',
+        'http://www.facebook.com/',
+        'http://www.yahoo.com/',
+        'http://www.youtube.com/',
+        'http://www.blogger.com/']
+    
+    
+@contextlib.contextmanager
+def HandleServerException( display = True, truncate = False ):
+  '''Catch any exception raised through server communication. If it is raised
+  because of a unknown .ycm_extra_conf.py file, load the file or ignore it after
+  asking the user. Otherwise, log the exception and display its message to the
+  user on the Vim status line. Unset the |display| parameter to hide the message
+  from the user. Set the |truncate| parameter to avoid hit-enter prompts from
+  this message.
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+      if not p.isfile( build_file ):
+    sys.exit(
+      'File {0} does not exist; you probably forgot to run:\n'
+      '\tgit submodule update --init --recursive\n'.format( build_file ) )
+    
+    
+def WaitUntilReady( timeout = 5 ):
+  expiration = time.time() + timeout
+  while True:
     try:
-    from urllib import urlopen
-except ImportError:
-    from urllib.request import urlopen
-    
-    #import matplotlib.pyplot as plt
-#plt.matshow(cm, cmap=plt.cm.jet)
-#plt.show()
-    
-        out = K.eval(weighted_loss(K.variable(x),
-                               K.variable(y),
-                               K.variable(weights),
-                               K.variable(mask)))
-    
-    model = Sequential()
-model.add(Embedding(max_features, embedding_size, input_length=maxlen))
-model.add(Dropout(0.25))
-model.add(Conv1D(filters,
-                 kernel_size,
-                 padding='valid',
-                 activation='relu',
-                 strides=1))
-model.add(MaxPooling1D(pool_size=pool_size))
-model.add(LSTM(lstm_output_size))
-model.add(Dense(1))
-model.add(Activation('sigmoid'))
-    
-    x_train = x_train.astype('float32')
-x_test = x_test.astype('float32')
-x_train /= 255
-x_test /= 255
-print('x_train shape:', x_train.shape)
-print(x_train.shape[0], 'train samples')
-print(x_test.shape[0], 'test samples')
-    
-    learning_rate = 1e-6
-clip_norm = 1.0
-    
-    
-@keras_test
-def test_convert_weights():
-    def get_model(shape, data_format):
-        model = Sequential()
-        model.add(Conv2D(filters=2,
-                         kernel_size=(4, 3),
-                         input_shape=shape,
-                         data_format=data_format))
-        model.add(Flatten())
-        model.add(Dense(5))
-        return model
-    
-        # Arguments
-        x: Numpy array of input data.
-        y: Numpy array of targets data.
-        image_data_generator: Instance of `ImageDataGenerator`
-            to use for random transformations and normalization.
-        batch_size: Integer, size of a batch.
-        shuffle: Boolean, whether to shuffle the data between epochs.
-        seed: Random seed for data shuffling.
-        data_format: String, one of `channels_first`, `channels_last`.
-        save_to_dir: Optional directory where to save the pictures
-            being yielded, in a viewable format. This is useful
-            for visualizing the random transformations being
-            applied, for debugging purposes.
-        save_prefix: String prefix to use for saving sample
-            images (if `save_to_dir` is set).
-        save_format: Format to use for saving sample images
-            (if `save_to_dir` is set).
-    '''
-    
-    
-def test_reuters():
-    # only run data download tests 20% of the time
-    # to speed up frequent testing
-    random.seed(time.time())
-    if random.random() > 0.8:
-        (x_train, y_train), (x_test, y_test) = reuters.load_data()
-        assert len(x_train) == len(y_train)
-        assert len(x_test) == len(y_test)
-        assert len(x_train) + len(x_test) == 11228
-        (x_train, y_train), (x_test, y_test) = reuters.load_data(maxlen=10)
-        assert len(x_train) == len(y_train)
-        assert len(x_test) == len(y_test)
-        word_index = reuters.get_word_index()
-        assert isinstance(word_index, dict)
-    
-    
-@keras_test
-def test_maxout_dense():
-    layer_test(legacy_layers.MaxoutDense,
-               kwargs={'output_dim': 3},
-               input_shape=(3, 2))
-    
-        # 4. Anything else is not a valid argument
-    with pytest.raises(ValueError):
-        a = activations.get(6)
-    
-                # check that output changes after states are reset
-            # (even though the model itself didn't change)
-            layer.reset_states()
-            out3 = model.predict(np.ones_like(inputs))
-            assert(out2.max() != out3.max())
-    
-                if point.name == 'p':
-                link = point.find('a')
-                if link is not None:
-                    link = clean_pdf_link(link.attrs['href'])
-                    ext = get_extension(link)
-                    print(ext)
-                    if not ext in forbidden_extensions:
-                        print(shorten_title(point.text) + ' (' + link + ')')
-                        try:
-                            name = clean_text(point.text.split('[' + ext + ']')[0])
-                            fullname = '.'.join((name, ext))
-                            if not os.path.exists('/'.join((current_directory, fullname)) ):
-                                download_pdf(link, current_directory, '.'.join((name, ext)))
-                        except KeyboardInterrupt:
-                            try:
-                                print('Press Ctrl-C in 1 second to quit')
-                                time.sleep(1)
-                            except KeyboardInterrupt:
-                                print('Cancelling..')
-                                break
-                        except:
-                            failures.append(point.text)
-                        
-        point = point.next_sibling          
-    
-    
-def update_data():
-    global src_x, src_y
-    
-            # 在跳跃落下的瞬间 摄像机移动前截图 这个参数要自己校调
-        time.sleep(0.2)
-        pull_screenshot_temp()
-        im_temp = Image.open('./autojump_temp.png')
-        temp_piece_x, temp_piece_y = find_piece(im_temp)
-        debug.computing_error(press_time, board_x, board_y, piece_x, piece_y, temp_piece_x, temp_piece_y)
-    
-        # 粗查棋子位置
-    piece_found, piece_fx, piece_fy = 0, 0, 0
-    scan_piece_unit = w // 40  # 间隔单位
-    ny = (h + w) // 2  # 寻找下限 从画面中央的正方形的下缘开始
-    while ny > (h - w) // 2 and not piece_found:
-        ny -= scan_piece_unit
-        for nx in range(0, w, scan_piece_unit):
-            pixel = im_pixel[nx, ny]
-            if find_piece(pixel):
-                piece_fx, piece_fy = nx, ny
-                piece_found = True
-                break
-    print('%-12s %s,%s' % ('piece_fuzzy:', piece_fx, piece_fy))
-    if not piece_fx:
-        return 0, 0  # 没找到棋子
+      if time.time() > expiration:
+        raise RuntimeError( 'Waited for the server to be ready '
+                            'for {0} seconds, aborting.'.format( timeout ) )
+      if _IsReady():
+        return
+    except requests.exceptions.ConnectionError:
+      pass
+    finally:
+      time.sleep( 0.1 )
