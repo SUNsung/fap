@@ -1,132 +1,175 @@
 
         
-        
-def plot_batch_errors(all_errors, n_features, all_batch_sizes, data):
-    plt.figure()
-    plot_results(all_batch_sizes, all_errors['pca'], label='PCA')
-    plot_results(all_batch_sizes, all_errors['ipca'], label='IncrementalPCA')
-    plt.legend(loc='lower left')
-    plt.suptitle('Algorithm error vs. batch_size for n_components %i\n \
-                 LFW, size %i x %i' % (
-                 n_features, data.shape[0], data.shape[1]))
-    plt.xlabel('Batch size')
-    plt.ylabel('Mean absolute error')
+            params = {
+        'age_limit': age,
+        'skip_download': True,
+        'writeinfojson': True,
+        'outtmpl': '%(id)s.%(ext)s',
+    }
+    ydl = YoutubeDL(params)
+    ydl.add_default_info_extractors()
+    json_filename = os.path.splitext(filename)[0] + '.info.json'
+    try_rm(json_filename)
+    ydl.download([url])
+    res = os.path.exists(json_filename)
+    try_rm(json_filename)
+    return res
     
-    ward = AgglomerativeClustering(n_clusters=3, linkage='ward')
+            if check_executable('mplayer', ['-h']):
+            args = [
+                'mplayer', '-really-quiet', '-vo', 'null', '-vc', 'dummy',
+                '-dumpstream', '-dumpfile', tmpfilename, url]
+        elif check_executable('mpv', ['-h']):
+            args = [
+                'mpv', '-really-quiet', '--vo=null', '--stream-dump=' + tmpfilename, url]
+        else:
+            self.report_error('MMS or RTSP download detected but neither 'mplayer' nor 'mpv' could be run. Please install any.')
+            return False
     
-        url_fmt is along the lines of ('https://github.com/USER/PROJECT/'
-                                   'blob/{revision}/{package}/'
-                                   '{path}#L{lineno}')
-    '''
-    revision = _get_git_revision()
-    return partial(_linkcode_resolve, revision=revision, package=package,
-                   url_fmt=url_fmt)
+            raw_payload = self._search_regex([
+            r'class='amtv-embed'[^>]+id='([^']+)'',
+            r'class=\\'amtv-embed\\'[^>]+id=\\'([^']+)\\'',
+        ], webpage, 'raw payload')
+        _, stage_mode, video_id, lang = raw_payload.split('-')
+    
+            return {
+            'id': flv_id,
+            'url': rtmp_url,
+            'ext': 'flv',
+            'no_resume': True,
+            'title': title,
+            'description': description,
+            'duration': duration,
+            'view_count': view_count,
+            'comment_count': comment_count,
+            'uploader': uploader,
+            'upload_date': upload_date,
+        }
 
     
-        print('Decompressing %s' % ARCHIVE_NAME)
-    with closing(tarfile.open(ARCHIVE_NAME, 'r:gz')) as archive:
-        archive.extractall(path='.')
-    os.remove(ARCHIVE_NAME)
+            return info_dict
 
     
-        # the training data folder must be passed as first argument
-    movie_reviews_data_folder = sys.argv[1]
-    dataset = load_files(movie_reviews_data_folder, shuffle=False)
-    print('n_samples: %d' % len(dataset.data))
-    
-    In both examples below, the main result is that the empirical covariance
-estimate, as a non-robust one, is highly influenced by the heterogeneous
-structure of the observations. Although the robust covariance estimate is
-able to focus on the main mode of the data distribution, it sticks to the
-assumption that the data should be Gaussian distributed, yielding some biased
-estimation of the data structure, but yet accurate to some extent.
-The One-Class SVM does not assume any parametric form of the data distribution
-and can therefore model the complex shape of the data much better.
-    
-    The data is generated with the ``make_checkerboard`` function, then
-shuffled and passed to the Spectral Biclustering algorithm. The rows
-and columns of the shuffled matrix are rearranged to show the
-biclusters found by the algorithm.
-    
-    ] + _py_files('scrapy/contrib') + _py_files('scrapy/contrib_exp')
-    
-            if opts.logfile:
-            self.settings.set('LOG_ENABLED', True, priority='cmdline')
-            self.settings.set('LOG_FILE', opts.logfile, priority='cmdline')
-    
-        @property
-    def templates_dir(self):
-        _templates_base_dir = self.settings['TEMPLATES_DIR'] or \
-            join(scrapy.__path__[0], 'templates')
-        return join(_templates_base_dir, 'spiders')
+    site_info = 'MioMio.tv'
+download = miomio_download
+download_playlist = playlist_not_supported('miomio')
 
     
-            if not assertion:
-            if self.min_bound == self.max_bound:
-                expected = self.min_bound
-            else:
-                expected = '%s..%s' % (self.min_bound, self.max_bound)
+    #----------------------------------------------------------------------
+def showroom_get_roomid_by_room_url_key(room_url_key):
+    '''str->str'''
+    fake_headers_mobile = {
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Charset': 'UTF-8,*;q=0.5',
+        'Accept-Encoding': 'gzip,deflate,sdch',
+        'Accept-Language': 'en-US,en;q=0.8',
+        'User-Agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36'
+    }
+    webpage_url = 'https://www.showroom-live.com/' + room_url_key
+    html = get_content(webpage_url, headers = fake_headers_mobile)
+    roomid = match1(html, r'room\?room_id\=(\d+)')
+    assert roomid
+    return roomid
     
     
-class TestDecode:
-    def test_decimal(self):
-        rval = self.loads('1.1', parse_float=decimal.Decimal)
-        self.assertTrue(isinstance(rval, decimal.Decimal))
-        self.assertEqual(rval, decimal.Decimal('1.1'))
+class TestNaitivePool(unittest.TestCase):
     
-            try:
-            if s[end] in _ws:
-                end += 1
-                if s[end] in _ws:
-                    end = _w(s, end + 1).end()
-        except IndexError:
-            pass
+        def test_parrot_eng_localization(self):
+        self.assertEqual(self.e.get('parrot'), 'parrot')
     
-        @support.requires_IEEE_754
-    def test_overflow(self):
-        self.assertEqual(complex('1e500'), complex(INF, 0.0))
-        self.assertEqual(complex('-1e500j'), complex(0.0, -INF))
-        self.assertEqual(complex('-1e500+1.8e308j'), complex(-INF, INF))
+        def test_am_station_overflow_after_scan(self):
+        self.radio.scan()
+        station = self.radio.state.stations[self.radio.state.pos]
+        expected_station = '1250'
+        self.assertEqual(station, expected_station)
     
-        def _create_infile(self):
-        infile = support.TESTFN
-        with open(infile, 'w') as fp:
-            self.addCleanup(os.remove, infile)
-            fp.write(self.data)
-        return infile
+        def main_method(self):
+        '''will execute either _instance_method_1 or _instance_method_2
+    
+        def publishReport(self):
+        self._db.update()
+        self._reporter.report()
     
     
-def set_up_logging(verbosity):
-    levels = {-2: logging.ERROR, -1: logging.WARN, 0: logging.INFO,
-              1: logging.DEBUG}
-    max_level = max(levels.keys())
-    min_level = min(levels.keys())
-    verbosity = min(verbosity, max_level)
-    verbosity = max(verbosity, min_level)
-    level = levels[verbosity]
-    format_ = '%(levelname)s %(message)s'
-    logging.basicConfig(level=level, format=format_)
+class CompositeSpecification(Specification):
     
-        if setup_globals:
-        g.setup_complete()
+    print 'PLUGIN_I18N_PATHS := ' + ','.join(os.path.relpath(plugin.path)
+                                         for plugin in plugins
+                                         if plugin.needs_translation)
     
-            Always succeeds, even if the proxy has not yet been initialized.
-        Normally, if the proxy hasn't been initialized, a `TypeError` is
-        raised to indicate a programming error. To avoid crashing on feature
-        checks that are done too early (e.g., during initial DB set-up of
-        the pylons environment), this function will instead return `default`
-        for an uninitialized proxy.
+        def live_config_iteritems(self):
+        live = self.stacked_proxy_safe_get(g, 'live_config', {})
+        return live.iteritems()
     
-    api('trophy', TrophyJsonTemplate)
-api('rules', RulesJsonTemplate)
+    api('organiclisting',       OrganicListingJsonTemplate)
+api('subreddittraffic', TrafficJsonTemplate)
+api('takedownpane', TakedownJsonTemplate)
+api('policyview', PolicyViewJsonTemplate)
     
-                send_gift(
-                buyer=buyer,
-                recipient=recipient,
-                months=months,
-                days=months * 31,
-                signed=False,
-                giftmessage=None,
-                thing_fullname=thing_fullname,
-                note=note,
-            )
+    from r2.config.extensions import set_extension
+from r2.controllers.reddit_base import RedditController, generate_modhash
+from r2.controllers.login import handle_login, handle_register
+from r2.lib.csrf import csrf_exempt
+from r2.lib.validator import (
+    json_validate,
+    ValidEmail,
+    VPasswordChange,
+    VRatelimit,
+    VSigned,
+    VThrottledLogin,
+    VUname,
+)
+    
+            # See if the target is already an existing friend.
+        # If not, create the friend relationship.
+        friend_rel = Account.get_friend(c.user, friend)
+        rel_exists = bool(friend_rel)
+        if not friend_rel:
+            friend_rel = c.user.add_friend(friend)
+            response.status = 201
+    
+            def builder_wrapper(thing = None):
+            kw = {}
+            if not thing:
+                kw['url'] = url
+                kw['title'] = title
+            return ButtonLite(thing,
+                              image = 1 if buttonimage is None else buttonimage,
+                              target = '_new' if newwindow else '_parent',
+                              styled = styled, **kw)
+    
+            To request a new CAPTCHA,
+        use [/api/new_captcha](#POST_api_new_captcha).
+        '''
+        image = captcha.get_image(iden)
+        f = StringIO.StringIO()
+        image.save(f, 'PNG')
+        response.content_type = 'image/png;'
+        return f.getvalue()
+    
+
+    
+    
+    def send400(self):
+        if 'usable_error_content' in request.environ:
+            return request.environ['usable_error_content']
+        else:
+            res = pages.RedditError(
+                title=_('bad request (%(domain)s)') % dict(domain=g.domain),
+                message=_('you sent an invalid request'),
+                explanation=request.GET.get('explanation'))
+            return res.render()
+    
+    from r2.controllers.reddit_base import MinimalController
+from r2.lib.pages import (
+    GoogleTagManagerJail,
+    GoogleTagManager,
+)
+from r2.lib.validator import (
+    validate,
+    VGTMContainerId,
+)
+    
+        def GET_promohealth(self):
+        response.content_type = 'application/json'
+        return json.dumps(promote.health_check())
