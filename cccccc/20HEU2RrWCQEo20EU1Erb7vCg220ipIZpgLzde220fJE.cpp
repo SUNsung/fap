@@ -1,321 +1,315 @@
 
         
-          if (!description.empty()) {
-    auto I = hideByDescription.find(description);
-    if (I != hideByDescription.end())
-      return I->getValue();
-  }
+         protected:
+  // Variables accessible from subclasses.
+  mutex mu_;
+  ContainerInfo cinfo_ GUARDED_BY(mu_);
+  T* resource_ GUARDED_BY(mu_) = nullptr;
     
-    
-    
-      ArrayRef<StringRef> getTags() const {
-    return llvm::makeArrayRef(Parts.Tags.begin(), Parts.Tags.end());
-  }
-    
-    
-    {  StringRef getReceiverUSR() const {
-    for (auto Relation: Relations) {
-      if (Relation.roles & (SymbolRoleSet) SymbolRole::RelationReceivedBy)
-        return Relation.USR;
+    namespace xla {
     }
-    return StringRef();
+    
+    // Prune a model to make it more efficient:
+// * Remove unnecessary operations.
+// * Optimize gradient computations.
+class ModelPruner : public GraphOptimizer {
+ public:
+  ModelPruner() {}
+  ~ModelPruner() override {}
+    }
+    
+      // Child process: close parent-side pipes and channels marked for closing.
+  // For pipe channels, replace their file descriptors with the pipes.
+  int devnull_fd = -1;
+  for (int i = 0; i < kNFds; i++) {
+    if (parent_pipe_[i] >= 0) {
+      close(parent_pipe_[i]);
+      parent_pipe_[i] = -1;
+    }
+    }
+    
+    // kNullPlugin denotes an invalid plugin identifier.
+extern const PluginId kNullPlugin;
+    
+    /** scalar_sigmoid_fast_derivative_op
+  * \ingroup CXX11_NeuralNetworks_Module
+  * \brief Template functor to compute the fast derivative of a sigmoid
+  *
+  * Input should be the backpropagated gradient.
+  *
+  * \sa class CwiseUnaryOp, Cwise::sigmoid_fast_derivative()
+  */
+template <typename T>
+struct scalar_sigmoid_fast_derivative_op {
+  EIGEN_EMPTY_STRUCT_CTOR(scalar_sigmoid_fast_derivative_op)
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE T operator()(const T& y) const {
+    const T one = T(1);
+    return (one - y) * y;
   }
+    }
+    
+      Status ResetLocked() override {
+    line_number_ = 0;
+    input_buffer_.reset(nullptr);
+    return ReaderBase::ResetLocked();
+  }
+    
+      // If instruction is part of inputs, don't reset the bit_vector.
+  if (std::find(inputs.begin(), inputs.end(), instruction) == inputs.end()) {
+    bit_vector.SetToZero();
+  }
+  bit_vector.Set(GetIndex(instruction));
+  for (const HloInstruction* input : inputs) {
+    bit_vector.OrWith(GetBitVector(input));
+  }
+    
+    template <typename T>
+struct DynamicStitchOpCPU : DynamicStitchOpImplCPU<T, false> {
+  using DynamicStitchOpImplCPU<T, false>::DynamicStitchOpImplCPU;
 };
     
-    // Like ASSERT_DEATH, but continues on to successive tests in the
-// test case, if any:
-# define EXPECT_DEATH(statement, regex) \
-    EXPECT_EXIT(statement, ::testing::internal::ExitedUnsuccessfully, regex)
+    
+    {}  // namespace
+    
+        // Finish and check for file errors
+    if (s.ok()) {
+      s = file->Sync();
+    }
+    if (s.ok()) {
+      s = file->Close();
+    }
+    delete file;
+    file = NULL;
+    
+    void DBIter::Next() {
+  assert(valid_);
+    }
+    
+    #include 'db/filename.h'
     
     
-    {    // Then prints the value itself.
-    UniversalPrint(value, os);
+    {  Table* table = reinterpret_cast<TableAndFile*>(cache_->Value(handle))->table;
+  Iterator* result = table->NewIterator(options);
+  result->RegisterCleanup(&UnrefEntry, cache_, handle);
+  if (tableptr != NULL) {
+    *tableptr = table;
   }
-    
-      // Returns a copy of the FilePath with the case-insensitive extension removed.
-  // Example: FilePath('dir/file.exe').RemoveExtension('EXE') returns
-  // FilePath('dir/file'). If a case-insensitive extension is not
-  // found, returns a copy of the original FilePath.
-  FilePath RemoveExtension(const char* extension) const;
-    
-      // Creates an ANSI string from the given wide string, allocating
-  // memory using new. The caller is responsible for deleting the return
-  // value using delete[]. Returns the ANSI string, or NULL if the
-  // input is NULL.
-  //
-  // The returned string is created using the ANSI codepage (CP_ACP) to
-  // match the behaviour of the ANSI versions of Win32 calls and the
-  // C runtime.
-  static const char* Utf16ToAnsi(LPCWSTR utf16_str);
-#endif
-    
-    template <GTEST_$(n)_TYPENAMES_(T), GTEST_$(n)_TYPENAMES_(U)>
-inline bool operator==(const GTEST_$(n)_TUPLE_(T)& t,
-                       const GTEST_$(n)_TUPLE_(U)& u) {
-  return gtest_internal::SameSizeTuplePrefixComparator<
-      tuple_size<GTEST_$(n)_TUPLE_(T) >::value,
-      tuple_size<GTEST_$(n)_TUPLE_(U) >::value>::Eq(t, u);
+  return result;
 }
     
-      // Now, we have that n is odd and n >= 3.
+      void Clear();
     
-    
-    {    // You can generate a failure in any event handler except
-    // OnTestPartResult. Just use an appropriate Google Test assertion to do
-    // it.
-    EXPECT_LE(difference, 0) << 'Leaked ' << difference << ' unit(s) of Water!';
+     public:
+  RandomGenerator() {
+    // We use a limited amount of data over and over again and ensure
+    // that it is larger than the compression window (32KB), and also
+    // large enough to serve all typical value sizes we want to write.
+    Random rnd(301);
+    std::string piece;
+    while (data_.size() < 1048576) {
+      // Add a short fragment that is as compressible as specified
+      // by FLAGS_compression_ratio.
+      test::CompressibleString(&rnd, FLAGS_compression_ratio, 100, &piece);
+      data_.append(piece);
+    }
+    pos_ = 0;
   }
     
-      void ResetStub(bool round_robin) {
-    ChannelArguments args;
-    if (round_robin) args.SetLoadBalancingPolicyName('round_robin');
-    std::ostringstream uri;
-    uri << 'ipv4:///';
-    for (size_t i = 0; i < servers_.size() - 1; ++i) {
-      uri << '127.0.0.1:' << servers_[i]->port_ << ',';
-    }
-    uri << '127.0.0.1:' << servers_[servers_.size() - 1]->port_;
-    channel_ =
-        CreateCustomChannel(uri.str(), InsecureChannelCredentials(), args);
-    stub_ = grpc::testing::EchoTestService::NewStub(channel_);
+    // If true, do not destroy the existing database.  If you set this
+// flag and also specify a benchmark that wants a fresh database, that
+// benchmark will fail.
+static bool FLAGS_use_existing_db = false;
+    
+    // Returns a new environment that stores its data in memory and delegates
+// all non-file-storage tasks to base_env. The caller must delete the result
+// when it is no longer needed.
+// *base_env must remain live while the result is in use.
+Env* NewMemEnv(Env* base_env);
+    
+      // Return true iff 'x' is a prefix of '*this'
+  bool starts_with(const Slice& x) const {
+    return ((size_ >= x.size_) &&
+            (memcmp(data_, x.data_, x.size_) == 0));
   }
     
-    #ifndef GRPC_TEST_CPP_UTIL_CREATE_TEST_CHANNEL_H
-#define GRPC_TEST_CPP_UTIL_CREATE_TEST_CHANNEL_H
-    
-        void Proceed() {
-      if (status_ == CREATE) {
-        // Make this instance progress to the PROCESS state.
-        status_ = PROCESS;
+    class DummyBufferPoolController : public BufferPoolController
+{
+public:
+    DummyBufferPoolController() { }
+    virtual ~DummyBufferPoolController() { }
     }
-    }
-    
-      // Is it the expected marker? If not, something bad happened.
-  if (c != (m_next_restart_num + M_RST0))
-    stop_decoding(JPGD_BAD_RESTART_MARKER);
-    
-    static const vorbis_info_residue0 _residue_44p_lo={
-  0,-1, -1, 7,-1,-1,
-  /* 0   1   2   3   4   5   6   7   8  */
-  {0},
-  {-1},
-  {  0,  1,  2,  7, 17, 31},
-  {  0,  0, 99,  7, 17, 31},
-};
-    
-    static const static_bookblock _resbook_8s_0={
-  {
-    {0},
-    {0,0,&_8c0_s_p1_0},
-    {0},
-    {0,0,&_8c0_s_p3_0},
-    {0,0,&_8c0_s_p4_0},
-    {0,0,&_8c0_s_p5_0},
-    {0,0,&_8c0_s_p6_0},
-    {&_8c0_s_p7_0,&_8c0_s_p7_1},
-    {&_8c0_s_p8_0,&_8c0_s_p8_1},
-    {&_8c0_s_p9_0,&_8c0_s_p9_1,&_8c0_s_p9_2}
-   }
-};
-static const static_bookblock _resbook_8s_1={
-  {
-    {0},
-    {0,0,&_8c1_s_p1_0},
-    {0},
-    {0,0,&_8c1_s_p3_0},
-    {0,0,&_8c1_s_p4_0},
-    {0,0,&_8c1_s_p5_0},
-    {0,0,&_8c1_s_p6_0},
-    {&_8c1_s_p7_0,&_8c1_s_p7_1},
-    {&_8c1_s_p8_0,&_8c1_s_p8_1},
-    {&_8c1_s_p9_0,&_8c1_s_p9_1,&_8c1_s_p9_2}
-   }
-};
-    
-      /**
-   * @brief Bind a registered EventSubscriber member function to a Subscription.
-   *
-   * @param entry A templated EventSubscriber member function.
-   * @param sc The subscription context.
-   */
-  template <class T, typename E>
-  void subscribe(Status (T::*entry)(const std::shared_ptr<E>&, const SCRef&),
-                 const SCRef& sc) {
-    using std::placeholders::_1;
-    using std::placeholders::_2;
-    using CallbackFunc =
-        Status (T::*)(const EventContextRef&, const SubscriptionContextRef&);
-    }
-    
-      /**
-   * @brief Sets up the process as an osquery shell.
-   *
-   * The shell is lighter than a daemon and disables (by default) features.
-   */
-  void initShell() const;
     
     
     {
-    {  c.reset();
+    {
+    {            if (wholeSize.height < rows || wholeSize.width < cols)
+            {
+                obj.create(rows, cols, type);
+            }
+            else
+            {
+                obj.cols = cols;
+                obj.rows = rows;
+            }
+        }
+    }
 }
-}
-
     
-    class TLSConfigPlugin : public ConfigPlugin,
-                        public std::enable_shared_from_this<TLSConfigPlugin> {
- public:
-  Status setUp() override;
-  Status genConfig(std::map<std::string, std::string>& config) override;
+    #ifndef GL_VERSION_2_0
+    // GL type for program/shader text
+    typedef char GLchar;
+#endif
+    
+    #if defined(__linux__)
+    #include <dlfcn.h>
+    #include <stdio.h>
+    
+    bool js_cocos2dx_physics3d_Physics3DObject_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DObject_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DObject(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DObject_setUserData(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_getUserData(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_getObjType(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_setPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_getWorldTransform(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_getPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_setMask(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_getCollisionCallback(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_getMask(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DObject_needCollisionCallback(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    #if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,'invalid 'cobj' in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_rewindBackgroundMusic'', nullptr);
+        return 0;
+    }
+#endif
+    
+    
+    
+    
+    
+    
+    
+    	b2Fixture* fixtureA = contact->GetFixtureA();
+	b2Fixture* fixtureB = contact->GetFixtureB();
+    
+    			b2EdgeShape shape;
+    
+    			b2EdgeShape shape;
+			shape.Set(b2Vec2(-20.0f, 0.0f), b2Vec2(20.0f, 0.0f));
+    
+    		// Compute consistent velocities for new bodies based on
+		// cached velocity.
+		b2Vec2 center1 = body1->GetWorldCenter();
+		b2Vec2 center2 = body2->GetWorldCenter();
+		
+		b2Vec2 velocity1 = m_velocity + b2Cross(m_angularVelocity, center1 - center);
+		b2Vec2 velocity2 = m_velocity + b2Cross(m_angularVelocity, center2 - center);
+    
+    			box.SetAsBox(0.25f, 0.25f);
+    
+    
+    {        // Process command
+        if (Stricmp(command_line, 'CLEAR') == 0)
+        {
+            ClearLog();
+        }
+        else if (Stricmp(command_line, 'HELP') == 0)
+        {
+            AddLog('Commands:');
+            for (int i = 0; i < Commands.Size; i++)
+                AddLog('- %s', Commands[i]);
+        }
+        else if (Stricmp(command_line, 'HISTORY') == 0)
+        {
+            int first = History.Size - 10;
+            for (int i = first > 0 ? first : 0; i < History.Size; i++)
+                AddLog('%3d: %s\n', i, History[i]);
+        }
+        else
+        {
+            AddLog('Unknown command: '%s'\n', command_line);
+        }
     }
     
-    /*!
- * \brief global singleton of a random engine.
- *  This random engine is thread-local and
- *  only visible to current thread.
- */
-GlobalRandomEngine& GlobalRandom(); // NOLINT(*)
+            // FIXME-OPT: Unfortunately Allegro doesn't support 32-bits packed colors so we have to convert them to 4 floats
+        static ImVector<ImDrawVertAllegro> vertices;
+        vertices.resize(cmd_list->VtxBuffer.Size);
+        for (int i = 0; i < cmd_list->VtxBuffer.Size; ++i)
+        {
+            const ImDrawVert &dv = cmd_list->VtxBuffer[i];
+            ImDrawVertAllegro v;
+            v.pos = dv.pos;
+            v.uv = dv.uv;
+            unsigned char *c = (unsigned char*)&dv.col;
+            v.col = al_map_rgba(c[0], c[1], c[2], c[3]);
+            vertices[i] = v;
+        }
     
-    #include <xgboost/tree_updater.h>
-#include <string>
-#include <memory>
-#include './param.h'
-#include '../common/sync.h'
-#include '../common/io.h'
-    
-      void DeleteInput(size_t Idx) {
-    InputInfo &II = *Inputs[Idx];
-    if (!OutputCorpus.empty() && II.MayDeleteFile)
-      RemoveFile(DirPlusFile(OutputCorpus, Sha1ToString(II.Sha1)));
-    Unit().swap(II.U);
-    if (FeatureDebug)
-      Printf('EVICTED %zd\n', Idx);
-  }
-    
-      void HandleMalloc(size_t Size);
-    
-    
-    {  std::ofstream OF(CFPath, std::ofstream::out | std::ofstream::app);
-  for (size_t i = M.FirstNotProcessedFile; i < M.Files.size(); i++) {
-    auto U = FileToVector(M.Files[i].Name);
-    if (U.size() > MaxInputLen) {
-      U.resize(MaxInputLen);
-      U.shrink_to_fit();
+            // 1. Show a simple window.
+        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
+            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
     }
-    std::ostringstream StartedLine;
-    // Write the pre-run marker.
-    OF << 'STARTED ' << std::dec << i << ' ' << U.size() << '\n';
-    OF.flush();  // Flush is important since ExecuteCommand may crash.
-    // Run.
-    TPC.ResetMaps();
-    ExecuteCallback(U.data(), U.size());
-    // Collect coverage.
-    std::set<size_t> Features;
-    TPC.CollectFeatures([&](size_t Feature) -> bool {
-      Features.insert(Feature);
-      return true;
-    });
-    // Show stats.
-    TotalNumberOfRuns++;
-    if (!(TotalNumberOfRuns & (TotalNumberOfRuns - 1)))
-      PrintStats('pulse ');
-    // Write the post-run marker and the coverage.
-    OF << 'DONE ' << i;
-    for (size_t F : Features)
-      OF << ' ' << std::hex << F;
-    OF << '\n';
-  }
-}
     
-      // Dictionary provided by the user via -dict=DICT_FILE.
-  Dictionary ManualDictionary;
-  // Temporary dictionary modified by the fuzzer itself,
-  // recreated periodically.
-  Dictionary TempAutoDictionary;
-  // Persistent dictionary modified by the fuzzer, consists of
-  // entries that led to successfull discoveries in the past mutations.
-  Dictionary PersistentAutoDictionary;
+        VkDynamicState dynamic_states[2] = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };
+    VkPipelineDynamicStateCreateInfo dynamic_state = {};
+    dynamic_state.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+    dynamic_state.dynamicStateCount = 2;
+    dynamic_state.pDynamicStates = dynamic_states;
+    
+            // Rendering
+        g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
+        g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, (float*)&clear_color);
+        ImGui::Render();
+        ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+    
+    
+    {private:
+  uint8_t Size = 0;
+  uint8_t Data[kMaxSize];
+};
+    
+    
+    {} // namespace fuzzer
+    
+    #include 'FuzzerExtFunctions.h'
+#include 'FuzzerIO.h'
+#include <cstdarg>
+#include <cstdio>
+#include <dirent.h>
+#include <fstream>
+#include <iterator>
+#include <libgen.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+    
+    // Parse a location, like:
+// \\?\UNC\Server\Share\  \\?\C:\  \\Server\Share\  \  C:\  C:
+// Returns number of characters considered if successful.
+static size_t ParseLocation(const std::string &FileName) {
+  size_t Pos = 0, Res;
+    }
     
     
     {}  // namespace fuzzer
     
-    __attribute__((visibility('default')))
-void __sanitizer_cov_trace_switch(uint64_t Val, uint64_t *Cases) {
-  // Updates the value profile based on the relative position of Val and Cases.
-  // We want to handle one random case at every call (handling all is slow).
-  // Since none of the arguments contain any random bits we use a thread-local
-  // counter to choose the random case to handle.
-  static thread_local size_t Counter;
-  Counter++;
-  uint64_t N = Cases[0];
-  uint64_t *Vals = Cases + 2;
-  char *PC = (char*)__builtin_return_address(0);
-  // We need a random number < N using Counter as a seed. But w/o DIV.
-  // * find a power of two >= N
-  // * mask Counter with this power of two.
-  // * maybe subtract N.
-  size_t Nlog = sizeof(long) * 8 - __builtin_clzl((long)N);
-  size_t PowerOfTwoGeN = 1U << Nlog;
-  assert(PowerOfTwoGeN >= N);
-  size_t Idx = Counter & (PowerOfTwoGeN - 1);
-  if (Idx >= N)
-    Idx -= N;
-  assert(Idx < N);
-  uint64_t TwoIn32 = 1ULL << 32;
-  if ((Val | Vals[Idx]) < TwoIn32)
-    fuzzer::TPC.HandleCmp(PC + Idx, static_cast<uint32_t>(Val),
-                          static_cast<uint32_t>(Vals[Idx]));
-  else
-    fuzzer::TPC.HandleCmp(PC + Idx, Val, Vals[Idx]);
-}
+      struct Mutator {
+    size_t (MutationDispatcher::*Fn)(uint8_t *Data, size_t Size, size_t Max);
+    const char *Name;
+  };
     
-      void PrintNewPCs();
-  size_t GetNumPCs() const { return Min(kNumPCs, NumGuards + 1); }
-  uintptr_t GetPC(size_t Idx) {
-    assert(Idx < GetNumPCs());
-    return PCs[Idx];
-  }
+      bool UsingTracePcGuard() const {return NumModules; }
     
-    unsigned NumberOfCpuCores();
+    void PrintHexArray(const Unit &U, const char *PrintAfter = '');
     
-    
-    {} // namespace aria2
-    
-    void AdaptiveFileAllocationIterator::allocateChunk()
-{
-  if (!allocator_) {
-#ifdef HAVE_FALLOCATE
-    try {
-      A2_LOG_DEBUG('Testing file system supports fallocate.');
-      if (offset_ < totalLength_) {
-        int64_t len =
-            std::min(totalLength_ - offset_, static_cast<int64_t>(4_k));
-        stream_->allocate(offset_, len, false);
-        offset_ += len;
-      }
-      A2_LOG_DEBUG('File system supports fallocate.');
-      allocator_ = make_unique<FallocFileAllocationIterator>(stream_, offset_,
-                                                             totalLength_);
-    }
-    catch (RecoverableException& e) {
-      A2_LOG_DEBUG('File system does not support fallocate.');
-      auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
-                                                              totalLength_);
-      salloc->init();
-      allocator_ = std::move(salloc);
-    }
-#else  // !HAVE_FALLOCATE
-    auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
-                                                            totalLength_);
-    salloc->init();
-    allocator_ = std::move(salloc);
-#endif // !HAVE_FALLOCATE
-    allocator_->allocateChunk();
-  }
-  else {
-    allocator_->allocateChunk();
-  }
-}
-    
-    
-    {  bool currentTierAcceptsCompletedEvent() const;
-};
+    // There is no header for this on macOS so declare here
+extern 'C' char **environ;
