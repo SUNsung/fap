@@ -1,251 +1,444 @@
-template <class T>
-struct DereferencingComparator { bool operator()(const T a, const T b) const { return *a < *b; } };
+
+        
+        #ifndef TENSORFLOW_FRAMEWORK_RESOURCE_OP_KERNEL_H_
+#define TENSORFLOW_FRAMEWORK_RESOURCE_OP_KERNEL_H_
     
-    // Build a Table file from the contents of *iter.  The generated file
-// will be named according to meta->number.  On success, the rest of
-// *meta will be filled with metadata about the generated table.
-// If no data is present in *iter, meta->file_size will be set to
-// zero, and no Table file will be produced.
-extern Status BuildTable(const std::string& dbname,
-                         Env* env,
-                         const Options& options,
-                         TableCache* table_cache,
-                         Iterator* iter,
-                         FileMetaData* meta);
     
-    leveldb_comparator_t* leveldb_comparator_create(
-    void* state,
-    void (*destructor)(void*),
-    int (*compare)(
-        void*,
-        const char* a, size_t alen,
-        const char* b, size_t blen),
-    const char* (*name)(void*)) {
-  leveldb_comparator_t* result = new leveldb_comparator_t;
-  result->state_ = state;
-  result->destructor_ = destructor;
-  result->compare_ = compare;
-  result->name_ = name;
-  return result;
+    {  void Feedback(Cluster* cluster, const GrapplerItem& item,
+                const GraphDef& pruned_graph, double result) override;
+};
+    
+      // Given the driver version file contents, finds the kernel module version and
+  // returns it as a string.
+  //
+  // This is solely used for more informative log messages when the user is
+  // running on a machine that happens to have a libcuda/kernel driver mismatch.
+  static port::StatusOr<DriverVersion> FindKernelModuleVersion(
+      const string &driver_version_file_contents);
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    namespace internal {
+template <typename Scalar>
+struct functor_traits<scalar_clip_op<Scalar> > {
+  enum {
+    Cost = NumTraits<Scalar>::AddCost * 3,
+    PacketAccess = packet_traits<Scalar>::HasMax &&
+                   packet_traits<Scalar>::HasMin &&
+                   packet_traits<Scalar>::HasNegate
+  };
+};
+}  // namespace internal
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    
+    {}  // namespace tensorflow
+
+    
+    bool HloReachabilityMap::IsConnected(const HloInstruction* a,
+                                     const HloInstruction* b) const {
+  return IsReachable(a, b) || IsReachable(b, a);
 }
     
-      ReadOptions ro;
-  ro.fill_cache = false;
-  Iterator* iter = table->NewIterator(ro);
-  std::string r;
-  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-    r.clear();
-    ParsedInternalKey key;
-    if (!ParseInternalKey(iter->key(), &key)) {
-      r = 'badkey '';
-      AppendEscapedStringTo(&r, iter->key());
-      r += '' => '';
-      AppendEscapedStringTo(&r, iter->value());
-      r += ''\n';
-      dst->Append(r);
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+        // Finish and check for builder errors
+    if (s.ok()) {
+      s = builder->Finish();
+      if (s.ok()) {
+        meta->file_size = builder->FileSize();
+        assert(meta->file_size > 0);
+      }
     } else {
-      r = ''';
-      AppendEscapedStringTo(&r, key.user_key);
-      r += '' @ ';
-      AppendNumberTo(&r, key.sequence);
-      r += ' : ';
-      if (key.type == kTypeDeletion) {
-        r += 'del';
-      } else if (key.type == kTypeValue) {
-        r += 'val';
-      } else {
-        AppendNumberTo(&r, key.type);
-      }
-      r += ' => '';
-      AppendEscapedStringTo(&r, iter->value());
-      r += ''\n';
-      dst->Append(r);
+      builder->Abandon();
     }
+    delete builder;
+    
+    
+    {}  // namespace leveldb
+    
+    
+    {  if (value_type == kTypeDeletion) {
+    // End
+    valid_ = false;
+    saved_key_.clear();
+    ClearSavedValue();
+    direction_ = kForward;
+  } else {
+    valid_ = true;
   }
-  s = iter->status();
-  if (!s.ok()) {
-    dst->Append('iterator error: ' + s.ToString() + '\n');
-  }
-    
-    TEST(FileNameTest, Construction) {
-  uint64_t number;
-  FileType type;
-  std::string fname;
-    }
-    
-        const char* benchmarks = FLAGS_benchmarks;
-    while (benchmarks != NULL) {
-      const char* sep = strchr(benchmarks, ',');
-      Slice name;
-      if (sep == NULL) {
-        name = benchmarks;
-        benchmarks = NULL;
-      } else {
-        name = Slice(benchmarks, sep - benchmarks);
-        benchmarks = sep + 1;
-      }
-    }
-    
-      void Start() {
-    start_ = Env::Default()->NowMicros() * 1e-6;
-    bytes_ = 0;
-    message_.clear();
-    last_op_finish_ = start_;
-    hist_.Clear();
-    done_ = 0;
-    next_report_ = 100;
-  }
-    
-    // Functions producing parameter generators.
-//
-// Google Test uses these generators to produce parameters for value-
-// parameterized tests. When a parameterized test case is instantiated
-// with a particular generator, Google Test creates and runs tests
-// for each element in the sequence produced by the generator.
-//
-// In the following sample, tests from test case FooTest are instantiated
-// each three times with parameter values 3, 5, and 8:
-//
-// class FooTest : public TestWithParam<int> { ... };
-//
-// TEST_P(FooTest, TestThis) {
-// }
-// TEST_P(FooTest, TestThat) {
-// }
-// INSTANTIATE_TEST_CASE_P(TestSequence, FooTest, Values(3, 5, 8));
-//
-    
-      // C'tor.  TestPartResult does NOT have a default constructor.
-  // Always use this constructor (with parameters) to create a
-  // TestPartResult object.
-  TestPartResult(Type a_type,
-                 const char* a_file_name,
-                 int a_line_number,
-                 const char* a_message)
-      : type_(a_type),
-        file_name_(a_file_name == NULL ? '' : a_file_name),
-        line_number_(a_line_number),
-        summary_(ExtractSummary(a_message)),
-        message_(a_message) {
-  }
-    
-      const std::string& file() const { return file_; }
-  int line() const { return line_; }
-  int index() const { return index_; }
-  int write_fd() const { return write_fd_; }
-    
-    #if defined(_MSC_VER) && _MSC_VER < 1400
-// This is the only specialization that allows VC++ 7.1 to remove const in
-// 'const int[3] and 'const int[3][4]'.  However, it causes trouble with GCC
-// and thus needs to be conditionally compiled.
-template <typename T, size_t N>
-struct RemoveConst<T[N]> {
-  typedef typename RemoveConst<T>::type type[N];
-};
-#endif
-    
-      bool operator==(T* p) const { return value_ == p; }
-  bool operator!=(T* p) const { return value_ != p; }
-  template <typename U>
-  bool operator==(linked_ptr<U> const& ptr) const {
-    return value_ == ptr.get();
-  }
-  template <typename U>
-  bool operator!=(linked_ptr<U> const& ptr) const {
-    return value_ != ptr.get();
-  }
-    
-          const ParamGenerator<T$j>& g$j,
-      const typename ParamGenerator<T$j>::iterator& current$(j)]])
-        : base_(base),
-$for j, [[
+}
     
     
-    {  template <class Tuple>
-  static GTEST_BY_REF_(GTEST_TUPLE_ELEMENT_(7, Tuple))
-  ConstField(const Tuple& t) { return t.f7_; }
-};
-    
-    
-// Step 2. Use the TEST macro to define your tests.
-//
-// TEST has two parameters: the test case name and the test name.
-// After using the macro, you should define your test logic between a
-// pair of braces.  You can use a bunch of macros to indicate the
-// success or failure of a test.  EXPECT_TRUE and EXPECT_EQ are
-// examples of such macros.  For a complete list, see gtest.h.
-//
-// <TechnicalDetails>
-//
-// In Google Test, tests are grouped into test cases.  This is how we
-// keep test code organized.  You should put logically related tests
-// into the same test case.
-//
-// The test case name and the test name should both be valid C++
-// identifiers.  And you should not use underscore (_) in the names.
-//
-// Google Test guarantees that each test you define is run exactly
-// once, but it makes no guarantee on the order the tests are
-// executed.  Therefore, you should write your tests in such a way
-// that their results don't depend on their order.
-//
-// </TechnicalDetails>
-    
-    bool AbstractHttpServerResponseCommand::execute()
-{
-  if (e_->getRequestGroupMan()->downloadFinished() || e_->isHaltRequested()) {
-    return true;
-  }
-  try {
-    ssize_t len = httpServer_->sendResponse();
-    if (len > 0) {
-      timeoutTimer_ = global::wallclock();
-    }
-  }
-  catch (RecoverableException& e) {
-    A2_LOG_INFO_EX(fmt('CUID#%' PRId64
-                       ' - Error occurred while transmitting response body.',
-                       getCuid()),
-                   e);
-    return true;
-  }
-  if (httpServer_->sendBufferIsEmpty()) {
-    A2_LOG_INFO(fmt('CUID#%' PRId64 ' - HttpServer: all response transmitted.',
-                    getCuid()));
-    afterSend(httpServer_, e_);
-    return true;
-  }
-  else {
-    if (timeoutTimer_.difference(global::wallclock()) >= 30_s) {
-      A2_LOG_INFO(fmt('CUID#%' PRId64
-                      ' - HttpServer: Timeout while trasmitting response.',
-                      getCuid()));
-      return true;
-    }
-    else {
-      updateReadWriteCheck();
-      e_->addCommand(std::unique_ptr<Command>(this));
+// Owned filenames have the form:
+//    dbname/CURRENT
+//    dbname/LOCK
+//    dbname/LOG
+//    dbname/LOG.old
+//    dbname/MANIFEST-[0-9]+
+//    dbname/[0-9]+.(log|sst|ldb)
+bool ParseFileName(const std::string& fname,
+                   uint64_t* number,
+                   FileType* type) {
+  Slice rest(fname);
+  if (rest == 'CURRENT') {
+    *number = 0;
+    *type = kCurrentFile;
+  } else if (rest == 'LOCK') {
+    *number = 0;
+    *type = kDBLockFile;
+  } else if (rest == 'LOG' || rest == 'LOG.old') {
+    *number = 0;
+    *type = kInfoLogFile;
+  } else if (rest.starts_with('MANIFEST-')) {
+    rest.remove_prefix(strlen('MANIFEST-'));
+    uint64_t num;
+    if (!ConsumeDecimalNumber(&rest, &num)) {
       return false;
     }
+    if (!rest.empty()) {
+      return false;
+    }
+    *type = kDescriptorFile;
+    *number = num;
+  } else {
+    // Avoid strtoull() to keep filename format independent of the
+    // current locale
+    uint64_t num;
+    if (!ConsumeDecimalNumber(&rest, &num)) {
+      return false;
+    }
+    Slice suffix = rest;
+    if (suffix == Slice('.log')) {
+      *type = kLogFile;
+    } else if (suffix == Slice('.sst') || suffix == Slice('.ldb')) {
+      *type = kTableFile;
+    } else if (suffix == Slice('.dbtmp')) {
+      *type = kTempFile;
+    } else {
+      return false;
+    }
+    *number = num;
   }
+  return true;
 }
     
-    bool AbstractOptionHandler::hasTag(uint32_t tag) const
-{
-  return (tags_ & (1 << tag));
+    namespace leveldb {
+    }
+    
+      // Change this slice to refer to an empty array
+  void clear() { data_ = ''; size_ = 0; }
+    
+    bool OurReader::readNumber(bool checkInf) {
+  const char *p = current_;
+  if (checkInf && p != end_ && *p == 'I') {
+    current_ = ++p;
+    return false;
+  }
+  char c = '0'; // stopgap for already consumed character
+  // integral part
+  while (c >= '0' && c <= '9')
+    c = (current_ = p) < end_ ? *p++ : 0;
+  // fractional part
+  if (c == '.') {
+    c = (current_ = p) < end_ ? *p++ : 0;
+    while (c >= '0' && c <= '9')
+      c = (current_ = p) < end_ ? *p++ : 0;
+  }
+  // exponential part
+  if (c == 'e' || c == 'E') {
+    c = (current_ = p) < end_ ? *p++ : 0;
+    if (c == '+' || c == '-')
+      c = (current_ = p) < end_ ? *p++ : 0;
+    while (c >= '0' && c <= '9')
+      c = (current_ = p) < end_ ? *p++ : 0;
+  }
+  return true;
+}
+bool OurReader::readString() {
+  Char c = 0;
+  while (current_ != end_) {
+    c = getNextChar();
+    if (c == '\\')
+      getNextChar();
+    else if (c == ''')
+      break;
+  }
+  return c == ''';
 }
     
-    int64_t AdaptiveFileAllocationIterator::getCurrentLength()
-{
-  if (!allocator_) {
-    return offset_;
-  }
-  else {
-    return allocator_->getCurrentLength();
-  }
+    PyDescriptorDatabase::~PyDescriptorDatabase() { Py_DECREF(py_database_); }
+    
+     private:
+  const FileDescriptor* file_;
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
+    }
+    
+    TEST(JavaDocCommentTest, Escaping) {
+  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
+  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
+  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
+  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
+  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
+  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
 }
     
-      void reconfigure(const std::vector<std::vector<std::string>>& announceList);
-  void reconfigure(const std::string& url);
+      // Returns an estimate of the number of bytes the printed code will compile to
+  virtual int GenerateNonNestedInitializationCode(io::Printer* printer);
     
-    #include 'a2functional.h'
+      net_->Forward();
+    
+      // Open leveldb
+  leveldb::DB* db;
+  leveldb::Options options;
+  options.create_if_missing = true;
+  options.error_if_exists = true;
+  leveldb::Status status = leveldb::DB::Open(
+      options, db_filename, &db);
+  CHECK(status.ok()) << 'Failed to open leveldb ' << db_filename
+      << '. Is it already existing?';
+    
+    /**
+ * @brief Applies common transformations to the input data, such as
+ * scaling, mirroring, substracting the image mean...
+ */
+template <typename Dtype>
+class DataTransformer {
+ public:
+  explicit DataTransformer(const TransformationParameter& param, Phase phase);
+  virtual ~DataTransformer() {}
+    }
+    
+    #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of ConvolutionLayer.
+ *        Fallback to ConvolutionLayer for CPU mode.
+ *
+ * cuDNN accelerates convolution through forward kernels for filtering and bias
+ * plus backward kernels for the gradient w.r.t. the filters, biases, and
+ * inputs. Caffe + cuDNN further speeds up the computation through forward
+ * parallelism across groups and backward parallelism across gradients.
+ *
+ * The CUDNN engine does not have memory overhead for matrix buffers. For many
+ * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
+ * but for fully-convolutional models and large inputs the CAFFE engine can be
+ * faster as long as it fits in memory.
+*/
+template <typename Dtype>
+class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
+ public:
+  explicit CuDNNConvolutionLayer(const LayerParameter& param)
+      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNConvolutionLayer();
+    }
+    
+    #ifdef USE_CUDNN
+template <typename Dtype>
+class CuDNNLCNLayer : public LRNLayer<Dtype> {
+ public:
+  explicit CuDNNLCNLayer(const LayerParameter& param)
+      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
+        tempData1(NULL), tempData2(NULL) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNLCNLayer();
+    }
+    
+    namespace caffe {
+    }
+    
+      virtual inline const char* type() const { return 'Deconvolution'; }
+    
+    /**
+ * @brief Exponential Linear Unit non-linearity @f$
+ *        y = \left\{
+ *        \begin{array}{lr}
+ *            x                  & \mathrm{if} \; x > 0 \\
+ *            \alpha (\exp(x)-1) & \mathrm{if} \; x \le 0
+ *        \end{array} \right.
+ *      @f$.  
+ */
+template <typename Dtype>
+class ELULayer : public NeuronLayer<Dtype> {
+ public:
+  /**
+   * @param param provides ELUParameter elu_param,
+   *     with ELULayer options:
+   *   - alpha (\b optional, default 1).
+   *     the value @f$ \alpha @f$ by which controls saturation for negative inputs.
+   */
+  explicit ELULayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+    }
+    }
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+      for (const auto& iter : line) {
+    options_index++;
+    if (iter[0] == '/') {
+      line_exports.push_back(iter);
+    } else {
+      break;
+    }
+  }
+    
+      // Get an integral value, 0 or 1, for whether a syscall table pointer is modified.
+  auto f1 = osquery::readFile(kKernelSyscallAddrModifiedPath, content);
+  if (f1.ok()) {
+    boost::trim(content);
+    syscall_addr_modified = content;
+  } else {
+    VLOG(1) << 'Cannot read file: ' << kKernelSyscallAddrModifiedPath;
+    return results;
+  }
+    
+    
+    {  /**
+   * @brief Populate a property tree with host details.
+   *
+   * This will use kEnrollHostDetails to select from each table and
+   * construct a property tree from the results of the first row of each.
+   * The input property tree will have a key set for each table.
+   *
+   * @param host_details An output property tree containing each table.
+   */
+  void genHostDetails(boost::property_tree::ptree& host_details);
+};
+    
+    #include <string>
+#include <vector>
+    
+      /**
+   * @brief If dropping explicitly to a user and group also drop groups.
+   *
+   * Original process groups before explicitly dropping privileges.
+   * On restore, if there are any groups in this list, they will be added
+   * to the processes group list.
+   */
+  gid_t* original_groups_{nullptr};
+    
+      /**
+   * @brief Before ending, tear down any platform specific setup
+   *
+   * On windows, we require the COM libraries be initialized just once
+   */
+  static void platformTeardown();
+    
+    #include <gtest/gtest.h>
+    
+    DECLARE_bool(tls_secret_always);
+DECLARE_string(tls_enroll_override);
+DECLARE_bool(tls_node_api);
+DECLARE_bool(enroll_always);
+    
+    
+    {
+    {    double dat[2]; dat[0] = sum, dat[1] = wsum;
+    if (distributed) {
+      rabit::Allreduce<rabit::op::Sum>(dat, 2);
+    }
+    return Derived::GetFinal(dat[0], dat[1]);
+  }
+  /*!
+   * \brief to be implemented by subclass,
+   *   get evaluation result from one row
+   * \param label label of current instance
+   * \param pred prediction value of current instance
+   * \param nclass number of class in the prediction
+   */
+  inline static bst_float EvalRow(int label,
+                                  const bst_float *pred,
+                                  size_t nclass);
+  /*!
+   * \brief to be overridden by subclass, final transformation
+   * \param esum the sum statistics returned by EvalRow
+   * \param wsum sum of weight
+   */
+  inline static bst_float GetFinal(bst_float esum, bst_float wsum) {
+    return esum / wsum;
+  }
+  // used to store error message
+  const char *error_msg_;
+};
+    
+        jboolean*   (*GetBooleanArrayElements)(JNIEnv*, jbooleanArray, jboolean*);
+    jbyte*      (*GetByteArrayElements)(JNIEnv*, jbyteArray, jboolean*);
+    jchar*      (*GetCharArrayElements)(JNIEnv*, jcharArray, jboolean*);
+    jshort*     (*GetShortArrayElements)(JNIEnv*, jshortArray, jboolean*);
+    jint*       (*GetIntArrayElements)(JNIEnv*, jintArray, jboolean*);
+    jlong*      (*GetLongArrayElements)(JNIEnv*, jlongArray, jboolean*);
+    jfloat*     (*GetFloatArrayElements)(JNIEnv*, jfloatArray, jboolean*);
+    jdouble*    (*GetDoubleArrayElements)(JNIEnv*, jdoubleArray, jboolean*);
+    
+    // convert return from local_ref<T>
+template <typename T>
+struct Convert<local_ref<T>> {
+  typedef JniType<T> jniType;
+  // No automatic synthesis of local_ref
+  static jniType toJniRet(local_ref<jniType> t) {
+    return t.release();
+  }
+  static jniType toCall(local_ref<jniType> t) {
+    return t.get();
+  }
+};
+    
+    class FBEXPORT StackTraceElement {
+ public:
+  StackTraceElement(InstructionPointer absoluteProgramCounter,
+                    InstructionPointer libraryBase,
+                    InstructionPointer functionAddress, std::string libraryName,
+                    std::string functionName)
+      : absoluteProgramCounter_{absoluteProgramCounter},
+        libraryBase_{libraryBase},
+        functionAddress_{functionAddress},
+        libraryName_{std::move(libraryName)},
+        functionName_{std::move(functionName)} {}
+    }
+    
+    ostream& operator<<(ostream& out, const StackTraceElement& elm) {
+  IosFlagsSaver flags{out};
+    }
+    
+    
+    {    YGNodeSetMeasureFunc(m_node, &globalMeasureFunc);
+}
+    
+        Size(double width, double height)
+    : width(width)
+    , height(height)
+    {
+    }
+    
+    DEFINE_BOXED_PRIMITIVE(boolean, Boolean)
+DEFINE_BOXED_PRIMITIVE(byte, Byte)
+DEFINE_BOXED_PRIMITIVE(char, Character)
+DEFINE_BOXED_PRIMITIVE(short, Short)
+DEFINE_BOXED_PRIMITIVE(int, Integer)
+DEFINE_BOXED_PRIMITIVE(long, Long)
+DEFINE_BOXED_PRIMITIVE(float, Float)
+DEFINE_BOXED_PRIMITIVE(double, Double)
