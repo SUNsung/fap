@@ -1,130 +1,157 @@
 
         
-          def test_escape_javascript
-    assert_equal '', escape_javascript(nil)
-    assert_equal %(This \\'thing\\' is really\\n netos\\'), escape_javascript(%(This 'thing' is really\n netos'))
-    assert_equal %(backslash\\\\test), escape_javascript(%(backslash\\test))
-    assert_equal %(dont <\\/close> tags), escape_javascript(%(dont </close> tags))
-    assert_equal %(unicode &#x2028; newline), escape_javascript(%(unicode \342\200\250 newline).dup.force_encoding(Encoding::UTF_8).encode!)
-    assert_equal %(unicode &#x2029; newline), escape_javascript(%(unicode \342\200\251 newline).dup.force_encoding(Encoding::UTF_8).encode!)
-    
-            def tag_options(options, escape = true)
-          return if options.blank?
-          output = ''.dup
-          sep    = ' '
-          options.each_pair do |key, value|
-            if TAG_PREFIXES.include?(key) && value.is_a?(Hash)
-              value.each_pair do |k, v|
-                next if v.nil?
-                output << sep
-                output << prefix_tag_option(key, k, v, escape)
-              end
-            elsif BOOLEAN_ATTRIBUTES.include?(key)
-              if value
-                output << sep
-                output << boolean_tag_option(key)
-              end
-            elsif !value.nil?
-              output << sep
-              output << tag_option(key, value, escape)
-            end
+                def helper_method(*methods)
+          # Almost a duplicate from ActionController::Helpers
+          methods.flatten.each do |method|
+            _helpers.module_eval <<-end_eval, __FILE__, __LINE__ + 1
+              def #{method}(*args, &block)                    # def current_user(*args, &block)
+                _test_case.send(%(#{method}), *args, &block)  #   _test_case.send(%(current_user), *args, &block)
+              end                                             # end
+            end_eval
           end
-          output unless output.empty?
         end
     
-          # Returns a Hash of instance variables and their values, as defined by
-      # the user in the test case, which are then assigned to the view being
-      # rendered. This is generally intended for internal use and extension
-      # frameworks.
-      def view_assigns
-        Hash[_user_defined_ivars.map do |ivar|
-          [ivar[1..-1].to_sym, instance_variable_get(ivar)]
-        end]
+                @subscribe_callbacks = Hash.new { |h, k| h[k] = [] }
+            @subscription_lock = Mutex.new
+    
+            def test_url_sub_key_for_sqlite3
+          spec = resolve :production, 'production' => { 'url' => 'sqlite3:foo?encoding=utf8' }
+          assert_equal({
+            'adapter'  => 'sqlite3',
+            'database' => 'foo',
+            'encoding' => 'utf8',
+            'name'     => 'production' }, spec)
+        end
+    
+              def uri_parser
+            @uri_parser ||= URI::Parser.new
+          end
+    
+    class TestResponseTest < ActiveSupport::TestCase
+  def assert_response_code_range(range, predicate)
+    response = ActionDispatch::TestResponse.new
+    (0..599).each do |status|
+      response.status = status
+      assert_equal range.include?(status), response.send(predicate),
+                   'ActionDispatch::TestResponse.new(#{status}).#{predicate}'
+    end
+  end
+    
+          def reset_all # :nodoc:
+        current_instances.each_value(&:reset)
       end
     
-              # Bubbled up from the adapter require. Prefix the exception message
-          # with some guidance about how to address it and reraise.
-          else
-            raise e.class, 'Error loading the '#{adapter}' Action Cable pubsub adapter. Missing a gem it depends on? #{e.message}', e.backtrace
-          end
-        end
+        class CallbacksWithArgs < ControllerWithCallbacks
+      set_callback :process_action, :before, :first
     
-      def test_put_json
-    with_test_route_set do
-      put '/',
-        params: '{'entry':{'summary':'content...'}}',
-        headers: { 'CONTENT_TYPE' => 'application/json' }
+          # Make list points stand on their own line
+      formatted.gsub!(/[ ]*([*]+) ([^*]*)/) { '  #{$1} #{$2.strip}\n' }
+      formatted.gsub!(/[ ]*([#]+) ([^#]*)/) { '  #{$1} #{$2.strip}\n' }
     
-        # Use the logger configured for ActionMailer::Base.
-    def logger
-      ActionMailer::Base.logger
-    end
-  end
+    def build_configs(overrides, base_hash = Jekyll::Configuration::DEFAULTS)
+  Jekyll::Utils.deep_merge_hashes(base_hash, overrides)
 end
     
-        # Access the message instance.
-    def message
-      @_message
-    end
+    Mercenary.program(:jekyll) do |p|
+  p.version Jekyll::VERSION
+  p.description 'Jekyll is a blog-aware, static site generator in Ruby'
+  p.syntax 'jekyll <subcommand> [options]'
     
-          private
-        def processed_mailer
-          @processed_mailer ||= @mailer_class.new.tap do |mailer|
-            mailer.params = @params
-            mailer.process @action, *@args
-          end
-        end
-    
-            def clear_test_deliveries
-          if ActionMailer::Base.delivery_method == :test
-            ActionMailer::Base.deliveries.clear
-          end
-        end
-    end
-    
-          { :title => 'Event', :entries => present_hash(payload) }
-    else
-      { :title => payload.to_s, :entries => [] }
-    end
-  end
-    
-      before_action :upgrade_warning, only: :index
-    
-      def edit
-    @user_credential = current_user.user_credentials.find(params[:id])
-  end
-    
-            It is possible to specify a list of dependencies which will be used by
-        the template in the `Podfile.default` (normal targets) `Podfile.test`
-        (test targets) files which should be stored in the
-        `~/.cocoapods/templates` folder.
-      DESC
-      self.arguments = [
-        CLAide::Argument.new('XCODEPROJ', :false),
-      ]
-    
-            self.summary = 'The repl listens to commands on standard input'
-        self.description = <<-DESC
-          The repl listens to commands on standard input and prints their
-          result to standard output.
-          It accepts all the other ipc subcommands. The repl will signal the
-          end of output with the the ASCII CR+LF `\\n\\r`.
-        DESC
-    
-          #-----------------------------------------------------------------------#
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
     end
   end
 end
 
     
-      context 'called with two widths' do
-    it 'applies to alternating sides' do
-      rule = 'border-width: 2px 3px'
+        def special?(entry)
+      SPECIAL_LEADING_CHARACTERS.include?(entry[0..0]) ||
+        SPECIAL_LEADING_CHARACTERS.include?(File.basename(entry)[0..0])
+    end
     
-      context 'called with four sizes' do
-    it 'applies different widths to all sides' do
-      ruleset = 'position: fixed; ' +
-                'top: 7px; ' +
-                'right: 8px; ' +
-                'bottom: 9px; ' +
-                'left: 10px;'
+            # A callback method used to deliver confirmation
+        # instructions on creation. This can be overridden
+        # in models to map to a nice sign up e-mail.
+        def send_on_create_confirmation_instructions
+          send_confirmation_instructions
+        end
+    
+      test 'should add error to new user email if no email was found' do
+    confirmation_user = User.send_confirmation_instructions(email: 'invalid@example.com')
+    assert confirmation_user.errors[:email]
+    assert_equal 'not found', confirmation_user.errors[:email].join
+  end
+    
+    class Devise::OmniauthCallbacksController < DeviseController
+  prepend_before_action { request.env['devise.skip_timeout'] = true }
+    
+    gem 'rails-controller-testing'
+    
+      # GET /resource/password/edit?reset_password_token=abcdef
+  def edit
+    self.resource = resource_class.new
+    set_minimum_password_length
+    resource.reset_password_token = params[:reset_password_token]
+  end
+    
+    class Devise::UnlocksController < DeviseController
+  prepend_before_action :require_no_authentication
+    
+    # puts '\nDone.'
+
+    
+        if run? && ARGV.any?
+      require 'optparse'
+      OptionParser.new { |op|
+        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
+        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
+        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
+        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
+        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
+        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
+      }.parse!(ARGV.dup)
+    end
+  end
+    
+          def self.default_options(options)
+        define_method(:default_options) { super().merge(options) }
+      end
+    
+          expected_header = <<-END.chomp
+rack.%2573ession=; domain=example.org; path=/; expires=Thu, 01 Jan 1970 00:00:00 -0000
+rack.%2573ession=; domain=example.org; path=/some; expires=Thu, 01 Jan 1970 00:00:00 -0000
+rack.%2573ession=; domain=example.org; path=/some/path; expires=Thu, 01 Jan 1970 00:00:00 -0000
+rack.session=; domain=example.org; path=/; expires=Thu, 01 Jan 1970 00:00:00 -0000
+rack.session=; domain=example.org; path=/some; expires=Thu, 01 Jan 1970 00:00:00 -0000
+rack.session=; domain=example.org; path=/some/path; expires=Thu, 01 Jan 1970 00:00:00 -0000
+END
+      expect(last_response.headers['Set-Cookie']).to eq(expected_header)
+    end
+  end
+    
+      %w(GET HEAD POST PUT DELETE).each do |method|
+    it 'accepts #{method} requests when allow_if is true' do
+      mock_app do
+        use Rack::Protection::HttpOrigin, :allow_if => lambda{|env| env.has_key?('HTTP_ORIGIN') }
+        run DummyApp
+      end
+      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://any.domain.com')).to be_ok
+    end
+  end
+    
+      it 'should set the X-XSS-Protection for XHTML' do
+    expect(get('/', {}, 'wants' => 'application/xhtml+xml').headers['X-XSS-Protection']).to eq('1; mode=block')
+  end
+    
+      def human?
+    params.has_key?('human') && (params['human'].nil? || as_boolean(params['human']) == true)
+  end
+end
+
+    
+      module Condition1
+    def expression
+      elements[0]
+    end
