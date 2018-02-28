@@ -1,99 +1,104 @@
 
         
-        module Docs
-  class URL < URI::Generic
-    PARSER = URI::Parser.new
-    
-            css('> .section', '#preamble', 'a[href*='dict.html']', 'code var', 'code strong').each do |node|
-          node.before(node.children).remove
-        end
-    
-          connection.execute(<<~SQL)
-        CREATE OR REPLACE FUNCTION timestamp_id(table_name text)
-        RETURNS bigint AS
-        $$
-          DECLARE
-            time_part bigint;
-            sequence_base bigint;
-            tail bigint;
-          BEGIN
-            time_part := (
-              -- Get the time in milliseconds
-              ((date_part('epoch', now()) * 1000))::bigint
-              -- And shift it over two bytes
-              << 16);
-    
-      def type
-    'Emoji'
-  end
-    
-      describe 'GET #show' do
-    it 'returns http success' do
-      get :show
-      expect(response).to have_http_status(:success)
+              keys = Spaceship::Portal::Key.all
+      expect(keys.size).to eq(2)
+      expect(keys.sample).to be_instance_of(Spaceship::Portal::Key)
     end
   end
     
-        puts 'Downloading emojos from source... (#{source})'
-    
-        def initialize(attributes={})
-      assign_attributes(attributes)
-      yield(self) if block_given?
+        def groups=(groups)
+      @groups = groups ? groups.compact : nil
     end
     
-          def handle_confirmation_endpoint_response(endpoint)
-        _status, header, _response = endpoint.call(request.env)
-        delete_authorization_session_variables
-        redirect_to header['Location']
+            expect(result).to eq('/usr/local/bin/cloc  --by-file --xml  --out=/tmp/cloc.xml')
       end
     
-    When /^(?:|I )check '([^']*)'$/ do |field|
-  check(field)
-end
-    
-        def self.each_definition(&block)
-      instance.each_definition(&block)
-    end
-    
-        def raise_if_blank_file
-      if path.blank?
-        raise Errors::NotIdentifiedByImageMagickError.new('Cannot find the geometry of a file with a blank name')
+            expect(result).to eq('hg parent --template '{node|short}'')
+        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('hg parent --template '{node|short}'')
       end
-    end
     
-        def define_flush_errors
-      @klass.send(:validates_each, @name) do |record, attr, value|
-        attachment = record.send(@name)
-        attachment.send(:flush_errors)
-      end
-    end
-    
-        # Returns the id of the instance in a split path form. e.g. returns
-    # 000/001/234 for an id of 1234.
-    def id_partition attachment, style_name
-      case id = attachment.instance.id
-      when Integer
-        ('%09d'.freeze % id).scan(/\d{3}/).join('/'.freeze)
-      when String
-        id.scan(/.{3}/).first(3).join('/'.freeze)
-      else
-        nil
-      end
-    end
-    
-            def failure_message_when_negated
-          'Attachment #{@attachment_name} cannot be between #{@low} and #{@high} bytes'
+          context('when the tag doesn't exist') do
+        before do
+          allow(Fastlane::Actions).to receive(:sh).with('git rev-parse -q --verify refs/tags/1.2.0 || true', { log: nil }).and_return('')
         end
-        alias negative_failure_message failure_message_when_negated
     
-        def processor(name) #:nodoc:
-      @known_processors ||= {}
-      if @known_processors[name.to_s]
-        @known_processors[name.to_s]
-      else
-        name = name.to_s.camelize
-        load_processor(name) unless Paperclip.const_defined?(name)
-        processor = Paperclip.const_get(name)
-        @known_processors[name.to_s] = processor
+          it 'raises an exception when use passes workspace' do
+        expect do
+          Fastlane::FastFile.new.parse('lane :test do
+            increment_build_number(xcodeproj: 'project.xcworkspace')
+          end').runner.execute(:test)
+        end.to raise_error('Please pass the path to the project, not the workspace')
+      end
+    
+      def execute
+    Gitlab::Metrics.measure(:import_export_clean_up) do
+      return unless File.directory?(path)
+    
+          def save_request_parameters
+        session[:client_id] = @o_auth_application.client_id
+        session[:response_type] = @response_type
+        session[:redirect_uri] = @redirect_uri
+        session[:scopes] = scopes_as_space_seperated_values
+        session[:state] = params[:state]
+        session[:nonce] = params[:nonce]
+      end
+    
+          out =
+        Sass::Util.silence_sass_warnings do
+          if @options[:from] == :css
+            require 'sass/css'
+            Sass::CSS.new(read(input), @options[:for_tree]).render(@options[:to])
+          else
+            if input_path
+              Sass::Engine.for_file(input_path, @options[:for_engine])
+            else
+              Sass::Engine.new(read(input), @options[:for_engine])
+            end.to_tree.send('to_#{@options[:to]}', @options[:for_tree])
+          end
+        end
+    
+          had_error = false
+      Sass::Plugin.on_creating_directory {|dirname| puts_action :directory, :green, dirname}
+      Sass::Plugin.on_deleting_css {|filename| puts_action :delete, :yellow, filename}
+      Sass::Plugin.on_deleting_sourcemap {|filename| puts_action :delete, :yellow, filename}
+      Sass::Plugin.on_compilation_error do |error, _, _|
+        if error.is_a?(SystemCallError) && !@options[:stop_on_error]
+          had_error = true
+          puts_action :error, :red, error.message
+          STDOUT.flush
+          next
+        end
+    
+        def parse_input(environment, text)
+      case text
+      when Script::MATCH
+        name = $1
+        guarded = !!$3
+        val = Script::Parser.parse($2, @line, text.size - ($3 || '').size - $2.size)
+    
+    @@ chat
+<pre id='chat'></pre>
+<form>
+  <input id='msg' placeholder='type message here...' />
+</form>
+    
+          def initialize(*)
+        super
+    
+        it 'denies requests with sneaky encoded session cookies' do
+      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.%73ession=SESSION_TOKEN'
+      expect(last_response).not_to be_ok
+    end
+    
+      %w(GET HEAD).each do |method|
+    it 'accepts #{method} requests with non-whitelisted Origin' do
+      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://malicious.com')).to be_ok
+    end
+  end
+    
+        SPREE_GEMS.each do |gem_name|
+      Dir.chdir(gem_name) do
+        sh 'gem build spree_#{gem_name}.gemspec'
+        mv 'spree_#{gem_name}-#{version}.gem', pkgdir
       end
     end
