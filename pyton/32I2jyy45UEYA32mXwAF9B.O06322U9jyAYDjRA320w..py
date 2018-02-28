@@ -1,176 +1,139 @@
 
         
-        https://github.com/Homebrew/homebrew-core/blob/master/Formula/httpie.rb
+        
+def random_perturbation_loss(embedded, length, loss_fn):
+  '''Adds noise to embeddings and recomputes classification loss.'''
+  noise = tf.random_normal(shape=tf.shape(embedded))
+  perturb = _scale_l2(_mask_by_length(noise, length), FLAGS.perturb_norm_length)
+  return loss_fn(embedded + perturb)
     
-        Useful for long-lived HTTP responses that stream by lines
-    such as the Twitter streaming API.
+      def setUp(self):
+    FLAGS.train_data = os.path.join(self.get_temp_dir(), 'test-text.txt')
+    FLAGS.eval_data = os.path.join(self.get_temp_dir(), 'eval-text.txt')
+    FLAGS.save_path = self.get_temp_dir()
+    with open(FLAGS.train_data, 'w') as f:
+      f.write(
+          '''alice was beginning to get very tired of sitting by her sister on
+          the bank, and of having nothing to do: once or twice she had peeped
+          into the book her sister was reading, but it had no pictures or
+          conversations in it, 'and what is the use of a book,' thought alice
+          'without pictures or conversations?' So she was considering in her own
+          mind (as well as she could, for the hot day made her feel very sleepy
+          and stupid), whether the pleasure of making a daisy-chain would be
+          worth the trouble of getting up and picking the daisies, when suddenly
+          a White rabbit with pink eyes ran close by her.\n''')
+      with open(FLAGS.eval_data, 'w') as f:
+        f.write('alice she rabbit once\n')
     
+        # 2. Evaluation mode
+    # Return our loss (which is used to evaluate our model)
+    # Set the TensorBoard scalar my_accurace to the accuracy
+    # Obs: This function only sets value during mode == ModeKeys.EVAL
+    # To set values during training, see tf.summary.scalar
+    if mode == tf.estimator.ModeKeys.EVAL:
+        return tf.estimator.EstimatorSpec(
+            mode,
+            loss=loss,
+            eval_metric_ops={'my_accuracy': accuracy})
     
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
-
+      if summary_writer is not None:
+    global_step_val = sess.run(tf.train.get_global_step())
+    tf.logging.info('Finished eval for step ' + str(global_step_val))
+    summary_writer.add_summary(summary, global_step_val)
     
+    import numpy as np
+from six.moves import urllib
+import tensorflow as tf
     
-@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
-def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
-    r = http(follow_flag, httpbin.url + '/redirect/2')
-    assert r.count('HTTP/1.1') == 1
-    assert HTTP_OK in r
-    
-        def sum_up(self):
-        actually_downloaded = (
-            self.status.downloaded - self.status.resumed_from)
-        time_taken = self.status.time_finished - self.status.time_started
-    
-        def __contains__(self, item):
-        return item in plugin_manager.get_auth_plugin_mapping()
-    
-        Assumes `from __future__ import division`.
-    
-            check_options(self.args.output_options, '--print')
-        check_options(self.args.output_options_history, '--history-print')
-    
-    
-def check_entry(line_num, segments):
-    # START Title
-    title = segments[index_title].upper()
-    if title.endswith(' API'):
-        add_error(line_num, 'Title should not contain 'API'')
-    # END Title
-    # START Description
-    # first character should be capitalized
-    char = segments[index_desc][0]
-    if char.upper() != char:
-        add_error(line_num, 'first character of description is not capitalized')
-    # last character should not punctuation
-    char = segments[index_desc][-1]
-    if char in punctuation:
-        add_error(line_num, 'description should not end with {}'.format(char))
-    desc_length = len(segments[index_desc])
-    if desc_length > 100:
-        add_error(line_num, 'description should not exceed 100 characters (currently {})'.format(desc_length))
-    # END Description
-    # START Auth
-    # values should conform to valid options only
-    auth = segments[index_auth]
-    if auth != 'No' and (not auth.startswith('`') or not auth.endswith('`')):
-        add_error(line_num, 'auth value is not enclosed with `backticks`')
-    if auth.replace('`', '') not in auth_keys:
-        add_error(line_num, '{} is not a valid Auth option'.format(auth))
-    # END Auth
-    # START HTTPS
-    # values should conform to valid options only
-    https = segments[index_https]
-    if https not in https_keys:
-        add_error(line_num, '{} is not a valid HTTPS option'.format(https))
-    # END HTTPS
-    # START CORS
-    # values should conform to valid options only
-    cors = segments[index_cors]
-    if cors not in cors_keys:
-        add_error(line_num, '{} is not a valid CORS option'.format(cors))
-    # END CORS
-    # START Link
-    # url should be wrapped in '[Go!]()' Markdown syntax
-    link = segments[index_link]
-    if not link.startswith('[Go!](http') or not link.endswith(')'):
-        add_error(line_num, 'link syntax should be '[Go!](LINK)'')
-    # END Link
-    
-        r = client.get('/pages/world')
-    assert r.status_code == 200
-
-    
-    
-@app.route('/_add_numbers')
-def add_numbers():
-    '''Add two numbers server side, ridiculous but well...'''
-    a = request.args.get('a', 0, type=int)
-    b = request.args.get('b', 0, type=int)
-    return jsonify(result=a + b)
-    
-    
-def format_datetime(timestamp):
-    '''Format a timestamp for display.'''
-    return datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%d @ %H:%M')
-    
-    import pytest
-from requests.compat import urljoin
-    
-        def __eq__(self, other):
-        if isinstance(other, collections.Mapping):
-            other = CaseInsensitiveDict(other)
+        def set(self, results, query):
+        '''Set the result for the given query key in the cache.
+        
+        When updating an entry, updates its position to the front of the LRU list.
+        If the entry is new and the cache is at capacity, removes the oldest entry
+        before the new entry is added.
+        '''
+        node = self.lookup[query]
+        if node is not None:
+            # Key exists in cache, update the value
+            node.results = results
+            self.linked_list.move_to_front(node)
         else:
-            return NotImplemented
-        # Compare insensitively
-        return dict(self.lower_items()) == dict(other.lower_items())
+            # Key does not exist in cache
+            if self.size == self.MAX_SIZE:
+                # Remove the oldest entry from the linked list and lookup
+                self.lookup.pop(self.linked_list.tail.query, None)
+                self.linked_list.remove_from_tail()
+            else:
+                self.size += 1
+            # Add the new key and value
+            new_node = Node(results)
+            self.linked_list.append_to_front(new_node)
+            self.lookup[query] = new_node
     
-        possible_keys = pytest.mark.parametrize('key', ('accept', 'ACCEPT', 'aCcEpT', 'Accept'))
+        def __init__(self, query, results):
+        self.query = query
+        self.results = results
     
-    _init()
-
+        def reducer(self, key, values):
+        total = sum(values)
+        if total == 1:
+            yield key, total
     
-    # If true, SmartyPants will be used to convert quotes and dashes to
-# typographically correct entities.
-html_use_smartypants = False
+        def test_where_subquery(self):
+        query = '''
+          SELECT name
+            FROM t1
+            WHERE regionkey = (SELECT max(regionkey) FROM t2)
+        '''
+        self.assertEquals({'t1', 't2'}, self.extract_tables(query))
     
-    # A dictionary with options for the search language support, empty by default.
-# Now only 'ja' uses this config value
-#html_search_options = {'type': 'default'}
+        id = Column(Integer, primary_key=True)
+    column_name = Column(String(255))
+    verbose_name = Column(String(1024))
+    is_active = Column(Boolean, default=True)
+    type = Column(String(32))
+    groupby = Column(Boolean, default=False)
+    count_distinct = Column(Boolean, default=False)
+    sum = Column(Boolean, default=False)
+    avg = Column(Boolean, default=False)
+    max = Column(Boolean, default=False)
+    min = Column(Boolean, default=False)
+    filterable = Column(Boolean, default=False)
+    description = Column(Text)
+    is_dttm = None
     
+        @classmethod
+    def register_sources(cls, datasource_config):
+        for module_name, class_names in datasource_config.items():
+            class_names = [str(s) for s in class_names]
+            module_obj = __import__(module_name, fromlist=class_names)
+            for class_name in class_names:
+                source_class = getattr(module_obj, class_name)
+                cls.sources[source_class.type] = source_class
     
-@zope.interface.implementer(interfaces.IAuthenticator)
-@zope.interface.provider(interfaces.IPluginFactory)
-class Authenticator(common.Plugin):
-    '''Example Authenticator.'''
+        @staticmethod
+    def _dimensions_to_values(dimensions):
+        '''
+        Replace dimensions specs with their `dimension`
+        values, and ignore those without
+        '''
+        values = []
+        for dimension in dimensions:
+            if isinstance(dimension, dict):
+                if 'dimension' in dimension:
+                    values.append(dimension['dimension'])
+            else:
+                values.append(dimension)
     
-        Snippets without code (only comments) or containing lines starting with ??? should not yeld files,
-    but the counter for naming snippets should still increment.
-    '''
-    parser = argparse.ArgumentParser(description='Split md file into plain text and code blocks')
-    parser.add_argument('sourcefile',
-                        help='which file to read')
-    parser.add_argument('targetfile',
-                        help='where to put plain text')
-    parser.add_argument('codedir',
-                        help='where to put codeblocks')
-    args = parser.parse_args()
+    from superset import appbuilder, db, security, sm, utils
+from superset.connectors.base.views import DatasourceModelView
+from superset.connectors.connector_registry import ConnectorRegistry
+from superset.utils import has_access
+from superset.views.base import (
+    BaseSupersetView, DatasourceFilter, DeleteMixin,
+    get_datasource_exist_error_mgs, ListWidgetWithCheckboxes, SupersetModelView,
+    validate_json, YamlExportMixin,
+)
+from . import models
     
-        parser = argparse.ArgumentParser(description = 'Download all the PDF/HTML links into README.md')
-    parser.add_argument('-d', action='store', dest='directory')
-    parser.add_argument('--no-html', action='store_true', dest='nohtml', default = False)
-    parser.add_argument('--overwrite', action='store_true', default = False)    
-    results = parser.parse_args()
-    
-        @csrf_exempt
-    @json_validate(
-        VRatelimit(rate_ip=True, prefix='rate_register_'),
-        signature=VSigned(),
-        name=VUname(['user']),
-        email=ValidEmail('email'),
-        password=VPasswordChange(['passwd', 'passwd2']),
-    )
-    def POST_register(self, responder, name, email, password, **kwargs):
-        kwargs.update(dict(
-            controller=self,
-            form=responder('noop'),
-            responder=responder,
-            name=name,
-            email=email,
-            password=password,
-        ))
-        return handle_register(**kwargs)
-    
-        @validate(
-        container_id=VGTMContainerId('id')
-    )
-    def GET_gtm(self, container_id):
-        return GoogleTagManager(container_id=container_id).render()
+        '''ORM object for table columns, each table can have multiple columns'''
