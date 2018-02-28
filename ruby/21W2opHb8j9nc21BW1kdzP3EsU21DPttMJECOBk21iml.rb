@@ -1,126 +1,109 @@
 
         
-              if options[:roles].is_a?(Symbol)
-        options[:roles] = [options[:roles]]
+              # Topic may be hard deleted due to spam, no point complaining
+      # we would have to look at the topics table id sequence to find cases
+      # where this was called with an invalid id, no point really
+      return unless topic.present?
+    
+      describe '.create' do
+    it 'creates a key with the client' do
+      expected_service_configs = {
+        'U27F4V844T' => [],
+        'DQ8HTZ7739' => [],
+        '6A7HVUVQ3M' => ['some-music-id']
+      }
+      mock_client_response(:create_key!, with: { name: 'New Key', service_configs: expected_service_configs }) do
+        {
+          keyId: 'a-new-key-id'
+        }
       end
     
-      def destroy
-    @event.destroy
+    module Fastlane
+  class CrashlyticsProjectParser
+    # @param project_file_path path to a .xcodeproj file
+    def initialize(config = {})
+      FastlaneCore::Project.detect_projects(config)
+      @project = FastlaneCore::Project.new(config, xcodebuild_list_silent: true, xcodebuild_suppress_stderr: true)
     
-      def destroy
-    @services = current_user.services.find(params[:id])
-    @services.destroy
+        context 'Mercurial repository' do
+      before do
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_svn?).and_return(false)
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git_svn?).and_return(false)
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git?).and_return(false)
+        expect(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_hg?).and_return(true)
+      end
     
-    module Docs
-  class PageDb
-    attr_reader :pages
+          it 'gets the correct version number for 'TargetBTests'' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          get_version_number(xcodeproj: '.xcproject', target: 'TargetBTests')
+        end').runner.execute(:test)
+        expect(result).to eq('5.4.3')
+      end
     
-      def test_without
-    @opt.parse!(%w'--without-zot')
-    assert_nil(@zot)
-    assert_raise(OptionParser::NeedlessArgument) {@opt.parse!(%w'--without-zot=foobar')}
+      def failure_message
+    exception = request.respond_to?(:get_header) ? request.get_header('omniauth.error') : request.env['omniauth.error']
+    error   = exception.error_reason if exception.respond_to?(:error_reason)
+    error ||= exception.error        if exception.respond_to?(:error)
+    error ||= (request.respond_to?(:get_header) ? request.get_header('omniauth.error.type') : request.env['omniauth.error.type']).to_s
+    error.to_s.humanize if error
   end
     
-          if off
-        year, mon, day, hour, min, sec =
-          apply_offset(year, mon, day, hour, min, sec, off)
-        t = self.utc(year, mon, day, hour, min, sec, usec)
-        force_zone!(t, zone, off)
-        t
-      else
-        self.local(year, mon, day, hour, min, sec, usec)
-      end
+        def confirmation_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :confirmation_instructions, opts)
     end
-    private :make_time
     
-      def subtest_xmlschema_alias(method)
-    t = Time.utc(1985, 4, 12, 23, 20, 50, 520000)
-    s = '1985-04-12T23:20:50.52Z'
-    assert_equal(t, Time.__send__(method, s))
-    assert_equal(s, t.__send__(method, 2))
+    class TestApp < Rails::Application
+  config.root = File.dirname(__FILE__)
+  config.session_store :cookie_store, key: 'cookie_store_key'
+  secrets.secret_token    = 'secret_token'
+  secrets.secret_key_base = 'secret_key_base'
+  config.eager_load = false
     
-      self.each_test do |test, i|
-    define_method('test_#{i}') do ||
-      Tempfile.create('iotest.dat') do |fh|
-        fh.print test[1]
-        fh.rewind
-        assert_equal(test[2], fh.scanf(test[0]))
+          opts[:format] = request_format unless skip_format?
+    
+          def to_s
+        @pairs.inspect
       end
     end
   end
 end
 
     
+            def update
+          authorize! :update, @order, order_token
+          @address = find_address
+    
+        # called by storage after the writes are flushed and before @queued_for_write is cleared
+    def after_flush_writes
+      unlink_files(@queued_for_write.values)
     end
-
     
+        alias :empty? :empty_file?
     
-    {    r1, w1 = IO.pipe
-    r2, w2 = IO.pipe
-    t1 = Thread.new { w1 << megacontent; w1.close }
-    t2 = Thread.new { r2.read; r2.close }
-    IO.copy_stream(r1, w2) rescue nil
-    w2.close
-    r1.close
-    t1.join
-    t2.join
-  }, 'megacontent-copy_stream', ['INT'], :timeout => 10 or break
-end
+        # Returns the timestamp as defined by the <attachment>_updated_at field
+    # in the server default time zone unless :use_global_time_zone is set
+    # to false.  Note that a Rails.config.time_zone change will still
+    # invalidate any path or URL that uses :timestamp.  For a
+    # time_zone-agnostic timestamp, use #updated_at.
+    def timestamp attachment, style_name
+      attachment.instance_read(:updated_at).in_time_zone(attachment.time_zone).to_s
+    end
     
-        ##
-    # Creates a Regexp to match an address.
-    
-      def adjusted_results name, results
-    s = nil
-    results.each_with_index{|e, i|
-      r = e.min
-      case name
-      when /^vm1_/
-        if @loop_wl1
-          r -= @loop_wl1[i]
-          r = 0 if r < 0
-          s = '*'
-        end
-      when /^vm2_/
-        if @loop_wl2
-          r -= @loop_wl2[i]
-          r = 0 if r < 0
-          s = '*'
+        Hash.new.tap do |missing_styles|
+      current_styles.each do |klass, attachment_definitions|
+        attachment_definitions.each do |attachment_name, styles|
+          registered = registered_styles[klass][attachment_name] || [] rescue []
+          missed = styles - registered
+          if missed.present?
+            klass_sym = klass.to_s.to_sym
+            missing_styles[klass_sym] ||= Hash.new
+            missing_styles[klass_sym][attachment_name.to_sym] ||= Array.new
+            missing_styles[klass_sym][attachment_name.to_sym].concat(missed.to_a)
+            missing_styles[klass_sym][attachment_name.to_sym].map!(&:to_s).sort!.map!(&:to_sym).uniq!
+          end
         end
       end
-      yield r
-    }
-    s
+    end
   end
-    
-          def http_error_page_as_json(e)
-        render json: {error: :invalid_request, error_description: e.message}, status: 400
-      end
-    
-          def create
-        req = Rack::Request.new(request.env)
-        if req['client_assertion_type'] == 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
-          handle_jwt_bearer(req)
-        end
-        self.status, headers, self.response_body = Api::OpenidConnect::TokenEndpoint.new.call(request.env)
-        headers.each {|name, value| response.headers[name] = value }
-        nil
-      end
-    
-      out = File.join(output, site + '.txt')
-  File.unlink(out) if File.exist?(out)
-    
-        # We want to return immediatly if we do not have a packet which is handled by us
-    return unless pkt.is_tcp?
-    return if (pkt.tcp_sport != 143 and pkt.tcp_dport != 143)
-    s = find_session((pkt.tcp_sport == 143) ? get_session_src(pkt) : get_session_dst(pkt))
-    s[:sname] ||= 'imap4'
-    
-    
-    
-            def_node_matcher :redundant_regex?, <<-PATTERN
-          {(send $!nil? {:match :=~} (regexp (str $#literal_at_end?) (regopt)))
-           (send (regexp (str $#literal_at_end?) (regopt)) {:match :=~} $_)}
-        PATTERN
-    
-            private
+end
