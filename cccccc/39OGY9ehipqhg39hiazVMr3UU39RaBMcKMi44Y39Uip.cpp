@@ -1,356 +1,195 @@
 
         
-        void convert_dataset(const char* image_filename, const char* label_filename,
-        const char* db_filename) {
-  // Open files
-  std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
-  std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
-  CHECK(image_file) << 'Unable to open file ' << image_filename;
-  CHECK(label_file) << 'Unable to open file ' << label_filename;
-  // Read the magic and the meta data
-  uint32_t magic;
-  uint32_t num_items;
-  uint32_t num_labels;
-  uint32_t rows;
-  uint32_t cols;
+            cv::Mat ppi_A(3, 1, CV_64F);
+    for (int i = 0; i < N; ++i)
+    {
+        z.col(i).copyTo(z_i);
+        ppi_A = LeftMultVec(pp.col(i)) + A;
+        D += ppi_A.t() * ( eye - z_i*z_i.t() ) * ppi_A;
     }
+    A.release();
     
-    /**
- * @brief Computes @f$ y = |x| @f$
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$ y = |x| @f$
- */
-template <typename Dtype>
-class AbsValLayer : public NeuronLayer<Dtype> {
- public:
-  explicit AbsValLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+    void CalibrateExtrinsics(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
+                         const IntrinsicParams& param, const int check_cond,
+                         const double thresh_cond, InputOutputArray omc, InputOutputArray Tc);
+    
+    #if 0
+    
+    void cv::cuda::GpuMat::convertTo(OutputArray _dst, int rtype, double alpha, double beta, Stream& _stream) const
+{
+    (void) _dst;
+    (void) rtype;
+    (void) alpha;
+    (void) beta;
+    (void) _stream;
+    throw_no_cuda();
+}
+    
+        hdr.cols = new_width;
+    hdr.flags = (hdr.flags & ~CV_MAT_CN_MASK) | ((new_cn - 1) << CV_CN_SHIFT);
+    
+    #undef cv_hal_LU32f
+#define cv_hal_LU32f lapack_LU32f
+#undef cv_hal_LU64f
+#define cv_hal_LU64f lapack_LU64f
+    
+      if (flags.bit (CHECK_DAWGS) &&
+    (word->best_choice->permuter () != SYSTEM_DAWG_PERM) &&
+    (word->best_choice->permuter () != FREQ_DAWG_PERM) &&
+    (word->best_choice->permuter () != USER_DAWG_PERM) &&
+    (word->best_choice->permuter () != NUMBER_PERM)) {
+    if (tessedit_adaption_debug) tprintf('word not in dawgs\n');
+    return FALSE;
+  }
+    
+    // Fixxht overview.
+// Premise: Initial estimate of x-height is adequate most of the time, but
+// occasionally it is incorrect. Most notable causes of failure are:
+// 1. Small caps, where the top of the caps is the same as the body text
+// xheight. For small caps words the xheight needs to be reduced to correctly
+// recognize the caps in the small caps word.
+// 2. All xheight lines, such as summer. Here the initial estimate will have
+// guessed that the blob tops are caps and will have placed the xheight too low.
+// 3. Noise/logos beside words, or changes in font size on a line. Such
+// things can blow the statistics and cause an incorrect estimate.
+// 4. Incorrect baseline. Can happen when 2 columns are incorrectly merged.
+// In this case the x-height is often still correct.
+//
+// Algorithm.
+// Compare the vertical position (top only) of alphnumerics in a word with
+// the range of positions in training data (in the unicharset).
+// See CountMisfitTops. If any characters disagree sufficiently with the
+// initial xheight estimate, then recalculate the xheight, re-run OCR on
+// the word, and if the number of vertical misfits goes down, along with
+// either the word rating or certainty, then keep the new xheight.
+// The new xheight is calculated as follows:ComputeCompatibleXHeight
+// For each alphanumeric character that has a vertically misplaced top
+// (a misfit), yet its bottom is within the acceptable range (ie it is not
+// likely a sub-or super-script) calculate the range of acceptable xheight
+// positions from its range of tops, and give each value in the range a
+// number of votes equal to the distance of its top from its acceptance range.
+// The x-height position with the median of the votes becomes the new
+// x-height. This assumes that most characters will be correctly recognized
+// even if the x-height is incorrect. This is not a terrible assumption, but
+// it is not great. An improvement would be to use a classifier that does
+// not care about vertical position or scaling at all.
+// Separately collect stats on shifted baselines and apply the same logic to
+// computing a best-fit shift to fix the error. If the baseline needs to be
+// shifted, but the x-height is OK, returns the original x-height along with
+// the baseline shift to indicate that recognition needs to re-run.
+    
+    #include 'ccstruct.h'
+    
+    
+    {  // We shouldn't try calculations if the characters are very short (for example
+  // for punctuation).
+  if (min_height > kBlnXHeight / 8 && height > 0) {
+    float result = height * kBlnXHeight * yscale / min_height;
+    *max_xht = result + kFinalPixelTolerance;
+    result = height * kBlnXHeight * yscale / max_height;
+    *min_xht = result - kFinalPixelTolerance;
+  }
+}
+    
+      // Return whether a given text line could be a first paragraph line according
+  // to this paragraph model.
+  bool ValidFirstLine(int lmargin, int lindent, int rindent, int rmargin) const;
+    
+        // Converts an angle in radians (from ICOORD::angle or FCOORD::angle) to a
+    // standard feature direction as an unsigned angle in 256ths of a circle
+    // measured anticlockwise from (-1, 0).
+    static uinT8 binary_angle_plus_pi(double angle);
+    // Inverse of binary_angle_plus_pi returns an angle in radians for the
+    // given standard feature direction.
+    static double angle_from_direction(uinT8 direction);
+    // Returns the point on the given line nearest to this, ie the point such
+    // that the vector point->this is perpendicular to the line.
+    // The line is defined as a line_point and a dir_vector for its direction.
+    // dir_vector need not be a unit vector.
+    FCOORD nearest_pt_on_line(const FCOORD& line_point,
+                              const FCOORD& dir_vector) const;
+    
+        // Setup inputs
+    ALLEGRO_KEYBOARD_STATE keys;
+    al_get_keyboard_state(&keys);
+    io.KeyCtrl = al_key_down(&keys, ALLEGRO_KEY_LCTRL) || al_key_down(&keys, ALLEGRO_KEY_RCTRL);
+    io.KeyShift = al_key_down(&keys, ALLEGRO_KEY_LSHIFT) || al_key_down(&keys, ALLEGRO_KEY_RSHIFT);
+    io.KeyAlt = al_key_down(&keys, ALLEGRO_KEY_ALT) || al_key_down(&keys, ALLEGRO_KEY_ALTGR);
+    io.KeySuper = al_key_down(&keys, ALLEGRO_KEY_LWIN) || al_key_down(&keys, ALLEGRO_KEY_RWIN);
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+    // Implemented features:
+//  [X] User texture binding. Use 'ID3D10ShaderResourceView*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+    
+    
+    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        }
+    
+    struct GLFWwindow;
+    
+        // We are using the OpenGL fixed pipeline to make the example code simpler to read!
+    // Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled, vertex/texcoord/color pointers, polygon fill.
+    GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
+    GLint last_polygon_mode[2]; glGetIntegerv(GL_POLYGON_MODE, last_polygon_mode);
+    GLint last_viewport[4]; glGetIntegerv(GL_VIEWPORT, last_viewport);
+    GLint last_scissor_box[4]; glGetIntegerv(GL_SCISSOR_BOX, last_scissor_box); 
+    glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TRANSFORM_BIT);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
+    glEnable(GL_SCISSOR_TEST);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    glEnable(GL_TEXTURE_2D);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
+    
+        void        (*SetObjectField)(JNIEnv*, jobject, jfieldID, jobject);
+    void        (*SetBooleanField)(JNIEnv*, jobject, jfieldID, jboolean);
+    void        (*SetByteField)(JNIEnv*, jobject, jfieldID, jbyte);
+    void        (*SetCharField)(JNIEnv*, jobject, jfieldID, jchar);
+    void        (*SetShortField)(JNIEnv*, jobject, jfieldID, jshort);
+    void        (*SetIntField)(JNIEnv*, jobject, jfieldID, jint);
+    void        (*SetLongField)(JNIEnv*, jobject, jfieldID, jlong);
+    void        (*SetFloatField)(JNIEnv*, jobject, jfieldID, jfloat);
+    void        (*SetDoubleField)(JNIEnv*, jobject, jfieldID, jdouble);
+    
+    
+    {    void toJS(nbind::cbOutput expose) const
+    {
+        expose(unit, value);
     }
-    
-    /**
- * @brief Compute the index of the @f$ K @f$ max values for each datum across
- *        all dimensions @f$ (C \times H \times W) @f$.
- *
- * Intended for use after a classification layer to produce a prediction.
- * If parameter out_max_val is set to true, output is a vector of pairs
- * (max_ind, max_val) for each image. The axis parameter specifies an axis
- * along which to maximise.
- *
- * NOTE: does not implement Backwards operation.
- */
-template <typename Dtype>
-class ArgMaxLayer : public Layer<Dtype> {
- public:
-  /**
-   * @param param provides ArgMaxParameter argmax_param,
-   *     with ArgMaxLayer options:
-   *   - top_k (\b optional uint, default 1).
-   *     the number @f$ K @f$ of maximal items to output.
-   *   - out_max_val (\b optional bool, default false).
-   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
-   *     output max_val along the specified axis.
-   *   - axis (\b optional int).
-   *     if set, maximise along the specified axis else maximise the flattened
-   *     trailing dimensions for each index of the first / num dimension.
-   */
-  explicit ArgMaxLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    namespace caffe {
-    }
-    
-      virtual inline const char* type() const { return 'Convolution'; }
-    
-    #include 'caffe/layers/neuron_layer.hpp'
-    
-    #endif // __cocos2dx_builder_h__
+};
 
     
-    bool js_cocos2dx_navmesh_NavMeshAgent_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_navmesh_NavMeshAgent_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_navmesh_NavMeshAgent(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_navmesh(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_navmesh_NavMeshAgent_setMaxSpeed(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_syncToNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_completeOffMeshLink(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_getSeparationWeight(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_setAutoTraverseOffMeshLink(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_getCurrentVelocity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_syncToAgent(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_isOnOffMeshLink(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_setSeparationWeight(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_pause(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_setAutoOrientation(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_getHeight(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_getMaxSpeed(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_getCurrentOffMeshLinkData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_getRadius(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_getSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_resume(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_stop(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_setMaxAcceleration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_setOrientationRefAxes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_getMaxAcceleration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_setHeight(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_getObstacleAvoidanceType(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_getVelocity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_setRadius(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_setObstacleAvoidanceType(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_getNavMeshAgentComponentName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshAgent_NavMeshAgent(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    bool js_cocos2dx_physics3d_Physics3DConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DConstraint_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DConstraint(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DConstraint_setEnabled(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_setBreakingImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getUserData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getBreakingImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getBodyA(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_isEnabled(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getOverrideNumSolverIterations(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getBodyB(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_setOverrideNumSolverIterations(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getConstraintType(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_setUserData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getbtContraint(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    int register_all_cocos2dx_cocosbuilder(lua_State* tolua_S);
-    
-    
-    
-    
-    
-    
-    
-    void Test::LaunchBomb()
-{
-	b2Vec2 p(RandomFloat(-15.0f, 15.0f), 30.0f);
-	b2Vec2 v = -5.0f * p;
-	LaunchBomb(p, v);
-}
-    
-    /// Random floating point number in range [lo, hi]
-inline float32 RandomFloat(float32 lo, float32 hi)
-{
-	float32 r = (float32)(std::rand() & (RAND_LIMIT));
-	r /= RAND_LIMIT;
-	r = (hi - lo) * r + lo;
-	return r;
-}
-    
-    	static Test* Create()
-	{
-		return new ApplyForce;
-	}
-    
-    	b2Body* m_body1;
-	b2Vec2 m_velocity;
-	float32 m_angularVelocity;
-	b2PolygonShape m_shape1;
-	b2PolygonShape m_shape2;
-	b2Fixture* m_piece1;
-	b2Fixture* m_piece2;
-    
-    /**
- * Get the path to the current executable.
- *
- * Note that this is not reliable and not recommended in general; it may not be
- * implemented on your platform (in which case it will throw), the executable
- * might have been moved or replaced while running, and applications comprising
- * of multiple executables should use some form of configuration system to
- * find the other executables rather than relying on relative paths from one
- * to another.
- *
- * So this should only be used for tests, logging, or other innocuous purposes.
- */
-path executable_path();
-    
-    namespace {
-    }
-    
-      // Read and parse /proc/mounts
-  std::vector<StringPiece> parts;
-  std::vector<StringPiece> options;
-    
-    // Temporary file that is NOT kept open but is deleted on exit.
-// Generate random-looking but reproduceable data.
-class TemporaryFile {
- public:
-  explicit TemporaryFile(size_t size);
-  ~TemporaryFile();
-    }
-    
-    void AsyncFileWriter::performIO(std::vector<std::string>* ioQueue) {
-  // kNumIovecs controls the maximum number of strings we write at once in a
-  // single writev() call.
-  constexpr int kNumIovecs = 64;
-  std::array<iovec, kNumIovecs> iovecs;
-    }
-    
-    
-    {StringPiece getGlogLevelName(LogLevel level) {
-  if (level < LogLevel::INFO) {
-    return 'VERBOSE';
-  } else if (level < LogLevel::WARN) {
-    return 'INFO';
-  } else if (level < LogLevel::ERR) {
-    return 'WARNING';
-  } else if (level < LogLevel::CRITICAL) {
-    return 'ERROR';
+      if (state->stackTrace.size() == state->stackTrace.capacity()) {
+    return _URC_END_OF_STACK;
   }
-  return 'CRITICAL';
+    
+      ASSERT_TRUE(YGNodeLayoutGetHadOverflow(root));
+    
+    void jni_YGNodeSetHasMeasureFunc(alias_ref<jobject>, jlong nativePointer, jboolean hasMeasureFunc) {
+  _jlong2YGNodeRef(nativePointer)
+      ->setMeasureFunc(hasMeasureFunc ? YGJNIMeasureFunc : nullptr);
 }
-} // namespace
+    
+     public: // Style setters
     
     
-    {  // Propagate the message up to our parent LogCategory.
-  //
-  // Maybe in the future it might be worth adding a flag to control if a
-  // LogCategory should propagate messages to its parent or not.  (This would
-  // be similar to log4j's 'additivity' flag.)
-  // For now I don't have a strong use case for this.
-  if (parent_) {
-    parent_->processMessage(message);
+#define DEFINE_BOXED_PRIMITIVE(LITTLE, BIG)                          \
+  struct J ## BIG : detail::JPrimitive<J ## BIG, j ## LITTLE> {      \
+    static auto constexpr kJavaDescriptor = 'Ljava/lang/' #BIG ';';  \
+    static auto constexpr kValueMethod = #LITTLE 'Value';            \
+    j ## LITTLE LITTLE ## Value() const {                            \
+      return value();                                                \
+    }                                                                \
+  };                                                                 \
+  inline local_ref<jobject> autobox(j ## LITTLE val) {               \
+    return J ## BIG::valueOf(val);                                   \
   }
-}
-    
-    namespace folly {
-    }
-    
-    /**
- * Configuration for a LogCategory
- */
-class LogCategoryConfig {
- public:
-  explicit LogCategoryConfig(
-      LogLevel level = LogLevel::WARNING,
-      bool inheritParentLevel = true);
-  LogCategoryConfig(
-      LogLevel level,
-      bool inheritParentLevel,
-      std::vector<std::string> handlers);
-    }
-    
-    namespace folly {
-    }
-    
-    void ListFilesInDirRecursive(const std::string &Dir, long *Epoch,
-                             std::vector<std::string> *V, bool TopDir);
-    
-    #include 'FuzzerExtFunctions.h'
-#include 'FuzzerIO.h'
-#include <cstdarg>
-#include <cstdio>
-#include <dirent.h>
-#include <fstream>
-#include <iterator>
-#include <libgen.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-    
-    
-    {}  // namespace fuzzer
-    
-    struct FuzzingOptions {
-  int Verbosity = 1;
-  size_t MaxLen = 0;
-  int UnitTimeoutSec = 300;
-  int TimeoutExitCode = 77;
-  int ErrorExitCode = 77;
-  int MaxTotalTimeSec = 0;
-  int RssLimitMb = 0;
-  bool DoCrossOver = true;
-  int MutateDepth = 5;
-  bool UseCounters = false;
-  bool UseIndirCalls = true;
-  bool UseMemcmp = true;
-  bool UseMemmem = true;
-  bool UseCmp = false;
-  bool UseValueProfile = false;
-  bool Shrink = false;
-  int ReloadIntervalSec = 1;
-  bool ShuffleAtStartUp = true;
-  bool PreferSmall = true;
-  size_t MaxNumberOfRuns = -1L;
-  int ReportSlowUnits = 10;
-  bool OnlyASCII = false;
-  std::string OutputCorpus;
-  std::string ArtifactPrefix = './';
-  std::string ExactArtifactPath;
-  std::string ExitOnSrcPos;
-  std::string ExitOnItem;
-  bool SaveArtifacts = true;
-  bool PrintNEW = true; // Print a status line when new units are found;
-  bool OutputCSV = false;
-  bool PrintNewCovPcs = false;
-  bool PrintFinalStats = false;
-  bool PrintCorpusStats = false;
-  bool PrintCoverage = false;
-  bool DumpCoverage = false;
-  bool DetectLeaks = true;
-  int  TraceMalloc = 0;
-  bool HandleAbrt = false;
-  bool HandleBus = false;
-  bool HandleFpe = false;
-  bool HandleIll = false;
-  bool HandleInt = false;
-  bool HandleSegv = false;
-  bool HandleTerm = false;
-};
-    
-    #ifndef LLVM_FUZZER_TRACE_PC
-#define LLVM_FUZZER_TRACE_PC
-    
-    bool ToASCII(uint8_t *Data, size_t Size) {
-  bool Changed = false;
-  for (size_t i = 0; i < Size; i++) {
-    uint8_t &X = Data[i];
-    auto NewX = X;
-    NewX &= 127;
-    if (!isspace(NewX) && !isprint(NewX))
-      NewX = ' ';
-    Changed |= NewX != X;
-    X = NewX;
-  }
-  return Changed;
-}
-    
-    unsigned long GetPid();
-    
-    
-    {} // namespace A2STR
-    
-    private:
-  std::string userDefinedUser_;
-  std::string userDefinedPassword_;
-    
-      std::chrono::seconds interval_;
-  DownloadEngine* e_;
-  Timer checkPoint_;
-  int numNewConnection_; // the number of the connection to establish.
-public:
-  ActivePeerConnectionCommand(cuid_t cuid, RequestGroup* requestGroup,
-                              DownloadEngine* e, std::chrono::seconds interval);
-    
-    AdaptiveFileAllocationIterator::~AdaptiveFileAllocationIterator() = default;
-    
-      virtual void allocateChunk() CXX11_OVERRIDE;
-    
-      AnnounceTier::AnnounceEvent getEvent() const;
