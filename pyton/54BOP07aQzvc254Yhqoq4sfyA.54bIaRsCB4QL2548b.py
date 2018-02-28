@@ -1,152 +1,189 @@
 
         
-            for i, NN in enumerate(Nrange):
-        print('N = %i (%i out of %i)' % (NN, i + 1, len(Nrange)))
-        X = get_data(NN, D, dataset)
-        for algorithm in algorithms:
-            nbrs = neighbors.NearestNeighbors(n_neighbors=min(NN, k),
-                                              algorithm=algorithm,
-                                              leaf_size=leaf_size)
-            t0 = time()
-            nbrs.fit(X)
-            t1 = time()
-            nbrs.kneighbors(X)
-            t2 = time()
-    
-    for i, n in enumerate(n_samples):
-    for j, p in enumerate(n_features):
-        X = np.random.normal(size=(n, p))
-        t0 = time.time()
-        ward.fit(X)
-        scikits_time[j, i] = time.time() - t0
-        t0 = time.time()
-        hierarchy.ward(X)
-        scipy_time[j, i] = time.time() - t0
-    
-    In the second benchmark, we increase the number of dimensions of the
-training set, classify a sample and plot the time taken as a function
-of the number of dimensions.
-'''
-import numpy as np
-import matplotlib.pyplot as plt
-import gc
-from datetime import datetime
-    
-        fn = os.path.relpath(fn,
-                         start=os.path.dirname(__import__(package).__file__))
-    try:
-        lineno = inspect.getsourcelines(obj)[1]
-    except Exception:
-        lineno = ''
-    return url_fmt.format(revision=revision, package=package,
-                          path=fn, lineno=lineno)
-    
-    ARCHIVE_NAME = URL.rsplit('/', 1)[1]
-DATA_FOLDER = 'txt_sentoken'
-    
-    plt.matshow(fit_data, cmap=plt.cm.Blues)
-plt.title('After biclustering; rearranged to show biclusters')
-    
-    plt.show()
+        
+def side_effect(old_cmd, command):
+    with tarfile.TarFile(_tar_file(old_cmd.script_parts)[0]) as archive:
+        for file in archive.getnames():
+            try:
+                os.remove(file)
+            except OSError:
+                # does not try to remove directories as we cannot know if they
+                # already existed before
+                pass
 
     
-    features_samples_ratio = np.array(n_features_range) / n_train
+    # If true, an OpenSearch description file will be output, and all pages will
+# contain a <link> tag referring to it.  The value of this option must be the
+# base URL from which the finished HTML is served.
+#html_use_opensearch = ''
     
-    The following plots demonstrate the impact of the number of clusters and
-number of samples on various clustering performance evaluation metrics.
     
-        (x_train, y_train), _, (sample_weight, _, _) = _get_test_data()
+@app.before_request
+def before_request():
+    g.user = None
+    if 'user_id' in session:
+        g.user = query_db('select * from user where user_id = ?',
+                          [session['user_id']], one=True)
+    
+        styles = {
+        # No corresponding class for the following:
+        #Text:                     '', # class:  ''
+        Whitespace:                'underline #f8f8f8',      # class: 'w'
+        Error:                     '#a40000 border:#ef2929', # class: 'err'
+        Other:                     '#000000',                # class 'x'
+    }
+    
+    This module provides the capabilities for the Requests hooks system.
+    
+        @pytest.fixture(autouse=True)
+    def setup(self):
+        '''LookupDict instance with 'bad_gateway' attribute.'''
+        self.lookup_dict = LookupDict('test')
+        self.lookup_dict.bad_gateway = 502
+    
+        @pytest.mark.parametrize(
+        'mode, warnings_num', (
+            ('r', 1),
+            ('rb', 0),
+        ))
+    def test_file(self, tmpdir, mode, warnings_num, recwarn):
+        file_obj = tmpdir.join('test.txt')
+        file_obj.write('Test')
+        with file_obj.open(mode) as fd:
+            assert super_len(fd) == 4
+        assert len(recwarn) == warnings_num
+    
+        Or as a context manager::
+    
+        mask_inputs = (np.zeros(input_shapes[0][:-1]), np.ones(input_shapes[1][:-1]))
+    expected_mask_output = np.concatenate(mask_inputs, axis=-1)
+    mask_input_placeholders = [K.placeholder(shape=input_shape[:-1]) for input_shape in input_shapes]
+    mask_output = model.layers[-1]._output_mask(mask_input_placeholders)
+    assert np.all(K.function(mask_input_placeholders, [mask_output])(mask_inputs)[0] == expected_mask_output)
     
     
 @keras_test
-def test_nested_model_trainability():
-    # a Sequential inside a Model
-    inner_model = Sequential()
-    inner_model.add(Dense(2, input_dim=1))
+def test_vector_regression():
+    '''
+    Perform float data prediction (regression) using 2 layer MLP
+    with tanh and sigmoid activations.
+    '''
+    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=500,
+                                                         num_test=200,
+                                                         input_shape=(20,),
+                                                         output_shape=(num_classes,),
+                                                         classification=False)
     
-    from keras.models import Sequential
-from keras.engine.training import _weighted_masked_objective
-from keras.layers import TimeDistributed, Masking, Dense
-from keras.utils.test_utils import keras_test
-from keras import losses
-from keras import backend as K
+    from flask import Flask, redirect
+from flask_appbuilder import AppBuilder, IndexView, SQLA
+from flask_appbuilder.baseviews import expose
+from flask_migrate import Migrate
+from flask_wtf.csrf import CSRFProtect
+from werkzeug.contrib.fixers import ProxyFix
     
-            layer_test(local.LocallyConnected2D,
-                   kwargs={'filters': filters,
-                           'kernel_size': (3, 3),
-                           'padding': padding,
-                           'kernel_regularizer': 'l2',
-                           'bias_regularizer': 'l2',
-                           'activity_regularizer': 'l2',
-                           'strides': strides,
-                           'data_format': 'channels_first'},
-                   input_shape=(num_samples, stack_size, num_row, num_col))
-    
-    
-@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
-def test_constant(tensor_shape):
-    _runner(initializers.Constant(2), tensor_shape,
-            target_mean=2, target_max=2, target_min=2)
-    
-    history = model.fit(x_train, y_train,
-                    batch_size=batch_size,
-                    epochs=epochs,
-                    verbose=1,
-                    validation_data=(x_test, y_test))
-score = model.evaluate(x_test, y_test, verbose=0)
-print('Test loss:', score[0])
-print('Test accuracy:', score[1])
-
-    
-        def __init__(self, from_user_id, to_user_id, request_status, timestamp):
-        self.from_user_id = from_user_id
-        self.to_user_id = to_user_id
-        self.request_status = request_status
-        self.timestamp = timestamp
-    
-        def take_spot(self, spot):
-        self.spots_taken.append(spot)
-    
-            Emit key value pairs of the form:
+        export_fields = (
+        'datasource_id', 'column_name', 'is_active', 'type', 'groupby',
+        'count_distinct', 'sum', 'avg', 'max', 'min', 'filterable',
+        'description', 'dimension_spec_json', 'verbose_name',
+    )
+    export_parent = 'datasource'
     
     
-class Transaction(object):
+class SqlMetricInlineView(CompactCRUDMixin, SupersetModelView):  # noqa
+    datamodel = SQLAInterface(models.SqlMetric)
     
-            try:
-            response = fetch(method, host, url, headers, body)
-            if response:
-                if response.status > 400:
-                    server_type = response.getheader('Server', '')
+                    if delegate is not None:
+                    return delegate
     
-        def getStart(self):
-        '''Return the start token or tree.'''
-        return None
+    from tornado.http1connection import HTTP1Connection
+from tornado.httputil import HTTPMessageDelegate
+from tornado.iostream import IOStream
+from tornado.locks import Event
+from tornado.netutil import add_accept_handler
+from tornado.testing import AsyncTestCase, bind_unused_port, gen_test
+    
+        .. versionchanged:: 5.0
+       The ``io_loop`` argument (deprecated since version 4.1) has been removed.
+    '''
+    def initialize(self):
+        self.io_loop = IOLoop.current()
+        self.channel = pycares.Channel(sock_state_cb=self._sock_state_cb)
+        self.fds = {}
+    
+            # Make sure the tornado module under test is available to the test
+        # application
+        pythonpath = os.getcwd()
+        if 'PYTHONPATH' in os.environ:
+            pythonpath += os.pathsep + os.environ['PYTHONPATH']
     
     
-            rewrites = self.programs.get(programName)
-        if rewrites is None or len(rewrites) == 0:
-            # no instructions to execute
-            return self.toOriginalString(start, end)
-        
-        buf = StringIO()
+class ExceptionBenchmark(Benchmark):
+    def make_context(self):
+        return stack_context.ExceptionStackContext(self.__handle_exception)
     
-            total_count = 0
-        translated_count = 0
-        with open(fn) as f:
-            catalog = read_po(f)
-            for msg in catalog:
-                total_count += 1
-                if is_translated(msg):
-                    translated_count += 1
-        pct = translated_count / float(total_count) * 100
-        click.echo('% -7s % 2d%%' % (
-            locale,
-            pct,
-        ), err=True)
-        if pct >= MINIMUM and locale not in rv:
-            rv.append(locale)
-    with open(catalog_file, 'w') as f:
-        json.dump({
-            'supported_locales': sorted(rv)
-        }, f, indent=2)
-        f.write('\n')
+    
+class MainHandler(BaseHandler, tornado.auth.FacebookGraphMixin):
+    @tornado.web.authenticated
+    @tornado.web.asynchronous
+    def get(self):
+        self.facebook_request('/me/home', self._on_stream,
+                              access_token=self.current_user['access_token'])
+    
+    
+def updatefig(*args):
+    global update
+    if update:
+        time.sleep(1)
+        pull_screenshot()
+        im.set_array(update_data())
+        update = False
+    return im,
+    
+    
+def on_click(event):
+    global update
+    global ix, iy
+    global click_count
+    global cor
+    
+    
+def open_accordant_config():
+    '''
+    调用配置文件
+    '''
+    screen_size = _get_screen_size()
+    config_file = '{path}/config/{screen_size}/config.json'.format(
+        path=sys.path[0],
+        screen_size=screen_size
+    )
+    
+    # Magic Number，不设置可能无法正常执行，请根据具体截图从上到下按需设置，设置保存在 config 文件夹中
+under_game_score_y = config['under_game_score_y']
+press_coefficient = config['press_coefficient']  # 长按的时间系数，请自己根据实际情况调节
+piece_base_height_1_2 = config['piece_base_height_1_2']  # 二分之一的棋子底座高度，可能要调节
+piece_body_width = config['piece_body_width']  # 棋子的宽度，比截图中量到的稍微大一点比较安全，可能要调节
+    
+        pixels_Widh=[]
+    end_w=0
+    for i in range(1,w):
+        if col_pix[0,i-1]<=0 and col_pix[0,i]>=1:
+            pixels_Widh.append(i-1)
+        if col_pix[0,i]>=1:
+            end_w=i
+    pixels_Widh.append(end_w+1)
+    return start_h,end_h,pixels_Widh
+    
+    
+def set_button_position(im):
+    '''
+    将 swipe 设置为 `再来一局` 按钮的位置
+    '''
+    global swipe_x1, swipe_y1, swipe_x2, swipe_y2
+    w, h = im.size
+    left = int(w / 2)
+    top = int(1584 * (h / 1920.0))
+    left = int(random.uniform(left - 200, left + 200))
+    top = int(random.uniform(top - 200, top + 200))  # 随机防 ban
+    after_top = int(random.uniform(top - 200, top + 200))
+    after_left = int(random.uniform(left - 200, left + 200))
+    swipe_x1, swipe_y1, swipe_x2, swipe_y2 = left, top, after_left, after_top
