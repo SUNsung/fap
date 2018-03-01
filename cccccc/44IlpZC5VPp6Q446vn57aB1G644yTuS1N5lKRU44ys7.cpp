@@ -1,264 +1,361 @@
 
         
-        #endif // BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
+          // During the first Compute(), resource is either created or looked up using
+  // shared_name. In the latter case, the resource found should be verified if
+  // it is compatible with this op's configuration. The verification may fail in
+  // cases such as two graphs asking queues of the same shared name to have
+  // inconsistent capacities.
+  virtual Status VerifyResource(T* resource) { return Status::OK(); }
+    
+          case ACTION_PIPE:
+        while (dup2(child_pipe_[i], i) < 0) {
+          if (!retry(errno)) {
+            _exit(1);
+          }
+        }
+        close(child_pipe_[i]);
+        child_pipe_[i] = -1;
+        break;
+    
+    /**
+ * \ingroup CXX11_NeuralNetworks_Module
+ * \brief Template functor to clip the magnitude of the first scalar.
+ *
+ * \sa class CwiseBinaryOp, MatrixBase::Clip
+ */
+template <typename Scalar>
+struct scalar_clip_op {
+  EIGEN_EMPTY_STRUCT_CTOR(scalar_clip_op)
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const Scalar
+  operator()(const Scalar& a, const Scalar& b) const {
+    return numext::mini(numext::maxi(a, -b), b);
+  }
+  template <typename Packet>
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const Packet
+  packetOp(const Packet& a, const Packet& b) const {
+    return internal::pmin(internal::pmax(a, internal::pnegate(b)), b);
+  }
+};
+    
+    #endif  // TENSORFLOW_COMMON_RUNTIME_SYCL_SYCL_DEVICE_CONTEXT_H_
 
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    #include <memory>
+#include 'tensorflow/core/framework/reader_base.h'
+#include 'tensorflow/core/framework/reader_op_kernel.h'
+#include 'tensorflow/core/lib/core/errors.h'
+#include 'tensorflow/core/lib/io/record_reader.h'
+#include 'tensorflow/core/lib/strings/strcat.h'
+#include 'tensorflow/core/platform/env.h'
+    
+    template <class T>
+class DynamicStitchOpImplBase : public OpKernel {
+ public:
+  explicit DynamicStitchOpImplBase(OpKernelConstruction* c,
+                                   const string& op_name)
+      : OpKernel(c) {
+    // Compute expected input signature
+    const DataType dt = DataTypeToEnum<T>::v();
+    const int n = c->num_inputs() / 2;
+    DataTypeVector expected;
+    for (int i = 0; i < n; i++) {
+      expected.push_back(DT_INT32);
+    }
+    for (int i = 0; i < n; i++) {
+      expected.push_back(dt);
+    }
+    OP_REQUIRES_OK(c, c->MatchSignature(expected, {dt}));
+    OP_REQUIRES(c, c->num_inputs() > 0,
+                errors::InvalidArgument(op_name + ': Must have some inputs'));
+    OP_REQUIRES(c, c->num_inputs() % 2 == 0,
+                errors::InvalidArgument(
+                    op_name + ': Must have even number of arguments'));
+  }
+    }
+    
+    #undef REGISTER_GPU
+    
+        D3D_FEATURE_LEVEL featureLevels[] =
+    {
+        D3D_FEATURE_LEVEL_11_0,
+        D3D_FEATURE_LEVEL_10_1,
+        D3D_FEATURE_LEVEL_10_0,
+    };
+    UINT numFeatureLevels = ARRAYSIZE(featureLevels);
+    
+    #include 'precomp.hpp'
+    
+                static __device__ __forceinline__ int atomicMin(int* address, int val)
+            {
+                return ::atomicMin(address, val);
+            }
+            static __device__ __forceinline__ float atomicMin(float* address, float val)
+            {
+            #if __CUDA_ARCH__ >= 120
+                int* address_as_i = (int*) address;
+                int old = *address_as_i, assumed;
+                do {
+                    assumed = old;
+                    old = ::atomicCAS(address_as_i, assumed,
+                        __float_as_int(::fminf(val, __int_as_float(assumed))));
+                } while (assumed != old);
+                return __int_as_float(old);
+            #else
+                (void) address;
+                (void) val;
+                return 0.0f;
+            #endif
+            }
+            static __device__ __forceinline__ double atomicMin(double* address, double val)
+            {
+            #if __CUDA_ARCH__ >= 130
+                unsigned long long int* address_as_ull = (unsigned long long int*) address;
+                unsigned long long int old = *address_as_ull, assumed;
+                do {
+                    assumed = old;
+                    old = ::atomicCAS(address_as_ull, assumed,
+                        __double_as_longlong(::fmin(val, __longlong_as_double(assumed))));
+                } while (assumed != old);
+                return __longlong_as_double(old);
+            #else
+                (void) address;
+                (void) val;
+                return 0.0;
+            #endif
+            }
+    
+    namespace cv { namespace cuda { namespace device
+{
+    template <class T>
+    __device__ __forceinline__ T warp_reduce(volatile T *ptr , const unsigned int tid = threadIdx.x)
+    {
+        const unsigned int lane = tid & 31; // index of thread in warp (0..31)
+    }
+    }
+    }
+    }
+    
+    #if defined(_WIN32)
+#include <windows.h>
+    
+      /// Cancels one asynchronous operation that is waiting on the timer.
+  /**
+   * This function forces the completion of one pending asynchronous wait
+   * operation against the timer. Handlers are cancelled in FIFO order. The
+   * handler for the cancelled operation will be invoked with the
+   * boost::asio::error::operation_aborted error code.
+   *
+   * Cancelling the timer does not change the expiry time.
+   *
+   * @return The number of asynchronous operations that were cancelled. That is,
+   * either 0 or 1.
+   *
+   * @throws boost::system::system_error Thrown on failure.
+   *
+   * @note If the timer has already expired when cancel_one() is called, then
+   * the handlers for asynchronous wait operations will:
+   *
+   * @li have already been invoked; or
+   *
+   * @li have been queued for invocation in the near future.
+   *
+   * These handlers can no longer be cancelled, and therefore are passed an
+   * error code that indicates the successful completion of the wait operation.
+   */
+  std::size_t cancel_one()
+  {
+    boost::system::error_code ec;
+    std::size_t s = this->service.cancel_one(this->implementation, ec);
+    boost::asio::detail::throw_error(ec, 'cancel_one');
+    return s;
+  }
     
     namespace boost {
 namespace asio {
-namespace detail {
     }
     }
-    }
     
-        // Make a copy of the handler so that the memory can be deallocated before
-    // the upcall is made. Even if we're not about to make an upcall, a
-    // sub-object of the handler may be the true owner of the memory associated
-    // with the handler. Consequently, a local copy of the handler is required
-    // to ensure that any owning sub-object remains valid until after we have
-    // deallocated the memory here.
-    detail::binder2<Handler, boost::system::error_code, std::size_t>
-      handler(o->handler_, o->ec_, o->bytes_transferred_);
-    p.h = boost::asio::detail::addressof(handler.handler_);
-    p.reset();
-    
-    
-    {private:
-  Handler handler_;
-};
-    
-    #ifndef BOOST_ASIO_DETAIL_EVENT_HPP
-#define BOOST_ASIO_DETAIL_EVENT_HPP
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS) \
-  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
-typedef null_fenced_block fenced_block;
-#elif defined(__MACH__) && defined(__APPLE__)
-typedef macos_fenced_block fenced_block;
-#elif defined(__sun)
-typedef solaris_fenced_block fenced_block;
-#elif defined(__GNUC__) && defined(__arm__) \
-  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
-typedef gcc_arm_fenced_block fenced_block;
-#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
-typedef gcc_hppa_fenced_block fenced_block;
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-typedef gcc_x86_fenced_block fenced_block;
-#elif defined(__GNUC__) \
-  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
-  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
-  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
-typedef gcc_sync_fenced_block fenced_block;
-#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
-typedef win_fenced_block fenced_block;
-#else
-typedef null_fenced_block fenced_block;
-#endif
-    
-    template <typename Handler>
-inline void deallocate(void* p, std::size_t s, Handler& h)
-{
-#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
-  ::operator delete(p);
-#else
-  using boost::asio::asio_handler_deallocate;
-  asio_handler_deallocate(p, s, boost::asio::detail::addressof(h));
-#endif
-}
-    
-      // Find an entry in the map.
-  const_iterator find(const K& k) const
-  {
-    if (num_buckets_)
-    {
-      size_t bucket = calculate_hash_value(k) % num_buckets_;
-      const_iterator it = buckets_[bucket].first;
-      if (it == values_.end())
-        return it;
-      const_iterator end_it = buckets_[bucket].last;
-      ++end_it;
-      while (it != end_it)
-      {
-        if (it->first == k)
-          return it;
-        ++it;
-      }
-    }
-    return values_.end();
-  }
+    #include <boost/asio/detail/addressof.hpp>
+#include <boost/asio/detail/bind_handler.hpp>
+#include <boost/asio/detail/buffer_sequence_adapter.hpp>
+#include <boost/asio/detail/descriptor_ops.hpp>
+#include <boost/asio/detail/fenced_block.hpp>
+#include <boost/asio/detail/reactor_op.hpp>
     
     #include <boost/asio/detail/config.hpp>
     
-    #endif // BOOST_ASIO_DETAIL_IMPL_DEV_POLL_REACTOR_HPP
-
     
-    namespace boost {
-namespace asio {
-namespace detail {
+#define BOOST_ASIO_WRITE_HANDLER_CHECK( \
+    handler_type, handler) \
+  \
+  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
+      void(boost::system::error_code, std::size_t)) \
+    asio_true_handler_type; \
+  \
+  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
+      sizeof(boost::asio::detail::two_arg_handler_test( \
+          boost::asio::detail::clvref< \
+            asio_true_handler_type>(), \
+          static_cast<const boost::system::error_code*>(0), \
+          static_cast<const std::size_t*>(0))) == 1, \
+      'WriteHandler type requirements not met') \
+  \
+  typedef boost::asio::detail::handler_type_requirements< \
+      sizeof( \
+        boost::asio::detail::argbyv( \
+          boost::asio::detail::clvref< \
+            asio_true_handler_type>())) + \
+      sizeof( \
+        boost::asio::detail::lvref< \
+          asio_true_handler_type>()( \
+            boost::asio::detail::lvref<const boost::system::error_code>(), \
+            boost::asio::detail::lvref<const std::size_t>()), \
+        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
+    
+      // We now have a FlatBuffer that can be stored on disk or sent over a network.
+    
+    // A common interface for objects having comments in the source.
+// Return formatted comments to be inserted in generated code.
+struct CommentHolder {
+  virtual ~CommentHolder() {}
+  virtual grpc::string GetLeadingComments(const grpc::string prefix) const = 0;
+  virtual grpc::string GetTrailingComments(const grpc::string prefix) const = 0;
+  virtual std::vector<grpc::string> GetAllComments() const = 0;
+};
+    
+      std::string GetUsageString(const char *program_name) const;
+    
+    struct ToStringVisitor : public IterationVisitor {
+  std::string s;
+  void StartSequence() { s += '{ '; }
+  void EndSequence() { s += ' }'; }
+  void Field(size_t /*field_idx*/, size_t set_idx, ElementaryType /*type*/,
+             bool /*is_vector*/, const TypeTable * /*type_table*/,
+             const char *name, const uint8_t *val) {
+    if (!val) return;
+    if (set_idx) s += ', ';
+    if (name) {
+      s += name;
+      s += ': ';
     }
+  }
+  template<typename T> void Named(T x, const char *name) {
+    if (name)
+      s += name;
+    else
+      s += NumToString(x);
+  }
+  void UType(uint8_t x, const char *name) { Named(x, name); }
+  void Bool(bool x) { s += x ? 'true' : 'false'; }
+  void Char(int8_t x, const char *name) { Named(x, name); }
+  void UChar(uint8_t x, const char *name) { Named(x, name); }
+  void Short(int16_t x, const char *name) { Named(x, name); }
+  void UShort(uint16_t x, const char *name) { Named(x, name); }
+  void Int(int32_t x, const char *name) { Named(x, name); }
+  void UInt(uint32_t x, const char *name) { Named(x, name); }
+  void Long(int64_t x) { s += NumToString(x); }
+  void ULong(uint64_t x) { s += NumToString(x); }
+  void Float(float x) { s += NumToString(x); }
+  void Double(double x) { s += NumToString(x); }
+  void String(const struct String *str) {
+    EscapeString(str->c_str(), str->size(), &s, true);
+  }
+  void Unknown(const uint8_t *) { s += '(?)'; }
+  void StartVector() { s += '[ '; }
+  void EndVector() { s += ' ]'; }
+  void Element(size_t i, ElementaryType /*type*/,
+               const TypeTable * /*type_table*/, const uint8_t * /*val*/) {
+    if (i) s += ', ';
+  }
+};
+    
+      // Modify any parsing / output options used by the other functions.
+  void SetOptions(const IDLOptions &opts) { opts_ = opts; }
+    
+      // Create a FlatBuffer's `vector` from the `std::vector`.
+  std::vector<flatbuffers::Offset<Weapon>> weapons_vector;
+  weapons_vector.push_back(sword);
+  weapons_vector.push_back(axe);
+  auto weapons = builder.CreateVector(weapons_vector);
+    
+    
+    {  std::string &code = *code_ptr;
+  if (config != nullptr && config->first_line != nullptr) {
+    code += std::string(prefix) + std::string(config->first_line) + '\n';
+  }
+  std::string line_prefix =
+      std::string(prefix) +
+      ((config != nullptr && config->content_line_prefix != nullptr)
+           ? config->content_line_prefix
+           : '///');
+  for (auto it = dc.begin(); it != dc.end(); ++it) {
+    code += line_prefix + *it + '\n';
+  }
+  if (config != nullptr && config->last_line != nullptr) {
+    code += std::string(prefix) + std::string(config->last_line) + '\n';
+  }
+}
+    
+      for (auto file_it = filenames.begin(); file_it != filenames.end();
+       ++file_it) {
+    auto &filename = *file_it;
+    std::string contents;
+    if (!flatbuffers::LoadFile(filename.c_str(), true, &contents))
+      Error('unable to load file: ' + filename);
     }
-    }
     
+    #include 'flatbuffers/flatc.h'
     
+      virtual void onChokingEvent(const BtChokingEvent& event) CXX11_OVERRIDE {}
     
-    
-    
-    
-    
-        GLfloat                glVertices[] = {
-        aabb->lowerBound.x * mRatio, aabb->lowerBound.y * mRatio,
-        aabb->upperBound.x * mRatio, aabb->lowerBound.y * mRatio,
-        aabb->upperBound.x * mRatio, aabb->upperBound.y * mRatio,
-        aabb->lowerBound.x * mRatio, aabb->upperBound.y * mRatio
-    };
-    
-    class BulletTest : public Test
+    AbstractProxyRequestCommand::AbstractProxyRequestCommand(
+    cuid_t cuid, const std::shared_ptr<Request>& req,
+    const std::shared_ptr<FileEntry>& fileEntry, RequestGroup* requestGroup,
+    DownloadEngine* e, const std::shared_ptr<Request>& proxyRequest,
+    const std::shared_ptr<SocketCore>& s)
+    : AbstractCommand(cuid, req, fileEntry, requestGroup, e, s),
+      proxyRequest_(proxyRequest),
+      httpConnection_(std::make_shared<HttpConnection>(
+          cuid, s, std::make_shared<SocketRecvBuffer>(s)))
 {
-public:
-    }
+  setTimeout(std::chrono::seconds(getOption()->getAsInt(PREF_CONNECT_TIMEOUT)));
+  disableReadCheckSocket();
+  setWriteCheckSocket(getSocket());
+}
     
-    std::vector<float> LinearlyAveragedLuma(const std::vector<float>& rgb) {
-  assert(rgb.size() % 3 == 0);
-  std::vector<float> y(rgb.size() / 3);
-  for (size_t i = 0, p = 0; p < rgb.size(); ++i, p += 3) {
-    y[i] = LinearToGamma(RGBToY(GammaToLinear(rgb[p + 0]),
-                                GammaToLinear(rgb[p + 1]),
-                                GammaToLinear(rgb[p + 2])));
+    class HttpConnection;
+class SocketCore;
+    
+    void AnnounceTier::nextEvent()
+{
+  switch (event) {
+  case STARTED:
+    event = DOWNLOADING;
+    break;
+  case STARTED_AFTER_COMPLETION:
+    event = SEEDING;
+    break;
+  case STOPPED:
+    event = HALTED;
+    break;
+  case COMPLETED:
+    event = SEEDING;
+    break;
+  default:
+    break;
   }
-  return y;
 }
     
     
-    {}  // namespace guetzli
+    {} // namespace aria2
     
-    namespace guetzli {
-    }
+    #include 'Notifier.h'
     
-    #endif  // GUETZLI_IDCT_H_
-
-    
-    // Single pixel rgb to 16-bit yuv conversion.
-// The returned yuv values are signed integers in the
-// range [-128, 127] inclusive.
-inline static void RGBToYUV16(const uint8_t* const rgb,
-                              coeff_t *out) {
-  enum { FRAC = 16, HALF = 1 << (FRAC - 1) };
-  const int r = rgb[0];
-  const int g = rgb[1];
-  const int b = rgb[2];
-  out[0] = (19595 * r  + 38469 * g +  7471 * b - (128 << 16) + HALF) >> FRAC;
-  out[64] = (-11059 * r - 21709 * g + 32768 * b + HALF - 1) >> FRAC;
-  out[128] = (32768 * r  - 27439 * g -  5329 * b + HALF - 1) >> FRAC;
-}
-    
-      if (!args[2]->IsObject()) {
-    return scope.Close(Boolean::New(false));
-  }
-    
-    
-    {  // if dir is a file, returns IOError
-  ASSERT_OK(env_->CreateDir(test_dir_));
-  unique_ptr<WritableFile> writable_file;
-  ASSERT_OK(
-      env_->NewWritableFile(test_dir_ + '/file', &writable_file, soptions_));
-  ASSERT_OK(writable_file->Close());
-  writable_file.reset();
-  ASSERT_TRUE(!env_->GetChildren(test_dir_ + '/file', &children).ok());
-  ASSERT_EQ(0U, children.size());
-}
-    
-    class StringAppendOperator : public AssociativeMergeOperator {
- public:
-  // Constructor: specify delimiter
-  explicit StringAppendOperator(char delim_char);
-    }
-    
-     private:
-  // A version of PartialMerge that actually performs 'partial merging'.
-  // Use this to simulate the exact behaviour of the StringAppendOperator.
-  bool _AssocPartialMergeMulti(const Slice& key,
-                               const std::deque<Slice>& operand_list,
-                               std::string* new_value, Logger* logger) const;
-    
-    #ifndef ROCKSDB_LITE
-#include 'redis_lists.h'
-    
-    namespace log {
-    }
-    
-    void JniCallback::releaseJniEnv(jboolean& attached) const {
-  JniUtil::releaseJniEnv(m_jvm, attached);
-}
-    
-    
-    {      if (r == 0) {
-        _buffer.clear();
-        _buffer_size = 0;
-        _file_size = size;
-      }
-    } else if (_file_size == size) {
-      _buffer.clear();
-      _buffer_size = 0;
-    } else {
-      librados::bufferlist tmp;
-      tmp.claim(_buffer);
-      _buffer.substr_of(tmp, 0, size - _file_size);
-      _buffer_size = size - _file_size;
-    }
-    
-    // Return an iterator that provided the union of the data in
-// children[0,n-1].  Takes ownership of the child iterators and
-// will delete them when the result iterator is deleted.
-//
-// The result does no duplicate suppression.  I.e., if a particular
-// key is present in K child iterators, it will be yielded K times.
-//
-// REQUIRES: n >= 0
-extern InternalIterator* NewMergingIterator(
-    const InternalKeyComparator* comparator, InternalIterator** children, int n,
-    Arena* arena = nullptr, bool prefix_seek_mode = false);
-    
-    struct {
-#define FUZZER_DEPRECATED_FLAG(Name)
-#define FUZZER_FLAG_INT(Name, Default, Description) int Name;
-#define FUZZER_FLAG_UNSIGNED(Name, Default, Description) unsigned int Name;
-#define FUZZER_FLAG_STRING(Name, Description) const char *Name;
-#include 'FuzzerFlags.def'
-#undef FUZZER_DEPRECATED_FLAG
-#undef FUZZER_FLAG_INT
-#undef FUZZER_FLAG_UNSIGNED
-#undef FUZZER_FLAG_STRING
-} Flags;
-    
-    std::string Hash(const Unit &U);
-    
-    ATTRIBUTE_NO_SANITIZE_MEMORY
-void TracePC::AddValueForMemcmp(void *caller_pc, const void *s1, const void *s2,
-                              size_t n) {
-  if (!n) return;
-  size_t Len = std::min(n, (size_t)32);
-  const uint8_t *A1 = reinterpret_cast<const uint8_t *>(s1);
-  const uint8_t *A2 = reinterpret_cast<const uint8_t *>(s2);
-  size_t I = 0;
-  for (; I < Len; I++)
-    if (A1[I] != A2[I])
-      break;
-  size_t PC = reinterpret_cast<size_t>(caller_pc);
-  size_t Idx = I;
-  // if (I < Len)
-  //  Idx += __builtin_popcountl((A1[I] ^ A2[I])) - 1;
-  TPC.HandleValueProfile((PC & 4095) | (Idx << 12));
-}
-    
-      void HandleTrace(uint32_t *guard, uintptr_t PC);
-  void HandleInit(uint32_t *start, uint32_t *stop);
-  void HandleCallerCallee(uintptr_t Caller, uintptr_t Callee);
-  void HandleValueProfile(size_t Value) { ValueProfileMap.AddValue(Value); }
-  template <class T> void HandleCmp(void *PC, T Arg1, T Arg2);
-  size_t GetTotalPCCoverage();
-  void SetUseCounters(bool UC) { UseCounters = UC; }
-  void SetUseValueProfile(bool VP) { UseValueProfile = VP; }
-  void SetPrintNewPCs(bool P) { DoPrintNewPCs = P; }
-  template <class Callback> size_t CollectFeatures(Callback CB);
-  bool UpdateValueProfileMap(ValueBitMap *MaxValueProfileMap) {
-    return UseValueProfile && MaxValueProfileMap->MergeFrom(ValueProfileMap);
-  }
+    AuthConfig::~AuthConfig() = default;
