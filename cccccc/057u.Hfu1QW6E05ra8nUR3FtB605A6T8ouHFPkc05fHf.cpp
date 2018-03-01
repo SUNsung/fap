@@ -1,223 +1,184 @@
 
         
-        template <class T>
-struct DereferencingComparator { bool operator()(const T a, const T b) const { return *a < *b; } };
+          /// Build the components of an Objective-C method descriptor for the given
+  /// property's method implementations.
+  void emitObjCGetterDescriptorParts(IRGenModule &IGM,
+                                     VarDecl *property,
+                                     llvm::Constant *&selectorRef,
+                                     llvm::Constant *&atEncoding,
+                                     llvm::Constant *&impl);
     
-        // Finish and check for builder errors
-    if (s.ok()) {
-      s = builder->Finish();
-      if (s.ok()) {
-        meta->file_size = builder->FileSize();
-        assert(meta->file_size > 0);
-      }
-    } else {
-      builder->Abandon();
-    }
-    delete builder;
+    class SILBasicBlock;
+class SILInstruction;
+class SILModule;
+class SILValue;
+class DeadEndBlocks;
     
-    #include <stdint.h>
-#include 'leveldb/db.h'
-#include 'db/dbformat.h'
     
-    Iterator* TableCache::NewIterator(const ReadOptions& options,
-                                  uint64_t file_number,
-                                  uint64_t file_size,
-                                  Table** tableptr) {
-  if (tableptr != NULL) {
-    *tableptr = NULL;
+    {} // end namespace swift
+    
+    #ifndef LLVM_SOURCEKIT_LIB_SWIFTLANG_SWIFTEDITORDIAGCONSUMER_H
+#define LLVM_SOURCEKIT_LIB_SWIFTLANG_SWIFTEDITORDIAGCONSUMER_H
+    
+    // Prints a value tersely: for a reference type, the referenced value
+// (but not the address) is printed; for a (const) char pointer, the
+// NUL-terminated string (but not the pointer) is printed.
+    
+    // ArrayEq() compares two k-dimensional native arrays using the
+// elements' operator==, where k can be any integer >= 0.  When k is
+// 0, ArrayEq() degenerates into comparing a single pair of values.
+    
+    // This is used internally by all instances of linked_ptr<>.  It needs to be
+// a non-template class because different types of linked_ptr<> can refer to
+// the same object (linked_ptr<Superclass>(obj) vs linked_ptr<Subclass>(obj)).
+// So, it needs to be possible for different types of linked_ptr to participate
+// in the same circular linked list, so we need a single class type here.
+//
+// DO NOT USE THIS CLASS DIRECTLY YOURSELF.  Use linked_ptr<T>.
+class linked_ptr_internal {
+ public:
+  // Create a new circle that includes only this instance.
+  void join_new() {
+    next_ = this;
   }
     }
     
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14>
+class ValueArray14 {
+ public:
+  ValueArray14(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14) : v1_(v1), v2_(v2), v3_(v3),
+      v4_(v4), v5_(v5), v6_(v6), v7_(v7), v8_(v8), v9_(v9), v10_(v10),
+      v11_(v11), v12_(v12), v13_(v13), v14_(v14) {}
+    }
     
-    {  for (size_t i = 0; i < new_files_.size(); i++) {
-    const FileMetaData& f = new_files_[i].second;
-    PutVarint32(dst, kNewFile);
-    PutVarint32(dst, new_files_[i].first);  // level
-    PutVarint64(dst, f.number);
-    PutVarint64(dst, f.file_size);
-    PutLengthPrefixedSlice(dst, f.smallest.Encode());
-    PutLengthPrefixedSlice(dst, f.largest.Encode());
-  }
-}
+      virtual ~ParamGeneratorInterface() {}
     
+    #if GTEST_OS_WINDOWS
     
-    {  bool Overlaps(const char* smallest, const char* largest) {
-    InternalKeyComparator cmp(BytewiseComparator());
-    Slice s(smallest != NULL ? smallest : '');
-    Slice l(largest != NULL ? largest : '');
-    return SomeFileOverlapsRange(cmp, disjoint_sorted_files_, files_,
-                                 (smallest != NULL ? &s : NULL),
-                                 (largest != NULL ? &l : NULL));
-  }
+      // Creates a UTF-16 wide string from the given ANSI string, allocating
+  // memory using new. The caller is responsible for deleting the return
+  // value using delete[]. Returns the wide string, or NULL if the
+  // input is NULL.
+  //
+  // The wide string is created using the ANSI codepage (CP_ACP) to
+  // match the behaviour of the ANSI versions of Win32 calls and the
+  // C runtime.
+  static LPCWSTR AnsiToUtf16(const char* c_str);
+    
+      template <GTEST_8_TYPENAMES_(U)>
+  tuple(const GTEST_8_TUPLE_(U)& t) : f0_(t.f0_), f1_(t.f1_), f2_(t.f2_),
+      f3_(t.f3_), f4_(t.f4_), f5_(t.f5_), f6_(t.f6_), f7_(t.f7_) {}
+    
+    // Known limitations: we don't support passing an
+// std::tr1::reference_wrapper<T> to make_tuple().  And we don't
+// implement tie().
+    
+    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
+    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
+    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
+    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
+    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
+    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
+    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
+    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
+    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
+    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29, GTEST_TEMPLATE_ T30,
+    GTEST_TEMPLATE_ T31>
+struct Templates31 {
+  typedef TemplateSel<T1> Head;
+  typedef Templates30<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
+      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+      T29, T30, T31> Tail;
 };
     
-    WriteBatch::Handler::~Handler() { }
+    namespace osquery {
+/**
+ * @brief Create the external SQLite implementation wrapper.
+ *
+ * Anything built with only libosquery and not the 'additional' library will
+ * not include a native SQL implementation. This applies to extensions and
+ * separate applications built with the osquery SDK.
+ *
+ * The ExternalSQLPlugin is a wrapper around the SQLite API, which forwards
+ * calls to an osquery extension manager (core).
+ */
+REGISTER_INTERNAL(ExternalSQLPlugin, 'sql', 'sql');
+    }
     
-    
-    {    status = sqlite3_finalize(read_stmt);
-    ErrorCheck(status);
-    status = sqlite3_finalize(begin_trans_stmt);
-    ErrorCheck(status);
-    status = sqlite3_finalize(end_trans_stmt);
-    ErrorCheck(status);
+      Status s;
+  for (const auto& p : paths_) {
+    s = carve.carve(fs::path(p));
+    EXPECT_TRUE(s.ok());
   }
     
-    // Return a builtin comparator that uses lexicographic byte-wise
-// ordering.  The result remains the property of this module and
-// must not be deleted.
-extern const Comparator* BytewiseComparator();
+    /**
+ * @brief Iterate the discovered decorators for a given point type.
+ *
+ * The configuration maintains various sources, each may contain a set of
+ * decorators. The source tracking is abstracted for the decorator iterator.
+ *
+ * @param point request execution of decorators for this given point.
+ * @param time an optional time for points using intervals.
+ * @param source restrict run to a specific config source.
+ */
+void runDecorators(DecorationPoint point,
+                   size_t time = 0,
+                   const std::string& source = '');
     
-    QueryData genKernelIntegrity(QueryContext &context) {
-  QueryData results;
-  Row r;
-  std::string content;
-  std::string text_segment_hash;
-  std::string syscall_addr_modified;
+    TEST_F(ViewsConfigParserPluginTests, test_swap_view) {
+  Config c;
+  std::vector<std::string> old_views_vec;
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  old_views_vec.clear();
+  auto s = c.update(getTestConfigMap('view_test.conf'));
+  EXPECT_TRUE(s.ok());
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  EXPECT_EQ(old_views_vec[0], 'config_views.kernel_hashes_new');
     }
     
-    class InternalRunnable : private boost::noncopyable,
-                         public InterruptableRunnable {
- public:
-  InternalRunnable(const std::string& name) : run_(false), name_(name) {}
-  virtual ~InternalRunnable() override = default;
-    }
+      std::vector<std::string> conf_files;
+  resolveFilePattern(FLAGS_config_path + '.d/%.conf', conf_files);
+  std::sort(conf_files.begin(), conf_files.end());
+  conf_files.push_back(FLAGS_config_path);
     
     
-    {// Remove registry-helper macros from the SDK.
-#undef REGISTER
-#define REGISTER 'Do not REGISTER in the osquery SDK'
-#undef REGISTER_INTERNAL
-#define REGISTER_INTERNAL 'Do not REGISTER_INTERNAL in the osquery SDK'
-#undef CREATE_REGISTRY
-#define CREATE_REGISTRY 'Do not CREATE_REGISTRY in the osquery SDK'
-#undef CREATE_LAZY_REGISTRY
-#define CREATE_LAZY_REGISTRY 'Do not CREATE_LAZY_REGISTRY in the osquery SDK'
-}
+    {// Enable LOG(CONSOLE) for print messages to console.
+#define LOG_CONSOLE ::xgboost::ConsoleLogger()
+// Enable LOG(TRACKER) for print messages to tracker
+#define LOG_TRACKER ::xgboost::TrackerLogger()
+}  // namespace xgboost.
+#endif  // XGBOOST_LOGGING_H_
 
+    
+        c.type = type_[fid];
+    const size_t block_offset = boundary_[fid].index_begin / packing_factor_;
+    const size_t elem_offset = boundary_[fid].index_begin % packing_factor_;
+    c.index = reinterpret_cast<const T*>(&index_[block_offset]) + elem_offset;
+    c.index_base = index_base_[fid];
+    c.row_ind = &row_ind_[boundary_[fid].row_ind_begin];
+    c.len = boundary_[fid].index_end - boundary_[fid].index_begin;
+    
+    #include 'rocksdb/db.h'
+#include 'rocksdb/slice.h'
+#include 'rocksdb/options.h'
+    
+      // Whether this is a recycled log file
+  bool recycled_;
     
       /**
-   * @brief A synonym for osquery::Status::getMessage()
-   *
-   * @see getMessage()
+   * @brief Get file size
+   * @details
+   *  This API will use cached file_size.
+   * @return [description]
    */
-  std::string toString() const { return getMessage(); }
-  std::string what() const { return getMessage(); }
-    
-    #endif // __cocos2dx_builder_h__
-
-    
-        return 0;
-}
-int lua_cocos2dx_cocosdenshion_SimpleAudioEngine_preloadEffect(lua_State* tolua_S)
-{
-    int argc = 0;
-    CocosDenshion::SimpleAudioEngine* cobj = nullptr;
-    bool ok  = true;
-    
-    
-    
-    
-    
-    
-    
-    			bd.position.Set(1.0f, 0.4f);
-			m_wheel2 = m_world->CreateBody(&bd);
-			m_wheel2->CreateFixture(&fd);
-    
-    #include <string>
-#include <vector>
-    
-    #include <vector>
-#include <string>
-    
-    static int stb_not_crap(int best, int dist)
-{
-    return   ((best > 2  &&  dist <= 0x00100)     
-        || (best > 5  &&  dist <= 0x04000)
-        || (best > 7  &&  dist <= 0x80000));
-}
-    
-    
-    {        // Rendering
-        al_clear_to_color(al_map_rgba_f(clear_color.x, clear_color.y, clear_color.z, clear_color.w));
-        ImGui::Render();
-        al_flip_display();
+  uint64_t GetFileSize() {
+    LOG_DEBUG('%lld|%lld\n', (long long)_buffer_size, (long long)_file_size);
     }
     
-    void CleanupDeviceD3D()
-{
-    CleanupRenderTarget();
-    if (g_pSwapChain) { g_pSwapChain->Release(); g_pSwapChain = NULL; }
-    if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = NULL; }
-}
     
-    IMGUI_API bool        ImGui_ImplSdlGL2_Init(SDL_Window* window);
-IMGUI_API void        ImGui_ImplSdlGL2_Shutdown();
-IMGUI_API void        ImGui_ImplSdlGL2_NewFrame(SDL_Window* window);
-IMGUI_API bool        ImGui_ImplSdlGL2_ProcessEvent(SDL_Event* event);
-    
-    int main(int, char**)
-{
-    // Setup SDL
-    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) != 0)
-    {
-        printf('Error: %s\n', SDL_GetError());
-        return -1;
-    }
-    }
-    
-            // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
-        if (show_demo_window)
-        {
-            ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-            ImGui::ShowDemoWindow(&show_demo_window);
-        }
-    
-            D3DCompile(vertexShader, strlen(vertexShader), NULL, NULL, NULL, 'main', 'vs_4_0', 0, 0, &g_pVertexShaderBlob, NULL);
-        if (g_pVertexShaderBlob == NULL) // NB: Pass ID3D10Blob* pErrorBlob to D3DCompile() to get error showing in (const char*)pErrorBlob->GetBufferPointer(). Make sure to Release() the blob!
-            return false;
-        if (g_pd3dDevice->CreateVertexShader((DWORD*)g_pVertexShaderBlob->GetBufferPointer(), g_pVertexShaderBlob->GetBufferSize(), NULL, &g_pVertexShader) != S_OK)
-            return false;
-    
-    bool nextConnection(int tid)
-{
-    m.lock();
-    int socketfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (socketfd == -1) {
-        cout << 'FD error, connections: ' << connections << endl;
-        return false;
-    }
-    }
-    
-        if (connections % 1000 == 0 || connections < 1000) {
-        cout << 'Connections: ' << connections << endl;
-    }
-    
-    namespace uS {
-    }
-    
-        // Not thread safe
-    void sendPrepared(PreparedMessage *preparedMessage, void *callbackData = nullptr);
-    static void finalizeMessage(PreparedMessage *preparedMessage);
-    void close(int code = 1000, const char *message = nullptr, size_t length = 0);
-    void transfer(Group<isServer> *group);
-    
-    template <bool isServer>
-void *Group<isServer>::getUserData() {
-    return userData;
-}
-    
-                th.onMessage([&tServerGroup, &client, &receivedMessages, &clientGroup, &m, &transferred](uWS::WebSocket<uWS::SERVER> *ws, char *message, size_t length, uWS::OpCode opCode) {
-                if (!transferred) {
-                    std::cout << 'FAILURE: onTransfer was not triggered in time' << std::endl;
-                    exit(-1);
-                }
-    }
-    
-        const int HEADER_LENGTH = WebSocketProtocol<!isServer, WebSocket<!isServer>>::LONG_MESSAGE_HEADER;
-    
-        static Loop *createLoop(bool defaultLoop = true) {
-        return new Loop(defaultLoop);
-    }
-    
-    #endif // EXTENSIONS_UWS_H
+    {}  // namespace rocksdb
