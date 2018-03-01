@@ -1,80 +1,72 @@
 
         
-        
-    {    def replace_escaping(less)
-      less = less.gsub(/~'([^']+)'/, '\1').gsub(/~'([^']+)'/, '\1') # Get rid of ~'' escape
-      less.gsub!(/\$\{([^}]+)\}/, '$\1') # Get rid of @{} escape
-      less.gsub!(/'([^'\n]*)(\$[\w\-]+)([^'\n]*)'/, ''\1#{\2}\3'') # interpolate variable in string, e.g. url('$file-1x') => url('#{$file-1x}')
-      less.gsub(/(\W)e\(%\('?([^']*)'?\)\)/, '\1\2') # Get rid of e(%('')) escape
-    end
-    
-      # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
-end
-
-    
-          File.open('bower.json', 'w') do |f|
-        f.puts JSON.pretty_generate(spec)
-      end
-    end
-  end
-end
-
-    
-    begin
-  require 'escape_utils'
-rescue LoadError
-end
-    
-      context 'with custom session key' do
-    it 'denies requests with duplicate session cookies' do
-      mock_app do
-        use Rack::Protection::CookieTossing, :session_key => '_session'
-        run DummyApp
-      end
-    
-            post '/', :file => Rack::Test::UploadedFile.new(temp_file.path), :other => '<bar>'
-        expect(body).to eq('_escaped_params_tmp_file\nhello world\n&lt;bar&gt;')
-      ensure
-        File.unlink(temp_file.path)
-      end
-    end
-  end
-end
-
-    
-      it 'passes errors through if :reaction => :report is used' do
-    mock_app do
-      use Rack::Protection, :reaction => :report
-      run proc { |e| [200, {'Content-Type' => 'text/plain'}, [e['protection.failed'].to_s]] }
-    end
-    
-      it 'accepts requests with a changing Version header'do
-    session = {:foo => :bar}
-    get '/', {}, 'rack.session' => session, 'HTTP_VERSION' => '1.0'
-    get '/', {}, 'rack.session' => session, 'HTTP_VERSION' => '1.1'
-    expect(session[:foo]).to eq(:bar)
-  end
-end
-
-    
-      # Run specs in random order to surface order dependencies. If you find an
-  # order dependency and want to debug it, you can fix the order by providing
-  # the seed, which is printed after each run.
-  #     --seed 1234
-  config.order = :random
-    
-            private
-    
-        def self.each_definition(&block)
-      instance.each_definition(&block)
-    end
-    
-        def path
-      @file.respond_to?(:path) ? @file.path : @file
-    end
-    
-            def failure_message_when_negated
-          'Attachment #{@attachment_name} cannot be between #{@low} and #{@high} bytes'
+              # Renders the template using the class intance as the binding. Because the
+      # renderer inherits from `OpenStruct`, additional view variables can be
+      # added like normal accessors.
+      #
+      # @return [String]
+      def render
+        old_template = template
+        result = nil
+        File.open(full_template_path, 'r') do |f|
+          self.template = f.read
+          result = render_string
         end
-        alias negative_failure_message failure_message_when_negated
+    
+    module Metasploit
+  module Framework
+    class Application < Rails::Application
+      include Metasploit::Framework::CommonEngine
+    
+        inp.attributes.keys.each do |ikey|
+      if (ikey.downcase == 'value')
+        inp[ikey] = ''
+        next
+      end
+    
+          when :banner
+        # Because some ftp server send multiple banner we take only the first one and ignore the rest
+        if not (s[:info])
+          s[:info] = matches
+          report_service(s)
+        end
+    
+      def parse(pkt)
+    # We want to return immediantly if	we do not have a packet which is handled by us
+    return unless pkt.is_tcp?
+    return if (pkt.tcp_sport != 80 and pkt.tcp_dport != 80)
+    s = find_session((pkt.tcp_sport == 80) ? get_session_src(pkt) : get_session_dst(pkt))
+    
+    puts '* Initializing Meterpreter'
+    
+    classNames.each { |name|
+	filesIn << clsFile.new_with_sig('Ljava.lang.String;', '#{outputDir}/#{name}.class')
+}
+    
+    outputJar = 'output.jar'
+    
+        @execve      = ''
+    @getpeername = ''
+    @accept      = ''
+    @listen      = ''
+    @bind        = ''
+    @socket      = ''
+    @connect     = ''
+    @close       = ''
+    @kfcntl      = ''
+    
+    	def initialize(filename)
+		unless filename.empty?
+			self.file = File.new(filename)
+		else
+			self.file = STDIN
+		end
+    
+        # Remove directories opposite from traversal, so that a subtree with no
+    # actual files gets removed correctly.
+    dirs.reverse_each do |d|
+      if d.children.empty?
+        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
+        d.rmdir
+      end
+    end
