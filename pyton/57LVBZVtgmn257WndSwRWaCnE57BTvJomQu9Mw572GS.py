@@ -1,24 +1,84 @@
 
         
-            def score(self):
-        min_over = sys.MAXSIZE
-        max_under = -sys.MAXSIZE
-        for score in self.possible_scores():
-            if self.BLACKJACK < score < min_over:
-                min_over = score
-            elif max_under < score <= self.BLACKJACK:
-                max_under = score
-        return max_under if max_under != -sys.MAXSIZE else min_over
+        from landscape_api.base import API, HTTPError
+    
+    # (c) 2015, Marc Abramowitz <marca@surveymonkey.com>
+#
+# This file is part of Ansible.
+#
+# Ansible is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Ansible is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Ansible. If not, see <http://www.gnu.org/licenses/>.
     
     
-class LinkedList(object):
+def secure_hash_s(data, hash_func=sha1):
+    ''' Return a secure hash hex digest of data. '''
     
-        def can_fit_in_spot(self, spot):
-        return True
+        path = os.path.join(os.environ['HOME'], '.shippable.key')
     
-        def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
+    
+def jsonify(result, format=False):
+    ''' format JSON output (uncompressed or uncompressed) '''
+    
+        def __init__(self, galaxy):
+        self.galaxy = galaxy
+        self.token = GalaxyToken()
+        self._api_server = C.GALAXY_SERVER
+        self._validate_certs = not galaxy.options.ignore_certs
+        self.baseurl = None
+        self.version = None
+        self.initialized = False
+    
+            expected = {
+            'description': 'foo_url_map description',
+            'hostRules': [
+                {
+                    'description': 'host rules description',
+                    'hosts': [
+                        'www.example.com',
+                        'www2.example.com'
+                    ],
+                    'pathMatcher': 'host_rules_path_matcher'
+                }
+            ],
+            'name': 'foo_url_map_name',
+            'pathMatchers': [
+                {
+                    'defaultService': 'bes-pathmatcher-one-default',
+                    'description': 'path matcher one',
+                    'name': 'path_matcher_one',
+                    'pathRules': [
+                        {
+                            'paths': [
+                                '/',
+                                '/aboutus'
+                            ],
+                            'service': 'my-one-bes'
+                        }
+                    ]
+                },
+                {
+                    'defaultService': 'bes-pathmatcher-two-default',
+                    'description': 'path matcher two',
+                    'name': 'path_matcher_two',
+                    'pathRules': [
+                        {
+                            'paths': [
+                                '/webapp',
+                                '/graphs'
+                            ],
+                            'service': 'my-two-bes'
+                        }
+                    ]
+                }
+            ]
+        }
