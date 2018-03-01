@@ -1,82 +1,140 @@
 
         
-            infile, outfile = args
+            with open('README.md', 'w+') as sorted_file:
+        # Then all of the blocks are sorted individually
+        blocks = [''.join(sorted(block, key=lambda s: s.lower())) for block in blocks]
+        # And the result is written back to README.md
+        sorted_file.write(''.join(blocks))
     
-    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    # Add any paths that contain custom static files (such as style sheets) here,
+# relative to this directory. They are copied after the builtin static files,
+# so a file named 'default.css' will overwrite the builtin 'default.css'.
+html_static_path = ['_static']
     
-        def assertMatch(self, url, ie_list):
-        self.assertEqual(self.matching_ies(url), ie_list)
-    
-    
-class ClipRsIE(OnetBaseIE):
-    _VALID_URL = r'https?://(?:www\.)?clip\.rs/(?P<id>[^/]+)/\d+'
-    _TEST = {
-        'url': 'http://www.clip.rs/premijera-frajle-predstavljaju-novi-spot-za-pesmu-moli-me-moli/3732',
-        'md5': 'c412d57815ba07b56f9edc7b5d6a14e5',
-        'info_dict': {
-            'id': '1488842.1399140381',
-            'ext': 'mp4',
-            'title': 'PREMIJERA Frajle predstavljaju novi spot za pesmu Moli me, moli',
-            'description': 'md5:56ce2c3b4ab31c5a2e0b17cb9a453026',
-            'duration': 229,
-            'timestamp': 1459850243,
-            'upload_date': '20160405',
-        }
-    }
-    
-    # The name of an image file (within the static path) to use as favicon of the
-# docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
-# pixels large.
-html_favicon = '_static/flask-favicon.ico'
-    
-        r = client.get('/world')
-    assert r.status_code == 200
+        with app.app_context():
+        init_db()
+        yield app
     
     
-def test_messages(client, app):
-    '''Test that messages work'''
-    login(client, app.config['USERNAME'],
-          app.config['PASSWORD'])
-    rv = client.post('/add', data=dict(
-        title='<Hello>',
-        text='<strong>HTML</strong> allowed here'
-    ), follow_redirects=True)
-    assert b'No entries here so far' not in rv.data
-    assert b'&lt;Hello&gt;' in rv.data
-    assert b'<strong>HTML</strong> allowed here' in rv.data
+@pytest.fixture
+def client():
+    db_fd, minitwit.app.config['DATABASE'] = tempfile.mkstemp()
+    client = minitwit.app.test_client()
+    with minitwit.app.app_context():
+        minitwit.init_db()
+    
+    # Dependency imports
+    
+      def setUp(self):
+    FLAGS.train_data = os.path.join(self.get_temp_dir() + 'test-text.txt')
+    FLAGS.eval_data = os.path.join(self.get_temp_dir() + 'eval-text.txt')
+    FLAGS.save_path = self.get_temp_dir()
+    with open(FLAGS.train_data, 'w') as f:
+      f.write(
+          '''alice was beginning to get very tired of sitting by her sister on
+          the bank, and of having nothing to do: once or twice she had peeped
+          into the book her sister was reading, but it had no pictures or
+          conversations in it, 'and what is the use of a book,' thought alice
+          'without pictures or conversations?' So she was considering in her own
+          mind (as well as she could, for the hot day made her feel very sleepy
+          and stupid), whether the pleasure of making a daisy-chain would be
+          worth the trouble of getting up and picking the daisies, when suddenly
+          a White rabbit with pink eyes ran close by her.\n''')
+      with open(FLAGS.eval_data, 'w') as f:
+        f.write('alice she rabbit once\n')
+    
+    import reader
+    
+    
+parser = argparse.ArgumentParser()
+parser.add_argument('--batch_size', default=100, type=int, help='batch size')
+parser.add_argument('--train_steps', default=1000, type=int,
+                    help='number of training steps')
+    
+    import graphs
+    
+        # Write
+    lm_seq_ser = lm_seq.seq.SerializeToString()
+    seq_ae_seq_ser = seq_ae_seq.seq.SerializeToString()
+    writer_lm_all.write(lm_seq_ser)
+    writer_seq_ae_all.write(seq_ae_seq_ser)
+    if not doc.is_validation:
+      writer_lm.write(lm_seq_ser)
+      writer_rev_lm.write(rev_lm_seq.seq.SerializeToString())
+      writer_seq_ae.write(seq_ae_seq_ser)
+    
+    
+if __name__ == '__main__':
+  tf.test.main()
 
     
-    # Make coding more python3-ish
-from __future__ import (absolute_import, division, print_function)
-__metaclass__ = type
+      @property
+  def length(self):
+    return self._batch.length
     
     
-class Galaxy(object):
-    ''' Keeps global galaxy info '''
+def optimize(loss,
+             global_step,
+             max_grad_norm,
+             lr,
+             lr_decay,
+             sync_replicas=False,
+             replicas_to_aggregate=1,
+             task_id=0):
+  '''Builds optimization graph.
     
-    # Documents to append as an appendix to all manuals.
-#latex_appendices = []
+    import tensorflow as tf
     
-    def sequential():
-    return list(map(is_prime, PRIMES))
+                self._state = CANCELLED
+            self._condition.notify_all()
+    
+    # The master toctree document.
+master_doc = 'index'
+    
+    def main():
+    for name, fn in [('sequential', sequential),
+                     ('processes', with_process_pool_executor),
+                     ('threads', with_thread_pool_executor)]:
+        sys.stdout.write('%s: ' % name.ljust(12))
+        start = time.time()
+        if fn() != [True] * len(PRIMES):
+            sys.stdout.write('failed\n')
+        else:
+            sys.stdout.write('%.2f seconds\n' % (time.time() - start))
     
     
-  # This is the blocking version of the method. See below for async.
-  # |timeout| is num seconds to tolerate no response from server before giving
-  # up; see Requests docs for details (we just pass the param along).
-  @staticmethod
-  def PostDataToHandler( data, handler, timeout = _READ_TIMEOUT_SEC ):
-    return JsonFromFuture( BaseRequest.PostDataToHandlerAsync( data,
-                                                               handler,
-                                                               timeout ) )
+class ShutdownRequest( BaseRequest ):
+  def __init__( self ):
+    super( BaseRequest, self ).__init__()
     
-          with HandleServerException( display = False ):
-        BaseRequest.GetDataFromHandler( 'healthy' )
-
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+  def _ThreadMain( self ):
+    while True:
+      time.sleep( self._ping_interval_seconds )
+    
+        @gen_test
+    def test_http10_no_content_length(self):
+        # Regression test for a bug in which can_keep_alive would crash
+        # for an HTTP/1.0 (not 1.1) response with no content-length.
+        conn = HTTP1Connection(self.client_stream, True)
+        self.server_stream.write(b'HTTP/1.0 200 Not Modified\r\n\r\nhello')
+        self.server_stream.close()
+    
+        If bucket depth is given, we break files up into multiple directories
+    to prevent hitting file system limits for number of files in each
+    directories. 1 means one level of directories, 2 means 2, etc.
+    '''
+    def __init__(self, root_directory, bucket_depth=0):
+        web.Application.__init__(self, [
+            (r'/', RootHandler),
+            (r'/([^/]+)/(.+)', ObjectHandler),
+            (r'/([^/]+)/', BucketHandler),
+        ])
+        self.directory = os.path.abspath(root_directory)
+        if not os.path.exists(self.directory):
+            os.makedirs(self.directory)
+        self.bucket_depth = bucket_depth
+    
+    
+if __name__ == '__main__':
+    main()
