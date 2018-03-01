@@ -1,184 +1,188 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
+        
+    {}  // namespace tensorflow
+
+    
+    
+    { private:
+  PluginId blas_, dnn_, fft_, rng_;
+};
+    
+    #include 'tensorflow/core/platform/platform.h'
+    
+    #include 'tensorflow/core/lib/strings/strcat.h'
+    
+    Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an 'AS IS' BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
     
+    sampled_audio: A rank-2 float tensor containing all tracks of the audio.
+    Dimension 0 is time and dimension 1 is the channel.
+file_format: A string or rank-0 string tensor describing the audio file
+    format. This value must be `'wav'`.
+samples_per_second: The number of samples per second that the audio should
+    have, as an int or rank-0 `int32` tensor. This value must be
+    positive.
+bits_per_second: The approximate bitrate of the encoded audio file, as
+    an int or rank-0 `int32` tensor. This is ignored by the 'wav' file
+    format.
+contents: The binary audio file contents, as a rank-0 string tensor.
+)doc');
+    
     Licensed under the Apache License, Version 2.0 (the 'License');
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
     
-    int SubProcess::Communicate(const string* stdin_input, string* stdout_output,
-                            string* stderr_output) {
-  struct pollfd fds[kNFds];
-  size_t nbytes[kNFds];
-  string* iobufs[kNFds];
-  int fd_count = 0;
+    #include 'precomp.hpp'
+#include 'opencv2/calib3d/calib3d_c.h'
+    
+    void ComputeJacobians(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
+                      const IntrinsicParams& param,  InputArray omc, InputArray Tc,
+                      const int& check_cond, const double& thresh_cond, Mat& JJ2_inv, Mat& ex3);
+    
+            if(quantile_sum - low_sum > out_of_bells_fraction*total_sum)
+        {
+            if(max_segment_length < x - start_x)
+            {
+                max_segment_length = x - start_x;
+                max_start_x = start_x;
+                max_end_x = x;
+            }
     }
     
-    /**
- * \ingroup CXX11_NeuralNetworks_Module
- * \brief Template functor to clip the magnitude of the first scalar.
- *
- * \sa class CwiseBinaryOp, MatrixBase::Clip
- */
-template <typename Scalar>
-struct scalar_clip_op {
-  EIGEN_EMPTY_STRUCT_CTOR(scalar_clip_op)
-  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const Scalar
-  operator()(const Scalar& a, const Scalar& b) const {
-    return numext::mini(numext::maxi(a, -b), b);
-  }
-  template <typename Packet>
-  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const Packet
-  packetOp(const Packet& a, const Packet& b) const {
-    return internal::pmin(internal::pmax(a, internal::pnegate(b)), b);
-  }
-};
     
-    
-    { private:
-  Env* const env_;
-  uint64 offset_;
-  std::unique_ptr<RandomAccessFile> file_;
-  std::unique_ptr<io::RecordReader> reader_;
-  string compression_type_ = '';
-};
-    
-        void SetName(const std::wstring& name)
-    {
-        m_name = name;
-    }
-    const std::wstring& GetName();
-    int GetSectionCount() const
-    {
-        return m_sectionHeader->dataSections;
-    }
-    size_t GetRecordCount() const
-    {
-        return m_sectionHeader->elementsPerRecord != 0 ? m_sectionHeader->elementsCount / m_sectionHeader->elementsPerRecord : m_sectionHeader->elementsCount;
-    }
-    
-        mAsparse.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseCSR, true);
-    mBsparse.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseCSR, true);
-    Matrix<float>::ScaleAndAdd(alpha, mAsparse, mBsparse);
-    
-    #pragma once
-    
-    #include 'Basics.h'
-#include 'Matrix.h'
-#include 'Config.h' // for ConfigParameters
-#include 'ScriptableObjects.h'
-#include <map>
-#include <string>
-    
-        // other goodies I came across (intrin.h):
-    //  - _mm_prefetch
-    //  - _mm_stream_ps --store without polluting cache
-    //  - unknown: _mm_addsub_ps, _mm_hsub_ps, _mm_movehdup_ps, _mm_moveldup_ps, _mm_blend_ps, _mm_blendv_ps, _mm_insert_ps, _mm_extract_ps, _mm_round_ps
-    //  - _mm_dp_ps dot product! http://msdn.microsoft.com/en-us/library/bb514054.aspx
-    //    Not so interesting for long vectors, we get better numerical precision with parallel adds and hadd at the end
-    
-    #ifndef let
-#define let const auto
-#endif
-    
-      void Add(const char* smallest, const char* largest,
-           SequenceNumber smallest_seq = 100,
-           SequenceNumber largest_seq = 100) {
-    FileMetaData* f = new FileMetaData;
-    f->number = files_.size() + 1;
-    f->smallest = InternalKey(smallest, smallest_seq, kTypeValue);
-    f->largest = InternalKey(largest, largest_seq, kTypeValue);
-    files_.push_back(f);
-  }
-    
-    struct BlockContents {
-  Slice data;           // Actual contents of data
-  bool cachable;        // True iff data can be cached
-  bool heap_allocated;  // True iff caller should delete[] data.data()
-};
-    
-    bool js_cocos2dx_navmesh_NavMeshObstacle_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_navmesh_NavMeshObstacle_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_navmesh_NavMeshObstacle(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_navmesh(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_initWith(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_syncToObstacle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_syncToNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getHeight(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getRadius(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getNavMeshObstacleComponentName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_NavMeshObstacle(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    
-    #if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-    
-    
-    
-        mShaderProgram->setUniformLocationWith4f(mColorLocation, color.r, color.g, color.b, 1);
-    
-    
-    {
-    {
-    {			if (settings->drawFrictionImpulse == 1)
-			{
-				b2Vec2 tangent = b2Cross(point->normal, 1.0f);
-				b2Vec2 p1 = point->position;
-				b2Vec2 p2 = p1 + k_impulseScale * point->tangentImpulse * tangent;
-				m_debugDraw.DrawSegment(p1, p2, b2Color(0.9f, 0.9f, 0.3f));
-			}
-		}
-	}
+double CV_ModelEstimator2_Test::get_success_error_level( int /*test_case_idx*/, int /*i*/, int /*j*/ )
+{
+    return 0;
 }
     
-    #define	RAND_LIMIT	32767
-#define DRAW_STRING_NEW_LINE 25
-    
-        CALL_STATIC_TYPE(jobject, Object)
-    CALL_STATIC_TYPE(jboolean, Boolean)
-    CALL_STATIC_TYPE(jbyte, Byte)
-    CALL_STATIC_TYPE(jchar, Char)
-    CALL_STATIC_TYPE(jshort, Short)
-    CALL_STATIC_TYPE(jint, Int)
-    CALL_STATIC_TYPE(jlong, Long)
-    CALL_STATIC_TYPE(jfloat, Float)
-    CALL_STATIC_TYPE(jdouble, Double)
-    
-      InstructionPointer absoluteProgramCounter() const noexcept {
-    return absoluteProgramCounter_;
-  }
-    
-    TEST_F(YogaTest_HadOverflowTests, spacing_overflow_in_nested_nodes) {
-  const YGNodeRef child0 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child0, 80);
-  YGNodeStyleSetHeight(child0, 40);
-  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
-  YGNodeStyleSetMargin(child0, YGEdgeBottom, 10);
-  YGNodeInsertChild(root, child0, 0);
-  const YGNodeRef child1 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child1, 80);
-  YGNodeStyleSetHeight(child1, 40);
-  YGNodeInsertChild(root, child1, 1);
-  const YGNodeRef child1_1 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child1_1, 80);
-  YGNodeStyleSetHeight(child1_1, 40);
-  YGNodeStyleSetMargin(child1_1, YGEdgeBottom, 5);
-  YGNodeInsertChild(child1, child1_1, 0);
+    /**
+ * @brief Superclass for the pluggable logging facilities.
+ *
+ * In order to make the logging of osquery results and inline debug, warning,
+ * error status easy to integrate into your environment, we take advantage of
+ * a plugin interface which allows you to integrate osquery with your internal
+ * large-scale logging infrastructure.
+ *
+ * You may use flume, splunk, syslog, scribe, etc. In order to use your
+ * specific upstream logging systems, one simply needs to create a custom
+ * subclass of LoggerPlugin. That subclass should at least implement the
+ * LoggerPlugin::logString method.
+ *
+ * Consider the following example:
+ *
+ * @code{.cpp}
+ *   class TestLoggerPlugin : public LoggerPlugin {
+ *    public:
+ *     osquery::Status logString(const std::string& s) {
+ *       int i = 0;
+ *       internal::logStringToFlume(s, i);
+ *       std::string message;
+ *       if (i == 0) {
+ *         message = 'OK';
+ *       } else {
+ *         message = 'Failed';
+ *       }
+ *       return osquery::Status(i, message);
+ *     }
+ *  };
+ *
+ *  REGISTER(TestLoggerPlugin, 'logger', 'test');
+ * @endcode
+ */
+class LoggerPlugin : public Plugin {
+ public:
+  /// The LoggerPlugin PluginRequest action router.
+  Status call(const PluginRequest& request, PluginResponse& response) override;
     }
     
-        void setExperimentalFeatureEnabled(int feature, bool enabled);
-    void setPointScaleFactor(float pixelsInPoint);
- 
- public: // Getters
+    #include <boost/filesystem/path.hpp>
     
-        // The following functions cannot be const because they could discard const qualifiers (ex: constNode->getChild(0)->getParent() wouldn't be const)
+    static int subscribe_to_event(osquery_event_t event, int subscribe) {
+  if (osquery.buffer == NULL) {
+    return -EINVAL;
+  }
+  if (!(OSQUERY_NULL_EVENT < event && event < OSQUERY_NUM_EVENTS)) {
+    return -EINVAL;
+  }
+  if (!osquery_publishers[event]) {
+    return -EINVAL;
+  }
+    }
+    
+    #include <osquery/config.h>
+#include <osquery/database.h>
+#include <osquery/registry.h>
+    
+    
+    
+    
+    
+    #ifdef __cplusplus
+extern 'C' {
+#endif
+#include 'tolua++.h'
+#ifdef __cplusplus
+}
+#endif
+    
+    
+    {        ok &= luaval_to_number(tolua_S, 2,&arg0, 'cc.PhysicsBody:setAngularVelocityLimit');
+        if(!ok)
+        {
+            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsBody_setAngularVelocityLimit'', nullptr);
+            return 0;
+        }
+        cobj->setAngularVelocityLimit(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.PhysicsBody:setAngularVelocityLimit',argc, 1);
+    return 0;
+    
+    	// Callbacks for derived classes.
+	virtual void BeginContact(b2Contact* contact) { B2_NOT_USED(contact); }
+	virtual void EndContact(b2Contact* contact) { B2_NOT_USED(contact); }
+	virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
+	virtual void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
+	{
+		B2_NOT_USED(contact);
+		B2_NOT_USED(impulse);
+	}
+    
+    				body->CreateFixture(&fd);
+    
+    
+    {
+    {		case 'e':
+			m_hz += 1.0f;
+			m_spring1->SetSpringFrequencyHz(m_hz);
+			m_spring2->SetSpringFrequencyHz(m_hz);
+			break;
+		}
+	}
+    
+    
+    { protected:
+  std::ostringstream log_stream_;
+};
+    
+     private:
+  char ch_buf;
+  std::string s_name, s_val, s_buf;
+    
+    /*! \brief match error */
+struct EvalMatchError : public EvalMClassBase<EvalMatchError> {
+  const char* Name() const override {
+    return 'merror';
+  }
+  inline static bst_float EvalRow(int label,
+                                  const bst_float *pred,
+                                  size_t nclass) {
+    return common::FindMaxIndex(pred, pred + nclass) != pred + static_cast<int>(label);
+  }
+};
