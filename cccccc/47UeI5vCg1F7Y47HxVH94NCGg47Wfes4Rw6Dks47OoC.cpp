@@ -1,336 +1,408 @@
-#include 'swift/AST/SyntaxASTMap.h'
-#include 'swift/AST/Expr.h'
-#include 'swift/AST/Decl.h'
-#include 'swift/AST/Stmt.h'
-#include 'swift/Syntax/Syntax.h'
+
+        
+            txn->Put(key_str, value);
     
-      virtual void enter(const MarkupASTNode *Node) {}
-  virtual void exit(const MarkupASTNode *Node) {}
+      /**
+   * @brief Applies the same transformation defined in the data layer's
+   * transform_param block to all the num images in a input_blob.
+   *
+   * @param input_blob
+   *    A Blob containing the data to be transformed. It applies the same
+   *    transformation to all the num images in the blob.
+   * @param transformed_blob
+   *    This is destination blob, it will contain as many images as the
+   *    input blob. It can be part of top blob's data.
+   */
+  void Transform(Blob<Dtype>* input_blob, Blob<Dtype>* transformed_blob);
     
-    /// Format a Syntax tree with the given rules.
-Syntax format(Syntax Tree);
-// TODO: Representation for formatting rules, etc. This is just a figment
-// for now.
+     protected:
+  /// @copydoc AbsValLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     
-        if( !*state )
-        return;
-    
-        static void CODEGEN_FUNCPTR Switch_Enable(GLenum cap)
-    {
-        Enable = (PFNENABLEPROC)IntGetProcAddress('glEnable');
-        Enable(cap);
+     private:
+  // wrap im2col/col2im so we don't have to remember the (long) argument lists
+  inline void conv_im2col_cpu(const Dtype* data, Dtype* col_buff) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      im2col_cpu(data, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
+    } else {
+      im2col_nd_cpu(data, num_spatial_axes_, conv_input_shape_.cpu_data(),
+          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
+          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), col_buff);
     }
-    
-    int lapack_LU32f(float* a, size_t a_step, int m, float* b, size_t b_step, int n, int* info);
-int lapack_LU64f(double* a, size_t a_step, int m, double* b, size_t b_step, int n, int* info);
-int lapack_Cholesky32f(float* a, size_t a_step, int m, float* b, size_t b_step, int n, bool* info);
-int lapack_Cholesky64f(double* a, size_t a_step, int m, double* b, size_t b_step, int n, bool* info);
-int lapack_SVD32f(float* a, size_t a_step, float* w, float* u, size_t u_step, float* vt, size_t v_step, int m, int n, int flags);
-int lapack_SVD64f(double* a, size_t a_step, double* w, double* u, size_t u_step, double* vt, size_t v_step, int m, int n, int flags);
-int lapack_QR32f(float* src1, size_t src1_step, int m, int n, int k, float* src2, size_t src2_step, float* dst, int* info);
-int lapack_QR64f(double* src1, size_t src1_step, int m, int n, int k, double* src2, size_t src2_step, double* dst, int* info);
-int lapack_gemm32f(const float* src1, size_t src1_step, const float* src2, size_t src2_step,
-                   float alpha, const float* src3, size_t src3_step, float beta, float* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm64f(const double* src1, size_t src1_step, const double* src2, size_t src2_step,
-                   double alpha, const double* src3, size_t src3_step, double beta, double* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm32fc(const float* src1, size_t src1_step, const float* src2, size_t src2_step,
-                   float alpha, const float* src3, size_t src3_step, float beta, float* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm64fc(const double* src1, size_t src1_step, const double* src2, size_t src2_step,
-                   double alpha, const double* src3, size_t src3_step, double beta, double* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-    
-    #ifndef CV_CL_GET_PROC_ADDRESS
-#ifdef __GNUC__
-#warning('OPENCV: OpenCL BLAS dynamic library loader: check configuration')
-#else
-#pragma message('WARNING: OPENCV: OpenCL BLAS dynamic library loader: check configuration')
-#endif
-#define CV_CL_GET_PROC_ADDRESS(name) NULL
-#endif
-    
-    void Timer::RequestExit() {
-  Dump();
-}
-    
-    int64_t gettime_diff_us(const timespec& start, const timespec& end) {
-  int64_t dsec = end.tv_sec - start.tv_sec;
-  int64_t dnsec = end.tv_nsec - start.tv_nsec;
-  return dsec * 1000000 + dnsec / 1000;
-}
-    
-    #ifndef incl_HPHP_TIMER_H_
-#define incl_HPHP_TIMER_H_
-    
-    // Grab the ip address and port of the client that is connected to this proxy.
-bool DebuggerProxy::getClientConnectionInfo(VRefParam address,
-                                            VRefParam port) {
-  Resource s(m_thrift.getSocket().get());
-  return HHVM_FN(socket_getpeername)(s, address, port);
-}
-    
-    /*
- * Objects that need to do special clean up at the end of the request
- * may register themselves for this by deriving from Sweepable.  After
- * every request, MemoryManager::sweep() called each Sweepable::sweep()
- * method, allowing objects to clean up resources that are not othewise
- * owned by the current request, for example malloc'd-memory or file handles.
- */
-struct Sweepable {
-  Sweepable(const Sweepable&) = delete;
-  Sweepable& operator=(const Sweepable&) = delete;
-    }
-    
-    /*
- * Make block weights more consistent by enforcing that the weight of each block
- * doesn't exceed the sums of the weights of its predecessors or its successors.
- */
-void fixBlockWeights(Vunit& unit);
-    
-    void numa_bind_to(void* start, size_t size, int node) {
-  if (!use_numa) return;
-  numa_tonode_memory(start, size, node);
-}
-    
-    void ThriftBuffer::skip(int8_t type) {
-  switch (type) {
-    case T_STOP:
-    case T_VOID:
-      return;
-    case T_STRUCT:
-      while (true) {
-        int8_t ttype; read(ttype); // get field type
-        if (ttype == T_STOP) break;
-        read(nullptr, 2); // skip field number, I16
-        skip(ttype); // skip field payload
-      }
-      return;
-    case T_BOOL:
-    case T_BYTE:
-      read(nullptr, 1);
-      return;
-    case T_I16:
-      read(nullptr, 2);
-      return;
-    case T_I32:
-      read(nullptr, 4);
-      return;
-    case T_U64:
-    case T_I64:
-    case T_DOUBLE:
-      read(nullptr, 8);
-      return;
-    //case T_UTF7: // aliases T_STRING
-    case T_UTF8:
-    case T_UTF16:
-    case T_STRING: {
-      int32_t len; read(len);
-      read(nullptr, len);
-      } return;
-    case T_MAP: {
-      int8_t keytype; read(keytype);
-      int8_t valtype; read(valtype);
-      int32_t size; read(size);
-      for (int32_t i = 0; i < size; ++i) {
-        skip(keytype);
-        skip(valtype);
-      }
-    } return;
-    case T_LIST:
-    case T_SET: {
-      int8_t valtype; read(valtype);
-      int32_t size; read(size);
-      for (int32_t i = 0; i < size; ++i) {
-        skip(valtype);
-      }
-    } return;
-  };
-    }
-    
-      Array members = Array::Create();
-  for (int count=0; gr.gr_mem[count] != NULL; count++) {
-    members.append(String(gr.gr_mem[count], CopyString));
   }
-    
-    #include 'hphp/runtime/vm/hhbc.h'
-    
-    int getifaddrs(struct ifaddrs** result) {
-	int fd = socket(PF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
-	if (fd < 0) {
-		return -1;
-	}
-	netlinkrequest ifaddr_request;
-	memset(&ifaddr_request, 0, sizeof(ifaddr_request));
-	ifaddr_request.header.nlmsg_flags = NLM_F_ROOT | NLM_F_REQUEST;
-	ifaddr_request.header.nlmsg_type = RTM_GETADDR;
-	ifaddr_request.header.nlmsg_len = NLMSG_LENGTH(sizeof(ifaddrmsg));
-	ssize_t count = send(fd, &ifaddr_request, ifaddr_request.header.nlmsg_len, 0);
-	if (static_cast<size_t>(count) != ifaddr_request.header.nlmsg_len) {
-		close(fd);
-		return -1;
-	}
-	struct ifaddrs* start = NULL;
-	struct ifaddrs* current = NULL;
-	char buf[kMaxReadSize];
-	ssize_t amount_read = recv(fd, &buf, kMaxReadSize, 0);
-	while (amount_read > 0) {
-		nlmsghdr* header = reinterpret_cast<nlmsghdr*>(&buf[0]);
-		size_t header_size = static_cast<size_t>(amount_read);
-		for ( ; NLMSG_OK(header, header_size);
-		      header = NLMSG_NEXT(header, header_size)) {
-			switch (header->nlmsg_type) {
-			case NLMSG_DONE:
-				// Success. Return.
-				*result = start;
-				close(fd);
-				return 0;
-			case NLMSG_ERROR:
-				close(fd);
-				freeifaddrs(start);
-				return -1;
-			case RTM_NEWADDR: {
-				ifaddrmsg* address_msg =
-						reinterpret_cast<ifaddrmsg*>(NLMSG_DATA(header));
-				rtattr* rta = IFA_RTA(address_msg);
-				ssize_t payload_len = IFA_PAYLOAD(header);
-				while (RTA_OK(rta, payload_len)) {
-					if (rta->rta_type == IFA_ADDRESS) {
-						int family = address_msg->ifa_family;
-						if (family == AF_INET || family == AF_INET6) {
-							ifaddrs* newest = new ifaddrs;
-							memset(newest, 0, sizeof(ifaddrs));
-							if (current) {
-								current->ifa_next = newest;
-							} else {
-								start = newest;
-							}
-							if (populate_ifaddrs(newest, address_msg, RTA_DATA(rta),
-									     RTA_PAYLOAD(rta)) != 0) {
-								freeifaddrs(start);
-								*result = NULL;
-								return -1;
-							}
-							current = newest;
-						}
-					}
-					rta = RTA_NEXT(rta, payload_len);
-				}
-				break;
-			}
-			}
-		}
-		amount_read = recv(fd, &buf, kMaxReadSize, 0);
-	}
-	close(fd);
-	freeifaddrs(start);
-	return -1;
-}
-    
-    
-#include <ft2build.h>
-    
-    
-int             oc_has_mode_metrics;
-oc_mode_metrics OC_MODE_METRICS[64][3][2][OC_SAD_BINS];
-# endif
-    
-    #undef MULT16_32_Q15
-static inline int MULT16_32_Q15(int a, int b)
-{
-    int c;
-    asm volatile('MULT $ac1, %0, %1' : : 'r' (a), 'r' (b));
-    asm volatile('EXTR.W %0,$ac1, %1' : '=r' (c): 'i' (15));
-    return c;
-}
-    
-    #undef    silk_LSHIFT8
-static OPUS_INLINE opus_int8 silk_LSHIFT8(opus_int8 a, opus_int32 shift){
-    opus_int8 ret;
-    ops_count += 1;
-    ret = a << shift;
-    return ret;
-}
-#undef    silk_LSHIFT16
-static OPUS_INLINE opus_int16 silk_LSHIFT16(opus_int16 a, opus_int32 shift){
-    opus_int16 ret;
-    ops_count += 1;
-    ret = a << shift;
-    return ret;
-}
-#undef    silk_LSHIFT32
-static OPUS_INLINE opus_int32 silk_LSHIFT32(opus_int32 a, opus_int32 shift){
-    opus_int32 ret;
-    ops_count += 1;
-    ret = a << shift;
-    return ret;
-}
-#undef    silk_LSHIFT64
-static OPUS_INLINE opus_int64 silk_LSHIFT64(opus_int64 a, opus_int shift){
-    ops_count += 1;
-    return a << shift;
-}
-    
-    Status TableCache::FindTable(uint64_t file_number, uint64_t file_size,
-                             Cache::Handle** handle) {
-  Status s;
-  char buf[sizeof(file_number)];
-  EncodeFixed64(buf, file_number);
-  Slice key(buf, sizeof(buf));
-  *handle = cache_->Lookup(key);
-  if (*handle == NULL) {
-    std::string fname = TableFileName(dbname_, file_number);
-    RandomAccessFile* file = NULL;
-    Table* table = NULL;
-    s = env_->NewRandomAccessFile(fname, &file);
-    if (!s.ok()) {
-      std::string old_fname = SSTTableFileName(dbname_, file_number);
-      if (env_->NewRandomAccessFile(old_fname, &file).ok()) {
-        s = Status::OK();
-      }
+  inline void conv_col2im_cpu(const Dtype* col_buff, Dtype* data) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      col2im_cpu(col_buff, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
+    } else {
+      col2im_nd_cpu(col_buff, num_spatial_axes_, conv_input_shape_.cpu_data(),
+          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
+          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), data);
     }
-    if (s.ok()) {
-      s = Table::Open(*options_, file, file_size, &table);
+  }
+#ifndef CPU_ONLY
+  inline void conv_im2col_gpu(const Dtype* data, Dtype* col_buff) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      im2col_gpu(data, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
+    } else {
+      im2col_nd_gpu(data, num_spatial_axes_, num_kernels_im2col_,
+          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
+          kernel_shape_.gpu_data(), pad_.gpu_data(),
+          stride_.gpu_data(), dilation_.gpu_data(), col_buff);
     }
+  }
+  inline void conv_col2im_gpu(const Dtype* col_buff, Dtype* data) {
+    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
+      col2im_gpu(col_buff, conv_in_channels_,
+          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
+          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
+          pad_.cpu_data()[0], pad_.cpu_data()[1],
+          stride_.cpu_data()[0], stride_.cpu_data()[1],
+          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
+    } else {
+      col2im_nd_gpu(col_buff, num_spatial_axes_, num_kernels_col2im_,
+          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
+          kernel_shape_.gpu_data(), pad_.gpu_data(), stride_.gpu_data(),
+          dilation_.gpu_data(), data);
     }
-    }
+  }
+#endif
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
     
-    {  std::vector< std::pair<int, InternalKey> > compact_pointers_;
-  DeletedFileSet deleted_files_;
-  std::vector< std::pair<int, FileMetaData> > new_files_;
+    {  bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnTensorDescriptor_t bottom_desc_;
+  cudnnTensorDescriptor_t top_desc_;
+  cudnnActivationDescriptor_t activ_desc_;
+};
+#endif
+    
+      virtual inline const char* type() const { return 'Dropout'; }
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the ELU inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x} = \left\{
+   *        \begin{array}{lr}
+   *            1           & \mathrm{if} \; x > 0 \\
+   *            y + \alpha  & \mathrm{if} \; x \le 0
+   *        \end{array} \right.
+   *      @f$ if propagate_down[0].
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
 };
     
-      void DeleteFileInternal(const std::string& fname) {
-    if (file_map_.find(fname) == file_map_.end()) {
-      return;
-    }
-    }
+    #endif  // STORAGE_LEVELDB_DB_LOG_FORMAT_H_
+
     
-      inline int Compare(const Slice& a, const Slice& b) const {
-    return comparator_->Compare(a, b);
+      bool empty() const { return list_.next_ == &list_; }
+  SnapshotImpl* oldest() const { assert(!empty()); return list_.next_; }
+  SnapshotImpl* newest() const { assert(!empty()); return list_.prev_; }
+    
+    
+    {}  // namespace leveldb
+    
+      // Delete the specified 'file' from the specified 'level'.
+  void DeleteFile(int level, uint64_t file) {
+    deleted_files_.insert(std::make_pair(level, file));
   }
     
-      void StartBlock(uint64_t block_offset);
-  void AddKey(const Slice& key);
-  Slice Finish();
     
-    Iterator::~Iterator() {
-  if (cleanup_.function != NULL) {
-    (*cleanup_.function)(cleanup_.arg1, cleanup_.arg2);
-    for (Cleanup* c = cleanup_.next; c != NULL; ) {
-      (*c->function)(c->arg1, c->arg2);
-      Cleanup* next = c->next;
-      delete c;
-      c = next;
+    {}  // namespace leveldb
+    
+    
+    {    status = sqlite3_finalize(read_stmt);
+    ErrorCheck(status);
+    status = sqlite3_finalize(begin_trans_stmt);
+    ErrorCheck(status);
+    status = sqlite3_finalize(end_trans_stmt);
+    ErrorCheck(status);
+  }
+    
+      // Read sequentially.
+  ASSERT_OK(env_->NewSequentialFile('/dir/f', &seq_file));
+  ASSERT_OK(seq_file->Read(5, &result, scratch)); // Read 'hello'.
+  ASSERT_EQ(0, result.compare('hello'));
+  ASSERT_OK(seq_file->Skip(1));
+  ASSERT_OK(seq_file->Read(1000, &result, scratch)); // Read 'world'.
+  ASSERT_EQ(0, result.compare('world'));
+  ASSERT_OK(seq_file->Read(1000, &result, scratch)); // Try reading past EOF.
+  ASSERT_EQ(0, result.size());
+  ASSERT_OK(seq_file->Skip(100)); // Try to skip past end of file.
+  ASSERT_OK(seq_file->Read(1000, &result, scratch));
+  ASSERT_EQ(0, result.size());
+  delete seq_file;
+    
+    TEST(Issue178, Test) {
+  // Get rid of any state from an old run.
+  std::string dbpath = leveldb::test::TmpDir() + '/leveldb_cbug_test';
+  DestroyDB(dbpath, leveldb::Options());
+    }
+    
+      virtual void CreateFilter(const Slice* keys, int n, std::string* dst) const {
+    for (int i = 0; i < n; i++) {
+      uint32_t h = Hash(keys[i].data(), keys[i].size(), 1);
+      PutFixed32(dst, h);
     }
   }
+    
+      // Check the crc of the type and the block contents
+  const char* data = contents.data();    // Pointer to where Read put the data
+  if (options.verify_checksums) {
+    const uint32_t crc = crc32c::Unmask(DecodeFixed32(data + n + 1));
+    const uint32_t actual = crc32c::Value(data, n + 1);
+    if (actual != crc) {
+      delete[] buf;
+      s = Status::Corruption('block checksum mismatch');
+      return s;
+    }
+  }
+    
+    std::function<size_t(size_t)> DeterministicSchedule::uniform(uint64_t seed) {
+  auto rand = std::make_shared<std::ranlux48>(seed);
+  return [rand](size_t numActive) {
+    auto dist = std::uniform_int_distribution<size_t>(0, numActive - 1);
+    return dist(*rand);
+  };
 }
     
+      void transferCredit() noexcept {
+    Weight credit = takeCredit();
+    transfer_.fetch_add(credit, std::memory_order_acq_rel);
+    if (MayBlock) {
+      std::atomic_thread_fence(std::memory_order_seq_cst);
+      waiting_.store(NOTWAITING, std::memory_order_relaxed);
+      waiting_.futexWake();
+    }
+  }
     
     
-        glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, 0, glVertices);
+    {
+    {} // namespace detail
+} // namespace folly
+
     
-    		b2Body* body2 = m_world->CreateBody(&bd);
-		m_piece2 = body2->CreateFixture(&m_shape2, 1.0f);
+    #include <memory>
+#include <thread>
+#include <unordered_map>
+    
+    #include <folly/Portability.h>
+    
+      typedef void_allocator::rebind<int>::other int_allocator;
+  int_allocator ialloc(valloc);
+    
+    // Auto-conversion of key/value based on callback signature, documented in
+// DynamicParser.h.
+namespace detail {
+class IdentifyCallable {
+ public:
+  enum class Kind { Function, MemberFunction };
+  template <typename Fn>
+  constexpr static Kind getKind() { return test<Fn>(nullptr); }
+    }
+    }
+    
+    folly::dynamic DynamicParser::ParserStack::releaseErrorsImpl() {
+  if (errors_.isNull()) {
+    throw DynamicParserLogicError('Do not releaseErrors() twice');
+  }
+  auto errors = std::move(errors_);
+  errors_ = nullptr;  // Prevent a second release.
+  value_ = nullptr;  // Break attempts to parse again.
+  return errors;
+}
+    
+    TEST(TestDynamicParser, TestThrowOnReleaseWhileParsing) {
+  auto d = dynamic::array(1);
+  DynamicParser p(DynamicParser::OnError::RECORD, &d);
+  EXPECT_THROW(
+    p.arrayItems([&]() { p.releaseErrors(); }),
+    DynamicParserLogicError
+  );
+}
+    
+    bool binary_to_compressed_c(const char* filename, const char* symbol, bool use_base85_encoding, bool use_compression)
+{
+    // Read file
+    FILE* f = fopen(filename, 'rb');
+    if (!f) return false;
+    int data_sz;
+    if (fseek(f, 0, SEEK_END) || (data_sz = (int)ftell(f)) == -1 || fseek(f, 0, SEEK_SET)) { fclose(f); return false; }
+    char* data = new char[data_sz+4];
+    if (fread(data, 1, data_sz, f) != (size_t)data_sz) { fclose(f); delete[] data; return false; }
+    memset((void *)(((char*)data) + data_sz), 0, 4);
+    fclose(f);
+    }
+    
+    //---- Don't implement demo windows functionality (ShowDemoWindow()/ShowStyleEditor()/ShowUserGuide() methods will be empty)
+//---- It is very strongly recommended to NOT disable the demo windows. Please read the comment at the top of imgui_demo.cpp.
+//#define IMGUI_DISABLE_DEMO_WINDOWS
+    
+    IMGUI_API bool        ImGui_ImplDX10_Init(void* hwnd, ID3D10Device* device);
+IMGUI_API void        ImGui_ImplDX10_Shutdown();
+IMGUI_API void        ImGui_ImplDX10_NewFrame();
+IMGUI_API void        ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
+    
+    struct IDirect3DDevice9;
+    
+    // SDL,GL3W
+#include <SDL.h>
+#include <SDL_syswm.h>
+#include <GL/gl3w.h>    // This example is using gl3w to access OpenGL functions (because it is small). You may use glew/glad/glLoadGen/etc. whatever already works for you.
+    
+    void ImDrawList::ClearFreeMemory()
+{
+    CmdBuffer.clear();
+    IdxBuffer.clear();
+    VtxBuffer.clear();
+    _VtxCurrentIdx = 0;
+    _VtxWritePtr = NULL;
+    _IdxWritePtr = NULL;
+    _ClipRectStack.clear();
+    _TextureIdStack.clear();
+    _Path.clear();
+    _ChannelsCurrent = 0;
+    _ChannelsCount = 1;
+    for (int i = 0; i < _Channels.Size; i++)
+    {
+        if (i == 0) memset(&_Channels[0], 0, sizeof(_Channels[0]));  // channel 0 is a copy of CmdBuffer/IdxBuffer, don't destruct again
+        _Channels[i].CmdBuffer.clear();
+        _Channels[i].IdxBuffer.clear();
+    }
+    _Channels.clear();
+}
+    
+        // Render command lists
+    int vtx_offset = 0;
+    int idx_offset = 0;
+    for (int n = 0; n < draw_data->CmdListsCount; n++)
+    {
+        const ImDrawList* cmd_list = draw_data->CmdLists[n];
+        for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
+        {
+            const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
+            if (pcmd->UserCallback)
+            {
+                pcmd->UserCallback(cmd_list, pcmd);
+            }
+            else
+            {
+                const D3D11_RECT r = { (LONG)pcmd->ClipRect.x, (LONG)pcmd->ClipRect.y, (LONG)pcmd->ClipRect.z, (LONG)pcmd->ClipRect.w };
+                ctx->PSSetShaderResources(0, 1, (ID3D11ShaderResourceView**)&pcmd->TextureId);
+                ctx->RSSetScissorRects(1, &r);
+                ctx->DrawIndexed(pcmd->ElemCount, idx_offset, vtx_offset);
+            }
+            idx_offset += pcmd->ElemCount;
+        }
+        vtx_offset += cmd_list->VtxBuffer.Size;
+    }
+    
+            // 1. Show a simple window.
+        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
+            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    }
+    
+    // Return the services for generated mock file.
+grpc::string GetMockServices(grpc_generator::File *file,
+                             const Parameters &params);
+    
+    
+    
+    #include 'monster_test_generated.h'
+#include 'flatbuffers/grpc.h'
+    
+    
+    {
+    {    printer->Print(vars, '// Generated by the gRPC C++ plugin.\n');
+    printer->Print(vars,
+                   '// If you make any local change, they will be lost.\n');
+    printer->Print(vars, '// source: $filename$\n');
+    grpc::string leading_comments = file->GetLeadingComments('//');
+    if (!leading_comments.empty()) {
+      printer->Print(vars, '// Original file comments:\n');
+      printer->Print(leading_comments.c_str());
+    }
+    printer->Print(vars, '#ifndef GRPC_$filename_identifier$__INCLUDED\n');
+    printer->Print(vars, '#define GRPC_$filename_identifier$__INCLUDED\n');
+    printer->Print(vars, '\n');
+    printer->Print(vars, '#include \'$filename_base$$message_header_ext$\'\n');
+    printer->Print(vars, file->additional_headers().c_str());
+    printer->Print(vars, '\n');
+  }
+  return output;
+}
+    
+    // Abort the program after logging the mesage if the given condition is not
+// true. Otherwise, do nothing.
+#define GRPC_CODEGEN_CHECK(x)                                            \
+  (x) ? (void)0                                                          \
+      : LogMessageVoidify() & LogHelper(&std::cerr).get_os()             \
+                                  << 'CHECK FAILED: ' << __FILE__ << ':' \
+                                  << __LINE__ << ': '
+    
+    #ifdef _STLPORT_VERSION
+  #define FLATBUFFERS_CPP98_STL
+#endif
+#ifndef FLATBUFFERS_CPP98_STL
+  #include <functional>
+#endif
+    
+    // Get a field, if you know it's a vector.
+template<typename T>
+Vector<T> *GetFieldV(const Table &table, const reflection::Field &field) {
+  assert(field.type()->base_type() == reflection::Vector &&
+         sizeof(T) == GetTypeSize(field.type()->element()));
+  return table.GetPointer<Vector<T> *>(field.offset());
+}
+    
+      // Get and test the `Equipment` union (`equipped` field).
+  assert(monster->equipped_type() == Equipment_Weapon);
+  auto equipped = static_cast<const Weapon *>(monster->equipped());
+  assert(equipped->name()->str() == 'Axe');
+  assert(equipped->damage() == 5);
+  (void)equipped;
