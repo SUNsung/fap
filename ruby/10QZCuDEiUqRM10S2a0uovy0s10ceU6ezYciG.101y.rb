@@ -1,80 +1,136 @@
-        if subscription_klass && ActionCable::Channel::Base >= subscription_klass
-          subscription = subscription_klass.new(connection, id_key, id_options)
-          subscriptions[id_key] = subscription
-          subscription.subscribe_to_channel
-        else
-          logger.error 'Subscription class not found: #{id_options[:channel].inspect}'
+
+        
+          def teardown
+    ActiveSupport.escape_html_entities_in_json = @old_escape_html_entities_in_json
+  end
+    
+                define_method('#{name}=') do |attribute|
+              attributes[name.to_sym] = attribute
+            end
+          end
         end
-      end
     
-          # Returns an escaped version of +html+ without affecting existing escaped entities.
-      #
-      #   escape_once('1 < 2 &amp; 3')
-      #   # => '1 &lt; 2 &amp; 3'
-      #
-      #   escape_once('&lt;&lt; Accept & Checkout')
-      #   # => '&lt;&lt; Accept &amp; Checkout'
-      def escape_once(html)
-        ERB::Util.html_escape_once(html)
+          test 'when :except is specified with an array, an after action is not triggered on that action' do
+        @controller.process(:index)
+        assert !@controller.instance_variable_defined?('@authenticated')
       end
+    end
     
-          included do
-        setup :setup_with_controller
-        ActiveSupport.run_load_hooks(:action_view_test_case, self)
-      end
+      private
+    def with_params_parsers(parsers = {})
+      old_session = @integration_session
+      original_parsers = ActionDispatch::Request.parameter_parsers
+      ActionDispatch::Request.parameter_parsers = original_parsers.merge parsers
+      reset!
+      yield
+    ensure
+      ActionDispatch::Request.parameter_parsers = original_parsers
+      @integration_session = old_session
+    end
     
-            def _limit
-          limit || DEFAULT_LIMIT
+          private
+        def processed_mailer
+          @processed_mailer ||= @mailer_class.new.tap do |mailer|
+            mailer.params = @params
+            mailer.process @action, *@args
+          end
+        end
+    
+            def initialize_test_deliveries
+          set_delivery_method :test
+          @old_perform_deliveries = ActionMailer::Base.perform_deliveries
+          ActionMailer::Base.perform_deliveries = true
+          ActionMailer::Base.deliveries.clear
+        end
+    
+            def application_mailer_file_name
+          @_application_mailer_file_name ||= if mountable_engine?
+            'app/mailers/#{namespaced_path}/application_mailer.rb'
+          else
+            'app/mailers/application_mailer.rb'
+          end
         end
     end
   end
 end
 
     
-      def test_helper_proxy
-    methods = AllHelpersController.helpers.methods
+      test 'confirm time should fallback to devise confirm in default configuration' do
+    swap Devise, allow_unconfirmed_access_for: 1.day do
+      user = create_user
+      user.confirmation_sent_at = 2.days.ago
+      refute user.active_for_authentication?
     
-          # Adds a new delivery method through the given class using the given
-      # symbol as alias and the default options supplied.
-      #
-      #   add_delivery_method :sendmail, Mail::Sendmail,
-      #     location:  '/usr/sbin/sendmail',
-      #     arguments: '-i'
-      def add_delivery_method(symbol, klass, default_options = {})
-        class_attribute(:'#{symbol}_settings') unless respond_to?(:'#{symbol}_settings')
-        send(:'#{symbol}_settings=', default_options)
-        self.delivery_methods = delivery_methods.merge(symbol.to_sym => klass).freeze
-      end
-    
-    puts 'Results stored in #{PROF_OUTPUT_FILE}'
-
-    
-    class Jekyll::Commands::NewTheme < Jekyll::Command
-  class << self
-    def init_with_program(prog)
-      prog.command(:'new-theme') do |c|
-        c.syntax 'new-theme NAME'
-        c.description 'Creates a new Jekyll theme scaffold'
-        c.option 'code_of_conduct', \
-          '-c', '--code-of-conduct', \
-          'Include a Code of Conduct. (defaults to false)'
-    
-    module Jekyll
-  module Filters
-    module GroupingFilters
-      # Group an array of items by a property
-      #
-      # input - the inputted Enumerable
-      # property - the property
-      #
-      # Returns an array of Hashes, each looking something like this:
-      #  {'name'  => 'larry'
-      #   'items' => [...] } # all the items where `property` == 'larry'
-      def group_by(input, property)
-        if groupable?(input)
-          groups = input.group_by { |item| item_property(item, property).to_s }
-          grouped_array(groups)
-        else
-          input
+    module Devise
+  module Controllers
+    # Create url helpers to be used with resource/scope configuration. Acts as
+    # proxies to the generated routes created by devise.
+    # Resource param can be a string or symbol, a class, or an instance object.
+    # Example using a :user resource:
+    #
+    #   new_session_path(:user)      => new_user_session_path
+    #   session_path(:user)          => user_session_path
+    #   destroy_session_path(:user)  => destroy_user_session_path
+    #
+    #   new_password_path(:user)     => new_user_password_path
+    #   password_path(:user)         => user_password_path
+    #   edit_password_path(:user)    => edit_user_password_path
+    #
+    #   new_confirmation_path(:user) => new_user_confirmation_path
+    #   confirmation_path(:user)     => user_confirmation_path
+    #
+    # Those helpers are included by default to ActionController::Base.
+    #
+    # In case you want to add such helpers to another class, you can do
+    # that as long as this new class includes both url_helpers and
+    # mounted_helpers. Example:
+    #
+    #     include Rails.application.routes.url_helpers
+    #     include Rails.application.routes.mounted_helpers
+    #
+    module UrlHelpers
+      def self.remove_helpers!
+        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
+          remove_method method
         end
       end
+    
+      def setup
+    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
+    success = Dir.chdir DUMMY_PATH do
+      silence_stdout_if !ENV['VERBOSE'] do
+        system 'node', 'manifest.js', tmp_dir
+      end
+    end
+    assert success, 'Node.js Mincer compilation failed'
+    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
+    css_name = manifest['assets']['application.css']
+    @css = File.read('#{tmp_dir}/#{css_name}')
+  end
+end
+
+    
+            # Prints the list of specs & pod cache dirs for a single pod name.
+        #
+        # This output is valid YAML so it can be parsed with 3rd party tools
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
+        #
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
+            end
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
+          end
+        end
+      end
+    end
+  end
+end
