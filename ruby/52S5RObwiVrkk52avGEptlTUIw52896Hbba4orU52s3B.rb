@@ -1,113 +1,108 @@
-      https://pip.readthedocs.org/en/stable/installing/#install-pip
-    EOS
-  when 'pil' then <<-EOS.undent
-    Instead of PIL, consider `pip install pillow` or `brew install Homebrew/python/pillow`.
-    EOS
-  when 'macruby' then <<-EOS.undent
-    MacRuby works better when you install their package:
-      http://www.macruby.org/
-    EOS
-  when /(lib)?lzma/
-    'lzma is now part of the xz formula.'
-  when 'xcode'
-    if MacOS.version >= :lion
-      <<-EOS.undent
-      Xcode can be installed from the App Store.
-      EOS
-    else
-      <<-EOS.undent
-      Xcode can be installed from https://developer.apple.com/xcode/downloads/
-      EOS
+
+        
+              module ClassMethods
+        def tests(helper_class)
+          case helper_class
+          when String, Symbol
+            self.helper_class = '#{helper_class.to_s.underscore}_helper'.camelize.safe_constantize
+          when Module
+            self.helper_class = helper_class
+          end
+        end
+    
+          # Returns constant of subscription adapter specified in config/cable.yml.
+      # If the adapter cannot be found, this will default to the Redis adapter.
+      # Also makes sure proper dependencies are required.
+      def pubsub_adapter
+        adapter = (cable.fetch('adapter') { 'redis' })
+    
+    module ActiveRecord
+  module ConnectionAdapters
+    class ConnectionSpecification
+      class ResolverTest < ActiveRecord::TestCase
+        def resolve(spec, config = {})
+          Resolver.new(config).resolve(spec)
+        end
+    
+        def master_helper_methods
+      @controller_class._helpers.instance_methods
     end
-  when 'gtest', 'googletest', 'google-test' then <<-EOS.undent
-    Installing gtest system-wide is not recommended; it should be vendored
-    in your projects that use it.
-    EOS
-  when 'gmock', 'googlemock', 'google-mock' then <<-EOS.undent
-    Installing gmock system-wide is not recommended; it should be vendored
-    in your projects that use it.
-    EOS
-  when 'sshpass' then <<-EOS.undent
-    We won't add sshpass because it makes it too easy for novice SSH users to
-    ruin SSH's security.
-    EOS
-  when 'gsutil' then <<-EOS.undent
-    Install gsutil with `pip install gsutil`
-    EOS
-  when 'clojure' then <<-EOS.undent
-    Clojure isn't really a program but a library managed as part of a
-    project and Leiningen is the user interface to that library.
     
-      # True if a {Formula} is being built in 32-bit/x86 mode.
-  # This is needed for some use-cases though we prefer to build Universal
-  # when a 32-bit version is needed.
-  def build_32_bit?
-    include?('32-bit') && option_defined?('32-bit')
-  end
+    require 'abstract_unit'
     
-      # Clean the keg of formula @f
-  def clean
-    ObserverPathnameExtension.reset_counts!
+    module ActionMailer
+  # The <tt>ActionMailer::DeliveryJob</tt> class is used when you
+  # want to send emails outside of the request-response cycle.
+  #
+  # Exceptions are rescued and handled by the mailer class.
+  class DeliveryJob < ActiveJob::Base # :nodoc:
+    queue_as { ActionMailer::Base.deliver_later_queue_name }
     
-      def std_cmake_parameters
-    '-DCMAKE_INSTALL_PREFIX='#{prefix}' -DCMAKE_BUILD_TYPE=None -DCMAKE_FIND_FRAMEWORK=LAST -Wno-dev'
-  end
-    
-    # This formula serves as the base class for several very similar
-# formulae for Amazon Web Services related tools.
-class AmazonWebServicesFormula < Formula
-  # Use this method to peform a standard install for Java-based tools,
-  # keeping the .jars out of HOMEBREW_PREFIX/lib
-  def install
-    rm Dir['bin/*.cmd'] # Remove Windows versions
-    libexec.install Dir['*']
-    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
-  end
-  alias_method :standard_install, :install
-    
-    require_relative 'converter/fonts_conversion'
-require_relative 'converter/less_conversion'
-require_relative 'converter/js_conversion'
-require_relative 'converter/logger'
-require_relative 'converter/network'
-    
-          def plugin_gem_names
-        (Gem.loaded_specs.keys - ['capistrano']).grep(/capistrano/).sort
-      end
+          indentation = ' ' * indent
+      sentences.map! { |sentence|
+        '#{indentation}#{sentence.join(' ')}'
+      }.join '\n'
     end
   end
 end
 
     
-        def cropping dst, ratio, scale
-      if ratio.horizontal? || ratio.square?
-        '%dx%d+%d+%d' % [ dst.width, dst.height, 0, (self.height * scale - dst.height) / 2 ]
-      else
-        '%dx%d+%d+%d' % [ dst.width, dst.height, (self.width * scale - dst.width) / 2, 0 ]
+      class AssertMultipartSelectMailer < ActionMailer::Base
+    def test(options)
+      mail subject: 'Test e-mail', from: 'test@test.host', to: 'test <test@test.host>' do |format|
+        format.text { render plain: options[:text] }
+        format.html { render plain: options[:html] }
       end
     end
+  end
     
-        def raise_if_blank_file
-      if path.blank?
-        raise Errors::NotIdentifiedByImageMagickError.new('Cannot find the geometry of a file with a blank name')
+          def remember_cookie_values(resource)
+        options = { httponly: true }
+        options.merge!(forget_cookie_values(resource))
+        options.merge!(
+          value: resource.class.serialize_into_cookie(resource),
+          expires: resource.remember_expires_at
+        )
       end
-    end
     
-            def description
-          'require presence of attachment #{@attachment_name}'
+          header_info.each do | var, value|
+        if request.respond_to?(:set_header)
+          request.set_header(var, value)
+        else
+          request.env[var]  = value
         end
+      end
     
-          expect('.all-buttons-active').to have_ruleset(ruleset)
-    end
+    module Metasploit
+  module Framework
+    class Application < Rails::Application
+      include Metasploit::Framework::CommonEngine
+    
+      def parse(pkt)
+    # We want to return immediantly if	we do not have a packet which is handled by us
+    return unless pkt.is_tcp?
+    return if (pkt.tcp_sport != 80 and pkt.tcp_dport != 80)
+    s = find_session((pkt.tcp_sport == 80) ? get_session_src(pkt) : get_session_dst(pkt))
+    
+    
+# extract label addresses
+addrs = {}
+dtrans.each_line { |ln|
+	if ln =~ /;[^ ].*:/
+		parts = ln.split(' ')
+		label = parts[1]
+		label = label.slice(1,label.index(':')-1)
+		addr = parts[0].split(':')[1].to_i(16)
+		#puts '%s => %x' % [label, addr]
+		one = { label => addr }
+		addrs.merge!(one)
+	end
+}
+#puts addrs.inspect
+    
+    p meterp.sys.config.sysinfo
+    
+      def get_result
+    result
   end
-    
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'padding-top: 11px; ' +
-                'padding-right: 12px; ' +
-                'padding-left: 13px;'
-      bad_rule = 'padding-bottom: null;'
-    
-          expect('.prefix').to have_ruleset(rule)
-    end
-  end
+end
