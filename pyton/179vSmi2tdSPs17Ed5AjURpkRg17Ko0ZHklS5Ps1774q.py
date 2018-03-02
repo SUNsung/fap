@@ -1,81 +1,59 @@
 
         
-            if not os.path.exists(to_bytes(filename, errors='surrogate_or_strict')) or os.path.isdir(to_bytes(filename, errors='strict')):
-        return None
-    digest = hash_func()
-    blocksize = 64 * 1024
-    try:
-        infile = open(to_bytes(filename, errors='surrogate_or_strict'), 'rb')
-        block = infile.read(blocksize)
-        while block:
-            digest.update(block)
-            block = infile.read(blocksize)
-        infile.close()
-    except IOError as e:
-        raise AnsibleError('error while accessing the file %s, error was: %s' % (filename, e))
-    return digest.hexdigest()
+        # The master toctree document.
+master_doc = 'index'
     
-            if args.verbose or args.test:
-            print(path)
+        def get_all_names_answer(self):
+        '''Returns the set of domain names that the plugin should find'''
+        if self._all_names:
+            return self._all_names
+        else:
+            raise errors.Error('No configuration file loaded')
     
-            # load data path for resource usage
-        this_dir, this_filename = os.path.split(__file__)
-        type_path = 'container_enabled' if getattr(self.options, 'container_enabled', False) else 'default'
-        self.DATA_PATH = os.path.join(this_dir, 'data', type_path)
+    # If true, an OpenSearch description file will be output, and all pages will
+# contain a <link> tag referring to it.  The value of this option must be the
+# base URL from which the finished HTML is served.
+#html_use_opensearch = ''
     
-        terminal_stdout_re = [
-        re.compile(r'[\r\n]?<.+>(?:\s*)$'),
-        re.compile(r'[\r\n]?\[.+\](?:\s*)$'),
-    ]
+        @mock.patch('certbot.display.enhancements.util')
+    def test_cancel(self, mock_util):
+        mock_util().menu.return_value = (display_util.CANCEL, 1)
+        self.assertFalse(self._call())
     
-        assert_almost_equal(unweighted_metric * weight, weighted_metric, decimal=decimal)
+    print 'JS_OUTPUTS := ' + ' '.join(outputs)
+print 'DEFS_SUCCESS := 1'
+
     
-    print('Build model...')
+            def mako_module_path(filename, uri):
+            filename = filename.lstrip('/').replace('/', '-')
+            path = os.path.join(module_directory, filename + '.py')
+            return os.path.abspath(path)
+    else:
+        # disable caching templates since we don't know where they should go.
+        module_directory = mako_module_path = None
     
+        @require_oauth2_scope('read')
+    @validate(
+        user=VAccountByName('username'),
+    )
+    @api_doc(
+        section=api_section.users,
+        uri='/api/v1/user/{username}/trophies',
+    )
+    def GET_usertrophies(self, user):
+        '''Return a list of trophies for the a given user.'''
+        return self.api_wrapper(get_usertrophies(user))
     
-def assert_args_presence(args, doc, member, name):
-    args_not_in_doc = [arg not in doc for arg in args]
-    if any(args_not_in_doc):
-        raise ValueError(
-            '{} {} arguments are not present in documentation '.format(name, list(
-                compress(args, args_not_in_doc))), member.__module__)
-    words = doc.replace('*', '').split()
-    # Check arguments styling
-    styles = [arg + ':' not in words for arg in args]
-    if any(styles):
-        raise ValueError(
-            '{} {} are not style properly 'argument': documentation'.format(name, list(
-                compress(args, styles))), member.__module__)
+    from reddit_base import RedditController, UnloggedUser
+from r2.lib.pages import (ButtonLite, ButtonDemoPanel, WidgetDemoPanel,
+                          BoringPage)
+from r2.lib.pages.things import wrap_links
+from r2.models import *
+from r2.lib.validator import *
+from pylons import request, response
+from pylons import tmpl_context as c
+from pylons.i18n import _
     
-    
-def get_example_array():
-    np.random.seed(3537)
-    example_array = np.random.random((100, 100)) * 100. - 50.
-    example_array[0, 0] = 0.  # 0 could possibly cause trouble
-    return example_array
-    
-                # check that container-level reset_states() works
-            model.reset_states()
-            out4 = model.predict(np.ones_like(inputs))
-            assert_allclose(out3, out4, atol=1e-5)
-    
-            total_count = 0
-        translated_count = 0
-        with open(fn) as f:
-            catalog = read_po(f)
-            for msg in catalog:
-                total_count += 1
-                if is_translated(msg):
-                    translated_count += 1
-        pct = translated_count / float(total_count) * 100
-        click.echo('% -7s % 2d%%' % (
-            locale,
-            pct,
-        ), err=True)
-        if pct >= MINIMUM and locale not in rv:
-            rv.append(locale)
-    with open(catalog_file, 'w') as f:
-        json.dump({
-            'supported_locales': sorted(rv)
-        }, f, indent=2)
-        f.write('\n')
+            return HelpPage(_('help'),
+                        content = Embed(content=output),
+                        show_sidebar = None).render()
