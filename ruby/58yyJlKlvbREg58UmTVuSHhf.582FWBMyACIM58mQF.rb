@@ -1,128 +1,152 @@
 
         
-            def store
-      @store.write FILENAME, to_json
-    end
+          def merge(*args)
+    @settings.merge(*args)
+    self
+  end
     
-        def name=(value)
-      @name = value.try :strip
-    end
+      def repo_var
+    @repo_var ||= tap.path.to_s.
+        strip_prefix(Tap::TAP_DIRECTORY.to_s).
+        tr('^A-Za-z0-9', '_').
+        upcase
+  end
     
-            # Registers additional provisioners to be available.
-        #
-        # @param [String] name Name of the provisioner.
-        def self.provisioner(name=UNSET_VALUE, &block)
-          data[:provisioners] ||= Registry.new
+          # Sign in a user bypassing the warden callbacks and stores the user
+      # straight in session. This option is useful in cases the user is already
+      # signed in, but we want to refresh the credentials in session.
+      #
+      # Examples:
+      #
+      #   bypass_sign_in @user, scope: :user
+      #   bypass_sign_in @user
+      def bypass_sign_in(resource, scope: nil)
+        scope ||= Devise::Mapping.find_scope!(resource)
+        expire_data_after_sign_in!
+        warden.session_serializer.store(resource, scope)
+      end
     
-            # This is called early, before a machine is instantiated, to check
-        # if this provider is installed. This should return true or false.
-        #
-        # If the provider is not installed and Vagrant determines it is
-        # able to install this provider, then it will do so. Installation
-        # is done by calling Environment.install_provider.
-        #
-        # If Environment.can_install_provider? returns false, then an error
-        # will be shown to the user.
-        def self.installed?
-          # By default return true for backwards compat so all providers
-          # continue to work.
-          true
+    class Devise::PasswordsController < DeviseController
+  prepend_before_action :require_no_authentication
+  # Render the #edit only if coming from a reset password email link
+  append_before_action :assert_reset_token_passed, only: :edit
+    
+                if respond_to?(:helper_method)
+              helper_method 'current_#{group_name}', 'current_#{group_name.to_s.pluralize}', '#{group_name}_signed_in?'
+            end
+          METHODS
         end
+      end
     
-      # Show full error reports and disable caching.
-  config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
+      it 'yields every element of self' do
+    ret = []
+    @set.send(@method) { |x| ret << x }
+    ret.sort.should == ['one', 'two', 'three'].sort
+  end
     
-      path = 'assets/stylesheets'
-  css_path = args.with_defaults(css_path: 'tmp')[:css_path]
-  puts Term::ANSIColor.bold 'Compiling SCSS in #{path}'
-  Dir.mkdir(css_path) unless File.directory?(css_path)
-  %w(_bootstrap bootstrap/_theme).each do |file|
-    save_path = '#{css_path}/#{file.sub(/(^|\/)?_+/, '\1').sub('/', '-')}.css'
-    puts Term::ANSIColor.cyan('  #{save_path}') + '...'
-    engine    = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
-    css       = engine.render
-    File.open(save_path, 'w') { |f| f.write css }
+        bug9187 = '[ruby-core:58728] [Bug #9187]'
+    
+      it 'auto-detects base 8 via leading 0 when base = 0' do
+    '01778'.to_i(0).should == 0177
+    '-01778'.to_i(0).should == -0177
+  end
+    
+          raise <<MSG if @args.empty?
+What files should I watch? Did you mean something like:
+    #{@default_syntax} --watch input.#{@default_syntax}:output.css
+    #{@default_syntax} --watch input-dir:output-dir
+MSG
+    
+          # Find a Sass file, if it exists.
+      #
+      # This is the primary entry point of the Importer.
+      # It corresponds directly to an `@import` statement in Sass.
+      # It should do three basic things:
+      #
+      # * Determine if the URI is in this importer's format.
+      #   If not, return nil.
+      # * Determine if the file indicated by the URI actually exists and is readable.
+      #   If not, return nil.
+      # * Read the file and place the contents in a {Sass::Engine}.
+      #   Return that engine.
+      #
+      # If this importer's format allows for file extensions,
+      # it should treat them the same way as the default {Filesystem} importer.
+      # If the URI explicitly has a `.sass` or `.scss` filename,
+      # the importer should look for that exact file
+      # and import it as the syntax indicated.
+      # If it doesn't exist, the importer should return nil.
+      #
+      # If the URI doesn't have either of these extensions,
+      # the importer should look for files with the extensions.
+      # If no such files exist, it should return nil.
+      #
+      # The {Sass::Engine} to be returned should be passed `options`,
+      # with a few modifications. `:syntax` should be set appropriately,
+      # `:filename` should be set to `uri`,
+      # and `:importer` should be set to this importer.
+      #
+      # @param uri [String] The URI to import.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` that's currently being resolved.
+      #   This is safe for subclasses to modify destructively.
+      #   Callers should only pass in a value they don't mind being destructively modified.
+      # @return [Sass::Engine, nil] An Engine containing the imported file,
+      #   or nil if it couldn't be found or was in the wrong format.
+      def find(uri, options)
+        Sass::Util.abstract(self)
+      end
+    
+            def define_logger(name, options = {})
+          class_eval <<-RUBY, __FILE__, __LINE__ + 1
+            def #{name}(message)
+              #{options.fetch(:to, :log)}(#{name.inspect}, message)
+            end
+          RUBY
+        end
+      end
+    end
   end
 end
+
     
-              tries     += 1
-          record.id += rand(100)
-    
-      def preview_url
-    if object.needs_redownload?
-      media_proxy_url(object.id, :small)
-    else
-      full_asset_url(object.file.url(:small))
-    end
-  end
-    
-        attributes :type, :media_type, :url, :name
-    
-      describe 'PUT #update' do
-    it 'updates notifications settings' do
-      user.settings['notification_emails'] = user.settings['notification_emails'].merge('follow' => false)
-      user.settings['interactions'] = user.settings['interactions'].merge('must_be_follower' => true)
-    
-    namespace :emojis do
-  desc 'Generate a unicode to filename mapping'
-  task :generate do
-    source = 'http://www.unicode.org/Public/emoji/5.0/emoji-test.txt'
-    codes  = []
-    dest   = Rails.root.join('app', 'javascript', 'mastodon', 'features', 'emoji', 'emoji_map.json')
-    
-    ```
-#{plugins_string}
-```
-#{markdown_podfile}
+    (deny default)
 EOS
+    
+            # Split out the targets into app and test targets
+        test_targets, app_targets = project.native_targets.
+                              sort_by { |t| t.name.downcase }.
+                              partition(&:test_target_type?)
+    
+            def initialize(argv)
+          @name = argv.shift_argument
+          @template_url = argv.option('template-url', TEMPLATE_REPO)
+          super
+          @additional_args = argv.remainder!
+        end
+    
+            def yellow
+          @color = :yellow
+        end
       end
     
-          def self.options
-        [
-          ['--update', 'Run `pod repo update` before listing'],
-          ['--stats',  'Show additional stats (like GitHub watchers and forks)'],
-        ].concat(super)
+          def stage_definitions
+        stage_config_path.join('*.rb')
       end
     
-          # Override `Kernel#puts` to prepend four spaces to each line.
-      def puts(string=nil)
-        $stdout.puts(string.to_s.gsub(/^/, '    '))
-      end
-    
-        # The release path according to the context
-    def release_path
-      context.release_path
+        # @abstract
+    #
+    # Create a (new) clone of the remote-repository on the deployment target
+    #
+    # @return void
+    #
+    def clone
+      raise NotImplementedError, 'Your SCM strategy module should provide a #clone method'
     end
     
-          it 'filters by role from the :filter variable' do
-        hosts = dsl.roles(:web)
-        all = dsl.roles(:all)
-        SSHKit::Coordinator.expects(:new).with(hosts).returns(@coordinator)
-        dsl.set :filter, role: 'web'
-        dsl.on(all)
-      end
-    
-    desc 'Generates a dummy app for testing for every Spree engine'
-task :test_app do
-  SPREE_GEMS.each do |gem_name|
-    Dir.chdir('#{File.dirname(__FILE__)}/#{gem_name}') do
-      sh 'rake test_app'
-    end
+        return captured_stdout.string, captured_stderr.string
+  ensure
+    $stdout = orig_stdout
+    $stderr = orig_stderr
   end
 end
-    
-            def create
-          authorize! :create, StockLocation
-          @stock_location = StockLocation.new(stock_location_params)
-          if @stock_location.save
-            respond_with(@stock_location, status: 201, default_template: :show)
-          else
-            invalid_resource!(@stock_location)
-          end
-        end
-    
-            def stock_location
-          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
-          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:stock_location_id])
-        end
