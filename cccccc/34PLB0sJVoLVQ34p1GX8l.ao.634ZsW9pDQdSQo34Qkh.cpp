@@ -1,140 +1,87 @@
 
         
-        void leveldb_approximate_sizes(
-    leveldb_t* db,
-    int num_ranges,
-    const char* const* range_start_key, const size_t* range_start_key_len,
-    const char* const* range_limit_key, const size_t* range_limit_key_len,
-    uint64_t* sizes) {
-  Range* ranges = new Range[num_ranges];
-  for (int i = 0; i < num_ranges; i++) {
-    ranges[i].start = Slice(range_start_key[i], range_start_key_len[i]);
-    ranges[i].limit = Slice(range_limit_key[i], range_limit_key_len[i]);
+        
+    {// Enable LOG(CONSOLE) for print messages to console.
+#define LOG_CONSOLE ::xgboost::ConsoleLogger()
+// Enable LOG(TRACKER) for print messages to tracker
+#define LOG_TRACKER ::xgboost::TrackerLogger()
+}  // namespace xgboost.
+#endif  // XGBOOST_LOGGING_H_
+
+    
+    namespace rocksdb {
+    }
+    
+    // @lint-ignore TXT4 T25377293 Grandfathered in
+#endif  // JAVA_ROCKSJNI_STATISTICSJNI_H_
+    
+    /**
+ * @brief create a new directory handler
+ * @details [long description]
+ *
+ * @param name [description]
+ * @param result [description]
+ *
+ * @return [description]
+ */
+Status EnvLibrados::NewDirectory(
+  const std::string& name,
+  std::unique_ptr<Directory>* result)
+{
+  LOG_DEBUG('[IN]%s\n', name.c_str());
+  std::string fid, dir, file;
+  /* just want to get dir name */
+  split(name + '/tmp', &dir, &file);
+  Status s;
+    }
+    
+      using DB::CompactRange;
+  virtual Status CompactRange(const CompactRangeOptions& options,
+                              ColumnFamilyHandle* column_family,
+                              const Slice* begin, const Slice* end) override {
+    return db_->CompactRange(options, column_family, begin, end);
   }
-  db->rep->GetApproximateSizes(ranges, num_ranges, sizes);
-  delete[] ranges;
-}
     
-    
-    {}  // namespace leveldb
-    
-    std::string ParsedInternalKey::DebugString() const {
-  char buf[50];
-  snprintf(buf, sizeof(buf), '' @ %llu : %d',
-           (unsigned long long) sequence,
-           int(type));
-  std::string result = ''';
-  result += EscapeString(user_key.ToString());
-  result += buf;
-  return result;
-}
-    
-    static std::string IKey(const std::string& user_key,
-                        uint64_t seq,
-                        ValueType vt) {
-  std::string encoded;
-  AppendInternalKey(&encoded, ParsedInternalKey(user_key, seq, vt));
-  return encoded;
-}
-    
-    Status SetCurrentFile(Env* env, const std::string& dbname,
-                      uint64_t descriptor_number) {
-  // Remove leading 'dbname/' and add newline to manifest file name
-  std::string manifest = DescriptorFileName(dbname, descriptor_number);
-  Slice contents = manifest;
-  assert(contents.starts_with(dbname + '/'));
-  contents.remove_prefix(dbname.size() + 1);
-  std::string tmp = TempFileName(dbname, descriptor_number);
-  Status s = WriteStringToFileSync(env, contents.ToString() + '\n', tmp);
-  if (s.ok()) {
-    s = env->RenameFile(tmp, CurrentFileName(dbname));
-  }
+      // Decide column family (i.e. the time window) to put into
+  ColumnFamilyHandle* column_family;
+  s = FindColumnFamily(timestamp, &column_family, true /*create_if_missing*/);
   if (!s.ok()) {
-    env->DeleteFile(tmp);
+    return s;
   }
-  return s;
-}
     
-      fname = CurrentFileName('foo');
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(0, number);
-  ASSERT_EQ(kCurrentFile, type);
-    
-      // If a seek to internal key 'k' in specified file finds an entry,
-  // call (*handle_result)(arg, found_key, found_value).
-  Status Get(const ReadOptions& options,
-             uint64_t file_number,
-             uint64_t file_size,
-             const Slice& k,
-             void* arg,
-             void (*handle_result)(void*, const Slice&, const Slice&));
-    
-    
-    {private:
-  Word W;
-  size_t PositionHint = std::numeric_limits<size_t>::max();
-  size_t UseCount = 0;
-  size_t SuccessCount = 0;
-};
-    
-    #define EXT_FUNC(NAME, RETURN_TYPE, FUNC_SIG, WARN)                            \
-  RETURN_TYPE(*NAME) FUNC_SIG = nullptr
-    
-    void ReadDirToVectorOfUnits(const char *Path, std::vector<Unit> *V,
-                            long *Epoch, size_t MaxSize, bool ExitOnError) {
-  long E = Epoch ? *Epoch : 0;
-  std::vector<std::string> Files;
-  ListFilesInDirRecursive(Path, Epoch, &Files, /*TopDir*/true);
-  size_t NumLoaded = 0;
-  for (size_t i = 0; i < Files.size(); i++) {
-    auto &X = Files[i];
-    if (Epoch && GetEpoch(X) < E) continue;
-    NumLoaded++;
-    if ((NumLoaded & (NumLoaded - 1)) == 0 && NumLoaded >= 1024)
-      Printf('Loaded %zd/%zd files from %s\n', NumLoaded, Files.size(), Path);
-    auto S = FileToVector(X, MaxSize, ExitOnError);
-    if (!S.empty())
-      V->push_back(S);
-  }
-}
-    
-    void ListFilesInDirRecursive(const std::string &Dir, long *Epoch,
-                             std::vector<std::string> *V, bool TopDir) {
-  auto E = GetEpoch(Dir);
-  if (Epoch)
-    if (E && *Epoch >= E) return;
+    TEST_F(YogaTest_HadOverflowTests, no_overflow_no_wrap_and_flex_children) {
+  const YGNodeRef child0 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child0, 80);
+  YGNodeStyleSetHeight(child0, 40);
+  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
+  YGNodeStyleSetMargin(child0, YGEdgeBottom, 10);
+  YGNodeInsertChild(root, child0, 0);
+  const YGNodeRef child1 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child1, 80);
+  YGNodeStyleSetHeight(child1, 40);
+  YGNodeStyleSetMargin(child1, YGEdgeBottom, 5);
+  YGNodeStyleSetFlexShrink(child1, 1);
+  YGNodeInsertChild(root, child1, 1);
     }
     
-      // Remove all features that we already know from all other inputs.
-  for (size_t i = NumFilesInFirstCorpus; i < Files.size(); i++) {
-    auto &Cur = Files[i].Features;
-    std::vector<uint32_t> Tmp;
-    std::set_difference(Cur.begin(), Cur.end(), AllFeatures.begin(),
-                        AllFeatures.end(), std::inserter(Tmp, Tmp.begin()));
-    Cur.swap(Tmp);
-  }
+        YGConfigRef m_config;
     
-    void MutationDispatcher::AddWordToAutoDictionary(DictionaryEntry DE) {
-  static const size_t kMaxAutoDictSize = 1 << 14;
-  if (TempAutoDictionary.size() >= kMaxAutoDictSize) return;
-  TempAutoDictionary.push_back(DE);
-}
-    
-    extern 'C' {
-__attribute__((visibility('default')))
-void __sanitizer_cov_trace_pc_guard(uint32_t *Guard) {
-  uintptr_t PC = (uintptr_t)__builtin_return_address(0);
-  fuzzer::TPC.HandleTrace(Guard, PC);
-}
+        Size(void)
+    : width(0.0)
+    , height(0.0)
+    {
     }
     
-    bool ExecuteCommandAndReadOutput(const std::string &Command, std::string *Out) {
-  FILE *Pipe = OpenProcessPipe(Command.c_str(), 'r');
-  if (!Pipe) return false;
-  char Buff[1024];
-  size_t N;
-  while ((N = fread(Buff, 1, sizeof(Buff), Pipe)) > 0)
-    Out->append(Buff, N);
-  return true;
-}
+      /**
+   * This runs the closure in a scope with fbjni's classloader. This should be
+   * the same classloader as the rest of the application and thus anything
+   * running in the closure will have access to the same classes as in a normal
+   * java-create thread.
+   */
+  static void WithClassLoader(std::function<void()>&& runnable);
+    
+      template <typename ...Args>
+  void initialize(Args&&... arguments) {
+    FBASSERT(!m_instance);
+    m_instance = new T(std::forward<Args>(arguments)...);
+  }
