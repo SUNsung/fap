@@ -1,124 +1,144 @@
-template <typename Generator1, typename Generator2, typename Generator3,
-    typename Generator4, typename Generator5, typename Generator6>
-internal::CartesianProductHolder6<Generator1, Generator2, Generator3,
-    Generator4, Generator5, Generator6> Combine(
-    const Generator1& g1, const Generator2& g2, const Generator3& g3,
-        const Generator4& g4, const Generator5& g5, const Generator6& g6) {
-  return internal::CartesianProductHolder6<Generator1, Generator2, Generator3,
-      Generator4, Generator5, Generator6>(
-      g1, g2, g3, g4, g5, g6);
+
+        
+        PyObject* NewFileExtensionsByName(const FileDescriptor* descriptor);
+    
+    void RepeatedEnumFieldGenerator::WriteToString(io::Printer* printer) {
+  printer->Print(variables_,
+    'PrintField(\'$descriptor_name$\', $name$_, writer);\n');
 }
     
-    // Range() returns generators providing sequences of values in a range.
-//
-// Synopsis:
-// Range(start, end)
-//   - returns a generator producing a sequence of values {start, start+1,
-//     start+2, ..., }.
-// Range(start, end, step)
-//   - returns a generator producing a sequence of values {start, start+step,
-//     start+step+step, ..., }.
-// Notes:
-//   * The generated sequences never include end. For example, Range(1, 5)
-//     returns a generator producing a sequence {1, 2, 3, 4}. Range(1, 9, 2)
-//     returns a generator producing {1, 3, 5, 7}.
-//   * start and end must have the same type. That type may be any integral or
-//     floating-point type or a user defined type satisfying these conditions:
-//     * It must be assignable (have operator=() defined).
-//     * It must have operator+() (operator+(int-compatible type) for
-//       two-operand version).
-//     * It must have operator<() defined.
-//     Elements in the resulting sequences will also have that type.
-//   * Condition start < end must be satisfied in order for resulting sequences
-//     to contain any elements.
-//
-template <typename T, typename IncrementT>
-internal::ParamGenerator<T> Range(T start, T end, IncrementT step) {
-  return internal::ParamGenerator<T>(
-      new internal::RangeGenerator<T, IncrementT>(start, end, step));
-}
+    #include <sstream>
     
-      // The c'tor sets this object as the test part result reporter used
-  // by Google Test.  The 'result' parameter specifies where to report the
-  // results. This reporter will only catch failures generated in the current
-  // thread. DEPRECATED
-  explicit ScopedFakeTestPartResultReporter(TestPartResultArray* result);
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
     
-    namespace internal {
-    }
-    
-      const std::string& string() const { return pathname_; }
-  const char* c_str() const { return pathname_.c_str(); }
-    
-    // Protects copying of all linked_ptr objects.
-GTEST_API_ GTEST_DECLARE_STATIC_MUTEX_(g_linked_ptr_mutex);
-    
-    template <typename T, size_t N>
-internal::ParamGenerator<T> ValuesIn(const T (&array)[N]);
-    
-      bool check_for_leaks = false;
-  if (argc > 1 && strcmp(argv[1], '--check_for_leaks') == 0 )
-    check_for_leaks = true;
-  else
-    printf('%s\n', 'Run this program with --check_for_leaks to enable '
-           'custom leak checking in the tests.');
-    
-    
-// This sample shows how to write a simple unit test for a function,
-// using Google C++ testing framework.
-//
-// Writing a unit test using Google C++ testing framework is easy as 1-2-3:
-    
-    // This is unlike folly::ThreadCachedInt in that the full value
-// is never rounded up globally and cached, it only supports readFull.
-//
-// folly/experimental/TLRefCount is similar, but does not support a
-// waitForZero, and is not reset-able.
-//
-// Note that the RCU implementation is completely abstracted from the
-// counter implementation, a rseq implementation can be dropped in
-// if the kernel supports it.
-    
-    template <class Then>
-decltype(auto) if_constexpr(std::true_type, Then then) {
-  return then(Identity{});
-}
-    
-    //  Essentially, two versions of this file: one with an SSE42 implementation
-//  and one with a fallback implementation. We determine which version to use by
-//  testing for the presence of the required headers.
-//
-//  TODO: Maybe this should be done by the build system....
-#if !FOLLY_SSE_PREREQ(4, 2)
-namespace folly {
-namespace detail {
-size_t qfind_first_byte_of_sse42(
-    const StringPieceLite haystack,
-    const StringPieceLite needles) {
-  return qfind_first_byte_of_nosse(haystack, needles);
-}
-} // namespace detail
-} // namespace folly
-#else
-#include <cstdint>
-#include <limits>
+    #include <map>
 #include <string>
     
-    
-    {
-    {size_t qfind_first_byte_of_sse42(
-    const StringPieceLite haystack,
-    const StringPieceLite needles);
-} // namespace detail
-} // namespace folly
-
-    
-    TEST(allocate_sys_buffer, compiles) {
-  auto buf = allocate_sys_buffer(256);
-  //  Freed at the end of the scope.
+    DEFINE_FIND_STATIC_METHOD(KXlog_setAppenderMode, KXlog, 'setAppenderMode', '(I)V')
+JNIEXPORT void JNICALL Java_com_tencent_mars_xlog_Xlog_setAppenderMode
+  (JNIEnv *, jclass, jint _mode) {
+	appender_setmode((TAppenderMode)_mode);
 }
     
+    class DNS {
+  public:
+   typedef std::vector<std::string> (*DNSFunc)(const std::string& host);
+    }
     
-    {     private:
-      Optional<Pop> pop_;
-    };
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    #endif
+    
+    void Test_Spy_Sample::TestFun0()
+{
+    SPY_HOOK_THIS_API(TestFun0);
+    int i = 0;
+    SPY_ATTACH_VARIABLE('TestFun0 i', i);
+    i++;
+    xinfo2(TSF'Test');
+    }
+    
+    
+    {  private:
+    virtual void __OnAttach(const char* _key) {}
+    virtual void __OnDetach(const char* _key) {}
+};
+
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    JNIEnv* ScopeJEnv::GetEnv() {
+    return env_;
+}
+    
+    // Parses one dictionary entry.
+// If successfull, write the enty to Unit and returns true,
+// otherwise returns false.
+bool ParseOneDictionaryEntry(const std::string &Str, Unit *U);
+// Parses the dictionary file, fills Units, returns true iff all lines
+// were parsed succesfully.
+bool ParseDictionaryFile(const std::string &Text, std::vector<Unit> *Units);
+    
+      if (Flags.jobs > 0 && Flags.workers == 0) {
+    Flags.workers = std::min(NumberOfCpuCores() / 2, Flags.jobs);
+    if (Flags.workers > 1)
+      Printf('Running %u workers\n', Flags.workers);
+  }
+    
+    #include 'FuzzerExtFunctions.def'
+    
+    void CopyFileToErr(const std::string &Path) {
+  Printf('%s', FileToString(Path).c_str());
+}
+    
+      bool InFuzzingThread() const { return IsMyThread; }
+  size_t GetCurrentUnitInFuzzingThead(const uint8_t **Data) const;
+  void TryDetectingAMemoryLeak(const uint8_t *Data, size_t Size,
+                               bool DuringInitialCorpusExecution);
+    
+    
+    {  bool Parse(std::istream &IS, bool ParseCoverage);
+  bool Parse(const std::string &Str, bool ParseCoverage);
+  void ParseOrExit(std::istream &IS, bool ParseCoverage);
+  size_t Merge(std::vector<std::string> *NewFiles);
+};
+    
+    namespace fuzzer {
+    }
+    
+    void sha1_writebyte(sha1nfo *s, uint8_t data) {
+	++s->byteCount;
+	sha1_addUncounted(s, data);
+}
+    
+    void TraceState::TraceMemcmpCallback(size_t CmpSize, const uint8_t *Data1,
+                                     const uint8_t *Data2) {
+  if (!RecordingMemcmp || !F->InFuzzingThread()) return;
+  CmpSize = std::min(CmpSize, Word::GetMaxSize());
+  int Added2 = TryToAddDesiredData(Data1, Data2, CmpSize);
+  int Added1 = TryToAddDesiredData(Data2, Data1, CmpSize);
+  if ((Added1 || Added2) && Options.Verbosity >= 3) {
+    Printf('MemCmp Added %d%d: ', Added1, Added2);
+    if (Added1) PrintASCII(Data1, CmpSize);
+    if (Added2) PrintASCII(Data2, CmpSize);
+    Printf('\n');
+  }
+}
+    
+    public:
+  RequestGroup* getRequestGroup() const { return requestGroup_; }
+    
+    #include 'TimerA2.h'
+    
+    
+    {} // namespace aria2
+
+    
+      /**
+   * Moves current tier pointer to the tier to which the 'stopped' event can
+   * be sent.
+   * 2-stage search operation is made.
+   * The first search operation is performed from current pointer position
+   * to the end. If no such tier is found, the second search is performed from
+   * the first to the current pointer position.
+   */
+  void moveToStoppedAllowedTier();
+  void moveToCompletedAllowedTier();
+    
+    #else // defined(__MAC_10_7)
+#if defined(__MAC_10_6)
