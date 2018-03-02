@@ -1,87 +1,224 @@
 
         
-        
-    {// Enable LOG(CONSOLE) for print messages to console.
-#define LOG_CONSOLE ::xgboost::ConsoleLogger()
-// Enable LOG(TRACKER) for print messages to tracker
-#define LOG_TRACKER ::xgboost::TrackerLogger()
-}  // namespace xgboost.
-#endif  // XGBOOST_LOGGING_H_
+        class StatusPropagationTest : public ::testing::TestWithParam<StatusTestParam> {
+ protected:
+  PartialRunMgr partial_run_mgr_;
+    }
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+      double PrimalLossDerivative(const double wx, const double label,
+                              const double example_weight) const final {
+    if (label * wx >= 1) {
+      return 0;
+    }
+    if (label * wx <= 1 - gamma) {
+      return -label;
+    }
+    return (wx - label) / gamma;
+  }
+    
+    #include 'third_party/eigen3/unsupported/Eigen/CXX11/Tensor'
+#include 'tensorflow/core/framework/tensor_types.h'
+#include 'tensorflow/core/framework/types.h'
+#include 'tensorflow/core/kernels/scatter_functor.h'
+    
+    bool SubProcess::Start() {
+  mutex_lock procLock(proc_mu_);
+  mutex_lock dataLock(data_mu_);
+  if (running_) {
+    LOG(ERROR) << 'Start called after the process was started.';
+    return false;
+  }
+  if ((exec_path_ == nullptr) || (exec_argv_ == nullptr)) {
+    LOG(ERROR) << 'Start called without setting a program.';
+    return false;
+  }
+    }
+    
+    #include 'tensorflow/stream_executor/cuda/cuda_driver.h'
+#include 'tensorflow/stream_executor/cuda/cuda_stream.h'
+#include 'tensorflow/stream_executor/event.h'
+#include 'tensorflow/stream_executor/lib/status.h'
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    
+    {} // namespace swift
+    
+    
+    {  const SILDebugScope *Scope = this;
+  while (Scope->Parent.is<const SILDebugScope *>())
+    Scope = Scope->Parent.get<const SILDebugScope *>();
+  assert(Scope->Parent.is<SILFunction *>() && 'orphaned scope');
+  return Scope->Parent.get<SILFunction *>();
+}
+    
+    
+    {} // end namespace swift
+    
+    
+    {} // end namespace swift
+    
+    
+    {  StringRef getReceiverUSR() const {
+    for (auto Relation: Relations) {
+      if (Relation.roles & (SymbolRoleSet) SymbolRole::RelationReceivedBy)
+        return Relation.USR;
+    }
+    return StringRef();
+  }
+};
+    
+    void cvValidateDisparity( CvArr* _disp, const CvArr* _cost, int minDisparity,
+                         int numberOfDisparities, int disp12MaxDiff )
+{
+    cv::Mat disp = cv::cvarrToMat(_disp), cost = cv::cvarrToMat(_cost);
+    cv::validateDisparity( disp, cost, minDisparity, numberOfDisparities, disp12MaxDiff );
+}
 
     
-    namespace rocksdb {
+    void dls::compute_eigenvec(const cv::Mat& Mtilde, cv::Mat& eigenval_real, cv::Mat& eigenval_imag,
+                                                  cv::Mat& eigenvec_real, cv::Mat& eigenvec_imag)
+{
+#ifdef HAVE_EIGEN
+    Eigen::MatrixXd Mtilde_eig, zeros_eig;
+    cv::cv2eigen(Mtilde, Mtilde_eig);
+    cv::cv2eigen(cv::Mat::zeros(27, 27, CV_64F), zeros_eig);
     }
     
-    // @lint-ignore TXT4 T25377293 Grandfathered in
-#endif  // JAVA_ROCKSJNI_STATISTICSJNI_H_
+    // fit second order curve to a set of 2D points
+inline void fitCurve2Order(const std::vector<Point2f>& /*points*/, std::vector<float>& /*curve*/)
+{
+    // TBD
+}
+    
+        static void CODEGEN_FUNCPTR Switch_BlendEquationSeparate(GLenum modeRGB, GLenum modeAlpha)
+    {
+        BlendEquationSeparate = (PFNBLENDEQUATIONSEPARATEPROC)IntGetProcAddress('glBlendEquationSeparate');
+        BlendEquationSeparate(modeRGB, modeAlpha);
+    }
+    
+    #include 'precomp.hpp'
+    
+      switch (arr->tag()) {
+    case RepoAuthType::Array::Tag::Packed: {
+      for (uint32_t idx = 0; idx < arr->size(); ++idx) {
+        auto rat = arr->packedElem(idx);
+        assert(rat.resolved());
+        if (rat.mayHaveArrData()) check(rat.array());
+      }
+      break;
+    }
+    case RepoAuthType::Array::Tag::PackedN: {
+      auto rat = arr->elemType();
+      assert(rat.resolved());
+      if (rat.mayHaveArrData()) check(rat.array());
+      break;
+    }
+  }
+    
+    /////////////////////////////////////////////////////////////////////////////
+    
+      if (m_log_entry) {
+    m_log_entry->setInt(std::string(s_names[(size_t)m_name].str) + '_micros',
+                        elapsed / 1000);
+  }
+    
+    
+    {  switch (t) {
+    case SystemCPU: return to_usec(ru.ru_stime);
+    case UserCPU:   return to_usec(ru.ru_utime);
+    case TotalCPU:  return to_usec(ru.ru_stime) + to_usec(ru.ru_utime);
+    default: always_assert(false);
+  }
+}
+    
+    
+    {  v << vcall{
+    CallSpec::direct(pthread_getspecific),
+    v.makeVcallArgs({{v.cns(datum.tls->m_key)}}),
+    v.makeTuple({d}),
+    Fixup{},
+    DestType::SSA
+  };
+}
     
     /**
- * @brief create a new directory handler
- * @details [long description]
- *
- * @param name [description]
- * @param result [description]
- *
- * @return [description]
+ * Fast check for the most common form of the UTF-8 encoding identifier.
  */
-Status EnvLibrados::NewDirectory(
-  const std::string& name,
-  std::unique_ptr<Directory>* result)
-{
-  LOG_DEBUG('[IN]%s\n', name.c_str());
-  std::string fid, dir, file;
-  /* just want to get dir name */
-  split(name + '/tmp', &dir, &file);
-  Status s;
-    }
+ALWAYS_INLINE
+static bool isUtf8(const Variant& encoding) {
+  return encoding.getStringDataOrNull() == s_utf_8.get();
+}
     
-      using DB::CompactRange;
-  virtual Status CompactRange(const CompactRangeOptions& options,
-                              ColumnFamilyHandle* column_family,
-                              const Slice* begin, const Slice* end) override {
-    return db_->CompactRange(options, column_family, begin, end);
-  }
     
-      // Decide column family (i.e. the time window) to put into
-  ColumnFamilyHandle* column_family;
-  s = FindColumnFamily(timestamp, &column_family, true /*create_if_missing*/);
-  if (!s.ok()) {
-    return s;
-  }
-    
-    TEST_F(YogaTest_HadOverflowTests, no_overflow_no_wrap_and_flex_children) {
-  const YGNodeRef child0 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child0, 80);
-  YGNodeStyleSetHeight(child0, 40);
-  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
-  YGNodeStyleSetMargin(child0, YGEdgeBottom, 10);
-  YGNodeInsertChild(root, child0, 0);
-  const YGNodeRef child1 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child1, 80);
-  YGNodeStyleSetHeight(child1, 40);
-  YGNodeStyleSetMargin(child1, YGEdgeBottom, 5);
-  YGNodeStyleSetFlexShrink(child1, 1);
-  YGNodeInsertChild(root, child1, 1);
-    }
-    
-        YGConfigRef m_config;
-    
-        Size(void)
-    : width(0.0)
-    , height(0.0)
-    {
+static Variant HHVM_FUNCTION(gmp_strval,
+                             const Variant& data,
+                             const int64_t base /* = 10 */) {
+  mpz_t gmpData;
     }
     
       /**
-   * This runs the closure in a scope with fbjni's classloader. This should be
-   * the same classloader as the rest of the application and thus anything
-   * running in the closure will have access to the same classes as in a normal
-   * java-create thread.
+   * Gracefully stop this web server. We will stop accepting new connections
+   * and finish ongoing requests without being interrupted in the middle of
+   * them. Note this is a non-blocking call and it will return immediately.
+   * At background, it will eventually make the thread calling start() quit.
    */
-  static void WithClassLoader(std::function<void()>&& runnable);
+  virtual void stop() = 0;
     
-      template <typename ...Args>
-  void initialize(Args&&... arguments) {
-    FBASSERT(!m_instance);
-    m_instance = new T(std::forward<Args>(arguments)...);
+    Variant HHVM_FUNCTION(posix_getlogin) {
+#if !defined(__APPLE__) && !defined(__FreeBSD__)
+  char buf[L_cuserid];
+#else
+  char buf[MAXLOGNAME];
+#endif
+  if (!getlogin_r(buf, sizeof(buf) - 1)) {
+    return String(buf, CopyString);
   }
+  return false;
+}
+    
+    namespace irgen {
+    }
+    
+    namespace A2STR {
+    }
+    
+      std::unique_ptr<AuthConfig> getDefaultAuthConfig() const;
+    
+    #ifdef __MINGW32__
+  HANDLE fd_;
+  // The handle for memory mapped file. mmap equivalent in Windows.
+  HANDLE mapView_;
+#else  // !__MINGW32__
+  int fd_;
+#endif // !__MINGW32__
+    
+    class AbstractHttpServerResponseCommand : public Command {
+private:
+  DownloadEngine* e_;
+  std::shared_ptr<SocketCore> socket_;
+  std::shared_ptr<HttpServer> httpServer_;
+  Timer timeoutTimer_;
+  bool readCheck_;
+  bool writeCheck_;
+    }
+    
+    void AnnounceList::announceSuccess()
+{
+  if (currentTrackerInitialized_) {
+    (*currentTier_)->nextEvent();
+    auto url = *currentTracker_;
+    (*currentTier_)->urls.erase(currentTracker_);
+    (*currentTier_)->urls.push_front(std::move(url));
+    currentTier_ = std::begin(tiers_);
+    currentTracker_ = std::begin((*currentTier_)->urls);
+  }
+}
+    
+      // Don't allow copying
+  AnnounceTier(const AnnounceTier&) = delete;
+  AnnounceTier& operator=(const AnnounceTier&) = delete;
