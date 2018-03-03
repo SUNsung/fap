@@ -1,50 +1,36 @@
 
         
-        # If true, SmartyPants will be used to convert quotes and dashes to
-# typographically correct entities.
-#html_use_smartypants = True
+                # remember the port
+        try:
+            environ['request_port'] = int(port)
+        except ValueError:
+            pass
     
-        with app.app_context():
-        init_db()
-        yield app
+        @csrf_exempt
+    @json_validate(
+        VRatelimit(rate_ip=True, prefix='rate_register_'),
+        signature=VSigned(),
+        name=VUname(['user']),
+        email=ValidEmail('email'),
+        password=VPasswordChange(['passwd', 'passwd2']),
+    )
+    def POST_register(self, responder, name, email, password, **kwargs):
+        kwargs.update(dict(
+            controller=self,
+            form=responder('noop'),
+            responder=responder,
+            name=name,
+            email=email,
+            password=password,
+        ))
+        return handle_register(**kwargs)
     
+    from pylons import request
+from pylons import app_globals as g
+from reddit_base import RedditController
+from r2.lib.pages import AdminPage, AdminAwards
+from r2.lib.pages import AdminAwardGive, AdminAwardWinners
+from r2.lib.validator import *
     
-@app.route('/<username>/unfollow')
-def unfollow_user(username):
-    '''Removes the current user as follower of the given user.'''
-    if not g.user:
-        abort(401)
-    whom_id = get_user_id(username)
-    if whom_id is None:
-        abort(404)
-    db = get_db()
-    db.execute('delete from follower where who_id=? and whom_id=?',
-              [session['user_id'], whom_id])
-    db.commit()
-    flash('You are no longer following '%s'' % username)
-    return redirect(url_for('user_timeline', username=username))
-    
-    
-import argparse
-import collections
-import os
-import sys
-    
-    
-def secure_hash_s(data, hash_func=sha1):
-    ''' Return a secure hash hex digest of data. '''
-    
-        if key:
-        return key
-    
-        # new build
-    
-            # global, resource
-        input_url = 'https://www.googleapis.com/compute/v1/projects/myproject/global/urlMaps'
-        actual = GCPUtils.parse_gcp_url(input_url)
-        self.assertEquals('compute', actual['service'])
-        self.assertEquals('v1', actual['api_version'])
-        self.assertEquals('myproject', actual['project'])
-        self.assertTrue('global' in actual)
-        self.assertTrue(actual['global'])
-        self.assertEquals('urlMaps', actual['resource_name'])
+    class EmbedController(RedditController):
+    allow_stylesheets = True
