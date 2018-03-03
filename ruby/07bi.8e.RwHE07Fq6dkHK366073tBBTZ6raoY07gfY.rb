@@ -1,57 +1,68 @@
-  # Allows a bottle tag to specify a specific OS or later,
-  # so the same bottle can target multiple OSs.
-  # Not used in core, used in taps.
-  def find_or_later_tag(tag)
-    begin
-      tag_version = MacOS::Version.from_symbol(tag)
-    rescue ArgumentError
-      return
-    end
+
+        
+          included do
+    helper SortableTableHelper
+  end
     
-      private
+            private
     
-        if $stdout.tty?
-      metacharacters = %w[\\ | ( ) [ ] { } ^ $ * + ? .]
-      bad_regex = metacharacters.any? do |char|
-        ARGV.any? do |arg|
-          arg.include?(char) && !arg.start_with?('/')
+            def initialize(argv)
+          @pod_name = argv.shift_argument
+          @short_output = argv.flag?('short')
+          super
         end
-      end
-      if ARGV.any? && bad_regex
-        ohai 'Did you mean to perform a regular expression search?'
-        ohai 'Surround your query with /slashes/ to search by regex.'
+    
+            def listen
+          while repl_command = STDIN.gets
+            execute_repl_command(repl_command)
+          end
+        end
+    
+          def plugin_gem_names
+        (Gem.loaded_specs.keys - ['capistrano']).grep(/capistrano/).sort
       end
     end
-    
-        initial_revision = ENV['HOMEBREW_UPDATE_BEFORE'].to_s
-    current_revision = ENV['HOMEBREW_UPDATE_AFTER'].to_s
-    if initial_revision.empty? || current_revision.empty?
-      odie 'update-report should not be called directly!'
-    end
-    
-          export JAVA_HOME='$(/usr/libexec/java_home)'
-      export AWS_ACCESS_KEY='<Your AWS Access ID>'
-      export AWS_SECRET_KEY='<Your AWS Secret Key>'
-      export #{home_name}='#{home_value}'
-    EOS
   end
 end
 
     
-      included do
-    include Oauthable
+      # Implemented by subclasses to define Rake tasks. Typically a plugin will call
+  # `eval_rakefile` to load Rake tasks from a separate .rake file.
+  #
+  # Example:
+  #
+  #   def define_tasks
+  #     eval_rakefile File.expand_path('../tasks.rake', __FILE__)
+  #   end
+  #
+  # For simple tasks, you can define them inline. No need for a separate file.
+  #
+  #   def define_tasks
+  #     desc 'Do something fantastic.'
+  #     task 'my_plugin:fantastic' do
+  #       ...
+  #     end
+  #   end
+  #
+  def define_tasks; end
     
-    module SortableTable
-  extend ActiveSupport::Concern
+        def possible_types
+      MIME::Types.type_for(@filepath).collect(&:content_type)
+    end
     
-    require 'builder'
-require 'feedbag'
-require 'nokogiri'
-    
-          def handle_params_error(error, error_description)
-        if params[:client_id] && params[:redirect_uri]
-          handle_params_error_when_client_id_and_redirect_uri_exists(error, error_description)
-        else
-          render_error I18n.t('api.openid_connect.error_page.could_not_authorize'), error_description
-        end
+        # Returns a the attachment hash.  See Paperclip::Attachment#hash_key for
+    # more details.
+    def hash attachment=nil, style_name=nil
+      if attachment && style_name
+        attachment.hash_key(style_name)
+      else
+        super()
       end
+    end
+    
+          class ValidateAttachmentContentTypeMatcher
+        def initialize attachment_name
+          @attachment_name = attachment_name
+          @allowed_types = []
+          @rejected_types = []
+        end
