@@ -1,154 +1,191 @@
 
         
-              keys = Spaceship::Portal::Key.all
-      expect(keys.size).to eq(2)
-      expect(keys.sample).to be_instance_of(Spaceship::Portal::Key)
-    end
+                def content_tag_string(name, content, options, escape = true)
+          tag_options = tag_options(options, escape) if options
+          content     = ERB::Util.unwrapped_html_escape(content) if escape
+          '<#{name}#{tag_options}>#{PRE_CONTENT_STRINGS[name]}#{content}</#{name}>'.html_safe
+        end
+    
+      def test_relative_url_redirect_with_status_hash
+    get :relative_url_redirect_with_status_hash
+    assert_response 301
+    assert_equal 'http://test.host/things/stuff', redirect_to_url
   end
     
-          it 'splits correctly' do
-        expected = ['One', 'Two', 'Three', 'Four Token']
-        expect(generator.split_keywords(keywords)).to eq(expected)
+    module ActionCable
+  module Server
+    # An instance of this configuration object is available via ActionCable.server.config, which allows you to tweak Action Cable configuration
+    # in a Rails config initializer.
+    class Configuration
+      attr_accessor :logger, :log_tags
+      attr_accessor :connection_class, :worker_pool_size
+      attr_accessor :disable_request_forgery_protection, :allowed_request_origins, :allow_same_origin_as_host
+      attr_accessor :cable, :url, :mount_path
+    
+          # Overwrite this factory method for Redis connections if you want to use a different Redis library than the redis gem.
+      # This is needed, for example, when using Makara proxies for distributed Redis.
+      cattr_accessor :redis_connector, default: ->(config) do
+        ::Redis.new(config.slice(:url, :host, :port, :db, :password))
+      end
+    
+            def test_url_with_authority_for_sqlite3
+          spec = resolve 'sqlite3:///foo_test'
+          assert_equal('/foo_test', spec['database'])
+        end
+    
+      def flash
+    render inline: '<h1><%= notice %></h1>'
+  end
+    
+          class_attribute :delivery_methods, default: {}.freeze
+      class_attribute :delivery_method, default: :smtp
+    
+        # Returns +text+ wrapped at +len+ columns and indented +indent+ spaces.
+    # By default column length +len+ equals 72 characters and indent
+    # +indent+ equal two spaces.
+    #
+    #   my_text = 'Here is a sample text with more than 40 characters'
+    #
+    #   format_paragraph(my_text, 25, 4)
+    #   # => '    Here is a sample text with\n    more than 40 characters'
+    def format_paragraph(text, len = 72, indent = 2)
+      sentences = [[]]
+    
+        AssertSelectMailer.test('<div><p>foo</p><p>bar</p></div>').deliver_now
+    assert_select_email do
+      assert_select 'div:root' do
+        assert_select 'p:first-child', 'foo'
+        assert_select 'p:last-child', 'bar'
       end
     end
-    
-          # All the available tasks
-      attr_accessor :tasks
-    
-        context 'GIT repository' do
-      before do
-        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_svn?).and_return(false)
-        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git_svn?).and_return(false)
-        expect(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git?).and_return(true)
-        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_hg?).and_return(false)
-      end
-    
-      def recipients(payload = {})
-    emails = interpolated(payload)['recipients']
-    if emails.present?
-      if emails.is_a?(String)
-        [emails]
-      else
-        emails
-      end
-    else
-      [user.email]
-    end
   end
     
-        def every(*args, &blk)
-      schedule(:every, args, &blk)
-    end
-    
-      def tumblr_oauth_token
-    service.token
-  end
-    
-      def reemit
-    @event.reemit!
-    respond_to do |format|
-      format.html { redirect_back event_path(@event), notice: 'Event re-emitted.' }
-    end
-  end
-    
-        respond_to do |format|
-      if !running? && @job.destroy
-        format.html { redirect_to jobs_path, notice: 'Job deleted.' }
-        format.json { head :no_content }
-      else
-        format.html { redirect_to jobs_path, alert: 'Can not delete a running job.' }
-        format.json { render json: @job.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-    
-    desc 'Deploy a new release.'
-task :deploy do
-  set(:deploying, true)
-  %w{ starting started
-      updating updated
-      publishing published
-      finishing finished }.each do |task|
-    invoke 'deploy:#{task}'
-  end
-end
-task default: :deploy
-
-    
-      it 'overrides the rake method, and sets the sshkit_backend to SSHKit::Backend::Printer' do
-    capture_io do
-      flags '--dry-run', '-n'
-    end
-    sshkit_backend = Capistrano::Configuration.fetch(:sshkit_backend)
-    expect(sshkit_backend).to eq(SSHKit::Backend::Printer)
-  end
-    
-    module Sinatra
-  class Application < Base
-    
-          def initialize(*)
-        super
-    
-        it 'copes with nested arrays' do
-      mock_app do |env|
-        request = Rack::Request.new(env)
-        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']['bar']]]
-      end
-      get '/', :foo => {:bar => '<bar>'}
-      expect(body).to eq('&lt;bar&gt;')
-    end
-    
-    
-  it 'should allow changing the protection mode to a string' do
-    # I have no clue what other modes are available
-    mock_app do
-      use Rack::Protection::FrameOptions, :frame_options => 'ALLOW-FROM foo'
-      run DummyApp
-    end
-    
-    # usage rake isolate[my-post]
-desc 'Move all other posts than the one currently being worked on to a temporary stash location (stash) so regenerating the site happens much more quickly.'
-task :isolate, :filename do |t, args|
-  stash_dir = '#{source_dir}/#{stash_dir}'
-  FileUtils.mkdir(stash_dir) unless File.exist?(stash_dir)
-  Dir.glob('#{source_dir}/#{posts_dir}/*.*') do |post|
-    FileUtils.mv post, stash_dir unless post.include?(args.filename)
-  end
-end
-    
-      not_found do
-    send_file(File.join(File.dirname(__FILE__), 'public', '404.html'), {:status => 404})
-  end
-    
-    module Jekyll
-    
-    def config_tag(config, key, tag=nil, classname=nil)
-  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
-  tag       ||= 'div'
-  classname ||= key.sub(/_/, '-').sub(/\./, '-')
-  output      = '<#{tag} class='#{classname}''
-    
-            Dir.chdir(includes_dir) do
-          choices = Dir['**/*'].reject { |x| File.symlink?(x) }
-          if choices.include?(file)
-            source = File.read(file)
-            partial = Liquid::Template.parse(source)
-            context.stack do
-              rtn = rtn + partial.render(context)
-            end
+              # assert differences with Jekyll::PageWithoutAFile instance
+          if basic_attrs.include?(prop)
+            assert_equal @page[prop], value, 'For <page[\'#{prop}\']>:'
           else
-            rtn = rtn + 'Included file '#{file}' not found in _includes directory'
+            assert_nil @page[prop]
           end
         end
       end
-      rtn
     end
-  end
     
-            def stock_movement_params
-          params.require(:stock_movement).permit(permitted_stock_movement_attributes)
-        end
+    def dest_dir(*subdirs)
+  test_dir('dest', *subdirs)
+end
+    
+          new_theme_name = args.join('_')
+      theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
+      if theme.path.exist?
+        Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.'
       end
+    
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
     end
   end
 end
+
+    
+      private
+    
+        groups << @user.authorized_groups.visible_to_user(current_user) if current_user
+    groups << @user.authorized_groups.public_to_user(current_user)
+    
+            # Defines a capability for the given guest. The block should return
+        # a class/module that has a method with the capability name, ready
+        # to be executed. This means that if it is an instance method,
+        # the block should return an instance of the class.
+        #
+        # @param [String] guest The name of the guest
+        # @param [String] cap The name of the capability
+        def self.guest_capability(guest, cap, &block)
+          components.guest_capabilities[guest.to_sym].register(cap.to_sym, &block)
+          nil
+        end
+    
+          # This returns the keys (or ids) that are in the string.
+      #
+      # @return [<Array<String>]
+      def keys
+        regexp = /^#\s*VAGRANT-BEGIN:\s*(.+?)$\r?\n?(.*)$\r?\n?^#\s*VAGRANT-END:\s(\1)$/m
+        @value.scan(regexp).map do |match|
+          match[0]
+        end
+      end
+    
+    require 'erubis'
+    
+      def test_utime_with_minus_time_segv
+    bug5596 = '[ruby-dev:44838]'
+    assert_in_out_err([], <<-EOS, [bug5596], [])
+      require 'tempfile'
+      t = Time.at(-1)
+      begin
+        Tempfile.create('test_utime_with_minus_time_segv') {|f|
+          File.utime(t, t, f)
+        }
+      rescue
+      end
+      puts '#{bug5596}'
+    EOS
+  end
+    
+      # Returns a new set containing elements common to the set and the
+  # given enumerable object.
+  #
+  #     Set[1, 3, 5] & Set[3, 2, 1]             #=> #<Set: {3, 1}>
+  #     Set['a', 'b', 'z'] & ['a', 'b', 'c']    #=> #<Set: {'a', 'b'}>
+  def &(enum)
+    n = self.class.new
+    do_with_enum(enum) { |o| n.add(o) if include?(o) }
+    n
+  end
+  alias intersection &
+    
+        assert_nothing_raised {
+      set2.flatten!
+    }
+    
+      it 'returns 0.0 if the conversion fails' do
+    'bad'.to_f.should == 0.0
+    'thx1138'.to_f.should == 0.0
+  end
+end
+
+    
+      def user_search
+    if params[:admins_controller_user_search]
+      search_params = params.require(:admins_controller_user_search)
+                            .permit(:username, :email, :guid, :under13)
+      @search = UserSearch.new(search_params)
+      @users = @search.perform
+    end
+    
+          def request_authorization_consent_form
+        add_claims_to_scopes
+        endpoint = Api::OpenidConnect::AuthorizationPoint::EndpointStartPoint.new(current_user)
+        handle_start_point_response(endpoint)
+      end
+    
+            def initialize(argv)
+          @pod_name = argv.shift_argument
+          @wipe_all = argv.flag?('all')
+          super
+        end
+    
+            self.description = <<-DESC
+          Shows the content of the pods cache as a YAML tree output, organized by pod.
+          If `NAME` is given, only the caches for that pod will be included in the output.
+        DESC
+    
+            # Runs the template configuration utilities.
+        #
+        # @return [void]
+        #
+        def print_info
+          UI.puts '\nTo learn more about the template see `#{template_repo_url}`.'
+          UI.puts 'To learn more about creating a new pod, see `#{CREATE_NEW_POD_INFO_URL}`.'
+        end
