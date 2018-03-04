@@ -1,150 +1,58 @@
 
         
-        class JavaScriptHelperTest < ActionView::TestCase
-  tests ActionView::Helpers::JavaScriptHelper
+              topic.feature_topic_users(args)
+    end
     
-      test 'response status aliases deprecated' do
-    response = ActionDispatch::TestResponse.create
-    assert_deprecated { response.success? }
-    assert_deprecated { response.missing? }
-    assert_deprecated { response.error? }
-  end
-end
+    end
 
     
-        class TestCallbacks1 < ActiveSupport::TestCase
-      test 'basic callbacks work' do
-        controller = Callback1.new
-        controller.process(:index)
-        assert_equal 'Hello world', controller.response_body
-      end
+      # Finds the projects '@user' contributed to, limited to either public projects
+  # or projects visible to the given user.
+  #
+  # current_user - When given the list of the projects is limited to those only
+  #                visible by this user.
+  #
+  # Returns an ActiveRecord::Relation.
+  def execute(current_user = nil)
+    segments = all_projects(current_user)
+    
+        groups << @user.authorized_groups.visible_to_user(current_user) if current_user
+    groups << @user.authorized_groups.public_to_user(current_user)
+    
+        def schedule_in(*args, &blk)
+      schedule(:schedule_in, args, &blk)
     end
     
-      def test_helper_proxy
-    methods = AllHelpersController.helpers.methods
+              # The plugin should be registered if we're setting a real name on it
+          Plugin.manager.register(self) if name != UNSET_VALUE
     
-            in_root do
-          if behavior == :invoke && !File.exist?(application_mailer_file_name)
-            template 'application_mailer.rb', application_mailer_file_name
-          end
+            # Registers a SIGINT handler. This typically is called from {busy}.
+        # Callbacks are only registered once, so calling this multiple times
+        # with the same callback has no consequence.
+        def register(sig_callback)
+          @@mutex.synchronize do
+            registered << sig_callback
+            registered.uniq!
+    
+          describe 'fetching servers by multiple roles' do
+        it 'does not confuse the last role with options' do
+          expect(dsl.roles(:app, :web).count).to eq 4
+          expect(dsl.roles(:app, :web, filter: :active).count).to eq 2
         end
       end
     
-        def api_key_valid?
-      !api_key.nil? && api_key.to_s.length == 40
+        def type_from_file_contents
+      type_from_mime_magic || type_from_file_command
+    rescue Errno::ENOENT => e
+      Paperclip.log('Error while determining content type: #{e}')
+      SENSIBLE_DEFAULT
     end
     
-          it 'it increments all targets minor version major' do
-        Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number(bump_type: 'major')
-        end').runner.execute(:test)
-    
-            # A callback method used to deliver confirmation
-        # instructions on creation. This can be overridden
-        # in models to map to a nice sign up e-mail.
-        def send_on_create_confirmation_instructions
-          send_confirmation_instructions
-        end
-    
-      def failure
-    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
-    redirect_to after_omniauth_failure_path_for(resource_name)
-  end
-    
-    gem 'rails', '~> 5.1'
-gem 'omniauth', '~> 1.3'
-gem 'oauth2'
-gem 'omniauth-oauth2'
-gem 'rdoc'
-    
-      # GET /resource/password/edit?reset_password_token=abcdef
-  def edit
-    self.resource = resource_class.new
-    set_minimum_password_length
-    resource.reset_password_token = params[:reset_password_token]
-  end
-    
-        if successfully_sent?(resource)
-      respond_with({}, location: after_sending_unlock_instructions_path_for(resource))
-    else
-      respond_with(resource)
-    end
-  end
-    
-          def remember_cookie_values(resource)
-        options = { httponly: true }
-        options.merge!(forget_cookie_values(resource))
-        options.merge!(
-          value: resource.class.serialize_into_cookie(resource),
-          expires: resource.remember_expires_at
-        )
-      end
-    
-        def recall_app(app)
-      controller, action = app.split('#')
-      controller_name  = ActiveSupport::Inflector.camelize(controller)
-      controller_klass = ActiveSupport::Inflector.constantize('#{controller_name}Controller')
-      controller_klass.action(action)
+        def path
+      @file.respond_to?(:path) ? @file.path : @file
     end
     
-      desc 'update main and version in bower.json'
-  task :generate do
-    require 'bootstrap-sass'
-    Dir.chdir Bootstrap.gem_path do
-      spec       = JSON.parse(File.read 'bower.json')
-    
-      subject { BlockDomainService.new }
-    
-    begin
-  require 'bundler/setup'
-rescue LoadError
-  $stderr.puts '[*] Metasploit requires the Bundler gem to be installed'
-  $stderr.puts '    $ gem install bundler'
-  exit(1)
-end
-    
-    #
-# This script extracts the forms from the main page of each
-# web site in a list. The output of this can be used with
-# Metasploit (and other tools) to obtain the saved form data
-# of these domains.
-#
-    
-                end
-    
-    # Sniffer class for GET URL's
-class SnifferURL < BaseProtocolParser
-  def register_sigs
-    self.sigs = {
-      :get		=> /^GET\s+([^\n]+)\s+HTTP\/\d\.\d/i,
-      :webhost	=> /^HOST\:\s+([^\n\r]+)/i,
-    }
-  end
-    
-    
-    {	if ln =~ /;(read|write)_(handle|filename)=/
-		parts = ln.split(' ')
-		if (parts[0] == 'mov')
-			parts2 = parts[2].split('=')
-			label = parts2[0]
-			label.slice!(0,1)
-			old = parts2[1]
-			new = addrs[label]
-			#puts '%32s: %s -> %x' % [label, old, new]
-			replaces << [label, old, new.to_s(16)]
-		end
-	end
-}
-    
-            def autocorrect(node)
-          redundant_regex?(node) do |receiver, regex_str|
-            receiver, regex_str = regex_str, receiver if receiver.is_a?(String)
-            regex_str = regex_str[2..-1] # drop \A anchor
-            regex_str = interpret_string_escapes(regex_str)
-    
-            def variable_name(node)
-          node.children[0]
-        end
-    
-              add_offense(node)
+          class ValidateAttachmentPresenceMatcher
+        def initialize attachment_name
+          @attachment_name = attachment_name
         end
