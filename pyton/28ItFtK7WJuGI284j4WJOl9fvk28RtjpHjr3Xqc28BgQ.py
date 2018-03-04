@@ -1,78 +1,67 @@
-    r = client.get('/hello')
-    assert r.status_code == 200
+
+        
+        
+def test_messages(client, app):
+    '''Test that messages work'''
+    login(client, app.config['USERNAME'],
+          app.config['PASSWORD'])
+    rv = client.post('/add', data=dict(
+        title='<Hello>',
+        text='<strong>HTML</strong> allowed here'
+    ), follow_redirects=True)
+    assert b'No entries here so far' not in rv.data
+    assert b'&lt;Hello&gt;' in rv.data
+    assert b'<strong>HTML</strong> allowed here' in rv.data
+
+    
+        def add_card(self, card):
+        self.cards.append(card)
+    
+        def __init__(self):
+        self.head = None
+        self.tail = None
+    
+        def __init__(self, seller_category_map, seller_category_overrides_map):
+        self.seller_category_map = seller_category_map
+        self.seller_category_overrides_map = seller_category_overrides_map
     
     
-@bp.route('/login', methods=['GET', 'POST'])
-def login():
-    error = None
-    if request.method == 'POST':
-        if request.form['username'] != current_app.config['USERNAME']:
-            error = 'Invalid username'
-        elif request.form['password'] != current_app.config['PASSWORD']:
-            error = 'Invalid password'
-        else:
-            session['logged_in'] = True
-            flash('You were logged in')
-            return redirect(url_for('flaskr.show_entries'))
-    return render_template('login.html', error=error)
-    
-        :param url: URL for the new :class:`Request` object.
-    :param params: (optional) Dictionary or bytes to be sent in the query string for the :class:`Request`.
-    :param \*\*kwargs: Optional arguments that ``request`` takes.
-    :return: :class:`Response <Response>` object
-    :rtype: requests.Response
-    '''
-    
-                handler_result = self.handler(sock)
-    
-        # Copy is required
-    def copy(self):
-        return CaseInsensitiveDict(self._store.values())
-    
-            assert server.handler_results[0] == data
+if __name__ == '__main__':
+    HitCounts.run()
+
     
     
-class HTTPDigestAuth(AuthBase):
-    '''Attaches HTTP Digest Authentication to the given Request object.'''
+if __name__ == '__main__':
+    RemoveDuplicateUrls.run()
+
     
-    '''
-requests.exceptions
-~~~~~~~~~~~~~~~~~~~
+        def __init__(self, pages, data_store, reverse_index_queue, doc_index_queue):
+        self.pages = pages
+        self.data_store = data_store
+        self.reverse_index_queue = reverse_index_queue
+        self.doc_index_queue = doc_index_queue
     
-    
-@pytest.mark.parametrize(
-    'value, expected', (
-        ('T', 'T'),
-        (b'T', 'T'),
-        (u'T', 'T'),
-    ))
-def test_to_native_string(value, expected):
-    assert to_native_string(value) == expected
-    
-    
-def merge_hooks(request_hooks, session_hooks, dict_class=OrderedDict):
-    '''Properly merges both requests and session hooks.
-    
-        def __init__(self, operators, supervisors, directors):
-        self.operators = operators
-        self.supervisors = supervisors
-        self.directors = directors
-        self.queued_calls = deque()
-    
-    
-class Chat(metaclass=ABCMeta):
-    
-        def __init__(self, vehicle_size, license_plate, spot_size):
-        self.vehicle_size = vehicle_size
-        self.license_plate = license_plate
-        self.spot_size
-        self.spots_taken = []
-    
-        def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer),
-            self.mr(mapper=self.mapper_sort,
-                    reducer=self.reducer_identity),
-        ]
+                if point.name == 'p':
+                link = point.find('a')
+                if link is not None:
+                    link = clean_pdf_link(link.attrs['href'])
+                    ext = get_extension(link)
+                    print(ext)
+                    if not ext in forbidden_extensions:
+                        print(shorten_title(point.text) + ' (' + link + ')')
+                        try:
+                            name = clean_text(point.text.split('[' + ext + ']')[0])
+                            fullname = '.'.join((name, ext))
+                            if not os.path.exists('/'.join((current_directory, fullname)) ):
+                                download_pdf(link, current_directory, '.'.join((name, ext)))
+                        except KeyboardInterrupt:
+                            try:
+                                print('Press Ctrl-C in 1 second to quit')
+                                time.sleep(1)
+                            except KeyboardInterrupt:
+                                print('Cancelling..')
+                                break
+                        except:
+                            failures.append(point.text)
+                        
+        point = point.next_sibling          
