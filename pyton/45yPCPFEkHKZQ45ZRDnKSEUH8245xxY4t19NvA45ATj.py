@@ -1,116 +1,39 @@
 
         
-        
-def get_args(args_list):
-    parser = argparse.ArgumentParser(
-        description='ansible inventory script reading from serf cluster')
-    mutex_group = parser.add_mutually_exclusive_group(required=True)
-    help_list = 'list all hosts from serf cluster'
-    mutex_group.add_argument('--list', action='store_true', help=help_list)
-    help_host = 'display variables for a host'
-    mutex_group.add_argument('--host', help=help_host)
-    return parser.parse_args(args_list)
+            # Then we cluster the lines together as blocks
+    # Each block represents a collection of lines that should be sorted
+    # This was done by assuming only links ([...](...)) are meant to be sorted
+    # Clustering is done by indentation
+    blocks = []
+    last_indent = None
+    for line in read_me:
+        s_line = line.lstrip()
+        indent = len(line) - len(s_line)
     
-            with self.assertRaises(GCPInvalidURLError) as cm:
-            GCPUtils.parse_gcp_url(no_resource_no_loc_input_url)
-        self.assertTrue(cm.exception, GCPInvalidURLError)
+    #----------------------------------------------------------------------
+def fc2video_download_by_upid(upid, output_dir = '.', merge = True, info_only = False, **kwargs):
+    ''''''
+    fake_headers = {
+        'DNT': '1',
+        'Accept-Encoding': 'gzip, deflate, sdch',
+        'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.58 Safari/537.36',
+        'Accept': '*/*',
+        'X-Requested-With': 'ShockwaveFlash/19.0.0.245',
+        'Connection': 'keep-alive',
+    }
+    api_base = 'http://video.fc2.com/ginfo.php?upid={upid}&mimi={mimi}'.format(upid = upid, mimi = makeMimi(upid))
+    html = get_content(api_base, headers=fake_headers)
     
-        @support.requires_IEEE_754
-    def test_float_conversion(self):
     
-    __all__ = ['JSONDecoder', 'JSONDecodeError']
+def extract_board_data(url):
+    json_data = extract_json_data(url, limit=LIMIT)
+    pin_list = json_data['pins']
+    title = json_data['title']
+    pin_count = json_data['pin_count']
+    pin_count -= len(pin_list)
     
-        def _explain_to(self, message):
-        '''Copy mbox- or MMDF-specific state to message insofar as possible.'''
-        if isinstance(message, MaildirMessage):
-            flags = set(self.get_flags())
-            if 'O' in flags:
-                message.set_subdir('cur')
-            if 'F' in flags:
-                message.add_flag('F')
-            if 'A' in flags:
-                message.add_flag('R')
-            if 'R' in flags:
-                message.add_flag('S')
-            if 'D' in flags:
-                message.add_flag('T')
-            del message['status']
-            del message['x-status']
-            maybe_date = ' '.join(self.get_from().split()[-5:])
-            try:
-                message.set_date(calendar.timegm(time.strptime(maybe_date,
-                                                      '%a %b %d %H:%M:%S %Y')))
-            except (ValueError, OverflowError):
-                pass
-        elif isinstance(message, _mboxMMDFMessage):
-            message.set_flags(self.get_flags())
-            message.set_from(self.get_from())
-        elif isinstance(message, MHMessage):
-            flags = set(self.get_flags())
-            if 'R' not in flags:
-                message.add_sequence('unseen')
-            if 'A' in flags:
-                message.add_sequence('replied')
-            if 'F' in flags:
-                message.add_sequence('flagged')
-            del message['status']
-            del message['x-status']
-        elif isinstance(message, BabylMessage):
-            flags = set(self.get_flags())
-            if 'R' not in flags:
-                message.add_label('unseen')
-            if 'D' in flags:
-                message.add_label('deleted')
-            if 'A' in flags:
-                message.add_label('answered')
-            del message['status']
-            del message['x-status']
-        elif isinstance(message, Message):
-            pass
-        else:
-            raise TypeError('Cannot convert to specified type: %s' %
-                            type(message))
-    
-        objects = []
-    libs = ['shell32.lib', 'comdlg32.lib', 'wsock32.lib', 'user32.lib', 'oleaut32.lib']
-    for moddefn in moddefns:
-        print('# Module', moddefn.name)
-        for file in moddefn.sourceFiles:
-            base = os.path.basename(file)
-            base, ext = os.path.splitext(base)
-            objects.append(base + '.obj')
-            print(r'$(temp_dir)\%s.obj: '%s'' % (base, file))
-            print('\t@$(CC) -c -nologo /Fo$* $(cdl) $(c_debug) /D BUILD_FREEZE', end=' ')
-            print(''-I$(pythonhome)/Include'  '-I$(pythonhome)/PC' \\')
-            print('\t\t$(cflags) $(cdebug) $(cinclude) \\')
-            extra = moddefn.GetCompilerOptions()
-            if extra:
-                print('\t\t%s \\' % (' '.join(extra),))
-            print('\t\t'%s'' % file)
-            print()
-    
-            # make sure everything works in ''.format()
-        self.assertEqual('*{0:.3f}*'.format(3.14159+2.71828j), '*3.142+2.718j*')
-    
-        def _create_infile(self):
-        infile = support.TESTFN
-        with open(infile, 'w') as fp:
-            self.addCleanup(os.remove, infile)
-            fp.write(self.data)
-        return infile
-    
-        def test_large_exhausted_iterator_pickling(self):
-        for proto in range(pickle.HIGHEST_PROTOCOL + 1):
-            r = range(20)
-            i = iter(r)
-            while True:
-                r = next(i)
-                if r == 19:
-                    break
-            d = pickle.dumps(i, proto)
-            i2 = pickle.loads(d)
-            self.assertEqual(list(i), [])
-            self.assertEqual(list(i2), [])
-    
-            del wndclass
-        del wndproc
+        # mgid%3Auma%3Avideo%3Amtv81.com%3A897974
+    vid = match1(html, r'getTheVideo\('(.*?)'')
+    xml = parseString(
+        get_content('http://intl.esperanto.mtvi.com/www/xml/media/mediaGen.jhtml?uri={}&flashPlayer=LNX%2013,0,0,206&geo=CN&sid=123456'.format(vid)))
