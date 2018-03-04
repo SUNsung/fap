@@ -1,144 +1,155 @@
 
         
-        QueryData genKernelIntegrity(QueryContext &context) {
-  QueryData results;
-  Row r;
-  std::string content;
-  std::string text_segment_hash;
-  std::string syscall_addr_modified;
-    }
+        struct Builder::Impl {
+  std::mutex mutex;
+  std::unordered_set<
+    const RepoAuthType::Array*,
+    repo_auth_array_hash,
+    repo_auth_array_eq
+  > types;
+  uint32_t nextId{0};
+};
     
-     public:
-  /**
-   * @brief The std::thread entrypoint.
-   *
-   * This is used by the Dispatcher only.
-   */
-  virtual void run() final;
-    
-    
-    {/**
- * @brief Read the enrollment secret from disk.
- *
- * We suspect multiple enrollment types may require an apriori, and enterprise
- * shared, secret. Use of this enroll or deployment secret is an optional choice
- * made by the enroll plugin type.
- *
- * @return enroll_secret The trimmed content read from FLAGS_enroll_secret_path.
- */
-const std::string getEnrollSecret();
+    void HHVM_FUNCTION(xhprof_sample_enable) {
+  if (RuntimeOption::EnableHotProfiler) {
+    s_profiler_factory->start(ProfilerKind::Sample, 0);
+  } else {
+    raise_warning('The runtime option Stats.EnableHotProfiler must be on to '
+                  'use xhprof.');
+  }
 }
+    
+    #include 'hphp/runtime/vm/jit/abi.h'
+#include 'hphp/runtime/vm/jit/arg-group.h'
+#include 'hphp/runtime/vm/jit/fixup.h'
+#include 'hphp/runtime/vm/jit/phys-reg-saver.h'
+#include 'hphp/runtime/vm/jit/vasm-gen.h'
+#include 'hphp/runtime/vm/jit/vasm-instr.h'
+#include 'hphp/runtime/vm/jit/vasm-reg.h'
+    
+      mbfl_string mbs_needle;
+  mbfl_string_init(&mbs_needle);
+  mbs_needle.no_language = MBSTRG(current_language);
+  mbs_needle.no_encoding = MBSTRG(current_internal_encoding)->no_encoding;
+  mbs_needle.val = (unsigned char *)needle.data();
+  mbs_needle.len = needle.size();
+    
+    ALWAYS_INLINE
+ptrdiff_t PackedArray::entriesOffset() {
+  return reinterpret_cast<ptrdiff_t>(
+    packedData(reinterpret_cast<ArrayData*>(0x0)));
+}
+    
+    void PageletTransport::setAsioEvent(PageletServerTaskEvent *event) {
+  m_event = event;
+}
+    
+    
+    {  return env.irb->makeBlock(sk, curProfCount(env));
+}
+    
+    FilterBlockBuilder::FilterBlockBuilder(const FilterPolicy* policy)
+    : policy_(policy) {
+}
+    
+    
+    {  Status result;
+  if (msg != NULL) {
+    result = Status::Corruption('VersionEdit', msg);
+  }
+  return result;
+}
+    
+    
+    {    done_++;
+    if (done_ >= next_report_) {
+      if      (next_report_ < 1000)   next_report_ += 100;
+      else if (next_report_ < 5000)   next_report_ += 500;
+      else if (next_report_ < 10000)  next_report_ += 1000;
+      else if (next_report_ < 50000)  next_report_ += 5000;
+      else if (next_report_ < 100000) next_report_ += 10000;
+      else if (next_report_ < 500000) next_report_ += 50000;
+      else                            next_report_ += 100000;
+      fprintf(stderr, '... finished %d ops%30s\r', done_, '');
+      fflush(stderr);
+    }
+  }
+    
+    
+    {    // Create tuning options and open the database
+    int open_options = kyotocabinet::PolyDB::OWRITER |
+                       kyotocabinet::PolyDB::OCREATE;
+    int tune_options = kyotocabinet::TreeDB::TSMALL |
+        kyotocabinet::TreeDB::TLINEAR;
+    if (FLAGS_compression) {
+      tune_options |= kyotocabinet::TreeDB::TCOMPRESS;
+      db_->tune_compressor(&comp_);
+    }
+    db_->tune_options(tune_options);
+    db_->tune_page_cache(FLAGS_cache_size);
+    db_->tune_page(FLAGS_page_size);
+    db_->tune_map(256LL<<20);
+    if (sync) {
+      open_options |= kyotocabinet::PolyDB::OAUTOSYNC;
+    }
+    if (!db_->open(file_name, open_options)) {
+      fprintf(stderr, 'open error: %s\n', db_->error().name());
+    }
+  }
+    
+    // Returns a new environment that stores its data in memory and delegates
+// all non-file-storage tasks to base_env. The caller must delete the result
+// when it is no longer needed.
+// *base_env must remain live while the result is in use.
+Env* NewMemEnv(Env* base_env);
+    
+      // compact database
+  std::string start_key = Key1(0);
+  std::string end_key = Key1(kNumKeys - 1);
+  leveldb::Slice least(start_key.data(), start_key.size());
+  leveldb::Slice greatest(end_key.data(), end_key.size());
+    
+      // Check the crc of the type and the block contents
+  const char* data = contents.data();    // Pointer to where Read put the data
+  if (options.verify_checksums) {
+    const uint32_t crc = crc32c::Unmask(DecodeFixed32(data + n + 1));
+    const uint32_t actual = crc32c::Value(data, n + 1);
+    if (actual != crc) {
+      delete[] buf;
+      s = Status::Corruption('block checksum mismatch');
+      return s;
+    }
+  }
+    
+    
+    {};
 
     
     
+    {    void toJS(nbind::cbOutput expose) const
     {
-    { private:
-  FRIEND_TEST(PermissionsTests, test_explicit_drop);
-  FRIEND_TEST(PermissionsTests, test_path_drop);
-  FRIEND_TEST(PermissionsTests, test_nobody_drop);
-};
-} // namespace osquery
-
-    
-      /// Get the 'active' plugin, return success with the active plugin name.
-  const std::string& getActive() const {
-    return active_;
-  }
-    
-      /**
-   * @brief A constructor which can be used to concisely express the status of
-   * an operation.
-   *
-   * @param c a status code. The idiom is that a zero status code indicates a
-   * successful operation and a non-zero status code indicates a failed
-   * operation.
-   * @param m a message indicating some extra detail regarding the operation.
-   * If all operations were successful, this message should be 'OK'.
-   * Otherwise, it doesn't matter what the string is, as long as both the
-   * setter and caller agree.
-   */
-  Status(int c, std::string m) : code_(c), message_(std::move(m)) {}
-    
-      // Running status of the carver
-  Status status_;
-    
-    
-    {/// Clear decorations for a source when it updates.
-void clearDecorations(const std::string& source);
-}
-
-    
-    TEST_F(ViewsConfigParserPluginTests, test_update_view) {
-  Config c;
-  std::vector<std::string> old_views_vec;
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  old_views_vec.clear();
-  auto s = c.update(getTestConfigMap('view_test2.conf'));
-  EXPECT_TRUE(s.ok());
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  std::string query;
-  getDatabaseValue(kQueries, 'config_views.kernel_hashes_new', query);
-  EXPECT_EQ(query,
-            'select hash.path as binary, version, hash.sha256 as SHA256, '
-            'hash.sha1 as SHA1, hash.md5 as MD5 from (select path || '
-            ''/Contents/MacOS/' as directory, name, version from '
-            'kernel_extensions) join hash using (directory)');
+        expose(left, right, top, bottom, width, height);
     }
+};
+
     
-    
-    {    // Prevent the refresh thread from starting.
-    FLAGS_config_refresh = 0;
+      bool operator==(const ProgramLocation& other) const {
+    // Assumes that the strings are static
+    return (m_functionName == other.m_functionName) && (m_fileName == other.m_fileName) && m_lineNumber == other.m_lineNumber;
   }
     
-    extern JSClass  *jsb_cocos2d_Physics3DPointToPointConstraint_class;
-extern JSObject *jsb_cocos2d_Physics3DPointToPointConstraint_prototype;
     
-    
-    
-    
-    
-    
-    {    tolua_beginmodule(tolua_S,'PhysicsContactPreSolve');
-        tolua_function(tolua_S,'getFriction',lua_cocos2dx_physics_PhysicsContactPreSolve_getFriction);
-        tolua_function(tolua_S,'getRestitution',lua_cocos2dx_physics_PhysicsContactPreSolve_getRestitution);
-        tolua_function(tolua_S,'setFriction',lua_cocos2dx_physics_PhysicsContactPreSolve_setFriction);
-        tolua_function(tolua_S,'ignore',lua_cocos2dx_physics_PhysicsContactPreSolve_ignore);
-        tolua_function(tolua_S,'getSurfaceVelocity',lua_cocos2dx_physics_PhysicsContactPreSolve_getSurfaceVelocity);
-        tolua_function(tolua_S,'setSurfaceVelocity',lua_cocos2dx_physics_PhysicsContactPreSolve_setSurfaceVelocity);
-        tolua_function(tolua_S,'setRestitution',lua_cocos2dx_physics_PhysicsContactPreSolve_setRestitution);
-    tolua_endmodule(tolua_S);
-    std::string typeName = typeid(cocos2d::PhysicsContactPreSolve).name();
-    g_luaType[typeName] = 'cc.PhysicsContactPreSolve';
-    g_typeCast['PhysicsContactPreSolve'] = 'cc.PhysicsContactPreSolve';
-    return 1;
-}
-    
-    
-    {    p2 = p1 + k_axisScale * xf.q.GetYAxis();
-    DrawSegment(p1,p2,b2Color(0,1,0));
-}
-    
-    
-    {	b2Vec2 viewCenter;
-	float32 hz;
-	int32 velocityIterations;
-	int32 positionIterations;
-	int32 drawShapes;
-	int32 drawJoints;
-	int32 drawAABBs;
-	int32 drawContactPoints;
-	int32 drawContactNormals;
-	int32 drawContactImpulse;
-	int32 drawFrictionImpulse;
-	int32 drawCOMs;
-	int32 drawStats;
-	int32 drawProfile;
-	int32 enableWarmStarting;
-	int32 enableContinuous;
-	int32 enableSubStepping;
-	int32 enableSleep;
-	int32 pause;
-	int32 singleStep;
+    {  T* operator->() const {
+    return m_instance;
+  }
+private:
+  T* m_instance;
 };
+    
+      static void OnThreadExit(void *obj) {
+    if (NULL != obj) {
+      delete (T*)obj;
+    }
+  }
+    
+      bool isDirect() const;
