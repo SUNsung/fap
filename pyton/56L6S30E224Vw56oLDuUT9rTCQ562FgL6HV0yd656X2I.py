@@ -1,144 +1,119 @@
 
         
-        import io
-import sys
-import re
+            model.train_on_batch(x_train[:32], y_train[:32])
+    model.test_on_batch(x_train[:32], y_train[:32])
     
-            with open(swf_file, 'rb') as swf_f:
-            swf_content = swf_f.read()
-        swfi = SWFInterpreter(swf_content)
+        # by setting the `trainable` argument, in Sequential
+    model = Sequential()
+    layer = Dense(2, input_dim=1)
+    model.add(layer)
+    assert model.trainable_weights == layer.trainable_weights
+    layer.trainable = False
+    assert model.trainable_weights == []
     
+            layer_test(local.LocallyConnected2D,
+                   kwargs={'filters': filters,
+                           'kernel_size': (3, 3),
+                           'padding': padding,
+                           'kernel_regularizer': 'l2',
+                           'bias_regularizer': 'l2',
+                           'activity_regularizer': 'l2',
+                           'strides': strides,
+                           'data_format': 'channels_first'},
+                   input_shape=(num_samples, stack_size, num_row, num_col))
     
-class ScrapyCommand(object):
-    
-            @wraps(cb)
-        def cb_wrapper(response):
-            try:
-                output = cb(response)
-                output = list(iterate_spider_output(output))
-            except:
-                case = _create_testcase(method, 'callback')
-                results.addError(case, sys.exc_info())
-    
-            for i in range(0, len(ds_refresh)):
-            datasource = ds_refresh[i]
-            cols = metadata[i]
-            if cols:
-                col_objs_list = (
-                    session.query(DruidColumn)
-                    .filter(DruidColumn.datasource_id == datasource.id)
-                    .filter(or_(DruidColumn.column_name == col for col in cols))
-                )
-                col_objs = {col.column_name: col for col in col_objs_list}
-                for col in cols:
-                    if col == '__time':  # skip the time column
-                        continue
-                    col_obj = col_objs.get(col, None)
-                    if not col_obj:
-                        col_obj = DruidColumn(
-                            datasource_id=datasource.id,
-                            column_name=col)
-                        with session.no_autoflush:
-                            session.add(col_obj)
-                    datatype = cols[col]['type']
-                    if datatype == 'STRING':
-                        col_obj.groupby = True
-                        col_obj.filterable = True
-                    if datatype == 'hyperUnique' or datatype == 'thetaSketch':
-                        col_obj.count_distinct = True
-                    # Allow sum/min/max for long or double
-                    if datatype == 'LONG' or datatype == 'DOUBLE':
-                        col_obj.sum = True
-                        col_obj.min = True
-                        col_obj.max = True
-                    col_obj.type = datatype
-                    col_obj.datasource = datasource
-                datasource.generate_metrics_for(col_objs_list)
-        session.commit()
-    
-        @property
-    def data(self):
-        d = super(SqlaTable, self).data
-        if self.type == 'table':
-            grains = self.database.grains() or []
-            if grains:
-                grains = [(g.name, g.name) for g in grains]
-            d['granularity_sqla'] = utils.choicify(self.dttm_cols)
-            d['time_grain_sqla'] = grains
-        return d
-    
-            logging.info('Importing %d %s',
-                     len(data.get(DRUID_CLUSTERS_KEY, [])),
-                     DRUID_CLUSTERS_KEY)
-        for datasource in data.get(DRUID_CLUSTERS_KEY, []):
-            DruidCluster.import_from_dict(session, datasource, sync=sync)
-        session.commit()
-    else:
-        logging.info('Supplied object is not a dictionary.')
-
-    
-         Metrics and columns and datasource will be overrided if exists.
-     This function can be used to import/export dashboards between multiple
-     superset instances. Audit metadata isn't copies over.
-    '''
-    make_transient(i_datasource)
-    logging.info('Started import of the datasource: {}'.format(
-        i_datasource.to_json()))
+    from keras.applications import vgg19
+from keras import backend as K
     
     
-template_processors = {}
-keys = tuple(globals().keys())
-for k in keys:
-    o = globals()[k]
-    if o and inspect.isclass(o) and issubclass(o, BaseTemplateProcessor):
-        template_processors[o.engine] = o
-    
-        test_suite = 'tests',
-    
-    site = Bigthink()
-download = site.download_by_url
-
-    
-    #----------------------------------------------------------------------
-def makeMimi(upid):
-    '''From http://cdn37.atwikiimg.com/sitescript/pub/dksitescript/FC2.site.js
-    Also com.hps.util.fc2.FC2EncrptUtil.makeMimiLocal
-    L110'''
-    strSeed = 'gGddgPfeaf_gzyr'
-    prehash = upid + '_' + strSeed
-    return md5(prehash.encode('utf-8')).hexdigest()
+@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
+def test_orthogonal(tensor_shape):
+    _runner(initializers.orthogonal(), tensor_shape,
+            target_mean=0.)
     
     
-  def Response( self ):
-    return {}
+@keras_test
+def test_max_norm():
+    array = get_example_array()
+    for m in get_test_values():
+        norm_instance = constraints.max_norm(m)
+        normed = norm_instance(K.variable(array))
+        assert(np.all(K.eval(normed) < m))
     
-        with HandleServerException( truncate = True ):
-      self._cached_response = JsonFromFuture( self._response_future )
+        mask_inputs = (np.zeros(input_shapes[0][:-1]), np.ones(input_shapes[1][:-1]))
+    expected_mask_output = np.concatenate(mask_inputs, axis=-1)
+    mask_input_placeholders = [K.placeholder(shape=input_shape[:-1]) for input_shape in input_shapes]
+    mask_output = model.layers[-1]._output_mask(mask_input_placeholders)
+    assert np.all(K.function(mask_input_placeholders, [mask_output])(mask_inputs)[0] == expected_mask_output)
     
-    TIMEOUT_SECONDS = 0.1
+        model = Sequential()
+    model.add(Merge([intermediate, righter], mode='sum'))
+    model.add(Dense(num_classes))
+    model.add(Activation('softmax'))
+    model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
+    
+        ld = layers.Lambda(f)
+    config = ld.get_config()
+    ld = deserialize_layer({'class_name': 'Lambda', 'config': config})
+    
+    # Apply monkey patches to fix issues in external libraries
+from . import _monkeypatches
+del _monkeypatches
+    
+        def tested_methods_from_spidercls(self, spidercls):
+        methods = []
+        for key, value in vars(spidercls).items():
+            if (callable(value) and value.__doc__ and
+                    re.search(r'^\s*@', value.__doc__, re.MULTILINE)):
+                methods.append(key)
+    
+            The shuffle/sort step of MapReduce will then do a
+        distributed sort on the keys, resulting in:
+    
+        def __init__(self, id, name):
+        self.id = id
+        self.name = name
+        self.friend_ids = []
     
     
-def _JavaFilter( config ):
-  return { 'filter_diagnostics' : { 'java': config } }
+class Crawler(object):
     
-            return [('/without_user', WithoutUserHandler),
-                ('/with_user', WithUserHandler),
-                ('/without_user_module', WithoutUserModuleHandler),
-                ('/with_user_module', WithUserModuleHandler)]
+        def add_label(self, label):
+        '''Add label to list of labels on the message.'''
+        if isinstance(label, str):
+            if label not in self._labels:
+                self._labels.append(label)
+        else:
+            raise TypeError('label must be a string: %s' % type(label))
     
-            p = Popen(
-            [sys.executable, '-m', 'testapp'], stdout=subprocess.PIPE,
-            cwd=path, env=dict(os.environ, PYTHONPATH=pythonpath),
-            universal_newlines=True)
-        out = p.communicate()[0]
-        self.assertEqual(out, 'Starting\nStarting\n')
-
+        first = str(int(last) - args.nb_articles + 1)
+    resp, overviews = s.xover(first, last)
+    for artnum, over in overviews:
+        author = decode_header(over['from']).split('<', 1)[0]
+        subject = decode_header(over['subject'])
+        lines = int(over[':lines'])
+        print('{:7} {:20} {:42} ({})'.format(
+              artnum, cut(author, 20), cut(subject, 42), lines)
+              )
     
-    from tornado.escape import utf8, to_unicode
-from tornado import gen
-from tornado.iostream import IOStream
-from tornado.log import app_log
-from tornado.stack_context import NullContext
-from tornado.tcpserver import TCPServer
-from tornado.test.util import skipBefore35, skipIfNonUnix, exec_test, unittest
-from tornado.testing import AsyncTestCase, ExpectLog, bind_unused_port, gen_test
+        def abort(self):
+        # What does it mean to 'clear' a document?  Does the
+        # documentElement disappear?
+        raise NotImplementedError(
+            'haven't figured out what this means yet')
+    
+            for func, args, expected in self.CALLS_POSARGS:
+            with self.subTest(func=func, args=args):
+                result = _testcapi.pyobject_fastcall(func, args)
+                self.check_result(result, expected)
+    
+            Interpret all HTTP GET requests as requests for server
+        documentation.
+        '''
+        # Check that the path is legal
+        if not self.is_rpc_path_valid():
+            self.report_404()
+            return
+    
+            self.assertEqual(bool(CFUNCTYPE(None)(0)), False)
+        self.assertEqual(bool(CFUNCTYPE(None)(42)), True)
