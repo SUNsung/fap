@@ -1,248 +1,244 @@
 
         
-        namespace tensorflow {
+        // Build a Table file from the contents of *iter.  The generated file
+// will be named according to meta->number.  On success, the rest of
+// *meta will be filled with metadata about the generated table.
+// If no data is present in *iter, meta->file_size will be set to
+// zero, and no Table file will be produced.
+extern Status BuildTable(const std::string& dbname,
+                         Env* env,
+                         const Options& options,
+                         TableCache* table_cache,
+                         Iterator* iter,
+                         FileMetaData* meta);
+    
+    void leveldb_options_set_paranoid_checks(
+    leveldb_options_t* opt, unsigned char v) {
+  opt->rep.paranoid_checks = v;
+}
+    
+    
+// Owned filenames have the form:
+//    dbname/CURRENT
+//    dbname/LOCK
+//    dbname/LOG
+//    dbname/LOG.old
+//    dbname/MANIFEST-[0-9]+
+//    dbname/[0-9]+.(log|sst|ldb)
+bool ParseFileName(const std::string& fname,
+                   uint64_t* number,
+                   FileType* type) {
+  Slice rest(fname);
+  if (rest == 'CURRENT') {
+    *number = 0;
+    *type = kCurrentFile;
+  } else if (rest == 'LOCK') {
+    *number = 0;
+    *type = kDBLockFile;
+  } else if (rest == 'LOG' || rest == 'LOG.old') {
+    *number = 0;
+    *type = kInfoLogFile;
+  } else if (rest.starts_with('MANIFEST-')) {
+    rest.remove_prefix(strlen('MANIFEST-'));
+    uint64_t num;
+    if (!ConsumeDecimalNumber(&rest, &num)) {
+      return false;
+    }
+    if (!rest.empty()) {
+      return false;
+    }
+    *type = kDescriptorFile;
+    *number = num;
+  } else {
+    // Avoid strtoull() to keep filename format independent of the
+    // current locale
+    uint64_t num;
+    if (!ConsumeDecimalNumber(&rest, &num)) {
+      return false;
+    }
+    Slice suffix = rest;
+    if (suffix == Slice('.log')) {
+      *type = kLogFile;
+    } else if (suffix == Slice('.sst') || suffix == Slice('.ldb')) {
+      *type = kTableFile;
+    } else if (suffix == Slice('.dbtmp')) {
+      *type = kTempFile;
+    } else {
+      return false;
+    }
+    *number = num;
+  }
+  return true;
+}
+    
+      fname = LogFileName('foo', 192);
+  ASSERT_EQ('foo/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(192, number);
+  ASSERT_EQ(kLogFile, type);
+    
+      Cache::Handle* handle = NULL;
+  Status s = FindTable(file_number, file_size, &handle);
+  if (!s.ok()) {
+    return NewErrorIterator(s);
+  }
+    
+      std::string comparator_;
+  uint64_t log_number_;
+  uint64_t prev_log_number_;
+  uint64_t next_file_number_;
+  SequenceNumber last_sequence_;
+  bool has_comparator_;
+  bool has_log_number_;
+  bool has_prev_log_number_;
+  bool has_next_file_number_;
+  bool has_last_sequence_;
+    
+      void Write(bool sync, Order order, DBState state,
+             int num_entries, int value_size, int entries_per_batch) {
+    // Create new database if state == FRESH
+    if (state == FRESH) {
+      if (FLAGS_use_existing_db) {
+        message_ = 'skipping (--use_existing_db is true)';
+        return;
+      }
+      delete db_;
+      db_ = NULL;
+      Open(sync);
+      Start();  // Do not count time taken to destroy/open
+    }
     }
     
-      int called = 0;
-  partial_run_mgr.PartialRunDone(
-      step_id, [&called](Status status) { called++; }, Status::OK());
-  partial_run_mgr.ExecutorDone(step_id, Status::OK());
-    
-    #endif  // TENSORFLOW_FRAMEWORK_RESOURCE_OP_KERNEL_H_
-
-    
-        // Find node in graph with that name.
-    auto iter = name_index->find(id.first);
-    if (iter == name_index->end()) {
-      return errors::NotFound('FetchOutputs node ', t, ': not found');
-    }
-    Node* n = iter->second;
-    DCHECK_EQ(n->name(), id.first);
-    VLOG(2) << 'Found fetch node for ' << t;
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    namespace tensorflow {
-namespace port {
-    }
+    // This function takes tif/box pair of files and runs recognition on the image,
+// while making sure that the word bounds that tesseract identified roughly
+// match to those specified by the input box file. For each word (ngram in a
+// single bounding box from the input box file) it outputs the ocred result,
+// the correct label, rating and certainty.
+void Tesseract::recog_training_segmented(const STRING &fname,
+                                         PAGE_RES *page_res,
+                                         volatile ETEXT_DESC *monitor,
+                                         FILE *output_file) {
+  STRING box_fname = fname;
+  const char *lastdot = strrchr(box_fname.string(), '.');
+  if (lastdot != NULL) box_fname[lastdot - box_fname.string()] = '\0';
+  box_fname += '.box';
+  // ReadNextBox() will close box_file
+  FILE *box_file = open_file(box_fname.string(), 'r');
     }
     
-    namespace xla {
-    }
+    #include 'mfoutline.h'
+#include 'tessbox.h'
+#include 'tesseractclass.h'
+    
+    // Returns true if there were enough points at the last call to Fit or
+// ConstrainedFit for the fitted points to be used on a badly fitted line.
+bool DetLineFit::SufficientPointsForIndependentFit() const {
+  return distances_.size() >= kMinPointsForErrorCount;
+}
+    
+      // Constrained fit with a supplied direction vector. Finds the best line_pt,
+  // that is one of the supplied points having the median cross product with
+  // direction, ignoring points that have a cross product outside of the range
+  // [min_dist, max_dist]. Returns the resulting error metric using the same
+  // reduced set of points.
+  // *Makes use of floating point arithmetic*
+  double ConstrainedFit(const FCOORD& direction,
+                        double min_dist, double max_dist,
+                        bool debug, ICOORD* line_pt);
     
     
-    {  ChildValues childValues_;
-  std::ostream* document_;
-  std::string indentString_;
-  int rightMargin_;
-  std::string indentation_;
-  bool addChildValues_ : 1;
-  bool indented_ : 1;
+    {  if (total_weight > 0) {
+    error = sigyy + m * (m * sigxx + 2 * (c * sigx - sigxy)) + c *
+            (total_weight * c - 2 * sigy);
+    if (error >= 0)
+      error = sqrt(error / total_weight);  // sqrt of mean
+    else
+      error = 0;
+  } else {
+    error = 0;                   // too little
+  }
+  return error;
+}
+    
+      // Transforms the given coords one step forward to normalized space, without
+  // using any block rotation or predecessor.
+  void LocalNormTransform(const TPOINT& pt, TPOINT* transformed) const;
+  void LocalNormTransform(const FCOORD& pt, FCOORD* transformed) const;
+  // Transforms the given coords forward to normalized space using the
+  // full transformation sequence defined by the block rotation, the
+  // predecessors, deepest first, and finally this. If first_norm is not NULL,
+  // then the first and deepest transformation used is first_norm, ending
+  // with this, and the block rotation will not be applied.
+  void NormTransform(const DENORM* first_norm, const TPOINT& pt,
+                     TPOINT* transformed) const;
+  void NormTransform(const DENORM* first_norm, const FCOORD& pt,
+                     FCOORD* transformed) const;
+  // Transforms the given coords one step back to source space, without
+  // using to any block rotation or predecessor.
+  void LocalDenormTransform(const TPOINT& pt, TPOINT* original) const;
+  void LocalDenormTransform(const FCOORD& pt, FCOORD* original) const;
+  // Transforms the given coords all the way back to source image space using
+  // the full transformation sequence defined by this and its predecessors
+  // recursively, shallowest first, and finally any block re_rotation.
+  // If last_denorm is not NULL, then the last transformation used will
+  // be last_denorm, and the block re_rotation will never be executed.
+  void DenormTransform(const DENORM* last_denorm, const TPOINT& pt,
+                       TPOINT* original) const;
+  void DenormTransform(const DENORM* last_denorm, const FCOORD& pt,
+                       FCOORD* original) const;
+    
+    
+    { private:
+  BOOL8 proportional;          //< proportional
+  bool right_to_left_;         //< major script is right to left.
+  inT8 kerning;                //< inter blob gap
+  inT16 spacing;               //< inter word gap
+  inT16 pitch;                 //< pitch of non-props
+  inT16 font_class;            //< correct font class
+  inT32 xheight;               //< height of chars
+  float cell_over_xheight_;    //< Ratio of cell height to xheight.
+  STRING filename;             //< name of block
+  ROW_LIST rows;               //< rows in block
+  PARA_LIST paras_;            //< paragraphs of block
+  C_BLOB_LIST c_blobs;         //< before textord
+  C_BLOB_LIST rej_blobs;       //< duff stuff
+  FCOORD re_rotation_;         //< How to transform coords back to image.
+  FCOORD classify_rotation_;   //< Apply this before classifying.
+  FCOORD skew_;                //< Direction of true horizontal.
+  ICOORD median_size_;         //< Median size of blobs.
 };
     
-    // Builds a RepeatedScalarContainer object, from a parent message and a
-// field descriptor.
-extern PyObject *NewContainer(
-    CMessage* parent, const FieldDescriptor* parent_field_descriptor);
     
-    
-    {}
-    
-    #include <string>
-    
-    #ifdef USE_OPENCV
-  /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a vector of Mat.
-   *
-   * @param mat_vector
-   *    A vector of Mat containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See memory_layer.cpp for an example.
-   */
-  void Transform(const vector<cv::Mat> & mat_vector,
-                Blob<Dtype>* transformed_blob);
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {}  // namespace caffe
-    
-      /**
-   * @brief Computes the Contrastive error gradient w.r.t. the inputs.
-   *
-   * Computes the gradients with respect to the two input vectors (bottom[0] and
-   * bottom[1]), but not the similarity label (bottom[2]).
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
-   *      This Blob's diff will simply contain the loss_weight* @f$ \lambda @f$,
-   *      as @f$ \lambda @f$ is the coefficient of this layer's output
-   *      @f$\ell_i@f$ in the overall Net loss
-   *      @f$ E = \lambda_i \ell_i + \mbox{other loss terms}@f$; hence
-   *      @f$ \frac{\partial E}{\partial \ell_i} = \lambda_i @f$.
-   *      (*Assuming that this top Blob is not used as a bottom (input) by any
-   *      other layer of the Net.)
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times 1 \times 1) @f$
-   *      the features @f$a@f$; Backward fills their diff with
-   *      gradients if propagate_down[0]
-   *   -# @f$ (N \times C \times 1 \times 1) @f$
-   *      the features @f$b@f$; Backward fills their diff with gradients if
-   *      propagate_down[1]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-      virtual inline const char* type() const { return 'Convolution'; }
-    
-      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
-  cudnnTensorDescriptor_t    bias_desc_;
-  cudnnFilterDescriptor_t      filter_desc_;
-  vector<cudnnConvolutionDescriptor_t> conv_descs_;
-  int bottom_offset_, top_offset_, bias_offset_;
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include 'caffe/layers/pooling_layer.hpp'
-    
-    
-    {}  // namespace caffe
-    
-      /// Perform a blocking wait on the timer.
-  /**
-   * This function is used to wait for the timer to expire. This function
-   * blocks and does not return until the timer has expired.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   */
-  void wait()
-  {
-    boost::system::error_code ec;
-    this->service.wait(this->implementation, ec);
-    boost::asio::detail::throw_error(ec, 'wait');
-  }
-    
-    namespace boost {
-namespace asio {
-    }
-    }
-    
-    #include <boost/asio/detail/push_options.hpp>
-    
-    class ptime;
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    #include <boost/asio/detail/push_options.hpp>
-    
-    #endif // BOOST_ASIO_DETAIL_IMPL_BUFFER_SEQUENCE_ADAPTER_IPP
-
-    
-      if (result >= 0)
-  {
-    ec = boost::system::error_code();
-    if (value)
-      state |= user_set_non_blocking;
-    else
     {
-      // Clearing the user-set non-blocking mode always overrides any
-      // internally-set non-blocking flag. Any subsequent asynchronous
-      // operations will need to re-enable non-blocking I/O.
-      state &= ~(user_set_non_blocking | internal_non_blocking);
-    }
-    return true;
-  }
+    {#undef EXT_FUNC
+};
+} // namespace fuzzer
     
-    
-    
-    
-    
-    
-    
-        void initShader( void );
-public:
-    GLESDebugDraw();
-    
-    	b2FixtureDef fd;
-	fd.shape = &circle;
-	fd.density = 20.0f;
-	fd.restitution = 0.0f;
-	
-	b2Vec2 minV = position - b2Vec2(0.3f,0.3f);
-	b2Vec2 maxV = position + b2Vec2(0.3f,0.3f);
-	
-	b2AABB aabb;
-	aabb.lowerBound = minV;
-	aabb.upperBound = maxV;
-    
-    #endif
-
-    
-    
-    {			if ((p.x < -10.0f && v.x < 0.0f) ||
-				(p.x > 10.0f && v.x > 0.0f))
-			{
-				v.x = -v.x;
-				m_platform->SetLinearVelocity(v);
-			}
-		}
-    
-    		// Compute consistent velocities for new bodies based on
-		// cached velocity.
-		b2Vec2 center1 = body1->GetWorldCenter();
-		b2Vec2 center2 = body2->GetWorldCenter();
-		
-		b2Vec2 velocity1 = m_velocity + b2Cross(m_angularVelocity, center1 - center);
-		b2Vec2 velocity2 = m_velocity + b2Cross(m_angularVelocity, center2 - center);
-    
-    			bd.position.Set(230.0f, 2.5f);
-			body = m_world->CreateBody(&bd);
-			body->CreateFixture(&box, 0.5f);
-    
-      void setDefaultCred(std::string user, std::string password);
-    
-    
-    {} // namespace aria2
-
-    
-    class ApiCallbackDownloadEventListener : public DownloadEventListener {
-public:
-  ApiCallbackDownloadEventListener(Session* session,
-                                   DownloadEventCallback callback,
-                                   void* userData);
-  virtual ~ApiCallbackDownloadEventListener();
-  virtual void onEvent(DownloadEvent event,
-                       const RequestGroup* group) CXX11_OVERRIDE;
+    namespace fuzzer {
     }
     
-    #include 'common.h'
+    namespace fuzzer {
+    }
+    
+    // Decides which files need to be merged (add thost to NewFiles).
+// Returns the number of new features added.
+size_t Merger::Merge(std::vector<std::string> *NewFiles) {
+  NewFiles->clear();
+  assert(NumFilesInFirstCorpus <= Files.size());
+  std::set<uint32_t> AllFeatures;
+    }
+    
+    // Overwrites part of To[0,ToSize) with a part of From[0,FromSize).
+// Returns ToSize.
+size_t MutationDispatcher::CopyPartOf(const uint8_t *From, size_t FromSize,
+                                      uint8_t *To, size_t ToSize) {
+  // Copy From[FromBeg, FromBeg + CopySize) into To[ToBeg, ToBeg + CopySize).
+  size_t ToBeg = Rand(ToSize);
+  size_t CopySize = Rand(ToSize - ToBeg) + 1;
+  assert(ToBeg + CopySize <= ToSize);
+  CopySize = std::min(CopySize, FromSize);
+  size_t FromBeg = Rand(FromSize - CopySize + 1);
+  assert(FromBeg + CopySize <= FromSize);
+  memmove(To + ToBeg, From + FromBeg, CopySize);
+  return ToSize;
+}
