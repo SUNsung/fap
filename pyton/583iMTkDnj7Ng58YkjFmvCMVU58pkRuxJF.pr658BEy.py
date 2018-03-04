@@ -1,71 +1,95 @@
 
         
-        print('Build model...')
-    
-        if member.__doc__ is None and not member_too_small(member):
-        raise ValueError('{} class doesn't have any documentation'.format(name),
-                         member.__module__, inspect.getmodule(member).__file__)
-    for n, met in inspect.getmembers(member):
-        if inspect.ismethod(met):
-            handle_method(n, met)
+                headers = dict(self._orig.headers)
+        if 'Host' not in self._orig.headers:
+            headers['Host'] = url.netloc.split('@')[-1]
     
     
-if __name__ == '__main__':
-    pytest.main([__file__])
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
 
     
-        input_a = layers.Input(shape=input_shapes[0][1:])
-    input_b = layers.Input(shape=input_shapes[1][1:])
-    a = layers.Masking()(input_a)
-    b = layers.Masking()(input_b)
-    merged = legacy_layers.merge([a, b], mode=fn_mode, output_shape=fn_output_shape, output_mask=fn_output_mask)
-    model = models.Model([input_a, input_b], merged)
-    expected_output_shape = model.compute_output_shape(input_shapes)
-    actual_output_shape = model.predict(inputs).shape
-    assert expected_output_shape == actual_output_shape
+    
+def test_unicode_raw_json_item_verbose(httpbin):
+    r = http('--json', 'POST', httpbin.url + '/post',
+             u'test:={ '%s' : [ '%s' ] }' % (UNICODE, UNICODE))
+    assert HTTP_OK in r
+    assert r.json['json'] == {'test': {UNICODE: [UNICODE]}}
+    
+        if n == 1:
+        return '1 B'
     
     
-@keras_test
-def test_merge_overlap(in_tmpdir):
-    (x_train, y_train), (x_test, y_test) = _get_test_data()
-    left = Sequential()
-    left.add(Dense(num_hidden, input_shape=(input_dim,)))
-    left.add(Activation('relu'))
+@app.route('/')
+def index():
+    return render_template('index.html')
     
-        def __init__(self):
-        self.head = None
-        self.tail = None
     
-        HOUSING = 0
-    FOOD = 1
-    GAS = 2
-    SHOPPING = 3
-    ...
+def get_db():
+    '''Opens a new database connection if there is none yet for the
+    current application context.
+    '''
+    top = _app_ctx_stack.top
+    if not hasattr(top, 'sqlite_db'):
+        top.sqlite_db = sqlite3.connect(app.config['DATABASE'])
+        top.sqlite_db.row_factory = sqlite3.Row
+    return top.sqlite_db
     
-        def set(self, results, query):
-        '''Set the result for the given query key in the cache.
+    from setuptools import setup, find_packages
+setup(
+    name = proj_info['name'],
+    version = VERSION,
     
-        def get_people(self, ids):
-        results = []
-        for id in ids:
-            if id in self.people:
-                results.append(self.people[id])
-        return results
+    _options = [
+    'help',
+    'version',
+    'gui',
+    'force',
+    'playlists',
+]
+_short_options = 'hVgfl'
     
-    #----------------------------------------------------------------------
-def fc2video_download_by_upid(upid, output_dir = '.', merge = True, info_only = False, **kwargs):
-    ''''''
-    fake_headers = {
-        'DNT': '1',
-        'Accept-Encoding': 'gzip, deflate, sdch',
-        'Accept-Language': 'en-CA,en;q=0.8,en-US;q=0.6,zh-CN;q=0.4,zh;q=0.2',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.58 Safari/537.36',
-        'Accept': '*/*',
-        'X-Requested-With': 'ShockwaveFlash/19.0.0.245',
-        'Connection': 'keep-alive',
-    }
-    api_base = 'http://video.fc2.com/ginfo.php?upid={upid}&mimi={mimi}'.format(upid = upid, mimi = makeMimi(upid))
-    html = get_content(api_base, headers=fake_headers)
+        title = match1(html, r'&title=([^&]+)')
+    
+    
+class Pin:
+    host = 'http://img.hb.aicdn.com/'
+    
+    def kugou_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    if url.lower().find('5sing')!=-1:
+        #for 5sing.kugou.com
+        html=get_html(url)
+        ticket=r1(r''ticket':\s*'(.*)'',html)
+        j=loads(str(b64decode(ticket),encoding='utf-8'))
+        url=j['file']
+        title=j['songName']
+        songtype, ext, size = url_info(url)
+        print_info(site_info, title, songtype, size)
+        if not info_only:
+            download_urls([url], title, ext, size, output_dir, merge=merge)
+    else:
+        #for the www.kugou.com/
+        return kugou_download_playlist(url, output_dir=output_dir, merge=merge, info_only=info_only)
+        # raise NotImplementedError(url)       
+    
+    def kuwo_download_by_rid(rid, output_dir = '.', merge = True, info_only = False):
+    html=get_content('http://player.kuwo.cn/webmusic/st/getNewMuiseByRid?rid=MUSIC_%s'%rid)
+    title=match1(html,r'<name>(.*)</name>')
+    #to get title
+    #format =aac|mp3 ->to get aac format=mp3 ->to get mp3
+    url=get_content('http://antiserver.kuwo.cn/anti.s?format=mp3&rid=MUSIC_%s&type=convert_url&response=url'%rid)
+    songtype, ext, size = url_info(url)
+    print_info(site_info, title, songtype, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir)
     
         for i in range(10, 30):
         url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
