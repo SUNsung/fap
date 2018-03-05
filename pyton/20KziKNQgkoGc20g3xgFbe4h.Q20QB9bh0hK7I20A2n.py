@@ -1,72 +1,46 @@
 
         
-            def entry_ok(self):
-        'Return sensible ConfigParser section name or None.'
-        self.entry_error['text'] = ''
-        name = self.entry.get().strip()
-        if not name:
-            self.showerror('no name specified.')
-            return None
-        elif len(name)>30:
-            self.showerror('name is longer than 30 characters.')
-            return None
-        elif name in self.used_names:
-            self.showerror('name is already in use.')
-            return None
-        return name
+            Examples:
     
-        >>> from fractions import Fraction as F
-    >>> variance([F(1, 6), F(1, 2), F(5, 3)])
-    Fraction(67, 108)
+        def test_basics(self):
+        d = deque(range(-5125, -5000))
+        d.__init__(range(200))
+        for i in range(200, 400):
+            d.append(i)
+        for i in reversed(range(-200, 0)):
+            d.appendleft(i)
+        self.assertEqual(list(d), list(range(-200, 400)))
+        self.assertEqual(len(d), 600)
+    
+        objects = []
+    libs = ['shell32.lib', 'comdlg32.lib', 'wsock32.lib', 'user32.lib', 'oleaut32.lib']
+    for moddefn in moddefns:
+        print('# Module', moddefn.name)
+        for file in moddefn.sourceFiles:
+            base = os.path.basename(file)
+            base, ext = os.path.splitext(base)
+            objects.append(base + '.obj')
+            print(r'$(temp_dir)\%s.obj: '%s'' % (base, file))
+            print('\t@$(CC) -c -nologo /Fo$* $(cdl) $(c_debug) /D BUILD_FREEZE', end=' ')
+            print(''-I$(pythonhome)/Include'  '-I$(pythonhome)/PC' \\')
+            print('\t\t$(cflags) $(cdebug) $(cinclude) \\')
+            extra = moddefn.GetCompilerOptions()
+            if extra:
+                print('\t\t%s \\' % (' '.join(extra),))
+            print('\t\t'%s'' % file)
+            print()
     
     
-# Use speedup if available
-scanstring = c_scanstring or py_scanstring
+def triplet_to_brightness(rgbtuple):
+    # return the brightness (grey level) along the scale 0.0==black to
+    # 1.0==white
+    r = 0.299
+    g = 0.587
+    b = 0.114
+    return r*rgbtuple[0] + g*rgbtuple[1] + b*rgbtuple[2]
     
-    >>> from nntplib import NNTP
->>> s = NNTP('news')
->>> resp, count, first, last, name = s.group('comp.lang.python')
->>> print('Group', name, 'has', count, 'articles, range', first, 'to', last)
-Group comp.lang.python has 51 articles, range 5770 to 5821
->>> resp, subs = s.xhdr('subject', '{0}-{1}'.format(first, last))
->>> resp = s.quit()
->>>
-    
-        def aliases_of(self, red, green, blue):
-        try:
-            name, aliases = self.__byrgb[(red, green, blue)]
-        except KeyError:
-            raise BadColor((red, green, blue)) from None
-        return [name] + aliases
-    
-            If no XML data is given then it is read from stdin. The resulting
-        XML-RPC response is printed to stdout along with the correct HTTP
-        headers.
-        '''
-    
-        @support.requires_IEEE_754
-    def test_negative_zero_repr_str(self):
-        def test(v, expected, test_fn=self.assertEqual):
-            test_fn(repr(v), expected)
-            test_fn(str(v), expected)
-    
-            a = 0
-        b = sys.maxsize**10
-        c = 2*sys.maxsize
-        expected_len = 1 + (b - a) // c
-        x = range(a, b, c)
-        self.assertIn(a, x)
-        self.assertNotIn(b, x)
-        self.assertRaises(OverflowError, len, x)
-        self.assertTrue(x)
-        self.assertEqual(_range_len(x), expected_len)
-        self.assertEqual(x[0], a)
-        idx = sys.maxsize+1
-        self.assertEqual(x[idx], a+(idx*c))
-        self.assertEqual(x[idx:idx+1][0], a+(idx*c))
-        with self.assertRaises(IndexError):
-            x[-expected_len-1]
-        with self.assertRaises(IndexError):
-            x[expected_len]
-    
-            self.assertEqual(x[:], a.tolist())
+            # Check that equality of ranges matches equality of the corresponding
+        # tuples for each pair from the test lists above.
+        ranges_eq = [a == b for a in test_ranges for b in test_ranges]
+        tuples_eq = [a == b for a in test_tuples for b in test_tuples]
+        self.assertEqual(ranges_eq, tuples_eq)
