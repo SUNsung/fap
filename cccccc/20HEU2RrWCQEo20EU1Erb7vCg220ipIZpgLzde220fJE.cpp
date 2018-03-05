@@ -1,315 +1,478 @@
 
         
-         protected:
-  // Variables accessible from subclasses.
-  mutex mu_;
-  ContainerInfo cinfo_ GUARDED_BY(mu_);
-  T* resource_ GUARDED_BY(mu_) = nullptr;
+        // Gets the path to the content shell's pak file.
+bool GetResourcesPakFilePath(base::FilePath& output);
     
-    namespace xla {
+    #endif  // CONTENT_NW_SRC_API_DISPATCHER_H_
+    
+    
+    {} // namespace nwapi
+
+    
+    public:
+  EventListener(int id,
+                const base::WeakPtr<DispatcherHost>& dispatcher_host,
+                const base::DictionaryValue& option);
+    
+    
+    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+  return !item->icon_.IsEmpty();
+}
+    
+    #include 'content/nw/src/api/menu/menu.h'
+    
+    
+    {
+    {    // build keyboard code
+    ui::DomCode domCode = ui::KeycodeConverter::CodeStringToDomCode(keyName.c_str());
+    retval = ui::DomCodeToUsLayoutKeyboardCode(domCode);
+  }
+  return retval;
+}
+    
+    int main(int argc, char** argv) {
+  if (argc != 4) {
+    printf('This script converts the MNIST dataset to the leveldb format used\n'
+           'by caffe to train a siamese network.\n'
+           'Usage:\n'
+           '    convert_mnist_data input_image_file input_label_file '
+           'output_db_file\n'
+           'The MNIST dataset could be downloaded at\n'
+           '    http://yann.lecun.com/exdb/mnist/\n'
+           'You should gunzip them after downloading.\n');
+  } else {
+    google::InitGoogleLogging(argv[0]);
+    convert_dataset(argv[1], argv[2], argv[3]);
+  }
+  return 0;
+}
+#else
+int main(int argc, char** argv) {
+  LOG(FATAL) << 'This example requires LevelDB; compile with USE_LEVELDB.';
+}
+#endif  // USE_LEVELDB
+
+    
+      /// @brief The spatial dimensions of the input.
+  inline int input_shape(int i) {
+    return (*bottom_shape_)[channel_axis_ + i];
+  }
+  // reverse_dimensions should return true iff we are implementing deconv, so
+  // that conv helpers know which dimensions are which.
+  virtual bool reverse_dimensions() = 0;
+  // Compute height_out_ and width_out_ from other parameters.
+  virtual void compute_output_shape() = 0;
+    
+    #endif  // CAFFE_CUDNN_LCN_LAYER_HPP_
+
+    
+    namespace caffe {
     }
     
-    // Prune a model to make it more efficient:
-// * Remove unnecessary operations.
-// * Optimize gradient computations.
-class ModelPruner : public GraphOptimizer {
+    #ifdef USE_CUDNN
+/**
+ * @brief cuDNN implementation of SoftmaxLayer.
+ *        Fallback to SoftmaxLayer for CPU mode.
+ */
+template <typename Dtype>
+class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
  public:
-  ModelPruner() {}
-  ~ModelPruner() override {}
+  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
+      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNSoftmaxLayer();
     }
     
-      // Child process: close parent-side pipes and channels marked for closing.
-  // For pipe channels, replace their file descriptors with the pipes.
-  int devnull_fd = -1;
-  for (int i = 0; i < kNFds; i++) {
-    if (parent_pipe_[i] >= 0) {
-      close(parent_pipe_[i]);
-      parent_pipe_[i] = -1;
-    }
-    }
+      EltwiseParameter_EltwiseOp op_;
+  vector<Dtype> coeffs_;
+  Blob<int> max_idx_;
     
-    // kNullPlugin denotes an invalid plugin identifier.
-extern const PluginId kNullPlugin;
-    
-    /** scalar_sigmoid_fast_derivative_op
-  * \ingroup CXX11_NeuralNetworks_Module
-  * \brief Template functor to compute the fast derivative of a sigmoid
-  *
-  * Input should be the backpropagated gradient.
-  *
-  * \sa class CwiseUnaryOp, Cwise::sigmoid_fast_derivative()
-  */
-template <typename T>
-struct scalar_sigmoid_fast_derivative_op {
-  EIGEN_EMPTY_STRUCT_CTOR(scalar_sigmoid_fast_derivative_op)
-  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE T operator()(const T& y) const {
-    const T one = T(1);
-    return (one - y) * y;
-  }
+    /**
+ * @brief A layer for learning 'embeddings' of one-hot vector input.
+ *        Equivalent to an InnerProductLayer with one-hot vectors as input, but
+ *        for efficiency the input is the 'hot' index of each column itself.
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+template <typename Dtype>
+class EmbedLayer : public Layer<Dtype> {
+ public:
+  explicit EmbedLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-      Status ResetLocked() override {
-    line_number_ = 0;
-    input_buffer_.reset(nullptr);
-    return ReaderBase::ResetLocked();
-  }
+    /**
+ * @brief Computes @f$ y = \gamma ^ {\alpha x + \beta} @f$,
+ *        as specified by the scale @f$ \alpha @f$, shift @f$ \beta @f$,
+ *        and base @f$ \gamma @f$.
+ */
+template <typename Dtype>
+class ExpLayer : public NeuronLayer<Dtype> {
+ public:
+  /**
+   * @param param provides ExpParameter exp_param,
+   *     with ExpLayer options:
+   *   - scale (\b optional, default 1) the scale @f$ \alpha @f$
+   *   - shift (\b optional, default 0) the shift @f$ \beta @f$
+   *   - base (\b optional, default -1 for a value of @f$ e \approx 2.718 @f$)
+   *         the base @f$ \gamma @f$
+   */
+  explicit ExpLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
     
-      // If instruction is part of inputs, don't reset the bit_vector.
-  if (std::find(inputs.begin(), inputs.end(), instruction) == inputs.end()) {
-    bit_vector.SetToZero();
-  }
-  bit_vector.Set(GetIndex(instruction));
-  for (const HloInstruction* input : inputs) {
-    bit_vector.OrWith(GetBitVector(input));
-  }
+     private:
+  std::vector<TestPartResult> array_;
+    
+    // Type-parameterized tests are abstract test patterns parameterized
+// by a type.  Compared with typed tests, type-parameterized tests
+// allow you to define the test pattern without knowing what the type
+// parameters are.  The defined pattern can be instantiated with
+// different types any number of times, in any number of translation
+// units.
+//
+// If you are designing an interface or concept, you can define a
+// suite of type-parameterized tests to verify properties that any
+// valid implementation of the interface/concept should have.  Then,
+// each implementation can easily instantiate the test suite to verify
+// that it conforms to the requirements, without having to write
+// similar tests repeatedly.  Here's an example:
     
     template <typename T>
-struct DynamicStitchOpCPU : DynamicStitchOpImplCPU<T, false> {
-  using DynamicStitchOpImplCPU<T, false>::DynamicStitchOpImplCPU;
-};
+bool TypeIdHelper<T>::dummy_ = false;
     
+      // Compares two wide C strings, ignoring case.  Returns true iff they
+  // have the same content.
+  //
+  // Unlike wcscasecmp(), this function can handle NULL argument(s).
+  // A NULL C string is considered different to any non-NULL wide C string,
+  // including the empty string.
+  // NB: The implementations on different platforms slightly differ.
+  // On windows, this method uses _wcsicmp which compares according to LC_CTYPE
+  // environment variable. On GNU platform this method uses wcscasecmp
+  // which compares according to LC_CTYPE category of the current locale.
+  // On MacOS X, it uses towlower, which also uses LC_CTYPE category of the
+  // current locale.
+  static bool CaseInsensitiveWideCStringEquals(const wchar_t* lhs,
+                                               const wchar_t* rhs);
     
-    {}  // namespace
-    
-        // Finish and check for file errors
-    if (s.ok()) {
-      s = file->Sync();
+     private:
+  void CalculatePrimesUpTo(int max) {
+    ::std::fill(is_prime_, is_prime_ + is_prime_size_, true);
+    is_prime_[0] = is_prime_[1] = false;
     }
-    if (s.ok()) {
-      s = file->Close();
-    }
-    delete file;
-    file = NULL;
-    
-    void DBIter::Next() {
-  assert(valid_);
-    }
-    
-    #include 'db/filename.h'
     
     
-    {  Table* table = reinterpret_cast<TableAndFile*>(cache_->Value(handle))->table;
-  Iterator* result = table->NewIterator(options);
-  result->RegisterCleanup(&UnrefEntry, cache_, handle);
-  if (tableptr != NULL) {
-    *tableptr = table;
+    {    // Now, we have i <= n/i < n.
+    // If n is divisible by i, n is not prime.
+    if (n % i == 0) return false;
   }
-  return result;
+    
+    
+    {  // <TechnicalDetails>
+  //
+  // EXPECT_EQ(expected, actual) is the same as
+  //
+  //   EXPECT_TRUE((expected) == (actual))
+  //
+  // except that it will print both the expected value and the actual
+  // value when the assertion fails.  This is very helpful for
+  // debugging.  Therefore in this case EXPECT_EQ is preferred.
+  //
+  // On the other hand, EXPECT_TRUE accepts any Boolean expression,
+  // and is thus more general.
+  //
+  // </TechnicalDetails>
 }
     
-      void Clear();
-    
-     public:
-  RandomGenerator() {
-    // We use a limited amount of data over and over again and ensure
-    // that it is larger than the compression window (32KB), and also
-    // large enough to serve all typical value sizes we want to write.
-    Random rnd(301);
-    std::string piece;
-    while (data_.size() < 1048576) {
-      // Add a short fragment that is as compressible as specified
-      // by FLAGS_compression_ratio.
-      test::CompressibleString(&rnd, FLAGS_compression_ratio, 100, &piece);
-      data_.append(piece);
+    namespace irgen {
     }
-    pos_ = 0;
+    
+      /* Since popen() doesn't indicate if the internal fork() doesn't work
+   * (e.g. the shell can't be executed) we explicitly set it to 0 to be
+   * sure we don't catch any older errno value. */
+  errno = 0;
+  FILE *sendmail = popen(sendmail_cmd.data(), 'w');
+  if (sendmail == nullptr) {
+    raise_warning('Could not execute mail delivery program '%s'',
+                    sendmail_path);
+    return 0;
   }
     
-    // If true, do not destroy the existing database.  If you set this
-// flag and also specify a benchmark that wants a fresh database, that
-// benchmark will fail.
-static bool FLAGS_use_existing_db = false;
+      Variant ret = mpzToGMPObject(gmpReturn);
     
-    // Returns a new environment that stores its data in memory and delegates
-// all non-file-storage tasks to base_env. The caller must delete the result
-// when it is no longer needed.
-// *base_env must remain live while the result is in use.
-Env* NewMemEnv(Env* base_env);
+    /*
+ * Vtuple is an index to a tuple in Vunit::tuples.
+ */
+DECLARE_VNUM(Vtuple, true, 'T');
     
-      // Return true iff 'x' is a prefix of '*this'
-  bool starts_with(const Slice& x) const {
-    return ((size_ >= x.size_) &&
-            (memcmp(data_, x.data_, x.size_) == 0));
-  }
-    
-    class DummyBufferPoolController : public BufferPoolController
-{
-public:
-    DummyBufferPoolController() { }
-    virtual ~DummyBufferPoolController() { }
-    }
-    
-    
-    {
-    {
-    {            if (wholeSize.height < rows || wholeSize.width < cols)
-            {
-                obj.create(rows, cols, type);
-            }
-            else
-            {
-                obj.cols = cols;
-                obj.rows = rows;
-            }
-        }
-    }
+    void ThriftBuffer::read(Variant &data) {
+  String sdata;
+  read(sdata);
+  data = unserialize_with_no_notice(sdata);
 }
     
-    #ifndef GL_VERSION_2_0
-    // GL type for program/shader text
-    typedef char GLchar;
-#endif
+    #include 'hphp/util/assertions.h'
+#include 'magic.h' // @nolint
     
-    #if defined(__linux__)
-    #include <dlfcn.h>
-    #include <stdio.h>
+        // dense for comparison
+    mC.Resize(dim1, dim1);
+    mC.SetValue(0.0f);
+    Matrix<float>::MultiplyAndAdd(mAdense, transposeA, mAdense, transposeB, mC);
+    Matrix<float>::MultiplyAndWeightedAdd(alpha, mAdense, transposeA, mA2dense, transposeB, beta, mC);
     
-    bool js_cocos2dx_physics3d_Physics3DObject_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DObject_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DObject(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DObject_setUserData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getUserData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getObjType(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_setPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getWorldTransform(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_setMask(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getCollisionCallback(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getMask(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_needCollisionCallback(JSContext *cx, uint32_t argc, jsval *vp);
+    #include 'stdafx.h'
+#include 'Actions.h'
+#include 'SimpleNetworkBuilder.h'
+#include 'NDLNetworkBuilder.h'
+#include 'ScriptableObjects.h'
+#include 'BrainScriptEvaluator.h'
+#include 'BrainScriptParser.h'
     
-    #if COCOS2D_DEBUG >= 1
-    if (!cobj) 
+    
     {
-        tolua_error(tolua_S,'invalid 'cobj' in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_rewindBackgroundMusic'', nullptr);
-        return 0;
-    }
-#endif
+    {
+    {}}}
+
     
     
+    {
+    {
+    {}}}
+
     
-    
-    
-    
-    
-    	b2Fixture* fixtureA = contact->GetFixtureA();
-	b2Fixture* fixtureB = contact->GetFixtureB();
-    
-    			b2EdgeShape shape;
-    
-    			b2EdgeShape shape;
-			shape.Set(b2Vec2(-20.0f, 0.0f), b2Vec2(20.0f, 0.0f));
-    
-    		// Compute consistent velocities for new bodies based on
-		// cached velocity.
-		b2Vec2 center1 = body1->GetWorldCenter();
-		b2Vec2 center2 = body2->GetWorldCenter();
-		
-		b2Vec2 velocity1 = m_velocity + b2Cross(m_angularVelocity, center1 - center);
-		b2Vec2 velocity2 = m_velocity + b2Cross(m_angularVelocity, center2 - center);
-    
-    			box.SetAsBox(0.25f, 0.25f);
-    
-    
-    {        // Process command
-        if (Stricmp(command_line, 'CLEAR') == 0)
-        {
-            ClearLog();
-        }
-        else if (Stricmp(command_line, 'HELP') == 0)
-        {
-            AddLog('Commands:');
-            for (int i = 0; i < Commands.Size; i++)
-                AddLog('- %s', Commands[i]);
-        }
-        else if (Stricmp(command_line, 'HISTORY') == 0)
-        {
-            int first = History.Size - 10;
-            for (int i = first > 0 ? first : 0; i < History.Size; i++)
-                AddLog('%3d: %s\n', i, History[i]);
-        }
-        else
-        {
-            AddLog('Unknown command: '%s'\n', command_line);
-        }
+    // Subclass of TestServiceImpl that increments a request counter for
+// every call to the Echo RPC.
+class MyTestServiceImpl : public TestServiceImpl {
+ public:
+  MyTestServiceImpl() : request_count_(0) {}
     }
     
-            // FIXME-OPT: Unfortunately Allegro doesn't support 32-bits packed colors so we have to convert them to 4 floats
-        static ImVector<ImDrawVertAllegro> vertices;
-        vertices.resize(cmd_list->VtxBuffer.Size);
-        for (int i = 0; i < cmd_list->VtxBuffer.Size; ++i)
-        {
-            const ImDrawVert &dv = cmd_list->VtxBuffer[i];
-            ImDrawVertAllegro v;
-            v.pos = dv.pos;
-            v.uv = dv.uv;
-            unsigned char *c = (unsigned char*)&dv.col;
-            v.col = al_map_rgba(c[0], c[1], c[2], c[3]);
-            vertices[i] = v;
-        }
+    #endif  // GRPC_TEST_CPP_UTIL_CREATE_TEST_CHANNEL_H
+
     
-            // 1. Show a simple window.
-        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    }
-    
-        VkDynamicState dynamic_states[2] = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };
-    VkPipelineDynamicStateCreateInfo dynamic_state = {};
-    dynamic_state.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-    dynamic_state.dynamicStateCount = 2;
-    dynamic_state.pDynamicStates = dynamic_states;
-    
-            // Rendering
-        g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
-        g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, (float*)&clear_color);
-        ImGui::Render();
-        ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+    static const int WARMUP = 5;
+static const int BENCHMARK = 5;
     
     
-    {private:
-  uint8_t Size = 0;
-  uint8_t Data[kMaxSize];
-};
+    {  GetReporter()->ReportQPS(*result);
+  GetReporter()->ReportLatency(*result);
+}
+    
+        // What we get from the client.
+    HelloRequest request_;
+    // What we send back to the client.
+    HelloReply reply_;
+    
+    using grpc::Channel;
+using grpc::ClientContext;
+using grpc::Status;
+using helloworld::HelloRequest;
+using helloworld::HelloReply;
+using helloworld::Greeter;
     
     
-    {} // namespace fuzzer
+    {
+}  // namespace routeguide
     
-    #include 'FuzzerExtFunctions.h'
-#include 'FuzzerIO.h'
-#include <cstdarg>
-#include <cstdio>
-#include <dirent.h>
-#include <fstream>
-#include <iterator>
-#include <libgen.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
+    bool SecureAuthContext::SetPeerIdentityPropertyName(const grpc::string& name) {
+  if (!ctx_) return false;
+  return grpc_auth_context_set_peer_identity_property_name(ctx_,
+                                                           name.c_str()) != 0;
+}
     
-    // Parse a location, like:
-// \\?\UNC\Server\Share\  \\?\C:\  \\Server\Share\  \  C:\  C:
-// Returns number of characters considered if successful.
-static size_t ParseLocation(const std::string &FileName) {
-  size_t Pos = 0, Res;
-    }
+      Copyright 2003 by
+  Francesco Zappa Nardelli
     
-    
-    {}  // namespace fuzzer
-    
-      struct Mutator {
-    size_t (MutationDispatcher::*Fn)(uint8_t *Data, size_t Size, size_t Max);
-    const char *Name;
+      // Success/failure error codes.
+  enum jpgd_status
+  {
+    JPGD_SUCCESS = 0, JPGD_FAILED = -1, JPGD_DONE = 1,
+    JPGD_BAD_DHT_COUNTS = -256, JPGD_BAD_DHT_INDEX, JPGD_BAD_DHT_MARKER, JPGD_BAD_DQT_MARKER, JPGD_BAD_DQT_TABLE, 
+    JPGD_BAD_PRECISION, JPGD_BAD_HEIGHT, JPGD_BAD_WIDTH, JPGD_TOO_MANY_COMPONENTS, 
+    JPGD_BAD_SOF_LENGTH, JPGD_BAD_VARIABLE_MARKER, JPGD_BAD_DRI_LENGTH, JPGD_BAD_SOS_LENGTH,
+    JPGD_BAD_SOS_COMP_ID, JPGD_W_EXTRA_BYTES_BEFORE_MARKER, JPGD_NO_ARITHMITIC_SUPPORT, JPGD_UNEXPECTED_MARKER,
+    JPGD_NOT_JPEG, JPGD_UNSUPPORTED_MARKER, JPGD_BAD_DQT_LENGTH, JPGD_TOO_MANY_BLOCKS,
+    JPGD_UNDEFINED_QUANT_TABLE, JPGD_UNDEFINED_HUFF_TABLE, JPGD_NOT_SINGLE_SCAN, JPGD_UNSUPPORTED_COLORSPACE,
+    JPGD_UNSUPPORTED_SAMP_FACTORS, JPGD_DECODE_ERROR, JPGD_BAD_RESTART_MARKER, JPGD_ASSERTION_ERROR,
+    JPGD_BAD_SOS_SPECTRAL, JPGD_BAD_SOS_SUCCESSIVE, JPGD_STREAM_READ, JPGD_NOTENOUGHMEM
   };
     
-      bool UsingTracePcGuard() const {return NumModules; }
+  // Input stream interface.
+  // Derive from this class to read input data from sources other than files or memory. Set m_eof_flag to true when no more data is available.
+  // The decoder is rather greedy: it will keep on calling this method until its internal input buffer is full, or until the EOF flag is set.
+  // It the input stream contains data after the JPEG stream's EOI (end of image) marker it will probably be pulled into the internal buffer.
+  // Call the get_total_bytes_read() method to determine the actual size of the JPEG stream after successful decoding.
+  class jpeg_decoder_stream
+  {
+  public:
+    jpeg_decoder_stream() { }
+    virtual ~jpeg_decoder_stream() { }
+    }
     
-    void PrintHexArray(const Unit &U, const char *PrintAfter = '');
+    static const vorbis_residue_template _res_16s_0[]={
+  {2,0,32,  &_residue_44_mid,
+   &_huff_book__16c0_s_single,&_huff_book__16c0_s_single,
+   &_resbook_16s_0,&_resbook_16s_0},
+};
+static const vorbis_residue_template _res_16s_1[]={
+  {2,0,32,  &_residue_44_mid,
+   &_huff_book__16c1_s_short,&_huff_book__16c1_s_short,
+   &_resbook_16s_1,&_resbook_16s_1},
+    }
     
-    // There is no header for this on macOS so declare here
-extern 'C' char **environ;
+    /* We don't have special code for this compiler/arch, so do it the slow way */
+#  define vorbis_fpu_setround(vorbis_fpu_control) {}
+#  define vorbis_fpu_restore(vorbis_fpu_control) {}
+    
+    #define todB_nn(x) todB(x)
+    
+    #define opus_ifft(_st, _fin, _fout, arch) \
+   ((void)(arch), opus_ifft_neon(_st, _fin, _fout))
+    
+    
+/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
+#undef MULT16_32_Q15
+static OPUS_INLINE opus_val32 MULT16_32_Q15_armv4(opus_val16 a, opus_val32 b)
+{
+  unsigned rd_lo;
+  int rd_hi;
+  __asm__(
+      '#MULT16_32_Q15\n\t'
+      'smull %0, %1, %2, %3\n\t'
+      : '=&r'(rd_lo), '=&r'(rd_hi)
+      : '%r'(b), 'r'(a<<16)
+  );
+  /*We intentionally don't OR in the high bit of rd_lo for speed.*/
+  return rd_hi<<1;
+}
+#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv4(a, b))
+    
+    #undef    silk_min_16
+static OPUS_INLINE opus_int16 silk_min_16(opus_int16 a, opus_int16 b)
+{
+    ops_count += 1;
+    return (((a) < (b)) ? (a) : (b));
+}
+#undef    silk_min_32
+static OPUS_INLINE opus_int32 silk_min_32(opus_int32 a, opus_int32 b)
+{
+    ops_count += 1;
+    return (((a) < (b)) ? (a) : (b));
+}
+#undef    silk_min_64
+static OPUS_INLINE opus_int64 silk_min_64(opus_int64 a, opus_int64 b)
+{
+    ops_count += 1;
+    return (((a) < (b)) ? (a) : (b));
+}
+    
+    bool js_cocos2dx_studio_Frame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_Frame_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_Frame(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_Frame_clone(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_setTweenType(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_setNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_setTimeline(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_isEnterWhenPassed(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_getTweenType(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_getFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_apply(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_isTween(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_setFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_setTween(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_getTimeline(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_Frame_getNode(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    class BodyTypes : public Test
+{
+public:
+	BodyTypes()
+	{
+		b2Body* ground = NULL;
+		{
+			b2BodyDef bd;
+			ground = m_world->CreateBody(&bd);
+    }
+    }
+    }
+    
+    			m_bullet = m_world->CreateBody(&bd);
+			m_bullet->CreateFixture(&box, 100.0f);
+    
+    
+    {				prevBody = body;
+			}
+    
+    // Define a callback to handle incoming messages
+void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
+    try {
+        s->send(hdl, msg->get_payload(), msg->get_opcode());
+    } catch (const websocketpp::lib::error_code& e) {
+    }
+    }
+    
+        // this is a shared upgrade, no need to make it unique
+    const char *buf = 'GET / HTTP/1.1\r\n'
+                      'Host: server.example.com\r\n'
+                      'Upgrade: websocket\r\n'
+                      'Connection: Upgrade\r\n'
+                      'Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==\r\n'
+                      'Sec-WebSocket-Protocol: default\r\n'
+                      'Sec-WebSocket-Version: 13\r\n'
+                      'Origin: http://example.com\r\n\r\n';
+    
+    
+    {
+    {                    // Perform first batch of echo sending
+                    if (sockets.size() == connections) {
+                        startPoint = high_resolution_clock::now();
+                        echo();
+                    } else {
+                        newConnection();
+                    }
+                }
+                delete [] buf->base;
+            });
+    
+    
+    {    if (addr.ss_family == AF_INET) {
+        sockaddr_in *ipv4 = (sockaddr_in *) &addr;
+        inet_ntop(AF_INET, &ipv4->sin_addr, buf, sizeof(buf));
+        return {ntohs(ipv4->sin_port), buf, 'IPv4'};
+    } else {
+        sockaddr_in6 *ipv6 = (sockaddr_in6 *) &addr;
+        inet_ntop(AF_INET6, &ipv6->sin6_addr, buf, sizeof(buf));
+        return {ntohs(ipv6->sin6_port), buf, 'IPv6'};
+    }
+}
+    
+    #include 'WebSocketProtocol.h'
+#include 'Socket.h'
+    
+        Poll(Loop *loop, uv_os_sock_t fd) {
+        uv_poll = new uv_poll_t;
+        uv_poll_init_socket(loop, uv_poll, fd);
+    }
