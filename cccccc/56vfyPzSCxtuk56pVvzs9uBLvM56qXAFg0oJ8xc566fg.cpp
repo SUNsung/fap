@@ -1,269 +1,192 @@
 
         
-        
-    {  DISALLOW_COPY_AND_ASSIGN(DesktopCapturer);
-};
+            return;
+  } else if (method == 'ClearCache') {
+    ClearCache(GetRenderProcessHost());
+    return;
+  } else if (method == 'CreateShortcut') {
+#if defined(OS_WIN)
+    base::string16 path;
+    arguments.GetString(0, &path);
     
-    
-    {}  // namespace api
-    
-    #include 'atom/common/node_includes.h'
-    
-    void Event::SetSenderAndMessage(content::WebContents* sender,
-                                IPC::Message* message) {
-  DCHECK(!sender_);
-  DCHECK(!message_);
-  sender_ = sender;
-  message_ = message;
+      void SetUpCommandLine(base::CommandLine* command_line) override {
+    command_line->AppendSwitch(switches::kUseFakeDeviceForMediaStream);
+    command_line->AppendSwitchASCII(switches::kJavaScriptFlags, '--expose-gc');
     }
     
-    
-    {}  // namespace api
-    
-    namespace atom {
-    }
-    
-      // Don't execute signal handlers of SIGUSR2.
-  sigset_t mask;
-  sigemptyset(&mask);
-  sigaddset(&mask, SIGUSR2);
-  if (sigprocmask(SIG_BLOCK, &mask, NULL) < 0) {
-    PLOG(ERROR) << 'sigprocmask';
-    return;
-  }
+    // Sets up the CHILD_PROCESS_EXE path to properly point to the helper app.
+void OverrideChildProcessPath();
     
     
-    {  if (event.filter != EVFILT_PROC ||
-      event.fflags != NOTE_EXIT ||
-      event.ident != static_cast<uintptr_t>(parent_pid)) {
-    LOG(ERROR) << 'kevent (monitor): unexpected event, filter ' << event.filter
-               << ', fflags ' << event.fflags << ', ident ' << event.ident;
-    return;
+    {  switch (item_id) {
+    case WebAutofillClient::MenuItemIDAutocompleteEntry:
+    case WebAutofillClient::MenuItemIDPasswordEntry:
+      // User selected an Autocomplete or password entry, so we fill directly.
+      SetNodeText(value, &element_);
+      break;
+    case WebAutofillClient::MenuItemIDDataListEntry:
+      AcceptDataListSuggestion(value);
+      break;
   }
 }
     
-      int AddEntry(const base::DictionaryValue& entry);
-  void RemoveEntry(int id);
-    
-    static const char* kModuleName = '_api_implementation';
-static const char kModuleDocstring[] =
-'_api_implementation is a module that exposes compile-time constants that\n'
-'determine the default API implementation to use for Python proto2.\n'
-'\n'
-'It complements api_implementation.py by setting defaults using compile-time\n'
-'constants defined in C, such that one can set defaults at compilation\n'
-'(e.g. with blaze flag --copt=-DPYTHON_PROTO2_CPP_IMPL_V2).';
-    
-    // Mappings and Sequences of descriptors.
-// They implement containers like fields_by_name, EnumDescriptor.values...
-// See descriptor_containers.cc for more description.
-#include <Python.h>
-    
-    // Appends the scalar 'item' to the end of the container 'self'.
-//
-// Returns None if successful; returns NULL and sets an exception if
-// unsuccessful.
-PyObject* Append(RepeatedScalarContainer* self, PyObject* item);
-    
-    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_ENUM_H__
+    // Call method of an object in browser.
+// function CallObjectMethod(id, type, method, args);
+v8::Handle<v8::Value> CallObjectMethod(int routing_id,
+                                       int object_id,
+                                       const std::string& type,
+                                       const std::string& method,
+                                       v8::Handle<v8::Value> args);
     
     
-    {
-    {
-    {
-    {
-    {}  // namespace
-}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
+    {}  // namespace nwapi
     
+    #include <string>
+#include <set>
     
-    { private:
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(MapFieldGenerator);
-};
-    
-      std::string namespace_;
-  std::string reflectionClassname_;
-    
-    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_SOURCE_GENERATOR_BASE_H__
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace java {
-namespace {
-    }
-    }
-    }
-    }
+    class BaseEvent {
+  friend class EventListener;
+  DISALLOW_COPY_AND_ASSIGN(BaseEvent);
     }
     
-    #ifndef incl_HPHP_WORKLOAD_STATS_H_
-#define incl_HPHP_WORKLOAD_STATS_H_
-    
-    std::string show(const RepoAuthType::Array& ar) {
-  auto ret = std::string{};
+    namespace {
     }
     
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
-    }
-    
-    const StaticString s_pagelet('pagelet');
-    
-    void Vunit::freeScratchBlock(Vlabel l) {
-  // This will leak blocks if anything's been added since the corresponding
-  // call to makeScratchBlock(), but it's harmless.
-  if (l == blocks.size() - 1) blocks.pop_back();
+    aura::Window* Menu::GetActiveNativeView(content::RenderFrameHost* rfh) {
+  content::WebContents* web_contents =
+    content::WebContents::FromRenderFrameHost(rfh);
+  if (!web_contents) {
+    LOG(ERROR) << 'Menu: couldn't find WebContents';
+    return NULL;
+  }
+  return web_contents->GetFullscreenRenderWidgetHostView()
+             ? web_contents->GetFullscreenRenderWidgetHostView()
+                   ->GetNativeView()
+             : web_contents->GetNativeView();
 }
     
-      for (mapping = enc_name_map; mapping->names != nullptr; mapping++) {
-    for (p = mapping->names; *p != '\0'; p += (strlen(p) + 1)) {
-      if (strcasecmp(p, pname) == 0) {
-        return mapping->code;
+            if (pD->get_bits_no_markers(1))
+          s = p1;
+        else
+          s = m1;
+      }
+      else
+      {
+        if (r != 15)
+        {
+          pD->m_eob_run = 1 << r;
+    }
+    
+    static const vorbis_residue_template _res_8s_0[]={
+  {2,0,32,  &_residue_44_mid,
+   &_huff_book__8c0_s_single,&_huff_book__8c0_s_single,
+   &_resbook_8s_0,&_resbook_8s_0},
+};
+static const vorbis_residue_template _res_8s_1[]={
+  {2,0,32,  &_residue_44_mid,
+   &_huff_book__8c1_s_single,&_huff_book__8c1_s_single,
+   &_resbook_8s_1,&_resbook_8s_1},
+};
+    
+     ********************************************************************/
+    
+    /* We currently support 4 ARM variants:
+ * arch[0] -> ARMv4
+ * arch[1] -> ARMv5E
+ * arch[2] -> ARMv6
+ * arch[3] -> NEON
+ */
+#define OPUS_ARCHMASK 3
+    
+    #undef MULT32_32_Q31
+static inline int MULT32_32_Q31(int a, int b)
+{
+    int r;
+    asm volatile('MULT $ac1, %0, %1' : : 'r' (a), 'r' (b));
+    asm volatile('EXTR.W %0,$ac1, %1' : '=r' (r): 'i' (31));
+    return r;
+}
+    
+    #undef silk_MLA_uint
+static OPUS_INLINE opus_int32 silk_MLA_uint(opus_uint32 a32, opus_uint32 b32, opus_uint32 c32){
+    opus_uint32 ret;
+    ops_count += 4;
+    ret = a32 + b32 * c32;
+    return ret;
+}
+    
+        if (sub_batch->Has(String::NewSymbol('column_family'))) {
+      if (!has_key_for_array(sub_batch, 'put') &&
+          !has_key_for_array(sub_batch, 'delete')) {
+        return scope.Close(Boolean::New(false));
       }
     }
-  }
     
-    #ifndef incl_HPHP_SWEEPABLE_H_
-#define incl_HPHP_SWEEPABLE_H_
     
-    inline void PackedArray::scan(const ArrayData* a, type_scan::Scanner& scanner) {
-  assert(checkInvariants(a));
-  auto data = packedData(a);
-  scanner.scan(*data, a->getSize() * sizeof(*data));
-}
-    
-    TransID Scale::findProfTransID(Vlabel blk) const {
-  for (auto& i : m_unit.blocks[blk].code) {
-    if (!i.origin) continue;
-    auto profTransID = i.origin->marker().profTransID();
-    if (profTransID == kInvalidTransID) continue;
-    return profTransID;
-  }
-  return kInvalidTransID;
-}
-    
-      // set interleave for early code. we'll then force interleave for a few
-  // regions, and switch to local for the threads
-  numa_set_interleave_mask(numa_all_nodes_ptr);
-    
-    namespace HPHP { namespace jit {
-    }
+    {    } else if (query == GET_OP) {
+      // Assumes that a non-existent key just returns <empty>
+      std::string res;
+      slists.Get(key, &res);
+      ASSERT_EQ(res, parallel_copy[key]);
     }
     
-    
-    // -------------------------------------------------------------------
-    // DecimateMinibatch - decimate minibatch for parallelization
-    // -------------------------------------------------------------------
-    // non-inplace decimation , to be used in subminibatch implementation
-    // returns a subset of parallel sequences
-    template <class ElemType>
-    static pair<size_t, size_t> DecimateMinibatch(const StreamMinibatchInputs& MB,    // input matrices
-                                                  StreamMinibatchInputs& decimatedMB, // output decimated matrices.
-                                                  MBLayoutPtr pMBLayout,              // input MBLayout
-                                                  MBLayoutPtr& pDecimateMBLayout,     // output decimated MBLayout (note: cannot work in-place)
-                                                  size_t numProcs, size_t rank)
-    {
-        size_t numParallelSequences = pMBLayout->GetNumParallelSequences();
-        size_t nT = pMBLayout->GetNumTimeSteps();
+    // Insert element value into (list: key), right before/after
+//  the first occurrence of pivot
+//   : throws RedisListException
+int RedisLists::Insert(const std::string& key, const std::string& pivot,
+                       const std::string& value, bool insert_after) {
+  // Get the original list data
+  std::string data;
+  db_->Get(get_option_, key, &data);
     }
     
-            // M             * V
-        // (8192 x 9304) * (9304 x 1024) -> (8192 x 1024)   // 78047.609 MFlops, 81.773 total MB
-        // 7.86 ms / frame
-        // We need to store: 4 cols of V and 1 row of M, that is 9304 x 4 x 5 = 186 KB. Too much for the cache!
-        // (8192 x 1024) * (1024 x 9304) -> (8192 x 9304)   // 78047.609 MFlops, 17.086 total MB
-        // 1.78 ms / frame
+      /// Remove the first (or last) num occurrences of value from the list (key)
+  /// Return the number of elements removed.
+  /// May throw RedisListException
+  int Remove(const std::string& key, int32_t num,
+             const std::string& value);
+  int RemoveFirst(const std::string& key, int32_t num,
+                  const std::string& value);
+  int RemoveLast(const std::string& key, int32_t num,
+                 const std::string& value);
     
-    // magic numbers for headers
-const WORD magicFile = 0xACE9;       // file header, only expected at beginning of file
-const WORD magicSection = 0x4ACE;    // section headers, all other header types
-const WORD magicIncomplete = 0xBAD1; // use a section header for the file that isn't valid until we close it properly
-    
-    BOOST_FIXTURE_TEST_CASE(MatrixSparsePlusSparse, RandomSeedFixture)
-{
-    std::mt19937 rng(0);
-    Matrix<float> mAdense(c_deviceIdZero);
-    mAdense.AssignTruncateBottomOf(Matrix<float>::RandomUniform(dim1, dim2, c_deviceIdZero, -3.0f, 0.1f, IncrementCounter()), 0);
-    Matrix<float> mAsparse(mAdense.DeepClone());
-    }
-    
-            // set the Computational network in the script, so we can do name lookup in the model
-        script->SetComputationNetwork(m_net);
-    
-    
-    {
-    {        return newNumItersSinceLastPrintOfProgress;
-    }
-};
-    
-    vector<wstring> /*IConfigRecord::*/ ComputationNodeBase::GetMemberIds() const
-{
-    return vector<wstring>{ L'name', L'operation', L'dim', L'dims', /*L'tag', */L'inputs', OperationName() + L'Args' };
-}
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    void GLESDebugDraw::DrawString(int x, int y, const char *string, ...)
-{
-//    NSLog(@'DrawString: unsupported: %s', string);
-    //printf(string);
-    /* Unsupported as yet. Could replace with bitmap font renderer at a later date */
-}
-    
-    class AddPair : public Test
-{
-public:
-    }
-    
-    
-    {
-    {		case 'k':
-			m_platform->SetType(b2_kinematicBody);
-			m_platform->SetLinearVelocity(b2Vec2(-m_speed, 0.0f));
-			m_platform->SetAngularVelocity(0.0f);
-			break;
-		}
-	}
-    
-    #endif
-
-    
-    
-    {
-    {				prevBody = body;
-			}
-		}
-    
-    /**
- * Symbolicates a stack trace into a new vector
- *
- * @param stackTrace The input stack trace
+    /*
+ * Class:     org_rocksdb_IngestExternalFileOptions
+ * Method:    allowGlobalSeqNo
+ * Signature: (J)Z
  */
-FBEXPORT inline std::vector<StackTraceElement> getStackTraceSymbols(
-    const std::vector<InstructionPointer>& trace) {
-  auto symbols = std::vector<StackTraceElement>{};
-  getStackTraceSymbols(symbols, trace);
-  return symbols;
+jboolean Java_org_rocksdb_IngestExternalFileOptions_allowGlobalSeqNo(
+    JNIEnv* env, jobject jobj, jlong jhandle) {
+  auto* options =
+      reinterpret_cast<rocksdb::IngestExternalFileOptions*>(jhandle);
+  return static_cast<jboolean>(options->allow_global_seqno);
 }
     
-        static Config * create(void);
     
-        method(getComputedWidth);
-    method(getComputedHeight);
+    {
+    {      if (child.Valid()) {
+        PERF_TIMER_GUARD(seek_min_heap_time);
+        minHeap_.push(&child);
+      }
+    }
+    direction_ = kForward;
+    {
+      PERF_TIMER_GUARD(seek_min_heap_time);
+      current_ = CurrentForward();
+    }
+  }
     
-    #include <cstdarg>
-#include <stdio.h>
+    class MergingIterator;
     
-    #pragma once
-#include <fb/assert.h>
-#include <utility>
+      jstring jname =
+      (jstring)env->CallObjectMethod(m_jcallback_obj, jname_method_id);
+  if(env->ExceptionCheck()) {
+    // exception thrown
+    return;
+  }
+  jboolean has_exception = JNI_FALSE;
+  m_name = JniUtil::copyString(env, jname, &has_exception);  // also releases jname
+  if (has_exception == JNI_TRUE) {
+    // exception thrown
+    return;
+  }
