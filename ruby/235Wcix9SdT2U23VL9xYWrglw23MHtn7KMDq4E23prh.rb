@@ -1,55 +1,89 @@
 
         
-              command = ['git describe']
-      command << '--tags' if match_lightweight
-      command << '`git rev-list --tags#{tag_pattern_param} --max-count=1`'
-      Actions.sh(command.compact.join(' '), log: false).chomp
-    rescue
-      nil
+          # @private
+  def unused_options
+    @options - @args
+  end
+    
+      def filtered_list
+    names = if ARGV.named.empty?
+      Formula.racks
+    else
+      ARGV.named.map { |n| HOMEBREW_CELLAR+n }.select(&:exist?)
     end
-    
-            command = [escaped_gradle_path, 'tasks', '--console=plain'].join(' ')
-        output = Action.sh(command, print_command: false, print_command_output: false)
-        output.split('\n').each do |line|
-          if (result = line.match(/(\w+)\s\-\s([\w\s]+)/))
-            self.tasks << GradleTask.new(title: result[1], description: result[2])
-          end
+    if ARGV.include? '--pinned'
+      pinned_versions = {}
+      names.each do |d|
+        keg_pin = (HOMEBREW_LIBRARY/'PinnedKegs'/d.basename.to_s)
+        if keg_pin.exist? || keg_pin.symlink?
+          pinned_versions[d] = keg_pin.readlink.basename.to_s
         end
+      end
+      pinned_versions.each do |d, version|
+        puts '#{d.basename}'.concat(ARGV.include?('--versions') ? ' #{version}' : '')
+      end
+    else # --versions without --pinned
+      names.each do |d|
+        versions = d.subdirs.map { |pn| pn.basename.to_s }
+        next if ARGV.include?('--multiple') && versions.length < 2
+        puts '#{d.basename} #{versions*' '}'
+      end
+    end
+  end
+end
     
-            expect(result).to eq('git rev-parse --short HEAD')
-        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('git rev-parse --short HEAD')
+      def search_formulae(rx)
+    aliases = Formula.alias_full_names
+    results = (Formula.full_names+aliases).grep(rx).sort
+    
+        updated_taps = []
+    Tap.each do |tap|
+      next unless tap.git?
+      begin
+        reporter = Reporter.new(tap)
+      rescue Reporter::ReporterRevisionUnsetError => e
+        onoe e if ARGV.homebrew_developer?
+        next
+      end
+      if reporter.updated?
+        updated_taps << tap.name
+        hub.add(reporter)
       end
     end
     
-          it 'automatically removes new lines from the version number' do
-        Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number(version_number: '1.77.3\n', bump_type: 'major')
-        end').runner.execute(:test)
+          def initialize(*args, &block)
+        @bypass_confirmation_postpone = false
+        @skip_reconfirmation_in_callback = false
+        @reconfirmation_required = false
+        @skip_confirmation_notification = false
+        @raw_confirmation_token = nil
+        super
+      end
     
-            # With reconfirmable, notify the original email when the user first
-        # requests the email change, instead of when the change is confirmed.
-        def send_email_changed_notification?
-          if self.class.reconfirmable
-            self.class.send_email_changed_notification && reconfirmation_required?
-          else
-            super
-          end
-        end
-    
-      test 'should require reconfirmation after creating a record and updating the email' do
-    admin = create_admin
-    assert !admin.instance_variable_get(:@bypass_confirmation_postpone)
-    admin.email = 'new_test@email.com'
-    admin.save
-    assert admin.pending_reconfirmation?
+      def translation_scope
+    'devise.omniauth_callbacks'
   end
-    
-    group :test do
-  gem 'omniauth-facebook'
-  gem 'omniauth-openid'
-  gem 'webrat', '0.7.3', require: false
-  gem 'mocha', '~> 1.1', require: false
 end
+
+    
+        def translation_scope
+      'devise.confirmations'
+    end
+end
+
+    
+        def email_changed(record, opts={})
+      devise_mail(record, :email_changed, opts)
+    end
+    
+          def remember_cookie_values(resource)
+        options = { httponly: true }
+        options.merge!(forget_cookie_values(resource))
+        options.merge!(
+          value: resource.class.serialize_into_cookie(resource),
+          expires: resource.remember_expires_at
+        )
+      end
     
     module Devise
   module Controllers
@@ -85,103 +119,30 @@ end
         end
       end
     
-      def test_each_byte_extended_file
-    [nil, {:textmode=>true}, {:binmode=>true}].each do |mode|
-      Tempfile.create('test-extended-file', mode) {|f|
-        assert_nil(f.getc)
-        f.print 'a'
-        f.rewind
-        result = []
-        f.each_byte {|b| result << b.chr }
-        assert_equal([?a], result, 'mode = <#{mode}>')
-      }
-    end
+        export LANG=en_US.UTF-8
+    \e[0m
+    DOC
   end
     
-    describe :sorted_set_select_bang, shared: true do
-  before :each do
-    @set = SortedSet['one', 'two', 'three']
-  end
-    
-      def test_with_object
-    obj = [0, 1]
-    ret = (1..10).each.with_object(obj) {|i, memo|
-      memo[0] += i
-      memo[1] *= i
-    }
-    assert_same(obj, ret)
-    assert_equal([55, 3628800], ret)
-    
-      ruby_version_is ''...'2.4' do
-    it 'is locale insensitive (only upcases a-z and only downcases A-Z)' do
-      'ÄÖÜ'.swapcase.should == 'ÄÖÜ'
-      'ärger'.swapcase.should == 'äRGER'
-      'BÄR'.swapcase.should == 'bÄr'
-    end
-  end
-    
-      it 'understands 'a+bi' to mean a complex number with 'a' as the real part, 'b' as the imaginary' do
-    '79+4i'.to_c.should == Complex(79,4)
-  end
-    
-      it 'returns a Fixnum for long strings with trailing spaces' do
-    '0                             '.to_i.should == 0
-    '0                             '.to_i.should be_an_instance_of(Fixnum)
-    
-    desc 'Dumps output to a CSS file for testing'
-task :debug do
-  require 'sass'
-  path = Bootstrap.stylesheets_path
-  %w(bootstrap).each do |file|
-    engine = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
-    File.open('./#{file}.css', 'w') { |f| f.write(engine.render) }
-  end
-end
-    
-    @@ login
-<form action='/'>
-  <label for='user'>User Name:</label>
-  <input name='user' value='' />
-  <input type='submit' value='GO!' />
-</form>
-    
-          def escape(object)
-        case object
-        when Hash   then escape_hash(object)
-        when Array  then object.map { |o| escape(o) }
-        when String then escape_string(object)
-        when Tempfile then object
-        else nil
+            def self.options
+          [[
+            '--all', 'Remove all the cached pods without asking'
+          ]].concat(super)
         end
+    
+    # include would include the module in Object
+# extend only extends the `main` object
+extend Sinatra::Delegator
+    
+          def session?(env)
+        env.include? options[:session_key]
       end
     
-      describe '#referrer' do
-    it 'Reads referrer from Referer header' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
-      expect(subject.referrer(env)).to eq('bar.com')
+          get '/?95df8d9bf5237ad08df3115ee74dcb10'
+      expect(body).to eq('hi')
     end
     
-        it 'denies requests with duplicate session cookies' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
-      expect(last_response).not_to be_ok
-    end
     
-      # Many RSpec users commonly either run the entire suite or an individual
-  # file, and it's useful to allow more verbose output when running an
-  # individual spec file.
-  if config.files_to_run.one?
-    # Use the documentation formatter for detailed output,
-    # unless a formatter has already been configured
-    # (e.g. via a command-line flag).
-    config.default_formatter = 'doc'
-  end
-    
-    # The project root directory
-$root = ::File.dirname(__FILE__)
-    
-    Liquid::Template.register_tag('img', Jekyll::ImageTag)
-
-    
-          expect('.all-text-inputs').to have_ruleset(ruleset)
-    end
+  it 'should set the X-Content-Type-Options for other content types' do
+    expect(get('/', {}, 'wants' => 'application/foo').header['X-Content-Type-Options']).to eq('nosniff')
   end
