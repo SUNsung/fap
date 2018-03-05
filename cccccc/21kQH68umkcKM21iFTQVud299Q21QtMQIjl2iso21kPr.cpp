@@ -1,385 +1,384 @@
 
         
-        /* Map whose keys are pointers, but are compared by their dereferenced values.
- *
- * Differs from a plain std::map<const K*, T, DereferencingComparator<K*> > in
- * that methods that take a key for comparison take a K rather than taking a K*
- * (taking a K* would be confusing, since it's the value rather than the address
- * of the object for comparison that matters due to the dereferencing comparator).
- *
- * Objects pointed to by keys must not be modified in any way that changes the
- * result of DereferencingComparator.
- */
-template <class K, class T>
-class indirectmap {
-private:
-    typedef std::map<const K*, T, DereferencingComparator<const K*> > base;
-    base m;
-public:
-    typedef typename base::iterator iterator;
-    typedef typename base::const_iterator const_iterator;
-    typedef typename base::size_type size_type;
-    typedef typename base::value_type value_type;
+        namespace swift {
     }
     
-    void leveldb_writebatch_clear(leveldb_writebatch_t* b) {
-  b->rep.Clear();
-}
+      SILDebuggerClient(ASTContext &C) : DebuggerClient(C) { }
+  virtual ~SILDebuggerClient() = default;
     
-      ASSERT_TRUE(ParseInternalKey(in, &decoded));
-  ASSERT_EQ(key, decoded.user_key.ToString());
-  ASSERT_EQ(seq, decoded.sequence);
-  ASSERT_EQ(vt, decoded.type);
-    
-    std::string SSTTableFileName(const std::string& name, uint64_t number) {
-  assert(number > 0);
-  return MakeFileName(name, number, 'sst');
-}
-    
-    #endif  // STORAGE_LEVELDB_DB_FILENAME_H_
-
-    
-      fname = TableFileName('bar', 200);
-  ASSERT_EQ('bar/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(200, number);
-  ASSERT_EQ(kTableFile, type);
-    
-    TableCache::TableCache(const std::string& dbname,
-                       const Options* options,
-                       int entries)
-    : env_(options->env),
-      dbname_(dbname),
-      options_(options),
-      cache_(NewLRUCache(entries)) {
-}
-    
-          case kNextFileNumber:
-        if (GetVarint64(&input, &next_file_number_)) {
-          has_next_file_number_ = true;
-        } else {
-          msg = 'next file number';
-        }
-        break;
-    
-      void SetComparatorName(const Slice& name) {
-    has_comparator_ = true;
-    comparator_ = name.ToString();
-  }
-  void SetLogNumber(uint64_t num) {
-    has_log_number_ = true;
-    log_number_ = num;
-  }
-  void SetPrevLogNumber(uint64_t num) {
-    has_prev_log_number_ = true;
-    prev_log_number_ = num;
-  }
-  void SetNextFile(uint64_t num) {
-    has_next_file_number_ = true;
-    next_file_number_ = num;
-  }
-  void SetLastSequence(SequenceNumber seq) {
-    has_last_sequence_ = true;
-    last_sequence_ = seq;
-  }
-  void SetCompactPointer(int level, const InternalKey& key) {
-    compact_pointers_.push_back(std::make_pair(level, key));
-  }
-    
-    TEST(FindFileTest, Empty) {
-  ASSERT_EQ(0, Find('foo'));
-  ASSERT_TRUE(! Overlaps('a', 'z'));
-  ASSERT_TRUE(! Overlaps(NULL, 'z'));
-  ASSERT_TRUE(! Overlaps('a', NULL));
-  ASSERT_TRUE(! Overlaps(NULL, NULL));
-}
-    
-    // WriteBatch header has an 8-byte sequence number followed by a 4-byte count.
-static const size_t kHeader = 12;
-    
-    TEST(WriteBatchTest, Corruption) {
-  WriteBatch batch;
-  batch.Put(Slice('foo'), Slice('bar'));
-  batch.Delete(Slice('box'));
-  WriteBatchInternal::SetSequence(&batch, 200);
-  Slice contents = WriteBatchInternal::Contents(&batch);
-  WriteBatchInternal::SetContents(&batch,
-                                  Slice(contents.data(),contents.size()-1));
-  ASSERT_EQ('Put(foo, bar)@200'
-            'ParseError()',
-            PrintContents(&batch));
-}
-    
-    #endif  // STORAGE_LEVELDB_HELPERS_MEMENV_MEMENV_H_
-
-    
-    // A Comparator object provides a total order across slices that are
-// used as keys in an sstable or a database.  A Comparator implementation
-// must be thread-safe since leveldb may invoke its methods concurrently
-// from multiple threads.
-class Comparator {
- public:
-  virtual ~Comparator();
-    }
-    
-      // implements CodeGenerator ----------------------------------------
-  bool Generate(const FileDescriptor* file,
-                const string& parameter,
-                GeneratorContext* generator_context,
-                string* error) const;
-    
-    class EnumGenerator : public SourceGeneratorBase {
- public:
-  EnumGenerator(const EnumDescriptor* descriptor, const Options* options);
-  ~EnumGenerator();
-    }
-    
-    RepeatedEnumFieldGenerator::~RepeatedEnumFieldGenerator() {
-    }
-    
-      virtual void WriteHash(io::Printer* printer);
-  virtual void WriteEquals(io::Printer* printer);
-  virtual void WriteToString(io::Printer* printer);
-    
-    
-    {}
-    
-    
-    {  LOG(INFO) << 'Writing Testing data';
-  scoped_ptr<db::DB> test_db(db::GetDB(db_type));
-  test_db->Open(output_folder + '/cifar10_test_' + db_type, db::NEW);
-  txn.reset(test_db->NewTransaction());
-  // Open files
-  std::ifstream data_file((input_folder + '/test_batch.bin').c_str(),
-      std::ios::in | std::ios::binary);
-  CHECK(data_file) << 'Unable to open test file.';
-  for (int itemid = 0; itemid < kCIFARBatchSize; ++itemid) {
-    read_image(&data_file, &label, str_buffer);
-    datum.set_label(label);
-    datum.set_data(str_buffer, kCIFARImageNBytes);
-    string out;
-    CHECK(datum.SerializeToString(&out));
-    txn->Put(caffe::format_int(itemid, 5), out);
-  }
-  txn->Commit();
-  test_db->Close();
-}
-    
-    #include 'glog/logging.h'
-#include 'google/protobuf/text_format.h'
-#include 'stdint.h'
-    
-      /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *
-   * @param datum
-   *    Datum containing the data to be transformed.
-   */
-  vector<int> InferBlobShape(const Datum& datum);
-  /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *    It uses the first element to infer the shape of the blob.
-   *
-   * @param datum_vector
-   *    A vector of Datum containing the data to be transformed.
-   */
-  vector<int> InferBlobShape(const vector<Datum> & datum_vector);
-  /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *    It uses the first element to infer the shape of the blob.
-   *
-   * @param mat_vector
-   *    A vector of Mat containing the data to be transformed.
-   */
-#ifdef USE_OPENCV
-  vector<int> InferBlobShape(const vector<cv::Mat> & mat_vector);
-  /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *
-   * @param cv_img
-   *    cv::Mat containing the data to be transformed.
-   */
-  vector<int> InferBlobShape(const cv::Mat& cv_img);
-#endif  // USE_OPENCV
-    
-    
-template <typename Dtype>
-class LayerRegisterer {
- public:
-  LayerRegisterer(const string& type,
-                  shared_ptr<Layer<Dtype> > (*creator)(const LayerParameter&)) {
-    // LOG(INFO) << 'Registering layer type: ' << type;
-    LayerRegistry<Dtype>::AddCreator(type, creator);
-  }
+    typedef NS_ENUM(NSInteger, ObjectBehaviorAction) {
+    ObjectBehaviorActionRetain,
+    ObjectBehaviorActionCopy,
+    ObjectBehaviorActionMutableCopy
 };
     
     
-    {}  // namespace caffe
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include 'caffe/layers/neuron_layer.hpp'
-#include 'caffe/layers/sigmoid_layer.hpp'
-    
-    
-    {}  // namespace caffe
-    
-        static void CODEGEN_FUNCPTR Switch_CompressedTexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *data)
     {
-        CompressedTexImage2D = (PFNCOMPRESSEDTEXIMAGE2DPROC)IntGetProcAddress('glCompressedTexImage2D');
-        CompressedTexImage2D(target, level, internalformat, width, height, border, imageSize, data);
+    {}
+}
+#endif
+
+    
+    
+    {} // end namespace swift
+    
+    namespace swift {
     }
     
-            // Core Extension: ARB_uniform_buffer_object
-        UNIFORM_BUFFER                   = 0x8A11,
-        UNIFORM_BUFFER_BINDING           = 0x8A28,
-        UNIFORM_BUFFER_START             = 0x8A29,
-        UNIFORM_BUFFER_SIZE              = 0x8A2A,
-        MAX_VERTEX_UNIFORM_BLOCKS        = 0x8A2B,
-        MAX_FRAGMENT_UNIFORM_BLOCKS      = 0x8A2D,
-        MAX_COMBINED_UNIFORM_BLOCKS      = 0x8A2E,
-        MAX_UNIFORM_BUFFER_BINDINGS      = 0x8A2F,
-        MAX_UNIFORM_BLOCK_SIZE           = 0x8A30,
-        MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS = 0x8A31,
-        MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS = 0x8A33,
-        UNIFORM_BUFFER_OFFSET_ALIGNMENT  = 0x8A34,
-        ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH = 0x8A35,
-        ACTIVE_UNIFORM_BLOCKS            = 0x8A36,
-        UNIFORM_TYPE                     = 0x8A37,
-        UNIFORM_SIZE                     = 0x8A38,
-        UNIFORM_NAME_LENGTH              = 0x8A39,
-        UNIFORM_BLOCK_INDEX              = 0x8A3A,
-        UNIFORM_OFFSET                   = 0x8A3B,
-        UNIFORM_ARRAY_STRIDE             = 0x8A3C,
-        UNIFORM_MATRIX_STRIDE            = 0x8A3D,
-        UNIFORM_IS_ROW_MAJOR             = 0x8A3E,
-        UNIFORM_BLOCK_BINDING            = 0x8A3F,
-        UNIFORM_BLOCK_DATA_SIZE          = 0x8A40,
-        UNIFORM_BLOCK_NAME_LENGTH        = 0x8A41,
-        UNIFORM_BLOCK_ACTIVE_UNIFORMS    = 0x8A42,
-        UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES = 0x8A43,
-        UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER = 0x8A44,
-        UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER = 0x8A46,
-        INVALID_INDEX                    = 0xFFFFFFFF,
-        MAX_GEOMETRY_UNIFORM_BLOCKS      = 0x8A2C,
-        MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS = 0x8A32,
-        UNIFORM_BLOCK_REFERENCED_BY_GEOMETRY_SHADER = 0x8A45,
+    
+    {  pointer operator->() const { return &deref(); }
+};
+    
+    PyObject* NewFileExtensionsByName(const FileDescriptor* descriptor);
+    
+    #include <google/protobuf/stubs/logging.h>
+#include <google/protobuf/stubs/common.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/pyext/message.h>
+#include <google/protobuf/pyext/scoped_pyobject_ptr.h>
     
     
     {
-    {}  // namespace testing
-}  // namespace grpc
+    {
+    {
+    {
+    {}  // namespace
+}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
     
-    /**
- * Flushes pending writes. This method should not be called before invocation of
- * on_stream_ready() method of the bidirectional_stream_callback.
- * For each previously called bidirectional_stream_write()
- * a corresponding on_write_completed() callback will be invoked when the buffer
- * is sent.
- */
-GRPC_SUPPORT_EXPORT
-void bidirectional_stream_flush(bidirectional_stream* stream);
     
-      if (server_try_cancel_thd != nullptr) {
-    server_try_cancel_thd->join();
-    delete server_try_cancel_thd;
-    return Status::CANCELLED;
+    {
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+    
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_PRIMITIVE_FIELD_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_PRIMITIVE_FIELD_H__
+    
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
+    
+    
+    {  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ImmutableExtensionLiteGenerator);
+};
+    
+      if (flags.bit (ADAPTABLE_WERD)) {
+    status |= word->tess_would_adapt;  // result of Classify::AdaptableWord()
+    if (tessedit_adaption_debug && !status) {
+      tprintf('tess_would_adapt bit is false\n');
+    }
   }
     
-    // NOTE: We eventually want to use absl::InlinedVector here.  However,
-// there are currently build problems that prevent us from using absl.
-// In the interim, we define a custom implementation as a place-holder,
-// with the intent to eventually replace this with the absl
-// implementation.
-//
-// This place-holder implementation does not implement the full set of
-// functionality from the absl version; it has just the methods that we
-// currently happen to need in gRPC.  If additional functionality is
-// needed before this gets replaced with the absl version, it can be
-// added, with the following proviso:
-//
-// ANY METHOD ADDED HERE MUST COMPLY WITH THE INTERFACE IN THE absl
-// IMPLEMENTATION!
-//
-// TODO(nnoble, roth): Replace this with absl::InlinedVector once we
-// integrate absl into the gRPC build system in a usable way.
-template <typename T, size_t N>
-class InlinedVector {
+    ScrollView* bln_word_window_handle();  //return handle
+void build_image_window(int width, int height);
+void display_bln_lines(ScrollView window,
+                       ScrollView::Color colour,
+                       float scale_factor,
+                       float y_offset,
+                       float minx,
+                       float maxx);
+                                 //function to call
+void pgeditor_msg(  //message display
+                  const char *msg);
+void pgeditor_show_point(  //display coords
+                         SVEvent *event);
+                                 //put bln word in       box
+void show_point(PAGE_RES* page_res, float x, float y);
+    
+    
+    {
+    {    if (debug) {
+      if (is_italic) {
+        tprintf(' Rejecting: superscript is italic.\n');
+      }
+      if (is_punc) {
+        tprintf(' Rejecting: punctuation present.\n');
+      }
+      const char *char_str = wc.unicharset()->id_to_unichar(unichar_id);
+      if (bad_certainty) {
+        tprintf(' Rejecting: don't believe character %s with certainty %.2f '
+                'which is less than threshold %.2f\n', char_str,
+                char_certainty, certainty_threshold);
+      }
+      if (bad_height) {
+        tprintf(' Rejecting: character %s seems too small @ %.2f versus '
+                'expected %.2f\n', char_str, char_height, normal_height);
+      }
+    }
+    if (bad_certainty || bad_height || is_punc || is_italic) {
+      if (ok_run_count == i) {
+        initial_ok_run_count = ok_run_count;
+      }
+      ok_run_count = 0;
+    } else {
+      ok_run_count++;
+    }
+    if (char_certainty < worst_certainty) {
+      worst_certainty = char_certainty;
+    }
+  }
+  bool all_ok = ok_run_count == wc.length();
+  if (all_ok && debug) {
+    tprintf(' Accept: worst revised certainty is %.2f\n', worst_certainty);
+  }
+  if (!all_ok) {
+    if (left_ok) *left_ok = initial_ok_run_count;
+    if (right_ok) *right_ok = ok_run_count;
+  }
+  return all_ok;
+}
+    
+    
+/**********************************************************************
+ * ICOORD::rotate
+ *
+ * Rotate an ICOORD by the given (normalized) (cos,sin) vector.
+ **********************************************************************/
+    
+    // Possible normalization methods. Use NEGATIVE values as these also
+// double up as markers for the last sub-classifier.
+enum NormalizationMode {
+  NM_BASELINE = -3,         // The original BL normalization mode.
+  NM_CHAR_ISOTROPIC = -2,   // Character normalization but isotropic.
+  NM_CHAR_ANISOTROPIC = -1  // The original CN normalization mode.
+};
+    
+    void FilterBlockBuilder::GenerateFilter() {
+  const size_t num_keys = start_.size();
+  if (num_keys == 0) {
+    // Fast path if there are no keys for this filter
+    filter_offsets_.push_back(result_.size());
+    return;
+  }
+    }
+    
+    TEST(LogTest, BadLength) {
+  const int kPayloadSize = kBlockSize - kHeaderSize;
+  Write(BigString('bar', kPayloadSize));
+  Write('foo');
+  // Least significant size byte is stored in header[4].
+  IncrementByte(4, 1);
+  ASSERT_EQ('foo', Read());
+  ASSERT_EQ(kBlockSize, DroppedBytes());
+  ASSERT_EQ('OK', MatchError('bad record length'));
+}
+    
+    Iterator* TableCache::NewIterator(const ReadOptions& options,
+                                  uint64_t file_number,
+                                  uint64_t file_size,
+                                  Table** tableptr) {
+  if (tableptr != NULL) {
+    *tableptr = NULL;
+  }
+    }
+    
+    
+    {  Status FindTable(uint64_t file_number, uint64_t file_size, Cache::Handle**);
+};
+    
+    
+    {  static void Append(WriteBatch* dst, const WriteBatch* src);
+};
+    
+        // Preparing sqlite3 statements
+    status = sqlite3_prepare_v2(db_, replace_str.c_str(), -1,
+                                &replace_stmt, NULL);
+    ErrorCheck(status);
+    status = sqlite3_prepare_v2(db_, begin_trans_str.c_str(), -1,
+                                &begin_trans_stmt, NULL);
+    ErrorCheck(status);
+    status = sqlite3_prepare_v2(db_, end_trans_str.c_str(), -1,
+                                &end_trans_stmt, NULL);
+    ErrorCheck(status);
+    
+    class InMemoryEnv : public EnvWrapper {
  public:
-  InlinedVector() { init_data(); }
-  ~InlinedVector() { destroy_elements(); }
+  explicit InMemoryEnv(Env* base_env) : EnvWrapper(base_env) { }
     }
     
-    TEST(InlinedVectorTest, ValuesAreInlined) {
-  const int kNumElements = 5;
-  InlinedVector<int, 10> v;
-  for (int i = 0; i < kNumElements; ++i) {
-    v.push_back(i);
+      // count the keys
+  leveldb::Iterator* iter = db->NewIterator(leveldb::ReadOptions());
+  size_t num_keys = 0;
+  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
+    num_keys++;
   }
-  EXPECT_EQ(static_cast<size_t>(kNumElements), v.size());
-  for (int i = 0; i < kNumElements; ++i) {
-    EXPECT_EQ(i, v[i]);
+  delete iter;
+  ASSERT_EQ(kNumKeys, num_keys) << 'Bad number of keys';
+    
+    int main(int argc, char** argv) {
+  return leveldb::test::RunAllTests();
+}
+
+    
+      // current_ is offset in data_ of current entry.  >= restarts_ if !Valid
+  uint32_t current_;
+  uint32_t restart_index_;  // Index of restart block in which current_ falls
+  std::string key_;
+  Slice value_;
+  Status status_;
+    
+    namespace leveldb {
+    }
+    
+    Status ReadBlock(RandomAccessFile* file,
+                 const ReadOptions& options,
+                 const BlockHandle& handle,
+                 BlockContents* result) {
+  result->data = Slice();
+  result->cachable = false;
+  result->heap_allocated = false;
+    }
+    
+      // Takes ownership of 'iter' and will delete it when destroyed, or
+  // when Set() is invoked again.
+  void Set(Iterator* iter) {
+    delete iter_;
+    iter_ = iter;
+    if (iter_ == NULL) {
+      valid_ = false;
+    } else {
+      Update();
+    }
+  }
+    
+    //---- Define constructor and implicit cast operators to convert back<>forth from your math types and ImVec2/ImVec4.
+// This will be inlined as part of ImVec2 and ImVec4 class declarations.
+/*
+#define IM_VEC2_CLASS_EXTRA                                                 \
+        ImVec2(const MyVec2& f) { x = f.x; y = f.y; }                       \
+        operator MyVec2() const { return MyVec2(x,y); }
+    
+    IMGUI_API bool        ImGui_ImplDX9_Init(void* hwnd, IDirect3DDevice9* device);
+IMGUI_API void        ImGui_ImplDX9_Shutdown();
+IMGUI_API void        ImGui_ImplDX9_NewFrame();
+IMGUI_API void        ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data);
+    
+        void FreeTypeFont::Shutdown()
+    {
+        if (FreetypeFace) 
+        {
+            FT_Done_Face(FreetypeFace);
+            FreetypeFace = NULL;
+            FT_Done_FreeType(FreetypeLibrary);
+            FreetypeLibrary = NULL;
+        }
+    }
+    
+            // 1. Show a simple window.
+        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
+            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    }
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+        // Setup orthographic projection matrix
+    // Being agnostic of whether <d3dx9.h> or <DirectXMath.h> can be used, we aren't relying on D3DXMatrixIdentity()/D3DXMatrixOrthoOffCenterLH() or DirectX::XMMatrixIdentity()/DirectX::XMMatrixOrthographicOffCenterLH()
+    {
+        const float L = 0.5f, R = io.DisplaySize.x+0.5f, T = 0.5f, B = io.DisplaySize.y+0.5f;
+        D3DMATRIX mat_identity = { { 1.0f, 0.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f } };
+        D3DMATRIX mat_projection =
+        {
+            2.0f/(R-L),   0.0f,         0.0f,  0.0f,
+            0.0f,         2.0f/(T-B),   0.0f,  0.0f,
+            0.0f,         0.0f,         0.5f,  0.0f,
+            (L+R)/(L-R),  (T+B)/(B-T),  0.5f,  1.0f,
+        };
+        g_pd3dDevice->SetTransform(D3DTS_WORLD, &mat_identity);
+        g_pd3dDevice->SetTransform(D3DTS_VIEW, &mat_identity);
+        g_pd3dDevice->SetTransform(D3DTS_PROJECTION, &mat_projection);
+    }
+    
+    void AbstractBtMessage::setPeer(const std::shared_ptr<Peer>& peer)
+{
+  peer_ = peer;
+}
+    
+      bool incNumConnection_;
+    
+      // File must be opened before calling this function.
+  virtual void allocate(int64_t offset, int64_t length,
+                        bool sparse) CXX11_OVERRIDE;
+    
+    void AbstractHttpServerResponseCommand::updateReadWriteCheck()
+{
+  if (httpServer_->wantRead()) {
+    if (!readCheck_) {
+      readCheck_ = true;
+      e_->addSocketForReadCheck(socket_, this);
+    }
+  }
+  else if (readCheck_) {
+    readCheck_ = false;
+    e_->deleteSocketForReadCheck(socket_, this);
+  }
+  if (httpServer_->wantWrite()) {
+    if (!writeCheck_) {
+      writeCheck_ = true;
+      e_->addSocketForWriteCheck(socket_, this);
+    }
+  }
+  else if (writeCheck_) {
+    writeCheck_ = false;
+    e_->deleteSocketForWriteCheck(socket_, this);
   }
 }
     
-    std::shared_ptr<Channel> CreateTestChannel(
-    const grpc::string& server, const grpc::string& cred_type,
-    const grpc::string& override_hostname, bool use_prod_roots,
-    const std::shared_ptr<CallCredentials>& creds,
-    const ChannelArguments& args);
     
-    #ifndef QPS_WORKER_H
-#define QPS_WORKER_H
+    {} // namespace aria2
+
     
-    int main(int argc, char** argv) {
-  // Instantiate the client. It requires a channel, out of which the actual RPCs
-  // are created. This channel models a connection to an endpoint (in this case,
-  // localhost at port 50051). We indicate that the channel isn't authenticated
-  // (use of InsecureChannelCredentials()).
-  GreeterClient greeter(grpc::CreateChannel(
-      'localhost:50051', grpc::InsecureChannelCredentials()));
-  std::string user('world');
-  std::string reply = greeter.SayHello(user);
-  std::cout << 'Greeter received: ' << reply << std::endl;
-    }
+    #endif // D_ABSTRACT_PROXY_REQUEST_COMMAND_H
+
+    
+    protected:
+  virtual bool executeInternal() CXX11_OVERRIDE;
+    
+    size_t AnnounceList::countTier() const { return tiers_.size(); }
     
     
+    {  bool currentTierAcceptsCompletedEvent() const;
+};
     
-    #include <pthread.h>
     
-    /// Allow users to disable enrollment features.
-DECLARE_bool(disable_enrollment);
+    {} // namespace aria2
     
-      /**
-   * @brief Attempt to drop privileges to that of the parent of a given path.
-   *
-   * This will return false if privileges could not be dropped or there was
-   * an previous, and still active, request for dropped privileges.
-   *
-   * @return success if privileges were dropped, otherwise false.
-   */
-  bool dropToParent(const boost::filesystem::path& path);
+    #endif // D_ANON_DISK_WRITER_FACTORY_H
+
     
-      EXPECT_EQ(carves.size(), 2U);
-  s = archive(carves,
-              carveFSPath + '/' + kTestCarveNamePrefix + guid_ + '.tar');
-  EXPECT_TRUE(s.ok());
-    
-    DECLARE_bool(tls_secret_always);
-DECLARE_string(tls_enroll_override);
-DECLARE_bool(tls_node_api);
-DECLARE_bool(enroll_always);
-    
-      if (!CFStringGetCString(
-          cf_string, buffer, length + 1, kCFStringEncodingASCII)) {
-    free(buffer);
-    return '';
+      CFDictionaryRef idAndTrust =
+      (CFDictionaryRef)CFArrayGetValueAtIndex(items.get(), 0);
+  if (!idAndTrust) {
+    A2_LOG_ERROR('Failed to get identity and trust from PKCS12 data');
+    return false;
   }
+  credentials_ =
+      (SecIdentityRef)CFDictionaryGetValue(idAndTrust, kSecImportItemIdentity);
+  if (!credentials_) {
+    A2_LOG_ERROR('Failed to get credentials PKCS12 data');
+    return false;
+  }
+  CFRetain(credentials_);
+  A2_LOG_INFO('Loaded certificate from file');
+  return true;
