@@ -1,191 +1,309 @@
-class PyDescriptorDatabase : public DescriptorDatabase {
+
+        
+        namespace osquery {
+namespace tables {
+    }
+    }
+    
+      /// The EventPublisher will keep track of Subscription%s that contain callins.
+  SubscriptionVector subscriptions_;
+    
+      /// A helper call that does not return a response (only status).
+  static Status call(const std::string& registry_name,
+                     const std::string& item_name,
+                     const PluginRequest& request);
+    
+      /*
+   * @brief the uri used to begin POSTing carve data
+   *
+   * This endpoint should negotiate the details of the carve, as well
+   * as give the client a session id used to continue POSTing the data.
+   */
+  std::string startUri_;
+    
+    class ViewsConfigParserPluginTests : public testing::Test {};
+    
+    class TLSConfigPlugin : public ConfigPlugin,
+                        public std::enable_shared_from_this<TLSConfigPlugin> {
  public:
-  explicit PyDescriptorDatabase(PyObject* py_database);
-  ~PyDescriptorDatabase();
-    }
-    
-    TEST(AnyTest, TestPackAndUnpack) {
-  protobuf_unittest::TestAny submessage;
-  submessage.set_int32_value(12345);
-  protobuf_unittest::TestAny message;
-  message.mutable_any_value()->PackFrom(submessage);
+  Status setUp() override;
+  Status genConfig(std::map<std::string, std::string>& config) override;
     }
     
     
-    {  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(EnumGenerator);
+    {
+    {  ::strncpy(dst, src, count);
+  return Status(0, 'OK');
+}
+}
+
+    
+    bool js_cocos2dx_builder_CCBReader_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_builder_CCBReader_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_builder_CCBReader(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_builder_CCBReader_getAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_setAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addOwnerOutletName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_setCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addOwnerOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_readSoundKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_readUTF8(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_readCallbackKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getAnimationManagersForNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getNodesWithAnimationManagers(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_setResolutionScale(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_CCBReader(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+    
+    
+    #ifdef __cplusplus
+extern 'C' {
+#endif
+#include 'tolua++.h'
+#ifdef __cplusplus
+}
+#endif
+    
+    // This class implements debug drawing callbacks that are invoked
+// inside b2World::Step.
+class GLESDebugDraw : public b2Draw
+{
+    float32 mRatio;
+    cocos2d::GLProgram* mShaderProgram;
+    GLint        mColorLocation;
+    }
+    
+    	void Break()
+	{
+		// Create two bodies from one.
+		b2Body* body1 = m_piece1->GetBody();
+		b2Vec2 center = body1->GetWorldCenter();
+    }
+    
+    			b2FixtureDef fd;
+			fd.shape = &shape;
+			fd.density = 1.0f;
+    
+    
+    {	b2Body* m_body;
+	b2Body* m_bullet;
+	float32 m_x;
 };
     
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
     
-    RepeatedEnumFieldGenerator::RepeatedEnumFieldGenerator(
-    const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options)
-    : FieldGeneratorBase(descriptor, fieldOrdinal, options) {
-}
-    
-    void RepeatedMessageFieldGenerator::GenerateMergingCode(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    '$name$_.Add(other.$name$_);\n');
-}
-    
-    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_PRIMITIVE_FIELD_H__
-    
-    const Options* SourceGeneratorBase::options() {
-  return this->options_;
-}
-    
-        // helper function to initialize and check BlockMomentumSGD related parameters
-    void InitializeAndCheckBlockMomentumSGDParameters();
-    // only true when the user specify LearningRatePerMB and the number of parallel utterances in Reader > 1
-    // bool m_needToNormalizeLRByParallUtterance;          // TODO: should go away
-    // bool m_needToNormalizeMomentumByParallUtterance;
-    
-                shared_ptr<ComputationNode<ElemType>> runMeanNode = static_pointer_cast<ComputationNode<ElemType>>(runMeanParameterPtr);
-            shared_ptr<ComputationNode<ElemType>> runStdNode  = static_pointer_cast<ComputationNode<ElemType>>(runStdParameterPtr);
-    
-    template class NDLUtil<float>;
-template class NDLUtil<double>;
-    
-    template <typename ElemType>
-class MELScript : public ConfigParser
-{
-private:
-    typedef shared_ptr<ComputationNode<ElemType>> ComputationNodePtr;
-    typedef std::map<std::string, NetNdl<ElemType>, nocase_compare> MapNameToNetNdl;
+    {    for (size_t i = 0; i < sorted_index_set.size(); ++i) {
+      bst_uint cid = sorted_index_set[i];
+      size_t dst_begin = page->offset[i];
+      size_t src_begin = disk_offset_[cid];
+      size_t num = disk_offset_[cid + 1] - disk_offset_[cid];
+      for (size_t j = 0; j < num; ++j) {
+        page->data[dst_begin + j] = SparseBatch::Entry(
+            index_.data[src_begin + j] + min_index_, value_.data[src_begin + j]);
+      }
     }
-    
-    class float4
-{
-    __m128 v; // value
-private:
-    // return the low 'float'
-    float f0() const
-    {
-        float f;
-        _mm_store_ss(&f, v);
-        return f;
-    }
-    // construct from a __m128, assuming it is a f32 vector (needed for directly returning __m128 below)
-    float4(const __m128& v)
-        : v(v)
-    {
-    }
-    // return as a __m128 --should this be a reference?
-    operator __m128() const
-    {
-        return v;
-    }
-    // assign a __m128 (needed for using nested float4 objects inside this class, e.g. sum())
-    float4& operator=(const __m128& other)
-    {
-        v = other;
-        return *this;
-    }
-    }
-    
-    namespace {
-    }
-    
-    
-    {  // Returns a heuristic cutoff on block errors in the sense that we won't
-  // consider distortions where a block error is greater than this.
-  virtual float BlockErrorLimit() const = 0;
-  // Given the search direction (+1 for upwards and -1 for downwards) and the
-  // current distance map, fills in *block_weight image with the relative block
-  // error adjustment weights.
-  // The target_mul param has the same semantics as in DistanceOK().
-  // Note that this is essentially a static function in the sense that it does
-  // not depend on the last Compare() call.
-  virtual void ComputeBlockErrorAdjustmentWeights(
-      int direction, int max_block_dist, double target_mul, int factor_x,
-      int factor_y, const std::vector<float>& distmap,
-      std::vector<float>* block_weight) = 0;
-};
-    
-      int width() const { return width_; }
-  int height() const { return height_; }
-  int factor_x() const { return factor_x_; }
-  int factor_y() const { return factor_y_; }
-  int width_in_blocks() const { return width_in_blocks_; }
-  int height_in_blocks() const { return height_in_blocks_; }
-  const coeff_t* coeffs() const { return &coeffs_[0]; }
-  const int* quant() const { return &quant_[0]; }
-  bool IsAllZero() const;
-    
-    double ButteraugliScoreForQuality(double quality) {
-  if (quality < kLowestQuality) quality = kLowestQuality;
-  if (quality > kHighestQuality) quality = kHighestQuality;
-  int index = static_cast<int>(quality);
-  double mix = quality - index;
-  return kScoreForQuality[index - kLowestQuality] * (1 - mix) +
-      kScoreForQuality[index - kLowestQuality + 1] * mix;
-}
-    
-      /// Hold on to the returned shared_ptr until the end of the test
-  static std::shared_ptr<StrictMock<MockClock>> setup() {
-    auto rv = std::make_shared<StrictMock<MockClock>>();
-    s_mockClockInstance = rv;
-    return rv;
+    return true;
   }
     
-    #pragma once
+      fs = dmlc::Stream::Create(tmp_file.c_str(), 'r');
+  xgboost::MetaInfo inforead;
+  inforead.LoadBinary(fs);
+  EXPECT_EQ(inforead.labels, info.labels);
+  EXPECT_EQ(inforead.num_col, info.num_col);
+  EXPECT_EQ(inforead.num_row, info.num_row);
     
-      explicit ScopeGuardImpl(const FunctionType& fn) noexcept(
-      std::is_nothrow_copy_constructible<FunctionType>::value)
-      : ScopeGuardImpl(
-            fn,
-            makeFailsafe(std::is_nothrow_copy_constructible<FunctionType>{},
-                         &fn)) {}
+    template<typename IndexType>
+class DensifyParser : public dmlc::Parser<IndexType> {
+ public:
+  DensifyParser(dmlc::Parser<IndexType>* parser, uint32_t num_col)
+      : parser_(parser), num_col_(num_col) {
+  }
+    }
     
-    template <typename Fn>
-void DynamicParser::parse(
-    const folly::dynamic& k, const folly::dynamic& v, Fn fn) {
-  auto guard = stack_.push(k, v);  // User code can nest parser calls.
-  wrapError(nullptr, [&]() { detail::invokeForKeyValue(fn, k, v); });
+    /*! \brief gradient statistics pair usually needed in gradient boosting */
+typedef detail::bst_gpair_internal<float> bst_gpair;
+    
+    /*!
+ * \brief base class of multi-class evaluation
+ * \tparam Derived the name of subclass
+ */
+template<typename Derived>
+struct EvalMClassBase : public Metric {
+  bst_float Eval(const std::vector<bst_float> &preds,
+                 const MetaInfo &info,
+                 bool distributed) const override {
+    CHECK_NE(info.labels.size(), 0U) << 'label set cannot be empty';
+    CHECK(preds.size() % info.labels.size() == 0)
+        << 'label and prediction size not match';
+    const size_t nclass = preds.size() / info.labels.size();
+    CHECK_GE(nclass, 1U)
+        << 'mlogloss and merror are only used for multi-class classification,'
+        << ' use logloss for binary classification';
+    const bst_omp_uint ndata = static_cast<bst_omp_uint>(info.labels.size());
+    double sum = 0.0, wsum = 0.0;
+    int label_error = 0;
+    #pragma omp parallel for reduction(+: sum, wsum) schedule(static)
+    for (bst_omp_uint i = 0; i < ndata; ++i) {
+      const bst_float wt = info.GetWeight(i);
+      int label =  static_cast<int>(info.labels[i]);
+      if (label >= 0 && label < static_cast<int>(nclass)) {
+        sum += Derived::EvalRow(label,
+                                dmlc::BeginPtr(preds) + i * nclass,
+                                nclass) * wt;
+        wsum += wt;
+      } else {
+        label_error = label;
+      }
+    }
+    CHECK(label_error >= 0 && label_error < static_cast<int>(nclass))
+        << 'MultiClassEvaluation: label must be in [0, num_class),'
+        << ' num_class=' << nclass << ' but found ' << label_error << ' in label';
+    }
+    }
+    
+    void OutputImage::ToLinearRGB(std::vector<std::vector<float> >* rgb) const {
+  ToLinearRGB(0, 0, width_, height_, rgb);
 }
     
-        std::cout << globalOptions_;
+    #ifndef GUETZLI_ENTROPY_ENCODE_H_
+#define GUETZLI_ENTROPY_ENCODE_H_
     
-    void DebugHUD_InitDefaults( DebugHUD *hud )
-{
-    hud->show_demo_window = true;
-    hud->show_another_window = true;
-    hud->rotation_speed = 15.0f;
     
-    hud->cubeColor1[0] = 0.4f;
-    hud->cubeColor1[1] = 0.4f;
-    hud->cubeColor1[2] = 1.0f;
-    hud->cubeColor1[3] = 1.0f;
-    
-    hud->cubeColor2[0] = 1.0f;
-    hud->cubeColor2[1] = 0.4f;
-    hud->cubeColor2[2] = 0.4f;
-    hud->cubeColor2[3] = 1.0f;
-    
-    hud->clearColor[0] = 0.45f;
-    hud->clearColor[1] = 0.55f;
-    hud->clearColor[2] = 0.60f;
-    hud->clearColor[3] = 1.00f;
+    {  tmp0 = in[7 * stride];
+  tmp1 = kIDCTMatrix[ 7] * tmp0;
+  tmp2 = kIDCTMatrix[15] * tmp0;
+  tmp3 = kIDCTMatrix[23] * tmp0;
+  tmp4 = kIDCTMatrix[31] * tmp0;
+  out[0] += tmp1;
+  out[1] += tmp2;
+  out[2] += tmp3;
+  out[3] += tmp4;
+  out[4] -= tmp4;
+  out[5] -= tmp3;
+  out[6] -= tmp2;
+  out[7] -= tmp1;
 }
     
-    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
-// **Prefer using the code in the sdl_opengl3_example/ folder**
-// See imgui_impl_sdl.cpp for details.
+      // Fill in 2nd level tables and add pointers to root table.
+  table += table_size;
+  table_size = 0;
+  low = 0;
+  for (len = kJpegHuffmanRootTableBits + 1;
+       len <= kJpegHuffmanMaxBitLength; ++len) {
+    for (; count[len] > 0; --count[len]) {
+      // Start a new sub-table if the previous one is full.
+      if (low >= table_size) {
+        table += table_size;
+        table_bits = NextTableBitSize(count, len);
+        table_size = 1 << table_bits;
+        total_size += table_size;
+        low = 0;
+        lut[key].bits = table_bits + kJpegHuffmanRootTableBits;
+        lut[key].value = (table - lut) - key;
+        ++key;
+      }
+      code.bits = len - kJpegHuffmanRootTableBits;
+      code.value = symbols[idx++];
+      reps = 1 << (table_bits - code.bits);
+      while (reps--) {
+        table[low++] = code;
+      }
+    }
+  }
     
-            // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
-        if (show_demo_window)
-        {
-            ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-            ImGui::ShowDemoWindow(&show_demo_window);
+    // Utility function for building a Huffman lookup table for the jpeg decoder.
+    
+    namespace guetzli {
+    }
+    
+    template <bool isServer>
+void ExtensionsNegotiator<isServer>::readOffer(std::string offer) {
+    if (isServer) {
+        ExtensionsParser extensionsParser(offer.data(), offer.length());
+        if ((options & PERMESSAGE_DEFLATE) && extensionsParser.perMessageDeflate) {
+            if (extensionsParser.clientNoContextTakeover || (options & CLIENT_NO_CONTEXT_TAKEOVER)) {
+                options |= CLIENT_NO_CONTEXT_TAKEOVER;
+            }
+    }
+    }
+    }
+    
+        SSL_CTX_set_options(context.context, SSL_OP_NO_SSLv3);
+    
+        static __thread char buf[INET6_ADDRSTRLEN];
+    
+    
+    {        if (webSocket->compressionStatus == WebSocket<isServer>::CompressionStatus::ENABLED) {
+            webSocket->compressionStatus = WebSocket<isServer>::CompressionStatus::COMPRESSED_FRAME;
+            return true;
+        } else {
+            return false;
         }
+    }
     
-            // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
-        if (show_demo_window)
-        {
-            ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-            ImGui::ShowDemoWindow(&show_demo_window);
+    template <bool isServer>
+void Group<isServer>::removeHttpSocket(HttpSocket<isServer> *httpSocket) {
+    if (iterators.size()) {
+        iterators.top() = httpSocket->next;
+    }
+    if (httpSocket->prev == httpSocket->next) {
+        httpSocketHead = nullptr;
+        httpTimer->stop();
+        httpTimer->close();
+    } else {
+        if (httpSocket->prev) {
+            ((HttpSocket<isServer> *) httpSocket->prev)->next = httpSocket->next;
+        } else {
+            httpSocketHead = (HttpSocket<isServer> *) httpSocket->next;
         }
+        if (httpSocket->next) {
+            ((HttpSocket<isServer> *) httpSocket->next)->prev = httpSocket->prev;
+        }
+    }
+}
     
-    // Implemented features:
-//  [X] User texture binding. Use 'LPDIRECT3DTEXTURE9' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+                                webSocket->cork(true);
+                            Group<isServer>::from(webSocket)->connectionHandler(webSocket, req);
+                            // todo: should not uncork if closed!
+                            webSocket->cork(false);
+                            delete httpSocket;
+    
+        if (opCode < 3) {
+        if (!remainingBytes && fin && !webSocket->fragmentBuffer.length()) {
+            if (webSocket->compressionStatus == WebSocket<isServer>::CompressionStatus::COMPRESSED_FRAME) {
+                    webSocket->compressionStatus = WebSocket<isServer>::CompressionStatus::ENABLED;
+                    data = group->hub->inflate(data, length, group->maxPayload);
+                    if (!data) {
+                        forceClose(webSocketState);
+                        return true;
+                    }
+            }
+    }
+    }
+    
+    namespace uS {
+    }
+    
+            Socket initialSocket(nodeData, getLoop(), fd, ssl);
+        uS::Socket *socket = I(&initialSocket);
+    
+    template <bool isServer>
+class ExtensionsNegotiator {
+protected:
+    int options;
+public:
+    ExtensionsNegotiator(int wantedOptions);
+    std::string generateOffer();
+    void readOffer(std::string offer);
+    int getNegotiatedOptions();
+};
