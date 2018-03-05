@@ -1,115 +1,133 @@
 
         
-        # TODO: ensure that history changes.
+        import pytest
+    
+    # This view is called from FlatpageFallbackMiddleware.process_response
+# when a 404 is raised, which often means CsrfViewMiddleware.process_view
+# has not been called even if CsrfViewMiddleware is installed. So we need
+# to use @csrf_protect, in case the template needs {% csrf_token %}.
+# However, we can't just wrap this view; if no matching flatpage exists,
+# or a redirect is required for authentication, the 404 needs to be returned
+# without any CSRF checks. Therefore, we only
+# CSRF protect the internal implementation.
+    
+        return inner
+    
+        :param str u_string: unicode string to check. Must be unicode
+        and not Python 2 `str`.
+    :rtype: bool
+    '''
+    assert isinstance(u_string, str)
+    try:
+        u_string.encode('ascii')
+        return True
+    except UnicodeEncodeError:
+        return False
 
     
+            realm = self._thread_local.chal['realm']
+        nonce = self._thread_local.chal['nonce']
+        qop = self._thread_local.chal.get('qop')
+        algorithm = self._thread_local.chal.get('algorithm')
+        opaque = self._thread_local.chal.get('opaque')
+        hash_utf8 = None
     
-@app.route('/')
-def index():
-    return render_template('index.html')
+    if is_py2:
+    from urllib import (
+        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
+        proxy_bypass, proxy_bypass_environment, getproxies_environment)
+    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
+    from urllib2 import parse_http_list
+    import cookielib
+    from Cookie import Morsel
+    from StringIO import StringIO
     
-        def __init__(self, floor, total_spots):
-        self.floor = floor
-        self.num_spots = total_spots
-        self.available_spots = 0
-        self.spots = []  # List of ParkingSpots
+    def _init():
+    for code, titles in _codes.items():
+        for title in titles:
+            setattr(codes, title, code)
+            if not title.startswith(('\\', '/')):
+                setattr(codes, title.upper(), code)
     
-            Emit key value pairs of the form:
+            #: A CookieJar containing all currently outstanding cookies set on this
+        #: session. By default it is a
+        #: :class:`RequestsCookieJar <requests.cookies.RequestsCookieJar>`, but
+        #: may be any other ``cookielib.CookieJar`` compatible object.
+        self.cookies = cookiejar_from_dict({})
     
-        def __init__(self, MAX_SIZE):
-        self.MAX_SIZE = MAX_SIZE
-        self.size = 0
-        self.lookup = {}
-        self.linked_list = LinkedList()
+      # Create output directory if necessary.
+  if not os.path.exists(cmd_args.output_dir):
+    os.makedirs(cmd_args.output_dir)
     
-        def test_data_name_shall_be_changeable(cls):
-        cls.sub.name = 'New Data Name'
-        cls.assertEqual(cls.sub.name, 'New Data Name')
-
+        self.assertAllEqual(exp_boxes, boxes_out)
+    self.assertAllEqual(exp_feature_scales, feature_scales_out)
+    self.assertAllClose(exp_features, features_out)
+    self.assertAllClose(exp_scores, scores_out)
     
-        def tearDown(cls):
-        ''' Function/test case scope teardown. '''
-        cls.output.close()
-        sys.stdout = cls.saved_stdout
-    
-        print(u'Setting Data 1 = 10')
-    data1.data = 10
-    print(u'Setting Data 2 = 15')
-    data2.data = 15
-    print(u'Setting Data 1 = 3')
-    data1.data = 3
-    print(u'Setting Data 2 = 5')
-    data2.data = 5
-    print(u'Detach HexViewer from data1 and data2.')
-    data1.detach(view2)
-    data2.detach(view2)
-    print(u'Setting Data 1 = 10')
-    data1.data = 10
-    print(u'Setting Data 2 = 15')
-    data2.data = 15
-    
-            distance = (cor1[0][0] - cor2[0][0])**2 + (cor1[0][1] - cor2[0][1])**2
-        distance = distance ** 0.5
-        print('distance = ', distance)
-        jump(distance)
-        update = True
+      # Train and evaluate for 11 epochs.
+  with tf.device(device):
+    for epoch in range(1, 11):
+      with tfe.restore_variables_on_create(
+          tf.train.latest_checkpoint(FLAGS.checkpoint_dir)):
+        global_step = tf.train.get_or_create_global_step()
+        start = time.time()
+        with summary_writer.as_default():
+          train(model, optimizer, train_ds, FLAGS.log_interval)
+        end = time.time()
+        print('\nTrain time for epoch #%d (global step %d): %f' %
+              (epoch, global_step.numpy(), end - start))
+      with test_summary_writer.as_default():
+        test(model, test_ds)
+      all_variables = (model.variables + optimizer.variables() + [global_step])
+      tfe.Saver(all_variables).save(checkpoint_prefix, global_step=global_step)
     
     
-class auto_adb():
-    def __init__(self):
-        try:
-            adb_path = 'adb'
-            subprocess.Popen([adb_path], stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
-            self.adb_path = adb_path
-        except OSError:
-            if platform.system() == 'Windows':
-                adb_path = os.path.join('Tools', 'adb', 'adb.exe')
-                try:
-                    subprocess.Popen(
-                        [adb_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                    self.adb_path = adb_path
-                except OSError:
-                    pass
-            else:
-                try:
-                    subprocess.Popen(
-                        [adb_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                except OSError:
-                    pass
-            print('请安装 ADB 及驱动并配置环境变量')
-            print('具体链接: https://github.com/wangshub/wechat_jump_game/wiki')
-            exit(1)
+def device():
+  return '/device:GPU:0' if tfe.num_gpus() else '/device:CPU:0'
     
-        # 限制棋盘扫描的横坐标，避免音符 bug
-    if piece_x < w / 2:
-        board_x_start = piece_x
-        board_x_end = w
-    else:
-        board_x_start = 0
-        board_x_end = piece_x
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
     
-            for j in range(int(board_x_start), int(board_x_end)):
-            pixel = im_pixel[j, i]
-            # 修掉脑袋比下一个小格子还高的情况的 bug
-            if abs(j - piece_x) < piece_body_width:
-                continue
+    flags.DEFINE_string('master', '',
+                    'BNS name prefix of the Tensorflow eval master, '
+                    'or 'local'.')
+flags.DEFINE_string('eval_dir', '/tmp/text_eval',
+                    'Directory where to write event logs.')
+flags.DEFINE_string('eval_data', 'test', 'Specify which dataset is used. '
+                    '('train', 'valid', 'test') ')
     
-    c = wda.Client()
-s = c.session()
+        parser.add_argument('--key',
+                        metavar='KEY',
+                        default=api_key,
+                        required=not api_key,
+                        help='Shippable API key')
     
-        # 精查棋子位置
-    piece_x, piece_x_set = 0, []  # 棋子x/棋子坐标集合
-    piece_width = w // 14  # 估算棋子宽度
-    piece_height = w // 5  # 估算棋子高度
-    for ny in range(piece_fy + scan_piece_unit, piece_fy - piece_height, -4):
-        for nx in range(max(piece_fx - piece_width, 0),
-                        min(piece_fx + piece_width, w)):
-            pixel = im_pixel[nx, ny]
-            # print(nx,ny,pixel)
-            if find_piece(pixel):
-                piece_x_set.append(nx)
-        if len(piece_x_set) > 10:
-            piece_x = sum(piece_x_set) / len(piece_x_set)
-            break
-    print('%-12s %s' % ('p_exact_x:', piece_x))
+        terminal_length = os.getenv('ANSIBLE_VYOS_TERMINAL_LENGTH', 10000)
+    
+        def get(self, query)
+        '''Get the stored query result from the cache.
+        
+        Accessing a node updates its position to the front of the LRU list.
+        '''
+        node = self.lookup[query]
+        if node is None:
+            return None
+        self.linked_list.move_to_front(node)
+        return node.results
+    
+        def can_fit_vehicle(self, vehicle):
+        if self.vehicle is not None:
+            return False
+        return vehicle.can_fit_in_spot(self)
+    
+        def get_people(self, ids):
+        results = []
+        for id in ids:
+            if id in self.people:
+                results.append(self.people[id])
+        return results
+    
+        def create_signature(self):
+        # Create signature based on url and contents
+        ...
