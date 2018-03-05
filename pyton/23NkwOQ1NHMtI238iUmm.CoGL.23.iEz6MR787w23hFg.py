@@ -1,140 +1,180 @@
 
         
-        
-PACKAGES = [
-    'httpie',
-    'requests',
-    'pygments',
-]
+            infile, outfile = args
+    
+    options = helptext[helptext.index('  General Options:') + 19:]
+options = re.sub(r'(?m)^  (\w.+)$', r'## \1', options)
+options = '# OPTIONS\n' + options + '\n'
     
     
-with codecs.open(FILE_PATH, encoding='utf8') as f:
-    # Strip because we don't want new lines in the data so that we can
-    # easily count occurrences also when embedded in JSON (where the new
-    # line would be escaped).
-    FILE_CONTENT = f.read().strip()
+class TestCache(unittest.TestCase):
+    def setUp(self):
+        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
+        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
+        _mkdir(TESTDATA_DIR)
+        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
+        self.tearDown()
     
+        def test_secondary_proxy_https(self):
+        params = self._check_params(['secondary_proxy', 'secondary_server_ip'])
+        if params is None:
+            return
+        ydl = FakeYDL()
+        req = compat_urllib_request.Request('https://yt-dl.org/ip')
+        req.add_header('Ytdl-request-proxy', params['secondary_proxy'])
+        self.assertEqual(
+            ydl.urlopen(req).read().decode('utf-8'),
+            params['secondary_server_ip'])
     
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
-    
-    
-def test_max_redirects(httpbin):
-    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
-             error_exit_ok=True)
-    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+            retval = subprocess.call(args)
+        if retval == 0:
+            fsize = os.path.getsize(encodeFilename(tmpfilename))
+            self.to_screen('\r[%s] %s bytes' % (args[0], fsize))
+            self.try_rename(tmpfilename, filename)
+            self._hook_progress({
+                'downloaded_bytes': fsize,
+                'total_bytes': fsize,
+                'filename': filename,
+                'status': 'finished',
+            })
+            return True
+        else:
+            self.to_stderr('\n')
+            self.report_error('%s exited with code %d' % (args[0], retval))
+            return False
 
     
-            Referer:http://httpie.org  Cookie:foo=bar  User-Agent:bacon/1.0
-    
-        def has_password(self):
-        return self.value is not None
-    
-    
-def main():
-    num_args = len(sys.argv)
-    if num_args < 2:
-        print('No file passed (file should contain Markdown table syntax)')
-        sys.exit(1)
-    
-        data_train = fetch_20newsgroups_vectorized(subset='train')
-    data_test = fetch_20newsgroups_vectorized(subset='test')
-    X_train = check_array(data_train.data, dtype=np.float32,
-                          accept_sparse='csc')
-    X_test = check_array(data_test.data, dtype=np.float32, accept_sparse='csr')
-    y_train = data_train.target
-    y_test = data_test.target
-    
-        it = 0
-    
-            start = time.time()
-        func(X, n_jobs=1)
-        one_core.append(time.time() - start)
-    
-    
-if __name__ == '__main__':
-    ###########################################################################
-    # Option parser
-    ###########################################################################
-    op = optparse.OptionParser()
-    op.add_option('--n-times',
-                  dest='n_times', default=5, type=int,
-                  help='Benchmark results are average over n_times experiments')
-    
-        package is the name of the root module of the package
-    
-    try:
-    from urllib import urlopen
-except ImportError:
-    from urllib.request import urlopen
-    
-            clf_score = brier_score_loss(y_test, prob_pos, pos_label=y.max())
-        print('%s:' % name)
-        print('\tBrier: %1.3f' % (clf_score))
-        print('\tPrecision: %1.3f' % precision_score(y_test, y_pred))
-        print('\tRecall: %1.3f' % recall_score(y_test, y_pred))
-        print('\tF1: %1.3f\n' % f1_score(y_test, y_pred))
-    
-        t0 = time()
-    scores = uniform_labelings_scores(score_func, n_samples, n_clusters_range)
-    print('done in %0.3fs' % (time() - t0))
-    plots.append(plt.errorbar(
-        n_clusters_range, np.median(scores, axis=1), scores.std(axis=1))[0])
-    names.append(score_func.__name__)
-    
-        def test_conflicts(self):
-        # Note: Defined IP is more important than defined port in match
-        self.assertTrue(self.addr.conflicts(self.addr1))
-        self.assertTrue(self.addr.conflicts(self.addr2))
-        self.assertTrue(self.addr.conflicts(self.addr_defined))
-        self.assertFalse(self.addr.conflicts(self.addr_default))
-    
-    For full examples, see `certbot.plugins`.
-    
-        long_description = README,
-    
-        stream_types = [
-        {'id': '720p HD'},
-        {'id': '360p SD'},
+        _ALL_CLASSES = [
+        klass
+        for name, klass in globals().items()
+        if name.endswith('IE') and name != 'GenericIE'
     ]
+    _ALL_CLASSES.append(GenericIE)
     
-    from ..common import *
-from ..extractor import VideoExtractor
+            # Request the extended version of the api for extra fields like artist and title
+        api_response = self._download_json(
+            'http://www.audiomack.com/api/music/url/song/%s?extended=1&_=%d' % (
+                album_url_tag, time.time()),
+            album_url_tag)
     
-    print 'PLUGIN_I18N_PATHS := ' + ','.join(os.path.relpath(plugin.path)
-                                         for plugin in plugins
-                                         if plugin.needs_translation)
+            String:                    '#4e9a06',        # class: 's'
+        String.Backtick:           '#4e9a06',        # class: 'sb'
+        String.Char:               '#4e9a06',        # class: 'sc'
+        String.Doc:                'italic #8f5902', # class: 'sd' - like a comment
+        String.Double:             '#4e9a06',        # class: 's2'
+        String.Escape:             '#4e9a06',        # class: 'se'
+        String.Heredoc:            '#4e9a06',        # class: 'sh'
+        String.Interpol:           '#4e9a06',        # class: 'si'
+        String.Other:              '#4e9a06',        # class: 'sx'
+        String.Regex:              '#4e9a06',        # class: 'sr'
+        String.Single:             '#4e9a06',        # class: 's1'
+        String.Symbol:             '#4e9a06',        # class: 'ss'
     
-        def setup_app_env(self, environ, start_response):
-        PylonsApp.setup_app_env(self, environ, start_response)
+        return inner
     
-    api('wikipagelisting', WikiPageListingJsonTemplate)
-api('wikipagediscussions', WikiJsonTemplate)
-api('wikipagesettings', WikiSettingsJsonTemplate)
+        :param url: URL for the new :class:`Request` object.
+    :param params: (optional) Dictionary or bytes to be sent in the query string for the :class:`Request`.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
+    '''
     
-            An iden is given as the `captcha` field with a `BAD_CAPTCHA`
-        error, you should use this endpoint if you get a
-        `BAD_CAPTCHA` error response.
+        def __call__(self, r):
+        r.headers['Proxy-Authorization'] = _basic_auth_str(self.username, self.password)
+        return r
     
-        allowed_render_styles = ('html', 'xml', 'js', 'embed', '', 'compact', 'api')
-    # List of admins to blame (skip the first admin, 'reddit')
-    # If list is empty, just blame 'an admin'
-    admins = g.admins[1:] or ['an admin']
-    def __before__(self):
-        try:
-            c.error_page = True
-            RedditController.__before__(self)
-        except (HTTPMovedPermanently, HTTPFound):
-            # ignore an attempt to redirect from an error page
-            pass
-        except Exception as e:
-            handle_awful_failure('ErrorController.__before__: %r' % e)
+    #: Python 3.x?
+is_py3 = (_ver[0] == 3)
     
-        def post(self):
-        pass
+        # Check cryptography version
+    from cryptography import __version__ as cryptography_version
+    _check_cryptography(cryptography_version)
+except ImportError:
+    pass
+    
+    num_classes = 10
+batch_size = 128
+epochs = 15
+weighted_class = 5
+high_weight = 10
+train_samples = 5000
+test_samples = 1000
+timesteps = 3
+input_dim = 10
+loss = 'mse'
+loss_full_name = 'mean_squared_error'
+standard_weight = 1
+standard_score_sequential = 0.5
+    
+    
+@keras_test
+def test_loss_masking():
+    weighted_loss = _weighted_masked_objective(losses.get('mae'))
+    shape = (3, 4, 2)
+    x = np.arange(24).reshape(shape)
+    y = 2 * x
+    
+        if len(args) > 0 and '# Arguments' not in doc:
+        raise ValueError('{} needs a '# Arguments' section'.format(name),
+                         member.__module__)
+    
+        history = model.fit(x, ys, validation_split=0.05, batch_size=10,
+                        verbose=0, epochs=3)
+    ground_truth = -np.log(0.5)
+    assert(np.abs(history.history['loss'][-1] - ground_truth) < 0.06)
+    
+    
+@keras_test
+def test_merge_sum(in_tmpdir):
+    (x_train, y_train), (x_test, y_test) = _get_test_data()
+    left = Sequential()
+    left.add(Dense(num_hidden, input_shape=(input_dim,)))
+    left.add(Activation('relu'))
+    
+        n_samples = 2000
+    list_n_features = np.linspace(500, 3000, 5).astype(np.int)
+    lasso_results, lars_lasso_results = compute_bench(alpha, [n_samples],
+                                           list_n_features, precompute=False)
+    plt.subplot(212)
+    plt.plot(list_n_features, lasso_results, 'b-', label='Lasso')
+    plt.plot(list_n_features, lars_lasso_results, 'r-', label='LassoLars')
+    plt.title('%d samples, alpha=%s' % (n_samples, alpha))
+    plt.legend(loc='upper left')
+    plt.xlabel('number of features')
+    plt.ylabel('Time (s)')
+    plt.axis('tight')
+    plt.show()
+
+    
+        # decode the payload explicitly as UTF-8 since lxml is confused for some
+    # reason
+    with codecs.open(html_filename,'r','utf-8') as html_file:
+        html_content = html_file.read()
+    tree = ElementTree(lxml.html.document_fromstring(html_content))
+    i = 0
+    j = 0
+    for p in tree.findall('//p'):
+        content = p.text_content()
+        if len(content) < 100:
+            # skip paragraphs that are too short - probably too noisy and not
+            # representative of the actual language
+            continue
+    
+        # the training data folder must be passed as first argument
+    movie_reviews_data_folder = sys.argv[1]
+    dataset = load_files(movie_reviews_data_folder, shuffle=False)
+    print('n_samples: %d' % len(dataset.data))
+    
+    from sklearn.datasets import make_checkerboard
+from sklearn.datasets import samples_generator as sg
+from sklearn.cluster.bicluster import SpectralBiclustering
+from sklearn.metrics import consensus_score
+    
+    plt.grid('off')
+for x in [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]:
+    plt.plot([0, x], [x, 0], 'k', alpha=0.2)
+    plt.plot([0, 0 + (1-x)/2], [x, x + (1-x)/2], 'k', alpha=0.2)
+    plt.plot([x, x + (1-x)/2], [0, 0 + (1-x)/2], 'k', alpha=0.2)
     
     
 def open_accordant_config():
@@ -146,3 +186,78 @@ def open_accordant_config():
         path=sys.path[0],
         screen_size=screen_size
     )
+    
+    
+def computing_error(last_press_time, target_board_x, target_board_y, last_piece_x, last_piece_y, temp_piece_x,
+                    temp_piece_y):
+    '''
+    计算跳跃实际误差
+    '''
+    target_distance = math.sqrt(
+        (target_board_x - last_piece_x) ** 2 + (target_board_y - last_piece_y) ** 2)  # 上一轮目标跳跃距离
+    actual_distance = math.sqrt((temp_piece_x - last_piece_x) ** 2 + (temp_piece_y - last_piece_y) ** 2)  # 上一轮实际跳跃距离
+    jump_error_value = math.sqrt((target_board_x - temp_piece_x) ** 2 + (target_board_y - temp_piece_y) ** 2)  # 跳跃误差
+    
+    try:
+    from common import ai, debug, config, UnicodeStreamFilter
+    from common.auto_adb import auto_adb
+except Exception as ex:
+    print(ex)
+    print('请将脚本放在项目根目录中运行')
+    print('请检查项目根目录中的 common 文件夹是否存在')
+    exit(1)
+adb = auto_adb()
+VERSION = '1.1.3'
+    
+            graph = tf.get_default_graph()
+        x = graph.get_tensor_by_name('x:0')
+        logits = graph.get_tensor_by_name('logits_eval:0')
+    #####################识别分数
+        while True:
+            screenshot.pull_screenshot()
+            im = Image.open('./autojump.png')
+            ##比例系数
+            pix_w=im.size[0]*1.0/1080
+            pix_h=im.size[1]
+            region=im.crop((0,pix_h*0.1,460*pix_w,pix_h*0.2))
+            region=region.convert('L')
+            start_h,end_h,pixels_Widh=pixel_division(region,int(460*pix_w),int(pix_h*0.1))
+            if start_h==end_h:
+                continue
+            data = []
+            for i in range(len(pixels_Widh)-1):
+                region1=region.crop((pixels_Widh[i],start_h,pixels_Widh[i+1],end_h))
+                region1.putdata(pross_data(region1))
+                str1='./region'+str(i)+'.png'
+                region1.save(str1)
+                data1 = read_one_image(str1)
+                data.append(data1)
+            feed_dict = {x:data}
+            classification_result = sess.run(logits,feed_dict)
+            output = []
+            output = tf.argmax(classification_result,1).eval()
+            m_score=''
+            for i in range(len(output)):
+                m_score+=strint(output[i])
+            if m_score=='':
+                continue
+            m_score=int(m_score)
+            print('score:{}'.format(m_score))
+            ####################################
+            # 获取棋子和 board 的位置
+            print(j)
+            piece_x, piece_y, board_x, board_y = find_piece_and_board(im)
+            ts = int(time.time())
+            print(ts, piece_x, piece_y, board_x, board_y)
+            set_button_position(im)
+    
+    
+# Magic Number，不设置可能无法正常执行，请根据具体截图从上到下按需设置
+under_game_score_y = config['under_game_score_y']
+# 长按的时间系数，请自己根据实际情况调节
+press_coefficient = config['press_coefficient']
+# 二分之一的棋子底座高度，可能要调节
+piece_base_height_1_2 = config['piece_base_height_1_2']
+# 棋子的宽度，比截图中量到的稍微大一点比较安全，可能要调节
+piece_body_width = config['piece_body_width']
+time_coefficient = config['press_coefficient']
