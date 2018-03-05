@@ -1,91 +1,81 @@
 
         
-            sidekiq_options queue: 'critical'
+          def present(payload)
+    if payload.is_a?(Hash)
+      payload = ActiveSupport::HashWithIndifferentAccess.new(payload)
+      MAIN_KEYS.each do |key|
+        return { :title => payload[key].to_s, :entries => present_hash(payload, key) } if payload.has_key?(key)
+      end
     
-      module ClassMethods
-    def load_types_in(module_name, my_name = module_name.singularize)
-      const_set(:MODULE_NAME, module_name)
-      const_set(:BASE_CLASS_NAME, my_name)
-      const_set(:TYPES, Dir[Rails.root.join('app', 'models', module_name.underscore, '*.rb')].map { |path| module_name + '::' + File.basename(path, '.rb').camelize })
+      def import
+    if params[:file]
+      file = params[:file]
+      content = JSON.parse(file.read)
+      new_credentials = content.map do |hash|
+        current_user.user_credentials.build(hash.slice('credential_name', 'credential_value', 'mode'))
+      end
+    
+    lib_path = root.join('lib').to_path
+    
+    res = ''
+doc = Hpricot(File.open(input))
+doc.search('//form').each do |form|
+    
+        self.sigs.each_key do |k|
+      # There is only one pattern per run to test
+      matched = nil
+      matches = nil
+    
+    
+# replace calls, jmps, and read/write handle/filename references
+replaces = []
+asm.each_line { |ln|
+	if ln =~ /call /
+		parts = ln.split(' ')
+		if (parts[0] == 'call' and parts[2] == ';call')
+			old = parts[1]
+			func = parts[3]
+			new = addrs[func]
+			#puts '%32s: %s -> %x' % [func, old, new]
+			replaces << [func, old, new.to_s(16)]
+		end
+	end
+    }
+    
+    puts '* Loading Stdapi'
+    
+    		self.block = Array.new
+		self.block_size = 0
+	end
+    
+      public
+  # Relies on the codec being synchronous (which they all are!)
+  # We need a better long term design here, but this is an improvement
+  # over the current API for shared plugins
+  # It is best if the codec implements this directly
+  def multi_encode(events)
+    if @has_encode_sync              
+      events.map {|event| [event, self.encode_sync(event)]}
+    else
+      batch = Thread.current[:logstash_output_codec_batch] ||= []
+      batch.clear
+      
+      events.each {|event| self.encode(event) }
+      batch
     end
-    
-          if options[:type] == :array && (options[:values].blank? || !options[:values].is_a?(Array))
-        raise ArgumentError.new('When using :array as :type you need to provide the :values as an Array')
-      end
-    
-      def table_sort
-    raise('You must call set_table_sort in any action using table_sort.') unless @table_sort_info.present?
-    @table_sort_info[:order]
   end
     
-        respond_to do |format|
-      format.html { render layout: !request.xhr? }
-      format.json { render json: @jobs }
-    end
-  end
-    
-    invalids = []
-Parallel.each(links, in_threads: 4) do |link|
-  href = link.attribute('href').to_s
-  begin
-    case check_link(URI.join(BASE_URI, href))
-    when (200...300)
-      putc('.')
-    when (300..302)
-      putc('w')
-    end
-  rescue => e
-    putc('F')
-    invalids << '#{href} (reason: #{e.message})'
-  end
-end
-    
-      it 'ignores underscores in between the digits' do
-    '1_2_3asdf'.to_i.should == 123
-  end
-    
-      it 'translates chars not in from_string when it starts with a ^' do
-    'hello'.tr_s('^aeiou', '*').should == '*e*o'
-    '123456789'.tr_s('^345', 'abc').should == 'c345c'
-    'abcdefghijk'.tr_s('^d-g', '9131').should == '1defg1'
-    
-      it 'translates chars not in from_string when it starts with a ^' do
-    'hello'.tr('^aeiou', '*').should == '*e**o'
-    '123456789'.tr('^345', 'abc').should == 'cc345cccc'
-    'abcdefghijk'.tr('^d-g', '9131').should == '111defg1111'
-    
-            origin.should_not equal(dynamic)
-        (-origin).should equal(-dynamic)
-      end
-    
-        def process_directory
-      @options[:input] = @args.shift
-      unless @options[:input]
-        raise 'Error: directory required when using --recursive.'
-      end
-    
-          opts.on('--cache-location PATH',
-              'The path to save parsed Sass files. Defaults to .sass-cache.') do |loc|
-        @options[:for_engine][:cache_location] = loc
-      end
-    
-            def define_logger(name, options = {})
-          class_eval <<-RUBY, __FILE__, __LINE__ + 1
-            def #{name}(message)
-              #{options.fetch(:to, :log)}(#{name.inspect}, message)
-            end
-          RUBY
-        end
-      end
+          expect('.border-color-false-third').to have_ruleset(ruleset)
+      expect('.border-color-false-third').to_not have_rule(bad_rule)
     end
   end
 end
 
     
-        # Returns the Sass/SCSS code for the media query list.
-    #
-    # @param options [{Symbol => Object}] An options hash (see {Sass::CSS#initialize}).
-    # @return [String]
-    def to_src(options)
-      queries.map {|q| q.to_src(options)}.join(', ')
-    end
+      context 'called with four styles' do
+    it 'applies different styles to all sides' do
+      rule = 'border-style: dotted groove ridge none'
+    
+      context 'called with auto' do
+    it 'applies to auto to height' do
+      rule = 'height: auto; width: 100px;'
