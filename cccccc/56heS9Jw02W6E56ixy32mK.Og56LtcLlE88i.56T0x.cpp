@@ -1,160 +1,196 @@
 
         
-          Status status_;
-  std::string saved_key_;     // == current key when direction_==kReverse
-  std::string saved_value_;   // == current raw value when direction_==kReverse
-  Direction direction_;
-  bool valid_;
+          /// When evaluating an expression in the context of an existing source file,
+  /// we may want to prefer declarations from that source file.
+  /// The DebuggerClient can return a private-discriminator to tell lookup to
+  /// prefer these certain decls.
+  virtual Identifier getPreferredPrivateDiscriminator() = 0;
     
-    void InternalKeyComparator::FindShortSuccessor(std::string* key) const {
-  Slice user_key = ExtractUserKey(*key);
-  std::string tmp(user_key.data(), user_key.size());
-  user_comparator_->FindShortSuccessor(&tmp);
-  if (tmp.size() < user_key.size() &&
-      user_comparator_->Compare(user_key, tmp) < 0) {
-    // User key has become shorter physically, but larger logically.
-    // Tack on the earliest possible number to the shortened user key.
-    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
-    assert(this->Compare(*key, tmp) < 0);
-    key->swap(tmp);
+      CodeBlock(StringRef LiteralContent, StringRef Language)
+      : MarkupASTNode(ASTNodeKind::CodeBlock),
+        LiteralContent(LiteralContent),
+        Language(Language) {}
+    
+    /// A SyntaxRewriter for applying a set of formatting rules to a Syntax tree.
+struct FormatSyntaxRewriter : public SyntaxRewriter {
+  virtual StructDeclSyntax
+  rewriteStructDecl(StructDeclSyntax Struct) override;
+};
+    
+      /// Adds a memory buffer to the SourceManager, taking ownership of it.
+  unsigned addNewSourceBuffer(std::unique_ptr<llvm::MemoryBuffer> Buffer);
+    
+    namespace {
+    }
+    
+    static std::string IKey(const std::string& user_key,
+                        uint64_t seq,
+                        ValueType vt) {
+  std::string encoded;
+  AppendInternalKey(&encoded, ParsedInternalKey(user_key, seq, vt));
+  return encoded;
+}
+    
+    Status TableCache::Get(const ReadOptions& options,
+                       uint64_t file_number,
+                       uint64_t file_size,
+                       const Slice& k,
+                       void* arg,
+                       void (*saver)(void*, const Slice&, const Slice&)) {
+  Cache::Handle* handle = NULL;
+  Status s = FindTable(file_number, file_size, &handle);
+  if (s.ok()) {
+    Table* t = reinterpret_cast<TableAndFile*>(cache_->Value(handle))->table;
+    s = t->InternalGet(options, k, arg, saver);
+    cache_->Release(handle);
   }
+  return s;
 }
-    
-    bool GuessType(const std::string& fname, FileType* type) {
-  size_t pos = fname.rfind('/');
-  std::string basename;
-  if (pos == std::string::npos) {
-    basename = fname;
-  } else {
-    basename = std::string(fname.data() + pos + 1, fname.size() - pos - 1);
-  }
-  uint64_t ignored;
-  return ParseFileName(basename, &ignored, type);
-}
-    
-    static std::string MakeFileName(const std::string& name, uint64_t number,
-                                const char* suffix) {
-  char buf[100];
-  snprintf(buf, sizeof(buf), '/%06llu.%s',
-           static_cast<unsigned long long>(number),
-           suffix);
-  return name + buf;
-}
-    
-    #endif  // STORAGE_LEVELDB_DB_TABLE_CACHE_H_
-
     
     int main(int argc, char** argv) {
   return leveldb::test::RunAllTests();
 }
 
     
-    // Returns a new environment that stores its data in memory and delegates
-// all non-file-storage tasks to base_env. The caller must delete the result
-// when it is no longer needed.
-// *base_env must remain live while the result is in use.
-Env* NewMemEnv(Env* base_env);
-    
-    /**
- * @brief Request the extensions API to autoload any appropriate extensions.
- *
- * Extensions may be 'autoloaded' using the `extensions_autoload` command line
- * argument. loadExtensions should be called before any plugin or registry item
- * is used. This allows appropriate extensions to expose plugin requirements.
- *
- * An 'appropriate' extension is one within the `extensions_autoload` search
- * path with file ownership equivalent or greater (root) than the osquery
- * process requesting autoload.
- */
-void loadExtensions();
-    
-      /// Get a PluginResponse key as a property tree.
-  static void getResponse(const std::string& key,
-                          const PluginResponse& response,
-                          boost::property_tree::ptree& tree);
-    
-    #pragma once
-    
-    using ModuleHandle = void*;
-    
-    
-    {/// Clear decorations for a source when it updates.
-void clearDecorations(const std::string& source);
+    void WriteBatch::Put(const Slice& key, const Slice& value) {
+  WriteBatchInternal::SetCount(this, WriteBatchInternal::Count(this) + 1);
+  rep_.push_back(static_cast<char>(kTypeValue));
+  PutLengthPrefixedSlice(&rep_, key);
+  PutLengthPrefixedSlice(&rep_, value);
 }
-
     
-        // We should have a property tree of pack content mimicking embedded
-    // configuration packs, ready to parse as a string.
-    std::ostringstream output;
-    pt::write_json(output, multi_pack, false);
-    pack = output.str();
-    if (pack.empty()) {
-      return Status(1, 'Multi-pack content empty');
+    #include <string>
+#include 'leveldb/env.h'
+#include 'leveldb/status.h'
+    
+      // keys[0,n-1] contains a list of keys (potentially with duplicates)
+  // that are ordered according to the user supplied comparator.
+  // Append a filter that summarizes keys[0,n-1] to *dst.
+  //
+  // Warning: do not change the initial contents of *dst.  Instead,
+  // append the newly constructed filter to *dst.
+  virtual void CreateFilter(const Slice* keys, int n, std::string* dst)
+      const = 0;
+    
+    #include 'src/compiler/schema_interface.h'
+    
+    class GreeterServiceImpl final : public Greeter::Service {
+  virtual grpc::Status SayHello(
+      grpc::ServerContext *context,
+      const flatbuffers::grpc::Message<HelloRequest> *request_msg,
+      flatbuffers::grpc::Message<HelloReply> *response_msg) override {
+    // flatbuffers::grpc::MessageBuilder mb_;
+    // We call GetRoot to 'parse' the message. Verification is already
+    // performed by default. See the notes below for more details.
+    const HelloRequest *request = request_msg->GetRoot();
+    }
     }
     
-      int num_greetings = 10;
-  greeter.SayManyHellos(name, num_greetings, [](const std::string &message) {
-    std::cerr << 'Greeter received: ' << message << std::endl;
-  });
-    
-    inline flatbuffers::Offset<Field> CreateField(
+    inline flatbuffers::Offset<KeyValue> CreateKeyValue(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::String> name = 0,
-    flatbuffers::Offset<Type> type = 0,
-    uint16_t id = 0,
-    uint16_t offset = 0,
-    int64_t default_integer = 0,
-    double default_real = 0.0,
-    bool deprecated = false,
-    bool required = false,
-    bool key = false,
-    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<KeyValue>>> attributes = 0,
-    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>> documentation = 0) {
-  FieldBuilder builder_(_fbb);
-  builder_.add_default_real(default_real);
-  builder_.add_default_integer(default_integer);
-  builder_.add_documentation(documentation);
-  builder_.add_attributes(attributes);
-  builder_.add_type(type);
-  builder_.add_name(name);
-  builder_.add_offset(offset);
-  builder_.add_id(id);
+    flatbuffers::Offset<flatbuffers::String> key = 0,
+    flatbuffers::Offset<flatbuffers::String> value = 0) {
+  KeyValueBuilder builder_(_fbb);
+  builder_.add_value(value);
   builder_.add_key(key);
-  builder_.add_required(required);
-  builder_.add_deprecated(deprecated);
   return builder_.Finish();
 }
     
-      virtual grpc::string name() const = 0;
+    #include <map>
+#include <sstream>
+#include 'flatbuffers/idl.h'
     
-    // Set any scalar field, if you know its exact type.
-template<typename T>
-bool SetField(Table *table, const reflection::Field &field, T val) {
-  reflection::BaseType type = field.type()->base_type();
-  if (!IsScalar(type)) { return false; }
-  assert(sizeof(T) == GetTypeSize(type));
-  T def;
-  if (IsInteger(type)) {
-    def = GetFieldDefaultI<T>(field);
-  } else {
-    assert(IsFloat(type));
-    def = GetFieldDefaultF<T>(field);
+      // Create a FlatBuffer's `vector` from the `std::vector`.
+  std::vector<flatbuffers::Offset<Weapon>> weapons_vector;
+  weapons_vector.push_back(sword);
+  weapons_vector.push_back(axe);
+  auto weapons = builder.CreateVector(weapons_vector);
+    
+      // to ensure it is correct, we now generate text back from the binary,
+  // and compare the two:
+  std::string jsongen;
+  if (!GenerateText(parser, parser.builder_.GetBufferPointer(), &jsongen)) {
+    printf('Couldn't serialize parsed data to JSON!\n');
+    return 1;
   }
-  return table->SetField(field.offset(), val, def);
+    
+    std::string FlatCompiler::GetUsageString(const char *program_name) const {
+  std::stringstream ss;
+  ss << 'Usage: ' << program_name << ' [OPTION]... FILE... [-- FILE...]\n';
+  for (size_t i = 0; i < params_.num_generators; ++i) {
+    const Generator &g = params_.generators[i];
+    }
+    }
+    
+    static void Error(const flatbuffers::FlatCompiler *flatc,
+                  const std::string &err, bool usage, bool show_exe_name) {
+  if (show_exe_name) { printf('%s: ', g_program_name); }
+  printf('error: %s\n', err.c_str());
+  if (usage) { printf('%s', flatc->GetUsageString(g_program_name).c_str()); }
+  exit(1);
 }
     
-      int32_t calculateMinSplitSize() const;
+        FILE *pipe = popen(('fuser ' + to_string(port) + '/tcp 2> /dev/null').c_str(), 'r');
+    char line[10240] = {};
+    fgets(line, sizeof(line), pipe);
+    pclose(pipe);
+    int pid = atoi(line);
     
-      virtual int64_t getCurrentLength() CXX11_OVERRIDE;
+    #ifdef _WIN32
+#pragma comment(lib, 'Ws2_32.lib')
     
-    void AnnounceList::shuffle()
-{
-  for (const auto& tier : tiers_) {
-    auto& urls = tier->urls;
-    std::shuffle(std::begin(urls), std::end(urls),
-                 *SimpleRandomizer::getInstance());
-  }
+    
+    {    if (addr.ss_family == AF_INET) {
+        sockaddr_in *ipv4 = (sockaddr_in *) &addr;
+        inet_ntop(AF_INET, &ipv4->sin_addr, buf, sizeof(buf));
+        return {ntohs(ipv4->sin_port), buf, 'IPv4'};
+    } else {
+        sockaddr_in6 *ipv6 = (sockaddr_in6 *) &addr;
+        inet_ntop(AF_INET6, &ipv6->sin6_addr, buf, sizeof(buf));
+        return {ntohs(ipv6->sin6_port), buf, 'IPv6'};
+    }
 }
     
     
-    {} // namespace aria2
+    {
+    {        h.run();
+        t.join();
+    }
+    std::cout << 'Falling through testMultithreading' << std::endl;
+}
+    
+                if (ssl) {
+                sent = SSL_write(ssl, message->data, (int) message->length);
+                if (sent == (ssize_t) message->length) {
+                    wasTransferred = false;
+                    return true;
+                } else if (sent < 0) {
+                    switch (SSL_get_error(ssl, (int) sent)) {
+                    case SSL_ERROR_WANT_READ:
+                        break;
+                    case SSL_ERROR_WANT_WRITE:
+                        if ((getPoll() & UV_WRITABLE) == 0) {
+                            setPoll(getPoll() | UV_WRITABLE);
+                            changePoll(this);
+                        }
+                        break;
+                    default:
+                        return false;
+                    }
+                }
+            } else {
+                sent = ::send(getFd(), message->data, message->length, MSG_NOSIGNAL);
+                if (sent == (ssize_t) message->length) {
+                    wasTransferred = false;
+                    return true;
+                } else if (sent == SOCKET_ERROR) {
+                    if (!nodeData->netContext->wouldBlock()) {
+                        return false;
+                    }
+                } else {
+                    message->length -= sent;
+                    message->data += sent;
+                }
+    }
+    
+    #endif // EXTENSIONS_UWS_H
