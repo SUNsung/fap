@@ -1,280 +1,461 @@
 
         
-          // Constructs a Message from a C-string.
-  explicit Message(const char* str) : ss_(new ::std::stringstream) {
-    *ss_ << str;
-  }
-    
-    namespace internal {
-    }
-    
-    
-    {  return AssertionFailure() << pred_text << '('
-                            << e1 << ', '
-                            << e2 << ') evaluates to false, where'
-                            << '\n' << e1 << ' evaluates to ' << v1
-                            << '\n' << e2 << ' evaluates to ' << v2;
-}
-    
-      // Returns true if pathname describes an absolute path.
-  bool IsAbsolutePath() const;
-    
-      const string test_case_name_;
-  TestInfoContainer tests_;
-  InstantiationContainer instantiations_;
-    
-    
-    {# endif  // GTEST_HAS_RTTI
-}
-    
-    #include          <string.h>
-#include          <ctype.h>
-#include          'params.h'
-#include          'float2int.h'
-#include          'tesseractclass.h'
-    
-    namespace tesseract {
-void Tesseract::tess_segment_pass_n(int pass_n, WERD_RES *word) {
-  int saved_enable_assoc = 0;
-  int saved_chop_enable = 0;
-    }
-    }
-    
-    namespace tesseract {
-    }
-    
-    // Update the other members if the cost is lower.
-void DPPoint::UpdateIfBetter(inT64 cost, inT32 steps, const DPPoint* prev,
-                             inT32 n, inT32 sig_x, inT64 sig_xsq) {
-  if (cost < total_cost_) {
-    total_cost_ = cost;
-    total_steps_ = steps;
-    best_prev_ = prev;
-    n_ = n;
-    sig_x_ = sig_x;
-    sig_xsq_ = sig_xsq;
-  }
-}
-    
-      // Calculate the scale factor we'll use to get to image y-pixels
-  double midx = (bbox.left() + bbox.right()) / 2.0;
-  double ydiff = (bbox.top() - bbox.bottom()) + 2.0;
-  FCOORD mid_bot(midx, bbox.bottom()), tmid_bot;
-  FCOORD mid_high(midx, bbox.bottom() + ydiff), tmid_high;
-  DenormTransform(NULL, mid_bot, &tmid_bot);
-  DenormTransform(NULL, mid_high, &tmid_high);
-    
-    #include          <stdio.h>
-#include          <math.h>
-#include          'elst.h'
-    
-    static int set_flags(struct ifaddrs* ifaddr) {
-	int fd = socket(AF_INET, SOCK_DGRAM, 0);
-	if (fd == -1) {
-		return -1;
-	}
-	ifreq ifr;
-	memset(&ifr, 0, sizeof(ifr));
-	strncpy(ifr.ifr_name, ifaddr->ifa_name, IFNAMSIZ - 1);
-	int rc = ioctl(fd, SIOCGIFFLAGS, &ifr);
-	close(fd);
-	if (rc == -1) {
-		return -1;
-	}
-	ifaddr->ifa_flags = ifr.ifr_flags;
-	return 0;
-}
-    
-    # define OC_STATIC_ILOG0(_v) (!!(_v))
-# define OC_STATIC_ILOG1(_v) (((_v)&0x2)?2:OC_STATIC_ILOG0(_v))
-# define OC_STATIC_ILOG2(_v) \
- (((_v)&0xC)?2+OC_STATIC_ILOG1((_v)>>2):OC_STATIC_ILOG1(_v))
-# define OC_STATIC_ILOG3(_v) \
- (((_v)&0xF0)?4+OC_STATIC_ILOG2((_v)>>4):OC_STATIC_ILOG2(_v))
-# define OC_STATIC_ILOG4(_v) \
- (((_v)&0xFF00)?8+OC_STATIC_ILOG3((_v)>>8):OC_STATIC_ILOG3(_v))
-# define OC_STATIC_ILOG5(_v) \
- (((_v)&0xFFFF0000)?16+OC_STATIC_ILOG4((_v)>>16):OC_STATIC_ILOG4(_v))
-# define OC_STATIC_ILOG6(_v) \
- (((_v)&0xFFFFFFFF00000000ULL)?32+OC_STATIC_ILOG5((_v)>>32):OC_STATIC_ILOG5(_v))
-/**
- * OC_STATIC_ILOG_32 - The integer logarithm of an (unsigned, 32-bit) constant.
- * @_v: A non-negative 32-bit constant.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * This macro is suitable for evaluation at compile time, but it should not be
- *  used on values that can change at runtime, as it operates via exhaustive
- *  search.
- */
-# define OC_STATIC_ILOG_32(_v) (OC_STATIC_ILOG5((ogg_uint32_t)(_v)))
-/**
- * OC_STATIC_ILOG_64 - The integer logarithm of an (unsigned, 64-bit) constant.
- * @_v: A non-negative 64-bit constant.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * This macro is suitable for evaluation at compile time, but it should not be
- *  used on values that can change at runtime, as it operates via exhaustive
- *  search.
- */
-# define OC_STATIC_ILOG_64(_v) (OC_STATIC_ILOG6((ogg_int64_t)(_v)))
-    
-    static const static_codebook*const _floor_128x4_books[]={
-  &_huff_book_line_128x4_class0,
-  &_huff_book_line_128x4_0sub0,
-  &_huff_book_line_128x4_0sub1,
-  &_huff_book_line_128x4_0sub2,
-  &_huff_book_line_128x4_0sub3,
+        
+    { private:
+  DebugOptions debug_options_;
 };
-static const static_codebook*const _floor_256x4_books[]={
-  &_huff_book_line_256x4_class0,
-  &_huff_book_line_256x4_0sub0,
-  &_huff_book_line_256x4_0sub1,
-  &_huff_book_line_256x4_0sub2,
-  &_huff_book_line_256x4_0sub3,
-};
-static const static_codebook*const _floor_128x7_books[]={
-  &_huff_book_line_128x7_class0,
-  &_huff_book_line_128x7_class1,
-    }
     
-        {&_44p3_p3_0,&_44p3_p3_1,0},
-    {&_44p3_p4_0,&_44p3_p4_1,0},
-    {&_44p3_p5_0,&_44p3_p5_1,0},
+    #include 'tensorflow/compiler/xla/service/hlo_module.h'
+#include 'tensorflow/compiler/xla/service/hlo_pass_interface.h'
     
-    #define opus_fft_free_arch(_st, arch) \
-   ((void)(arch), opus_fft_free_arm_neon(_st))
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-      /// Cancel all asynchronous operations associated with the acceptor.
-  /**
-   * This function causes all outstanding asynchronous connect, send and receive
-   * operations to finish immediately, and the handlers for cancelled operations
-   * will be passed the boost::asio::error::operation_aborted error.
+    #ifndef TENSORFLOW_PLATFORM_PREFETCH_H_
+#define TENSORFLOW_PLATFORM_PREFETCH_H_
+    
+    #if !TENSORFLOW_USE_SYCL
+#error This file must only be included when building TensorFlow with SYCL support
+#endif
+    
+    #include 'tensorflow/core/lib/strings/strcat.h'
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the reordered input.
    *
-   * @param ec Set to indicate what error occurred, if any.
+   * @param top output Blob vector (length 1), providing the error gradient
+   *        with respect to the outputs
+   *   -# @f$ (M \times ...) @f$:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2):
+   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
+   *     required) back to the input x_1
+   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
+   *     false.
    */
-  boost::system::error_code cancel(boost::system::error_code& ec)
-  {
-    return this->get_service().cancel(this->get_implementation(), ec);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #endif  // CAFFE_CUDNN_POOLING_LAYER_HPP_
+
+    
+    #endif  // CAFFE_CUDNN_RELU_LAYER_HPP_
+
+    
+    #include <vector>
+    
+    #endif  // CAFFE_CUDNN_SOFTMAX_LAYER_HPP_
+
+    
+      virtual inline const char* type() const { return 'Eltwise'; }
+  virtual inline int MinBottomBlobs() const { return 2; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the computed outputs @f$
+   *        y = \gamma ^ {\alpha x + \beta}
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    #endif
+
+    
+    
+    {    case KindOfObject:
+    case KindOfResource:
+    case KindOfRef:
+      fb_compact_serialize_code(sb, FB_CS_NULL);
+      raise_warning(
+        'fb_compact_serialize(): unable to serialize object/resource/ref'
+      );
+      break;
   }
     
-        // Push the key/value pair on to the stack.
-    context(Key* k, Value& v)
-      : key_(k),
-        value_(&v),
-        next_(call_stack<Key, Value>::top_)
+    template<class SerDe>
+typename std::enable_if<SerDe::deserializing>::type
+ArrayTypeTable::serde(SerDe& sd) {
+  TRACE_SET_MOD(rat);
+  uint32_t size;
+  sd(size);
+  FTRACE(1, 'ArrayTypeTable size = {}\n', size);
+  decltype(m_arrTypes)(size).swap(m_arrTypes);
+  for (auto i = uint32_t{0}; i < size; ++i) {
+    m_arrTypes[i] = RepoAuthType::Array::deserialize(sd, *this);
+    assert(m_arrTypes[i] != nullptr);
+    assert(m_arrTypes[i]->id() == i);
+    assert(check(m_arrTypes[i]));
+    FTRACE(2, '  {} {}\n', i, show(*m_arrTypes[i]));
+  }
+}
+    
+    protected:
+  Sweepable();
+  enum class Init {};
+  explicit Sweepable(Init) { init(); }
+  virtual ~Sweepable() { delist(); }
+    
+    class BaseLogger {
+ public:
+  BaseLogger() {
+#if XGBOOST_LOG_WITH_TIME
+    log_stream_ << '[' << dmlc::DateLogger().HumanDate() << '] ';
+#endif
+  }
+  std::ostream& stream() { return log_stream_; }
+    }
+    
+    
     {
-      call_stack<Key, Value>::top_ = this;
-    }
+    {
+    { private:
+  std::ifstream fi;
+};
+}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_CONFIG_H_
+
     
-        BOOST_ASIO_HANDLER_COMPLETION((o));
+      fs = dmlc::Stream::Create(tmp_file.c_str(), 'r');
+  xgboost::MetaInfo inforead;
+  inforead.LoadBinary(fs);
+  EXPECT_EQ(inforead.labels, info.labels);
+  EXPECT_EQ(inforead.num_col, info.num_col);
+  EXPECT_EQ(inforead.num_row, info.num_row);
     
-        // Check if we need to run the operation again.
-    if (ec == boost::asio::error::would_block
-        || ec == boost::asio::error::try_again)
-      return false;
+      XGBOOST_DEVICE float GetGrad() const { return grad_; }
+  XGBOOST_DEVICE float GetHess() const { return hess_; }
     
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-      // Put the result back to the database
-  db_->Put(put_option_, key, it.WriteResult());
-    
-     private: // Private Functions
-  /// Calls InsertBefore or InsertAfter
-  int Insert(const std::string& key, const std::string& pivot,
-             const std::string& value, bool insert_after);
- private:
-  std::string db_name_;       // The actual database name/path
-  WriteOptions put_option_;
-  ReadOptions get_option_;
-    
-    /**
- * @brief get file modification time
- * @details [long description]
- *
- * @param fname [description]
- * @param file_mtime [description]
- *
- * @return [description]
+    /*!
+ * \brief base class of multi-class evaluation
+ * \tparam Derived the name of subclass
  */
-Status EnvLibrados::GetFileModificationTime(const std::string& fname,
-    uint64_t* file_mtime)
-{
-  LOG_DEBUG('[IN]%s\n', fname.c_str());
-  std::string fid, dir, file;
-  split(fname, &dir, &file);
-  time_t mtime;
-  uint64_t file_size;
-  Status s = Status::OK();
-  do {
-    std::string fpath = dir + '/' + file;
-    s = _GetFid(dir + '/' + file, fid);
-    }
-    }
-    
-      virtual void SeekToFirst() override {
-    ClearHeaps();
-    for (auto& child : children_) {
-      child.SeekToFirst();
-      if (child.Valid()) {
-        minHeap_.push(&child);
+template<typename Derived>
+struct EvalMClassBase : public Metric {
+  bst_float Eval(const std::vector<bst_float> &preds,
+                 const MetaInfo &info,
+                 bool distributed) const override {
+    CHECK_NE(info.labels.size(), 0U) << 'label set cannot be empty';
+    CHECK(preds.size() % info.labels.size() == 0)
+        << 'label and prediction size not match';
+    const size_t nclass = preds.size() / info.labels.size();
+    CHECK_GE(nclass, 1U)
+        << 'mlogloss and merror are only used for multi-class classification,'
+        << ' use logloss for binary classification';
+    const bst_omp_uint ndata = static_cast<bst_omp_uint>(info.labels.size());
+    double sum = 0.0, wsum = 0.0;
+    int label_error = 0;
+    #pragma omp parallel for reduction(+: sum, wsum) schedule(static)
+    for (bst_omp_uint i = 0; i < ndata; ++i) {
+      const bst_float wt = info.GetWeight(i);
+      int label =  static_cast<int>(info.labels[i]);
+      if (label >= 0 && label < static_cast<int>(nclass)) {
+        sum += Derived::EvalRow(label,
+                                dmlc::BeginPtr(preds) + i * nclass,
+                                nclass) * wt;
+        wsum += wt;
+      } else {
+        label_error = label;
       }
     }
-    direction_ = kForward;
-    current_ = CurrentForward();
+    CHECK(label_error >= 0 && label_error < static_cast<int>(nclass))
+        << 'MultiClassEvaluation: label must be in [0, num_class),'
+        << ' num_class=' << nclass << ' but found ' << label_error << ' in label';
+    }
+    }
+    
+    using namespace folly;
+    
+    /**
+ * Return the mount point for the requested huge page size.
+ * 0 = use smallest available.
+ * Returns nullptr if the requested huge page size is not available.
+ */
+const HugePageSize* getHugePageSize(size_t size = 0);
+    
+    std::shared_ptr<LogHandler> FileHandlerFactory::createHandler(
+    const Options& options) {
+  WriterFactory writerFactory;
+  return StandardLogHandlerFactory::createHandler(
+      getType(), &writerFactory, options);
+}
+    
+    
+    {void ImmediateFileWriter::flush() {}
+} // namespace folly
+
+    
+      /**
+   * Get the output file.
+   */
+  const folly::File& getFile() const {
+    return file_;
   }
     
-    #endif  // GRPC_INTERNAL_COMPILER_GO_GENERATOR_H
-
+      bool operator==(const LogConfig& other) const;
+  bool operator!=(const LogConfig& other) const;
     
-    namespace grpc_java_generator {
-struct Parameters {
-  //        //Defines the custom parameter types for methods
-  //        //eg: flatbuffers uses flatbuffers.Builder as input for the client
-  //        and output for the server grpc::string custom_method_io_type;
+    /**
+ * LogHandler represents a generic API for processing log messages.
+ *
+ * LogHandlers have an associated log level.  The LogHandler will discard any
+ * messages below its log level.  This allows specific LogHandlers to perform
+ * additional filtering of messages even if the messages were enabled at the
+ * LogCategory level.  For instance, a single LogCategory may have two
+ * LogHandlers attached, one that logs locally to a file, and one that sends
+ * messages to a remote logging service.  The local LogHandler may be
+ * configured to record all messages, but the remote LogHandler may want to
+ * only process ERROR messages and above, even when debug logging is enabled
+ * for this LogCategory.
+ *
+ * By default the LogHandler level is set to LogLevel::NONE, which means that
+ * all log messages will be processed.
+ */
+class LogHandler {
+ public:
+  virtual ~LogHandler() = default;
     }
+    
+    
+    {    // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
+    if (hud->show_demo_window)
+    {
+        ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
+        ImGui::ShowDemoWindow(&hud->show_demo_window);
     }
-    
-    // An abstract interface representing a method.
-struct Method : public CommentHolder {
-  virtual ~Method() {}
-    }
-    
-    
-    {  return 0;
 }
 
     
-      std::string GetNameSpace(const Definition &def) const;
-    
-     private:
-  void ParseFile(flatbuffers::Parser &parser, const std::string &filename,
-                 const std::string &contents,
-                 std::vector<const char *> &include_directories) const;
-    
-    // Raw helper functions used below: get any value in memory as a 64bit int, a
-// double or a string.
-// All scalars get static_cast to an int64_t, strings use strtoull, every other
-// data type returns 0.
-int64_t GetAnyValueI(reflection::BaseType type, const uint8_t *data);
-// All scalars static cast to double, strings use strtod, every other data
-// type is 0.0.
-double GetAnyValueF(reflection::BaseType type, const uint8_t *data);
-// All scalars converted using stringstream, strings as-is, and all other
-// data types provide some level of debug-pretty-printing.
-std::string GetAnyValueS(reflection::BaseType type, const uint8_t *data,
-                         const reflection::Schema *schema, int type_index);
-    
-    void AbstractBtMessage::setBtMessageDispatcher(BtMessageDispatcher* dispatcher)
+    bool Imgui_ImplA5_CreateDeviceObjects()
 {
-  dispatcher_ = dispatcher;
+    // Build texture atlas
+    ImGuiIO &io = ImGui::GetIO();
+    unsigned char *pixels;
+    int width, height;
+    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
+    }
+    
+    // Implemented features:
+//  [X] User texture binding. Use 'CIwTexture*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+            // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+    #include 'imgui.h'
+#include 'imgui_impl_sdl_gl3.h'
+#include <stdio.h>
+#include <GL/gl3w.h>    // This example is using gl3w to access OpenGL functions (because it is small). You may use glew/glad/glLoadGen/etc. whatever already works for you.
+#include <SDL.h>
+    
+        // Create the vertex shader
+    {
+        static const char* vertexShader =
+            'cbuffer vertexBuffer : register(b0) \
+            {\
+            float4x4 ProjectionMatrix; \
+            };\
+            struct VS_INPUT\
+            {\
+            float2 pos : POSITION;\
+            float4 col : COLOR0;\
+            float2 uv  : TEXCOORD0;\
+            };\
+            \
+            struct PS_INPUT\
+            {\
+            float4 pos : SV_POSITION;\
+            float4 col : COLOR0;\
+            float2 uv  : TEXCOORD0;\
+            };\
+            \
+            PS_INPUT main(VS_INPUT input)\
+            {\
+            PS_INPUT output;\
+            output.pos = mul( ProjectionMatrix, float4(input.pos.xy, 0.f, 1.f));\
+            output.col = input.col;\
+            output.uv  = input.uv;\
+            return output;\
+            }';
+    }
+    
+    #include 'FuzzerExtFunctions.def'
+    
+    template <typename T>
+static T *GetFnPtr(T *Fun, T *FunDef, const char *FnName, bool WarnIfMissing) {
+  if (Fun == FunDef) {
+    if (WarnIfMissing)
+      Printf('WARNING: Failed to find function \'%s\'.\n', FnName);
+    return nullptr;
+  }
+  return Fun;
 }
     
-      void setBtMessageFactory(BtMessageFactory* factory);
+    #include 'FuzzerExtFunctions.h'
+#include 'FuzzerIO.h'
+#include <cstdarg>
+#include <cstdio>
+#include <dirent.h>
+#include <fstream>
+#include <iterator>
+#include <libgen.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
     
-      virtual bool getChangeOption() const CXX11_OVERRIDE;
+    int CloseFile(int Fd) {
+  return _close(Fd);
+}
     
-      void setPeerStorage(const std::shared_ptr<PeerStorage>& peerStorage);
+    
+    {  std::ofstream OF(CFPath, std::ofstream::out | std::ofstream::app);
+  for (size_t i = M.FirstNotProcessedFile; i < M.Files.size(); i++) {
+    auto U = FileToVector(M.Files[i].Name);
+    if (U.size() > MaxInputLen) {
+      U.resize(MaxInputLen);
+      U.shrink_to_fit();
+    }
+    std::ostringstream StartedLine;
+    // Write the pre-run marker.
+    OF << 'STARTED ' << std::dec << i << ' ' << U.size() << '\n';
+    OF.flush();  // Flush is important since ExecuteCommand may crash.
+    // Run.
+    TPC.ResetMaps();
+    ExecuteCallback(U.data(), U.size());
+    // Collect coverage.
+    std::set<size_t> Features;
+    TPC.CollectFeatures([&](size_t Feature) -> bool {
+      Features.insert(Feature);
+      return true;
+    });
+    // Show stats.
+    TotalNumberOfRuns++;
+    if (!(TotalNumberOfRuns & (TotalNumberOfRuns - 1)))
+      PrintStats('pulse ');
+    // Write the post-run marker and the coverage.
+    OF << 'DONE ' << i;
+    for (size_t F : Features)
+      OF << ' ' << std::hex << F;
+    OF << '\n';
+  }
+}
+    
+    typedef struct sha1nfo {
+	uint32_t buffer[BLOCK_LENGTH/4];
+	uint32_t state[HASH_LENGTH/4];
+	uint32_t byteCount;
+	uint8_t bufferOffset;
+	uint8_t keyBuffer[BLOCK_LENGTH];
+	uint8_t innerHash[HASH_LENGTH];
+} sha1nfo;
+    
+    #if LLVM_FUZZER_DEFINES_SANITIZER_WEAK_HOOOKS
+void __sanitizer_weak_hook_memcmp(void *caller_pc, const void *s1,
+                                  const void *s2, size_t n, int result) {
+  fuzzer::TPC.AddValueForMemcmp(caller_pc, s1, s2, n);
+  if (!RecordingMemcmp) return;
+  if (result == 0) return;  // No reason to mutate.
+  if (n <= 1) return;  // Not interesting.
+  TS->TraceMemcmpCallback(n, reinterpret_cast<const uint8_t *>(s1),
+                          reinterpret_cast<const uint8_t *>(s2));
+}
+    
+    
+    {} // namespace aria2
+
+    
+    protected:
+  void createFile(int addFlags = 0);
+    
+    
+    {} // namespace aria2
+
+    
+    void AdaptiveFileAllocationIterator::allocateChunk()
+{
+  if (!allocator_) {
+#ifdef HAVE_FALLOCATE
+    try {
+      A2_LOG_DEBUG('Testing file system supports fallocate.');
+      if (offset_ < totalLength_) {
+        int64_t len =
+            std::min(totalLength_ - offset_, static_cast<int64_t>(4_k));
+        stream_->allocate(offset_, len, false);
+        offset_ += len;
+      }
+      A2_LOG_DEBUG('File system supports fallocate.');
+      allocator_ = make_unique<FallocFileAllocationIterator>(stream_, offset_,
+                                                             totalLength_);
+    }
+    catch (RecoverableException& e) {
+      A2_LOG_DEBUG('File system does not support fallocate.');
+      auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
+                                                              totalLength_);
+      salloc->init();
+      allocator_ = std::move(salloc);
+    }
+#else  // !HAVE_FALLOCATE
+    auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
+                                                            totalLength_);
+    salloc->init();
+    allocator_ = std::move(salloc);
+#endif // !HAVE_FALLOCATE
+    allocator_->allocateChunk();
+  }
+  else {
+    allocator_->allocateChunk();
+  }
+}
+    
+    
+    {} // namespace aria2
+    
+    namespace aria2 {
+    }
+    
+    AuthConfig::AuthConfig() {}
