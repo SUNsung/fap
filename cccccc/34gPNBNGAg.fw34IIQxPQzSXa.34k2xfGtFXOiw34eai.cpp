@@ -1,237 +1,137 @@
 
         
-        struct leveldb_comparator_t : public Comparator {
-  void* state_;
-  void (*destructor_)(void*);
-  int (*compare_)(
-      void*,
-      const char* a, size_t alen,
-      const char* b, size_t blen);
-  const char* (*name_)(void*);
+        bool Event::SendReply(const base::string16& json) {
+  if (message_ == nullptr || sender_ == nullptr)
+    return false;
     }
     
-      ReadOptions ro;
-  ro.fill_cache = false;
-  Iterator* iter = table->NewIterator(ro);
-  std::string r;
-  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-    r.clear();
-    ParsedInternalKey key;
-    if (!ParseInternalKey(iter->key(), &key)) {
-      r = 'badkey '';
-      AppendEscapedStringTo(&r, iter->key());
-      r += '' => '';
-      AppendEscapedStringTo(&r, iter->value());
-      r += ''\n';
-      dst->Append(r);
-    } else {
-      r = ''';
-      AppendEscapedStringTo(&r, key.user_key);
-      r += '' @ ';
-      AppendNumberTo(&r, key.sequence);
-      r += ' : ';
-      if (key.type == kTypeDeletion) {
-        r += 'del';
-      } else if (key.type == kTypeValue) {
-        r += 'val';
-      } else {
-        AppendNumberTo(&r, key.type);
-      }
-      r += ' => '';
-      AppendEscapedStringTo(&r, iter->value());
-      r += ''\n';
-      dst->Append(r);
+    class AtomQuotaPermissionContext : public content::QuotaPermissionContext {
+ public:
+  typedef content::QuotaPermissionContext::QuotaPermissionResponse response;
     }
-  }
-  s = iter->status();
-  if (!s.ok()) {
-    dst->Append('iterator error: ' + s.ToString() + '\n');
-  }
     
-    #include 'db/version_edit.h'
-#include 'util/testharness.h'
-    
-      ASSERT_TRUE(! Overlaps('a', 'b'));
-  ASSERT_TRUE(! Overlaps('z1', 'z2'));
-  ASSERT_TRUE(Overlaps('a', 'p'));
-  ASSERT_TRUE(Overlaps('a', 'q'));
-  ASSERT_TRUE(Overlaps('a', 'z'));
-  ASSERT_TRUE(Overlaps('p', 'p1'));
-  ASSERT_TRUE(Overlaps('p', 'q'));
-  ASSERT_TRUE(Overlaps('p', 'z'));
-  ASSERT_TRUE(Overlaps('p1', 'p2'));
-  ASSERT_TRUE(Overlaps('p1', 'z'));
-  ASSERT_TRUE(Overlaps('q', 'q'));
-  ASSERT_TRUE(Overlaps('q', 'q1'));
-    
-    
-    {  input.remove_prefix(kHeader);
-  Slice key, value;
-  int found = 0;
-  while (!input.empty()) {
-    found++;
-    char tag = input[0];
-    input.remove_prefix(1);
-    switch (tag) {
-      case kTypeValue:
-        if (GetLengthPrefixedSlice(&input, &key) &&
-            GetLengthPrefixedSlice(&input, &value)) {
-          handler->Put(key, value);
-        } else {
-          return Status::Corruption('bad WriteBatch Put');
-        }
-        break;
-      case kTypeDeletion:
-        if (GetLengthPrefixedSlice(&input, &key)) {
-          handler->Delete(key);
-        } else {
-          return Status::Corruption('bad WriteBatch Delete');
-        }
-        break;
-      default:
-        return Status::Corruption('unknown WriteBatch tag');
+    class HttpProtocolHandler : public net::URLRequestJobFactory::ProtocolHandler {
+ public:
+  explicit HttpProtocolHandler(const std::string&);
+  virtual ~HttpProtocolHandler();
     }
-  }
-  if (found != WriteBatchInternal::Count(this)) {
-    return Status::Corruption('WriteBatch has wrong count');
-  } else {
-    return Status::OK();
-  }
-}
     
-      void PrintHeader() {
-    const int kKeySize = 16;
-    PrintEnvironment();
-    fprintf(stdout, 'Keys:       %d bytes each\n', kKeySize);
-    fprintf(stdout, 'Values:     %d bytes each\n', FLAGS_value_size);
-    fprintf(stdout, 'Entries:    %d\n', num_);
-    fprintf(stdout, 'RawSize:    %.1f MB (estimated)\n',
-            ((static_cast<int64_t>(kKeySize + FLAGS_value_size) * num_)
-             / 1048576.0));
-    PrintWarnings();
-    fprintf(stdout, '------------------------------------------------\n');
-  }
+      // URLRequestJob:
+  void GetResponseInfo(net::HttpResponseInfo* info) override;
     
-      // If *start < limit, changes *start to a short string in [start,limit).
-  // Simple comparator implementations may return with *start unchanged,
-  // i.e., an implementation of this method that does nothing is correct.
-  virtual void FindShortestSeparator(
-      std::string* start,
-      const Slice& limit) const = 0;
+    #ifndef ATOM_BROWSER_RENDER_PROCESS_PREFERENCES_H_
+#define ATOM_BROWSER_RENDER_PROCESS_PREFERENCES_H_
     
-    namespace leveldb {
+    
+    {}  // namespace accelerator_util
+    
+    namespace atom {
+    }
+    
+    #endif  // ATOM_BROWSER_UI_TRAY_ICON_GTK_H_
+
+    
+    #include 'boost/scoped_ptr.hpp'
+#include 'glog/logging.h'
+#include 'google/protobuf/text_format.h'
+#include 'stdint.h'
+    
+    namespace caffe {
     }
     
       /**
-   * @brief Applies the same transformation defined in the data layer's
-   * transform_param block to all the num images in a input_blob.
+   * @brief Computes the Contrastive error gradient w.r.t. the inputs.
    *
-   * @param input_blob
-   *    A Blob containing the data to be transformed. It applies the same
-   *    transformation to all the num images in the blob.
-   * @param transformed_blob
-   *    This is destination blob, it will contain as many images as the
-   *    input blob. It can be part of top blob's data.
+   * Computes the gradients with respect to the two input vectors (bottom[0] and
+   * bottom[1]), but not the similarity label (bottom[2]).
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+   *      This Blob's diff will simply contain the loss_weight* @f$ \lambda @f$,
+   *      as @f$ \lambda @f$ is the coefficient of this layer's output
+   *      @f$\ell_i@f$ in the overall Net loss
+   *      @f$ E = \lambda_i \ell_i + \mbox{other loss terms}@f$; hence
+   *      @f$ \frac{\partial E}{\partial \ell_i} = \lambda_i @f$.
+   *      (*Assuming that this top Blob is not used as a bottom (input) by any
+   *      other layer of the Net.)
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$a@f$; Backward fills their diff with
+   *      gradients if propagate_down[0]
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$b@f$; Backward fills their diff with gradients if
+   *      propagate_down[1]
    */
-  void Transform(Blob<Dtype>* input_blob, Blob<Dtype>* transformed_blob);
-    
-      virtual inline const char* type() const { return 'Concat'; }
-  virtual inline int MinBottomBlobs() const { return 1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    
-      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
-  cudnnTensorDescriptor_t    bias_desc_;
-  cudnnFilterDescriptor_t      filter_desc_;
-  vector<cudnnConvolutionDescriptor_t> conv_descs_;
-  int bottom_offset_, top_offset_, bias_offset_;
-    
-    #endif  // CAFFE_CUDNN_LCN_LAYER_HPP_
-
-    
-    #endif  // CAFFE_CUDNN_POOLING_LAYER_HPP_
-
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
   virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    inline float YUVToG(float y, float u, float v) {
-  return y - 0.344136f * (u - 128.0f) - 0.714136f * (v - 128.0f);
-}
-    
-    // This function will create a Huffman tree.
-//
-// The (data,length) contains the population counts.
-// The tree_limit is the maximum bit depth of the Huffman codes.
-//
-// The depth contains the tree, i.e., how many bits are used for
-// the symbol.
-//
-// The actual Huffman tree is constructed in the tree[] array, which has to
-// be at least 2 * length + 1 long.
-//
-// See http://en.wikipedia.org/wiki/Huffman_coding
-void CreateHuffmanTree(const uint32_t *data,
-                       const size_t length,
-                       const int tree_limit,
-                       HuffmanTree* tree,
-                       uint8_t *depth);
-    
-    inline int Log2FloorNonZero(uint32_t n) {
-#ifdef __GNUC__
-  return 31 ^ __builtin_clz(n);
-#else
-  unsigned int result = 0;
-  while (n >>= 1) result++;
-  return result;
-#endif
-}
-    
-    
-    {  tmp0 = in[7 * stride];
-  tmp1 = kIDCTMatrix[ 7] * tmp0;
-  tmp2 = kIDCTMatrix[15] * tmp0;
-  tmp3 = kIDCTMatrix[23] * tmp0;
-  tmp4 = kIDCTMatrix[31] * tmp0;
-  out[0] += tmp1;
-  out[1] += tmp2;
-  out[2] += tmp3;
-  out[3] += tmp4;
-  out[4] -= tmp4;
-  out[5] -= tmp3;
-  out[6] -= tmp2;
-  out[7] -= tmp1;
-}
-    
-    #include 'guetzli/jpeg_data.h'
-    
-    namespace grpc_cpp_generator {
+    #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of ConvolutionLayer.
+ *        Fallback to ConvolutionLayer for CPU mode.
+ *
+ * cuDNN accelerates convolution through forward kernels for filtering and bias
+ * plus backward kernels for the gradient w.r.t. the filters, biases, and
+ * inputs. Caffe + cuDNN further speeds up the computation through forward
+ * parallelism across groups and backward parallelism across gradients.
+ *
+ * The CUDNN engine does not have memory overhead for matrix buffers. For many
+ * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
+ * but for fully-convolutional models and large inputs the CAFFE engine can be
+ * faster as long as it fits in memory.
+*/
+template <typename Dtype>
+class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
+ public:
+  explicit CuDNNConvolutionLayer(const LayerParameter& param)
+      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNConvolutionLayer();
     }
     
+      bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnLRNDescriptor_t norm_desc_;
+  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
     
-    {  //Package name for the service
-  grpc::string package_name;
-};
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-      virtual grpc::Status SayManyHellos(
-      grpc::ServerContext *context,
-      const flatbuffers::grpc::Message<ManyHellosRequest> *request_msg,
-      grpc::ServerWriter<flatbuffers::grpc::Message<HelloReply>> *writer)
-      override {
-    // The streaming usage below is simply a combination of standard gRPC
-    // streaming with the FlatBuffers usage shown above.
-    const ManyHellosRequest *request = request_msg->GetRoot();
-    const std::string &name = request->name()->str();
-    int num_greetings = request->num_greetings();
-    }
+    #include <vector>
     
-    // A common interface for objects having comments in the source.
-// Return formatted comments to be inserted in generated code.
-struct CommentHolder {
-  virtual ~CommentHolder() {}
-  virtual grpc::string GetLeadingComments(const grpc::string prefix) const = 0;
-  virtual grpc::string GetTrailingComments(const grpc::string prefix) const = 0;
-  virtual std::vector<grpc::string> GetAllComments() const = 0;
-};
+    #include 'caffe/layers/softmax_layer.hpp'
+    
+    // Print histogram of operation timings
+static bool FLAGS_histogram = false;
+    
+    #ifndef STORAGE_LEVELDB_HELPERS_MEMENV_MEMENV_H_
+#define STORAGE_LEVELDB_HELPERS_MEMENV_MEMENV_H_
+    
+      // Add string delta to buffer_ followed by value
+  buffer_.append(key.data() + shared, non_shared);
+  buffer_.append(value.data(), value.size());
+    
+    #ifndef COMPLEXITY_H_
+#define COMPLEXITY_H_
+    
+    
+    {void SleepForSeconds(double seconds) {
+  SleepForMicroseconds(static_cast<int>(seconds * kNumMicrosPerSecond));
+}
+#endif  // BENCHMARK_OS_WINDOWS
+}  // end namespace benchmark
+
+    
+      // Accumulators.
+  std::vector<double> real_accumulated_time_stat;
+  std::vector<double> cpu_accumulated_time_stat;
+  std::vector<double> bytes_per_second_stat;
+  std::vector<double> items_per_second_stat;
