@@ -1,170 +1,130 @@
-        # Checks if the user confirmation happens before the token becomes invalid
-        # Examples:
-        #
-        #   # confirm_within = 3.days and confirmation_sent_at = 2.days.ago
-        #   confirmation_period_expired?  # returns false
-        #
-        #   # confirm_within = 3.days and confirmation_sent_at = 4.days.ago
-        #   confirmation_period_expired?  # returns true
-        #
-        #   # confirm_within = nil
-        #   confirmation_period_expired?  # will always return false
-        #
-        def confirmation_period_expired?
-          self.class.confirm_within && self.confirmation_sent_at && (Time.now.utc > self.confirmation_sent_at.utc + self.class.confirm_within)
-        end
-    
-          user.confirmation_sent_at = 4.days.ago
-      assert user.active_for_authentication?
-    
-    platforms :ruby do
-  gem 'sqlite3'
-end
-    
-        if successfully_sent?(resource)
-      respond_with({}, location: after_sending_unlock_instructions_path_for(resource))
-    else
-      respond_with(resource)
-    end
+
+        
+            groups
   end
-    
-        def email_changed(record, opts={})
-      devise_mail(record, :email_changed, opts)
-    end
-    
-      # Register available devise modules. For the standard modules that Devise provides, this method is
-  # called from lib/devise/modules.rb. Third-party modules need to be added explicitly using this method.
-  #
-  # Note that adding a module using this method does not cause it to be used in the authentication
-  # process. That requires that the module be listed in the arguments passed to the 'devise' method
-  # in the model class definition.
-  #
-  # == Options:
-  #
-  #   +model+      - String representing the load path to a custom *model* for this module (to autoload.)
-  #   +controller+ - Symbol representing the name of an existing or custom *controller* for this module.
-  #   +route+      - Symbol representing the named *route* helper for this module.
-  #   +strategy+   - Symbol representing if this module got a custom *strategy*.
-  #   +insert_at+  - Integer representing the order in which this module's model will be included
-  #
-  # All values, except :model, accept also a boolean and will have the same name as the given module
-  # name.
-  #
-  # == Examples:
-  #
-  #   Devise.add_module(:party_module)
-  #   Devise.add_module(:party_module, strategy: true, controller: :sessions)
-  #   Devise.add_module(:party_module, model: 'party_module/model')
-  #   Devise.add_module(:party_module, insert_at: 0)
-  #
-  def self.add_module(module_name, options = {})
-    options.assert_valid_keys(:strategy, :model, :controller, :route, :no_input, :insert_at)
+end
+
     
     module Devise
-  module Controllers
-    # Create url helpers to be used with resource/scope configuration. Acts as
-    # proxies to the generated routes created by devise.
-    # Resource param can be a string or symbol, a class, or an instance object.
-    # Example using a :user resource:
+  module Models
+    # Confirmable is responsible to verify if an account is already confirmed to
+    # sign in, and to send emails with confirmation instructions.
+    # Confirmation instructions are sent to the user email after creating a
+    # record and when manually requested by a new confirmation instruction request.
     #
-    #   new_session_path(:user)      => new_user_session_path
-    #   session_path(:user)          => user_session_path
-    #   destroy_session_path(:user)  => destroy_user_session_path
+    # Confirmable tracks the following columns:
     #
-    #   new_password_path(:user)     => new_user_password_path
-    #   password_path(:user)         => user_password_path
-    #   edit_password_path(:user)    => edit_user_password_path
+    # * confirmation_token   - A unique random token
+    # * confirmed_at         - A timestamp when the user clicked the confirmation link
+    # * confirmation_sent_at - A timestamp when the confirmation_token was generated (not sent)
+    # * unconfirmed_email    - An email address copied from the email attr. After confirmation
+    #                          this value is copied to the email attr then cleared
     #
-    #   new_confirmation_path(:user) => new_user_confirmation_path
-    #   confirmation_path(:user)     => user_confirmation_path
+    # == Options
     #
-    # Those helpers are included by default to ActionController::Base.
+    # Confirmable adds the following options to +devise+:
     #
-    # In case you want to add such helpers to another class, you can do
-    # that as long as this new class includes both url_helpers and
-    # mounted_helpers. Example:
+    #   * +allow_unconfirmed_access_for+: the time you want to allow the user to access their account
+    #     before confirming it. After this period, the user access is denied. You can
+    #     use this to let your user access some features of your application without
+    #     confirming the account, but blocking it after a certain period (ie 7 days).
+    #     By default allow_unconfirmed_access_for is zero, it means users always have to confirm to sign in.
+    #   * +reconfirmable+: requires any email changes to be confirmed (exactly the same way as
+    #     initial account confirmation) to be applied. Requires additional unconfirmed_email
+    #     db field to be set up (t.reconfirmable in migrations). Until confirmed, new email is
+    #     stored in unconfirmed email column, and copied to email column on successful
+    #     confirmation. Also, when used in conjunction with `send_email_changed_notification`,
+    #     the notification is sent to the original email when the change is requested,
+    #     not when the unconfirmed email is confirmed.
+    #   * +confirm_within+: the time before a sent confirmation token becomes invalid.
+    #     You can use this to force the user to confirm within a set period of time.
+    #     Confirmable will not generate a new token if a repeat confirmation is requested
+    #     during this time frame, unless the user's email changed too.
     #
-    #     include Rails.application.routes.url_helpers
-    #     include Rails.application.routes.mounted_helpers
+    # == Examples
     #
-    module UrlHelpers
-      def self.remove_helpers!
-        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
-          remove_method method
-        end
-      end
+    #   User.find(1).confirm       # returns true unless it's already confirmed
+    #   User.find(1).confirmed?    # true/false
+    #   User.find(1).send_confirmation_instructions # manually send instructions
+    #
+    module Confirmable
+      extend ActiveSupport::Concern
     
-        def relative_path_to(url)
-      url = self.class.parse(url)
-      return unless origin == url.origin
-    
-            doc
-      end
+        if resource.errors.empty?
+      set_flash_message!(:notice, :confirmed)
+      respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
+    else
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
     end
   end
-end
-
     
-        # Writes the attachment-specific attribute on the instance. For example,
-    # instance_write(:file_name, 'me.jpg') will write 'me.jpg' to the instance's
-    # 'avatar_file_name' field (assuming the attachment is called avatar).
-    def instance_write(attr, value)
-      setter = :'#{@name_string}_#{attr}='
-      if instance.respond_to?(setter)
-        instance.send(setter, value)
-      end
+        # Check if proper Lockable module methods are present & unlock strategy
+    # allows to unlock resource on password reset
+    def unlockable?(resource)
+      resource.respond_to?(:unlock_access!) &&
+        resource.respond_to?(:unlock_strategy_enabled?) &&
+        resource.unlock_strategy_enabled?(:email)
     end
     
-        def definitions_for(klass)
-      parent_classes = klass.ancestors.reverse
-      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
-        inherited_definitions.deep_merge! @attachments[ancestor]
-      end
+        def reset_password_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :reset_password_instructions, opts)
     end
-  end
-end
-
     
-        # scale to the requested geometry and preserve the aspect ratio
-    def scale_to(new_geometry)
-      scale = [new_geometry.width.to_f / self.width.to_f , new_geometry.height.to_f / self.height.to_f].min
-      Paperclip::Geometry.new((self.width * scale).round, (self.height * scale).round)
-    end
-  end
-end
-
-    
-            if attachment.nil?
-          attachment = Attachment.new(name, self, options)
-          instance_variable_set(ivar, attachment)
+          def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
         end
     
-      def full_plugin_name
-    @full_plugin_name ||= 'logstash-#{type}-#{name.downcase}'
-  end
-end
-
+        def recall_app(app)
+      controller, action = app.split('#')
+      controller_name  = ActiveSupport::Inflector.camelize(controller)
+      controller_klass = ActiveSupport::Inflector.constantize('#{controller_name}Controller')
+      controller_klass.action(action)
+    end
     
-      protected
-  def extract_fields(filter_string)
-    (filter_string.empty? ? [] : filter_string.split(',').map { |s| s.strip.to_sym })
-  end
+        def type=(value)
+      @type = value.try :strip
+    end
     
-              def plugins
-            @plugins ||= find_plugins_gem_specs.map do |spec|
-              { :name => spec.name, :version => spec.version.to_s }
-            end.sort_by do |spec|
-              spec[:name]
+        self.base_url = 'http://localhost/'
+    
+              # Underscore methods
+          if name.start_with?('Underscore')
+            node.at_css('~ ul').css('li').each do |li|
+              name = [type.downcase, li.at_css('a').content.split.first].join('.')
+              id = name.parameterize
+              li['id'] = id
+              entries << [name, id, type]
             end
+            next
           end
     
-      public
-  def clone
-    return self.class.new(params)
-  end
-end; end # class LogStash::Codecs::Base
-
+            css('.function').each do |node|
+          name = '#{node.at_css('.descname').content}()'
+          id = node.at_css('dt[id]')['id']
+          entries << [name, id]
+        end
     
-        def _1
-      elements[1]
+    require 'rubygems'  # install rubygems
+require 'hpricot'   # gem install hpricot
+require 'uri'
+require 'timeout'
+    
+          when :login_fail
+        if(s[:user] and s[:pass])
+          report_auth_info(s.merge({:active => false}))
+          print_status('Failed FTP Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]}')
+    
+    fileOutJar 	= clsFile.new_with_sig('Ljava.lang.String;', 'output.jar')
+filesIn		= Array.new
+    
+    end
+    
+        SPREE_GEMS.each do |gem_name|
+      Dir.chdir(gem_name) do
+        sh 'gem build spree_#{gem_name}.gemspec'
+        mv 'spree_#{gem_name}-#{version}.gem', pkgdir
+      end
     end
