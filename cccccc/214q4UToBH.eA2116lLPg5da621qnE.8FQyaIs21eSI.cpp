@@ -1,362 +1,226 @@
 
         
-        
-    {  if (word->word->flag(W_DONT_CHOP)) {
-    saved_enable_assoc = wordrec_enable_assoc;
-    saved_chop_enable = chop_enable;
-    wordrec_enable_assoc.set_value(0);
-    chop_enable.set_value(0);
+        #endif // defined(BOOST_ASIO_HAS_STD_ARRAY) || defined(GENERATING_DOCUMENTATION)
+    
+      descriptor_write_op(int descriptor,
+      const ConstBufferSequence& buffers, Handler& handler)
+    : descriptor_write_op_base<ConstBufferSequence>(
+        descriptor, buffers, &descriptor_write_op::do_complete),
+      handler_(BOOST_ASIO_MOVE_CAST(Handler)(handler))
+  {
   }
-  if (pass_n == 1)
-    set_pass1();
-  else
-    set_pass2();
-  recog_word(word);
-  if (word->best_choice == NULL)
-    word->SetupFake(*word->uch_set);
-  if (word->word->flag(W_DONT_CHOP)) {
-    wordrec_enable_assoc.set_value(saved_enable_assoc);
-    chop_enable.set_value(saved_chop_enable);
+    
+      ~winrt_buffer_impl()
+  {
   }
-}
     
-      // Backwards compatible fit returning a gradient and constant.
-  // Deprecated. Prefer Fit(ICOORD*, ICOORD*) where possible, but use this
-  // function in preference to the LMS class.
-  double Fit(float* m, float* c);
-    
-    // Update the other members if the cost is lower.
-void DPPoint::UpdateIfBetter(inT64 cost, inT32 steps, const DPPoint* prev,
-                             inT32 n, inT32 sig_x, inT64 sig_xsq) {
-  if (cost < total_cost_) {
-    total_cost_ = cost;
-    total_steps_ = steps;
-    best_prev_ = prev;
-    n_ = n;
-    sig_x_ = sig_x;
-    sig_xsq_ = sig_xsq;
-  }
-}
-    
-    
-    {  auto const ret = make_map_array(
-    s_sec, (int)tp.tv_sec,
-    s_usec, (int)tp.tv_usec,
-    s_minuteswest, (int)(-offset->offset / 60),
-    s_dsttime, (int)offset->is_dst
-  );
-  timelib_time_offset_dtor(offset);
-  return ret;
-}
-    
-    namespace {
-///////////////////////////////////////////////////////////////////////////////
+      template <typename T>
+  static std::shared_ptr<T> get_shared_ptr_from_counted_base(
+      counted_base* base,
+      bool inc = true) {
+    if (!base) {
+      return nullptr;
     }
+    std::shared_ptr<const void> newp;
+    if (inc) {
+      inc_shared_count(base, 1);
+    }
+    newp.*fieldPtr(access_shared_ptr_ptr{}) =
+        get_shared_ptr<const void>(base); // _M_ptr
+    (newp.*fieldPtr(access_refcount{})).*fieldPtr(access_base{}) = base;
+    // reinterpret_pointer_cast<T>
+    auto res = reinterpret_cast<std::shared_ptr<T>*>(&newp);
+    return std::move(*res);
+  }
     
     
     {
-    {}}
+    {} // namespace detail
+} // namespace folly
 
     
-    SSATmp* implInstanceOfD(IRGS& env, SSATmp* src, const StringData* className);
+    TEST(MemoryIdler, futexWaitAwokenLate) {
+  StrictMock<Futex<MockAtom>> fut;
+  auto clock = MockClock::setup();
+  auto begin = MockClock::time_point(std::chrono::seconds(100));
+  auto idleTimeout = MemoryIdler::defaultIdleTimeout.load();
+    }
     
-      if (!variantToGMPData('gmp_pow', gmpData, data)) {
-    return false;
-  }
+    #include <bitset>
     
-    // MaxSizeIndex corresponds to HashTableCommon::MaxSize - 1 (which is the same
-// as MixedArray::MaxSize - 1) because HashTableCommon::MaxSize - 1 exactly fits
-// into a MM size class, PackedArray::capacity is a function of MM size class,
-// and we can't allow a capacity > MaxSize since most operations only check
-// that size <= capacity stays true (and don't explicitly check size <= MaxSize)
-static_assert(
-  kSizeIndex2PackedArrayCapacity[PackedArray::MaxSizeIndex]
-    == array::HashTableCommon::MaxSize - 1,
-  'MaxSizeIndex must be the largest possible size class index for PackedArrays'
-);
+      // This load is safe because needles.size() >= 16
+  auto arr2 = _mm_loadu_si128(reinterpret_cast<const __m128i*>(needles.data()));
+  auto b =
+      _mm_cmpestri(arr2, 16, arr1, int(haystack.size() - blockStartIdx), 0);
     
-    String PageletServer::TaskResult(const Resource& task, Array &headers, int &code,
-                                 int64_t timeout_ms) {
-  auto ptask = cast<PageletTask>(task);
-  return ptask->getJob()->getResults(headers, code, timeout_ms);
-}
-    
-    
-    {private:
-  int m_timeout;
+    template <IdentifyCallable::Kind, typename Fn>
+struct ArgumentTypesByKind {};
+template <typename Fn>
+struct ArgumentTypesByKind<IdentifyCallable::Kind::MemberFunction, Fn> {
+  using type = typename boost::mpl::template pop_front<
+    typename boost::function_types::template parameter_types<
+      decltype(&Fn::operator())
+    >::type
+  >::type;
+};
+template <typename Fn>
+struct ArgumentTypesByKind<IdentifyCallable::Kind::Function, Fn> {
+  using type = typename boost::function_types::template parameter_types<Fn>;
 };
     
-    /*
- * Determine the next NUMA node according to state maintained in `curr_node`.
- */
-int next_numa_node(std::atomic_int& curr_node);
-/*
- * The number of numa nodes in the system
- */
-inline int num_numa_nodes() {
-  return use_numa ? numa_num_nodes : 1;
+    namespace detail {
+std::string toPseudoJson(const folly::dynamic& d) {
+  std::stringstream ss;
+  ss << d;
+  return ss.str();
 }
-/*
- * Enable numa interleaving for the specified address range
- */
-void numa_interleave(void* start, size_t size);
-/*
- * Allocate the specified address range on the given node
- */
-void numa_bind_to(void* start, size_t size, int node);
-/*
- * Return true if node is part of the allowed set of numa nodes
- */
-inline bool numa_node_allowed(int node) {
-  if (numa_node_set == 0) return true;
-  return numa_node_set & (1u << node);
+} // namespace detail
+    
+       private:
+    friend struct Pop;
+    
+    // Errors & exceptions are best tested separately, but squeezing all the
+// features into one test is good for exercising nesting.
+TEST(TestDynamicParser, AllParserFeaturesSuccess) {
+  // Input
+  auto d = dynamic::array(
+    dynamic::object('a', 7)('b', 9)('c', 13.3),
+    5,
+    dynamic::array('x', 'y', 1, 'z'),
+    dynamic::object('int', 7)('false', 0)('true', true)('str', 's'),
+    dynamic::object('bools', dynamic::array(false, true, 0, 1))
+  );
+  // Outputs, in the same order as the inputs.
+  std::map<std::string, double> doubles;
+  folly::Optional<int64_t> outer_int;
+  std::vector<std::string> strings;
+  folly::Optional<int64_t> inner_int;
+  folly::Optional<bool> inner_false;
+  folly::Optional<bool> inner_true;
+  folly::Optional<std::string> inner_str;
+  std::vector<bool> bools;
+  // Parse and verify some invariants
+  DynamicParser p(DynamicParser::OnError::RECORD, &d);
+  EXPECT_EQ(d, p.value());
+  p.required(0, [&](const dynamic& v) {
+    EXPECT_EQ(0, p.key().getInt());
+    EXPECT_EQ(v, p.value());
+    p.objectItems([&](const std::string& k, double v) {
+      EXPECT_EQ(k, p.key().getString());
+      EXPECT_EQ(v, p.value().asDouble());
+      doubles.emplace(k, v);
+    });
+  });
+  p.required(1, [&](int64_t k, int64_t v) {
+    EXPECT_EQ(1, k);
+    EXPECT_EQ(1, p.key().getInt());
+    EXPECT_EQ(5, p.value().getInt());
+    outer_int = v;
+  });
+  p.optional(2, [&](const dynamic& v) {
+    EXPECT_EQ(2, p.key().getInt());
+    EXPECT_EQ(v, p.value());
+    p.arrayItems([&](int64_t k, const std::string& v) {
+      EXPECT_EQ(strings.size(), k);
+      EXPECT_EQ(k, p.key().getInt());
+      EXPECT_EQ(v, p.value().asString());
+      strings.emplace_back(v);
+    });
+  });
+  p.required(3, [&](const dynamic& v) {
+    EXPECT_EQ(3, p.key().getInt());
+    EXPECT_EQ(v, p.value());
+    p.optional('int', [&](const std::string& k, int64_t v) {
+      EXPECT_EQ('int', p.key().getString());
+      EXPECT_EQ(k, p.key().getString());
+      EXPECT_EQ(v, p.value().getInt());
+      inner_int = v;
+    });
+    p.required('false', [&](const std::string& k, bool v) {
+      EXPECT_EQ('false', p.key().getString());
+      EXPECT_EQ(k, p.key().getString());
+      EXPECT_EQ(v, p.value().asBool());
+      inner_false = v;
+    });
+    p.required('true', [&](const std::string& k, bool v) {
+      EXPECT_EQ('true', p.key().getString());
+      EXPECT_EQ(k, p.key().getString());
+      EXPECT_EQ(v, p.value().getBool());
+      inner_true = v;
+    });
+    p.required('str', [&](const std::string& k, const std::string& v) {
+      EXPECT_EQ('str', p.key().getString());
+      EXPECT_EQ(k, p.key().getString());
+      EXPECT_EQ(v, p.value().getString());
+      inner_str = v;
+    });
+    p.optional('not set', [&](bool) { FAIL() << 'No key 'not set''; });
+  });
+  p.required(4, [&](const dynamic& v) {
+    EXPECT_EQ(4, p.key().getInt());
+    EXPECT_EQ(v, p.value());
+    p.optional('bools', [&](const std::string& k, const dynamic& v2) {
+      EXPECT_EQ(std::string('bools'), k);
+      EXPECT_EQ(k, p.key().getString());
+      EXPECT_EQ(v2, p.value());
+      p.arrayItems([&](int64_t k, bool v3) {
+        EXPECT_EQ(bools.size(), k);
+        EXPECT_EQ(k, p.key().getInt());
+        EXPECT_EQ(v3, p.value().asBool());
+        bools.push_back(v3);
+      });
+    });
+  });
+  p.optional(5, [&](int64_t) { FAIL() << 'Index 5 does not exist'; });
+  // Confirm the parse
+  EXPECT_EQ(dynamic(dynamic::object()), p.releaseErrors());
+  EXPECT_EQ((decltype(doubles){{'a', 7.}, {'b', 9.}, {'c', 13.3}}), doubles);
+  EXPECT_EQ((int64_t)5, outer_int);
+  EXPECT_EQ((decltype(strings){'x', 'y', '1', 'z'}), strings);
+  EXPECT_EQ((int64_t)7, inner_int);
+  EXPECT_FALSE(inner_false.value());
+  EXPECT_TRUE(inner_true.value());
+  EXPECT_EQ(std::string('s'), inner_str);
+  EXPECT_EQ(std::string('s'), inner_str);
+  EXPECT_EQ((decltype(bools){false, true, false, true}), bools);
 }
     
-    
-    {  /* We cannot open it, but we were able to stat it. */
-  if (access(file, W_OK) == 0)
-    if (file_printf(ms, 'writable, ') == -1)
-      return -1;
-  if (access(file, X_OK) == 0)
-    if (file_printf(ms, 'executable, ') == -1)
-      return -1;
-  if (S_ISREG(md))
-    if (file_printf(ms, 'regular file, ') == -1)
-      return -1;
-  if (file_printf(ms, 'no read permission') == -1)
-    return -1;
-  return 0;
-}
-    
-    
-    {  String ttyname(ttyname_maxlen, ReserveString);
-  char *p = ttyname.mutableData();
-  if (ttyname_r(php_posix_get_fd(fd), p, ttyname_maxlen)) {
-    return false;
+    const std::string& NestedCommandLineApp::resolveAlias(
+    const std::string& name) const {
+  auto dest = &name;
+  for (;;) {
+    auto pos = aliases_.find(*dest);
+    if (pos == aliases_.end()) {
+      break;
+    }
+    dest = &pos->second;
   }
-  ttyname.setSize(strlen(p));
-  return ttyname;
+  return *dest;
 }
     
-    /*
- * Helpers for unconditional and conditional jumps.
- */
-void surpriseCheck(IRGS&);
-void surpriseCheck(IRGS&, Offset);
-void jmpImpl(IRGS&, Offset);
-void implCondJmp(IRGS&, Offset taken, bool negate, SSATmp*);
+    #include <folly/experimental/NestedCommandLineApp.h>
     
-        void TrainOneMiniEpochAndReloadModel(ComputationNetworkPtr net,
-                                         ComputationNetworkPtr refNet,
-                                         const ComputationNodeBasePtr& refNode, const int epochNumber,
-                                         const size_t epochSize, IDataReader* trainSetDataReader,
-                                         const double learnRatePerSample,
-                                         const size_t minibatchSize,
-                                         const std::vector<ComputationNodeBasePtr>& featureNodes,
-                                         const std::vector<ComputationNodeBasePtr>& labelNodes,
-                                         const std::vector<ComputationNodeBasePtr>& criterionNodes,
-                                         const std::vector<ComputationNodeBasePtr>& evaluationNodes,
-                                         StreamMinibatchInputs* inputMatrices,
-                                         const std::list<ComputationNodeBasePtr>& learnableNodes,
-                                         std::list<Matrix<ElemType>>& smoothedGradients, std::vector<double> smoothedCounts,
-                                         /*out*/ EpochCriterion& epochCriterion,
-                                         /*out*/ std::vector<EpochCriterion>& epochEvalErrors,
-                                         std::string prefixMsg,
-                                         const size_t maxNumOfSamples);
+    #include <string>
     
-        // relink the input of those nodes whose child is oldNode to point to the new one instead
-    for (auto nodeIter = m_nameToNodeMap.begin(); nodeIter != m_nameToNodeMap.end(); nodeIter++)
-    {
-        ComputationNodeBasePtr node = nodeIter->second;
-        for (int i = 0; i < node->GetNumInputs(); i++)
-            if (node->GetInputs()[i] == oldNode)
-                node->SetInput(i, newNode);
+    
+    {} // namespace aria2
+    
+      std::shared_ptr<Peer> peer_;
+    
+    namespace aria2 {
     }
     
-    #include <vector>
+    #include <algorithm>
     
-    void OutputImageComponent::CopyFromJpegComponent(const JPEGComponent& comp,
-                                                 int factor_x, int factor_y,
-                                                 const int* quant) {
-  Reset(factor_x, factor_y);
-  assert(width_in_blocks_ <= comp.width_in_blocks);
-  assert(height_in_blocks_ <= comp.height_in_blocks);
-  const size_t src_row_size = comp.width_in_blocks * kDCTBlockSize;
-  for (int block_y = 0; block_y < height_in_blocks_; ++block_y) {
-    const coeff_t* src_coeffs = &comp.coeffs[block_y * src_row_size];
-    for (int block_x = 0; block_x < width_in_blocks_; ++block_x) {
-      coeff_t block[kDCTBlockSize];
-      for (int i = 0; i < kDCTBlockSize; ++i) {
-        block[i] = src_coeffs[i] * quant[i];
-      }
-      SetCoeffBlock(block_x, block_y, block);
-      src_coeffs += kDCTBlockSize;
-    }
-  }
-  memcpy(quant_, quant, sizeof(quant_));
-}
-    
-    // kDCTMatrix[8*u+x] = 0.5*alpha(u)*cos((2*x+1)*u*M_PI/16),
-// where alpha(0) = 1/sqrt(2) and alpha(u) = 1 for u > 0.
-static const double kDCTMatrix[64] = {
-  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
-  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
-  0.4903926402,  0.4157348062,  0.2777851165,  0.0975451610,
- -0.0975451610, -0.2777851165, -0.4157348062, -0.4903926402,
-  0.4619397663,  0.1913417162, -0.1913417162, -0.4619397663,
- -0.4619397663, -0.1913417162,  0.1913417162,  0.4619397663,
-  0.4157348062, -0.0975451610, -0.4903926402, -0.2777851165,
-  0.2777851165,  0.4903926402,  0.0975451610, -0.4157348062,
-  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
-  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
-  0.2777851165, -0.4903926402,  0.0975451610,  0.4157348062,
- -0.4157348062, -0.0975451610,  0.4903926402, -0.2777851165,
-  0.1913417162, -0.4619397663,  0.4619397663, -0.1913417162,
- -0.1913417162,  0.4619397663, -0.4619397663,  0.1913417162,
-  0.0975451610, -0.2777851165,  0.4157348062, -0.4903926402,
-  0.4903926402, -0.4157348062,  0.2777851165, -0.0975451610,
-};
-    
-          // The sentinel node becomes the parent node.
-      size_t j_end = 2 * n - k;
-      tree[j_end].total_count_ =
-          tree[left].total_count_ + tree[right].total_count_;
-      tree[j_end].index_left_ = static_cast<int16_t>(left);
-      tree[j_end].index_right_or_value_ = static_cast<int16_t>(right);
-    
-    void AddApp0Data(JPEGData* jpg) {
-  const unsigned char kApp0Data[] = {
-      0xe0, 0x00, 0x10,              // APP0
-      0x4a, 0x46, 0x49, 0x46, 0x00,  // 'JFIF'
-      0x01, 0x01,                    // v1.01
-      0x00, 0x00, 0x01, 0x00, 0x01,  // aspect ratio = 1:1
-      0x00, 0x00                     // thumbnail width/height
-  };
-  jpg->app_data.push_back(
-      std::string(reinterpret_cast<const char*>(kApp0Data),
-                                 sizeof(kApp0Data)));
-}
-    
-    
-    {  return p;
-}
-    
-      /**
-   * Construct an ImmediateFileWriter that writes to the specified File object.
-   */
-  explicit ImmediateFileWriter(folly::File&& file);
-    
-    LogCategoryConfig::LogCategoryConfig(LogLevel l, bool inherit)
-    : level{l}, inheritParentLevel{inherit} {}
-    
-    void LogConfig::update(const LogConfig& other) {
-  // Update handlerConfigs_ with all of the entries from the other LogConfig.
-  // Any entries already present in our handlerConfigs_ are replaced wholesale.
-  for (const auto& entry : other.handlerConfigs_) {
-    if (entry.second.type.hasValue()) {
-      // This is a complete LogHandlerConfig that should be inserted
-      // or completely replace an existing handler config with this name.
-      auto result = handlerConfigs_.insert(entry);
-      if (!result.second) {
-        result.first->second = entry.second;
-      }
-    } else {
-      // This config is updating an existing LogHandlerConfig rather than
-      // completely replacing it.
-      auto iter = handlerConfigs_.find(entry.first);
-      if (iter == handlerConfigs_.end()) {
-        throw std::invalid_argument(to<std::string>(
-            'cannot update configuration for unknown log handler \'',
-            entry.first,
-            '\''));
-      }
-      iter->second.update(entry.second);
-    }
-  }
+    namespace aria2 {
     }
     
-    void AbstractAuthResolver::setDefaultCred(std::string user,
-                                          std::string password)
-{
-  defaultUser_ = std::move(user);
-  defaultPassword_ = std::move(password);
-}
+    private:
+  void startAsyncFamily(const std::string& hostname, int family,
+                        DownloadEngine* e, Command* command);
+  void setNameResolverCheck(size_t resolverIndex, DownloadEngine* e,
+                            Command* command);
+  void disableNameResolverCheck(size_t index, DownloadEngine* e,
+                                Command* command);
     
-    void AbstractBtMessage::setBtRequestFactory(BtRequestFactory* factory)
-{
-  requestFactory_ = factory;
-}
-    
-      const char* name_;
-    
-      // Returns proxy method for given protocol. Either V_GET or V_TUNNEL
-  // is returned.  For HTTPS, always returns V_TUNNEL.
-  const std::string& resolveProxyMethod(const std::string& protocol) const;
-    
-    AbstractHttpServerResponseCommand::AbstractHttpServerResponseCommand(
-    cuid_t cuid, const std::shared_ptr<HttpServer>& httpServer,
-    DownloadEngine* e, const std::shared_ptr<SocketCore>& socket)
-    : Command(cuid),
-      e_(e),
-      socket_(socket),
-      httpServer_(httpServer),
-      readCheck_(false),
-      writeCheck_(true)
-{
-  setStatus(Command::STATUS_ONESHOT_REALTIME);
-  e_->addSocketForWriteCheck(socket_, this);
-}
-    
-    void AbstractOptionHandler::hide() { updateFlags(FLAG_HIDDEN, true); }
-    
-      const std::shared_ptr<Request>& getProxyRequest() const
-  {
-    return proxyRequest_;
-  }
-    
-      virtual bool execute() CXX11_OVERRIDE;
-    
-    void AdaptiveFileAllocationIterator::allocateChunk()
-{
-  if (!allocator_) {
-#ifdef HAVE_FALLOCATE
-    try {
-      A2_LOG_DEBUG('Testing file system supports fallocate.');
-      if (offset_ < totalLength_) {
-        int64_t len =
-            std::min(totalLength_ - offset_, static_cast<int64_t>(4_k));
-        stream_->allocate(offset_, len, false);
-        offset_ += len;
-      }
-      A2_LOG_DEBUG('File system supports fallocate.');
-      allocator_ = make_unique<FallocFileAllocationIterator>(stream_, offset_,
-                                                             totalLength_);
-    }
-    catch (RecoverableException& e) {
-      A2_LOG_DEBUG('File system does not support fallocate.');
-      auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
-                                                              totalLength_);
-      salloc->init();
-      allocator_ = std::move(salloc);
-    }
-#else  // !HAVE_FALLOCATE
-    auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
-                                                            totalLength_);
-    salloc->init();
-    allocator_ = std::move(salloc);
-#endif // !HAVE_FALLOCATE
-    allocator_->allocateChunk();
-  }
-  else {
-    allocator_->allocateChunk();
-  }
-}
-    
-    #include 'common.h'
-    
-      virtual ~AppleTLSContext();
-    
-    AuthConfig::AuthConfig(std::string user, std::string password)
-    : user_(std::move(user)), password_(std::move(password))
-{
-}
+    AuthConfig::AuthConfig() {}
