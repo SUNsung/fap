@@ -1,73 +1,124 @@
 
         
-                # This is called early, before a machine is instantiated, to check
-        # if this provider is installed. This should return true or false.
-        #
-        # If the provider is not installed and Vagrant determines it is
-        # able to install this provider, then it will do so. Installation
-        # is done by calling Environment.install_provider.
-        #
-        # If Environment.can_install_provider? returns false, then an error
-        # will be shown to the user.
-        def self.installed?
-          # By default return true for backwards compat so all providers
-          # continue to work.
-          true
-        end
+          describe 'instance methods' do
+    let(:key_attributes) do # these keys are intentionally strings.
+      {
+        'canDownload' => false,
+        'canRevoke' => true,
+        'keyId' => 'some-key-id',
+        'keyName' => 'fastlane',
+        'servicesCount' => 3,
+        'services' => [
+          {
+            'name' => 'APNS',
+            'id' => 'U27F4V844T',
+            'configurations' => []
+          },
+          {
+            'name' => 'MusicKit',
+            'id' => '6A7HVUVQ3M',
+            'configurations' => [
+              {
+                'name' => 'music id test',
+                'identifier' => 'music.com.snatchev.test',
+                'type' => 'music',
+                'prefix' => 'some-prefix-id',
+                'id' => 'some-music-kit-id'
+              }
+            ]
+          },
+          {
+            'name' => 'DeviceCheck',
+            'id' => 'DQ8HTZ7739',
+            'configurations' => []
+          }
+        ]
+      }
+    end
     
-    module Vagrant
-  module Util
-    # This class is used to render the ERB templates in the
-    # `GEM_ROOT/templates` directory.
-    class TemplateRenderer < OpenStruct
-      class << self
-        # Render a given template and return the result. This method optionally
-        # takes a block which will be passed the renderer prior to rendering, which
-        # allows the caller to set any view variables within the renderer itself.
-        #
-        # @return [String] Rendered template
-        def render(*args)
-          render_with(:render, *args)
-        end
-    
-            self.description = <<-DESC
-          Creates a scaffold for the development of a new Pod named `NAME`
-          according to the CocoaPods best practices.
-          If a `TEMPLATE_URL`, pointing to a git repo containing a compatible
-          template, is specified, it will be used in place of the default one.
-        DESC
-    
-          def update_if_necessary!
-        if @update && config.verbose?
-          UI.section('\nUpdating Spec Repositories\n'.yellow) do
-            Repo.new(ARGV.new(['update'])).run
-          end
-        end
+          def self.description
+        'Create a new Keychain'
       end
     
-        def handle_gist_redirecting(data)
-      redirected_url = data.header['Location']
-      if redirected_url.nil? || redirected_url.empty?
-        raise ArgumentError, 'GitHub replied with a 302 but didn't provide a location in the response headers.'
+        def groups=(groups)
+      @groups = groups ? groups.compact : nil
+    end
+    
+          UI.user_error!('Unable to find Crashlytics Run Script Build Phase') if crash_script.nil?
+    
+            expect(result).to eq('hg parent --template {rev}')
+        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('hg parent --template {rev}')
+      end
+    end
+  end
+end
+
+    
+          it 'gets the correct version number with no target specified' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          get_version_number(xcodeproj: '.xcproject')
+        end').runner.execute(:test)
+        expect(result).to eq('4.3.2')
       end
     
-      context 'called with argument (2)' do
-    it 'outputs the second value from the default scale' do
-      expect('.two-base-one').to have_rule('font-size: 1.5625em')
+          it 'it increments all targets minor version major' do
+        Fastlane::FastFile.new.parse('lane :test do
+          increment_version_number(bump_type: 'major')
+        end').runner.execute(:test)
+    
+        if extension_pathname.readable?
+      ENV['BUNDLE_GEMFILE'] = extension_pathname.to_path
+      break
+    end
+  end
+end
+    
+          when :login
+        s[:user]=$1
+        s[:pass]=$2
+    
+          # A string representation of the importer.
+      # Should be overridden by subclasses.
+      #
+      # This is used to help debugging,
+      # and should usually just show the load path encapsulated by this importer.
+      #
+      # @return [String]
+      def to_s
+        Sass::Util.abstract(self)
+      end
+    
+        # Returns the CSS for the media query.
+    #
+    # @return [String]
+    def to_css
+      css = ''
+      css << resolved_modifier
+      css << ' ' unless resolved_modifier.empty?
+      css << resolved_type
+      css << ' and ' unless resolved_type.empty? || expressions.empty?
+      css << expressions.map do |e|
+        # It's possible for there to be script nodes in Expressions even when
+        # we're converting to CSS in the case where we parsed the document as
+        # CSS originally (as in css_test.rb).
+        e.map {|c| c.is_a?(Sass::Script::Tree::Node) ? c.to_sass : c.to_s}.join
+      end.join(' and ')
+      css
+    end
+    
+            {
+          :always_update     => false,
+          :template_location => root + '/public/stylesheets/sass',
+          :css_location      => root + '/public/stylesheets',
+          :cache_location    => root + '/tmp/sass-cache',
+          :always_check      => env != 'production',
+          :quiet             => env != 'production',
+          :full_exception    => env != 'production'
+        }.freeze
+      end
     end
   end
     
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'padding-top: 11px; ' +
-                'padding-right: 12px; ' +
-                'padding-left: 13px;'
-      bad_rule = 'padding-bottom: null;'
-    
-      context 'called with no prefixes' do
-    it 'outputs the spec' do
-      rule = 'appearance: none;'
-    
-      context 'called with two sizes' do
-    it 'applies to height and width' do
-      rule = 'height: 2em; width: 1em;'
+            unless guarded && environment.var(name)
+          environment.set_var(name, val.perform(environment))
+        end
