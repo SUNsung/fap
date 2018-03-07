@@ -1,75 +1,59 @@
 
         
-              # Run a certain action
-      def trigger(command: nil, serial: nil)
-        android_serial = serial != '' ? 'ANDROID_SERIAL=#{serial}' : nil
-        command = [android_serial, adb_path, command].join(' ')
-        Action.sh(command)
-      end
+          # If a given extension is listed multiple times, prefer the first one listed
+  extensions.reject! { |extension| mimes.values.flatten.include?(extension) }
     
-        attr_accessor :crashlytics_path
-    attr_accessor :api_key
-    attr_accessor :build_secret
-    attr_accessor :emails
-    attr_accessor :groups
-    attr_accessor :schemes
-    attr_accessor :export_method
+          #
+      # Require a gem or gems. If it's not present, show a very nice error
+      # message that explains everything and is much more helpful than the
+      # normal LoadError.
+      #
+      # names - a string gem name or array of gem names
+      #
+      def require_with_graceful_fail(names)
+        Array(names).each do |name|
+          begin
+            Jekyll.logger.debug 'Requiring:', name.to_s
+            require name
+          rescue LoadError => e
+            Jekyll.logger.error 'Dependency Error:', <<-MSG
+Yikes! It looks like you don't have #{name} or one of its dependencies installed.
+In order to use Jekyll as currently configured, you'll need to install this gem.
     
-            expect(result).to eq('/usr/local/bin/cloc --exclude-dir=test1,test2,build --by-file --xml  --out=build/cloc.xml')
-      end
-    
-          it 'properly removes new lines of the build number' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          increment_build_number(build_number: '24\n', xcodeproj: '.xcproject')
-        end').runner.execute(:test)
-    
-          it 'it increments all targets minor version number' do
-        Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number(bump_type: 'minor')
-        end').runner.execute(:test)
-    
-            # This method is called if the underying machine ID changes. Providers
-        # can use this method to load in new data for the actual backing
-        # machine or to realize that the machine is now gone (the ID can
-        # become `nil`). No parameters are given, since the underlying machine
-        # is simply the machine instance given to this object. And no
-        # return value is necessary.
-        def machine_id_changed
-        end
-    
-      def enough_poll_answers
-    errors.add(:poll_answers, I18n.t('activerecord.errors.models.poll.attributes.poll_answers.not_enough_poll_answers')) if poll_answers.size < 2
+        sh 'gem build spree.gemspec'
+    mv 'spree-#{version}.gem', pkgdir
   end
     
-      def add_invites
-    InvitationCode.find_by_token(params[:invite_code_id]).add_invites!
-    redirect_to user_search_path
-  end
+            def update
+          authorize! :update, @order, order_token
+          @address = find_address
     
-          def fetch_public_key(o_auth_app, jwt)
-        public_key = fetch_public_key_from_json(o_auth_app.jwks, jwt)
-        if public_key.empty? && o_auth_app.jwks_uri
-          response = Faraday.get(o_auth_app.jwks_uri)
-          public_key = fetch_public_key_from_json(response.body, jwt)
+            def accepted_types_and_failures
+          if @allowed_types.present?
+            'Accept content types: #{@allowed_types.join(', ')}\n'.tap do |message|
+              if @missing_allowed_types.present?
+                message << '  #{@missing_allowed_types.join(', ')} were rejected.'
+              else
+                message << '  All were accepted successfully.'
+              end
+            end
+          end
         end
-        raise Rack::OAuth2::Server::Authorize::BadRequest(:unauthorized_client) if public_key.empty?
-        public_key
-      end
+        def rejected_types_and_failures
+          if @rejected_types.present?
+            'Reject content types: #{@rejected_types.join(', ')}\n'.tap do |message|
+              if @missing_rejected_types.present?
+                message << '  #{@missing_rejected_types.join(', ')} were accepted.'
+              else
+                message << '  All were rejected successfully.'
+              end
+            end
+          end
+        end
     
-          # A string representation of the importer.
-      # Should be overridden by subclasses.
-      #
-      # This is used to help debugging,
-      # and should usually just show the load path encapsulated by this importer.
-      #
-      # @return [String]
-      def to_s
-        Sass::Util.abstract(self)
+          def extract_metrics(path, *keys)
+        snapshot.metric_store.extract_metrics(path, *keys)
       end
-    
-        def parse_input(environment, text)
-      case text
-      when Script::MATCH
-        name = $1
-        guarded = !!$3
-        val = Script::Parser.parse($2, @line, text.size - ($3 || '').size - $2.size)
+    end
+  end
+end
