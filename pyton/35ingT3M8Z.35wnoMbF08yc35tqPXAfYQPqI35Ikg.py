@@ -1,90 +1,187 @@
 
         
-            n_features = 10
-    list_n_samples = np.linspace(100, 1000000, 5).astype(np.int)
-    lasso_results, lars_lasso_results = compute_bench(alpha, list_n_samples,
-                                            [n_features], precompute=True)
+            @classmethod
+    def query_datasources_by_name(
+            cls, session, database, datasource_name, schema=None):
+        datasource_class = ConnectorRegistry.sources[database.type]
+        return datasource_class.query_datasources_by_name(
+            session, database, datasource_name, schema=None)
+
     
-            start = time.time()
-        func(X, n_jobs=1)
-        one_core.append(time.time() - start)
+        def _delete(self, pk):
+        DeleteMixin._delete(self, pk)
     
-        from sklearn.tree import DecisionTreeClassifier
+        @property
+    def data(self):
+        d = super(SqlaTable, self).data
+        if self.type == 'table':
+            grains = self.database.grains() or []
+            if grains:
+                grains = [(g.name, g.name) for g in grains]
+            d['granularity_sqla'] = utils.choicify(self.dttm_cols)
+            d['time_grain_sqla'] = grains
+        return d
     
-    import os
-import tarfile
-from contextlib import closing
-try:
-    from urllib import urlopen
-except ImportError:
-    from urllib.request import urlopen
+                if column['type'] in ('OBJECT', None):
+                v = sample[col].iloc[0] if not sample[col].empty else None
+                if isinstance(v, basestring):
+                    column['type'] = 'STRING'
+                elif isinstance(v, int):
+                    column['type'] = 'INT'
+                elif isinstance(v, float):
+                    column['type'] = 'FLOAT'
+                elif isinstance(v, (datetime, date)):
+                    column['type'] = 'DATETIME'
+                    column['is_date'] = True
+                    column['is_dim'] = False
+                # check if encoded datetime
+                if (
+                        column['type'] == 'STRING' and
+                        self.datetime_conversion_rate(sample[col]) >
+                        INFER_COL_TYPES_THRESHOLD):
+                    column.update({
+                        'is_date': True,
+                        'is_dim': False,
+                        'agg': None,
+                    })
+            # 'agg' is optional attribute
+            if not column['agg']:
+                column.pop('agg', None)
+            columns.append(column)
+        return columns
+
     
-    ARCHIVE_NAME = URL.rsplit('/', 1)[1]
-TRAIN_FOLDER = '20news-bydate-train'
-TEST_FOLDER = '20news-bydate-test'
     
-        if f == os.path.basename(__file__):
-        continue
+def export_schema_to_dict(back_references):
+    '''Exports the supported import/export schema to a dictionary'''
+    databases = [Database.export_schema(recursive=True,
+                 include_parent_ref=back_references)]
+    clusters = [DruidCluster.export_schema(recursive=True,
+                include_parent_ref=back_references)]
+    data = dict()
+    if databases:
+        data[DATABASES_KEY] = databases
+    if clusters:
+        data[DRUID_CLUSTERS_KEY] = clusters
+    return data
     
-    plt.figure(2)  # 'banana' shape
-plt.title('Outlier detection on a real data set (boston housing)')
-plt.scatter(X2[:, 0], X2[:, 1], color='black')
-plt.xlim((xx2.min(), xx2.max()))
-plt.ylim((yy2.min(), yy2.max()))
-plt.legend((legend2_values_list[0].collections[0],
-            legend2_values_list[1].collections[0],
-            legend2_values_list[2].collections[0]),
-           (legend2_keys_list[0], legend2_keys_list[1], legend2_keys_list[2]),
-           loc='upper center',
-           prop=matplotlib.font_manager.FontProperties(size=12))
-plt.ylabel('% lower status of the population')
-plt.xlabel('average number of rooms per dwelling')
+         Metrics and columns and datasource will be overrided if exists.
+     This function can be used to import/export dashboards between multiple
+     superset instances. Audit metadata isn't copies over.
+    '''
+    make_transient(i_datasource)
+    logging.info('Started import of the datasource: {}'.format(
+        i_datasource.to_json()))
     
-    # Train uncalibrated random forest classifier on whole train and validation
-# data and evaluate on test data
-clf = RandomForestClassifier(n_estimators=25)
-clf.fit(X_train_valid, y_train_valid)
-clf_probs = clf.predict_proba(X_test)
-score = log_loss(y_test, clf_probs)
+        :param param: the url parameter to lookup
+    :type param: str
+    :param default: the value to return in the absence of the parameter
+    :type default: str
+    '''
+    print(request.args)
+    return request.args.get(param, default)
     
-    from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
-from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.gaussian_process.kernels import RBF
-from sklearn import datasets
+        context.configure(connection=connection,
+                      target_metadata=target_metadata,
+                      # compare_type=True,
+                      process_revision_directives=process_revision_directives,
+                      **kwargs)
     
-    plt.title('Clustering measures for 2 random uniform labelings\n'
-          'with equal number of clusters')
-plt.xlabel('Number of clusters (Number of samples is fixed to %d)' % n_samples)
-plt.ylabel('Score value')
-plt.legend(plots, names)
-plt.ylim(ymin=-0.05, ymax=1.05)
+    import importlib
+import os
+from sys import executable, platform  # Platform is set for one test.
     
-        def has_more_configs(self):
-        '''Returns true if there are more configs to test'''
-        return bool(self._configs)
+        def test_string_with_utf8_bom(self):
+        # see #18958
+        bom_json = '[1,2,3]'.encode('utf-8-sig').decode('utf-8')
+        with self.assertRaises(self.JSONDecodeError) as cm:
+            self.loads(bom_json)
+        self.assertIn('BOM', str(cm.exception))
+        with self.assertRaises(self.JSONDecodeError) as cm:
+            self.json.load(StringIO(bom_json))
+        self.assertIn('BOM', str(cm.exception))
+        # make sure that the BOM is not detected in the middle of a string
+        bom_in_str = ''{}''.format(''.encode('utf-8-sig').decode('utf-8'))
+        self.assertEqual(self.loads(bom_in_str), '\ufeff')
+        self.assertEqual(self.json.load(StringIO(bom_in_str)), '\ufeff')
     
-    # The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
-#
-# The short X.Y version.
-version = '0'
-# The full version, including alpha/beta/rc tags.
-release = '0'
+        if C is not None:
+        # C version of decimal
+        start_calc = time.time()
+        x = factorial(C.Decimal(n), 0)
+        end_calc = time.time()
+        start_conv = time.time()
+        sx = str(x)
+        end_conv = time.time()
+        print('cdecimal:')
+        print('calculation time: %fs' % (end_calc-start_calc))
+        print('conversion time: %fs\n' % (end_conv-start_conv))
     
-    # Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named 'default.css' will overwrite the builtin 'default.css'.
-html_static_path = ['_static']
+    class TZInfo:
+    def __init__(self, transitions, type_indices, ttis, abbrs):
+        self.transitions = transitions
+        self.type_indices = type_indices
+        self.ttis = ttis
+        self.abbrs = abbrs
     
-        @mock.patch('certbot.display.enhancements.util')
-    def test_redirect(self, mock_util):
-        mock_util().menu.return_value = (display_util.OK, 1)
-        self.assertTrue(self._call('redirect'))
+            resp = self._shortcmd('XPATH {0}'.format(id))
+        if not resp.startswith('223'):
+            raise NNTPReplyError(resp)
+        try:
+            [resp_num, path] = resp.split()
+        except ValueError:
+            raise NNTPReplyError(resp) from None
+        else:
+            return resp, path
     
-        def run(self, raw_command):
-        command = '{} {}'.format(self.adb_path, raw_command)
-        process = os.popen(command)
-        output = process.read()
-        return output
+        def test_varargs1_ext(self):
+        {}.__contains__(*(0,))
+    
+            The optional name argument can be used to set a Unicode name
+        for the function.
+        '''
+        # decorator factory
+        if function is None:
+            return partial(self.register_function, name=name)
+    
+    
+def init():
+    global distances, press_times
+    distances = []
+    press_times = []
+    
+    
+class auto_adb():
+    def __init__(self):
+        try:
+            adb_path = 'adb'
+            subprocess.Popen([adb_path], stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+            self.adb_path = adb_path
+        except OSError:
+            if platform.system() == 'Windows':
+                adb_path = os.path.join('Tools', 'adb', 'adb.exe')
+                try:
+                    subprocess.Popen(
+                        [adb_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    self.adb_path = adb_path
+                except OSError:
+                    pass
+            else:
+                try:
+                    subprocess.Popen(
+                        [adb_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                except OSError:
+                    pass
+            print('请安装 ADB 及驱动并配置环境变量')
+            print('具体链接: https://github.com/wangshub/wechat_jump_game/wiki')
+            exit(1)
+    
+            # actions
+        self.steps = 0
+        self.params = params
+        self.coords = []
+        self.ix = [0, 0]
+        self.iy = [0, 0]
+        self.click_counter = 0
+        self.status = True
