@@ -1,384 +1,334 @@
 
         
-        namespace swift {
-    }
-    
-      SILDebuggerClient(ASTContext &C) : DebuggerClient(C) { }
-  virtual ~SILDebuggerClient() = default;
-    
-    typedef NS_ENUM(NSInteger, ObjectBehaviorAction) {
-    ObjectBehaviorActionRetain,
-    ObjectBehaviorActionCopy,
-    ObjectBehaviorActionMutableCopy
-};
-    
-    
-    {
-    {}
-}
-#endif
-
-    
-    
-    {} // end namespace swift
-    
-    namespace swift {
-    }
-    
-    
-    {  pointer operator->() const { return &deref(); }
-};
-    
-    PyObject* NewFileExtensionsByName(const FileDescriptor* descriptor);
-    
-    #include <google/protobuf/stubs/logging.h>
-#include <google/protobuf/stubs/common.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/pyext/message.h>
-#include <google/protobuf/pyext/scoped_pyobject_ptr.h>
-    
-    
-    {
-    {
-    {
-    {
-    {}  // namespace
-}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-
-    
-    
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-    
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_PRIMITIVE_FIELD_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_PRIMITIVE_FIELD_H__
-    
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
-    
-    
-    {  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ImmutableExtensionLiteGenerator);
-};
-    
-      if (flags.bit (ADAPTABLE_WERD)) {
-    status |= word->tess_would_adapt;  // result of Classify::AdaptableWord()
-    if (tessedit_adaption_debug && !status) {
-      tprintf('tess_would_adapt bit is false\n');
-    }
-  }
-    
-    ScrollView* bln_word_window_handle();  //return handle
-void build_image_window(int width, int height);
-void display_bln_lines(ScrollView window,
-                       ScrollView::Color colour,
-                       float scale_factor,
-                       float y_offset,
-                       float minx,
-                       float maxx);
-                                 //function to call
-void pgeditor_msg(  //message display
-                  const char *msg);
-void pgeditor_show_point(  //display coords
-                         SVEvent *event);
-                                 //put bln word in       box
-void show_point(PAGE_RES* page_res, float x, float y);
-    
-    
-    {
-    {    if (debug) {
-      if (is_italic) {
-        tprintf(' Rejecting: superscript is italic.\n');
-      }
-      if (is_punc) {
-        tprintf(' Rejecting: punctuation present.\n');
-      }
-      const char *char_str = wc.unicharset()->id_to_unichar(unichar_id);
-      if (bad_certainty) {
-        tprintf(' Rejecting: don't believe character %s with certainty %.2f '
-                'which is less than threshold %.2f\n', char_str,
-                char_certainty, certainty_threshold);
-      }
-      if (bad_height) {
-        tprintf(' Rejecting: character %s seems too small @ %.2f versus '
-                'expected %.2f\n', char_str, char_height, normal_height);
-      }
-    }
-    if (bad_certainty || bad_height || is_punc || is_italic) {
-      if (ok_run_count == i) {
-        initial_ok_run_count = ok_run_count;
-      }
-      ok_run_count = 0;
-    } else {
-      ok_run_count++;
-    }
-    if (char_certainty < worst_certainty) {
-      worst_certainty = char_certainty;
-    }
-  }
-  bool all_ok = ok_run_count == wc.length();
-  if (all_ok && debug) {
-    tprintf(' Accept: worst revised certainty is %.2f\n', worst_certainty);
-  }
-  if (!all_ok) {
-    if (left_ok) *left_ok = initial_ok_run_count;
-    if (right_ok) *right_ok = ok_run_count;
-  }
-  return all_ok;
-}
-    
-    
-/**********************************************************************
- * ICOORD::rotate
- *
- * Rotate an ICOORD by the given (normalized) (cos,sin) vector.
- **********************************************************************/
-    
-    // Possible normalization methods. Use NEGATIVE values as these also
-// double up as markers for the last sub-classifier.
-enum NormalizationMode {
-  NM_BASELINE = -3,         // The original BL normalization mode.
-  NM_CHAR_ISOTROPIC = -2,   // Character normalization but isotropic.
-  NM_CHAR_ANISOTROPIC = -1  // The original CN normalization mode.
-};
-    
-    void FilterBlockBuilder::GenerateFilter() {
-  const size_t num_keys = start_.size();
-  if (num_keys == 0) {
-    // Fast path if there are no keys for this filter
-    filter_offsets_.push_back(result_.size());
-    return;
-  }
-    }
-    
-    TEST(LogTest, BadLength) {
-  const int kPayloadSize = kBlockSize - kHeaderSize;
-  Write(BigString('bar', kPayloadSize));
-  Write('foo');
-  // Least significant size byte is stored in header[4].
-  IncrementByte(4, 1);
-  ASSERT_EQ('foo', Read());
-  ASSERT_EQ(kBlockSize, DroppedBytes());
-  ASSERT_EQ('OK', MatchError('bad record length'));
-}
-    
-    Iterator* TableCache::NewIterator(const ReadOptions& options,
-                                  uint64_t file_number,
-                                  uint64_t file_size,
-                                  Table** tableptr) {
-  if (tableptr != NULL) {
-    *tableptr = NULL;
-  }
-    }
-    
-    
-    {  Status FindTable(uint64_t file_number, uint64_t file_size, Cache::Handle**);
-};
-    
-    
-    {  static void Append(WriteBatch* dst, const WriteBatch* src);
-};
-    
-        // Preparing sqlite3 statements
-    status = sqlite3_prepare_v2(db_, replace_str.c_str(), -1,
-                                &replace_stmt, NULL);
-    ErrorCheck(status);
-    status = sqlite3_prepare_v2(db_, begin_trans_str.c_str(), -1,
-                                &begin_trans_stmt, NULL);
-    ErrorCheck(status);
-    status = sqlite3_prepare_v2(db_, end_trans_str.c_str(), -1,
-                                &end_trans_stmt, NULL);
-    ErrorCheck(status);
-    
-    class InMemoryEnv : public EnvWrapper {
+        class GlobalShortcut : public extensions::GlobalShortcutListener::Observer,
+                       public mate::TrackableObject<GlobalShortcut> {
  public:
-  explicit InMemoryEnv(Env* base_env) : EnvWrapper(base_env) { }
+  static mate::Handle<GlobalShortcut> Create(v8::Isolate* isolate);
     }
     
-      // count the keys
-  leveldb::Iterator* iter = db->NewIterator(leveldb::ReadOptions());
-  size_t num_keys = 0;
-  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-    num_keys++;
-  }
-  delete iter;
-  ASSERT_EQ(kNumKeys, num_keys) << 'Bad number of keys';
     
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
+    {  DISALLOW_COPY_AND_ASSIGN(WebRequest);
+};
+    
+    #include 'content/public/browser/web_contents_observer.h'
+#include 'native_mate/handle.h'
+#include 'native_mate/wrappable.h'
+    
+    namespace internal {
+    }
+    
+    LoginHandler::LoginHandler(net::AuthChallengeInfo* auth_info,
+                           net::URLRequest* request)
+    : handled_auth_(false),
+      auth_info_(auth_info),
+      request_(request),
+      render_process_host_id_(0),
+      render_frame_id_(0) {
+  content::ResourceRequestInfo::ForRequest(request_)->GetAssociatedRenderFrame(
+      &render_process_host_id_,  &render_frame_id_);
+    }
+    
+    #include 'net/url_request/url_request_job_factory.h'
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(URLRequestBufferJob);
+};
+    
+    #endif  // ATOM_BROWSER_UI_TRAY_ICON_GTK_H_
 
     
-      // current_ is offset in data_ of current entry.  >= restarts_ if !Valid
-  uint32_t current_;
-  uint32_t restart_index_;  // Index of restart block in which current_ falls
-  std::string key_;
-  Slice value_;
-  Status status_;
+    #include 'leveldb/status.h'
+    
+    // Return a new iterator that converts internal keys (yielded by
+// '*internal_iter') that were live at the specified 'sequence' number
+// into appropriate user keys.
+extern Iterator* NewDBIterator(
+    DBImpl* db,
+    const Comparator* user_key_comparator,
+    Iterator* internal_iter,
+    SequenceNumber sequence,
+    uint32_t seed);
     
     namespace leveldb {
     }
     
-    Status ReadBlock(RandomAccessFile* file,
-                 const ReadOptions& options,
-                 const BlockHandle& handle,
-                 BlockContents* result) {
-  result->data = Slice();
-  result->cachable = false;
-  result->heap_allocated = false;
+    #endif  // STORAGE_LEVELDB_DB_FILENAME_H_
+
+    
+    Status TableCache::FindTable(uint64_t file_number, uint64_t file_size,
+                             Cache::Handle** handle) {
+  Status s;
+  char buf[sizeof(file_number)];
+  EncodeFixed64(buf, file_number);
+  Slice key(buf, sizeof(buf));
+  *handle = cache_->Lookup(key);
+  if (*handle == NULL) {
+    std::string fname = TableFileName(dbname_, file_number);
+    RandomAccessFile* file = NULL;
+    Table* table = NULL;
+    s = env_->NewRandomAccessFile(fname, &file);
+    if (!s.ok()) {
+      std::string old_fname = SSTTableFileName(dbname_, file_number);
+      if (env_->NewRandomAccessFile(old_fname, &file).ok()) {
+        s = Status::OK();
+      }
+    }
+    if (s.ok()) {
+      s = Table::Open(*options_, file, file_size, &table);
+    }
+    }
     }
     
-      // Takes ownership of 'iter' and will delete it when destroyed, or
-  // when Set() is invoked again.
-  void Set(Iterator* iter) {
-    delete iter_;
-    iter_ = iter;
-    if (iter_ == NULL) {
-      valid_ = false;
-    } else {
-      Update();
+    namespace leveldb {
     }
+    
+    TEST(FindFileTest, OverlappingFiles) {
+  Add('150', '600');
+  Add('400', '500');
+  disjoint_sorted_files_ = false;
+  ASSERT_TRUE(! Overlaps('100', '149'));
+  ASSERT_TRUE(! Overlaps('601', '700'));
+  ASSERT_TRUE(Overlaps('100', '150'));
+  ASSERT_TRUE(Overlaps('100', '200'));
+  ASSERT_TRUE(Overlaps('100', '300'));
+  ASSERT_TRUE(Overlaps('100', '400'));
+  ASSERT_TRUE(Overlaps('100', '500'));
+  ASSERT_TRUE(Overlaps('375', '400'));
+  ASSERT_TRUE(Overlaps('450', '450'));
+  ASSERT_TRUE(Overlaps('450', '500'));
+  ASSERT_TRUE(Overlaps('450', '700'));
+  ASSERT_TRUE(Overlaps('600', '700'));
+}
+    
+    
+    {}  // namespace leveldb
+    
+    // Return a new filter policy that uses a bloom filter with approximately
+// the specified number of bits per key.  A good value for bits_per_key
+// is 10, which yields a filter with ~ 1% false positive rate.
+//
+// Callers must delete the result after any database that is using the
+// result has been closed.
+//
+// Note: if you are using a custom comparator that ignores some parts
+// of the keys being compared, you must not use NewBloomFilterPolicy()
+// and must provide your own FilterPolicy that also ignores the
+// corresponding parts of the keys.  For example, if the comparator
+// ignores trailing spaces, it would be incorrect to use a
+// FilterPolicy (like NewBloomFilterPolicy) that does not ignore
+// trailing spaces in keys.
+extern const FilterPolicy* NewBloomFilterPolicy(int bits_per_key);
+    
+      // Drop the first 'n' bytes from this slice.
+  void remove_prefix(size_t n) {
+    assert(n <= size());
+    data_ += n;
+    size_ -= n;
   }
     
-    //---- Define constructor and implicit cast operators to convert back<>forth from your math types and ImVec2/ImVec4.
-// This will be inlined as part of ImVec2 and ImVec4 class declarations.
-/*
-#define IM_VEC2_CLASS_EXTRA                                                 \
-        ImVec2(const MyVec2& f) { x = f.x; y = f.y; }                       \
-        operator MyVec2() const { return MyVec2(x,y); }
     
-    IMGUI_API bool        ImGui_ImplDX9_Init(void* hwnd, IDirect3DDevice9* device);
-IMGUI_API void        ImGui_ImplDX9_Shutdown();
-IMGUI_API void        ImGui_ImplDX9_NewFrame();
-IMGUI_API void        ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data);
+    {    IntrinsicParams();
+    IntrinsicParams(Vec2d f, Vec2d c, Vec4d k, double alpha = 0);
+    IntrinsicParams operator+(const Mat& a);
+    IntrinsicParams& operator =(const Mat& a);
+    void Init(const cv::Vec2d& f, const cv::Vec2d& c, const cv::Vec4d& k = Vec4d(0,0,0,0), const double& alpha = 0);
+};
     
-        void FreeTypeFont::Shutdown()
+    using namespace std;
+using namespace cv;
+    
+    #include 'opencv2/core.hpp'
+    
+        // Extension: ARB_copy_buffer
+    extern void (CODEGEN_FUNCPTR *CopyBufferSubData)(GLenum readTarget, GLenum writeTarget, GLintptr readOffset, GLintptr writeOffset, GLsizeiptr size);
+    
+    #undef cv_hal_gemm32f
+#define cv_hal_gemm32f lapack_gemm32f
+#undef cv_hal_gemm64f
+#define cv_hal_gemm64f lapack_gemm64f
+#undef cv_hal_gemm32fc
+#define cv_hal_gemm32fc lapack_gemm32fc
+#undef cv_hal_gemm64fc
+#define cv_hal_gemm64fc lapack_gemm64fc
+    
+        static void* GetProcAddress (const char* name)
     {
-        if (FreetypeFace) 
+        static void* h = NULL;
+        if (!h)
         {
-            FT_Done_Face(FreetypeFace);
-            FreetypeFace = NULL;
-            FT_Done_FreeType(FreetypeLibrary);
-            FreetypeLibrary = NULL;
+            h = dlopen('libclAmdBlas.so', RTLD_LAZY | RTLD_GLOBAL);
+            if (!h)
+                return NULL;
         }
     }
     
-            // 1. Show a simple window.
-        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    }
+    //
+// BEGIN OF CUSTOM FUNCTIONS
+//
     
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
     
-        // Setup orthographic projection matrix
-    // Being agnostic of whether <d3dx9.h> or <DirectXMath.h> can be used, we aren't relying on D3DXMatrixIdentity()/D3DXMatrixOrthoOffCenterLH() or DirectX::XMMatrixIdentity()/DirectX::XMMatrixOrthographicOffCenterLH()
     {
-        const float L = 0.5f, R = io.DisplaySize.x+0.5f, T = 0.5f, B = io.DisplaySize.y+0.5f;
-        D3DMATRIX mat_identity = { { 1.0f, 0.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f } };
-        D3DMATRIX mat_projection =
-        {
-            2.0f/(R-L),   0.0f,         0.0f,  0.0f,
-            0.0f,         2.0f/(T-B),   0.0f,  0.0f,
-            0.0f,         0.0f,         0.5f,  0.0f,
-            (L+R)/(L-R),  (T+B)/(B-T),  0.5f,  1.0f,
-        };
-        g_pd3dDevice->SetTransform(D3DTS_WORLD, &mat_identity);
-        g_pd3dDevice->SetTransform(D3DTS_VIEW, &mat_identity);
-        g_pd3dDevice->SetTransform(D3DTS_PROJECTION, &mat_projection);
-    }
-    
-    void AbstractBtMessage::setPeer(const std::shared_ptr<Peer>& peer)
-{
-  peer_ = peer;
-}
-    
-      bool incNumConnection_;
-    
-      // File must be opened before calling this function.
-  virtual void allocate(int64_t offset, int64_t length,
-                        bool sparse) CXX11_OVERRIDE;
-    
-    void AbstractHttpServerResponseCommand::updateReadWriteCheck()
-{
-  if (httpServer_->wantRead()) {
-    if (!readCheck_) {
-      readCheck_ = true;
-      e_->addSocketForReadCheck(socket_, this);
-    }
-  }
-  else if (readCheck_) {
-    readCheck_ = false;
-    e_->deleteSocketForReadCheck(socket_, this);
-  }
-  if (httpServer_->wantWrite()) {
-    if (!writeCheck_) {
-      writeCheck_ = true;
-      e_->addSocketForWriteCheck(socket_, this);
-    }
-  }
-  else if (writeCheck_) {
-    writeCheck_ = false;
-    e_->deleteSocketForWriteCheck(socket_, this);
+    {    std::ostringstream oss;
+    std::copy(line.begin() + options_index,
+              line.end(),
+              std::ostream_iterator<std::string>(oss, ' '));
+    r['options'] = oss.str();
+    results.push_back(r);
   }
 }
     
+      /// An internal status protecting database access.
+  static std::atomic<bool> kDBInitialized;
     
-    {} // namespace aria2
+      /// Access all plugins.
+  static AutoRegisterSet& plugins() {
+    static AutoRegisterSet plugins_;
+    return plugins_;
+  }
+    
+    TEST_F(ViewsConfigParserPluginTests, test_swap_view) {
+  Config c;
+  std::vector<std::string> old_views_vec;
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  old_views_vec.clear();
+  auto s = c.update(getTestConfigMap('view_test.conf'));
+  EXPECT_TRUE(s.ok());
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  EXPECT_EQ(old_views_vec[0], 'config_views.kernel_hashes_new');
+    }
+    
+    
+    {    // Code should never reach this point
+    VLOG(1) << 'Could not start extension process: ' << exec_path;
+    Initializer::shutdown(EXIT_FAILURE);
+    return std::shared_ptr<PlatformProcess>();
+  }
+    
+    extern JSClass  *jsb_cocostudio_timeline_Frame_class;
+extern JSObject *jsb_cocostudio_timeline_Frame_prototype;
+    
+    
+    
+    
+    
+    #endif // __cocos2dx_csloader_h__
 
     
-    #endif // D_ABSTRACT_PROXY_REQUEST_COMMAND_H
-
-    
-    protected:
-  virtual bool executeInternal() CXX11_OVERRIDE;
-    
-    size_t AnnounceList::countTier() const { return tiers_.size(); }
     
     
-    {  bool currentTierAcceptsCompletedEvent() const;
+        void initShader( void );
+public:
+    GLESDebugDraw();
+    
+    			b2PrismaticJointDef pjd;
+			pjd.Initialize(ground, m_platform, b2Vec2(0.0f, 5.0f), b2Vec2(1.0f, 0.0f));
+    
+    int main(int, char**)
+{
+    // Setup Allegro
+    al_init();
+    al_install_keyboard();
+    al_install_mouse();
+    al_init_primitives_addon();
+    al_set_new_display_flags(ALLEGRO_RESIZABLE);
+    ALLEGRO_DISPLAY* display = al_create_display(1280, 720);
+    al_set_window_title(display, 'ImGui Allegro 5 example');
+    ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
+    al_register_event_source(queue, al_get_display_event_source(display));
+    al_register_event_source(queue, al_get_keyboard_event_source());
+    al_register_event_source(queue, al_get_mouse_event_source());
+    }
+    
+        // Setup ImGui binding
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    ImGui_ImplDX10_Init(hwnd, g_pd3dDevice);
+    
+    void CreateRenderTarget()
+{
+    ID3D11Texture2D* pBackBuffer;
+    g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+    g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_mainRenderTargetView);
+    pBackBuffer->Release();
+}
+    
+    static int const                    NUM_BACK_BUFFERS = 3;
+static ID3D12Device*                g_pd3dDevice = NULL;
+static ID3D12DescriptorHeap*        g_pd3dRtvDescHeap = NULL;
+static ID3D12DescriptorHeap*        g_pd3dSrvDescHeap = NULL;
+static ID3D12CommandQueue*          g_pd3dCommandQueue = NULL;
+static ID3D12GraphicsCommandList*   g_pd3dCommandList = NULL;
+static ID3D12Fence*                 g_fence = NULL;
+static HANDLE                       g_fenceEvent = NULL;
+static UINT64                       g_fenceLastSignaledValue = 0;
+static IDXGISwapChain3*             g_pSwapChain = NULL;
+static HANDLE                       g_hSwapChainWaitableObject = NULL;
+static ID3D12Resource*              g_mainRenderTargetResource[NUM_BACK_BUFFERS] = {};
+static D3D12_CPU_DESCRIPTOR_HANDLE  g_mainRenderTargetDescriptor[NUM_BACK_BUFFERS] = {};
+    
+      InstructionPointer functionAddress() const noexcept {
+    return functionAddress_;
+  }
+    
+    
+    {    void toJS(nbind::cbOutput expose) const
+    {
+        expose(left, right, top, bottom, width, height);
+    }
 };
-    
-    
-    {} // namespace aria2
-    
-    #endif // D_ANON_DISK_WRITER_FACTORY_H
 
     
-      CFDictionaryRef idAndTrust =
-      (CFDictionaryRef)CFArrayGetValueAtIndex(items.get(), 0);
-  if (!idAndTrust) {
-    A2_LOG_ERROR('Failed to get identity and trust from PKCS12 data');
-    return false;
-  }
-  credentials_ =
-      (SecIdentityRef)CFDictionaryGetValue(idAndTrust, kSecImportItemIdentity);
-  if (!credentials_) {
-    A2_LOG_ERROR('Failed to get credentials PKCS12 data');
-    return false;
-  }
-  CFRetain(credentials_);
-  A2_LOG_INFO('Loaded certificate from file');
-  return true;
+    #define ASSERT_BUF_SIZE 4096
+static char sAssertBuf[ASSERT_BUF_SIZE];
+static AssertHandler gAssertHandler;
+    
+    // JNI's NIO support has some awkward preconditions and error reporting. This
+// class provides much more user-friendly access.
+class FBEXPORT JByteBuffer : public JavaClass<JByteBuffer> {
+ public:
+  static constexpr const char* kJavaDescriptor = 'Ljava/nio/ByteBuffer;';
+    }
+    
+        if (keyFilePassword.length()) {
+        context.password.reset(new std::string(keyFilePassword));
+        SSL_CTX_set_default_passwd_cb_userdata(context.context, context.password.get());
+        SSL_CTX_set_default_passwd_cb(context.context, Context::passwordCallback);
+    }
+    
+    template <const bool isServer>
+struct WIN32_EXPORT WebSocket : uS::Socket, WebSocketState<isServer> {
+protected:
+    std::string fragmentBuffer;
+    enum CompressionStatus : char {
+        DISABLED,
+        ENABLED,
+        COMPRESSED_FRAME
+    } compressionStatus;
+    unsigned char controlTipLength = 0, hasOutstandingPong = false;
+    }
+    
+    void Loop::run() {
+    // updated for consistency with libuv impl. behaviour
+    timepoint = std::chrono::system_clock::now();
+    while (numPolls) {
+        doEpoll(delay);
+    }
+}
+    
+    
+    {    int indices = NodeData::getMemoryBlockIndex(NodeData::preAllocMaxSize) + 1;
+    for (int i = 0; i < indices; i++) {
+        if (nodeData->preAlloc[i]) {
+            delete [] nodeData->preAlloc[i];
+        }
+    }
+    delete [] nodeData->preAlloc;
+    delete nodeData->netContext;
+    delete nodeData;
+    loop->destroy();
+}
+    
+    struct Hub;
