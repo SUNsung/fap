@@ -1,270 +1,138 @@
 
         
-        void dls::compute_eigenvec(const cv::Mat& Mtilde, cv::Mat& eigenval_real, cv::Mat& eigenval_imag,
-                                                  cv::Mat& eigenvec_real, cv::Mat& eigenvec_imag)
-{
-#ifdef HAVE_EIGEN
-    Eigen::MatrixXd Mtilde_eig, zeros_eig;
-    cv::cv2eigen(Mtilde, Mtilde_eig);
-    cv::cv2eigen(cv::Mat::zeros(27, 27, CV_64F), zeros_eig);
-    }
+          auto channel =
+      grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials());
+  GreeterClient greeter(channel);
     
-    /** @file
- * @deprecated Use @ref cudev instead.
- */
+    #include <grpc++/impl/codegen/async_stream.h>
+#include <grpc++/impl/codegen/async_unary_call.h>
+#include <grpc++/impl/codegen/method_handler_impl.h>
+#include <grpc++/impl/codegen/proto_utils.h>
+#include <grpc++/impl/codegen/rpc_method.h>
+#include <grpc++/impl/codegen/service_type.h>
+#include <grpc++/impl/codegen/status.h>
+#include <grpc++/impl/codegen/stub_options.h>
+#include <grpc++/impl/codegen/sync_stream.h>
     
-    CV_EXPORTS_W void absdiff(InputArray src1, Scalar src2, OutputArray dst);
-    
-        if (refcount)
-        CV_XADD(refcount, 1);
-    
-    #include <stddef.h>
-    
-    // This flag controls the style of death tests.  Valid values are 'threadsafe',
-// meaning that the death test child process will re-execute the test binary
-// from the start, running only a single death test, or 'fast',
-// meaning that the child process will execute the test logic immediately
-// after forking.
-GTEST_DECLARE_string_(death_test_style);
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26>
-internal::ValueArray26<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
-    T26> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
-    T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15, T16 v16, T17 v17,
-    T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23, T24 v24, T25 v25,
-    T26 v26) {
-  return internal::ValueArray26<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
-      T26>(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15,
-      v16, v17, v18, v19, v20, v21, v22, v23, v24, v25, v26);
-}
-    
-     private:
-  std::vector<TestPartResult> array_;
-    
-    // Use this function in main() to run all tests.  It returns 0 if all
-// tests are successful, or 1 otherwise.
-//
-// RUN_ALL_TESTS() should be invoked after the command line has been
-// parsed by InitGoogleTest().
-//
-// This function was formerly a macro; thus, it is in the global
-// namespace and has an all-caps name.
-int RUN_ALL_TESTS() GTEST_MUST_USE_RESULT_;
-    
-    
-$for j [[
-  const ParamGenerator<T$j> g$(j)_;
-    
-    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
-//
-// ParameterizedTestCaseInfoBase is a generic interface
-// to ParameterizedTestCaseInfo classes. ParameterizedTestCaseInfoBase
-// accumulates test information provided by TEST_P macro invocations
-// and generators provided by INSTANTIATE_TEST_CASE_P macro invocations
-// and uses that information to register all resulting test instances
-// in RegisterTests method. The ParameterizeTestCaseRegistry class holds
-// a collection of pointers to the ParameterizedTestCaseInfo objects
-// and calls RegisterTests() on each of them when asked.
-class ParameterizedTestCaseInfoBase {
- public:
-  virtual ~ParameterizedTestCaseInfoBase() {}
-    }
-    
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
-    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
-    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
-    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
-    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
-    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
-    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29, GTEST_TEMPLATE_ T30,
-    GTEST_TEMPLATE_ T31, GTEST_TEMPLATE_ T32, GTEST_TEMPLATE_ T33,
-    GTEST_TEMPLATE_ T34, GTEST_TEMPLATE_ T35, GTEST_TEMPLATE_ T36,
-    GTEST_TEMPLATE_ T37, GTEST_TEMPLATE_ T38, GTEST_TEMPLATE_ T39,
-    GTEST_TEMPLATE_ T40, GTEST_TEMPLATE_ T41, GTEST_TEMPLATE_ T42,
-    GTEST_TEMPLATE_ T43, GTEST_TEMPLATE_ T44, GTEST_TEMPLATE_ T45,
-    GTEST_TEMPLATE_ T46, GTEST_TEMPLATE_ T47>
-struct Templates47 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates46<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
-      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-      T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42,
-      T43, T44, T45, T46, T47> Tail;
-};
-    
-    #include 'leveldb/env.h'
-    
-    TEST(LogTest, UnexpectedMiddleType) {
-  Write('foo');
-  SetByte(6, kMiddleType);
-  FixChecksum(0, 3);
-  ASSERT_EQ('EOF', Read());
-  ASSERT_EQ(3, DroppedBytes());
-  ASSERT_EQ('OK', MatchError('missing start'));
-}
-    
-    namespace leveldb {
-    }
-    
-     private:
-  Env* const env_;
-  const std::string dbname_;
-  const Options* options_;
-  Cache* cache_;
-    
-    void VersionEdit::Clear() {
-  comparator_.clear();
-  log_number_ = 0;
-  prev_log_number_ = 0;
-  last_sequence_ = 0;
-  next_file_number_ = 0;
-  has_comparator_ = false;
-  has_log_number_ = false;
-  has_prev_log_number_ = false;
-  has_next_file_number_ = false;
-  has_last_sequence_ = false;
-  deleted_files_.clear();
-  new_files_.clear();
-}
-    
-    // Size of each value
-static int FLAGS_value_size = 100;
-    
-    
-    {  enum { kBlockSize = 8 * 1024 };
-};
-    
-    #include 'port/port_posix.h'
-    
-    
-    { private:
-  const FilterPolicy* policy_;
-  const char* data_;    // Pointer to filter data (at block-start)
-  const char* offset_;  // Pointer to beginning of offset array (at block-end)
-  size_t num_;          // Number of entries in offset array
-  size_t base_lg_;      // Encoding parameter (see kFilterBaseLg in .cc file)
-};
-    
-    TEST(FilterBlockTest, SingleChunk) {
-  FilterBlockBuilder builder(&policy_);
-  builder.StartBlock(100);
-  builder.AddKey('foo');
-  builder.AddKey('bar');
-  builder.AddKey('box');
-  builder.StartBlock(200);
-  builder.AddKey('box');
-  builder.StartBlock(300);
-  builder.AddKey('hello');
-  Slice block = builder.Finish();
-  FilterBlockReader reader(&policy_, block);
-  ASSERT_TRUE(reader.KeyMayMatch(100, 'foo'));
-  ASSERT_TRUE(reader.KeyMayMatch(100, 'bar'));
-  ASSERT_TRUE(reader.KeyMayMatch(100, 'box'));
-  ASSERT_TRUE(reader.KeyMayMatch(100, 'hello'));
-  ASSERT_TRUE(reader.KeyMayMatch(100, 'foo'));
-  ASSERT_TRUE(! reader.KeyMayMatch(100, 'missing'));
-  ASSERT_TRUE(! reader.KeyMayMatch(100, 'other'));
-}
-    
-    Iterator::Iterator() {
-  cleanup_.function = NULL;
-  cleanup_.next = NULL;
-}
-    
-    // convert return from local_ref<T>
-template <typename T>
-struct Convert<local_ref<T>> {
-  typedef JniType<T> jniType;
-  // No automatic synthesis of local_ref
-  static jniType toJniRet(local_ref<jniType> t) {
-    return t.release();
+      for (int i = 0; i < service->method_count(); ++i) {
+    (*vars)['method_name'] = service->method(i).get()->name();
+    printer->Print(*vars, 'WithAsyncMethod_$method_name$<');
   }
-  static jniType toCall(local_ref<jniType> t) {
-    return t.get();
+  printer->Print('Service');
+  for (int i = 0; i < service->method_count(); ++i) {
+    printer->Print(' >');
   }
-};
+  printer->Print(' AsyncService;\n');
     
+      void Error(const std::string &err, bool usage = true,
+             bool show_exe_name = true) const;
     
-/**
- * Captures and symbolicates a stack trace
- *
- * Beware of a bug on some platforms, which makes the trace loop until the
- * buffer is full when it reaches a noexpr function. It seems to be fixed in
- * newer versions of gcc. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56846
- *
- * @param skip The number of frames before capturing the trace
- *
- * @param limit The maximum number of frames captured
- */
-FBEXPORT inline std::vector<StackTraceElement> getStackTraceSymbols(
-    size_t skip = 0,
-    size_t limit = kDefaultLimit) {
-  return getStackTraceSymbols(getStackTrace(skip + 1, limit));
+    inline Reference Map::operator[](const char *key) const {
+  auto keys = Keys();
+  // We can't pass keys.byte_width_ to the comparison function, so we have
+  // to pick the right one ahead of time.
+  int (*comp)(const void *, const void *) = nullptr;
+  switch (keys.byte_width_) {
+    case 1: comp = KeyCompare<uint8_t>; break;
+    case 2: comp = KeyCompare<uint16_t>; break;
+    case 4: comp = KeyCompare<uint32_t>; break;
+    case 8: comp = KeyCompare<uint64_t>; break;
+  }
+  auto res = std::bsearch(key, keys.data_, keys.size(), keys.byte_width_, comp);
+  if (!res) return Reference(nullptr, 1, NullPackedType());
+  auto i = (reinterpret_cast<uint8_t *>(res) - keys.data_) / keys.byte_width_;
+  return (*static_cast<const Vector *>(this))[i];
 }
     
-    #include <nbind/api.h>
-#include <nbind/BindDefiner.h>
-#include <yoga/Yoga.h>
+      auto name = builder.CreateString('MyMonster');
     
-    Value Node::getMaxWidth(void) const
-{
-    return Value::fromYGValue(YGNodeStyleGetMaxWidth(m_node));
+      // here, parser.builder_ contains a binary buffer that is the parsed data.
+    
+    
+    {  std::string &code = *code_ptr;
+  if (config != nullptr && config->first_line != nullptr) {
+    code += std::string(prefix) + std::string(config->first_line) + '\n';
+  }
+  std::string line_prefix =
+      std::string(prefix) +
+      ((config != nullptr && config->content_line_prefix != nullptr)
+           ? config->content_line_prefix
+           : '///');
+  for (auto it = dc.begin(); it != dc.end(); ++it) {
+    code += line_prefix + *it + '\n';
+  }
+  if (config != nullptr && config->last_line != nullptr) {
+    code += std::string(prefix) + std::string(config->last_line) + '\n';
+  }
 }
     
-        void insertChild(Node * child, unsigned index);
-    void removeChild(Node * child);
+    std::string GenNativeType(BaseType type) {
+  switch (type) {
+    case BASE_TYPE_BOOL: return 'boolean';
+    case BASE_TYPE_CHAR:
+    case BASE_TYPE_UCHAR:
+    case BASE_TYPE_SHORT:
+    case BASE_TYPE_USHORT:
+    case BASE_TYPE_INT:
+    case BASE_TYPE_UINT:
+    case BASE_TYPE_LONG:
+    case BASE_TYPE_ULONG:
+    case BASE_TYPE_FLOAT:
+    case BASE_TYPE_DOUBLE: return 'number';
+    case BASE_TYPE_STRING: return 'string';
+    default: return '';
+  }
+}
     
-        Size(void)
-    : width(0.0)
-    , height(0.0)
-    {
+    // Generate the receiver for function signatures.
+static void GenReceiver(const StructDef &struct_def, std::string *code_ptr) {
+  std::string &code = *code_ptr;
+  code += Indent + '# ' + struct_def.name + '\n';
+  code += Indent + 'def ';
+}
+    
+        Printf('CRASH_MIN: executing: %s\n', Cmd.c_str());
+    int ExitCode = ExecuteCommand(Cmd);
+    if (ExitCode == 0) {
+      Printf('ERROR: the input %s did not crash\n', CurrentFilePath.c_str());
+      exit(1);
     }
+    Printf('CRASH_MIN: '%s' (%zd bytes) caused a crash. Will try to minimize '
+           'it further\n',
+           CurrentFilePath.c_str(), U.size());
     
-    // Reference counting smart pointer. This is designed to work with the
-// Countable class or other implementations in the future. It is designed in a
-// way to be both efficient and difficult to misuse. Typical usage is very
-// simple once you learn the patterns (and the compiler will help!):
-//
-// By default, the internal pointer is null.
-//   RefPtr<Foo> ref;
-//
-// Object creation requires explicit construction:
-//   RefPtr<Foo> ref = createNew<Foo>(...);
-//
-// Or if the constructor is not public:
-//   RefPtr<Foo> ref = adoptRef(new Foo(...));
-//
-// But you can implicitly create from nullptr:
-//   RefPtr<Foo> maybeRef = cond ? ref : nullptr;
-//
-// Move/Copy Construction/Assignment are straightforward:
-//   RefPtr<Foo> ref2 = ref;
-//   ref = std::move(ref2);
-//
-// Destruction automatically drops the RefPtr's reference as expected.
-//
-// Upcasting is implicit but downcasting requires an explicit cast:
-//   struct Bar : public Foo {};
-//   RefPtr<Bar> barRef = static_cast<RefPtr<Bar>>(ref);
-//   ref = barRef;
-//
-template <class T>
-class RefPtr {
-public:
-  constexpr RefPtr() :
-    m_ptr(nullptr)
-  {}
-    }
-    
-    inline local_ref<jobject> autobox(alias_ref<jobject> val) {
-  return make_local(val);
+    // Parse a directory ending in separator, like: SomeDir\
+// Returns number of characters considered if successful.
+static size_t ParseDir(const std::string &FileName, const size_t Offset) {
+  size_t Pos = Offset;
+  const size_t End = FileName.size();
+  if (Pos >= End || IsSeparator(FileName[Pos]))
+    return 0;
+  for(; Pos < End && !IsSeparator(FileName[Pos]); ++Pos)
+    ;
+  if (Pos >= End)
+    return 0;
+  ++Pos; // Include separator.
+  return Pos - Offset;
 }
+    
+      bool HasMoreMallocsThanFrees = false;
+  size_t NumberOfLeakDetectionAttempts = 0;
+    
+    ATTRIBUTE_NO_SANITIZE_MEMORY
+void FreeHook(const volatile void *ptr) {
+  size_t N = AllocTracer.Frees++;
+  if (int TraceLevel = AllocTracer.TraceLevel) {
+    Printf('FREE[%zd]   %p\n', N, ptr);
+    if (TraceLevel >= 2 && EF)
+      EF->__sanitizer_print_stack_trace();
+  }
+}
+    
+    #endif  // LLVM_FUZZER_OPTIONS_H
+
+    
+    // We may need to avoid defining weak hooks to stay compatible with older clang.
+#ifndef LLVM_FUZZER_DEFINES_SANITIZER_WEAK_HOOOKS
+# define LLVM_FUZZER_DEFINES_SANITIZER_WEAK_HOOOKS 1
+#endif
