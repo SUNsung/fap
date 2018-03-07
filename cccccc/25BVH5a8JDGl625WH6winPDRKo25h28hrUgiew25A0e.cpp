@@ -1,284 +1,331 @@
-  Status DecorateGraph(Graph* graph, Device* device) override;
-  Status PublishGraph(const Graph& graph, const string& device_name) override;
+
+        
+        extern JSClass  *jsb_cocosbuilder_CCBReader_class;
+extern JSObject *jsb_cocosbuilder_CCBReader_prototype;
     
-    void PartialRunMgr::PartialRunDone(int step_id, StatusCallback done,
-                                   const Status& status) {
-  Status callback_status;
-  {
-    mutex_lock l(mu_);
-    auto run_it = step_id_to_partial_run_.find(step_id);
-    if (run_it == step_id_to_partial_run_.end()) {
-      return;
+    
+    
+    
+    
+    
+    
+    
+    {		m_debugDraw.DrawString(5, m_textLine, '****PAUSED****');
+		m_textLine += DRAW_STRING_NEW_LINE;
+	}
+    
+    #ifndef TEST_H
+#define TEST_H
+    
+    	static Test* Create()
+	{
+		return new BulletTest;
+	}
+    
+      // Choose sharpened, blurred or original per pixel
+  std::vector<float> sharpened = Sharpen(yuv[channel], w, h, sigma, amount);
+  std::vector<float> blurred = Blur(yuv[channel], w, h);
+  for (int y = 0; y < h; y++) {
+    for (int x = 0; x < w; x++) {
+      size_t index = y * w + x;
     }
-    run_it->second->final_status.Update(status);
-    if (!run_it->second->executor_done) {
-      // If we found the partial_run, we set the final callback to call only
-      // when the executor is completely done.
-      run_it->second->final_callback = std::move(done);
-      return;
     }
-    callback_status = run_it->second->final_status;
+    
+    void DCT1d(const double* in, int stride, double* out) {
+  for (int x = 0; x < 8; ++x) {
+    out[x * stride] = 0.0;
+    for (int u = 0; u < 8; ++u) {
+      out[x * stride] += kDCTMatrix[8 * x + u] * in[u * stride];
+    }
   }
-  // Otherwise we call the callback immediately.
-  done(callback_status);
-  mutex_lock l(mu_);
-  step_id_to_partial_run_.erase(step_id);
+}
+    
+    #endif  // GUETZLI_ENTROPY_ENCODE_H_
+
+    
+    
+    {}  // namespace guetzli
+
+    
+    // Fills in 'result' with the inverse DCT of 'block'.
+// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
+// a row-by-row memory layout.
+void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
+    
+    // Decodes the parsed jpeg coefficients into an RGB image.
+// There can be only either 1 or 3 image components, in either case, an RGB
+// output image will be generated.
+// Only YUV420 and YUV444 sampling factors are supported.
+// Vector will be empty if a decoding error occurred.
+std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
+    
+    #include 'guetzli/fdct.h'
+    
+    enum JPEGReadError {
+  JPEG_OK = 0,
+  JPEG_SOI_NOT_FOUND,
+  JPEG_SOF_NOT_FOUND,
+  JPEG_UNEXPECTED_EOF,
+  JPEG_MARKER_BYTE_NOT_FOUND,
+  JPEG_UNSUPPORTED_MARKER,
+  JPEG_WRONG_MARKER_SIZE,
+  JPEG_INVALID_PRECISION,
+  JPEG_INVALID_WIDTH,
+  JPEG_INVALID_HEIGHT,
+  JPEG_INVALID_NUMCOMP,
+  JPEG_INVALID_SAMP_FACTOR,
+  JPEG_INVALID_START_OF_SCAN,
+  JPEG_INVALID_END_OF_SCAN,
+  JPEG_INVALID_SCAN_BIT_POSITION,
+  JPEG_INVALID_COMPS_IN_SCAN,
+  JPEG_INVALID_HUFFMAN_INDEX,
+  JPEG_INVALID_QUANT_TBL_INDEX,
+  JPEG_INVALID_QUANT_VAL,
+  JPEG_INVALID_MARKER_LEN,
+  JPEG_INVALID_SAMPLING_FACTORS,
+  JPEG_INVALID_HUFFMAN_CODE,
+  JPEG_INVALID_SYMBOL,
+  JPEG_NON_REPRESENTABLE_DC_COEFF,
+  JPEG_NON_REPRESENTABLE_AC_COEFF,
+  JPEG_INVALID_SCAN,
+  JPEG_OVERLAPPING_SCANS,
+  JPEG_INVALID_SCAN_ORDER,
+  JPEG_EXTRA_ZERO_RUN,
+  JPEG_DUPLICATE_DRI,
+  JPEG_DUPLICATE_SOF,
+  JPEG_WRONG_RESTART_MARKER,
+  JPEG_DUPLICATE_COMPONENT_ID,
+  JPEG_COMPONENT_NOT_FOUND,
+  JPEG_HUFFMAN_TABLE_NOT_FOUND,
+  JPEG_HUFFMAN_TABLE_ERROR,
+  JPEG_QUANT_TABLE_NOT_FOUND,
+  JPEG_EMPTY_DHT,
+  JPEG_EMPTY_DQT,
+  JPEG_OUT_OF_BAND_COEFF,
+  JPEG_EOB_RUN_TOO_LONG,
+  JPEG_IMAGE_TOO_LARGE,
+};
+    
+      // Fill in root table.
+  key = 0;
+  idx = 0;
+  for (len = 1; len <= kJpegHuffmanRootTableBits; ++len) {
+    for (; count[len] > 0; --count[len]) {
+      code.bits = len;
+      code.value = symbols[idx++];
+      reps = 1 << (kJpegHuffmanRootTableBits - len);
+      while (reps--) {
+        table[key++] = code;
+      }
+    }
+  }
+    
+    #include 'guetzli/quality.h'
+    
+      size_t queued() const {
+    return queue_.size();
+  }
+    
+    #include <cctype>
+#include <cstring>
+    
+    
+    {} // namespace folly
+
+    
+    
+    {} // namespace folly
+
+    
+    namespace folly {
+    }
+    
+    /**
+ * LogConfig contains configuration for the LoggerDB.
+ *
+ * This includes information about the log levels for log categories,
+ * as well as what log handlers are configured and which categories they are
+ * attached to.
+ */
+class LogConfig {
+ public:
+  using CategoryConfigMap = std::unordered_map<std::string, LogCategoryConfig>;
+  using HandlerConfigMap = std::unordered_map<std::string, LogHandlerConfig>;
+    }
+    
+      slists.Append('k1', 'v1');
+  slists.Append('k1', 'v2');
+  slists.Append('k1', 'v3');
+    
+    #include <memory>
+#include <set>
+#include <string>
+#include 'rocksdb/statistics.h'
+#include 'monitoring/statistics.h'
+    
+    /**
+ * @brief convert error code to status
+ * @details Convert internal linux error code to Status
+ *
+ * @param r [description]
+ * @return [description]
+ */
+Status err_to_status(int r)
+{
+  switch (r) {
+  case 0:
+    return Status::OK();
+  case -ENOENT:
+    return Status::IOError();
+  case -ENODATA:
+  case -ENOTDIR:
+    return Status::NotFound(Status::kNone);
+  case -EINVAL:
+    return Status::InvalidArgument(Status::kNone);
+  case -EIO:
+    return Status::IOError(Status::kNone);
+  default:
+    // FIXME :(
+    assert(0 == 'unrecognized error code');
+    return Status::NotSupported(Status::kNone);
+  }
+}
+    
+    // This class contains APIs to stack rocksdb wrappers.Eg. Stack TTL over base d
+class StackableDB : public DB {
+ public:
+  // StackableDB take sole ownership of the underlying db.
+  explicit StackableDB(DB* db) : db_(db) {}
+    }
+    
+    
+    {  m_jcreate_compaction_filter_methodid =
+      AbstractCompactionFilterFactoryJni::getCreateCompactionFilterMethodId(env);
+  if(m_jcreate_compaction_filter_methodid == nullptr) {
+    // exception thrown: NoSuchMethodException or OutOfMemoryError
+    return;
+  }
 }
     
     
-    {}  // namespace tensorflow
-
+    {  server->Wait();
+}
     
-    // CUDAEvent wraps a CUevent in the platform-independent EventInterface
-// interface.
-class CUDAEvent : public internal::EventInterface {
- public:
-  explicit CUDAEvent(CUDAExecutor* parent);
-    }
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    REGISTER_KERNEL_BUILDER(Name('TextLineReader').Device(DEVICE_CPU),
-                        TextLineReaderOp);
-REGISTER_KERNEL_BUILDER(Name('TextLineReaderV2').Device(DEVICE_CPU),
-                        TextLineReaderOp);
-    
-    
-    {
-    {    // Allocate result tensor of shape
-    //   [*first_dim_size] + data.shape[indices.dims:]
-    TensorShape result_shape;
-    result_shape.AddDim(*first_dim_size);
-    for (int d = indices0.dims(); d < data0.dims(); d++) {
-      result_shape.AddDim(data0.dim_size(d));
-    }
-    OP_REQUIRES_OK(c, c->allocate_output(0, result_shape, result_ptr));
+    struct EnumValBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_name(flatbuffers::Offset<flatbuffers::String> name) {
+    fbb_.AddOffset(EnumVal::VT_NAME, name);
+  }
+  void add_value(int64_t value) {
+    fbb_.AddElement<int64_t>(EnumVal::VT_VALUE, value, 0);
+  }
+  void add_object(flatbuffers::Offset<Object> object) {
+    fbb_.AddOffset(EnumVal::VT_OBJECT, object);
+  }
+  void add_union_type(flatbuffers::Offset<Type> union_type) {
+    fbb_.AddOffset(EnumVal::VT_UNION_TYPE, union_type);
+  }
+  EnumValBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  EnumValBuilder &operator=(const EnumValBuilder &);
+  flatbuffers::Offset<EnumVal> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<EnumVal>(end);
+    fbb_.Required(o, EnumVal::VT_NAME);
+    return o;
   }
 };
     
-    // HACK: Allow support for many newer emoji by overriding behavior of ZWJ and
-// emoji modifiers. This does not make the breaks correct for any version of
-// Unicode, but shifts the ways in which it is incorrect to be less harmful.
-//
-// TODO: Remove this hack and reevaluate whether we should have any static
-// notion of what a grapheme is.
-//
-// Returns true if lhs and rhs shouldn't be considered as having a grapheme
-// break between them. That is, whether we're overriding the behavior of the
-// hard coded Unicode 8 rules surrounding ZWJ and emoji modifiers.
-static inline bool graphemeBreakOverride(llvm::UTF32 lhs, llvm::UTF32 rhs) {
-  return lhs == 0x200D || (rhs >= 0x1F3FB && rhs <= 0x1F3FF);
-}
+    // A common interface for objects having comments in the source.
+// Return formatted comments to be inserted in generated code.
+struct CommentHolder {
+  virtual ~CommentHolder() {}
+  virtual grpc::string GetLeadingComments(const grpc::string prefix) const = 0;
+  virtual grpc::string GetTrailingComments(const grpc::string prefix) const = 0;
+  virtual std::vector<grpc::string> GetAllComments() const = 0;
+};
     
-      bool isEmpty() const {
-    return Parts.isEmpty();
+    static std::string GenTypePointer(const Type &type) {
+  switch (type.base_type) {
+    case BASE_TYPE_STRING: return '[]byte';
+    case BASE_TYPE_VECTOR: return GenTypeGet(type.VectorType());
+    case BASE_TYPE_STRUCT: return type.struct_def->name;
+    case BASE_TYPE_UNION:
+      // fall through
+    default: return '*flatbuffers.Table';
   }
+}
     
-      void *operator new(size_t Bytes, MarkupContext &MC,
-                     unsigned alignment = alignof(MarkupASTNode));
-  void *operator new(size_t Bytes, void *Mem) {
-    assert(Mem);
-    return Mem;
+    template<class T> std::string GenFullName(const T *enum_def) {
+  std::string full_name;
+  const auto &name_spaces = enum_def->defined_namespace->components;
+  for (auto ns = name_spaces.cbegin(); ns != name_spaces.cend(); ++ns) {
+    full_name.append(*ns + '_');
   }
-    
-    #include 'swift/SIL/SILDebugScope.h'
-#include 'swift/SIL/SILFunction.h'
-    
-      /// Retrieve a reference to the declaration this one overrides.
-  ConcreteDeclRef
-  getOverriddenDecl(ASTContext &ctx) const;
-    
-      /// Close a #line-defined virtual file region.
-  void closeVirtualFile(SourceLoc end);
-    
-    leveldb_filterpolicy_t* leveldb_filterpolicy_create_bloom(int bits_per_key) {
-  // Make a leveldb_filterpolicy_t, but override all of its methods so
-  // they delegate to a NewBloomFilterPolicy() instead of user
-  // supplied C functions.
-  struct Wrapper : public leveldb_filterpolicy_t {
-    const FilterPolicy* rep_;
-    ~Wrapper() { delete rep_; }
-    const char* Name() const { return rep_->Name(); }
-    void CreateFilter(const Slice* keys, int n, std::string* dst) const {
-      return rep_->CreateFilter(keys, n, dst);
-    }
-    bool KeyMayMatch(const Slice& key, const Slice& filter) const {
-      return rep_->KeyMayMatch(key, filter);
-    }
-    static void DoNothing(void*) { }
-  };
-  Wrapper* wrapper = new Wrapper;
-  wrapper->rep_ = NewBloomFilterPolicy(bits_per_key);
-  wrapper->state_ = NULL;
-  wrapper->destructor_ = &Wrapper::DoNothing;
-  return wrapper;
+  full_name.append(enum_def->name);
+  return full_name;
 }
     
-    int InternalKeyComparator::Compare(const Slice& akey, const Slice& bkey) const {
-  // Order by:
-  //    increasing user key (according to user-supplied comparator)
-  //    decreasing sequence number
-  //    decreasing type (though sequence# should be enough to disambiguate)
-  int r = user_comparator_->Compare(ExtractUserKey(akey), ExtractUserKey(bkey));
-  if (r == 0) {
-    const uint64_t anum = DecodeFixed64(akey.data() + akey.size() - 8);
-    const uint64_t bnum = DecodeFixed64(bkey.data() + bkey.size() - 8);
-    if (anum > bnum) {
-      r = -1;
-    } else if (anum < bnum) {
-      r = +1;
-    }
-  }
-  return r;
-}
-    
-    
-    {  // When limit user key is prefix of start user key
-  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
-            Shorten(IKey('foobar', 100, kTypeValue),
-                    IKey('foo', 200, kTypeValue)));
-}
-    
-    
-    {}  // namespace leveldb
-    
-        bool transaction = (entries_per_batch > 1);
-    for (int i = 0; i < reads_; i += entries_per_batch) {
-      // Begin read transaction
-      if (FLAGS_transaction && transaction) {
-        status = sqlite3_step(begin_trans_stmt);
-        StepErrorCheck(status);
-        status = sqlite3_reset(begin_trans_stmt);
-        ErrorCheck(status);
-      }
+    namespace flatbuffers {
     }
     
-      void ReadSequential() {
-    kyotocabinet::DB::Cursor* cur = db_->cursor();
-    cur->jump();
-    std::string ckey, cvalue;
-    while (cur->get(&ckey, &cvalue, true)) {
-      bytes_ += ckey.size() + cvalue.size();
-      FinishedSingleOp();
+        // Fill with random data
+    int allocLength = (byteSize + 14) * framesPerSend;
+    framePackBuffer = new unsigned char[allocLength];
+    for (int i = 0; i < allocLength; i++) {
+        framePackBuffer[i] = rand() % 255;
     }
-    delete cur;
-  }
-    
-    #include <string>
-#include 'leveldb/env.h'
-#include 'leveldb/status.h'
-    
-    #include <assert.h>
-#include <stddef.h>
-#include <string.h>
-#include <string>
-    
-        // Adds the module variable 'api_version'.
-    if (PyModule_AddIntConstant(
-        module,
-        const_cast<char*>(kImplVersionName),
-        kImplVersion))
-#if PY_MAJOR_VERSION < 3
-      return;
-#else
-      { Py_DECREF(module); return NULL; }
-    
-      // Pointer to the C++ Message that contains this container.  The
-  // RepeatedScalarContainer does not own this pointer.
-  Message* message;
-    
-    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
-  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
-  // Identifiers can't start with digits
-  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
-  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
-}
-    
-    void RepeatedEnumFieldGenerator::GenerateMembers(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'private static readonly pb::FieldCodec<$type_name$> _repeated_$name$_codec\n'
-    '    = pb::FieldCodec.ForEnum($tag$, x => (int) x, x => ($type_name$) x);\n');
-  printer->Print(variables_,
-    'private readonly pbc::RepeatedField<$type_name$> $name$_ = new pbc::RepeatedField<$type_name$>();\n');
-  WritePropertyDocComment(printer, descriptor_);
-  AddPublicMemberAttributes(printer);
-  printer->Print(
-    variables_,
-    '$access_level$ pbc::RepeatedField<$type_name$> $property_name$ {\n'
-    '  get { return $name$_; }\n'
-    '}\n');
-}
-    
-    #include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/compiler/csharp/csharp_repeated_message_field.h>
-#include <google/protobuf/compiler/csharp/csharp_message_field.h>
-#include <google/protobuf/compiler/csharp/csharp_wrapper_field.h>
-    
-    void RepeatedPrimitiveFieldGenerator::WriteHash(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'hash ^= $name$_.GetHashCode();\n');
-}
-void RepeatedPrimitiveFieldGenerator::WriteEquals(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'if(!$name$_.Equals(other.$name$_)) return false;\n');
-}
-void RepeatedPrimitiveFieldGenerator::WriteToString(io::Printer* printer) {
-  printer->Print(variables_,
-    'PrintField(\'$descriptor_name$\', $name$_, writer);\n');
-}
     
     
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace java {
+    {    perMessageDeflate = (token == TOK_PERMESSAGE_DEFLATE);
+    while ((token = getToken(data, stop))) {
+        switch (token) {
+        case TOK_PERMESSAGE_DEFLATE:
+            return;
+        case TOK_SERVER_NO_CONTEXT_TAKEOVER:
+            serverNoContextTakeover = true;
+            break;
+        case TOK_CLIENT_NO_CONTEXT_TAKEOVER:
+            clientNoContextTakeover = true;
+            break;
+        case TOK_SERVER_MAX_WINDOW_BITS:
+            serverMaxWindowBits = 1;
+            lastInteger = &serverMaxWindowBits;
+            break;
+        case TOK_CLIENT_MAX_WINDOW_BITS:
+            clientMaxWindowBits = 1;
+            lastInteger = &clientMaxWindowBits;
+            break;
+        default:
+            if (token < 0 && lastInteger) {
+                *lastInteger = -token;
+            }
+            break;
+        }
     }
-    }
+}
+    
+    struct Init {
+    Init() {SSL_library_init();}
+    ~Init() {/*EVP_cleanup();*/}
+} init;
+    
+    void Loop::doEpoll(int epollTimeout) {
+    for (std::pair<Poll *, void (*)(Poll *)> c : closing) {
+        numPolls--;
     }
     }
     
-    #endif // BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
-
+        void listen(ListenOptions listenOptions) {
+        if (listenOptions == TRANSFERS && !async) {
+            addAsync();
+        }
+    }
     
-    // Standard library components can't be forward declared, so we'll have to
-// include the array header. Fortunately, it's fairly lightweight and doesn't
-// add significantly to the compile time.
-#if defined(BOOST_ASIO_HAS_STD_ARRAY)
-# include <array>
-#endif // defined(BOOST_ASIO_HAS_STD_ARRAY)
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-    #include <boost/asio/detail/pop_options.hpp>
-    
-    #endif // defined(BOOST_ASIO_HAS_DEV_POLL)
+                // todo: this should get TransformData!
+            static size_t estimate(const char *data, size_t length) {
+                return length + 128;
+            }
