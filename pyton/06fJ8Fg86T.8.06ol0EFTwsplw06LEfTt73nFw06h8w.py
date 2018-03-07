@@ -1,21 +1,39 @@
 
         
-            def get_testable_domain_names(self):
-        '''Returns the set of domain names that can be tested against'''
-        if self._test_names:
-            return self._test_names
+            # Separating the 'table of contents' from the contents (blocks)
+    table_of_contents = ''.join(read_me.split('- - -')[0])
+    blocks = ''.join(read_me.split('- - -')[1]).split('\n# ')
+    for i in range(len(blocks)):
+        if i == 0:
+            blocks[i] = blocks[i] + '\n'
         else:
-            return {'example.com'}
+            blocks[i] = '# ' + blocks[i] + '\n'
     
-    
-class AskTest(unittest.TestCase):
-    '''Test the ask method.'''
-    def setUp(self):
-        logging.disable(logging.CRITICAL)
-    
-    if __name__ == '__main__':
-    unittest.main()  # pragma: no cover
+    # TODO: ensure that history changes.
 
+    
+    def print_title(title, pattern = '-'):
+    print('\n'.join(('', title, pattern * len(title)))) 
+    
+    # Can't import these from paths.py because that uses `future` imports
+DIR_OF_CURRENT_SCRIPT = os.path.dirname( os.path.abspath( __file__ ) )
+DIR_OF_YCMD = os.path.join( DIR_OF_CURRENT_SCRIPT, '..', '..', 'third_party',
+                            'ycmd' )
+    
+        def _adjust_thread_count(self):
+        # When the executor gets lost, the weakref callback will wake up
+        # the worker threads.
+        def weakref_cb(_, q=self._work_queue):
+            q.put(None)
+        # TODO(bquinlan): Should avoid creating new threads if there are more
+        # idle threads than items in the work queue.
+        if len(self._threads) < self._max_workers:
+            t = threading.Thread(target=_worker,
+                                 args=(weakref.ref(self, weakref_cb),
+                                       self._work_queue))
+            t.daemon = True
+            t.start()
+            self._threads.add(t)
     
         # Parse and validate the field names.  Validation serves two purposes,
     # generating informative error messages and preventing template injection attacks.
@@ -37,86 +55,112 @@ class AskTest(unittest.TestCase):
             raise ValueError('Encountered duplicate field name: %r' % name)
         seen_names.add(name)
     
-    def download_urls_sequential(urls, timeout=60):
-    url_to_content = {}
-    for url in urls:
+        def test_pending_calls_race(self):
+        # Issue #14406: multi-threaded race condition when waiting on all
+        # futures.
+        event = threading.Event()
+        def future_func():
+            event.wait()
+        oldswitchinterval = sys.getcheckinterval()
+        sys.setcheckinterval(1)
         try:
-            url_to_content[url] = load_url(url, timeout=timeout)
-        except:
-            pass
-    return url_to_content
+            fs = set(self.executor.submit(future_func) for i in range(100))
+            event.set()
+            futures.wait(fs, return_when=futures.ALL_COMPLETED)
+        finally:
+            sys.setcheckinterval(oldswitchinterval)
     
-        This will typically be run on the result of the communicate() method
-    of a subprocess.Popen object.
+      CheckCall( [ sys.executable, build_file ] + sys.argv[ 1: ] )
+    
+    
+# This class can be used to keep the ycmd server alive for the duration of the
+# life of the client. By default, ycmd shuts down if it doesn't see a request in
+# a while.
+class YcmdKeepalive( object ):
+  def __init__( self, ping_interval_seconds = 60 * 10 ):
+    self._keepalive_thread = Thread( target = self._ThreadMain )
+    self._keepalive_thread.daemon = True
+    self._ping_interval_seconds = ping_interval_seconds
+    
     '''
-    stderr = re.sub(r'\[\d+ refs\]\r?\n?$'.encode(), ''.encode(), stderr).strip()
-    return stderr
+Port of the Java example of 'Setter Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
+http://xunitpatterns.com/Dependency%20Injection.html.
+    
+    '''
+Port of the Java example of 'Parameter Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
+http://xunitpatterns.com/Dependency%20Injection.html.
     
     
-def _FormatYcmdDebugInfo( ycmd ):
-  python = ycmd[ 'python' ]
-  clang = ycmd[ 'clang' ]
-  message = ( 'Server Python interpreter: {0}\n'
-              'Server Python version: {1}\n'
-              'Server has Clang support compiled in: {2}\n'
-              'Clang version: {3}\n'.format( python[ 'executable' ],
-                                             python[ 'version' ],
-                                             clang[ 'has_support' ],
-                                             clang[ 'version' ] ) )
-  extra_conf = ycmd[ 'extra_conf' ]
-  extra_conf_path = extra_conf[ 'path' ]
-  if not extra_conf_path:
-    message += 'No extra configuration file found\n'
-  elif not extra_conf[ 'is_loaded' ]:
-    message += ( 'Extra configuration file found but not loaded\n'
-                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
-  else:
-    message += ( 'Extra configuration file found and loaded\n'
-                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
-  return message
+@coroutine
+def coroutine1(target):
+    while True:
+        request = yield
+        if 0 < request <= 10:
+            print('request {} handled in coroutine 1'.format(request))
+        else:
+            target.send(request)
+    
+            # they can be executed later on
+        for cmd in command_stack:
+            cmd.execute()
+    
+    ### OUTPUT ###
+# Counting to two...
+# one two
+# Counting to five...
+# one two three four five
+
+    
+    print 'PLUGIN_I18N_PATHS := ' + ','.join(os.path.relpath(plugin.path)
+                                         for plugin in plugins
+                                         if plugin.needs_translation)
     
     
-  def Start( self ):
-    request_data = BuildRequestData()
-    request_data.update( { 'filetypes': self.filetypes } )
-    with HandleServerException():
-      self._response = self.PostDataToHandler( request_data,
-                                               'semantic_completion_available' )
-    
-      def FilterLevel( diagnostic ):
-    return diagnostic[ 'kind' ] == expected_kind
+class SubredditMiddleware(object):
+    sr_pattern = re.compile(r'^/r/([^/]{2,})')
     
     
-def FormatDebugInfoResponse_NoExtraConf_test():
-  response = deepcopy( GENERIC_RESPONSE )
-  response[ 'extra_conf' ].update( {
-    'is_loaded': False,
-    'path': None
-  } )
-  assert_that(
-    FormatDebugInfoResponse( response ),
-    contains_string(
-      'No extra configuration file found\n'
-    )
-  )
+def register_api_templates(template_name, template_class):
+    for style in ('api', 'api-html', 'api-compact'):
+        tpm.add_handler(
+            name=template_name,
+            style=style,
+            handler=template_class,
+        )
     
-            total_count = 0
-        translated_count = 0
-        with open(fn) as f:
-            catalog = read_po(f)
-            for msg in catalog:
-                total_count += 1
-                if is_translated(msg):
-                    translated_count += 1
-        pct = translated_count / float(total_count) * 100
-        click.echo('% -7s % 2d%%' % (
-            locale,
-            pct,
-        ), err=True)
-        if pct >= MINIMUM and locale not in rv:
-            rv.append(locale)
-    with open(catalog_file, 'w') as f:
-        json.dump({
-            'supported_locales': sorted(rv)
-        }, f, indent=2)
-        f.write('\n')
+            res = AdminPage(content = AdminAwardWinners(award),
+                        title='award winners').render()
+        return res
+
+    
+        def GET_button_demo_page(self):
+        # no buttons for domain listings -> redirect to top level
+        if isinstance(c.site, DomainSR):
+            return self.redirect('/buttons')
+        return BoringPage(_('reddit buttons'),
+                          show_sidebar = False, 
+                          content=ButtonDemoPanel()).render()
+    
+    
+redditbroke =  \
+'''<html>
+  <head>
+    <title>reddit broke!</title>
+  </head>
+  <body>
+    <div style='margin: auto; text-align: center'>
+      <p>
+        <a href='/'>
+          <img border='0' src='%s' alt='you broke reddit' />
+        </a>
+      </p>
+      <p>
+        %s
+      </p>
+  </body>
+</html>
+'''
