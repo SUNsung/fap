@@ -1,111 +1,132 @@
 
         
-        
-# create our blueprint :)
-bp = Blueprint('flaskr', __name__)
+                String:                    '#4e9a06',        # class: 's'
+        String.Backtick:           '#4e9a06',        # class: 'sb'
+        String.Char:               '#4e9a06',        # class: 'sc'
+        String.Doc:                'italic #8f5902', # class: 'sd' - like a comment
+        String.Double:             '#4e9a06',        # class: 's2'
+        String.Escape:             '#4e9a06',        # class: 'se'
+        String.Heredoc:            '#4e9a06',        # class: 'sh'
+        String.Interpol:           '#4e9a06',        # class: 'si'
+        String.Other:              '#4e9a06',        # class: 'sx'
+        String.Regex:              '#4e9a06',        # class: 'sr'
+        String.Single:             '#4e9a06',        # class: 's1'
+        String.Symbol:             '#4e9a06',        # class: 'ss'
     
-        A simple application that shows how Flask and jQuery get along.
+    #: The set of HTTP status codes that indicate an automatically
+#: processable redirect.
+REDIRECT_STATI = (
+    codes.moved,               # 301
+    codes.found,               # 302
+    codes.other,               # 303
+    codes.temporary_redirect,  # 307
+    codes.permanent_redirect,  # 308
+)
     
-        # by setting the `trainable` argument, in Sequential
-    model = Sequential()
-    layer = Dense(2, input_dim=1)
-    model.add(layer)
-    assert model.trainable_weights == layer.trainable_weights
-    layer.trainable = False
-    assert model.trainable_weights == []
+        def __init__(self, username, password):
+        self.username = username
+        self.password = password
     
-    # we start off with an efficient embedding layer which maps
-# our vocab indices into embedding_dims dimensions
-model.add(Embedding(max_features,
-                    embedding_dims,
-                    input_length=maxlen))
+        builtin_str = str
+    bytes = str
+    str = unicode
+    basestring = basestring
+    numeric_types = (int, long, float)
+    integer_types = (int, long)
+    
+        @classmethod
+    def register_sources(cls, datasource_config):
+        for module_name, class_names in datasource_config.items():
+            class_names = [str(s) for s in class_names]
+            module_obj = __import__(module_name, fromlist=class_names)
+            for class_name in class_names:
+                source_class = getattr(module_obj, class_name)
+                cls.sources[source_class.type] = source_class
+    
+        def dttm_sql_literal(self, dttm):
+        '''Convert datetime object to a SQL expression string
+    
+    
+def main():
+    tornado.options.parse_command_line()
+    application = tornado.web.Application([
+        (r'/', MainHandler),
+    ])
+    http_server = tornado.httpserver.HTTPServer(application)
+    http_server.listen(options.port)
+    tornado.ioloop.IOLoop.current().start()
+    
+    
+@wsgi_safe
+class NamedURLSpecGroupsTest(WebTestCase):
+    def get_handlers(self):
+        class EchoHandler(RequestHandler):
+            def get(self, path):
+                self.write(path)
+    
+    The one public-facing part of this module is the `Configurable` class
+and its `~Configurable.configure` method, which becomes a part of the
+interface of its subclasses, including `.AsyncHTTPClient`, `.IOLoop`,
+and `.Resolver`.
+'''
+    
+    # This import will fail if path is not set up correctly
+import testapp
+    
+        @gen_test
+    def test_stop_in_callback(self):
+        # Issue #2069: calling server.stop() in a loop callback should not
+        # raise EBADF when the loop handles other server connection
+        # requests in the same loop iteration
     
     
 if __name__ == '__main__':
-    pytest.main([__file__])
+    main()
 
     
-    print('Train...')
-model.fit(x_train, y_train,
-          batch_size=batch_size,
-          epochs=epochs,
-          validation_data=(x_test, y_test))
-score, acc = model.evaluate(x_test, y_test, batch_size=batch_size)
-print('Test score:', score)
-print('Test accuracy:', acc)
+        __metaclass__ = abc.ABCMeta
+    
+        def test_frozen_pool(self):
+        with ObjectPool(self.sample_queue) as pool:
+            self.assertEqual(pool, 'first')
+            self.assertEqual(pool, 'first')
+        self.assertTrue(self.sample_queue.get() == 'second')
+        self.assertFalse(self.sample_queue.empty())
+        self.assertTrue(self.sample_queue.get() == 'first')
+        self.assertTrue(self.sample_queue.empty())
+    
+    production code which is untestable:
+    
+        test = CatalogStatic('param_value_1')
+    test.main_method()
+    
+    
+@coroutine
+def coroutine3(target):
+    while True:
+        request = yield
+        if 20 < request <= 30:
+            print('request {} handled in coroutine 3'.format(request))
+        else:
+            target.send(request)
+    
+    ### OUTPUT ###
+# renaming foo.txt to bar.txt
+# renaming bar.txt to baz.txt
+# renaming baz.txt to bar.txt
+# renaming bar.txt to foo.txt
 
     
-    # 4D convolution in th order. This shape has the same effective shape as FC_SHAPE
-CONV_SHAPE = (25, 25, 20, 20)
     
-                # cntk doesn't support eval convolution with static
-            # variable, will enable it later
-            if K.backend() != 'cntk':
-                # check regularizers
-                kwargs = {'data_format': data_format,
-                          'return_sequences': return_sequences,
-                          'kernel_size': (num_row, num_col),
-                          'stateful': True,
-                          'filters': filters,
-                          'batch_input_shape': inputs.shape,
-                          'kernel_regularizer': regularizers.L1L2(l1=0.01),
-                          'recurrent_regularizer': regularizers.L1L2(l1=0.01),
-                          'bias_regularizer': 'l2',
-                          'activity_regularizer': 'l2',
-                          'kernel_constraint': 'max_norm',
-                          'recurrent_constraint': 'max_norm',
-                          'bias_constraint': 'max_norm',
-                          'padding': 'same'}
+def count_to(count):
+    '''Counts by word numbers, up to a maximum of five'''
+    numbers = ['one', 'two', 'three', 'four', 'five']
+    for number in numbers[:count]:
+        yield number
     
-        train_samples = 100
-    test_samples = 50
+        def attach(self, observer):
+        if observer not in self._observers:
+            self._observers.append(observer)
     
     
-def shuffle_mats_or_lists(matrix_list, stop_ind=None):
-    ret = []
-    assert all([len(i) == len(matrix_list[0]) for i in matrix_list])
-    len_val = len(matrix_list[0])
-    if stop_ind is None:
-        stop_ind = len_val
-    assert stop_ind <= len_val
-    
-            # put all lines in the file into a Python list
-        strings = f.readlines()
-        
-        # above line leaves trailing newline characters; strip them out
-        strings = [x.strip(u'\n') for x in strings]
-        
-        # remove empty-lines and comments
-        strings = [x for x in strings if x and not x.startswith(u'#')]
-        
-        # insert empty string since all are being removed
-        strings.insert(0, u'')
-    
-    js.load_plugin_modules(plugins)
-modules = dict((k, m) for k, m in js.module.iteritems())
-print 'JS_MODULES := ' + ' '.join(modules.iterkeys())
-outputs = []
-for name, module in modules.iteritems():
-    outputs.extend(module.outputs)
-    print 'JS_MODULE_OUTPUTS_%s := %s' % (name, ' '.join(module.outputs))
-    print 'JS_MODULE_DEPS_%s := %s' % (name, ' '.join(module.dependencies))
-    
-    from pylons import tmpl_context as c
-    
-            AJAX login handler, used by both login and register to set the
-        user cookie and send back a redirect.
-        '''
-        c.user = user
-        c.user_is_loggedin = True
-        self.login(user, rem=rem)
-    
-        def GET_widget_demo_page(self):
-        return BoringPage(_('reddit widget'),
-                          show_sidebar = False, 
-                          content=WidgetDemoPanel()).render()
-
-    
-    import pylibmc
-from pylons import request, response
-from pylons import app_globals as g
-from pylons.controllers.util import abort
+class CompositeSpecification(Specification):
