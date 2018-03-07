@@ -1,60 +1,90 @@
 
         
-            try:
-        # hide console in MS windows
-        startupinfo = subprocess.STARTUPINFO()
-        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-        startupinfo.wShowWindow = subprocess.SW_HIDE
-    
-        def mark(self):
-        '''
-        Tell the stream to start buffering if it hasn't already.  Return
-        current input position, index(), or some other marker so that
-        when passed to rewind() you get back to the same spot.
-        rewind(mark()) should not affect the input cursor.  The Lexer
-        track line/col info as well as input index so its markers are
-        not pure input indexes.  Same for tree node streams.
-        '''
-    
-        # exceptions:  division by zero, overflow
-    if not b:
-        raise ZeroDivisionError('division by zero')
-    if a >= DBL_MIN_OVERFLOW * b:
-        raise OverflowError('int/int too large to represent as a float')
-    
-            abbrs = fileobj.read(tzh_charcnt)
-    
-    Usage:
-while True:
-    try:
-        chunk = Chunk(file)
-    except EOFError:
-        break
-    chunktype = chunk.getname()
-    while True:
-        data = chunk.read(nbytes)
-        if not data:
-            pass
-        # do something with data
-    
-    FLAGS = re.VERBOSE | re.MULTILINE | re.DOTALL
-    
-            m = match_number(string, idx)
-        if m is not None:
-            integer, frac, exp = m.groups()
-            if frac or exp:
-                res = parse_float(integer + (frac or '') + (exp or ''))
+            def _get_having_obj(self, col, op, eq):
+        cond = None
+        if op == '==':
+            if col in self.column_names:
+                cond = DimSelector(dimension=col, value=eq)
             else:
-                res = parse_int(integer)
-            return res, m.end()
-        elif nextchar == 'N' and string[idx:idx + 3] == 'NaN':
-            return parse_constant('NaN'), idx + 3
-        elif nextchar == 'I' and string[idx:idx + 8] == 'Infinity':
-            return parse_constant('Infinity'), idx + 8
-        elif nextchar == '-' and string[idx:idx + 9] == '-Infinity':
-            return parse_constant('-Infinity'), idx + 9
-        else:
-            raise StopIteration(idx)
+                cond = Aggregation(col) == eq
+        elif op == '>':
+            cond = Aggregation(col) > eq
+        elif op == '<':
+            cond = Aggregation(col) < eq
+    
+    # List of patterns, relative to source directory, that match files and
+# directories to ignore when looking for source files.
+exclude_patterns = ['_build']
+    
+            # schema
+        self.assertEquals(
+            {'schemaname.tbname'},
+            self.extract_tables('SELECT * FROM schemaname.tbname'))
+    
+        for pvm_list in duplicates:
+        first_prm = pvm_list[0]
+        roles = set(first_prm.role)
+        for pvm in pvm_list[1:]:
+            roles = roles.union(pvm.role)
+            sm.get_session.delete(pvm)
+        first_prm.roles = list(roles)
+    sm.get_session.commit()
+    
+        print('Loading [Misc Charts] dashboard')
+    data.load_misc_dashboard()
+    
+    
+appbuilder.add_view(
+    TableModelView,
+    'Tables',
+    label=__('Tables'),
+    category='Sources',
+    category_label=__('Sources'),
+    icon='fa-table',
+)
+    
+    import re
+    
+    
+class Board:
+    def __init__(self, title, pins):
+        self.title = title
+        self.pins = pins
+        self.pin_count = len(pins)
+    
+        for i in range(10, 30):
+        url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
+            i = i,
+            p = preview
+        )
+        try:
+            mime, ext, size = url_info(url)
+            break
+        except: continue
+    
+    from html.parser import HTMLParser
+    
+    
+class HelpSource(Query):
+    'Get menu name and help source for Help menu.'
+    # Used in ConfigDialog.HelpListItemAdd/Edit, (941/9)
+    
+        def test_extend(self):
+        d = deque('a')
+        self.assertRaises(TypeError, d.extend, 1)
+        d.extend('bcd')
+        self.assertEqual(list(d), list('abcd'))
+        d.extend(d)
+        self.assertEqual(list(d), list('abcdabcd'))
+    
+    +----------------+
+| ID (4 bytes)   |
++----------------+
+| size (4 bytes) |
++----------------+
+| data           |
+| ...            |
++----------------+
     
     def escape(m):
     all, tail = m.group(0, 1)
@@ -77,40 +107,59 @@ while True:
             raise ValueError('invalid octal string escape ('\\%s')' % tail) from None
     return chr(i)
     
-        @support.requires_IEEE_754
-    def test_plus_minus_0j(self):
-        # test that -0j and 0j literals are not identified
-        z1, z2 = 0j, -0j
-        self.assertEqual(atan2(z1.imag, -1.), atan2(0., -1.))
-        self.assertEqual(atan2(z2.imag, -1.), atan2(-0., -1.))
+        X_RGB_TXT -- X Consortium rgb.txt format files.  Three columns of numbers
+                 from 0 .. 255 separated by whitespace.  Arbitrary trailing
+                 columns used as the color name.
     
-            for start, end, step in test_ranges:
-            iter1 = range(start, end, step)
-            iter2 = pyrange(start, end, step)
-            test_id = 'range({}, {}, {})'.format(start, end, step)
-            # check first 100 entries
-            self.assert_iterators_equal(iter1, iter2, test_id, limit=100)
-    
-    # 截图距离 * time_coefficient = 按键时长
-# time_coefficient:
-#    iphonex: 0.00125
-#    iphone6: 0.00196
-#    iphone6s plus: 0.00120
-time_coefficient = 0.00120
-    
-        def get_screen(self):
-        process = os.popen(self.adb_path + ' shell wm size')
-        output = process.read()
-        return output
+    ctype_types = [c_byte, c_ubyte, c_short, c_ushort, c_int, c_uint,
+                 c_long, c_ulong, c_longlong, c_ulonglong, c_double, c_float]
+python_types = [int, int, int, int, int, int,
+                int, int, int, int, float, float]
     
     
-# Magic Number，不设置可能无法正常执行，请根据具体截图从上到下按需
-# 设置，设置保存在 config 文件夹中
-config = config.open_accordant_config()
-under_game_score_y = config['under_game_score_y']
-# 长按的时间系数，请自己根据实际情况调节
-press_coefficient = config['press_coefficient']
-# 二分之一的棋子底座高度，可能要调节
-piece_base_height_1_2 = config['piece_base_height_1_2']
-# 棋子的宽度，比截图中量到的稍微大一点比较安全，可能要调节
-piece_body_width = config['piece_body_width']
+class auto_adb():
+    def __init__(self):
+        try:
+            adb_path = 'adb'
+            subprocess.Popen([adb_path], stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+            self.adb_path = adb_path
+        except OSError:
+            if platform.system() == 'Windows':
+                adb_path = os.path.join('Tools', 'adb', 'adb.exe')
+                try:
+                    subprocess.Popen(
+                        [adb_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    self.adb_path = adb_path
+                except OSError:
+                    pass
+            else:
+                try:
+                    subprocess.Popen(
+                        [adb_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                except OSError:
+                    pass
+            print('请安装 ADB 及驱动并配置环境变量')
+            print('具体链接: https://github.com/wangshub/wechat_jump_game/wiki')
+            exit(1)
+    
+    
+    def _find_board(self, image, piece_x, piece_y):
+        width, height = image.size
+        pixels = image.load()
+    
+    
+def pull_screenshot():  # 获取截图
+    global screenshot_way
+    if screenshot_way in [1, 2]:
+        process = subprocess.Popen(
+            'adb shell screencap -p', shell=True, stdout=subprocess.PIPE)
+        screenshot = process.stdout.read()
+        if screenshot_way == 2:
+            binary_screenshot = screenshot.replace(b'\r\n', b'\n')
+        else:
+            binary_screenshot = screenshot.replace(b'\r\r\n', b'\n')
+        return binary_screenshot
+    elif screenshot_way == 0:
+        os.system('adb shell screencap -p /sdcard/autojump.png')
+        os.system('adb pull /sdcard/autojump.png .')
