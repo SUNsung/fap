@@ -1,19 +1,22 @@
 
         
-        require 'json'
-require 'open-uri'
+            def valid_type?(type)
+      const_get(:TYPES).include?(type)
+    end
     
-          new_theme_name = args.join('_')
-      theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
-      if theme.path.exist?
-        Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.'
-      end
+          logger.log(sev, message)
+    end
     
-        sh 'gem build spree.gemspec'
-    mv 'spree-#{version}.gem', pkgdir
+      included do
+    include Oauthable
+    
+      def load_event
+    @event = current_user.events.find(params[:id])
   end
+end
+
     
-            def show
-          @stock_movement = scope.find(params[:id])
-          respond_with(@stock_movement)
-        end
+          if create && !path.directory?
+        odebug 'Creating metadata directory #{path}.'
+        path.mkpath
+      end
