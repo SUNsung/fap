@@ -1,78 +1,84 @@
 
         
-              module ClassMethods
-        # Attempt to find a user by its email. If a record is found, send new
-        # confirmation instructions to it. If not, try searching for a user by unconfirmed_email
-        # field. If no user is found, returns a new user with an email not found error.
-        # Options must contain the user email
-        def send_confirmation_instructions(attributes={})
-          confirmable = find_by_unconfirmed_email_with_errors(attributes) if reconfirmable
-          unless confirmable.try(:persisted?)
-            confirmable = find_or_initialize_with_errors(confirmation_keys, attributes, :not_found)
-          end
-          confirmable.resend_confirmation_instructions if confirmable.persisted?
-          confirmable
+            # This setting makes it so that network access from inside the vagrant guest
+    # is able to resolve DNS using the hosts VPN connection.
+    v.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
+  end
+    
+          topic.feature_topic_users(args)
+    end
+    
+    module Jobs
+    
+    BASE_URI = ENV['BASE_URI'] || 'https://github.com/jondot/awesome-react-native'
+    
+            return a.casecmp(b) if a_length == 1 && b_length == 1
+        return 1 if a_length == 1
+        return -1 if b_length == 1
+    
+          unless root?
+        raise Invalid, 'missing name' if !name || name.empty?
+        raise Invalid, 'missing path' if !path || path.empty?
+        raise Invalid, 'missing type' if !type || type.empty?
+      end
+    end
+    
+        class << self
+      attr_accessor :dir
+    
+        # we assume that the first file that requires 'sinatra' is the
+    # app_file. all other path related options are calculated based
+    # on this path by default.
+    set :app_file, caller_files.first || $0
+    
+          def html?(headers)
+        return false unless header = headers.detect { |k,v| k.downcase == 'content-type' }
+        options[:html_types].include? header.last[/^\w+\/\w+/]
+      end
+    end
+  end
+end
+
+    
+            modes       = Array options[:escape]
+        @escaper    = options[:escaper]
+        @html       = modes.include? :html
+        @javascript = modes.include? :javascript
+        @url        = modes.include? :url
+    
+        def assign_file_information
+      instance_write(:file_name, cleanup_filename(@file.original_filename))
+      instance_write(:content_type, @file.content_type.to_s.strip)
+      instance_write(:file_size, @file.size)
+    end
+    
+        # Extracts the Geometry from a 'WxH,O' string
+    # Where W is the width, H is the height,
+    # and O is the EXIF orientation
+    def self.parse(string)
+      GeometryParser.new(string).make
+    end
+    
+            def responds?
+          methods = @subject.instance_methods.map(&:to_s)
+          methods.include?('#{@attachment_name}') &&
+            methods.include?('#{@attachment_name}=') &&
+            methods.include?('#{@attachment_name}?')
         end
     
-      # PUT /resource/password
-  def update
-    self.resource = resource_class.reset_password_by_token(resource_params)
-    yield resource if block_given?
+            def rejecting *types
+          @rejected_types = types.flatten
+          self
+        end
     
-        def reset_password_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :reset_password_instructions, opts)
-    end
     
-          private
-    
-      #forward some requests to status message, because a poll is just attached to a status message and is not sharable itself
-  delegate :author_id, :diaspora_handle, :public?, :subscribers, to: :status_message
-    
-        def recheck
-      pod = Pod.find(params[:pod_id])
-      pod.test_connection!
-    
-          # Inspired by https://github.com/nov/openid_connect_sample/blob/master/app/controllers/connect/clients_controller.rb#L24
-      def create
-        registrar = OpenIDConnect::Client::Registrar.new(request.url, params)
-        client = Api::OpenidConnect::OAuthApplication.register! registrar
-        render json: client.as_json(root: false)
-      end
-    
-          # Get the cache key pair for the given Sass URI.
-      # The URI need not be checked for validity.
-      #
-      # The only strict requirement is that the returned pair of strings
-      # uniquely identify the file at the given URI.
-      # However, the first component generally corresponds roughly to the directory,
-      # and the second to the basename, of the URI.
-      #
-      # Note that keys must be unique *across importers*.
-      # Thus it's probably a good idea to include the importer name
-      # at the beginning of the first component.
-      #
-      # @param uri [String] A URI known to be valid for this importer.
-      # @param options [{Symbol => Object}] Options for the Sass file
-      #   containing the `@import` currently being checked.
-      # @return [(String, String)] The key pair which uniquely identifies
-      #   the file at the given URI.
-      def key(uri, options)
-        Sass::Util.abstract(self)
-      end
-    
-      # Uninstalls this logger from \{Sass.logger\}. This should only be called if
-  # the logger was installed using \{#install!}
-  def uninstall!
-    if Sass.logger != self
-      throw Exception.new('Can't uninstall a logger that's not currently installed.')
-    end
-    
-        # The type of the query (e.g. `'screen'` or `'print'`).
-    #
-    # When parsed as Sass code, this contains strings and SassScript nodes. When
-    # parsed as CSS, it contains a single string (accessible via
-    # \{#resolved_type}).
-    #
-    # @return [Array<String, Sass::Script::Tree::Node>]
-    attr_accessor :type
+    {  # Returns hash with styles missing from recent run of rake paperclip:refresh:missing_styles
+  #   {
+  #     :User => {:avatar => [:big]},
+  #     :Book => {
+  #       :cover => [:croppable]},
+  #     }
+  #   }
+  def self.missing_attachments_styles
+    current_styles = current_attachments_styles
+    registered_styles = get_registered_attachments_styles
