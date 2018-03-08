@@ -1,254 +1,257 @@
-Value const* Value::find(char const* key, char const* cend) const
-{
-  JSON_ASSERT_MESSAGE(
-      type_ == nullValue || type_ == objectValue,
-      'in Json::Value::find(key, end, found): requires objectValue or nullValue');
-  if (type_ == nullValue) return NULL;
-  CZString actualKey(key, static_cast<unsigned>(cend-key), CZString::noDuplication);
-  ObjectValues::const_iterator it = value_.map_->find(actualKey);
-  if (it == value_.map_->end()) return NULL;
-  return &(*it).second;
-}
-const Value& Value::operator[](const char* key) const
-{
-  Value const* found = find(key, key + strlen(key));
-  if (!found) return nullRef;
-  return *found;
-}
-Value const& Value::operator[](std::string const& key) const
-{
-  Value const* found = find(key.data(), key.data() + key.length());
-  if (!found) return nullRef;
-  return *found;
-}
+
+        
+          // mate::TrackableObject:
+  static void BuildPrototype(v8::Isolate* isolate,
+                             v8::Local<v8::FunctionTemplate> prototype);
     
-    namespace oneof_descriptor {
-PyObject* NewOneofFieldsSeq(const OneofDescriptor* descriptor);
-}  // namespace oneof_descriptor
+    AsarProtocolHandler::AsarProtocolHandler(
+    const scoped_refptr<base::TaskRunner>& file_task_runner)
+    : file_task_runner_(file_task_runner) {}
     
-    namespace google {
-namespace protobuf {
-namespace python {
-    }
-    }
-    }
+      // net::URLRequestJobFactory::ProtocolHandler:
+  net::URLRequestJob* MaybeCreateJob(
+      net::URLRequest* request,
+      net::NetworkDelegate* network_delegate) const override;
     
+    #endif  // ATOM_BROWSER_RELAUNCHER_H_
+
     
-    {  ASSERT_TRUE(message.ParseFromString(data));
-  EXPECT_TRUE(message.has_any_value());
-  ASSERT_TRUE(message.any_value().UnpackTo(&any));
-  ASSERT_TRUE(any.UnpackTo(&submessage));
-  EXPECT_EQ(12345, submessage.int32_value());
-}
+      Predicate predicate_;
     
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_PRIMITIVE_FIELD_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_PRIMITIVE_FIELD_H__
+    // Set platform accelerator for the Accelerator.
+void SetPlatformAccelerator(ui::Accelerator* accelerator);
+    
+    /// used internally
+void throwRuntimeError(std::string const& msg);
+/// used internally
+void throwLogicError(std::string const& msg);
+    
+    // Appends all the CMessages in the input iterator to the container.
+//
+// Returns None if successful; returns NULL and sets an exception if
+// unsuccessful.
+PyObject* Extend(RepeatedCompositeContainer* self, PyObject* value);
     
     
     {
     {
-    {
-    {}  // namespace csharp
+    {}  // namespace cpp
 }  // namespace compiler
 }  // namespace protobuf
-}  // namespace google
-
     
-      virtual void Generate(io::Printer* printer);
+    #include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/io/printer.h>
     
-      /// Sets the non-blocking mode of the native acceptor implementation.
-  /**
-   * This function is used to modify the non-blocking mode of the underlying
-   * native acceptor. It has no effect on the behaviour of the acceptor object's
-   * synchronous operations.
-   *
-   * @param mode If @c true, the underlying acceptor is put into non-blocking
-   * mode and direct system calls may fail with boost::asio::error::would_block
-   * (or the equivalent system error).
-   *
-   * @throws boost::system::system_error Thrown on failure. If the @c mode is
-   * @c false, but the current value of @c non_blocking() is @c true, this
-   * function fails with boost::asio::error::invalid_argument, as the
-   * combination does not make sense.
-   */
-  void native_non_blocking(bool mode)
-  {
-    boost::system::error_code ec;
-    this->get_service().native_non_blocking(
-        this->get_implementation(), mode, ec);
-    boost::asio::detail::throw_error(ec, 'native_non_blocking');
-  }
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
     
-      /// Set the timer's expiry time as an absolute time.
-  /**
-   * This function sets the expiry time. Any pending asynchronous wait
-   * operations will be cancelled. The handler for each cancelled operation will
-   * be invoked with the boost::asio::error::operation_aborted error code.
-   *
-   * @param expiry_time The expiry time to be used for the timer.
-   *
-   * @return The number of asynchronous operations that were cancelled.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   *
-   * @note If the timer has already expired when expires_at() is called, then
-   * the handlers for asynchronous wait operations will:
-   *
-   * @li have already been invoked; or
-   *
-   * @li have been queued for invocation in the near future.
-   *
-   * These handlers can no longer be cancelled, and therefore are passed an
-   * error code that indicates the successful completion of the wait operation.
-   */
-  std::size_t expires_at(const time_point& expiry_time)
-  {
-    boost::system::error_code ec;
-    std::size_t s = this->service.expires_at(
-        this->implementation, expiry_time, ec);
-    boost::asio::detail::throw_error(ec, 'expires_at');
-    return s;
-  }
+    void RepeatedEnumFieldGenerator::GenerateMembers(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    'private static readonly pb::FieldCodec<$type_name$> _repeated_$name$_codec\n'
+    '    = pb::FieldCodec.ForEnum($tag$, x => (int) x, x => ($type_name$) x);\n');
+  printer->Print(variables_,
+    'private readonly pbc::RepeatedField<$type_name$> $name$_ = new pbc::RepeatedField<$type_name$>();\n');
+  WritePropertyDocComment(printer, descriptor_);
+  AddPublicMemberAttributes(printer);
+  printer->Print(
+    variables_,
+    '$access_level$ pbc::RepeatedField<$type_name$> $property_name$ {\n'
+    '  get { return $name$_; }\n'
+    '}\n');
+}
     
-      /// Construct a non-modifiable buffer from a modifiable one.
-  const_buffer(const mutable_buffer& b)
-    : data_(boost::asio::detail::buffer_cast_helper(b)),
-      size_(boost::asio::detail::buffer_size_helper(b))
-#if defined(BOOST_ASIO_ENABLE_BUFFER_DEBUGGING)
-      , debug_check_(b.get_debug_check())
-#endif // BOOST_ASIO_ENABLE_BUFFER_DEBUGGING
-  {
-  }
+    CvRect cvGetValidDisparityROI( CvRect roi1, CvRect roi2, int minDisparity,
+                              int numberOfDisparities, int SADWindowSize )
+{
+    return (CvRect)cv::getValidDisparityROI( roi1, roi2, minDisparity,
+                                            numberOfDisparities, SADWindowSize );
+}
     
-    #ifndef BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
-#define BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
+        Mat img = _img.getMat(), cornersM = _corners.getMat();
+    int ncorners = cornersM.checkVector(2, CV_32F);
+    CV_Assert( ncorners >= 0 );
+    Point2f* corners = cornersM.ptr<Point2f>();
+    const int nbins = 256;
+    float ranges[] = {0, 256};
+    const float* _ranges = ranges;
+    Mat hist;
     
-    #include <boost/asio/detail/pop_options.hpp>
-    
-    #include <boost/asio/detail/addressof.hpp>
-#include <boost/asio/detail/bind_handler.hpp>
-#include <boost/asio/detail/buffer_sequence_adapter.hpp>
-#include <boost/asio/detail/descriptor_ops.hpp>
-#include <boost/asio/detail/fenced_block.hpp>
-#include <boost/asio/detail/reactor_op.hpp>
-    
-    // Calls to asio_handler_allocate and asio_handler_deallocate must be made from
-// a namespace that does not contain any overloads of these functions. The
-// boost_asio_handler_alloc_helpers namespace is defined here for that purpose.
-namespace boost_asio_handler_alloc_helpers {
+    // Subclass of TestServiceImpl that increments a request counter for
+// every call to the Echo RPC.
+class MyTestServiceImpl : public TestServiceImpl {
+ public:
+  MyTestServiceImpl() : request_count_(0) {}
     }
     
-    #define BOOST_ASIO_HANDSHAKE_HANDLER_CHECK( \
-    handler_type, handler) \
-  typedef int BOOST_ASIO_UNUSED_TYPEDEF
+    DEFINE_string(scenario_result_file, '',
+              'Write JSON benchmark report to the file specified.');
     
-      // Re-initialise the hash from the values already contained in the list.
-  void rehash(std::size_t num_buckets)
-  {
-    if (num_buckets == num_buckets_)
-      return;
-    num_buckets_ = num_buckets;
-    BOOST_ASIO_ASSERT(num_buckets_ != 0);
+    
+    {  if (request->has_param() && request->param().echo_metadata()) {
+    const std::multimap<grpc::string_ref, grpc::string_ref>& client_metadata =
+        context->client_metadata();
+    for (std::multimap<grpc::string_ref, grpc::string_ref>::const_iterator
+             iter = client_metadata.begin();
+         iter != client_metadata.end(); ++iter) {
+      context->AddTrailingMetadata(ToString(iter->first),
+                                   ToString(iter->second));
     }
-    
-      errno = 0;
-#if defined(__SYMBIAN32__)
-  int result = error_wrapper(::fcntl(d, F_GETFL, 0), ec);
-  if (result >= 0)
-  {
-    errno = 0;
-    int flag = (value ? (result | O_NONBLOCK) : (result & ~O_NONBLOCK));
-    result = error_wrapper(::fcntl(d, F_SETFL, flag), ec);
+    // Terminate rpc with error and debug info in trailer.
+    if (request->param().debug_info().stack_entries_size() ||
+        !request->param().debug_info().detail().empty()) {
+      grpc::string serialized_debug_info =
+          request->param().debug_info().SerializeAsString();
+      context->AddTrailingMetadata(kDebugInfoTrailerKey, serialized_debug_info);
+      return Status::CANCELLED;
+    }
   }
-#else // defined(__SYMBIAN32__)
-  ioctl_arg_type arg = (value ? 1 : 0);
-  int result = error_wrapper(::ioctl(d, FIONBIO, &arg), ec);
-#endif // defined(__SYMBIAN32__)
+  if (request->has_param() &&
+      (request->param().expected_client_identity().length() > 0 ||
+       request->param().check_auth_context())) {
+    CheckServerAuthContext(context,
+                           request->param().expected_transport_security_type(),
+                           request->param().expected_client_identity());
+  }
+  if (request->has_param() && request->param().response_message_length() > 0) {
+    response->set_message(
+        grpc::string(request->param().response_message_length(), '\0'));
+  }
+  if (request->has_param() && request->param().echo_peer()) {
+    response->mutable_param()->set_peer(context->peer());
+  }
+  return Status::OK;
+}
     
-    #endif // defined(BOOST_ASIO_HAS_EPOLL)
+      bool signal_client() {
+    std::unique_lock<std::mutex> lock(mu_);
+    return signal_client_;
+  }
     
-    #include 'db/filename.h'
-#include 'leveldb/env.h'
-#include 'leveldb/table.h'
-#include 'util/coding.h'
+    #include <grpc++/create_channel.h>
+#include <grpc++/security/credentials.h>
+#include <grpc/support/log.h>
     
-      ASSERT_TRUE(! Overlaps('100', '149'));
-  ASSERT_TRUE(! Overlaps('251', '299'));
-  ASSERT_TRUE(! Overlaps('451', '500'));
-  ASSERT_TRUE(! Overlaps('351', '399'));
+      ClientConfig client_config;
+  client_config.set_client_type(ASYNC_CLIENT);
+  client_config.set_outstanding_rpcs_per_channel(1000);
+  client_config.set_client_channels(8);
+  client_config.set_async_client_threads(8);
+  client_config.set_rpc_type(STREAMING);
+  client_config.mutable_load_params()->mutable_poisson()->set_offered_load(
+      1000.0 / grpc_test_slowdown_factor());
     
-    
-    {}  // namespace leveldb
-    
-      void ReadSequential() {
-    int status;
-    sqlite3_stmt *pStmt;
-    std::string read_str = 'SELECT * FROM test ORDER BY key';
+    int main(int argc, char** argv) {
+  grpc::testing::InitTest(&argc, &argv, true);
     }
     
-    #include 'db/db_impl.h'
-#include 'leveldb/db.h'
-#include 'leveldb/env.h'
-#include 'util/testharness.h'
+    class RouteGuideClient {
+ public:
+  RouteGuideClient(std::shared_ptr<Channel> channel, const std::string& db)
+      : stub_(RouteGuide::NewStub(channel)) {
+    routeguide::ParseDb(db, &feature_list_);
+  }
+    }
+    
+    namespace grpc_node_generator {
+    }
+    
+      if (!args[0]->IsString()) {
+    return scope.Close(Boolean::New(false));
+  }
+    
+      private:
+    explicit DBWrapper();
+    ~DBWrapper();
+    
+    
+    {  // No copying allowed
+  Reader(const Reader&);
+  void operator=(const Reader&);
+};
+    
+    /*
+ * Class:     org_rocksdb_IngestExternalFileOptions
+ * Method:    allowBlockingFlush
+ * Signature: (J)Z
+ */
+jboolean Java_org_rocksdb_IngestExternalFileOptions_allowBlockingFlush(
+    JNIEnv* env, jobject jobj, jlong jhandle) {
+  auto* options =
+      reinterpret_cast<rocksdb::IngestExternalFileOptions*>(jhandle);
+  return static_cast<jboolean>(options->allow_blocking_flush);
+}
+    
+    #include <memory>
+#include <set>
 #include <string>
-#include <vector>
+#include 'rocksdb/statistics.h'
+#include 'monitoring/statistics.h'
     
-      // delete second key range
-  batch.Clear();
-  for (size_t i = 0; i < kNumKeys; i++) {
-    batch.Delete(Key2(i));
-  }
-  ASSERT_OK(db->Write(leveldb::WriteOptions(), &batch));
+        std::string log_line = 'ADD - ';
+    log_line += key.ToString(true);
+    log_line += ' - ';
+    AppendNumberTo(&log_line, size);
+  // @lint-ignore TXT2 T25377293 Grandfathered in
+		log_line += '\n';
     
-    Iterator::~Iterator() {
-  if (cleanup_.function != NULL) {
-    (*cleanup_.function)(cleanup_.arg1, cleanup_.arg2);
-    for (Cleanup* c = cleanup_.next; c != NULL; ) {
-      (*c->function)(c->arg1, c->arg2);
-      Cleanup* next = c->next;
-      delete c;
-      c = next;
+    #include 'rocksdb/compaction_filter.h'
+#include 'rocksjni/jnicallback.h'
+    
+    namespace A2STR {
     }
-  }
-}
+    
+    class AbstractCommand : public Command {
+private:
+  std::shared_ptr<Request> req_;
+  std::shared_ptr<FileEntry> fileEntry_;
+  std::shared_ptr<SocketCore> socket_;
+  std::shared_ptr<SocketRecvBuffer> socketRecvBuffer_;
+  std::shared_ptr<SocketCore> readCheckTarget_;
+  std::shared_ptr<SocketCore> writeCheckTarget_;
+    }
+    
+      virtual void openFile(int64_t totalLength = 0) CXX11_OVERRIDE;
+    
+      void updateReadWriteCheck();
     
     
-    {    printf('DestroyContext()\n');
-    ImGui::DestroyContext();
-    return 0;
-}
+    {} // namespace aria2
 
     
+    AbstractProxyRequestCommand::AbstractProxyRequestCommand(
+    cuid_t cuid, const std::shared_ptr<Request>& req,
+    const std::shared_ptr<FileEntry>& fileEntry, RequestGroup* requestGroup,
+    DownloadEngine* e, const std::shared_ptr<Request>& proxyRequest,
+    const std::shared_ptr<SocketCore>& s)
+    : AbstractCommand(cuid, req, fileEntry, requestGroup, e, s),
+      proxyRequest_(proxyRequest),
+      httpConnection_(std::make_shared<HttpConnection>(
+          cuid, s, std::make_shared<SocketRecvBuffer>(s)))
+{
+  setTimeout(std::chrono::seconds(getOption()->getAsInt(PREF_CONNECT_TIMEOUT)));
+  disableReadCheckSocket();
+  setWriteCheckSocket(getSocket());
+}
     
-    {        int idx_offset = 0;
-        for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
-        {
-            const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
-            if (pcmd->UserCallback)
-            {
-                pcmd->UserCallback(cmd_list, pcmd);
-            }
-            else
-            {
-                ALLEGRO_BITMAP* texture = (ALLEGRO_BITMAP*)pcmd->TextureId;
-                al_set_clipping_rectangle(pcmd->ClipRect.x, pcmd->ClipRect.y, pcmd->ClipRect.z-pcmd->ClipRect.x, pcmd->ClipRect.w-pcmd->ClipRect.y);
-                al_draw_indexed_prim(&vertices[0], g_VertexDecl, texture, &indices[idx_offset], pcmd->ElemCount, ALLEGRO_PRIM_TRIANGLE_LIST);
-            }
-            idx_offset += pcmd->ElemCount;
-        }
+    namespace aria2 {
     }
     
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
+    #include 'common.h'
+    
+    class ApiCallbackDownloadEventListener : public DownloadEventListener {
+public:
+  ApiCallbackDownloadEventListener(Session* session,
+                                   DownloadEventCallback callback,
+                                   void* userData);
+  virtual ~ApiCallbackDownloadEventListener();
+  virtual void onEvent(DownloadEvent event,
+                       const RequestGroup* group) CXX11_OVERRIDE;
+    }
