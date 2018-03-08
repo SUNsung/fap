@@ -1,20 +1,11 @@
 
         
-        try:
-    input = raw_input
-except NameError:
-    pass
+        signature = hexlify(rsa.pkcs1.sign(json.dumps(versions_info, sort_keys=True).encode('utf-8'), privkey, 'SHA-256')).decode()
+print('signature: ' + signature)
     
-        entry = entry_template.replace('@TIMESTAMP@', timestamp)
-    entry = entry.replace('@VERSION@', v)
-    entries.append(entry)
-    
-    if isinstance(helptext, bytes):
-    helptext = helptext.decode('utf-8')
-    
-        def test_youtube_search_matching(self):
-        self.assertMatch('http://www.youtube.com/results?search_query=making+mustard', ['youtube:search_url'])
-        self.assertMatch('https://www.youtube.com/results?baz=bar&search_query=youtube-dl+test+video&filters=video&lclk=video', ['youtube:search_url'])
+        # Get the version from youtube_dl/version.py without importing the package
+    exec(compile(open('youtube_dl/version.py').read(),
+                 'youtube_dl/version.py', 'exec'))
     
     
 class TestCache(unittest.TestCase):
@@ -25,116 +16,95 @@ class TestCache(unittest.TestCase):
         self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
         self.tearDown()
     
+            self.server_process.terminate()
+        self.server_process.communicate()
     
-if __name__ == '__main__':
-    unittest.main()
+    
+import errno
+import io
+import json
+import re
+import subprocess
+    
+            return self._extract_nuevo(
+            'http://www.anitube.se/nuevo/econfig.php?key=%s' % key, video_id)
+
+    
+            # Audiomack wraps a lot of soundcloud tracks in their branded wrapper
+        # if so, pass the work off to the soundcloud extractor
+        if SoundcloudIE.suitable(api_response['url']):
+            return {'_type': 'url', 'url': api_response['url'], 'ie_key': 'Soundcloud'}
+    
+        _TESTS = [{
+        'url': 'http://camwithher.tv/view_video.php?viewkey=6e9a24e2c0e842e1f177&page=&viewtype=&category=',
+        'info_dict': {
+            'id': '5644',
+            'ext': 'flv',
+            'title': 'Periscope Tease',
+            'description': 'In the clouds teasing on periscope to my favorite song',
+            'duration': 240,
+            'view_count': int,
+            'comment_count': int,
+            'uploader': 'MileenaK',
+            'upload_date': '20160322',
+        },
+        'params': {
+            'skip_download': True,
+        }
+    }, {
+        'url': 'http://camwithher.tv/view_video.php?viewkey=6dfd8b7c97531a459937',
+        'only_matching': True,
+    }, {
+        'url': 'http://camwithher.tv/view_video.php?page=&viewkey=6e9a24e2c0e842e1f177&viewtype=&category=',
+        'only_matching': True,
+    }, {
+        'url': 'http://camwithher.tv/view_video.php?viewkey=b6c3b5bea9515d1a1fc4&page=&viewtype=&category=mv',
+        'only_matching': True,
+    }]
+    
+    
+def side_effect(old_cmd, command):
+    with tarfile.TarFile(_tar_file(old_cmd.script_parts)[0]) as archive:
+        for file in archive.getnames():
+            try:
+                os.remove(file)
+            except OSError:
+                # does not try to remove directories as we cannot know if they
+                # already existed before
+                pass
 
     
     
-class AcademicEarthCourseIE(InfoExtractor):
-    _VALID_URL = r'^https?://(?:www\.)?academicearth\.org/playlists/(?P<id>[^?#/]+)'
-    IE_NAME = 'AcademicEarth:Course'
-    _TEST = {
-        'url': 'http://academicearth.org/playlists/laws-of-nature/',
-        'info_dict': {
-            'id': 'laws-of-nature',
-            'title': 'Laws of Nature',
-            'description': 'Introduce yourself to the laws of nature with these free online college lectures from Yale, Harvard, and MIT.',
-        },
-        'playlist_count': 3,
-    }
-    
-        def _real_extract(self, url):
-        # URLs end with [uploader name]/[uploader title]
-        # this title is whatever the user types in, and is rarely
-        # the proper song title.  Real metadata is in the api response
-        album_url_tag = self._match_id(url)
+def linear_model_main(_distances, _press_times, target_distance):
+    regr = LinearRegression()
+    regr.fit(_distances, _press_times)
+    predict_press_time = regr.predict(target_distance)
+    result = {}
+    # 截距 b
+    result['intercept'] = regr.intercept_
+    # 斜率值 k
+    result['coefficient'] = regr.coef_
+    # 预估的按压时间
+    result['value'] = predict_press_time
+    return result
     
     
-class C56IE(InfoExtractor):
-    _VALID_URL = r'https?://(?:(?:www|player)\.)?56\.com/(?:.+?/)?(?:v_|(?:play_album.+-))(?P<textid>.+?)\.(?:html|swf)'
-    IE_NAME = '56.com'
-    _TESTS = [{
-        'url': 'http://www.56.com/u39/v_OTM0NDA3MTY.html',
-        'md5': 'e59995ac63d0457783ea05f93f12a866',
-        'info_dict': {
-            'id': '93440716',
-            'ext': 'flv',
-            'title': '网事知多少 第32期：车怒',
-            'duration': 283.813,
-        },
-    }, {
-        'url': 'http://www.56.com/u47/v_MTM5NjQ5ODc2.html',
-        'md5': '',
-        'info_dict': {
-            'id': '82247482',
-            'title': '爱的诅咒之杜鹃花开',
-        },
-        'playlist_count': 7,
-        'add_ie': ['Sohu'],
-    }]
+def jumpbot(parser):
+ 
+    if parser.mode == 'manual':
+        bot = ManualBot(params=settings.get_bot_params(parser.model))
+        bot.run()
     
-    # Workers are created as daemon threads and processes. This is done to allow the
-# interpreter to exit when there are still idle processes in a
-# ProcessPoolExecutor's process pool (i.e. shutdown() was not called). However,
-# allowing workers to die with the interpreter has two undesirable properties:
-#   - The workers would still be running during interpretor shutdown,
-#     meaning that they would fail in unpredictable ways.
-#   - The workers could be killed while evaluating a work item, which could
-#     be bad if the callable being evaluated has external side-effects e.g.
-#     writing to a file.
-#
-# To work around this problem, an exit handler is installed which tells the
-# workers to exit when their work queues are empty and then waits until the
-# threads/processes finish.
+            self.client = wda.Client()
+        self.session = self.client.session()
     
-    from concurrent.futures import _base
-    
-    URLS = ['http://www.google.com/',
-        'http://www.apple.com/',
-        'http://www.ibm.com',
-        'http://www.thisurlprobablydoesnotexist.com',
-        'http://www.slashdot.org/',
-        'http://www.python.org/',
-        'http://www.bing.com/',
-        'http://www.facebook.com/',
-        'http://www.yahoo.com/',
-        'http://www.youtube.com/',
-        'http://www.blogger.com/']
+        # 如果游戏结束 点击再来一局
+    left = int(w / 2)  # 按钮半宽约uiw//5
+    # 根据9:16实测按钮高度中心0.825 按钮半高约uiw//28
+    top = int((h - uih) / 2 + uih * 0.825)
+    if gameover:
+        return left, top
     
     
-@contextlib.contextmanager
-def HandleServerException( display = True, truncate = False ):
-  '''Catch any exception raised through server communication. If it is raised
-  because of a unknown .ycm_extra_conf.py file, load the file or ignore it after
-  asking the user. Otherwise, log the exception and display its message to the
-  user on the Vim status line. Unset the |display| parameter to hide the message
-  from the user. Set the |truncate| parameter to avoid hit-enter prompts from
-  this message.
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-      if not p.isfile( build_file ):
-    sys.exit(
-      'File {0} does not exist; you probably forgot to run:\n'
-      '\tgit submodule update --init --recursive\n'.format( build_file ) )
-    
-    
-def WaitUntilReady( timeout = 5 ):
-  expiration = time.time() + timeout
-  while True:
-    try:
-      if time.time() > expiration:
-        raise RuntimeError( 'Waited for the server to be ready '
-                            'for {0} seconds, aborting.'.format( timeout ) )
-      if _IsReady():
-        return
-    except requests.exceptions.ConnectionError:
-      pass
-    finally:
-      time.sleep( 0.1 )
+def update_data():
+    return np.array(Image.open('autojump.png'))
