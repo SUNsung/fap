@@ -1,99 +1,82 @@
 
         
-        namespace HPHP {
-/////////////////////////////////////////////////////////////////////////////
+        v8::Local<v8::Object> CreateJSEvent(
+    v8::Isolate* isolate,
+    v8::Local<v8::Object> object,
+    content::WebContents* sender,
+    IPC::Message* message) {
+  v8::Local<v8::Object> event;
+  bool use_native_event = sender && message;
     }
     
-    ///////////////////////////////////////////////////////////////////////////////
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
-    }
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    protected:
-  Sweepable();
-  enum class Init {};
-  explicit Sweepable(Init) { init(); }
-  virtual ~Sweepable() { delist(); }
-    
-    
-    {
-    {    s_dispatcher->enqueue(job);
-    g_context->incrPageletTasksStarted();
-    return Resource(std::move(task));
-  }
-  return Resource();
+    namespace content {
+class WebContents;
 }
     
-    #include <atomic>
-#include 'stddef.h'
-    
-    #include 'hphp/runtime/vm/resumable.h'
-    
-    // true pass, false limit
-bool CommFrequencyLimit::Check() {
-    uint64_t now = ::gettickcount();
-    if (!touch_times_.empty() && (now<touch_times_.front()) ) { //if user modify the time, amend it
-    	xwarn2(TSF'Must be modified time.now=%_', now);
-    	size_t size = touch_times_.size();
-    	touch_times_.clear();
-    	for (size_t i=0; i<size; ++i) {
-    		touch_times_.push_back(now-1);
-    	}
-    }
-    }
-    
-    //
-//  spy.h
-//  PublicComponent
-//
-//  Created by yerungui on 14-5-14.
-//
-    
-        auto startPoint = high_resolution_clock::now();
-    vector<thread *> threads;
-    for (int i = 0; i < THREADS; i++) {
-        threads.push_back(new thread([i] {
-            while(nextConnection(i));
-        }));
-    }
-    
-    template <bool isServer>
-void Group<isServer>::addWebSocket(WebSocket<isServer> *webSocket) {
-    if (webSocketHead) {
-        webSocketHead->prev = webSocket;
-        webSocket->next = webSocketHead;
-    } else {
-        webSocket->next = nullptr;
-    }
-    webSocketHead = webSocket;
-    webSocket->prev = nullptr;
+    namespace base {
+class TaskRunner;
 }
     
-        if (!httpSocket->isShuttingDown()) {
-        if (isServer) {
-            Group<isServer>::from(httpSocket)->removeHttpSocket(httpSocket);
-            Group<isServer>::from(httpSocket)->httpDisconnectionHandler(httpSocket);
-        }
-    } else {
-        httpSocket->cancelTimeout();
+    // Like URLRequestAsarJob, but asks the JavaScript handler for file path.
+class URLRequestAsyncAsarJob : public JsAsker<asar::URLRequestAsarJob> {
+ public:
+  URLRequestAsyncAsarJob(net::URLRequest*, net::NetworkDelegate*);
     }
     
-    /*
- * Immediately terminates this WebSocket. Will call onDisconnection of its Group.
- *
- * Hints: Close code will be 1006 and message will be empty.
- *
- */
-template <bool isServer>
-void WebSocket<isServer>::terminate() {
-    }
+    // Relaunches the application using the helper application associated with the
+// currently running instance of Chrome in the parent browser process as the
+// executable for the relauncher process. |args| is an argv-style vector of
+// command line arguments of the form normally passed to execv. args[0] is
+// also the path to the relaunched process. Because the relauncher process
+// will ultimately launch the relaunched process via Launch Services, args[0]
+// may be either a pathname to an executable file or a pathname to an .app
+// bundle directory. The caller should exit soon after RelaunchApp returns
+// successfully. Returns true on success, although some failures can occur
+// after this function returns true if, for example, they occur within the
+// relauncher process. Returns false when the relaunch definitely failed.
+bool RelaunchApp(const StringVector& argv);
     
-        void start(void (*cb)(Timer *), int timeout, int repeat) {
-        loop->timepoint = std::chrono::system_clock::now();
-        std::chrono::system_clock::time_point timepoint = loop->timepoint + std::chrono::milliseconds(timeout);
+    #include <memory>
+#include <unordered_map>
+    
+    typedef struct { int position; atom::AtomMenuModel* model; } MenuItem;
+typedef std::map<ui::Accelerator, MenuItem> AcceleratorTable;
+    
+    namespace base {
+class FilePath;
+}
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(GlobalMenuBarX11);
+};
+    
+    namespace xgboost {
+ConsoleLogger::~ConsoleLogger() {
+  dmlc::CustomLogMessage::Log(log_stream_.str());
+}
+TrackerLogger::~TrackerLogger() {
+  dmlc::CustomLogMessage::Log(log_stream_.str());
+}
+}  // namespace xgboost
+    
+    #include <dmlc/logging.h>
+#include <sstream>
+#include './base.h'
+    
+     protected:
+  /*!
+   * \brief to be implemented by subclass,
+   * get next token, return EOF if end of file
+   */
+  virtual char GetChar(void) = 0;
+  /*! \brief to be implemented by child, check if end of stream */
+  virtual bool IsEnd(void) = 0;
+    
+    TEST(Param, VectorIOStream) {
+  std::vector<int> vals = {3, 2, 1};
+  std::stringstream ss;
+  std::vector<int> vals_in;
+  
+  ss << vals;
+  EXPECT_EQ(ss.str(), '(3,2,1)');
     }
