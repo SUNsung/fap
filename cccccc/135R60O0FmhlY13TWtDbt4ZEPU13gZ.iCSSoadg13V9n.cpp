@@ -1,341 +1,371 @@
 
         
-          if (!status) {                  // If not set then
-    return FALSE;                // ignore other checks
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+      // Runs the optimized version of the graph on the cluster, measure
+  // the runtimes of each operation, and annotated the CostGraphDef
+  // with the corresponding measurements.
+  // Returns the average latency for the whole graph.
+  Status PredictCosts(const GraphDef& optimized_graph, CostGraphDef* cost_graph,
+                      Costs* overall_cost) const override;
+    
+    #ifndef TENSORFLOW_KERNELS_SPARSE_TENSOR_DENSE_ADD_OP_H_
+#define TENSORFLOW_KERNELS_SPARSE_TENSOR_DENSE_ADD_OP_H_
+    
+    
+    {  int argc = argv.size();
+  exec_argv_ = new char*[argc + 1];
+  for (int i = 0; i < argc; i++) {
+    exec_argv_[i] = strdup(argv[i].c_str());
+    if (exec_argv_[i] == nullptr) {
+      LOG(FATAL) << 'SetProgram failed to allocate command argument.';
+      return;
+    }
   }
-    
-    
-    {  STRING output_fname = fname;
-  const char *lastdot = strrchr(output_fname.string(), '.');
-  if (lastdot != NULL) output_fname[lastdot - output_fname.string()] = '\0';
-  output_fname += '.txt';
-  FILE *output_file = open_file(output_fname.string(), 'a+');
-  return output_file;
+  exec_argv_[argc] = nullptr;
 }
     
-    #include          <stdio.h>
-#include          <math.h>
-#include          'errcode.h'
-#include          'linlsq.h'
+      bool operator==(const PluginConfig& rhs) const;
     
-    #include <stdio.h>
-    
-    static int set_ifname(struct ifaddrs* ifaddr, int interface) {
-	char buf[IFNAMSIZ] = {0};
-	char* name = if_indextoname(interface, buf);
-	if (name == NULL) {
-		return -1;
-	}
-	ifaddr->ifa_name = new char[strlen(name) + 1];
-	strncpy(ifaddr->ifa_name, name, strlen(name) + 1);
-	return 0;
+    std::ostream& operator<<(std::ostream& out,
+                         const VersionedComputationHandle& versioned_handle) {
+  out << versioned_handle.ToString();
+  return out;
 }
     
-    FT_BEGIN_HEADER
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    # ifdef __GNUC_PREREQ
-#  if __GNUC_PREREQ(3,4)
-#   include <limits.h>
-/*Note the casts to (int) below: this prevents OC_CLZ{32|64}_OFFS from
-   'upgrading' the type of an entire expression to an (unsigned) size_t.*/
-#   if INT_MAX>=2147483647
-#    define OC_CLZ32_OFFS ((int)sizeof(unsigned)*CHAR_BIT)
-#    define OC_CLZ32(_x) (__builtin_clz(_x))
-#   elif LONG_MAX>=2147483647L
-#    define OC_CLZ32_OFFS ((int)sizeof(unsigned long)*CHAR_BIT)
-#    define OC_CLZ32(_x) (__builtin_clzl(_x))
-#   endif
-#   if INT_MAX>=9223372036854775807LL
-#    define OC_CLZ64_OFFS ((int)sizeof(unsigned)*CHAR_BIT)
-#    define OC_CLZ64(_x) (__builtin_clz(_x))
-#   elif LONG_MAX>=9223372036854775807LL
-#    define OC_CLZ64_OFFS ((int)sizeof(unsigned long)*CHAR_BIT)
-#    define OC_CLZ64(_x) (__builtin_clzl(_x))
-#   elif LLONG_MAX>=9223372036854775807LL|| \
-     __LONG_LONG_MAX__>=9223372036854775807LL
-#    define OC_CLZ64_OFFS ((int)sizeof(unsigned long long)*CHAR_BIT)
-#    define OC_CLZ64(_x) (__builtin_clzll(_x))
-#   endif
-#  endif
-# endif
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
+    //////////////////////////////////////////////////////////////////////
     
+    #include 'hphp/runtime/base/array-init.h'
+#include 'hphp/runtime/base/datetime.h'
+#include 'hphp/runtime/base/resource-data.h'
+#include 'hphp/runtime/base/type-array.h'
+#include 'hphp/runtime/base/type-string.h'
+#include 'hphp/util/timer.h'
     
-    static const vorbis_mapping_template _mapres_template_16_stereo[3]={
-  { _map_nominal, _res_16s_0 }, /* 0 */
-  { _map_nominal, _res_16s_1 }, /* 1 */
-  { _map_nominal, _res_16s_2 }, /* 2 */
-};
-    
-      {2,0,32,  &_residue_44_high,
-   &_huff_book__44c8_s_long,&_huff_book__44c8_s_long,
-   &_resbook_44s_8,&_resbook_44s_8}
-};
-static const vorbis_residue_template _res_44s_9[]={
-  {2,0,16,  &_residue_44_high,
-   &_huff_book__44c9_s_short,&_huff_book__44c9_s_short,
-   &_resbook_44s_9,&_resbook_44s_9},
-    
-    template <typename CompletionCondition>
-class base_from_completion_cond
-{
-protected:
-  explicit base_from_completion_cond(CompletionCondition completion_condition)
-    : completion_condition_(completion_condition)
-  {
-  }
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
     }
     
-      BOOST_ASIO_DECL static void init_native_buffer(
-      native_buffer_type& buf,
-      const boost::asio::const_buffer& buffer);
-#elif defined(BOOST_ASIO_WINDOWS) || defined(__CYGWIN__)
-  // The maximum number of buffers to support in a single operation.
-  enum { max_buffers = 64 < max_iov_len ? 64 : max_iov_len };
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-      static void do_complete(io_service_impl* owner, operation* base,
-      const boost::system::error_code& /*ec*/,
-      std::size_t /*bytes_transferred*/)
-  {
-    // Take ownership of the handler object.
-    descriptor_read_op* o(static_cast<descriptor_read_op*>(base));
-    ptr p = { boost::asio::detail::addressof(o->handler_), o, o };
-    }
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-# include <boost/asio/detail/null_event.hpp>
-#elif defined(BOOST_ASIO_WINDOWS)
-# include <boost/asio/detail/win_event.hpp>
-#elif defined(BOOST_ASIO_HAS_PTHREADS)
-# include <boost/asio/detail/posix_event.hpp>
-#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
-# include <boost/asio/detail/std_event.hpp>
-#else
-# error Only Windows, POSIX and std::condition_variable are supported!
-#endif
-    
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
-    }
-    
-    #define BOOST_ASIO_HANDSHAKE_HANDLER_CHECK( \
-    handler_type, handler) \
-  \
-  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
-      void(boost::system::error_code)) \
-    asio_true_handler_type; \
-  \
-  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
-      sizeof(boost::asio::detail::one_arg_handler_test( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>(), \
-          static_cast<const boost::system::error_code*>(0))) == 1, \
-      'HandshakeHandler type requirements not met') \
-  \
-  typedef boost::asio::detail::handler_type_requirements< \
-      sizeof( \
-        boost::asio::detail::argbyv( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>())) + \
-      sizeof( \
-        boost::asio::detail::lvref< \
-          asio_true_handler_type>()( \
-            boost::asio::detail::lvref<const boost::system::error_code>()), \
-        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
-    
-      // Remove the descriptor from /dev/poll. Since this function is only called
-  // during a fork, we can apply the change immediately.
-  ::pollfd ev = { 0, 0, 0 };
-  ev.fd = descriptor;
-  ev.events = POLLREMOVE;
-  ev.revents = 0;
-  ::write(dev_poll_fd_, &ev, sizeof(ev));
-    
-      inline void ParseStr(std::string *tok) {
-    while ((ch_buf = this->GetChar()) != EOF) {
-      switch (ch_buf) {
-        case '\\': *tok += this->GetChar(); break;
-        case '\'': return;
-        case '\r':
-        case '\n': LOG(FATAL)<< 'ConfigReader: unterminated string';
-        default: *tok += ch_buf;
-      }
-    }
-    LOG(FATAL) << 'ConfigReader: unterminated string';
-  }
-  inline void ParseStrML(std::string *tok) {
-    while ((ch_buf = this->GetChar()) != EOF) {
-      switch (ch_buf) {
-        case '\\': *tok += this->GetChar(); break;
-        case '\'': return;
-        default: *tok += ch_buf;
-      }
-    }
-    LOG(FATAL) << 'unterminated string';
-  }
-  // return newline
-  inline bool GetNextToken(std::string *tok) {
-    tok->clear();
-    bool new_line = false;
-    while (ch_buf != EOF) {
-      switch (ch_buf) {
-        case '#' : SkipLine(); new_line = true; break;
-        case '\'':
-          if (tok->length() == 0) {
-            ParseStr(tok); ch_buf = this->GetChar(); return new_line;
-          } else {
-            LOG(FATAL) << 'ConfigReader: token followed directly by string';
-          }
-        case '\'':
-          if (tok->length() == 0) {
-            ParseStrML(tok); ch_buf = this->GetChar(); return new_line;
-          } else {
-            LOG(FATAL) << 'ConfigReader: token followed directly by string';
-          }
-        case '=':
-          if (tok->length() == 0) {
-            ch_buf = this->GetChar();
-            *tok = '=';
-          }
-          return new_line;
-        case '\r':
-        case '\n':
-          if (tok->length() == 0) new_line = true;
-        case '\t':
-        case ' ' :
-          ch_buf = this->GetChar();
-          if (tok->length() != 0) return new_line;
-          break;
-        default:
-          *tok += ch_buf;
-          ch_buf = this->GetChar();
-          break;
-      }
-    }
-    if (tok->length() == 0) {
-      return true;
-    } else {
+      /* encoding */
+  if (!encoding.empty()) {
+    string.no_encoding = mbfl_name2no_encoding(encoding.data());
+    if (string.no_encoding == mbfl_no_encoding_invalid) {
+      raise_warning('Unknown encoding \'%s\'', encoding.data());
       return false;
     }
   }
-};
-/*!
- * \brief an iterator use stream base, allows use all types of istream
- */
-class ConfigStreamReader: public ConfigReaderBase {
- public:
-  /*!
-   * \brief constructor
-   * \param fin istream input stream
-   */
-  explicit ConfigStreamReader(std::istream &fin) : fin(fin) {}
     
-      std::string tmp_file = TempFileName();
-  dmlc::Stream * fs = dmlc::Stream::Create(tmp_file.c_str(), 'w');
-  info.SaveBinary(fs);
-  delete fs;
-    
-    
-    {  EXPECT_TRUE(se1.NeedReplace(3, 1));
-}
-
-    
-    
-    {
-    {      if (size_to_read != 0) {
-        CHECK_EQ(fi->Read(dmlc::BeginPtr(page->data) + page->offset[i],
-                          size_to_read * sizeof(SparseBatch::Entry)),
-                 size_to_read * sizeof(SparseBatch::Entry))
-            << 'Invalid SparsePage file';
-        curr_offset += size_to_read;
-      }
-      i = j;
-    }
-    // seek to end of record
-    if (curr_offset != disk_offset_.back()) {
-      fi->Seek(begin + disk_offset_.back() * sizeof(SparseBatch::Entry));
-    }
-    return true;
+      if (root % 2 == 0 && mpz_sgn(gmpData) < 0) {
+    mpz_clear(gmpData);
+    raise_warning(cs_GMP_ERROR_EVEN_ROOT_NEGATIVE_NUMBER, 'gmp_rootrem');
+    return false;
   }
+    
+    #include 'hphp/runtime/vm/jit/containers.h'
+#include 'hphp/runtime/vm/jit/prof-data.h'
+#include 'hphp/runtime/vm/jit/timer.h'
+#include 'hphp/runtime/vm/jit/vasm.h'
+#include 'hphp/runtime/vm/jit/vasm-instr.h'
+#include 'hphp/runtime/vm/jit/vasm-print.h'
+#include 'hphp/runtime/vm/jit/vasm-text.h'
+#include 'hphp/runtime/vm/jit/vasm-unit.h'
+#include 'hphp/runtime/vm/jit/vasm-visit.h'
+    
+    PageletTransport::PageletTransport(
+    const String& url, const Array& headers, const String& postData,
+    const String& remoteHost, const set<std::string> &rfc1867UploadedFiles,
+    const Array& files, int timeoutSeconds)
+    : m_refCount(0),
+      m_timeoutSeconds(timeoutSeconds),
+      m_done(false),
+      m_code(0),
+      m_event(nullptr) {
+    }
     
       /**
-   * If POLLABLE, return a file descriptor that can be passed to poll / epoll
-   * and will become readable when any async IO operations have completed.
-   * If NOT_POLLABLE, return -1.
+   * Create a new RequestHandler.
    */
-  int pollFd() const {
-    return pollFd_;
+  std::unique_ptr<RequestHandler> createRequestHandler() {
+    return m_handlerFactory();
   }
     
-    TEST(AsyncIO, NonBlockingWait) {
-  AsyncIO aioReader(1, AsyncIO::NOT_POLLABLE);
-  AsyncIO::Op op;
-  int fd = ::open(tempFile.path().c_str(), O_DIRECT | O_RDONLY);
-  PCHECK(fd != -1);
-  SCOPE_EXIT {
-    ::close(fd);
-  };
-  size_t size = 2 * kAlign;
-  auto buf = allocateAligned(size);
-  op.pread(fd, buf.get(), size, 0);
-  aioReader.submit(&op);
-  EXPECT_EQ(aioReader.pending(), 1);
-    }
+    #include <cstdint>
+#include <vector>
+#include <numa.h>
     
-    namespace folly {
-    }
-    
-    void LogCategory::parentLevelUpdated(LogLevel parentEffectiveLevel) {
-  uint32_t levelValue = level_.load(std::memory_order_acquire);
-  auto inherit = (levelValue & FLAG_INHERIT);
-  if (!inherit) {
-    return;
-  }
-    }
-    
-    
-    {} // namespace folly
-
-    
-        // Check for multiple entries for the same category with different but
-    // equivalent names.
-    auto canonicalName = LogName::canonicalize(categoryName);
-    auto ret = seenCategories.emplace(canonicalName, categoryName.str());
-    if (!ret.second) {
-      throw LogConfigParseError{to<string>(
-          'category \'',
-          canonicalName,
-          '\' listed multiple times under different names: \'',
-          ret.first->second,
-          '\' and \'',
-          categoryName,
-          '\'')};
-    }
+          if (bounded && val.caseIdx == iv.size() - 2) {
+        // If we haven't checked bounds yet and this is the 'first non-zero'
+        // case, we have to skip it. This case is only hit for non-Int input
+        // types anyway.
+        continue;
+      }
     
     /**
- * LogHandler represents a generic API for processing log messages.
+ * @brief Superclass for the pluggable logging facilities.
  *
- * LogHandlers have an associated log level.  The LogHandler will discard any
- * messages below its log level.  This allows specific LogHandlers to perform
- * additional filtering of messages even if the messages were enabled at the
- * LogCategory level.  For instance, a single LogCategory may have two
- * LogHandlers attached, one that logs locally to a file, and one that sends
- * messages to a remote logging service.  The local LogHandler may be
- * configured to record all messages, but the remote LogHandler may want to
- * only process ERROR messages and above, even when debug logging is enabled
- * for this LogCategory.
+ * In order to make the logging of osquery results and inline debug, warning,
+ * error status easy to integrate into your environment, we take advantage of
+ * a plugin interface which allows you to integrate osquery with your internal
+ * large-scale logging infrastructure.
  *
- * By default the LogHandler level is set to LogLevel::NONE, which means that
- * all log messages will be processed.
+ * You may use flume, splunk, syslog, scribe, etc. In order to use your
+ * specific upstream logging systems, one simply needs to create a custom
+ * subclass of LoggerPlugin. That subclass should at least implement the
+ * LoggerPlugin::logString method.
+ *
+ * Consider the following example:
+ *
+ * @code{.cpp}
+ *   class TestLoggerPlugin : public LoggerPlugin {
+ *    public:
+ *     osquery::Status logString(const std::string& s) {
+ *       int i = 0;
+ *       internal::logStringToFlume(s, i);
+ *       std::string message;
+ *       if (i == 0) {
+ *         message = 'OK';
+ *       } else {
+ *         message = 'Failed';
+ *       }
+ *       return osquery::Status(i, message);
+ *     }
+ *  };
+ *
+ *  REGISTER(TestLoggerPlugin, 'logger', 'test');
+ * @endcode
  */
-class LogHandler {
+class LoggerPlugin : public Plugin {
  public:
-  virtual ~LogHandler() = default;
+  /// The LoggerPlugin PluginRequest action router.
+  Status call(const PluginRequest& request, PluginResponse& response) override;
     }
+    
+    class DropPrivileges : private boost::noncopyable {
+ public:
+  /// Make call sites use 'dropTo' booleans to improve the UI.
+  static DropPrivilegesRef get() {
+    DropPrivilegesRef handle = DropPrivilegesRef(new DropPrivileges());
+    return handle;
+  }
+    }
+    
+    static int subscribe_to_event(osquery_event_t event, int subscribe) {
+  if (osquery.buffer == NULL) {
+    return -EINVAL;
+  }
+  if (!(OSQUERY_NULL_EVENT < event && event < OSQUERY_NUM_EVENTS)) {
+    return -EINVAL;
+  }
+  if (!osquery_publishers[event]) {
+    return -EINVAL;
+  }
+    }
+    
+    #include 'osquery/tests/test_util.h'
+    
+        std::string arg_interval('--interval');
+    arguments.push_back(arg_interval.c_str());
+    arguments.push_back(extensions_interval.c_str());
+    arguments.push_back(nullptr);
+    
+    #include <string>
+    
+    
+    {  // Returns a heuristic cutoff on block errors in the sense that we won't
+  // consider distortions where a block error is greater than this.
+  virtual float BlockErrorLimit() const = 0;
+  // Given the search direction (+1 for upwards and -1 for downwards) and the
+  // current distance map, fills in *block_weight image with the relative block
+  // error adjustment weights.
+  // The target_mul param has the same semantics as in DistanceOK().
+  // Note that this is essentially a static function in the sense that it does
+  // not depend on the last Compare() call.
+  virtual void ComputeBlockErrorAdjustmentWeights(
+      int direction, int max_block_dist, double target_mul, int factor_x,
+      int factor_y, const std::vector<float>& distmap,
+      std::vector<float>* block_weight) = 0;
+};
+    
+    void Erode(int w, int h, std::vector<bool>* image) {
+  std::vector<bool> temp = *image;
+  for (int y = 1; y + 1 < h; y++) {
+    for (int x = 1; x + 1 < w; x++) {
+      size_t index = y * w + x;
+      if (!(temp[index] && temp[index - 1] && temp[index + 1]
+          && temp[index - w] && temp[index + w])) {
+        (*image)[index] = 0;
+      }
+    }
+  }
+}
+    
+    // Performs in-place floating point 8x8 DCT on block[0..63].
+// Note that the DCT used here is the DCT-2 with the first term multiplied by
+// 1/sqrt(2) and the result scaled by 1/2.
+void ComputeBlockDCTDouble(double block[64]);
+    
+    // Fills in 'result' with the inverse DCT of 'block'.
+// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
+// a row-by-row memory layout.
+void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
+    
+    #include <assert.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+    
+      int width() const { return width_; }
+  int height() const { return height_; }
+    
+    // Butteraugli scores that correspond to JPEG quality levels, starting at
+// kLowestQuality. They were computed by taking median BA scores of JPEGs
+// generated using libjpeg-turbo at given quality from a set of PNGs.
+// The scores above quality level 100 are just linearly decreased so that score
+// for 110 is 90% of the score for 100.
+const double kScoreForQuality[] = {
+  2.810761,  // 70
+  2.729300,
+  2.689687,
+  2.636811,
+  2.547863,
+  2.525400,
+  2.473416,
+  2.366133,
+  2.338078,
+  2.318654,
+  2.201674,  // 80
+  2.145517,
+  2.087322,
+  2.009328,
+  1.945456,
+  1.900112,
+  1.805701,
+  1.750194,
+  1.644175,
+  1.562165,
+  1.473608,  // 90
+  1.382021,
+  1.294298,
+  1.185402,
+  1.066781,
+  0.971769,  // 95
+  0.852901,
+  0.724544,
+  0.611302,
+  0.443185,
+  0.211578,  // 100
+  0.209462,
+  0.207346,
+  0.205230,
+  0.203114,
+  0.200999,  // 105
+  0.198883,
+  0.196767,
+  0.194651,
+  0.192535,
+  0.190420,  // 110
+  0.190420,
+};
+    
+    namespace mars {
+namespace baseevent {
+    }
+    }
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    #endif
+    
+        void Detach(const char* _key) {
+        __OnDetach(_key);
+        m_variablemap.erase(_key);
+    }
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    
+bool TSpy::SpyHookLogFunc(XLoggerInfo_t& _info, std::string& _log)
+{
+    __attribute__((unused)) int i = 0;
+    return true;
+}
+    
+            if (JNI_OK == status_) {
+            break;
+        }
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    TEST(MemoryIdler, futexWaitAwokenEarly) {
+  StrictMock<Futex<MockAtom>> fut;
+  auto clock = MockClock::setup();
+  auto begin = MockClock::time_point(std::chrono::seconds(100));
+  auto idleTimeout = MemoryIdler::defaultIdleTimeout.load();
+    }
+    
+     private:
+  // Uses SFINAE to detect and call
+  // std::enable_shared_from_this<T>::weak_from_this() if available. Falls
+  // back to std::enable_shared_from_this<T>::shared_from_this() otherwise.
+  template <typename U>
+  auto weak_from_this_(std::enable_shared_from_this<U>* base_ptr)
+  noexcept -> decltype(base_ptr->weak_from_this()) {
+    return base_ptr->weak_from_this();
+  }
+    
+    TEST(to_weak_ptr, example) {
+  auto s = std::make_shared<int>(17);
+  EXPECT_EQ(1, s.use_count());
+  EXPECT_EQ(2, (to_weak_ptr(s).lock(), s.use_count())) << 'lvalue';
+  EXPECT_EQ(3, (to_weak_ptr(decltype(s)(s)).lock(), s.use_count())) << 'rvalue';
+}
+    
+      template <typename Fn>
+  static auto makeFailsafe(std::false_type, Fn* fn) noexcept
+      -> ScopeGuardImpl<decltype(std::ref(*fn))> {
+    return ScopeGuardImpl<decltype(std::ref(*fn))>{std::ref(*fn)};
+  }
+    
+    
+    {  EXPECT_EQ(dynamic(dynamic::object
+    ('nested', dynamic::object(coerce_fn(good_k), parse_error))
+    ('key_errors', dynamic::object(coerce_fn(missing_k), key_error))
+    ('value', d)
+  ), errors);
+}
+    
+    
+    {  // Check that global flags can still be given after the command
+  EXPECT_EQ(
+      'running foo\n'
+      'foo global-foo 43\n'
+      'foo local-foo 44\n'
+      'foo arg a\n'
+      'foo arg b\n',
+      callHelper({'foo', '--global-foo', '43', '--local-foo', '44',
+                 'a', 'b'}));
+}
