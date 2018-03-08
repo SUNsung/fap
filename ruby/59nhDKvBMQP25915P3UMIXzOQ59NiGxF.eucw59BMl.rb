@@ -1,150 +1,98 @@
 
         
-        CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+              # Topic may be hard deleted due to spam, no point complaining
+      # we would have to look at the topics table id sequence to find cases
+      # where this was called with an invalid id, no point really
+      return unless topic.present?
     
-    require 'bundler/setup'
-require 'json'
-require 'stackprof'
-require File.expand_path('../lib/jekyll', __dir__)
+    module Jobs
     
-    def run_jekyll(args)
-  args = args.strip.split(' ') # Shellwords?
-  process = run_in_shell('ruby', Paths.jekyll_bin.to_s, *args, '--trace')
-  process.exitstatus.zero?
+      def regular?
+    !staff?
+  end
+    
+        valid_oauth_providers :evernote
+    
+      def load_event
+    @event = current_user.events.find(params[:id])
+  end
 end
+
     
-        def arg_is_present?(args, deprecated_argument, message)
-      if args.include?(deprecated_argument)
-        deprecation_message(message)
-      end
+      def toggle_availability
+    @service = current_user.services.find(params[:id])
+    @service.toggle_availability!
+    
+            def log_level(name, options = {})
+          if options[:prepend]
+            level = log_levels.values.min
+            level = level.nil? ? 0 : level - 1
+          else
+            level = log_levels.values.max
+            level = level.nil? ? 0 : level + 1
+          end
+          log_levels.update(name => level)
+          define_logger(name)
+        end
+    
+    run SinatraStaticServer
+
+    
+    module Jekyll
+    
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
+    
+        def html_output_for(script_url, code)
+      code = CGI.escapeHTML code
+      <<-HTML
+<div><script src='#{script_url}'></script>
+<noscript><pre><code>#{code}</code></pre></noscript></div>
+      HTML
     end
     
-          #
-      # Require a gem or gems. If it's not present, show a very nice error
-      # message that explains everything and is much more helpful than the
-      # normal LoadError.
-      #
-      # names - a string gem name or array of gem names
-      #
-      def require_with_graceful_fail(names)
-        Array(names).each do |name|
-          begin
-            Jekyll.logger.debug 'Requiring:', name.to_s
-            require name
-          rescue LoadError => e
-            Jekyll.logger.error 'Dependency Error:', <<-MSG
-Yikes! It looks like you don't have #{name} or one of its dependencies installed.
-In order to use Jekyll as currently configured, you'll need to install this gem.
+        def render(context)
+      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
+      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
+      file = code_path + @file
     
-        # Initialize a new Layout.
-    #
-    # site - The Site.
-    # base - The String path to the source.
-    # name - The String filename of the post file.
-    def initialize(site, base, name)
-      @site = site
-      @base = base
-      @name = name
-    
-      private
-    
-        registration
-  end
-    
-      test 'should always have confirmation token when email is sent' do
-    user = new_user
-    user.instance_eval { def confirmation_required?; false end }
-    user.save
-    user.send_confirmation_instructions
-    assert_not_nil user.reload.confirmation_token
-  end
-    
-      def failure_message
-    exception = request.respond_to?(:get_header) ? request.get_header('omniauth.error') : request.env['omniauth.error']
-    error   = exception.error_reason if exception.respond_to?(:error_reason)
-    error ||= exception.error        if exception.respond_to?(:error)
-    error ||= (request.respond_to?(:get_header) ? request.get_header('omniauth.error.type') : request.env['omniauth.error.type']).to_s
-    error.to_s.humanize if error
-  end
-    
-    gemspec
-    
-      # Controllers inheriting DeviseController are advised to override this
-  # method so that other controllers inheriting from them would use
-  # existing translations.
-  def translation_scope
-    'devise.#{controller_name}'
-  end
-    
-        ActiveSupport.on_load(:action_view) do
-      include scope::UrlHelpers
+      # Improved version of Liquid's truncate:
+  # - Doesn't cut in the middle of a word.
+  # - Uses typographically correct ellipsis (…) insted of '...'
+  def truncate(input, length)
+    if input.length > length && input[0..(length-1)] =~ /(.+)\b.+$/im
+      $1.strip + ' &hellip;'
+    else
+      input
     end
   end
     
-            # Initialize the provider to represent the given machine.
-        #
-        # @param [Vagrant::Machine] machine The machine that this provider
-        #   is responsible for.
-        def initialize(machine)
+          Dir.chdir(file_path) do
+        contents = file.read
+        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
+          contents = $1.lstrip
         end
-    
-          def merge!(other)
-        other.each do |key, value|
-          self[convert_key(key)] = value
-        end
-        self
-      end
-    
-        select_pairs = []
-    reject_pairs = []
-    h.dup.send(@method) { |*pair| select_pairs << pair }
-    h.reject { |*pair| reject_pairs << pair }
-    
-      it 'ignores underscores between numbers' do
-    '190_22'.to_r.should == Rational(19022, 1)
-    '-190_22.7'.to_r.should == Rational(-190227, 10)
-  end
-    
-            # Prints the list of specs & pod cache dirs for a single pod name.
-        #
-        # This output is valid YAML so it can be parsed with 3rd party tools
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        The various infos about a pod cache. Keys are
-        #        :spec_file, :version, :release and :slug
-        #
-        def print_pod_cache_infos(pod_name, cache_descriptors)
-          UI.puts '#{pod_name}:'
-          cache_descriptors.each do |desc|
-            if @short_output
-              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
-            end
-            UI.puts('  - Version: #{desc[:version]}')
-            UI.puts('    Type:    #{pod_type(desc)}')
-            UI.puts('    Spec:    #{desc[:spec_file]}')
-            UI.puts('    Pod:     #{desc[:slug]}')
+        contents = pre_filter(contents)
+        if @raw
+          contents
+        else
+          partial = Liquid::Template.parse(contents)
+          context.stack do
+            partial.render(context)
           end
         end
       end
     end
   end
 end
-
     
-          def self.options
-        [
-          ['--update', 'Run `pod repo update` before listing'],
-          ['--stats',  'Show additional stats (like GitHub watchers and forks)'],
-        ].concat(super)
-      end
+            private
+    
+          expect('.margin-false-third').to have_ruleset(ruleset)
+      expect('.margin-false-third').to_not have_rule(bad_rule)
+    end
+  end
+end
