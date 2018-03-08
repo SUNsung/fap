@@ -1,48 +1,64 @@
 
         
-            def metadata_subdir(leaf, version: self.version, timestamp: :latest, create: false)
-      if create && timestamp == :latest
-        raise CaskError, 'Cannot create metadata subdir when timestamp is :latest.'
-      end
+          out = File.join(output, site + '.txt')
+  File.unlink(out) if File.exist?(out)
     
-            return if type.nil?
-        return unless Hbc::Container.from_type(type).nil?
-        raise 'invalid container type: #{type.inspect}'
-      end
+          when :bye
+        sessions.delete(s[:session])
     
-      deploy_rb = File.expand_path('../../templates/deploy.rb.erb', __FILE__)
-  stage_rb = File.expand_path('../../templates/stage.rb.erb', __FILE__)
-  capfile = File.expand_path('../../templates/Capfile', __FILE__)
-    
-        def post_process_styles(*style_args) #:nodoc:
-      post_process_style(:original, styles[:original]) if styles.include?(:original) && process_style?(:original, style_args)
-      styles.reject{ |name, style| name == :original }.each do |name, style|
-        post_process_style(name, style) if process_style?(name, style_args)
+      if options.respond_to? 'keys'
+    options.each do |k,v|
+      unless v.nil?
+        v = v.join ',' if v.respond_to? 'join'
+        v = v.to_json if v.respond_to? 'keys'
+        output += ' data-#{k.sub'_','-'}='#{v}''
       end
     end
+  elsif options.respond_to? 'join'
+    output += ' data-value='#{config[key].join(',')}''
+  else
+    output += ' data-value='#{config[key]}''
+  end
+  output += '></#{tag}>'
+end
     
-        def names_for(klass)
-      @attachments[klass].keys
-    end
+    Liquid::Template.register_tag('include_array', Jekyll::IncludeArrayTag)
+
     
-        # scale to the requested geometry and preserve the aspect ratio
-    def scale_to(new_geometry)
-      scale = [new_geometry.width.to_f / self.width.to_f , new_geometry.height.to_f / self.height.to_f].min
-      Paperclip::Geometry.new((self.width * scale).round, (self.height * scale).round)
+            def create
+          authorize! :create, StockLocation
+          @stock_location = StockLocation.new(stock_location_params)
+          if @stock_location.save
+            respond_with(@stock_location, status: 201, default_template: :show)
+          else
+            invalid_resource!(@stock_location)
+          end
+        end
+    
+            def stock_movement_params
+          params.require(:stock_movement).permit(permitted_stock_movement_attributes)
+        end
+      end
     end
   end
 end
 
     
-        def add_paperclip_callbacks
-      @klass.send(
-        :define_paperclip_callbacks,
-        :post_process, :'#{@name}_post_process')
+        respond_to do |format|
+      if @book.save
+        format.html { redirect_to @book, notice: 'Book was successfully created.' }
+        format.json { render :show, status: :created, location: @book }
+      else
+        format.html { render :new }
+        format.json { render json: @book.errors, status: :unprocessable_entity }
+      end
     end
+  end
     
-            def matches? subject
-          @subject = subject
-          @subject = @subject.new if @subject.class == Class
-          @allowed_types && @rejected_types &&
-          allowed_types_allowed? && rejected_types_rejected?
+            def argument?
+          ARGUMENT_DECLARATION_TYPES.include?(@declaration_node.type)
         end
+    
+            def each_misplaced_optional_arg(arguments)
+          optarg_positions, arg_positions = argument_positions(arguments)
+          return if optarg_positions.empty? || arg_positions.empty?
