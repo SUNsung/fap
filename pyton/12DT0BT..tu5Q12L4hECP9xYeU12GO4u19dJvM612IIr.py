@@ -1,110 +1,76 @@
 
         
-        signature = hexlify(rsa.pkcs1.sign(json.dumps(versions_info, sort_keys=True).encode('utf-8'), privkey, 'SHA-256')).decode()
-print('signature: ' + signature)
+            parser = argparse.ArgumentParser(description='Start a new Shippable run.')
     
-        # Get the version from youtube_dl/version.py without importing the package
-    exec(compile(open('youtube_dl/version.py').read(),
-                 'youtube_dl/version.py', 'exec'))
+        def _get_having_obj(self, col, op, eq):
+        cond = None
+        if op == '==':
+            if col in self.column_names:
+                cond = DimSelector(dimension=col, value=eq)
+            else:
+                cond = Aggregation(col) == eq
+        elif op == '>':
+            cond = Aggregation(col) > eq
+        elif op == '<':
+            cond = Aggregation(col) < eq
     
+        def test_select_from_values(self):
+        query = 'SELECT * FROM VALUES (13, 42)'
+        self.assertFalse(self.extract_tables(query))
     
-class TestCache(unittest.TestCase):
-    def setUp(self):
-        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
-        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
-        _mkdir(TESTDATA_DIR)
-        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
-        self.tearDown()
+        def pre_add(self, cluster):
+        security.merge_perm(sm, 'database_access', cluster.perm)
     
-            self.server_process.terminate()
-        self.server_process.communicate()
+    import logging
     
+        This configures the context with just a URL
+    and not an Engine, though an Engine is acceptable
+    here as well.  By skipping the Engine creation
+    we don't even need a DBAPI to be available.
     
-import errno
-import io
-import json
-import re
-import subprocess
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# No imports from `future` because when this is loaded, sys.path hasn't been set
+# up yet!
     
-            return self._extract_nuevo(
-            'http://www.anitube.se/nuevo/econfig.php?key=%s' % key, video_id)
-
+        # For pickling to work, the __module__ variable needs to be set to the frame
+    # where the named tuple is created.  Bypass this step in enviroments where
+    # sys._getframe is not defined (Jython for example).
+    if hasattr(_sys, '_getframe'):
+        result.__module__ = _sys._getframe(1).f_globals.get('__name__', '__main__')
     
-            # Audiomack wraps a lot of soundcloud tracks in their branded wrapper
-        # if so, pass the work off to the soundcloud extractor
-        if SoundcloudIE.suitable(api_response['url']):
-            return {'_type': 'url', 'url': api_response['url'], 'ie_key': 'Soundcloud'}
-    
-        _TESTS = [{
-        'url': 'http://camwithher.tv/view_video.php?viewkey=6e9a24e2c0e842e1f177&page=&viewtype=&category=',
-        'info_dict': {
-            'id': '5644',
-            'ext': 'flv',
-            'title': 'Periscope Tease',
-            'description': 'In the clouds teasing on periscope to my favorite song',
-            'duration': 240,
-            'view_count': int,
-            'comment_count': int,
-            'uploader': 'MileenaK',
-            'upload_date': '20160322',
-        },
-        'params': {
-            'skip_download': True,
-        }
-    }, {
-        'url': 'http://camwithher.tv/view_video.php?viewkey=6dfd8b7c97531a459937',
-        'only_matching': True,
-    }, {
-        'url': 'http://camwithher.tv/view_video.php?page=&viewkey=6e9a24e2c0e842e1f177&viewtype=&category=',
-        'only_matching': True,
-    }, {
-        'url': 'http://camwithher.tv/view_video.php?viewkey=b6c3b5bea9515d1a1fc4&page=&viewtype=&category=mv',
-        'only_matching': True,
-    }]
+    from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
     
     
-def side_effect(old_cmd, command):
-    with tarfile.TarFile(_tar_file(old_cmd.script_parts)[0]) as archive:
-        for file in archive.getnames():
-            try:
-                os.remove(file)
-            except OSError:
-                # does not try to remove directories as we cannot know if they
-                # already existed before
-                pass
-
+  def Done( self ):
+    return bool( self._response_future ) and self._response_future.done()
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
     
-def linear_model_main(_distances, _press_times, target_distance):
-    regr = LinearRegression()
-    regr.fit(_distances, _press_times)
-    predict_press_time = regr.predict(target_distance)
-    result = {}
-    # 截距 b
-    result['intercept'] = regr.intercept_
-    # 斜率值 k
-    result['coefficient'] = regr.coef_
-    # 预估的按压时间
-    result['value'] = predict_press_time
-    return result
+def MergeMultipleFiletypes_test():
     
     
-def jumpbot(parser):
- 
-    if parser.mode == 'manual':
-        bot = ManualBot(params=settings.get_bot_params(parser.model))
-        bot.run()
+def KeywordsFromSyntaxListOutput_ContainedArgAllowed_test():
+  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
+phpFunctions   xxx contained gzclose yaz_syntax html_entity_decode fbsql_read_blob png2wbmp mssql_init cpdf_set_title gztell fbsql_insert_id empty cpdf_restore mysql_field_type closelog swftext ldap_search curl_errno gmp_div_r mssql_data_seek getmyinode printer_draw_pie mcve_initconn ncurses_getmaxyx defined
+                   contained replace_child has_attributes specified insertdocument assign node_name hwstat addshape get_attribute_node html_dump_mem userlist
+                   links to Function''' ), # noqa
+              has_items( 'gzclose', 'userlist', 'ldap_search' ) )
     
-            self.client = wda.Client()
-        self.session = self.client.session()
-    
-        # 如果游戏结束 点击再来一局
-    left = int(w / 2)  # 按钮半宽约uiw//5
-    # 根据9:16实测按钮高度中心0.825 按钮半高约uiw//28
-    top = int((h - uih) / 2 + uih * 0.825)
-    if gameover:
-        return left, top
-    
-    
-def update_data():
-    return np.array(Image.open('autojump.png'))
+    from ycm.tests.test_utils import MockVimModule
+MockVimModule()
