@@ -1,388 +1,210 @@
 
         
-          bool Register(const ui::Accelerator& accelerator,
-                const base::Closure& callback);
-  bool IsRegistered(const ui::Accelerator& accelerator);
-  void Unregister(const ui::Accelerator& accelerator);
-  void UnregisterAll();
-    
-      // C++ can not distinguish overloaded member function.
-  template<AtomNetworkDelegate::SimpleEvent type>
-  void SetSimpleListener(mate::Arguments* args);
-  template<AtomNetworkDelegate::ResponseEvent type>
-  void SetResponseListener(mate::Arguments* args);
-  template<typename Listener, typename Method, typename Event>
-  void SetListener(Method method, Event type, mate::Arguments* args);
-    
-    
-    {}  // namespace mate
-
-    
-    net::URLRequestJob* AsarProtocolHandler::MaybeCreateJob(
-    net::URLRequest* request,
-    net::NetworkDelegate* network_delegate) const {
-  base::FilePath full_path;
-  net::FileURLToFilePath(request->url(), &full_path);
-  auto* job = new URLRequestAsarJob(request, network_delegate);
-  job->Initialize(file_task_runner_, full_path);
-  return job;
-}
-    
-    #endif  // ATOM_BROWSER_UI_VIEWS_GLOBAL_MENU_BAR_X11_H_
-
-    
-        case FB_CS_MAP:
-    {
-      Array arr = Array::Create();
-      while (p < n && buf[p] != (char)(kCodePrefix | FB_CS_STOP)) {
-        Variant key;
-        int err = fb_compact_unserialize_from_buffer(key, buf, n, p);
-        if (err) {
-          return err;
-        }
-        Variant value;
-        err = fb_compact_unserialize_from_buffer(value, buf, n, p);
-        if (err) {
-          return err;
-        }
-        if (key.getType() == KindOfInt64) {
-          arr.set(key.toInt64(), value);
-        } else if (key.getType() == KindOfString ||
-                   key.getType() == KindOfPersistentString) {
-          arr.set(key, value);
-        } else {
-          return FB_UNSERIALIZE_UNEXPECTED_ARRAY_KEY_TYPE;
-        }
-      }
-    }
-    
-    namespace {
-///////////////////////////////////////////////////////////////////////////////
-    }
-    
-    // Sends a copy of the given command to the associated client
-// using the buffer in m_thrift. Returns false if an exception
-// occurs during the send (typically a socket error).
-bool DebuggerProxy::sendToClient(DebuggerCommand *cmd) {
-  TRACE(2, 'DebuggerProxy::sendToClient\n');
-  return cmd->send(m_thrift);
-}
-    
-    
-static Variant HHVM_FUNCTION(gmp_hamdist,
-                             const Variant& dataA,
-                             const Variant& dataB) {
-  mpz_t gmpDataA, gmpDataB;
-    }
-    
-    /*
- * Order blocks for lowering to machine code.  May use different layout
- * algorithms depending on the TransKind of `unit'.
- *
- * The output is guaranteed to be partitioned by area relative to `text'.  This
- * is almost the same as partitioning by AreaIndex, except we may interleave,
- * e.g., Main and Cold blocks in the same partition if their actual code areas
- * in `text' are the same.
- */
-jit::vector<Vlabel> layoutBlocks(Vunit& unit, const Vtext& text);
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    /*! \brief namespace of base64 decoding and encoding table */
-namespace base64 {
-const char DecodeTable[] = {
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  62,  // '+'
-  0, 0, 0,
-  63,  // '/'
-  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
-  0, 0, 0, 0, 0, 0, 0,
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
-  0, 0, 0, 0, 0, 0,
-  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
-  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
-};
-static const char EncodeTable[] =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-}  // namespace base64
-/*! \brief the stream that reads from base64, note we take from file pointers */
-class Base64InStream: public dmlc::Stream {
- public:
-  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
-    reader_.set_stream(fs);
-    num_prev = 0; tmp_ch = 0;
-  }
-  /*!
-   * \brief initialize the stream position to beginning of next base64 stream
-   * call this function before actually start read
-   */
-  inline void InitPosition(void) {
-    // get a character
-    do {
-      tmp_ch = reader_.GetChar();
-    } while (isspace(tmp_ch));
-  }
-  /*! \brief whether current position is end of a base64 stream */
-  inline bool IsEOF(void) const {
-    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    using base64::DecodeTable;
-    if (size == 0) return 0;
-    // use tlen to record left size
-    size_t tlen = size;
-    unsigned char *cptr = static_cast<unsigned char*>(ptr);
-    // if anything left, load from previous buffered result
-    if (num_prev != 0) {
-      if (num_prev == 2) {
-        if (tlen >= 2) {
-          *cptr++ = buf_prev[0];
-          *cptr++ = buf_prev[1];
-          tlen -= 2;
-          num_prev = 0;
-        } else {
-          // assert tlen == 1
-          *cptr++ = buf_prev[0]; --tlen;
-          buf_prev[0] = buf_prev[1];
-          num_prev = 1;
-        }
-      } else {
-        // assert num_prev == 1
-        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
-      }
-    }
-    if (tlen == 0) return size;
-    int nvalue;
-    // note: everything goes with 4 bytes in Base64
-    // so we process 4 bytes a unit
-    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
-      // first byte
-      nvalue = DecodeTable[tmp_ch] << 18;
-      {
-        // second byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        nvalue |= DecodeTable[tmp_ch] << 12;
-        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
-        }
-      {
-        // third byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        // handle termination
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == '=') << 'invalid base64 format';
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch] << 6;
-        if (tlen) {
-          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
-        }
-      }
-      {
-        // fourth byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
-            << 'invalid base64 format';
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch];
-        if (tlen) {
-          *cptr++ = nvalue & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev ++] = nvalue & 0xFF;
-        }
-      }
-      // get next char
-      tmp_ch = reader_.GetChar();
-    }
-    if (kStrictCheck) {
-      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
-    }
-    return size - tlen;
-  }
-  virtual void Write(const void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64InStream do not support write';
-  }
-    }
-    
-    
-    {
-    {
+        
     { private:
-  /*! \brief input stream */
-  dmlc::Stream *strm_;
-  /*! \brief current buffer pointer */
-  size_t buffer_ptr_;
-  /*! \brief internal buffer */
-  std::string buffer_;
+  // The python object that implements the database. The reference is owned.
+  PyObject* py_database_;
 };
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_IO_H_
-
     
-        c.type = type_[fid];
-    const size_t block_offset = boundary_[fid].index_begin / packing_factor_;
-    const size_t elem_offset = boundary_[fid].index_begin % packing_factor_;
-    c.index = reinterpret_cast<const T*>(&index_[block_offset]) + elem_offset;
-    c.index_base = index_base_[fid];
-    c.row_ind = &row_ind_[boundary_[fid].row_ind_begin];
-    c.len = boundary_[fid].index_end - boundary_[fid].index_begin;
+    TEST(AnyTest, TestIs) {
+  protobuf_unittest::TestAny submessage;
+  submessage.set_int32_value(12345);
+  google::protobuf::Any any;
+  any.PackFrom(submessage);
+  ASSERT_TRUE(any.ParseFromString(any.SerializeAsString()));
+  EXPECT_TRUE(any.Is<protobuf_unittest::TestAny>());
+  EXPECT_FALSE(any.Is<google::protobuf::Any>());
+    }
     
+    #include <string>
     
-    {  info.Clear();
-  ASSERT_EQ(info.group_ptr.size(), 0);
+    void RepeatedPrimitiveFieldGenerator::GenerateMembers(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    'private static readonly pb::FieldCodec<$type_name$> _repeated_$name$_codec\n'
+    '    = pb::FieldCodec.For$capitalized_type_name$($tag$);\n');
+  printer->Print(variables_,
+    'private readonly pbc::RepeatedField<$type_name$> $name$_ = new pbc::RepeatedField<$type_name$>();\n');
+  WritePropertyDocComment(printer, descriptor_);
+  AddPublicMemberAttributes(printer);
+  printer->Print(
+    variables_,
+    '$access_level$ pbc::RepeatedField<$type_name$> $property_name$ {\n'
+    '  get { return $name$_; }\n'
+    '}\n');
 }
     
+    #include <sstream>
     
-    {}  // namespace rocksdb
     
-        // Compact, Get
-    db->CompactRange(CompactRangeOptions(), nullptr, nullptr);
-    ASSERT_EQ(a, 'x\nt\nr\nsa\ngh\njk');
-    ASSERT_EQ(b, 'y\n2\nmonkey\ndf\nl;');
-    ASSERT_EQ(c, 'asdasd\nasdasd\nbbnagnagsx\nrogosh');
     
-    // Return and remove the first element in the list (or '' if empty)
-//   : throws RedisListException
-bool RedisLists::PopLeft(const std::string& key, std::string* result) {
-  // Get the original list data
-  std::string data;
-  db_->Get(get_option_, key, &data);
-    }
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
     
-      void Initialize(const Comparator* comparator, const char* data,
-                  uint32_t restarts, uint32_t num_restarts,
-                  BlockPrefixIndex* prefix_index, SequenceNumber global_seqno,
-                  BlockReadAmpBitmap* read_amp_bitmap) {
-    assert(data_ == nullptr);           // Ensure it is called only once
-    assert(num_restarts > 0);           // Ensure the param is valid
-    }
+    // A small event handler class to process incoming events to
+// this window.
+class PGEventHandler : public SVEventHandler {
+  public:
+   PGEventHandler(tesseract::Tesseract* tess) : tess_(tess) {
+   }
+   void Notify(const SVEvent* sve);
+  private:
+    tesseract::Tesseract* tess_;
+};
     
-    Status DateTieredDBImpl::Get(const ReadOptions& options, const Slice& key,
-                             std::string* value) {
-  int64_t timestamp = 0;
-  Status s;
-  s = GetTimestamp(key, &timestamp);
-  if (!s.ok()) {
-    return s;
+      // Splits *this into two pieces in bundle1 and bundle2 (preallocated, empty
+  // bundles) where the right edge/ of the left-hand word is word1_right,
+  // and the left edge of the right-hand word is word2_left.
+  void SplitBundle(int word1_right, int word2_left, bool debug,
+                   BlamerBundle* bundle1, BlamerBundle* bundle2) const;
+  // 'Joins' the blames from bundle1 and bundle2 into *this.
+  void JoinBlames(const BlamerBundle& bundle1, const BlamerBundle& bundle2,
+                  bool debug);
+    
+    // Update the other members if the cost is lower.
+void DPPoint::UpdateIfBetter(inT64 cost, inT32 steps, const DPPoint* prev,
+                             inT32 n, inT32 sig_x, inT64 sig_xsq) {
+  if (cost < total_cost_) {
+    total_cost_ = cost;
+    total_steps_ = steps;
+    best_prev_ = prev;
+    n_ = n;
+    sig_x_ = sig_x;
+    sig_xsq_ = sig_xsq;
   }
-  // Prune request to obsolete data
-  if (IsStale(timestamp, ttl_, db_->GetEnv())) {
-    return Status::NotFound();
+}
+    
+    inline ICOORD operator *(                    //scalar multiply
+                         const ICOORD &op1,  //operands
+                         inT16 scale) {
+  ICOORD result;                 //output
+    }
+    
+    // Returns the x,y means as an FCOORD.
+FCOORD LLSQ::mean_point() const {
+  if (total_weight > 0.0) {
+    return FCOORD(sigx / total_weight, sigy / total_weight);
+  } else {
+    return FCOORD(0.0f, 0.0f);
   }
+}
+    
+        ///rewrite function
+    void set_x(inT16 xin) {
+      xcoord = xin;              //write new value
+    }
+    ///rewrite function
+    void set_y(inT16 yin) {  //value to set
+      ycoord = yin;
     }
     
-      virtual void AddIterator(InternalIterator* iter) {
-    assert(direction_ == kForward);
-    children_.emplace_back(iter);
-    if (pinned_iters_mgr_) {
-      iter->SetPinnedItersMgr(pinned_iters_mgr_);
-    }
-    auto new_wrapper = children_.back();
-    if (new_wrapper.Valid()) {
-      minHeap_.push(&new_wrapper);
-      current_ = CurrentForward();
-    }
-  }
-    
-    // TODO(t10737622): Improve on-device symbolification
-void getStackTraceSymbols(vector<StackTraceElement>& symbols,
-                          const vector<InstructionPointer>& trace) {
-  symbols.clear();
-  symbols.reserve(trace.size());
+        // instantiate from a float vector  --buffer must be SSE-aligned
+    template <class VECTOR>
+    ssematrixfrombuffer(VECTOR &buffer, size_t n, size_t m)
+        : ssematrixbase(buffer, n, m)
+    {
     }
     
-    TEST_F(YogaTest_HadOverflowTests, hadOverflow_gets_reset_if_not_logger_valid) {
-  const YGNodeRef child0 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child0, 80);
-  YGNodeStyleSetHeight(child0, 40);
-  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
-  YGNodeStyleSetMargin(child0, YGEdgeBottom, 10);
-  YGNodeInsertChild(root, child0, 0);
-  const YGNodeRef child1 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child1, 80);
-  YGNodeStyleSetHeight(child1, 40);
-  YGNodeStyleSetMargin(child1, YGEdgeBottom, 5);
-  YGNodeInsertChild(root, child1, 1);
+        // relink the input of those nodes whose child is oldNode to point to the new one instead
+    for (auto nodeIter = m_nameToNodeMap.begin(); nodeIter != m_nameToNodeMap.end(); nodeIter++)
+    {
+        ComputationNodeBasePtr node = nodeIter->second;
+        for (int i = 0; i < node->GetNumInputs(); i++)
+            if (node->GetInputs()[i] == oldNode)
+                node->SetInput(i, newNode);
     }
     
-        bool isExperimentalFeatureEnabled(int feature) const;
+        Matrix<float> mBdense(c_deviceIdZero);
+    mBdense.AssignTruncateBottomOf(Matrix<float>::RandomUniform(dim1, dim2, c_deviceIdZero, -5.0f, 0.4f, IncrementCounter()), 0);
+    Matrix<float> mBsparse(mBdense.DeepClone());
     
-    double Node::getComputedBorder(int edge) const
+        bnNodes = m_net->SortByGlobalEvalOrder(bnNodes);
+    for (auto& node : bnNodes)
+    {
+        let bnNode = static_pointer_cast<BatchNormalizationNode<ElemType>>(node);
+        size_t actualMBSize = 0;
+    }
+    
+        // ProcessNDLScript - Process the NDL script
+    // script - NDL Script to process
+    // ndlPassUntil - complete processing through this pass, all passes if ndlPassAll
+    // skipThrough - [in/out] for iterative processing, a pointer to an array of NDLNode*, one for each pass
+    //               the pointer will be updated to last node processed for that pass, can be NULL if all node processing is desired
+    // fullValidate - validate as a complete network? (false if this might be a snippet of a full network)
+    void ProcessNDLScript(NDLScript<ElemType>* script, NDLPass ndlPassUntil = ndlPassAll, NDLNode<ElemType>** skipThrough = nullptr, bool fullValidate = false, const std::wstring& dumpFileName = L'')
+    {
+        // if we don't have a script yet, don't bother
+        if (script == nullptr)
+            return;
+    }
+    
+    
+    {
+    {                GenNameValue value(node, nodeOutName);
+                ret.push_back(value);
+            }
+        }
+    
+    // If the Tracing flag is set, print out a timestamp with no new line at the end
+#define PREPENDTS(stream) \
+    do \
+    { \
+        if (ProgressTracing::GetTimestampingFlag()) \
+        { \
+            char mbstr[30]; \
+            fprintf(stream, '%s: ', ProgressTracing::Timestamp(mbstr));  \
+        } \
+    } while(0)
+    
+        void getlattices(const std::wstring& key, std::shared_ptr<const latticepair>& L, size_t expectedframes) const
+    {
+        std::shared_ptr<latticepair> LP(new latticepair);
+        denlattices.getlattice(key, LP->second, expectedframes); // this loads the lattice from disk, using the existing L.second object
+        L = LP;
+    }
+    
+    // not in the cache yet: create it (or not if no such member)
+void /*CustomConfigRecord::*/ ComputationNodeBase::LazyCreateConfigMember(const wstring& id) const /*override*/
 {
-    return YGNodeLayoutGetBorder(m_node, static_cast<YGEdge>(edge));
-}
-    
-     public: // Measure func inspectors
-    
-    #pragma once
-#include <fb/assert.h>
-#include <utility>
-    
-    namespace detail {
-template <typename T, typename jprim>
-struct JPrimitive : JavaClass<T> {
-  using typename JavaClass<T>::javaobject;
-  using JavaClass<T>::javaClassStatic;
-  static local_ref<javaobject> valueOf(jprim val) {
-    static auto cls = javaClassStatic();
-    static auto method =
-      cls->template getStaticMethod<javaobject(jprim)>('valueOf');
-    return method(cls, val);
-  }
-  jprim value() const {
-    static auto method =
-      javaClassStatic()->template getMethod<jprim()>(T::kValueMethod);
-    return method(this->self());
-  }
-};
+    if (id == L'name') // node name
+    {
+        InsertConfigMember(id, ConfigValuePtr(make_shared<String>(NodeName()), [](const std::wstring &) { LogicError('should not get here'); }, L''));
     }
-    
-      flatbuffers::FlatBufferBuilder builder;
-  auto name = builder.CreateString('Dog');
-  auto sound = builder.CreateString('Bark');
-  auto animal_buffer = sample::CreateAnimal(builder, name, sound);
-  builder.Finish(animal_buffer);
-    
-    #include <grpc++/grpc++.h>
-    
-    ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>* MonsterStorage::Stub::AsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) {
-  return ::grpc::internal::ClientAsyncReaderFactory< flatbuffers::grpc::Message<Monster>>::Create(channel_.get(), cq, rpcmethod_Retrieve_, context, request, true, tag);
-}
-    
-    class LogHelper {
-  std::ostream* os_;
+    else if (id == L'operation') // type ('operation' parameter to ComputationNode BS constructor)
+    {
+        InsertConfigMember(id, ConfigValuePtr(make_shared<String>(OperationName()), [](const std::wstring &) { LogicError('should not get here'); }, L''));
     }
-    
-        // The actual RPC.
-    auto status = stub->Store(&context, request, &response);
-    
-    // Get a field's default, if you know it's floating point and its exact type.
-template<typename T> T GetFieldDefaultF(const reflection::Field &field) {
-  assert(sizeof(T) == GetTypeSize(field.type()->base_type()));
-  return static_cast<T>(field.default_real());
-}
-    
-    static const char *g_program_name = nullptr;
-    
-      // Save out the generated code for a Go Table type.
-  bool SaveType(const Definition &def, const std::string &classcode,
-                bool needs_imports) {
-    if (!classcode.length()) return true;
+    else if (id == L'dim') // scalar dimension (#elements) per sample
+    {
+        // Note: When freshly creating models, dimensions may not have been inferred yet.
+        size_t dim = GetSampleLayout().GetNumElements();
+        if (dim == 0)
+            InvalidArgument('%ls.dim: The node's dimensions are not known yet.', NodeName().c_str());
+        InsertConfigMember(id, MakePrimitiveConfigValuePtr((double) dim, [](const std::wstring &) { LogicError('should not get here'); }, L''));
     }
+    else if (id == L'dims') // tensor dimension vector
+    {
+        NOT_IMPLEMENTED;
+    }
+    // TODO: Think through what tags mean. Do we allow user-named tags? Is it a set or a single string? If set, then how to compare?
+    //else if (id == L'tag')
+    //{
+    //}
+    else if (id == L'inputs' || id == OperationName() + L'Args') // e.g. node.PlusArg[0] = alternative for node.inputs[0] that shows a user that this is a Plus node
+    {
+        std::vector<ConfigValuePtr> inputsAsValues;
+        for (let& input : GetInputs())
+            inputsAsValues.push_back(ConfigValuePtr(input, [](const std::wstring &) { LogicError('should not get here'); }, L''));
+        let& arr = make_shared<ScriptableObjects::ConfigArray>(0, move(inputsAsValues));
+        InsertConfigMember(id, ConfigValuePtr(arr, [](const std::wstring &) { LogicError('should not get here'); }, L''));
+    }
+    // any other id does not exist, don't create any entry for it
+}
