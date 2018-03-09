@@ -1,139 +1,212 @@
 
         
-        filenames = {
-    'bin': 'youtube-dl',
-    'exe': 'youtube-dl.exe',
-    'tar': 'youtube-dl-%s.tar.gz' % version}
-build_dir = os.path.join('..', '..', 'build', version)
-for key, filename in filenames.items():
-    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
-    fn = os.path.join(build_dir, filename)
-    with open(fn, 'rb') as f:
-        data = f.read()
-    if not data:
-        raise ValueError('File %s is empty!' % fn)
-    sha256sum = hashlib.sha256(data).hexdigest()
-    new_version[key] = (url, sha256sum)
+            def getChild(self, request, name):
+        return self
     
-        def tearDown(self):
-        if self._SKIP_SOCKS_TEST:
-            return
+    # Declare top-level shortcuts
+from scrapy.spiders import Spider
+from scrapy.http import Request, FormRequest
+from scrapy.selector import Selector
+from scrapy.item import Item, Field
     
-        def _real_extract(self, url):
-        mobj = re.match(self._VALID_URL, url)
-        video_id = mobj.group('id')
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-l', '--list', dest='list', action='store_true',
+                          help='only list contracts, without checking them')
+        parser.add_option('-v', '--verbose', dest='verbose', default=False, action='store_true',
+                          help='print contract tests for all spiders')
     
-                return {
-                'id': video_id,
-                'title': json_data['title'],
-                'description': json_data.get('subtitle'),
-                'thumbnail': json_data.get('thumbnail_image', {}).get('file'),
-                'timestamp': parse_iso8601(json_data.get('publication_date')),
-                'duration': int_or_none(json_data.get('duration')),
-                'view_count': int_or_none(json_data.get('view_count')),
-                'formats': formats,
-            }
-
+        def _list_templates(self):
+        print('Available templates:')
+        for filename in sorted(os.listdir(self.templates_dir)):
+            if filename.endswith('.tmpl'):
+                print('  %s' % splitext(filename)[0])
     
-            info_dict = self._extract_from_id(mvp_id, webpage)
-        info_dict['display_id'] = display_id
+        def set(self, key, value):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                item.value = value
+                return
+        self.table[hash_index].append(Item(key, value))
     
-    # TODO: run all these tests in session mode as well
+        def crawl_page(self, page):
+        for url in page.child_urls:
+            self.data_store.add_link_to_crawl(url)
+        self.reverse_index_queue.generate(page)
+        self.doc_index_queue.generate(page)
+        self.data_store.remove_link_to_crawl(page.url)
+        self.data_store.insert_crawled_link(page.url, page.signature)
     
+        def has_more_configs(self):
+        '''Returns true if there are more configs to test'''
+        return bool(self._configs)
     
-PACKAGES = [
-    'httpie',
-    'requests',
-    'pygments',
-]
+        @mock.patch('certbot.notify.smtplib.LMTP')
+    @mock.patch('certbot.notify.subprocess.Popen')
+    def test_everything_fails(self, mock_popen, mock_lmtp):
+        from certbot.notify import notify
+        lmtp_obj = mock.MagicMock()
+        mock_lmtp.return_value = lmtp_obj
+        lmtp_obj.sendmail.side_effect = socket.error(17)
+        proc = mock.MagicMock()
+        mock_popen.return_value = proc
+        proc.communicate.side_effect = OSError('What we have here is a '
+                                               'failure to communicate.')
+        self.assertFalse(notify('Goose', 'auntrhody@example.com',
+                                'The old grey goose is dead.'))
+        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
+        self.assertEqual(proc.communicate.call_count, 1)
     
-      1. Read, validate and process the input (args, `stdin`).
-  2. Create and send a request.
-  3. Stream, and possibly process and format, the parts
-     of the request-response exchange selected by output options.
-  4. Simultaneously write to `stdout`
-  5. Exit.
+        # Implement all methods from IAuthenticator, remembering to add
+    # 'self' as first argument, e.g. def prepare(self)...
     
+        author = proj_info['author'],
+    author_email = proj_info['author_email'],
+    url = proj_info['url'],
+    license = proj_info['license'],
     
-class SessionNameValidator(object):
-    
-        # Adapters
-    def get_transport_plugins(self):
-        return [plugin for plugin in self
-                if issubclass(plugin, TransportPlugin)]
-
-    
-    from __future__ import print_function
-from keras.preprocessing.image import load_img, img_to_array
-from scipy.misc import imsave
-import numpy as np
-from scipy.optimize import fmin_l_bfgs_b
-import time
-import argparse
+    __all__ = ['ehow_download']
     
     
-@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
-def test_he_uniform(tensor_shape):
-    fan_in, _ = initializers._compute_fans(tensor_shape)
-    scale = np.sqrt(6. / fan_in)
-    _runner(initializers.he_uniform(), tensor_shape,
-            target_mean=0., target_max=scale, target_min=-scale)
+def huaban_download(url, output_dir='.', **kwargs):
+    if re.match(r'http://huaban\.com/boards/\d+/', url):
+        huaban_download_board(url, output_dir, **kwargs)
+    else:
+        print('Only board (画板) pages are supported currently')
+        print('ex: http://huaban.com/boards/12345678/')
+    
+            print_info(site_info, title, type_, size_full)
+        if not info_only:
+            download_urls(url_list, title, ext, total_size=size_full, output_dir=output_dir, merge=merge, headers=fake_headers)
+    else:
+        raise NotImplementedError(flashvars)
+    
+    `Router` interface extends `~.httputil.HTTPServerConnectionDelegate`
+to provide additional routing capabilities. This also means that any
+`Router` implementation can be used directly as a ``request_callback``
+for `~.httpserver.HTTPServer` constructor.
+    
+        @gen_test
+    def test_put_with_getters(self):
+        q = queues.Queue()
+        get0 = q.get()
+        get1 = q.get()
+        yield q.put(0)
+        self.assertEqual(0, (yield get0))
+        yield q.put(1)
+        self.assertEqual(1, (yield get1))
     
     
-@keras_test
-def test_convert_weights():
-    def get_model(shape, data_format):
-        model = Sequential()
-        model.add(Conv2D(filters=2,
-                         kernel_size=(4, 3),
-                         input_shape=shape,
-                         data_format=data_format))
-        model.add(Flatten())
-        model.add(Dense(5))
-        return model
+class DigestAuthHandler(RequestHandler):
+    def get(self):
+        realm = 'test'
+        opaque = 'asdf'
+        # Real implementations would use a random nonce.
+        nonce = '1234'
+        username = 'foo'
+        password = 'bar'
     
-                # check dropout
-            layer_test(convolutional_recurrent.ConvLSTM2D,
-                       kwargs={'data_format': data_format,
-                               'return_sequences': return_sequences,
-                               'filters': filters,
-                               'kernel_size': (num_row, num_col),
-                               'padding': 'same',
-                               'dropout': 0.1,
-                               'recurrent_dropout': 0.1},
-                       input_shape=inputs.shape)
+    # Repeat the entire benchmark this many times (on different ports)
+# This gives JITs time to warm up, etc.  Pypy needs 3-5 runs at
+# --n=15000 for its JIT to reach full effectiveness
+define('num_runs', type=int, default=1)
+    
+        def call_wrapped(self, count):
+        '''Wraps and calls a function at each level of stack depth
+        to measure the overhead of the wrapped function.
+        '''
+        # This queue is analogous to IOLoop.add_callback, but lets us
+        # benchmark the stack_context in isolation without system call
+        # overhead.
+        queue = collections.deque()
+        self.call_wrapped_inner(queue, count)
+        while queue:
+            queue.popleft()()
+    
+    import bcrypt
+import concurrent.futures
+import MySQLdb
+import markdown
+import os.path
+import re
+import subprocess
+import torndb
+import tornado.escape
+from tornado import gen
+import tornado.httpserver
+import tornado.ioloop
+import tornado.options
+import tornado.web
+import unicodedata
+    
+    from tornado.options import define, options
     
     
-@keras_test
-def test_merge_sum(in_tmpdir):
-    (x_train, y_train), (x_test, y_test) = _get_test_data()
-    left = Sequential()
-    left.add(Dense(num_hidden, input_shape=(input_dim,)))
-    left.add(Activation('relu'))
+def linear_model_main(_distances, _press_times, target_distance):
+    regr = LinearRegression()
+    regr.fit(_distances, _press_times)
+    predict_press_time = regr.predict(target_distance)
+    result = {}
+    # 截距 b
+    result['intercept'] = regr.intercept_
+    # 斜率值 k
+    result['coefficient'] = regr.coef_
+    # 预估的按压时间
+    result['value'] = predict_press_time
+    return result
     
-        code_block_index = 0
-    last_header = ''
-    linenum = 0
-    with io.open(args.sourcefile, 'r') as read_filehandle:
-        with io.open(args.targetfile, 'w') as text_filehandle:
-            for line in read_filehandle:
-                linenum += 1
-                indent_depth = is_code(line)
-                if indent_depth:
-                    (line, linenum) = process_code(read_filehandle,
-                                                    text_filehandle,
-                                                    line, linenum,
-                                                    args.sourcefile, args.codedir,
-                                                    last_header, code_block_index,
-                                                    indent_depth)
-                    code_block_index += 1
-                # reach here either line was not code, or was code
-                # and we dealt with n code lines
-                if indent_depth < 4 or not is_code(line, indent_depth):
-                    # store header id for codeblock
-                    section_id = get_marker(line)
-                    if section_id is not None:
-                        code_block_index = 0
-                        last_header = section_id
-                    sline = stripped(line)
-                    text_filehandle.write(sline)
+        cmd = 'shell input swipe {x1} {y1} {x2} {y2} {duration}'.format(
+        x1=swipe_x1,
+        y1=swipe_y1,
+        x2=swipe_x2,
+        y2=swipe_y2,
+        duration=press_time + delta_piece_y
+    )
+    print(cmd)
+    adb.run(cmd)
+    return press_time
+    
+            self.client = wda.Client()
+        self.session = self.client.session()
+    
+        if model == 'ip':
+        bot_params['TIME_COEFF'] = 2.
+        bot_params['COORD_Y_START_SCAN'] = 200
+        bot_params['PIECE_BASE_HEIGHT_HALF'] = 13
+        bot_params['PIECE_BODY_WIDTH'] = 49
+        bot_params['SWIPE_X1'] = 375
+        bot_params['SWIPE_Y1'] = 1055
+        bot_params['SWIPE_X2'] = 375
+        bot_params['SWIPE_Y2'] = 1055
+    
+        img = cv2.imread('./autojump.png')
+    img = cv2.resize(img, (0, 0), fx=scale, fy=scale)
+    img, src_x, src_y = search(img)
+    return img
+    
+    def pixel_division(img,w,h):
+    pixels = list(img.getdata())
+    row_pix=np.zeros([1,h])
+    col_pix=np.zeros([1,w])
+    for i in range(w):
+        for j in range(h):
+            if pixels[j*w+i]<100:
+                row_pix[0,j]+=1
+                col_pix[0,i]+=1
+    start_h=0
+    end_h=0
+    flag=0
+    for j in range(h):
+        if row_pix[0,j]>=1 and flag==0:
+            start_h=j
+            flag=1
+        if row_pix[0,j]>=1:
+            end_h=j
+    
+    
+def on_click(event):
+    global update
+    global ix, iy
+    global click_count
+    global cor
