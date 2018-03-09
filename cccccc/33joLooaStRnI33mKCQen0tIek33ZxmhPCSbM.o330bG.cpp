@@ -1,261 +1,426 @@
 
         
-        // Tests that an exit code describes a normal exit with a given exit code.
-class GTEST_API_ ExitedWithCode {
+        
+    {}  // namespace mate
+    
+    // A self-destroyed class for handling save page request.
+class SavePageHandler : public content::DownloadManager::Observer,
+                        public content::DownloadItem::Observer {
  public:
-  explicit ExitedWithCode(int exit_code);
-  bool operator()(int exit_status) const;
- private:
-  // No implementation - assignment is unsupported.
-  void operator=(const ExitedWithCode& other);
+  using SavePageCallback = base::Callback<void(v8::Local<v8::Value>)>;
     }
     
-    // scripts/fuse_gtest.py depends on gtest's own header being #included
-// *unconditionally*.  Therefore these #includes cannot be moved
-// inside #if GTEST_HAS_PARAM_TEST.
-#include 'gtest/internal/gtest-internal.h'
-#include 'gtest/internal/gtest-param-util.h'
-#include 'gtest/internal/gtest-param-util-generated.h'
+    #include 'atom/browser/net/asar/url_request_asar_job.h'
+#include 'net/base/filename_util.h'
+#include 'net/base/net_errors.h'
     
-      // Clears the object.
-  void Clear();
+      // JsAsker:
+  void StartAsync(std::unique_ptr<base::Value> options) override;
     
-      const std::string& file() const { return file_; }
-  int line() const { return line_; }
-  int index() const { return index_; }
-  int write_fd() const { return write_fd_; }
+    #include 'atom/browser/render_process_preferences.h'
     
-    #define GTEST_TEST_NO_THROW_(statement, fail) \
-  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
-  if (::testing::internal::AlwaysTrue()) { \
-    try { \
-      GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
-    } \
-    catch (...) { \
-      goto GTEST_CONCAT_TOKEN_(gtest_label_testnothrow_, __LINE__); \
-    } \
-  } else \
-    GTEST_CONCAT_TOKEN_(gtest_label_testnothrow_, __LINE__): \
-      fail('Expected: ' #statement ' doesn't throw an exception.\n' \
-           '  Actual: it throws.')
+    // WorkloadStats is used to track per request timing for different states
+// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
+// should be made to guard the state change with appropriate timers and
+// counters.
+//
+// The states tracked are:
+//  - In a request (this is a superset of the interpreter state)
+//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
+//  - In the JIT (currently tracks time inside the translate routine)
+//
+// Note the time in the TC is not tracked.  This is roughly:
+//   Time in request - Time in interp
+//
+// This gives us the relative interp time formula of:
+//   Relative interp time = Time in interp / Time in request
+struct WorkloadStats final {
+  enum State {
+    InRequest,
+    // -> InInterp   Okay (entering Dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InInterp,
+    // -> InRequest  Okay (leaving the dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InTrans,
+    // -> InRequest  Okay (leaving translate)
+    // -> InInterp   Okay (leaving translate)
+  };
+    }
     
-    // #ifdef __GNUC__ is too general here.  It is possible to use gcc without using
-// libstdc++ (which is where cxxabi.h comes from).
-# if GTEST_HAS_CXXABI_H_
-#  include <cxxabi.h>
-# elif defined(__HP_aCC)
-#  include <acxx_demangle.h>
-# endif  // GTEST_HASH_CXXABI_H_
-    
-    #include 'sample1.h'
-    
-    using ::testing::EmptyTestEventListener;
-using ::testing::InitGoogleTest;
-using ::testing::Test;
-using ::testing::TestCase;
-using ::testing::TestEventListeners;
-using ::testing::TestInfo;
-using ::testing::TestPartResult;
-using ::testing::UnitTest;
-    
-    
-    {  // <TechnicalDetails>
-  //
-  // EXPECT_EQ(expected, actual) is the same as
-  //
-  //   EXPECT_TRUE((expected) == (actual))
-  //
-  // except that it will print both the expected value and the actual
-  // value when the assertion fails.  This is very helpful for
-  // debugging.  Therefore in this case EXPECT_EQ is preferred.
-  //
-  // On the other hand, EXPECT_TRUE accepts any Boolean expression,
-  // and is thus more general.
-  //
-  // </TechnicalDetails>
+    String TimeStamp::CurrentMicroTime() {
+  struct timeval tp;
+  gettimeofday(&tp, nullptr);
+  char ret[100];
+  snprintf(ret, 100, '%.8F %ld', (double)tp.tv_usec / 1000000, tp.tv_sec);
+  return String(ret, CopyString);
 }
     
-    
-    {  // Set up scripts on all of the words that did not get sent to
-  // ambigs_classify_and_output.  They all should have, but if all the
-  // werd_res's don't get uch_sets, tesseract will crash when you try
-  // to iterate over them. :-(
-  int total_words = 0;
-  for (page_res_it.restart_page(); page_res_it.block() != NULL;
-       page_res_it.forward()) {
-    if (page_res_it.word()) {
-      if (page_res_it.word()->uch_set == NULL)
-        page_res_it.word()->SetupFake(unicharset);
-      total_words++;
+    struct DebuggerLoggerHook final : LoggerHook {
+  StringBuffer& sb;
+  explicit DebuggerLoggerHook(StringBuffer& sb) : sb(sb) {}
+  void operator()(const char* /*hdr*/, const char* msg, const char* ending)
+       override {
+    TRACE(2, 'DebuggerProxy::append_stderr\n');
+    if (s_stderr_color) {
+      sb.append(s_stderr_color);
+    }
+    sb.append(msg);
+    sb.append(ending);
+    if (s_stderr_color) {
+      sb.append(ANSI_COLOR_END);
     }
   }
-  if (examined_words < 0.85 * total_words) {
-    tprintf('TODO(antonova): clean up recog_training_segmented; '
-            ' It examined only a small fraction of the ambigs image.\n');
+};
+    
+    struct SSATmp;
+struct Type;
+    
+    Vreg Vunit::makeConst(Vconst vconst) {
+  auto it = constToReg.find(vconst);
+  if (it != constToReg.end()) return it->second;
+    }
+    
+      void delist() {
+    auto n = m_next, p = m_prev;
+    n->m_prev = p;
+    p->m_next = n;
   }
-  tprintf('recog_training_segmented: examined %d / %d words.\n',
-          examined_words, total_words);
+    
+    /*
+ * Return the payload from a ArrayData* that is kPacked/VecKind.
+ */
+ALWAYS_INLINE
+TypedValue* packedData(const ArrayData* arr) {
+  return const_cast<TypedValue*>(
+    reinterpret_cast<const TypedValue*>(arr + 1)
+  );
 }
     
+      for (auto b : m_blocks) {
+    for (auto s : succs(m_unit.blocks[b])) {
+      auto srcCid = m_blockCluster[b];
+      auto dstCid = m_blockCluster[s];
+      if (srcCid == dstCid) continue;
+      auto wgt = m_scale.weight(b, s);
+      clusterGraph[srcCid][dstCid] += wgt;
+    }
+  }
     
-inline FCOORD operator *(                   //scalar multiply
-                         float scale,
-                         const FCOORD &op1  //operands
-                        ) {
-  FCOORD result;                 //output
+    #include <atomic>
+#include 'stddef.h'
+    
+    namespace irgen {
     }
     
+    #include <memory>
     
-    {  // We shouldn't try calculations if the characters are very short (for example
-  // for punctuation).
-  if (min_height > kBlnXHeight / 8 && height > 0) {
-    float result = height * kBlnXHeight * yscale / min_height;
-    *max_xht = result + kFinalPixelTolerance;
-    result = height * kBlnXHeight * yscale / max_height;
-    *min_xht = result - kFinalPixelTolerance;
+    TEST(InlinedVectorTest, CreateAndIterate) {
+  const int kNumElements = 9;
+  InlinedVector<int, 2> v;
+  for (int i = 0; i < kNumElements; ++i) {
+    v.push_back(i);
+  }
+  EXPECT_EQ(static_cast<size_t>(kNumElements), v.size());
+  for (int i = 0; i < kNumElements; ++i) {
+    EXPECT_EQ(i, v[i]);
   }
 }
     
-    const int kBlnCellHeight = 256;     // Full-height for baseline normalization.
-const int kBlnXHeight = 128;        // x-height for baseline normalization.
-const int kBlnBaselineOffset = 64;  // offset for baseline normalization.
-    
-    class ParagraphModel;
-    
-    #include <stdio.h>
-    
-    #include 'hphp/runtime/base/array-init.h'
-#include 'hphp/runtime/base/datetime.h'
-#include 'hphp/runtime/base/resource-data.h'
-#include 'hphp/runtime/base/type-array.h'
-#include 'hphp/runtime/base/type-string.h'
-#include 'hphp/util/timer.h'
-    
-    int64_t HHVM_FUNCTION(posix_getuid) {
-  if (auto cred = get_cli_ucred()) return cred->uid;
-    }
-    
-    //---- Define constructor and implicit cast operators to convert back<>forth from your math types and ImVec2/ImVec4.
-// This will be inlined as part of ImVec2 and ImVec4 class declarations.
-/*
-#define IM_VEC2_CLASS_EXTRA                                                 \
-        ImVec2(const MyVec2& f) { x = f.x; y = f.y; }                       \
-        operator MyVec2() const { return MyVec2(x,y); }
+     private:
+  int GetIntValueFromMetadata(
+      const char* key,
+      const std::multimap<grpc::string_ref, grpc::string_ref>& metadata,
+      int default_value);
     
     
-    {        ImGui::Render();
-    }
-    
-        // Setup inputs
-    // (we already got mouse wheel, keyboard keys & characters from glfw callbacks polled in glfwPollEvents())
-    if (glfwGetWindowAttrib(g_Window, GLFW_FOCUSED))
     {
-        if (io.WantMoveMouse)
-        {
-            glfwSetCursorPos(g_Window, (double)io.MousePos.x, (double)io.MousePos.y);   // Set mouse position if requested by io.WantMoveMouse flag (used when io.NavMovesTrue is enabled by user and using directional navigation)
+    {      // Send a simple response after a small delay that would ensure the client
+      // deadline is exceeded.
+      gpr_log(GPR_INFO, 'Got request %d', n);
+      testing::EchoResponse response;
+      response.set_message('foobar');
+      // A bit of sleep to make sure the deadline elapses.
+      gpr_sleep_until(gpr_time_add(gpr_now(GPR_CLOCK_MONOTONIC),
+                                   gpr_time_from_millis(50, GPR_TIMESPAN)));
+      {
+        std::lock_guard<std::mutex> lock(mu);
+        if (shutting_down) {
+          gpr_log(GPR_INFO,
+                  'shut down while processing call, not calling Finish()');
+          // Continue flushing the CQ.
+          continue;
         }
-        else
-        {
-            double mouse_x, mouse_y;
-            glfwGetCursorPos(g_Window, &mouse_x, &mouse_y);
-            io.MousePos = ImVec2((float)mouse_x, (float)mouse_y);
+        gpr_log(GPR_INFO, 'Finishing request %d', n);
+        responder.Finish(response, grpc::Status::OK, (void*)2);
+        if (!cq->Next(&tag, &ok)) {
+          break;
         }
+        EXPECT_EQ((void*)2, tag);
+      }
     }
-    else
-    {
-        io.MousePos = ImVec2(-FLT_MAX,-FLT_MAX);
+  });
+    
+    std::unique_ptr<ScenarioResult> RunScenario(
+    const grpc::testing::ClientConfig& client_config, size_t num_clients,
+    const grpc::testing::ServerConfig& server_config, size_t num_servers,
+    int warmup_seconds, int benchmark_seconds, int spawn_local_worker_count,
+    const grpc::string& qps_server_target_override,
+    const grpc::string& credential_type, bool run_inproc);
+    
+      grpc::testing::RunQPS();
+    
+    std::string GetDbFileContent(int argc, char** argv) {
+  std::string db_path;
+  std::string arg_str('--db_path');
+  if (argc > 1) {
+    std::string argv_1 = argv[1];
+    size_t start_position = argv_1.find(arg_str);
+    if (start_position != std::string::npos) {
+      start_position += arg_str.size();
+      if (argv_1[start_position] == ' ' ||
+          argv_1[start_position] == '=') {
+        db_path = argv_1.substr(start_position + 1);
+      }
+    }
+  } else {
+    db_path = 'route_guide_db.json';
+  }
+  std::ifstream db_file(db_path);
+  if (!db_file.is_open()) {
+    std::cout << 'Failed to open ' << db_path << std::endl;
+    return '';
+  }
+  std::stringstream db;
+  db << db_file.rdbuf();
+  return db.str();
+}
+    
+    #include <grpc/grpc.h>
+#include <grpc++/channel.h>
+#include <grpc++/client_context.h>
+#include <grpc++/create_channel.h>
+#include <grpc++/security/credentials.h>
+#include 'helper.h'
+#include 'route_guide.grpc.pb.h'
+    
+      bool PrintAddServicerToServer(
+      const grpc::string& package_qualified_service_name,
+      const grpc_generator::Service* service, grpc_generator::Printer* out);
+  bool PrintServicer(const grpc_generator::Service* service,
+                     grpc_generator::Printer* out);
+  bool PrintStub(const grpc::string& package_qualified_service_name,
+                 const grpc_generator::Service* service,
+                 grpc_generator::Printer* out);
+    
+      NSDictionary *flagNames = @{
+#define GRPC_XMACRO_ITEM(methodName, FlagName) \
+    @(kSCNetworkReachabilityFlags ## FlagName): @#methodName,
+#include 'GRXReachabilityFlagNames.xmacro.h'
+#undef GRPC_XMACRO_ITEM
+  };
+    
+    
+# if defined(OC_CLZ32)
+/**
+ * OC_ILOGNZ_32 - Integer binary logarithm of a non-zero 32-bit value.
+ * @_v: A non-zero 32-bit value.
+ * Returns floor(log2(_v))+1.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * If _v is zero, the return value is undefined; use OC_ILOG_32() instead.
+ */
+#  define OC_ILOGNZ_32(_v) (OC_CLZ32_OFFS-OC_CLZ32(_v))
+/**
+ * OC_ILOG_32 - Integer binary logarithm of a 32-bit value.
+ * @_v: A 32-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ */
+#  define OC_ILOG_32(_v)   (OC_ILOGNZ_32(_v)&-!!(_v))
+# else
+#  define OC_ILOGNZ_32(_v) (oc_ilog32(_v))
+#  define OC_ILOG_32(_v)   (oc_ilog32(_v))
+# endif
+    
+    #include 'vorbis/codec.h'
+#include 'backends.h'
+#include 'books/coupled/res_books_stereo.h'
+    
+    #define opus_fft(_st, _fin, _fout, arch) \
+   ((void)(arch), opus_fft_neon(_st, _fin, _fout))
+    
+    bool FilterBlockReader::KeyMayMatch(uint64_t block_offset, const Slice& key) {
+  uint64_t index = block_offset >> base_lg_;
+  if (index < num_) {
+    uint32_t start = DecodeFixed32(offset_ + index*4);
+    uint32_t limit = DecodeFixed32(offset_ + index*4 + 4);
+    if (start <= limit && limit <= static_cast<size_t>(offset_ - data_)) {
+      Slice filter = Slice(data_ + start, limit - start);
+      return policy_->KeyMayMatch(key, filter);
+    } else if (start == limit) {
+      // Empty filters do not match any keys
+      return false;
+    }
+  }
+  return true;  // Errors are treated as potential matches
+}
+    
+      void CheckOffsetPastEndReturnsNoRecords(uint64_t offset_past_end) {
+    WriteInitialOffsetLog();
+    reading_ = true;
+    source_.contents_ = Slice(dest_.contents_);
+    Reader* offset_reader = new Reader(&source_, &report_, true/*checksum*/,
+                                       WrittenBytes() + offset_past_end);
+    Slice record;
+    std::string scratch;
+    ASSERT_TRUE(!offset_reader->ReadRecord(&record, &scratch));
+    delete offset_reader;
+  }
+    
+    
+    {}  // namespace leveldb
+    
+    #include <string>
+#include <stdint.h>
+#include 'db/dbformat.h'
+#include 'leveldb/cache.h'
+#include 'leveldb/table.h'
+#include 'port/port.h'
+    
+    
+    {  for (size_t i = 0; i < new_files_.size(); i++) {
+    const FileMetaData& f = new_files_[i].second;
+    PutVarint32(dst, kNewFile);
+    PutVarint32(dst, new_files_[i].first);  // level
+    PutVarint64(dst, f.number);
+    PutVarint64(dst, f.file_size);
+    PutLengthPrefixedSlice(dst, f.smallest.Encode());
+    PutLengthPrefixedSlice(dst, f.largest.Encode());
+  }
+}
+    
+      void Clear();
+    
+    
+    {    SeekToRestartPoint(restart_index_);
+    do {
+      // Loop until end of current entry hits the start of original entry
+    } while (ParseNextKey() && NextEntryOffset() < original);
+  }
+    
+    
+    {  virtual bool KeyMayMatch(const Slice& key, const Slice& filter) const {
+    uint32_t h = Hash(key.data(), key.size(), 1);
+    for (size_t i = 0; i + 4 <= filter.size(); i += 4) {
+      if (h == DecodeFixed32(filter.data() + i)) {
+        return true;
+      }
+    }
+    return false;
+  }
+};
+    
+        page->offset.clear();
+    page->offset.push_back(0);
+    for (bst_uint cid : sorted_index_set) {
+      page->offset.push_back(
+          page->offset.back() + disk_offset_[cid + 1] - disk_offset_[cid]);
+    }
+    page->data.resize(page->offset.back());
+    CHECK_EQ(index_.data.size(), value_.data.size());
+    CHECK_EQ(index_.data.size(), disk_offset_.back());
+    
+    #include <cstdio>
+#include <cstring>
+#include <string>
+#include <istream>
+#include <fstream>
+    
+    /*! \brief a column storage, to be used with ApplySplit. Note that each
+    bin id is stored as index[i] + index_base. */
+template<typename T>
+class Column {
+ public:
+  ColumnType type;
+  const T* index;
+  uint32_t index_base;
+  const size_t* row_ind;
+  size_t len;
+};
+    
+    
+    { private:
+  RowBlock<IndexType> out_;
+  std::unique_ptr<Parser<IndexType> > parser_;
+  uint32_t num_col_;
+  std::vector<size_t> offset_;
+  std::vector<IndexType> dense_index_;
+  std::vector<xgboost::bst_float> dense_value_;
+};
+    
+    
+    {/*!
+ * \brief define compatible keywords in g++
+ *  Used to support g++-4.6 and g++4.7
+ */
+#if DMLC_USE_CXX11 && defined(__GNUC__) && !defined(__clang_version__)
+#if __GNUC__ == 4 && __GNUC_MINOR__ < 8
+#define override
+#define final
+#endif
+#endif
+}  // namespace xgboost
+#endif  // XGBOOST_BASE_H_
+
+    
+    #include <chrono>
+#include <functional>
+#include <ratio>
+#include <thread>
+    
+    TEST(MemoryIdler, futexWaitAwokenEarly) {
+  StrictMock<Futex<MockAtom>> fut;
+  auto clock = MockClock::setup();
+  auto begin = MockClock::time_point(std::chrono::seconds(100));
+  auto idleTimeout = MemoryIdler::defaultIdleTimeout.load();
     }
     
-        // Create and grow buffers if needed
-    if (!g_pVB || g_VertexBufferSize < draw_data->TotalVtxCount)
-    {
-        if (g_pVB) { g_pVB->Release(); g_pVB = NULL; }
-        g_VertexBufferSize = draw_data->TotalVtxCount + 5000;
-        if (g_pd3dDevice->CreateVertexBuffer(g_VertexBufferSize * sizeof(CUSTOMVERTEX), D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY, D3DFVF_CUSTOMVERTEX, D3DPOOL_DEFAULT, &g_pVB, NULL) < 0)
-            return;
+    template <class I, class = void>
+struct SubsumptionsOf_ {
+  using type = TypeList<>;
+};
+    
+    static void contentionAtWidthGetcpu(size_t iters, size_t stripes, size_t work) {
+  contentionAtWidth<std::atomic>(iters, stripes, work);
+}
+    
+    /**
+ * Internal use for the macro SCOPE_FAIL below
+ */
+enum class ScopeGuardOnFail {};
+    
+    template <typename Fn>
+void DynamicParser::required(const folly::dynamic& key, Fn fn) {
+  wrapError(&key, [&]() {
+    auto vp = value().get_ptr(key);
+    if (!vp) {
+      throw std::runtime_error(folly::to<std::string>(
+        'Couldn't find key ', detail::toPseudoJson(key), ' in dynamic object'
+      ));
     }
-    if (!g_pIB || g_IndexBufferSize < draw_data->TotalIdxCount)
-    {
-        if (g_pIB) { g_pIB->Release(); g_pIB = NULL; }
-        g_IndexBufferSize = draw_data->TotalIdxCount + 10000;
-        if (g_pd3dDevice->CreateIndexBuffer(g_IndexBufferSize * sizeof(ImDrawIdx), D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY, sizeof(ImDrawIdx) == 2 ? D3DFMT_INDEX16 : D3DFMT_INDEX32, D3DPOOL_DEFAULT, &g_pIB, NULL) < 0)
-            return;
-    }
+    parse(key, *vp, fn);
+  });
+}
     
-    // CHANGELOG
-// (minor and older changes stripped away, please see git history for details)
-//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_Marmalade_RenderDrawData() in the .h file so you can call it yourself.
-//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
-//  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
+      /**
+   * Error-wraps fn(auto-converted key & value) if d[key] is set. The
+   * top-of-file docblock explains the auto-conversion.
+   */
+  template <typename Fn>
+  void optional(const folly::dynamic& key, Fn);
     
-        auto startPoint = high_resolution_clock::now();
-    vector<thread *> threads;
-    for (int i = 0; i < THREADS; i++) {
-        threads.push_back(new thread([i] {
-            while(nextConnection(i));
-        }));
-    }
-    
-    namespace TLS {
-    }
-    
-            unsigned char shaInput[] = 'XXXXXXXXXXXXXXXXXXXXXXXX258EAFA5-E914-47DA-95CA-C5AB0DC85B11';
-        memcpy(shaInput, secKey, 24);
-        unsigned char shaDigest[SHA_DIGEST_LENGTH];
-        SHA1(shaInput, sizeof(shaInput) - 1, shaDigest);
-    
-            if (!socket->messageQueue.empty() && ((events & UV_WRITABLE) || SSL_want(socket->ssl) == SSL_READING)) {
-            socket->cork(true);
-            while (true) {
-                Queue::Message *messagePtr = socket->messageQueue.front();
-                int sent = SSL_write(socket->ssl, messagePtr->data, (int) messagePtr->length);
-                if (sent == (ssize_t) messagePtr->length) {
-                    if (messagePtr->callback) {
-                        messagePtr->callback(p, messagePtr->callbackData, false, messagePtr->reserved);
-                    }
-                    socket->messageQueue.pop();
-                    if (socket->messageQueue.empty()) {
-                        if ((socket->state.poll & UV_WRITABLE) && SSL_want(socket->ssl) != SSL_WRITING) {
-                            socket->change(socket->nodeData->loop, socket, socket->setPoll(UV_READABLE));
-                        }
-                        break;
-                    }
-                } else if (sent <= 0) {
-                    switch (SSL_get_error(socket->ssl, sent)) {
-                    case SSL_ERROR_WANT_READ:
-                        break;
-                    case SSL_ERROR_WANT_WRITE:
-                        if ((socket->getPoll() & UV_WRITABLE) == 0) {
-                            socket->change(socket->nodeData->loop, socket, socket->setPoll(socket->getPoll() | UV_WRITABLE));
-                        }
-                        break;
-                    default:
-                        STATE::onEnd((Socket *) p);
-                        return;
-                    }
-                    break;
-                }
-            }
-            socket->cork(false);
-        }
-    
-                group->messageHandler(webSocket, data, length, (OpCode) opCode);
-            if (webSocket->isClosed() || webSocket->isShuttingDown()) {
-                return true;
-            }
-        } else {
-            webSocket->fragmentBuffer.append(data, length);
-            if (!remainingBytes && fin) {
-                length = webSocket->fragmentBuffer.length();
-                if (webSocket->compressionStatus == WebSocket<isServer>::CompressionStatus::COMPRESSED_FRAME) {
-                        webSocket->compressionStatus = WebSocket<isServer>::CompressionStatus::ENABLED;
-                        webSocket->fragmentBuffer.append('....');
-                        data = group->hub->inflate((char *) webSocket->fragmentBuffer.data(), length, group->maxPayload);
-                        if (!data) {
-                            forceClose(webSocketState);
-                            return true;
-                        }
-                } else {
-                    data = (char *) webSocket->fragmentBuffer.data();
-                }
-    }
+      auto parse_error = errors.at('nested').at(coerce_fn(good_k));
+  EXPECT_EQ(d.at(good_k), parse_error.at('value'));
+  EXPECT_PCRE_MATCH('.*failsauce.*', parse_error.at('error').getString());
