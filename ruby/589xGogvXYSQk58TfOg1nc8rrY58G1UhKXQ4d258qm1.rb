@@ -1,145 +1,100 @@
-          def listen(conn)
-            conn.without_reconnect do
-              original_client = conn.respond_to?(:_client) ? conn._client : conn.client
-    
-            def test_url_memory_db_for_sqlite3
-          spec = resolve 'sqlite3::memory:'
-          assert_equal(':memory:', spec['database'])
-        end
-    
-          def beat
-        transmit type: ActionCable::INTERNAL[:message_types][:ping], message: Time.now.to_i
+
+        
+          def recipients(payload = {})
+    emails = interpolated(payload)['recipients']
+    if emails.present?
+      if emails.is_a?(String)
+        [emails]
+      else
+        emails
       end
-    
-    class HelpersTypoControllerTest < ActiveSupport::TestCase
-  def setup
-    @autoload_paths = ActiveSupport::Dependencies.autoload_paths
-    ActiveSupport::Dependencies.autoload_paths = Array(HelpersTypoController.helpers_path)
-  end
-    
-      test 'token_and_options returns nil with no value after the equal sign' do
-    actual = ActionController::HttpAuthentication::Token.token_and_options(malformed_request).first
-    assert_nil actual
-  end
-    
-        def call(env)
-      result = @app.call(env)
-      result[1]['Middleware-Order'] += '!'
-      result
+    else
+      [user.email]
     end
   end
     
-          def handle_exception_with_mailer_class(exception)
-        if klass = mailer_class
-          klass.handle_exception exception
-        else
-          raise exception
-        end
+      module SortableTableHelper
+    # :call-seq:
+    #   sortable_column(attribute, default_direction = 'desc', name: attribute.humanize)
+    def sortable_column(attribute, default_direction = nil, options = nil)
+      if options.nil? && (options = Hash.try_convert(default_direction))
+        default_direction = nil
       end
+      default_direction ||= 'desc'
+      options ||= {}
+      name = options[:name] || attribute.humanize
+      selected = @table_sort_info[:attribute].to_s == attribute
+      if selected
+        direction = @table_sort_info[:direction]
+        new_direction = direction.to_s == 'desc' ? 'asc' : 'desc'
+        classes = 'selected #{direction}'
+      else
+        classes = ''
+        new_direction = default_direction
+      end
+      link_to(name, url_for(sort: '#{attribute}.#{new_direction}'), class: classes)
+    end
   end
 end
 
     
-          debug { event.payload[:mail] }
-    end
-    
-      # This allows generic Altivec PPC bottles to be supported in some
-  # formulae, while also allowing specific bottles in others; e.g.,
-  # sometimes a formula has just :tiger_altivec, other times it has
-  # :tiger_g4, :tiger_g5, etc.
-  def find_altivec_tag(tag)
-    if tag.to_s =~ /(\w+)_(g4|g4e|g5)$/
-      altivec_tag = '#{$1}_altivec'.to_sym
-      altivec_tag if key?(altivec_tag)
+        respond_to do |format|
+      format.html { redirect_back events_path, notice: 'Event deleted.' }
+      format.json { head :no_content }
     end
   end
     
-      def <<(o)
-    @settings << o
-    self
-  end
-    
-        if !Language::Python.in_sys_path?('python', homebrew_site_packages)
-      s = <<-EOS.undent
-        Python modules have been installed and Homebrew's site-packages is not
-        in your Python sys.path, so you will not be able to import the modules
-        this formula installed. If you plan to develop with these modules,
-        please run:
-      EOS
-      s += instructions
-    elsif keg.python_pth_files_installed?
-      s = <<-EOS.undent
-        This formula installed .pth files to Homebrew's site-packages and your
-        Python isn't configured to process them, so you will not be able to
-        import the modules this formula installed. If you plan to develop
-        with these modules, please run:
-      EOS
-      s += instructions
+        respond_to do |format|
+      format.html { redirect_to services_path }
+      format.json { render json: @service }
     end
-    s
   end
+end
+
     
-      UNBREWED_EXCLUDE_FILES = %w[.DS_Store]
-  UNBREWED_EXCLUDE_PATHS = %w[
-    .github/*
-    bin/brew
-    lib/gdk-pixbuf-2.0/*
-    lib/gio/*
-    lib/node_modules/*
-    lib/python[23].[0-9]/*
-    lib/pypy/*
-    lib/pypy3/*
-    lib/ruby/gems/[12].*
-    lib/ruby/site_ruby/[12].*
-    lib/ruby/vendor_ruby/[12].*
-    share/pypy/*
-    share/pypy3/*
-    share/doc/homebrew/*
-    share/info/dir
-    share/man/man1/brew.1
-    share/man/whatis
-  ]
+        private
     
-      # Enable Rack::Cache to put a simple HTTP cache in front of your application
-  # Add `rack-cache` to your Gemfile before enabling this.
-  # For large-scale production use, consider using a caching reverse proxy like nginx, varnish or squid.
-  # config.action_dispatch.rack_cache = true
-    
-      # Configure static asset server for tests with Cache-Control for performance.
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
-  end
-  config.static_cache_control = 'public, max-age=3600'
-    
-          encoding_option(opts)
-    
-          opts.on('-l', '--line-numbers', '--line-comments',
-              'Emit comments in the generated CSS indicating the corresponding source line.') do
-        @options[:for_engine][:line_numbers] = true
-      end
-    end
-    
-          # If the importer is based on files on the local filesystem
-      # this method should return folders which should be watched
-      # for changes.
-      #
-      # @return [Array<String>] List of absolute paths of directories to watch
-      def directories_to_watch
-        []
+          def get_type
+        case slug
+        when 'api'
+          'Reference'
+        when 'configuration'
+          'Reference: Configuration'
+        when 'stpl'
+          'Reference: SimpleTemplate'
+        when 'plugindev'
+          'Reference: Plugin'
+        else
+          'Manual'
+        end
       end
     
-    module Sass
-  # Runs a SassScript read-eval-print loop.
-  # It presents a prompt on the terminal,
-  # reads in SassScript expressions,
-  # evaluates them,
-  # and prints the result.
-  class Repl
-    # @param options [{Symbol => Object}] An options hash.
-    def initialize(options = {})
-      @options = options
-    end
+        assert_not_operator(h1, :>, h1)
+    assert_not_operator(h1, :>, h2)
+    assert_not_operator(h2, :>, h1)
+    assert_not_operator(h2, :>, h2)
+  end
+    
+      def test_time_time()
+    assert_equal(Time.utc(2000, 3, 21, 3, 30)  \
+                -Time.utc(2000, 3, 21, 0, 30), 3*3600)
+    assert_equal(Time.utc(2000, 3, 21, 0, 30)  \
+                -Time.utc(2000, 3, 21, 3, 30), -3*3600)
+  end
+    
+      it 'returns empty strings for repeated formats if the input is empty' do
+    ''.unpack(unpack_format(nil, 3)).should == ['', '', '']
+  end
+    
+      it 'decodes UTF-8 BMP codepoints' do
+    [ ['\xc2\x80',      [0x80]],
+      ['\xdf\xbf',      [0x7ff]],
+      ['\xe0\xa0\x80',  [0x800]],
+      ['\xef\xbf\xbf',  [0xffff]]
+    ].should be_computed_by(:unpack, 'U')
+  end
+    
+        run.should be_true
+  end
+    
+      def_delegators :@logger, :log, :log_status, :log_processing, :log_transform, :log_file_info, :log_processed, :log_http_get_file, :log_http_get_files, :silence_log
