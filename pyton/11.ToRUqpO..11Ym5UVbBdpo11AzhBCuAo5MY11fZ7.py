@@ -1,95 +1,112 @@
 
         
-                # because special names such as Name.Class, Name.Function, etc.
-        # are not recognized as such later in the parsing, we choose them
-        # to look the same as ordinary variables.
-        Name:                      '#000000',        # class: 'n'
-        Name.Attribute:            '#c4a000',        # class: 'na' - to be revised
-        Name.Builtin:              '#004461',        # class: 'nb'
-        Name.Builtin.Pseudo:       '#3465a4',        # class: 'bp'
-        Name.Class:                '#000000',        # class: 'nc' - to be revised
-        Name.Constant:             '#000000',        # class: 'no' - to be revised
-        Name.Decorator:            '#888',           # class: 'nd' - to be revised
-        Name.Entity:               '#ce5c00',        # class: 'ni'
-        Name.Exception:            'bold #cc0000',   # class: 'ne'
-        Name.Function:             '#000000',        # class: 'nf'
-        Name.Property:             '#000000',        # class: 'py'
-        Name.Label:                '#f57900',        # class: 'nl'
-        Name.Namespace:            '#000000',        # class: 'nn' - to be revised
-        Name.Other:                '#000000',        # class: 'nx'
-        Name.Tag:                  'bold #004461',   # class: 'nt' - like a keyword
-        Name.Variable:             '#000000',        # class: 'nv' - to be revised
-        Name.Variable.Class:       '#000000',        # class: 'vc' - to be revised
-        Name.Variable.Global:      '#000000',        # class: 'vg' - to be revised
-        Name.Variable.Instance:    '#000000',        # class: 'vi' - to be revised
+        
+class TestCache(unittest.TestCase):
+    def setUp(self):
+        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
+        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
+        _mkdir(TESTDATA_DIR)
+        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
+        self.tearDown()
     
-        def __exit__(self, exc_type, exc_value, traceback):
-        if exc_type is None:
-            self.stop_event.wait(self.WAIT_EVENT_TIMEOUT)
+    
+class TestUnicodeLiterals(unittest.TestCase):
+    def test_all_files(self):
+        for dirpath, dirnames, filenames in os.walk(rootDir):
+            for ignore_dir in IGNORED_DIRS:
+                if ignore_dir in dirnames:
+                    # If we remove the directory from dirnames os.walk won't
+                    # recurse into it
+                    dirnames.remove(ignore_dir)
+            for basename in filenames:
+                if not basename.endswith('.py'):
+                    continue
+                if basename in IGNORED_FILES:
+                    continue
+    
+            retval = subprocess.call(args)
+        if retval == 0:
+            fsize = os.path.getsize(encodeFilename(tmpfilename))
+            self.to_screen('\r[%s] %s bytes' % (args[0], fsize))
+            self.try_rename(tmpfilename, filename)
+            self._hook_progress({
+                'downloaded_bytes': fsize,
+                'total_bytes': fsize,
+                'filename': filename,
+                'status': 'finished',
+            })
+            return True
         else:
-            if self.wait_to_close_event:
-                # avoid server from waiting for event timeouts
-                # if an exception is found in the main thread
-                self.wait_to_close_event.set()
+            self.to_stderr('\n')
+            self.report_error('%s exited with code %d' % (args[0], retval))
+            return False
+
     
+            return self._extract_nuevo(
+            'http://www.anitube.se/nuevo/econfig.php?key=%s' % key, video_id)
+
     
-class Timeout(RequestException):
-    '''The request timed out.
+            # Audiomack wraps a lot of soundcloud tracks in their branded wrapper
+        # if so, pass the work off to the soundcloud extractor
+        if SoundcloudIE.suitable(api_response['url']):
+            return {'_type': 'url', 'url': api_response['url'], 'ie_key': 'Soundcloud'}
     
-    packages = ['requests']
+            mvp_id = self._search_mvp_id(webpage)
     
+      Raises:
+    ValueError: if frequency edges are incorrectly ordered or out of range.
+  '''
+  nyquist_hertz = audio_sample_rate / 2.
+  if lower_edge_hertz < 0.0:
+    raise ValueError('lower_edge_hertz %.1f must be >= 0' % lower_edge_hertz)
+  if lower_edge_hertz >= upper_edge_hertz:
+    raise ValueError('lower_edge_hertz %.1f >= upper_edge_hertz %.1f' %
+                     (lower_edge_hertz, upper_edge_hertz))
+  if upper_edge_hertz > nyquist_hertz:
+    raise ValueError('upper_edge_hertz %.1f is greater than Nyquist %.1f' %
+                     (upper_edge_hertz, nyquist_hertz))
+  spectrogram_bins_hertz = np.linspace(0.0, nyquist_hertz, num_spectrogram_bins)
+  spectrogram_bins_mel = hertz_to_mel(spectrogram_bins_hertz)
+  # The i'th mel band (starting from i=1) has center frequency
+  # band_edges_mel[i], lower edge band_edges_mel[i-1], and higher edge
+  # band_edges_mel[i+1].  Thus, we need num_mel_bins + 2 values in
+  # the band_edges_mel arrays.
+  band_edges_mel = np.linspace(hertz_to_mel(lower_edge_hertz),
+                               hertz_to_mel(upper_edge_hertz), num_mel_bins + 2)
+  # Matrix to post-multiply feature arrays whose rows are num_spectrogram_bins
+  # of spectrogram values.
+  mel_weights_matrix = np.empty((num_spectrogram_bins, num_mel_bins))
+  for i in range(num_mel_bins):
+    lower_edge_mel, center_mel, upper_edge_mel = band_edges_mel[i:i + 3]
+    # Calculate lower and upper slopes for every spectrogram bin.
+    # Line segments are linear in the *mel* domain, not hertz.
+    lower_slope = ((spectrogram_bins_mel - lower_edge_mel) /
+                   (center_mel - lower_edge_mel))
+    upper_slope = ((upper_edge_mel - spectrogram_bins_mel) /
+                   (upper_edge_mel - center_mel))
+    # .. then intersect them with each other and zero.
+    mel_weights_matrix[:, i] = np.maximum(0.0, np.minimum(lower_slope,
+                                                          upper_slope))
+  # HTK excludes the spectrogram DC bin; make sure it always gets a zero
+  # coefficient.
+  mel_weights_matrix[0, :] = 0.0
+  return mel_weights_matrix
     
-class TestAddressInNetwork:
+    import iris_data
+import custom_estimator
+import premade_estimator
     
-        def load_config(self):
-        '''Returns the next config directory to be tested'''
-        shutil.rmtree(self.le_config.work_dir, ignore_errors=True)
-        backup = os.path.join(self.le_config.work_dir, constants.BACKUP_DIR)
-        os.makedirs(backup)
-        return self._configs.pop()
+        final_timestep = label_seq[-1]
+    self.assertEqual(final_timestep.token, eos_id)
+    self.assertEqual(final_timestep.label, 1)
+    self.assertEqual(final_timestep.weight, 1.0)
     
-        @mock.patch(
-        'certbot_compatibility_test.validator.crypto_util.probe_sni')
-    def test_certificate_success(self, mock_probe_sni):
-        cert = OpenSSL.crypto.X509()
-        mock_probe_sni.return_value = cert
-        self.assertTrue(self.validator.certificate(
-            cert, 'test.com', '127.0.0.1'))
+      Raises:
+    ValueError: if the length of the frequency file is not equal to the vocab
+      size, or if the file is not found.
+  '''
+  path = FLAGS.vocab_freq_path or os.path.join(FLAGS.data_dir, 'vocab_freq.txt')
     
-            html = get_content(endpoint, headers= fake_header_id)
-        html_json = json.loads(html)
-    
-    #----------------------------------------------------------------------
-def makeMimi(upid):
-    '''From http://cdn37.atwikiimg.com/sitescript/pub/dksitescript/FC2.site.js
-    Also com.hps.util.fc2.FC2EncrptUtil.makeMimiLocal
-    L110'''
-    strSeed = 'gGddgPfeaf_gzyr'
-    prehash = upid + '_' + strSeed
-    return md5(prehash.encode('utf-8')).hexdigest()
-    
-        while pin_count > 0:
-        json_data = extract_json_data(url, max=pin_list[-1]['pin_id'],
-                                      limit=LIMIT)
-        pins = json_data['pins']
-        pin_list += pins
-        pin_count -= len(pins)
-    
-    #----------------------------------------------------------------------
-def sina_xml_to_url_list(xml_data):
-    '''str->list
-    Convert XML to URL List.
-    From Biligrab.
-    '''
-    rawurl = []
-    dom = parseString(xml_data)
-    for node in dom.getElementsByTagName('durl'):
-        url = node.getElementsByTagName('url')[0]
-        rawurl.append(url.childNodes[0].data)
-    return rawurl
-    
-            # extract raw urls
-        orig_img = match1(content,
-                         r'<meta itemprop='image' content='([^']+/originals/[^']+)'')
-        twit_img = match1(content,
-                          r'<meta property='twitter:image:src' name='twitter:image:src' content='([^']+)'')
+      def testSyncReplicas(self):
+    FLAGS.sync_replicas = True
+    graphs.VatxtModel().language_model_training()
