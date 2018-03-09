@@ -1,124 +1,106 @@
 
         
-          describe 'instance methods' do
-    let(:key_attributes) do # these keys are intentionally strings.
-      {
-        'canDownload' => false,
-        'canRevoke' => true,
-        'keyId' => 'some-key-id',
-        'keyName' => 'fastlane',
-        'servicesCount' => 3,
-        'services' => [
-          {
-            'name' => 'APNS',
-            'id' => 'U27F4V844T',
-            'configurations' => []
-          },
-          {
-            'name' => 'MusicKit',
-            'id' => '6A7HVUVQ3M',
-            'configurations' => [
-              {
-                'name' => 'music id test',
-                'identifier' => 'music.com.snatchev.test',
-                'type' => 'music',
-                'prefix' => 'some-prefix-id',
-                'id' => 'some-music-kit-id'
-              }
-            ]
-          },
-          {
-            'name' => 'DeviceCheck',
-            'id' => 'DQ8HTZ7739',
-            'configurations' => []
-          }
-        ]
-      }
+              BOOLEAN_ATTRIBUTES.merge(BOOLEAN_ATTRIBUTES.map(&:to_sym))
+    
+                @subscribe_callbacks = Hash.new { |h, k| h[k] = [] }
+            @subscription_lock = Mutex.new
+    
+          def set_body
+        self.response_body = 'Success'
+      end
     end
     
-          def self.description
-        'Create a new Keychain'
-      end
-    
-        def groups=(groups)
-      @groups = groups ? groups.compact : nil
+      def test_lib_helper_methods_after_clear_helpers
+    assert_nothing_raised do
+      call_controller(JustMeController, 'lib')
     end
+  end
     
-          UI.user_error!('Unable to find Crashlytics Run Script Build Phase') if crash_script.nil?
-    
-            expect(result).to eq('hg parent --template {rev}')
-        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('hg parent --template {rev}')
-      end
+        def wrap_delivery_behavior!(*args) # :nodoc:
+      self.class.wrap_delivery_behavior(message, *args)
     end
   end
 end
 
     
-          it 'gets the correct version number with no target specified' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          get_version_number(xcodeproj: '.xcproject')
-        end').runner.execute(:test)
-        expect(result).to eq('4.3.2')
-      end
-    
-          it 'it increments all targets minor version major' do
-        Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number(bump_type: 'major')
-        end').runner.execute(:test)
-    
-        if extension_pathname.readable?
-      ENV['BUNDLE_GEMFILE'] = extension_pathname.to_path
-      break
-    end
-  end
-end
-    
-          when :login
-        s[:user]=$1
-        s[:pass]=$2
-    
-          # A string representation of the importer.
-      # Should be overridden by subclasses.
-      #
-      # This is used to help debugging,
-      # and should usually just show the load path encapsulated by this importer.
-      #
-      # @return [String]
-      def to_s
-        Sass::Util.abstract(self)
-      end
-    
-        # Returns the CSS for the media query.
-    #
-    # @return [String]
-    def to_css
-      css = ''
-      css << resolved_modifier
-      css << ' ' unless resolved_modifier.empty?
-      css << resolved_type
-      css << ' and ' unless resolved_type.empty? || expressions.empty?
-      css << expressions.map do |e|
-        # It's possible for there to be script nodes in Expressions even when
-        # we're converting to CSS in the case where we parsed the document as
-        # CSS originally (as in css_test.rb).
-        e.map {|c| c.is_a?(Sass::Script::Tree::Node) ? c.to_sass : c.to_s}.join
-      end.join(' and ')
-      css
+          formatted
     end
     
-            {
-          :always_update     => false,
-          :template_location => root + '/public/stylesheets/sass',
-          :css_location      => root + '/public/stylesheets',
-          :cache_location    => root + '/tmp/sass-cache',
-          :always_check      => env != 'production',
-          :quiet             => env != 'production',
-          :full_exception    => env != 'production'
-        }.freeze
-      end
-    end
-  end
-    
-            unless guarded && environment.var(name)
-          environment.set_var(name, val.perform(environment))
+          private
+        def processed_mailer
+          @processed_mailer ||= @mailer_class.new.tap do |mailer|
+            mailer.params = @params
+            mailer.process @action, *@args
+          end
         end
+    
+    class AssertSelectEmailTest < ActionMailer::TestCase
+  class AssertSelectMailer < ActionMailer::Base
+    def test(html)
+      mail body: html, content_type: 'text/html',
+        subject: 'Test e-mail', from: 'test@test.host', to: 'test <test@test.host>'
+    end
+  end
+    
+      def grant_admin!
+    set_permission('admin', true)
+  end
+    
+          if base == dest
+        ''
+      elsif dest.start_with? File.join(base, '')
+        url.path[(path.length)..-1]
+      end
+    end
+    
+          def get_type
+        case slug
+        when 'api'
+          'Reference'
+        when 'configuration'
+          'Reference: Configuration'
+        when 'stpl'
+          'Reference: SimpleTemplate'
+        when 'plugindev'
+          'Reference: Plugin'
+        else
+          'Manual'
+        end
+      end
+    
+            # Returns the internal data associated with this plugin. This
+        # should NOT be called by the general public.
+        #
+        # @return [Hash]
+        def self.data
+          @data ||= {}
+        end
+    
+    process_args
+list_login_items_for_app $app_path
+
+    
+    if $opt_test
+  exit test_app($opt_test)
+else
+  report_apps
+end
+
+    
+    end
+    
+            self.description = <<-DESC
+          Remove the cache for a given pod, or clear the cache completely.
+    
+            self.description = <<-DESC
+          Shows the content of the pods cache as a YAML tree output, organized by pod.
+          If `NAME` is given, only the caches for that pod will be included in the output.
+        DESC
+    
+            TEMPLATE_REPO = 'https://github.com/CocoaPods/pod-template.git'.freeze
+        TEMPLATE_INFO_URL = 'https://github.com/CocoaPods/pod-template'.freeze
+        CREATE_NEW_POD_INFO_URL = 'http://guides.cocoapods.org/making/making-a-cocoapod'.freeze
+    
+          def snapshot
+        agent.metric.collector.snapshot_metric
+      end
