@@ -1,98 +1,96 @@
 
         
-              # Topic may be hard deleted due to spam, no point complaining
-      # we would have to look at the topics table id sequence to find cases
-      # where this was called with an invalid id, no point really
-      return unless topic.present?
+              if rails?
+        register_rails_engine
+      elsif lotus?
+        register_lotus
+      elsif sprockets?
+        register_sprockets
+      end
     
-    module Jobs
-    
-      def regular?
-    !staff?
-  end
-    
-        valid_oauth_providers :evernote
-    
-      def load_event
-    @event = current_user.events.find(params[:id])
-  end
-end
-
-    
-      def toggle_availability
-    @service = current_user.services.find(params[:id])
-    @service.toggle_availability!
-    
-            def log_level(name, options = {})
-          if options[:prepend]
-            level = log_levels.values.min
-            level = level.nil? ? 0 : level - 1
-          else
-            level = log_levels.values.max
-            level = level.nil? ? 0 : level + 1
-          end
-          log_levels.update(name => level)
-          define_logger(name)
-        end
-    
-    run SinatraStaticServer
-
-    
-    module Jekyll
-    
-    def config_tag(config, key, tag=nil, classname=nil)
-  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
-  tag       ||= 'div'
-  classname ||= key.sub(/_/, '-').sub(/\./, '-')
-  output      = '<#{tag} class='#{classname}''
-    
-        def html_output_for(script_url, code)
-      code = CGI.escapeHTML code
-      <<-HTML
-<div><script src='#{script_url}'></script>
-<noscript><pre><code>#{code}</code></pre></noscript></div>
-      HTML
-    end
-    
-        def render(context)
-      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
-      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
-      file = code_path + @file
-    
-      # Improved version of Liquid's truncate:
-  # - Doesn't cut in the middle of a word.
-  # - Uses typographically correct ellipsis (…) insted of '...'
-  def truncate(input, length)
-    if input.length > length && input[0..(length-1)] =~ /(.+)\b.+$/im
-      $1.strip + ' &hellip;'
-    else
-      input
-    end
-  end
-    
-          Dir.chdir(file_path) do
-        contents = file.read
-        if contents =~ /\A-{3}.+[^\A]-{3}\n(.+)/m
-          contents = $1.lstrip
-        end
-        contents = pre_filter(contents)
-        if @raw
-          contents
-        else
-          partial = Liquid::Template.parse(contents)
-          context.stack do
-            partial.render(context)
-          end
-        end
+          opts.on('--unix-newlines', 'Use Unix-style newlines in written files.',
+                                 ('Always true on Unix.' unless Sass::Util.windows?)) do
+        @options[:unix_newlines] = true if Sass::Util.windows?
       end
     end
+    
+    # A logger that delays messages until they're explicitly flushed to an inner
+# logger.
+#
+# This can be installed around the current logger by calling \{#install!}, and
+# the original logger can be replaced by calling \{#uninstall!}. The log
+# messages can be flushed by calling \{#flush}.
+class Sass::Logger::Delayed < Sass::Logger::Base
+  # Installs a new delayed logger as the current Sass logger, wrapping the
+  # original logger.
+  #
+  # This can be undone by calling \{#uninstall!}.
+  #
+  # @return [Sass::Logger::Delayed] The newly-created logger.
+  def self.install!
+    logger = Sass::Logger::Delayed.new(Sass.logger)
+    Sass.logger = logger
+    logger
   end
-end
     
-            private
+        # Merges this query list with another. The returned query list
+    # queries for the intersection between the two inputs.
+    #
+    # Both query lists should be resolved.
+    #
+    # @param other [QueryList]
+    # @return [QueryList?] The merged list, or nil if there is no intersection.
+    def merge(other)
+      new_queries = queries.map {|q1| other.queries.map {|q2| q1.merge(q2)}}.flatten.compact
+      return if new_queries.empty?
+      QueryList.new(new_queries)
+    end
     
-          expect('.margin-false-third').to have_ruleset(ruleset)
-      expect('.margin-false-third').to_not have_rule(bad_rule)
+      config = Merb::Plugins.config[:sass] || Merb::Plugins.config['sass'] || {}
+    
+          # Override `Kernel#puts` to prepend four spaces to each line.
+      def puts(string=nil)
+        $stdout.puts(string.to_s.gsub(/^/, '    '))
+      end
+    
+        # @abstract
+    #
+    # Create a (new) clone of the remote-repository on the deployment target
+    #
+    # @return void
+    #
+    def clone
+      raise NotImplementedError, 'Your SCM strategy module should provide a #clone method'
+    end
+    
+        # we assume that the first file that requires 'sinatra' is the
+    # app_file. all other path related options are calculated based
+    # on this path by default.
+    set :app_file, caller_files.first || $0
+    
+          def escape(object)
+        case object
+        when Hash   then escape_hash(object)
+        when Array  then object.map { |o| escape(o) }
+        when String then escape_string(object)
+        when Tempfile then object
+        else nil
+        end
+      end
+    
+      describe '#random_string' do
+    it 'outputs a string of 32 characters' do
+      expect(subject.random_string.length).to eq(32)
     end
   end
-end
+    
+      describe '#react' do
+    it 'prevents attacks and warns about it' do
+      io = StringIO.new
+      mock_app do
+        use Rack::Protection, :logger => Logger.new(io)
+        run DummyApp
+      end
+      post('/', {}, 'rack.session' => {}, 'HTTP_ORIGIN' => 'http://malicious.com')
+      expect(io.string).to match(/prevented.*Origin/)
+    end
