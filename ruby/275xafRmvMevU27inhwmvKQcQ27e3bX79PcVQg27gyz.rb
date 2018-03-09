@@ -1,12 +1,33 @@
 
         
-          # GET /books/1
-  # GET /books/1.json
-  def show
+          def resource
+    @resource ||=
+      if params[:project_id].present?
+        Project.find(params[:project_id])
+      elsif params[:namespace_id].present?
+        Group.find(params[:namespace_id])
+      end
   end
     
-            def explicit_block_local_variable?
-          @declaration_node.shadowarg_type?
+            # Prints the list of specs & pod cache dirs for a single pod name.
+        #
+        # This output is valid YAML so it can be parsed with 3rd party tools
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
+        #
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
+            end
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
+          end
         end
       end
     end
@@ -14,37 +35,17 @@
 end
 
     
-            def autocorrect(node)
-          # Regexp#match can take a second argument, but this cop doesn't
-          # register an offense in that case
-          return unless node.first_argument.regexp_type?
-    
-                previous.push(when_node.conditions)
+            def execute_repl_command(repl_command)
+          unless repl_command == '\n'
+            repl_commands = repl_command.split
+            subcommand = repl_commands.shift.capitalize
+            arguments = repl_commands
+            subcommand_class = Pod::Command::IPC.const_get(subcommand)
+            subcommand_class.new(CLAide::ARGV.new(arguments)).run
+            signal_end_of_output
           end
         end
-    
-            def on_block(node)
-          on_body_of_reduce(node) do |body|
-            void_next = body.each_node(:next).find do |n|
-              n.children.empty? && parent_block_node(n) == node
-            end
-    
-            def argument_positions(arguments)
-          optarg_positions = []
-          arg_positions = []
-    
-      context 'called with four widths' do
-    it 'applies different widths to all sides' do
-      rule = 'border-width: 7px 8px 9px 10px'
-    
-      context 'called with one size' do
-    it 'applies same width to all sides' do
-      ruleset = 'position: fixed; ' +
-                'top: 1em; ' +
-                'right: 1em; ' +
-                'bottom: 1em; ' +
-                'left: 1em;'
-    
-      context 'called with two sizes' do
-    it 'applies to height and width' do
-      rule = 'height: 2em; width: 1em;'
+      end
+    end
+  end
+end
