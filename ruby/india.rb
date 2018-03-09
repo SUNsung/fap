@@ -1,102 +1,108 @@
 
         
-              https://pip.readthedocs.org/en/stable/installing/#install-pip
-    EOS
-  when 'pil' then <<-EOS.undent
-    Instead of PIL, consider `pip install pillow` or `brew install Homebrew/python/pillow`.
-    EOS
-  when 'macruby' then <<-EOS.undent
-    MacRuby works better when you install their package:
-      http://www.macruby.org/
-    EOS
-  when /(lib)?lzma/
-    'lzma is now part of the xz formula.'
-  when 'xcode'
-    if MacOS.version >= :lion
-      <<-EOS.undent
-      Xcode can be installed from the App Store.
-      EOS
-    else
-      <<-EOS.undent
-      Xcode can be installed from https://developer.apple.com/xcode/downloads/
-      EOS
-    end
-  when 'gtest', 'googletest', 'google-test' then <<-EOS.undent
-    Installing gtest system-wide is not recommended; it should be vendored
-    in your projects that use it.
-    EOS
-  when 'gmock', 'googlemock', 'google-mock' then <<-EOS.undent
-    Installing gmock system-wide is not recommended; it should be vendored
-    in your projects that use it.
-    EOS
-  when 'sshpass' then <<-EOS.undent
-    We won't add sshpass because it makes it too easy for novice SSH users to
-    ruin SSH's security.
-    EOS
-  when 'gsutil' then <<-EOS.undent
-    Install gsutil with `pip install gsutil`
-    EOS
-  when 'clojure' then <<-EOS.undent
-    Clojure isn't really a program but a library managed as part of a
-    project and Leiningen is the user interface to that library.
+            attr_accessor :name, :type, :path
     
-      def clang
-    @clang ||= MacOS.clang_version if MacOS.has_apple_developer_tools?
+        def request_one(url)
+      Response.new read_file(file_path_for(url)), URL.parse(url)
+    end
+    
+            css('h2:not([id]) a[id]:not([href])').each do |node|
+          node.parent['id'] = node['id']
+          node.before(node.children).remove
+        end
+    
+            css('[id]').each do |node|
+          # Module
+          if node.name == 'h2'
+            type = node.content.remove 'Backbone.'
+            if type.capitalize! # sync, history
+              entries << [node.content, node['id'], type]
+            end
+            next
+          end
+    
+            %w(modals dropdowns scrollspy tabs tooltips popovers alerts buttons collapse carousel affix).each do |dom_id|
+          css('##{dom_id}-options + p + div tbody td:first-child').each do |node|
+            name = node.content.strip
+            id = node.parent['id'] = '#{dom_id}-#{name.parameterize}-option'
+            name.prepend '#{dom_id.singularize.titleize}: '
+            name << ' (option)'
+            entries << [name, id]
+          end
+    
+        assert_raise(ArgumentError) {
+      set.superset?([2])
+    }
+    
+      it 'decodes the number of bytes specified by the count modifier including whitespace bytes' do
+    [ ['a bc',  ['a b', 'c']],
+      ['a\fbc', ['a\fb', 'c']],
+      ['a\nbc', ['a\nb', 'c']],
+      ['a\rbc', ['a\rb', 'c']],
+      ['a\tbc', ['a\tb', 'c']],
+      ['a\vbc', ['a\vb', 'c']]
+    ].should be_computed_by(:unpack, unpack_format(3)+unpack_format)
   end
     
-    class PrettyListing
-  def initialize(path)
-    Pathname.new(path).children.sort_by { |p| p.to_s.downcase }.each do |pn|
-      case pn.basename.to_s
-      when 'bin', 'sbin'
-        pn.find { |pnn| puts pnn unless pnn.directory? }
-      when 'lib'
-        print_dir pn do |pnn|
-          # dylibs have multiple symlinks and we don't care about them
-          (pnn.extname == '.dylib' || pnn.extname == '.pc') && !pnn.symlink?
-        end
-      else
-        if pn.directory?
-          if pn.symlink?
-            puts '#{pn} -> #{pn.readlink}'
-          else
-            print_dir pn
-          end
-        elsif Metafiles.list?(pn.basename.to_s)
-          puts pn
-        end
+      it 'decodes UTF-8 max codepoints' do
+    [ ['\xf0\x90\x80\x80', [0x10000]],
+      ['\xf3\xbf\xbf\xbf', [0xfffff]],
+      ['\xf4\x80\x80\x80', [0x100000]],
+      ['\xf4\x8f\xbf\xbf', [0x10ffff]]
+    ].should be_computed_by(:unpack, 'U')
+  end
+    
+      class Apple < Struct; end
+    
+      attributes :id, :type, :url, :preview_url,
+             :remote_url, :text_url, :meta,
+             :description
+    
+            expect(response).to have_http_status(:missing)
       end
     end
   end
+end
+
     
-      def self.require_universal_deps
-    define_method(:require_universal_deps?) { true }
-  end
+      attributes :id, :type, :name, :updated
     
-        sidekiq_options queue: 'critical'
+      describe 'PUT #update' do
+    it 'updates notifications settings' do
+      user.settings['notification_emails'] = user.settings['notification_emails'].merge('follow' => false)
+      user.settings['interactions'] = user.settings['interactions'].merge('must_be_follower' => true)
     
-        ret = route.slice(:location, :label)
-    ret[:full_location] = 'adminPlugins.#{ret[:location]}'
-    ret
-  end
+    GEMFILE_EXTENSIONS = [
+    '.local',
+    ''
+]
     
-          unless root?
-        raise Invalid, 'missing name' if !name || name.empty?
-        raise Invalid, 'missing path' if !path || path.empty?
-        raise Invalid, 'missing type' if !type || type.empty?
-      end
+    
+signer._invoke('KeyToolMSF','[Ljava.lang.String;',keytoolOpts)
+    
+    	def parse_line(line)
+		if line =~ /\w+ <[\.\w]+>:/
+			# End a previous block
+			unless block_size == 0
+				block_end
+			end
+			block_begin(line)
+    
+        # Provide a wrapper for the SCM that loads a strategy for the user.
+    #
+    # @param [Rake] context     The context in which the strategy should run
+    # @param [Module] strategy  A module to include into the SCM instance. The
+    #    module should provide the abstract methods of Capistrano::SCM
+    #
+    def initialize(context, strategy)
+      @context = context
+      singleton = class << self; self; end
+      singleton.send(:include, strategy)
     end
     
-    module Docs
-  class PageDb
-    attr_reader :pages
+          describe 'fetching all release servers' do
+        context 'with no additional options' do
+          subject { dsl.release_roles(:all) }
     
-              node.css('> ul > li > a').each do |link|
-            n = link.content
-            next if n.start_with?('Ex: ') || n.start_with?('Default ') || n =~ /example/i || IGNORE_ENTRIES.include?(n)
-            id = link['href'].remove('#')
-            n.downcase!
-            n.prepend '#{name}: '
-            entries << [n, id]
-          end
-        end
+      public
+  def close; end;
