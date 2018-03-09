@@ -1,60 +1,50 @@
 
         
-              if options[:type] == :array
-        options[:roles] << :completable
-        class_eval <<-EOF
-          def complete_#{name}
-            #{options[:values]}.map { |v| {text: v, id: v} }
-          end
-        EOF
-      end
-    
-      def index
-    @jobs = Delayed::Job.order('coalesce(failed_at,'1000-01-01'), run_at asc').page(params[:page])
-    
-    class REST::MediaAttachmentSerializer < ActiveModel::Serializer
-  include RoutingHelper
-    
-    describe Settings::PreferencesController do
-  render_views
-    
-      def as_json(options={})
-    {
-      poll_id:             id,
-      post_id:             status_message.id,
-      question:            question,
-      poll_answers:        poll_answers,
-      participation_count: participation_count
-    }
-  end
-    
-          private
-    
-        def define_remote_file_task(task, target_roles)
-      Capistrano::UploadTask.define_task(task) do |t|
-        prerequisite_file = t.prerequisites.first
-        file = shared_path.join(t.name)
-    
-      # Implemented by subclasses to hook into Capistrano's deployment flow using
-  # using the `before` and `after` DSL methods. Note that `register_hooks` will
-  # not be called if the user has opted-out of hooks when installing the plugin.
-  #
-  # Example:
-  #
-  #   def register_hooks
-  #     after 'deploy:updated', 'my_plugin:do_something'
-  #   end
-  #
-  def register_hooks; end
-    
-    desc 'Deploy a new release.'
-task :deploy do
-  set(:deploying, true)
-  %w{ starting started
-      updating updated
-      publishing published
-      finishing finished }.each do |task|
-    invoke 'deploy:#{task}'
+          def meta
+    object.file.meta
   end
 end
-task default: :deploy
+
+    
+      describe 'GET #show' do
+    let!(:tag)     { Fabricate(:tag, name: 'test') }
+    let!(:local)   { Fabricate(:status, tags: [tag], text: 'local #test') }
+    let!(:remote)  { Fabricate(:status, tags: [tag], text: 'remote #test', account: Fabricate(:account, domain: 'remote')) }
+    let!(:late)    { Fabricate(:status, tags: [tag], text: 'late #test') }
+    
+        HTTP.get(source).to_s.split('\n').each do |line|
+      next if line.start_with? '#'
+      parts = line.split(';').map(&:strip)
+      next if parts.size < 2
+      codes << [parts[0], parts[1].start_with?('fully-qualified')]
+    end
+    
+      # PATCH/PUT /books/1
+  # PATCH/PUT /books/1.json
+  def update
+    respond_to do |format|
+      if @book.update(book_params)
+        format.html { redirect_to @book, notice: 'Book was successfully updated.' }
+        format.json { render :show, status: :ok, location: @book }
+      else
+        format.html { render :edit }
+        format.json { render json: @book.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+    
+            def initialize(name, declaration_node, scope)
+          unless VARIABLE_DECLARATION_TYPES.include?(declaration_node.type)
+            raise ArgumentError,
+                  'Node type must be any of #{VARIABLE_DECLARATION_TYPES}, ' \
+                  'passed #{declaration_node.type}'
+          end
+    
+            private
+    
+            def autocorrect(node)
+          lambda do |corrector|
+            corrector.remove(node.loc.dot)
+            corrector.remove(node.loc.selector)
+          end
+        end
