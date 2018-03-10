@@ -1,166 +1,137 @@
 
         
-                def get_auth(self, username=None, password=None):
-            assert self.raw_auth == USERNAME
-            assert username == USERNAME
-            assert password is None
-            return basic_auth()
+            def iter_body(self, chunk_size=1):
+        return self._orig.iter_content(chunk_size=chunk_size)
     
-        def __init__(self, groups, env=Environment(), **kwargs):
-        '''
-        :param groups: names of processor groups to be applied
-        :param env: Environment
-        :param kwargs: additional keyword arguments for processors
+            '''
+        raise NotImplementedError()
     
+        name = 'Basic HTTP auth'
+    auth_type = 'basic'
     
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
-
+        def _get_path(self):
+        '''Return the config file path without side-effects.'''
+        raise NotImplementedError()
     
+        def get_formatters_grouped(self):
+        groups = {}
+        for group_name, group in groupby(
+                self.get_formatters(),
+                key=lambda p: getattr(p, 'group_name', 'format')):
+            groups[group_name] = list(group)
+        return groups
     
-def test_unicode_digest_auth(httpbin):
-    # it doesn't really authenticate us because httpbin
-    # doesn't interpret the utf8-encoded auth
-    http('--auth-type=digest',
-         '--auth', u'test:%s' % UNICODE,
-         httpbin.url + u'/digest-auth/auth/test/' + UNICODE)
-
-    
-        # If both `auth_parse` and `prompt_password` are set to `True`,
-    # and the value of `-a` lacks the password part,
-    # then the user will be prompted to type the password in.
-    prompt_password = True
-    
-        # noinspection PyUnboundLocalVariable
-    return '%.*f %s' % (precision, n / factor, suffix)
-
-    
-        # To avoid having to always use the '|safe' filter in flatpage templates,
-    # mark the title and content as already safe (since they are raw HTML
-    # content in the first place).
-    f.title = mark_safe(f.title)
-    f.content = mark_safe(f.content)
+        # Redirection.
+    300: ('multiple_choices',),
+    301: ('moved_permanently', 'moved', '\\o-'),
+    302: ('found',),
+    303: ('see_other', 'other'),
+    304: ('not_modified',),
+    305: ('use_proxy',),
+    306: ('switch_proxy',),
+    307: ('temporary_redirect', 'temporary_moved', 'temporary'),
+    308: ('permanent_redirect',
+          'resume_incomplete', 'resume',),  # These 2 to be removed in 3.0
     
     
-@keras_test
-def test_loss_masking():
-    weighted_loss = _weighted_masked_objective(losses.get('mae'))
-    shape = (3, 4, 2)
-    x = np.arange(24).reshape(shape)
-    y = 2 * x
+@pytest.mark.parametrize(
+    'uri, expected', (
+        (
+            # Illegal bytes
+            'http://example.com/?a=%--',
+            'http://example.com/?a=%--',
+        ),
+        (
+            # Reserved characters
+            'http://example.com/?a=%300',
+            'http://example.com/?a=00',
+        )
+    ))
+def test_unquote_unreserved(uri, expected):
+    assert unquote_unreserved(uri) == expected
     
-    # this will contain our generated image
-if K.image_data_format() == 'channels_first':
-    combination_image = K.placeholder((1, 3, img_nrows, img_ncols))
-else:
-    combination_image = K.placeholder((1, img_nrows, img_ncols, 3))
+            # Verify Authorization isn't sent to the redirected host,
+        # then send another challenge.
+        request_content = consume_socket_content(sock, timeout=0.5)
+        assert b'Authorization:' not in request_content
+        sock.send(text_401)
     
+        def test_HTTP_307_ALLOW_REDIRECT_POST_WITH_SEEKABLE(self, httpbin):
+        byte_str = b'test'
+        r = requests.post(httpbin('redirect-to'), data=io.BytesIO(byte_str), params={'url': 'post', 'status_code': 307})
+        assert r.status_code == 200
+        assert r.history[0].status_code == 307
+        assert r.history[0].is_redirect
+        assert r.json()['data'] == byte_str.decode('utf-8')
     
-@keras_test
-def test_vector_classification_functional():
-    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=500,
-                                                         num_test=200,
-                                                         input_shape=(20,),
-                                                         classification=True,
-                                                         num_classes=num_classes)
-    # Test with functional API
-    inputs = layers.Input(shape=(x_train.shape[-1],))
-    x = layers.Dense(16, activation=keras.activations.relu)(inputs)
-    x = layers.Dense(8)(x)
-    x = layers.Activation('relu')(x)
-    outputs = layers.Dense(num_classes, activation='softmax')(x)
-    model = keras.models.Model(inputs, outputs)
-    model.compile(loss=keras.losses.sparse_categorical_crossentropy,
-                  optimizer=keras.optimizers.RMSprop(),
-                  metrics=['acc'])
-    history = model.fit(x_train, y_train, epochs=15, batch_size=16,
-                        validation_data=(x_test, y_test),
-                        verbose=0)
-    assert(history.history['val_acc'][-1] > 0.8)
-    
-        # the loss calc occurs elsewhere, so use a dummy lambda func for the loss
-    model.compile(loss={'ctc': lambda y_true, y_pred: y_pred}, optimizer=sgd)
-    if start_epoch > 0:
-        weight_file = os.path.join(OUTPUT_DIR, os.path.join(run_name, 'weights%02d.h5' % (start_epoch - 1)))
-        model.load_weights(weight_file)
-    # captures output of softmax so we can decode the output during visualization
-    test_func = K.function([input_data], [y_pred])
-    
-            #out = subprocess.check_output(cmd, startupinfo=startupinfo)
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, startupinfo=startupinfo)
-        out, unused_err = process.communicate()
-        retcode = process.poll()
-        if retcode:
-            return out + '\n retcode:%s\n unused_err:%s\n' % (retcode, unused_err)
-    except Exception as e:
-        out = 'Exception:%r' % e
-    
-        def ok(self, event=None):  # Do not replace.
-        '''If entry is valid, bind it to 'result' and destroy tk widget.
-    
-        def test_empty_objects(self):
-        self.assertEqual(self.loads('{}'), {})
-        self.assertEqual(self.loads('[]'), [])
-        self.assertEqual(self.loads(''''), '')
+    from codecs import open
     
     
-import time
-try:
-    from test.support import import_fresh_module
+def SetUpYCM():
+  from ycm import base
+  from ycmd import user_options_store
+  from ycm.youcompleteme import YouCompleteMe
+    
+        def _adjust_thread_count(self):
+        # When the executor gets lost, the weakref callback will wake up
+        # the worker threads.
+        def weakref_cb(_, q=self._work_queue):
+            q.put(None)
+        # TODO(bquinlan): Should avoid creating new threads if there are more
+        # idle threads than items in the work queue.
+        if len(self._threads) < self._max_workers:
+            t = threading.Thread(target=_worker,
+                                 args=(weakref.ref(self, weakref_cb),
+                                       self._work_queue))
+            t.daemon = True
+            t.start()
+            self._threads.add(t)
+    
+    try:
+    import queue
 except ImportError:
-    from test.test_support import import_fresh_module
+    import Queue as queue
     
-    class Chunk:
-    def __init__(self, file, align=True, bigendian=True, inclheader=False):
-        import struct
-        self.closed = False
-        self.align = align      # whether to align to word (2-byte) boundaries
-        if bigendian:
-            strflag = '>'
-        else:
-            strflag = '<'
-        self.file = file
-        self.chunkname = file.read(4)
-        if len(self.chunkname) < 4:
-            raise EOFError
+      return FilterRegex
+    
+      _assert_rejects( f, { 'text' : 'This is an unimportant taco',
+                        'kind' : 'WARNING' } )
+  _assert_rejects( f, { 'text' : 'This taco will NOT be shown',
+                        'kind' : 'ERROR' } )
+  _assert_accepts( f, { 'text' : 'This burrito WILL be shown',
+                        'kind' : 'ERROR' } )
+    
+    plugins = PluginLoader()
+print 'PLUGINS := ' + ' '.join(plugin.name for plugin in plugins
+                               if plugin.needs_static_build)
+    
+    from pylons import tmpl_context as c
+    
+            if target.subreddit_slow.quarantine:
+            err = RedditError('GILDING_NOT_ALLOWED')
+            self.on_validation_error(err)
+        VNotInTimeout().run(target=target, subreddit=target.subreddit_slow)
+    
+    class ButtonsController(RedditController):
+    def get_wrapped_link(self, url, link = None, wrapper = None):
         try:
-            self.chunksize = struct.unpack_from(strflag+'L', file.read(4))[0]
-        except struct.error:
-            raise EOFError from None
-        if inclheader:
-            self.chunksize = self.chunksize - 8 # subtract header
-        self.size_read = 0
-        try:
-            self.offset = self.file.tell()
-        except (AttributeError, OSError):
-            self.seekable = False
-        else:
-            self.seekable = True
+            links = []
+            if link:
+                links = [link]
+            else:
+                sr = None if isinstance(c.site, FakeSubreddit) else c.site
+                try:
+                    links = Link._by_url(url, sr)
+                except NotFound:
+                    pass
     
-    WHITESPACE = re.compile(r'[ \t\n\r]*', FLAGS)
-WHITESPACE_STR = ' \t\n\r'
+    from r2.controllers.reddit_base import RedditController
+from r2.lib.base import proxyurl
+from r2.lib.csrf import csrf_exempt
+from r2.lib.template_helpers import get_domain
+from r2.lib.pages import Embed, BoringPage, HelpPage
+from r2.lib.filters import websafe, SC_OFF, SC_ON
+from r2.lib.memoize import memoize
     
-            class complex2(complex): pass
-        self.assertAlmostEqual(complex(complex2(1+1j)), 1+1j)
-        self.assertAlmostEqual(complex(real=17, imag=23), 17+23j)
-        self.assertAlmostEqual(complex(real=17+23j), 17+23j)
-        self.assertAlmostEqual(complex(real=17+23j, imag=23), 17+46j)
-        self.assertAlmostEqual(complex(real=1+2j, imag=3+4j), -3+5j)
-    
-        def test_pickling(self):
-        testcases = [(13,), (0, 11), (-22, 10), (20, 3, -1),
-                     (13, 21, 3), (-2, 2, 2), (2**65, 2**65+2)]
-        for proto in range(pickle.HIGHEST_PROTOCOL + 1):
-            for t in testcases:
-                with self.subTest(proto=proto, test=t):
-                    r = range(*t)
-                    self.assertEqual(list(pickle.loads(pickle.dumps(r, proto))),
-                                     list(r))
+                if request.GET.has_key('allow_framing'):
+                c.allow_framing = bool(request.GET['allow_framing'] == '1')
