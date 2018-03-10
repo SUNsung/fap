@@ -1,164 +1,196 @@
 
         
-        
-FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
-FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
-JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
-BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
+            epoch_size = (batch_len - 1) // num_steps
+    assertion = tf.assert_positive(
+        epoch_size,
+        message='epoch_size == 0, decrease batch_size or num_steps')
+    with tf.control_dependencies([assertion]):
+      epoch_size = tf.identity(epoch_size, name='epoch_size')
     
-        def log_error(msg, *args, **kwargs):
-        msg = msg % args
-        level = kwargs.get('level', 'error')
-        assert level in ['error', 'warning']
-        env.stderr.write('\nhttp: %s: %s\n' % (level, msg))
+      # Init ops
+  if FLAGS.sync_replicas:
+    local_init_op = tf.get_collection('local_init_op')[0]
+    ready_for_local_init_op = tf.get_collection('ready_for_local_init_op')[0]
+  else:
+    local_init_op = tf.train.Supervisor.USE_DEFAULT
+    ready_for_local_init_op = tf.train.Supervisor.USE_DEFAULT
     
-        return lexer
+    flags = tf.app.flags
     
-        # 128+2 SIGINT <http://www.tldp.org/LDP/abs/html/exitcodes.html>
-    ERROR_CTRL_C = 130
+      def _record(self, label, red, green, blue):
+    image_size = 32 * 32
+    record = bytes(bytearray([label] + [red] * image_size +
+                             [green] * image_size + [blue] * image_size))
+    expected = [[[red, green, blue]] * 32] * 32
+    return record, expected
     
+        # Run update ops
+    num_batches = int(math.ceil(FLAGS.num_examples / FLAGS.batch_size))
+    tf.logging.info('Running %d batches for evaluation.', num_batches)
+    for i in range(num_batches):
+      if (i + 1) % 10 == 0:
+        tf.logging.info('Running batch %d/%d...', i + 1, num_batches)
+      if (i + 1) % 50 == 0:
+        _log_values(sess, value_ops_dict)
+      sess.run(update_ops)
     
-def check_alphabetical(lines):
-    '''
-    checks if all entries per section are in alphabetical order based in entry title
-    '''
-    sections = {}
-    section_line_num = {}
-    for line_num, line in enumerate(lines):
-        if line.startswith(anchor):
-            category = line.split(anchor)[1].strip()
-            sections[category] = []
-            section_line_num[category] = line_num
-            continue
-        if not line.startswith('|') or line.startswith('|---'):
-            continue
-        title = [x.strip() for x in line.split('|')[1:-1]][0].upper()
-        sections[category].append(title)
+      @property
+  def pretrained_variables(self):
+    variables = super(VatxtBidirModel, self).pretrained_variables
+    variables.extend(self.layers['lstm_reverse'].trainable_weights)
+    return variables
     
-    # Custom sidebar templates, maps document names to template names.
-html_sidebars = {
-    'index': [
-        'sidebarintro.html',
-        'sourcelink.html',
-        'searchbox.html'
+    import graphs
+import train_utils
+    
+      images = tf.data.FixedLengthRecordDataset(
+      images_file, 28 * 28, header_bytes=16).map(decode_image)
+  labels = tf.data.FixedLengthRecordDataset(
+      labels_file, 1, header_bytes=8).map(decode_label)
+  return tf.data.Dataset.zip((images, labels))
+    
+    py_test(
+    name = 'cifar10_input_test',
+    size = 'small',
+    srcs = ['cifar10_input_test.py'],
+    srcs_version = 'PY2AND3',
+    deps = [
+        ':cifar10_input',
+        '//tensorflow:tensorflow_py',
+        '//tensorflow/python:framework_test_lib',
+        '//tensorflow/python:platform_test',
     ],
-    '**': [
-        'sidebarlogo.html',
-        'localtoc.html',
-        'relations.html',
-        'sourcelink.html',
-        'searchbox.html'
-    ]
-}
+)
     
-        return inner
+        y_merged = f_merged(X)
+    y_expected = _to_list(merge_func(f_forward(X)[0], f_backward(X)[0]))
+    assert len(y_merged) == len(y_expected)
+    for x1, x2 in zip(y_merged, y_expected):
+        assert_allclose(x1, x2, atol=1e-5)
     
-            self.wait_to_close_event = wait_to_close_event
-        self.ready_event = threading.Event()
-        self.stop_event = threading.Event()
+        layer_test(local.LocallyConnected1D,
+               kwargs={'filters': filters,
+                       'kernel_size': filter_length,
+                       'padding': padding,
+                       'kernel_regularizer': 'l2',
+                       'bias_regularizer': 'l2',
+                       'activity_regularizer': 'l2',
+                       'strides': strides},
+               input_shape=(num_samples, num_steps, input_dim))
     
-        def test_repr(self):
-        assert repr(self.case_insensitive_dict) == '{'Accept': 'application/json'}'
-    
-    
-def _check_cryptography(cryptography_version):
-    # cryptography < 1.3.4
-    try:
-        cryptography_version = list(map(int, cryptography_version.split('.')))
-    except ValueError:
-        return
-    
-    
-class ChunkedEncodingError(RequestException):
-    '''The server declared chunked encoding but sent an invalid chunk.'''
+    # this Evaluator class makes it possible
+# to compute loss and gradients in one pass
+# while retrieving them via two separate functions,
+# 'loss' and 'grads'. This is done because scipy.optimize
+# requires separate functions for loss and gradients,
+# but computing them separately would be inefficient.
     
     
-def test_digestauth_401_only_sent_once():
-    '''Ensure we correctly respond to a 401 challenge once, and then
-    stop responding if challenged again.
+def get_example_array():
+    np.random.seed(3537)
+    example_array = np.random.random((100, 100)) * 100. - 50.
+    example_array[0, 0] = 0.  # 0 could possibly cause trouble
+    return example_array
+    
+        x = K.placeholder(ndim=1)
+    
+        # Returns
+        Layer instance (may be Model, Sequential, Layer...)
     '''
-    text_401 = (b'HTTP/1.1 401 UNAUTHORIZED\r\n'
-                b'Content-Length: 0\r\n'
-                b'WWW-Authenticate: Digest nonce='6bf5d6e4da1ce66918800195d6b9130d''
-                b', opaque='372825293d1c26955496c80ed6426e9e', '
-                b'realm='me@kennethreitz.com', qop=auth\r\n\r\n')
-    
-    
-class Level(object):
-    
-        def __init__(self, categorizer):
-        self.categorizer = categorizer
-        ...
-    
-            When updating an entry, updates its position to the front of the LRU list.
-        If the entry is new and the cache is at capacity, removes the oldest entry
-        before the new entry is added.
-        '''
-        node = self.map[query]
-        if node is not None:
-            # Key exists in cache, update the value
-            node.results = results
-            self.linked_list.move_to_front(node)
-        else:
-            # Key does not exist in cache
-            if self.size == self.MAX_SIZE:
-                # Remove the oldest entry from the linked list and lookup
-                self.lookup.pop(self.linked_list.tail.query, None)
-                self.linked_list.remove_from_tail()
-            else:
-                self.size += 1
-            # Add the new key and value
-            new_node = Node(query, results)
-            self.linked_list.append_to_front(new_node)
-            self.lookup[query] = new_node
+    from .. import models
+    globs = globals()  # All layers.
+    globs['Model'] = models.Model
+    globs['Sequential'] = models.Sequential
+    return deserialize_keras_object(config,
+                                    module_objects=globs,
+                                    custom_objects=custom_objects,
+                                    printable_module_name='layer')
 
     
+        def next_train(self):
+        while 1:
+            ret = self.get_batch(self.cur_train_index, self.minibatch_size, train=True)
+            self.cur_train_index += self.minibatch_size
+            if self.cur_train_index >= self.val_split:
+                self.cur_train_index = self.cur_train_index % 32
+                (self.X_text, self.Y_data, self.Y_len) = shuffle_mats_or_lists(
+                    [self.X_text, self.Y_data, self.Y_len], self.val_split)
+            yield ret
     
-class UserGraphService(object):
+            # Create flat baselines to compare the variation over batch size
+        all_times['pca'].extend([results_dict['pca']['time']] *
+                                len(batch_sizes))
+        all_errors['pca'].extend([results_dict['pca']['error']] *
+                                 len(batch_sizes))
+        all_times['rpca'].extend([results_dict['rpca']['time']] *
+                                 len(batch_sizes))
+        all_errors['rpca'].extend([results_dict['rpca']['error']] *
+                                  len(batch_sizes))
+        for batch_size in batch_sizes:
+            ipca = IncrementalPCA(n_components=n_components,
+                                  batch_size=batch_size)
+            results_dict = {k: benchmark(est, data) for k, est in [('ipca',
+                                                                   ipca)]}
+            all_times['ipca'].append(results_dict['ipca']['time'])
+            all_errors['ipca'].append(results_dict['ipca']['error'])
     
-            #out = subprocess.check_output(cmd, startupinfo=startupinfo)
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, startupinfo=startupinfo)
-        out, unused_err = process.communicate()
-        retcode = process.poll()
-        if retcode:
-            return out + '\n retcode:%s\n unused_err:%s\n' % (retcode, unused_err)
-    except Exception as e:
-        out = 'Exception:%r' % e
+        selected_algorithm = opts.selected_algorithm.split(',')
+    for key in selected_algorithm:
+        if key not in default_algorithms.split(','):
+            raise ValueError('Unknown sampling algorithm \'%s\' not in (%s).'
+                             % (key, default_algorithms))
     
-        def open_log(self):
-        if os.path.isfile(self.log_path):
-            with open(self.log_path, 'r') as fd:
-                lines = fd.readlines()
-                line_num = len(lines)
-            if line_num >= self.max_lines_per_log_file:
-                self.roll_log()
+        if not os.path.exists(ARCHIVE_NAME):
+        print('Downloading dataset from %s (3 MB)' % URL)
+        opener = urlopen(URL)
+        with open(ARCHIVE_NAME, 'wb') as archive:
+            archive.write(opener.read())
     
-    \note Please be warned that the line numbers in the API documentation do not
-match the real locations in the source code of the package. This is an
-unintended artifact of doxygen, which I could only convince to use the
-correct module names by concatenating all files from the package into a single
-module file...
+    # Predict the result on some short new sentences:
+sentences = [
+    u'This is a language detection test.',
+    u'Ceci est un test de d\xe9tection de la langue.',
+    u'Dies ist ein Test, um die Sprache zu erkennen.',
+]
+predicted = clf.predict(sentences)
     
-      user_options_store.SetAll( base.BuildServerConf() )
-    
-    from concurrent.futures import _base
-    
-        sqrt_n = int(math.floor(math.sqrt(n)))
-    for i in range(3, sqrt_n + 1, 2):
-        if n % i == 0:
-            return False
-    return True
-    
-    from ycm.client.base_request import ( BaseRequest, BuildRequestData,
-                                      HandleServerException )
+    When performing classification one often wants to predict not only the class
+label, but also the associated probability. This probability gives some
+kind of confidence on the prediction. This example demonstrates how to display
+how well calibrated the predicted probabilities are and how to calibrate an
+uncalibrated classifier.
     
     
-  def Start( self ):
-    with HandleServerException( display = False ):
-      self.PostDataToHandler( {}, 'shutdown', TIMEOUT_SECONDS )
+n_train = 20  # samples for training
+n_test = 200  # samples for testing
+n_averages = 50  # how often to repeat classification
+n_features_max = 75  # maximum number of features
+step = 4  # step size for the calculation
+    
+    # Add any paths that contain custom themes here, relative to this directory.
+#html_theme_path = []
+    
+        def setUp(self):
+        self.t1 = time.time()
+        try:
+            self.executor = self.executor_type(max_workers=self.worker_count)
+        except NotImplementedError:
+            e = sys.exc_info()[1]
+            self.skipTest(str(e))
+        self._prime_executor()
+    
+        if not self._response_future or self._event_name != 'FileReadyToParse':
+      return []
     
     
-def KeywordsFromSyntaxListOutput_PhpSyntax_ContainsPreProc_test():
-  assert_that( syntax_parse._KeywordsFromSyntaxListOutput(
-                   ContentsOfTestFile( 'php_syntax' ) ),
-               has_items( 'skip', 'function' ) )
+  def SubsetForTypes( self, filetypes ):
+    '''Return a sub-filter limited to the given filetypes'''
+    # NOTE: actually, this class is already filtered
+    return self
+    
+      _assert_rejects( f, { 'text' : 'This is an unimportant taco',
+                        'kind' : 'WARNING' } )
+  _assert_rejects( f, { 'text' : 'This taco will NOT be shown',
+                        'kind' : 'ERROR' } )
+  _assert_accepts( f, { 'text' : 'This burrito WILL be shown',
+                        'kind' : 'ERROR' } )
