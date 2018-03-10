@@ -1,89 +1,29 @@
 
         
-        unless File.exist?(PROF_OUTPUT_FILE)
-  StackProf.run(
-    mode: MODE.to_sym,
-    interval: 100,
-    raw: true,
-    out: PROF_OUTPUT_FILE
-  ) do
-    puts 'GC Stats:', JSON.pretty_generate(GC.stat)
-    GC.disable
-    
-    STDOUT.sync = true
-    
-        def no_subcommand(args)
-      unless args.empty? ||
-          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
-        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
-                          Run `jekyll help` to find out more.'
-        abort
-      end
+          def tumblr
+    Tumblr.configure do |config|
+      config.consumer_key = tumblr_consumer_key
+      config.consumer_secret = tumblr_consumer_secret
+      config.oauth_token = tumblr_oauth_token
+      config.oauth_token_secret = tumblr_oauth_token_secret
     end
     
-    module Jekyll
-  module External
-    class << self
-      #
-      # Gems that, if installed, should be loaded.
-      # Usually contain subcommands.
-      #
-      def blessed_gems
-        %w(
-          jekyll-docs
-          jekyll-import
-        )
-      end
-    
-    class BottleCollector
-  def initialize
-    @checksums = {}
+    Tumblr::Client.new
   end
+end
     
-      def detect_stdlibs(compiler)
-    keg = Keg.new(formula.prefix)
-    CxxStdlib.check_compatibility(formula, deps, keg, compiler)
+      def toggle_availability
+    @service = current_user.services.find(params[:id])
+    @service.toggle_availability!
     
-        if f.keg_only?
-      keg_site_packages = f.opt_prefix/'lib/python2.7/site-packages'
-      unless Language::Python.in_sys_path?('python', keg_site_packages)
-        s = <<-EOS.undent
-          If you need Python to find bindings for this keg-only formula, run:
-            echo #{keg_site_packages} >> #{homebrew_site_packages/f.name}.pth
-        EOS
-        s += instructions unless Language::Python.reads_brewed_pth_files?('python')
-      end
-      return s
+    require_relative 'converter/fonts_conversion'
+require_relative 'converter/less_conversion'
+require_relative 'converter/js_conversion'
+require_relative 'converter/logger'
+require_relative 'converter/network'
+    
+        def log_transform(*args, from: caller[1][/`.*'/][1..-2].sub(/^block in /, ''))
+      puts '    #{cyan from}#{cyan ': #{args * ', '}' unless args.empty?}'
     end
     
-      def describe_java
-    java_xml = Utils.popen_read('/usr/libexec/java_home', '--xml', '--failfast')
-    return 'N/A' unless $?.success?
-    javas = []
-    REXML::XPath.each(REXML::Document.new(java_xml), '//key[text()='JVMVersion']/following-sibling::string') do |item|
-      javas << item.text
-    end
-    javas.uniq.join(', ')
-  end
-    
-            $stderr.puts
-        opoo out
-        Homebrew.failed = true
-        first_warning = false
-      end
-    end
-    
-      def self.factory(name)
-    Formulary.factory(name)
-  end
-    
-      # Use this method to generate standard caveats.
-  def standard_instructions(home_name, home_value = libexec)
-    <<-EOS.undent
-      Before you can use these tools you must export some variables to your $SHELL.
-    
-      included do
-    scope :admins, -> { where(admin: true) }
-    scope :moderators, -> { where(moderator: true) }
-    scope :staff, -> { where('moderator or admin ') }
-  end
+          spec['version'] = Bootstrap::VERSION
