@@ -1,94 +1,125 @@
-CONTENT_CONTAINING = <<-HTML.freeze
-<!DOCTYPE HTML>
-<html lang='en-US'>
-  <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-    <meta charset='UTF-8'>
-    <title>Jemoji</title>
-    <meta name='viewport' content='width=device-width,initial-scale=1'>
-    <link rel='stylesheet' href='/css/screen.css'>
-  </head>
-  <body class='wrap'>
-    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
+
+        
+                css('h2:not([id]) a[id]:not([href])').each do |node|
+          node.parent['id'] = node['id']
+          node.before(node.children).remove
+        end
     
-    def test_dir(*subdirs)
-  File.join(TEST_DIR, *subdirs)
-end
+            when :err
+          case s[:last]
+            when :pass
+              # Oops got a -ERR after a pass so its crap ignore the pass
+              # But report it, might be helpfull for guessing :-)
     
-        def process(args)
-      arg_is_present? args, '--server', 'The --server command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
-                          'serve' subcommand.'
-      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
-                          use the 'build' subcommand.'
-      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
-                          '--watch'.'
-      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
-                          the '--watch' switch.'
-      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
-                          favour of 'highlighter'.'
-      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
-                          your config files.'
-      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
-                          config files.'
-      no_subcommand(args)
-    end
+    # Sniffer class for GET URL's
+class SnifferURL < BaseProtocolParser
+  def register_sigs
+    self.sigs = {
+      :get		=> /^GET\s+([^\n]+)\s+HTTP\/\d\.\d/i,
+      :webhost	=> /^HOST\:\s+([^\n\r]+)/i,
+    }
+  end
     
-          private
-      def grouped_array(groups)
-        groups.each_with_object([]) do |item, array|
-          array << {
-            'name'  => item.first,
-            'items' => item.last,
-            'size'  => item.last.size,
-          }
+    
+    {	if ln =~ /;(read|write)_(handle|filename)=/
+		parts = ln.split(' ')
+		if (parts[0] == 'mov')
+			parts2 = parts[2].split('=')
+			label = parts2[0]
+			label.slice!(0,1)
+			old = parts2[1]
+			new = addrs[label]
+			#puts '%32s: %s -> %x' % [label, old, new]
+			replaces << [label, old, new.to_s(16)]
+		end
+	end
+}
+    
+    $:.unshift(File.join(File.dirname(__FILE__), '..', '..', '..', 'lib'))
+    
+    classNames.each { |name|
+	filesIn << clsFile.new_with_sig('Ljava.lang.String;', '#{outputDir}/#{name}.class')
+}
+    
+    outputJar = 'output.jar'
+    
+    # A logger that delays messages until they're explicitly flushed to an inner
+# logger.
+#
+# This can be installed around the current logger by calling \{#install!}, and
+# the original logger can be replaced by calling \{#uninstall!}. The log
+# messages can be flushed by calling \{#flush}.
+class Sass::Logger::Delayed < Sass::Logger::Base
+  # Installs a new delayed logger as the current Sass logger, wrapping the
+  # original logger.
+  #
+  # This can be undone by calling \{#uninstall!}.
+  #
+  # @return [Sass::Logger::Delayed] The newly-created logger.
+  def self.install!
+    logger = Sass::Logger::Delayed.new(Sass.logger)
+    Sass.logger = logger
+    logger
+  end
+    
+        private
+    
+          # Prints a table for a given array of records. For each record, the block
+      # is yielded two arguments: the record and a Row object. To print values
+      # for that record, add values using `row << 'some value'`. A row can
+      # optionally be highlighted in yellow using `row.yellow`.
+      def table(records, &block)
+        return if records.empty?
+        rows = collect_rows(records, &block)
+        col_widths = calculate_column_widths(rows)
+    
+          def stage_definitions
+        stage_config_path.join('*.rb')
+      end
+    
+        def ensure_stage
+      Rake::Task.define_task(:ensure_stage) do
+        unless stage_set?
+          puts t(:stage_not_set)
+          exit 1
         end
       end
     end
-  end
-end
-
     
-        # Gets the path to this layout.
-    attr_reader :path
-    
-        # This setting makes it so that network access from inside the vagrant guest
-    # is able to resolve DNS using the hosts VPN connection.
-    v.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
-  end
-    
-      private
-    
-      def self.register(user, app_id, params, challenges)
-    u2f = U2F::U2F.new(app_id)
-    registration = self.new
-    
-      test 'required_fields should contain the fields that Devise uses' do
-    assert_equal Devise::Models::Confirmable.required_fields(User), [
-      :confirmation_token,
-      :confirmed_at,
-      :confirmation_sent_at
-    ]
-  end
-    
-        # Initialize Warden and copy its configurations.
-    config.app_middleware.use Warden::Manager do |config|
-      Devise.warden_config = config
+        # @abstract
+    #
+    # Create a (new) clone of the remote-repository on the deployment target
+    #
+    # @return void
+    #
+    def clone
+      raise NotImplementedError, 'Your SCM strategy module should provide a #clone method'
     end
     
-      def unknown_action!(msg)
-    logger.debug '[Devise] #{msg}' if logger
-    raise AbstractController::ActionNotFound, msg
+          describe 'fetching selected servers by role' do
+        subject { dsl.roles(:app, select: :active) }
+    
+      def capture_io
+    require 'stringio'
+    
+    module Paperclip
+  class << self
+    attr_writer :registered_attachments_styles_path
+    def registered_attachments_styles_path
+      @registered_attachments_styles_path ||= Rails.root.join('public/system/paperclip_attachments.yml').to_s
+    end
   end
     
-    gemfile(true) do
-  source 'https://rubygems.org'
-  # Activate the gem you are reporting the issue against.
-  gem 'rails', '~> 4.2.0'
-  gem 'devise', '~> 4.0'
-  gem 'sqlite3'
-  gem 'byebug'
-end
+      class Railtie
+    def self.insert
+      Paperclip.options[:logger] = Rails.logger
     
-    puts 'Deduping #{links.size} links...'
+      context 'called with three widths' do
+    it 'applies second width to left and right' do
+      rule = 'border-width: 4px 5px 6px'
+    
+      context 'called with arguments (1, $ratio: $golden-ratio)' do
+    it 'output the first value from the golden ratio scale' do
+      expect('.one-golden-ratio').to have_rule('font-size: 1.618em')
+    end
+  end
