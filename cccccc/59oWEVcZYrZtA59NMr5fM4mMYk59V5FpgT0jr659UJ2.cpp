@@ -1,312 +1,262 @@
 
         
-        void PartialRunMgr::ExecutorDone(int step_id, const Status& executor_status) {
-  StatusCallback done;
-  Status callback_status;
-  {
-    mutex_lock l(mu_);
-    auto run_it = step_id_to_partial_run_.find(step_id);
-    if (run_it == step_id_to_partial_run_.end()) {
-      return;
-    }
-    // If we found the partial_run, we call the final callback, if it
-    // exists.
-    // It is guaranteed that run_it->second->final_callback is left empty
-    // after the std::move call.
-    done = std::move(run_it->second->final_callback);
-    if (!executor_status.ok()) {
-      run_it->second->final_status = executor_status;
-    }
-    callback_status = run_it->second->final_status;
-    run_it->second->executor_done = true;
+          if (flags.bit (CHECK_DAWGS) &&
+    (word->best_choice->permuter () != SYSTEM_DAWG_PERM) &&
+    (word->best_choice->permuter () != FREQ_DAWG_PERM) &&
+    (word->best_choice->permuter () != USER_DAWG_PERM) &&
+    (word->best_choice->permuter () != NUMBER_PERM)) {
+    if (tessedit_adaption_debug) tprintf('word not in dawgs\n');
+    return FALSE;
   }
-  if (done != nullptr) {
-    done(callback_status);
-    mutex_lock l(mu_);
-    step_id_to_partial_run_.erase(step_id);
-  }
-}
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    #include          'ocrblock.h'
+#include          'ocrrow.h'
+#include          'werd.h'
+#include          'rect.h'
+#include          'params.h'
+#include          'tesseractclass.h'
     
-    #ifndef TENSORFLOW_GRAPPLER_OPTIMIZERS_MODEL_PRUNER_H_
-#define TENSORFLOW_GRAPPLER_OPTIMIZERS_MODEL_PRUNER_H_
-    
-    namespace tensorflow {
-    }
-    
-    void SubProcess::SetProgram(const string& file,
-                            const std::vector<string>& argv) {
-  mutex_lock procLock(proc_mu_);
-  mutex_lock dataLock(data_mu_);
-  if (running_) {
-    LOG(FATAL) << 'SetProgram called after the process was started.';
-    return;
+    // Sets flags necessary for recognition in the training mode.
+// Opens and returns the pointer to the output file.
+FILE *Tesseract::init_recog_training(const STRING &fname) {
+  if (tessedit_ambigs_training) {
+    tessedit_tess_adaption_mode.set_value(0);    // turn off adaption
+    tessedit_enable_doc_dict.set_value(0);       // turn off document dictionary
+    // Explore all segmentations.
+    getDict().stopper_no_acceptable_choices.set_value(1);
   }
     }
     
-    // Rewrite graph by replacing the output tensors specified in
-// 'fed_outputs' with special feed nodes for each specified output
-// tensor, and removing any nodes that are now disconnected from the
-// part of the graph that reaches the sink node.  The set of special
-// feed nodes added to the graph are returned in '*feed_nodes'.
-//
-// Return true on success.  On error, return false and sets *error to
-// an appropriate error message (and *g is left in an indeterminate
-// state).
-static Status FeedInputs(Graph* g, const DeviceAttributes& device_info,
-                         const gtl::ArraySlice<string>& fed_outputs,
-                         bool use_function_convention,
-                         subgraph::NameIndex* name_index,
-                         DataTypeVector* out_feed_types) {
-  out_feed_types->clear();
-  out_feed_types->reserve(fed_outputs.size());
-  for (size_t i = 0; i < fed_outputs.size(); ++i) {
-    const string& t = fed_outputs[i];
-    TensorId id(ParseTensorName(t));
-    }
+    bool read_unlv_file(                    //print list of sides
+                     STRING name,        //basename of file
+                     inT32 xsize,        //image size
+                     inT32 ysize,        //image size
+                     BLOCK_LIST *blocks  //output list
+                    ) {
+  FILE *pdfp;                    //file pointer
+  BLOCK *block;                  //current block
+  int x;                         //current top-down coords
+  int y;
+  int width;                     //of current block
+  int height;
+  BLOCK_IT block_it = blocks;    //block iterator
     }
     
-    #ifndef CONTENT_NW_SRC_API_APP_APP_H_
-#define CONTENT_NW_SRC_API_APP_APP_H_
     
-    #endif  // CONTENT_NW_SRC_API_BASE_BASE_H_
+    {}
 
     
-      v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  v8::HandleScope handleScope(isolate);
+      // ValidFirstLine() and ValidBodyLine() take arguments describing a text line
+  // in a block of text which we are trying to model:
+  //   lmargin, lindent:  these add up to the distance from the leftmost ink
+  //                      in the text line to the surrounding text block's left
+  //                      edge.
+  //   rmargin, rindent:  these add up to the distance from the rightmost ink
+  //                      in the text line to the surrounding text block's right
+  //                      edge.
+  // The caller determines the division between 'margin' and 'indent', which
+  // only actually affect whether we think the line may be centered.
+  //
+  // If the amount of whitespace matches the amount of whitespace expected on
+  // the relevant side of the line (within tolerance_) we say it matches.
     
-      template<typename T> T* AddListener() {
-    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
-    if (i==listerners_.end()) {
-      T* listener_object = new T(this);
-      listerners_[T::id] = listener_object;
-      return listener_object;
-    }
-    return NULL;
-  }
-    
-    void MenuItem::OnClick(GtkWidget* widget) {
-  if (block_active_)
-    return;
-    }
-    
-      // Bring servers back up on the same port (we aren't recreating the channel).
-  StartServers(kNumServers, ports);
-    
-      ServerConfig server_config;
-  server_config.set_server_type(ASYNC_SERVER);
-  server_config.set_async_server_threads(8);
-    
-            // As part of the initial CREATE state, we *request* that the system
-        // start processing SayHello requests. In this request, 'this' acts are
-        // the tag uniquely identifying the request (so that different CallData
-        // instances can serve different requests concurrently), in this case
-        // the memory address of this CallData instance.
-        service_->RequestSayHello(&ctx_, &request_, &responder_, cq_, cq_,
-                                  this);
-      } else if (status_ == PROCESS) {
-        // Spawn a new CallData instance to serve new clients while we process
-        // the one for this CallData. The instance will deallocate itself as
-        // part of its FINISH state.
-        new CallData(service_, cq_);
-    
-    
-    {  return 0;
+    int64_t Timer::GetCurrentTimeMicros() {
+  timeval tv;
+  gettimeofday(&tv, 0);
+  return to_usec(tv);
 }
+    
+    template<typename T>
+inline void
+emitTLSLoad(Vout& v, TLSDatum<ThreadLocalNoCheck<T>> datum, Vreg d) {
+  // We don't know for sure what's live.
+  PhysRegSaver(v, abi().gpUnreserved - abi().calleeSaved);
+    }
+    
+    
+    {  int n = mbfl_substr_count(&mbs_haystack, &mbs_needle);
+  if (n >= 0) {
+    return n;
+  }
+  return false;
+}
+    
+    void Clusterizer::clusterize() {
+  struct ArcInfo {
+    Vlabel  src;
+    Vlabel  dst;
+    int64_t wgt;
+  };
+  jit::vector<ArcInfo> arcInfos;
+  for (auto b : m_blocks) {
+    for (auto s : succs(m_unit.blocks[b])) {
+      arcInfos.push_back({b, s, m_scale.weight(b, s)});
+    }
+  }
+    }
+    
+    static JobQueueDispatcher<PageletWorker> *s_dispatcher;
+static Mutex s_dispatchMutex;
+static ServiceData::CounterCallback s_counters(
+  [](std::map<std::string, int64_t>& counters) {
+    counters['pagelet_inflight_requests'] = PageletServer::GetActiveWorker();
+    counters['pagelet_queued_requests'] = PageletServer::GetQueuedJobs();
+  }
+);
+    
+    uint32_t numa_node_set;
+uint32_t numa_num_nodes;
+uint32_t numa_node_mask;
+std::vector<bitmask*> node_to_cpu_mask;
+bool use_numa = false;
+bool threads_bind_local = false;
+    
+    void ThriftBuffer::write(const Object& data) {
+  VariableSerializer vs(m_serializerType);
+  String sdata = vs.serialize(VarNR(data), true);
+  write(sdata);
+}
+    
+    static int set_flags(struct ifaddrs* ifaddr) {
+	int fd = socket(AF_INET, SOCK_DGRAM, 0);
+	if (fd == -1) {
+		return -1;
+	}
+	ifreq ifr;
+	memset(&ifr, 0, sizeof(ifr));
+	strncpy(ifr.ifr_name, ifaddr->ifa_name, IFNAMSIZ - 1);
+	int rc = ioctl(fd, SIOCGIFFLAGS, &ifr);
+	close(fd);
+	if (rc == -1) {
+		return -1;
+	}
+	ifaddr->ifa_flags = ifr.ifr_flags;
+	return 0;
+}
+    
+     ********************************************************************/
+    
+    #include 'x86/x86cpu.h'
+/* We currently support 5 x86 variants:
+ * arch[0] -> non-sse
+ * arch[1] -> sse
+ * arch[2] -> sse2
+ * arch[3] -> sse4.1
+ * arch[4] -> avx
+ */
+#define OPUS_ARCHMASK 7
+int opus_select_arch(void);
+    
+    #undef MULT16_16_Q15_SUB
+static inline int MULT16_16_Q15_SUB(int a, int b, int c, int d) {
+    int m;
+    asm volatile('MULT $ac1, %0, %1' : : 'r' ((int)a), 'r' ((int)b));
+    asm volatile('msub $ac1, %0, %1' : : 'r' ((int)c), 'r' ((int)d));
+    asm volatile('EXTR.W %0,$ac1, %1' : '=r' (m): 'i' (15));
+    return m;
+}
+    
+    # if !defined(__OPTIMIZE__)
+#  define OP_CVTEPI16_EPI32_M64(x) \
+ (_mm_cvtepi16_epi32(_mm_loadl_epi64((__m128i *)(x))))
+# else
+#  define OP_CVTEPI16_EPI32_M64(x) \
+ (_mm_cvtepi16_epi32(*(__m128i *)(x)))
+# endif
+    
+    #endif // BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
 
     
-    #ifdef BAZEL_BUILD
-#include 'examples/protos/helloworld.grpc.pb.h'
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    #include <boost/asio/detail/push_options.hpp>
+    
+        // Find the next context with the same key.
+    Value* next_by_key() const
+    {
+      context* elem = next_;
+      while (elem)
+      {
+        if (elem->key_ == key_)
+          return elem->value_;
+        elem = elem->next_;
+      }
+      return 0;
+    }
+    
+    #endif // BOOST_ASIO_DETAIL_DESCRIPTOR_WRITE_OP_HPP
+
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+# include <boost/asio/detail/null_event.hpp>
+#elif defined(BOOST_ASIO_WINDOWS)
+# include <boost/asio/detail/win_event.hpp>
+#elif defined(BOOST_ASIO_HAS_PTHREADS)
+# include <boost/asio/detail/posix_event.hpp>
+#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
+# include <boost/asio/detail/std_event.hpp>
 #else
-#include 'helloworld.grpc.pb.h'
+# error Only Windows, POSIX and std::condition_variable are supported!
 #endif
     
-    std::string GetDbFileContent(int argc, char** argv);
-    
-    // Data pertaining to configuration of the generator with respect to anything
-// that may be used internally at Google.
-struct GeneratorConfiguration {
-  GeneratorConfiguration();
-  grpc::string grpc_package_root;
-  // TODO(https://github.com/grpc/grpc/issues/8622): Drop this.
-  grpc::string beta_package_root;
-  // TODO(https://github.com/google/protobuf/issues/888): Drop this.
-  grpc::string import_prefix;
-};
-    
-      NSDictionary *flagNames = @{
-#define GRPC_XMACRO_ITEM(methodName, FlagName) \
-    @(kSCNetworkReachabilityFlags ## FlagName): @#methodName,
-#include 'GRXReachabilityFlagNames.xmacro.h'
-#undef GRPC_XMACRO_ITEM
-  };
-    
-    void BuildDCHistograms(const JPEGData& jpg, JpegHistogram* histo) {
-  for (size_t i = 0; i < jpg.components.size(); ++i) {
-    const JPEGComponent& c = jpg.components[i];
-    JpegHistogram* dc_histogram = &histo[i];
-    coeff_t last_dc_coeff = 0;
-    for (int mcu_y = 0; mcu_y < jpg.MCU_rows; ++mcu_y) {
-      for (int mcu_x = 0; mcu_x < jpg.MCU_cols; ++mcu_x) {
-        for (int iy = 0; iy < c.v_samp_factor; ++iy) {
-          for (int ix = 0; ix < c.h_samp_factor; ++ix) {
-            int block_y = mcu_y * c.v_samp_factor + iy;
-            int block_x = mcu_x * c.h_samp_factor + ix;
-            int block_idx = block_y * c.width_in_blocks + block_x;
-            coeff_t dc_coeff = c.coeffs[block_idx << 6];
-            int diff = std::abs(dc_coeff - last_dc_coeff);
-            int nbits = Log2Floor(diff) + 1;
-            dc_histogram->Add(nbits);
-            last_dc_coeff = dc_coeff;
-          }
-        }
-      }
-    }
-  }
-}
-    
-    static const int kCbToBlueTable[256] = {
-  -227, -225, -223, -222, -220, -218, -216, -214, -213, -211, -209, -207,
-  -206, -204, -202, -200, -198, -197, -195, -193, -191, -190, -188, -186,
-  -184, -183, -181, -179, -177, -175, -174, -172, -170, -168, -167, -165,
-  -163, -161, -159, -158, -156, -154, -152, -151, -149, -147, -145, -144,
-  -142, -140, -138, -136, -135, -133, -131, -129, -128, -126, -124, -122,
-  -120, -119, -117, -115, -113, -112, -110, -108, -106, -105, -103, -101,
-   -99,  -97,  -96,  -94,  -92,  -90,  -89,  -87,  -85,  -83,  -82,  -80,
-   -78,  -76,  -74,  -73,  -71,  -69,  -67,  -66,  -64,  -62,  -60,  -58,
-   -57,  -55,  -53,  -51,  -50,  -48,  -46,  -44,  -43,  -41,  -39,  -37,
-   -35,  -34,  -32,  -30,  -28,  -27,  -25,  -23,  -21,  -19,  -18,  -16,
-   -14,  -12,  -11,   -9,   -7,   -5,   -4,   -2,    0,    2,    4,    5,
-     7,    9,   11,   12,   14,   16,   18,   19,   21,   23,   25,   27,
-    28,   30,   32,   34,   35,   37,   39,   41,   43,   44,   46,   48,
-    50,   51,   53,   55,   57,   58,   60,   62,   64,   66,   67,   69,
-    71,   73,   74,   76,   78,   80,   82,   83,   85,   87,   89,   90,
-    92,   94,   96,   97,   99,  101,  103,  105,  106,  108,  110,  112,
-   113,  115,  117,  119,  120,  122,  124,  126,  128,  129,  131,  133,
-   135,  136,  138,  140,  142,  144,  145,  147,  149,  151,  152,  154,
-   156,  158,  159,  161,  163,  165,  167,  168,  170,  172,  174,  175,
-   177,  179,  181,  183,  184,  186,  188,  190,  191,  193,  195,  197,
-   198,  200,  202,  204,  206,  207,  209,  211,  213,  214,  216,  218,
-   220,  222,  223,  225,
-};
-    
-    
-    {}  // namespace guetzli
-    
-    // Parses the jpeg stream contained in data[*pos ... len) and fills in *jpg with
-// the parsed information.
-// If mode is JPEG_READ_HEADER, it fills in only the image dimensions in *jpg.
-// Returns false if the data is not valid jpeg, or if it contains an unsupported
-// jpeg feature.
-bool ReadJpeg(const uint8_t* data, const size_t len, JpegReadMode mode,
-              JPEGData* jpg);
-// string variant
-bool ReadJpeg(const std::string& data, JpegReadMode mode,
-              JPEGData* jpg);
-    
-      // Fills in out[] array with the floating-point precision pixel view of the
-  // component.
-  // REQUIRES: factor_x() == 1 and factor_y() == 1.
-  void ToFloatPixels(float* out, int stride) const;
-    
-    template<typename DType>
-inline void CompressArray<DType>::InitCompressChunks(
-    const std::vector<bst_uint>& chunk_ptr) {
-  raw_chunks_ = chunk_ptr;
-  CHECK_GE(raw_chunks_.size(), 2);
-  out_buffer_.resize(raw_chunks_.size() - 1);
-  for (size_t i = 0; i < out_buffer_.size(); ++i) {
-    out_buffer_[i].resize(raw_chunks_[i + 1] - raw_chunks_[i]);
-  }
-}
-    
-    
-    {
-    {
-    { private:
-  /*! \brief input stream */
-  dmlc::Stream *strm_;
-  /*! \brief current buffer pointer */
-  size_t buffer_ptr_;
-  /*! \brief internal buffer */
-  std::string buffer_;
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_IO_H_
+    #endif // BOOST_ASIO_DETAIL_FENCED_BLOCK_HPP
 
     
+    template <typename Function, typename Context>
+inline void invoke(Function& function, Context& context)
+{
+#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
+  Function tmp(function);
+  tmp();
+#else
+  using boost::asio::asio_handler_invoke;
+  asio_handler_invoke(function, boost::asio::detail::addressof(context));
+#endif
+}
+    
+    
+    {  bool earliest = queue.enqueue_timer(time, timer, op);
+  io_service_.work_started();
+  if (earliest)
+    interrupter_.interrupt();
+}
+    
     
     {
-    {XGBOOST_REGISTER_TREE_UPDATER(TreeRefresher, 'refresh')
-.describe('Refresher that refreshes the weight and statistics according to data.')
-.set_body([]() {
-    return new TreeRefresher<GradStats>();
-  });
-}  // namespace tree
-}  // namespace xgboost
+    {
+    {  return results;
+}
+}
+}
 
     
-    bool DBWrapper::AddToBatch(rocksdb::WriteBatch& batch, bool del,
-                           Handle<Array> array) {
-  Handle<Array> put_pair;
-  for (uint i = 0; i < array->Length(); i++) {
-    if (del) {
-      if (!array->Get(i)->IsString()) {
-        return false;
-      }
+    /// See FLAG, FLAG_ALIAS aliases a flag name to an existing FLAG.
+#define FLAG_ALIAS(t, a, n) OSQUERY_FLAG_ALIAS(t, a, n, 0, 0)
+    
+     protected:
+  /**
+   * @brief The only method a plugin user should call.
+   *
+   * Registry plugins are used internally and externally. They may belong
+   * to the process making the call or to an external process via a thrift
+   * transport.
+   *
+   * All plugin input and output must be serializable. The plugin types
+   * RegistryType usually exposes protected serialization methods for the
+   * data structures used by plugins (registry items).
+   *
+   * @param item_name The plugin identifier to call.
+   * @param request The plugin request, usually containing an action request.
+   * @param response If successful, the requested information.
+   * @return Success if the plugin was called, and response was filled.
+   */
+  virtual Status call(const std::string& item_name,
+                      const PluginRequest& request,
+                      PluginResponse& response);
+    
+    #include <gtest/gtest.h>
+    
+    namespace osquery {
     }
-    }
-    }
-    
-      EnvBasicTestWithParam() : env_(GetParam()) {
-    test_dir_ = test::TmpDir(env_) + '/env_basic_test';
-  }
-    
-      std::string scratch;
-  scratch.resize(kGood.size() + kCorrupted.size() + 16);
-  Slice result;
-  unique_ptr<RandomAccessFile> rand_file;
-  ASSERT_OK(env_->NewRandomAccessFile(kFileName, &rand_file, soptions_));
-  ASSERT_OK(rand_file->Read(0, kGood.size(), &result, &(scratch[0])));
-  ASSERT_EQ(result.compare(kGood), 0);
-    
-    #include <map>
-#include <node.h>
-    
-    namespace {
-// OpenDb opens a (possibly new) rocksdb database with a StringAppendOperator
-std::shared_ptr<DB> OpenNormalDb(char delim_char) {
-  DB* db;
-  Options options;
-  options.create_if_missing = true;
-  options.merge_operator.reset(new StringAppendOperator(delim_char));
-  EXPECT_OK(DB::Open(options, kDbName, &db));
-  return std::shared_ptr<DB>(db);
-}
-    }
-    
-    // Print the (list: key) out to stdout. For debugging mostly. Public for now.
-void RedisLists::Print(const std::string& key) {
-  // Extract the string data representing the list.
-  std::string data;
-  db_->Get(get_option_, key, &data);
-    }
-    
-    void JniCallback::releaseJniEnv(jboolean& attached) const {
-  JniUtil::releaseJniEnv(m_jvm, attached);
-}
-    
-      StatisticsJni::StatisticsJni(std::shared_ptr<Statistics> stats,
-      const std::set<uint32_t> ignore_histograms) : StatisticsImpl(stats, false),
-      m_ignore_histograms(ignore_histograms) {
-  }
-    
-    // @lint-ignore TXT4 T25377293 Grandfathered in
-#endif  // JAVA_ROCKSJNI_STATISTICSJNI_H_
