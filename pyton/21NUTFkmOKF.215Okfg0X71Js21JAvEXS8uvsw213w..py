@@ -1,166 +1,123 @@
 
         
-        versions_info['signature'] = signature
-with open('update/versions.json', 'w') as versionsf:
-    json.dump(versions_info, versionsf, indent=4, sort_keys=True)
+        containers = (('thefuck/python3-tcsh',
+               u'''FROM python:3
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'),
+              ('thefuck/python2-tcsh',
+               u'''FROM python:2
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'))
+    
+    
+def dispatch_hook(key, hooks, hook_data, **kwargs):
+    '''Dispatches a hook dictionary on a given piece of data.'''
+    hooks = hooks or dict()
+    hooks = hooks.get(key)
+    if hooks:
+        if hasattr(hooks, '__call__'):
+            hooks = [hooks]
+        for hook in hooks:
+            _hook_data = hook(hook_data, **kwargs)
+            if _hook_data is not None:
+                hook_data = _hook_data
+    return hook_data
 
     
-    import datetime
-import io
-import json
-import textwrap
+        def _handle_requests(self):
+        for _ in range(self.requests_to_handle):
+            sock = self._accept_connection()
+            if not sock:
+                break
     
     
-from youtube_dl import YoutubeDL
+def unicode_is_ascii(u_string):
+    '''Determine if unicode string only contains ASCII characters.
     
-    # Allow direct execution
-import os
-import sys
-import unittest
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        def prepare(self):
+        '''Constructs a :class:`PreparedRequest <PreparedRequest>` for transmission and returns it.'''
+        p = PreparedRequest()
+        p.prepare(
+            method=self.method,
+            url=self.url,
+            headers=self.headers,
+            files=self.files,
+            data=self.data,
+            json=self.json,
+            params=self.params,
+            auth=self.auth,
+            cookies=self.cookies,
+            hooks=self.hooks,
+        )
+        return p
     
-        def test_proxy_http(self):
-        params = self._check_params(['primary_proxy', 'primary_server_ip'])
-        if params is None:
-            return
-        ydl = FakeYDL({
-            'proxy': params['primary_proxy']
-        })
-        self.assertEqual(
-            ydl.urlopen('http://yt-dl.org/ip').read().decode('utf-8'),
-            params['primary_server_ip'])
     
-            page = self._download_json(
-            'http://vxml.56.com/json/%s/' % text_id, text_id, 'Downloading video info')
+@pytest.mark.skipif(sys.version_info < (2,7), reason='Only run on Python 2.7+')
+def test_system_ssl():
+    '''Verify we're actually setting system_ssl when it should be available.'''
+    assert info()['system_ssl']['version'] != ''
     
-    from tensorflow.core.framework import variable_pb2
-from tensorflow.core.protobuf import rewriter_config_pb2
-    
-      Returns:
-    log_sum_exp of the arguments.
-  '''
-  m = tf.reduce_max(x_k)
-  x1_k = x_k - m
-  u_k = tf.exp(x1_k)
-  z = tf.reduce_sum(u_k)
-  return tf.log(z) + m
+            assert r.status_code == 200
+        assert len(r.history) == 2
+        assert r.history[0].request.url == url
     
       Args:
-    arr: Numpy array of arbitrary shape.
+    string: Serialized DatumProto string.
     
-            attention_score = slim.conv2d(
-            feature_map_conv1,
-            1,
-            kernel,
-            rate=1,
-            activation_fn=None,
-            normalizer_fn=None,
-            scope='conv2')
+          # Start input enqueue threads.
+      coord = tf.train.Coordinator()
+      threads = tf.train.start_queue_runners(sess=sess, coord=coord)
+      start = time.clock()
+      for i in range(num_images):
+        # Write to log-info once in a while.
+        if i == 0:
+          tf.logging.info('Starting to extract DELF features from images...')
+        elif i % _STATUS_CHECK_ITERATIONS == 0:
+          elapsed = (time.clock() - start)
+          tf.logging.info('Processing image %d out of %d, last %d '
+                          'images took %f seconds', i, num_images,
+                          _STATUS_CHECK_ITERATIONS, elapsed)
+          start = time.clock()
     
-          # Finalize enqueue threads.
-      coord.request_stop()
-      coord.join(threads)
+      def testWriteAndReadToFile(self):
+    locations, scales, descriptors, attention, orientations = create_data()
     
+        self.conv1 = tf.layers.Conv2D(
+        32, 5, padding='same', data_format=data_format, activation=tf.nn.relu)
+    self.conv2 = tf.layers.Conv2D(
+        64, 5, padding='same', data_format=data_format, activation=tf.nn.relu)
+    self.fc1 = tf.layers.Dense(1024, activation=tf.nn.relu)
+    self.fc2 = tf.layers.Dense(10)
+    self.dropout = tf.layers.Dropout(0.4)
+    self.max_pool2d = tf.layers.MaxPooling2D(
+        (2, 2), (2, 2), padding='same', data_format=data_format)
     
-def random_dataset():
-  batch_size = 64
-  images = tf.random_normal([batch_size, 784])
-  labels = tf.random_uniform([batch_size], minval=0, maxval=10, dtype=tf.int32)
-  return tf.data.Dataset.from_tensors((images, labels))
-    
-      def setUp(self):
-    FLAGS.train_data = os.path.join(self.get_temp_dir() + 'test-text.txt')
-    FLAGS.eval_data = os.path.join(self.get_temp_dir() + 'eval-text.txt')
-    FLAGS.save_path = self.get_temp_dir()
-    with open(FLAGS.train_data, 'w') as f:
-      f.write(
-          '''alice was beginning to get very tired of sitting by her sister on
-          the bank, and of having nothing to do: once or twice she had peeped
-          into the book her sister was reading, but it had no pictures or
-          conversations in it, 'and what is the use of a book,' thought alice
-          'without pictures or conversations?' So she was considering in her own
-          mind (as well as she could, for the hot day made her feel very sleepy
-          and stupid), whether the pleasure of making a daisy-chain would be
-          worth the trouble of getting up and picking the daisies, when suddenly
-          a White rabbit with pink eyes ran close by her.\n''')
-      with open(FLAGS.eval_data, 'w') as f:
-        f.write('alice she rabbit once\n')
-    
-    import word2vec
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-    
-    
-def dataset(directory, images_file, labels_file):
-  images_file = download(directory, images_file)
-  labels_file = download(directory, labels_file)
-    
-        final_timestep = reverse_seq[-1]
-    eos_id = len(seq) - 1
-    self.assertEqual(final_timestep.token, eos_id)
-    self.assertEqual(final_timestep.label, 0)
-    self.assertEqual(final_timestep.weight, 0.0)
-    
-      Yields:
-    Document
-    
-        value_ops_dict = dict(zip(metric_names, value_ops))
+      def testPtbProducer(self):
+    raw_data = [4, 3, 2, 1, 0, 5, 6, 1, 1, 1, 1, 0, 3, 4, 1]
+    batch_size = 3
+    num_steps = 2
+    x, y = reader.ptb_producer(raw_data, batch_size, num_steps)
+    with self.test_session() as session:
+      coord = tf.train.Coordinator()
+      tf.train.start_queue_runners(session, coord=coord)
+      try:
+        xval, yval = session.run([x, y])
+        self.assertAllEqual(xval, [[4, 3], [5, 6], [1, 0]])
+        self.assertAllEqual(yval, [[3, 2], [6, 1], [0, 3]])
+        xval, yval = session.run([x, y])
+        self.assertAllEqual(xval, [[2, 1], [1, 1], [3, 4]])
+        self.assertAllEqual(yval, [[1, 0], [1, 1], [4, 1]])
+      finally:
+        coord.request_stop()
+        coord.join()
     
     
-def secure_hash(filename, hash_func=sha1):
-    ''' Return a secure hash hex digest of local file, None if file is not present or a directory. '''
+def main(argv):
+    args = parser.parse_args(argv[1:])
     
-        # by setting the `trainable` argument, in Sequential
-    model = Sequential()
-    layer = Dense(2, input_dim=1)
-    model.add(layer)
-    assert model.trainable_weights == layer.trainable_weights
-    layer.trainable = False
-    assert model.trainable_weights == []
-    
-    print('Building model...')
-model = Sequential()
-model.add(Dense(512, input_shape=(max_words,)))
-model.add(Activation('relu'))
-model.add(Dropout(0.5))
-model.add(Dense(num_classes))
-model.add(Activation('softmax'))
-    
-        >>> tokenize('Bob dropped the apple. Where is the apple?')
-    ['Bob', 'dropped', 'the', 'apple', '.', 'Where', 'is', 'the', 'apple', '?']
-    '''
-    return [x.strip() for x in re.split('(\W+)?', sent) if x.strip()]
-    
-    # Reserve 0 for masking via pad_sequences
-vocab_size = len(vocab) + 1
-word_idx = dict((c, i + 1) for i, c in enumerate(vocab))
-story_maxlen = max(map(len, (x for x, _, _ in train + test)))
-query_maxlen = max(map(len, (x for _, x, _ in train + test)))
-    
-    # Vectorize the data.
-input_texts = []
-target_texts = []
-input_characters = set()
-target_characters = set()
-with open(data_path, 'r', encoding='utf-8') as f:
-    lines = f.read().split('\n')
-for line in lines[: min(num_samples, len(lines) - 1)]:
-    input_text, target_text = line.split('\t')
-    # We use 'tab' as the 'start sequence' character
-    # for the targets, and '\n' as 'end sequence' character.
-    target_text = '\t' + target_text + '\n'
-    input_texts.append(input_text)
-    target_texts.append(target_text)
-    for char in input_text:
-        if char not in input_characters:
-            input_characters.add(char)
-    for char in target_text:
-        if char not in target_characters:
-            target_characters.add(char)
-    
-        # Generate empty target sequence of length 1.
-    target_seq = np.zeros((1, 1, num_decoder_tokens))
-    # Populate the first character of target sequence with the start character.
-    target_seq[0, 0, target_token_index['\t']] = 1.
+            if infos:
+            writeln(' (%s)' % (', '.join(infos),))
+        else:
+            write('\n')
