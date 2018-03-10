@@ -1,138 +1,233 @@
 
         
-          auto channel =
-      grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials());
-  GreeterClient greeter(channel);
-    
-    #include <grpc++/impl/codegen/async_stream.h>
-#include <grpc++/impl/codegen/async_unary_call.h>
-#include <grpc++/impl/codegen/method_handler_impl.h>
-#include <grpc++/impl/codegen/proto_utils.h>
-#include <grpc++/impl/codegen/rpc_method.h>
-#include <grpc++/impl/codegen/service_type.h>
-#include <grpc++/impl/codegen/status.h>
-#include <grpc++/impl/codegen/stub_options.h>
-#include <grpc++/impl/codegen/sync_stream.h>
-    
-      for (int i = 0; i < service->method_count(); ++i) {
-    (*vars)['method_name'] = service->method(i).get()->name();
-    printer->Print(*vars, 'WithAsyncMethod_$method_name$<');
+        namespace tesseract {
+BOOL8 Tesseract::word_adaptable(  //should we adapt?
+                                WERD_RES *word,
+                                uinT16 mode) {
+  if (tessedit_adaption_debug) {
+    tprintf('Running word_adaptable() for %s rating %.4f certainty %.4f\n',
+          word->best_choice == NULL ? '' :
+          word->best_choice->unichar_string().string(),
+          word->best_choice->rating(), word->best_choice->certainty());
   }
-  printer->Print('Service');
-  for (int i = 0; i < service->method_count(); ++i) {
-    printer->Print(' >');
-  }
-  printer->Print(' AsyncService;\n');
-    
-      void Error(const std::string &err, bool usage = true,
-             bool show_exe_name = true) const;
-    
-    inline Reference Map::operator[](const char *key) const {
-  auto keys = Keys();
-  // We can't pass keys.byte_width_ to the comparison function, so we have
-  // to pick the right one ahead of time.
-  int (*comp)(const void *, const void *) = nullptr;
-  switch (keys.byte_width_) {
-    case 1: comp = KeyCompare<uint8_t>; break;
-    case 2: comp = KeyCompare<uint16_t>; break;
-    case 4: comp = KeyCompare<uint32_t>; break;
-    case 8: comp = KeyCompare<uint64_t>; break;
-  }
-  auto res = std::bsearch(key, keys.data_, keys.size(), keys.byte_width_, comp);
-  if (!res) return Reference(nullptr, 1, NullPackedType());
-  auto i = (reinterpret_cast<uint8_t *>(res) - keys.data_) / keys.byte_width_;
-  return (*static_cast<const Vector *>(this))[i];
-}
-    
-      auto name = builder.CreateString('MyMonster');
-    
-      // here, parser.builder_ contains a binary buffer that is the parsed data.
-    
-    
-    {  std::string &code = *code_ptr;
-  if (config != nullptr && config->first_line != nullptr) {
-    code += std::string(prefix) + std::string(config->first_line) + '\n';
-  }
-  std::string line_prefix =
-      std::string(prefix) +
-      ((config != nullptr && config->content_line_prefix != nullptr)
-           ? config->content_line_prefix
-           : '///');
-  for (auto it = dc.begin(); it != dc.end(); ++it) {
-    code += line_prefix + *it + '\n';
-  }
-  if (config != nullptr && config->last_line != nullptr) {
-    code += std::string(prefix) + std::string(config->last_line) + '\n';
-  }
-}
-    
-    std::string GenNativeType(BaseType type) {
-  switch (type) {
-    case BASE_TYPE_BOOL: return 'boolean';
-    case BASE_TYPE_CHAR:
-    case BASE_TYPE_UCHAR:
-    case BASE_TYPE_SHORT:
-    case BASE_TYPE_USHORT:
-    case BASE_TYPE_INT:
-    case BASE_TYPE_UINT:
-    case BASE_TYPE_LONG:
-    case BASE_TYPE_ULONG:
-    case BASE_TYPE_FLOAT:
-    case BASE_TYPE_DOUBLE: return 'number';
-    case BASE_TYPE_STRING: return 'string';
-    default: return '';
-  }
-}
-    
-    // Generate the receiver for function signatures.
-static void GenReceiver(const StructDef &struct_def, std::string *code_ptr) {
-  std::string &code = *code_ptr;
-  code += Indent + '# ' + struct_def.name + '\n';
-  code += Indent + 'def ';
-}
-    
-        Printf('CRASH_MIN: executing: %s\n', Cmd.c_str());
-    int ExitCode = ExecuteCommand(Cmd);
-    if (ExitCode == 0) {
-      Printf('ERROR: the input %s did not crash\n', CurrentFilePath.c_str());
-      exit(1);
     }
-    Printf('CRASH_MIN: '%s' (%zd bytes) caused a crash. Will try to minimize '
-           'it further\n',
-           CurrentFilePath.c_str(), U.size());
+    }
     
-    // Parse a directory ending in separator, like: SomeDir\
-// Returns number of characters considered if successful.
-static size_t ParseDir(const std::string &FileName, const size_t Offset) {
-  size_t Pos = Offset;
-  const size_t End = FileName.size();
-  if (Pos >= End || IsSeparator(FileName[Pos]))
-    return 0;
-  for(; Pos < End && !IsSeparator(FileName[Pos]); ++Pos)
-    ;
-  if (Pos >= End)
-    return 0;
-  ++Pos; // Include separator.
-  return Pos - Offset;
+    double LLSQ::m() const {  // get gradient
+  double covar = covariance();
+  double x_var = x_variance();
+  if (x_var != 0.0)
+    return covar / x_var;
+  else
+    return 0.0;                    // too little
 }
     
-      bool HasMoreMallocsThanFrees = false;
-  size_t NumberOfLeakDetectionAttempts = 0;
+        // Writes to the given file. Returns false in case of error.
+    bool Serialize(FILE* fp) const;
+    // Reads from the given file. Returns false in case of error.
+    // If swap is true, assumes a big/little-endian swap is needed.
+    bool DeSerialize(bool swap, FILE* fp);
     
-    ATTRIBUTE_NO_SANITIZE_MEMORY
-void FreeHook(const volatile void *ptr) {
-  size_t N = AllocTracer.Frees++;
-  if (int TraceLevel = AllocTracer.TraceLevel) {
-    Printf('FREE[%zd]   %p\n', N, ptr);
-    if (TraceLevel >= 2 && EF)
-      EF->__sanitizer_print_stack_trace();
-  }
-}
+    static const int kBlockSize = 32768;
     
-    #endif  // LLVM_FUZZER_OPTIONS_H
+    
+    {  Status FindTable(uint64_t file_number, uint64_t file_size, Cache::Handle**);
+};
+    
+      // Encoded length of a Footer.  Note that the serialization of a
+  // Footer will always occupy exactly this many bytes.  It consists
+  // of two block handles and a magic number.
+  enum {
+    kEncodedLength = 2*BlockHandle::kMaxEncodedLength + 8
+  };
+    
+    #endif // __cocos2dx_navmesh_h__
+#endif //#if CC_USE_NAVMESH
 
     
-    // We may need to avoid defining weak hooks to stay compatible with older clang.
-#ifndef LLVM_FUZZER_DEFINES_SANITIZER_WEAK_HOOOKS
-# define LLVM_FUZZER_DEFINES_SANITIZER_WEAK_HOOOKS 1
+    bool js_cocos2dx_physics3d_Physics3DRigidBody_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DRigidBody_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DRigidBody(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_setGravity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getFriction(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_setAngularFactor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_addConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getRigidBody(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getTotalForce(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getConstraintCount(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_applyCentralForce(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_setMassProps(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_setFriction(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_setKinematic(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_setDamping(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_applyImpulse(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_isKinematic(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_applyTorque(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_setCcdMotionThreshold(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_setRollingFriction(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getCcdMotionThreshold(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getLinearFactor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_applyDamping(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getAngularVelocity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_init(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_applyTorqueImpulse(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_setActive(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_setLinearFactor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_setLinearVelocity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getLinearVelocity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_setCcdSweptSphereRadius(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_applyForce(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_setAngularVelocity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_applyCentralImpulse(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getGravity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getRollingFriction(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_setCenterOfMassTransform(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_setInvInertiaDiagLocal(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_removeConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getTotalTorque(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getInvMass(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getRestitution(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getCcdSweptSphereRadius(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getHitFraction(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getAngularDamping(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getCenterOfMassTransform(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getAngularFactor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_setRestitution(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_setHitFraction(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_getLinearDamping(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DRigidBody_Physics3DRigidBody(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    {        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, 'cc.SimpleAudioEngine:preloadEffect'); arg0 = arg0_tmp.c_str();
+        if(!ok)
+        {
+            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_preloadEffect'', nullptr);
+            return 0;
+        }
+        cobj->preloadEffect(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.SimpleAudioEngine:preloadEffect',argc, 1);
+    return 0;
+    
+    
+    
+    #if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
 #endif
+    
+    
+    
+        GLfloat                glVertices[] = {
+        p.x * mRatio, p.y * mRatio
+    };
+    
+    				float32 gravity = 10.0f;
+				float32 I = body->GetInertia();
+				float32 mass = body->GetMass();
+    
+    	void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
+	{
+		if (m_broke)
+		{
+			// The body already broke.
+			return;
+		}
+    }
+    
+    	XLoggerInfo xlog_info;
+	gettimeofday(&xlog_info.timeval, NULL);
+	xlog_info.level = (TLogLevel)level;
+	xlog_info.line = line;
+	xlog_info.pid = (int)pid;
+	xlog_info.tid = LONGTHREADID2INT(tid);
+	xlog_info.maintid = LONGTHREADID2INT(maintid);;
+    
+            __FirstGetCreater(T::ServiceName());
+    
+    
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    ////////////////////////////////////////////////////////////////////////////////
+/// Disclaimer: This is intended only as a partial stand-in for
+/// std::pmr::memory_resource (C++17) as needed for developing a
+/// hazptr prototype.
+////////////////////////////////////////////////////////////////////////////////
+    
+    #pragma once
+    
+    [[noreturn]] void usage(const char* name) {
+  std::cerr << folly::format(
+      'Usage: {0}\n'
+      '         list all huge page sizes and their mount points\n'
+      '       {0} -cp <src_file> <dest_nameprefix>\n'
+      '         copy src_file to a huge page file\n',
+      name);
+  exit(1);
+}
+    
+      size_t remaining = specs.size();
+  while (remaining != 0) {
+    if (remaining >= readerCapacity) {
+      EXPECT_EQ(readerCapacity, aioReader.pending());
+      EXPECT_EQ(remaining - readerCapacity, aioQueue.queued());
+    } else {
+      EXPECT_EQ(remaining, aioReader.pending());
+      EXPECT_EQ(0, aioQueue.queued());
+    }
+    auto completed = readerWait(&aioReader);
+    size_t nrRead = completed.size();
+    EXPECT_NE(nrRead, 0);
+    remaining -= nrRead;
+    }
+    
+      /**
+   * Get the output file.
+   */
+  const folly::File& getFile() const {
+    return file_;
+  }
+    
+    #include <folly/experimental/logging/LogHandlerFactory.h>
+    
+    void LogCategory::processMessage(const LogMessage& message) const {
+  // Make a copy of any attached LogHandlers, so we can release the handlers_
+  // lock before holding them.
+  //
+  // In the common case there will only be a small number of handlers.  Use a
+  // std::array in this case to avoid a heap allocation for the vector.
+  const std::shared_ptr<LogHandler>* handlers = nullptr;
+  size_t numHandlers = 0;
+  constexpr uint32_t kSmallOptimizationSize = 5;
+  std::array<std::shared_ptr<LogHandler>, kSmallOptimizationSize> handlersArray;
+  std::vector<std::shared_ptr<LogHandler>> handlersVector;
+  {
+    auto lockedHandlers = handlers_.rlock();
+    numHandlers = lockedHandlers->size();
+    if (numHandlers <= kSmallOptimizationSize) {
+      for (size_t n = 0; n < numHandlers; ++n) {
+        handlersArray[n] = (*lockedHandlers)[n];
+      }
+      handlers = handlersArray.data();
+    } else {
+      handlersVector = *lockedHandlers;
+      handlers = handlersVector.data();
+    }
+  }
+    }
+    
+    namespace folly {
+    }
