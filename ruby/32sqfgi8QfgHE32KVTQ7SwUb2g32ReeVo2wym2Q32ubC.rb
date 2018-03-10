@@ -1,63 +1,114 @@
-  private
+
+        
+            assert_dom_equal '<script>\n//<![CDATA[\nalert('hello')\n//]]>\n</script>',
+      javascript_tag('alert('hello')')
     
-    ActiveRecord::Base.establish_connection( adapter: :sqlite3, database:  ':memory:')
-    
-          opts[:script_name] = relative_url_root if relative_url_root?
-    
-        def type=(value)
-      @type = value.try :strip
-    end
-    
-        respond_to do |format|
-      format.html do
-        serializable_resource = ActiveModelSerializers::SerializableResource.new(InitialStatePresenter.new(initial_state_params), serializer: InitialStateSerializer)
-        @initial_state_json   = serializable_resource.to_json
-      end
-    
-      describe 'GET #show' do
-    it 'returns http success' do
-      get :show
-      expect(response).to have_http_status(:success)
+                  if very_raw_connection && very_raw_connection.respond_to?(:flush)
+                very_raw_connection.flush
+              end
+            end
+        end
     end
   end
-    
-      describe 'PUT #update' do
-    it 'updates the user record' do
-      put :update, params: { user: { locale: 'en', filtered_languages: ['es', 'fr', ''] } }
-    
-    Then /^(?:|I )should see '([^']*)'$/ do |text|
-  expect(page).to have_content(text)
 end
 
     
-        # Returns an extension based on the content type. e.g. 'jpeg' for
-    # 'image/jpeg'. If the style has a specified format, it will override the
-    # content-type detection.
-    #
-    # Each mime type generally has multiple extensions associated with it, so
-    # if the extension from the original filename is one of these extensions,
-    # that extension is used, otherwise, the first in the list is used.
-    def content_type_extension attachment, style_name
-      mime_type = MIME::Types[attachment.content_type]
-      extensions_for_mime_type = unless mime_type.empty?
-        mime_type.first.extensions
+              def uri_parser
+            @uri_parser ||= URI::Parser.new
+          end
+    
+          add_delivery_method :smtp, Mail::SMTP,
+        address:              'localhost',
+        port:                 25,
+        domain:               'localhost.localdomain',
+        user_name:            nil,
+        password:             nil,
+        authentication:       nil,
+        enable_starttls_auto: true
+    
+    def source_dir(*subdirs)
+  test_dir('source', *subdirs)
+end
+    
+    # You can also do other things. Examples:
+# https://github.com/tmm1/stackprof/blob/master/bin/stackprof
+report = StackProf::Report.new(Marshal.load(IO.binread(PROF_OUTPUT_FILE)))
+report.print_text(
+  options[:sort],
+  options[:limit],
+  options[:select_files],
+  options[:reject_files],
+  options[:select_names],
+  options[:reject_names]
+)
+    
+          #
+      # Require a gem or gems. If it's not present, show a very nice error
+      # message that explains everything and is much more helpful than the
+      # normal LoadError.
+      #
+      # names - a string gem name or array of gem names
+      #
+      def require_with_graceful_fail(names)
+        Array(names).each do |name|
+          begin
+            Jekyll.logger.debug 'Requiring:', name.to_s
+            require name
+          rescue LoadError => e
+            Jekyll.logger.error 'Dependency Error:', <<-MSG
+Yikes! It looks like you don't have #{name} or one of its dependencies installed.
+In order to use Jekyll as currently configured, you'll need to install this gem.
+    
+        def add(entry)
+      if entry.is_a? Array
+        entry.each(&method(:add))
       else
-        []
+        add_entry(entry) unless entry.root?
+      end
+    end
+    
+        def as_json
+      @pages
+    end
+    
+            entries
       end
     
-        def clear_processors!
-      @known_processors.try(:clear)
+          def get_type
+        case slug
+        when 'api'
+          'Reference'
+        when 'configuration'
+          'Reference: Configuration'
+        when 'stpl'
+          'Reference: SimpleTemplate'
+        when 'plugindev'
+          'Reference: Plugin'
+        else
+          'Manual'
+        end
+      end
+    
+          def call
+        title('Gems')
+        table(all_gem_names) do |gem, row|
+          row.yellow if update_available?(gem)
+          row << gem
+          row << installed_gem_version(gem)
+          row << '(update available)' if update_available?(gem)
+        end
+      end
+    
+        # @abstract
+    #
+    # Copy the contents of the cache-repository onto the release path
+    #
+    # @return void
+    #
+    def release
+      raise NotImplementedError, 'Your SCM strategy module should provide a #release method'
     end
     
-    describe 'border-color' do
-  before(:all) do
-    ParserSupport.parse_file('library/border-color')
-  end
-    
-      context 'called with two styles' do
-    it 'applies to alternating sides' do
-      rule = 'border-style: dotted dashed'
-    
-          expect('.all-buttons').to have_ruleset(ruleset)
-    end
+      desc 'Reverted'
+  task :reverted do
   end
