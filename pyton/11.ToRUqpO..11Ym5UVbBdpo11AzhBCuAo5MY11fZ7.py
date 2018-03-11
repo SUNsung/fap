@@ -1,112 +1,213 @@
 
         
         
-class TestCache(unittest.TestCase):
-    def setUp(self):
-        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
-        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
-        _mkdir(TESTDATA_DIR)
-        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
-        self.tearDown()
+def _mkdir(d):
+    if not os.path.exists(d):
+        os.mkdir(d)
+    
+            def _find_spec(key):
+            m = re.search(
+                r'(?m)^//\s*%s:\s*(.*?)\n' % re.escape(key), as_content)
+            if not m:
+                raise ValueError('Cannot find %s in %s' % (key, testfile))
+            return json.loads(m.group(1))
     
     
-class TestUnicodeLiterals(unittest.TestCase):
-    def test_all_files(self):
-        for dirpath, dirnames, filenames in os.walk(rootDir):
-            for ignore_dir in IGNORED_DIRS:
-                if ignore_dir in dirnames:
-                    # If we remove the directory from dirnames os.walk won't
-                    # recurse into it
-                    dirnames.remove(ignore_dir)
-            for basename in filenames:
-                if not basename.endswith('.py'):
-                    continue
-                if basename in IGNORED_FILES:
-                    continue
+class AudiomackIE(InfoExtractor):
+    _VALID_URL = r'https?://(?:www\.)?audiomack\.com/song/(?P<id>[\w/-]+)'
+    IE_NAME = 'audiomack'
+    _TESTS = [
+        # hosted on audiomack
+        {
+            'url': 'http://www.audiomack.com/song/roosh-williams/extraordinary',
+            'info_dict':
+            {
+                'id': '310086',
+                'ext': 'mp3',
+                'uploader': 'Roosh Williams',
+                'title': 'Extraordinary'
+            }
+        },
+        # audiomack wrapper around soundcloud song
+        {
+            'add_ie': ['Soundcloud'],
+            'url': 'http://www.audiomack.com/song/hip-hop-daily/black-mamba-freestyle',
+            'info_dict': {
+                'id': '258901379',
+                'ext': 'mp3',
+                'description': 'mamba day freestyle for the legend Kobe Bryant ',
+                'title': 'Black Mamba Freestyle [Prod. By Danny Wolf]',
+                'uploader': 'ILOVEMAKONNEN',
+                'upload_date': '20160414',
+            }
+        },
+    ]
     
-            retval = subprocess.call(args)
-        if retval == 0:
-            fsize = os.path.getsize(encodeFilename(tmpfilename))
-            self.to_screen('\r[%s] %s bytes' % (args[0], fsize))
-            self.try_rename(tmpfilename, filename)
-            self._hook_progress({
-                'downloaded_bytes': fsize,
-                'total_bytes': fsize,
-                'filename': filename,
-                'status': 'finished',
-            })
-            return True
+        def __init__(self, orig):
+        self._orig = orig
+    
+    
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
+
+    
+            See https://github.com/jakubroztocil/httpie/issues/212
+    
+        def test_verify_no_OK(self, httpbin_secure):
+        r = http(httpbin_secure.url + '/get', '--verify=no')
+        assert HTTP_OK in r
+    
+        ERROR_TIMEOUT = 2
+    ERROR_TOO_MANY_REDIRECTS = 6
+    
+            else:
+            raise ArgumentTypeError(
+                u''%s' is not a valid value' % string)
+    
+        :param url: URL for the new :class:`Request` object.
+    :param params: (optional) Dictionary or bytes to be sent in the query string for the :class:`Request`.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
+    '''
+    
+                if length:
+                self.headers['Content-Length'] = builtin_str(length)
+            else:
+                self.headers['Transfer-Encoding'] = 'chunked'
         else:
-            self.to_stderr('\n')
-            self.report_error('%s exited with code %d' % (args[0], retval))
-            return False
-
+            # Multi-part file uploads.
+            if files:
+                (body, content_type) = self._encode_files(files, data)
+            else:
+                if data:
+                    body = self._encode_params(data)
+                    if isinstance(data, basestring) or hasattr(data, 'read'):
+                        content_type = None
+                    else:
+                        content_type = 'application/x-www-form-urlencoded'
     
-            return self._extract_nuevo(
-            'http://www.anitube.se/nuevo/econfig.php?key=%s' % key, video_id)
-
+        @pytest.fixture(autouse=True)
+    def setup(self):
+        '''CaseInsensitiveDict instance with 'Accept' header.'''
+        self.case_insensitive_dict = CaseInsensitiveDict()
+        self.case_insensitive_dict['Accept'] = 'application/json'
     
-            # Audiomack wraps a lot of soundcloud tracks in their branded wrapper
-        # if so, pass the work off to the soundcloud extractor
-        if SoundcloudIE.suitable(api_response['url']):
-            return {'_type': 'url', 'url': api_response['url'], 'ie_key': 'Soundcloud'}
+    if is_py2:
+    from urllib import (
+        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
+        proxy_bypass, proxy_bypass_environment, getproxies_environment)
+    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
+    from urllib2 import parse_http_list
+    import cookielib
+    from Cookie import Morsel
+    from StringIO import StringIO
     
-            mvp_id = self._search_mvp_id(webpage)
+    from requests.help import info
     
-      Raises:
-    ValueError: if frequency edges are incorrectly ordered or out of range.
-  '''
-  nyquist_hertz = audio_sample_rate / 2.
-  if lower_edge_hertz < 0.0:
-    raise ValueError('lower_edge_hertz %.1f must be >= 0' % lower_edge_hertz)
-  if lower_edge_hertz >= upper_edge_hertz:
-    raise ValueError('lower_edge_hertz %.1f >= upper_edge_hertz %.1f' %
-                     (lower_edge_hertz, upper_edge_hertz))
-  if upper_edge_hertz > nyquist_hertz:
-    raise ValueError('upper_edge_hertz %.1f is greater than Nyquist %.1f' %
-                     (upper_edge_hertz, nyquist_hertz))
-  spectrogram_bins_hertz = np.linspace(0.0, nyquist_hertz, num_spectrogram_bins)
-  spectrogram_bins_mel = hertz_to_mel(spectrogram_bins_hertz)
-  # The i'th mel band (starting from i=1) has center frequency
-  # band_edges_mel[i], lower edge band_edges_mel[i-1], and higher edge
-  # band_edges_mel[i+1].  Thus, we need num_mel_bins + 2 values in
-  # the band_edges_mel arrays.
-  band_edges_mel = np.linspace(hertz_to_mel(lower_edge_hertz),
-                               hertz_to_mel(upper_edge_hertz), num_mel_bins + 2)
-  # Matrix to post-multiply feature arrays whose rows are num_spectrogram_bins
-  # of spectrogram values.
-  mel_weights_matrix = np.empty((num_spectrogram_bins, num_mel_bins))
-  for i in range(num_mel_bins):
-    lower_edge_mel, center_mel, upper_edge_mel = band_edges_mel[i:i + 3]
-    # Calculate lower and upper slopes for every spectrogram bin.
-    # Line segments are linear in the *mel* domain, not hertz.
-    lower_slope = ((spectrogram_bins_mel - lower_edge_mel) /
-                   (center_mel - lower_edge_mel))
-    upper_slope = ((upper_edge_mel - spectrogram_bins_mel) /
-                   (upper_edge_mel - center_mel))
-    # .. then intersect them with each other and zero.
-    mel_weights_matrix[:, i] = np.maximum(0.0, np.minimum(lower_slope,
-                                                          upper_slope))
-  # HTK excludes the spectrogram DC bin; make sure it always gets a zero
-  # coefficient.
-  mel_weights_matrix[0, :] = 0.0
-  return mel_weights_matrix
+            # It's possible that users might accidentally send a Request object.
+        # Guard against that specific failure case.
+        if isinstance(request, Request):
+            raise ValueError('You can only send PreparedRequests.')
     
-    import iris_data
-import custom_estimator
-import premade_estimator
     
-        final_timestep = label_seq[-1]
-    self.assertEqual(final_timestep.token, eos_id)
-    self.assertEqual(final_timestep.label, 1)
-    self.assertEqual(final_timestep.weight, 1.0)
+def maybe_restore_pretrained_model(sess, saver_for_restore, model_dir):
+  '''Restores pretrained model if there is no ckpt model.'''
+  ckpt = tf.train.get_checkpoint_state(FLAGS.train_dir)
+  checkpoint_exists = ckpt and ckpt.model_checkpoint_path
+  if checkpoint_exists:
+    tf.logging.info('Checkpoint exists in FLAGS.train_dir; skipping '
+                    'pretraining restore')
+    return
     
-      Raises:
-    ValueError: if the length of the frequency file is not equal to the vocab
-      size, or if the file is not found.
-  '''
-  path = FLAGS.vocab_freq_path or os.path.join(FLAGS.data_dir, 'vocab_freq.txt')
     
-      def testSyncReplicas(self):
-    FLAGS.sync_replicas = True
-    graphs.VatxtModel().language_model_training()
+def model_fn(features, labels, mode, params):
+  '''The model_fn argument for creating an Estimator.'''
+  model = Model(params['data_format'])
+  image = features
+  if isinstance(image, dict):
+    image = features['image']
+    
+          for i in range(3):
+        key, label, uint8image = sess.run([
+            result.key, result.label, result.uint8image])
+        self.assertEqual('%s:%d' % (filename, i), tf.compat.as_text(key))
+        self.assertEqual(labels[i], label)
+        self.assertAllEqual(expected[i], uint8image)
+    
+        # Build 2 hidden layer DNN with 10, 10 units respectively.
+    classifier = tf.estimator.DNNClassifier(
+        feature_columns=my_feature_columns,
+        # Two hidden layers of 10 nodes each.
+        hidden_units=[10, 10],
+        # The model must choose between 3 classes.
+        n_classes=3)
+    
+          content = row[1] + ' ' + row[2]
+      yield Document(
+          content=content,
+          is_validation=is_validation,
+          is_test=False,
+          label=int(row[0]) - 1,  # Labels should start from 0
+          add_tokens=True)
+    
+    
+def build_input_sequence(doc, vocab_ids):
+  '''Builds input sequence from file.
+    
+      # Filter out low-occurring terms
+  vocab_freqs = dict((term, freq) for term, freq in vocab_freqs.iteritems()
+                     if doc_counts[term] > FLAGS.doc_count_threshold)
+    
+    DOCUMENTATION = '''
+---
+inventory: openshift
+short_description: Openshift gears external inventory script
+description:
+  - Generates inventory of Openshift gears using the REST interface
+  - this permit to reuse playbook to setup an Openshift gear
+version_added: None
+author: Michael Scherer
+'''
+    
+    
+def secure_hash(filename, hash_func=sha1):
+    ''' Return a secure hash hex digest of local file, None if file is not present or a directory. '''
+    
+            input_url = 'https://www.googleapis.com/compute/v1/projects/myproject/targetHttpProxies/mytargetproxy'
+        actual = GCPUtils.parse_gcp_url(input_url)
+        self.assertEquals('compute', actual['service'])
+        self.assertEquals('v1', actual['api_version'])
+        self.assertEquals('myproject', actual['project'])
+        self.assertFalse('global' in actual)
+        self.assertEquals('targetHttpProxies', actual['resource_name'])
+        self.assertEquals('mytargetproxy', actual['entity_name'])
+    
+    from ansible.plugins.terminal import TerminalBase
+from ansible.errors import AnsibleConnectionFailure
+    
+    
+def get_group_vars(groups):
+    
+    
+def walk_workspace():
+    root = get_root()
+    files = subprocess.check_output(['git', 'ls-files', '--full-name',
+                                     '--', root])
+    for filename in files.splitlines():
+        yield os.path.join(root, filename)
+    
+    class CaptchaController(RedditController):
+    @allow_oauth2_access
+    @api_doc(api_section.captcha, uri='/captcha/{iden}')
+    def GET_captchaimg(self, iden):
+        '''
+        Request a CAPTCHA image given an `iden`.
