@@ -1,96 +1,72 @@
 
         
-                command = 'security set-keychain-settings'
-        command << ' -t #{params[:timeout]}' if params[:timeout]
-        command << ' -l' if params[:lock_when_sleeps]
-        command << ' -u' if params[:lock_after_timeout]
-        command << ' #{keychain_path}'
+                expect(result).to eq('/usr/local/bin/cloc  --by-file --xml  --out=build/cloc.xml MyCoolApp')
+      end
     
-                # Register the handler if this is our first callback.
-            Signal.trap('INT') { fire_callbacks } if registered.length == 1
+          context('when the tag exists') do
+        before do
+          allow(Fastlane::Actions).to receive(:sh).with('git rev-parse -q --verify refs/tags/1.2.0 || true', { log: nil }).and_return('41215512353215321')
+        end
+    
+    begin
+  require 'bundler/setup'
+rescue LoadError
+  $stderr.puts '[*] Metasploit requires the Bundler gem to be installed'
+  $stderr.puts '    $ gem install bundler'
+  exit(1)
+end
+    
+              s[:pass] = ''
+          return
+        end
+    
+    # Sniffer class for GET URL's
+class SnifferURL < BaseProtocolParser
+  def register_sigs
+    self.sigs = {
+      :get		=> /^GET\s+([^\n]+)\s+HTTP\/\d\.\d/i,
+      :webhost	=> /^HOST\:\s+([^\n\r]+)/i,
+    }
+  end
+    
+    clsJavaCompile 	= Rjb::import('javaCompile.CompileSourceInMemory')
+clsCreateJar	= Rjb::import('javaCompile.CreateJarFile')
+clsFile			= Rjb::import('java.io.File')
+system			= Rjb::import('java.lang.System')
+#clsString	= Rjb::import('java.lang.String')
+    
+    #certCN cannot contain commas
+certCN 		= 'Metasploit Inc.'
+#keytoolOpts 	= '-genkey -alias signFiles -keystore msfkeystore ' +
+#		  '-storepass msfstorepass -dname \'cn=#{certCN}\' ' +
+#		  '-keypass msfkeypass'
+    
+            # Removes the specified cache
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        An array of caches to remove, each specified with the same
+        #        hash as cache_descriptors_per_pod especially :spec_file and :slug
+        #
+        def remove_caches(cache_descriptors)
+          cache_descriptors.each do |desc|
+            UI.message('Removing spec #{desc[:spec_file]} (v#{desc[:version]})') do
+              FileUtils.rm(desc[:spec_file])
+            end
+            UI.message('Removing cache #{desc[:slug]}') do
+              FileUtils.rm_rf(desc[:slug])
+            end
           end
         end
     
-      def test_next_month__2
-    d = Date.new(2000,1,31).next_month(-1)
-    assert_equal([1999, 12, 31], [d.year, d.mon, d.mday])
-    d = Date.new(2000,1,31).next_month
-    assert_equal([2000, 2, 29], [d.year, d.mon, d.mday])
-    d = Date.new(2000,1,31).next_month(12)
-    assert_equal([2001, 1, 31], [d.year, d.mon, d.mday])
-    d = Date.new(2000,1,31).next_month(13)
-    assert_equal([2001, 2, 28], [d.year, d.mon, d.mday])
-  end
+            It is possible to specify a list of dependencies which will be used by
+        the template in the `Podfile.default` (normal targets) `Podfile.test`
+        (test targets) files which should be stored in the
+        `~/.cocoapods/templates` folder.
+      DESC
+      self.arguments = [
+        CLAide::Argument.new('XCODEPROJ', :false),
+      ]
     
-    undef printf
-alias printf printf_orig
-
-    
-    FIRST     = -> l { LEFT[RIGHT[l]] }
-IF        = -> b { b }
-LEFT      = -> p { p[-> x { -> y { x } } ] }
-RIGHT     = -> p { p[-> x { -> y { y } } ] }
-IS_EMPTY  = LEFT
-REST      = -> l { RIGHT[RIGHT[l]] }
-    
-    mkpieces
-mkboard
-$p[4] = [$p[4][0]]
-$pnum = (0...$p.length).to_a
-setpiece([],0)
-
-    
-    module Capistrano
-  module Doctor
-    # Prints table of all Capistrano-related gems and their version numbers. If
-    # there is a newer version of a gem available, call attention to it.
-    class GemsDoctor
-      include Capistrano::Doctor::OutputHelpers
-    
-          def stage_set?
-        !!fetch(:stage, false)
-      end
-    
-    module Capistrano
-  module TaskEnhancements
-    def before(task, prerequisite, *args, &block)
-      prerequisite = Rake::Task.define_task(prerequisite, *args, &block) if block_given?
-      Rake::Task[task].enhance [prerequisite]
-    end
-    
-      # Implemented by subclasses to hook into Capistrano's deployment flow using
-  # using the `before` and `after` DSL methods. Note that `register_hooks` will
-  # not be called if the user has opted-out of hooks when installing the plugin.
-  #
-  # Example:
-  #
-  #   def register_hooks
-  #     after 'deploy:updated', 'my_plugin:do_something'
-  #   end
-  #
-  def register_hooks; end
-    
-      desc 'Started'
-  task :started do
-  end
-    
-      describe 'asking for a variable' do
-    before do
-      dsl.ask(:scm, :svn)
-      $stdout.stubs(:print)
-    end
-    
-        @buttons_list = %w(
-      button
-      [type='button']
-      [type='reset']
-      [type='submit']
-    )
-  end
-    
-      context 'called with arguments (2, $value: 4em 6em)' do
-    it 'outputs sextuple the second value from the default scale' do
-      expect('.two-double-value').to have_rule('font-size: 3.125em')
-    end
-  end
-end
+            def print_version
+          output_pipe.puts 'version: '#{Pod::VERSION}''
+        end
