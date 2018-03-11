@@ -1,68 +1,106 @@
 
-def register_blueprints(app):
-    '''Register all blueprint modules
+        
+        
+def register_cli(app):
+    @app.cli.command('initdb')
+    def initdb_command():
+        '''Creates the database tables.'''
+        init_db()
+        print('Initialized the database.')
     
     
-@app.route('/')
-def timeline():
-    '''Shows a users timeline or if no user is logged in it will
-    redirect to the public timeline.  This timeline shows the user's
-    messages as well as all the messages of followed users.
-    '''
-    if not g.user:
-        return redirect(url_for('public_timeline'))
-    return render_template('timeline.html', messages=query_db('''
-        select message.*, user.* from message, user
-        where message.author_id = user.user_id and (
-            user.user_id = ? or
-            user.user_id in (select whom_id from follower
-                                    where who_id = ?))
-        order by message.pub_date desc limit ?''',
-        [session['user_id'], session['user_id'], PER_PAGE]))
+def test_login_logout(client, app):
+    '''Make sure login and logout works'''
+    rv = login(client, app.config['USERNAME'],
+               app.config['PASSWORD'])
+    assert b'You were logged in' in rv.data
+    rv = logout(client)
+    assert b'You were logged out' in rv.data
+    rv = login(client,app.config['USERNAME'] + 'x',
+               app.config['PASSWORD'])
+    assert b'Invalid username' in rv.data
+    rv = login(client, app.config['USERNAME'],
+               app.config['PASSWORD'] + 'x')
+    assert b'Invalid password' in rv.data
     
-    import os
-import tempfile
-import pytest
-from minitwit import minitwit
+    import matplotlib.image as mpimg
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.spatial import cKDTree
+from skimage.feature import plot_matches
+from skimage.measure import ransac
+from skimage.transform import AffineTransform
+import tensorflow as tf
     
-    def py_scanstring(s, end, strict=True,
-        _b=BACKSLASH, _m=STRINGCHUNK.match):
-    '''Scan the string s for a JSON string. End is the index of the
-    character in s after the quote that started the JSON string.
-    Unescapes all valid JSON string escape sequences and raises ValueError
-    on attempt to decode an invalid string. If strict is False then literal
-    control characters are allowed in the string.
+      # Figure out descriptor dimensionality by parsing first one.
+  descriptor_dim = len(
+      datum_io.DatumToArray(delf_features.feature[0].descriptor))
+  locations = np.zeros([num_features, 2])
+  scales = np.zeros([num_features])
+  descriptors = np.zeros([num_features, descriptor_dim])
+  attention = np.zeros([num_features])
+  orientations = np.zeros([num_features])
     
-    def py_make_scanner(context):
-    parse_object = context.parse_object
-    parse_array = context.parse_array
-    parse_string = context.parse_string
-    match_number = NUMBER_RE.match
-    strict = context.strict
-    parse_float = context.parse_float
-    parse_int = context.parse_int
-    parse_constant = context.parse_constant
-    object_hook = context.object_hook
-    object_pairs_hook = context.object_pairs_hook
-    memo = context.memo
+    import os.path
     
-            # Add .lib files this module needs
-        for modlib in moddefn.GetLinkerLibs():
-            if modlib not in libs:
-                libs.append(modlib)
+    parser = argparse.ArgumentParser()
+parser.add_argument('--batch_size', default=100, type=int, help='batch size')
+parser.add_argument('--train_steps', default=1000, type=int,
+                    help='number of training steps')
     
-        def test_format(self):
-        # empty format string is same as str()
-        self.assertEqual(format(1+3j, ''), str(1+3j))
-        self.assertEqual(format(1.5+3.5j, ''), str(1.5+3.5j))
-        self.assertEqual(format(3j, ''), str(3j))
-        self.assertEqual(format(3.2j, ''), str(3.2j))
-        self.assertEqual(format(3+0j, ''), str(3+0j))
-        self.assertEqual(format(3.2+0j, ''), str(3.2+0j))
+        value_ops_dict = dict(zip(metric_names, value_ops))
     
-            self.assertRaises(TypeError, Array.from_buffer, bytearray(10))
-        self.assertRaises(TypeError, Structure.from_buffer, bytearray(10))
-        self.assertRaises(TypeError, Union.from_buffer, bytearray(10))
-        self.assertRaises(TypeError, _CFuncPtr.from_buffer, bytearray(10))
-        self.assertRaises(TypeError, _Pointer.from_buffer, bytearray(10))
-        self.assertRaises(TypeError, _SimpleCData.from_buffer, bytearray(10))
+      Returns:
+    None
+  '''
+  doc_seen = set()
+    
+        def __init__(self):
+        self.settings = None  # set in scrapy.cmdline
+    
+        def from_spider(self, spider, results):
+        requests = []
+        for method in self.tested_methods_from_spidercls(type(spider)):
+            bound_method = spider.__getattribute__(method)
+            requests.append(self.from_method(bound_method, results))
+    
+        def mapper_sort(self, key, value):
+        '''Construct key to ensure proper sorting.
+    
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer)
+        ]
+    
+    
+class Chat(metaclass=ABCMeta):
+    
+    
+class Motorcycle(Vehicle):
+    
+    GB_RESULT_SET = [
+    {
+        'version': 'v1',
+        'timestamp': '2012-01-01T00:00:00.000Z',
+        'event': {
+            'dim1': 'Canada',
+            'metric1': 12345678,
+        },
+    },
+    {
+        'version': 'v1',
+        'timestamp': '2012-01-01T00:00:00.000Z',
+        'event': {
+            'dim1': 'USA',
+            'metric1': 12345678 / 2,
+        },
+    },
+]
+    
+    from superset import frontend_config
+    
+    Revision ID: 19a814813610
+Revises: ca69c70ec99b
+Create Date: 2017-09-15 15:09:40.495345
