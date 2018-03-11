@@ -1,257 +1,378 @@
 
         
-          // mate::TrackableObject:
-  static void BuildPrototype(v8::Isolate* isolate,
-                             v8::Local<v8::FunctionTemplate> prototype);
+            // this = this * thisscale + other
+    void scaleandadd(const float thisscale, const ssematrixbase &other)
+    {
+        auto &us = *this;
+        assert(rows() == other.rows() && cols() == other.cols());
+    }
     
-    AsarProtocolHandler::AsarProtocolHandler(
-    const scoped_refptr<base::TaskRunner>& file_task_runner)
-    : file_task_runner_(file_task_runner) {}
+    // sets m_learningRateMultiplier in all LearnableParameters feeding into the passed rootNode
+// Called from MEL
+void ComputationNetwork::SetLearnableNodesBelowLearningRateMultiplier(const float learningRateMultiplier, const ComputationNodeBasePtr& rootNode)
+{
+    // find nodes from all available nodes
+    if (rootNode == nullptr)
+    {
+        for (auto nodeIter = m_nameToNodeMap.begin(); nodeIter != m_nameToNodeMap.end(); nodeIter++)
+        {
+            ComputationNodeBasePtr node = nodeIter->second;
+            if (node->OperationName() == OperationNameOf(LearnableParameter))
+                node->SetLearningRateMultiplier(learningRateMultiplier);
+        }
+    }
+    else
+    {
+        // for calculating a specific node
+        if (!EvalOrderExists(rootNode))
+            const_cast<ComputationNetwork&>(*this).FormEvalOrder(rootNode);
+    }
+    }
     
-      // net::URLRequestJobFactory::ProtocolHandler:
-  net::URLRequestJob* MaybeCreateJob(
-      net::URLRequest* request,
-      net::NetworkDelegate* network_delegate) const override;
+        // first try if a NetworkBuilder is present
+    function<ComputationNetworkPtr(DEVICEID_TYPE)> createNetworkFn;
+    bool gotIt = TryGetNetworkFactory<ConfigRecordType, ElemType>(config, createNetworkFn);
+    if (gotIt)
+    {
+        // We have several ways to create a network.
+        net = createNetworkFn(deviceId);
+        if (outputNodeNames.size() > 0)
+        {
+            net->InvalidateCompiledNetwork();
+            PatchOutputNodes(net, outputNodeNames, outputNodeNamesVector);
+            net->CompileNetwork();
+            // BUGBUG: This will generate double Validation output in the log
+        }
+    }
+    else // no NetworkBuilder given: load from 'modelPath'
+    {
+        wstring modelPath = config(L'modelPath');
+    }
     
-    #endif  // ATOM_BROWSER_RELAUNCHER_H_
-
+            for (size_t paramNumber = params.size(); paramNumber > numFixedParams; paramNumber--)
+        {
+            // process optional parameter if it exists
+            std::string propName, value;
+            if (OptionalParameter(params[paramNumber - 1], propName, value))
+            {
+                if (EqualInsensitive(propName, 'copyFlag', 'copy'))
+                {
+                    if (EqualInsensitive(value, 'all'))
+                    {
+                        copyFlags = CopyNodeFlags::copyNodeAll;
+                    }
+                    else if (EqualInsensitive(value, 'value'))
+                    {
+                        copyFlags = CopyNodeFlags::copyNodeValue;
+                    }
+                    else
+                    {
+                        RuntimeError('Invalid optional parameter value %s in CopyNode(), valid values are copyFlag=(all|value)', value.c_str());
+                    }
+                }
+                else
+                {
+                    RuntimeError('Invalid optional parameter to Copy, %s\n valid optional parameters: copyFlag=(all|value)', propName.c_str());
+                }
+            }
+        }
     
-      Predicate predicate_;
+        bool empty() const
+    {
+#ifndef NONUMLATTICEMMI // TODO:set NUM lattice to null so as to save memory
+        if (numlattices.empty() ^ denlattices.empty())
+            RuntimeError('latticesource: numerator and denominator lattices must be either both empty or both not empty');
+#endif
+        return denlattices.empty();
+    }
     
-    // Set platform accelerator for the Accelerator.
-void SetPlatformAccelerator(ui::Accelerator* accelerator);
-    
-    /// used internally
-void throwRuntimeError(std::string const& msg);
-/// used internally
-void throwLogicError(std::string const& msg);
-    
-    // Appends all the CMessages in the input iterator to the container.
+    // ---------------------------------------------------------------------------
+// hardcoded_array -- wraps a fixed-size C array together with its size.
 //
-// Returns None if successful; returns NULL and sets an exception if
-// unsuccessful.
-PyObject* Extend(RepeatedCompositeContainer* self, PyObject* value);
+// operator[] checks index bounds in Debug builds. size() is provided such
+// that this class can be substituted for STL vector in many cases.
+// Can be constructed with a size parameter--it will be checked against the
+// hard-coded size.
+// Can also be constructed with an initialization parameter (typ. 0).
+// ---------------------------------------------------------------------------
     
-    
-    {
-    {
-    {}  // namespace cpp
-}  // namespace compiler
-}  // namespace protobuf
-    
-    #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/io/printer.h>
-    
-      virtual void GenerateCloningCode(io::Printer* printer);
-  virtual void GenerateFreezingCode(io::Printer* printer);
-  virtual void GenerateMembers(io::Printer* printer);
-  virtual void GenerateMergingCode(io::Printer* printer);
-  virtual void GenerateParsingCode(io::Printer* printer);
-  virtual void GenerateSerializationCode(io::Printer* printer);
-  virtual void GenerateSerializedSizeCode(io::Printer* printer);
-    
-    void RepeatedEnumFieldGenerator::GenerateMembers(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'private static readonly pb::FieldCodec<$type_name$> _repeated_$name$_codec\n'
-    '    = pb::FieldCodec.ForEnum($tag$, x => (int) x, x => ($type_name$) x);\n');
-  printer->Print(variables_,
-    'private readonly pbc::RepeatedField<$type_name$> $name$_ = new pbc::RepeatedField<$type_name$>();\n');
-  WritePropertyDocComment(printer, descriptor_);
-  AddPublicMemberAttributes(printer);
-  printer->Print(
-    variables_,
-    '$access_level$ pbc::RepeatedField<$type_name$> $property_name$ {\n'
-    '  get { return $name$_; }\n'
-    '}\n');
-}
-    
-    CvRect cvGetValidDisparityROI( CvRect roi1, CvRect roi2, int minDisparity,
-                              int numberOfDisparities, int SADWindowSize )
-{
-    return (CvRect)cv::getValidDisparityROI( roi1, roi2, minDisparity,
-                                            numberOfDisparities, SADWindowSize );
-}
-    
-        Mat img = _img.getMat(), cornersM = _corners.getMat();
-    int ncorners = cornersM.checkVector(2, CV_32F);
-    CV_Assert( ncorners >= 0 );
-    Point2f* corners = cornersM.ptr<Point2f>();
-    const int nbins = 256;
-    float ranges[] = {0, 256};
-    const float* _ranges = ranges;
-    Mat hist;
-    
-    // Subclass of TestServiceImpl that increments a request counter for
-// every call to the Echo RPC.
-class MyTestServiceImpl : public TestServiceImpl {
- public:
-  MyTestServiceImpl() : request_count_(0) {}
-    }
-    
-    DEFINE_string(scenario_result_file, '',
-              'Write JSON benchmark report to the file specified.');
-    
-    
-    {  if (request->has_param() && request->param().echo_metadata()) {
-    const std::multimap<grpc::string_ref, grpc::string_ref>& client_metadata =
-        context->client_metadata();
-    for (std::multimap<grpc::string_ref, grpc::string_ref>::const_iterator
-             iter = client_metadata.begin();
-         iter != client_metadata.end(); ++iter) {
-      context->AddTrailingMetadata(ToString(iter->first),
-                                   ToString(iter->second));
-    }
-    // Terminate rpc with error and debug info in trailer.
-    if (request->param().debug_info().stack_entries_size() ||
-        !request->param().debug_info().detail().empty()) {
-      grpc::string serialized_debug_info =
-          request->param().debug_info().SerializeAsString();
-      context->AddTrailingMetadata(kDebugInfoTrailerKey, serialized_debug_info);
-      return Status::CANCELLED;
-    }
-  }
-  if (request->has_param() &&
-      (request->param().expected_client_identity().length() > 0 ||
-       request->param().check_auth_context())) {
-    CheckServerAuthContext(context,
-                           request->param().expected_transport_security_type(),
-                           request->param().expected_client_identity());
-  }
-  if (request->has_param() && request->param().response_message_length() > 0) {
-    response->set_message(
-        grpc::string(request->param().response_message_length(), '\0'));
-  }
-  if (request->has_param() && request->param().echo_peer()) {
-    response->mutable_param()->set_peer(context->peer());
-  }
-  return Status::OK;
-}
-    
-      bool signal_client() {
-    std::unique_lock<std::mutex> lock(mu_);
-    return signal_client_;
-  }
-    
-    #include <grpc++/create_channel.h>
-#include <grpc++/security/credentials.h>
-#include <grpc/support/log.h>
-    
-      ClientConfig client_config;
-  client_config.set_client_type(ASYNC_CLIENT);
-  client_config.set_outstanding_rpcs_per_channel(1000);
-  client_config.set_client_channels(8);
-  client_config.set_async_client_threads(8);
-  client_config.set_rpc_type(STREAMING);
-  client_config.mutable_load_params()->mutable_poisson()->set_offered_load(
-      1000.0 / grpc_test_slowdown_factor());
-    
-    int main(int argc, char** argv) {
-  grpc::testing::InitTest(&argc, &argv, true);
-    }
-    
-    class RouteGuideClient {
- public:
-  RouteGuideClient(std::shared_ptr<Channel> channel, const std::string& db)
-      : stub_(RouteGuide::NewStub(channel)) {
-    routeguide::ParseDb(db, &feature_list_);
-  }
-    }
-    
-    namespace grpc_node_generator {
-    }
-    
-      if (!args[0]->IsString()) {
-    return scope.Close(Boolean::New(false));
-  }
-    
-      private:
-    explicit DBWrapper();
-    ~DBWrapper();
-    
-    
-    {  // No copying allowed
-  Reader(const Reader&);
-  void operator=(const Reader&);
-};
-    
-    /*
- * Class:     org_rocksdb_IngestExternalFileOptions
- * Method:    allowBlockingFlush
- * Signature: (J)Z
- */
-jboolean Java_org_rocksdb_IngestExternalFileOptions_allowBlockingFlush(
-    JNIEnv* env, jobject jobj, jlong jhandle) {
-  auto* options =
-      reinterpret_cast<rocksdb::IngestExternalFileOptions*>(jhandle);
-  return static_cast<jboolean>(options->allow_blocking_flush);
-}
-    
-    #include <memory>
-#include <set>
+    #include <atomic>
 #include <string>
-#include 'rocksdb/statistics.h'
-#include 'monitoring/statistics.h'
+#include <vector>
     
-        std::string log_line = 'ADD - ';
-    log_line += key.ToString(true);
-    log_line += ' - ';
-    AppendNumberTo(&log_line, size);
-  // @lint-ignore TXT2 T25377293 Grandfathered in
-		log_line += '\n';
+      /**
+   * @brief Signal to the Dispatcher that no services should be created.
+   *
+   * The Dispatcher will not add services if it is shutting down until
+   * a join has completed of existing services.
+   *
+   * This prevents a very strange race where the dispatcher is signaled to
+   * abort or interrupt and serviced are sill waiting to be added.
+   * A future join will be requested AFTER all services were expected to have
+   * been interrupted.
+   */
+  std::atomic<bool> stopping_{false};
     
-    #include 'rocksdb/compaction_filter.h'
-#include 'rocksjni/jnicallback.h'
+    /**
+ * @brief Load extenion modules from a delimited search path string.
+ *
+ * @param loadfile Path to file containing newline delimited file paths
+ */
+Status loadModules(const std::string& loadfile);
     
-    namespace A2STR {
-    }
+      /*
+   * @brief Update the flag value by string name,
+   *
+   * @param name the flag name.
+   * @parma value the new value.
+   * @return if the value was updated.
+   */
+  static Status updateValue(const std::string& name, const std::string& value);
     
-    class AbstractCommand : public Command {
-private:
-  std::shared_ptr<Request> req_;
-  std::shared_ptr<FileEntry> fileEntry_;
-  std::shared_ptr<SocketCore> socket_;
-  std::shared_ptr<SocketRecvBuffer> socketRecvBuffer_;
-  std::shared_ptr<SocketCore> readCheckTarget_;
-  std::shared_ptr<SocketCore> writeCheckTarget_;
-    }
-    
-      virtual void openFile(int64_t totalLength = 0) CXX11_OVERRIDE;
-    
-      void updateReadWriteCheck();
+    class DropPrivileges;
+using DropPrivilegesRef = std::shared_ptr<DropPrivileges>;
     
     
-    {} // namespace aria2
+    {    // Code should never reach this point
+    VLOG(1) << 'Could not start extension process: ' << exec_path;
+    Initializer::shutdown(EXIT_FAILURE);
+    return std::shared_ptr<PlatformProcess>();
+  }
+    
+    DECLARE_uint64(alarm_timeout);
+    
+    #endif // __cocos2dx_builder_h__
 
     
-    AbstractProxyRequestCommand::AbstractProxyRequestCommand(
-    cuid_t cuid, const std::shared_ptr<Request>& req,
-    const std::shared_ptr<FileEntry>& fileEntry, RequestGroup* requestGroup,
-    DownloadEngine* e, const std::shared_ptr<Request>& proxyRequest,
-    const std::shared_ptr<SocketCore>& s)
-    : AbstractCommand(cuid, req, fileEntry, requestGroup, e, s),
-      proxyRequest_(proxyRequest),
-      httpConnection_(std::make_shared<HttpConnection>(
-          cuid, s, std::make_shared<SocketRecvBuffer>(s)))
+    extern JSClass  *jsb_cocostudio_timeline_EventFrame_class;
+extern JSObject *jsb_cocostudio_timeline_EventFrame_prototype;
+    
+    
+    
+    
+    
+    
+    
+    #if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,'#ferror in function 'lua_cocos2dx_physics_PhysicsBody_getTag'.',&tolua_err);
+#endif
+    
+    
+    
+    GLESDebugDraw::GLESDebugDraw()
+    : mRatio( 1.0f )
 {
-  setTimeout(std::chrono::seconds(getOption()->getAsInt(PREF_CONNECT_TIMEOUT)));
-  disableReadCheckSocket();
-  setWriteCheckSocket(getSocket());
+    this->initShader();
 }
     
-    namespace aria2 {
+    	b2PointState state1[b2_maxManifoldPoints], state2[b2_maxManifoldPoints];
+	b2GetPointStates(state1, state2, oldManifold, manifold);
+    
+    			m_world->CreateJoint(&pjd);
+    
+    		if (b2_toiCalls > 0)
+		{
+			m_debugDraw.DrawString(5, m_textLine, 'toi calls = %d, ave toi iters = %3.1f, max toi iters = %d',
+				b2_toiCalls, b2_toiIters / float32(b2_toiCalls), b2_toiMaxRootIters);
+			m_textLine += DRAW_STRING_NEW_LINE;
     }
     
-    #include 'common.h'
+        // C++ mappings of API methods
+    static Persistent<v8::Function> constructor;
+    static Handle<Value> Open(const Arguments& args);
+    static Handle<Value> New(const Arguments& args);
+    static Handle<Value> Get(const Arguments& args);
+    static Handle<Value> Put(const Arguments& args);
+    static Handle<Value> Delete(const Arguments& args);
+    static Handle<Value> Dump(const Arguments& args);
+    static Handle<Value> WriteBatch(const Arguments& args);
+    static Handle<Value> CreateColumnFamily(const Arguments& args);
+    static Handle<Value> CompactRange(const Arguments& args);
+    static Handle<Value> Close(const Arguments& args);
     
-    class ApiCallbackDownloadEventListener : public DownloadEventListener {
-public:
-  ApiCallbackDownloadEventListener(Session* session,
-                                   DownloadEventCallback callback,
-                                   void* userData);
-  virtual ~ApiCallbackDownloadEventListener();
-  virtual void onEvent(DownloadEvent event,
-                       const RequestGroup* group) CXX11_OVERRIDE;
+      virtual const char* Name() const override;
+    
+        // I omit the 'assert(success)' checks here.
+    slists.Get('a', &a);
+    slists.Get('b', &b);
+    slists.Get('c', &c);
+    
+      size_t size() const { return size_; }
+  const char* data() const { return data_; }
+  bool cachable() const { return contents_.cachable; }
+  size_t usable_size() const {
+#ifdef ROCKSDB_MALLOC_USABLE_SIZE
+    if (contents_.allocation.get() != nullptr) {
+      return malloc_usable_size(contents_.allocation.get());
+    }
+#endif  // ROCKSDB_MALLOC_USABLE_SIZE
+    return size_;
+  }
+  uint32_t NumRestarts() const;
+  CompressionType compression_type() const {
+    return contents_.compression_type;
+  }
+    
+    namespace rocksdb {
+    }
+    
+      virtual void SeekForPrev(const Slice& target) override {
+    ClearHeaps();
+    InitMaxHeap();
+    }
+    
+    // Return an iterator that provided the union of the data in
+// children[0,n-1].  Takes ownership of the child iterators and
+// will delete them when the result iterator is deleted.
+//
+// The result does no duplicate suppression.  I.e., if a particular
+// key is present in K child iterators, it will be yielded K times.
+//
+// REQUIRES: n >= 0
+extern InternalIterator* NewMergingIterator(
+    const InternalKeyComparator* comparator, InternalIterator** children, int n,
+    Arena* arena = nullptr, bool prefix_seek_mode = false);
+    
+    struct Parameters {
+  //Defines the custom parameter types for methods
+  //eg: flatbuffers uses flatbuffers.Builder as input for the client and output for the server
+  grpc::string custom_method_io_type;
+    }
+    
+    namespace grpc_java_generator {
+struct Parameters {
+  //        //Defines the custom parameter types for methods
+  //        //eg: flatbuffers uses flatbuffers.Builder as input for the client
+  //        and output for the server grpc::string custom_method_io_type;
+    }
+    }
+    
+    #ifndef FLATC_H_
+#  define FLATC_H_
+    
+    inline void IterateValue(ElementaryType type, const uint8_t *val,
+                         const TypeTable *type_table, const uint8_t *prev_val,
+                         soffset_t vector_index, IterationVisitor *visitor) {
+  switch (type) {
+    case ET_UTYPE: {
+      auto tval = *reinterpret_cast<const uint8_t *>(val);
+      visitor->UType(tval, EnumName(tval, type_table));
+      break;
+    }
+    case ET_BOOL: {
+      visitor->Bool(*reinterpret_cast<const uint8_t *>(val) != 0);
+      break;
+    }
+    case ET_CHAR: {
+      auto tval = *reinterpret_cast<const int8_t *>(val);
+      visitor->Char(tval, EnumName(tval, type_table));
+      break;
+    }
+    case ET_UCHAR: {
+      auto tval = *reinterpret_cast<const uint8_t *>(val);
+      visitor->UChar(tval, EnumName(tval, type_table));
+      break;
+    }
+    case ET_SHORT: {
+      auto tval = *reinterpret_cast<const int16_t *>(val);
+      visitor->Short(tval, EnumName(tval, type_table));
+      break;
+    }
+    case ET_USHORT: {
+      auto tval = *reinterpret_cast<const uint16_t *>(val);
+      visitor->UShort(tval, EnumName(tval, type_table));
+      break;
+    }
+    case ET_INT: {
+      auto tval = *reinterpret_cast<const int32_t *>(val);
+      visitor->Int(tval, EnumName(tval, type_table));
+      break;
+    }
+    case ET_UINT: {
+      auto tval = *reinterpret_cast<const uint32_t *>(val);
+      visitor->UInt(tval, EnumName(tval, type_table));
+      break;
+    }
+    case ET_LONG: {
+      visitor->Long(*reinterpret_cast<const int64_t *>(val));
+      break;
+    }
+    case ET_ULONG: {
+      visitor->ULong(*reinterpret_cast<const uint64_t *>(val));
+      break;
+    }
+    case ET_FLOAT: {
+      visitor->Float(*reinterpret_cast<const float *>(val));
+      break;
+    }
+    case ET_DOUBLE: {
+      visitor->Double(*reinterpret_cast<const double *>(val));
+      break;
+    }
+    case ET_STRING: {
+      val += ReadScalar<uoffset_t>(val);
+      visitor->String(reinterpret_cast<const String *>(val));
+      break;
+    }
+    case ET_SEQUENCE: {
+      switch (type_table->st) {
+        case ST_TABLE:
+          val += ReadScalar<uoffset_t>(val);
+          IterateObject(val, type_table, visitor);
+          break;
+        case ST_STRUCT: IterateObject(val, type_table, visitor); break;
+        case ST_UNION: {
+          val += ReadScalar<uoffset_t>(val);
+          assert(prev_val);
+          auto union_type = *prev_val;  // Always a uint8_t.
+          if (vector_index >= 0) {
+            auto type_vec = reinterpret_cast<const Vector<uint8_t> *>(prev_val);
+            union_type = type_vec->Get(static_cast<uoffset_t>(vector_index));
+          }
+          auto type_code_idx =
+              LookupEnum(union_type, type_table->values, type_table->num_elems);
+          if (type_code_idx >= 0 &&
+              type_code_idx < static_cast<int32_t>(type_table->num_elems)) {
+            auto type_code = type_table->type_codes[type_code_idx];
+            switch (type_code.base_type) {
+              case ET_SEQUENCE: {
+                auto ref = type_table->type_refs[type_code.sequence_ref]();
+                IterateObject(val, ref, visitor);
+                break;
+              }
+              case ET_STRING:
+                visitor->String(reinterpret_cast<const String *>(val));
+                break;
+              default: visitor->Unknown(val);
+            }
+          } else {
+            visitor->Unknown(val);
+          }
+          break;
+        }
+        case ST_ENUM: assert(false); break;
+      }
+      break;
+    }
+    default: {
+      visitor->Unknown(val);
+      break;
+    }
+  }
+}
+    
+      // Get and test a field of the FlatBuffer's `struct`.
+  auto pos = monster->pos();
+  assert(pos);
+  assert(pos->z() == 3.0f);
+  (void)pos;
+    
+    static std::string TypeName(const FieldDef &field) {
+  return GenTypeGet(field.value.type);
+}
+    
+    class JsonSchemaGenerator : public BaseGenerator {
+ private:
+  CodeWriter code_;
     }
