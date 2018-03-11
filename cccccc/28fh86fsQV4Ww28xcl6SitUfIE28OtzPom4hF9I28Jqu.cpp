@@ -1,336 +1,437 @@
 
         
-        // Finally, you can use INSTANTIATE_TEST_CASE_P to instantiate the test
-// case with any set of parameters you want. Google Test defines a number
-// of functions for generating test parameters. They return what we call
-// (surprise!) parameter generators. Here is a  summary of them, which
-// are all in the testing namespace:
-//
-//
-//  Range(begin, end [, step]) - Yields values {begin, begin+step,
-//                               begin+step+step, ...}. The values do not
-//                               include end. step defaults to 1.
-//  Values(v1, v2, ..., vN)    - Yields values {v1, v2, ..., vN}.
-//  ValuesIn(container)        - Yields values from a C-style array, an STL
-//  ValuesIn(begin,end)          container, or an iterator range [begin, end).
-//  Bool()                     - Yields sequence {false, true}.
-//  Combine(g1, g2, ..., gN)   - Yields all combinations (the Cartesian product
-//                               for the math savvy) of the values generated
-//                               by the N generators.
-//
-// For more details, see comments at the definitions of these functions below
-// in this file.
-//
-// The following statement will instantiate tests from the FooTest test case
-// each with parameter values 'meeny', 'miny', and 'moe'.
+        
+    {  // The length of the transcoded string in UTF-16 code points.
+  Length = toPtr - &buffer[0];
+  return Length;
+}
+
     
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-          typename T6, typename T7>
-void PrintTo(const ::std::tr1::tuple<T1, T2, T3, T4, T5, T6, T7>& t,
-             ::std::ostream* os) {
-  PrintTupleTo(t, os);
+    #import <Foundation/Foundation.h>
+    
+    
+    {    return Parts.getValue().hasFunctionDocumentation();
+  }
+    
+    public:
+  /// The replacement type.
+  Type getReplacement() const { return Replacement; }
+  
+  /// The protocol conformances for the replacement. These appear in the same
+  /// order as Archetype->getConformsTo() for the substituted archetype.
+  const ArrayRef<ProtocolConformanceRef> getConformances() const {
+    return Conformance;
+  }
+  
+  Substitution() {}
+  
+  Substitution(Type Replacement, ArrayRef<ProtocolConformanceRef> Conformance);
+    
+    bool Substitution::operator==(const Substitution &other) const {
+  // The archetypes may be missing, but we can compare them directly
+  // because archetypes are always canonical.
+  return
+    Replacement->isEqual(other.Replacement) &&
+    Conformance.equals(other.Conformance);
 }
     
-    #include 'gtest/gtest.h'
+    /* Bidirectional Stream API */
     
-      // Returns true if pathname describes a directory in the file-system
-  // that exists.
-  bool DirectoryExists() const;
-    
-    // Helper macro for defining tests.
-#define GTEST_TEST_(test_case_name, test_name, parent_class, parent_id)\
-class GTEST_TEST_CLASS_NAME_(test_case_name, test_name) : public parent_class {\
- public:\
-  GTEST_TEST_CLASS_NAME_(test_case_name, test_name)() {}\
- private:\
-  virtual void TestBody();\
-  static ::testing::TestInfo* const test_info_ GTEST_ATTRIBUTE_UNUSED_;\
-  GTEST_DISALLOW_COPY_AND_ASSIGN_(\
-      GTEST_TEST_CLASS_NAME_(test_case_name, test_name));\
-};\
-\
-::testing::TestInfo* const GTEST_TEST_CLASS_NAME_(test_case_name, test_name)\
-  ::test_info_ =\
-    ::testing::internal::MakeAndRegisterTestInfo(\
-        #test_case_name, #test_name, NULL, NULL, \
-        (parent_id), \
-        parent_class::SetUpTestCase, \
-        parent_class::TearDownTestCase, \
-        new ::testing::internal::TestFactoryImpl<\
-            GTEST_TEST_CLASS_NAME_(test_case_name, test_name)>);\
-void GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::TestBody()
-    
-    template <typename T>
-struct StaticAssertTypeEqHelper<T, T> {};
-    
-    // The compiler used in Symbian has a bug that prevents us from declaring the
-// tuple template as a friend (it complains that tuple is redefined).  This
-// hack bypasses the bug by declaring the members that should otherwise be
-// private as public.
-// Sun Studio versions < 12 also have the above bug.
-#if defined(__SYMBIAN32__) || (defined(__SUNPRO_CC) && __SUNPRO_CC < 0x590)
-# define GTEST_DECLARE_TUPLE_AS_FRIEND_ public:
-#else
-# define GTEST_DECLARE_TUPLE_AS_FRIEND_ \
-    template <GTEST_$(n)_TYPENAMES_(U)> friend class tuple; \
-   private:
-#endif
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38, typename T39, typename T40,
-    typename T41, typename T42, typename T43, typename T44, typename T45,
-    typename T46, typename T47, typename T48, typename T49, typename T50>
-struct Types50 {
-  typedef T1 Head;
-  typedef Types49<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15,
-      T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
-      T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41, T42, T43,
-      T44, T45, T46, T47, T48, T49, T50> Tail;
-};
-    
-    // The template 'selector' struct TemplateSel<Tmpl> is used to
-// represent Tmpl, which must be a class template with one type
-// parameter, as a type.  TemplateSel<Tmpl>::Bind<T>::type is defined
-// as the type Tmpl<T>.  This allows us to actually instantiate the
-// template 'selected' by TemplateSel<Tmpl>.
-//
-// This trick is necessary for simulating typedef for class templates,
-// which C++ doesn't support directly.
-template <GTEST_TEMPLATE_ Tmpl>
-struct TemplateSel {
-  template <typename T>
-  struct Bind {
-    typedef Tmpl<T> type;
-  };
-};
-    
-    #include <limits.h>
-#include 'sample1.h'
-#include 'gtest/gtest.h'
-    
-      if (flags.bit (CHECK_DAWGS) &&
-    (word->best_choice->permuter () != SYSTEM_DAWG_PERM) &&
-    (word->best_choice->permuter () != FREQ_DAWG_PERM) &&
-    (word->best_choice->permuter () != USER_DAWG_PERM) &&
-    (word->best_choice->permuter () != NUMBER_PERM)) {
-    if (tessedit_adaption_debug) tprintf('word not in dawgs\n');
-    return FALSE;
+    TEST(InlinedVectorTest, ClearAndRepopulate) {
+  const int kNumElements = 10;
+  InlinedVector<int, 5> v;
+  EXPECT_EQ(0UL, v.size());
+  for (int i = 0; i < kNumElements; ++i) {
+    v.push_back(i);
+    EXPECT_EQ(i + 1UL, v.size());
   }
-    
-    // Main entry point for Paragraph Detection Algorithm.
-//
-// Given a set of equally spaced textlines (described by row_infos),
-// Split them into paragraphs.  See http://goto/paragraphstalk
-//
-// Output:
-//   row_owners - one pointer for each row, to the paragraph it belongs to.
-//   paragraphs - this is the actual list of PARA objects.
-//   models - the list of paragraph models referenced by the PARA objects.
-//            caller is responsible for deleting the models.
-void DetectParagraphs(int debug_level,
-                      GenericVector<RowInfo> *row_infos,
-                      GenericVector<PARA *> *row_owners,
-                      PARA_LIST *paragraphs,
-                      GenericVector<ParagraphModel *> *models);
-    
-      if (page_res_it->word() != NULL) {
-    *tbox = page_res_it->word()->word->bounding_box();
-    }
-    
-    #include 'mfoutline.h'
-#include 'tessbox.h'
-#include 'tesseractclass.h'
-    
-    // Sets up the DENORM to execute a non-linear transformation based on
-// preserving an even distribution of stroke edges. The transformation
-// operates only within the given box.
-// x_coords is a collection of the x-coords of vertical edges for each
-// y-coord starting at box.bottom().
-// y_coords is a collection of the y-coords of horizontal edges for each
-// x-coord starting at box.left().
-// Eg x_coords[0] is a collection of the x-coords of edges at y=bottom.
-// Eg x_coords[1] is a collection of the x-coords of edges at y=bottom + 1.
-// The second-level vectors must all be sorted in ascending order.
-// See comments on the helper functions above for more details.
-void DENORM::SetupNonLinear(
-    const DENORM* predecessor, const TBOX& box, float target_width,
-    float target_height, float final_xshift, float final_yshift,
-    const GenericVector<GenericVector<int> >& x_coords,
-    const GenericVector<GenericVector<int> >& y_coords) {
-  Clear();
-  predecessor_ = predecessor;
-  // x_map_ and y_map_ store a mapping from input x and y coordinate to output
-  // x and y coordinate, based on scaling to the supplied target_width and
-  // target_height.
-  x_map_ = new GenericVector<float>;
-  y_map_ = new GenericVector<float>;
-  // Set a 2-d image array to the run lengths at each pixel.
-  int width = box.width();
-  int height = box.height();
-  GENERIC_2D_ARRAY<int> minruns(width, height, 0);
-  ComputeRunlengthImage(box, x_coords, y_coords, &minruns);
-  // Edge density is the sum of the inverses of the run lengths. Compute
-  // edge density projection profiles.
-  ComputeEdgeDensityProfiles(box, minruns, x_map_, y_map_);
-  // Convert the edge density profiles to the coordinates by multiplying by
-  // the desired size and accumulating.
-  (*x_map_)[width] = target_width;
-  for (int x = width - 1; x >= 0; --x) {
-    (*x_map_)[x] = (*x_map_)[x + 1] - (*x_map_)[x] * target_width;
+  for (int i = 0; i < kNumElements; ++i) {
+    EXPECT_EQ(i, v[i]);
   }
-  (*y_map_)[height] = target_height;
-  for (int y = height - 1; y >= 0; --y) {
-    (*y_map_)[y] = (*y_map_)[y + 1] - (*y_map_)[y] * target_height;
+  v.clear();
+  EXPECT_EQ(0UL, v.size());
+  for (int i = 0; i < kNumElements; ++i) {
+    v.push_back(kNumElements + i);
+    EXPECT_EQ(i + 1UL, v.size());
   }
-  x_origin_ = box.left();
-  y_origin_ = box.bottom();
-  final_xshift_ = final_xshift;
-  final_yshift_ = final_yshift;
+  for (int i = 0; i < kNumElements; ++i) {
+    EXPECT_EQ(kNumElements + i, v[i]);
+  }
 }
     
-      // get paragraphs
-  PARA_LIST *para_list() {
-    return &paras_;
-  }
-  /// get blobs
-  C_BLOB_LIST *blob_list() {
-    return &c_blobs;
-  }
-  C_BLOB_LIST *reject_blobs() {
-    return &rej_blobs;
-  }
-  FCOORD re_rotation() const {
-    return re_rotation_;         // How to transform coords back to image.
-  }
-  void set_re_rotation(const FCOORD& rotation) {
-    re_rotation_ = rotation;
-  }
-  FCOORD classify_rotation() const {
-    return classify_rotation_;   // Apply this before classifying.
-  }
-  void set_classify_rotation(const FCOORD& rotation) {
-    classify_rotation_ = rotation;
-  }
-  FCOORD skew() const {
-    return skew_;                // Direction of true horizontal.
-  }
-  void set_skew(const FCOORD& skew) {
-    skew_ = skew;
-  }
-  const ICOORD& median_size() const {
-    return median_size_;
-  }
-  void set_median_size(int x, int y) {
-    median_size_.set_x(x);
-    median_size_.set_y(y);
-  }
+    #include <gflags/gflags.h>
+#include <grpc/grpc.h>
+#include <grpc/support/time.h>
     
-      bool is_list_item;
     
-    #include <gtest/gtest.h>
+    {}  // namespace grpc_python_generator
     
-      EchoResponse response;
-  std::thread* server_try_cancel_thd = nullptr;
-  if (server_try_cancel == CANCEL_DURING_PROCESSING) {
-    server_try_cancel_thd =
-        new std::thread(&TestServiceImpl::ServerTryCancel, this, context);
+    std::vector<grpc::string_ref> SecureAuthContext::GetPeerIdentity() const {
+  if (!ctx_) {
+    return std::vector<grpc::string_ref>();
   }
-    
-    std::unique_ptr<ScenarioResult> RunScenario(
-    const grpc::testing::ClientConfig& client_config, size_t num_clients,
-    const grpc::testing::ServerConfig& server_config, size_t num_servers,
-    int warmup_seconds, int benchmark_seconds, int spawn_local_worker_count,
-    const grpc::string& qps_server_target_override,
-    const grpc::string& credential_type, bool run_inproc);
-    
-      ClientConfig client_config;
-  client_config.set_client_type(ASYNC_CLIENT);
-  client_config.set_outstanding_rpcs_per_channel(1000);
-  client_config.set_client_channels(8);
-  client_config.set_async_client_threads(8);
-  client_config.set_rpc_type(STREAMING);
-  client_config.mutable_load_params()->mutable_poisson()->set_offered_load(
-      1000.0 / grpc_test_slowdown_factor());
-    
-    #include 'test/cpp/qps/server.h'
-    
-    RouteNote MakeRouteNote(const std::string& message,
-                        long latitude, long longitude) {
-  RouteNote n;
-  n.set_message(message);
-  n.mutable_location()->CopyFrom(MakePoint(latitude, longitude));
-  return n;
+  grpc_auth_property_iterator iter = grpc_auth_context_peer_identity(ctx_);
+  std::vector<grpc::string_ref> identity;
+  const grpc_auth_property* property = nullptr;
+  while ((property = grpc_auth_property_iterator_next(&iter))) {
+    identity.push_back(
+        grpc::string_ref(property->value, property->value_length));
+  }
+  return identity;
 }
     
-        gmat.GetFeatureCounts(&feature_counts_[0]);
-    // classify features
-    for (bst_uint fid = 0; fid < nfeature; ++fid) {
-      if (static_cast<double>(feature_counts_[fid])
-                 < param.sparse_threshold * nrow) {
-        type_[fid] = kSparseColumn;
-      } else {
-        type_[fid] = kDenseColumn;
+    class CodegenTestMinimal : public ::testing::Test {};
+    
+    #ifndef TEST_QPS_STATS_UTILS_H
+#define TEST_QPS_STATS_UTILS_H
+    
+      /// Set the timer's expiry time as an absolute time.
+  /**
+   * This function sets the expiry time. Any pending asynchronous wait
+   * operations will be cancelled. The handler for each cancelled operation will
+   * be invoked with the boost::asio::error::operation_aborted error code.
+   *
+   * @param expiry_time The expiry time to be used for the timer.
+   *
+   * @param ec Set to indicate what error occurred, if any.
+   *
+   * @return The number of asynchronous operations that were cancelled.
+   *
+   * @note If the timer has already expired when expires_at() is called, then
+   * the handlers for asynchronous wait operations will:
+   *
+   * @li have already been invoked; or
+   *
+   * @li have been queued for invocation in the near future.
+   *
+   * These handlers can no longer be cancelled, and therefore are passed an
+   * error code that indicates the successful completion of the wait operation.
+   */
+  std::size_t expires_at(const time_point& expiry_time,
+      boost::system::error_code& ec)
+  {
+    return this->service.expires_at(this->implementation, expiry_time, ec);
+  }
+    
+    
+    {
+    {} // namespace asio
+} // namespace boost
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    #endif // BOOST_ASIO_DETAIL_FUNCTION_HPP
+
+    
+    #include <boost/asio/detail/push_options.hpp>
+    
+    
+    {    // Put all values back into the hash.
+    iterator iter = values_.begin();
+    while (iter != end_iter)
+    {
+      std::size_t bucket = calculate_hash_value(iter->first) % num_buckets_;
+      if (buckets_[bucket].last == end_iter)
+      {
+        buckets_[bucket].first = buckets_[bucket].last = iter++;
+      }
+      else if (++buckets_[bucket].last == iter)
+      {
+        ++iter;
+      }
+      else
+      {
+        values_.splice(buckets_[bucket].last, values_, iter++);
+        --buckets_[bucket].last;
       }
     }
-    
-      std::string scratch;
-  scratch.resize(kGood.size() + kCorrupted.size() + 16);
-  Slice result;
-  unique_ptr<RandomAccessFile> rand_file;
-  ASSERT_OK(env_->NewRandomAccessFile(kFileName, &rand_file, soptions_));
-  ASSERT_OK(rand_file->Read(0, kGood.size(), &result, &(scratch[0])));
-  ASSERT_EQ(result.compare(kGood), 0);
-    
-     private:
-  char delim_;         // The delimiter is inserted between elements
-    
-    #pragma once
-#include <stddef.h>
-#include <stdint.h>
-#include <string>
-#include <vector>
-#ifdef ROCKSDB_MALLOC_USABLE_SIZE
-#ifdef OS_FREEBSD
-#include <malloc_np.h>
-#else
-#include <malloc.h>
-#endif
-#endif
-    
-    
-    {    StopLoggingInternal();
   }
     
-    // Return an iterator that provided the union of the data in
-// children[0,n-1].  Takes ownership of the child iterators and
-// will delete them when the result iterator is deleted.
-//
-// The result does no duplicate suppression.  I.e., if a particular
-// key is present in K child iterators, it will be yielded K times.
-//
-// REQUIRES: n >= 0
-extern InternalIterator* NewMergingIterator(
-    const InternalKeyComparator* comparator, InternalIterator** children, int n,
-    Arena* arena = nullptr, bool prefix_seek_mode = false);
+    namespace boost {
+namespace asio {
+namespace detail {
+    }
+    }
+    }
     
-    namespace rocksdb {
-CompactionFilterFactoryJniCallback::CompactionFilterFactoryJniCallback(
-    JNIEnv* env, jobject jcompaction_filter_factory)
-    : JniCallback(env, jcompaction_filter_factory) {
-  
-  // Note: The name of a CompactionFilterFactory will not change during
-  // it's lifetime, so we cache it in a global var
-  jmethodID jname_method_id =
-      AbstractCompactionFilterFactoryJni::getNameMethodId(env);
-  if(jname_method_id == nullptr) {
-    // exception thrown: NoSuchMethodException or OutOfMemoryError
-    return;
+    int main(int argc, char** argv) {
+  // All tests currently run with the same read-only file limits.
+  leveldb::EnvPosixTest::SetFileLimits(leveldb::kReadOnlyFileLimit,
+                                       leveldb::kMMapLimit);
+  return leveldb::test::RunAllTests();
+}
+
+    
+          case kCompactPointer:
+        if (GetLevel(&input, &level) &&
+            GetInternalKey(&input, &key)) {
+          compact_pointers_.push_back(std::make_pair(level, key));
+        } else {
+          msg = 'compaction pointer';
+        }
+        break;
+    
+    // Helper for quickly generating random data.
+namespace {
+class RandomGenerator {
+ private:
+  std::string data_;
+  int pos_;
+    }
+    }
+    
+    
+    {
+    {      bool known = true;
+      bool write_sync = false;
+      if (name == Slice('fillseq')) {
+        Write(write_sync, SEQUENTIAL, FRESH, num_, FLAGS_value_size, 1);
+        DBSynchronize(db_);
+      } else if (name == Slice('fillrandom')) {
+        Write(write_sync, RANDOM, FRESH, num_, FLAGS_value_size, 1);
+        DBSynchronize(db_);
+      } else if (name == Slice('overwrite')) {
+        Write(write_sync, RANDOM, EXISTING, num_, FLAGS_value_size, 1);
+        DBSynchronize(db_);
+      } else if (name == Slice('fillrandsync')) {
+        write_sync = true;
+        Write(write_sync, RANDOM, FRESH, num_ / 100, FLAGS_value_size, 1);
+        DBSynchronize(db_);
+      } else if (name == Slice('fillseqsync')) {
+        write_sync = true;
+        Write(write_sync, SEQUENTIAL, FRESH, num_ / 100, FLAGS_value_size, 1);
+        DBSynchronize(db_);
+      } else if (name == Slice('fillrand100K')) {
+        Write(write_sync, RANDOM, FRESH, num_ / 1000, 100 * 1000, 1);
+        DBSynchronize(db_);
+      } else if (name == Slice('fillseq100K')) {
+        Write(write_sync, SEQUENTIAL, FRESH, num_ / 1000, 100 * 1000, 1);
+        DBSynchronize(db_);
+      } else if (name == Slice('readseq')) {
+        ReadSequential();
+      } else if (name == Slice('readrandom')) {
+        ReadRandom();
+      } else if (name == Slice('readrand100K')) {
+        int n = reads_;
+        reads_ /= 1000;
+        ReadRandom();
+        reads_ = n;
+      } else if (name == Slice('readseq100K')) {
+        int n = reads_;
+        reads_ /= 1000;
+        ReadSequential();
+        reads_ = n;
+      } else {
+        known = false;
+        if (name != Slice()) {  // No error message for empty name
+          fprintf(stderr, 'unknown benchmark '%s'\n', name.ToString().c_str());
+        }
+      }
+      if (known) {
+        Stop(name);
+      }
+    }
   }
+    
+    namespace leveldb {
+    }
+    
+    
+    {}  // anonymous namespace
+    
+      // Return the offset in data_ just past the end of the current entry.
+  inline uint32_t NextEntryOffset() const {
+    return (value_.data() + value_.size()) - data_;
+  }
+    
+    // A internal wrapper class with an interface similar to Iterator that
+// caches the valid() and key() results for an underlying iterator.
+// This can help avoid virtual function calls and also gives better
+// cache locality.
+class IteratorWrapper {
+ public:
+  IteratorWrapper(): iter_(NULL), valid_(false) { }
+  explicit IteratorWrapper(Iterator* iter): iter_(NULL) {
+    Set(iter);
+  }
+  ~IteratorWrapper() { delete iter_; }
+  Iterator* iter() const { return iter_; }
+    }
+    
+    
+    
+    
+    
+        virtual void DrawPoint(const b2Vec2& p, float32 size, const b2Color& color);
+    
+    
+    {	for (int32 i = 0; i < manifold->pointCount && m_pointCount < k_maxContactPoints; ++i)
+	{
+		ContactPoint* cp = m_points + m_pointCount;
+		cp->fixtureA = fixtureA;
+		cp->fixtureB = fixtureB;
+		cp->position = worldManifold.points[i];
+		cp->normal = worldManifold.normal;
+		cp->state = state2[i];
+		cp->normalImpulse = manifold->points[i].normalImpulse;
+		cp->tangentImpulse = manifold->points[i].tangentImpulse;
+		cp->separation = worldManifold.separations[i];
+		++m_pointCount;
+	}
+}
+    
+    
+    {		Test::Step(settings);
+		m_debugDraw.DrawString(5, m_textLine, 'Keys: (d) dynamic, (s) static, (k) kinematic');
+		m_textLine += DRAW_STRING_NEW_LINE;
+	}
+    
+    void OutputImage::SaveToJpegData(JPEGData* jpg) const {
+  assert(components_[0].factor_x() == 1);
+  assert(components_[0].factor_y() == 1);
+  jpg->width = width_;
+  jpg->height = height_;
+  jpg->max_h_samp_factor = 1;
+  jpg->max_v_samp_factor = 1;
+  jpg->MCU_cols = components_[0].width_in_blocks();
+  jpg->MCU_rows = components_[0].height_in_blocks();
+  int ncomp = components_[1].IsAllZero() && components_[2].IsAllZero() ? 1 : 3;
+  for (int i = 1; i < ncomp; ++i) {
+    jpg->max_h_samp_factor = std::max(jpg->max_h_samp_factor,
+                                      components_[i].factor_x());
+    jpg->max_v_samp_factor = std::max(jpg->max_h_samp_factor,
+                                      components_[i].factor_y());
+    jpg->MCU_cols = std::min(jpg->MCU_cols, components_[i].width_in_blocks());
+    jpg->MCU_rows = std::min(jpg->MCU_rows, components_[i].height_in_blocks());
+  }
+  jpg->components.resize(ncomp);
+  int q[3][kDCTBlockSize];
+  for (int c = 0; c < 3; ++c) {
+    memcpy(&q[c][0], components_[c].quant(), kDCTBlockSize * sizeof(q[0][0]));
+  }
+  for (int c = 0; c < ncomp; ++c) {
+    JPEGComponent* comp = &jpg->components[c];
+    assert(jpg->max_h_samp_factor % components_[c].factor_x() == 0);
+    assert(jpg->max_v_samp_factor % components_[c].factor_y() == 0);
+    comp->id = c;
+    comp->h_samp_factor = jpg->max_h_samp_factor / components_[c].factor_x();
+    comp->v_samp_factor = jpg->max_v_samp_factor / components_[c].factor_y();
+    comp->width_in_blocks = jpg->MCU_cols * comp->h_samp_factor;
+    comp->height_in_blocks = jpg->MCU_rows * comp->v_samp_factor;
+    comp->num_blocks = comp->width_in_blocks * comp->height_in_blocks;
+    comp->coeffs.resize(kDCTBlockSize * comp->num_blocks);
     }
     }
+    
+    static const int kCrToRedTable[256] = {
+  -179, -178, -177, -175, -174, -172, -171, -170, -168, -167, -165, -164,
+  -163, -161, -160, -158, -157, -156, -154, -153, -151, -150, -149, -147,
+  -146, -144, -143, -142, -140, -139, -137, -136, -135, -133, -132, -130,
+  -129, -128, -126, -125, -123, -122, -121, -119, -118, -116, -115, -114,
+  -112, -111, -109, -108, -107, -105, -104, -102, -101, -100,  -98,  -97,
+   -95,  -94,  -93,  -91,  -90,  -88,  -87,  -86,  -84,  -83,  -81,  -80,
+   -79,  -77,  -76,  -74,  -73,  -72,  -70,  -69,  -67,  -66,  -64,  -63,
+   -62,  -60,  -59,  -57,  -56,  -55,  -53,  -52,  -50,  -49,  -48,  -46,
+   -45,  -43,  -42,  -41,  -39,  -38,  -36,  -35,  -34,  -32,  -31,  -29,
+   -28,  -27,  -25,  -24,  -22,  -21,  -20,  -18,  -17,  -15,  -14,  -13,
+   -11,  -10,   -8,   -7,   -6,   -4,   -3,   -1,    0,    1,    3,    4,
+     6,    7,    8,   10,   11,   13,   14,   15,   17,   18,   20,   21,
+    22,   24,   25,   27,   28,   29,   31,   32,   34,   35,   36,   38,
+    39,   41,   42,   43,   45,   46,   48,   49,   50,   52,   53,   55,
+    56,   57,   59,   60,   62,   63,   64,   66,   67,   69,   70,   72,
+    73,   74,   76,   77,   79,   80,   81,   83,   84,   86,   87,   88,
+    90,   91,   93,   94,   95,   97,   98,  100,  101,  102,  104,  105,
+   107,  108,  109,  111,  112,  114,  115,  116,  118,  119,  121,  122,
+   123,  125,  126,  128,  129,  130,  132,  133,  135,  136,  137,  139,
+   140,  142,  143,  144,  146,  147,  149,  150,  151,  153,  154,  156,
+   157,  158,  160,  161,  163,  164,  165,  167,  168,  170,  171,  172,
+   174,  175,  177,  178
+};
+    
+    void ComputeBlockDCTDouble(double block[64]) {
+  TransformBlock(block, DCT1d);
+}
+    
+    #include 'guetzli/gamma_correct.h'
+    
+      tmp0 = in[5 * stride];
+  tmp1 = kIDCTMatrix[ 5] * tmp0;
+  tmp2 = kIDCTMatrix[13] * tmp0;
+  tmp3 = kIDCTMatrix[21] * tmp0;
+  tmp4 = kIDCTMatrix[29] * tmp0;
+  out[0] += tmp1;
+  out[1] += tmp2;
+  out[2] += tmp3;
+  out[3] += tmp4;
+  out[4] -= tmp4;
+  out[5] -= tmp3;
+  out[6] -= tmp2;
+  out[7] -= tmp1;
+    
+    // Functions for reading a jpeg byte stream into a JPEGData object.
+    
+    // Output callback function with associated data.
+struct JPEGOutput {
+  JPEGOutput(JPEGOutputHook cb, void* data) : cb(cb), data(data) {}
+  bool Write(const uint8_t* buf, size_t len) const {
+    return (len == 0) || (cb(data, buf, len) == len);
+  }
+ private:
+  JPEGOutputHook cb;
+  void* data;
+};
+    
+    #endif  // GUETZLI_JPEG_ERROR_H_
+
+    
+    // Builds jpeg-style Huffman lookup table from the given symbols.
+// The symbols are in order of increasing bit lengths. The number of symbols
+// with bit length n is given in counts[n] for each n >= 1.
+// Returns the size of the lookup table.
+int BuildJpegHuffmanTable(const int* counts, const int* symbols,
+                          HuffmanTableEntry* lut);
+    
+    /**
+ * Canonicalize the parent path, leaving the filename (last component)
+ * unchanged.  You may use this before creating a file instead of
+ * boost::filesystem::canonical, which requires that the entire path exists.
+ */
+path canonical_parent(const path& p, const path& basePath = current_path());
+    
+    
+    {    for (size_t i = 0; i < nrRead; i++) {
+      int id = completed[i] - ops.get();
+      EXPECT_GE(id, 0);
+      EXPECT_LT(id, specs.size());
+      EXPECT_TRUE(pending[id]);
+      pending[id] = false;
+      ssize_t res = ops[id].result();
+      EXPECT_LE(0, res) << folly::errnoStr(-res);
+      EXPECT_EQ(specs[id].size, res);
+    }
+  }
+  EXPECT_EQ(specs.size(), aioReader.totalSubmits());
+    
+    
+    {
+    {      if (end == msgData.size()) {
+        break;
+      }
+      idx = end + 1;
+    }
+  } else {
+    buffer.reserve(headerLengthGuess + msgData.size());
+    headerFormatter.appendTo(buffer);
+    buffer.append(msgData.data(), msgData.size());
+    buffer.push_back('\n');
+  }
+    
+      /**
+   * Whether this category should inherit its effective log level from its
+   * parent category, if the parent category has a more verbose log level.
+   */
+  bool inheritParentLevel{true};
+    
+    using std::string;
