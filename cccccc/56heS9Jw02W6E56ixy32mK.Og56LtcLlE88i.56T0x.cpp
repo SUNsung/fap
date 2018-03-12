@@ -1,196 +1,180 @@
 
         
-          /// When evaluating an expression in the context of an existing source file,
-  /// we may want to prefer declarations from that source file.
-  /// The DebuggerClient can return a private-discriminator to tell lookup to
-  /// prefer these certain decls.
-  virtual Identifier getPreferredPrivateDiscriminator() = 0;
+        class SILDebuggerClient;
     
-      CodeBlock(StringRef LiteralContent, StringRef Language)
-      : MarkupASTNode(ASTNodeKind::CodeBlock),
-        LiteralContent(LiteralContent),
-        Language(Language) {}
+    #include 'swift/AST/SyntaxASTMap.h'
+#include 'swift/AST/Expr.h'
+#include 'swift/AST/Decl.h'
+#include 'swift/AST/Stmt.h'
+#include 'swift/Syntax/Syntax.h'
     
-    /// A SyntaxRewriter for applying a set of formatting rules to a Syntax tree.
-struct FormatSyntaxRewriter : public SyntaxRewriter {
-  virtual StructDeclSyntax
-  rewriteStructDecl(StructDeclSyntax Struct) override;
+    
+    {  bool checkValue(SILValue Value);
 };
     
-      /// Adds a memory buffer to the SourceManager, taking ownership of it.
-  unsigned addNewSourceBuffer(std::unique_ptr<llvm::MemoryBuffer> Buffer);
+    //===----------------------------------------------------------------------===//
+// Index data collection and record writing
+//===----------------------------------------------------------------------===//
     
-    namespace {
-    }
-    
-    static std::string IKey(const std::string& user_key,
-                        uint64_t seq,
-                        ValueType vt) {
-  std::string encoded;
-  AppendInternalKey(&encoded, ParsedInternalKey(user_key, seq, vt));
-  return encoded;
-}
-    
-    Status TableCache::Get(const ReadOptions& options,
-                       uint64_t file_number,
-                       uint64_t file_size,
-                       const Slice& k,
-                       void* arg,
-                       void (*saver)(void*, const Slice&, const Slice&)) {
-  Cache::Handle* handle = NULL;
-  Status s = FindTable(file_number, file_size, &handle);
-  if (s.ok()) {
-    Table* t = reinterpret_cast<TableAndFile*>(cache_->Value(handle))->table;
-    s = t->InternalGet(options, k, arg, saver);
-    cache_->Release(handle);
-  }
-  return s;
-}
-    
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
+    #endif
 
     
-    void WriteBatch::Put(const Slice& key, const Slice& value) {
-  WriteBatchInternal::SetCount(this, WriteBatchInternal::Count(this) + 1);
-  rep_.push_back(static_cast<char>(kTypeValue));
-  PutLengthPrefixedSlice(&rep_, key);
-  PutLengthPrefixedSlice(&rep_, value);
-}
+      /// Indicates whether the diagnostics produced during compilation should be
+  /// checked against expected diagnostics, indicated by markers in the
+  /// input source file.
+  enum {
+    NoVerify,
+    Verify,
+    VerifyAndApplyFixes
+  } VerifyMode = NoVerify;
     
-    #include <string>
-#include 'leveldb/env.h'
-#include 'leveldb/status.h'
+    using clang::index::printSymbolProperties;
     
-      // keys[0,n-1] contains a list of keys (potentially with duplicates)
-  // that are ordered according to the user supplied comparator.
-  // Append a filter that summarizes keys[0,n-1] to *dst.
-  //
-  // Warning: do not change the initial contents of *dst.  Instead,
-  // append the newly constructed filter to *dst.
-  virtual void CreateFilter(const Slice* keys, int n, std::string* dst)
-      const = 0;
-    
-    #include 'src/compiler/schema_interface.h'
-    
-    class GreeterServiceImpl final : public Greeter::Service {
-  virtual grpc::Status SayHello(
-      grpc::ServerContext *context,
-      const flatbuffers::grpc::Message<HelloRequest> *request_msg,
-      flatbuffers::grpc::Message<HelloReply> *response_msg) override {
-    // flatbuffers::grpc::MessageBuilder mb_;
-    // We call GetRoot to 'parse' the message. Verification is already
-    // performed by default. See the notes below for more details.
-    const HelloRequest *request = request_msg->GetRoot();
-    }
-    }
-    
-    inline flatbuffers::Offset<KeyValue> CreateKeyValue(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::String> key = 0,
-    flatbuffers::Offset<flatbuffers::String> value = 0) {
-  KeyValueBuilder builder_(_fbb);
-  builder_.add_value(value);
-  builder_.add_key(key);
-  return builder_.Finish();
-}
-    
-    #include <map>
-#include <sstream>
-#include 'flatbuffers/idl.h'
-    
-      // Create a FlatBuffer's `vector` from the `std::vector`.
-  std::vector<flatbuffers::Offset<Weapon>> weapons_vector;
-  weapons_vector.push_back(sword);
-  weapons_vector.push_back(axe);
-  auto weapons = builder.CreateVector(weapons_vector);
-    
-      // to ensure it is correct, we now generate text back from the binary,
-  // and compare the two:
-  std::string jsongen;
-  if (!GenerateText(parser, parser.builder_.GetBufferPointer(), &jsongen)) {
-    printf('Couldn't serialize parsed data to JSON!\n');
-    return 1;
+      SourceLoc getLocForLineCol(unsigned BufferId, unsigned Line, unsigned Col) const {
+    auto Offset = resolveFromLineCol(BufferId, Line, Col);
+    return Offset.hasValue() ? getLocForOffset(BufferId, Offset.getValue()) :
+                               SourceLoc();
   }
     
-    std::string FlatCompiler::GetUsageString(const char *program_name) const {
-  std::stringstream ss;
-  ss << 'Usage: ' << program_name << ' [OPTION]... FILE... [-- FILE...]\n';
-  for (size_t i = 0; i < params_.num_generators; ++i) {
-    const Generator &g = params_.generators[i];
-    }
-    }
-    
-    static void Error(const flatbuffers::FlatCompiler *flatc,
-                  const std::string &err, bool usage, bool show_exe_name) {
-  if (show_exe_name) { printf('%s: ', g_program_name); }
-  printf('error: %s\n', err.c_str());
-  if (usage) { printf('%s', flatc->GetUsageString(g_program_name).c_str()); }
-  exit(1);
+    Substitution::Substitution(Type Replacement,
+                           ArrayRef<ProtocolConformanceRef> Conformance)
+  : Replacement(Replacement), Conformance(Conformance)
+{
+  // The replacement type must be materializable.
+  assert(Replacement->isMaterializable()
+         && 'cannot substitute with a non-materializable type');
 }
     
-        FILE *pipe = popen(('fuser ' + to_string(port) + '/tcp 2> /dev/null').c_str(), 'r');
-    char line[10240] = {};
-    fgets(line, sizeof(line), pipe);
-    pclose(pipe);
-    int pid = atoi(line);
+    #include 'hphp/runtime/base/array-init.h'
+#include 'hphp/runtime/base/datetime.h'
+#include 'hphp/runtime/base/resource-data.h'
+#include 'hphp/runtime/base/type-array.h'
+#include 'hphp/runtime/base/type-string.h'
+#include 'hphp/util/timer.h'
     
-    #ifdef _WIN32
-#pragma comment(lib, 'Ws2_32.lib')
-    
-    
-    {    if (addr.ss_family == AF_INET) {
-        sockaddr_in *ipv4 = (sockaddr_in *) &addr;
-        inet_ntop(AF_INET, &ipv4->sin_addr, buf, sizeof(buf));
-        return {ntohs(ipv4->sin_port), buf, 'IPv4'};
-    } else {
-        sockaddr_in6 *ipv6 = (sockaddr_in6 *) &addr;
-        inet_ntop(AF_INET6, &ipv6->sin6_addr, buf, sizeof(buf));
-        return {ntohs(ipv6->sin6_port), buf, 'IPv6'};
-    }
+    Vlabel Vunit::makeBlock(AreaIndex area, uint64_t weight) {
+  auto i = blocks.size();
+  blocks.emplace_back(area, weight);
+  return Vlabel{i};
 }
     
     
-    {
-    {        h.run();
-        t.join();
-    }
-    std::cout << 'Falling through testMultithreading' << std::endl;
+    {  unsigned next_vr{Vreg::V0};
+  Vlabel entry;
+  jit::vector<Vframe> frames;
+  jit::vector<Vblock> blocks;
+  jit::hash_map<Vconst,Vreg,Vconst::Hash> constToReg;
+  jit::hash_map<size_t,Vconst> regToConst;
+  jit::vector<VregList> tuples;
+  jit::vector<VcallArgs> vcallArgs;
+  jit::vector<VdataBlock> dataBlocks;
+  uint16_t cur_voff{0};  // current instruction index managed by Vout
+  bool padding{false};
+  bool profiling{false};
+  folly::Optional<TransContext> context;
+  StructuredLogEntry* log_entry{nullptr};
+};
+    
+      /**
+   * Write an entry to the handler's access log.
+   */
+  virtual void logToAccessLog(Transport* /*transport*/) {}
+    
+    
+    {  if (m_p + len > m_pEnd) {
+    flush();
+  }
+  if (len > m_size) {
+    flushImpl(data);
+  } else {
+    memcpy(m_p, data.data(), len);
+    if ((m_p += len) > m_pSafe) flush();
+  }
 }
     
-                if (ssl) {
-                sent = SSL_write(ssl, message->data, (int) message->length);
-                if (sent == (ssize_t) message->length) {
-                    wasTransferred = false;
-                    return true;
-                } else if (sent < 0) {
-                    switch (SSL_get_error(ssl, (int) sent)) {
-                    case SSL_ERROR_WANT_READ:
-                        break;
-                    case SSL_ERROR_WANT_WRITE:
-                        if ((getPoll() & UV_WRITABLE) == 0) {
-                            setPoll(getPoll() | UV_WRITABLE);
-                            changePoll(this);
-                        }
-                        break;
-                    default:
-                        return false;
-                    }
-                }
-            } else {
-                sent = ::send(getFd(), message->data, message->length, MSG_NOSIGNAL);
-                if (sent == (ssize_t) message->length) {
-                    wasTransferred = false;
-                    return true;
-                } else if (sent == SOCKET_ERROR) {
-                    if (!nodeData->netContext->wouldBlock()) {
-                        return false;
-                    }
-                } else {
-                    message->length -= sent;
-                    message->data += sent;
-                }
-    }
+    #ifndef PIPE_BUF
+/* Get the PIPE_BUF from pathconf */
+#ifdef _PC_PIPE_BUF
+#define PIPE_BUF pathconf('.', _PC_PIPE_BUF)
+#else
+#define PIPE_BUF 512
+#endif
+#endif
     
-    #endif // EXTENSIONS_UWS_H
+    #endif // !defined(BOOST_ASIO_WINDOWS) && !defined(__CYGWIN__)
+    
+    #if !defined(BOOST_ASIO_WINDOWS) && !defined(__CYGWIN__)
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS) \
+  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
+# include <boost/asio/detail/null_fenced_block.hpp>
+#elif defined(__MACH__) && defined(__APPLE__)
+# include <boost/asio/detail/macos_fenced_block.hpp>
+#elif defined(__sun)
+# include <boost/asio/detail/solaris_fenced_block.hpp>
+#elif defined(__GNUC__) && defined(__arm__) \
+  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
+# include <boost/asio/detail/gcc_arm_fenced_block.hpp>
+#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
+# include <boost/asio/detail/gcc_hppa_fenced_block.hpp>
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+# include <boost/asio/detail/gcc_x86_fenced_block.hpp>
+#elif defined(__GNUC__) \
+  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
+  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
+  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
+# include <boost/asio/detail/gcc_sync_fenced_block.hpp>
+#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
+# include <boost/asio/detail/win_fenced_block.hpp>
+#else
+# include <boost/asio/detail/null_fenced_block.hpp>
+#endif
+    
+    #include <boost/asio/detail/config.hpp>
+#include <boost/asio/detail/addressof.hpp>
+#include <boost/asio/detail/noncopyable.hpp>
+#include <boost/asio/handler_alloc_hook.hpp>
+    
+      STDMETHODIMP get_Capacity(UINT32* value)
+  {
+    *value = capacity_;
+    return S_OK;
+  }
+    
+    
+    {  bool earliest = queue.enqueue_timer(time, timer, op);
+  io_service_.work_started();
+  if (earliest)
+    interrupter_.interrupt();
+}
+    
+    void*         XXH32_init   (unsigned int seed);
+XXH_errorcode XXH32_update (void* state, const void* input, int len);
+unsigned int  XXH32_digest (void* state);
+    
+      virtual bool PartialMergeMulti(const Slice& key,
+                                 const std::deque<Slice>& operand_list,
+                                 std::string* new_value, Logger* logger) const
+      override;
+    
+    
+    {  /// The backend rocksdb database.
+  /// Map : key --> list
+  ///       where a list is a sequence of elements
+  ///       and an element is a 4-byte integer (n), followed by n bytes of data
+  std::unique_ptr<DB> db_;
+};
+    
+      static bool isAligned(size_t n, size_t alignment) {
+    return n % alignment == 0;
+  }
+    
+      if(env->ExceptionCheck()) {
+    // exception thrown from CallLongMethod
+    env->ExceptionDescribe();  // print out exception to stderr
+    releaseJniEnv(attached_thread);
+    return nullptr;
+  }
+    
+    #include 'rocksdb/compaction_filter.h'
+#include 'rocksjni/jnicallback.h'
