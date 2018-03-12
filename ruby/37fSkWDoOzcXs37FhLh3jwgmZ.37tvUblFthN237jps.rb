@@ -1,58 +1,113 @@
 
         
-              topic.feature_topic_users(args)
+              key = Spaceship::Portal::Key.create(name: 'New Key', apns: true, device_check: true, music_id: 'some-music-id')
+      expect(key).to be_instance_of(Spaceship::Portal::Key)
+      expect(key.id).to eq('a-new-key-id')
     end
+  end
     
-    end
-
+        class AdbHelper
+      # Path to the adb binary
+      attr_accessor :adb_path
     
-      # Finds the projects '@user' contributed to, limited to either public projects
-  # or projects visible to the given user.
-  #
-  # current_user - When given the list of the projects is limited to those only
-  #                visible by this user.
-  #
-  # Returns an ActiveRecord::Relation.
-  def execute(current_user = nil)
-    segments = all_projects(current_user)
-    
-        groups << @user.authorized_groups.visible_to_user(current_user) if current_user
-    groups << @user.authorized_groups.public_to_user(current_user)
-    
-        def schedule_in(*args, &blk)
-      schedule(:schedule_in, args, &blk)
-    end
-    
-              # The plugin should be registered if we're setting a real name on it
-          Plugin.manager.register(self) if name != UNSET_VALUE
-    
-            # Registers a SIGINT handler. This typically is called from {busy}.
-        # Callbacks are only registered once, so calling this multiple times
-        # with the same callback has no consequence.
-        def register(sig_callback)
-          @@mutex.synchronize do
-            registered << sig_callback
-            registered.uniq!
-    
-          describe 'fetching servers by multiple roles' do
-        it 'does not confuse the last role with options' do
-          expect(dsl.roles(:app, :web).count).to eq 4
-          expect(dsl.roles(:app, :web, filter: :active).count).to eq 2
-        end
+            expect(result).to eq('/usr/local/bin/cloc  --by-file --xml  --out=build/cloc.xml')
       end
     
-        def type_from_file_contents
-      type_from_mime_magic || type_from_file_command
-    rescue Errno::ENOENT => e
-      Paperclip.log('Error while determining content type: #{e}')
-      SENSIBLE_DEFAULT
-    end
+          it 'gets the correct version number with no target specified' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          get_version_number(xcodeproj: '.xcproject')
+        end').runner.execute(:test)
+        expect(result).to eq('4.3.2')
+      end
     
-        def path
-      @file.respond_to?(:path) ? @file.path : @file
+    def process_args
+  until ARGV.empty?
+    if ARGV.first =~ %r{^-+t(?:est)?$} && ARGV.length > 1
+      ARGV.shift
+      $opt_test = ARGV.shift
+    elsif ARGV.first =~ %r{^-+h(?:elp)?$}
+      puts usage
+      exit 0
+    else
+      puts usage
+      exit 1
     end
+  end
+end
     
-          class ValidateAttachmentPresenceMatcher
-        def initialize attachment_name
-          @attachment_name = attachment_name
+    get '/stream', :provides => 'text/event-stream' do
+  stream :keep_open do |out|
+    connections << out
+    out.callback { connections.delete(out) }
+  end
+end
+    
+          def encrypt(value)
+        options[:encryptor].hexdigest value.to_s
+      end
+    
+        it 'redirects requests with sneaky encoded session cookies' do
+      get '/path', {}, 'HTTP_COOKIE' => 'rack.%73ession=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
+      expect(last_response).to be_redirect
+      expect(last_response.location).to eq('/path')
+    end
+  end
+    
+      %w(GET HEAD).each do |method|
+    it 'accepts #{method} requests with non-whitelisted Origin' do
+      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://malicious.com')).to be_ok
+    end
+  end
+    
+      # These two settings work together to allow you to limit a spec run
+  # to individual examples or groups you care about by tagging them with
+  # `:focus` metadata. When nothing is tagged with `:focus`, all examples
+  # get run.
+  config.filter_run :focus
+  config.run_all_when_everything_filtered = true
+    
+            def operator_assignment_node
+          return nil unless node.parent
+          return nil unless OPERATOR_ASSIGNMENT_TYPES.include?(node.parent.type)
+          return nil unless node.sibling_index.zero?
+          node.parent
         end
+    
+            def autocorrect(node)
+          lambda do |corrector|
+            each_unnecessary_space_match(node) do |range|
+              corrector.replace(range, ' ')
+            end
+          end
+        end
+    
+            def on_send(node)
+          return unless match_call?(node) &&
+                        (!node.value_used? || only_truthiness_matters?(node)) &&
+                        !(node.parent && node.parent.block_type?)
+    
+            def_node_matcher :redundant_regex?, <<-PATTERN
+          {(send $!nil? {:match :=~} (regexp (str $#literal_at_start?) (regopt)))
+           (send (regexp (str $#literal_at_start?) (regopt)) {:match :=~} $_)}
+        PATTERN
+    
+                add_offense(void_next) if void_next
+          end
+        end
+    
+            def variable_name(node)
+          node.children[0]
+        end
+    
+              private
+    
+          def started?
+        true
+      end
+    
+      public
+  def decode(data)
+    raise '#{self.class}#decode must be overidden'
+  end # def decode
+    
+      extend self
