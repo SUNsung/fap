@@ -1,113 +1,95 @@
 
         
-              key = Spaceship::Portal::Key.create(name: 'New Key', apns: true, device_check: true, music_id: 'some-music-id')
-      expect(key).to be_instance_of(Spaceship::Portal::Key)
-      expect(key.id).to eq('a-new-key-id')
-    end
+          if temp_ignores.include?(name)
+    puts '#{name}: IGNORE [TEMPORARILY]'
+    next
   end
     
-        class AdbHelper
-      # Path to the adb binary
-      attr_accessor :adb_path
-    
-            expect(result).to eq('/usr/local/bin/cloc  --by-file --xml  --out=build/cloc.xml')
+          rescue_from OpenSSL::SSL::SSLError do |e|
+        validation_fail_as_json(e)
       end
     
-          it 'gets the correct version number with no target specified' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          get_version_number(xcodeproj: '.xcproject')
-        end').runner.execute(:test)
-        expect(result).to eq('4.3.2')
-      end
+    # IMPORTANT: The Capistrano::Plugin system is not yet considered a stable,
+# public API, and is subject to change without notice. Eventually it will be
+# officially documented and supported, but for now, use it at your own risk.
+#
+# Base class for Capistrano plugins. Makes building a Capistrano plugin as easy
+# as writing a `Capistrano::Plugin` subclass and overriding any or all of its
+# three template methods:
+#
+# * set_defaults
+# * register_hooks
+# * define_tasks
+#
+# Within the plugin you can use any methods of the Rake or Capistrano DSLs, like
+# `fetch`, `invoke`, etc. In cases when you need to use SSHKit's backend outside
+# of an `on` block, use the `backend` convenience method. E.g. `backend.test`,
+# `backend.execute`, or `backend.capture`.
+#
+# Package up and distribute your plugin class as a gem and you're good to go!
+#
+# To use a plugin, all a user has to do is install it in the Capfile, like this:
+#
+#   # Capfile
+#   require 'capistrano/superfancy'
+#   install_plugin Capistrano::Superfancy
+#
+# Or, to install the plugin without its hooks:
+#
+#   # Capfile
+#   require 'capistrano/superfancy'
+#   install_plugin Capistrano::Superfancy, load_hooks: false
+#
+class Capistrano::Plugin < Rake::TaskLib
+  include Capistrano::DSL
     
-    def process_args
-  until ARGV.empty?
-    if ARGV.first =~ %r{^-+t(?:est)?$} && ARGV.length > 1
-      ARGV.shift
-      $opt_test = ARGV.shift
-    elsif ARGV.first =~ %r{^-+h(?:elp)?$}
-      puts usage
-      exit 0
-    else
-      puts usage
-      exit 1
+      puts I18n.t :capified, scope: :capistrano
+end
+
+    
+          context 'when the variables is undefined' do
+        it 'returns nil' do
+          expect(dsl.fetch(:source_control)).to be_nil
+        end
+      end
+    end
+    
+            def index
+          authorize! :read, StockMovement
+          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@stock_movements)
+        end
+    
+        def definitions_for(klass)
+      parent_classes = klass.ancestors.reverse
+      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
+        inherited_definitions.deep_merge! @attachments[ancestor]
+      end
     end
   end
 end
+
     
-    get '/stream', :provides => 'text/event-stream' do
-  stream :keep_open do |out|
-    connections << out
-    out.callback { connections.delete(out) }
+        def add_required_validations
+      options = Paperclip::Attachment.default_options.deep_merge(@options)
+      if options[:validate_media_type] != false
+        name = @name
+        @klass.validates_media_type_spoof_detection name,
+          :if => ->(instance){ instance.send(name).dirty? }
+      end
+    end
+    
+            def no_error_when_valid?
+          @file = StringIO.new('.')
+          @subject.send(@attachment_name).assign(@file)
+          @subject.valid?
+          expected_message = [
+            @attachment_name.to_s.titleize,
+            I18n.t(:blank, scope: [:errors, :messages])
+          ].join(' ')
+          @subject.errors.full_messages.exclude?(expected_message)
+        end
+      end
+    end
   end
 end
-    
-          def encrypt(value)
-        options[:encryptor].hexdigest value.to_s
-      end
-    
-        it 'redirects requests with sneaky encoded session cookies' do
-      get '/path', {}, 'HTTP_COOKIE' => 'rack.%73ession=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
-      expect(last_response).to be_redirect
-      expect(last_response.location).to eq('/path')
-    end
-  end
-    
-      %w(GET HEAD).each do |method|
-    it 'accepts #{method} requests with non-whitelisted Origin' do
-      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://malicious.com')).to be_ok
-    end
-  end
-    
-      # These two settings work together to allow you to limit a spec run
-  # to individual examples or groups you care about by tagging them with
-  # `:focus` metadata. When nothing is tagged with `:focus`, all examples
-  # get run.
-  config.filter_run :focus
-  config.run_all_when_everything_filtered = true
-    
-            def operator_assignment_node
-          return nil unless node.parent
-          return nil unless OPERATOR_ASSIGNMENT_TYPES.include?(node.parent.type)
-          return nil unless node.sibling_index.zero?
-          node.parent
-        end
-    
-            def autocorrect(node)
-          lambda do |corrector|
-            each_unnecessary_space_match(node) do |range|
-              corrector.replace(range, ' ')
-            end
-          end
-        end
-    
-            def on_send(node)
-          return unless match_call?(node) &&
-                        (!node.value_used? || only_truthiness_matters?(node)) &&
-                        !(node.parent && node.parent.block_type?)
-    
-            def_node_matcher :redundant_regex?, <<-PATTERN
-          {(send $!nil? {:match :=~} (regexp (str $#literal_at_start?) (regopt)))
-           (send (regexp (str $#literal_at_start?) (regopt)) {:match :=~} $_)}
-        PATTERN
-    
-                add_offense(void_next) if void_next
-          end
-        end
-    
-            def variable_name(node)
-          node.children[0]
-        end
-    
-              private
-    
-          def started?
-        true
-      end
-    
-      public
-  def decode(data)
-    raise '#{self.class}#decode must be overidden'
-  end # def decode
-    
-      extend self
