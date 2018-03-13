@@ -1,90 +1,121 @@
 
         
-        import word2vec
+            clf.fit(X_train, str_y_train, batch_size=batch_size, epochs=epochs)
     
-        optimizer = tf.train.AdagradOptimizer(learning_rate=0.1)
-    train_op = optimizer.minimize(loss, global_step=tf.train.get_global_step())
-    return tf.estimator.EstimatorSpec(mode, loss=loss, train_op=train_op)
+        # same for Sequential
+    model = Sequential()
+    model.add(Dense(2, input_dim=1))
+    model.trainable = False
+    assert model.trainable_weights == []
     
-    py_library(
-    name = 'linear',
-    srcs = [
-        'linear.py',
-    ],
-    srcs_version = 'PY2AND3',
-    deps = [
-        '//tensorflow:tensorflow_py',
-    ],
-)
-    
-          ps_device_spec.merge_from(current_device)
-      return ps_device_spec.to_string()
-    else:
-      worker_device_spec = pydev.DeviceSpec.from_string(worker_device or '')
-      worker_device_spec.merge_from(current_device)
-      return worker_device_spec.to_string()
-  return _local_device_chooser
+    print('Train...')
+model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=epochs,
+          validation_data=(x_test, y_test))
+score, acc = model.evaluate(x_test, y_test, batch_size=batch_size)
+print('Test score:', score)
+print('Test accuracy:', acc)
 
     
-    
-if __name__ == '__main__':
-    from glmnet.elastic_net import Lasso as GlmnetLasso
-    from sklearn.linear_model import Lasso as ScikitLasso
-    # Delayed import of matplotlib.pyplot
-    import matplotlib.pyplot as plt
-    
-    In the second benchmark, we increase the number of dimensions of the
-training set. Then we plot the computation time as function of
-the number of dimensions.
-    
-                gc.collect()
-            print('benchmarking lars_path (with Gram):', end='')
-            sys.stdout.flush()
-            tstart = time()
-            G = np.dot(X.T, X)  # precomputed Gram matrix
-            Xy = np.dot(X.T, y)
-            lars_path(X, y, Xy=Xy, Gram=G, method='lasso')
-            delta = time() - tstart
-            print('%0.3fs' % delta)
-            results['lars_path (with Gram)'].append(delta)
-    
-                D_results_build[algorithm][i] = (t1 - t0)
-            D_results_query[algorithm][i] = (t2 - t1)
-    
-    ARCHIVE_NAME = URL.rsplit('/', 1)[1]
-TRAIN_FOLDER = '20news-bydate-train'
-TEST_FOLDER = '20news-bydate-test'
+    This is achieved through the optimization of a loss function
+that has 3 components: 'style loss', 'content loss',
+and 'total variation loss':
     
     
-if __name__ == '__main__':
-    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
-    # block to be able to use a multi-core grid search that also works under
-    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
-    # The multiprocessing module is used as the backend of joblib.Parallel
-    # that is used when n_jobs != 1 in GridSearchCV
+def test_serialization():
+    all_activations = ['max_norm', 'non_neg',
+                       'unit_norm', 'min_max_norm']
+    for name in all_activations:
+        fn = constraints.get(name)
+        ref_fn = getattr(constraints, name)()
+        assert fn.__class__ == ref_fn.__class__
+        config = constraints.serialize(fn)
+        fn = constraints.deserialize(config)
+        assert fn.__class__ == ref_fn.__class__
     
-        def add_card(self, card):
-        self.cards.append(card)
+        result = f([test_values])[0]
+    expected = softplus(test_values)
+    assert_allclose(result, expected, rtol=1e-05)
     
-        def get(self, query)
-        '''Get the stored query result from the cache.
-        
-        Accessing a node updates its position to the front of the LRU list.
-        '''
-        node = self.lookup[query]
-        if node is None:
-            return None
-        self.linked_list.move_to_front(node)
-        return node.results
+        intermediate = Sequential()
+    intermediate.add(Merge([left, right], mode='sum'))
+    intermediate.add(Dense(num_hidden))
+    intermediate.add(Activation('relu'))
+    
+    # Grouping the document tree into LaTeX files. List of tuples
+# (source start file, target name, title,
+#  author, documentclass [howto, manual, or own class]).
+latex_documents = [
+    (master_doc, 'certbot-nginx.tex', u'certbot-nginx Documentation',
+     u'Let\'s Encrypt Project', 'manual'),
+]
+    
+    '''
+import zope.interface
+    
+        def test_create_option_buttons(self):
+        e = self.engine
+        for state in (0, 1):
+            for var in (e.revar, e.casevar, e.wordvar, e.wrapvar):
+                var.set(state)
+            frame, options = self.btn_test_setup(
+                    self.dialog.create_option_buttons)
+            for spec, button in zip (options, frame.pack_slaves()):
+                var, label = spec
+                self.assertEqual(button['text'], label)
+                self.assertEqual(var.get(), state)
     
     
-class Transaction(object):
+class ModuleName(Query):
+    'Get a module name for Open Module menu entry.'
+    # Used in open_module (editor.EditorWindow until move to iobinding).
     
-        def mapper_sort(self, key, value):
-        '''Construct key to ensure proper sorting.
+    def py_make_scanner(context):
+    parse_object = context.parse_object
+    parse_array = context.parse_array
+    parse_string = context.parse_string
+    match_number = NUMBER_RE.match
+    strict = context.strict
+    parse_float = context.parse_float
+    parse_int = context.parse_int
+    parse_constant = context.parse_constant
+    object_hook = context.object_hook
+    object_pairs_hook = context.object_pairs_hook
+    memo = context.memo
     
+        def _set_async(self, flag):
+        if flag:
+            raise xml.dom.NotSupportedErr(
+                'asynchronous document loading is not supported')
     
-class LookupService(object):
+        print('$(target)$(debug_suffix)%s: $(temp_dir) $(OBJS)' % (target_ext))
+    print('\tlink -out:$(target)$(debug_suffix)%s %s' %
+          (target_ext, target_link_flags), '@<<')
+    print('\t$(OBJS)')
+    print('\t$(LIBS)')
+    print('\t$(ADDN_LINK_FILES)')
+    print('\t$(pythonlib) $(lcustom) $(l_debug)')
+    print('\t$(resources)')
+    print('<<')
+    print()
+    print('clean:')
+    print('\t-del /f *.obj')
+    print('\t-del /f $(target).exe')
+
     
+        def unique_names(self):
+        # sorted
+        if not self.__allnames:
+            self.__allnames = []
+            for name, aliases in self.__byrgb.values():
+                self.__allnames.append(name)
+            self.__allnames.sort(key=str.lower)
+        return self.__allnames
     
-class RemoveDuplicateUrls(MRJob):
+        def test_infile_stdout(self):
+        infile = self._create_infile()
+        rc, out, err = assert_python_ok('-m', 'json.tool', infile)
+        self.assertEqual(rc, 0)
+        self.assertEqual(out.splitlines(), self.expect.encode().splitlines())
+        self.assertEqual(err, b'')
