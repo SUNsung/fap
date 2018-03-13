@@ -1,101 +1,88 @@
 
         
-        unless File.exist?(PROF_OUTPUT_FILE)
-  StackProf.run(
-    mode: MODE.to_sym,
-    interval: 100,
-    raw: true,
-    out: PROF_OUTPUT_FILE
-  ) do
-    puts 'GC Stats:', JSON.pretty_generate(GC.stat)
-    GC.disable
+        module Homebrew
+  SEARCH_ERROR_QUEUE = Queue.new
     
-          theme.create!
-      Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
-        ' is ready for you in #{theme.path.to_s.cyan}!'
-      Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
-    end
-    # rubocop:enable Metrics/AbcSize
+      def failure
+    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
+    redirect_to after_omniauth_failure_path_for(resource_name)
   end
-end
+    
+    # TODO:
+# group :mongoid do
+#   gem 'mongoid', '~> 4.0.0'
+# end
 
     
-    If you run into trouble, you can find helpful resources at https://jekyllrb.com/help/!
-            MSG
-            raise Jekyll::Errors::MissingDependencyException, name
-          end
+      # GET /resource/sign_in
+  def new
+    self.resource = resource_class.new(sign_in_params)
+    clean_up_passwords(resource)
+    yield resource if block_given?
+    respond_with(resource, serialize_options(resource))
+  end
+    
+          # Define authentication filters and accessor helpers based on mappings.
+      # These filters should be used inside the controllers as before_actions,
+      # so you can control the scope of the user who should be signed in to
+      # access that specific controller/action.
+      # Example:
+      #
+      #   Roles:
+      #     User
+      #     Admin
+      #
+      #   Generated methods:
+      #     authenticate_user!  # Signs user in or redirect
+      #     authenticate_admin! # Signs admin in or redirect
+      #     user_signed_in?     # Checks whether there is a user signed in or not
+      #     admin_signed_in?    # Checks whether there is an admin signed in or not
+      #     current_user        # Current signed in user
+      #     current_admin       # Current signed in admin
+      #     user_session        # Session data available only to the user scope
+      #     admin_session       # Session data available only to the admin scope
+      #
+      #   Use:
+      #     before_action :authenticate_user!  # Tell devise to use :user map
+      #     before_action :authenticate_admin! # Tell devise to use :admin map
+      #
+      def self.define_helpers(mapping) #:nodoc:
+        mapping = mapping.name
+    
+        def split_colon_path(path)
+      one, two = path.split(':', 2)
+      if one && two && Sass::Util.windows? &&
+          one =~ /\A[A-Za-z]\Z/ && two =~ %r{\A[/\\]}
+        # If we're on Windows and we were passed a drive letter path,
+        # don't split on that colon.
+        one2, two = two.split(':', 2)
+        one = one + ':' + one2
+      end
+      return one, two
+    end
+    
+    # A logger that delays messages until they're explicitly flushed to an inner
+# logger.
+#
+# This can be installed around the current logger by calling \{#install!}, and
+# the original logger can be replaced by calling \{#uninstall!}. The log
+# messages can be flushed by calling \{#flush}.
+class Sass::Logger::Delayed < Sass::Logger::Base
+  # Installs a new delayed logger as the current Sass logger, wrapping the
+  # original logger.
+  #
+  # This can be undone by calling \{#uninstall!}.
+  #
+  # @return [Sass::Logger::Delayed] The newly-created logger.
+  def self.install!
+    logger = Sass::Logger::Delayed.new(Sass.logger)
+    Sass.logger = logger
+    logger
+  end
+    
+            def self.options
+          [
+            ['--template-url=URL', 'The URL of the git repo containing a ' \
+                                  'compatible template'],
+          ].concat(super)
         end
-      end
-    end
-  end
-end
-
-    
-      def tumblr_oauth_token
-    service.token
-  end
-    
-        def unlink_files(files)
-      Array(files).each do |file|
-        file.close unless file.closed?
-        file.unlink if file.respond_to?(:unlink) && file.path.present? && File.exist?(file.path)
-      end
-    end
-    
-        # Returns the scaling and cropping geometries (in string-based ImageMagick format)
-    # neccessary to transform this Geometry into the Geometry given. If crop is true,
-    # then it is assumed the destination Geometry will be the exact final resolution.
-    # In this case, the source Geometry is scaled so that an image containing the
-    # destination Geometry would be completely filled by the source image, and any
-    # overhanging image would be cropped. Useful for square thumbnail images. The cropping
-    # is weighted at the center of the Geometry.
-    def transformation_to dst, crop = false
-      if crop
-        ratio = Geometry.new( dst.width / self.width, dst.height / self.height )
-        scale_geometry, scale = scaling(dst, ratio)
-        crop_geometry         = cropping(dst, ratio, scale)
-      else
-        scale_geometry        = dst.to_s
-      end
-    
-        def geometry_string
-      begin
-        orientation = Paperclip.options[:use_exif_orientation] ?
-          '%[exif:orientation]' : '1'
-        Paperclip.run(
-          'identify',
-          '-format '%wx%h,#{orientation}' :file', {
-            :file => '#{path}[0]'
-          }, {
-            :swallow_stderr => true
-          }
-        )
-      rescue Cocaine::ExitStatusError
-        ''
-      rescue Cocaine::CommandNotFoundError => e
-        raise_because_imagemagick_missing
-      end
-    end
-    
-          expect('.border-style-alternate').to have_rule(rule)
-    end
-  end
-    
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'margin-top: 11px; ' +
-                'margin-right: 12px; ' +
-                'margin-left: 13px;'
-      bad_rule = 'margin-bottom: null;'
-    
-    describe 'modular-scale' do
-  before(:all) do
-    ParserSupport.parse_file('library/modular-scale')
-  end
-    
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'padding-top: 11px; ' +
-                'padding-right: 12px; ' +
-                'padding-left: 13px;'
-      bad_rule = 'padding-bottom: null;'
