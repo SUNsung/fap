@@ -1,128 +1,135 @@
 
         
-            static void* GetProcAddress (const char* name)
+         protected:
+  Debugger(v8::Isolate* isolate, content::WebContents* web_contents);
+  ~Debugger() override;
+    
+    // Create a pure JavaScript Event object.
+v8::Local<v8::Object> CreateEventObject(v8::Isolate* isolate) {
+  if (event_template.IsEmpty()) {
+    event_template.Reset(isolate, ObjectTemplateBuilder(isolate)
+        .SetMethod('preventDefault', &PreventDefault)
+        .Build());
+  }
+    }
+    
+    void AtomQuotaPermissionContext::RequestQuotaPermission(
+    const content::StorageQuotaParams& params,
+    int render_process_id,
+    const PermissionCallback& callback) {
+  callback.Run(response::QUOTA_PERMISSION_RESPONSE_ALLOW);
+}
+    
+    #include 'atom/browser/net/http_protocol_handler.h'
+    
+      // URLRequestSimpleJob:
+  int GetData(std::string* mime_type,
+              std::string* charset,
+              std::string* data,
+              const net::CompletionCallback& callback) const override;
+    
+    // The entry point from ChromeMain into the relauncher process.
+int RelauncherMain(const content::MainFunctionParams& main_parameters);
+    
+    void RenderProcessPreferences::Observe(
+    int type,
+    const content::NotificationSource& source,
+    const content::NotificationDetails& details) {
+  DCHECK_EQ(type, content::NOTIFICATION_RENDERER_PROCESS_CREATED);
+  content::RenderProcessHost* process =
+      content::Source<content::RenderProcessHost>(source).ptr();
+    }
+    
+    // Trigger command from the accelerators table.
+bool TriggerAcceleratorTableCommand(AcceleratorTable* table,
+                                    const ui::Accelerator& accelerator);
+    
+                // subminibatches are cutted at the parallel sequence level;
+            // if #requested subminibatch is larger than #parallel sequence,
+            // we cannot split further; instead, each subsequence become a subminibatch
+            size_t actualnumSubminibatches = requestedSubminibatches > nParallelSequences ? nParallelSequences : requestedSubminibatches;
+    
+                    for (size_t k0 = 0; k0 < V.rows(); k0 += dotprodstep)
+                {
+                    const size_t k1 = std::min(k0 + dotprodstep, V.rows());
+                    const bool first = k0 == 0;
+                    // const bool last = k0 + dotprodstep >= V.rows();
+    }
+    
+    // sets m_learningRateMultiplier in all LearnableParameters feeding into the passed rootNode
+// Called from MEL
+void ComputationNetwork::SetLearnableNodesBelowLearningRateMultiplier(const float learningRateMultiplier, const ComputationNodeBasePtr& rootNode)
+{
+    // find nodes from all available nodes
+    if (rootNode == nullptr)
     {
-        static void* h = NULL;
-        if (!h)
+        for (auto nodeIter = m_nameToNodeMap.begin(); nodeIter != m_nameToNodeMap.end(); nodeIter++)
         {
-            h = dlopen('libclAmdFft.Runtime.so', RTLD_LAZY | RTLD_GLOBAL);
-            if (!h)
-                return NULL;
+            ComputationNodeBasePtr node = nodeIter->second;
+            if (node->OperationName() == OperationNameOf(LearnableParameter))
+                node->SetLearningRateMultiplier(learningRateMultiplier);
         }
     }
-    
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-    
-      // Extract the original list data
-  std::string data;
-  db_->Get(get_option_, key, &data);
-    
-    namespace rocksdb {
-    }
-    
-    // Open the db inside DateTieredDBImpl because options needs pointer to its ttl
-DateTieredDBImpl::DateTieredDBImpl(
-    DB* db, Options options,
-    const std::vector<ColumnFamilyDescriptor>& descriptors,
-    const std::vector<ColumnFamilyHandle*>& handles, int64_t ttl,
-    int64_t column_family_interval)
-    : db_(db),
-      cf_options_(ColumnFamilyOptions(options)),
-      ioptions_(ImmutableCFOptions(options)),
-      icomp_(cf_options_.comparator),
-      ttl_(ttl),
-      column_family_interval_(column_family_interval),
-      mutex_(options.statistics.get(), db->GetEnv(), DB_MUTEX_WAIT_MICROS,
-             options.use_adaptive_mutex) {
-  latest_timebound_ = std::numeric_limits<int64_t>::min();
-  for (size_t i = 0; i < handles.size(); ++i) {
-    const auto& name = descriptors[i].name;
-    int64_t timestamp = 0;
-    try {
-      timestamp = ParseUint64(name);
-    } catch (const std::invalid_argument&) {
-      // Bypass unrelated column family, e.g. default
-      db_->DestroyColumnFamilyHandle(handles[i]);
-      continue;
-    }
-    if (timestamp > latest_timebound_) {
-      latest_timebound_ = timestamp;
-    }
-    handle_map_.insert(std::make_pair(timestamp, handles[i]));
-  }
-}
-    
-    #include 'BtMessage.h'
-#include 'Command.h'
-    
-    bool AbstractHttpServerResponseCommand::execute()
-{
-  if (e_->getRequestGroupMan()->downloadFinished() || e_->isHaltRequested()) {
-    return true;
-  }
-  try {
-    ssize_t len = httpServer_->sendResponse();
-    if (len > 0) {
-      timeoutTimer_ = global::wallclock();
-    }
-  }
-  catch (RecoverableException& e) {
-    A2_LOG_INFO_EX(fmt('CUID#%' PRId64
-                       ' - Error occurred while transmitting response body.',
-                       getCuid()),
-                   e);
-    return true;
-  }
-  if (httpServer_->sendBufferIsEmpty()) {
-    A2_LOG_INFO(fmt('CUID#%' PRId64 ' - HttpServer: all response transmitted.',
-                    getCuid()));
-    afterSend(httpServer_, e_);
-    return true;
-  }
-  else {
-    if (timeoutTimer_.difference(global::wallclock()) >= 30_s) {
-      A2_LOG_INFO(fmt('CUID#%' PRId64
-                      ' - HttpServer: Timeout while trasmitting response.',
-                      getCuid()));
-      return true;
-    }
-    else {
-      updateReadWriteCheck();
-      e_->addCommand(std::unique_ptr<Command>(this));
-      return false;
-    }
-  }
-}
-    
-    
+    else
     {
-    {    httpConnection_->sendProxyRequest(std::move(httpRequest));
-  }
-  else {
-    httpConnection_->sendPendingData();
-  }
-  if (httpConnection_->sendBufferIsEmpty()) {
-    getDownloadEngine()->addCommand(getNextCommand());
-    return true;
-  }
-  else {
-    setWriteCheckSocket(getSocket());
-    addCommandSelf();
-    return false;
-  }
+        // for calculating a specific node
+        if (!EvalOrderExists(rootNode))
+            const_cast<ComputationNetwork&>(*this).FormEvalOrder(rootNode);
+    }
+    }
+    
+    template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ScriptableObjects::IConfigRecord, float>(const ScriptableObjects::IConfigRecord& config);
+template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ScriptableObjects::IConfigRecord, double>(const ScriptableObjects::IConfigRecord& config);
+template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ConfigParameters, float>(const ConfigParameters& config);
+template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ConfigParameters, double>(const ConfigParameters& config);
+template ComputationNetworkPtr GetModelFromConfig<ConfigParameters, float> (const ConfigParameters& config, const wstring&, vector<wstring>& outputNodeNamesVector);
+template ComputationNetworkPtr GetModelFromConfig<ConfigParameters, double>(const ConfigParameters& config, const wstring&, vector<wstring>& outputNodeNamesVector);
+
+    
+    // ---------------------------------------------------------------------------
+// ConfigException -- all errors from processing the config files are reported as ConfigException
+// ---------------------------------------------------------------------------
+    
+    #include 'Basics.h'
+#include <chrono>
+#include 'TimerUtility.h'
+#include <string>
+    
+    class memory_resource {
+ public:
+  virtual ~memory_resource() = default;
+  virtual void* allocate(
+      const size_t bytes,
+      const size_t alignment = max_align_v) = 0;
+  virtual void deallocate(
+      void* p,
+      const size_t bytes,
+      const size_t alignment = max_align_v) = 0;
+};
+    
+    path canonical_parent(const path& pth, const path& base) {
+  return canonical(pth.parent_path(), base) / pth.filename();
 }
     
-    AnnounceTier::AnnounceTier(std::deque<std::string> urls)
-    : event(STARTED), urls(std::move(urls))
-{
-}
+      size_t remaining = specs.size();
+  while (remaining != 0) {
+    if (remaining >= readerCapacity) {
+      EXPECT_EQ(readerCapacity, aioReader.pending());
+      EXPECT_EQ(remaining - readerCapacity, aioQueue.queued());
+    } else {
+      EXPECT_EQ(remaining, aioReader.pending());
+      EXPECT_EQ(0, aioQueue.queued());
+    }
+    auto completed = readerWait(&aioReader);
+    size_t nrRead = completed.size();
+    EXPECT_NE(nrRead, 0);
+    remaining -= nrRead;
+    }
+    
+    #include <folly/experimental/logging/LogHandlerFactory.h>
+    
+    LogCategoryConfig::LogCategoryConfig(
+    LogLevel l,
+    bool inherit,
+    std::vector<std::string> h)
+    : level{l}, inheritParentLevel{inherit}, handlers{h} {}
