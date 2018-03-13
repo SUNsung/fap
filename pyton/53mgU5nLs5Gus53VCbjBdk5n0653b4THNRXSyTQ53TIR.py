@@ -1,128 +1,138 @@
 
         
-        
-@pytest.mark.functional
-def test_select_command_with_arrows(proc, TIMEOUT):
-    select_command_with_arrows(proc, TIMEOUT)
-    
-            String:                    '#4e9a06',        # class: 's'
-        String.Backtick:           '#4e9a06',        # class: 'sb'
-        String.Char:               '#4e9a06',        # class: 'sc'
-        String.Doc:                'italic #8f5902', # class: 'sd' - like a comment
-        String.Double:             '#4e9a06',        # class: 's2'
-        String.Escape:             '#4e9a06',        # class: 'se'
-        String.Heredoc:            '#4e9a06',        # class: 'sh'
-        String.Interpol:           '#4e9a06',        # class: 'si'
-        String.Other:              '#4e9a06',        # class: 'sx'
-        String.Regex:              '#4e9a06',        # class: 'sr'
-        String.Single:             '#4e9a06',        # class: 's1'
-        String.Symbol:             '#4e9a06',        # class: 'ss'
-    
-        # Informational.
-    100: ('continue',),
-    101: ('switching_protocols',),
-    102: ('processing',),
-    103: ('checkpoint',),
-    122: ('uri_too_long', 'request_uri_too_long'),
-    200: ('ok', 'okay', 'all_ok', 'all_okay', 'all_good', '\\o/', '✓'),
-    201: ('created',),
-    202: ('accepted',),
-    203: ('non_authoritative_info', 'non_authoritative_information'),
-    204: ('no_content',),
-    205: ('reset_content', 'reset'),
-    206: ('partial_content', 'partial'),
-    207: ('multi_status', 'multiple_status', 'multi_stati', 'multiple_stati'),
-    208: ('already_reported',),
-    226: ('im_used',),
-    
-        @pytest.mark.parametrize(
-        'url', (
-            'http://192.168.1.1:5000/',
-            'http://192.168.1.1/',
-            'http://www.requests.com/',
-        ))
-    def test_not_bypass(self, url):
-        assert get_environ_proxies(url, no_proxy=None) != {}
-    
-        def digest_response_handler(sock):
-        # Respond to GET with a 200 containing www-authenticate header.
-        request_content = consume_socket_content(sock, timeout=0.5)
-        assert request_content.startswith(b'GET / HTTP/1.1')
-        sock.send(text_200_chal)
-    
-        def setUp(self):
-        from acme.errors import PollError
-        self.timeout = PollError(
-            exhausted=set([mock.sentinel.AR]),
-            updated={})
-        self.invalid = PollError(exhausted=set(), updated={
-            mock.sentinel.AR: mock.sentinel.AR2})
-    
-        # Implement all methods from IAuthenticator, remembering to add
-    # 'self' as first argument, e.g. def prepare(self)...
-    
-    current_path = os.path.dirname(os.path.abspath(__file__))
-root_path = os.path.abspath(os.path.join(current_path, os.pardir, os.pardir, os.pardir))
-data_path = os.path.abspath(os.path.join(root_path, os.pardir, os.pardir, 'data', 'gae_proxy'))
-if not os.path.isdir(data_path):
-    data_path = current_path
-    
-        def __str__(self):
-        return 'MismatchedTreeNodeException(%r!=%r)' % (
-            self.getUnexpectedType(), self.expecting
-            )
-    __repr__ = __str__
+            exc = Timeout('Request timed out')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR_TIMEOUT
+    assert error_msg == 'Request timed out (30s).'
 
     
-            depth  local follow set     after call to rule
-          0         \<EOF>                    a (from main())
-          1          ']'                     b
-          3          '^'                     c
     
-    # [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+def test_follow_redirect_output_options(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=h',
+             '--history-print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 2
+    assert 'HTTP/1.1 302 FOUND' not in r
+    assert HTTP_OK in r
     
     
-def regression_report(options):
-    added, removed = 0, 0
-    for line in diff_report(options):
-        line = line.strip()
-        if line == '+++' or line == '---':
-            continue
-        if line.startswith('+'):
-            added += 1
-        elif line.startswith('-'):
-            removed += 1
+def load_json_preserve_order(s):
+    return json.loads(s, object_pairs_hook=OrderedDict)
     
-    from reddit_base import RedditController, UnloggedUser
-from r2.lib.pages import (ButtonLite, ButtonDemoPanel, WidgetDemoPanel,
-                          BoringPage)
-from r2.lib.pages.things import wrap_links
-from r2.models import *
-from r2.lib.validator import *
-from pylons import request, response
-from pylons import tmpl_context as c
-from pylons.i18n import _
+            (2016-01, shopping), 25
+        (2016-01, shopping), 100
+        (2016-01, gas), 50
+        '''
+        timestamp, seller, amount = line.split('\t')
+        period = self. extract_year_month(timestamp)
+        if period == self.current_year_month():
+            yield (period, category), amount
+    
+            (2016-01, url0), 1
+        (2016-01, url0), 1
+        (2016-01, url1), 1
+        '''
+        url = self.extract_url(line)
+        period = self.extract_year_month(line)
+        yield (period, url), 1
+    
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer),
+            self.mr(mapper=self.mapper_sort,
+                    reducer=self.reducer_identity),
+        ]
+    
+    
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/', None),
+    'acme': ('https://acme-python.readthedocs.org/en/latest/', None),
+    'certbot': ('https://certbot.eff.org/docs/', None),
+}
+
+    
+        @mock.patch('certbot.notify.smtplib.LMTP')
+    @mock.patch('certbot.notify.subprocess.Popen')
+    def test_smtp_failure(self, mock_popen, mock_lmtp):
+        from certbot.notify import notify
+        lmtp_obj = mock.MagicMock()
+        mock_lmtp.return_value = lmtp_obj
+        lmtp_obj.sendmail.side_effect = socket.error(17)
+        proc = mock.MagicMock()
+        mock_popen.return_value = proc
+        self.assertTrue(notify('Goose', 'auntrhody@example.com',
+                               'The old grey goose is dead.'))
+        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
+        self.assertEqual(proc.communicate.call_count, 1)
+    
+        def __init__(self, tokenSource=None, channel=DEFAULT_CHANNEL):
+        '''
+        @param tokenSource A TokenSource instance (usually a Lexer) to pull
+            the tokens from.
+    
+            self.decisionNumber = decisionNumber
+        self.eot = eot
+        self.eof = eof
+        self.min = min
+        self.max = max
+        self.accept = accept
+        self.special = special
+        self.transition = transition
+    
+    
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write('Hello, world')
+    
+        def test_non_reversible(self):
+        # URLSpecs are non-reversible if they include non-constant
+        # regex features outside capturing groups. Currently, this is
+        # only strictly enforced for backslash-escaped character
+        # classes.
+        paths = [
+            r'^/api/v\d+/foo/(\w+)$',
+        ]
+        for path in paths:
+            # A URLSpec can still be created even if it cannot be reversed.
+            url_spec = url(path, None)
+            try:
+                result = url_spec.reverse()
+                self.fail('did not get expected exception when reversing %s. '
+                          'result: %s' % (path, result))
+            except ValueError:
+                pass
+    
+    
+globals().update(wrap_web_tests_application())
+    
+    print('Starting')
+if 'TESTAPP_STARTED' not in os.environ:
+    os.environ['TESTAPP_STARTED'] = '1'
+    sys.stdout.flush()
+    autoreload._reload()
+'''
+    
+    
+@gen.coroutine
+def put(filenames):
+    client = httpclient.AsyncHTTPClient()
+    for filename in filenames:
+        mtype = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+        headers = {'Content-Type': mtype}
+        producer = partial(raw_producer, filename)
+        url_path = quote(os.path.basename(filename))
+        response = yield client.fetch('http://localhost:8888/%s' % url_path,
+                                      method='PUT',
+                                      headers=headers,
+                                      body_producer=producer)
+        print(response)
+    
+        print('Start on 8888')
+    application.listen(8888, '127.0.0.1')
