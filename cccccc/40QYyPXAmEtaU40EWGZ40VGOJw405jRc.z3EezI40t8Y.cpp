@@ -1,135 +1,232 @@
 
         
-         protected:
-  Debugger(v8::Isolate* isolate, content::WebContents* web_contents);
-  ~Debugger() override;
-    
-    // Create a pure JavaScript Event object.
-v8::Local<v8::Object> CreateEventObject(v8::Isolate* isolate) {
-  if (event_template.IsEmpty()) {
-    event_template.Reset(isolate, ObjectTemplateBuilder(isolate)
-        .SetMethod('preventDefault', &PreventDefault)
-        .Build());
-  }
+        namespace nw {
     }
     
-    void AtomQuotaPermissionContext::RequestQuotaPermission(
-    const content::StorageQuotaParams& params,
-    int render_process_id,
-    const PermissionCallback& callback) {
-  callback.Run(response::QUOTA_PERMISSION_RESPONSE_ALLOW);
+    void Clipboard::CallSync(const std::string& method,
+                         const base::ListValue& arguments,
+                         base::ListValue* result) {
+  if (method == 'Get') {
+    result->AppendString(GetText());
+  } else {
+    NOTREACHED() << 'Invalid call to Clipboard method:' << method
+                 << ' arguments:' << arguments;
+  }
 }
     
-    #include 'atom/browser/net/http_protocol_handler.h'
     
-      // URLRequestSimpleJob:
-  int GetData(std::string* mime_type,
-              std::string* charset,
-              std::string* data,
-              const net::CompletionCallback& callback) const override;
-    
-    // The entry point from ChromeMain into the relauncher process.
-int RelauncherMain(const content::MainFunctionParams& main_parameters);
-    
-    void RenderProcessPreferences::Observe(
-    int type,
-    const content::NotificationSource& source,
-    const content::NotificationDetails& details) {
-  DCHECK_EQ(type, content::NOTIFICATION_RENDERER_PROCESS_CREATED);
-  content::RenderProcessHost* process =
-      content::Source<content::RenderProcessHost>(source).ptr();
-    }
-    
-    // Trigger command from the accelerators table.
-bool TriggerAcceleratorTableCommand(AcceleratorTable* table,
-                                    const ui::Accelerator& accelerator);
-    
-                // subminibatches are cutted at the parallel sequence level;
-            // if #requested subminibatch is larger than #parallel sequence,
-            // we cannot split further; instead, each subsequence become a subminibatch
-            size_t actualnumSubminibatches = requestedSubminibatches > nParallelSequences ? nParallelSequences : requestedSubminibatches;
-    
-                    for (size_t k0 = 0; k0 < V.rows(); k0 += dotprodstep)
-                {
-                    const size_t k1 = std::min(k0 + dotprodstep, V.rows());
-                    const bool first = k0 == 0;
-                    // const bool last = k0 + dotprodstep >= V.rows();
-    }
-    
-    // sets m_learningRateMultiplier in all LearnableParameters feeding into the passed rootNode
-// Called from MEL
-void ComputationNetwork::SetLearnableNodesBelowLearningRateMultiplier(const float learningRateMultiplier, const ComputationNodeBasePtr& rootNode)
-{
-    // find nodes from all available nodes
-    if (rootNode == nullptr)
-    {
-        for (auto nodeIter = m_nameToNodeMap.begin(); nodeIter != m_nameToNodeMap.end(); nodeIter++)
-        {
-            ComputationNodeBasePtr node = nodeIter->second;
-            if (node->OperationName() == OperationNameOf(LearnableParameter))
-                node->SetLearningRateMultiplier(learningRateMultiplier);
-        }
-    }
-    else
-    {
-        // for calculating a specific node
-        if (!EvalOrderExists(rootNode))
-            const_cast<ComputationNetwork&>(*this).FormEvalOrder(rootNode);
-    }
-    }
-    
-    template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ScriptableObjects::IConfigRecord, float>(const ScriptableObjects::IConfigRecord& config);
-template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ScriptableObjects::IConfigRecord, double>(const ScriptableObjects::IConfigRecord& config);
-template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ConfigParameters, float>(const ConfigParameters& config);
-template function<ComputationNetworkPtr(DEVICEID_TYPE)> GetNetworkFactory<ConfigParameters, double>(const ConfigParameters& config);
-template ComputationNetworkPtr GetModelFromConfig<ConfigParameters, float> (const ConfigParameters& config, const wstring&, vector<wstring>& outputNodeNamesVector);
-template ComputationNetworkPtr GetModelFromConfig<ConfigParameters, double>(const ConfigParameters& config, const wstring&, vector<wstring>& outputNodeNamesVector);
-
-    
-    // ---------------------------------------------------------------------------
-// ConfigException -- all errors from processing the config files are reported as ConfigException
-// ---------------------------------------------------------------------------
-    
-    #include 'Basics.h'
-#include <chrono>
-#include 'TimerUtility.h'
-#include <string>
-    
-    class memory_resource {
- public:
-  virtual ~memory_resource() = default;
-  virtual void* allocate(
-      const size_t bytes,
-      const size_t alignment = max_align_v) = 0;
-  virtual void deallocate(
-      void* p,
-      const size_t bytes,
-      const size_t alignment = max_align_v) = 0;
+    {  DISALLOW_COPY_AND_ASSIGN(DispatcherBindings);
 };
     
-    path canonical_parent(const path& pth, const path& base) {
-  return canonical(pth.parent_path(), base) / pth.filename();
+    
+    {} // namespace nwapi
+
+    
+    #include <boost/asio/detail/config.hpp>
+#include <boost/asio/basic_io_object.hpp>
+#include <boost/asio/basic_socket.hpp>
+#include <boost/asio/detail/handler_type_requirements.hpp>
+#include <boost/asio/detail/throw_error.hpp>
+#include <boost/asio/detail/type_traits.hpp>
+#include <boost/asio/error.hpp>
+#include <boost/asio/socket_acceptor_service.hpp>
+#include <boost/asio/socket_base.hpp>
+    
+    /// Copies bytes from a source buffer to a target buffer sequence.
+/**
+ * @param target A modifiable buffer sequence representing the memory regions to
+ * which the bytes will be copied.
+ *
+ * @param source A non-modifiable buffer representing the memory region from
+ * which the bytes will be copied.
+ *
+ * @returns The number of bytes copied.
+ *
+ * @note The number of bytes copied is the lesser of:
+ *
+ * @li @c buffer_size(target)
+ *
+ * @li @c buffer_size(source)
+ *
+ * This function is implemented in terms of @c memcpy, and consequently it
+ * cannot be used to copy between overlapping memory regions.
+ */
+template <typename MutableBufferSequence>
+inline std::size_t buffer_copy(const MutableBufferSequence& target,
+    const const_buffers_1& source)
+{
+  return buffer_copy(target, static_cast<const const_buffer&>(source));
 }
     
-      size_t remaining = specs.size();
-  while (remaining != 0) {
-    if (remaining >= readerCapacity) {
-      EXPECT_EQ(readerCapacity, aioReader.pending());
-      EXPECT_EQ(remaining - readerCapacity, aioQueue.queued());
-    } else {
-      EXPECT_EQ(remaining, aioReader.pending());
-      EXPECT_EQ(0, aioQueue.queued());
-    }
-    auto completed = readerWait(&aioReader);
-    size_t nrRead = completed.size();
-    EXPECT_NE(nrRead, 0);
-    remaining -= nrRead;
+    
+    {
+    {} // namespace asio
+} // namespace boost
+    
+    
+    {  // The offset to the end of the unread data.
+  size_type end_offset_;
+  
+  // The data in the buffer.
+  std::vector<byte_type> buffer_;
+};
+    
+    #endif // BOOST_ASIO_DETAIL_DATE_TIME_FWD_HPP
+
+    
+      // The list of all values in the hash map.
+  std::list<value_type> values_;
+    
+    void buffer_sequence_adapter_base::init_native_buffer(
+    buffer_sequence_adapter_base::native_buffer_type& buf,
+    const boost::asio::const_buffer& buffer)
+{
+  std::memset(&buf, 0, sizeof(native_buffer_type));
+  Microsoft::WRL::ComPtr<IInspectable> insp
+    = Microsoft::WRL::Make<winrt_buffer_impl>(buffer);
+  Platform::Object^ buf_obj = reinterpret_cast<Platform::Object^>(insp.Get());
+  buf = reinterpret_cast<Windows::Storage::Streams::IBuffer^>(insp.Get());
+}
+    
+        // Retry operation if interrupted by signal.
+    if (ec == boost::asio::error::interrupted)
+      continue;
+    
+    template <typename Time_Traits>
+void epoll_reactor::schedule_timer(timer_queue<Time_Traits>& queue,
+    const typename Time_Traits::time_type& time,
+    typename timer_queue<Time_Traits>::per_timer_data& timer, wait_op* op)
+{
+  mutex::scoped_lock lock(mutex_);
     }
     
-    #include <folly/experimental/logging/LogHandlerFactory.h>
     
-    LogCategoryConfig::LogCategoryConfig(
-    LogLevel l,
-    bool inherit,
-    std::vector<std::string> h)
-    : level{l}, inheritParentLevel{inherit}, handlers{h} {}
+    {
+    {    std::ostringstream oss;
+    std::copy(line.begin() + options_index,
+              line.end(),
+              std::ostream_iterator<std::string>(oss, ' '));
+    r['options'] = oss.str();
+    results.push_back(r);
+  }
+}
+    
+    #include <atomic>
+#include <string>
+#include <vector>
+    
+    #include <osquery/config.h>
+#include <osquery/core.h>
+#include <osquery/database.h>
+#include <osquery/events.h>
+#include <osquery/extensions.h>
+#include <osquery/filesystem.h>
+#include <osquery/flags.h>
+#include <osquery/logger.h>
+#include <osquery/registry.h>
+#include <osquery/sql.h>
+#include <osquery/status.h>
+#include <osquery/tables.h>
+    
+    
+    {/// Clear decorations for a source when it updates.
+void clearDecorations(const std::string& source);
+}
+
+    
+    #include 'osquery/tests/test_util.h'
+    
+    namespace osquery {
+    }
+    
+    bool platformModuleClose(ModuleHandle module) {
+  return (::dlclose(module) == 0);
+}
+    
+    
+    
+        tolua_beginmodule(tolua_S,'SimpleAudioEngine');
+        tolua_function(tolua_S,'preloadMusic',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_preloadBackgroundMusic);
+        tolua_function(tolua_S,'stopMusic',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_stopBackgroundMusic);
+        tolua_function(tolua_S,'stopAllEffects',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_stopAllEffects);
+        tolua_function(tolua_S,'getMusicVolume',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_getBackgroundMusicVolume);
+        tolua_function(tolua_S,'resumeMusic',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_resumeBackgroundMusic);
+        tolua_function(tolua_S,'setMusicVolume',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_setBackgroundMusicVolume);
+        tolua_function(tolua_S,'preloadEffect',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_preloadEffect);
+        tolua_function(tolua_S,'isMusicPlaying',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_isBackgroundMusicPlaying);
+        tolua_function(tolua_S,'getEffectsVolume',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_getEffectsVolume);
+        tolua_function(tolua_S,'willPlayMusic',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_willPlayBackgroundMusic);
+        tolua_function(tolua_S,'pauseEffect',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_pauseEffect);
+        tolua_function(tolua_S,'playEffect',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_playEffect);
+        tolua_function(tolua_S,'rewindMusic',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_rewindBackgroundMusic);
+        tolua_function(tolua_S,'playMusic',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_playBackgroundMusic);
+        tolua_function(tolua_S,'resumeAllEffects',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_resumeAllEffects);
+        tolua_function(tolua_S,'setEffectsVolume',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_setEffectsVolume);
+        tolua_function(tolua_S,'stopEffect',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_stopEffect);
+        tolua_function(tolua_S,'pauseMusic',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_pauseBackgroundMusic);
+        tolua_function(tolua_S,'pauseAllEffects',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_pauseAllEffects);
+        tolua_function(tolua_S,'unloadEffect',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_unloadEffect);
+        tolua_function(tolua_S,'resumeEffect',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_resumeEffect);
+        tolua_function(tolua_S,'destroyInstance', lua_cocos2dx_cocosdenshion_SimpleAudioEngine_end);
+        tolua_function(tolua_S,'getInstance', lua_cocos2dx_cocosdenshion_SimpleAudioEngine_getInstance);
+    tolua_endmodule(tolua_S);
+    std::string typeName = typeid(CocosDenshion::SimpleAudioEngine).name();
+    g_luaType[typeName] = 'cc.SimpleAudioEngine';
+    g_typeCast['SimpleAudioEngine'] = 'cc.SimpleAudioEngine';
+    return 1;
+}
+TOLUA_API int register_all_cocos2dx_cocosdenshion(lua_State* tolua_S)
+{
+	tolua_open(tolua_S);
+	
+	tolua_module(tolua_S,'cc',0);
+	tolua_beginmodule(tolua_S,'cc');
+    
+    
+    
+    
+    
+    class AddPair : public Test
+{
+public:
+    }
+    
+    			// Left vertical
+			shape.Set(b2Vec2(-20.0f, -20.0f), b2Vec2(-20.0f, 20.0f));
+			ground->CreateFixture(&sd);
+    
+    
+    {			m_debugDraw.DrawString(5, m_textLine, 'ave toi root iters = %3.1f, max toi root iters = %d',
+				b2_toiRootIters / float32(b2_toiCalls), b2_toiMaxRootIters);
+			m_textLine += DRAW_STRING_NEW_LINE;
+		}
+    
+    
+    {			bd.position.Set(230.0f, 4.5f);
+			body = m_world->CreateBody(&bd);
+			body->CreateFixture(&box, 0.5f);
+		}
+    
+    ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>* MonsterStorage::Stub::PrepareAsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderFactory< flatbuffers::grpc::Message<Stat>>::Create(channel_.get(), cq, rpcmethod_Store_, context, request, false);
+}
+    
+      virtual grpc::string name() const = 0;
+    
+    // Get the root, regardless of what type it is.
+inline Table *GetAnyRoot(uint8_t *flatbuf) {
+  return GetMutableRoot<Table>(flatbuf);
+}
+inline const Table *GetAnyRoot(const uint8_t *flatbuf) {
+  return GetRoot<Table>(flatbuf);
+}
+    
+      // Instead, we're going to access it right away (as if we just received it).
+    
+        // The key is between the {{ and }}.
+    const std::string key = text.substr(begin + 2, end - begin - 2);
+    
+    bool FileExistsRaw(const char *name) {
+  std::ifstream ifs(name);
+  return ifs.good();
+}
