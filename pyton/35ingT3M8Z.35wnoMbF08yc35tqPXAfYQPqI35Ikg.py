@@ -1,187 +1,95 @@
 
         
-            @classmethod
-    def query_datasources_by_name(
-            cls, session, database, datasource_name, schema=None):
-        datasource_class = ConnectorRegistry.sources[database.type]
-        return datasource_class.query_datasources_by_name(
-            session, database, datasource_name, schema=None)
-
+        def main():
+    # First, we load the current README into memory as an array of lines
+    with open('README.md', 'r') as read_me_file:
+        read_me = read_me_file.readlines()
     
-        def _delete(self, pk):
-        DeleteMixin._delete(self, pk)
+        format_str = ('step %d, loss = %.2f (%.1f examples/sec; %.3f ' 'sec/batch)')
+    tf.logging.info(format_str % (global_step_val, loss_val, examples_per_sec,
+                                  sec_per_batch))
     
-        @property
-    def data(self):
-        d = super(SqlaTable, self).data
-        if self.type == 'table':
-            grains = self.database.grains() or []
-            if grains:
-                grains = [(g.name, g.name) for g in grains]
-            d['granularity_sqla'] = utils.choicify(self.dttm_cols)
-            d['time_grain_sqla'] = grains
-        return d
+      def _record(self, label, red, green, blue):
+    image_size = 32 * 32
+    record = bytes(bytearray([label] + [red] * image_size +
+                             [green] * image_size + [blue] * image_size))
+    expected = [[[red, green, blue]] * 32] * 32
+    return record, expected
     
-                if column['type'] in ('OBJECT', None):
-                v = sample[col].iloc[0] if not sample[col].empty else None
-                if isinstance(v, basestring):
-                    column['type'] = 'STRING'
-                elif isinstance(v, int):
-                    column['type'] = 'INT'
-                elif isinstance(v, float):
-                    column['type'] = 'FLOAT'
-                elif isinstance(v, (datetime, date)):
-                    column['type'] = 'DATETIME'
-                    column['is_date'] = True
-                    column['is_dim'] = False
-                # check if encoded datetime
-                if (
-                        column['type'] == 'STRING' and
-                        self.datetime_conversion_rate(sample[col]) >
-                        INFER_COL_TYPES_THRESHOLD):
-                    column.update({
-                        'is_date': True,
-                        'is_dim': False,
-                        'agg': None,
-                    })
-            # 'agg' is optional attribute
-            if not column['agg']:
-                column.pop('agg', None)
-            columns.append(column)
-        return columns
-
+    def new_input_fn():
+    def decode(x):
+        x = tf.split(x, 4)  # Need to split into our 4 features
+        return dict(zip(feature_names, x))  # To build a dict of them
+    
+      for doc in document_generators.documents(
+      dataset='train', include_unlabeled=True, include_validation=True):
+    input_seq = build_input_sequence(doc, vocab_ids)
+    if len(input_seq) < 2:
+      continue
+    rev_seq = data.build_reverse_sequence(input_seq)
+    lm_seq = data.build_lm_sequence(input_seq)
+    rev_lm_seq = data.build_lm_sequence(rev_seq)
+    seq_ae_seq = data.build_seq_ae_sequence(input_seq)
+    if doc.label is not None:
+      # Used for sentiment classification.
+      label_seq = data.build_labeled_sequence(
+          input_seq,
+          doc.label,
+          label_gain=(FLAGS.label_gain and not doc.is_validation))
+      bd_label_seq = data.build_labeled_sequence(
+          data.build_bidirectional_seq(input_seq, rev_seq),
+          doc.label,
+          label_gain=(FLAGS.label_gain and not doc.is_validation))
+      class_writer = writer_valid_class if doc.is_validation else writer_class
+      bd_class_writer = (writer_bd_valid_class
+                         if doc.is_validation else writer_bd_class)
+      class_writer.write(label_seq.seq.SerializeToString())
+      bd_class_writer.write(bd_label_seq.seq.SerializeToString())
+    
+    from data import data_utils
+from data import document_generators
     
     
-def export_schema_to_dict(back_references):
-    '''Exports the supported import/export schema to a dictionary'''
-    databases = [Database.export_schema(recursive=True,
-                 include_parent_ref=back_references)]
-    clusters = [DruidCluster.export_schema(recursive=True,
-                include_parent_ref=back_references)]
-    data = dict()
-    if databases:
-        data[DATABASES_KEY] = databases
-    if clusters:
-        data[DRUID_CLUSTERS_KEY] = clusters
-    return data
+def read32(bytestream):
+  '''Read 4 bytes from bytestream as an unsigned 32-bit integer.'''
+  dt = np.dtype(np.uint32).newbyteorder('>')
+  return np.frombuffer(bytestream.read(4), dtype=dt)[0]
     
-         Metrics and columns and datasource will be overrided if exists.
-     This function can be used to import/export dashboards between multiple
-     superset instances. Audit metadata isn't copies over.
-    '''
-    make_transient(i_datasource)
-    logging.info('Started import of the datasource: {}'.format(
-        i_datasource.to_json()))
+        def get(self, key):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                return item.value
+        raise KeyError('Key not found')
     
-        :param param: the url parameter to lookup
-    :type param: str
-    :param default: the value to return in the absence of the parameter
-    :type default: str
-    '''
-    print(request.args)
-    return request.args.get(param, default)
+    class DefaultCategories(Enum):
     
-        context.configure(connection=connection,
-                      target_metadata=target_metadata,
-                      # compare_type=True,
-                      process_revision_directives=process_revision_directives,
-                      **kwargs)
+        def test_pool_behavior_with_single_object_inside(self):
+        sample_queue = queue.Queue()
+        sample_queue.put('yam')
+        with ObjectPool(sample_queue) as obj:
+            # print('Inside with: {}'.format(obj))
+            self.assertEqual(obj, 'yam')
+        self.assertFalse(sample_queue.empty())
+        self.assertTrue(sample_queue.get() == 'yam')
+        self.assertTrue(sample_queue.empty())
+        
     
-    import importlib
-import os
-from sys import executable, platform  # Platform is set for one test.
+        def test_display_current_time_at_midnight(self):
+        class_under_test = TimeDisplay()
+        expected_time = '24:01'
+        result = class_under_test.get_current_time_as_as_html_fragment()
+        self.assertEqual(result, expected_time)
+'''
     
-        def test_string_with_utf8_bom(self):
-        # see #18958
-        bom_json = '[1,2,3]'.encode('utf-8-sig').decode('utf-8')
-        with self.assertRaises(self.JSONDecodeError) as cm:
-            self.loads(bom_json)
-        self.assertIn('BOM', str(cm.exception))
-        with self.assertRaises(self.JSONDecodeError) as cm:
-            self.json.load(StringIO(bom_json))
-        self.assertIn('BOM', str(cm.exception))
-        # make sure that the BOM is not detected in the middle of a string
-        bom_in_str = ''{}''.format(''.encode('utf-8-sig').decode('utf-8'))
-        self.assertEqual(self.loads(bom_in_str), '\ufeff')
-        self.assertEqual(self.json.load(StringIO(bom_in_str)), '\ufeff')
-    
-        if C is not None:
-        # C version of decimal
-        start_calc = time.time()
-        x = factorial(C.Decimal(n), 0)
-        end_calc = time.time()
-        start_conv = time.time()
-        sx = str(x)
-        end_conv = time.time()
-        print('cdecimal:')
-        print('calculation time: %fs' % (end_calc-start_calc))
-        print('conversion time: %fs\n' % (end_conv-start_conv))
-    
-    class TZInfo:
-    def __init__(self, transitions, type_indices, ttis, abbrs):
-        self.transitions = transitions
-        self.type_indices = type_indices
-        self.ttis = ttis
-        self.abbrs = abbrs
-    
-            resp = self._shortcmd('XPATH {0}'.format(id))
-        if not resp.startswith('223'):
-            raise NNTPReplyError(resp)
-        try:
-            [resp_num, path] = resp.split()
-        except ValueError:
-            raise NNTPReplyError(resp) from None
-        else:
-            return resp, path
-    
-        def test_varargs1_ext(self):
-        {}.__contains__(*(0,))
-    
-            The optional name argument can be used to set a Unicode name
-        for the function.
-        '''
-        # decorator factory
-        if function is None:
-            return partial(self.register_function, name=name)
+        def get_current_time_as_html_fragment(self, time_provider):
+        current_time = time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
     
     
-def init():
-    global distances, press_times
-    distances = []
-    press_times = []
-    
-    
-class auto_adb():
-    def __init__(self):
-        try:
-            adb_path = 'adb'
-            subprocess.Popen([adb_path], stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
-            self.adb_path = adb_path
-        except OSError:
-            if platform.system() == 'Windows':
-                adb_path = os.path.join('Tools', 'adb', 'adb.exe')
-                try:
-                    subprocess.Popen(
-                        [adb_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                    self.adb_path = adb_path
-                except OSError:
-                    pass
-            else:
-                try:
-                    subprocess.Popen(
-                        [adb_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                except OSError:
-                    pass
-            print('请安装 ADB 及驱动并配置环境变量')
-            print('具体链接: https://github.com/wangshub/wechat_jump_game/wiki')
-            exit(1)
-    
-            # actions
-        self.steps = 0
-        self.params = params
-        self.coords = []
-        self.ix = [0, 0]
-        self.iy = [0, 0]
-        self.click_counter = 0
-        self.status = True
+### OUTPUT ###
+# Specification
+# False
+# True
+# False
