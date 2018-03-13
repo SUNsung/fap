@@ -1,90 +1,233 @@
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named 'default.css' will overwrite the builtin 'default.css'.
-html_static_path = ['_static']
+
+        
+        entries_str = textwrap.indent(''.join(entries), '\t')
+atom_template = atom_template.replace('@ENTRIES@', entries_str)
     
-    from sqlite3 import dbapi2 as sqlite3
-from flask import Blueprint, request, session, g, redirect, url_for, abort, \
-     render_template, flash, current_app
+    import itertools
+import json
+import os
+import re
+import sys
     
-        with app.app_context():
-        init_db()
-        yield app
+    from test.helper import try_rm
     
-        yield client
+                    if ''' not in code and ''' not in code:
+                    continue
+                assertRegexpMatches(
+                    self,
+                    code,
+                    r'(?:(?:#.*?|\s*)\n)*from __future__ import (?:[a-z_]+,\s*)*unicode_literals',
+                    'unicode_literals import  missing in %s' % fn)
     
-        for ns in n_samples:
-        for nf in n_features:
-            it += 1
-            print('==================')
-            print('Iteration %s of %s' % (it, max(len(n_samples),
-                                          len(n_features))))
-            print('==================')
-            n_informative = nf // 10
-            X, Y, coef_ = make_regression(n_samples=ns, n_features=nf,
-                                          n_informative=n_informative,
-                                          noise=0.1, coef=True)
+        def _real_extract(self, url):
+        mobj = re.match(self._VALID_URL, url)
+        video_id = mobj.group('id')
     
-        results = benchmark([METRICS[k] for k in args.metrics],
-                        [FORMATS[k] for k in args.formats],
-                        args.samples, args.classes, args.density,
-                        args.n_times)
+            # TODO: handle s and e stage_mode (live streams and ended live streams)
+        if stage_mode not in ('s', 'e'):
+            request = sanitized_Request(
+                'https://audimedia.tv/api/video/v1/videos/%s?embed[]=video_versions&embed[]=thumbnail_image&where[content_language_iso]=%s' % (video_id, lang),
+                headers={'X-Auth-Token': self._AUTH_TOKEN})
+            json_data = self._download_json(request, video_id)['results']
+            formats = []
+    
+            formats = [
+            {
+                'format_id': f['type'],
+                'filesize': int(f['filesize']),
+                'url': f['url']
+            } for f in info['rfiles']
+        ]
+        self._sort_formats(formats)
+    
+            # Video URL construction algorithm is reverse-engineered from cwhplayer.swf
+        rtmp_url = 'rtmp://camwithher.tv/clipshare/%s' % (
+            ('mp4:%s.mp4' % flv_id) if int(flv_id) > 2010 else flv_id)
+    
+    from landscape_api.base import API, HTTPError
+    
+    try:
+    import json
+except ImportError:
+    import simplejson as json
+import os
+import os.path
+import sys
+import ConfigParser
+import StringIO
+    
+        parser = argparse.ArgumentParser(description='Download results from a Shippable run.')
+    
+        print(json.dumps(response.json(), indent=4, sort_keys=True))
+    
+            # global, resource, entity
+        input_url = 'https://www.googleapis.com/compute/v1/projects/myproject/global/urlMaps/my-url-map'
+        actual = GCPUtils.parse_gcp_url(input_url)
+        self.assertEquals('myproject', actual['project'])
+        self.assertTrue('global' in actual)
+        self.assertTrue(actual['global'])
+        self.assertEquals('v1', actual['api_version'])
+        self.assertEquals('compute', actual['service'])
+    
+        plt.figlegend((c_bar, q_bar), ('construction', 'N-point query'),
+                  'upper right')
+    
+    import time
+    
+        url_fmt is along the lines of ('https://github.com/USER/PROJECT/'
+                                   'blob/{revision}/{package}/'
+                                   '{path}#L{lineno}')
+    '''
+    revision = _get_git_revision()
+    return partial(_linkcode_resolve, revision=revision, package=package,
+                   url_fmt=url_fmt)
+
     
     
-def barplot_neighbors(Nrange=2 ** np.arange(1, 11),
-                      Drange=2 ** np.arange(7),
-                      krange=2 ** np.arange(10),
-                      N=1000,
-                      D=64,
-                      k=5,
-                      leaf_size=30,
-                      dataset='digits'):
-    algorithms = ('kd_tree', 'brute', 'ball_tree')
-    fiducial_values = {'N': N,
-                       'D': D,
-                       'k': k}
+URL = ('http://www.cs.cornell.edu/people/pabo/'
+       'movie-review-data/review_polarity.tar.gz')
     
-    for i, n in enumerate(n_samples):
-    for j, p in enumerate(n_features):
-        X = np.random.normal(size=(n, p))
-        t0 = time.time()
-        ward.fit(X)
-        scikits_time[j, i] = time.time() - t0
-        t0 = time.time()
-        hierarchy.ward(X)
-        scipy_time[j, i] = time.time() - t0
+    for s, p in zip(sentences, predicted):
+    print(u'The language of '%s' is '%s'' % (s, dataset.target_names[p]))
+
     
     
+if __name__ == '__main__':
+    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
+    # block to be able to use a multi-core grid search that also works under
+    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
+    # The multiprocessing module is used as the backend of joblib.Parallel
+    # that is used when n_jobs != 1 in GridSearchCV
     
-            if event == 'example_added':
-            self.update_example(model, -1)
+    import sys
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.svm import LinearSVC
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
+from sklearn.datasets import load_files
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
     
-    autodoc_member_order = 'bysource'
-autodoc_default_flags = ['show-inheritance', 'private-members']
+    Calibration of the probabilities of Gaussian naive Bayes with isotonic
+regression can fix this issue as can be seen from the nearly diagonal
+calibration curve. Sigmoid calibration also improves the brier score slightly,
+albeit not as strongly as the non-parametric isotonic regression. This can be
+attributed to the fact that we have plenty of calibration data such that the
+greater flexibility of the non-parametric model can be exploited.
     
-        @mock.patch('certbot.display.enhancements.util')
-    def test_redirect(self, mock_util):
-        mock_util().menu.return_value = (display_util.OK, 1)
-        self.assertTrue(self._call('redirect'))
+    calibrated_classifier = sig_clf.calibrated_classifiers_[0]
+prediction = np.vstack([calibrator.predict(this_p)
+                        for calibrator, this_p in
+                        zip(calibrated_classifier.calibrators_, p.T)]).T
+prediction /= prediction.sum(axis=1)[:, None]
     
-    import mock
-    
-                https_manager.save_ssl_connection_for_reuse(response.ssl_sock, host)
-            response.close()
-            xlog.info('DIRECT chucked t:%d s:%d %d %s %s', (time.time()-time_request)*1000, length, response.status, host, url)
-            return
-    
-                            #print 'no viable alt'
-                        self.noViableAlt(s, input)
-                        return 0
+        # add non-discriminative features
+    if n_features > 1:
+        X = np.hstack([X, np.random.randn(n_samples, n_features - 1)])
+    return X, y
     
     
-    def computeErrorRecoverySet(self):
-        '''
-        Compute the error recovery set for the current rule.  During
-        rule invocation, the parser pushes the set of tokens that can
-        follow that rule reference on the stack; this amounts to
-        computing FIRST of what follows the rule reference in the
-        enclosing rule. This local follow set only includes tokens
-        from within the rule; i.e., the FIRST computation done by
-        ANTLR stops at the end of a rule.
+MINIMUM = 80
+    
+    def main():
+    for name, fn in [('sequential',
+                      functools.partial(download_urls_sequential, URLS)),
+                     ('processes',
+                      functools.partial(download_urls_with_executor,
+                                        URLS,
+                                        ProcessPoolExecutor(10))),
+                     ('threads',
+                      functools.partial(download_urls_with_executor,
+                                        URLS,
+                                        ThreadPoolExecutor(10)))]:
+        sys.stdout.write('%s: ' % name.ljust(12))
+        start = time.time()
+        url_map = fn()
+        sys.stdout.write('%.2f seconds (%d of %d downloaded)\n' %
+                         (time.time() - start, len(url_map), len(URLS)))
+    
+    from ycm.client.base_request import ( BaseRequest, BuildRequestData,
+                                      HandleServerException )
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+            path_args, path_kwargs = [], {}
+    
+        @gen.coroutine
+    def resolve(self, host, port, family=0):
+        if is_valid_ip(host):
+            addresses = [host]
+        else:
+            # gethostbyname doesn't take callback as a kwarg
+            self.channel.gethostbyname(host, family, (yield gen.Callback(1)))
+            callback_args = yield gen.Wait(1)
+            assert isinstance(callback_args, gen.Arguments)
+            assert not callback_args.kwargs
+            result, error = callback_args.args
+            if error:
+                raise IOError('C-Ares returned error %s: %s while resolving %s' %
+                              (error, pycares.errno.strerror(error), host))
+            addresses = result.addresses
+        addrinfo = []
+        for address in addresses:
+            if '.' in address:
+                address_family = socket.AF_INET
+            elif ':' in address:
+                address_family = socket.AF_INET6
+            else:
+                address_family = socket.AF_UNSPEC
+            if family != socket.AF_UNSPEC and family != address_family:
+                raise IOError('Requested socket family %d but got %d' %
+                              (family, address_family))
+            addrinfo.append((address_family, (address, port)))
+        raise gen.Return(addrinfo)
+
+    
+    
+def main():
+    base_cmd = [
+        sys.executable, '-m', 'timeit', '-s',
+        'from stack_context_benchmark import StackBenchmark, ExceptionBenchmark']
+    cmds = [
+        'StackBenchmark().enter_exit(50)',
+        'StackBenchmark().call_wrapped(50)',
+        'StackBenchmark().enter_exit(500)',
+        'StackBenchmark().call_wrapped(500)',
+    
+    import logging
+import tornado.escape
+import tornado.ioloop
+import tornado.options
+import tornado.web
+import tornado.websocket
+import os.path
+import uuid
+    
+    
+class UnsupportedTransition(BaseException):
+    pass
+    
+        def setUp(cls):
+        ''' Function/test case scope setup. '''
+        cls.output = StringIO()
+        cls.saved_stdout = sys.stdout
+        sys.stdout = cls.output
+    
+        def notify(self, msg):
+        self.msg_queue.append(msg)
+    
+        def test_bear_greek_localization(self):
+        self.assertEqual(self.g.get('bear'), 'bear')
+
+    
+    from __future__ import print_function
+    
+    
+class AndSpecification(CompositeSpecification):
+    _one = Specification()
+    _other = Specification()
