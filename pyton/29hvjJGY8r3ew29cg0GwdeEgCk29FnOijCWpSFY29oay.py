@@ -1,137 +1,133 @@
 
         
-        # TODO: ensure that history changes.
-
+            # Sorting the libraries
+    inner_blocks = sorted(blocks[0].split('##'))
+    for i in range(1 , len(inner_blocks)):
+        if inner_blocks[i][0] != '#':
+            inner_blocks[i] = '##' + inner_blocks[i]
+    inner_blocks=''.join(inner_blocks)
     
-            String:                    '#4e9a06',        # class: 's'
-        String.Backtick:           '#4e9a06',        # class: 'sb'
-        String.Char:               '#4e9a06',        # class: 'sc'
-        String.Doc:                'italic #8f5902', # class: 'sd' - like a comment
-        String.Double:             '#4e9a06',        # class: 's2'
-        String.Escape:             '#4e9a06',        # class: 'se'
-        String.Heredoc:            '#4e9a06',        # class: 'sh'
-        String.Interpol:           '#4e9a06',        # class: 'si'
-        String.Other:              '#4e9a06',        # class: 'sx'
-        String.Regex:              '#4e9a06',        # class: 'sr'
-        String.Single:             '#4e9a06',        # class: 's1'
-        String.Symbol:             '#4e9a06',        # class: 'ss'
-    
-            HA1 = hash_utf8(A1)
-        HA2 = hash_utf8(A2)
-    
-    
-@pytest.mark.parametrize(
-    'url, expected', (
-            ('http://192.168.0.1:5000/', True),
-            ('http://192.168.0.1/', True),
-            ('http://172.16.1.1/', True),
-            ('http://172.16.1.1:5000/', True),
-            ('http://localhost.localdomain:5000/v1.0/', True),
-            ('http://google.com:6000/', True),
-            ('http://172.16.1.12/', False),
-            ('http://172.16.1.12:5000/', False),
-            ('http://google.com:5000/v1.0/', False),
-    ))
-def test_should_bypass_proxies(url, expected, monkeypatch):
-    '''Tests for function should_bypass_proxies to check if proxy
-    can be bypassed or not
+        Example: adding tri-gram
+    >>> sequences = [[1, 3, 4, 5], [1, 3, 7, 9, 2]]
+    >>> token_indice = {(1, 3): 1337, (9, 2): 42, (4, 5): 2017, (7, 9, 2): 2018}
+    >>> add_ngram(sequences, token_indice, ngram_range=3)
+    [[1, 3, 4, 5, 1337], [1, 3, 7, 9, 2, 1337, 2018]]
     '''
-    monkeypatch.setenv('no_proxy', '192.168.0.0/24,127.0.0.1,localhost.localdomain,172.16.1.1, google.com:6000')
-    monkeypatch.setenv('NO_PROXY', '192.168.0.0/24,127.0.0.1,localhost.localdomain,172.16.1.1, google.com:6000')
-    assert should_bypass_proxies(url, no_proxy=None) == expected
+    new_sequences = []
+    for input_list in sequences:
+        new_list = input_list[:]
+        for i in range(len(new_list) - ngram_range + 1):
+            for ngram_value in range(2, ngram_range + 1):
+                ngram = tuple(new_list[i:i + ngram_value])
+                if ngram in token_indice:
+                    new_list.append(token_indice[ngram])
+        new_sequences.append(new_list)
     
-            :rtype: requests.Response
+        for data_format in ['channels_first', 'channels_last']:
+        if data_format == 'channels_first':
+            shape = (3, 5, 5)
+            target_shape = (5, 5, 3)
+            prev_shape = (2, 3, 2)
+            flip = lambda x: np.flip(np.flip(x, axis=2), axis=3)
+            transpose = lambda x: np.transpose(x, (0, 2, 3, 1))
+            target_data_format = 'channels_last'
+        elif data_format == 'channels_last':
+            shape = (5, 5, 3)
+            target_shape = (3, 5, 5)
+            prev_shape = (2, 2, 3)
+            flip = lambda x: np.flip(np.flip(x, axis=1), axis=2)
+            transpose = lambda x: np.transpose(x, (0, 3, 1, 2))
+            target_data_format = 'channels_first'
+    
+    
+def get_example_array():
+    np.random.seed(3537)
+    example_array = np.random.random((100, 100)) * 100. - 50.
+    example_array[0, 0] = 0.  # 0 could possibly cause trouble
+    return example_array
+    
+        # Transform sequences and labels into 'one-hot' encoding
+    x = np.zeros((len(sentences), sequence_length, number_of_chars), dtype=np.bool)
+    y = np.zeros((len(sentences), number_of_chars), dtype=np.bool)
+    for i, sentence in enumerate(sentences):
+        for t, char in enumerate(sentence):
+            x[i, t, ord(char) - ord('a')] = 1
+        y[i, ord(next_chars[i]) - ord('a')] = 1
+    
+            config = model.get_config()
+        model = models.Model.from_config(config)
+        model.compile('rmsprop', 'mse')
+    
+            labels = np.ones([size, self.absolute_max_string_len])
+        input_length = np.zeros([size, 1])
+        label_length = np.zeros([size, 1])
+        source_str = []
+        for i in range(size):
+            # Mix in some blank inputs.  This seems to be important for
+            # achieving translational invariance
+            if train and i > size - 4:
+                if K.image_data_format() == 'channels_first':
+                    X_data[i, 0, 0:self.img_w, :] = self.paint_func('')[0, :, :].T
+                else:
+                    X_data[i, 0:self.img_w, :, 0] = self.paint_func('',)[0, :, :].T
+                labels[i, 0] = self.blank_label
+                input_length[i] = self.img_w // self.downsample_factor - 2
+                label_length[i] = 1
+                source_str.append('')
+            else:
+                if K.image_data_format() == 'channels_first':
+                    X_data[i, 0, 0:self.img_w, :] = self.paint_func(self.X_text[index + i])[0, :, :].T
+                else:
+                    X_data[i, 0:self.img_w, :, 0] = self.paint_func(self.X_text[index + i])[0, :, :].T
+                labels[i, :] = self.Y_data[index + i]
+                input_length[i] = self.img_w // self.downsample_factor - 2
+                label_length[i] = self.Y_len[index + i]
+                source_str.append(self.X_text[index + i])
+        inputs = {'the_input': X_data,
+                  'the_labels': labels,
+                  'input_length': input_length,
+                  'label_length': label_length,
+                  'source_str': source_str  # used for visualization only
+                  }
+        outputs = {'ctc': np.zeros([size])}  # dummy data for dummy loss function
+        return (inputs, outputs)
+    
+        def contribute(self):
+        self.blackboard.common_state['problems'] += random.randint(1, 2)
+        self.blackboard.common_state['suggestions'] += random.randint(10, 20)
+        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
+        self.blackboard.common_state['progress'] += random.randint(10, 100)
+    
+        def test_sequential_execution(self):
+        self.command_stack[0].execute()
+        output_after_first_execution = os.listdir(self.test_dir)
+        self.assertEqual(output_after_first_execution[0], 'bar.txt')
+        self.command_stack[1].execute()
+        output_after_second_execution = os.listdir(self.test_dir)
+        self.assertEqual(output_after_second_execution[0], 'baz.txt')
+    
+        def __init__(self, msg_center):
+        self.provider = msg_center
+    
+        def __new__(cls, name, bases, attrs):
+        new_cls = type.__new__(cls, name, bases, attrs)
         '''
-        # Set defaults that the hooks can utilize to ensure they always have
-        # the correct parameters to reproduce the previous request.
-        kwargs.setdefault('stream', self.stream)
-        kwargs.setdefault('verify', self.verify)
-        kwargs.setdefault('cert', self.cert)
-        kwargs.setdefault('proxies', self.proxies)
+            Here the name of the class is used as key but it could be any class
+            parameter.
+        '''
+        cls.REGISTRY[new_cls.__name__] = new_cls
+        return new_cls
     
-      def replicate_states(self, state_coll_name):
-    state_list = self._metagraph.collection_def[state_coll_name]
-    num_states = len(state_list.node_list.value)
-    for replica_id in range(1, FLAGS.num_gpus):
-      for i in range(num_states):
-        state_list.node_list.value.append(state_list.node_list.value[i])
-    for replica_id in range(FLAGS.num_gpus):
-      for i in range(num_states):
-        index = replica_id * num_states + i
-        state_list.node_list.value[index] = with_autoparallel_prefix(
-            replica_id, state_list.node_list.value[index])
     
-      def __init__(self, multivalent_tokens=False):
-    self._seq = tf.train.SequenceExample()
-    self._flist = self._seq.feature_lists.feature_list
-    self._timesteps = []
-    self._multivalent_tokens = multivalent_tokens
+class TestLocalizer(unittest.TestCase):
     
-        self.assertEqual(t1.weight, 0.0)
-    self.assertEqual(t1.label, 0)
-    self.assertEqual(t1.token, 0)
-    
-    py_binary(
-    name = 'cifar10_multi_gpu_train',
-    srcs = [
-        'cifar10_multi_gpu_train.py',
-    ],
-    srcs_version = 'PY2AND3',
-    visibility = ['//tensorflow:__subpackages__'],
-    deps = [
-        ':cifar10',
-    ],
-)
-    
-        An example with a long-untouched module that everyone has
-    >>> _linkcode_resolve('py', {'module': 'tty',
-    ...                          'fullname': 'setraw'},
-    ...                   package='tty',
-    ...                   url_fmt='http://hg.python.org/cpython/file/'
-    ...                           '{revision}/Lib/{package}/{path}#L{lineno}',
-    ...                   revision='xxxx')
-    'http://hg.python.org/cpython/file/xxxx/Lib/tty/tty.py#L18'
-    '''
-    
-    Second example
---------------
-The second example shows the ability of the Minimum Covariance Determinant
-robust estimator of covariance to concentrate on the main mode of the data
-distribution: the location seems to be well estimated, although the covariance
-is hard to estimate due to the banana-shaped distribution. Anyway, we can
-get rid of some outlying observations.
-The One-Class SVM is able to capture the real data structure, but the
-difficulty is to adjust its kernel bandwidth parameter so as to obtain
-a good compromise between the shape of the data scatter matrix and the
-risk of over-fitting the data.
-    
-    from sklearn.datasets import make_checkerboard
-from sklearn.datasets import samples_generator as sg
-from sklearn.cluster.bicluster import SpectralBiclustering
-from sklearn.metrics import consensus_score
-    
-    The base classifier is a random forest classifier with 25 base estimators
-(trees). If this classifier is trained on all 800 training datapoints, it is
-overly confident in its predictions and thus incurs a large log-loss.
-Calibrating an identical classifier, which was trained on 600 datapoints, with
-method='sigmoid' on the remaining 200 datapoints reduces the confidence of the
-predictions, i.e., moves the probability vectors from the edges of the simplex
-towards the center. This calibration results in a lower log-loss. Note that an
-alternative would have been to increase the number of base estimators which
-would have resulted in a similar decrease in log-loss.
+        def get_current_time_as_html_fragment(self):
+        current_time = self.time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
 '''
-print(__doc__)
     
-            self.assertFalse(self.vhost2.conflicts([self.addr1,
-                                                self.addr_default]))
-    
-    # If true, links to the reST sources are added to the pages.
-#html_show_sourcelink = True
-    
-    autodoc_member_order = 'bysource'
-autodoc_default_flags = ['show-inheritance', 'private-members']
-    
-        @classmethod
-    def _call(cls, enhancement):
-        from certbot.display.enhancements import ask
-        return ask(enhancement)
+        @Transactional
+    def do_stuff(self):
+        self.value = '1111'  # <- invalid value
+        self.increment()  # <- will fail and rollback
