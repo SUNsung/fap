@@ -1,56 +1,52 @@
 
         
-          def app_caveats
-    if keg && keg.app_installed?
-      <<-EOS.undent
-        .app bundles were installed.
-        Run `brew linkapps #{keg.name}` to symlink these to /Applications.
-      EOS
+        require 'active_support/core_ext/module/redefine_method'
+require 'action_controller'
+require 'action_controller/test_case'
+require 'action_view'
+    
+    class TestResponseTest < ActiveSupport::TestCase
+  def assert_response_code_range(range, predicate)
+    response = ActionDispatch::TestResponse.new
+    (0..599).each do |status|
+      response.status = status
+      assert_equal range.include?(status), response.send(predicate),
+                   'ActionDispatch::TestResponse.new(#{status}).#{predicate}'
     end
   end
     
-            next unless HOMEBREW_CELLAR.directory?
-    
-      def query_regexp(query)
-    case query
-    when %r{^/(.*)/$} then Regexp.new($1)
-    else /.*#{Regexp.escape(query)}.*/i
-    end
-  rescue RegexpError
-    odie '#{query} is not a valid regex'
-  end
-    
-    # This formula serves as the base class for several very similar
-# formulae for Amazon Web Services related tools.
-class AmazonWebServicesFormula < Formula
-  # Use this method to peform a standard install for Java-based tools,
-  # keeping the .jars out of HOMEBREW_PREFIX/lib
-  def install
-    rm Dir['bin/*.cmd'] # Remove Windows versions
-    libexec.install Dir['*']
-    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
-  end
-  alias_method :standard_install, :install
-    
-            commands
+              define_singleton_method('#{name}=') do |attribute|
+            instance.public_send('#{name}=', attribute)
+          end
+        end
       end
     
-        class AdbHelper
-      # Path to the adb binary
-      attr_accessor :adb_path
     
-          scripts = target.build_phases.select { |t| t.class == Xcodeproj::Project::Object::PBXShellScriptBuildPhase }
-      crash_script = scripts.find { |s| includes_run_script?(s.shell_script) }
+    {      def content_length; get_header('rack.input').length; end
+    end.new('rack.input' => StringIO.new('{'title':'JSON'}}'), 'CONTENT_TYPE' => 'application/json')
     
-            expect(result).to eq('svn info | grep Revision | egrep -o '[0-9]+'')
-        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('svn info | grep Revision | egrep -o '[0-9]+'')
-      end
-    end
+        def execute(args)
     
-          it 'pass a custom build number to the tool' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          increment_build_number(build_number: 24, xcodeproj: '.xcproject')
-        end').runner.execute(:test)
+        assert_raise(ArgumentError) {
+      set.subset?()
+    }
     
-        find_union(segments, Project).includes(:namespace).order_id_desc
+      def test_marshal_to_s
+    t1 = Time.new(2011,11,8, 0,42,25, 9*3600)
+    t2 = Time.at(Marshal.load(Marshal.dump(t1)))
+    assert_equal('2011-11-08 00:42:25 +0900', t2.to_s,
+      '[ruby-dev:44827] [Bug #5586]')
   end
+    
+      it 'decodes the number of characters specified by the count modifier' do
+    [ ['\xc2\x80\xc2\x81\xc2\x82\xc2\x83', 'U1', [0x80]],
+      ['\xc2\x80\xc2\x81\xc2\x82\xc2\x83', 'U2', [0x80, 0x81]],
+      ['\xc2\x80\xc2\x81\xc2\x82\xc2\x83', 'U3', [0x80, 0x81, 0x82]]
+    ].should be_computed_by(:unpack)
+  end
+    
+              private
+    
+    # This is the base class for logstash codecs.
+module LogStash::Codecs; class Base < LogStash::Plugin
+  include LogStash::Config::Mixin
