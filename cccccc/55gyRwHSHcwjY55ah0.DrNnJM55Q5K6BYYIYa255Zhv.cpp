@@ -1,217 +1,89 @@
 
         
-          void Delete(const SnapshotImpl* s) {
-    assert(s->list_ == this);
-    s->prev_->next_ = s->next_;
-    s->next_->prev_ = s->prev_;
-    delete s;
-  }
+        template <class T>
+struct DereferencingComparator { bool operator()(const T a, const T b) const { return *a < *b; } };
     
-    #ifndef STORAGE_LEVELDB_DB_TABLE_CACHE_H_
-#define STORAGE_LEVELDB_DB_TABLE_CACHE_H_
+    #if 0
+static void DumpInternalIter(Iterator* iter) {
+  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
+    ParsedInternalKey k;
+    if (!ParseInternalKey(iter->key(), &k)) {
+      fprintf(stderr, 'Corrupt '%s'\n', EscapeString(iter->key()).c_str());
+    } else {
+      fprintf(stderr, '@ '%s'\n', k.DebugString().c_str());
+    }
+  }
+}
+#endif
     
-    std::string VersionEdit::DebugString() const {
-  std::string r;
-  r.append('VersionEdit {');
-  if (has_comparator_) {
-    r.append('\n  Comparator: ');
-    r.append(comparator_);
+    typedef uint64_t SequenceNumber;
+    
+    // Print contents of a log file. (*func)() is called on every record.
+Status PrintLogContents(Env* env, const std::string& fname,
+                        void (*func)(uint64_t, Slice, WritableFile*),
+                        WritableFile* dst) {
+  SequentialFile* file;
+  Status s = env->NewSequentialFile(fname, &file);
+  if (!s.ok()) {
+    return s;
   }
-  if (has_log_number_) {
-    r.append('\n  LogNumber: ');
-    AppendNumberTo(&r, log_number_);
+  CorruptionReporter reporter;
+  reporter.dst_ = dst;
+  log::Reader reader(file, &reporter, true, 0);
+  Slice record;
+  std::string scratch;
+  while (reader.ReadRecord(&record, &scratch)) {
+    (*func)(reader.LastRecordOffset(), record, dst);
   }
-  if (has_prev_log_number_) {
-    r.append('\n  PrevLogNumber: ');
-    AppendNumberTo(&r, prev_log_number_);
-  }
-  if (has_next_file_number_) {
-    r.append('\n  NextFile: ');
-    AppendNumberTo(&r, next_file_number_);
-  }
-  if (has_last_sequence_) {
-    r.append('\n  LastSeq: ');
-    AppendNumberTo(&r, last_sequence_);
-  }
-  for (size_t i = 0; i < compact_pointers_.size(); i++) {
-    r.append('\n  CompactPointer: ');
-    AppendNumberTo(&r, compact_pointers_[i].first);
-    r.append(' ');
-    r.append(compact_pointers_[i].second.DebugString());
-  }
-  for (DeletedFileSet::const_iterator iter = deleted_files_.begin();
-       iter != deleted_files_.end();
-       ++iter) {
-    r.append('\n  DeleteFile: ');
-    AppendNumberTo(&r, iter->first);
-    r.append(' ');
-    AppendNumberTo(&r, iter->second);
-  }
-  for (size_t i = 0; i < new_files_.size(); i++) {
-    const FileMetaData& f = new_files_[i].second;
-    r.append('\n  AddFile: ');
-    AppendNumberTo(&r, new_files_[i].first);
-    r.append(' ');
-    AppendNumberTo(&r, f.number);
-    r.append(' ');
-    AppendNumberTo(&r, f.file_size);
-    r.append(' ');
-    r.append(f.smallest.DebugString());
-    r.append(' .. ');
-    r.append(f.largest.DebugString());
-  }
-  r.append('\n}\n');
-  return r;
+  delete file;
+  return Status::OK();
 }
     
-    TEST(FindFileTest, Empty) {
-  ASSERT_EQ(0, Find('foo'));
-  ASSERT_TRUE(! Overlaps('a', 'z'));
-  ASSERT_TRUE(! Overlaps(NULL, 'z'));
-  ASSERT_TRUE(! Overlaps('a', NULL));
-  ASSERT_TRUE(! Overlaps(NULL, NULL));
+    // Return the name of the old info log file for 'dbname'.
+std::string OldInfoLogFileName(const std::string& dbname) {
+  return dbname + '/LOG.old';
 }
     
-    namespace leveldb {
-    }
     
-    // Number of read operations to do.  If negative, do FLAGS_num reads.
-static int FLAGS_reads = -1;
+    {}  // namespace leveldb
     
-      virtual Status Close() { return Status::OK(); }
-  virtual Status Flush() { return Status::OK(); }
-  virtual Status Sync() { return Status::OK(); }
+      void EncodeTo(std::string* dst) const;
+  Status DecodeFrom(const Slice& src);
     
-    namespace leveldb {
-    }
     
-      const Slice keys[] = {Slice('aaa'), Slice('bbb'), Slice('ccc')};
-  const Slice vals[] = {Slice('foo'), Slice('bar'), Slice('baz')};
+    {}  // namespace leveldb
     
-    #include 'table/format.h'
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+#include 'caffe/util/im2col.hpp'
     
-      /// Allow shutdown before exit.
-  static void shutdown();
     
-     private:
-  /**
-   * @brief Default constructor.
-   *
-   * Since instances of Dispatcher should only be created via instance(),
-   * Dispatcher's constructor is private.
-   */
-  Dispatcher() = default;
-  virtual ~Dispatcher() = default;
+    {}  // namespace caffe
     
-    /**
- * @brief Helper accessor/assignment alias class to support deprecated flags.
- *
- * This templated class wraps Flag::updateValue and Flag::getValue to 'alias'
- * a deprecated flag name as the updated name. The helper macro FLAG_ALIAS
- * will create a global variable instances of this wrapper using the same
- * Gflags naming scheme to prevent collisions and support existing callsites.
- */
-template <typename T>
-class FlagAlias {
- public:
-  FlagAlias& operator=(T const& v) {
-    Flag::updateValue(name_, boost::lexical_cast<std::string>(v));
-    return *this;
-  }
-    }
+    #include 'caffe/layers/lrn_layer.hpp'
     
-      /// The size of the original groups to backup when restoring privileges.
-  size_t group_size_{0};
-    
-      /// Calling startExtension should declare the registry external.
-  /// This will cause extension-internal events to forward to osquery core.
-  bool external_{false};
-    
-    #include <osquery/config.h>
-#include <osquery/core.h>
-#include <osquery/database.h>
-#include <osquery/events.h>
-#include <osquery/extensions.h>
-#include <osquery/filesystem.h>
-#include <osquery/flags.h>
-#include <osquery/logger.h>
-#include <osquery/registry.h>
-#include <osquery/sql.h>
-#include <osquery/status.h>
-#include <osquery/tables.h>
+      virtual inline const char* type() const { return 'Eltwise'; }
+  virtual inline int MinBottomBlobs() const { return 2; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
     
       /**
-   * @brief Check is a process is an osquery watcher.
+   * @brief Computes the error gradient w.r.t. the forwarded inputs.
    *
-   * Is watcher is different from the opposite of isWorker. An osquery process
-   * may have disabled the watchdog so the parent could be doing the work or
-   * the worker child.
+   * @param top output Blob vector (length 1+), providing the error gradient with
+   *        respect to the outputs
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2+), into which the top error
+   *        gradient is copied
    */
-  static bool isWatcher();
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+    const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-     protected:
-  /// Calculate the URL once and cache the result.
-  std::string uri_;
+      std::unique_ptr<AuthConfig> getUserDefinedAuthConfig() const;
     
-    std::string stringFromCFNumber(const CFDataRef& cf_number, CFNumberType type) {
-  // Make sure the type is a number.
-  if (CFGetTypeID(cf_number) != CFNumberGetTypeID()) {
-    return '0';
-  }
-    }
+      BinaryStream* stream_;
     
-    #include <string.h>
-#include <time.h>
     
-      // Compares the 8x8 block with offsets (off_x, off_y) within the current
-  // macro-block of the baseline image with the same block of img and returns
-  // the resulting per-block distance. The interpretation of the returned
-  // distance depends on the comparator used.
-  virtual double CompareBlock(const OutputImage& img,
-                              int off_x, int off_y) const = 0;
-    
-    #include <stddef.h>
-#include <stdint.h>
-    
-    #endif  // GUETZLI_FAST_LOG_H_
-
-    
-    #include <cmath>
-    
-    struct HuffmanTableEntry {
-  // Initialize the value to an invalid symbol so that we can recognize it
-  // when reading the bit stream using a Huffman code with space > 0.
-  HuffmanTableEntry() : bits(0), value(0xffff) {}
-    }
-    
-    // Preprocesses U and V channel for better results after downsampling.
-    
-    namespace guetzli {
-    }
-    
-        // Helper methods
-    static bool HasFamilyNamed(std::string& name, DBWrapper* db);
-    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
-        Handle<Array> array);
-    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
-        Handle<Array> array, DBWrapper* db_wrapper, std::string cf);
-    static Handle<Value> CompactRangeDefault(const v8::Arguments& args);
-    static Handle<Value> CompactColumnFamily(const Arguments& args);
-    static Handle<Value> CompactOptions(const Arguments& args);
-    static Handle<Value> CompactAll(const Arguments& args);
-    
-      // After a partial flush move the tail to the beginning of the buffer
-  void RefitTail(size_t tail_offset, size_t tail_size) {
-    if (tail_size > 0) {
-      memmove(bufstart_, bufstart_ + tail_offset, tail_size);
-    }
-    cursize_ = tail_size;
-  }
-    
-    #pragma once
-    
-            struct NoopTransformer {
-            static size_t estimate(const char *data, size_t length) {
-                return length;
-            }
-    }
+    {} // namespace aria2
