@@ -1,77 +1,75 @@
-    def extract_url(self, line):
-        '''Extract the generated url from the log line.'''
-        pass
+
+        
+            :param url: URL for the new :class:`Request` object.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
+    '''
     
-        def _getargnames(self, func):
-        # type: (Callable) -> List[str]
-        try:
-            return getargspec(func).args
-        except TypeError:
-            if hasattr(func, 'func_code'):
-                # Cython-generated code has all the attributes needed
-                # by inspect.getargspec, but the inspect module only
-                # works with ordinary functions. Inline the portion of
-                # getargspec that we need here. Note that for static
-                # functions the @cython.binding(True) decorator must
-                # be used (for methods it works out of the box).
-                code = func.func_code  # type: ignore
-                return code.co_varnames[:code.co_argcount]
-            raise
+            def generate():
+            # Special case for urllib3.
+            if hasattr(self.raw, 'stream'):
+                try:
+                    for chunk in self.raw.stream(chunk_size, decode_content=True):
+                        yield chunk
+                except ProtocolError as e:
+                    raise ChunkedEncodingError(e)
+                except DecodeError as e:
+                    raise ContentDecodingError(e)
+                except ReadTimeoutError as e:
+                    raise ConnectionError(e)
+            else:
+                # Standard file-like object.
+                while True:
+                    chunk = self.raw.read(chunk_size)
+                    if not chunk:
+                        break
+                    yield chunk
+    
+        possible_keys = pytest.mark.parametrize('key', ('accept', 'ACCEPT', 'aCcEpT', 'Accept'))
+    
+            .. seealso:: keys() and items().
+        '''
+        return list(self.itervalues())
     
     
-@gen.coroutine
-def raw_producer(filename, write):
-    with open(filename, 'rb') as f:
-        while True:
-            # 16K at a time.
-            chunk = f.read(16 * 1024)
-            if not chunk:
-                # Complete.
-                break
+def test_idna_with_version_attribute(mocker):
+    '''Verify we're actually setting idna version when it should be available.'''
+    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
+    assert info()['idna'] == {'version': '2.6'}
+
     
-    To run this app, you must first register an application with Twitter:
-  1) Go to https://dev.twitter.com/apps and create an application.
-     Your application must have a callback URL registered with Twitter.
-     It doesn't matter what it is, but it has to be there (Twitter won't
-     let you use localhost in a registered callback URL, but that won't stop
-     you from running this demo on localhost).
-  2) Create a file called 'secrets.cfg' and put your consumer key and
-     secret (which Twitter gives you when you register an app) in it:
-       twitter_consumer_key = 'asdf1234'
-       twitter_consumer_secret = 'qwer5678'
-     (you could also generate a random value for 'cookie_secret' and put it
-     in the same file, although it's not necessary to run this demo)
-  3) Run this program and go to http://localhost:8888 (by default) in your
-     browser.
-'''
+        def reducer_identity(self, key, value):
+        yield key, value
     
-    import time
-from datetime import timedelta
+    	for video in tab.childNodes:
+		if re.search(contentid, video.attributes['link'].value):
+			url = video.attributes['flv'].value
+			break
     
-    js.load_plugin_modules(plugins)
-modules = dict((k, m) for k, m in js.module.iteritems())
-print 'JS_MODULES := ' + ' '.join(modules.iterkeys())
-outputs = []
-for name, module in modules.iteritems():
-    outputs.extend(module.outputs)
-    print 'JS_MODULE_OUTPUTS_%s := %s' % (name, ' '.join(module.outputs))
-    print 'JS_MODULE_DEPS_%s := %s' % (name, ' '.join(module.dependencies))
     
-        paths = {
-        'root': root_path,
-        'controllers': os.path.join(root_path, 'controllers'),
-        'templates': [os.path.join(root_path, 'templates')],
-    }
+def extract_board_data(url):
+    json_data = extract_json_data(url, limit=LIMIT)
+    pin_list = json_data['pins']
+    title = json_data['title']
+    pin_count = json_data['pin_count']
+    pin_count -= len(pin_list)
     
-    def is_api(subtype = ''):
-    return c.render_style and c.render_style.startswith(api_type(subtype))
+    def kugou_download_by_hash(title,hash_val,output_dir = '.', merge = True, info_only = False):
+    #sample
+    #url_sample:http://www.kugou.com/yy/album/single/536957.html
+    #hash ->key  md5(hash+kgcloud')->key  decompile swf
+    #cmd 4 for mp3 cmd 3 for m4a
+    key=hashlib.new('md5',(hash_val+'kgcloud').encode('utf-8')).hexdigest()
+    html=get_html('http://trackercdn.kugou.com/i/?pid=6&key=%s&acceptMp3=1&cmd=4&hash=%s'%(key,hash_val))
+    j=loads(html)
+    url=j['url']
+    songtype, ext, size = url_info(url)
+    print_info(site_info, title, songtype, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir, merge=merge)
     
-    from reddit_base import RedditController, UnloggedUser
-from r2.lib.pages import (ButtonLite, ButtonDemoPanel, WidgetDemoPanel,
-                          BoringPage)
-from r2.lib.pages.things import wrap_links
-from r2.models import *
-from r2.lib.validator import *
-from pylons import request, response
-from pylons import tmpl_context as c
-from pylons.i18n import _
+        # mgid%3Auma%3Avideo%3Amtv81.com%3A897974
+    vid = match1(html, r'getTheVideo\('(.*?)'')
+    xml = parseString(
+        get_content('http://intl.esperanto.mtvi.com/www/xml/media/mediaGen.jhtml?uri={}&flashPlayer=LNX%2013,0,0,206&geo=CN&sid=123456'.format(vid)))
