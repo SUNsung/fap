@@ -1,38 +1,75 @@
 
         
-        post '/' do
-  connections.each { |out| out << 'data: #{params[:msg]}\n\n' }
-  204 # response without entity body
+            def insert_after(index, *names)
+      insert assert_index(index) + 1, *names
+    end
+    
+    Bundler.require(
+    *Rails.groups(
+        coverage: [:test],
+        db: all_environments,
+        pcap: all_environments
+    )
+)
+    
+        if extension_pathname.readable?
+      ENV['BUNDLE_GEMFILE'] = extension_pathname.to_path
+      break
+    end
+  end
 end
     
-    # include would include the module in Object
-# extend only extends the `main` object
-extend Sinatra::Delegator
+    res = ''
+doc = Hpricot(File.open(input))
+doc.search('//form').each do |form|
     
-    module Rack
-  module Protection
-    class Base
-      DEFAULT_OPTIONS = {
-        :reaction    => :default_reaction, :logging   => true,
-        :message     => 'Forbidden',       :encryptor => Digest::SHA1,
-        :session_key => 'rack.session',    :status    => 403,
-        :allow_empty_referrer => true,
-        :report_key           => 'protection.failed',
-        :html_types           => %w[text/html application/xhtml]
-      }
+              s[:pass] = ''
+          return
+        end
     
-      %w(GET HEAD).each do |method|
-    it 'accepts #{method} requests with non-whitelisted Origin' do
-      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://malicious.com')).to be_ok
+            # Remove it form the session objects so freeup
+        sessions.delete(s[:session])
+    
+        it 'returns false if osxfuse include directory is a symlink' do
+      allow(File).to receive(:exist?).and_return(true)
+      allow(File).to receive(:symlink?).and_return(true)
+      expect(described_class).not_to be_binary_osxfuse_installed
     end
   end
     
-        %w[/foo/bar /foo/bar/ / /.f /a.x].each do |path|
-      it('does not touch #{path.inspect}') { expect(get(path).body).to eq(path) }
-    end
+            def run
+          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
+          if @pod_name.nil? # Print all
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
+            end
+          else # Print only for the requested pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            else
+              print_pod_cache_infos(@pod_name, cache_descriptors)
+            end
+          end
+        end
     
-      it 'should not override the header if already set X-Content-Type-Options' do
-    mock_app with_headers('X-Content-Type-Options' => 'sniff')
-    expect(get('/', {}, 'wants' => 'text/html').headers['X-Content-Type-Options']).to eq('sniff')
+          def run
+        UI.puts report
+      end
+    
+          # @param  [[Xcodeproj::PBXTarget]] targets
+      #         An array which always has a target as its first item
+      #         and may optionally contain related test targets
+      #
+      # @return [String] the text for the target module
+      #
+      def target_module(app, tests)
+        target_module = '\ntarget '#{app.name.gsub(/'/, '\\\\\'')}' do\n'
+    
+      # Get list of styles saved on previous deploy (running rake paperclip:refresh:missing_styles)
+  def self.get_registered_attachments_styles
+    YAML.load_file(Paperclip.registered_attachments_styles_path)
+  rescue Errno::ENOENT
+    nil
   end
-end
+  private_class_method :get_registered_attachments_styles
