@@ -1,81 +1,154 @@
 
         
-          def present(payload)
-    if payload.is_a?(Hash)
-      payload = ActiveSupport::HashWithIndifferentAccess.new(payload)
-      MAIN_KEYS.each do |key|
-        return { :title => payload[key].to_s, :entries => present_hash(payload, key) } if payload.has_key?(key)
+        require 'abstract_unit'
+    
+          def sekrit_data
+        self.response_body = (@list + [@authenticated]).join(', ')
       end
     
-      def import
-    if params[:file]
-      file = params[:file]
-      content = JSON.parse(file.read)
-      new_credentials = content.map do |hash|
-        current_user.user_credentials.build(hash.slice('credential_name', 'credential_value', 'mode'))
+      test 'successful authentication request with Bearer instead of Token' do
+    @request.env['HTTP_AUTHORIZATION'] = 'Bearer lifo'
+    get :index
+    
+        test 'the middleware stack is exposed as 'middleware' in the controller' do
+      result = @app.call(env_for('/'))
+      assert_equal 'First!', result[1]['Middleware-Order']
+    end
+    
+        private
+      # 'Deserialize' the mailer class name by hand in case another argument
+      # (like a Global ID reference) raised DeserializationError.
+      def mailer_class
+        if mailer = Array(@serialized_arguments).first || Array(arguments).first
+          mailer.constantize
+        end
       end
     
-    lib_path = root.join('lib').to_path
-    
-    res = ''
-doc = Hpricot(File.open(input))
-doc.search('//form').each do |form|
-    
-        self.sigs.each_key do |k|
-      # There is only one pattern per run to test
-      matched = nil
-      matches = nil
-    
-    
-# replace calls, jmps, and read/write handle/filename references
-replaces = []
-asm.each_line { |ln|
-	if ln =~ /call /
-		parts = ln.split(' ')
-		if (parts[0] == 'call' and parts[2] == ';call')
-			old = parts[1]
-			func = parts[3]
-			new = addrs[func]
-			#puts '%32s: %s -> %x' % [func, old, new]
-			replaces << [func, old, new.to_s(16)]
-		end
-	end
-    }
-    
-    puts '* Loading Stdapi'
-    
-    		self.block = Array.new
-		self.block_size = 0
-	end
-    
-      public
-  # Relies on the codec being synchronous (which they all are!)
-  # We need a better long term design here, but this is an improvement
-  # over the current API for shared plugins
-  # It is best if the codec implements this directly
-  def multi_encode(events)
-    if @has_encode_sync              
-      events.map {|event| [event, self.encode_sync(event)]}
-    else
-      batch = Thread.current[:logstash_output_codec_batch] ||= []
-      batch.clear
-      
-      events.each {|event| self.encode(event) }
-      batch
+        AssertSelectMailer.test('<div><p>foo</p><p>bar</p></div>').deliver_now
+    assert_select_email do
+      assert_select 'div:root' do
+        assert_select 'p:first-child', 'foo'
+        assert_select 'p:last-child', 'bar'
+      end
     end
   end
     
-          expect('.border-color-false-third').to have_ruleset(ruleset)
-      expect('.border-color-false-third').to_not have_rule(bad_rule)
+        def push(*names)
+      @filters.push *filter_const(names)
     end
+    
+    module Docs
+  class Entry
+    class Invalid < StandardError; end
+    
+        def add(path, content)
+      @pages[path] = content
+    end
+    
+            # This is called early, before a machine is instantiated, to check
+        # if this provider is usable. This should return true or false.
+        #
+        # If raise_error is true, then instead of returning false, this
+        # should raise an error with a helpful message about why this
+        # provider cannot be used.
+        #
+        # @param [Boolean] raise_error If true, raise exception if not usable.
+        # @return [Boolean]
+        def self.usable?(raise_error=false)
+          # Return true by default for backwards compat since this was
+          # introduced long after providers were being written.
+          true
+        end
+    
+          # Renders the template using the class intance as the binding. Because the
+      # renderer inherits from `OpenStruct`, additional view variables can be
+      # added like normal accessors.
+      #
+      # @return [String]
+      def render
+        old_template = template
+        result = nil
+        File.open(full_template_path, 'r') do |f|
+          self.template = f.read
+          result = render_string
+        end
+    
+      def test_repeated_combination_with_callcc
+    need_continuation
+    n = 1000
+    cont = nil
+    ary = [1,2,3]
+    begin
+      ary.repeated_combination(2) {
+        callcc {|k| cont = k} unless cont
+      }
+    rescue => e
+    end
+    n -= 1
+    cont.call if 0 < n
+    assert_instance_of(RuntimeError, e)
+    assert_match(/reentered/, e.message)
   end
-end
-
     
-      context 'called with four styles' do
-    it 'applies different styles to all sides' do
-      rule = 'border-style: dotted groove ridge none'
+        bug6323 = '[ruby-core:44447]'
+    t = t2000.getlocal('+00:36')
+    assert_equal('      +036', t.strftime('%_10z'), bug6323)
+    assert_equal('+000000036', t.strftime('%10z'), bug6323)
+    assert_equal('     +0:36', t.strftime('%_10:z'), bug6323)
+    assert_equal('+000000:36', t.strftime('%10:z'), bug6323)
+    assert_equal('  +0:36:00', t.strftime('%_10::z'), bug6323)
+    assert_equal('+000:36:00', t.strftime('%10::z'), bug6323)
+    assert_equal('+000000:36', t.strftime('%10:::z'))
+    t = t2000.getlocal('-00:55')
+    assert_equal('      -055', t.strftime('%_10z'), bug6323)
+    assert_equal('-000000055', t.strftime('%10z'), bug6323)
+    assert_equal('     -0:55', t.strftime('%_10:z'), bug6323)
+    assert_equal('-000000:55', t.strftime('%10:z'), bug6323)
+    assert_equal('  -0:55:00', t.strftime('%_10::z'), bug6323)
+    assert_equal('-000:55:00', t.strftime('%10::z'), bug6323)
+    assert_equal('-000000:55', t.strftime('%10:::z'))
+  end
     
-      context 'called with auto' do
-    it 'applies to auto to height' do
-      rule = 'height: auto; width: 100px;'
+      it 'returns an empty string and does not decode any bytes when the count modifier is zero' do
+    'abc'.unpack(unpack_format(0)+unpack_format).should == ['', 'a']
+  end
+    
+      class SubclassX < Struct
+  end
+    
+      # Clean a top-level (bin, sbin, lib) directory, recursively, by fixing file
+  # permissions and removing .la files, unless the files (or parent
+  # directories) are protected by skip_clean.
+  #
+  # bin and sbin should not have any subdirectories; if either do that is
+  # caught as an audit warning
+  #
+  # lib may have a large directory tree (see Erlang for instance), and
+  # clean_dir applies cleaning rules to the entire tree
+  def clean_dir(d)
+    d.find do |path|
+      path.extend(ObserverPathnameExtension)
+    
+            rows.each do |row|
+          line = row.values.each_with_index.map do |value, col|
+            value.to_s.ljust(col_widths[col])
+          end.join(' ').rstrip
+          line = color.colorize(line, row.color) if row.color
+          puts line
+        end
+      end
+    
+      if File.exist?('Capfile')
+    warn '[skip] Capfile already exists'
+  else
+    FileUtils.cp(capfile, 'Capfile')
+    puts I18n.t(:written_file, scope: :capistrano, file: 'Capfile')
+  end
+    
+      describe 'role_properties()' do
+    before do
+      dsl.role :redis, %w[example1.com example2.com], redis: { port: 6379, type: :slave }
+      dsl.server 'example1.com', roles: %w{web}, active: true, web: { port: 80 }
+      dsl.server 'example2.com', roles: %w{web redis}, web: { port: 81 }, redis: { type: :master }
+      dsl.server 'example3.com', roles: %w{app}, primary: true
+    end
