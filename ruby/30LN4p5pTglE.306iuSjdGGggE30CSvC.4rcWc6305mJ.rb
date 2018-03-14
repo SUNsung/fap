@@ -1,101 +1,93 @@
 
         
-            # Check if proper Lockable module methods are present & unlock strategy
-    # allows to unlock resource on password reset
-    def unlockable?(resource)
-      resource.respond_to?(:unlock_access!) &&
-        resource.respond_to?(:unlock_strategy_enabled?) &&
-        resource.unlock_strategy_enabled?(:email)
+          # Allows a bottle tag to specify a specific OS or later,
+  # so the same bottle can target multiple OSs.
+  # Not used in core, used in taps.
+  def find_or_later_tag(tag)
+    begin
+      tag_version = MacOS::Version.from_symbol(tag)
+    rescue ArgumentError
+      return
     end
     
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
+      def <<(o)
+    @settings << o
+    self
+  end
+    
+    # This formula serves as the base class for several very similar
+# formulae for Amazon Web Services related tools.
+class AmazonWebServicesFormula < Formula
+  # Use this method to peform a standard install for Java-based tools,
+  # keeping the .jars out of HOMEBREW_PREFIX/lib
+  def install
+    rm Dir['bin/*.cmd'] # Remove Windows versions
+    libexec.install Dir['*']
+    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
+  end
+  alias_method :standard_install, :install
+    
+    BASE_URI = ENV['BASE_URI'] || 'https://github.com/jondot/awesome-react-native'
+    
+    unless invalids.empty?
+  puts '\n\nFailed links:'
+  invalids.each do |link|
+    puts '- #{link}'
+  end
+  puts 'Done with errors.'
+  exit(1)
+end
+    
+    
+    
+    
+# replace the stuff
+replaces.uniq!
+replaces.each { |arr|
+	#puts '%32s: %s -> %s' % arr
+	asm.gsub!(arr[1], arr[2])
+}
+    
+    #certCN cannot contain commas
+certCN 		= 'Metasploit Inc.'
+#keytoolOpts 	= '-genkey -alias signFiles -keystore msfkeystore ' +
+#		  '-storepass msfstorepass -dname \'cn=#{certCN}\' ' +
+#		  '-keypass msfkeypass'
+    
+    	def initialize(filename)
+		unless filename.empty?
+			self.file = File.new(filename)
+		else
+			self.file = STDIN
+		end
+    
+              if @address.update_attributes(address_params)
+            respond_with(@address, default_template: :show)
+          else
+            invalid_resource!(@address)
+          end
+        end
+    
+          expect('.margin-implied-left').to have_rule(rule)
     end
+  end
     
-          # Remembers the given resource by setting up a cookie
-      def remember_me(resource)
-        return if request.env['devise.skip_storage']
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.remember_me!
-        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
-      end
-    
-    map = {}
-dups = []
-    
-        def log_processed(name)
-      puts green '    #{name}'
-    end
-    
-      # Code is not reloaded between requests.
-  config.cache_classes = true
-    
-          def save_request_parameters
-        session[:client_id] = @o_auth_application.client_id
-        session[:response_type] = @response_type
-        session[:redirect_uri] = @redirect_uri
-        session[:scopes] = scopes_as_space_seperated_values
-        session[:state] = params[:state]
-        session[:nonce] = params[:nonce]
-      end
-    
-          def validation_fail_redirect_uri(e)
-        render json: {error: :invalid_redirect_uri, error_description: e.message}, status: 400
-      end
+      context 'called with arguments (2, $value: 4em 6em)' do
+    it 'outputs sextuple the second value from the default scale' do
+      expect('.two-double-value').to have_rule('font-size: 3.125em')
     end
   end
 end
 
     
-        # Validates that {#boundary} is {#valid_ip_or_range? a valid IP address or
-    # IP address range}. Due to this not being tested before it was moved here
-    # from Mdm, the default workspace does not validate. We always validate boundaries
-    # and a workspace may have a blank default boundary.
-    #
-    # @return [void]
-    def boundary_must_be_ip_range
-      unless boundary.blank?
-        begin
-          boundaries = Shellwords.split(boundary)
-        rescue ArgumentError
-          boundaries = []
-        end
+          expect('.padding-alternate').to have_rule(rule)
+    end
+  end
     
-      GEMFILE_EXTENSIONS.each do |extension|
-    extension_pathname = root.join('Gemfile#{extension}')
+          expect('.position-explicit').to have_ruleset(ruleset)
+    end
+  end
     
-          when :login_pass
-    
-            def in range
-          @low, @high = range.first, range.last
-          self
-        end
-    
-            def meta_assignment_node
-          unless instance_variable_defined?(:@meta_assignment_node)
-            @meta_assignment_node =
-              operator_assignment_node || multiple_assignment_node
-          end
-    
-            def should_be_unused?
-          name.to_s.start_with?('_')
-        end
-    
-            def autocorrect(node)
-          lambda do |corrector|
-            each_unnecessary_space_match(node) do |range|
-              corrector.replace(range, ' ')
-            end
-          end
-        end
-    
-            def autocorrect(node)
-          redundant_regex?(node) do |receiver, regex_str|
-            receiver, regex_str = regex_str, receiver if receiver.is_a?(String)
-            regex_str = regex_str[2..-1] # drop \A anchor
-            regex_str = interpret_string_escapes(regex_str)
-    
-                yield arguments[optarg_position]
-          end
-        end
+      context 'called with auto' do
+    it 'applies to auto to height' do
+      rule = 'height: auto; width: 100px;'
