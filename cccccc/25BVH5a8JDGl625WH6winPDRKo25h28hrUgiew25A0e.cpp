@@ -1,535 +1,371 @@
 
         
-        // Instantiate tests for all error orderings, for both call orders of
-// ExecutorDone and PartialRunDone.
-Status ExecutorError() { return errors::Internal('executor error'); }
-Status PartialRunError() { return errors::Internal('partial run error'); }
-INSTANTIATE_TEST_CASE_P(
-    PartialRunMgr, StatusPropagationTest,
-    ::testing::Values(
-        StatusTestParam{Status::OK(), Status::OK(), Status::OK()},
-        StatusTestParam{ExecutorError(), Status::OK(), ExecutorError()},
-        StatusTestParam{Status::OK(), PartialRunError(), PartialRunError()},
-        StatusTestParam{ExecutorError(), PartialRunError(), ExecutorError()}));
-    
-    #include 'tensorflow/core/framework/op_kernel.h'
-#include 'tensorflow/core/framework/resource_mgr.h'
-#include 'tensorflow/core/framework/tensor_shape.h'
-#include 'tensorflow/core/platform/logging.h'
-#include 'tensorflow/core/platform/mutex.h'
-#include 'tensorflow/core/platform/thread_annotations.h'
-#include 'tensorflow/core/platform/types.h'
-    
-    #ifndef TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
-#define TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
-    
-    void SYCLDeviceContext::CopyCPUTensorToDevice(const Tensor *cpu_tensor,
-                                              Device *device,
-                                              Tensor *device_tensor,
-                                              StatusCallback done) const {
-  const int64 total_bytes = cpu_tensor->TotalBytes();
-  if (total_bytes > 0) {
-    const void *src_ptr = DMAHelper::base(cpu_tensor);
-    void *dst_ptr = DMAHelper::base(device_tensor);
-    switch (cpu_tensor->dtype()) {
-      case DT_FLOAT:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<float *>(dst_ptr), static_cast<const float *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_DOUBLE:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<double *>(dst_ptr),
-            static_cast<const double *>(src_ptr), total_bytes);
-        break;
-      case DT_INT32:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int32 *>(dst_ptr), static_cast<const int32 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT64:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int64 *>(dst_ptr), static_cast<const int64 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_HALF:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<Eigen::half *>(dst_ptr),
-            static_cast<const Eigen::half *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX64:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<std::complex<float> *>(dst_ptr),
-            static_cast<const std::complex<float> *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX128:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<std::complex<double> *>(dst_ptr),
-            static_cast<const std::complex<double> *>(src_ptr), total_bytes);
-        break;
-      case DT_INT8:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int8 *>(dst_ptr), static_cast<const int8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT16:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int16 *>(dst_ptr), static_cast<const int16 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT8:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<uint8 *>(dst_ptr), static_cast<const uint8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT16:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<uint16 *>(dst_ptr),
-            static_cast<const uint16 *>(src_ptr), total_bytes);
-        break;
-      case DT_BOOL:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<bool *>(dst_ptr), static_cast<const bool *>(src_ptr),
-            total_bytes);
-        break;
-      default:
-        assert(false && 'unsupported type');
+        /* Map whose keys are pointers, but are compared by their dereferenced values.
+ *
+ * Differs from a plain std::map<const K*, T, DereferencingComparator<K*> > in
+ * that methods that take a key for comparison take a K rather than taking a K*
+ * (taking a K* would be confusing, since it's the value rather than the address
+ * of the object for comparison that matters due to the dereferencing comparator).
+ *
+ * Objects pointed to by keys must not be modified in any way that changes the
+ * result of DereferencingComparator.
+ */
+template <class K, class T>
+class indirectmap {
+private:
+    typedef std::map<const K*, T, DereferencingComparator<const K*> > base;
+    base m;
+public:
+    typedef typename base::iterator iterator;
+    typedef typename base::const_iterator const_iterator;
+    typedef typename base::size_type size_type;
+    typedef typename base::value_type value_type;
     }
+    
+    class Env;
+class Iterator;
+class TableCache;
+class VersionEdit;
+    
+    void DBIter::SeekToFirst() {
+  direction_ = kForward;
+  ClearSavedValue();
+  iter_->SeekToFirst();
+  if (iter_->Valid()) {
+    FindNextUserEntry(false, &saved_key_ /* temporary storage */);
+  } else {
+    valid_ = false;
   }
-  device->eigen_sycl_device()->synchronize();
-  done(Status::OK());
 }
     
-      void CopyCPUTensorToDevice(const Tensor *cpu_tensor, Device *device,
-                             Tensor *device_tensor,
-                             StatusCallback done) const override;
+    std::string InternalKey::DebugString() const {
+  std::string result;
+  ParsedInternalKey parsed;
+  if (ParseInternalKey(rep_, &parsed)) {
+    result = parsed.DebugString();
+  } else {
+    result = '(bad)';
+    result.append(EscapeString(rep_));
+  }
+  return result;
+}
+    
+    #endif  // STORAGE_LEVELDB_DB_DBFORMAT_H_
+
+    
+    
+    {}
+    
+      // Accessors for the [start, limit) range of bytes within the JSON text from
+  // which this value was parsed, if any.
+  void setOffsetStart(size_t start);
+  void setOffsetLimit(size_t limit);
+  size_t getOffsetStart() const;
+  size_t getOffsetLimit() const;
+    
+    namespace google {
+namespace protobuf {
+namespace python {
+    }
+    }
+    }
+    
+      // Find the file that declares the given fully-qualified symbol name.
+  bool FindFileContainingSymbol(const string& symbol_name,
+                                FileDescriptorProto* output);
+    
+    namespace repeated_composite_container {
+    }
     
     #include <memory>
-#include 'tensorflow/core/framework/reader_base.h'
-#include 'tensorflow/core/framework/reader_op_kernel.h'
-#include 'tensorflow/core/lib/core/errors.h'
-#include 'tensorflow/core/lib/io/inputbuffer.h'
-#include 'tensorflow/core/lib/strings/strcat.h'
-#include 'tensorflow/core/platform/env.h'
+#ifndef _SHARED_PTR_H
+#include <google/protobuf/stubs/shared_ptr.h>
+#endif
     
     
-    {
-    {    // Allocate result tensor of shape
-    //   [*first_dim_size] + data.shape[indices.dims:]
-    TensorShape result_shape;
-    result_shape.AddDim(*first_dim_size);
-    for (int d = indices0.dims(); d < data0.dims(); d++) {
-      result_shape.AddDim(data0.dim_size(d));
+    {  printer->Print(
+    variables_,
+    'private static readonly pbc::MapField<$key_type_name$, $value_type_name$>.Codec _map_$name$_codec\n'
+    '    = new pbc::MapField<$key_type_name$, $value_type_name$>.Codec(');
+  key_generator->GenerateCodecCode(printer);
+  printer->Print(', ');
+  value_generator->GenerateCodecCode(printer);
+  printer->Print(
+    variables_,
+    ', $tag$);\n'
+    'private readonly pbc::MapField<$key_type_name$, $value_type_name$> $name$_ = new pbc::MapField<$key_type_name$, $value_type_name$>();\n');
+  WritePropertyDocComment(printer, descriptor_);
+  AddPublicMemberAttributes(printer);
+  printer->Print(
+    variables_,
+    '$access_level$ pbc::MapField<$key_type_name$, $value_type_name$> $property_name$ {\n'
+    '  get { return $name$_; }\n'
+    '}\n');
+}
+    
+    RepeatedPrimitiveFieldGenerator::RepeatedPrimitiveFieldGenerator(
+    const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options)
+    : FieldGeneratorBase(descriptor, fieldOrdinal, options) {
+}
+    
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    #include <boost/asio/detail/config.hpp>
+#include <boost/asio/completion_condition.hpp>
+    
+    namespace boost {
+namespace asio {
+namespace detail {
     }
-    OP_REQUIRES_OK(c, c->allocate_output(0, result_shape, result_ptr));
+    }
+    }
+    
+    namespace leveldb {
+namespace log {
+    }
+    }
+    
+      // Append array of per-filter offsets
+  const uint32_t array_offset = result_.size();
+  for (size_t i = 0; i < filter_offsets_.size(); i++) {
+    PutFixed32(&result_, filter_offsets_[i]);
   }
-};
+    
+    TEST(LogTest, ReadEnd) {
+  CheckOffsetPastEndReturnsNoRecords(0);
+}
+    
+      void Delete(const SnapshotImpl* s) {
+    assert(s->list_ == this);
+    s->prev_->next_ = s->next_;
+    s->next_->prev_ = s->prev_;
+    delete s;
+  }
+    
+          if (offset != 0) {
+        // There is some room in the last block.
+        avail = kBlockSize - offset;
+      } else {
+        // No room in the last block; push new one.
+        blocks_.push_back(new char[kBlockSize]);
+        avail = kBlockSize;
+      }
+    
+    namespace leveldb {
+namespace port {
+    }
+    }
+    
+    namespace leveldb {
+    }
     
      protected:
-  explicit GlobalShortcut(v8::Isolate* isolate);
-  ~GlobalShortcut() override;
+  /**
+   * @brief Initialize the logger with the name of the binary and any status
+   * logs generated between program launch and logger start.
+   *
+   * The logger initialization is called once CLI flags have been parsed, the
+   * registry items are constructed, extension routes broadcasted and extension
+   * plugins discovered (as a logger may be an extension plugin) and the config
+   * has been loaded (which may include additional CLI flag-options).
+   *
+   * All of these actions may have generated VERBOSE, INFO, WARNING, or ERROR
+   * logs. The internal logging facility, Glog, collects these intermediate
+   * status logs and a customized log sink buffers them until the active
+   * osquery logger's `init` method is called.
+   *
+   * @param binary_name The string name of the process (argv[0]).
+   * @param log The set of status (INFO, WARNING, ERROR) logs generated before
+   * the logger's `init` method was called.
+   */
+  virtual void init(const std::string& binary_name,
+                    const std::vector<StatusLogLine>& log) = 0;
     
-    #include 'content/public/browser/download_item.h'
-#include 'content/public/browser/download_manager.h'
-#include 'content/public/browser/save_page_type.h'
-#include 'v8/include/v8.h'
+      /// Remove all the routes for a given uuid.
+  void removeExternal(const RouteUUID& uuid);
+    
+    #include <osquery/dispatcher.h>
+#include <osquery/filesystem.h>
+    
+    /**
+ * @brief Access the internal storage of the Decorator parser.
+ *
+ * The decoration set is a map of column name to value. It contains the opaque
+ * set of decoration point results.
+ *
+ * Decorations are applied to log items before they are sent to the downstream
+ * logging APIs: logString, logSnapshot, etc.
+ *
+ * @param results the output parameter to write decorations.
+ */
+void getDecorations(std::map<std::string, std::string>& results);
+    
+    #include <gtest/gtest.h>
     
     
-    {}  // namespace atom
-
+    {  // Support a signed 64, a double, and treat everything else as a signed int.
+  if (type == kCFNumberSInt64Type) {
+    long long int value;
+    if (CFNumberGetValue((CFNumberRef)cf_number, type, &value)) {
+      return boost::lexical_cast<std::string>(value);
+    }
+  } else if (type == kCFNumberDoubleType) {
+    double value;
+    if (CFNumberGetValue((CFNumberRef)cf_number, type, &value)) {
+      return boost::lexical_cast<std::string>(value);
+    }
+  } else {
+    unsigned int value;
+    if (CFNumberGetValue((CFNumberRef)cf_number, type, &value)) {
+      return boost::lexical_cast<std::string>(value);
+    }
+  }
+  // Cast as a string.
+  return '0';
+}
     
-    class HttpProtocolHandler : public net::URLRequestJobFactory::ProtocolHandler {
+      pid_t result = ::waitpid(nativeHandle(), &process_status, WNOHANG);
+  if (result < 0) {
+    if (errno == ECHILD) {
+      return PROCESS_EXITED;
+    }
+    process_status = -1;
+    return PROCESS_ERROR;
+  }
+    
+    bool setEnvVar(const std::string& name, const std::string& value) {
+  auto ret = ::setenv(name.c_str(), value.c_str(), 1);
+  return (ret == 0);
+}
+    
+    std::string platformStrerr(int errnum) {
+  return ::strerror(errnum);
+}
+    
+    class TrackerLogger : public BaseLogger {
  public:
-  explicit HttpProtocolHandler(const std::string&);
-  virtual ~HttpProtocolHandler();
-    }
-    
-    namespace atom {
-    }
-    
-      // Create a menu from menu model.
-  void BuildMenuFromModel(AtomMenuModel* model, DbusmenuMenuitem* parent);
-    
-    
-    {    cvReleaseMat( &(*state)->preFilteredImg0 );
-    cvReleaseMat( &(*state)->preFilteredImg1 );
-    cvReleaseMat( &(*state)->slidingSumBuf );
-    cvReleaseMat( &(*state)->disp );
-    cvReleaseMat( &(*state)->cost );
-    cvFree( state );
-}
-    
-    CV_EXPORTS_W void divide(InputArray src1, Scalar src2, OutputArray dst, double scale=1, int dtype=-1);
-    
-            // Version: 2.0
-        BLEND_EQUATION_RGB               = 0x8009,
-        VERTEX_ATTRIB_ARRAY_ENABLED      = 0x8622,
-        VERTEX_ATTRIB_ARRAY_SIZE         = 0x8623,
-        VERTEX_ATTRIB_ARRAY_STRIDE       = 0x8624,
-        VERTEX_ATTRIB_ARRAY_TYPE         = 0x8625,
-        CURRENT_VERTEX_ATTRIB            = 0x8626,
-        VERTEX_PROGRAM_POINT_SIZE        = 0x8642,
-        VERTEX_ATTRIB_ARRAY_POINTER      = 0x8645,
-        STENCIL_BACK_FUNC                = 0x8800,
-        STENCIL_BACK_FAIL                = 0x8801,
-        STENCIL_BACK_PASS_DEPTH_FAIL     = 0x8802,
-        STENCIL_BACK_PASS_DEPTH_PASS     = 0x8803,
-        MAX_DRAW_BUFFERS                 = 0x8824,
-        DRAW_BUFFER0                     = 0x8825,
-        DRAW_BUFFER1                     = 0x8826,
-        DRAW_BUFFER2                     = 0x8827,
-        DRAW_BUFFER3                     = 0x8828,
-        DRAW_BUFFER4                     = 0x8829,
-        DRAW_BUFFER5                     = 0x882A,
-        DRAW_BUFFER6                     = 0x882B,
-        DRAW_BUFFER7                     = 0x882C,
-        DRAW_BUFFER8                     = 0x882D,
-        DRAW_BUFFER9                     = 0x882E,
-        DRAW_BUFFER10                    = 0x882F,
-        DRAW_BUFFER11                    = 0x8830,
-        DRAW_BUFFER12                    = 0x8831,
-        DRAW_BUFFER13                    = 0x8832,
-        DRAW_BUFFER14                    = 0x8833,
-        DRAW_BUFFER15                    = 0x8834,
-        BLEND_EQUATION_ALPHA             = 0x883D,
-        MAX_VERTEX_ATTRIBS               = 0x8869,
-        VERTEX_ATTRIB_ARRAY_NORMALIZED   = 0x886A,
-        MAX_TEXTURE_IMAGE_UNITS          = 0x8872,
-        FRAGMENT_SHADER                  = 0x8B30,
-        VERTEX_SHADER                    = 0x8B31,
-        MAX_FRAGMENT_UNIFORM_COMPONENTS  = 0x8B49,
-        MAX_VERTEX_UNIFORM_COMPONENTS    = 0x8B4A,
-        MAX_VARYING_FLOATS               = 0x8B4B,
-        MAX_VERTEX_TEXTURE_IMAGE_UNITS   = 0x8B4C,
-        MAX_COMBINED_TEXTURE_IMAGE_UNITS = 0x8B4D,
-        SHADER_TYPE                      = 0x8B4F,
-        FLOAT_VEC2                       = 0x8B50,
-        FLOAT_VEC3                       = 0x8B51,
-        FLOAT_VEC4                       = 0x8B52,
-        INT_VEC2                         = 0x8B53,
-        INT_VEC3                         = 0x8B54,
-        INT_VEC4                         = 0x8B55,
-        BOOL                             = 0x8B56,
-        BOOL_VEC2                        = 0x8B57,
-        BOOL_VEC3                        = 0x8B58,
-        BOOL_VEC4                        = 0x8B59,
-        FLOAT_MAT2                       = 0x8B5A,
-        FLOAT_MAT3                       = 0x8B5B,
-        FLOAT_MAT4                       = 0x8B5C,
-        SAMPLER_1D                       = 0x8B5D,
-        SAMPLER_2D                       = 0x8B5E,
-        SAMPLER_3D                       = 0x8B5F,
-        SAMPLER_CUBE                     = 0x8B60,
-        SAMPLER_1D_SHADOW                = 0x8B61,
-        SAMPLER_2D_SHADOW                = 0x8B62,
-        DELETE_STATUS                    = 0x8B80,
-        COMPILE_STATUS                   = 0x8B81,
-        LINK_STATUS                      = 0x8B82,
-        VALIDATE_STATUS                  = 0x8B83,
-        INFO_LOG_LENGTH                  = 0x8B84,
-        ATTACHED_SHADERS                 = 0x8B85,
-        ACTIVE_UNIFORMS                  = 0x8B86,
-        ACTIVE_UNIFORM_MAX_LENGTH        = 0x8B87,
-        SHADER_SOURCE_LENGTH             = 0x8B88,
-        ACTIVE_ATTRIBUTES                = 0x8B89,
-        ACTIVE_ATTRIBUTE_MAX_LENGTH      = 0x8B8A,
-        FRAGMENT_SHADER_DERIVATIVE_HINT  = 0x8B8B,
-        SHADING_LANGUAGE_VERSION         = 0x8B8C,
-        CURRENT_PROGRAM                  = 0x8B8D,
-        POINT_SPRITE_COORD_ORIGIN        = 0x8CA0,
-        LOWER_LEFT                       = 0x8CA1,
-        UPPER_LEFT                       = 0x8CA2,
-        STENCIL_BACK_REF                 = 0x8CA3,
-        STENCIL_BACK_VALUE_MASK          = 0x8CA4,
-        STENCIL_BACK_WRITEMASK           = 0x8CA5,
-    
-        static void* GetProcAddress (const char* name)
-    {
-        static void* h = NULL;
-        if (!h)
-        {
-            h = dlopen('libclAmdFft.Runtime.so', RTLD_LAZY | RTLD_GLOBAL);
-            if (!h)
-                return NULL;
-        }
-    }
-    
-    bool js_cocos2dx_builder_CCBAnimationManager_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_builder_CCBAnimationManager_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_builder_CCBAnimationManager(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_builder_CCBAnimationManager_moveAnimationsFromNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setAutoPlaySequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_actionForSoundChannel(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setBaseValue(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getLastCompletedSequenceName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setRootNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceNamedTweenDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentOutletName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRootContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setDocumentControllerName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_actionForCallbackChannel(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_init(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getKeyframeCallbacks(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setRootContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceIdTweenDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRunningSequenceName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getAutoPlaySequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRootNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setDelegate(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getSequenceDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceNamed(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getSequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setSequences(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_debug(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentControllerName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_CCBAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    extern JSClass  *jsb_cocos2d_Physics3DWorld_class;
-extern JSObject *jsb_cocos2d_Physics3DWorld_prototype;
-    
-    
-    
-    #ifdef __cplusplus
-extern 'C' {
-#endif
-#include 'tolua++.h'
-#ifdef __cplusplus
-}
-#endif
-    
-    int lua_register_cocos2dx_physics_PhysicsJointDistance(lua_State* tolua_S)
-{
-    tolua_usertype(tolua_S,'cc.PhysicsJointDistance');
-    tolua_cclass(tolua_S,'PhysicsJointDistance','cc.PhysicsJointDistance','cc.PhysicsJoint',nullptr);
-    }
-    
-    			vertices[0] = b2Mul(xf2, b2Vec2(-1.0f, 0.0f));
-			vertices[1] = b2Mul(xf2, b2Vec2(1.0f, 0.0f));
-			vertices[2] = b2Mul(xf2, b2Vec2(0.0f, 0.5f));
-			
-			b2PolygonShape poly2;
-			poly2.Set(vertices, 3);
-    
-    
-    {
-    {				prevBody = body;
-			}
-		}
-    
-    
-    {	float32 m_hz;
-	float32 m_zeta;
-	float32 m_speed;
-	b2WheelJoint* m_spring1;
-	b2WheelJoint* m_spring2;
+  ~TrackerLogger();
 };
     
     
-Handle<Value> DBWrapper::New(const Arguments& args) {
-  HandleScope scope;
-  Handle<Value> to_return;
-    }
-    
-    This pointer must be provided as 'void* state' parameter for XXH32_update().
-XXH32_update() can be called as many times as necessary.
-The user must provide a valid (allocated) input.
-The function returns an error code, with 0 meaning OK, and any other value meaning there is an error.
-Note that 'len' is type 'int', which means it is limited to 2^31-1.
-If your data is larger, it is recommended to chunk your data into blocks
-of size for example 2^30 (1GB) to avoid any 'int' overflow issue.
-    
-    
-    {};
-    
-      std::string res;
-  bool status = slists.Get('k1', &res);
-    
-      /// Remove the first (or last) num occurrences of value from the list (key)
-  /// Return the number of elements removed.
-  /// May throw RedisListException
-  int Remove(const std::string& key, int32_t num,
-             const std::string& value);
-  int RemoveFirst(const std::string& key, int32_t num,
-                  const std::string& value);
-  int RemoveLast(const std::string& key, int32_t num,
-                 const std::string& value);
-    
-      virtual bool Valid() const override { return current_ < restarts_; }
-  virtual Status status() const override { return status_; }
-  virtual Slice key() const override {
-    assert(Valid());
-    return key_.GetInternalKey();
+    {
+    {
+    {  inline void PutChar(char ch) {
+    out_buf += ch;
+    if (out_buf.length() >= kBufferSize) Flush();
   }
-  virtual Slice value() const override {
-    assert(Valid());
-    if (read_amp_bitmap_ && current_ < restarts_ &&
-        current_ != last_bitmap_offset_) {
-      read_amp_bitmap_->Mark(current_ /* current entry offset */,
-                             NextEntryOffset() - 1);
-      last_bitmap_offset_ = current_;
+  inline void Flush(void) {
+    if (out_buf.length() != 0) {
+      fp->Write(&out_buf[0], out_buf.length());
+      out_buf.clear();
     }
-    return value_;
   }
-    
-    // Checks if the string is stale or not according to TTl provided
-bool DateTieredDBImpl::IsStale(int64_t keytime, int64_t ttl, Env* env) {
-  if (ttl <= 0) {
-    // Data is fresh if TTL is non-positive
-    return false;
-  }
-  int64_t curtime;
-  if (!env->GetCurrentTime(&curtime).ok()) {
-    // Treat the data as fresh if could not get current time
-    return false;
-  }
-  return curtime >= keytime + ttl;
-}
-    
-    // A builder class to build a merging iterator by adding iterators one by one.
-class MergeIteratorBuilder {
- public:
-  // comparator: the comparator used in merging comparator
-  // arena: where the merging iterator needs to be allocated from.
-  explicit MergeIteratorBuilder(const InternalKeyComparator* comparator,
-                                Arena* arena, bool prefix_seek_mode = false);
-  ~MergeIteratorBuilder();
-    }
-    
-      jstring jname =
-      (jstring)env->CallObjectMethod(m_jcallback_obj, jname_method_id);
-  if(env->ExceptionCheck()) {
-    // exception thrown
-    return;
-  }
-  jboolean has_exception = JNI_FALSE;
-  m_name = JniUtil::copyString(env, jname, &has_exception);  // also releases jname
-  if (has_exception == JNI_TRUE) {
-    // exception thrown
-    return;
-  }
-    
-    class CompactionFilterFactoryJniCallback : public JniCallback, public CompactionFilterFactory {
- public:
-    CompactionFilterFactoryJniCallback(
-        JNIEnv* env, jobject jcompaction_filter_factory);
-    virtual std::unique_ptr<CompactionFilter> CreateCompactionFilter(
-      const CompactionFilter::Context& context);
-    virtual const char* Name() const;
-    }
-    
-    // TODO(t10737622): Improve on-device symbolification
-void getStackTraceSymbols(vector<StackTraceElement>& symbols,
-                          const vector<InstructionPointer>& trace) {
-  symbols.clear();
-  symbols.reserve(trace.size());
-    }
-    
-    NBIND_CLASS(Node)
-{
-    method(createDefault);
-    method(createWithConfig);
-    method(destroy);
-    }
-    
-    
-    {} // namespace facebook
-#endif // FBASSERT_H
+};
+}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_BASE64_H_
 
     
-      bool HasUnit(const Unit &U) { return Hashes.count(Hash(U)); }
-  bool HasUnit(const std::string &H) { return Hashes.count(H); }
-  InputInfo &ChooseUnitToMutate(Random &Rand) {
-    InputInfo &II = *Inputs[ChooseUnitIdxToMutate(Rand)];
-    assert(!II.U.empty());
-    return II;
-  };
-    
-    Unit FileToVector(const std::string &Path, size_t MaxSize = 0,
-                  bool ExitOnError = true);
-    
-    
-    {    size_t BlockCoverage;
-    size_t CallerCalleeCoverage;
-    // Precalculated number of bits in CounterBitmap.
-    size_t CounterBitmapBits;
-    std::vector<uint8_t> CounterBitmap;
-    ValueBitMap VPMap;
-  };
-    
-    #endif  // LLVM_FUZZER_OPTIONS_H
-
-    
-    void TracePC::HandleInit(uint32_t *Start, uint32_t *Stop) {
-  if (Start == Stop || *Start) return;
-  assert(NumModules < sizeof(Modules) / sizeof(Modules[0]));
-  for (uint32_t *P = Start; P < Stop; P++)
-    *P = ++NumGuards;
-  Modules[NumModules].Start = Start;
-  Modules[NumModules].Stop = Stop;
-  NumModules++;
-}
-    
-    bool ParseDictionaryFile(const std::string &Text, std::vector<Unit> *Units) {
-  if (Text.empty()) {
-    Printf('ParseDictionaryFile: file does not exist or is empty\n');
-    return false;
-  }
-  std::istringstream ISS(Text);
-  Units->clear();
-  Unit U;
-  int LineNo = 0;
-  std::string S;
-  while (std::getline(ISS, S, '\n')) {
-    LineNo++;
-    size_t Pos = 0;
-    while (Pos < S.size() && isspace(S[Pos])) Pos++;  // Skip spaces.
-    if (Pos == S.size()) continue;  // Empty line.
-    if (S[Pos] == '#') continue;  // Comment line.
-    if (ParseOneDictionaryEntry(S, &U)) {
-      Units->push_back(U);
+      size_t Read(void* dptr, size_t size) override {
+    size_t nbuffer = buffer_.length() - buffer_ptr_;
+    if (nbuffer == 0) return strm_->Read(dptr, size);
+    if (nbuffer < size) {
+      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, nbuffer);
+      buffer_ptr_ += nbuffer;
+      return nbuffer + strm_->Read(reinterpret_cast<char*>(dptr) + nbuffer,
+                                   size - nbuffer);
     } else {
-      Printf('ParseDictionaryFile: error in line %d\n\t\t%s\n', LineNo,
-             S.c_str());
-      return false;
+      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, size);
+      buffer_ptr_ += size;
+      return size;
     }
   }
-  return true;
+    
+    namespace xgboost {
+namespace common {
+/*!
+ * \brief Define mt19937 as default type Random Engine.
+ */
+typedef std::mt19937 RandomEngine;
+    }
+    }
+    
+      XGBOOST_DEVICE bst_gpair_internal<T> &operator-=(
+      const bst_gpair_internal<T> &rhs) {
+    grad_ -= rhs.grad_;
+    hess_ -= rhs.hess_;
+    return *this;
+  }
+    
+    std::string DirName(const std::string &FileName) {
+  char *Tmp = new char[FileName.size() + 1];
+  memcpy(Tmp, FileName.c_str(), FileName.size() + 1);
+  std::string Res = dirname(Tmp);
+  delete [] Tmp;
+  return Res;
 }
     
-      virtual bool isHidden() const CXX11_OVERRIDE;
+      // Dictionary provided by the user via -dict=DICT_FILE.
+  Dictionary ManualDictionary;
+  // Temporary dictionary modified by the fuzzer itself,
+  // recreated periodically.
+  Dictionary TempAutoDictionary;
+  // Persistent dictionary modified by the fuzzer, consists of
+  // entries that led to successfull discoveries in the past mutations.
+  Dictionary PersistentAutoDictionary;
     
-    namespace {
-class FindStoppedAllowedTier {
-public:
-  bool operator()(const std::shared_ptr<AnnounceTier>& tier) const
-  {
-    switch (tier->event) {
-    case AnnounceTier::DOWNLOADING:
-    case AnnounceTier::STOPPED:
-    case AnnounceTier::COMPLETED:
-    case AnnounceTier::SEEDING:
-      return true;
-    default:
-      return false;
+    template <class T>
+ATTRIBUTE_TARGET_POPCNT
+#ifdef __clang__  // g++ can't handle this __attribute__ here :(
+__attribute__((always_inline))
+#endif  // __clang__
+void TracePC::HandleCmp(void *PC, T Arg1, T Arg2) {
+  uintptr_t PCuint = reinterpret_cast<uintptr_t>(PC);
+  uint64_t ArgXor = Arg1 ^ Arg2;
+  uint64_t ArgDistance = __builtin_popcountl(ArgXor) + 1; // [1,65]
+  uintptr_t Idx = ((PCuint & 4095) + 1) * ArgDistance;
+  if (sizeof(T) == 4)
+      TORC4.Insert(ArgXor, Arg1, Arg2);
+  else if (sizeof(T) == 8)
+      TORC8.Insert(ArgXor, Arg1, Arg2);
+  HandleValueProfile(Idx);
+}
+    
+      bool UsingTracePcGuard() const {return NumModules; }
+    
+    void TraceState::TraceSwitchCallback(uintptr_t PC, size_t ValSizeInBits,
+                                     uint64_t Val, size_t NumCases,
+                                     uint64_t *Cases) {
+  if (F->InFuzzingThread()) return;
+  size_t ValSize = ValSizeInBits / 8;
+  bool TryShort = IsTwoByteData(Val);
+  for (size_t i = 0; i < NumCases; i++)
+    TryShort &= IsTwoByteData(Cases[i]);
     }
+    
+    
+    {
+    {      (void)sigemptyset(&BlockedSignalsSet);
+      (void)sigaddset(&BlockedSignalsSet, SIGCHLD);
+      if (sigprocmask(SIG_BLOCK, &BlockedSignalsSet, &OldBlockedSignalsSet) ==
+          -1) {
+        Printf('Failed to block SIGCHLD\n');
+        // Try our best to restore the signal handlers.
+        (void)sigaction(SIGQUIT, &OldSigQuitAction, NULL);
+        (void)sigaction(SIGINT, &OldSigIntAction, NULL);
+        (void)posix_spawnattr_destroy(&SpawnAttributes);
+        return -1;
+      }
+    }
+    ++ActiveThreadCount;
   }
-};
-} // namespace
-    
-    #endif // DOWNLOAD_EVENT_LISTENER_H
-
-    
-    AuthConfig::AuthConfig() {}
