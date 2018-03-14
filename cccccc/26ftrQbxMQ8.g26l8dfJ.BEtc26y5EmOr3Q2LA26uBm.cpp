@@ -1,133 +1,82 @@
-// Appends a new CMessage to the container and returns it.  The
-// CMessage is initialized using the content of kwargs.
-//
-// Returns a new reference if successful; returns NULL and sets an
-// exception if unsuccessful.
-PyObject* Add(RepeatedCompositeContainer* self,
-              PyObject* args,
-              PyObject* kwargs);
+
+        
+          // Appends the TestPartResult object to the TestPartResultArray
+  // received in the constructor.
+  //
+  // This method is from the TestPartResultReporterInterface
+  // interface.
+  virtual void ReportTestPartResult(const TestPartResult& result);
+ private:
+  void Init();
     
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_REFLECTION_CLASS_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_REFLECTION_CLASS_H__
+    // This flag brings the debugger on an assertion failure.
+GTEST_DECLARE_bool_(break_on_failure);
     
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/csharp/csharp_field_base.h>
-    
-    
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-    
-      /// Copy data from the internal buffer to the specified target buffer, without
-  /// removing the data from the internal buffer. Returns the number of bytes
-  /// copied.
-  template <typename MutableBufferSequence>
-  std::size_t peek_copy(const MutableBufferSequence& buffers)
-  {
-    return boost::asio::buffer_copy(buffers, storage_.data(), storage_.size());
-  }
-    
-    namespace boost {
-namespace asio {
-    }
-    }
-    
-      // Return a pointer to the beginning of the unread data.
-  const_buffer data() const
-  {
-    return boost::asio::buffer(buffer_) + begin_offset_;
-  }
-    
-    namespace boost {
-namespace date_time {
-    }
-    }
-    
-    template <typename MutableBufferSequence>
-class descriptor_read_op_base : public reactor_op
-{
-public:
-  descriptor_read_op_base(int descriptor,
-      const MutableBufferSequence& buffers, func_type complete_func)
-    : reactor_op(&descriptor_read_op_base::do_perform, complete_func),
-      descriptor_(descriptor),
-      buffers_(buffers)
-  {
-  }
-    }
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS) \
-  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
-typedef null_fenced_block fenced_block;
-#elif defined(__MACH__) && defined(__APPLE__)
-typedef macos_fenced_block fenced_block;
-#elif defined(__sun)
-typedef solaris_fenced_block fenced_block;
-#elif defined(__GNUC__) && defined(__arm__) \
-  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
-typedef gcc_arm_fenced_block fenced_block;
-#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
-typedef gcc_hppa_fenced_block fenced_block;
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-typedef gcc_x86_fenced_block fenced_block;
-#elif defined(__GNUC__) \
-  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
-  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
-  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
-typedef gcc_sync_fenced_block fenced_block;
-#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
-typedef win_fenced_block fenced_block;
-#else
-typedef null_fenced_block fenced_block;
-#endif
-    
-      // Check whether the map is empty.
-  bool empty() const
-  {
-    return values_.empty();
-  }
-    
-    // Global interface to functions that may or may not be available.
-extern ExternalFunctions *EF;
-    
-    struct ExternalFunctions {
-  // Initialize function pointers. Functions that are not available will be set
-  // to nullptr.  Do not call this constructor  before ``main()`` has been
-  // entered.
-  ExternalFunctions();
-    }
-    
-    Unit FileToVector(const std::string &Path, size_t MaxSize = 0,
-                  bool ExitOnError = true);
-    
-    ATTRIBUTE_NO_SANITIZE_MEMORY
-void MallocHook(const volatile void *ptr, size_t size) {
-  size_t N = AllocTracer.Mallocs++;
-  F->HandleMalloc(size);
-  if (int TraceLevel = AllocTracer.TraceLevel) {
-    Printf('MALLOC[%zd] %p %zd\n', N, ptr, size);
-    if (TraceLevel >= 2 && EF)
-      EF->__sanitizer_print_stack_trace();
-  }
-}
+      // Given directory = 'dir', base_name = 'test', number = 0,
+  // extension = 'xml', returns 'dir/test.xml'. If number is greater
+  // than zero (e.g., 12), returns 'dir/test_12.xml'.
+  // On Windows platform, uses \ as the separator rather than /.
+  static FilePath MakeFileName(const FilePath& directory,
+                               const FilePath& base_name,
+                               int number,
+                               const char* extension);
     
     
-    {  static const size_t kMaxMutations = 1 << 16;
-  size_t NumMutations;
-  TraceBasedMutation Mutations[kMaxMutations];
-  // TODO: std::set is too inefficient, need to have a custom DS here.
-  std::set<Word> InterestingWords;
-  MutationDispatcher &MD;
-  const FuzzingOptions Options;
-  const Fuzzer *F;
-  std::map<Word, size_t> AutoDictUnitCounts;
-  size_t AutoDictAdds = 0;
+    {  const T1 v1_;
+  const T2 v2_;
+  const T3 v3_;
+  const T4 v4_;
+  const T5 v5_;
+  const T6 v6_;
+  const T7 v7_;
+  const T8 v8_;
+  const T9 v9_;
+  const T10 v10_;
+  const T11 v11_;
+  const T12 v12_;
+  const T13 v13_;
+  const T14 v14_;
+  const T15 v15_;
+  const T16 v16_;
+  const T17 v17_;
+  const T18 v18_;
+  const T19 v19_;
+  const T20 v20_;
+  const T21 v21_;
+  const T22 v22_;
+  const T23 v23_;
+  const T24 v24_;
+  const T25 v25_;
+  const T26 v26_;
+  const T27 v27_;
+  const T28 v28_;
 };
+    
+    $for k [[
+$range m 0..k-1
+    
+      bool check_for_leaks = false;
+  if (argc > 1 && strcmp(argv[1], '--check_for_leaks') == 0 )
+    check_for_leaks = true;
+  else
+    printf('%s\n', 'Run this program with --check_for_leaks to enable '
+           'custom leak checking in the tests.');
+    
+    /// Ping an extension manager or extension.
+Status pingExtension(const std::string& path);
+    
+      /**
+   * @brief Initialize any platform dependent libraries or objects
+   *
+   * On windows, we require the COM libraries be initialized just once
+   */
+  static void platformSetup();
+    
+      /*
+   * @brief A helper function to perform a start to finish carve
+   *
+   * This function walks through the carve, compress, and exfil functions
+   * in one fell swoop. Use of this class should largely happen through
+   * this function.
+   */
+  void start();
