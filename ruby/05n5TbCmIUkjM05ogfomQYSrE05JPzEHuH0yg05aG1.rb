@@ -1,81 +1,43 @@
-# TODO:
-# group :mongoid do
-#   gem 'mongoid', '~> 4.0.0'
-# end
 
-    
-      # Helper for use in before_actions where no authentication is required.
-  #
-  # Example:
-  #   before_action :require_no_authentication, only: :new
-  def require_no_authentication
-    assert_is_devise_resource!
-    return unless is_navigational_format?
-    no_input = devise_mapping.no_input_strategies
-    
-    module Devise
-  module Controllers
-    # Create url helpers to be used with resource/scope configuration. Acts as
-    # proxies to the generated routes created by devise.
-    # Resource param can be a string or symbol, a class, or an instance object.
-    # Example using a :user resource:
-    #
-    #   new_session_path(:user)      => new_user_session_path
-    #   session_path(:user)          => user_session_path
-    #   destroy_session_path(:user)  => destroy_user_session_path
-    #
-    #   new_password_path(:user)     => new_user_password_path
-    #   password_path(:user)         => user_password_path
-    #   edit_password_path(:user)    => edit_user_password_path
-    #
-    #   new_confirmation_path(:user) => new_user_confirmation_path
-    #   confirmation_path(:user)     => user_confirmation_path
-    #
-    # Those helpers are included by default to ActionController::Base.
-    #
-    # In case you want to add such helpers to another class, you can do
-    # that as long as this new class includes both url_helpers and
-    # mounted_helpers. Example:
-    #
-    #     include Rails.application.routes.url_helpers
-    #     include Rails.application.routes.mounted_helpers
-    #
-    module UrlHelpers
-      def self.remove_helpers!
-        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
-          remove_method method
+        
+                  # Return the registry
+          data[:communicator]
         end
+    
+          # This gets the value of the block with the given key.
+      def get(key)
+        key    = Regexp.quote(key)
+        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$\r?\n?(.*?)\r?\n?^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
+        match  = regexp.match(@value)
+        return nil if !match
+        match[1]
       end
     
-    unless invalids.empty?
-  puts '\n\nFailed links:'
-  invalids.each do |link|
-    puts '- #{link}'
-  end
-  puts 'Done with errors.'
-  exit(1)
-end
+            self.arguments = [
+          CLAide::Argument.new('NAME', false),
+        ]
     
-          if record.created_at.nil? || record.created_at >= now || record.created_at == record.updated_at
-        yield
-      else
-        record.id = Mastodon::Snowflake.id_at(record.created_at)
-        tries     = 0
+            def run
+          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
+          if @pod_name.nil? # Print all
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
+            end
+          else # Print only for the requested pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            else
+              print_pod_cache_infos(@pod_name, cache_descriptors)
+            end
+          end
+        end
     
-      # After we load the schema, make sure we have sequences for each
-  # table using timestamp IDs.
-  Rake::Task['db:schema:load'].enhance do
-    Rake::Task['db:ensure_id_sequences_exist'].invoke
-  end
+      TYPES = [ 'input', 'filter', 'output', 'codec' ]
     
-      def id
-    object.id.to_s
-  end
-    
-            render json: collection_presenter,
-               serializer: ActivityPub::CollectionSerializer,
-               adapter: ActivityPub::Adapter,
-               content_type: 'application/activity+json'
+          def initialize(agent)
+        @agent = agent
+        logger.debug('[api-service] start') if logger.debug?
       end
-    end
-  end
+    
+        node_cache[:plugin_section][start_index] = r0
