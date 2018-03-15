@@ -1,12 +1,11 @@
 
         
-        
-    { private:
-  std::unordered_set<string> debug_urls_;
-};
-    
-    #endif  // TENSORFLOW_LIB_IO_RECORD_WRITER_H_
-
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
     Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an 'AS IS' BASIS,
@@ -15,166 +14,274 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
     
-    #include 'tensorflow/core/common_runtime/dma_helper.h'
-#include 'tensorflow/core/common_runtime/sycl/sycl_device_context.h'
+      // List input
+  ExpectFailure(Builder().Input(FakeInput(3, DT_FLOAT)),
+                'List provided to input 'a' when single Tensor expected while');
     
-      void CheckArgsAndAllocateResult(OpKernelContext* c,
-                                  OpInputList* indices_inputs,
-                                  OpInputList* data_inputs, int* first_dim_size,
-                                  int* data_elements_size,
-                                  Tensor** result_ptr) {
-    // Find maximum index in the indices vectors
-    OP_REQUIRES_OK(c, c->input_list('indices', indices_inputs));
-    }
-    
-    TF_CALL_GPU_NUMBER_TYPES(REGISTER_GPU);
-TF_CALL_complex64(REGISTER_GPU);
-TF_CALL_complex128(REGISTER_GPU);
-TF_CALL_int64(REGISTER_GPU);
-TF_CALL_int32(REGISTER_GPU)
-    
-    
-    {
-    {    IntType split = gidx / split_size;
-    const T* input_ptr = input_ptrs[split];
-    IntType col_offset = gidx % split_size;
-#pragma unroll
-    for (; gidy < total_rows; gidy += blockDim.y * gridDim.y) {
-      output[gidy * total_cols + gidx] =
-          input_ptr[gidy * split_size + col_offset];
-    }
-  }
-}
-    
-    namespace leveldb {
-namespace log {
-    }
-    }
-    
-    void VersionEdit::Clear() {
-  comparator_.clear();
-  log_number_ = 0;
-  prev_log_number_ = 0;
-  last_sequence_ = 0;
-  next_file_number_ = 0;
-  has_comparator_ = false;
-  has_log_number_ = false;
-  has_prev_log_number_ = false;
-  has_next_file_number_ = false;
-  has_last_sequence_ = false;
-  deleted_files_.clear();
-  new_files_.clear();
-}
-    
-        if (bytes_ > 0) {
-      char rate[100];
-      snprintf(rate, sizeof(rate), '%6.1f MB/s',
-               (bytes_ / 1048576.0) / (finish - start_));
-      if (!message_.empty()) {
-        message_  = std::string(rate) + ' ' + message_;
-      } else {
-        message_ = rate;
-      }
-    }
-    
-    class Issue178 { };
-    
-    namespace {
-class EmptyIterator : public Iterator {
- public:
-  EmptyIterator(const Status& s) : status_(s) { }
-  virtual bool Valid() const { return false; }
-  virtual void Seek(const Slice& target) { }
-  virtual void SeekToFirst() { }
-  virtual void SeekToLast() { }
-  virtual void Next() { assert(false); }
-  virtual void Prev() { assert(false); }
-  Slice key() const { assert(false); return Slice(); }
-  Slice value() const { assert(false); return Slice(); }
-  virtual Status status() const { return status_; }
- private:
-  Status status_;
+    namespace internal {
+template <typename T>
+struct functor_traits<scalar_sigmoid_fast_derivative_op<T> > {
+  enum {
+    Cost = NumTraits<T>::AddCost * 2 + NumTraits<T>::MulCost,
+    PacketAccess = packet_traits<T>::HasAdd && packet_traits<T>::HasMul &&
+                   packet_traits<T>::HasNegate
+  };
 };
-}  // namespace
+}  // namespace internal
     
-    #ifndef STORAGE_LEVELDB_TABLE_ITERATOR_WRAPPER_H_
-#define STORAGE_LEVELDB_TABLE_ITERATOR_WRAPPER_H_
+    // ---------------------------------------------------------------------------
+// Inline implementation
+// ---------------------------------------------------------------------------
+template <PrefetchHint hint>
+inline void prefetch(const void* x) {
+// Check of COMPILER_GCC macro below is kept only for backward-compatibility
+// reasons. COMPILER_GCC3 is the macro that actually enables prefetch.
+#if defined(__llvm__) || defined(COMPILER_GCC) || defined(COMPILER_GCC3)
+  __builtin_prefetch(x, 0, hint);
+#else
+// You get no effect.  Feel free to add more sections above.
+#endif
+}
     
-     private:
-  void FindSmallest();
-  void FindLargest();
+    #endif  // TENSORFLOW_COMMON_RUNTIME_SYCL_SYCL_DEVICE_CONTEXT_H_
+
     
-      if (r->pending_index_entry) {
-    assert(r->data_block.empty());
-    r->options.comparator->FindShortestSeparator(&r->last_key, key);
-    std::string handle_encoding;
-    r->pending_handle.EncodeTo(&handle_encoding);
-    r->index_block.Add(r->last_key, Slice(handle_encoding));
-    r->pending_index_entry = false;
+    class TFRecordReader : public ReaderBase {
+ public:
+  TFRecordReader(const string& node_name, const string& compression_type,
+                 Env* env)
+      : ReaderBase(strings::StrCat('TFRecordReader '', node_name, ''')),
+        env_(env),
+        offset_(0),
+        compression_type_(compression_type) {}
+    }
+    
+    
+    {  // Copy the encoded audio file to the output tensor.
+  Tensor* output = nullptr;
+  OP_REQUIRES_OK(context, context->allocate_output(0, TensorShape(), &output));
+  output->scalar<string>()() = encoded_audio;
+}
+    
+    template <typename T>
+void DynamicStitchGPUImpl(const Eigen::GpuDevice& gpu_device,
+                          const int32 slice_size, const int32 first_dim_size,
+                          const CudaDeviceArrayStruct<int>& input_indices,
+                          const CudaDeviceArrayStruct<const T*>& input_ptrs,
+                          T* output) {
+  const int32 output_size = first_dim_size * slice_size;
+  auto config = GetCudaLaunchConfig(output_size, gpu_device);
+    }
+    
+      // Post 'open' event.
+  static void EmitOpenEvent(const std::string& path);
+    
+    v8::Handle<v8::Value> AllocateObject(int routing_id,
+                                     int object_id,
+                                     const std::string& type,
+                                     v8::Handle<v8::Value> options) {
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  v8::EscapableHandleScope handle_scope(isolate);
+    }
+    
+      RenderView* render_view = GetCurrentRenderView();
+  if (!render_view) {
+    args.GetReturnValue().Set(isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
+                                     'Unable to get render view in AllocateObject'))));
+    return;
   }
     
-      /// Returns the runner name
-  std::string name() const {
-    return name_;
-  }
+    namespace nw {
+    }
     
-      /// See DropPrivileges::dropToParent but for a user's UID and GID.
-  bool dropTo(const std::string& user);
+    void MenuItem::SetChecked(bool checked) {
+  // Set active will cause 'activate' to be emitted, so block here
+  block_active_ = true;
+  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menu_item_), checked);
+  block_active_ = false;
+}
+    
+      /// Access an array element (zero based index ).
+  /// If the array contains less than index element, then null value are
+  /// inserted
+  /// in the array so that its size is index+1.
+  /// (You may need to say 'value[0u]' to get your compiler to distinguish
+  ///  this from the operator[] which takes a string.)
+  Value& operator[](ArrayIndex index);
+    
+    // Find a file by file name.
+bool PyDescriptorDatabase::FindFileByName(const string& filename,
+                                          FileDescriptorProto* output) {
+  ScopedPyObjectPtr py_descriptor(PyObject_CallMethod(
+      py_database_, 'FindFileByName', 's#', filename.c_str(), filename.size()));
+  return GetFileDescriptorProto(py_descriptor.get(), output);
+}
+    
+    namespace google {
+namespace protobuf {
+namespace python {
+    }
+    }
+    }
+    
+    
+    {  // Pointer to the parent's descriptor that describes this
+  // field.  Used together with the parent's message when making a
+  // default message instance mutable.
+  // The pointer is owned by the global DescriptorPool.
+  const FieldDescriptor* parent_field_descriptor;
+} RepeatedScalarContainer;
+    
+    
+    {  ASSERT_TRUE(message.ParseFromString(data));
+  EXPECT_TRUE(message.has_any_value());
+  ASSERT_TRUE(message.any_value().UnpackTo(&submessage));
+  EXPECT_EQ(12345, submessage.int32_value());
+}
+    
+    // Generator options (used by csharp_generator.cc):
+struct Options {
+  Options() :
+      file_extension('.cs'),
+      base_namespace(''),
+      base_namespace_specified(false),
+      internal_access(false) {
+  }
+  // Extension of the generated file. Defaults to '.cs'
+  string file_extension;
+  // Base namespace to use to create directory hierarchy. Defaults to ''.
+  // This option allows the simple creation of a conventional C# file layout,
+  // where directories are created relative to a project-specific base
+  // namespace. For example, in a project with a base namespace of PetShop, a
+  // proto of user.proto with a C# namespace of PetShop.Model.Shared would
+  // generate Model/Shared/User.cs underneath the specified --csharp_out
+  // directory.
+  //
+  // If no base namespace is specified, all files are generated in the
+  // --csharp_out directory, with no subdirectories created automatically.
+  string base_namespace;
+  // Whether the base namespace has been explicitly specified by the user.
+  // This is required as the base namespace can be explicitly set to the empty
+  // string, meaning 'create a full directory hierarchy, starting from the first
+  // segment of the namespace.'
+  bool base_namespace_specified;
+  // Whether the generated classes should have accessibility level of 'internal'.
+  // Defaults to false that generates 'public' classes.
+  bool internal_access;
+};
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/wire_format.h>
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
+    }
+    
+    void CV_ModelEstimator2_Test::get_test_array_types_and_sizes( int /*test_case_idx*/,
+                                                              vector<vector<Size> > &sizes, vector<vector<int> > &types )
+{
+    RNG &rng = ts->get_rng();
+    checkPartialSubsets = (cvtest::randInt(rng) % 2 == 0);
+    }
+    
+    CV_EXPORTS_W void multiply(InputArray src1, Scalar src2, OutputArray dst, double scale=1, int dtype=-1);
+    
+    #include 'precomp.hpp'
+    
+    const std::string kKernelSyscallAddrModifiedPath = '/sys/kernel/camb/syscall_addr_modified';
+const std::string kKernelTextHashPath = '/sys/kernel/camb/text_segment_hash';
+    
+      /**
+   * @brief Support the registry calling API for extensions.
+   *
+   * The database plugin 'fast-calls' directly to local plugins.
+   * Extensions cannot use an extension-local backing store so their requests
+   * are routed like all other plugins.
+   */
+  Status call(const PluginRequest& request, PluginResponse& response) override;
+    
+      /// Testing only, require that the interruptible bypass the first check.
+  std::atomic<bool> bypass_check_{false};
+    
+      /// Get the total number of Subscription%s across ALL EventPublisher%s.
+  static size_t numSubscriptions(const std::string& type_id);
+    
+    /// The main runloop entered by an Extension, start an ExtensionRunner thread.
+Status startExtension(const std::string& name,
+                      const std::string& version,
+                      const std::string& min_sdk_version);
     
      private:
-  /// the internal storage of the status code
-  int code_;
+  /// The container of all shell, CLI, and normal flags.
+  std::map<std::string, FlagDetail> flags_;
+    
+    
+    {/**
+ * @brief Write a log line to the OS system log.
+ *
+ * There are occasional needs to log independently of the osquery logging
+ * facilities. This allows a feature (not a table) to bypass all osquery
+ * configuration and log to the OS system log.
+ *
+ * Linux/Darwin: this uses syslog's LOG_NOTICE.
+ * Windows: This will end up inside the Facebook/osquery in the Windows
+ * Event Log.
+ */
+void systemLog(const std::string& line);
+} // namespace osquery
+
     
     /**
- * @brief Access the internal storage of the Decorator parser.
+ * @brief A utility class which is used to express the state of operations.
  *
- * The decoration set is a map of column name to value. It contains the opaque
- * set of decoration point results.
- *
- * Decorations are applied to log items before they are sent to the downstream
- * logging APIs: logString, logSnapshot, etc.
- *
- * @param results the output parameter to write decorations.
+ * @code{.cpp}
+ *   osquery::Status foobar() {
+ *     auto na = doSomeWork();
+ *     if (na->itWorked()) {
+ *       return osquery::Status(0, 'OK');
+ *     } else {
+ *       return osquery::Status(1, na->getErrorString());
+ *     }
+ *   }
+ * @endcode
  */
-void getDecorations(std::map<std::string, std::string>& results);
+class Status {
+ public:
+  /**
+   * @brief Default constructor
+   *
+   * Note that the default constructor initialized an osquery::Status instance
+   * to a state such that a successful operation is indicated.
+   */
+  explicit Status(int c = 0) : code_(c), message_('OK') {}
+    }
     
-    
-    {  // Cleanup allocations.
-  std::string result(buffer);
-  free(buffer);
-  return result;
+    static void unsubscribe_all_events() {
+  for (int i = 0; i < OSQUERY_NUM_EVENTS; i++) {
+    if (osquery_publishers[i]) {
+      osquery_publishers[i]->unsubscribe();
+    }
+  }
 }
     
-    bool js_cocos2dx_navmesh_NavMesh_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_navmesh_NavMesh_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_navmesh_NavMesh(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_navmesh(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_navmesh_NavMesh_removeNavMeshObstacle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMesh_removeNavMeshAgent(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMesh_update(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMesh_isDebugDrawEnabled(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMesh_addNavMeshAgent(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMesh_addNavMeshObstacle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMesh_setDebugDrawEnable(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMesh_debugDraw(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMesh_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMesh_NavMesh(JSContext *cx, uint32_t argc, jsval *vp);
+    Status FilesystemConfigPlugin::genConfig(
+    std::map<std::string, std::string>& config) {
+  boost::system::error_code ec;
+  if (!fs::is_regular_file(FLAGS_config_path, ec) ||
+      ec.value() != errc::success) {
+    return Status(1, 'config file does not exist: ' + FLAGS_config_path);
+  }
+    }
     
-    
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,'cc.SimpleAudioEngine',0,&tolua_err)) goto tolua_lerror;
-#endif
-    
-    
-    
-        return 0;
-}
-int lua_cocos2dx_physics_EventListenerPhysicsContactWithGroup_create(lua_State* tolua_S)
-{
-    int argc = 0;
-    bool ok  = true;
-    
-    USING_NS_CC;
-    
-    			b2PolygonShape shape;
-			shape.Set(vertices, 3);
+    #include <osquery/config.h>
+#include <osquery/dispatcher.h>
