@@ -1,34 +1,13 @@
 
         
-            def build_for_type(type, user, attributes = {})
-      attributes.delete(:type)
-    
-          if options[:roles].is_a?(Symbol)
-        options[:roles] = [options[:roles]]
+              def installed_gem_version(gem_name)
+        Gem.loaded_specs[gem_name].version
       end
     
-        def setup!(scheduler, mutex)
-      @scheduler = scheduler
-      @mutex = mutex
-      setup if respond_to?(:setup)
+        # Fetch a var from the context
+    # @param [Symbol] variable The variable to fetch
+    # @param [Object] default  The default value if not found
+    #
+    def fetch(*args)
+      context.fetch(*args)
     end
-    
-        def id_at(timestamp)
-      id  = timestamp.to_i * 1000 + rand(1000)
-      id  = id << 16
-      id += rand(2**16)
-      id
-    end
-    
-          it 'processes payload with actor if valid signature exists' do
-        payload['signature'] = {'type' => 'RsaSignature2017'}
-    
-    describe Settings::NotificationsController do
-  render_views
-    
-            def_node_matcher :redundant_regex?, <<-PATTERN
-          {(send $!nil? {:match :=~} (regexp (str $#literal_at_start?) (regopt)))
-           (send (regexp (str $#literal_at_start?) (regopt)) {:match :=~} $_)}
-        PATTERN
-    
-            private
