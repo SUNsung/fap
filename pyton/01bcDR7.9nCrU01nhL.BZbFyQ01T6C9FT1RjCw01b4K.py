@@ -1,70 +1,154 @@
 
         
-        try:
-    input = raw_input
-except NameError:
-    pass
+                if any([s_line.startswith(s) for s in ['* [', '- [']]):
+            if indent == last_indent:
+                blocks[-1].append(line)
+            else:
+                blocks.append([line])
+            last_indent = indent
+        else:
+            blocks.append([line])
+            last_indent = None
     
-    if __name__ == '__main__':
-    main()
+    plot(euclidean_distances)
+plot(rbf_kernels)
+plt.show()
 
     
-    if isinstance(helptext, bytes):
-    helptext = helptext.decode('utf-8')
+        print('')
     
-    from youtube_dl.swfinterp import SWFInterpreter
+    # Predict the result on some short new sentences:
+sentences = [
+    u'This is a language detection test.',
+    u'Ceci est un test de d\xe9tection de la langue.',
+    u'Dies ist ein Test, um die Sprache zu erkennen.',
+]
+predicted = clf.predict(sentences)
     
-    from test.helper import assertRegexpMatches
+    Sentiment analysis can be casted as a binary text classification problem,
+that is fitting a linear classifier on features extracted from the text
+of the user messages so as to guess wether the opinion of the author is
+positive or negative.
     
-            webpage = self._download_webpage(url, video_id)
+    Second example
+--------------
+The second example shows the ability of the Minimum Covariance Determinant
+robust estimator of covariance to concentrate on the main mode of the data
+distribution: the location seems to be well estimated, although the covariance
+is hard to estimate due to the banana-shaped distribution. Anyway, we can
+get rid of some outlying observations.
+The One-Class SVM is able to capture the real data structure, but the
+difficulty is to adjust its kernel bandwidth parameter so as to obtain
+a good compromise between the shape of the data scatter matrix and the
+risk of over-fitting the data.
     
-                stream_url_hls = json_data.get('stream_url_hls')
-            if stream_url_hls:
-                formats.extend(self._extract_m3u8_formats(
-                    stream_url_hls, video_id, 'mp4',
-                    entry_protocol='m3u8_native', m3u8_id='hls', fatal=False))
+    plt.matshow(fit_data, cmap=plt.cm.Blues)
+plt.title('After biclustering; rearranged to show biclusters')
+    
+    # Train uncalibrated random forest classifier on whole train and validation
+# data and evaluate on test data
+clf = RandomForestClassifier(n_estimators=25)
+clf.fit(X_train_valid, y_train_valid)
+clf_probs = clf.predict_proba(X_test)
+score = log_loss(y_test, clf_probs)
+    
+        Only one feature contains discriminative information, the other features
+    contain only noise.
+    '''
+    X, y = make_blobs(n_samples=n_samples, n_features=1, centers=[[-2], [2]])
+    
+    plt.title('Clustering measures for 2 random uniform labelings\n'
+          'with equal number of clusters')
+plt.xlabel('Number of clusters (Number of samples is fixed to %d)' % n_samples)
+plt.ylabel('Score value')
+plt.legend(plots, names)
+plt.ylim(ymin=-0.05, ymax=1.05)
+    
+        def _adjust_thread_count(self):
+        # When the executor gets lost, the weakref callback will wake up
+        # the worker threads.
+        def weakref_cb(_, q=self._work_queue):
+            q.put(None)
+        # TODO(bquinlan): Should avoid creating new threads if there are more
+        # idle threads than items in the work queue.
+        if len(self._threads) < self._max_workers:
+            t = threading.Thread(target=_worker,
+                                 args=(weakref.ref(self, weakref_cb),
+                                       self._work_queue))
+            t.daemon = True
+            t.start()
+            self._threads.add(t)
     
     
-class ClipRsIE(OnetBaseIE):
-    _VALID_URL = r'https?://(?:www\.)?clip\.rs/(?P<id>[^/]+)/\d+'
-    _TEST = {
-        'url': 'http://www.clip.rs/premijera-frajle-predstavljaju-novi-spot-za-pesmu-moli-me-moli/3732',
-        'md5': 'c412d57815ba07b56f9edc7b5d6a14e5',
-        'info_dict': {
-            'id': '1488842.1399140381',
-            'ext': 'mp4',
-            'title': 'PREMIJERA Frajle predstavljaju novi spot za pesmu Moli me, moli',
-            'description': 'md5:56ce2c3b4ab31c5a2e0b17cb9a453026',
-            'duration': 229,
-            'timestamp': 1459850243,
-            'upload_date': '20160405',
-        }
-    }
+def namedtuple(typename, field_names):
+    '''Returns a new subclass of tuple with named fields.
     
-    Does two benchmarks
+        This worker is run in a separate process.
     
-        return lasso_results, lars_lasso_results
+    def main():
+    for name, fn in [('sequential',
+                      functools.partial(download_urls_sequential, URLS)),
+                     ('processes',
+                      functools.partial(download_urls_with_executor,
+                                        URLS,
+                                        ProcessPoolExecutor(10))),
+                     ('threads',
+                      functools.partial(download_urls_with_executor,
+                                        URLS,
+                                        ThreadPoolExecutor(10)))]:
+        sys.stdout.write('%s: ' % name.ljust(12))
+        start = time.time()
+        url_map = fn()
+        sys.stdout.write('%.2f seconds (%d of %d downloaded)\n' %
+                         (time.time() - start, len(url_map), len(URLS)))
     
-    n_samples = np.logspace(.5, 3, 9)
-n_features = np.logspace(1, 3.5, 7)
-N_samples, N_features = np.meshgrid(n_samples,
-                                    n_features)
-scikits_time = np.zeros(N_samples.shape)
-scipy_time = np.zeros(N_samples.shape)
+    def with_thread_pool_executor():
+    with ThreadPoolExecutor(10) as executor:
+        return list(executor.map(is_prime, PRIMES))
     
-    If all examples are from the same class, it uses a one-class SVM.
-    
-    # Generate data
-X, y = make_blobs(n_samples=1000, n_features=2, random_state=42,
-                  cluster_std=5.0)
-X_train, y_train = X[:600], y[:600]
-X_valid, y_valid = X[600:800], y[600:800]
-X_train_valid, y_train_valid = X[:800], y[:800]
-X_test, y_test = X[800:], y[800:]
+    TIMEOUT_SECONDS = 0.1
     
     
-n_train = 20  # samples for training
-n_test = 200  # samples for testing
-n_averages = 50  # how often to repeat classification
-n_features_max = 75  # maximum number of features
-step = 4  # step size for the calculation
+GENERIC_RESPONSE = {
+  'clang': {
+    'has_support': True,
+    'version': 'Clang version'
+  },
+  'completer': {
+    'items': [
+      {
+        'key': 'key',
+        'value': 'value'
+      }
+    ],
+    'name': 'Completer name',
+    'servers': [
+      {
+        'address': '127.0.0.1',
+        'executable': '/path/to/executable',
+        'extras': [
+          {
+            'key': 'key',
+            'value': 'value'
+          }
+        ],
+        'is_running': True,
+        'logfiles': [
+          '/path/to/stdout/logfile',
+          '/path/to/stderr/logfile'
+        ],
+        'name': 'Server name',
+        'pid': 12345,
+        'port': 1234
+      }
+    ]
+  },
+  'extra_conf': {
+    'is_loaded': False,
+    'path': '/path/to/extra/conf'
+  },
+  'python': {
+    'executable': '/path/to/python/interpreter',
+    'version': 'Python version'
+  }
+}
