@@ -1,56 +1,104 @@
 
         
-        import itertools
-import json
-import os
-import re
-import sys
+        # -- Options for LaTeX output ---------------------------------------------
     
-        def test_youtube_extract(self):
-        assertExtractId = lambda url, id: self.assertEqual(YoutubeIE.extract_id(url), id)
-        assertExtractId('http://www.youtube.com/watch?&v=BaW_jenozKc', 'BaW_jenozKc')
-        assertExtractId('https://www.youtube.com/watch?&v=BaW_jenozKc', 'BaW_jenozKc')
-        assertExtractId('https://www.youtube.com/watch?feature=player_embedded&v=BaW_jenozKc', 'BaW_jenozKc')
-        assertExtractId('https://www.youtube.com/watch_popup?v=BaW_jenozKc', 'BaW_jenozKc')
-        assertExtractId('http://www.youtube.com/watch?v=BaW_jenozKcsharePLED17F32AD9753930', 'BaW_jenozKc')
-        assertExtractId('BaW_jenozKc', 'BaW_jenozKc')
+            query = '''
+          SELECT sub.*
+              FROM (
+                    SELECT *
+                      FROM s1.t1
+                     WHERE day_of_week = 'Friday'
+                   ) sub
+          WHERE sub.resolution = 'NONE'
+        '''
+        self.assertEquals({'s1.t1'}, self.extract_tables(query))
     
     
-import errno
-import io
-import json
-import re
-import subprocess
-    
-        def run(self):
+@manager.command
+def update_datasources_cache():
+    '''Refresh sqllab datasources cache'''
+    from superset.models.core import Database
+    for database in db.session.query(Database).all():
+        print('Fetching {} datasources ...'.format(database.name))
         try:
-            self.server_sock = self._create_socket_and_bind()
-            # in case self.port = 0
-            self.port = self.server_sock.getsockname()[1]
-            self.ready_event.set()
-            self._handle_requests()
+            database.all_table_names(force=True)
+            database.all_view_names(force=True)
+        except Exception as e:
+            print('{}'.format(e.message))
     
-            try:
-            username, password = get_auth_from_url(new_proxies[scheme])
-        except KeyError:
-            username, password = None, None
+    appbuilder.add_link(
+    'Scan New Datasources',
+    label=__('Scan New Datasources'),
+    href='/druid/scan_new_datasources/',
+    category='Sources',
+    category_label=__('Sources'),
+    category_icon='fa-database',
+    icon='fa-refresh')
+appbuilder.add_link(
+    'Refresh Druid Metadata',
+    label=__('Refresh Druid Metadata'),
+    href='/druid/refresh_datasources/',
+    category='Sources',
+    category_label=__('Sources'),
+    category_icon='fa-database',
+    icon='fa-cog')
     
-        @pytest.mark.parametrize(
-        'url, expected', (
-            ('http://example.com/path#fragment', 'http://example.com/path?a=b#fragment'),
-            ('http://example.com/path?key=value#fragment', 'http://example.com/path?key=value&a=b#fragment')
-        ))
-    def test_params_are_added_before_fragment(self, url, expected):
-        request = requests.Request('GET', url, params={'a': 'b'}).prepare()
-        assert request.url == expected
+            # Fail before adding if the table can't be found
+        if not table.database.has_table(table):
+            raise Exception(_(
+                'Table [{}] could not be found, '
+                'please double check your '
+                'database connection, schema, and '
+                'table name').format(table.name))
     
-        def within_past_week(self, timestamp):
-        '''Return True if timestamp is within past week, False otherwise.'''
-        ...
+        This configures the context with just a URL
+    and not an Engine, though an Engine is acceptable
+    here as well.  By skipping the Engine creation
+    we don't even need a DBAPI to be available.
+    
+    # revision identifiers, used by Alembic.
+revision = '1296d28ec131'
+down_revision = '6414e83d82b7'
+    
+    '''
+    
+    from alembic import op
+import sqlalchemy as sa
     
     
-class BlackJackHand(Hand):
+if __name__ == '__main__':
+    cli()
+
     
-        def __init__(self, db):
-        self.db = db
-        pass
+    '''
+Port of the Java example of 'Parameter Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
+http://xunitpatterns.com/Dependency%20Injection.html.
+    
+    ### OUTPUT ###
+# request 2 handled in handler 1
+# request 5 handled in handler 1
+# request 14 handled in handler 2
+# request 22 handled in handler 3
+# request 18 handled in handler 2
+# request 3 handled in handler 1
+# end of chain, no handler for 35
+# request 27 handled in handler 3
+# request 20 handled in handler 2
+# ------------------------------
+# request 2 handled in coroutine 1
+# request 5 handled in coroutine 1
+# request 14 handled in coroutine 2
+# request 22 handled in coroutine 3
+# request 18 handled in coroutine 2
+# request 3 handled in coroutine 1
+# end of chain, no coroutine for 35
+# request 27 handled in coroutine 3
+# request 20 handled in coroutine 2
+# (0.2369999885559082, 0.16199994087219238)
+
+    
+    print('Counting to five...')
+for number in count_to_five():
+    print(number, end=' ')
