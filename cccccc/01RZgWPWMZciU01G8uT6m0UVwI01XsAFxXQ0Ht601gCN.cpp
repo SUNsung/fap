@@ -1,203 +1,180 @@
-namespace atom {
-    }
-    
-    namespace api {
-    }
-    
-    bool Event::SendReply(const base::string16& json) {
-  if (message_ == nullptr || sender_ == nullptr)
-    return false;
-    }
-    
-      // event.sendReply(json), used for replying synchronous message.
-  bool SendReply(const base::string16& json);
-    
-    SavePageHandler::SavePageHandler(content::WebContents* web_contents,
-                                 const SavePageCallback& callback)
-    : web_contents_(web_contents),
-      callback_(callback) {
-}
-    
-    
-    {}  // namespace atom
 
-    
-      const net::AuthChallengeInfo* auth_info() const { return auth_info_.get(); }
-    
-    
+        
+        
     { private:
-  DISALLOW_COPY_AND_ASSIGN(URLRequestAsyncAsarJob);
+  std::unordered_set<string> debug_urls_;
 };
     
-    #ifndef ATOM_BROWSER_NET_URL_REQUEST_STRING_JOB_H_
-#define ATOM_BROWSER_NET_URL_REQUEST_STRING_JOB_H_
+    #endif  // TENSORFLOW_LIB_IO_RECORD_WRITER_H_
+
     
-    // The entry point from ChromeMain into the relauncher process.
-int RelauncherMain(const content::MainFunctionParams& main_parameters);
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    // Header is checksum (4 bytes), length (2 bytes), type (1 byte).
-static const int kHeaderSize = 4 + 2 + 1;
+    #include 'tensorflow/core/common_runtime/dma_helper.h'
+#include 'tensorflow/core/common_runtime/sycl/sycl_device_context.h'
     
-    bool FilterBlockReader::KeyMayMatch(uint64_t block_offset, const Slice& key) {
-  uint64_t index = block_offset >> base_lg_;
-  if (index < num_) {
-    uint32_t start = DecodeFixed32(offset_ + index*4);
-    uint32_t limit = DecodeFixed32(offset_ + index*4 + 4);
-    if (start <= limit && limit <= static_cast<size_t>(offset_ - data_)) {
-      Slice filter = Slice(data_ + start, limit - start);
-      return policy_->KeyMayMatch(key, filter);
-    } else if (start == limit) {
-      // Empty filters do not match any keys
-      return false;
-    }
-  }
-  return true;  // Errors are treated as potential matches
-}
-    
-      // If a seek to internal key 'k' in specified file finds an entry,
-  // call (*handle_result)(arg, found_key, found_value).
-  Status Get(const ReadOptions& options,
-             uint64_t file_number,
-             uint64_t file_size,
-             const Slice& k,
-             void* arg,
-             void (*handle_result)(void*, const Slice&, const Slice&));
-    
-    #ifndef STORAGE_LEVELDB_HELPERS_MEMENV_MEMENV_H_
-#define STORAGE_LEVELDB_HELPERS_MEMENV_MEMENV_H_
-    
-    BlockBuilder::BlockBuilder(const Options* options)
-    : options_(options),
-      restarts_(),
-      counter_(0),
-      finished_(false) {
-  assert(options->block_restart_interval >= 1);
-  restarts_.push_back(0);       // First restart point is at offset 0
-}
-    
-      const FilterPolicy* policy_;
-  std::string keys_;              // Flattened key contents
-  std::vector<size_t> start_;     // Starting index in keys_ of each key
-  std::string result_;            // Filter data computed so far
-  std::vector<Slice> tmp_keys_;   // policy_->CreateFilter() argument
-  std::vector<uint32_t> filter_offsets_;
-    
-      // Read the block contents as well as the type/crc footer.
-  // See table_builder.cc for the code that built this structure.
-  size_t n = static_cast<size_t>(handle.size());
-  char* buf = new char[n + kBlockTrailerSize];
-  Slice contents;
-  Status s = file->Read(handle.offset(), n + kBlockTrailerSize, &contents, buf);
-  if (!s.ok()) {
-    delete[] buf;
-    return s;
-  }
-  if (contents.size() != n + kBlockTrailerSize) {
-    delete[] buf;
-    return Status::Corruption('truncated block read');
-  }
-    
-      // Encoded length of a Footer.  Note that the serialization of a
-  // Footer will always occupy exactly this many bytes.  It consists
-  // of two block handles and a magic number.
-  enum {
-    kEncodedLength = 2*BlockHandle::kMaxEncodedLength + 8
-  };
-    
-    namespace {
-class MergingIterator : public Iterator {
- public:
-  MergingIterator(const Comparator* comparator, Iterator** children, int n)
-      : comparator_(comparator),
-        children_(new IteratorWrapper[n]),
-        n_(n),
-        current_(NULL),
-        direction_(kForward) {
-    for (int i = 0; i < n; i++) {
-      children_[i].Set(children[i]);
-    }
-  }
-    }
+      void CheckArgsAndAllocateResult(OpKernelContext* c,
+                                  OpInputList* indices_inputs,
+                                  OpInputList* data_inputs, int* first_dim_size,
+                                  int* data_elements_size,
+                                  Tensor** result_ptr) {
+    // Find maximum index in the indices vectors
+    OP_REQUIRES_OK(c, c->input_list('indices', indices_inputs));
     }
     
-    /**
- * @brief A backing storage domain name, used for key/value based storage.
- *
- * There are certain 'cached' variables such as a node-unique UUID or negotiated
- * 'node_key' following enrollment. If a value or setting must persist between
- * osqueryi or osqueryd runs it should be stored using the kPersistentSetting%s
- * domain.
- */
-extern const std::string kPersistentSettings;
-    
-      /// Keep a lookup of registry items that are blacklisted from broadcast.
-  std::vector<std::string> internal_;
-    
-    #include <map>
-#include <functional>
-    
-    TEST_F(ViewsConfigParserPluginTests, test_swap_view) {
-  Config c;
-  std::vector<std::string> old_views_vec;
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  old_views_vec.clear();
-  auto s = c.update(getTestConfigMap('view_test.conf'));
-  EXPECT_TRUE(s.ok());
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  EXPECT_EQ(old_views_vec[0], 'config_views.kernel_hashes_new');
-    }
+    TF_CALL_GPU_NUMBER_TYPES(REGISTER_GPU);
+TF_CALL_complex64(REGISTER_GPU);
+TF_CALL_complex128(REGISTER_GPU);
+TF_CALL_int64(REGISTER_GPU);
+TF_CALL_int32(REGISTER_GPU)
     
     
     {
-    { private:
-  friend class TLSConfigTests;
-};
+    {    IntType split = gidx / split_size;
+    const T* input_ptr = input_ptrs[split];
+    IntType col_offset = gidx % split_size;
+#pragma unroll
+    for (; gidy < total_rows; gidy += blockDim.y * gridDim.y) {
+      output[gidy * total_cols + gidx] =
+          input_ptr[gidy * split_size + col_offset];
+    }
+  }
 }
-
     
-    /*! \brief pruner that prunes a tree after growing finishes */
-class TreePruner: public TreeUpdater {
+    namespace leveldb {
+namespace log {
+    }
+    }
+    
+    void VersionEdit::Clear() {
+  comparator_.clear();
+  log_number_ = 0;
+  prev_log_number_ = 0;
+  last_sequence_ = 0;
+  next_file_number_ = 0;
+  has_comparator_ = false;
+  has_log_number_ = false;
+  has_prev_log_number_ = false;
+  has_next_file_number_ = false;
+  has_last_sequence_ = false;
+  deleted_files_.clear();
+  new_files_.clear();
+}
+    
+        if (bytes_ > 0) {
+      char rate[100];
+      snprintf(rate, sizeof(rate), '%6.1f MB/s',
+               (bytes_ / 1048576.0) / (finish - start_));
+      if (!message_.empty()) {
+        message_  = std::string(rate) + ' ' + message_;
+      } else {
+        message_ = rate;
+      }
+    }
+    
+    class Issue178 { };
+    
+    namespace {
+class EmptyIterator : public Iterator {
  public:
-  TreePruner() {
-    syncher.reset(TreeUpdater::Create('sync'));
-  }
-  // set training parameter
-  void Init(const std::vector<std::pair<std::string, std::string> >& args) override {
-    param.InitAllowUnknown(args);
-    syncher->Init(args);
-  }
-  // update the tree, do pruning
-  void Update(const std::vector<bst_gpair> &gpair,
-              DMatrix *p_fmat,
-              const std::vector<RegTree*> &trees) override {
-    // rescale learning rate according to size of trees
-    float lr = param.learning_rate;
-    param.learning_rate = lr / trees.size();
-    for (size_t i = 0; i < trees.size(); ++i) {
-      this->DoPrune(*trees[i]);
-    }
-    param.learning_rate = lr;
-    syncher->Update(gpair, p_fmat, trees);
-  }
-    }
+  EmptyIterator(const Status& s) : status_(s) { }
+  virtual bool Valid() const { return false; }
+  virtual void Seek(const Slice& target) { }
+  virtual void SeekToFirst() { }
+  virtual void SeekToLast() { }
+  virtual void Next() { assert(false); }
+  virtual void Prev() { assert(false); }
+  Slice key() const { assert(false); return Slice(); }
+  Slice value() const { assert(false); return Slice(); }
+  virtual Status status() const { return status_; }
+ private:
+  Status status_;
+};
+}  // namespace
     
-      std::string tmp_file = TempFileName();
-  dmlc::Stream * fs = dmlc::Stream::Create(tmp_file.c_str(), 'w');
-  info.SaveBinary(fs);
-  delete fs;
+    #ifndef STORAGE_LEVELDB_TABLE_ITERATOR_WRAPPER_H_
+#define STORAGE_LEVELDB_TABLE_ITERATOR_WRAPPER_H_
+    
+     private:
+  void FindSmallest();
+  void FindLargest();
+    
+      if (r->pending_index_entry) {
+    assert(r->data_block.empty());
+    r->options.comparator->FindShortestSeparator(&r->last_key, key);
+    std::string handle_encoding;
+    r->pending_handle.EncodeTo(&handle_encoding);
+    r->index_block.Add(r->last_key, Slice(handle_encoding));
+    r->pending_index_entry = false;
+  }
+    
+      /// Returns the runner name
+  std::string name() const {
+    return name_;
+  }
+    
+      /// See DropPrivileges::dropToParent but for a user's UID and GID.
+  bool dropTo(const std::string& user);
+    
+     private:
+  /// the internal storage of the status code
+  int code_;
+    
+    /**
+ * @brief Access the internal storage of the Decorator parser.
+ *
+ * The decoration set is a map of column name to value. It contains the opaque
+ * set of decoration point results.
+ *
+ * Decorations are applied to log items before they are sent to the downstream
+ * logging APIs: logString, logSnapshot, etc.
+ *
+ * @param results the output parameter to write decorations.
+ */
+void getDecorations(std::map<std::string, std::string>& results);
     
     
-namespace detail {
-/*! \brief Implementation of gradient statistics pair. Template specialisation
- * may be used to overload different gradients types e.g. low precision, high
- * precision, integer, floating point. */
-template <typename T>
-class bst_gpair_internal {
-  /*! \brief gradient statistics */
-  T grad_;
-  /*! \brief second order gradient statistics */
-  T hess_;
-    }
-    }
+    {  // Cleanup allocations.
+  std::string result(buffer);
+  free(buffer);
+  return result;
+}
+    
+    bool js_cocos2dx_navmesh_NavMesh_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_navmesh_NavMesh_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_navmesh_NavMesh(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_navmesh(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_navmesh_NavMesh_removeNavMeshObstacle(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_removeNavMeshAgent(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_update(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_isDebugDrawEnabled(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_addNavMeshAgent(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_addNavMeshObstacle(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_setDebugDrawEnable(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_debugDraw(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMesh_NavMesh(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,'cc.SimpleAudioEngine',0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    
+    
+        return 0;
+}
+int lua_cocos2dx_physics_EventListenerPhysicsContactWithGroup_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+    
+    USING_NS_CC;
+    
+    			b2PolygonShape shape;
+			shape.Set(vertices, 3);
