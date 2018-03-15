@@ -1,115 +1,58 @@
-class HelpersPathsController < ActionController::Base
-  paths = ['helpers2_pack', 'helpers1_pack'].map do |path|
-    File.join(File.expand_path('../fixtures', __dir__), path)
-  end
-  $:.unshift(*paths)
+
+        
+              topic = Topic.find_by(id: topic_id)
     
-    module ActionMailer
-  # Provides the option to parameterize mailers in order to share instance variable
-  # setup, processing, and common headers.
-  #
-  # Consider this example that does not use parameterization:
-  #
-  #   class InvitationsMailer < ApplicationMailer
-  #     def account_invitation(inviter, invitee)
-  #       @account = inviter.account
-  #       @inviter = inviter
-  #       @invitee = invitee
-  #
-  #       subject = '#{@inviter.name} invited you to their Basecamp (#{@account.name})'
-  #
-  #       mail \
-  #         subject:   subject,
-  #         to:        invitee.email_address,
-  #         from:      common_address(inviter),
-  #         reply_to:  inviter.email_address_with_name
-  #     end
-  #
-  #     def project_invitation(project, inviter, invitee)
-  #       @account = inviter.account
-  #       @project = project
-  #       @inviter = inviter
-  #       @invitee = invitee
-  #       @summarizer = ProjectInvitationSummarizer.new(@project.bucket)
-  #
-  #       subject = '#{@inviter.name.familiar} added you to a project in Basecamp (#{@account.name})'
-  #
-  #       mail \
-  #         subject:   subject,
-  #         to:        invitee.email_address,
-  #         from:      common_address(inviter),
-  #         reply_to:  inviter.email_address_with_name
-  #     end
-  #
-  #     def bulk_project_invitation(projects, inviter, invitee)
-  #       @account  = inviter.account
-  #       @projects = projects.sort_by(&:name)
-  #       @inviter  = inviter
-  #       @invitee  = invitee
-  #
-  #       subject = '#{@inviter.name.familiar} added you to some new stuff in Basecamp (#{@account.name})'
-  #
-  #       mail \
-  #         subject:   subject,
-  #         to:        invitee.email_address,
-  #         from:      common_address(inviter),
-  #         reply_to:  inviter.email_address_with_name
-  #     end
-  #   end
-  #
-  #   InvitationsMailer.account_invitation(person_a, person_b).deliver_later
-  #
-  # Using parameterized mailers, this can be rewritten as:
-  #
-  #   class InvitationsMailer < ApplicationMailer
-  #     before_action { @inviter, @invitee = params[:inviter], params[:invitee] }
-  #     before_action { @account = params[:inviter].account }
-  #
-  #     default to:       -> { @invitee.email_address },
-  #             from:     -> { common_address(@inviter) },
-  #             reply_to: -> { @inviter.email_address_with_name }
-  #
-  #     def account_invitation
-  #       mail subject: '#{@inviter.name} invited you to their Basecamp (#{@account.name})'
-  #     end
-  #
-  #     def project_invitation
-  #       @project    = params[:project]
-  #       @summarizer = ProjectInvitationSummarizer.new(@project.bucket)
-  #
-  #       mail subject: '#{@inviter.name.familiar} added you to a project in Basecamp (#{@account.name})'
-  #     end
-  #
-  #     def bulk_project_invitation
-  #       @projects = params[:projects].sort_by(&:name)
-  #
-  #       mail subject: '#{@inviter.name.familiar} added you to some new stuff in Basecamp (#{@account.name})'
-  #     end
-  #   end
-  #
-  #   InvitationsMailer.with(inviter: person_a, invitee: person_b).account_invitation.deliver_later
-  module Parameterized
-    extend ActiveSupport::Concern
+      private
     
-      def test_float_hash_random
-    assert_hash_random(0.0)
-    assert_hash_random(+1.0)
-    assert_hash_random(-1.0)
-    assert_hash_random(1.72723e-77)
-    assert_hash_random(Float::INFINITY, 'Float::INFINITY')
+      # Finds the projects '@user' contributed to, limited to either public projects
+  # or projects visible to the given user.
+  #
+  # current_user - When given the list of the projects is limited to those only
+  #                visible by this user.
+  #
+  # Returns an ActiveRecord::Relation.
+  def execute(current_user = nil)
+    segments = all_projects(current_user)
+    
+        find_union(segments, Group).order_id_desc
   end
     
-    describe :string_unpack_16bit_le_unsigned, shared: true do
-  it 'decodes a short with most significant bit set as a positive number' do
-    '\x00\xff'.unpack(unpack_format()).should == [65280]
+      # Finds the projects belonging to the user in '@user', limited to either
+  # public projects or projects visible to the given user.
+  #
+  # current_user - When given the list of projects is limited to those only
+  #                visible by this user.
+  #
+  # Returns an ActiveRecord::Relation.
+  def execute(current_user = nil)
+    segments = all_projects(current_user)
+    
+      def clean_up_export_files
+    Gitlab::Popen.popen(%W(find #{path} -not -path #{path} -mmin +#{mmin} -delete))
   end
 end
+
     
-          sleep
-      after_sleep1 = true
+            # This method is called if the underying machine ID changes. Providers
+        # can use this method to load in new data for the actual backing
+        # machine or to realize that the machine is now gone (the ID can
+        # become `nil`). No parameters are given, since the underlying machine
+        # is simply the machine instance given to this object. And no
+        # return value is necessary.
+        def machine_id_changed
+        end
     
-              private
+        # @abstract
+    #
+    # Update the clone on the deployment target
+    #
+    # @return void
+    #
+    def update
+      raise NotImplementedError, 'Your SCM strategy module should provide a #update method'
+    end
     
-          def get_shallow(*path)
-        snapshot.metric_store.get_shallow(*path)
+            it 'returns the servers' do
+          expect(subject.map(&:hostname)).to eq %w{example3.com}
+        end
       end
