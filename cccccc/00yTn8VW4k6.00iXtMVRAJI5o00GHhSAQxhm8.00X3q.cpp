@@ -1,305 +1,195 @@
-namespace content {
-class DevToolsAgentHost;
-class WebContents;
-}
-    
-    #ifndef ATOM_BROWSER_API_ATOM_API_RENDER_PROCESS_PREFERENCES_H_
-#define ATOM_BROWSER_API_ATOM_API_RENDER_PROCESS_PREFERENCES_H_
-    
-    class WebRequest : public mate::TrackableObject<WebRequest> {
- public:
-  static mate::Handle<WebRequest> Create(v8::Isolate* isolate,
-                                         AtomBrowserContext* browser_context);
-    }
+
+        
+          static void Call(content::Shell* shell,
+                   const std::string& method,
+                   const base::ListValue& arguments,
+                   base::ListValue* result,
+                   DispatcherHost* dispatcher_host);
     
     
-    {  Observe(sender);
-}
-    
-      // Pass the sender and message to be replied.
-  void SetSenderAndMessage(content::WebContents* sender, IPC::Message* message);
-    
-    namespace asar {
-    }
-    
-    #include 'atom/browser/net/asar/url_request_asar_job.h'
-#include 'atom/browser/net/js_asker.h'
-    
-    
-    {}  // namespace atom
-    
-    #ifndef CPU_ONLY
-  void forward_gpu_gemm(const Dtype* col_input, const Dtype* weights,
-      Dtype* output, bool skip_im2col = false);
-  void forward_gpu_bias(Dtype* output, const Dtype* bias);
-  void backward_gpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* col_output);
-  void weight_gpu_gemm(const Dtype* col_input, const Dtype* output, Dtype*
-      weights);
-  void backward_gpu_bias(Dtype* bias, const Dtype* input);
-#endif
-    
-    #include <vector>
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of PoolingLayer.
- *        Fallback to PoolingLayer for CPU mode.
-*/
-template <typename Dtype>
-class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
- public:
-  explicit CuDNNPoolingLayer(const LayerParameter& param)
-      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNPoolingLayer();
-  // Currently, cuDNN does not support the extra top blob.
-  virtual inline int MinTopBlobs() const { return -1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    }
-    
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of ReLULayer.
- */
-template <typename Dtype>
-class CuDNNReLULayer : public ReLULayer<Dtype> {
- public:
-  explicit CuDNNReLULayer(const LayerParameter& param)
-      : ReLULayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNReLULayer();
-    }
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    
-    {}  // namespace caffe
-    
-    
-    {}  // namespace caffe
-    
-    #include <vector>
-    
-    template <typename Generator1, typename Generator2, typename Generator3,
-    typename Generator4, typename Generator5, typename Generator6,
-    typename Generator7, typename Generator8>
-internal::CartesianProductHolder8<Generator1, Generator2, Generator3,
-    Generator4, Generator5, Generator6, Generator7, Generator8> Combine(
-    const Generator1& g1, const Generator2& g2, const Generator3& g3,
-        const Generator4& g4, const Generator5& g5, const Generator6& g6,
-        const Generator7& g7, const Generator8& g8) {
-  return internal::CartesianProductHolder8<Generator1, Generator2, Generator3,
-      Generator4, Generator5, Generator6, Generator7, Generator8>(
-      g1, g2, g3, g4, g5, g6, g7, g8);
-}
-    
-    template<typename T> inline
-bool operator==(T* ptr, const linked_ptr<T>& x) {
-  return ptr == x.get();
-}
-    
-    $range i 2..n
-$for i [[
-$range j 1..i
-    
-      virtual ParamIteratorInterface<T>* Begin() const {
-    return new Iterator(this, container_.begin());
+    {  if (trusted_) {
+    content::WebContents* web_view_contents = guest_web_contents_list[0];
+    bool load_success = pdf_extension_test_util::EnsurePDFHasLoaded(
+      web_view_contents);
+    EXPECT_TRUE(load_success);
   }
-  virtual ParamIteratorInterface<T>* End() const {
-    return new Iterator(this, container_.end());
-  }
-    
-    // A dummy implementation of synchronization primitives (mutex, lock,
-// and thread-local variable).  Necessary for compiling Google Test where
-// mutex is not supported - using Google Test in multiple threads is not
-// supported on such platforms.
-    
-      template <GTEST_6_TYPENAMES_(U)>
-  tuple& CopyFrom(const GTEST_6_TUPLE_(U)& t) {
-    f0_ = t.f0_;
-    f1_ = t.f1_;
-    f2_ = t.f2_;
-    f3_ = t.f3_;
-    f4_ = t.f4_;
-    f5_ = t.f5_;
-    return *this;
-  }
-    
-      // Trivial case 2: even numbers
-  if (n % 2 == 0) return n == 2;
-    
-    // This should fail when the --check_for_leaks command line flag is
-// specified.
-TEST(ListenersTest, LeaksWater) {
-  Water* water = new Water;
-  EXPECT_TRUE(water != NULL);
 }
     
-      // Returns the next byte and skips the 0xff/0x00 escape sequences.
-  uint8_t GetNextByte() {
-    if (pos_ >= next_marker_pos_) {
-      ++pos_;
-      return 0;
-    }
-    uint8_t c = data_[pos_++];
-    if (c == 0xff) {
-      uint8_t escape = data_[pos_];
-      if (escape == 0) {
-        ++pos_;
-      } else {
-        // 0xff was followed by a non-zero byte, which means that we found the
-        // start of the next marker segment.
-        next_marker_pos_ = pos_ - 1;
-      }
-    }
-    return c;
+    #include 'base/files/file_path.h'
+    
+      blink::LocalFrame* core_frame = blink::toWebLocalFrameImpl(frame)->frame();
+  if (core_frame->deprecatedLocalOwner()) {
+    element = blink::toV8((blink::HTMLElement*)core_frame->deprecatedLocalOwner(),
+                            frame->mainWorldScriptContext()->Global(),
+                            frame->mainWorldScriptContext()->GetIsolate());
   }
+  args->Set(0, element);
+  args->Set(1, v8_str(request.url().string().utf8().c_str()));
+  args->Set(2, policy_obj);
     
-    // This function will create a Huffman tree.
-//
-// The (data,length) contains the population counts.
-// The tree_limit is the maximum bit depth of the Huffman codes.
-//
-// The depth contains the tree, i.e., how many bits are used for
-// the symbol.
-//
-// The actual Huffman tree is constructed in the tree[] array, which has to
-// be at least 2 * length + 1 long.
-//
-// See http://en.wikipedia.org/wiki/Huffman_coding
-void CreateHuffmanTree(const uint32_t *data,
-                       const size_t length,
-                       const int tree_limit,
-                       HuffmanTree* tree,
-                       uint8_t *depth);
+    #include 'base/basictypes.h'
+#include 'content/public/renderer/render_view_observer.h'
+#include 'third_party/WebKit/public/web/WebNavigationPolicy.h'
+#include <v8.h>
+#include <string>
     
-    // Return the epilogue of the generated header file.
-grpc::string GetHeaderEpilogue(grpc_generator::File *file,
-                               const Parameters &params);
+    #include 'base/basictypes.h'
+#include 'base/compiler_specific.h'
+#include 'v8/include/v8.h'
     
-    struct Parameters {
-  //Defines the custom parameter types for methods
-  //eg: flatbuffers uses flatbuffers.Builder as input for the client and output for the server
-  grpc::string custom_method_io_type;
-    }
-    
-    
-    {    auto status = stub_->SayHello(&context, request_msg, &response_msg);
-    if (status.ok()) {
-      const HelloReply *response = response_msg.GetRoot();
-      return response->message()->str();
-    } else {
-      std::cerr << status.error_code() << ': ' << status.error_message()
-                << std::endl;
-      return 'RPC failed';
-    }
-  }
-    
-        // `flatbuffers::grpc::MessageBuilder` is a `FlatBufferBuilder` with a
-    // special allocator for efficient gRPC buffer transfer, but otherwise
-    // usage is the same as usual.
-    auto msg_offset = mb_.CreateString('Hello, ' + name);
-    auto hello_offset = CreateHelloReply(mb_, msg_offset);
-    mb_.Finish(hello_offset);
-    
-    inline flatbuffers::Offset<KeyValue> CreateKeyValueDirect(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    const char *key = nullptr,
-    const char *value = nullptr) {
-  return reflection::CreateKeyValue(
-      _fbb,
-      key ? _fbb.CreateString(key) : 0,
-      value ? _fbb.CreateString(value) : 0);
+    void Menu::Remove(MenuItem* menu_item, int pos) {
+  std::vector<MenuItem*>::iterator begin = menu_items.begin();
+  menu_items.erase(begin+pos);
+  gtk_container_remove(GTK_CONTAINER(menu_), menu_item->menu_item_);
 }
     
-    MonsterStorage::Service::Service() {
-  AddMethod(new ::grpc::internal::RpcServiceMethod(
-      MonsterStorage_method_names[0],
-      ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< MonsterStorage::Service, flatbuffers::grpc::Message<Monster>, flatbuffers::grpc::Message<Stat>>(
-          std::mem_fn(&MonsterStorage::Service::Store), this)));
-  AddMethod(new ::grpc::internal::RpcServiceMethod(
-      MonsterStorage_method_names[1],
-      ::grpc::internal::RpcMethod::SERVER_STREAMING,
-      new ::grpc::internal::ServerStreamingHandler< MonsterStorage::Service, flatbuffers::grpc::Message<Stat>, flatbuffers::grpc::Message<Monster>>(
-          std::mem_fn(&MonsterStorage::Service::Retrieve), this)));
-}
-    
-      // to ensure it is correct, we now generate text back from the binary,
-  // and compare the two:
-  std::string jsongen;
-  if (!GenerateText(parser, parser.builder_.GetBufferPointer(), &jsongen)) {
-    printf('Couldn't serialize parsed data to JSON!\n');
-    return 1;
-  }
-    
-    // Returns the method name for use with add/put calls.
-static std::string GenMethod(const FieldDef &field) {
-  return IsScalar(field.value.type.base_type)
-             ? MakeCamel(GenTypeBasic(field.value.type))
-             : (IsStruct(field.value.type) ? 'Struct' : 'UOffsetT');
-}
-    
-    bool DirExists(const char *name) {
-  // clang-format off
-  #ifdef _WIN32
-    #define flatbuffers_stat _stat
-    #define FLATBUFFERS_S_IFDIR _S_IFDIR
-  #else
-    #define flatbuffers_stat stat
-    #define FLATBUFFERS_S_IFDIR S_IFDIR
-  #endif
-  // clang-format on
-  struct flatbuffers_stat file_info;
-  if (flatbuffers_stat(name, &file_info) != 0) return false;
-  return (file_info.st_mode & FLATBUFFERS_S_IFDIR) != 0;
-}
-    
-    
-    {} // namespace aria2
-    
-      OptionHandler::ARG_TYPE argType_;
-    
-    AbstractProxyRequestCommand::~AbstractProxyRequestCommand() = default;
-    
-      std::shared_ptr<HttpConnection> httpConnection_;
-    
-    
-    {  virtual std::unique_ptr<Command> getNextCommand() = 0;
+    static KeyMap keymap = {
+  {'`'    , 'Backquote'},
+  {'\\'   , 'Backslash'},
+  {'['    , 'BracketLeft'},
+  {']'    , 'BracketRight'},
+  {','    , 'Comma'},
+  {'='    , 'Equal'},
+  {'-'    , 'Minus'},
+  {'.'    , 'Period'},
+  {'''    , 'Quote'},
+  {';'    , 'Semicolon'},
+  {'/'    , 'Slash'},
+  {'\n'   , 'Enter'},
+  {'\t'   , 'Tab'},
+  {'UP'   , 'ArrowUp'},
+  {'DOWN' , 'ArrowDown'},
+  {'LEFT' , 'ArrowLeft'},
+  {'RIGHT', 'ArrowRight'},
+  {'ESC'  , 'Escape'},
+  {'MEDIANEXTTRACK', 'MediaTrackNext'},
+  {'MEDIAPREVTRACK', 'MediaTrackPrevious'}
 };
     
-    bool AdaptiveFileAllocationIterator::finished()
-{
-  if (!allocator_) {
-    return offset_ == totalLength_;
+    
+    {    block_active_ = false;
+    g_signal_connect(menu_item_, 'activate',
+                     G_CALLBACK(OnClickThunk), this);
   }
-  else {
-    return allocator_->finished();
-  }
+    
+    #include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/io/printer.h>
+    
+    void RepeatedPrimitiveFieldGenerator::WriteHash(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    'hash ^= $name$_.GetHashCode();\n');
+}
+void RepeatedPrimitiveFieldGenerator::WriteEquals(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    'if(!$name$_.Equals(other.$name$_)) return false;\n');
+}
+void RepeatedPrimitiveFieldGenerator::WriteToString(io::Printer* printer) {
+  printer->Print(variables_,
+    'PrintField(\'$descriptor_name$\', $name$_, writer);\n');
 }
     
-    AnnounceTier::AnnounceTier(std::deque<std::string> urls)
-    : event(STARTED), urls(std::move(urls))
-{
-}
-    
-    namespace aria2 {
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
     }
     
-    #include 'DiskWriterFactory.h'
-#include 'a2functional.h'
+    #endif // BOOST_ASIO_DETAIL_BASE_FROM_COMPLETION_COND_HPP
+
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+# include <boost/asio/detail/null_event.hpp>
+#elif defined(BOOST_ASIO_WINDOWS)
+# include <boost/asio/detail/win_event.hpp>
+#elif defined(BOOST_ASIO_HAS_PTHREADS)
+# include <boost/asio/detail/posix_event.hpp>
+#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
+# include <boost/asio/detail/std_event.hpp>
+#else
+# error Only Windows, POSIX and std::condition_variable are supported!
+#endif
+    
+    template <typename Time_Traits>
+std::size_t epoll_reactor::cancel_timer(timer_queue<Time_Traits>& queue,
+    typename timer_queue<Time_Traits>::per_timer_data& timer,
+    std::size_t max_cancelled)
+{
+  mutex::scoped_lock lock(mutex_);
+  op_queue<operation> ops;
+  std::size_t n = queue.cancel_timer(timer, ops, max_cancelled);
+  lock.unlock();
+  io_service_.post_deferred_completions(ops);
+  return n;
+}
+    
+      DBWrapper* db_wrapper = ObjectWrap::Unwrap<DBWrapper>(args.This());
+  std::string key       = *v8::String::Utf8Value(args[0]->ToString());
+  std::string value     = *v8::String::Utf8Value(args[1]->ToString());
+  std::string cf        = *v8::String::Utf8Value(args[2]->ToString());
+    
+      std::string scratch;
+  scratch.resize(kGood.size() + kCorrupted.size() + 16);
+  Slice result;
+  unique_ptr<RandomAccessFile> rand_file;
+  ASSERT_OK(env_->NewRandomAccessFile(kFileName, &rand_file, soptions_));
+  ASSERT_OK(rand_file->Read(0, kGood.size(), &result, &(scratch[0])));
+  ASSERT_EQ(result.compare(kGood), 0);
+    
+      private:
+    explicit DBWrapper();
+    ~DBWrapper();
+    
+    #include 'rocksdb/merge_operator.h'
+#include 'rocksdb/slice.h'
+    
+      if(m_jcallback_obj != nullptr) {    
+    env->DeleteGlobalRef(m_jcallback_obj);
+  }
+    
+      virtual Status Insert(const Slice& key, void* value, size_t charge,
+                        void (*deleter)(const Slice& key, void* value),
+                        Handle** handle, Priority priority) override {
+    // The handle and value passed in are for real cache, so we pass nullptr
+    // to key_only_cache_ for both instead. Also, the deleter function pointer
+    // will be called by user to perform some external operation which should
+    // be applied only once. Thus key_only_cache accepts an empty function.
+    // *Lambda function without capture can be assgined to a function pointer
+    Handle* h = key_only_cache_->Lookup(key);
+    if (h == nullptr) {
+      key_only_cache_->Insert(key, nullptr, charge,
+                              [](const Slice& k, void* v) {}, nullptr,
+                              priority);
+    } else {
+      key_only_cache_->Release(h);
+    }
+    }
+    
+      virtual Status CreateColumnFamilies(
+      const ColumnFamilyOptions& options,
+      const std::vector<std::string>& column_family_names,
+      std::vector<ColumnFamilyHandle*>* handles) override {
+    return db_->CreateColumnFamilies(options, column_family_names, handles);
+  }
+    
+    #pragma once
+    
+    
+    {  ASSERT_TRUE(YGNodeLayoutGetHadOverflow(root));
+}
+    
+    
+    {
+    {
+    {  static void OnLoad();
+ private:
+  bool attachedWithThisScope_;
+};
+}
+}
