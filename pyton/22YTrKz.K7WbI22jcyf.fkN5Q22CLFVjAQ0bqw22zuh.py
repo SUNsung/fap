@@ -1,27 +1,56 @@
 
         
-        signature = hexlify(rsa.pkcs1.sign(json.dumps(versions_info, sort_keys=True).encode('utf-8'), privkey, 'SHA-256')).decode()
-print('signature: ' + signature)
+        import itertools
+import json
+import os
+import re
+import sys
+    
+        def test_youtube_extract(self):
+        assertExtractId = lambda url, id: self.assertEqual(YoutubeIE.extract_id(url), id)
+        assertExtractId('http://www.youtube.com/watch?&v=BaW_jenozKc', 'BaW_jenozKc')
+        assertExtractId('https://www.youtube.com/watch?&v=BaW_jenozKc', 'BaW_jenozKc')
+        assertExtractId('https://www.youtube.com/watch?feature=player_embedded&v=BaW_jenozKc', 'BaW_jenozKc')
+        assertExtractId('https://www.youtube.com/watch_popup?v=BaW_jenozKc', 'BaW_jenozKc')
+        assertExtractId('http://www.youtube.com/watch?v=BaW_jenozKcsharePLED17F32AD9753930', 'BaW_jenozKc')
+        assertExtractId('BaW_jenozKc', 'BaW_jenozKc')
     
     
-total_bytes = 0
+import errno
+import io
+import json
+import re
+import subprocess
+    
+        def run(self):
+        try:
+            self.server_sock = self._create_socket_and_bind()
+            # in case self.port = 0
+            self.port = self.server_sock.getsockname()[1]
+            self.ready_event.set()
+            self._handle_requests()
+    
+            try:
+            username, password = get_auth_from_url(new_proxies[scheme])
+        except KeyError:
+            username, password = None, None
+    
+        @pytest.mark.parametrize(
+        'url, expected', (
+            ('http://example.com/path#fragment', 'http://example.com/path?a=b#fragment'),
+            ('http://example.com/path?key=value#fragment', 'http://example.com/path?key=value&a=b#fragment')
+        ))
+    def test_params_are_added_before_fragment(self, url, expected):
+        request = requests.Request('GET', url, params={'a': 'b'}).prepare()
+        assert request.url == expected
+    
+        def within_past_week(self, timestamp):
+        '''Return True if timestamp is within past week, False otherwise.'''
+        ...
     
     
-class AnitubeIE(NuevoBaseIE):
-    IE_NAME = 'anitube.se'
-    _VALID_URL = r'https?://(?:www\.)?anitube\.se/video/(?P<id>\d+)'
+class BlackJackHand(Hand):
     
-            video_url = self._html_search_regex(r'video_url\s*:\s*'([^']+)'', webpage, 'video URL')
-    
-            uploader = self._search_regex(
-            r'Added by\s*:\s*<a[^>]+>([^<]+)</a>', webpage, 'uploader', default=None)
-        upload_date = unified_strdate(self._search_regex(
-            r'Added on\s*:\s*([\d-]+)', webpage, 'upload date', default=None))
-    
-    
-@click.command()
-@click.argument('catalog_file', type=click.Path())
-def cli(catalog_file):
-    # Read the old ones back.  Once we are in, we will never go.
-    with open(catalog_file) as f:
-        rv = json.load(f)['supported_locales']
+        def __init__(self, db):
+        self.db = db
+        pass
