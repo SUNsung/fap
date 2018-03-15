@@ -1,87 +1,119 @@
 
         
-            groups << @user.authorized_groups.visible_to_user(current_user) if current_user
-    groups << @user.authorized_groups.public_to_user(current_user)
-    
-          if record.created_at.nil? || record.created_at >= now || record.created_at == record.updated_at
-        yield
-      else
-        record.id = Mastodon::Snowflake.id_at(record.created_at)
-        tries     = 0
-    
-      # Before we load the schema, define the timestamp_id function.
-  # Idiomatically, we might do this in a migration, but then it
-  # wouldn't end up in schema.rb, so we'd need to figure out a way to
-  # get it in before doing db:setup as well. This is simpler, and
-  # ensures it's always in place.
-  Rake::Task['db:schema:load'].enhance ['db:define_timestamp_id']
-    
-      def url
-    if object.needs_redownload?
-      media_proxy_url(object.id, :original)
-    else
-      full_asset_url(object.file.url(:original))
-    end
-  end
-    
-          it 'renders application layout' do
-        get :show, params: { id: 'test', max_id: late.id }
-        expect(response).to render_template layout: 'application'
-      end
-    end
-    
-      def id
-    ActivityPub::TagManager.instance.uri_for(object)
-  end
-    
-    
-  class UserSearch
-    include ActiveModel::Model
-    include ActiveModel::Conversion
-    include ActiveModel::Validations
-    
-          rescue_from OpenIDConnect::ValidationFailed,
-                  ActiveRecord::RecordInvalid, Api::OpenidConnect::Error::InvalidSectorIdentifierUri do |e|
-        validation_fail_as_json(e)
-      end
-    
-          def create
-        req = Rack::Request.new(request.env)
-        if req['client_assertion_type'] == 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
-          handle_jwt_bearer(req)
-        end
-        self.status, headers, self.response_body = Api::OpenidConnect::TokenEndpoint.new.call(request.env)
-        headers.each {|name, value| response.headers[name] = value }
-        nil
-      end
-    
-            def has_column?
-          @subject.column_names.include?('#{@attachment_name}_file_name')
-        end
-      end
-    end
+            Or via the Cask:
+      brew cask install ngrok
+    EOS
   end
 end
 
     
-          class ValidateAttachmentPresenceMatcher
-        def initialize attachment_name
-          @attachment_name = attachment_name
-        end
+      # True if a {Formula} is being built with {Formula.head} instead of {Formula.stable}.
+  # <pre>args << '--some-new-stuff' if build.head?</pre>
+  # <pre># If there are multiple conditional arguments use a block instead of lines.
+  #  if build.head?
+  #    args << '--i-want-pizza'
+  #    args << '--and-a-cold-beer' if build.with? 'cold-beer'
+  #  end</pre>
+  def head?
+    include? 'HEAD'
+  end
     
-        Hash.new.tap do |missing_styles|
-      current_styles.each do |klass, attachment_definitions|
-        attachment_definitions.each do |attachment_name, styles|
-          registered = registered_styles[klass][attachment_name] || [] rescue []
-          missed = styles - registered
-          if missed.present?
-            klass_sym = klass.to_s.to_sym
-            missing_styles[klass_sym] ||= Hash.new
-            missing_styles[klass_sym][attachment_name.to_sym] ||= Array.new
-            missing_styles[klass_sym][attachment_name.to_sym].concat(missed.to_a)
-            missing_styles[klass_sym][attachment_name.to_sym].map!(&:to_s).sort!.map!(&:to_sym).uniq!
-          end
+      def fish_completion_caveats
+    if keg && keg.completion_installed?(:fish) && which('fish') then <<-EOS.undent
+      fish completion has been installed to:
+        #{HOMEBREW_PREFIX}/share/fish/vendor_completions.d
+      EOS
+    end
+  end
+    
+        if $stdout.tty?
+      metacharacters = %w[\\ | ( ) [ ] { } ^ $ * + ? .]
+      bad_regex = metacharacters.any? do |char|
+        ARGV.any? do |arg|
+          arg.include?(char) && !arg.start_with?('/')
         end
+      end
+      if ARGV.any? && bad_regex
+        ohai 'Did you mean to perform a regular expression search?'
+        ohai 'Surround your query with /slashes/ to search by regex.'
+      end
+    end
+    
+      def cxxstdlib_check(check_type)
+    self.class.cxxstdlib_check check_type
+  end
+    
+          export JAVA_HOME='$(/usr/libexec/java_home)'
+      export AWS_ACCESS_KEY='<Your AWS Access ID>'
+      export AWS_SECRET_KEY='<Your AWS Secret Key>'
+      export #{home_name}='#{home_value}'
+    EOS
+  end
+end
+
+    
+      def confirm_user_by_token_with_confirmation_sent_at(confirmation_sent_at)
+    user = create_user
+    user.update_attribute(:confirmation_sent_at, confirmation_sent_at)
+    confirmed_user = User.confirm_by_token(user.raw_confirmation_token)
+    assert_equal confirmed_user, user
+    user.reload.confirmed?
+  end
+    
+      def failure_message
+    exception = request.respond_to?(:get_header) ? request.get_header('omniauth.error') : request.env['omniauth.error']
+    error   = exception.error_reason if exception.respond_to?(:error_reason)
+    error ||= exception.error        if exception.respond_to?(:error)
+    error ||= (request.respond_to?(:get_header) ? request.get_header('omniauth.error.type') : request.env['omniauth.error.type']).to_s
+    error.to_s.humanize if error
+  end
+    
+      # Gets the actual resource stored in the instance variable
+  def resource
+    instance_variable_get(:'@#{resource_name}')
+  end
+    
+        def email_changed(record, opts={})
+      devise_mail(record, :email_changed, opts)
+    end
+    
+    DeviseCreateUsers.migrate(:up)
+    
+    ###
+### methods
+###
+    
+    unless ENV['BUNDLE_GEMFILE']
+  require 'pathname'
+    
+    
+# replace calls, jmps, and read/write handle/filename references
+replaces = []
+asm.each_line { |ln|
+	if ln =~ /call /
+		parts = ln.split(' ')
+		if (parts[0] == 'call' and parts[2] == ';call')
+			old = parts[1]
+			func = parts[3]
+			new = addrs[func]
+			#puts '%32s: %s -> %x' % [func, old, new]
+			replaces << [func, old, new.to_s(16)]
+		end
+	end
+    }
+    
+    	def block_end
+		# Insert the block size
+		self.block[-1][0] = block[-1][0].ljust(SIZE1)
+		self.block[-1][0] << '/*  '
+		self.block[-1][0] << '#{block_size} bytes'
+		self.block[-1][0] = block[-1][0].ljust(SIZE2)
+		self.block[-1][0] << '  */'
+    
+        def definitions_for(klass)
+      parent_classes = klass.ancestors.reverse
+      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
+        inherited_definitions.deep_merge! @attachments[ancestor]
       end
     end
   end
