@@ -1,116 +1,167 @@
 
         
-          def test_escape_javascript
-    assert_equal '', escape_javascript(nil)
-    assert_equal %(This \\'thing\\' is really\\n netos\\'), escape_javascript(%(This 'thing' is really\n netos'))
-    assert_equal %(backslash\\\\test), escape_javascript(%(backslash\\test))
-    assert_equal %(dont <\\/close> tags), escape_javascript(%(dont </close> tags))
-    assert_equal %(unicode &#x2028; newline), escape_javascript(%(unicode \342\200\250 newline).dup.force_encoding(Encoding::UTF_8).encode!)
-    assert_equal %(unicode &#x2029; newline), escape_javascript(%(unicode \342\200\251 newline).dup.force_encoding(Encoding::UTF_8).encode!)
+            confirmed_user = User.confirm_by_token(raw)
+    assert_equal 'was already confirmed, please try signing in', confirmed_user.errors[:email].join
+  end
     
-        # Expose one or more attributes within a block. Old values are returned after the block concludes.
-    # Example demonstrating the common use of needing to set Current attributes outside the request-cycle:
-    #
-    #   class Chat::PublicationJob < ApplicationJob
-    #     def perform(attributes, room_number, creator)
-    #       Current.set(person: creator) do
-    #         Chat::Publisher.publish(attributes: attributes, room_number: room_number)
-    #       end
-    #     end
-    #   end
-    def set(set_attributes)
-      old_attributes = compute_attributes(set_attributes.keys)
-      assign_attributes(set_attributes)
-      yield
-    ensure
-      assign_attributes(old_attributes)
+        # The path used after resending confirmation instructions.
+    def after_resending_confirmation_instructions_path_for(resource_name)
+      is_navigational_format? ? new_session_path(resource_name) : '/'
     end
     
-        class TestCallbacksWithArgs < ActiveSupport::TestCase
-      test 'callbacks still work when invoking process with multiple arguments' do
-        controller = CallbacksWithArgs.new
-        controller.process(:index, ' Howdy!')
-        assert_equal 'Hello world Howdy!', controller.response_body
+        def translation_scope
+      'devise.passwords'
+    end
+end
+
+    
+      # GET /resource/unlock/new
+  def new
+    self.resource = resource_class.new
+  end
+    
+      # Helper for use in before_actions where no authentication is required.
+  #
+  # Example:
+  #   before_action :require_no_authentication, only: :new
+  def require_no_authentication
+    assert_is_devise_resource!
+    return unless is_navigational_format?
+    no_input = devise_mapping.no_input_strategies
+    
+      # Keys that should have whitespace stripped.
+  mattr_accessor :strip_whitespace_keys
+  @@strip_whitespace_keys = [:email]
+    
+          def remember_me_is_active?(resource)
+        return false unless resource.respond_to?(:remember_me)
+        scope = Devise::Mapping.find_scope!(resource)
+        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
+        resource.remember_me?(token, generated_at)
       end
-    end
-  end
-end
-
     
-        # Returns +text+ wrapped at +len+ columns and indented +indent+ spaces.
-    # By default column length +len+ equals 72 characters and indent
-    # +indent+ equal two spaces.
+    module Devise
+  module Controllers
+    # Create url helpers to be used with resource/scope configuration. Acts as
+    # proxies to the generated routes created by devise.
+    # Resource param can be a string or symbol, a class, or an instance object.
+    # Example using a :user resource:
     #
-    #   my_text = 'Here is a sample text with more than 40 characters'
+    #   new_session_path(:user)      => new_user_session_path
+    #   session_path(:user)          => user_session_path
+    #   destroy_session_path(:user)  => destroy_user_session_path
     #
-    #   format_paragraph(my_text, 25, 4)
-    #   # => '    Here is a sample text with\n    more than 40 characters'
-    def format_paragraph(text, len = 72, indent = 2)
-      sentences = [[]]
-    
-          include ActiveSupport::Testing::ConstantLookup
-      include TestHelper
-      include Rails::Dom::Testing::Assertions::SelectorAssertions
-      include Rails::Dom::Testing::Assertions::DomAssertions
-    
-          expect(response).to redirect_to(settings_preferences_path)
-      user.reload
-      expect(user.settings['boost_modal']).to be true
-      expect(user.settings['delete_modal']).to be false
-    end
-  end
-end
-
-    
-    namespace :emojis do
-  desc 'Generate a unicode to filename mapping'
-  task :generate do
-    source = 'http://www.unicode.org/Public/emoji/5.0/emoji-test.txt'
-    codes  = []
-    dest   = Rails.root.join('app', 'javascript', 'mastodon', 'features', 'emoji', 'emoji_map.json')
-    
-      subject { BlockDomainService.new }
-    
-        def path
-      @file.respond_to?(:path) ? @file.path : @file
-    end
-    
-            def matches? subject
-          @subject = subject
-          @subject = @subject.class unless Class === @subject
-          responds? && has_column?
+    #   new_password_path(:user)     => new_user_password_path
+    #   password_path(:user)         => user_password_path
+    #   edit_password_path(:user)    => edit_user_password_path
+    #
+    #   new_confirmation_path(:user) => new_user_confirmation_path
+    #   confirmation_path(:user)     => user_confirmation_path
+    #
+    # Those helpers are included by default to ActionController::Base.
+    #
+    # In case you want to add such helpers to another class, you can do
+    # that as long as this new class includes both url_helpers and
+    # mounted_helpers. Example:
+    #
+    #     include Rails.application.routes.url_helpers
+    #     include Rails.application.routes.mounted_helpers
+    #
+    module UrlHelpers
+      def self.remove_helpers!
+        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
+          remove_method method
         end
+      end
     
-      # PATCH/PUT /books/1
-  # PATCH/PUT /books/1.json
-  def update
+      def dry_run?
+    !!@dry_run
+  end
+    
+          { :title => 'Event', :entries => present_hash(payload) }
+    else
+      { :title => payload.to_s, :entries => [] }
+    end
+  end
+    
+      def show
     respond_to do |format|
-      if @book.update(book_params)
-        format.html { redirect_to @book, notice: 'Book was successfully updated.' }
-        format.json { render :show, status: :ok, location: @book }
-      else
-        format.html { render :edit }
-        format.json { render json: @book.errors, status: :unprocessable_entity }
-      end
+      format.html
+      format.json { render json: @event }
     end
   end
     
-                lambda do |corrector|
-              new_source = receiver.source + '.end_with?(' +
-                           to_string_literal(regex_str) + ')'
-              corrector.replace(node.source_range, new_source)
-            end
-          end
-        end
+    # puts '\nDone.'
+
+    
+            subject.call(json, forwarder)
+      end
+    
+      attributes :id, :type, :name, :updated
+    
+        it 'does not create a domain block' do
+      expect(DomainBlock.blocked?('evil.org')).to be false
+    end
+    
+          input.close if input.is_a?(File)
+    
+          # If this importer is based on files on the local filesystem This method
+      # should return true if the file, when changed, should trigger a
+      # recompile.
+      #
+      # It is acceptable for non-sass files to be watched and trigger a recompile.
+      #
+      # @param filename [String] The absolute filename for a file that has changed.
+      # @return [Boolean] When the file changed should cause a recompile.
+      def watched_file?(filename)
+        false
       end
     end
   end
 end
 
     
-            private
+    module Sass
+  # Runs a SassScript read-eval-print loop.
+  # It presents a prompt on the terminal,
+  # reads in SassScript expressions,
+  # evaluates them,
+  # and prints the result.
+  class Repl
+    # @param options [{Symbol => Object}] An options hash.
+    def initialize(options = {})
+      @options = options
+    end
     
-              each_misplaced_optional_arg(arguments) do |argument|
-            add_offense(argument)
+        # Creates an instance of CategoryIndex for each category page, renders it, and
+    # writes the output to a file.
+    #
+    #  +category_dir+ is the String path to the category folder.
+    #  +category+     is the category currently being processed.
+    def write_category_index(category_dir, category)
+      index = CategoryIndex.new(self, self.source, category_dir, category)
+      index.render(self.layouts, site_payload)
+      index.write(self.dest)
+      # Record the fact that this page has been added, otherwise Site::cleanup will remove it.
+      self.pages << index
+    
+          content_type 'application/json'
+      LogStash::Json.dump(data, {:pretty => pretty?})
+    else
+      content_type 'text/plain'
+      data.to_s
+    end
+  end
+    
+    module LogStash
+  module Api
+    module Commands
+      module System
+        class Plugins < Commands::Base
+          def run
+            { :total => plugins.count, :plugins => plugins }
           end
-        end
+    
+      def seventy_five_percent
+    [1, (maximum * 0.75)].max.floor
+  end
