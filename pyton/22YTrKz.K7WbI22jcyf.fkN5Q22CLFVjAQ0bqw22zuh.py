@@ -1,104 +1,71 @@
 
         
-        # -- Options for LaTeX output ---------------------------------------------
+            assert history.history['acc'] != history.history['weighted_acc']
     
-            query = '''
-          SELECT sub.*
-              FROM (
-                    SELECT *
-                      FROM s1.t1
-                     WHERE day_of_week = 'Friday'
-                   ) sub
-          WHERE sub.resolution = 'NONE'
-        '''
-        self.assertEquals({'s1.t1'}, self.extract_tables(query))
-    
-    
-@manager.command
-def update_datasources_cache():
-    '''Refresh sqllab datasources cache'''
-    from superset.models.core import Database
-    for database in db.session.query(Database).all():
-        print('Fetching {} datasources ...'.format(database.name))
-        try:
-            database.all_table_names(force=True)
-            database.all_view_names(force=True)
-        except Exception as e:
-            print('{}'.format(e.message))
-    
-    appbuilder.add_link(
-    'Scan New Datasources',
-    label=__('Scan New Datasources'),
-    href='/druid/scan_new_datasources/',
-    category='Sources',
-    category_label=__('Sources'),
-    category_icon='fa-database',
-    icon='fa-refresh')
-appbuilder.add_link(
-    'Refresh Druid Metadata',
-    label=__('Refresh Druid Metadata'),
-    href='/druid/refresh_datasources/',
-    category='Sources',
-    category_label=__('Sources'),
-    category_icon='fa-database',
-    icon='fa-cog')
-    
-            # Fail before adding if the table can't be found
-        if not table.database.has_table(table):
-            raise Exception(_(
-                'Table [{}] could not be found, '
-                'please double check your '
-                'database connection, schema, and '
-                'table name').format(table.name))
-    
-        This configures the context with just a URL
-    and not an Engine, though an Engine is acceptable
-    here as well.  By skipping the Engine creation
-    we don't even need a DBAPI to be available.
-    
-    # revision identifiers, used by Alembic.
-revision = '1296d28ec131'
-down_revision = '6414e83d82b7'
-    
-    '''
-    
-    from alembic import op
-import sqlalchemy as sa
+        def compute_output_shape(self, input_shape):
+        child_input_shape = (input_shape[0],) + input_shape[2:]
+        child_output_shape = self.layer.compute_output_shape(child_input_shape)
+        timesteps = input_shape[1]
+        return (child_output_shape[0], timesteps) + child_output_shape[1:]
     
     
 if __name__ == '__main__':
-    cli()
+    pytest.main([__file__])
 
     
+    model = Sequential()
+model.add(Embedding(max_features, embedding_size, input_length=maxlen))
+model.add(Dropout(0.25))
+model.add(Conv1D(filters,
+                 kernel_size,
+                 padding='valid',
+                 activation='relu',
+                 strides=1))
+model.add(MaxPooling1D(pool_size=pool_size))
+model.add(LSTM(lstm_output_size))
+model.add(Dense(1))
+model.add(Activation('sigmoid'))
+    
+    
+@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
+def test_zero(tensor_shape):
+    _runner(initializers.zeros(), tensor_shape,
+            target_mean=0., target_max=0.)
+    
+    
+def test_serialization():
+    all_activations = ['max_norm', 'non_neg',
+                       'unit_norm', 'min_max_norm']
+    for name in all_activations:
+        fn = constraints.get(name)
+        ref_fn = getattr(constraints, name)()
+        assert fn.__class__ == ref_fn.__class__
+        config = constraints.serialize(fn)
+        fn = constraints.deserialize(config)
+        assert fn.__class__ == ref_fn.__class__
+    
+    
+def test_softmax_valid():
+    '''Test using a reference implementation of softmax.
     '''
-Port of the Java example of 'Parameter Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
-http://xunitpatterns.com/Dependency%20Injection.html.
+    def softmax(values):
+        m = np.max(values)
+        e = np.exp(values - m)
+        return e / np.sum(e)
     
-    ### OUTPUT ###
-# request 2 handled in handler 1
-# request 5 handled in handler 1
-# request 14 handled in handler 2
-# request 22 handled in handler 3
-# request 18 handled in handler 2
-# request 3 handled in handler 1
-# end of chain, no handler for 35
-# request 27 handled in handler 3
-# request 20 handled in handler 2
-# ------------------------------
-# request 2 handled in coroutine 1
-# request 5 handled in coroutine 1
-# request 14 handled in coroutine 2
-# request 22 handled in coroutine 3
-# request 18 handled in coroutine 2
-# request 3 handled in coroutine 1
-# end of chain, no coroutine for 35
-# request 27 handled in coroutine 3
-# request 20 handled in coroutine 2
-# (0.2369999885559082, 0.16199994087219238)
-
+    This network is used to predict the next frame of an artificially
+generated movie which contains moving squares.
+'''
+from keras.models import Sequential
+from keras.layers.convolutional import Conv3D
+from keras.layers.convolutional_recurrent import ConvLSTM2D
+from keras.layers.normalization import BatchNormalization
+import numpy as np
+import pylab as plt
     
-    print('Counting to five...')
-for number in count_to_five():
-    print(number, end=' ')
+        def __init__(self):
+        self.msg_queue = []
+        self.subscribers = {}
+    
+    
+class HexViewer:
