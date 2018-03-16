@@ -1,134 +1,145 @@
-    return len(cmd) > 1 and 'x' in cmd[1]
+
+        
+            try:
+        s2 = os.lstat(parent)
+    except OSError:
+        # one should handle the returned OSError with more care to figure
+        # out whether this is still a mount
+        return False
     
-        plt.clf()
-    xx = range(0, n * step, step)
-    plt.title('Lasso regression on sample dataset (%d features)' % n_features)
-    plt.plot(xx, scikit_results, 'b-', label='scikit-learn')
-    plt.plot(xx, glmnet_results, 'r-', label='glmnet')
-    plt.legend()
-    plt.xlabel('number of samples to classify')
-    plt.ylabel('Time (s)')
-    plt.show()
+    # Note, sha1 is the only hash algorithm compatible with python2.4 and with
+# FIPS-140 mode (as of 11-2014)
+try:
+    from hashlib import sha1 as sha1
+except ImportError:
+    from sha import sha as sha1
     
-        fig = plt.figure('scikit-learn Lasso path benchmark results')
-    i = 1
-    for c, (label, timings) in zip('bcry', sorted(results.items())):
-        ax = fig.add_subplot(2, 2, i, projection='3d')
-        X, Y = np.meshgrid(samples_range, features_range)
-        Z = np.asarray(timings).reshape(samples_range.shape[0],
-                                        features_range.shape[0])
+            params1 = {'one': 1}
+        params2 = {'two': 2}
+        actual = GCPUtils.are_params_equal(params1, params2)
+        self.assertFalse(actual)
     
-        for (sbplt, vals, quantity,
-         build_time, query_time) in [(311, Nrange, 'N',
-                                      N_results_build,
-                                      N_results_query),
-                                     (312, Drange, 'D',
-                                      D_results_build,
-                                      D_results_query),
-                                     (313, krange, 'k',
-                                      k_results_build,
-                                      k_results_query)]:
-        ax = plt.subplot(sbplt, yscale='log')
-        plt.grid(True)
+        def get(self, key):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                return item.value
+        raise KeyError('Key not found')
     
-       ###########################################################################
-    # Set custom automatic method selection
-    sampling_algorithm['custom-auto'] = \
-        lambda n_population, n_samples, random_state=None: \
-            sample_without_replacement(n_population,
-                                       n_samples,
-                                       method='auto',
-                                       random_state=random_state)
+        def mapper(self, _, line):
+        '''Parse each log line, extract and transform relevant lines.
     
-        xx = np.arange(start_dim, start_dim + n * step, step)
-    plt.subplot(212)
-    plt.title('Learning in high dimensional spaces')
-    plt.plot(xx, scikit_classifier_results, 'g-', label='classification')
-    plt.plot(xx, scikit_regressor_results, 'r-', label='regression')
-    plt.legend(loc='upper left')
-    plt.xlabel('number of dimensions')
-    plt.ylabel('Time (s)')
-    plt.axis('tight')
-    plt.show()
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer),
+            self.mr(mapper=self.mapper_sort,
+                    reducer=self.reducer_identity),
+        ]
+    
+        def take_call(self, call):
+        '''Assume the employee will always successfully take the call.'''
+        self.call = call
+        self.call.employee = self
+        self.call.state = CallState.IN_PROGRESS
+    
+            When updating an entry, updates its position to the front of the LRU list.
+        If the entry is new and the cache is at capacity, removes the oldest entry
+        before the new entry is added.
+        '''
+        node = self.lookup[query]
+        if node is not None:
+            # Key exists in cache, update the value
+            node.results = results
+            self.linked_list.move_to_front(node)
+        else:
+            # Key does not exist in cache
+            if self.size == self.MAX_SIZE:
+                # Remove the oldest entry from the linked list and lookup
+                self.lookup.pop(self.linked_list.tail.query, None)
+                self.linked_list.remove_from_tail()
+            else:
+                self.size += 1
+            # Add the new key and value
+            new_node = Node(results)
+            self.linked_list.append_to_front(new_node)
+            self.lookup[query] = new_node
 
     
-        if revision is None:
-        return
-    if domain not in ('py', 'pyx'):
-        return
-    if not info.get('module') or not info.get('fullname'):
-        return
+        def __init__(self, license_plate):
+        super(Car, self).__init__(VehicleSize.COMPACT, license_plate, spot_size=1)
     
-        opener = build_opener()
-    html_filename = os.path.join(html_folder, lang + '.html')
-    if not os.path.exists(html_filename):
-        print('Downloading %s' % page)
-        request = Request(page)
-        # change the User Agent to avoid being blocked by Wikipedia
-        # downloading a couple of articles should not be considered abusive
-        request.add_header('User-Agent', 'OpenAnything/1.0')
-        html_content = opener.open(request).read()
-        open(html_filename, 'wb').write(html_content)
+        def create_signature(self):
+        # Create signature based on url and contents
+        pass
     
-        if not os.path.exists(ARCHIVE_NAME):
-        print('Downloading dataset from %s (3 MB)' % URL)
-        opener = urlopen(URL)
-        with open(ARCHIVE_NAME, 'wb') as archive:
-            archive.write(opener.read())
+        def test_eq(self):
+        self.assertTrue(self.vhost1b == self.vhost1)
+        self.assertFalse(self.vhost1 == self.vhost2)
+        self.assertEqual(str(self.vhost1b), str(self.vhost1))
+        self.assertFalse(self.vhost1b == 1234)
     
-    model = SpectralBiclustering(n_clusters=n_clusters, method='log',
-                             random_state=0)
-model.fit(data)
-score = consensus_score(model.biclusters_,
-                        (rows[:, row_idx], columns[:, col_idx]))
+    # If true, '()' will be appended to :func: etc. cross-reference text.
+#add_function_parentheses = True
     
-    The second figure shows the calibration curve of a linear support-vector
-classifier (LinearSVC). LinearSVC shows the opposite behavior as Gaussian
-naive Bayes: the calibration curve has a sigmoid curve, which is typical for
-an under-confident classifier. In the case of LinearSVC, this is caused by the
-margin property of the hinge loss, which lets the model focus on hard samples
-that are close to the decision boundary (the support vectors).
+    if __name__ == '__main__':
+    unittest.main()  # pragma: no cover
+
     
-        What it should do it take a markdown file, and split it into more files. A targetfile should have the same
-    number of lines as the original, with source code snippets and markdown non-words removed, for spell-checking.
+    '''
+import zope.interface
     
-      # Reset include state across preprocessor directives.  This is meant
-  # to silence warnings for conditional includes.
-  match = Match(r'^\s*#\s*(if|ifdef|ifndef|elif|else|endif)\b', line)
-  if match:
-    include_state.ResetSection(match.group(1))
+        def add_missing_metrics(self, metrics):
+        exisiting_metrics = {m.metric_name for m in self.metrics}
+        for metric in metrics:
+            if metric.metric_name not in exisiting_metrics:
+                metric.table_id = self.id
+                self.metrics += [metric]
     
-    def get_api_subtype():
-    if is_api() and c.render_style.startswith('api-'):
-        return c.render_style[4:]
+        @classmethod
+    def is_dimension(cls, dtype, column_name):
+        if cls.is_id(column_name):
+            return False
+        return dtype.name in ('object', 'bool')
     
     
-try:
-    # place all r2 specific imports in here.  If there is a code error, it'll
-    # get caught and the stack trace won't be presented to the user in
-    # production
-    from r2.config import extensions
-    from r2.controllers.reddit_base import RedditController, UnloggedUser
-    from r2.lib.cookies import Cookies
-    from r2.lib.errors import ErrorSet
-    from r2.lib.filters import (
-        safemarkdown,
-        scriptsafe_dumps,
-        websafe,
-        websafe_json,
-    )
-    from r2.lib import log, pages
-    from r2.lib.strings import get_funny_translated_string
-    from r2.lib.template_helpers import static
-    from r2.lib.base import abort
-    from r2.models.link import Link
-    from r2.models.subreddit import DefaultSR, Subreddit
-except Exception, e:
-    if g.debug:
-        # if debug mode, let the error filter up to pylons to be handled
-        raise e
-    else:
-        # production environment: protect the code integrity!
-        print 'HuffmanEncodingError: make sure your python compiles before deploying, stupid!'
-        # kill this app
-        os._exit(1)
+def import_from_dict(session, data, sync=[]):
+    '''Imports databases and druid clusters from dictionary'''
+    if isinstance(data, dict):
+        logging.info('Importing %d %s',
+                     len(data.get(DATABASES_KEY, [])),
+                     DATABASES_KEY)
+        for database in data.get(DATABASES_KEY, []):
+            Database.import_from_dict(session, database, sync=sync)
+    
+    
+def upgrade():
+    try:
+        constraint = find_constraint_name() or 'fk_columns_column_name_datasources'
+        with op.batch_alter_table('columns',
+                naming_convention=naming_convention) as batch_op:
+            batch_op.drop_constraint(constraint, type_='foreignkey')
+            batch_op.create_foreign_key(
+                'fk_columns_datasource_name_datasources',
+                'datasources',
+                ['datasource_name'], ['datasource_name'])
+    except:
+        logging.warning(
+            'Could not find or drop constraint on `columns`')
+    
+    # revision identifiers, used by Alembic.
+revision = '1296d28ec131'
+down_revision = '6414e83d82b7'
+    
+    
+def downgrade():
+    pass
+
+    
+    
+def downgrade():
+    with op.batch_alter_table('sql_metrics') as batch_op_sql_metrics:
+        batch_op_sql_metrics.drop_column('warning_text')
+    with op.batch_alter_table('metrics') as batch_op_metrics:
+        batch_op_metrics.drop_column('warning_text')
