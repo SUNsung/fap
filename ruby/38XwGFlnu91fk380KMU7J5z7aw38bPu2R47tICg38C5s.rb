@@ -1,72 +1,46 @@
 
         
-                expect(result).to eq('/usr/local/bin/cloc  --by-file --xml  --out=build/cloc.xml MyCoolApp')
-      end
-    
-          context('when the tag exists') do
-        before do
-          allow(Fastlane::Actions).to receive(:sh).with('git rev-parse -q --verify refs/tags/1.2.0 || true', { log: nil }).and_return('41215512353215321')
+                def content_tag_string(name, content, options, escape = true)
+          tag_options = tag_options(options, escape) if options
+          content     = ERB::Util.unwrapped_html_escape(content) if escape
+          '<#{name}#{tag_options}>#{PRE_CONTENT_STRINGS[name]}#{content}</#{name}>'.html_safe
         end
     
-    begin
-  require 'bundler/setup'
-rescue LoadError
-  $stderr.puts '[*] Metasploit requires the Bundler gem to be installed'
-  $stderr.puts '    $ gem install bundler'
-  exit(1)
-end
-    
-              s[:pass] = ''
-          return
-        end
-    
-    # Sniffer class for GET URL's
-class SnifferURL < BaseProtocolParser
-  def register_sigs
-    self.sigs = {
-      :get		=> /^GET\s+([^\n]+)\s+HTTP\/\d\.\d/i,
-      :webhost	=> /^HOST\:\s+([^\n\r]+)/i,
-    }
+      def test_check_parameters
+    with_test_route_set do
+      get '/'
+      assert_equal '', @controller.response.body
+    end
   end
     
-    clsJavaCompile 	= Rjb::import('javaCompile.CompileSourceInMemory')
-clsCreateJar	= Rjb::import('javaCompile.CreateJarFile')
-clsFile			= Rjb::import('java.io.File')
-system			= Rjb::import('java.lang.System')
-#clsString	= Rjb::import('java.lang.String')
+          add_delivery_method :test, Mail::TestMailer
+    end
     
-    #certCN cannot contain commas
-certCN 		= 'Metasploit Inc.'
-#keytoolOpts 	= '-genkey -alias signFiles -keystore msfkeystore ' +
-#		  '-storepass msfstorepass -dname \'cn=#{certCN}\' ' +
-#		  '-keypass msfkeypass'
-    
-            # Removes the specified cache
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        An array of caches to remove, each specified with the same
-        #        hash as cache_descriptors_per_pod especially :spec_file and :slug
-        #
-        def remove_caches(cache_descriptors)
-          cache_descriptors.each do |desc|
-            UI.message('Removing spec #{desc[:spec_file]} (v#{desc[:version]})') do
-              FileUtils.rm(desc[:spec_file])
-            end
-            UI.message('Removing cache #{desc[:slug]}') do
-              FileUtils.rm_rf(desc[:slug])
-            end
-          end
+            def set_expected_mail
+          @expected = Mail.new
+          @expected.content_type ['text', 'plain', { 'charset' => charset }]
+          @expected.mime_version = '1.0'
         end
     
-            It is possible to specify a list of dependencies which will be used by
-        the template in the `Podfile.default` (normal targets) `Podfile.test`
-        (test targets) files which should be stored in the
-        `~/.cocoapods/templates` folder.
-      DESC
-      self.arguments = [
-        CLAide::Argument.new('XCODEPROJ', :false),
-      ]
+          def warnings
+        @template.warnings
+      end
     
-            def print_version
-          output_pipe.puts 'version: '#{Pod::VERSION}''
+        find_union(segments, Project).includes(:namespace).order_id_desc
+  end
+    
+        def recheck
+      pod = Pod.find(params[:pod_id])
+      pod.test_connection!
+    
+          def auth_user_unless_prompt_none!
+        prompt = params[:prompt]
+        if prompt && prompt.include?('none')
+          handle_prompt_none
+        elsif prompt && prompt.include?('login')
+          new_params = params.except('controller', 'action').permit!.to_h.merge(prompt: prompt.remove('login'))
+          reauthenticate(new_params)
+        else
+          authenticate_user!
         end
+      end
