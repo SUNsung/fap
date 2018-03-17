@@ -1,496 +1,281 @@
-    if (useDistributedMBReading)
-        dataReader->StartDistributedMinibatchLoop(mbSize, 0, m_mpi->CurrentNodeRank(), m_mpi->NumNodesInUse(), inputMatrices.GetStreamDescriptions(), totalEpochSize);
-    else
-        dataReader->StartMinibatchLoop(mbSize, 0, inputMatrices.GetStreamDescriptions(), totalEpochSize);
-    
-    template void DoConvertFromDbn<float>(const ConfigParameters& config);
-template void DoConvertFromDbn<double>(const ConfigParameters& config);
-template void DoExportToDbn<float>(const ConfigParameters& config);
-template void DoExportToDbn<double>(const ConfigParameters& config);
 
+        
+        #ifndef TENSORFLOW_DEBUGGER_STATE_IMPL_H_
+#define TENSORFLOW_DEBUGGER_STATE_IMPL_H_
     
-    #pragma once
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    #include 'tensorflow/core/framework/op_kernel.h'
+#include 'tensorflow/core/framework/resource_mgr.h'
+#include 'tensorflow/core/framework/tensor_shape.h'
+#include 'tensorflow/core/platform/logging.h'
+#include 'tensorflow/core/platform/mutex.h'
+#include 'tensorflow/core/platform/thread_annotations.h'
+#include 'tensorflow/core/platform/types.h'
     
     
-    {    // SaveMapping - save a map into the file
-    // saveId - name of the section to save into (section:subsection format)
-    // labelMapping - map we are saving to the file
-    virtual void SaveMapping(std::wstring saveId, const std::map<LabelIdType, LabelType>& labelMapping);
-    virtual bool SupportMultiUtterances() const 
-    {
+    {  void Feedback(Cluster* cluster, const GrapplerItem& item,
+                const GraphDef& pruned_graph, double result) override;
+};
+    
+    #ifndef TENSORFLOW_STREAM_EXECUTOR_CUDA_CUDA_EVENT_H_
+#define TENSORFLOW_STREAM_EXECUTOR_CUDA_CUDA_EVENT_H_
+    
+    REGISTER_KERNEL_BUILDER(Name('TextLineReader').Device(DEVICE_CPU),
+                        TextLineReaderOp);
+REGISTER_KERNEL_BUILDER(Name('TextLineReaderV2').Device(DEVICE_CPU),
+                        TextLineReaderOp);
+    
+    #include <memory>
+#include 'tensorflow/core/framework/reader_base.h'
+#include 'tensorflow/core/framework/reader_op_kernel.h'
+#include 'tensorflow/core/lib/core/errors.h'
+#include 'tensorflow/core/lib/io/record_reader.h'
+#include 'tensorflow/core/lib/strings/strcat.h'
+#include 'tensorflow/core/platform/env.h'
+    
+      // If instruction is part of inputs, don't reset the bit_vector.
+  if (std::find(inputs.begin(), inputs.end(), instruction) == inputs.end()) {
+    bit_vector.SetToZero();
+  }
+  bit_vector.Set(GetIndex(instruction));
+  for (const HloInstruction* input : inputs) {
+    bit_vector.OrWith(GetBitVector(input));
+  }
+    
+     protected:
+  // Check if data0.shape[indices0.dims():] == data1.shape[indices1.dims():]
+  static bool SameExtraShape(const Tensor& data0, const Tensor& indices0,
+                             const Tensor& data1, const Tensor& indices1) {
+    const int extra0 = data0.dims() - indices0.dims();
+    const int extra1 = data1.dims() - indices1.dims();
+    if (extra0 != extra1) return false;
+    for (int i = 0; i < extra0; i++) {
+      if (data0.dim_size(indices0.dims() + i) !=
+          data1.dim_size(indices1.dims() + i)) {
         return false;
-    };
-};
+      }
+    }
+    return true;
+  }
     
-    #include <string>
-    
-        bool haslattice(std::wstring key) const
-    {
-#ifdef NONUMLATTICEMMI
-        return denlattices.haslattice(key);
-#else
-        return numlattices.haslattice(key) && denlattices.haslattice(key);
-#endif
+    CompletionBuilder::CompletionBuilder(CompletionSink &sink, SwiftResult &base)
+    : sink(sink), current(base) {
+  isNotRecommended = current.isNotRecommended();
+  notRecommendedReason = current.getNotRecommendedReason();
+  semanticContext = current.getSemanticContext();
+  completionString =
+      const_cast<CodeCompletionString *>(current.getCompletionString());
     }
     
+    NS_ASSUME_NONNULL_BEGIN
     
-    {public:
-    inline hardcoded_array() throw()
-    {
+      virtual void handleDiagnostic(SourceManager &SM, SourceLoc Loc,
+                                DiagnosticKind Kind,
+                                StringRef FormatString,
+                                ArrayRef<DiagnosticArgument> FormatArgs,
+                                const DiagnosticInfo &Info) override;
+    
+    class EditorDiagConsumer : public swift::DiagnosticConsumer {
+  typedef std::vector<DiagnosticEntryInfo> DiagnosticsTy;
+  /// Maps from a BufferID to the diagnostics that were emitted inside that
+  /// buffer.
+  llvm::DenseMap<unsigned, DiagnosticsTy> BufferDiagnostics;
     }
-    inline hardcoded_array(size_t n) throw()
-    {
-        check_size(n);
-    } // we can instantiate with a size parameter--just checks the size
-    inline hardcoded_array(size_t n, const _T& val) throw()
-    {
-        check_size(n);
-        for (size_t i = 0; i < n; i++)
-            data[i] = val;
-    }
-    inline _T& operator[](size_t i) throw()
-    {
-        check_index(i);
-        return data[i];
-    }
-    inline const _T& operator[](size_t i) const throw()
-    {
-        check_index(i);
-        return data[i];
-    }
-    inline size_t size() const throw()
-    {
-        return _N;
-    }
-};
+    
+    #endif // SWIFT_SYNTAX_REFERENCES_H
 
     
-        float4 operator&(const float4& other) const
-    {
-        return _mm_and_ps(v, other);
-    }
-    float4 operator|(const float4& other) const
-    {
-        return _mm_or_ps(v, other);
-    }
-    float4 operator+(const float4& other) const
-    {
-        return _mm_add_ps(v, other);
-    }
-    float4 operator-(const float4& other) const
-    {
-        return _mm_sub_ps(v, other);
-    }
-    float4 operator*(const float4& other) const
-    {
-        return _mm_mul_ps(v, other);
-    }
-    float4 operator/(const float4& other) const
-    {
-        return _mm_div_ps(v, other);
-    }
+    #include <limits>
+#include <utility>
+#include <algorithm>
     
-    vector<wstring> /*IConfigRecord::*/ ComputationNodeBase::GetMemberIds() const
+    
+    {
+    {    default:
+        arr.create(rows, cols, type);
+    }
+}
+    
+        CV_DbgAssert( rows_ >= 0 && cols_ >= 0 );
+    
+    static void* openclamdblas_check_fn(int ID)
 {
-    return vector<wstring>{ L'name', L'operation', L'dim', L'dims', /*L'tag', */L'inputs', OperationName() + L'Args' };
+    assert(ID >= 0 && ID < (int)(sizeof(openclamdblas_fn)/sizeof(openclamdblas_fn[0])));
+    const struct DynamicFnEntry* e = openclamdblas_fn[ID];
+    void* func = CV_CL_GET_PROC_ADDRESS(e->fnName);
+    if (!func)
+    {
+        throw cv::Exception(cv::Error::OpenCLApiCallError,
+                cv::format('OpenCL AMD BLAS function is not available: [%s]', e->fnName),
+                CV_Func, __FILE__, __LINE__);
+    }
+    *(e->ppFn) = func;
+    return func;
 }
     
-    const int kServerDefaultResponseStreamsToSend = 3;
-const char* const kServerResponseStreamsToSend = 'server_responses_to_send';
-const char* const kServerTryCancelRequest = 'server_try_cancel';
-const char* const kDebugInfoTrailerKey = 'debug-info-bin';
-const char* const kServerFinishAfterNReads = 'server_finish_after_n_reads';
-const char* const kServerUseCoalescingApi = 'server_use_coalescing_api';
+    #if defined(BOOST_ASIO_ENABLE_BUFFER_DEBUGGING)
+# include <boost/asio/detail/function.hpp>
+#endif // BOOST_ASIO_ENABLE_BUFFER_DEBUGGING
     
-    #endif
-
-    
-    // Logic and data behind the server's behavior.
-class GreeterServiceImpl final : public Greeter::Service {
-  Status SayHello(ServerContext* context, const HelloRequest* request,
-                  HelloReply* reply) override {
-    std::string prefix('Hello ');
-    reply->set_message(prefix + request->name());
-    return Status::OK;
-  }
-};
-    
-      Status GetFeature(ServerContext* context, const Point* point,
-                    Feature* feature) override {
-    feature->set_name(GetFeatureName(*point, feature_list_));
-    feature->mutable_location()->CopyFrom(*point);
-    return Status::OK;
-  }
-    
-    std::vector<grpc::string_ref> SecureAuthContext::FindPropertyValues(
-    const grpc::string& name) const {
-  if (!ctx_) {
-    return std::vector<grpc::string_ref>();
-  }
-  grpc_auth_property_iterator iter =
-      grpc_auth_context_find_properties_by_name(ctx_, name.c_str());
-  const grpc_auth_property* property = nullptr;
-  std::vector<grpc::string_ref> values;
-  while ((property = grpc_auth_property_iterator_next(&iter))) {
-    values.push_back(grpc::string_ref(property->value, property->value_length));
-  }
-  return values;
-}
-    
-      /// Put the runnable into an interruptible sleep.
-  virtual void pauseMilli(size_t milli) {
-    pauseMilli(std::chrono::milliseconds(milli));
-  }
-    
-    /**
- * @brief A Subscription is used to configure an EventPublisher and bind a
- * callback to a SubscriptionContext.
+    /// Adds buffering to the read-related operations of a stream.
+/**
+ * The buffered_read_stream class template can be used to add buffering to the
+ * synchronous and asynchronous read operations of a stream.
  *
- * A Subscription is the input to an EventPublisher when the EventPublisher
- * decides on the scope and details of the events it watches/generates.
- * An example includes a filesystem change event. A subscription would include
- * a path with optional recursion and attribute selectors as well as a callback
- * function to fire when an event for that path and selector occurs.
+ * @par Thread Safety
+ * @e Distinct @e objects: Safe.@n
+ * @e Shared @e objects: Unsafe.
  *
- * A Subscription also functions to greatly scope an EventPublisher%'s work.
- * Using the same filesystem example and the Linux inotify subsystem a
- * Subscription limits the number of inode watches to only those requested by
- * appropriate EventSubscriber%s.
- * Note: EventSubscriber%s and Subscriptions can be configured by the osquery
- * user.
- *
- * Subscriptions are usually created with EventFactory members:
- *
- * @code{.cpp}
- *   EventFactory::addSubscription('MyEventPublisher', my_subscription_context);
- * @endcode
+ * @par Concepts:
+ * AsyncReadStream, AsyncWriteStream, Stream, SyncReadStream, SyncWriteStream.
  */
-struct Subscription : private boost::noncopyable {
- public:
-  // EventSubscriber name.
-  std::string subscriber_name;
-    }
-    
-    /// Helper replacement for REGISTER, used within extension modules.
-#define REGISTER_MODULE(t, r, n)                                               \
-  auto t##Module = Registry::get().registry(r)->add(n, std::make_shared<t>());
-    
-    namespace osquery {
-    }
-    
-      if (count > nelms) {
-    return Status(1, 'Failed to strncpy: dst too small');
-  }
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    struct ServiceRegister;
-    
-    
-Test_Spy_Sample::Test_Spy_Sample()
+template <typename Stream>
+class buffered_read_stream
+  : private noncopyable
 {
-    SPY_ATTACH_CLASS(NULL);
-}
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    
-    {  private:
-    virtual void __OnAttach(const char* _key) {}
-    virtual void __OnDetach(const char* _key) {}
-};
-
-    
-    ScopeJEnv::ScopeJEnv(JavaVM* jvm, jint _capacity)
-    : vm_(jvm), env_(NULL), we_attach_(false), status_(0) {
-    ASSERT(jvm);
-    do {
-        env_ = (JNIEnv*)pthread_getspecific(g_env_key);
-        
-        if (NULL != env_) {
-            break;
-        }
-        
-        status_ = vm_->GetEnv((void**) &env_, JNI_VERSION_1_6);
-    }
+public:
+  /// The type of the next layer.
+  typedef typename remove_reference<Stream>::type next_layer_type;
     }
     
-    
-    {  atomic_shared_ptr<foo> asp;
-  asp.store(alias);
-  a.reset();
-  alias.reset();
-  auto res1 = asp.load();
-  auto res2 = asp.exchange(nullptr);
-  EXPECT_EQ(b, res1.get());
-  EXPECT_EQ(b, res2.get());
-  EXPECT_EQ(2, c_count);
-  EXPECT_EQ(0, d_count);
-  res1.reset();
-  res2.reset();
-  EXPECT_EQ(2, c_count);
-  EXPECT_EQ(1, d_count);
-  delete b;
-  EXPECT_EQ(2, c_count);
-  EXPECT_EQ(2, d_count);
-}
-    
-    BENCHMARK_DRAW_LINE()
-BENCHMARK_NAMED_PARAM(contentionAtWidthGetcpu, 1_stripe_0_work, 1, 0)
-BENCHMARK_NAMED_PARAM(contentionAtWidthGetcpu, 2_stripe_0_work, 2, 0)
-BENCHMARK_NAMED_PARAM(contentionAtWidthGetcpu, 4_stripe_0_work, 4, 0)
-BENCHMARK_NAMED_PARAM(contentionAtWidthGetcpu, 8_stripe_0_work, 8, 0)
-BENCHMARK_NAMED_PARAM(contentionAtWidthGetcpu, 16_stripe_0_work, 16, 0)
-BENCHMARK_NAMED_PARAM(contentionAtWidthGetcpu, 32_stripe_0_work, 32, 0)
-BENCHMARK_NAMED_PARAM(contentionAtWidthGetcpu, 64_stripe_0_work, 64, 0)
-BENCHMARK_NAMED_PARAM(contentionAtWidthThreadLocal, 2_stripe_0_work, 2, 0)
-BENCHMARK_NAMED_PARAM(contentionAtWidthThreadLocal, 4_stripe_0_work, 4, 0)
-BENCHMARK_NAMED_PARAM(contentionAtWidthThreadLocal, 8_stripe_0_work, 8, 0)
-BENCHMARK_NAMED_PARAM(contentionAtWidthThreadLocal, 16_stripe_0_work, 16, 0)
-BENCHMARK_NAMED_PARAM(contentionAtWidthThreadLocal, 32_stripe_0_work, 32, 0)
-BENCHMARK_NAMED_PARAM(contentionAtWidthThreadLocal, 64_stripe_0_work, 64, 0)
-BENCHMARK_NAMED_PARAM(contentionAtWidthPthreadSelf, 2_stripe_0_work, 2, 0)
-BENCHMARK_NAMED_PARAM(contentionAtWidthPthreadSelf, 4_stripe_0_work, 4, 0)
-BENCHMARK_NAMED_PARAM(contentionAtWidthPthreadSelf, 8_stripe_0_work, 8, 0)
-BENCHMARK_NAMED_PARAM(contentionAtWidthPthreadSelf, 16_stripe_0_work, 16, 0)
-BENCHMARK_NAMED_PARAM(contentionAtWidthPthreadSelf, 32_stripe_0_work, 32, 0)
-BENCHMARK_NAMED_PARAM(contentionAtWidthPthreadSelf, 64_stripe_0_work, 64, 0)
-BENCHMARK_NAMED_PARAM(atomicIncrBaseline, local_incr_0_work, 0)
-BENCHMARK_DRAW_LINE()
-BENCHMARK_NAMED_PARAM(contentionAtWidthGetcpu, 1_stripe_500_work, 1, 500)
-BENCHMARK_NAMED_PARAM(contentionAtWidthGetcpu, 2_stripe_500_work, 2, 500)
-BENCHMARK_NAMED_PARAM(contentionAtWidthGetcpu, 4_stripe_500_work, 4, 500)
-BENCHMARK_NAMED_PARAM(contentionAtWidthGetcpu, 8_stripe_500_work, 8, 500)
-BENCHMARK_NAMED_PARAM(contentionAtWidthGetcpu, 16_stripe_500_work, 16, 500)
-BENCHMARK_NAMED_PARAM(contentionAtWidthGetcpu, 32_stripe_500_work, 32, 500)
-BENCHMARK_NAMED_PARAM(atomicIncrBaseline, local_incr_500_work, 500)
-BENCHMARK_DRAW_LINE()
-BENCHMARK_NAMED_PARAM(contentionAtWidthGetcpu, 1_stripe_1000_work, 1, 1000)
-BENCHMARK_NAMED_PARAM(contentionAtWidthGetcpu, 2_stripe_1000_work, 2, 1000)
-BENCHMARK_NAMED_PARAM(contentionAtWidthGetcpu, 4_stripe_1000_work, 4, 1000)
-BENCHMARK_NAMED_PARAM(contentionAtWidthGetcpu, 8_stripe_1000_work, 8, 1000)
-BENCHMARK_NAMED_PARAM(contentionAtWidthGetcpu, 16_stripe_1000_work, 16, 1000)
-BENCHMARK_NAMED_PARAM(contentionAtWidthGetcpu, 32_stripe_1000_work, 32, 1000)
-BENCHMARK_NAMED_PARAM(atomicIncrBaseline, local_incr_1000_work, 1000)
-    
-    static int testingGetcpu(unsigned* cpu, unsigned* node, void* /* unused */) {
-  if (cpu != nullptr) {
-    *cpu = testingCpu;
-  }
-  if (node != nullptr) {
-    *node = testingCpu;
-  }
-  return 0;
-}
+    #if !defined(BOOST_ASIO_HAS_THREADS) \
+  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
+# include <boost/asio/detail/null_fenced_block.hpp>
+#elif defined(__MACH__) && defined(__APPLE__)
+# include <boost/asio/detail/macos_fenced_block.hpp>
+#elif defined(__sun)
+# include <boost/asio/detail/solaris_fenced_block.hpp>
+#elif defined(__GNUC__) && defined(__arm__) \
+  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
+# include <boost/asio/detail/gcc_arm_fenced_block.hpp>
+#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
+# include <boost/asio/detail/gcc_hppa_fenced_block.hpp>
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+# include <boost/asio/detail/gcc_x86_fenced_block.hpp>
+#elif defined(__GNUC__) \
+  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
+  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
+  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
+# include <boost/asio/detail/gcc_sync_fenced_block.hpp>
+#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
+# include <boost/asio/detail/win_fenced_block.hpp>
+#else
+# include <boost/asio/detail/null_fenced_block.hpp>
 #endif
     
-    size_t qfind_first_byte_of_bitset(
-    const StringPieceLite haystack,
-    const StringPieceLite needles) {
-  std::bitset<256> s;
-  for (auto needle : needles) {
-    s[(uint8_t)needle] = true;
-  }
-  for (size_t index = 0; index < haystack.size(); ++index) {
-    if (s[(uint8_t)haystack[index]]) {
-      return index;
+    #ifndef BOOST_ASIO_DETAIL_GCC_ARM_FENCED_BLOCK_HPP
+#define BOOST_ASIO_DETAIL_GCC_ARM_FENCED_BLOCK_HPP
+    
+    #include <random>
+#include <limits>
+    
+    
+    {
+    {      if (size_to_read != 0) {
+        CHECK_EQ(fi->Read(dmlc::BeginPtr(page->data) + page->offset[i],
+                          size_to_read * sizeof(SparseBatch::Entry)),
+                 size_to_read * sizeof(SparseBatch::Entry))
+            << 'Invalid SparsePage file';
+        curr_offset += size_to_read;
+      }
+      i = j;
     }
-  }
-  return std::string::npos;
-}
-    
-    #include <folly/Likely.h>
-    
-    // It's okay if pages are bigger than this (as powers of two), but they should
-// not be smaller.
-static constexpr size_t kMinPageSize = 4096;
-static_assert(
-    kMinPageSize >= 16,
-    'kMinPageSize must be at least SSE register size');
-    
-    #include <cstddef>
-    
-    //
-// Implementation of DynamicParser template & inline methods.
-//
-    
-    
-    {} // namespace fuzzer
-    
-    extern 'C' {
-// Declare these symbols as weak to allow them to be optionally defined.
-#define EXT_FUNC(NAME, RETURN_TYPE, FUNC_SIG, WARN)                            \
-  RETURN_TYPE NAME##Def FUNC_SIG {                                             \
-    Printf('ERROR: Function \'%s\' not defined.\n', #NAME);                    \
-    exit(1);                                                                   \
-  }                                                                            \
-  RETURN_TYPE NAME FUNC_SIG __attribute__((weak, alias(#NAME 'Def')));
+    // seek to end of record
+    if (curr_offset != disk_offset_.back()) {
+      fi->Seek(begin + disk_offset_.back() * sizeof(SparseBatch::Entry));
     }
+    return true;
+  }
     
-    // Parse a servername and share, like: SomeServer\SomeShare\
-// Returns number of characters considered if successful.
-static size_t ParseServerAndShare(const std::string &FileName,
-                                  const size_t Offset) {
-  size_t Pos = Offset, Res;
-  if (!(Res = ParseDir(FileName, Pos)))
-    return 0;
-  Pos += Res;
-  if (!(Res = ParseDir(FileName, Pos)))
-    return 0;
-  Pos += Res;
-  return Pos - Offset;
-}
-    
-    void Fuzzer::PrintFinalStats() {
-  if (Options.PrintCoverage)
-    TPC.PrintCoverage();
-  if (Options.DumpCoverage)
-    TPC.DumpCoverage();
-  if (Options.PrintCorpusStats)
-    Corpus.PrintStats();
-  if (!Options.PrintFinalStats) return;
-  size_t ExecPerSec = execPerSec();
-  Printf('stat::number_of_executed_units: %zd\n', TotalNumberOfRuns);
-  Printf('stat::average_exec_per_sec:     %zd\n', ExecPerSec);
-  Printf('stat::new_units_added:          %zd\n', NumberOfNewUnitsAdded);
-  Printf('stat::slowest_unit_time_sec:    %zd\n', TimeOfLongestUnitInSeconds);
-  Printf('stat::peak_rss_mb:              %zd\n', GetPeakRSSMb());
-}
-    
-    #ifndef LLVM_FUZZER_MERGE_H
-#define LLVM_FUZZER_MERGE_H
-    
-    size_t MutationDispatcher::Mutate_ShuffleBytes(uint8_t *Data, size_t Size,
-                                               size_t MaxSize) {
-  if (Size > MaxSize) return 0;
-  assert(Size);
-  size_t ShuffleAmount =
-      Rand(std::min(Size, (size_t)8)) + 1; // [1,8] and <= Size.
-  size_t ShuffleStart = Rand(Size - ShuffleAmount);
-  assert(ShuffleStart + ShuffleAmount <= Size);
-  std::random_shuffle(Data + ShuffleStart, Data + ShuffleStart + ShuffleAmount,
-                      Rand);
-  return Size;
-}
-    
-    struct FuzzingOptions {
-  int Verbosity = 1;
-  size_t MaxLen = 0;
-  int UnitTimeoutSec = 300;
-  int TimeoutExitCode = 77;
-  int ErrorExitCode = 77;
-  int MaxTotalTimeSec = 0;
-  int RssLimitMb = 0;
-  bool DoCrossOver = true;
-  int MutateDepth = 5;
-  bool UseCounters = false;
-  bool UseIndirCalls = true;
-  bool UseMemcmp = true;
-  bool UseMemmem = true;
-  bool UseCmp = false;
-  bool UseValueProfile = false;
-  bool Shrink = false;
-  int ReloadIntervalSec = 1;
-  bool ShuffleAtStartUp = true;
-  bool PreferSmall = true;
-  size_t MaxNumberOfRuns = -1L;
-  int ReportSlowUnits = 10;
-  bool OnlyASCII = false;
-  std::string OutputCorpus;
-  std::string ArtifactPrefix = './';
-  std::string ExactArtifactPath;
-  std::string ExitOnSrcPos;
-  std::string ExitOnItem;
-  bool SaveArtifacts = true;
-  bool PrintNEW = true; // Print a status line when new units are found;
-  bool OutputCSV = false;
-  bool PrintNewCovPcs = false;
-  bool PrintFinalStats = false;
-  bool PrintCorpusStats = false;
-  bool PrintCoverage = false;
-  bool DumpCoverage = false;
-  bool DetectLeaks = true;
-  int  TraceMalloc = 0;
-  bool HandleAbrt = false;
-  bool HandleBus = false;
-  bool HandleFpe = false;
-  bool HandleIll = false;
-  bool HandleInt = false;
-  bool HandleSegv = false;
-  bool HandleTerm = false;
+    struct EvalRMSE : public EvalEWiseBase<EvalRMSE> {
+  const char *Name() const override {
+    return 'rmse';
+  }
+  inline bst_float EvalRow(bst_float label, bst_float pred) const {
+    bst_float diff = label - pred;
+    return diff * diff;
+  }
+  inline static bst_float GetFinal(bst_float esum, bst_float wsum) {
+    return std::sqrt(esum / wsum);
+  }
 };
     
-    uint32_t sha1_rol32(uint32_t number, uint8_t bits) {
-	return ((number << bits) | (number >> (32-bits)));
+    
+    {
+    {    double dat[2]; dat[0] = sum, dat[1] = wsum;
+    if (distributed) {
+      rabit::Allreduce<rabit::op::Sum>(dat, 2);
+    }
+    return Derived::GetFinal(dat[0], dat[1]);
+  }
+  /*!
+   * \brief to be implemented by subclass,
+   *   get evaluation result from one row
+   * \param label label of current instance
+   * \param pred prediction value of current instance
+   * \param nclass number of class in the prediction
+   */
+  inline static bst_float EvalRow(int label,
+                                  const bst_float *pred,
+                                  size_t nclass);
+  /*!
+   * \brief to be overridden by subclass, final transformation
+   * \param esum the sum statistics returned by EvalRow
+   * \param wsum sum of weight
+   */
+  inline static bst_float GetFinal(bst_float esum, bst_float wsum) {
+    return esum / wsum;
+  }
+  // used to store error message
+  const char *error_msg_;
+};
+    
+    bool ReadJpeg(const uint8_t* data, const size_t len, JpegReadMode mode,
+              JPEGData* jpg) {
+  size_t pos = 0;
+  // Check SOI marker.
+  EXPECT_MARKER();
+  int marker = data[pos + 1];
+  pos += 2;
+  if (marker != 0xd8) {
+    fprintf(stderr, 'Did not find expected SOI marker, actual=%d\n', marker);
+    jpg->error = JPEG_SOI_NOT_FOUND;
+    return false;
+  }
+  int lut_size = kMaxHuffmanTables * kJpegHuffmanLutSize;
+  std::vector<HuffmanTableEntry> dc_huff_lut(lut_size);
+  std::vector<HuffmanTableEntry> ac_huff_lut(lut_size);
+  bool found_sof = false;
+  uint16_t scan_progression[kMaxComponents][kDCTBlockSize] = { { 0 } };
+    }
+    
+    void OutputImage::ToLinearRGB(std::vector<std::vector<float> >* rgb) const {
+  ToLinearRGB(0, 0, width_, height_, rgb);
 }
     
-    #include 'FuzzerDefs.h'
-#include <cstddef>
-#include <stdint.h>
     
-    // Value profile.
-// We keep track of various values that affect control flow.
-// These values are inserted into a bit-set-based hash map.
-// Every new bit in the map is treated as a new coverage.
-//
-// For memcmp/strcmp/etc the interesting value is the length of the common
-// prefix of the parameters.
-// For cmp instructions the interesting value is a XOR of the parameters.
-// The interesting value is mixed up with the PC and is then added to the map.
+    {
+    {      // Parameters tuned to allow only colors on which sharpening is useful.
+      if (channel == 2 && 2.116 * v > -0.34414 * u + 0.2
+          && 1.402 * v > 1.772 * u + 0.2) {
+        redmap[index] = true;
+      }
+      if (channel == 1 && v < 1.263 * u - 0.1 && u > -0.33741 * v) {
+        redmap[index] = true;
+      }
+    }
+  }
     
-    #endif // LIBFUZZER_APPLE
+    #endif  // GUETZLI_DCT_DOUBLE_H_
 
     
-      BtMessageFactory* messageFactory_;
+      void SaveToJpegData(JPEGData* jpg) const;
     
-      int64_t offset_;
-    
-    const char* AnnounceList::getEventString() const
-{
-  if (currentTrackerInitialized_) {
-    switch ((*currentTier_)->event) {
-    case AnnounceTier::STARTED:
-    case AnnounceTier::STARTED_AFTER_COMPLETION:
-      return 'started';
-    case AnnounceTier::STOPPED:
-      return 'stopped';
-    case AnnounceTier::COMPLETED:
-      return 'completed';
-    default:
-      return '';
+    namespace guetzli {
     }
-  }
-  else {
-    return '';
-  }
-}
-    
-    namespace aria2 {
-    }
-    
-    class ApiCallbackDownloadEventListener : public DownloadEventListener {
-public:
-  ApiCallbackDownloadEventListener(Session* session,
-                                   DownloadEventCallback callback,
-                                   void* userData);
-  virtual ~ApiCallbackDownloadEventListener();
-  virtual void onEvent(DownloadEvent event,
-                       const RequestGroup* group) CXX11_OVERRIDE;
-    }
-    
-    #include 'LogFactory.h'
-#include 'BufferedFile.h'
-#include 'Logger.h'
-#include 'MessageDigest.h'
-#include 'fmt.h'
-#include 'message.h'
-#include 'util.h'
-    
-      virtual TLSSessionSide getSide() const CXX11_OVERRIDE { return side_; }
-    
-    AuthConfig::~AuthConfig() = default;
