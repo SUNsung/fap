@@ -1,117 +1,88 @@
 
         
-                # This is called early, before a machine is instantiated, to check
-        # if this provider is usable. This should return true or false.
-        #
-        # If raise_error is true, then instead of returning false, this
-        # should raise an error with a helpful message about why this
-        # provider cannot be used.
-        #
-        # @param [Boolean] raise_error If true, raise exception if not usable.
-        # @return [Boolean]
-        def self.usable?(raise_error=false)
-          # Return true by default for backwards compat since this was
-          # introduced long after providers were being written.
-          true
-        end
+                    -- Return the time part and the sequence part. OR appears
+            -- faster here than addition, but they're equivalent:
+            -- time_part has no trailing two bytes, and tail is only
+            -- the last two bytes.
+            RETURN time_part | tail;
+          END
+        $$ LANGUAGE plpgsql VOLATILE;
+      SQL
+    end
     
-          # Returns the full path to the template, taking into accoun the gem directory
-      # and adding the `.erb` extension to the end.
-      #
-      # @return [String]
-      def full_template_path
-        @template_root.join('#{template}.erb').to_s.squeeze('/')
+            expect(response).to have_http_status(:missing)
       end
     end
   end
 end
 
     
-      def test_plus
-    set = Set[1,2,3]
-    
-      it 'decodes the remaining longs when passed the '*' modifier after another directive' do
-    array = 'degfhacbacbdegfh'.unpack(unpack_format()+unpack_format('*'))
-    array.should == [7234302065976107874, 7017560827710891624]
+      def id
+    ActivityPub::TagManager.instance.uri_for(object)
   end
     
-      # Hangs on 1.8.6.114 OS X, possibly also on Linux
-  quarantine! do
-    it 'is deferred if ensure clause sleeps' do
-      ThreadSpecs.wakeup_dying_sleeping_thread(@method) { sleep; ScratchPad.record :after_sleep }
-      ScratchPad.recorded.should == :after_sleep
+      describe 'GET #show' do
+    it 'returns http success' do
+      get :show
+      expect(response).to have_http_status(:success)
     end
   end
     
-        prune
-  end
+        it 'denies requests with sneaky encoded session cookies' do
+      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.%73ession=SESSION_TOKEN'
+      expect(last_response).not_to be_ok
+    end
     
-        private
-    
-          # Get the cache key pair for the given Sass URI.
-      # The URI need not be checked for validity.
-      #
-      # The only strict requirement is that the returned pair of strings
-      # uniquely identify the file at the given URI.
-      # However, the first component generally corresponds roughly to the directory,
-      # and the second to the basename, of the URI.
-      #
-      # Note that keys must be unique *across importers*.
-      # Thus it's probably a good idea to include the importer name
-      # at the beginning of the first component.
-      #
-      # @param uri [String] A URI known to be valid for this importer.
-      # @param options [{Symbol => Object}] Options for the Sass file
-      #   containing the `@import` currently being checked.
-      # @return [(String, String)] The key pair which uniquely identifies
-      #   the file at the given URI.
-      def key(uri, options)
-        Sass::Util.abstract(self)
+      context 'escaping' do
+    it 'escapes html entities' do
+      mock_app do |env|
+        request = Rack::Request.new(env)
+        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']]]
       end
-    
-        # Never trust parameters from the scary internet, only allow the white list through.
-    def book_params
-      params.require(:book).permit(:name)
+      get '/', :foo => '<bar>'
+      expect(body).to eq('&lt;bar&gt;')
     end
+    
+    
+  it 'should allow changing the protection mode to a string' do
+    # I have no clue what other modes are available
+    mock_app do
+      use Rack::Protection::FrameOptions, :frame_options => 'ALLOW-FROM foo'
+      run DummyApp
+    end
+    
+          post('/', {}, 'HTTP_REFERER' => 'http://example.com/foo', 'HTTP_HOST' => 'example.org')
+      expect(last_response).to be_ok
+    end
+  end
 end
 
     
-            def name
-          @node.children.first
-        end
+      private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_book
+      @book = Book.find(params[:id])
+    end
     
-    module RuboCop
-  module Cop
-    module Layout
-      # Checks for unnecessary additional spaces inside array percent literals
-      # (i.e. %i/%w).
-      #
-      # @example
-      #
-      #   # bad
-      #   %w(foo  bar  baz)
-      #   # good
-      #   %i(foo bar baz)
-      class SpaceInsideArrayPercentLiteral < Cop
-        include MatchRange
-        include PercentLiteral
-    
-            def autocorrect(node)
-          # Regexp#match can take a second argument, but this cop doesn't
-          # register an offense in that case
-          return unless node.first_argument.regexp_type?
-    
-            private
-    
-            def on_block(node)
-          on_body_of_reduce(node) do |body|
-            void_next = body.each_node(:next).find do |n|
-              n.children.empty? && parent_block_node(n) == node
+                lambda do |corrector|
+              new_source = receiver.source + '.end_with?(' +
+                           to_string_literal(regex_str) + ')'
+              corrector.replace(node.source_range, new_source)
             end
-    
-              [optarg_positions, arg_positions]
+          end
         end
       end
     end
   end
 end
+
+    
+            def variables_in_node(node)
+          if node.or_type?
+            node.node_parts
+                .flat_map { |node_part| variables_in_node(node_part) }
+                .uniq
+          else
+            variables_in_simple_node(node)
+          end
+        end
