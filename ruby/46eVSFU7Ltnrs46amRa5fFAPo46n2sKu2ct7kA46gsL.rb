@@ -1,82 +1,48 @@
 
         
-          setup do
-    @old_escape_html_entities_in_json = ActiveSupport.escape_html_entities_in_json
-    ActiveSupport.escape_html_entities_in_json = true
-    @template = self
-    @request = Class.new do
-      def send_early_hints(links) end
-    end.new
-  end
-    
-        class MessageDelivery < ActionMailer::MessageDelivery # :nodoc:
-      def initialize(mailer_class, action, params, *args)
-        super(mailer_class, action, *args)
-        @params = params
+              def initialize(serial: nil)
+        self.serial = serial
       end
+    end
     
-            def application_mailer_file_name
-          @_application_mailer_file_name ||= if mountable_engine?
-            'app/mailers/#{namespaced_path}/application_mailer.rb'
+          it 'get GIT-SVN build number' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            get_build_number_repository
+        end').runner.execute(:test)
+    
+          context('when the tag doesn't exist') do
+        before do
+          allow(Fastlane::Actions).to receive(:sh).with('git rev-parse -q --verify refs/tags/1.2.0 || true', { log: nil }).and_return('')
+        end
+    
+          it 'prefers a custom version number over a boring version bump' do
+        Fastlane::FastFile.new.parse('lane :test do
+          increment_version_number(version_number: '1.77.3', bump_type: 'major')
+        end').runner.execute(:test)
+    
+            def find_address
+          if @order.bill_address_id == params[:id].to_i
+            @order.bill_address
+          elsif @order.ship_address_id == params[:id].to_i
+            @order.ship_address
           else
-            'app/mailers/application_mailer.rb'
+            raise CanCan::AccessDenied
           end
         end
-    end
-  end
-end
-
-    
-      p.action do |args, _|
-    if args.empty?
-      Jekyll.logger.error 'A subcommand is required.'
-      puts p
-      abort
-    else
-      subcommand = args.first
-      unless p.has_command? subcommand
-        Jekyll.logger.abort_with 'fatal: 'jekyll #{args.first}' could not' \
-          ' be found. You may need to install the jekyll-#{args.first} gem' \
-          ' or a related gem to be able to use this subcommand.'
       end
     end
   end
 end
 
     
-    map = {}
-dups = []
-    
-          config.paths['log']             = '#{Msf::Config.log_directory}/#{Rails.env}.log'
-      config.paths['config/database'] = [Metasploit::Framework::Database.configurations_pathname.try(:to_path)]
-    
-    parser = Parser.new(filename)
-parser.parse
-print parser.get_result
-    
-          if File.directory?(source_entry)
-        FileUtils.mkdir(target_entry) unless File.exists?(target_entry)
-        transform_r(source_entry, target_entry)
-      else
-        # copy the new file, in case of being an .erb file should render first
-        if source_entry.end_with?('erb')
-          target_entry = target_entry.gsub(/.erb$/,'').gsub('example', name)
-          File.open(target_entry, 'w') { |f| f.write(render(source_entry)) }
-        else
-          FileUtils.cp(source_entry, target_entry)
+            def stock_location
+          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:id])
         end
-        puts '\t create #{File.join(full_plugin_name, Pathname.new(target_entry).relative_path_from(Pathname.new(@target_path)))}'
-      end
-    end
-  end
     
-      protected
-  def extract_fields(filter_string)
-    (filter_string.empty? ? [] : filter_string.split(',').map { |s| s.strip.to_sym })
-  end
+                break if !assignment.branch || assignment.branch == reference.branch
     
-      public
-  def clone
-    return self.class.new(params)
-  end
-end; end # class LogStash::Codecs::Base
+            def autocorrect(node)
+          redundant_regex?(node) do |receiver, regex_str|
+            receiver, regex_str = regex_str, receiver if receiver.is_a?(String)
+            regex_str = regex_str[0..-3] # drop \Z anchor
+            regex_str = interpret_string_escapes(regex_str)
