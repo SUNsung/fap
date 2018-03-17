@@ -1,28 +1,40 @@
 
         
-        ###
-### dependencies
-###
+        # This bin wrapper runs the `pod` command in a OS X sandbox. The reason for this
+# is to ensure that people can’t use malicious code from pod specifications.
+#
+# It does this by creating a ‘seatbelt’ profile on the fly and executing the
+# given command through `/usr/bin/sandbox-exec`. This profile format is an
+# undocumented format, which uses TinyScheme to implement its DSL.
+#
+# Even though it uses a undocumented format, it’s actually very self-explanatory.
+# Because we use a whitelist approach, `(deny default)`, any action that is
+# denied is logged to `/var/log/system.log`. So tailing that should provide
+# enough information on steps that need to be take to get something to work.
+#
+# For more information see:
+#
+# * https://github.com/CocoaPods/CocoaPods/issues/939
+# * http://reverse.put.as/wp-content/uploads/2011/08/The-Apple-Sandbox-BHDC2011-Slides.pdf
+# * http://reverse.put.as/wp-content/uploads/2011/08/The-Apple-Sandbox-BHDC2011-Paper.pdf
+# * https://github.com/s7ephen/OSX-Sandbox--Seatbelt--Profiles
+# * `$ man sandbox-exec`
+# * `$ ls /usr/share/sandbox`
     
-          def handle_start_point_response(endpoint)
-        _status, header, response = endpoint.call(request.env)
-        if response.redirect?
-          redirect_to header['Location']
-        else
-          save_params_and_render_consent_form(endpoint)
+          def report
+        <<-EOS
+    
+            def execute_repl_command(repl_command)
+          unless repl_command == '\n'
+            repl_commands = repl_command.split
+            subcommand = repl_commands.shift.capitalize
+            arguments = repl_commands
+            subcommand_class = Pod::Command::IPC.const_get(subcommand)
+            subcommand_class.new(CLAide::ARGV.new(arguments)).run
+            signal_end_of_output
+          end
         end
       end
-    
-    post '/' do
-  connections.each { |out| out << 'data: #{params[:msg]}\n\n' }
-  204 # response without entity body
-end
-    
-          def drop_session(env)
-        session(env).clear if session? env
-      end
-    
-        it 'denies requests with duplicate session cookies' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
-      expect(last_response).not_to be_ok
     end
+  end
+end
