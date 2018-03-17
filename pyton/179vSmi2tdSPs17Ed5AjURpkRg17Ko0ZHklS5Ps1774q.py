@@ -1,59 +1,127 @@
 
         
-        # The master toctree document.
-master_doc = 'index'
-    
-        def get_all_names_answer(self):
-        '''Returns the set of domain names that the plugin should find'''
-        if self._all_names:
-            return self._all_names
-        else:
-            raise errors.Error('No configuration file loaded')
-    
-    # If true, an OpenSearch description file will be output, and all pages will
-# contain a <link> tag referring to it.  The value of this option must be the
-# base URL from which the finished HTML is served.
-#html_use_opensearch = ''
-    
-        @mock.patch('certbot.display.enhancements.util')
-    def test_cancel(self, mock_util):
-        mock_util().menu.return_value = (display_util.CANCEL, 1)
-        self.assertFalse(self._call())
-    
-    print 'JS_OUTPUTS := ' + ' '.join(outputs)
-print 'DEFS_SUCCESS := 1'
+            return strings
 
     
-            def mako_module_path(filename, uri):
-            filename = filename.lstrip('/').replace('/', '-')
-            path = os.path.join(module_directory, filename + '.py')
-            return os.path.abspath(path)
-    else:
-        # disable caching templates since we don't know where they should go.
-        module_directory = mako_module_path = None
+    from ..common import *
     
-        @require_oauth2_scope('read')
-    @validate(
-        user=VAccountByName('username'),
-    )
-    @api_doc(
-        section=api_section.users,
-        uri='/api/v1/user/{username}/trophies',
-    )
-    def GET_usertrophies(self, user):
-        '''Return a list of trophies for the a given user.'''
-        return self.api_wrapper(get_usertrophies(user))
+    def kugou_download_playlist(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    html=get_html(url)
+    pattern=re.compile('title='(.*?)'.* data='(\w*)\|.*?'')
+    pairs=pattern.findall(html)
+    for title,hash_val in pairs:
+        kugou_download_by_hash(title,hash_val,output_dir,merge,info_only)
     
-    from reddit_base import RedditController, UnloggedUser
-from r2.lib.pages import (ButtonLite, ButtonDemoPanel, WidgetDemoPanel,
-                          BoringPage)
-from r2.lib.pages.things import wrap_links
-from r2.models import *
-from r2.lib.validator import *
-from pylons import request, response
-from pylons import tmpl_context as c
-from pylons.i18n import _
+        def resolveEntity(self, publicId, systemId):
+        assert systemId is not None
+        source = DOMInputSource()
+        source.publicId = publicId
+        source.systemId = systemId
+        source.byteStream = self._get_opener().open(systemId)
     
-            return HelpPage(_('help'),
-                        content = Embed(content=output),
-                        show_sidebar = None).render()
+        print('$(temp_dir):')
+    print(r'  if not exist $(temp_dir)\. mkdir $(temp_dir)')
+    print()
+    
+            class complex1(complex):
+            '''Test usage of __complex__() with a __new__() method'''
+            def __new__(self, value=0j):
+                return complex.__new__(self, 2*value)
+            def __complex__(self):
+                return self
+    
+        expect_without_sort_keys = textwrap.dedent('''\
+    [
+        [
+            'blorpie'
+        ],
+        [
+            'whoops'
+        ],
+        [],
+        'd-shtaeou',
+        'd-nthiouh',
+        'i-vhbjkhnth',
+        {
+            'nifty': 87
+        },
+        {
+            'field': 'yes',
+            'morefield': false
+        }
+    ]
+    ''')
+    
+        def test_change_pointers(self):
+        dll = CDLL(_ctypes_test.__file__)
+        func = dll._testfunc_p_p
+    
+    
+if __name__ == '__main__':
+    main()
+
+    
+    The one public-facing part of this module is the `Configurable` class
+and its `~Configurable.configure` method, which becomes a part of the
+interface of its subclasses, including `.AsyncHTTPClient`, `.IOLoop`,
+and `.Resolver`.
+'''
+    
+        @gen_test
+    def test_http10_no_content_length(self):
+        # Regression test for a bug in which can_keep_alive would crash
+        # for an HTTP/1.0 (not 1.1) response with no content-length.
+        conn = HTTP1Connection(self.client_stream, True)
+        self.server_stream.write(b'HTTP/1.0 200 Not Modified\r\n\r\nhello')
+        self.server_stream.close()
+    
+            p = Popen(
+            [sys.executable, '-m', 'testapp'], stdout=subprocess.PIPE,
+            cwd=path, env=dict(os.environ, PYTHONPATH=pythonpath),
+            universal_newlines=True)
+        out = p.communicate()[0]
+        self.assertEqual(out, 'Starting\nStarting\n')
+
+    
+    
+class BaseHandler(RequestHandler):
+    COOKIE_NAME = 'twitterdemo_user'
+    
+    
+register_api_templates('comment', CommentJsonTemplate)
+register_api_templates('morerecursion', MoreCommentJsonTemplate)
+register_api_templates('morechildren', MoreCommentJsonTemplate)
+
+    
+        @validate(VAdmin(),
+              award = VAwardByCodename('awardcn'),
+              recipient = nop('recipient'),
+              desc = nop('desc'),
+              url = nop('url'),
+              hours = nop('hours'))
+    def GET_give(self, award, recipient, desc, url, hours):
+        if award is None:
+            abort(404, 'page not found')
+    
+    class CaptchaController(RedditController):
+    @allow_oauth2_access
+    @api_doc(api_section.captcha, uri='/captcha/{iden}')
+    def GET_captchaimg(self, iden):
+        '''
+        Request a CAPTCHA image given an `iden`.
+    
+            # Replace all links to '/wiki/help/...' with '/help/...'
+        for link in output.findAll('a'):
+            if link.has_key('href') and link['href'].startswith('/wiki/help'):
+                link['href'] = link['href'][5:]
+    
+    
+class GoogleTagManagerController(MinimalController):
+    def pre(self):
+        if request.host != g.media_domain:
+            # don't serve up untrusted content except on our
+            # specifically untrusted domain
+            self.abort404()
+    
+    import json
+import os
