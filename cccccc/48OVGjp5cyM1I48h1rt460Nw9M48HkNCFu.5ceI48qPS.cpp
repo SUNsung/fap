@@ -1,20 +1,118 @@
 
         
-          // Get a layer using a LayerParameter.
-  static shared_ptr<Layer<Dtype> > CreateLayer(const LayerParameter& param) {
-    if (Caffe::root_solver()) {
-      LOG(INFO) << 'Creating layer ' << param.name();
-    }
-    const string& type = param.type();
-    CreatorRegistry& registry = Registry();
-    CHECK_EQ(registry.count(type), 1) << 'Unknown layer type: ' << type
-        << ' (known types: ' << LayerTypeListString() << ')';
-    return registry[type](param);
-  }
+        
+    {}  // namespace
     
-      bool handles_setup_;
-  cudnnHandle_t* handle_;
-  cudaStream_t*  stream_;
+    // The entry point from ChromeMain into the relauncher process.
+int RelauncherMain(const content::MainFunctionParams& main_parameters);
+    
+      int next_id_;
+  std::unordered_map<int, std::unique_ptr<base::DictionaryValue>> entries_;
+    
+    void DragFileItems(const std::vector<base::FilePath>& files,
+                   const gfx::Image& icon,
+                   gfx::NativeView view);
+    
+    namespace atom {
+    }
+    
+    
+    {}  // namespace atom
+    
+    // Return the name of the lock file for the db named by
+// 'dbname'.  The result will be prefixed with 'dbname'.
+extern std::string LockFileName(const std::string& dbname);
+    
+      fname = LogFileName('foo', 192);
+  ASSERT_EQ('foo/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(192, number);
+  ASSERT_EQ(kLogFile, type);
+    
+      std::string comparator_;
+  uint64_t log_number_;
+  uint64_t prev_log_number_;
+  uint64_t next_file_number_;
+  SequenceNumber last_sequence_;
+  bool has_comparator_;
+  bool has_log_number_;
+  bool has_prev_log_number_;
+  bool has_next_file_number_;
+  bool has_last_sequence_;
+    
+    // A Comparator object provides a total order across slices that are
+// used as keys in an sstable or a database.  A Comparator implementation
+// must be thread-safe since leveldb may invoke its methods concurrently
+// from multiple threads.
+class Comparator {
+ public:
+  virtual ~Comparator();
+    }
+    
+    
+    {}  // namespace leveldb
+    
+      string model_file   = argv[1];
+  string trained_file = argv[2];
+  string mean_file    = argv[3];
+  string label_file   = argv[4];
+  Classifier classifier(model_file, trained_file, mean_file, label_file);
+    
+      image_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
+  label_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
+  image_file.read(reinterpret_cast<char*>(&num_items), 4);
+  num_items = swap_endian(num_items);
+  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
+  num_labels = swap_endian(num_labels);
+  CHECK_EQ(num_items, num_labels);
+  image_file.read(reinterpret_cast<char*>(&rows), 4);
+  rows = swap_endian(rows);
+  image_file.read(reinterpret_cast<char*>(&cols), 4);
+  cols = swap_endian(cols);
+    
+    
+    { protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
+   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
+   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
+   *      the computed outputs @f$
+   *       y_n = \arg\max\limits_i x_{ni}
+   *      @f$ (for @f$ K = 1 @f$).
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  /// @brief Not implemented (non-differentiable function)
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
+    NOT_IMPLEMENTED;
+  }
+  bool out_max_val_;
+  size_t top_k_;
+  bool has_axis_;
+  int axis_;
+};
+    
+     protected:
+  /// @copydoc ContrastiveLossLayer
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
+  cudnnTensorDescriptor_t    bias_desc_;
+  cudnnFilterDescriptor_t      filter_desc_;
+  vector<cudnnConvolutionDescriptor_t> conv_descs_;
+  int bottom_offset_, top_offset_, bias_offset_;
     
      protected:
   virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
@@ -22,403 +120,181 @@
   virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    
-    {}  // namespace caffe
-    
-    namespace caffe {
-    }
-    
-    /**
- * @brief Takes two+ Blobs, interprets last Blob as a selector and
- *  filter remaining Blobs accordingly with selector data (0 means that
- * the corresponding item has to be filtered, non-zero means that corresponding
- * item needs to stay).
- */
-template <typename Dtype>
-class FilterLayer : public Layer<Dtype> {
- public:
-  explicit FilterLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-                template<typename T>
-            static __device__ __forceinline__ T atomicAdd(T* address, T val)
-            {
-#if defined (__CUDA_ARCH__) && (__CUDA_ARCH__ < 120)
-                T count;
-                unsigned int tag = threadIdx.x << ( (sizeof(unsigned int) << 3) - 5U);
-                do
-                {
-                    count = *address & TAG_MASK;
-                    count = tag | (count + val);
-                    *address = count;
-                } while (*address != count);
-    }
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-    int lapack_LU32f(float* a, size_t a_step, int m, float* b, size_t b_step, int n, int* info);
-int lapack_LU64f(double* a, size_t a_step, int m, double* b, size_t b_step, int n, int* info);
-int lapack_Cholesky32f(float* a, size_t a_step, int m, float* b, size_t b_step, int n, bool* info);
-int lapack_Cholesky64f(double* a, size_t a_step, int m, double* b, size_t b_step, int n, bool* info);
-int lapack_SVD32f(float* a, size_t a_step, float* w, float* u, size_t u_step, float* vt, size_t v_step, int m, int n, int flags);
-int lapack_SVD64f(double* a, size_t a_step, double* w, double* u, size_t u_step, double* vt, size_t v_step, int m, int n, int flags);
-int lapack_QR32f(float* src1, size_t src1_step, int m, int n, int k, float* src2, size_t src2_step, float* dst, int* info);
-int lapack_QR64f(double* src1, size_t src1_step, int m, int n, int k, double* src2, size_t src2_step, double* dst, int* info);
-int lapack_gemm32f(const float* src1, size_t src1_step, const float* src2, size_t src2_step,
-                   float alpha, const float* src3, size_t src3_step, float beta, float* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm64f(const double* src1, size_t src1_step, const double* src2, size_t src2_step,
-                   double alpha, const double* src3, size_t src3_step, double beta, double* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm32fc(const float* src1, size_t src1_step, const float* src2, size_t src2_step,
-                   float alpha, const float* src3, size_t src3_step, float beta, float* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm64fc(const double* src1, size_t src1_step, const double* src2, size_t src2_step,
-                   double alpha, const double* src3, size_t src3_step, double beta, double* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
+      /**
+   * @brief Computes the error gradient w.r.t. the exp inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x} =
+   *            \frac{\partial E}{\partial y} y \alpha \log_e(gamma)
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    static void* openclamdfft_check_fn(int ID)
+    #include 'precomp.hpp'
+#include 'opencv2/calib3d/calib3d_c.h'
+    
+    bool dls::is_empty(const cv::Mat * M)
 {
-    assert(ID >= 0 && ID < (int)(sizeof(openclamdfft_fn)/sizeof(openclamdfft_fn[0])));
-    const struct DynamicFnEntry* e = openclamdfft_fn[ID];
-    void* func = CV_CL_GET_PROC_ADDRESS(e->fnName);
-    if (!func)
+    cv::MatConstIterator_<double> it = M->begin<double>(), it_end = M->end<double>();
+    for(; it != it_end; ++it)
     {
-        throw cv::Exception(cv::Error::OpenCLApiCallError,
-                cv::format('OpenCL AMD FFT function is not available: [%s]', e->fnName),
-                CV_Func, __FILE__, __LINE__);
+        if(*it < 0) return false;
     }
-    *(e->ppFn) = func;
-    return func;
-}
-    
-    // Used to print a value that is not an STL-style container when the
-// user doesn't define PrintTo() for it.
-template <typename T>
-void DefaultPrintNonContainerTo(const T& value, ::std::ostream* os) {
-  // With the following statement, during unqualified name lookup,
-  // testing::internal2::operator<< appears as if it was declared in
-  // the nearest enclosing namespace that contains both
-  // ::testing_internal and ::testing::internal2, i.e. the global
-  // namespace.  For more details, refer to the C++ Standard section
-  // 7.3.4-1 [namespace.udir].  This allows us to fall back onto
-  // testing::internal2::operator<< in case T doesn't come with a <<
-  // operator.
-  //
-  // We cannot write 'using ::testing::internal2::operator<<;', which
-  // gcc 3.3 fails to compile due to a compiler bug.
-  using namespace ::testing::internal2;  // NOLINT
-    }
-    
-    
-    {}  // namespace internal
-    
-      FilePath& operator=(const FilePath& rhs) {
-    Set(rhs);
-    return *this;
-  }
-    
-    // Gets the content of the stringstream's buffer as an std::string.  Each '\0'
-// character in the buffer is replaced with '\\0'.
-GTEST_API_ std::string StringStreamToString(::std::stringstream* stream);
-    
-      template <GTEST_1_TYPENAMES_(U)>
-  tuple& operator=(const GTEST_1_TUPLE_(U)& t) {
-    return CopyFrom(t);
-  }
-    
-    
-$range i 0..n-1
-$range j 0..n
-$range k 1..n
-// GTEST_n_TUPLE_(T) is the type of an n-tuple.
-#define GTEST_0_TUPLE_(T) tuple<>
-    
-    $range i 2..n
-    
-    // Returns n! (the factorial of n).  For negative n, n! is defined to be 1.
-int Factorial(int n) {
-  int result = 1;
-  for (int i = 1; i <= n; i++) {
-    result *= i;
-  }
-    }
-    
-    // This should fail when the --check_for_leaks command line flag is
-// specified.
-TEST(ListenersTest, LeaksWater) {
-  Water* water = new Water;
-  EXPECT_TRUE(water != NULL);
-}
-    
-    // Tests factorial of positive numbers.
-TEST(FactorialTest, Positive) {
-  EXPECT_EQ(1, Factorial(1));
-  EXPECT_EQ(2, Factorial(2));
-  EXPECT_EQ(6, Factorial(3));
-  EXPECT_EQ(40320, Factorial(8));
-}
-    
-    // WorkloadStats is used to track per request timing for different states
-// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
-// should be made to guard the state change with appropriate timers and
-// counters.
-//
-// The states tracked are:
-//  - In a request (this is a superset of the interpreter state)
-//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
-//  - In the JIT (currently tracks time inside the translate routine)
-//
-// Note the time in the TC is not tracked.  This is roughly:
-//   Time in request - Time in interp
-//
-// This gives us the relative interp time formula of:
-//   Relative interp time = Time in interp / Time in request
-struct WorkloadStats final {
-  enum State {
-    InRequest,
-    // -> InInterp   Okay (entering Dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InInterp,
-    // -> InRequest  Okay (leaving the dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InTrans,
-    // -> InRequest  Okay (leaving translate)
-    // -> InInterp   Okay (leaving translate)
-  };
-    }
-    
-    
-    {  return false;
+    return true;
 }
     
     
-    {  unsigned next_vr{Vreg::V0};
-  Vlabel entry;
-  jit::vector<Vframe> frames;
-  jit::vector<Vblock> blocks;
-  jit::hash_map<Vconst,Vreg,Vconst::Hash> constToReg;
-  jit::hash_map<size_t,Vconst> regToConst;
-  jit::vector<VregList> tuples;
-  jit::vector<VcallArgs> vcallArgs;
-  jit::vector<VdataBlock> dataBlocks;
-  uint16_t cur_voff{0};  // current instruction index managed by Vout
-  bool padding{false};
-  bool profiling{false};
-  folly::Optional<TransContext> context;
-  StructuredLogEntry* log_entry{nullptr};
-};
-    
-    void Clusterizer::clusterize() {
-  struct ArcInfo {
-    Vlabel  src;
-    Vlabel  dst;
-    int64_t wgt;
-  };
-  jit::vector<ArcInfo> arcInfos;
-  for (auto b : m_blocks) {
-    for (auto s : succs(m_unit.blocks[b])) {
-      arcInfos.push_back({b, s, m_scale.weight(b, s)});
-    }
-  }
-    }
-    
-    
-    {
-    {///////////////////////////////////////////////////////////////////////////////
-}}
-    
-    void ThriftBuffer::read(std::string &data) {
-  String sdata;
-  read(sdata);
-  data = std::string(sdata.data(), sdata.size());
+    {    RNG &rng = ts->get_rng();
+    int modelPoints = cvtest::randInt(rng);
+    CvSize modelSize = cvSize(2, modelPoints);
+    int maxBasicSolutions = cvtest::randInt(rng);
+    BareModelEstimator modelEstimator(modelPoints, modelSize, maxBasicSolutions);
+    checkSubsetResult = modelEstimator.checkSubsetPublic(&_input, usedPointsCount, checkPartialSubsets);
 }
     
-    #endif  // STORAGE_LEVELDB_DB_LOG_FORMAT_H_
+    #endif // __OPENCV_CORE_BUFFER_POOL_IMPL_HPP__
 
     
+    // APPROXIMATIONS of the fractions of the character cell taken by
+// the descenders, ascenders, and x-height.
+const double CCStruct::kDescenderFraction = 0.25;
+const double CCStruct::kXHeightFraction = 0.5;
+const double CCStruct::kAscenderFraction = 0.25;
+const double CCStruct::kXHeightCapRatio = CCStruct::kXHeightFraction /
+    (CCStruct::kXHeightFraction + CCStruct::kAscenderFraction);
     
-    {  Table* table = reinterpret_cast<TableAndFile*>(cache_->Value(handle))->table;
-  Iterator* result = table->NewIterator(options);
-  result->RegisterCleanup(&UnrefEntry, cache_, handle);
-  if (tableptr != NULL) {
-    *tableptr = table;
+    // Fits a line to the points, ignoring the skip_first initial points and the
+// skip_last final points, returning the fitted line as a pair of points,
+// and the upper quartile error.
+double DetLineFit::Fit(int skip_first, int skip_last,
+                       ICOORD* pt1, ICOORD* pt2) {
+  // Do something sensible with no points.
+  if (pts_.empty()) {
+    pt1->set_x(0);
+    pt1->set_y(0);
+    *pt2 = *pt1;
+    return 0.0;
   }
-  return result;
-}
-    
-      // If a seek to internal key 'k' in specified file finds an entry,
-  // call (*handle_result)(arg, found_key, found_value).
-  Status Get(const ReadOptions& options,
-             uint64_t file_number,
-             uint64_t file_size,
-             const Slice& k,
-             void* arg,
-             void (*handle_result)(void*, const Slice&, const Slice&));
-    
-    struct FileMetaData {
-  int refs;
-  int allowed_seeks;          // Seeks allowed until compaction
-  uint64_t number;
-  uint64_t file_size;         // File size in bytes
-  InternalKey smallest;       // Smallest internal key served by table
-  InternalKey largest;        // Largest internal key served by table
-    }
-    
-    #include 'leveldb/env.h'
-#include 'leveldb/status.h'
-#include 'port/port.h'
-#include 'util/mutexlock.h'
-#include <map>
-#include <string.h>
-#include <string>
-#include <vector>
-    
-      // compact database
-  std::string start_key = Key1(0);
-  std::string end_key = Key1(kNumKeys - 1);
-  leveldb::Slice least(start_key.data(), start_key.size());
-  leveldb::Slice greatest(end_key.data(), end_key.size());
-    
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
-
-    
-    
-    {
-    {}  // namespace port
-}  // namespace leveldb
-
-    
-      void SeekToRestartPoint(uint32_t index) {
-    key_.clear();
-    restart_index_ = index;
-    // current_ will be fixed by ParseNextKey();
-    }
-    
-    Status ReadBlock(RandomAccessFile* file,
-                 const ReadOptions& options,
-                 const BlockHandle& handle,
-                 BlockContents* result) {
-  result->data = Slice();
-  result->cachable = false;
-  result->heap_allocated = false;
-    }
-    
-    
-    {  Iterator* iter_;
-  bool valid_;
-  Slice key_;
-};
-    
-    namespace {
-class MergingIterator : public Iterator {
- public:
-  MergingIterator(const Comparator* comparator, Iterator** children, int n)
-      : comparator_(comparator),
-        children_(new IteratorWrapper[n]),
-        n_(n),
-        current_(NULL),
-        direction_(kForward) {
-    for (int i = 0; i < n; i++) {
-      children_[i].Set(children[i]);
-    }
+  // Count the points and find the first and last kNumEndPoints.
+  int pt_count = pts_.size();
+  ICOORD* starts[kNumEndPoints];
+  if (skip_first >= pt_count) skip_first = pt_count - 1;
+  int start_count = 0;
+  int end_i = MIN(skip_first + kNumEndPoints, pt_count);
+  for (int i = skip_first; i < end_i; ++i) {
+    starts[start_count++] = &pts_[i].pt;
   }
-    }
-    }
-    
-    /**
- * @brief Iterate the discovered decorators for a given point type.
- *
- * The configuration maintains various sources, each may contain a set of
- * decorators. The source tracking is abstracted for the decorator iterator.
- *
- * @param point request execution of decorators for this given point.
- * @param time an optional time for points using intervals.
- * @param source restrict run to a specific config source.
- */
-void runDecorators(DecorationPoint point,
-                   size_t time = 0,
-                   const std::string& source = '');
-    
-    
-    {    return Status(0);
+  ICOORD* ends[kNumEndPoints];
+  if (skip_last >= pt_count) skip_last = pt_count - 1;
+  int end_count = 0;
+  end_i = MAX(0, pt_count - kNumEndPoints - skip_last);
+  for (int i = pt_count - 1 - skip_last; i >= end_i; --i) {
+    ends[end_count++] = &pts_[i].pt;
   }
-    
-    #include 'osquery/core/utils.h'
-    
-    std::vector<float> LinearlyAveragedLuma(const std::vector<float>& rgb) {
-  assert(rgb.size() % 3 == 0);
-  std::vector<float> y(rgb.size() / 3);
-  for (size_t i = 0, p = 0; p < rgb.size(); ++i, p += 3) {
-    y[i] = LinearToGamma(RGBToY(GammaToLinear(rgb[p + 0]),
-                                GammaToLinear(rgb[p + 1]),
-                                GammaToLinear(rgb[p + 2])));
+  // 1 or 2 points need special treatment.
+  if (pt_count <= 2) {
+    *pt1 = *starts[0];
+    if (pt_count > 1)
+      *pt2 = *ends[0];
+    else
+      *pt2 = *pt1;
+    return 0.0;
   }
-  return y;
-}
-    
-    // Fills in 'result' with the inverse DCT of 'block'.
-// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
-// a row-by-row memory layout.
-void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
-    
-    #endif  // GUETZLI_JPEG_ERROR_H_
-
-    
-      // Fill in 2nd level tables and add pointers to root table.
-  table += table_size;
-  table_size = 0;
-  low = 0;
-  for (len = kJpegHuffmanRootTableBits + 1;
-       len <= kJpegHuffmanMaxBitLength; ++len) {
-    for (; count[len] > 0; --count[len]) {
-      // Start a new sub-table if the previous one is full.
-      if (low >= table_size) {
-        table += table_size;
-        table_bits = NextTableBitSize(count, len);
-        table_size = 1 << table_bits;
-        total_size += table_size;
-        low = 0;
-        lut[key].bits = table_bits + kJpegHuffmanRootTableBits;
-        lut[key].value = (table - lut) - key;
-        ++key;
-      }
-      code.bits = len - kJpegHuffmanRootTableBits;
-      code.value = symbols[idx++];
-      reps = 1 << (table_bits - code.bits);
-      while (reps--) {
-        table[low++] = code;
+  // Although with between 2 and 2*kNumEndPoints-1 points, there will be
+  // overlap in the starts, ends sets, this is OK and taken care of by the
+  // if (*start != *end) test below, which also tests for equal input points.
+  double best_uq = -1.0;
+  // Iterate each pair of points and find the best fitting line.
+  for (int i = 0; i < start_count; ++i) {
+    ICOORD* start = starts[i];
+    for (int j = 0; j < end_count; ++j) {
+      ICOORD* end = ends[j];
+      if (*start != *end) {
+        ComputeDistances(*start, *end);
+        // Compute the upper quartile error from the line.
+        double dist = EvaluateLineFit();
+        if (dist < best_uq || best_uq < 0.0) {
+          best_uq = dist;
+          *pt1 = *start;
+          *pt2 = *end;
+        }
       }
     }
   }
+  // Finally compute the square root to return the true distance.
+  return best_uq > 0.0 ? sqrt(best_uq) : best_uq;
+}
     
-    #include 'boost/function.hpp'
+    
+    {    int n[CT_SIZE];
+  };
+    
+    
+    {    _state = EXPECTS_CRASH_DUMP_END;
+    return 0;
+}
     
     // Licensed under the MIT License (the 'License'); you may not use this file except in 
 // compliance with the License. You may obtain a copy of the License at
 // http://opensource.org/licenses/MIT
     
-    int Packer_Unpack(const void* _rawbuf, size_t _rawlen, std::string& _url, unsigned int& _sequence, size_t& _packlen, AutoBuffer& _data) {
-    if (_rawlen < sizeof(LongLinkPack)) return LONGLINKPACK_CONTINUE;
+    //
+//  comm_frequency_limit.cc
+//  comm
+//
+//  Created by liucan on 13-11-23.
+//
+    
+    #define DEFINE_SERVICE() \
+    static  const char* ServiceName();\
+    static const std::set<std::string>& DependServicesName();
+#endif
+
+    
+    std::string AbstractOptionHandler::toTagString() const
+{
+  std::string s;
+  for (int i = 0; i < MAX_HELP_TAG; ++i) {
+    if (tags_ & (1 << i)) {
+      s += strHelpTag(i);
+      s += ', ';
+    }
+  }
+  if (!s.empty()) {
+    s.resize(s.size() - 2);
+  }
+  return s;
+}
+    
+    class ActivePeerConnectionCommand : public Command {
+private:
+  RequestGroup* requestGroup_;
+  std::shared_ptr<BtRuntime> btRuntime_;
+  std::shared_ptr<PieceStorage> pieceStorage_;
+  std::shared_ptr<PeerStorage> peerStorage_;
+  std::shared_ptr<BtAnnounce> btAnnounce_;
     }
     
-    
-    
-    
-    {  private:
-    TServicesMap m_services;
-    TServicesMap m_publicservices;
-    std::vector<ServiceBase*> m_releasevec;
-};
-    
-    //
-//  testspy_spy.cpp
-//  PublicComponent
-//
-//  Created by yerungui on 14-5-13.
-//
+    #include 'common.h'
