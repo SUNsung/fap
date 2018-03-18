@@ -1,120 +1,67 @@
 
         
-            Or via the Cask:
-      brew cask install ngrok
-    EOS
+          # GET /resource/unlock?unlock_token=abcdef
+  def show
+    self.resource = resource_class.unlock_access_by_token(params[:unlock_token])
+    yield resource if block_given?
+    
+      # Controllers inheriting DeviseController are advised to override this
+  # method so that other controllers inheriting from them would use
+  # existing translations.
+  def translation_scope
+    'devise.#{controller_name}'
+  end
+    
+      def app
+    Rails.application
   end
 end
 
     
-      # True if a {Formula} is being built with {Formula.head} instead of {Formula.stable}.
-  # <pre>args << '--some-new-stuff' if build.head?</pre>
-  # <pre># If there are multiple conditional arguments use a block instead of lines.
-  #  if build.head?
-  #    args << '--i-want-pizza'
-  #    args << '--and-a-cold-beer' if build.with? 'cold-beer'
-  #  end</pre>
-  def head?
-    include? 'HEAD'
-  end
-    
-      def fish_completion_caveats
-    if keg && keg.completion_installed?(:fish) && which('fish') then <<-EOS.undent
-      fish completion has been installed to:
-        #{HOMEBREW_PREFIX}/share/fish/vendor_completions.d
-      EOS
-    end
-  end
-    
-        if $stdout.tty?
-      metacharacters = %w[\\ | ( ) [ ] { } ^ $ * + ? .]
-      bad_regex = metacharacters.any? do |char|
-        ARGV.any? do |arg|
-          arg.include?(char) && !arg.start_with?('/')
+                  define_method method do |resource_or_scope, *args|
+                scope = Devise::Mapping.find_scope!(resource_or_scope)
+                router_name = Devise.mappings[scope].router_name
+                context = router_name ? send(router_name) : _devise_route_context
+                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
+              end
+            end
+          end
         end
       end
-      if ARGV.any? && bad_regex
-        ohai 'Did you mean to perform a regular expression search?'
-        ohai 'Surround your query with /slashes/ to search by regex.'
-      end
-    end
     
-      def cxxstdlib_check(check_type)
-    self.class.cxxstdlib_check check_type
-  end
+    Struct.new('Blog', :name, :web_url, :rss_url)
+blogs = []
     
-          export JAVA_HOME='$(/usr/libexec/java_home)'
-      export AWS_ACCESS_KEY='<Your AWS Access ID>'
-      export AWS_SECRET_KEY='<Your AWS Secret Key>'
-      export #{home_name}='#{home_value}'
-    EOS
-  end
-end
-
+      GEMFILE_EXTENSIONS.each do |extension|
+    extension_pathname = root.join('Gemfile#{extension}')
     
-      def confirm_user_by_token_with_confirmation_sent_at(confirmation_sent_at)
-    user = create_user
-    user.update_attribute(:confirmation_sent_at, confirmation_sent_at)
-    confirmed_user = User.confirm_by_token(user.raw_confirmation_token)
-    assert_equal confirmed_user, user
-    user.reload.confirmed?
-  end
-    
-      def failure_message
-    exception = request.respond_to?(:get_header) ? request.get_header('omniauth.error') : request.env['omniauth.error']
-    error   = exception.error_reason if exception.respond_to?(:error_reason)
-    error ||= exception.error        if exception.respond_to?(:error)
-    error ||= (request.respond_to?(:get_header) ? request.get_header('omniauth.error.type') : request.env['omniauth.error.type']).to_s
-    error.to_s.humanize if error
-  end
-    
-      # Gets the actual resource stored in the instance variable
-  def resource
-    instance_variable_get(:'@#{resource_name}')
-  end
-    
-        def email_changed(record, opts={})
-      devise_mail(record, :email_changed, opts)
-    end
-    
-    DeviseCreateUsers.migrate(:up)
-    
-    ###
-### methods
-###
-    
-    unless ENV['BUNDLE_GEMFILE']
-  require 'pathname'
+          when :login_fail
+        if(s[:user] and s[:pass])
+          report_auth_info(s.merge({:active => false}))
+          print_status('Failed FTP Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]}')
     
     
-# replace calls, jmps, and read/write handle/filename references
-replaces = []
-asm.each_line { |ln|
-	if ln =~ /call /
+    {	if ln =~ /;(read|write)_(handle|filename)=/
 		parts = ln.split(' ')
-		if (parts[0] == 'call' and parts[2] == ';call')
-			old = parts[1]
-			func = parts[3]
-			new = addrs[func]
-			#puts '%32s: %s -> %x' % [func, old, new]
-			replaces << [func, old, new.to_s(16)]
+		if (parts[0] == 'mov')
+			parts2 = parts[2].split('=')
+			label = parts2[0]
+			label.slice!(0,1)
+			old = parts2[1]
+			new = addrs[label]
+			#puts '%32s: %s -> %x' % [label, old, new]
+			replaces << [label, old, new.to_s(16)]
 		end
 	end
-    }
+}
     
-    	def block_end
-		# Insert the block size
-		self.block[-1][0] = block[-1][0].ljust(SIZE1)
-		self.block[-1][0] << '/*  '
-		self.block[-1][0] << '#{block_size} bytes'
-		self.block[-1][0] = block[-1][0].ljust(SIZE2)
-		self.block[-1][0] << '  */'
-    
-        def definitions_for(klass)
-      parent_classes = klass.ancestors.reverse
-      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
-        inherited_definitions.deep_merge! @attachments[ancestor]
-      end
-    end
-  end
-end
+      when '6.1.1'
+    __NR_execve      = 7
+    __NR_getpeername = 202
+    __NR_accept      = 229
+    __NR_listen      = 232
+    __NR_bind        = 234
+    __NR_socket      = 235
+    __NR_connect     = 236
+    __NR_close       = 269
+    __NR_kfcntl      = 614
