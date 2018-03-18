@@ -1,222 +1,135 @@
 
         
-        new_version = {}
+        # There are two options for replacing |today|: either, you set today to some
+# non-false value, then it is used:
+#today = ''
+# Else, today_fmt is used as the format for a strftime call.
+#today_fmt = '%B %d, %Y'
     
-    entries = []
-for v in versions:
-    fields = v.split('.')
-    year, month, day = map(int, fields[:3])
-    faked = 0
-    patchlevel = 0
-    while True:
-        try:
-            datetime.date(year, month, day)
-        except ValueError:
-            day -= 1
-            faked += 1
-            assert day > 0
-            continue
-        break
-    if len(fields) >= 4:
-        try:
-            patchlevel = int(fields[3])
-        except ValueError:
-            patchlevel = 1
-    timestamp = '%04d-%02d-%02dT00:%02d:%02dZ' % (year, month, day, faked, patchlevel)
-    
-        with io.open(infile, encoding='utf-8') as inf:
-        issue_template_tmpl = inf.read()
-    
-    options = helptext[helptext.index('  General Options:') + 19:]
-options = re.sub(r'(?m)^  (\w.+)$', r'## \1', options)
-options = '# OPTIONS\n' + options + '\n'
-    
-            swf_class = swfi.extract_class(test_id)
-        func = swfi.extract_function(swf_class, 'main')
-        res = func(input_args)
-        self.assertEqual(res, output)
+        app.config.update(dict(
+        DATABASE=os.path.join(app.root_path, 'flaskr.db'),
+        DEBUG=True,
+        SECRET_KEY=b'_5#y2L'F4Q8z\n\xec]/',
+        USERNAME='admin',
+        PASSWORD='default'
+    ))
+    app.config.update(config or {})
+    app.config.from_envvar('FLASKR_SETTINGS', silent=True)
     
     
-class AnySexIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?anysex\.com/(?P<id>\d+)'
-    _TEST = {
-        'url': 'http://anysex.com/156592/',
-        'md5': '023e9fbb7f7987f5529a394c34ad3d3d',
-        'info_dict': {
-            'id': '156592',
-            'ext': 'mp4',
-            'title': 'Busty and sexy blondie in her bikini strips for you',
-            'description': 'md5:de9e418178e2931c10b62966474e1383',
-            'categories': ['Erotic'],
-            'duration': 270,
-            'age_limit': 18,
-        }
-    }
+def get_db():
+    '''Opens a new database connection if there is none yet for the
+    current application context.
+    '''
+    top = _app_ctx_stack.top
+    if not hasattr(top, 'sqlite_db'):
+        top.sqlite_db = sqlite3.connect(app.config['DATABASE'])
+        top.sqlite_db.row_factory = sqlite3.Row
+    return top.sqlite_db
     
-            return {
-            'id': info['vid'],
-            'title': info['Subject'],
-            'duration': int(info['duration']) / 1000.0,
-            'formats': formats,
-            'thumbnail': info.get('bimg') or info.get('img'),
-        }
-
-    
-        _TESTS = [{
-        'url': 'http://camwithher.tv/view_video.php?viewkey=6e9a24e2c0e842e1f177&page=&viewtype=&category=',
-        'info_dict': {
-            'id': '5644',
-            'ext': 'flv',
-            'title': 'Periscope Tease',
-            'description': 'In the clouds teasing on periscope to my favorite song',
-            'duration': 240,
-            'view_count': int,
-            'comment_count': int,
-            'uploader': 'MileenaK',
-            'upload_date': '20160322',
-        },
-        'params': {
-            'skip_download': True,
-        }
-    }, {
-        'url': 'http://camwithher.tv/view_video.php?viewkey=6dfd8b7c97531a459937',
-        'only_matching': True,
-    }, {
-        'url': 'http://camwithher.tv/view_video.php?page=&viewkey=6e9a24e2c0e842e1f177&viewtype=&category=',
-        'only_matching': True,
-    }, {
-        'url': 'http://camwithher.tv/view_video.php?viewkey=b6c3b5bea9515d1a1fc4&page=&viewtype=&category=mv',
-        'only_matching': True,
-    }]
+    _key = 'landscape'
     
         @property
-    def templates_dir(self):
-        _templates_base_dir = self.settings['TEMPLATES_DIR'] or \
-            join(scrapy.__path__[0], 'templates')
-        return join(_templates_base_dir, 'spiders')
-
+    def validate_certs(self):
+        return self._validate_certs
     
-        def add_pre_hook(self, request, results):
-        if hasattr(self, 'pre_process'):
-            cb = request.callback
-    
-        def __init__(self, MAX_SIZE):
-        self.MAX_SIZE = MAX_SIZE
-        self.size = 0
-        self.lookup = {}  # key: query, value: node
-        self.linked_list = LinkedList()
+    - BaseRecognizer: Base class with common recognizer functionality.
+- Lexer: Base class for lexers.
+- Parser: Base class for parsers.
+- tree.TreeParser: Base class for %tree parser.
     
     
-class RemoveDuplicateUrls(MRJob):
+    def predict(self, input):
+        '''
+        From the input stream, predict what alternative will succeed
+	using this DFA (representing the covering regular approximation
+	to the underlying CFL).  Return an alternative number 1..n.  Throw
+	 an exception upon error.
+	'''
+        mark = input.mark()
+        s = 0 # we always start at s0
+        try:
+            for _ in xrange(50000):
+                #print '***Current state = %d' % s
+                
+                specialState = self.special[s]
+                if specialState >= 0:
+                    #print 'is special'
+                    s = self.specialStateTransition(specialState, input)
+                    if s == -1:
+                        self.noViableAlt(s, input)
+                        return 0
+                    input.consume()
+                    continue
     
     
-class MissingNonceTest(unittest.TestCase):
-    '''Tests for acme.errors.MissingNonce.'''
+    def mismatch(self, input, ttype, follow):
+        '''
+        Factor out what to do upon token mismatch so tree parsers can behave
+        differently.  Override and call mismatchRecover(input, ttype, follow)
+        to get single token insertion and deletion. Use this to turn of
+        single token insertion and deletion. Override mismatchRecover
+        to call this instead.
+        '''
     
-        def test_same_server(self):
-        from certbot_apache.obj import VirtualHost
-        no_name1 = VirtualHost(
-            'fp', 'vhp', set([self.addr1]), False, False, None)
-        no_name2 = VirtualHost(
-            'fp', 'vhp', set([self.addr2]), False, False, None)
-        no_name3 = VirtualHost(
-            'fp', 'vhp', set([self.addr_default]),
-            False, False, None)
-        no_name4 = VirtualHost(
-            'fp', 'vhp', set([self.addr2, self.addr_default]),
-            False, False, None)
+        '''
+    
+    def __init__(self, type=None, channel=DEFAULT_CHANNEL, text=None,
+                 input=None, start=None, stop=None, oldToken=None):
+        Token.__init__(self)
+        
+        if oldToken is not None:
+            self.type = oldToken.type
+            self.line = oldToken.line
+            self.charPositionInLine = oldToken.charPositionInLine
+            self.channel = oldToken.channel
+            self.index = oldToken.index
+            self._text = oldToken._text
+            if isinstance(oldToken, CommonToken):
+                self.input = oldToken.input
+                self.start = oldToken.start
+                self.stop = oldToken.stop
+            
+        else:
+            self.type = type
+            self.input = input
+            self.charPositionInLine = -1 # set to invalid position
+            self.line = 0
+            self.channel = channel
+            
+	    #What token number is this from 0..n-1 tokens; < 0 implies invalid index
+            self.index = -1
+            
+            # We need to be able to change the text once in a while.  If
+            # this is non-null, then getText should return this.  Note that
+            # start/stop are not affected by changing this.
+            self._text = text
+    
+    - tree.CommonTree: A basic and most commonly used Tree implementation.
+    
+    In Blackboard pattern several specialised sub-systems (knowledge sources)
+assemble their knowledge to build a possibly partial or approximate solution.
+In this way, the sub-systems work together to solve the problem,
+where the solution is the sum of its parts.
+    
+        def unsubscribe(self, msg, subscriber):
+        self.subscribers[msg].remove(subscriber)
     
         @staticmethod
-    def get_streams_by_id(account_number, video_id):
-        '''
-        int, int->list
-        
-        Get the height of the videos.
-        
-        Since brightcove is using 3 kinds of links: rtmp, http and https,
-        we will be using the HTTPS one to make it secure.
-        
-        If somehow akamaihd.net is blocked by the Great Fucking Wall,
-        change the 'startswith https' to http.
-        '''
-        endpoint = 'https://edge.api.brightcove.com/playback/v1/accounts/{account_number}/videos/{video_id}'.format(account_number = account_number, video_id = video_id)
-        fake_header_id = fake_headers
-        #is this somehow related to the time? Magic....
-        fake_header_id['Accept'] ='application/json;pk=BCpkADawqM1cc6wmJQC2tvoXZt4mrB7bFfi6zGt9QnOzprPZcGLE9OMGJwspQwKfuFYuCjAAJ53JdjI8zGFx1ll4rxhYJ255AXH1BQ10rnm34weknpfG-sippyQ'
+    def _static_method_2():
+        print('executed method 2!')
     
-        while pin_count > 0:
-        json_data = extract_json_data(url, max=pin_list[-1]['pin_id'],
-                                      limit=LIMIT)
-        pins = json_data['pins']
-        pin_list += pins
-        pin_count -= len(pins)
     
-        t = r1(r'type=(\w+)', flashvars)
-    id = r1(r'vid=([^']+)', flashvars)
-    if t == 'youku':
-        youku_download_by_vid(id, title=title, output_dir=output_dir, merge=merge, info_only=info_only)
-    elif t == 'tudou':
-        tudou_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
-    elif t == 'sina' or t == 'video':
-        fake_headers['Referer'] = url
-        url = 'http://www.miomio.tv/mioplayer/mioplayerconfigfiles/sina.php?vid=' + id
-        xml_data = get_content(url, headers=fake_headers, decoded=True)
-        url_list = sina_xml_to_url_list(xml_data)
-    
-            for s in self.stream_types:
-            quality = s['id']
-            src = match1(content,
-                         r'src: '([^']+)', 'data-res': '%s'' % quality)
-            if src is not None:
-                url = 'http://en.musicplayon.com%s' % src
-                self.streams[quality] = {'url': url}
-    
-    def showroom_download_by_room_id(room_id, output_dir = '.', merge = False, info_only = False, **kwargs):
-    '''Source: Android mobile'''
+@coroutine
+def coroutine1(target):
     while True:
-        timestamp = str(int(time() * 1000))
-        api_endpoint = 'https://www.showroom-live.com/api/live/streaming_url?room_id={room_id}&_={timestamp}'.format(room_id = room_id, timestamp = timestamp)
-        html = get_content(api_endpoint)
-        html = json.loads(html)
-        #{'streaming_url_list': [{'url': 'rtmp://52.197.69.198:1935/liveedge', 'id': 1, 'label': 'original spec(low latency)', 'is_default': True, 'type': 'rtmp', 'stream_name': '7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed'}, {'url': 'http://52.197.69.198:1935/liveedge/7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed/playlist.m3u8', 'is_default': True, 'id': 2, 'type': 'hls', 'label': 'original spec'}, {'url': 'rtmp://52.197.69.198:1935/liveedge', 'id': 3, 'label': 'low spec(low latency)', 'is_default': False, 'type': 'rtmp', 'stream_name': '7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed_low'}, {'url': 'http://52.197.69.198:1935/liveedge/7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed_low/playlist.m3u8', 'is_default': False, 'id': 4, 'type': 'hls', 'label': 'low spec'}]}
-        if len(html) >= 1:
-            break
-        log.w('The live show is currently offline.')
-        sleep(1)
+        request = yield
+        if 0 < request <= 10:
+            print('request {} handled in coroutine 1'.format(request))
+        else:
+            target.send(request)
     
-    define('port', default=8888, help='run on the given port', type=int)
+    from __future__ import print_function
     
-        def test_gzip_static(self):
-        # The streaming responses in StaticFileHandler have subtle
-        # interactions with the gzip output so test this case separately.
-        response = self.fetch('/robots.txt')
-        self.assert_compressed(response)
-        self.assertEqual(response.headers['Vary'], 'Accept-Encoding')
     
-        .. versionchanged:: 5.0
-    
-        .. versionchanged:: 5.0
-       The ``io_loop`` argument (deprecated since version 4.1) has been removed.
-    '''
-    def initialize(self):
-        self.io_loop = IOLoop.current()
-        self.channel = pycares.Channel(sock_state_cb=self._sock_state_cb)
-        self.fds = {}
-    
-    define('ioloop', type=str, default=None)
-    
-    try:
-    xrange
-except NameError:
-    xrange = range
-    
-        def maybe_create_tables(self):
-        try:
-            self.db.get('SELECT COUNT(*) from entries;')
-        except MySQLdb.ProgrammingError:
-            subprocess.check_call(['mysql',
-                                   '--host=' + options.mysql_host,
-                                   '--database=' + options.mysql_database,
-                                   '--user=' + options.mysql_user,
-                                   '--password=' + options.mysql_password],
-                                  stdin=open('schema.sql'))
+class Specification(object):
