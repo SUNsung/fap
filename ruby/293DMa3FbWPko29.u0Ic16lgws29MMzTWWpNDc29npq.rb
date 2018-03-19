@@ -1,64 +1,51 @@
 
         
-        # Create an array of vendored mimetype => [extensions]
-mimes = {}
-json = open('https://raw.githubusercontent.com/jshttp/mime-db/master/db.json').read
-data = JSON.parse(json)
-data.reject! { |mime, meta| meta['extensions'].nil? || meta['extensions'].empty? }
-data.each do |mime, meta|
-  # Normalize extensions and mime-types
-  mime = mime.downcase.strip
-  extensions = meta['extensions'].map { |e| e.downcase.strip }.compact
+              def self.authors
+        ['gin0606']
+      end
     
-    Jekyll::Deprecator.process(ARGV)
+          # All available devices
+      attr_accessor :devices
     
-          return false unless prune_time
+            expect(result).to eq('/usr/local/bin/cloc  --by-file --xml  --out=build/cloc.xml')
+      end
     
-      def print_remaining_files(files, root, other = '')
-    case files.length
-    when 0
-      # noop
-    when 1
-      puts files
-    else
-      puts '#{root}/ (#{files.length} #{other}files)'
+          it 'increments the build number of the Xcode project' do
+        Fastlane::FastFile.new.parse('lane :test do
+          increment_build_number(xcodeproj: '.xcproject')
+        end').runner.execute(:test)
+    
+          it 'automatically removes new lines from the version number' do
+        Fastlane::FastFile.new.parse('lane :test do
+          increment_version_number(version_number: '1.77.3\n', bump_type: 'major')
+        end').runner.execute(:test)
+    
+            # Defines additional configuration keys to be available in the
+        # Vagrantfile. The configuration class should be returned by a
+        # block passed to this method. This is done to ensure that the class
+        # is lazy loaded, so if your class inherits from any classes that
+        # are specific to Vagrant 1.0, then the plugin can still be defined
+        # without breaking anything in future versions of Vagrant.
+        #
+        # @param [String] name Configuration key.
+        def self.config(name, scope=nil, &block)
+          scope ||= :top
+          components.configs[scope].register(name.to_sym, &block)
+          nil
+        end
+    
+            # Helper method to get access to the class variable. This is mostly
+        # exposed for tests. This shouldn't be mucked with directly, since it's
+        # structure may change at any time.
+        def registered; @@registered; end
+      end
     end
   end
 end
 
     
-      def python(_options = {}, &block)
-    opoo 'Formula#python is deprecated and will go away shortly.'
-    block.call if block_given?
-    PythonRequirement.new
-  end
-  alias_method :python2, :python
-  alias_method :python3, :python
-end
-
-    
-          To export the needed variables, add them to your dotfiles.
-       * On Bash, add them to `~/.bash_profile`.
-       * On Zsh, add them to `~/.zprofile` instead.
-    
-        inp.attributes.keys.each do |ikey|
-      if (ikey.downcase == 'value')
-        inp[ikey] = ''
-        next
-      end
-    
-        self.sigs.each_key do |k|
-    
-    
-signer._invoke('KeyToolMSF','[Ljava.lang.String;',keytoolOpts)
-    
-      when '6.1.0'
-    __NR_execve      = 6
-    __NR_getpeername = 203
-    __NR_accept      = 229
-    __NR_listen      = 232
-    __NR_bind        = 234
-    __NR_socket      = 235
-    __NR_connect     = 236
-    __NR_close       = 269
-    __NR_kfcntl      = 617
+    module Vagrant
+  module Util
+    class IO
+      # The chunk size for reading from subprocess IO.
+      READ_CHUNK_SIZE = 4096
