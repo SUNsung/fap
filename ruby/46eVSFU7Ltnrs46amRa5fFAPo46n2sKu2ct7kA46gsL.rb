@@ -1,48 +1,36 @@
 
         
-              def initialize(serial: nil)
-        self.serial = serial
+            if f.keg_only?
+      keg_site_packages = f.opt_prefix/'lib/python2.7/site-packages'
+      unless Language::Python.in_sys_path?('python', keg_site_packages)
+        s = <<-EOS.undent
+          If you need Python to find bindings for this keg-only formula, run:
+            echo #{keg_site_packages} >> #{homebrew_site_packages/f.name}.pth
+        EOS
+        s += instructions unless Language::Python.reads_brewed_pth_files?('python')
       end
+      return s
     end
     
-          it 'get GIT-SVN build number' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            get_build_number_repository
-        end').runner.execute(:test)
+        @report = Hash.new { |h, k| h[k] = [] }
+    return @report unless updated?
     
-          context('when the tag doesn't exist') do
-        before do
-          allow(Fastlane::Actions).to receive(:sh).with('git rev-parse -q --verify refs/tags/1.2.0 || true', { log: nil }).and_return('')
-        end
+        # This setting makes it so that network access from inside the vagrant guest
+    # is able to resolve DNS using the hosts VPN connection.
+    v.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
+  end
     
-          it 'prefers a custom version number over a boring version bump' do
-        Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number(version_number: '1.77.3', bump_type: 'major')
-        end').runner.execute(:test)
+        enum = x.transform_keys
+    assert_equal(x.size, enum.size)
+    assert_instance_of(Enumerator, enum)
     
-            def find_address
-          if @order.bill_address_id == params[:id].to_i
-            @order.bill_address
-          elsif @order.ship_address_id == params[:id].to_i
-            @order.ship_address
-          else
-            raise CanCan::AccessDenied
-          end
-        end
+            render json: collection_presenter,
+               serializer: ActivityPub::CollectionSerializer,
+               adapter: ActivityPub::Adapter,
+               content_type: 'application/activity+json'
       end
     end
   end
-end
-
     
-            def stock_location
-          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:id])
-        end
-    
-                break if !assignment.branch || assignment.branch == reference.branch
-    
-            def autocorrect(node)
-          redundant_regex?(node) do |receiver, regex_str|
-            receiver, regex_str = regex_str, receiver if receiver.is_a?(String)
-            regex_str = regex_str[0..-3] # drop \Z anchor
-            regex_str = interpret_string_escapes(regex_str)
+          attr_accessor(*VALID_KEYS)
+      attr_accessor :pairs
