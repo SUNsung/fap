@@ -1,107 +1,85 @@
 
         
-        source 'https://rubygems.org'
+              it 'it increments all targets minor version major' do
+        Fastlane::FastFile.new.parse('lane :test do
+          increment_version_number(bump_type: 'major')
+        end').runner.execute(:test)
     
-        def translation_scope
-      'devise.confirmations'
-    end
-end
-
-    
-        def reset_password_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :reset_password_instructions, opts)
-    end
-    
-    class TestApp < Rails::Application
-  config.root = File.dirname(__FILE__)
-  config.session_store :cookie_store, key: 'cookie_store_key'
-  secrets.secret_token    = 'secret_token'
-  secrets.secret_key_base = 'secret_key_base'
-  config.eager_load = false
-    
-      included do
-    include Oauthable
-    
-      module SortableTableHelper
-    # :call-seq:
-    #   sortable_column(attribute, default_direction = 'desc', name: attribute.humanize)
-    def sortable_column(attribute, default_direction = nil, options = nil)
-      if options.nil? && (options = Hash.try_convert(default_direction))
-        default_direction = nil
+      def resource
+    @resource ||=
+      if params[:project_id].present?
+        Project.find(params[:project_id])
+      elsif params[:namespace_id].present?
+        Group.find(params[:namespace_id])
       end
-      default_direction ||= 'desc'
-      options ||= {}
-      name = options[:name] || attribute.humanize
-      selected = @table_sort_info[:attribute].to_s == attribute
-      if selected
-        direction = @table_sort_info[:direction]
-        new_direction = direction.to_s == 'desc' ? 'asc' : 'desc'
-        classes = 'selected #{direction}'
-      else
-        classes = ''
-        new_direction = default_direction
+  end
+    
+      protected
+    
+        # Check if a reset_password_token is provided in the request
+    def assert_reset_token_passed
+      if params[:reset_password_token].blank?
+        set_flash_message(:alert, :no_token)
+        redirect_to new_session_path(resource_name)
       end
-      link_to(name, url_for(sort: '#{attribute}.#{new_direction}'), class: classes)
+    end
+    
+    if defined?(ActionMailer)
+  class Devise::Mailer < Devise.parent_mailer.constantize
+    include Devise::Mailers::Helpers
+    
+        def ==(other)
+      other.name == name && other.path == path && other.type == type
+    end
+    
+              if %w(Events Sync).include?(type)
+            name.prepend 'Backbone.'
+          elsif type == 'History'
+            name.prepend 'Backbone.history.'
+          elsif name == 'extend'
+            name.prepend '#{type}.'
+          elsif name.start_with? 'constructor'
+            name = type
+          elsif type != 'Utility'
+            name.prepend '#{type.downcase}.'
+          end
+    
+                sequence_base := (
+              'x' ||
+              -- Take the first two bytes (four hex characters)
+              substr(
+                -- Of the MD5 hash of the data we documented
+                md5(table_name ||
+                  '#{SecureRandom.hex(16)}' ||
+                  time_part::text
+                ),
+                1, 4
+              )
+            -- And turn it into a bigint
+            )::bit(16)::bigint;
+    
+      def show
+    @tag = Tag.find_by!(name: params[:id].downcase)
+    
+      describe 'GET #show' do
+    let!(:tag)     { Fabricate(:tag, name: 'test') }
+    let!(:local)   { Fabricate(:status, tags: [tag], text: 'local #test') }
+    let!(:remote)  { Fabricate(:status, tags: [tag], text: 'remote #test', account: Fabricate(:account, domain: 'remote')) }
+    let!(:late)    { Fabricate(:status, tags: [tag], text: 'late #test') }
+    
+          expect('.border-style-alternate').to have_rule(rule)
+    end
+  end
+    
+          expect('.padding-implied-left').to have_rule(rule)
+    end
+  end
+    
+          expect('.prefix--webkit').to have_ruleset(rule)
+    end
+  end
+    
+          expect('.size-auto').to have_ruleset(rule)
     end
   end
 end
-
-    
-    def check_link(uri)
-  HTTParty.head(uri, :verify => false).code.to_i.tap do |status|
-    if (400..422).include?(status)
-      if status != 403 && !uri.exclude?('udemy.com')
-        raise 'Request had status #{status}'
-      else
-        putc('S')
-      end
-    end
-  end
-end
-    
-        def log_http_get_files(files, from, cached = false)
-      return if files.empty?
-      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
-      end
-    end
-    
-      # Configure static asset server for tests with Cache-Control for performance.
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
-  end
-  config.static_cache_control = 'public, max-age=3600'
-    
-      def register_sigs
-    self.sigs = {
-      :banner		=> /^(220\s*[^\r\n]+)/i,
-      :user		=> /^USER\s+([^\s]+)/i,
-      :pass		=> /^PASS\s+([^\s]+)/i,
-      :login_pass => /^(230\s*[^\n]+)/i,
-      :login_fail => /^(5\d\d\s*[^\n]+)/i,
-      :bye      => /^221/
-    }
-  end
-    
-      def fifty_percent
-    [1, (maximum * 0.5)].max.floor
-  end
-    
-      def _nt_hashentry
-    start_index = index
-    if node_cache[:hashentry].has_key?(index)
-      cached = node_cache[:hashentry][index]
-      if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
-        @index = cached.interval.end
-      end
-      return cached
-    end
