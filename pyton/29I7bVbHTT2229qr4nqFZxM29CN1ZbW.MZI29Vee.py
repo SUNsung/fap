@@ -1,90 +1,150 @@
 
         
-        
-def check_format(filename):
+            plugin_manager.register(Plugin)
+    try:
+        r = http(
+            httpbin + BASIC_AUTH_URL,
+            '--auth-type',
+            Plugin.auth_type,
+        )
+        assert HTTP_OK in r
+        assert r.json == AUTH_OK
+    finally:
+        plugin_manager.unregister(Plugin)
+    
+    
+PACKAGES = [
+    'httpie',
+    'requests',
+    'pygments',
+]
+    
+            headers = dict(self._orig.headers)
+        if 'Host' not in self._orig.headers:
+            headers['Host'] = url.netloc.split('@')[-1]
+    
+        # Build candidate mime type and lexer names.
+    mime_types, lexer_names = [mime], []
+    type_, subtype = mime.split('/', 1)
+    if '+' not in subtype:
+        lexer_names.append(subtype)
+    else:
+        subtype_name, subtype_suffix = subtype.split('+', 1)
+        lexer_names.extend([subtype_name, subtype_suffix])
+        mime_types.extend([
+            '%s/%s' % (type_, subtype_name),
+            '%s/%s' % (type_, subtype_suffix)
+        ])
+    
+        # 128+2 SIGINT <http://www.tldp.org/LDP/abs/html/exitcodes.html>
+    ERROR_CTRL_C = 130
+    
+        # noinspection PyMethodOverriding
+    def __setitem__(self, key, value):
+        ''' If `key` is assigned more than once, `self[key]` holds a
+        `list` of all the values.
+    
+        def unregister(self, plugin):
+        self._plugins.remove(plugin)
+    
+    # If true, sectionauthor and moduleauthor directives will be shown in the
+# output. They are ignored by default.
+#show_authors = False
+    
+    import blueprintexample
+    
+    
+def login(client, username, password):
+    return client.post('/login', data=dict(
+        username=username,
+        password=password
+    ), follow_redirects=True)
+    
+    import time
+from sqlite3 import dbapi2 as sqlite3
+from hashlib import md5
+from datetime import datetime
+from flask import Flask, request, session, url_for, redirect, \
+     render_template, abort, g, flash, _app_ctx_stack
+from werkzeug import check_password_hash, generate_password_hash
+    
+            Punctuation:               'bold #000000',   # class: 'p'
+    
+        def prepare(self,
+            method=None, url=None, headers=None, files=None, data=None,
+            params=None, auth=None, cookies=None, hooks=None, json=None):
+        '''Prepares the entire request with the given parameters.'''
+    
+        def __init__(self, data=None, **kwargs):
+        self._store = OrderedDict()
+        if data is None:
+            data = {}
+        self.update(data, **kwargs)
+    
+        @pytest.fixture(autouse=True)
+    def setup(self):
+        '''LookupDict instance with 'bad_gateway' attribute.'''
+        self.lookup_dict = LookupDict('test')
+        self.lookup_dict.bad_gateway = 502
+    
+        # Check chardet for compatibility.
+    major, minor, patch = chardet_version.split('.')[:3]
+    major, minor, patch = int(major), int(minor), int(patch)
+    # chardet >= 3.0.2, < 3.1.0
+    assert major == 3
+    assert minor < 1
+    assert patch >= 2
+    
+    This module contains the set of Requests' exceptions.
+'''
+from urllib3.exceptions import HTTPError as BaseHTTPError
+    
+            return self.request('POST', url, data=data, json=json, **kwargs)
+    
+        def setUp(self):
+        from acme.errors import BadNonce
+        self.error = BadNonce(nonce='xxx', error='error')
+    
+    
+@zope.interface.implementer(interfaces.IInstaller)
+@zope.interface.provider(interfaces.IPluginFactory)
+class Installer(common.Plugin):
+    '''Example Installer.'''
+    
+        .. versionadded:: 4.4
     '''
-    validates that each line is formatted correctly,
-    appending to error list as needed
-    '''
-    with open(filename) as fp:
-        lines = list(line.rstrip() for line in fp)
-    check_alphabetical(lines)
-    # START Check Entries
-    num_in_category = min_entries_per_section + 1
-    category = ''
-    category_line = 0
-    for line_num, line in enumerate(lines):
-        if section_title_re.match(line):
-            title_links.append(section_title_re.match(line).group(1))
-        # check each section for the minimum number of entries
-        if line.startswith(anchor):
-            match = anchor_re.match(line)
-            if match:
-                if match.group(1) not in title_links:
-                    add_error(line_num, 'section header ({}) not added as a title link'.format(match.group(1)))
-            else:
-                add_error(line_num, 'section header is not formatted correctly')
-            if num_in_category < min_entries_per_section:
-                add_error(category_line, '{} section does not have the minimum {} entries (only has {})'.format(
-                    category, min_entries_per_section, num_in_category))
-            category = line.split(' ')[1]
-            category_line = line_num
-            num_in_category = 0
-            continue
-        # skips lines that we do not care about
-        if not line.startswith('|') or line.startswith('|---'):
-            continue
-        num_in_category += 1
-        segments = line.split('|')[1:-1]
-        # START Global
-        for segment in segments:
-            # every line segment should start and end with exactly 1 space
-            if len(segment) - len(segment.lstrip()) != 1 or len(segment) - len(segment.rstrip()) != 1:
-                add_error(line_num, 'each segment must start and end with exactly 1 space')
-        # END Global
-        segments = [seg.strip() for seg in segments]
-        check_entry(line_num, segments)
-    # END Check Entries
-    
-                # Use main dttm column to support index with secondary dttm columns
-            if db_engine_spec.time_secondary_columns and \
-                    self.main_dttm_col in self.dttm_cols and \
-                    self.main_dttm_col != dttm_col.column_name:
-                time_filters.append(cols[self.main_dttm_col].
-                                    get_time_filter(from_dttm, to_dttm))
-            time_filters.append(dttm_col.get_time_filter(from_dttm, to_dttm))
-    
-        # DESCRIBE | DESC qualifiedName
-    def test_describe(self):
-        self.assertEquals({'t1'}, self.extract_tables('DESCRIBE t1'))
-        self.assertEquals({'t1'}, self.extract_tables('DESC t1'))
-    
-        # 2. Clean up None permissions or view menues
-    pvms = sm.get_session.query(sm.permissionview_model).all()
-    for pvm in pvms:
-        if not (pvm.view_menu and pvm.permission):
-            sm.get_session.delete(pvm)
-    sm.get_session.commit()
-    
-        @classmethod
-    def datetime_conversion_rate(cls, data_series):
-        success = 0
-        total = 0
-        for value in data_series:
-            total += 1
-            try:
-                pd.to_datetime(value)
-                success += 1
-            except Exception:
-                continue
-        return 100 * success / total
+    return _re_unescape_pattern.sub(_re_unescape_replacement, s)
     
     
-def import_from_dict(session, data, sync=[]):
-    '''Imports databases and druid clusters from dictionary'''
-    if isinstance(data, dict):
-        logging.info('Importing %d %s',
-                     len(data.get(DATABASES_KEY, [])),
-                     DATABASES_KEY)
-        for database in data.get(DATABASES_KEY, []):
-            Database.import_from_dict(session, database, sync=sync)
+@unittest.skipIf(pycurl is None, 'pycurl module not present')
+class CurlHTTPClientTestCase(AsyncHTTPTestCase):
+    def setUp(self):
+        super(CurlHTTPClientTestCase, self).setUp()
+        self.http_client = self.create_client()
+    
+            sock, port = bind_unused_port()
+        server = TestServer()
+        server.add_socket(sock)
+        server_addr = ('localhost', port)
+        N = 40
+        clients = [IOStream(socket.socket()) for i in range(N)]
+        connected_clients = []
+    
+    
+if __name__ == '__main__':
+    main()
+
+    
+    
+class FeedHandler(BaseHandler):
+    def get(self):
+        entries = self.db.query('SELECT * FROM entries ORDER BY published '
+                                'DESC LIMIT 10')
+        self.set_header('Content-Type', 'application/atom+xml')
+        self.render('feed.xml', entries=entries)
+    
+    
+# Making this a non-singleton is left as an exercise for the reader.
+global_message_buffer = MessageBuffer()
+    
+    define('port', default=8888, help='run on the given port', type=int)
