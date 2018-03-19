@@ -1,76 +1,134 @@
-CvRect cvGetValidDisparityROI( CvRect roi1, CvRect roi2, int minDisparity,
-                              int numberOfDisparities, int SADWindowSize )
-{
-    return (CvRect)cv::getValidDisparityROI( roi1, roi2, minDisparity,
-                                            numberOfDisparities, SADWindowSize );
-}
+
+        
+        #include 'atom/browser/api/trackable_object.h'
+#include 'atom/browser/net/atom_network_delegate.h'
+#include 'native_mate/arguments.h'
+#include 'native_mate/handle.h'
     
+      AtomQuotaPermissionContext();
+  virtual ~AtomQuotaPermissionContext();
     
-    {            findCorner(quads_approx[k], corners[i], quad_corners[k]);
-            quad_corners[k] += Point2f(0.5f, 0.5f);
-        }
+    namespace atom {
+    }
     
-    #elif (defined(OPUS_X86_MAY_HAVE_SSE) && !defined(OPUS_X86_PRESUME_SSE)) || \
-  (defined(OPUS_X86_MAY_HAVE_SSE2) && !defined(OPUS_X86_PRESUME_SSE2)) || \
-  (defined(OPUS_X86_MAY_HAVE_SSE4_1) && !defined(OPUS_X86_PRESUME_SSE4_1)) || \
-  (defined(OPUS_X86_MAY_HAVE_AVX) && !defined(OPUS_X86_PRESUME_AVX))
+      // URLRequestJob:
+  void GetResponseInfo(net::HttpResponseInfo* info) override;
     
-    #elif (defined(HAVE_LRINT))
+    typedef struct { int position; atom::AtomMenuModel* model; } MenuItem;
+typedef std::map<ui::Accelerator, MenuItem> AcceleratorTable;
     
-    /*Constants used by the entropy encoder/decoder.*/
-    
-    // Handler for Win32 messages, update mouse/keyboard data.
-// You may or not need this for your implementation, but it can serve as reference for handling inputs.
-// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
-/*
-IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-*/
+    #endif  // ATOM_BROWSER_UI_DRAG_UTIL_H_
 
     
-    IMGUI_API bool        ImGui_ImplDX9_Init(void* hwnd, IDirect3DDevice9* device);
-IMGUI_API void        ImGui_ImplDX9_Shutdown();
-IMGUI_API void        ImGui_ImplDX9_NewFrame();
-IMGUI_API void        ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data);
+    #ifndef ATOM_BROWSER_UI_TRAY_ICON_GTK_H_
+#define ATOM_BROWSER_UI_TRAY_ICON_GTK_H_
     
-    
-    {    return g_ClipboardText;
+    MenuModelAdapter::~MenuModelAdapter() {
 }
     
-    IMGUI_API bool        ImGui_ImplSdlGL2_Init(SDL_Window* window);
-IMGUI_API void        ImGui_ImplSdlGL2_Shutdown();
-IMGUI_API void        ImGui_ImplSdlGL2_NewFrame(SDL_Window* window);
-IMGUI_API void        ImGui_ImplSdlGL2_RenderDrawData(ImDrawData* draw_data);
-IMGUI_API bool        ImGui_ImplSdlGL2_ProcessEvent(SDL_Event* event);
+    #define MARKUP_SIMPLE_FIELD(Id, Keyword, XMLKind) \
+class Id final : public PrivateExtension, \
+    private llvm::TrailingObjects<Id, MarkupASTNode *> { \
+  friend TrailingObjects; \
+\
+  size_t NumChildren; \
+\
+  Id(ArrayRef<MarkupASTNode *> Children);\
+\
+public: \
+  static Id *create(MarkupContext &MC, ArrayRef<MarkupASTNode *> Children); \
+\
+  ArrayRef<MarkupASTNode *> getChildren() { \
+    return {getTrailingObjects<MarkupASTNode *>(), NumChildren}; \
+  } \
+\
+  ArrayRef<const MarkupASTNode *> getChildren() const { \
+    return {getTrailingObjects<MarkupASTNode *>(), NumChildren}; \
+  } \
+\
+  static bool classof(const MarkupASTNode *N) { \
+    return N->getKind() == ASTNodeKind::Id; \
+  } \
+};
+#include 'swift/Markup/SimpleFields.def'
     
-        // Cleanup
-    ImGui_ImplA5_Shutdown();
-    ImGui::DestroyContext();
-    al_destroy_event_queue(queue);
-    al_destroy_display(display);
+      /// \brief Returns a SourceRange covering the entire specified buffer.
+  ///
+  /// Note that the start location might not point at the first token: it
+  /// might point at whitespace or a comment.
+  CharSourceRange getRangeForBuffer(unsigned BufferID) const;
     
-            // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
-        if (show_demo_window)
-        {
-            ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-            ImGui::ShowDemoWindow(&show_demo_window);
-        }
+    extern JSClass  *jsb_cocosbuilder_CCBAnimationManager_class;
+extern JSObject *jsb_cocosbuilder_CCBAnimationManager_prototype;
     
-        g_ShaderHandle = glCreateProgram();
-    g_VertHandle = glCreateShader(GL_VERTEX_SHADER);
-    g_FragHandle = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(g_VertHandle, 2, vertex_shader_with_version, NULL);
-    glShaderSource(g_FragHandle, 2, fragment_shader_with_version, NULL);
-    glCompileShader(g_VertHandle);
-    glCompileShader(g_FragHandle);
-    glAttachShader(g_ShaderHandle, g_VertHandle);
-    glAttachShader(g_ShaderHandle, g_FragHandle);
-    glLinkProgram(g_ShaderHandle);
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
+    bool js_cocos2dx_navmesh_NavMeshObstacle_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_navmesh_NavMeshObstacle_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_navmesh_NavMeshObstacle(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_navmesh(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_navmesh_NavMeshObstacle_getSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_initWith(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_syncToObstacle(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_syncToNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_getHeight(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_getRadius(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_getNavMeshObstacleComponentName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshObstacle_NavMeshObstacle(JSContext *cx, uint32_t argc, jsval *vp);
     
     
-    {    return true;
+    
+    
+    
+    class AddPair : public Test
+{
+public:
+    }
+    
+    
+    {    _state = EXPECTS_CRASH_DUMP_END;
+    return 0;
 }
+    
+    
+    
+    #ifndef _COMM_FUNCTION_H_
+#define _COMM_FUNCTION_H_
+    
+    
+/*
+ * scop_jenv.h
+ *
+ *  Created on: 2012-8-21
+ *      Author: yanguoyue
+ */
+    
+    ////////////////////////////////////////////////////////////////////////////////
+/// Disclaimer: This is intended only as a partial stand-in for
+/// std::pmr::memory_resource (C++17) as needed for developing a
+/// hazptr prototype.
+////////////////////////////////////////////////////////////////////////////////
+    
+    
+    { private:
+  bool async_{true};
+  Optional<size_t> maxBufferSize_;
+};
+    
+     private:
+  ImmediateFileWriter(ImmediateFileWriter const&) = delete;
+  ImmediateFileWriter& operator=(ImmediateFileWriter const&) = delete;
+    
+    /**
+ * Configuration for a LogCategory
+ */
+class LogCategoryConfig {
+ public:
+  explicit LogCategoryConfig(
+      LogLevel level = LogLevel::WARNING,
+      bool inheritParentLevel = true);
+  LogCategoryConfig(
+      LogLevel level,
+      bool inheritParentLevel,
+      std::vector<std::string> handlers);
+    }
