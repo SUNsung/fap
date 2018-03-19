@@ -1,157 +1,139 @@
 
         
-        
-def get_db():
-    '''Opens a new database connection if there is none yet for the
-    current application context.
+            CHUNK_SIZE = 1024 * 10
+    
+    
+def rst_filenames():
+    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
+        if '.tox' not in root:
+            for filename in fnmatch.filter(filenames, '*.rst'):
+                yield os.path.join(root, filename)
+    
+        '''
+    args = decode_args(args, env.stdin_encoding)
+    plugin_manager.load_installed_plugins()
+    
+        # Optional short description. Will be be shown in the help
+    # under --auth-type.
+    description = None
+    
+    
+class DigestAuthPlugin(BuiltinAuthPlugin):
+    
+    
+#######################################################################
+# Network
+#######################################################################
+    
+        def __init__(self, env, explicit_json=False,
+                 color_scheme=DEFAULT_STYLE, **kwargs):
+        super(ColorFormatter, self).__init__(**kwargs)
+        if not env.colors:
+            self.enabled = False
+            return
+    
+        def test_cert_and_key(self, httpbin_secure):
+        r = http(httpbin_secure + '/get',
+                 '--cert', CLIENT_CERT,
+                 '--cert-key', CLIENT_KEY)
+        assert HTTP_OK in r
+    
+    
+class ExitStatus:
+    '''Exit status code constants.'''
+    OK = 0
+    ERROR = 1
+    PLUGIN_ERROR = 7
+    
+        # Auth
+    def get_auth_plugins(self):
+        return [plugin for plugin in self if issubclass(plugin, AuthPlugin)]
+    
+    
+def check_format(filename):
     '''
-    if not hasattr(g, 'sqlite_db'):
-        g.sqlite_db = connect_db()
-    return g.sqlite_db
-    
-    
-def register_teardowns(app):
-    @app.teardown_appcontext
-    def close_db(error):
-        '''Closes the database again at the end of the request.'''
-        if hasattr(g, 'sqlite_db'):
-            g.sqlite_db.close()
-
-    
-            entrylabel = Label(frame, anchor='w', justify='left',
-                           text=self.message)
-        self.entryvar = StringVar(self, self.text0)
-        self.entry = Entry(frame, width=30, textvariable=self.entryvar)
-        self.entry.focus_set()
-        self.error_font = Font(name='TkCaptionFont',
-                               exists=True, root=self.parent)
-        self.entry_error = Label(frame, text=' ', foreground='red',
-                                 font=self.error_font)
-        self.button_ok = Button(
-                frame, text='OK', default='active', command=self.ok)
-        self.button_cancel = Button(
-                frame, text='Cancel', command=self.cancel)
-    
-            if self.closed:
-            raise ValueError('I/O operation on closed file')
-        if self.size_read >= self.chunksize:
-            return b''
-        if size < 0:
-            size = self.chunksize - self.size_read
-        if size > self.chunksize - self.size_read:
-            size = self.chunksize - self.size_read
-        data = self.file.read(size)
-        self.size_read = self.size_read + len(data)
-        if self.size_read == self.chunksize and \
-           self.align and \
-           (self.chunksize & 1):
-            dummy = self.file.read(1)
-            self.size_read = self.size_read + len(dummy)
-        return data
-    
-    def JSONArray(s_and_end, scan_once, _w=WHITESPACE.match, _ws=WHITESPACE_STR):
-    s, end = s_and_end
-    values = []
-    nextchar = s[end:end + 1]
-    if nextchar in _ws:
-        end = _w(s, end + 1).end()
-        nextchar = s[end:end + 1]
-    # Look-ahead for trivial empty array
-    if nextchar == ']':
-        return values, end + 1
-    _append = values.append
-    while True:
-        try:
-            value, end = scan_once(s, end)
-        except StopIteration as err:
-            raise JSONDecodeError('Expecting value', s, err.value) from None
-        _append(value)
-        nextchar = s[end:end + 1]
-        if nextchar in _ws:
-            end = _w(s, end + 1).end()
-            nextchar = s[end:end + 1]
-        end += 1
-        if nextchar == ']':
-            break
-        elif nextchar != ',':
-            raise JSONDecodeError('Expecting ',' delimiter', s, end - 1)
-        try:
-            if s[end] in _ws:
-                end += 1
-                if s[end] in _ws:
-                    end = _w(s, end + 1).end()
-        except IndexError:
-            pass
-    
-    def escape(m):
-    all, tail = m.group(0, 1)
-    assert all.startswith('\\')
-    esc = simple_escapes.get(tail)
-    if esc is not None:
-        return esc
-    if tail.startswith('x'):
-        hexes = tail[1:]
-        if len(hexes) < 2:
-            raise ValueError('invalid hex string escape ('\\%s')' % tail)
-        try:
-            i = int(hexes, 16)
-        except ValueError:
-            raise ValueError('invalid hex string escape ('\\%s')' % tail) from None
-    else:
-        try:
-            i = int(tail, 8)
-        except ValueError:
-            raise ValueError('invalid octal string escape ('\\%s')' % tail) from None
-    return chr(i)
-    
-        print('LIBS=', end=' ')
-    for lib in libs: print(''%s'' % (lib), end=' ')
-    print() ; print()
-    
-        def on_handler_waiting(self):
-        logging.debug('handler waiting')
-        self.stream.close()
-    
-    
-class QueuePutTest(AsyncTestCase):
-    @gen_test
-    def test_blocking_put(self):
-        q = queues.Queue()
-        q.put(0)
-        self.assertEqual(0, q.get_nowait())
-    
-        @gen.coroutine
-    def resolve(self, host, port, family=0):
-        if is_valid_ip(host):
-            addresses = [host]
-        else:
-            # gethostbyname doesn't take callback as a kwarg
-            self.channel.gethostbyname(host, family, (yield gen.Callback(1)))
-            callback_args = yield gen.Wait(1)
-            assert isinstance(callback_args, gen.Arguments)
-            assert not callback_args.kwargs
-            result, error = callback_args.args
-            if error:
-                raise IOError('C-Ares returned error %s: %s while resolving %s' %
-                              (error, pycares.errno.strerror(error), host))
-            addresses = result.addresses
-        addrinfo = []
-        for address in addresses:
-            if '.' in address:
-                address_family = socket.AF_INET
-            elif ':' in address:
-                address_family = socket.AF_INET6
+    validates that each line is formatted correctly,
+    appending to error list as needed
+    '''
+    with open(filename) as fp:
+        lines = list(line.rstrip() for line in fp)
+    check_alphabetical(lines)
+    # START Check Entries
+    num_in_category = min_entries_per_section + 1
+    category = ''
+    category_line = 0
+    for line_num, line in enumerate(lines):
+        if section_title_re.match(line):
+            title_links.append(section_title_re.match(line).group(1))
+        # check each section for the minimum number of entries
+        if line.startswith(anchor):
+            match = anchor_re.match(line)
+            if match:
+                if match.group(1) not in title_links:
+                    add_error(line_num, 'section header ({}) not added as a title link'.format(match.group(1)))
             else:
-                address_family = socket.AF_UNSPEC
-            if family != socket.AF_UNSPEC and family != address_family:
-                raise IOError('Requested socket family %d but got %d' %
-                              (family, address_family))
-            addrinfo.append((address_family, (address, port)))
-        raise gen.Return(addrinfo)
-
+                add_error(line_num, 'section header is not formatted correctly')
+            if num_in_category < min_entries_per_section:
+                add_error(category_line, '{} section does not have the minimum {} entries (only has {})'.format(
+                    category, min_entries_per_section, num_in_category))
+            category = line.split(' ')[1]
+            category_line = line_num
+            num_in_category = 0
+            continue
+        # skips lines that we do not care about
+        if not line.startswith('|') or line.startswith('|---'):
+            continue
+        num_in_category += 1
+        segments = line.split('|')[1:-1]
+        # START Global
+        for segment in segments:
+            # every line segment should start and end with exactly 1 space
+            if len(segment) - len(segment.lstrip()) != 1 or len(segment) - len(segment.rstrip()) != 1:
+                add_error(line_num, 'each segment must start and end with exactly 1 space')
+        # END Global
+        segments = [seg.strip() for seg in segments]
+        check_entry(line_num, segments)
+    # END Check Entries
     
-        @classmethod
-    def update_cache(cls, chat):
-        cls.cache.append(chat)
-        if len(cls.cache) > cls.cache_size:
-            cls.cache = cls.cache[-cls.cache_size:]
+    PROJ_NAME = 'you-get'
+PACKAGE_NAME = 'you_get'
+    
+    def cbs_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    '''Downloads CBS videos by URL.
+    '''
+    
+    def kuwo_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    if 'www.kuwo.cn/yinyue' in url:
+        rid=match1(url,'yinyue/(\d+)')
+        kuwo_download_by_rid(rid,output_dir, merge, info_only)
+    else:
+        kuwo_playlist_download(url,output_dir,merge,info_only)
+    
+    def mixcloud_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html(url, faker=True)
+    title = r1(r'<meta property='og:title' content='([^']*)'', html)
+    preview_url = r1(r'm-preview=\'([^\']+)\'', html)
+    preview = r1(r'previews(.*)\.mp3$', preview_url)
+    
+        def prepare(self, **kwargs):
+        content = get_content(self.url)
+    
+        def extract(self, **kwargs):
+        for i in self.streams:
+            # for each available stream
+            s = self.streams[i]
+            # fill in 'container' field and 'size' field (optional)
+            _, s['container'], s['size'] = url_info(s['url'])
+            # 'src' field is a list of processed urls for direct downloading
+            # usually derived from 'url'
+            s['src'] = [s['url']]
+    
+    
+#----------------------------------------------------------------------
+def showroom_download(url, output_dir = '.', merge = False, info_only = False, **kwargs):
+    ''''''
+    if re.match( r'(\w+)://www.showroom-live.com/([-\w]+)', url):
+        room_url_key = match1(url, r'\w+://www.showroom-live.com/([-\w]+)')
+        room_id = showroom_get_roomid_by_room_url_key(room_url_key)
+        showroom_download_by_room_id(room_id, output_dir, merge,
+                                    info_only)
