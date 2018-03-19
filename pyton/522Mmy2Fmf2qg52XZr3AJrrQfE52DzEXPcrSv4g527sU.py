@@ -1,139 +1,203 @@
 
         
-            CHUNK_SIZE = 1024 * 10
+        import rsa
+import json
+from binascii import hexlify
+    
+    options = helptext[helptext.index('  General Options:') + 19:]
+options = re.sub(r'(?m)^  (\w.+)$', r'## \1', options)
+options = '# OPTIONS\n' + options + '\n'
+    
+        def download(self, x):
+        self.result.append(x)
+    
+        def test_no_duplicated_ie_names(self):
+        name_accu = collections.defaultdict(list)
+        for ie in self.ies:
+            name_accu[ie.IE_NAME.lower()].append(type(ie).__name__)
+        for (ie_name, ie_list) in name_accu.items():
+            self.assertEqual(
+                len(ie_list), 1,
+                'Multiple extractors with the same IE_NAME '%s' (%s)' % (ie_name, ', '.join(ie_list)))
     
     
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
+class RtspFD(FileDownloader):
+    def real_download(self, filename, info_dict):
+        url = info_dict['url']
+        self.report_destination(filename)
+        tmpfilename = self.temp_name(filename)
     
-        '''
-    args = decode_args(args, env.stdin_encoding)
-    plugin_manager.load_installed_plugins()
+            webpage = self._download_webpage(url, video_id)
     
-        # Optional short description. Will be be shown in the help
-    # under --auth-type.
-    description = None
+            # Create flat baselines to compare the variation over batch size
+        all_times['pca'].extend([results_dict['pca']['time']] *
+                                len(batch_sizes))
+        all_errors['pca'].extend([results_dict['pca']['error']] *
+                                 len(batch_sizes))
+        all_times['rpca'].extend([results_dict['rpca']['time']] *
+                                 len(batch_sizes))
+        all_errors['rpca'].extend([results_dict['rpca']['error']] *
+                                  len(batch_sizes))
+        for batch_size in batch_sizes:
+            ipca = IncrementalPCA(n_components=n_components,
+                                  batch_size=batch_size)
+            results_dict = {k: benchmark(est, data) for k, est in [('ipca',
+                                                                   ipca)]}
+            all_times['ipca'].append(results_dict['ipca']['time'])
+            all_errors['ipca'].append(results_dict['ipca']['error'])
     
+                gc.collect()
+            print('benchmarking lasso_path (with Gram):', end='')
+            sys.stdout.flush()
+            tstart = time()
+            lasso_path(X, y, precompute=True)
+            delta = time() - tstart
+            print('%0.3fs' % delta)
+            results['lasso_path (with Gram)'].append(delta)
     
-class DigestAuthPlugin(BuiltinAuthPlugin):
+        #------------------------------------------------------------
+    # varying N
+    N_results_build = dict([(alg, np.zeros(len(Nrange)))
+                            for alg in algorithms])
+    N_results_query = dict([(alg, np.zeros(len(Nrange)))
+                            for alg in algorithms])
     
+    for i, n in enumerate(n_samples):
+    for j, p in enumerate(n_features):
+        X = np.random.normal(size=(n, p))
+        t0 = time.time()
+        ward.fit(X)
+        scikits_time[j, i] = time.time() - t0
+        t0 = time.time()
+        hierarchy.ward(X)
+        scipy_time[j, i] = time.time() - t0
     
-#######################################################################
-# Network
-#######################################################################
+    mu_second = 0.0 + 10 ** 6  # number of microseconds in a second
     
-        def __init__(self, env, explicit_json=False,
-                 color_scheme=DEFAULT_STYLE, **kwargs):
-        super(ColorFormatter, self).__init__(**kwargs)
-        if not env.colors:
-            self.enabled = False
-            return
+    import os
+import tarfile
+from contextlib import closing
     
-        def test_cert_and_key(self, httpbin_secure):
-        r = http(httpbin_secure + '/get',
-                 '--cert', CLIENT_CERT,
-                 '--cert-key', CLIENT_KEY)
-        assert HTTP_OK in r
+    skeleton_dir = os.path.abspath(os.path.join(exercise_dir, '..', 'skeletons'))
+if not os.path.exists(skeleton_dir):
+    os.makedirs(skeleton_dir)
     
+    model = SpectralBiclustering(n_clusters=n_clusters, method='log',
+                             random_state=0)
+model.fit(data)
+score = consensus_score(model.biclusters_,
+                        (rows[:, row_idx], columns[:, col_idx]))
     
-class ExitStatus:
-    '''Exit status code constants.'''
-    OK = 0
-    ERROR = 1
-    PLUGIN_ERROR = 7
+            # a particularly bad case for the old algorithm:  gives an
+        # error of close to 3.5 ulps.
+        self.check_truediv(295147931372582273023, 295147932265116303360)
+        for i in range(1000):
+            self.check_truediv(10**(i+1), 10**i)
+            self.check_truediv(10**i, 10**(i+1))
     
-        # Auth
-    def get_auth_plugins(self):
-        return [plugin for plugin in self if issubclass(plugin, AuthPlugin)]
+        @classmethod
+    def zonelist(cls, zonedir='/usr/share/zoneinfo'):
+        zones = []
+        for root, _, files in os.walk(zonedir):
+            for f in files:
+                p = os.path.join(root, f)
+                with open(p, 'rb') as o:
+                    magic =  o.read(4)
+                if magic == b'TZif':
+                    zones.append(p[len(zonedir) + 1:])
+        return zones
     
+        def find_byname(self, name):
+        '''Return (red, green, blue) for name'''
+        name = name.lower()
+        try:
+            return self.__byname[name]
+        except KeyError:
+            raise BadColor(name) from None
     
-def check_format(filename):
-    '''
-    validates that each line is formatted correctly,
-    appending to error list as needed
-    '''
-    with open(filename) as fp:
-        lines = list(line.rstrip() for line in fp)
-    check_alphabetical(lines)
-    # START Check Entries
-    num_in_category = min_entries_per_section + 1
-    category = ''
-    category_line = 0
-    for line_num, line in enumerate(lines):
-        if section_title_re.match(line):
-            title_links.append(section_title_re.match(line).group(1))
-        # check each section for the minimum number of entries
-        if line.startswith(anchor):
-            match = anchor_re.match(line)
-            if match:
-                if match.group(1) not in title_links:
-                    add_error(line_num, 'section header ({}) not added as a title link'.format(match.group(1)))
-            else:
-                add_error(line_num, 'section header is not formatted correctly')
-            if num_in_category < min_entries_per_section:
-                add_error(category_line, '{} section does not have the minimum {} entries (only has {})'.format(
-                    category, min_entries_per_section, num_in_category))
-            category = line.split(' ')[1]
-            category_line = line_num
-            num_in_category = 0
-            continue
-        # skips lines that we do not care about
-        if not line.startswith('|') or line.startswith('|---'):
-            continue
-        num_in_category += 1
-        segments = line.split('|')[1:-1]
-        # START Global
-        for segment in segments:
-            # every line segment should start and end with exactly 1 space
-            if len(segment) - len(segment.lstrip()) != 1 or len(segment) - len(segment.rstrip()) != 1:
-                add_error(line_num, 'each segment must start and end with exactly 1 space')
-        # END Global
-        segments = [seg.strip() for seg in segments]
-        check_entry(line_num, segments)
-    # END Check Entries
-    
-    PROJ_NAME = 'you-get'
-PACKAGE_NAME = 'you_get'
-    
-    def cbs_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    '''Downloads CBS videos by URL.
-    '''
-    
-    def kuwo_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    if 'www.kuwo.cn/yinyue' in url:
-        rid=match1(url,'yinyue/(\d+)')
-        kuwo_download_by_rid(rid,output_dir, merge, info_only)
-    else:
-        kuwo_playlist_download(url,output_dir,merge,info_only)
-    
-    def mixcloud_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url, faker=True)
-    title = r1(r'<meta property='og:title' content='([^']*)'', html)
-    preview_url = r1(r'm-preview=\'([^\']+)\'', html)
-    preview = r1(r'previews(.*)\.mp3$', preview_url)
-    
-        def prepare(self, **kwargs):
-        content = get_content(self.url)
-    
-        def extract(self, **kwargs):
-        for i in self.streams:
-            # for each available stream
-            s = self.streams[i]
-            # fill in 'container' field and 'size' field (optional)
-            _, s['container'], s['size'] = url_info(s['url'])
-            # 'src' field is a list of processed urls for direct downloading
-            # usually derived from 'url'
-            s['src'] = [s['url']]
+            pt = pointer(Table(1, 2, 3))
     
     
-#----------------------------------------------------------------------
-def showroom_download(url, output_dir = '.', merge = False, info_only = False, **kwargs):
-    ''''''
-    if re.match( r'(\w+)://www.showroom-live.com/([-\w]+)', url):
-        room_url_key = match1(url, r'\w+://www.showroom-live.com/([-\w]+)')
-        room_id = showroom_get_roomid_by_room_url_key(room_url_key)
-        showroom_download_by_room_id(room_id, output_dir, merge,
-                                    info_only)
+if __name__ == '__main__':
+    main()
+
+    
+        def __init__(self, application, host_pattern):
+        self.application = application
+        self.host_pattern = host_pattern
+    
+        def test_uimodule_resources(self):
+        response = self.fetch('/uimodule_resources')
+        self.assertEqual(response.body, b'''\
+<html><head><link href='/base.css' type='text/css' rel='stylesheet'/><link href='/foo.css' type='text/css' rel='stylesheet'/>
+<style type='text/css'>
+.entry { margin-bottom: 1em; }
+</style>
+<meta>
+</head><body>
+    
+    from tornado.http1connection import HTTP1Connection
+from tornado.httputil import HTTPMessageDelegate
+from tornado.iostream import IOStream
+from tornado.locks import Event
+from tornado.netutil import add_accept_handler
+from tornado.testing import AsyncTestCase, bind_unused_port, gen_test
+    
+            sock, port = bind_unused_port()
+        server = namespace['TestServer']()
+        server.add_socket(sock)
+        client = IOStream(socket.socket())
+        yield client.connect(('localhost', port))
+        result = yield client.read_until_close()
+        self.assertEqual(result, b'data')
+        server.stop()
+        client.close()
+    
+    
+class MainHandler(BaseHandler, tornado.auth.FacebookGraphMixin):
+    @tornado.web.authenticated
+    @tornado.web.asynchronous
+    def get(self):
+        self.facebook_request('/me/home', self._on_stream,
+                              access_token=self.current_user['access_token'])
+    
+        def on_close(self):
+        ChatSocketHandler.waiters.remove(self)
+    
+        def __init__(self, name, msg_center):
+        self.name = name
+        self.provider = msg_center
+    
+        def test_tc1_output(self):
+        self.tc1.run()
+        output = self.out.getvalue().strip()
+        self.assertEqual(output, self.average_result_tc1)
+    
+    from dft.constructor_injection import TimeDisplay, MidnightTimeProvider, ProductionCodeTimeProvider, datetime
+    
+        def __init__(self):
+        self.time_provider = datetime.datetime
+    
+        def undo(self):
+        self.rename(self.dest, self.src)
+    
+    print()
+    
+    ### OUTPUT ###
+# Setting Data 1 = 10
+# DecimalViewer: Subject Data 1 has data 10
+# HexViewer: Subject Data 1 has data 0xa
+# Setting Data 2 = 15
+# HexViewer: Subject Data 2 has data 0xf
+# DecimalViewer: Subject Data 2 has data 15
+# Setting Data 1 = 3
+# DecimalViewer: Subject Data 1 has data 3
+# HexViewer: Subject Data 1 has data 0x3
+# Setting Data 2 = 5
+# HexViewer: Subject Data 2 has data 0x5
+# DecimalViewer: Subject Data 2 has data 5
+# Detach HexViewer from data1 and data2.
+# Setting Data 1 = 10
+# DecimalViewer: Subject Data 1 has data 10
+# Setting Data 2 = 15
+# DecimalViewer: Subject Data 2 has data 15
