@@ -1,284 +1,332 @@
 
         
-          if (flags.bit (CHECK_DAWGS) &&
-    (word->best_choice->permuter () != SYSTEM_DAWG_PERM) &&
-    (word->best_choice->permuter () != FREQ_DAWG_PERM) &&
-    (word->best_choice->permuter () != USER_DAWG_PERM) &&
-    (word->best_choice->permuter () != NUMBER_PERM)) {
-    if (tessedit_adaption_debug) tprintf('word not in dawgs\n');
-    return FALSE;
+        /* Map whose keys are pointers, but are compared by their dereferenced values.
+ *
+ * Differs from a plain std::map<const K*, T, DereferencingComparator<K*> > in
+ * that methods that take a key for comparison take a K rather than taking a K*
+ * (taking a K* would be confusing, since it's the value rather than the address
+ * of the object for comparison that matters due to the dereferencing comparator).
+ *
+ * Objects pointed to by keys must not be modified in any way that changes the
+ * result of DereferencingComparator.
+ */
+template <class K, class T>
+class indirectmap {
+private:
+    typedef std::map<const K*, T, DereferencingComparator<const K*> > base;
+    base m;
+public:
+    typedef typename base::iterator iterator;
+    typedef typename base::const_iterator const_iterator;
+    typedef typename base::size_type size_type;
+    typedef typename base::value_type value_type;
+    }
+    
+    char* leveldb_get(
+    leveldb_t* db,
+    const leveldb_readoptions_t* options,
+    const char* key, size_t keylen,
+    size_t* vallen,
+    char** errptr) {
+  char* result = NULL;
+  std::string tmp;
+  Status s = db->rep->Get(options->rep, Slice(key, keylen), &tmp);
+  if (s.ok()) {
+    *vallen = tmp.size();
+    result = CopyString(tmp);
+  } else {
+    *vallen = 0;
+    if (!s.IsNotFound()) {
+      SaveError(errptr, s);
+    }
+  }
+  return result;
+}
+    
+    #include 'db/filename.h'
+#include 'db/db_impl.h'
+#include 'db/dbformat.h'
+#include 'leveldb/env.h'
+#include 'leveldb/iterator.h'
+#include 'port/port.h'
+#include 'util/logging.h'
+#include 'util/mutexlock.h'
+#include 'util/random.h'
+    
+    // Return the legacy file name for an sstable with the specified number
+// in the db named by 'dbname'. The result will be prefixed with
+// 'dbname'.
+extern std::string SSTTableFileName(const std::string& dbname, uint64_t number);
+    
+    Iterator* TableCache::NewIterator(const ReadOptions& options,
+                                  uint64_t file_number,
+                                  uint64_t file_size,
+                                  Table** tableptr) {
+  if (tableptr != NULL) {
+    *tableptr = NULL;
+  }
+    }
+    
+    class TableCache {
+ public:
+  TableCache(const std::string& dbname, const Options* options, int entries);
+  ~TableCache();
+    }
+    
+    struct FileMetaData {
+  int refs;
+  int allowed_seeks;          // Seeks allowed until compaction
+  uint64_t number;
+  uint64_t file_size;         // File size in bytes
+  InternalKey smallest;       // Smallest internal key served by table
+  InternalKey largest;        // Largest internal key served by table
+    }
+    
+    static void TestEncodeDecode(const VersionEdit& edit) {
+  std::string encoded, encoded2;
+  edit.EncodeTo(&encoded);
+  VersionEdit parsed;
+  Status s = parsed.DecodeFrom(encoded);
+  ASSERT_TRUE(s.ok()) << s.ToString();
+  parsed.EncodeTo(&encoded2);
+  ASSERT_EQ(encoded, encoded2);
+}
+    
+    /// Internal callExtension implementation using a UNIX domain socket path.
+Status callExtension(const std::string& extension_path,
+                     const std::string& registry,
+                     const std::string& item,
+                     const PluginRequest& request,
+                     PluginResponse& response);
+    
+    /*
+ * @brief Replace gflags' `DEFINE_type` macros to track osquery flags.
+ *
+ * Do not use this macro within the codebase directly! Use the subsequent macros
+ * that abstract the tail of boolean arguments into meaningful statements.
+ *
+ * @param type(t) The `_type` symbol portion of the gflags define.
+ * @param name(n) The name symbol passed to gflags' `DEFINE_type`.
+ * @param value(v) The default value, use a C++ literal.
+ * @param desc(d) A string literal used for help display.
+ * @param shell(s) Boolean, true if this is only supported in osqueryi.
+ * @param extension(e) Boolean, true if this is only supported in an extension.
+ * @param cli(c) Boolean, true if this can only be set on the CLI (or flagfile).
+ *   This helps documentation since flags can also be set within configuration
+ *   as 'options'.
+ * @param hidden(h) Boolean, true if this is hidden from help displays.
+ */
+#define OSQUERY_FLAG(t, n, v, d, s, e, c, h)                                   \
+  DEFINE_##t(n, v, d);                                                         \
+  namespace flags {                                                            \
+  const int flag_##n = Flag::create(#n, {d, s, e, c, h});                      \
   }
     
-    // Blamer-related information to determine the source of errors.
-struct BlamerBundle {
-  static const char *IncorrectReasonName(IncorrectResultReason irr);
-  BlamerBundle() : truth_has_char_boxes_(false),
-      incorrect_result_reason_(IRR_CORRECT),
-      lattice_data_(NULL) { ClearResults(); }
-  BlamerBundle(const BlamerBundle &other) {
-    this->CopyTruth(other);
-    this->CopyResults(other);
+    #include <osquery/core.h>
+#include <osquery/flags.h>
+#include <osquery/query.h>
+#include <osquery/registry.h>
+    
+    /**
+ * @brief Create an osquery extension 'module', if an expression is true.
+ *
+ * This is a helper testing wrapper around CREATE_MODULE and DECLARE_MODULE.
+ * It allows unit and integration tests to generate global construction code
+ * that depends on data/variables available during global construction.
+ *
+ * And example use includes checking if a process environment variable is
+ * defined. If defined the module is declared.
+ */
+#define CREATE_MODULE_IF(expr, name, version, min_sdk_version)                 \
+  extern 'C' EXPORT_FUNCTION void initModule(void);                            \
+  struct osquery_InternalStructCreateModule {                                  \
+    osquery_InternalStructCreateModule(void) {                                 \
+      if ((expr)) {                                                            \
+        Registry::get().declareModule(                                         \
+            name, version, min_sdk_version, OSQUERY_SDK_VERSION);              \
+      }                                                                        \
+    }                                                                          \
+  };                                                                           \
+  static osquery_InternalStructCreateModule osquery_internal_module_instance_;
+    
+    #include <gtest/gtest.h>
+    
+    TEST_F(ViewsConfigParserPluginTests, test_swap_view) {
+  Config c;
+  std::vector<std::string> old_views_vec;
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  old_views_vec.clear();
+  auto s = c.update(getTestConfigMap('view_test.conf'));
+  EXPECT_TRUE(s.ok());
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  EXPECT_EQ(old_views_vec[0], 'config_views.kernel_hashes_new');
+    }
+    
+    Status platformStrncpy(char* dst, size_t nelms, const char* src, size_t count) {
+  if (dst == nullptr || src == nullptr || nelms == 0) {
+    return Status(1, 'Failed to strncpy: invalid arguments');
   }
-  ~BlamerBundle() { delete[] lattice_data_; }
+    }
+    
+    #pragma once
+    
+    void copy(const char* srcFile, const char* dest) {
+  fs::path destPath(dest);
+  if (!destPath.is_absolute()) {
+    auto hp = getHugePageSize();
+    CHECK(hp) << 'no huge pages available';
+    destPath = fs::canonical_parent(destPath, hp->mountPoint);
+  }
+    }
+    
+      // Format the data into a buffer.
+  std::string buffer;
+  StringPiece msgData{message.getMessage()};
+  if (message.containsNewlines()) {
+    // If there are multiple lines in the log message, add a header
+    // before each one.
+    std::string header;
+    header.reserve(headerLengthGuess);
+    headerFormatter.appendTo(header);
     }
     
     
-    {}  // namespace tesseract.
-
-    
-    // Fills in the x-height range accepted by the given unichar_id, given its
-// bounding box in the usual baseline-normalized coordinates, with some
-// initial crude x-height estimate (such as word size) and this denoting the
-// transformation that was used.
-void DENORM::XHeightRange(int unichar_id, const UNICHARSET& unicharset,
-                          const TBOX& bbox,
-                          float* min_xht, float* max_xht, float* yshift) const {
-  // Default return -- accept anything.
-  *yshift = 0.0f;
-  *min_xht = 0.0f;
-  *max_xht = MAX_FLOAT32;
-    }
-    
-    
-    {  private:
-    float xcoord;                //2 floating coords
-    float ycoord;
+    {  /**
+   * An optional list of LogHandler names to use for this category.
+   *
+   * When applying config changes to an existing LogCategory, the existing
+   * LogHandler list will be left unchanged if this field is unset.
+   */
+  Optional<std::vector<std::string>> handlers;
 };
     
-    namespace jit {
+        for (const auto& entry : categories->items()) {
+      if (!entry.first.isString()) {
+        // This shouldn't really ever happen.
+        // We deserialize the json with allow_non_string_keys set to False.
+        throw LogConfigParseError{'category name must be a string'};
+      }
+      auto categoryName = entry.first.asString();
+      auto categoryConfig = parseJsonCategoryConfig(entry.second, categoryName);
     }
-    
-    Vreg Vunit::makeConst(Vconst vconst) {
-  auto it = constToReg.find(vconst);
-  if (it != constToReg.end()) return it->second;
-    }
-    
-      mpz_clear(gmpDataA);
-  mpz_clear(gmpDataB);
-  mpz_clear(gmpReturn);
     
       /**
-   * Set the URLChecker function which determines which paths this server is
-   * allowed to server.
+   * Block until all messages that have already been sent to this LogHandler
+   * have been processed.
    *
-   * Defaults to SatelliteServerInfo::checkURL()
+   * For LogHandlers that perform asynchronous processing of log messages,
+   * this ensures that messages already sent to this handler have finished
+   * being processed.
+   *
+   * Other threads may still call handleMessage() while flush() is running.
+   * handleMessage() calls that did not complete before the flush() call
+   * started will not necessarily be processed by the flush call.
    */
-  void setUrlChecker(const URLChecker& checker) {
-    m_urlChecker = checker;
-  }
+  virtual void flush() = 0;
     
-    namespace HPHP {
-    }
-    
-    void ThriftBuffer::read(Array &data) {
-  String sdata;
-  read(sdata);
-  data = unserialize_with_no_notice(sdata).toArray();
-}
-    
-    #include <limits.h>  /* for PIPE_BUF */
-    
-    
-    {  return make_map_array(
-    s_name,   String(pw.pw_name,   CopyString),
-    s_passwd, String(pw.pw_passwd, CopyString),
-    s_uid,    (int)pw.pw_uid,
-    s_gid,    (int)pw.pw_gid,
-    s_gecos,  String(pw.pw_gecos,  CopyString),
-    s_dir,    String(pw.pw_dir,    CopyString),
-    s_shell,  String(pw.pw_shell,  CopyString)
-  );
-}
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    
-    {
-    {
-    {                // add to the desired node group
-                m_net->AddToNodeGroup(groupTag, cnNode);
-            }
-        }
-    }
-    
-    namespace Microsoft { namespace MSR { namespace BS {
-    }
-    }
-    }
-    
-        // FileParse - parse at the file level, can be overridden for 'section of file' behavior
-    // stringParse - file concatentated as a single string
-    void FileParse(const std::string& stringParse)
-    {
-        ConfigParameters sections(stringParse);
-        bool loadOrEditFound = false;
-    }
-    
-    // Data Writer class
-// interface for clients of the Data Writer
-// mirrors the IDataWriter interface, except the Init method is private (use the constructor)
-class DataWriter : public IDataWriter, protected Plugin
-{
-    IDataWriter* m_dataWriter; // writer
-    }
-    
-    namespace Microsoft { namespace MSR { namespace CNTK {
-    }
-    }
-    }
-    
-        bool empty() const
-    {
-#ifndef NONUMLATTICEMMI // TODO:set NUM lattice to null so as to save memory
-        if (numlattices.empty() ^ denlattices.empty())
-            RuntimeError('latticesource: numerator and denominator lattices must be either both empty or both not empty');
-#endif
-        return denlattices.empty();
-    }
-    
-    inline void ColorTransformYCbCrToRGB(uint8_t* pixel) {
-  int y  = pixel[0];
-  int cb = pixel[1];
-  int cr = pixel[2];
-  pixel[0] = kRangeLimit[y + kCrToRedTable[cr]];
-  pixel[1] = kRangeLimit[y +
-                         ((kCrToGreenTable[cr] + kCbToGreenTable[cb]) >> 16)];
-  pixel[2] = kRangeLimit[y + kCbToBlueTable[cb]];
-}
-    
-    #include 'guetzli/entropy_encode.h'
-    
-    #include <math.h>
-    
-    // kIDCTMatrix[8*x+u] = alpha(u)*cos((2*x+1)*u*M_PI/16)*sqrt(2), with fixed 13
-// bit precision, where alpha(0) = 1/sqrt(2) and alpha(u) = 1 for u > 0.
-// Some coefficients are off by +-1 to mimick libjpeg's behaviour.
-static const int kIDCTMatrix[kDCTBlockSize] = {
-  8192,  11363,  10703,   9633,   8192,   6437,   4433,   2260,
-  8192,   9633,   4433,  -2259,  -8192, -11362, -10704,  -6436,
-  8192,   6437,  -4433, -11362,  -8192,   2261,  10704,   9633,
-  8192,   2260, -10703,  -6436,   8192,   9633,  -4433, -11363,
-  8192,  -2260, -10703,   6436,   8192,  -9633,  -4433,  11363,
-  8192,  -6437,  -4433,  11362,  -8192,  -2261,  10704,  -9633,
-  8192,  -9633,   4433,   2259,  -8192,  11362, -10704,   6436,
-  8192, -11363,  10703,  -9633,   8192,  -6437,   4433,  -2260,
-};
-    
-    // Mimic libjpeg's heuristics to guess jpeg color space.
-// Requires that the jpg has 3 components.
-bool HasYCbCrColorSpace(const JPEGData& jpg);
-    
-      // Special case code with only one value.
-  if (total_count == 1) {
-    code.bits = 0;
-    code.value = symbols[0];
-    for (key = 0; key < total_size; ++key) {
-      table[key] = code;
-    }
-    return total_size;
-  }
-    
-    
-    { private:
-  const int width_;
-  const int height_;
-  std::vector<OutputImageComponent> components_;
-};
-    
-    // Butteraugli scores that correspond to JPEG quality levels, starting at
-// kLowestQuality. They were computed by taking median BA scores of JPEGs
-// generated using libjpeg-turbo at given quality from a set of PNGs.
-// The scores above quality level 100 are just linearly decreased so that score
-// for 110 is 90% of the score for 100.
-const double kScoreForQuality[] = {
-  2.810761,  // 70
-  2.729300,
-  2.689687,
-  2.636811,
-  2.547863,
-  2.525400,
-  2.473416,
-  2.366133,
-  2.338078,
-  2.318654,
-  2.201674,  // 80
-  2.145517,
-  2.087322,
-  2.009328,
-  1.945456,
-  1.900112,
-  1.805701,
-  1.750194,
-  1.644175,
-  1.562165,
-  1.473608,  // 90
-  1.382021,
-  1.294298,
-  1.185402,
-  1.066781,
-  0.971769,  // 95
-  0.852901,
-  0.724544,
-  0.611302,
-  0.443185,
-  0.211578,  // 100
-  0.209462,
-  0.207346,
-  0.205230,
-  0.203114,
-  0.200999,  // 105
-  0.198883,
-  0.196767,
-  0.194651,
-  0.192535,
-  0.190420,  // 110
-  0.190420,
-};
-    
-      assert(animal->name()->str() == 'Dog');
-  assert(animal->sound()->str() == 'Bark');
-  (void)animal; // To silence 'Unused Variable' warnings.
-    
-    
-#endif  // GRPC_monster_5ftest__INCLUDED
+    // Handler for Win32 messages, update mouse/keyboard data.
+// You may or not need this for your implementation, but it can serve as reference for handling inputs.
+// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
+/*
+IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+*/
 
     
-     private:
-  void ParseFile(flatbuffers::Parser &parser, const std::string &filename,
-                 const std::string &contents,
-                 std::vector<const char *> &include_directories) const;
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
     
-      // Converts a binary buffer to text using one of the schemas in the registry,
-  // use the file_identifier to indicate which.
-  // If DetachedBuffer::data() is null then parsing failed.
-  DetachedBuffer TextToFlatBuffer(const char *text,
-                                  const char *file_identifier) {
-    // Load and parse the schema.
-    Parser parser;
-    if (!LoadSchema(file_identifier, &parser)) return DetachedBuffer();
-    // Parse the text.
-    if (!parser.Parse(text)) {
-      lasterror_ = parser.error_;
-      return DetachedBuffer();
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+            cmdList->Release();
+        cmdAlloc->Release();
+        cmdQueue->Release();
+        CloseHandle(event);
+        fence->Release();
+        uploadBuffer->Release();
+    
+    bool    ImGui_ImplGlfwVulkan_Init(GLFWwindow* window, bool install_callbacks, ImGui_ImplGlfwVulkan_Init_Data *init_data)
+{
+    g_Allocator = init_data->allocator;
+    g_Gpu = init_data->gpu;
+    g_Device = init_data->device;
+    g_RenderPass = init_data->render_pass;
+    g_PipelineCache = init_data->pipeline_cache;
+    g_DescriptorPool = init_data->descriptor_pool;
+    g_CheckVkResult = init_data->check_vk_result;
     }
-    // We have a valid FlatBuffer. Detach it from the builder and return.
-    return parser.builder_.ReleaseBufferPointer();
+    
+        for (int i = 0; i < 3; i++)
+    {
+        // If a mouse press event came, always pass it as 'mouse held this frame', so we don't miss click-release events that are shorter than 1 frame.
+        io.MouseDown[i] = g_MouseJustPressed[i] || glfwGetMouseButton(g_Window, i) != 0;
+        g_MouseJustPressed[i] = false;
+    }
+    
+      YGNodeCalculateLayout(root, 200, 100, YGDirectionLTR);
+    
+        Config(Config const &) = delete;
+    
+    void Node::setWidth(double width)
+{
+    YGNodeStyleSetWidth(m_node, width);
+}
+    
+     public: // Tree hierarchy inspectors
+    
+    class Countable : public noncopyable, public nonmovable {
+public:
+  // RefPtr expects refcount to start at 0
+  Countable() : m_refcount(0) {}
+  virtual ~Countable()
+  {
+    FBASSERT(m_refcount == 0);
+  }
+    }
+    
+    class ProgramLocation {
+public:
+  ProgramLocation() : m_functionName('Unspecified'), m_fileName('Unspecified'), m_lineNumber(0) {}
+    }
+    
+      T* release() {
+    T* obj = get();
+    pthread_setspecific(m_key, NULL);
+    return obj;
   }
     
-      // Use the `CreateWeapon` shortcut to create Weapons with all fields set.
-  auto sword = CreateWeapon(builder, weapon_one_name, weapon_one_damage);
-  auto axe = CreateWeapon(builder, weapon_two_name, weapon_two_damage);
+    #define FBCRASH(msg, ...) facebook::assertInternal('Fatal error (%s:%d): ' msg, __FILE__, __LINE__, ##__VA_ARGS__)
+#define FBUNREACHABLE() facebook::assertInternal('This code should be unreachable (%s:%d)', __FILE__, __LINE__)
     
-      flatbuffers::FlatCompiler::InitParams params;
-  params.generators = generators;
-  params.num_generators = sizeof(generators) / sizeof(generators[0]);
-  params.warn_fn = Warn;
-  params.error_fn = Error;
+      system_clock::time_point ProcessStartTime = system_clock::now();
+  system_clock::time_point UnitStartTime, UnitStopTime;
+  long TimeOfLongestUnitInSeconds = 0;
+  long EpochOfLastReadOfOutputCorpus = 0;
     
-    // Create a struct with a builder and the struct's arguments.
-static void GenStructBuilder(const StructDef &struct_def,
-                             std::string *code_ptr) {
-  BeginBuilderArgs(struct_def, code_ptr);
-  StructBuilderArgs(struct_def, '', code_ptr);
-  EndBuilderArgs(code_ptr);
-    }
+    
+    {  // One greedy pass: add the file's features to AllFeatures.
+  // If new features were added, add this file to NewFiles.
+  for (size_t i = NumFilesInFirstCorpus; i < Files.size(); i++) {
+    auto &Cur = Files[i].Features;
+    // Printf('%s -> sz %zd ft %zd\n', Files[i].Name.c_str(),
+    //       Files[i].Size, Cur.size());
+    size_t OldSize = AllFeatures.size();
+    AllFeatures.insert(Cur.begin(), Cur.end());
+    if (AllFeatures.size() > OldSize)
+      NewFiles->push_back(Files[i].Name);
+  }
+  return AllFeatures.size() - InitialNumFeatures;
+}
+    
+    
+    {}
+
+    
+    // Private copy of SHA1 implementation.
+static const int kSHA1NumBytes = 20;
