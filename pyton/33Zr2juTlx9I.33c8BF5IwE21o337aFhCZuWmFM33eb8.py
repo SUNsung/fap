@@ -1,233 +1,189 @@
 
         
-        entries_str = textwrap.indent(''.join(entries), '\t')
-atom_template = atom_template.replace('@ENTRIES@', entries_str)
+            def start_requests(self):
+        qargs = {'total': self.total, 'show': self.show}
+        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
+        return [scrapy.Request(url, dont_filter=True)]
     
-    import itertools
-import json
-import os
-import re
-import sys
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-l', '--list', dest='list', action='store_true',
+                          help='only list contracts, without checking them')
+        parser.add_option('-v', '--verbose', dest='verbose', default=False, action='store_true',
+                          help='print contract tests for all spiders')
     
-    from test.helper import try_rm
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
+                          help='set spider argument (may be repeated)')
+        parser.add_option('-o', '--output', metavar='FILE',
+                          help='dump scraped items into FILE (use - for stdout)')
+        parser.add_option('-t', '--output-format', metavar='FORMAT',
+                          help='format to use for dumping items with -o')
     
-                    if ''' not in code and ''' not in code:
-                    continue
-                assertRegexpMatches(
-                    self,
-                    code,
-                    r'(?:(?:#.*?|\s*)\n)*from __future__ import (?:[a-z_]+,\s*)*unicode_literals',
-                    'unicode_literals import  missing in %s' % fn)
+        def set(self, key, value):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                item.value = value
+                return
+        self.table[hash_index].append(Item(key, value))
     
-        def _real_extract(self, url):
-        mobj = re.match(self._VALID_URL, url)
-        video_id = mobj.group('id')
+            Emit key value pairs of the form:
     
-            # TODO: handle s and e stage_mode (live streams and ended live streams)
-        if stage_mode not in ('s', 'e'):
-            request = sanitized_Request(
-                'https://audimedia.tv/api/video/v1/videos/%s?embed[]=video_versions&embed[]=thumbnail_image&where[content_language_iso]=%s' % (video_id, lang),
-                headers={'X-Auth-Token': self._AUTH_TOKEN})
-            json_data = self._download_json(request, video_id)['results']
-            formats = []
+        def get_person(self, person_id):
+        person_server = self.lookup[person_id]
+        return person_server.people[person_id]
     
-            formats = [
-            {
-                'format_id': f['type'],
-                'filesize': int(f['filesize']),
-                'url': f['url']
-            } for f in info['rfiles']
-        ]
-        self._sort_formats(formats)
+        def crawl_page(self, page):
+        for url in page.child_urls:
+            self.data_store.add_link_to_crawl(url)
+        self.reverse_index_queue.generate(page)
+        self.doc_index_queue.generate(page)
+        self.data_store.remove_link_to_crawl(page.url)
+        self.data_store.insert_crawled_link(page.url, page.signature)
     
-            # Video URL construction algorithm is reverse-engineered from cwhplayer.swf
-        rtmp_url = 'rtmp://camwithher.tv/clipshare/%s' % (
-            ('mp4:%s.mp4' % flv_id) if int(flv_id) > 2010 else flv_id)
+        @property
+    @abstractmethod
+    def value(self):
+        pass
     
-    from landscape_api.base import API, HTTPError
+        def get(self, query):
+        '''Get the stored query result from the cache.
     
-    try:
-    import json
-except ImportError:
-    import simplejson as json
-import os
-import os.path
-import sys
-import ConfigParser
-import StringIO
+    # The reST default role (used for this markup: `text`) to use for all
+# documents.
+default_role = 'py:obj'
     
-        parser = argparse.ArgumentParser(description='Download results from a Shippable run.')
+        @mock.patch('certbot.display.enhancements.util')
+    def test_easy(self, mock_util):
+        mock_util().menu.return_value = (display_util.OK, 0)
+        self.assertFalse(self._call())
     
-        print(json.dumps(response.json(), indent=4, sort_keys=True))
-    
-            # global, resource, entity
-        input_url = 'https://www.googleapis.com/compute/v1/projects/myproject/global/urlMaps/my-url-map'
-        actual = GCPUtils.parse_gcp_url(input_url)
-        self.assertEquals('myproject', actual['project'])
-        self.assertTrue('global' in actual)
-        self.assertTrue(actual['global'])
-        self.assertEquals('v1', actual['api_version'])
-        self.assertEquals('compute', actual['service'])
-    
-        plt.figlegend((c_bar, q_bar), ('construction', 'N-point query'),
-                  'upper right')
-    
-    import time
-    
-        url_fmt is along the lines of ('https://github.com/USER/PROJECT/'
-                                   'blob/{revision}/{package}/'
-                                   '{path}#L{lineno}')
-    '''
-    revision = _get_git_revision()
-    return partial(_linkcode_resolve, revision=revision, package=package,
-                   url_fmt=url_fmt)
-
-    
-    
-URL = ('http://www.cs.cornell.edu/people/pabo/'
-       'movie-review-data/review_polarity.tar.gz')
-    
-    for s, p in zip(sentences, predicted):
-    print(u'The language of '%s' is '%s'' % (s, dataset.target_names[p]))
-
-    
-    
-if __name__ == '__main__':
-    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
-    # block to be able to use a multi-core grid search that also works under
-    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
-    # The multiprocessing module is used as the backend of joblib.Parallel
-    # that is used when n_jobs != 1 in GridSearchCV
-    
-    import sys
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import LinearSVC
-from sklearn.pipeline import Pipeline
-from sklearn.model_selection import GridSearchCV
-from sklearn.datasets import load_files
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
-    
-    Calibration of the probabilities of Gaussian naive Bayes with isotonic
-regression can fix this issue as can be seen from the nearly diagonal
-calibration curve. Sigmoid calibration also improves the brier score slightly,
-albeit not as strongly as the non-parametric isotonic regression. This can be
-attributed to the fact that we have plenty of calibration data such that the
-greater flexibility of the non-parametric model can be exploited.
-    
-    calibrated_classifier = sig_clf.calibrated_classifiers_[0]
-prediction = np.vstack([calibrator.predict(this_p)
-                        for calibrator, this_p in
-                        zip(calibrated_classifier.calibrators_, p.T)]).T
-prediction /= prediction.sum(axis=1)[:, None]
-    
-        # add non-discriminative features
-    if n_features > 1:
-        X = np.hstack([X, np.random.randn(n_samples, n_features - 1)])
-    return X, y
-    
-    
-MINIMUM = 80
-    
-    def main():
-    for name, fn in [('sequential',
-                      functools.partial(download_urls_sequential, URLS)),
-                     ('processes',
-                      functools.partial(download_urls_with_executor,
-                                        URLS,
-                                        ProcessPoolExecutor(10))),
-                     ('threads',
-                      functools.partial(download_urls_with_executor,
-                                        URLS,
-                                        ThreadPoolExecutor(10)))]:
-        sys.stdout.write('%s: ' % name.ljust(12))
-        start = time.time()
-        url_map = fn()
-        sys.stdout.write('%.2f seconds (%d of %d downloaded)\n' %
-                         (time.time() - start, len(url_map), len(URLS)))
-    
-    from ycm.client.base_request import ( BaseRequest, BuildRequestData,
-                                      HandleServerException )
+    from certbot import interfaces
+from certbot.plugins import common
     
     from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import division
 from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+# No imports from `future` because when this is loaded, sys.path hasn't been set
+# up yet!
     
-            path_args, path_kwargs = [], {}
+            Raises:
+            CancelledError: If the future was cancelled.
+            TimeoutError: If the future didn't finish executing before the given
+                timeout.
+        '''
     
-        @gen.coroutine
-    def resolve(self, host, port, family=0):
-        if is_valid_ip(host):
-            addresses = [host]
-        else:
-            # gethostbyname doesn't take callback as a kwarg
-            self.channel.gethostbyname(host, family, (yield gen.Callback(1)))
-            callback_args = yield gen.Wait(1)
-            assert isinstance(callback_args, gen.Arguments)
-            assert not callback_args.kwargs
-            result, error = callback_args.args
-            if error:
-                raise IOError('C-Ares returned error %s: %s while resolving %s' %
-                              (error, pycares.errno.strerror(error), host))
-            addresses = result.addresses
-        addrinfo = []
-        for address in addresses:
-            if '.' in address:
-                address_family = socket.AF_INET
-            elif ':' in address:
-                address_family = socket.AF_INET6
-            else:
-                address_family = socket.AF_UNSPEC
-            if family != socket.AF_UNSPEC and family != address_family:
-                raise IOError('Requested socket family %d but got %d' %
-                              (family, address_family))
-            addrinfo.append((address_family, (address, port)))
-        raise gen.Return(addrinfo)
+    # Workers are created as daemon threads. This is done to allow the interpreter
+# to exit when there are still idle threads in a ThreadPoolExecutor's thread
+# pool (i.e. shutdown() was not called). However, allowing workers to die with
+# the interpreter has two undesirable properties:
+#   - The workers would still be running during interpretor shutdown,
+#     meaning that they would fail in unpredictable ways.
+#   - The workers could be killed while evaluating a work item, which could
+#     be bad if the callable being evaluated has external side-effects e.g.
+#     writing to a file.
+#
+# To work around this problem, an exit handler is installed which tells the
+# workers to exit when their work queues are empty and then waits until the
+# threads finish.
+    
+        def test_threads_terminate(self):
+        self.executor.submit(mul, 21, 2)
+        self.executor.submit(mul, 6, 7)
+        self.executor.submit(mul, 3, 14)
+        self.assertEqual(len(self.executor._threads), 3)
+        self.executor.shutdown()
+        for t in self.executor._threads:
+            t.join()
+    
+        self._response_future = self.PostDataToHandlerAsync( request_data,
+                                                         'event_notification' )
+    
+    
+def _FormatYcmdDebugInfo( ycmd ):
+  python = ycmd[ 'python' ]
+  clang = ycmd[ 'clang' ]
+  message = ( 'Server Python interpreter: {0}\n'
+              'Server Python version: {1}\n'
+              'Server has Clang support compiled in: {2}\n'
+              'Clang version: {3}\n'.format( python[ 'executable' ],
+                                             python[ 'version' ],
+                                             clang[ 'has_support' ],
+                                             clang[ 'version' ] ) )
+  extra_conf = ycmd[ 'extra_conf' ]
+  extra_conf_path = extra_conf[ 'path' ]
+  if not extra_conf_path:
+    message += 'No extra configuration file found\n'
+  elif not extra_conf[ 'is_loaded' ]:
+    message += ( 'Extra configuration file found but not loaded\n'
+                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
+  else:
+    message += ( 'Extra configuration file found and loaded\n'
+                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
+  return message
+    
+    
+class CompleterAvailableRequest( BaseRequest ):
+  def __init__( self, filetypes ):
+    super( CompleterAvailableRequest, self ).__init__()
+    self.filetypes = filetypes
+    self._response = None
+    
+        # if not sample_queue.empty():
+
+    
+        def test_2nd_am_station_after_scan(self):
+        self.radio.scan()
+        station = self.radio.state.stations[self.radio.state.pos]
+        expected_station = '1380'
+        self.assertEqual(station, expected_station)
+    
+        def test_display_current_time_at_midnight(self):
+        class_under_test = TimeDisplay()
+        expected_time = '24:01'
+        result = class_under_test.get_current_time_as_as_html_fragment()
+        self.assertEqual(result, expected_time)
+'''
+    
+        def test_display_current_time_at_midnight(self):
+        class_under_test = TimeDisplay()
+        expected_time = '24:01'
+        result = class_under_test.get_current_time_as_as_html_fragment()
+        self.assertEqual(result, expected_time)
+'''
+    
+        _static_method_choices = {'param_value_1': _static_method_1,
+                              'param_value_2': _static_method_2}
+    
+    print()
+    
+    '''
+http://web.archive.org/web/20120309135549/http://dpip.testingperspective.com/?p=28
+    
+    ### OUTPUT ###
+# Setting Data 1 = 10
+# DecimalViewer: Subject Data 1 has data 10
+# HexViewer: Subject Data 1 has data 0xa
+# Setting Data 2 = 15
+# HexViewer: Subject Data 2 has data 0xf
+# DecimalViewer: Subject Data 2 has data 15
+# Setting Data 1 = 3
+# DecimalViewer: Subject Data 1 has data 3
+# HexViewer: Subject Data 1 has data 0x3
+# Setting Data 2 = 5
+# HexViewer: Subject Data 2 has data 0x5
+# DecimalViewer: Subject Data 2 has data 5
+# Detach HexViewer from data1 and data2.
+# Setting Data 1 = 10
+# DecimalViewer: Subject Data 1 has data 10
+# Setting Data 2 = 15
+# DecimalViewer: Subject Data 2 has data 15
 
     
     
-def main():
-    base_cmd = [
-        sys.executable, '-m', 'timeit', '-s',
-        'from stack_context_benchmark import StackBenchmark, ExceptionBenchmark']
-    cmds = [
-        'StackBenchmark().enter_exit(50)',
-        'StackBenchmark().call_wrapped(50)',
-        'StackBenchmark().enter_exit(500)',
-        'StackBenchmark().call_wrapped(500)',
-    
-    import logging
-import tornado.escape
-import tornado.ioloop
-import tornado.options
-import tornado.web
-import tornado.websocket
-import os.path
-import uuid
-    
-    
-class UnsupportedTransition(BaseException):
-    pass
-    
-        def setUp(cls):
-        ''' Function/test case scope setup. '''
-        cls.output = StringIO()
-        cls.saved_stdout = sys.stdout
-        sys.stdout = cls.output
-    
-        def notify(self, msg):
-        self.msg_queue.append(msg)
-    
-        def test_bear_greek_localization(self):
-        self.assertEqual(self.g.get('bear'), 'bear')
-
-    
-    from __future__ import print_function
-    
-    
-class AndSpecification(CompositeSpecification):
+class OrSpecification(CompositeSpecification):
     _one = Specification()
     _other = Specification()
