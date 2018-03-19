@@ -1,75 +1,43 @@
 
         
-            :param url: URL for the new :class:`Request` object.
-    :param \*\*kwargs: Optional arguments that ``request`` takes.
-    :return: :class:`Response <Response>` object
-    :rtype: requests.Response
+            def __init__(self, HierachicalStateMachine):
+        self._hsm = HierachicalStateMachine
+    
+        def test_sales_manager_shall_talk_through_proxy_with_delay(cls):
+        cls.p.busy = 'No'
+        start_time = time()
+        cls.p.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+Sales Manager ready to talk\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
+    
+    
+class BaseRegisteredClass(object):
+    __metaclass__ = RegistryHolder
     '''
+        Any class that will inherits from BaseRegisteredClass will be included
+        inside the dict RegistryHolder.REGISTRY, the key being the name of the
+        class and the associated value, the class itself.
+    '''
+    pass
     
-            def generate():
-            # Special case for urllib3.
-            if hasattr(self.raw, 'stream'):
-                try:
-                    for chunk in self.raw.stream(chunk_size, decode_content=True):
-                        yield chunk
-                except ProtocolError as e:
-                    raise ChunkedEncodingError(e)
-                except DecodeError as e:
-                    raise ContentDecodingError(e)
-                except ReadTimeoutError as e:
-                    raise ConnectionError(e)
-            else:
-                # Standard file-like object.
-                while True:
-                    chunk = self.raw.read(chunk_size)
-                    if not chunk:
-                        break
-                    yield chunk
+        def test_cat_eng_localization(self):
+        self.assertEqual(self.e.get('cat'), 'cat')
     
-        possible_keys = pytest.mark.parametrize('key', ('accept', 'ACCEPT', 'aCcEpT', 'Accept'))
+    from dft.setter_injection import TimeDisplay, MidnightTimeProvider, ProductionCodeTimeProvider, datetime
     
-            .. seealso:: keys() and items().
-        '''
-        return list(self.itervalues())
+    '''
+Port of the Java example of 'Constructor Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050)
     
+        def __init__(self):
+        self._observers = []
     
-def test_idna_with_version_attribute(mocker):
-    '''Verify we're actually setting idna version when it should be available.'''
-    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
-    assert info()['idna'] == {'version': '2.6'}
-
-    
-        def reducer_identity(self, key, value):
-        yield key, value
-    
-    	for video in tab.childNodes:
-		if re.search(contentid, video.attributes['link'].value):
-			url = video.attributes['flv'].value
-			break
-    
-    
-def extract_board_data(url):
-    json_data = extract_json_data(url, limit=LIMIT)
-    pin_list = json_data['pins']
-    title = json_data['title']
-    pin_count = json_data['pin_count']
-    pin_count -= len(pin_list)
-    
-    def kugou_download_by_hash(title,hash_val,output_dir = '.', merge = True, info_only = False):
-    #sample
-    #url_sample:http://www.kugou.com/yy/album/single/536957.html
-    #hash ->key  md5(hash+kgcloud')->key  decompile swf
-    #cmd 4 for mp3 cmd 3 for m4a
-    key=hashlib.new('md5',(hash_val+'kgcloud').encode('utf-8')).hexdigest()
-    html=get_html('http://trackercdn.kugou.com/i/?pid=6&key=%s&acceptMp3=1&cmd=4&hash=%s'%(key,hash_val))
-    j=loads(html)
-    url=j['url']
-    songtype, ext, size = url_info(url)
-    print_info(site_info, title, songtype, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge=merge)
-    
-        # mgid%3Auma%3Avideo%3Amtv81.com%3A897974
-    vid = match1(html, r'getTheVideo\('(.*?)'')
-    xml = parseString(
-        get_content('http://intl.esperanto.mtvi.com/www/xml/media/mediaGen.jhtml?uri={}&flashPlayer=LNX%2013,0,0,206&geo=CN&sid=123456'.format(vid)))
+        def is_satisfied_by(self, candidate):
+        return bool(not self._wrapped.is_satisfied_by(candidate))
