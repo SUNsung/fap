@@ -1,161 +1,174 @@
 
         
-        
-def default_hooks():
-    return dict((event, []) for event in HOOKS)
+        # (c) 2016 Red Hat, Inc.
+#
+# This file is part of Ansible
+#
+# Ansible is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Ansible is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
+'''CLI tool for starting new Shippable CI runs.'''
     
-        :param url: URL for the new :class:`Request` object.
-    :param data: (optional) Dictionary (will be form-encoded), bytes, or file-like object to send in the body of the :class:`Request`.
-    :param json: (optional) json data to send in the body of the :class:`Request`.
-    :param \*\*kwargs: Optional arguments that ``request`` takes.
-    :return: :class:`Response <Response>` object
-    :rtype: requests.Response
-    '''
+        @g_connect
+    def __call_galaxy(self, url, args=None, headers=None, method=None):
+        if args and not headers:
+            headers = self.__auth_header()
+        try:
+            display.vvv(url)
+            resp = open_url(url, data=args, validate_certs=self._validate_certs, headers=headers, method=method,
+                            timeout=20)
+            data = json.loads(to_text(resp.read(), errors='surrogate_or_strict'))
+        except HTTPError as e:
+            res = json.loads(to_text(e.fp.read(), errors='surrogate_or_strict'))
+            raise AnsibleError(res['detail'])
+        return data
     
-        # Client Error.
-    400: ('bad_request', 'bad'),
-    401: ('unauthorized',),
-    402: ('payment_required', 'payment'),
-    403: ('forbidden',),
-    404: ('not_found', '-o-'),
-    405: ('method_not_allowed', 'not_allowed'),
-    406: ('not_acceptable',),
-    407: ('proxy_authentication_required', 'proxy_auth', 'proxy_authentication'),
-    408: ('request_timeout', 'timeout'),
-    409: ('conflict',),
-    410: ('gone',),
-    411: ('length_required',),
-    412: ('precondition_failed', 'precondition'),
-    413: ('request_entity_too_large',),
-    414: ('request_uri_too_large',),
-    415: ('unsupported_media_type', 'unsupported_media', 'media_type'),
-    416: ('requested_range_not_satisfiable', 'requested_range', 'range_not_satisfiable'),
-    417: ('expectation_failed',),
-    418: ('im_a_teapot', 'teapot', 'i_am_a_teapot'),
-    421: ('misdirected_request',),
-    422: ('unprocessable_entity', 'unprocessable'),
-    423: ('locked',),
-    424: ('failed_dependency', 'dependency'),
-    425: ('unordered_collection', 'unordered'),
-    426: ('upgrade_required', 'upgrade'),
-    428: ('precondition_required', 'precondition'),
-    429: ('too_many_requests', 'too_many'),
-    431: ('header_fields_too_large', 'fields_too_large'),
-    444: ('no_response', 'none'),
-    449: ('retry_with', 'retry'),
-    450: ('blocked_by_windows_parental_controls', 'parental_controls'),
-    451: ('unavailable_for_legal_reasons', 'legal_reasons'),
-    499: ('client_closed_request',),
-    
-            s = pickle.loads(pickle.dumps(s))
-        s.proxies = getproxies()
-    
-        print('Loading [World Bank's Health Nutrition and Population Stats]')
-    data.load_world_bank_health_n_pop()
-    
-        @property
-    def groupby_column_names(self):
-        return sorted([c.column_name for c in self.columns if c.groupby])
-    
-        @classmethod
-    def query_datasources_by_permissions(cls, session, database, permissions):
-        datasource_class = ConnectorRegistry.sources[database.type]
-        return (
-            session.query(datasource_class)
-            .filter_by(database_id=database.id)
-            .filter(datasource_class.perm.in_(permissions))
-            .all()
-        )
-    
-    appbuilder.add_link(
-    'Scan New Datasources',
-    label=__('Scan New Datasources'),
-    href='/druid/scan_new_datasources/',
-    category='Sources',
-    category_label=__('Sources'),
-    category_icon='fa-database',
-    icon='fa-refresh')
-appbuilder.add_link(
-    'Refresh Druid Metadata',
-    label=__('Refresh Druid Metadata'),
-    href='/druid/refresh_datasources/',
-    category='Sources',
-    category_label=__('Sources'),
-    category_icon='fa-database',
-    icon='fa-cog')
-    
-    naming_convention = {
-    'fk': 'fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s',
-}
+        return results
+
     
     
-def upgrade():
-    op.add_column('metrics', sa.Column('warning_text', sa.Text(), nullable=True))
-    op.add_column('sql_metrics', sa.Column('warning_text', sa.Text(), nullable=True))
+@keras_test
+def test_gaussiandropout_legacy_interface():
+    old_layer = keras.layers.GaussianDropout(p=0.6, name='drop')
+    new_layer_1 = keras.layers.GaussianDropout(rate=0.6, name='drop')
+    new_layer_2 = keras.layers.GaussianDropout(0.6, name='drop')
+    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer_1.get_config())
+    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer_2.get_config())
     
-        forbidden_extensions = ['html', 'htm'] if results.nohtml else []
+    from keras.utils.test_utils import get_test_data
+    
+    print('Train...')
+model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=epochs,
+          validation_data=(x_test, y_test))
+score, acc = model.evaluate(x_test, y_test, batch_size=batch_size)
+print('Test score:', score)
+print('Test accuracy:', acc)
+
+    
+        model.summary()
+    json_str = model.to_json()
+    model_from_json(json_str)
+    
+        def dispatch_call(self, call):
+        if call.rank not in (Rank.OPERATOR, Rank.SUPERVISOR, Rank.DIRECTOR):
+            raise ValueError('Invalid call rank: {}'.format(call.rank))
+        employee = None
+        if call.rank == Rank.OPERATOR:
+            employee = self._dispatch_call(call, self.operators)
+        if call.rank == Rank.SUPERVISOR or employee is None:
+            employee = self._dispatch_call(call, self.supervisors)
+        if call.rank == Rank.DIRECTOR or employee is None:
+            employee = self._dispatch_call(call, self.directors)
+        if employee is None:
+            self.queued_calls.append(call)
+    
+        def bfs(self, source, dest):
+        if source is None:
+            return False
+        queue = deque()
+        queue.append(source)
+        source.visit_state = State.visited
+        while queue:
+            node = queue.popleft()
+            print(node)
+            if dest is node:
+                return True
+            for adjacent_node in node.adj_nodes.values():
+                if adjacent_node.visit_state == State.unvisited:
+                    queue.append(adjacent_node)
+                    adjacent_node.visit_state = State.visited
+        return False
+    
+    from concurrent.futures import _base
+    
+    def download_urls_sequential(urls, timeout=60):
+    url_to_content = {}
+    for url in urls:
+        try:
+            url_to_content[url] = load_url(url, timeout=timeout)
+        except:
+            pass
+    return url_to_content
+    
+    from ycm.client.base_request import ( BaseRequest, BuildRequestData,
+                                      HandleServerException )
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
     
-def main():
-    tornado.options.parse_command_line()
-    application = tornado.web.Application([
-        (r'/', MainHandler),
-    ])
-    http_server = tornado.httpserver.HTTPServer(application)
-    http_server.listen(options.port)
-    tornado.ioloop.IOLoop.current().start()
+def RegexFilter_test():
+  opts = _JavaFilter( { 'regex' : 'taco' } )
+  f = _CreateFilterForTypes( opts, [ 'java' ] )
     
-        @gen.coroutine
-    def resolve(self, host, port, family=0):
-        if is_valid_ip(host):
-            addresses = [host]
+    from ycm.client.base_request import BaseRequest
+from ycm.youcompleteme import YouCompleteMe
+from ycmd import user_options_store
+from ycmd.utils import CloseStandardStreams, WaitUntilProcessIsTerminated
+    
+        def test_sales_manager_shall_respond_through_proxy_with_delay(cls):
+        cls.p.busy = 'Yes'
+        start_time = time()
+        cls.p.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+Sales Manager is busy\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
+    
+    
+class Action(object):
+    
+        def run(self, msg):
+        print('{} got {}'.format(self.name, msg))
+    
+    
+@coroutine
+def coroutine1(target):
+    while True:
+        request = yield
+        if 0 < request <= 10:
+            print('request {} handled in coroutine 1'.format(request))
         else:
-            # gethostbyname doesn't take callback as a kwarg
-            self.channel.gethostbyname(host, family, (yield gen.Callback(1)))
-            callback_args = yield gen.Wait(1)
-            assert isinstance(callback_args, gen.Arguments)
-            assert not callback_args.kwargs
-            result, error = callback_args.args
-            if error:
-                raise IOError('C-Ares returned error %s: %s while resolving %s' %
-                              (error, pycares.errno.strerror(error), host))
-            addresses = result.addresses
-        addrinfo = []
-        for address in addresses:
-            if '.' in address:
-                address_family = socket.AF_INET
-            elif ':' in address:
-                address_family = socket.AF_INET6
-            else:
-                address_family = socket.AF_UNSPEC
-            if family != socket.AF_UNSPEC and family != address_family:
-                raise IOError('Requested socket family %d but got %d' %
-                              (family, address_family))
-            addrinfo.append((address_family, (address, port)))
-        raise gen.Return(addrinfo)
-
+            target.send(request)
     
+        # verify that none of the target files exist
+    assert(not lexists('foo.txt'))
+    assert(not lexists('bar.txt'))
+    assert(not lexists('baz.txt'))
+    try:
+        with open('foo.txt', 'w'):  # Creating the file
+            pass
     
-MAIN = '''\
-import os
-import sys
+    *TL;DR80
+Provides the ability to restore an object to its previous state.
+'''
     
-        def test_failed_setup(self):
-        self.http_client = self.create_client(max_clients=1)
-        for i in range(5):
-            response = self.fetch(u'/ユニコード')
-            self.assertIsNot(response.error, None)
-
-    
-    # Increasing --n without --keepalive will eventually run into problems
-# due to TIME_WAIT sockets
-define('n', type=int, default=15000)
-define('c', type=int, default=25)
-define('keepalive', type=bool, default=False)
-define('quiet', type=bool, default=False)
-    
-        logging.warning('Starting fetch with curl client')
-    curl_client = CurlAsyncHTTPClient()
-    curl_client.fetch('http://localhost:%d/' % options.port,
-                      callback=callback)
-    IOLoop.current().start()
+        def update(self, subject):
+        print(u'DecimalViewer: Subject %s has data %d' %
+              (subject.name, subject.data))
