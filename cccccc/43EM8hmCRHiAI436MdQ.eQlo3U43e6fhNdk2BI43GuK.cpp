@@ -1,285 +1,291 @@
 
         
-        
-    {  std::unique_ptr<PartialRunState> partial_run = MakeUnique<PartialRunState>();
-  partial_run->cancellation_manager = MakeUnique<CancellationManager>();
-  *cancellation_manager = partial_run->cancellation_manager.get();
-  step_id_to_partial_run_[step_id] = std::move(partial_run);
-  return true;
+        template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15,
+    typename T16, typename T17, typename T18, typename T19, typename T20,
+    typename T21, typename T22, typename T23, typename T24, typename T25,
+    typename T26, typename T27, typename T28, typename T29, typename T30,
+    typename T31, typename T32>
+internal::ValueArray32<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
+    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
+    T29, T30, T31, T32> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7,
+    T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15,
+    T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23,
+    T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31,
+    T32 v32) {
+  return internal::ValueArray32<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
+      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
+      T26, T27, T28, T29, T30, T31, T32>(v1, v2, v3, v4, v5, v6, v7, v8, v9,
+      v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23,
+      v24, v25, v26, v27, v28, v29, v30, v31, v32);
 }
     
-    #include 'tensorflow/core/lib/core/errors.h'
-#include 'tensorflow/core/lib/core/status.h'
-#include 'tensorflow/core/lib/gtl/array_slice.h'
-#include 'tensorflow/core/platform/types.h'
     
-    #endif  // TENSORFLOW_KERNELS_SPARSE_TENSOR_DENSE_ADD_OP_H_
-
+    {}  // namespace internal
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    // A PluginConfig describes the set of plugins to be used by a StreamExecutor
-// instance. Each plugin is defined by an arbitrary identifier, usually best set
-// to the address static member in the implementation (to avoid conflicts).
-//
-// A PluginConfig may be passed to the StreamExecutor constructor - the plugins
-// described therein will be used to provide BLAS, DNN, FFT, and RNG
-// functionality. Platform-appropriate defaults will be used for any un-set
-// libraries. If a platform does not support a specified plugin (ex. cuBLAS on
-// an OpenCL executor), then an error will be logged and no plugin operations
-// will succeed.
-//
-// The StreamExecutor BUILD target does not link ANY plugin libraries - even
-// common host fallbacks! Any plugins must be explicitly linked by dependent
-// targets. See the cuda, opencl and host BUILD files for implemented plugin
-// support (search for 'plugin').
-class PluginConfig {
- public:
-  // Value specifying the platform's default option for that plugin.
-  static const PluginId kDefault;
-    }
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    #endif  // TENSORFLOW_PLATFORM_PREFETCH_H_
-
-    
-    namespace tensorflow {
-    }
-    
-    
-    {    input_buffer_.reset(new io::InputBuffer(file_.get(), kBufferSize));
-    for (; line_number_ < skip_header_lines_; ++line_number_) {
-      string line_contents;
-      Status status = input_buffer_->ReadLine(&line_contents);
-      if (errors::IsOutOfRange(status)) {
-        // We ignore an end of file error when skipping header lines.
-        // We will end up skipping this file.
-        return Status::OK();
-      }
-      TF_RETURN_IF_ERROR(status);
-    }
-    return Status::OK();
-  }
-    
-      // If instruction is part of inputs, don't reset the bit_vector.
-  if (std::find(inputs.begin(), inputs.end(), instruction) == inputs.end()) {
-    bit_vector.SetToZero();
-  }
-  bit_vector.Set(GetIndex(instruction));
-  for (const HloInstruction* input : inputs) {
-    bit_vector.OrWith(GetBitVector(input));
-  }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    
-    {    bool checkSubsetPublic( const CvMat* ms1, int count, bool checkPartialSubset );
+    // First, define a fixture class template.  It should be parameterized
+// by a type.  Remember to derive it from testing::Test.
+template <typename T>
+class FooTest : public testing::Test {
+  ...
 };
     
-    /** @file
- * @deprecated Use @ref cudev instead.
- */
+      // Returns a copy of the FilePath with the directory part removed.
+  // Example: FilePath('path/to/file').RemoveDirectoryName() returns
+  // FilePath('file'). If there is no directory part ('just_a_file'), it returns
+  // the FilePath unmodified. If there is no file part ('just_a_dir/') it
+  // returns an empty FilePath ('').
+  // On Windows platform, '\' is the path separator, otherwise it is '/'.
+  FilePath RemoveDirectoryName() const;
     
-    #endif //HAVE_LAPACK
-#endif //OPENCV_CORE_HAL_INTERNAL_HPP
-
+      void depart() {
+    if (link_.depart()) delete value_;
+  }
     
-    
-    {        return dlsym(h, name);
+       private:
+    Iterator(const Iterator& other)
+        : base_(other.base_),
+        begin1_(other.begin1_),
+        end1_(other.end1_),
+        current1_(other.current1_),
+        begin2_(other.begin2_),
+        end2_(other.end2_),
+        current2_(other.current2_),
+        begin3_(other.begin3_),
+        end3_(other.end3_),
+        current3_(other.current3_),
+        begin4_(other.begin4_),
+        end4_(other.end4_),
+        current4_(other.current4_),
+        begin5_(other.begin5_),
+        end5_(other.end5_),
+        current5_(other.current5_),
+        begin6_(other.begin6_),
+        end6_(other.end6_),
+        current6_(other.current6_),
+        begin7_(other.begin7_),
+        end7_(other.end7_),
+        current7_(other.current7_) {
+      ComputeCurrentValue();
     }
-    #define CV_CL_GET_PROC_ADDRESS(name) GetProcAddress(name)
+    
+    
+$for i [[
+template <GTEST_$(n)_TYPENAMES_(T)>
+struct TupleElement<true, $i, GTEST_$(n)_TUPLE_(T) > {
+  typedef T$i type;
+};
+    
+    // We don't want to require the users to write TypesN<...> directly,
+// as that would require them to count the length.  Types<...> is much
+// easier to write, but generates horrible messages when there is a
+// compiler error, as gcc insists on printing out each template
+// argument, even if it has the default value (this means Types<int>
+// will appear as Types<int, None, None, ..., None> in the compiler
+// errors).
+//
+// Our solution is to combine the best part of the two approaches: a
+// user would write Types<T1, ..., TN>, and Google Test will translate
+// that to TypesN<T1, ..., TN> internally to make error messages
+// readable.  The translation is done by the 'type' member of the
+// Types template.
+    
+    
+    {    if (((req_comps == 1) && (decoder.get_num_components() == 1)) || ((req_comps == 4) && (decoder.get_num_components() == 3)))
+      memcpy(pDst, pScan_line, dst_bpl);
+    else if (decoder.get_num_components() == 1)
+    {
+      if (req_comps == 3)
+      {
+        for (int x = 0; x < image_width; x++)
+        {
+          uint8 luma = pScan_line[x];
+          pDst[0] = luma;
+          pDst[1] = luma;
+          pDst[2] = luma;
+          pDst += 3;
+        }
+      }
+      else
+      {
+        for (int x = 0; x < image_width; x++)
+        {
+          uint8 luma = pScan_line[x];
+          pDst[0] = luma;
+          pDst[1] = luma;
+          pDst[2] = luma;
+          pDst[3] = 255;
+          pDst += 4;
+        }
+      }
+    }
+    else if (decoder.get_num_components() == 3)
+    {
+      if (req_comps == 1)
+      {
+        const int YR = 19595, YG = 38470, YB = 7471;
+        for (int x = 0; x < image_width; x++)
+        {
+          int r = pScan_line[x*4+0];
+          int g = pScan_line[x*4+1];
+          int b = pScan_line[x*4+2];
+          *pDst++ = static_cast<uint8>((r * YR + g * YG + b * YB + 32768) >> 16);
+        }
+      }
+      else
+      {
+        for (int x = 0; x < image_width; x++)
+        {
+          pDst[0] = pScan_line[x*4+0];
+          pDst[1] = pScan_line[x*4+1];
+          pDst[2] = pScan_line[x*4+2];
+          pDst += 3;
+        }
+      }
+    }
+  }
+    
+    
+int             oc_has_mode_metrics;
+oc_mode_metrics OC_MODE_METRICS[64][3][2][OC_SAD_BINS];
+# endif
+    
+    /*Note that we do not provide a macro for abs(), because it is provided as a
+   library function, which we assume is translated into an intrinsic to avoid
+   the function call overhead and then implemented in the smartest way for the
+   target platform.
+  With modern gcc (4.x), this is true: it uses cmov instructions if the
+   architecture supports it and branchless bit-twiddling if it does not (the
+   speed difference between the two approaches is not measurable).
+  Interestingly, the bit-twiddling method was patented in 2000 (US 6,073,150)
+   by Sun Microsystems, despite prior art dating back to at least 1996:
+   http://web.archive.org/web/19961201174141/www.x86.org/ftp/articles/pentopt/PENTOPT.TXT
+  On gcc 3.x, however, our assumption is not true, as abs() is translated to a
+   conditional jump, which is horrible on deeply piplined architectures (e.g.,
+   all consumer architectures for the past decade or more).
+  Also be warned that -C*abs(x) where C is a constant is mis-optimized as
+   abs(C*x) on every gcc release before 4.2.3.
+  See bug http://gcc.gnu.org/bugzilla/show_bug.cgi?id=34130 */
+    
+      &_huff_book_line_128x11_0sub0,
+  &_huff_book_line_128x11_1sub0,
+  &_huff_book_line_128x11_1sub1,
+  &_huff_book_line_128x11_2sub1,
+  &_huff_book_line_128x11_2sub2,
+  &_huff_book_line_128x11_2sub3,
+  &_huff_book_line_128x11_3sub1,
+  &_huff_book_line_128x11_3sub2,
+  &_huff_book_line_128x11_3sub3,
+};
+static const static_codebook*const _floor_128x17_books[]={
+  &_huff_book_line_128x17_class1,
+  &_huff_book_line_128x17_class2,
+  &_huff_book_line_128x17_class3,
+    
+      {1,0,32,  &_residue_44_low_un,
+   &_huff_book__44u2__long,&_huff_book__44u2__long,
+   &_resbook_44u_2,&_resbook_44u_2}
+};
+static const vorbis_residue_template _res_44u_3[]={
+  {1,0,16,  &_residue_44_low_un,
+   &_huff_book__44u3__short,&_huff_book__44u3__short,
+   &_resbook_44u_3,&_resbook_44u_3},
+    
+    #ifdef _MSC_VER
+/* MS Visual Studio doesn't have C99 inline keyword. */
+#define inline __inline
 #endif
     
-    /**
- * @brief A backing storage domain name, used for key/value based storage.
- *
- * There are certain 'cached' variables such as a node-unique UUID or negotiated
- * 'node_key' following enrollment. If a value or setting must persist between
- * osqueryi or osqueryd runs it should be stored using the kPersistentSetting%s
- * domain.
- */
-extern const std::string kPersistentSettings;
-    
-     private:
-  /**
-   * @brief Default constructor.
-   *
-   * Since instances of Dispatcher should only be created via instance(),
-   * Dispatcher's constructor is private.
-   */
-  Dispatcher() = default;
-  virtual ~Dispatcher() = default;
-    
-      /**
-   * @brief Halt the EventPublisher run loop.
-   *
-   * Any EventSubscriber%s with Subscription%s for this EventPublisher will
-   * become useless. osquery callers MUST deregister events.
-   * EventPublisher%s assume they can hook/trampoline, which requires cleanup.
-   * This will tear down and remove the publisher if the run loop did not start.
-   * Otherwise it will call end on the publisher and assume the run loop will
-   * tear down and remove.
-   *
-   * @param pub The string label for the EventPublisher.
-   *
-   * @return Did the EventPublisher deregister cleanly.
-   */
-  static Status deregisterEventPublisher(const EventPublisherRef& pub);
-    
-    #pragma once
-    
-      /**
-   * @brief implicit conversion to bool
-   *
-   * Allows easy use of Status in an if statement, as below:
-   *
-   * @code{.cpp}
-   *   if (doSomethingThatReturnsStatus()) {
-   *     LOG(INFO) << 'Success!';
-   *   }
-   * @endcode
-   */
-  /* explicit */ explicit operator bool() const {
-    return ok();
-  }
-    
-    KMOD_EXPLICIT_DECL(com.facebook.security.osquery,
-                   STR(OSQUERY_KERNEL_COMMUNICATION_VERSION),
-                   _start,
-                   _stop)
-DECLHIDDEN(kmod_start_func_t *) _realmain = OsqueryStart;
-DECLHIDDEN(kmod_stop_func_t *) _antimain = OsqueryStop;
-DECLHIDDEN(int) _kext_apple_cc = __APPLE_CC__;
+    /*The number of bits to output at a time.*/
+# define EC_SYM_BITS   (8)
+/*The total number of bits in each of the state registers.*/
+# define EC_CODE_BITS  (32)
+/*The maximum symbol value.*/
+# define EC_SYM_MAX    ((1U<<EC_SYM_BITS)-1)
+/*Bits to shift by to move a symbol into the high-order position.*/
+# define EC_CODE_SHIFT (EC_CODE_BITS-EC_SYM_BITS-1)
+/*Carry bit of the high-order range symbol.*/
+# define EC_CODE_TOP   (((opus_uint32)1U)<<(EC_CODE_BITS-1))
+/*Low-order bit of the high-order range symbol.*/
+# define EC_CODE_BOT   (EC_CODE_TOP>>EC_SYM_BITS)
+/*The number of bits available for the last, partial symbol in the code field.*/
+# define EC_CODE_EXTRA ((EC_CODE_BITS-2)%EC_SYM_BITS+1)
+#endif
 
     
-    class CarverTests : public testing::Test {
- public:
-  CarverTests() {
-    fs::create_directories(kFakeDirectory + '/files_to_carve/');
-    writeTextFile(kFakeDirectory + '/files_to_carve/secrets.txt',
-                  'This is a message I'd rather no one saw.');
-    writeTextFile(kFakeDirectory + '/files_to_carve/evil.exe',
-                  'MZP\x00\x02\x00\x00\x00\x04\x00\x0f\x00\xff\xff');
-    }
-    }
-    
-    namespace errc = boost::system::errc;
-namespace fs = boost::filesystem;
-namespace pt = boost::property_tree;
-    
-    Status platformStrncpy(char* dst, size_t nelms, const char* src, size_t count) {
-  if (dst == nullptr || src == nullptr || nelms == 0) {
-    return Status(1, 'Failed to strncpy: invalid arguments');
+      // Append array of per-filter offsets
+  const uint32_t array_offset = result_.size();
+  for (size_t i = 0; i < filter_offsets_.size(); i++) {
+    PutFixed32(&result_, filter_offsets_[i]);
   }
+    
+          case kNewFile:
+        if (GetLevel(&input, &level) &&
+            GetVarint64(&input, &f.number) &&
+            GetVarint64(&input, &f.file_size) &&
+            GetInternalKey(&input, &f.smallest) &&
+            GetInternalKey(&input, &f.largest)) {
+          new_files_.push_back(std::make_pair(level, f));
+        } else {
+          msg = 'new-file entry';
+        }
+        break;
+    
+    
+    {  Slice Generate(int len) {
+    if (pos_ + len > data_.size()) {
+      pos_ = 0;
+      assert(len < data_.size());
     }
+    pos_ += len;
+    return Slice(data_.data() + pos_ - len, len);
+  }
+};
+    
+    #include <cstdlib>
+#include <stdio.h>
+#include <string.h>
+    
+    [[noreturn]] void usage(const char* name) {
+  std::cerr << folly::format(
+      'Usage: {0}\n'
+      '         list all huge page sizes and their mount points\n'
+      '       {0} -cp <src_file> <dest_nameprefix>\n'
+      '         copy src_file to a huge page file\n',
+      name);
+  exit(1);
+}
     
     
     {
-    {      if (sharpenmap[index]) {
-        if (sharpen) yuv[channel][index] = sharpened[index];
-      } else if (blurmap[index]) {
-        if (blur) yuv[channel][index] = blurred[index];
-      }
-    }
-  }
-    
-    const double* Srgb8ToLinearTable() {
-  static const double* const kSrgb8ToLinearTable = NewSrgb8ToLinearTable();
-  return kSrgb8ToLinearTable;
-}
-    
-    // Definition of error codes for parsing jpeg files.
-    
-      // Fill in 2nd level tables and add pointers to root table.
-  table += table_size;
-  table_size = 0;
-  low = 0;
-  for (len = kJpegHuffmanRootTableBits + 1;
-       len <= kJpegHuffmanMaxBitLength; ++len) {
-    for (; count[len] > 0; --count[len]) {
-      // Start a new sub-table if the previous one is full.
-      if (low >= table_size) {
-        table += table_size;
-        table_bits = NextTableBitSize(count, len);
-        table_size = 1 << table_bits;
-        total_size += table_size;
-        low = 0;
-        lut[key].bits = table_bits + kJpegHuffmanRootTableBits;
-        lut[key].value = (table - lut) - key;
-        ++key;
-      }
-      code.bits = len - kJpegHuffmanRootTableBits;
-      code.value = symbols[idx++];
-      reps = 1 << (table_bits - code.bits);
-      while (reps--) {
-        table[low++] = code;
-      }
-    }
-  }
-    
-    namespace fuzzer {
-    }
-    
-      void ExecuteCallback(const uint8_t *Data, size_t Size);
-  size_t RunOne(const uint8_t *Data, size_t Size);
-    
-    // The control file example:
-//
-// 3 # The number of inputs
-// 1 # The number of inputs in the first corpus, <= the previous number
-// file0
-// file1
-// file2  # One file name per line.
-// STARTED 0 123  # FileID, file size
-// DONE 0 1 4 6 8  # FileID COV1 COV2 ...
-// STARTED 1 456  # If DONE is missing, the input crashed while processing.
-// STARTED 2 567
-// DONE 2 8 9
-bool Merger::Parse(std::istream &IS, bool ParseCoverage) {
-  LastFailure.clear();
-  std::string Line;
-    }
-    
-    struct MergeFileInfo {
-  std::string Name;
-  size_t Size = 0;
-  std::vector<uint32_t> Features;
+    {  folly::File file_;
 };
-    
-      /// Creates a cross-over of two pieces of Data, returns its size.
-  size_t CrossOver(const uint8_t *Data1, size_t Size1, const uint8_t *Data2,
-                   size_t Size2, uint8_t *Out, size_t MaxOutSize);
-    
-    #endif  // LLVM_FUZZER_OPTIONS_H
+} // namespace folly
 
     
-    // TableOfRecentCompares (TORC) remembers the most recently performed
-// comparisons of type T.
-// We record the arguments of CMP instructions in this table unconditionally
-// because it seems cheaper this way than to compute some expensive
-// conditions inside __sanitizer_cov_trace_cmp*.
-// After the unit has been executed we may decide to use the contents of
-// this table to populate a Dictionary.
-template<class T, size_t kSizeT>
-struct TableOfRecentCompares {
-  static const size_t kSize = kSizeT;
-  struct Pair {
-    T A, B;
-  };
-  void Insert(size_t Idx, T Arg1, T Arg2) {
-    Idx = Idx % kSize;
-    Table[Idx].A = Arg1;
-    Table[Idx].B = Arg2;
+    void LogConfig::update(const LogConfig& other) {
+  // Update handlerConfigs_ with all of the entries from the other LogConfig.
+  // Any entries already present in our handlerConfigs_ are replaced wholesale.
+  for (const auto& entry : other.handlerConfigs_) {
+    if (entry.second.type.hasValue()) {
+      // This is a complete LogHandlerConfig that should be inserted
+      // or completely replace an existing handler config with this name.
+      auto result = handlerConfigs_.insert(entry);
+      if (!result.second) {
+        result.first->second = entry.second;
+      }
+    } else {
+      // This config is updating an existing LogHandlerConfig rather than
+      // completely replacing it.
+      auto iter = handlerConfigs_.find(entry.first);
+      if (iter == handlerConfigs_.end()) {
+        throw std::invalid_argument(to<std::string>(
+            'cannot update configuration for unknown log handler \'',
+            entry.first,
+            '\''));
+      }
+      iter->second.update(entry.second);
+    }
   }
     }
