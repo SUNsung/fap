@@ -1,187 +1,163 @@
 
         
-            # Separating the 'table of contents' from the contents (blocks)
-    table_of_contents = ''.join(read_me.split('- - -')[0])
-    blocks = ''.join(read_me.split('- - -')[1]).split('\n# ')
-    for i in range(len(blocks)):
-        if i == 0:
-            blocks[i] = blocks[i] + '\n'
-        else:
-            blocks[i] = '# ' + blocks[i] + '\n'
-    
-    entry_template = textwrap.dedent('''
-    <entry>
-        <id>https://yt-dl.org/feed/youtube-dl-updates-feed/youtube-dl-@VERSION@</id>
-        <title>New version @VERSION@</title>
-        <link href='http://rg3.github.io/youtube-dl' />
-        <content type='xhtml'>
-            <div xmlns='http://www.w3.org/1999/xhtml'>
-                Downloads available at <a href='https://yt-dl.org/downloads/@VERSION@/'>https://yt-dl.org/downloads/@VERSION@/</a>
-            </div>
-        </content>
-        <author>
-            <name>The youtube-dl maintainers</name>
-        </author>
-        <updated>@TIMESTAMP@</updated>
-    </entry>
-    ''')
-    
-    header = oldreadme[:oldreadme.index('# OPTIONS')]
-footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
+                String:                    '#4e9a06',        # class: 's'
+        String.Backtick:           '#4e9a06',        # class: 'sb'
+        String.Char:               '#4e9a06',        # class: 'sc'
+        String.Doc:                'italic #8f5902', # class: 'sd' - like a comment
+        String.Double:             '#4e9a06',        # class: 's2'
+        String.Escape:             '#4e9a06',        # class: 'se'
+        String.Heredoc:            '#4e9a06',        # class: 'sh'
+        String.Interpol:           '#4e9a06',        # class: 'si'
+        String.Other:              '#4e9a06',        # class: 'sx'
+        String.Regex:              '#4e9a06',        # class: 'sr'
+        String.Single:             '#4e9a06',        # class: 's1'
+        String.Symbol:             '#4e9a06',        # class: 'ss'
     
     
-def report_warning(message):
+@pytest.fixture
+def httpbin(httpbin):
+    return prepare_url(httpbin)
+    
+        :param url: URL for the new :class:`Request` object.
+    :param data: (optional) Dictionary (will be form-encoded), bytes, or file-like object to send in the body of the :class:`Request`.
+    :param json: (optional) json data to send in the body of the :class:`Request`.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
     '''
-    Print the message to stderr, it will be prefixed with 'WARNING:'
-    If stderr is a tty file the 'WARNING:' will be colored
+    
+        @possible_keys
+    def test_delitem(self, key):
+        del self.case_insensitive_dict[key]
+        assert key not in self.case_insensitive_dict
+    
+        def __eq__(self, other):
+        return all([
+            self.username == getattr(other, 'username', None),
+            self.password == getattr(other, 'password', None)
+        ])
+    
+        def __setitem__(self, name, value):
+        '''Dict-like __setitem__ for compatibility with client code. Throws
+        exception if there is already a cookie of that name in the jar. In that
+        case, use the more explicit set() method instead.
+        '''
+        self.set(name, value)
+    
+    
+class TestGetEnvironProxies:
+    '''Ensures that IP addresses are correctly matches with ranges
+    in no_proxy variable.
     '''
-    if sys.stderr.isatty() and compat_os_name != 'nt':
-        _msg_header = '\033[0;33mWARNING:\033[0m'
-    else:
-        _msg_header = 'WARNING:'
-    output = '%s %s\n' % (_msg_header, message)
-    if 'b' in getattr(sys.stderr, 'mode', '') or sys.version_info[0] < 3:
-        output = output.encode(preferredencoding())
-    sys.stderr.write(output)
     
-        def assertMatch(self, url, ie_list):
-        self.assertEqual(self.matching_ies(url), ie_list)
-    
-    if __name__ == '__main__':
-    unittest.main()
-
-    
-                    if ''' not in code and ''' not in code:
-                    continue
-                assertRegexpMatches(
-                    self,
-                    code,
-                    r'(?:(?:#.*?|\s*)\n)*from __future__ import (?:[a-z_]+,\s*)*unicode_literals',
-                    'unicode_literals import  missing in %s' % fn)
+            :param url: URL for the new :class:`Request` object.
+        :param data: (optional) Dictionary, bytes, or file-like object to send in the body of the :class:`Request`.
+        :param \*\*kwargs: Optional arguments that ``request`` takes.
+        :rtype: requests.Response
+        '''
     
     
-class RtspFD(FileDownloader):
-    def real_download(self, filename, info_dict):
-        url = info_dict['url']
-        self.report_destination(filename)
-        tmpfilename = self.temp_name(filename)
+def test_digestauth_401_count_reset_on_redirect():
+    '''Ensure we correctly reset num_401_calls after a successful digest auth,
+    followed by a 302 redirect to another digest auth prompt.
     
-    
-def gen_extractors():
-    ''' Return a list of an instance of every supported extractor.
-    The order does matter; the first extractor matched is the one handling the URL.
-    '''
-    return [klass() for klass in gen_extractor_classes()]
-    
-            uploader = self._search_regex(
-            r'Added by\s*:\s*<a[^>]+>([^<]+)</a>', webpage, 'uploader', default=None)
-        upload_date = unified_strdate(self._search_regex(
-            r'Added on\s*:\s*([\d-]+)', webpage, 'upload date', default=None))
-    
-    
-class ClipRsIE(OnetBaseIE):
-    _VALID_URL = r'https?://(?:www\.)?clip\.rs/(?P<id>[^/]+)/\d+'
-    _TEST = {
-        'url': 'http://www.clip.rs/premijera-frajle-predstavljaju-novi-spot-za-pesmu-moli-me-moli/3732',
-        'md5': 'c412d57815ba07b56f9edc7b5d6a14e5',
-        'info_dict': {
-            'id': '1488842.1399140381',
-            'ext': 'mp4',
-            'title': 'PREMIJERA Frajle predstavljaju novi spot za pesmu Moli me, moli',
-            'description': 'md5:56ce2c3b4ab31c5a2e0b17cb9a453026',
-            'duration': 229,
-            'timestamp': 1459850243,
-            'upload_date': '20160405',
-        }
-    }
-    
-        history = model.fit(x_train, y_train, batch_size=batch_size,
-                        epochs=epochs // 3, verbose=0,
-                        sample_weight=sample_weight,
-                        validation_split=0.1)
-    
-        old_layer = keras.layers.AveragePooling3D((2, 2, 2), padding='valid', dim_ordering='th', name='avgpooling3d')
-    new_layer = keras.layers.AvgPool3D(pool_size=(2, 2, 2), padding='valid', data_format='channels_first', name='avgpooling3d')
+        old_layer = keras.layers.Convolution3D(5, 3, 3, 4,
+                                           init='normal',
+                                           subsample=(2, 2, 2),
+                                           border_mode='valid',
+                                           dim_ordering='th',
+                                           W_regularizer='l1',
+                                           b_regularizer='l2',
+                                           W_constraint='maxnorm',
+                                           b_constraint='unitnorm',
+                                           name='conv')
+    new_layer = keras.layers.Conv3D(5, (3, 3, 4),
+                                    kernel_initializer='normal',
+                                    strides=(2, 2, 2),
+                                    padding='valid',
+                                    kernel_regularizer='l1',
+                                    bias_regularizer='l2',
+                                    kernel_constraint='max_norm',
+                                    bias_constraint='unit_norm',
+                                    data_format='channels_first',
+                                    name='conv')
     assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
     
-                # Add regularization penalties
-            # and other layer-specific losses.
-            for loss_tensor in self.losses:
-                total_loss += loss_tensor
+        # test with functional API
+    x = Input(shape=(3, 2))
+    y = wrappers.TimeDistributed(model)(x)
+    outer_model = Model(x, y)
+    outer_model.compile(optimizer='rmsprop', loss='mse')
+    outer_model.fit(np.random.random((10, 3, 2)), np.random.random((10, 3, 3)),
+                    epochs=1, batch_size=10)
     
-        def __getitem__(self, idx):
-        return [np.random.random((self.batch_size, 3)), np.random.random((self.batch_size, 3))], [
-            np.random.random((self.batch_size, 4)),
-            np.random.random((self.batch_size, 3))]
+        preds = clf.predict(X_test, batch_size=batch_size)
+    assert preds.shape == (num_test, )
+    for prediction in np.unique(preds):
+        assert prediction in range(num_classes)
     
-    '''
-Note:
-batch_size is highly sensitive.
-Only 2 epochs are needed as the dataset is very small.
-'''
+        # a Model inside a Model
+    x = Input(shape=(1,))
+    y = Dense(2)(x)
+    inner_model = Model(x, y)
+    x = Input(shape=(1,))
+    y = inner_model(x)
+    outer_model = Model(x, y)
+    assert outer_model.trainable_weights == inner_model.trainable_weights
+    inner_model.trainable = False
+    assert outer_model.trainable_weights == []
+    inner_model.trainable = True
+    inner_model.layers[-1].trainable = False
+    assert outer_model.trainable_weights == []
     
-    # this Evaluator class makes it possible
-# to compute loss and gradients in one pass
-# while retrieving them via two separate functions,
-# 'loss' and 'grads'. This is done because scipy.optimize
-# requires separate functions for loss and gradients,
-# but computing them separately would be inefficient.
+        out = K.eval(weighted_loss(K.variable(x),
+                               K.variable(y),
+                               K.variable(weights),
+                               K.variable(mask)))
     
-    question = layers.Input(shape=(query_maxlen,), dtype='int32')
-encoded_question = layers.Embedding(vocab_size, EMBED_HIDDEN_SIZE)(question)
-encoded_question = layers.Dropout(0.3)(encoded_question)
-encoded_question = RNN(EMBED_HIDDEN_SIZE)(encoded_question)
-encoded_question = layers.RepeatVector(story_maxlen)(encoded_question)
+            x = np.random.random((1,) + shape)
     
-    - We start with input sequences from a domain (e.g. English sentences)
-    and correspding target sequences from another domain
-    (e.g. French sentences).
-- An encoder LSTM turns input sequences to 2 state vectors
-    (we keep the last LSTM state and discard the outputs).
-- A decoder LSTM is trained to turn the target sequences into
-    the same sequence but offset by one timestep in the future,
-    a training process called 'teacher forcing' in this context.
-    Is uses as initial state the state vectors from the encoder.
-    Effectively, the decoder learns to generate `targets[t+1...]`
-    given `targets[...t]`, conditioned on the input sequence.
-- In inference mode, when we want to decode unknown input sequences, we:
-    - Encode the input sequence into state vectors
-    - Start with a target sequence of size 1
-        (just the start-of-sequence character)
-    - Feed the state vectors and 1-char target sequence
-        to the decoder to produce predictions for the next character
-    - Sample the next character using these predictions
-        (we simply use argmax).
-    - Append the sampled character to the target sequence
-    - Repeat until we generate the end-of-sequence character or we
-        hit the character limit.
     
-    input_token_index = dict(
-    [(char, i) for i, char in enumerate(input_characters)])
-target_token_index = dict(
-    [(char, i) for i, char in enumerate(target_characters)])
+@keras_test
+def test_min_max_norm():
+    array = get_example_array()
+    for m in get_test_values():
+        norm_instance = constraints.min_max_norm(min_value=m, max_value=m * 2)
+        normed = norm_instance(K.variable(array))
+        value = K.eval(normed)
+        l2 = np.sqrt(np.sum(np.square(value), axis=0))
+        assert not l2[l2 < m]
+        assert not l2[l2 > m * 2 + 1e-5]
     
-    from __future__ import print_function
-from keras.callbacks import LambdaCallback
-from keras.models import Sequential
-from keras.layers import Dense, Activation
-from keras.layers import LSTM
-from keras.optimizers import RMSprop
-from keras.utils.data_utils import get_file
-import numpy as np
-import random
-import sys
-import io
+        # three different types of merging
+    merged_sum = legacy_layers.merge([masked_a, masked_b], mode='sum')
+    merged_concat = legacy_layers.merge([masked_a, masked_b], mode='concat', concat_axis=1)
+    merged_concat_mixed = legacy_layers.merge([masked_a, input_b], mode='concat', concat_axis=1)
     
-    # Import backend functions.
-if _BACKEND == 'cntk':
-    sys.stderr.write('Using CNTK backend\n')
-    from .cntk_backend import *
-elif _BACKEND == 'theano':
-    sys.stderr.write('Using Theano backend.\n')
-    from .theano_backend import *
-elif _BACKEND == 'tensorflow':
-    sys.stderr.write('Using TensorFlow backend.\n')
-    from .tensorflow_backend import *
-else:
-    raise ValueError('Unknown backend: ' + str(_BACKEND))
+    from ..utils.generic_utils import deserialize_keras_object
+from ..engine import Layer
+from ..engine import Input
+from ..engine import InputLayer
+from ..engine import InputSpec
+from .merge import *
+from .core import *
+from .convolutional import *
+from .pooling import *
+from .local import *
+from .recurrent import *
+from .cudnn_recurrent import *
+from .normalization import *
+from .embeddings import *
+from .noise import *
+from .advanced_activations import *
+from .wrappers import *
+from .convolutional_recurrent import *
+from ..legacy.layers import *
+    
+    def speckle(img):
+    severity = np.random.uniform(0, 0.6)
+    blur = ndimage.gaussian_filter(np.random.randn(*img.shape) * severity, 1)
+    img_speck = (img + blur)
+    img_speck[img_speck > 1] = 1
+    img_speck[img_speck <= 0] = 0
+    return img_speck
