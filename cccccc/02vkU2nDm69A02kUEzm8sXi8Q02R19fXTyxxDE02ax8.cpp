@@ -1,190 +1,297 @@
 
         
-        Variant HHVM_FUNCTION(xhprof_network_disable) {
-  return ServerStats::EndNetworkProfile();
+        void PartialRunMgr::ExecutorDone(int step_id, const Status& executor_status) {
+  StatusCallback done;
+  Status callback_status;
+  {
+    mutex_lock l(mu_);
+    auto run_it = step_id_to_partial_run_.find(step_id);
+    if (run_it == step_id_to_partial_run_.end()) {
+      return;
+    }
+    // If we found the partial_run, we call the final callback, if it
+    // exists.
+    // It is guaranteed that run_it->second->final_callback is left empty
+    // after the std::move call.
+    done = std::move(run_it->second->final_callback);
+    if (!executor_status.ok()) {
+      run_it->second->final_status = executor_status;
+    }
+    callback_status = run_it->second->final_status;
+    run_it->second->executor_done = true;
+  }
+  if (done != nullptr) {
+    done(callback_status);
+    mutex_lock l(mu_);
+    step_id_to_partial_run_.erase(step_id);
+  }
 }
     
-    void Timer::Dump() {
-  if (!Trace::moduleEnabledRelease(Trace::jittime)) return;
-  Trace::traceRelease('%s', Show().c_str());
+    
+    {  // Blocks until status is set.
+  Status status() {
+    invoked_.WaitForNotification();
+    return status_;
+  }
+};
+    
+    namespace tensorflow {
+    }
+    
+    #include 'tensorflow/core/lib/core/status.h'
+#include 'tensorflow/core/lib/core/stringpiece.h'
+#if !defined(IS_SLIM_BUILD)
+#include 'tensorflow/core/lib/io/zlib_compression_options.h'
+#include 'tensorflow/core/lib/io/zlib_outputbuffer.h'
+#endif  // IS_SLIM_BUILD
+#include 'tensorflow/core/platform/macros.h'
+#include 'tensorflow/core/platform/types.h'
+    
+    namespace Eigen {
+    }
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    
+    {  std::vector<string> workers;
+  cc->ListWorkers(&workers);
+  EXPECT_EQ(std::vector<string>(
+                {'/job:mnist/replica:0/task:0', '/job:mnist/replica:0/task:1',
+                 '/job:mnist/replica:0/task:2', '/job:mnist/replica:0/task:3',
+                 '/job:mnist/replica:0/task:4', '/job:mnist/replica:0/task:5'}),
+            workers);
 }
     
+     private:
+  std::unique_ptr<DesktopMediaList> media_list_;
     
-    {  return ret;
+     private:
+  scoped_refptr<AtomBrowserContext> browser_context_;
+    
+    namespace atom {
+    }
+    
+    // A self-destroyed class for handling save page request.
+class SavePageHandler : public content::DownloadManager::Observer,
+                        public content::DownloadItem::Observer {
+ public:
+  using SavePageCallback = base::Callback<void(v8::Local<v8::Value>)>;
+    }
+    
+    
+    {}  // namespace asar
+
+    
+    namespace internal {
+    }
+    
+      // Create a menu from menu model.
+  void BuildMenuFromModel(AtomMenuModel* model, DbusmenuMenuitem* parent);
+    
+    bool MenuModelAdapter::GetAccelerator(int id,
+                                      ui::Accelerator* accelerator) const {
+  ui::MenuModel* model = menu_model_;
+  int index = 0;
+  if (ui::MenuModel::GetModelAndIndexForCommandId(id, &model, &index)) {
+    return static_cast<AtomMenuModel*>(model)->
+      GetAcceleratorAtWithParams(index, true, accelerator);
+  }
+  return false;
 }
     
-    /* this only exists to make compilers happy about types in the below macro */
-inline constexpr uint32_t sizeClassParams2PackedArrayCapacity(
-  size_t index,
-  size_t lg_grp,
-  size_t lg_delta,
-  size_t ndelta
-) {
-  static_assert(sizeof(ArrayData) <= kSizeIndex2Size[0],
-    'this math only works if ArrayData fits in the smallest size class');
-  return index <= PackedArray::MaxSizeIndex
-    ? (((size_t{1} << lg_grp) + (ndelta << lg_delta)) - sizeof(ArrayData))
-      / sizeof(TypedValue)
-    : 0;
+    // Generate constructors.
+#include 'ipc/struct_constructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
+    
+    
+    {}  // namespace nw
+
+    
+    v8::Handle<v8::Value> DeallocateObject(int routing_id,
+                                       int object_id) {
+  RenderThread::Get()->Send(new ShellViewHostMsg_Deallocate_Object(
+      routing_id, object_id));
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  return v8::Undefined(isolate);
 }
     
-    uint32_t numa_node_set;
-uint32_t numa_num_nodes;
-uint32_t numa_node_mask;
-std::vector<bitmask*> node_to_cpu_mask;
-bool use_numa = false;
-bool threads_bind_local = false;
+    // Sets up the CHILD_PROCESS_EXE path to properly point to the helper app.
+void OverrideChildProcessPath();
     
-      // If we somehow reach this point and both gname and gid were
-  // passed, then the gid values will override the gname values,
-  // but it will otherwise function just fine.
-  // The assert() clause above should prevent that, however.
-  if ((gname.size() > 0) &&
-      (getgrnam_r(gname.data(), &gr, grbuf.get(), grbuflen, &retgrptr) != 0 ||
-      retgrptr == nullptr)) {
-    return false;
-  } else if ((gid >= 0) &&
-      (getgrgid_r(gid, &gr, grbuf.get(), grbuflen, &retgrptr) != 0 ||
-      retgrptr == nullptr)) {
-    return false;
+    #ifndef CONTENT_NW_SRC_API_BINDINGS_COMMON_H_
+#define CONTENT_NW_SRC_API_BINDINGS_COMMON_H_
+    
+    void DispatcherHost::OnDeallocateObject(int object_id) {
+  DLOG(INFO) << 'OnDeallocateObject: object_id:' << object_id;
+  if (objects_registry_.Lookup(object_id))
+    objects_registry_.Remove(object_id);
+  objects_.erase(object_id);
+}
+    
+    namespace nwapi {
+    }
+    
+    
+    {protected:
+  BaseEvent(){}
+  virtual ~BaseEvent(){}
+};
+    
+    void PointMenuPositionFunc(GtkMenu* menu,
+                           int* x,
+                           int* y,
+                           gboolean* push_in,
+                           gpointer userdata) {
+  *push_in = TRUE;
+    }
+    
+    
+    {    block_active_ = false;
+    g_signal_connect(menu_item_, 'activate',
+                     G_CALLBACK(OnClickThunk), this);
   }
     
-      /// The size of the original groups to backup when restoring privileges.
-  size_t group_size_{0};
+    bool ProcessRestart(const uint8_t* data, const size_t len,
+                    int* next_restart_marker, BitReaderState* br,
+                    JPEGData* jpg) {
+  size_t pos = 0;
+  if (!br->FinishStream(&pos)) {
+    jpg->error = JPEG_INVALID_SCAN;
+    return false;
+  }
+  int expected_marker = 0xd0 + *next_restart_marker;
+  EXPECT_MARKER();
+  int marker = data[pos + 1];
+  if (marker != expected_marker) {
+    fprintf(stderr, 'Did not find expected restart marker %d actual=%d\n',
+            expected_marker, marker);
+    jpg->error = JPEG_WRONG_RESTART_MARKER;
+    return false;
+  }
+  br->Reset(pos + 2);
+  *next_restart_marker += 1;
+  *next_restart_marker &= 0x7;
+  return true;
+}
+    
+    void OutputImage::Downsample(const DownsampleConfig& cfg) {
+  if (components_[1].IsAllZero() && components_[2].IsAllZero()) {
+    // If the image is already grayscale, nothing to do.
+    return;
+  }
+  if (cfg.use_silver_screen &&
+      cfg.u_factor_x == 2 && cfg.u_factor_y == 2 &&
+      cfg.v_factor_x == 2 && cfg.v_factor_y == 2) {
+    std::vector<uint8_t> rgb = ToSRGB();
+    std::vector<std::vector<float> > yuv = RGBToYUV420(rgb, width_, height_);
+    SetDownsampledCoefficients(yuv[0], 1, 1, &components_[0]);
+    SetDownsampledCoefficients(yuv[1], 2, 2, &components_[1]);
+    SetDownsampledCoefficients(yuv[2], 2, 2, &components_[2]);
+    return;
+  }
+  // Get the floating-point precision YUV array represented by the set of
+  // DCT coefficients.
+  std::vector<std::vector<float> > yuv(3, std::vector<float>(width_ * height_));
+  for (int c = 0; c < 3; ++c) {
+    components_[c].ToFloatPixels(&yuv[c][0], 1);
+  }
+    }
+    
+    
+    {}  // namespace guetzli
+
+    
+    #include 'guetzli/jpeg_data.h'
+    
+        if (IsLocking())
+        ::wakeupLock_Unlock(object_);
+    
+    #include <stdint.h>
+    
+    namespace mars_boost {} namespace boost = mars_boost; namespace mars_boost {
+    }
+    
+    
+    {  private:
+    size_t count_;
+    uint64_t time_span_;
+    std::list<uint64_t> touch_times_;
+};
+    
+    #include 'boost/any.hpp'
+    
+        void TestFun0();
+    void TestFun2()  {__TestFun1(1);}
+    
+    class DictionaryEntry {
+ public:
+  DictionaryEntry() {}
+  DictionaryEntry(Word W) : W(W) {}
+  DictionaryEntry(Word W, size_t PositionHint) : W(W), PositionHint(PositionHint) {}
+  const Word &GetW() const { return W; }
+    }
     
     
     {
-    { private:
-  friend class TLSConfigTests;
-};
+    {    std::string ArtifactPath = 'minimized-from-' + Hash(U);
+    Cmd += ' -minimize_crash_internal_step=1 -exact_artifact_path=' +
+        ArtifactPath;
+    Printf('CRASH_MIN: executing: %s\n', Cmd.c_str());
+    ExitCode = ExecuteCommand(Cmd);
+    if (ExitCode == 0) {
+      if (Flags.exact_artifact_path) {
+        CurrentFilePath = Flags.exact_artifact_path;
+        WriteToFile(U, CurrentFilePath);
+      }
+      Printf('CRASH_MIN: failed to minimize beyond %s (%d bytes), exiting\n',
+             CurrentFilePath.c_str(), U.size());
+      return 0;
+    }
+    CurrentFilePath = ArtifactPath;
+    Printf('\n\n\n\n\n\n*********************************\n');
+  }
+  return 0;
 }
+    
+    using namespace fuzzer;
+    
+      UserCallback CB;
+  InputCorpus &Corpus;
+  MutationDispatcher &MD;
+  FuzzingOptions Options;
+    
+    #endif  // LLVM_FUZZER_MERGE_H
 
     
-    #include 'osquery/core/process.h'
+    size_t MutationDispatcher::Mutate_ShuffleBytes(uint8_t *Data, size_t Size,
+                                               size_t MaxSize) {
+  if (Size > MaxSize) return 0;
+  assert(Size);
+  size_t ShuffleAmount =
+      Rand(std::min(Size, (size_t)8)) + 1; // [1,8] and <= Size.
+  size_t ShuffleStart = Rand(Size - ShuffleAmount);
+  assert(ShuffleStart + ShuffleAmount <= Size);
+  std::random_shuffle(Data + ShuffleStart, Data + ShuffleStart + ShuffleAmount,
+                      Rand);
+  return Size;
+}
     
-    #include <assert.h>
-#include <boost/noncopyable.hpp>
-#include <errno.h>
-#include <glog/logging.h>
-#include <atomic>
-#include <functional>
-#include <mutex>
+      const InputCorpus *Corpus = nullptr;
+  std::vector<uint8_t> MutateInPlaceHere;
+    
+    #include 'FuzzerDictionary.h'
+#include 'FuzzerInternal.h'
+#include 'FuzzerIO.h'
+#include 'FuzzerMutate.h'
+#include 'FuzzerRandom.h'
+#include 'FuzzerTracePC.h'
+#include <algorithm>
+#include <cstring>
+#include <map>
+#include <set>
 #include <thread>
-#include <unordered_set>
-#include <vector>
-    
-      // if we happen to be using the tlsRoundRobin, then sequentially
-  // assigning the thread identifiers is the unlikely best-case scenario.
-  // We don't want to unfairly benefit or penalize.  Computing the exact
-  // maximum likelihood of the probability distributions is annoying, so
-  // I approximate as 2/5 of the ids that have no threads, 2/5 that have
-  // 1, 2/15 that have 2, and 1/15 that have 3.  We accomplish this by
-  // wrapping back to slot 0 when we hit 1/15 and 1/5.
-    
-    size_t qfind_first_byte_of_bitset(
-    const StringPieceLite haystack,
-    const StringPieceLite needles) {
-  std::bitset<256> s;
-  for (auto needle : needles) {
-    s[(uint8_t)needle] = true;
-  }
-  for (size_t index = 0; index < haystack.size(); ++index) {
-    if (s[(uint8_t)haystack[index]]) {
-      return index;
-    }
-  }
-  return std::string::npos;
-}
-    
-    template <bool HAYSTACK_ALIGNED>
-size_t scanHaystackBlock(
-    const StringPieceLite haystack,
-    const StringPieceLite needles,
-    uint64_t idx)
-    // Turn off ASAN because the 'arr2 = ...' assignment in the loop below reads
-    // up to 15 bytes beyond end of the buffer in #needles#.  That is ok because
-    // ptr2 is always 16-byte aligned, so the read can never span a page
-    // boundary. Also, the extra data that may be read is never actually used.
-    FOLLY_DISABLE_ADDRESS_SANITIZER;
-    
-    namespace {
-folly::dynamic& insertAtKey(
-    folly::dynamic* d, bool allow_non_string_keys, const folly::dynamic& key) {
-  if (key.isString()) {
-    return (*d)[key];
-  // folly::dynamic allows non-null scalars for keys.
-  } else if (key.isNumber() || key.isBool()) {
-    return allow_non_string_keys ? (*d)[key] : (*d)[key.asString()];
-  }
-  // One cause might be oddness like p.optional(dynamic::array(...), ...);
-  throw DynamicParserLogicError(
-    'Unsupported key type ', key.typeName(), ' of ', detail::toPseudoJson(key)
-  );
-}
-} // namespace
-    
-      /**
-   * The key currently being parsed (integer if inside an array). Throws if
-   * called outside of a parser callback.
-   */
-  inline const folly::dynamic& key() const { return stack_.key(); }
-  /**
-   * The value currently being parsed (initially, the input dynamic).
-   * Throws if parsing nullptr, or parsing after releaseErrors().
-   */
-  inline const folly::dynamic& value() const { return stack_.value(); }
-    
-    // Guess the program name as basename(executable)
-std::string guessProgramName() {
-  try {
-    return fs::executable_path().filename().string();
-  } catch (const std::exception&) {
-    return 'UNKNOWN';
-  }
-}
-    
-      static constexpr size_t bitOffset(size_t bit) {
-    return bit % kBitsPerBlock;
-  }
-    
-      virtual bool executeInternal() = 0;
-    
-    
-    {  virtual void dropCache(int64_t len, int64_t offset) CXX11_OVERRIDE;
-};
-    
-    AbstractHttpServerResponseCommand::~AbstractHttpServerResponseCommand()
-{
-  if (readCheck_) {
-    e_->deleteSocketForReadCheck(socket_, this);
-  }
-  if (writeCheck_) {
-    e_->deleteSocketForWriteCheck(socket_, this);
-  }
-}
-    
-    class AnnounceList {
-public:
-private:
-  std::deque<std::shared_ptr<AnnounceTier>> tiers_;
-  std::deque<std::shared_ptr<AnnounceTier>>::iterator currentTier_;
-  std::deque<std::string>::iterator currentTracker_;
-  bool currentTrackerInitialized_;
-    }
-    
-      // Alrighty, search the fingerprint.
-  const size_t nvals = CFArrayGetCount(identities);
-  for (size_t i = 0; i < nvals; ++i) {
-    SecIdentityRef id = (SecIdentityRef)CFArrayGetValueAtIndex(identities, i);
-    if (!id) {
-      A2_LOG_ERROR('Failed to get a value!');
-      continue;
-    }
-    if (!checkIdentity(id, fp, ht)) {
-      continue;
-    }
-    A2_LOG_INFO('Found cert with matching fingerprint');
-    credentials_ = id;
-    CFRetain(id);
-    return true;
-  }
