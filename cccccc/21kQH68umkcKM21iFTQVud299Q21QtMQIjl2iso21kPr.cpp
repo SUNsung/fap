@@ -1,334 +1,253 @@
 
         
-        class GlobalShortcut : public extensions::GlobalShortcutListener::Observer,
-                       public mate::TrackableObject<GlobalShortcut> {
- public:
-  static mate::Handle<GlobalShortcut> Create(v8::Isolate* isolate);
-    }
+          /**
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to a vector of Datum.
+   *
+   * @param datum_vector
+   *    A vector of Datum containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See memory_layer.cpp for an example.
+   */
+  void Transform(const vector<Datum> & datum_vector,
+                Blob<Dtype>* transformed_blob);
+    
+      /// @brief The spatial dimensions of the input.
+  inline int input_shape(int i) {
+    return (*bottom_shape_)[channel_axis_ + i];
+  }
+  // reverse_dimensions should return true iff we are implementing deconv, so
+  // that conv helpers know which dimensions are which.
+  virtual bool reverse_dimensions() = 0;
+  // Compute height_out_ and width_out_ from other parameters.
+  virtual void compute_output_shape() = 0;
+    
+      virtual inline const char* type() const { return 'Concat'; }
+  virtual inline int MinBottomBlobs() const { return 1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    
+      virtual inline const char* type() const { return 'Convolution'; }
     
     
-    {  DISALLOW_COPY_AND_ASSIGN(WebRequest);
-};
+    {}  // namespace caffe
     
-    #include 'content/public/browser/web_contents_observer.h'
-#include 'native_mate/handle.h'
-#include 'native_mate/wrappable.h'
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-    namespace internal {
-    }
+      // Since the basic IO manipulators are overloaded for both narrow
+  // and wide streams, we have to provide this specialized definition
+  // of operator <<, even though its body is the same as the
+  // templatized version above.  Without this definition, streaming
+  // endl or other basic IO manipulators to Message will confuse the
+  // compiler.
+  Message& operator <<(BasicNarrowIoManip val) {
+    *ss_ << val;
+    return *this;
+  }
     
-    LoginHandler::LoginHandler(net::AuthChallengeInfo* auth_info,
-                           net::URLRequest* request)
-    : handled_auth_(false),
-      auth_info_(auth_info),
-      request_(request),
-      render_process_host_id_(0),
-      render_frame_id_(0) {
-  content::ResourceRequestInfo::ForRequest(request_)->GetAssociatedRenderFrame(
-      &render_process_host_id_,  &render_frame_id_);
-    }
+      // Returns a copy of the FilePath with the case-insensitive extension removed.
+  // Example: FilePath('dir/file.exe').RemoveExtension('EXE') returns
+  // FilePath('dir/file'). If a case-insensitive extension is not
+  // found, returns a copy of the original FilePath.
+  FilePath RemoveExtension(const char* extension) const;
     
-    #include 'net/url_request/url_request_job_factory.h'
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(URLRequestBufferJob);
-};
-    
-    #endif  // ATOM_BROWSER_UI_TRAY_ICON_GTK_H_
-
-    
-    #include 'leveldb/status.h'
-    
-    // Return a new iterator that converts internal keys (yielded by
-// '*internal_iter') that were live at the specified 'sequence' number
-// into appropriate user keys.
-extern Iterator* NewDBIterator(
-    DBImpl* db,
-    const Comparator* user_key_comparator,
-    Iterator* internal_iter,
-    SequenceNumber sequence,
-    uint32_t seed);
-    
-    namespace leveldb {
-    }
-    
-    #endif  // STORAGE_LEVELDB_DB_FILENAME_H_
-
-    
-    Status TableCache::FindTable(uint64_t file_number, uint64_t file_size,
-                             Cache::Handle** handle) {
-  Status s;
-  char buf[sizeof(file_number)];
-  EncodeFixed64(buf, file_number);
-  Slice key(buf, sizeof(buf));
-  *handle = cache_->Lookup(key);
-  if (*handle == NULL) {
-    std::string fname = TableFileName(dbname_, file_number);
-    RandomAccessFile* file = NULL;
-    Table* table = NULL;
-    s = env_->NewRandomAccessFile(fname, &file);
-    if (!s.ok()) {
-      std::string old_fname = SSTTableFileName(dbname_, file_number);
-      if (env_->NewRandomAccessFile(old_fname, &file).ok()) {
-        s = Status::OK();
-      }
-    }
-    if (s.ok()) {
-      s = Table::Open(*options_, file, file_size, &table);
-    }
-    }
-    }
-    
-    namespace leveldb {
-    }
-    
-    TEST(FindFileTest, OverlappingFiles) {
-  Add('150', '600');
-  Add('400', '500');
-  disjoint_sorted_files_ = false;
-  ASSERT_TRUE(! Overlaps('100', '149'));
-  ASSERT_TRUE(! Overlaps('601', '700'));
-  ASSERT_TRUE(Overlaps('100', '150'));
-  ASSERT_TRUE(Overlaps('100', '200'));
-  ASSERT_TRUE(Overlaps('100', '300'));
-  ASSERT_TRUE(Overlaps('100', '400'));
-  ASSERT_TRUE(Overlaps('100', '500'));
-  ASSERT_TRUE(Overlaps('375', '400'));
-  ASSERT_TRUE(Overlaps('450', '450'));
-  ASSERT_TRUE(Overlaps('450', '500'));
-  ASSERT_TRUE(Overlaps('450', '700'));
-  ASSERT_TRUE(Overlaps('600', '700'));
-}
-    
-    
-    {}  // namespace leveldb
-    
-    // Return a new filter policy that uses a bloom filter with approximately
-// the specified number of bits per key.  A good value for bits_per_key
-// is 10, which yields a filter with ~ 1% false positive rate.
-//
-// Callers must delete the result after any database that is using the
-// result has been closed.
-//
-// Note: if you are using a custom comparator that ignores some parts
-// of the keys being compared, you must not use NewBloomFilterPolicy()
-// and must provide your own FilterPolicy that also ignores the
-// corresponding parts of the keys.  For example, if the comparator
-// ignores trailing spaces, it would be incorrect to use a
-// FilterPolicy (like NewBloomFilterPolicy) that does not ignore
-// trailing spaces in keys.
-extern const FilterPolicy* NewBloomFilterPolicy(int bits_per_key);
-    
-      // Drop the first 'n' bytes from this slice.
-  void remove_prefix(size_t n) {
-    assert(n <= size());
-    data_ += n;
-    size_ -= n;
+      // Copy an existing linked_ptr<>, adding ourselves to the list of references.
+  template <typename U> linked_ptr(linked_ptr<U> const& ptr) { copy(&ptr); }
+  linked_ptr(linked_ptr const& ptr) {  // NOLINT
+    assert(&ptr != this);
+    copy(&ptr);
   }
     
     
-    {    IntrinsicParams();
-    IntrinsicParams(Vec2d f, Vec2d c, Vec4d k, double alpha = 0);
-    IntrinsicParams operator+(const Mat& a);
-    IntrinsicParams& operator =(const Mat& a);
-    void Init(const cv::Vec2d& f, const cv::Vec2d& c, const cv::Vec4d& k = Vec4d(0,0,0,0), const double& alpha = 0);
+    {  const T1 v1_;
+  const T2 v2_;
+  const T3 v3_;
+  const T4 v4_;
+  const T5 v5_;
+  const T6 v6_;
+  const T7 v7_;
+  const T8 v8_;
+  const T9 v9_;
+  const T10 v10_;
+  const T11 v11_;
+  const T12 v12_;
+  const T13 v13_;
+  const T14 v14_;
+  const T15 v15_;
+  const T16 v16_;
+  const T17 v17_;
+  const T18 v18_;
+  const T19 v19_;
+  const T20 v20_;
+  const T21 v21_;
+  const T22 v22_;
+  const T23 v23_;
+  const T24 v24_;
+  const T25 v25_;
+  const T26 v26_;
+  const T27 v27_;
+  const T28 v28_;
+  const T29 v29_;
+  const T30 v30_;
+  const T31 v31_;
+  const T32 v32_;
+  const T33 v33_;
+  const T34 v34_;
+  const T35 v35_;
+  const T36 v36_;
+  const T37 v37_;
+  const T38 v38_;
+  const T39 v39_;
+  const T40 v40_;
+  const T41 v41_;
+  const T42 v42_;
+  const T43 v43_;
+  const T44 v44_;
+  const T45 v45_;
+  const T46 v46_;
+  const T47 v47_;
+  const T48 v48_;
+  const T49 v49_;
+  const T50 v50_;
 };
     
-    using namespace std;
-using namespace cv;
+    // A helper for implementing get<k>().
+template <int k> class Get;
     
-    #include 'opencv2/core.hpp'
+    // Copyright 2008 Google Inc.
+// All Rights Reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+// Author: wan@google.com (Zhanyong Wan)
     
-        // Extension: ARB_copy_buffer
-    extern void (CODEGEN_FUNCPTR *CopyBufferSubData)(GLenum readTarget, GLenum writeTarget, GLintptr readOffset, GLintptr writeOffset, GLsizeiptr size);
+    // The template 'selector' struct TemplateSel<Tmpl> is used to
+// represent Tmpl, which must be a class template with one type
+// parameter, as a type.  TemplateSel<Tmpl>::Bind<T>::type is defined
+// as the type Tmpl<T>.  This allows us to actually instantiate the
+// template 'selected' by TemplateSel<Tmpl>.
+//
+// This trick is necessary for simulating typedef for class templates,
+// which C++ doesn't support directly.
+template <GTEST_TEMPLATE_ Tmpl>
+struct TemplateSel {
+  template <typename T>
+  struct Bind {
+    typedef Tmpl<T> type;
+  };
+};
     
-    #undef cv_hal_gemm32f
-#define cv_hal_gemm32f lapack_gemm32f
-#undef cv_hal_gemm64f
-#define cv_hal_gemm64f lapack_gemm64f
-#undef cv_hal_gemm32fc
-#define cv_hal_gemm32fc lapack_gemm32fc
-#undef cv_hal_gemm64fc
-#define cv_hal_gemm64fc lapack_gemm64fc
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
     
-        static void* GetProcAddress (const char* name)
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    #endif
+
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    IMGUI_API bool        ImGui_ImplDX9_Init(void* hwnd, IDirect3DDevice9* device);
+IMGUI_API void        ImGui_ImplDX9_Shutdown();
+IMGUI_API void        ImGui_ImplDX9_NewFrame();
+IMGUI_API void        ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data);
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+    #include 'imgui.h'
+#include 'imgui_impl_dx10.h'
+#include <d3d10_1.h>
+#include <d3d10.h>
+#define DIRECTINPUT_VERSION 0x0800
+#include <dinput.h>
+#include <tchar.h>
+    
+        void FreeTypeFont::BlitGlyph(FT_BitmapGlyph ft_bitmap, uint8_t* dst, uint32_t dst_pitch, unsigned char* multiply_table)
     {
-        static void* h = NULL;
-        if (!h)
+        IM_ASSERT(ft_bitmap != NULL);
+    }
+    
+    
+    {        // If a number >1 of GPUs got reported, you should find the best fit GPU for your purpose
+        // e.g. VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU if available, or with the greatest memory available, etc.
+        // for sake of simplicity we'll just take the first one, assuming it has a graphics queue family.
+        g_Gpu = gpus[0];
+        free(gpus);
+    }
+    
+        // Upload texture to graphics system
+    GLint last_texture;
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
+    glGenTextures(1, &g_FontTexture);
+    glBindTexture(GL_TEXTURE_2D, g_FontTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    
+    void ImGui_ImplGlfw_CharCallback(GLFWwindow*, unsigned int c)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    if (c > 0 && c < 0x10000)
+        io.AddInputCharacter((unsigned short)c);
+}
+    
+        // Render command lists
+    int vtx_offset = 0;
+    int idx_offset = 0;
+    for (int n = 0; n < draw_data->CmdListsCount; n++)
+    {
+        const ImDrawList* cmd_list = draw_data->CmdLists[n];
+        for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
         {
-            h = dlopen('libclAmdBlas.so', RTLD_LAZY | RTLD_GLOBAL);
-            if (!h)
-                return NULL;
+            const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
+            if (pcmd->UserCallback)
+            {
+                pcmd->UserCallback(cmd_list, pcmd);
+            }
+            else
+            {
+                const D3D10_RECT r = { (LONG)pcmd->ClipRect.x, (LONG)pcmd->ClipRect.y, (LONG)pcmd->ClipRect.z, (LONG)pcmd->ClipRect.w };
+                ctx->PSSetShaderResources(0, 1, (ID3D10ShaderResourceView**)&pcmd->TextureId);
+                ctx->RSSetScissorRects(1, &r);
+                ctx->DrawIndexed(pcmd->ElemCount, idx_offset, vtx_offset);
+            }
+            idx_offset += pcmd->ElemCount;
         }
+        vtx_offset += cmd_list->VtxBuffer.Size;
     }
-    
-    //
-// BEGIN OF CUSTOM FUNCTIONS
-//
-    
-    
-    {
-    {    std::ostringstream oss;
-    std::copy(line.begin() + options_index,
-              line.end(),
-              std::ostream_iterator<std::string>(oss, ' '));
-    r['options'] = oss.str();
-    results.push_back(r);
-  }
-}
-    
-      /// An internal status protecting database access.
-  static std::atomic<bool> kDBInitialized;
-    
-      /// Access all plugins.
-  static AutoRegisterSet& plugins() {
-    static AutoRegisterSet plugins_;
-    return plugins_;
-  }
-    
-    TEST_F(ViewsConfigParserPluginTests, test_swap_view) {
-  Config c;
-  std::vector<std::string> old_views_vec;
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  old_views_vec.clear();
-  auto s = c.update(getTestConfigMap('view_test.conf'));
-  EXPECT_TRUE(s.ok());
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  EXPECT_EQ(old_views_vec[0], 'config_views.kernel_hashes_new');
-    }
-    
-    
-    {    // Code should never reach this point
-    VLOG(1) << 'Could not start extension process: ' << exec_path;
-    Initializer::shutdown(EXIT_FAILURE);
-    return std::shared_ptr<PlatformProcess>();
-  }
-    
-    extern JSClass  *jsb_cocostudio_timeline_Frame_class;
-extern JSObject *jsb_cocostudio_timeline_Frame_prototype;
-    
-    
-    
-    
-    
-    #endif // __cocos2dx_csloader_h__
-
-    
-    
-    
-        void initShader( void );
-public:
-    GLESDebugDraw();
-    
-    			b2PrismaticJointDef pjd;
-			pjd.Initialize(ground, m_platform, b2Vec2(0.0f, 5.0f), b2Vec2(1.0f, 0.0f));
-    
-    int main(int, char**)
-{
-    // Setup Allegro
-    al_init();
-    al_install_keyboard();
-    al_install_mouse();
-    al_init_primitives_addon();
-    al_set_new_display_flags(ALLEGRO_RESIZABLE);
-    ALLEGRO_DISPLAY* display = al_create_display(1280, 720);
-    al_set_window_title(display, 'ImGui Allegro 5 example');
-    ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
-    al_register_event_source(queue, al_get_display_event_source(display));
-    al_register_event_source(queue, al_get_keyboard_event_source());
-    al_register_event_source(queue, al_get_mouse_event_source());
-    }
-    
-        // Setup ImGui binding
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    ImGui_ImplDX10_Init(hwnd, g_pd3dDevice);
-    
-    void CreateRenderTarget()
-{
-    ID3D11Texture2D* pBackBuffer;
-    g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
-    g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_mainRenderTargetView);
-    pBackBuffer->Release();
-}
-    
-    static int const                    NUM_BACK_BUFFERS = 3;
-static ID3D12Device*                g_pd3dDevice = NULL;
-static ID3D12DescriptorHeap*        g_pd3dRtvDescHeap = NULL;
-static ID3D12DescriptorHeap*        g_pd3dSrvDescHeap = NULL;
-static ID3D12CommandQueue*          g_pd3dCommandQueue = NULL;
-static ID3D12GraphicsCommandList*   g_pd3dCommandList = NULL;
-static ID3D12Fence*                 g_fence = NULL;
-static HANDLE                       g_fenceEvent = NULL;
-static UINT64                       g_fenceLastSignaledValue = 0;
-static IDXGISwapChain3*             g_pSwapChain = NULL;
-static HANDLE                       g_hSwapChainWaitableObject = NULL;
-static ID3D12Resource*              g_mainRenderTargetResource[NUM_BACK_BUFFERS] = {};
-static D3D12_CPU_DESCRIPTOR_HANDLE  g_mainRenderTargetDescriptor[NUM_BACK_BUFFERS] = {};
-    
-      InstructionPointer functionAddress() const noexcept {
-    return functionAddress_;
-  }
-    
-    
-    {    void toJS(nbind::cbOutput expose) const
-    {
-        expose(left, right, top, bottom, width, height);
-    }
-};
-
-    
-    #define ASSERT_BUF_SIZE 4096
-static char sAssertBuf[ASSERT_BUF_SIZE];
-static AssertHandler gAssertHandler;
-    
-    // JNI's NIO support has some awkward preconditions and error reporting. This
-// class provides much more user-friendly access.
-class FBEXPORT JByteBuffer : public JavaClass<JByteBuffer> {
- public:
-  static constexpr const char* kJavaDescriptor = 'Ljava/nio/ByteBuffer;';
-    }
-    
-        if (keyFilePassword.length()) {
-        context.password.reset(new std::string(keyFilePassword));
-        SSL_CTX_set_default_passwd_cb_userdata(context.context, context.password.get());
-        SSL_CTX_set_default_passwd_cb(context.context, Context::passwordCallback);
-    }
-    
-    template <const bool isServer>
-struct WIN32_EXPORT WebSocket : uS::Socket, WebSocketState<isServer> {
-protected:
-    std::string fragmentBuffer;
-    enum CompressionStatus : char {
-        DISABLED,
-        ENABLED,
-        COMPRESSED_FRAME
-    } compressionStatus;
-    unsigned char controlTipLength = 0, hasOutstandingPong = false;
-    }
-    
-    void Loop::run() {
-    // updated for consistency with libuv impl. behaviour
-    timepoint = std::chrono::system_clock::now();
-    while (numPolls) {
-        doEpoll(delay);
-    }
-}
-    
-    
-    {    int indices = NodeData::getMemoryBlockIndex(NodeData::preAllocMaxSize) + 1;
-    for (int i = 0; i < indices; i++) {
-        if (nodeData->preAlloc[i]) {
-            delete [] nodeData->preAlloc[i];
-        }
-    }
-    delete [] nodeData->preAlloc;
-    delete nodeData->netContext;
-    delete nodeData;
-    loop->destroy();
-}
-    
-    struct Hub;
