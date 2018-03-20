@@ -1,43 +1,31 @@
 
         
-            def get_mixin_names(file, opts = {})
-      names = get_css_selectors(file).join('\n' * 2).scan(/^\.([\w-]+)\(#{LESS_MIXIN_DEF_ARGS_RE}\)(?: when.*?)?[ ]*\{/).map(&:first).uniq.sort
-      log_file_info 'mixin defs: #{names * ', '}' unless opts[:silent] || names.empty?
-      names
-    end
-    }
+          def as_boolean(string)
+    return true   if string == true   || string =~ (/(true|t|yes|y|1)$/i)
+    return false  if string == false  || string.blank? || string =~ (/(false|f|no|n|0)$/i)
+    raise ArgumentError.new('invalid value for Boolean: \'#{string}\'')
+  end
     
-      config.active_support.deprecation = :stderr
-end
-
+      config_name 'codec'
     
-          spec['version'] = Bootstrap::VERSION
+      context 'called with three styles' do
+    it 'applies second style to left and right' do
+      rule = 'border-style: dashed double solid'
     
-    # Single-line step scoper
-When /^(.*) within (.*[^:])$/ do |step, parent|
-  with_scope(parent) { When step }
-end
+      context 'expands focus buttons' do
+    it 'finds selectors' do
+      list = @buttons_list.map { |input| '#{input}:focus' }
+      list = list.join(', ')
+      ruleset = 'content: #{list};'
     
-        def post_process_styles(*style_args) #:nodoc:
-      post_process_style(:original, styles[:original]) if styles.include?(:original) && process_style?(:original, style_args)
-      styles.reject{ |name, style| name == :original }.each do |name, style|
-        post_process_style(name, style) if process_style?(name, style_args)
-      end
-    end
-    
-            def has_column?
-          @subject.column_names.include?('#{@attachment_name}_file_name')
-        end
-      end
+      context 'called with arguments (1, $value: 4em 6em)' do
+    it 'outputs quadruple the first value from the default scale' do
+      expect('.one-double-value').to have_rule('font-size: 1.024em')
     end
   end
-end
-
     
-            def failure_message
-          '#{expected_attachment}\n'.tap do |message|
-            message << accepted_types_and_failures.to_s
-            message << '\n\n' if @allowed_types.present? && @rejected_types.present?
-            message << rejected_types_and_failures.to_s
-          end
-        end
+      context 'called with multiple prefixes' do
+    it 'applies the prefixes to the property' do
+      rule = '-moz-appearance: none; ' +
+             '-ms-appearance: none; ' +
+             'appearance: none;'
