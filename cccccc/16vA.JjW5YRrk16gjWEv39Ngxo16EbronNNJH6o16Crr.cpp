@@ -1,261 +1,303 @@
 
         
-        void leveldb_iter_get_error(const leveldb_iterator_t* iter, char** errptr) {
-  SaveError(errptr, iter->rep->status());
-}
+        Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    void AppendInternalKey(std::string* result, const ParsedInternalKey& key) {
-  result->append(key.user_key.data(), key.user_key.size());
-  PutFixed64(result, PackSequenceAndType(key.sequence, key.type));
-}
+      partial_run_mgr_.ExecutorDone(step_id, param.executor_status);
+  partial_run_mgr_.PartialRunDone(step_id,
+                                  [this](Status status) { set_status(status); },
+                                  param.partial_run_status);
     
-    // Value types encoded as the last component of internal keys.
-// DO NOT CHANGE THESE ENUM VALUES: they are embedded in the on-disk
-// data structures.
-enum ValueType {
-  kTypeDeletion = 0x0,
-  kTypeValue = 0x1
-};
-// kValueTypeForSeek defines the ValueType that should be passed when
-// constructing a ParsedInternalKey object for seeking to a particular
-// sequence number (since we sort sequence numbers in decreasing order
-// and the value type is embedded as the low 8 bits in the sequence
-// number in internal keys, we need to use the highest-numbered
-// ValueType, not the lowest).
-static const ValueType kValueTypeForSeek = kTypeValue;
-    
-    Status TableCache::Get(const ReadOptions& options,
-                       uint64_t file_number,
-                       uint64_t file_size,
-                       const Slice& k,
-                       void* arg,
-                       void (*saver)(void*, const Slice&, const Slice&)) {
-  Cache::Handle* handle = NULL;
-  Status s = FindTable(file_number, file_size, &handle);
-  if (s.ok()) {
-    Table* t = reinterpret_cast<TableAndFile*>(cache_->Value(handle))->table;
-    s = t->InternalGet(options, k, arg, saver);
-    cache_->Release(handle);
+    class TestFileSystem : public NullFileSystem {
+ public:
+  Status NewRandomAccessFile(
+      const string& fname, std::unique_ptr<RandomAccessFile>* result) override {
+    result->reset(new TestRandomAccessFile);
+    return Status::OK();
   }
-  return s;
-}
-    
-     private:
-  friend class VersionSet;
-    
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
-
-    
-    TEST(FindFileTest, Single) {
-  Add('p', 'q');
-  ASSERT_EQ(0, Find('a'));
-  ASSERT_EQ(0, Find('p'));
-  ASSERT_EQ(0, Find('p1'));
-  ASSERT_EQ(0, Find('q'));
-  ASSERT_EQ(1, Find('q1'));
-  ASSERT_EQ(1, Find('z'));
-    }
-    
-    void WriteBatch::Delete(const Slice& key) {
-  WriteBatchInternal::SetCount(this, WriteBatchInternal::Count(this) + 1);
-  rep_.push_back(static_cast<char>(kTypeDeletion));
-  PutLengthPrefixedSlice(&rep_, key);
-}
-    
-    class FilterPolicy {
- public:
-  virtual ~FilterPolicy();
-    }
-    
-    int main(int argc, char** argv) {
-  if (argc != 4) {
-    printf('This script converts the MNIST dataset to the leveldb format used\n'
-           'by caffe to train a siamese network.\n'
-           'Usage:\n'
-           '    convert_mnist_data input_image_file input_label_file '
-           'output_db_file\n'
-           'The MNIST dataset could be downloaded at\n'
-           '    http://yann.lecun.com/exdb/mnist/\n'
-           'You should gunzip them after downloading.\n');
-  } else {
-    google::InitGoogleLogging(argv[0]);
-    convert_dataset(argv[1], argv[2], argv[3]);
+  // Always return size of 10
+  Status GetFileSize(const string& fname, uint64* file_size) override {
+    *file_size = 10;
+    return Status::OK();
   }
-  return 0;
-}
-#else
-int main(int argc, char** argv) {
-  LOG(FATAL) << 'This example requires LevelDB; compile with USE_LEVELDB.';
-}
-#endif  // USE_LEVELDB
-
-    
-    #include <vector>
-    
-    /**
- * @brief Abstract base class that factors out the BLAS code common to
- *        ConvolutionLayer and DeconvolutionLayer.
- */
-template <typename Dtype>
-class BaseConvolutionLayer : public Layer<Dtype> {
- public:
-  explicit BaseConvolutionLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_;
-  cudnnTensorDescriptor_t top_desc_;
 };
-#endif
-    
-    /**
- * @brief During training only, sets a random portion of @f$x@f$ to 0, adjusting
- *        the rest of the vector magnitude accordingly.
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$ y = |x| @f$
- */
-template <typename Dtype>
-class DropoutLayer : public NeuronLayer<Dtype> {
- public:
-  /**
-   * @param param provides DropoutParameter dropout_param,
-   *     with DropoutLayer options:
-   *   - dropout_ratio (\b optional, default 0.5).
-   *     Sets the probability @f$ p @f$ that any given unit is dropped.
-   */
-  explicit DropoutLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-      // Same as above, but you can choose the interception scope of this object.
-  ScopedFakeTestPartResultReporter(InterceptMode intercept_mode,
-                                   TestPartResultArray* result);
-    
-    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
-//
-// Expands to the name of the variable used to remember the names of
-// the defined tests in the given test case.
-# define GTEST_TYPED_TEST_CASE_P_STATE_(TestCaseName) \
-  gtest_typed_test_case_p_state_##TestCaseName##_
-    
-      // Returns a pathname for a file that does not currently exist. The pathname
-  // will be directory/base_name.extension or
-  // directory/base_name_<number>.extension if directory/base_name.extension
-  // already exists. The number will be incremented until a pathname is found
-  // that does not already exist.
-  // Examples: 'dir/foo_test.xml' or 'dir/foo_test_1.xml'.
-  // There could be a race condition if two or more processes are calling this
-  // function at the same time -- they could both pick the same filename.
-  static FilePath GenerateUniqueFileName(const FilePath& directory,
-                                         const FilePath& base_name,
-                                         const char* extension);
-    
-    #if GTEST_HAS_EXCEPTIONS
-    
-    #include <stdlib.h>
-#include <assert.h>
     
     
     {
-]]
-}  // namespace gtest_internal
+    {      auto h = handle_.AccessTensor(context)->template flat<string>();
+      h(0) = cinfo_.container();
+      h(1) = cinfo_.name();
+      resource_ = resource;
+    }
+    if (context->expected_output_dtype(0) == DT_RESOURCE) {
+      OP_REQUIRES_OK(context, MakeResourceHandleToOutput(
+                                  context, 0, cinfo_.container(), cinfo_.name(),
+                                  MakeTypeIndex<T>()));
+    } else {
+      context->set_output_ref(0, &mu_, handle_.AccessTensor(context));
+    }
+  }
     
-    #include 'sample1.h'
-    
-    ArrayTypeTable& globalArrayTypeTable() {
-  assert(RuntimeOption::RepoAuthoritative);
-  return s_instance;
-}
-    
-    
-    {  if (flags & XhpTrace) {
-    s_profiler_factory->start(ProfilerKind::Trace, flags);
-  } else if (flags & Memo) {
-    flags = 0;  /* flags are not used by MemoProfiler::MemoProfiler */
-    s_profiler_factory->start(ProfilerKind::Memo, flags);
-  } else if (flags & External) {
-    for (ArrayIter iter(args); iter; ++iter) {
-      if (iter.first().toInt32() == 0) {
-         flags = iter.second().toInt32();
+      bool ret = false;
+  if (running && (pid > 1)) {
+    pid_t cpid;
+    int cstat;
+    bool done = false;
+    while (!done) {
+      cpid = waitpid(pid, &cstat, 0);
+      if ((cpid < 0) && !retry(errno)) {
+        done = true;
+      } else if ((cpid == pid) && (WIFEXITED(cstat) || WIFSIGNALED(cstat))) {
+        *status = cstat;
+        ret = true;
+        done = true;
       }
     }
-    s_profiler_factory->start(ProfilerKind::External, flags);
-  } else {
-    s_profiler_factory->start(ProfilerKind::Hierarchical, flags);
   }
+    
+      // Sets the appropriate library kind to that passed in.
+  PluginConfig& SetBlas(PluginId blas);
+  PluginConfig& SetDnn(PluginId dnn);
+  PluginConfig& SetFft(PluginId fft);
+  PluginConfig& SetRng(PluginId rng);
+    
+    class SYCLDeviceContext : public DeviceContext {
+ public:
+  SYCLDeviceContext() {}
+    }
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    class TFRecordReader : public ReaderBase {
+ public:
+  TFRecordReader(const string& node_name, const string& compression_type,
+                 Env* env)
+      : ReaderBase(strings::StrCat('TFRecordReader '', node_name, ''')),
+        env_(env),
+        offset_(0),
+        compression_type_(compression_type) {}
+    }
+    
+        OP_REQUIRES(context, TensorShapeUtils::IsMatrix(contents.shape()),
+                errors::InvalidArgument(
+                    'sampled_audio must be a rank-2 tensor but got shape ',
+                    contents.shape().DebugString()));
+    OP_REQUIRES(
+        context, contents.NumElements() <= std::numeric_limits<int32>::max(),
+        errors::InvalidArgument(
+            'sampled_audio cannot have more than 2^31 entries. Shape = ',
+            contents.shape().DebugString()));
+    OP_REQUIRES(context, TensorShapeUtils::IsScalar(file_format_tensor.shape()),
+                errors::InvalidArgument(
+                    'file_format must be a rank-0 tensor but got shape ',
+                    file_format_tensor.shape().DebugString()));
+    OP_REQUIRES(context,
+                TensorShapeUtils::IsScalar(samples_per_second_tensor.shape()),
+                errors::InvalidArgument(
+                    'samples_per_second must be a rank-0 tensor but got shape ',
+                    samples_per_second_tensor.shape().DebugString()));
+    OP_REQUIRES(context,
+                TensorShapeUtils::IsScalar(bits_per_second_tensor.shape()),
+                errors::InvalidArgument(
+                    'bits_per_second must be a rank-0 tensor but got shape ',
+                    bits_per_second_tensor.shape().DebugString()));
+    
+    TF_CALL_GPU_NUMBER_TYPES(REGISTER_DYNAMIC_STITCH_GPU);
+TF_CALL_complex64(REGISTER_DYNAMIC_STITCH_GPU);
+TF_CALL_complex128(REGISTER_DYNAMIC_STITCH_GPU);
+TF_CALL_int64(REGISTER_DYNAMIC_STITCH_GPU);
+TF_CALL_int32(REGISTER_DYNAMIC_STITCH_GPU);
+#undef REGISTER_DYNAMIC_STITCH_GPU
+    
+    static std::unique_ptr<Result> make_result(Completion *result) {
+  auto r = llvm::make_unique<Result>(result);
+  r->name = result->getName();
+  r->description = result->getDescription();
+  return r;
 }
     
-    template<typename T>
-inline Vptr emitTLSAddr(Vout& v, TLSDatum<T> datum) {
-  switch (arch()) {
-    case Arch::X64:
-      return x64::detail::emitTLSAddr(v, datum);
-    case Arch::ARM:
-      return arm::detail::emitTLSAddr(v, datum);
-    case Arch::PPC64:
-      return ppc64::detail::emitTLSAddr(v, datum);
+    
+    {} // end swift namespace
+    
+    /// \brief Diagnostic consumer that displays diagnostics to standard error.
+class PrintingDiagnosticConsumer : public DiagnosticConsumer {
+  llvm::raw_ostream &Stream;
+  bool ForceColors = false;
+  bool DidErrorOccur = false;
+public:
+  PrintingDiagnosticConsumer(llvm::raw_ostream &stream = llvm::errs()) :
+    Stream(stream) { }
+    }
+    
+    
+    {  StringRef getReceiverUSR() const {
+    for (auto Relation: Relations) {
+      if (Relation.roles & (SymbolRoleSet) SymbolRole::RelationReceivedBy)
+        return Relation.USR;
+    }
+    return StringRef();
   }
-  not_reached();
+};
+    
+    Status DumpFile(Env* env, const std::string& fname, WritableFile* dst) {
+  FileType ftype;
+  if (!GuessType(fname, &ftype)) {
+    return Status::InvalidArgument(fname + ': unknown file type');
+  }
+  switch (ftype) {
+    case kLogFile:         return DumpLog(env, fname, dst);
+    case kDescriptorFile:  return DumpDescriptor(env, fname, dst);
+    case kTableFile:       return DumpTable(env, fname, dst);
+    default:
+      break;
+  }
+  return Status::InvalidArgument(fname + ': not a dump-able file type');
 }
     
-    #include <folly/Optional.h>
     
+    {}  // namespace leveldb
     
-    {
-    {///////////////////////////////////////////////////////////////////////////////
-}}
+    Status VersionEdit::DecodeFrom(const Slice& src) {
+  Clear();
+  Slice input = src;
+  const char* msg = NULL;
+  uint32_t tag;
+    }
     
-    // Pack together the size class and the varray/darray state into a single 16-bit
-// number which can be stored in the HeapObject object. ArrayData requires the
-// varray/darray state to be in the lower 8-bits, but we're free to use the
-// upper.
-ALWAYS_INLINE
-uint16_t PackedArray::packSizeIndexAndDV(uint8_t idx, ArrayData::DVArray dv) {
-  return (static_cast<uint16_t>(idx) << 8) | dv;
-}
+      VersionEdit edit;
+  for (int i = 0; i < 4; i++) {
+    TestEncodeDecode(edit);
+    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
+                 InternalKey('foo', kBig + 500 + i, kTypeValue),
+                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
+    edit.DeleteFile(4, kBig + 700 + i);
+    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
+  }
     
-    void ThriftBuffer::flush() {
-  *m_p = '\0';
-  String data(m_buf, m_p - m_buf, CopyString);
-  m_p = m_buf;
-  flushImpl(data);
-}
+    #endif  // STORAGE_LEVELDB_HELPERS_MEMENV_MEMENV_H_
+
     
-    bool HHVM_FUNCTION(posix_initgroups,
-                   const String& name,
-                   int base_group_id) {
-  if (name.empty()) return false;
-  return !initgroups(name.data(), base_group_id);
-}
+      // If *start < limit, changes *start to a short string in [start,limit).
+  // Simple comparator implementations may return with *start unchanged,
+  // i.e., an implementation of this method that does nothing is correct.
+  virtual void FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const = 0;
     
-    void emitJmpNS(IRGS& env, Offset relOffset) {
-  jmpImpl(env, bcOff(env) + relOffset);
-}
+      // Return the length (in bytes) of the referenced data
+  size_t size() const { return size_; }
     
-        if (1024 * 1024 < st.total_length) return __LINE__;
+    // EXPECT_DEATH_IF_SUPPORTED(statement, regex) and
+// ASSERT_DEATH_IF_SUPPORTED(statement, regex) expand to real death tests if
+// death tests are supported; otherwise they just issue a warning.  This is
+// useful when you are combining death test assertions with normal test
+// assertions in one test.
+#if GTEST_HAS_DEATH_TEST
+# define EXPECT_DEATH_IF_SUPPORTED(statement, regex) \
+    EXPECT_DEATH(statement, regex)
+# define ASSERT_DEATH_IF_SUPPORTED(statement, regex) \
+    ASSERT_DEATH(statement, regex)
+#else
+# define EXPECT_DEATH_IF_SUPPORTED(statement, regex) \
+    GTEST_UNSUPPORTED_DEATH_TEST_(statement, regex, )
+# define ASSERT_DEATH_IF_SUPPORTED(statement, regex) \
+    GTEST_UNSUPPORTED_DEATH_TEST_(statement, regex, return)
+#endif
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
+    // The tests from the instantiation above will have these names:
+//
+//    * AnotherInstantiationName/FooTest.DoesBlah/0 for 'cat'
+//    * AnotherInstantiationName/FooTest.DoesBlah/1 for 'dog'
+//    * AnotherInstantiationName/FooTest.HasBlahBlah/0 for 'cat'
+//    * AnotherInstantiationName/FooTest.HasBlahBlah/1 for 'dog'
+//
+// Please note that INSTANTIATE_TEST_CASE_P will instantiate all tests
+// in the given test case, whether their definitions come before or
+// AFTER the INSTANTIATE_TEST_CASE_P statement.
+//
+// Please also note that generator expressions (including parameters to the
+// generators) are evaluated in InitGoogleTest(), after main() has started.
+// This allows the user on one hand, to adjust generator parameters in order
+// to dynamically determine a set of tests to run and on the other hand,
+// give the user a chance to inspect the generated tests with Google Test
+// reflection API before RUN_ALL_TESTS() is executed.
+//
+// You can see samples/sample7_unittest.cc and samples/sample8_unittest.cc
+// for more examples.
+//
+// In the future, we plan to publish the API for defining new parameter
+// generators. But for now this interface remains part of the internal
+// implementation and is subject to change.
+//
+//
+// A parameterized test fixture must be derived from testing::Test and from
+// testing::WithParamInterface<T>, where T is the type of the parameter
+// values. Inheriting from TestWithParam<T> satisfies that requirement because
+// TestWithParam<T> inherits from both Test and WithParamInterface. In more
+// complicated hierarchies, however, it is occasionally useful to inherit
+// separately from Test and WithParamInterface. For example:
     
-      protected:
-    ServiceBase(const char* _servicename) : m_servicename(_servicename) {}
+      // Leave whatever circle we're part of.  Returns true if we were the
+  // last member of the circle.  Once this is done, you can join() another.
+  bool depart()
+      GTEST_LOCK_EXCLUDED_(g_linked_ptr_mutex) {
+    MutexLock lock(&g_linked_ptr_mutex);
+    }
+    
+      // Try to divide n by every odd number i, starting from 3
+  for (int i = 3; ; i += 2) {
+    // We only have to try i up to the squre root of n
+    if (i > n/i) break;
+    }
+    
+    using ::testing::EmptyTestEventListener;
+using ::testing::InitGoogleTest;
+using ::testing::Test;
+using ::testing::TestCase;
+using ::testing::TestEventListeners;
+using ::testing::TestInfo;
+using ::testing::TestPartResult;
+using ::testing::UnitTest;
+    
+      explicit WorkloadStats(State guardedState);
+  ~WorkloadStats();
+    
+      int reverse = 0;
+  int n = mbfl_strpos(&mbs_haystack, &mbs_needle, offset, reverse);
+  if (n >= 0) {
+    return n;
+  }
+    
+      if (asprintf(&default_magic, '%s:%s', hmagicpath, MAGIC) < 0)
+    goto out;
+  free(hmagicpath);
+  return default_magic;
+out:
+  default_magic = NULL;
+  free(hmagicpath);
+  return MAGIC;
+#else
+  char *hmagicp = hmagicpath;
+  char *tmppath = NULL;
+  LPTSTR dllpath;
+    
+    /*
+ * Helpers for unconditional and conditional jumps.
+ */
+void surpriseCheck(IRGS&);
+void surpriseCheck(IRGS&, Offset);
+void jmpImpl(IRGS&, Offset);
+void implCondJmp(IRGS&, Offset taken, bool negate, SSATmp*);
+    
+    /*
+ * Emit checks for (and hooks into) an attached debugger in front of each
+ * translation in `unit' or for `SrcKey{func, offset, resumed}'.
+ */
+bool addDbgGuards(const Unit* unit);
+bool addDbgGuard(const Func* func, Offset offset, ResumeMode resumeMode);
+    
+    #include 'hphp/util/arch.h'
+#include 'hphp/util/assertions.h'
