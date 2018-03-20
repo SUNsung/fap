@@ -1,75 +1,127 @@
 
-def _is_tar_extract(cmd):
-    if '--extract' in cmd:
-        return True
+        
+            >>> median_low([1, 3, 5])
+    3
+    >>> median_low([1, 3, 5, 7])
+    3
+    
+    class TZInfo:
+    def __init__(self, transitions, type_indices, ttis, abbrs):
+        self.transitions = transitions
+        self.type_indices = type_indices
+        self.ttis = ttis
+        self.abbrs = abbrs
+    
+            if self.closed:
+            raise ValueError('I/O operation on closed file')
+        if not self.seekable:
+            raise OSError('cannot seek')
+        if whence == 1:
+            pos = pos + self.size_read
+        elif whence == 2:
+            pos = pos + self.chunksize
+        if pos < 0 or pos > self.chunksize:
+            raise RuntimeError
+        self.file.seek(self.offset + pos, 0)
+        self.size_read = pos
+    
+        def __init__(self, *, object_hook=None, parse_float=None,
+            parse_int=None, parse_constant=None, strict=True,
+            object_pairs_hook=None):
+        '''``object_hook``, if specified, will be called with the result
+        of every JSON object decoded and its return value will be used in
+        place of the given ``dict``.  This can be used to provide custom
+        deserializations (e.g. to support JSON-RPC class hinting).
+    
+    from xml.dom.NodeFilter import NodeFilter
+    
+    int main( int argc, char **argv)
+{
+    PyImport_FrozenModules = _PyImport_FrozenModules;
+    return PythonService_main(argc, argv);
+}
+'''
+    
+                    if not args:
+                    # kwnames=NULL
+                    result = _testcapi.pyobject_fastcallkeywords(func, None, None)
+                    self.check_result(result, expected)
+    
+            response = http.server.DEFAULT_ERROR_MESSAGE % \
+            {
+             'code' : code,
+             'message' : message,
+             'explain' : explain
+            }
+        response = response.encode('utf-8')
+        print('Status: %d %s' % (code, message))
+        print('Content-Type: %s' % http.server.DEFAULT_ERROR_CONTENT_TYPE)
+        print('Content-Length: %d' % len(response))
+        print()
+        sys.stdout.flush()
+        sys.stdout.buffer.write(response)
+        sys.stdout.buffer.flush()
+    
+            a = 3.33+4.43j
+        self.assertEqual(a ** 0j, 1)
+        self.assertEqual(a ** 0.+0.j, 1)
+    
+            s = b'a\nb\nc'
+        b = c_string(s)
+    
+            Returns ``(old_value, args, kwargs)``.  The returned ``args`` and
+        ``kwargs`` objects may not be the same as the input objects, or
+        the input objects may be mutated.
+    
+        @gen_test
+    def asyncSetUp(self):
+        listener, port = bind_unused_port()
+        event = Event()
     
     
-def auto_parallel(metagraph, model):
-  from tensorflow.python.grappler import tf_optimizer
-  rewriter_config = rewriter_config_pb2.RewriterConfig()
-  rewriter_config.optimizers.append('autoparallel')
-  rewriter_config.auto_parallel.enable = True
-  rewriter_config.auto_parallel.num_replicas = FLAGS.num_gpus
-  optimized_graph = tf_optimizer.OptimizeGraph(rewriter_config, metagraph)
-  metagraph.graph_def.CopyFrom(optimized_graph)
-  UpdateCollection(metagraph, model)
-
+MAIN = '''\
+import os
+import sys
     
-        i = tf.train.range_input_producer(epoch_size, shuffle=False).dequeue()
-    x = tf.strided_slice(data, [0, i * num_steps],
-                         [batch_size, (i + 1) * num_steps])
-    x.set_shape([batch_size, num_steps])
-    y = tf.strided_slice(data, [0, i * num_steps + 1],
-                         [batch_size, (i + 1) * num_steps + 1])
-    y.set_shape([batch_size, num_steps])
-    return x, y
-
+    from tornado.options import define, options
     
-      tf.logging.info('Found %d inliers' % sum(inliers))
+        def new_future_import(self, old):
+        new = FromImport('__future__',
+                         [Name('absolute_import', prefix=' '), Comma(),
+                          Name('division', prefix=' '), Comma(),
+                          Name('print_function', prefix=' ')])
+        if old is not None:
+            new.prefix = old.prefix
+        return new
     
-      def testSimple(self):
-    labels = [9, 3, 0]
-    records = [self._record(labels[0], 0, 128, 255),
-               self._record(labels[1], 255, 0, 1),
-               self._record(labels[2], 254, 255, 0)]
-    contents = b''.join([record for record, _ in records])
-    expected = [expected for _, expected in records]
-    filename = os.path.join(self.get_temp_dir(), 'cifar')
-    open(filename, 'wb').write(contents)
+        jim = Subscriber('jim', message_center)
+    jim.subscribe('cartoon')
+    jack = Subscriber('jack', message_center)
+    jack.subscribe('music')
+    gee = Subscriber('gee', message_center)
+    gee.subscribe('movie')
+    vani = Subscriber('vani', message_center)
+    vani.subscribe('movie')
+    vani.unsubscribe('movie')
     
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+        def test_display_current_time_at_midnight(self):
+        '''
+        Would almost always fail (despite of right at/after midnight) if
+        untestable production code would have been used.
+        '''
+        time_provider_stub = MidnightTimeProvider()
+        class_under_test = TimeDisplay()
+        class_under_test.set_time_provider(time_provider_stub)
+        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
     
-      def cl_loss_from_embedding(self,
-                             embedded,
-                             inputs=None,
-                             return_intermediates=False):
-    '''Compute classification loss from embedding.
-    
-        def extract_year_month(self, timestamp):
-        '''Return the year and month portions of the timestamp.'''
-        ...
-    
-        def extract_year_month(self, line):
-        '''Return the year and month portions of the timestamp.'''
-        pass
+            depending on self.param value
+        '''
+        self._static_method_choices[self.param]()
     
     
-if __name__ == '__main__':
-    RemoveDuplicateUrls.run()
-
+def timeit(func):
     
-    
-class Card(metaclass=ABCMeta):
-    
-        def __init__(self, results):
-        self.results = results
-        self.next = next
-    
-    
-class Motorcycle(Vehicle):
-    
-    
-    if os.path.exists(args.targetfile):
-        os.remove(args.targetfile)
+    from __future__ import print_function
+import os
+from os.path import lexists
