@@ -1,119 +1,109 @@
 
         
-            model.train_on_batch(x_train[:32], y_train[:32])
-    model.test_on_batch(x_train[:32], y_train[:32])
-    
-        # by setting the `trainable` argument, in Sequential
-    model = Sequential()
-    layer = Dense(2, input_dim=1)
-    model.add(layer)
-    assert model.trainable_weights == layer.trainable_weights
-    layer.trainable = False
-    assert model.trainable_weights == []
-    
-            layer_test(local.LocallyConnected2D,
-                   kwargs={'filters': filters,
-                           'kernel_size': (3, 3),
-                           'padding': padding,
-                           'kernel_regularizer': 'l2',
-                           'bias_regularizer': 'l2',
-                           'activity_regularizer': 'l2',
-                           'strides': strides,
-                           'data_format': 'channels_first'},
-                   input_shape=(num_samples, stack_size, num_row, num_col))
-    
-    from keras.applications import vgg19
-from keras import backend as K
+        
+@app.route('/_add_numbers')
+def add_numbers():
+    '''Add two numbers server side, ridiculous but well...'''
+    a = request.args.get('a', 0, type=int)
+    b = request.args.get('b', 0, type=int)
+    return jsonify(result=a + b)
     
     
-@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
-def test_orthogonal(tensor_shape):
-    _runner(initializers.orthogonal(), tensor_shape,
-            target_mean=0.)
+def test_register(client):
+    '''Make sure registering works'''
+    rv = register(client, 'user1', 'default')
+    assert b'You were successfully registered ' \
+           b'and can login now' in rv.data
+    rv = register(client, 'user1', 'default')
+    assert b'The username is already taken' in rv.data
+    rv = register(client, '', 'default')
+    assert b'You have to enter a username' in rv.data
+    rv = register(client, 'meh', '')
+    assert b'You have to enter a password' in rv.data
+    rv = register(client, 'meh', 'x', 'y')
+    assert b'The two passwords do not match' in rv.data
+    rv = register(client, 'meh', 'foo', email='broken')
+    assert b'You have to enter a valid email address' in rv.data
+    
+        engine = 'base'  # str as defined in sqlalchemy.engine.engine
+    cursor_execute_kwargs = {}
+    time_grains = tuple()
+    time_groupby_inline = False
+    limit_method = LimitMethod.FETCH_MANY
+    time_secondary_columns = False
+    inner_joins = True
     
     
-@keras_test
-def test_max_norm():
-    array = get_example_array()
-    for m in get_test_values():
-        norm_instance = constraints.max_norm(m)
-        normed = norm_instance(K.variable(array))
-        assert(np.all(K.eval(normed) < m))
+class SeparatorViz(MarkupViz):
     
-        mask_inputs = (np.zeros(input_shapes[0][:-1]), np.ones(input_shapes[1][:-1]))
-    expected_mask_output = np.concatenate(mask_inputs, axis=-1)
-    mask_input_placeholders = [K.placeholder(shape=input_shape[:-1]) for input_shape in input_shapes]
-    mask_output = model.layers[-1]._output_mask(mask_input_placeholders)
-    assert np.all(K.function(mask_input_placeholders, [mask_output])(mask_inputs)[0] == expected_mask_output)
-    
-        model = Sequential()
-    model.add(Merge([intermediate, righter], mode='sum'))
-    model.add(Dense(num_classes))
-    model.add(Activation('softmax'))
-    model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
-    
-        ld = layers.Lambda(f)
-    config = ld.get_config()
-    ld = deserialize_layer({'class_name': 'Lambda', 'config': config})
-    
-    # Apply monkey patches to fix issues in external libraries
-from . import _monkeypatches
-del _monkeypatches
-    
-        def tested_methods_from_spidercls(self, spidercls):
-        methods = []
-        for key, value in vars(spidercls).items():
-            if (callable(value) and value.__doc__ and
-                    re.search(r'^\s*@', value.__doc__, re.MULTILINE)):
-                methods.append(key)
-    
-            The shuffle/sort step of MapReduce will then do a
-        distributed sort on the keys, resulting in:
-    
-        def __init__(self, id, name):
-        self.id = id
-        self.name = name
-        self.friend_ids = []
+        def pre_add(self, datasource):
+        with db.session.no_autoflush:
+            query = (
+                db.session.query(models.DruidDatasource)
+                .filter(models.DruidDatasource.datasource_name ==
+                        datasource.datasource_name,
+                        models.DruidDatasource.cluster_name ==
+                        datasource.cluster.id)
+            )
+            if db.session.query(query.exists()).scalar():
+                raise Exception(get_datasource_exist_error_mgs(
+                    datasource.full_name))
     
     
-class Crawler(object):
+def export_to_dict(session,
+                   recursive,
+                   back_references,
+                   include_defaults):
+    '''Exports databases and druid clusters to a dictionary'''
+    logging.info('Starting export')
+    dbs = session.query(Database)
+    databases = [database.export_to_dict(recursive=recursive,
+                 include_parent_ref=back_references,
+                 include_defaults=include_defaults) for database in dbs]
+    logging.info('Exported %d %s', len(databases), DATABASES_KEY)
+    cls = session.query(DruidCluster)
+    clusters = [cluster.export_to_dict(recursive=recursive,
+                include_parent_ref=back_references,
+                include_defaults=include_defaults) for cluster in cls]
+    logging.info('Exported %d %s', len(clusters), DRUID_CLUSTERS_KEY)
+    data = dict()
+    if databases:
+        data[DATABASES_KEY] = databases
+    if clusters:
+        data[DRUID_CLUSTERS_KEY] = clusters
+    return data
     
-        def add_label(self, label):
-        '''Add label to list of labels on the message.'''
-        if isinstance(label, str):
-            if label not in self._labels:
-                self._labels.append(label)
-        else:
-            raise TypeError('label must be a string: %s' % type(label))
     
-        first = str(int(last) - args.nb_articles + 1)
-    resp, overviews = s.xover(first, last)
-    for artnum, over in overviews:
-        author = decode_header(over['from']).split('<', 1)[0]
-        subject = decode_header(over['subject'])
-        lines = int(over[':lines'])
-        print('{:7} {:20} {:42} ({})'.format(
-              artnum, cut(author, 20), cut(subject, 42), lines)
-              )
+def cast_form_data(form_data):
+    '''Translates old to new form_data'''
+    d = {}
+    fields = frontend_config.get('controls', {})
+    for k, v in form_data.items():
+        field_config = fields.get(k, {})
+        ft = field_config.get('type')
+        if ft == 'CheckboxControl':
+            # bug in some urls with dups on bools
+            if isinstance(v, list):
+                v = 'y' in v
+            else:
+                v = True if v in ('true', 'y') or v is True else False
+        elif v and ft == 'TextControl' and field_config.get('isInt'):
+            v = int(v) if v != '' else None
+        elif v and ft == 'TextControl' and field_config.get('isFloat'):
+            v = float(v) if v != '' else None
+        elif v and ft == 'SelectControl':
+            if field_config.get('multi'):
+                if type(form_data).__name__ == 'ImmutableMultiDict':
+                    v = form_data.getlist(k)
+                elif not isinstance(v, list):
+                    v = [v]
+        if d.get('slice_id'):
+            d['slice_id'] = int(d['slice_id'])
     
-        def abort(self):
-        # What does it mean to 'clear' a document?  Does the
-        # documentElement disappear?
-        raise NotImplementedError(
-            'haven't figured out what this means yet')
-    
-            for func, args, expected in self.CALLS_POSARGS:
-            with self.subTest(func=func, args=args):
-                result = _testcapi.pyobject_fastcall(func, args)
-                self.check_result(result, expected)
-    
-            Interpret all HTTP GET requests as requests for server
-        documentation.
         '''
-        # Check that the path is legal
-        if not self.is_rpc_path_valid():
-            self.report_404()
-            return
+    url = config.get_main_option('sqlalchemy.url')
+    context.configure(url=url)
     
-            self.assertEqual(bool(CFUNCTYPE(None)(0)), False)
-        self.assertEqual(bool(CFUNCTYPE(None)(42)), True)
+    site_info = 'ehow.com'
+download = ehow_download
+download_playlist = playlist_not_supported('ehow')
