@@ -1,275 +1,221 @@
 
         
-          /// True if the VarDecl requires ObjC accessor methods and a property
-  /// descriptor.
-  bool requiresObjCPropertyDescriptor(IRGenModule &IGM,
-                                      VarDecl *property);
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    namespace swift {
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    
+    { private:
+  Cluster* cluster_;  // Not owned.
+  int measurement_steps_;
+  int measurement_threads_;
+  std::vector<std::pair<string, Tensor>> feed_;
+  std::vector<string> fetch_;
+  std::unique_ptr<thread::ThreadPool> thread_pool_;
+};
+    
+      // Logs information about the dev nodes present on this machine: their
+  // existence, permissions, accessibility from this uid/gid.
+  static void LogDevNodeDiagnosticInformation();
+    
+    /** scalar_sigmoid_fast_derivative_op
+  * \ingroup CXX11_NeuralNetworks_Module
+  * \brief Template functor to compute the fast derivative of a sigmoid
+  *
+  * Input should be the backpropagated gradient.
+  *
+  * \sa class CwiseUnaryOp, Cwise::sigmoid_fast_derivative()
+  */
+template <typename T>
+struct scalar_sigmoid_fast_derivative_op {
+  EIGEN_EMPTY_STRUCT_CTOR(scalar_sigmoid_fast_derivative_op)
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE T operator()(const T& y) const {
+    const T one = T(1);
+    return (one - y) * y;
+  }
     }
     
-    #ifndef SWIFT_SIL_OWNERSHIPCHECKER_H
-#define SWIFT_SIL_OWNERSHIPCHECKER_H
-    
-    // NOTE: this class is NOT meant to be used in threaded contexts.
-@interface ObjectBehaviorVerifier : NSObject
-@property (readonly) BOOL wasRetained;
-@property (readonly) BOOL wasCopied;
-@property (readonly) BOOL wasMutableCopied;
-    
-        bool failed = false;
-    StdlibGroupsIndexRecordingConsumer groupIndexConsumer([&](StringRef groupName, SymbolTracker &tracker) -> bool {
-      SmallString<128> moduleName;
-      makeSubmoduleNameFromGroupName(groupName, moduleName);
-      SmallString<256> fileNameWithGroup = filename;
-      appendGroupNameForFilename(groupName, fileNameWithGroup);
+    template <typename T>
+__global__ void DynamicStitchKernel(const int32 slice_size,
+                                    const int32 output_size,
+                                    CudaDeviceArrayStruct<int32> input_indices,
+                                    CudaDeviceArrayStruct<const T*> input_ptrs,
+                                    T* output) {
+  int32* data_indices = GetCudaDeviceArrayOnDevice(&input_indices);
+  const T** data_ptrs = GetCudaDeviceArrayOnDevice(&input_ptrs);
+  CUDA_1D_KERNEL_LOOP(output_index, output_size) {
+    const int32 slice_id = output_index / slice_size;
+    const int32 slice_offset = output_index % slice_size;
+    const int32 input_index = data_indices[slice_id];
+    if (input_index != -1) {
+      output[output_index] = ldg(data_ptrs[input_index] + slice_offset);
     }
-    
-      StringRef Destination;
+  }
+}
     
     
     {
-    {}
-}
-#endif
-
-    
-    
-    {  /// Return a hash code of any components from these options that should
-  /// contribute to a Swift Bridging PCH hash.
-  llvm::hash_code getPCHHashComponents() const {
-    // Nothing here that contributes anything significant when emitting the PCH.
-    return llvm::hash_value(0);
-  }
-};
-    
-    struct IndexSymbol : IndexRelation {
-  SmallVector<IndexRelation, 3> Relations;
-  unsigned line = 0;
-  unsigned column = 0;
-    }
-    
-      /// Returns the SourceLoc for the beginning of the specified buffer
-  /// (at offset zero).
-  ///
-  /// Note that the resulting location might not point at the first token: it
-  /// might point at whitespace or a comment.
-  SourceLoc getLocForBufferStart(unsigned BufferID) const {
-    return getRangeForBuffer(BufferID).getStart();
+    {
+    {        const Tensor& y = outputs[0];
+        const Tensor& y_norm = outputs[1];
+        // Print out lambda, x, and y.
+        std::printf('%06d/%06d %s\n', session_index, step,
+                    DebugString(x, y).c_str());
+        // Copies y_normalized to x.
+        x = y_norm;
+      }
+    });
   }
     
-    bool Substitution::operator==(const Substitution &other) const {
-  // The archetypes may be missing, but we can compare them directly
-  // because archetypes are always canonical.
-  return
-    Replacement->isEqual(other.Replacement) &&
-    Conformance.equals(other.Conformance);
-}
-    
-    #include <memory>
+        FILE *m_pFile;
+    bool m_eof_flag, m_error_flag;
     
     
-    {  GetReporter()->ReportQPS(*result);
-  GetReporter()->ReportLatency(*result);
-}
     
-      grpc::testing::RunServer();
+    /*Modern gcc (4.x) can compile the naive versions of min and max with cmov if
+   given an appropriate architecture, but the branchless bit-twiddling versions
+   are just as fast, and do not require any special target architecture.
+  Earlier gcc versions (3.x) compiled both code to the same assembly
+   instructions, because of the way they represented ((_b)>(_a)) internally.*/
+#define OC_MAXI(_a,_b)      ((_a)-((_a)-(_b)&-((_b)>(_a))))
+#define OC_MINI(_a,_b)      ((_a)+((_b)-(_a)&-((_b)<(_a))))
+/*Clamps an integer into the given range.
+  If _a>_c, then the lower bound _a is respected over the upper bound _c (this
+   behavior is required to meet our documented API behavior).
+  _a: The lower bound.
+  _b: The value to clamp.
+  _c: The upper boud.*/
+#define OC_CLAMPI(_a,_b,_c) (OC_MAXI(_a,OC_MINI(_b,_c)))
+#define OC_CLAMP255(_x)     ((unsigned char)((((_x)<0)-1)&((_x)|-((_x)>255))))
+/*This has a chance of compiling branchless, and is just as fast as the
+   bit-twiddling method, which is slightly less portable, since it relies on a
+   sign-extended rightshift, which is not guaranteed by ANSI (but present on
+   every relevant platform).*/
+#define OC_SIGNI(_a)        (((_a)>0)-((_a)<0))
+/*Slightly more portable than relying on a sign-extended right-shift (which is
+   not guaranteed by ANSI), and just as fast, since gcc (3.x and 4.x both)
+   compile it into the right-shift anyway.*/
+#define OC_SIGNMASK(_a)     (-((_a)<0))
+/*Divides an integer by a power of two, truncating towards 0.
+  _dividend: The integer to divide.
+  _shift:    The non-negative power of two to divide by.
+  _rmask:    (1<<_shift)-1*/
+#define OC_DIV_POW2(_dividend,_shift,_rmask)\
+  ((_dividend)+(OC_SIGNMASK(_dividend)&(_rmask))>>(_shift))
+/*Divides _x by 65536, truncating towards 0.*/
+#define OC_DIV2_16(_x) OC_DIV_POW2(_x,16,0xFFFF)
+/*Divides _x by 2, truncating towards 0.*/
+#define OC_DIV2(_x) OC_DIV_POW2(_x,1,0x1)
+/*Divides _x by 8, truncating towards 0.*/
+#define OC_DIV8(_x) OC_DIV_POW2(_x,3,0x7)
+/*Divides _x by 16, truncating towards 0.*/
+#define OC_DIV16(_x) OC_DIV_POW2(_x,4,0xF)
+/*Right shifts _dividend by _shift, adding _rval, and subtracting one for
+   negative dividends first.
+  When _rval is (1<<_shift-1), this is equivalent to division with rounding
+   ties away from zero.*/
+#define OC_DIV_ROUND_POW2(_dividend,_shift,_rval)\
+  ((_dividend)+OC_SIGNMASK(_dividend)+(_rval)>>(_shift))
+/*Divides a _x by 2, rounding towards even numbers.*/
+#define OC_DIV2_RE(_x) ((_x)+((_x)>>1&1)>>1)
+/*Divides a _x by (1<<(_shift)), rounding towards even numbers.*/
+#define OC_DIV_POW2_RE(_x,_shift) \
+  ((_x)+((_x)>>(_shift)&1)+((1<<(_shift))-1>>1)>>(_shift))
+/*Swaps two integers _a and _b if _a>_b.*/
+#define OC_SORT2I(_a,_b) \
+  do{ \
+    int t__; \
+    t__=((_a)^(_b))&-((_b)<(_a)); \
+    (_a)^=t__; \
+    (_b)^=t__; \
+  } \
+  while(0)
     
-    #endif  // GRPC_INTERNAL_COMPILER_PYTHON_GENERATOR_H
-
-    
-    namespace grpc {
-    }
-    
-    #endif  // TEST_QPS_TIMER_H
-
-    
-    namespace grpc {
-    }
-    
-    
-static const vorbis_info_mapping0 _map_nominal_51[2]={
-  {2, {0,0,0,0,0,1}, {0,2}, {0,2}, 4,{0,3,0,0},{2,4,1,3}},
-  {2, {0,0,0,0,0,1}, {1,2}, {1,2}, 4,{0,3,0,0},{2,4,1,3}}
-};
-static const vorbis_info_mapping0 _map_nominal_51u[2]={
-  {2, {0,0,0,0,0,1}, {0,2}, {0,2}, 0,{0},{0}},
-  {2, {0,0,0,0,0,1}, {1,2}, {1,2}, 0,{0},{0}}
-};
-    
-    #endif /* FLOAT_CAST_H */
-
-    
-    #if !defined(_mfrngcode_H)
-# define _mfrngcode_H (1)
-# include 'entcode.h'
-    
-    #undef MULT16_32_Q15_ADD
-static inline int MULT16_32_Q15_ADD(int a, int b, int c, int d) {
-    int m;
-    asm volatile('MULT $ac1, %0, %1' : : 'r' ((int)a), 'r' ((int)b));
-    asm volatile('madd $ac1, %0, %1' : : 'r' ((int)c), 'r' ((int)d));
-    asm volatile('EXTR.W %0,$ac1, %1' : '=r' (m): 'i' (15));
-    return m;
-}
-    
-    #if !defined(X86CPU_H)
-# define X86CPU_H
-    
-    TEST_F(MockEnvTest, FakeSleeping) {
-  int64_t now = 0;
-  auto s = env_->GetCurrentTime(&now);
-  ASSERT_OK(s);
-  env_->FakeSleepForMicroseconds(3 * 1000 * 1000);
-  int64_t after_sleep = 0;
-  s = env_->GetCurrentTime(&after_sleep);
-  ASSERT_OK(s);
-  auto delta = after_sleep - now;
-  // this will be true unless test runs for 2 seconds
-  ASSERT_TRUE(delta == 3 || delta == 4);
-}
-    
-    // Used to encapsulate a particular instance of an opened database.
-//
-// This object should not be used directly in C++; it exists solely to provide
-// a mapping from a JavaScript object to a C++ code that can use the RocksDB
-// API.
-class DBWrapper : public node::ObjectWrap {
-  public:
-    static void Init(Handle<Object> exports);
-    }
-    
-    int main(int argc, char** argv) {
-  ::testing::InitGoogleTest(&argc, argv);
-  // Run with regular database
-  int result;
+        60,30,500,    3,18.,  1024
+  },
+  /* 8: 2048 x 27 */
   {
-    fprintf(stderr, 'Running tests with regular db and operator.\n');
-    StringAppendOperatorTest::SetOpenDbFunction(&OpenNormalDb);
-    result = RUN_ALL_TESTS();
-  }
+    8,{0,1,2,2,3,3,4,4},{3,4,3,4,3},{0,1,1,2,2},{-1,0,1,2,3},
+    {{4},{5,6},{7,8},{-1,9,10,11},{-1,12,13,14}},
+    2,{0,2048,   186,46,744, 12,92,372,1500,  28,66,130, 260,520,1112,
+       6,20,36,56,  78,110,158,222,  316,440,624,  928,1300,1700},
+    
+    static const static_bookblock _resbook_8s_0={
+  {
+    {0},
+    {0,0,&_8c0_s_p1_0},
+    {0},
+    {0,0,&_8c0_s_p3_0},
+    {0,0,&_8c0_s_p4_0},
+    {0,0,&_8c0_s_p5_0},
+    {0,0,&_8c0_s_p6_0},
+    {&_8c0_s_p7_0,&_8c0_s_p7_1},
+    {&_8c0_s_p8_0,&_8c0_s_p8_1},
+    {&_8c0_s_p9_0,&_8c0_s_p9_1,&_8c0_s_p9_2}
+   }
+};
+static const static_bookblock _resbook_8s_1={
+  {
+    {0},
+    {0,0,&_8c1_s_p1_0},
+    {0},
+    {0,0,&_8c1_s_p3_0},
+    {0,0,&_8c1_s_p4_0},
+    {0,0,&_8c1_s_p5_0},
+    {0,0,&_8c1_s_p6_0},
+    {&_8c1_s_p7_0,&_8c1_s_p7_1},
+    {&_8c1_s_p8_0,&_8c1_s_p8_1},
+    {&_8c1_s_p9_0,&_8c1_s_p9_1,&_8c1_s_p9_2}
+   }
+};
+    
+    extern JSClass  *jsb_cocos2d_NavMesh_class;
+extern JSObject *jsb_cocos2d_NavMesh_prototype;
+    
+    
+    
+    
+    
+    			float32 x = 20.0f, y1 = 0.0f, dx = 5.0f;
+    
+        Value(int unit, double value)
+    : unit(unit)
+    , value(value)
+    {
     }
     
-      size_t Capacity() const {
-    return capacity_;
-  }
     
-    #pragma once
-#include <stddef.h>
-#include <stdint.h>
-#include <string>
-#include <vector>
-#ifdef ROCKSDB_MALLOC_USABLE_SIZE
-#ifdef OS_FREEBSD
-#include <malloc_np.h>
-#else
-#include <malloc.h>
-#endif
-#endif
+    {} // namespace detail
     
-    JNIEnv* JniCallback::getJniEnv(jboolean* attached) const {
-  return JniUtil::getJniEnv(m_jvm, attached);
-}
-    
-      bool StatisticsJni::HistEnabledForType(uint32_t type) const {
-    if (type >= HISTOGRAM_ENUM_MAX) {
-      return false;
-    }
-    
-    if (m_ignore_histograms.count(type) > 0) {
-        return false;
-    }
-    }
-    
-      using WritableFile::RangeSync;
-  /**
-   * @brief No RangeSync support, just call Sync()
-   * @details [long description]
-   *
-   * @param offset [description]
-   * @param nbytes [description]
-   *
-   * @return [description]
-   */
-  Status RangeSync(off_t offset, off_t nbytes) {
-    return Sync();
-  }
-    
-      virtual std::string ToString() const override {
-    std::string res;
-    res.append('SimCache MISSes: ' + std::to_string(get_miss_counter()) + '\n');
-    res.append('SimCache HITs:    ' + std::to_string(get_hit_counter()) + '\n');
-    char buff[350];
-    auto lookups = get_miss_counter() + get_hit_counter();
-    snprintf(buff, sizeof(buff), 'SimCache HITRATE: %.2f%%\n',
-             (lookups == 0 ? 0 : get_hit_counter() * 100.0f / lookups));
-    res.append(buff);
-    return res;
-  }
-    
-    void MergeIteratorBuilder::AddIterator(InternalIterator* iter) {
-  if (!use_merging_iter && first_iter != nullptr) {
-    merge_iter->AddIterator(first_iter);
-    use_merging_iter = true;
-    first_iter = nullptr;
-  }
-  if (use_merging_iter) {
-    merge_iter->AddIterator(iter);
-  } else {
-    first_iter = iter;
-  }
-}
-    
-    void BaseComparatorJniCallback::FindShortestSeparator(
-    std::string* start, const Slice& limit) const {
-  if (start == nullptr) {
-    return;
-  }
-    }
-    
-        int unit;
-    double value;
-    
-    #include <iomanip>
-#include <iostream>
-#include <string>
-#include <vector>
-    
-        int getAlignContent(void) const;
-    int getAlignItems(void) const;
-    int getAlignSelf(void) const;
-    int getFlexDirection(void) const;
-    int getFlexWrap(void) const;
-    int getJustifyContent(void) const;
-    
-    template<typename... ARGS>
-inline void logi(const char* tag, const char* msg, ARGS... args) noexcept {
-  log(ANDROID_LOG_INFO, tag, msg, args...);
-}
-    
-    #pragma once
-#include <fb/assert.h>
-#include <utility>
-    
-    DEFINE_BOXED_PRIMITIVE(boolean, Boolean)
-DEFINE_BOXED_PRIMITIVE(byte, Byte)
-DEFINE_BOXED_PRIMITIVE(char, Character)
-DEFINE_BOXED_PRIMITIVE(short, Short)
-DEFINE_BOXED_PRIMITIVE(int, Integer)
-DEFINE_BOXED_PRIMITIVE(long, Long)
-DEFINE_BOXED_PRIMITIVE(float, Float)
-DEFINE_BOXED_PRIMITIVE(double, Double)
-    
-    #include 'CoreClasses.h'
-#include 'References-forward.h'
-    
-    #include <memory>
-    
-      virtual void allocateChunk() CXX11_OVERRIDE;
-    
-    std::ostream& operator<<(std::ostream& o,
-                         const std::shared_ptr<AuthConfig>& authConfig)
+    Config::~Config(void)
 {
-  o << authConfig->getAuthText();
-  return o;
+    YGConfigFree(m_config);
 }
+    
+    void setAssertHandler(AssertHandler assertHandler) {
+    gAssertHandler = assertHandler;
+}
+    
+      bool hasOnlyOneRef() const {
+    return m_refcount == 1;
+  }
+    
+      std::string asFormattedString() const {
+    std::stringstream str;
+    str << 'Function ' << m_functionName << ' in file ' << m_fileName << ':' << m_lineNumber;
+    return str.str();
+  }
+    
+    namespace facebook {
+    }
+    
+    
+    {
+    {}}
