@@ -1,291 +1,200 @@
 
         
-        template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32>
-internal::ValueArray32<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-    T29, T30, T31, T32> Values(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7,
-    T8 v8, T9 v9, T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15,
-    T16 v16, T17 v17, T18 v18, T19 v19, T20 v20, T21 v21, T22 v22, T23 v23,
-    T24 v24, T25 v25, T26 v26, T27 v27, T28 v28, T29 v29, T30 v30, T31 v31,
-    T32 v32) {
-  return internal::ValueArray32<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
-      T26, T27, T28, T29, T30, T31, T32>(v1, v2, v3, v4, v5, v6, v7, v8, v9,
-      v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23,
-      v24, v25, v26, v27, v28, v29, v30, v31, v32);
+        void Timer::report() const {
+  int64_t ms = getMicroSeconds();
+  int seconds = ms / 1000000;
+  PRINT_MSG('%s took %d'%02d\' (%' PRId64 ' us) %s', m_name.c_str(),
+            seconds / 60, seconds % 60, ms, getName());
 }
     
-    
-    {}  // namespace internal
-    
-    // First, define a fixture class template.  It should be parameterized
-// by a type.  Remember to derive it from testing::Test.
-template <typename T>
-class FooTest : public testing::Test {
-  ...
-};
-    
-      // Returns a copy of the FilePath with the directory part removed.
-  // Example: FilePath('path/to/file').RemoveDirectoryName() returns
-  // FilePath('file'). If there is no directory part ('just_a_file'), it returns
-  // the FilePath unmodified. If there is no file part ('just_a_dir/') it
-  // returns an empty FilePath ('').
-  // On Windows platform, '\' is the path separator, otherwise it is '/'.
-  FilePath RemoveDirectoryName() const;
-    
-      void depart() {
-    if (link_.depart()) delete value_;
+      /**
+   * Get a description of the type of transport.
+   */
+  String describe() const override {
+    return s_pagelet;
   }
     
-       private:
-    Iterator(const Iterator& other)
-        : base_(other.base_),
-        begin1_(other.begin1_),
-        end1_(other.end1_),
-        current1_(other.current1_),
-        begin2_(other.begin2_),
-        end2_(other.end2_),
-        current2_(other.current2_),
-        begin3_(other.begin3_),
-        end3_(other.end3_),
-        current3_(other.current3_),
-        begin4_(other.begin4_),
-        end4_(other.end4_),
-        current4_(other.current4_),
-        begin5_(other.begin5_),
-        end5_(other.end5_),
-        current5_(other.current5_),
-        begin6_(other.begin6_),
-        end6_(other.end6_),
-        current6_(other.current6_),
-        begin7_(other.begin7_),
-        end7_(other.end7_),
-        current7_(other.current7_) {
-      ComputeCurrentValue();
+    //////////////////////////////////////////////////////////////////////
+    
+    Variant HHVM_FUNCTION(mb_convert_variables,
+                      const String& to_encoding,
+                      const Variant& from_encoding,
+                      VRefParam vars,
+                      const Array& args /* = null_array */) {
+  mbfl_string string, result;
+  mbfl_encoding *_from_encoding, *_to_encoding;
+  mbfl_encoding_detector *identd;
+  mbfl_buffer_converter *convd;
+  int elistsz;
+  mbfl_encoding **elist;
+  char *name;
+    }
+    
+    #endif
+#endif
+
+    
+    
+    {  gen(env, JmpSwitchDest, data, index, sp(env), fp(env));
+}
+    
+    #include 'hphp/runtime/vm/hhbc.h'
+    
+    #include 'test/cpp/qps/qps_worker.h'
+#include 'test/cpp/util/test_config.h'
+#include 'test/cpp/util/test_credentials_provider.h'
+    
+    #include <gtest/gtest.h>
+    
+      std::unique_ptr<grpc::Server> StartServer(int port);
+    
+    #include 'test/core/end2end/data/ssl_test_data.h'
+    
+    // ===========================================================================
+// DoExportToDbn() - implements CNTK 'exportdbn' command
+// ===========================================================================
+    
+    namespace Microsoft { namespace MSR { namespace BS {
+    }
+    }
+    }
+    
+            // now we have the original names from the input symbol, generate the output names
+        for (GenNameValue name : copyNodes)
+        {
+            auto& node = name.first;
+            std::wstring nodeName = node->NodeName();
+            std::wstring nodeOutName = name.second;
     }
     
     
-$for i [[
-template <GTEST_$(n)_TYPENAMES_(T)>
-struct TupleElement<true, $i, GTEST_$(n)_TUPLE_(T) > {
-  typedef T$i type;
+    {
+    {
+    {    void setverbosity(int veb)
+    {
+        verbosity = veb;
+        numlattices.setverbosity(veb);
+        denlattices.setverbosity(veb);
+    }
 };
+} }
+
     
-    // We don't want to require the users to write TypesN<...> directly,
-// as that would require them to count the length.  Types<...> is much
-// easier to write, but generates horrible messages when there is a
-// compiler error, as gcc insists on printing out each template
-// argument, even if it has the default value (this means Types<int>
-// will appear as Types<int, None, None, ..., None> in the compiler
-// errors).
-//
-// Our solution is to combine the best part of the two approaches: a
-// user would write Types<T1, ..., TN>, and Google Test will translate
-// that to TypesN<T1, ..., TN> internally to make error messages
-// readable.  The translation is done by the 'type' member of the
-// Types template.
+        // other goodies I came across (intrin.h):
+    //  - _mm_prefetch
+    //  - _mm_stream_ps --store without polluting cache
+    //  - unknown: _mm_addsub_ps, _mm_hsub_ps, _mm_movehdup_ps, _mm_moveldup_ps, _mm_blend_ps, _mm_blendv_ps, _mm_insert_ps, _mm_extract_ps, _mm_round_ps
+    //  - _mm_dp_ps dot product! http://msdn.microsoft.com/en-us/library/bb514054.aspx
+    //    Not so interesting for long vectors, we get better numerical precision with parallel adds and hadd at the end
     
+      // Success/failure error codes.
+  enum jpgd_status
+  {
+    JPGD_SUCCESS = 0, JPGD_FAILED = -1, JPGD_DONE = 1,
+    JPGD_BAD_DHT_COUNTS = -256, JPGD_BAD_DHT_INDEX, JPGD_BAD_DHT_MARKER, JPGD_BAD_DQT_MARKER, JPGD_BAD_DQT_TABLE, 
+    JPGD_BAD_PRECISION, JPGD_BAD_HEIGHT, JPGD_BAD_WIDTH, JPGD_TOO_MANY_COMPONENTS, 
+    JPGD_BAD_SOF_LENGTH, JPGD_BAD_VARIABLE_MARKER, JPGD_BAD_DRI_LENGTH, JPGD_BAD_SOS_LENGTH,
+    JPGD_BAD_SOS_COMP_ID, JPGD_W_EXTRA_BYTES_BEFORE_MARKER, JPGD_NO_ARITHMITIC_SUPPORT, JPGD_UNEXPECTED_MARKER,
+    JPGD_NOT_JPEG, JPGD_UNSUPPORTED_MARKER, JPGD_BAD_DQT_LENGTH, JPGD_TOO_MANY_BLOCKS,
+    JPGD_UNDEFINED_QUANT_TABLE, JPGD_UNDEFINED_HUFF_TABLE, JPGD_NOT_SINGLE_SCAN, JPGD_UNSUPPORTED_COLORSPACE,
+    JPGD_UNSUPPORTED_SAMP_FACTORS, JPGD_DECODE_ERROR, JPGD_BAD_RESTART_MARKER, JPGD_ASSERTION_ERROR,
+    JPGD_BAD_SOS_SPECTRAL, JPGD_BAD_SOS_SUCCESSIVE, JPGD_STREAM_READ, JPGD_NOTENOUGHMEM
+  };
     
-    {    if (((req_comps == 1) && (decoder.get_num_components() == 1)) || ((req_comps == 4) && (decoder.get_num_components() == 3)))
-      memcpy(pDst, pScan_line, dst_bpl);
-    else if (decoder.get_num_components() == 1)
-    {
-      if (req_comps == 3)
-      {
-        for (int x = 0; x < image_width; x++)
-        {
-          uint8 luma = pScan_line[x];
-          pDst[0] = luma;
-          pDst[1] = luma;
-          pDst[2] = luma;
-          pDst += 3;
-        }
-      }
-      else
-      {
-        for (int x = 0; x < image_width; x++)
-        {
-          uint8 luma = pScan_line[x];
-          pDst[0] = luma;
-          pDst[1] = luma;
-          pDst[2] = luma;
-          pDst[3] = 255;
-          pDst += 4;
-        }
-      }
+  // Input stream interface.
+  // Derive from this class to read input data from sources other than files or memory. Set m_eof_flag to true when no more data is available.
+  // The decoder is rather greedy: it will keep on calling this method until its internal input buffer is full, or until the EOF flag is set.
+  // It the input stream contains data after the JPEG stream's EOI (end of image) marker it will probably be pulled into the internal buffer.
+  // Call the get_total_bytes_read() method to determine the actual size of the JPEG stream after successful decoding.
+  class jpeg_decoder_stream
+  {
+  public:
+    jpeg_decoder_stream() { }
+    virtual ~jpeg_decoder_stream() { }
     }
-    else if (decoder.get_num_components() == 3)
-    {
-      if (req_comps == 1)
-      {
-        const int YR = 19595, YG = 38470, YB = 7471;
-        for (int x = 0; x < image_width; x++)
-        {
-          int r = pScan_line[x*4+0];
-          int g = pScan_line[x*4+1];
-          int b = pScan_line[x*4+2];
-          *pDst++ = static_cast<uint8>((r * YR + g * YG + b * YB + 32768) >> 16);
-        }
-      }
-      else
-      {
-        for (int x = 0; x < image_width; x++)
-        {
-          pDst[0] = pScan_line[x*4+0];
-          pDst[1] = pScan_line[x*4+1];
-          pDst[2] = pScan_line[x*4+2];
-          pDst += 3;
-        }
-      }
-    }
-  }
     
-    
-int             oc_has_mode_metrics;
-oc_mode_metrics OC_MODE_METRICS[64][3][2][OC_SAD_BINS];
+    # if defined(CLZ64)
+/**
+ * OC_ILOGNZ_64 - Integer binary logarithm of a non-zero 64-bit value.
+ * @_v: A non-zero 64-bit value.
+ * Returns floor(log2(_v))+1.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * If _v is zero, the return value is undefined; use OC_ILOG_64() instead.
+ */
+#  define OC_ILOGNZ_64(_v) (CLZ64_OFFS-CLZ64(_v))
+/**
+ * OC_ILOG_64 - Integer binary logarithm of a 64-bit value.
+ * @_v: A 64-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ */
+#  define OC_ILOG_64(_v)   (OC_ILOGNZ_64(_v)&-!!(_v))
+# else
+#  define OC_ILOGNZ_64(_v) (oc_ilog64(_v))
+#  define OC_ILOG_64(_v)   (oc_ilog64(_v))
 # endif
     
-    /*Note that we do not provide a macro for abs(), because it is provided as a
-   library function, which we assume is translated into an intrinsic to avoid
-   the function call overhead and then implemented in the smartest way for the
-   target platform.
-  With modern gcc (4.x), this is true: it uses cmov instructions if the
-   architecture supports it and branchless bit-twiddling if it does not (the
-   speed difference between the two approaches is not measurable).
-  Interestingly, the bit-twiddling method was patented in 2000 (US 6,073,150)
-   by Sun Microsystems, despite prior art dating back to at least 1996:
-   http://web.archive.org/web/19961201174141/www.x86.org/ftp/articles/pentopt/PENTOPT.TXT
-  On gcc 3.x, however, our assumption is not true, as abs() is translated to a
-   conditional jump, which is horrible on deeply piplined architectures (e.g.,
-   all consumer architectures for the past decade or more).
-  Also be warned that -C*abs(x) where C is a constant is mis-optimized as
-   abs(C*x) on every gcc release before 4.2.3.
-  See bug http://gcc.gnu.org/bugzilla/show_bug.cgi?id=34130 */
-    
-      &_huff_book_line_128x11_0sub0,
-  &_huff_book_line_128x11_1sub0,
-  &_huff_book_line_128x11_1sub1,
-  &_huff_book_line_128x11_2sub1,
-  &_huff_book_line_128x11_2sub2,
-  &_huff_book_line_128x11_2sub3,
-  &_huff_book_line_128x11_3sub1,
-  &_huff_book_line_128x11_3sub2,
-  &_huff_book_line_128x11_3sub3,
+      {1,0,32,  &_residue_44_mid_un,
+   &_huff_book__16u1__long,&_huff_book__16u1__long,
+   &_resbook_16u_1,&_resbook_16u_1}
 };
-static const static_codebook*const _floor_128x17_books[]={
-  &_huff_book_line_128x17_class1,
-  &_huff_book_line_128x17_class2,
-  &_huff_book_line_128x17_class3,
+static const vorbis_residue_template _res_16u_2[]={
+  {1,0,32,  &_residue_44_hi_un,
+   &_huff_book__16u2__short,&_huff_book__16u2__short,
+   &_resbook_16u_2,&_resbook_16u_2},
     
-      {1,0,32,  &_residue_44_low_un,
-   &_huff_book__44u2__long,&_huff_book__44u2__long,
-   &_resbook_44u_2,&_resbook_44u_2}
-};
-static const vorbis_residue_template _res_44u_3[]={
-  {1,0,16,  &_residue_44_low_un,
-   &_huff_book__44u3__short,&_huff_book__44u3__short,
-   &_resbook_44u_3,&_resbook_44u_3},
-    
-    #ifdef _MSC_VER
-/* MS Visual Studio doesn't have C99 inline keyword. */
-#define inline __inline
+    #ifndef min
+#  define min(x,y)  ((x)>(y)?(y):(x))
 #endif
     
-    /*The number of bits to output at a time.*/
-# define EC_SYM_BITS   (8)
-/*The total number of bits in each of the state registers.*/
-# define EC_CODE_BITS  (32)
-/*The maximum symbol value.*/
-# define EC_SYM_MAX    ((1U<<EC_SYM_BITS)-1)
-/*Bits to shift by to move a symbol into the high-order position.*/
-# define EC_CODE_SHIFT (EC_CODE_BITS-EC_SYM_BITS-1)
-/*Carry bit of the high-order range symbol.*/
-# define EC_CODE_TOP   (((opus_uint32)1U)<<(EC_CODE_BITS-1))
-/*Low-order bit of the high-order range symbol.*/
-# define EC_CODE_BOT   (EC_CODE_TOP>>EC_SYM_BITS)
-/*The number of bits available for the last, partial symbol in the code field.*/
-# define EC_CODE_EXTRA ((EC_CODE_BITS-2)%EC_SYM_BITS+1)
-#endif
-
     
-      // Append array of per-filter offsets
-  const uint32_t array_offset = result_.size();
-  for (size_t i = 0; i < filter_offsets_.size(); i++) {
-    PutFixed32(&result_, filter_offsets_[i]);
-  }
+/** 16x32 multiply, followed by a 15-bit shift right and 32-bit add.
+    b must fit in 31 bits.
+    Result fits in 32 bits. */
+#undef MAC16_32_Q15
+#define MAC16_32_Q15(c, a, b) ADD32(c, MULT16_32_Q15(a, b))
     
-          case kNewFile:
-        if (GetLevel(&input, &level) &&
-            GetVarint64(&input, &f.number) &&
-            GetVarint64(&input, &f.file_size) &&
-            GetInternalKey(&input, &f.smallest) &&
-            GetInternalKey(&input, &f.largest)) {
-          new_files_.push_back(std::make_pair(level, f));
-        } else {
-          msg = 'new-file entry';
-        }
-        break;
-    
-    
-    {  Slice Generate(int len) {
-    if (pos_ + len > data_.size()) {
-      pos_ = 0;
-      assert(len < data_.size());
-    }
-    pos_ += len;
-    return Slice(data_.data() + pos_ - len, len);
-  }
-};
-    
-    #include <cstdlib>
-#include <stdio.h>
-#include <string.h>
-    
-    [[noreturn]] void usage(const char* name) {
-  std::cerr << folly::format(
-      'Usage: {0}\n'
-      '         list all huge page sizes and their mount points\n'
-      '       {0} -cp <src_file> <dest_nameprefix>\n'
-      '         copy src_file to a huge page file\n',
-      name);
-  exit(1);
-}
+      Clang, in contrast, requires us to do this always for _mm_cvtepi8_epi32
+  (which is fair, since technically the compiler is always allowed to do the
+  dereference before invoking the function implementing the intrinsic).
+  However, it is smart enough to eliminate the extra MOVD instruction.
+  For _mm_cvtepi16_epi32, it does the right thing, though does *not* optimize out
+  the extra MOVQ if it's specified explicitly */
     
     
     {
-    {  folly::File file_;
-};
-} // namespace folly
+    {// use R's PRNG to replacd
+CustomGlobalRandomEngine::result_type
+CustomGlobalRandomEngine::operator()() {
+  return static_cast<result_type>(
+      std::floor(unif_rand() * CustomGlobalRandomEngine::max()));
+}
+}  // namespace common
+}  // namespace xgboost
 
     
-    void LogConfig::update(const LogConfig& other) {
-  // Update handlerConfigs_ with all of the entries from the other LogConfig.
-  // Any entries already present in our handlerConfigs_ are replaced wholesale.
-  for (const auto& entry : other.handlerConfigs_) {
-    if (entry.second.type.hasValue()) {
-      // This is a complete LogHandlerConfig that should be inserted
-      // or completely replace an existing handler config with this name.
-      auto result = handlerConfigs_.insert(entry);
-      if (!result.second) {
-        result.first->second = entry.second;
-      }
-    } else {
-      // This config is updating an existing LogHandlerConfig rather than
-      // completely replacing it.
-      auto iter = handlerConfigs_.find(entry.first);
-      if (iter == handlerConfigs_.end()) {
-        throw std::invalid_argument(to<std::string>(
-            'cannot update configuration for unknown log handler \'',
-            entry.first,
-            '\''));
-      }
-      iter->second.update(entry.second);
-    }
+    XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(lz4i16hc)
+.describe('Apply LZ4 binary data compression(16 bit index mode) for ext memory.')
+.set_body([]() {
+    return new SparsePageLZ4Format<uint16_t>(true);
+  });
+    
+    #include <dmlc/io.h>
+#include <string>
+#include <cstring>
+#include './sync.h'
+    
+    struct EvalRMSE : public EvalEWiseBase<EvalRMSE> {
+  const char *Name() const override {
+    return 'rmse';
   }
-    }
+  inline bst_float EvalRow(bst_float label, bst_float pred) const {
+    bst_float diff = label - pred;
+    return diff * diff;
+  }
+  inline static bst_float GetFinal(bst_float esum, bst_float wsum) {
+    return std::sqrt(esum / wsum);
+  }
+};
