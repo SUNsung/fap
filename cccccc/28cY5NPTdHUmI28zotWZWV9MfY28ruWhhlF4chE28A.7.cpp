@@ -1,134 +1,101 @@
 
         
-        #include 'atom/browser/api/trackable_object.h'
-#include 'atom/browser/net/atom_network_delegate.h'
-#include 'native_mate/arguments.h'
-#include 'native_mate/handle.h'
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-      AtomQuotaPermissionContext();
-  virtual ~AtomQuotaPermissionContext();
-    
-    namespace atom {
-    }
-    
-      // URLRequestJob:
-  void GetResponseInfo(net::HttpResponseInfo* info) override;
-    
-    typedef struct { int position; atom::AtomMenuModel* model; } MenuItem;
-typedef std::map<ui::Accelerator, MenuItem> AcceleratorTable;
-    
-    #endif  // ATOM_BROWSER_UI_DRAG_UTIL_H_
-
-    
-    #ifndef ATOM_BROWSER_UI_TRAY_ICON_GTK_H_
-#define ATOM_BROWSER_UI_TRAY_ICON_GTK_H_
-    
-    MenuModelAdapter::~MenuModelAdapter() {
-}
-    
-    #define MARKUP_SIMPLE_FIELD(Id, Keyword, XMLKind) \
-class Id final : public PrivateExtension, \
-    private llvm::TrailingObjects<Id, MarkupASTNode *> { \
-  friend TrailingObjects; \
-\
-  size_t NumChildren; \
-\
-  Id(ArrayRef<MarkupASTNode *> Children);\
-\
-public: \
-  static Id *create(MarkupContext &MC, ArrayRef<MarkupASTNode *> Children); \
-\
-  ArrayRef<MarkupASTNode *> getChildren() { \
-    return {getTrailingObjects<MarkupASTNode *>(), NumChildren}; \
-  } \
-\
-  ArrayRef<const MarkupASTNode *> getChildren() const { \
-    return {getTrailingObjects<MarkupASTNode *>(), NumChildren}; \
-  } \
-\
-  static bool classof(const MarkupASTNode *N) { \
-    return N->getKind() == ASTNodeKind::Id; \
-  } \
-};
-#include 'swift/Markup/SimpleFields.def'
-    
-      /// \brief Returns a SourceRange covering the entire specified buffer.
-  ///
-  /// Note that the start location might not point at the first token: it
-  /// might point at whitespace or a comment.
-  CharSourceRange getRangeForBuffer(unsigned BufferID) const;
-    
-    extern JSClass  *jsb_cocosbuilder_CCBAnimationManager_class;
-extern JSObject *jsb_cocosbuilder_CCBAnimationManager_prototype;
-    
-    bool js_cocos2dx_navmesh_NavMeshObstacle_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_navmesh_NavMeshObstacle_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_navmesh_NavMeshObstacle(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_navmesh(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_initWith(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_syncToObstacle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_syncToNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getHeight(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getRadius(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getNavMeshObstacleComponentName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_NavMeshObstacle(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    
-    
-    
-    class AddPair : public Test
-{
-public:
-    }
-    
-    
-    {    _state = EXPECTS_CRASH_DUMP_END;
-    return 0;
-}
-    
-    
-    
-    #ifndef _COMM_FUNCTION_H_
-#define _COMM_FUNCTION_H_
-    
-    
-/*
- * scop_jenv.h
- *
- *  Created on: 2012-8-21
- *      Author: yanguoyue
- */
-    
-    ////////////////////////////////////////////////////////////////////////////////
-/// Disclaimer: This is intended only as a partial stand-in for
-/// std::pmr::memory_resource (C++17) as needed for developing a
-/// hazptr prototype.
-////////////////////////////////////////////////////////////////////////////////
-    
-    
-    { private:
-  bool async_{true};
-  Optional<size_t> maxBufferSize_;
-};
-    
-     private:
-  ImmediateFileWriter(ImmediateFileWriter const&) = delete;
-  ImmediateFileWriter& operator=(ImmediateFileWriter const&) = delete;
+        http://www.apache.org/licenses/LICENSE-2.0
     
     /**
- * Configuration for a LogCategory
+ * \ingroup CXX11_NeuralNetworks_Module
+ * \brief Template functor to clip the magnitude of the first scalar.
+ *
+ * \sa class CwiseBinaryOp, MatrixBase::Clip
  */
-class LogCategoryConfig {
- public:
-  explicit LogCategoryConfig(
-      LogLevel level = LogLevel::WARNING,
-      bool inheritParentLevel = true);
-  LogCategoryConfig(
-      LogLevel level,
-      bool inheritParentLevel,
-      std::vector<std::string> handlers);
-    }
+template <typename Scalar>
+struct scalar_clip_op {
+  EIGEN_EMPTY_STRUCT_CTOR(scalar_clip_op)
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const Scalar
+  operator()(const Scalar& a, const Scalar& b) const {
+    return numext::mini(numext::maxi(a, -b), b);
+  }
+  template <typename Packet>
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const Packet
+  packetOp(const Packet& a, const Packet& b) const {
+    return internal::pmin(internal::pmax(a, internal::pnegate(b)), b);
+  }
+};
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    REGISTER_OP('EncodeAudio')
+    .Input('sampled_audio: float')
+    .Output('contents: string')
+    .Attr('file_format: string')
+    .Attr('samples_per_second: int')
+    .Attr('bits_per_second: int = 192000')
+    .SetShapeFn(shape_inference::ScalarShape)
+    .Doc(R'doc(
+Processes a `Tensor` containing sampled audio with the number of channels
+and length of the audio specified by the dimensions of the `Tensor`. The
+audio is converted into a string that, when saved to disk, will be equivalent
+to the audio in the specified audio format.
+    
+    template<typename DType>
+inline void CompressArray<DType>::InitCompressChunks(size_t chunk_size, size_t max_nchunk) {
+  raw_chunks_.clear();
+  raw_chunks_.push_back(0);
+  size_t min_chunk_size = data.size() / max_nchunk;
+  chunk_size = std::max(min_chunk_size, chunk_size);
+  size_t nstep = data.size() / chunk_size;
+  for (size_t i = 0; i < nstep; ++i) {
+    raw_chunks_.push_back(raw_chunks_.back() + chunk_size);
+    CHECK_LE(raw_chunks_.back(), data.size());
+  }
+  if (nstep == 0) raw_chunks_.push_back(0);
+  raw_chunks_.back() = data.size();
+  CHECK_GE(raw_chunks_.size(), 2);
+  out_buffer_.resize(raw_chunks_.size() - 1);
+  for (size_t i = 0; i < out_buffer_.size(); ++i) {
+    out_buffer_[i].resize(raw_chunks_[i + 1] - raw_chunks_[i]);
+  }
+}
+    
+      void Write(const void* dptr, size_t size) override {
+    LOG(FATAL) << 'Not implemented';
+  }
+    
+      void BeforeFirst() override {
+    parser_->BeforeFirst();
+  }
+    
+    #include <stdint.h>
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    #endif
+
+    
+    
+#define DEFINE_HAS_MEMBER_WITH_TYPE(member_name, member_type) \
+    template <typename T>\
+    class has_##member_name {\
+      private:\
+        struct yes_type { char x[1]; };\
+        struct no_type { char x[2]; };\
+        template <member_type (T::*)> struct tester;\
+        template <typename U> static yes_type test(tester<&U::member_name>*);\
+        template <typename U> static no_type test(...);\
+      public:\
+        static const bool value = (sizeof(test<T>(0)) == sizeof(yes_type));\
+    };
+    
+    #ifndef SCOP_JENV_H_
+#define SCOP_JENV_H_
