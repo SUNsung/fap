@@ -1,49 +1,85 @@
 
         
-        - tree.RewriteCardinalityException
-  - tree.RewriteEarlyExitException
-  - tree.RewriteEmptyStreamException
-  .
-.
+                    plt.text((i + 0.02) / len(algorithms), 0.98, alg,
+                     transform=ax.transAxes,
+                     ha='left',
+                     va='top',
+                     bbox=dict(facecolor='w', edgecolor='w', alpha=0.5))
     
-    from antlr3.constants import INVALID_TOKEN_TYPE
+            start = time.time()
+        func(X, n_jobs=1)
+        one_core.append(time.time() - start)
     
-            else:
-            msg = str(e)
+    from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import Perceptron
+from sklearn.pipeline import Pipeline
+from sklearn.datasets import load_files
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
     
-                        if snext < 0:
-                        #print 'not a normal transition'
-                        # was in range but not a normal transition
-                        # must check EOT, which is like the else clause.
-                        # eot[s]>=0 indicates that an EOT edge goes to another
-                        # state.
-                        if self.eot[s] >= 0: # EOT Transition to accept state?
-                            #print 'EOT trans to accept state %d' % self.eot[s]
-    
-            Should only be used by Executor implementations and unit tests.
-        '''
-        with self._condition:
-            self._result = result
-            self._state = FINISHED
-            for waiter in self._waiters:
-                waiter.add_result(self)
-            self._condition.notify_all()
-        self._invoke_callbacks()
-    
-    atexit.register(_python_exit)
-
+    import socket
+import ctypes
+import os
     
     
-FILTER_COMPILERS = { 'regex' : CompileRegex,
-                     'level' : CompileLevel }
+    def unpack(cls, string):
+        '''@brief Unpack the runlength encoded table data.
+    
+            return '[@%d,%d:%d=%r,<%d>%s,%d:%d]' % (
+            self.index,
+            self.start, self.stop,
+            txt,
+            self.type, channelStr,
+            self.line, self.charPositionInLine
+            )
     
     
-def _JavaFilter( config ):
-  return { 'filter_diagnostics' : { 'java': config } }
+    
+def wrap_web_tests_adapter():
+    result = {}
+    for cls in web_test.wsgi_safe_tests:
+        class WSGIAdapterWrappedTest(cls):  # type: ignore
+            def get_app(self):
+                self.app = Application(self.get_handlers(),
+                                       **self.get_app_kwargs())
+                return WSGIContainer(validator(WSGIAdapter(self.app)))
+        result['WSGIAdapter_' + cls.__name__] = WSGIAdapterWrappedTest
+    return result
+    
+        For use on platforms that don't have os.pipe() (or where pipes cannot
+    be passed to select()), but do have sockets.  This includes Windows
+    and Jython.
+    '''
+    def __init__(self):
+        from .auto import set_close_exec
+        # Based on Zope select_trigger.py:
+        # https://github.com/zopefoundation/Zope/blob/master/src/ZServer/medusa/thread/select_trigger.py
     
     
-def MakeUserOptions( custom_options = {} ):
-  options = dict( user_options_store.DefaultOptions() )
-  options.update( DEFAULT_CLIENT_OPTIONS )
-  options.update( custom_options )
-  return options
+class AutoreloadTest(unittest.TestCase):
+    def test_reload_module(self):
+        # Create temporary test application
+        path = mkdtemp()
+        os.mkdir(os.path.join(path, 'testapp'))
+        open(os.path.join(path, 'testapp/__init__.py'), 'w').close()
+        with open(os.path.join(path, 'testapp/__main__.py'), 'w') as f:
+            f.write(MAIN)
+    
+        def get_app(self):
+        return Application([
+            ('/digest', DigestAuthHandler),
+            ('/custom_reason', CustomReasonHandler),
+            ('/custom_fail_reason', CustomFailReasonHandler),
+        ])
+    
+        @gen_test
+    def test_wait_timeout_preempted(self):
+        c = locks.Condition()
+    
+                server = TCPServer()
+            server.listen(0, address='127.0.0.1')
+            IOLoop.current().run_sync(lambda: None)
+            print('012', end='')
+        ''')
+        out = self.run_subproc(code)
+        self.assertEqual(''.join(sorted(out)), '012')
