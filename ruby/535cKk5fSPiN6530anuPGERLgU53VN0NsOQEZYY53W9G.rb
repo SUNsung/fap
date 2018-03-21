@@ -1,35 +1,103 @@
 
         
-              keys = Spaceship::Portal::Key.all
-      expect(keys.size).to eq(2)
-      expect(keys.sample).to be_instance_of(Spaceship::Portal::Key)
-    end
-  end
-    
-        # Gets the last git commit information formatted into a String by the provided
-    # pretty format String. See the git-log documentation for valid format placeholders
-    def self.last_git_commit_formatted_with(pretty_format, date_format = nil)
-      command = ['git log -1']
-      command << '--pretty=\'#{pretty_format}\''
-      command << '--date=\'#{date_format}\'' if date_format
-      Actions.sh(command.compact.join(' '), log: false).chomp
-    rescue
-      nil
-    end
-    
-        class AdbHelper
-      # Path to the adb binary
-      attr_accessor :adb_path
-    
-            expect(result).to eq('/usr/local/bin/cloc  --by-file --xml  --out=build/cloc.xml MyCoolApp')
+              it 'logs the command if verbose' do
+        with_verbose(true) do
+          allow(Fastlane::Actions).to receive(:sh).with(anything, { log: true }).and_return('')
+          result = Fastlane::FastFile.new.parse('lane :test do
+            git_tag_exists(tag: '1.2.0')
+          end').runner.execute(:test)
+        end
       end
     
-          context('when the tag exists') do
-        before do
-          allow(Fastlane::Actions).to receive(:sh).with('git rev-parse -q --verify refs/tags/1.2.0 || true', { log: nil }).and_return('41215512353215321')
+            # Checks if the confirmation for the user is within the limit time.
+        # We do this by calculating if the difference between today and the
+        # confirmation sent date does not exceed the confirm in time configured.
+        # allow_unconfirmed_access_for is a model configuration, must always be an integer value.
+        #
+        # Example:
+        #
+        #   # allow_unconfirmed_access_for = 1.day and confirmation_sent_at = today
+        #   confirmation_period_valid?   # returns true
+        #
+        #   # allow_unconfirmed_access_for = 5.days and confirmation_sent_at = 4.days.ago
+        #   confirmation_period_valid?   # returns true
+        #
+        #   # allow_unconfirmed_access_for = 5.days and confirmation_sent_at = 5.days.ago
+        #   confirmation_period_valid?   # returns false
+        #
+        #   # allow_unconfirmed_access_for = 0.days
+        #   confirmation_period_valid?   # will always return false
+        #
+        #   # allow_unconfirmed_access_for = nil
+        #   confirmation_period_valid?   # will always return true
+        #
+        def confirmation_period_valid?
+          self.class.allow_unconfirmed_access_for.nil? || (confirmation_sent_at && confirmation_sent_at.utc >= self.class.allow_unconfirmed_access_for.ago)
         end
     
-          it 'pass a custom build number to the tool' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          increment_build_number(build_number: 24, xcodeproj: '.xcproject')
-        end').runner.execute(:test)
+        def translation_scope
+      'devise.confirmations'
+    end
+end
+
+    
+      # GET /resource/unlock/new
+  def new
+    self.resource = resource_class.new
+  end
+    
+        def password_change(record, opts={})
+      devise_mail(record, :password_change, opts)
+    end
+  end
+end
+
+    
+      def index
+    render plain: 'Home'
+  end
+end
+    
+        def respond
+      if http_auth?
+        http_auth
+      elsif warden_options[:recall]
+        recall
+      else
+        redirect
+      end
+    end
+    
+        def length
+      @entries.length
+    end
+    
+        def initialize(name = nil, path = nil, type = nil)
+      self.name = name
+      self.path = path
+      self.type = type
+    
+    module Docs
+  class PageDb
+    attr_reader :pages
+    
+            css('[id]').each do |node|
+          # Module
+          if node.name == 'h2'
+            type = node.content.remove 'Backbone.'
+            if type.capitalize! # sync, history
+              entries << [node.content, node['id'], type]
+            end
+            next
+          end
+    
+            entries
+      end
+    
+      context 'called with one size' do
+    it 'applies same width to all sides' do
+      ruleset = 'position: fixed; ' +
+                'top: 1em; ' +
+                'right: 1em; ' +
+                'bottom: 1em; ' +
+                'left: 1em;'
