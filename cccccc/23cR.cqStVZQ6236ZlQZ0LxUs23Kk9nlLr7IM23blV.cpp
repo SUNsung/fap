@@ -1,233 +1,229 @@
 
         
-        namespace tesseract {
-BOOL8 Tesseract::word_adaptable(  //should we adapt?
-                                WERD_RES *word,
-                                uinT16 mode) {
-  if (tessedit_adaption_debug) {
-    tprintf('Running word_adaptable() for %s rating %.4f certainty %.4f\n',
-          word->best_choice == NULL ? '' :
-          word->best_choice->unichar_string().string(),
-          word->best_choice->rating(), word->best_choice->certainty());
+        class TestFileSystem : public NullFileSystem {
+ public:
+  Status NewRandomAccessFile(
+      const string& fname, std::unique_ptr<RandomAccessFile>* result) override {
+    result->reset(new TestRandomAccessFile);
+    return Status::OK();
   }
-    }
-    }
-    
-    double LLSQ::m() const {  // get gradient
-  double covar = covariance();
-  double x_var = x_variance();
-  if (x_var != 0.0)
-    return covar / x_var;
-  else
-    return 0.0;                    // too little
-}
-    
-        // Writes to the given file. Returns false in case of error.
-    bool Serialize(FILE* fp) const;
-    // Reads from the given file. Returns false in case of error.
-    // If swap is true, assumes a big/little-endian swap is needed.
-    bool DeSerialize(bool swap, FILE* fp);
-    
-    static const int kBlockSize = 32768;
-    
-    
-    {  Status FindTable(uint64_t file_number, uint64_t file_size, Cache::Handle**);
+  // Always return size of 10
+  Status GetFileSize(const string& fname, uint64* file_size) override {
+    *file_size = 10;
+    return Status::OK();
+  }
 };
     
-      // Encoded length of a Footer.  Note that the serialization of a
-  // Footer will always occupy exactly this many bytes.  It consists
-  // of two block handles and a magic number.
-  enum {
-    kEncodedLength = 2*BlockHandle::kMaxEncodedLength + 8
-  };
     
-    #endif // __cocos2dx_navmesh_h__
-#endif //#if CC_USE_NAVMESH
-
+    {}  // namespace tensorflow
     
-    bool js_cocos2dx_physics3d_Physics3DRigidBody_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DRigidBody_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DRigidBody(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_setGravity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getFriction(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_setAngularFactor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_addConstraint(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getRigidBody(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getTotalForce(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getConstraintCount(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_applyCentralForce(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_setMassProps(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_setFriction(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_setKinematic(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_setDamping(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_applyImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_isKinematic(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_applyTorque(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_setCcdMotionThreshold(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_setRollingFriction(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getCcdMotionThreshold(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getLinearFactor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_applyDamping(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getAngularVelocity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_init(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_applyTorqueImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_setActive(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_setLinearFactor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_setLinearVelocity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getLinearVelocity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_setCcdSweptSphereRadius(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_applyForce(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_setAngularVelocity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_applyCentralImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getGravity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getRollingFriction(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_setCenterOfMassTransform(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_setInvInertiaDiagLocal(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_removeConstraint(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getTotalTorque(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getInvMass(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getConstraint(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getRestitution(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getCcdSweptSphereRadius(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getHitFraction(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getAngularDamping(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getCenterOfMassTransform(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getAngularFactor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_setRestitution(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_setHitFraction(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_getLinearDamping(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DRigidBody_Physics3DRigidBody(JSContext *cx, uint32_t argc, jsval *vp);
+    namespace tensorflow {
+class CostGraphDef;
+class GraphDef;
+}  // namespace tensorflow
+    
+    // TODO(zongheng): this should be a general functor that powers SparseAdd and
+// ScatterNd ops.  It should be moved to its own head file, once the other ops
+// are implemented.
+template <typename Device, typename T, typename Index, int NDIMS,
+          scatter_op::UpdateOp op>
+struct ScatterNdFunctor {
+  // Returns -1 on success or a nonnegative i s.t. indices[i] is a bad index.
+  Index operator()(const Device& d, typename TTypes<Index>::ConstMatrix indices,
+                   typename TTypes<T>::ConstFlat updates,
+                   typename TTypes<T, NDIMS>::Tensor out);
+};
     
     
-    {        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, 'cc.SimpleAudioEngine:preloadEffect'); arg0 = arg0_tmp.c_str();
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_preloadEffect'', nullptr);
-            return 0;
-        }
-        cobj->preloadEffect(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.SimpleAudioEngine:preloadEffect',argc, 1);
-    return 0;
+    { private:
+  PluginId blas_, dnn_, fft_, rng_;
+};
     
-    
-    
-    #if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-    
-    
-    
-        GLfloat                glVertices[] = {
-        p.x * mRatio, p.y * mRatio
-    };
-    
-    				float32 gravity = 10.0f;
-				float32 I = body->GetInertia();
-				float32 mass = body->GetMass();
-    
-    	void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
-	{
-		if (m_broke)
-		{
-			// The body already broke.
-			return;
-		}
+      Status OnWorkStartedLocked() override {
+    offset_ = 0;
+    TF_RETURN_IF_ERROR(env_->NewRandomAccessFile(current_work(), &file_));
     }
     
-    	XLoggerInfo xlog_info;
-	gettimeofday(&xlog_info.timeval, NULL);
-	xlog_info.level = (TLogLevel)level;
-	xlog_info.line = line;
-	xlog_info.pid = (int)pid;
-	xlog_info.tid = LONGTHREADID2INT(tid);
-	xlog_info.maintid = LONGTHREADID2INT(maintid);;
+    TF_CALL_GPU_NUMBER_TYPES(REGISTER_GPU32);
+TF_CALL_complex64(REGISTER_GPU32);
+TF_CALL_complex128(REGISTER_GPU32);
+TF_CALL_int64(REGISTER_GPU32);
+REGISTER_GPU32(bfloat16);
+REGISTER_GPU32(bool);
     
-            __FirstGetCreater(T::ServiceName());
+    bool ParseBoolFlag(tensorflow::StringPiece arg, tensorflow::StringPiece flag,
+                   bool* dst) {
+  if (arg.Consume(flag)) {
+    if (arg.empty()) {
+      *dst = true;
+      return true;
+    }
+    }
+    }
     
+        auto d_4_1 = cc->FindWorkerChannel('/job:mnist/replica:0/task:3');
+    auto d_4_2 = cc->FindWorkerChannel('/job:mnist/replica:0/task:3');
     
+    #ifndef STORAGE_LEVELDB_DB_BUILDER_H_
+#define STORAGE_LEVELDB_DB_BUILDER_H_
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    ////////////////////////////////////////////////////////////////////////////////
-/// Disclaimer: This is intended only as a partial stand-in for
-/// std::pmr::memory_resource (C++17) as needed for developing a
-/// hazptr prototype.
-////////////////////////////////////////////////////////////////////////////////
-    
-    #pragma once
-    
-    [[noreturn]] void usage(const char* name) {
-  std::cerr << folly::format(
-      'Usage: {0}\n'
-      '         list all huge page sizes and their mount points\n'
-      '       {0} -cp <src_file> <dest_nameprefix>\n'
-      '         copy src_file to a huge page file\n',
-      name);
-  exit(1);
+    leveldb_filterpolicy_t* leveldb_filterpolicy_create(
+    void* state,
+    void (*destructor)(void*),
+    char* (*create_filter)(
+        void*,
+        const char* const* key_array, const size_t* key_length_array,
+        int num_keys,
+        size_t* filter_length),
+    unsigned char (*key_may_match)(
+        void*,
+        const char* key, size_t length,
+        const char* filter, size_t filter_length),
+    const char* (*name)(void*)) {
+  leveldb_filterpolicy_t* result = new leveldb_filterpolicy_t;
+  result->state_ = state;
+  result->destructor_ = destructor;
+  result->create_ = create_filter;
+  result->key_match_ = key_may_match;
+  result->name_ = name;
+  return result;
 }
     
-      size_t remaining = specs.size();
-  while (remaining != 0) {
-    if (remaining >= readerCapacity) {
-      EXPECT_EQ(readerCapacity, aioReader.pending());
-      EXPECT_EQ(remaining - readerCapacity, aioQueue.queued());
+      if (direction_ == kReverse) {  // Switch directions?
+    direction_ = kForward;
+    // iter_ is pointing just before the entries for this->key(),
+    // so advance into the range of entries for this->key() and then
+    // use the normal skipping code below.
+    if (!iter_->Valid()) {
+      iter_->SeekToFirst();
     } else {
-      EXPECT_EQ(remaining, aioReader.pending());
-      EXPECT_EQ(0, aioQueue.queued());
+      iter_->Next();
     }
-    auto completed = readerWait(&aioReader);
-    size_t nrRead = completed.size();
-    EXPECT_NE(nrRead, 0);
-    remaining -= nrRead;
+    if (!iter_->Valid()) {
+      valid_ = false;
+      saved_key_.clear();
+      return;
     }
-    
-      /**
-   * Get the output file.
-   */
-  const folly::File& getFile() const {
-    return file_;
+    // saved_key_ already contains the key to skip past.
+  } else {
+    // Store in saved_key_ the current key so we skip it below.
+    SaveKey(ExtractUserKey(iter_->key()), &saved_key_);
   }
     
-    #include <folly/experimental/logging/LogHandlerFactory.h>
+    static std::string Shorten(const std::string& s, const std::string& l) {
+  std::string result = s;
+  InternalKeyComparator(BytewiseComparator()).FindShortestSeparator(&result, l);
+  return result;
+}
     
-    void LogCategory::processMessage(const LogMessage& message) const {
-  // Make a copy of any attached LogHandlers, so we can release the handlers_
-  // lock before holding them.
-  //
-  // In the common case there will only be a small number of handlers.  Use a
-  // std::array in this case to avoid a heap allocation for the vector.
-  const std::shared_ptr<LogHandler>* handlers = nullptr;
-  size_t numHandlers = 0;
-  constexpr uint32_t kSmallOptimizationSize = 5;
-  std::array<std::shared_ptr<LogHandler>, kSmallOptimizationSize> handlersArray;
-  std::vector<std::shared_ptr<LogHandler>> handlersVector;
-  {
-    auto lockedHandlers = handlers_.rlock();
-    numHandlers = lockedHandlers->size();
-    if (numHandlers <= kSmallOptimizationSize) {
-      for (size_t n = 0; n < numHandlers; ++n) {
-        handlersArray[n] = (*lockedHandlers)[n];
+    #include <stdio.h>
+#include 'db/dbformat.h'
+#include 'db/filename.h'
+#include 'db/log_reader.h'
+#include 'db/version_edit.h'
+#include 'db/write_batch_internal.h'
+#include 'leveldb/env.h'
+#include 'leveldb/iterator.h'
+#include 'leveldb/options.h'
+#include 'leveldb/status.h'
+#include 'leveldb/table.h'
+#include 'leveldb/write_batch.h'
+#include 'util/logging.h'
+    
+    // Return the name of the lock file for the db named by
+// 'dbname'.  The result will be prefixed with 'dbname'.
+extern std::string LockFileName(const std::string& dbname);
+    
+    
+    {  Table* table = reinterpret_cast<TableAndFile*>(cache_->Value(handle))->table;
+  Iterator* result = table->NewIterator(options);
+  result->RegisterCleanup(&UnrefEntry, cache_, handle);
+  if (tableptr != NULL) {
+    *tableptr = table;
+  }
+  return result;
+}
+    
+      Benchmark()
+  : db_(NULL),
+    db_num_(0),
+    num_(FLAGS_num),
+    reads_(FLAGS_reads < 0 ? FLAGS_num : FLAGS_reads),
+    bytes_(0),
+    rand_(301) {
+    std::vector<std::string> files;
+    std::string test_dir;
+    Env::Default()->GetTestDirectory(&test_dir);
+    Env::Default()->GetChildren(test_dir, &files);
+    if (!FLAGS_use_existing_db) {
+      for (int i = 0; i < files.size(); i++) {
+        if (Slice(files[i]).starts_with('dbbench_sqlite3')) {
+          std::string file_name(test_dir);
+          file_name += '/';
+          file_name += files[i];
+          Env::Default()->DeleteFile(file_name.c_str());
+        }
       }
-      handlers = handlersArray.data();
-    } else {
-      handlersVector = *lockedHandlers;
-      handlers = handlersVector.data();
     }
   }
+    
+    
+    {    // Create tuning options and open the database
+    int open_options = kyotocabinet::PolyDB::OWRITER |
+                       kyotocabinet::PolyDB::OCREATE;
+    int tune_options = kyotocabinet::TreeDB::TSMALL |
+        kyotocabinet::TreeDB::TLINEAR;
+    if (FLAGS_compression) {
+      tune_options |= kyotocabinet::TreeDB::TCOMPRESS;
+      db_->tune_compressor(&comp_);
+    }
+    db_->tune_options(tune_options);
+    db_->tune_page_cache(FLAGS_cache_size);
+    db_->tune_page(FLAGS_page_size);
+    db_->tune_map(256LL<<20);
+    if (sync) {
+      open_options |= kyotocabinet::PolyDB::OAUTOSYNC;
+    }
+    if (!db_->open(file_name, open_options)) {
+      fprintf(stderr, 'open error: %s\n', db_->error().name());
+    }
+  }
+    
+    
+    // F3 COEFFICIENT
+    
+    CV_EXPORTS_W void absdiff(InputArray src1, Scalar src2, OutputArray dst);
+    
+    
+    {    if (rows <= 0 || cols <= 0)
+        rows = cols = 0;
+}
+    
+    
+    {} // namespace
+    
+      ServerConfig server_config;
+  server_config.set_server_type(ASYNC_SERVER);
+  server_config.set_async_server_threads(8);
+    
+    #include <string>
+#include <vector>
+    
+    
+    {}  // namespace grpc_node_generator
+    
+      bool generate_in_pb2_grpc;
+    
+    
+    {}  // namespace grpc
+
+    
+    class UsageTimer {
+ public:
+  UsageTimer();
     }
     
-    namespace folly {
-    }
+    #include 'test/cpp/util/service_describer.h'
+    
+    
+    {}  // namespace grpc
