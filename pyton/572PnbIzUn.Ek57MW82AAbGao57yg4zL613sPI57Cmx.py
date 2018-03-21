@@ -1,85 +1,155 @@
 
         
-          word_to_id = _build_vocab(train_path)
-  train_data = _file_to_word_ids(train_path, word_to_id)
-  valid_data = _file_to_word_ids(valid_path, word_to_id)
-  test_data = _file_to_word_ids(test_path, word_to_id)
-  vocabulary = len(word_to_id)
-  return train_data, valid_data, test_data, vocabulary
+        
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
     
-      Returns:
-    2D np.array where each row contains the magnitudes of the fft_length/2+1
-    unique values of the FFT for the corresponding frame of input samples.
-  '''
-  frames = frame(signal, window_length, hop_length)
-  # Apply frame window to each frame. We use a periodic Hann (cosine of period
-  # window_length) instead of the symmetric Hann of np.hanning (period
-  # window_length-1).
-  window = periodic_hann(window_length)
-  windowed_frames = frames * window
-  return np.abs(np.fft.rfft(windowed_frames, int(fft_length)))
+    for page in itertools.count(1):
+    releases = json.loads(compat_urllib_request.urlopen(
+        'https://api.github.com/repos/rg3/youtube-dl/releases?page=%s' % page
+    ).read().decode('utf-8'))
     
-      def setUp(self):
-    FLAGS.train_data = os.path.join(self.get_temp_dir(), 'test-text.txt')
-    FLAGS.eval_data = os.path.join(self.get_temp_dir(), 'eval-text.txt')
-    FLAGS.save_path = self.get_temp_dir()
-    with open(FLAGS.train_data, 'w') as f:
-      f.write(
-          '''alice was beginning to get very tired of sitting by her sister on
-          the bank, and of having nothing to do: once or twice she had peeped
-          into the book her sister was reading, but it had no pictures or
-          conversations in it, 'and what is the use of a book,' thought alice
-          'without pictures or conversations?' So she was considering in her own
-          mind (as well as she could, for the hot day made her feel very sleepy
-          and stupid), whether the pleasure of making a daisy-chain would be
-          worth the trouble of getting up and picking the daisies, when suddenly
-          a White rabbit with pink eyes ran close by her.\n''')
-      with open(FLAGS.eval_data, 'w') as f:
-        f.write('alice she rabbit once\n')
+    import re
     
-      def setUp(self):
-    self._string_data = '\n'.join(
-        [' hello there i am',
-         ' rain as day',
-         ' want some cheesy puffs ?'])
+                return {
+                'id': video_id,
+                'title': json_data['title'],
+                'description': json_data.get('subtitle'),
+                'thumbnail': json_data.get('thumbnail_image', {}).get('file'),
+                'timestamp': parse_iso8601(json_data.get('publication_date')),
+                'duration': int_or_none(json_data.get('duration')),
+                'view_count': int_or_none(json_data.get('view_count')),
+                'formats': formats,
+            }
+
     
-      Data from http://ai.stanford.edu/~amaas/data/sentiment/
+        def __init__(self, groups, env=Environment(), **kwargs):
+        '''
+        :param groups: names of processor groups to be applied
+        :param env: Environment
+        :param kwargs: additional keyword arguments for processors
     
-    flags.DEFINE_boolean('use_unlabeled', True, 'Whether to use the '
-                     'unlabeled sentiment dataset in the vocabulary.')
-flags.DEFINE_boolean('include_validation', False, 'Whether to include the '
-                     'validation set in the vocabulary.')
-flags.DEFINE_integer('doc_count_threshold', 1, 'The minimum number of '
-                     'documents a word or bigram should occur in to keep '
-                     'it in the vocabulary.')
+        ERROR_TIMEOUT = 2
+    ERROR_TOO_MANY_REDIRECTS = 6
     
     
-def _build_random_vocabulary(vocab_size=100):
-  '''Builds and returns a dict<term, id>.'''
-  vocab = set()
-  while len(vocab) < (vocab_size - 1):
-    rand_word = ''.join(
-        random.choice(string.ascii_lowercase)
-        for _ in range(random.randint(1, 10)))
-    vocab.add(rand_word)
+@keras_test
+def test_model_trainability_switch():
+    # a non-trainable model has no trainable weights
+    x = Input(shape=(1,))
+    y = Dense(2)(x)
+    model = Model(x, y)
+    model.trainable = False
+    assert model.trainable_weights == []
     
     
-def main(_):
-  '''Trains Language Model.'''
-  tf.logging.set_verbosity(tf.logging.INFO)
-  with tf.device(tf.train.replica_device_setter(FLAGS.ps_tasks)):
-    model = graphs.get_model()
-    train_op, loss, global_step = model.language_model_training()
-    train_utils.run_training(train_op, loss, global_step)
+if __name__ == '__main__':
+    pytest.main([__file__])
+
     
-    py_binary(
-    name = 'cifar10_multi_gpu_train',
-    srcs = [
-        'cifar10_multi_gpu_train.py',
-    ],
-    srcs_version = 'PY2AND3',
-    visibility = ['//tensorflow:__subpackages__'],
-    deps = [
-        ':cifar10',
-    ],
-)
+    
+if __name__ == '__main__':
+    pytest.main([__file__])
+
+    
+        If only_supporting is true, only the sentences
+    that support the answer are kept.
+    '''
+    data = []
+    story = []
+    for line in lines:
+        line = line.decode('utf-8').strip()
+        nid, line = line.split(' ', 1)
+        nid = int(nid)
+        if nid == 1:
+            story = []
+        if '\t' in line:
+            q, a, supporting = line.split('\t')
+            q = tokenize(q)
+            substory = None
+            if only_supporting:
+                # Only select the related substory
+                supporting = map(int, supporting.split())
+                substory = [story[i - 1] for i in supporting]
+            else:
+                # Provide all the substories
+                substory = [x for x in story if x]
+            data.append((substory, q, a))
+            story.append('')
+        else:
+            sent = tokenize(line)
+            story.append(sent)
+    return data
+    
+    input_characters = sorted(list(input_characters))
+target_characters = sorted(list(target_characters))
+num_encoder_tokens = len(input_characters)
+num_decoder_tokens = len(target_characters)
+max_encoder_seq_length = max([len(txt) for txt in input_texts])
+max_decoder_seq_length = max([len(txt) for txt in target_texts])
+    
+            test_history['generator'].append(generator_test_loss)
+        test_history['discriminator'].append(discriminator_test_loss)
+    
+        # Arguments
+        x: Input array, 3D or 4D.
+        data_format: Data format of the image array.
+        mode: One of 'caffe', 'tf' or 'torch'.
+            - caffe: will convert the images from RGB to BGR,
+                then will zero-center each color channel with
+                respect to the ImageNet dataset,
+                without scaling.
+            - tf: will scale pixels between -1 and 1,
+                sample-wise.
+            - torch: will scale pixels between 0 and 1 and then
+                will normalize each channel with respect to the
+                ImageNet dataset.
+    
+    # Attempt to read Keras config file.
+_config_path = os.path.expanduser(os.path.join(_keras_dir, 'keras.json'))
+if os.path.exists(_config_path):
+    try:
+        with open(_config_path) as f:
+            _config = json.load(f)
+    except ValueError:
+        _config = {}
+    _floatx = _config.get('floatx', floatx())
+    assert _floatx in {'float16', 'float32', 'float64'}
+    _epsilon = _config.get('epsilon', epsilon())
+    assert isinstance(_epsilon, float)
+    _backend = _config.get('backend', _BACKEND)
+    assert _backend in {'theano', 'tensorflow', 'cntk'}
+    _image_data_format = _config.get('image_data_format',
+                                     image_data_format())
+    assert _image_data_format in {'channels_last', 'channels_first'}
+    
+        def __setattr__(self, name, value):
+        # type: (str, Any) -> None
+        self[name] = value
+    
+                def finish(self):
+                event.set()
+    
+        def test_path_quoting(self):
+        response = self.fetch('/path/foo%20bar%C3%A9')
+        self.assertEqual(response.body, u'foo bar\u00e9'.encode('utf-8'))
+    
+    # This import will fail if path is not set up correctly
+import testapp
+    
+    
+@gen.coroutine
+def raw_producer(filename, write):
+    with open(filename, 'rb') as f:
+        while True:
+            # 16K at a time.
+            chunk = f.read(16 * 1024)
+            if not chunk:
+                # Complete.
+                break
+    
+        print('Start on 8888')
+    application.listen(8888, '127.0.0.1')
