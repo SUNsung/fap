@@ -1,160 +1,150 @@
 
         
-            :copyright: © 2010 by the Pallets team.
-    :license: BSD, see LICENSE for more details.
-'''
+            '''
+    req_h = OUT_REQ_HEAD in output_options
+    req_b = OUT_REQ_BODY in output_options
+    resp_h = OUT_RESP_HEAD in output_options
+    resp_b = OUT_RESP_BODY in output_options
+    req = req_h or req_b
+    resp = resp_h or resp_b
+    
+    error_msg = None
+    
+        '''
+)
+troubleshooting.add_argument(
+    '--version',
+    action='version',
+    version=__version__,
+    help='''
+    Show version and exit.
+    
+            # --json, -j
+        self.explicit_json = explicit_json
+    
+        def test_verify_no_OK(self, httpbin_secure):
+        r = http(httpbin_secure.url + '/get', '--verify=no')
+        assert HTTP_OK in r
+    
+        # Used only when requested with --check-status:
+    ERROR_HTTP_3XX = 3
+    ERROR_HTTP_4XX = 4
+    ERROR_HTTP_5XX = 5
     
     
-class EnvironmentConfig(object):
-    uri = os.getenv('LANDSCAPE_API_URI')
-    access_key = os.getenv('LANDSCAPE_API_KEY')
-    secret_key = os.getenv('LANDSCAPE_API_SECRET')
-    ssl_ca_file = os.getenv('LANDSCAPE_API_SSL_CA_FILE')
+class SessionNameValidator(object):
     
-    
-def ismount(path):
-    '''Test whether a path is a mount point
-    clone of os.path.ismount (from cpython Lib/posixpath.py)
-    fixed to solve https://github.com/ansible/ansible-modules-core/issues/2186
-    and workaround non-fixed http://bugs.python.org/issue2466
-    this should be rewritten as soon as python issue 2466 is fixed
-    probably check for python version and use os.path.ismount if fixed
-    
-            run = response.json()
-    
-        if key:
-        return key
-    
-    
-class TerminalModule(TerminalBase):
-    
-        old_layer = keras.layers.Convolution2D(5, nb_row=3, nb_col=3, name='conv')
-    new_layer = keras.layers.Conv2D(5, (3, 3), name='conv')
-    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
-    
-        def compute_mask(self, inputs, mask):
-        if self.return_sequences:
-            if not self.merge_mode:
-                return [mask, mask]
-            else:
-                return mask
-        else:
-            return None
-    
-            layer_test(local.LocallyConnected2D,
-                   kwargs={'filters': filters,
-                           'kernel_size': (3, 3),
-                           'padding': padding,
-                           'kernel_regularizer': 'l2',
-                           'bias_regularizer': 'l2',
-                           'activity_regularizer': 'l2',
-                           'strides': strides,
-                           'data_format': 'channels_first'},
-                   input_shape=(num_samples, stack_size, num_row, num_col))
-    
-        # a more explicit example
-    norm_instance = constraints.max_norm(2.0)
-    x = np.array([[0, 0, 0], [1.0, 0, 0], [3, 0, 0], [3, 3, 3]]).T
-    x_normed_target = np.array([[0, 0, 0], [1.0, 0, 0],
-                                [2.0, 0, 0],
-                                [2. / np.sqrt(3),
-                                 2. / np.sqrt(3),
-                                 2. / np.sqrt(3)]]).T
-    x_normed_actual = K.eval(norm_instance(K.variable(x)))
-    assert_allclose(x_normed_actual, x_normed_target, rtol=1e-05)
-    
-            self.minibatch_size = minibatch_size
-        self.img_w = img_w
-        self.img_h = img_h
-        self.monogram_file = monogram_file
-        self.bigram_file = bigram_file
-        self.downsample_factor = downsample_factor
-        self.val_split = val_split
-        self.blank_label = self.get_output_size() - 1
-        self.absolute_max_string_len = absolute_max_string_len
-    
-    print('Loading data...')
-(x_train, y_train), (x_test, y_test) = imdb.load_data(num_words=max_features)
-print(len(x_train), 'train sequences')
-print(len(x_test), 'test sequences')
-    
-    
-def clean_trailing_newlines(linebuffer):
-    result = []
-    code_started = False
-    linebuffer.reverse()
-    for line in linebuffer:
-        if not code_started and line == '\n':
-            continue
-        code_started = True
-        result.append(line)
-    result.reverse()
-    return result
-    
-    
-def _worker(executor_reference, work_queue):
-    try:
-        while True:
-            work_item = work_queue.get(block=True)
-            if work_item is not None:
-                work_item.run()
-                continue
-            executor = executor_reference()
-            # Exit if:
-            #   - The executor that owns the worker has been collected OR
-            #   - The executor that owns the worker has been shutdown.
-            if executor is None or executor._shutdown:
-                # Notice other workers
-                work_queue.put(None)
-                return
-            del executor
-    except BaseException:
-        _base.LOGGER.critical('Exception in worker', exc_info=True)
-    
-        def run(self):
-        if not self.future.set_running_or_notify_cancel():
-            return
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    js.load_plugin_modules(plugins)
-modules = dict((k, m) for k, m in js.module.iteritems())
-print 'JS_MODULES := ' + ' '.join(modules.iterkeys())
-outputs = []
-for name, module in modules.iteritems():
-    outputs.extend(module.outputs)
-    print 'JS_MODULE_OUTPUTS_%s := %s' % (name, ' '.join(module.outputs))
-    print 'JS_MODULE_DEPS_%s := %s' % (name, ' '.join(module.dependencies))
-    
-    # TODO CleanupMiddleware seems to exist because cookie headers are being duplicated
-# somewhere in the response processing chain. It should be removed as soon as we
-# find the underlying issue.
-class CleanupMiddleware(object):
+        :param url: URL for the new :class:`Request` object.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
     '''
-    Put anything here that should be called after every other bit of
-    middleware. This currently includes the code for removing
-    duplicate headers (such as multiple cookie setting).  The behavior
-    here is to disregard all but the last record.
-    '''
-    def __init__(self, app):
-        self.app = app
     
-    api('modaction', ModActionTemplate)
+        def __iter__(self):
+        '''Allows you to use a response as an iterator.'''
+        return self.iter_content(128)
     
-        @validate(VAdmin())
-    def GET_index(self):
-        res = AdminPage(content = AdminAwards(),
-                        title = 'awards').render()
-        return res
+    _init()
+
     
-    from reddit_base import RedditController
-import StringIO
-import r2.lib.captcha as captcha
-from pylons import response
+    setup(
+    name=about['__title__'],
+    version=about['__version__'],
+    description=about['__description__'],
+    long_description=readme + '\n\n' + history,
+    author=about['__author__'],
+    author_email=about['__author_email__'],
+    url=about['__url__'],
+    packages=packages,
+    package_data={'': ['LICENSE', 'NOTICE'], 'requests': ['*.pem']},
+    package_dir={'requests': 'requests'},
+    include_package_data=True,
+    python_requires='>=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
+    install_requires=requires,
+    license=about['__license__'],
+    zip_safe=False,
+    classifiers=(
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'Natural Language :: English',
+        'License :: OSI Approved :: Apache Software License',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: Implementation :: CPython',
+        'Programming Language :: Python :: Implementation :: PyPy'
+    ),
+    cmdclass={'test': PyTest},
+    tests_require=test_requirements,
+    extras_require={
+        'security': ['pyOpenSSL>=0.14', 'cryptography>=1.3.4', 'idna>=2.0.0'],
+        'socks': ['PySocks>=1.5.6, !=1.5.7'],
+        'socks:sys_platform == 'win32' and (python_version == '2.7' or python_version == '2.6')': ['win_inet_pton'],
+    },
+)
+
     
-        GET_help = POST_help = renderurl
+        if C is not None:
+        assert(sx == sy)
+
+    
+        return _scan_once
+    
+    def escape(m):
+    all, tail = m.group(0, 1)
+    assert all.startswith('\\')
+    esc = simple_escapes.get(tail)
+    if esc is not None:
+        return esc
+    if tail.startswith('x'):
+        hexes = tail[1:]
+        if len(hexes) < 2:
+            raise ValueError('invalid hex string escape ('\\%s')' % tail)
+        try:
+            i = int(hexes, 16)
+        except ValueError:
+            raise ValueError('invalid hex string escape ('\\%s')' % tail) from None
+    else:
+        try:
+            i = int(tail, 8)
+        except ValueError:
+            raise ValueError('invalid octal string escape ('\\%s')' % tail) from None
+    return chr(i)
+    
+        def _encrypt_on(sock, context, hostname):
+        '''Wrap a socket in SSL/TLS. Arguments:
+        - sock: Socket to wrap
+        - context: SSL context to use for the encrypted connection
+        Returns:
+        - sock: New, encrypted socket.
+        '''
+        # Generate a default SSL context if none was passed.
+        if context is None:
+            context = ssl._create_stdlib_context()
+        return context.wrap_socket(sock, server_hostname=hostname)
+    
+        def _set_async(self, flag):
+        if flag:
+            raise xml.dom.NotSupportedErr(
+                'asynchronous document loading is not supported')
+    
+        def iter_builtins(self):
+        '''
+        Yield a sequence of (name,value) pairs of PyObjectPtr instances, for
+        the builtin variables
+        '''
+        if self.is_optimized_out():
+            return ()
+    
+        def test_getnewargs(self):
+        self.assertEqual((1+2j).__getnewargs__(), (1.0, 2.0))
+        self.assertEqual((1-2j).__getnewargs__(), (1.0, -2.0))
+        self.assertEqual((2j).__getnewargs__(), (0.0, 2.0))
+        self.assertEqual((-0j).__getnewargs__(), (0.0, -0.0))
+        self.assertEqual(complex(0, INF).__getnewargs__(), (0.0, INF))
+        self.assertEqual(complex(INF, 0).__getnewargs__(), (INF, 0.0))
