@@ -1,53 +1,53 @@
 
         
-                expect(result).to eq('/usr/local/bin/cloc --exclude-dir=test1,test2,build --by-file --xml  --out=build/cloc.xml')
-      end
+            SPLIT_INTS = /(?<=\d)\.(?=[\s\d])/.freeze
     
-          it 'pass a custom build number to the tool' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          increment_build_number(build_number: 24, xcodeproj: '.xcproject')
-        end').runner.execute(:test)
+        def ==(other)
+      other.is_a?(self.class) && filters == other.filters
+    end
     
-            expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::VERSION_NUMBER]).to end_with('&& agvtool new-marketing-version 1.77.3')
-      end
-    
-        def sort_fn(a, b)
-      if (a.getbyte(0) >= 49 && a.getbyte(0) <= 57) || (b.getbyte(0) >= 49 && b.getbyte(0) <= 57)
-        a_split = a.split(SPLIT_INTS)
-        b_split = b.split(SPLIT_INTS)
-    
-        delegate :empty?, :blank?, to: :pages
-    
-              entries << [name, node['id'], type]
+            css('h2:not([id]) a[id]:not([href])').each do |node|
+          node.parent['id'] = node['id']
+          node.before(node.children).remove
         end
     
-      # Set to :debug to see everything in the log.
-  config.log_level = :info
+              css('##{dom_id}-methods ~ h4 code').each do |node|
+            next unless name = node.content[/\('(\w+)'\)/, 1]
+            id = node.parent['id'] = '#{dom_id}-#{name.parameterize}-method'
+            name.prepend '#{dom_id.singularize.titleize}: '
+            name << ' (method)'
+            entries << [name, id]
+          end
+        end
     
-      def setup
-    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
-    success = Dir.chdir DUMMY_PATH do
-      silence_stdout_if !ENV['VERBOSE'] do
-        system 'node', 'manifest.js', tmp_dir
+      def self.wakeup_dying_sleeping_thread(kill_method_name=:kill)
+    t = ThreadSpecs.dying_thread_ensures(kill_method_name) { yield }
+    Thread.pass while t.status and t.status != 'sleep'
+    t.wakeup
+    t.join
+  end
+    
+            self.description = <<-DESC
+          Remove the cache for a given pod, or clear the cache completely.
+    
+            def execute_repl_command(repl_command)
+          unless repl_command == '\n'
+            repl_commands = repl_command.split
+            subcommand = repl_commands.shift.capitalize
+            arguments = repl_commands
+            subcommand_class = Pod::Command::IPC.const_get(subcommand)
+            subcommand_class.new(CLAide::ARGV.new(arguments)).run
+            signal_end_of_output
+          end
+        end
       end
     end
-    assert success, 'Node.js Mincer compilation failed'
-    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
-    css_name = manifest['assets']['application.css']
-    @css = File.read('#{tmp_dir}/#{css_name}')
   end
 end
 
     
-          spec['version'] = Bootstrap::VERSION
-    
-          expect('.margin-false-third').to have_ruleset(ruleset)
-      expect('.margin-false-third').to_not have_rule(bad_rule)
-    end
-  end
-end
-
-    
-      context 'called with no prefixes' do
-    it 'outputs the spec' do
-      rule = 'appearance: none;'
+          def stages
+        names = Dir[stage_definitions].map { |f| File.basename(f, '.rb') }
+        assert_valid_stage_names(names)
+        names
+      end
