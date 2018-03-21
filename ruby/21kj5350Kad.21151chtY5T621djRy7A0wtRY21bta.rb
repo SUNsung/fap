@@ -1,88 +1,49 @@
 
         
-                    -- Return the time part and the sequence part. OR appears
-            -- faster here than addition, but they're equivalent:
-            -- time_part has no trailing two bytes, and tail is only
-            -- the last two bytes.
-            RETURN time_part | tail;
-          END
-        $$ LANGUAGE plpgsql VOLATILE;
-      SQL
+        class Reporter
+  class ReporterRevisionUnsetError < RuntimeError
+    def initialize(var_name)
+      super '#{var_name} is unset!'
     end
+  end
     
-            expect(response).to have_http_status(:missing)
+      def self.path(name)
+    Formulary.core_path(name)
+  end
+    
+    # This formula serves as the base class for several very similar
+# formulae for Amazon Web Services related tools.
+class AmazonWebServicesFormula < Formula
+  # Use this method to peform a standard install for Java-based tools,
+  # keeping the .jars out of HOMEBREW_PREFIX/lib
+  def install
+    rm Dir['bin/*.cmd'] # Remove Windows versions
+    libexec.install Dir['*']
+    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
+  end
+  alias_method :standard_install, :install
+    
+    namespace :db do
+  namespace :migrate do
+    desc 'Setup the db or migrate depending on state of db'
+    task setup: :environment do
+      begin
+        if ActiveRecord::Migrator.current_version.zero?
+          Rake::Task['db:migrate'].invoke
+          Rake::Task['db:seed'].invoke
+        end
+      rescue ActiveRecord::NoDatabaseError
+        Rake::Task['db:setup'].invoke
+      else
+        Rake::Task['db:migrate'].invoke
       end
     end
   end
-end
-
     
       def id
-    ActivityPub::TagManager.instance.uri_for(object)
+    object.id.to_s
   end
     
-      describe 'GET #show' do
-    it 'returns http success' do
-      get :show
-      expect(response).to have_http_status(:success)
-    end
-  end
-    
-        it 'denies requests with sneaky encoded session cookies' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.%73ession=SESSION_TOKEN'
-      expect(last_response).not_to be_ok
-    end
-    
-      context 'escaping' do
-    it 'escapes html entities' do
-      mock_app do |env|
-        request = Rack::Request.new(env)
-        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']]]
-      end
-      get '/', :foo => '<bar>'
-      expect(body).to eq('&lt;bar&gt;')
-    end
-    
-    
-  it 'should allow changing the protection mode to a string' do
-    # I have no clue what other modes are available
-    mock_app do
-      use Rack::Protection::FrameOptions, :frame_options => 'ALLOW-FROM foo'
-      run DummyApp
-    end
-    
-          post('/', {}, 'HTTP_REFERER' => 'http://example.com/foo', 'HTTP_HOST' => 'example.org')
-      expect(last_response).to be_ok
-    end
-  end
-end
-
-    
-      private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_book
-      @book = Book.find(params[:id])
-    end
-    
-                lambda do |corrector|
-              new_source = receiver.source + '.end_with?(' +
-                           to_string_literal(regex_str) + ')'
-              corrector.replace(node.source_range, new_source)
-            end
-          end
-        end
-      end
-    end
-  end
-end
-
-    
-            def variables_in_node(node)
-          if node.or_type?
-            node.node_parts
-                .flat_map { |node_part| variables_in_node(node_part) }
-                .uniq
-          else
-            variables_in_simple_node(node)
-          end
-        end
+        def recheck
+      pod = Pod.find(params[:pod_id])
+      pod.test_connection!
