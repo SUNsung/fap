@@ -1,179 +1,170 @@
-``response``:
-    The response generated from a Request.
-'''
-HOOKS = ['response']
+
+        
+        
+def init_linear(in_size, out_size, do_bias=True, mat_init_value=None,
+                bias_init_value=None, alpha=1.0, identity_if_possible=False,
+                normalized=False, name=None, collections=None, trainable=True):
+  '''Linear (affine) transformation, y = x W + b, for a variety of
+  configurations.
     
-            realm = self._thread_local.chal['realm']
-        nonce = self._thread_local.chal['nonce']
-        qop = self._thread_local.chal.get('qop')
-        algorithm = self._thread_local.chal.get('algorithm')
-        opaque = self._thread_local.chal.get('opaque')
-        hash_utf8 = None
-    
-    elif is_py3:
-    from urllib.parse import urlparse, urlunparse, urljoin, urlsplit, urlencode, quote, unquote, quote_plus, unquote_plus, urldefrag
-    from urllib.request import parse_http_list, getproxies, proxy_bypass, proxy_bypass_environment, getproxies_environment
-    from http import cookiejar as cookielib
-    from http.cookies import Morsel
-    from io import StringIO
-    from collections import OrderedDict
-    
-    import pytest
-    
-    
-@pytest.mark.parametrize(
-    'url, auth', (
-        (
-            'http://' + ENCODED_USER + ':' + ENCODED_PASSWORD + '@' +
-            'request.com/url.html#test',
-            (USER, PASSWORD)
-        ),
-        (
-            'http://user:pass@complex.url.com/path?query=yes',
-            ('user', 'pass')
-        ),
-        (
-            'http://user:pass%20pass@complex.url.com/path?query=yes',
-            ('user', 'pass pass')
-        ),
-        (
-            'http://user:pass pass@complex.url.com/path?query=yes',
-            ('user', 'pass pass')
-        ),
-        (
-            'http://user%25user:pass@complex.url.com/path?query=yes',
-            ('user%user', 'pass')
-        ),
-        (
-            'http://user:pass%23pass@complex.url.com/path?query=yes',
-            ('user', 'pass#pass')
-        ),
-        (
-            'http://complex.url.com/path?query=yes',
-            ('', '')
-        ),
-    ))
-def test_get_auth_from_url(url, auth):
-    assert get_auth_from_url(url) == auth
-    
-        def get_redirect_target(self, resp):
-        '''Receives a Response. Returns a redirect URI or ``None``'''
-        # Due to the nature of how requests processes redirects this method will
-        # be called at least once upon the original response and at least twice
-        # on each subsequent redirect response (if any).
-        # If a custom mixin is used to handle this logic, it may be advantageous
-        # to cache the redirect location onto the response object as a private
-        # attribute.
-        if resp.is_redirect:
-            location = resp.headers['location']
-            # Currently the underlying http module on py3 decode headers
-            # in latin1, but empirical evidence suggests that latin1 is very
-            # rarely used with non-ASCII characters in HTTP headers.
-            # It is more likely to get UTF8 header rather than latin1.
-            # This causes incorrect handling of UTF8 encoded location headers.
-            # To solve this, we re-encode the location in latin1.
-            if is_py3:
-                location = location.encode('latin1')
-            return to_native_string(location, 'utf8')
-        return None
-    
-        @pytest.mark.parametrize(
-        'data', (
-            {'stuff': u('ëlïxr')},
-            {'stuff': u('ëlïxr').encode('utf-8')},
-            {'stuff': 'elixr'},
-            {'stuff': 'elixr'.encode('utf-8')},
-        ))
-    def test_unicode_multipart_post(self, httpbin, data):
-        r = requests.post(httpbin('post'),
-            data=data,
-            files={'file': ('test_requests.py', open(__file__, 'rb'))})
-        assert r.status_code == 200
-    
-    class PyTest(TestCommand):
-    user_options = [('pytest-args=', 'a', 'Arguments to pass into py.test')]
-    
-            ds = (
-            db.session.query(DruidDatasource)
-            .filter_by(datasource_name='test_click')
-            .first()
-        )
-        if ds:
-            db.session.delete(ds)
-        db.session.commit()
-    
-        # 3. Delete empty permission view menues from roles
-    roles = sm.get_session.query(sm.role_model).all()
-    for role in roles:
-        role.permissions = [p for p in role.permissions if p]
-    sm.get_session.commit()
+          # Start input enqueue threads.
+      coord = tf.train.Coordinator()
+      threads = tf.train.start_queue_runners(sess=sess, coord=coord)
+      start = time.clock()
+      for i in range(num_images):
+        # Write to log-info once in a while.
+        if i == 0:
+          tf.logging.info('Starting to extract DELF features from images...')
+        elif i % _STATUS_CHECK_ITERATIONS == 0:
+          elapsed = (time.clock() - start)
+          tf.logging.info('Processing image %d out of %d, last %d '
+                          'images took %f seconds', i, num_images,
+                          _STATUS_CHECK_ITERATIONS, elapsed)
+          start = time.clock()
     
     
-appbuilder.add_view(
-    DruidClusterModelView,
-    name='Druid Clusters',
-    label=__('Druid Clusters'),
-    icon='fa-cubes',
-    category='Sources',
-    category_label=__('Sources'),
-    category_icon='fa-database',
-)
+def CalculateKeypointCenters(boxes):
+  '''Helper function to compute feature centers, from RF boxes.
     
-        @expose('/edit/<pk>', methods=['GET', 'POST'])
-    @has_access
-    def edit(self, pk):
-        '''Simple hack to redirect to explore view after saving'''
-        resp = super(TableModelView, self).edit(pk)
-        if isinstance(resp, basestring):
-            return resp
-        return redirect('/superset/explore/table/{}/'.format(pk))
+        exp_boxes = [[-145.0, -145.0, 145.0, 145.0], [-113.0, -145.0, 177.0, 145.0]]
+    exp_feature_scales = [1.0, 1.0]
+    exp_features = np.array(
+        np.concatenate(
+            (np.tile([[-1.0, 127.0 / 128.0, 127.0 / 128.0], [-1.0, -1.0, -0.75]
+                     ], [1, 341]), np.zeros([2, 1])),
+            axis=1))
+    exp_scores = [[1.723042], [1.600781]]
     
+        serialized = feature_io.SerializeToString(locations, scales, descriptors,
+                                              attention, orientations)
+    parsed_data = feature_io.ParseFromString(serialized)
     
-def export_schema_to_dict(back_references):
-    '''Exports the supported import/export schema to a dictionary'''
-    databases = [Database.export_schema(recursive=True,
-                 include_parent_ref=back_references)]
-    clusters = [DruidCluster.export_schema(recursive=True,
-                include_parent_ref=back_references)]
-    data = dict()
-    if databases:
-        data[DATABASES_KEY] = databases
-    if clusters:
-        data[DRUID_CLUSTERS_KEY] = clusters
-    return data
+    import os
     
-        # find if the column was already imported
-    existing_column = lookup_obj(i_obj)
-    i_obj.table = None
-    if existing_column:
-        existing_column.override(i_obj)
-        session.flush()
-        return existing_column
+    flags = tf.app.flags
     
-    FORM_DATA_KEY_WHITELIST = list(frontend_config.get('controls').keys()) + ['slice_id']
+        # Compute logits (1 per class).
+    logits = tf.layers.dense(net, params['n_classes'], activation=None)
     
-    # other values from the config, defined by the needs of env.py,
-# can be acquired:
-# my_important_option = config.get_main_option('my_important_option')
-# ... etc.
+      def testBuildLMSeq(self):
+    seq = self._buildDummySequence()
+    lm_seq = data.build_lm_sequence(seq)
+    for i, ts in enumerate(lm_seq):
+      # For end of sequence, the token and label should be same, and weight
+      # should be 0.0.
+      if i == len(lm_seq) - 1:
+        self.assertEqual(ts.token, i)
+        self.assertEqual(ts.label, i)
+        self.assertEqual(ts.weight, 0.0)
+      else:
+        self.assertEqual(ts.token, i)
+        self.assertEqual(ts.label, i + 1)
+        self.assertEqual(ts.weight, 1.0)
     
     
-class UIModuleResourceHandler(RequestHandler):
-    def get(self):
-        self.render('page.html', entries=[1, 2])
+def _build_random_vocabulary(vocab_size=100):
+  '''Builds and returns a dict<term, id>.'''
+  vocab = set()
+  while len(vocab) < (vocab_size - 1):
+    rand_word = ''.join(
+        random.choice(string.ascii_lowercase)
+        for _ in range(random.randint(1, 10)))
+    vocab.add(rand_word)
     
-            Returns ``(old_value, args, kwargs)``.  The returned ``args`` and
-        ``kwargs`` objects may not be the same as the input objects, or
-        the input objects may be mutated.
+        # not a test, but looks like a test
+    'scrapy/utils/testsite.py',
     
-            futures = [f(i) for i in range(N)]
-        self.assertFalse(any(future.done() for future in futures))
-        lock.release()
-        yield futures
-        self.assertEqual(list(range(N)), history)
+            if opts.pdb:
+            failure.startDebugMode()
     
-        def callback(response):
-        response.rethrow()
-        assert len(response.body) == (options.num_chunks * options.chunk_size)
-        logging.warning('fetch completed in %s seconds', response.request_time)
-        IOLoop.current().stop()
+        def short_desc(self):
+        return 'Run a spider'
+    
+        def _list_templates(self):
+        print('Available templates:')
+        for filename in sorted(os.listdir(self.templates_dir)):
+            if filename.endswith('.tmpl'):
+                print('  %s' % splitext(filename)[0])
+    
+                @wraps(cb)
+            def wrapper(response):
+                output = list(iterate_spider_output(cb(response)))
+                try:
+                    results.startTest(self.testcase_post)
+                    self.post_process(output)
+                    results.stopTest(self.testcase_post)
+                except AssertionError:
+                    results.addFailure(self.testcase_post, sys.exc_info())
+                except Exception:
+                    results.addError(self.testcase_post, sys.exc_info())
+                else:
+                    results.addSuccess(self.testcase_post)
+                finally:
+                    return output
+    
+            if not assertion:
+            if self.min_bound == self.max_bound:
+                expected = self.min_bound
+            else:
+                expected = '%s..%s' % (self.min_bound, self.max_bound)
+    
+        def set(self, key, value):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                item.value = value
+                return
+        self.table[hash_index].append(Item(key, value))
+    
+        def remaining_cards(self):
+        return len(self.cards) - self.deal_index
+    
+        def prepare(self, **kwargs):
+        content = get_content(self.url)
+        self.title = match1(content, r'<title>([^<]+)</title>')
+        s = match1(content, r'P\.s\s*=\s*\'([^\']+)\'')
+        scp = match1(content, r'InfoQConstants\.scp\s*=\s*\'([^\']+)\'')
+        scs = match1(content, r'InfoQConstants\.scs\s*=\s*\'([^\']+)\'')
+        sck = match1(content, r'InfoQConstants\.sck\s*=\s*\'([^\']+)\'')
+    
+    def kugou_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    if url.lower().find('5sing')!=-1:
+        #for 5sing.kugou.com
+        html=get_html(url)
+        ticket=r1(r''ticket':\s*'(.*)'',html)
+        j=loads(str(b64decode(ticket),encoding='utf-8'))
+        url=j['file']
+        title=j['songName']
+        songtype, ext, size = url_info(url)
+        print_info(site_info, title, songtype, size)
+        if not info_only:
+            download_urls([url], title, ext, size, output_dir, merge=merge)
+    else:
+        #for the www.kugou.com/
+        return kugou_download_playlist(url, output_dir=output_dir, merge=merge, info_only=info_only)
+        # raise NotImplementedError(url)       
+    
+        t = r1(r'type=(\w+)', flashvars)
+    id = r1(r'vid=([^']+)', flashvars)
+    if t == 'youku':
+        youku_download_by_vid(id, title=title, output_dir=output_dir, merge=merge, info_only=info_only)
+    elif t == 'tudou':
+        tudou_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
+    elif t == 'sina' or t == 'video':
+        fake_headers['Referer'] = url
+        url = 'http://www.miomio.tv/mioplayer/mioplayerconfigfiles/sina.php?vid=' + id
+        xml_data = get_content(url, headers=fake_headers, decoded=True)
+        url_list = sina_xml_to_url_list(xml_data)
+    
+    def showroom_download_by_room_id(room_id, output_dir = '.', merge = False, info_only = False, **kwargs):
+    '''Source: Android mobile'''
+    while True:
+        timestamp = str(int(time() * 1000))
+        api_endpoint = 'https://www.showroom-live.com/api/live/streaming_url?room_id={room_id}&_={timestamp}'.format(room_id = room_id, timestamp = timestamp)
+        html = get_content(api_endpoint)
+        html = json.loads(html)
+        #{'streaming_url_list': [{'url': 'rtmp://52.197.69.198:1935/liveedge', 'id': 1, 'label': 'original spec(low latency)', 'is_default': True, 'type': 'rtmp', 'stream_name': '7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed'}, {'url': 'http://52.197.69.198:1935/liveedge/7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed/playlist.m3u8', 'is_default': True, 'id': 2, 'type': 'hls', 'label': 'original spec'}, {'url': 'rtmp://52.197.69.198:1935/liveedge', 'id': 3, 'label': 'low spec(low latency)', 'is_default': False, 'type': 'rtmp', 'stream_name': '7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed_low'}, {'url': 'http://52.197.69.198:1935/liveedge/7656a6d5baa1d77075c971f6d8b6dc61b979fc913dc5fe7cc1318281793436ed_low/playlist.m3u8', 'is_default': False, 'id': 4, 'type': 'hls', 'label': 'low spec'}]}
+        if len(html) >= 1:
+            break
+        log.w('The live show is currently offline.')
+        sleep(1)
