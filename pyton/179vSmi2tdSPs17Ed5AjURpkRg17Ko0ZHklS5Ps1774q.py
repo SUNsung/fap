@@ -1,127 +1,140 @@
 
         
-            return strings
-
+        
+FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
+FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
+JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
+BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
     
-    from ..common import *
+    from utils import TESTS_ROOT
     
-    def kugou_download_playlist(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    html=get_html(url)
-    pattern=re.compile('title='(.*?)'.* data='(\w*)\|.*?'')
-    pairs=pattern.findall(html)
-    for title,hash_val in pairs:
-        kugou_download_by_hash(title,hash_val,output_dir,merge,info_only)
+        '''
+    exit_status = ExitStatus.OK
+    downloader = None
+    show_traceback = args.debug or args.traceback
     
-        def resolveEntity(self, publicId, systemId):
-        assert systemId is not None
-        source = DOMInputSource()
-        source.publicId = publicId
-        source.systemId = systemId
-        source.byteStream = self._get_opener().open(systemId)
     
-        print('$(temp_dir):')
-    print(r'  if not exist $(temp_dir)\. mkdir $(temp_dir)')
-    print()
+def humanize_bytes(n, precision=2):
+    # Author: Doug Latornell
+    # Licence: MIT
+    # URL: http://code.activestate.com/recipes/577081/
+    '''Return a humanized string representation of a number of bytes.
     
-            class complex1(complex):
-            '''Test usage of __complex__() with a __new__() method'''
-            def __new__(self, value=0j):
-                return complex.__new__(self, 2*value)
-            def __complex__(self):
-                return self
+        reference = Sequential()
+    reference.add(wrappers.TimeDistributed(layers.Dense(2),
+                                           batch_input_shape=(1, 3, 4)))
+    reference.add(layers.Activation('relu'))
+    reference.compile(optimizer='rmsprop', loss='mse')
+    reference.layers[0].set_weights(weights)
     
-        expect_without_sort_keys = textwrap.dedent('''\
-    [
-        [
-            'blorpie'
-        ],
-        [
-            'whoops'
-        ],
-        [],
-        'd-shtaeou',
-        'd-nthiouh',
-        'i-vhbjkhnth',
-        {
-            'nifty': 87
-        },
-        {
-            'field': 'yes',
-            'morefield': false
-        }
-    ]
-    ''')
     
-        def test_change_pointers(self):
-        dll = CDLL(_ctypes_test.__file__)
-        func = dll._testfunc_p_p
+@keras_test
+def test_masking():
+    np.random.seed(1337)
+    x = np.array([[[1], [1]],
+                  [[0], [0]]])
+    model = Sequential()
+    model.add(Masking(mask_value=0, input_shape=(2, 1)))
+    model.add(TimeDistributed(Dense(1, kernel_initializer='one')))
+    model.compile(loss='mse', optimizer='sgd')
+    y = np.array([[[1], [1]],
+                  [[1], [1]]])
+    loss = model.train_on_batch(x, y)
+    assert loss == 0
+    
+    
+@keras_test
+def test_locallyconnected_1d():
+    num_samples = 2
+    num_steps = 8
+    input_dim = 5
+    filter_length = 3
+    filters = 4
+    padding = 'valid'
+    strides = 1
+    
+        history = model.fit(x, ys, validation_split=0.05, batch_size=10,
+                        verbose=0, epochs=3)
+    ground_truth = -np.log(0.5)
+    assert(np.abs(history.history['loss'][-1] - ground_truth) < 0.06)
+    
+        # test lambda with output_mask lambda
+    input_a = layers.Input(shape=input_shapes[0][1:])
+    input_b = layers.Input(shape=input_shapes[1][1:])
+    a = layers.Masking()(input_a)
+    b = layers.Masking()(input_b)
+    merged = legacy_layers.merge(
+        [a, b], mode=lambda tup: K.concatenate([tup[0], tup[1]], axis=1),
+        output_shape=lambda tup: (tup[0][0], tup[0][1] + tup[1][1]) + tup[0][2:],
+        output_mask=lambda tup: K.concatenate([tup[0], tup[1]]))
+    model = models.Model([input_a, input_b], merged)
+    expected_output_shape = model.compute_output_shape(input_shapes)
+    actual_output_shape = model.predict(inputs).shape
+    assert expected_output_shape == actual_output_shape
+    
+        # Arguments
+        config: dict of the form {'class_name': str, 'config': dict}
+        custom_objects: dict mapping class names (or function names)
+            of custom (non-Keras) objects to class/functions
     
     
 if __name__ == '__main__':
-    main()
+    pytest.main([__file__])
 
     
-    The one public-facing part of this module is the `Configurable` class
-and its `~Configurable.configure` method, which becomes a part of the
-interface of its subclasses, including `.AsyncHTTPClient`, `.IOLoop`,
-and `.Resolver`.
-'''
+        # test serialization
+    config = model.get_config()
+    Sequential.from_config(config)
     
-        @gen_test
-    def test_http10_no_content_length(self):
-        # Regression test for a bug in which can_keep_alive would crash
-        # for an HTTP/1.0 (not 1.1) response with no content-length.
-        conn = HTTP1Connection(self.client_stream, True)
-        self.server_stream.write(b'HTTP/1.0 200 Not Modified\r\n\r\nhello')
-        self.server_stream.close()
+                    # Make it more robust by adding noise.
+                # The idea is that if during inference,
+                # the value of the pixel is not exactly one,
+                # we need to train the network to be robust and still
+                # consider it as a pixel belonging to a square.
+                if np.random.randint(0, 2):
+                    noise_f = (-1)**np.random.randint(0, 2)
+                    noisy_movies[i, t,
+                                 x_shift - w - 1: x_shift + w + 1,
+                                 y_shift - w - 1: y_shift + w + 1,
+                                 0] += noise_f * 0.1
     
-            p = Popen(
-            [sys.executable, '-m', 'testapp'], stdout=subprocess.PIPE,
-            cwd=path, env=dict(os.environ, PYTHONPATH=pythonpath),
-            universal_newlines=True)
-        out = p.communicate()[0]
-        self.assertEqual(out, 'Starting\nStarting\n')
-
+        def test_eq(self):
+        self.assertTrue(self.vhost1b == self.vhost1)
+        self.assertFalse(self.vhost1 == self.vhost2)
+        self.assertEqual(str(self.vhost1b), str(self.vhost1))
+        self.assertFalse(self.vhost1b == 1234)
     
+    # If extensions (or modules to document with autodoc) are in another directory,
+# add these directories to sys.path here. If the directory is relative to the
+# documentation root, use os.path.abspath to make it absolute, like shown here.
+sys.path.insert(0, os.path.abspath(os.path.join(here, '..')))
     
-class BaseHandler(RequestHandler):
-    COOKIE_NAME = 'twitterdemo_user'
+        # Additional stuff for the LaTeX preamble.
+    #'preamble': '',
     
+    def main(loc, colorscheme):
     
-register_api_templates('comment', CommentJsonTemplate)
-register_api_templates('morerecursion', MoreCommentJsonTemplate)
-register_api_templates('morechildren', MoreCommentJsonTemplate)
-
-    
-        @validate(VAdmin(),
-              award = VAwardByCodename('awardcn'),
-              recipient = nop('recipient'),
-              desc = nop('desc'),
-              url = nop('url'),
-              hours = nop('hours'))
-    def GET_give(self, award, recipient, desc, url, hours):
-        if award is None:
-            abort(404, 'page not found')
-    
-    class CaptchaController(RedditController):
-    @allow_oauth2_access
-    @api_doc(api_section.captcha, uri='/captcha/{iden}')
-    def GET_captchaimg(self, iden):
-        '''
-        Request a CAPTCHA image given an `iden`.
-    
-            # Replace all links to '/wiki/help/...' with '/help/...'
-        for link in output.findAll('a'):
-            if link.has_key('href') and link['href'].startswith('/wiki/help'):
-                link['href'] = link['href'][5:]
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
     
-class GoogleTagManagerController(MinimalController):
-    def pre(self):
-        if request.host != g.media_domain:
-            # don't serve up untrusted content except on our
-            # specifically untrusted domain
-            self.abort404()
-    
-    import json
-import os
+def FormatDebugInfoResponse_Completer_ServerRunningWithHost_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Completer name completer debug information:\n'
+      '  Server name running at: http://127.0.0.1:1234\n'
+      '  Server name process ID: 12345\n'
+      '  Server name executable: /path/to/executable\n'
+      '  Server name logfiles:\n'
+      '    /path/to/stdout/logfile\n'
+      '    /path/to/stderr/logfile\n'
+      '  Server name key: value\n'
+      '  Key: value\n'
+    )
+  )
