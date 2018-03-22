@@ -1,181 +1,178 @@
 
         
         
-def is_valid_mime(mime):
-    return mime and MIME_RE.match(mime)
-    
-    
-def test_unicode_raw_json_item_verbose(httpbin):
-    r = http('--json', 'POST', httpbin.url + '/post',
-             u'test:={ '%s' : [ '%s' ] }' % (UNICODE, UNICODE))
-    assert HTTP_OK in r
-    assert r.json['json'] == {'test': {UNICODE: [UNICODE]}}
-    
-            if self.about:
-            self['__meta__']['about'] = self.about
-    
-        model.train_on_batch(x_train[:32], y_train[:32],
-                         sample_weight=sample_weight[:32])
-    model.test_on_batch(x_train[:32], y_train[:32],
-                        sample_weight=sample_weight[:32])
-    score = model.evaluate(x_test[test_ids, :], y_test[test_ids, :], verbose=0)
-    assert(score < standard_score_sequential)
-    
-    
-if __name__ == '__main__':
-    pytest.main([__file__])
-
-    
-    
-def gram_matrix(x):
-    assert K.ndim(x) == 3
-    if K.image_data_format() == 'channels_first':
-        features = K.batch_flatten(x)
-    else:
-        features = K.batch_flatten(K.permute_dimensions(x, (2, 0, 1)))
-    gram = K.dot(features, K.transpose(features))
-    return gram
-    
-    
-@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
-def test_he_uniform(tensor_shape):
-    fan_in, _ = initializers._compute_fans(tensor_shape)
-    scale = np.sqrt(6. / fan_in)
-    _runner(initializers.he_uniform(), tensor_shape,
-            target_mean=0., target_max=scale, target_min=-scale)
-    
-    
-def get_standard_values():
-    '''A set of floats used for testing the activations.
-    '''
-    return np.array([[0, 0.1, 0.5, 0.9, 1.0]], dtype=K.floatx())
-    
-                # check that output changes after states are reset
-            # (even though the model itself didn't change)
-            layer.reset_states()
-            out3 = model.predict(np.ones_like(inputs))
-            assert(out2.max() != out3.max())
-    
-        # Arguments
-        config: dict of the form {'class_name': str, 'config': dict}
-        custom_objects: dict mapping class names (or function names)
-            of custom (non-Keras) objects to class/functions
-    
-    ESTIMATORS = {
-    'dummy': DummyClassifier(),
-    'random_forest': RandomForestClassifier(n_estimators=100,
-                                            max_features='sqrt',
-                                            min_samples_split=10),
-    'extra_trees': ExtraTreesClassifier(n_estimators=100,
-                                        max_features='sqrt',
-                                        min_samples_split=10),
-    'logistic_regression': LogisticRegression(),
-    'naive_bayes': MultinomialNB(),
-    'adaboost': AdaBoostClassifier(n_estimators=10),
-}
-    
-            start = datetime.now()
-        ols = linear_model.LinearRegression()
-        ols.fit(X, Y)
-        time_ols[i] = total_seconds(datetime.now() - start)
-    
-        scikit_results = []
-    glmnet_results = []
-    n = 20
-    step = 500
-    n_features = 1000
-    n_informative = n_features / 10
-    n_test_samples = 1000
-    for i in range(1, n + 1):
-        print('==================')
-        print('Iteration %s of %s' % (i, n))
-        print('==================')
-    
-    ratio = scikits_time / scipy_time
-    
-        selected_algorithm = opts.selected_algorithm.split(',')
-    for key in selected_algorithm:
-        if key not in default_algorithms.split(','):
-            raise ValueError('Unknown sampling algorithm \'%s\' not in (%s).'
-                             % (key, default_algorithms))
-    
-    # Plot the results (= shape of the data points cloud)
-plt.figure(1)  # two clusters
-plt.title('Outlier detection on a real data set (boston housing)')
-plt.scatter(X1[:, 0], X1[:, 1], color='black')
-bbox_args = dict(boxstyle='round', fc='0.8')
-arrow_args = dict(arrowstyle='->')
-plt.annotate('several confounded points', xy=(24, 19),
-             xycoords='data', textcoords='data',
-             xytext=(13, 10), bbox=bbox_args, arrowprops=arrow_args)
-plt.xlim((xx1.min(), xx1.max()))
-plt.ylim((yy1.min(), yy1.max()))
-plt.legend((legend1_values_list[0].collections[0],
-            legend1_values_list[1].collections[0],
-            legend1_values_list[2].collections[0]),
-           (legend1_keys_list[0], legend1_keys_list[1], legend1_keys_list[2]),
-           loc='upper center',
-           prop=matplotlib.font_manager.FontProperties(size=12))
-plt.ylabel('accessibility to radial highways')
-plt.xlabel('pupil-teacher ratio by town')
-    
-    plt.matshow(data, cmap=plt.cm.Blues)
-plt.title('Original dataset')
-    
-        t0 = time()
-    scores = uniform_labelings_scores(score_func, n_samples, n_clusters_range)
-    print('done in %0.3fs' % (time() - t0))
-    plots.append(plt.errorbar(
-        n_clusters_range, np.median(scores, axis=1), scores.std(axis=1))[0])
-    names.append(score_func.__name__)
+@mock.patch('httpie.core.get_response')
+def test_error_traceback(get_response):
+    exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    with raises(ConnectionError):
+        main(['--ignore-stdin', '--traceback', 'www.google.com'])
     
         @staticmethod
-    def get_streams_by_id(account_number, video_id):
+    def make_header(username, password):
+        credentials = u'%s:%s' % (username, password)
+        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
+        return 'Basic %s' % token
+    
         '''
-        int, int->list
-        
-        Get the height of the videos.
-        
-        Since brightcove is using 3 kinds of links: rtmp, http and https,
-        we will be using the HTTPS one to make it secure.
-        
-        If somehow akamaihd.net is blocked by the Great Fucking Wall,
-        change the 'startswith https' to http.
+)
+network.add_argument(
+    '--check-status',
+    default=False,
+    action='store_true',
+    help='''
+    By default, HTTPie exits with 0 when no network or other fatal errors
+    occur. This flag instructs HTTPie to also check the HTTP status code and
+    exit with an error if the status indicates one.
+    
+        def test_verify_custom_ca_bundle_invalid_path(self, httpbin_secure):
+        # since 2.14.0 requests raises IOError
+        with pytest.raises((SSLError, IOError)):
+            http(httpbin_secure.url + '/get', '--verify', '/__not_found__')
+    
+        def prompt_password(self, host):
+        try:
+            self.value = self._getpass(
+                'http: password for %s@%s: ' % (self.key, host))
+        except (EOFError, KeyboardInterrupt):
+            sys.stderr.write('\n')
+            sys.exit(0)
+    
+        def _hash_function(self, key):
+        return key % self.size
+    
+    seller_category_map = {}
+seller_category_map['Exxon'] = DefaultCategories.GAS
+seller_category_map['Target'] = DefaultCategories.SHOPPING
+    
+    from mrjob.job import MRJob
+    
+            When updating an entry, updates its position to the front of the LRU list.
+        If the entry is new and the cache is at capacity, removes the oldest entry
+        before the new entry is added.
         '''
-        endpoint = 'https://edge.api.brightcove.com/playback/v1/accounts/{account_number}/videos/{video_id}'.format(account_number = account_number, video_id = video_id)
-        fake_header_id = fake_headers
-        #is this somehow related to the time? Magic....
-        fake_header_id['Accept'] ='application/json;pk=BCpkADawqM1cc6wmJQC2tvoXZt4mrB7bFfi6zGt9QnOzprPZcGLE9OMGJwspQwKfuFYuCjAAJ53JdjI8zGFx1ll4rxhYJ255AXH1BQ10rnm34weknpfG-sippyQ'
+        node = self.lookup[query]
+        if node is not None:
+            # Key exists in cache, update the value
+            node.results = results
+            self.linked_list.move_to_front(node)
+        else:
+            # Key does not exist in cache
+            if self.size == self.MAX_SIZE:
+                # Remove the oldest entry from the linked list and lookup
+                self.lookup.pop(self.linked_list.tail.query, None)
+                self.linked_list.remove_from_tail()
+            else:
+                self.size += 1
+            # Add the new key and value
+            new_node = Node(results)
+            self.linked_list.append_to_front(new_node)
+            self.lookup[query] = new_node
+
     
-    __all__ = ['ehow_download']
+    from superset import db
+from superset.models.core import Database
     
-            '''
-        super(URLSpec, self).__init__(PathMatches(pattern), handler, kwargs, name)
+        # DESCRIBE | DESC qualifiedName
+    def test_describe(self):
+        self.assertEquals({'t1'}, self.extract_tables('DESCRIBE t1'))
+        self.assertEquals({'t1'}, self.extract_tables('DESC t1'))
     
-        def test_absolute_static_url(self):
-        response = self.fetch('/abs_static_url/robots.txt')
-        self.assertEqual(response.body, (
-            utf8(self.get_url('/')) +
-            b'static/robots.txt?v=' +
-            self.robots_txt_hash
-        ))
+        # 4. Delete empty roles from permission view menues
+    pvms = sm.get_session.query(sm.permissionview_model).all()
+    for pvm in pvms:
+        pvm.role = [r for r in pvm.role if r]
+    sm.get_session.commit()
     
-            .. versionchanged:: 4.2
-           Now accepts positional arguments in addition to keyword arguments.
-        '''
+        def get_query_str(self, query_obj):
+        '''Returns a query as a string
+    
+    from sqlalchemy.orm.session import make_transient
     
     
-MAIN = '''\
-import os
-import sys
+def cast_form_data(form_data):
+    '''Translates old to new form_data'''
+    d = {}
+    fields = frontend_config.get('controls', {})
+    for k, v in form_data.items():
+        field_config = fields.get(k, {})
+        ft = field_config.get('type')
+        if ft == 'CheckboxControl':
+            # bug in some urls with dups on bools
+            if isinstance(v, list):
+                v = 'y' in v
+            else:
+                v = True if v in ('true', 'y') or v is True else False
+        elif v and ft == 'TextControl' and field_config.get('isInt'):
+            v = int(v) if v != '' else None
+        elif v and ft == 'TextControl' and field_config.get('isFloat'):
+            v = float(v) if v != '' else None
+        elif v and ft == 'SelectControl':
+            if field_config.get('multi'):
+                if type(form_data).__name__ == 'ImmutableMultiDict':
+                    v = form_data.getlist(k)
+                elif not isinstance(v, list):
+                    v = [v]
+        if d.get('slice_id'):
+            d['slice_id'] = int(d['slice_id'])
     
-            # Wait for callback 1 to time out.
-        yield gen.sleep(0.02)
-        self.assertEqual(['timeout'], self.history)
+        It also understands ``NaN``, ``Infinity``, and ``-Infinity`` as
+    their corresponding ``float`` values, which is outside the JSON spec.
     
-        def _on_stream(self, stream):
-        if stream is None:
-            # Session may have expired
-            self.redirect('/auth/login')
-            return
-        self.render('stream.html', stream=stream)
+            m = match_number(string, idx)
+        if m is not None:
+            integer, frac, exp = m.groups()
+            if frac or exp:
+                res = parse_float(integer + (frac or '') + (exp or ''))
+            else:
+                res = parse_int(integer)
+            return res, m.end()
+        elif nextchar == 'N' and string[idx:idx + 3] == 'NaN':
+            return parse_constant('NaN'), idx + 3
+        elif nextchar == 'I' and string[idx:idx + 8] == 'Infinity':
+            return parse_constant('Infinity'), idx + 8
+        elif nextchar == '-' and string[idx:idx + 9] == '-Infinity':
+            return parse_constant('-Infinity'), idx + 9
+        else:
+            raise StopIteration(idx)
+    
+        print('$(target)$(debug_suffix)%s: $(temp_dir) $(OBJS)' % (target_ext))
+    print('\tlink -out:$(target)$(debug_suffix)%s %s' %
+          (target_ext, target_link_flags), '@<<')
+    print('\t$(OBJS)')
+    print('\t$(LIBS)')
+    print('\t$(ADDN_LINK_FILES)')
+    print('\t$(pythonlib) $(lcustom) $(l_debug)')
+    print('\t$(resources)')
+    print('<<')
+    print()
+    print('clean:')
+    print('\t-del /f *.obj')
+    print('\t-del /f $(target).exe')
+
+    
+                    if not args:
+                    # args=NULL, nargs=0, kwargs=NULL
+                    result = _testcapi.pyobject_fastcalldict(func, None, None)
+                    self.check_result(result, expected)
+    
+        # We divide frames into:
+    #   - 'python frames':
+    #       - 'bytecode frames' i.e. PyEval_EvalFrameEx
+    #       - 'other python frames': things that are of interest from a python
+    #         POV, but aren't bytecode (e.g. GC, GIL)
+    #   - everything else
+    
+        def _create_infile(self):
+        infile = support.TESTFN
+        with open(infile, 'w') as fp:
+            self.addCleanup(os.remove, infile)
+            fp.write(self.data)
+        return infile
+    
+    class X(Structure):
+    _fields_ = [('c_int', c_int)]
+    init_called = False
+    def __init__(self):
+        self._init_called = True
