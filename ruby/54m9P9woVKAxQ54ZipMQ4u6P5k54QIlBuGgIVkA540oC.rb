@@ -1,85 +1,87 @@
 
         
-              it 'it increments all targets minor version major' do
-        Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number(bump_type: 'major')
-        end').runner.execute(:test)
+            Jekyll::Commands::Build.process({'source' => 'docs'})
     
-      def resource
-    @resource ||=
-      if params[:project_id].present?
-        Project.find(params[:project_id])
-      elsif params[:namespace_id].present?
-        Group.find(params[:namespace_id])
+        def process(args)
+      arg_is_present? args, '--server', 'The --server command has been replaced by the \
+                          'serve' subcommand.'
+      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
+                          'serve' subcommand.'
+      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
+                          use the 'build' subcommand.'
+      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
+                          '--watch'.'
+      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
+                          the '--watch' switch.'
+      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
+                          favour of 'highlighter'.'
+      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
+                          your config files.'
+      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
+                          config files.'
+      no_subcommand(args)
+    end
+    
+          #
+      # The version constraint required to activate a given gem.
+      # Usually the gem version requirement is '> 0,' because any version
+      # will do. In the case of jekyll-docs, however, we require the exact
+      # same version as Jekyll.
+      #
+      # Returns a String version constraint in a parseable form for
+      # RubyGems.
+      def version_constraint(gem_name)
+        return '= #{Jekyll::VERSION}' if gem_name.to_s.eql?('jekyll-docs')
+        '> 0'
       end
+    
+          private
+    
+        def translation_scope
+      'devise.confirmations'
+    end
+end
+
+    
+      # POST /resource/sign_in
+  def create
+    self.resource = warden.authenticate!(auth_options)
+    set_flash_message!(:notice, :signed_in)
+    sign_in(resource_name, resource)
+    yield resource if block_given?
+    respond_with resource, location: after_sign_in_path_for(resource)
   end
     
-      protected
+    # All Devise controllers are inherited from here.
+class DeviseController < Devise.parent_controller.constantize
+  include Devise::Controllers::ScopedViews
     
-        # Check if a reset_password_token is provided in the request
-    def assert_reset_token_passed
-      if params[:reset_password_token].blank?
-        set_flash_message(:alert, :no_token)
-        redirect_to new_session_path(resource_name)
+          def get_type
+        case slug
+        when 'api'
+          'Reference'
+        when 'configuration'
+          'Reference: Configuration'
+        when 'stpl'
+          'Reference: SimpleTemplate'
+        when 'plugindev'
+          'Reference: Plugin'
+        else
+          'Manual'
+        end
       end
-    end
     
-    if defined?(ActionMailer)
-  class Devise::Mailer < Devise.parent_mailer.constantize
-    include Devise::Mailers::Helpers
-    
-        def ==(other)
-      other.name == name && other.path == path && other.type == type
-    end
-    
-              if %w(Events Sync).include?(type)
-            name.prepend 'Backbone.'
-          elsif type == 'History'
-            name.prepend 'Backbone.history.'
-          elsif name == 'extend'
-            name.prepend '#{type}.'
-          elsif name.start_with? 'constructor'
-            name = type
-          elsif type != 'Utility'
-            name.prepend '#{type.downcase}.'
-          end
-    
-                sequence_base := (
-              'x' ||
-              -- Take the first two bytes (four hex characters)
-              substr(
-                -- Of the MD5 hash of the data we documented
-                md5(table_name ||
-                  '#{SecureRandom.hex(16)}' ||
-                  time_part::text
-                ),
-                1, 4
-              )
-            -- And turn it into a bigint
-            )::bit(16)::bigint;
-    
-      def show
-    @tag = Tag.find_by!(name: params[:id].downcase)
-    
-      describe 'GET #show' do
-    let!(:tag)     { Fabricate(:tag, name: 'test') }
-    let!(:local)   { Fabricate(:status, tags: [tag], text: 'local #test') }
-    let!(:remote)  { Fabricate(:status, tags: [tag], text: 'remote #test', account: Fabricate(:account, domain: 'remote')) }
-    let!(:late)    { Fabricate(:status, tags: [tag], text: 'late #test') }
-    
-          expect('.border-style-alternate').to have_rule(rule)
-    end
-  end
-    
-          expect('.padding-implied-left').to have_rule(rule)
-    end
-  end
-    
-          expect('.prefix--webkit').to have_ruleset(rule)
-    end
-  end
-    
-          expect('.size-auto').to have_ruleset(rule)
-    end
+      # Update version.rb file with BOOTSTRAP_SHA
+  def store_version
+    path    = 'lib/bootstrap-sass/version.rb'
+    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
+    File.open(path, 'w') { |f| f.write(content) }
   end
 end
+
+    
+      # Disable automatic flushing of the log to improve performance.
+  # config.autoflush_log = false
+    
+            # Remove it form the session objects so freeup
+        sessions.delete(s[:session])
