@@ -1,133 +1,104 @@
 
         
-        import pytest
+                return methods
     
-    # This view is called from FlatpageFallbackMiddleware.process_response
-# when a 404 is raised, which often means CsrfViewMiddleware.process_view
-# has not been called even if CsrfViewMiddleware is installed. So we need
-# to use @csrf_protect, in case the template needs {% csrf_token %}.
-# However, we can't just wrap this view; if no matching flatpage exists,
-# or a redirect is required for authentication, the 404 needs to be returned
-# without any CSRF checks. Therefore, we only
-# CSRF protect the internal implementation.
+    from mrjob.job import MRJob
     
-        return inner
+        def __init__(self, user_id, name, pass_hash):
+        self.user_id = user_id
+        self.name = name
+        self.pass_hash = pass_hash
+        self.friends_by_id = {}  # key: friend id, value: User
+        self.friend_ids_to_private_chats = {}  # key: friend id, value: private chats
+        self.group_chats_by_id = {}  # key: chat id, value: GroupChat
+        self.received_friend_requests_by_friend_id = {}  # key: friend id, value: AddRequest
+        self.sent_friend_requests_by_friend_id = {}  # key: friend id, value: AddRequest
     
-        :param str u_string: unicode string to check. Must be unicode
-        and not Python 2 `str`.
-    :rtype: bool
-    '''
-    assert isinstance(u_string, str)
+        def crawl_page(self, page):
+        for url in page.child_urls:
+            self.data_store.add_link_to_crawl(url)
+        self.reverse_index_queue.generate(page)
+        self.doc_index_queue.generate(page)
+        self.data_store.remove_link_to_crawl(page.url)
+        self.data_store.insert_crawled_link(page.url, page.signature)
+    
+        def entry_ok(self):
+        'Return apparently valid (name, path) or None'
+        self.entry_error['text'] = ''
+        self.path_error['text'] = ''
+        name = self.item_ok()
+        path = self.path_ok()
+        return None if name is None or path is None else (name, path)
+    
+    
+def _convert(value, T):
+    '''Convert value to given numeric type T.'''
+    if type(value) is T:
+        # This covers the cases where T is Fraction, or where value is
+        # a NAN or INF (Decimal or float).
+        return value
+    if issubclass(T, int) and value.denominator != 1:
+        T = float
     try:
-        u_string.encode('ascii')
-        return True
-    except UnicodeEncodeError:
-        return False
-
+        # FIXME: what do we do if this overflows?
+        return T(value)
+    except TypeError:
+        if issubclass(T, Decimal):
+            return T(value.numerator)/T(value.denominator)
+        else:
+            raise
     
-            realm = self._thread_local.chal['realm']
-        nonce = self._thread_local.chal['nonce']
-        qop = self._thread_local.chal.get('qop')
-        algorithm = self._thread_local.chal.get('algorithm')
-        opaque = self._thread_local.chal.get('opaque')
-        hash_utf8 = None
+        def test_setitem(self):
+        morsel = cookies.Morsel()
+        morsel['expires'] = 0
+        self.assertEqual(morsel['expires'], 0)
+        morsel['Version'] = 2
+        self.assertEqual(morsel['version'], 2)
+        morsel['DOMAIN'] = 'example.com'
+        self.assertEqual(morsel['domain'], 'example.com')
     
-    if is_py2:
-    from urllib import (
-        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
-        proxy_bypass, proxy_bypass_environment, getproxies_environment)
-    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
-    from urllib2 import parse_http_list
-    import cookielib
-    from Cookie import Morsel
-    from StringIO import StringIO
+            self = cls(transitions, type_indices, ttis, abbrs)
+        self.tzh = tzh
     
-    def _init():
-    for code, titles in _codes.items():
-        for title in titles:
-            setattr(codes, title, code)
-            if not title.startswith(('\\', '/')):
-                setattr(codes, title.upper(), code)
+    int WINAPI WinMain(
+    HINSTANCE hInstance,      // handle to current instance
+    HINSTANCE hPrevInstance,  // handle to previous instance
+    LPSTR lpCmdLine,          // pointer to command line
+    int nCmdShow              // show state of window
+    )
+{
+    extern int Py_FrozenMain(int, char **);
+    PyImport_FrozenModules = _PyImport_FrozenModules;
+    return Py_FrozenMain(__argc, __argv);
+}
+'''
     
-            #: A CookieJar containing all currently outstanding cookies set on this
-        #: session. By default it is a
-        #: :class:`RequestsCookieJar <requests.cookies.RequestsCookieJar>`, but
-        #: may be any other ``cookielib.CookieJar`` compatible object.
-        self.cookies = cookiejar_from_dict({})
+        X_RGB_TXT -- X Consortium rgb.txt format files.  Three columns of numbers
+                 from 0 .. 255 separated by whitespace.  Arbitrary trailing
+                 columns used as the color name.
     
-      # Create output directory if necessary.
-  if not os.path.exists(cmd_args.output_dir):
-    os.makedirs(cmd_args.output_dir)
+        def test_oldargs1_1_kw(self):
+        msg = r'count\(\) takes no keyword arguments'
+        self.assertRaisesRegex(TypeError, msg, [].count, {}, x=2)
     
-        self.assertAllEqual(exp_boxes, boxes_out)
-    self.assertAllEqual(exp_feature_scales, feature_scales_out)
-    self.assertAllClose(exp_features, features_out)
-    self.assertAllClose(exp_scores, scores_out)
+        def _marshaled_dispatch(self, data, dispatch_method = None, path = None):
+        '''Dispatches an XML-RPC method from marshalled (XML) data.
     
-      # Train and evaluate for 11 epochs.
-  with tf.device(device):
-    for epoch in range(1, 11):
-      with tfe.restore_variables_on_create(
-          tf.train.latest_checkpoint(FLAGS.checkpoint_dir)):
-        global_step = tf.train.get_or_create_global_step()
-        start = time.time()
-        with summary_writer.as_default():
-          train(model, optimizer, train_ds, FLAGS.log_interval)
-        end = time.time()
-        print('\nTrain time for epoch #%d (global step %d): %f' %
-              (epoch, global_step.numpy(), end - start))
-      with test_summary_writer.as_default():
-        test(model, test_ds)
-      all_variables = (model.variables + optimizer.variables() + [global_step])
-      tfe.Saver(all_variables).save(checkpoint_prefix, global_step=global_step)
+        def test_help_flag(self):
+        rc, out, err = assert_python_ok('-m', 'json.tool', '-h')
+        self.assertEqual(rc, 0)
+        self.assertTrue(out.startswith(b'usage: '))
+        self.assertEqual(err, b'')
     
+        def test_pickling(self):
+        testcases = [(13,), (0, 11), (-22, 10), (20, 3, -1),
+                     (13, 21, 3), (-2, 2, 2), (2**65, 2**65+2)]
+        for proto in range(pickle.HIGHEST_PROTOCOL + 1):
+            for t in testcases:
+                with self.subTest(proto=proto, test=t):
+                    r = range(*t)
+                    self.assertEqual(list(pickle.loads(pickle.dumps(r, proto))),
+                                     list(r))
     
-def device():
-  return '/device:GPU:0' if tfe.num_gpus() else '/device:CPU:0'
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-    
-    flags.DEFINE_string('master', '',
-                    'BNS name prefix of the Tensorflow eval master, '
-                    'or 'local'.')
-flags.DEFINE_string('eval_dir', '/tmp/text_eval',
-                    'Directory where to write event logs.')
-flags.DEFINE_string('eval_data', 'test', 'Specify which dataset is used. '
-                    '('train', 'valid', 'test') ')
-    
-        parser.add_argument('--key',
-                        metavar='KEY',
-                        default=api_key,
-                        required=not api_key,
-                        help='Shippable API key')
-    
-        terminal_length = os.getenv('ANSIBLE_VYOS_TERMINAL_LENGTH', 10000)
-    
-        def get(self, query)
-        '''Get the stored query result from the cache.
-        
-        Accessing a node updates its position to the front of the LRU list.
-        '''
-        node = self.lookup[query]
-        if node is None:
-            return None
-        self.linked_list.move_to_front(node)
-        return node.results
-    
-        def can_fit_vehicle(self, vehicle):
-        if self.vehicle is not None:
-            return False
-        return vehicle.can_fit_in_spot(self)
-    
-        def get_people(self, ids):
-        results = []
-        for id in ids:
-            if id in self.people:
-                results.append(self.people[id])
-        return results
-    
-        def create_signature(self):
-        # Create signature based on url and contents
-        ...
+    from ctypes import *
+import _ctypes_test
