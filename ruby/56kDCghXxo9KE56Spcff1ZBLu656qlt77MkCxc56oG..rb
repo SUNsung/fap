@@ -1,112 +1,133 @@
 
         
-                  # Bubbled up from the adapter require. Prefix the exception message
-          # with some guidance about how to address it and reraise.
-          else
-            raise e.class, 'Error loading the '#{adapter}' Action Cable pubsub adapter. Missing a gem it depends on? #{e.message}', e.backtrace
-          end
-        end
+        def bottle_resolve_formula_names(bottle_file)
+  receipt_file_path = bottle_receipt_path bottle_file
+  receipt_file = Utils.popen_read('tar', '-xOzf', bottle_file, receipt_file_path)
+  name = receipt_file_path.split('/').first
+  tap = Tab.from_file_content(receipt_file, '#{bottle_file}/#{receipt_file_path}').tap
     
-            def test_spec_name_with_inline_config
-          spec = spec('adapter' => 'sqlite3')
-          assert_equal 'primary', spec.name, 'should default to primary id'
-        end
-      end
-    end
-  end
-end
-
-    
-          # Declares one or more attributes that will be given both class and instance accessor methods.
-      def attribute(*names)
-        generated_attribute_methods.module_eval do
-          names.each do |name|
-            define_method(name) do
-              attributes[name.to_sym]
-            end
-    
-          def index
-        self.response_body = 'Fail'
-      end
-    
-      class BareEmptyTest < ActiveSupport::TestCase
-    test 'response body is nil' do
-      controller = BareEmptyController.new
-      controller.set_request!(ActionDispatch::Request.empty)
-      controller.set_response!(BareController.make_response!(controller.request))
-      controller.index
-      assert_nil controller.response_body
-    end
-  end
-    
-        # An email was generated.
-    def process(event)
-      debug do
-        mailer = event.payload[:mailer]
-        action = event.payload[:action]
-        '#{mailer}##{action}: processed outbound mail in #{event.duration.round(1)}ms'
+        # Remove directories opposite from traversal, so that a subtree with no
+    # actual files gets removed correctly.
+    dirs.reverse_each do |d|
+      if d.children.empty?
+        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
+        d.rmdir
       end
     end
     
-          private
-        def method_missing(method_name, *args)
-          if @mailer.action_methods.include?(method_name.to_s)
-            ActionMailer::Parameterized::MessageDelivery.new(@mailer, method_name, @params, *args)
-          else
-            super
-          end
+            if file_is_stale || ARGV.switch?('s') && !f.installed? || bottle_file_outdated?(f, file)
+          cleanup_path(file) { file.unlink }
         end
-    
-            def application_mailer_file_name
-          @_application_mailer_file_name ||= if mountable_engine?
-            'app/mailers/#{namespaced_path}/application_mailer.rb'
-          else
-            'app/mailers/application_mailer.rb'
-          end
-        end
+      end
     end
+    
+      def internal_development_commands
+    find_internal_commands HOMEBREW_LIBRARY_PATH/'dev-cmd'
   end
+    
+      def kernel
+    `uname -m`.chomp
+  end
+    
+      UNBREWED_EXCLUDE_FILES = %w[.DS_Store]
+  UNBREWED_EXCLUDE_PATHS = %w[
+    .github/*
+    bin/brew
+    lib/gdk-pixbuf-2.0/*
+    lib/gio/*
+    lib/node_modules/*
+    lib/python[23].[0-9]/*
+    lib/pypy/*
+    lib/pypy3/*
+    lib/ruby/gems/[12].*
+    lib/ruby/site_ruby/[12].*
+    lib/ruby/vendor_ruby/[12].*
+    share/pypy/*
+    share/pypy3/*
+    share/doc/homebrew/*
+    share/info/dir
+    share/man/man1/brew.1
+    share/man/whatis
+  ]
+    
+    if $PROGRAM_NAME == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
+  ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
+  require 'rubygems'
+  require 'bundler/setup'
+  $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+elsif ENV['COCOAPODS_NO_BUNDLER']
+  require 'rubygems'
+  gem 'cocoapods'
 end
-
     
-    # These are the normal settings that will be set up by Railties
-# TODO: Have these tests support other combinations of these values
-silence_warnings do
-  Encoding.default_internal = Encoding::UTF_8
-  Encoding.default_external = Encoding::UTF_8
-end
+    (deny default)
+EOS
     
-      def execute
-    Gitlab::Metrics.measure(:import_export_clean_up) do
-      return unless File.directory?(path)
+          def initialize(argv)
+        @podfile_path = Pathname.pwd + 'Podfile'
+        @project_path = argv.shift_argument
+        @project_paths = Pathname.pwd.children.select { |pn| pn.extname == '.xcodeproj' }
+        super
+      end
     
-    if profile_filename = ENV['PROFILE']
-  require 'ruby-prof'
-  reporter =
-    case (profile_extname = File.extname(profile_filename))
-    when '.txt'
-      RubyProf::FlatPrinterWithLineNumbers
-    when '.html'
-      RubyProf::GraphHtmlPrinter
-    when '.callgrind'
-      RubyProf::CallTreePrinter
+        def define_remote_file_task(task, target_roles)
+      Capistrano::UploadTask.define_task(task) do |t|
+        prerequisite_file = t.prerequisites.first
+        file = shared_path.join(t.name)
+    
+      entries.each do |entry|
+    if File.exist?(entry[:file])
+      warn '[skip] #{entry[:file]} already exists'
     else
-      raise 'Unknown profiler format indicated by extension: #{profile_extname}'
+      File.open(entry[:file], 'w+') do |f|
+        f.write(ERB.new(File.read(entry[:template])).result(binding))
+        puts I18n.t(:written_file, scope: :capistrano, file: entry[:file])
+      end
     end
-  File.open(profile_filename, 'w') do |io|
-    reporter.new(RubyProf.profile { Pod::Command.run(ARGV) }).print(io)
   end
-else
-  Pod::Command.run(ARGV)
-end
-
     
-            self.arguments = [
-          CLAide::Argument.new('NAME', false),
-        ]
+          describe 'using the :user property' do
+        it 'takes precedence over in the host string' do
+          dsl.server 'db@example1.com:1234', roles: %w{db}, active: true, user: 'brian'
+          expect(subject).to eq('brian@example1.com:1234')
+        end
+      end
     
-            def run
-          print_version
-          signal_end_of_output
-          listen
+            def description
+          'validate the content types allowed on attachment #{@attachment_name}'
+        end
+    
+          class ValidateAttachmentPresenceMatcher
+        def initialize attachment_name
+          @attachment_name = attachment_name
+        end
+    
+      class Railtie
+    def self.insert
+      Paperclip.options[:logger] = Rails.logger
+    
+    module Paperclip
+  # Provides helper methods that can be used in migrations.
+  module Schema
+    COLUMNS = {:file_name    => :string,
+               :content_type => :string,
+               :file_size    => :integer,
+               :updated_at   => :datetime}
+    
+            def autocorrect(node)
+          lambda do |corrector|
+            each_unnecessary_space_match(node) do |range|
+              corrector.replace(range, ' ')
+            end
+          end
+        end
+    
+            def on_case(case_node)
+          case_node.when_branches.each_with_object([]) do |when_node, previous|
+            when_node.each_condition do |condition|
+              next unless repeated_condition?(previous, condition)
+    
+            def on_if(node)
+          return unless nested_variable_comparison?(node.condition)
+          add_offense(node)
         end
