@@ -1,230 +1,280 @@
 
         
-        // Read through the first n keys repeatedly and check that they get
-// compacted (verified by checking the size of the key space).
-void AutoCompactTest::DoReads(int n) {
-  std::string value(kValueSize, 'x');
-  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
+          PendingRequestMap pending_requests_;
+  int previous_request_id_;
+    
+    class HttpProtocolHandler : public net::URLRequestJobFactory::ProtocolHandler {
+ public:
+  explicit HttpProtocolHandler(const std::string&);
+  virtual ~HttpProtocolHandler();
     }
     
-    struct Options;
-struct FileMetaData;
     
-      // Return a key suitable for lookup in a MemTable.
-  Slice memtable_key() const { return Slice(start_, end_ - start_); }
+    {  DISALLOW_COPY_AND_ASSIGN(URLRequestBufferJob);
+};
     
-    std::string TableFileName(const std::string& name, uint64_t number) {
-  assert(number > 0);
-  return MakeFileName(name, number, 'ldb');
-}
+    #ifndef ATOM_BROWSER_NET_URL_REQUEST_STRING_JOB_H_
+#define ATOM_BROWSER_NET_URL_REQUEST_STRING_JOB_H_
     
-    // If filename is a leveldb file, store the type of the file in *type.
-// The number encoded in the filename is stored in *number.  If the
-// filename was successfully parsed, returns true.  Else return false.
-extern bool ParseFileName(const std::string& filename,
-                          uint64_t* number,
-                          FileType* type);
+      if (!predicate_.Run(process))
+    return;
     
-    
-    {  Status result;
-  if (msg != NULL) {
-    result = Status::Corruption('VersionEdit', msg);
-  }
-  return result;
-}
+    #endif  // ATOM_BROWSER_UI_DRAG_UTIL_H_
+
     
      private:
-  friend class VersionSet;
+  AtomMenuModel* menu_model_;
     
-    TEST(FindFileTest, OverlapSequenceChecks) {
-  Add('200', '200', 5000, 3000);
-  ASSERT_TRUE(! Overlaps('199', '199'));
-  ASSERT_TRUE(! Overlaps('201', '300'));
-  ASSERT_TRUE(Overlaps('200', '200'));
-  ASSERT_TRUE(Overlaps('190', '200'));
-  ASSERT_TRUE(Overlaps('200', '210'));
+      /// When evaluating an expression in the context of an existing source file,
+  /// we may want to prefer declarations from that source file.
+  /// The DebuggerClient can return a private-discriminator to tell lookup to
+  /// prefer these certain decls.
+  virtual Identifier getPreferredPrivateDiscriminator() = 0;
+    
+        // Hide literals other than the ones that are also keywords if they don't
+    // match the expected types.
+    if (completion->getKind() == Completion::Literal &&
+        completionHasExpectedTypes &&
+        completion->getExpectedTypeRelation() < Completion::Convertible &&
+        completion->getLiteralKind() !=
+            CodeCompletionLiteralKind::BooleanLiteral &&
+        completion->getLiteralKind() != CodeCompletionLiteralKind::NilLiteral)
+      continue;
+    
+    #endif
+
+    
+      ConvertUTF8toUTF32(&SourceNext, SourceStart + S.size(), &TargetStart, C + 1,
+                     llvm::lenientConversion);
+  if (TargetStart == C) {
+    // The source string contains an ill-formed subsequence at the end.
+    return S;
+  }
+    
+    SILFunction *SILDebugScope::getParentFunction() const {
+  if (InlinedCallSite)
+    return InlinedCallSite->getParentFunction();
+  if (auto *ParentScope = Parent.dyn_cast<const SILDebugScope *>())
+    return ParentScope->getParentFunction();
+  return Parent.get<SILFunction *>();
 }
+
     
-    namespace leveldb {
-    }
+    #include 'swift/Syntax/Rewriter.h'
     
-    class DummyBufferPoolController : public BufferPoolController
-{
-public:
-    DummyBufferPoolController() { }
-    virtual ~DummyBufferPoolController() { }
-    }
-    
-        CV_Assert( 0 <= roi.x && 0 <= roi.width && roi.x + roi.width <= m.cols && 0 <= roi.y && 0 <= roi.height && roi.y + roi.height <= m.rows );
-    
-    bool js_cocos2dx_physics3d_Physics3DObject_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DObject_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DObject(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DObject_setUserData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getUserData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getObjType(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_setPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getWorldTransform(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_setMask(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getCollisionCallback(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getMask(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_needCollisionCallback(JSContext *cx, uint32_t argc, jsval *vp);
+    #ifndef SWIFT_AST_SUBSTITUTION_LIST_H
+#define SWIFT_AST_SUBSTITUTION_LIST_H
     
     
-    
-    
-    
-    
-    
-    
-    
-    	if (settings->pause)
-	{
-		if (settings->singleStep)
-		{
-			settings->singleStep = 0;
-		}
-		else
-		{
-			timeStep = 0.0f;
-		}
-    }
-    
-    /// Test settings. Some can be controlled in the GUI.
-struct Settings
-{
-	Settings()
-	{
-		viewCenter.Set(0.0f, 20.0f);
-		hz = 60.0f;
-		velocityIterations = 8;
-		positionIterations = 3;
-		drawShapes = 1;
-		drawJoints = 1;
-		drawAABBs = 0;
-		drawContactPoints = 0;
-		drawContactNormals = 0;
-		drawContactImpulse = 0;
-		drawFrictionImpulse = 0;
-		drawCOMs = 0;
-		drawStats = 0;
-		drawProfile = 0;
-		enableWarmStarting = 1;
-		enableContinuous = 1;
-		enableSubStepping = 0;
-		enableSleep = 1;
-		pause = 0;
-		singleStep = 0;
-	}
-    }
-    
-    	void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
-	{
-		if (m_broke)
-		{
-			// The body already broke.
-			return;
-		}
-    }
-    
-    #include <string>
-#include <vector>
-    
-    
-    {  private:
-    std::vector<std::string> vecdump_;
+    {  /// Return a hash code of any components from these options that should
+  /// contribute to a Swift Bridging PCH hash.
+  llvm::hash_code getPCHHashComponents() const {
+    // Nothing here that contributes anything significant when emitting the PCH.
+    return llvm::hash_value(0);
+  }
 };
     
-    #endif /* defined(COMM_COMM_FREQUENCY_LIMIT_H_) */
+      virtual void handleDiagnostic(SourceManager &SM, SourceLoc Loc,
+                                DiagnosticKind Kind,
+                                StringRef FormatString,
+                                ArrayRef<DiagnosticArgument> FormatArgs,
+                                const DiagnosticInfo &Info) override;
+    
+    bool Substitution::isCanonical() const {
+  if (!getReplacement()->isCanonical())
+    return false;
+  for (auto conf : getConformances()) {
+    if (!conf.isCanonical())
+      return false;
+  }
+  return true;
+}
 
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
+    namespace tesseract  {
+    }
     
-    #ifndef __PublicComponent__testspy__
-#define __PublicComponent__testspy__
+      // Delete all Added points.
+  void Clear();
     
+      // ValidFirstLine() and ValidBodyLine() take arguments describing a text line
+  // in a block of text which we are trying to model:
+  //   lmargin, lindent:  these add up to the distance from the leftmost ink
+  //                      in the text line to the surrounding text block's left
+  //                      edge.
+  //   rmargin, rindent:  these add up to the distance from the rightmost ink
+  //                      in the text line to the surrounding text block's right
+  //                      edge.
+  // The caller determines the division between 'margin' and 'indent', which
+  // only actually affect whether we think the line may be centered.
+  //
+  // If the amount of whitespace matches the amount of whitespace expected on
+  // the relevant side of the line (within tolerance_) we say it matches.
     
-    static bool SpyHookLogFunc(struct XLoggerInfo_t& _info, std::string& _log);
-    void TestFun0();
-    int __TestFun1(int i);
+    namespace tesseract {
+    }
     
-      auto animal = sample::GetAnimal(builder.GetBufferPointer());
+    /**----------------------------------------------------------------------------
+          Include Files and Type Defines
+----------------------------------------------------------------------------**/
+#include 'host.h'
+#include <stdio.h>
+#include <math.h>
     
-    #endif  // GRPC_INTERNAL_COMPILER_CPP_GENERATOR_H
-
-    
-    // Generates imports for the service
-void GenerateImports(grpc_generator::File *file, grpc_generator::Printer *printer,
-                     std::map<grpc::string, grpc::string> vars) {
-	vars['filename'] = file->filename();
-	printer->Print('//Generated by gRPC Go plugin\n');
-	printer->Print('//If you make any local changes, they will be lost\n');
-	printer->Print(vars, '//source: $filename$\n\n');
-	printer->Print(vars, 'package $Package$\n\n');
-	if (file->additional_headers() != '') {
-		printer->Print(file->additional_headers().c_str());
-		printer->Print('\n\n');
-	}
-	printer->Print('import (\n');
-	printer->Indent();
-	printer->Print(vars, '$context$ \'golang.org/x/net/context\'\n');
-	printer->Print(vars, '$grpc$ \'google.golang.org/grpc\'\n');
-	printer->Outdent();
-	printer->Print(')\n\n');
+    // Compute the distance between the given feature vector and the last
+// Set feature vector.
+double IntFeatureDist::DebugFeatureDistance(
+    const GenericVector<int>& features) const {
+  int num_test_features = features.size();
+  double denominator = total_feature_weight_ + num_test_features;
+  double misses = denominator;
+  for (int i = 0; i < num_test_features; ++i) {
+    int index = features[i];
+    double weight = 1.0;
+    INT_FEATURE_STRUCT f = feature_map_->InverseMapFeature(features[i]);
+    tprintf('Testing feature weight %g:', weight);
+    f.print();
+    if (features_[index]) {
+      // A perfect match.
+      misses -= 2.0 * weight;
+      tprintf('Perfect hit\n');
+    } else if (features_delta_one_[index]) {
+      misses -= 1.5 * weight;
+      tprintf('-1 hit\n');
+    } else if (features_delta_two_[index]) {
+      // A near miss.
+      misses -= 1.0 * weight;
+      tprintf('-2 hit\n');
+    } else {
+      tprintf('Total miss\n');
+    }
+  }
+  tprintf('Features present:');
+  for (int i = 0; i < size_; ++i) {
+    if (features_[i]) {
+      INT_FEATURE_STRUCT f = feature_map_->InverseMapFeature(i);
+      f.print();
+    }
+  }
+  tprintf('\nMinus one features:');
+  for (int i = 0; i < size_; ++i) {
+    if (features_delta_one_[i]) {
+      INT_FEATURE_STRUCT f = feature_map_->InverseMapFeature(i);
+      f.print();
+    }
+  }
+  tprintf('\nMinus two features:');
+  for (int i = 0; i < size_; ++i) {
+    if (features_delta_two_[i]) {
+      INT_FEATURE_STRUCT f = feature_map_->InverseMapFeature(i);
+      f.print();
+    }
+  }
+  tprintf('\n');
+  return misses / denominator;
 }
     
-    #include 'monster_test_generated.h'
-#include 'flatbuffers/grpc.h'
+    // Apply the supplied feature_space/feature_map transform to all samples
+// accessed by this iterator.
+void SampleIterator::MapSampleFeatures(const IntFeatureMap& feature_map) {
+  for (Begin(); !AtEnd(); Next()) {
+    TrainingSample* sample = MutableSample();
+    sample->MapFeatures(feature_map);
+  }
+}
     
+    bool DeterministicSchedule::tryWait(sem_t* sem) {
+  beforeSharedAccess();
+  int rv = sem_trywait(sem);
+  int e = rv == 0 ? 0 : errno;
+  FOLLY_TEST_DSCHED_VLOG('sem_trywait(' << sem << ') = ' << rv
+                                        << ' errno=' << e);
+  afterSharedAccess();
+  if (rv == 0) {
+    return true;
+  } else {
+    assert(e == EAGAIN);
+    return false;
+  }
+}
     
-    {  InitParams params_;
-};
+    template <>
+Getcpu::Func AccessSpreader<test::DeterministicAtomic>::pickGetcpuFunc();
     
-        // Write root value.
-    auto byte_width = Align(stack_[0].ElemWidth(buf_.size(), 0));
-    WriteAny(stack_[0], byte_width);
-    // Write root type.
-    Write(stack_[0].StoredPackedType(), 1);
-    // Write root size. Normally determined by parent, but root has no parent :)
-    Write(byte_width, 1);
-    
-    #endif  // FLATBUFFERS_REGISTRY_H_
-
-    
-    #include 'flatbuffers/idl.h'
-#include 'flatbuffers/util.h'
-    
-    
-    {}  // namespace fuzzer
-
-    
-    ExternalFunctions::ExternalFunctions() {
-#define EXT_FUNC(NAME, RETURN_TYPE, FUNC_SIG, WARN)                            \
-  this->NAME = GetFnPtr<decltype(ExternalFunctions::NAME)>(#NAME, WARN)
+    template <template <typename> class Atom>
+void run_basic_tests() {
+  Futex<Atom> f(0);
     }
     
-    static bool IsFile(const std::string &Path, const DWORD &FileAttributes) {
-    }
+      void init() {
+    auto ret = new Integer(this);
+    cs_.reset(ret);
+    int_cache_ = ret;
+  }
     
-    namespace fuzzer {
-    }
+    Through linear inheritance, Poly<Mine> ends up with the public member functions
+of both interfaces, Mine and Yours.
     
-    #ifdef __BIG_ENDIAN__
-# define SHA_BIG_ENDIAN
-#elif defined __LITTLE_ENDIAN__
-/* override */
-#elif defined __BYTE_ORDER
-# if __BYTE_ORDER__ ==  __ORDER_BIG_ENDIAN__
-# define SHA_BIG_ENDIAN
-# endif
-#else // ! defined __LITTLE_ENDIAN__
-# include <endian.h> // machine/endian.h
-# if __BYTE_ORDER__ ==  __ORDER_BIG_ENDIAN__
-#  define SHA_BIG_ENDIAN
-# endif
-#endif
+    TEST(TestDynamicParser, OnErrorThrowError) {
+  auto d = dynamic::array(dynamic::object('int', 'fail'));
+  DynamicParser p(DynamicParser::OnError::THROW, &d);
+  try {
+    // Force the exception to bubble up through a couple levels of nesting.
+    p.required(0, [&]() { p.optional('int', [&](int64_t) {}); });
+    FAIL() << 'Should have thrown';
+  } catch (const DynamicParserParseError& ex) {
+    auto error = ex.error();
+    const auto& message =
+      error.at('nested').at('0').at('nested').at('int').at('error');
+    EXPECT_PCRE_MATCH('.*Invalid leading.*', message.getString());
+    EXPECT_PCRE_MATCH(
+      'DynamicParserParseError: .*Invalid leading.*', ex.what()
+    );
+    EXPECT_EQ(dynamic(dynamic::object
+      ('nested', dynamic::object
+        ('0', dynamic::object
+          ('nested', dynamic::object
+            ('int', dynamic::object
+              ('error', message)('value', 'fail')))))), error);
+    EXPECT_THROW(p.releaseErrors(), DynamicParserLogicError)
+      << 'THROW releases the first error eagerly, and throws';
+  }
+}
+    
+      Subprocess proc(allArgs, options);
+  auto p = proc.communicate();
+  EXPECT_EQ(expectedExitCode, proc.wait().exitStatus());
+    
+    /*
+ * insertInternal --
+ *
+ *   Returns false on failure due to key collision or full.
+ *   Also sets ret.index to the index of the key.  If the map is full, sets
+ *   ret.index = capacity_.  Also sets ret.second to cell value, thus if insert
+ *   successful this will be what we just inserted, if there is a key collision
+ *   this will be the previously inserted value, and if the map is full it is
+ *   default.
+ */
+template <
+    class KeyT,
+    class ValueT,
+    class HashFcn,
+    class EqualFcn,
+    class Allocator,
+    class ProbeFcn,
+    class KeyConvertFcn>
+template <
+    typename LookupKeyT,
+    typename LookupHashFcn,
+    typename LookupEqualFcn,
+    typename LookupKeyToKeyFcn,
+    typename... ArgTs>
+typename AtomicHashArray<KeyT, ValueT, HashFcn, EqualFcn,
+                         Allocator, ProbeFcn, KeyConvertFcn>::SimpleRetT
+AtomicHashArray<KeyT, ValueT, HashFcn, EqualFcn,
+                Allocator, ProbeFcn, KeyConvertFcn>::
+insertInternal(LookupKeyT key_in, ArgTs&&... vCtorArgs) {
+  const short NO_NEW_INSERTS = 1;
+  const short NO_PENDING_INSERTS = 2;
+  checkLegalKeyIfKey<LookupKeyT>(key_in);
+    }
