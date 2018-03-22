@@ -1,61 +1,143 @@
 
         
-          Args:
-    data: 1D np.array of waveform data.
-    audio_sample_rate: The sampling rate of data.
-    log_offset: Add this to values when taking log to avoid -Infs.
-    window_length_secs: Duration of each window to analyze.
-    hop_length_secs: Advance between successive analysis windows.
-    **kwargs: Additional arguments to pass to spectrogram_to_mel_matrix.
+                headers.insert(0, request_line)
+        headers = '\r\n'.join(headers).strip()
     
-        optimizer = tf.train.AdagradOptimizer(learning_rate=0.1)
-    train_op = optimizer.minimize(loss, global_step=tf.train.get_global_step())
-    return tf.estimator.EstimatorSpec(mode, loss=loss, train_op=train_op)
     
-            # Ensure variables have been reused
-        # Embedding + 2 LSTM layers + hidden layers + logits layer
-        expected_num_vars = 1 + 2 * 2 * FLAGS.rnn_num_layers + 2 * (
-            FLAGS.cl_num_layers) + 2
-        self.assertEqual(len(tf.trainable_variables()), expected_num_vars)
+def is_valid_mime(mime):
+    return mime and MIME_RE.match(mime)
     
-    def get_default_args():
-  robot = utils.Foo(radius=15, base=10, height=140, sensor_height=120,
-                    camera_elevation_degree=-15)
+            '''
+        return content
+
     
-        def test_sequential_undo(self):
-        self.command_stack = list(reversed(self.command_stack))
-        self.command_stack[0].undo()
-        output_after_first_undo = os.listdir(self.test_dir)
-        self.assertEqual(output_after_first_undo[0], 'bar.txt')
-        self.command_stack[1].undo()
-        output_after_second_undo = os.listdir(self.test_dir)
-        self.assertEqual(output_after_second_undo[0], 'foo.txt')
+        def _migrate_implicit_content_type(self):
+        '''Migrate the removed implicit_content_type config option'''
+        try:
+            implicit_content_type = self.pop('implicit_content_type')
+        except KeyError:
+            self.save()
+        else:
+            if implicit_content_type == 'form':
+                self['default_options'].insert(0, '--form')
+            self.save()
+            self.load()
+
+    
+        ERROR_TIMEOUT = 2
+    ERROR_TOO_MANY_REDIRECTS = 6
+    
+                try:
+                slice_id = int(
+                    slice_id or json.loads(d.get('form_data')).get('slice_id'))
+            except (ValueError, TypeError):
+                slice_id = 0
+    
+            def lookup_database(table):
+            return db.session.query(Database).filter_by(
+                database_name=table.params_dict['database_name']).one()
+        return import_util.import_datasource(
+            db.session, i_datasource, lookup_database, lookup_sqlatable,
+            import_time)
+    
+        @property
+    def data(self):
+        attrs = (
+            'metric_name', 'verbose_name', 'description', 'expression',
+            'warning_text')
+        return {s: getattr(self, s) for s in attrs}
+
     
         @classmethod
-    def setUpClass(cls):
-        cls.dec_obs = DecimalViewer()
-        cls.hex_obs = HexViewer()
-        cls.sub = Data('Data')
-        # inherited behavior already tested with TestSubject
-        cls.sub.attach(cls.dec_obs)
-        cls.sub.attach(cls.hex_obs)
+    def query_datasources_by_permissions(cls, session, database, permissions):
+        datasource_class = ConnectorRegistry.sources[database.type]
+        return (
+            session.query(datasource_class)
+            .filter_by(database_id=database.id)
+            .filter(datasource_class.perm.in_(permissions))
+            .all()
+        )
     
-        def __init__(self, name, action):
-        self.name = name
-        self.action = action
+    appbuilder.add_link(
+    'Scan New Datasources',
+    label=__('Scan New Datasources'),
+    href='/druid/scan_new_datasources/',
+    category='Sources',
+    category_label=__('Sources'),
+    category_icon='fa-database',
+    icon='fa-refresh')
+appbuilder.add_link(
+    'Refresh Druid Metadata',
+    label=__('Refresh Druid Metadata'),
+    href='/druid/refresh_datasources/',
+    category='Sources',
+    category_label=__('Sources'),
+    category_icon='fa-database',
+    icon='fa-cog')
     
-        def test_2nd_am_station_after_scan(self):
-        self.radio.scan()
-        station = self.radio.state.stations[self.radio.state.pos]
-        expected_station = '1380'
-        self.assertEqual(station, expected_station)
+            logging.info('Importing %d %s',
+                     len(data.get(DRUID_CLUSTERS_KEY, [])),
+                     DRUID_CLUSTERS_KEY)
+        for datasource in data.get(DRUID_CLUSTERS_KEY, []):
+            DruidCluster.import_from_dict(session, datasource, sync=sync)
+        session.commit()
+    else:
+        logging.info('Supplied object is not a dictionary.')
+
+    
+    def downgrade():
+    constraint = find_constraint_name(False) or 'fk_columns_datasource_name_datasources'
+    with op.batch_alter_table('columns',
+        naming_convention=naming_convention) as batch_op:
+        batch_op.drop_constraint(constraint, type_='foreignkey')
+        batch_op.create_foreign_key(
+            'fk_columns_column_name_datasources',
+            'datasources',
+            ['column_name'], ['datasource_name'])
+
+    
+    # encoding=utf8  
+import sys  
+try:
+    reload(sys)
+except NameError:
+    pass
+try:
+    sys.setdefaultencoding('utf8')
+except AttributeError:
+    pass
     
     
-def main():
-    command_stack = []
+class UnimplementedNonStandardMethodsTest(SimpleHandlerTestCase):
+    # wsgiref.validate complains about unknown methods in a way that makes
+    # this test not wsgi_safe.
+    class Handler(RequestHandler):
+        def other(self):
+            # Even though this method exists, it won't get called automatically
+            # because it is not in SUPPORTED_METHODS.
+            self.write('other')
     
-    ### OUTPUT ###
-# Counting to two...
-# one two
-# Counting to five...
-# one two three four five
+    
+def run():
+    io_loop = IOLoop(make_current=True)
+    app = Application([('/', RootHandler)])
+    port = random.randrange(options.min_port, options.max_port)
+    app.listen(port, address='127.0.0.1')
+    signal.signal(signal.SIGCHLD, handle_sigchld)
+    args = ['ab']
+    args.extend(['-n', str(options.n)])
+    args.extend(['-c', str(options.c)])
+    if options.keepalive:
+        args.append('-k')
+    if options.quiet:
+        # just stops the progress messages printed to stderr
+        args.append('-q')
+    args.append('http://127.0.0.1:%d/' % port)
+    subprocess.Popen(args)
+    io_loop.start()
+    io_loop.close()
+    io_loop.clear_current()
+    
+    
+if __name__ == '__main__':
+    main()
