@@ -1,234 +1,372 @@
 
         
-        void SyntaxASTMap::clearSyntaxMap() {
-  SyntaxMap.shrink_and_clear();
-}
+        
+    {} // namespace swift
     
-      public:
-    ObjCMethod(SILDeclRef method, SILType searchType, bool startAtSuper)
-      : method(method), searchTypeAndSuper(searchType, startAtSuper)
-    {}
+      /// Build the components of an Objective-C method descriptor for the given
+  /// property's method implementations.
+  void emitObjCGetterDescriptorParts(IRGenModule &IGM,
+                                     VarDecl *property,
+                                     llvm::Constant *&selectorRef,
+                                     llvm::Constant *&atEncoding,
+                                     llvm::Constant *&impl);
     
-    SILDeclRef getMethod() const { return method; }
-    SILType getSearchType() const { return searchTypeAndSuper.getPointer(); }
-    bool shouldStartAtSuper() const { return searchTypeAndSuper.getInt(); }
     
-    /// FIXME: Thunk down to a Swift function value?
-    llvm::Value *getExplosionValue(IRGenFunction &IGF) const {
-      llvm_unreachable('thunking unapplied objc method to swift function '
-                       'not yet implemented');
+    {  /// Returns true if \p BB is a dead-end block.
+  bool isDeadEnd(SILBasicBlock *BB) {
+    if (!isComputed) {
+      // Lazily compute the dataflow.
+      compute();
+      isComputed = true;
     }
-    
-    /// Determine the kind of message that should be sent to this
-    /// method.
-    ObjCMessageKind getMessageKind() const {
-      // Determine the kind of message send to perform.
-      if (!getSearchType()) return ObjCMessageKind::Normal;
-    }
-    
-    /// A utility for finding dead-end blocks.
-///
-/// Dead-end blocks are blocks from which there is no path to the function exit
-/// (either return or throw). These are blocks which end with an unreachable
-/// instruction and blocks from which all paths end in 'unreachable' blocks.
-/// This utility is needed to determine if the a value definition can have a
-/// lack of users ignored along a specific path.
-class DeadEndBlocks {
-  llvm::SetVector<const SILBasicBlock *> ReachableBlocks;
-  const SILFunction *F;
-  bool isComputed = false;
-    }
-    
-      bool isEmpty() const {
-    return !Brief.hasValue() &&
-           !ReturnsField.hasValue() &&
-           !ThrowsField.hasValue() &&
-           BodyNodes.empty() &&
-           ParamFields.empty();
+    return ReachableBlocks.count(BB) == 0;
   }
+};
     
-    #include 'swift/Syntax/Rewriter.h'
+    #ifndef LLVM_SOURCEKIT_LIB_SWIFTLANG_SWIFTEDITORDIAGCONSUMER_H
+#define LLVM_SOURCEKIT_LIB_SWIFTLANG_SWIFTEDITORDIAGCONSUMER_H
     
-    #endif
-
+    #ifndef SWIFT_INDEX_INDEXSYMBOL_H
+#define SWIFT_INDEX_INDEXSYMBOL_H
     
-    Base::Base(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-	   const std::string& extension_id)
-    : extension_id_(extension_id),
-      id_(id),
-      delay_destruction_(false),
-      pending_destruction_(false),
-      object_manager_(object_manager) {
+    bool Substitution::isCanonical() const {
+  if (!getReplacement()->isCanonical())
+    return false;
+  for (auto conf : getConformances()) {
+    if (!conf.isCanonical())
+      return false;
+  }
+  return true;
 }
-    
-      void documentCallback(const char* ev, blink::WebLocalFrame* frame);
-    
-    #ifndef CONTENT_NW_SRC_API_DISPATCHER_HOST_H_
-#define CONTENT_NW_SRC_API_DISPATCHER_HOST_H_
-    
-    
-    {} // namespace nwapi
 
     
-    void Menu::Call(const std::string& method,
-                const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  if (method == 'Append') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    Append(object_manager()->GetApiObject<MenuItem>(object_id));
-  } else if (method == 'Insert') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    int pos = 0;
-    arguments.GetInteger(1, &pos);
-    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
-  } else if (method == 'Remove') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    int pos = 0;
-    arguments.GetInteger(1, &pos);
-    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
-  } else if (method == 'Popup') {
-    int x = 0;
-    arguments.GetInteger(0, &x);
-    int y = 0;
-    arguments.GetInteger(1, &y);
-    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
-    DCHECK(web_contents);
-    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
-    }
-    }
+      string data = message.SerializeAsString();
     
-    MenuDelegate::~MenuDelegate() {
-}
     
-    #endif  // CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
-
-    
-          p[g_ZAG[k]] = static_cast<jpgd_block_t>(s << pD->m_successive_low);
-    }
-    else
     {
-      if (r == 15)
-      {
-        if ((k += 15) > 63)
-          pD->stop_decoding(JPGD_DECODE_ERROR);
-      }
-      else
-      {
-        pD->m_eob_run = 1 << r;
+    {
+    {
+    {
+    {}  // namespace
+}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
+    
+      virtual void WriteHash(io::Printer* printer);
+  virtual void WriteEquals(io::Printer* printer);
+  virtual void WriteToString(io::Printer* printer);
+    
+    // Generator options (used by csharp_generator.cc):
+struct Options {
+  Options() :
+      file_extension('.cs'),
+      base_namespace(''),
+      base_namespace_specified(false),
+      internal_access(false) {
+  }
+  // Extension of the generated file. Defaults to '.cs'
+  string file_extension;
+  // Base namespace to use to create directory hierarchy. Defaults to ''.
+  // This option allows the simple creation of a conventional C# file layout,
+  // where directories are created relative to a project-specific base
+  // namespace. For example, in a project with a base namespace of PetShop, a
+  // proto of user.proto with a C# namespace of PetShop.Model.Shared would
+  // generate Model/Shared/User.cs underneath the specified --csharp_out
+  // directory.
+  //
+  // If no base namespace is specified, all files are generated in the
+  // --csharp_out directory, with no subdirectories created automatically.
+  string base_namespace;
+  // Whether the base namespace has been explicitly specified by the user.
+  // This is required as the base namespace can be explicitly set to the empty
+  // string, meaning 'create a full directory hierarchy, starting from the first
+  // segment of the namespace.'
+  bool base_namespace_specified;
+  // Whether the generated classes should have accessibility level of 'internal'.
+  // Defaults to false that generates 'public' classes.
+  bool internal_access;
+};
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
     }
     
-    struct oc_mode_rd{
-  ogg_int16_t rate;
-  ogg_int16_t rmse;
-};
-    
-    /*All of these macros should expect floats as arguments.*/
-#define OC_MAXF(_a,_b)      ((_a)<(_b)?(_b):(_a))
-#define OC_MINF(_a,_b)      ((_a)>(_b)?(_b):(_a))
-#define OC_CLAMPF(_a,_b,_c) (OC_MINF(_a,OC_MAXF(_b,_c)))
-#define OC_FABSF(_f)        ((float)fabs(_f))
-#define OC_SQRTF(_f)        ((float)sqrt(_f))
-#define OC_POWF(_b,_e)      ((float)pow(_b,_e))
-#define OC_LOGF(_f)         ((float)log(_f))
-#define OC_IFLOORF(_f)      ((int)floor(_f))
-#define OC_ICEILF(_f)       ((int)ceil(_f))
-    
-      {1,2,6,  &_residue_44p_lfe,
-   &_huff_book__44p4_lfe,&_huff_book__44p4_lfe,
-   &_resbook_44p_l4,&_resbook_44p_l4}
-};
-static const vorbis_residue_template _res_44p51_5[]={
-  {2,0,15,  &_residue_44p_hi,
-   &_huff_book__44p5_short,&_huff_book__44p5_short,
-   &_resbook_44p_5,&_resbook_44p_5},
-    
-    static int vorbis_ftoi(double f){
-        /* Note: MSVC and GCC (at least on some systems) round towards zero, thus,
-           the floor() call is required to ensure correct roudning of
-           negative numbers */
-        return (int)floor(f+.5);
+    RepeatedPrimitiveFieldGenerator::RepeatedPrimitiveFieldGenerator(
+    const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options)
+    : FieldGeneratorBase(descriptor, fieldOrdinal, options) {
 }
     
-       - Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
+    // Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
     
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+    #include <google/protobuf/compiler/java/java_context.h>
+#include <google/protobuf/compiler/java/java_lazy_message_field.h>
+#include <google/protobuf/compiler/java/java_doc_comment.h>
+#include <google/protobuf/compiler/java/java_helpers.h>
+#include <google/protobuf/io/printer.h>
     
-    #undef silk_ADD_POS_SAT8
-static OPUS_INLINE opus_int8 silk_ADD_POS_SAT8(opus_int64 a, opus_int64 b){
-    opus_int8 tmp;
-    ops_count += 1;
-    tmp = (opus_int8)((((a)+(b)) & 0x80) ? silk_int8_MAX  : ((a)+(b)));
-    return(tmp);
-}
-#undef silk_ADD_POS_SAT16
-static OPUS_INLINE opus_int16 silk_ADD_POS_SAT16(opus_int64 a, opus_int64 b){
-    opus_int16 tmp;
-    ops_count += 1;
-    tmp = (opus_int16)((((a)+(b)) & 0x8000) ? silk_int16_MAX : ((a)+(b)));
-    return(tmp);
-}
+    #include 'glog/logging.h'
+#include 'google/protobuf/text_format.h'
+#include 'stdint.h'
     
-    
-    { private:
-  FRIEND_TEST(DispatcherTests, test_run);
-  FRIEND_TEST(DispatcherTests, test_independent_run);
-  FRIEND_TEST(DispatcherTests, test_interruption);
-  FRIEND_TEST(BufferedLogForwarderTests, test_async);
-};
-    
-      // Enables use of gtest (ASSERT|EXPECT)_EQ
-  bool operator==(const Status& rhs) const {
-    return (code_ == rhs.getCode()) && (message_ == rhs.getMessage());
+      // Get a layer using a LayerParameter.
+  static shared_ptr<Layer<Dtype> > CreateLayer(const LayerParameter& param) {
+    if (Caffe::root_solver()) {
+      LOG(INFO) << 'Creating layer ' << param.name();
+    }
+    const string& type = param.type();
+    CreatorRegistry& registry = Registry();
+    CHECK_EQ(registry.count(type), 1) << 'Unknown layer type: ' << type
+        << ' (known types: ' << LayerTypeListString() << ')';
+    return registry[type](param);
   }
+    
+    
+    {  bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnTensorDescriptor_t bottom_desc_;
+  cudnnTensorDescriptor_t top_desc_;
+  cudnnActivationDescriptor_t activ_desc_;
+};
+#endif
+    
+    #endif  // CAFFE_CUDNN_SOFTMAX_LAYER_HPP_
+
+    
+    #include <vector>
+    
+    /**
+ * @brief Exponential Linear Unit non-linearity @f$
+ *        y = \left\{
+ *        \begin{array}{lr}
+ *            x                  & \mathrm{if} \; x > 0 \\
+ *            \alpha (\exp(x)-1) & \mathrm{if} \; x \le 0
+ *        \end{array} \right.
+ *      @f$.  
+ */
+template <typename Dtype>
+class ELULayer : public NeuronLayer<Dtype> {
+ public:
+  /**
+   * @param param provides ELUParameter elu_param,
+   *     with ELULayer options:
+   *   - alpha (\b optional, default 1).
+   *     the value @f$ \alpha @f$ by which controls saturation for negative inputs.
+   */
+  explicit ELULayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+    }
+    }
+    
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
       /**
-   * @brief Sets up the process as an osquery shell.
+   * @brief Computes the error gradient w.r.t. the exp inputs.
    *
-   * The shell is lighter than a daemon and disables (by default) features.
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x} =
+   *            \frac{\partial E}{\partial y} y \alpha \log_e(gamma)
+   *      @f$ if propagate_down[0]
    */
-  void initShell() const;
-    
-        // We should have a property tree of pack content mimicking embedded
-    // configuration packs, ready to parse as a string.
-    std::ostringstream output;
-    pt::write_json(output, multi_pack, false);
-    pack = output.str();
-    if (pack.empty()) {
-      return Status(1, 'Multi-pack content empty');
-    }
-    
-    #include 'osquery/core/utils.h'
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
     
-    {  ASSERT_FALSE(YGNodeLayoutGetHadOverflow(root));
-}
+    {}  // namespace caffe
     
-      void reset(T* other = NULL) {
-    T* old = (T*)pthread_getspecific(m_key);
-    if (old != other) {
-      FBASSERT(m_cleanup);
-      m_cleanup(old);
-      pthread_setspecific(m_key, other);
-    }
+    // Finally, you are free to instantiate the pattern with the types you
+// want.  If you put the above code in a header file, you can #include
+// it in multiple C++ source files and instantiate it multiple times.
+//
+// To distinguish different instances of the pattern, the first
+// argument to the INSTANTIATE_* macro is a prefix that will be added
+// to the actual test case name.  Remember to pick unique prefixes for
+// different instances.
+typedef testing::Types<char, int, unsigned int> MyTypes;
+INSTANTIATE_TYPED_TEST_CASE_P(My, FooTest, MyTypes);
+    
+    // Traps C++ exceptions escaping statement and reports them as test
+// failures. Note that trapping SEH exceptions is not implemented here.
+# if GTEST_HAS_EXCEPTIONS
+#  define GTEST_EXECUTE_DEATH_TEST_STATEMENT_(statement, death_test) \
+  try { \
+    GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
+  } catch (const ::std::exception& gtest_exception) { \
+    fprintf(\
+        stderr, \
+        '\n%s: Caught std::exception-derived exception escaping the ' \
+        'death test statement. Exception message: %s\n', \
+        ::testing::internal::FormatFileLocation(__FILE__, __LINE__).c_str(), \
+        gtest_exception.what()); \
+    fflush(stderr); \
+    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
+  } catch (...) { \
+    death_test->Abort(::testing::internal::DeathTest::TEST_THREW_EXCEPTION); \
   }
     
-    // This allows storing the assert message before the current process terminates due to a crash
-typedef void (*AssertHandler)(const char* message);
-void setAssertHandler(AssertHandler assertHandler);
+      // Returns a copy of the FilePath with the case-insensitive extension removed.
+  // Example: FilePath('dir/file.exe').RemoveExtension('EXE') returns
+  // FilePath('dir/file'). If a case-insensitive extension is not
+  // found, returns a copy of the original FilePath.
+  FilePath RemoveExtension(const char* extension) const;
+    
+    template<typename T> inline
+bool operator==(T* ptr, const linked_ptr<T>& x) {
+  return ptr == x.get();
+}
+    
+      template <typename T>
+  operator ParamGenerator<T>() const {
+    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
+        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
+        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
+        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
+        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_),
+        static_cast<T>(v15_), static_cast<T>(v16_), static_cast<T>(v17_),
+        static_cast<T>(v18_), static_cast<T>(v19_)};
+    return ValuesIn(array);
+  }
+    
+    # define GTEST_BIND_(TmplSel, T) \
+  TmplSel::template Bind<T>::type
+    
+    
+    {    return -1;
+  }
+    
+    
+    {  return result;
+}
+    
+    #endif // __cocos2dx_experimental_video_h__
+#endif //#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) && !defined(CC_TARGET_OS_TVOS)
+
+    
+    			b2PolygonShape shape;
+			shape.SetAsBox(0.5f, 4.0f, b2Vec2(4.0f, 0.0f), 0.5f * b2_pi);
+    
+    void BuildSequentialHuffmanCodes(
+    const JPEGData& jpg,
+    std::vector<HuffmanCodeTable>* dc_huffman_code_tables,
+    std::vector<HuffmanCodeTable>* ac_huffman_code_tables) {
+  JPEGOutput out(NullOut, nullptr);
+  BuildAndEncodeHuffmanCodes(jpg, out, dc_huffman_code_tables,
+                             ac_huffman_code_tables);
+}
+    
+    // Performs in-place floating point 8x8 DCT on block[0..63].
+// Note that the DCT used here is the DCT-2 with the first term multiplied by
+// 1/sqrt(2) and the result scaled by 1/2.
+void ComputeBlockDCTDouble(double block[64]);
+    
+    #include <inttypes.h>
+    
+    #include <stdint.h>
+#include <vector>
+    
+      // Relinquish the pointer to the caller.
+  DetachedBuffer release() {
+    DetachedBuffer fb(allocator_, own_allocator_, buf_, reserved_, cur_,
+                      size());
+    allocator_ = nullptr;
+    own_allocator_ = false;
+    buf_ = nullptr;
+    clear();
+    return fb;
+  }
+    
+    CheckedError Parser::ParseProtoCurliesOrIdent() {
+  if (Is('{')) {
+    NEXT();
+    for (int nesting = 1; nesting;) {
+      if (token_ == '{')
+        nesting++;
+      else if (token_ == '}')
+        nesting--;
+      NEXT();
+    }
+  } else {
+    NEXT();  // Any single token.
+  }
+  return NoError();
+}
+    }
+    
+    class Builder FLATBUFFERS_FINAL_CLASS {
+ public:
+  Builder(size_t initial_size = 256,
+          BuilderFlag flags = BUILDER_FLAG_SHARE_KEYS)
+      : buf_(initial_size),
+        finished_(false),
+        flags_(flags),
+        force_min_bit_width_(BIT_WIDTH_8),
+        key_pool(KeyOffsetCompare(buf_)),
+        string_pool(StringOffsetCompare(buf_)) {
+    buf_.clear();
+  }
+    }
+    
+    inline bool ClientOnlyStreaming(const grpc_generator::Method *method) {
+  return method->ClientStreaming() && !method->ServerStreaming();
+}
+    
+      // Start the server. Lock to change the variable we're changing.
+  wait_for_server.lock();
+  server_instance = builder.BuildAndStart().release();
+  wait_for_server.unlock();
+  server_instance_cv.notify_one();
+    
+      // Parameters required to initialize the FlatCompiler.
+  struct InitParams {
+    InitParams()
+        : generators(nullptr),
+          num_generators(0),
+          warn_fn(nullptr),
+          error_fn(nullptr) {}
+    }
+    
+      // Converts a binary buffer to text using one of the schemas in the registry,
+  // use the file_identifier to indicate which.
+  // If DetachedBuffer::data() is null then parsing failed.
+  DetachedBuffer TextToFlatBuffer(const char *text,
+                                  const char *file_identifier) {
+    // Load and parse the schema.
+    Parser parser;
+    if (!LoadSchema(file_identifier, &parser)) return DetachedBuffer();
+    // Parse the text.
+    if (!parser.Parse(text)) {
+      lasterror_ = parser.error_;
+      return DetachedBuffer();
+    }
+    // We have a valid FlatBuffer. Detach it from the builder and return.
+    return parser.builder_.ReleaseBufferPointer();
+  }
+    
+      // We now have a FlatBuffer we can store on disk or send over a network.
