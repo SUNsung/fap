@@ -1,16 +1,13 @@
 
         
-        DOCUMENTATION = '''
----
-inventory: openshift
-short_description: Openshift gears external inventory script
-description:
-  - Generates inventory of Openshift gears using the REST interface
-  - this permit to reuse playbook to setup an Openshift gear
-version_added: None
-author: Michael Scherer
-'''
+            def escalate_call(self):
+        self.call.level = Rank.SUPERVISOR
+        self._escalate_call()
     
-            if platforms and isinstance(platforms, string_types):
-            platforms = platforms.split(',')
-            search_url += '&platforms_autocomplete=' + '+'.join(platforms)
+        def bfs(self, source, dest):
+        # Use self.visited_ids to track visited nodes
+        # Use self.lookup to translate a person_id to a Person
+        pass
+
+    
+    - tree.CommonTree: A basic and most commonly used Tree implementation.
