@@ -1,143 +1,172 @@
 
         
-                headers.insert(0, request_line)
-        headers = '\r\n'.join(headers).strip()
+          train_path = os.path.join(data_path, 'ptb.train.txt')
+  valid_path = os.path.join(data_path, 'ptb.valid.txt')
+  test_path = os.path.join(data_path, 'ptb.test.txt')
     
     
-def is_valid_mime(mime):
-    return mime and MIME_RE.match(mime)
+def _set_bytes_feature(ex, name, value):
+  '''Sets the value of a bytes feature in a tensorflow.train.Example proto.'''
+  assert name not in ex.features.feature, 'Duplicate feature: %s' % name
+  ex.features.feature[name].bytes_list.value.extend([
+      str(v).encode('latin-1') for v in value])
     
-            '''
-        return content
-
+          # If a GPU is used for the test, the shape is returned (already in NCHW
+      # form). When GPU is not used, the shape is converted to NHWC.
+      if with_gpu:
+        return shape
+      return shape[0], shape[2], shape[3], shape[1]
     
-        def _migrate_implicit_content_type(self):
-        '''Migrate the removed implicit_content_type config option'''
-        try:
-            implicit_content_type = self.pop('implicit_content_type')
-        except KeyError:
-            self.save()
+      # We use a weight decay of 0.0002, which performs better
+  # than the 0.0001 that was originally suggested.
+  weight_decay = 2e-4
+    
+      def test_train(self):
+    train(defun=False)
+    
+      Args:
+    image_buffer: scalar string Tensor representing the raw JPEG image buffer.
+    bbox: 3-D float Tensor of bounding boxes arranged [1, num_boxes, coords]
+      where each coordinate is [0, 1) and the coordinates are arranged as
+      [ymin, xmin, ymax, xmax].
+    output_height: The height of the image after preprocessing.
+    output_width: The width of the image after preprocessing.
+    num_channels: Integer depth of the image buffer for decoding.
+    is_training: `True` if we're preprocessing the image for training and
+      `False` otherwise.
+    
+    
+collect_ignore = [
+    # deprecated or moved modules
+    'scrapy/conf.py',
+    'scrapy/stats.py',
+    'scrapy/project.py',
+    'scrapy/utils/decorator.py',
+    'scrapy/statscol.py',
+    'scrapy/squeue.py',
+    'scrapy/log.py',
+    'scrapy/dupefilter.py',
+    'scrapy/command.py',
+    'scrapy/linkextractor.py',
+    'scrapy/spider.py',
+    
+            parser.add_option_group(group)
+    
+            infos = []
+        if not self.wasSuccessful():
+            write('FAILED')
+            failed, errored = map(len, (self.failures, self.errors))
+            if failed:
+                infos.append('failures=%d' % failed)
+            if errored:
+                infos.append('errors=%d' % errored)
         else:
-            if implicit_content_type == 'form':
-                self['default_options'].insert(0, '--form')
-            self.save()
-            self.load()
-
+            write('OK')
     
-        ERROR_TIMEOUT = 2
-    ERROR_TOO_MANY_REDIRECTS = 6
+        name = 'url'
     
-                try:
-                slice_id = int(
-                    slice_id or json.loads(d.get('form_data')).get('slice_id'))
-            except (ValueError, TypeError):
-                slice_id = 0
+        try:
+        # hide console in MS windows
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        startupinfo.wShowWindow = subprocess.SW_HIDE
     
-            def lookup_database(table):
-            return db.session.query(Database).filter_by(
-                database_name=table.params_dict['database_name']).one()
-        return import_util.import_datasource(
-            db.session, i_datasource, lookup_database, lookup_sqlatable,
-            import_time)
+        if address_family == socket.AF_INET:
+        if len(packed_ip) != ctypes.sizeof(addr.ipv4_addr):
+            raise socket.error('packed IP wrong length for inet_ntoa')
+        ctypes.memmove(addr.ipv4_addr, packed_ip, 4)
+    elif address_family == socket.AF_INET6:
+        if len(packed_ip) != ctypes.sizeof(addr.ipv6_addr):
+            raise socket.error('packed IP wrong length for inet_ntoa')
+        ctypes.memmove(addr.ipv6_addr, packed_ip, 16)
+    else:
+        raise socket.error('unknown address family')
     
-        @property
-    def data(self):
-        attrs = (
-            'metric_name', 'verbose_name', 'description', 'expression',
-            'warning_text')
-        return {s: getattr(self, s) for s in attrs}
-
+    A Parser needs a TokenStream as input (which in turn is usually fed by a
+Lexer):
+    
+    
+class MismatchedNotSetException(MismatchedSetException):
+    '''@brief Used for remote debugger deserialization'''
+    
+    def __str__(self):
+        return 'MismatchedNotSetException(%r!=%r)' % (
+            self.getUnexpectedType(), self.expecting
+            )
+    __repr__ = __str__
+    
+            An index from 0..n-1 of the token object in the input stream.
+        This must be valid in order to use the ANTLRWorks debugger.
+        
+        Using setter/getter methods is deprecated. Use o.index instead.'''
+    
+    EOF = -1
+    
+        # Replace quoted strings and digit separators.  Both single quotes
+    # and double quotes are processed in the same loop, otherwise
+    # nested quotes wouldn't work.
+    collapsed = ''
+    while True:
+      # Find the first quote character
+      match = Match(r'^([^\'']*)([\''])(.*)$', elided)
+      if not match:
+        collapsed += elided
+        break
+      head, quote, tail = match.groups()
     
         @classmethod
-    def query_datasources_by_permissions(cls, session, database, permissions):
-        datasource_class = ConnectorRegistry.sources[database.type]
-        return (
-            session.query(datasource_class)
-            .filter_by(database_id=database.id)
-            .filter(datasource_class.perm.in_(permissions))
-            .all()
+    def configurable_default(cls):
+        # type: () -> type
+        '''Returns the implementation class to be used if none is configured.'''
+        raise NotImplementedError()
+    
+    
+def wrap_web_tests_adapter():
+    result = {}
+    for cls in web_test.wsgi_safe_tests:
+        class WSGIAdapterWrappedTest(cls):  # type: ignore
+            def get_app(self):
+                self.app = Application(self.get_handlers(),
+                                       **self.get_app_kwargs())
+                return WSGIContainer(validator(WSGIAdapter(self.app)))
+        result['WSGIAdapter_' + cls.__name__] = WSGIAdapterWrappedTest
+    return result
+    
+        def _log(self):
+        pass
+    
+    import logging
+from tornado.curl_httpclient import CurlAsyncHTTPClient
+from tornado.simple_httpclient import SimpleAsyncHTTPClient
+from tornado.ioloop import IOLoop
+from tornado.options import define, options, parse_command_line
+from tornado.web import RequestHandler, Application
+    
+        def call_wrapped_inner(self, queue, count):
+        if count < 0:
+            return
+        with self.make_context():
+            queue.append(stack_context.wrap(
+                functools.partial(self.call_wrapped_inner, queue, count - 1)))
+    
+    
+class Application(tornado.web.Application):
+    def __init__(self):
+        handlers = [
+            (r'/', MainHandler),
+            (r'/auth/login', AuthLoginHandler),
+            (r'/auth/logout', AuthLogoutHandler),
+        ]
+        settings = dict(
+            cookie_secret='__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__',
+            login_url='/auth/login',
+            template_path=os.path.join(os.path.dirname(__file__), 'templates'),
+            static_path=os.path.join(os.path.dirname(__file__), 'static'),
+            xsrf_cookies=True,
+            facebook_api_key=options.facebook_api_key,
+            facebook_secret=options.facebook_secret,
+            ui_modules={'Post': PostModule},
+            debug=True,
+            autoescape=None,
         )
-    
-    appbuilder.add_link(
-    'Scan New Datasources',
-    label=__('Scan New Datasources'),
-    href='/druid/scan_new_datasources/',
-    category='Sources',
-    category_label=__('Sources'),
-    category_icon='fa-database',
-    icon='fa-refresh')
-appbuilder.add_link(
-    'Refresh Druid Metadata',
-    label=__('Refresh Druid Metadata'),
-    href='/druid/refresh_datasources/',
-    category='Sources',
-    category_label=__('Sources'),
-    category_icon='fa-database',
-    icon='fa-cog')
-    
-            logging.info('Importing %d %s',
-                     len(data.get(DRUID_CLUSTERS_KEY, [])),
-                     DRUID_CLUSTERS_KEY)
-        for datasource in data.get(DRUID_CLUSTERS_KEY, []):
-            DruidCluster.import_from_dict(session, datasource, sync=sync)
-        session.commit()
-    else:
-        logging.info('Supplied object is not a dictionary.')
-
-    
-    def downgrade():
-    constraint = find_constraint_name(False) or 'fk_columns_datasource_name_datasources'
-    with op.batch_alter_table('columns',
-        naming_convention=naming_convention) as batch_op:
-        batch_op.drop_constraint(constraint, type_='foreignkey')
-        batch_op.create_foreign_key(
-            'fk_columns_column_name_datasources',
-            'datasources',
-            ['column_name'], ['datasource_name'])
-
-    
-    # encoding=utf8  
-import sys  
-try:
-    reload(sys)
-except NameError:
-    pass
-try:
-    sys.setdefaultencoding('utf8')
-except AttributeError:
-    pass
-    
-    
-class UnimplementedNonStandardMethodsTest(SimpleHandlerTestCase):
-    # wsgiref.validate complains about unknown methods in a way that makes
-    # this test not wsgi_safe.
-    class Handler(RequestHandler):
-        def other(self):
-            # Even though this method exists, it won't get called automatically
-            # because it is not in SUPPORTED_METHODS.
-            self.write('other')
-    
-    
-def run():
-    io_loop = IOLoop(make_current=True)
-    app = Application([('/', RootHandler)])
-    port = random.randrange(options.min_port, options.max_port)
-    app.listen(port, address='127.0.0.1')
-    signal.signal(signal.SIGCHLD, handle_sigchld)
-    args = ['ab']
-    args.extend(['-n', str(options.n)])
-    args.extend(['-c', str(options.c)])
-    if options.keepalive:
-        args.append('-k')
-    if options.quiet:
-        # just stops the progress messages printed to stderr
-        args.append('-q')
-    args.append('http://127.0.0.1:%d/' % port)
-    subprocess.Popen(args)
-    io_loop.start()
-    io_loop.close()
-    io_loop.clear_current()
-    
-    
-if __name__ == '__main__':
-    main()
+        tornado.web.Application.__init__(self, handlers, **settings)
