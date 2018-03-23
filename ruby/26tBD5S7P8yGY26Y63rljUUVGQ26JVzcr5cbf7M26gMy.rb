@@ -1,85 +1,84 @@
 
         
-                    define_method('#{name}=') do |attribute|
-              attributes[name.to_sym] = attribute
-            end
-          end
-        end
+            class TestCallbacksWithChangedConditions < ActiveSupport::TestCase
+      def setup
+        @controller = ChangedConditions.new
+      end
     
-        def call(env)
-      result = @app.call(env)
-      result[1]['Configurable-Message'] = configurable_message
-      result
-    end
-  end
+    module ActionMailer
+  # Implements the ActiveSupport::LogSubscriber for logging notifications when
+  # email is delivered or received.
+  class LogSubscriber < ActiveSupport::LogSubscriber
+    # An email was delivered.
+    def deliver(event)
+      info do
+        recipients = Array(event.payload[:to]).join(', ')
+        'Sent mail to #{recipients} (#{event.duration.round(1)}ms)'
+      end
     
-    require 'tmpdir'
-    
-            def enqueue_delivery(delivery_method, options = {})
-          if processed?
-            super
+            def application_mailer_file_name
+          @_application_mailer_file_name ||= if mountable_engine?
+            'app/mailers/#{namespaced_path}/application_mailer.rb'
           else
-            args = @mailer_class.name, @action.to_s, delivery_method.to_s, @params, *@args
-            ActionMailer::Parameterized::DeliveryJob.set(options).perform_later(*args)
+            'app/mailers/application_mailer.rb'
           end
         end
     end
-    
-      # True if a {Formula} is being built with {Formula.head} instead of {Formula.stable}.
-  # <pre>args << '--some-new-stuff' if build.head?</pre>
-  # <pre># If there are multiple conditional arguments use a block instead of lines.
-  #  if build.head?
-  #    args << '--i-want-pizza'
-  #    args << '--and-a-cold-beer' if build.with? 'cold-beer'
-  #  end</pre>
-  def head?
-    include? 'HEAD'
   end
+end
+
     
-      def describe_python
-    python = which 'python'
-    return 'N/A' if python.nil?
-    python_binary = Utils.popen_read python, '-c', 'import sys; sys.stdout.write(sys.executable)'
-    python_binary = Pathname.new(python_binary).realpath
-    if python == python_binary
-      python
-    else
-      '#{python} => #{python_binary}'
+    def envygeeks(url)
+  return url if url.end_with?(FORWARD_SLASH) || url == FORWARD_SLASH
+    
+          process(name)
+      read_yaml(base, name)
+    end
+    
+    module Rack
+  module Protection
+    ##
+    # Prevented attack::   Cookie Tossing
+    # Supported browsers:: all
+    # More infos::         https://github.com/blog/1466-yummy-cookies-across-domains
+    #
+    # Does not accept HTTP requests if the HTTP_COOKIE header contains more than one
+    # session cookie. This does not protect against a cookie overflow attack.
+    #
+    # Options:
+    #
+    # session_key:: The name of the session cookie (default: 'rack.session')
+    class CookieTossing < Base
+      default_reaction :deny
+    
+        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
+      env = {'HTTP_HOST' => 'foo.com'}
+      subject.options[:allow_empty_referrer] = false
+      expect(subject.referrer(env)).to be_nil
+    end
+    
+            post '/', :file => Rack::Test::UploadedFile.new(temp_file.path), :other => '<bar>'
+        expect(body).to eq('_escaped_params_tmp_file\nhello world\n&lt;bar&gt;')
+      ensure
+        File.unlink(temp_file.path)
+      end
     end
   end
+end
+
     
-        print_remaining_files remaining_root_files, root, other
+      if ''.respond_to?(:encoding)  # Ruby 1.9+ M17N
+    context 'PATH_INFO's encoding' do
+      before do
+        @app = Rack::Protection::PathTraversal.new(proc { |e| [200, {'Content-Type' => 'text/plain'}, [e['PATH_INFO'].encoding.to_s]] })
+      end
+    
+      # rspec-expectations config goes here. You can use an alternate
+  # assertion/expectation library such as wrong or the stdlib/minitest
+  # assertions if you prefer.
+  config.expect_with :rspec do |expectations|
+    # Enable only the newer, non-monkey-patching expect syntax.
+    # For more details, see:
+    #   - http://myronmars.to/n/dev-blog/2012/06/rspecs-new-expectation-syntax
+    expectations.syntax = :expect
   end
-    
-          begin
-        result = Formulary.factory(query).name
-      rescue FormulaUnavailableError
-        result = search_tap(user, repo, name)
-      end
-    
-        def build_for_type(type, user, attributes = {})
-      attributes.delete(:type)
-    
-      private
-    
-      delegate :form_configurable_attributes, to: :class
-  delegate :form_configurable_fields, to: :class
-    
-      def set_table_sort(sort_options)
-    valid_sorts = sort_options[:sorts] or raise ArgumentError.new('You must specify :sorts as an array of valid sort attributes.')
-    default = sort_options[:default] || { valid_sorts.first.to_sym => :desc }
-    
-    def usage
-  <<-EOS
-Usage: list_login_items_for_app <path.app>
-    
-      let(:json) { Oj.dump(payload) }
-    
-    namespace :emojis do
-  desc 'Generate a unicode to filename mapping'
-  task :generate do
-    source = 'http://www.unicode.org/Public/emoji/5.0/emoji-test.txt'
-    codes  = []
-    dest   = Rails.root.join('app', 'javascript', 'mastodon', 'features', 'emoji', 'emoji_map.json')
-    
-      end
