@@ -1,24 +1,31 @@
 
         
-            groups << @user.authorized_groups.visible_to_user(current_user) if current_user
-    groups << @user.authorized_groups.public_to_user(current_user)
+        if Encoding.default_external != Encoding::UTF_8
     
-      # Finds the projects belonging to the user in '@user', limited to either
-  # public projects or projects visible to the given user.
-  #
-  # current_user - When given the list of projects is limited to those only
-  #                visible by this user.
-  #
-  # Returns an ActiveRecord::Relation.
-  def execute(current_user = nil)
-    segments = all_projects(current_user)
-    
-      def execute
-    Gitlab::Metrics.measure(:import_export_clean_up) do
-      return unless File.directory?(path)
-    
-      def send_sinatra_file(path, &missing_file_block)
-    file_path = File.join(File.dirname(__FILE__), 'public',  path)
-    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
-    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
+      def ruby_bin
+    File.join(RbConfig::CONFIG['bindir'], RbConfig::CONFIG['ruby_install_name'])
   end
+    
+            private
+    
+          def run
+        update_if_necessary!
+    
+        # Returns an array containing the errors on this attachment.
+    def errors
+      @errors
+    end
+    
+        def names_for(klass)
+      @attachments[klass].keys
+    end
+    
+            raise LoadError, 'Could not find the '#{name}' processor in any of these paths: #{directories.join(', ')}' unless required.any?
+      end
+    end
+    
+      class Railtie < Rails::Railtie
+    initializer 'paperclip.insert_into_active_record' do |app|
+      ActiveSupport.on_load :active_record do
+        Paperclip::Railtie.insert
+      end
