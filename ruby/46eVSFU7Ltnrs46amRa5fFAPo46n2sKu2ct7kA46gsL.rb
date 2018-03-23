@@ -1,36 +1,45 @@
 
         
-            if f.keg_only?
-      keg_site_packages = f.opt_prefix/'lib/python2.7/site-packages'
-      unless Language::Python.in_sys_path?('python', keg_site_packages)
-        s = <<-EOS.undent
-          If you need Python to find bindings for this keg-only formula, run:
-            echo #{keg_site_packages} >> #{homebrew_site_packages/f.name}.pth
-        EOS
-        s += instructions unless Language::Python.reads_brewed_pth_files?('python')
+            describe '#download' do
+      it 'returns the p8 file' do
+        mock_client_response(:download_key) do
+          %{
+-----BEGIN PRIVATE KEY-----
+this is the encoded private key contents
+-----END PRIVATE KEY-----
+          }
+        end
+        p8_string = key.download
+        expect(p8_string).to include('PRIVATE KEY')
       end
-      return s
     end
     
-        @report = Hash.new { |h, k| h[k] = [] }
-    return @report unless updated?
+        class CreateKeychainAction < Action
+      def self.run(params)
+        escaped_password = params[:password].shellescape
     
-        # This setting makes it so that network access from inside the vagrant guest
-    # is able to resolve DNS using the hosts VPN connection.
-    v.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
-  end
-    
-        enum = x.transform_keys
-    assert_equal(x.size, enum.size)
-    assert_instance_of(Enumerator, enum)
-    
-            render json: collection_presenter,
-               serializer: ActivityPub::CollectionSerializer,
-               adapter: ActivityPub::Adapter,
-               content_type: 'application/activity+json'
+            expect(result).to eq('hg parent --template {rev}')
+        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('hg parent --template {rev}')
       end
     end
   end
+end
+
     
-          attr_accessor(*VALID_KEYS)
-      attr_accessor :pairs
+            # With reconfirmable, notify the original email when the user first
+        # requests the email change, instead of when the change is confirmed.
+        def send_email_changed_notification?
+          if self.class.reconfirmable
+            self.class.send_email_changed_notification && reconfirmation_required?
+          else
+            super
+          end
+        end
+    
+        # Check if a reset_password_token is provided in the request
+    def assert_reset_token_passed
+      if params[:reset_password_token].blank?
+        set_flash_message(:alert, :no_token)
+        redirect_to new_session_path(resource_name)
+      end
+    end
