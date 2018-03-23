@@ -1,48 +1,50 @@
 
         
-              # Topic may be hard deleted due to spam, no point complaining
-      # we would have to look at the topics table id sequence to find cases
-      # where this was called with an invalid id, no point really
-      return unless topic.present?
-    
-      def include_url?
-    url.present?
+          def test_simple_redirect
+    get :simple_redirect
+    assert_response :redirect
+    assert_equal 'http://test.host/redirect/hello_world', redirect_to_url
   end
     
-        def self.each_definition(&block)
-      instance.each_definition(&block)
+                        if callbacks = @subscribe_callbacks[chan]
+                      next_callback = callbacks.shift
+                      @event_loop.post(&next_callback) if next_callback
+                      @subscribe_callbacks.delete(chan) if callbacks.empty?
+                    end
+                  end
+                end
+    
+        assert_response :unauthorized
+    assert_equal 'Authentication Failed\n', @response.body
+    assert_equal 'Token realm='SuperSecret'', @response.headers['WWW-Authenticate']
+  end
+    
+    module MiddlewareTest
+  class MyMiddleware
+    def initialize(app)
+      @app = app
     end
     
-        def calculated_type_matches
-      possible_types.select do |content_type|
-        content_type == type_from_file_contents
-      end
-    end
-    
-              @subject.send(@attachment_name).post_processing = false
-          @subject.send(@attachment_name).assign(file)
-          @subject.valid?
-          @subject.errors[:'#{@attachment_name}_file_size'].blank?
-        ensure
-          @subject.send(@attachment_name).post_processing = true
+        private
+      # 'Deserialize' the mailer class name by hand in case another argument
+      # (like a Global ID reference) raised DeserializationError.
+      def mailer_class
+        if mailer = Array(@serialized_arguments).first || Array(arguments).first
+          mailer.constantize
         end
+      end
     
-    module Paperclip
-  class << self
-    attr_writer :registered_attachments_styles_path
-    def registered_attachments_styles_path
-      @registered_attachments_styles_path ||= Rails.root.join('public/system/paperclip_attachments.yml').to_s
-    end
+      def clean_up_export_files
+    Gitlab::Popen.popen(%W(find #{path} -not -path #{path} -mmin +#{mmin} -delete))
+  end
+end
+
+    
+      def validate_email_options
+    errors.add(:base, 'subject and expected_receive_period_in_days are required') unless options['subject'].present? && options['expected_receive_period_in_days'].present?
+    
+      def worker_id(config = nil)
+    '#{self.class.to_s}-#{id}-#{Digest::SHA1.hexdigest((config.presence || options).to_json)}'
   end
     
-        def processor(name) #:nodoc:
-      @known_processors ||= {}
-      if @known_processors[name.to_s]
-        @known_processors[name.to_s]
-      else
-        name = name.to_s.camelize
-        load_processor(name) unless Paperclip.const_defined?(name)
-        processor = Paperclip.const_get(name)
-        @known_processors[name.to_s] = processor
-      end
-    end
+        @services = current_user.services.reorder(table_sort).page(params[:page])
