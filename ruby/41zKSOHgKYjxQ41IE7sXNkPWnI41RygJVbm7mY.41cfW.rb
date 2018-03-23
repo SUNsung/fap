@@ -1,124 +1,128 @@
 
         
-        Mercenary.program(:jekyll) do |p|
-  p.version Jekyll::VERSION
-  p.description 'Jekyll is a blog-aware, static site generator in Ruby'
-  p.syntax 'jekyll <subcommand> [options]'
+                # Require the adapter itself and give useful feedback about
+        #   1. Missing adapter gems and
+        #   2. Adapter gems' missing dependencies.
+        path_to_adapter = 'action_cable/subscription_adapter/#{adapter}'
+        begin
+          require path_to_adapter
+        rescue LoadError => e
+          # We couldn't require the adapter itself. Raise an exception that
+          # points out config typos and missing gems.
+          if e.path == path_to_adapter
+            # We can assume that a non-builtin adapter was specified, so it's
+            # either misspelled or missing from Gemfile.
+            raise e.class, 'Could not load the '#{adapter}' Action Cable pubsub adapter. Ensure that the adapter is spelled correctly in config/cable.yml and that you've added the necessary adapter gem to your Gemfile.', e.backtrace
     
-          #
-      # Require a gem or gems. If it's not present, show a very nice error
-      # message that explains everything and is much more helpful than the
-      # normal LoadError.
-      #
-      # names - a string gem name or array of gem names
-      #
-      def require_with_graceful_fail(names)
-        Array(names).each do |name|
-          begin
-            Jekyll.logger.debug 'Requiring:', name.to_s
-            require name
-          rescue LoadError => e
-            Jekyll.logger.error 'Dependency Error:', <<-MSG
-Yikes! It looks like you don't have #{name} or one of its dependencies installed.
-In order to use Jekyll as currently configured, you'll need to install this gem.
-    
-          process(name)
-      read_yaml(base, name)
+        def initialize
+      @attributes = {}
     end
     
-      class FeatureTopicUsers < Jobs::Base
+          test 'after_action works' do
+        @controller.process(:index)
+        assert_equal 'Goodbye', @controller.instance_variable_get('@second')
+      end
     
-      def update
-    @notification_setting = current_user.notification_settings.find(params[:id])
-    @saved = @notification_setting.update_attributes(notification_setting_params)
+        actual = ActionController::HttpAuthentication::Token.token_and_options(
+      sample_request_without_token_key(token)
+    ).first
     
-        groups << @user.authorized_groups.visible_to_user(current_user) if current_user
-    groups << @user.authorized_groups.public_to_user(current_user)
+        # Access the message instance.
+    def message
+      @_message
+    end
     
-        projects
+          def create_mailer_file
+        template 'mailer.rb', File.join('app/mailers', class_path, '#{file_name}_mailer.rb')
+    
+    class AssertSelectEmailTest < ActionMailer::TestCase
+  class AssertSelectMailer < ActionMailer::Base
+    def test(html)
+      mail body: html, content_type: 'text/html',
+        subject: 'Test e-mail', from: 'test@test.host', to: 'test <test@test.host>'
+    end
+  end
+    
+      test 'delivery method can be customized per instance' do
+    stub_any_instance(Mail::SMTP, instance: Mail::SMTP.new({})) do |instance|
+      assert_called(instance, :deliver!) do
+        email = DeliveryMailer.welcome.deliver_now
+        assert_instance_of Mail::SMTP, email.delivery_method
+        email = DeliveryMailer.welcome(delivery_method: :test).deliver_now
+        assert_instance_of Mail::TestMailer, email.delivery_method
+      end
+    end
+  end
+    
+      test 'should regenerate confirmation token after changing email' do
+    admin = create_admin
+    assert admin.confirm
+    assert admin.update_attributes(email: 'old_test@example.com')
+    token = admin.confirmation_token
+    assert admin.update_attributes(email: 'new_test@example.com')
+    assert_not_equal token, admin.confirmation_token
+  end
+    
+      def passthru
+    render status: 404, plain: 'Not found. Authentication passthru.'
+  end
+    
+        if resource.errors.empty?
+      resource.unlock_access! if unlockable?(resource)
+      if Devise.sign_in_after_reset_password
+        flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
+        set_flash_message!(:notice, flash_message)
+        sign_in(resource_name, resource)
+      else
+        set_flash_message!(:notice, :updated_not_active)
+      end
+      respond_with resource, location: after_resetting_password_path_for(resource)
+    else
+      set_minimum_password_length
+      respond_with resource
+    end
+  end
+    
+        get '/'
+    assert last_response.ok?
+  end
+    
+        def length
+      @entries.length
+    end
+    
+        def to_json
+      JSON.generate(as_json)
+    end
   end
 end
 
     
-        t = Time.at(946684800).getlocal
-    assert_equal(t.sec, Time.at(946684800).sec)
-    assert_equal(t.min, Time.at(946684800).min)
-    assert_equal(t.hour, Time.at(946684800).hour)
-    assert_equal(t.mday, Time.at(946684800).mday)
-    assert_equal(t.mon, Time.at(946684800).mon)
-    assert_equal(t.year, Time.at(946684800).year)
-    assert_equal(t.wday, Time.at(946684800).wday)
-    assert_equal(t.yday, Time.at(946684800).yday)
-    assert_equal(t.isdst, Time.at(946684800).isdst)
-    assert_equal(t.zone, Time.at(946684800).zone)
-    assert_zone_encoding(Time.at(946684800))
-    assert_equal(t.gmt_offset, Time.at(946684800).gmt_offset)
-    assert_equal(t.sunday?, Time.at(946684800).sunday?)
-    assert_equal(t.monday?, Time.at(946684800).monday?)
-    assert_equal(t.tuesday?, Time.at(946684800).tuesday?)
-    assert_equal(t.wednesday?, Time.at(946684800).wednesday?)
-    assert_equal(t.thursday?, Time.at(946684800).thursday?)
-    assert_equal(t.friday?, Time.at(946684800).friday?)
-    assert_equal(t.saturday?, Time.at(946684800).saturday?)
-    assert_equal(t.to_a, Time.at(946684800).to_a)
-  end
+    ###
+### methods
+###
     
-    success = clsJavaCompile._invoke('CompileFromMemory','[Ljava.lang.String;[Ljava.lang.String;[Ljava.lang.String;', classNames, codez, compileOpts)
+          subdir
+    end
     
-    signer._invoke('JarSignerMSF','[Ljava.lang.String;',jarsignerOpts)
+          def to_yaml
+        @pairs.to_yaml
+      end
     
-    	def block_begin(line)
-		# Get the block name from label
-		temp = line.scan(/\w+/)
-		block_name = temp[1].delete('<>:')
-    
-      if ARGV.include? '--no-ansi'
-    STDERR.puts <<-DOC
-    WARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
-    Consider adding the following to ~/.profile:
-    
-          # @param  [[Xcodeproj::PBXTarget]] targets
-      #         An array which always has a target as its first item
-      #         and may optionally contain a second target as its test target
-      #
-      # @return [String] the text for the target module
-      #
-      def template_contents(path, prefix, fallback)
-        if path.exist?
-          path.read.chomp.lines.map { |line| '#{prefix}#{line}' }.join('\n')
-        else
-          '#{prefix}# #{fallback}'
-        end
+        def render(context)
+      if @img
+        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      else
+        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
       end
     end
   end
 end
-
     
-          alias default_reaction deny
-    
-          def remove_bad_cookies(request, response)
-        return if bad_cookies.empty?
-        paths = cookie_paths(request.path)
-        bad_cookies.each do |name|
-          paths.each { |path| response.set_cookie name, empty_cookie(request.host, path) }
-        end
-      end
-    
-        it 'denies requests with sneaky encoded session cookies' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.%73ession=SESSION_TOKEN'
-      expect(last_response).not_to be_ok
+          super
     end
     
-    
-  it 'should allow changing the protection mode to a string' do
-    # I have no clue what other modes are available
-    mock_app do
-      use Rack::Protection::FrameOptions, :frame_options => 'ALLOW-FROM foo'
-      run DummyApp
-    end
-    
-      it 'should not override the header if already set' do
-    mock_app with_headers('X-XSS-Protection' => '0')
-    expect(get('/', {}, 'wants' => 'text/html').headers['X-XSS-Protection']).to eq('0')
+      # Checks for excerpts (helpful for template conditionals)
+  def has_excerpt(input)
+    input =~ /<!--\s*more\s*-->/i ? true : false
   end
