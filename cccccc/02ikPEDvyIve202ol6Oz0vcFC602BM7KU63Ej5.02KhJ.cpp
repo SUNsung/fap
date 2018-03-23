@@ -1,266 +1,170 @@
-void leveldb_options_set_block_restart_interval(leveldb_options_t* opt, int n) {
-  opt->rep.block_restart_interval = n;
-}
-    
-      // Successful parses
-  static struct {
-    const char* fname;
-    uint64_t number;
-    FileType type;
-  } cases[] = {
-    { '100.log',            100,   kLogFile },
-    { '0.log',              0,     kLogFile },
-    { '0.sst',              0,     kTableFile },
-    { '0.ldb',              0,     kTableFile },
-    { 'CURRENT',            0,     kCurrentFile },
-    { 'LOCK',               0,     kDBLockFile },
-    { 'MANIFEST-2',         2,     kDescriptorFile },
-    { 'MANIFEST-7',         7,     kDescriptorFile },
-    { 'LOG',                0,     kInfoLogFile },
-    { 'LOG.old',            0,     kInfoLogFile },
-    { '18446744073709551615.log', 18446744073709551615ull, kLogFile },
-  };
-  for (int i = 0; i < sizeof(cases) / sizeof(cases[0]); i++) {
-    std::string f = cases[i].fname;
-    ASSERT_TRUE(ParseFileName(f, &number, &type)) << f;
-    ASSERT_EQ(cases[i].type, type) << f;
-    ASSERT_EQ(cases[i].number, number) << f;
-  }
-    
-    
-    {
-    {    if (!s.ok()) {
-      assert(table == NULL);
-      delete file;
-      // We do not cache error results so that if the error is transient,
-      // or somebody repairs the file, we recover automatically.
-    } else {
-      TableAndFile* tf = new TableAndFile;
-      tf->file = file;
-      tf->table = table;
-      *handle = cache_->Insert(key, tf, 1, &DeleteEntry);
-    }
-  }
-  return s;
-}
-    
-    
-    {}  // namespace leveldb
 
-    
-    
-    {  std::vector< std::pair<int, InternalKey> > compact_pointers_;
-  DeletedFileSet deleted_files_;
-  std::vector< std::pair<int, FileMetaData> > new_files_;
-};
-    
-    TEST(VersionEditTest, EncodeDecode) {
-  static const uint64_t kBig = 1ull << 50;
+        
+          void Write(const SparsePage& page, dmlc::Stream* fo) override {
+    CHECK(page.offset.size() != 0 && page.offset[0] == 0);
+    CHECK_EQ(page.offset.back(), page.data.size());
+    fo->Write(page.offset);
+    min_index_ = page.min_index;
+    fo->Write(&min_index_, sizeof(min_index_));
+    index_.data.resize(page.data.size());
+    value_.data.resize(page.data.size());
     }
     
-    
-    {  input.remove_prefix(kHeader);
-  Slice key, value;
-  int found = 0;
-  while (!input.empty()) {
-    found++;
-    char tag = input[0];
-    input.remove_prefix(1);
-    switch (tag) {
-      case kTypeValue:
-        if (GetLengthPrefixedSlice(&input, &key) &&
-            GetLengthPrefixedSlice(&input, &value)) {
-          handler->Put(key, value);
-        } else {
-          return Status::Corruption('bad WriteBatch Put');
-        }
-        break;
-      case kTypeDeletion:
-        if (GetLengthPrefixedSlice(&input, &key)) {
-          handler->Delete(key);
-        } else {
-          return Status::Corruption('bad WriteBatch Delete');
-        }
-        break;
-      default:
-        return Status::Corruption('unknown WriteBatch tag');
+    /*!
+ * \brief an iterator that iterates over a configure file and gets the configures
+ */
+class ConfigIterator: public ConfigStreamReader {
+ public:
+  /*!
+   * \brief constructor
+   * \param fname name of configure file
+   */
+  explicit ConfigIterator(const char *fname) : ConfigStreamReader(fi) {
+    fi.open(fname);
+    if (fi.fail()) {
+      LOG(FATAL) << 'cannot open file ' << fname;
     }
+    ConfigReaderBase::Init();
   }
-  if (found != WriteBatchInternal::Count(this)) {
-    return Status::Corruption('WriteBatch has wrong count');
-  } else {
-    return Status::OK();
+  /*! \brief destructor */
+  ~ConfigIterator(void) {
+    fi.close();
   }
+    }
+    
+      vals_in.clear(); ss.flush(); ss.clear(); ss.str('');
+  ss << 'abcde';
+  ss >> vals_in;
+  EXPECT_NE(vals_in, vals);
+    
+      XGBOOST_DEVICE float GetGrad() const { return grad_; }
+  XGBOOST_DEVICE float GetHess() const { return hess_; }
+    
+    XGBOOST_REGISTER_METRIC(GammaDeviance, 'gamma-deviance')
+.describe('Residual deviance for gamma regression.')
+.set_body([](const char* param) { return new EvalGammaDeviance(); });
+    
+    path remove_prefix(const path& pth, const path& prefix) {
+  path::const_iterator it;
+  if (!skipPrefix(pth, prefix, it)) {
+    throw filesystem_error(
+        'Path does not start with prefix',
+        pth,
+        prefix,
+        bsys::errc::make_error_code(bsys::errc::invalid_argument));
+  }
+    }
+    
+    /**
+ * FileHandlerFactory is a LogHandlerFactory that constructs log handlers
+ * that write to a file.
+ *
+ * Note that FileHandlerFactory allows opening and appending to arbitrary files
+ * based on the handler options.  This may make it unsafe to use
+ * FileHandlerFactory in some contexts: for instance, a setuid binary should
+ * generally avoid registering the FileHandlerFactory if they allow log
+ * handlers to be configured via command line parameters, since otherwise this
+ * may allow non-root users to append to files that they otherwise would not
+ * have write permissions for.
+ */
+class FileHandlerFactory : public LogHandlerFactory {
+ public:
+  StringPiece getType() const override {
+    return 'file';
+  }
+    }
+    
+    /**
+ * Get the type of a folly::dynamic object as a string, for inclusion in
+ * exception messages.
+ */
+std::string dynamicTypename(const dynamic& value) {
+  switch (value.type()) {
+    case dynamic::NULLT:
+      return 'null';
+    case dynamic::ARRAY:
+      return 'array';
+    case dynamic::BOOL:
+      return 'boolean';
+    case dynamic::DOUBLE:
+      return 'double';
+    case dynamic::INT64:
+      return 'integer';
+    case dynamic::OBJECT:
+      return 'object';
+    case dynamic::STRING:
+      return 'string';
+  }
+  return 'unknown type';
 }
     
-    namespace leveldb {
+    /**
+ * LogHandler represents a generic API for processing log messages.
+ *
+ * LogHandlers have an associated log level.  The LogHandler will discard any
+ * messages below its log level.  This allows specific LogHandlers to perform
+ * additional filtering of messages even if the messages were enabled at the
+ * LogCategory level.  For instance, a single LogCategory may have two
+ * LogHandlers attached, one that logs locally to a file, and one that sends
+ * messages to a remote logging service.  The local LogHandler may be
+ * configured to record all messages, but the remote LogHandler may want to
+ * only process ERROR messages and above, even when debug logging is enabled
+ * for this LogCategory.
+ *
+ * By default the LogHandler level is set to LogLevel::NONE, which means that
+ * all log messages will be processed.
+ */
+class LogHandler {
+ public:
+  virtual ~LogHandler() = default;
     }
-    
-    #include <string>
-    
-        for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
-    {
-        g_driverType = driverTypes[driverTypeIndex];
-        hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-                D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
-        if (SUCCEEDED(hr))
-            break;
-    }
-    if (FAILED(hr))
-        return hr;
-    
-        // fill Hessian matrix
-    cv::Mat H(3, 3, CV_64F);
-    H.at<double>(0,0) = cv::Mat(cv::Mat(f1coeff).rowRange(1,21).t()*cv::Mat(20, 1, CV_64F, &Hs1)).at<double>(0,0);
-    H.at<double>(0,1) = cv::Mat(cv::Mat(f1coeff).rowRange(1,21).t()*cv::Mat(20, 1, CV_64F, &Hs2)).at<double>(0,0);
-    H.at<double>(0,2) = cv::Mat(cv::Mat(f1coeff).rowRange(1,21).t()*cv::Mat(20, 1, CV_64F, &Hs3)).at<double>(0,0);
-    
-    void ComputeJacobians(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
-                      const IntrinsicParams& param,  InputArray omc, InputArray Tc,
-                      const int& check_cond, const double& thresh_cond, Mat& JJ2_inv, Mat& ex3);
-    
-    namespace cv {
-    }
-    
-    CV_EXPORTS_W void multiply(InputArray src1, Scalar src2, OutputArray dst, double scale=1, int dtype=-1);
-    
-    namespace cv {
-    }
-    
-    #ifndef CV_CL_GET_PROC_ADDRESS
-#ifdef __GNUC__
-#warning('OPENCV: OpenCL BLAS dynamic library loader: check configuration')
-#else
-#pragma message('WARNING: OPENCV: OpenCL BLAS dynamic library loader: check configuration')
-#endif
-#define CV_CL_GET_PROC_ADDRESS(name) NULL
-#endif
-    
-    // Performs in-place floating point 8x8 DCT on block[0..63].
-// Note that the DCT used here is the DCT-2 with the first term multiplied by
-// 1/sqrt(2) and the result scaled by 1/2.
-void ComputeBlockDCTDouble(double block[64]);
-    
-    #include 'guetzli/jpeg_data.h'
-    
-    // Integer implementation of the Inverse Discrete Cosine Transform (IDCT).
-    
-    namespace guetzli {
-    }
-    
-    
-    {}  // namespace guetzli
-    
-    IMGUI_API bool        ImGui_ImplDX10_Init(void* hwnd, ID3D10Device* device);
-IMGUI_API void        ImGui_ImplDX10_Shutdown();
-IMGUI_API void        ImGui_ImplDX10_NewFrame();
-IMGUI_API void        ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
-    
-        // Upload texture to graphics system
-    g_FontTexture = new CIwTexture();
-    g_FontTexture->SetModifiable(true);
-    CIwImage& image = g_FontTexture->GetImage();
-    image.SetFormat(CIwImage::ARGB_8888);
-    image.SetWidth(width);
-    image.SetHeight(height);
-    image.SetBuffers();                                    // allocates and own buffers
-    image.ReadTexels(pixels);
-    g_FontTexture->SetMipMapping(false);
-    g_FontTexture->SetFiltering(false);
-    g_FontTexture->Upload();
     
     // Use if you want to reset your rendering device without losing ImGui state.
 IMGUI_API void        ImGui_Marmalade_InvalidateDeviceObjects();
 IMGUI_API bool        ImGui_Marmalade_CreateDeviceObjects();
     
-    int main(int, char**)
-{
-    // Create application window
-    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
-    RegisterClassEx(&wc);
-    HWND hwnd = CreateWindow(_T('ImGui Example'), _T('ImGui DirectX10 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
-    }
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
     
-    #include <s3eKeyboard.h>
-#include <s3ePointer.h>
-#include <IwGx.h>
     
-            // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
-        if (show_demo_window)
-        {
-            ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-            ImGui::ShowDemoWindow(&show_demo_window);
+    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         }
     
-      void PrintStats() {
-    for (size_t i = 0; i < Inputs.size(); i++) {
-      const auto &II = *Inputs[i];
-      Printf('  [%zd %s]\tsz: %zd\truns: %zd\tsucc: %zd\n', i,
-             Sha1ToString(II.Sha1).c_str(), II.U.size(),
-             II.NumExecutedMutations, II.NumSuccessfullMutations);
-    }
-  }
+    // Data
+static ID3D11Device*            g_pd3dDevice = NULL;
+static ID3D11DeviceContext*     g_pd3dDeviceContext = NULL;
+static IDXGISwapChain*          g_pSwapChain = NULL;
+static ID3D11RenderTargetView*  g_mainRenderTargetView = NULL;
     
-    ExternalFunctions::ExternalFunctions() {
-#define EXT_FUNC(NAME, RETURN_TYPE, FUNC_SIG, WARN)                            \
-  this->NAME = GetFnPtr<decltype(ExternalFunctions::NAME)>(#NAME, WARN)
-    }
+    // GLFW callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// Provided here if you want to chain callbacks.
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_API void        ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+IMGUI_API void        ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+IMGUI_API void        ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+IMGUI_API void        ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+
     
-    template <typename T>
-static T *GetFnPtr(T *Fun, T *FunDef, const char *FnName, bool WarnIfMissing) {
-  if (Fun == FunDef) {
-    if (WarnIfMissing)
-      Printf('WARNING: Failed to find function \'%s\'.\n', FnName);
-    return nullptr;
-  }
-  return Fun;
-}
-    
-    namespace fuzzer {
-    }
-    
-    #ifndef SHA_BIG_ENDIAN
-	// Swap byte order back
-	int i;
-	for (i=0; i<5; i++) {
-		s->state[i]=
-			  (((s->state[i])<<24)& 0xff000000)
-			| (((s->state[i])<<8) & 0x00ff0000)
-			| (((s->state[i])>>8) & 0x0000ff00)
-			| (((s->state[i])>>24)& 0x000000ff);
-	}
-#endif
-    
-    #include 'FuzzerDefs.h'
-#include <cstddef>
-#include <stdint.h>
-    
-      void StopTraceRecording() {
-    if (!RecordingMemcmp)
-      return;
-    RecordingMemcmp = false;
-    for (size_t i = 0; i < NumMutations; i++) {
-      auto &M = Mutations[i];
-      if (Options.Verbosity >= 2) {
-        AutoDictUnitCounts[M.W]++;
-        AutoDictAdds++;
-        if ((AutoDictAdds & (AutoDictAdds - 1)) == 0) {
-          typedef std::pair<size_t, Word> CU;
-          std::vector<CU> CountedUnits;
-          for (auto &I : AutoDictUnitCounts)
-            CountedUnits.push_back(std::make_pair(I.second, I.first));
-          std::sort(CountedUnits.begin(), CountedUnits.end(),
-                    [](const CU &a, const CU &b) { return a.first > b.first; });
-          Printf('AutoDict:\n');
-          for (auto &I : CountedUnits) {
-            Printf('   %zd ', I.first);
-            PrintASCII(I.second.data(), I.second.size());
-            Printf('\n');
-          }
-        }
-      }
-      MD.AddWordToAutoDictionary({M.W, M.Pos});
-    }
-    for (auto &W : InterestingWords)
-      MD.AddWordToAutoDictionary({W});
-  }
+    // CHANGELOG
+// (minor and older changes stripped away, please see git history for details)
+//  2018-03-20: Misc: Setup io.BackendFlags ImGuiBackendFlags_HasMouseCursors and ImGuiBackendFlags_HasSetMousePos flags + honor ImGuiConfigFlags_NoSetMouseCursor flag.
+//  2018-03-06: OpenGL: Added const char* glsl_version parameter to ImGui_ImplGlfwGL3_Init() so user can override the GLSL version e.g. '#version 150'.
+//  2018-02-23: OpenGL: Create the VAO in the render function so the setup can more easily be used with multiple shared GL context.
+//  2018-02-20: Inputs: Added support for mouse cursors (ImGui::GetMouseCursor() value and WM_SETCURSOR message handling).
+//  2018-02-20: Inputs: Renamed GLFW callbacks exposed in .h to not include GL3 in their name.
+//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplGlfwGL3_RenderDrawData() in the .h file so you can call it yourself.
+//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
+//  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
+//  2018-01-25: Inputs: Added gamepad support if ImGuiConfigFlags_NavEnableGamepad is set.
+//  2018-01-25: Inputs: Honoring the io.WantSetMousePos flag by repositioning the mouse (ImGuiConfigFlags_NavEnableSetMousePos is set).
+//  2018-01-20: Inputs: Added Horizontal Mouse Wheel support.
+//  2018-01-18: Inputs: Added mapping for ImGuiKey_Insert.
+//  2018-01-07: OpenGL: Changed GLSL shader version from 330 to 150. (Also changed GL context from 3.3 to 3.2 in example's main.cpp)
+//  2017-09-01: OpenGL: Save and restore current bound sampler. Save and restore current polygon mode.
+//  2017-08-25: Inputs: MousePos set to -FLT_MAX,-FLT_MAX when mouse is unavailable/missing (instead of -1,-1).
+//  2017-05-01: OpenGL: Fixed save and restore of current blend function state.
+//  2016-10-15: Misc: Added a void* user_data parameter to Clipboard function handlers.
+//  2016-09-05: OpenGL: Fixed save and restore of current scissor rectangle.
+//  2016-04-30: OpenGL: Fixed save and restore of current GL_ACTIVE_TEXTURE.
