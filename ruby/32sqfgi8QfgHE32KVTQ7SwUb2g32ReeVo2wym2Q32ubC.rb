@@ -1,95 +1,118 @@
 
         
-          def gcc_42
-    @gcc_42 ||= MacOS.gcc_42_build_version if MacOS.has_apple_developer_tools?
-  end
-    
-        @@remote_tap_formulae ||= Hash.new do |cache, key|
-      user, repo = key.split('/', 2)
-      tree = {}
-    
-          it 'splits correctly' do
-        expected = ['One', 'Two', 'Three', 'Four Token']
-        expect(generator.split_keywords(keywords)).to eq(expected)
-      end
+            # Determine the available cores in host system.
+    # This mostly helps on linux, but it couldn't hurt on MacOSX.
+    if RUBY_PLATFORM =~ /linux/
+      cpu_count = `nproc`.to_i
+    elsif RUBY_PLATFORM =~ /darwin/
+      cpu_count = `sysctl -n hw.ncpu`.to_i
     end
     
-          context('when the tag doesn't exist') do
-        before do
-          allow(Fastlane::Actions).to receive(:sh).with('git rev-parse -q --verify refs/tags/1.2.0 || true', { log: nil }).and_return('')
-        end
-    
-          it 'properly removes new lines of the build number' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          increment_build_number(build_number: '24\n', xcodeproj: '.xcproject')
-        end').runner.execute(:test)
-    
-          it 'raises an exception when xcode project path wasn't found' do
-        expect do
-          Fastlane::FastFile.new.parse('lane :test do
-            increment_version_number(xcodeproj: '/nothere')
-          end').runner.execute(:test)
-        end.to raise_error('Could not find Xcode project')
-      end
-    
-            # This is called early, before a machine is instantiated, to check
-        # if this provider is usable. This should return true or false.
-        #
-        # If raise_error is true, then instead of returning false, this
-        # should raise an error with a helpful message about why this
-        # provider cannot be used.
-        #
-        # @param [Boolean] raise_error If true, raise exception if not usable.
-        # @return [Boolean]
-        def self.usable?(raise_error=false)
-          # Return true by default for backwards compat since this was
-          # introduced long after providers were being written.
-          true
-        end
-    
-          # This deletes the block with the given key if it exists.
-      def delete(key)
-        key    = Regexp.quote(key)
-        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$.*^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
-        @value.gsub!(regexp, '')
-      end
-    
-      def test_each_pair
-    ENV.each_pair do |k, v|
-      assert_kind_of(String, k)
-      assert_kind_of(String, v)
-    end
+      def dry_run?
+    !!@dry_run
   end
     
-      def self.status_of_dying_sleeping_thread
-    t = dying_thread_ensures { Thread.stop; }
-    Thread.pass while t.status and t.status != 'sleep'
-    status = Status.new t
-    t.wakeup
-    t.join
-    status
-  end
-    
-      it 'spawns a new Thread running the block' do
-    run = false
-    t = Thread.send(@method) { run = true }
-    t.should be_kind_of(Thread)
-    t.join
-    
-        exit_loop = true
-    
-    end
-    
-    require 'pathname'
-require './plugins/octopress_filters'
-    
-    module Jekyll
-    
-    module LogStash
-  module Api
-    module Commands
-      module System
-        class Plugins < Commands::Base
-          def run
-            { :total => plugins.count, :plugins => plugins }
+          if options[:type] == :array
+        options[:roles] << :completable
+        class_eval <<-EOF
+          def complete_#{name}
+            #{options[:values]}.map { |v| {text: v, id: v} }
           end
+        EOF
+      end
+    
+        def boolify(value)
+      agent.send(:boolify, value)
+    end
+    
+      def tumblr
+    Tumblr.configure do |config|
+      config.consumer_key = tumblr_consumer_key
+      config.consumer_secret = tumblr_consumer_secret
+      config.oauth_token = tumblr_oauth_token
+      config.oauth_token_secret = tumblr_oauth_token_secret
+    end
+    
+    Tumblr::Client.new
+  end
+end
+    
+      module SortableTableHelper
+    # :call-seq:
+    #   sortable_column(attribute, default_direction = 'desc', name: attribute.humanize)
+    def sortable_column(attribute, default_direction = nil, options = nil)
+      if options.nil? && (options = Hash.try_convert(default_direction))
+        default_direction = nil
+      end
+      default_direction ||= 'desc'
+      options ||= {}
+      name = options[:name] || attribute.humanize
+      selected = @table_sort_info[:attribute].to_s == attribute
+      if selected
+        direction = @table_sort_info[:direction]
+        new_direction = direction.to_s == 'desc' ? 'asc' : 'desc'
+        classes = 'selected #{direction}'
+      else
+        classes = ''
+        new_direction = default_direction
+      end
+      link_to(name, url_for(sort: '#{attribute}.#{new_direction}'), class: classes)
+    end
+  end
+end
+
+    
+          opts.on('-F', '--from FORMAT',
+        'The format to convert from. Can be css, scss, sass.',
+        'By default, this is inferred from the input filename.',
+        'If there is none, defaults to css.') do |name|
+        @options[:from] = name.downcase.to_sym
+        raise 'sass-convert no longer supports LessCSS.' if @options[:from] == :less
+        unless [:css, :scss, :sass].include?(@options[:from])
+          raise 'Unknown format for sass-convert --from: #{name}'
+        end
+      end
+    
+      Sass::Plugin.options.merge!(config)
+    
+                lambda do |corrector|
+              new_source = receiver.source + '.end_with?(' +
+                           to_string_literal(regex_str) + ')'
+              corrector.replace(node.source_range, new_source)
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+            def autocorrect(node)
+          # Regexp#match can take a second argument, but this cop doesn't
+          # register an offense in that case
+          return unless node.first_argument.regexp_type?
+    
+    module RuboCop
+  module Cop
+    module Lint
+      # In math and Python, we can use `x < y < z` style comparison to compare
+      # multiple value. However, we can't use the comparison in Ruby. However,
+      # the comparison is not syntax error. This cop checks the bad usage of
+      # comparison operators.
+      #
+      # @example
+      #
+      #   # bad
+      #
+      #   x < y < z
+      #   10 <= x <= 20
+      #
+      # @example
+      #
+      #   # good
+      #
+      #   x < y && y < z
+      #   10 <= x && x <= 20
+      class MultipleCompare < Cop
+        MSG = 'Use the `&&` operator to compare multiple values.'.freeze
