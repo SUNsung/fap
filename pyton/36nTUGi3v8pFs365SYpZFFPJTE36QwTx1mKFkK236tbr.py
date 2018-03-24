@@ -1,168 +1,101 @@
 
         
-          def update_snapshot_name(self, var_coll_name):
-    var_list = self._metagraph.collection_def[var_coll_name]
-    for i, value in enumerate(var_list.bytes_list.value):
-      var_def = variable_pb2.VariableDef()
-      var_def.ParseFromString(value)
-      # Somehow node Model/global_step/read doesn't have any fanout and seems to
-      # be only used for snapshot; this is different from all other variables.
-      if var_def.snapshot_name != 'Model/global_step/read:0':
-        var_def.snapshot_name = with_autoparallel_prefix(
-            0, var_def.snapshot_name)
-      value = var_def.SerializeToString()
-      var_list.bytes_list.value[i] = value
+                print('Training %s ... ' % name, end='')
+        t0 = time()
+        clf.fit(X_train, y_train)
+        train_time[name] = time() - t0
+        t0 = time()
+        y_pred = clf.predict(X_test)
+        test_time[name] = time() - t0
+        accuracy[name] = accuracy_score(y_test, y_pred)
+        print('done')
     
-      def testBuildFeaturePlaceholders(self):
-    # One time series feature.
-    config = configdict.ConfigDict({
-        'time_feature_1': {
-            'length': 14,
-            'is_time_series': True,
-        }
-    })
-    expected_shapes = {
-        'time_series_features': {
-            'time_feature_1': [None, 14],
-        },
-        'aux_features': {}
-    }
-    features = input_ops.build_feature_placeholders(config)
-    self.assertFeatureShapesEqual(expected_shapes, features)
+            print('benchmarking scikit-learn: ')
+        scikit_results.append(bench(ScikitLasso, X, Y, X_test, Y_test, coef_))
+        print('benchmarking glmnet: ')
+        glmnet_results.append(bench(GlmnetLasso, X, Y, X_test, Y_test, coef_))
     
-      Returns:
-    Dictionary containing 'time_series_features' and 'aux_features'. Each is a
-        dictionary of named numpy arrays of shape [batch_size, length].
-  '''
-  features = {}
-  features['time_series_features'] = {
-      name: np.random.random([batch_size, spec['length']])
-      for name, spec in feature_spec.items() if spec['is_time_series']
-  }
-  features['aux_features'] = {
-      name: np.random.random([batch_size, spec['length']])
-      for name, spec in feature_spec.items() if not spec['is_time_series']
-  }
-  return features
+    import matplotlib.pyplot as plt
+import numpy as np
+import random
     
-      if quarters is None:
-    quarters = quarter_prefixes.keys()
-    
-    
-def _landscape_client():
-    env = EnvironmentConfig()
-    return API(
-        uri=env.uri,
-        access_key=env.access_key,
-        secret_key=env.secret_key,
-        ssl_ca_file=env.ssl_ca_file)
-    
-        parser.add_argument('--env',
-                        nargs=2,
-                        metavar=('KEY', 'VALUE'),
-                        action='append',
-                        help='environment variable to pass')
-    
-    #############################################
-from __future__ import (absolute_import, division, print_function)
-__metaclass__ = type
-    
-    
-@keras_test
-def test_sequential_temporal_sample_weights():
-    (x_train, y_train), (x_test, y_test), (sample_weight, class_weight, test_ids) = _get_test_data()
-    
-        # by setting the `trainable` argument, in Sequential
-    model = Sequential()
-    layer = Dense(2, input_dim=1)
-    model.add(layer)
-    assert model.trainable_weights == layer.trainable_weights
-    layer.trainable = False
-    assert model.trainable_weights == []
+        url_fmt is along the lines of ('https://github.com/USER/PROJECT/'
+                                   'blob/{revision}/{package}/'
+                                   '{path}#L{lineno}')
+    '''
+    revision = _get_git_revision()
+    return partial(_linkcode_resolve, revision=revision, package=package,
+                   url_fmt=url_fmt)
+
     
     
 if __name__ == '__main__':
-    pytest.main([__file__])
-
+    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
+    # block to be able to use a multi-core grid search that also works under
+    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
+    # The multiprocessing module is used as the backend of joblib.Parallel
+    # that is used when n_jobs != 1 in GridSearchCV
     
-    model = Sequential()
-model.add(Embedding(max_features, embedding_size, input_length=maxlen))
-model.add(Dropout(0.25))
-model.add(Conv1D(filters,
-                 kernel_size,
-                 padding='valid',
-                 activation='relu',
-                 strides=1))
-model.add(MaxPooling1D(pool_size=pool_size))
-model.add(LSTM(lstm_output_size))
-model.add(Dense(1))
-model.add(Activation('sigmoid'))
+    plt.matshow(np.outer(np.sort(model.row_labels_) + 1,
+                     np.sort(model.column_labels_) + 1),
+            cmap=plt.cm.Blues)
+plt.title('Checkerboard structure of rearranged data')
     
+    Plot the classification probability for different classifiers. We use a 3
+class dataset, and we classify it with a Support Vector classifier, L1
+and L2 penalized logistic regression with either a One-Vs-Rest or multinomial
+setting, and Gaussian process classification.
     
-@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
-def test_orthogonal(tensor_shape):
-    _runner(initializers.orthogonal(), tensor_shape,
-            target_mean=0.)
+        t0 = time()
+    scores = uniform_labelings_scores(score_func, n_samples, n_clusters_range)
+    print('done in %0.3fs' % (time() - t0))
+    plots.append(plt.errorbar(
+        n_clusters_range, np.median(scores, axis=1), scores.std(axis=1))[0])
+    names.append(score_func.__name__)
     
+        def process_options(self, args, opts):
+        try:
+            self.settings.setdict(arglist_to_dict(opts.set),
+                                  priority='cmdline')
+        except ValueError:
+            raise UsageError('Invalid -s value, use -s NAME=VALUE', print_help=False)
     
-@keras_test
-def test_convert_weights():
-    def get_model(shape, data_format):
-        model = Sequential()
-        model.add(Conv2D(filters=2,
-                         kernel_size=(4, 3),
-                         input_shape=shape,
-                         data_format=data_format))
-        model.add(Flatten())
-        model.add(Dense(5))
-        return model
+        def run(self, args, opts):
+        # load contracts
+        contracts = build_component_list(self.settings.getwithbase('SPIDER_CONTRACTS'))
+        conman = ContractsManager(load_object(c) for c in contracts)
+        runner = TextTestRunner(verbosity=2 if opts.verbose else 1)
+        result = TextTestResult(runner.stream, runner.descriptions, runner.verbosity)
     
-        model = Sequential([
-        layers.Dense(16, input_shape=(x_train.shape[-1],), activation='tanh'),
-        layers.Dense(num_classes)
-    ])
+    import json
     
-        buf = surface.get_data()
-    a = np.frombuffer(buf, np.uint8)
-    a.shape = (h, w, 4)
-    a = a[:, :, 0]  # grab single channel
-    a = a.astype(np.float32) / 255
-    a = np.expand_dims(a, 0)
-    if rotate:
-        a = image.random_rotation(a, 3 * (w - top_left_x) / w + 1)
-    a = speckle(a)
+    __all__ = ['ehow_download']
     
-    This network is used to predict the next frame of an artificially
-generated movie which contains moving squares.
-'''
-from keras.models import Sequential
-from keras.layers.convolutional import Conv3D
-from keras.layers.convolutional_recurrent import ConvLSTM2D
-from keras.layers.normalization import BatchNormalization
-import numpy as np
-import pylab as plt
+            # cookie handler
+        ssl_context = request.HTTPSHandler(
+            context=ssl.SSLContext(ssl.PROTOCOL_TLSv1))
+        cookie_handler = request.HTTPCookieProcessor()
+        opener = request.build_opener(ssl_context, cookie_handler)
+        opener.addheaders = [
+            ('Referer', self.url),
+            ('Cookie',
+             'CloudFront-Policy=%s;CloudFront-Signature=%s;CloudFront-Key-Pair-Id=%s' % (scp, scs, sck))
+        ]
+        request.install_opener(opener)
     
-                if point.name == 'p':
-                link = point.find('a')
-                if link is not None:
-                    link = clean_pdf_link(link.attrs['href'])
-                    ext = get_extension(link)
-                    print(ext)
-                    if not ext in forbidden_extensions:
-                        print(shorten_title(point.text) + ' (' + link + ')')
-                        try:
-                            name = clean_text(point.text.split('[' + ext + ']')[0])
-                            fullname = '.'.join((name, ext))
-                            if not os.path.exists('/'.join((current_directory, fullname)) ):
-                                download_pdf(link, current_directory, '.'.join((name, ext)))
-                        except KeyboardInterrupt:
-                            try:
-                                print('Press Ctrl-C in 1 second to quit')
-                                time.sleep(1)
-                            except KeyboardInterrupt:
-                                print('Cancelling..')
-                                break
-                        except:
-                            failures.append(point.text)
-                        
-        point = point.next_sibling          
+    def kugou_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    if url.lower().find('5sing')!=-1:
+        #for 5sing.kugou.com
+        html=get_html(url)
+        ticket=r1(r''ticket':\s*'(.*)'',html)
+        j=loads(str(b64decode(ticket),encoding='utf-8'))
+        url=j['file']
+        title=j['songName']
+        songtype, ext, size = url_info(url)
+        print_info(site_info, title, songtype, size)
+        if not info_only:
+            download_urls([url], title, ext, size, output_dir, merge=merge)
+    else:
+        #for the www.kugou.com/
+        return kugou_download_playlist(url, output_dir=output_dir, merge=merge, info_only=info_only)
+        # raise NotImplementedError(url)       
