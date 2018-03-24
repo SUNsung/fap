@@ -1,67 +1,60 @@
 
         
-          # GET /resource/unlock?unlock_token=abcdef
-  def show
-    self.resource = resource_class.unlock_access_by_token(params[:unlock_token])
-    yield resource if block_given?
+        puts 'Validating #{links.size} links...'
     
-      # Controllers inheriting DeviseController are advised to override this
-  # method so that other controllers inheriting from them would use
-  # existing translations.
-  def translation_scope
-    'devise.#{controller_name}'
-  end
+      describe 'PUT #update' do
+    it 'updates notifications settings' do
+      user.settings['notification_emails'] = user.settings['notification_emails'].merge('follow' => false)
+      user.settings['interactions'] = user.settings['interactions'].merge('must_be_follower' => true)
     
-      def app
-    Rails.application
+    def codepoints_to_unicode(codepoints)
+  if codepoints.include?(' ')
+    codepoints.split(' ').map(&:hex).pack('U*')
+  else
+    [codepoints.hex].pack('U')
   end
 end
-
     
-                  define_method method do |resource_or_scope, *args|
-                scope = Devise::Mapping.find_scope!(resource_or_scope)
-                router_name = Devise.mappings[scope].router_name
-                context = router_name ? send(router_name) : _devise_route_context
-                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
-              end
-            end
-          end
-        end
+        it 'removes remote accounts from that domain' do
+      expect(Account.find_remote('badguy666', 'evil.org').suspended?).to be true
+    end
+    
+          # Find a Sass file, if it exists.
+      #
+      # This is the primary entry point of the Importer.
+      # It corresponds directly to an `@import` statement in Sass.
+      # It should do three basic things:
+      #
+      # * Determine if the URI is in this importer's format.
+      #   If not, return nil.
+      # * Determine if the file indicated by the URI actually exists and is readable.
+      #   If not, return nil.
+      # * Read the file and place the contents in a {Sass::Engine}.
+      #   Return that engine.
+      #
+      # If this importer's format allows for file extensions,
+      # it should treat them the same way as the default {Filesystem} importer.
+      # If the URI explicitly has a `.sass` or `.scss` filename,
+      # the importer should look for that exact file
+      # and import it as the syntax indicated.
+      # If it doesn't exist, the importer should return nil.
+      #
+      # If the URI doesn't have either of these extensions,
+      # the importer should look for files with the extensions.
+      # If no such files exist, it should return nil.
+      #
+      # The {Sass::Engine} to be returned should be passed `options`,
+      # with a few modifications. `:syntax` should be set appropriately,
+      # `:filename` should be set to `uri`,
+      # and `:importer` should be set to this importer.
+      #
+      # @param uri [String] The URI to import.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` that's currently being resolved.
+      #   This is safe for subclasses to modify destructively.
+      #   Callers should only pass in a value they don't mind being destructively modified.
+      # @return [Sass::Engine, nil] An Engine containing the imported file,
+      #   or nil if it couldn't be found or was in the wrong format.
+      def find(uri, options)
+        Sass::Util.abstract(self)
       end
-    
-    Struct.new('Blog', :name, :web_url, :rss_url)
-blogs = []
-    
-      GEMFILE_EXTENSIONS.each do |extension|
-    extension_pathname = root.join('Gemfile#{extension}')
-    
-          when :login_fail
-        if(s[:user] and s[:pass])
-          report_auth_info(s.merge({:active => false}))
-          print_status('Failed FTP Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]}')
-    
-    
-    {	if ln =~ /;(read|write)_(handle|filename)=/
-		parts = ln.split(' ')
-		if (parts[0] == 'mov')
-			parts2 = parts[2].split('=')
-			label = parts2[0]
-			label.slice!(0,1)
-			old = parts2[1]
-			new = addrs[label]
-			#puts '%32s: %s -> %x' % [label, old, new]
-			replaces << [label, old, new.to_s(16)]
-		end
-	end
-}
-    
-      when '6.1.1'
-    __NR_execve      = 7
-    __NR_getpeername = 202
-    __NR_accept      = 229
-    __NR_listen      = 232
-    __NR_bind        = 234
-    __NR_socket      = 235
-    __NR_connect     = 236
-    __NR_close       = 269
-    __NR_kfcntl      = 614
