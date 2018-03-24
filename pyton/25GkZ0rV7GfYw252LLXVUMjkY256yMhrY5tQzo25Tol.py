@@ -1,144 +1,128 @@
 
         
-        # Adding our two functions to the socket library
-if os.name == 'nt':
-    socket.inet_pton = inet_pton
-    socket.inet_ntop = inet_ntop
+                ydl = FakeYDL({
+            'proxy': '%s://127.0.0.1:%d' % (protocol, self.port),
+        })
+        return ydl.urlopen('http://yt-dl.org/ip').read().decode('utf-8')
+    
+    
+class TestUnicodeLiterals(unittest.TestCase):
+    def test_all_files(self):
+        for dirpath, dirnames, filenames in os.walk(rootDir):
+            for ignore_dir in IGNORED_DIRS:
+                if ignore_dir in dirnames:
+                    # If we remove the directory from dirnames os.walk won't
+                    # recurse into it
+                    dirnames.remove(ignore_dir)
+            for basename in filenames:
+                if not basename.endswith('.py'):
+                    continue
+                if basename in IGNORED_FILES:
+                    continue
+    
+            return {
+            '_type': 'playlist',
+            'id': playlist_id,
+            'title': title,
+            'description': description,
+            'entries': entries,
+        }
 
     
-            txt = self.text
-        if txt is not None:
-            txt = txt.replace('\n','\\\\n')
-            txt = txt.replace('\r','\\\\r')
-            txt = txt.replace('\t','\\\\t')
+        class Plugin(AuthPlugin):
+        auth_type = 'test-require-false'
+        auth_require = False
+    
+        def __init__(self, groups, env=Environment(), **kwargs):
+        '''
+        :param groups: names of processor groups to be applied
+        :param env: Environment
+        :param kwargs: additional keyword arguments for processors
+    
+        def __init__(self, **kwargs):
+        '''
+        :param env: an class:`Environment` instance
+        :param kwargs: additional keyword argument that some
+                       processor might require.
+    
+            if color_scheme == PRESET_STYLE:
+            self.http_lexer = PygmentsHttpLexer()
         else:
-            txt = '<no text>'
+            self.http_lexer = HTTPLexer()
     
-            nvae = NoViableAltException(
-            self.getDescription(),
-            self.decisionNumber,
-            s,
-            input
-            )
-    
-        def test_make_frame(self):
-        self.dialog.row = 0
-        self.dialog.top = self.root
-        frame, label = self.dialog.make_frame()
-        self.assertEqual(label, '')
-        self.assertIsInstance(frame, Frame)
-    
-        def test_delitem(self):
-        n = 500         # O(n**2) test, don't make this too big
-        d = deque(range(n))
-        self.assertRaises(IndexError, d.__delitem__, -n-1)
-        self.assertRaises(IndexError, d.__delitem__, n)
-        for i in range(n):
-            self.assertEqual(len(d), n-i)
-            j = random.randrange(-len(d), len(d))
-            val = d[j]
-            self.assertIn(val, d)
-            del d[j]
-            self.assertNotIn(val, d)
-        self.assertEqual(len(d), 0)
-    
-        def test_special_attrs(self):
-        # 'expires'
-        C = cookies.SimpleCookie('Customer='WILE_E_COYOTE'')
-        C['Customer']['expires'] = 0
-        # can't test exact output, it always depends on current date/time
-        self.assertTrue(C.output().endswith('GMT'))
-    
-        if C is not None:
-        # C version of decimal
-        start_calc = time.time()
-        x = factorial(C.Decimal(n), 0)
-        end_calc = time.time()
-        start_conv = time.time()
-        sx = str(x)
-        end_conv = time.time()
-        print('cdecimal:')
-        print('calculation time: %fs' % (end_calc-start_calc))
-        print('conversion time: %fs\n' % (end_conv-start_conv))
-    
-    if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        zones = TZInfo.zonelist()
-        for z in zones:
-            print(z)
-        sys.exit()
-    filepath = sys.argv[1]
-    if not filepath.startswith('/'):
-        filepath = os.path.join('/usr/share/zoneinfo', filepath)
-    with open(filepath, 'rb') as fileobj:
-        tzi = TZInfo.fromfile(fileobj)
-    tzi.dump(sys.stdout)
+    ### OUTPUT ###
+# ['Student',
+#  'Student',
+#  'Scientist',
+#  'Student',
+#  'Scientist',
+#  'Student',
+#  'Scientist',
+#  'Student',
+#  'Scientist',
+#  'Student',
+#  'Scientist',
+#  'Professor']
 
     
-            # Issue 7094: Alternate formatting (specified by #)
-        self.assertEqual(format(1+1j, '.0e'), '1e+00+1e+00j')
-        self.assertEqual(format(1+1j, '#.0e'), '1.e+00+1.e+00j')
-        self.assertEqual(format(1+1j, '.0f'), '1+1j')
-        self.assertEqual(format(1+1j, '#.0f'), '1.+1.j')
-        self.assertEqual(format(1.1+1.1j, 'g'), '1.1+1.1j')
-        self.assertEqual(format(1.1+1.1j, '#g'), '1.10000+1.10000j')
+        def test_cat_adapter_shall_make_noise(self):
+        cat = Cat()
+        cat_adapter = Adapter(cat, make_noise=cat.meow)
+        noise = cat_adapter.make_noise()
+        expected_noise = 'meow!'
+        self.assertEqual(noise, expected_noise)
+    
+        def test_sequential_execution(self):
+        self.command_stack[0].execute()
+        output_after_first_execution = os.listdir(self.test_dir)
+        self.assertEqual(output_after_first_execution[0], 'bar.txt')
+        self.command_stack[1].execute()
+        output_after_second_execution = os.listdir(self.test_dir)
+        self.assertEqual(output_after_second_execution[0], 'baz.txt')
+    
+        def test_sales_manager_shall_respond_through_proxy_with_delay(cls):
+        cls.p.busy = 'Yes'
+        start_time = time()
+        cls.p.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+Sales Manager is busy\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
+    
+        def test_display_current_time_at_current_time(self):
+        '''
+        Just as justification for working example. (Will always pass.)
+        '''
+        production_code_time_provider = ProductionCodeTimeProvider()
+        class_under_test = TimeDisplay(production_code_time_provider)
+        current_time = datetime.datetime.now()
+        expected_time = '<span class=\'tinyBoldText\'>{}:{}</span>'.format(current_time.hour, current_time.minute)
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
+    
+    production code which is untestable:
+    
+        @classmethod
+    def _class_method_1(cls):
+        print('Value {}'.format(cls.x1))
+    
+        def count(*args, **kwargs):
+        start = time.time()
+        res = func(*args, **kwargs)
+        count._time = time.time() - start
+        return res
+    return count
+    
+        def tearDown(self):
+        if not self._bProblem:
+            print('Tearing down')
+            time.sleep(0.1)
+            self._tm.publishReport()
+        else:
+            print('Test not executed. No tear down required.')
     
     
-class TestTool(unittest.TestCase):
-    data = '''
-    
-        def test_range_iterators_invocation(self):
-        # verify range iterators instances cannot be created by
-        # calling their type
-        rangeiter_type = type(iter(range(0)))
-        self.assertRaises(TypeError, rangeiter_type, 1, 3, 1)
-        long_rangeiter_type = type(iter(range(1 << 1000)))
-        self.assertRaises(TypeError, long_rangeiter_type, 1, 3, 1)
-    
-            res = func(pointer(i))
-        self.assertEqual(res[0], 87654)
-        self.assertEqual(res.contents.value, 87654)
-    
-    
-if __name__ == '__main__':
-    main()
-
-    
-        @gen_test
-    def test_order(self):
-        q = self.queue_class(maxsize=2)
-        q.put_nowait((1, 'a'))
-        q.put_nowait((0, 'b'))
-        self.assertTrue(q.full())
-        q.put((3, 'c'))
-        q.put((2, 'd'))
-        self.assertEqual((0, 'b'), q.get_nowait())
-        self.assertEqual((1, 'a'), (yield q.get()))
-        self.assertEqual((2, 'd'), q.get_nowait())
-        self.assertEqual((3, 'c'), (yield q.get()))
-        self.assertTrue(q.empty())
-    
-    define('debug', default=False, group='application',
-       help='run in debug mode (with automatic reloading)')
-# The following settings should probably be defined in secrets.cfg
-define('twitter_consumer_key', type=str, group='application')
-define('twitter_consumer_secret', type=str, group='application')
-define('cookie_secret', type=str, group='application',
-       default='__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE__',
-       help='signing key for secure cookies')
-    
-        Returned links have had the fragment after `#` removed, and have been made
-    absolute so, e.g. the URL 'gen.html#tornado.gen.coroutine' becomes
-    'http://www.tornadoweb.org/en/stable/gen.html'.
-    '''
-    try:
-        response = yield httpclient.AsyncHTTPClient().fetch(url)
-        print('fetched %s' % url)
-    
-    Circular references are not leaks per se, because they will eventually
-be GC'd. However, on CPython, they prevent the reference-counting fast
-path from being used and instead rely on the slower full GC. This
-increases memory footprint and CPU overhead, so we try to eliminate
-circular references created by normal operation.
-'''
-from __future__ import print_function
+class NumObj(object):
