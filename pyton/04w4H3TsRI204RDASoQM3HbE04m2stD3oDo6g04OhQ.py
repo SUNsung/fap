@@ -1,174 +1,97 @@
 
         
-        # (c) 2016 Red Hat, Inc.
-#
-# This file is part of Ansible
-#
-# Ansible is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Ansible is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
-'''CLI tool for starting new Shippable CI runs.'''
+                '''
+        available_plugins = plugin_manager.get_formatters_grouped()
+        self.enabled_plugins = []
+        for group in groups:
+            for cls in available_plugins[group]:
+                p = cls(env=env, **kwargs)
+                if p.enabled:
+                    self.enabled_plugins.append(p)
     
-        @g_connect
-    def __call_galaxy(self, url, args=None, headers=None, method=None):
-        if args and not headers:
-            headers = self.__auth_header()
+    
+@mock.patch('httpie.core.get_response')
+def test_error_traceback(get_response):
+    exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    with raises(ConnectionError):
+        main(['--ignore-stdin', '--traceback', 'www.google.com'])
+    
+        def _migrate_implicit_content_type(self):
+        '''Migrate the removed implicit_content_type config option'''
         try:
-            display.vvv(url)
-            resp = open_url(url, data=args, validate_certs=self._validate_certs, headers=headers, method=method,
-                            timeout=20)
-            data = json.loads(to_text(resp.read(), errors='surrogate_or_strict'))
-        except HTTPError as e:
-            res = json.loads(to_text(e.fp.read(), errors='surrogate_or_strict'))
-            raise AnsibleError(res['detail'])
-        return data
-    
-        return results
-
-    
-    
-@keras_test
-def test_gaussiandropout_legacy_interface():
-    old_layer = keras.layers.GaussianDropout(p=0.6, name='drop')
-    new_layer_1 = keras.layers.GaussianDropout(rate=0.6, name='drop')
-    new_layer_2 = keras.layers.GaussianDropout(0.6, name='drop')
-    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer_1.get_config())
-    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer_2.get_config())
-    
-    from keras.utils.test_utils import get_test_data
-    
-    print('Train...')
-model.fit(x_train, y_train,
-          batch_size=batch_size,
-          epochs=epochs,
-          validation_data=(x_test, y_test))
-score, acc = model.evaluate(x_test, y_test, batch_size=batch_size)
-print('Test score:', score)
-print('Test accuracy:', acc)
-
-    
-        model.summary()
-    json_str = model.to_json()
-    model_from_json(json_str)
-    
-        def dispatch_call(self, call):
-        if call.rank not in (Rank.OPERATOR, Rank.SUPERVISOR, Rank.DIRECTOR):
-            raise ValueError('Invalid call rank: {}'.format(call.rank))
-        employee = None
-        if call.rank == Rank.OPERATOR:
-            employee = self._dispatch_call(call, self.operators)
-        if call.rank == Rank.SUPERVISOR or employee is None:
-            employee = self._dispatch_call(call, self.supervisors)
-        if call.rank == Rank.DIRECTOR or employee is None:
-            employee = self._dispatch_call(call, self.directors)
-        if employee is None:
-            self.queued_calls.append(call)
-    
-        def bfs(self, source, dest):
-        if source is None:
-            return False
-        queue = deque()
-        queue.append(source)
-        source.visit_state = State.visited
-        while queue:
-            node = queue.popleft()
-            print(node)
-            if dest is node:
-                return True
-            for adjacent_node in node.adj_nodes.values():
-                if adjacent_node.visit_state == State.unvisited:
-                    queue.append(adjacent_node)
-                    adjacent_node.visit_state = State.visited
-        return False
-    
-    from concurrent.futures import _base
-    
-    def download_urls_sequential(urls, timeout=60):
-    url_to_content = {}
-    for url in urls:
-        try:
-            url_to_content[url] = load_url(url, timeout=timeout)
-        except:
-            pass
-    return url_to_content
-    
-    from ycm.client.base_request import ( BaseRequest, BuildRequestData,
-                                      HandleServerException )
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-    
-    
-def RegexFilter_test():
-  opts = _JavaFilter( { 'regex' : 'taco' } )
-  f = _CreateFilterForTypes( opts, [ 'java' ] )
-    
-    from ycm.client.base_request import BaseRequest
-from ycm.youcompleteme import YouCompleteMe
-from ycmd import user_options_store
-from ycmd.utils import CloseStandardStreams, WaitUntilProcessIsTerminated
-    
-        def test_sales_manager_shall_respond_through_proxy_with_delay(cls):
-        cls.p.busy = 'Yes'
-        start_time = time()
-        cls.p.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-Sales Manager is busy\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time*10), expected_execution_time)
-    
-    
-class Action(object):
-    
-        def run(self, msg):
-        print('{} got {}'.format(self.name, msg))
-    
-    
-@coroutine
-def coroutine1(target):
-    while True:
-        request = yield
-        if 0 < request <= 10:
-            print('request {} handled in coroutine 1'.format(request))
+            implicit_content_type = self.pop('implicit_content_type')
+        except KeyError:
+            self.save()
         else:
-            target.send(request)
+            if implicit_content_type == 'form':
+                self['default_options'].insert(0, '--form')
+            self.save()
+            self.load()
+
     
-        # verify that none of the target files exist
-    assert(not lexists('foo.txt'))
-    assert(not lexists('bar.txt'))
-    assert(not lexists('baz.txt'))
+        # Used only when requested with --check-status:
+    ERROR_HTTP_3XX = 3
+    ERROR_HTTP_4XX = 4
+    ERROR_HTTP_5XX = 5
+    
+        parent = os.path.join(path, os.path.pardir)
+    parent = os.path.realpath(parent)
+    
+    from ansible.errors import AnsibleError
+from ansible.module_utils._text import to_bytes
+    
+        @property
+    def api_server(self):
+        return self._api_server
+    
+            actual = GCPUtils.filter_gcp_fields(input_data)
+        self.assertEquals(expected, actual)
+
+    
+    
+def sort_groups(groups):
+    return sorted(groups, key=lambda g: (g.depth, g.priority, g.name))
+    
+        def _genspider(self, module, name, domain, template_name, template_file):
+        '''Generate the spider module, based on the given template'''
+        tvars = {
+            'project_name': self.settings.get('BOT_NAME'),
+            'ProjectName': string_camelcase(self.settings.get('BOT_NAME')),
+            'module': module,
+            'name': name,
+            'domain': domain,
+            'classname': '%sSpider' % ''.join(s.capitalize() \
+                for s in module.split('_'))
+        }
+        if self.settings.get('NEWSPIDER_MODULE'):
+            spiders_module = import_module(self.settings['NEWSPIDER_MODULE'])
+            spiders_dir = abspath(dirname(spiders_module.__file__))
+        else:
+            spiders_module = None
+            spiders_dir = '.'
+        spider_file = '%s.py' % join(spiders_dir, module)
+        shutil.copyfile(template_file, spider_file)
+        render_templatefile(spider_file, **tvars)
+        print('Created spider %r using template %r ' % (name, \
+            template_name), end=('' if spiders_module else '\n'))
+        if spiders_module:
+            print('in module:\n  %s.%s' % (spiders_module.__name__, module))
+    
+    # The reST default role (used for this markup: `text`) to use for all
+# documents.
+default_role = 'py:obj'
+    
+    For full examples, see `certbot.plugins`.
+    
     try:
-        with open('foo.txt', 'w'):  # Creating the file
-            pass
-    
-    *TL;DR80
-Provides the ability to restore an object to its previous state.
-'''
-    
-        def update(self, subject):
-        print(u'DecimalViewer: Subject %s has data %d' %
-              (subject.name, subject.data))
+    # compatible for python2
+    from urllib2 import urlopen
+    from urllib2 import HTTPError
+    from urllib2 import URLError
+except ImportError:
+    # compatible for python3
+    from urllib.request import urlopen
+    from urllib.error import HTTPError
+    from urllib.error import URLError
