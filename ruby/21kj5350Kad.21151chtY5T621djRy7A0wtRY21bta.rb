@@ -1,49 +1,46 @@
 
         
-        class Reporter
-  class ReporterRevisionUnsetError < RuntimeError
-    def initialize(var_name)
-      super '#{var_name} is unset!'
-    end
+          def include_url?
+    url.present?
   end
     
-      def self.path(name)
-    Formulary.core_path(name)
-  end
+    def usage
+  <<-EOS
+list_running_app_ids [ -t <bundle-id> ]
     
-    # This formula serves as the base class for several very similar
-# formulae for Amazon Web Services related tools.
-class AmazonWebServicesFormula < Formula
-  # Use this method to peform a standard install for Java-based tools,
-  # keeping the .jars out of HOMEBREW_PREFIX/lib
-  def install
-    rm Dir['bin/*.cmd'] # Remove Windows versions
-    libexec.install Dir['*']
-    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
-  end
-  alias_method :standard_install, :install
+      belongs_to :status_message
+  has_many :poll_answers, -> { order 'id ASC' }, dependent: :destroy
+  has_many :poll_participations, dependent: :destroy
+  has_one :author, through: :status_message
     
-    namespace :db do
-  namespace :migrate do
-    desc 'Setup the db or migrate depending on state of db'
-    task setup: :environment do
-      begin
-        if ActiveRecord::Migrator.current_version.zero?
-          Rake::Task['db:migrate'].invoke
-          Rake::Task['db:seed'].invoke
-        end
-      rescue ActiveRecord::NoDatabaseError
-        Rake::Task['db:setup'].invoke
-      else
-        Rake::Task['db:migrate'].invoke
+          respond_with do |format|
+        format.html { redirect_to admin_pods_path }
+        format.json { render json: PodPresenter.new(pod).as_json }
       end
     end
   end
+end
+
     
-      def id
-    object.id.to_s
-  end
+          if @options[:to] == @options[:from] && !@options[:in_place]
+        fmt = @options[:from]
+        raise 'Error: converting from #{fmt} to #{fmt} without --in-place'
+      end
     
-        def recheck
-      pod = Pod.find(params[:pod_id])
-      pod.test_connection!
+          # Returns the time the given Sass file was last modified.
+      #
+      # If the given file has been deleted or the time can't be accessed
+      # for some other reason, this should return nil.
+      #
+      # @param uri [String] The URI of the file to check.
+      #   Comes from a `:filename` option set on an engine returned by this importer.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` currently being checked.
+      # @return [Time, nil]
+      def mtime(uri, options)
+        Sass::Util.abstract(self)
+      end
+    
+            def find_order
+          @order = Spree::Order.find_by!(number: order_id)
+        end
