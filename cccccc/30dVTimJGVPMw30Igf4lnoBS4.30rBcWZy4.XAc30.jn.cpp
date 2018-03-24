@@ -1,122 +1,162 @@
-//////////////////////////////////////////////////////////////////////
+
+        
+        std::string ParsedInternalKey::DebugString() const {
+  char buf[50];
+  snprintf(buf, sizeof(buf), '' @ %llu : %d',
+           (unsigned long long) sequence,
+           int(type));
+  std::string result = ''';
+  result += EscapeString(user_key.ToString());
+  result += buf;
+  return result;
+}
     
-    bool HHVM_FUNCTION(mb_ereg_search_init,
-                   const String& str,
-                   const Variant& opt_pattern,
-                   const Variant& opt_option) {
-  const String pattern = convertArg(opt_pattern);
-  const String option = convertArg(opt_option);
+    // Return the length of the encoding of 'key'.
+inline size_t InternalKeyEncodingLength(const ParsedInternalKey& key) {
+  return key.user_key.size() + 8;
+}
+    
+    // Return the name of the current file.  This file contains the name
+// of the current manifest file.  The result will be prefixed with
+// 'dbname'.
+extern std::string CurrentFileName(const std::string& dbname);
+    
+          case kLogNumber:
+        if (GetVarint64(&input, &log_number_)) {
+          has_log_number_ = true;
+        } else {
+          msg = 'log number';
+        }
+        break;
+    
+    
+    {  edit.SetComparatorName('foo');
+  edit.SetLogNumber(kBig + 100);
+  edit.SetNextFile(kBig + 200);
+  edit.SetLastSequence(kBig + 1000);
+  TestEncodeDecode(edit);
+}
+    
+      ASSERT_TRUE(! Overlaps('a', 'b'));
+  ASSERT_TRUE(! Overlaps('z1', 'z2'));
+  ASSERT_TRUE(Overlaps('a', 'p'));
+  ASSERT_TRUE(Overlaps('a', 'q'));
+  ASSERT_TRUE(Overlaps('a', 'z'));
+  ASSERT_TRUE(Overlaps('p', 'p1'));
+  ASSERT_TRUE(Overlaps('p', 'q'));
+  ASSERT_TRUE(Overlaps('p', 'z'));
+  ASSERT_TRUE(Overlaps('p1', 'p2'));
+  ASSERT_TRUE(Overlaps('p1', 'z'));
+  ASSERT_TRUE(Overlaps('q', 'q'));
+  ASSERT_TRUE(Overlaps('q', 'q1'));
+    
+      // Return true iff the length of the referenced data is zero
+  bool empty() const { return size_ == 0; }
+    
+    // redirect the nath functions.
+bool CheckNAN(double v) {
+  return ISNAN(v);
+}
+double LogGamma(double v) {
+  return lgammafn(v);
+}
+    
+    #include <dmlc/logging.h>
+#include <sstream>
+#include './base.h'
+    
+     protected:
+  virtual char GetChar(void) {
+    return fin.get();
+  }
+  /*! \brief to be implemented by child, check if end of stream */
+  virtual bool IsEnd(void) {
+    return fin.eof();
+  }
+    
+      void Write(const SparsePage& page, dmlc::Stream* fo) override {
+    CHECK(page.offset.size() != 0 && page.offset[0] == 0);
+    CHECK_EQ(page.offset.back(), page.data.size());
+    fo->Write(page.offset);
+    if (page.data.size() != 0) {
+      fo->Write(dmlc::BeginPtr(page.data), page.data.size() * sizeof(SparseBatch::Entry));
     }
+  }
     
-    
-    {  Vunit&                    m_unit;
-  const Scale&              m_scale;
-  const jit::vector<Vlabel> m_blocks;
-  jit::vector<Cluster>      m_clusters;
-  jit::vector<Vlabel>       m_blockCluster; // maps block to current cluster
-  jit::vector<Vlabel>       m_clusterOrder; // final sorted list of cluster ids
-};
-    
-    /*
- * Vlabel wraps a block number.
- */
-DECLARE_VNUM(Vlabel, true, 'B');
-    
-    inline void initNuma() {}
-inline constexpr int next_numa_node(std::atomic_int& curr_node) { return 0; }
-inline constexpr int num_numa_nodes() { return 1; }
-inline void numa_interleave(void* start, size_t size) {}
-inline void numa_bind_to(void* start, size_t size, int node) {}
-inline constexpr bool numa_node_allowed(int node) { return true; }
-    
-    void ThriftBuffer::write(const std::vector<std::string> &data) {
-  int32_t size = data.size();
-  write(size);
-  for (int i = 0; i < size; i++) {
-    write(data[i]);
+    SparsePage::Writer::~Writer() {
+  for (auto& queue : qworkers_) {
+    // use nullptr to signal termination.
+    std::shared_ptr<SparsePage> sig(nullptr);
+    queue.Push(std::move(sig));
+  }
+  for (auto& thread : workers_) {
+    thread->join();
   }
 }
     
-                Equations:
-              - Ht = Activation(Wi*Xt + Ri*Ht-1 + Wbi + Rbi)
-            )DOC')
-        .FillUsing(RNNDocGeneratorInputX())
-        .Input('W',
-            'The weight tensor for input gate. Concatenation of `Wi` and `WBi` '
-            '(if bidirectional). The tensor has shape '
-            '`[num_directions, hidden_size, input_size]`.', 'T')
-        .Input('R',
-            'The recurrence weight tensor. Concatenation of `Ri` and `RBi` '
-            '(if bidirectional). The tensor has shape '
-            '`[num_directions, hidden_size, hidden_size]`.', 'T')
-        .Input('B',
-            'The bias tensor for input gate. Concatenation of `[Wbi, Rbi]` '
-            'and `[WBbi, RBbi]` (if bidirectional). The tensor has shape '
-            '`[num_directions, 2*hidden_size]`, Optional: If not specified - assumed '
-            'to be 0.', 'T',
-            true)
-        .FillUsing(RNNDocGeneratorInputSeqLen())
-        .FillUsing(RNNDocGeneratorInputInitialH())
-        .Attr('activations', 'One (or two if bidirectional) activation function for '
-            'input gate. It must be one of tanh and ReLU. Default `tanh`.',
-            AttrType::AttributeProto_AttributeType_STRINGS)
-        .FillUsing(RNNDocGeneratorActivationArgs())
-        .FillUsing(RNNDocGeneratorAttrOutput());
+    std::string TextMakeRule(const Parser &parser, const std::string &path,
+                         const std::string &file_name) {
+  if (!parser.builder_.GetSize() || !parser.root_struct_def_) return '';
+  std::string filebase =
+      flatbuffers::StripPath(flatbuffers::StripExtension(file_name));
+  std::string make_rule = TextFileName(path, filebase) + ': ' + file_name;
+  auto included_files =
+      parser.GetIncludedFilesRecursive(parser.root_struct_def_->file);
+  for (auto it = included_files.begin(); it != included_files.end(); ++it) {
+    make_rule += ' ' + *it;
+  }
+  return make_rule;
+}
     
-        // Returns all frames of a given utterance.
-    msra::dbn::matrixstripe GetUtteranceFrames(size_t index) const
+    
+    {  const Parser &parser_;
+  const std::string &path_;
+  const std::string &file_name_;
+  const std::string qualifying_start_;
+  const std::string qualifying_separator_;
+};
+    
+    // 'smart' pointer for use with resizing vectors: turns a pointer inside
+// a vector into a relative offset, such that it is not affected by resizes.
+template<typename T, typename U> class pointer_inside_vector {
+ public:
+  pointer_inside_vector(T *ptr, std::vector<U> &vec)
+      : offset_(reinterpret_cast<uint8_t *>(ptr) -
+                reinterpret_cast<uint8_t *>(flatbuffers::vector_data(vec))),
+        vec_(vec) {}
+    }
+    
+    // Returns the method name for use with add/put calls.
+static std::string GenMethod(const FieldDef &field) {
+  return IsScalar(field.value.type.base_type)
+             ? MakeCamel(GenTypeBasic(field.value.type))
+             : (IsStruct(field.value.type) ? 'Struct' : 'UOffsetTRelative');
+}
+    
+    struct ScopedDoingMyOwnMemmem {
+  ScopedDoingMyOwnMemmem();
+  ~ScopedDoingMyOwnMemmem();
+};
+    
+    
     {
-        if (!IsInRam())
-        {
-            LogicError('GetUtteranceFrames was called when data have not yet been paged in.');
-        }
-    }
+    {    if (NewSize + 5 >= OldSize)
+      break;
+    OldSize = NewSize;
+  }
+  return Res;
+}
     
-            // Make sure we always have 3 at the end for buffer overrun, i.e. 4 byte alignment
-        // This is required because currently lattices are exposed as an array of floats, because CPUMatrix does not support chars.
-        // TODO: switch to char when possible.
-        vector<char> buffer(sizeInBytes + sizeof(float) - 1);
-        for (int fl = 0; fl < sizeof(float) - 1; fl++)
-        {
-            buffer[sizeInBytes + fl] = 0;
-        }
+    #include 'FuzzerDefs.h'
     
-        // We need to make sure that the compute for the current transfer is finished before we start prefetch.
-    if (m_dataTransferers[currentDataTransferIndex])
-        m_dataTransferers[currentDataTransferIndex]->WaitForSyncPointOnAssignStreamAsync();
+    /* public API - prototypes - TODO: doxygen*/
     
-            // we stripe V
-        // This is to ensure that we only touch a subset of columns of V at once that fit into
-        // the cache. E.g. for a 1024-row V, that would be 195 columns. We then 'stream'
-        // through M, where each row of M is applied to all those columns of V. This way,
-        // both V and M come from the cache except for the first time. Each 'float' of V
-        // is loaded once into cache. Each row of M is loaded into cache once per stripe of V,
-        // in the example every 195 columns.
-        const size_t cacheablerowsV = 512; // at most
-        const size_t cacheablecolsV = 16;  // V.cacheablecols();    // don't get more than this of V per row of M
-        // 512 * 16 -> 32 KB
+    std::string Sha1ToString(const uint8_t Sha1[kSHA1NumBytes]);
     
-      std::vector<std::string> line_exports;
-  unsigned int readonly = 0;
-  int options_index = -1;
-    
-    #pragma once
-    
-    TEST_F(ViewsConfigParserPluginTests, test_update_view) {
-  Config c;
-  std::vector<std::string> old_views_vec;
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  old_views_vec.clear();
-  auto s = c.update(getTestConfigMap('view_test2.conf'));
-  EXPECT_TRUE(s.ok());
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  std::string query;
-  getDatabaseValue(kQueries, 'config_views.kernel_hashes_new', query);
-  EXPECT_EQ(query,
-            'select hash.path as binary, version, hash.sha256 as SHA256, '
-            'hash.sha1 as SHA1, hash.md5 as MD5 from (select path || '
-            ''/Contents/MacOS/' as directory, name, version from '
-            'kernel_extensions) join hash using (directory)');
-    }
+    static std::mutex SignalMutex;
+// Global variables used to keep track of how signal handling should be
+// restored. They should **not** be accessed without holding `SignalMutex`.
+static int ActiveThreadCount = 0;
+static struct sigaction OldSigIntAction;
+static struct sigaction OldSigQuitAction;
+static sigset_t OldBlockedSignalsSet;
