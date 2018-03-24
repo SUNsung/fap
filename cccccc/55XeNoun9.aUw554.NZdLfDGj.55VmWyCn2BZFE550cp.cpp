@@ -1,554 +1,378 @@
 
         
-                    template<typename T>
-            static __device__ __forceinline__ T atomicAdd(T* address, T val)
-            {
-#if defined (__CUDA_ARCH__) && (__CUDA_ARCH__ < 120)
-                T count;
-                unsigned int tag = threadIdx.x << ( (sizeof(unsigned int) << 3) - 5U);
-                do
-                {
-                    count = *address & TAG_MASK;
-                    count = tag | (count + val);
-                    *address = count;
-                } while (*address != count);
+        
+    {
+    {}  // namespace
+}  // namespace tensorflow
+
+    
+    #ifndef TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
+#define TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
+    
+    // A PluginConfig describes the set of plugins to be used by a StreamExecutor
+// instance. Each plugin is defined by an arbitrary identifier, usually best set
+// to the address static member in the implementation (to avoid conflicts).
+//
+// A PluginConfig may be passed to the StreamExecutor constructor - the plugins
+// described therein will be used to provide BLAS, DNN, FFT, and RNG
+// functionality. Platform-appropriate defaults will be used for any un-set
+// libraries. If a platform does not support a specified plugin (ex. cuBLAS on
+// an OpenCL executor), then an error will be logged and no plugin operations
+// will succeed.
+//
+// The StreamExecutor BUILD target does not link ANY plugin libraries - even
+// common host fallbacks! Any plugins must be explicitly linked by dependent
+// targets. See the cuda, opencl and host BUILD files for implemented plugin
+// support (search for 'plugin').
+class PluginConfig {
+ public:
+  // Value specifying the platform's default option for that plugin.
+  static const PluginId kDefault;
     }
     
-            // Core Extension: ARB_imaging
-        CONSTANT_COLOR                   = 0x8001,
-        ONE_MINUS_CONSTANT_COLOR         = 0x8002,
-        CONSTANT_ALPHA                   = 0x8003,
-        ONE_MINUS_CONSTANT_ALPHA         = 0x8004,
-        BLEND_COLOR                      = 0x8005,
-        FUNC_ADD                         = 0x8006,
-        MIN                              = 0x8007,
-        MAX                              = 0x8008,
-        BLEND_EQUATION                   = 0x8009,
-        FUNC_SUBTRACT                    = 0x800A,
-        FUNC_REVERSE_SUBTRACT            = 0x800B,
-        CONVOLUTION_1D                   = 0x8010,
-        CONVOLUTION_2D                   = 0x8011,
-        SEPARABLE_2D                     = 0x8012,
-        CONVOLUTION_BORDER_MODE          = 0x8013,
-        CONVOLUTION_FILTER_SCALE         = 0x8014,
-        CONVOLUTION_FILTER_BIAS          = 0x8015,
-        REDUCE                           = 0x8016,
-        CONVOLUTION_FORMAT               = 0x8017,
-        CONVOLUTION_WIDTH                = 0x8018,
-        CONVOLUTION_HEIGHT               = 0x8019,
-        MAX_CONVOLUTION_WIDTH            = 0x801A,
-        MAX_CONVOLUTION_HEIGHT           = 0x801B,
-        POST_CONVOLUTION_RED_SCALE       = 0x801C,
-        POST_CONVOLUTION_GREEN_SCALE     = 0x801D,
-        POST_CONVOLUTION_BLUE_SCALE      = 0x801E,
-        POST_CONVOLUTION_ALPHA_SCALE     = 0x801F,
-        POST_CONVOLUTION_RED_BIAS        = 0x8020,
-        POST_CONVOLUTION_GREEN_BIAS      = 0x8021,
-        POST_CONVOLUTION_BLUE_BIAS       = 0x8022,
-        POST_CONVOLUTION_ALPHA_BIAS      = 0x8023,
-        HISTOGRAM                        = 0x8024,
-        PROXY_HISTOGRAM                  = 0x8025,
-        HISTOGRAM_WIDTH                  = 0x8026,
-        HISTOGRAM_FORMAT                 = 0x8027,
-        HISTOGRAM_RED_SIZE               = 0x8028,
-        HISTOGRAM_GREEN_SIZE             = 0x8029,
-        HISTOGRAM_BLUE_SIZE              = 0x802A,
-        HISTOGRAM_ALPHA_SIZE             = 0x802B,
-        HISTOGRAM_LUMINANCE_SIZE         = 0x802C,
-        HISTOGRAM_SINK                   = 0x802D,
-        MINMAX                           = 0x802E,
-        MINMAX_FORMAT                    = 0x802F,
-        MINMAX_SINK                      = 0x8030,
-        TABLE_TOO_LARGE                  = 0x8031,
-        COLOR_MATRIX                     = 0x80B1,
-        COLOR_MATRIX_STACK_DEPTH         = 0x80B2,
-        MAX_COLOR_MATRIX_STACK_DEPTH     = 0x80B3,
-        POST_COLOR_MATRIX_RED_SCALE      = 0x80B4,
-        POST_COLOR_MATRIX_GREEN_SCALE    = 0x80B5,
-        POST_COLOR_MATRIX_BLUE_SCALE     = 0x80B6,
-        POST_COLOR_MATRIX_ALPHA_SCALE    = 0x80B7,
-        POST_COLOR_MATRIX_RED_BIAS       = 0x80B8,
-        POST_COLOR_MATRIX_GREEN_BIAS     = 0x80B9,
-        POST_COLOR_MATRIX_BLUE_BIAS      = 0x80BA,
-        POST_COLOR_MATRIX_ALPHA_BIAS     = 0x80BB,
-        COLOR_TABLE                      = 0x80D0,
-        POST_CONVOLUTION_COLOR_TABLE     = 0x80D1,
-        POST_COLOR_MATRIX_COLOR_TABLE    = 0x80D2,
-        PROXY_COLOR_TABLE                = 0x80D3,
-        PROXY_POST_CONVOLUTION_COLOR_TABLE = 0x80D4,
-        PROXY_POST_COLOR_MATRIX_COLOR_TABLE = 0x80D5,
-        COLOR_TABLE_SCALE                = 0x80D6,
-        COLOR_TABLE_BIAS                 = 0x80D7,
-        COLOR_TABLE_FORMAT               = 0x80D8,
-        COLOR_TABLE_WIDTH                = 0x80D9,
-        COLOR_TABLE_RED_SIZE             = 0x80DA,
-        COLOR_TABLE_GREEN_SIZE           = 0x80DB,
-        COLOR_TABLE_BLUE_SIZE            = 0x80DC,
-        COLOR_TABLE_ALPHA_SIZE           = 0x80DD,
-        COLOR_TABLE_LUMINANCE_SIZE       = 0x80DE,
-        COLOR_TABLE_INTENSITY_SIZE       = 0x80DF,
-        CONSTANT_BORDER                  = 0x8151,
-        REPLICATE_BORDER                 = 0x8153,
-        CONVOLUTION_BORDER_COLOR         = 0x8154,
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    #undef cv_hal_Cholesky32f
-#define cv_hal_Cholesky32f lapack_Cholesky32f
-#undef cv_hal_Cholesky64f
-#define cv_hal_Cholesky64f lapack_Cholesky64f
-    
-    ScrollView* bln_word_window_handle();  //return handle
-void build_image_window(int width, int height);
-void display_bln_lines(ScrollView window,
-                       ScrollView::Color colour,
-                       float scale_factor,
-                       float y_offset,
-                       float minx,
-                       float maxx);
-                                 //function to call
-void pgeditor_msg(  //message display
-                  const char *msg);
-void pgeditor_show_point(  //display coords
-                         SVEvent *event);
-                                 //put bln word in       box
-void show_point(PAGE_RES* page_res, float x, float y);
-    
-      if (num_chopped_trailing > 0) {
-    int split_pt = num_chopped - num_chopped_trailing - num_chopped_leading;
-    split_word(core, split_pt, &suffix, &bb1);
-  }
-    
-      // Return whether a given text line could be a first paragraph line according
-  // to this paragraph model.
-  bool ValidBodyLine(int lmargin, int lindent, int rindent, int rmargin) const;
-    
-    
-    {}  // namespace tesseract.
-    
-    // Compute the distance between the given feature vector and the last
-// Set feature vector.
-double IntFeatureDist::DebugFeatureDistance(
-    const GenericVector<int>& features) const {
-  int num_test_features = features.size();
-  double denominator = total_feature_weight_ + num_test_features;
-  double misses = denominator;
-  for (int i = 0; i < num_test_features; ++i) {
-    int index = features[i];
-    double weight = 1.0;
-    INT_FEATURE_STRUCT f = feature_map_->InverseMapFeature(features[i]);
-    tprintf('Testing feature weight %g:', weight);
-    f.print();
-    if (features_[index]) {
-      // A perfect match.
-      misses -= 2.0 * weight;
-      tprintf('Perfect hit\n');
-    } else if (features_delta_one_[index]) {
-      misses -= 1.5 * weight;
-      tprintf('-1 hit\n');
-    } else if (features_delta_two_[index]) {
-      // A near miss.
-      misses -= 1.0 * weight;
-      tprintf('-2 hit\n');
-    } else {
-      tprintf('Total miss\n');
+    void SYCLDeviceContext::CopyCPUTensorToDevice(const Tensor *cpu_tensor,
+                                              Device *device,
+                                              Tensor *device_tensor,
+                                              StatusCallback done) const {
+  const int64 total_bytes = cpu_tensor->TotalBytes();
+  if (total_bytes > 0) {
+    const void *src_ptr = DMAHelper::base(cpu_tensor);
+    void *dst_ptr = DMAHelper::base(device_tensor);
+    switch (cpu_tensor->dtype()) {
+      case DT_FLOAT:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<float *>(dst_ptr), static_cast<const float *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_DOUBLE:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<double *>(dst_ptr),
+            static_cast<const double *>(src_ptr), total_bytes);
+        break;
+      case DT_INT32:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<int32 *>(dst_ptr), static_cast<const int32 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_INT64:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<int64 *>(dst_ptr), static_cast<const int64 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_HALF:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<Eigen::half *>(dst_ptr),
+            static_cast<const Eigen::half *>(src_ptr), total_bytes);
+        break;
+      case DT_COMPLEX64:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<std::complex<float> *>(dst_ptr),
+            static_cast<const std::complex<float> *>(src_ptr), total_bytes);
+        break;
+      case DT_COMPLEX128:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<std::complex<double> *>(dst_ptr),
+            static_cast<const std::complex<double> *>(src_ptr), total_bytes);
+        break;
+      case DT_INT8:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<int8 *>(dst_ptr), static_cast<const int8 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_INT16:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<int16 *>(dst_ptr), static_cast<const int16 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_UINT8:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<uint8 *>(dst_ptr), static_cast<const uint8 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_UINT16:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<uint16 *>(dst_ptr),
+            static_cast<const uint16 *>(src_ptr), total_bytes);
+        break;
+      case DT_BOOL:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<bool *>(dst_ptr), static_cast<const bool *>(src_ptr),
+            total_bytes);
+        break;
+      default:
+        assert(false && 'unsupported type');
     }
   }
-  tprintf('Features present:');
-  for (int i = 0; i < size_; ++i) {
-    if (features_[i]) {
-      INT_FEATURE_STRUCT f = feature_map_->InverseMapFeature(i);
-      f.print();
-    }
-  }
-  tprintf('\nMinus one features:');
-  for (int i = 0; i < size_; ++i) {
-    if (features_delta_one_[i]) {
-      INT_FEATURE_STRUCT f = feature_map_->InverseMapFeature(i);
-      f.print();
-    }
-  }
-  tprintf('\nMinus two features:');
-  for (int i = 0; i < size_; ++i) {
-    if (features_delta_two_[i]) {
-      INT_FEATURE_STRUCT f = feature_map_->InverseMapFeature(i);
-      f.print();
-    }
-  }
-  tprintf('\n');
-  return misses / denominator;
+  device->eigen_sycl_device()->synchronize();
+  done(Status::OK());
 }
     
-    // Feature distance calculator designed to provide a fast distance calculation
-// based on set difference between a given feature set and many other feature
-// sets in turn.
-// Representation of a feature set as an array of bools that are sparsely
-// true, and companion arrays that allow fast feature set distance
-// calculations with allowance of offsets in position.
-// Init is expensive, so for greatest efficiency, to re-initialize for a new
-// feature set, use Set(..., false) on the SAME feature set as was used to
-// setup with Set(..., true), to return to its initialized state before
-// reuse with Set(..., true) on a new feature set.
-class IntFeatureDist {
+      Status ReadLocked(string* key, string* value, bool* produced,
+                    bool* at_end) override {
+    Status status = input_buffer_->ReadLine(value);
+    ++line_number_;
+    if (status.ok()) {
+      *key = strings::StrCat(current_work(), ':', line_number_);
+      *produced = true;
+      return status;
+    }
+    if (errors::IsOutOfRange(status)) {  // End of file, advance to the next.
+      *at_end = true;
+      return Status::OK();
+    } else {  // Some other reading error
+      return status;
+    }
+  }
+    
+    void HloReachabilityMap::SetReachable(const HloInstruction* a,
+                                      const HloInstruction* b) {
+  GetBitVector(b).Set(GetIndex(a));
+}
+    
+        const string file_format =
+        str_util::Lowercase(file_format_tensor.scalar<string>()());
+    const int32 samples_per_second =
+        samples_per_second_tensor.scalar<int32>()();
+    const int32 bits_per_second = bits_per_second_tensor.scalar<int32>()();
+    
+    
+    {}  // end namespace
+    
+    
+    {}  // namespace atom
+    
+    namespace api {
+    }
+    
+    // Handles the HTTP basic auth, must be created on IO thread.
+class LoginHandler : public content::ResourceDispatcherHostLoginDelegate {
  public:
-  IntFeatureDist();
-  ~IntFeatureDist();
+  LoginHandler(net::AuthChallengeInfo* auth_info, net::URLRequest* request);
     }
     
-    #include 'indexmapbidi.h'
-#include 'shapetable.h'
-#include 'trainingsample.h'
-#include 'trainingsampleset.h'
+    #endif  // ATOM_BROWSER_NET_ASAR_ASAR_PROTOCOL_HANDLER_H_
+
     
-    template<typename T>
-inline void
-emitTLSLoad(Vout& v, TLSDatum<ThreadLocalNoCheck<T>> datum, Vreg d) {
-  // We don't know for sure what's live.
-  PhysRegSaver(v, abi().gpUnreserved - abi().calleeSaved);
+    
+    {}  // namespace atom
+    
+    
+    {}  // namespace atom
+    
+    MenuModelAdapter::MenuModelAdapter(AtomMenuModel* menu_model)
+  : views::MenuModelAdapter(menu_model),
+    menu_model_(menu_model) {
+}
+    
+    gfx::Size NativeFrameView::GetMaximumSize() const {
+  return window_->GetMaximumSize();
+}
+    
+    
+    { protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
+   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
+   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
+   *      the computed outputs @f$
+   *       y_n = \arg\max\limits_i x_{ni}
+   *      @f$ (for @f$ K = 1 @f$).
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  /// @brief Not implemented (non-differentiable function)
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
+    NOT_IMPLEMENTED;
+  }
+  bool out_max_val_;
+  size_t top_k_;
+  bool has_axis_;
+  int axis_;
+};
+    
+    #include <vector>
+    
+    
+    {
+}  // namespace caffe
+    
+      // Sets *pos to the next stream position where parsing should continue.
+  // Returns false if the stream ended too early.
+  bool FinishStream(size_t* pos) {
+    // Give back some bytes that we did not use.
+    int unused_bytes_left = bits_left_ >> 3;
+    while (unused_bytes_left-- > 0) {
+      --pos_;
+      // If we give back a 0 byte, we need to check if it was a 0xff/0x00 escape
+      // sequence, and if yes, we need to give back one more byte.
+      if (pos_ < next_marker_pos_ &&
+          data_[pos_] == 0 && data_[pos_ - 1] == 0xff) {
+        --pos_;
+      }
+    }
+    if (pos_ > next_marker_pos_) {
+      // Data ran out before the scan was complete.
+      fprintf(stderr, 'Unexpected end of scan.\n');
+      return false;
+    }
+    *pos = pos_;
+    return true;
+  }
+    
+    static const int kCrToGreenTable[256] = {
+  5990656,  5943854,  5897052,  5850250,  5803448,  5756646,  5709844,  5663042,
+  5616240,  5569438,  5522636,  5475834,  5429032,  5382230,  5335428,  5288626,
+  5241824,  5195022,  5148220,  5101418,  5054616,  5007814,  4961012,  4914210,
+  4867408,  4820606,  4773804,  4727002,  4680200,  4633398,  4586596,  4539794,
+  4492992,  4446190,  4399388,  4352586,  4305784,  4258982,  4212180,  4165378,
+  4118576,  4071774,  4024972,  3978170,  3931368,  3884566,  3837764,  3790962,
+  3744160,  3697358,  3650556,  3603754,  3556952,  3510150,  3463348,  3416546,
+  3369744,  3322942,  3276140,  3229338,  3182536,  3135734,  3088932,  3042130,
+  2995328,  2948526,  2901724,  2854922,  2808120,  2761318,  2714516,  2667714,
+  2620912,  2574110,  2527308,  2480506,  2433704,  2386902,  2340100,  2293298,
+  2246496,  2199694,  2152892,  2106090,  2059288,  2012486,  1965684,  1918882,
+  1872080,  1825278,  1778476,  1731674,  1684872,  1638070,  1591268,  1544466,
+  1497664,  1450862,  1404060,  1357258,  1310456,  1263654,  1216852,  1170050,
+  1123248,  1076446,  1029644,   982842,   936040,   889238,   842436,   795634,
+   748832,   702030,   655228,   608426,   561624,   514822,   468020,   421218,
+   374416,   327614,   280812,   234010,   187208,   140406,    93604,    46802,
+        0,   -46802,   -93604,  -140406,  -187208,  -234010,  -280812,  -327614,
+  -374416,  -421218,  -468020,  -514822,  -561624,  -608426,  -655228,  -702030,
+  -748832,  -795634,  -842436,  -889238,  -936040,  -982842, -1029644, -1076446,
+ -1123248, -1170050, -1216852, -1263654, -1310456, -1357258, -1404060, -1450862,
+ -1497664, -1544466, -1591268, -1638070, -1684872, -1731674, -1778476, -1825278,
+ -1872080, -1918882, -1965684, -2012486, -2059288, -2106090, -2152892, -2199694,
+ -2246496, -2293298, -2340100, -2386902, -2433704, -2480506, -2527308, -2574110,
+ -2620912, -2667714, -2714516, -2761318, -2808120, -2854922, -2901724, -2948526,
+ -2995328, -3042130, -3088932, -3135734, -3182536, -3229338, -3276140, -3322942,
+ -3369744, -3416546, -3463348, -3510150, -3556952, -3603754, -3650556, -3697358,
+ -3744160, -3790962, -3837764, -3884566, -3931368, -3978170, -4024972, -4071774,
+ -4118576, -4165378, -4212180, -4258982, -4305784, -4352586, -4399388, -4446190,
+ -4492992, -4539794, -4586596, -4633398, -4680200, -4727002, -4773804, -4820606,
+ -4867408, -4914210, -4961012, -5007814, -5054616, -5101418, -5148220, -5195022,
+ -5241824, -5288626, -5335428, -5382230, -5429032, -5475834, -5522636, -5569438,
+ -5616240, -5663042, -5709844, -5756646, -5803448, -5850250, -5897052, -5943854,
+};
+    
+    namespace {
     }
     
-      if (encoding.empty()) {
-    string.no_encoding = MBSTRG(current_internal_encoding)->no_encoding;
-  } else {
-    string.no_encoding = mbfl_name2no_encoding(encoding.data());
-    if (string.no_encoding == mbfl_no_encoding_invalid) {
-      raise_warning('Unknown encoding \'%s\'', encoding.data());
+    #ifndef GUETZLI_DCT_DOUBLE_H_
+#define GUETZLI_DCT_DOUBLE_H_
+    
+    // A node of a Huffman tree.
+struct HuffmanTree {
+  HuffmanTree() {}
+  HuffmanTree(uint32_t count, int16_t left, int16_t right)
+      : total_count_(count),
+        index_left_(left),
+        index_right_or_value_(right) {
+  }
+  uint32_t total_count_;
+  int16_t index_left_;
+  int16_t index_right_or_value_;
+};
+    
+    // Decodes the parsed jpeg coefficients into an RGB image.
+// There can be only either 1 or 3 image components, in either case, an RGB
+// output image will be generated.
+// Only YUV420 and YUV444 sampling factors are supported.
+// Vector will be empty if a decoding error occurred.
+std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
+    
+    #endif
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    
+    {  private:
+    TServicesMap m_services;
+    TServicesMap m_publicservices;
+    std::vector<ServiceBase*> m_releasevec;
+};
+    
+    ScopeJEnv::ScopeJEnv(JavaVM* jvm, jint _capacity)
+    : vm_(jvm), env_(NULL), we_attach_(false), status_(0) {
+    ASSERT(jvm);
+    do {
+        env_ = (JNIEnv*)pthread_getspecific(g_env_key);
+        
+        if (NULL != env_) {
+            break;
+        }
+        
+        status_ = vm_->GetEnv((void**) &env_, JNI_VERSION_1_6);
+    }
+    }
+    
+        method(getComputedLeft);
+    method(getComputedRight);
+    
+    #include 'CoreClasses.h'
+#include 'References-forward.h'
+    
+      /**
+   * If pred == true, calls setReadCheckSocket(socket). Otherwise, calls
+   * disableReadCheckSocket().
+   */
+  void setReadCheckSocketIf(const std::shared_ptr<SocketCore>& socket,
+                            bool pred);
+  /**
+   * If pred == true, calls setWriteCheckSocket(socket). Otherwise, calls
+   * disableWriteCheckSocket().
+   */
+  void setWriteCheckSocketIf(const std::shared_ptr<SocketCore>& socket,
+                             bool pred);
+    
+    bool AbstractHttpServerResponseCommand::execute()
+{
+  if (e_->getRequestGroupMan()->downloadFinished() || e_->isHaltRequested()) {
+    return true;
+  }
+  try {
+    ssize_t len = httpServer_->sendResponse();
+    if (len > 0) {
+      timeoutTimer_ = global::wallclock();
+    }
+  }
+  catch (RecoverableException& e) {
+    A2_LOG_INFO_EX(fmt('CUID#%' PRId64
+                       ' - Error occurred while transmitting response body.',
+                       getCuid()),
+                   e);
+    return true;
+  }
+  if (httpServer_->sendBufferIsEmpty()) {
+    A2_LOG_INFO(fmt('CUID#%' PRId64 ' - HttpServer: all response transmitted.',
+                    getCuid()));
+    afterSend(httpServer_, e_);
+    return true;
+  }
+  else {
+    if (timeoutTimer_.difference(global::wallclock()) >= 30_s) {
+      A2_LOG_INFO(fmt('CUID#%' PRId64
+                      ' - HttpServer: Timeout while trasmitting response.',
+                      getCuid()));
+      return true;
+    }
+    else {
+      updateReadWriteCheck();
+      e_->addCommand(std::unique_ptr<Command>(this));
       return false;
     }
   }
-    
-    /*
- * Like getUsageInfo(), but formatted as a pleasant string.
- */
-std::string getTCSpace();
-    
-    
-    {
-    {
-    { private:
-  std::ifstream fi;
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_CONFIG_H_
-
-    
-      fs = dmlc::Stream::Create(tmp_file.c_str(), 'r');
-  xgboost::MetaInfo inforead;
-  inforead.LoadBinary(fs);
-  EXPECT_EQ(inforead.labels, info.labels);
-  EXPECT_EQ(inforead.num_col, info.num_col);
-  EXPECT_EQ(inforead.num_row, info.num_row);
-    
-      bool Read(SparsePage* page,
-            dmlc::SeekStream* fi,
-            const std::vector<bst_uint>& sorted_index_set) override {
-    if (!fi->Read(&disk_offset_)) return false;
-    // setup the offset
-    page->offset.clear();
-    page->offset.push_back(0);
-    for (size_t i = 0; i < sorted_index_set.size(); ++i) {
-      bst_uint fid = sorted_index_set[i];
-      CHECK_LT(fid + 1, disk_offset_.size());
-      size_t size = disk_offset_[fid + 1] - disk_offset_[fid];
-      page->offset.push_back(page->offset.back() + size);
-    }
-    page->data.resize(page->offset.back());
-    // read in the data
-    size_t begin = fi->Tell();
-    size_t curr_offset = 0;
-    for (size_t i = 0; i < sorted_index_set.size();) {
-      bst_uint fid = sorted_index_set[i];
-      if (disk_offset_[fid] != curr_offset) {
-        CHECK_GT(disk_offset_[fid], curr_offset);
-        fi->Seek(begin + disk_offset_[fid] * sizeof(SparseBatch::Entry));
-        curr_offset = disk_offset_[fid];
-      }
-      size_t j, size_to_read = 0;
-      for (j = i; j < sorted_index_set.size(); ++j) {
-        if (disk_offset_[sorted_index_set[j]] == disk_offset_[fid] + size_to_read) {
-          size_to_read += page->offset[j + 1] - page->offset[j];
-        } else {
-          break;
-        }
-      }
-    }
-    }
-    
-            ImGui::Checkbox('Demo Window', &hud->show_demo_window);      // Edit bools storing our windows open/close state
-        ImGui::Checkbox('Another Window', &hud->show_another_window);
-    
-            static float f = 0.0f;
-        ImGui::Text('Hello, world!');
-        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
-        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
-        ImGui::ShowDemoWindow(NULL);
-    
-    // Handler for Win32 messages, update mouse/keyboard data.
-// You may or not need this for your implementation, but it can serve as reference for handling inputs.
-// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
-/*
-IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-*/
-
-    
-    //---- Define attributes of all API symbols declarations, e.g. for DLL under Windows.
-//#define IMGUI_API __declspec( dllexport )
-//#define IMGUI_API __declspec( dllimport )
-    
-            // 1. Show a simple window.
-        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    }
-    
-    
-    {    return true;
 }
     
-        for (int i = 0; i < num_greetings; i++) {
-      auto msg_offset = mb_.CreateString('Many hellos, ' + name);
-      auto hello_offset = CreateHelloReply(mb_, msg_offset);
-      mb_.Finish(hello_offset);
-      writer->Write(mb_.ReleaseMessage<HelloReply>());
-    }
+    #include 'Command.h'
     
-    
-    
-    class MonsterStorage final {
- public:
-  static constexpr char const* service_full_name() {
-    return 'MyGame.Example.MonsterStorage';
-  }
-  class StubInterface {
-   public:
-    virtual ~StubInterface() {}
-    virtual ::grpc::Status Store(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, flatbuffers::grpc::Message<Stat>* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>> AsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>>(AsyncStoreRaw(context, request, cq));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>> PrepareAsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>>(PrepareAsyncStoreRaw(context, request, cq));
-    }
-    std::unique_ptr< ::grpc::ClientReaderInterface< flatbuffers::grpc::Message<Monster>>> Retrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) {
-      return std::unique_ptr< ::grpc::ClientReaderInterface< flatbuffers::grpc::Message<Monster>>>(RetrieveRaw(context, request));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>> AsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) {
-      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>>(AsyncRetrieveRaw(context, request, cq, tag));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>> PrepareAsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>>(PrepareAsyncRetrieveRaw(context, request, cq));
-    }
-  private:
-    virtual ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>* AsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< flatbuffers::grpc::Message<Stat>>* PrepareAsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientReaderInterface< flatbuffers::grpc::Message<Monster>>* RetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) = 0;
-    virtual ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>* AsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
-    virtual ::grpc::ClientAsyncReaderInterface< flatbuffers::grpc::Message<Monster>>* PrepareAsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) = 0;
-  };
-  class Stub final : public StubInterface {
-   public:
-    Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel);
-    ::grpc::Status Store(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, flatbuffers::grpc::Message<Stat>* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>> AsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>>(AsyncStoreRaw(context, request, cq));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>> PrepareAsyncStore(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>>(PrepareAsyncStoreRaw(context, request, cq));
-    }
-    std::unique_ptr< ::grpc::ClientReader< flatbuffers::grpc::Message<Monster>>> Retrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) {
-      return std::unique_ptr< ::grpc::ClientReader< flatbuffers::grpc::Message<Monster>>>(RetrieveRaw(context, request));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>> AsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) {
-      return std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>>(AsyncRetrieveRaw(context, request, cq, tag));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>> PrepareAsyncRetrieve(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>>(PrepareAsyncRetrieveRaw(context, request, cq));
-    }
-  
-   private:
-    std::shared_ptr< ::grpc::ChannelInterface> channel_;
-    ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>* AsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>* PrepareAsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientReader< flatbuffers::grpc::Message<Monster>>* RetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request) override;
-    ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>* AsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) override;
-    ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>* PrepareAsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq) override;
-    const ::grpc::internal::RpcMethod rpcmethod_Store_;
-    const ::grpc::internal::RpcMethod rpcmethod_Retrieve_;
-  };
-  static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
-  
-  class Service : public ::grpc::Service {
-   public:
-    Service();
-    virtual ~Service();
-    virtual ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response);
-    virtual ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer);
-  };
-  template <class BaseClass>
-  class WithAsyncMethod_Store : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
-   public:
-    WithAsyncMethod_Store() {
-      ::grpc::Service::MarkMethodAsync(0);
-    }
-    ~WithAsyncMethod_Store() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) final override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
-    }
-    void RequestStore(::grpc::ServerContext* context, flatbuffers::grpc::Message<Monster>* request, ::grpc::ServerAsyncResponseWriter< flatbuffers::grpc::Message<Stat>>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
-    }
-  };
-  template <class BaseClass>
-  class WithAsyncMethod_Retrieve : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
-   public:
-    WithAsyncMethod_Retrieve() {
-      ::grpc::Service::MarkMethodAsync(1);
-    }
-    ~WithAsyncMethod_Retrieve() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer) final override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
-    }
-    void RequestRetrieve(::grpc::ServerContext* context, flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerAsyncWriter< flatbuffers::grpc::Message<Monster>>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncServerStreaming(1, context, request, writer, new_call_cq, notification_cq, tag);
-    }
-  };
-  typedef   WithAsyncMethod_Store<  WithAsyncMethod_Retrieve<  Service   >   >   AsyncService;
-  template <class BaseClass>
-  class WithGenericMethod_Store : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
-   public:
-    WithGenericMethod_Store() {
-      ::grpc::Service::MarkMethodGeneric(0);
-    }
-    ~WithGenericMethod_Store() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) final override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
-    }
-  };
-  template <class BaseClass>
-  class WithGenericMethod_Retrieve : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
-   public:
-    WithGenericMethod_Retrieve() {
-      ::grpc::Service::MarkMethodGeneric(1);
-    }
-    ~WithGenericMethod_Retrieve() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer) final override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
-    }
-  };
-  template <class BaseClass>
-  class WithStreamedUnaryMethod_Store : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
-   public:
-    WithStreamedUnaryMethod_Store() {
-      ::grpc::Service::MarkMethodStreamed(0,
-        new ::grpc::internal::StreamedUnaryHandler< flatbuffers::grpc::Message<Monster>, flatbuffers::grpc::Message<Stat>>(std::bind(&WithStreamedUnaryMethod_Store<BaseClass>::StreamedStore, this, std::placeholders::_1, std::placeholders::_2)));
-    }
-    ~WithStreamedUnaryMethod_Store() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable regular version of this method
-    ::grpc::Status Store(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Monster>* request, flatbuffers::grpc::Message<Stat>* response) final override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
-    }
-    // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedStore(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< flatbuffers::grpc::Message<Monster>,flatbuffers::grpc::Message<Stat>>* server_unary_streamer) = 0;
-  };
-  typedef   WithStreamedUnaryMethod_Store<  Service   >   StreamedUnaryService;
-  template <class BaseClass>
-  class WithSplitStreamingMethod_Retrieve : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
-   public:
-    WithSplitStreamingMethod_Retrieve() {
-      ::grpc::Service::MarkMethodStreamed(1,
-        new ::grpc::internal::SplitServerStreamingHandler< flatbuffers::grpc::Message<Stat>, flatbuffers::grpc::Message<Monster>>(std::bind(&WithSplitStreamingMethod_Retrieve<BaseClass>::StreamedRetrieve, this, std::placeholders::_1, std::placeholders::_2)));
-    }
-    ~WithSplitStreamingMethod_Retrieve() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable regular version of this method
-    ::grpc::Status Retrieve(::grpc::ServerContext* context, const flatbuffers::grpc::Message<Stat>* request, ::grpc::ServerWriter< flatbuffers::grpc::Message<Monster>>* writer) final override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, '');
-    }
-    // replace default version of method with split streamed
-    virtual ::grpc::Status StreamedRetrieve(::grpc::ServerContext* context, ::grpc::ServerSplitStreamer< flatbuffers::grpc::Message<Stat>,flatbuffers::grpc::Message<Monster>>* server_split_streamer) = 0;
-  };
-  typedef   WithSplitStreamingMethod_Retrieve<  Service   >   SplitStreamedService;
-  typedef   WithStreamedUnaryMethod_Store<  WithSplitStreamingMethod_Retrieve<  Service   >   >   StreamedService;
-};
-    
-    // Abort the program after logging the mesage if the given condition is not
-// true. Otherwise, do nothing.
-#define GRPC_CODEGEN_CHECK(x)                                            \
-  (x) ? (void)0                                                          \
-      : LogMessageVoidify() & LogHelper(&std::cerr).get_os()             \
-                                  << 'CHECK FAILED: ' << __FILE__ << ':' \
-                                  << __LINE__ << ': '
-    
-    namespace grpc {
-    }
-    
-    // Get any vector element as a string, regardless of what type it is.
-inline std::string GetAnyVectorElemS(const VectorOfAny *vec,
-                                     reflection::BaseType elem_type, size_t i) {
-  return GetAnyValueS(elem_type, vec->Data() + GetTypeSize(elem_type) * i,
-                      nullptr, -1);
-}
-    
-    using namespace MyGame::Sample;
-    
-    #if defined(_MSC_VER)
-#  pragma warning(pop)
-#endif
-
-    
-      void setPieceStorage(PieceStorage* pieceStorage);
-    
-    #include <memory>
-    
-      virtual char getShortName() const CXX11_OVERRIDE { return shortName_; }
-    
-    
-    {} // namespace aria2
-
-    
-    AdaptiveFileAllocationIterator::~AdaptiveFileAllocationIterator() = default;
-    
-    bool AnnounceList::currentTierAcceptsStoppedEvent() const
-{
-  if (currentTrackerInitialized_) {
-    return FindStoppedAllowedTier()(*currentTier_);
-  }
-    }
-    
-    #endif // D_ANON_DISK_WRITER_FACTORY_H
+      void nextEvent();
