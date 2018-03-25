@@ -1,54 +1,86 @@
 
         
-              it 'does not process payload if invalid signature exists' do
-        payload['signature'] = {'type' => 'RsaSignature2017'}
-    
-      def type
-    'Emoji'
-  end
-    
-      describe 'PUT #update' do
-    it 'updates notifications settings' do
-      user.settings['notification_emails'] = user.settings['notification_emails'].merge('follow' => false)
-      user.settings['interactions'] = user.settings['interactions'].merge('must_be_follower' => true)
-    
-      describe 'GET #show' do
-    it 'returns http success' do
-      get :show
-      expect(response).to have_http_status(:success)
+            def initialize
+      @entries = []
+      @index = Set.new
+      @types = Hash.new { |hash, key| hash[key] = Type.new key }
     end
+    
+              # Built-in events
+          if node['id'] == 'Events-catalog'
+            node.next_element.css('li').each do |li|
+              name = '#{li.at_css('b').content.delete(''').strip} event'
+              id = name.parameterize
+              li['id'] = id
+              entries << [name, id, type] unless name == entries.last[0]
+            end
+            next
+          end
+    
+        case params[:range]
+    when 'week'
+      range = 1.week
+      @segment = t('admins.stats.week')
+    when '2weeks'
+      range = 2.weeks
+      @segment = t('admins.stats.2weeks')
+    when 'month'
+      range = 1.month
+      @segment = t('admins.stats.month')
+    else
+      range = 1.day
+      @segment = t('admins.stats.daily')
+    end
+    
+          def handle_start_point_response(endpoint)
+        _status, header, response = endpoint.call(request.env)
+        if response.redirect?
+          redirect_to header['Location']
+        else
+          save_params_and_render_consent_form(endpoint)
+        end
+      end
+    
+    # A logger that delays messages until they're explicitly flushed to an inner
+# logger.
+#
+# This can be installed around the current logger by calling \{#install!}, and
+# the original logger can be replaced by calling \{#uninstall!}. The log
+# messages can be flushed by calling \{#flush}.
+class Sass::Logger::Delayed < Sass::Logger::Base
+  # Installs a new delayed logger as the current Sass logger, wrapping the
+  # original logger.
+  #
+  # This can be undone by calling \{#uninstall!}.
+  #
+  # @return [Sass::Logger::Delayed] The newly-created logger.
+  def self.install!
+    logger = Sass::Logger::Delayed.new(Sass.logger)
+    Sass.logger = logger
+    logger
   end
     
-    lib_path = root.join('lib').to_path
+            attr_writer :log_levels
     
-                when :user
-              # When the last command was a username login
-              # We might keep track on this one in future
-            when :pass
-              # Perfect we get an +OK after a PASS command this means right password given :-)
+        # Returns a representation of the query as an array of strings and
+    # potentially {Sass::Script::Tree::Node}s (if there's interpolation in it).
+    # When the interpolation is resolved and the strings are joined together,
+    # this will be the string representation of this query.
+    #
+    # @return [Array<String, Sass::Script::Tree::Node>]
+    def to_a
+      Sass::Util.intersperse(queries.map {|q| q.to_a}, ', ').flatten
+    end
     
-    require 'openssl'
-require 'rex'
-    
-    fileOutJar 	= clsFile.new_with_sig('Ljava.lang.String;', 'output.jar')
-filesIn		= Array.new
-    
-    class Source < Template
-  attr_accessor :__CAL
-  attr_accessor :__NR_execve
-  attr_accessor :__NR_getpeername
-  attr_accessor :__NR_accept
-  attr_accessor :__NR_listen
-  attr_accessor :__NR_bind
-  attr_accessor :__NR_socket
-  attr_accessor :__NR_connect
-  attr_accessor :__NR_close
-  attr_accessor :__NR_kfcntl
-  attr_accessor :__cal
-  attr_accessor :_cal
-  attr_accessor :cal
-  attr_accessor :ver
-    
-    	def parse
-		parse_file(file)
-	end
+        # Returns an `unquote()` expression that will evaluate to the same value as
+    # this interpolation.
+    #
+    # @return [Sass::Script::Tree::Node]
+    def to_quoted_equivalent
+      Funcall.new(
+        'unquote',
+        [to_string_interpolation(self)],
+        Sass::Util::NormalizedMap.new,
+        nil,
+        nil)
+    end
