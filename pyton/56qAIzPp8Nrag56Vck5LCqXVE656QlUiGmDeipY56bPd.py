@@ -1,31 +1,35 @@
 
         
+                # put all lines in the file into a Python list
+        strings = f.readlines()
         
-def get_line_value(r, n):
-    rls = r.split('\r\n')
-    if len(rls) < n + 1:
-        return None
+        # above line leaves trailing newline characters; strip them out
+        strings = [x.strip(u'\n') for x in strings]
+        
+        # remove empty-lines and comments
+        strings = [x for x in strings if x and not x.startswith(u'#')]
+        
+        # insert empty string since all are being removed
+        strings.insert(0, u'')
     
-        if address_family == socket.AF_INET:
-        if len(packed_ip) != ctypes.sizeof(addr.ipv4_addr):
-            raise socket.error('packed IP wrong length for inet_ntoa')
-        ctypes.memmove(addr.ipv4_addr, packed_ip, 4)
-    elif address_family == socket.AF_INET6:
-        if len(packed_ip) != ctypes.sizeof(addr.ipv6_addr):
-            raise socket.error('packed IP wrong length for inet_ntoa')
-        ctypes.memmove(addr.ipv6_addr, packed_ip, 16)
-    else:
-        raise socket.error('unknown address family')
+        @mock.patch('certbot.notify.smtplib.LMTP')
+    def test_smtp_success(self, mock_lmtp):
+        from certbot.notify import notify
+        lmtp_obj = mock.MagicMock()
+        mock_lmtp.return_value = lmtp_obj
+        self.assertTrue(notify('Goose', 'auntrhody@example.com',
+                               'The old grey goose is dead.'))
+        self.assertEqual(lmtp_obj.connect.call_count, 1)
+        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
     
-    - tree.CommonTreeNodeStream: A basic and most commonly used tree.TreeNodeStream
-  implementation.
-  
     
-    	# The current Token when an error occurred.  Since not all streams
-	# can retrieve the ith Token, we have to track the Token object.
-	# For parsers.  Even when it's a tree parser, token might be set.
-        self.token = None
+@zope.interface.implementer(interfaces.IAuthenticator)
+@zope.interface.provider(interfaces.IPluginFactory)
+class Authenticator(common.Plugin):
+    '''Example Authenticator.'''
     
-        This is an abstract class that must be implemented by a subclass.
-    
-    '''
+        base = 'src/sentry/locale'
+    for locale in os.listdir(base):
+        fn = os.path.join(base, locale, 'LC_MESSAGES', 'django.po')
+        if not os.path.isfile(fn):
+            continue
