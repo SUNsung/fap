@@ -1,250 +1,390 @@
-Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+
+        
+        #include 'atom/browser/net/asar/asar_protocol_handler.h'
     
-    class SmoothHingeLossUpdater : public DualLossUpdater {
- public:
-  // Computes the updated dual variable (corresponding) to a single example. The
-  // updated dual value maximizes the objective function of the dual
-  // optimization problem associated with smooth hinge loss. The computations
-  // are detailed in readme.md.
-  double ComputeUpdatedDual(const int num_partitions, const double label,
-                            const double example_weight,
-                            const double current_dual, const double wx,
-                            const double weighted_example_norm) const final {
-    // Intutitvely there are 3 cases:
-    // a. new optimal value of the dual variable falls within the admissible
-    // range [0, 1]. In this case we set new dual to this value.
-    // b. new optimal value is < 0. Then, because of convexity, the optimal
-    // valid value for new dual = 0
-    // c. new optimal value > 1.0. Then new optimal value should be set to 1.0.
-    const double candidate_optimal_dual =
-        current_dual +
-        (label - wx - gamma * current_dual) /
-            (num_partitions * example_weight * weighted_example_norm + gamma);
-    if (label * candidate_optimal_dual < 0) {
-      return 0.0;
+      // URLRequestSimpleJob:
+  int GetRefCountedData(std::string* mime_type,
+                        std::string* charset,
+                        scoped_refptr<base::RefCountedMemory>* data,
+                        const net::CompletionCallback& callback) const override;
+    
+    #include 'atom/browser/net/js_asker.h'
+#include 'net/url_request/url_request_simple_job.h'
+    
+    namespace atom {
     }
-    if (label * candidate_optimal_dual > 1.0) {
-      return label;
+    
+    #include 'base/callback.h'
+#include 'base/values.h'
+#include 'content/public/browser/notification_observer.h'
+#include 'content/public/browser/notification_registrar.h'
+    
+    // Trigger command from the accelerators table.
+bool TriggerAcceleratorTableCommand(AcceleratorTable* table,
+                                    const ui::Accelerator& accelerator);
+    
+    namespace atom {
     }
-    return candidate_optimal_dual;
+    
+     private:
+  // views::StatusIconLinux::Delegate:
+  void OnClick() override;
+  bool HasClickAction() override;
+    
+      DbusmenuServer* server_;
+    
+    #include 'ui/views/window/native_frame_view.h'
+    
+    
+    {    if (s.ok()) {
+      // Verify that the table is usable
+      Iterator* it = table_cache->NewIterator(ReadOptions(),
+                                              meta->number,
+                                              meta->file_size);
+      s = it->status();
+      delete it;
+    }
   }
-    }
     
+    class DBImpl;
     
-    {  SE_DISALLOW_COPY_AND_ASSIGN(Diagnostician);
-};
-    
-      // Populates the CUDA-platform-specific elements of this object.
-  port::Status Init();
-    
-    
-    {  ExpectSuccess(Builder().Attr('N', 3).Attr('T', DT_INT32), {},
-                {DT_INT32, DT_INT32, DT_INT32}, R'proto(
-      op: 'NPolymorphicOutDefault'
-      attr { key: 'N' value { i: 3 } }
-      attr { key: 'T' value { type: DT_INT32 } } )proto');
+    void InternalKeyComparator::FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const {
+  // Attempt to shorten the user portion of the key
+  Slice user_start = ExtractUserKey(*start);
+  Slice user_limit = ExtractUserKey(limit);
+  std::string tmp(user_start.data(), user_start.size());
+  user_comparator_->FindShortestSeparator(&tmp, user_limit);
+  if (tmp.size() < user_start.size() &&
+      user_comparator_->Compare(user_start, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*start, tmp) < 0);
+    assert(this->Compare(tmp, limit) < 0);
+    start->swap(tmp);
+  }
 }
     
-      // Calls Close() and logs if an error occurs.
-  //
-  // TODO(jhseu): Require that callers explicitly call Close() and remove the
-  // implicit Close() call in the destructor.
-  ~RecordWriter();
+      Slice in(encoded);
+  ParsedInternalKey decoded('', 0, kTypeValue);
     
-    namespace internal {
-template <typename Scalar>
-struct functor_traits<scalar_clip_op<Scalar> > {
-  enum {
-    Cost = NumTraits<Scalar>::AddCost * 3,
-    PacketAccess = packet_traits<Scalar>::HasMax &&
-                   packet_traits<Scalar>::HasMin &&
-                   packet_traits<Scalar>::HasNegate
-  };
-};
-}  // namespace internal
+    // Return the name of the sstable with the specified number
+// in the db named by 'dbname'.  The result will be prefixed with
+// 'dbname'.
+extern std::string TableFileName(const std::string& dbname, uint64_t number);
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-      Status OnWorkStartedLocked() override {
-    offset_ = 0;
-    TF_RETURN_IF_ERROR(env_->NewRandomAccessFile(current_work(), &file_));
-    }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-      // The d'tor restores the previous test part result reporter.
-  virtual ~ScopedFakeTestPartResultReporter();
-    
-    // Internal macro for implementing {EXPECT|ASSERT}_PRED4.  Don't use
-// this in your code.
-#define GTEST_PRED4_(pred, v1, v2, v3, v4, on_failure)\
-  GTEST_ASSERT_(::testing::AssertPred4Helper(#pred, \
-                                             #v1, \
-                                             #v2, \
-                                             #v3, \
-                                             #v4, \
-                                             pred, \
-                                             v1, \
-                                             v2, \
-                                             v3, \
-                                             v4), on_failure)
-    
-        // A sub-minibatch is a part of a minibatch which helps computing large minibatches that cannot load into GPU memory in one forward-backward computation
-    // The usage would be :
-    //        SubminibatchHelpers sbhelper;
-    //        for (;;)
-    //        {
-    //            size_t nsb=sb.GetMinibatchIntoCache(...);
-    //            for (size_t i=0; i<nsb; i++)
-    //            {
-    //                sbhelper.GetSubMinibatchToNet(i);
-    //                net.Evaluate(criterionNodes[0]);
-    //                sbhelper.DoneWithCurrentSubMinibatch();
-    //            }
-    //            UpdateWeights(...);
-    //        }
-    
-    private:
-    void MarkDropoutNodesEvalTimeStampAsOutdated(const ComputationNetworkPtr& net, const ComputationNodeBasePtr& criterionNode);
-    std::shared_ptr<ASGDHelper<ElemType>> m_pASGDHelper;
-    
-    
-    {    // Save the data into this section,
-    virtual bool SaveData(size_t recordStart, const std::map<std::wstring, void*, nocase_compare>& matrices, size_t numRecords, size_t datasetSize, size_t byteVariableSized);
-};
-    
-        Matrix<float> mA2dense(c_deviceIdZero);
-    mA2dense.AssignTruncateBottomOf(Matrix<float>::RandomUniform(dim1, dim2, c_deviceIdZero, -300.0f, 0.1f, IncrementCounter()), 0);
-    
-                m_gradHeader->numSamples = actualMBSize ? 1 : actualMBSize;
-            distGradAgg.AggregateGradients(learnParamsValues, m_gradHeader.get(), 0);
-    
-    #include 'Basics.h'
-#include 'ScriptableObjects.h'
-#include 'BrainScriptParser.h'
-    
-    #include 'Basics.h'
-#include 'Matrix.h'
-#include 'Config.h' // for ConfigParameters
-#include 'ScriptableObjects.h'
-#include <map>
-#include <string>
-    
-        // emit the trace message for global progress
-    // 'currentStep' will be offset by m_currentStepOffset.
-    // This only prints of enough time (10s) has elapsed since last print, and the return value is 'true' if it did print.
-    static bool TraceProgressPercentage(size_t epochNumber, double mbProg /*0..100*/, bool isTimerPaced)
-    {
-        auto& us = GetStaticInstance();
-        if (!us.m_enabled)
-        {
-            return false;
-        }
-    }
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui, Original code by @birthggd
-    
-    
-    {    return 0;
+    Status TableCache::Get(const ReadOptions& options,
+                       uint64_t file_number,
+                       uint64_t file_size,
+                       const Slice& k,
+                       void* arg,
+                       void (*saver)(void*, const Slice&, const Slice&)) {
+  Cache::Handle* handle = NULL;
+  Status s = FindTable(file_number, file_size, &handle);
+  if (s.ok()) {
+    Table* t = reinterpret_cast<TableAndFile*>(cache_->Value(handle))->table;
+    s = t->InternalGet(options, k, arg, saver);
+    cache_->Release(handle);
+  }
+  return s;
 }
     
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_API void        ImGui_Marmalade_InvalidateDeviceObjects();
-IMGUI_API bool        ImGui_Marmalade_CreateDeviceObjects();
+    class VersionSet;
     
-    int main(int, char**)
-{
-    // Setup Allegro
-    al_init();
-    al_install_keyboard();
-    al_install_mouse();
-    al_init_primitives_addon();
-    al_set_new_display_flags(ALLEGRO_RESIZABLE);
-    ALLEGRO_DISPLAY* display = al_create_display(1280, 720);
-    al_set_window_title(display, 'ImGui Allegro 5 example');
-    ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
-    al_register_event_source(queue, al_get_display_event_source(display));
-    al_register_event_source(queue, al_get_keyboard_event_source());
-    al_register_event_source(queue, al_get_mouse_event_source());
+    
+    
+    // Convert a Python object to a FileDescriptorProto pointer.
+// Handles all kinds of Python errors, which are simply logged.
+static bool GetFileDescriptorProto(PyObject* py_descriptor,
+                                   FileDescriptorProto* output) {
+  if (py_descriptor == NULL) {
+    if (PyErr_ExceptionMatches(PyExc_KeyError)) {
+      // Expected error: item was simply not found.
+      PyErr_Clear();
+    } else {
+      GOOGLE_LOG(ERROR) << 'DescriptorDatabase method raised an error';
+      PyErr_Print();
+    }
+    return false;
+  }
+  if (py_descriptor == Py_None) {
+    return false;
+  }
+  const Descriptor* filedescriptor_descriptor =
+      FileDescriptorProto::default_instance().GetDescriptor();
+  CMessage* message = reinterpret_cast<CMessage*>(py_descriptor);
+  if (PyObject_TypeCheck(py_descriptor, &CMessage_Type) &&
+      message->message->GetDescriptor() == filedescriptor_descriptor) {
+    // Fast path: Just use the pointer.
+    FileDescriptorProto* file_proto =
+        static_cast<FileDescriptorProto*>(message->message);
+    *output = *file_proto;
+    return true;
+  } else {
+    // Slow path: serialize the message. This allows to use databases which
+    // use a different implementation of FileDescriptorProto.
+    ScopedPyObjectPtr serialized_pb(
+        PyObject_CallMethod(py_descriptor, 'SerializeToString', NULL));
+    if (serialized_pb == NULL) {
+      GOOGLE_LOG(ERROR)
+          << 'DescriptorDatabase method did not return a FileDescriptorProto';
+      PyErr_Print();
+      return false;
+    }
+    char* str;
+    Py_ssize_t len;
+    if (PyBytes_AsStringAndSize(serialized_pb.get(), &str, &len) < 0) {
+      GOOGLE_LOG(ERROR)
+          << 'DescriptorDatabase method did not return a FileDescriptorProto';
+      PyErr_Print();
+      return false;
+    }
+    FileDescriptorProto file_proto;
+    if (!file_proto.ParseFromArray(str, len)) {
+      GOOGLE_LOG(ERROR)
+          << 'DescriptorDatabase method did not return a FileDescriptorProto';
+      return false;
+    }
+    *output = file_proto;
+    return true;
+  }
+}
+    
+    namespace google {
+namespace protobuf {
+namespace python {
+    }
+    }
     }
     
-    int main(int, char**)
-{
-    // Create application window
-    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
-    RegisterClassEx(&wc);
-    HWND hwnd = CreateWindow(_T('ImGui Example'), _T('ImGui DirectX9 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
     }
     
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
     
-        if (!QueryPerformanceFrequency((LARGE_INTEGER *)&g_TicksPerSecond))
-        return false;
-    if (!QueryPerformanceCounter((LARGE_INTEGER *)&g_Time))
-        return false;
     
-            param[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-        param[1].DescriptorTable.NumDescriptorRanges = 1;
-        param[1].DescriptorTable.pDescriptorRanges = &descRange;
-        param[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
     
-    // Render function.
-// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
-void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
-{
-    // Avoid rendering when minimized
-    ImGuiIO& io = ImGui::GetIO();
-    if (io.DisplaySize.x <= 0.0f || io.DisplaySize.y <= 0.0f)
-        return;
+    
+        // Extension: 2.0
+    typedef void (CODEGEN_FUNCPTR *PFNBLENDEQUATIONSEPARATEPROC)(GLenum , GLenum );
+    typedef void (CODEGEN_FUNCPTR *PFNDRAWBUFFERSPROC)(GLsizei , const GLenum *);
+    typedef void (CODEGEN_FUNCPTR *PFNSTENCILOPSEPARATEPROC)(GLenum , GLenum , GLenum , GLenum );
+    typedef void (CODEGEN_FUNCPTR *PFNSTENCILFUNCSEPARATEPROC)(GLenum , GLenum , GLint , GLuint );
+    typedef void (CODEGEN_FUNCPTR *PFNSTENCILMASKSEPARATEPROC)(GLenum , GLuint );
+    typedef void (CODEGEN_FUNCPTR *PFNATTACHSHADERPROC)(GLuint , GLuint );
+    typedef void (CODEGEN_FUNCPTR *PFNBINDATTRIBLOCATIONPROC)(GLuint , GLuint , const GLchar *);
+    typedef void (CODEGEN_FUNCPTR *PFNCOMPILESHADERPROC)(GLuint );
+    typedef GLuint (CODEGEN_FUNCPTR *PFNCREATEPROGRAMPROC)();
+    typedef GLuint (CODEGEN_FUNCPTR *PFNCREATESHADERPROC)(GLenum );
+    typedef void (CODEGEN_FUNCPTR *PFNDELETEPROGRAMPROC)(GLuint );
+    typedef void (CODEGEN_FUNCPTR *PFNDELETESHADERPROC)(GLuint );
+    typedef void (CODEGEN_FUNCPTR *PFNDETACHSHADERPROC)(GLuint , GLuint );
+    typedef void (CODEGEN_FUNCPTR *PFNDISABLEVERTEXATTRIBARRAYPROC)(GLuint );
+    typedef void (CODEGEN_FUNCPTR *PFNENABLEVERTEXATTRIBARRAYPROC)(GLuint );
+    typedef void (CODEGEN_FUNCPTR *PFNGETACTIVEATTRIBPROC)(GLuint , GLuint , GLsizei , GLsizei *, GLint *, GLenum *, GLchar *);
+    typedef void (CODEGEN_FUNCPTR *PFNGETACTIVEUNIFORMPROC)(GLuint , GLuint , GLsizei , GLsizei *, GLint *, GLenum *, GLchar *);
+    typedef void (CODEGEN_FUNCPTR *PFNGETATTACHEDSHADERSPROC)(GLuint , GLsizei , GLsizei *, GLuint *);
+    typedef GLint (CODEGEN_FUNCPTR *PFNGETATTRIBLOCATIONPROC)(GLuint , const GLchar *);
+    typedef void (CODEGEN_FUNCPTR *PFNGETPROGRAMIVPROC)(GLuint , GLenum , GLint *);
+    typedef void (CODEGEN_FUNCPTR *PFNGETPROGRAMINFOLOGPROC)(GLuint , GLsizei , GLsizei *, GLchar *);
+    typedef void (CODEGEN_FUNCPTR *PFNGETSHADERIVPROC)(GLuint , GLenum , GLint *);
+    typedef void (CODEGEN_FUNCPTR *PFNGETSHADERINFOLOGPROC)(GLuint , GLsizei , GLsizei *, GLchar *);
+    typedef void (CODEGEN_FUNCPTR *PFNGETSHADERSOURCEPROC)(GLuint , GLsizei , GLsizei *, GLchar *);
+    typedef GLint (CODEGEN_FUNCPTR *PFNGETUNIFORMLOCATIONPROC)(GLuint , const GLchar *);
+    typedef void (CODEGEN_FUNCPTR *PFNGETUNIFORMFVPROC)(GLuint , GLint , GLfloat *);
+    typedef void (CODEGEN_FUNCPTR *PFNGETUNIFORMIVPROC)(GLuint , GLint , GLint *);
+    typedef void (CODEGEN_FUNCPTR *PFNGETVERTEXATTRIBDVPROC)(GLuint , GLenum , GLdouble *);
+    typedef void (CODEGEN_FUNCPTR *PFNGETVERTEXATTRIBFVPROC)(GLuint , GLenum , GLfloat *);
+    typedef void (CODEGEN_FUNCPTR *PFNGETVERTEXATTRIBIVPROC)(GLuint , GLenum , GLint *);
+    typedef void (CODEGEN_FUNCPTR *PFNGETVERTEXATTRIBPOINTERVPROC)(GLuint , GLenum , GLvoid* *);
+    typedef GLboolean (CODEGEN_FUNCPTR *PFNISPROGRAMPROC)(GLuint );
+    typedef GLboolean (CODEGEN_FUNCPTR *PFNISSHADERPROC)(GLuint );
+    typedef void (CODEGEN_FUNCPTR *PFNLINKPROGRAMPROC)(GLuint );
+    typedef void (CODEGEN_FUNCPTR *PFNSHADERSOURCEPROC)(GLuint , GLsizei , const GLchar* const *, const GLint *);
+    typedef void (CODEGEN_FUNCPTR *PFNUSEPROGRAMPROC)(GLuint );
+    typedef void (CODEGEN_FUNCPTR *PFNUNIFORM1FPROC)(GLint , GLfloat );
+    typedef void (CODEGEN_FUNCPTR *PFNUNIFORM2FPROC)(GLint , GLfloat , GLfloat );
+    typedef void (CODEGEN_FUNCPTR *PFNUNIFORM3FPROC)(GLint , GLfloat , GLfloat , GLfloat );
+    typedef void (CODEGEN_FUNCPTR *PFNUNIFORM4FPROC)(GLint , GLfloat , GLfloat , GLfloat , GLfloat );
+    typedef void (CODEGEN_FUNCPTR *PFNUNIFORM1IPROC)(GLint , GLint );
+    typedef void (CODEGEN_FUNCPTR *PFNUNIFORM2IPROC)(GLint , GLint , GLint );
+    typedef void (CODEGEN_FUNCPTR *PFNUNIFORM3IPROC)(GLint , GLint , GLint , GLint );
+    typedef void (CODEGEN_FUNCPTR *PFNUNIFORM4IPROC)(GLint , GLint , GLint , GLint , GLint );
+    typedef void (CODEGEN_FUNCPTR *PFNUNIFORM1FVPROC)(GLint , GLsizei , const GLfloat *);
+    typedef void (CODEGEN_FUNCPTR *PFNUNIFORM2FVPROC)(GLint , GLsizei , const GLfloat *);
+    typedef void (CODEGEN_FUNCPTR *PFNUNIFORM3FVPROC)(GLint , GLsizei , const GLfloat *);
+    typedef void (CODEGEN_FUNCPTR *PFNUNIFORM4FVPROC)(GLint , GLsizei , const GLfloat *);
+    typedef void (CODEGEN_FUNCPTR *PFNUNIFORM1IVPROC)(GLint , GLsizei , const GLint *);
+    typedef void (CODEGEN_FUNCPTR *PFNUNIFORM2IVPROC)(GLint , GLsizei , const GLint *);
+    typedef void (CODEGEN_FUNCPTR *PFNUNIFORM3IVPROC)(GLint , GLsizei , const GLint *);
+    typedef void (CODEGEN_FUNCPTR *PFNUNIFORM4IVPROC)(GLint , GLsizei , const GLint *);
+    typedef void (CODEGEN_FUNCPTR *PFNUNIFORMMATRIX2FVPROC)(GLint , GLsizei , GLboolean , const GLfloat *);
+    typedef void (CODEGEN_FUNCPTR *PFNUNIFORMMATRIX3FVPROC)(GLint , GLsizei , GLboolean , const GLfloat *);
+    typedef void (CODEGEN_FUNCPTR *PFNUNIFORMMATRIX4FVPROC)(GLint , GLsizei , GLboolean , const GLfloat *);
+    typedef void (CODEGEN_FUNCPTR *PFNVALIDATEPROGRAMPROC)(GLuint );
+    typedef void (CODEGEN_FUNCPTR *PFNVERTEXATTRIBPOINTERPROC)(GLuint , GLint , GLenum , GLboolean , GLsizei , const GLvoid *);
+    
+    #ifndef STORAGE_LEVELDB_DB_SNAPSHOT_H_
+#define STORAGE_LEVELDB_DB_SNAPSHOT_H_
+    
+    TEST(FindFileTest, OverlappingFiles) {
+  Add('150', '600');
+  Add('400', '500');
+  disjoint_sorted_files_ = false;
+  ASSERT_TRUE(! Overlaps('100', '149'));
+  ASSERT_TRUE(! Overlaps('601', '700'));
+  ASSERT_TRUE(Overlaps('100', '150'));
+  ASSERT_TRUE(Overlaps('100', '200'));
+  ASSERT_TRUE(Overlaps('100', '300'));
+  ASSERT_TRUE(Overlaps('100', '400'));
+  ASSERT_TRUE(Overlaps('100', '500'));
+  ASSERT_TRUE(Overlaps('375', '400'));
+  ASSERT_TRUE(Overlaps('450', '450'));
+  ASSERT_TRUE(Overlaps('450', '500'));
+  ASSERT_TRUE(Overlaps('450', '700'));
+  ASSERT_TRUE(Overlaps('600', '700'));
+}
+    
+    
+    {    status = sqlite3_finalize(read_stmt);
+    ErrorCheck(status);
+    status = sqlite3_finalize(begin_trans_stmt);
+    ErrorCheck(status);
+    status = sqlite3_finalize(end_trans_stmt);
+    ErrorCheck(status);
+  }
+    
+    // Helper for quickly generating random data.
+namespace {
+class RandomGenerator {
+ private:
+  std::string data_;
+  int pos_;
+    }
     }
     
-    extern 'C' {
-// Declare these symbols as weak to allow them to be optionally defined.
-#define EXT_FUNC(NAME, RETURN_TYPE, FUNC_SIG, WARN)                            \
-  __attribute__((weak)) RETURN_TYPE NAME FUNC_SIG
+    void BlockBuilder::Add(const Slice& key, const Slice& value) {
+  Slice last_key_piece(last_key_);
+  assert(!finished_);
+  assert(counter_ <= options_->block_restart_interval);
+  assert(buffer_.empty() // No values yet?
+         || options_->comparator->Compare(key, last_key_piece) > 0);
+  size_t shared = 0;
+  if (counter_ < options_->block_restart_interval) {
+    // See how much sharing to do with previous string
+    const size_t min_length = std::min(last_key_piece.size(), key.size());
+    while ((shared < min_length) && (last_key_piece[shared] == key[shared])) {
+      shared++;
+    }
+  } else {
+    // Restart compression
+    restarts_.push_back(buffer_.size());
+    counter_ = 0;
+  }
+  const size_t non_shared = key.size() - shared;
     }
     
-    namespace fuzzer {
-    }
+      // Last filter
+  builder.StartBlock(9000);
+  builder.AddKey('box');
+  builder.AddKey('hello');
     
-      Random &Rand;
-  const FuzzingOptions &Options;
     
-    #endif  // LLVM_FUZZER_SHA1_H
+    {}  // namespace leveldb
 
     
-    ATTRIBUTE_NO_SANITIZE_MEMORY
-void TracePC::AddValueForStrcmp(void *caller_pc, const char *s1, const char *s2,
-                              size_t n) {
-  if (!n) return;
-  size_t Len = std::min(n, (size_t)32);
-  const uint8_t *A1 = reinterpret_cast<const uint8_t *>(s1);
-  const uint8_t *A2 = reinterpret_cast<const uint8_t *>(s2);
-  size_t I = 0;
-  for (; I < Len; I++)
-    if (A1[I] != A2[I] || A1[I] == 0)
-      break;
-  size_t PC = reinterpret_cast<size_t>(caller_pc);
-  size_t Idx = I;
-  // if (I < Len && A1[I])
-  //  Idx += __builtin_popcountl((A1[I] ^ A2[I])) - 1;
-  TPC.HandleValueProfile((PC & 4095) | (Idx << 12));
+      virtual void Next() {
+    assert(Valid());
+    }
+    
+    This pointer must be provided as 'void* state' parameter for XXH32_update().
+XXH32_update() can be called as many times as necessary.
+The user must provide a valid (allocated) input.
+The function returns an error code, with 0 meaning OK, and any other value meaning there is an error.
+Note that 'len' is type 'int', which means it is limited to 2^31-1.
+If your data is larger, it is recommended to chunk your data into blocks
+of size for example 2^30 (1GB) to avoid any 'int' overflow issue.
+    
+    
+    {  // No copying allowed
+  Reader(const Reader&);
+  void operator=(const Reader&);
+};
+    
+    /*
+ * Class:     org_rocksdb_IngestExternalFileOptions
+ * Method:    setAllowGlobalSeqNo
+ * Signature: (JZ)V
+ */
+void Java_org_rocksdb_IngestExternalFileOptions_setAllowGlobalSeqNo(
+    JNIEnv* env, jobject jobj, jlong jhandle, jboolean jallow_global_seqno) {
+  auto* options =
+      reinterpret_cast<rocksdb::IngestExternalFileOptions*>(jhandle);
+  options->allow_global_seqno = static_cast<bool>(jallow_global_seqno);
+}
+    
+      class StatisticsJni : public StatisticsImpl {
+   public:
+     StatisticsJni(std::shared_ptr<Statistics> stats);
+     StatisticsJni(std::shared_ptr<Statistics> stats,
+         const std::set<uint32_t> ignore_histograms);
+     virtual bool HistEnabledForType(uint32_t type) const override;
+    }
+    
+    
+    {  ROCKS_LOG_INFO(options_.info_log, 'Restoring done -- %s\n',
+                 s.ToString().c_str());
+  return s;
+}
+    
+      ReadOptions read_options;
+  std::string value;
+  TransactionOptions txn_options;
+  Transaction* txn = txdb->BeginTransaction(write_options, txn_options);
+  s = txn->SetName('xid');
+  ASSERT_OK(s);
+  ASSERT_EQ(txdb->GetTransactionByName('xid'), txn);
+    
+    typedef GRPC_CUSTOM_STRING string;
+    
+    
+    {}
+    
+    std::unique_ptr< MonsterStorage::Stub> MonsterStorage::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
+  std::unique_ptr< MonsterStorage::Stub> stub(new MonsterStorage::Stub(channel));
+  return stub;
+}
+    
+      struct {
+    grpc::string prefix;
+    grpc::string method_params;  // extra arguments to method
+    int extra_method_param_count;
+  } async_prefixes[] = {{'Async', ', void* tag', 1}, {'PrepareAsync', '', 0}};
+    
+    class FlatCompiler {
+ public:
+  // Output generator for the various programming languages and formats we
+  // support.
+  struct Generator {
+    typedef bool (*GenerateFn)(const flatbuffers::Parser &parser,
+                               const std::string &path,
+                               const std::string &file_name);
+    typedef std::string (*MakeRuleFn)(const flatbuffers::Parser &parser,
+                                      const std::string &path,
+                                      const std::string &file_name);
+    }
+    }
+    
+    // Set any struct field as a double, regardless of type what it is.
+inline void SetAnyFieldF(Struct *st, const reflection::Field &field,
+                         double val) {
+  SetAnyValueF(field.type()->base_type(), st->GetAddressOf(field.offset()),
+               val);
 }
