@@ -1,358 +1,353 @@
 
         
-        void Base::CallSync(const std::string& method,
-                    const base::ListValue& arguments,
-                    base::ListValue* result) {
-  NOTREACHED() << 'Uncatched callAsync in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    void Clipboard::Call(const std::string& method,
-                     const base::ListValue& arguments) {
-  if (method == 'Set') {
-    std::string text, type;
-    arguments.GetString(0, &text);
-    arguments.GetString(1, &type);
-    SetText(text);
-  } else if (method == 'Clear') {
-    Clear();
-  } else {
-    NOTREACHED() << 'Invalid call to Clipboard method:' << method
-                 << ' arguments:' << arguments;
+        
+    {    if (s.ok()) {
+      // Verify that the table is usable
+      Iterator* it = table_cache->NewIterator(ReadOptions(),
+                                              meta->number,
+                                              meta->file_size);
+      s = it->status();
+      delete it;
+    }
   }
-}
     
-    #ifndef CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
-#define CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
-    
-    v8::Handle<v8::Object> Dispatcher::GetObjectRegistry() {
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  v8::Local<v8::Context> context =
-    v8::Local<v8::Context>::New(isolate, node::g_context);
-  // need to enter node context to access the registry in
-  // some cases, e.g. normal frame in #1519
-  context->Enter();
-  v8::Handle<v8::Value> registry =
-    context->Global()->Get(v8_str('__nwObjectsRegistry'));
-  context->Exit();
-  ASSERT(!(registry->IsNull() || registry->IsUndefined()));
-  // if (registry->IsNull() || registry->IsUndefined())
-  //   return v8::Undefined();
-  return registry->ToObject();
-}
-    
-     private:
-  // Helper functions for bindings.
-  static void RequireNwGui(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void GetAbsolutePath(const v8::FunctionCallbackInfo<v8::Value>& args);
-    
-    
-    {} // namespace nwapi
+    #endif  // STORAGE_LEVELDB_DB_DB_ITER_H_
 
     
+      ASSERT_TRUE(ParseInternalKey(in, &decoded));
+  ASSERT_EQ(key, decoded.user_key.ToString());
+  ASSERT_EQ(seq, decoded.sequence);
+  ASSERT_EQ(vt, decoded.type);
     
-#ifndef CONTENT_NW_SRC_API_EVENT_EVENT_H_
-#define CONTENT_NW_SRC_API_EVENT_EVENT_H_
-    
-    #include 'base/values.h'
-#include 'content/nw/src/api/dispatcher_host.h'
-#include 'content/nw/src/api/menu/menu.h'
-#include 'gdk/gdkkeysyms.h'//to get keyval from name
-    
-    namespace extensions {
-    }
-    
-            //if (imag(V(2,k)) == 0)
-#ifdef HAVE_EIGEN
-        const double epsilon = 1e-4;
-        if( eigenval_i.at<double>(k,0) >= -epsilon && eigenval_i.at<double>(k,0) <= epsilon )
-#endif
-        {
-    }
-    
-    namespace cv { namespace cuda { namespace device
-{
-    template <class T>
-    __device__ __forceinline__ T warp_reduce(volatile T *ptr , const unsigned int tid = threadIdx.x)
-    {
-        const unsigned int lane = tid & 31; // index of thread in warp (0..31)
-    }
-    }
-    }
-    }
-    
-    class DummyBufferPoolController : public BufferPoolController
-{
-public:
-    DummyBufferPoolController() { }
-    virtual ~DummyBufferPoolController() { }
-    }
-    
-    cv::cuda::GpuMat::GpuMat(const GpuMat& m, Rect roi) :
-    flags(m.flags), rows(roi.height), cols(roi.width),
-    step(m.step), data(m.data + roi.y*step), refcount(m.refcount),
-    datastart(m.datastart), dataend(m.dataend),
-    allocator(m.allocator)
-{
-    flags &= roi.width < m.cols ? ~Mat::CONTINUOUS_FLAG : -1;
-    data += roi.x * elemSize();
-    }
-    
-        static void CODEGEN_FUNCPTR Switch_VertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer)
-    {
-        VertexAttribPointer = (PFNVERTEXATTRIBPOINTERPROC)IntGetProcAddress('glVertexAttribPointer');
-        VertexAttribPointer(index, size, type, normalized, stride, pointer);
-    }
-    
-    #include '../../precomp.hpp'
-    
-    static const vorbis_residue_template _res_16u_0[]={
-  {1,0,32,  &_residue_44_low_un,
-   &_huff_book__16u0__single,&_huff_book__16u0__single,
-   &_resbook_16u_0,&_resbook_16u_0},
-};
-static const vorbis_residue_template _res_16u_1[]={
-  {1,0,32,  &_residue_44_mid_un,
-   &_huff_book__16u1__short,&_huff_book__16u1__short,
-   &_resbook_16u_1,&_resbook_16u_1},
-    }
-    
-    static const static_bookblock _resbook_44s_1={
-  {
-    {0},{0,0,&_44c1_s_p1_0},{0,0,&_44c1_s_p2_0},
-    {0,0,&_44c1_s_p3_0},{0,0,&_44c1_s_p4_0},{0,0,&_44c1_s_p5_0},
-    {&_44c1_s_p6_0,&_44c1_s_p6_1},{&_44c1_s_p7_0,&_44c1_s_p7_1},
-    {&_44c1_s_p8_0,&_44c1_s_p8_1,&_44c1_s_p8_2}
-   }
-};
-static const static_bookblock _resbook_44sm_1={
-  {
-    {0},{0,0,&_44c1_sm_p1_0},{0,0,&_44c1_sm_p2_0},
-    {0,0,&_44c1_sm_p3_0},{0,0,&_44c1_sm_p4_0},{0,0,&_44c1_sm_p5_0},
-    {&_44c1_sm_p6_0,&_44c1_sm_p6_1},{&_44c1_sm_p7_0,&_44c1_sm_p7_1},
-    {&_44c1_sm_p8_0,&_44c1_sm_p8_1,&_44c1_sm_p8_2}
-   }
-};
-    
-      {1,0,32,  &_residue_44_low_un,
-   &_huff_book__44u1__long,&_huff_book__44u1__long,
-   &_resbook_44u_1,&_resbook_44u_1}
-};
-static const vorbis_residue_template _res_44u_2[]={
-  {1,0,16,  &_residue_44_low_un,
-   &_huff_book__44u2__short,&_huff_book__44u2__short,
-   &_resbook_44u_2,&_resbook_44u_2},
-    
-    static const vorbis_residue_template _res_8s_0[]={
-  {2,0,32,  &_residue_44_mid,
-   &_huff_book__8c0_s_single,&_huff_book__8c0_s_single,
-   &_resbook_8s_0,&_resbook_8s_0},
-};
-static const vorbis_residue_template _res_8s_1[]={
-  {2,0,32,  &_residue_44_mid,
-   &_huff_book__8c1_s_single,&_huff_book__8c1_s_single,
-   &_resbook_8s_1,&_resbook_8s_1},
-};
+    // Return the name of the lock file for the db named by
+// 'dbname'.  The result will be prefixed with 'dbname'.
+extern std::string LockFileName(const std::string& dbname);
     
     
-/* Special i386 GCC implementation */
-#if defined(__i386__) && defined(__GNUC__) && !defined(__BEOS__)
-#  define VORBIS_FPU_CONTROL
-/* both GCC and MSVC are kinda stupid about rounding/casting to int.
-   Because of encapsulation constraints (GCC can't see inside the asm
-   block and so we end up doing stupid things like a store/load that
-   is collectively a noop), we do it this way */
-    
-    int opus_fft_alloc_arm_neon(kiss_fft_state *st);
-void opus_fft_free_arm_neon(kiss_fft_state *st);
-    
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-    
-    #ifndef DISABLE_FLOAT_API
-static OPUS_INLINE opus_int16 FLOAT2INT16(float x)
-{
-   x = x*CELT_SIG_SCALE;
-   x = MAX32(x, -32768);
-   x = MIN32(x, 32767);
-   return (opus_int16)float2int(x);
-}
-#endif /* DISABLE_FLOAT_API */
-    
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-    
-    #undef MULT32_32_Q31
-static inline int MULT32_32_Q31(int a, int b)
-{
-    int r;
-    asm volatile('MULT $ac1, %0, %1' : : 'r' (a), 'r' (b));
-    asm volatile('EXTR.W %0,$ac1, %1' : '=r' (r): 'i' (31));
-    return r;
+    {  // Errors
+  static const char* errors[] = {
+    '',
+    'foo',
+    'foo-dx-100.log',
+    '.log',
+    '',
+    'manifest',
+    'CURREN',
+    'CURRENTX',
+    'MANIFES',
+    'MANIFEST',
+    'MANIFEST-',
+    'XMANIFEST-3',
+    'MANIFEST-3x',
+    'LOC',
+    'LOCKx',
+    'LO',
+    'LOGx',
+    '18446744073709551616.log',
+    '184467440737095516150.log',
+    '100',
+    '100.',
+    '100.lop'
+  };
+  for (int i = 0; i < sizeof(errors) / sizeof(errors[0]); i++) {
+    std::string f = errors[i];
+    ASSERT_TRUE(!ParseFileName(f, &number, &type)) << f;
+  }
 }
     
-      // Get an integral value, 0 or 1, for whether a syscall table pointer is modified.
-  auto f1 = osquery::readFile(kKernelSyscallAddrModifiedPath, content);
-  if (f1.ok()) {
-    boost::trim(content);
-    syscall_addr_modified = content;
-  } else {
-    VLOG(1) << 'Cannot read file: ' << kKernelSyscallAddrModifiedPath;
-    return results;
+      void SetComparatorName(const Slice& name) {
+    has_comparator_ = true;
+    comparator_ = name.ToString();
+  }
+  void SetLogNumber(uint64_t num) {
+    has_log_number_ = true;
+    log_number_ = num;
+  }
+  void SetPrevLogNumber(uint64_t num) {
+    has_prev_log_number_ = true;
+    prev_log_number_ = num;
+  }
+  void SetNextFile(uint64_t num) {
+    has_next_file_number_ = true;
+    next_file_number_ = num;
+  }
+  void SetLastSequence(SequenceNumber seq) {
+    has_last_sequence_ = true;
+    last_sequence_ = seq;
+  }
+  void SetCompactPointer(int level, const InternalKey& key) {
+    compact_pointers_.push_back(std::make_pair(level, key));
   }
     
-     private:
-  /// For testing only, reset the stopping status for unittests.
-  void resetStopping() {
-    stopping_ = false;
-  }
+    TEST(WriteBatchTest, Corruption) {
+  WriteBatch batch;
+  batch.Put(Slice('foo'), Slice('bar'));
+  batch.Delete(Slice('box'));
+  WriteBatchInternal::SetSequence(&batch, 200);
+  Slice contents = WriteBatchInternal::Contents(&batch);
+  WriteBatchInternal::SetContents(&batch,
+                                  Slice(contents.data(),contents.size()-1));
+  ASSERT_EQ('Put(foo, bar)@200'
+            'ParseError()',
+            PrintContents(&batch));
+}
     
-    /**
- * @brief EventSubscriber%s and Publishers may exist in various states.
- *
- * The class will move through states when osquery is initializing the
- * registry, starting event publisher loops, and requesting initialization of
- * each subscriber and the optional set of subscriptions it creates. If this
- * initialization fails the publishers or EventFactory may eject, warn, or
- * otherwise not use the subscriber's subscriptions.
- *
- * The supported states are:
- * - None: The default state, uninitialized.
- * - Setup: The Subscriber is attached and has run setup.
- * - Running: Subscriber is ready for events.
- * - Paused: Subscriber was initialized but is not currently accepting events.
- * - Failed: Subscriber failed to initialize or is otherwise offline.
+      // Three-way comparison.  Returns value:
+  //   < 0 iff 'a' < 'b',
+  //   == 0 iff 'a' == 'b',
+  //   > 0 iff 'a' > 'b'
+  virtual int Compare(const Slice& a, const Slice& b) const = 0;
+    
+    #include <fstream>  // NOLINT(readability/streams)
+#include <string>
+    
+    
+    {  static string LayerTypeListString() {
+    vector<string> layer_types = LayerTypeList();
+    string layer_types_str;
+    for (vector<string>::iterator iter = layer_types.begin();
+         iter != layer_types.end(); ++iter) {
+      if (iter != layer_types.begin()) {
+        layer_types_str += ', ';
+      }
+      layer_types_str += *iter;
+    }
+    return layer_types_str;
+  }
+};
+    
+    #ifdef USE_CUDNN
+/**
+ * @brief CuDNN acceleration of TanHLayer.
  */
-enum class EventState {
-  EVENT_NONE = 0,
-  EVENT_SETUP,
-  EVENT_RUNNING,
-  EVENT_PAUSED,
-  EVENT_FAILED,
-};
-    
-    /// Internal callExtension implementation using a UNIX domain socket path.
-Status callExtension(const std::string& extension_path,
-                     const std::string& registry,
-                     const std::string& item,
-                     const PluginRequest& request,
-                     PluginResponse& response);
-    
-     private:
-  /// Boolean to track if this instance needs to restore privileges.
-  bool dropped_{false};
-    
-      // Tear down device node data.
-  if (!(osquery.major_number < 0)) {
-    if (cdevsw_remove(osquery.major_number, &osquery_cdevsw) < 0) {
-      panic('osquery kext: Cannot remove osquery from cdevsw');
-    }
-  }
-    
-    /**
- * @brief Iterate the discovered decorators for a given point type.
- *
- * The configuration maintains various sources, each may contain a set of
- * decorators. The source tracking is abstracted for the decorator iterator.
- *
- * @param point request execution of decorators for this given point.
- * @param time an optional time for points using intervals.
- * @param source restrict run to a specific config source.
- */
-void runDecorators(DecorationPoint point,
-                   size_t time = 0,
-                   const std::string& source = '');
-    
-    bool isLauncherProcessDead(PlatformProcess& launcher) {
-  if (!launcher.isValid()) {
-    return true;
-  }
-    }
-    
-      group_size_ = getgroups(0, nullptr);
-  if (group_size_ > 0) {
-    original_groups_ = (gid_t*)malloc(group_size_ * sizeof(gid_t));
-    group_size_ = getgroups(group_size_, original_groups_);
-  }
-  setgroups(1, &gid);
-    
-    // Return the prologue of the generated source file.
-grpc::string GetSourcePrologue(grpc_generator::File *file,
-                               const Parameters &params);
-    
-      std::string SayHello(const std::string &name) {
-    flatbuffers::grpc::MessageBuilder mb;
-    auto name_offset = mb.CreateString(name);
-    auto request_offset = CreateHelloRequest(mb, name_offset);
-    mb.Finish(request_offset);
-    auto request_msg = mb.ReleaseMessage<HelloRequest>();
-    }
-    
-    ::grpc::ClientAsyncResponseReader< flatbuffers::grpc::Message<Stat>>* MonsterStorage::Stub::AsyncStoreRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Monster>& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderFactory< flatbuffers::grpc::Message<Stat>>::Create(channel_.get(), cq, rpcmethod_Store_, context, request, true);
-}
-    
-    #include 'src/compiler/schema_interface.h'
-    
-      // Associates a key with a value.  All subsequent calls to operator+=, where
-  // the specified key is contained in {{ and }} delimiters will be replaced by
-  // the given value.
-  void SetValue(const std::string &key, const std::string &value) {
-    value_map_[key] = value;
-  }
-    
-      // Parameters required to initialize the FlatCompiler.
-  struct InitParams {
-    InitParams()
-        : generators(nullptr),
-          num_generators(0),
-          warn_fn(nullptr),
-          error_fn(nullptr) {}
-    }
-    
-    // Utilities that can be used with the 'mini reflection' tables present
-// in generated code with --reflect-types (only types) or --reflect-names
-// (also names).
-// This allows basic reflection functionality such as pretty-printing
-// that does not require the use of the schema parser or loading of binary
-// schema files at runtime (reflection.h).
-    
-    // Convenience class to easily parse or generate text for arbitrary FlatBuffers.
-// Simply pre-populate it with all schema filenames that may be in use, and
-// This class will look them up using the file_identifier declared in the
-// schema.
-class Registry {
+template <typename Dtype>
+class CuDNNTanHLayer : public TanHLayer<Dtype> {
  public:
-  // Call this for all schemas that may be in use. The identifier has
-  // a function in the generated code, e.g. MonsterIdentifier().
-  void Register(const char *file_identifier, const char *schema_path) {
-    Schema schema;
-    schema.path_ = schema_path;
-    schemas_[file_identifier] = schema;
-  }
+  explicit CuDNNTanHLayer(const LayerParameter& param)
+      : TanHLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNTanHLayer();
     }
     
-      // Use the `CreateWeapon` shortcut to create Weapons with all fields set.
-  auto sword = CreateWeapon(builder, weapon_one_name, weapon_one_damage);
-  auto axe = CreateWeapon(builder, weapon_two_name, weapon_two_damage);
+    /**
+ * @brief During training only, sets a random portion of @f$x@f$ to 0, adjusting
+ *        the rest of the vector magnitude accordingly.
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$ y = |x| @f$
+ */
+template <typename Dtype>
+class DropoutLayer : public NeuronLayer<Dtype> {
+ public:
+  /**
+   * @param param provides DropoutParameter dropout_param,
+   *     with DropoutLayer options:
+   *   - dropout_ratio (\b optional, default 0.5).
+   *     Sets the probability @f$ p @f$ that any given unit is dropped.
+   */
+  explicit DropoutLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the computed outputs @f$
+   *        y = \left\{
+   *        \begin{array}{lr}
+   *            x                  & \mathrm{if} \; x > 0 \\
+   *            \alpha (\exp(x)-1) & \mathrm{if} \; x \le 0
+   *        \end{array} \right.
+   *      @f$.  
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    namespace caffe {
+    }
+    
+    void initNuma() {
+  if (getenv('HHVM_DISABLE_NUMA')) {
+    return;
+  }
+  // When linked dynamically numa_init() is called before JEMallocInitializer()
+  // numa_init is not exported by libnuma.so so it will be NULL
+  // however when linked statically numa_init() is not guaranteed to be called
+  // before JEMallocInitializer(), so call it here.
+  if (&numa_init) {
+    numa_init();
+  }
+  if (numa_available() < 0) return;
+    }
+    
+      switch (file_fsmagic(ms, inname, &sb, stream)) {
+  case -1:    /* error */
+    goto done;
+  case 0:      /* nothing found */
+    break;
+  default:    /* matched it and printed type */
+    rv = 0;
+    goto done;
+  }
+    
+    namespace HPHP { namespace jit {
+    }
+    }
+    
+        HFTRACE(1, 'merging %s -> %s: %u\n', predCluster->toString().c_str(),
+            cluster->toString().c_str(), cg.targets[fid].samples);
+    
+    
+Instruction* Instruction::ImmPCOffsetTarget(Instruction* from) {
+  ptrdiff_t offset;
+  if (IsPCRelAddressing()) {
+    // PC-relative addressing. Only ADR is supported.
+    offset = ImmPCRel();
+  } else if (IsLoadOrStore()) {
+    offset = ImmLLiteral() << kInstructionSizeLog2;
+  } else {
+    // All PC-relative branches.
+    assert(BranchType() != UnknownBranchType);
+    // Relative branch offsets are instruction-size-aligned.
+    offset = ImmBranch() << kInstructionSizeLog2;
+  }
+  return (!from ? this : from) + offset;
+}
+    
+    #include 'test/cpp/qps/report.h'
+    
+      ClientConfig client_config;
+  client_config.set_client_type(SYNC_CLIENT);
+  client_config.set_outstanding_rpcs_per_channel(1);
+  client_config.set_client_channels(1);
+  client_config.set_rpc_type(UNARY);
+  client_config.mutable_load_params()->mutable_closed_loop();
+    
+    #include <gflags/gflags.h>
+#include <grpc/grpc.h>
+#include <grpc/support/time.h>
+    
+      NSDictionary *flagNames = @{
+#define GRPC_XMACRO_ITEM(methodName, FlagName) \
+    @(kSCNetworkReachabilityFlags ## FlagName): @#methodName,
+#include 'GRXReachabilityFlagNames.xmacro.h'
+#undef GRPC_XMACRO_ITEM
+  };
+    
+    
+    {}  // namespace grpc
+    
+      // Proto2 Python
+  google::protobuf::compiler::python::Generator py_generator;
+  cli.RegisterGenerator('--python_out', &py_generator,
+                        'Generate Python source file.');
+    
+    bool js_cocos2dx_builder_CCBAnimationManager_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_builder_CCBAnimationManager_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_builder_CCBAnimationManager(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_builder_CCBAnimationManager_moveAnimationsFromNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_setAutoPlaySequenceId(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_actionForSoundChannel(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_setBaseValue(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getDocumentOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getLastCompletedSequenceName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_setRootNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceNamedTweenDuration(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_addDocumentOutletName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getRootContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_setDocumentControllerName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_setObject(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_actionForCallbackChannel(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getDocumentOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_init(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getKeyframeCallbacks(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_setRootContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceIdTweenDuration(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getRunningSequenceName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getAutoPlaySequenceId(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getRootNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_addDocumentOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_setDelegate(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getSequenceDuration(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceNamed(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getSequenceId(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_setCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_setSequences(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_debug(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_getDocumentControllerName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBAnimationManager_CCBAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DConeTwistConstraint_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DConeTwistConstraint(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getBFrame(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFixThresh(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFixThresh(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan2(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan1(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFrames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistAngle(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistSpan(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setDamping(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getAFrame(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_enableMotor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_Physics3DConeTwistConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    {    CHECK_GL_ERROR_DEBUG();
+}
+    
+    		// Breakable dynamic body
+		{
+			b2BodyDef bd;
+			bd.type = b2_dynamicBody;
+			bd.position.Set(0.0f, 40.0f);
+			bd.angle = 0.25f * b2_pi;
+			m_body1 = m_world->CreateBody(&bd);
+    }
+    
+    #endif
