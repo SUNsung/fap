@@ -1,98 +1,41 @@
 
         
-                self.decisionNumber = decisionNumber
-        self.eot = eot
-        self.eof = eof
-        self.min = min
-        self.max = max
-        self.accept = accept
-        self.special = special
-        self.transition = transition
+            def test_key_error(self):
+        self.assertRaises(errors.Error, self._call, 'unknown_enhancement')
     
-            elif isinstance(e, EarlyExitException):
-            msg = 'required (...)+ loop did not match anything at character ' \
-                  + self.getCharErrorDisplay(e.c)
-            
-        elif isinstance(e, MismatchedNotSetException):
-            msg = 'mismatched character ' \
-                  + self.getCharErrorDisplay(e.c) \
-                  + ' expecting set ' \
-                  + repr(e.expecting)
+    from certbot import interfaces
+from certbot.plugins import common
     
-                    if c >= self.min[s] and c <= self.max[s]:
-                    # move to next state
-                    snext = self.transition[s][c-self.min[s]]
-                    #print 'in range, next state = %d' % snext
+      Args:
+    filename: The name of the current file.
+    clean_lines: A CleansedLines instance containing the file.
+    linenum: The number of the line to check.
+    error: The function to call with any errors found.
+  '''
     
+            # morsel/dict
+        morsel = cookies.Morsel()
+        morsel.set(*base_case)
+        morsel.update(attribs)
+        self.assertTrue(morsel == dict(morsel))
+        self.assertFalse(morsel != dict(morsel))
     
-class EventNotification( BaseRequest ):
-  def __init__( self, event_name, buffer_number = None, extra_data = None ):
-    super( EventNotification, self ).__init__()
-    self._event_name = event_name
-    self._buffer_number = buffer_number
-    self._extra_data = extra_data
-    self._response_future = None
-    self._cached_response = None
+        def parseURI(self, uri):
+        if self.entityResolver:
+            input = self.entityResolver.resolveEntity(None, uri)
+        else:
+            input = DOMEntityResolver().resolveEntity(None, uri)
+        return self.parse(input)
     
+        def test_varargs1_kw(self):
+        self.assertRaises(TypeError, {}.__contains__, x=2)
     
-def FormatDebugInfoResponse( response ):
-  if not response:
-    return 'Server errored, no debug info from server\n'
-  message = _FormatYcmdDebugInfo( response )
-  completer = response[ 'completer' ]
-  if completer:
-    message += _FormatCompleterDebugInfo( completer )
-  return message
+            with self.assertRaises(AttributeError):
+            rangeobj.start = 0
+        with self.assertRaises(AttributeError):
+            rangeobj.stop = 10
+        with self.assertRaises(AttributeError):
+            rangeobj.step = 1
     
-    
-GENERIC_RESPONSE = {
-  'clang': {
-    'has_support': True,
-    'version': 'Clang version'
-  },
-  'completer': {
-    'items': [
-      {
-        'key': 'key',
-        'value': 'value'
-      }
-    ],
-    'name': 'Completer name',
-    'servers': [
-      {
-        'address': '127.0.0.1',
-        'executable': '/path/to/executable',
-        'extras': [
-          {
-            'key': 'key',
-            'value': 'value'
-          }
-        ],
-        'is_running': True,
-        'logfiles': [
-          '/path/to/stdout/logfile',
-          '/path/to/stderr/logfile'
-        ],
-        'name': 'Server name',
-        'pid': 12345,
-        'port': 1234
-      }
-    ]
-  },
-  'extra_conf': {
-    'is_loaded': False,
-    'path': '/path/to/extra/conf'
-  },
-  'python': {
-    'executable': '/path/to/python/interpreter',
-    'version': 'Python version'
-  }
-}
-    
-    
-def setUpPackage():
-  # We treat warnings as errors in our tests because warnings raised inside Vim
-  # will interrupt user workflow with a traceback and we don't want that.
-  warnings.filterwarnings( 'error' )
-  # We ignore warnings from nose as we are not interested in them.
-  warnings.filterwarnings( 'ignore', module = 'nose' )
+            a[0], a[-1] = 200, -200
+        self.assertEqual(x[:], a.tolist())
