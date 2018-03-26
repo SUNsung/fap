@@ -1,124 +1,104 @@
 
         
-        #
+              def remember_cookie_values(resource)
+        options = { httponly: true }
+        options.merge!(forget_cookie_values(resource))
+        options.merge!(
+          value: resource.class.serialize_into_cookie(resource),
+          expires: resource.remember_expires_at
+        )
+      end
     
-    If you run into trouble, you can find helpful resources at https://jekyllrb.com/help/!
-            MSG
-            raise Jekyll::Errors::MissingDependencyException, name
-          end
+    module Devise
+  module Controllers
+    # Create url helpers to be used with resource/scope configuration. Acts as
+    # proxies to the generated routes created by devise.
+    # Resource param can be a string or symbol, a class, or an instance object.
+    # Example using a :user resource:
+    #
+    #   new_session_path(:user)      => new_user_session_path
+    #   session_path(:user)          => user_session_path
+    #   destroy_session_path(:user)  => destroy_user_session_path
+    #
+    #   new_password_path(:user)     => new_user_password_path
+    #   password_path(:user)         => user_password_path
+    #   edit_password_path(:user)    => edit_user_password_path
+    #
+    #   new_confirmation_path(:user) => new_user_confirmation_path
+    #   confirmation_path(:user)     => user_confirmation_path
+    #
+    # Those helpers are included by default to ActionController::Base.
+    #
+    # In case you want to add such helpers to another class, you can do
+    # that as long as this new class includes both url_helpers and
+    # mounted_helpers. Example:
+    #
+    #     include Rails.application.routes.url_helpers
+    #     include Rails.application.routes.mounted_helpers
+    #
+    module UrlHelpers
+      def self.remove_helpers!
+        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
+          remove_method method
         end
       end
-    end
+    
+      def test_file_open_permissions
+    Dir.mktmpdir(__method__.to_s) do |tmpdir|
+      tmp = File.join(tmpdir, 'x')
+      File.open(tmp, :mode     => IO::RDWR | IO::CREAT | IO::BINARY,
+                     :encoding => Encoding::ASCII_8BIT) do |x|
+    
+          assert_equal(false, set < klass[1,2,3], klass.name)
+      assert_equal(true, set < klass[1,2,3,4], klass.name)
+    
+      it 'decodes past whitespace bytes when passed the '*' modifier' do
+    [ ['a b c',    ['a b c']],
+      ['a\fb c',   ['a\fb c']],
+      ['a\nb c',   ['a\nb c']],
+      ['a\rb c',   ['a\rb c']],
+      ['a\tb c',   ['a\tb c']],
+      ['a\vb c',   ['a\vb c']],
+    ].should be_computed_by(:unpack, unpack_format('*'))
   end
 end
-
     
-            self
+        exit_loop = true
+    
+          it 'selects using the string when a hosts filter is present' do
+        dsl.set :filter, hosts: 'server.local'
+        SSHKit::Coordinator.expects(:new).with(['server.local']).returns(@coordinator)
+        dsl.on('server.local')
       end
     
-      def render_response
-    render json: {
-      html: view_to_html_string('shared/notifications/_button', notification_setting: @notification_setting),
-      saved: @saved
-    }
-  end
+      def capture_io
+    require 'stringio'
     
-      # if rss_url already in existing opml file, use that; otherwise, do a lookup
-  rss_url = nil
-  existing_blog = xml.xpath('//outline[@htmlUrl='#{web_url}']').first if xml
-  if existing_blog
-    rss_url = existing_blog.attr('xmlUrl')
-    puts '#{name}: ALREADY HAVE'
-  end
-    
-        # Returns a deep copy of this query and all its children.
-    #
-    # @return [Query]
-    def deep_copy
-      Query.new(
-        modifier.map {|c| c.is_a?(Sass::Script::Tree::Node) ? c.deep_copy : c},
-        type.map {|c| c.is_a?(Sass::Script::Tree::Node) ? c.deep_copy : c},
-        expressions.map {|e| e.map {|c| c.is_a?(Sass::Script::Tree::Node) ? c.deep_copy : c}})
-    end
-  end
-    
-    @@ chat
-<pre id='chat'></pre>
-<form>
-  <input id='msg' placeholder='type message here...' />
-</form>
-    
-          def instrument(env)
-        return unless i = options[:instrumenter]
-        env['rack.protection.attack'] = self.class.name.split('::').last.downcase
-        i.instrument('rack.protection', env)
-      end
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   Cookie Tossing
-    # Supported browsers:: all
-    # More infos::         https://github.com/blog/1466-yummy-cookies-across-domains
-    #
-    # Does not accept HTTP requests if the HTTP_COOKIE header contains more than one
-    # session cookie. This does not protect against a cookie overflow attack.
-    #
-    # Options:
-    #
-    # session_key:: The name of the session cookie (default: 'rack.session')
-    class CookieTossing < Base
-      default_reaction :deny
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   XSS
-    # Supported browsers:: all
-    # More infos::         http://en.wikipedia.org/wiki/Cross-site_scripting
-    #
-    # Automatically escapes Rack::Request#params so they can be embedded in HTML
-    # or JavaScript without any further issues. Calls +html_safe+ on the escaped
-    # strings if defined, to avoid double-escaping in Rails.
-    #
-    # Options:
-    # escape:: What escaping modes to use, should be Symbol or Array of Symbols.
-    #          Available: :html (default), :javascript, :url
-    class EscapedParams < Base
-      extend Rack::Utils
-    
-        it 'redirects requests with duplicate session cookies' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
-      expect(last_response).to be_redirect
-      expect(last_response.location).to eq('/')
-    end
-    
-      context 'escaping' do
-    before do
-      mock_app { |e| [200, {'Content-Type' => 'text/plain'}, [e['PATH_INFO']]] }
-    end
-    
-      describe 'new' do
-    it 'should allow disable session protection' do
+      context 'with custom session key' do
+    it 'denies requests with duplicate session cookies' do
       mock_app do
-        use Rack::Protection, :without_session => true
+        use Rack::Protection::CookieTossing, :session_key => '_session'
         run DummyApp
       end
     
-      it 'accepts requests with a changing Accept-Encoding header' do
-    # this is tested because previously it led to clearing the session
+    
+  it 'should allow changing the protection mode to a string' do
+    # I have no clue what other modes are available
+    mock_app do
+      use Rack::Protection::FrameOptions, :frame_options => 'ALLOW-FROM foo'
+      run DummyApp
+    end
+    
+      it 'accepts a session without changes to tracked parameters' do
     session = {:foo => :bar}
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_ENCODING' => 'a'
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_ENCODING' => 'b'
-    expect(session).not_to be_empty
+    get '/', {}, 'rack.session' => session
+    get '/', {}, 'rack.session' => session
+    expect(session[:foo]).to eq(:bar)
   end
     
-      # Run specs in random order to surface order dependencies. If you find an
-  # order dependency and want to debug it, you can fix the order by providing
-  # the seed, which is printed after each run.
-  #     --seed 1234
-  config.order = :random
     
-      def pretty?
-    params.has_key?('pretty')
+  it 'should set the X-Content-Type-Options for other content types' do
+    expect(get('/', {}, 'wants' => 'application/foo').header['X-Content-Type-Options']).to eq('nosniff')
   end
+    
+    module Jekyll
