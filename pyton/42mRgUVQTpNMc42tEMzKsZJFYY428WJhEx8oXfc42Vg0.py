@@ -1,39 +1,49 @@
 
         
-            def __eq__(self, other):
-        if isinstance(other, collections.Mapping):
-            other = CaseInsensitiveDict(other)
-        else:
-            return NotImplemented
-        # Compare insensitively
-        return dict(self.lower_items()) == dict(other.lower_items())
+                self.addr_defined = Addr.fromstring('127.0.0.1:443')
+        self.addr_default = Addr.fromstring('_default_:443')
     
-        def test_server_finishes_when_no_connections(self):
-        '''the server thread exits even if there are no connections'''
-        server = Server.basic_response_server()
-        with server:
-            pass
+        @mock.patch('certbot_compatibility_test.validator.requests.get')
+    def test_redirect_with_headers(self, mock_get_request):
+        mock_get_request.return_value = create_response(
+            301, {'location': 'https://test.com'})
+        self.assertTrue(self.validator.redirect(
+            'test.com', headers={'Host': 'test.com'}))
     
+        # Implement all methods from IAuthenticator, remembering to add
+    # 'self' as first argument, e.g. def prepare(self)...
+    
+    site_info = 'kuwo.cn'
+download = kuwo_download
+# download_playlist = playlist_not_supported('kugou')
+# download_playlist=playlist_not_supported('kuwo')
+download_playlist=kuwo_playlist_download
+
+    
+    from html.parser import HTMLParser
+    
+        #title
+    title = ''
+    profile_api = 'https://www.showroom-live.com/api/room/profile?room_id={room_id}'.format(room_id = room_id)
+    html = loads(get_content(profile_api))
     try:
-    import threading
-except ImportError:
-    import dummy_threading as threading
+        title = html['main_name']
+    except KeyError:
+        title = 'Showroom_{room_id}'.format(room_id = room_id)
     
-    import sys
+        The name for each file chosen consists os the section id in the markdown document, a counter for the snippet inside the section.
     
-        def doc(code):
-        names = ', '.join('``%s``' % n for n in _codes[code])
-        return '* %d: %s' % (code, names)
+    if __name__ == '__main__':
+    main()
+
+    
+    def is_prime(n):
+    if n % 2 == 0:
+        return False
     
     
-@pytest.mark.parametrize('var,scheme', _proxy_combos)
-def test_use_proxy_from_environment(httpbin, var, scheme):
-    url = '{0}://httpbin.org'.format(scheme)
-    fake_proxy = Server()  # do nothing with the requests; just close the socket
-    with fake_proxy as (host, port):
-        proxy_url = 'socks5://{0}:{1}'.format(host, port)
-        kwargs = {var: proxy_url}
-        with override_environ(**kwargs):
-            # fake proxy's lack of response will cause a ConnectionError
-            with pytest.raises(requests.exceptions.ConnectionError):
-                requests.get(url)
+  def Response( self ):
+    return {}
+    
+    DIR_OF_THIS_SCRIPT = p.dirname( p.abspath( __file__ ) )
+DIR_OF_OLD_LIBS = p.join( DIR_OF_THIS_SCRIPT, 'python' )
