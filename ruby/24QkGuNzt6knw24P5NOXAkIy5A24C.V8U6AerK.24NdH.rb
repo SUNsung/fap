@@ -1,167 +1,137 @@
 
         
-            confirmed_user = User.confirm_by_token(raw)
-    assert_equal 'was already confirmed, please try signing in', confirmed_user.errors[:email].join
+          def test_javascript_tag
+    self.output_buffer = 'foo'
+    
+            def content_tag_string(name, content, options, escape = true)
+          tag_options = tag_options(options, escape) if options
+          content     = ERB::Util.unwrapped_html_escape(content) if escape
+          '<#{name}#{tag_options}>#{PRE_CONTENT_STRINGS[name]}#{content}</#{name}>'.html_safe
+        end
+    
+      test 'helpers' do
+    assert_response_code_range 200..299, :successful?
+    assert_response_code_range [404],    :not_found?
+    assert_response_code_range 300..399, :redirection?
+    assert_response_code_range 500..599, :server_error?
+    assert_response_code_range 400..499, :client_error?
   end
     
-        # The path used after resending confirmation instructions.
-    def after_resending_confirmation_instructions_path_for(resource_name)
-      is_navigational_format? ? new_session_path(resource_name) : '/'
-    end
+          def index
+        self.response_body = @list.join(', ')
+      end
     
-        def translation_scope
-      'devise.passwords'
+          assert_equal 'entry', @controller.response.body
+      assert @controller.params.has_key?(:entry)
+      assert_equal 'content...', @controller.params['entry']['summary']
     end
+  end
+    
+          def handle_exception_with_mailer_class(exception)
+        if klass = mailer_class
+          klass.handle_exception exception
+        else
+          raise exception
+        end
+      end
+  end
 end
 
     
-      # GET /resource/unlock/new
-  def new
-    self.resource = resource_class.new
-  end
+        # An email was received.
+    def receive(event)
+      info { 'Received mail (#{event.duration.round(1)}ms)' }
+      debug { event.payload[:mail] }
+    end
     
-      # Helper for use in before_actions where no authentication is required.
-  #
-  # Example:
-  #   before_action :require_no_authentication, only: :new
-  def require_no_authentication
-    assert_is_devise_resource!
-    return unless is_navigational_format?
-    no_input = devise_mapping.no_input_strategies
+          check_class_collision suffix: 'Mailer'
     
-      # Keys that should have whitespace stripped.
-  mattr_accessor :strip_whitespace_keys
-  @@strip_whitespace_keys = [:email]
+    def source_dir(*subdirs)
+  test_dir('source', *subdirs)
+end
     
-          def remember_me_is_active?(resource)
-        return false unless resource.respond_to?(:remember_me)
-        scope = Devise::Mapping.find_scope!(resource)
-        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
-        resource.remember_me?(token, generated_at)
-      end
-    
-    module Devise
-  module Controllers
-    # Create url helpers to be used with resource/scope configuration. Acts as
-    # proxies to the generated routes created by devise.
-    # Resource param can be a string or symbol, a class, or an instance object.
-    # Example using a :user resource:
-    #
-    #   new_session_path(:user)      => new_user_session_path
-    #   session_path(:user)          => user_session_path
-    #   destroy_session_path(:user)  => destroy_user_session_path
-    #
-    #   new_password_path(:user)     => new_user_password_path
-    #   password_path(:user)         => user_password_path
-    #   edit_password_path(:user)    => edit_user_password_path
-    #
-    #   new_confirmation_path(:user) => new_user_confirmation_path
-    #   confirmation_path(:user)     => user_confirmation_path
-    #
-    # Those helpers are included by default to ActionController::Base.
-    #
-    # In case you want to add such helpers to another class, you can do
-    # that as long as this new class includes both url_helpers and
-    # mounted_helpers. Example:
-    #
-    #     include Rails.application.routes.url_helpers
-    #     include Rails.application.routes.mounted_helpers
-    #
-    module UrlHelpers
-      def self.remove_helpers!
-        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
-          remove_method method
+          #
+      # Require a gem or file if it's present, otherwise silently fail.
+      #
+      # names - a string gem name or array of gem names
+      #
+      def require_if_present(names)
+        Array(names).each do |name|
+          begin
+            require name
+          rescue LoadError
+            Jekyll.logger.debug 'Couldn't load #{name}. Skipping.'
+            yield(name, version_constraint(name)) if block_given?
+            false
+          end
         end
       end
     
-      def dry_run?
-    !!@dry_run
-  end
-    
-          { :title => 'Event', :entries => present_hash(payload) }
-    else
-      { :title => payload.to_s, :entries => [] }
-    end
-  end
-    
-      def show
-    respond_to do |format|
-      format.html
-      format.json { render json: @event }
-    end
-  end
-    
-    # puts '\nDone.'
-
-    
-            subject.call(json, forwarder)
-      end
-    
-      attributes :id, :type, :name, :updated
-    
-        it 'does not create a domain block' do
-      expect(DomainBlock.blocked?('evil.org')).to be false
-    end
-    
-          input.close if input.is_a?(File)
-    
-          # If this importer is based on files on the local filesystem This method
-      # should return true if the file, when changed, should trigger a
-      # recompile.
-      #
-      # It is acceptable for non-sass files to be watched and trigger a recompile.
-      #
-      # @param filename [String] The absolute filename for a file that has changed.
-      # @return [Boolean] When the file changed should cause a recompile.
-      def watched_file?(filename)
-        false
-      end
-    end
-  end
-end
-
-    
-    module Sass
-  # Runs a SassScript read-eval-print loop.
-  # It presents a prompt on the terminal,
-  # reads in SassScript expressions,
-  # evaluates them,
-  # and prints the result.
-  class Repl
-    # @param options [{Symbol => Object}] An options hash.
-    def initialize(options = {})
-      @options = options
-    end
-    
-        # Creates an instance of CategoryIndex for each category page, renders it, and
-    # writes the output to a file.
+        # Initialize a new Layout.
     #
-    #  +category_dir+ is the String path to the category folder.
-    #  +category+     is the category currently being processed.
-    def write_category_index(category_dir, category)
-      index = CategoryIndex.new(self, self.source, category_dir, category)
-      index.render(self.layouts, site_payload)
-      index.write(self.dest)
-      # Record the fact that this page has been added, otherwise Site::cleanup will remove it.
-      self.pages << index
+    # site - The Site.
+    # base - The String path to the source.
+    # name - The String filename of the post file.
+    def initialize(site, base, name)
+      @site = site
+      @base = base
+      @name = name
     
-          content_type 'application/json'
-      LogStash::Json.dump(data, {:pretty => pretty?})
-    else
-      content_type 'text/plain'
-      data.to_s
-    end
+          it 'get GIT-SVN build number' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            get_build_number_repository
+        end').runner.execute(:test)
+    
+      def pod_prefix
+    File.expand_path('../..', pod_bin)
   end
     
-    module LogStash
-  module Api
-    module Commands
-      module System
-        class Plugins < Commands::Base
-          def run
-            { :total => plugins.count, :plugins => plugins }
+            def validate!
+          super
+          if @pod_name.nil? && !@wipe_all
+            # Security measure, to avoid removing the pod cache too agressively by mistake
+            help! 'You should either specify a pod name or use the --all flag'
           end
+        end
     
-      def seventy_five_percent
-    [1, (maximum * 0.75)].max.floor
-  end
+            def self.options
+          [[
+            '--short', 'Only print the path relative to the cache root'
+          ]].concat(super)
+        end
+    
+        def initialize(tag_name, markup, tokens)
+      @by = nil
+      @source = nil
+      @title = nil
+      if markup =~ FullCiteWithTitle
+        @by = $1
+        @source = $2 + $3
+        @title = $4.titlecase.strip
+      elsif markup =~ FullCite
+        @by = $1
+        @source = $2 + $3
+      elsif markup =~ AuthorTitle
+        @by = $1
+        @title = $2.titlecase.strip
+      elsif markup =~ Author
+        @by = $1
+      end
+      super
+    end
+    
+        def get_cached_gist(gist, file)
+      return nil if @cache_disabled
+      cache_file = get_cache_file_for gist, file
+      File.read cache_file if File.exist? cache_file
+    end
+    
+    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
+
+    
+        def initialize(tag_name, markup, tokens)
+      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
+      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
+      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
+      super
+    end
