@@ -1,79 +1,22 @@
 
         
-        faces = fetch_lfw_people(resize=.2, min_faces_per_person=5)
-# limit dataset to 5000 people (don't care who they are!)
-X = faces.data[:5000]
-n_samples, h, w = faces.images.shape
-n_features = X.shape[1]
+            classifiers = proj_info['classifiers'],
     
-    def plot(func):
-    random_state = check_random_state(0)
-    one_core = []
-    multi_core = []
-    sample_sizes = range(1000, 6000, 1000)
-    
-        ###########################################################################
-    # Set SparseRandomProjection input
-    sparse_matrix_params = {
-        'n_components': opts.n_components,
-        'random_state': opts.random_seed,
-        'density': opts.density,
-        'eps': opts.eps,
-    }
-    
-        ###########################################################################
-    # Set custom reservoir based method
-    sampling_algorithm['custom-pool'] = \
-        lambda n_population, n_samples, random_state=None: \
-            sample_without_replacement(n_population,
-                                       n_samples,
-                                       method='pool',
-                                       random_state=random_state)
-    
-        An example with a long-untouched module that everyone has
-    >>> _linkcode_resolve('py', {'module': 'tty',
-    ...                          'fullname': 'setraw'},
-    ...                   package='tty',
-    ...                   url_fmt='http://hg.python.org/cpython/file/'
-    ...                           '{revision}/Lib/{package}/{path}#L{lineno}',
-    ...                   revision='xxxx')
-    'http://hg.python.org/cpython/file/xxxx/Lib/tty/tty.py#L18'
-    '''
-    
-    ARCHIVE_NAME = URL.rsplit('/', 1)[1]
-TRAIN_FOLDER = '20news-bydate-train'
-TEST_FOLDER = '20news-bydate-test'
-    
-            if not in_exercise_region or linestrip.startswith('#'):
-            output_file.write(line)
-    
-    import numpy as np
-from sklearn.covariance import EllipticEnvelope
-from sklearn.svm import OneClassSVM
-import matplotlib.pyplot as plt
-import matplotlib.font_manager
-from sklearn.datasets import load_boston
+    site = Bigthink()
+download = site.download_by_url
+
     
     
-def plot_calibration_curve(est, name, fig_index):
-    '''Plot calibration curve for est w/o and with calibration. '''
-    # Calibrated with isotonic calibration
-    isotonic = CalibratedClassifierCV(est, cv=2, method='isotonic')
+def huaban_download(url, output_dir='.', **kwargs):
+    if re.match(r'http://huaban\.com/boards/\d+/', url):
+        huaban_download_board(url, output_dir, **kwargs)
+    else:
+        print('Only board (画板) pages are supported currently')
+        print('ex: http://huaban.com/boards/12345678/')
     
-    _help = '''Usage: {} [OPTION]... [URL]...
-TODO
-'''.format(script_name)
-    
-    def ehow_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-	
-	assert re.search(r'http://www.ehow.com/video_', url), 'URL you entered is not supported'
-    
-    class MusicPlayOn(VideoExtractor):
-    name = 'MusicPlayOn'
-    
-            # construct available streams
-        if orig_img: self.streams['original'] = {'url': orig_img}
-        if twit_img: self.streams['small'] = {'url': twit_img}
+            # extract title
+        self.title = match1(content,
+                            r'<meta property='og:description' name='og:description' content='([^']+)'')
     
         #title
     title = ''
@@ -84,36 +27,37 @@ TODO
     except KeyError:
         title = 'Showroom_{room_id}'.format(room_id = room_id)
     
-        #Unless specified otherwise by the user, this is the default colorscheme
-    colorscheme = 'basic'
+    
+    def decode(self, s, _w=WHITESPACE.match):
+        '''Return the Python representation of ``s`` (a ``str`` instance
+        containing a JSON document).
     
     
-class Action(object):
+class _AsyncDeprecatedProperty:
+    def warn(self, cls):
+        clsname = cls.__name__
+        warnings.warn(
+            '{cls}.async is deprecated; use {cls}.async_'.format(cls=clsname),
+            DeprecationWarning)
     
-        def test_frozen_pool(self):
-        with ObjectPool(self.sample_queue) as pool:
-            self.assertEqual(pool, 'first')
-            self.assertEqual(pool, 'first')
-        self.assertTrue(self.sample_queue.get() == 'second')
-        self.assertFalse(self.sample_queue.empty())
-        self.assertTrue(self.sample_queue.get() == 'first')
-        self.assertTrue(self.sample_queue.empty())
+        def test_varargs14_kw(self):
+        msg = r'^product\(\) takes at most 1 keyword argument \(2 given\)$'
+        self.assertRaisesRegex(TypeError, msg,
+                               itertools.product, 0, repeat=1, foo=2)
     
-        def tearDown(self):
-        self.out.close()
-        sys.stdout = self.saved_stdout
+        def test_pointer_type_name(self):
+        LargeNamedType = type('T' * 2 ** 25, (Structure,), {})
+        self.assertTrue(POINTER(LargeNamedType))
     
-    '''
-Port of the Java example of 'Setter Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
-http://xunitpatterns.com/Dependency%20Injection.html.
-    
-    __author__ = 'Ibrahim Diop <ibrahim@sikilabs.com>'
-    
-    
-def count_to(count):
-    '''Counts by word numbers, up to a maximum of five'''
-    numbers = ['one', 'two', 'three', 'four', 'five']
-    for number in numbers[:count]:
-        yield number
+    def download_pdf(link, location, name):
+    try:
+        response = requests.get(link)
+        with open(os.path.join(location, name), 'wb') as f:
+        	f.write(response.content)
+        	f.close()
+    except HTTPError:
+        print('>>> Error 404: cannot be downloaded!\n') 
+        raise   
+    except socket.timeout:
+        print(' '.join(('can't download', link, 'due to connection timeout!')) )
+        raise
