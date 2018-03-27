@@ -1,218 +1,143 @@
 
         
-              private
-        def listener
-          @listener || @server.mutex.synchronize { @listener ||= Listener.new(self, @server.event_loop) }
-        end
+        def bottle_resolve_formula_names(bottle_file)
+  receipt_file_path = bottle_receipt_path bottle_file
+  receipt_file = Utils.popen_read('tar', '-xOzf', bottle_file, receipt_file_path)
+  name = receipt_file_path.split('/').first
+  tap = Tab.from_file_content(receipt_file, '#{bottle_file}/#{receipt_file_path}').tap
     
-          def first
-        @text = 'Hello world'
+        # Remove directories opposite from traversal, so that a subtree with no
+    # actual files gets removed correctly.
+    dirs.reverse_each do |d|
+      if d.children.empty?
+        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
+        d.rmdir
       end
-    
-    require 'abstract_unit'
-    
-      class ExclaimerMiddleware
-    def initialize(app)
-      @app = app
     end
     
-        assert_raises(Interrupt) do
-      req.request_parameters
-    end
-  end
-    
-    ActionMailer::LogSubscriber.attach_to :action_mailer
-
-    
-        begin
-      raise '#{short_type} does not support dry-run' unless can_dry_run?
-      readonly!
-      @dry_run_started_at = Time.zone.now
-      @dry_run_logger.info('Dry Run started')
-      if event
-        raise 'This agent cannot receive an event!' unless can_receive_events?
-        receive([event])
-      else
-        check
-      end
-      @dry_run_logger.info('Dry Run finished')
-    rescue => e
-      @dry_run_logger.info('Dry Run failed')
-      error 'Exception during dry-run. #{e.message}: #{e.backtrace.join('\n')}'
-    end
-    
-        respond_to do |format|
-      format.html { redirect_to jobs_path, notice: 'Failed jobs removed.' }
-      format.json { head :no_content }
-    end
-  end
-    
-      def update
-    @user_credential = current_user.user_credentials.find(params[:id])
-    
-        def as_json
-      @pages
-    end
-    
-            css('[id]').each do |node|
-          # Module
-          if node.name == 'h2'
-            type = node.content.remove 'Backbone.'
-            if type.capitalize! # sync, history
-              entries << [node.content, node['id'], type]
-            end
-            next
-          end
-    
-      def test_assoc
-    assert_nil(ENV.assoc('test'))
-    ENV['test'] = 'foo'
-    k, v = ENV.assoc('test')
-    if IGNORE_CASE
-      assert_equal('TEST', k.upcase)
-      assert_equal('FOO', v.upcase)
+      def print_remaining_files(files, root, other = '')
+    case files.length
+    when 0
+      # noop
+    when 1
+      puts files
     else
-      assert_equal('test', k)
-      assert_equal('foo', v)
-    end
-    assert_invalid_env {|var| ENV.assoc(var)}
-    assert_predicate(v, :tainted?)
-    assert_equal(Encoding.find('locale'), v.encoding)
-  end
-    
-        o = Object.new
-    def o.hash; 2 << 100; end
-    assert_equal({o=>1}.hash, @cls[o=>1].hash)
-  end
-    
-        assert_not_equal(set1, set2)
-  end
-    
-      def test_reinitialize
-    bug8099 = '[ruby-core:53436] [Bug #8099]'
-    t2000 = get_t2000
-    assert_raise(TypeError, bug8099) {
-      t2000.send(:initialize, 2013, 03, 14)
-    }
-    assert_equal(get_t2000, t2000, bug8099)
-  end
-    
-      it 'decodes the number of bytes specified by the count modifier including whitespace bytes' do
-    [ ['a bc',  ['a b', 'c']],
-      ['a\fbc', ['a\fb', 'c']],
-      ['a\nbc', ['a\nb', 'c']],
-      ['a\rbc', ['a\rb', 'c']],
-      ['a\tbc', ['a\tb', 'c']],
-      ['a\vbc', ['a\vb', 'c']]
-    ].should be_computed_by(:unpack, unpack_format(3)+unpack_format)
-  end
-    
-      it 'cannot be rescued' do
-    thread = Thread.new do
-      begin
-        Thread.current.send(@method)
-      rescue Exception
-        ScratchPad.record :in_rescue
-      end
-     ScratchPad.record :end_of_thread_block
-    end
-    
-      it 'spawns a new Thread running the block' do
-    run = false
-    t = Thread.send(@method) { run = true }
-    t.should be_kind_of(Thread)
-    t.join
-    
-          connection.execute(<<~SQL)
-        CREATE OR REPLACE FUNCTION timestamp_id(table_name text)
-        RETURNS bigint AS
-        $$
-          DECLARE
-            time_part bigint;
-            sequence_base bigint;
-            tail bigint;
-          BEGIN
-            time_part := (
-              -- Get the time in milliseconds
-              ((date_part('epoch', now()) * 1000))::bigint
-              -- And shift it over two bytes
-              << 16);
-    
-      yield
-end
-    
-          expect(response).to redirect_to(settings_notifications_path)
-      user.reload
-      expect(user.settings['notification_emails']['follow']).to be true
-      expect(user.settings['interactions']['must_be_follower']).to be false
+      puts '#{root}/ (#{files.length} #{other}files)'
     end
   end
 end
 
     
-          def call
-        title('Gems')
-        table(all_gem_names) do |gem, row|
-          row.yellow if update_available?(gem)
-          row << gem
-          row << installed_gem_version(gem)
-          row << '(update available)' if update_available?(gem)
-        end
-      end
+      SEARCHABLE_TAPS = OFFICIAL_TAPS.map { |tap| ['Homebrew', tap] } + [
+    %w[Caskroom cask],
+    %w[Caskroom versions]
+  ]
     
-          # Prints a table for a given array of records. For each record, the block
-      # is yielded two arguments: the record and a Row object. To print values
-      # for that record, add values using `row << 'some value'`. A row can
-      # optionally be highlighted in yellow using `row.yellow`.
-      def table(records, &block)
-        return if records.empty?
-        rows = collect_rows(records, &block)
-        col_widths = calculate_column_widths(rows)
-    
-        def ensure_stage
-      Rake::Task.define_task(:ensure_stage) do
-        unless stage_set?
-          puts t(:stage_not_set)
-          exit 1
-        end
-      end
-    end
-    
-      # Read and eval a .rake file in such a way that `self` within the .rake file
-  # refers to this plugin instance. This gives the tasks in the file access to
-  # helper methods defined by the plugin.
-  def eval_rakefile(path)
-    contents = IO.read(path)
-    instance_eval(contents, path, 1)
+      def failure
+    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
+    redirect_to after_omniauth_failure_path_for(resource_name)
   end
     
-          it 'filters from ENV[ROLES]' do
-        hosts = dsl.roles(:db)
-        all = dsl.roles(:all)
-        SSHKit::Coordinator.expects(:new).with(hosts).returns(@coordinator)
-        ENV['ROLES'] = 'db'
-        dsl.on(all)
+        # The path used after resending confirmation instructions.
+    def after_resending_confirmation_instructions_path_for(resource_name)
+      is_navigational_format? ? new_session_path(resource_name) : '/'
+    end
+    
+      protected
+    
+        def unlock_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :unlock_instructions, opts)
+    end
+    
+        def is_navigational_format?
+      Devise.navigational_formats.include?(request_format)
+    end
+    
+      def new
+    @user_credential = current_user.user_credentials.build
+    
+    class ActivityPub::EmojiSerializer < ActiveModel::Serializer
+  include RoutingHelper
+    
+        def register_compass_extension
+      ::Compass::Frameworks.register(
+          'bootstrap',
+          :version               => Bootstrap::VERSION,
+          :path                  => gem_path,
+          :stylesheets_directory => stylesheets_path,
+          :templates_directory   => File.join(gem_path, 'templates')
+      )
+    end
+    
+        def log_http_get_file(url, cached = false)
+      s = '  #{'CACHED ' if cached}GET #{url}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
+      end
+    end
+    
+          File.open('bower.json', 'w') do |f|
+        f.puts JSON.pretty_generate(spec)
+      end
+    end
+  end
+end
+
+    
+      def weekly_user_stats
+    @created_users_by_week = Hash.new{ |h,k| h[k] = [] }
+    @created_users = User.where('username IS NOT NULL and created_at IS NOT NULL')
+    @created_users.find_each do |u|
+      week = u.created_at.beginning_of_week.strftime('%Y-%m-%d')
+      @created_users_by_week[week] << u.username
+    end
+    
+    module Api
+  module OpenidConnect
+    class ClientsController < ApplicationController
+      skip_before_action :verify_authenticity_token
+    
+    public_dir      = 'public'    # compiled site directory
+source_dir      = 'source'    # source file directory
+blog_index_dir  = 'source'    # directory for your blog's index page (if you put your index in source/blog/index.html, set this to 'source/blog')
+deploy_dir      = '_deploy'   # deploy directory (for Github pages deployment)
+stash_dir       = '_stash'    # directory to stash posts for speedy generation
+posts_dir       = '_posts'    # directory for blog files
+themes_dir      = '.themes'   # directory for blog files
+new_post_ext    = 'markdown'  # default new post file extension when using the new_post task
+new_page_ext    = 'markdown'  # default new page file extension when using the new_page task
+server_port     = '4000'      # port for preview server eg. localhost:4000
+    
+        def generate(site)
+      site.write_category_indexes
+    end
+    
+        def render(context)
+      if @img
+        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      else
+        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+      end
+    end
+  end
+end
+    
+          def get_shallow(*path)
+        snapshot.metric_store.get_shallow(*path)
       end
     
-      it 'overrides the rake method, and sets the sshkit_backend to SSHKit::Backend::Printer' do
-    capture_io do
-      flags '--dry-run', '-n'
-    end
-    sshkit_backend = Capistrano::Configuration.fetch(:sshkit_backend)
-    expect(sshkit_backend).to eq(SSHKit::Backend::Printer)
-  end
+      def setup_multi_encode!
+    @has_encode_sync = self.methods.include?(:encode_sync)
     
-        # Returns the fingerprint of the instance.
-    def fingerprint attachment, style_name
-      attachment.fingerprint
-    end
+      context 'called with two widths' do
+    it 'applies to alternating sides' do
+      rule = 'border-width: 2px 3px'
     
-            def responds?
-          methods = @subject.instance_methods.map(&:to_s)
-          methods.include?('#{@attachment_name}') &&
-            methods.include?('#{@attachment_name}=') &&
-            methods.include?('#{@attachment_name}?')
-        end
-    
-    module Paperclip
-  require 'rails'
+      context 'called with multiple prefixes' do
+    it 'applies the prefixes to the property' do
+      rule = '-moz-appearance: none; ' +
+             '-ms-appearance: none; ' +
+             'appearance: none;'
