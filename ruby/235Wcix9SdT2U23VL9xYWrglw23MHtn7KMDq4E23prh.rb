@@ -1,89 +1,52 @@
 
         
-          # @private
-  def unused_options
-    @options - @args
+        require 'abstract_unit'
+    
+          def index
+        @text ||= nil
+        self.response_body = @text.to_s
+      end
+    end
+    
+      def test_register_and_use_json_simple
+    with_test_route_set do
+      with_params_parsers Mime[:json] => Proc.new { |data| ActiveSupport::JSON.decode(data)['request'].with_indifferent_access } do
+        post '/',
+          params: '{'request':{'summary':'content...','title':'JSON'}}',
+          headers: { 'CONTENT_TYPE' => 'application/json' }
+    
+      # Skips the current run on Rubinius using Minitest::Assertions#skip
+  private def rubinius_skip(message = '')
+    skip message if RUBY_ENGINE == 'rbx'
   end
-    
-      def filtered_list
-    names = if ARGV.named.empty?
-      Formula.racks
-    else
-      ARGV.named.map { |n| HOMEBREW_CELLAR+n }.select(&:exist?)
-    end
-    if ARGV.include? '--pinned'
-      pinned_versions = {}
-      names.each do |d|
-        keg_pin = (HOMEBREW_LIBRARY/'PinnedKegs'/d.basename.to_s)
-        if keg_pin.exist? || keg_pin.symlink?
-          pinned_versions[d] = keg_pin.readlink.basename.to_s
-        end
-      end
-      pinned_versions.each do |d, version|
-        puts '#{d.basename}'.concat(ARGV.include?('--versions') ? ' #{version}' : '')
-      end
-    else # --versions without --pinned
-      names.each do |d|
-        versions = d.subdirs.map { |pn| pn.basename.to_s }
-        next if ARGV.include?('--multiple') && versions.length < 2
-        puts '#{d.basename} #{versions*' '}'
-      end
-    end
-  end
-end
-    
-      def search_formulae(rx)
-    aliases = Formula.alias_full_names
-    results = (Formula.full_names+aliases).grep(rx).sort
-    
-        updated_taps = []
-    Tap.each do |tap|
-      next unless tap.git?
-      begin
-        reporter = Reporter.new(tap)
-      rescue Reporter::ReporterRevisionUnsetError => e
-        onoe e if ARGV.homebrew_developer?
-        next
-      end
-      if reporter.updated?
-        updated_taps << tap.name
-        hub.add(reporter)
-      end
-    end
-    
-          def initialize(*args, &block)
-        @bypass_confirmation_postpone = false
-        @skip_reconfirmation_in_callback = false
-        @reconfirmation_required = false
-        @skip_confirmation_notification = false
-        @raw_confirmation_token = nil
-        super
-      end
-    
-      def translation_scope
-    'devise.omniauth_callbacks'
+  # Skips the current run on JRuby using Minitest::Assertions#skip
+  private def jruby_skip(message = '')
+    skip message if defined?(JRUBY_VERSION)
   end
 end
 
     
-        def translation_scope
-      'devise.confirmations'
-    end
-end
-
-    
-        def email_changed(record, opts={})
-      devise_mail(record, :email_changed, opts)
-    end
-    
-          def remember_cookie_values(resource)
-        options = { httponly: true }
-        options.merge!(forget_cookie_values(resource))
-        options.merge!(
-          value: resource.class.serialize_into_cookie(resource),
-          expires: resource.remember_expires_at
-        )
+        AssertSelectMailer.test('<div><p>foo</p><p>bar</p></div>').deliver_now
+    assert_select_email do
+      assert_select 'div:root' do
+        assert_select 'p:first-child', 'foo'
+        assert_select 'p:last-child', 'bar'
       end
+    end
+  end
+    
+      # Finds the projects '@user' contributed to, limited to either public projects
+  # or projects visible to the given user.
+  #
+  # current_user - When given the list of the projects is limited to those only
+  #                visible by this user.
+  #
+  # Returns an ActiveRecord::Relation.
+  def execute(current_user = nil)
+    segments = all_projects(current_user)
+    
+        find_union(segments, Group).order_id_desc
+  end
     
     module Devise
   module Controllers
@@ -119,30 +82,60 @@ end
         end
       end
     
-        export LANG=en_US.UTF-8
-    \e[0m
-    DOC
-  end
-    
-            def self.options
-          [[
-            '--all', 'Remove all the cached pods without asking'
-          ]].concat(super)
-        end
-    
-    # include would include the module in Object
-# extend only extends the `main` object
-extend Sinatra::Delegator
-    
-          def session?(env)
-        env.include? options[:session_key]
-      end
-    
-          get '/?95df8d9bf5237ad08df3115ee74dcb10'
-      expect(body).to eq('hi')
+        def form_configurable_fields
+      self._form_configurable_fields
     end
     
+        # Validates that {#boundary} is {#valid_ip_or_range? a valid IP address or
+    # IP address range}. Due to this not being tested before it was moved here
+    # from Mdm, the default workspace does not validate. We always validate boundaries
+    # and a workspace may have a blank default boundary.
+    #
+    # @return [void]
+    def boundary_must_be_ip_range
+      unless boundary.blank?
+        begin
+          boundaries = Shellwords.split(boundary)
+        rescue ArgumentError
+          boundaries = []
+        end
     
-  it 'should set the X-Content-Type-Options for other content types' do
-    expect(get('/', {}, 'wants' => 'application/foo').header['X-Content-Type-Options']).to eq('nosniff')
+        end
+    
+          case matched
+    
+    	def dump_all
+		block.each do |block|
+			block.each do |line|
+				print '#{line}\n'
+			end
+		end
+	end
+    
+        # See \{#type}.
+    # @return [String]
+    def resolved_type
+      # type should contain only a single string
+      type.first || ''
+    end
+    
+    module Sass
+  # Runs a SassScript read-eval-print loop.
+  # It presents a prompt on the terminal,
+  # reads in SassScript expressions,
+  # evaluates them,
+  # and prints the result.
+  class Repl
+    # @param options [{Symbol => Object}] An options hash.
+    def initialize(options = {})
+      @options = options
+    end
+    
+        begin
+      create_scaffold(source, @target_path)
+    rescue Errno::EACCES => exception
+      report_exception('Permission denied when executing the plugin manager', exception)
+    rescue => exception
+      report_exception('Plugin creation Aborted', exception)
+    end
   end
