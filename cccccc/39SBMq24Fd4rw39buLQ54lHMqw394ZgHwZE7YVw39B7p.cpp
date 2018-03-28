@@ -1,254 +1,253 @@
 
         
-        #include 'hphp/runtime/base/array-init.h'
-#include 'hphp/runtime/base/datetime.h'
-#include 'hphp/runtime/base/resource-data.h'
-#include 'hphp/runtime/base/type-array.h'
-#include 'hphp/runtime/base/type-string.h'
-#include 'hphp/util/timer.h'
+        #ifndef TENSORFLOW_COMMON_RUNTIME_SESSION_FACTORY_H_
+#define TENSORFLOW_COMMON_RUNTIME_SESSION_FACTORY_H_
     
-      std::deque<std::string> m_pipeline; // the intermediate pagelet results
-  std::set<std::string> m_rfc1867UploadedFiles;
-  std::string m_files; // serialized to use as $_FILES
     
-    /*
- * Order blocks for lowering to machine code.  May use different layout
- * algorithms depending on the TransKind of `unit'.
- *
- * The output is guaranteed to be partitioned by area relative to `text'.  This
- * is almost the same as partitioning by AreaIndex, except we may interleave,
- * e.g., Main and Cold blocks in the same partition if their actual code areas
- * in `text' are the same.
- */
-jit::vector<Vlabel> layoutBlocks(Vunit& unit, const Vtext& text);
-    
-    void ThriftBuffer::read(std::string &data) {
-  String sdata;
-  read(sdata);
-  data = std::string(sdata.data(), sdata.size());
+    {  ExpectSuccess(Builder().Attr('N', 3).Attr('T', DT_INT32), {},
+                {DT_INT32, DT_INT32, DT_INT32}, R'proto(
+      op: 'NPolymorphicOutDefault'
+      attr { key: 'N' value { i: 3 } }
+      attr { key: 'T' value { type: DT_INT32 } } )proto');
 }
     
-      if (file_reset(ms) == -1)
-    goto done;
-    
-    struct Block;
-struct SSATmp;
-    
-      void zero() {
-    memset(m_destBase, 0, m_frontier - m_base);
-    clear();
-  }
-    
-    
-    {  // Returns a heuristic cutoff on block errors in the sense that we won't
-  // consider distortions where a block error is greater than this.
-  virtual float BlockErrorLimit() const = 0;
-  // Given the search direction (+1 for upwards and -1 for downwards) and the
-  // current distance map, fills in *block_weight image with the relative block
-  // error adjustment weights.
-  // The target_mul param has the same semantics as in DistanceOK().
-  // Note that this is essentially a static function in the sense that it does
-  // not depend on the last Compare() call.
-  virtual void ComputeBlockErrorAdjustmentWeights(
-      int direction, int max_block_dist, double target_mul, int factor_x,
-      int factor_y, const std::vector<float>& distmap,
-      std::vector<float>* block_weight) = 0;
-};
-    
-    #ifndef GUETZLI_DCT_DOUBLE_H_
-#define GUETZLI_DCT_DOUBLE_H_
-    
-        std::sort(tree, tree + n, SortHuffmanTree);
-    
-    #include 'guetzli/jpeg_data.h'
-    
-    // Mimic libjpeg's heuristics to guess jpeg color space.
-// Requires that the jpg has 3 components.
-bool HasYCbCrColorSpace(const JPEGData& jpg) {
-  bool has_Adobe_marker = false;
-  uint8_t Adobe_transform = 0;
-  for (const std::string& app : jpg.app_data) {
-    if (static_cast<uint8_t>(app[0]) == 0xe0) {
-      return true;
-    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
-      has_Adobe_marker = true;
-      Adobe_transform = app[14];
+    namespace tensorflow {
+namespace port {
     }
+    }
+    
+    
+    {
+    {    IntType gidy = blockIdx.y * blockDim.y + threadIdx.y;
+    for (; gidy < total_rows; gidy += blockDim.y * gridDim.y)
+      output[gidy * total_cols + gidx] =
+          input_ptr[gidy * segment_width + local_col];
   }
-  if (has_Adobe_marker) {
-    return (Adobe_transform != 0);
-  }
-  const int cid0 = jpg.components[0].id;
-  const int cid1 = jpg.components[1].id;
-  const int cid2 = jpg.components[2].id;
-  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
 }
     
-    #ifndef GUETZLI_JPEG_DATA_READER_H_
-#define GUETZLI_JPEG_DATA_READER_H_
     
-    // Gamma-compensated chroma subsampling.
-// Returns Y, U, V image planes, each with width x height dimensions, but the
-// U and V planes are composed of 2x2 blocks with the same values.
-std::vector<std::vector<float> > RGBToYUV420(
-    const std::vector<uint8_t>& rgb_in, const int width, const int height);
-    
-    
-    {}  // namespace
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    //
-//  comm_frequency_limit.cc
-//  comm
-//
-//  Created by liucan on 13-11-23.
-//
-    
-    
-    
-    
+    {
 /**
- * created on : 2012-07-16
- * author    : yanguoyue
+ * @name tess_add_doc_word
+ *
+ * Add the given word to the document dictionary
  */
+void Tesseract::tess_add_doc_word(WERD_CHOICE *word_choice) {
+  getDict().add_document_word(*word_choice);
+}
+}  // namespace tesseract
+
     
-      // Offset at which to start looking for the first record to return
-  uint64_t const initial_offset_;
+    #include 'ccstruct.h'
     
-      StatisticsJni::StatisticsJni(std::shared_ptr<Statistics> stats,
-      const std::set<uint32_t> ignore_histograms) : StatisticsImpl(stats, false),
-      m_ignore_histograms(ignore_histograms) {
+      // Adds a new point. Takes a copy - the pt doesn't need to stay in scope.
+  // Add must be called on points in sequence along the line.
+  void Add(const ICOORD& pt);
+  // Associates a half-width with the given point if a point overlaps the
+  // previous point by more than half the width, and its distance is further
+  // than the previous point, then the more distant point is ignored in the
+  // distance calculation. Useful for ignoring i dots and other diacritics.
+  void Add(const ICOORD& pt, int halfwidth);
+    
+    // Transforms the given coords forward to normalized space using the
+// full transformation sequence defined by the block rotation, the
+// predecessors, deepest first, and finally this. If first_norm is not NULL,
+// then the first and deepest transformation used is first_norm, ending
+// with this, and the block rotation will not be applied.
+void DENORM::NormTransform(const DENORM* first_norm, const TPOINT& pt,
+                           TPOINT* transformed) const {
+  FCOORD src_pt(pt.x, pt.y);
+  FCOORD float_result;
+  NormTransform(first_norm, src_pt, &float_result);
+  transformed->x = IntCastRounded(float_result.x());
+  transformed->y = IntCastRounded(float_result.y());
+}
+void DENORM::NormTransform(const DENORM* first_norm, const FCOORD& pt,
+                           FCOORD* transformed) const {
+  FCOORD src_pt(pt);
+  if (first_norm != this) {
+    if (predecessor_ != NULL) {
+      predecessor_->NormTransform(first_norm, pt, &src_pt);
+    } else if (block_ != NULL) {
+      FCOORD fwd_rotation(block_->re_rotation().x(),
+                          -block_->re_rotation().y());
+      src_pt.rotate(fwd_rotation);
+    }
   }
+  LocalNormTransform(src_pt, transformed);
+}
     
-    #ifndef JAVA_ROCKSJNI_STATISTICSJNI_H_
-#define JAVA_ROCKSJNI_STATISTICSJNI_H_
     
-      virtual size_t GetSimCapacity() const override {
-    return key_only_cache_->GetCapacity();
-  }
-  virtual size_t GetSimUsage() const override {
-    return key_only_cache_->GetUsage();
-  }
-  virtual void SetSimCapacity(size_t capacity) override {
-    key_only_cache_->SetCapacity(capacity);
-  }
+/**********************************************************************
+ * QLSQ::remove
+ *
+ * Delete an element from the accumulator.
+ **********************************************************************/
     
-    class MergingIterator : public InternalIterator {
+    // Feature distance calculator designed to provide a fast distance calculation
+// based on set difference between a given feature set and many other feature
+// sets in turn.
+// Representation of a feature set as an array of bools that are sparsely
+// true, and companion arrays that allow fast feature set distance
+// calculations with allowance of offsets in position.
+// Init is expensive, so for greatest efficiency, to re-initialize for a new
+// feature set, use Set(..., false) on the SAME feature set as was used to
+// setup with Set(..., true), to return to its initialized state before
+// reuse with Set(..., true) on a new feature set.
+class IntFeatureDist {
  public:
-  MergingIterator(const InternalKeyComparator* comparator,
-                  InternalIterator** children, int n, bool is_arena_mode,
-                  bool prefix_seek_mode)
-      : is_arena_mode_(is_arena_mode),
-        comparator_(comparator),
-        current_(nullptr),
-        direction_(kForward),
-        minHeap_(comparator_),
-        prefix_seek_mode_(prefix_seek_mode),
-        pinned_iters_mgr_(nullptr) {
-    children_.resize(n);
-    for (int i = 0; i < n; i++) {
-      children_[i].Set(children[i]);
-    }
-    for (auto& child : children_) {
-      if (child.Valid()) {
-        minHeap_.push(&child);
-      }
-    }
-    current_ = CurrentForward();
-  }
+  IntFeatureDist();
+  ~IntFeatureDist();
     }
     
-      const char* keyUtf = key->c_str();
-  jstring jsKey = env->NewStringUTF(keyUtf);
-  if(jsKey == nullptr) {
-    // unable to construct string
-    if(env->ExceptionCheck()) {
-      env->ExceptionDescribe(); // print out exception to stderr
-    }
-    releaseJniEnv(attached_thread);
-    return;
-  } else if(env->ExceptionCheck()) {
-    // exception thrown: OutOfMemoryError
-    env->ExceptionDescribe(); // print out exception to stderr
-    env->DeleteLocalRef(jsKey);
-    releaseJniEnv(attached_thread);
-    return;
-  }
+    void FindDirectionChanges(MFOUTLINE Outline,
+                          FLOAT32 MinSlope,
+                          FLOAT32 MaxSlope);
     
-    namespace aria2 {
-    }
+    #ifndef BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
+#define BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
     
-    void AbstractBtMessage::setBtMessageValidator(
-    std::unique_ptr<BtMessageValidator> validator)
+    #include <boost/asio/detail/pop_options.hpp>
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+typedef null_event event;
+#elif defined(BOOST_ASIO_WINDOWS)
+typedef win_event event;
+#elif defined(BOOST_ASIO_HAS_PTHREADS)
+typedef posix_event event;
+#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
+typedef std_event event;
+#endif
+    
+    #include <boost/asio/detail/config.hpp>
+    
+    #define BOOST_ASIO_COMPOSED_CONNECT_HANDLER_CHECK( \
+    handler_type, handler, iter_type) \
+  \
+  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
+      void(boost::system::error_code, iter_type)) \
+    asio_true_handler_type; \
+  \
+  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
+      sizeof(boost::asio::detail::two_arg_handler_test( \
+          boost::asio::detail::clvref< \
+            asio_true_handler_type>(), \
+          static_cast<const boost::system::error_code*>(0), \
+          static_cast<const iter_type*>(0))) == 1, \
+      'ComposedConnectHandler type requirements not met') \
+  \
+  typedef boost::asio::detail::handler_type_requirements< \
+      sizeof( \
+        boost::asio::detail::argbyv( \
+          boost::asio::detail::clvref< \
+            asio_true_handler_type>())) + \
+      sizeof( \
+        boost::asio::detail::lvref< \
+          asio_true_handler_type>()( \
+            boost::asio::detail::lvref<const boost::system::error_code>(), \
+            boost::asio::detail::lvref<const iter_type>()), \
+        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
+    
+    bool non_blocking_write(int d, const buf* bufs, std::size_t count,
+    boost::system::error_code& ec, std::size_t& bytes_transferred)
 {
-  validator_ = std::move(validator);
-}
-    
-      virtual void truncate(int64_t length) CXX11_OVERRIDE;
-    
-      std::shared_ptr<HttpConnection> httpConnection_;
-    
-    namespace aria2 {
+  for (;;)
+  {
+    // Write some data.
+    errno = 0;
+    signed_size_type bytes = error_wrapper(::writev(
+          d, bufs, static_cast<int>(count)), ec);
+    }
     }
     
-      void setPieceStorage(const std::shared_ptr<PieceStorage>& pieceStorage);
     
-    void AdaptiveFileAllocationIterator::allocateChunk()
-{
-  if (!allocator_) {
-#ifdef HAVE_FALLOCATE
-    try {
-      A2_LOG_DEBUG('Testing file system supports fallocate.');
-      if (offset_ < totalLength_) {
-        int64_t len =
-            std::min(totalLength_ - offset_, static_cast<int64_t>(4_k));
-        stream_->allocate(offset_, len, false);
-        offset_ += len;
-      }
-      A2_LOG_DEBUG('File system supports fallocate.');
-      allocator_ = make_unique<FallocFileAllocationIterator>(stream_, offset_,
-                                                             totalLength_);
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
+    
+    namespace folly {
+namespace hazptr {
     }
-    catch (RecoverableException& e) {
-      A2_LOG_DEBUG('File system does not support fallocate.');
-      auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
-                                                              totalLength_);
-      salloc->init();
-      allocator_ = std::move(salloc);
     }
-#else  // !HAVE_FALLOCATE
-    auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
-                                                            totalLength_);
-    salloc->init();
-    allocator_ = std::move(salloc);
-#endif // !HAVE_FALLOCATE
-    allocator_->allocateChunk();
+    
+    path remove_prefix(const path& pth, const path& prefix) {
+  path::const_iterator it;
+  if (!skipPrefix(pth, prefix, it)) {
+    throw filesystem_error(
+        'Path does not start with prefix',
+        pth,
+        prefix,
+        bsys::errc::make_error_code(bsys::errc::invalid_argument));
   }
-  else {
-    allocator_->allocateChunk();
+    }
+    
+    
+    {StringPiece getGlogLevelName(LogLevel level) {
+  if (level < LogLevel::INFO) {
+    return 'VERBOSE';
+  } else if (level < LogLevel::WARN) {
+    return 'INFO';
+  } else if (level < LogLevel::ERR) {
+    return 'WARNING';
+  } else if (level < LogLevel::CRITICAL) {
+    return 'ERROR';
   }
+  return 'CRITICAL';
 }
+} // namespace
     
+    /**
+ * Configuration for a LogCategory
+ */
+class LogCategoryConfig {
+ public:
+  explicit LogCategoryConfig(
+      LogLevel level = LogLevel::WARNING,
+      bool inheritParentLevel = true);
+  LogCategoryConfig(
+      LogLevel level,
+      bool inheritParentLevel,
+      std::vector<std::string> handlers);
+    }
     
-    {} // namespace aria2
+        double mouse_x, mouse_y;
+    mouse_x = s3ePointerGetX();
+    mouse_y = s3ePointerGetY();
+    io.MousePos = ImVec2((float)mouse_x/g_scale.x, (float)mouse_y/g_scale.y);   // Mouse position (set to -FLT_MAX,-FLT_MAX if no mouse / on another screen, etc.)
+    
+    // GLFW callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// Provided here if you want to chain callbacks.
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_API void        ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+IMGUI_API void        ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+IMGUI_API void        ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+IMGUI_API void        ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
 
     
+        // Setup back-end capabilities flags
+    ImGuiIO& io = ImGui::GetIO();
+    io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;   // We can honor GetMouseCursor() values (optional)
+    io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;    // We can honor io.WantSetMousePos requests (optional, rarely used)
     
-    {} // namespace aria2
+    void assertInternal(const char* formatstr ...) {
+    va_list va_args;
+    va_start(va_args, formatstr);
+    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
+    va_end(va_args);
+    if (gAssertHandler != NULL) {
+        gAssertHandler(sAssertBuf);
+    }
+    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
+    // crash at this specific address so that we can find our crashes easier
+    *(int*)0xdeadb00c = 0;
+    // let the compiler know we won't reach the end of the function
+     __builtin_unreachable();
+}
     
-    #include 'DiskWriterFactory.h'
-#include 'a2functional.h'
-    
-    #endif // DOWNLOAD_EVENT_LISTENER_H
-
-    
-    class AsyncNameResolver;
-class DownloadEngine;
-class Command;
-class Option;
-    
-    AuthConfig::~AuthConfig() = default;
+    #if ENABLE_FBASSERT
+#define FBASSERTMSGF(expr, msg, ...) !(expr) ? facebook::assertInternal('Assert (%s:%d): ' msg, __FILE__, __LINE__, ##__VA_ARGS__) : (void) 0
+#else
+#define FBASSERTMSGF(expr, msg, ...)
+#endif // ENABLE_FBASSERT
