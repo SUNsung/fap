@@ -1,203 +1,245 @@
 
         
-        import rsa
-import json
-from binascii import hexlify
+            port = None
+    for matching in ['bracketed_hostport', 'hostport']:
+        m = patterns[matching].match(address)
+        if m:
+            (address, port) = m.groups()
+            port = int(port)
+            continue
     
-    options = helptext[helptext.index('  General Options:') + 19:]
-options = re.sub(r'(?m)^  (\w.+)$', r'## \1', options)
-options = '# OPTIONS\n' + options + '\n'
-    
-        def download(self, x):
-        self.result.append(x)
-    
-        def test_no_duplicated_ie_names(self):
-        name_accu = collections.defaultdict(list)
-        for ie in self.ies:
-            name_accu[ie.IE_NAME.lower()].append(type(ie).__name__)
-        for (ie_name, ie_list) in name_accu.items():
-            self.assertEqual(
-                len(ie_list), 1,
-                'Multiple extractors with the same IE_NAME '%s' (%s)' % (ie_name, ', '.join(ie_list)))
+        @g_connect
+    def add_secret(self, source, github_user, github_repo, secret):
+        url = '%s/notification_secrets/' % self.baseurl
+        args = urlencode({
+            'source': source,
+            'github_user': github_user,
+            'github_repo': github_repo,
+            'secret': secret
+        })
+        data = self.__call_galaxy(url, args=args)
+        return data
     
     
-class RtspFD(FileDownloader):
-    def real_download(self, filename, info_dict):
-        url = info_dict['url']
-        self.report_destination(filename)
-        tmpfilename = self.temp_name(filename)
+def get_group_vars(groups):
     
-            webpage = self._download_webpage(url, video_id)
+        model_1.fit(input_a_df,
+                output_a_df)
+    model_2.fit([input_a_df, input_b_df],
+                [output_a_df, output_b_df])
+    model_1.fit([input_a_df],
+                [output_a_df])
+    model_1.fit({'input_a': input_a_df},
+                output_a_df)
+    model_2.fit({'input_a': input_a_df, 'input_b': input_b_df},
+                [output_a_df, output_b_df])
     
-            # Create flat baselines to compare the variation over batch size
-        all_times['pca'].extend([results_dict['pca']['time']] *
-                                len(batch_sizes))
-        all_errors['pca'].extend([results_dict['pca']['error']] *
-                                 len(batch_sizes))
-        all_times['rpca'].extend([results_dict['rpca']['time']] *
-                                 len(batch_sizes))
-        all_errors['rpca'].extend([results_dict['rpca']['error']] *
-                                  len(batch_sizes))
-        for batch_size in batch_sizes:
-            ipca = IncrementalPCA(n_components=n_components,
-                                  batch_size=batch_size)
-            results_dict = {k: benchmark(est, data) for k, est in [('ipca',
-                                                                   ipca)]}
-            all_times['ipca'].append(results_dict['ipca']['time'])
-            all_errors['ipca'].append(results_dict['ipca']['error'])
+    # Embedding
+max_features = 20000
+maxlen = 100
+embedding_size = 128
     
-                gc.collect()
-            print('benchmarking lasso_path (with Gram):', end='')
-            sys.stdout.flush()
-            tstart = time()
-            lasso_path(X, y, precompute=True)
-            delta = time() - tstart
-            print('%0.3fs' % delta)
-            results['lasso_path (with Gram)'].append(delta)
+    print('Building model...')
+model = Sequential()
+model.add(Dense(512, input_shape=(max_words,)))
+model.add(Activation('relu'))
+model.add(Dropout(0.5))
+model.add(Dense(num_classes))
+model.add(Activation('softmax'))
     
-        #------------------------------------------------------------
-    # varying N
-    N_results_build = dict([(alg, np.zeros(len(Nrange)))
-                            for alg in algorithms])
-    N_results_query = dict([(alg, np.zeros(len(Nrange)))
-                            for alg in algorithms])
     
-    for i, n in enumerate(n_samples):
-    for j, p in enumerate(n_features):
-        X = np.random.normal(size=(n, p))
-        t0 = time.time()
-        ward.fit(X)
-        scikits_time[j, i] = time.time() - t0
-        t0 = time.time()
-        hierarchy.ward(X)
-        scipy_time[j, i] = time.time() - t0
+@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
+def test_orthogonal(tensor_shape):
+    _runner(initializers.orthogonal(), tensor_shape,
+            target_mean=0.)
     
-    mu_second = 0.0 + 10 ** 6  # number of microseconds in a second
+            assert_allclose(out1, out2, atol=1e-5)
     
-    import os
-import tarfile
-from contextlib import closing
+    path = get_file('nietzsche.txt', origin='https://s3.amazonaws.com/text-datasets/nietzsche.txt')
+with io.open(path, encoding='utf-8') as f:
+    text = f.read().lower()
+print('corpus length:', len(text))
     
-    skeleton_dir = os.path.abspath(os.path.join(exercise_dir, '..', 'skeletons'))
-if not os.path.exists(skeleton_dir):
-    os.makedirs(skeleton_dir)
+    # Set backend based on KERAS_BACKEND flag, if applicable.
+if 'KERAS_BACKEND' in os.environ:
+    _backend = os.environ['KERAS_BACKEND']
+    assert _backend in {'theano', 'tensorflow', 'cntk'}
+    _BACKEND = _backend
     
-    model = SpectralBiclustering(n_clusters=n_clusters, method='log',
-                             random_state=0)
-model.fit(data)
-score = consensus_score(model.biclusters_,
-                        (rows[:, row_idx], columns[:, col_idx]))
+            # make sure these are errors
+        self.assertRaises(ValueError, format, 3, '1.3')  # precision disallowed
+        self.assertRaises(ValueError, format, 3, '_c')   # underscore,
+        self.assertRaises(ValueError, format, 3, ',c')   # comma, and
+        self.assertRaises(ValueError, format, 3, '+c')   # sign not allowed
+                                                         # with 'c'
     
-            # a particularly bad case for the old algorithm:  gives an
-        # error of close to 3.5 ulps.
-        self.check_truediv(295147931372582273023, 295147932265116303360)
-        for i in range(1000):
-            self.check_truediv(10**(i+1), 10**i)
-            self.check_truediv(10**i, 10**(i+1))
+        def test_defaults(self):
+        morsel = cookies.Morsel()
+        self.assertIsNone(morsel.key)
+        self.assertIsNone(morsel.value)
+        self.assertIsNone(morsel.coded_value)
+        self.assertEqual(morsel.keys(), cookies.Morsel._reserved.keys())
+        for key, val in morsel.items():
+            self.assertEqual(val, '', key)
     
-        @classmethod
-    def zonelist(cls, zonedir='/usr/share/zoneinfo'):
-        zones = []
-        for root, _, files in os.walk(zonedir):
-            for f in files:
-                p = os.path.join(root, f)
-                with open(p, 'rb') as o:
-                    magic =  o.read(4)
-                if magic == b'TZif':
-                    zones.append(p[len(zonedir) + 1:])
-        return zones
+    if C is not None:
+    c = C.getcontext()
+    c.prec = C.MAX_PREC
+    c.Emax = C.MAX_EMAX
+    c.Emin = C.MIN_EMIN
     
-        def find_byname(self, name):
-        '''Return (red, green, blue) for name'''
-        name = name.lower()
+    def py_make_scanner(context):
+    parse_object = context.parse_object
+    parse_array = context.parse_array
+    parse_string = context.parse_string
+    match_number = NUMBER_RE.match
+    strict = context.strict
+    parse_float = context.parse_float
+    parse_int = context.parse_int
+    parse_constant = context.parse_constant
+    object_hook = context.object_hook
+    object_pairs_hook = context.object_pairs_hook
+    memo = context.memo
+    
+        def discard(self, key):
+        '''If the keyed message exists, remove it.'''
+        # This overrides an inapplicable implementation in the superclass.
         try:
-            return self.__byname[name]
-        except KeyError:
-            raise BadColor(name) from None
+            self.remove(key)
+        except (KeyError, FileNotFoundError):
+            pass
     
-            pt = pointer(Table(1, 2, 3))
+        def date(self):
+        '''Process the DATE command.
+        Returns:
+        - resp: server response if successful
+        - date: datetime object
+        '''
+        resp = self._shortcmd('DATE')
+        if not resp.startswith('111'):
+            raise NNTPReplyError(resp)
+        elem = resp.split()
+        if len(elem) != 2:
+            raise NNTPDataError(resp)
+        date = elem[1]
+        if len(date) != 14:
+            raise NNTPDataError(resp)
+        return resp, _parse_datetime(date, None)
     
+        def test_oldargs0_1(self):
+        msg = r'keys\(\) takes no arguments \(1 given\)'
+        self.assertRaisesRegex(TypeError, msg, {}.keys, 0)
     
-if __name__ == '__main__':
-    main()
-
+            # User-defined class with a failing __index__ method
+        class IX:
+            def __index__(self):
+                raise RuntimeError
+        self.assertRaises(RuntimeError, range, IX())
     
-        def __init__(self, application, host_pattern):
-        self.application = application
-        self.host_pattern = host_pattern
-    
-        def test_uimodule_resources(self):
-        response = self.fetch('/uimodule_resources')
-        self.assertEqual(response.body, b'''\
-<html><head><link href='/base.css' type='text/css' rel='stylesheet'/><link href='/foo.css' type='text/css' rel='stylesheet'/>
-<style type='text/css'>
-.entry { margin-bottom: 1em; }
-</style>
-<meta>
-</head><body>
-    
-    from tornado.http1connection import HTTP1Connection
-from tornado.httputil import HTTPMessageDelegate
-from tornado.iostream import IOStream
-from tornado.locks import Event
-from tornado.netutil import add_accept_handler
-from tornado.testing import AsyncTestCase, bind_unused_port, gen_test
-    
-            sock, port = bind_unused_port()
-        server = namespace['TestServer']()
-        server.add_socket(sock)
-        client = IOStream(socket.socket())
-        yield client.connect(('localhost', port))
-        result = yield client.read_until_close()
-        self.assertEqual(result, b'data')
-        server.stop()
-        client.close()
+            x = X(func)
+        self.assertEqual(x.restype, c_int)
+        self.assertEqual(x.argtypes, (c_int, c_int))
+        self.assertEqual(sizeof(x), sizeof(c_voidp))
+        self.assertEqual(sizeof(X), sizeof(c_voidp))
     
     
-class MainHandler(BaseHandler, tornado.auth.FacebookGraphMixin):
-    @tornado.web.authenticated
-    @tornado.web.asynchronous
-    def get(self):
-        self.facebook_request('/me/home', self._on_stream,
-                              access_token=self.current_user['access_token'])
+def SetUpSystemPaths():
+  sys.path.insert( 0, os.path.join( DIR_OF_YCMD ) )
     
-        def on_close(self):
-        ChatSocketHandler.waiters.remove(self)
+        # Execute the template string in a temporary namespace and
+    # support tracing utilities by setting a value for frame.f_globals['__name__']
+    namespace = dict(_itemgetter=_itemgetter, __name__='namedtuple_%s' % typename,
+                     _property=property, _tuple=tuple)
+    try:
+        exec(template, namespace)
+    except SyntaxError:
+        e = _sys.exc_info()[1]
+        raise SyntaxError(e.message + ':\n' + template)
+    result = namespace[typename]
     
-        def __init__(self, name, msg_center):
-        self.name = name
-        self.provider = msg_center
+    def main():
+    for name, fn in [('sequential', sequential),
+                     ('processes', with_process_pool_executor),
+                     ('threads', with_thread_pool_executor)]:
+        sys.stdout.write('%s: ' % name.ljust(12))
+        start = time.time()
+        if fn() != [True] * len(PRIMES):
+            sys.stdout.write('failed\n')
+        else:
+            sys.stdout.write('%.2f seconds\n' % (time.time() - start))
     
-        def test_tc1_output(self):
-        self.tc1.run()
-        output = self.out.getvalue().strip()
-        self.assertEqual(output, self.average_result_tc1)
+        def tearDown(self):
+        self.executor.shutdown(wait=True)
+        dt = time.time() - self.t1
+        if test_support.verbose:
+            print('%.2fs' % dt)
+        self.assertLess(dt, 60, 'synchronization issue: test lasted too long')
     
-    from dft.constructor_injection import TimeDisplay, MidnightTimeProvider, ProductionCodeTimeProvider, datetime
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
-        def __init__(self):
-        self.time_provider = datetime.datetime
     
-        def undo(self):
-        self.rename(self.dest, self.src)
+def FormatDebugInfoResponse( response ):
+  if not response:
+    return 'Server errored, no debug info from server\n'
+  message = _FormatYcmdDebugInfo( response )
+  completer = response[ 'completer' ]
+  if completer:
+    message += _FormatCompleterDebugInfo( completer )
+  return message
     
-    print()
+    PY_MAJOR, PY_MINOR = sys.version_info[ 0 : 2 ]
+if not ( ( PY_MAJOR == 2 and PY_MINOR >= 6 ) or
+         ( PY_MAJOR == 3 and PY_MINOR >= 3 ) or
+         PY_MAJOR > 3 ):
+  sys.exit( 'YouCompleteMe requires Python >= 2.6 or >= 3.3; '
+            'your version of Python is ' + sys.version )
     
-    ### OUTPUT ###
-# Setting Data 1 = 10
-# DecimalViewer: Subject Data 1 has data 10
-# HexViewer: Subject Data 1 has data 0xa
-# Setting Data 2 = 15
-# HexViewer: Subject Data 2 has data 0xf
-# DecimalViewer: Subject Data 2 has data 15
-# Setting Data 1 = 3
-# DecimalViewer: Subject Data 1 has data 3
-# HexViewer: Subject Data 1 has data 0x3
-# Setting Data 2 = 5
-# HexViewer: Subject Data 2 has data 0x5
-# DecimalViewer: Subject Data 2 has data 5
-# Detach HexViewer from data1 and data2.
-# Setting Data 1 = 10
-# DecimalViewer: Subject Data 1 has data 10
-# Setting Data 2 = 15
-# DecimalViewer: Subject Data 2 has data 15
+    
+GENERIC_RESPONSE = {
+  'clang': {
+    'has_support': True,
+    'version': 'Clang version'
+  },
+  'completer': {
+    'items': [
+      {
+        'key': 'key',
+        'value': 'value'
+      }
+    ],
+    'name': 'Completer name',
+    'servers': [
+      {
+        'address': '127.0.0.1',
+        'executable': '/path/to/executable',
+        'extras': [
+          {
+            'key': 'key',
+            'value': 'value'
+          }
+        ],
+        'is_running': True,
+        'logfiles': [
+          '/path/to/stdout/logfile',
+          '/path/to/stderr/logfile'
+        ],
+        'name': 'Server name',
+        'pid': 12345,
+        'port': 1234
+      }
+    ]
+  },
+  'extra_conf': {
+    'is_loaded': False,
+    'path': '/path/to/extra/conf'
+  },
+  'python': {
+    'executable': '/path/to/python/interpreter',
+    'version': 'Python version'
+  }
+}
