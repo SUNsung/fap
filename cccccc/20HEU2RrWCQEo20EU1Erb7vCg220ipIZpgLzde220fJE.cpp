@@ -1,312 +1,222 @@
 
         
-        
-    {}  // namespace atom
-    
-      int AddEntry(const base::DictionaryValue& entry);
-  void RemoveEntry(int id);
-    
-    #include 'atom/common/api/api_messages.h'
-#include 'atom/common/native_mate_converters/string16_converter.h'
-#include 'content/public/browser/web_contents.h'
-#include 'native_mate/object_template_builder.h'
-    
-    
-    {}  // namespace atom
-
-    
-    void AppendInternalKey(std::string* result, const ParsedInternalKey& key) {
-  result->append(key.user_key.data(), key.user_key.size());
-  PutFixed64(result, PackSequenceAndType(key.sequence, key.type));
-}
-    
-    // Filter policy wrapper that converts from internal keys to user keys
-class InternalFilterPolicy : public FilterPolicy {
- private:
-  const FilterPolicy* const user_policy_;
- public:
-  explicit InternalFilterPolicy(const FilterPolicy* p) : user_policy_(p) { }
-  virtual const char* Name() const;
-  virtual void CreateFilter(const Slice* keys, int n, std::string* dst) const;
-  virtual bool KeyMayMatch(const Slice& key, const Slice& filter) const;
+        // TODO(zongheng): this should be a general functor that powers SparseAdd and
+// ScatterNd ops.  It should be moved to its own head file, once the other ops
+// are implemented.
+template <typename Device, typename T, typename Index, int NDIMS,
+          scatter_op::UpdateOp op>
+struct ScatterNdFunctor {
+  // Returns -1 on success or a nonnegative i s.t. indices[i] is a bad index.
+  Index operator()(const Device& d, typename TTypes<Index>::ConstMatrix indices,
+                   typename TTypes<T>::ConstFlat updates,
+                   typename TTypes<T, NDIMS>::Tensor out);
 };
     
-      // When start user key is prefix of limit user key
-  ASSERT_EQ(IKey('foo', 100, kTypeValue),
-            Shorten(IKey('foo', 100, kTypeValue),
-                    IKey('foobar', 200, kTypeValue)));
+      ExpectInvalid(Builder().Input(FakeInput({})),
+                'Length for attr 'T' of 0 must be at least minimum 1');
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    string VersionedComputationHandle::ToString() const {
+  return tensorflow::strings::StrCat(handle.handle(), ':v', version);
+}
+    
+      // If instruction is part of inputs, don't reset the bit_vector.
+  if (std::find(inputs.begin(), inputs.end(), instruction) == inputs.end()) {
+    bit_vector.SetToZero();
+  }
+  bit_vector.Set(GetIndex(instruction));
+  for (const HloInstruction* input : inputs) {
+    bit_vector.OrWith(GetBitVector(input));
+  }
     
     
-// Owned filenames have the form:
-//    dbname/CURRENT
-//    dbname/LOCK
-//    dbname/LOG
-//    dbname/LOG.old
-//    dbname/MANIFEST-[0-9]+
-//    dbname/[0-9]+.(log|sst|ldb)
-bool ParseFileName(const std::string& fname,
-                   uint64_t* number,
-                   FileType* type) {
-  Slice rest(fname);
-  if (rest == 'CURRENT') {
-    *number = 0;
-    *type = kCurrentFile;
-  } else if (rest == 'LOCK') {
-    *number = 0;
-    *type = kDBLockFile;
-  } else if (rest == 'LOG' || rest == 'LOG.old') {
-    *number = 0;
-    *type = kInfoLogFile;
-  } else if (rest.starts_with('MANIFEST-')) {
-    rest.remove_prefix(strlen('MANIFEST-'));
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
+    {  /* We cannot open it, but we were able to stat it. */
+  if (access(file, W_OK) == 0)
+    if (file_printf(ms, 'writable, ') == -1)
+      return -1;
+  if (access(file, X_OK) == 0)
+    if (file_printf(ms, 'executable, ') == -1)
+      return -1;
+  if (S_ISREG(md))
+    if (file_printf(ms, 'regular file, ') == -1)
+      return -1;
+  if (file_printf(ms, 'no read permission') == -1)
+    return -1;
+  return 0;
+}
+    
+        // Emit conditional checks for all successors in this region, in descending
+    // order of hotness. We rely on the region selector to decide which arcs
+    // are appropriate to include in the region. Fall through to the
+    // fully-generic JmpSwitchDest at the end if nothing matches.
+    for (auto const& val : values) {
+      auto targetOff = bcOff(env) + offsets[val.caseIdx];
+      SrcKey sk(curSrcKey(env), targetOff);
+      if (!env.irb->hasBlock(sk)) continue;
     }
-    if (!rest.empty()) {
-      return false;
+    
+    ////////////////////////////////////////////////////////////////////////////////
+    
+    #endif
+    
+    
+inline int Instruction::ImmBranch() const {
+  switch (BranchType()) {
+    case CondBranchType: return ImmCondBranch();
+    case UncondBranchType: return ImmUncondBranch();
+    case CompareBranchType: return ImmCmpBranch();
+    case TestBranchType: return ImmTestBranch();
+    default: not_reached();
+  }
+  return 0;
+}
+    
+    std::string read_embedded_data(const embedded_data& desc) {
+  std::ifstream ifs(desc.m_filename);
+  if (!ifs.good()) return '';
+  ifs.seekg(desc.m_start, std::ios::beg);
+  std::unique_ptr<char[]> data(new char[desc.m_len]);
+  ifs.read(data.get(), desc.m_len);
+  return std::string(data.get(), desc.m_len);
+}
+    
+    #include <cstdint>
+#include <string>
+    
+    namespace leveldb {
     }
-    *type = kDescriptorFile;
-    *number = num;
-  } else {
-    // Avoid strtoull() to keep filename format independent of the
-    // current locale
-    uint64_t num;
-    if (!ConsumeDecimalNumber(&rest, &num)) {
-      return false;
+    
+      std::string comparator_;
+  uint64_t log_number_;
+  uint64_t prev_log_number_;
+  uint64_t next_file_number_;
+  SequenceNumber last_sequence_;
+  bool has_comparator_;
+  bool has_log_number_;
+  bool has_prev_log_number_;
+  bool has_next_file_number_;
+  bool has_last_sequence_;
+    
+    void BlockBuilder::Reset() {
+  buffer_.clear();
+  restarts_.clear();
+  restarts_.push_back(0);       // First restart point is at offset 0
+  counter_ = 0;
+  finished_ = false;
+  last_key_.clear();
+}
+    
+    
+    {    page->data.resize(page->offset.back());
+    CHECK_EQ(index_.data.size(), value_.data.size());
+    CHECK_EQ(index_.data.size(), page->data.size());
+    for (size_t i = 0; i < page->data.size(); ++i) {
+      page->data[i] = SparseBatch::Entry(index_.data[i] + min_index_, value_.data[i]);
     }
-    Slice suffix = rest;
-    if (suffix == Slice('.log')) {
-      *type = kLogFile;
-    } else if (suffix == Slice('.sst') || suffix == Slice('.ldb')) {
-      *type = kTableFile;
-    } else if (suffix == Slice('.dbtmp')) {
-      *type = kTempFile;
+    return true;
+  }
+    
+    #include <cstdio>
+#include <cstring>
+#include <string>
+#include <istream>
+#include <fstream>
+    
+      size_t PeekRead(void* dptr, size_t size) {
+    size_t nbuffer = buffer_.length() - buffer_ptr_;
+    if (nbuffer < size) {
+      buffer_ = buffer_.substr(buffer_ptr_, buffer_.length());
+      buffer_ptr_ = 0;
+      buffer_.resize(size);
+      size_t nadd = strm_->Read(dmlc::BeginPtr(buffer_) + nbuffer, size - nbuffer);
+      buffer_.resize(nbuffer + nadd);
+      std::memcpy(dptr, dmlc::BeginPtr(buffer_), buffer_.length());
+      return buffer_.length();
     } else {
-      return false;
+      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, size);
+      return size;
     }
-    *number = num;
   }
-  return true;
-}
-    
-    #include <string>
-#include <stdint.h>
-#include 'db/dbformat.h'
-#include 'leveldb/cache.h'
-#include 'leveldb/table.h'
-#include 'port/port.h'
-    
-    // Tag numbers for serialized VersionEdit.  These numbers are written to
-// disk and should not be changed.
-enum Tag {
-  kComparator           = 1,
-  kLogNumber            = 2,
-  kNextFileNumber       = 3,
-  kLastSequence         = 4,
-  kCompactPointer       = 5,
-  kDeletedFile          = 6,
-  kNewFile              = 7,
-  // 8 was used for large value refs
-  kPrevLogNumber        = 9
-};
-    
-    class Slice {
- public:
-  // Create an empty slice.
-  Slice() : data_(''), size_(0) { }
-    }
-    
-    #include 'hphp/runtime/base/array-init.h'
-#include 'hphp/runtime/base/datetime.h'
-#include 'hphp/runtime/base/resource-data.h'
-#include 'hphp/runtime/base/type-array.h'
-#include 'hphp/runtime/base/type-string.h'
-#include 'hphp/util/timer.h'
-    
-    
-    {///////////////////////////////////////////////////////////////////////////////
-}
-    
-    /*
- * SweepableMember is a Sweepable used as a member of an otherwise nonvirtual
- * class. The member must be named m_sweepable. If T is a derived class, it
- * should only have one m_sweepable member. Anything fancier than that voids
- * your warranty.
- */
-template<class T>
-struct SweepableMember : Sweepable {
-  void sweep() override {
-    auto obj = reinterpret_cast<T*>(
-      uintptr_t(this) - offsetof(T, m_sweepable)
-    );
-    obj->sweep();
-  };
-  void* owner() override {
-    return reinterpret_cast<T*>(
-      uintptr_t(this) - offsetof(T, m_sweepable)
-    );
-  }
-};
-    
-    // In some distros, gflags is in the namespace google, and in some others,
-// in gflags. This hack is enabling us to find both.
-namespace google {}
-namespace gflags {}
-using namespace google;
-using namespace gflags;
-    
-    TEST(InlinedVectorTest, ClearAndRepopulate) {
-  const int kNumElements = 10;
-  InlinedVector<int, 5> v;
-  EXPECT_EQ(0UL, v.size());
-  for (int i = 0; i < kNumElements; ++i) {
-    v.push_back(i);
-    EXPECT_EQ(i + 1UL, v.size());
-  }
-  for (int i = 0; i < kNumElements; ++i) {
-    EXPECT_EQ(i, v[i]);
-  }
-  v.clear();
-  EXPECT_EQ(0UL, v.size());
-  for (int i = 0; i < kNumElements; ++i) {
-    v.push_back(kNumElements + i);
-    EXPECT_EQ(i + 1UL, v.size());
-  }
-  for (int i = 0; i < kNumElements; ++i) {
-    EXPECT_EQ(kNumElements + i, v[i]);
-  }
-}
-    
-    // Logic and data behind the server's behavior.
-class GreeterServiceImpl final : public Greeter::Service {
-  Status SayHello(ServerContext* context, const HelloRequest* request,
-                  HelloReply* reply) override {
-    std::string prefix('Hello ');
-    reply->set_message(prefix + request->name());
-    return Status::OK;
-  }
-};
-    
-    
-    
-    using grpc::Channel;
-using grpc::ClientContext;
-using grpc::ClientReader;
-using grpc::ClientReaderWriter;
-using grpc::ClientWriter;
-using grpc::Status;
-using routeguide::Point;
-using routeguide::Feature;
-using routeguide::Rectangle;
-using routeguide::RouteSummary;
-using routeguide::RouteNote;
-using routeguide::RouteGuide;
-    
-     private:
-  bool PrintPreamble(grpc_generator::Printer* out);
-  bool PrintBetaPreamble(grpc_generator::Printer* out);
-  bool PrintGAServices(grpc_generator::Printer* out);
-  bool PrintBetaServices(grpc_generator::Printer* out);
-    
-    bool js_cocos2dx_studio_Frame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_Frame_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_Frame(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_Frame_clone(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_setTweenType(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_setNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_setTimeline(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_isEnterWhenPassed(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_getTweenType(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_getFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_apply(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_isTween(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_setFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_setTween(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_getTimeline(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_Frame_getNode(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    
-    
-    
-    	m_pointCount = 0;
-    
-    // Return the prologue of the generated header file.
-grpc::string GetHeaderPrologue(grpc_generator::File *file,
-                               const Parameters &params);
-    
-    #include <map>
-#include <cctype>
-#include <sstream>
-    
-    // Abort the program after logging the mesage.
-#define GRPC_CODEGEN_FAIL GRPC_CODEGEN_CHECK(false)
-    
-      // Returns the current contents of the CodeWriter as a std::string.
-  std::string ToString() const { return stream_.str(); }
-    
-      template<typename T> size_t FixedTypedVector(const T *elems, size_t len) {
-    // We only support a few fixed vector lengths. Anything bigger use a
-    // regular typed vector.
-    assert(len >= 2 && len <= 4);
-    // And only scalar values.
-    assert(flatbuffers::is_scalar<T>::value);
-    return ScalarVector(elems, len, true);
-  }
-    
-      // to ensure it is correct, we now generate text back from the binary,
-  // and compare the two:
-  std::string jsongen;
-  if (!GenerateText(parser, parser.builder_.GetBufferPointer(), &jsongen)) {
-    printf('Couldn't serialize parsed data to JSON!\n');
-    return 1;
-  }
-    
-    // Ensure that a type is prefixed with its namespace whenever it is used
-// outside of its namespace.
-std::string BaseGenerator::WrapInNameSpace(const Namespace *ns,
-                                           const std::string &name) const {
-  if (CurrentNameSpace() == ns) return name;
-  std::string qualified_name = qualifying_start_;
-  for (auto it = ns->components.begin(); it != ns->components.end(); ++it)
-    qualified_name += *it + qualifying_separator_;
-  return qualified_name + name;
-}
     
     
     {
-    {
-    {  GenReceiver(struct_def, code_ptr);
-  code += ' ' + MakeCamel(field.name) + 'Length(';
-  code += ') int ' + OffsetPrefix(field);
-  code += '\t\treturn rcv._tab.VectorLen(o)\n\t}\n';
-  code += '\treturn 0\n}\n\n';
-}
-    
-    // End enum code.
-static void EndEnum(std::string *code_ptr) {
-  std::string &code = *code_ptr;
-  code += '\n';
-}
-    
-    
-    {} // namespace aria2
+    {}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_RANDOM_H_
 
     
-      void disableReadCheckSocket();
+      bool Read(SparsePage* page,
+            dmlc::SeekStream* fi,
+            const std::vector<bst_uint>& sorted_index_set) override {
+    if (!fi->Read(&disk_offset_)) return false;
+    // setup the offset
+    page->offset.clear();
+    page->offset.push_back(0);
+    for (size_t i = 0; i < sorted_index_set.size(); ++i) {
+      bst_uint fid = sorted_index_set[i];
+      CHECK_LT(fid + 1, disk_offset_.size());
+      size_t size = disk_offset_[fid + 1] - disk_offset_[fid];
+      page->offset.push_back(page->offset.back() + size);
+    }
+    page->data.resize(page->offset.back());
+    // read in the data
+    size_t begin = fi->Tell();
+    size_t curr_offset = 0;
+    for (size_t i = 0; i < sorted_index_set.size();) {
+      bst_uint fid = sorted_index_set[i];
+      if (disk_offset_[fid] != curr_offset) {
+        CHECK_GT(disk_offset_[fid], curr_offset);
+        fi->Seek(begin + disk_offset_[fid] * sizeof(SparseBatch::Entry));
+        curr_offset = disk_offset_[fid];
+      }
+      size_t j, size_to_read = 0;
+      for (j = i; j < sorted_index_set.size(); ++j) {
+        if (disk_offset_[sorted_index_set[j]] == disk_offset_[fid] + size_to_read) {
+          size_to_read += page->offset[j + 1] - page->offset[j];
+        } else {
+          break;
+        }
+      }
+    }
+    }
     
-      virtual void truncate(int64_t length) CXX11_OVERRIDE;
-    
-    #endif // D_ABSTRACT_HTTP_SERVER_RESPONSE_COMMAND_H
+    #endif  // GUETZLI_DCT_DOUBLE_H_
 
     
-      virtual void parse(Option& option,
-                     const std::string& arg) const CXX11_OVERRIDE;
+    #include 'guetzli/gamma_correct.h'
+    
+      tmp0 = in[2 * stride];
+  tmp1 = kIDCTMatrix[ 2] * tmp0;
+  tmp2 = kIDCTMatrix[10] * tmp0;
+  out[0] += tmp1;
+  out[1] += tmp2;
+  out[2] -= tmp2;
+  out[3] -= tmp1;
+  out[4] -= tmp1;
+  out[5] -= tmp2;
+  out[6] += tmp2;
+  out[7] += tmp1;
+    
+    // Decodes the parsed jpeg coefficients into an RGB image.
+// There can be only either 1 or 3 image components, in either case, an RGB
+// output image will be generated.
+// Only YUV420 and YUV444 sampling factors are supported.
+// Vector will be empty if a decoding error occurred.
+std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
     
     
-    {} // namespace aria2
-
+    {  uint32_t counts[kSize];
+};
     
-    #include <ostream>
+    
+    {  uint8_t bits;     // number of bits used for this symbol
+  uint16_t value;   // symbol value or table offset
+};
+    
+    #include 'guetzli/quality.h'
