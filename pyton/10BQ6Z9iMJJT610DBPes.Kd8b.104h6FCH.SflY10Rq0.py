@@ -1,141 +1,131 @@
 
         
-        
-@pytest.mark.functional
-def test_without_confirmation(proc, TIMEOUT):
-    without_confirmation(proc, TIMEOUT)
+            Args:
+      expected_shapes: Dictionary of expected Tensor shapes, as lists,
+          corresponding to the structure of 'features'.
+      features: Dictionary of feature placeholders of the format returned by
+          input_ops.build_feature_placeholders().
+    '''
+    actual_shapes = {}
+    for feature_type in features:
+      actual_shapes[feature_type] = {
+          feature: tensor.shape.as_list()
+          for feature, tensor in features[feature_type].items()
+      }
+    self.assertDictEqual(expected_shapes, actual_shapes)
     
-    # If true, '(C) Copyright ...' is shown in the HTML footer. Default is True.
-#html_show_copyright = True
-    
-    
-def test_login_logout(client, app):
-    '''Make sure login and logout works'''
-    rv = login(client, app.config['USERNAME'],
-               app.config['PASSWORD'])
-    assert b'You were logged in' in rv.data
-    rv = logout(client)
-    assert b'You were logged out' in rv.data
-    rv = login(client,app.config['USERNAME'] + 'x',
-               app.config['PASSWORD'])
-    assert b'Invalid username' in rv.data
-    rv = login(client, app.config['USERNAME'],
-               app.config['PASSWORD'] + 'x')
-    assert b'Invalid password' in rv.data
-    
-    
-@app.route('/')
-def index():
-    return render_template('index.html')
-    
-    import os
-import tempfile
-import pytest
-from minitwit import minitwit
-    
-        return groups
-    
-    # The checksum algorithm must match with the algorithm in ShellModule.checksum() method
-checksum = secure_hash
-checksum_s = secure_hash_s
-    
-        parser.add_argument('--key',
-                        dest='api_key',
-                        default=api_key,
-                        required=api_key is None,
-                        help='api key for accessing Shippable')
-    
-        parser.add_argument('--key',
-                        metavar='KEY',
-                        default=api_key,
-                        required=not api_key,
-                        help='Shippable API key')
-    
-    from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import MultinomialNB
-    
-        #------------------------------------------------------------
-    # varying D
-    D_results_build = dict([(alg, np.zeros(len(Drange)))
-                            for alg in algorithms])
-    D_results_query = dict([(alg, np.zeros(len(Drange)))
-                            for alg in algorithms])
-    
-    plot(euclidean_distances)
-plot(rbf_kernels)
-plt.show()
-
-    
-    for i, n in enumerate(n_samples):
-    for j, p in enumerate(n_features):
-        X = np.random.normal(size=(n, p))
-        t0 = time.time()
-        ward.fit(X)
-        scikits_time[j, i] = time.time() - t0
-        t0 = time.time()
-        hierarchy.ward(X)
-        scipy_time[j, i] = time.time() - t0
+        self.data_format = data_format
+    self.num_classes = num_classes
+    self.num_filters = num_filters
+    self.kernel_size = kernel_size
+    self.conv_stride = conv_stride
+    self.first_pool_size = first_pool_size
+    self.first_pool_stride = first_pool_stride
+    self.second_pool_size = second_pool_size
+    self.second_pool_stride = second_pool_stride
+    self.block_sizes = block_sizes
+    self.block_strides = block_strides
+    self.final_size = final_size
     
     
-def compute_time(t_start, delta):
-    mu_second = 0.0 + 10 ** 6  # number of microseconds in a second
+def main(argv):
+  parser = resnet_run_loop.ResnetArgParser()
+  # Set defaults that are reasonable for this model.
+  parser.set_defaults(data_dir='/tmp/cifar10_data',
+                      model_dir='/tmp/cifar10_model',
+                      resnet_size=32,
+                      train_epochs=250,
+                      epochs_between_evals=10,
+                      batch_size=128)
     
-        fn = os.path.relpath(fn,
-                         start=os.path.dirname(__import__(package).__file__))
-    try:
-        lineno = inspect.getsourcelines(obj)[1]
-    except Exception:
-        lineno = ''
-    return url_fmt.format(revision=revision, package=package,
-                          path=fn, lineno=lineno)
+        print('%s initial results:' % model_type, initial_results)
+    print('%s final results:' % model_type, final_results)
     
+    This module is used internally by Tornado.  It is not necessarily expected
+that the functions and classes defined here will be useful to other
+applications, but they are documented here in case they are.
     
-# The training data folder must be passed as first argument
-languages_data_folder = sys.argv[1]
-dataset = load_files(languages_data_folder)
+            @gen.coroutine
+        def worker():
+            while True:
+                item = yield q.get()
+                self.accumulator += item
+                q.task_done()
+                yield gen.sleep(random() * 0.01)
     
-        in_exercise_region = False
+        .. versionchanged:: 5.0
+       The ``io_loop`` argument (deprecated since version 4.1) has been removed.
+    '''
+    def initialize(self):
+        self.io_loop = IOLoop.current()
+        self.channel = pycares.Channel(sock_state_cb=self._sock_state_cb)
+        self.fds = {}
     
-    In both examples below, the main result is that the empirical covariance
-estimate, as a non-robust one, is highly influenced by the heterogeneous
-structure of the observations. Although the robust covariance estimate is
-able to focus on the main mode of the data distribution, it sticks to the
-assumption that the data should be Gaussian distributed, yielding some biased
-estimation of the data structure, but yet accurate to some extent.
-The One-Class SVM does not assume any parametric form of the data distribution
-and can therefore model the complex shape of the data much better.
-    
-    This example illustrates how sigmoid calibration changes predicted
-probabilities for a 3-class classification problem. Illustrated is the
-standard 2-simplex, where the three corners correspond to the three classes.
-Arrows point from the probability vectors predicted by an uncalibrated
-classifier to the probability vectors predicted by the same classifier after
-sigmoid calibration on a hold-out validation set. Colors indicate the true
-class of an instance (red: class 1, green: class 2, blue: class 3).
-    
-        # View probabilities=
-    probas = classifier.predict_proba(Xfull)
-    n_classes = np.unique(y_pred).size
-    for k in range(n_classes):
-        plt.subplot(n_classifiers, n_classes, index * n_classes + k + 1)
-        plt.title('Class %d' % k)
-        if k == 0:
-            plt.ylabel(name)
-        imshow_handle = plt.imshow(probas[:, k].reshape((100, 100)),
-                                   extent=(3, 9, 1, 5), origin='lower')
-        plt.xticks(())
-        plt.yticks(())
-        idx = (y_pred == k)
-        if idx.any():
-            plt.scatter(X[idx, 0], X[idx, 1], marker='o', c='k')
+        try:
+        unittest.main(defaultTest='all', argv=sys.argv[:1])
+    except SystemExit as e:
+        if e.code == 0:
+            print('PASS')
+        else:
+            raise
     
     
-def generate_data(n_samples, n_features):
-    '''Generate random blob-ish data with noisy features.
+class Professor(AbstractExpert):
+    
+        def __init__(self):
+        self._active_state = Active(self)  # Unit.Inservice.Active()
+        self._standby_state = Standby(self)  # Unit.Inservice.Standby()
+        self._suspect_state = Suspect(self)  # Unit.OutOfService.Suspect()
+        self._failed_state = Failed(self)  # Unit.OutOfService.Failed()
+        self._current_state = self._standby_state
+        self.states = {'active': self._active_state,
+                       'standby': self._standby_state,
+                       'suspect': self._suspect_state,
+                       'failed': self._failed_state}
+        self.message_types = {'fault trigger': self._current_state.on_fault_trigger,
+                              'switchover': self._current_state.on_switchover,
+                              'diagnostics passed': self._current_state.on_diagnostics_passed,
+                              'diagnostics failed': self._current_state.on_diagnostics_failed,
+                              'operator inservice': self._current_state.on_operator_inservice}
+    
+        def test_c_observers_shall_be_detachable(cls):
+        cls.s.detach(cls.dec_obs)
+        # hex viewer shall be remaining if dec viewer is detached first
+        cls.assertEqual(isinstance(cls.s._observers[0], HexViewer), True)
+        cls.assertEqual(len(cls.s._observers), 1)
+        cls.s.detach(cls.hex_obs)
+        cls.assertEqual(len(cls.s._observers), 0)
+    
+        def test_2nd_am_station_after_scan(self):
+        self.radio.scan()
+        station = self.radio.state.stations[self.radio.state.pos]
+        expected_station = '1380'
+        self.assertEqual(station, expected_station)
+    
+        def test_display_current_time_at_midnight(self):
+        '''
+        Will almost always fail (despite of right at/after midnight).
+        '''
+        time_provider_stub = MidnightTimeProvider()
+        class_under_test = TimeDisplay(time_provider_stub)
+        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
+    
+        @staticmethod
+    def _static_method_2():
+        print('executed method 2!')
+    
+        def __repr__(self):
+        return '<%s: %r>' % (self.__class__.__name__, self.value)
     
     
-if __name__ == '__main__':
-    cli()
+# Example usage...
+def main():
+    data1 = Data('Data 1')
+    data2 = Data('Data 2')
+    view1 = DecimalViewer()
+    view2 = HexViewer()
+    data1.attach(view1)
+    data1.attach(view2)
+    data2.attach(view2)
+    data2.attach(view1)
