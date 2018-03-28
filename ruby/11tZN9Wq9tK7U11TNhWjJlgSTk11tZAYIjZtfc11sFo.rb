@@ -1,88 +1,66 @@
-    admin = Admin::WithSaveInCallback.create(valid_attributes.except(:username))
-    assert !admin.pending_reconfirmation?
-  end
-    
-      def translation_scope
-    'devise.omniauth_callbacks'
-  end
-end
 
-    
-    group :test do
-  gem 'omniauth-facebook'
-  gem 'omniauth-openid'
-  gem 'webrat', '0.7.3', require: false
-  gem 'mocha', '~> 1.1', require: false
+        
+        def test_dir(*subdirs)
+  File.join(TEST_DIR, *subdirs)
 end
     
-        users.all?(&:blank?)
+        puts 'GC Stats:'
+    GC.start(full_mark: true, immediate_sweep: false)
+    puts JSON.pretty_generate(GC.stat)
   end
+end
     
-        # The path used after unlocking the resource
-    def after_unlock_path_for(resource)
-      new_session_path(resource)  if is_navigational_format?
-    end
-    
-      def index
-    if params[:agent_id]
-      @agent = current_user.agents.find(params[:agent_id])
-      @events = @agent.events.page(params[:page])
-    else
-      @events = current_user.events.preload(:agent).page(params[:page])
-    end
-    
-        respond_to do |format|
-      format.html { render layout: !request.xhr? }
-      format.json { render json: @jobs }
-    end
-  end
-    
-      def destroy
-    @services = current_user.services.find(params[:id])
-    @services.destroy
-    
-             RUBY
-                         else
-                           <<-RUBY
-  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
-  # use_frameworks!
-    
-            def execute_repl_command(repl_command)
-          unless repl_command == '\n'
-            repl_commands = repl_command.split
-            subcommand = repl_commands.shift.capitalize
-            arguments = repl_commands
-            subcommand_class = Pod::Command::IPC.const_get(subcommand)
-            subcommand_class.new(CLAide::ARGV.new(arguments)).run
-            signal_end_of_output
-          end
+        def filter(entries)
+      entries.reject do |e|
+        unless included?(e)
+          special?(e) || backup?(e) || excluded?(e) || symlink?(e)
         end
       end
     end
-  end
-end
+    
+        # Initialize a new Layout.
+    #
+    # site - The Site.
+    # base - The String path to the source.
+    # name - The String filename of the post file.
+    def initialize(site, base, name)
+      @site = site
+      @base = base
+      @name = name
+    
+        class CreateKeychainAction < Action
+      def self.run(params)
+        escaped_password = params[:password].shellescape
+    
+          it 'pass a custom build number to the tool' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          increment_build_number(build_number: 24, xcodeproj: '.xcproject')
+        end').runner.execute(:test)
+    
+    File.readlines(sitelist).each do |site|
+  site.strip!
+  next if site.length == 0
+  next if site =~ /^#/
+    
+    
+    
+    meterp.core.use('Stdapi')
+    
+    
 
     
-            # Runs the template configuration utilities.
-        #
-        # @return [void]
-        #
-        def print_info
-          UI.puts '\nTo learn more about the template see `#{template_repo_url}`.'
-          UI.puts 'To learn more about creating a new pod, see `#{CREATE_NEW_POD_INFO_URL}`.'
+        def missing_required_validator?
+      (active_validator_classes.flat_map(&:ancestors) & Paperclip::REQUIRED_VALIDATORS).empty?
+    end
+    
+            def description
+          'validate the content types allowed on attachment #{@attachment_name}'
         end
     
-          def self.options
-        [
-          ['--update', 'Run `pod repo update` before listing'],
-          ['--stats',  'Show additional stats (like GitHub watchers and forks)'],
-        ].concat(super)
-      end
-    
-            def_node_matcher :redundant_regex?, <<-PATTERN
-          {(send $!nil? {:match :=~} (regexp (str $#literal_at_end?) (regopt)))
-           (send (regexp (str $#literal_at_end?) (regopt)) {:match :=~} $_)}
-        PATTERN
-    
-                  add_offense(condition)
-            end
+              @subject.send(@attachment_name).post_processing = false
+          @subject.send(@attachment_name).assign(file)
+          @subject.valid?
+          @subject.errors[:'#{@attachment_name}_file_size'].blank?
+        ensure
+          @subject.send(@attachment_name).post_processing = true
+        end
