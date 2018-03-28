@@ -1,183 +1,225 @@
 
         
-        
-/**********************************************************************
- * LLSQ::remove
- *
- * Delete an element from the acculuator.
- **********************************************************************/
-    
-    void QLSQ::remove(double x, double y) {
-  if (n <= 0) {
-    tprintf('Can't remove an element from an empty QLSQ accumulator!\n');
-    return;
-  }
-  n--;                           // Count elements.
-  sigx -= x;                     // Update accumulators.
-  sigy -= y;
-  sigxx -= x * x;
-  sigxy -= x * y;
-  sigyy -= y * y;
-  sigxxx -= static_cast<long double>(x) * x * x;
-  sigxxy -= static_cast<long double>(x) * x * y;
-  sigxxxx -= static_cast<long double>(x) * x * x * x;
-}
-    
-    /* Returns true if the |stream| was successfully started and is now done
- * (succeeded, canceled, or failed).
- * Returns false if the |stream| stream is not yet started or is in progress.
- */
-GRPC_SUPPORT_EXPORT
-bool bidirectional_stream_is_done(bidirectional_stream* stream);
-    
-    #endif
+        #endif
 
     
-    #include 'test/cpp/qps/benchmark_config.h'
-#include 'test/cpp/qps/driver.h'
-#include 'test/cpp/qps/report.h'
-#include 'test/cpp/qps/server.h'
-#include 'test/cpp/util/test_config.h'
-#include 'test/cpp/util/test_credentials_provider.h'
-    
-    
-    {}  // namespace
-    
-    namespace grpc {
-namespace testing {
-    }
+      /// Represents an ObjC method reference that will be invoked by a form of
+  /// objc_msgSend.
+  class ObjCMethod {
+    /// The SILDeclRef declaring the method.
+    SILDeclRef method;
+    /// For a bounded call, the static type that provides the lower bound for
+    /// the search. Null for unbounded calls that will look for the method in
+    /// the dynamic type of the object.
+    llvm::PointerIntPair<SILType, 1, bool> searchTypeAndSuper;
     }
     
-    double UsageTimer::Now() {
-  auto ts = gpr_now(GPR_CLOCK_REALTIME);
-  return ts.tv_sec + 1e-9 * ts.tv_nsec;
+    
+    {  auto *result = new (sink.allocator)
+      Completion(std::move(base), copyString(sink.allocator, name),
+                 copyString(sink.allocator, description));
+  result->moduleImportDepth = moduleImportDepth;
+  result->popularityFactor = popularityFactor;
+  result->opaqueCustomKind = customKind;
+  return result;
 }
     
-      Result Mark() const;
+      /// The list of regular users from the last run of the checker.
+  llvm::SmallVector<SILInstruction *, 16> LifetimeEndingUsers;
     
+    @interface NumberBridgingTester : NSObject
+- (BOOL)verifyKeysInRange:(NSRange)range existInDictionary:(NSDictionary *)dictionary;
+@end
     
-    {
-    {}  // namespace testing
-}  // namespace grpc
+    #ifndef SWIFT_INDEX_INDEXRECORD_H
+#define SWIFT_INDEX_INDEXRECORD_H
     
-    grpc::string DescribeMethod(const grpc::protobuf::MethodDescriptor* method) {
-  std::stringstream result;
-  result << '  rpc ' << method->name()
-         << (method->client_streaming() ? '(stream ' : '(')
-         << method->input_type()->full_name() << ') returns '
-         << (method->server_streaming() ? '(stream ' : '(')
-         << method->output_type()->full_name() << ') {}\n';
-  if (method->options().deprecated()) {
-    result << ' DEPRECATED';
-  }
-  return result.str();
-}
+    enum class ASTNodeKind : uint8_t {
+#define MARKUP_AST_NODE(Id, Parent) Id,
+#define ABSTRACT_MARKUP_AST_NODE(Id, Parent)
+#define MARKUP_AST_NODE_RANGE(Id, FirstId, LastId) \
+  First_##Id = FirstId, Last_##Id = LastId,
+#include 'swift/Markup/ASTNodes.def'
+};
     
-    namespace xgboost {
-ConsoleLogger::~ConsoleLogger() {
-  dmlc::CustomLogMessage::Log(log_stream_.str());
-}
-TrackerLogger::~TrackerLogger() {
-  dmlc::CustomLogMessage::Log(log_stream_.str());
-}
-}  // namespace xgboost
+    #include 'swift/SIL/SILDebugScope.h'
+#include 'swift/SIL/SILFunction.h'
     
-    namespace xgboost {
-namespace common {
-/*! \brief buffer reader of the stream that allows you to get */
-class StreamBufferReader {
+    #include 'swift/AST/Substitution.h'
+#include 'llvm/ADT/ArrayRef.h'
+#include 'llvm/ADT/FoldingSet.h'
+    
+    // A smart pointer class that implements a double-ended pointer. Each end
+// points to the other end. The copy constructor and operator= have MOVE
+// semantics, meaning that the relationship with the other end moves to the
+// destination of the copy, leaving the source unattached.
+// For this reason both the copy constructor and the operator= take a non-const
+// reference argument, and the const reference versions cannot be used.
+// DoublePtr is useful to incorporate into structures that are part of a
+// collection such as GenericVector or STL containers, where reallocs can
+// relocate the members. DoublePtr is also useful in a GenericHeap, where it
+// can correctly maintain the pointer to an element of the heap despite it
+// getting moved around on the heap.
+class DoublePtr {
  public:
-  explicit StreamBufferReader(size_t buffer_size)
-      :stream_(NULL),
-       read_len_(1), read_ptr_(1) {
-    buffer_.resize(buffer_size);
-  }
-  /*!
-   * \brief set input stream
-   */
-  inline void set_stream(dmlc::Stream *stream) {
-    stream_ = stream;
-    read_len_ = read_ptr_ = 1;
-  }
-  /*!
-   * \brief allows quick read using get char
-   */
-  inline char GetChar(void) {
-    while (true) {
-      if (read_ptr_ < read_len_) {
-        return buffer_[read_ptr_++];
-      } else {
-        read_len_ = stream_->Read(&buffer_[0], buffer_.length());
-        if (read_len_ == 0) return EOF;
-        read_ptr_ = 0;
-      }
+  DoublePtr() : other_end_(NULL) {}
+  // Copy constructor steals the partner off src and is therefore a non
+  // const reference arg.
+  // Copying a const DoublePtr generates a compiler error.
+  DoublePtr(DoublePtr& src) {
+    other_end_ = src.other_end_;
+    if (other_end_ != NULL) {
+      other_end_->other_end_ = this;
+      src.other_end_ = NULL;
     }
   }
-  /*! \brief whether we are reaching the end of file */
-  inline bool AtEnd(void) const {
-    return read_len_ == 0;
+  // Operator= steals the partner off src, and therefore needs src to be a non-
+  // const reference.
+  // Assigning from a const DoublePtr generates a compiler error.
+  void operator=(DoublePtr& src) {
+    Disconnect();
+    other_end_ = src.other_end_;
+    if (other_end_ != NULL) {
+      other_end_->other_end_ = this;
+      src.other_end_ = NULL;
+    }
   }
-    }
-    }
     }
     
-    #else
-/*!
- * \brief global random engine
- */
-typedef RandomEngine GlobalRandomEngine;
+    // Returns the size of the sparse charset space.
+int SampleIterator::SparseCharsetSize() const {
+  return charset_map_ != NULL
+      ? charset_map_->SparseSize()
+      : (shape_table_ != NULL ? shape_table_->NumShapes()
+                              : sample_set_->charsetsize());
+}
+    
+        std::wstring Value::AsString() const
+    {
+        wstringstream wss;
+        if (IsValid())
+            wss << L'Value(' << Shape().AsString() << ', ' << DeviceKindName(Device().Type()) << L')';
+        else
+            wss << L'Value(###)';
+        return wss.str();
+    }
+    
+    template <class ElemType>
+class BinaryReader : public DataReaderBase
+{
+    size_t m_mbSize;           // size of minibatch requested
+    size_t m_mbStartSample;    // starting sample # of the next minibatch
+    size_t m_epochSize;        // size of an epoch
+    size_t m_epoch;            // which epoch are we on
+    size_t m_epochStartSample; // the starting sample for the epoch
+    size_t m_totalSamples;     // number of samples in the dataset
+    bool m_partialMinibatch;   // a partial minibatch is allowed
+    MBLayoutPtr m_pMBLayout;
+    }
+    
+    BOOST_FIXTURE_TEST_CASE(MatrixSparseElementWisePower, RandomSeedFixture)
+{
+    Matrix<float> mAdense(c_deviceIdZero);
+    mAdense.AssignTruncateBottomOf(Matrix<float>::RandomUniform(dim1, dim2, c_deviceIdZero, -3.0f, 0.1f, IncrementCounter()), 0);
+    Matrix<float> mAsparse(mAdense.DeepClone());
+    mAsparse.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseCSR, true);
+    }
+    
+    // access the parser through one of these functions
+ExpressionPtr ParseConfigDictFromString(wstring text, wstring location, vector<wstring>&& includePaths);          // parses a list of dictionary members, returns a dictionary expression
+// TODO: These rvalue references are no longer adding value, change to const<>&
+//ExpressionPtr ParseConfigDictFromFile(wstring path, vector<wstring> includePaths);              // likewise, but from a file path
+ExpressionPtr ParseConfigExpression(const wstring& sourceText, vector<wstring>&& includePaths); // parses a single expression from sourceText, which is meant to contain an include statement, hence includePaths
+    
+        // EvaluateNDLSnippet - evaluate the passed snippet of NDL into a computational network
+    // script - [in] text of the NDL snippet
+    // network - [in/out] computation network to insert NDL into
+    void EvaluateNDLSnippet(const ConfigValue& script, ComputationNetworkPtr network)
+    {
+        NDLUtil<ElemType> ndlUtil(network);
+        ndlUtil.ProcessNDLConfig(script);
+    }
+    
+    // The following ifdef block is the standard way of creating macros which make exporting
+// from a DLL simpler. All files within this DLL are compiled with the DATAWRITER_EXPORTS
+// symbol defined on the command line. This symbol should not be defined on any project
+// that uses this DLL. This way any other project whose source files include this file see
+// DATAWRITER_API functions as being imported from a DLL, whereas this DLL sees symbols
+// defined with this macro as being exported.
+#ifdef _WIN32
+#if defined(DATAWRITER_EXPORTS)
+#define DATAWRITER_API __declspec(dllexport)
+#elif defined(DATAWRITER_LOCAL)
+#define DATAWRITER_API
+#else
+#define DATAWRITER_API __declspec(dllimport)
+#endif
+#else
+#define DATAWRITER_API
 #endif
     
-    /*! \brief High precision gradient statistics pair with integer backed
- * storage. Operators are associative where floating point versions are not
- * associative. */
-typedef detail::bst_gpair_internal<int64_t> bst_gpair_integer;
+    #endif // __cocos2dx_builder_h__
+
     
-    class SparsePageRawFormat : public SparsePage::Format {
- public:
-  bool Read(SparsePage* page, dmlc::SeekStream* fi) override {
-    if (!fi->Read(&(page->offset))) return false;
-    CHECK_NE(page->offset.size(), 0U) << 'Invalid SparsePage file';
-    page->data.resize(page->offset.back());
-    if (page->data.size() != 0) {
-      CHECK_EQ(fi->Read(dmlc::BeginPtr(page->data),
-                        (page->data).size() * sizeof(SparseBatch::Entry)),
-               (page->data).size() * sizeof(SparseBatch::Entry))
-          << 'Invalid SparsePage file';
-    }
-    return true;
-  }
-    }
+    bool js_cocos2dx_physics3d_Physics3DPointToPointConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DPointToPointConstraint_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DPointToPointConstraint(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DPointToPointConstraint_getPivotPointInA(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DPointToPointConstraint_getPivotPointInB(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DPointToPointConstraint_init(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DPointToPointConstraint_setPivotPointInA(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DPointToPointConstraint_setPivotPointInB(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DPointToPointConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DPointToPointConstraint_Physics3DPointToPointConstraint(JSContext *cx, uint32_t argc, jsval *vp);
     
-    SparsePage::Writer::Writer(
-    const std::vector<std::string>& name_shards,
-    const std::vector<std::string>& format_shards,
-    size_t extra_buffer_capacity)
-    : num_free_buffer_(extra_buffer_capacity + name_shards.size()),
-      clock_ptr_(0),
-      workers_(name_shards.size()),
-      qworkers_(name_shards.size()) {
-  CHECK_EQ(name_shards.size(), format_shards.size());
-  // start writer threads
-  for (size_t i = 0; i < name_shards.size(); ++i) {
-    std::string name_shard = name_shards[i];
-    std::string format_shard = format_shards[i];
-    auto* wqueue = &qworkers_[i];
-    workers_[i].reset(new std::thread(
-        [this, name_shard, format_shard, wqueue] () {
-          std::unique_ptr<dmlc::Stream> fo(
-              dmlc::Stream::Create(name_shard.c_str(), 'w'));
-          std::unique_ptr<SparsePage::Format> fmt(
-              SparsePage::Format::Create(format_shard));
-          fo->Write(format_shard);
-          std::shared_ptr<SparsePage> page;
-          while (wqueue->Pop(&page)) {
-            if (page.get() == nullptr) break;
-            fmt->Write(*page, fo.get());
-            qrecycle_.Push(std::move(page));
-          }
-          fo.reset(nullptr);
-          LOG(CONSOLE) << 'SparsePage::Writer Finished writing to ' << name_shard;
-        }));
-  }
+    
+    
+    #ifdef __cplusplus
+extern 'C' {
+#endif
+#include 'tolua++.h'
+#ifdef __cplusplus
 }
+#endif
+    
+    
+    
+    	static Test* Create()
+	{
+		return new Breakable;
+	}
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+        bool Check();  // true pass, false limit
+    
+    void Test_Spy_Sample::TestFun0()
+{
+    SPY_HOOK_THIS_API(TestFun0);
+    int i = 0;
+    SPY_ATTACH_VARIABLE('TestFun0 i', i);
+    i++;
+    xinfo2(TSF'Test');
+    }
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    #ifndef SCOP_JENV_H_
+#define SCOP_JENV_H_
