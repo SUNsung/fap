@@ -1,170 +1,359 @@
 
         
-          void Write(const SparsePage& page, dmlc::Stream* fo) override {
-    CHECK(page.offset.size() != 0 && page.offset[0] == 0);
-    CHECK_EQ(page.offset.back(), page.data.size());
-    fo->Write(page.offset);
-    min_index_ = page.min_index;
-    fo->Write(&min_index_, sizeof(min_index_));
-    index_.data.resize(page.data.size());
-    value_.data.resize(page.data.size());
-    }
-    
-    /*!
- * \brief an iterator that iterates over a configure file and gets the configures
- */
-class ConfigIterator: public ConfigStreamReader {
- public:
-  /*!
-   * \brief constructor
-   * \param fname name of configure file
-   */
-  explicit ConfigIterator(const char *fname) : ConfigStreamReader(fi) {
-    fi.open(fname);
-    if (fi.fail()) {
-      LOG(FATAL) << 'cannot open file ' << fname;
-    }
-    ConfigReaderBase::Init();
-  }
-  /*! \brief destructor */
-  ~ConfigIterator(void) {
-    fi.close();
-  }
-    }
-    
-      vals_in.clear(); ss.flush(); ss.clear(); ss.str('');
-  ss << 'abcde';
-  ss >> vals_in;
-  EXPECT_NE(vals_in, vals);
-    
-      XGBOOST_DEVICE float GetGrad() const { return grad_; }
-  XGBOOST_DEVICE float GetHess() const { return hess_; }
-    
-    XGBOOST_REGISTER_METRIC(GammaDeviance, 'gamma-deviance')
-.describe('Residual deviance for gamma regression.')
-.set_body([](const char* param) { return new EvalGammaDeviance(); });
-    
-    path remove_prefix(const path& pth, const path& prefix) {
-  path::const_iterator it;
-  if (!skipPrefix(pth, prefix, it)) {
-    throw filesystem_error(
-        'Path does not start with prefix',
-        pth,
-        prefix,
-        bsys::errc::make_error_code(bsys::errc::invalid_argument));
-  }
-    }
-    
-    /**
- * FileHandlerFactory is a LogHandlerFactory that constructs log handlers
- * that write to a file.
- *
- * Note that FileHandlerFactory allows opening and appending to arbitrary files
- * based on the handler options.  This may make it unsafe to use
- * FileHandlerFactory in some contexts: for instance, a setuid binary should
- * generally avoid registering the FileHandlerFactory if they allow log
- * handlers to be configured via command line parameters, since otherwise this
- * may allow non-root users to append to files that they otherwise would not
- * have write permissions for.
- */
-class FileHandlerFactory : public LogHandlerFactory {
- public:
-  StringPiece getType() const override {
-    return 'file';
-  }
-    }
-    
-    /**
- * Get the type of a folly::dynamic object as a string, for inclusion in
- * exception messages.
- */
-std::string dynamicTypename(const dynamic& value) {
-  switch (value.type()) {
-    case dynamic::NULLT:
-      return 'null';
-    case dynamic::ARRAY:
-      return 'array';
-    case dynamic::BOOL:
-      return 'boolean';
-    case dynamic::DOUBLE:
-      return 'double';
-    case dynamic::INT64:
-      return 'integer';
-    case dynamic::OBJECT:
-      return 'object';
-    case dynamic::STRING:
-      return 'string';
-  }
-  return 'unknown type';
-}
-    
-    /**
- * LogHandler represents a generic API for processing log messages.
- *
- * LogHandlers have an associated log level.  The LogHandler will discard any
- * messages below its log level.  This allows specific LogHandlers to perform
- * additional filtering of messages even if the messages were enabled at the
- * LogCategory level.  For instance, a single LogCategory may have two
- * LogHandlers attached, one that logs locally to a file, and one that sends
- * messages to a remote logging service.  The local LogHandler may be
- * configured to record all messages, but the remote LogHandler may want to
- * only process ERROR messages and above, even when debug logging is enabled
- * for this LogCategory.
- *
- * By default the LogHandler level is set to LogLevel::NONE, which means that
- * all log messages will be processed.
- */
-class LogHandler {
- public:
-  virtual ~LogHandler() = default;
-    }
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_API void        ImGui_Marmalade_InvalidateDeviceObjects();
-IMGUI_API bool        ImGui_Marmalade_CreateDeviceObjects();
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    
-    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-        }
-    
-    // Data
-static ID3D11Device*            g_pd3dDevice = NULL;
-static ID3D11DeviceContext*     g_pd3dDeviceContext = NULL;
-static IDXGISwapChain*          g_pSwapChain = NULL;
-static ID3D11RenderTargetView*  g_mainRenderTargetView = NULL;
-    
-    // GLFW callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// Provided here if you want to chain callbacks.
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_API void        ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-IMGUI_API void        ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-IMGUI_API void        ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-IMGUI_API void        ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+        // Generate param traits log methods.
+#include 'ipc/param_traits_log_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
 
     
-    // CHANGELOG
-// (minor and older changes stripped away, please see git history for details)
-//  2018-03-20: Misc: Setup io.BackendFlags ImGuiBackendFlags_HasMouseCursors and ImGuiBackendFlags_HasSetMousePos flags + honor ImGuiConfigFlags_NoSetMouseCursor flag.
-//  2018-03-06: OpenGL: Added const char* glsl_version parameter to ImGui_ImplGlfwGL3_Init() so user can override the GLSL version e.g. '#version 150'.
-//  2018-02-23: OpenGL: Create the VAO in the render function so the setup can more easily be used with multiple shared GL context.
-//  2018-02-20: Inputs: Added support for mouse cursors (ImGui::GetMouseCursor() value and WM_SETCURSOR message handling).
-//  2018-02-20: Inputs: Renamed GLFW callbacks exposed in .h to not include GL3 in their name.
-//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplGlfwGL3_RenderDrawData() in the .h file so you can call it yourself.
-//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
-//  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
-//  2018-01-25: Inputs: Added gamepad support if ImGuiConfigFlags_NavEnableGamepad is set.
-//  2018-01-25: Inputs: Honoring the io.WantSetMousePos flag by repositioning the mouse (ImGuiConfigFlags_NavEnableSetMousePos is set).
-//  2018-01-20: Inputs: Added Horizontal Mouse Wheel support.
-//  2018-01-18: Inputs: Added mapping for ImGuiKey_Insert.
-//  2018-01-07: OpenGL: Changed GLSL shader version from 330 to 150. (Also changed GL context from 3.3 to 3.2 in example's main.cpp)
-//  2017-09-01: OpenGL: Save and restore current bound sampler. Save and restore current polygon mode.
-//  2017-08-25: Inputs: MousePos set to -FLT_MAX,-FLT_MAX when mouse is unavailable/missing (instead of -1,-1).
-//  2017-05-01: OpenGL: Fixed save and restore of current blend function state.
-//  2016-10-15: Misc: Added a void* user_data parameter to Clipboard function handlers.
-//  2016-09-05: OpenGL: Fixed save and restore of current scissor rectangle.
-//  2016-04-30: OpenGL: Fixed save and restore of current GL_ACTIVE_TEXTURE.
+    #include 'content/nw/src/api/base/base.h'
+    
+    namespace content {
+class RenderView;
+}
+    
+    
+    {}  // namespace nwapi
+    
+       bool HasIcon(int command_id) override;
+    
+     protected:
+  ~NwAppSetProxyConfigFunction() override;
+    
+    class NwClipboardClearSyncFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardClearSyncFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    void InternalKeyComparator::FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const {
+  // Attempt to shorten the user portion of the key
+  Slice user_start = ExtractUserKey(*start);
+  Slice user_limit = ExtractUserKey(limit);
+  std::string tmp(user_start.data(), user_start.size());
+  user_comparator_->FindShortestSeparator(&tmp, user_limit);
+  if (tmp.size() < user_start.size() &&
+      user_comparator_->Compare(user_start, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*start, tmp) < 0);
+    assert(this->Compare(tmp, limit) < 0);
+    start->swap(tmp);
+  }
+}
+    
+    static void TestKey(const std::string& key,
+                    uint64_t seq,
+                    ValueType vt) {
+  std::string encoded = IKey(key, seq, vt);
+    }
+    
+    int main(int argc, char** argv) {
+  return leveldb::test::RunAllTests();
+}
+
+    
+    void TableCache::Evict(uint64_t file_number) {
+  char buf[sizeof(file_number)];
+  EncodeFixed64(buf, file_number);
+  cache_->Erase(Slice(buf, sizeof(buf)));
+}
+    
+    TEST(FindFileTest, MultipleNullBoundaries) {
+  Add('150', '200');
+  Add('200', '250');
+  Add('300', '350');
+  Add('400', '450');
+  ASSERT_TRUE(! Overlaps(NULL, '149'));
+  ASSERT_TRUE(! Overlaps('451', NULL));
+  ASSERT_TRUE(Overlaps(NULL, NULL));
+  ASSERT_TRUE(Overlaps(NULL, '150'));
+  ASSERT_TRUE(Overlaps(NULL, '199'));
+  ASSERT_TRUE(Overlaps(NULL, '200'));
+  ASSERT_TRUE(Overlaps(NULL, '201'));
+  ASSERT_TRUE(Overlaps(NULL, '400'));
+  ASSERT_TRUE(Overlaps(NULL, '800'));
+  ASSERT_TRUE(Overlaps('100', NULL));
+  ASSERT_TRUE(Overlaps('200', NULL));
+  ASSERT_TRUE(Overlaps('449', NULL));
+  ASSERT_TRUE(Overlaps('450', NULL));
+}
+    
+    // Returns a new environment that stores its data in memory and delegates
+// all non-file-storage tasks to base_env. The caller must delete the result
+// when it is no longer needed.
+// *base_env must remain live while the result is in use.
+Env* NewMemEnv(Env* base_env);
+    
+    struct CV_EXPORTS IntrinsicParams
+{
+    Vec2d f;
+    Vec2d c;
+    Vec4d k;
+    double alpha;
+    std::vector<uchar> isEstimate;
+    }
+    
+    namespace {
+    }
+    
+                // Extension: 3.1
+            DrawArraysInstanced = Switch_DrawArraysInstanced;
+            DrawElementsInstanced = Switch_DrawElementsInstanced;
+            TexBuffer = Switch_TexBuffer;
+            PrimitiveRestartIndex = Switch_PrimitiveRestartIndex;
+    
+      // Streams a pointer value to this object.
+  //
+  // This function is an overload of the previous one.  When you
+  // stream a pointer to a Message, this definition will be used as it
+  // is more specialized.  (The C++ Standard, section
+  // [temp.func.order].)  If you stream a non-pointer, then the
+  // previous definition will be used.
+  //
+  // The reason for this overload is that streaming a NULL pointer to
+  // ostream is undefined behavior.  Depending on the compiler, you
+  // may get '0', '(nil)', '(null)', or an access violation.  To
+  // ensure consistent result across compilers, we always treat NULL
+  // as '(null)'.
+  template <typename T>
+  inline Message& operator <<(T* const& pointer) {  // NOLINT
+    if (pointer == NULL) {
+      *ss_ << '(null)';
+    } else {
+      *ss_ << pointer;
+    }
+    return *this;
+  }
+#endif  // GTEST_OS_SYMBIAN
+    
+    // Functions producing parameter generators.
+//
+// Google Test uses these generators to produce parameters for value-
+// parameterized tests. When a parameterized test case is instantiated
+// with a particular generator, Google Test creates and runs tests
+// for each element in the sequence produced by the generator.
+//
+// In the following sample, tests from test case FooTest are instantiated
+// each three times with parameter values 3, 5, and 8:
+//
+// class FooTest : public TestWithParam<int> { ... };
+//
+// TEST_P(FooTest, TestThis) {
+// }
+// TEST_P(FooTest, TestThat) {
+// }
+// INSTANTIATE_TEST_CASE_P(TestSequence, FooTest, Values(3, 5, 8));
+//
+    
+    ]]
+    
+    namespace testing {
+    }
+    
+      // Returns a pointer to the last occurence of a valid path separator in
+  // the FilePath. On Windows, for example, both '/' and '\' are valid path
+  // separators. Returns NULL if no path separator was found.
+  const char* FindLastPathSeparator() const;
+    
+    // scripts/fuse_gtest.py depends on gtest's own header being #included
+// *unconditionally*.  Therefore these #includes cannot be moved
+// inside #if GTEST_HAS_PARAM_TEST.
+#include 'gtest/internal/gtest-param-util.h'
+#include 'gtest/internal/gtest-port.h'
+    
+    
+    {  const T begin_;
+  const T end_;
+  const IncrementT step_;
+  // The index for the end() iterator. All the elements in the generated
+  // sequence are indexed (0-based) to aid iterator comparison.
+  const int end_index_;
+};  // class RangeGenerator
+    
+    #include <string.h>
+#include <string>
+    
+    $range i 1..n
+template <$for i, [[GTEST_TEMPLATE_ T$i = NoneT]]>
+struct Templates {
+  typedef Templates$n<$for i, [[T$i]]> type;
+};
+    
+    using ::testing::EmptyTestEventListener;
+using ::testing::InitGoogleTest;
+using ::testing::Test;
+using ::testing::TestCase;
+using ::testing::TestEventListeners;
+using ::testing::TestInfo;
+using ::testing::TestPartResult;
+using ::testing::UnitTest;
+    
+        // Taken from RS4
+    REGISTER_OPERATOR_SCHEMA(LogSoftmax)
+        .Description('Log Softmax takes one input data (Tensor<T>) and produces one output '
+            'data (Tensor<T>) where the function, y = log(1 / sum(exp(X)) * exp(x)), is applied '
+            'to the tensor elementwise.')
+        .Input('input', 'The input tensor that's coerced into a 2D matrix of size (NxD) as '
+            'described above.', 'T')
+        .Output('output', 'Output tensor of same shape and type as input X.', 'T')
+        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
+            'Constrain input and output types to float tensors.')
+        .Attr('axis', '(int) default to 1; describes the axis of the inputs when coerced '
+            'to 2D; defaults to one because the 0th axis most likely describes '
+            'the batch_size', AttrType::AttributeProto_AttributeType_INT);
+    
+    #define REGISTER_BINARY_LOGIC_OPERATOR_SCHEMA(OpName)                                                           \
+    REGISTER_OPERATOR_SCHEMA(OpName)                                                                            \
+        .Description('Returns the tensor resulted from performing the ''#OpName'' logical operation'            \
+            'elementwise on the input tensors A and B. If broadcasting is enabled, the right-hand-side'         \
+            'argument will be broadcasted to match the shape of left-hand-side argument. Refer to Add'          \
+            ' for a detailed description of the broadcasting rules.')                                           \
+        .Input('A', 'First operand.', 'T')                                                                      \
+        .Input('B', 'Second operand. With broadcasting can be of smaller size than A. If broadcasting'          \
+            'is disabled, it should be of the same size.', 'T')                                                 \
+        .Output('C', 'Result, has same dimensions and A and type bool.', 'T')                                   \
+        .TypeConstraint('T', { 'tensor(bool)' }, 'Constrain input and output types to bool tensor.')            \
+        .Attr('axis', 'If set, defines the broadcast dimensions.',                                              \
+            AttrType::AttributeProto_AttributeType_INT)                                                         \
+        .Attr('broadcast', 'Pass 1 to enable broadcasting.',                                                    \
+            AttrType::AttributeProto_AttributeType_INT);
+    
+    
+    REGISTER_OPERATOR_SCHEMA(LabelEncoder)
+        .SetDomain(c_mlDomain)
+        .Input('X', 'Data to be encoded', 'T1')
+        .Output('Y', 'Encoded output data', 'T2')
+        .Description(R'DOC(
+            Convert class label to their integral type and vice versa.
+            In both cases the operator is instantiated with the list of class strings.
+            The integral value of the string is the index position in the list.
+            )DOC')
+        .TypeConstraint('T1', { 'tensor(string)', 'tensor(int64)' }, ' allowed types.')
+        .TypeConstraint('T2', { 'tensor(string)', 'tensor(int64)' }, ' allowed types.')
+        .Attr('classes_strings', 'List of class label strings to be encoded as INTS', AttrType::AttributeProto_AttributeType_STRINGS)
+        .Attr('default_int64', 'Default value if not in class list as int64', AttrType::AttributeProto_AttributeType_INT)
+        .Attr('default_string', 'Default value if not in class list as string', AttrType::AttributeProto_AttributeType_STRING);
+    
+        // Adds an utterance to the chunk.
+    void Add(UtteranceDescription&& utterance)
+    {
+        if (IsInRam())
+        {
+            LogicError('Frames already paged into RAM -- too late to add data.');
+        }
+    }
+    
+    // This class stores sequence data for HTK for floats.
+struct HTKFloatSequenceData : DenseSequenceData
+{
+    HTKFloatSequenceData(FeatureMatrix&& data, const NDShape& frameShape) : m_buffer(data), m_frameShape(frameShape)
+    {
+        m_numberOfSamples = (uint32_t)data.GetNumberOfColumns();
+        if (m_numberOfSamples != data.GetNumberOfColumns())
+        {
+            RuntimeError('Maximum number of samples per sequence exceeded.');
+        }
+    }
+    }
+    
+    using namespace std;
+    
+    FunctionPtr CreateRNN(const ONNXIR::Node *node, const std::vector<Variable> &inputs, const std::string &direction,
+    const std::vector<string> &activations, const std::vector<float> &activation_alpha, const std::vector<float> &activation_beta);
+    
+    // ===========================================================================
+// ssematrix -- main matrix type with allocation
+// ===========================================================================
+    
+        InvalidateCompiledNetwork();
+    
+    void UnregisterShellMenu(std::wstring opt, wchar_t* keyBaseName)
+{
+	HKEY root = GetRootKey(opt);
+	HKEY cmderKey;
+	FAIL_ON_ERROR(RegCreateKeyEx(root, keyBaseName, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &cmderKey, NULL));
+	FAIL_ON_ERROR(RegDeleteTree(cmderKey, NULL));
+	RegCloseKey(cmderKey);
+	RegCloseKey(root);
+}
+    
+    bool js_cocos2dx_studio_SkeletonNode_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_SkeletonNode_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_SkeletonNode(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_SkeletonNode_getBoneNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_SkeletonNode_changeSkins(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_SkeletonNode_addSkinGroup(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_SkeletonNode_getAllSubBonesMap(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_SkeletonNode_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_SkeletonNode_SkeletonNode(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+        virtual void DrawTransform(const b2Transform& xf);
+    
+    			b2BodyDef bd;
+			bd.type = b2_dynamicBody;
+			bd.angularDamping = 2.0f;
+			bd.linearDamping = 0.5f;
+    
+    			b2FixtureDef fd;
+			fd.shape = &circle;
+			fd.density = 1.0f;
+			fd.friction = 0.9f;
+    
+    
+/*
+ * WakeUpLock.cpp
+ *
+ *  Created on: 2012-9-28
+ *      Author: yerungui
+ */
+    
+    #include 'comm/debugger/test_spy_sample.h'
+#include 'comm/xlogger/xlogger.h'
+    
+    //
+//  testspy_spy.cpp
+//  PublicComponent
+//
+//  Created by yerungui on 14-5-13.
+//
+    
+      bool ContainsWord(const Word &W) const {
+    return std::any_of(begin(), end(), [&](const DictionaryEntry &DE) {
+      return DE.GetW() == W;
+    });
+  }
+  const DictionaryEntry *begin() const { return &DE[0]; }
+  const DictionaryEntry *end() const { return begin() + Size; }
+  DictionaryEntry & operator[] (size_t Idx) {
+    assert(Idx < Size);
+    return DE[Idx];
+  }
+  void push_back(DictionaryEntry DE) {
+    if (Size < kMaxDictSize)
+      this->DE[Size++] = DE;
+  }
+  void clear() { Size = 0; }
+  bool empty() const { return Size == 0; }
+  size_t size() const { return Size; }
+    
+    #endif
+
+    
+      FindClose(FindHandle);
+    
+      // Public for tests.
+  void ResetCoverage();
+    
+    #include 'FuzzerDefs.h'
+    
+      /// Creates a cross-over of two pieces of Data, returns its size.
+  size_t CrossOver(const uint8_t *Data1, size_t Size1, const uint8_t *Data2,
+                   size_t Size2, uint8_t *Out, size_t MaxOutSize);
