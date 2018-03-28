@@ -1,138 +1,73 @@
-// Memtables and sstables that make the DB representation contain
-// (userkey,seq,type) => uservalue entries.  DBIter
-// combines multiple entries for the same userkey found in the DB
-// representation into a single entry while accounting for sequence
-// numbers, deletion markers, overwrites, etc.
-class DBIter: public Iterator {
- public:
-  // Which direction is the iterator currently moving?
-  // (1) When moving forward, the internal iterator is positioned at
-  //     the exact entry that yields this->key(), this->value()
-  // (2) When moving backwards, the internal iterator is positioned
-  //     just before all entries whose user key == this->key().
-  enum Direction {
-    kForward,
-    kReverse
-  };
-    }
+
+        
+        #include 'test/cpp/qps/benchmark_config.h'
+#include 'test/cpp/qps/driver.h'
+#include 'test/cpp/qps/report.h'
+#include 'test/cpp/qps/server.h'
+#include 'test/cpp/util/test_config.h'
+#include 'test/cpp/util/test_credentials_provider.h'
     
-    #ifndef STORAGE_LEVELDB_DB_DB_ITER_H_
-#define STORAGE_LEVELDB_DB_DB_ITER_H_
+    #include 'test/cpp/qps/benchmark_config.h'
+#include 'test/cpp/qps/driver.h'
+#include 'test/cpp/qps/report.h'
+#include 'test/cpp/qps/server.h'
+#include 'test/cpp/util/test_config.h'
+#include 'test/cpp/util/test_credentials_provider.h'
     
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
+      PrivateGenerator(const GeneratorConfiguration& config,
+                   const grpc_generator::File* file);
+    
+     private:
+  static Result Sample();
+    
+    #endif  // GRPC_TEST_CPP_METRICS_SERVER_H
 
     
-    #include <string>
-#include 'leveldb/env.h'
-#include 'leveldb/status.h'
+      /*
+   * @brief Update the flag value by string name,
+   *
+   * @param name the flag name.
+   * @parma value the new value.
+   * @return if the value was updated.
+   */
+  static Status updateValue(const std::string& name, const std::string& value);
     
-    inline int Slice::compare(const Slice& b) const {
-  const size_t min_len = (size_ < b.size_) ? size_ : b.size_;
-  int r = memcmp(data_, b.data_, min_len);
-  if (r == 0) {
-    if (size_ < b.size_) r = -1;
-    else if (size_ > b.size_) r = +1;
-  }
-  return r;
+    #include <osquery/config.h>
+#include <osquery/core.h>
+#include <osquery/database.h>
+#include <osquery/events.h>
+#include <osquery/extensions.h>
+#include <osquery/filesystem.h>
+#include <osquery/flags.h>
+#include <osquery/logger.h>
+#include <osquery/registry.h>
+#include <osquery/sql.h>
+#include <osquery/status.h>
+#include <osquery/tables.h>
+    
+      /*
+   * @brief Helper function to POST a carve to the graph endpoint.
+   *
+   * Once all of the files have been carved and the tgz has been
+   * created, we POST the carved file to an endpoint specified by the
+   * carver_start_endpoint and carver_continue_endpoint
+   */
+  Status postCarve(const boost::filesystem::path& path);
+    
+    #ifndef BASEEVENT_INTERFACE_BASEEVENT_H_
+#define BASEEVENT_INTERFACE_BASEEVENT_H_
+    
+    
+    {    void throw_exception( std::exception const & e ) {
+        xfatal2(TSF'boost exception:%_', e.what());
+        
+#ifdef ANDROID
+        char stack[4096] = {0};
+        android_callstack(stack, sizeof(stack));
+        xfatal2(TSF'%_', stack);
+#endif
+    }
 }
-    
-    #if defined(JSON_HAS_INT64)
-    
-    #include <Python.h>
-    
-    
-    {
-    {
-    {}  // namespace cpp
-}  // namespace compiler
-}  // namespace protobuf
-    
-    void MapFieldGenerator::GenerateSerializedSizeCode(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'size += $name$_.CalculateSize(_map_$name$_codec);\n');
-}
-    
-    
-    {
-}  // namespace google
-#endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
-
-    
-    void RepeatedEnumFieldGenerator::WriteToString(io::Printer* printer) {
-  printer->Print(variables_,
-    'PrintField(\'$descriptor_name$\', $name$_, writer);\n');
-}
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-    
-    
-    { private:
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(RepeatedMessageFieldGenerator);
-};
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace java {
-namespace {
-    }
-    }
-    }
-    }
-    }
-    
-    
-    
-    
-    
-    
-    
-    #endif
-
-    
-    				// For a circle: I = 0.5 * m * r * r ==> r = sqrt(2 * I / m)
-				float32 radius = b2Sqrt(2.0f * I / mass);
-    
-    			b2FixtureDef fd;
-			fd.shape = &shape;
-			fd.density = 1.0f;
-			fd.friction = 0.6f;
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    void WakeUpLock::Lock() {
-    ::wakeupLock_Lock(object_);
-}
-    
-    
-    
-      public:
-    template<typename T>
-    T* Service() {
-        if (m_publicservices.end() != m_publicservices.find(T::ServiceName()))
-            return (T*)m_publicservices[T::ServiceName()];
-    }
-    
-    #endif
 
     
     // Unless required by applicable law or agreed to in writing, software distributed under the License is
@@ -140,17 +75,98 @@ namespace {
 // either express or implied. See the License for the specific language governing permissions and
 // limitations under the License.
     
-    //
-//  testspy.h
-//  PublicComponent
-//
-//  Created by yerungui on 14-5-13.
-//
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
     
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
     
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
+    {  private:
+    virtual void __OnAttach(const char* _key) {}
+    virtual void __OnDetach(const char* _key) {}
+};
+
+    
+            if (JNI_OK == status_) {
+            break;
+        }
+    
+      size_t NumFeatures() const {
+    size_t Res = 0;
+    for (size_t i = 0; i < kFeatureSetSize; i++)
+      Res += GetFeature(i) != 0;
+    return Res;
+  }
+    
+      if (DoPlainRun) {
+    Options.SaveArtifacts = false;
+    int Runs = std::max(1, Flags.runs);
+    Printf('%s: Running %zd inputs %d time(s) each.\n', ProgName->c_str(),
+           Inputs->size(), Runs);
+    for (auto &Path : *Inputs) {
+      auto StartTime = system_clock::now();
+      Printf('Running: %s\n', Path.c_str());
+      for (int Iter = 0; Iter < Runs; Iter++)
+        RunOneTest(F, Path.c_str(), Options.MaxLen);
+      auto StopTime = system_clock::now();
+      auto MS = duration_cast<milliseconds>(StopTime - StartTime).count();
+      Printf('Executed %s in %zd ms\n', Path.c_str(), (long)MS);
+    }
+    Printf('***\n'
+           '*** NOTE: fuzzing was not performed, you have only\n'
+           '***       executed the target code on a fixed set of inputs.\n'
+           '***\n');
+    F->PrintFinalStats();
+    exit(0);
+  }
+    
+    using namespace fuzzer;
+    
+      bool HasMoreMallocsThanFrees = false;
+  size_t NumberOfLeakDetectionAttempts = 0;
+    
+    bool ParseOneDictionaryEntry(const std::string &Str, Unit *U) {
+  U->clear();
+  if (Str.empty()) return false;
+  size_t L = 0, R = Str.size() - 1;  // We are parsing the range [L,R].
+  // Skip spaces from both sides.
+  while (L < R && isspace(Str[L])) L++;
+  while (R > L && isspace(Str[R])) R--;
+  if (R - L < 2) return false;
+  // Check the closing '
+  if (Str[R] != ''') return false;
+  R--;
+  // Find the opening '
+  while (L < R && Str[L] != ''') L++;
+  if (L >= R) return false;
+  assert(Str[L] == '\'');
+  L++;
+  assert(L <= R);
+  for (size_t Pos = L; Pos <= R; Pos++) {
+    uint8_t V = (uint8_t)Str[Pos];
+    if (!isprint(V) && !isspace(V)) return false;
+    if (V =='\\') {
+      // Handle '\\'
+      if (Pos + 1 <= R && (Str[Pos + 1] == '\\' || Str[Pos + 1] == ''')) {
+        U->push_back(Str[Pos + 1]);
+        Pos++;
+        continue;
+      }
+      // Handle '\xAB'
+      if (Pos + 3 <= R && Str[Pos + 1] == 'x'
+           && isxdigit(Str[Pos + 2]) && isxdigit(Str[Pos + 3])) {
+        char Hex[] = '0xAA';
+        Hex[2] = Str[Pos + 2];
+        Hex[3] = Str[Pos + 3];
+        U->push_back(strtol(Hex, nullptr, 16));
+        Pos += 3;
+        continue;
+      }
+      return false;  // Invalid escape.
+    } else {
+      // Any other character.
+      U->push_back(V);
+    }
+  }
+  return true;
+}
