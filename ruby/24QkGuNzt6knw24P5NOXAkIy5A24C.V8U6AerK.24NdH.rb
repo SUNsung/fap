@@ -1,137 +1,54 @@
 
         
-          def test_javascript_tag
-    self.output_buffer = 'foo'
-    
-            def content_tag_string(name, content, options, escape = true)
-          tag_options = tag_options(options, escape) if options
-          content     = ERB::Util.unwrapped_html_escape(content) if escape
-          '<#{name}#{tag_options}>#{PRE_CONTENT_STRINGS[name]}#{content}</#{name}>'.html_safe
-        end
-    
-      test 'helpers' do
-    assert_response_code_range 200..299, :successful?
-    assert_response_code_range [404],    :not_found?
-    assert_response_code_range 300..399, :redirection?
-    assert_response_code_range 500..599, :server_error?
-    assert_response_code_range 400..499, :client_error?
-  end
-    
-          def index
-        self.response_body = @list.join(', ')
-      end
-    
-          assert_equal 'entry', @controller.response.body
-      assert @controller.params.has_key?(:entry)
-      assert_equal 'content...', @controller.params['entry']['summary']
-    end
-  end
-    
-          def handle_exception_with_mailer_class(exception)
-        if klass = mailer_class
-          klass.handle_exception exception
-        else
-          raise exception
-        end
-      end
-  end
-end
-
-    
-        # An email was received.
-    def receive(event)
-      info { 'Received mail (#{event.duration.round(1)}ms)' }
-      debug { event.payload[:mail] }
-    end
-    
-          check_class_collision suffix: 'Mailer'
-    
-    def source_dir(*subdirs)
-  test_dir('source', *subdirs)
-end
-    
-          #
-      # Require a gem or file if it's present, otherwise silently fail.
-      #
-      # names - a string gem name or array of gem names
-      #
-      def require_if_present(names)
-        Array(names).each do |name|
-          begin
-            require name
-          rescue LoadError
-            Jekyll.logger.debug 'Couldn't load #{name}. Skipping.'
-            yield(name, version_constraint(name)) if block_given?
-            false
-          end
-        end
-      end
-    
-        # Initialize a new Layout.
-    #
-    # site - The Site.
-    # base - The String path to the source.
-    # name - The String filename of the post file.
-    def initialize(site, base, name)
-      @site = site
-      @base = base
-      @name = name
-    
-          it 'get GIT-SVN build number' do
+              it 'does set the exclude directories' do
         result = Fastlane::FastFile.new.parse('lane :test do
-            get_build_number_repository
+            cloc(exclude_dir: 'test1,test2,build')
+          end').runner.execute(:test)
+    
+        context 'GIT-SVN repository' do
+      before do
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_svn?).and_return(false)
+        expect(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git_svn?).and_return(true)
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git?).and_return(false)
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_hg?).and_return(false)
+      end
+    
+          it 'automatically removes new lines from the version number' do
+        Fastlane::FastFile.new.parse('lane :test do
+          increment_version_number(version_number: '1.77.3\n', bump_type: 'major')
         end').runner.execute(:test)
     
-      def pod_prefix
-    File.expand_path('../..', pod_bin)
-  end
+        def sort_fn(a, b)
+      if (a.getbyte(0) >= 49 && a.getbyte(0) <= 57) || (b.getbyte(0) >= 49 && b.getbyte(0) <= 57)
+        a_split = a.split(SPLIT_INTS)
+        b_split = b.split(SPLIT_INTS)
     
-            def validate!
-          super
-          if @pod_name.nil? && !@wipe_all
-            # Security measure, to avoid removing the pod cache too agressively by mistake
-            help! 'You should either specify a pod name or use the --all flag'
+              # Underscore methods
+          if name.start_with?('Underscore')
+            node.at_css('~ ul').css('li').each do |li|
+              name = [type.downcase, li.at_css('a').content.split.first].join('.')
+              id = name.parameterize
+              li['id'] = id
+              entries << [name, id, type]
+            end
+            next
           end
+    
+            css('div.attributes').each do |node|
+          node.name = 'p'
         end
     
-            def self.options
-          [[
-            '--short', 'Only print the path relative to the cache root'
-          ]].concat(super)
+    end
+    
+            # Runs the template configuration utilities.
+        #
+        # @return [void]
+        #
+        def print_info
+          UI.puts '\nTo learn more about the template see `#{template_repo_url}`.'
+          UI.puts 'To learn more about creating a new pod, see `#{CREATE_NEW_POD_INFO_URL}`.'
         end
     
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
-      end
-      super
-    end
-    
-        def get_cached_gist(gist, file)
-      return nil if @cache_disabled
-      cache_file = get_cache_file_for gist, file
-      File.read cache_file if File.exist? cache_file
-    end
-    
-    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
-
-    
-        def initialize(tag_name, markup, tokens)
-      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
-      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
-      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
-      super
-    end
+      context 'called with four widths' do
+    it 'applies different widths to all sides' do
+      rule = 'border-width: 7px 8px 9px 10px'
