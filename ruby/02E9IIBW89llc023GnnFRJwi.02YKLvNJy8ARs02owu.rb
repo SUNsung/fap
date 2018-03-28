@@ -1,9 +1,21 @@
-      raise Discourse::InvalidParameters.new(:to_address) unless args[:to_address].present?
+
+        
+              output = @options[:output] = @args.shift
+      raise 'Error: --from required when using --recursive.' unless @options[:from]
+      raise 'Error: --to required when using --recursive.' unless @options[:to]
+      unless File.directory?(@options[:input])
+        raise 'Error: '#{@options[:input]}' is not a directory'
+      end
+      if @options[:output] && File.exist?(@options[:output]) &&
+        !File.directory?(@options[:output])
+        raise 'Error: '#{@options[:output]}' is not a directory'
+      end
+      @options[:output] ||= @options[:input]
     
-          expect('.border-style-all').to have_rule(rule)
+            def parent_block_node(node)
+          node.each_ancestor(:block).first
+        end
+      end
     end
   end
-    
-      context 'called with three sizes' do
-    it 'applies second width to left and right' do
-      rule = 'padding: 4px 5px 6px'
+end
