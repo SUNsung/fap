@@ -1,175 +1,141 @@
-    with open('README.md', 'w+') as sorted_file:
-        # Then all of the blocks are sorted individually
-        blocks = [''.join(sorted(block, key=lambda s: s.lower())) for block in blocks]
-        # And the result is written back to README.md
-        sorted_file.write(''.join(blocks))
+
+        
+        for page in itertools.count(1):
+    releases = json.loads(compat_urllib_request.urlopen(
+        'https://api.github.com/repos/rg3/youtube-dl/releases?page=%s' % page
+    ).read().decode('utf-8'))
     
+        def test_youtube_user_matching(self):
+        self.assertMatch('http://www.youtube.com/NASAgovVideo/videos', ['youtube:user'])
+    
+    
+if __name__ == '__main__':
+    unittest.main()
+
+    
+    
+class TestUnicodeLiterals(unittest.TestCase):
+    def test_all_files(self):
+        for dirpath, dirnames, filenames in os.walk(rootDir):
+            for ignore_dir in IGNORED_DIRS:
+                if ignore_dir in dirnames:
+                    # If we remove the directory from dirnames os.walk won't
+                    # recurse into it
+                    dirnames.remove(ignore_dir)
+            for basename in filenames:
+                if not basename.endswith('.py'):
+                    continue
+                if basename in IGNORED_FILES:
+                    continue
+    
+            video_url = self._html_search_regex(r'video_url\s*:\s*'([^']+)'', webpage, 'video URL')
+    
+            page = self._download_json(
+            'http://vxml.56.com/json/%s/' % text_id, text_id, 'Downloading video info')
+    
+        model.train_on_batch(x_train[:32], y_train[:32],
+                         class_weight=class_weight)
+    score = model.evaluate(x_test[test_ids, :], y_test[test_ids, :], verbose=0)
+    assert(score < standard_score_sequential)
+    
+        proba = clf.predict_proba(X_test, batch_size=batch_size)
+    assert proba.shape == (num_test, num_classes)
+    assert np.allclose(np.sum(proba, axis=1), np.ones(num_test))
+    
+    from keras.utils.test_utils import keras_test
+from keras.models import Model, Sequential
+from keras.layers import Dense, Input
+    
+    from keras.preprocessing import sequence
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation
+from keras.layers import Embedding
+from keras.layers import LSTM
+from keras.layers import Conv1D, MaxPooling1D
+from keras.datasets import imdb
+    
+    
+@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
+def test_he_normal(tensor_shape):
+    fan_in, _ = initializers._compute_fans(tensor_shape)
+    scale = np.sqrt(2. / fan_in)
+    _runner(initializers.he_normal(), tensor_shape,
+            target_mean=0., target_std=None, target_max=2 * scale)
+    
+            assert_allclose(out1, out2, atol=1e-5)
+    
+    
+@keras_test
+def test_max_norm():
+    array = get_example_array()
+    for m in get_test_values():
+        norm_instance = constraints.max_norm(m)
+        normed = norm_instance(K.variable(array))
+        assert(np.all(K.eval(normed) < m))
+    
+        right = Sequential()
+    right.add(Dense(num_hidden, input_shape=(input_dim,)))
+    right.add(Activation('relu'))
+    
+    seq = Sequential()
+seq.add(ConvLSTM2D(filters=40, kernel_size=(3, 3),
+                   input_shape=(None, 40, 40, 1),
+                   padding='same', return_sequences=True))
+seq.add(BatchNormalization())
+    
+    MIN_TOKEN_TYPE = UP+1
+	
+INVALID_TOKEN_TYPE = 0
+    
+                    #print 'LA = %d (%r)' % (c, unichr(c) if c >= 0 else 'EOF')
+                #print 'range = %d..%d' % (self.min[s], self.max[s])
+    
+        def __init__(
+        self, grammarDecisionDescription, decisionNumber, stateNumber, input
+        ):
+        RecognitionException.__init__(self, input)
+    
+    
+    def substring(self, start, stop):
+        '''
+        For infinite streams, you don't need this; primarily I'm providing
+        a useful interface for action code.  Just make sure actions don't
+        use this on streams that don't support it.
         '''
     
-    
-def program(args, env, log_error):
-    '''
-    The main program without error handling
-    
-            if color_scheme != PRESET_STYLE and env.colors == 256:
-            fmt_class = Terminal256Formatter
-        else:
-            fmt_class = TerminalFormatter
-        self.formatter = fmt_class(style=style_class)
-    
-        ERROR_TIMEOUT = 2
-    ERROR_TOO_MANY_REDIRECTS = 6
+    # There are two options for replacing |today|: either, you set today to some
+# non-false value, then it is used:
+#today = ''
+# Else, today_fmt is used as the format for a strftime call.
+#today_fmt = '%B %d, %Y'
     
     
-parse_auth = AuthCredentialsArgType(SEP_CREDENTIALS)
+class AskTest(unittest.TestCase):
+    '''Test the ask method.'''
+    def setUp(self):
+        logging.disable(logging.CRITICAL)
     
-    containers = (('thefuck/python3-fish',
-               u'''FROM python:3
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'),
-              ('thefuck/python2-fish',
-               u'''FROM python:2
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'))
-    
-      Args:
-    num_mel_bins: How many bands in the resulting mel spectrum.  This is
-      the number of columns in the output matrix.
-    num_spectrogram_bins: How many bins there are in the source spectrogram
-      data, which is understood to be fft_size/2 + 1, i.e. the spectrogram
-      only contains the nonredundant FFT bins.
-    audio_sample_rate: Samples per second of the audio at the input to the
-      spectrogram. We need this to figure out the actual frequencies for
-      each spectrogram bin, which dictates how they are mapped into mel.
-    lower_edge_hertz: Lower bound on the frequencies to be included in the mel
-      spectrum.  This corresponds to the lower edge of the lowest triangular
-      band.
-    upper_edge_hertz: The desired top edge of the highest frequency band.
-    
-    import os
-    
-      def setUp(self):
-    FLAGS.train_data = os.path.join(self.get_temp_dir(), 'test-text.txt')
-    FLAGS.eval_data = os.path.join(self.get_temp_dir(), 'eval-text.txt')
-    FLAGS.save_path = self.get_temp_dir()
-    with open(FLAGS.train_data, 'w') as f:
-      f.write(
-          '''alice was beginning to get very tired of sitting by her sister on
-          the bank, and of having nothing to do: once or twice she had peeped
-          into the book her sister was reading, but it had no pictures or
-          conversations in it, 'and what is the use of a book,' thought alice
-          'without pictures or conversations?' So she was considering in her own
-          mind (as well as she could, for the hot day made her feel very sleepy
-          and stupid), whether the pleasure of making a daisy-chain would be
-          worth the trouble of getting up and picking the daisies, when suddenly
-          a White rabbit with pink eyes ran close by her.\n''')
-      with open(FLAGS.eval_data, 'w') as f:
-        f.write('alice she rabbit once\n')
-    
-      @property
-  def length(self):
-    return self._batch.length
-    
-    def get_args_for_config(config_name):
-  args = get_default_args()
-  config_name, mode = config_name.split('+')
-  vars = get_vars(config_name)
-  
-  logging.info('config_name: %s, mode: %s', config_name, mode)
-  
-  args.buildinger.task_params.n_ori = int(vars[2])
-  args.solver.freeze_conv = True
-  args.solver.pretrained_path = rgb_resnet_v2_50_path
-  args.buildinger.task_params.img_channels = 5
-  args.solver.data_loss_wt = 0.00001
- 
-  if vars[0] == 'v0':
-    None
-  else:
-    logging.error('config_name: %s undefined', config_name)
-    
-    from __future__ import print_function
-    
-            self.options = options
-        # self.options.roles_path needs to be a list and will be by default
-        roles_path = getattr(self.options, 'roles_path', [])
-        # cli option handling is responsible for making roles_path a list
-        self.roles_paths = roles_path
-    
-        @g_connect
-    def __call_galaxy(self, url, args=None, headers=None, method=None):
-        if args and not headers:
-            headers = self.__auth_header()
-        try:
-            display.vvv(url)
-            resp = open_url(url, data=args, validate_certs=self._validate_certs, headers=headers, method=method,
-                            timeout=20)
-            data = json.loads(to_text(resp.read(), errors='surrogate_or_strict'))
-        except HTTPError as e:
-            res = json.loads(to_text(e.fp.read(), errors='surrogate_or_strict'))
-            raise AnsibleError(res['detail'])
-        return data
-    
-            # global, resource, entity
-        input_url = 'https://www.googleapis.com/compute/v1/projects/myproject/global/urlMaps/my-url-map'
-        actual = GCPUtils.parse_gcp_url(input_url)
-        self.assertEquals('myproject', actual['project'])
-        self.assertTrue('global' in actual)
-        self.assertTrue(actual['global'])
-        self.assertEquals('v1', actual['api_version'])
-        self.assertEquals('compute', actual['service'])
-    
-        terminal_stderr_re = [
-        re.compile(r'% ?Error: '),
-        re.compile(r'^% \w+', re.M),
-        re.compile(r'% ?Bad secret'),
-        re.compile(r'invalid input', re.I),
-        re.compile(r'(?:incomplete|ambiguous) command', re.I),
-        re.compile(r'connection timed out', re.I),
-        re.compile(r'[^\r\n]+ not found', re.I),
-        re.compile(r''[^']' +returned error code: ?\d+'),
-        re.compile(r'syntax error'),
-        re.compile(r'unknown command'),
-        re.compile(r'Error\[\d+\]: ', re.I),
-        re.compile(r'Error:', re.I)
-    ]
-    
-        parser.add_argument('-me', '--mode', 
-                        type=str,
-                        help='mode = [auto, manual]',
-                        required=True)
-    
-        elif model == 'se':
-        bot_params['TIME_COEFF'] = 2.3
-        bot_params['COORD_Y_START_SCAN'] = 190
-        bot_params['PIECE_BASE_HEIGHT_HALF'] = 12
-        bot_params['PIECE_BODY_WIDTH'] = 50
-        bot_params['SWIPE_X1'] = 375
-        bot_params['SWIPE_Y1'] = 1055
-        bot_params['SWIPE_X2'] = 375
-        bot_params['SWIPE_Y2'] = 1055
+        @mock.patch('certbot.notify.smtplib.LMTP')
+    @mock.patch('certbot.notify.subprocess.Popen')
+    def test_everything_fails(self, mock_popen, mock_lmtp):
+        from certbot.notify import notify
+        lmtp_obj = mock.MagicMock()
+        mock_lmtp.return_value = lmtp_obj
+        lmtp_obj.sendmail.side_effect = socket.error(17)
+        proc = mock.MagicMock()
+        mock_popen.return_value = proc
+        proc.communicate.side_effect = OSError('What we have here is a '
+                                               'failure to communicate.')
+        self.assertFalse(notify('Goose', 'auntrhody@example.com',
+                                'The old grey goose is dead.'))
+        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
+        self.assertEqual(proc.communicate.call_count, 1)
     
     
-def updatefig(*args):
-    global update
-    
-        y_score=[]
-    next_start=0
-    global start_score
-    for i in range(total_step):
-        each_score=target_score*(1-np.exp(-0.15*(1024.0/target_score)*i))
-        y_score.append(each_score)
-        if start_score>each_score:
-            next_start=i
-    next_start+=1
-    #print(y_score)
-    if start_score<y_score[0]:
-        next_start=0
+def is_translated(msg):
+    if isinstance(msg.string, basestring):
+        return bool(msg.string)
+    for item in msg.string:
+        if not item:
+            return False
+    return True
