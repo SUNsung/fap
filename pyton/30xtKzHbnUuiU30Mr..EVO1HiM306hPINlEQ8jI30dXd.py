@@ -1,134 +1,158 @@
 
         
-        new_version = {}
-    
-        def test_youporn(self):
-        self._assert_restricted(
-            'http://www.youporn.com/watch/505835/sex-ed-is-it-safe-to-masturbate-daily/',
-            '505835.mp4', 2, old_age=25)
-    
-            if check_executable('mplayer', ['-h']):
-            args = [
-                'mplayer', '-really-quiet', '-vo', 'null', '-vc', 'dummy',
-                '-dumpstream', '-dumpfile', tmpfilename, url]
-        elif check_executable('mpv', ['-h']):
-            args = [
-                'mpv', '-really-quiet', '--vo=null', '--stream-dump=' + tmpfilename, url]
-        else:
-            self.report_error('MMS or RTSP download detected but neither 'mplayer' nor 'mpv' could be run. Please install any.')
-            return False
-    
-    from .common import InfoExtractor
-    
-    from httpie.compat import is_windows
-from httpie.config import DEFAULT_CONFIG_DIR, Config
-    
-    
-with codecs.open(FILE_PATH, encoding='utf8') as f:
-    # Strip because we don't want new lines in the data so that we can
-    # easily count occurrences also when embedded in JSON (where the new
-    # line would be escaped).
-    FILE_CONTENT = f.read().strip()
-    
-    
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
+            def get_headers(self):
+        '''Return the headers' bytes.'''
+        return self.msg.headers.encode('utf8')
     
         '''
-    # The value that should be passed to --auth-type
-    # to use this auth plugin. Eg. 'my-auth'
-    auth_type = None
+    return path.replace('\\', '\\\\\\')
     
-    # -- Options for LaTeX output ---------------------------------------------
-    
-    
-GIT_SHA = get_git_sha()
-version_info = {
-    'GIT_SHA': GIT_SHA,
-    'version': version_string,
-}
-print('-==-' * 15)
-print('VERSION: ' + version_string)
-print('GIT SHA: ' + GIT_SHA)
-print('-==-' * 15)
-    
-        print('Loading [Misc Charts] dashboard')
-    data.load_misc_dashboard()
-    
-    # Provide a callable that receives a tracking_url and returns another
-# URL. This is used to translate internal Hadoop job tracker URL
-# into a proxied one
-TRACKING_URL_TRANSFORMER = lambda x: x  # noqa: E731
-    
-        '''Interface for Metrics'''
-    
-            upload_prefix = app.config['CSV_TO_HIVE_UPLOAD_DIRECTORY']
-        dest_path = os.path.join(table_name, filename)
-    
-    
-def import_from_dict(session, data, sync=[]):
-    '''Imports databases and druid clusters from dictionary'''
-    if isinstance(data, dict):
-        logging.info('Importing %d %s',
-                     len(data.get(DATABASES_KEY, [])),
-                     DATABASES_KEY)
-        for database in data.get(DATABASES_KEY, []):
-            Database.import_from_dict(session, database, sync=sync)
-    
-            # Compare builtin float conversion with pure Python int_to_float
-        # function above.
-        test_values = [
-            int_dbl_max-1, int_dbl_max, int_dbl_max+1,
-            halfway-1, halfway, halfway + 1,
-            top_power-1, top_power, top_power+1,
-            2*top_power-1, 2*top_power, top_power*top_power,
-        ]
-        test_values.extend(exact_values)
-        for p in range(-4, 8):
-            for x in range(-128, 128):
-                test_values.append(2**(p+53) + x)
-        for value in test_values:
-            self.check_float_conversion(value)
-            self.check_float_conversion(-value)
-    
-            side -- 0 or 1 indicating 'from' or 'to' text
-        flag -- indicates if difference on line
-        linenum -- line number (used for line number column)
-        text -- line text to be marked up
-        '''
+        if explicit_json and body and (not lexer or isinstance(lexer, TextLexer)):
+        # JSON response with an incorrect Content-Type?
         try:
-            linenum = '%d' % linenum
-            id = ' id='%s%s'' % (self._prefix[side],linenum)
-        except TypeError:
-            # handle blank lines where linenum is '>' or ''
-            id = ''
-        # replace those things that would get confused with HTML symbols
-        text=text.replace('&','&amp;').replace('>','&gt;').replace('<','&lt;')
+            json.loads(body)  # FIXME: the body also gets parsed in json.py
+        except ValueError:
+            pass  # Nope
+        else:
+            lexer = pygments.lexers.get_lexer_by_name('json')
     
-            if nextchar == ''':
-            return parse_string(string, idx + 1, strict)
-        elif nextchar == '{':
-            return parse_object((string, idx + 1), strict,
-                _scan_once, object_hook, object_pairs_hook, memo)
-        elif nextchar == '[':
-            return parse_array((string, idx + 1), _scan_once)
-        elif nextchar == 'n' and string[idx:idx + 4] == 'null':
-            return None, idx + 4
-        elif nextchar == 't' and string[idx:idx + 4] == 'true':
-            return True, idx + 4
-        elif nextchar == 'f' and string[idx:idx + 5] == 'false':
-            return False, idx + 5
-    }
     
-        def _extractname(self, mo):
-        return mo.group('name')
+class ExitStatus:
+    '''Exit status code constants.'''
+    OK = 0
+    ERROR = 1
+    PLUGIN_ERROR = 7
     
-        def assertFloatsAreIdentical(self, x, y):
-        '''assert that floats x and y are identical, in the sense that:
-        (1) both x and y are nans, or
-        (2) both x and y are infinities, with the same sign, or
-        (3) both x and y are zeros, with the same sign, or
-        (4) x and y are both finite and nonzero, and x == y
+    
+class PluginManager(object):
+    
+    
+class FlaskyStyle(Style):
+    background_color = '#f8f8f8'
+    default_style = ''
+    
+    
+def default_hooks():
+    return dict((event, []) for event in HOOKS)
+    
+        def __exit__(self, exc_type, exc_value, traceback):
+        if exc_type is None:
+            self.stop_event.wait(self.WAIT_EVENT_TIMEOUT)
+        else:
+            if self.wait_to_close_event:
+                # avoid server from waiting for event timeouts
+                # if an exception is found in the main thread
+                self.wait_to_close_event.set()
+    
+        def __init__(self, headers):
+        '''Make a MockResponse for `cookielib` to read.
+    
+            #: Dictionary mapping protocol or protocol and host to the URL of the proxy
+        #: (e.g. {'http': 'foo.bar:3128', 'http://host.name': 'foo.bar:4012'}) to
+        #: be used on each :class:`Request <Request>`.
+        self.proxies = {}
+    
+        close_server = threading.Event()
+    server = Server(response_handler, wait_to_close_event=close_server)
+    
+    # Backwards compat only
+try:
+    from hashlib import md5 as _md5
+except ImportError:
+    try:
+        from md5 import md5 as _md5
+    except ImportError:
+        # Assume we're running in FIPS mode here
+        _md5 = None
+    
+        @g_connect
+    def create_import_task(self, github_user, github_repo, reference=None, role_name=None):
+        '''
+        Post an import request
+        '''
+        url = '%s/imports/' % self.baseurl
+        args = {
+            'github_user': github_user,
+            'github_repo': github_repo,
+            'github_reference': reference if reference else ''
+        }
+        if role_name:
+            args['alternate_role_name'] = role_name
+        elif github_repo.startswith('ansible-role'):
+            args['alternate_role_name'] = github_repo[len('ansible-role') + 1:]
+        data = self.__call_galaxy(url, args=urlencode(args))
+        if data.get('results', None):
+            return data['results']
+        return data
+    
+            input_url = 'https://www.googleapis.com/compute/v1/projects/myproject/targetHttpProxies'
+        actual = GCPUtils.parse_gcp_url(input_url)
+        self.assertEquals('compute', actual['service'])
+        self.assertEquals('v1', actual['api_version'])
+        self.assertEquals('myproject', actual['project'])
+        self.assertFalse('global' in actual)
+        self.assertEquals('targetHttpProxies', actual['resource_name'])
+    
+        def on_open_shell(self):
+        try:
+            for cmd in (b'set terminal length 0', b'set terminal width 512'):
+                self._exec_cli_command(cmd)
+            self._exec_cli_command(b'set terminal length %d' % self.terminal_length)
+        except AnsibleConnectionFailure:
+            raise AnsibleConnectionFailure('unable to set terminal parameters')
+
+    
+    
+def sort_groups(groups):
+    return sorted(groups, key=lambda g: (g.depth, g.priority, g.name))
+    
+        def __init__(self, blackboard):
+        self.blackboard = blackboard
+    
+        def on_message(self, message_type):  # message ignored
+        if message_type in self.message_types.keys():
+            self.message_types[message_type]()
+        else:
+            raise UnsupportedMessageType
+    
+        def test_car_adapter_shall_make_very_loud_noise(self):
+        car = Car()
+        car_adapter = Adapter(car, make_noise=car.make_noise)
+        noise = car_adapter.make_noise(10)
+        expected_noise = 'vroom!!!!!!!!!!'
+    
+        def unsubscribe(self, msg):
+        self.provider.unsubscribe(msg, self)
+    
+        def tearDown(self):
+        self.out.close()
+        sys.stdout = self.saved_stdout
+    
+        def test_display_current_time_at_current_time(self):
+        '''
+        Just as justification for working example. (Will always pass.)
+        '''
+        production_code_time_provider = ProductionCodeTimeProvider()
+        class_under_test = TimeDisplay(production_code_time_provider)
+        current_time = datetime.datetime.now()
+        expected_time = '<span class=\'tinyBoldText\'>{}:{}</span>'.format(current_time.hour, current_time.minute)
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
+    
+    production code which is untestable:
+    
+    
+@coroutine
+def coroutine2(target):
+    while True:
+        request = yield
+        if 10 < request <= 20:
+            print('request {} handled in coroutine 2'.format(request))
+        else:
+            target.send(request)
+    
+    import random
+import time
+    
+    
+if __name__ == '__main__':
+    main()
