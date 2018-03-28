@@ -1,64 +1,69 @@
 
         
-          def present(payload)
-    if payload.is_a?(Hash)
-      payload = ActiveSupport::HashWithIndifferentAccess.new(payload)
-      MAIN_KEYS.each do |key|
-        return { :title => payload[key].to_s, :entries => present_hash(payload, key) } if payload.has_key?(key)
-      end
+          # Finds the projects '@user' contributed to, limited to either public projects
+  # or projects visible to the given user.
+  #
+  # current_user - When given the list of the projects is limited to those only
+  #                visible by this user.
+  #
+  # Returns an ActiveRecord::Relation.
+  def execute(current_user = nil)
+    segments = all_projects(current_user)
     
-      def destroy_failed
-    Delayed::Job.where.not(failed_at: nil).delete_all
+      private
     
-      def test_delete_if
-    h1 = {}
-    ENV.each_pair {|k, v| h1[k] = v }
-    ENV['test'] = 'foo'
-    ENV.delete_if {|k, v| IGNORE_CASE ? k.upcase == 'TEST' : k == 'test' }
-    h2 = {}
-    ENV.each_pair {|k, v| h2[k] = v }
-    assert_equal(h1, h2)
+      private
     
-        iset = Set.new.compare_by_identity
-    assert_send([iset, :compare_by_identity?])
-    iset.merge(array)
-    assert_equal(5, iset.size)
-    assert_equal(array.map(&:object_id).sort, iset.map(&:object_id).sort)
+            # Checks whether the record requires any confirmation.
+        def pending_any_confirmation
+          if (!confirmed? || pending_reconfirmation?)
+            yield
+          else
+            self.errors.add(:email, :already_confirmed)
+            false
+          end
+        end
     
-      it 'does not call #initialize' do
-    c = Class.new(Thread) do
-      def initialize
-        ScratchPad.record :bad
+      def failure
+    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
+    redirect_to after_omniauth_failure_path_for(resource_name)
+  end
+    
+    # TODO:
+# group :mongoid do
+#   gem 'mongoid', '~> 4.0.0'
+# end
+
+    
+        def respond
+      if http_auth?
+        http_auth
+      elsif warden_options[:recall]
+        recall
+      else
+        redirect
       end
     end
     
-            def validate!
-          super
-          if @pod_name.nil? && !@wipe_all
-            # Security measure, to avoid removing the pod cache too agressively by mistake
-            help! 'You should either specify a pod name or use the --all flag'
+        def initialize
+      @entries = []
+      @index = Set.new
+      @types = Hash.new { |hash, key| hash[key] = Type.new key }
+    end
+    
+        def insert_after(index, *names)
+      insert assert_index(index) + 1, *names
+    end
+    
+              css('##{dom_id}-methods ~ h4 code').each do |node|
+            next unless name = node.content[/\('(\w+)'\)/, 1]
+            id = node.parent['id'] = '#{dom_id}-#{name.parameterize}-method'
+            name.prepend '#{dom_id.singularize.titleize}: '
+            name << ' (method)'
+            entries << [name, id]
           end
         end
     
-            def run
-          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
-          if @pod_name.nil? # Print all
-            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
-              print_pod_cache_infos(pod_name, cache_descriptors)
-            end
-          else # Print only for the requested pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            else
-              print_pod_cache_infos(@pod_name, cache_descriptors)
-            end
-          end
-        end
-    
-              if @address.update_attributes(address_params)
-            respond_with(@address, default_template: :show)
-          else
-            invalid_resource!(@address)
-          end
+            css('.method-detail').each do |node|
+          node.at_css('.method-name')['id'] = node.at_css('a')['id']
         end
