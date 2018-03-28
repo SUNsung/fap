@@ -1,104 +1,232 @@
 
         
-          if (options.sortByName) {
-    llvm::array_pod_sort(contents.begin(), contents.end(),
-        [](const std::unique_ptr<Item> *a, const std::unique_ptr<Item> *b) {
-      return compareResultName(**a, **b);
-    });
-    return;
+        void leveldb_delete(
+    leveldb_t* db,
+    const leveldb_writeoptions_t* options,
+    const char* key, size_t keylen,
+    char** errptr) {
+  SaveError(errptr, db->rep->Delete(options->rep, Slice(key, keylen)));
+}
+    
+    // Return a new iterator that converts internal keys (yielded by
+// '*internal_iter') that were live at the specified 'sequence' number
+// into appropriate user keys.
+extern Iterator* NewDBIterator(
+    DBImpl* db,
+    const Comparator* user_key_comparator,
+    Iterator* internal_iter,
+    SequenceNumber sequence,
+    uint32_t seed);
+    
+    const char* InternalKeyComparator::Name() const {
+  return 'leveldb.InternalKeyComparator';
+}
+    
+    static void TestKey(const std::string& key,
+                    uint64_t seq,
+                    ValueType vt) {
+  std::string encoded = IKey(key, seq, vt);
+    }
+    
+    namespace leveldb {
+    }
+    
+    #ifndef STORAGE_LEVELDB_HELPERS_MEMENV_MEMENV_H_
+#define STORAGE_LEVELDB_HELPERS_MEMENV_MEMENV_H_
+    
+      // If *start < limit, changes *start to a short string in [start,limit).
+  // Simple comparator implementations may return with *start unchanged,
+  // i.e., an implementation of this method that does nothing is correct.
+  virtual void FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const = 0;
+    
+      // Drop the first 'n' bytes from this slice.
+  void remove_prefix(size_t n) {
+    assert(n <= size());
+    data_ += n;
+    size_ -= n;
   }
     
-    public:
-  static Item *create(MarkupContext &MC, ArrayRef<MarkupASTNode *> Children);
     
+// //////////////////////////////////////////////////////////////////////
+// Beginning of content of file: include/json/value.h
+// //////////////////////////////////////////////////////////////////////
     
-    {
-    {}
+        // Adds the module variable 'api_version'.
+    if (PyModule_AddIntConstant(
+        module,
+        const_cast<char*>(kImplVersionName),
+        kImplVersion))
+#if PY_MAJOR_VERSION < 3
+      return;
+#else
+      { Py_DECREF(module); return NULL; }
+    
+    class MapFieldGenerator : public FieldGeneratorBase {
+ public:
+  MapFieldGenerator(const FieldDescriptor* descriptor,
+                    int fieldOrdinal,
+                    const Options* options);
+  ~MapFieldGenerator();
+    }
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
+    }
+    
+    TEST(JavaDocCommentTest, Escaping) {
+  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
+  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
+  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
+  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
+  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
+  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
 }
-#endif
+    
+    ExtensionGenerator* ImmutableGeneratorFactory::NewExtensionGenerator(
+    const FieldDescriptor* descriptor) const {
+  if (HasDescriptorMethods(descriptor->file(), context_->EnforceLite())) {
+    return new ImmutableExtensionGenerator(descriptor, context_);
+  } else {
+    return new ImmutableExtensionLiteGenerator(descriptor, context_);
+  }
+}
+    
+    #include 'test/cpp/qps/report.h'
+    
+    /* Opaque object representing a Bidirectional stream creating engine. Created
+ * and configured outside of this API to facilitate sharing with other
+ * components */
+typedef struct stream_engine {
+  void* obj;
+  void* annotation;
+} stream_engine;
+    
+    #include 'test/core/util/test_config.h'
+#include 'test/cpp/qps/benchmark_config.h'
+#include 'test/cpp/qps/driver.h'
+#include 'test/cpp/qps/report.h'
+#include 'test/cpp/qps/server.h'
+#include 'test/cpp/util/test_config.h'
+#include 'test/cpp/util/test_credentials_provider.h'
+    
+    #include <signal.h>
+    
+    #include <utility>
+    
+    bool SecureAuthContext::SetPeerIdentityPropertyName(const grpc::string& name) {
+  if (!ctx_) return false;
+  return grpc_auth_context_set_peer_identity_property_name(ctx_,
+                                                           name.c_str()) != 0;
+}
+    
+      NSDictionary *flagNames = @{
+#define GRPC_XMACRO_ITEM(methodName, FlagName) \
+    @(kSCNetworkReachabilityFlags ## FlagName): @#methodName,
+#include 'GRXReachabilityFlagNames.xmacro.h'
+#undef GRPC_XMACRO_ITEM
+  };
+    
+    
+    {  return 0;
+}
 
     
-    class ASTContext;
-class SourceManager;
-class ValueDecl;
+      InstructionPointer libraryBase() const noexcept { return libraryBase_; }
     
-    #ifndef LLVM_SOURCEKIT_LIB_SWIFTLANG_SWIFTEDITORDIAGCONSUMER_H
-#define LLVM_SOURCEKIT_LIB_SWIFTLANG_SWIFTEDITORDIAGCONSUMER_H
+        method(setWidth);
+    method(setWidthPercent);
+    method(setWidthAuto);
+    method(setHeight);
+    method(setHeightPercent);
+    method(setHeightAuto);
     
-        void FreeTypeFont::SetPixelHeight(int pixel_height) 
-    {
-        // I'm not sure how to deal with font sizes properly.
-        // As far as I understand, currently ImGui assumes that the 'pixel_height' is a maximum height of an any given glyph,
-        // i.e. it's the sum of font's ascender and descender. Seems strange to me.
-        FT_Size_RequestRec req;
-        req.type = FT_SIZE_REQUEST_TYPE_REAL_DIM;
-        req.width = 0;
-        req.height = (uint32_t)pixel_height * 64;
-        req.horiResolution = 0;
-        req.vertResolution = 0;
-        FT_Request_Size(FreetypeFace, &req);
-    }
+      // The STL assumes rvalue references are unique and for simplicity's sake, we
+  // make the same assumption here, that &ref != this.
+  RefPtr<T>& operator=(RefPtr<T>&& ref) {
+    unrefIfNecessary(m_ptr);
+    m_ptr = ref.m_ptr;
+    ref.m_ptr = nullptr;
+    return *this;
+  }
     
-    void ImGui_ImplA5_InvalidateDeviceObjects()
-{
-    if (g_Texture)
-    {
-        al_destroy_bitmap(g_Texture);
-        ImGui::GetIO().Fonts->TexID = NULL;
-        g_Texture = NULL;
-    }
-    if (g_MouseCursorInvisible)
-    {
-        al_destroy_mouse_cursor(g_MouseCursorInvisible);
-        g_MouseCursorInvisible = NULL;
-    }
+    using namespace fuzzer;
+    
+    #include 'FuzzerExtFunctions.def'
+    
+    struct FuzzingOptions {
+  int Verbosity = 1;
+  size_t MaxLen = 0;
+  int UnitTimeoutSec = 300;
+  int TimeoutExitCode = 77;
+  int ErrorExitCode = 77;
+  int MaxTotalTimeSec = 0;
+  int RssLimitMb = 0;
+  bool DoCrossOver = true;
+  int MutateDepth = 5;
+  bool UseCounters = false;
+  bool UseIndirCalls = true;
+  bool UseMemcmp = true;
+  bool UseMemmem = true;
+  bool UseCmp = false;
+  bool UseValueProfile = false;
+  bool Shrink = false;
+  int ReloadIntervalSec = 1;
+  bool ShuffleAtStartUp = true;
+  bool PreferSmall = true;
+  size_t MaxNumberOfRuns = -1L;
+  int ReportSlowUnits = 10;
+  bool OnlyASCII = false;
+  std::string OutputCorpus;
+  std::string ArtifactPrefix = './';
+  std::string ExactArtifactPath;
+  std::string ExitOnSrcPos;
+  std::string ExitOnItem;
+  bool SaveArtifacts = true;
+  bool PrintNEW = true; // Print a status line when new units are found;
+  bool OutputCSV = false;
+  bool PrintNewCovPcs = false;
+  bool PrintFinalStats = false;
+  bool PrintCorpusStats = false;
+  bool PrintCoverage = false;
+  bool DumpCoverage = false;
+  bool DetectLeaks = true;
+  int  TraceMalloc = 0;
+  bool HandleAbrt = false;
+  bool HandleBus = false;
+  bool HandleFpe = false;
+  bool HandleIll = false;
+  bool HandleInt = false;
+  bool HandleSegv = false;
+  bool HandleTerm = false;
+};
+    
+    template <class T>
+ATTRIBUTE_TARGET_POPCNT
+#ifdef __clang__  // g++ can't handle this __attribute__ here :(
+__attribute__((always_inline))
+#endif  // __clang__
+void TracePC::HandleCmp(void *PC, T Arg1, T Arg2) {
+  uintptr_t PCuint = reinterpret_cast<uintptr_t>(PC);
+  uint64_t ArgXor = Arg1 ^ Arg2;
+  uint64_t ArgDistance = __builtin_popcountl(ArgXor) + 1; // [1,65]
+  uintptr_t Idx = ((PCuint & 4095) + 1) * ArgDistance;
+  if (sizeof(T) == 4)
+      TORC4.Insert(ArgXor, Arg1, Arg2);
+  else if (sizeof(T) == 8)
+      TORC8.Insert(ArgXor, Arg1, Arg2);
+  HandleValueProfile(Idx);
 }
     
-    // Implemented features:
-//  [X] User texture binding. Use 'ID3D10ShaderResourceView*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-    void CreateRenderTarget()
-{
-    ID3D10Texture2D* pBackBuffer;
-    g_pSwapChain->GetBuffer(0, __uuidof(ID3D10Texture2D), (LPVOID*)&pBackBuffer);
-    g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_mainRenderTargetView);
-    pBackBuffer->Release();
-}
-    
-    extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-    if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
-        return true;
-    }
-    
-    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
-// **Prefer using the code in the opengl3_example/ folder**
-// See imgui_impl_glfw.cpp for details.
-    
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-        // Get Surface Format
-    {
-        // Per Spec Format and View Format are expected to be the same unless VK_IMAGE_CREATE_MUTABLE_BIT was set at image creation
-        // Assuming that the default behavior is without setting this bit, there is no need for separate Spawchain image and image view format
-        // additionally several new color spaces were introduced with Vulkan Spec v1.0.40
-        // hence we must make sure that a format with the mostly available color space, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR, is found and used
-        uint32_t count;
-        vkGetPhysicalDeviceSurfaceFormatsKHR(g_Gpu, g_Surface, &count, NULL);
-        VkSurfaceFormatKHR *formats = (VkSurfaceFormatKHR*)malloc(sizeof(VkSurfaceFormatKHR) * count);
-        vkGetPhysicalDeviceSurfaceFormatsKHR(g_Gpu, g_Surface, &count, formats);
-    }
+      void PrintNewPCs();
+  size_t GetNumPCs() const { return Min(kNumPCs, NumGuards + 1); }
+  uintptr_t GetPC(size_t Idx) {
+    assert(Idx < GetNumPCs());
+    return PCs[Idx];
+  }
