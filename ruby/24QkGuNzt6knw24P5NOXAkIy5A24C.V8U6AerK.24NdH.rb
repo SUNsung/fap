@@ -1,54 +1,35 @@
 
         
-              it 'does set the exclude directories' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            cloc(exclude_dir: 'test1,test2,build')
-          end').runner.execute(:test)
-    
-        context 'GIT-SVN repository' do
-      before do
-        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_svn?).and_return(false)
-        expect(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git_svn?).and_return(true)
-        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git?).and_return(false)
-        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_hg?).and_return(false)
+            def definitions_for(klass)
+      parent_classes = klass.ancestors.reverse
+      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
+        inherited_definitions.deep_merge! @attachments[ancestor]
       end
+    end
+  end
+end
+
     
-          it 'automatically removes new lines from the version number' do
-        Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number(version_number: '1.77.3\n', bump_type: 'major')
-        end').runner.execute(:test)
-    
-        def sort_fn(a, b)
-      if (a.getbyte(0) >= 49 && a.getbyte(0) <= 57) || (b.getbyte(0) >= 49 && b.getbyte(0) <= 57)
-        a_split = a.split(SPLIT_INTS)
-        b_split = b.split(SPLIT_INTS)
-    
-              # Underscore methods
-          if name.start_with?('Underscore')
-            node.at_css('~ ul').css('li').each do |li|
-              name = [type.downcase, li.at_css('a').content.split.first].join('.')
-              id = name.parameterize
-              li['id'] = id
-              entries << [name, id, type]
-            end
-            next
-          end
-    
-            css('div.attributes').each do |node|
-          node.name = 'p'
-        end
-    
+        # Returns the width and height in a format suitable to be passed to Geometry.parse
+    def to_s
+      s = ''
+      s << width.to_i.to_s if width > 0
+      s << 'x#{height.to_i}' if height > 0
+      s << modifier.to_s
+      s
     end
     
-            # Runs the template configuration utilities.
-        #
-        # @return [void]
-        #
-        def print_info
-          UI.puts '\nTo learn more about the template see `#{template_repo_url}`.'
-          UI.puts 'To learn more about creating a new pod, see `#{CREATE_NEW_POD_INFO_URL}`.'
+            def has_column?
+          @subject.column_names.include?('#{@attachment_name}_file_name')
         end
+      end
+    end
+  end
+end
+
     
-      context 'called with four widths' do
-    it 'applies different widths to all sides' do
-      rule = 'border-width: 7px 8px 9px 10px'
+            def error_when_not_valid?
+          @subject.send(@attachment_name).assign(nil)
+          @subject.valid?
+          @subject.errors[:'#{@attachment_name}'].present?
+        end
