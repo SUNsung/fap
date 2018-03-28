@@ -1,28 +1,13 @@
 
         
-        namespace tensorflow {
-    }
-    
-      void Compute(OpKernelContext* context) override LOCKS_EXCLUDED(mu_) {
-    mutex_lock l(mu_);
-    if (resource_ == nullptr) {
-      ResourceMgr* mgr = context->resource_manager();
-      OP_REQUIRES_OK(context, cinfo_.Init(mgr, def()));
-    }
-    }
-    
-    #ifndef TENSORFLOW_GRAPPLER_COSTS_MEASURING_COST_ESTIMATOR_H_
-#define TENSORFLOW_GRAPPLER_COSTS_MEASURING_COST_ESTIMATOR_H_
-    
-    #endif  // TENSORFLOW_GRAPPLER_OPTIMIZERS_MODEL_PRUNER_H_
+        #endif  // TENSORFLOW_DEBUGGER_STATE_IMPL_H_
 
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    #include 'tensorflow/core/framework/tensor.h'
+#include 'tensorflow/core/grappler/costs/cost_estimator.h'
+#include 'tensorflow/core/lib/core/status.h'
+#include 'tensorflow/core/lib/core/threadpool.h'
+#include 'tensorflow/core/platform/types.h'
     
     Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an 'AS IS' BASIS,
@@ -31,41 +16,36 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
     
-    // Prefetching support
-//
-// Defined behavior on some of the uarchs:
-// PREFETCH_HINT_T0:
-//   prefetch to all levels of the hierarchy (except on p4: prefetch to L2)
-// PREFETCH_HINT_NTA:
-//   p4: fetch to L2, but limit to 1 way (out of the 8 ways)
-//   core: skip L2, go directly to L1
-//   k8 rev E and later: skip L2, can go to either of the 2-ways in L1
-enum PrefetchHint {
-  PREFETCH_HINT_T0 = 3,  // More temporal locality
-  PREFETCH_HINT_T1 = 2,
-  PREFETCH_HINT_T2 = 1,  // Less temporal locality
-  PREFETCH_HINT_NTA = 0  // No temporal locality
+    // TODO(zongheng): this should be a general functor that powers SparseAdd and
+// ScatterNd ops.  It should be moved to its own head file, once the other ops
+// are implemented.
+template <typename Device, typename T, typename Index, int NDIMS,
+          scatter_op::UpdateOp op>
+struct ScatterNdFunctor {
+  // Returns -1 on success or a nonnegative i s.t. indices[i] is a bad index.
+  Index operator()(const Device& d, typename TTypes<Index>::ConstMatrix indices,
+                   typename TTypes<T>::ConstFlat updates,
+                   typename TTypes<T, NDIMS>::Tensor out);
 };
-template <PrefetchHint hint>
-void prefetch(const void* x);
     
-    #include 'tensorflow/core/common_runtime/dma_helper.h'
-#include 'tensorflow/core/common_runtime/sycl/sycl_device_context.h'
+    // Enumeration to list the supported types of plugins / support libraries.
+enum class PluginKind {
+  kInvalid,
+  kBlas,
+  kDnn,
+  kFft,
+  kRng,
+};
     
-    namespace xla {
+    class WritableFile;
+    
+    bool ParseInt32Flag(tensorflow::StringPiece arg, tensorflow::StringPiece flag,
+                    int32* dst) {
+  if (arg.Consume(flag) && arg.Consume('=')) {
+    char extra;
+    return (sscanf(arg.data(), '%d%c', dst, &extra) == 1);
+  }
     }
-    
-        const Tensor& contents = context->input(0);
-    const Tensor& file_format_tensor = context->input(1);
-    const Tensor& samples_per_second_tensor = context->input(2);
-    const Tensor& bits_per_second_tensor = context->input(3);
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
     
     TEST(GrpcChannelTest, SparseHostPorts) {
   GrpcChannelSpec spec;
@@ -76,343 +56,311 @@ limitations under the License.
   std::unique_ptr<GrpcChannelCache> cc(NewGrpcChannelCache(spec, channel_func));
     }
     
-    TEST(InlinedVectorTest, ConstIndexOperator) {
-  const int kNumElements = 10;
-  InlinedVector<int, 5> v;
-  EXPECT_EQ(0UL, v.size());
-  for (int i = 0; i < kNumElements; ++i) {
-    v.push_back(i);
-    EXPECT_EQ(i + 1UL, v.size());
-  }
-  auto const_func = [kNumElements](const InlinedVector<int, 5>& v) {
-    for (int i = 0; i < kNumElements; ++i) {
-      EXPECT_EQ(i, v[i]);
-    }
-  };
-  const_func(v);
-}
+    TEST_F(RemoveDeviceTest, TestRemoveDevice) { TestRemoveDevice(); }
     
-    #include <set>
-    
-      bool Match(const std::string& prefix) {
-    bool eq = db_.substr(current_, prefix.size()) == prefix;
-    current_ += prefix.size();
-    return eq;
-  }
-    
-    namespace routeguide {
-class Feature;
-    }
-    
-    inline grpc::string GetJSServiceFilename(const grpc::string& filename) {
-  return grpc_generator::StripProto(filename) + '_grpc_pb.js';
-}
-    
-    std::vector<grpc::string_ref> SecureAuthContext::GetPeerIdentity() const {
-  if (!ctx_) {
-    return std::vector<grpc::string_ref>();
-  }
-  grpc_auth_property_iterator iter = grpc_auth_context_peer_identity(ctx_);
-  std::vector<grpc::string_ref> identity;
-  const grpc_auth_property* property = nullptr;
-  while ((property = grpc_auth_property_iterator_next(&iter))) {
-    identity.push_back(
-        grpc::string_ref(property->value, property->value_length));
-  }
-  return identity;
-}
-    
-    class CodegenTestMinimal : public ::testing::Test {};
-    
-    static void sigint_handler(int x) {
-  gpr_atm_no_barrier_store(&grpc::testing::interop::g_got_sigint, true);
-}
-    
-      struct Result {
-    double wall;
-    double user;
-    double system;
-    unsigned long long total_cpu_time;
-    unsigned long long idle_cpu_time;
-  };
-    
-    struct gpr_subprocess;
-    
-      void AddSecureType(
-      const grpc::string& type,
-      std::unique_ptr<CredentialTypeProvider> type_provider) override {
-    // This clobbers any existing entry for type, except the defaults, which
-    // can't be clobbered.
-    std::unique_lock<std::mutex> lock(mu_);
-    auto it = std::find(added_secure_type_names_.begin(),
-                        added_secure_type_names_.end(), type);
-    if (it == added_secure_type_names_.end()) {
-      added_secure_type_names_.push_back(type);
-      added_secure_type_providers_.push_back(std::move(type_provider));
-    } else {
-      added_secure_type_providers_[it - added_secure_type_names_.begin()] =
-          std::move(type_provider);
-    }
-  }
-    
-    #ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-#define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-    
-    void FilterBlockBuilder::StartBlock(uint64_t block_offset) {
-  uint64_t filter_index = (block_offset / kFilterBase);
-  assert(filter_index >= filter_offsets_.size());
-  while (filter_index > filter_offsets_.size()) {
-    GenerateFilter();
-  }
+    AtomQuotaPermissionContext::~AtomQuotaPermissionContext() {
 }
     
     
-    {  // Open test file some number above the sum of the two limits to force
-  // open-on-read behavior of POSIX Env leveldb::RandomAccessFile.
-  const int kNumFiles = kReadOnlyFileLimit + kMMapLimit + 5;
-  leveldb::RandomAccessFile* files[kNumFiles] = {0};
-  for (int i = 0; i < kNumFiles; i++) {
-    ASSERT_OK(env_->NewRandomAccessFile(test_file, &files[i]));
-  }
-  char scratch;
-  Slice read_result;
-  for (int i = 0; i < kNumFiles; i++) {
-    ASSERT_OK(files[i]->Read(i, 1, &read_result, &scratch));
-    ASSERT_EQ(kFileData[i], read_result[0]);
-  }
-  for (int i = 0; i < kNumFiles; i++) {
-    delete files[i];
-  }
-  ASSERT_OK(env_->DeleteFile(test_file));
-}
-    
-    namespace leveldb {
-    }
-    
-      virtual void CreateFilter(const Slice* keys, int n, std::string* dst) const {
-    for (int i = 0; i < n; i++) {
-      uint32_t h = Hash(keys[i].data(), keys[i].size(), 1);
-      PutFixed32(dst, h);
-    }
-  }
-    
-    class DBConstructor: public Constructor {
- public:
-  explicit DBConstructor(const Comparator* cmp)
-      : Constructor(cmp),
-        comparator_(cmp) {
-    db_ = NULL;
-    NewDB();
-  }
-  ~DBConstructor() {
-    delete db_;
-  }
-  virtual Status FinishImpl(const Options& options, const KVMap& data) {
-    delete db_;
-    db_ = NULL;
-    NewDB();
-    for (KVMap::const_iterator it = data.begin();
-         it != data.end();
-         ++it) {
-      WriteBatch batch;
-      batch.Put(it->first, it->second);
-      ASSERT_TRUE(db_->Write(WriteOptions(), &batch).ok());
-    }
-    return Status::OK();
-  }
-  virtual Iterator* NewIterator() const {
-    return db_->NewIterator(ReadOptions());
-  }
-    }
-    
-      // ...Code to store on disk or send over a network goes here...
-    
-    void FlatCompiler::ParseFile(
-    flatbuffers::Parser &parser, const std::string &filename,
-    const std::string &contents,
-    std::vector<const char *> &include_directories) const {
-  auto local_include_directory = flatbuffers::StripFileName(filename);
-  include_directories.push_back(local_include_directory.c_str());
-  include_directories.push_back(nullptr);
-  if (!parser.Parse(contents.c_str(), &include_directories[0],
-                    filename.c_str()))
-    Error(parser.error_, false, false);
-  include_directories.pop_back();
-  include_directories.pop_back();
-}
-    
-    // Generate text for a struct or table, values separated by commas, indented,
-// and bracketed by '{}'
-static bool GenStruct(const StructDef &struct_def, const Table *table,
-                      int indent, const IDLOptions &opts, std::string *_text) {
-  std::string &text = *_text;
-  text += '{';
-  int fieldout = 0;
-  Type *union_type = nullptr;
-  for (auto it = struct_def.fields.vec.begin();
-       it != struct_def.fields.vec.end(); ++it) {
-    FieldDef &fd = **it;
-    auto is_present = struct_def.fixed || table->CheckField(fd.value.offset);
-    auto output_anyway = opts.output_default_scalars_in_json &&
-                         IsScalar(fd.value.type.base_type) && !fd.deprecated;
-    if (is_present || output_anyway) {
-      if (fieldout++) {
-        if (!opts.protobuf_ascii_alike) text += ',';
-      }
-      text += NewLine(opts);
-      text.append(indent + Indent(opts), ' ');
-      OutputIdentifier(fd.name, opts, _text);
-      if (!opts.protobuf_ascii_alike ||
-          (fd.value.type.base_type != BASE_TYPE_STRUCT &&
-           fd.value.type.base_type != BASE_TYPE_VECTOR))
-        text += ':';
-      text += ' ';
-      switch (fd.value.type.base_type) {
-          // clang-format off
-          #define FLATBUFFERS_TD(ENUM, IDLTYPE, \
-            CTYPE, JTYPE, GTYPE, NTYPE, PTYPE) \
-            case BASE_TYPE_ ## ENUM: \
-              if (!GenField<CTYPE>(fd, table, struct_def.fixed, \
-                                   opts, indent + Indent(opts), _text)) { \
-                return false; \
-              } \
-              break;
-          FLATBUFFERS_GEN_TYPES_SCALAR(FLATBUFFERS_TD)
-        #undef FLATBUFFERS_TD
-        // Generate drop-thru case statements for all pointer types:
-        #define FLATBUFFERS_TD(ENUM, IDLTYPE, \
-          CTYPE, JTYPE, GTYPE, NTYPE, PTYPE) \
-          case BASE_TYPE_ ## ENUM:
-          FLATBUFFERS_GEN_TYPES_POINTER(FLATBUFFERS_TD)
-        #undef FLATBUFFERS_TD
-            if (!GenFieldOffset(fd, table, struct_def.fixed, indent + Indent(opts),
-                                union_type, opts, _text)) {
-              return false;
-            }
-            break;
-          // clang-format on
-      }
-      if (fd.value.type.base_type == BASE_TYPE_UTYPE) {
-        auto enum_val = fd.value.type.enum_def->ReverseLookup(
-            table->GetField<uint8_t>(fd.value.offset, 0));
-        union_type = enum_val ? &enum_val->union_type : nullptr;
-      }
-    }
-  }
-  text += NewLine(opts);
-  text.append(indent, ' ');
-  text += '}';
-  return true;
-}
-    
-    const char *const kTypeNames[] = {
-// clang-format off
-  #define FLATBUFFERS_TD(ENUM, IDLTYPE, \
-    CTYPE, JTYPE, GTYPE, NTYPE, PTYPE) \
-    IDLTYPE,
-    FLATBUFFERS_GEN_TYPES(FLATBUFFERS_TD)
-  #undef FLATBUFFERS_TD
-  // clang-format on
-  nullptr
+    { private:
+  DISALLOW_COPY_AND_ASSIGN(AtomQuotaPermissionContext);
 };
     
     
-    {
-    {
-    {
-    {
-    {      code += '\n  public static ' + struct_def.name + lang_.optional_suffix;
-      code += ' __lookup_by_key(';
-      if (lang_.language == IDLOptions::kJava)
-        code +=  struct_def.name + ' obj, ';
-      code += 'int vectorLocation, ';
-      code += GenTypeNameDest(key_field->value.type);
-      code += ' key, ByteBuffer bb) {\n';
-      if (key_field->value.type.base_type == BASE_TYPE_STRING) {
-        code += '    byte[] byteKey = ';
-        if (lang_.language == IDLOptions::kJava)
-          code += 'key.getBytes(Table.UTF8_CHARSET.get());\n';
-        else
-          code += 'System.Text.Encoding.UTF8.GetBytes(key);\n';
-      }
-      code += '    int span = ';
-      code += 'bb.' + FunctionStart('G') + 'etInt(vectorLocation - 4);\n';
-      code += '    int start = 0;\n';
-      code += '    while (span != 0) {\n';
-      code += '      int middle = span / 2;\n';
-      code += GenLookupKeyGetter(key_field);
-      code += '      if (comp > 0) {\n';
-      code += '        span = middle;\n';
-      code += '      } else if (comp < 0) {\n';
-      code += '        middle++;\n';
-      code += '        start += middle;\n';
-      code += '        span -= middle;\n';
-      code += '      } else {\n';
-      code += '        return ';
-      if (lang_.language == IDLOptions::kJava)
-        code += '(obj == null ? new ' + struct_def.name + '() : obj)';
-      else
-        code += 'new ' + struct_def.name + '()';
-      code += '.__assign(tableOffset, bb);\n';
-      code += '      }\n    }\n';
-      code += '    return null;\n';
-      code += '  }\n';
-    }
-    code += '}';
-    // Java does not need the closing semi-colon on class definitions.
-    code += (lang_.language != IDLOptions::kJava) ? ';' : '';
-    code += '\n\n';
-  }
-  const LanguageParameters &lang_;
-  // This tracks the current namespace used to determine if a type need to be
-  // prefixed by its namespace
-  const Namespace *cur_name_space_;
-};
-}  // namespace general
-    
-    #include <iostream>
-#include <memory>
-#include <string>
-    
-    struct KeyValueBuilder {
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_key(flatbuffers::Offset<flatbuffers::String> key) {
-    fbb_.AddOffset(KeyValue::VT_KEY, key);
-  }
-  void add_value(flatbuffers::Offset<flatbuffers::String> value) {
-    fbb_.AddOffset(KeyValue::VT_VALUE, value);
-  }
-  KeyValueBuilder(flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  KeyValueBuilder &operator=(const KeyValueBuilder &);
-  flatbuffers::Offset<KeyValue> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<KeyValue>(end);
-    fbb_.Required(o, KeyValue::VT_KEY);
-    return o;
-  }
+    { private:
+  std::string scheme_;
 };
     
-    #endif  // GRPC_INTERNAL_COMPILER_SCHEMA_INTERFACE_H
+      // URLRequestSimpleJob:
+  int GetRefCountedData(std::string* mime_type,
+                        std::string* charset,
+                        scoped_refptr<base::RefCountedMemory>* data,
+                        const net::CompletionCallback& callback) const override;
+    
+      // URLRequestSimpleJob:
+  int GetData(std::string* mime_type,
+              std::string* charset,
+              std::string* data,
+              const net::CompletionCallback& callback) const override;
+    
+    #ifndef ATOM_BROWSER_RENDER_PROCESS_PREFERENCES_H_
+#define ATOM_BROWSER_RENDER_PROCESS_PREFERENCES_H_
+    
+      void SetMenu(AtomMenuModel* menu_model);
+  bool IsServerStarted() const;
+    
+    bool MenuModelAdapter::GetAccelerator(int id,
+                                      ui::Accelerator* accelerator) const {
+  ui::MenuModel* model = menu_model_;
+  int index = 0;
+  if (ui::MenuModel::GetModelAndIndexForCommandId(id, &model, &index)) {
+    return static_cast<AtomMenuModel*>(model)->
+      GetAcceleratorAtWithParams(index, true, accelerator);
+  }
+  return false;
+}
+    
+    #endif  // ATOM_BROWSER_UI_VIEWS_MENU_MODEL_ADAPTER_H_
 
     
-      // Clears the current 'written' code.
-  void Clear() {
-    stream_.str('');
-    stream_.clear();
+      // Find a file by file name.
+  bool FindFileByName(const string& filename,
+                      FileDescriptorProto* output);
+    
+      std::string namespace_;
+  std::string reflectionClassname_;
+    
+    
+    {
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+
+    
+    namespace protobuf {
+namespace compiler {
+namespace java {
+    }
+    }
+    }
+    
+      virtual ExtensionGenerator* NewExtensionGenerator(
+      const FieldDescriptor* descriptor) const = 0;
+    
+      WriteFieldDocComment(printer, descriptor_);
+      printer->Print(variables_,
+    '$deprecation$public $type$OrBuilder get$capitalized_name$OrBuilder(\n'
+    '    int index) {\n'
+    '  if ($name$Builder_ == null) {\n'
+    '    return $name$_.get(index);'
+    '  } else {\n'
+    '    return $name$Builder_.getMessageOrBuilder(index);\n'
+    '  }\n'
+    '}\n');
+    
+    
+namespace tesseract {
+    }
+    
+    /**
+ * @name tess_acceptable_word
+ *
+ * @return true if the word is regarded as 'good enough'.
+ * @param word_choice after context
+ * @param raw_choice before context
+ */
+bool Tesseract::tess_acceptable_word(WERD_RES* word) {
+  return getDict().AcceptableResult(word);
+}
+    
+      // Fits a line to the points, returning the fitted line as a pair of
+  // points, and the upper quartile error.
+  double Fit(ICOORD* pt1, ICOORD* pt2) {
+    return Fit(0, 0, pt1, pt2);
+  }
+  // Fits a line to the points, ignoring the skip_first initial points and the
+  // skip_last final points, returning the fitted line as a pair of points,
+  // and the upper quartile error.
+  double Fit(int skip_first, int skip_last, ICOORD* pt1, ICOORD* pt2);
+    
+    // Free allocated memory and clear pointers.
+void DENORM::Clear() {
+  if (x_map_ != NULL) {
+    delete x_map_;
+    x_map_ = NULL;
+  }
+  if (y_map_ != NULL) {
+    delete y_map_;
+    y_map_ = NULL;
+  }
+  if (rotation_ != NULL) {
+    delete rotation_;
+    rotation_ = NULL;
+  }
+}
+    
+    // Minimum variance in least squares before backing off to a lower degree.
+const double kMinVariance = 1.0 / 1024;
+    
+    // A simple object cache which maps a string to an object of type T.
+// Usually, these are expensive objects that are loaded from disk.
+// Reference counting is performed, so every Get() needs to be followed later
+// by a Free().  Actual deletion is accomplished by DeleteUnusedObjects().
+template<typename T>
+class ObjectCache {
+ public:
+  ObjectCache() {}
+  ~ObjectCache() {
+    mu_.Lock();
+    for (int i = 0; i < cache_.size(); i++) {
+      if (cache_[i].count > 0) {
+        tprintf('ObjectCache(%p)::~ObjectCache(): WARNING! LEAK! object %p '
+                'still has count %d (id %s)\n',
+                this, cache_[i].object, cache_[i].count,
+                cache_[i].id.string());
+      } else {
+        delete cache_[i].object;
+        cache_[i].object = NULL;
+      }
+    }
+    mu_.Unlock();
+  }
+    }
+    
+    
+    {    while (next_num_ < kMaxNaturalNumberValue) {
+      n = GetBinaryReversedInteger(next_num_++);
+      if (n < N_) break;
+    }
+    return (next_num_ > kMaxNaturalNumberValue) ? kInvalidVal : n;
   }
     
+    #include 'fontinfo.h'
+#include 'ndminx.h'
+#include 'sampleiterator.h'
+#include 'shapeclassifier.h'
+#include 'shapetable.h'
+#include 'trainingsample.h'
+#include 'trainingsampleset.h'
+#include 'unicity_table.h'
     
-    {    GenerateFn generate;
-    const char *generator_opt_short;
-    const char *generator_opt_long;
-    const char *lang_name;
-    bool schema_only;
-    GenerateFn generateGRPC;
-    flatbuffers::IDLOptions::Language lang;
-    const char *generator_help;
-    MakeRuleFn make_rule;
-  };
+    // Clear all data.
+void IntFeatureDist::Clear() {
+  delete [] features_;
+  features_ = NULL;
+  delete [] features_delta_one_;
+  features_delta_one_ = NULL;
+  delete [] features_delta_two_;
+  features_delta_two_ = NULL;
+}
+    
+    namespace tesseract {
+    }
+    
+    JNIEXPORT void JNICALL Java_com_tencent_mars_xlog_Xlog_appenderFlush(JNIEnv *env, jobject, jboolean _is_sync) {
+	if (_is_sync) {
+		appender_flush_sync();
+	} else {
+		appender_flush();
+	}
+}
+    
+    
+    {    ::wakeupLock_delete(object_);
+}
+    
+        xassert2(now > touch_times_.front());
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    namespace design_patterns {
+    }
+    
+    
+    {  private:
+//    int m_t;
+};
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    #define DEFINE_HAS_MEMBER(member_name) \
+    template <typename T>\
+    class has_##member_name {\
+      private:\
+        struct yes_type { char x[1]; };\
+        struct no_type { char x[2]; };\
+        template <int> struct tester;\
+        template <typename U> static yes_type test(tester<sizeof(&U::member_name)>*);\
+        template <typename U> static no_type test(...);\
+      public:\
+        static const bool value = (sizeof(test<T>(0)) == sizeof(yes_type));\
+    };
+    
+    jvalue JNU_CallMethodByMethodInfo(JNIEnv* _env, jobject _obj, JniMethodInfo _method_info, ...);
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+        // Setup time step
+    double current_time = s3eTimerGetUST() / 1000.0f;
+    io.DeltaTime = g_Time > 0.0 ? (float)(current_time - g_Time) : (float)(1.0f/60.0f);
+    g_Time = current_time;
+    
+    struct GLFWwindow;
+    
+        // Cleanup
+    ImGui_ImplA5_Shutdown();
+    ImGui::DestroyContext();
+    al_destroy_event_queue(queue);
+    al_destroy_display(display);
+    
+        // Initialize Direct3D
+    if (CreateDeviceD3D(hwnd) < 0)
+    {
+        CleanupDeviceD3D();
+        UnregisterClass(_T('ImGui Example'), wc.hInstance);
+        return 1;
+    }
+    
+        // Setup ImGui binding
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    ImGui_ImplDX9_Init(hwnd, g_pd3dDevice);
+    
+    
+    {        // Rendering
+        int display_w, display_h;
+        glfwGetFramebufferSize(window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+        glClear(GL_COLOR_BUFFER_BIT);
+        //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound, but prefer using the GL3+ code.
+        ImGui::Render();
+        ImGui_ImplGlfwGL2_RenderDrawData(ImGui::GetDrawData());
+        glfwSwapBuffers(window);
+    }
+    
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+    static void ImGui_ImplGlfw_InstallCallbacks(GLFWwindow* window)
+{
+    glfwSetMouseButtonCallback(window, ImGui_ImplGlfw_MouseButtonCallback);
+    glfwSetScrollCallback(window, ImGui_ImplGlfw_ScrollCallback);
+    glfwSetKeyCallback(window, ImGui_ImplGlfw_KeyCallback);
+    glfwSetCharCallback(window, ImGui_ImplGlfw_CharCallback);
+}
+    
+        // Load cursors
+    // FIXME: GLFW doesn't expose suitable cursors for ResizeAll, ResizeNESW, ResizeNWSE. We revert to arrow cursor for those.
+    g_MouseCursors[ImGuiMouseCursor_Arrow] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+    g_MouseCursors[ImGuiMouseCursor_TextInput] = glfwCreateStandardCursor(GLFW_IBEAM_CURSOR);
+    g_MouseCursors[ImGuiMouseCursor_ResizeAll] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+    g_MouseCursors[ImGuiMouseCursor_ResizeNS] = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
+    g_MouseCursors[ImGuiMouseCursor_ResizeEW] = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
+    g_MouseCursors[ImGuiMouseCursor_ResizeNESW] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+    g_MouseCursors[ImGuiMouseCursor_ResizeNWSE] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
