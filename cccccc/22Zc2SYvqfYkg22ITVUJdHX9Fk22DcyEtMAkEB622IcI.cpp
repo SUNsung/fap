@@ -1,178 +1,143 @@
 
         
-        #endif  // STORAGE_LEVELDB_DB_BUILDER_H_
-
+          content::WebContents* web_contents_;  // Weak Reference.
+  scoped_refptr<content::DevToolsAgentHost> agent_host_;
     
-    leveldb_filterpolicy_t* leveldb_filterpolicy_create_bloom(int bits_per_key) {
-  // Make a leveldb_filterpolicy_t, but override all of its methods so
-  // they delegate to a NewBloomFilterPolicy() instead of user
-  // supplied C functions.
-  struct Wrapper : public leveldb_filterpolicy_t {
-    const FilterPolicy* rep_;
-    ~Wrapper() { delete rep_; }
-    const char* Name() const { return rep_->Name(); }
-    void CreateFilter(const Slice* keys, int n, std::string* dst) const {
-      return rep_->CreateFilter(keys, n, dst);
-    }
-    bool KeyMayMatch(const Slice& key, const Slice& filter) const {
-      return rep_->KeyMayMatch(key, filter);
-    }
-    static void DoNothing(void*) { }
-  };
-  Wrapper* wrapper = new Wrapper;
-  wrapper->rep_ = NewBloomFilterPolicy(bits_per_key);
-  wrapper->state_ = NULL;
-  wrapper->destructor_ = &Wrapper::DoNothing;
-  return wrapper;
-}
     
-    inline bool DBIter::ParseKey(ParsedInternalKey* ikey) {
-  Slice k = iter_->key();
-  ssize_t n = k.size() + iter_->value().size();
-  bytes_counter_ -= n;
-  while (bytes_counter_ < 0) {
-    bytes_counter_ += RandomPeriod();
-    db_->RecordReadSample(k);
-  }
-  if (!ParseInternalKey(k, ikey)) {
-    status_ = Status::Corruption('corrupted internal key in DBIter');
-    return false;
-  } else {
-    return true;
-  }
+    {}  // namespace api
+    
+    
+    {}  // namespace api
+    
+      AtomQuotaPermissionContext();
+  virtual ~AtomQuotaPermissionContext();
+    
+      // JsAsker:
+  void StartAsync(std::unique_ptr<base::Value> options) override;
+    
+    gfx::Size NativeFrameView::GetMinimumSize() const {
+  return window_->GetMinimumSize();
 }
     
     
-    {}  // namespace leveldb
-    
-    // Notified when log reader encounters corruption.
-class CorruptionReporter : public log::Reader::Reporter {
- public:
-  WritableFile* dst_;
-  virtual void Corruption(size_t bytes, const Status& status) {
-    std::string r = 'corruption: ';
-    AppendNumberTo(&r, bytes);
-    r += ' bytes; ';
-    r += status.ToString();
-    r.push_back('\n');
-    dst_->Append(r);
-  }
+    {  DISALLOW_COPY_AND_ASSIGN(NativeFrameView);
 };
     
-      /// Accept a new connection.
-  /**
-   * This function is used to accept a new connection from a peer into the
-   * given socket. The function call will block until a new connection has been
-   * accepted successfully or an error occurs.
-   *
-   * @param peer The socket into which the new connection will be accepted.
-   *
-   * @param ec Set to indicate what error occurred, if any.
-   *
-   * @par Example
-   * @code
-   * boost::asio::ip::tcp::acceptor acceptor(io_service);
-   * ...
-   * boost::asio::ip::tcp::soocket socket(io_service);
-   * boost::system::error_code ec;
-   * acceptor.accept(socket, ec);
-   * if (ec)
-   * {
-   *   // An error occurred.
-   * }
-   * @endcode
-   */
-  template <typename Protocol1, typename SocketService>
-  boost::system::error_code accept(
-      basic_socket<Protocol1, SocketService>& peer,
-      boost::system::error_code& ec,
-      typename enable_if<is_convertible<Protocol, Protocol1>::value>::type* = 0)
-  {
-    return this->get_service().accept(this->get_implementation(),
-        peer, static_cast<endpoint_type*>(0), ec);
-  }
+                // Formal parameter name.
+            std::string m_name;
+    
+            StatusCategory Status::Category() const
+        {
+            return Ok() ? StatusCategory::NONE : m_state->m_category;
+        }
+    
+                static Common::Status UnpackTensor(const onnx::TensorProto& p_tensor, /*out*/std::string* p_data, int64_t p_expected_size);
+            static Common::Status UnpackTensor(const onnx::TensorProto& p_tensor, /*out*/bool* p_data, int64_t p_expected_size);
+    
+                If the input is a tensor of float, int32, or double, the data will be cast
+            to int64s and the cats_int64s category list will be used for the lookups.
+            )DOC')
+        .TypeConstraint('T', { 'tensor(string)', 'tensor(int64)','tensor(int32)', 'tensor(float)','tensor(double)' }, 'allowed types.')
+        .Attr('cats_int64s', 'list of cateogries, ints', AttrType::AttributeProto_AttributeType_INTS)
+        .Attr('cats_strings', 'list of cateogries, strings', AttrType::AttributeProto_AttributeType_STRINGS)
+        .Attr('zeros', 'if true and category is not present, will return all zeros, if false and missing category, operator will return false', AttrType::AttributeProto_AttributeType_INT);
+    
+    FunctionPtr CreateRNN(const ONNXIR::Node *node, const std::vector<Variable> &inputs, const std::string &direction,
+    const std::vector<string> &activations, const std::vector<float> &activation_alpha, const std::vector<float> &activation_beta);
     
     
+    {    // also update node groups
+    for (auto groupIter : GetAllNodeGroups())
     {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-      // Insert an element into the values list by splicing from the spares list,
-  // if a spare is available, and otherwise by inserting a new element.
-  iterator values_insert(iterator it, const value_type& v)
-  {
-    if (spares_.empty())
-    {
-      return values_.insert(it, v);
+        auto& group = *groupIter;
+        for (int i = 0; i < group.size(); i++)
+            if (group[i] == oldNode)
+                group[i] = newNode;
     }
-    else
-    {
-      spares_.front() = v;
-      values_.splice(it, spares_, spares_.begin());
-      return --it;
-    }
-  }
-    
-    void buffer_sequence_adapter_base::init_native_buffer(
-    buffer_sequence_adapter_base::native_buffer_type& buf,
-    const boost::asio::const_buffer& buffer)
-{
-  std::memset(&buf, 0, sizeof(native_buffer_type));
-  Microsoft::WRL::ComPtr<IInspectable> insp
-    = Microsoft::WRL::Make<winrt_buffer_impl>(buffer);
-  Platform::Object^ buf_obj = reinterpret_cast<Platform::Object^>(insp.Get());
-  buf = reinterpret_cast<Windows::Storage::Streams::IBuffer^>(insp.Get());
 }
     
+    extern JSClass  *jsb_cocosbuilder_CCBAnimationManager_class;
+extern JSObject *jsb_cocosbuilder_CCBAnimationManager_prototype;
     
-    {/**
- * @brief Read the enrollment secret from disk.
- *
- * We suspect multiple enrollment types may require an apriori, and enterprise
- * shared, secret. Use of this enroll or deployment secret is an optional choice
- * made by the enroll plugin type.
- *
- * @return enroll_secret The trimmed content read from FLAGS_enroll_secret_path.
- */
-const std::string getEnrollSecret();
-}
+    bool js_cocos2dx_physics3d_Physics3DShape_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DShape_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DShape(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DShape_initConvexHull(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_getbtShape(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_initSphere(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_initBox(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_initCapsule(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_initCylinder(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_getShapeType(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_createBox(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_createCylinder(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_createConvexHull(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_createCapsule(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_createSphere(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_Physics3DShape(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    bool js_cocos2dx_studio_SkewFrame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_SkewFrame_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_SkewFrame(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_SkewFrame_getSkewY(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_SkewFrame_setSkewX(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_SkewFrame_setSkewY(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_SkewFrame_getSkewX(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_SkewFrame_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_SkewFrame_SkewFrame(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    #endif // __cocos2dx_csloader_h__
 
     
-    /**
- * @brief Load extenion modules from a delimited search path string.
- *
- * @param loadfile Path to file containing newline delimited file paths
- */
-Status loadModules(const std::string& loadfile);
-    
-    namespace osquery {
-    }
-    
-    #include <map>
-#include <functional>
-    
-    
+        argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
     {
-    { private:
-  friend class TLSConfigTests;
-};
-}
+        if(!ok)
+        {
+            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsJointRotaryLimit_getMin'', nullptr);
+            return 0;
+        }
+        double ret = cobj->getMin();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.PhysicsJointRotaryLimit:getMin',argc, 0);
+    return 0;
+    
+    #include 'Box2D/Box2D.h'
+#include 'cocos2d.h'
+    
+    		// Should the body break?
+		int32 count = contact->GetManifold()->pointCount;
+    
+    
+    {			b2BodyDef bd;
+			bd.type = b2_dynamicBody;
+			bd.position.Set(-8.0f + 8.0f * i, 12.0f);
+			b2Body* body = m_world->CreateBody(&bd);
+			body->CreateFixture(&fd);
+		}
+    
+    #include <assert.h>
+#include <cstdlib>
+#include <string.h>
+    
+    #endif  // GUETZLI_COLOR_TRANSFORM_H_
 
     
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    
-    
-    jbyteArray JNU_Buffer2JbyteArray(JNIEnv* _env, const AutoBuffer& ab);
-jbyteArray JNU_Buffer2JbyteArray(JNIEnv* _env, const void* _buffer, size_t _length);
-void JNU_FreeJbyteArray(JNIEnv* _env, jbyteArray bytes);
-    
-    ScopeJEnv::~ScopeJEnv() {
-    if (NULL != env_) {
-        env_->PopLocalFrame(NULL);
+    void IDCT1d(const double* in, int stride, double* out) {
+  for (int x = 0; x < 8; ++x) {
+    out[x * stride] = 0.0;
+    for (int u = 0; u < 8; ++u) {
+      out[x * stride] += kDCTMatrix[8 * u + x] * in[u * stride];
     }
+  }
 }
+    
+    #endif  // GUETZLI_FAST_LOG_H_
+
+    
+    
+    {}  // namespace guetzli
