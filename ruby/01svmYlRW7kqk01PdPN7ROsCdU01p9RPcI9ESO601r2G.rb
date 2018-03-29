@@ -1,63 +1,88 @@
 
         
-            def initialize
-      @entries = []
-      @index = Set.new
-      @types = Hash.new { |hash, key| hash[key] = Type.new key }
+              https://pip.readthedocs.org/en/stable/installing/#install-pip
+    EOS
+  when 'pil' then <<-EOS.undent
+    Instead of PIL, consider `pip install pillow` or `brew install Homebrew/python/pillow`.
+    EOS
+  when 'macruby' then <<-EOS.undent
+    MacRuby works better when you install their package:
+      http://www.macruby.org/
+    EOS
+  when /(lib)?lzma/
+    'lzma is now part of the xz formula.'
+  when 'xcode'
+    if MacOS.version >= :lion
+      <<-EOS.undent
+      Xcode can be installed from the App Store.
+      EOS
+    else
+      <<-EOS.undent
+      Xcode can be installed from https://developer.apple.com/xcode/downloads/
+      EOS
     end
+  when 'gtest', 'googletest', 'google-test' then <<-EOS.undent
+    Installing gtest system-wide is not recommended; it should be vendored
+    in your projects that use it.
+    EOS
+  when 'gmock', 'googlemock', 'google-mock' then <<-EOS.undent
+    Installing gmock system-wide is not recommended; it should be vendored
+    in your projects that use it.
+    EOS
+  when 'sshpass' then <<-EOS.undent
+    We won't add sshpass because it makes it too easy for novice SSH users to
+    ruin SSH's security.
+    EOS
+  when 'gsutil' then <<-EOS.undent
+    Install gsutil with `pip install gsutil`
+    EOS
+  when 'clojure' then <<-EOS.undent
+    Clojure isn't really a program but a library managed as part of a
+    project and Leiningen is the user interface to that library.
     
-        private
+    module Homebrew
+  def build_env_keys(env)
+    %w[
+      CC CXX LD OBJC OBJCXX
+      HOMEBREW_CC HOMEBREW_CXX
+      CFLAGS CXXFLAGS CPPFLAGS LDFLAGS SDKROOT MAKEFLAGS
+      CMAKE_PREFIX_PATH CMAKE_INCLUDE_PATH CMAKE_LIBRARY_PATH CMAKE_FRAMEWORK_PATH
+      MACOSX_DEPLOYMENT_TARGET PKG_CONFIG_PATH PKG_CONFIG_LIBDIR
+      HOMEBREW_DEBUG HOMEBREW_MAKE_JOBS HOMEBREW_VERBOSE
+      HOMEBREW_SVN HOMEBREW_GIT
+      HOMEBREW_SDKROOT HOMEBREW_BUILD_FROM_SOURCE
+      MAKE GIT CPP
+      ACLOCAL_PATH PATH CPATH].select { |key| env.key?(key) }
+  end
     
-        self.base_url = 'http://localhost/'
+      # True if a {Formula} is being built universally.
+  # e.g. on newer Intel Macs this means a combined x86_64/x86 binary/library.
+  # <pre>args << '--universal-binary' if build.universal?</pre>
+  def universal?
+    include?('universal') && option_defined?('universal')
+  end
     
-            %w(modals dropdowns scrollspy tabs tooltips popovers alerts buttons collapse carousel affix).each do |dom_id|
-          css('##{dom_id}-options + p + div tbody td:first-child').each do |node|
-            name = node.content.strip
-            id = node.parent['id'] = '#{dom_id}-#{name.parameterize}-option'
-            name.prepend '#{dom_id.singularize.titleize}: '
-            name << ' (option)'
-            entries << [name, id]
-          end
-    
-          def get_type
-        case slug
-        when 'api'
-          'Reference'
-        when 'configuration'
-          'Reference: Configuration'
-        when 'stpl'
-          'Reference: SimpleTemplate'
-        when 'plugindev'
-          'Reference: Plugin'
-        else
-          'Manual'
-        end
+        if f.keg_only?
+      keg_site_packages = f.opt_prefix/'lib/python2.7/site-packages'
+      unless Language::Python.in_sys_path?('python', keg_site_packages)
+        s = <<-EOS.undent
+          If you need Python to find bindings for this keg-only formula, run:
+            echo #{keg_site_packages} >> #{homebrew_site_packages/f.name}.pth
+        EOS
+        s += instructions unless Language::Python.reads_brewed_pth_files?('python')
       end
-    
-    require 'cocoapods'
-    
-            def validate!
-          super
-          if @pod_name.nil? && !@wipe_all
-            # Security measure, to avoid removing the pod cache too agressively by mistake
-            help! 'You should either specify a pod name or use the --all flag'
-          end
-        end
-    
-            def initialize(argv)
-          @pod_name = argv.shift_argument
-          @short_output = argv.flag?('short')
-          super
-        end
-    
-      context 'called with four colors' do
-    it 'applies different colors to all sides' do
-      rule = 'border-color: #00f #0f0 #f00 #ff0'
-    
-          expect('.prefix').to have_ruleset(rule)
+      return s
     end
+    
+      def external_commands
+    paths.reduce([]) do |cmds, path|
+      Dir['#{path}/brew-*'].each do |file|
+        next unless File.executable?(file)
+        cmd = File.basename(file, '.rb')[5..-1]
+        cmds << cmd unless cmd.include?('.')
+      end
+      cmds
+    end.sort
   end
     
-          expect('.all-text-inputs-active').to have_ruleset(ruleset)
-    end
-  end
+      end
