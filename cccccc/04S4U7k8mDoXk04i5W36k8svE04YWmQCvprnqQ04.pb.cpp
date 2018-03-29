@@ -1,247 +1,141 @@
 
         
-        REGISTER_FILE_SYSTEM('test', TestFileSystem);
+          check_huff_tables();
     
-    
-    {
-    {  PersistentTensor handle_ GUARDED_BY(mu_);
+    # if defined(OC_COLLECT_METRICS)
+struct oc_mode_metrics{
+  double fragw;
+  double satd;
+  double rate;
+  double rmse;
+  double satd2;
+  double satdrate;
+  double rate2;
+  double satdrmse;
+  double rmse2;
 };
-}  // namespace tensorflow
-    
-    #ifndef TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
-#define TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
-    
-    
-    {
-    {}  // end namespace grappler
-}  // end namespace tensorflow
-    
-    #endif  // TENSORFLOW_STREAM_EXECUTOR_PLUGIN_H_
-
-    
-      Status ResetLocked() override {
-    offset_ = 0;
-    reader_.reset(nullptr);
-    file_.reset(nullptr);
-    return ReaderBase::ResetLocked();
-  }
-    
-    #define REGISTER_GPU(T)                                           \
-  template void DynamicStitchGPUImpl(                             \
-      const Eigen::GpuDevice& gpu_device, const int32 slice_size, \
-      const int32 first_dim_size,                                 \
-      const CudaDeviceArrayStruct<int32>& input_indices,          \
-      const CudaDeviceArrayStruct<const T*>& input_ptrs, T* output);
-    
-        for (IntType i = lidx; i < output_scan.size; i += blockSize) {
-      smem_col_scan[i] = col_scan[i];
-    }
-    
-    struct Options {
-  int num_concurrent_sessions = 1;   // The number of concurrent sessions
-  int num_concurrent_steps = 10;     // The number of concurrent steps
-  int num_iterations = 100;          // Each step repeats this many times
-  bool use_gpu = false;              // Whether to use gpu in the training
-};
-    
-    namespace atom {
-    }
-    
-    // The argument separating arguments intended for the relauncher process from
-// those intended for the relaunched process. '---' is chosen instead of '--'
-// because CommandLine interprets '--' as meaning 'end of switches', but
-// for many purposes, the relauncher process' CommandLine ought to interpret
-// arguments intended for the relaunched process, to get the correct settings
-// for such things as logging and the user-data-dir in case it affects crash
-// reporting.
-extern const CharType* kRelauncherArgSeparator;
-    
-    void RenderProcessPreferences::UpdateCache() {
-  if (!cache_needs_update_)
-    return;
-    }
-    
-    #ifndef ATOM_BROWSER_UI_ACCELERATOR_UTIL_H_
-#define ATOM_BROWSER_UI_ACCELERATOR_UTIL_H_
-    
-    gfx::Size NativeFrameView::GetMaximumSize() const {
-  return window_->GetMaximumSize();
-}
     
     #endif
 
     
+    static const vorbis_residue_template _res_8u_0[]={
+  {1,0,32,  &_residue_44_low_un,
+   &_huff_book__8u0__single,&_huff_book__8u0__single,
+   &_resbook_8u_0,&_resbook_8u_0},
+};
+static const vorbis_residue_template _res_8u_1[]={
+  {1,0,32,  &_residue_44_mid_un,
+   &_huff_book__8u1__single,&_huff_book__8u1__single,
+   &_resbook_8u_1,&_resbook_8u_1},
+};
+    
+    #if defined(HAVE_ARM_NE10)
+    
+    #include <math.h>
+#define float2int(x) lrintf(x)
+    
+        /* Refinement */
+    result = silk_SMLAWB(result, a32_nrm, b32_inv);                             /* Q: 29 + a_headrm - b_headrm  */
+    
+      void PrintWarnings() {
+#if defined(__GNUC__) && !defined(__OPTIMIZE__)
+    fprintf(stdout,
+            'WARNING: Optimization is disabled: benchmarks unnecessarily slow\n'
+            );
+#endif
+#ifndef NDEBUG
+    fprintf(stdout,
+            'WARNING: Assertions are enabled; benchmarks unnecessarily slow\n');
+#endif
+  }
+    
+      DB *db;
+  Options options;
+  options.create_if_missing = true;
+  ASSERT_OK(DB::Open(options, dbpath, &db));
+    
+    #ifndef STORAGE_LEVELDB_TABLE_ITERATOR_WRAPPER_H_
+#define STORAGE_LEVELDB_TABLE_ITERATOR_WRAPPER_H_
+    
+      if (r->pending_index_entry) {
+    assert(r->data_block.empty());
+    r->options.comparator->FindShortestSeparator(&r->last_key, key);
+    std::string handle_encoding;
+    r->pending_handle.EncodeTo(&handle_encoding);
+    r->index_block.Add(r->last_key, Slice(handle_encoding));
+    r->pending_index_entry = false;
+  }
+    
+      // Get the hash value for the kernel's .text memory segment
+  auto f2 = osquery::readFile(kKernelTextHashPath, content);
+  if (f2.ok()) {
+    boost::trim(content);
+    text_segment_hash = content;
+  } else {
+    VLOG(1) << 'Cannot read file: ' << kKernelTextHashPath;
+    return results;
+  }
+    
+    class RunnerInterruptPoint : private boost::noncopyable {
+ public:
+  RunnerInterruptPoint() = default;
+    }
+    
+    
+    {  /// Configurations may set 'custom_' flags.
+  std::map<std::string, std::string> custom_;
+};
+    
+      /// The UNIX time for when the status message was emitted
+  size_t time;
+    
+    #pragma once
+    
     
     {
-    {      return shouldStartAtSuper()? ObjCMessageKind::Super
-                                 : ObjCMessageKind::Peer;
-    }
-  };
-    
-    #ifndef SWIFT_INDEX_INDEXRECORD_H
-#define SWIFT_INDEX_INDEXRECORD_H
-    
-    
-    {  for (auto &rel : sym.Relations) {
-    if (!rel.group.empty())
-      return rel.group;
-    if (rel.decl)
-      return findGroupNameForDecl(rel.decl);
-  }
-  llvm_unreachable('did not find group name for reference');
-}
-    
-      bool HadInvalidLocError = false;
-  bool HadAnyError = false;
-    
-    #endif // SWIFT_SYNTAX_REFERENCES_H
+    {  /// the internal storage of the status message
+  std::string message_;
+};
+} // namespace osquery
 
     
-      /// Get the canonicalized substitution. If wasCanonical is not nullptr,
-  /// store there whether the current substitution was canonical already.
-  Substitution getCanonicalSubstitution(bool *wasCanonical = nullptr) const;
+    // IOKit headers
+#include <IOKit/IOMemoryDescriptor.h>
+#include <IOKit/IOLib.h>
     
-    #include 'swift/AST/ASTContext.h'
-#include 'swift/AST/GenericEnvironment.h'
-#include 'swift/AST/Module.h'
-#include 'swift/AST/ProtocolConformance.h'
-#include 'swift/AST/SubstitutionMap.h'
-#include 'swift/AST/Types.h'
-#include 'llvm/ADT/DenseMap.h'
-    
-                            CV_Assert(arr.type() == CV_64FC2);
-                        Point2d tangentVector_1 = arr.at<Point2d>(endPointIndex) - arr.at<Point2d>(startPointIndex);
-                        Point2d tangentVector_2 = arr.at<Point2d>(testPointIndex) - arr.at<Point2d>(startPointIndex);
-    
-    void cv::cuda::HostMem::release()
-{
-#ifdef HAVE_CUDA
-    if (refcount && CV_XADD(refcount, -1) == 1)
-    {
-        cudaFreeHost(datastart);
-        fastFree(refcount);
+    class CarverTests : public testing::Test {
+ public:
+  CarverTests() {
+    fs::create_directories(kFakeDirectory + '/files_to_carve/');
+    writeTextFile(kFakeDirectory + '/files_to_carve/secrets.txt',
+                  'This is a message I'd rather no one saw.');
+    writeTextFile(kFakeDirectory + '/files_to_carve/evil.exe',
+                  'MZP\x00\x02\x00\x00\x00\x04\x00\x0f\x00\xff\xff');
     }
     }
     
-        // Extension: 1.1
-    typedef void (CODEGEN_FUNCPTR *PFNCULLFACEPROC)(GLenum );
-    typedef void (CODEGEN_FUNCPTR *PFNFRONTFACEPROC)(GLenum );
-    typedef void (CODEGEN_FUNCPTR *PFNHINTPROC)(GLenum , GLenum );
-    typedef void (CODEGEN_FUNCPTR *PFNLINEWIDTHPROC)(GLfloat );
-    typedef void (CODEGEN_FUNCPTR *PFNPOINTSIZEPROC)(GLfloat );
-    typedef void (CODEGEN_FUNCPTR *PFNPOLYGONMODEPROC)(GLenum , GLenum );
-    typedef void (CODEGEN_FUNCPTR *PFNSCISSORPROC)(GLint , GLint , GLsizei , GLsizei );
-    typedef void (CODEGEN_FUNCPTR *PFNTEXPARAMETERFPROC)(GLenum , GLenum , GLfloat );
-    typedef void (CODEGEN_FUNCPTR *PFNTEXPARAMETERFVPROC)(GLenum , GLenum , const GLfloat *);
-    typedef void (CODEGEN_FUNCPTR *PFNTEXPARAMETERIPROC)(GLenum , GLenum , GLint );
-    typedef void (CODEGEN_FUNCPTR *PFNTEXPARAMETERIVPROC)(GLenum , GLenum , const GLint *);
-    typedef void (CODEGEN_FUNCPTR *PFNTEXIMAGE1DPROC)(GLenum , GLint , GLint , GLsizei , GLint , GLenum , GLenum , const GLvoid *);
-    typedef void (CODEGEN_FUNCPTR *PFNTEXIMAGE2DPROC)(GLenum , GLint , GLint , GLsizei , GLsizei , GLint , GLenum , GLenum , const GLvoid *);
-    typedef void (CODEGEN_FUNCPTR *PFNDRAWBUFFERPROC)(GLenum );
-    typedef void (CODEGEN_FUNCPTR *PFNCLEARPROC)(GLbitfield );
-    typedef void (CODEGEN_FUNCPTR *PFNCLEARCOLORPROC)(GLfloat , GLfloat , GLfloat , GLfloat );
-    typedef void (CODEGEN_FUNCPTR *PFNCLEARSTENCILPROC)(GLint );
-    typedef void (CODEGEN_FUNCPTR *PFNCLEARDEPTHPROC)(GLdouble );
-    typedef void (CODEGEN_FUNCPTR *PFNSTENCILMASKPROC)(GLuint );
-    typedef void (CODEGEN_FUNCPTR *PFNCOLORMASKPROC)(GLboolean , GLboolean , GLboolean , GLboolean );
-    typedef void (CODEGEN_FUNCPTR *PFNDEPTHMASKPROC)(GLboolean );
-    typedef void (CODEGEN_FUNCPTR *PFNDISABLEPROC)(GLenum );
-    typedef void (CODEGEN_FUNCPTR *PFNENABLEPROC)(GLenum );
-    typedef void (CODEGEN_FUNCPTR *PFNFINISHPROC)();
-    typedef void (CODEGEN_FUNCPTR *PFNFLUSHPROC)();
-    typedef void (CODEGEN_FUNCPTR *PFNBLENDFUNCPROC)(GLenum , GLenum );
-    typedef void (CODEGEN_FUNCPTR *PFNLOGICOPPROC)(GLenum );
-    typedef void (CODEGEN_FUNCPTR *PFNSTENCILFUNCPROC)(GLenum , GLint , GLuint );
-    typedef void (CODEGEN_FUNCPTR *PFNSTENCILOPPROC)(GLenum , GLenum , GLenum );
-    typedef void (CODEGEN_FUNCPTR *PFNDEPTHFUNCPROC)(GLenum );
-    typedef void (CODEGEN_FUNCPTR *PFNPIXELSTOREFPROC)(GLenum , GLfloat );
-    typedef void (CODEGEN_FUNCPTR *PFNPIXELSTOREIPROC)(GLenum , GLint );
-    typedef void (CODEGEN_FUNCPTR *PFNREADBUFFERPROC)(GLenum );
-    typedef void (CODEGEN_FUNCPTR *PFNREADPIXELSPROC)(GLint , GLint , GLsizei , GLsizei , GLenum , GLenum , GLvoid *);
-    typedef void (CODEGEN_FUNCPTR *PFNGETBOOLEANVPROC)(GLenum , GLboolean *);
-    typedef void (CODEGEN_FUNCPTR *PFNGETDOUBLEVPROC)(GLenum , GLdouble *);
-    typedef GLenum (CODEGEN_FUNCPTR *PFNGETERRORPROC)();
-    typedef void (CODEGEN_FUNCPTR *PFNGETFLOATVPROC)(GLenum , GLfloat *);
-    typedef void (CODEGEN_FUNCPTR *PFNGETINTEGERVPROC)(GLenum , GLint *);
-    typedef const GLubyte * (CODEGEN_FUNCPTR *PFNGETSTRINGPROC)(GLenum );
-    typedef void (CODEGEN_FUNCPTR *PFNGETTEXIMAGEPROC)(GLenum , GLint , GLenum , GLenum , GLvoid *);
-    typedef void (CODEGEN_FUNCPTR *PFNGETTEXPARAMETERFVPROC)(GLenum , GLenum , GLfloat *);
-    typedef void (CODEGEN_FUNCPTR *PFNGETTEXPARAMETERIVPROC)(GLenum , GLenum , GLint *);
-    typedef void (CODEGEN_FUNCPTR *PFNGETTEXLEVELPARAMETERFVPROC)(GLenum , GLint , GLenum , GLfloat *);
-    typedef void (CODEGEN_FUNCPTR *PFNGETTEXLEVELPARAMETERIVPROC)(GLenum , GLint , GLenum , GLint *);
-    typedef GLboolean (CODEGEN_FUNCPTR *PFNISENABLEDPROC)(GLenum );
-    typedef void (CODEGEN_FUNCPTR *PFNDEPTHRANGEPROC)(GLdouble , GLdouble );
-    typedef void (CODEGEN_FUNCPTR *PFNVIEWPORTPROC)(GLint , GLint , GLsizei , GLsizei );
-    typedef void (CODEGEN_FUNCPTR *PFNDRAWARRAYSPROC)(GLenum , GLint , GLsizei );
-    typedef void (CODEGEN_FUNCPTR *PFNDRAWELEMENTSPROC)(GLenum , GLsizei , GLenum , const GLvoid *);
-    typedef void (CODEGEN_FUNCPTR *PFNGETPOINTERVPROC)(GLenum , GLvoid* *);
-    typedef void (CODEGEN_FUNCPTR *PFNPOLYGONOFFSETPROC)(GLfloat , GLfloat );
-    typedef void (CODEGEN_FUNCPTR *PFNCOPYTEXIMAGE1DPROC)(GLenum , GLint , GLenum , GLint , GLint , GLsizei , GLint );
-    typedef void (CODEGEN_FUNCPTR *PFNCOPYTEXIMAGE2DPROC)(GLenum , GLint , GLenum , GLint , GLint , GLsizei , GLsizei , GLint );
-    typedef void (CODEGEN_FUNCPTR *PFNCOPYTEXSUBIMAGE1DPROC)(GLenum , GLint , GLint , GLint , GLint , GLsizei );
-    typedef void (CODEGEN_FUNCPTR *PFNCOPYTEXSUBIMAGE2DPROC)(GLenum , GLint , GLint , GLint , GLint , GLint , GLsizei , GLsizei );
-    typedef void (CODEGEN_FUNCPTR *PFNTEXSUBIMAGE1DPROC)(GLenum , GLint , GLint , GLsizei , GLenum , GLenum , const GLvoid *);
-    typedef void (CODEGEN_FUNCPTR *PFNTEXSUBIMAGE2DPROC)(GLenum , GLint , GLint , GLint , GLsizei , GLsizei , GLenum , GLenum , const GLvoid *);
-    typedef void (CODEGEN_FUNCPTR *PFNBINDTEXTUREPROC)(GLenum , GLuint );
-    typedef void (CODEGEN_FUNCPTR *PFNDELETETEXTURESPROC)(GLsizei , const GLuint *);
-    typedef void (CODEGEN_FUNCPTR *PFNGENTEXTURESPROC)(GLsizei , GLuint *);
-    typedef GLboolean (CODEGEN_FUNCPTR *PFNISTEXTUREPROC)(GLuint );
-    typedef void (CODEGEN_FUNCPTR *PFNINDEXUBPROC)(GLubyte );
-    typedef void (CODEGEN_FUNCPTR *PFNINDEXUBVPROC)(const GLubyte *);
+    /// Enforce specific types of decoration.
+enum DecorationPoint {
+  DECORATE_LOAD,
+  DECORATE_ALWAYS,
+  DECORATE_INTERVAL,
+};
     
-    //
-// BEGIN OF CUSTOM FUNCTIONS
-//
-    
-        BOOST_CHECK(mD.IsEqualTo(mC, c_epsilonFloatE4));
-    
-        // first try if a NetworkBuilder is present
-    function<ComputationNetworkPtr(DEVICEID_TYPE)> createNetworkFn;
-    bool gotIt = TryGetNetworkFactory<ConfigRecordType, ElemType>(config, createNetworkFn);
-    if (gotIt)
-    {
-        // We have several ways to create a network.
-        net = createNetworkFn(deviceId);
-        if (outputNodeNames.size() > 0)
-        {
-            net->InvalidateCompiledNetwork();
-            PatchOutputNodes(net, outputNodeNames, outputNodeNamesVector);
-            net->CompileNetwork();
-            // BUGBUG: This will generate double Validation output in the log
-        }
-    }
-    else // no NetworkBuilder given: load from 'modelPath'
-    {
-        wstring modelPath = config(L'modelPath');
+    class TLSConfigPlugin : public ConfigPlugin,
+                        public std::enable_shared_from_this<TLSConfigPlugin> {
+ public:
+  Status setUp() override;
+  Status genConfig(std::map<std::string, std::string>& config) override;
     }
     
-    // ---------------------------------------------------------------------------
-// ConfigException -- all errors from processing the config files are reported as ConfigException
-// ---------------------------------------------------------------------------
+      if (count > nelms) {
+    return Status(1, 'Failed to strncpy: dst too small');
+  }
     
     
-    {        // no config file, parse as regular argument
-        if (compare)
-        {
-            configString += (msra::strfun::utf8(str) + '\n');
-        }
-        else // One or more config file paths specified in a '+'-separated list.
-        {
-            const std::string filePaths = msra::strfun::utf8(str.substr(configDescriptor.length()));
-            std::vector<std::string> filePathsVec = msra::strfun::split(filePaths, '+');
-            for (auto filePath : filePathsVec)
-            {
-                if (std::find(resolvedConfigFiles.begin(), resolvedConfigFiles.end(), filePath) == resolvedConfigFiles.end())
-                {
-                    // if haven't already read this file, read it
-                    resolvedConfigFiles.push_back(filePath);
-                    configString += config.ReadConfigFile(filePath);
-                    // remember all config directories, for use as include paths by BrainScriptNetworkBuilder
-                    GetBrainScriptNetworkBuilderIncludePaths().push_back(File::DirectoryPathOf(msra::strfun::utf16(filePath)));
-                }
-                else
-                    RuntimeError('Cannot specify same config file multiple times at the command line.');
-            }
-        }
-    }
-    // now, configString is a concatenation of lines, including parameters from the command line, with comments stripped
+    {  // Privileges are now dropped to the requested user/group.
+  to_user_ = uid;
+  to_group_ = gid;
+  dropped_ = true;
+  return true;
+}
