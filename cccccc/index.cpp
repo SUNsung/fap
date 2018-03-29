@@ -1,109 +1,71 @@
 
         
-        namespace api {
-    }
+        #ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
+#define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
     
-    #endif  // ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
-
-    
-    net::URLRequestJob* AsarProtocolHandler::MaybeCreateJob(
-    net::URLRequest* request,
-    net::NetworkDelegate* network_delegate) const {
-  base::FilePath full_path;
-  net::FileURLToFilePath(request->url(), &full_path);
-  auto* job = new URLRequestAsarJob(request, network_delegate);
-  job->Initialize(file_task_runner_, full_path);
-  return job;
+    void FilterBlockBuilder::AddKey(const Slice& key) {
+  Slice k = key;
+  start_.push_back(keys_.size());
+  keys_.append(k.data(), k.size());
 }
     
-      // net::URLRequestJobFactory::ProtocolHandler:
-  net::URLRequestJob* MaybeCreateJob(
-      net::URLRequest* request,
-      net::NetworkDelegate* network_delegate) const override;
-  bool IsSafeRedirectTarget(const GURL& location) const override;
     
-    namespace atom {
+    {}  // namespace leveldb
+    
+    
+    {}  // namespace leveldb
+    
+          case kPrevLogNumber:
+        if (GetVarint64(&input, &prev_log_number_)) {
+          has_prev_log_number_ = true;
+        } else {
+          msg = 'previous log number';
+        }
+        break;
+    
+    
+TEST(FindFileTest, Multiple) {
+  Add('150', '200');
+  Add('200', '250');
+  Add('300', '350');
+  Add('400', '450');
+  ASSERT_EQ(0, Find('100'));
+  ASSERT_EQ(0, Find('150'));
+  ASSERT_EQ(0, Find('151'));
+  ASSERT_EQ(0, Find('199'));
+  ASSERT_EQ(0, Find('200'));
+  ASSERT_EQ(1, Find('201'));
+  ASSERT_EQ(1, Find('249'));
+  ASSERT_EQ(1, Find('250'));
+  ASSERT_EQ(2, Find('251'));
+  ASSERT_EQ(2, Find('299'));
+  ASSERT_EQ(2, Find('300'));
+  ASSERT_EQ(2, Find('349'));
+  ASSERT_EQ(2, Find('350'));
+  ASSERT_EQ(3, Find('351'));
+  ASSERT_EQ(3, Find('400'));
+  ASSERT_EQ(3, Find('450'));
+  ASSERT_EQ(4, Find('451'));
     }
     
+      // Store the specified number as the sequence number for the start of
+  // this batch.
+  static void SetSequence(WriteBatch* batch, SequenceNumber seq);
     
-    {}  // namespace atom
+      // Check that opening non-existent file fails.
+  SequentialFile* seq_file;
+  RandomAccessFile* rand_file;
+  ASSERT_TRUE(!env_->NewSequentialFile('/dir/non_existent', &seq_file).ok());
+  ASSERT_TRUE(!seq_file);
+  ASSERT_TRUE(!env_->NewRandomAccessFile('/dir/non_existent', &rand_file).ok());
+  ASSERT_TRUE(!rand_file);
     
-     private:
-  // content::NotificationObserver:
-  void Observe(int type,
-               const content::NotificationSource& source,
-               const content::NotificationDetails& details) override;
-    
-    class MenuModelAdapter : public views::MenuModelAdapter {
- public:
-  explicit MenuModelAdapter(AtomMenuModel* menu_model);
-  virtual ~MenuModelAdapter();
-    }
-    
-    namespace atom {
-    }
-    
-    	wchar_t message[1024];
-	swprintf_s(message, L'%s\nFunction: %s\nLine: %d', buffer, func, line);
-	LocalFree(buffer);
-    
-    #endif // BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
-
-    
-    template<class T, std::size_t N>
-class array;
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-// Nothing to include.
-#elif defined(BOOST_ASIO_HAS_STD_ATOMIC)
-# include <atomic>
-#else // defined(BOOST_ASIO_HAS_STD_ATOMIC)
-# include <boost/detail/atomic_count.hpp>
-#endif // defined(BOOST_ASIO_HAS_STD_ATOMIC)
-    
-      descriptor_read_op(int descriptor,
-      const MutableBufferSequence& buffers, Handler& handler)
-    : descriptor_read_op_base<MutableBufferSequence>(
-        descriptor, buffers, &descriptor_read_op::do_complete),
-      handler_(BOOST_ASIO_MOVE_CAST(Handler)(handler))
-  {
+    Slice BlockBuilder::Finish() {
+  // Append restart array
+  for (size_t i = 0; i < restarts_.size(); i++) {
+    PutFixed32(&buffer_, restarts_[i]);
   }
-    
-    #ifndef BOOST_ASIO_DETAIL_FUNCTION_HPP
-#define BOOST_ASIO_DETAIL_FUNCTION_HPP
-    
-    template <typename Function, typename Context>
-inline void invoke(const Function& function, Context& context)
-{
-#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
-  Function tmp(function);
-  tmp();
-#else
-  using boost::asio::asio_handler_invoke;
-  asio_handler_invoke(function, boost::asio::detail::addressof(context));
-#endif
+  PutFixed32(&buffer_, restarts_.size());
+  finished_ = true;
+  return Slice(buffer_);
 }
-    
-    #define BOOST_ASIO_SIGNAL_HANDLER_CHECK( \
-    handler_type, handler) \
-  typedef int BOOST_ASIO_UNUSED_TYPEDEF
-    
-    #if defined(BOOST_ASIO_HAS_EPOLL)
-    
-    template<typename... ARGS>
-inline void logi(const char* tag, const char* msg, ARGS... args) noexcept {
-  log(ANDROID_LOG_INFO, tag, msg, args...);
-}
-    
-    #pragma once
-#include <cstring>
-#include <string>
-#include <sstream>
-    
-      template <typename U>
-  RefPtr<T>& operator=(RefPtr<U>&& ref) {
-    unrefIfNecessary(m_ptr);
-    m_ptr = ref.m_ptr;
-    ref.m_ptr = nullptr;
-    return *this;
-  }
