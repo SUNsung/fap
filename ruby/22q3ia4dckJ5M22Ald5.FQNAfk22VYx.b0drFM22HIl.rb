@@ -1,130 +1,119 @@
 
         
-            groups
+                def tag_option(key, value, escape)
+          if value.is_a?(Array)
+            value = escape ? safe_join(value, ' '.freeze) : value.join(' '.freeze)
+          else
+            value = escape ? ERB::Util.unwrapped_html_escape(value) : value.to_s
+          end
+          %(#{key}='#{value.gsub('''.freeze, '&quot;'.freeze)}')
+        end
+    
+          get :redirect_to_with_block_and_options
+    
+          def handle_exception_with_mailer_class(exception)
+        if klass = mailer_class
+          klass.handle_exception exception
+        else
+          raise exception
+        end
+      end
   end
 end
 
     
-    module Devise
-  module Models
-    # Confirmable is responsible to verify if an account is already confirmed to
-    # sign in, and to send emails with confirmation instructions.
-    # Confirmation instructions are sent to the user email after creating a
-    # record and when manually requested by a new confirmation instruction request.
-    #
-    # Confirmable tracks the following columns:
-    #
-    # * confirmation_token   - A unique random token
-    # * confirmed_at         - A timestamp when the user clicked the confirmation link
-    # * confirmation_sent_at - A timestamp when the confirmation_token was generated (not sent)
-    # * unconfirmed_email    - An email address copied from the email attr. After confirmation
-    #                          this value is copied to the email attr then cleared
-    #
-    # == Options
-    #
-    # Confirmable adds the following options to +devise+:
-    #
-    #   * +allow_unconfirmed_access_for+: the time you want to allow the user to access their account
-    #     before confirming it. After this period, the user access is denied. You can
-    #     use this to let your user access some features of your application without
-    #     confirming the account, but blocking it after a certain period (ie 7 days).
-    #     By default allow_unconfirmed_access_for is zero, it means users always have to confirm to sign in.
-    #   * +reconfirmable+: requires any email changes to be confirmed (exactly the same way as
-    #     initial account confirmation) to be applied. Requires additional unconfirmed_email
-    #     db field to be set up (t.reconfirmable in migrations). Until confirmed, new email is
-    #     stored in unconfirmed email column, and copied to email column on successful
-    #     confirmation. Also, when used in conjunction with `send_email_changed_notification`,
-    #     the notification is sent to the original email when the change is requested,
-    #     not when the unconfirmed email is confirmed.
-    #   * +confirm_within+: the time before a sent confirmation token becomes invalid.
-    #     You can use this to force the user to confirm within a set period of time.
-    #     Confirmable will not generate a new token if a repeat confirmation is requested
-    #     during this time frame, unless the user's email changed too.
-    #
-    # == Examples
-    #
-    #   User.find(1).confirm       # returns true unless it's already confirmed
-    #   User.find(1).confirmed?    # true/false
-    #   User.find(1).send_confirmation_instructions # manually send instructions
-    #
-    module Confirmable
-      extend ActiveSupport::Concern
+          text.split.each do |word|
+        if sentences.first.present? && (sentences.last + [word]).join(' ').length > len
+          sentences << [word]
+        else
+          sentences.last << word
+        end
+      end
     
-        if resource.errors.empty?
-      set_flash_message!(:notice, :confirmed)
-      respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
-    else
-      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
-    end
-  end
-    
-        # Check if proper Lockable module methods are present & unlock strategy
-    # allows to unlock resource on password reset
-    def unlockable?(resource)
-      resource.respond_to?(:unlock_access!) &&
-        resource.respond_to?(:unlock_strategy_enabled?) &&
-        resource.unlock_strategy_enabled?(:email)
-    end
-    
-        def reset_password_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :reset_password_instructions, opts)
-    end
-    
-          def self.generate_helpers!(routes=nil)
-        routes ||= begin
-          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
-          Devise::URL_HELPERS.slice(*mappings)
+            def initialize_test_deliveries
+          set_delivery_method :test
+          @old_perform_deliveries = ActionMailer::Base.perform_deliveries
+          ActionMailer::Base.perform_deliveries = true
+          ActionMailer::Base.deliveries.clear
         end
     
-        def recall_app(app)
-      controller, action = app.split('#')
-      controller_name  = ActiveSupport::Inflector.camelize(controller)
-      controller_klass = ActiveSupport::Inflector.constantize('#{controller_name}Controller')
-      controller_klass.action(action)
+      #
+  # Test assert_select_email
+  #
+    
+      test 'default file delivery settings (with Rails.root)' do
+    settings = { location: '#{Rails.root}/tmp/mails' }
+    assert_equal settings, ActionMailer::Base.file_settings
+  end
+    
+        def add(entry)
+      if entry.is_a? Array
+        entry.each(&method(:add))
+      else
+        add_entry(entry) unless entry.root?
+      end
     end
     
-        def type=(value)
-      @type = value.try :strip
-    end
-    
-        self.base_url = 'http://localhost/'
-    
-              # Underscore methods
-          if name.start_with?('Underscore')
-            node.at_css('~ ul').css('li').each do |li|
-              name = [type.downcase, li.at_css('a').content.split.first].join('.')
+              # Built-in events
+          if node['id'] == 'Events-catalog'
+            node.next_element.css('li').each do |li|
+              name = '#{li.at_css('b').content.delete(''').strip} event'
               id = name.parameterize
               li['id'] = id
-              entries << [name, id, type]
+              entries << [name, id, type] unless name == entries.last[0]
             end
             next
           end
     
-            css('.function').each do |node|
-          name = '#{node.at_css('.descname').content}()'
-          id = node.at_css('dt[id]')['id']
-          entries << [name, id]
-        end
+          def additional_entries
+        return [] if root_page?
+        entries = []
     
-    require 'rubygems'  # install rubygems
-require 'hpricot'   # gem install hpricot
-require 'uri'
-require 'timeout'
+    def ask(message, valid_options)
+  if valid_options
+    answer = get_stdin('#{message} #{valid_options.to_s.gsub(/'/, '').gsub(/, /,'/')} ') while !valid_options.include?(answer)
+  else
+    answer = get_stdin(message)
+  end
+  answer
+end
     
-          when :login_fail
-        if(s[:user] and s[:pass])
-          report_auth_info(s.merge({:active => false}))
-          print_status('Failed FTP Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]}')
+      # Used on the blog index to split posts on the <!--more--> marker
+  def excerpt(input)
+    if input.index(/<!--\s*more\s*-->/i)
+      input.split(/<!--\s*more\s*-->/i)[0]
+    else
+      input
+    end
+  end
     
-    fileOutJar 	= clsFile.new_with_sig('Ljava.lang.String;', 'output.jar')
-filesIn		= Array.new
-    
+        def poster
+      'poster='#{@poster}'' if @poster
     end
     
-        SPREE_GEMS.each do |gem_name|
-      Dir.chdir(gem_name) do
-        sh 'gem build spree_#{gem_name}.gemspec'
-        mv 'spree_#{gem_name}-#{version}.gem', pkgdir
+        def unlink_files(files)
+      Array(files).each do |file|
+        file.close unless file.closed?
+        file.unlink if file.respond_to?(:unlink) && file.path.present? && File.exist?(file.path)
       end
     end
+    
+        def self.register(klass, attachment_name, attachment_options)
+      instance.register(klass, attachment_name, attachment_options)
+    end
+    
+      context 'called with one color' do
+    it 'applies same width to all sides' do
+      rule = 'border-width: 1px'
+    
+      context 'called with arguments (2, $value: 4em 6em)' do
+    it 'outputs sextuple the second value from the default scale' do
+      expect('.two-double-value').to have_rule('font-size: 3.125em')
+    end
+  end
+end
+
+    
+          expect('.size-implicit').to have_ruleset(rule)
+    end
+  end
