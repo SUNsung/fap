@@ -1,103 +1,131 @@
 
         
-              it 'logs the command if verbose' do
-        with_verbose(true) do
-          allow(Fastlane::Actions).to receive(:sh).with(anything, { log: true }).and_return('')
-          result = Fastlane::FastFile.new.parse('lane :test do
-            git_tag_exists(tag: '1.2.0')
-          end').runner.execute(:test)
-        end
-      end
-    
-            # Checks if the confirmation for the user is within the limit time.
-        # We do this by calculating if the difference between today and the
-        # confirmation sent date does not exceed the confirm in time configured.
-        # allow_unconfirmed_access_for is a model configuration, must always be an integer value.
-        #
-        # Example:
-        #
-        #   # allow_unconfirmed_access_for = 1.day and confirmation_sent_at = today
-        #   confirmation_period_valid?   # returns true
-        #
-        #   # allow_unconfirmed_access_for = 5.days and confirmation_sent_at = 4.days.ago
-        #   confirmation_period_valid?   # returns true
-        #
-        #   # allow_unconfirmed_access_for = 5.days and confirmation_sent_at = 5.days.ago
-        #   confirmation_period_valid?   # returns false
-        #
-        #   # allow_unconfirmed_access_for = 0.days
-        #   confirmation_period_valid?   # will always return false
-        #
-        #   # allow_unconfirmed_access_for = nil
-        #   confirmation_period_valid?   # will always return true
-        #
-        def confirmation_period_valid?
-          self.class.allow_unconfirmed_access_for.nil? || (confirmation_sent_at && confirmation_sent_at.utc >= self.class.allow_unconfirmed_access_for.ago)
-        end
-    
-        def translation_scope
-      'devise.confirmations'
-    end
-end
-
-    
-      # GET /resource/unlock/new
-  def new
-    self.resource = resource_class.new
+        class BuildEnvironment
+  def initialize(*settings)
+    @settings = Set.new(*settings)
   end
     
-        def password_change(record, opts={})
-      devise_mail(record, :password_change, opts)
-    end
+          export JAVA_HOME='$(/usr/libexec/java_home)'
+      export AWS_ACCESS_KEY='<Your AWS Access ID>'
+      export AWS_SECRET_KEY='<Your AWS Secret Key>'
+      export #{home_name}='#{home_value}'
+    EOS
   end
 end
 
     
-      def index
-    render plain: 'Home'
+      def failed_strategy
+    request.respond_to?(:get_header) ? request.get_header('omniauth.error.strategy') : request.env['omniauth.error.strategy']
   end
-end
     
-        def respond
-      if http_auth?
-        http_auth
-      elsif warden_options[:recall]
-        recall
-      else
-        redirect
+        def unlock_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :unlock_instructions, opts)
+    end
+    
+      def test_file_share_delete
+    Dir.mktmpdir(__method__.to_s) do |tmpdir|
+      tmp = File.join(tmpdir, 'x')
+      File.open(tmp, mode: IO::WRONLY | IO::CREAT | IO::BINARY | IO::SHARE_DELETE) do |f|
+        assert_file.exist?(tmp)
+        assert_nothing_raised do
+          File.unlink(tmp)
+        end
+      end
+      assert_file.not_exist?(tmp)
+    end
+  end
+    
+      def test_filter
+    ENV['test'] = 'foo'
+    h = ENV.filter {|k| IGNORE_CASE ? k.upcase == 'TEST' : k == 'test' }
+    assert_equal(1, h.size)
+    k = h.keys.first
+    v = h.values.first
+    if IGNORE_CASE
+      assert_equal('TEST', k.upcase)
+      assert_equal('FOO', v.upcase)
+    else
+      assert_equal('test', k)
+      assert_equal('foo', v)
+    end
+  end
+    
+      it 'adds nil for each element requested beyond the end of the String' do
+    [ ['',          [nil, nil, nil]],
+      ['abcde',     [1684234849, nil, nil]],
+      ['abcdefg',   [1684234849, nil, nil]],
+      ['abcdefgh',  [1684234849, 1751606885, nil]]
+    ].should be_computed_by(:unpack, unpack_format(3))
+  end
+    
+      def self.critical_is_reset
+    # Create another thread to verify that it can call Thread.critical=
+    t = Thread.new do
+      initial_critical = Thread.critical
+      Thread.critical = true
+      Thread.critical = false
+      initial_critical == false && Thread.critical == false
+    end
+    v = t.value
+    t.join
+    v
+  end
+    
+        t.join
+  end
+    
+        10.times { sleep 0.1 if after_sleep1 != true }
+    10.times { sleep 0.1 if t.status and t.status != 'sleep' }
+    after_sleep2.should == false # t should be blocked on the second sleep
+    t.send(@method)
+    
+        def log_processed(name)
+      puts green '    #{name}'
+    end
+    
+      # Disable Rails's static asset server (Apache or nginx will already do this).
+  if config.respond_to?(:serve_static_files)
+    # rails >= 4.2
+    config.serve_static_files = true
+  elsif config.respond_to?(:serve_static_assets)
+    # rails < 4.2
+    config.serve_static_assets = true
+  end
+    
+            def type_allowed?(type)
+          @subject.send('#{@attachment_name}_content_type=', type)
+          @subject.valid?
+          @subject.errors[:'#{@attachment_name}_content_type'].blank?
+        end
+    
+            def no_error_when_valid?
+          @file = StringIO.new('.')
+          @subject.send(@attachment_name).assign(@file)
+          @subject.valid?
+          expected_message = [
+            @attachment_name.to_s.titleize,
+            I18n.t(:blank, scope: [:errors, :messages])
+          ].join(' ')
+          @subject.errors.full_messages.exclude?(expected_message)
+        end
       end
     end
+  end
+end
+
     
-        def length
-      @entries.length
-    end
+            def matches? subject
+          @subject = subject
+          @subject = @subject.new if @subject.class == Class
+          lower_than_low? && higher_than_low? && lower_than_high? && higher_than_high?
+        end
     
-        def initialize(name = nil, path = nil, type = nil)
-      self.name = name
-      self.path = path
-      self.type = type
+    module Paperclip
+  require 'rails'
     
-    module Docs
-  class PageDb
-    attr_reader :pages
-    
-            css('[id]').each do |node|
-          # Module
-          if node.name == 'h2'
-            type = node.content.remove 'Backbone.'
-            if type.capitalize! # sync, history
-              entries << [node.content, node['id'], type]
+            def on_block(node)
+          on_body_of_reduce(node) do |body|
+            void_next = body.each_node(:next).find do |n|
+              n.children.empty? && parent_block_node(n) == node
             end
-            next
-          end
-    
-            entries
-      end
-    
-      context 'called with one size' do
-    it 'applies same width to all sides' do
-      ruleset = 'position: fixed; ' +
-                'top: 1em; ' +
-                'right: 1em; ' +
-                'bottom: 1em; ' +
-                'left: 1em;'
