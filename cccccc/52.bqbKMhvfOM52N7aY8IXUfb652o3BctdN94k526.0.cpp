@@ -1,303 +1,266 @@
 
         
-        
-    {  LOG(INFO) << 'Writing Testing data';
-  scoped_ptr<db::DB> test_db(db::GetDB(db_type));
-  test_db->Open(output_folder + '/cifar10_test_' + db_type, db::NEW);
-  txn.reset(test_db->NewTransaction());
-  // Open files
-  std::ifstream data_file((input_folder + '/test_batch.bin').c_str(),
-      std::ios::in | std::ios::binary);
-  CHECK(data_file) << 'Unable to open test file.';
-  for (int itemid = 0; itemid < kCIFARBatchSize; ++itemid) {
-    read_image(&data_file, &label, str_buffer);
-    datum.set_label(label);
-    datum.set_data(str_buffer, kCIFARImageNBytes);
-    string out;
-    CHECK(datum.SerializeToString(&out));
-    txn->Put(caffe::format_int(itemid, 5), out);
-  }
-  txn->Commit();
-  test_db->Close();
-}
-    
-      /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a vector of Datum.
-   *
-   * @param datum_vector
-   *    A vector of Datum containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See memory_layer.cpp for an example.
-   */
-  void Transform(const vector<Datum> & datum_vector,
-                Blob<Dtype>* transformed_blob);
-    
-    
-    {  static string LayerTypeListString() {
-    vector<string> layer_types = LayerTypeList();
-    string layer_types_str;
-    for (vector<string>::iterator iter = layer_types.begin();
-         iter != layer_types.end(); ++iter) {
-      if (iter != layer_types.begin()) {
-        layer_types_str += ', ';
-      }
-      layer_types_str += *iter;
-    }
-    return layer_types_str;
-  }
-};
-    
-    
-    {}  // namespace caffe
-    
-    
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
-  cudnnPoolingDescriptor_t  pooling_desc_;
-  cudnnPoolingMode_t        mode_;
-};
-#endif
-    
-     protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {}  // namespace caffe
-    
-        Mat black_comp, white_comp;
-    for(int i = 0; i < ncorners; i++)
+            Status Model::LoadFromBytes(int count, void *pBytes, /*out*/ std::shared_ptr<Model>* p_model)
     {
-        int channels = 0;
-        Rect roi(cvRound(corners[i].x - region_size.width), cvRound(corners[i].y - region_size.height),
-            region_size.width*2 + 1, region_size.height*2 + 1);
-        Mat img_roi = img(roi);
-        calcHist(&img_roi, 1, &channels, Mat(), hist, 1, &nbins, &_ranges);
+        std::unique_ptr<ModelProto> modelProto(new ModelProto);
+        bool result = modelProto->ParseFromArray(pBytes, count);
+        if (!result)
+        {
+            return Status(ONNX, INVALID_PROTOBUF, 'Protobuf parsing failed.');
+        }
     }
     
-    // Helper prints the given set of blob choices.
-static void PrintPath(int length, const BLOB_CHOICE** blob_choices,
-                      const UNICHARSET& unicharset,
-                      const char *label, FILE *output_file) {
-  float rating = 0.0f;
-  float certainty = 0.0f;
-  for (int i = 0; i < length; ++i) {
-    const BLOB_CHOICE* blob_choice = blob_choices[i];
-    fprintf(output_file, '%s',
-           unicharset.id_to_unichar(blob_choice->unichar_id()));
-    rating += blob_choice->rating();
-    if (certainty > blob_choice->certainty())
-      certainty = blob_choice->certainty();
-  }
-  fprintf(output_file, '\t%s\t%.4f\t%.4f\n',
-         label, rating, certainty);
-}
+                // Get formal parameter description.
+            const std::string& GetDescription() const;
     
-    // Update the other members if the cost is lower.
-void DPPoint::UpdateIfBetter(inT64 cost, inT32 steps, const DPPoint* prev,
-                             inT32 n, inT32 sig_x, inT64 sig_xsq) {
-  if (cost < total_cost_) {
-    total_cost_ = cost;
-    total_steps_ = steps;
-    best_prev_ = prev;
-    n_ = n;
-    sig_x_ = sig_x;
-    sig_xsq_ = sig_xsq;
-  }
-}
+            const Status& Status::OK()
+        {
+            static Status s_ok;
+            return s_ok;
+        }
     
-      ParagraphModel()
-      : justification_(tesseract::JUSTIFICATION_UNKNOWN),
-         margin_(0),
-         first_indent_(0),
-         body_indent_(0),
-         tolerance_(0) { }
+            bool OpUtils::IsValidDataTypeString(const std::string& p_dataType)
+        {
+            TypesWrapper& t = TypesWrapper::GetTypesWrapper();
+            const auto& allowedSet = t.GetAllowedDataTypes();
+            return (allowedSet.find(p_dataType) != allowedSet.end());
+        }
     
-        void plot_baseline(                  //draw the baseline
-                       ScrollView* window,    //window to draw in
-                       ScrollView::Color colour) {  //colour to draw
-                                 //draw it
-      baseline.plot (window, colour);
+        std::function<void(OperatorSchemaSetter&)> RNNDocGeneratorActivationArgs() {
+        return [=](OperatorSchemaSetter& schema) {
+            schema.Attr('activation_alpha',
+                'Optional scaling values used by some activation functions.',
+                AttrType::AttributeProto_AttributeType_FLOATS);
+            schema.Attr('activation_beta',
+                'Optional scaling values used by some activation functions.',
+                AttrType::AttributeProto_AttributeType_FLOATS);
+        };
     }
-    #endif  // GRAPHICS_DISABLED
-    ROW& operator= (const ROW & source);
     
-      ClientConfig client_config;
-  client_config.set_client_type(SYNC_CLIENT);
-  client_config.set_outstanding_rpcs_per_channel(1);
-  client_config.set_client_channels(1);
-  client_config.set_rpc_type(UNARY);
-  client_config.mutable_load_params()->mutable_closed_loop();
-    
-    void ParseDb(const std::string& db, std::vector<Feature>* feature_list);
-    
-    bool SecureAuthContext::SetPeerIdentityPropertyName(const grpc::string& name) {
-  if (!ctx_) return false;
-  return grpc_auth_context_set_peer_identity_property_name(ctx_,
-                                                           name.c_str()) != 0;
-}
-    
-    static void sigint_handler(int x) {
-  gpr_atm_no_barrier_store(&grpc::testing::interop::g_got_sigint, true);
-}
-    
-    static void get_cpu_usage(unsigned long long* total_cpu_time,
-                          unsigned long long* idle_cpu_time) {
-#ifdef __linux__
-  std::ifstream proc_stat('/proc/stat');
-  proc_stat.ignore(5);
-  std::string cpu_time_str;
-  std::string first_line;
-  std::getline(proc_stat, first_line);
-  std::stringstream first_line_s(first_line);
-  for (int i = 0; i < 10; ++i) {
-    std::getline(first_line_s, cpu_time_str, ' ');
-    *total_cpu_time += std::stol(cpu_time_str);
-    if (i == 3) {
-      *idle_cpu_time = std::stol(cpu_time_str);
+        // Gets data for the sequence.
+    virtual void GetSequence(size_t sequenceId, vector<SequenceDataPtr>& result) override
+    {
+        m_parent->GetSequenceById(m_chunkId, sequenceId, result);
     }
-  }
-#else
-  gpr_log(GPR_INFO, 'get_cpu_usage(): Non-linux platform is not supported.');
+    
+        // Now we can be sure, no prefetch thread is running and there are no outstanding memcopies.
+    // Let's check that requested devices are ok and see whether we need to change our data transferers.
+    auto device = std::find_if(inputs.begin(), inputs.end(),
+        [](const InputStreamDescription& d) { return d.GetDeviceId() != CPUDEVICE; });
+    auto deviceId = device != inputs.end() ? device->GetDeviceId() : CPUDEVICE;
+    
+    bool js_cocos2dx_builder_CCBReader_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_builder_CCBReader_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_builder_CCBReader(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_builder_CCBReader_getAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_setAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addOwnerOutletName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_setCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addOwnerOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_readSoundKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_readUTF8(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_readCallbackKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getAnimationManagersForNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getNodesWithAnimationManagers(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_setResolutionScale(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_CCBReader(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+    
+    
+    
 #endif
-}
+
     
+    class BodyTypes : public Test
+{
+public:
+	BodyTypes()
+	{
+		b2Body* ground = NULL;
+		{
+			b2BodyDef bd;
+			ground = m_world->CreateBody(&bd);
+    }
+    }
+    }
     
-    {  // We can increment past capacity, but we'll clean up after ourselves.
-  auto p = pending_.fetch_add(1, std::memory_order_acq_rel);
-  if (p >= capacity_) {
-    decrementPending();
-    throw std::range_error('AsyncIO: too many pending requests');
+      for (std::vector<int>::size_type i = 0; i < cfs.size(); i++) {
+    families.push_back(rocksdb::ColumnFamilyDescriptor(
+        cfs[i], rocksdb::ColumnFamilyOptions()));
   }
-  iocb* cb = &op->iocb_;
-  cb->data = nullptr; // unused
-  if (pollFd_ != -1) {
-    io_set_eventfd(cb, pollFd_);
+    
+     private: // Private Functions
+  /// Calls InsertBefore or InsertAfter
+  int Insert(const std::string& key, const std::string& pivot,
+             const std::string& value, bool insert_after);
+ private:
+  std::string db_name_;       // The actual database name/path
+  WriteOptions put_option_;
+  ReadOptions get_option_;
+    
+      bool BinarySeek(const Slice& target, uint32_t left, uint32_t right,
+                  uint32_t* index);
+    
+      bool StatisticsJni::HistEnabledForType(uint32_t type) const {
+    if (type >= HISTOGRAM_ENUM_MAX) {
+      return false;
+    }
+    
+    if (m_ignore_histograms.count(type) > 0) {
+        return false;
+    }
+    }
+    
+      virtual std::string GetPrintableOptions() const override {
+    std::string ret;
+    ret.reserve(20000);
+    ret.append('    cache_options:\n');
+    ret.append(cache_->GetPrintableOptions());
+    ret.append('    sim_cache_options:\n');
+    ret.append(key_only_cache_->GetPrintableOptions());
+    return ret;
   }
-  int rc = io_submit(ctx_, 1, &cb);
-  if (rc < 0) {
-    decrementPending();
-    throwSystemErrorExplicit(-rc, 'AsyncIO: io_submit failed');
-  }
-  submitted_++;
-  DCHECK_EQ(rc, 1);
-  op->start();
-}
     
     
-    { private:
-  fs::path path_;
+    {    CopyOrCreateWorkItem(std::string _src_path, std::string _dst_path,
+                         std::string _contents, Env* _src_env, Env* _dst_env,
+                         bool _sync, RateLimiter* _rate_limiter,
+                         uint64_t _size_limit,
+                         std::function<void()> _progress_callback = []() {})
+        : src_path(std::move(_src_path)),
+          dst_path(std::move(_dst_path)),
+          contents(std::move(_contents)),
+          src_env(_src_env),
+          dst_env(_dst_env),
+          sync(_sync),
+          rate_limiter(_rate_limiter),
+          size_limit(_size_limit),
+          progress_callback(_progress_callback) {}
+  };
+    
+    
+    {  // Return true if the current MemTableRep supports detecting duplicate
+  // <key,seq> at insertion time. If true, then MemTableRep::Insert* returns
+  // false when if the <key,seq> already exists.
+  // Default: false
+  virtual bool CanHandleDuplicatedKey() const { return false; }
 };
     
-      /**
-   * Set the maximum buffer size for this AsyncFileWriter, in bytes.
-   *
-   * This controls the upper bound on how much unwritten data will be buffered
-   * in memory.  If messages are being logged faster than they can be written
-   * to output file, new messages will be discarded if they would cause the
-   * amount of buffered data to exceed this limit.
-   */
-  void setMaxBufferSize(size_t size);
-    
-    namespace folly {
-    }
-    
-    using folly::StringPiece;
-    
-    namespace folly {
-    }
-    
-      auto categoryConfigs = parseCategoryConfigs(pieces[0]);
-  LogConfig::HandlerConfigMap handlerConfigs;
-  for (size_t n = 1; n < pieces.size(); ++n) {
-    auto handlerInfo = parseHandlerConfig(pieces[n]);
-    auto ret = handlerConfigs.emplace(
-        handlerInfo.first, std::move(handlerInfo.second));
-    if (!ret.second) {
-      throw LogConfigParseError{to<string>(
-          'configuration for log category \'',
-          handlerInfo.first,
-          '\' specified multiple times')};
-    }
-  }
-    
-    void AbstractAuthResolver::setDefaultCred(std::string user,
-                                          std::string password)
-{
-  defaultUser_ = std::move(user);
-  defaultPassword_ = std::move(password);
-}
-    
-      void setDefaultCred(std::string user, std::string password);
-    
-      virtual void enableMmap() CXX11_OVERRIDE;
-    
-    void AdaptiveFileAllocationIterator::allocateChunk()
-{
-  if (!allocator_) {
-#ifdef HAVE_FALLOCATE
-    try {
-      A2_LOG_DEBUG('Testing file system supports fallocate.');
-      if (offset_ < totalLength_) {
-        int64_t len =
-            std::min(totalLength_ - offset_, static_cast<int64_t>(4_k));
-        stream_->allocate(offset_, len, false);
-        offset_ += len;
-      }
-      A2_LOG_DEBUG('File system supports fallocate.');
-      allocator_ = make_unique<FallocFileAllocationIterator>(stream_, offset_,
-                                                             totalLength_);
-    }
-    catch (RecoverableException& e) {
-      A2_LOG_DEBUG('File system does not support fallocate.');
-      auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
-                                                              totalLength_);
-      salloc->init();
-      allocator_ = std::move(salloc);
-    }
-#else  // !HAVE_FALLOCATE
-    auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
-                                                            totalLength_);
-    salloc->init();
-    allocator_ = std::move(salloc);
-#endif // !HAVE_FALLOCATE
-    allocator_->allocateChunk();
-  }
-  else {
-    allocator_->allocateChunk();
+    void PrintSourceServerMethod(grpc_generator::Printer *printer,
+                             const grpc_generator::Method *method,
+                             std::map<grpc::string, grpc::string> *vars) {
+  (*vars)['Method'] = method->name();
+  (*vars)['Request'] = method->input_type_name();
+  (*vars)['Response'] = method->output_type_name();
+  if (method->NoStreaming()) {
+    printer->Print(*vars,
+                   '::grpc::Status $ns$$Service$::Service::$Method$('
+                   '::grpc::ServerContext* context, '
+                   'const $Request$* request, $Response$* response) {\n');
+    printer->Print('  (void) context;\n');
+    printer->Print('  (void) request;\n');
+    printer->Print('  (void) response;\n');
+    printer->Print(
+        '  return ::grpc::Status('
+        '::grpc::StatusCode::UNIMPLEMENTED, \'\');\n');
+    printer->Print('}\n\n');
+  } else if (ClientOnlyStreaming(method)) {
+    printer->Print(*vars,
+                   '::grpc::Status $ns$$Service$::Service::$Method$('
+                   '::grpc::ServerContext* context, '
+                   '::grpc::ServerReader< $Request$>* reader, '
+                   '$Response$* response) {\n');
+    printer->Print('  (void) context;\n');
+    printer->Print('  (void) reader;\n');
+    printer->Print('  (void) response;\n');
+    printer->Print(
+        '  return ::grpc::Status('
+        '::grpc::StatusCode::UNIMPLEMENTED, \'\');\n');
+    printer->Print('}\n\n');
+  } else if (ServerOnlyStreaming(method)) {
+    printer->Print(*vars,
+                   '::grpc::Status $ns$$Service$::Service::$Method$('
+                   '::grpc::ServerContext* context, '
+                   'const $Request$* request, '
+                   '::grpc::ServerWriter< $Response$>* writer) {\n');
+    printer->Print('  (void) context;\n');
+    printer->Print('  (void) request;\n');
+    printer->Print('  (void) writer;\n');
+    printer->Print(
+        '  return ::grpc::Status('
+        '::grpc::StatusCode::UNIMPLEMENTED, \'\');\n');
+    printer->Print('}\n\n');
+  } else if (method->BidiStreaming()) {
+    printer->Print(*vars,
+                   '::grpc::Status $ns$$Service$::Service::$Method$('
+                   '::grpc::ServerContext* context, '
+                   '::grpc::ServerReaderWriter< $Response$, $Request$>* '
+                   'stream) {\n');
+    printer->Print('  (void) context;\n');
+    printer->Print('  (void) stream;\n');
+    printer->Print(
+        '  return ::grpc::Status('
+        '::grpc::StatusCode::UNIMPLEMENTED, \'\');\n');
+    printer->Print('}\n\n');
   }
 }
     
+    class FlatCompiler {
+ public:
+  // Output generator for the various programming languages and formats we
+  // support.
+  struct Generator {
+    typedef bool (*GenerateFn)(const flatbuffers::Parser &parser,
+                               const std::string &path,
+                               const std::string &file_name);
+    typedef std::string (*MakeRuleFn)(const flatbuffers::Parser &parser,
+                                      const std::string &path,
+                                      const std::string &file_name);
+    }
+    }
     
-    {} // namespace aria2
-    
-    void AnnounceTier::nextEvent()
-{
-  switch (event) {
-  case STARTED:
-    event = DOWNLOADING;
-    break;
-  case STARTED_AFTER_COMPLETION:
-    event = SEEDING;
-    break;
-  case STOPPED:
-    event = HALTED;
-    break;
-  case COMPLETED:
-    event = SEEDING;
-    break;
-  default:
-    break;
+      // Generate text from an arbitrary FlatBuffer by looking up its
+  // file_identifier in the registry.
+  bool FlatBufferToText(const uint8_t *flatbuf, size_t len, std::string *dest) {
+    // Get the identifier out of the buffer.
+    // If the buffer is truncated, exit.
+    if (len < sizeof(uoffset_t) + FlatBufferBuilder::kFileIdentifierLength) {
+      lasterror_ = 'buffer truncated';
+      return false;
+    }
+    std::string ident(
+        reinterpret_cast<const char *>(flatbuf) + sizeof(uoffset_t),
+        FlatBufferBuilder::kFileIdentifierLength);
+    // Load and parse the schema.
+    Parser parser;
+    if (!LoadSchema(ident, &parser)) return false;
+    // Now we're ready to generate text.
+    if (!GenerateText(parser, flatbuf, dest)) {
+      lasterror_ = 'unable to generate text for FlatBuffer binary';
+      return false;
+    }
+    return true;
   }
-}
     
-      ~AnnounceTier();
+      // ** file/network code goes here :) **
+  // access builder.GetBufferPointer() for builder.GetSize() bytes
+    
+    static std::string GenGetter(const Type &type);
+static std::string GenMethod(const FieldDef &field);
+static void GenStructBuilder(const StructDef &struct_def,
+                             std::string *code_ptr);
+static void GenReceiver(const StructDef &struct_def, std::string *code_ptr);
+static std::string GenTypeBasic(const Type &type);
+static std::string GenTypeGet(const Type &type);
+static std::string TypeName(const FieldDef &field);
