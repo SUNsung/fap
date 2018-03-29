@@ -1,94 +1,89 @@
-  Args:
-    data: np.array of dimension N >= 1.
-    window_length: Number of samples in each frame.
-    hop_length: Advance (in samples) between each window.
+
+        
+          def replicate_states(self, state_coll_name):
+    state_list = self._metagraph.collection_def[state_coll_name]
+    num_states = len(state_list.node_list.value)
+    for replica_id in range(1, FLAGS.num_gpus):
+      for i in range(num_states):
+        state_list.node_list.value.append(state_list.node_list.value[i])
+    for replica_id in range(FLAGS.num_gpus):
+      for i in range(num_states):
+        index = replica_id * num_states + i
+        state_list.node_list.value[index] = with_autoparallel_prefix(
+            replica_id, state_list.node_list.value[index])
     
-    flags.DEFINE_string('master', '', 'Master address.')
-flags.DEFINE_integer('task', 0, 'Task id of the replica running the training.')
-flags.DEFINE_integer('ps_tasks', 0, 'Number of parameter servers.')
-flags.DEFINE_string('train_dir', '/tmp/text_train',
-                    'Directory for logs and checkpoints.')
-flags.DEFINE_integer('max_steps', 1000000, 'Number of batches to run.')
-flags.DEFINE_boolean('log_device_placement', False,
-                     'Whether to log device placement.')
+    # Fetch and store Training and Test dataset files
+PATH_DATASET = PATH + os.sep + 'dataset'
+FILE_TRAIN = PATH_DATASET + os.sep + 'iris_training.csv'
+FILE_TEST = PATH_DATASET + os.sep + 'iris_test.csv'
+URL_TRAIN = 'http://download.tensorflow.org/data/iris_training.csv'
+URL_TEST = 'http://download.tensorflow.org/data/iris_test.csv'
     
-    import os
+      return seq
     
+      Args:
+    doc: Document to read tokens from.
+    vocab_freqs: dict<token, frequency count>
+    doc_counts: dict<token, document count>
     
-if __name__ == '__main__':
-  tf.test.main()
+        elif bidir:
+      # Classifier bidirectional LSTM
+      # Shared data source, but separate token/state streams
+      fname, = filenames
+      batch = _read_and_batch(
+          data_dir,
+          fname,
+          state_name,
+          state_size,
+          num_layers,
+          unroll_steps,
+          batch_size,
+          bidir_input=True)
+      forward_tokens, reverse_tokens = _split_bidir_tokens(batch)
+      forward_input = VatxtInput(
+          batch,
+          state_name=state_name,
+          tokens=forward_tokens,
+          num_states=num_layers)
+      reverse_input = VatxtInput(
+          batch,
+          state_name=state_name + '_reverse',
+          tokens=reverse_tokens,
+          num_states=num_layers)
+      return forward_input, reverse_input
+    else:
+      # Unidirectional LM or classifier
+      fname, = filenames
+      batch = _read_and_batch(
+          data_dir,
+          fname,
+          state_name,
+          state_size,
+          num_layers,
+          unroll_steps,
+          batch_size,
+          bidir_input=False)
+      return VatxtInput(
+          batch, state_name=state_name, num_states=num_layers, eos_id=eos_id)
 
     
-      def testPtbRawData(self):
-    tmpdir = tf.test.get_temp_dir()
-    for suffix in 'train', 'valid', 'test':
-      filename = os.path.join(tmpdir, 'ptb.%s.txt' % suffix)
-      with tf.gfile.GFile(filename, 'w') as fh:
-        fh.write(self._string_data)
-    # Smoke test
-    output = reader.ptb_raw_data(tmpdir)
-    self.assertEqual(len(output), 4)
+    licenses(['notice'])  # Apache 2.0
     
-        # Feature columns describe how to use the input.
-    my_feature_columns = []
-    for key in train_x.keys():
-        my_feature_columns.append(tf.feature_column.numeric_column(key=key))
+    Run image classification with Inception trained on ImageNet 2012 Challenge data
+set.
     
-        def test_flow_control_chunked_body(self):
-        chunks = [b'abcd', b'efgh', b'ijkl']
-    
-            yield conn.read_response(Delegate())
-        yield event.wait()
-        self.assertEqual(self.code, 200)
-        self.assertEqual(b''.join(body), b'hello')
-
-    
-        @gen_test
-    def test_order(self):
-        q = self.queue_class(maxsize=2)
-        q.put_nowait((1, 'a'))
-        q.put_nowait((0, 'b'))
-        self.assertTrue(q.full())
-        q.put((3, 'c'))
-        q.put((2, 'd'))
-        self.assertEqual((0, 'b'), q.get_nowait())
-        self.assertEqual((1, 'a'), (yield q.get()))
-        self.assertEqual((2, 'd'), q.get_nowait())
-        self.assertEqual((3, 'c'), (yield q.get()))
-        self.assertTrue(q.empty())
+            for i in html_json['sources']:
+            if 'src' in i:  #to avoid KeyError
+                if i['src'].startswith('https'):
+                    link_list.append((str(i['height']), i['src']))
     
     
-def try_close(f):
-    # Avoid issue #875 (race condition when using the file in another
-    # thread).
-    for i in range(10):
-        try:
-            f.close()
-        except IOError:
-            # Yield to another thread
-            time.sleep(1e-3)
-        else:
-            break
-    # Try a last time and let raise
-    f.close()
     
+            print_info(site_info, title, type_, size_full)
+        if not info_only:
+            download_urls(url_list, title, ext, total_size=size_full, output_dir=output_dir, merge=merge, headers=fake_headers)
+    else:
+        raise NotImplementedError(flashvars)
     
-class POSTHandler(tornado.web.RequestHandler):
-    def post(self):
-        for field_name, files in self.request.files.items():
-            for info in files:
-                filename, content_type = info['filename'], info['content_type']
-                body = info['body']
-                logging.info('POST '%s' '%s' %d bytes',
-                             filename, content_type, len(body))
-    
-        if setup_globals:
-        config['r2.import_private'] = \
-            ConfigValue.bool(global_conf['import_private'])
-        g.setup()
-        g.plugins.declare_queues(g.queues)
-    
-    
-class HealthController(MinimalController):
-    def pre(self):
-        pass
+        #This is mainly for testing the M3U FFmpeg parser so I would ignore any non-m3u ones
+    stream_url = [i['url'] for i in html['streaming_url_list'] if i['is_default'] and i['type'] == 'hls'][0]
