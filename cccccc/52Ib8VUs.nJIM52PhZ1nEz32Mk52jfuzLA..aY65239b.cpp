@@ -1,136 +1,232 @@
 
         
         
-    {
-    {    if (++count % 1000 == 0) {
-      txn->Commit();
-    }
-  }
-  // write the last batch
-  if (count % 1000 != 0) {
-      txn->Commit();
-  }
-  LOG(INFO) << 'Processed ' << count << ' files.';
-  delete[] pixels;
-  db->Close();
+    {  Blob<float>* output_layer = net_->output_blobs()[0];
+  CHECK_EQ(labels_.size(), output_layer->channels())
+    << 'Number of labels is different from the output layer dimension.';
 }
     
-      /**
-   * @brief Computes the Contrastive error gradient w.r.t. the inputs.
-   *
-   * Computes the gradients with respect to the two input vectors (bottom[0] and
-   * bottom[1]), but not the similarity label (bottom[2]).
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
-   *      This Blob's diff will simply contain the loss_weight* @f$ \lambda @f$,
-   *      as @f$ \lambda @f$ is the coefficient of this layer's output
-   *      @f$\ell_i@f$ in the overall Net loss
-   *      @f$ E = \lambda_i \ell_i + \mbox{other loss terms}@f$; hence
-   *      @f$ \frac{\partial E}{\partial \ell_i} = \lambda_i @f$.
-   *      (*Assuming that this top Blob is not used as a bottom (input) by any
-   *      other layer of the Net.)
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times 1 \times 1) @f$
-   *      the features @f$a@f$; Backward fills their diff with
-   *      gradients if propagate_down[0]
-   *   -# @f$ (N \times C \times 1 \times 1) @f$
-   *      the features @f$b@f$; Backward fills their diff with gradients if
-   *      propagate_down[1]
+    
+    {  static string LayerTypeListString() {
+    vector<string> layer_types = LayerTypeList();
+    string layer_types_str;
+    for (vector<string>::iterator iter = layer_types.begin();
+         iter != layer_types.end(); ++iter) {
+      if (iter != layer_types.begin()) {
+        layer_types_str += ', ';
+      }
+      layer_types_str += *iter;
+    }
+    return layer_types_str;
+  }
+};
+    
+    /**
+ * @brief Convolves the input image with a bank of learned filters,
+ *        and (optionally) adds biases.
+ *
+ *   Caffe convolves by reduction to matrix multiplication. This achieves
+ *   high-throughput and generality of input and filter dimensions but comes at
+ *   the cost of memory for matrices. This makes use of efficiency in BLAS.
+ *
+ *   The input is 'im2col' transformed to a channel K' x H x W data matrix
+ *   for multiplication with the N x K' x H x W filter matrix to yield a
+ *   N' x H x W output matrix that is then 'col2im' restored. K' is the
+ *   input channel * kernel height * kernel width dimension of the unrolled
+ *   inputs so that the im2col matrix has a column for each input region to
+ *   be filtered. col2im restores the output spatial structure by rolling up
+ *   the output channel N' columns of the output matrix.
+ */
+template <typename Dtype>
+class ConvolutionLayer : public BaseConvolutionLayer<Dtype> {
+ public:
+  /**
+   * @param param provides ConvolutionParameter convolution_param,
+   *    with ConvolutionLayer options:
+   *  - num_output. The number of filters.
+   *  - kernel_size / kernel_h / kernel_w. The filter dimensions, given by
+   *  kernel_size for square filters or kernel_h and kernel_w for rectangular
+   *  filters.
+   *  - stride / stride_h / stride_w (\b optional, default 1). The filter
+   *  stride, given by stride_size for equal dimensions or stride_h and stride_w
+   *  for different strides. By default the convolution is dense with stride 1.
+   *  - pad / pad_h / pad_w (\b optional, default 0). The zero-padding for
+   *  convolution, given by pad for equal dimensions or pad_h and pad_w for
+   *  different padding. Input padding is computed implicitly instead of
+   *  actually padding.
+   *  - dilation (\b optional, default 1). The filter
+   *  dilation, given by dilation_size for equal dimensions for different
+   *  dilation. By default the convolution has dilation 1.
+   *  - group (\b optional, default 1). The number of filter groups. Group
+   *  convolution is a method for reducing parameterization by selectively
+   *  connecting input and output channels. The input and output channel dimensions must be divisible
+   *  by the number of groups. For group @f$ \geq 1 @f$, the
+   *  convolutional filters' input and output channels are separated s.t. each
+   *  group takes 1 / group of the input channels and makes 1 / group of the
+   *  output channels. Concretely 4 input channels, 8 output channels, and
+   *  2 groups separate input channels 1-2 and output channels 1-4 into the
+   *  first group and input channels 3-4 and output channels 5-8 into the second
+   *  group.
+   *  - bias_term (\b optional, default true). Whether to have a bias.
+   *  - engine: convolution has CAFFE (matrix multiplication) and CUDNN (library
+   *    kernels + stream parallelism) engines.
    */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  explicit ConvolutionLayer(const LayerParameter& param)
+      : BaseConvolutionLayer<Dtype>(param) {}
+    }
     
     #include 'caffe/blob.hpp'
 #include 'caffe/layer.hpp'
 #include 'caffe/proto/caffe.pb.h'
     
-    /**
- * @brief During training only, sets a random portion of @f$x@f$ to 0, adjusting
- *        the rest of the vector magnitude accordingly.
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$ y = |x| @f$
- */
-template <typename Dtype>
-class DropoutLayer : public NeuronLayer<Dtype> {
- public:
-  /**
-   * @param param provides DropoutParameter dropout_param,
-   *     with DropoutLayer options:
-   *   - dropout_ratio (\b optional, default 0.5).
-   *     Sets the probability @f$ p @f$ that any given unit is dropped.
-   */
-  explicit DropoutLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+    
+    {}  // namespace caffe
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-      virtual inline const char* type() const { return 'Eltwise'; }
-  virtual inline int MinBottomBlobs() const { return 2; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
     
-    {  auto const ret = make_map_array(
-    s_sec, (int)tp.tv_sec,
-    s_usec, (int)tp.tv_usec,
-    s_minuteswest, (int)(-offset->offset / 60),
-    s_dsttime, (int)offset->is_dst
-  );
-  timelib_time_offset_dtor(offset);
-  return ret;
-}
+    {}  // namespace testing
+    
+    # define REGISTER_TYPED_TEST_CASE_P(CaseName, ...) \
+  namespace GTEST_CASE_NAMESPACE_(CaseName) { \
+  typedef ::testing::internal::Templates<__VA_ARGS__>::type gtest_AllTests_; \
+  } \
+  static const char* const GTEST_REGISTERED_TEST_NAMES_(CaseName) = \
+      GTEST_TYPED_TEST_CASE_P_STATE_(CaseName).VerifyRegisteredTestNames(\
+          __FILE__, __LINE__, #__VA_ARGS__)
     
     
-    {///////////////////////////////////////////////////////////////////////////////
-}
+    {]]
+};  // class CartesianProductHolder$i
     
-      int64_t getTime() const;
+    // Parses a bool/Int32/string from the environment variable
+// corresponding to the given Google Test flag.
+bool BoolFromGTestEnv(const char* flag, bool default_val);
+GTEST_API_ Int32 Int32FromGTestEnv(const char* flag, Int32 default_val);
+const char* StringFromGTestEnv(const char* flag, const char* default_val);
     
-    /*
- * Assert that Vreg widths match between defs and uses.
- *
- * This should only be run before any zero-extending or truncating copies get
- * reduced to regular copies---so, before simplify() or the various lowering
- * passes.
- */
-bool checkWidths(Vunit& unit);
-    
-    public const char *
-magic_getpath(const char *magicfile, int action)
-{
-  if (magicfile != NULL)
-    return magicfile;
-    }
-    
-    #include 'hphp/runtime/vm/hhbc.h'
-    
-      void assertCanEmit(size_t nBytes) {
-    if (!canEmit(nBytes) && !grow(nBytes)) reportFull(nBytes);
+      /// Determine the amount of data that may be read without blocking.
+  std::size_t in_avail(boost::system::error_code& ec)
+  {
+    ec = boost::system::error_code();
+    return storage_.size();
   }
     
-    using std::vector;
     
-    void mergeInto(Cluster& into, Cluster&& other, const double /*aw*/ = 0) {
-  into.targets.insert(into.targets.end(),
-                      other.targets.begin(), other.targets.end());
-  into.size += other.size;
-  into.samples += other.samples;
+    {} // namespace boost
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    template <>
+class base_from_completion_cond<transfer_all_t>
+{
+protected:
+  explicit base_from_completion_cond(transfer_all_t)
+  {
+  }
     }
     
-    #include <cstdint>
-#include <string>
+      // Resize the buffer to the specified length.
+  void resize(size_type length)
+  {
+    BOOST_ASIO_ASSERT(length <= capacity());
+    if (begin_offset_ + length <= capacity())
+    {
+      end_offset_ = begin_offset_ + length;
+    }
+    else
+    {
+      using namespace std; // For memmove.
+      memmove(&buffer_[0], &buffer_[0] + begin_offset_, size());
+      end_offset_ = length;
+      begin_offset_ = 0;
+    }
+  }
+    
+    
+    {
+    {} // namespace posix_time
+} // namespace boost
+    
+    namespace boost {
+namespace asio {
+namespace detail {
+    }
+    }
+    }
+    
+      if (shutdown_)
+  {
+    io_service_.post_immediate_completion(op, false);
+    return;
+  }
+    
+    #include <boost/asio/detail/pop_options.hpp>
+    
+     private:
+  StreamBufferReader reader_;
+  int tmp_ch;
+  int num_prev;
+  unsigned char buf_prev[2];
+  // whether we need to do strict check
+  static const bool kStrictCheck = false;
+};
+/*! \brief the stream that write to base64, note we take from file pointers */
+class Base64OutStream: public dmlc::Stream {
+ public:
+  explicit Base64OutStream(dmlc::Stream *fp) : fp(fp) {
+    buf_top = 0;
+  }
+  virtual void Write(const void *ptr, size_t size) {
+    using base64::EncodeTable;
+    size_t tlen = size;
+    const unsigned char *cptr = static_cast<const unsigned char*>(ptr);
+    while (tlen) {
+      while (buf_top < 3  && tlen != 0) {
+        buf[++buf_top] = *cptr++; --tlen;
+      }
+      if (buf_top == 3) {
+        // flush 4 bytes out
+        PutChar(EncodeTable[buf[1] >> 2]);
+        PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+        PutChar(EncodeTable[((buf[2] << 2) | (buf[3] >> 6)) & 0x3F]);
+        PutChar(EncodeTable[buf[3] & 0x3F]);
+        buf_top = 0;
+      }
+    }
+  }
+  virtual size_t Read(void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64OutStream do not support read';
+    return 0;
+  }
+  /*!
+   * \brief finish writing of all current base64 stream, do some post processing
+   * \param endch character to put to end of stream, if it is EOF, then nothing will be done
+   */
+  inline void Finish(char endch = EOF) {
+    using base64::EncodeTable;
+    if (buf_top == 1) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[(buf[1] << 4) & 0x3F]);
+      PutChar('=');
+      PutChar('=');
+    }
+    if (buf_top == 2) {
+      PutChar(EncodeTable[buf[1] >> 2]);
+      PutChar(EncodeTable[((buf[1] << 4) | (buf[2] >> 4)) & 0x3F]);
+      PutChar(EncodeTable[(buf[2] << 2) & 0x3F]);
+      PutChar('=');
+    }
+    buf_top = 0;
+    if (endch != EOF) PutChar(endch);
+    this->Flush();
+  }
     
       std::vector<size_t> feature_counts_;
   std::vector<ColumnType> type_;
@@ -138,88 +234,41 @@ magic_getpath(const char *magicfile, int action)
   std::vector<size_t> row_ind_;
   std::vector<ColumnBoundary> boundary_;
     
-    #if defined(__GNUC__) && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 8) || __GNUC__ > 4) && \
-    !defined(__CUDACC__)
-#include <parallel/algorithm>
-#define XGBOOST_PARALLEL_SORT(X, Y, Z) __gnu_parallel::sort((X), (Y), (Z))
-#define XGBOOST_PARALLEL_STABLE_SORT(X, Y, Z) \
-  __gnu_parallel::stable_sort((X), (Y), (Z))
-#elif defined(_MSC_VER) && (!__INTEL_COMPILER)
-#include <ppl.h>
-#define XGBOOST_PARALLEL_SORT(X, Y, Z) concurrency::parallel_sort((X), (Y), (Z))
-#define XGBOOST_PARALLEL_STABLE_SORT(X, Y, Z) std::stable_sort((X), (Y), (Z))
-#else
-#define XGBOOST_PARALLEL_SORT(X, Y, Z) std::sort((X), (Y), (Z))
-#define XGBOOST_PARALLEL_STABLE_SORT(X, Y, Z) std::stable_sort((X), (Y), (Z))
-#endif
+    
+    {  info.Clear();
+  ASSERT_EQ(info.group_ptr.size(), 0);
+}
+    
+    private:
+    
+    #include 'FuzzerExtFunctions.def'
+    
+    #include 'FuzzerExtFunctions.h'
+#include 'FuzzerIO.h'
+#include <cstdarg>
+#include <cstdio>
+#include <dirent.h>
+#include <fstream>
+#include <iterator>
+#include <libgen.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+    
+      Random &Rand;
+  const FuzzingOptions &Options;
     
     
-    {
-    {XGBOOST_REGISTER_METRIC(MultiLogLoss, 'mlogloss')
-.describe('Multiclass negative loglikelihood.')
-.set_body([](const char* param) { return new EvalMultiLogLoss(); });
-}  // namespace metric
-}  // namespace xgboost
-
-    
-        // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
-    if (hud->show_another_window)
-    {
-        ImGui::Begin('Another Window', &hud->show_another_window);
-        ImGui::Text('Hello from another window!');
-        ImGui::ColorEdit3('Cube 1 Color', hud->cubeColor1);
-        ImGui::ColorEdit3('Cube 2 Color', hud->cubeColor2);
-        ImGui::SliderFloat('Rotation Speed', &hud->rotation_speed, 0.0f, 200.0f);
-        if (ImGui::Button('Close Me'))
-            hud->show_another_window = false;
-        ImGui::End();
-    }
-    
-        for (int n = 0; n < 50; n++)
-    {
-        printf('NewFrame() %d\n', n);
-        io.DisplaySize = ImVec2(1920, 1080);
-        io.DeltaTime = 1.0f / 60.0f;
-        ImGui::NewFrame();
-    }
-    
-    IMGUI_API bool        ImGui_ImplDX10_Init(void* hwnd, ID3D10Device* device);
-IMGUI_API void        ImGui_ImplDX10_Shutdown();
-IMGUI_API void        ImGui_ImplDX10_NewFrame();
-IMGUI_API void        ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
-    
-            for( int i=0; i < nVert; i++ )
-        {
-            // TODO: optimize multiplication on gpu using vertex shader/projection matrix.
-            pVertStream[i].x = cmd_list->VtxBuffer[i].pos.x * g_RenderScale.x;
-            pVertStream[i].y = cmd_list->VtxBuffer[i].pos.y * g_RenderScale.y;
-            pUVStream[i].x = cmd_list->VtxBuffer[i].uv.x;
-            pUVStream[i].y = cmd_list->VtxBuffer[i].uv.y;
-            pColStream[i] = cmd_list->VtxBuffer[i].col;
-        }
-    
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-    
-    {        // Handle loss of D3D9 device
-        if (result == D3DERR_DEVICELOST && g_pd3dDevice->TestCooperativeLevel() == D3DERR_DEVICENOTRESET)
-        {
-            ImGui_ImplDX9_InvalidateDeviceObjects();
-            g_pd3dDevice->Reset(&g_d3dpp);
-            ImGui_ImplDX9_CreateDeviceObjects();
-        }
-    }
-    
-    // Draw channels are used by the Columns API to 'split' the render list into different channels while building, so items of each column can be batched together.
-// You can also use them to simulate drawing layers and submit primitives in a different order than how they will be rendered.
-struct ImDrawChannel
-{
-    ImVector<ImDrawCmd>     CmdBuffer;
-    ImVector<ImDrawIdx>     IdxBuffer;
+    {  static const size_t kMaxMutations = 1 << 16;
+  size_t NumMutations;
+  TraceBasedMutation Mutations[kMaxMutations];
+  // TODO: std::set is too inefficient, need to have a custom DS here.
+  std::set<Word> InterestingWords;
+  MutationDispatcher &MD;
+  const FuzzingOptions Options;
+  const Fuzzer *F;
+  std::map<Word, size_t> AutoDictUnitCounts;
+  size_t AutoDictAdds = 0;
 };
     
-                static float arr[] = { 0.6f, 0.1f, 1.0f, 0.5f, 0.92f, 0.1f, 0.2f };
-            ImGui::PlotLines('Frame Times', arr, IM_ARRAYSIZE(arr));
+    bool ExecuteCommandAndReadOutput(const std::string &Command, std::string *Out);
