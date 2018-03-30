@@ -1,164 +1,171 @@
 
         
-        def pr(url)
-  if url.end_with?(FORWARD_SLASH)
-    url
-  else
-    url_dir = File.dirname(url)
-    url_dir.end_with?(FORWARD_SLASH) ? url_dir : '#{url_dir}/'
+            # Who has a single core cpu these days anyways?
+    cpu_count = 2
+    
+      def name
+    object.metadata.name
   end
+    
+        # Returns the unwrapped subject and body of the last commit
+    # <b>DEPRECATED:</b> Use <tt>last_git_commit_message</tt> instead.
+    def self.last_git_commit
+      UI.important('`last_git_commit` is deprecated. Please use `last_git_commit_message` instead.')
+      last_git_commit_message
+    end
+    
+          it 'raises an exception when use passes workspace' do
+        expect do
+          Fastlane::FastFile.new.parse('lane :test do
+            increment_build_number(xcodeproj: 'project.xcworkspace')
+          end').runner.execute(:test)
+        end.to raise_error('Please pass the path to the project, not the workspace')
+      end
+    
+    desc 'LESS to stdin -> Sass to stdout'
+task :less_to_scss, :branch do |t, args|
+  require './tasks/converter'
+  puts Converter.new(branch: args[:branch]).convert_less(STDIN.read)
 end
     
-    def source_dir(*subdirs)
-  test_dir('source', *subdirs)
-end
+          spec['version'] = Bootstrap::VERSION
     
-    puts 'Stackprof Mode: #{MODE}'
+    end
     
-      p.action do |args, _|
-    if args.empty?
-      Jekyll.logger.error 'A subcommand is required.'
-      puts p
-      abort
-    else
-      subcommand = args.first
-      unless p.has_command? subcommand
-        Jekyll.logger.abort_with 'fatal: 'jekyll #{args.first}' could not' \
-          ' be found. You may need to install the jekyll-#{args.first} gem' \
-          ' or a related gem to be able to use this subcommand.'
+            def self.options
+          [[
+            '--all', 'Remove all the cached pods without asking'
+          ]].concat(super)
+        end
+    
+            # Prints the list of specs & pod cache dirs for a single pod name.
+        #
+        # This output is valid YAML so it can be parsed with 3rd party tools
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
+        #
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
+            end
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
+          end
+        end
       end
     end
   end
 end
 
     
-    def run_rubygem(args)
-  run_in_shell('gem', *args.strip.split(' '))
-end
-    
-      test 'should accept confirmation email token after 2 days when expiration is set to 3 days' do
-    swap Devise, confirm_within: 3.days do
-      assert confirm_user_by_token_with_confirmation_sent_at(2.days.ago)
-    end
-  end
-    
-        # Check if proper Lockable module methods are present & unlock strategy
-    # allows to unlock resource on password reset
-    def unlockable?(resource)
-      resource.respond_to?(:unlock_access!) &&
-        resource.respond_to?(:unlock_strategy_enabled?) &&
-        resource.unlock_strategy_enabled?(:email)
-    end
-    
-      # Controllers inheriting DeviseController are advised to override this
-  # method so that other controllers inheriting from them would use
-  # existing translations.
-  def translation_scope
-    'devise.#{controller_name}'
-  end
-    
-        def redirect
-      store_location!
-      if is_flashing_format?
-        if flash[:timedout] && flash[:alert]
-          flash.keep(:timedout)
-          flash.keep(:alert)
+          def validate!
+        super
+        raise Informative, 'Existing Podfile found in directory' unless config.podfile_path_in_dir(Pathname.pwd).nil?
+        if @project_path
+          help! 'Xcode project at #{@project_path} does not exist' unless File.exist? @project_path
+          project_path = @project_path
         else
-          flash[:alert] = i18n_message
+          raise Informative, 'No Xcode project found, please specify one' unless @project_paths.length > 0
+          raise Informative, 'Multiple Xcode projects found, please specify one' unless @project_paths.length == 1
+          project_path = @project_paths.first
         end
+        @xcode_project = Xcodeproj::Project.open(project_path)
       end
-      redirect_to redirect_url
-    end
     
-          if valid_type?(type)
-        type.constantize.new(attributes).tap do |instance|
-          instance.user = user if instance.respond_to?(:user=)
-        end
-      else
-        const_get(:BASE_CLASS_NAME).constantize.new(attributes).tap do |instance|
-          instance.type = type
-          instance.user = user if instance.respond_to?(:user=)
-        end
-      end
-    end
-  end
-end
-    
-        respond_to do |format|
-      format.html
-      format.json { render json: @events }
-    end
-  end
-    
-      def destroy
-    @services = current_user.services.find(params[:id])
-    @services.destroy
-    
-          def handle_prompt_none
-        if params[:prompt] == 'none'
-          if user_signed_in?
-            handle_prompt_with_signed_in_user
-          else
-            handle_params_error('login_required', 'User must already be logged in when `prompt` is `none`')
+            def execute_repl_command(repl_command)
+          unless repl_command == '\n'
+            repl_commands = repl_command.split
+            subcommand = repl_commands.shift.capitalize
+            arguments = repl_commands
+            subcommand_class = Pod::Command::IPC.const_get(subcommand)
+            subcommand_class.new(CLAide::ARGV.new(arguments)).run
+            signal_end_of_output
           end
-        else
-          handle_params_error('invalid_request', 'The 'none' value cannot be used with any other prompt value')
         end
       end
+    end
+  end
+end
+
     
-          rescue_from Api::OpenidConnect::Error::InvalidRedirectUri do |e|
-        validation_fail_redirect_uri(e)
-      end
+    # usage rake new_page[my-new-page] or rake new_page[my-new-page.html] or rake new_page (defaults to 'new-page.markdown')
+desc 'Create a new page in #{source_dir}/(filename)/index.#{new_page_ext}'
+task :new_page, :filename do |t, args|
+  raise '### You haven't set anything up yet. First run `rake install` to set up an Octopress theme.' unless File.directory?(source_dir)
+  args.with_defaults(:filename => 'new-page')
+  page_dir = [source_dir]
+  if args.filename.downcase =~ /(^.+\/)?(.+)/
+    filename, dot, extension = $2.rpartition('.').reject(&:empty?)         # Get filename and extension
+    title = filename
+    page_dir.concat($1.downcase.sub(/^\//, '').split('/')) unless $1.nil?  # Add path to page_dir Array
+    if extension.nil?
+      page_dir << filename
+      filename = 'index'
+    end
+    extension ||= new_page_ext
+    page_dir = page_dir.map! { |d| d = d.to_url }.join('/')                # Sanitize path
+    filename = filename.downcase.to_url
     
-          def create
-        req = Rack::Request.new(request.env)
-        if req['client_assertion_type'] == 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
-          handle_jwt_bearer(req)
+        def render(context)
+      quote = paragraphize(super)
+      author = '<strong>#{@by.strip}</strong>' if @by
+      if @source
+        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
+        parts = []
+        url.each do |part|
+          if (parts + [part]).join('/').length < 32
+            parts << part
+          end
         end
-        self.status, headers, self.response_body = Api::OpenidConnect::TokenEndpoint.new.call(request.env)
-        headers.each {|name, value| response.headers[name] = value }
-        nil
+        source = parts.join('/')
+        source << '/&hellip;' unless source == @source
       end
-    
-          @options               = options
-      @post_processing       = true
-      @queued_for_delete     = []
-      @queued_for_write      = {}
-      @errors                = {}
-      @dirty                 = false
-      @interpolator          = options[:interpolator]
-      @url_generator         = options[:url_generator].new(self)
-      @source_file_options   = options[:source_file_options]
-      @whiny                 = options[:whiny]
-    
-        # Returns the id of the instance in a split path form. e.g. returns
-    # 000/001/234 for an id of 1234.
-    def id_partition attachment, style_name
-      case id = attachment.instance.id
-      when Integer
-        ('%09d'.freeze % id).scan(/\d{3}/).join('/'.freeze)
-      when String
-        id.scan(/.{3}/).first(3).join('/'.freeze)
+      if !@source.nil?
+        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
+      elsif !@title.nil?
+        cite = ' <cite>#{@title}</cite>'
+      end
+      blockquote = if @by.nil?
+        quote
+      elsif cite
+        '#{quote}<footer>#{author + cite}</footer>'
       else
-        nil
+        '#{quote}<footer>#{author}</footer>'
       end
+      '<blockquote>#{blockquote}</blockquote>'
     end
     
-          if app.config.respond_to?(:paperclip_defaults)
-        Paperclip::Attachment.default_options.merge!(app.config.paperclip_defaults)
+    def config_tag(config, key, tag=nil, classname=nil)
+  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
+  tag       ||= 'div'
+  classname ||= key.sub(/_/, '-').sub(/\./, '-')
+  output      = '<#{tag} class='#{classname}''
+    
+      # Condenses multiple spaces and tabs into a single space
+  def condense_spaces(input)
+    input.gsub(/\s{2,}/, ' ')
+  end
+    
+        def render(context)
+      output = super
+      types = {
+        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
+        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
+        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
+      }
+      if @videos.size > 0
+        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
+        @videos.each do |v|
+          video << '<source src='#{v}' #{types[File.extname(v)]}>'
+        end
+        video += '</video>'
+      else
+        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
       end
     end
-    
-      def as_boolean(string)
-    return true   if string == true   || string =~ (/(true|t|yes|y|1)$/i)
-    return false  if string == false  || string.blank? || string =~ (/(false|f|no|n|0)$/i)
-    raise ArgumentError.new('invalid value for Boolean: \'#{string}\'')
-  end
-    
-          def snapshot
-        agent.metric.collector.snapshot_metric
-      end
-    
-      def twenty_five_percent
-    [1, (maximum * 0.25)].max.floor
-  end
