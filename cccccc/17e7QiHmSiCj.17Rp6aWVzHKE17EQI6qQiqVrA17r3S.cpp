@@ -1,274 +1,191 @@
 
         
-        
-    {public:
-    SectionStats(SectionFile* file, Section* parentSection, SectionHeader* sectionHeader, size_t filePosition, MappingType mappingType = mappingParent, size_t size = 0);
-    SectionStats(SectionFile* file, Section* parentSection, size_t filePosition, MappingType mappingType = mappingParent, size_t size = 0);
-    void InitCompute(const ConfigArray& compute);
-    void SetCompute(const std::string& name, double value);
-    double GetCompute(const std::string& name);
-    void Store();
-};
+        #include 'hphp/runtime/base/array-init.h'
+#include 'hphp/runtime/base/datetime.h'
+#include 'hphp/runtime/base/resource-data.h'
+#include 'hphp/runtime/base/type-array.h'
+#include 'hphp/runtime/base/type-string.h'
+#include 'hphp/util/timer.h'
     
-        m_net->StartEvaluateMinibatchLoop(bnNodes);
+    #include 'hphp/runtime/vm/jit/abi.h'
+#include 'hphp/runtime/vm/jit/arg-group.h'
+#include 'hphp/runtime/vm/jit/fixup.h'
+#include 'hphp/runtime/vm/jit/phys-reg-saver.h'
+#include 'hphp/runtime/vm/jit/vasm-gen.h'
+#include 'hphp/runtime/vm/jit/vasm-instr.h'
+#include 'hphp/runtime/vm/jit/vasm-reg.h'
     
-            if (!us.m_enabled)
-        {
-            return;
-        }
+      for (auto& block : blocks) {
+    for (auto& inst : block.code) {
+      if (inst.op == Vinstr::copyargs) return true;
+    }
+  }
     
-        float4& operator&=(const float4& other)
-    {
-        v = _mm_and_ps(v, other);
-        return *this;
-    }
-    float4& operator|=(const float4& other)
-    {
-        v = _mm_or_ps(v, other);
-        return *this;
-    }
-    float4& operator+=(const float4& other)
-    {
-        v = _mm_add_ps(v, other);
-        return *this;
-    }
-    float4& operator-=(const float4& other)
-    {
-        v = _mm_sub_ps(v, other);
-        return *this;
-    }
-    float4& operator*=(const float4& other)
-    {
-        v = _mm_mul_ps(v, other);
-        return *this;
-    }
-    float4& operator/=(const float4& other)
-    {
-        v = _mm_div_ps(v, other);
-        return *this;
+      if (asprintf(&default_magic, '%s:%s', hmagicpath, MAGIC) < 0)
+    goto out;
+  free(hmagicpath);
+  return default_magic;
+out:
+  default_magic = NULL;
+  free(hmagicpath);
+  return MAGIC;
+#else
+  char *hmagicp = hmagicpath;
+  char *tmppath = NULL;
+  LPTSTR dllpath;
+    
+    #include 'hphp/runtime/vm/hhbc.h'
+    
+    
+// Logical immediates can't encode zero, so a return value of zero is used to
+// indicate a failure case. Specifically, where the constraints on imm_s are
+// not met.
+uint64_t Instruction::ImmLogical() {
+  unsigned reg_size = SixtyFourBits() ? kXRegSize : kWRegSize;
+  int64_t n = BitN();
+  int64_t imm_s = ImmSetBits();
+  int64_t imm_r = ImmRotate();
     }
     
-    	si.cb = sizeof(STARTUPINFO);
-#if USE_TASKBAR_API
-	si.lpTitle = appId;
-	si.dwFlags = STARTF_TITLEISAPPID;
+    std::string GetDbFileContent(int argc, char** argv);
+    
+    namespace grpc_node_generator {
+    }
+    
+    AuthPropertyIterator SecureAuthContext::begin() const {
+  if (ctx_) {
+    grpc_auth_property_iterator iter =
+        grpc_auth_context_property_iterator(ctx_);
+    const grpc_auth_property* property =
+        grpc_auth_property_iterator_next(&iter);
+    return AuthPropertyIterator(property, &iter);
+  } else {
+    return end();
+  }
+}
+    
+    #if TARGET_OS_IPHONE
+GRPC_XMACRO_ITEM(isWWAN, IsWWAN)
 #endif
-	PROCESS_INFORMATION pi;
-	if (!CreateProcess(conEmuPath, args, NULL, NULL, false, 0, NULL, NULL, &si, &pi)) {
-		MessageBox(NULL, _T('Unable to create the ConEmu process!'), _T('Error'), MB_OK);
-		return;
-	}
-    
-    bool js_cocos2dx_navmesh_NavMeshObstacle_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_navmesh_NavMeshObstacle_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_navmesh_NavMeshObstacle(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_navmesh(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_initWith(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_syncToObstacle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_syncToNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getHeight(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getRadius(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getNavMeshObstacleComponentName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_NavMeshObstacle(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    bool js_cocos2dx_physics3d_Physics3DHingeConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DHingeConstraint_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DHingeConstraint(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getHingeAngle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetA(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetB(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_enableAngularMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getUpperLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getLowerLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getEnableAngularMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_enableMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getBFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setFrames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setAngularOnly(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setMotorTarget(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getAngularOnly(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setAxis(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getAFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DHingeConstraint_Physics3DHingeConstraint(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    bool js_cocos2dx_studio_BoneNode_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_BoneNode_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_BoneNode(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_BoneNode_getDebugDrawWidth(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getChildBones(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getBlendFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getAllSubBones(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_setBlendFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_setDebugDrawEnabled(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getVisibleSkinsRect(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getAllSubSkins(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_displaySkin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_isDebugDrawEnabled(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_addSkin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getRootSkeletonNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_setDebugDrawLength(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getSkins(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getVisibleSkins(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_setDebugDrawWidth(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getDebugDrawLength(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_setDebugDrawColor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getDebugDrawColor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_BoneNode(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    
-        argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsBody_isDynamic'', nullptr);
-            return 0;
-        }
-        bool ret = cobj->isDynamic();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.PhysicsBody:isDynamic',argc, 0);
-    return 0;
-    
-        CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1,1);
-    
-    // This is used to test sensor shapes.
-class Breakable : public Test
-{
-public:
-    }
-    
-    typedef bool (*LoadFileFunction)(const char *filename, bool binary,
-                                 std::string *dest);
-typedef bool (*FileExistsFunction)(const char *filename);
-    
-    // Return the prologue of the generated mock file.
-grpc::string GetMockPrologue(grpc_generator::File *file,
-                             const Parameters &params);
-    
-    
-    {}
-    
-    #include <grpc++/impl/codegen/async_stream.h>
-#include <grpc++/impl/codegen/async_unary_call.h>
-#include <grpc++/impl/codegen/method_handler_impl.h>
-#include <grpc++/impl/codegen/proto_utils.h>
-#include <grpc++/impl/codegen/rpc_method.h>
-#include <grpc++/impl/codegen/service_type.h>
-#include <grpc++/impl/codegen/status.h>
-#include <grpc++/impl/codegen/stub_options.h>
-#include <grpc++/impl/codegen/sync_stream.h>
-    
-    // An abstract interface representing a method.
-struct Method : public CommentHolder {
-  virtual ~Method() {}
-    }
-    
-      delete server_instance;
-    
-    #endif  // FLATBUFFERS_CODE_GENERATORS_H_
+GRPC_XMACRO_ITEM(reachable, Reachable)
+GRPC_XMACRO_ITEM(transientConnection, TransientConnection)
+GRPC_XMACRO_ITEM(connectionRequired, ConnectionRequired)
+GRPC_XMACRO_ITEM(connectionOnTraffic, ConnectionOnTraffic)
+GRPC_XMACRO_ITEM(interventionRequired, InterventionRequired)
+GRPC_XMACRO_ITEM(connectionOnDemand, ConnectionOnDemand)
+GRPC_XMACRO_ITEM(isLocalAddress, IsLocalAddress)
+GRPC_XMACRO_ITEM(isDirect, IsDirect)
 
     
-    class FileEntry;
-class RequestGroup;
-class CheckIntegrityEntry;
-class DownloadContext;
-class SegmentMan;
-class PieceStorage;
-class Request;
-class DownloadEngine;
-class Segment;
-class SocketCore;
-class Option;
-class SocketRecvBuffer;
-#ifdef ENABLE_ASYNC_DNS
-class AsyncNameResolver;
-class AsyncNameResolverMan;
-#endif // ENABLE_ASYNC_DNS
+    gpr_atm grpc::testing::interop::g_got_sigint;
+    
+      int Join();
+  void Interrupt();
+    
+    #include 'test/cpp/util/test_credentials_provider.h'
+    
+    #include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/compiler/python/python_generator.h>
+    
+      // Generate filter for current set of keys and append to result_.
+  filter_offsets_.push_back(result_.size());
+  policy_->CreateFilter(&tmp_keys_[0], static_cast<int>(num_keys), &result_);
+    
+    TEST(LogTest, RandomRead) {
+  const int N = 500;
+  Random write_rnd(301);
+  for (int i = 0; i < N; i++) {
+    Write(RandomSkewedString(i, &write_rnd));
+  }
+  Random read_rnd(301);
+  for (int i = 0; i < N; i++) {
+    ASSERT_EQ(RandomSkewedString(i, &read_rnd), Read());
+  }
+  ASSERT_EQ('EOF', Read());
+}
+    
+      ReadOptions read_options;
+  Iterator *iter = db->NewIterator(read_options);
+    
+    class FilterPolicy;
+    
+      // Check first filter
+  ASSERT_TRUE(reader.KeyMayMatch(0, 'foo'));
+  ASSERT_TRUE(reader.KeyMayMatch(2000, 'bar'));
+  ASSERT_TRUE(! reader.KeyMayMatch(0, 'box'));
+  ASSERT_TRUE(! reader.KeyMayMatch(0, 'hello'));
+    
+    TEST(CRC, StandardResults) {
+  // From rfc3720 section B.4.
+  char buf[32];
+    }
+    
+      int ReadBits(int nbits) {
+    FillBitWindow();
+    uint64_t val = (val_ >> (bits_left_ - nbits)) & ((1ULL << nbits) - 1);
+    bits_left_ -= nbits;
+    return val;
+  }
+    
+    
+    {}  // namespace guetzli
+    
+    // Fills in 'result' with the inverse DCT of 'block'.
+// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
+// a row-by-row memory layout.
+void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
+    
+    
+    {}  // namespace guetzli
+
+    
+    namespace guetzli {
+    }
+    
+    // Returns string with first letter to lowerCase
+grpc::string unexportName(grpc::string s) {
+	if (s.empty())
+		return s;
+	s[0] = static_cast<char>(std::tolower(s[0]));
+	return s;
+}
+    
+    static const char* MonsterStorage_method_names[] = {
+  '/MyGame.Example.MonsterStorage/Store',
+  '/MyGame.Example.MonsterStorage/Retrieve',
+};
+    
+    
+#endif  // GRPC_monster_5ftest__INCLUDED
+
+    
+    
+    {  // Package name for the service
+  grpc::string package_name;
+};
     
     
     {
-    {    httpConnection_->sendProxyRequest(std::move(httpRequest));
-  }
-  else {
-    httpConnection_->sendPendingData();
-  }
-  if (httpConnection_->sendBufferIsEmpty()) {
-    getDownloadEngine()->addCommand(getNextCommand());
-    return true;
-  }
-  else {
-    setWriteCheckSocket(getSocket());
-    addCommandSelf();
-    return false;
-  }
-}
-    
-    void AnnounceList::shuffle()
-{
-  for (const auto& tier : tiers_) {
-    auto& urls = tier->urls;
-    std::shuffle(std::begin(urls), std::end(urls),
-                 *SimpleRandomizer::getInstance());
-  }
-}
-    
-      bool currentTierAcceptsStoppedEvent() const;
-    
-    // DiskwriterFactory class template to create DiskWriter derived
-// object, ignoring filename.
-template <class DiskWriterType>
-class AnonDiskWriterFactory : public DiskWriterFactory {
-public:
-  AnonDiskWriterFactory() = default;
-  virtual ~AnonDiskWriterFactory() = default;
+    {
+    {      std::vector<FieldDef *> requiredProperties;
+      std::copy_if(properties.begin(), properties.end(),
+                   back_inserter(requiredProperties),
+                   [](FieldDef const *prop) { return prop->required; });
+      if (requiredProperties.size() > 0) {
+        std::string required_string('      \'required\' : [');
+        for (auto req_prop = requiredProperties.cbegin();
+             req_prop != requiredProperties.cend(); ++req_prop) {
+          required_string.append('\'' + (*req_prop)->name + '\'');
+          if (*req_prop != requiredProperties.back()) {
+            required_string.append(', ');
+          }
+        }
+        required_string.append('],');
+        code_ += required_string;
+      }
+      code_ += '      \'additionalProperties\' : false';
+      std::string closeType('    }');
+      if (*s != parser_.structs_.vec.back()) { closeType.append(','); }
+      code_ += closeType;  // close type
     }
-    
-      bool tryAsPKCS12(const std::string& certfile);
-    
-    class AsyncNameResolverMan {
-public:
-  AsyncNameResolverMan();
-  // Destructor does not call disableNameResolverCheck(). Application
-  // must call it before the destruction of this object.
-  ~AsyncNameResolverMan();
-  // Enable IPv4 address lookup. default: true
-  void setIPv4(bool ipv4) { ipv4_ = ipv4; }
-  // Enable IPv6 address lookup. default: true
-  void setIPv6(bool ipv6) { ipv6_ = ipv6; }
-  // Returns true if asynchronous name resolution has been started.
-  bool started() const;
-  // Starts asynchronous name resolution.
-  void startAsync(const std::string& hostname, DownloadEngine* e,
-                  Command* command);
-  // Appends resolved addresses to |res|.
-  void getResolvedAddress(std::vector<std::string>& res) const;
-  // Adds resolvers to DownloadEngine to check event notification.
-  void setNameResolverCheck(DownloadEngine* e, Command* command);
-  // Removes resolvers from DownloadEngine.
-  void disableNameResolverCheck(DownloadEngine* e, Command* command);
-  // Returns true if any of resolvers are added in DownloadEngine.
-  bool resolverChecked() const { return resolverCheck_; }
-  // Returns status value: 0 for inprogress, 1 for success and -1 for
-  // failure.
-  int getStatus() const;
-  // Returns last error string
-  const std::string& getLastError() const;
-  // Resets state. Also removes resolvers from DownloadEngine.
-  void reset(DownloadEngine* e, Command* command);
-    }
+    code_ += '  },';  // close definitions
