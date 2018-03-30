@@ -1,93 +1,102 @@
 
         
-        #
+                      conn.subscribe('_action_cable_internal') do |on|
+                on.subscribe do |chan, count|
+                  @subscription_lock.synchronize do
+                    if count == 1
+                      @raw_client = original_client
     
-        def no_subcommand(args)
-      unless args.empty? ||
-          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
-        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
-                          Run `jekyll help` to find out more.'
-        abort
-      end
+          indentation = ' ' * indent
+      sentences.map! { |sentence|
+        '#{indentation}#{sentence.join(' ')}'
+      }.join '\n'
     end
-    
-        # Gets the name of this layout.
-    attr_reader :name
-    
-          def measure_bytes
-        yield.tap do |str|
-          @renderer.increment_bytes(@filename, str.bytesize)
-        end
-      end
-    
-      def test_to_h
-    h = @h.to_h
-    assert_equal(@h, h)
-    assert_instance_of(Hash, h)
-  end
-    
-      class SubclassX < Struct
-  end
-    
-      with_feature :fiber do
-    it 'kills the entire thread when a fiber is active' do
-      t = Thread.new do
-        Fiber.new do
-          sleep
-        end.resume
-        ScratchPad.record :fiber_resumed
-      end
-      Thread.pass while t.status and t.status != 'sleep'
-      t.send(@method)
-      t.join
-      ScratchPad.recorded.should == nil
-    end
-  end
-    
-      # Converts an interpolation array to source.
-  #
-  # @param interp [Array<String, Sass::Script::Tree::Node>] The interpolation array to convert.
-  # @param options [{Symbol => Object}] An options hash (see {Sass::CSS#initialize}).
-  # @return [String]
-  def self._interp_to_src(interp, options)
-    interp.map {|r| r.is_a?(String) ? r : r.to_sass(options)}.join
   end
 end
 
     
-            # Removes the specified cache
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        An array of caches to remove, each specified with the same
-        #        hash as cache_descriptors_per_pod especially :spec_file and :slug
-        #
-        def remove_caches(cache_descriptors)
-          cache_descriptors.each do |desc|
-            UI.message('Removing spec #{desc[:spec_file]} (v#{desc[:version]})') do
-              FileUtils.rm(desc[:spec_file])
-            end
-            UI.message('Removing cache #{desc[:slug]}') do
-              FileUtils.rm_rf(desc[:slug])
-            end
-          end
-        end
-    
-            rows.each do |row|
-          line = row.values.each_with_index.map do |value, col|
-            value.to_s.ljust(col_widths[col])
-          end.join(' ').rstrip
-          line = color.colorize(line, row.color) if row.color
-          puts line
-        end
+          # Run a certain action
+      def trigger(command: nil, serial: nil)
+        android_serial = serial != '' ? 'ANDROID_SERIAL=#{serial}' : nil
+        command = [android_serial, adb_path, command].join(' ')
+        Action.sh(command)
       end
     
-      desc 'Rollback to previous release.'
-  task :rollback do
-    %w{ starting started
-        reverting reverted
-        publishing published
-        finishing_rollback finished }.each do |task|
-      invoke 'deploy:#{task}'
+            expect_any_instance_of(ActivityPub::LinkedDataSignature).to receive(:verify_account!).and_return(nil)
+        expect(ActivityPub::Activity).not_to receive(:factory)
+    
+      attributes :id, :type, :name, :updated
+    
+    describe Settings::NotificationsController do
+  render_views
+    
+    
+end
+
+    
+        if extension_pathname.readable?
+      ENV['BUNDLE_GEMFILE'] = extension_pathname.to_path
+      break
     end
   end
 end
+    
+          when :login_fail
+        if(s[:user] and s[:pass])
+          report_auth_info(s.merge({:active => false}))
+          print_status('Failed FTP Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]}')
+    
+    # This is a completely hackish way to do this, and could break with future
+# versions of the JDK.  Need to find a better way to use sun.security.tools.KeyTool
+# and .JarSigner than modifying the source.  These rely on internal APIs that may
+# change.
+signer = Rjb::import('javaCompile.SignJar')
+#clsKeyTool = Rjb::import('sun.security.tools.KeyTool')
+#clsKeyTool = Rjb::import('sun.security.tools.KeyToolMSF')
+#clsJarSigner = Rjb::import('javaCompile.SignJar.JarSignerMSF')
+#clsJarSigner = Rjb::import('sun.security.tools.JarSigner')
+#clsJarSigner = Rjb::import('sun.security.tools.JarSignerMSF')
+    
+    class Source < Template
+  attr_accessor :__CAL
+  attr_accessor :__NR_execve
+  attr_accessor :__NR_getpeername
+  attr_accessor :__NR_accept
+  attr_accessor :__NR_listen
+  attr_accessor :__NR_bind
+  attr_accessor :__NR_socket
+  attr_accessor :__NR_connect
+  attr_accessor :__NR_close
+  attr_accessor :__NR_kfcntl
+  attr_accessor :__cal
+  attr_accessor :_cal
+  attr_accessor :cal
+  attr_accessor :ver
+    
+          it 'should remain unchanged as ASCII-8BIT' do
+        body = @app.call({ 'PATH_INFO' => '/'.encode('ASCII-8BIT') })[2][0]
+        expect(body).to eq('ASCII-8BIT')
+      end
+    end
+  end
+end
+
+    
+      it 'comparison of Accept-Language header is not case sensitive' do
+    session = {:foo => :bar}
+    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'a'
+    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'A'
+    expect(session).not_to be_empty
+  end
+    
+        # Returns the width and height in a format suitable to be passed to Geometry.parse
+    def to_s
+      s = ''
+      s << width.to_i.to_s if width > 0
+      s << 'x#{height.to_i}' if height > 0
+      s << modifier.to_s
+      s
+    end
+    
+    module Paperclip
+  require 'rails'
