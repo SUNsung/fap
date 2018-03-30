@@ -1,89 +1,105 @@
 
-@bp.route('/add', methods=['POST'])
-def add_entry():
-    if not session.get('logged_in'):
-        abort(401)
-    db = get_db()
-    db.execute('insert into entries (title, text) values (?, ?)',
-               [request.form['title'], request.form['text']])
-    db.commit()
-    flash('New entry was successfully posted')
-    return redirect(url_for('flaskr.show_entries'))
+        
+            def test_update(self):
+        attribs = {'expires': 1, 'Version': 2, 'DOMAIN': 'example.com'}
+        # test dict update
+        morsel = cookies.Morsel()
+        morsel.update(attribs)
+        self.assertEqual(morsel['expires'], 1)
+        self.assertEqual(morsel['version'], 2)
+        self.assertEqual(morsel['domain'], 'example.com')
+        # test iterable update
+        morsel = cookies.Morsel()
+        morsel.update(list(attribs.items()))
+        self.assertEqual(morsel['expires'], 1)
+        self.assertEqual(morsel['version'], 2)
+        self.assertEqual(morsel['domain'], 'example.com')
+        # test iterator update
+        morsel = cookies.Morsel()
+        morsel.update((k, v) for k, v in attribs.items())
+        self.assertEqual(morsel['expires'], 1)
+        self.assertEqual(morsel['version'], 2)
+        self.assertEqual(morsel['domain'], 'example.com')
     
-        return app
+        @classmethod
+    def zonelist(cls, zonedir='/usr/share/zoneinfo'):
+        zones = []
+        for root, _, files in os.walk(zonedir):
+            for f in files:
+                p = os.path.join(root, f)
+                with open(p, 'rb') as o:
+                    magic =  o.read(4)
+                if magic == b'TZif':
+                    zones.append(p[len(zonedir) + 1:])
+        return zones
     
+        def _longcmd(self, line, file=None):
+        '''Internal: send a command and get the response plus following text.
+        Same return value as _getlongresp().'''
+        self._putcmd(line)
+        return self._getlongresp(file)
     
-@app.route('/_add_numbers')
-def add_numbers():
-    '''Add two numbers server side, ridiculous but well...'''
-    a = request.args.get('a', 0, type=int)
-    b = request.args.get('b', 0, type=int)
-    return jsonify(result=a + b)
+    int WINAPI WinMain(
+    HINSTANCE hInstance,      // handle to current instance
+    HINSTANCE hPrevInstance,  // handle to previous instance
+    LPSTR lpCmdLine,          // pointer to command line
+    int nCmdShow              // show state of window
+    )
+{
+    extern int Py_FrozenMain(int, char **);
+    PyImport_FrozenModules = _PyImport_FrozenModules;
+    return Py_FrozenMain(__argc, __argv);
+}
+'''
     
-        requires_project = False
-    crawler_process = None
+    1. Install functions:
     
-                @wraps(cb)
-            def wrapper(response):
-                output = list(iterate_spider_output(cb(response)))
-                try:
-                    results.startTest(self.testcase_post)
-                    self.post_process(output)
-                    results.stopTest(self.testcase_post)
-                except AssertionError:
-                    results.addFailure(self.testcase_post, sys.exc_info())
-                except Exception:
-                    results.addError(self.testcase_post, sys.exc_info())
-                else:
-                    results.addSuccess(self.testcase_post)
-                finally:
-                    return output
+            x = (c_char * 16).from_buffer_copy(b'a' * 16)
+        self.assertEqual(x[:], b'a' * 16)
+        with self.assertRaises(TypeError):
+            (c_char * 16).from_buffer_copy('a' * 16)
     
-        def post_process(self, output):
-        occurrences = 0
-        for x in output:
-            if isinstance(x, self.obj_type):
-                occurrences += 1
+    # Can't import these from paths.py because that uses `future` imports
+DIR_OF_CURRENT_SCRIPT = os.path.dirname( os.path.abspath( __file__ ) )
+DIR_OF_YCMD = os.path.join( DIR_OF_CURRENT_SCRIPT, '..', '..', 'third_party',
+                            'ycmd' )
     
-        print_info(site_info, title, type, size)
-    if not info_only:
-        download_urls([video_url], title, ext, size, output_dir, merge=merge, headers = fake_headers)
+        def set_result(self, result):
+        '''Sets the return value of work associated with the future.
     
-        def __init__(self, pin_json):
-        img_file = pin_json['file']
-        self.id = str(pin_json['pin_id'])
-        self.url = urlparse.urljoin(self.host, img_file['key'])
-        self.ext = img_file['type'].split('/')[-1]
-    
-    def kugou_download_by_hash(title,hash_val,output_dir = '.', merge = True, info_only = False):
-    #sample
-    #url_sample:http://www.kugou.com/yy/album/single/536957.html
-    #hash ->key  md5(hash+kgcloud')->key  decompile swf
-    #cmd 4 for mp3 cmd 3 for m4a
-    key=hashlib.new('md5',(hash_val+'kgcloud').encode('utf-8')).hexdigest()
-    html=get_html('http://trackercdn.kugou.com/i/?pid=6&key=%s&acceptMp3=1&cmd=4&hash=%s'%(key,hash_val))
-    j=loads(html)
-    url=j['url']
-    songtype, ext, size = url_info(url)
-    print_info(site_info, title, songtype, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge=merge)
-    
-    def mixcloud_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url, faker=True)
-    title = r1(r'<meta property='og:title' content='([^']*)'', html)
-    preview_url = r1(r'm-preview=\'([^\']+)\'', html)
-    preview = r1(r'previews(.*)\.mp3$', preview_url)
-    
-    class MusicPlayOn(VideoExtractor):
-    name = 'MusicPlayOn'
+    class ProcessPoolExecutor(_base.Executor):
+    def __init__(self, max_workers=None):
+        '''Initializes a new ProcessPoolExecutor instance.
     
     
-#----------------------------------------------------------------------
-def showroom_download(url, output_dir = '.', merge = False, info_only = False, **kwargs):
-    ''''''
-    if re.match( r'(\w+)://www.showroom-live.com/([-\w]+)', url):
-        room_url_key = match1(url, r'\w+://www.showroom-live.com/([-\w]+)')
-        room_id = showroom_get_roomid_by_room_url_key(room_url_key)
-        showroom_download_by_room_id(room_id, output_dir, merge,
-                                    info_only)
+def FormatDebugInfoResponse( response ):
+  if not response:
+    return 'Server errored, no debug info from server\n'
+  message = _FormatYcmdDebugInfo( response )
+  completer = response[ 'completer' ]
+  if completer:
+    message += _FormatCompleterDebugInfo( completer )
+  return message
+    
+    import time
+from threading import Thread
+from ycm.client.base_request import BaseRequest, HandleServerException
+    
+    
+def FormatDebugInfoResponse_ExtraConfFoundAndLoaded_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'extra_conf' ].update( {
+    'is_loaded': True,
+    'path': '/path/to/extra/conf'
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Extra configuration file found and loaded\n'
+      'Extra configuration path: /path/to/extra/conf\n'
+    )
+  )
+    
+      assert_that( syntax_parse._KeywordsFromSyntaxListOutput(
+                   ContentsOfTestFile( 'python_syntax' ) ),
+               contains_inanyorder( *expected_keywords ) )
