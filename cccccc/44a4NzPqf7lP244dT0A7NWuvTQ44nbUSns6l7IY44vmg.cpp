@@ -1,332 +1,284 @@
 
         
-        /* Map whose keys are pointers, but are compared by their dereferenced values.
- *
- * Differs from a plain std::map<const K*, T, DereferencingComparator<K*> > in
- * that methods that take a key for comparison take a K rather than taking a K*
- * (taking a K* would be confusing, since it's the value rather than the address
- * of the object for comparison that matters due to the dereferencing comparator).
- *
- * Objects pointed to by keys must not be modified in any way that changes the
- * result of DereferencingComparator.
- */
-template <class K, class T>
-class indirectmap {
-private:
-    typedef std::map<const K*, T, DereferencingComparator<const K*> > base;
-    base m;
-public:
-    typedef typename base::iterator iterator;
-    typedef typename base::const_iterator const_iterator;
-    typedef typename base::size_type size_type;
-    typedef typename base::value_type value_type;
+        #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+namespace {
+    }
+    }
+    }
+    }
     }
     
-    char* leveldb_get(
-    leveldb_t* db,
-    const leveldb_readoptions_t* options,
-    const char* key, size_t keylen,
-    size_t* vallen,
-    char** errptr) {
-  char* result = NULL;
-  std::string tmp;
-  Status s = db->rep->Get(options->rep, Slice(key, keylen), &tmp);
-  if (s.ok()) {
-    *vallen = tmp.size();
-    result = CopyString(tmp);
-  } else {
-    *vallen = 0;
-    if (!s.IsNotFound()) {
-      SaveError(errptr, s);
-    }
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
+    
+    // Generator options (used by csharp_generator.cc):
+struct Options {
+  Options() :
+      file_extension('.cs'),
+      base_namespace(''),
+      base_namespace_specified(false),
+      internal_access(false) {
   }
-  return result;
-}
-    
-    #include 'db/filename.h'
-#include 'db/db_impl.h'
-#include 'db/dbformat.h'
-#include 'leveldb/env.h'
-#include 'leveldb/iterator.h'
-#include 'port/port.h'
-#include 'util/logging.h'
-#include 'util/mutexlock.h'
-#include 'util/random.h'
-    
-    // Return the legacy file name for an sstable with the specified number
-// in the db named by 'dbname'. The result will be prefixed with
-// 'dbname'.
-extern std::string SSTTableFileName(const std::string& dbname, uint64_t number);
-    
-    Iterator* TableCache::NewIterator(const ReadOptions& options,
-                                  uint64_t file_number,
-                                  uint64_t file_size,
-                                  Table** tableptr) {
-  if (tableptr != NULL) {
-    *tableptr = NULL;
-  }
-    }
-    
-    class TableCache {
- public:
-  TableCache(const std::string& dbname, const Options* options, int entries);
-  ~TableCache();
-    }
-    
-    struct FileMetaData {
-  int refs;
-  int allowed_seeks;          // Seeks allowed until compaction
-  uint64_t number;
-  uint64_t file_size;         // File size in bytes
-  InternalKey smallest;       // Smallest internal key served by table
-  InternalKey largest;        // Largest internal key served by table
-    }
-    
-    static void TestEncodeDecode(const VersionEdit& edit) {
-  std::string encoded, encoded2;
-  edit.EncodeTo(&encoded);
-  VersionEdit parsed;
-  Status s = parsed.DecodeFrom(encoded);
-  ASSERT_TRUE(s.ok()) << s.ToString();
-  parsed.EncodeTo(&encoded2);
-  ASSERT_EQ(encoded, encoded2);
-}
-    
-    /// Internal callExtension implementation using a UNIX domain socket path.
-Status callExtension(const std::string& extension_path,
-                     const std::string& registry,
-                     const std::string& item,
-                     const PluginRequest& request,
-                     PluginResponse& response);
-    
-    /*
- * @brief Replace gflags' `DEFINE_type` macros to track osquery flags.
- *
- * Do not use this macro within the codebase directly! Use the subsequent macros
- * that abstract the tail of boolean arguments into meaningful statements.
- *
- * @param type(t) The `_type` symbol portion of the gflags define.
- * @param name(n) The name symbol passed to gflags' `DEFINE_type`.
- * @param value(v) The default value, use a C++ literal.
- * @param desc(d) A string literal used for help display.
- * @param shell(s) Boolean, true if this is only supported in osqueryi.
- * @param extension(e) Boolean, true if this is only supported in an extension.
- * @param cli(c) Boolean, true if this can only be set on the CLI (or flagfile).
- *   This helps documentation since flags can also be set within configuration
- *   as 'options'.
- * @param hidden(h) Boolean, true if this is hidden from help displays.
- */
-#define OSQUERY_FLAG(t, n, v, d, s, e, c, h)                                   \
-  DEFINE_##t(n, v, d);                                                         \
-  namespace flags {                                                            \
-  const int flag_##n = Flag::create(#n, {d, s, e, c, h});                      \
-  }
-    
-    #include <osquery/core.h>
-#include <osquery/flags.h>
-#include <osquery/query.h>
-#include <osquery/registry.h>
-    
-    /**
- * @brief Create an osquery extension 'module', if an expression is true.
- *
- * This is a helper testing wrapper around CREATE_MODULE and DECLARE_MODULE.
- * It allows unit and integration tests to generate global construction code
- * that depends on data/variables available during global construction.
- *
- * And example use includes checking if a process environment variable is
- * defined. If defined the module is declared.
- */
-#define CREATE_MODULE_IF(expr, name, version, min_sdk_version)                 \
-  extern 'C' EXPORT_FUNCTION void initModule(void);                            \
-  struct osquery_InternalStructCreateModule {                                  \
-    osquery_InternalStructCreateModule(void) {                                 \
-      if ((expr)) {                                                            \
-        Registry::get().declareModule(                                         \
-            name, version, min_sdk_version, OSQUERY_SDK_VERSION);              \
-      }                                                                        \
-    }                                                                          \
-  };                                                                           \
-  static osquery_InternalStructCreateModule osquery_internal_module_instance_;
-    
-    #include <gtest/gtest.h>
-    
-    TEST_F(ViewsConfigParserPluginTests, test_swap_view) {
-  Config c;
-  std::vector<std::string> old_views_vec;
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  old_views_vec.clear();
-  auto s = c.update(getTestConfigMap('view_test.conf'));
-  EXPECT_TRUE(s.ok());
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  EXPECT_EQ(old_views_vec[0], 'config_views.kernel_hashes_new');
-    }
-    
-    Status platformStrncpy(char* dst, size_t nelms, const char* src, size_t count) {
-  if (dst == nullptr || src == nullptr || nelms == 0) {
-    return Status(1, 'Failed to strncpy: invalid arguments');
-  }
-    }
-    
-    #pragma once
-    
-    void copy(const char* srcFile, const char* dest) {
-  fs::path destPath(dest);
-  if (!destPath.is_absolute()) {
-    auto hp = getHugePageSize();
-    CHECK(hp) << 'no huge pages available';
-    destPath = fs::canonical_parent(destPath, hp->mountPoint);
-  }
-    }
-    
-      // Format the data into a buffer.
-  std::string buffer;
-  StringPiece msgData{message.getMessage()};
-  if (message.containsNewlines()) {
-    // If there are multiple lines in the log message, add a header
-    // before each one.
-    std::string header;
-    header.reserve(headerLengthGuess);
-    headerFormatter.appendTo(header);
-    }
-    
-    
-    {  /**
-   * An optional list of LogHandler names to use for this category.
-   *
-   * When applying config changes to an existing LogCategory, the existing
-   * LogHandler list will be left unchanged if this field is unset.
-   */
-  Optional<std::vector<std::string>> handlers;
+  // Extension of the generated file. Defaults to '.cs'
+  string file_extension;
+  // Base namespace to use to create directory hierarchy. Defaults to ''.
+  // This option allows the simple creation of a conventional C# file layout,
+  // where directories are created relative to a project-specific base
+  // namespace. For example, in a project with a base namespace of PetShop, a
+  // proto of user.proto with a C# namespace of PetShop.Model.Shared would
+  // generate Model/Shared/User.cs underneath the specified --csharp_out
+  // directory.
+  //
+  // If no base namespace is specified, all files are generated in the
+  // --csharp_out directory, with no subdirectories created automatically.
+  string base_namespace;
+  // Whether the base namespace has been explicitly specified by the user.
+  // This is required as the base namespace can be explicitly set to the empty
+  // string, meaning 'create a full directory hierarchy, starting from the first
+  // segment of the namespace.'
+  bool base_namespace_specified;
+  // Whether the generated classes should have accessibility level of 'internal'.
+  // Defaults to false that generates 'public' classes.
+  bool internal_access;
 };
     
-        for (const auto& entry : categories->items()) {
-      if (!entry.first.isString()) {
-        // This shouldn't really ever happen.
-        // We deserialize the json with allow_non_string_keys set to False.
-        throw LogConfigParseError{'category name must be a string'};
-      }
-      auto categoryName = entry.first.asString();
-      auto categoryConfig = parseJsonCategoryConfig(entry.second, categoryName);
+      void WriteIntroduction(io::Printer* printer);
+  void WriteDescriptor(io::Printer* printer);
+  void WriteGeneratedCodeInfo(const Descriptor* descriptor,
+                              io::Printer* printer,
+                              bool last);
+    
+    
+    { private:
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(RepeatedEnumFieldGenerator);
+};
+    
+    
+    {
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+    
+    #include <google/protobuf/compiler/code_generator.h>
+    
+    // Generates code for a lite extension, which may be within the scope of some
+// message or may be at file scope.  This is much simpler than FieldGenerator
+// since extensions are just simple identifiers with interesting types.
+class ImmutableExtensionLiteGenerator : public ExtensionGenerator {
+ public:
+  explicit ImmutableExtensionLiteGenerator(const FieldDescriptor* descriptor,
+                                           Context* context);
+  virtual ~ImmutableExtensionLiteGenerator();
     }
+    
+    ServiceGenerator* ImmutableGeneratorFactory::NewServiceGenerator(
+    const ServiceDescriptor* descriptor) const {
+  return new ImmutableServiceGenerator(descriptor, context_);
+}
+    
+      /// Construct, passing the specified argument to initialise the next layer.
+  template <typename Arg>
+  buffered_read_stream(Arg& a, std::size_t buffer_size)
+    : next_layer_(a),
+      storage_(buffer_size)
+  {
+  }
+    
+    
+    {
+    {} // namespace asio
+} // namespace boost
+    
+    namespace boost {
+namespace asio {
+    }
+    }
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+typedef long atomic_count;
+inline void increment(atomic_count& a, long b) { a += b; }
+#elif defined(BOOST_ASIO_HAS_STD_ATOMIC)
+typedef std::atomic<long> atomic_count;
+inline void increment(atomic_count& a, long b) { a += b; }
+#else // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+typedef boost::detail::atomic_count atomic_count;
+inline void increment(atomic_count& a, long b) { while (b > 0) ++a, --b; }
+#endif // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+    
+    #include <boost/asio/detail/config.hpp>
+    
+    #include <boost/asio/detail/config.hpp>
+    
+      // Get an iterator for the beginning of the map.
+  const_iterator begin() const
+  {
+    return values_.begin();
+  }
+    
+      // Read some data.
+  for (;;)
+  {
+    // Try to complete the operation without blocking.
+    errno = 0;
+    signed_size_type bytes = error_wrapper(::readv(
+          d, bufs, static_cast<int>(count)), ec);
+    }
+    
+    #include <boost/asio/detail/pop_options.hpp>
+    
+      std::vector<std::string> line_exports;
+  unsigned int readonly = 0;
+  int options_index = -1;
+    
+    #include <atomic>
+#include <chrono>
+#include <condition_variable>
+#include <memory>
+#include <thread>
+#include <vector>
+    
+      /// Create a EventContext based on the templated type.
+  static ECRef createEventContext() {
+    return std::make_shared<EC>();
+  }
     
       /**
-   * Block until all messages that have already been sent to this LogHandler
-   * have been processed.
+   * @brief implicit conversion to bool
    *
-   * For LogHandlers that perform asynchronous processing of log messages,
-   * this ensures that messages already sent to this handler have finished
-   * being processed.
+   * Allows easy use of Status in an if statement, as below:
    *
-   * Other threads may still call handleMessage() while flush() is running.
-   * handleMessage() calls that did not complete before the flush() call
-   * started will not necessarily be processed by the flush call.
+   * @code{.cpp}
+   *   if (doSomethingThatReturnsStatus()) {
+   *     LOG(INFO) << 'Success!';
+   *   }
+   * @endcode
    */
-  virtual void flush() = 0;
+  /* explicit */ explicit operator bool() const {
+    return ok();
+  }
     
-    // Handler for Win32 messages, update mouse/keyboard data.
-// You may or not need this for your implementation, but it can serve as reference for handling inputs.
-// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
-/*
-IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-*/
+      /**
+   * @brief Cleanly wait for all services and components to shutdown.
+   *
+   * Enter a join of all services followed by a sync wait for event loops.
+   * If the main thread is out of actions it can call #waitForShutdown.
+   */
+  static void waitForShutdown();
+    
+      // Tear down device node data.
+  if (!(osquery.major_number < 0)) {
+    if (cdevsw_remove(osquery.major_number, &osquery_cdevsw) < 0) {
+      panic('osquery kext: Cannot remove osquery from cdevsw');
+    }
+  }
+    
+    /**
+ * @brief Access the internal storage of the Decorator parser.
+ *
+ * The decoration set is a map of column name to value. It contains the opaque
+ * set of decoration point results.
+ *
+ * Decorations are applied to log items before they are sent to the downstream
+ * logging APIs: logString, logSnapshot, etc.
+ *
+ * @param results the output parameter to write decorations.
+ */
+void getDecorations(std::map<std::string, std::string>& results);
+    
+    REGISTER(FilesystemConfigPlugin, 'config', 'filesystem');
+    
+    #endif // __cocos2dx_csloader_h__
 
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
     
-            cmdList->Release();
-        cmdAlloc->Release();
-        cmdQueue->Release();
-        CloseHandle(event);
-        fence->Release();
-        uploadBuffer->Release();
     
-    bool    ImGui_ImplGlfwVulkan_Init(GLFWwindow* window, bool install_callbacks, ImGui_ImplGlfwVulkan_Init_Data *init_data)
-{
-    g_Allocator = init_data->allocator;
-    g_Gpu = init_data->gpu;
-    g_Device = init_data->device;
-    g_RenderPass = init_data->render_pass;
-    g_PipelineCache = init_data->pipeline_cache;
-    g_DescriptorPool = init_data->descriptor_pool;
-    g_CheckVkResult = init_data->check_vk_result;
-    }
+#endif // __cocos2dx_navmesh_h__
+#endif //#if CC_USE_NAVMESH
+
     
-        for (int i = 0; i < 3; i++)
+    
+    
+        virtual void DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color);
+    
+    #endif
+
+    
+    
+    {			bd.position.Set(230.0f, 4.5f);
+			body = m_world->CreateBody(&bd);
+			body->CreateFixture(&box, 0.5f);
+		}
+    
+    
+    {    // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
+    if (hud->show_demo_window)
     {
-        // If a mouse press event came, always pass it as 'mouse held this frame', so we don't miss click-release events that are shorter than 1 frame.
-        io.MouseDown[i] = g_MouseJustPressed[i] || glfwGetMouseButton(g_Window, i) != 0;
-        g_MouseJustPressed[i] = false;
+        ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
+        ImGui::ShowDemoWindow(&hud->show_demo_window);
     }
-    
-      YGNodeCalculateLayout(root, 200, 100, YGDirectionLTR);
-    
-        Config(Config const &) = delete;
-    
-    void Node::setWidth(double width)
-{
-    YGNodeStyleSetWidth(m_node, width);
 }
-    
-     public: // Tree hierarchy inspectors
-    
-    class Countable : public noncopyable, public nonmovable {
-public:
-  // RefPtr expects refcount to start at 0
-  Countable() : m_refcount(0) {}
-  virtual ~Countable()
-  {
-    FBASSERT(m_refcount == 0);
-  }
-    }
-    
-    class ProgramLocation {
-public:
-  ProgramLocation() : m_functionName('Unspecified'), m_fileName('Unspecified'), m_lineNumber(0) {}
-    }
-    
-      T* release() {
-    T* obj = get();
-    pthread_setspecific(m_key, NULL);
-    return obj;
-  }
-    
-    #define FBCRASH(msg, ...) facebook::assertInternal('Fatal error (%s:%d): ' msg, __FILE__, __LINE__, ##__VA_ARGS__)
-#define FBUNREACHABLE() facebook::assertInternal('This code should be unreachable (%s:%d)', __FILE__, __LINE__)
-    
-      system_clock::time_point ProcessStartTime = system_clock::now();
-  system_clock::time_point UnitStartTime, UnitStopTime;
-  long TimeOfLongestUnitInSeconds = 0;
-  long EpochOfLastReadOfOutputCorpus = 0;
-    
-    
-    {  // One greedy pass: add the file's features to AllFeatures.
-  // If new features were added, add this file to NewFiles.
-  for (size_t i = NumFilesInFirstCorpus; i < Files.size(); i++) {
-    auto &Cur = Files[i].Features;
-    // Printf('%s -> sz %zd ft %zd\n', Files[i].Name.c_str(),
-    //       Files[i].Size, Cur.size());
-    size_t OldSize = AllFeatures.size();
-    AllFeatures.insert(Cur.begin(), Cur.end());
-    if (AllFeatures.size() > OldSize)
-      NewFiles->push_back(Files[i].Name);
-  }
-  return AllFeatures.size() - InitialNumFeatures;
-}
-    
-    
-    {}
 
     
-    // Private copy of SHA1 implementation.
-static const int kSHA1NumBytes = 20;
+    // Data
+static ALLEGRO_DISPLAY*         g_Display = NULL;
+static ALLEGRO_BITMAP*          g_Texture = NULL;
+static double                   g_Time = 0.0;
+static ALLEGRO_MOUSE_CURSOR*    g_MouseCursorInvisible = NULL;
+static ALLEGRO_VERTEX_DECL*     g_VertexDecl = NULL;
+    
+    // Data
+static ID3D10Device*            g_pd3dDevice = NULL;
+static IDXGISwapChain*          g_pSwapChain = NULL;
+static ID3D10RenderTargetView*  g_mainRenderTargetView = NULL;
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_API void        ImGui_ImplGlfwGL3_InvalidateDeviceObjects();
+IMGUI_API bool        ImGui_ImplGlfwGL3_CreateDeviceObjects();
+    
+    #include 'imgui.h'
+#include 'imgui_impl_sdl_gl3.h'
+#include <stdio.h>
+#include <GL/gl3w.h>    // This example is using gl3w to access OpenGL functions (because it is small). You may use glew/glad/glLoadGen/etc. whatever already works for you.
+#include <SDL.h>
+    
+    static void ImGui_ImplGlfw_InstallCallbacks(GLFWwindow* window)
+{
+    glfwSetMouseButtonCallback(window, ImGui_ImplGlfw_MouseButtonCallback);
+    glfwSetScrollCallback(window, ImGui_ImplGlfw_ScrollCallback);
+    glfwSetKeyCallback(window, ImGui_ImplGlfw_KeyCallback);
+    glfwSetCharCallback(window, ImGui_ImplGlfw_CharCallback);
+}
+    
+    void    ImGui_ImplGlfwGL3_InvalidateDeviceObjects()
+{
+    if (g_VboHandle) glDeleteBuffers(1, &g_VboHandle);
+    if (g_ElementsHandle) glDeleteBuffers(1, &g_ElementsHandle);
+    g_VboHandle = g_ElementsHandle = 0;
+    }
+    
+    static VkSampler              g_FontSampler = VK_NULL_HANDLE;
+static VkDeviceMemory         g_FontMemory = VK_NULL_HANDLE;
+static VkImage                g_FontImage = VK_NULL_HANDLE;
+static VkImageView            g_FontView = VK_NULL_HANDLE;
