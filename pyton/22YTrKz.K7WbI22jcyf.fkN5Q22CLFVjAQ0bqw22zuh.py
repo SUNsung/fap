@@ -1,82 +1,64 @@
 
         
-        import re
-import sys
+            :copyright: © 2010 by the Pallets team.
+    :license: BSD, see LICENSE for more details.
+'''
     
-    class Chunk:
-    def __init__(self, file, align=True, bigendian=True, inclheader=False):
-        import struct
-        self.closed = False
-        self.align = align      # whether to align to word (2-byte) boundaries
-        if bigendian:
-            strflag = '>'
-        else:
-            strflag = '<'
-        self.file = file
-        self.chunkname = file.read(4)
-        if len(self.chunkname) < 4:
-            raise EOFError
+    
+@app.route('/_add_numbers')
+def add_numbers():
+    '''Add two numbers server side, ridiculous but well...'''
+    a = request.args.get('a', 0, type=int)
+    b = request.args.get('b', 0, type=int)
+    return jsonify(result=a + b)
+    
+    # (c) 2013, Michael Scherer <misc@zarb.org>
+#
+# This file is part of Ansible,
+#
+# Ansible is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Ansible is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
+    
+    try:
+    import json
+except ImportError:
+    import simplejson as json
+    
+        def on_open_shell(self):
         try:
-            self.chunksize = struct.unpack_from(strflag+'L', file.read(4))[0]
-        except struct.error:
-            raise EOFError from None
-        if inclheader:
-            self.chunksize = self.chunksize - 8 # subtract header
-        self.size_read = 0
-        try:
-            self.offset = self.file.tell()
-        except (AttributeError, OSError):
-            self.seekable = False
-        else:
-            self.seekable = True
+            self._exec_cli_command(b'environment no more')
+        except AnsibleConnectionFailure:
+            raise AnsibleConnectionFailure('unable to set terminal parameters')
+
     
     
-    print('# As the target uses Python%s.dll, we must use this compiler option!' % version_suffix)
-    print('cdl = /MD')
-    print()
-    print('all: $(target)$(debug_suffix)%s' % (target_ext))
-    print()
-    
-        if move_up:
-        print('Unable to find an older python frame')
-    else:
-        print('Unable to find a newer python frame')
-    
-        def test_hash(self):
-        for x in range(-30, 30):
-            self.assertEqual(hash(x), hash(complex(x, 0)))
-            x /= 3.0    # now check against floating point
-            self.assertEqual(hash(x), hash(complex(x, 0.)))
-    
-            add_accept_handler(listener, accept_callback)
-        self.client_stream = IOStream(socket.socket())
-        self.addCleanup(self.client_stream.close)
-        yield [self.client_stream.connect(('127.0.0.1', port)),
-               event.wait()]
-        self.io_loop.remove_handler(listener)
-        listener.close()
+class HashTable(object):
     
     
-@unittest.skipIf(pycurl is None, 'pycurl module not present')
-class CurlHTTPClientCommonTestCase(httpclient_test.HTTPClientCommonTestCase):
-    def get_http_client(self):
-        client = CurlAsyncHTTPClient(defaults=dict(allow_ipv6=False))
-        # make sure AsyncHTTPClient magic doesn't give us the wrong class
-        self.assertTrue(isinstance(client, CurlAsyncHTTPClient))
-        return client
+class PersonServer(object):
     
-        @gen.coroutine
-    def post(self):
-        author = self.db.get('SELECT * FROM authors WHERE email = %s',
-                             self.get_argument('email'))
-        if not author:
-            self.render('login.html', error='email not found')
-            return
-        hashed_password = yield executor.submit(
-            bcrypt.hashpw, tornado.escape.utf8(self.get_argument('password')),
-            tornado.escape.utf8(author.hashed_password))
-        if hashed_password == author.hashed_password:
-            self.set_secure_cookie('blogdemo_user', str(author.id))
-            self.redirect(self.get_argument('next', '/'))
-        else:
-            self.render('login.html', error='incorrect password')
+                self._pending_work_items[self._queue_count] = w
+            self._work_ids.put(self._queue_count)
+            self._queue_count += 1
+            # Wake up queue management thread
+            self._result_queue.put(None)
+    
+    PY_MAJOR, PY_MINOR = sys.version_info[ 0 : 2 ]
+if not ( ( PY_MAJOR == 2 and PY_MINOR >= 6 ) or
+         ( PY_MAJOR == 3 and PY_MINOR >= 3 ) or
+         PY_MAJOR > 3 ):
+  sys.exit( 'YouCompleteMe requires Python >= 2.6 or >= 3.3; '
+            'your version of Python is ' + sys.version )
+    
+    from ycm.tests.test_utils import MockVimModule
+MockVimModule()
