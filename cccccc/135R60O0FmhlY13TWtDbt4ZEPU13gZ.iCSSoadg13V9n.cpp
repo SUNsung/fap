@@ -1,198 +1,291 @@
 
         
-        bool js_cocos2dx_builder_CCBReader_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_builder_CCBReader_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_builder_CCBReader(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_builder_CCBReader_getAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readSoundKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readUTF8(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readCallbackKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getAnimationManagersForNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getNodesWithAnimationManagers(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setResolutionScale(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_CCBReader(JSContext *cx, uint32_t argc, jsval *vp);
+         private:
+  using PendingRequestMap = std::map<int, SendCommandCallback>;
     
-    bool js_cocos2dx_studio_PositionFrame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_PositionFrame_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_PositionFrame(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_PositionFrame_getX(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_PositionFrame_getY(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_PositionFrame_setPosition(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_PositionFrame_setX(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_PositionFrame_setY(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_PositionFrame_getPosition(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_PositionFrame_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_PositionFrame_PositionFrame(JSContext *cx, uint32_t argc, jsval *vp);
+    namespace atom {
+    }
+    
+      // Who/where/what asked for the authentication.
+  scoped_refptr<net::AuthChallengeInfo> auth_info_;
+    
+    #ifndef ATOM_BROWSER_UI_DRAG_UTIL_H_
+#define ATOM_BROWSER_UI_DRAG_UTIL_H_
+    
+    bool MenuModelAdapter::GetAccelerator(int id,
+                                      ui::Accelerator* accelerator) const {
+  ui::MenuModel* model = menu_model_;
+  int index = 0;
+  if (ui::MenuModel::GetModelAndIndexForCommandId(id, &model, &index)) {
+    return static_cast<AtomMenuModel*>(model)->
+      GetAcceleratorAtWithParams(index, true, accelerator);
+  }
+  return false;
+}
+    
+      /// Allocate an Objective-C object.
+  llvm::Value *emitObjCAllocObjectCall(IRGenFunction &IGF,
+                                       llvm::Value *classPtr,
+                                       SILType resultType);
+    
+    namespace swift {
+namespace syntax {
+    }
+    }
     
     
+    {  // Verify that the size of the key space not touched by the reads
+  // is pretty much unchanged.
+  const int64_t final_other_size = Size(Key(n), Key(kCount));
+  ASSERT_LE(final_other_size, initial_other_size + 1048576);
+  ASSERT_GE(final_other_size, initial_other_size/5 - 1048576);
+}
+    
+    Status SetCurrentFile(Env* env, const std::string& dbname,
+                      uint64_t descriptor_number) {
+  // Remove leading 'dbname/' and add newline to manifest file name
+  std::string manifest = DescriptorFileName(dbname, descriptor_number);
+  Slice contents = manifest;
+  assert(contents.starts_with(dbname + '/'));
+  contents.remove_prefix(dbname.size() + 1);
+  std::string tmp = TempFileName(dbname, descriptor_number);
+  Status s = WriteStringToFileSync(env, contents.ToString() + '\n', tmp);
+  if (s.ok()) {
+    s = env->RenameFile(tmp, CurrentFileName(dbname));
+  }
+  if (!s.ok()) {
+    env->DeleteFile(tmp);
+  }
+  return s;
+}
+    
+    class Env;
+    
+    
+    {
+    {  virtual void Put(const Slice& key, const Slice& value) {
+    mem_->Add(sequence_, kTypeValue, key, value);
+    sequence_++;
+  }
+  virtual void Delete(const Slice& key) {
+    mem_->Add(sequence_, kTypeDeletion, key, Slice());
+    sequence_++;
+  }
+};
+}  // namespace
+    
+      // If *start < limit, changes *start to a short string in [start,limit).
+  // Simple comparator implementations may return with *start unchanged,
+  // i.e., an implementation of this method that does nothing is correct.
+  virtual void FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const = 0;
+    
+    
+    {  // 'filter' contains the data appended by a preceding call to
+  // CreateFilter() on this class.  This method must return true if
+  // the key was in the list of keys passed to CreateFilter().
+  // This method may return true or false if the key was not on the
+  // list, but it should aim to return false with a high probability.
+  virtual bool KeyMayMatch(const Slice& key, const Slice& filter) const = 0;
+};
+    
+    
+    {  if (flags & XhpTrace) {
+    s_profiler_factory->start(ProfilerKind::Trace, flags);
+  } else if (flags & Memo) {
+    flags = 0;  /* flags are not used by MemoProfiler::MemoProfiler */
+    s_profiler_factory->start(ProfilerKind::Memo, flags);
+  } else if (flags & External) {
+    for (ArrayIter iter(args); iter; ++iter) {
+      if (iter.first().toInt32() == 0) {
+         flags = iter.second().toInt32();
+      }
+    }
+    s_profiler_factory->start(ProfilerKind::External, flags);
+  } else {
+    s_profiler_factory->start(ProfilerKind::Hierarchical, flags);
+  }
+}
+    
+      static void GetRealtimeTime(timespec &sp);
+  static void GetMonotonicTime(timespec &sp);
+  static int64_t GetCurrentTimeMicros();
+  static int64_t GetRusageMicros(Type t, Who who);
+  static int64_t GetThreadCPUTimeNanos();
+  const char *getName() const;
+  int64_t getMicroSeconds() const;
+  void report() const;
+    
+    
+    {
+    {///////////////////////////////////////////////////////////////////////////////
+}}
+
+    
+    int next_numa_node(std::atomic_int& curr_node) {
+  if (!use_numa) return 0;
+  int node;
+  do {
+    node = curr_node.fetch_add(1, std::memory_order_relaxed);
+    node &= numa_node_mask;
+  } while (!((numa_node_set >> node) & 1));
+  return node;
+}
+    
+    public const char *
+magic_stream(struct magic_set *ms, php_stream *stream)
+{
+  if (ms == NULL)
+    return NULL;
+  return file_or_stream(ms, NULL, stream);
+}
+    
+    NormalizedInstruction::NormalizedInstruction(SrcKey sk, const Unit* u)
+  : source(sk)
+  , funcd(nullptr)
+  , m_unit(u)
+  , immVec()
+  , endsRegion(false)
+  , preppedByRef(false)
+  , ignoreInnerType(false)
+  , interp(false)
+  , forceSurpriseCheck(false)
+{
+  memset(imm, 0, sizeof(imm));
+  populateImmediates(*this);
+}
+    
+      Currently we don't ever relocate anything from frozen (or prof). We also
+  don't relocate the cold portion of translations; but we still need to know
+  where those are in order to relocate back-references to the code that was
+  relocated.
+*/
+void liveRelocate(int time);
+    
+    std::string read_embedded_data(const embedded_data& desc) {
+  std::ifstream ifs(desc.m_filename);
+  if (!ifs.good()) return '';
+  ifs.seekg(desc.m_start, std::ios::beg);
+  std::unique_ptr<char[]> data(new char[desc.m_len]);
+  ifs.read(data.get(), desc.m_len);
+  return std::string(data.get(), desc.m_len);
+}
+    
+    namespace routeguide {
+class Feature;
+    }
+    
+    // Get leading or trailing comments in a string. Comment lines start with '// '.
+// Leading detached comments are put in in front of leading comments.
+template <typename DescriptorType>
+inline grpc::string GetNodeComments(const DescriptorType* desc, bool leading) {
+  return grpc_generator::GetPrefixedComments(desc, leading, '//');
+}
+    
+    bool SecureAuthContext::SetPeerIdentityPropertyName(const grpc::string& name) {
+  if (!ctx_) return false;
+  return grpc_auth_context_set_peer_identity_property_name(ctx_,
+                                                           name.c_str()) != 0;
+}
+    
+    grpc::string DescribeService(const grpc::protobuf::ServiceDescriptor* service) {
+  grpc::string result;
+  if (service->options().deprecated()) {
+    result.append('DEPRECATED\n');
+  }
+  result.append('filename: ' + service->file()->name() + '\n');
+    }
+    
+    #ifdef __cplusplus
+extern 'C' {
+#endif
+#include 'tolua++.h'
+#ifdef __cplusplus
+}
+#endif
     
         return 0;
 }
-int lua_cocos2dx_cocosdenshion_SimpleAudioEngine_willPlayBackgroundMusic(lua_State* tolua_S)
+int lua_cocos2dx_physics_PhysicsBody_getRotation(lua_State* tolua_S)
 {
     int argc = 0;
-    CocosDenshion::SimpleAudioEngine* cobj = nullptr;
+    cocos2d::PhysicsBody* cobj = nullptr;
     bool ok  = true;
     
     
     
+    	static Test* Create()
+	{
+		return new Bridge;
+	}
     
+    		if (b2_gjkCalls > 0)
+		{
+			m_debugDraw.DrawString(5, m_textLine, 'gjk calls = %d, ave gjk iters = %3.1f, max gjk iters = %d',
+				b2_gjkCalls, b2_gjkIters / float32(b2_gjkCalls), b2_gjkMaxIters);
+			m_textLine += DRAW_STRING_NEW_LINE;
+		}
     
-    
-    
-    			b2FixtureDef sd2;
-			sd2.shape = &poly2;
-			sd2.density = 2.0f;
-    
-    //---- Include imgui_user.h at the end of imgui.h as a convenience
-//#define IMGUI_INCLUDE_IMGUI_USER_H
-    
-    void DebugHUD_InitDefaults( DebugHUD *hud )
-{
-    hud->show_demo_window = true;
-    hud->show_another_window = true;
-    hud->rotation_speed = 15.0f;
-    
-    hud->cubeColor1[0] = 0.4f;
-    hud->cubeColor1[1] = 0.4f;
-    hud->cubeColor1[2] = 1.0f;
-    hud->cubeColor1[3] = 1.0f;
-    
-    hud->cubeColor2[0] = 1.0f;
-    hud->cubeColor2[1] = 0.4f;
-    hud->cubeColor2[2] = 0.4f;
-    hud->cubeColor2[3] = 1.0f;
-    
-    hud->clearColor[0] = 0.45f;
-    hud->clearColor[1] = 0.55f;
-    hud->clearColor[2] = 0.60f;
-    hud->clearColor[3] = 1.00f;
+    namespace xgboost {
+ConsoleLogger::~ConsoleLogger() {
+  dmlc::CustomLogMessage::Log(log_stream_.str());
 }
-    
-        // Create custom vertex declaration.
-    // Unfortunately Allegro doesn't support 32-bits packed colors so we have to convert them to 4 floats.
-    // We still use a custom declaration to use 'ALLEGRO_PRIM_TEX_COORD' instead of 'ALLEGRO_PRIM_TEX_COORD_PIXEL' else we can't do a reliable conversion.
-    ALLEGRO_VERTEX_ELEMENT elems[] =
-    {
-        { ALLEGRO_PRIM_POSITION, ALLEGRO_PRIM_FLOAT_2, IM_OFFSETOF(ImDrawVertAllegro, pos) },
-        { ALLEGRO_PRIM_TEX_COORD, ALLEGRO_PRIM_FLOAT_2, IM_OFFSETOF(ImDrawVertAllegro, uv) },
-        { ALLEGRO_PRIM_COLOR_ATTR, 0, IM_OFFSETOF(ImDrawVertAllegro, col) },
-        { 0, 0, 0 }
-    };
-    g_VertexDecl = al_create_vertex_decl(elems, sizeof(ImDrawVertAllegro));
-    
-    // Handler for Win32 messages, update mouse/keyboard data.
-// You may or not need this for your implementation, but it can serve as reference for handling inputs.
-// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
-/*
-IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-*/
-
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_API void        ImGui_ImplGlfwGL2_InvalidateDeviceObjects();
-IMGUI_API bool        ImGui_ImplGlfwGL2_CreateDeviceObjects();
-    
-                ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our windows open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
-    
-        for (UINT i = 0; i < NUM_FRAMES_IN_FLIGHT; i++)
-        if (g_pd3dDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&g_frameContext[i].CommandAllocator)) != S_OK)
-            return E_FAIL;
-    
-            // first check if only one format, VK_FORMAT_UNDEFINED, is available, which would imply that any format is available
-        if (count == 1)
-        {
-            if( formats[0].format == VK_FORMAT_UNDEFINED )
-            {
-                g_SurfaceFormat.format = VK_FORMAT_B8G8R8A8_UNORM;
-                g_SurfaceFormat.colorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
-            }
-            else
-            {   // no point in searching another format
-                g_SurfaceFormat = formats[0];
-            }
-        }
-        else
-        {
-            // request several formats, the first found will be used 
-            VkFormat requestSurfaceImageFormat[] = {VK_FORMAT_B8G8R8A8_UNORM, VK_FORMAT_R8G8B8A8_UNORM, VK_FORMAT_B8G8R8_UNORM, VK_FORMAT_R8G8B8_UNORM};
-            VkColorSpaceKHR requestSurfaceColorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
-            bool requestedFound = false;
-            for (size_t i = 0; i < sizeof(requestSurfaceImageFormat) / sizeof(requestSurfaceImageFormat[0]); i++)
-            {
-                if( requestedFound ) {
-                    break;
-                }
-                for (uint32_t j = 0; j < count; j++)
-                {
-                    if (formats[j].format == requestSurfaceImageFormat[i] && formats[j].colorSpace == requestSurfaceColorSpace)
-                    {
-                        g_SurfaceFormat = formats[j];
-                        requestedFound = true;
-                    }
-                }
-            }
-    }
-    
-    
-    {    // At this point note that we set ImGui::GetIO().Fonts->TexID to be == g_FontTexture, so clear both.
-    ImGuiIO& io = ImGui::GetIO();
-    IM_ASSERT(g_FontTexture == io.Fonts->TexID);
-    if (g_FontTexture)
-        g_FontTexture->Release();
-    g_FontTexture = NULL;
-    io.Fonts->TexID = NULL;
+TrackerLogger::~TrackerLogger() {
+  dmlc::CustomLogMessage::Log(log_stream_.str());
 }
+}  // namespace xgboost
     
-        // Render command lists
-    for (int n = 0; n < draw_data->CmdListsCount; n++)
+    
+    {    int nindex = index_.num_chunk();
+    int nvalue = value_.num_chunk();
+    int ntotal = nindex + nvalue;
+    #pragma omp parallel for schedule(dynamic, 1) num_threads(nthread_)
+    for (int i = 0; i < ntotal; ++i) {
+      if (i < nindex) {
+        index_.Decompress(i);
+      } else {
+        value_.Decompress(i - nindex);
+      }
+    }
+  }
+    
+    /*! \brief a column storage, to be used with ApplySplit. Note that each
+    bin id is stored as index[i] + index_base. */
+template<typename T>
+class Column {
+ public:
+  ColumnType type;
+  const T* index;
+  uint32_t index_base;
+  const size_t* row_ind;
+  size_t len;
+};
+    
+    
+    {template<typename IndexType>
+Parser<IndexType> *
+CreateDenseLibSVMParser(const std::string& path,
+                        const std::map<std::string, std::string>& args,
+                        unsigned part_index,
+                        unsigned num_parts) {
+  CHECK_NE(args.count('num_col'), 0) << 'expect num_col in dense_libsvm';
+  return new DensifyParser<IndexType>(
+            Parser<IndexType>::Create(path.c_str(), part_index, num_parts, 'libsvm'),
+           uint32_t(atoi(args.at('num_col').c_str())));
+}
+}  // namespace data
+    
+    
     {
-        const ImDrawList* cmd_list = draw_data->CmdLists[n];
-        const ImDrawVert* vtx_buffer = cmd_list->VtxBuffer.Data;
-        const ImDrawIdx* idx_buffer = cmd_list->IdxBuffer.Data;
-        glVertexPointer(2, GL_FLOAT, sizeof(ImDrawVert), (const GLvoid*)((const char*)vtx_buffer + IM_OFFSETOF(ImDrawVert, pos)));
-        glTexCoordPointer(2, GL_FLOAT, sizeof(ImDrawVert), (const GLvoid*)((const char*)vtx_buffer + IM_OFFSETOF(ImDrawVert, uv)));
-        glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(ImDrawVert), (const GLvoid*)((const char*)vtx_buffer + IM_OFFSETOF(ImDrawVert, col)));
-    }
-    
-        if (install_callbacks)
-        ImGui_ImplGlfw_InstallCallbacks(window);
-    
-    namespace grpc_go_generator {
-    }
-    
-    namespace grpc {
-class CompletionQueue;
-class Channel;
-class ServerCompletionQueue;
-class ServerContext;
-}  // namespace grpc
-    
-    // This function implements the server thread.
-void RunServer() {
-  auto server_address = '0.0.0.0:50051';
-  // Callback interface we implemented above.
-  ServiceImpl service;
-  grpc::ServerBuilder builder;
-  builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
-  builder.RegisterService(&service);
-    }
-    
-    extern void GenComment(const std::vector<std::string> &dc,
-                       std::string *code_ptr, const CommentConfig *config,
-                       const char *prefix = '');
+    {void SparsePage::Writer::Alloc(std::shared_ptr<SparsePage>* out_page) {
+  CHECK(out_page->get() == nullptr);
+  if (num_free_buffer_ != 0) {
+    out_page->reset(new SparsePage());
+    --num_free_buffer_;
+  } else {
+    CHECK(qrecycle_.Pop(out_page));
+  }
+}
+}  // namespace data
+}  // namespace xgboost
