@@ -1,8 +1,18 @@
 
         
-        
-    { private:
-  DebugOptions debug_options_;
+        #include 'tensorflow/core/framework/op_kernel.h'
+#include 'tensorflow/core/framework/resource_mgr.h'
+#include 'tensorflow/core/framework/tensor_shape.h'
+#include 'tensorflow/core/platform/logging.h'
+#include 'tensorflow/core/platform/mutex.h'
+#include 'tensorflow/core/platform/thread_annotations.h'
+#include 'tensorflow/core/platform/types.h'
+    
+    
+    {  virtual ~SessionFactory() {}
+  static void Register(const string& runtime_type, SessionFactory* factory);
+  static Status GetFactory(const SessionOptions& options,
+                           SessionFactory** out_factory);
 };
     
       // Runs the optimized version of the graph on the cluster, measure
@@ -12,232 +22,349 @@
   Status PredictCosts(const GraphDef& optimized_graph, CostGraphDef* cost_graph,
                       Costs* overall_cost) const override;
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+      Status Optimize(Cluster* cluster, const GrapplerItem& item,
+                  GraphDef* pruned_graph) override;
     
-    TEST_F(NodeDefBuilderTest, Simple) {
-  Op(OpDefBuilder('Simple').Input('a: int32').Output('out: float'));
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    namespace io {
     }
     
         http://www.apache.org/licenses/LICENSE-2.0
     
-        const string file_format =
-        str_util::Lowercase(file_format_tensor.scalar<string>()());
-    const int32 samples_per_second =
-        samples_per_second_tensor.scalar<int32>()();
-    const int32 bits_per_second = bits_per_second_tensor.scalar<int32>()();
+        NodeDef* mul_node1 = graph_def.add_node();
+    mul_node1->set_name('mul_node1');
+    mul_node1->set_op('Mul');
+    mul_node1->set_device('//cpu:0');
+    mul_node1->add_input('add_node2');
+    mul_node1->add_input('add_node3');
     
-    void ConcurrentSteps(const Options* opts, int session_index) {
-  // Creates a session.
-  SessionOptions options;
-  std::unique_ptr<Session> session(NewSession(options));
-  GraphDef def = CreateGraphDef();
-  if (options.target.empty()) {
-    graph::SetDefaultDevice(opts->use_gpu ? '/device:GPU:0' : '/cpu:0', &def);
-  }
+    
+    {  virtual SILDebuggerClient *getAsSILDebuggerClient() = 0;
+private:
+  virtual void anchor();
+};
+    
+    #endif
+
+    
+      /// The list of regular users from the last run of the checker.
+  llvm::SmallVector<SILInstruction *, 16> RegularUsers;
+    
+    @interface NumberBridgingTester : NSObject
+- (BOOL)verifyKeysInRange:(NSRange)range existInDictionary:(NSDictionary *)dictionary;
+@end
+    
+      CodeBlock(StringRef LiteralContent, StringRef Language)
+      : MarkupASTNode(ASTNodeKind::CodeBlock),
+        LiteralContent(LiteralContent),
+        Language(Language) {}
+    
+      /// Indicates whether the diagnostics produced during compilation should be
+  /// checked against expected diagnostics, indicated by markers in the
+  /// input source file.
+  enum {
+    NoVerify,
+    Verify,
+    VerifyAndApplyFixes
+  } VerifyMode = NoVerify;
+    
+    
+    {  StringRef getReceiverUSR() const {
+    for (auto Relation: Relations) {
+      if (Relation.roles & (SymbolRoleSet) SymbolRole::RelationReceivedBy)
+        return Relation.USR;
     }
-    
-    void Classifier::Preprocess(const cv::Mat& img,
-                            std::vector<cv::Mat>* input_channels) {
-  /* Convert the input image to the input image format of the network. */
-  cv::Mat sample;
-  if (img.channels() == 3 && num_channels_ == 1)
-    cv::cvtColor(img, sample, cv::COLOR_BGR2GRAY);
-  else if (img.channels() == 4 && num_channels_ == 1)
-    cv::cvtColor(img, sample, cv::COLOR_BGRA2GRAY);
-  else if (img.channels() == 4 && num_channels_ == 3)
-    cv::cvtColor(img, sample, cv::COLOR_BGRA2BGR);
-  else if (img.channels() == 1 && num_channels_ == 3)
-    cv::cvtColor(img, sample, cv::COLOR_GRAY2BGR);
-  else
-    sample = img;
-    }
-    
-      // Open leveldb
-  leveldb::DB* db;
-  leveldb::Options options;
-  options.create_if_missing = true;
-  options.error_if_exists = true;
-  leveldb::Status status = leveldb::DB::Open(
-      options, db_filename, &db);
-  CHECK(status.ok()) << 'Failed to open leveldb ' << db_filename
-      << '. Is it already existing?';
-    
-    
-    {  static string LayerTypeListString() {
-    vector<string> layer_types = LayerTypeList();
-    string layer_types_str;
-    for (vector<string>::iterator iter = layer_types.begin();
-         iter != layer_types.end(); ++iter) {
-      if (iter != layer_types.begin()) {
-        layer_types_str += ', ';
-      }
-      layer_types_str += *iter;
-    }
-    return layer_types_str;
+    return StringRef();
   }
 };
     
-    
-    {}  // namespace caffe
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the concatenate inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *        respect to the outputs
-   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
-   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length K), into which the top gradient
-   *        @f$ \frac{\partial E}{\partial y} @f$ is deconcatenated back to the
-   *        inputs @f$
-   *        \left[ \begin{array}{cccc}
-   *          \frac{\partial E}{\partial x_1} &
-   *          \frac{\partial E}{\partial x_2} &
-   *          ... &
-   *          \frac{\partial E}{\partial x_K}
-   *        \end{array} \right] =
-   *        \frac{\partial E}{\partial y}
-   *        @f$
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    bool EncodeScan(const JPEGData& jpg,
-                const std::vector<HuffmanCodeTable>& dc_huff_table,
-                const std::vector<HuffmanCodeTable>& ac_huff_table,
-                JPEGOutput out) {
-  coeff_t last_dc_coeff[kMaxComponents] = { 0 };
-  BitWriter bw(1 << 17);
-  for (int mcu_y = 0; mcu_y < jpg.MCU_rows; ++mcu_y) {
-    for (int mcu_x = 0; mcu_x < jpg.MCU_cols; ++mcu_x) {
-      // Encode one MCU
-      for (size_t i = 0; i < jpg.components.size(); ++i) {
-        const JPEGComponent& c = jpg.components[i];
-        int nblocks_y = c.v_samp_factor;
-        int nblocks_x = c.h_samp_factor;
-        for (int iy = 0; iy < nblocks_y; ++iy) {
-          for (int ix = 0; ix < nblocks_x; ++ix) {
-            int block_y = mcu_y * nblocks_y + iy;
-            int block_x = mcu_x * nblocks_x + ix;
-            int block_idx = block_y * c.width_in_blocks + block_x;
-            const coeff_t* coeffs = &c.coeffs[block_idx << 6];
-            EncodeDCTBlockSequential(coeffs, dc_huff_table[i], ac_huff_table[i],
-                                     &last_dc_coeff[i], &bw);
-          }
-        }
-      }
-      if (bw.pos > (1 << 16)) {
-        if (!JPEGWrite(out, bw.data.get(), bw.pos)) {
-          return false;
-        }
-        bw.pos = 0;
-      }
-    }
-  }
-  bw.JumpToByteBoundary();
-  return !bw.overflow && JPEGWrite(out, bw.data.get(), bw.pos);
-}
-    
-    void IDCT1d(const double* in, int stride, double* out) {
-  for (int x = 0; x < 8; ++x) {
-    out[x * stride] = 0.0;
-    for (int u = 0; u < 8; ++u) {
-      out[x * stride] += kDCTMatrix[8 * u + x] * in[u * stride];
-    }
-  }
-}
-    
-    // Performs in-place floating point 8x8 DCT on block[0..63].
-// Note that the DCT used here is the DCT-2 with the first term multiplied by
-// 1/sqrt(2) and the result scaled by 1/2.
-void ComputeBlockDCTDouble(double block[64]);
-    
-    namespace guetzli {
+      void setCodeCompletionPoint(unsigned BufferID, unsigned Offset) {
+    assert(BufferID != 0U && 'Buffer should be valid');
     }
     
     
-    {}  // namespace guetzli
-    
-    #include 'guetzli/jpeg_data.h'
-    
-    #endif  // GUETZLI_JPEG_ERROR_H_
-
-    
-    static  stb_uint stb__hashsize = 32768;
-    
-        // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
-    if (hud->show_another_window)
     {
-        ImGui::Begin('Another Window', &hud->show_another_window);
-        ImGui::Text('Hello from another window!');
-        ImGui::ColorEdit3('Cube 1 Color', hud->cubeColor1);
-        ImGui::ColorEdit3('Cube 2 Color', hud->cubeColor2);
-        ImGui::SliderFloat('Rotation Speed', &hud->rotation_speed, 0.0f, 200.0f);
-        if (ImGui::Button('Close Me'))
-            hud->show_another_window = false;
-        ImGui::End();
+    {
+    {
+    {        break;
+      }
+    }
+  }
+}
+    
+    # if defined(OC_COLLECT_METRICS)
+struct oc_mode_metrics{
+  double fragw;
+  double satd;
+  double rate;
+  double rmse;
+  double satd2;
+  double satdrate;
+  double rate2;
+  double satdrmse;
+  double rmse2;
+};
+    
+     ********************************************************************/
+    
+    static const vorbis_residue_template _res_44u_7[]={
+  {1,0,16,  &_residue_44_mid_un,
+   &_huff_book__44u7__short,&_huff_book__44u7__short,
+   &_resbook_44u_7,&_resbook_44u_7},
     }
     
-            static float f = 0.0f;
-        ImGui::Text('Hello, world!');
-        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
-        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
-        ImGui::ShowDemoWindow(NULL);
+    /* 20log10(x) */
+#define VORBIS_IEEE_FLOAT32 1
+#ifdef VORBIS_IEEE_FLOAT32
     
-    // Implemented features:
-//  [X] User texture binding. Use 'ID3D10ShaderResourceView*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
     
-    // Handler for Win32 messages, update mouse/keyboard data.
-// You may or not need this for your implementation, but it can serve as reference for handling inputs.
-// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
-/*
-IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    #include <math.h>
+#define float2int(x) lrintf(x)
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+    
+    
+        argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsJointRatchet_createConstraints'', nullptr);
+            return 0;
+        }
+        bool ret = cobj->createConstraints();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.PhysicsJointRatchet:createConstraints',argc, 0);
+    return 0;
+    
+    
+    
+    extern TestEntry g_testEntries[];
+// This is called when a joint in the world is implicitly destroyed
+// because an attached body is destroyed. This gives us a chance to
+// nullify the mouse joint.
+class DestructionListener : public b2DestructionListener
+{
+public:
+	void SayGoodbye(b2Fixture* fixture) { B2_NOT_USED(fixture); }
+	void SayGoodbye(b2Joint* joint);
+    }
+    
+      auto sp = getStackPtr();
+  assert(sp >= tls_stackLimit);
+  assert(sp - tls_stackLimit < tls_stackSize);
+    
+      struct access_counted_ptr_ptr {
+    typedef const void* std::_Sp_counted_ptr<const void*, std::_S_atomic>::*
+        type;
+    friend type fieldPtr(access_counted_ptr_ptr);
+  };
+    
+    #include <array>
+    
+    
+    {  template <class T>
+  constexpr Fun T::*operator()(Fun T::*t) const noexcept {
+    return t;
+  }
+  constexpr Fun* operator()(Fun* t) const noexcept {
+    return t;
+  }
+  template <class F>
+  constexpr F* operator()(F* t) const noexcept {
+    return t;
+  }
+};
+    
+      // wrong command name
+  callHelper({'--help', 'qux'}, 1);
+  callHelper({'help', 'qux'}, 1);
+    
+     private:
+  // Pick the largest lock-free type available
+#if (ATOMIC_LLONG_LOCK_FREE == 2)
+  typedef unsigned long long BlockType;
+#elif (ATOMIC_LONG_LOCK_FREE == 2)
+  typedef unsigned long BlockType;
+#else
+  // Even if not lock free, what can we do?
+  typedef unsigned int BlockType;
+#endif
+  typedef std::atomic<BlockType> AtomicBlockType;
+    
+    #include <folly/AtomicHashArray-inl.h>
 
     
-    void ImGui_Marmalade_NewFrame()
-{
-    if (!g_FontTexture)
-        ImGui_Marmalade_CreateDeviceObjects();
-    }
+      /*
+   * Returns the unique index that can be used for access directly
+   * into the data storage.
+   */
+  uint32_t getIndex() const {
+    CHECK(!isEnd());
+    return ahm_->encodeIndex(subMap_, subIt_.getIndex());
+  }
+    
+    #include <folly/Conv.h>
+#include <folly/Likely.h>
+#include <folly/Random.h>
+#include <folly/detail/AtomicUnorderedMapUtils.h>
+#include <folly/lang/Bits.h>
+#include <folly/portability/SysMman.h>
+#include <folly/portability/Unistd.h>
     
     // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_API void        ImGui_Marmalade_InvalidateDeviceObjects();
-IMGUI_API bool        ImGui_Marmalade_CreateDeviceObjects();
+IMGUI_API void        ImGui_ImplDX10_InvalidateDeviceObjects();
+IMGUI_API bool        ImGui_ImplDX10_CreateDeviceObjects();
     
     
-    {    g_fence->SetEventOnCompletion(fenceValue, g_fenceEvent);
-    WaitForSingleObject(g_fenceEvent, INFINITE);
+    {        // Rendering
+        int display_w, display_h;
+        glfwGetFramebufferSize(window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+        glClear(GL_COLOR_BUFFER_BIT);
+        //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound, but prefer using the GL3+ code.
+        ImGui::Render();
+        ImGui_ImplGlfwGL2_RenderDrawData(ImGui::GetDrawData());
+        glfwSwapBuffers(window);
+    }
+    
+        // Cleanup
+    ImGui_ImplSdlGL2_Shutdown();
+    ImGui::DestroyContext();
+    
+                ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our windows open/close state
+            ImGui::Checkbox('Another Window', &show_another_window);
+    
+        // Create Swapchain:
+    {
+        VkSwapchainCreateInfoKHR info = {};
+        info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+        info.surface = g_Surface;
+        info.imageFormat = g_SurfaceFormat.format;
+        info.imageColorSpace = g_SurfaceFormat.colorSpace;
+        info.imageArrayLayers = 1;
+        info.imageUsage |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+        info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+        info.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
+        info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+        info.presentMode = g_PresentMode;
+        info.clipped = VK_TRUE;
+        info.oldSwapchain = old_swapchain;
+        VkSurfaceCapabilitiesKHR cap;
+        err = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(g_Gpu, g_Surface, &cap);
+        check_vk_result(err);
+        if (cap.maxImageCount > 0)
+            info.minImageCount = (cap.minImageCount + 2 < cap.maxImageCount) ? (cap.minImageCount + 2) : cap.maxImageCount;
+        else
+            info.minImageCount = cap.minImageCount + 2;
+    }
+    
+        // Create the Vertex Buffer:
+    size_t vertex_size = draw_data->TotalVtxCount * sizeof(ImDrawVert);
+    if (!g_VertexBuffer[g_FrameIndex] || g_VertexBufferSize[g_FrameIndex] < vertex_size)
+    {
+        if (g_VertexBuffer[g_FrameIndex])
+            vkDestroyBuffer(g_Device, g_VertexBuffer[g_FrameIndex], g_Allocator);
+        if (g_VertexBufferMemory[g_FrameIndex])
+            vkFreeMemory(g_Device, g_VertexBufferMemory[g_FrameIndex], g_Allocator);
+        VkDeviceSize vertex_buffer_size = ((vertex_size-1) / g_BufferMemoryAlignment+1) * g_BufferMemoryAlignment;
+        VkBufferCreateInfo buffer_info = {};
+        buffer_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        buffer_info.size = vertex_buffer_size;
+        buffer_info.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
+        buffer_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+        err = vkCreateBuffer(g_Device, &buffer_info, g_Allocator, &g_VertexBuffer[g_FrameIndex]);
+        ImGui_ImplGlfwVulkan_VkResult(err);
+        VkMemoryRequirements req;
+        vkGetBufferMemoryRequirements(g_Device, g_VertexBuffer[g_FrameIndex], &req);
+        g_BufferMemoryAlignment = (g_BufferMemoryAlignment > req.alignment) ? g_BufferMemoryAlignment : req.alignment;
+        VkMemoryAllocateInfo alloc_info = {};
+        alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        alloc_info.allocationSize = req.size;
+        alloc_info.memoryTypeIndex = ImGui_ImplGlfwVulkan_MemoryType(VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, req.memoryTypeBits);
+        err = vkAllocateMemory(g_Device, &alloc_info, g_Allocator, &g_VertexBufferMemory[g_FrameIndex]);
+        ImGui_ImplGlfwVulkan_VkResult(err);
+        err = vkBindBufferMemory(g_Device, g_VertexBuffer[g_FrameIndex], g_VertexBufferMemory[g_FrameIndex], 0);
+        ImGui_ImplGlfwVulkan_VkResult(err);
+        g_VertexBufferSize[g_FrameIndex] = vertex_buffer_size;
+    }
+    
+    IMGUI_API bool        ImGui_ImplSdlGL2_Init(SDL_Window* window);
+IMGUI_API void        ImGui_ImplSdlGL2_Shutdown();
+IMGUI_API void        ImGui_ImplSdlGL2_NewFrame(SDL_Window* window);
+IMGUI_API void        ImGui_ImplSdlGL2_RenderDrawData(ImDrawData* draw_data);
+IMGUI_API bool        ImGui_ImplSdlGL2_ProcessEvent(SDL_Event* event);
+    
+    TEST_F(MockEnvTest, FakeSleeping) {
+  int64_t now = 0;
+  auto s = env_->GetCurrentTime(&now);
+  ASSERT_OK(s);
+  env_->FakeSleepForMicroseconds(3 * 1000 * 1000);
+  int64_t after_sleep = 0;
+  s = env_->GetCurrentTime(&after_sleep);
+  ASSERT_OK(s);
+  auto delta = after_sleep - now;
+  // this will be true unless test runs for 2 seconds
+  ASSERT_TRUE(delta == 3 || delta == 4);
 }
     
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
+     private: // Private Functions
+  /// Calls InsertBefore or InsertAfter
+  int Insert(const std::string& key, const std::string& pivot,
+             const std::string& value, bool insert_after);
+ private:
+  std::string db_name_;       // The actual database name/path
+  WriteOptions put_option_;
+  ReadOptions get_option_;
     
-    static uint32_t                 g_FrameIndex = 0;
-static VkCommandPool            g_CommandPool[IMGUI_VK_QUEUED_FRAMES];
-static VkCommandBuffer          g_CommandBuffer[IMGUI_VK_QUEUED_FRAMES];
-static VkFence                  g_Fence[IMGUI_VK_QUEUED_FRAMES];
-static VkSemaphore              g_PresentCompleteSemaphore[IMGUI_VK_QUEUED_FRAMES];
-static VkSemaphore              g_RenderCompleteSemaphore[IMGUI_VK_QUEUED_FRAMES];
+    #include <assert.h>
+#include 'rocksjni/jnicallback.h'
+#include 'rocksjni/portal.h'
+    
+    #ifndef JAVA_ROCKSJNI_STATISTICSJNI_H_
+#define JAVA_ROCKSJNI_STATISTICSJNI_H_
+    
+    #ifndef ROCKSDB_LITE
+    
+    // This class contains a fixed array of buckets, each
+// pointing to a skiplist (null if the bucket is empty).
+// bucket_count: number of fixed array buckets
+// skiplist_height: the max height of the skiplist
+// skiplist_branching_factor: probabilistic size ratio between adjacent
+//                            link lists in the skiplist
+extern MemTableRepFactory* NewHashSkipListRepFactory(
+    size_t bucket_count = 1000000, int32_t skiplist_height = 4,
+    int32_t skiplist_branching_factor = 4
+);
