@@ -1,426 +1,373 @@
 
         
         
-    {}  // namespace mate
+    {}  // namespace tensorflow
     
-    // A self-destroyed class for handling save page request.
-class SavePageHandler : public content::DownloadManager::Observer,
-                        public content::DownloadItem::Observer {
+    // Estimate the cost of running a Grappler item by actually running the
+// corresponding TensorFlow graph on the specified cluster and measuring the
+// runtimes.
+class MeasuringCostEstimator : public CostEstimator {
  public:
-  using SavePageCallback = base::Callback<void(v8::Local<v8::Value>)>;
+  // Run the model for measurement_steps to measure its average cost.
+  // When measurement_threads is greater than 0, use a threadpool of as many
+  // threads to run the measurements; otherwise, run them serially. Does not
+  // take ownership of cluster.
+  explicit MeasuringCostEstimator(Cluster* cluster, int measurement_steps,
+                                  int measurement_threads);
+  ~MeasuringCostEstimator() override {}
     }
     
-    #include 'atom/browser/net/asar/url_request_asar_job.h'
-#include 'net/base/filename_util.h'
-#include 'net/base/net_errors.h'
+      bool operator==(const PluginConfig& rhs) const;
     
-      // JsAsker:
-  void StartAsync(std::unique_ptr<base::Value> options) override;
+    #endif  // TENSORFLOW_LIB_IO_RECORD_WRITER_H_
+
     
-    #include 'atom/browser/render_process_preferences.h'
-    
-    // WorkloadStats is used to track per request timing for different states
-// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
-// should be made to guard the state change with appropriate timers and
-// counters.
-//
-// The states tracked are:
-//  - In a request (this is a superset of the interpreter state)
-//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
-//  - In the JIT (currently tracks time inside the translate routine)
-//
-// Note the time in the TC is not tracked.  This is roughly:
-//   Time in request - Time in interp
-//
-// This gives us the relative interp time formula of:
-//   Relative interp time = Time in interp / Time in request
-struct WorkloadStats final {
-  enum State {
-    InRequest,
-    // -> InInterp   Okay (entering Dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InInterp,
-    // -> InRequest  Okay (leaving the dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InTrans,
-    // -> InRequest  Okay (leaving translate)
-    // -> InInterp   Okay (leaving translate)
-  };
+    /** scalar_tanh_fast_derivative_op
+  * \ingroup CXX11_NeuralNetworks_Module
+  * \brief Template functor to compute the fast derivative of a tanh
+  *
+  * Input should be the backpropagated gradient.
+  *
+  * \sa class CwiseUnaryOp, Cwise::tanh_fast_derivative()
+  */
+template <typename T>
+struct scalar_tanh_fast_derivative_op {
+  EIGEN_EMPTY_STRUCT_CTOR(scalar_tanh_fast_derivative_op)
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE T operator()(const T& y) const {
+    const T one = T(1);
+    return one - (y * y);
+  }
     }
     
-    String TimeStamp::CurrentMicroTime() {
-  struct timeval tp;
-  gettimeofday(&tp, nullptr);
-  char ret[100];
-  snprintf(ret, 100, '%.8F %ld', (double)tp.tv_usec / 1000000, tp.tv_sec);
-  return String(ret, CopyString);
-}
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    struct DebuggerLoggerHook final : LoggerHook {
-  StringBuffer& sb;
-  explicit DebuggerLoggerHook(StringBuffer& sb) : sb(sb) {}
-  void operator()(const char* /*hdr*/, const char* msg, const char* ending)
-       override {
-    TRACE(2, 'DebuggerProxy::append_stderr\n');
-    if (s_stderr_color) {
-      sb.append(s_stderr_color);
-    }
-    sb.append(msg);
-    sb.append(ending);
-    if (s_stderr_color) {
-      sb.append(ANSI_COLOR_END);
-    }
+    
+    {  void CopyDeviceTensorToCPU(const Tensor *device_tensor, StringPiece edge_name,
+                             Device *device, Tensor *cpu_tensor,
+                             StatusCallback done) override;
+};
+    
+    class TextLineReaderOp : public ReaderOpKernel {
+ public:
+  explicit TextLineReaderOp(OpKernelConstruction* context)
+      : ReaderOpKernel(context) {
+    int skip_header_lines = -1;
+    OP_REQUIRES_OK(context,
+                   context->GetAttr('skip_header_lines', &skip_header_lines));
+    OP_REQUIRES(context, skip_header_lines >= 0,
+                errors::InvalidArgument('skip_header_lines must be >= 0 not ',
+                                        skip_header_lines));
+    Env* env = context->env();
+    SetReaderFactory([this, skip_header_lines, env]() {
+      return new TextLineReader(name(), skip_header_lines, env);
+    });
   }
 };
     
-    struct SSATmp;
-struct Type;
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    Vreg Vunit::makeConst(Vconst vconst) {
-  auto it = constToReg.find(vconst);
-  if (it != constToReg.end()) return it->second;
+    // A = [3 2; -1 0]; x = rand(2, 1);
+// We want to compute the largest eigenvalue for A.
+// repeat x = y / y.norm(); y = A * x; end
+GraphDef CreateGraphDef() {
+  // TODO(jeff,opensource): This should really be a more interesting
+  // computation.  Maybe turn this into an mnist model instead?
+  Scope root = Scope::NewRootScope();
+  using namespace ::tensorflow::ops;  // NOLINT(build/namespaces)
     }
     
-      void delist() {
-    auto n = m_next, p = m_prev;
-    n->m_prev = p;
-    p->m_next = n;
-  }
+    // Declare here, so we don't need a public header.
+Status RemoveDevice(const GraphDef& input_graph_def,
+                    const TransformFuncContext& context,
+                    GraphDef* output_graph_def);
     
-    /*
- * Return the payload from a ArrayData* that is kPacked/VecKind.
- */
-ALWAYS_INLINE
-TypedValue* packedData(const ArrayData* arr) {
-  return const_cast<TypedValue*>(
-    reinterpret_cast<const TypedValue*>(arr + 1)
-  );
+      // C++ can not distinguish overloaded member function.
+  template<AtomNetworkDelegate::SimpleEvent type>
+  void SetSimpleListener(mate::Arguments* args);
+  template<AtomNetworkDelegate::ResponseEvent type>
+  void SetResponseListener(mate::Arguments* args);
+  template<typename Listener, typename Method, typename Event>
+  void SetListener(Method method, Event type, mate::Arguments* args);
+    
+    void SavePageHandler::OnDownloadCreated(content::DownloadManager* manager,
+                                        content::DownloadItem* item) {
+  // OnDownloadCreated is invoked during WebContents::SavePage, so the |item|
+  // here is the one stated by WebContents::SavePage.
+  item->AddObserver(this);
 }
     
-      for (auto b : m_blocks) {
-    for (auto s : succs(m_unit.blocks[b])) {
-      auto srcCid = m_blockCluster[b];
-      auto dstCid = m_blockCluster[s];
-      if (srcCid == dstCid) continue;
-      auto wgt = m_scale.weight(b, s);
-      clusterGraph[srcCid][dstCid] += wgt;
-    }
+      // net::URLRequestJobFactory::ProtocolHandler:
+  net::URLRequestJob* MaybeCreateJob(
+      net::URLRequest* request,
+      net::NetworkDelegate* network_delegate) const override;
+  bool IsSafeRedirectTarget(const GURL& location) const override;
+    
+      // URLRequestSimpleJob:
+  int GetData(std::string* mime_type,
+              std::string* charset,
+              std::string* data,
+              const net::CompletionCallback& callback) const override;
+    
+    
+    {}  // namespace atom
+    
+    bool MenuModelAdapter::GetAccelerator(int id,
+                                      ui::Accelerator* accelerator) const {
+  ui::MenuModel* model = menu_model_;
+  int index = 0;
+  if (ui::MenuModel::GetModelAndIndexForCommandId(id, &model, &index)) {
+    return static_cast<AtomMenuModel*>(model)->
+      GetAcceleratorAtWithParams(index, true, accelerator);
   }
+  return false;
+}
     
-    #include <atomic>
-#include 'stddef.h'
-    
-    namespace irgen {
-    }
-    
-    #include <memory>
-    
-    TEST(InlinedVectorTest, CreateAndIterate) {
-  const int kNumElements = 9;
-  InlinedVector<int, 2> v;
-  for (int i = 0; i < kNumElements; ++i) {
-    v.push_back(i);
-  }
-  EXPECT_EQ(static_cast<size_t>(kNumElements), v.size());
-  for (int i = 0; i < kNumElements; ++i) {
-    EXPECT_EQ(i, v[i]);
+    // static
+void App::Call(const std::string& method,
+               const base::ListValue& arguments) {
+  if (method == 'Quit') {
+    Quit();
+  } else if (method == 'CloseAllWindows') {
+    CloseAllWindows();
+  } else if (method == 'CrashBrowser') {
+    int* ptr = NULL;
+    *ptr = 1;
+  } else {
+    NOTREACHED() << 'Calling unknown method ' << method << ' of App.';
   }
 }
     
-     private:
-  int GetIntValueFromMetadata(
-      const char* key,
-      const std::multimap<grpc::string_ref, grpc::string_ref>& metadata,
-      int default_value);
+    namespace content {
+class RenderFrameHost;
+}
+    
+    void Clipboard::CallSync(const std::string& method,
+                         const base::ListValue& arguments,
+                         base::ListValue* result) {
+  if (method == 'Get') {
+    result->AppendString(GetText());
+  } else {
+    NOTREACHED() << 'Invalid call to Clipboard method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
+    
+    DispatcherBindings::DispatcherBindings()
+    : v8::Extension('dispatcher_bindings.js',
+                    GetStringResource(
+                        IDR_NW_API_DISPATCHER_BINDINGS_JS).data(),
+                    0,     // num dependencies.
+                    NULL,  // dependencies array.
+                    (int)GetStringResource(
+                        IDR_NW_API_DISPATCHER_BINDINGS_JS).size()) {
+#if defined(OS_MACOSX)
+  InitMsgIDMap();
+#endif
+}
+    
+    static KeyMap keymap = {
+  {'`'    , 'Backquote'},
+  {'\\'   , 'Backslash'},
+  {'['    , 'BracketLeft'},
+  {']'    , 'BracketRight'},
+  {','    , 'Comma'},
+  {'='    , 'Equal'},
+  {'-'    , 'Minus'},
+  {'.'    , 'Period'},
+  {'''    , 'Quote'},
+  {';'    , 'Semicolon'},
+  {'/'    , 'Slash'},
+  {'\n'   , 'Enter'},
+  {'\t'   , 'Tab'},
+  {'UP'   , 'ArrowUp'},
+  {'DOWN' , 'ArrowDown'},
+  {'LEFT' , 'ArrowLeft'},
+  {'RIGHT', 'ArrowRight'},
+  {'ESC'  , 'Escape'},
+  {'MEDIANEXTTRACK', 'MediaTrackNext'},
+  {'MEDIAPREVTRACK', 'MediaTrackPrevious'}
+};
+    
+      nw::Package* package = nw::package();
+  base::CommandLine* command_line = base::CommandLine::ForCurrentProcess();
+  base::CommandLine::StringVector args = command_line->GetArgs();
+  base::CommandLine::StringVector argv = command_line->original_argv();
+    
+    
+    {  return true;
+}
+    
+    namespace enum_descriptor {
+PyObject* NewEnumValuesByName(const EnumDescriptor* descriptor);
+PyObject* NewEnumValuesByNumber(const EnumDescriptor* descriptor);
+PyObject* NewEnumValuesSeq(const EnumDescriptor* descriptor);
+}  // namespace enum_descriptor
+    
+    // Find the file which defines an extension extending the given message type
+// with the given field number.
+// Python DescriptorDatabases are not required to implement this method.
+bool PyDescriptorDatabase::FindFileContainingExtension(
+    const string& containing_type, int field_number,
+    FileDescriptorProto* output) {
+  ScopedPyObjectPtr py_method(
+      PyObject_GetAttrString(py_database_, 'FindFileContainingExtension'));
+  if (py_method == NULL) {
+    // This method is not implemented, returns without error.
+    PyErr_Clear();
+    return false;
+  }
+  ScopedPyObjectPtr py_descriptor(
+      PyObject_CallFunction(py_method.get(), 's#i', containing_type.c_str(),
+                            containing_type.size(), field_number));
+  return GetFileDescriptorProto(py_descriptor.get(), output);
+}
+    
+    
+    {}  // namespace google
+#endif  // GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_DATABASE_H__
+
+    
+    
+    
+    RepeatedEnumFieldGenerator::~RepeatedEnumFieldGenerator() {
+    }
     
     
     {
-    {      // Send a simple response after a small delay that would ensure the client
-      // deadline is exceeded.
-      gpr_log(GPR_INFO, 'Got request %d', n);
-      testing::EchoResponse response;
-      response.set_message('foobar');
-      // A bit of sleep to make sure the deadline elapses.
-      gpr_sleep_until(gpr_time_add(gpr_now(GPR_CLOCK_MONOTONIC),
-                                   gpr_time_from_millis(50, GPR_TIMESPAN)));
-      {
-        std::lock_guard<std::mutex> lock(mu);
-        if (shutting_down) {
-          gpr_log(GPR_INFO,
-                  'shut down while processing call, not calling Finish()');
-          // Continue flushing the CQ.
-          continue;
-        }
-        gpr_log(GPR_INFO, 'Finishing request %d', n);
-        responder.Finish(response, grpc::Status::OK, (void*)2);
-        if (!cq->Next(&tag, &ok)) {
-          break;
-        }
-        EXPECT_EQ((void*)2, tag);
-      }
-    }
-  });
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
     
-    std::unique_ptr<ScenarioResult> RunScenario(
-    const grpc::testing::ClientConfig& client_config, size_t num_clients,
-    const grpc::testing::ServerConfig& server_config, size_t num_servers,
-    int warmup_seconds, int benchmark_seconds, int spawn_local_worker_count,
-    const grpc::string& qps_server_target_override,
-    const grpc::string& credential_type, bool run_inproc);
-    
-      grpc::testing::RunQPS();
-    
-    std::string GetDbFileContent(int argc, char** argv) {
-  std::string db_path;
-  std::string arg_str('--db_path');
-  if (argc > 1) {
-    std::string argv_1 = argv[1];
-    size_t start_position = argv_1.find(arg_str);
-    if (start_position != std::string::npos) {
-      start_position += arg_str.size();
-      if (argv_1[start_position] == ' ' ||
-          argv_1[start_position] == '=') {
-        db_path = argv_1.substr(start_position + 1);
-      }
-    }
-  } else {
-    db_path = 'route_guide_db.json';
-  }
-  std::ifstream db_file(db_path);
-  if (!db_file.is_open()) {
-    std::cout << 'Failed to open ' << db_path << std::endl;
-    return '';
-  }
-  std::stringstream db;
-  db << db_file.rdbuf();
-  return db.str();
+    void ImmutableLazyMessageFieldGenerator::
+GenerateSerializationCode(io::Printer* printer) const {
+  // Do not de-serialize lazy fields.
+  printer->Print(variables_,
+    'if ($get_has_field_bit_message$) {\n'
+    '  output.writeBytes($number$, $name$_.toByteString());\n'
+    '}\n');
 }
     
-    #include <grpc/grpc.h>
-#include <grpc++/channel.h>
-#include <grpc++/client_context.h>
-#include <grpc++/create_channel.h>
-#include <grpc++/security/credentials.h>
-#include 'helper.h'
-#include 'route_guide.grpc.pb.h'
     
-      bool PrintAddServicerToServer(
-      const grpc::string& package_qualified_service_name,
-      const grpc_generator::Service* service, grpc_generator::Printer* out);
-  bool PrintServicer(const grpc_generator::Service* service,
-                     grpc_generator::Printer* out);
-  bool PrintStub(const grpc::string& package_qualified_service_name,
-                 const grpc_generator::Service* service,
-                 grpc_generator::Printer* out);
+    {}  // namespace tesseract.
     
-      NSDictionary *flagNames = @{
-#define GRPC_XMACRO_ITEM(methodName, FlagName) \
-    @(kSCNetworkReachabilityFlags ## FlagName): @#methodName,
-#include 'GRXReachabilityFlagNames.xmacro.h'
-#undef GRPC_XMACRO_ITEM
-  };
-    
-    
-# if defined(OC_CLZ32)
-/**
- * OC_ILOGNZ_32 - Integer binary logarithm of a non-zero 32-bit value.
- * @_v: A non-zero 32-bit value.
- * Returns floor(log2(_v))+1.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * If _v is zero, the return value is undefined; use OC_ILOG_32() instead.
- */
-#  define OC_ILOGNZ_32(_v) (OC_CLZ32_OFFS-OC_CLZ32(_v))
-/**
- * OC_ILOG_32 - Integer binary logarithm of a 32-bit value.
- * @_v: A 32-bit value.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- */
-#  define OC_ILOG_32(_v)   (OC_ILOGNZ_32(_v)&-!!(_v))
-# else
-#  define OC_ILOGNZ_32(_v) (oc_ilog32(_v))
-#  define OC_ILOG_32(_v)   (oc_ilog32(_v))
-# endif
-    
-    #include 'vorbis/codec.h'
-#include 'backends.h'
-#include 'books/coupled/res_books_stereo.h'
-    
-    #define opus_fft(_st, _fin, _fout, arch) \
-   ((void)(arch), opus_fft_neon(_st, _fin, _fout))
-    
-    bool FilterBlockReader::KeyMayMatch(uint64_t block_offset, const Slice& key) {
-  uint64_t index = block_offset >> base_lg_;
-  if (index < num_) {
-    uint32_t start = DecodeFixed32(offset_ + index*4);
-    uint32_t limit = DecodeFixed32(offset_ + index*4 + 4);
-    if (start <= limit && limit <= static_cast<size_t>(offset_ - data_)) {
-      Slice filter = Slice(data_ + start, limit - start);
-      return policy_->KeyMayMatch(key, filter);
-    } else if (start == limit) {
-      // Empty filters do not match any keys
-      return false;
-    }
-  }
-  return true;  // Errors are treated as potential matches
+    // Returns the sqrt of the mean squared error measured perpendicular from the
+// line through mean_point() in the direction dir.
+//
+// Derivation:
+//   Lemma:  Let v and x_i (i=1..N) be a k-dimensional vectors (1xk matrices).
+//     Let % be dot product and ' be transpose.  Note that:
+//      Sum[i=1..N] (v % x_i)^2
+//         = v * [x_1' x_2' ... x_N'] * [x_1' x_2' .. x_N']' * v'
+//     If x_i have average 0 we have:
+//       = v * (N * COVARIANCE_MATRIX(X)) * v'
+//     Expanded for the case that k = 2, where we treat the dimensions
+//     as x_i and y_i, this is:
+//       = v * (N * [VAR(X), COV(X,Y); COV(X,Y) VAR(Y)]) * v'
+//  Now, we are trying to calculate the mean squared error, where v is
+//  perpendicular to our line of interest:
+//    Mean squared error
+//      = E [ (v % (x_i - x_avg))) ^2 ]
+//      = Sum (v % (x_i - x_avg))^2 / N
+//      = v * N * [VAR(X) COV(X,Y); COV(X,Y) VAR(Y)] / N * v'
+//      = v * [VAR(X) COV(X,Y); COV(X,Y) VAR(Y)] * v'
+//      = code below
+double LLSQ::rms_orth(const FCOORD &dir) const {
+  FCOORD v = !dir;
+  v.normalise();
+  return sqrt(v.x() * v.x() * x_variance() +
+              2 * v.x() * v.y() * covariance() +
+              v.y() * v.y() * y_variance());
 }
     
-      void CheckOffsetPastEndReturnsNoRecords(uint64_t offset_past_end) {
-    WriteInitialOffsetLog();
-    reading_ = true;
-    source_.contents_ = Slice(dest_.contents_);
-    Reader* offset_reader = new Reader(&source_, &report_, true/*checksum*/,
-                                       WrittenBytes() + offset_past_end);
-    Slice record;
-    std::string scratch;
-    ASSERT_TRUE(!offset_reader->ReadRecord(&record, &scratch));
-    delete offset_reader;
+    // Transforms the given coords forward to normalized space using the
+// full transformation sequence defined by the block rotation, the
+// predecessors, deepest first, and finally this. If first_norm is not NULL,
+// then the first and deepest transformation used is first_norm, ending
+// with this, and the block rotation will not be applied.
+void DENORM::NormTransform(const DENORM* first_norm, const TPOINT& pt,
+                           TPOINT* transformed) const {
+  FCOORD src_pt(pt.x, pt.y);
+  FCOORD float_result;
+  NormTransform(first_norm, src_pt, &float_result);
+  transformed->x = IntCastRounded(float_result.x());
+  transformed->y = IntCastRounded(float_result.y());
+}
+void DENORM::NormTransform(const DENORM* first_norm, const FCOORD& pt,
+                           FCOORD* transformed) const {
+  FCOORD src_pt(pt);
+  if (first_norm != this) {
+    if (predecessor_ != NULL) {
+      predecessor_->NormTransform(first_norm, pt, &src_pt);
+    } else if (block_ != NULL) {
+      FCOORD fwd_rotation(block_->re_rotation().x(),
+                          -block_->re_rotation().y());
+      src_pt.rotate(fwd_rotation);
+    }
   }
-    
-    
-    {}  // namespace leveldb
-    
-    #include <string>
-#include <stdint.h>
-#include 'db/dbformat.h'
-#include 'leveldb/cache.h'
-#include 'leveldb/table.h'
-#include 'port/port.h'
-    
-    
-    {  for (size_t i = 0; i < new_files_.size(); i++) {
-    const FileMetaData& f = new_files_[i].second;
-    PutVarint32(dst, kNewFile);
-    PutVarint32(dst, new_files_[i].first);  // level
-    PutVarint64(dst, f.number);
-    PutVarint64(dst, f.file_size);
-    PutLengthPrefixedSlice(dst, f.smallest.Encode());
-    PutLengthPrefixedSlice(dst, f.largest.Encode());
-  }
+  LocalNormTransform(src_pt, transformed);
 }
     
-      void Clear();
+      // Accumulates counts for junk. Counts only whether the junk was correctly
+  // rejected or not.
+  bool AccumulateJunk(bool debug, const GenericVector<UnicharRating>& results,
+                      TrainingSample* sample);
     
     
-    {    SeekToRestartPoint(restart_index_);
-    do {
-      // Loop until end of current entry hits the start of original entry
-    } while (ParseNextKey() && NextEntryOffset() < original);
-  }
-    
-    
-    {  virtual bool KeyMayMatch(const Slice& key, const Slice& filter) const {
-    uint32_t h = Hash(key.data(), key.size(), 1);
-    for (size_t i = 0; i + 4 <= filter.size(); i += 4) {
-      if (h == DecodeFixed32(filter.data() + i)) {
-        return true;
-      }
-    }
-    return false;
-  }
-};
-    
-        page->offset.clear();
-    page->offset.push_back(0);
-    for (bst_uint cid : sorted_index_set) {
-      page->offset.push_back(
-          page->offset.back() + disk_offset_[cid + 1] - disk_offset_[cid]);
-    }
-    page->data.resize(page->offset.back());
-    CHECK_EQ(index_.data.size(), value_.data.size());
-    CHECK_EQ(index_.data.size(), disk_offset_.back());
-    
-    #include <cstdio>
-#include <cstring>
-#include <string>
-#include <istream>
-#include <fstream>
-    
-    /*! \brief a column storage, to be used with ApplySplit. Note that each
-    bin id is stored as index[i] + index_base. */
-template<typename T>
-class Column {
- public:
-  ColumnType type;
-  const T* index;
-  uint32_t index_base;
-  const size_t* row_ind;
-  size_t len;
-};
-    
-    
-    { private:
-  RowBlock<IndexType> out_;
-  std::unique_ptr<Parser<IndexType> > parser_;
-  uint32_t num_col_;
-  std::vector<size_t> offset_;
-  std::vector<IndexType> dense_index_;
-  std::vector<xgboost::bst_float> dense_value_;
-};
-    
-    
-    {/*!
- * \brief define compatible keywords in g++
- *  Used to support g++-4.6 and g++4.7
- */
-#if DMLC_USE_CXX11 && defined(__GNUC__) && !defined(__clang_version__)
-#if __GNUC__ == 4 && __GNUC_MINOR__ < 8
-#define override
-#define final
-#endif
-#endif
-}  // namespace xgboost
-#endif  // XGBOOST_BASE_H_
-
-    
-    #include <chrono>
-#include <functional>
-#include <ratio>
-#include <thread>
-    
-    TEST(MemoryIdler, futexWaitAwokenEarly) {
-  StrictMock<Futex<MockAtom>> fut;
-  auto clock = MockClock::setup();
-  auto begin = MockClock::time_point(std::chrono::seconds(100));
-  auto idleTimeout = MemoryIdler::defaultIdleTimeout.load();
-    }
-    
-    template <class I, class = void>
-struct SubsumptionsOf_ {
-  using type = TypeList<>;
-};
-    
-    static void contentionAtWidthGetcpu(size_t iters, size_t stripes, size_t work) {
-  contentionAtWidth<std::atomic>(iters, stripes, work);
-}
-    
-    /**
- * Internal use for the macro SCOPE_FAIL below
- */
-enum class ScopeGuardOnFail {};
-    
-    template <typename Fn>
-void DynamicParser::required(const folly::dynamic& key, Fn fn) {
-  wrapError(&key, [&]() {
-    auto vp = value().get_ptr(key);
-    if (!vp) {
-      throw std::runtime_error(folly::to<std::string>(
-        'Couldn't find key ', detail::toPseudoJson(key), ' in dynamic object'
-      ));
-    }
-    parse(key, *vp, fn);
-  });
+    {  auto const ret = make_map_array(
+    s_sec, (int)tp.tv_sec,
+    s_usec, (int)tp.tv_usec,
+    s_minuteswest, (int)(-offset->offset / 60),
+    s_dsttime, (int)offset->is_dst
+  );
+  timelib_time_offset_dtor(offset);
+  return ret;
 }
     
       /**
-   * Error-wraps fn(auto-converted key & value) if d[key] is set. The
-   * top-of-file docblock explains the auto-conversion.
+   * Add a piece of response to the pipeline.
    */
-  template <typename Fn>
-  void optional(const folly::dynamic& key, Fn);
+  static void AddToPipeline(const std::string &s);
     
-      auto parse_error = errors.at('nested').at(coerce_fn(good_k));
-  EXPECT_EQ(d.at(good_k), parse_error.at('value'));
-  EXPECT_PCRE_MATCH('.*failsauce.*', parse_error.at('error').getString());
+    //////////////////////////////////////////////////////////////////////
+    
+    /*
+ * Block of Vinstrs, managed by Vunit.
+ *
+ * A Vblock, in addition to containing a Vinstr stream, also specifies where it
+ * should be emitted to.
+ */
+struct Vblock {
+  explicit Vblock(AreaIndex area_idx, uint64_t w)
+    : area_idx(area_idx)
+    , weight(w) {}
+    }
+    
+    inline void initNuma() {}
+inline constexpr int next_numa_node(std::atomic_int& curr_node) { return 0; }
+inline constexpr int num_numa_nodes() { return 1; }
+inline void numa_interleave(void* start, size_t size) {}
+inline void numa_bind_to(void* start, size_t size, int node) {}
+inline constexpr bool numa_node_allowed(int node) { return true; }
+    
+    struct Block;
+struct SSATmp;
+    
+    std::string NormalizedInstruction::toString() const {
+  return instrToString(pc(), unit());
+}
+    
+    
+    {}
