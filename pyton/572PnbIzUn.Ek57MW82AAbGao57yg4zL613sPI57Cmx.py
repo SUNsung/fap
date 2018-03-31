@@ -1,155 +1,129 @@
 
         
-        
-def main():
-    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
-    options, args = parser.parse_args()
-    if len(args) != 2:
-        parser.error('Expected an input and an output filename')
+            with open('README.md', 'w+') as sorted_file:
+        # Then all of the blocks are sorted individually
+        blocks = [''.join(sorted(block, key=lambda s: s.lower())) for block in blocks]
+        # And the result is written back to README.md
+        sorted_file.write(''.join(blocks))
     
-    for page in itertools.count(1):
-    releases = json.loads(compat_urllib_request.urlopen(
-        'https://api.github.com/repos/rg3/youtube-dl/releases?page=%s' % page
-    ).read().decode('utf-8'))
+    intersphinx_mapping = {
+    'python': ('https://docs.python.org/3/', None),
+    'werkzeug': ('http://werkzeug.pocoo.org/docs/', None),
+    'click': ('http://click.pocoo.org/', None),
+    'jinja': ('http://jinja.pocoo.org/docs/', None),
+    'itsdangerous': ('https://pythonhosted.org/itsdangerous', None),
+    'sqlalchemy': ('https://docs.sqlalchemy.org/en/latest/', None),
+    'wtforms': ('https://wtforms.readthedocs.io/en/latest/', None),
+    'blinker': ('https://pythonhosted.org/blinker/', None),
+}
     
-    import re
+        r = client.get('/world')
+    assert r.status_code == 200
     
-                return {
-                'id': video_id,
-                'title': json_data['title'],
-                'description': json_data.get('subtitle'),
-                'thumbnail': json_data.get('thumbnail_image', {}).get('file'),
-                'timestamp': parse_iso8601(json_data.get('publication_date')),
-                'duration': int_or_none(json_data.get('duration')),
-                'view_count': int_or_none(json_data.get('view_count')),
-                'formats': formats,
-            }
+        A microblog example application written as Flask tutorial with
+    Flask and sqlite3.
+    
+    
+def register_teardowns(app):
+    @app.teardown_appcontext
+    def close_db(error):
+        '''Closes the database again at the end of the request.'''
+        if hasattr(g, 'sqlite_db'):
+            g.sqlite_db.close()
 
     
-        def __init__(self, groups, env=Environment(), **kwargs):
-        '''
-        :param groups: names of processor groups to be applied
-        :param env: Environment
-        :param kwargs: additional keyword arguments for processors
+        assert_almost_equal(loss_score, metric_score, decimal=decimal)
+    assert_almost_equal(loss_score, weighted_metric_score, decimal=decimal)
     
-        ERROR_TIMEOUT = 2
-    ERROR_TOO_MANY_REDIRECTS = 6
+        model = Sequential()
+    model.add(wrappers.TimeDistributed(
+        layers.Dense(2, activity_regularizer='l1'), input_shape=(3, 4)))
+    model.add(layers.Activation('relu'))
+    model.compile(optimizer='rmsprop', loss='mse')
+    assert len(model.losses) == 1
     
+    from keras.preprocessing import sequence
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation
+from keras.layers import Embedding
+from keras.layers import LSTM
+from keras.layers import Conv1D, MaxPooling1D
+from keras.datasets import imdb
     
-@keras_test
-def test_model_trainability_switch():
-    # a non-trainable model has no trainable weights
-    x = Input(shape=(1,))
-    y = Dense(2)(x)
-    model = Model(x, y)
-    model.trainable = False
-    assert model.trainable_weights == []
+        # Transform sequences and labels into 'one-hot' encoding
+    x = np.zeros((len(sentences), sequence_length, number_of_chars), dtype=np.bool)
+    y = np.zeros((len(sentences), number_of_chars), dtype=np.bool)
+    for i, sentence in enumerate(sentences):
+        for t, char in enumerate(sentence):
+            x[i, t, ord(char) - ord('a')] = 1
+        y[i, ord(next_chars[i]) - ord('a')] = 1
     
+                # check dropout
+            layer_test(convolutional_recurrent.ConvLSTM2D,
+                       kwargs={'data_format': data_format,
+                               'return_sequences': return_sequences,
+                               'filters': filters,
+                               'kernel_size': (num_row, num_col),
+                               'padding': 'same',
+                               'dropout': 0.1,
+                               'recurrent_dropout': 0.1},
+                       input_shape=inputs.shape)
     
-if __name__ == '__main__':
-    pytest.main([__file__])
-
-    
-    
-if __name__ == '__main__':
-    pytest.main([__file__])
-
-    
-        If only_supporting is true, only the sentences
-    that support the answer are kept.
-    '''
-    data = []
-    story = []
-    for line in lines:
-        line = line.decode('utf-8').strip()
-        nid, line = line.split(' ', 1)
-        nid = int(nid)
-        if nid == 1:
-            story = []
-        if '\t' in line:
-            q, a, supporting = line.split('\t')
-            q = tokenize(q)
-            substory = None
-            if only_supporting:
-                # Only select the related substory
-                supporting = map(int, supporting.split())
-                substory = [story[i - 1] for i in supporting]
-            else:
-                # Provide all the substories
-                substory = [x for x in story if x]
-            data.append((substory, q, a))
-            story.append('')
+        def get_testable_domain_names(self):
+        '''Returns the set of domain names that can be tested against'''
+        if self._test_names:
+            return self._test_names
         else:
-            sent = tokenize(line)
-            story.append(sent)
-    return data
+            return {'example.com'}
     
-    input_characters = sorted(list(input_characters))
-target_characters = sorted(list(target_characters))
-num_encoder_tokens = len(input_characters)
-num_decoder_tokens = len(target_characters)
-max_encoder_seq_length = max([len(txt) for txt in input_texts])
-max_decoder_seq_length = max([len(txt) for txt in target_texts])
+        @classmethod
+    def _call(cls, enhancement):
+        from certbot.display.enhancements import ask
+        return ask(enhancement)
     
-            test_history['generator'].append(generator_test_loss)
-        test_history['discriminator'].append(discriminator_test_loss)
-    
-        # Arguments
-        x: Input array, 3D or 4D.
-        data_format: Data format of the image array.
-        mode: One of 'caffe', 'tf' or 'torch'.
-            - caffe: will convert the images from RGB to BGR,
-                then will zero-center each color channel with
-                respect to the ImageNet dataset,
-                without scaling.
-            - tf: will scale pixels between -1 and 1,
-                sample-wise.
-            - torch: will scale pixels between 0 and 1 and then
-                will normalize each channel with respect to the
-                ImageNet dataset.
-    
-    # Attempt to read Keras config file.
-_config_path = os.path.expanduser(os.path.join(_keras_dir, 'keras.json'))
-if os.path.exists(_config_path):
-    try:
-        with open(_config_path) as f:
-            _config = json.load(f)
-    except ValueError:
-        _config = {}
-    _floatx = _config.get('floatx', floatx())
-    assert _floatx in {'float16', 'float32', 'float64'}
-    _epsilon = _config.get('epsilon', epsilon())
-    assert isinstance(_epsilon, float)
-    _backend = _config.get('backend', _BACKEND)
-    assert _backend in {'theano', 'tensorflow', 'cntk'}
-    _image_data_format = _config.get('image_data_format',
-                                     image_data_format())
-    assert _image_data_format in {'channels_last', 'channels_first'}
-    
-        def __setattr__(self, name, value):
-        # type: (str, Any) -> None
-        self[name] = value
-    
-                def finish(self):
-                event.set()
-    
-        def test_path_quoting(self):
-        response = self.fetch('/path/foo%20bar%C3%A9')
-        self.assertEqual(response.body, u'foo bar\u00e9'.encode('utf-8'))
-    
-    # This import will fail if path is not set up correctly
-import testapp
+        def getran(self, ndigits):
+        self.assertGreater(ndigits, 0)
+        nbits_hi = ndigits * SHIFT
+        nbits_lo = nbits_hi - SHIFT + 1
+        answer = 0
+        nbits = 0
+        r = int(random.random() * (SHIFT * 2)) | 1  # force 1 bits to start
+        while nbits < nbits_lo:
+            bits = (r >> 1) + 1
+            bits = min(bits, nbits_hi - nbits)
+            self.assertTrue(1 <= bits <= SHIFT)
+            nbits = nbits + bits
+            answer = answer << bits
+            if r & 1:
+                answer = answer | ((1 << bits) - 1)
+            r = int(random.random() * (SHIFT * 2))
+        self.assertTrue(nbits_lo <= nbits <= nbits_hi)
+        if random.random() < 0.5:
+            answer = -answer
+        return answer
     
     
-@gen.coroutine
-def raw_producer(filename, write):
-    with open(filename, 'rb') as f:
-        while True:
-            # 16K at a time.
-            chunk = f.read(16 * 1024)
-            if not chunk:
-                # Complete.
-                break
+import time
+try:
+    from test.support import import_fresh_module
+except ImportError:
+    from test.test_support import import_fresh_module
     
-        print('Start on 8888')
-    application.listen(8888, '127.0.0.1')
+            return self
+    
+            try:
+            # Get arguments by reading body of request.
+            # We read this in chunks to avoid straining
+            # socket.read(); around the 10 or 15Mb mark, some platforms
+            # begin to have problems (bug #792570).
+            max_chunk_size = 10*1024*1024
+            size_remaining = int(self.headers['content-length'])
+            L = []
+            while size_remaining:
+                chunk_size = min(size_remaining, max_chunk_size)
+                chunk = self.rfile.read(chunk_size)
+                if not chunk:
+                    break
+                L.append(chunk)
+                size_remaining -= len(L[-1])
+            data = b''.join(L)
