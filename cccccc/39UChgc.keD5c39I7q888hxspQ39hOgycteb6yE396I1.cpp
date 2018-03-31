@@ -1,226 +1,301 @@
-#include 'atom/browser/net/http_protocol_handler.h'
-    
-    
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-       void Call(const std::string& method,
-                    const base::ListValue& arguments) override;
-   void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) override;
-    
-      scoped_ptr<V8ValueConverter> converter(V8ValueConverter::create());
-    
-    
-    {}
-    
-    namespace nw {
-    }
-    
-    
-    {  *icon = item->icon_;
-  return true;
-}
-    
-    #include 'base/logging.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/nw/src/nw_shell.h'
-#include 'content/public/browser/web_contents.h'
-#include 'content/public/browser/render_widget_host_view.h'
-#include 'ui/gfx/point.h'
-#include 'vector'
-#include 'gtk/gtk.h'
-    
-    void MenuItem::CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) {
-  if (method == 'GetChecked') {
-    result->AppendBoolean(GetChecked());
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-        bool enabled;
-    if (option.GetBoolean('enabled', &enabled))
-      SetEnabled(enabled);
-    
-      // Pointer to the C++ Message that contains this container.  The
-  // RepeatedCompositeContainer does not own this pointer.
-  //
-  // If NULL, this message has been released from its parent (by
-  // calling Clear() or ClearField() on the parent.
-  Message* message;
-    
-    class EnumGenerator : public SourceGeneratorBase {
- public:
-  EnumGenerator(const EnumDescriptor* descriptor, const Options* options);
-  ~EnumGenerator();
-    }
-    
-    void MapFieldGenerator::GenerateMembers(io::Printer* printer) {   
-  const FieldDescriptor* key_descriptor =
-      descriptor_->message_type()->FindFieldByName('key');
-  const FieldDescriptor* value_descriptor =
-      descriptor_->message_type()->FindFieldByName('value');
-  variables_['key_type_name'] = type_name(key_descriptor);
-  variables_['value_type_name'] = type_name(value_descriptor);
-  scoped_ptr<FieldGeneratorBase> key_generator(
-      CreateFieldGenerator(key_descriptor, 1, this->options()));
-  scoped_ptr<FieldGeneratorBase> value_generator(
-      CreateFieldGenerator(value_descriptor, 2, this->options()));
-    }
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/csharp/csharp_field_base.h>
-    
-    
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-    
-    void WriteMessageDocComment(io::Printer* printer, const Descriptor* message);
-void WriteFieldDocComment(io::Printer* printer, const FieldDescriptor* field);
-void WriteEnumDocComment(io::Printer* printer, const EnumDescriptor* enum_);
-void WriteEnumValueDocComment(io::Printer* printer,
-                              const EnumValueDescriptor* value);
-void WriteServiceDocComment(io::Printer* printer,
-                            const ServiceDescriptor* service);
-void WriteMethodDocComment(io::Printer* printer,
-                           const MethodDescriptor* method);
-    
-    
-    {
-    {
-    {
-    {
-    {}  // namespace
-}  // namespace java
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
 
+        
+        class ScrollView;
+class SVMenuNode;
+struct SVEvent;
     
-    // Computes all the cross product distances of the points from the line,
-// storing the actual (signed) cross products in distances.
-// Ignores distances of points that are further away than the previous point,
-// and overlaps the previous point by at least half.
-void DetLineFit::ComputeDistances(const ICOORD& start, const ICOORD& end) {
-  distances_.truncate(0);
-  ICOORD line_vector = end;
-  line_vector -= start;
-  square_length_ = line_vector.sqlength();
-  int line_length = IntCastRounded(sqrt(square_length_));
-  // Compute the distance of each point from the line.
-  int prev_abs_dist = 0;
-  int prev_dot = 0;
-  for (int i = 0; i < pts_.size(); ++i) {
-    ICOORD pt_vector = pts_[i].pt;
-    pt_vector -= start;
-    int dot = line_vector % pt_vector;
-    // Compute |line_vector||pt_vector|sin(angle between)
-    int dist = line_vector * pt_vector;
-    int abs_dist = dist < 0 ? -dist : dist;
-    if (abs_dist > prev_abs_dist && i > 0) {
-      // Ignore this point if it overlaps the previous one.
-      int separation = abs(dot - prev_dot);
-      if (separation < line_length * pts_[i].halfwidth ||
-          separation < line_length * pts_[i - 1].halfwidth)
-        continue;
-    }
-    distances_.push_back(DistPointPair(dist, pts_[i].pt));
-    prev_abs_dist = abs_dist;
-    prev_dot = dot;
+      if (num_chopped_trailing > 0) {
+    int split_pt = num_chopped - num_chopped_trailing - num_chopped_leading;
+    split_word(core, split_pt, &suffix, &bb1);
   }
-}
     
-    #endif  // THIRD_PARTY_TESSERACT_CCUTIL_DOUBLEPTR_H_
-
+    namespace tesseract {
+void Tesseract::tess_segment_pass_n(int pass_n, WERD_RES *word) {
+  int saved_enable_assoc = 0;
+  int saved_chop_enable = 0;
+    }
+    }
     
-    /**----------------------------------------------------------------------------
-          Include Files and Type Defines
-----------------------------------------------------------------------------**/
-#include 'host.h'
-#include <stdio.h>
-#include <math.h>
+    CCStruct::CCStruct() {}
     
-    #include 'intfeaturedist.h'
-#include 'intfeaturemap.h'
     
-    struct DNSBreaker {
-	DNSBreaker(): isbreak(false), dnsstatus(NULL) {}
-	bool isbreak;
-	int* dnsstatus;
+    {  // Stores all the source points in the order they were given and their
+  // halfwidths, if any.
+  GenericVector<PointWidth> pts_;
+  // Stores the computed perpendicular distances of (some of) the pts_ from a
+  // given vector (assuming it goes through the origin, making it a line).
+  // Since the distances may be a subset of the input points, and get
+  // re-ordered by the nth_item function, the original point is stored
+  // along side the distance.
+  GenericVector<DistPointPair> distances_;  // Distances of points.
+  // The squared length of the vector used to compute distances_.
+  double square_length_;
 };
     
-    WakeUpLock::WakeUpLock() {
-    object_ = ::wakeupLock_new();
-    ASSERT(object_);
-    xinfo2('new wakeuplock:%p', object_);
-}
-    
-    // true pass, false limit
-bool CommFrequencyLimit::Check() {
-    uint64_t now = ::gettickcount();
-    if (!touch_times_.empty() && (now<touch_times_.front()) ) { //if user modify the time, amend it
-    	xwarn2(TSF'Must be modified time.now=%_', now);
-    	size_t size = touch_times_.size();
-    	touch_times_.clear();
-    	for (size_t i=0; i<size; ++i) {
-    		touch_times_.push_back(now-1);
-    	}
+      // Connects this and other, discarding any existing connections.
+  void Connect(DoublePtr* other) {
+    other->Disconnect();
+    Disconnect();
+    other->other_end_ = this;
+    other_end_ = other;
+  }
+  // Disconnects this and other, making OtherEnd() return NULL for both.
+  void Disconnect() {
+    if (other_end_ != NULL) {
+      other_end_->other_end_ = NULL;
+      other_end_ = NULL;
     }
-    }
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-      const std::string& libraryName() const noexcept { return libraryName_; }
-    
-    
-    {  ASSERT_FALSE(YGNodeLayoutGetHadOverflow(root));
-}
-    
-    int Node::getAlignItems(void) const
-{
-    return YGNodeStyleGetAlignItems(m_node);
-}
-    
-        void setPadding(int edge, double padding);
-    void setPaddingPercent(int edge, double padding);
-    
-        method(markDirty);
-    method(isDirty);
-    
-    
-    {}
-
-    
-      T* release() {
-    T* obj = get();
-    pthread_setspecific(m_key, NULL);
-    return obj;
+  }
+  // Returns the pointer to the other end of the double pointer.
+  DoublePtr* OtherEnd() const {
+    return other_end_;
   }
     
-      bool isDirect() const;
+    
+    {  int total_samples = 0;
+  int error_samples = 25;
+  int total_new_errors = 0;
+  // Iterate over all the samples, accumulating errors.
+  for (it->Begin(); !it->AtEnd(); it->Next()) {
+    TrainingSample* mutable_sample = it->MutableSample();
+    int page_index = mutable_sample->page_num();
+    Pix* page_pix = 0 <= page_index && page_index < page_images.size()
+                  ? page_images[page_index] : NULL;
+    // No debug, no keep this.
+    old_classifier->UnicharClassifySample(*mutable_sample, page_pix, 0,
+                                          INVALID_UNICHAR_ID, &results);
+    int correct_id = mutable_sample->class_id();
+    if (correct_id != 0 &&
+        !old_counter.AccumulateErrors(true, boosting_mode, fontinfo_table,
+                                      results, mutable_sample)) {
+      // old classifier was correct, check the new one.
+      new_classifier->UnicharClassifySample(*mutable_sample, page_pix, 0,
+                                            INVALID_UNICHAR_ID, &results);
+      if (correct_id != 0 &&
+          new_counter.AccumulateErrors(true, boosting_mode, fontinfo_table,
+                                        results, mutable_sample)) {
+        tprintf('New Error on sample %d: Classifier debug output:\n',
+                it->GlobalSampleIndex());
+        ++total_new_errors;
+        new_classifier->UnicharClassifySample(*mutable_sample, page_pix, 1,
+                                              correct_id, &results);
+        if (results.size() > 0 && error_samples > 0) {
+          new_classifier->DebugDisplay(*mutable_sample, page_pix, correct_id);
+          --error_samples;
+        }
+      }
+    }
+    ++total_samples;
+  }
+  tprintf('Total new errors = %d\n', total_new_errors);
+}
+    
+      // Accumulates counts for junk. Counts only whether the junk was correctly
+  // rejected or not.
+  bool AccumulateJunk(bool debug, const GenericVector<UnicharRating>& results,
+                      TrainingSample* sample);
+    
+    
+    
+        {&_44p3_p6_0,&_44p3_p6_1,&_44p3_p5_1},
+    {&_44p3_p7_0,&_44p3_p7_1,&_44p3_p7_2,&_44p3_p7_3}
+   }
+};
+static const static_bookblock _resbook_44p_4={
+  {
+    {0},
+    {0,0,&_44p4_p1_0},
+    {0,&_44p4_p2_0,0},
+    
+    /*      These defines enable functionality introduced with the 1999 ISO C
+**      standard. They must be defined before the inclusion of math.h to
+**      engage them. If optimisation is enabled, these functions will be
+**      inlined. With optimisation switched off, you have to link in the
+**      maths library using -lm.
+*/
+    
+    /*The number of bits to output at a time.*/
+# define EC_SYM_BITS   (8)
+/*The total number of bits in each of the state registers.*/
+# define EC_CODE_BITS  (32)
+/*The maximum symbol value.*/
+# define EC_SYM_MAX    ((1U<<EC_SYM_BITS)-1)
+/*Bits to shift by to move a symbol into the high-order position.*/
+# define EC_CODE_SHIFT (EC_CODE_BITS-EC_SYM_BITS-1)
+/*Carry bit of the high-order range symbol.*/
+# define EC_CODE_TOP   (((opus_uint32)1U)<<(EC_CODE_BITS-1))
+/*Low-order bit of the high-order range symbol.*/
+# define EC_CODE_BOT   (EC_CODE_TOP>>EC_SYM_BITS)
+/*The number of bits available for the last, partial symbol in the code field.*/
+# define EC_CODE_EXTRA ((EC_CODE_BITS-2)%EC_SYM_BITS+1)
+#endif
+
+    
+    #ifndef SILK_FIX_INLINES_H
+#define SILK_FIX_INLINES_H
+    
+        size_t TrainOneEpoch(ComputationNetworkPtr net,
+                         ComputationNetworkPtr refNet,
+                         const ComputationNodeBasePtr& refNode,
+                         const int epochNumber,
+                         const size_t epochSize,
+                         IDataReader* trainSetDataReader,
+                         const double learnRatePerSample,
+                         size_t tunedMBSize,
+                         const std::vector<ComputationNodeBasePtr>& featureNodes,
+                         const std::vector<ComputationNodeBasePtr>& labelNodes,
+                         const std::vector<ComputationNodeBasePtr>& criterionNodes,
+                         const std::vector<ComputationNodeBasePtr>& evaluationNodes,
+                         StreamMinibatchInputs* inputMatrices,
+                         const std::list<ComputationNodeBasePtr>& learnableNodes,
+                         std::list<Matrix<ElemType>>& smoothedGradients, std::vector<double>& smoothedCounts,
+                         /*out*/ EpochCriterion& epochCriterion,
+                         /*out*/ std::vector<EpochCriterion>& epochEvalErrors,
+                         const std::string& prefixMsg = '',
+                         const size_t maxNumberOfSamples = SIZE_MAX,
+                         const size_t totalMBsSeenBefore = 0,
+                         ::CNTK::Internal::TensorBoardFileWriterPtr tensorBoardWriter = nullptr,
+                         const int startEpoch = 0);
+    
+            // Get node arg name.
+        const std::string& Name() const;
+    
+        Status Model::Load(int p_fd, std::shared_ptr<Model>* p_model)
+    {
+        if (p_fd < 0 || nullptr == p_model)
+        {
+            return Status(ONNX, INVALID_ARGUMENT, '<p_fd> less than 0 or <p_model> is nullptr.');
+        }
+    }
+    
+        const OperatorSchema* OpSchemaRegistry::Schema(
+        const std::string& p_key,
+        const int p_maxInclusiveVersion,
+        const std::string& p_domain)
+    {
+        auto& m = map();
+        if (m.count(p_key) && m[p_key].count(p_domain))
+        {
+            auto pos = m[p_key][p_domain].lower_bound(p_maxInclusiveVersion);
+            if (m[p_key][p_domain].begin() == pos && pos->first > p_maxInclusiveVersion)
+            {
+                // All versions are greater than specified version.
+                return nullptr;
+            }
+    }
+    }
+    
+    
+    REGISTER_OPERATOR_SCHEMA(OneHotEncoder)
+        .SetDomain(c_mlDomain)
+        .Input('X', 'Data to be encoded', 'T')
+        .Output('Y', 'encoded output data', 'tensor(float)')
+        .Description(R'DOC(
+            Replace the inputs with an array of ones and zeros, where the only
+            one is the zero-based category that was passed in.  The total category count
+            will determine the length of the vector. For example if we pass a
+            tensor with a single value of 4, and a category count of 8, the
+            output will be a tensor with 0,0,0,0,1,0,0,0 .
+            This operator assumes every input in X is of the same category set
+            (meaning there is only one category count).
+    
+        virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override
+    {
+        Base::Validate(isFinalValidationPass);
+        InferMBLayoutFromInputsForStandardCase(isFinalValidationPass);
+    }
+    
+    
+    {template class ReaderShim<float>;
+template class ReaderShim<double>;
+}
+
+    
+    #if 0 // unused--delete
+// We only remove the node from the net, not destruct it.
+ComputationNodeBasePtr ComputationNetwork::RemoveFeatureNode(ComputationNodeBasePtr featureNode)
+{
+    InvalidateCompiledNetwork();
+    }
+    
+      /// Copy data from the internal buffer to the specified target buffer, without
+  /// removing the data from the internal buffer. Returns the number of bytes
+  /// copied.
+  template <typename MutableBufferSequence>
+  std::size_t peek_copy(const MutableBufferSequence& buffers)
+  {
+    return boost::asio::buffer_copy(buffers, storage_.data(), storage_.size());
+  }
+    
+    
+    {
+    {} // namespace asio
+} // namespace boost
+    
+    #include <boost/asio/detail/config.hpp>
+#include <boost/asio/completion_condition.hpp>
+    
+      // Return the maximum size for data in the buffer.
+  size_type capacity() const
+  {
+    return buffer_.size();
+  }
+    
+    class ptime;
+    
+    
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
+    
+      const SnapshotImpl* New(SequenceNumber seq) {
+    SnapshotImpl* s = new SnapshotImpl;
+    s->number_ = seq;
+    s->list_ = this;
+    s->next_ = &list_;
+    s->prev_ = list_.prev_;
+    s->prev_->next_ = s;
+    s->next_->prev_ = s;
+    return s;
+  }
+    
+    static void TestEncodeDecode(const VersionEdit& edit) {
+  std::string encoded, encoded2;
+  edit.EncodeTo(&encoded);
+  VersionEdit parsed;
+  Status s = parsed.DecodeFrom(encoded);
+  ASSERT_TRUE(s.ok()) << s.ToString();
+  parsed.EncodeTo(&encoded2);
+  ASSERT_EQ(encoded, encoded2);
+}
+    
+    
+    {  ASSERT_TRUE(! Overlaps(NULL, 'j'));
+  ASSERT_TRUE(! Overlaps('r', NULL));
+  ASSERT_TRUE(Overlaps(NULL, 'p'));
+  ASSERT_TRUE(Overlaps(NULL, 'p1'));
+  ASSERT_TRUE(Overlaps('q', NULL));
+  ASSERT_TRUE(Overlaps(NULL, NULL));
+}
+    
+      // count the keys
+  leveldb::Iterator* iter = db->NewIterator(leveldb::ReadOptions());
+  size_t num_keys = 0;
+  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
+    num_keys++;
+  }
+  delete iter;
+  ASSERT_EQ(kNumKeys, num_keys) << 'Bad number of keys';
+    
+      WriteOptions write_options;
+  ASSERT_OK(db->Put(write_options, '1', 'b'));
+  ASSERT_OK(db->Put(write_options, '2', 'c'));
+  ASSERT_OK(db->Put(write_options, '3', 'd'));
+  ASSERT_OK(db->Put(write_options, '4', 'e'));
+  ASSERT_OK(db->Put(write_options, '5', 'f'));
+    
+      void Add(const Slice& s) {
+    keys_.push_back(s.ToString());
+  }
