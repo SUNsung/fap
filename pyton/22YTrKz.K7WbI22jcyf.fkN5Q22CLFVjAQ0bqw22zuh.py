@@ -1,64 +1,50 @@
 
         
-            :copyright: © 2010 by the Pallets team.
-    :license: BSD, see LICENSE for more details.
-'''
+            # Separating the 'table of contents' from the contents (blocks)
+    table_of_contents = ''.join(read_me.split('- - -')[0])
+    blocks = ''.join(read_me.split('- - -')[1]).split('\n# ')
+    for i in range(len(blocks)):
+        if i == 0:
+            blocks[i] = blocks[i] + '\n'
+        else:
+            blocks[i] = '# ' + blocks[i] + '\n'
     
     
-@app.route('/_add_numbers')
-def add_numbers():
-    '''Add two numbers server side, ridiculous but well...'''
-    a = request.args.get('a', 0, type=int)
-    b = request.args.get('b', 0, type=int)
-    return jsonify(result=a + b)
+def test_idna_without_version_attribute(mocker):
+    '''Older versions of IDNA don't provide a __version__ attribute, verify
+    that if we have such a package, we don't blow up.
+    '''
+    mocker.patch('requests.help.idna', new=None)
+    assert info()['idna'] == {'version': ''}
     
-    # (c) 2013, Michael Scherer <misc@zarb.org>
-#
-# This file is part of Ansible,
-#
-# Ansible is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Ansible is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
+        old_layer = keras.layers.AveragePooling2D((2, 2), padding='valid', dim_ordering='th', name='avgpooling2d')
+    new_layer = keras.layers.AvgPool2D(pool_size=2, padding='valid', data_format='channels_first', name='avgpooling2d')
+    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
     
-    try:
-    import json
-except ImportError:
-    import simplejson as json
+        # test return_state
+    inputs = Input((timesteps, dim))
+    layer = wrappers.Bidirectional(rnn(units, return_state=True), merge_mode=merge_mode)
+    f_merged = K.function([inputs], layer(inputs))
+    f_forward = K.function([inputs], layer.forward_layer.call(inputs))
+    f_backward = K.function([inputs], layer.backward_layer.call(inputs))
+    n_states = len(layer.layer.states)
     
-        def on_open_shell(self):
-        try:
-            self._exec_cli_command(b'environment no more')
-        except AnsibleConnectionFailure:
-            raise AnsibleConnectionFailure('unable to set terminal parameters')
-
+        proba = clf.predict_proba(X_test, batch_size=batch_size)
+    assert proba.shape == (num_test, num_classes)
+    assert np.allclose(np.sum(proba, axis=1), np.ones(num_test))
     
     
-class HashTable(object):
+@keras_test
+def test_layer_trainability_switch():
+    # with constructor argument, in Sequential
+    model = Sequential()
+    model.add(Dense(2, trainable=False, input_dim=1))
+    assert model.trainable_weights == []
     
     
-class PersonServer(object):
-    
-                self._pending_work_items[self._queue_count] = w
-            self._work_ids.put(self._queue_count)
-            self._queue_count += 1
-            # Wake up queue management thread
-            self._result_queue.put(None)
-    
-    PY_MAJOR, PY_MINOR = sys.version_info[ 0 : 2 ]
-if not ( ( PY_MAJOR == 2 and PY_MINOR >= 6 ) or
-         ( PY_MAJOR == 3 and PY_MINOR >= 3 ) or
-         PY_MAJOR > 3 ):
-  sys.exit( 'YouCompleteMe requires Python >= 2.6 or >= 3.3; '
-            'your version of Python is ' + sys.version )
-    
-    from ycm.tests.test_utils import MockVimModule
-MockVimModule()
+@keras_test
+def test_loss_masking():
+    weighted_loss = _weighted_masked_objective(losses.get('mae'))
+    shape = (3, 4, 2)
+    x = np.arange(24).reshape(shape)
+    y = 2 * x
