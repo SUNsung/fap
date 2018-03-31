@@ -1,143 +1,111 @@
 
         
-        def bottle_resolve_formula_names(bottle_file)
-  receipt_file_path = bottle_receipt_path bottle_file
-  receipt_file = Utils.popen_read('tar', '-xOzf', bottle_file, receipt_file_path)
-  name = receipt_file_path.split('/').first
-  tap = Tab.from_file_content(receipt_file, '#{bottle_file}/#{receipt_file_path}').tap
+          # @private
+  def unused_options
+    @options - @args
+  end
     
-        # Remove directories opposite from traversal, so that a subtree with no
-    # actual files gets removed correctly.
-    dirs.reverse_each do |d|
-      if d.children.empty?
-        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
-        d.rmdir
-      end
-    end
+          out = checks.send(method)
+      unless out.nil? || out.empty?
+        if first_warning
+          $stderr.puts <<-EOS.undent
+            #{Tty.white}Please note that these warnings are just used to help the Homebrew maintainers
+            with debugging if you file an issue. If everything you use Homebrew for is
+            working fine: please don't worry and just ignore them. Thanks!#{Tty.reset}
+          EOS
+        end
     
-      def print_remaining_files(files, root, other = '')
-    case files.length
-    when 0
-      # noop
-    when 1
-      puts files
-    else
-      puts '#{root}/ (#{files.length} #{other}files)'
-    end
+        Tap.each(&:link_manpages)
+  end
+    
+          export JAVA_HOME='$(/usr/libexec/java_home)'
+      export AWS_ACCESS_KEY='<Your AWS Access ID>'
+      export AWS_SECRET_KEY='<Your AWS Secret Key>'
+      export #{home_name}='#{home_value}'
+    EOS
   end
 end
 
     
-      SEARCHABLE_TAPS = OFFICIAL_TAPS.map { |tap| ['Homebrew', tap] } + [
-    %w[Caskroom cask],
-    %w[Caskroom versions]
-  ]
+        # extracts rule immediately after it's parent, and adjust the selector
+    # .x { textarea& { ... }}
+    # to:
+    # .x { ... }
+    # textarea.x { ... }
+    def extract_nested_rule(file, selector, new_selector = nil)
+      matches = []
+      # first find the rules, and remove them
+      file    = replace_rules(file, '\s*#{selector}', comments: true) { |rule, pos, css|
+        new_sel = new_selector || '#{get_selector(rule).gsub(/&/, selector_for_pos(css, pos.begin))}'
+        matches << [rule, pos, new_sel]
+        indent '// [converter] extracted #{get_selector(rule)} to #{new_sel}'.tr('\n', ' ').squeeze(' '), indent_width(rule)
+      }
+      raise 'extract_nested_rule: no such selector: #{selector}' if matches.empty?
+      # replace rule selector with new_selector
+      matches.each do |m|
+        m[0].sub! /(#{COMMENT_RE}*)^(\s*).*?(\s*){/m, '\\1\\2#{m[2]}\\3{'
+        log_transform selector, m[2]
+      end
+      replace_substrings_at file,
+                            matches.map { |_, pos| close_brace_pos(file, pos.begin, 1) + 1 },
+                            matches.map { |rule, _| '\n\n' + unindent(rule) }
+    end
+    }
+    }
     
-      def failure
-    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
-    redirect_to after_omniauth_failure_path_for(resource_name)
+        def log_processing(name)
+      puts yellow '  #{File.basename(name)}'
+    end
+    
+      # Send deprecation notices to registered listeners.
+  config.active_support.deprecation = :notify
+    
+      # Do not eager load code on boot. This avoids loading your whole application
+  # just for the purpose of running a single test. If you are using a tool that
+  # preloads Rails for running tests, you may have to set it to true.
+  config.eager_load = false
+    
+          # If the importer is based on files on the local filesystem
+      # this method should return folders which should be watched
+      # for changes.
+      #
+      # @return [Array<String>] List of absolute paths of directories to watch
+      def directories_to_watch
+        []
+      end
+    
+    # A logger that delays messages until they're explicitly flushed to an inner
+# logger.
+#
+# This can be installed around the current logger by calling \{#install!}, and
+# the original logger can be replaced by calling \{#uninstall!}. The log
+# messages can be flushed by calling \{#flush}.
+class Sass::Logger::Delayed < Sass::Logger::Base
+  # Installs a new delayed logger as the current Sass logger, wrapping the
+  # original logger.
+  #
+  # This can be undone by calling \{#uninstall!}.
+  #
+  # @return [Sass::Logger::Delayed] The newly-created logger.
+  def self.install!
+    logger = Sass::Logger::Delayed.new(Sass.logger)
+    Sass.logger = logger
+    logger
   end
     
-        # The path used after resending confirmation instructions.
-    def after_resending_confirmation_instructions_path_for(resource_name)
-      is_navigational_format? ? new_session_path(resource_name) : '/'
-    end
-    
-      protected
-    
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
-    end
-    
-        def is_navigational_format?
-      Devise.navigational_formats.include?(request_format)
-    end
-    
-      def new
-    @user_credential = current_user.user_credentials.build
-    
-    class ActivityPub::EmojiSerializer < ActiveModel::Serializer
-  include RoutingHelper
-    
-        def register_compass_extension
-      ::Compass::Frameworks.register(
-          'bootstrap',
-          :version               => Bootstrap::VERSION,
-          :path                  => gem_path,
-          :stylesheets_directory => stylesheets_path,
-          :templates_directory   => File.join(gem_path, 'templates')
-      )
-    end
-    
-        def log_http_get_file(url, cached = false)
-      s = '  #{'CACHED ' if cached}GET #{url}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
-      end
-    end
-    
-          File.open('bower.json', 'w') do |f|
-        f.puts JSON.pretty_generate(spec)
-      end
-    end
-  end
-end
-
-    
-      def weekly_user_stats
-    @created_users_by_week = Hash.new{ |h,k| h[k] = [] }
-    @created_users = User.where('username IS NOT NULL and created_at IS NOT NULL')
-    @created_users.find_each do |u|
-      week = u.created_at.beginning_of_week.strftime('%Y-%m-%d')
-      @created_users_by_week[week] << u.username
-    end
-    
-    module Api
-  module OpenidConnect
-    class ClientsController < ApplicationController
-      skip_before_action :verify_authenticity_token
-    
-    public_dir      = 'public'    # compiled site directory
-source_dir      = 'source'    # source file directory
-blog_index_dir  = 'source'    # directory for your blog's index page (if you put your index in source/blog/index.html, set this to 'source/blog')
-deploy_dir      = '_deploy'   # deploy directory (for Github pages deployment)
-stash_dir       = '_stash'    # directory to stash posts for speedy generation
-posts_dir       = '_posts'    # directory for blog files
-themes_dir      = '.themes'   # directory for blog files
-new_post_ext    = 'markdown'  # default new post file extension when using the new_post task
-new_page_ext    = 'markdown'  # default new page file extension when using the new_page task
-server_port     = '4000'      # port for preview server eg. localhost:4000
-    
-        def generate(site)
-      site.write_category_indexes
-    end
-    
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
-      else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+            {
+          :always_update     => false,
+          :template_location => root + '/public/stylesheets/sass',
+          :css_location      => root + '/public/stylesheets',
+          :cache_location    => root + '/tmp/sass-cache',
+          :always_check      => env != 'production',
+          :quiet             => env != 'production',
+          :full_exception    => env != 'production'
+        }.freeze
       end
     end
   end
-end
     
-          def get_shallow(*path)
-        snapshot.metric_store.get_shallow(*path)
-      end
-    
-      def setup_multi_encode!
-    @has_encode_sync = self.methods.include?(:encode_sync)
-    
-      context 'called with two widths' do
-    it 'applies to alternating sides' do
-      rule = 'border-width: 2px 3px'
-    
-      context 'called with multiple prefixes' do
-    it 'applies the prefixes to the property' do
-      rule = '-moz-appearance: none; ' +
-             '-ms-appearance: none; ' +
-             'appearance: none;'
+      def prefixes
+    prefixes = ['/bin', '/usr/bin', '/usr/libexec', xcode_app_path]
+    prefixes << `brew --prefix`.strip unless `which brew`.strip.empty?
