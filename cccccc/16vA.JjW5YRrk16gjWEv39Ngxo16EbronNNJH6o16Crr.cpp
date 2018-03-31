@@ -1,303 +1,394 @@
 
         
-        Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+        #endif /* OPENCV_CUDA_WARP_REDUCE_HPP__ */
+
     
-      partial_run_mgr_.ExecutorDone(step_id, param.executor_status);
-  partial_run_mgr_.PartialRunDone(step_id,
-                                  [this](Status status) { set_status(status); },
-                                  param.partial_run_status);
+            if (obj.empty() || obj.type() != type || !obj.isContinuous() || obj.size().area() != area)
+            obj.create(1, area, type);
     
-    class TestFileSystem : public NullFileSystem {
- public:
-  Status NewRandomAccessFile(
-      const string& fname, std::unique_ptr<RandomAccessFile>* result) override {
-    result->reset(new TestRandomAccessFile);
-    return Status::OK();
-  }
-  // Always return size of 10
-  Status GetFileSize(const string& fname, uint64* file_size) override {
-    *file_size = 10;
-    return Status::OK();
-  }
+    GpuMat cv::cuda::HostMem::createGpuMatHeader() const
+{
+#ifndef HAVE_CUDA
+    throw_no_cuda();
+    return GpuMat();
+#else
+    CV_Assert( alloc_type == SHARED );
+    }
+    
+    
+class WERD;
+class UNICHARSET;
+    
+    /**
+ * @name tess_acceptable_word
+ *
+ * @return true if the word is regarded as 'good enough'.
+ * @param word_choice after context
+ * @param raw_choice before context
+ */
+bool Tesseract::tess_acceptable_word(WERD_RES* word) {
+  return getDict().AcceptableResult(word);
+}
+    
+    void LLSQ::add(double x, double y) {          // add an element
+  total_weight++;                           // count elements
+  sigx += x;                     // update accumulators
+  sigy += y;
+  sigxx += x * x;
+  sigxy += x * y;
+  sigyy += y * y;
+}
+// Adds an element with a specified weight.
+void LLSQ::add(double x, double y, double weight) {
+  total_weight += weight;
+  sigx += x * weight;                     // update accumulators
+  sigy += y * weight;
+  sigxx += x * x * weight;
+  sigxy += x * y * weight;
+  sigyy += y * y * weight;
+}
+// Adds a whole LLSQ.
+void LLSQ::add(const LLSQ& other) {
+  total_weight += other.total_weight;
+  sigx += other.sigx;                     // update accumulators
+  sigy += other.sigy;
+  sigxx += other.sigxx;
+  sigxy += other.sigxy;
+  sigyy += other.sigyy;
+}
+    
+    
+    {  // Does this paragraph begin with a drop cap?
+  bool has_drop_cap;
 };
+    
+    // A smart pointer class that implements a double-ended pointer. Each end
+// points to the other end. The copy constructor and operator= have MOVE
+// semantics, meaning that the relationship with the other end moves to the
+// destination of the copy, leaving the source unattached.
+// For this reason both the copy constructor and the operator= take a non-const
+// reference argument, and the const reference versions cannot be used.
+// DoublePtr is useful to incorporate into structures that are part of a
+// collection such as GenericVector or STL containers, where reallocs can
+// relocate the members. DoublePtr is also useful in a GenericHeap, where it
+// can correctly maintain the pointer to an element of the heap despite it
+// getting moved around on the heap.
+class DoublePtr {
+ public:
+  DoublePtr() : other_end_(NULL) {}
+  // Copy constructor steals the partner off src and is therefore a non
+  // const reference arg.
+  // Copying a const DoublePtr generates a compiler error.
+  DoublePtr(DoublePtr& src) {
+    other_end_ = src.other_end_;
+    if (other_end_ != NULL) {
+      other_end_->other_end_ = this;
+      src.other_end_ = NULL;
+    }
+  }
+  // Operator= steals the partner off src, and therefore needs src to be a non-
+  // const reference.
+  // Assigning from a const DoublePtr generates a compiler error.
+  void operator=(DoublePtr& src) {
+    Disconnect();
+    other_end_ = src.other_end_;
+    if (other_end_ != NULL) {
+      other_end_->other_end_ = this;
+      src.other_end_ = NULL;
+    }
+  }
+    }
+    
+    #include 'genericvector.h'
     
     
     {
-    {      auto h = handle_.AccessTensor(context)->template flat<string>();
-      h(0) = cinfo_.container();
-      h(1) = cinfo_.name();
-      resource_ = resource;
-    }
-    if (context->expected_output_dtype(0) == DT_RESOURCE) {
-      OP_REQUIRES_OK(context, MakeResourceHandleToOutput(
-                                  context, 0, cinfo_.container(), cinfo_.name(),
-                                  MakeTypeIndex<T>()));
-    } else {
-      context->set_output_ref(0, &mu_, handle_.AccessTensor(context));
-    }
+    {    loadSystemlib();
   }
+} s_xhprof_extension;
     
-      bool ret = false;
-  if (running && (pid > 1)) {
-    pid_t cpid;
-    int cstat;
-    bool done = false;
-    while (!done) {
-      cpid = waitpid(pid, &cstat, 0);
-      if ((cpid < 0) && !retry(errno)) {
-        done = true;
-      } else if ((cpid == pid) && (WIFEXITED(cstat) || WIFSIGNALED(cstat))) {
-        *status = cstat;
-        ret = true;
-        done = true;
+    void Vunit::freeScratchBlock(Vlabel l) {
+  // This will leak blocks if anything's been added since the corresponding
+  // call to makeScratchBlock(), but it's harmless.
+  if (l == blocks.size() - 1) blocks.pop_back();
+}
+    
+     private:
+  using Cluster = jit::vector<Vlabel>;
+    
+    void ThriftBuffer::skip(int8_t type) {
+  switch (type) {
+    case T_STOP:
+    case T_VOID:
+      return;
+    case T_STRUCT:
+      while (true) {
+        int8_t ttype; read(ttype); // get field type
+        if (ttype == T_STOP) break;
+        read(nullptr, 2); // skip field number, I16
+        skip(ttype); // skip field payload
       }
+      return;
+    case T_BOOL:
+    case T_BYTE:
+      read(nullptr, 1);
+      return;
+    case T_I16:
+      read(nullptr, 2);
+      return;
+    case T_I32:
+      read(nullptr, 4);
+      return;
+    case T_U64:
+    case T_I64:
+    case T_DOUBLE:
+      read(nullptr, 8);
+      return;
+    //case T_UTF7: // aliases T_STRING
+    case T_UTF8:
+    case T_UTF16:
+    case T_STRING: {
+      int32_t len; read(len);
+      read(nullptr, len);
+      } return;
+    case T_MAP: {
+      int8_t keytype; read(keytype);
+      int8_t valtype; read(valtype);
+      int32_t size; read(size);
+      for (int32_t i = 0; i < size; ++i) {
+        skip(keytype);
+        skip(valtype);
+      }
+    } return;
+    case T_LIST:
+    case T_SET: {
+      int8_t valtype; read(valtype);
+      int32_t size; read(size);
+      for (int32_t i = 0; i < size; ++i) {
+        skip(valtype);
+      }
+    } return;
+  };
     }
-  }
     
-      // Sets the appropriate library kind to that passed in.
-  PluginConfig& SetBlas(PluginId blas);
-  PluginConfig& SetDnn(PluginId dnn);
-  PluginConfig& SetFft(PluginId fft);
-  PluginConfig& SetRng(PluginId rng);
+    #ifndef GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
+#define GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
     
-    class SYCLDeviceContext : public DeviceContext {
- public:
-  SYCLDeviceContext() {}
+    // Tucks all generator state in an anonymous namespace away from
+// PythonGrpcGenerator and the header file, mostly to encourage future changes
+// to not require updates to the grpcio-tools C++ code part. Assumes that it is
+// only ever used from a single thread.
+struct PrivateGenerator {
+  const GeneratorConfiguration& config;
+  const grpc_generator::File* file;
     }
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    class TFRecordReader : public ReaderBase {
- public:
-  TFRecordReader(const string& node_name, const string& compression_type,
-                 Env* env)
-      : ReaderBase(strings::StrCat('TFRecordReader '', node_name, ''')),
-        env_(env),
-        offset_(0),
-        compression_type_(compression_type) {}
-    }
-    
-        OP_REQUIRES(context, TensorShapeUtils::IsMatrix(contents.shape()),
-                errors::InvalidArgument(
-                    'sampled_audio must be a rank-2 tensor but got shape ',
-                    contents.shape().DebugString()));
-    OP_REQUIRES(
-        context, contents.NumElements() <= std::numeric_limits<int32>::max(),
-        errors::InvalidArgument(
-            'sampled_audio cannot have more than 2^31 entries. Shape = ',
-            contents.shape().DebugString()));
-    OP_REQUIRES(context, TensorShapeUtils::IsScalar(file_format_tensor.shape()),
-                errors::InvalidArgument(
-                    'file_format must be a rank-0 tensor but got shape ',
-                    file_format_tensor.shape().DebugString()));
-    OP_REQUIRES(context,
-                TensorShapeUtils::IsScalar(samples_per_second_tensor.shape()),
-                errors::InvalidArgument(
-                    'samples_per_second must be a rank-0 tensor but got shape ',
-                    samples_per_second_tensor.shape().DebugString()));
-    OP_REQUIRES(context,
-                TensorShapeUtils::IsScalar(bits_per_second_tensor.shape()),
-                errors::InvalidArgument(
-                    'bits_per_second must be a rank-0 tensor but got shape ',
-                    bits_per_second_tensor.shape().DebugString()));
-    
-    TF_CALL_GPU_NUMBER_TYPES(REGISTER_DYNAMIC_STITCH_GPU);
-TF_CALL_complex64(REGISTER_DYNAMIC_STITCH_GPU);
-TF_CALL_complex128(REGISTER_DYNAMIC_STITCH_GPU);
-TF_CALL_int64(REGISTER_DYNAMIC_STITCH_GPU);
-TF_CALL_int32(REGISTER_DYNAMIC_STITCH_GPU);
-#undef REGISTER_DYNAMIC_STITCH_GPU
-    
-    static std::unique_ptr<Result> make_result(Completion *result) {
-  auto r = llvm::make_unique<Result>(result);
-  r->name = result->getName();
-  r->description = result->getDescription();
-  return r;
+    bool SecureAuthContext::SetPeerIdentityPropertyName(const grpc::string& name) {
+  if (!ctx_) return false;
+  return grpc_auth_context_set_peer_identity_property_name(ctx_,
+                                                           name.c_str()) != 0;
 }
     
-    
-    {} // end swift namespace
-    
-    /// \brief Diagnostic consumer that displays diagnostics to standard error.
-class PrintingDiagnosticConsumer : public DiagnosticConsumer {
-  llvm::raw_ostream &Stream;
-  bool ForceColors = false;
-  bool DidErrorOccur = false;
-public:
-  PrintingDiagnosticConsumer(llvm::raw_ostream &stream = llvm::errs()) :
-    Stream(stream) { }
-    }
-    
-    
-    {  StringRef getReceiverUSR() const {
-    for (auto Relation: Relations) {
-      if (Relation.roles & (SymbolRoleSet) SymbolRole::RelationReceivedBy)
-        return Relation.USR;
-    }
-    return StringRef();
-  }
-};
-    
-    Status DumpFile(Env* env, const std::string& fname, WritableFile* dst) {
-  FileType ftype;
-  if (!GuessType(fname, &ftype)) {
-    return Status::InvalidArgument(fname + ': unknown file type');
-  }
-  switch (ftype) {
-    case kLogFile:         return DumpLog(env, fname, dst);
-    case kDescriptorFile:  return DumpDescriptor(env, fname, dst);
-    case kTableFile:       return DumpTable(env, fname, dst);
-    default:
-      break;
-  }
-  return Status::InvalidArgument(fname + ': not a dump-able file type');
-}
-    
-    
-    {}  // namespace leveldb
-    
-    Status VersionEdit::DecodeFrom(const Slice& src) {
-  Clear();
-  Slice input = src;
-  const char* msg = NULL;
-  uint32_t tag;
-    }
-    
-      VersionEdit edit;
-  for (int i = 0; i < 4; i++) {
-    TestEncodeDecode(edit);
-    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
-                 InternalKey('foo', kBig + 500 + i, kTypeValue),
-                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
-    edit.DeleteFile(4, kBig + 700 + i);
-    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
-  }
-    
-    #endif  // STORAGE_LEVELDB_HELPERS_MEMENV_MEMENV_H_
-
-    
-      // If *start < limit, changes *start to a short string in [start,limit).
-  // Simple comparator implementations may return with *start unchanged,
-  // i.e., an implementation of this method that does nothing is correct.
-  virtual void FindShortestSeparator(
-      std::string* start,
-      const Slice& limit) const = 0;
-    
-      // Return the length (in bytes) of the referenced data
-  size_t size() const { return size_; }
-    
-    // EXPECT_DEATH_IF_SUPPORTED(statement, regex) and
-// ASSERT_DEATH_IF_SUPPORTED(statement, regex) expand to real death tests if
-// death tests are supported; otherwise they just issue a warning.  This is
-// useful when you are combining death test assertions with normal test
-// assertions in one test.
-#if GTEST_HAS_DEATH_TEST
-# define EXPECT_DEATH_IF_SUPPORTED(statement, regex) \
-    EXPECT_DEATH(statement, regex)
-# define ASSERT_DEATH_IF_SUPPORTED(statement, regex) \
-    ASSERT_DEATH(statement, regex)
-#else
-# define EXPECT_DEATH_IF_SUPPORTED(statement, regex) \
-    GTEST_UNSUPPORTED_DEATH_TEST_(statement, regex, )
-# define ASSERT_DEATH_IF_SUPPORTED(statement, regex) \
-    GTEST_UNSUPPORTED_DEATH_TEST_(statement, regex, return)
+    #ifndef GRPC_XMACRO_ITEM
+#error This file is to be used with the 'X-macro' pattern: Please #define \
+       GRPC_XMACRO_ITEM(methodName, FlagName), then #include this file, and then #undef \
+       GRPC_XMACRO_ITEM.
 #endif
     
-    // The tests from the instantiation above will have these names:
-//
-//    * AnotherInstantiationName/FooTest.DoesBlah/0 for 'cat'
-//    * AnotherInstantiationName/FooTest.DoesBlah/1 for 'dog'
-//    * AnotherInstantiationName/FooTest.HasBlahBlah/0 for 'cat'
-//    * AnotherInstantiationName/FooTest.HasBlahBlah/1 for 'dog'
-//
-// Please note that INSTANTIATE_TEST_CASE_P will instantiate all tests
-// in the given test case, whether their definitions come before or
-// AFTER the INSTANTIATE_TEST_CASE_P statement.
-//
-// Please also note that generator expressions (including parameters to the
-// generators) are evaluated in InitGoogleTest(), after main() has started.
-// This allows the user on one hand, to adjust generator parameters in order
-// to dynamically determine a set of tests to run and on the other hand,
-// give the user a chance to inspect the generated tests with Google Test
-// reflection API before RUN_ALL_TESTS() is executed.
-//
-// You can see samples/sample7_unittest.cc and samples/sample8_unittest.cc
-// for more examples.
-//
-// In the future, we plan to publish the API for defining new parameter
-// generators. But for now this interface remains part of the internal
-// implementation and is subject to change.
-//
-//
-// A parameterized test fixture must be derived from testing::Test and from
-// testing::WithParamInterface<T>, where T is the type of the parameter
-// values. Inheriting from TestWithParam<T> satisfies that requirement because
-// TestWithParam<T> inherits from both Test and WithParamInterface. In more
-// complicated hierarchies, however, it is occasionally useful to inherit
-// separately from Test and WithParamInterface. For example:
     
-      // Leave whatever circle we're part of.  Returns true if we were the
-  // last member of the circle.  Once this is done, you can join() another.
-  bool depart()
-      GTEST_LOCK_EXCLUDED_(g_linked_ptr_mutex) {
-    MutexLock lock(&g_linked_ptr_mutex);
+    {  const Result start_;
+};
+    
+      std::unique_ptr<grpc::Server> StartServer(int port);
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    namespace boost {
+namespace asio {
+    }
     }
     
-      // Try to divide n by every odd number i, starting from 3
-  for (int i = 3; ; i += 2) {
-    // We only have to try i up to the squre root of n
-    if (i > n/i) break;
-    }
+    #include <boost/asio/detail/config.hpp>
     
-    using ::testing::EmptyTestEventListener;
-using ::testing::InitGoogleTest;
-using ::testing::Test;
-using ::testing::TestCase;
-using ::testing::TestEventListeners;
-using ::testing::TestInfo;
-using ::testing::TestPartResult;
-using ::testing::UnitTest;
-    
-      explicit WorkloadStats(State guardedState);
-  ~WorkloadStats();
-    
-      int reverse = 0;
-  int n = mbfl_strpos(&mbs_haystack, &mbs_needle, offset, reverse);
-  if (n >= 0) {
-    return n;
-  }
-    
-      if (asprintf(&default_magic, '%s:%s', hmagicpath, MAGIC) < 0)
-    goto out;
-  free(hmagicpath);
-  return default_magic;
-out:
-  default_magic = NULL;
-  free(hmagicpath);
-  return MAGIC;
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+# include <boost/asio/detail/null_event.hpp>
+#elif defined(BOOST_ASIO_WINDOWS)
+# include <boost/asio/detail/win_event.hpp>
+#elif defined(BOOST_ASIO_HAS_PTHREADS)
+# include <boost/asio/detail/posix_event.hpp>
+#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
+# include <boost/asio/detail/std_event.hpp>
 #else
-  char *hmagicp = hmagicpath;
-  char *tmppath = NULL;
-  LPTSTR dllpath;
+# error Only Windows, POSIX and std::condition_variable are supported!
+#endif
     
-    /*
- * Helpers for unconditional and conditional jumps.
- */
-void surpriseCheck(IRGS&);
-void surpriseCheck(IRGS&, Offset);
-void jmpImpl(IRGS&, Offset);
-void implCondJmp(IRGS&, Offset taken, bool negate, SSATmp*);
+    #include <boost/asio/detail/posix_fd_set_adapter.hpp>
+#include <boost/asio/detail/win_fd_set_adapter.hpp>
     
-    /*
- * Emit checks for (and hooks into) an attached debugger in front of each
- * translation in `unit' or for `SrcKey{func, offset, resumed}'.
- */
-bool addDbgGuards(const Unit* unit);
-bool addDbgGuard(const Func* func, Offset offset, ResumeMode resumeMode);
+    #include <boost/asio/detail/pop_options.hpp>
     
-    #include 'hphp/util/arch.h'
-#include 'hphp/util/assertions.h'
+    
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
+    
+    bool js_cocos2dx_studio_ComController_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_ComController_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_ComController(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_ComController_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ComController_ComController(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+#endif // __cocos2dx_cocosbuilder_h__
+
+    
+    #ifdef __cplusplus
+extern 'C' {
+#endif
+#include 'tolua++.h'
+#ifdef __cplusplus
+}
+#endif
+    
+    
+    
+        argc = lua_gettop(tolua_S) - 1;
+    
+    void Test::MouseMove(const b2Vec2& p)
+{
+	m_mouseWorld = p;
+	
+	if (m_mouseJoint)
+	{
+		m_mouseJoint->SetTarget(p);
+	}
+}
+    
+    
+    {	b2Profile m_maxProfile;
+	b2Profile m_totalProfile;
+};
+    
+    			b2WeldJointDef jd;
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_API void        ImGui_ImplDX10_InvalidateDeviceObjects();
+IMGUI_API bool        ImGui_ImplDX10_CreateDeviceObjects();
+    
+        // Setup time step
+    double current_time = s3eTimerGetUST() / 1000.0f;
+    io.DeltaTime = g_Time > 0.0 ? (float)(current_time - g_Time) : (float)(1.0f/60.0f);
+    g_Time = current_time;
+    
+    // callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_API int32       ImGui_Marmalade_PointerButtonEventCallback(void* SystemData, void* pUserData);
+IMGUI_API int32       ImGui_Marmalade_KeyCallback(void* SystemData, void* userData);
+IMGUI_API int32       ImGui_Marmalade_CharCallback(void* SystemData, void* userData);
+
+    
+    
+    {        // Rendering
+        al_clear_to_color(al_map_rgba_f(clear_color.x, clear_color.y, clear_color.z, clear_color.w));
+        ImGui::Render();
+        ImGui_ImplA5_RenderDrawData(ImGui::GetDrawData());
+        al_flip_display();
+    }
+    
+        g_pSwapChain->SetMaximumFrameLatency(NUM_BACK_BUFFERS);
+    
+        ImVec2 max_glyph_size(1.0f, 1.0f);
+    
+    const ImWchar*  ImFontAtlas::GetGlyphRangesCyrillic()
+{
+    static const ImWchar ranges[] =
+    {
+        0x0020, 0x00FF, // Basic Latin + Latin Supplement
+        0x0400, 0x052F, // Cyrillic + Cyrillic Supplement
+        0x2DE0, 0x2DFF, // Cyrillic Extended-A
+        0xA640, 0xA69F, // Cyrillic Extended-B
+        0,
+    };
+    return &ranges[0];
+}
+    
+    
+    {    g_FrameIndex = (g_FrameIndex + 1) % IMGUI_VK_QUEUED_FRAMES;
+}
+    
+        // Setup time step
+    double current_time =  glfwGetTime();
+    io.DeltaTime = g_Time > 0.0 ? (float)(current_time - g_Time) : (float)(1.0f/60.0f);
+    g_Time = current_time;
+    
+        // Store GL version string so we can refer to it later in case we recreate shaders.
+    if (glsl_version == NULL)
+        glsl_version = '#version 150';
+    IM_ASSERT((int)strlen(glsl_version) + 2 < IM_ARRAYSIZE(g_GlslVersion));
+    strcpy(g_GlslVersion, glsl_version);
+    strcat(g_GlslVersion, '\n');
+    
+    IMGUI_API bool        ImGui_ImplSdlGL2_Init(SDL_Window* window);
+IMGUI_API void        ImGui_ImplSdlGL2_Shutdown();
+IMGUI_API void        ImGui_ImplSdlGL2_NewFrame(SDL_Window* window);
+IMGUI_API void        ImGui_ImplSdlGL2_RenderDrawData(ImDrawData* draw_data);
+IMGUI_API bool        ImGui_ImplSdlGL2_ProcessEvent(SDL_Event* event);
+    
+    
+    {    void toJS(nbind::cbOutput expose) const
+    {
+        expose(unit, value);
+    }
+};
+
+    
+    /* static */ void Config::destroy(Config * node)
+{
+    delete node;
+}
+    
+    // Return the epilogue of the generated source file.
+grpc::string GetSourceEpilogue(grpc_generator::File *file,
+                               const Parameters &params);
+    
+    namespace grpc_go_generator {
+    }
+    
+    namespace MyGame {
+namespace Example {
+    }
+    }
+    
+      void Warn(const std::string &warn, bool show_exe_name = true) const;
+    
+      T *operator*() const {
+    return reinterpret_cast<T *>(
+        reinterpret_cast<uint8_t *>(flatbuffers::vector_data(vec_)) + offset_);
+  }
+  T *operator->() const { return operator*(); }
+  void operator=(const pointer_inside_vector &piv);
+    
+      // Get and test a field of the FlatBuffer's `struct`.
+  auto pos = monster->pos();
+  assert(pos);
+  assert(pos->z() == 3.0f);
+  (void)pos;
+    
+    std::string BaseGenerator::NamespaceDir(const Parser &parser,
+                                        const std::string &path,
+                                        const Namespace &ns) {
+  EnsureDirExists(path.c_str());
+  if (parser.opts.one_file) return path;
+  std::string namespace_dir = path;  // Either empty or ends in separator.
+  auto &namespaces = ns.components;
+  for (auto it = namespaces.begin(); it != namespaces.end(); ++it) {
+    namespace_dir += *it + kPathSeparator;
+    EnsureDirExists(namespace_dir.c_str());
+  }
+  return namespace_dir;
+}
