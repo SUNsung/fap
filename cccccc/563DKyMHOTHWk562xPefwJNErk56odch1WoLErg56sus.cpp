@@ -1,405 +1,258 @@
 
         
-        void convert_dataset(const string& input_folder, const string& output_folder,
-    const string& db_type) {
-  scoped_ptr<db::DB> train_db(db::GetDB(db_type));
-  train_db->Open(output_folder + '/cifar10_train_' + db_type, db::NEW);
-  scoped_ptr<db::Transaction> txn(train_db->NewTransaction());
-  // Data buffer
-  int label;
-  char str_buffer[kCIFARImageNBytes];
-  Datum datum;
-  datum.set_channels(3);
-  datum.set_height(kCIFARSize);
-  datum.set_width(kCIFARSize);
-    }
+        // Generate destructors.
+#include 'ipc/struct_destructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
+    
+    NwAppSetProxyConfigFunction::NwAppSetProxyConfigFunction() {
+}
     
     
-#define REGISTER_LAYER_CREATOR(type, creator)                                  \
-  static LayerRegisterer<float> g_creator_f_##type(#type, creator<float>);     \
-  static LayerRegisterer<double> g_creator_d_##type(#type, creator<double>)    \
+    {} // namespace extensions
+
     
-      virtual inline const char* type() const { return 'BNLL'; }
     
-    namespace caffe {
-    }
+    {}
     
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of PoolingLayer.
- *        Fallback to PoolingLayer for CPU mode.
-*/
-template <typename Dtype>
-class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
- public:
-  explicit CuDNNPoolingLayer(const LayerParameter& param)
-      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNPoolingLayer();
-  // Currently, cuDNN does not support the extra top blob.
-  virtual inline int MinTopBlobs() const { return -1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    }
+      rusage ru;
+  memset(&ru, 0, sizeof(ru));
+  auto DEBUG_ONLY ret = getrusage(who, &ru);
+  assert(ret == 0);
     
-    #ifdef USE_CUDNN
-/**
- * @brief cuDNN implementation of SoftmaxLayer.
- *        Fallback to SoftmaxLayer for CPU mode.
- */
-template <typename Dtype>
-class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
- public:
-  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
-      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNSoftmaxLayer();
-    }
+    ///////////////////////////////////////////////////////////////////////////////
     
-     protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the computed outputs @f$
-   *        y = \left\{
-   *        \begin{array}{lr}
-   *            x                  & \mathrm{if} \; x > 0 \\
-   *            \alpha (\exp(x)-1) & \mathrm{if} \; x \le 0
-   *        \end{array} \right.
-   *      @f$.  
+    Vlabel Vunit::makeScratchBlock() {
+  return makeBlock(AreaIndex::Main, 1);
+}
+    
+      /*
+   * Make various Vunit-managed vasm structures.
    */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+  Vreg makeReg() { return Vreg{next_vr++}; }
+  Vtuple makeTuple(VregList&& regs);
+  Vtuple makeTuple(const VregList& regs);
+  VcallArgsId makeVcallArgs(VcallArgs&& args);
+    
+      if (strLength == 0) {
+    return false;
+  }
+    
+      // First, we can easily compute the weight of the non-crititical arcs by
+  // looking at its incident blocks.
+  for (auto b : m_blocks) {
+    auto succSet = succs(m_unit.blocks[b]);
+    for (auto s : succSet) {
+      auto arcid = arcId(b, s);
+      m_arcWgts[arcid] = succSet.size()    == 1 ? weight(b)
+                       : m_preds[s].size() == 1 ? weight(s)
+                       : kUnknownWeight;
+      assertx(m_arcWgts[arcid] >= 0);
+      if (m_arcWgts[arcid] != kUnknownWeight) {
+        FTRACE(3, '  - arc({} -> {}) [non-critical] => weight = {}  '
+               '[|succs(b)| = {} ; |preds(s)| = {}] '
+               '[weight(b) = {} ; weight(s) = {}]\n', b, s, m_arcWgts[arcid],
+               succSet.size(), m_preds[s].size(), weight(b), weight(s));
+      }
+    }
+  }
+    
+      if (data) memcpy(data, m_p, avail);
+  len -= avail;
+  data += avail;
+    
+      bool endsRegion:1;
+  bool preppedByRef:1;
+  bool ignoreInnerType:1;
+    
+      // Append address range to free list
+  void free(void* addr, size_t len);
+    
+        // Attempts to compute the error signal for the whole utterance, which will
+    // be fed to the neural network as features. Currently it is a workaround
+    // for the two-forward-pass sequence and ctc training, which allows
+    // processing more utterances at the same time. Only used in Kaldi2Reader.
+    // TODO: move the two-forward-pass support out of the reader.
+    void AttemptUtteranceDerivativeFeatures(ComputationNetworkPtr net,
+                                            IDataReader* trainSetDataReader,
+                                            const std::vector<ComputationNodeBasePtr>& featureNodes,
+                                            StreamMinibatchInputs* inputMatrices);
+    
+        const ModelMetaData& Model::MetaData() const
+    {
+        return m_modelMetaData;
     }
     
-     protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+                static Common::Status UnpackTensor(const onnx::TensorProto& p_tensor, /*out*/std::string* p_data, int64_t p_expected_size);
+            static Common::Status UnpackTensor(const onnx::TensorProto& p_tensor, /*out*/bool* p_data, int64_t p_expected_size);
     
-    // Asserts that a given statement causes the program to exit, either by
-// explicitly exiting with a nonzero exit code or being killed by a
-// signal, and emitting error output that matches regex.
-# define ASSERT_DEATH(statement, regex) \
-    ASSERT_EXIT(statement, ::testing::internal::ExitedUnsuccessfully, regex)
+        inline Status FileOpenWr(const std::wstring& p_path, /*out*/ int* p_fd)
+    {
+        _wsopen_s(p_fd, p_path.c_str(), _O_CREAT | _O_SEQUENTIAL | _O_BINARY | _O_WRONLY, _SH_DENYWR, _S_IREAD | _S_IWRITE);
+        if (0 > *p_fd)
+        {
+            return Status(SYSTEM, errno);
+        }
+        return Status::OK();
+    }
+#endif
     
-    // A copyable object representing the result of a test part (i.e. an
-// assertion or an explicit FAIL(), ADD_FAILURE(), or SUCCESS()).
-//
-// Don't inherit from TestPartResult as its destructor is not virtual.
-class GTEST_API_ TestPartResult {
- public:
-  // The possible outcomes of a test part (i.e. an assertion or an
-  // explicit SUCCEED(), FAIL(), or ADD_FAILURE()).
-  enum Type {
-    kSuccess,          // Succeeded.
-    kNonFatalFailure,  // Failed but the test can continue.
-    kFatalFailure      // Failed and the test should be terminated.
+        // Taken from RS4
+    REGISTER_OPERATOR_SCHEMA(Identity)
+        .Description('Identity takes one input data (Tensor<T>) and produces one '
+            'output data (Tensor<T>) where the function, y = x, is applied to the '
+            'tensor elementwise.')
+        .Input('input', 'input tensor', 'T')
+        .Output('output', 'output tensor', 'T')
+        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
+            'Constrain input and output types to float tensors.');
+    
+    #define REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(OpName)                                                      \
+    REGISTER_OPERATOR_SCHEMA(OpName)                                                                            \
+        .Description('Returns the tensor resulted from performing the ''#OpName'' logical operation'            \
+        'elementwise on the input tensors A and B. If broadcasting is enabled, the right-hand-side'             \
+        'argument will be broadcasted to match the shape of left-hand-side argument. Refer to Add for'          \
+        'a detailed description of the broadcasting rules.')                                                    \
+        .Input('A', 'First operand, should share the type with the second operand.', 'T1')                      \
+        .Input('B', 'Second operand. With broadcasting can be of smaller size than A.'                          \
+            'If broadcasting is disabled, it should be of the same size.', 'T1')                                \
+        .Output('C', 'Result, has same dimensions as A and type bool.', 'T2')                                   \
+        .TypeConstraint('T1', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },                         \
+                'Constrain input to float tensors.')                                                            \
+        .TypeConstraint('T2', { 'tensor(bool)' }, 'Constrain output types to bool tensor.')                     \
+        .Attr('axis', 'If set, defines the broadcast dimensions.',                                              \
+            AttrType::AttributeProto_AttributeType_INT)                                                         \
+        .Attr('broadcast', 'Pass 1 to enable broadcasting.',                                                    \
+            AttrType::AttributeProto_AttributeType_INT);
+    
+        // Taken from ONNX
+    REGISTER_OPERATOR_SCHEMA(Conv)
+        .Description('The convolution operator consumes an input tensor and a filter, and'
+            'computes the output.')
+        .Input('X',
+             'Input data tensor from previous layer; has size (N x C x H x W)'
+             ', where N is the batch size, C is the number of channels, and'
+             ' H and W are the height and width. Note that this is for the 2D image.'
+             'Otherwise the size is (N x D1 x D2 ... x Dn)',
+             'T')
+        .Input('W',
+             'The weight tensor that will be used in the convolutions; has size (M x C x kH x kW), '
+             'where C is the number of channels, and kH and kW are the height and width of the kernel, '
+             'and M is the number of feature maps. For more than 2 dimensions, the kernel shape will be '
+             '(M x C x k1 x k2 x ... x kn), where is the dimension of the kernel',
+             'T')
+        .Input('B',
+            'Optional 1D bias to be added to the convolution, has size of M.',
+            'T')
+        .Output('Y',
+              'Output data tensor that contains the result of the convolution. The '
+              'output dimensions are functions of the kernel size, stride size, '
+              'and pad lengths.',
+              'T')
+        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
+            'Constrain input and output types to float tensors.')
+        .Attr('auto_pad',
+            'auto_pad must be either SAME_UPPER, SAME_LOWER or VALID. Where SAME_UPPER '
+            'or SAME_LOWER mean pad the input so that the ouput size match the input. '
+            'In case of odd number add the extra padding at the end for SAME_UPPER and '
+            'at the begining for SAME_LOWER. VALID mean no padding, therefore, read the '
+            'pixel values from the pads attribute.',
+            AttrType::AttributeProto_AttributeType_STRING)
+        .Attr('kernel_shape',
+            'The shape of the convolution kernel.',
+             AttrType::AttributeProto_AttributeType_INTS)
+        .Attr('dilations',
+            'dilation value along each axis of the filter.',
+            AttrType::AttributeProto_AttributeType_INTS)
+        .Attr('strides',
+            'stride along each axis.',
+            AttrType::AttributeProto_AttributeType_INTS)
+        .Attr('pads',
+            'Padding for lower and upper side along each axis, it can take any value greater '
+            'than or equal to 0. The value represent the number of pixels added to the lower '
+            'and upper part of the corresponding axis. So `pads` will have two values per axis, '
+            'first value corresponding to the number of pixels added to the begining of the '
+            'axis and the second value corresponding to the number of pixels add at the end '
+            'of the axis.',
+            AttrType::AttributeProto_AttributeType_INTS)
+        .Attr('group',
+            'number of groups input channels and output channels are divided into',
+            AttrType::AttributeProto_AttributeType_INT);
+    
+        virtual void Save(File& fstream) const override
+    {
+        Base::Save(fstream);
+        fstream << m_delayConstraint;
+        fstream << m_blankTokenId;
+    }
+    
+        if (!(flags & CopyNodeFlags::copyNodeValue))
+        LogicError('CopySubTree: you cannot copy a tree without copying the node values.');
+    
+    	jstring tag = (jstring)JNU_GetField(env, _log_info, 'tag', 'Ljava/lang/String;').l;
+	jstring filename = (jstring)JNU_GetField(env, _log_info, 'filename', 'Ljava/lang/String;').l;
+	jstring funcname = (jstring)JNU_GetField(env, _log_info, 'funcname', 'Ljava/lang/String;').l;
+	jint line = JNU_GetField(env, _log_info, 'line', 'I').i;
+	jlong pid = JNU_GetField(env, _log_info, 'pid', 'J').i;
+	jlong tid = JNU_GetField(env, _log_info, 'tid', 'J').j;
+	jlong maintid = JNU_GetField(env, _log_info, 'maintid', 'J').j;
+    
+        if (EXPECTS_CRASH_DUMP_HEADER == _state) {
+        _state = EXPECTS_CRASH_DUMP_CONTENT;
+        strout += _strcache;
+    }
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+      /**
+   * Initiate a read request.
+   */
+  void pread(int fd, void* buf, size_t size, off_t start);
+  void pread(int fd, Range<unsigned char*> range, off_t start);
+  void preadv(int fd, const iovec* iov, int iovcnt, off_t start);
+    
+    void testReadsSerially(
+    const std::vector<TestSpec>& specs,
+    AsyncIO::PollMode pollMode) {
+  AsyncIO aioReader(1, pollMode);
+  AsyncIO::Op op;
+  int fd = ::open(tempFile.path().c_str(), O_DIRECT | O_RDONLY);
+  PCHECK(fd != -1);
+  SCOPE_EXIT {
+    ::close(fd);
   };
     }
     
-      // Returns a copy of the FilePath with the directory part removed.
-  // Example: FilePath('path/to/file').RemoveDirectoryName() returns
-  // FilePath('file'). If there is no directory part ('just_a_file'), it returns
-  // the FilePath unmodified. If there is no file part ('just_a_dir/') it
-  // returns an empty FilePath ('').
-  // On Windows platform, '\' is the path separator, otherwise it is '/'.
-  FilePath RemoveDirectoryName() const;
     
-    template <>
-class Get<9> {
- public:
-  template <class Tuple>
-  static GTEST_ADD_REF_(GTEST_TUPLE_ELEMENT_(9, Tuple))
-  Field(Tuple& t) { return t.f9_; }  // NOLINT
+    {    std::vector<std::string>* getCurrentQueue() {
+      return &queues[ioThreadCounter & 0x1];
+    }
+  };
+    
+    namespace folly {
     }
     
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
-    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
-    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
-    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
-    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
-    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
-    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29>
-struct Templates29 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates28<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
-      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-      T29> Tail;
-};
-    
-    // Tests some trivial cases.
-TEST(IsPrimeTest, Trivial) {
-  EXPECT_FALSE(IsPrime(0));
-  EXPECT_FALSE(IsPrime(1));
-  EXPECT_TRUE(IsPrime(2));
-  EXPECT_TRUE(IsPrime(3));
-}
-    
-    #include <grpc/support/log.h>
-    
-      ClientConfig client_config;
-  client_config.set_client_type(SYNC_CLIENT);
-  client_config.set_outstanding_rpcs_per_channel(1);
-  client_config.set_client_channels(1);
-  client_config.set_rpc_type(UNARY);
-  client_config.mutable_load_params()->mutable_closed_loop();
-    
-      bool Finished() {
-    return current_ >= db_.size();
-  }
-    
-    namespace routeguide {
-class Feature;
-    }
-    
-    namespace grpc {
-namespace {
-    }
-    }
-    
-    #include <fstream>
-#include <sstream>
-#include <string>
-    
-    #ifndef TEST_QPS_USAGE_TIMER_H
-#define TEST_QPS_USAGE_TIMER_H
-    
-    class SubProcess {
- public:
-  SubProcess(const std::vector<std::string>& args);
-  ~SubProcess();
-    }
-    
-    #if 0   // merge leftover?
-        // This will automatically discard a large fraction of the data, useful if the training data is known to be highly correlated
-        if (dataDecimationFactor)
-        {
-            auto& pMBLayout = net->GetMBLayoutPtrOfNetwork();
-    }
-    
-            // Number of nodes.
-        // Normally this is smaller than the size of <m_nodes>, as some
-        // elements in <m_nodes> may be removed when doing graph optimization,
-        // or some elements may be merged, etc.
-        int m_numOfNodes;
-    
-        // A machine learning model representation class.
-    // Besides a main <Graph>, it also holds basic information, say,
-    // version, domain, model author, license etc.
-    class Model
-    {
-    public:
-    }
-    
-    #include 'constants.h'
-#include 'op.h'
-#include 'opsignature.h'
-#include 'utils.h'
-#include <cstring>
-    
-    
-    {
-    {        const std::string& Status::EmptyString()
-        {
-            static std::string s_emptyStr = '';
-            return s_emptyStr;
-        }
-    }
-}
-
-    
-            class OpUtils
-        {
-        public:
-            static PTYPE ToType(const TypeProto& p_type);
-            static PTYPE ToType(const std::string& p_type);
-            static const TypeProto& ToTypeProto(const PTYPE& p_type);
-            static std::string ToString(const TypeProto& p_type, const std::string& left = '', const std::string& right = '');
-            static std::string ToDataTypeString(const TensorProto::DataType& p_type);
-            static void FromString(const std::string& p_src, TypeProto& p_type);
-            static void FromDataTypeString(const std::string& p_src, TensorProto::DataType& p_type);
-            static bool IsValidDataTypeString(const std::string &p_dataType);
-            static void SplitStringTokens(StringRange& p_src, std::vector<StringRange>& p_tokens);
-        private:
-            static std::unordered_map<std::string, TypeProto>& GetTypeStrToProtoMap();
-            // Returns lock used for concurrent updates to TypeStrToProtoMap.
-            static std::mutex& GetTypeStrLock();
-        };
-    
-            FrameRange fr(InputRef(0).GetMBLayout());
-        InputRef(0).ValueFor(fr).VectorMax(*m_maxIndexes, *m_maxValues, true);
-        // compute CTC score
-        m_GammaCal.doCTC(Value(), *m_logSoftmaxOfRight, *m_maxIndexes, *m_maxValues, *m_CTCposterior, InputRef(0).GetMBLayout(), m_blankTokenId, m_delayConstraint);
-    
-    
-    {        // TODO: this code is needed for ONNX converter because ONNX requires squeeze axis. However, unit test failed with this code.
-        // Need further investigation.
-        //auto additionalProperties = Dictionary();
-        //additionalProperties[PrimitiveFunction::AttributeNameAxisVec] = AsDictionaryValueVector(GetSqueezableAxes(operand.Shape()));
-        //return UnaryOp(PrimitiveOpType::Squeeze, operand, std::move(additionalProperties), name);
-    }
-    
-        if (newNode->NodeName() != nodeName) // TODO: This was not tested for earlier; I hope no code depends on this.
-        InvalidArgument('ChangeNode: newNode must have the same name as the old node.');
-    
-    #ifndef BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
-#define BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
-    
-    // Standard library components can't be forward declared, so we'll have to
-// include the array header. Fortunately, it's fairly lightweight and doesn't
-// add significantly to the compile time.
-#if defined(BOOST_ASIO_HAS_STD_ARRAY)
-# include <array>
-#endif // defined(BOOST_ASIO_HAS_STD_ARRAY)
-    
-    #ifndef BOOST_ASIO_DETAIL_ATOMIC_COUNT_HPP
-#define BOOST_ASIO_DETAIL_ATOMIC_COUNT_HPP
-    
-      static Buffer first(const boost::asio::const_buffers_1& buffer_sequence)
-  {
-    return Buffer(buffer_sequence);
-  }
-    
-      // Is there no unread data in the buffer.
-  bool empty() const
-  {
-    return begin_offset_ == end_offset_;
-  }
-    
-    
-    {
-    {} // namespace posix_time
-} // namespace boost
-    
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
-    }
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-# include <boost/asio/detail/null_event.hpp>
-#elif defined(BOOST_ASIO_WINDOWS)
-# include <boost/asio/detail/win_event.hpp>
-#elif defined(BOOST_ASIO_HAS_PTHREADS)
-# include <boost/asio/detail/posix_event.hpp>
-#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
-# include <boost/asio/detail/std_event.hpp>
-#else
-# error Only Windows, POSIX and std::condition_variable are supported!
-#endif
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS) \
-  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
-typedef null_fenced_block fenced_block;
-#elif defined(__MACH__) && defined(__APPLE__)
-typedef macos_fenced_block fenced_block;
-#elif defined(__sun)
-typedef solaris_fenced_block fenced_block;
-#elif defined(__GNUC__) && defined(__arm__) \
-  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
-typedef gcc_arm_fenced_block fenced_block;
-#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
-typedef gcc_hppa_fenced_block fenced_block;
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-typedef gcc_x86_fenced_block fenced_block;
-#elif defined(__GNUC__) \
-  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
-  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
-  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
-typedef gcc_sync_fenced_block fenced_block;
-#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
-typedef win_fenced_block fenced_block;
-#else
-typedef null_fenced_block fenced_block;
-#endif
-    
-    namespace rocksdb {
-    }
-    
-        // Apply the query and any checks.
-    if (query == APPEND_OP) {
-    }
-    
-    /*
- * Class:     org_rocksdb_IngestExternalFileOptions
- * Method:    allowGlobalSeqNo
- * Signature: (J)Z
- */
-jboolean Java_org_rocksdb_IngestExternalFileOptions_allowGlobalSeqNo(
-    JNIEnv* env, jobject jobj, jlong jhandle) {
-  auto* options =
-      reinterpret_cast<rocksdb::IngestExternalFileOptions*>(jhandle);
-  return static_cast<jboolean>(options->allow_global_seqno);
-}
-    
-      bool StatisticsJni::HistEnabledForType(uint32_t type) const {
-    if (type >= HISTOGRAM_ENUM_MAX) {
-      return false;
-    }
-    
-    if (m_ignore_histograms.count(type) > 0) {
-        return false;
-    }
-    }
-    
-    
-    {}  // namespace rocksdb
+      /**
+   * The LogLevel for this category.
+   */
+  LogLevel level{LogLevel::WARNING};
     
     /**
- * @brief create a new sequential read file handler
- * @details it will check the existence of fname
+ * LogConfig contains configuration for the LoggerDB.
  *
- * @param fname [description]
- * @param result [description]
- * @param options [description]
- * @return [description]
+ * This includes information about the log levels for log categories,
+ * as well as what log handlers are configured and which categories they are
+ * attached to.
  */
-Status EnvLibrados::NewSequentialFile(
-  const std::string& fname,
-  std::unique_ptr<SequentialFile>* result,
-  const EnvOptions& options)
-{
-  LOG_DEBUG('[IN]%s\n', fname.c_str());
-  std::string dir, file, fid;
-  split(fname, &dir, &file);
-  Status s;
-  std::string fpath = dir + '/' + file;
-  do {
-    s = _GetFid(dir, fid);
-    }
-    }
-    
-    #include 'rocksdb/compaction_filter.h'
-#include 'rocksjni/jnicallback.h'
-    
-    ComparatorJniCallback::ComparatorJniCallback(
-    JNIEnv* env, jobject jComparator,
-    const ComparatorJniCallbackOptions* copt) :
-    BaseComparatorJniCallback(env, jComparator, copt) {
-  m_jSliceA = env->NewGlobalRef(SliceJni::construct0(env));
-  if(m_jSliceA == nullptr) {
-    // exception thrown: OutOfMemoryError
-    return;
-  }
+class LogConfig {
+ public:
+  using CategoryConfigMap = std::unordered_map<std::string, LogCategoryConfig>;
+  using HandlerConfigMap = std::unordered_map<std::string, LogHandlerConfig>;
     }
