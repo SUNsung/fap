@@ -1,71 +1,81 @@
 
         
-        #ifndef STORAGE_LEVELDB_DB_LOG_FORMAT_H_
-#define STORAGE_LEVELDB_DB_LOG_FORMAT_H_
+        TEST(LogTest, Fragmentation) {
+  Write('small');
+  Write(BigString('medium', 50000));
+  Write(BigString('large', 100000));
+  ASSERT_EQ('small', Read());
+  ASSERT_EQ(BigString('medium', 50000), Read());
+  ASSERT_EQ(BigString('large', 100000), Read());
+  ASSERT_EQ('EOF', Read());
+}
     
-    void FilterBlockBuilder::AddKey(const Slice& key) {
-  Slice k = key;
-  start_.push_back(keys_.size());
-  keys_.append(k.data(), k.size());
+      // Check that the file exists.
+  ASSERT_TRUE(env_->FileExists('/dir/f'));
+  ASSERT_OK(env_->GetFileSize('/dir/f', &file_size));
+  ASSERT_EQ(0, file_size);
+  ASSERT_OK(env_->GetChildren('/dir', &children));
+  ASSERT_EQ(1, children.size());
+  ASSERT_EQ('f', children[0]);
+    
+    void CondVar::Signal() {
+  PthreadCall('signal', pthread_cond_signal(&cv_));
+}
+    
+    void BlockBuilder::Reset() {
+  buffer_.clear();
+  restarts_.clear();
+  restarts_.push_back(0);       // First restart point is at offset 0
+  counter_ = 0;
+  finished_ = false;
+  last_key_.clear();
 }
     
     
-    {}  // namespace leveldb
+    { private:
+  const FilterPolicy* policy_;
+  const char* data_;    // Pointer to filter data (at block-start)
+  const char* offset_;  // Pointer to beginning of offset array (at block-end)
+  size_t num_;          // Number of entries in offset array
+  size_t base_lg_;      // Encoding parameter (see kFilterBaseLg in .cc file)
+};
     
+    #include 'db/_wrapper.h'
+#include 'rocksdb/db.h'
+#include 'rocksdb/options.h'
+#include 'rocksdb/slice.h'
     
-    {}  // namespace leveldb
-    
-          case kPrevLogNumber:
-        if (GetVarint64(&input, &prev_log_number_)) {
-          has_prev_log_number_ = true;
-        } else {
-          msg = 'previous log number';
-        }
-        break;
-    
-    
-TEST(FindFileTest, Multiple) {
-  Add('150', '200');
-  Add('200', '250');
-  Add('300', '350');
-  Add('400', '450');
-  ASSERT_EQ(0, Find('100'));
-  ASSERT_EQ(0, Find('150'));
-  ASSERT_EQ(0, Find('151'));
-  ASSERT_EQ(0, Find('199'));
-  ASSERT_EQ(0, Find('200'));
-  ASSERT_EQ(1, Find('201'));
-  ASSERT_EQ(1, Find('249'));
-  ASSERT_EQ(1, Find('250'));
-  ASSERT_EQ(2, Find('251'));
-  ASSERT_EQ(2, Find('299'));
-  ASSERT_EQ(2, Find('300'));
-  ASSERT_EQ(2, Find('349'));
-  ASSERT_EQ(2, Find('350'));
-  ASSERT_EQ(3, Find('351'));
-  ASSERT_EQ(3, Find('400'));
-  ASSERT_EQ(3, Find('450'));
-  ASSERT_EQ(4, Find('451'));
+    namespace rocksdb {
     }
     
-      // Store the specified number as the sequence number for the start of
-  // this batch.
-  static void SetSequence(WriteBatch* batch, SequenceNumber seq);
+    #include <assert.h>
+#include 'rocksjni/jnicallback.h'
+#include 'rocksjni/portal.h'
     
-      // Check that opening non-existent file fails.
-  SequentialFile* seq_file;
-  RandomAccessFile* rand_file;
-  ASSERT_TRUE(!env_->NewSequentialFile('/dir/non_existent', &seq_file).ok());
-  ASSERT_TRUE(!seq_file);
-  ASSERT_TRUE(!env_->NewRandomAccessFile('/dir/non_existent', &rand_file).ok());
-  ASSERT_TRUE(!rand_file);
+    #include 'rocksjni/statisticsjni.h'
     
-    Slice BlockBuilder::Finish() {
-  // Append restart array
-  for (size_t i = 0; i < restarts_.size(); i++) {
-    PutFixed32(&buffer_, restarts_[i]);
+    namespace rocksdb {
+    }
+    
+      virtual Status StartActivityLogging(const std::string& activity_log_file,
+                                      Env* env,
+                                      uint64_t max_logging_size = 0) override {
+    return cache_activity_logger_.StartLogging(activity_log_file, env,
+                                               max_logging_size);
   }
-  PutFixed32(&buffer_, restarts_.size());
-  finished_ = true;
-  return Slice(buffer_);
-}
+    
+      // Memtable related options
+  cf_opts.write_buffer_size = mutable_cf_options.write_buffer_size;
+  cf_opts.max_write_buffer_number = mutable_cf_options.max_write_buffer_number;
+  cf_opts.arena_block_size = mutable_cf_options.arena_block_size;
+  cf_opts.memtable_prefix_bloom_size_ratio =
+      mutable_cf_options.memtable_prefix_bloom_size_ratio;
+  cf_opts.memtable_huge_page_size = mutable_cf_options.memtable_huge_page_size;
+  cf_opts.max_successive_merges = mutable_cf_options.max_successive_merges;
+  cf_opts.inplace_update_num_locks =
+      mutable_cf_options.inplace_update_num_locks;
+    
+    
+TEST_P(DBCompactionTestWithParam, CompactionTrigger) {
+  const int kNumKeysPerFile = 100;
+    }
