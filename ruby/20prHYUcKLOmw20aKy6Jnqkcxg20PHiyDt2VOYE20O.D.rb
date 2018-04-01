@@ -1,83 +1,111 @@
 
         
-          def self.authenticate(user, app_id, json_response, challenges)
-    response = U2F::SignResponse.load_from_json(json_response)
-    registration = user.u2f_registrations.find_by_key_handle(response.key_handle)
-    u2f = U2F::U2F.new(app_id)
+        # No trailing slash
+Benchmark.ips do |x|
+  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
+  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
+  x.compare!
+end
+
     
-            # Registers a SIGINT handler. This typically is called from {busy}.
-        # Callbacks are only registered once, so calling this multiple times
-        # with the same callback has no consequence.
-        def register(sig_callback)
-          @@mutex.synchronize do
-            registered << sig_callback
-            registered.uniq!
+    # Create an array of vendored mimetype => [extensions]
+mimes = {}
+json = open('https://raw.githubusercontent.com/jshttp/mime-db/master/db.json').read
+data = JSON.parse(json)
+data.reject! { |mime, meta| meta['extensions'].nil? || meta['extensions'].empty? }
+data.each do |mime, meta|
+  # Normalize extensions and mime-types
+  mime = mime.downcase.strip
+  extensions = meta['extensions'].map { |e| e.downcase.strip }.compact
     
-          alias_method :include?, :key?
-      alias_method :has_key?, :key?
-      alias_method :member?, :key?
-    
-        end
+          theme.create!
+      Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
+        ' is ready for you in #{theme.path.to_s.cyan}!'
+      Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
+    end
+    # rubocop:enable Metrics/AbcSize
   end
 end
 
     
-          # This inserts a block with the given key and value.
-      #
-      # @param [String] key
-      # @param [String] value
-      def insert(key, value)
-        # Insert the new block into the value
-        new_block = <<BLOCK
-# VAGRANT-BEGIN: #{key}
-#{value.strip}
-# VAGRANT-END: #{key}
-BLOCK
-    
-              # Verify the box exists that we want to repackage
-          box = @env.boxes.find(box_name, box_provider, '= #{box_version}')
-          if !box
-            raise Vagrant::Errors::BoxNotFoundWithProviderAndVersion,
-              name: box_name,
-              provider: box_provider.to_s,
-              version: box_version
-          end
-    
-    def pboard
-  return # skip print
-  print 'No. #$no\n'
-  (0...COL).each{|i|
-    print '|'
-    (0...ROW-NP).each{|j|
-      x = $b[i*ROW+j]
-      if x < 0
-        print '..|'
-      else
-        printf '%2d|',x+1
+        def no_subcommand(args)
+      unless args.empty? ||
+          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
+        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
+                          Run `jekyll help` to find out more.'
+        abort
       end
-    }
-    print '\n'
-  }
-  print '\n'
-end
-    
-        def already_defined?
-      connection.execute(<<~SQL).values.first.first
-        SELECT EXISTS(
-          SELECT * FROM pg_proc WHERE proname = 'timestamp_id'
-        );
-      SQL
     end
     
-      describe 'GET #show' do
-    let!(:tag)     { Fabricate(:tag, name: 'test') }
-    let!(:local)   { Fabricate(:status, tags: [tag], text: 'local #test') }
-    let!(:remote)  { Fabricate(:status, tags: [tag], text: 'remote #test', account: Fabricate(:account, domain: 'remote')) }
-    let!(:late)    { Fabricate(:status, tags: [tag], text: 'late #test') }
+          # Group an array of items by an expression
+      #
+      # input - the object array
+      # variable - the variable to assign each item to in the expression
+      # expression -a Liquid comparison expression passed in as a string
+      #
+      # Returns the filtered array of objects
+      def group_by_exp(input, variable, expression)
+        return input unless groupable?(input)
     
-    namespace :emojis do
-  desc 'Generate a unicode to filename mapping'
-  task :generate do
-    source = 'http://www.unicode.org/Public/emoji/5.0/emoji-test.txt'
-    codes  = []
-    dest   = Rails.root.join('app', 'javascript', 'mastodon', 'features', 'emoji', 'emoji_map.json')
+        def empty?
+      @entries.empty?
+    end
+    
+        def type=(value)
+      @type = value.try :strip
+    end
+    
+          dest = url.normalized_path
+      dest_dir = Pathname.new(dest)
+    
+          if record.created_at.nil? || record.created_at >= now || record.created_at == record.updated_at
+        yield
+      else
+        record.id = Mastodon::Snowflake.id_at(record.created_at)
+        tries     = 0
+    
+      # Before we load the schema, define the timestamp_id function.
+  # Idiomatically, we might do this in a migration, but then it
+  # wouldn't end up in schema.rb, so we'd need to figure out a way to
+  # get it in before doing db:setup as well. This is simpler, and
+  # ensures it's always in place.
+  Rake::Task['db:schema:load'].enhance ['db:define_timestamp_id']
+    
+      def collection_presenter
+    ActivityPub::CollectionPresenter.new(
+      id: tag_url(@tag),
+      type: :ordered,
+      size: @tag.statuses.count,
+      items: @statuses.map { |s| ActivityPub::TagManager.instance.uri_for(s) }
+    )
+  end
+    
+    RSpec.describe TagsController, type: :controller do
+  render_views
+    
+        HTTP.get(source).to_s.split('\n').each do |line|
+      next if line.start_with? '#'
+      parts = line.split(';').map(&:strip)
+      next if parts.size < 2
+      codes << [parts[0], parts[1].start_with?('fully-qualified')]
+    end
+    
+      # Code is not reloaded between requests.
+  config.cache_classes = true
+    
+    class NodeMincerTest < Minitest::Test
+  DUMMY_PATH = 'test/dummy_node_mincer'
+    
+      #forward some requests to status message, because a poll is just attached to a status message and is not sharable itself
+  delegate :author_id, :diaspora_handle, :public?, :subscribers, to: :status_message
+    
+      private
+    
+    desc 'Generates a dummy app for testing for every Spree engine'
+task :test_app do
+  SPREE_GEMS.each do |gem_name|
+    Dir.chdir('#{File.dirname(__FILE__)}/#{gem_name}') do
+      sh 'rake test_app'
+    end
+  end
+end
