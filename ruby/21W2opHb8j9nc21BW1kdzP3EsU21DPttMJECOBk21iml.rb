@@ -1,97 +1,100 @@
 
         
-          def execute
-    Gitlab::Metrics.measure(:import_export_clean_up) do
-      return unless File.directory?(path)
+        CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
     
-        if params[:sort].present?
-      attribute, direction = params[:sort].downcase.split('.')
-      unless valid_sorts.include?(attribute)
-        attribute, direction = default.to_a.first
+    module Jekyll
+  binding.pry
+end
+
+    
+      Jekyll::External.require_if_present(Jekyll::External.blessed_gems) do |g, ver_constraint|
+    cmd = g.split('-').last
+    p.command(cmd.to_sym) do |c|
+      c.syntax cmd
+      c.action do
+        Jekyll.logger.abort_with 'You must install the '#{g}' gem' \
+          ' version #{ver_constraint} to use the 'jekyll #{cmd}' command.'
       end
-    else
-      attribute, direction = default.to_a.first
     end
-    
-      def test_bom_32le
-    assert_bom(['\xFF\xFE\0', '\0'], __method__)
   end
     
-      def check(as, bs)
-    if IGNORE_CASE
-      as = as.map {|xs| xs.map {|x| x.upcase } }
-      bs = bs.map {|xs| xs.map {|x| x.upcase } }
-    end
-    assert_equal(as.sort, bs.sort)
-  end
+    module Jekyll
+  module External
+    class << self
+      #
+      # Gems that, if installed, should be loaded.
+      # Usually contain subcommands.
+      #
+      def blessed_gems
+        %w(
+          jekyll-docs
+          jekyll-import
+        )
+      end
     
-      it 'decodes past NULL bytes when passed the '*' modifier' do
-    'a\x00b c'.unpack(unpack_format('*')).should == ['a\x00b c']
+          self.data = {}
+    
+    def excluded_bundle_id(bundle_id)
+  %r{^com\.apple\.}.match(bundle_id)
+end
+    
+          private
+    
+    module Capistrano
+  module TaskEnhancements
+    def before(task, prerequisite, *args, &block)
+      prerequisite = Rake::Task.define_task(prerequisite, *args, &block) if block_given?
+      Rake::Task[task].enhance [prerequisite]
+    end
+    
+        context 'without a default' do
+      context 'when the variables is defined' do
+        it 'returns the variable' do
+          expect(dsl.fetch(:scm)).to eq :git
+        end
+      end
+    
+        return captured_stdout.string, captured_stderr.string
+  ensure
+    $stdout = orig_stdout
+    $stderr = orig_stderr
   end
 end
 
     
-      it 'decodes the number of characters specified by the count modifier' do
-    [ ['\xc2\x80\xc2\x81\xc2\x82\xc2\x83', 'U1', [0x80]],
-      ['\xc2\x80\xc2\x81\xc2\x82\xc2\x83', 'U2', [0x80, 0x81]],
-      ['\xc2\x80\xc2\x81\xc2\x82\xc2\x83', 'U3', [0x80, 0x81, 0x82]]
-    ].should be_computed_by(:unpack)
-  end
-    
-        run.should be_true
-  end
-    
-          output = input_path if @options[:in_place]
-      write_output(out, output)
-    rescue Sass::SyntaxError => e
-      raise e if @options[:trace]
-      file = ' of #{e.sass_filename}' if e.sass_filename
-      raise 'Error on line #{e.sass_line}#{file}: #{e.message}\n  Use --trace for backtrace'
-    rescue LoadError => err
-      handle_load_error(err)
-    end
-    
-      # Uninstalls this logger from \{Sass.logger\}. This should only be called if
-  # the logger was installed using \{#install!}
-  def uninstall!
-    if Sass.logger != self
-      throw Exception.new('Can't uninstall a logger that's not currently installed.')
-    end
-    
-      # Converts an interpolation array to source.
-  #
-  # @param interp [Array<String, Sass::Script::Tree::Node>] The interpolation array to convert.
-  # @param options [{Symbol => Object}] An options hash (see {Sass::CSS#initialize}).
-  # @return [String]
-  def self._interp_to_src(interp, options)
-    interp.map {|r| r.is_a?(String) ? r : r.to_sass(options)}.join
-  end
-end
-
-    
-      config = Merb::Plugins.config[:sass] || Merb::Plugins.config['sass'] || {}
-    
-      get(/.+/) do
-    send_sinatra_file(request.path) {404}
-  end
-    
-        def render(context)
-      if parts = @text.match(/([a-zA-Z\d]*) (.*)/)
-        gist, file = parts[1].strip, parts[2].strip
+        def cropping dst, ratio, scale
+      if ratio.horizontal? || ratio.square?
+        '%dx%d+%d+%d' % [ dst.width, dst.height, 0, (self.height * scale - dst.height) / 2 ]
       else
-        gist, file = @text.strip, ''
-      end
-      if gist.empty?
-        ''
-      else
-        script_url = script_url_for gist, file
-        code       = get_cached_gist(gist, file) || get_gist_from_web(gist, file)
-        html_output_for script_url, code
+        '%dx%d+%d+%d' % [ dst.width, dst.height, (self.width * scale - dst.width) / 2, 0 ]
       end
     end
     
+        # Returns the id of the instance.
+    def id attachment, style_name
+      attachment.instance.id
     end
     
-          unless file.file?
-        return 'File #{file} could not be found'
+            def responds?
+          methods = @subject.instance_methods.map(&:to_s)
+          methods.include?('#{@attachment_name}') &&
+            methods.include?('#{@attachment_name}=') &&
+            methods.include?('#{@attachment_name}?')
+        end
+    
+          def has_attached_file(*attachment_names)
+        ActiveSupport::Deprecation.warn 'Method `t.has_attached_file` in the migration has been deprecated and will be replaced by `t.attachment`.'
+        attachment(*attachment_names)
       end
+    end
