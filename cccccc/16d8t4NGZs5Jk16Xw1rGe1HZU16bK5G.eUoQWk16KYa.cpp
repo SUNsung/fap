@@ -1,281 +1,217 @@
 
         
-        #ifndef TENSORFLOW_DEBUGGER_STATE_IMPL_H_
-#define TENSORFLOW_DEBUGGER_STATE_IMPL_H_
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    #include 'tensorflow/core/framework/op_kernel.h'
-#include 'tensorflow/core/framework/resource_mgr.h'
-#include 'tensorflow/core/framework/tensor_shape.h'
-#include 'tensorflow/core/platform/logging.h'
-#include 'tensorflow/core/platform/mutex.h'
-#include 'tensorflow/core/platform/thread_annotations.h'
-#include 'tensorflow/core/platform/types.h'
-    
-    
-    {  void Feedback(Cluster* cluster, const GrapplerItem& item,
-                const GraphDef& pruned_graph, double result) override;
+        
+    {  Blob<Dtype> diff_;  // cached for backward pass
+  Blob<Dtype> dist_sq_;  // cached for backward pass
+  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
+  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
 };
     
-    #ifndef TENSORFLOW_STREAM_EXECUTOR_CUDA_CUDA_EVENT_H_
-#define TENSORFLOW_STREAM_EXECUTOR_CUDA_CUDA_EVENT_H_
-    
-    REGISTER_KERNEL_BUILDER(Name('TextLineReader').Device(DEVICE_CPU),
-                        TextLineReaderOp);
-REGISTER_KERNEL_BUILDER(Name('TextLineReaderV2').Device(DEVICE_CPU),
-                        TextLineReaderOp);
-    
-    #include <memory>
-#include 'tensorflow/core/framework/reader_base.h'
-#include 'tensorflow/core/framework/reader_op_kernel.h'
-#include 'tensorflow/core/lib/core/errors.h'
-#include 'tensorflow/core/lib/io/record_reader.h'
-#include 'tensorflow/core/lib/strings/strcat.h'
-#include 'tensorflow/core/platform/env.h'
-    
-      // If instruction is part of inputs, don't reset the bit_vector.
-  if (std::find(inputs.begin(), inputs.end(), instruction) == inputs.end()) {
-    bit_vector.SetToZero();
-  }
-  bit_vector.Set(GetIndex(instruction));
-  for (const HloInstruction* input : inputs) {
-    bit_vector.OrWith(GetBitVector(input));
-  }
-    
-     protected:
-  // Check if data0.shape[indices0.dims():] == data1.shape[indices1.dims():]
-  static bool SameExtraShape(const Tensor& data0, const Tensor& indices0,
-                             const Tensor& data1, const Tensor& indices1) {
-    const int extra0 = data0.dims() - indices0.dims();
-    const int extra1 = data1.dims() - indices1.dims();
-    if (extra0 != extra1) return false;
-    for (int i = 0; i < extra0; i++) {
-      if (data0.dim_size(indices0.dims() + i) !=
-          data1.dim_size(indices1.dims() + i)) {
-        return false;
-      }
-    }
-    return true;
-  }
-    
-    CompletionBuilder::CompletionBuilder(CompletionSink &sink, SwiftResult &base)
-    : sink(sink), current(base) {
-  isNotRecommended = current.isNotRecommended();
-  notRecommendedReason = current.getNotRecommendedReason();
-  semanticContext = current.getSemanticContext();
-  completionString =
-      const_cast<CodeCompletionString *>(current.getCompletionString());
+    #ifdef USE_CUDNN
+template <typename Dtype>
+class CuDNNLCNLayer : public LRNLayer<Dtype> {
+ public:
+  explicit CuDNNLCNLayer(const LayerParameter& param)
+      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
+        tempData1(NULL), tempData2(NULL) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNLCNLayer();
     }
     
-    NS_ASSUME_NONNULL_BEGIN
+    #include <vector>
     
-      virtual void handleDiagnostic(SourceManager &SM, SourceLoc Loc,
-                                DiagnosticKind Kind,
-                                StringRef FormatString,
-                                ArrayRef<DiagnosticArgument> FormatArgs,
-                                const DiagnosticInfo &Info) override;
-    
-    class EditorDiagConsumer : public swift::DiagnosticConsumer {
-  typedef std::vector<DiagnosticEntryInfo> DiagnosticsTy;
-  /// Maps from a BufferID to the diagnostics that were emitted inside that
-  /// buffer.
-  llvm::DenseMap<unsigned, DiagnosticsTy> BufferDiagnostics;
+    #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of PoolingLayer.
+ *        Fallback to PoolingLayer for CPU mode.
+*/
+template <typename Dtype>
+class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
+ public:
+  explicit CuDNNPoolingLayer(const LayerParameter& param)
+      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNPoolingLayer();
+  // Currently, cuDNN does not support the extra top blob.
+  virtual inline int MinTopBlobs() const { return -1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
     }
     
-    #endif // SWIFT_SYNTAX_REFERENCES_H
+    
+    {}  // namespace caffe
+    
+    #endif  // CAFFE_ELTWISE_LAYER_HPP_
 
     
-    #include <limits>
-#include <utility>
-#include <algorithm>
+    
+    { private:
+  /*! \brief the underlying stream */
+  dmlc::Stream *stream_;
+  /*! \brief buffer to hold data */
+  std::string buffer_;
+  /*! \brief length of valid data in buffer */
+  size_t read_len_;
+  /*! \brief pointer in the buffer */
+  size_t read_ptr_;
+};
     
     
-    {
-    {    default:
-        arr.create(rows, cols, type);
-    }
-}
+    { private:
+  RowBlock<IndexType> out_;
+  std::unique_ptr<Parser<IndexType> > parser_;
+  uint32_t num_col_;
+  std::vector<size_t> offset_;
+  std::vector<IndexType> dense_index_;
+  std::vector<xgboost::bst_float> dense_value_;
+};
     
-        CV_DbgAssert( rows_ >= 0 && cols_ >= 0 );
-    
-    static void* openclamdblas_check_fn(int ID)
-{
-    assert(ID >= 0 && ID < (int)(sizeof(openclamdblas_fn)/sizeof(openclamdblas_fn[0])));
-    const struct DynamicFnEntry* e = openclamdblas_fn[ID];
-    void* func = CV_CL_GET_PROC_ADDRESS(e->fnName);
-    if (!func)
-    {
-        throw cv::Exception(cv::Error::OpenCLApiCallError,
-                cv::format('OpenCL AMD BLAS function is not available: [%s]', e->fnName),
-                CV_Func, __FILE__, __LINE__);
-    }
-    *(e->ppFn) = func;
-    return func;
-}
-    
-    #if defined(BOOST_ASIO_ENABLE_BUFFER_DEBUGGING)
-# include <boost/asio/detail/function.hpp>
-#endif // BOOST_ASIO_ENABLE_BUFFER_DEBUGGING
-    
-    /// Adds buffering to the read-related operations of a stream.
-/**
- * The buffered_read_stream class template can be used to add buffering to the
- * synchronous and asynchronous read operations of a stream.
- *
- * @par Thread Safety
- * @e Distinct @e objects: Safe.@n
- * @e Shared @e objects: Unsafe.
- *
- * @par Concepts:
- * AsyncReadStream, AsyncWriteStream, Stream, SyncReadStream, SyncWriteStream.
- */
-template <typename Stream>
-class buffered_read_stream
-  : private noncopyable
-{
-public:
-  /// The type of the next layer.
-  typedef typename remove_reference<Stream>::type next_layer_type;
-    }
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS) \
-  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
-# include <boost/asio/detail/null_fenced_block.hpp>
-#elif defined(__MACH__) && defined(__APPLE__)
-# include <boost/asio/detail/macos_fenced_block.hpp>
-#elif defined(__sun)
-# include <boost/asio/detail/solaris_fenced_block.hpp>
-#elif defined(__GNUC__) && defined(__arm__) \
-  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
-# include <boost/asio/detail/gcc_arm_fenced_block.hpp>
-#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
-# include <boost/asio/detail/gcc_hppa_fenced_block.hpp>
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-# include <boost/asio/detail/gcc_x86_fenced_block.hpp>
-#elif defined(__GNUC__) \
-  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
-  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
-  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
-# include <boost/asio/detail/gcc_sync_fenced_block.hpp>
-#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
-# include <boost/asio/detail/win_fenced_block.hpp>
-#else
-# include <boost/asio/detail/null_fenced_block.hpp>
-#endif
-    
-    #ifndef BOOST_ASIO_DETAIL_GCC_ARM_FENCED_BLOCK_HPP
-#define BOOST_ASIO_DETAIL_GCC_ARM_FENCED_BLOCK_HPP
-    
-    #include <random>
-#include <limits>
-    
-    
-    {
-    {      if (size_to_read != 0) {
-        CHECK_EQ(fi->Read(dmlc::BeginPtr(page->data) + page->offset[i],
-                          size_to_read * sizeof(SparseBatch::Entry)),
-                 size_to_read * sizeof(SparseBatch::Entry))
-            << 'Invalid SparsePage file';
-        curr_offset += size_to_read;
-      }
-      i = j;
-    }
-    // seek to end of record
-    if (curr_offset != disk_offset_.back()) {
-      fi->Seek(begin + disk_offset_.back() * sizeof(SparseBatch::Entry));
-    }
-    return true;
-  }
-    
-    struct EvalRMSE : public EvalEWiseBase<EvalRMSE> {
+    struct EvalMAE : public EvalEWiseBase<EvalMAE> {
   const char *Name() const override {
-    return 'rmse';
+    return 'mae';
   }
   inline bst_float EvalRow(bst_float label, bst_float pred) const {
-    bst_float diff = label - pred;
-    return diff * diff;
-  }
-  inline static bst_float GetFinal(bst_float esum, bst_float wsum) {
-    return std::sqrt(esum / wsum);
+    return std::abs(label - pred);
   }
 };
     
+      flatbuffers::Parser conform_parser;
+  if (!conform_to_schema.empty()) {
+    std::string contents;
+    if (!flatbuffers::LoadFile(conform_to_schema.c_str(), true, &contents))
+      Error('unable to load schema: ' + conform_to_schema);
+    ParseFile(conform_parser, conform_to_schema, contents,
+              conform_include_directories);
+  }
     
-    {
-    {    double dat[2]; dat[0] = sum, dat[1] = wsum;
-    if (distributed) {
-      rabit::Allreduce<rabit::op::Sum>(dat, 2);
+      FixedTypedVector AsFixedTypedVector() const {
+    if (IsFixedTypedVector(type_)) {
+      uint8_t len = 0;
+      auto vtype = ToFixedTypedVectorElementType(type_, &len);
+      return FixedTypedVector(Indirect(), byte_width_, vtype, len);
+    } else {
+      return FixedTypedVector::EmptyFixedTypedVector();
     }
-    return Derived::GetFinal(dat[0], dat[1]);
   }
-  /*!
-   * \brief to be implemented by subclass,
-   *   get evaluation result from one row
-   * \param label label of current instance
-   * \param pred prediction value of current instance
-   * \param nclass number of class in the prediction
-   */
-  inline static bst_float EvalRow(int label,
-                                  const bst_float *pred,
-                                  size_t nclass);
-  /*!
-   * \brief to be overridden by subclass, final transformation
-   * \param esum the sum statistics returned by EvalRow
-   * \param wsum sum of weight
-   */
-  inline static bst_float GetFinal(bst_float esum, bst_float wsum) {
-    return esum / wsum;
-  }
-  // used to store error message
-  const char *error_msg_;
-};
     
-    bool ReadJpeg(const uint8_t* data, const size_t len, JpegReadMode mode,
-              JPEGData* jpg) {
-  size_t pos = 0;
-  // Check SOI marker.
-  EXPECT_MARKER();
-  int marker = data[pos + 1];
-  pos += 2;
-  if (marker != 0xd8) {
-    fprintf(stderr, 'Did not find expected SOI marker, actual=%d\n', marker);
-    jpg->error = JPEG_SOI_NOT_FOUND;
-    return false;
-  }
-  int lut_size = kMaxHuffmanTables * kJpegHuffmanLutSize;
-  std::vector<HuffmanTableEntry> dc_huff_lut(lut_size);
-  std::vector<HuffmanTableEntry> ac_huff_lut(lut_size);
-  bool found_sof = false;
-  uint16_t scan_progression[kMaxComponents][kDCTBlockSize] = { { 0 } };
+    // Return the source of the generated service file.
+grpc::string GenerateServiceSource(grpc_generator::File *file,
+                                   const grpc_generator::Service *service,
+                                   grpc_go_generator::Parameters *parameters);
+    
+    
+    {    auto stream = stub_->SayManyHellos(&context, request_msg);
+    while (stream->Read(&response_msg)) {
+      const HelloReply *response = response_msg.GetRoot();
+      callback(response->message()->str());
     }
+    auto status = stream->Finish();
+    if (!status.ok()) {
+      std::cerr << status.error_code() << ': ' << status.error_message()
+                << std::endl;
+      callback('RPC failed');
+    }
+  }
     
-    void OutputImage::ToLinearRGB(std::vector<std::vector<float> >* rgb) const {
-  ToLinearRGB(0, 0, width_, height_, rgb);
+    // Get the inline-address of a vector element. Useful for Structs (pass Struct
+// as template arg), or being able to address a range of scalars in-line.
+// Get elem_size from GetTypeSizeInline().
+// Note: little-endian data on all platforms, use EndianScalar() instead of
+// raw pointer access with scalars).
+template<typename T>
+T *GetAnyVectorElemAddressOf(const VectorOfAny *vec, size_t i,
+                             size_t elem_size) {
+  // C-cast to allow const conversion.
+  return (T *)(vec->Data() + elem_size * i);
 }
     
+      // If schemas used contain include statements, call this function for every
+  // directory the parser should search them for.
+  void AddIncludeDirectory(const char *path) { include_paths_.push_back(path); }
     
-    {
-    {      // Parameters tuned to allow only colors on which sharpening is useful.
-      if (channel == 2 && 2.116 * v > -0.34414 * u + 0.2
-          && 1.402 * v > 1.772 * u + 0.2) {
-        redmap[index] = true;
-      }
-      if (channel == 1 && v < 1.263 * u - 0.1 && u > -0.33741 * v) {
-        redmap[index] = true;
-      }
+    std::string BaseGenerator::GetNameSpace(const Definition &def) const {
+  const Namespace *ns = def.defined_namespace;
+  if (CurrentNameSpace() == ns) return '';
+  std::string qualified_name = qualifying_start_;
+  for (auto it = ns->components.begin(); it != ns->components.end(); ++it) {
+    qualified_name += *it;
+    if ((it + 1) != ns->components.end()) {
+      qualified_name += qualifying_separator_;
     }
   }
+    }
     
-    #endif  // GUETZLI_DCT_DOUBLE_H_
+    // End the creator function signature.
+static void EndBuilderArgs(std::string *code_ptr) {
+  std::string &code = *code_ptr;
+  code += '):\n';
+}
+    
+    static LoadFileFunction g_load_file_function = LoadFileRaw;
+static FileExistsFunction g_file_exists_function = FileExistsRaw;
+    
+    int DuplicateFile(int Fd) {
+  return dup(Fd);
+}
+    
+      // Parse NumFilesInFirstCorpus.
+  if (!std::getline(IS, Line, '\n')) return false;
+  std::istringstream L2(Line);
+  NumFilesInFirstCorpus = NumFiles + 1;
+  L2 >> NumFilesInFirstCorpus;
+  if (NumFilesInFirstCorpus > NumFiles) return false;
+    
+    size_t MutationDispatcher::Mutate_ChangeBinaryInteger(uint8_t *Data,
+                                                      size_t Size,
+                                                      size_t MaxSize) {
+  if (Size > MaxSize) return 0;
+  switch (Rand(4)) {
+    case 3: return ChangeBinaryInteger<uint64_t>(Data, Size, Rand);
+    case 2: return ChangeBinaryInteger<uint32_t>(Data, Size, Rand);
+    case 1: return ChangeBinaryInteger<uint16_t>(Data, Size, Rand);
+    case 0: return ChangeBinaryInteger<uint8_t>(Data, Size, Rand);
+    default: assert(0);
+  }
+  return 0;
+}
+    
+    #endif  // LLVM_FUZZER_SHA1_H
 
     
-      void SaveToJpegData(JPEGData* jpg) const;
+      void StartTraceRecording() {
+    if (!Options.UseMemcmp)
+      return;
+    RecordingMemcmp = Options.UseMemcmp;
+    RecordingMemmem = Options.UseMemmem;
+    NumMutations = 0;
+    InterestingWords.clear();
+    MD.ClearAutoDictionary();
+  }
     
-    namespace guetzli {
-    }
+    bool ExecuteCommandAndReadOutput(const std::string &Command, std::string *Out) {
+  FILE *Pipe = OpenProcessPipe(Command.c_str(), 'r');
+  if (!Pipe) return false;
+  char Buff[1024];
+  size_t N;
+  while ((N = fread(Buff, 1, sizeof(Buff), Pipe)) > 0)
+    Out->append(Buff, N);
+  return true;
+}
+    
+          if (sigaction(SIGINT, &IgnoreSignalAction, &OldSigIntAction) == -1) {
+        Printf('Failed to ignore SIGINT\n');
+        (void)posix_spawnattr_destroy(&SpawnAttributes);
+        return -1;
+      }
+      if (sigaction(SIGQUIT, &IgnoreSignalAction, &OldSigQuitAction) == -1) {
+        Printf('Failed to ignore SIGQUIT\n');
+        // Try our best to restore the signal handlers.
+        (void)sigaction(SIGINT, &OldSigIntAction, NULL);
+        (void)posix_spawnattr_destroy(&SpawnAttributes);
+        return -1;
+      }
