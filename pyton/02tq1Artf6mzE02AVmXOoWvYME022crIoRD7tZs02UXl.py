@@ -1,28 +1,73 @@
 
         
-        
-if __name__ == '__main__':
-    main()
+        filenames = {
+    'bin': 'youtube-dl',
+    'exe': 'youtube-dl.exe',
+    'tar': 'youtube-dl-%s.tar.gz' % version}
+build_dir = os.path.join('..', '..', 'build', version)
+for key, filename in filenames.items():
+    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
+    fn = os.path.join(build_dir, filename)
+    with open(fn, 'rb') as f:
+        data = f.read()
+    if not data:
+        raise ValueError('File %s is empty!' % fn)
+    sha256sum = hashlib.sha256(data).hexdigest()
+    new_version[key] = (url, sha256sum)
+    
+    print('Enter the PKCS1 private key, followed by a blank line:')
+privkey = b''
+while True:
+    try:
+        line = input()
+    except EOFError:
+        break
+    if line == '':
+        break
+    privkey += line.encode('ascii') + b'\n'
+privkey = rsa.PrivateKey.load_pkcs1(privkey)
+    
+        def test_secondary_proxy_http(self):
+        params = self._check_params(['secondary_proxy', 'secondary_server_ip'])
+        if params is None:
+            return
+        ydl = FakeYDL()
+        req = compat_urllib_request.Request('http://yt-dl.org/ip')
+        req.add_header('Ytdl-request-proxy', params['secondary_proxy'])
+        self.assertEqual(
+            ydl.urlopen(req).read().decode('utf-8'),
+            params['secondary_server_ip'])
+    
+            return {
+            'id': video_id,
+            'url': video_url,
+            'ext': 'mp4',
+            'title': title,
+            'description': description,
+            'thumbnail': thumbnail,
+            'categories': categories,
+            'duration': duration,
+            'view_count': view_count,
+            'age_limit': 18,
+        }
 
     
-    site_info = '花瓣 (Huaban)'
+            title = self._html_search_regex(
+            r'<div[^>]+style='float:left'[^>]*>\s*<h2>(.+?)</h2>', webpage, 'title')
+        description = self._html_search_regex(
+            r'>Description:</span>(.+?)</div>', webpage, 'description', default=None)
     
-    def kuwo_download_by_rid(rid, output_dir = '.', merge = True, info_only = False):
-    html=get_content('http://player.kuwo.cn/webmusic/st/getNewMuiseByRid?rid=MUSIC_%s'%rid)
-    title=match1(html,r'<name>(.*)</name>')
-    #to get title
-    #format =aac|mp3 ->to get aac format=mp3 ->to get mp3
-    url=get_content('http://antiserver.kuwo.cn/anti.s?format=mp3&rid=MUSIC_%s&type=convert_url&response=url'%rid)
-    songtype, ext, size = url_info(url)
-    print_info(site_info, title, songtype, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir)
+        # To avoid having to always use the '|safe' filter in flatpage templates,
+    # mark the title and content as already safe (since they are raw HTML
+    # content in the first place).
+    f.title = mark_safe(f.title)
+    f.content = mark_safe(f.content)
     
-            print_info(site_info, title, type_, size_full)
-        if not info_only:
-            download_urls(url_list, title, ext, total_size=size_full, output_dir=output_dir, merge=merge, headers=fake_headers)
-    else:
-        raise NotImplementedError(flashvars)
+            return ret
     
-    class MusicPlayOn(VideoExtractor):
-    name = 'MusicPlayOn'
+    unpack = classmethod(unpack)
+
+    
+                self.beginResync()
+            input.consume() # simply delete extra token
+            self.endResync()
