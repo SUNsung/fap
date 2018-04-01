@@ -1,229 +1,203 @@
 
         
-        class TestFileSystem : public NullFileSystem {
- public:
-  Status NewRandomAccessFile(
-      const string& fname, std::unique_ptr<RandomAccessFile>* result) override {
-    result->reset(new TestRandomAccessFile);
-    return Status::OK();
+          // Backwards compatible fit returning a gradient and constant.
+  // Deprecated. Prefer Fit(ICOORD*, ICOORD*) where possible, but use this
+  // function in preference to the LMS class.
+  double Fit(float* m, float* c);
+    
+    // Adjust the weights of all the samples to be uniform in the given charset.
+// Returns the number of samples in the iterator.
+int SampleIterator::UniformSamples() {
+  int num_good_samples = 0;
+  for (Begin(); !AtEnd(); Next()) {
+    TrainingSample* sample = MutableSample();
+    sample->set_weight(1.0);
+    ++num_good_samples;
   }
-  // Always return size of 10
-  Status GetFileSize(const string& fname, uint64* file_size) override {
-    *file_size = 10;
-    return Status::OK();
-  }
+  NormalizeSamples();
+  return num_good_samples;
+}
+    
+    
+    
+    
+    
+    
+    
+    #if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,'invalid 'cobj' in function 'lua_cocos2dx_physics_PhysicsJointDistance_createConstraints'', nullptr);
+        return 0;
+    }
+#endif
+    
+        const float32 k_segments = 16.0f;
+    int vertexCount=16;
+    const float32 k_increment = 2.0f * b2_pi / k_segments;
+    float32 theta = 0.0f;
+    
+    GLfloat*    glVertices = new (std::nothrow) GLfloat[vertexCount*2];
+    for (int i = 0; i < k_segments; ++i)
+    {
+        b2Vec2 v = center + radius * b2Vec2(cosf(theta), sinf(theta));
+        glVertices[i*2]=v.x * mRatio;
+        glVertices[i*2+1]=v.y * mRatio;
+        theta += k_increment;
+    }
+    
+    mShaderProgram->setUniformLocationWith4f(mColorLocation, color.r*0.5f, color.g*0.5f, color.b*0.5f, 0.5f);
+    glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, 0, glVertices);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+    
+    
+    {	static Test* Create()
+	{
+		return new AddPair;
+	}
 };
     
+    	enum
+	{
+		e_count = 30
+	};
     
-    {}  // namespace tensorflow
+    		if (b2_gjkCalls > 0)
+		{
+			m_debugDraw.DrawString(5, m_textLine, 'gjk calls = %d, ave gjk iters = %3.1f, max gjk iters = %d',
+				b2_gjkCalls, b2_gjkIters / float32(b2_gjkCalls), b2_gjkMaxIters);
+			m_textLine += DRAW_STRING_NEW_LINE;
+		}
     
-    namespace tensorflow {
-class CostGraphDef;
-class GraphDef;
-}  // namespace tensorflow
+    // Return the epilogue of generated mock file.
+grpc::string GetMockEpilogue(grpc_generator::File *file,
+                             const Parameters &params);
     
-    // TODO(zongheng): this should be a general functor that powers SparseAdd and
-// ScatterNd ops.  It should be moved to its own head file, once the other ops
-// are implemented.
-template <typename Device, typename T, typename Index, int NDIMS,
-          scatter_op::UpdateOp op>
-struct ScatterNdFunctor {
-  // Returns -1 on success or a nonnegative i s.t. indices[i] is a bad index.
-  Index operator()(const Device& d, typename TTypes<Index>::ConstMatrix indices,
-                   typename TTypes<T>::ConstFlat updates,
-                   typename TTypes<T, NDIMS>::Tensor out);
+    	for (int i = 0; i < service->method_count(); i++) {
+		GenerateServerMethod(service->method(i).get(), printer, vars);
+		printer->Print('\n');
+	}
+    
+    
+    {  //Package name for the service
+  grpc::string package_name;
 };
     
+    #include <grpc++/impl/codegen/async_stream.h>
+#include <grpc++/impl/codegen/async_unary_call.h>
+#include <grpc++/impl/codegen/channel_interface.h>
+#include <grpc++/impl/codegen/client_unary_call.h>
+#include <grpc++/impl/codegen/method_handler_impl.h>
+#include <grpc++/impl/codegen/rpc_service_method.h>
+#include <grpc++/impl/codegen/service_type.h>
+#include <grpc++/impl/codegen/sync_stream.h>
+namespace MyGame {
+namespace Example {
+    }
+    }
     
-    { private:
-  PluginId blas_, dnn_, fft_, rng_;
+    
+    {
+    {}  // namespace Example
+}  // namespace MyGame
+    
+      // Parameters required to initialize the FlatCompiler.
+  struct InitParams {
+    InitParams()
+        : generators(nullptr),
+          num_generators(0),
+          warn_fn(nullptr),
+          error_fn(nullptr) {}
+    }
+    
+    #include 'monster_generated.h'  // Already includes 'flatbuffers/flatbuffers.h'.
+    
+      // parse schema first, so we can use it to parse the data after
+  flatbuffers::Parser parser;
+  const char *include_directories[] = { 'samples', nullptr };
+  ok = parser.Parse(schemafile.c_str(), include_directories) &&
+       parser.Parse(jsonfile.c_str(), include_directories);
+  assert(ok);
+    
+    
+    {
+    {#undef EXT_FUNC
 };
+} // namespace fuzzer
     
-      Status OnWorkStartedLocked() override {
-    offset_ = 0;
-    TF_RETURN_IF_ERROR(env_->NewRandomAccessFile(current_work(), &file_));
+    ExternalFunctions::ExternalFunctions() {
+#define EXT_FUNC(NAME, RETURN_TYPE, FUNC_SIG, WARN)                            \
+  this->NAME = ::NAME;                                                         \
+  CheckFnPtr((void *)::NAME, #NAME, WARN);
     }
     
-    TF_CALL_GPU_NUMBER_TYPES(REGISTER_GPU32);
-TF_CALL_complex64(REGISTER_GPU32);
-TF_CALL_complex128(REGISTER_GPU32);
-TF_CALL_int64(REGISTER_GPU32);
-REGISTER_GPU32(bfloat16);
-REGISTER_GPU32(bool);
-    
-    bool ParseBoolFlag(tensorflow::StringPiece arg, tensorflow::StringPiece flag,
-                   bool* dst) {
-  if (arg.Consume(flag)) {
-    if (arg.empty()) {
-      *dst = true;
-      return true;
-    }
-    }
-    }
-    
-        auto d_4_1 = cc->FindWorkerChannel('/job:mnist/replica:0/task:3');
-    auto d_4_2 = cc->FindWorkerChannel('/job:mnist/replica:0/task:3');
-    
-    #ifndef STORAGE_LEVELDB_DB_BUILDER_H_
-#define STORAGE_LEVELDB_DB_BUILDER_H_
-    
-    leveldb_filterpolicy_t* leveldb_filterpolicy_create(
-    void* state,
-    void (*destructor)(void*),
-    char* (*create_filter)(
-        void*,
-        const char* const* key_array, const size_t* key_length_array,
-        int num_keys,
-        size_t* filter_length),
-    unsigned char (*key_may_match)(
-        void*,
-        const char* key, size_t length,
-        const char* filter, size_t filter_length),
-    const char* (*name)(void*)) {
-  leveldb_filterpolicy_t* result = new leveldb_filterpolicy_t;
-  result->state_ = state;
-  result->destructor_ = destructor;
-  result->create_ = create_filter;
-  result->key_match_ = key_may_match;
-  result->name_ = name;
-  return result;
-}
-    
-      if (direction_ == kReverse) {  // Switch directions?
-    direction_ = kForward;
-    // iter_ is pointing just before the entries for this->key(),
-    // so advance into the range of entries for this->key() and then
-    // use the normal skipping code below.
-    if (!iter_->Valid()) {
-      iter_->SeekToFirst();
-    } else {
-      iter_->Next();
-    }
-    if (!iter_->Valid()) {
-      valid_ = false;
-      saved_key_.clear();
-      return;
-    }
-    // saved_key_ already contains the key to skip past.
-  } else {
-    // Store in saved_key_ the current key so we skip it below.
-    SaveKey(ExtractUserKey(iter_->key()), &saved_key_);
-  }
-    
-    static std::string Shorten(const std::string& s, const std::string& l) {
-  std::string result = s;
-  InternalKeyComparator(BytewiseComparator()).FindShortestSeparator(&result, l);
-  return result;
-}
-    
-    #include <stdio.h>
-#include 'db/dbformat.h'
-#include 'db/filename.h'
-#include 'db/log_reader.h'
-#include 'db/version_edit.h'
-#include 'db/write_batch_internal.h'
-#include 'leveldb/env.h'
-#include 'leveldb/iterator.h'
-#include 'leveldb/options.h'
-#include 'leveldb/status.h'
-#include 'leveldb/table.h'
-#include 'leveldb/write_batch.h'
-#include 'util/logging.h'
-    
-    // Return the name of the lock file for the db named by
-// 'dbname'.  The result will be prefixed with 'dbname'.
-extern std::string LockFileName(const std::string& dbname);
+    using namespace fuzzer;
     
     
-    {  Table* table = reinterpret_cast<TableAndFile*>(cache_->Value(handle))->table;
-  Iterator* result = table->NewIterator(options);
-  result->RegisterCleanup(&UnrefEntry, cache_, handle);
-  if (tableptr != NULL) {
-    *tableptr = table;
-  }
-  return result;
-}
-    
-      Benchmark()
-  : db_(NULL),
-    db_num_(0),
-    num_(FLAGS_num),
-    reads_(FLAGS_reads < 0 ? FLAGS_num : FLAGS_reads),
-    bytes_(0),
-    rand_(301) {
-    std::vector<std::string> files;
-    std::string test_dir;
-    Env::Default()->GetTestDirectory(&test_dir);
-    Env::Default()->GetChildren(test_dir, &files);
-    if (!FLAGS_use_existing_db) {
-      for (int i = 0; i < files.size(); i++) {
-        if (Slice(files[i]).starts_with('dbbench_sqlite3')) {
-          std::string file_name(test_dir);
-          file_name += '/';
-          file_name += files[i];
-          Env::Default()->DeleteFile(file_name.c_str());
-        }
-      }
-    }
-  }
-    
-    
-    {    // Create tuning options and open the database
-    int open_options = kyotocabinet::PolyDB::OWRITER |
-                       kyotocabinet::PolyDB::OCREATE;
-    int tune_options = kyotocabinet::TreeDB::TSMALL |
-        kyotocabinet::TreeDB::TLINEAR;
-    if (FLAGS_compression) {
-      tune_options |= kyotocabinet::TreeDB::TCOMPRESS;
-      db_->tune_compressor(&comp_);
-    }
-    db_->tune_options(tune_options);
-    db_->tune_page_cache(FLAGS_cache_size);
-    db_->tune_page(FLAGS_page_size);
-    db_->tune_map(256LL<<20);
-    if (sync) {
-      open_options |= kyotocabinet::PolyDB::OAUTOSYNC;
-    }
-    if (!db_->open(file_name, open_options)) {
-      fprintf(stderr, 'open error: %s\n', db_->error().name());
-    }
-  }
-    
-    
-    // F3 COEFFICIENT
-    
-    CV_EXPORTS_W void absdiff(InputArray src1, Scalar src2, OutputArray dst);
-    
-    
-    {    if (rows <= 0 || cols <= 0)
-        rows = cols = 0;
-}
-    
-    
-    {} // namespace
-    
-      ServerConfig server_config;
-  server_config.set_server_type(ASYNC_SERVER);
-  server_config.set_async_server_threads(8);
-    
-    #include <string>
-#include <vector>
-    
-    
-    {}  // namespace grpc_node_generator
-    
-      bool generate_in_pb2_grpc;
-    
-    
-    {}  // namespace grpc
+    {}  // namespace fuzzer
 
     
-    class UsageTimer {
- public:
-  UsageTimer();
+    // Parse a location, like:
+// \\?\UNC\Server\Share\  \\?\C:\  \\Server\Share\  \  C:\  C:
+// Returns number of characters considered if successful.
+static size_t ParseLocation(const std::string &FileName) {
+  size_t Pos = 0, Res;
     }
     
-    #include 'test/cpp/util/service_describer.h'
+    void MutationDispatcher::AddWordToAutoDictionary(DictionaryEntry DE) {
+  static const size_t kMaxAutoDictSize = 1 << 14;
+  if (TempAutoDictionary.size() >= kMaxAutoDictSize) return;
+  TempAutoDictionary.push_back(DE);
+}
     
+      size_t AddWordFromDictionary(Dictionary &D, uint8_t *Data, size_t Size,
+                               size_t MaxSize);
+  size_t MutateImpl(uint8_t *Data, size_t Size, size_t MaxSize,
+                    const std::vector<Mutator> &Mutators);
     
-    {}  // namespace grpc
+    struct FuzzingOptions {
+  int Verbosity = 1;
+  size_t MaxLen = 0;
+  int UnitTimeoutSec = 300;
+  int TimeoutExitCode = 77;
+  int ErrorExitCode = 77;
+  int MaxTotalTimeSec = 0;
+  int RssLimitMb = 0;
+  bool DoCrossOver = true;
+  int MutateDepth = 5;
+  bool UseCounters = false;
+  bool UseIndirCalls = true;
+  bool UseMemcmp = true;
+  bool UseMemmem = true;
+  bool UseCmp = false;
+  bool UseValueProfile = false;
+  bool Shrink = false;
+  int ReloadIntervalSec = 1;
+  bool ShuffleAtStartUp = true;
+  bool PreferSmall = true;
+  size_t MaxNumberOfRuns = -1L;
+  int ReportSlowUnits = 10;
+  bool OnlyASCII = false;
+  std::string OutputCorpus;
+  std::string ArtifactPrefix = './';
+  std::string ExactArtifactPath;
+  std::string ExitOnSrcPos;
+  std::string ExitOnItem;
+  bool SaveArtifacts = true;
+  bool PrintNEW = true; // Print a status line when new units are found;
+  bool OutputCSV = false;
+  bool PrintNewCovPcs = false;
+  bool PrintFinalStats = false;
+  bool PrintCorpusStats = false;
+  bool PrintCoverage = false;
+  bool DumpCoverage = false;
+  bool DetectLeaks = true;
+  int  TraceMalloc = 0;
+  bool HandleAbrt = false;
+  bool HandleBus = false;
+  bool HandleFpe = false;
+  bool HandleIll = false;
+  bool HandleInt = false;
+  bool HandleSegv = false;
+  bool HandleTerm = false;
+};
