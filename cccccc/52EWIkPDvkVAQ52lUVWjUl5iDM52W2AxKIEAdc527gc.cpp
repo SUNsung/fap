@@ -1,130 +1,258 @@
 
         
-          std::vector<cv::Mat> input_channels;
-  WrapInputLayer(&input_channels);
-    
-    namespace caffe {
+        void PartialRunMgr::PartialRunDone(int step_id, StatusCallback done,
+                                   const Status& status) {
+  Status callback_status;
+  {
+    mutex_lock l(mu_);
+    auto run_it = step_id_to_partial_run_.find(step_id);
+    if (run_it == step_id_to_partial_run_.end()) {
+      return;
     }
+    run_it->second->final_status.Update(status);
+    if (!run_it->second->executor_done) {
+      // If we found the partial_run, we set the final callback to call only
+      // when the executor is completely done.
+      run_it->second->final_callback = std::move(done);
+      return;
+    }
+    callback_status = run_it->second->final_status;
+  }
+  // Otherwise we call the callback immediately.
+  done(callback_status);
+  mutex_lock l(mu_);
+  step_id_to_partial_run_.erase(step_id);
+}
+    
+    #include 'third_party/eigen3/unsupported/Eigen/CXX11/Tensor'
+#include 'tensorflow/core/framework/tensor_types.h'
+#include 'tensorflow/core/framework/types.h'
+#include 'tensorflow/core/kernels/scatter_functor.h'
+    
+    namespace tensorflow {
+namespace port {
+    }
+    }
+    
+    void SYCLDeviceContext::CopyCPUTensorToDevice(const Tensor *cpu_tensor,
+                                              Device *device,
+                                              Tensor *device_tensor,
+                                              StatusCallback done) const {
+  const int64 total_bytes = cpu_tensor->TotalBytes();
+  if (total_bytes > 0) {
+    const void *src_ptr = DMAHelper::base(cpu_tensor);
+    void *dst_ptr = DMAHelper::base(device_tensor);
+    switch (cpu_tensor->dtype()) {
+      case DT_FLOAT:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<float *>(dst_ptr), static_cast<const float *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_DOUBLE:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<double *>(dst_ptr),
+            static_cast<const double *>(src_ptr), total_bytes);
+        break;
+      case DT_INT32:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<int32 *>(dst_ptr), static_cast<const int32 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_INT64:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<int64 *>(dst_ptr), static_cast<const int64 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_HALF:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<Eigen::half *>(dst_ptr),
+            static_cast<const Eigen::half *>(src_ptr), total_bytes);
+        break;
+      case DT_COMPLEX64:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<std::complex<float> *>(dst_ptr),
+            static_cast<const std::complex<float> *>(src_ptr), total_bytes);
+        break;
+      case DT_COMPLEX128:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<std::complex<double> *>(dst_ptr),
+            static_cast<const std::complex<double> *>(src_ptr), total_bytes);
+        break;
+      case DT_INT8:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<int8 *>(dst_ptr), static_cast<const int8 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_INT16:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<int16 *>(dst_ptr), static_cast<const int16 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_UINT8:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<uint8 *>(dst_ptr), static_cast<const uint8 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_UINT16:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<uint16 *>(dst_ptr),
+            static_cast<const uint16 *>(src_ptr), total_bytes);
+        break;
+      case DT_BOOL:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<bool *>(dst_ptr), static_cast<const bool *>(src_ptr),
+            total_bytes);
+        break;
+      default:
+        assert(false && 'unsupported type');
+    }
+  }
+  device->eigen_sycl_device()->synchronize();
+  done(Status::OK());
+}
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    #include 'tensorflow/core/framework/register_types.h'
+#include 'tensorflow/core/framework/tensor_types.h'
+#include 'tensorflow/core/kernels/cuda_device_array_gpu.h'
+#include 'tensorflow/core/util/cuda_kernel_helper.h'
+    
+    #ifndef ATOM_BROWSER_API_ATOM_API_DESKTOP_CAPTURER_H_
+#define ATOM_BROWSER_API_ATOM_API_DESKTOP_CAPTURER_H_
+    
+    #ifndef ATOM_BROWSER_API_ATOM_API_RENDER_PROCESS_PREFERENCES_H_
+#define ATOM_BROWSER_API_ATOM_API_RENDER_PROCESS_PREFERENCES_H_
+    
+      // net::URLRequestJobFactory::ProtocolHandler:
+  net::URLRequestJob* MaybeCreateJob(
+      net::URLRequest* request,
+      net::NetworkDelegate* network_delegate) const override;
+  bool IsSafeRedirectTarget(const GURL& location) const override;
+    
+    HttpProtocolHandler::~HttpProtocolHandler() {
+}
     
     
     { private:
-  struct pair_sort_first {
-    bool operator()(const std::pair<int, int> &left,
-                    const std::pair<int, int> &right) {
-      return left.first < right.first;
-    }
-  };
-  void check_batch_reindex(int initial_num, int final_num,
-                           const Dtype* ridx_data);
+  DISALLOW_COPY_AND_ASSIGN(URLRequestAsyncAsarJob);
 };
     
-    
-    {  /**
-   * @brief Computes the error gradient w.r.t. the BNLL inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
-    
-    #endif  // CAFFE_CONTRASTIVE_LOSS_LAYER_HPP_
+    #endif  // ATOM_BROWSER_UI_TRAY_ICON_GTK_H_
 
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    /**
- * @brief Takes two+ Blobs, interprets last Blob as a selector and
- *  filter remaining Blobs accordingly with selector data (0 means that
- * the corresponding item has to be filtered, non-zero means that corresponding
- * item needs to stay).
- */
-template <typename Dtype>
-class FilterLayer : public Layer<Dtype> {
- public:
-  explicit FilterLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+    namespace atom {
     }
     
-      size_t Read(void* dptr, size_t size) override {
-    size_t nbuffer = buffer_.length() - buffer_ptr_;
-    if (nbuffer == 0) return strm_->Read(dptr, size);
-    if (nbuffer < size) {
-      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, nbuffer);
-      buffer_ptr_ += nbuffer;
-      return nbuffer + strm_->Read(reinterpret_cast<char*>(dptr) + nbuffer,
-                                   size - nbuffer);
-    } else {
-      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, size);
-      buffer_ptr_ += size;
-      return size;
+    bool SourceKit::CodeCompletion::addCustomCompletions(
+    CompletionSink &sink, std::vector<Completion *> &completions,
+    ArrayRef<CustomCompletionInfo> customCompletions,
+    CompletionKind completionKind) {
     }
+    
+    #ifndef SWIFT_INDEX_INDEXRECORD_H
+#define SWIFT_INDEX_INDEXRECORD_H
+    
+      /// Returns the buffer ID for the specified *valid* location.
+  ///
+  /// Because a valid source location always corresponds to a source buffer,
+  /// this routine always returns a valid buffer ID.
+  unsigned findBufferContainingLoc(SourceLoc Loc) const;
+    
+      scoped_ptr<base::Value> value_option(
+      converter->FromV8Value(options, isolate->GetCurrentContext()));
+  if (!value_option.get() ||
+      !value_option->IsType(base::Value::TYPE_DICTIONARY))
+    return isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
+        'Unable to convert 'option' passed to AllocateObject')));
+    
+    // static
+void
+DispatcherBindings::AllocateId(const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  RenderView* render_view = GetCurrentRenderView();
+  if (!render_view) {
+    args.GetReturnValue().Set(isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
+                                     'Unable to get render view in AllocateId'))));
+    return;
   }
-    
-    
-    {
-    {}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_RANDOM_H_
-
-    
-    bool binary_to_compressed_c(const char* filename, const char* symbol, bool use_base85_encoding, bool use_compression)
-{
-    // Read file
-    FILE* f = fopen(filename, 'rb');
-    if (!f) return false;
-    int data_sz;
-    if (fseek(f, 0, SEEK_END) || (data_sz = (int)ftell(f)) == -1 || fseek(f, 0, SEEK_SET)) { fclose(f); return false; }
-    char* data = new char[data_sz+4];
-    if (fread(data, 1, data_sz, f) != (size_t)data_sz) { fclose(f); delete[] data; return false; }
-    memset((void *)(((char*)data) + data_sz), 0, 4);
-    fclose(f);
     }
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui, Original code by @birthggd
+      // Remote objects.
+  static void AllocateId(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void AllocateObject(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void DeallocateObject(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void CallObjectMethod(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void CallObjectMethodSync(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void CallStaticMethod(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void CallStaticMethodSync(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void CrashRenderer(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void SetCrashDumpDir(const v8::FunctionCallbackInfo<v8::Value>& args);
+#if defined(OS_MACOSX)
+  static void InitMsgIDMap();
+  static void GetNSStringWithFixup(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void GetNSStringFWithFixup(const v8::FunctionCallbackInfo<v8::Value>& args);
+#endif
     
-    IMGUI_API bool        ImGui_ImplDX9_Init(void* hwnd, IDirect3DDevice9* device);
-IMGUI_API void        ImGui_ImplDX9_Shutdown();
-IMGUI_API void        ImGui_ImplDX9_NewFrame();
-IMGUI_API void        ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data);
+    class DispatcherHost : public content::WebContentsObserver {
+ public:
+  explicit DispatcherHost(content::RenderViewHost* render_view_host);
+  ~DispatcherHost() final;
+    }
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
+    EventListener::EventListener(int id,
+  const base::WeakPtr<DispatcherHost>& dispatcher_host,
+  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
+    }
     
-    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
-// **Prefer using the code in the opengl3_example/ folder**
-// See imgui_impl_glfw.cpp for details.
-    
-        VkPipelineShaderStageCreateInfo stage[2] = {};
-    stage[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-    stage[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
-    stage[0].module = vert_module;
-    stage[0].pName = 'main';
-    stage[1].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-    stage[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-    stage[1].module = frag_module;
-    stage[1].pName = 'main';
+    void MenuItem::Call(const std::string& method,
+                    const base::ListValue& arguments,
+                    content::RenderFrameHost* rvh) {
+  if (method == 'SetLabel') {
+    std::string label;
+    arguments.GetString(0, &label);
+    SetLabel(label);
+  } else if (method == 'SetIcon') {
+    std::string icon;
+    arguments.GetString(0, &icon);
+    SetIcon(icon);
+  } else if (method == 'SetIconIsTemplate') {
+    bool isTemplate;
+    arguments.GetBoolean(0, &isTemplate);
+    SetIconIsTemplate(isTemplate);
+  } else if (method == 'SetTooltip') {
+    std::string tooltip;
+    arguments.GetString(0, &tooltip);
+    SetTooltip(tooltip);
+  } else if (method == 'SetEnabled') {
+    bool enabled = true;
+    arguments.GetBoolean(0, &enabled);
+    SetEnabled(enabled);
+  } else if (method == 'SetChecked') {
+    bool checked = false;
+    arguments.GetBoolean(0, &checked);
+    SetChecked(checked);
+  } else if (method == 'SetSubmenu') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    SetSubmenu(object_manager()->GetApiObject<Menu>(object_id));
+#if defined(OS_MACOSX)
+  } else if (method == 'SetKey') {
+    std::string key;
+    arguments.GetString(0, &key);
+    SetKey(key);
+  } else if (method == 'SetModifiers') {
+    std::string mod;
+    arguments.GetString(0, &mod);
+    SetModifiers(mod);
+#endif
+  } else {
+    NOTREACHED() << 'Invalid call to MenuItem method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
