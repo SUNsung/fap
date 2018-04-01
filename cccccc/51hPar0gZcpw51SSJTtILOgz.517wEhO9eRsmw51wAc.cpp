@@ -1,171 +1,213 @@
 
-/**********************************************************************
- * QLSQ::add
- *
- * Add an element to the accumulator.
- **********************************************************************/
-    
-      // Main worker method that retrieves the next number in the sequence.
-  // Returns kInvalidVal if called more than N times after object initialization
-  int GetVal() {
-    const int kInvalidVal = -1;
-    const int kMaxNaturalNumberValue = 1 << num_bits_;
-    if (next_num_ >= kMaxNaturalNumberValue)
-      return kInvalidVal;
-    int n = next_num_;
+        
+        class App {
+ public:
+  static void Call(const std::string& method,
+                   const base::ListValue& arguments);
     }
     
-      // Compute the distance between the given feature vector and the last
-  // Set feature vector.
-  double FeatureDistance(const GenericVector<int>& features) const;
-  double DebugFeatureDistance(const GenericVector<int>& features) const;
-    
-    #include 'test/cpp/qps/qps_worker.h'
-#include 'test/cpp/util/test_config.h'
-#include 'test/cpp/util/test_credentials_provider.h'
-    
-    #include 'src/cpp/common/secure_auth_context.h'
-    
-    #include 'src/compiler/python_generator.h'
-    
-    static const static_bookblock _resbook_8u_0={
-  {
-    {0},
-    {0,0,&_8u0__p1_0},
-    {0,0,&_8u0__p2_0},
-    {0,0,&_8u0__p3_0},
-    {0,0,&_8u0__p4_0},
-    {0,0,&_8u0__p5_0},
-    {&_8u0__p6_0,&_8u0__p6_1},
-    {&_8u0__p7_0,&_8u0__p7_1,&_8u0__p7_2}
-   }
-};
-static const static_bookblock _resbook_8u_1={
-  {
-    {0},
-    {0,0,&_8u1__p1_0},
-    {0,0,&_8u1__p2_0},
-    {0,0,&_8u1__p3_0},
-    {0,0,&_8u1__p4_0},
-    {0,0,&_8u1__p5_0},
-    {0,0,&_8u1__p6_0},
-    {&_8u1__p7_0,&_8u1__p7_1},
-    {&_8u1__p8_0,&_8u1__p8_1},
-    {&_8u1__p9_0,&_8u1__p9_1,&_8u1__p9_2}
-   }
-};
-    
-    #define toBARK(n)   (13.1f*atan(.00074f*(n))+2.24f*atan((n)*(n)*1.85e-8f)+1e-4f*(n))
-#define fromBARK(z) (102.f*(z)-2.f*pow(z,2.f)+.4f*pow(z,3.f)+pow(1.46f,z)-1.f)
-#define toMEL(n)    (log(1.f+(n)*.001f)*1442.695f)
-#define fromMEL(m)  (1000.f*exp((m)/1442.695f)-1000.f)
-    
-    #define opus_ifft(_st, _fin, _fout, arch) \
-   ((void)(arch), opus_ifft_neon(_st, _fin, _fout))
-    
-    #ifndef FIXED_ARMv4_H
-#define FIXED_ARMv4_H
-    
-    /*Constants used by the entropy encoder/decoder.*/
-    
-        /* Inverse of b32, with 14 bits of precision */
-    b32_inv = silk_DIV32_16( silk_int32_MAX >> 2, silk_RSHIFT(b32_nrm, 16) );   /* Q: 29 + 16 - b_headrm        */
-    
-    TEST_F(MockEnvTest, Corrupt) {
-  const std::string kGood = 'this is a good string, synced to disk';
-  const std::string kCorrupted = 'this part may be corrupted';
-  const std::string kFileName = '/dir/f';
-  unique_ptr<WritableFile> writable_file;
-  ASSERT_OK(env_->NewWritableFile(kFileName, &writable_file, soptions_));
-  ASSERT_OK(writable_file->Append(kGood));
-  ASSERT_TRUE(writable_file->GetFileSize() == kGood.size());
+    class Base {
+ public:
+  Base(int id,
+       const base::WeakPtr<ObjectManager>& manager,
+       const base::DictionaryValue& option,
+       const std::string& extension_id);
+  virtual ~Base();
     }
     
+      v8::Handle<v8::Value> id_val;
+  if (web_view->mainFrame() && !web_view->mainFrame()->mainWorldScriptContext().IsEmpty()) {
+    v8::Context::Scope cscope (web_view->mainFrame()->mainWorldScriptContext());
+    id_val = nwapi::Dispatcher::GetWindowId(web_view->mainFrame());
+  }
+  if (id_val.IsEmpty())
+    return;
+  if (id_val->IsUndefined() || id_val->IsNull())
+    return;
     
-//****************************
-// Type
-//****************************
-typedef enum { XXH_OK=0, XXH_ERROR } XXH_errorcode;
+      void documentCallback(const char* ev, blink::WebLocalFrame* frame);
     
+    void DispatcherHost::OnCallObjectMethod(
+    int object_id,
+    const std::string& type,
+    const std::string& method,
+    const base::ListValue& arguments) {
+  DLOG(INFO) << 'OnCallObjectMethod: object_id:' << object_id
+             << ' type:' << type
+             << ' method:' << method
+             << ' arguments:' << arguments;
+    }
     
-    {  std::string res;
-  slists.Get('k1', &res);
-  ASSERT_EQ(res, 'v1|v2|v3');
+    void Menu::Call(const std::string& method,
+                const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  if (method == 'Append') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    Append(object_manager()->GetApiObject<MenuItem>(object_id));
+  } else if (method == 'Insert') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Remove') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Popup') {
+    int x = 0;
+    arguments.GetInteger(0, &x);
+    int y = 0;
+    arguments.GetInteger(1, &y);
+    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
+    DCHECK(web_contents);
+    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
+    }
+    }
+    
+    #include 'base/run_loop.h'
+#include 'base/values.h'
+#include 'base/strings/utf_string_conversions.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/render_frame_host.h'
+#include 'content/public/browser/render_view_host.h'
+#include 'content/public/browser/render_widget_host_view.h'
+#include 'content/public/browser/web_contents.h'
+#include 'extensions/browser/app_window/app_window.h'
+#include 'skia/ext/image_operations.h'
+#include 'ui/aura/client/screen_position_client.h'
+#include 'ui/aura/window.h'
+#include 'ui/aura/window_tree_host.h'
+#include 'ui/events/platform/platform_event_source.h'
+#include 'ui/views/controls/menu/menu_runner.h'
+#include 'ui/views/widget/widget.h'
+#include 'ui/views/focus/focus_manager.h'
+#include 'vector'
+    
+    void MenuItem::SetIconIsTemplate(bool isTemplate) {
 }
     
-      class StatisticsJni : public StatisticsImpl {
-   public:
-     StatisticsJni(std::shared_ptr<Statistics> stats);
-     StatisticsJni(std::shared_ptr<Statistics> stats,
-         const std::set<uint32_t> ignore_histograms);
-     virtual bool HistEnabledForType(uint32_t type) const override;
+        // passthrough (pointer interface)
+    std::pair<iterator, bool> insert(const value_type& value) { return m.insert(value); }
+    
+    
+    {    if (s.ok()) {
+      // Verify that the table is usable
+      Iterator* it = table_cache->NewIterator(ReadOptions(),
+                                              meta->number,
+                                              meta->file_size);
+      s = it->status();
+      delete it;
     }
-    
-    
-    {    return err_to_status(r);
   }
     
-        // delete unnecessary files if any, this is done outside the mutex
-    if (job_context.HaveSomethingToClean() ||
-        job_context.HaveSomethingToDelete() || !log_buffer.IsEmpty()) {
-      mutex_.Unlock();
-      // Have to flush the info logs before bg_compaction_scheduled_--
-      // because if bg_flush_scheduled_ becomes 0 and the lock is
-      // released, the deconstructor of DB can kick in and destroy all the
-      // states of DB so info_log might not be available after that point.
-      // It also applies to access other states that DB owns.
-      log_buffer.FlushBufferToLog();
-      if (job_context.HaveSomethingToDelete()) {
-        PurgeObsoleteFiles(job_context);
+    int InternalKeyComparator::Compare(const Slice& akey, const Slice& bkey) const {
+  // Order by:
+  //    increasing user key (according to user-supplied comparator)
+  //    decreasing sequence number
+  //    decreasing type (though sequence# should be enough to disambiguate)
+  int r = user_comparator_->Compare(ExtractUserKey(akey), ExtractUserKey(bkey));
+  if (r == 0) {
+    const uint64_t anum = DecodeFixed64(akey.data() + akey.size() - 8);
+    const uint64_t bnum = DecodeFixed64(bkey.data() + bkey.size() - 8);
+    if (anum > bnum) {
+      r = -1;
+    } else if (anum < bnum) {
+      r = +1;
+    }
+  }
+  return r;
+}
+    
+    // Return the legacy file name for an sstable with the specified number
+// in the db named by 'dbname'. The result will be prefixed with
+// 'dbname'.
+extern std::string SSTTableFileName(const std::string& dbname, uint64_t number);
+    
+    Status TableCache::FindTable(uint64_t file_number, uint64_t file_size,
+                             Cache::Handle** handle) {
+  Status s;
+  char buf[sizeof(file_number)];
+  EncodeFixed64(buf, file_number);
+  Slice key(buf, sizeof(buf));
+  *handle = cache_->Lookup(key);
+  if (*handle == NULL) {
+    std::string fname = TableFileName(dbname_, file_number);
+    RandomAccessFile* file = NULL;
+    Table* table = NULL;
+    s = env_->NewRandomAccessFile(fname, &file);
+    if (!s.ok()) {
+      std::string old_fname = SSTTableFileName(dbname_, file_number);
+      if (env_->NewRandomAccessFile(old_fname, &file).ok()) {
+        s = Status::OK();
       }
-      job_context.Clean();
-      mutex_.Lock();
+    }
+    if (s.ok()) {
+      s = Table::Open(*options_, file, file_size, &table);
+    }
+    }
     }
     
-    INSTANTIATE_TEST_CASE_P(
-    WritePreparedTransactionTest, WritePreparedTransactionTest,
-    ::testing::Values(std::make_tuple(false, false, WRITE_PREPARED),
-                      std::make_tuple(false, true, WRITE_PREPARED)));
-    
-      Printf('\nFlags: (strictly in form -flag=value)\n');
-  size_t MaxFlagLen = 0;
-  for (size_t F = 0; F < kNumFlags; F++)
-    MaxFlagLen = std::max(strlen(FlagDescriptions[F].Name), MaxFlagLen);
-    
-    
-    {  DIR *D = opendir(Dir.c_str());
-  if (!D) {
-    Printf('No such directory: %s; exiting\n', Dir.c_str());
-    exit(1);
+      VersionEdit edit;
+  for (int i = 0; i < 4; i++) {
+    TestEncodeDecode(edit);
+    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
+                 InternalKey('foo', kBig + 500 + i, kTypeValue),
+                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
+    edit.DeleteFile(4, kBig + 700 + i);
+    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
   }
-  while (auto E = readdir(D)) {
-    std::string Path = DirPlusFile(Dir, E->d_name);
-    if (E->d_type == DT_REG || E->d_type == DT_LNK)
-      V->push_back(Path);
-    else if (E->d_type == DT_DIR && *E->d_name != '.')
-      ListFilesInDirRecursive(Path, Epoch, V, false);
+    
+      int Find(const char* key) {
+    InternalKey target(key, 100, kTypeValue);
+    InternalKeyComparator cmp(BytewiseComparator());
+    return FindFile(cmp, files_, target.Encode());
   }
-  closedir(D);
-  if (Epoch && TopDir)
-    *Epoch = E;
+    
+    void WriteBatch::Delete(const Slice& key) {
+  WriteBatchInternal::SetCount(this, WriteBatchInternal::Count(this) + 1);
+  rep_.push_back(static_cast<char>(kTypeDeletion));
+  PutLengthPrefixedSlice(&rep_, key);
 }
     
-    // Parse a location, like:
-// \\?\UNC\Server\Share\  \\?\C:\  \\Server\Share\  \  C:\  C:
-// Returns number of characters considered if successful.
-static size_t ParseLocation(const std::string &FileName) {
-  size_t Pos = 0, Res;
+      // Return a pointer to the beginning of the referenced data
+  const char* data() const { return data_; }
+    
+    namespace boost {
+namespace asio {
+    }
     }
     
-    void Fuzzer::CrashCallback() {
-  Printf('==%lu== ERROR: libFuzzer: deadly signal\n', GetPid());
-  if (EF->__sanitizer_print_stack_trace)
-    EF->__sanitizer_print_stack_trace();
-  Printf('NOTE: libFuzzer has rudimentary signal handlers.\n'
-         '      Combine libFuzzer with AddressSanitizer or similar for better '
-         'crash reports.\n');
-  Printf('SUMMARY: libFuzzer: deadly signal\n');
-  DumpCurrentUnit('crash-');
-  PrintFinalStats();
-  exit(Options.ErrorExitCode);
-}
+    #endif // BOOST_ASIO_DETAIL_ATOMIC_COUNT_HPP
+
+    
+    #if defined(BOOST_ASIO_HAS_STD_FUNCTION)
+using std::function;
+#else // defined(BOOST_ASIO_HAS_STD_FUNCTION)
+using boost::function;
+#endif // defined(BOOST_ASIO_HAS_STD_FUNCTION)
+    
+    namespace {
+    }
+    
+    #include <math.h>
+    
+    // Computes the DCT (Discrete Cosine Transform) of the 8x8 array in 'block',
+// scaled up by a factor of 16. The values in 'block' are laid out row-by-row
+// and the result is written to the same memory area.
+void ComputeBlockDCT(coeff_t* block);
+    
+    #include <cmath>
+    
+    namespace guetzli {
+    }
+    
+    
+    {}  // namespace guetzli
+    
+    
+    {}  // namespace guetzli
