@@ -1,188 +1,305 @@
 
         
-          /// If a static EventPublisher callback wants to fire
-  template <typename PUB>
-  static void fire(const EventContextRef& ec) {
-    auto event_pub = getEventPublisher(getType<PUB>());
-    event_pub->fire(ec);
+        
+    {}
+    
+    void Clusterizer::clusterize() {
+  struct ArcInfo {
+    Vlabel  src;
+    Vlabel  dst;
+    int64_t wgt;
+  };
+  jit::vector<ArcInfo> arcInfos;
+  for (auto b : m_blocks) {
+    for (auto s : succs(m_unit.blocks[b])) {
+      arcInfos.push_back({b, s, m_scale.weight(b, s)});
+    }
+  }
+    }
+    
+    #define DECLARE_VNUM(Vnum, check, prefix)                 \
+struct Vnum {                                             \
+  Vnum() {}                                               \
+  explicit Vnum(size_t n) : n(safe_cast<uint32_t>(n)) {}  \
+                                                          \
+  /* implicit */ operator size_t() const {                \
+    if (check) assertx(n != kInvalidId);                   \
+    return n;                                             \
+  }                                                       \
+                                                          \
+  bool isValid() const {                                  \
+    return n != kInvalidId;                               \
+  }                                                       \
+                                                          \
+  std::string toString() const {                          \
+    if (n == kInvalidId) return prefix '?';               \
+    return folly::to<std::string>(prefix, n);             \
+  }                                                       \
+                                                          \
+private:                                                  \
+  static constexpr uint32_t kInvalidId = 0xffffffff;      \
+  uint32_t n{kInvalidId};                                 \
+}
+    
+      if (type <= TInt) {
+    // No special treatment needed
+    index = switchVal;
+  } else if (type <= TDbl) {
+    // switch(Double|String|Obj)Helper do bounds-checking for us, so we need to
+    // make sure the default case is in the jump table, and don't emit our own
+    // bounds-checking code.
+    bounded = false;
+    index = gen(env, LdSwitchDblIndex, switchVal, ssabase, ssatargets);
+  } else if (type <= TStr) {
+    bounded = false;
+    index = gen(env, LdSwitchStrIndex, switchVal, ssabase, ssatargets);
+  } else if (type <= TObj) {
+    // switchObjHelper can throw exceptions and reenter the VM so we use the
+    // catch block here.
+    bounded = false;
+    index = gen(env, LdSwitchObjIndex, switchVal, ssabase, ssatargets);
+  } else {
+    PUNT(Switch-UnknownType);
   }
     
-    /**
- * @brief Log a string using the default logger receiver.
- *
- * Note that this method should only be used to log results. If you'd like to
- * log normal osquery operations, use Google Logging.
- *
- * @param message the string to log
- * @param category a category/metadata key
- *
- * @return Status indicating the success or failure of the operation
+    /*
+ * A NormalizedInstruction contains information about a decoded bytecode
+ * instruction, including the unit it lives in, decoded immediates, and a few
+ * flags of interest the various parts of the jit.
  */
-Status logString(const std::string& message, const std::string& category);
-    
-    /// The osquery platform agnostic process identifier type.
-using PlatformPidType = pid_t;
-    
-    /**
- * @brief Getter for the current UNIX time.
- *
- * @return an int representing the amount of seconds since the UNIX epoch
- */
-size_t getUnixTime();
-    
-    Status FilesystemConfigPlugin::genPack(const std::string& name,
-                                       const std::string& value,
-                                       std::string& pack) {
-  if (name == '*') {
-    // The config requested a multi-pack.
-    std::vector<std::string> paths;
-    resolveFilePattern(value, paths);
-    }
+struct NormalizedInstruction {
+  SrcKey source;
+  const Func* funcd; // The Func in the topmost AR on the stack. Guaranteed to
+                     // be accurate. Don't guess about this. Note that this is
+                     // *not* the function whose body the NI belongs to.
+                     // Note that for an FPush* may be set to the (statically
+                     // known Func* that /this/ instruction is pushing)
+  const Unit* m_unit;
     }
     
+    #endif
     
-    {
-    { private:
-  friend class TLSConfigTests;
+    void test_barrier_group(std::shared_ptr<thd::DataChannel> data_channel,
+                        THDGroup group, std::vector<thd::rank_type> group_ranks) {
+  if (contains(group_ranks, data_channel->getRank())) {
+    for (int i = 0; i < group_ranks.size(); ++i) {
+      if (data_channel->getRank() == group_ranks[i]) {
+        int64_t time_after_barrier = nowInMilliseconds() + BARRIER_WAIT_TIME;
+        auto time_tensor = buildTensor<int64_t>({1}, time_after_barrier);
+        data_channel->broadcast(*time_tensor, group_ranks[i], group);
+        std::this_thread::sleep_for(std::chrono::milliseconds(BARRIER_WAIT_TIME + 10));
+        data_channel->barrier(group);
+      } else {
+        auto time_tensor = buildTensor<int64_t>({1}, -1);
+        data_channel->broadcast(*time_tensor, group_ranks[i], group); // get expected time after barrier
+        data_channel->barrier(group);
+        assert(nowInMilliseconds() >= reinterpret_cast<int64_t*>(time_tensor->data())[0]);
+      }
+    }
+  } else {
+    std::this_thread::sleep_for(std::chrono::milliseconds(BARRIER_WAIT_TIME + 100));
+    data_channel->barrier(group);
+  }
+}
+    
+      tensor->resize({1, 2, 3});
+  assert(tensor->nDim() == 3);
+  int i = 0;
+  for (auto s: tensor->sizes())
+    assert(s == ++i);
+    
+    int64_t stride(const Tensor& self, int64_t dim) {
+  // false is passed to maybe_wrap_dim so behavior is identical to array access (but with wrapping)
+  dim = maybe_wrap_dim(dim, self.dim(), false);
+  return self.strides()[dim];
+}
+    
+    #if ${isCUDA}
+static cudaError_t call_deleter(void * ctx, void * data) {
+  auto fnptr = (std::function<void(void*)>*) ctx;
+  (*fnptr)(data);
+  delete fnptr;
+  return cudaSuccess;
+}
+static THCDeviceAllocator storage_deleter = {
+  nullptr,
+  nullptr,
+  call_deleter,
+  nullptr,
+  nullptr,
 };
+static cudaError_t wrapped_alloc(void * ctx, void** result, size_t size, cudaStream_t stream) {
+  auto ac = static_cast<detail::AllocatorRetainable*>(ctx);
+  ac->retain();
+  *result = ac->allocate(size);
+  return cudaSuccess;
 }
-
-    
-    struct tm* localtime_r(time_t* t, struct tm* result) {
-  _localtime64_s(result, t);
-  return result;
+static cudaError_t wrapped_free(void * ctx, void * data) {
+  auto ac = static_cast<detail::AllocatorRetainable*>(ctx);
+  ac->deallocate(data);
+  ac->release();
+  return cudaSuccess;
 }
+static THCDeviceAllocator wrapped_allocator = {
+  wrapped_alloc,
+  nullptr,
+  wrapped_free,
+  nullptr,
+  nullptr,
+};
+#else
+static void call_deleter(void * ctx, void * data) {
+  auto fnptr = (std::function<void(void*)>*) ctx;
+  (*fnptr)(data);
+  delete fnptr;
+}
+static THAllocator storage_deleter = {
+  nullptr,
+  nullptr,
+  call_deleter,
+};
+static void* wrapped_alloc(void * ctx, ptrdiff_t size) {
+  auto ac = static_cast<detail::AllocatorRetainable*>(ctx);
+  ac->retain();
+  return ac->allocate(size);
+}
+static void wrapped_free(void * ctx, void * data) {
+  auto ac = static_cast<detail::AllocatorRetainable*>(ctx);
+  ac->deallocate(data);
+  ac->release();
+}
+static THAllocator wrapped_allocator = {
+  wrapped_alloc,
+  nullptr,
+  wrapped_free,
+};
 #endif
     
     
-    {  private:
-    std::vector<std::string> vecdump_;
-};
-    
-    
-/*
- * WakeUpLock.cpp
- *
- *  Created on: 2012-9-28
- *      Author: yerungui
- */
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    Test_Spy_Sample::~Test_Spy_Sample()
-{
-    SPY_DETACH_CLASS();
-}
-    
-    
-    {  private:
-//    int m_t;
-};
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    ScopeJEnv::~ScopeJEnv() {
-    if (NULL != env_) {
-        env_->PopLocalFrame(NULL);
-    }
-}
-    
-    
-    {    // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
-    if (hud->show_demo_window)
-    {
-        ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-        ImGui::ShowDemoWindow(&hud->show_demo_window);
-    }
-}
+    {}
 
     
-    int main(int, char**)
-{
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    }
     
-        bool show_demo_window = true;
-    bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    {} // namespace thd
     
-            // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
-    
-        // Get queue
-    {
-        uint32_t count;
-        vkGetPhysicalDeviceQueueFamilyProperties(g_Gpu, &count, NULL);
-        VkQueueFamilyProperties* queues = (VkQueueFamilyProperties*)malloc(sizeof(VkQueueFamilyProperties) * count);
-        vkGetPhysicalDeviceQueueFamilyProperties(g_Gpu, &count, queues);
-        for (uint32_t i = 0; i < count; i++)
-        {
-            if (queues[i].queueFlags & VK_QUEUE_GRAPHICS_BIT)
-            {
-                g_QueueFamily = i;
-                break;
-            }
-        }
-        free(queues);
-    }
-    
-    
-    {    // Restore modified GL state
-    glUseProgram(last_program);
-    glBindTexture(GL_TEXTURE_2D, last_texture);
-    glBindSampler(0, last_sampler);
-    glActiveTexture(last_active_texture);
-    glBindVertexArray(last_vertex_array);
-    glBindBuffer(GL_ARRAY_BUFFER, last_array_buffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, last_element_array_buffer);
-    glBlendEquationSeparate(last_blend_equation_rgb, last_blend_equation_alpha);
-    glBlendFuncSeparate(last_blend_src_rgb, last_blend_dst_rgb, last_blend_src_alpha, last_blend_dst_alpha);
-    if (last_enable_blend) glEnable(GL_BLEND); else glDisable(GL_BLEND);
-    if (last_enable_cull_face) glEnable(GL_CULL_FACE); else glDisable(GL_CULL_FACE);
-    if (last_enable_depth_test) glEnable(GL_DEPTH_TEST); else glDisable(GL_DEPTH_TEST);
-    if (last_enable_scissor_test) glEnable(GL_SCISSOR_TEST); else glDisable(GL_SCISSOR_TEST);
-    glPolygonMode(GL_FRONT_AND_BACK, (GLenum)last_polygon_mode[0]);
-    glViewport(last_viewport[0], last_viewport[1], (GLsizei)last_viewport[2], (GLsizei)last_viewport[3]);
-    glScissor(last_scissor_box[0], last_scissor_box[1], (GLsizei)last_scissor_box[2], (GLsizei)last_scissor_box[3]);
+    inline PyObject* load_scalar(void* data, at::ScalarType scalarType) {
+  switch (scalarType) {
+    case at::kByte: return THPUtils_packInt64(*(uint8_t*)data);
+    case at::kChar: return THPUtils_packInt64(*(char*)data);
+    case at::kShort: return THPUtils_packInt64(*(int16_t*)data);
+    case at::kInt: return THPUtils_packInt64(*(int32_t*)data);
+    case at::kLong: return THPUtils_packInt64(*(int64_t*)data);
+    case at::kHalf: return PyFloat_FromDouble(at::convert<double, at::Half>(*(at::Half*)data));
+    case at::kFloat: return PyFloat_FromDouble(*(float*)data);
+    case at::kDouble: return PyFloat_FromDouble(*(double*)data);
+    default: throw std::runtime_error('invalid type');
+  }
 }
     
-        // Setup scale and translation:
+    #include <cstring>
+#include <structmember.h>
+#include 'torch/csrc/Exceptions.h'
+#include 'torch/csrc/utils/object_ptr.h'
+#include 'torch/csrc/utils/python_strings.h'
+#include 'torch/csrc/utils/tensor_dtypes.h'
+#include 'torch/csrc/utils/tensor_types.h'
+    
+    // Wrap tensor operation outputs as PyObject*
+    
+        jobject     (*NewGlobalRef)(JNIEnv*, jobject);
+    void        (*DeleteGlobalRef)(JNIEnv*, jobject);
+    void        (*DeleteLocalRef)(JNIEnv*, jobject);
+    jboolean    (*IsSameObject)(JNIEnv*, jobject, jobject);
+    
+        Value(int unit, double value)
+    : unit(unit)
+    , value(value)
     {
-        float scale[2];
-        scale[0] = 2.0f/io.DisplaySize.x;
-        scale[1] = 2.0f/io.DisplaySize.y;
-        float translate[2];
-        translate[0] = -1.0f;
-        translate[1] = -1.0f;
-        vkCmdPushConstants(g_CommandBuffer, g_PipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, sizeof(float) * 0, sizeof(float) * 2, scale);
-        vkCmdPushConstants(g_CommandBuffer, g_PipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, sizeof(float) * 2, sizeof(float) * 2, translate);
     }
     
-        // Update OS/hardware mouse cursor if imgui isn't drawing a software cursor
-    if ((io.ConfigFlags & ImGuiConfigFlags_NoSetMouseCursor) == 0)
-    {
-        ImGuiMouseCursor cursor = ImGui::GetMouseCursor();
-        if (io.MouseDrawCursor || cursor == ImGuiMouseCursor_None)
-        {
-            SDL_ShowCursor(0);
-        }
-        else
-        {
-            SDL_SetCursor(g_MouseCursors[cursor] ? g_MouseCursors[cursor] : g_MouseCursors[ImGuiMouseCursor_Arrow]);
-            SDL_ShowCursor(1);
-        }
+    // convert to alias_ref<T> from T
+template <typename T>
+struct Convert<alias_ref<T>> {
+  typedef JniType<T> jniType;
+  static alias_ref<jniType> fromJni(jniType t) {
+    return wrap_alias(t);
+  }
+  static jniType toJniRet(alias_ref<jniType> t) {
+    return t.get();
+  }
+  static jniType toCall(alias_ref<jniType> t) {
+    return t.get();
+  }
+};
+    
+    
+    { private:
+  const InstructionPointer absoluteProgramCounter_;
+  const InstructionPointer libraryBase_;
+  const InstructionPointer functionAddress_;
+  const std::string libraryName_;
+  const std::string functionName_;
+};
+    
+      YGNodeCalculateLayout(root, 200, 100, YGDirectionLTR);
+    
+    #include <nbind/api.h>
+#include <nbind/BindDefiner.h>
+    
+        int getAlignContent(void) const;
+    int getAlignItems(void) const;
+    int getAlignSelf(void) const;
+    int getFlexDirection(void) const;
+    int getFlexWrap(void) const;
+    int getJustifyContent(void) const;
+    
+    #include <nbind/api.h>
+#include <nbind/BindDefiner.h>
+    
+      bool operator==(const ProgramLocation& other) const {
+    // Assumes that the strings are static
+    return (m_functionName == other.m_functionName) && (m_fileName == other.m_fileName) && m_lineNumber == other.m_lineNumber;
+  }
+    
+    #define FBCRASH(msg, ...) facebook::assertInternal('Fatal error (%s:%d): ' msg, __FILE__, __LINE__, ##__VA_ARGS__)
+#define FBUNREACHABLE() facebook::assertInternal('This code should be unreachable (%s:%d)', __FILE__, __LINE__)
+    
+      void PrintStats() {
+    for (size_t i = 0; i < Inputs.size(); i++) {
+      const auto &II = *Inputs[i];
+      Printf('  [%zd %s]\tsz: %zd\truns: %zd\tsucc: %zd\n', i,
+             Sha1ToString(II.Sha1).c_str(), II.U.size(),
+             II.NumExecutedMutations, II.NumSuccessfullMutations);
     }
+  }
+    
+    static const FlagDescription FlagDescriptions [] {
+#define FUZZER_DEPRECATED_FLAG(Name)                                           \
+  {#Name, 'Deprecated; don't use', 0, nullptr, nullptr, nullptr},
+#define FUZZER_FLAG_INT(Name, Default, Description)                            \
+  {#Name, Description, Default, &Flags.Name, nullptr, nullptr},
+#define FUZZER_FLAG_UNSIGNED(Name, Default, Description)                       \
+  {#Name,   Description, static_cast<int>(Default),                            \
+   nullptr, nullptr, &Flags.Name},
+#define FUZZER_FLAG_STRING(Name, Description)                                  \
+  {#Name, Description, 0, nullptr, &Flags.Name, nullptr},
+#include 'FuzzerFlags.def'
+#undef FUZZER_DEPRECATED_FLAG
+#undef FUZZER_FLAG_INT
+#undef FUZZER_FLAG_UNSIGNED
+#undef FUZZER_FLAG_STRING
+};
+    
+    #include <istream>
+#include <set>
+    
+    typedef struct sha1nfo {
+	uint32_t buffer[BLOCK_LENGTH/4];
+	uint32_t state[HASH_LENGTH/4];
+	uint32_t byteCount;
+	uint8_t bufferOffset;
+	uint8_t keyBuffer[BLOCK_LENGTH];
+	uint8_t innerHash[HASH_LENGTH];
+} sha1nfo;
+    
+    std::string Sha1ToString(const uint8_t Sha1[kSHA1NumBytes]);
