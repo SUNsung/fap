@@ -1,110 +1,105 @@
 
         
-            Reference: Armin Ronacher, 'Flask for Fun and for Profit' PyBay 2016.
-    '''
-    for name in find_modules('flaskr.blueprints'):
-        mod = import_string(name)
-        if hasattr(mod, 'bp'):
-            app.register_blueprint(mod.bp)
-    return None
+            with open('README.md', 'w+') as sorted_file:
+        sorted_file.write(final_README)
     
-    if __name__ == '__main__':
-    app.run()
+    filenames = {
+    'bin': 'youtube-dl',
+    'exe': 'youtube-dl.exe',
+    'tar': 'youtube-dl-%s.tar.gz' % version}
+build_dir = os.path.join('..', '..', 'build', version)
+for key, filename in filenames.items():
+    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
+    fn = os.path.join(build_dir, filename)
+    with open(fn, 'rb') as f:
+        data = f.read()
+    if not data:
+        raise ValueError('File %s is empty!' % fn)
+    sha256sum = hashlib.sha256(data).hexdigest()
+    new_version[key] = (url, sha256sum)
+    
+        def test_youtube_extract(self):
+        assertExtractId = lambda url, id: self.assertEqual(YoutubeIE.extract_id(url), id)
+        assertExtractId('http://www.youtube.com/watch?&v=BaW_jenozKc', 'BaW_jenozKc')
+        assertExtractId('https://www.youtube.com/watch?&v=BaW_jenozKc', 'BaW_jenozKc')
+        assertExtractId('https://www.youtube.com/watch?feature=player_embedded&v=BaW_jenozKc', 'BaW_jenozKc')
+        assertExtractId('https://www.youtube.com/watch_popup?v=BaW_jenozKc', 'BaW_jenozKc')
+        assertExtractId('http://www.youtube.com/watch?v=BaW_jenozKcsharePLED17F32AD9753930', 'BaW_jenozKc')
+        assertExtractId('BaW_jenozKc', 'BaW_jenozKc')
+    
+            formats = [
+            {
+                'format_id': f['type'],
+                'filesize': int(f['filesize']),
+                'url': f['url']
+            } for f in info['rfiles']
+        ]
+        self._sort_formats(formats)
+    
+    
+@pytest.fixture
+def httpbin_secure(httpbin_secure):
+    return prepare_url(httpbin_secure)
 
     
-        samples_range = np.linspace(10, 2000, 5).astype(np.int)
-    features_range = np.linspace(10, 2000, 5).astype(np.int)
-    results = compute_bench(samples_range, features_range)
+            self.wait_to_close_event = wait_to_close_event
+        self.ready_event = threading.Event()
+        self.stop_event = threading.Event()
     
+        @pytest.mark.parametrize(
+        'stream, value', (
+            (StringIO.StringIO, 'Test'),
+            (BytesIO, b'Test'),
+            pytest.mark.skipif('cStringIO is None')((cStringIO, 'Test')),
+        ))
+    def test_io_streams(self, stream, value):
+        '''Ensures that we properly deal with different kinds of IO streams.'''
+        assert super_len(stream()) == 0
+        assert super_len(stream(value)) == 4
     
-def euclidean_distances(X, n_jobs):
-    return pairwise_distances(X, metric='euclidean', n_jobs=n_jobs)
+    from r2.lib.translation import I18N_PATH
+from r2.lib.plugin import PluginLoader
+from r2.lib import js
     
-    plt.figure('scikit-learn Ward's method benchmark results')
-plt.imshow(np.log(ratio), aspect='auto', origin='lower')
-plt.colorbar()
-plt.contour(ratio, levels=[1, ], colors='k')
-plt.yticks(range(len(n_features)), n_features.astype(np.int))
-plt.ylabel('N features')
-plt.xticks(range(len(n_samples)), n_samples.astype(np.int))
-plt.xlabel('N samples')
-plt.title('Scikit's time, in units of scipy time (log)')
-plt.show()
-
+        config.init_app(global_conf, app_conf, package='r2', paths=paths)
     
-            if not in_exercise_region or linestrip.startswith('#'):
-            output_file.write(line)
+    api('wikibasepage', WikiJsonTemplate)
+api('wikipagerevisions', WikiJsonTemplate)
+api('wikiview', WikiViewJsonTemplate)
+api('wikirevision', WikiRevisionJsonTemplate)
     
-    plt.show()
-
+                send_gift(
+                buyer=buyer,
+                recipient=recipient,
+                months=months,
+                days=months * 31,
+                signed=False,
+                giftmessage=None,
+                thing_fullname=thing_fullname,
+                note=note,
+            )
     
+        @validate(VAdmin(),
+              award = VAwardByCodename('awardcn'),
+              recipient = nop('recipient'),
+              desc = nop('desc'),
+              url = nop('url'),
+              hours = nop('hours'))
+    def GET_give(self, award, recipient, desc, url, hours):
+        if award is None:
+            abort(404, 'page not found')
     
-def plot_calibration_curve(est, name, fig_index):
-    '''Plot calibration curve for est w/o and with calibration. '''
-    # Calibrated with isotonic calibration
-    isotonic = CalibratedClassifierCV(est, cv=2, method='isotonic')
-    
-    # Plot modifications of calibrator
-for i in range(prediction.shape[0]):
-    plt.arrow(p[i, 0], p[i, 1],
-              prediction[i, 0] - p[i, 0], prediction[i, 1] - p[i, 1],
-              head_width=1e-2, color=colors[np.argmax(p[i])])
-# Plot boundaries of unit simplex
-plt.plot([0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], 'k', label='Simplex')
-    
-    # Author: Alexandre Gramfort <alexandre.gramfort@inria.fr>
-# License: BSD 3 clause
-    
-    
-class HierachicalStateMachine(object):
-    
-        def __new__(cls, name, bases, attrs):
-        new_cls = type.__new__(cls, name, bases, attrs)
+    class CaptchaController(RedditController):
+    @allow_oauth2_access
+    @api_doc(api_section.captcha, uri='/captcha/{iden}')
+    def GET_captchaimg(self, iden):
         '''
-            Here the name of the class is used as key but it could be any class
-            parameter.
-        '''
-        cls.REGISTRY[new_cls.__name__] = new_cls
-        return new_cls
+        Request a CAPTCHA image given an `iden`.
     
-        def setUp(self):
-        self.e, self.g = get_localizer(language='English'), \
-                         get_localizer(language='Greek')
-    
-    Test code which will almost always fail (if not exactly 12:01) when untestable
-production code (production code time provider is datetime) is used:
-    
-        def test_display_current_time_at_current_time(self):
-        '''
-        Just as justification for working example with the time provider used in
-        production. (Will always pass.)
-        '''
-        production_code_time_provider = ProductionCodeTimeProvider()
-        class_under_test = TimeDisplay()
-        current_time = datetime.datetime.now()
-        expected_time = '<span class=\'tinyBoldText\'>{}:{}</span>'.format(current_time.hour, current_time.minute)
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(production_code_time_provider), expected_time)
-    
-    
-def count_to(count):
-    '''Counts by word numbers, up to a maximum of five'''
-    numbers = ['one', 'two', 'three', 'four', 'five']
-    for number in numbers[:count]:
-        yield number
-    
-        def tearDown(self):
-        if not self._bProblem:
-            print('Tearing down')
-            time.sleep(0.1)
-            self._tm.publishReport()
-        else:
-            print('Test not executed. No tear down required.')
-    
-        def __get__(self, obj, T):
-        def transaction(*args, **kwargs):
-            state = memento(obj)
-            try:
-                return self.method(obj, *args, **kwargs)
-            except Exception as e:
-                state()
-                raise e
+                    errpage = pages.InterstitialPage(
+                    _('suspended'),
+                    content=pages.InTimeoutInterstitial(
+                        timeout_days_remaining=timeout_days_remaining,
+                    ),
+                )
+                request.environ['usable_error_content'] = errpage.render()
