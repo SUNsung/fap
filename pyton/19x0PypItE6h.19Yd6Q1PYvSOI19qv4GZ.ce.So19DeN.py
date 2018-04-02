@@ -1,84 +1,71 @@
 
         
-        import scrapy
-from scrapy.commands import ScrapyCommand
-from scrapy.linkextractors import LinkExtractor
+            # Add additional run to verify proper reset when called multiple times.
+    self.logged_message = ''
+    mon_sess.run(self.train_op)
+    global_step_val = sess.run(self.global_step)
+    if every_n_steps == 1 and global_step_val > warm_steps:
+      self.assertRegexpMatches(str(self.logged_message), 'exp/sec')
+    else:
+      self.assertEqual(str(self.logged_message).find('exp/sec'), -1)
     
-        def create_widgets(self):  # Call from override, if any.
-        # Bind to self widgets needed for entry_ok or unittest.
-        self.frame = frame = Frame(self, padding=10)
-        frame.grid(column=0, row=0, sticky='news')
-        frame.grid_columnconfigure(0, weight=1)
     
-    class TestVariousIteratorArgs(unittest.TestCase):
+@click.command()
+@click.argument('catalog_file', type=click.Path())
+def cli(catalog_file):
+    # Read the old ones back.  Once we are in, we will never go.
+    with open(catalog_file) as f:
+        rv = json.load(f)['supported_locales']
     
-    ttinfo = namedtuple('ttinfo', ['tt_gmtoff', 'tt_isdst', 'tt_abbrind'])
+        def test_b_observers_shall_be_attachable(cls):
+        cls.s.attach(cls.dec_obs)
+        cls.assertEqual(isinstance(cls.s._observers[0], DecimalViewer), True)
+        cls.assertEqual(len(cls.s._observers), 1)
+        cls.s.attach(cls.hex_obs)
+        cls.assertEqual(isinstance(cls.s._observers[1], HexViewer), True)
+        cls.assertEqual(len(cls.s._observers), 2)
     
-    class Chunk:
-    def __init__(self, file, align=True, bigendian=True, inclheader=False):
-        import struct
-        self.closed = False
-        self.align = align      # whether to align to word (2-byte) boundaries
-        if bigendian:
-            strflag = '>'
-        else:
-            strflag = '<'
-        self.file = file
-        self.chunkname = file.read(4)
-        if len(self.chunkname) < 4:
-            raise EOFError
-        try:
-            self.chunksize = struct.unpack_from(strflag+'L', file.read(4))[0]
-        except struct.error:
-            raise EOFError from None
-        if inclheader:
-            self.chunksize = self.chunksize - 8 # subtract header
-        self.size_read = 0
-        try:
-            self.offset = self.file.tell()
-        except (AttributeError, OSError):
-            self.seekable = False
-        else:
-            self.seekable = True
+        def test_frozen_pool(self):
+        with ObjectPool(self.sample_queue) as pool:
+            self.assertEqual(pool, 'first')
+            self.assertEqual(pool, 'first')
+        self.assertTrue(self.sample_queue.get() == 'second')
+        self.assertFalse(self.sample_queue.empty())
+        self.assertTrue(self.sample_queue.get() == 'first')
+        self.assertTrue(self.sample_queue.empty())
     
-        def update_visible(self):
-        '''Update and/or sensibly generate a set of visible headers.'''
-        for header in self._visible.keys():
-            if header in self:
-                self._visible.replace_header(header, self[header])
-            else:
-                del self._visible[header]
-        for header in ('Date', 'From', 'Reply-To', 'To', 'CC', 'Subject'):
-            if header in self and header not in self._visible:
-                self._visible[header] = self[header]
+        def __new__(cls, name, bases, attrs):
+        new_cls = type.__new__(cls, name, bases, attrs)
+        '''
+            Here the name of the class is used as key but it could be any class
+            parameter.
+        '''
+        cls.REGISTRY[new_cls.__name__] = new_cls
+        return new_cls
     
-        print('ADDN_LINK_FILES=', end=' ')
-    for addn in vars['addn_link']: print(''%s'' % (addn), end=' ')
-    print() ; print()
+        def test_am_station_overflow_after_scan(self):
+        self.radio.scan()
+        station = self.radio.state.stations[self.radio.state.pos]
+        expected_station = '1250'
+        self.assertEqual(station, expected_station)
     
-        def test_infile_stdout(self):
-        infile = self._create_infile()
-        rc, out, err = assert_python_ok('-m', 'json.tool', infile)
-        self.assertEqual(rc, 0)
-        self.assertEqual(out.splitlines(), self.expect.encode().splitlines())
-        self.assertEqual(err, b'')
+        def _instance_method_1(self):
+        print('Value {}'.format(self.x1))
     
-    def _add_call_item_to_queue(pending_work_items,
-                            work_ids,
-                            call_queue):
-    '''Fills call_queue with _WorkItems from pending_work_items.
+    import random
+import time
     
-            for p in processes:
-            p.join()
+        a_transaction = Transaction(True, num_obj)
+    try:
+        for i in range(3):
+            num_obj.increment()
+            print(num_obj)
+        a_transaction.commit()
+        print('-- committed')
     
-    import time
-from threading import Thread
-from ycm.client.base_request import BaseRequest, HandleServerException
+        def attach(self, observer):
+        if observer not in self._observers:
+            self._observers.append(observer)
     
-        @property
-    def is_eager_to_contribute(self):
-        return random.randint(0, 1)
-    
-        def __init__(self, one, other):
-        self._one = one
-        self._other = other
+            Responds with a 120x50 `image/png` which should be displayed
+        to the user.
