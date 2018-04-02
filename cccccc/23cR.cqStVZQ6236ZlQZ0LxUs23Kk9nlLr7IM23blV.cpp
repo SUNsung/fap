@@ -1,203 +1,168 @@
 
         
-          // Backwards compatible fit returning a gradient and constant.
-  // Deprecated. Prefer Fit(ICOORD*, ICOORD*) where possible, but use this
-  // function in preference to the LMS class.
-  double Fit(float* m, float* c);
+          virtual bool lookupAdditions(DeclBaseName Name, DeclContext *DC,
+                               SourceLoc Loc, bool IsTypeLookup,
+                               ResultVector &RV) = 0;
     
-    // Adjust the weights of all the samples to be uniform in the given charset.
-// Returns the number of samples in the iterator.
-int SampleIterator::UniformSamples() {
-  int num_good_samples = 0;
-  for (Begin(); !AtEnd(); Next()) {
-    TrainingSample* sample = MutableSample();
-    sample->set_weight(1.0);
-    ++num_good_samples;
-  }
-  NormalizeSamples();
-  return num_good_samples;
+    
+    {  SyntaxMap[FromNode] = ToNode;
 }
     
+      /// Build the components of an Objective-C method descriptor for the given
+  /// subscript's method implementations.
+  void emitObjCSetterDescriptorParts(IRGenModule &IGM,
+                                     SubscriptDecl *subscript,
+                                     llvm::Constant *&selectorRef,
+                                     llvm::Constant *&atEncoding,
+                                     llvm::Constant *&impl);
     
+    using namespace SourceKit;
+using namespace CodeCompletion;
+using namespace swift;
+using namespace ide;
     
-    
-    
-    
-    
-    #if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,'invalid 'cobj' in function 'lua_cocos2dx_physics_PhysicsJointDistance_createConstraints'', nullptr);
-        return 0;
+      GraphemeClusterBreakProperty GCBForC0 = getGraphemeClusterBreakProperty(C[0]);
+  while (true) {
+    if (isExtendedGraphemeClusterBoundaryAfter(GCBForC0))
+      return S.slice(0, SourceNext - SourceStart);
     }
+    
+    /// \brief Diagnostic consumer that displays diagnostics to standard error.
+class PrintingDiagnosticConsumer : public DiagnosticConsumer {
+  llvm::raw_ostream &Stream;
+  bool ForceColors = false;
+  bool DidErrorOccur = false;
+public:
+  PrintingDiagnosticConsumer(llvm::raw_ostream &stream = llvm::errs()) :
+    Stream(stream) { }
+    }
+    
+        DXGI_SWAP_CHAIN_DESC sd;
+    ZeroMemory( &sd, sizeof( sd ) );
+    sd.BufferCount = 1;
+    sd.BufferDesc.Width = width;
+    sd.BufferDesc.Height = height;
+#ifdef CHECK_NV12
+    sd.BufferDesc.Format = DXGI_FORMAT_NV12;
+#else
+    sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 #endif
+    sd.BufferDesc.RefreshRate.Numerator = 60;
+    sd.BufferDesc.RefreshRate.Denominator = 1;
+    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+    sd.OutputWindow = NULL; //g_hWnd;
+    sd.SampleDesc.Count = 1;
+    sd.SampleDesc.Quality = 0;
+    sd.Windowed = TRUE;
     
-        const float32 k_segments = 16.0f;
-    int vertexCount=16;
-    const float32 k_increment = 2.0f * b2_pi / k_segments;
-    float32 theta = 0.0f;
+        // F1 COEFFICIENT
     
-    GLfloat*    glVertices = new (std::nothrow) GLfloat[vertexCount*2];
-    for (int i = 0; i < k_segments; ++i)
-    {
-        b2Vec2 v = center + radius * b2Vec2(cosf(theta), sinf(theta));
-        glVertices[i*2]=v.x * mRatio;
-        glVertices[i*2+1]=v.y * mRatio;
-        theta += k_increment;
+            if(quantile_sum - low_sum > out_of_bells_fraction*total_sum)
+        {
+            if(max_segment_length < x - start_x)
+            {
+                max_segment_length = x - start_x;
+                max_start_x = start_x;
+                max_end_x = x;
+            }
     }
     
-    mShaderProgram->setUniformLocationWith4f(mColorLocation, color.r*0.5f, color.g*0.5f, color.b*0.5f, 0.5f);
-    glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, 0, glVertices);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, vertexCount);
+            struct smem
+        {
+            enum { TAG_MASK = (1U << ( (sizeof(unsigned int) << 3) - 5U)) - 1U };
+    }
     
+    #ifndef GLEXT_64_TYPES_DEFINED
+    // This code block is duplicated in glxext.h, so must be protected
+    #define GLEXT_64_TYPES_DEFINED
     
-    {	static Test* Create()
-	{
-		return new AddPair;
-	}
-};
+    #include 'opencv2/core/opencl/runtime/opencl_core.hpp'
+#include 'opencv2/core/opencl/runtime/opencl_clamdblas.hpp'
     
-    	enum
-	{
-		e_count = 30
-	};
-    
-    		if (b2_gjkCalls > 0)
-		{
-			m_debugDraw.DrawString(5, m_textLine, 'gjk calls = %d, ave gjk iters = %3.1f, max gjk iters = %d',
-				b2_gjkCalls, b2_gjkIters / float32(b2_gjkCalls), b2_gjkMaxIters);
-			m_textLine += DRAW_STRING_NEW_LINE;
-		}
-    
-    // Return the epilogue of generated mock file.
-grpc::string GetMockEpilogue(grpc_generator::File *file,
-                             const Parameters &params);
-    
-    	for (int i = 0; i < service->method_count(); i++) {
-		GenerateServerMethod(service->method(i).get(), printer, vars);
-		printer->Print('\n');
-	}
-    
-    
-    {  //Package name for the service
-  grpc::string package_name;
-};
-    
-    #include <grpc++/impl/codegen/async_stream.h>
-#include <grpc++/impl/codegen/async_unary_call.h>
-#include <grpc++/impl/codegen/channel_interface.h>
-#include <grpc++/impl/codegen/client_unary_call.h>
-#include <grpc++/impl/codegen/method_handler_impl.h>
-#include <grpc++/impl/codegen/rpc_service_method.h>
-#include <grpc++/impl/codegen/service_type.h>
-#include <grpc++/impl/codegen/sync_stream.h>
-namespace MyGame {
-namespace Example {
+    namespace cv { namespace ocl { namespace runtime {
+    }
     }
     }
     
-    
-    {
-    {}  // namespace Example
-}  // namespace MyGame
-    
-      // Parameters required to initialize the FlatCompiler.
-  struct InitParams {
-    InitParams()
-        : generators(nullptr),
-          num_generators(0),
-          warn_fn(nullptr),
-          error_fn(nullptr) {}
-    }
-    
-    #include 'monster_generated.h'  // Already includes 'flatbuffers/flatbuffers.h'.
-    
-      // parse schema first, so we can use it to parse the data after
-  flatbuffers::Parser parser;
-  const char *include_directories[] = { 'samples', nullptr };
-  ok = parser.Parse(schemafile.c_str(), include_directories) &&
-       parser.Parse(jsonfile.c_str(), include_directories);
-  assert(ok);
-    
-    
-    {
-    {#undef EXT_FUNC
-};
-} // namespace fuzzer
-    
-    ExternalFunctions::ExternalFunctions() {
-#define EXT_FUNC(NAME, RETURN_TYPE, FUNC_SIG, WARN)                            \
-  this->NAME = ::NAME;                                                         \
-  CheckFnPtr((void *)::NAME, #NAME, WARN);
-    }
-    
-    using namespace fuzzer;
-    
-    
-    {}  // namespace fuzzer
+    #endif // __cocos2dx_builder_h__
 
     
-    // Parse a location, like:
-// \\?\UNC\Server\Share\  \\?\C:\  \\Server\Share\  \  C:\  C:
-// Returns number of characters considered if successful.
-static size_t ParseLocation(const std::string &FileName) {
-  size_t Pos = 0, Res;
+    extern JSClass  *jsb_cocos2d_NavMesh_class;
+extern JSObject *jsb_cocos2d_NavMesh_prototype;
+    
+    int register_all_cocos2dx_cocosdenshion(lua_State* tolua_S);
+    
+    #if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,'#ferror in function 'lua_cocos2dx_physics_PhysicsWorld_getSpeed'.',&tolua_err);
+#endif
+    
+        glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, 0, vertices);
+    glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
+    
+    	b2BodyDef bd;
+	bd.type = b2_dynamicBody;
+	bd.position = position;
+	bd.bullet = true;
+	m_bomb = m_world->CreateBody(&bd);
+	m_bomb->SetLinearVelocity(velocity);
+	
+	b2CircleShape circle;
+	circle.m_radius = 0.3f;
+    
+    
+    {			b2PolygonShape shape;
+			shape.SetAsBox(0.5f, 2.0f);
+			m_attachment->CreateFixture(&shape, 2.0f);
+		}
+    
+    			b2FixtureDef fd;
+			fd.shape = &shape;
+			fd.density = 1.0f;
+    
+    		b2_gjkCalls = 0;
+		b2_gjkIters = 0;
+		b2_gjkMaxIters = 0;
+    
+    namespace xgboost {
+namespace common {
+    }
     }
     
-    void MutationDispatcher::AddWordToAutoDictionary(DictionaryEntry DE) {
-  static const size_t kMaxAutoDictSize = 1 << 14;
-  if (TempAutoDictionary.size() >= kMaxAutoDictSize) return;
-  TempAutoDictionary.push_back(DE);
-}
     
-      size_t AddWordFromDictionary(Dictionary &D, uint8_t *Data, size_t Size,
-                               size_t MaxSize);
-  size_t MutateImpl(uint8_t *Data, size_t Size, size_t MaxSize,
-                    const std::vector<Mutator> &Mutators);
+    {
+    {}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_RANDOM_H_
+
     
-    struct FuzzingOptions {
-  int Verbosity = 1;
-  size_t MaxLen = 0;
-  int UnitTimeoutSec = 300;
-  int TimeoutExitCode = 77;
-  int ErrorExitCode = 77;
-  int MaxTotalTimeSec = 0;
-  int RssLimitMb = 0;
-  bool DoCrossOver = true;
-  int MutateDepth = 5;
-  bool UseCounters = false;
-  bool UseIndirCalls = true;
-  bool UseMemcmp = true;
-  bool UseMemmem = true;
-  bool UseCmp = false;
-  bool UseValueProfile = false;
-  bool Shrink = false;
-  int ReloadIntervalSec = 1;
-  bool ShuffleAtStartUp = true;
-  bool PreferSmall = true;
-  size_t MaxNumberOfRuns = -1L;
-  int ReportSlowUnits = 10;
-  bool OnlyASCII = false;
-  std::string OutputCorpus;
-  std::string ArtifactPrefix = './';
-  std::string ExactArtifactPath;
-  std::string ExitOnSrcPos;
-  std::string ExitOnItem;
-  bool SaveArtifacts = true;
-  bool PrintNEW = true; // Print a status line when new units are found;
-  bool OutputCSV = false;
-  bool PrintNewCovPcs = false;
-  bool PrintFinalStats = false;
-  bool PrintCorpusStats = false;
-  bool PrintCoverage = false;
-  bool DumpCoverage = false;
-  bool DetectLeaks = true;
-  int  TraceMalloc = 0;
-  bool HandleAbrt = false;
-  bool HandleBus = false;
-  bool HandleFpe = false;
-  bool HandleIll = false;
-  bool HandleInt = false;
-  bool HandleSegv = false;
-  bool HandleTerm = false;
-};
+      ASSERT_EQ(GetFileSize(tmp_file), 76)
+    << 'Expected saved binary file size to be same as object size';
+    
+    
+    {DMLC_REGISTER_DATA_PARSER(uint32_t, dense_libsvm, data::CreateDenseLibSVMParser<uint32_t>);
+}  // namespace dmlc
+
+    
+        void Dump(const std::string& _processname);
+    const std::vector<std::string>& StackList() const;
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    namespace mars_boost {} namespace boost = mars_boost; namespace mars_boost {
+    }
+    
+    #define DEFINE_HAS_MEMBER(member_name) \
+    template <typename T>\
+    class has_##member_name {\
+      private:\
+        struct yes_type { char x[1]; };\
+        struct no_type { char x[2]; };\
+        template <int> struct tester;\
+        template <typename U> static yes_type test(tester<sizeof(&U::member_name)>*);\
+        template <typename U> static no_type test(...);\
+      public:\
+        static const bool value = (sizeof(test<T>(0)) == sizeof(yes_type));\
+    };
