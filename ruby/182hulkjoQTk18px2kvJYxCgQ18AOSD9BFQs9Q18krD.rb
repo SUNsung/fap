@@ -1,73 +1,114 @@
 
         
-        def site_configuration(overrides = {})
-  build_configs({
-    'source'      => source_dir,
-    'destination' => dest_dir
-  }, build_configs(overrides))
-end
+          # Allows a bottle tag to specify a specific OS or later,
+  # so the same bottle can target multiple OSs.
+  # Not used in core, used in taps.
+  def find_or_later_tag(tag)
+    begin
+      tag_version = MacOS::Version.from_symbol(tag)
+    rescue ArgumentError
+      return
+    end
     
-    require 'bundler/setup'
-require 'json'
-require 'stackprof'
-require File.expand_path('../lib/jekyll', __dir__)
+    require 'global'
+require 'build_options'
+require 'cxxstdlib'
+require 'keg'
+require 'extend/ENV'
+require 'debrew'
+require 'fcntl'
+require 'socket'
     
-        # Gets/Sets the content of this layout.
-    attr_accessor :content
-    
-        def self.cleanup_cellar
-      Formula.installed.each do |formula|
-        cleanup_formula formula
+      # Removes any empty directories in the formula's prefix subtree
+  # Keeps any empty directions projected by skip_clean
+  # Removes any unresolved symlinks
+  def prune
+    dirs = []
+    symlinks = []
+    @f.prefix.find do |path|
+      if path == @f.libexec || @f.skip_clean?(path)
+        Find.prune
+      elsif path.symlink?
+        symlinks << path
+      elsif path.directory?
+        dirs << path
       end
     end
     
-          # Find commands in Homebrew/dev-cmd
-      if ARGV.homebrew_developer?
-        puts
-        puts 'Built-in development commands'
-        puts_columns internal_development_commands
-      end
+        h = base.dup
+    assert_equal(nil, h.reject! { false })
+    assert_equal(@cls[],  h.reject! { true })
     
-        def to_json
-      JSON.generate(as_json)
+      it 'decodes the remaining floats when passed the '*' modifier after another directive' do
+    array = '@\xa9\x99\x9aA\x1333'.unpack(unpack_format()+unpack_format('*'))
+    array.should == [5.300000190734863, 9.199999809265137]
+  end
+    
+      def self.clear_state
+    @state = nil
+  end
+    
+        t.status.should == false
+    t.join
+  end
+    
+        def register_compass_extension
+      ::Compass::Frameworks.register(
+          'bootstrap',
+          :version               => Bootstrap::VERSION,
+          :path                  => gem_path,
+          :stylesheets_directory => stylesheets_path,
+          :templates_directory   => File.join(gem_path, 'templates')
+      )
+    end
+    
+      # Eager load code on boot. This eager loads most of Rails and
+  # your application in memory, allowing both thread web servers
+  # and those relying on copy on write to perform better.
+  # Rake tasks automatically ignore this option for performance.
+  config.eager_load = true
+    
+      # Show full error reports and disable caching.
+  config.consider_all_requests_local       = true
+  config.action_controller.perform_caching = false
+    
+            def initialize(name, declaration_node, scope)
+          unless VARIABLE_DECLARATION_TYPES.include?(declaration_node.type)
+            raise ArgumentError,
+                  'Node type must be any of #{VARIABLE_DECLARATION_TYPES}, ' \
+                  'passed #{declaration_node.type}'
+          end
+    
+                lambda do |corrector|
+              new_source = receiver.source + '.start_with?(' +
+                           to_string_literal(regex_str) + ')'
+              corrector.replace(node.source_range, new_source)
+            end
+          end
+        end
+      end
     end
   end
 end
 
     
-        html_filters.push 'clean_local_urls'
-    
-        it 'redirects requests with duplicate session cookies' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
-      expect(last_response).to be_redirect
-      expect(last_response.location).to eq('/')
-    end
-    
-    
-  it 'should allow changing the protection mode to a string' do
-    # I have no clue what other modes are available
-    mock_app do
-      use Rack::Protection::FrameOptions, :frame_options => 'ALLOW-FROM foo'
-      run DummyApp
-    end
-    
-      %w(GET HEAD POST PUT DELETE).each do |method|
-    it 'accepts #{method} requests when allow_if is true' do
-      mock_app do
-        use Rack::Protection::HttpOrigin, :allow_if => lambda{|env| env.has_key?('HTTP_ORIGIN') }
-        run DummyApp
-      end
-      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://any.domain.com')).to be_ok
-    end
-  end
-    
-      describe '#react' do
-    it 'prevents attacks and warns about it' do
-      io = StringIO.new
-      mock_app do
-        use Rack::Protection, :logger => Logger.new(io)
-        run DummyApp
-      end
-      post('/', {}, 'rack.session' => {}, 'HTTP_ORIGIN' => 'http://malicious.com')
-      expect(io.string).to match(/prevented.*Origin/)
-    end
+    module RuboCop
+  module Cop
+    module Style
+      # This cop checks for optional arguments to methods
+      # that do not come at the end of the argument list
+      #
+      # @example
+      #   # bad
+      #   def foo(a = 1, b, c)
+      #   end
+      #
+      #   # good
+      #   def baz(a, b, c = 1)
+      #   end
+      #
+      #   def foobar(a = 1, b = 2, c = 3)
+      #   end
+      class OptionalArguments < Cop
+        MSG = 'Optional arguments should appear at the end ' \
+              'of the argument list.'.freeze
