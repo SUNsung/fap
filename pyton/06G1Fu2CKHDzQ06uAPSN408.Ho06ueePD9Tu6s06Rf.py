@@ -1,151 +1,96 @@
 
         
-            def get_testable_domain_names(self):
-        '''Returns the set of domain names that can be tested against'''
-        if self._test_names:
-            return self._test_names
-        else:
-            return {'example.com'}
+          def __init__(self, metagraph, model):
+    self._metagraph = metagraph
+    self.replicate_states(model.initial_state_name)
+    self.replicate_states(model.final_state_name)
+    self.update_snapshot_name('variables')
+    self.update_snapshot_name('trainable_variables')
     
-    # How to display URL addresses: 'footnote', 'no', or 'inline'.
-#texinfo_show_urls = 'footnote'
+        if mode == tf.estimator.ModeKeys.PREDICT:
+        tf.logging.info('my_model_fn: PREDICT, {}'.format(mode))
+    elif mode == tf.estimator.ModeKeys.EVAL:
+        tf.logging.info('my_model_fn: EVAL, {}'.format(mode))
+    elif mode == tf.estimator.ModeKeys.TRAIN:
+        tf.logging.info('my_model_fn: TRAIN, {}'.format(mode))
     
-        description = 'Example Installer plugin'
+        final_timestep = label_seq[-1]
+    eos_id = len(seq) - 1
+    self.assertAllEqual(final_timestep.tokens, [eos_id, eos_id])
+    self.assertEqual(final_timestep.label, 1)
+    self.assertEqual(final_timestep.weight, 1.0)
     
-    # The ## imports above & following could help make some tests gui-free.
-# However, they currently make radiobutton tests fail.
-##def setUpModule():
-##    # Replace tk objects used to initialize se.SearchEngine.
-##    se.BooleanVar = Var
-##    se.StringVar = Var
-##
-##def tearDownModule():
-##    se.BooleanVar = BooleanVar
-##    se.StringVar = StringVar
+      def _lm_loss(self,
+               inputs,
+               emb_key='lm_embedded',
+               lstm_layer='lstm',
+               lm_loss_layer='lm_loss',
+               loss_name='lm_loss',
+               compute_loss=True):
+    embedded = self.layers['embedding'](inputs.tokens)
+    self.tensors[emb_key] = embedded
+    lstm_out, next_state = self.layers[lstm_layer](embedded, inputs.state,
+                                                   inputs.length)
+    if compute_loss:
+      loss = self.layers[lm_loss_layer](
+          [lstm_out, inputs.labels, inputs.weights])
+      with tf.control_dependencies([inputs.save_state(next_state)]):
+        loss = tf.identity(loss)
+        tf.summary.scalar(loss_name, loss)
     
-        def dump(self, stream, start=None, end=None):
-        for j, (trans, i) in enumerate(zip(self.transitions, self.type_indices)):
-            utc = datetime.utcfromtimestamp(trans)
-            tti = self.ttis[i]
-            lmt = datetime.utcfromtimestamp(trans + tti.tt_gmtoff)
-            abbrind = tti.tt_abbrind
-            abbr = self.abbrs[abbrind:self.abbrs.find(0, abbrind)].decode()
-            if j > 0:
-                prev_tti = self.ttis[self.type_indices[j - 1]]
-                shift = ' %+g' % ((tti.tt_gmtoff - prev_tti.tt_gmtoff) / 3600)
-            else:
-                shift = ''
-            print('%s UTC = %s %-5s isdst=%d' % (utc, lmt, abbr, tti[1]) + shift, file=stream)
+      tokens_shape = [2] if bidir_input else []
+  seq_key, ctx, sequence = _read_single_sequence_example(
+      [data_path], tokens_shape=tokens_shape)
+  # Set up stateful queue reader.
+  state_names = _get_tuple_state_names(num_layers, state_name)
+  initial_states = {}
+  for c_state, h_state in state_names:
+    initial_states[c_state] = tf.zeros(state_size)
+    initial_states[h_state] = tf.zeros(state_size)
+  if bidir_input:
+    rev_state_names = _get_tuple_state_names(num_layers,
+                                             '{}_reverse'.format(state_name))
+    for rev_c_state, rev_h_state in rev_state_names:
+      initial_states[rev_c_state] = tf.zeros(state_size)
+      initial_states[rev_h_state] = tf.zeros(state_size)
+  batch = tf.contrib.training.batch_sequences_with_states(
+      input_key=seq_key,
+      input_sequences=sequence,
+      input_context=ctx,
+      input_length=tf.shape(sequence['token_id'])[0],
+      initial_states=initial_states,
+      num_unroll=unroll_steps,
+      batch_size=batch_size,
+      allow_small_batch=False,
+      num_threads=4,
+      capacity=batch_size * 10,
+      make_keys_unique=True,
+      make_keys_unique_seed=29392)
+  return batch
     
-        def __init__(self, *, object_hook=None, parse_float=None,
-            parse_int=None, parse_constant=None, strict=True,
-            object_pairs_hook=None):
-        '''``object_hook``, if specified, will be called with the result
-        of every JSON object decoded and its return value will be used in
-        place of the given ``dict``.  This can be used to provide custom
-        deserializations (e.g. to support JSON-RPC class hinting).
+      task_params = utils.Foo(num_actions=4, step_size=4, num_steps=0,
+                          batch_size=32, room_seed=0, base_class='Building',
+                          task='mapping', n_ori=6, data_augment=data_augment,
+                          output_transform_to_global_map=False,
+                          output_canonical_map=False,
+                          output_incremental_transform=False,
+                          output_free_space=False, move_type='shortest_path',
+                          toy_problem=0)
     
+    py_test(
+    name = 'cifar10_input_test',
+    size = 'small',
+    srcs = ['cifar10_input_test.py'],
+    srcs_version = 'PY2AND3',
+    deps = [
+        ':cifar10_input',
+        '//tensorflow:tensorflow_py',
+        '//tensorflow/python:framework_test_lib',
+        '//tensorflow/python:platform_test',
+    ],
+)
     
-
-# generic class
-class ColorDB:
-    def __init__(self, fp):
-        lineno = 2
-        self.__name = fp.name
-        # Maintain several dictionaries for indexing into the color database.
-        # Note that while Tk supports RGB intensities of 4, 8, 12, or 16 bits,
-        # for now we only support 8 bit intensities.  At least on OpenWindows,
-        # all intensities in the /usr/openwin/lib/rgb.txt file are 8-bit
-        #
-        # key is (red, green, blue) tuple, value is (name, [aliases])
-        self.__byrgb = {}
-        # key is name, value is (red, green, blue)
-        self.__byname = {}
-        # all unique names (non-aliases).  built-on demand
-        self.__allnames = None
-        for line in fp:
-            # get this compiled regular expression from derived class
-            mo = self._re.match(line)
-            if not mo:
-                print('Error in', fp.name, ' line', lineno, file=sys.stderr)
-                lineno += 1
-                continue
-            # extract the red, green, blue, and name
-            red, green, blue = self._extractrgb(mo)
-            name = self._extractname(mo)
-            keyname = name.lower()
-            # BAW: for now the `name' is just the first named color with the
-            # rgb values we find.  Later, we might want to make the two word
-            # version the `name', or the CapitalizedVersion, etc.
-            key = (red, green, blue)
-            foundname, aliases = self.__byrgb.get(key, (name, []))
-            if foundname != name and foundname not in aliases:
-                aliases.append(name)
-            self.__byrgb[key] = (foundname, aliases)
-            # add to byname lookup
-            self.__byname[keyname] = key
-            lineno = lineno + 1
+      def load(self, label_lookup_path, uid_lookup_path):
+    '''Loads a human readable English name for each softmax node.
     
-        def print_summary(self):
-        if self.is_evalframe():
-            pyop = self.get_pyop()
-            if pyop:
-                line = pyop.get_truncated_repr(MAX_OUTPUT_LEN)
-                write_unicode(sys.stdout, '#%i %s\n' % (self.get_index(), line))
-                if not pyop.is_optimized_out():
-                    line = pyop.current_line()
-                    if line is not None:
-                        sys.stdout.write('    %s\n' % line.strip())
-            else:
-                sys.stdout.write('#%i (unable to read python frame information)\n' % self.get_index())
-        else:
-            info = self.is_other_python_frame()
-            if info:
-                sys.stdout.write('#%i %s\n' % (self.get_index(), info))
-            else:
-                sys.stdout.write('#%i\n' % self.get_index())
-    
-        def test_contains(self):
-        r = range(10)
-        self.assertIn(0, r)
-        self.assertIn(1, r)
-        self.assertIn(5.0, r)
-        self.assertNotIn(5.1, r)
-        self.assertNotIn(-1, r)
-        self.assertNotIn(10, r)
-        self.assertNotIn('', r)
-        r = range(9, -1, -1)
-        self.assertIn(0, r)
-        self.assertIn(1, r)
-        self.assertIn(5.0, r)
-        self.assertNotIn(5.1, r)
-        self.assertNotIn(-1, r)
-        self.assertNotIn(10, r)
-        self.assertNotIn('', r)
-        r = range(0, 10, 2)
-        self.assertIn(0, r)
-        self.assertNotIn(1, r)
-        self.assertNotIn(5.0, r)
-        self.assertNotIn(5.1, r)
-        self.assertNotIn(-1, r)
-        self.assertNotIn(10, r)
-        self.assertNotIn('', r)
-        r = range(9, -1, -2)
-        self.assertNotIn(0, r)
-        self.assertIn(1, r)
-        self.assertIn(5.0, r)
-        self.assertNotIn(5.1, r)
-        self.assertNotIn(-1, r)
-        self.assertNotIn(10, r)
-        self.assertNotIn('', r)
-    
-            y = X.from_buffer_copy(a)
-        self.assertEqual(y.c_int, a[0])
-        self.assertFalse(y.init_called)
-    
-            # C code:
-        #   int x = 12321;
-        #   res = &x
-        x = c_int(12321)
-        res.contents = x
-        self.assertEqual(i.value, 54345)
+    package(default_visibility = ['//visibility:public'])
