@@ -1,87 +1,85 @@
 
         
-              if record.created_at.nil? || record.created_at >= now || record.created_at == record.updated_at
-        yield
+          describe '.all' do
+    it 'uses the client to fetch all keys' do
+      mock_client_response(:list_keys, with: no_args) do
+        [
+          {
+            canDownload: false,
+            canRevoke: true,
+            keyId: 'some-key-id',
+            keyName: 'Test Key via fastlane',
+            servicesCount: 2
+          },
+          {
+            canDownload: true,
+            canRevoke: true,
+            keyId: 'B92NE4F7RG',
+            keyName: 'Test Key via browser',
+            servicesCount: 2
+          }
+        ]
+      end
+    
+          # Run a certain action
+      def trigger(command: nil, serial: nil)
+        android_serial = serial != '' ? 'ANDROID_SERIAL=#{serial}' : nil
+        command = [android_serial, adb_path, command].join(' ')
+        Action.sh(command)
+      end
+    
+          it 'does set the source directory' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            cloc(source_directory: 'MyCoolApp')
+          end').runner.execute(:test)
+    
+      attributes :id, :type, :name, :updated
+    
+        it 'removes the remote accounts\'s statuses and media attachments' do
+      expect { bad_status1.reload }.to raise_exception ActiveRecord::RecordNotFound
+      expect { bad_status2.reload }.to raise_exception ActiveRecord::RecordNotFound
+      expect { bad_attachment.reload }.to raise_exception ActiveRecord::RecordNotFound
+    end
+  end
+    
+      def enough_poll_answers
+    errors.add(:poll_answers, I18n.t('activerecord.errors.models.poll.attributes.poll_answers.not_enough_poll_answers')) if poll_answers.size < 2
+  end
+    
+        def initialize
+      clear
+    end
+    
+        EMPTY_TYPE = 'inode/x-empty'
+    SENSIBLE_DEFAULT = 'application/octet-stream'
+    
+        # Returns the id of the instance in a split path form. e.g. returns
+    # 000/001/234 for an id of 1234.
+    def id_partition attachment, style_name
+      case id = attachment.instance.id
+      when Integer
+        ('%09d'.freeze % id).scan(/\d{3}/).join('/'.freeze)
+      when String
+        id.scan(/.{3}/).first(3).join('/'.freeze)
       else
-        record.id = Mastodon::Snowflake.id_at(record.created_at)
-        tries     = 0
-    
-      task :ensure_id_sequences_exist do
-    each_schema_load_environment do
-      Mastodon::Snowflake.ensure_id_sequences_exist
-    end
-  end
-end
-
-    
-      def text_url
-    object.local? ? medium_url(object) : nil
-  end
-    
-      describe 'GET #show' do
-    let!(:tag)     { Fabricate(:tag, name: 'test') }
-    let!(:local)   { Fabricate(:status, tags: [tag], text: 'local #test') }
-    let!(:remote)  { Fabricate(:status, tags: [tag], text: 'remote #test', account: Fabricate(:account, domain: 'remote')) }
-    let!(:late)    { Fabricate(:status, tags: [tag], text: 'late #test') }
-    
-      def id
-    ActivityPub::TagManager.instance.uri_for(object)
-  end
-    
-        it 'leaves the domains status and attachements, but clears media' do
-      expect { bad_status1.reload }.not_to raise_error
-      expect { bad_status2.reload }.not_to raise_error
-      expect { bad_attachment.reload }.not_to raise_error
-      expect(bad_attachment.file.exists?).to be false
-    end
-  end
-end
-
-    
-    module Sass::Exec
-  # The `sass-convert` executable.
-  class SassConvert < Base
-    # @param args [Array<String>] The command-line arguments
-    def initialize(args)
-      super
-      require 'sass'
-      @options[:for_tree] = {}
-      @options[:for_engine] = {:cache => false, :read_cache => true}
+        nil
+      end
     end
     
-    # A logger that delays messages until they're explicitly flushed to an inner
-# logger.
-#
-# This can be installed around the current logger by calling \{#install!}, and
-# the original logger can be replaced by calling \{#uninstall!}. The log
-# messages can be flushed by calling \{#flush}.
-class Sass::Logger::Delayed < Sass::Logger::Base
-  # Installs a new delayed logger as the current Sass logger, wrapping the
-  # original logger.
-  #
-  # This can be undone by calling \{#uninstall!}.
-  #
-  # @return [Sass::Logger::Delayed] The newly-created logger.
-  def self.install!
-    logger = Sass::Logger::Delayed.new(Sass.logger)
-    Sass.logger = logger
-    logger
-  end
-    
-        # @param queries [Array<Query>] See \{#queries}
-    def initialize(queries)
-      @queries = queries
-    end
-    
-        # @see Node#to_sass
-    def to_sass(opts = {})
-      return to_quoted_equivalent.to_sass if deprecation == :immediate
-    
-            def update
-          authorize! :update, stock_location
-          if stock_location.update_attributes(stock_location_params)
-            respond_with(stock_location, status: 200, default_template: :show)
-          else
-            invalid_resource!(stock_location)
+        Hash.new.tap do |missing_styles|
+      current_styles.each do |klass, attachment_definitions|
+        attachment_definitions.each do |attachment_name, styles|
+          registered = registered_styles[klass][attachment_name] || [] rescue []
+          missed = styles - registered
+          if missed.present?
+            klass_sym = klass.to_s.to_sym
+            missing_styles[klass_sym] ||= Hash.new
+            missing_styles[klass_sym][attachment_name.to_sym] ||= Array.new
+            missing_styles[klass_sym][attachment_name.to_sym].concat(missed.to_a)
+            missing_styles[klass_sym][attachment_name.to_sym].map!(&:to_s).sort!.map!(&:to_sym).uniq!
           end
         end
+      end
+    end
+  end
+end
