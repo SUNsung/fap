@@ -1,400 +1,134 @@
 
         
-        #include 'db/builder.h'
+          /**
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to a cv::Mat
+   *
+   * @param cv_img
+   *    cv::Mat containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See image_data_layer.cpp for an example.
+   */
+  void Transform(const cv::Mat& cv_img, Blob<Dtype>* transformed_blob);
+#endif  // USE_OPENCV
     
-    leveldb_filterpolicy_t* leveldb_filterpolicy_create(
-    void* state,
-    void (*destructor)(void*),
-    char* (*create_filter)(
-        void*,
-        const char* const* key_array, const size_t* key_length_array,
-        int num_keys,
-        size_t* filter_length),
-    unsigned char (*key_may_match)(
-        void*,
-        const char* key, size_t length,
-        const char* filter, size_t filter_length),
-    const char* (*name)(void*)) {
-  leveldb_filterpolicy_t* result = new leveldb_filterpolicy_t;
-  result->state_ = state;
-  result->destructor_ = destructor;
-  result->create_ = create_filter;
-  result->key_match_ = key_may_match;
-  result->name_ = name;
-  return result;
+      int channel_axis_;
+  int num_;
+  int channels_;
+  int group_;
+  int out_spatial_dim_;
+  int weight_offset_;
+  int num_output_;
+  bool bias_term_;
+  bool is_1x1_;
+  bool force_nd_im2col_;
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include <vector>
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include <emmintrin.h>
+static __inline int vorbis_ftoi(double f){
+        return _mm_cvtsd_si32(_mm_load_sd(&f));
 }
     
-    #endif  // STORAGE_LEVELDB_DB_DB_ITER_H_
-
+    #ifndef CPU_SUPPORT_H
+#define CPU_SUPPORT_H
     
+    /*
+**      The C99 prototypes for lrint and lrintf are as follows:
+**
+**              long int lrintf (float x) ;
+**              long int lrint  (double x) ;
+*/
     
-    {  // Errors
-  static const char* errors[] = {
-    '',
-    'foo',
-    'foo-dx-100.log',
-    '.log',
-    '',
-    'manifest',
-    'CURREN',
-    'CURRENTX',
-    'MANIFES',
-    'MANIFEST',
-    'MANIFEST-',
-    'XMANIFEST-3',
-    'MANIFEST-3x',
-    'LOC',
-    'LOCKx',
-    'LO',
-    'LOGx',
-    '18446744073709551616.log',
-    '184467440737095516150.log',
-    '100',
-    '100.',
-    '100.lop'
-  };
-  for (int i = 0; i < sizeof(errors) / sizeof(errors[0]); i++) {
-    std::string f = errors[i];
-    ASSERT_TRUE(!ParseFileName(f, &number, &type)) << f;
-  }
+    #undef MULT16_32_Q15
+static inline int MULT16_32_Q15(int a, int b)
+{
+    int c;
+    asm volatile('MULT $ac1, %0, %1' : : 'r' (a), 'r' (b));
+    asm volatile('EXTR.W %0,$ac1, %1' : '=r' (c): 'i' (15));
+    return c;
 }
     
-    static void TestEncodeDecode(const VersionEdit& edit) {
-  std::string encoded, encoded2;
-  edit.EncodeTo(&encoded);
-  VersionEdit parsed;
-  Status s = parsed.DecodeFrom(encoded);
-  ASSERT_TRUE(s.ok()) << s.ToString();
-  parsed.EncodeTo(&encoded2);
-  ASSERT_EQ(encoded, encoded2);
-}
-    
-      ASSERT_TRUE(! Overlaps('a', 'b'));
-  ASSERT_TRUE(! Overlaps('z1', 'z2'));
-  ASSERT_TRUE(Overlaps('a', 'p'));
-  ASSERT_TRUE(Overlaps('a', 'q'));
-  ASSERT_TRUE(Overlaps('a', 'z'));
-  ASSERT_TRUE(Overlaps('p', 'p1'));
-  ASSERT_TRUE(Overlaps('p', 'q'));
-  ASSERT_TRUE(Overlaps('p', 'z'));
-  ASSERT_TRUE(Overlaps('p1', 'p2'));
-  ASSERT_TRUE(Overlaps('p1', 'z'));
-  ASSERT_TRUE(Overlaps('q', 'q'));
-  ASSERT_TRUE(Overlaps('q', 'q1'));
-    
-    namespace {
-class MemTableInserter : public WriteBatch::Handler {
- public:
-  SequenceNumber sequence_;
-  MemTable* mem_;
-    }
-    }
-    
-     public:
-  enum Order {
-    SEQUENTIAL,
-    RANDOM
-  };
-  enum DBState {
-    FRESH,
-    EXISTING
-  };
-    
-      // Change this slice to refer to an empty array
-  void clear() { data_ = ''; size_ = 0; }
-    
-    TEST(AnyTest, TestPackAndUnpackAny) {
-  // We can pack a Any message inside another Any message.
-  protobuf_unittest::TestAny submessage;
-  submessage.set_int32_value(12345);
-  google::protobuf::Any any;
-  any.PackFrom(submessage);
-  protobuf_unittest::TestAny message;
-  message.mutable_any_value()->PackFrom(any);
-    }
-    
-      virtual void GenerateCloningCode(io::Printer* printer);
-  virtual void GenerateFreezingCode(io::Printer* printer);
-  virtual void GenerateMembers(io::Printer* printer);
-  virtual void GenerateMergingCode(io::Printer* printer);
-  virtual void GenerateParsingCode(io::Printer* printer);
-  virtual void GenerateSerializationCode(io::Printer* printer);
-  virtual void GenerateSerializedSizeCode(io::Printer* printer);
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
-    
-    #include <string>
+    /*gcc appears to emit MOVDQA's to load the argument of an _mm_cvtepi8_epi32()
+  or _mm_cvtepi16_epi32() when optimizations are disabled, even though the
+  actual PMOVSXWD instruction takes an m32 or m64. Unlike a normal memory
+  reference, these require 16-byte alignment and load a full 16 bytes (instead
+  of 4 or 8), possibly reading out of bounds.
     
     
-    {}  // namespace google
-#endif  // GOOGLE_PROTOBUF_COMPILER_JAVA_DOC_COMMENT_H__
-
-    
-      // implements CodeGenerator ----------------------------------------
-  bool Generate(const FileDescriptor* file,
-                const string& parameter,
-                GeneratorContext* context,
-                string* error) const;
-    
-    // WorkloadStats is used to track per request timing for different states
-// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
-// should be made to guard the state change with appropriate timers and
-// counters.
-//
-// The states tracked are:
-//  - In a request (this is a superset of the interpreter state)
-//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
-//  - In the JIT (currently tracks time inside the translate routine)
-//
-// Note the time in the TC is not tracked.  This is roughly:
-//   Time in request - Time in interp
-//
-// This gives us the relative interp time formula of:
-//   Relative interp time = Time in interp / Time in request
-struct WorkloadStats final {
-  enum State {
-    InRequest,
-    // -> InInterp   Okay (entering Dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InInterp,
-    // -> InRequest  Okay (leaving the dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InTrans,
-    // -> InRequest  Okay (leaving translate)
-    // -> InInterp   Okay (leaving translate)
-  };
-    }
-    
-    
-    {  auto& counter = s_counters[m_name];
-  counter.total += elapsed;
-  ++counter.count;
-  counter.max = std::max(counter.max, elapsed);
-  counter.wall_time_elapsed += elapsed_wall_clock;
-  m_finished = true;
-  return elapsed;
-}
-    
-    struct PageletTransport final : Transport, Synchronizable {
-  PageletTransport(
-    const String& url, const Array& headers, const String& postData,
-    const String& remoteHost,
-    const std::set<std::string> &rfc1867UploadedFiles,
-    const Array& files, int timeoutSeconds);
-    }
-    
-    #include <algorithm>
-    
-      struct Hash {
-    size_t operator()(Vconst c) const {
-      return
-        std::hash<uint64_t>()(c.val) ^ std::hash<int>()(c.kind) ^ c.isUndef;
-    }
-  };
-    
-    
-    {  const Vunit&                     m_unit;
-  const jit::vector<Vlabel>        m_blocks;
-  const PredVector                 m_preds;
-  jit::hash_map<uint64_t, int64_t> m_arcWgts; // keyed using arcId()
-};
-    
-    void initNuma() {
-  if (getenv('HHVM_DISABLE_NUMA')) {
-    return;
-  }
-  // When linked dynamically numa_init() is called before JEMallocInitializer()
-  // numa_init is not exported by libnuma.so so it will be NULL
-  // however when linked statically numa_init() is not guaranteed to be called
-  // before JEMallocInitializer(), so call it here.
-  if (&numa_init) {
-    numa_init();
-  }
-  if (numa_available() < 0) return;
-    }
-    
-    #else // HAVE_NUMA undefined
-namespace HPHP {
-    }
-    
-      auto const dataSize = iv.size() * sizeof(SwitchProfile::cases[0]);
-  TargetProfile<SwitchProfile> profile(
-    env.unit.context(), env.irb->curMarker(), s_switchProfile.get(),
-    dataSize
-  );
-    
-      // We rebuild a variant type here because using boosts fails on opensource
-  // builds because it at some point requires a copy construction.
-  // This vector has one entry per prologue/translation stored in the two
-  // vectors above, and it encodes the order in which they should be published.
-  std::vector<Kind> order;
-    
-      loadedResource = LoadResource(moduleHandle, resourceInfo);
-  if (!loadedResource) {
-    return false;
-  }
-    
-    
-    {  // For fragments
-  kFirstType = 2,
-  kMiddleType = 3,
-  kLastType = 4
-};
-static const int kMaxRecordType = kLastType;
-    
-      VersionEdit edit;
-  for (int i = 0; i < 4; i++) {
-    TestEncodeDecode(edit);
-    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
-                 InternalKey('foo', kBig + 500 + i, kTypeValue),
-                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
-    edit.DeleteFile(4, kBig + 700 + i);
-    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
-  }
-    
-    #include 'db/version_set.h'
-#include 'util/logging.h'
-#include 'util/testharness.h'
-#include 'util/testutil.h'
-    
-    
-    {}  // namespace leveldb
-    
-      // Check that renaming works.
-  ASSERT_TRUE(!env_->RenameFile('/dir/non_existent', '/dir/g').ok());
-  ASSERT_OK(env_->RenameFile('/dir/f', '/dir/g'));
-  ASSERT_TRUE(!env_->FileExists('/dir/f'));
-  ASSERT_TRUE(env_->FileExists('/dir/g'));
-  ASSERT_OK(env_->GetFileSize('/dir/g', &file_size));
-  ASSERT_EQ(8, file_size);
-    
-    Block::Block(const BlockContents& contents)
-    : data_(contents.data.data()),
-      size_(contents.data.size()),
-      owned_(contents.heap_allocated) {
-  if (size_ < sizeof(uint32_t)) {
-    size_ = 0;  // Error marker
-  } else {
-    size_t max_restarts_allowed = (size_-sizeof(uint32_t)) / sizeof(uint32_t);
-    if (NumRestarts() > max_restarts_allowed) {
-      // The size is too small for NumRestarts()
-      size_ = 0;
-    } else {
-      restart_offset_ = size_ - (1 + NumRestarts()) * sizeof(uint32_t);
-    }
+    {  // wait for all workers to finish
+  for (auto& worker : g_all_workers) {
+    worker.join();
   }
 }
     
-    
-    { private:
-  const FilterPolicy* policy_;
-  const char* data_;    // Pointer to filter data (at block-start)
-  const char* offset_;  // Pointer to beginning of offset array (at block-end)
-  size_t num_;          // Number of entries in offset array
-  size_t base_lg_;      // Encoding parameter (see kFilterBaseLg in .cc file)
-};
-    
-    Iterator::~Iterator() {
-  if (cleanup_.function != NULL) {
-    (*cleanup_.function)(cleanup_.arg1, cleanup_.arg2);
-    for (Cleanup* c = cleanup_.next; c != NULL; ) {
-      (*c->function)(c->arg1, c->arg2);
-      Cleanup* next = c->next;
-      delete c;
-      c = next;
-    }
-  }
-}
-    
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
-
+    constexpr ptrdiff_t STORAGE_SIZE = 10;
+constexpr size_t VEC_SIZE = 3;
     
     
-    {}  // namespace leveldb
-
-    
-    int DeterministicSchedule::getcpu(unsigned* cpu,
-                                  unsigned* node,
-                                  void* /* unused */) {
-  if (!tls_threadId && tls_sched) {
-    beforeSharedAccess();
-    tls_threadId = tls_sched->nextThreadId_++;
-    afterSharedAccess();
-  }
-  if (cpu) {
-    *cpu = tls_threadId;
-  }
-  if (node) {
-    *node = tls_threadId;
-  }
+    {  delete tensor;
+  delete tensor2;
+  cout << 'OK' << endl;
   return 0;
 }
+
     
-    template <
-    class T,
-    FOLLY_AUTO User,
-    class I,
-    class = ArgTypes<User, I>,
-    class = Bool<true>>
-struct ThunkFn {
-  template <class R, class D, class... As>
-  constexpr /* implicit */ operator FnPtr<R, D&, As...>() const noexcept {
-    return nullptr;
-  }
-};
-    
-      __m128i arr1;
-  if (HAYSTACK_ALIGNED) {
-    arr1 = _mm_load_si128(
-        reinterpret_cast<const __m128i*>(haystack.data() + blockStartIdx));
-  } else {
-    arr1 = _mm_loadu_si128(
-        reinterpret_cast<const __m128i*>(haystack.data() + blockStartIdx));
-  }
-    
-    void DynamicParser::reportError(
-    const folly::dynamic* lookup_k,
-    const std::exception& ex) {
-  // If descendants of this item, or other keys on it, already reported an
-  // error, the error object would already exist.
-  auto& e = stack_.errors(allowNonStringKeyErrors_);
+    namespace at {
     }
     
+      static GlooCache::value_type create(GlooCache& cache,
+    const DataChannelGloo::Group& group, const std::string& store_prefix,
+    DeviceType device, std::size_t input_bytes, std::size_t count, THDReduceOp op
+  ) {
+    auto context = cache.createContext(group, store_prefix);
+    auto input_buffer = cache.createBuffer(input_bytes, device);
+    }
     
-    {  return status;
+    CUDAGenerator::~CUDAGenerator() {
+  // no-op Generator state is global to the program
 }
     
-      /**
-   * Set bit idx to the given value, using the given memory order. Returns
-   * the previous value of the bit.
-   *
-   * Note that the operation is a read-modify-write operation due to the use
-   * of fetch_and or fetch_or.
-   *
-   * Yes, this is an overload of set(), to keep as close to std::bitset's
-   * interface as possible.
-   */
-  bool set(size_t idx,
-           bool value,
-           std::memory_order order = std::memory_order_seq_cst);
+    #if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,'#ferror in function 'lua_cocos2dx_physics_PhysicsWorld_addJoint'.',&tolua_err);
+#endif
     
-      /**
-   * Repeatedly pops element from head,
-   * and calls func() on the removed elements in the order from tail to head.
-   * Stops when the list is empty.
-   */
-  template <typename F>
-  void sweep(F&& func) {
-    list_.sweep([&](Wrapper* wrapperPtr) mutable {
-      std::unique_ptr<Wrapper> wrapper(wrapperPtr);
-    }
+    
+    {		m_debugDraw.DrawString(5, m_textLine, '****PAUSED****');
+		m_textLine += DRAW_STRING_NEW_LINE;
+	}
+    
+    /// Random floating point number in range [lo, hi]
+inline float32 RandomFloat(float32 lo, float32 hi)
+{
+	float32 r = (float32)(std::rand() & (RAND_LIMIT));
+	r /= RAND_LIMIT;
+	r = (hi - lo) * r + lo;
+	return r;
+}
+    
+    
+    {			m_shape2.SetAsBox(0.5f, 0.5f, b2Vec2(0.5f, 0.0f), 0.0f);
+			m_piece2 = m_body1->CreateFixture(&m_shape2, 1.0f);
+		}
+    
+    			box.SetAsBox(0.25f, 0.25f);
+    
+    #pragma once
+    
+    #include <nbind/api.h>
+#include <nbind/BindDefiner.h>
+    
+    class ProgramLocation {
+public:
+  ProgramLocation() : m_functionName('Unspecified'), m_fileName('Unspecified'), m_lineNumber(0) {}
     }
