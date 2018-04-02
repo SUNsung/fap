@@ -1,254 +1,182 @@
-namespace mate {
-class Arguments;
+
+        
+            void Model::SetModelversion(VERSION p_modelVersion)
+    {
+        m_modelProto->set_model_version(p_modelVersion);
+    }
+    
+    using namespace onnx;
+    
+        // Taken from RS4
+    REGISTER_OPERATOR_SCHEMA(HardSigmoid)
+        .Description('HardSigmoid takes one input data (Tensor<T>) and produces one output '
+            'data (Tensor<T>) where the hard sigmoid function, f(x) = max⁡(0,min⁡(alpha*x+beta,1)), '
+            'is applied to the  tensor elementwise.')
+        .Input('X', 'Input tensor of any shape', 'T')
+        .Output('Y', 'Output tensor of same shape and type as input X.', 'T')
+        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
+            'Constrain input and output types to float tensors.')
+        .Attr('alpha', 'Scaling value', AttrType::AttributeProto_AttributeType_FLOAT)
+        .Attr('beta', 'Scalar offset', AttrType::AttributeProto_AttributeType_FLOAT);
+    
+    namespace ONNXIR {
+    }
+    
+        // Get utterance description by its index.
+    const UtteranceDescription* GetUtterance(size_t index) const
+    {
+        return &m_utterances[index];
+    }
+    
+    void TraceLSTMPathes(const FunctionPtr& src, string &f_activation, string &g_activation, string &h_activation,
+    RNNDirection &direction, Variable &initStateH, Variable &initStateC, Variable &peepholeCi, Variable &peepholeCo, Variable &peepholeCf,
+    double &stabilizer_dh, double &stabilizer_dc, double &stabilizer_c);
+    
+    void DebugHUD_DoInterface(DebugHUD *hud)
+{
+    // 1. Show a simple window.
+    // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
+    {
+        static float f = 0.0f;
+        static int counter = 0;
+        ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
+        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+        ImGui::ColorEdit3('clear color', hud->clearColor);      // Edit 3 floats representing a color
+    }
+    }
+    
+    
+    {        ImGui::Render();
+    }
+    
+    
+    {    // Restore modified state
+    al_set_blender(op, src, dst);
+    al_set_clipping_rectangle(0, 0, al_get_display_width(g_Display), al_get_display_height(g_Display));
 }
     
-    #ifndef ATOM_BROWSER_API_ATOM_API_DESKTOP_CAPTURER_H_
-#define ATOM_BROWSER_API_ATOM_API_DESKTOP_CAPTURER_H_
+    struct ID3D10Device;
     
-      // Cached from the net::URLRequest, in case it goes NULL on us.
-  int render_process_host_id_;
-  int render_frame_id_;
+    // Copyright (C) 2015 by Giovanni Zito
+// This file is part of ImGui
     
-    // Like URLRequestAsarJob, but asks the JavaScript handler for file path.
-class URLRequestAsyncAsarJob : public JsAsker<asar::URLRequestAsarJob> {
- public:
-  URLRequestAsyncAsarJob(net::URLRequest*, net::NetworkDelegate*);
+    IMGUI_API bool        ImGui_ImplGlfwGL2_Init(GLFWwindow* window, bool install_callbacks);
+IMGUI_API void        ImGui_ImplGlfwGL2_Shutdown();
+IMGUI_API void        ImGui_ImplGlfwGL2_NewFrame();
+IMGUI_API void        ImGui_ImplGlfwGL2_RenderDrawData(ImDrawData* draw_data);
+    
+            // Rendering
+        g_pd3dDevice->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
+        g_pd3dDevice->ClearRenderTargetView(g_mainRenderTargetView, (float*)&clear_color);
+        ImGui::Render();
+        ImGui_ImplDX10_RenderDrawData(ImGui::GetDrawData());
+    
+            // 1. Show a simple window.
+        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
+            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
     }
     
-    namespace accelerator_util {
-    }
-    
-    // Given a MutableIterator to the start of a block, run DetectParagraphs on
-// that block and commit the results to the underlying ROW and BLOCK structs,
-// saving the ParagraphModels in models.  Caller owns the models.
-// We use unicharset during the function to answer questions such as 'is the
-// first letter of this word upper case?'
-void DetectParagraphs(int debug_level,
-                      bool after_text_recognition,
-                      const MutableIterator *block_start,
-                      GenericVector<ParagraphModel *> *models);
-    
-      int super_y_bottom =
-      kBlnBaselineOffset + kBlnXHeight * superscript_min_y_bottom;
-  int sub_y_top =
-      kBlnBaselineOffset + kBlnXHeight * subscript_max_y_top;
-    
-    
-    {    ICOORD pt;
-    int halfwidth;
-  };
-  // Type holds the distance of each point from the fitted line and the point
-  // itself. Use of double allows integer distances from ICOORDs to be stored
-  // exactly, and also the floating point results from ConstrainedFit.
-  typedef KDPairInc<double, ICOORD> DistPointPair;
-    
-    DENORM::~DENORM() {
-  Clear();
-}
-    
-    // Possible normalization methods. Use NEGATIVE values as these also
-// double up as markers for the last sub-classifier.
-enum NormalizationMode {
-  NM_BASELINE = -3,         // The original BL normalization mode.
-  NM_CHAR_ISOTROPIC = -2,   // Character normalization but isotropic.
-  NM_CHAR_ANISOTROPIC = -1  // The original CN normalization mode.
-};
-    
-    // Tests a pair of classifiers, debugging errors of the new against the old.
-// See errorcounter.h for description of arguments.
-// Iterates over the samples, calling the classifiers in normal/silent mode.
-// If the new_classifier makes a boosting_mode error that the old_classifier
-// does not, it will then call the new_classifier again with a debug flag
-// and a keep_this argument to find out what is going on.
-void ErrorCounter::DebugNewErrors(
-    ShapeClassifier* new_classifier, ShapeClassifier* old_classifier,
-    CountTypes boosting_mode,
-    const FontInfoTable& fontinfo_table,
-    const GenericVector<Pix*>& page_images, SampleIterator* it) {
-  int fontsize = it->sample_set()->NumFonts();
-  ErrorCounter old_counter(old_classifier->GetUnicharset(), fontsize);
-  ErrorCounter new_counter(new_classifier->GetUnicharset(), fontsize);
-  GenericVector<UnicharRating> results;
-    }
-    
-      // Accumulates counts for junk. Counts only whether the junk was correctly
-  // rejected or not.
-  bool AccumulateJunk(bool debug, const GenericVector<UnicharRating>& results,
-                      TrainingSample* sample);
-    
-    // Moves on to the next indexable sample. If the end is reached, leaves
-// the state such that AtEnd() is true.
-void SampleIterator::Next() {
-  if (shape_table_ != NULL) {
-    // Next sample in this class/font combination.
-    ++sample_index_;
-    if (sample_index_ < num_samples_)
-      return;
-    // Next font in this class in this shape.
-    sample_index_ = 0;
-    do {
-      ++shape_font_index_;
-      if (shape_font_index_ >= num_shape_fonts_) {
-        // Next unichar in this shape.
-        shape_font_index_ = 0;
-        ++shape_char_index_;
-        if (shape_char_index_ >= num_shape_chars_) {
-          // Find the next shape that is mapped in the charset_map_.
-          shape_char_index_ = 0;
-          do {
-            ++shape_index_;
-          } while (shape_index_ < num_shapes_ &&
-                   charset_map_ != NULL &&
-                   charset_map_->SparseToCompact(shape_index_) < 0);
-          if (shape_index_ >= num_shapes_)
-            return;  // The end.
-          num_shape_chars_ = shape_table_->GetShape(shape_index_).size();
+            // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
+        if (show_demo_window)
+        {
+            ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
+            ImGui::ShowDemoWindow(&show_demo_window);
         }
-      }
-      const UnicharAndFonts* shape_entry = GetShapeEntry();
-      num_shape_fonts_ = shape_entry->font_ids.size();
-      int char_id = shape_entry->unichar_id;
-      int font_id = shape_entry->font_ids[shape_font_index_];
-      num_samples_ = sample_set_->NumClassSamples(font_id, char_id, randomize_);
-    } while (num_samples_ == 0);
-  } else {
-    // We are just iterating over the samples.
-    ++shape_index_;
-  }
-}
     
-      // stdio FILE stream class.
-  class jpeg_decoder_file_stream : public jpeg_decoder_stream
-  {
-    jpeg_decoder_file_stream(const jpeg_decoder_file_stream &);
-    jpeg_decoder_file_stream &operator =(const jpeg_decoder_file_stream &);
+        // Main loop
+    bool done = false;
+    while (!done)
+    {
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            ImGui_ImplSdlGL2_ProcessEvent(&event);
+            if (event.type == SDL_QUIT)
+                done = true;
+        }
+        ImGui_ImplSdlGL2_NewFrame(window);
     }
     
-    /**
- * oc_ilog32 - Integer binary logarithm of a 32-bit value.
- * @_v: A 32-bit value.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * The OC_ILOG_32() or OC_ILOGNZ_32() macros may be able to use a builtin
- *  function instead, which should be faster.
- */
-int oc_ilog32(ogg_uint32_t _v);
-/**
- * oc_ilog64 - Integer binary logarithm of a 64-bit value.
- * @_v: A 64-bit value.
- * Returns floor(log2(_v))+1, or 0 if _v==0.
- * This is the number of bits that would be required to represent _v in two's
- *  complement notation with all of the leading zeros stripped.
- * The OC_ILOG_64() or OC_ILOGNZ_64() macros may be able to use a builtin
- *  function instead, which should be faster.
- */
-int oc_ilog64(ogg_int64_t _v);
+        // Upload texture to graphics system
+    GLint last_texture;
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
+    glGenTextures(1, &g_FontTexture);
+    glBindTexture(GL_TEXTURE_2D, g_FontTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
     
-    static const vorbis_residue_template _res_16u_0[]={
-  {1,0,32,  &_residue_44_low_un,
-   &_huff_book__16u0__single,&_huff_book__16u0__single,
-   &_resbook_16u_0,&_resbook_16u_0},
-};
-static const vorbis_residue_template _res_16u_1[]={
-  {1,0,32,  &_residue_44_mid_un,
-   &_huff_book__16u1__short,&_huff_book__16u1__short,
-   &_resbook_16u_1,&_resbook_16u_1},
-    }
-    
-    /// Internal startExtension implementation using a UNIX domain socket path.
-Status startExtension(const std::string& manager_path,
-                      const std::string& name,
-                      const std::string& version,
-                      const std::string& min_sdk_version,
-                      const std::string& sdk_version);
-    
-    /**
- * @brief Helper logging macro for table-generated verbose log lines.
- *
- * Since logging in tables does not always mean a critical warning or error
- * but more likely a parsing or expected edge-case, we provide a TLOG.
- *
- * The tool user can set within config or via the CLI what level of logging
- * to tolerate. It's the table developer's job to assume consistency in logging.
- */
-#define TLOG VLOG(1)
-    
-    CLI_FLAG(string,
-         config_path,
-         (fs::path(OSQUERY_HOME) / 'osquery.conf').make_preferred().string(),
-         'Path to JSON config file');
-    
-      /**
-   * Submit a delayed op to the AsyncIO queue; this allows you to postpone
-   * creation of the Op (which may require allocating memory, etc) until
-   * the AsyncIO object has room.
-   */
-  typedef std::function<AsyncIOOp*()> OpFactory;
-  void submit(OpFactory op);
-    
-    /**
- * Get the path to the current executable.
- *
- * Note that this is not reliable and not recommended in general; it may not be
- * implemented on your platform (in which case it will throw), the executable
- * might have been moved or replaced while running, and applications comprising
- * of multiple executables should use some form of configuration system to
- * find the other executables rather than relying on relative paths from one
- * to another.
- *
- * So this should only be used for tests, logging, or other innocuous purposes.
- */
-path executable_path();
-    
-        // clear() empties the vector, but the allocated capacity remains so we can
-    // just reuse it without having to re-allocate in most cases.
-    ioQueue->clear();
-    
-      folly::File file_;
-  folly::Synchronized<Data, std::mutex> data_;
-  /**
-   * messageReady_ is signaled by writer threads whenever they add a new
-   * message to the current queue.
-   */
-  std::condition_variable messageReady_;
-  /**
-   * ioCV_ is signaled by the I/O thread each time it increments
-   * the ioThreadCounter (once each time around its loop).
-   */
-  std::condition_variable ioCV_;
-    
-    
-    {} // namespace folly
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_API void        ImGui_ImplSdlGL2_InvalidateDeviceObjects();
+IMGUI_API bool        ImGui_ImplSdlGL2_CreateDeviceObjects();
 
     
-    namespace {
-    }
+    // Implemented features:
+//  [X] User texture binding. Cast 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+// Missing features:
+//  [ ] SDL2 handling of IME under Windows appears to be broken and it explicitly disable the regular Windows IME. You can restore Windows IME by compiling SDL with SDL_DISABLE_WINDOWS_IME.
     
-    LogHandlerConfig::LogHandlerConfig(Optional<StringPiece> t)
-    : type{t.hasValue() ? Optional<string>{t->str()} : Optional<string>{}} {}
     
-    #pragma once
-#include <deque>
-#include <string>
-    
-      void ReopenWithColumnFamilies(const std::vector<std::string>& cfs,
-                                const Options& options) {
-    ASSERT_OK(TryReopenWithColumnFamilies(cfs, options));
-  }
-    
-      TransactionOptions txn_options;
-  WriteOptions write_options;
-  size_t index = 0;
-  Transaction* txn0 = db->BeginTransaction(write_options, txn_options);
-  auto istr0 = std::to_string(index);
-  auto s = txn0->SetName('xid' + istr0);
-  ASSERT_OK(s);
-  s = txn0->Put(Slice('key' + istr0), Slice('bar0' + istr0));
-  ASSERT_OK(s);
-  s = txn0->Prepare();
-    
-    Slice MemTableRep::UserKey(const char* key) const {
-  Slice slice = GetLengthPrefixedSlice(key);
-  return Slice(slice.data(), slice.size() - 8);
+    {  return scope.Close(v);
 }
+    
+    
+    {};
+    
+    
+    {  std::string res;
+  slists.Get('k1', &res);
+  ASSERT_EQ(res, 'v1|v2|v3');
+}
+    
+      virtual void Prev() override;
+    
+    
+    {}  // namespace rocksdb
+    
+      virtual bool Ref(Handle* handle) override { return cache_->Ref(handle); }
+    
+    	// NewClient
+	printer->Print(vars, 'func New$Service$Client(cc *$grpc$.ClientConn) $Service$Client {\n');
+	printer->Indent();
+	printer->Print(vars, 'return &$ServiceUnexported$Client{cc}');
+	printer->Outdent();
+	printer->Print('\n}\n\n');
+    
+        vars['filename'] = file->filename();
+    vars['filename_base'] = file->filename_without_ext();
+    vars['message_header_ext'] = message_header_ext();
+    vars['service_header_ext'] = service_header_ext();
+    
+      virtual grpc::string name() const = 0;
+    
+      // Returns a human readable error if any of the above functions fail.
+  const std::string &GetLastError() { return lasterror_; }
+    
+      // Get and test the `Equipment` union (`equipped` field).
+  assert(monster->equipped_type() == Equipment_Weapon);
+  auto equipped = static_cast<const Weapon *>(monster->equipped());
+  assert(equipped->name()->str() == 'Axe');
+  assert(equipped->damage() == 5);
+  (void)equipped;
+    
+    #include <iostream>
+#include 'flatbuffers/code_generators.h'
+#include 'flatbuffers/idl.h'
+#include 'flatbuffers/util.h'
+    
+    // Begin the creator function signature.
+static void BeginBuilderArgs(const StructDef &struct_def,
+                             std::string *code_ptr) {
+  std::string &code = *code_ptr;
+    }
