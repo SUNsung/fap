@@ -1,58 +1,46 @@
 
         
-              topic = Topic.find_by(id: topic_id)
-    
-      private
-    
-      # Finds the projects '@user' contributed to, limited to either public projects
-  # or projects visible to the given user.
-  #
-  # current_user - When given the list of the projects is limited to those only
-  #                visible by this user.
-  #
-  # Returns an ActiveRecord::Relation.
-  def execute(current_user = nil)
-    segments = all_projects(current_user)
-    
-        find_union(segments, Group).order_id_desc
-  end
-    
-      # Finds the projects belonging to the user in '@user', limited to either
-  # public projects or projects visible to the given user.
-  #
-  # current_user - When given the list of projects is limited to those only
-  #                visible by this user.
-  #
-  # Returns an ActiveRecord::Relation.
-  def execute(current_user = nil)
-    segments = all_projects(current_user)
-    
-      def clean_up_export_files
-    Gitlab::Popen.popen(%W(find #{path} -not -path #{path} -mmin +#{mmin} -delete))
-  end
-end
-
-    
-            # This method is called if the underying machine ID changes. Providers
-        # can use this method to load in new data for the actual backing
-        # machine or to realize that the machine is now gone (the ID can
-        # become `nil`). No parameters are given, since the underlying machine
-        # is simply the machine instance given to this object. And no
-        # return value is necessary.
-        def machine_id_changed
+                def run
+          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
+          if @pod_name.nil? # Print all
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
+            end
+          else # Print only for the requested pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            else
+              print_pod_cache_infos(@pod_name, cache_descriptors)
+            end
+          end
         end
+    
+          def initialize(argv)
+        @update = argv.flag?('update')
+        @stats  = argv.flag?('stats')
+        super
+      end
     
         # @abstract
     #
-    # Update the clone on the deployment target
+    # Create a (new) clone of the remote-repository on the deployment target
     #
     # @return void
     #
-    def update
-      raise NotImplementedError, 'Your SCM strategy module should provide a #update method'
+    def clone
+      raise NotImplementedError, 'Your SCM strategy module should provide a #clone method'
     end
     
-            it 'returns the servers' do
-          expect(subject.map(&:hostname)).to eq %w{example3.com}
-        end
-      end
+      puts I18n.t :capified, scope: :capistrano
+end
+
+    
+    describe 'prefixer' do
+  before(:all) do
+    ParserSupport.parse_file('library/prefixer')
+  end
+    
+    describe 'text-inputs' do
+  before(:all) do
+    ParserSupport.parse_file('library/text-inputs')
