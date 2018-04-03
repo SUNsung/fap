@@ -1,84 +1,110 @@
 
         
-          it 'adds nil for each element requested beyond the end of the String' do
-    [ ['',          [nil, nil, nil]],
-      ['dcbae',     [1684234849, nil, nil]],
-      ['dcbaefg',   [1684234849, nil, nil]],
-      ['dcbahgfe',  [1684234849, 1751606885, nil]]
-    ].should be_computed_by(:unpack, unpack_format(3))
+                        on.unsubscribe do |chan, count|
+                  if count == 0
+                    @subscription_lock.synchronize do
+                      @raw_client = nil
+                    end
+                  end
+                end
+              end
+            end
+          end
+    
+      test 'response status aliases deprecated' do
+    response = ActionDispatch::TestResponse.create
+    assert_deprecated { response.success? }
+    assert_deprecated { response.missing? }
+    assert_deprecated { response.error? }
+  end
+end
+
+    
+          test 'before_action with overwritten condition' do
+        @controller = Callback2Overwrite.new
+        @controller.process(:index)
+        assert_equal '', @controller.response_body
+      end
+    end
+    
+      def setup
+    super
+    @request.action = 'index'
   end
     
-        def metadata_subdir(leaf, version: self.version, timestamp: :latest, create: false)
-      if create && timestamp == :latest
-        raise CaskError, 'Cannot create metadata subdir when timestamp is :latest.'
+          debug { event.payload[:mail] }
+    end
+    
+        class MessageDelivery < ActionMailer::MessageDelivery # :nodoc:
+      def initialize(mailer_class, action, params, *args)
+        super(mailer_class, action, *args)
+        @params = params
       end
     
-        # we assume that the first file that requires 'sinatra' is the
-    # app_file. all other path related options are calculated based
-    # on this path by default.
-    set :app_file, caller_files.first || $0
+    # Show backtraces for deprecated behavior for quicker cleanup.
+ActiveSupport::Deprecation.debug = true
     
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   Cookie Tossing
-    # Supported browsers:: all
-    # More infos::         https://github.com/blog/1466-yummy-cookies-across-domains
-    #
-    # Does not accept HTTP requests if the HTTP_COOKIE header contains more than one
-    # session cookie. This does not protect against a cookie overflow attack.
-    #
-    # Options:
-    #
-    # session_key:: The name of the session cookie (default: 'rack.session')
-    class CookieTossing < Base
-      default_reaction :deny
-    
-      it 'should allow changing the protection mode' do
-    # I have no clue what other modes are available
-    mock_app do
-      use Rack::Protection::FrameOptions, :frame_options => :deny
-      run DummyApp
-    end
-    
-      it 'should not leak changes to env' do
-    klass    = described_class
-    detector = Struct.new(:app) do
-      def call(env)
-        was = env.dup
-        res = app.call(env)
-        was.each do |k,v|
-          next if env[k] == v
-          fail 'env[#{k.inspect}] changed from #{v.inspect} to #{env[k].inspect}'
-        end
-        res
+      class AssertMultipartSelectMailer < ActionMailer::Base
+    def test(options)
+      mail subject: 'Test e-mail', from: 'test@test.host', to: 'test <test@test.host>' do |format|
+        format.text { render plain: options[:text] }
+        format.html { render plain: options[:html] }
       end
     end
+  end
     
-        def blank_name?
-      @filepath.nil? || @filepath.empty?
+      # True if a {Formula} is being built with a specific option.
+  # <pre>args << '--i-want-spam' if build.with? 'spam'
+  #
+  # args << '--qt-gui' if build.with? 'qt' # '--with-qt' ==> build.with? 'qt'
+  #
+  # # If a formula presents a user with a choice, but the choice must be fulfilled:
+  # if build.with? 'example2'
+  #   args << '--with-example2'
+  # else
+  #   args << '--with-example1'
+  # end</pre>
+  def with?(val)
+    option_names = val.respond_to?(:option_names) ? val.option_names : [val]
+    
+          puts_columns Array(result)
+    else
+      query = ARGV.first
+      rx = query_regexp(query)
+      local_results = search_formulae(rx)
+      puts_columns(local_results)
+      tap_results = search_taps(rx)
+      puts_columns(tap_results)
+    
+    module Homebrew
+  def update_report
+    install_core_tap_if_necessary
+    
+        def self.git_log_between(pretty_format, from, to, merge_commit_filtering, date_format = nil, ancestry_path)
+      command = ['git log']
+      command << '--pretty=\'#{pretty_format}\''
+      command << '--date=\'#{date_format}\'' if date_format
+      command << '--ancestry-path' if ancestry_path
+      command << '#{from.shellescape}...#{to.shellescape}'
+      command << git_log_merge_commit_filtering_option(merge_commit_filtering)
+      Actions.sh(command.compact.join(' '), log: false).chomp
+    rescue
+      nil
     end
     
-        def cropping dst, ratio, scale
-      if ratio.horizontal? || ratio.square?
-        '%dx%d+%d+%d' % [ dst.width, dst.height, 0, (self.height * scale - dst.height) / 2 ]
-      else
-        '%dx%d+%d+%d' % [ dst.width, dst.height, (self.width * scale - dst.width) / 2, 0 ]
+    describe Deliver::HtmlGenerator do
+  let(:generator) { Deliver::HtmlGenerator.new }
+    
+            expect(result).to eq('/usr/local/bin/cloc  --by-file --xml  --out=build/cloc.xml MyCoolApp')
       end
-    end
     
-          class ValidateAttachmentContentTypeMatcher
-        def initialize attachment_name
-          @attachment_name = attachment_name
-          @allowed_types = []
-          @rejected_types = []
-        end
+        context 'Mercurial repository' do
+      before do
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_svn?).and_return(false)
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git_svn?).and_return(false)
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git?).and_return(false)
+        expect(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_hg?).and_return(true)
+      end
     
-        def load_processor(name)
-      if defined?(Rails.root) && Rails.root
-        filename = '#{name.to_s.underscore}.rb'
-        directories = %w(lib/paperclip lib/paperclip_processors)
-    
-        module Statements
-      def add_attachment(table_name, *attachment_names)
-        raise ArgumentError, 'Please specify attachment name in your add_attachment call in your migration.' if attachment_names.empty?
+            expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER]).to match(/cd .* && agvtool new-version -all 24/)
+      end
