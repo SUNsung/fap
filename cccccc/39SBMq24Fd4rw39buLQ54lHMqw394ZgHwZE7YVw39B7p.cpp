@@ -1,253 +1,222 @@
 
         
-        #ifndef TENSORFLOW_COMMON_RUNTIME_SESSION_FACTORY_H_
-#define TENSORFLOW_COMMON_RUNTIME_SESSION_FACTORY_H_
+          // content::DevToolsAgentHostClient:
+  void AgentHostClosed(content::DevToolsAgentHost* agent_host,
+                       bool replaced_with_another_client) override;
+  void DispatchProtocolMessage(content::DevToolsAgentHost* agent_host,
+                               const std::string& message) override;
     
+     private:
+  std::unique_ptr<DesktopMediaList> media_list_;
     
-    {  ExpectSuccess(Builder().Attr('N', 3).Attr('T', DT_INT32), {},
-                {DT_INT32, DT_INT32, DT_INT32}, R'proto(
-      op: 'NPolymorphicOutDefault'
-      attr { key: 'N' value { i: 3 } }
-      attr { key: 'T' value { type: DT_INT32 } } )proto');
-}
-    
-    namespace tensorflow {
-namespace port {
-    }
+    namespace atom {
     }
     
-    
-    {
-    {    IntType gidy = blockIdx.y * blockDim.y + threadIdx.y;
-    for (; gidy < total_rows; gidy += blockDim.y * gridDim.y)
-      output[gidy * total_cols + gidx] =
-          input_ptr[gidy * segment_width + local_col];
-  }
+    HttpProtocolHandler::~HttpProtocolHandler() {
 }
     
+    namespace accelerator_util {
+    }
     
-    {
-/**
- * @name tess_add_doc_word
- *
- * Add the given word to the document dictionary
- */
-void Tesseract::tess_add_doc_word(WERD_CHOICE *word_choice) {
-  getDict().add_document_word(*word_choice);
-}
-}  // namespace tesseract
+    #include 'atom/browser/ui/tray_icon.h'
+#include 'ui/views/linux_ui/status_icon_linux.h'
+    
+    #ifndef ATOM_BROWSER_UI_VIEWS_GLOBAL_MENU_BAR_X11_H_
+#define ATOM_BROWSER_UI_VIEWS_GLOBAL_MENU_BAR_X11_H_
+    
+    #endif  // ATOM_BROWSER_UI_VIEWS_MENU_MODEL_ADAPTER_H_
 
     
-    #include 'ccstruct.h'
+     protected:
+  virtual char GetChar(void) {
+    return fin.get();
+  }
+  /*! \brief to be implemented by child, check if end of stream */
+  virtual bool IsEnd(void) {
+    return fin.eof();
+  }
     
-      // Adds a new point. Takes a copy - the pt doesn't need to stay in scope.
-  // Add must be called on points in sequence along the line.
-  void Add(const ICOORD& pt);
-  // Associates a half-width with the given point if a point overlaps the
-  // previous point by more than half the width, and its distance is further
-  // than the previous point, then the more distant point is ignored in the
-  // distance calculation. Useful for ignoring i dots and other diacritics.
-  void Add(const ICOORD& pt, int halfwidth);
+        index_.resize((boundary_[nfeature - 1].index_end
+                   + (packing_factor_ - 1)) / packing_factor_);
+    row_ind_.resize(boundary_[nfeature - 1].row_ind_end);
     
-    // Transforms the given coords forward to normalized space using the
-// full transformation sequence defined by the block rotation, the
-// predecessors, deepest first, and finally this. If first_norm is not NULL,
-// then the first and deepest transformation used is first_norm, ending
-// with this, and the block rotation will not be applied.
-void DENORM::NormTransform(const DENORM* first_norm, const TPOINT& pt,
-                           TPOINT* transformed) const {
-  FCOORD src_pt(pt.x, pt.y);
-  FCOORD float_result;
-  NormTransform(first_norm, src_pt, &float_result);
-  transformed->x = IntCastRounded(float_result.x());
-  transformed->y = IntCastRounded(float_result.y());
-}
-void DENORM::NormTransform(const DENORM* first_norm, const FCOORD& pt,
-                           FCOORD* transformed) const {
-  FCOORD src_pt(pt);
-  if (first_norm != this) {
-    if (predecessor_ != NULL) {
-      predecessor_->NormTransform(first_norm, pt, &src_pt);
-    } else if (block_ != NULL) {
-      FCOORD fwd_rotation(block_->re_rotation().x(),
-                          -block_->re_rotation().y());
-      src_pt.rotate(fwd_rotation);
+      uint64_t uint64_t2[2] = {1U, 2U};
+  EXPECT_EQ(info.group_ptr.size(), 0);
+  info.SetInfo('group', uint64_t2, xgboost::kUInt64, 2);
+  ASSERT_EQ(info.group_ptr.size(), 3);
+  EXPECT_EQ(info.group_ptr[2], 3);
+    
+      void Write(const SparsePage& page, dmlc::Stream* fo) override {
+    CHECK(page.offset.size() != 0 && page.offset[0] == 0);
+    CHECK_EQ(page.offset.back(), page.data.size());
+    fo->Write(page.offset);
+    if (page.data.size() != 0) {
+      fo->Write(dmlc::BeginPtr(page.data), page.data.size() * sizeof(SparseBatch::Entry));
     }
   }
-  LocalNormTransform(src_pt, transformed);
+    
+    void SparsePage::Writer::PushWrite(std::shared_ptr<SparsePage>&& page) {
+  qworkers_[clock_ptr_].Push(std::move(page));
+  clock_ptr_ = (clock_ptr_ + 1) % workers_.size();
 }
     
+    static const uint8_t kRangeLimitLut[4 * 256] = {
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
+  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
+  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
+  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
+  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
+  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
+  96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
+ 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
+ 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
+ 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
+ 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
+ 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
+ 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
+ 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
+ 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
+ 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+};
     
-/**********************************************************************
- * QLSQ::remove
- *
- * Delete an element from the accumulator.
- **********************************************************************/
-    
-    // Feature distance calculator designed to provide a fast distance calculation
-// based on set difference between a given feature set and many other feature
-// sets in turn.
-// Representation of a feature set as an array of bools that are sparsely
-// true, and companion arrays that allow fast feature set distance
-// calculations with allowance of offsets in position.
-// Init is expensive, so for greatest efficiency, to re-initialize for a new
-// feature set, use Set(..., false) on the SAME feature set as was used to
-// setup with Set(..., true), to return to its initialized state before
-// reuse with Set(..., true) on a new feature set.
-class IntFeatureDist {
- public:
-  IntFeatureDist();
-  ~IntFeatureDist();
+    namespace guetzli {
     }
     
-    void FindDirectionChanges(MFOUTLINE Outline,
-                          FLOAT32 MinSlope,
-                          FLOAT32 MaxSlope);
-    
-    #ifndef BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
-#define BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
-    
-    #include <boost/asio/detail/pop_options.hpp>
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-typedef null_event event;
-#elif defined(BOOST_ASIO_WINDOWS)
-typedef win_event event;
-#elif defined(BOOST_ASIO_HAS_PTHREADS)
-typedef posix_event event;
-#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
-typedef std_event event;
-#endif
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    #define BOOST_ASIO_COMPOSED_CONNECT_HANDLER_CHECK( \
-    handler_type, handler, iter_type) \
-  \
-  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
-      void(boost::system::error_code, iter_type)) \
-    asio_true_handler_type; \
-  \
-  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
-      sizeof(boost::asio::detail::two_arg_handler_test( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>(), \
-          static_cast<const boost::system::error_code*>(0), \
-          static_cast<const iter_type*>(0))) == 1, \
-      'ComposedConnectHandler type requirements not met') \
-  \
-  typedef boost::asio::detail::handler_type_requirements< \
-      sizeof( \
-        boost::asio::detail::argbyv( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>())) + \
-      sizeof( \
-        boost::asio::detail::lvref< \
-          asio_true_handler_type>()( \
-            boost::asio::detail::lvref<const boost::system::error_code>(), \
-            boost::asio::detail::lvref<const iter_type>()), \
-        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
-    
-    bool non_blocking_write(int d, const buf* bufs, std::size_t count,
-    boost::system::error_code& ec, std::size_t& bytes_transferred)
-{
-  for (;;)
-  {
-    // Write some data.
-    errno = 0;
-    signed_size_type bytes = error_wrapper(::writev(
-          d, bufs, static_cast<int>(count)), ec);
-    }
+    namespace guetzli {
     }
     
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-    namespace folly {
-namespace hazptr {
-    }
-    }
-    
-    path remove_prefix(const path& pth, const path& prefix) {
-  path::const_iterator it;
-  if (!skipPrefix(pth, prefix, it)) {
-    throw filesystem_error(
-        'Path does not start with prefix',
-        pth,
-        prefix,
-        bsys::errc::make_error_code(bsys::errc::invalid_argument));
-  }
-    }
+    #ifndef GUETZLI_IDCT_H_
+#define GUETZLI_IDCT_H_
     
     
-    {StringPiece getGlogLevelName(LogLevel level) {
-  if (level < LogLevel::INFO) {
-    return 'VERBOSE';
-  } else if (level < LogLevel::WARN) {
-    return 'INFO';
-  } else if (level < LogLevel::ERR) {
-    return 'WARNING';
-  } else if (level < LogLevel::CRITICAL) {
-    return 'ERROR';
-  }
-  return 'CRITICAL';
-}
-} // namespace
-    
-    /**
- * Configuration for a LogCategory
- */
-class LogCategoryConfig {
- public:
-  explicit LogCategoryConfig(
-      LogLevel level = LogLevel::WARNING,
-      bool inheritParentLevel = true);
-  LogCategoryConfig(
-      LogLevel level,
-      bool inheritParentLevel,
-      std::vector<std::string> handlers);
-    }
-    
-        double mouse_x, mouse_y;
-    mouse_x = s3ePointerGetX();
-    mouse_y = s3ePointerGetY();
-    io.MousePos = ImVec2((float)mouse_x/g_scale.x, (float)mouse_y/g_scale.y);   // Mouse position (set to -FLT_MAX,-FLT_MAX if no mouse / on another screen, etc.)
-    
-    // GLFW callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// Provided here if you want to chain callbacks.
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_API void        ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-IMGUI_API void        ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-IMGUI_API void        ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-IMGUI_API void        ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+    {}  // namespace guetzli
 
     
-        // Setup back-end capabilities flags
-    ImGuiIO& io = ImGui::GetIO();
-    io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;   // We can honor GetMouseCursor() values (optional)
-    io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;    // We can honor io.WantSetMousePos requests (optional, rarely used)
+    #include 'guetzli/jpeg_data_encoder.h'
     
-    void assertInternal(const char* formatstr ...) {
-    va_list va_args;
-    va_start(va_args, formatstr);
-    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
-    va_end(va_args);
-    if (gAssertHandler != NULL) {
-        gAssertHandler(sAssertBuf);
-    }
-    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
-    // crash at this specific address so that we can find our crashes easier
-    *(int*)0xdeadb00c = 0;
-    // let the compiler know we won't reach the end of the function
-     __builtin_unreachable();
+    // Parses the jpeg stream contained in data[*pos ... len) and fills in *jpg with
+// the parsed information.
+// If mode is JPEG_READ_HEADER, it fills in only the image dimensions in *jpg.
+// Returns false if the data is not valid jpeg, or if it contains an unsupported
+// jpeg feature.
+bool ReadJpeg(const uint8_t* data, const size_t len, JpegReadMode mode,
+              JPEGData* jpg);
+// string variant
+bool ReadJpeg(const std::string& data, JpegReadMode mode,
+              JPEGData* jpg);
+    
+    #include <stdint.h>
+#include <string.h>
+#include <vector>
+    
+      bool any_generator = false;
+  bool print_make_rules = false;
+  bool raw_binary = false;
+  bool schema_binary = false;
+  bool grpc_enabled = false;
+  std::vector<std::string> filenames;
+  std::list<std::string> include_directories_storage;
+  std::vector<const char *> include_directories;
+  std::vector<const char *> conform_include_directories;
+  std::vector<bool> generator_enabled(params_.num_generators, false);
+  size_t binary_files_from = std::numeric_limits<size_t>::max();
+  std::string conform_to_schema;
+    
+    #include <grpc++/grpc++.h>
+    
+    int main(int argc, const char *argv[]) {
+  RunServer();
+  return 0;
 }
+
     
-    #if ENABLE_FBASSERT
-#define FBASSERTMSGF(expr, msg, ...) !(expr) ? facebook::assertInternal('Assert (%s:%d): ' msg, __FILE__, __LINE__, ##__VA_ARGS__) : (void) 0
-#else
-#define FBASSERTMSGF(expr, msg, ...)
-#endif // ENABLE_FBASSERT
+      server_thread.join();
+    
+    struct IterationVisitor {
+  // These mark the scope of a table or struct.
+  virtual void StartSequence() {}
+  virtual void EndSequence() {}
+  // Called for each field regardless of wether it is present or not.
+  // If not present, val == nullptr. set_idx is the index of all set fields.
+  virtual void Field(size_t /*field_idx*/, size_t /*set_idx*/,
+                     ElementaryType /*type*/, bool /*is_vector*/,
+                     const TypeTable * /*type_table*/, const char * /*name*/,
+                     const uint8_t * /*val*/) {}
+  // Called for a value that is actually present, after a field, or as part
+  // of a vector.
+  virtual void UType(uint8_t, const char *) {}
+  virtual void Bool(bool) {}
+  virtual void Char(int8_t, const char *) {}
+  virtual void UChar(uint8_t, const char *) {}
+  virtual void Short(int16_t, const char *) {}
+  virtual void UShort(uint16_t, const char *) {}
+  virtual void Int(int32_t, const char *) {}
+  virtual void UInt(uint32_t, const char *) {}
+  virtual void Long(int64_t) {}
+  virtual void ULong(uint64_t) {}
+  virtual void Float(float) {}
+  virtual void Double(double) {}
+  virtual void String(const String *) {}
+  virtual void Unknown(const uint8_t *) {}  // From a future version.
+  // These mark the scope of a vector.
+  virtual void StartVector() {}
+  virtual void EndVector() {}
+  virtual void Element(size_t /*i*/, ElementaryType /*type*/,
+                       const TypeTable * /*type_table*/,
+                       const uint8_t * /*val*/) {}
+  virtual ~IterationVisitor() {}
+};
+    
+    // Initialize an existing object with other data, to avoid an allocation.
+static void InitializeExisting(const StructDef &struct_def,
+                               std::string *code_ptr) {
+  std::string &code = *code_ptr;
+    }
