@@ -1,84 +1,34 @@
 
         
-            class TestCallbacksWithChangedConditions < ActiveSupport::TestCase
-      def setup
-        @controller = ChangedConditions.new
-      end
+          # True if a {Formula} is being built with a specific option
+  # (which isn't named `with-*` or `without-*`).
+  # @deprecated
+  def include?(name)
+    @args.include?('--#{name}')
+  end
     
-    module ActionMailer
-  # Implements the ActiveSupport::LogSubscriber for logging notifications when
-  # email is delivered or received.
-  class LogSubscriber < ActiveSupport::LogSubscriber
-    # An email was delivered.
-    def deliver(event)
-      info do
-        recipients = Array(event.payload[:to]).join(', ')
-        'Sent mail to #{recipients} (#{event.duration.round(1)}ms)'
-      end
+          Find.prune if @f.skip_clean? path
     
-            def application_mailer_file_name
-          @_application_mailer_file_name ||= if mountable_engine?
-            'app/mailers/#{namespaced_path}/application_mailer.rb'
-          else
-            'app/mailers/application_mailer.rb'
+            def run
+          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
+          if @pod_name.nil? # Print all
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
+            end
+          else # Print only for the requested pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            else
+              print_pod_cache_infos(@pod_name, cache_descriptors)
+            end
           end
         end
+    
+      context 'called with one style' do
+    it 'applies same style to all sides' do
+      rule = 'border-style: solid'
+    
+          expect('.padding-explicit').to have_rule(rule)
     end
-  end
-end
-
-    
-    def envygeeks(url)
-  return url if url.end_with?(FORWARD_SLASH) || url == FORWARD_SLASH
-    
-          process(name)
-      read_yaml(base, name)
-    end
-    
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   Cookie Tossing
-    # Supported browsers:: all
-    # More infos::         https://github.com/blog/1466-yummy-cookies-across-domains
-    #
-    # Does not accept HTTP requests if the HTTP_COOKIE header contains more than one
-    # session cookie. This does not protect against a cookie overflow attack.
-    #
-    # Options:
-    #
-    # session_key:: The name of the session cookie (default: 'rack.session')
-    class CookieTossing < Base
-      default_reaction :deny
-    
-        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
-      env = {'HTTP_HOST' => 'foo.com'}
-      subject.options[:allow_empty_referrer] = false
-      expect(subject.referrer(env)).to be_nil
-    end
-    
-            post '/', :file => Rack::Test::UploadedFile.new(temp_file.path), :other => '<bar>'
-        expect(body).to eq('_escaped_params_tmp_file\nhello world\n&lt;bar&gt;')
-      ensure
-        File.unlink(temp_file.path)
-      end
-    end
-  end
-end
-
-    
-      if ''.respond_to?(:encoding)  # Ruby 1.9+ M17N
-    context 'PATH_INFO's encoding' do
-      before do
-        @app = Rack::Protection::PathTraversal.new(proc { |e| [200, {'Content-Type' => 'text/plain'}, [e['PATH_INFO'].encoding.to_s]] })
-      end
-    
-      # rspec-expectations config goes here. You can use an alternate
-  # assertion/expectation library such as wrong or the stdlib/minitest
-  # assertions if you prefer.
-  config.expect_with :rspec do |expectations|
-    # Enable only the newer, non-monkey-patching expect syntax.
-    # For more details, see:
-    #   - http://myronmars.to/n/dev-blog/2012/06/rspecs-new-expectation-syntax
-    expectations.syntax = :expect
   end
