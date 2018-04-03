@@ -1,54 +1,88 @@
 
         
-          def test_escape_javascript
-    assert_equal '', escape_javascript(nil)
-    assert_equal %(This \\'thing\\' is really\\n netos\\'), escape_javascript(%(This 'thing' is really\n netos'))
-    assert_equal %(backslash\\\\test), escape_javascript(%(backslash\\test))
-    assert_equal %(dont <\\/close> tags), escape_javascript(%(dont </close> tags))
-    assert_equal %(unicode &#x2028; newline), escape_javascript(%(unicode \342\200\250 newline).dup.force_encoding(Encoding::UTF_8).encode!)
-    assert_equal %(unicode &#x2029; newline), escape_javascript(%(unicode \342\200\251 newline).dup.force_encoding(Encoding::UTF_8).encode!)
-    
-            def test_encoded_password
-          password = 'am@z1ng_p@ssw0rd#!'
-          encoded_password = URI.encode_www_form_component(password)
-          spec = resolve 'abstract://foo:#{encoded_password}@localhost/bar'
-          assert_equal password, spec['password']
-        end
-    
-    class TestResponseTest < ActiveSupport::TestCase
-  def assert_response_code_range(range, predicate)
-    response = ActionDispatch::TestResponse.new
-    (0..599).each do |status|
-      response.status = status
-      assert_equal range.include?(status), response.send(predicate),
-                   'ActionDispatch::TestResponse.new(#{status}).#{predicate}'
-    end
+        class Ray
+  def initialize(org, dir)
+    @org = org
+    @dir = dir
   end
     
-        # Reset all attributes. Should be called before and after actions, when used as a per-request singleton.
-    def reset
-      run_callbacks :reset do
-        self.attributes = {}
+    def pboard
+  print 'No. #$no\n'
+  for i in 0...COL
+    print '|'
+    for j in 0...ROW-NP
+      x = $b[i*ROW+j]
+      if x < 0
+        print '..|'
+      else
+        printf '%2d|',x+1
       end
     end
+    print '\n'
+  end
+  print '\n'
+end
     
-          def index
-        self.response_body = @list.join(', ')
-      end
+    all_environments = [
+    :development,
+    :production,
+    :test
+]
     
-        included do
-      # Do not make this inheritable, because we always want it to propagate
-      cattr_accessor :raise_delivery_errors, default: true
-      cattr_accessor :perform_deliveries, default: true
-      cattr_accessor :deliver_later_queue_name, default: :mailers
+      fd.close
     
-          def merge!(other)
-        other.each do |key, value|
-          self[convert_key(key)] = value
-        end
-        self
-      end
+        end # end of each_key
+  end # end of parse
+end
     
-              box_name     = argv[0]
-          box_provider = argv[1].to_sym
-          box_version  = argv[2]
+    
+    {	if ln =~ /;(read|write)_(handle|filename)=/
+		parts = ln.split(' ')
+		if (parts[0] == 'mov')
+			parts2 = parts[2].split('=')
+			label = parts2[0]
+			label.slice!(0,1)
+			old = parts2[1]
+			new = addrs[label]
+			#puts '%32s: %s -> %x' % [label, old, new]
+			replaces << [label, old, new.to_s(16)]
+		end
+	end
+}
+    
+    if (ip == nil || port == nil)
+  puts 'Syntax: test.rb <ip> [port]\n'
+  exit
+end
+    
+      def get_result
+    @src.get_result
+  end
+end
+    
+    module Jekyll
+  class GistTag < Liquid::Tag
+    def initialize(tag_name, text, token)
+      super
+      @text           = text
+      @cache_disabled = false
+      @cache_folder   = File.expand_path '../.gist-cache', File.dirname(__FILE__)
+      FileUtils.mkdir_p @cache_folder
+    end
+    
+      class VideoTag < Liquid::Tag
+    @video = nil
+    @poster = ''
+    @height = ''
+    @width = ''
+    
+              def logstash_plugin_gem_spec?(spec)
+            spec.metadata && spec.metadata['logstash_plugin'] == 'true'
+          end
+    
+      public
+  # DEPRECATED: Prefer defining encode_sync or multi_encode
+  def encode(event)
+    encoded = multi_encode([event])
+    encoded.each {|event,data| @on_event.call(event,data) }
+  end # def encode
