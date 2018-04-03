@@ -1,59 +1,87 @@
 
         
-            with open('README.md', 'w+') as sorted_file:
-        sorted_file.write(final_README)
+            x = Input(shape=(1,))
+    y = inner_model(x)
+    outer_model = Model(x, y)
+    assert outer_model.trainable_weights == inner_model.trainable_weights
+    inner_model.trainable = False
+    assert outer_model.trainable_weights == []
+    inner_model.trainable = True
+    inner_model.layers[-1].trainable = False
+    assert outer_model.trainable_weights == []
     
-    FLAGS = flags.FLAGS
+        _, fname = tempfile.mkstemp('.h5')
+    model.save(fname)
     
-    flags = tf.app.flags
+            if isinstance(self._output_shape, python_types.LambdaType):
+            output_shape = func_dump(self._output_shape)
+            output_shape_type = 'lambda'
+        elif callable(self._output_shape):
+            output_shape = self._output_shape.__name__
+            output_shape_type = 'function'
+        else:
+            output_shape = self._output_shape
+            output_shape_type = 'raw'
     
-      @tf.test.mock.patch.dict(custom_estimator.__dict__,
-                           {'load_data': four_lines_data})
-  def test_custom_estimator(self):
-    custom_estimator.main([None, '--train_steps=1'])
+        model.compile(optimizer, loss=['mse', 'mae'])
+    model.compile(optimizer, loss='mse', loss_weights={'dense_1': 0.2, 'dropout': 0.8})
+    model.compile(optimizer, loss='mse', loss_weights=[0.2, 0.8])
     
-    flags.DEFINE_boolean('use_unlabeled', True, 'Whether to use the '
-                     'unlabeled sentiment dataset in the vocabulary.')
-flags.DEFINE_boolean('include_validation', False, 'Whether to include the '
-                     'validation set in the vocabulary.')
-flags.DEFINE_integer('doc_count_threshold', 1, 'The minimum number of '
-                     'documents a word or bigram should occur in to keep '
-                     'it in the vocabulary.')
+    - Preprocessing
+    Sequence Preprocessing
+    Text Preprocessing
+    Image Preprocessing
     
-        # Concatenate output of forward and reverse LSTMs
-    lstm_out = tf.concat(lstm_outs, 1)
+    # Training
+batch_size = 30
+epochs = 2
+    
+        print('Classifier Training')
+    print('===================')
+    accuracy, train_time, test_time = {}, {}, {}
+    for name in sorted(args['estimators']):
+        clf = ESTIMATORS[name]
+        try:
+            clf.set_params(random_state=0)
+        except (TypeError, ValueError):
+            pass
+    
+                tick_vals += list(xvals + 0.5 * width)
+            tick_labels += ['%i' % val for val in vals]
+    
+        # Sort legend labels
+    handles, labels = ax.get_legend_handles_labels()
+    hl = sorted(zip(handles, labels), key=operator.itemgetter(1))
+    handles2, labels2 = zip(*hl)
+    ax.legend(handles2, labels2, loc=0)
+    
+        def add_example(self, x, y, label):
+        self.model.data.append((x, y, label))
+        self.model.changed('example_added')
+    
+    from sklearn.datasets import make_biclusters
+from sklearn.datasets import samples_generator as sg
+from sklearn.cluster.bicluster import SpectralCoclustering
+from sklearn.metrics import consensus_score
+    
+    calibrated_classifier = sig_clf.calibrated_classifiers_[0]
+prediction = np.vstack([calibrator.predict(this_p)
+                        for calibrator, this_p in
+                        zip(calibrated_classifier.calibrators_, p.T)]).T
+prediction /= prediction.sum(axis=1)[:, None]
+    
+        if (has_actual_code and not has_question_marks):
+        linebuffer = clean_trailing_newlines(linebuffer)
+        write_with_harness(codefile, sourcefile, start_linenum, linebuffer)
+    return (line, linenum)
     
     
-def _build_random_vocabulary(vocab_size=100):
-  '''Builds and returns a dict<term, id>.'''
-  vocab = set()
-  while len(vocab) < (vocab_size - 1):
-    rand_word = ''.join(
-        random.choice(string.ascii_lowercase)
-        for _ in range(random.randint(1, 10)))
-    vocab.add(rand_word)
+PREFS_JSON_SPEC = VValidatedJSON.PartialObject({
+    k[len('pref_'):]: v for k, v in
+    vprefs.PREFS_VALIDATORS.iteritems()
+})
     
-        if bidir and pretrain:
-      # Bidirectional pretraining
-      # Requires separate forward and reverse language model data.
-      forward_fname, reverse_fname = filenames
-      forward_batch = _read_and_batch(data_dir, forward_fname, state_name,
-                                      state_size, num_layers, unroll_steps,
-                                      batch_size)
-      state_name_rev = state_name + '_reverse'
-      reverse_batch = _read_and_batch(data_dir, reverse_fname, state_name_rev,
-                                      state_size, num_layers, unroll_steps,
-                                      batch_size)
-      forward_input = VatxtInput(
-          forward_batch,
-          state_name=state_name,
-          num_states=num_layers,
-          eos_id=eos_id)
-      reverse_input = VatxtInput(
-          reverse_batch,
-          state_name=state_name_rev,
-          num_states=num_layers,
-          eos_id=eos_id)
-      return forward_input, reverse_input
-    
-    import tensorflow as tf
+        def GET_widget_demo_page(self):
+        return BoringPage(_('reddit widget'),
+                          show_sidebar = False, 
+                          content=WidgetDemoPanel()).render()
