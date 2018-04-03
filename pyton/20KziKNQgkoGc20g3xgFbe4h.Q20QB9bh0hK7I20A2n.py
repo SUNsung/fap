@@ -1,118 +1,98 @@
 
         
-        if isinstance(helptext, bytes):
-    helptext = helptext.decode('utf-8')
+                def get_auth(self, username=None, password=None):
+            assert self.raw_auth is None
+            assert username is None
+            assert password is None
+            return basic_auth()
     
-        def _report_warning(w):
-        if not any(re.search(w_re, w) for w_re in warnings_re):
-            real_warning(w)
+            '''
+        assert with_headers or with_body
+        self.msg = msg
+        self.with_headers = with_headers
+        self.with_body = with_body
+        self.on_body_chunk_downloaded = on_body_chunk_downloaded
     
-            swf_class = swfi.extract_class(test_id)
-        func = swfi.extract_function(swf_class, 'main')
-        res = func(input_args)
-        self.assertEqual(res, output)
-    
-    from .onet import OnetBaseIE
-    
-        return inner
-    
-    import collections
-    
-    from requests.structures import CaseInsensitiveDict, LookupDict
-    
-            # if the server thread fails to finish, the test suite will hang
-        # and get killed by the jenkins timeout.
-    
-    from requests.help import info
-    
-        def doc(code):
-        names = ', '.join('``%s``' % n for n in _codes[code])
-        return '* %d: %s' % (code, names)
-    
-        def test_request_with_bytestring_host(self, httpbin):
-        s = requests.Session()
-        resp = s.request(
-            'GET',
-            httpbin('cookies/set?cookie=value'),
-            allow_redirects=False,
-            headers={'Host': b'httpbin.org'}
-        )
-        assert resp.cookies.get('cookie') == 'value'
-    
-        density : array-like of ints (1d or 0d)
-        The density of positive labels in the input.
-    
-    fixed_batch_size_comparison(X)
-variable_batch_size_comparison(X)
-plt.show()
+    UNICODE = FILE_CONTENT
 
     
-                c_bar = plt.bar(xvals, build_time[alg] - bottom,
-                            width, bottom, color='r')
-            q_bar = plt.bar(xvals, query_time[alg],
-                            width, build_time[alg], color='b')
+      1. Read, validate and process the input (args, `stdin`).
+  2. Create and send a request.
+  3. Stream, and possibly process and format, the parts
+     of the request-response exchange selected by output options.
+  4. Simultaneously write to `stdout`
+  5. Exit.
+    
+    import requests.auth
+    
+    output_options.add_argument(
+    '--continue', '-c',
+    dest='download_resume',
+    action='store_true',
+    default=False,
+    help='''
+    Resume an interrupted download. Note that the --output option needs to be
+    specified as well.
+    
+        def format_headers(self, headers):
+        return pygments.highlight(headers, self.http_lexer, self.formatter).strip()
+    
+        def test_cert_pem(self, httpbin_secure):
+        r = http(httpbin_secure + '/get',
+                 '--cert', CLIENT_PEM)
+        assert HTTP_OK in r
     
     
-def _get_git_revision():
-    try:
-        revision = subprocess.check_output(REVISION_CMD.split()).strip()
-    except (subprocess.CalledProcessError, OSError):
-        print('Failed to execute git to get revision')
-        return None
-    return revision.decode('utf-8')
+class ExitStatus:
+    '''Exit status code constants.'''
+    OK = 0
+    ERROR = 1
+    PLUGIN_ERROR = 7
     
-    URL = ('http://people.csail.mit.edu/jrennie/'
-       '20Newsgroups/20news-bydate.tar.gz')
-    
-    Sentiment analysis can be casted as a binary text classification problem,
-that is fitting a linear classifier on features extracted from the text
-of the user messages so as to guess wether the opinion of the author is
-positive or negative.
-    
-    Adjusted for chance measure such as ARI display some random variations
-centered around a mean score of 0.0 for any number of samples and
-clusters.
-    
-    # Can't import these from paths.py because that uses `future` imports
-DIR_OF_CURRENT_SCRIPT = os.path.dirname( os.path.abspath( __file__ ) )
-DIR_OF_YCMD = os.path.join( DIR_OF_CURRENT_SCRIPT, '..', '..', 'third_party',
-                            'ycmd' )
-    
-            Args:
-            max_workers: The maximum number of threads that can be used to
-                execute the given calls.
         '''
-        self._max_workers = max_workers
-        self._work_queue = queue.Queue()
-        self._threads = set()
-        self._shutdown = False
-        self._shutdown_lock = threading.Lock()
+    
+            # put all lines in the file into a Python list
+        strings = f.readlines()
+        
+        # above line leaves trailing newline characters; strip them out
+        strings = [x.strip(u'\n') for x in strings]
+        
+        # remove empty-lines and comments
+        strings = [x for x in strings if x and not x.startswith(u'#')]
+        
+        # insert empty string since all are being removed
+        strings.insert(0, u'')
     
     
-class EventNotification( BaseRequest ):
-  def __init__( self, event_name, buffer_number = None, extra_data = None ):
-    super( EventNotification, self ).__init__()
-    self._event_name = event_name
-    self._buffer_number = buffer_number
-    self._extra_data = extra_data
-    self._response_future = None
-    self._cached_response = None
+def is_code(line, indent_depth = 4):
+    '''returns the indent depth, 0 means not code in markup'''
+    if line.startswith(' ' * indent_depth):
+        return len(line) - len(line.lstrip(' '))
+    return 0
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+      if file_extension in GetHeaderExtensions():
+    CheckForHeaderGuard(filename, clean_lines, error)
     
-      _assert_rejects( f, { 'text' : 'This is an unimportant taco',
-                        'kind' : 'WARNING' } )
-  _assert_rejects( f, { 'text' : 'This taco will NOT be shown',
-                        'kind' : 'ERROR' } )
-  _assert_accepts( f, { 'text' : 'This burrito WILL be shown',
-                        'kind' : 'ERROR' } )
     
-    from ycm.client.base_request import BaseRequest
-from ycm.youcompleteme import YouCompleteMe
-from ycmd import user_options_store
-from ycmd.utils import CloseStandardStreams, WaitUntilProcessIsTerminated
+@click.command()
+@click.argument('catalog_file', type=click.Path())
+def cli(catalog_file):
+    # Read the old ones back.  Once we are in, we will never go.
+    with open(catalog_file) as f:
+        rv = json.load(f)['supported_locales']
+    
+                    errpage = pages.InterstitialPage(
+                    _('suspended'),
+                    content=pages.InTimeoutInterstitial(
+                        timeout_days_remaining=timeout_days_remaining,
+                    ),
+                )
+                request.environ['usable_error_content'] = errpage.render()
+    
+    
+class GoogleTagManagerController(MinimalController):
+    def pre(self):
+        if request.host != g.media_domain:
+            # don't serve up untrusted content except on our
+            # specifically untrusted domain
+            self.abort404()
