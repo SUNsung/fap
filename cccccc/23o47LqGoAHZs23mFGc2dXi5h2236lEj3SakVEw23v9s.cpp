@@ -1,81 +1,216 @@
 
         
-          static void ClearCache(content::RenderProcessHost* render_view_host);
-  static void SetProxyConfig(content::RenderProcessHost* render_process_host,
-                             const std::string& proxy_config);
-    
-    #include 'base/logging.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/api_messages.h'
-#include 'content/public/renderer/render_view.h'
-#include 'content/public/renderer/render_thread.h'
-#include 'content/public/renderer/v8_value_converter.h'
-#include 'third_party/WebKit/public/web/WebView.h'
-#include 'third_party/WebKit/public/web/WebLocalFrame.h'
-#include 'ui/base/resource/resource_bundle.h'
-    
-    #include 'base/files/file_path.h'
-    
-       void Call(const std::string& method,
-                    const base::ListValue& arguments) override;
-   void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) override;
-    
-    #define V8_USE_UNSAFE_HANDLES
-    
-    namespace base {
-class ListValue;
-}
-    
-      RenderView* render_view = GetCurrentRenderView();
+          RenderView* render_view = GetCurrentRenderView();
   if (!render_view) {
     args.GetReturnValue().Set(isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
-                                     'Unable to get render view in AllocateObject'))));
+                                     'Unable to get render view in CallObjectMethod'))));
     return;
   }
     
-    template <typename T1, typename T2, typename T3, typename T4, typename T5>
-internal::ValueArray5<T1, T2, T3, T4, T5> Values(T1 v1, T2 v2, T3 v3, T4 v4,
-    T5 v5) {
-  return internal::ValueArray5<T1, T2, T3, T4, T5>(v1, v2, v3, v4, v5);
-}
     
-    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_FILEPATH_H_
-
+    {  DISALLOW_COPY_AND_ASSIGN(DispatcherHost);
+};
     
-    // Helpers for suppressing warnings on unreachable code or constant
-// condition.
-    
-    template <>
-class Get<2> {
- public:
-  template <class Tuple>
-  static GTEST_ADD_REF_(GTEST_TUPLE_ELEMENT_(2, Tuple))
-  Field(Tuple& t) { return t.f2_; }  // NOLINT
+    namespace nwapi {
     }
     
-    // We only implement == and !=, as we don't have a need for the rest yet.
+    #ifndef incl_HPHP_WORKLOAD_STATS_H_
+#define incl_HPHP_WORKLOAD_STATS_H_
     
-    #include 'sample1.h'
-    
-      void ServerTryCancel(ServerContext* context);
-    
-    static const int WARMUP = 5;
-static const int BENCHMARK = 5;
-    
-    #include 'test/core/util/test_config.h'
-#include 'test/cpp/qps/benchmark_config.h'
-#include 'test/cpp/qps/driver.h'
-#include 'test/cpp/qps/report.h'
-#include 'test/cpp/qps/server.h'
-#include 'test/cpp/util/test_config.h'
-#include 'test/cpp/util/test_credentials_provider.h'
-    
-    #include <grpc/support/log.h>
-    
-    
-    
-    inline grpc::string GetJSServiceFilename(const grpc::string& filename) {
-  return grpc_generator::StripProto(filename) + '_grpc_pb.js';
+    Timer::~Timer() {
+  if (!m_finished) stop();
 }
+    
+    
+    {
+    {}}
+
+    
+    
+    {  return false;
+}
+    
+    
+    {  unsigned next_vr{Vreg::V0};
+  Vlabel entry;
+  jit::vector<Vframe> frames;
+  jit::vector<Vblock> blocks;
+  jit::hash_map<Vconst,Vreg,Vconst::Hash> constToReg;
+  jit::hash_map<size_t,Vconst> regToConst;
+  jit::vector<VregList> tuples;
+  jit::vector<VcallArgs> vcallArgs;
+  jit::vector<VdataBlock> dataBlocks;
+  uint16_t cur_voff{0};  // current instruction index managed by Vout
+  bool padding{false};
+  bool profiling{false};
+  folly::Optional<TransContext> context;
+  StructuredLogEntry* log_entry{nullptr};
+};
+    
+    
+    {    raise_warning(cs_GMP_INVALID_VALUE_MUST_NOT_BE_ZERO, 'gmp_div_r');
+    return false;
+  }
+    
+    #endif
+#endif
+
+    
+    NormalizedInstruction::NormalizedInstruction(SrcKey sk, const Unit* u)
+  : source(sk)
+  , funcd(nullptr)
+  , m_unit(u)
+  , immVec()
+  , endsRegion(false)
+  , preppedByRef(false)
+  , ignoreInnerType(false)
+  , interp(false)
+  , forceSurpriseCheck(false)
+{
+  memset(imm, 0, sizeof(imm));
+  populateImmediates(*this);
+}
+    
+    
+    {
+    {///////////////////////////////////////////////////////////////////////////////
+}}
+#endif
+
+    
+    /*
+ * Insert a jump to destSk at toSmash. If no top translation for destSk exists
+ * no action is performed. On return, the value of smashed indicated whether a
+ * new address was written into the TC.
+ */
+TCA bindJmp(TCA toSmash, SrcKey destSk, TransFlags trflags, bool& smashed);
+    
+      DataBlock(DataBlock&& other) = default;
+  DataBlock& operator=(DataBlock&& other) = default;
+    
+    
+    {}  // namespace grpc_node_generator
+    
+    class PythonGrpcGenerator : public grpc::protobuf::compiler::CodeGenerator {
+ public:
+  PythonGrpcGenerator(const GeneratorConfiguration& config);
+  ~PythonGrpcGenerator();
+    }
+    
+    bool SecureAuthContext::IsPeerAuthenticated() const {
+  if (!ctx_) return false;
+  return grpc_auth_context_peer_is_authenticated(ctx_) != 0;
+}
+    
+    #if TARGET_OS_IPHONE
+GRPC_XMACRO_ITEM(isWWAN, IsWWAN)
+#endif
+GRPC_XMACRO_ITEM(reachable, Reachable)
+GRPC_XMACRO_ITEM(transientConnection, TransientConnection)
+GRPC_XMACRO_ITEM(connectionRequired, ConnectionRequired)
+GRPC_XMACRO_ITEM(connectionOnTraffic, ConnectionOnTraffic)
+GRPC_XMACRO_ITEM(interventionRequired, InterventionRequired)
+GRPC_XMACRO_ITEM(connectionOnDemand, ConnectionOnDemand)
+GRPC_XMACRO_ITEM(isLocalAddress, IsLocalAddress)
+GRPC_XMACRO_ITEM(isDirect, IsDirect)
+
+    
+    int main(int argc, char** argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
+
+    
+    #include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+    
+    
+    {  delete tensor;
+  delete tensor2;
+  cout << 'OK' << endl;
+  return 0;
+}
+
+    
+      /// Peek at the incoming data on the stream. Returns the number of bytes read,
+  /// or 0 if an error occurred.
+  template <typename MutableBufferSequence>
+  std::size_t peek(const MutableBufferSequence& buffers,
+      boost::system::error_code& ec);
+    
+    #ifndef BOOST_ASIO_BUFFERED_WRITE_STREAM_FWD_HPP
+#define BOOST_ASIO_BUFFERED_WRITE_STREAM_FWD_HPP
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+typedef long atomic_count;
+inline void increment(atomic_count& a, long b) { a += b; }
+#elif defined(BOOST_ASIO_HAS_STD_ATOMIC)
+typedef std::atomic<long> atomic_count;
+inline void increment(atomic_count& a, long b) { a += b; }
+#else // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+typedef boost::detail::atomic_count atomic_count;
+inline void increment(atomic_count& a, long b) { while (b > 0) ++a, --b; }
+#endif // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+    
+      static bool all_empty(const Buffers& buffer_sequence)
+  {
+    typename Buffers::const_iterator iter = buffer_sequence.begin();
+    typename Buffers::const_iterator end = buffer_sequence.end();
+    std::size_t i = 0;
+    for (; iter != end && i < max_buffers; ++iter, ++i)
+      if (boost::asio::buffer_size(Buffer(*iter)) > 0)
+        return false;
+    return true;
+  }
+    
+    
+    {    // Make the upcall if required.
+    if (owner)
+    {
+      fenced_block b(fenced_block::half);
+      BOOST_ASIO_HANDLER_INVOCATION_BEGIN((handler.arg1_, handler.arg2_));
+      boost_asio_handler_invoke_helpers::invoke(handler, handler.handler_);
+      BOOST_ASIO_HANDLER_INVOCATION_END;
+    }
+  }
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS) \
+  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
+# include <boost/asio/detail/null_fenced_block.hpp>
+#elif defined(__MACH__) && defined(__APPLE__)
+# include <boost/asio/detail/macos_fenced_block.hpp>
+#elif defined(__sun)
+# include <boost/asio/detail/solaris_fenced_block.hpp>
+#elif defined(__GNUC__) && defined(__arm__) \
+  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
+# include <boost/asio/detail/gcc_arm_fenced_block.hpp>
+#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
+# include <boost/asio/detail/gcc_hppa_fenced_block.hpp>
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+# include <boost/asio/detail/gcc_x86_fenced_block.hpp>
+#elif defined(__GNUC__) \
+  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
+  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
+  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
+# include <boost/asio/detail/gcc_sync_fenced_block.hpp>
+#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
+# include <boost/asio/detail/win_fenced_block.hpp>
+#else
+# include <boost/asio/detail/null_fenced_block.hpp>
+#endif
+    
+      // Remove the descriptor from /dev/poll. Since this function is only called
+  // during a fork, we can apply the change immediately.
+  ::pollfd ev = { 0, 0, 0 };
+  ev.fd = descriptor;
+  ev.events = POLLREMOVE;
+  ev.revents = 0;
+  ::write(dev_poll_fd_, &ev, sizeof(ev));
+    
+      if (shutdown_)
+  {
+    io_service_.post_immediate_completion(op, false);
+    return;
+  }
