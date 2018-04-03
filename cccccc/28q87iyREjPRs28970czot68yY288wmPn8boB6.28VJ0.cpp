@@ -1,375 +1,285 @@
 
         
-        #ifndef STORAGE_LEVELDB_DB_DB_ITER_H_
-#define STORAGE_LEVELDB_DB_DB_ITER_H_
+          fname = DescriptorFileName('bar', 100);
+  ASSERT_EQ('bar/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(100, number);
+  ASSERT_EQ(kDescriptorFile, type);
     
-    // Return the name of the old info log file for 'dbname'.
-std::string OldInfoLogFileName(const std::string& dbname) {
-  return dbname + '/LOG.old';
+    #ifndef STORAGE_LEVELDB_DB_TABLE_CACHE_H_
+#define STORAGE_LEVELDB_DB_TABLE_CACHE_H_
+    
+    #include 'db/version_edit.h'
+#include 'util/testharness.h'
+    
+    // Dump the contents of the file named by fname in text format to
+// *dst.  Makes a sequence of dst->Append() calls; each call is passed
+// the newline-terminated text corresponding to a single item found
+// in the file.
+//
+// Returns a non-OK result if fname does not name a leveldb storage
+// file, or if the file cannot be read.
+Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
+    
+    inline bool operator==(const Slice& x, const Slice& y) {
+  return ((x.size() == y.size()) &&
+          (memcmp(x.data(), y.data(), x.size()) == 0));
 }
     
-    void TableCache::Evict(uint64_t file_number) {
-  char buf[sizeof(file_number)];
-  EncodeFixed64(buf, file_number);
-  cache_->Erase(Slice(buf, sizeof(buf)));
-}
+    /** Returns the benchmark Reporter instance.
+ *
+ * The returned instance will take care of generating reports for all the actual
+ * reporters configured via the 'enable_*_reporter' command line flags (see
+ * benchmark_config.cc). */
+std::shared_ptr<Reporter> GetReporter();
+    
+    namespace grpc {
+namespace testing {
+    }
+    }
+    
+    #include 'test/cpp/qps/benchmark_config.h'
+#include 'test/cpp/qps/driver.h'
+#include 'test/cpp/qps/report.h'
+#include 'test/cpp/qps/server.h'
+#include 'test/cpp/util/test_config.h'
+#include 'test/cpp/util/test_credentials_provider.h'
+    
+    #include <chrono>
+#include <thread>
+#include <vector>
     
     
-    {}  // namespace leveldb
+    {}  // namespace grpc_python_generator
     
-    namespace {
-class MemTableInserter : public WriteBatch::Handler {
+    #if TARGET_OS_IPHONE
+GRPC_XMACRO_ITEM(isWWAN, IsWWAN)
+#endif
+GRPC_XMACRO_ITEM(reachable, Reachable)
+GRPC_XMACRO_ITEM(transientConnection, TransientConnection)
+GRPC_XMACRO_ITEM(connectionRequired, ConnectionRequired)
+GRPC_XMACRO_ITEM(connectionOnTraffic, ConnectionOnTraffic)
+GRPC_XMACRO_ITEM(interventionRequired, InterventionRequired)
+GRPC_XMACRO_ITEM(connectionOnDemand, ConnectionOnDemand)
+GRPC_XMACRO_ITEM(isLocalAddress, IsLocalAddress)
+GRPC_XMACRO_ITEM(isDirect, IsDirect)
+
+    
+    class UsageTimer {
  public:
-  SequenceNumber sequence_;
-  MemTable* mem_;
-    }
+  UsageTimer();
     }
     
-    static std::string PrintContents(WriteBatch* b) {
-  InternalKeyComparator cmp(BytewiseComparator());
-  MemTable* mem = new MemTable(cmp);
-  mem->Ref();
-  std::string state;
-  Status s = WriteBatchInternal::InsertInto(b, mem);
-  int count = 0;
-  Iterator* iter = mem->NewIterator();
-  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-    ParsedInternalKey ikey;
-    ASSERT_TRUE(ParseInternalKey(iter->key(), &ikey));
-    switch (ikey.type) {
-      case kTypeValue:
-        state.append('Put(');
-        state.append(ikey.user_key.ToString());
-        state.append(', ');
-        state.append(iter->value().ToString());
-        state.append(')');
-        count++;
-        break;
-      case kTypeDeletion:
-        state.append('Delete(');
-        state.append(ikey.user_key.ToString());
-        state.append(')');
-        count++;
-        break;
-    }
-    state.append('@');
-    state.append(NumberToString(ikey.sequence));
-  }
-  delete iter;
-  if (!s.ok()) {
-    state.append('ParseError()');
-  } else if (count != WriteBatchInternal::Count(b)) {
-    state.append('CountMismatch()');
-  }
-  mem->Unref();
-  return state;
-}
-    
-      // Create a slice that refers to s[0,strlen(s)-1]
-  Slice(const char* s) : data_(s), size_(strlen(s)) { }
-    
-    
-// //////////////////////////////////////////////////////////////////////
-// Beginning of content of file: src/lib_json/json_tool.h
-// //////////////////////////////////////////////////////////////////////
-    
-    namespace enum_descriptor {
-PyObject* NewEnumValuesByName(const EnumDescriptor* descriptor);
-PyObject* NewEnumValuesByNumber(const EnumDescriptor* descriptor);
-PyObject* NewEnumValuesSeq(const EnumDescriptor* descriptor);
-}  // namespace enum_descriptor
-    
-    
-    { private:
-  // The python object that implements the database. The reference is owned.
-  PyObject* py_database_;
-};
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
-    
-     private:
-  const FieldDescriptor* descriptor_;
-  Context* context_;
-  ClassNameResolver* name_resolver_;
-  string scope_;
-    
-    
-    {  if (word->word->flag(W_DONT_CHOP)) {
-    saved_enable_assoc = wordrec_enable_assoc;
-    saved_chop_enable = chop_enable;
-    wordrec_enable_assoc.set_value(0);
-    chop_enable.set_value(0);
-  }
-  if (pass_n == 1)
-    set_pass1();
-  else
-    set_pass2();
-  recog_word(word);
-  if (word->best_choice == NULL)
-    word->SetupFake(*word->uch_set);
-  if (word->word->flag(W_DONT_CHOP)) {
-    wordrec_enable_assoc.set_value(saved_enable_assoc);
-    chop_enable.set_value(saved_chop_enable);
-  }
-}
-    
-    // Fits a line to the points, ignoring the skip_first initial points and the
-// skip_last final points, returning the fitted line as a pair of points,
-// and the upper quartile error.
-double DetLineFit::Fit(int skip_first, int skip_last,
-                       ICOORD* pt1, ICOORD* pt2) {
-  // Do something sensible with no points.
-  if (pts_.empty()) {
-    pt1->set_x(0);
-    pt1->set_y(0);
-    *pt2 = *pt1;
-    return 0.0;
-  }
-  // Count the points and find the first and last kNumEndPoints.
-  int pt_count = pts_.size();
-  ICOORD* starts[kNumEndPoints];
-  if (skip_first >= pt_count) skip_first = pt_count - 1;
-  int start_count = 0;
-  int end_i = MIN(skip_first + kNumEndPoints, pt_count);
-  for (int i = skip_first; i < end_i; ++i) {
-    starts[start_count++] = &pts_[i].pt;
-  }
-  ICOORD* ends[kNumEndPoints];
-  if (skip_last >= pt_count) skip_last = pt_count - 1;
-  int end_count = 0;
-  end_i = MAX(0, pt_count - kNumEndPoints - skip_last);
-  for (int i = pt_count - 1 - skip_last; i >= end_i; --i) {
-    ends[end_count++] = &pts_[i].pt;
-  }
-  // 1 or 2 points need special treatment.
-  if (pt_count <= 2) {
-    *pt1 = *starts[0];
-    if (pt_count > 1)
-      *pt2 = *ends[0];
-    else
-      *pt2 = *pt1;
-    return 0.0;
-  }
-  // Although with between 2 and 2*kNumEndPoints-1 points, there will be
-  // overlap in the starts, ends sets, this is OK and taken care of by the
-  // if (*start != *end) test below, which also tests for equal input points.
-  double best_uq = -1.0;
-  // Iterate each pair of points and find the best fitting line.
-  for (int i = 0; i < start_count; ++i) {
-    ICOORD* start = starts[i];
-    for (int j = 0; j < end_count; ++j) {
-      ICOORD* end = ends[j];
-      if (*start != *end) {
-        ComputeDistances(*start, *end);
-        // Compute the upper quartile error from the line.
-        double dist = EvaluateLineFit();
-        if (dist < best_uq || best_uq < 0.0) {
-          best_uq = dist;
-          *pt1 = *start;
-          *pt2 = *end;
-        }
-      }
-    }
-  }
-  // Finally compute the square root to return the true distance.
-  return best_uq > 0.0 ? sqrt(best_uq) : best_uq;
-}
-    
-    
-/**********************************************************************
- * QLSQ::remove
- *
- * Delete an element from the accumulator.
- **********************************************************************/
-    
-     private:
-  struct ReferenceCount {
-    STRING id;  // A unique ID to identify the object (think path on disk)
-    T *object;  // A copy of the object in memory.  Can be delete'd.
-    int count;  // A count of the number of active users of this object.
-  };
-    
-    /**----------------------------------------------------------------------------
-          Include Files and Type Defines
-----------------------------------------------------------------------------**/
-#include 'strngs.h'
-    
-      // Creates a report of the error rate. The report_level controls the detail
-  // that is reported to stderr via tprintf:
-  // 0   -> no output.
-  // >=1 -> bottom-line error rate.
-  // >=3 -> font-level error rate.
-  // boosting_mode determines the return value. It selects which (un-weighted)
-  // error rate to return.
-  // The fontinfo_table from MasterTrainer provides the names of fonts.
-  // The it determines the current subset of the training samples.
-  // If not NULL, the top-choice unichar error rate is saved in unichar_error.
-  // If not NULL, the report string is saved in fonts_report.
-  // (Ignoring report_level).
-  double ReportErrors(int report_level, CountTypes boosting_mode,
-                      const FontInfoTable& fontinfo_table,
-                      const SampleIterator& it,
-                      double* unichar_error,
-                      STRING* fonts_report);
-    
-    /**----------------------------------------------------------------------------
-          Include Files and Type Defines
-----------------------------------------------------------------------------**/
-#include 'host.h'
-#include <stdio.h>
-#include <math.h>
-    
-      // Initialize the bool array to the given size of feature space.
-  // The feature_map is just borrowed, and must exist for the entire
-  // lifetime of the IntFeatureDist.
-  void Init(const IntFeatureMap* feature_map);
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    class Test_Spy_Sample {
-  public:
-    Test_Spy_Sample();
-    ~Test_Spy_Sample();
-    }
-    
-    void TSpy::TestFun0()
-{
-    return reinterpret_cast<Test_Spy_Sample*>(This())->TestFun0();
-}
-    
-    #endif
-
-    
-    #endif
-
-    
-    
-/*
- * scop_jenv.h
- *
- *  Created on: 2012-8-21
- *      Author: yanguoyue
- */
-    
-        void SetBooleanArrayRegion(jbooleanArray array, jsize start, jsize len,
-        const jboolean* buf)
-    { functions->SetBooleanArrayRegion(this, array, start, len, buf); }
-    void SetByteArrayRegion(jbyteArray array, jsize start, jsize len,
-        const jbyte* buf)
-    { functions->SetByteArrayRegion(this, array, start, len, buf); }
-    void SetCharArrayRegion(jcharArray array, jsize start, jsize len,
-        const jchar* buf)
-    { functions->SetCharArrayRegion(this, array, start, len, buf); }
-    void SetShortArrayRegion(jshortArray array, jsize start, jsize len,
-        const jshort* buf)
-    { functions->SetShortArrayRegion(this, array, start, len, buf); }
-    void SetIntArrayRegion(jintArray array, jsize start, jsize len,
-        const jint* buf)
-    { functions->SetIntArrayRegion(this, array, start, len, buf); }
-    void SetLongArrayRegion(jlongArray array, jsize start, jsize len,
-        const jlong* buf)
-    { functions->SetLongArrayRegion(this, array, start, len, buf); }
-    void SetFloatArrayRegion(jfloatArray array, jsize start, jsize len,
-        const jfloat* buf)
-    { functions->SetFloatArrayRegion(this, array, start, len, buf); }
-    void SetDoubleArrayRegion(jdoubleArray array, jsize start, jsize len,
-        const jdouble* buf)
-    { functions->SetDoubleArrayRegion(this, array, start, len, buf); }
-    
-    void Config::setExperimentalFeatureEnabled(int feature, bool enabled)
-{
-    YGConfigSetExperimentalFeatureEnabled(m_config, static_cast<YGExperimentalFeature>(feature), enabled);
-}
-    
-    
-    {    void toJS(nbind::cbOutput expose) const
-    {
-        expose(left, right, top, bottom, width, height);
-    }
-};
-
-    
-    #pragma once
-#include <utility>
-#include <fb/assert.h>
-    
-    
-    
-      if (opts.proto_mode) {
-    if (any_generator)
-      Error('cannot generate code directly from .proto files', true);
-  } else if (!any_generator && conform_to_schema.empty()) {
-    Error('no options: specify at least one generator.', true);
-  }
-    
-    // Contains all the parameters that are parsed from the command line.
-struct Parameters {
-  // Puts the service into a namespace
-  grpc::string services_namespace;
-  // Use system includes (<>) or local includes ('')
-  bool use_system_headers;
-  // Prefix to any grpc include
-  grpc::string grpc_search_path;
-  // Generate GMOCK code to facilitate unit testing.
-  bool generate_mock_code;
-};
-    
-      auto channel =
-      grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials());
-  GreeterClient greeter(channel);
-    
-    std::unique_ptr< MonsterStorage::Stub> MonsterStorage::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
-  std::unique_ptr< MonsterStorage::Stub> stub(new MonsterStorage::Stub(channel));
-  return stub;
-}
-    
-    namespace grpc_java_generator {
-struct Parameters {
-  //        //Defines the custom parameter types for methods
-  //        //eg: flatbuffers uses flatbuffers.Builder as input for the client
-  //        and output for the server grpc::string custom_method_io_type;
-    }
-    }
-    
-        if (status.ok()) {
-      auto resp = response.GetRoot()->id();
-      std::cout << 'RPC response: ' << resp->str() << std::endl;
-    } else {
-      std::cout << 'RPC failed' << std::endl;
-    }
-  }
+    static const static_bookblock _resbook_8s_0={
   {
-    grpc::ClientContext context;
-    fbb.Clear();
-    auto stat_offset = CreateStat(fbb, fbb.CreateString('Fred'));
-    fbb.Finish(stat_offset);
-    auto request = fbb.ReleaseMessage<Stat>();
+    {0},
+    {0,0,&_8c0_s_p1_0},
+    {0},
+    {0,0,&_8c0_s_p3_0},
+    {0,0,&_8c0_s_p4_0},
+    {0,0,&_8c0_s_p5_0},
+    {0,0,&_8c0_s_p6_0},
+    {&_8c0_s_p7_0,&_8c0_s_p7_1},
+    {&_8c0_s_p8_0,&_8c0_s_p8_1},
+    {&_8c0_s_p9_0,&_8c0_s_p9_1,&_8c0_s_p9_2}
+   }
+};
+static const static_bookblock _resbook_8s_1={
+  {
+    {0},
+    {0,0,&_8c1_s_p1_0},
+    {0},
+    {0,0,&_8c1_s_p3_0},
+    {0,0,&_8c1_s_p4_0},
+    {0,0,&_8c1_s_p5_0},
+    {0,0,&_8c1_s_p6_0},
+    {&_8c1_s_p7_0,&_8c1_s_p7_1},
+    {&_8c1_s_p8_0,&_8c1_s_p8_1},
+    {&_8c1_s_p9_0,&_8c1_s_p9_1,&_8c1_s_p9_2}
+   }
+};
     
-    static void Error(const flatbuffers::FlatCompiler *flatc,
-                  const std::string &err, bool usage, bool show_exe_name) {
-  if (show_exe_name) { printf('%s: ', g_program_name); }
-  printf('error: %s\n', err.c_str());
-  if (usage) { printf('%s', flatc->GetUsageString(g_program_name).c_str()); }
-  exit(1);
+    #include 'x86/x86cpu.h'
+/* We currently support 5 x86 variants:
+ * arch[0] -> non-sse
+ * arch[1] -> sse
+ * arch[2] -> sse2
+ * arch[3] -> sse4.1
+ * arch[4] -> avx
+ */
+#define OPUS_ARCHMASK 7
+int opus_select_arch(void);
+    
+    #undef PSHR32
+static inline int PSHR32(int a, int shift)
+{
+    int r;
+    asm volatile ('SHRAV_R.W %0, %1, %2' :'=r' (r): 'r' (a), 'r' (shift));
+    return r;
+}
+    
+      /// Set an option on the acceptor.
+  /**
+   * This function is used to set an option on the acceptor.
+   *
+   * @param option The new option value to be set on the acceptor.
+   *
+   * @param ec Set to indicate what error occurred, if any.
+   *
+   * @sa SettableSocketOption @n
+   * boost::asio::socket_base::reuse_address
+   * boost::asio::socket_base::enable_connection_aborted
+   *
+   * @par Example
+   * Setting the SOL_SOCKET/SO_REUSEADDR option:
+   * @code
+   * boost::asio::ip::tcp::acceptor acceptor(io_service);
+   * ...
+   * boost::asio::ip::tcp::acceptor::reuse_address option(true);
+   * boost::system::error_code ec;
+   * acceptor.set_option(option, ec);
+   * if (ec)
+   * {
+   *   // An error occurred.
+   * }
+   * @endcode
+   */
+  template <typename SettableSocketOption>
+  boost::system::error_code set_option(const SettableSocketOption& option,
+      boost::system::error_code& ec)
+  {
+    return this->get_service().set_option(
+        this->get_implementation(), option, ec);
+  }
+    
+    #include <boost/asio/detail/config.hpp>
+#include <cstddef>
+#include <boost/asio/basic_io_object.hpp>
+#include <boost/asio/detail/handler_type_requirements.hpp>
+#include <boost/asio/detail/throw_error.hpp>
+#include <boost/asio/error.hpp>
+#include <boost/asio/wait_traits.hpp>
+#include <boost/asio/waitable_timer_service.hpp>
+    
+    
+    {
+    {} // namespace asio
+} // namespace boost
+    
+    #ifndef BOOST_ASIO_DETAIL_BUFFERED_STREAM_STORAGE_HPP
+#define BOOST_ASIO_DETAIL_BUFFERED_STREAM_STORAGE_HPP
+    
+    #ifndef BOOST_ASIO_DETAIL_HANDLER_ALLOC_HELPERS_HPP
+#define BOOST_ASIO_DETAIL_HANDLER_ALLOC_HELPERS_HPP
+    
+    private:
+  // Calculate the hash size for the specified number of elements.
+  static std::size_t hash_size(std::size_t num_elems)
+  {
+    static std::size_t sizes[] =
+    {
+#if defined(BOOST_ASIO_HASH_MAP_BUCKETS)
+      BOOST_ASIO_HASH_MAP_BUCKETS
+#else // BOOST_ASIO_HASH_MAP_BUCKETS
+      3, 13, 23, 53, 97, 193, 389, 769, 1543, 3079, 6151, 12289, 24593,
+      49157, 98317, 196613, 393241, 786433, 1572869, 3145739, 6291469,
+      12582917, 25165843
+#endif // BOOST_ASIO_HASH_MAP_BUCKETS
+    };
+    const std::size_t nth_size = sizeof(sizes) / sizeof(std::size_t) - 1;
+    for (std::size_t i = 0; i < nth_size; ++i)
+      if (num_elems < sizes[i])
+        return sizes[i];
+    return sizes[nth_size];
+  }
+    
+    void buffer_sequence_adapter_base::init_native_buffer(
+    buffer_sequence_adapter_base::native_buffer_type& buf,
+    const boost::asio::const_buffer& buffer)
+{
+  std::memset(&buf, 0, sizeof(native_buffer_type));
+  Microsoft::WRL::ComPtr<IInspectable> insp
+    = Microsoft::WRL::Make<winrt_buffer_impl>(buffer);
+  Platform::Object^ buf_obj = reinterpret_cast<Platform::Object^>(insp.Get());
+  buf = reinterpret_cast<Windows::Storage::Streams::IBuffer^>(insp.Get());
+}
+    
+    template <typename Time_Traits>
+void epoll_reactor::remove_timer_queue(timer_queue<Time_Traits>& queue)
+{
+  do_remove_timer_queue(queue);
 }
     
     
-    {
-    {
-    {
-    {    code_ += '}';  // close schema root
-    const std::string file_path = GeneratedFileName(path_, file_name_);
-    const std::string final_code = code_.ToString();
-    return SaveFile(file_path.c_str(), final_code, false);
+    
+    
+    
+    
+    
+    
+    
+    		{
+			b2Transform xf1;
+			xf1.q.Set(0.3524f * b2_pi);
+			xf1.p = xf1.q.GetXAxis();
+    }
+    
+    			edge.Set(b2Vec2(-10.0f, 0.0f), b2Vec2(10.0f, 0.0f));
+			body->CreateFixture(&edge, 0.0f);
+    
+    				b2Vec2 anchor(-15.0f + 1.0f * i, 5.0f);
+				jd.Initialize(prevBody, body, anchor);
+				m_world->CreateJoint(&jd);
+    
+    std::vector<uint8_t> OutputImage::ToSRGB(int xmin, int ymin,
+                                         int xsize, int ysize) const {
+  std::vector<uint8_t> rgb(xsize * ysize * 3);
+  for (int c = 0; c < 3; ++c) {
+    components_[c].ToPixels(xmin, ymin, xsize, ysize, &rgb[c], 3);
   }
+  for (size_t p = 0; p < rgb.size(); p += 3) {
+    ColorTransformYCbCrToRGB(&rgb[p]);
+  }
+  return rgb;
+}
+    
+    
+    {  std::vector<float> result =
+      Convolve2X(image, w, h, kernel.data(), kernel.size(), mul);
+  for (size_t i = 0; i < image.size(); i++) {
+    result[i] = image[i] + (image[i] - result[i]) * amount;
+  }
+  return result;
+}
+    
+    // Fills in 'result' with the inverse DCT of 'block'.
+// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
+// a row-by-row memory layout.
+void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
+    
+    namespace guetzli {
+    }
+    
+      void SaveToJpegData(JPEGData* jpg) const;
+    
+        if (IsLocking())
+        ::wakeupLock_Unlock(object_);
+    
+    
+    {  private:
+    void* m_this;
+    std::map<const std::string, boost::any> m_variablemap;
 };
-}  // namespace jsons
+    
+    #define DEFINE_HAS_MEMBER(member_name) \
+    template <typename T>\
+    class has_##member_name {\
+      private:\
+        struct yes_type { char x[1]; };\
+        struct no_type { char x[2]; };\
+        template <int> struct tester;\
+        template <typename U> static yes_type test(tester<sizeof(&U::member_name)>*);\
+        template <typename U> static no_type test(...);\
+      public:\
+        static const bool value = (sizeof(test<T>(0)) == sizeof(yes_type));\
+    };
