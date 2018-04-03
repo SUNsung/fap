@@ -1,57 +1,52 @@
 
         
-        containers = (('thefuck/python3-tcsh',
-               u'''FROM python:3
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'),
-              ('thefuck/python2-tcsh',
-               u'''FROM python:2
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'))
+        # If true, an OpenSearch description file will be output, and all pages will
+# contain a <link> tag referring to it.  The value of this option must be the
+# base URL from which the finished HTML is served.
+#html_use_opensearch = ''
     
-            self.assertTrue(self.addr_default.conflicts(self.addr))
-        self.assertTrue(self.addr_default.conflicts(self.addr1))
-        self.assertTrue(self.addr_default.conflicts(self.addr_defined))
+    # If your documentation needs a minimal Sphinx version, state it here.
+needs_sphinx = '1.0'
     
-    # If true, the index is split into individual pages for each letter.
-#html_split_index = False
+        @mock.patch('certbot.notify.smtplib.LMTP')
+    @mock.patch('certbot.notify.subprocess.Popen')
+    def test_smtp_failure(self, mock_popen, mock_lmtp):
+        from certbot.notify import notify
+        lmtp_obj = mock.MagicMock()
+        mock_lmtp.return_value = lmtp_obj
+        lmtp_obj.sendmail.side_effect = socket.error(17)
+        proc = mock.MagicMock()
+        mock_popen.return_value = proc
+        self.assertTrue(notify('Goose', 'auntrhody@example.com',
+                               'The old grey goose is dead.'))
+        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
+        self.assertEqual(proc.communicate.call_count, 1)
     
-    	type, ext, size = url_info(url)
-	print_info(site_info, title, type, size)
-	
-	if not info_only:
-		download_urls([url], title, ext, size, output_dir, merge = merge)
     
-        fc2video_download_by_upid(upid, output_dir, merge, info_only)
+def namedtuple(typename, field_names):
+    '''Returns a new subclass of tuple with named fields.
     
-    import ssl
     
-    def kugou_download_playlist(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    html=get_html(url)
-    pattern=re.compile('title='(.*?)'.* data='(\w*)\|.*?'')
-    pairs=pattern.findall(html)
-    for title,hash_val in pairs:
-        kugou_download_by_hash(title,hash_val,output_dir,merge,info_only)
+def FormatDebugInfoResponse( response ):
+  if not response:
+    return 'Server errored, no debug info from server\n'
+  message = _FormatYcmdDebugInfo( response )
+  completer = response[ 'completer' ]
+  if completer:
+    message += _FormatCompleterDebugInfo( completer )
+  return message
     
-        title = r1(r'<meta name='description' content='([^']*)'', html)
-    flashvars = r1(r'flashvars='(type=[^']*)'', html)
+    TIMEOUT_SECONDS = 0.1
     
-    site = Pinterest()
-download = site.download_by_url
-# TBD: implement download_playlist
-
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
-        failures = []
-    while point is not None:
-        if point.name:
-            if re.search('h[1-2]', point.name):
-                if point.name == 'h1':
-                    h1_directory = os.path.join(output_directory, clean_text(point.text))
-                    current_directory = h1_directory
-                elif point.name == 'h2':
-                    current_directory = os.path.join(h1_directory, clean_text(point.text))  
-                if not os.path.exists(current_directory):
-                    os.makedirs(current_directory)
-                print_title(point.text)
+    
+def KeywordsFromSyntaxListOutput_PhpSyntax_ContainsFunctions_test():
+  assert_that( syntax_parse._KeywordsFromSyntaxListOutput(
+                   ContentsOfTestFile( 'php_syntax' ) ),
+               has_items( 'array_change_key_case' ) )
