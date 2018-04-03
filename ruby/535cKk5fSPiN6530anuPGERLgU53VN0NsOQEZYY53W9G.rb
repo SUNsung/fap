@@ -1,147 +1,86 @@
 
         
-          # Removes any empty directories in the formula's prefix subtree
-  # Keeps any empty directions projected by skip_clean
-  # Removes any unresolved symlinks
-  def prune
-    dirs = []
-    symlinks = []
-    @f.prefix.find do |path|
-      if path == @f.libexec || @f.skip_clean?(path)
-        Find.prune
-      elsif path.symlink?
-        symlinks << path
-      elsif path.directory?
-        dirs << path
-      end
-    end
-    
-        def self.rm_DS_Store
-      paths = Queue.new
-      %w[Cellar Frameworks Library bin etc include lib opt sbin share var].
-        map { |p| HOMEBREW_PREFIX/p }.each { |p| paths << p if p.exist? }
-      workers = (0...Hardware::CPU.cores).map do
-        Thread.new do
-          begin
-            while p = paths.pop(true)
-              quiet_system 'find', p, '-name', '.DS_Store', '-delete'
-            end
-          rescue ThreadError # ignore empty queue error
-          end
+                # Checks if the user confirmation happens before the token becomes invalid
+        # Examples:
+        #
+        #   # confirm_within = 3.days and confirmation_sent_at = 2.days.ago
+        #   confirmation_period_expired?  # returns false
+        #
+        #   # confirm_within = 3.days and confirmation_sent_at = 4.days.ago
+        #   confirmation_period_expired?  # returns true
+        #
+        #   # confirm_within = nil
+        #   confirmation_period_expired?  # will always return false
+        #
+        def confirmation_period_expired?
+          self.class.confirm_within && self.confirmation_sent_at && (Time.now.utc > self.confirmation_sent_at.utc + self.class.confirm_within)
         end
+    
+      # Controllers inheriting DeviseController are advised to override this
+  # method so that other controllers inheriting from them would use
+  # existing translations.
+  def translation_scope
+    'devise.#{controller_name}'
+  end
+    
+          def remember_me_is_active?(resource)
+        return false unless resource.respond_to?(:remember_me)
+        scope = Devise::Mapping.find_scope!(resource)
+        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
+        resource.remember_me?(token, generated_at)
       end
-      workers.map(&:join)
+    
+        it 'redirects requests with duplicate session cookies' do
+      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
+      expect(last_response).to be_redirect
+      expect(last_response.location).to eq('/')
     end
     
-      def all_projects(current_user)
-    projects = []
-    
-      module ClassMethods
-    def load_types_in(module_name, my_name = module_name.singularize)
-      const_set(:MODULE_NAME, module_name)
-      const_set(:BASE_CLASS_NAME, my_name)
-      const_set(:TYPES, Dir[Rails.root.join('app', 'models', module_name.underscore, '*.rb')].map { |path| module_name + '::' + File.basename(path, '.rb').camelize })
+      it 'should allow changing the protection mode' do
+    # I have no clue what other modes are available
+    mock_app do
+      use Rack::Protection::FrameOptions, :frame_options => :deny
+      run DummyApp
     end
     
-      def complete_option(method)
-    if self.respond_to? 'complete_#{method}'.to_sym
-      self.send('complete_#{method}'.to_sym)
+      %w(GET HEAD POST PUT DELETE).each do |method|
+    it 'accepts #{method} requests when allow_if is true' do
+      mock_app do
+        use Rack::Protection::HttpOrigin, :allow_if => lambda{|env| env.has_key?('HTTP_ORIGIN') }
+        run DummyApp
+      end
+      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://any.domain.com')).to be_ok
     end
   end
     
-      included do
-    helper SortableTableHelper
-  end
+    module LogStash
+  module Api
+    module Commands
+      module System
+        class Plugins < Commands::Base
+          def run
+            { :total => plugins.count, :plugins => plugins }
+          end
     
-      def index
-    if params[:agent_id]
-      @agent = current_user.agents.find(params[:agent_id])
-      @events = @agent.events.page(params[:page])
-    else
-      @events = current_user.events.preload(:agent).page(params[:page])
-    end
-    
-        respond_to do |format|
-      if !running? && @job.update_attributes!(run_at: Time.now, failed_at: nil)
-        format.html { redirect_to jobs_path, notice: 'Job enqueued.' }
-        format.json { render json: @job, status: :ok }
+        s0, i0 = [], index
+    loop do
+      i1 = index
+      r2 = _nt_comment
+      if r2
+        r1 = r2
       else
-        format.html { redirect_to jobs_path, alert: 'Can not enqueue a running job.' }
-        format.json { render json: @job.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-    
-        respond_to do |format|
-      format.html { redirect_to services_path }
-      format.json { head :no_content }
-    end
-  end
-    
-        def initialize(name = nil, path = nil, type = nil)
-      self.name = name
-      self.path = path
-      self.type = type
-    
-        def relative_path_from(url)
-      self.class.parse(url).relative_path_to(self)
-    end
-  end
-end
-
-    
-            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
-          next if node.previous.try(:content).present? || node.next.try(:content).present?
-          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
-          node.content = node.content.strip
-          node.name = 'pre' if node.content =~ /\s/
-          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
-        end
-    
-            css('.method-name', '.property-name').each do |node|
-          source = node.at_css('a')
-          source.before(%(<span class='name'>#{source.content}</span>))
-          source.content = 'source'
-          source['class'] = 'source'
-        end
-    
-        # @abstract
-    #
-    # Update the clone on the deployment target
-    #
-    # @return void
-    #
-    def update
-      raise NotImplementedError, 'Your SCM strategy module should provide a #update method'
-    end
-    
-      it 'overrides the rake method, and sets the sshkit_backend to SSHKit::Backend::Printer' do
-    capture_io do
-      flags '--dry-run', '-n'
-    end
-    sshkit_backend = Capistrano::Configuration.fetch(:sshkit_backend)
-    expect(sshkit_backend).to eq(SSHKit::Backend::Printer)
-  end
-    
-          class HaveAttachedFileMatcher
-        def initialize attachment_name
-          @attachment_name = attachment_name
-        end
-    
-        Hash.new.tap do |missing_styles|
-      current_styles.each do |klass, attachment_definitions|
-        attachment_definitions.each do |attachment_name, styles|
-          registered = registered_styles[klass][attachment_name] || [] rescue []
-          missed = styles - registered
-          if missed.present?
-            klass_sym = klass.to_s.to_sym
-            missing_styles[klass_sym] ||= Hash.new
-            missing_styles[klass_sym][attachment_name.to_sym] ||= Array.new
-            missing_styles[klass_sym][attachment_name.to_sym].concat(missed.to_a)
-            missing_styles[klass_sym][attachment_name.to_sym].map!(&:to_s).sort!.map!(&:to_sym).uniq!
-          end
+        r3 = _nt_whitespace
+        if r3
+          r1 = r3
+        else
+          @index = i1
+          r1 = nil
         end
       end
+      if r1
+        s0 << r1
+      else
+        break
+      end
     end
-  end
-end
+    r0 = instantiate_node(LogStash::Config::AST::Whitespace,input, i0...index, s0)
