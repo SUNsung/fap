@@ -1,75 +1,72 @@
 
         
-            def test_yahoo_https(self):
-        # https://github.com/rg3/youtube-dl/issues/2701
-        self.assertMatch(
-            'https://screen.yahoo.com/smartwatches-latest-wearable-gadgets-163745379-cbs.html',
-            ['Yahoo'])
+        if hasattr(ctypes, 'windll'):
+    WSAStringToAddressA = ctypes.windll.ws2_32.WSAStringToAddressA
+    WSAAddressToStringA = ctypes.windll.ws2_32.WSAAddressToStringA
+else:
+    def not_windows():
+        raise SystemError(
+            'Invalid platform. ctypes.windll must be available.'
+        )
+    WSAStringToAddressA = not_windows
+    WSAAddressToStringA = not_windows
     
-    IGNORED_FILES = [
-    'setup.py',  # http://bugs.python.org/issue13943
-    'conf.py',
-    'buildserver.py',
-]
+    	# The current Token when an error occurred.  Since not all streams
+	# can retrieve the ith Token, we have to track the Token object.
+	# For parsers.  Even when it's a tree parser, token might be set.
+        self.token = None
     
-            page = self._download_json(
-            'http://vxml.56.com/json/%s/' % text_id, text_id, 'Downloading video info')
+    from antlr3.constants import EOF, DEFAULT_CHANNEL, INVALID_TOKEN_TYPE
+    
+        unpack = classmethod(unpack)
+
     
     
-collect_ignore = [
-    # deprecated or moved modules
-    'scrapy/conf.py',
-    'scrapy/stats.py',
-    'scrapy/project.py',
-    'scrapy/utils/decorator.py',
-    'scrapy/statscol.py',
-    'scrapy/squeue.py',
-    'scrapy/log.py',
-    'scrapy/dupefilter.py',
-    'scrapy/command.py',
-    'scrapy/linkextractor.py',
-    'scrapy/spider.py',
+Calculate the median, or 50th percentile, of data grouped into class intervals
+centred on the data values provided. E.g. if your data points are rounded to
+the nearest whole number:
     
-        def test_select_if(self):
-        query = '''
-            SELECT IF(CARDINALITY(my_array) >= 3, my_array[3], NULL)
-            FROM t1 LIMIT 10
+        # verify reference counting
+    if verbose and hasattr(sys, 'gettotalrefcount'):
+        import gc
+        counts = [None] * 5
+        for i in range(len(counts)):
+            support.run_unittest(*test_classes)
+            gc.collect()
+            counts[i] = sys.gettotalrefcount()
+        print(counts)
+    
+    class TZInfo:
+    def __init__(self, transitions, type_indices, ttis, abbrs):
+        self.transitions = transitions
+        self.type_indices = type_indices
+        self.ttis = ttis
+        self.abbrs = abbrs
+    
+        def list_folders(self):
+        '''Return a list of folder names.'''
+        result = []
+        for entry in os.listdir(self._path):
+            if len(entry) > 1 and entry[0] == '.' and \
+               os.path.isdir(os.path.join(self._path, entry)):
+                result.append(entry[1:])
+        return result
+    
+        def test_infile_stdout(self):
+        infile = self._create_infile()
+        rc, out, err = assert_python_ok('-m', 'json.tool', infile)
+        self.assertEqual(rc, 0)
+        self.assertEqual(out.splitlines(), self.expect.encode().splitlines())
+        self.assertEqual(err, b'')
+    
+        def test_display_current_time_at_current_time(self):
         '''
-        self.assertEquals({'t1'}, self.extract_tables(query))
-    
-    
-@manager.option(
-    '-p', '--port',
-    default='5555',
-    help=('Port on which to start the Flower process'))
-@manager.option(
-    '-a', '--address',
-    default='localhost',
-    help=('Address on which to run the service'))
-def flower(port, address):
-    '''Runs a Celery Flower web server
-    
-            if flash_message:
-            flash(_(
-                'The table was created. '
-                'As part of this two phase configuration '
-                'process, you should now click the edit button by '
-                'the new table to configure it.'), 'info')
-    
-    
-def find_constraint_name(upgrade=True):
-    cols = {'column_name'} if upgrade else {'datasource_name'}
-    return generic_find_constraint_name(
-        table='columns', columns=cols, referenced='datasources', db=db)
-    
-    def upgrade():
-    op.add_column('dashboards', sa.Column('slug', sa.String(length=255), nullable=True))
-    try:
-        op.create_unique_constraint('idx_unique_slug', 'dashboards', ['slug'])
-    except:
-        pass
-    
-        #Required strings to create intermediate HTML files
-    header = '<html><head><link rel=stylesheet type=text/css href=' + colorscheme + '.css></head><body>\n'
-    footer = '</body></html>'
-    title_content = '<h1 class=titlemain>tldr pages</h1><h4 class=titlesub>Simplified and community driven man pages</h4></body></html>'
+        Just as justification for working example with the time provider used in
+        production. (Will always pass.)
+        '''
+        production_code_time_provider = ProductionCodeTimeProvider()
+        class_under_test = TimeDisplay()
+        class_under_test.set_time_provider(production_code_time_provider)
+        current_time = datetime.datetime.now()
+        expected_time = '<span class=\'tinyBoldText\'>{}:{}</span>'.format(current_time.hour, current_time.minute)
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
