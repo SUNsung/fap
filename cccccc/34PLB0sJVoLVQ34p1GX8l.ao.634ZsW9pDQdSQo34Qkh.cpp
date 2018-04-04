@@ -1,229 +1,142 @@
 
         
-        
-    {  /* Print the top N predictions. */
-  for (size_t i = 0; i < predictions.size(); ++i) {
-    Prediction p = predictions[i];
-    std::cout << std::fixed << std::setprecision(4) << p.second << ' - \''
-              << p.first << '\'' << std::endl;
-  }
+          // DesktopMediaListObserver overrides.
+  void OnSourceAdded(int index) override;
+  void OnSourceRemoved(int index) override;
+  void OnSourceMoved(int old_index, int new_index) override;
+  void OnSourceNameChanged(int index) override;
+  void OnSourceThumbnailChanged(int index) override;
+  bool OnRefreshFinished() override;
+    
+      AcceleratorCallbackMap accelerator_callback_map_;
+    
+    
+    {  content::WebContents* web_contents_;  // weak
+  SavePageCallback callback_;
+};
+    
+    
+    {}  // namespace atom
+    
+    #if defined(OS_WIN)
+StringType GetWaitEventName(base::ProcessId pid);
+    
+    MenuModelAdapter::MenuModelAdapter(AtomMenuModel* menu_model)
+  : views::MenuModelAdapter(menu_model),
+    menu_model_(menu_model) {
 }
-#else
-int main(int argc, char** argv) {
-  LOG(FATAL) << 'This example requires OpenCV; compile with USE_OPENCV.';
-}
-#endif  // USE_OPENCV
+    
+    #ifndef ATOM_BROWSER_UI_VIEWS_NATIVE_FRAME_VIEW_H_
+#define ATOM_BROWSER_UI_VIEWS_NATIVE_FRAME_VIEW_H_
+    
+      /// Access an array element (zero based index ).
+  /// If the array contains less than index element, then null value are
+  /// inserted
+  /// in the array so that its size is index+1.
+  /// (You may need to say 'value[0u]' to get your compiler to distinguish
+  ///  this from the operator[] which takes a string.)
+  Value& operator[](ArrayIndex index);
+    
+    TEST(AnyTest, TestIs) {
+  protobuf_unittest::TestAny submessage;
+  submessage.set_int32_value(12345);
+  google::protobuf::Any any;
+  any.PackFrom(submessage);
+  ASSERT_TRUE(any.ParseFromString(any.SerializeAsString()));
+  EXPECT_TRUE(any.Is<protobuf_unittest::TestAny>());
+  EXPECT_FALSE(any.Is<google::protobuf::Any>());
+    }
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
+    
+      virtual void WriteHash(io::Printer* printer);
+  virtual void WriteEquals(io::Printer* printer);
+  virtual void WriteToString(io::Printer* printer);
+    
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
+    
+    // Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// Generates Java code for a given .proto file.
+    
+    
+    {}  // namespace google
+#endif  // GOOGLE_PROTOBUF_COMPILER_JAVA_GENERATOR_FACTORY_H__
 
     
-    #include 'caffe/common.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    
-    { protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
-   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
-   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
-   *      the computed outputs @f$
-   *       y_n = \arg\max\limits_i x_{ni}
-   *      @f$ (for @f$ K = 1 @f$).
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  /// @brief Not implemented (non-differentiable function)
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-    NOT_IMPLEMENTED;
-  }
-  bool out_max_val_;
-  size_t top_k_;
-  bool has_axis_;
-  int axis_;
-};
-    
-      /// @brief The spatial dimensions of the input.
-  inline int input_shape(int i) {
-    return (*bottom_shape_)[channel_axis_ + i];
-  }
-  // reverse_dimensions should return true iff we are implementing deconv, so
-  // that conv helpers know which dimensions are which.
-  virtual bool reverse_dimensions() = 0;
-  // Compute height_out_ and width_out_ from other parameters.
-  virtual void compute_output_shape() = 0;
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the concatenate inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *        respect to the outputs
-   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
-   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length K), into which the top gradient
-   *        @f$ \frac{\partial E}{\partial y} @f$ is deconcatenated back to the
-   *        inputs @f$
-   *        \left[ \begin{array}{cccc}
-   *          \frac{\partial E}{\partial x_1} &
-   *          \frac{\partial E}{\partial x_2} &
-   *          ... &
-   *          \frac{\partial E}{\partial x_K}
-   *        \end{array} \right] =
-   *        \frac{\partial E}{\partial y}
-   *        @f$
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    { protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual inline bool reverse_dimensions() { return false; }
-  virtual void compute_output_shape();
-};
-    
-    
-    {}  // namespace caffe
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #endif  // CAFFE_CUDNN_SIGMOID_LAYER_HPP_
-
-    
-    /**
- * @brief During training only, sets a random portion of @f$x@f$ to 0, adjusting
- *        the rest of the vector magnitude accordingly.
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$ y = |x| @f$
- */
-template <typename Dtype>
-class DropoutLayer : public NeuronLayer<Dtype> {
- public:
-  /**
-   * @param param provides DropoutParameter dropout_param,
-   *     with DropoutLayer options:
-   *   - dropout_ratio (\b optional, default 0.5).
-   *     Sets the probability @f$ p @f$ that any given unit is dropped.
-   */
-  explicit DropoutLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-      virtual inline const char* type() const { return 'Eltwise'; }
-  virtual inline int MinBottomBlobs() const { return 2; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    
-    void DebugHUD_InitDefaults( DebugHUD *hud )
-{
-    hud->show_demo_window = true;
-    hud->show_another_window = true;
-    hud->rotation_speed = 15.0f;
-    
-    hud->cubeColor1[0] = 0.4f;
-    hud->cubeColor1[1] = 0.4f;
-    hud->cubeColor1[2] = 1.0f;
-    hud->cubeColor1[3] = 1.0f;
-    
-    hud->cubeColor2[0] = 1.0f;
-    hud->cubeColor2[1] = 0.4f;
-    hud->cubeColor2[2] = 0.4f;
-    hud->cubeColor2[3] = 1.0f;
-    
-    hud->clearColor[0] = 0.45f;
-    hud->clearColor[1] = 0.55f;
-    hud->clearColor[2] = 0.60f;
-    hud->clearColor[3] = 1.00f;
+    void ImmutableLazyMessageFieldGenerator::
+GenerateSerializedSizeCode(io::Printer* printer) const {
+  printer->Print(variables_,
+    'if ($get_has_field_bit_message$) {\n'
+    '  size += com.google.protobuf.CodedOutputStream\n'
+    '    .computeLazyFieldSize($number$, $name$_);\n'
+    '}\n');
 }
     
-        // Convert software texture to hardware texture.
-    ALLEGRO_BITMAP* cloned_img = al_clone_bitmap(img);
-    al_destroy_bitmap(img);
-    if (!cloned_img)
-        return false;
     
-                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-                counter++;
-            ImGui::SameLine();
-            ImGui::Text('counter = %d', counter);
-    
-        // Create depth-stencil State
-    {
-        D3D10_DEPTH_STENCIL_DESC desc;
-        ZeroMemory(&desc, sizeof(desc));
-        desc.DepthEnable = false;
-        desc.DepthWriteMask = D3D10_DEPTH_WRITE_MASK_ALL;
-        desc.DepthFunc = D3D10_COMPARISON_ALWAYS;
-        desc.StencilEnable = false;
-        desc.FrontFace.StencilFailOp = desc.FrontFace.StencilDepthFailOp = desc.FrontFace.StencilPassOp = D3D10_STENCIL_OP_KEEP;
-        desc.FrontFace.StencilFunc = D3D10_COMPARISON_ALWAYS;
-        desc.BackFace = desc.FrontFace;
-        g_pd3dDevice->CreateDepthStencilState(&desc, &g_pDepthStencilState);
+    {  if (rv == 0) {
+    return FutexResult::AWOKEN;
+  } else {
+    switch(errno) {
+      case ETIMEDOUT:
+        assert(timeout != nullptr);
+        return FutexResult::TIMEDOUT;
+      case EINTR:
+        return FutexResult::INTERRUPTED;
+      case EWOULDBLOCK:
+        return FutexResult::VALUE_CHANGED;
+      default:
+        assert(false);
+        // EINVAL, EACCESS, or EFAULT.  EINVAL means there was an invalid
+        // op (should be impossible) or an invalid timeout (should have
+        // been sanitized by timeSpecFromTimePoint).  EACCESS or EFAULT
+        // means *addr points to invalid memory, which is unlikely because
+        // the caller should have segfaulted already.  We can either
+        // crash, or return a value that lets the process continue for
+        // a bit. We choose the latter. VALUE_CHANGED probably turns the
+        // caller into a spin lock.
+        return FutexResult::VALUE_CHANGED;
     }
+  }
+}
     
-        int err = connect(socketfd, (sockaddr *) &addr, sizeof(addr));
-    if (err) {
-        cout << 'Connection error, connections: ' << connections << endl;
-        return false;
+    #include <folly/Chrono.h>
+#include <folly/portability/GTest.h>
+#include <folly/portability/Time.h>
+    
+    
+    
+      size_t i = nextAlignedIndex(haystack.data());
+  for (; i < haystack.size(); i += 16) {
+    ret = scanHaystackBlock<true>(haystack, needles, i);
+    if (ret != std::string::npos) {
+      return ret;
     }
-    send(socketfd, buf, strlen(buf), 0);
-    memset(message, 0, 1024);
-    size_t length;
-    do {
-        length = recv(socketfd, message, sizeof(message), 0);
-    }
-    while (strncmp(&message[length - 4], '\r\n\r\n', 4));
+  }
     
-    template <bool isServer>
-struct Group;
     
-    struct Timepoint {
-    void (*cb)(Timer *);
-    Timer *timer;
-    std::chrono::system_clock::time_point timepoint;
-    int nextDelay;
-};
-    
-    template <bool isServer>
-class ExtensionsNegotiator {
-protected:
-    int options;
-public:
-    ExtensionsNegotiator(int wantedOptions);
-    std::string generateOffer();
-    void readOffer(std::string offer);
-    int getNegotiatedOptions();
-};
+    {    // An object containing some of these keys:
+    //   'key_errors' -- {'key': 'description of error looking up said key'}
+    //   'error' -- why did we fail to parse this value?
+    //   'value' -- a copy of the input causing the error, and
+    //   'nested' -- {'key' or integer for arrays: <another errors_ object>}
+    //
+    // 'nested' will contain identically structured objects with keys (array
+    // indices) identifying the origin of the errors.  Of course, 'input'
+    // would no longer refer to the whole input, but to a part.
+    folly::dynamic errors_;
+    // We only materialize errors_ sub-objects when needed. This stores keys
+    // for unmaterialized errors, from outermost to innermost.
+    std::vector<const folly::dynamic*> unmaterializedSubErrorKeys_;
+    // Materialized errors, from outermost to innermost
+    std::vector<folly::dynamic*> subErrors_;  // Point into errors_
+  };
