@@ -1,86 +1,56 @@
 
         
-                # Checks if the user confirmation happens before the token becomes invalid
-        # Examples:
-        #
-        #   # confirm_within = 3.days and confirmation_sent_at = 2.days.ago
-        #   confirmation_period_expired?  # returns false
-        #
-        #   # confirm_within = 3.days and confirmation_sent_at = 4.days.ago
-        #   confirmation_period_expired?  # returns true
-        #
-        #   # confirm_within = nil
-        #   confirmation_period_expired?  # will always return false
-        #
-        def confirmation_period_expired?
-          self.class.confirm_within && self.confirmation_sent_at && (Time.now.utc > self.confirmation_sent_at.utc + self.class.confirm_within)
-        end
+          def show
+    @tag = Tag.find_by!(name: params[:id].downcase)
     
-      # Controllers inheriting DeviseController are advised to override this
-  # method so that other controllers inheriting from them would use
-  # existing translations.
-  def translation_scope
-    'devise.#{controller_name}'
+      def name
+    ':#{object.shortcode}:'
   end
+end
+
     
-          def remember_me_is_active?(resource)
-        return false unless resource.respond_to?(:remember_me)
-        scope = Devise::Mapping.find_scope!(resource)
-        _, token, generated_at = cookies.signed[remember_key(resource, scope)]
-        resource.remember_me?(token, generated_at)
-      end
+      describe 'PUT #update' do
+    it 'updates notifications settings' do
+      user.settings['notification_emails'] = user.settings['notification_emails'].merge('follow' => false)
+      user.settings['interactions'] = user.settings['interactions'].merge('must_be_follower' => true)
     
-        it 'redirects requests with duplicate session cookies' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
-      expect(last_response).to be_redirect
-      expect(last_response.location).to eq('/')
-    end
-    
-      it 'should allow changing the protection mode' do
-    # I have no clue what other modes are available
-    mock_app do
-      use Rack::Protection::FrameOptions, :frame_options => :deny
-      run DummyApp
-    end
-    
-      %w(GET HEAD POST PUT DELETE).each do |method|
-    it 'accepts #{method} requests when allow_if is true' do
-      mock_app do
-        use Rack::Protection::HttpOrigin, :allow_if => lambda{|env| env.has_key?('HTTP_ORIGIN') }
-        run DummyApp
-      end
-      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://any.domain.com')).to be_ok
-    end
-  end
-    
-    module LogStash
-  module Api
-    module Commands
-      module System
-        class Plugins < Commands::Base
-          def run
-            { :total => plugins.count, :plugins => plugins }
+        def render(context)
+      quote = paragraphize(super)
+      author = '<strong>#{@by.strip}</strong>' if @by
+      if @source
+        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
+        parts = []
+        url.each do |part|
+          if (parts + [part]).join('/').length < 32
+            parts << part
           end
-    
-        s0, i0 = [], index
-    loop do
-      i1 = index
-      r2 = _nt_comment
-      if r2
-        r1 = r2
-      else
-        r3 = _nt_whitespace
-        if r3
-          r1 = r3
-        else
-          @index = i1
-          r1 = nil
         end
+        source = parts.join('/')
+        source << '/&hellip;' unless source == @source
       end
-      if r1
-        s0 << r1
+      if !@source.nil?
+        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
+      elsif !@title.nil?
+        cite = ' <cite>#{@title}</cite>'
+      end
+      blockquote = if @by.nil?
+        quote
+      elsif cite
+        '#{quote}<footer>#{author + cite}</footer>'
       else
-        break
+        '#{quote}<footer>#{author}</footer>'
       end
+      '<blockquote>#{blockquote}</blockquote>'
     end
-    r0 = instantiate_node(LogStash::Config::AST::Whitespace,input, i0...index, s0)
+    
+        # Outputs the post.date as formatted html, with hooks for CSS styling.
+    #
+    #  +date+ is the date object to format as HTML.
+    #
+    # Returns string
+    def date_to_html_string(date)
+      result = '<span class='month'>' + date.strftime('%b').upcase + '</span> '
+      result << date.strftime('<span class='day'>%d</span> ')
+      result << date.strftime('<span class='year'>%Y</span> ')
+      result
+    end
