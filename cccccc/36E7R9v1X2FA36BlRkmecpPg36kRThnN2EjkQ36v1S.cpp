@@ -1,62 +1,124 @@
 
         
-        SavePageHandler::SavePageHandler(content::WebContents* web_contents,
-                                 const SavePageCallback& callback)
-    : web_contents_(web_contents),
-      callback_(callback) {
-}
+        
+    {
+    {      auto h = handle_.AccessTensor(context)->template flat<string>();
+      h(0) = cinfo_.container();
+      h(1) = cinfo_.name();
+      resource_ = resource;
+    }
+    if (context->expected_output_dtype(0) == DT_RESOURCE) {
+      OP_REQUIRES_OK(context, MakeResourceHandleToOutput(
+                                  context, 0, cinfo_.container(), cinfo_.name(),
+                                  MakeTypeIndex<T>()));
+    } else {
+      context->set_output_ref(0, &mu_, handle_.AccessTensor(context));
+    }
+  }
     
-    #ifndef ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
-#define ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
-    
-    RenderProcessPreferences::RenderProcessPreferences(const Predicate& predicate)
-    : predicate_(predicate),
-      next_id_(0),
-      cache_needs_update_(true) {
-  registrar_.Add(this,
-                 content::NOTIFICATION_RENDERER_PROCESS_CREATED,
-                 content::NotificationService::AllBrowserContextsAndSources());
-}
-    
-    namespace atom {
+    namespace perftools {
+namespace gputools {
+namespace cuda {
+    }
+    }
     }
     
+    #if TENSORFLOW_USE_SYCL
     
+    namespace tensorflow {
+    }
+    
+    REGISTER_KERNEL_BUILDER(Name('EncodeAudio').Device(DEVICE_CPU), EncodeAudioOp);
+    
+        auto d_4_1 = cc->FindWorkerChannel('/job:mnist/replica:0/task:3');
+    auto d_4_2 = cc->FindWorkerChannel('/job:mnist/replica:0/task:3');
+    
+        cv::Mat ppi_A(3, 1, CV_64F);
+    for (int i = 0; i < N; ++i)
     {
-    {                return count;
-#else
-                return ::atomicMin(address, val);
-#endif
+        z.col(i).copyTo(z_i);
+        ppi_A = LeftMultVec(pp.col(i)) + A;
+        D += ppi_A.t() * ( eye - z_i*z_i.t() ) * ppi_A;
+    }
+    A.release();
+    
+            std::vector<std::vector<Point> > white_contours, black_contours;
+        std::vector<Vec4i> white_hierarchy, black_hierarchy;
+        findContours(black_comp, black_contours, black_hierarchy, RETR_LIST, CHAIN_APPROX_SIMPLE);
+        findContours(white_comp, white_contours, white_hierarchy, RETR_LIST, CHAIN_APPROX_SIMPLE);
+    
+        virtual int runKernel( const CvMat*, const CvMat*, CvMat* );
+    virtual void computeReprojError( const CvMat*, const CvMat*,
+                                     const CvMat*, CvMat* );
+    
+            struct glob
+        {
+            static __device__ __forceinline__ int atomicAdd(int* address, int val)
+            {
+                return ::atomicAdd(address, val);
             }
-        }; // struct cmem
+            static __device__ __forceinline__ unsigned int atomicAdd(unsigned int* address, unsigned int val)
+            {
+                return ::atomicAdd(address, val);
+            }
+            static __device__ __forceinline__ float atomicAdd(float* address, float val)
+            {
+            #if __CUDA_ARCH__ >= 200
+                return ::atomicAdd(address, val);
+            #else
+                int* address_as_i = (int*) address;
+                int old = *address_as_i, assumed;
+                do {
+                    assumed = old;
+                    old = ::atomicCAS(address_as_i, assumed,
+                        __float_as_int(val + __int_as_float(assumed)));
+                } while (assumed != old);
+                return __int_as_float(old);
+            #endif
+            }
+            static __device__ __forceinline__ double atomicAdd(double* address, double val)
+            {
+            #if __CUDA_ARCH__ >= 130
+                unsigned long long int* address_as_ull = (unsigned long long int*) address;
+                unsigned long long int old = *address_as_ull, assumed;
+                do {
+                    assumed = old;
+                    old = ::atomicCAS(address_as_ull, assumed,
+                        __double_as_longlong(val + __longlong_as_double(assumed)));
+                } while (assumed != old);
+                return __longlong_as_double(old);
+            #else
+                (void) address;
+                (void) val;
+                return 0.0;
+            #endif
+            }
+    }
     
-    #include 'ifaddrs_android.h'
-#include <stdlib.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/utsname.h>
-#include <sys/ioctl.h>
-#include <netinet/in.h>
-#include <net/if.h>
-#include <unistd.h>
-#include <errno.h>
-#include <linux/netlink.h>
-#include <linux/rtnetlink.h>
+    CV_EXPORTS_W void divide(InputArray src1, Scalar src2, OutputArray dst, double scale=1, int dtype=-1);
     
-    /** 32x32 multiplication, followed by a 31-bit shift right. Results fits in 32 bits */
-#undef MULT32_32_Q31
-#define MULT32_32_Q31(a,b) (opus_val32)((((opus_int64)(a)) * ((opus_int64)(b)))>>31)
     
-    #undef MULT32_32_Q31
-static inline int MULT32_32_Q31(int a, int b)
-{
-    int r;
-    asm volatile('MULT $ac1, %0, %1' : : 'r' (a), 'r' (b));
-    asm volatile('EXTR.W %0,$ac1, %1' : '=r' (r): 'i' (31));
-    return r;
+    {    return hdr;
 }
     
-    #else
-#define varDefine
-#define silk_SaveCount()
+        if (data)
+        release();
+    
+        while (-1 != __ParseStack(stream, state, strcache, strstack)) {
+        if (!_processname.empty() && std::string::npos == strstack.find(processname, 0)) {
+            strstack.clear();
+            continue;
+        }
+    }
+    
+        if (touch_times_.size() <= count_) {
+        touch_times_.push_back(now);
+        return true;
+    }
+    
+    int Test_Spy_Sample::__TestFun1(int i)
+{
+    SPY_HOOK_THIS_API(__TestFun1, i);
+    xinfo2(TSF'Test');
+    return i+1;
+}
