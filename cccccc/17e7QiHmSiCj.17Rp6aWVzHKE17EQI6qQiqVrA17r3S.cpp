@@ -1,191 +1,176 @@
 
         
-        #include 'hphp/runtime/base/array-init.h'
-#include 'hphp/runtime/base/datetime.h'
-#include 'hphp/runtime/base/resource-data.h'
-#include 'hphp/runtime/base/type-array.h'
-#include 'hphp/runtime/base/type-string.h'
-#include 'hphp/util/timer.h'
+          virtual bool lookupAdditions(DeclBaseName Name, DeclContext *DC,
+                               SourceLoc Loc, bool IsTypeLookup,
+                               ResultVector &RV) = 0;
     
-    #include 'hphp/runtime/vm/jit/abi.h'
-#include 'hphp/runtime/vm/jit/arg-group.h'
-#include 'hphp/runtime/vm/jit/fixup.h'
-#include 'hphp/runtime/vm/jit/phys-reg-saver.h'
-#include 'hphp/runtime/vm/jit/vasm-gen.h'
-#include 'hphp/runtime/vm/jit/vasm-instr.h'
-#include 'hphp/runtime/vm/jit/vasm-reg.h'
+    @interface MutableDataVerifier : NSMutableData {
+    ObjectBehaviorVerifier *_verifier;
+    NSMutableData *_data;
+}
+@property (readonly) ObjectBehaviorVerifier *verifier;
+@end
     
-      for (auto& block : blocks) {
-    for (auto& inst : block.code) {
-      if (inst.op == Vinstr::copyargs) return true;
-    }
+    SILDebugScope::SILDebugScope(SILLocation Loc, SILFunction *SILFn,
+                             const SILDebugScope *ParentScope ,
+                             const SILDebugScope *InlinedCallSite)
+    : Loc(Loc), InlinedCallSite(InlinedCallSite) {
+  if (ParentScope)
+    Parent = ParentScope;
+  else {
+    assert(SILFn && 'no parent provided');
+    Parent = SILFn;
   }
+}
     
-      if (asprintf(&default_magic, '%s:%s', hmagicpath, MAGIC) < 0)
-    goto out;
-  free(hmagicpath);
-  return default_magic;
-out:
-  default_magic = NULL;
-  free(hmagicpath);
-  return MAGIC;
+    #endif // SWIFT_INDEX_INDEXSYMBOL_H
+
+    
+      /// Checks whether the current substitution is canonical.
+  bool isCanonical() const;
+    
+    #endif  // GTEST_HAS_PARAM_TEST
+    
+    // Unary predicate assertion macros.
+#define EXPECT_PRED_FORMAT1(pred_format, v1) \
+  GTEST_PRED_FORMAT1_(pred_format, v1, GTEST_NONFATAL_FAILURE_)
+#define EXPECT_PRED1(pred, v1) \
+  GTEST_PRED1_(pred, v1, GTEST_NONFATAL_FAILURE_)
+#define ASSERT_PRED_FORMAT1(pred_format, v1) \
+  GTEST_PRED_FORMAT1_(pred_format, v1, GTEST_FATAL_FAILURE_)
+#define ASSERT_PRED1(pred, v1) \
+  GTEST_PRED1_(pred, v1, GTEST_FATAL_FAILURE_)
+    
+     private:
+  // Replaces multiple consecutive separators with a single separator.
+  // For example, 'bar///foo' becomes 'bar/foo'. Does not eliminate other
+  // redundancies that might be in a pathname involving '.' or '..'.
+  //
+  // A pathname with multiple consecutive separators may occur either through
+  // user error or as a result of some scripts or APIs that generate a pathname
+  // with a trailing separator. On other platforms the same API or script
+  // may NOT generate a pathname with a trailing '/'. Then elsewhere that
+  // pathname may have another '/' and pathname components added to it,
+  // without checking for the separator already being there.
+  // The script language and operating system may allow paths like 'foo//bar'
+  // but some of the functions in FilePath will not handle that correctly. In
+  // particular, RemoveTrailingPathSeparator() only removes one separator, and
+  // it is called in CreateDirectoriesRecursively() assuming that it will change
+  // a pathname from directory syntax (trailing separator) to filename syntax.
+  //
+  // On Windows this method also replaces the alternate path separator '/' with
+  // the primary path separator '\\', so that for example 'bar\\/\\foo' becomes
+  // 'bar\\foo'.
+    
+     private:
+  // LocalTestInfo structure keeps information about a single test registered
+  // with TEST_P macro.
+  struct TestInfo {
+    TestInfo(const char* a_test_case_base_name,
+             const char* a_test_base_name,
+             TestMetaFactoryBase<ParamType>* a_test_meta_factory) :
+        test_case_base_name(a_test_case_base_name),
+        test_base_name(a_test_base_name),
+        test_meta_factory(a_test_meta_factory) {}
+    }
+    
+      tuple& operator=(const tuple& t) { return CopyFrom(t); }
+    
+    // Known limitations: we don't support passing an
+// std::tr1::reference_wrapper<T> to make_tuple().  And we don't
+// implement tie().
+    
+    // The template 'selector' struct TemplateSel<Tmpl> is used to
+// represent Tmpl, which must be a class template with one type
+// parameter, as a type.  TemplateSel<Tmpl>::Bind<T>::type is defined
+// as the type Tmpl<T>.  This allows us to actually instantiate the
+// template 'selected' by TemplateSel<Tmpl>.
+//
+// This trick is necessary for simulating typedef for class templates,
+// which C++ doesn't support directly.
+template <GTEST_TEMPLATE_ Tmpl>
+struct TemplateSel {
+  template <typename T>
+  struct Bind {
+    typedef Tmpl<T> type;
+  };
+};
+    
+        next_layer_.async_write_some(buffers,
+        BOOST_ASIO_MOVE_CAST(BOOST_ASIO_HANDLER_TYPE(WriteHandler,
+            void (boost::system::error_code, std::size_t)))(init.handler));
+    
+    #endif // BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
+
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    class ptime;
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+# include <boost/asio/detail/null_event.hpp>
+#elif defined(BOOST_ASIO_WINDOWS)
+# include <boost/asio/detail/win_event.hpp>
+#elif defined(BOOST_ASIO_HAS_PTHREADS)
+# include <boost/asio/detail/posix_event.hpp>
+#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
+# include <boost/asio/detail/std_event.hpp>
 #else
-  char *hmagicp = hmagicpath;
-  char *tmppath = NULL;
-  LPTSTR dllpath;
-    
-    #include 'hphp/runtime/vm/hhbc.h'
-    
-    
-// Logical immediates can't encode zero, so a return value of zero is used to
-// indicate a failure case. Specifically, where the constraints on imm_s are
-// not met.
-uint64_t Instruction::ImmLogical() {
-  unsigned reg_size = SixtyFourBits() ? kXRegSize : kWRegSize;
-  int64_t n = BitN();
-  int64_t imm_s = ImmSetBits();
-  int64_t imm_r = ImmRotate();
-    }
-    
-    std::string GetDbFileContent(int argc, char** argv);
-    
-    namespace grpc_node_generator {
-    }
-    
-    AuthPropertyIterator SecureAuthContext::begin() const {
-  if (ctx_) {
-    grpc_auth_property_iterator iter =
-        grpc_auth_context_property_iterator(ctx_);
-    const grpc_auth_property* property =
-        grpc_auth_property_iterator_next(&iter);
-    return AuthPropertyIterator(property, &iter);
-  } else {
-    return end();
-  }
-}
-    
-    #if TARGET_OS_IPHONE
-GRPC_XMACRO_ITEM(isWWAN, IsWWAN)
+# error Only Windows, POSIX and std::condition_variable are supported!
 #endif
-GRPC_XMACRO_ITEM(reachable, Reachable)
-GRPC_XMACRO_ITEM(transientConnection, TransientConnection)
-GRPC_XMACRO_ITEM(connectionRequired, ConnectionRequired)
-GRPC_XMACRO_ITEM(connectionOnTraffic, ConnectionOnTraffic)
-GRPC_XMACRO_ITEM(interventionRequired, InterventionRequired)
-GRPC_XMACRO_ITEM(connectionOnDemand, ConnectionOnDemand)
-GRPC_XMACRO_ITEM(isLocalAddress, IsLocalAddress)
-GRPC_XMACRO_ITEM(isDirect, IsDirect)
-
     
-    gpr_atm grpc::testing::interop::g_got_sigint;
+    #if !defined(BOOST_ASIO_WINDOWS_RUNTIME)
     
-      int Join();
-  void Interrupt();
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
     
-    #include 'test/cpp/util/test_credentials_provider.h'
+    bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DConeTwistConstraint_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DConeTwistConstraint(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getBFrame(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFixThresh(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFixThresh(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan2(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan1(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFrames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistAngle(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistSpan(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setDamping(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getAFrame(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_enableMotor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_Physics3DConeTwistConstraint(JSContext *cx, uint32_t argc, jsval *vp);
     
-    #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/python/python_generator.h>
+    extern JSClass  *jsb_cocostudio_timeline_BoneNode_class;
+extern JSObject *jsb_cocostudio_timeline_BoneNode_prototype;
     
-      // Generate filter for current set of keys and append to result_.
-  filter_offsets_.push_back(result_.size());
-  policy_->CreateFilter(&tmp_keys_[0], static_cast<int>(num_keys), &result_);
-    
-    TEST(LogTest, RandomRead) {
-  const int N = 500;
-  Random write_rnd(301);
-  for (int i = 0; i < N; i++) {
-    Write(RandomSkewedString(i, &write_rnd));
-  }
-  Random read_rnd(301);
-  for (int i = 0; i < N; i++) {
-    ASSERT_EQ(RandomSkewedString(i, &read_rnd), Read());
-  }
-  ASSERT_EQ('EOF', Read());
-}
-    
-      ReadOptions read_options;
-  Iterator *iter = db->NewIterator(read_options);
-    
-    class FilterPolicy;
-    
-      // Check first filter
-  ASSERT_TRUE(reader.KeyMayMatch(0, 'foo'));
-  ASSERT_TRUE(reader.KeyMayMatch(2000, 'bar'));
-  ASSERT_TRUE(! reader.KeyMayMatch(0, 'box'));
-  ASSERT_TRUE(! reader.KeyMayMatch(0, 'hello'));
-    
-    TEST(CRC, StandardResults) {
-  // From rfc3720 section B.4.
-  char buf[32];
+    int lua_register_cocos2dx_physics_PhysicsJointLimit(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,'cc.PhysicsJointLimit');
+    tolua_cclass(tolua_S,'PhysicsJointLimit','cc.PhysicsJointLimit','cc.PhysicsJoint',nullptr);
     }
     
-      int ReadBits(int nbits) {
-    FillBitWindow();
-    uint64_t val = (val_ >> (bits_left_ - nbits)) & ((1ULL << nbits) - 1);
-    bits_left_ -= nbits;
-    return val;
-  }
-    
-    
-    {}  // namespace guetzli
-    
-    // Fills in 'result' with the inverse DCT of 'block'.
-// The arguments 'block' and 'result' point to 8x8 arrays that are arranged in
-// a row-by-row memory layout.
-void ComputeBlockIDCT(const coeff_t* block, uint8_t* result);
-    
-    
-    {}  // namespace guetzli
-
-    
-    namespace guetzli {
-    }
-    
-    // Returns string with first letter to lowerCase
-grpc::string unexportName(grpc::string s) {
-	if (s.empty())
-		return s;
-	s[0] = static_cast<char>(std::tolower(s[0]));
-	return s;
-}
-    
-    static const char* MonsterStorage_method_names[] = {
-  '/MyGame.Example.MonsterStorage/Store',
-  '/MyGame.Example.MonsterStorage/Retrieve',
-};
-    
-    
-#endif  // GRPC_monster_5ftest__INCLUDED
-
-    
-    
-    {  // Package name for the service
-  grpc::string package_name;
-};
-    
-    
-    {
-    {
-    {      std::vector<FieldDef *> requiredProperties;
-      std::copy_if(properties.begin(), properties.end(),
-                   back_inserter(requiredProperties),
-                   [](FieldDef const *prop) { return prop->required; });
-      if (requiredProperties.size() > 0) {
-        std::string required_string('      \'required\' : [');
-        for (auto req_prop = requiredProperties.cbegin();
-             req_prop != requiredProperties.cend(); ++req_prop) {
-          required_string.append('\'' + (*req_prop)->name + '\'');
-          if (*req_prop != requiredProperties.back()) {
-            required_string.append(', ');
-          }
-        }
-        required_string.append('],');
-        code_ += required_string;
-      }
-      code_ += '      \'additionalProperties\' : false';
-      std::string closeType('    }');
-      if (*s != parser_.structs_.vec.back()) { closeType.append(','); }
-      code_ += closeType;  // close type
-    }
-    code_ += '  },';  // close definitions
+    	b2Body* m_groundBody;
+	b2AABB m_worldAABB;
+	ContactPoint m_points[k_maxContactPoints];
+	int32 m_pointCount;
+	DestructionListener m_destructionListener;
+	GLESDebugDraw m_debugDraw;
+	int32 m_textLine;
+	b2World* m_world;
+	b2Body* m_bomb;
+	b2MouseJoint* m_mouseJoint;
+	b2Vec2 m_bombSpawnPoint;
+	bool m_bombSpawning;
+	b2Vec2 m_mouseWorld;
+	int32 m_stepCount;
