@@ -1,111 +1,93 @@
 
         
-                pathlabel.grid(column=0, row=10, columnspan=3, padx=5, pady=[10,0],
-                       sticky=W)
-        self.path.grid(column=0, row=11, columnspan=2, padx=5, sticky=W+E,
-                       pady=[10,0])
-        browse.grid(column=2, row=11, padx=5, sticky=W+S)
-        self.path_error.grid(column=0, row=12, columnspan=3, padx=5,
-                             sticky=W+E)
+          Args:
+    config: ConfigDict containing the feature configurations.
     
-    NaN = float('nan')
-PosInf = float('inf')
-NegInf = float('-inf')
+      Returns:
+    Dictionary containing 'time_series_features' and 'aux_features'. Each is a
+        dictionary of named numpy arrays of shape [batch_size, length].
+  '''
+  features = {}
+  features['time_series_features'] = {
+      name: np.random.random([batch_size, spec['length']])
+      for name, spec in feature_spec.items() if spec['is_time_series']
+  }
+  features['aux_features'] = {
+      name: np.random.random([batch_size, spec['length']])
+      for name, spec in feature_spec.items() if not spec['is_time_series']
+  }
+  return features
     
-    def evalString(s):
-    assert s.startswith(''') or s.startswith('''), repr(s[:1])
-    q = s[0]
-    if s[:3] == q*3:
-        q = q*3
-    assert s.endswith(q), repr(s[-len(q):])
-    assert len(s) >= 2*len(q)
-    s = s[len(q):-len(q)]
-    return re.sub(r'\\(\'|\'|\\|[abfnrtv]|x.{0,2}|[0-7]{1,3})', escape, s)
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
     
-    def _unlock_file(f):
-    '''Unlock file f using lockf and dot locking.'''
-    if fcntl:
-        fcntl.lockf(f, fcntl.LOCK_UN)
-    if os.path.exists(f.name + '.lock'):
-        os.remove(f.name + '.lock')
+      return best_spline, best_spline_mask, best_bkspace, bad_bkspaces
+
     
-            # RFC 4642 2.2.2: Both the client and the server MUST know if there is
-        # a TLS session active.  A client MUST NOT attempt to start a TLS
-        # session if a TLS session is already active.
-        self.tls_on = False
-    
-            for func, args, kwargs, expected in self.CALLS_KWARGS:
-            with self.subTest(func=func, args=args, kwargs=kwargs):
-                result = _testcapi.pyobject_fastcalldict(func, args, kwargs)
-                self.check_result(result, expected)
-    
-        expect_without_sort_keys = textwrap.dedent('''\
-    [
-        [
-            'blorpie'
-        ],
-        [
-            'whoops'
-        ],
-        [],
-        'd-shtaeou',
-        'd-nthiouh',
-        'i-vhbjkhnth',
-        {
-            'nifty': 87
-        },
-        {
-            'field': 'yes',
-            'morefield': false
-        }
-    ]
-    ''')
-    
-            a = sys.maxsize**10
-        b = 0
-        c = -2*sys.maxsize
-        expected_len = 1 + (b - a) // c
-        x = range(a, b, c)
-        self.assertIn(a, x)
-        self.assertNotIn(b, x)
-        self.assertRaises(OverflowError, len, x)
-        self.assertTrue(x)
-        self.assertEqual(_range_len(x), expected_len)
-        self.assertEqual(x[0], a)
-        idx = sys.maxsize+1
-        self.assertEqual(x[idx], a+(idx*c))
-        self.assertEqual(x[idx:idx+1][0], a+(idx*c))
-        with self.assertRaises(IndexError):
-            x[-expected_len-1]
-        with self.assertRaises(IndexError):
-            x[expected_len]
-    
-            dll = CDLL(_ctypes_test.__file__)
-        # This function expects a function pointer,
-        # and calls this with an integer pointer as parameter.
-        # The int pointer points to a table containing the numbers 1..10
-        doit = dll._testfunc_callback_with_pointer
-    
-        def _send_diagnostics_failure_report(self):
-        return 'send diagnostics failure report'
-    
-        def test_data_change_shall_notify_all_observers_once(cls):
-        with patch.object(cls.dec_obs, 'update') as mock_dec_obs_update,\
-                patch.object(cls.hex_obs, 'update') as mock_hex_obs_update:
-            cls.sub.data = 10
-            cls.assertEqual(mock_dec_obs_update.call_count, 1)
-            cls.assertEqual(mock_hex_obs_update.call_count, 1)
-    
-        def setUp(self):
-        self.sample_queue = queue.Queue()
-        self.sample_queue.put('first')
-        self.sample_queue.put('second')
-    
-        def _instance_method_2(self):
-        print('Value {}'.format(self.x2))
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
     
     
-class ClientCoroutine:
+def evaluate(defun=False):
+  model = mnist.Model(data_format())
+  dataset = random_dataset()
+  if defun:
+    model.call = tfe.defun(model.call)
+  with tf.device(device()):
+    mnist_eager.test(model, dataset)
+    
+    Training images are sampled using the provided bounding boxes, and subsequently
+cropped to the sampled bounding box. Images are additionally flipped randomly,
+then resized to the target output size (without aspect-ratio preservation).
+    
+        Returns: the prediction object to be computed in a Session
+    '''
+    # Feed the paths to the MLP: path_embeddings is
+    # [num_batch_paths, output_dim], and when we multiply it by W
+    # ([output_dim, num_classes]), we get a matrix of class distributions:
+    # [num_batch_paths, num_classes].
+    self.distributions = tf.matmul(self.path_embeddings, self.weights1)
+    
+            name, domain = args[0:2]
+        module = sanitize_module_name(name)
+    
+        def test_types(self):
+        headers = {'Cookie': 'foo=bar'}
+        response = self.fetch('/typecheck?foo=bar', headers=headers)
+        data = json_decode(response.body)
+        self.assertEqual(data, {})
+    
+        # Do a little work. Alternately, could leave this script running and
+    # poke at it with a browser.
+    client = httpclient.AsyncHTTPClient()
+    yield client.fetch('http://127.0.0.1:8888/dummy/')
+    yield client.fetch('http://127.0.0.1:8888/dummyasync/', raise_error=False)
+    
+        def contribute(self):
+        self.blackboard.common_state['problems'] += random.randint(10, 20)
+        self.blackboard.common_state['suggestions'] += random.randint(10, 20)
+        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
+        self.blackboard.common_state['progress'] += random.randint(10, 30)
     
     
-class MoveFileCommand(object):
+class CommandTest(unittest.TestCase):
+    
+        message_center.update()
+    
+    
+class TestRunnerFacilities(unittest.TestCase):
+    
+        requests *= 10000
+    client1_delegate = timeit(client1.delegate)
+    client2_delegate = timeit(client2.delegate)
+    with suppress_stdout():
+        client1_delegate(requests)
+        client2_delegate(requests)
+    # lets check which is faster
+    print(client1_delegate._time, client2_delegate._time)
+    
+        def is_satisfied_by(self, candidate):
+        return bool(self._one.is_satisfied_by(candidate) or
+                    self._other.is_satisfied_by(candidate))
