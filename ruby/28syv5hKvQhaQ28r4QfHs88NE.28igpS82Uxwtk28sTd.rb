@@ -1,85 +1,162 @@
 
         
-              # Returns a Hash of instance variables and their values, as defined by
-      # the user in the test case, which are then assigned to the view being
-      # rendered. This is generally intended for internal use and extension
-      # frameworks.
-      def view_assigns
-        Hash[_user_defined_ivars.map do |ivar|
-          [ivar[1..-1].to_sym, instance_variable_get(ivar)]
-        end]
-      end
+        FORWARD_SLASH = '/'.freeze
     
-      AUTH_HEADERS.each do |header|
-    test 'unsuccessful authentication with #{header.downcase}' do
-      @request.env[header] = encode_credentials('h4x0r')
-      get :index
+    # No trailing slash
+Benchmark.ips do |x|
+  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
+  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
+  x.compare!
+end
+
     
-    module ActionMailer
-  # This module handles everything related to mail delivery, from registering
-  # new delivery methods to configuring the mail object to be sent.
-  module DeliveryMethods
-    extend ActiveSupport::Concern
+    def fixture_site(overrides = {})
+  Jekyll::Site.new(site_configuration(overrides))
+end
     
-          text.split.each do |word|
-        if sentences.first.present? && (sentences.last + [word]).join(' ').length > len
-          sentences << [word]
+          # Group an array of items by an expression
+      #
+      # input - the object array
+      # variable - the variable to assign each item to in the expression
+      # expression -a Liquid comparison expression passed in as a string
+      #
+      # Returns the filtered array of objects
+      def group_by_exp(input, variable, expression)
+        return input unless groupable?(input)
+    
+      def tumblr
+    Tumblr.configure do |config|
+      config.consumer_key = tumblr_consumer_key
+      config.consumer_secret = tumblr_consumer_secret
+      config.oauth_token = tumblr_oauth_token
+      config.oauth_token_secret = tumblr_oauth_token_secret
+    end
+    
+    Tumblr::Client.new
+  end
+end
+    
+      def destroy
+    @services = current_user.services.find(params[:id])
+    @services.destroy
+    
+          respond_to do |format|
+        if new_credentials.map(&:save).all?
+          format.html { redirect_to user_credentials_path, notice: 'The file was successfully uploaded.'}
         else
-          sentences.last << word
+          format.html { redirect_to user_credentials_path, notice: 'One or more of the uploaded credentials was not imported due to an error. Perhaps an existing credential had the same name?'}
         end
       end
-    
-        log = StringIO.new
-    @dry_run_started_at = Time.zone.now
-    @dry_run_logger = Logger.new(log).tap { |logger|
-      logger.formatter = proc { |severity, datetime, progname, message|
-        elapsed_time = '%02d:%02d:%02d' % 2.times.inject([datetime - @dry_run_started_at]) { |(x, *xs)|
-          [*x.divmod(60), *xs]
-        }
-    }
-    }
-    
-      def tumblr_consumer_secret
-    ENV['TUMBLR_OAUTH_SECRET']
+    else
+      redirect_to user_credentials_path, notice: 'No file was chosen to be uploaded.' 
+    end
   end
     
-        def flush_errors #:nodoc:
-      @errors.each do |error, message|
-        [message].flatten.each {|m| instance.errors.add(name, m) }
-      end
+        def empty?
+      @entries.empty?
     end
     
-        def type_from_file_contents
-      type_from_mime_magic || type_from_file_command
-    rescue Errno::ENOENT => e
-      Paperclip.log('Error while determining content type: #{e}')
-      SENSIBLE_DEFAULT
+        def name=(value)
+      @name = value.try :strip
     end
     
+        def join(*args)
+      self.class.join self, *args
+    end
     
-    {
-    {  # Returns hash with styles for all classes using Paperclip.
-  # Unfortunately current version does not work with lambda styles:(
-  #   {
-  #     :User => {:avatar => [:small, :big]},
-  #     :Book => {
-  #       :cover => [:thumb, :croppable]},
-  #       :sample => [:thumb, :big]},
-  #     }
-  #   }
-  def self.current_attachments_styles
-    Hash.new.tap do |current_styles|
-      Paperclip::AttachmentRegistry.each_definition do |klass, attachment_name, attachment_attributes|
-        # TODO: is it even possible to take into account Procs?
-        next if attachment_attributes[:styles].kind_of?(Proc)
-        attachment_attributes[:styles].try(:keys).try(:each) do |style_name|
-          klass_sym = klass.to_s.to_sym
-          current_styles[klass_sym] ||= Hash.new
-          current_styles[klass_sym][attachment_name.to_sym] ||= Array.new
-          current_styles[klass_sym][attachment_name.to_sym] << style_name.to_sym
-          current_styles[klass_sym][attachment_name.to_sym].map!(&:to_s).sort!.map!(&:to_sym).uniq!
+            css('.toplang', '#quickview', '.top').remove
+    
+            css('.bs-docs-sidenav > li').each do |node|
+          link = node.at_css('a')
+          name = link.content
+          next if IGNORE_ENTRIES.include?(name)
+    
+            css('.method-name', '.property-name').each do |node|
+          source = node.at_css('a')
+          source.before(%(<span class='name'>#{source.content}</span>))
+          source.content = 'source'
+          source['class'] = 'source'
         end
+    
+      def test_callcc_reenter
+    bug9105 = '[ruby-dev:47803] [Bug #9105]'
+    assert_nothing_raised(RuntimeError, bug9105) do
+      h = @cls[1=>2,3=>4]
+      c = nil
+      f = false
+      h.each { |i|
+        callcc {|c2| c = c2 } unless c
+        h.delete(1) if f
+      }
+      unless f
+        f = true
+        c.call
       end
     end
   end
-  private_class_method :current_attachments_styles
+    
+      it 'decodes the number of bytes specified by the count modifier including whitespace bytes' do
+    [ ['a bc',  ['a b', 'c']],
+      ['a\fbc', ['a\fb', 'c']],
+      ['a\nbc', ['a\nb', 'c']],
+      ['a\rbc', ['a\rb', 'c']],
+      ['a\tbc', ['a\tb', 'c']],
+      ['a\vbc', ['a\vb', 'c']]
+    ].should be_computed_by(:unpack, unpack_format(3)+unpack_format)
+  end
+    
+      it 'ignores spaces between directives' do
+    '\x01\x02'.unpack('U U').should == [1, 2]
+  end
+end
+
+    
+          sleep
+      after_sleep1 = true
+    
+    module RuboCop
+  module Cop
+    module Layout
+      # Checks for unnecessary additional spaces inside array percent literals
+      # (i.e. %i/%w).
+      #
+      # @example
+      #
+      #   # bad
+      #   %w(foo  bar  baz)
+      #   # good
+      #   %i(foo bar baz)
+      class SpaceInsideArrayPercentLiteral < Cop
+        include MatchRange
+        include PercentLiteral
+    
+                previous.push(when_node.conditions)
+          end
+        end
+    
+            def immutable_literal?(node)
+          return true if node.immutable_literal?
+    
+      context 'called with null values' do
+    it 'writes rules for other three' do
+      ruleset = 'border-top-width: 11px; ' +
+                'border-right-width: 12px; ' +
+                'border-left-width: 13px;'
+      bad_rule = 'border-bottom-width: null;'
+    
+      context 'called with two sizes' do
+    it 'applies to alternating sides' do
+      rule = 'margin: 2px 3px'
+    
+      context 'called with null values' do
+    it 'writes rules for others' do
+      ruleset = 'position: static; ' +
+                'top: 11px; ' +
+                'left: 13px;'
+      bad_rule = 'position-bottom: null; position-right: null;'
+    
+      context 'expands invalid text inputs' do
+    it 'finds selectors' do
+      list = @inputs_list.map { |input| '#{input}:invalid' }
+      list = list.join(', ')
+      ruleset = 'content: #{list};'
