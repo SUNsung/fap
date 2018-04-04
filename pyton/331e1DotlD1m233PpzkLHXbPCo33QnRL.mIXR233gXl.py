@@ -1,191 +1,178 @@
 
         
-            infile, outfile = args
+            '''
+    is_windows = is_windows
+    config_dir = DEFAULT_CONFIG_DIR
+    stdin = sys.stdin
+    stdin_isatty = stdin.isatty()
+    stdin_encoding = None
+    stdout = sys.stdout
+    stdout_isatty = stdout.isatty()
+    stdout_encoding = None
+    stderr = sys.stderr
+    stderr_isatty = stderr.isatty()
+    colors = 256
+    if not is_windows:
+        if curses:
+            try:
+                curses.setupterm()
+                colors = curses.tigetnum('colors')
+            except curses.error:
+                pass
+    else:
+        # noinspection PyUnresolvedReferences
+        import colorama.initialise
+        stdout = colorama.initialise.wrap_stream(
+            stdout, convert=None, strip=None,
+            autoreset=True, wrap=True
+        )
+        stderr = colorama.initialise.wrap_stream(
+            stderr, convert=None, strip=None,
+            autoreset=True, wrap=True
+        )
+        del colorama
     
-    README_FILE = 'README.md'
-helptext = sys.stdin.read()
-    
-    for page in itertools.count(1):
-    releases = json.loads(compat_urllib_request.urlopen(
-        'https://api.github.com/repos/rg3/youtube-dl/releases?page=%s' % page
-    ).read().decode('utf-8'))
-    
-        ydl.report_warning = _report_warning
+        def format_body(self, content, mime):
+        if is_valid_mime(mime):
+            for p in self.enabled_plugins:
+                content = p.format_body(content, mime)
+        return content
 
     
-        def test_youtube_playlist_matching(self):
-        assertPlaylist = lambda url: self.assertMatch(url, ['youtube:playlist'])
-        assertPlaylist('ECUl4u3cNGP61MdtwGTqZA0MreSaDybji8')
-        assertPlaylist('UUBABnxM4Ar9ten8Mdjj1j0Q')  # 585
-        assertPlaylist('PL63F0C78739B09958')
-        assertPlaylist('https://www.youtube.com/playlist?list=UUBABnxM4Ar9ten8Mdjj1j0Q')
-        assertPlaylist('https://www.youtube.com/course?list=ECUl4u3cNGP61MdtwGTqZA0MreSaDybji8')
-        assertPlaylist('https://www.youtube.com/playlist?list=PLwP_SiAcdui0KVebT0mU9Apz359a4ubsC')
-        assertPlaylist('https://www.youtube.com/watch?v=AV6J6_AeFEQ&playnext=1&list=PL4023E734DA416012')  # 668
-        self.assertFalse('youtube:playlist' in self.matching_ies('PLtS2H6bU1M'))
-        # Top tracks
-        assertPlaylist('https://www.youtube.com/playlist?list=MCUS.20142101')
     
-    
-class TestSWFInterpreter(unittest.TestCase):
-    pass
-    
-    
-class RtspFD(FileDownloader):
-    def real_download(self, filename, info_dict):
-        url = info_dict['url']
-        self.report_destination(filename)
-        tmpfilename = self.temp_name(filename)
-    
-            return {
-            'id': video_id,
-            'url': video_url,
-            'ext': 'mp4',
-            'title': title,
-            'description': description,
-            'thumbnail': thumbnail,
-            'categories': categories,
-            'duration': duration,
-            'view_count': view_count,
-            'age_limit': 18,
-        }
-
-    
-        def run(self, args, opts):
-        # load contracts
-        contracts = build_component_list(self.settings.getwithbase('SPIDER_CONTRACTS'))
-        conman = ContractsManager(load_object(c) for c in contracts)
-        runner = TextTestRunner(verbosity=2 if opts.verbose else 1)
-        result = TextTestResult(runner.stream, runner.descriptions, runner.verbosity)
-    
-        def from_spider(self, spider, results):
-        requests = []
-        for method in self.tested_methods_from_spidercls(type(spider)):
-            bound_method = spider.__getattribute__(method)
-            requests.append(self.from_method(bound_method, results))
-    
-    ##
-# imaginary tree navigation type; traverse 'get child' link
-DOWN = 2
-##
-#imaginary tree navigation type; finish with a child list
-UP = 3
-    
-        def __init__(self, a, b, input):
-        RecognitionException.__init__(self, input)
-    
-        def setUp(self):
-        from acme.errors import MissingNonce
-        self.response = mock.MagicMock(headers={})
-        self.response.request.method = 'FOO'
-        self.error = MissingNonce(self.response)
-    
-    
-class NotifyTests(unittest.TestCase):
-    '''Tests for the notifier.'''
-    
-        def extract(self, **kwargs):
-        for i in self.streams:
-            s = self.streams[i]
-            _, s['container'], s['size'] = url_info(s['url'])
-            s['src'] = [s['url']]
-    
-    def kugou_download_by_hash(title,hash_val,output_dir = '.', merge = True, info_only = False):
-    #sample
-    #url_sample:http://www.kugou.com/yy/album/single/536957.html
-    #hash ->key  md5(hash+kgcloud')->key  decompile swf
-    #cmd 4 for mp3 cmd 3 for m4a
-    key=hashlib.new('md5',(hash_val+'kgcloud').encode('utf-8')).hexdigest()
-    html=get_html('http://trackercdn.kugou.com/i/?pid=6&key=%s&acceptMp3=1&cmd=4&hash=%s'%(key,hash_val))
-    j=loads(html)
-    url=j['url']
-    songtype, ext, size = url_info(url)
-    print_info(site_info, title, songtype, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge=merge)
-    
-    site_info = 'kuwo.cn'
-download = kuwo_download
-# download_playlist = playlist_not_supported('kugou')
-# download_playlist=playlist_not_supported('kuwo')
-download_playlist=kuwo_playlist_download
-
-    
-        If ``c`` is None, the mean is calculated in one pass, and the deviations
-    from the mean are calculated in a second pass. Otherwise, deviations are
-    calculated from ``c`` as given. Use the second case with care, as it can
-    lead to garbage results.
+def patharg(path):
     '''
-    if c is None:
-        c = mean(data)
-    T, total, count = _sum((x-c)**2 for x in data)
-    # The following sum should mathematically equal zero, but due to rounding
-    # error may not.
-    U, total2, count2 = _sum((x-c) for x in data)
-    assert T == U and count == count2
-    total -=  total2**2/len(data)
-    assert not total < 0, 'negative sum of square deviations: %f' % total
-    return (T, total)
+    Back slashes need to be escaped in ITEM args,
+    even in Windows paths.
     
-            if self.closed:
-            raise ValueError('I/O operation on closed file')
-        if not self.seekable:
-            raise OSError('cannot seek')
-        if whence == 1:
-            pos = pos + self.size_read
-        elif whence == 2:
-            pos = pos + self.chunksize
-        if pos < 0 or pos > self.chunksize:
-            raise RuntimeError
-        self.file.seek(self.offset + pos, 0)
-        self.size_read = pos
+        exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
     
-            ``parse_float``, if specified, will be called with the string
-        of every JSON float to be decoded. By default this is equivalent to
-        float(num_str). This can be used to use another datatype or parser
-        for JSON floats (e.g. decimal.Decimal).
     
-    NUMBER_RE = re.compile(
-    r'(-?(?:0|[1-9]\d*))(\.\d+)?([eE][-+]?\d+)?',
-    (re.VERBOSE | re.MULTILINE | re.DOTALL))
+def test_follow_redirect_output_options(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=h',
+             '--history-print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 2
+    assert 'HTTP/1.1 302 FOUND' not in r
+    assert HTTP_OK in r
     
-    simple_escapes = {'a': '\a',
-                  'b': '\b',
-                  'f': '\f',
-                  'n': '\n',
-                  'r': '\r',
-                  't': '\t',
-                  'v': '\v',
-                  ''': ''',
-                  ''': ''',
-                  '\\': '\\'}
+        def test_cert_and_key(self, httpbin_secure):
+        r = http(httpbin_secure + '/get',
+                 '--cert', CLIENT_CERT,
+                 '--cert-key', CLIENT_KEY)
+        assert HTTP_OK in r
     
-        def _getline(self, strip_crlf=True):
-        '''Internal: return one line from the server, stripping _CRLF.
-        Raise EOFError if the connection is closed.
-        Returns a bytes object.'''
-        line = self.file.readline(_MAXLINE +1)
-        if len(line) > _MAXLINE:
-            raise NNTPDataError('line too long')
-        if self.debugging > 1:
-            print('*get*', repr(line))
-        if not line: raise EOFError
-        if strip_crlf:
-            if line[-2:] == _CRLF:
-                line = line[:-2]
-            elif line[-1:] in _CRLF:
-                line = line[:-1]
-        return line
+                RuleRouter([
+                Rule(PathMatches('/handler'), Target),
+                # ... more rules
+            ])
     
-    int WINAPI WinMain(
-    HINSTANCE hInstance,      // handle to current instance
-    HINSTANCE hPrevInstance,  // handle to previous instance
-    LPSTR lpCmdLine,          // pointer to command line
-    int nCmdShow              // show state of window
-    )
-{
-    extern int Py_FrozenMain(int, char **);
-    PyImport_FrozenModules = _PyImport_FrozenModules;
-    return Py_FrozenMain(__argc, __argv);
+        .. versionadded:: 4.4
+    '''
+    return _re_unescape_pattern.sub(_re_unescape_replacement, s)
+    
+        @gen_test
+    def test_task_done_delay(self):
+        # Verify it is task_done(), not get(), that unblocks join().
+        q = self.queue_class()
+        q.put_nowait(0)
+        join = q.join()
+        self.assertFalse(join.done())
+        yield q.get()
+        self.assertFalse(join.done())
+        yield gen.moment
+        self.assertFalse(join.done())
+        q.task_done()
+        self.assertTrue(join.done())
+    
+        logging.warning('Starting fetch with simple client')
+    simple_client = SimpleAsyncHTTPClient()
+    simple_client.fetch('http://localhost:%d/' % options.port,
+                        callback=callback)
+    IOLoop.current().start()
+    
+        def wait_for_messages(self, cursor=None):
+        # Construct a Future to return to our caller.  This allows
+        # wait_for_messages to be yielded from a coroutine even though
+        # it is not a coroutine itself.  We will set the result of the
+        # Future when results are available.
+        result_future = Future()
+        if cursor:
+            new_count = 0
+            for msg in reversed(self.cache):
+                if msg['id'] == cursor:
+                    break
+                new_count += 1
+            if new_count:
+                result_future.set_result(self.cache[-new_count:])
+                return result_future
+        self.waiters.add(result_future)
+        return result_future
+    
+    extension_mapping = {
+    'rss': ('xml', 'application/atom+xml; charset=UTF-8'),
+    'xml': ('xml', 'application/atom+xml; charset=UTF-8'),
+    'js': ('js', 'text/javascript; charset=UTF-8'),
+    'embed': ('htmllite', 'text/javascript; charset=UTF-8'),
+    'mobile': ('mobile', 'text/html; charset=UTF-8'),
+    'png': ('png', 'image/png'),
+    'css': ('css', 'text/css'),
+    'csv': ('csv', 'text/csv; charset=UTF-8'),
+    'api': (api_type(), 'application/json; charset=UTF-8'),
+    'json-html': (api_type('html'), 'application/json; charset=UTF-8'),
+    'json-compact': (api_type('compact'), 'application/json; charset=UTF-8'),
+    'compact': ('compact', 'text/html; charset=UTF-8'),
+    'json': (api_type(), 'application/json; charset=UTF-8'),
+    'i': ('compact', 'text/html; charset=UTF-8'),
 }
-'''
+    
+        @csrf_exempt
+    @json_validate(
+        VRatelimit(rate_ip=True, prefix='rate_register_'),
+        signature=VSigned(),
+        name=VUname(['user']),
+        email=ValidEmail('email'),
+        password=VPasswordChange(['passwd', 'passwd2']),
+    )
+    def POST_register(self, responder, name, email, password, **kwargs):
+        kwargs.update(dict(
+            controller=self,
+            form=responder('noop'),
+            responder=responder,
+            name=name,
+            email=email,
+            password=password,
+        ))
+        return handle_register(**kwargs)
+    
+        @require_oauth2_scope('identity')
+    @validate(
+        VUser(),
+        fields=VList(
+            'fields',
+            choices=PREFS_JSON_SPEC.spec.keys(),
+            error=errors.errors.NON_PREFERENCE,
+        ),
+    )
+    @api_doc(api_section.account, uri='/api/v1/me/prefs')
+    def GET_prefs(self, fields):
+        '''Return the preference settings of the logged in user'''
+        resp = PrefsJsonTemplate(fields).data(c.oauth_user)
+        return self.api_wrapper(resp)
+    
+            An iden is given as the `captcha` field with a `BAD_CAPTCHA`
+        error, you should use this endpoint if you get a
+        `BAD_CAPTCHA` error response.
+    
+        g.log.debug('Pulling %s for help' % u)
