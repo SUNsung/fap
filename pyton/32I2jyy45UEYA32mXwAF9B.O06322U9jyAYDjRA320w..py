@@ -1,93 +1,109 @@
 
         
-          Args:
-    config: ConfigDict containing the feature configurations.
+                if cmd.startswith('#'):
+            log.write('%s' % cmd)
+            continue
     
-      Returns:
-    Dictionary containing 'time_series_features' and 'aux_features'. Each is a
-        dictionary of named numpy arrays of shape [batch_size, length].
-  '''
-  features = {}
-  features['time_series_features'] = {
-      name: np.random.random([batch_size, spec['length']])
-      for name, spec in feature_spec.items() if spec['is_time_series']
-  }
-  features['aux_features'] = {
-      name: np.random.random([batch_size, spec['length']])
-      for name, spec in feature_spec.items() if not spec['is_time_series']
-  }
-  return features
+            # include stuff after end if it's last index in buffer
+        # So, if they did an insertAfter(lastValidIndex, 'foo'), include
+        # foo if end==lastValidIndex.
+        if end == len(self.tokens) - 1:
+            # Scan any remaining operations after last token
+            # should be included (they will be inserts).
+            for i in sorted(indexToOp.keys()):
+                op = indexToOp[i]
+                if op.index >= len(self.tokens)-1:
+                    buf.write(op.text)
     
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+        def test_small_ints(self):
+        for i in range(-5, 257):
+            self.assertIs(i, i + 0)
+            self.assertIs(i, i * 1)
+            self.assertIs(i, i - 0)
+            self.assertIs(i, i // 1)
+            self.assertIs(i, i & -1)
+            self.assertIs(i, i | 0)
+            self.assertIs(i, i ^ 0)
+            self.assertIs(i, ~~i)
+            self.assertIs(i, i**1)
+            self.assertIs(i, int(str(i)))
+            self.assertIs(i, i<<2>>2, str(i))
+        # corner cases
+        i = 1 << 70
+        self.assertIs(i - i, 0)
+        self.assertIs(0 * i, 0)
     
-      return best_spline, best_spline_mask, best_bkspace, bad_bkspaces
-
+            self.assertIn(entry.get(), 'hello')
+        egi = entry.grid_info()
+        equal(int(egi['row']), 0)
+        equal(int(egi['column']), 1)
+        equal(int(egi['rowspan']), 1)
+        equal(int(egi['columnspan']), 1)
+        equal(self.dialog.row, 1)
     
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+            for case in cases:
+            C = cookies.SimpleCookie()
+            C.load(case['data'])
+            self.assertEqual(repr(C), case['repr'])
+            self.assertEqual(C.output(sep='\n'), case['output'])
+            for k, v in sorted(case['dict'].items()):
+                self.assertEqual(C[k].value, v)
     
+            if self.closed:
+            raise ValueError('I/O operation on closed file')
+        if not self.seekable:
+            raise OSError('cannot seek')
+        if whence == 1:
+            pos = pos + self.size_read
+        elif whence == 2:
+            pos = pos + self.chunksize
+        if pos < 0 or pos > self.chunksize:
+            raise RuntimeError
+        self.file.seek(self.offset + pos, 0)
+        self.size_read = pos
     
-def evaluate(defun=False):
-  model = mnist.Model(data_format())
-  dataset = random_dataset()
-  if defun:
-    model.call = tfe.defun(model.call)
-  with tf.device(device()):
-    mnist_eager.test(model, dataset)
+        def _append_message(self, message):
+        '''Append message to mailbox and return (start, stop) offsets.'''
+        self._file.seek(0, 2)
+        before = self._file.tell()
+        if len(self._toc) == 0 and not self._pending:
+            # This is the first message, and the _pre_mailbox_hook
+            # hasn't yet been called. If self._pending is True,
+            # messages have been removed, so _pre_mailbox_hook must
+            # have been called already.
+            self._pre_mailbox_hook(self._file)
+        try:
+            self._pre_message_hook(self._file)
+            offsets = self._install_message(message)
+            self._post_message_hook(self._file)
+        except BaseException:
+            self._file.truncate(before)
+            raise
+        self._file.flush()
+        self._file_length = self._file.tell()  # Record current length of mailbox
+        return offsets
     
-    Training images are sampled using the provided bounding boxes, and subsequently
-cropped to the sampled bounding box. Images are additionally flipped randomly,
-then resized to the target output size (without aspect-ratio preservation).
+        def _get_baseURI(self):
+        return self.baseURI
+    def _set_baseURI(self, uri):
+        self.baseURI = uri
     
-        Returns: the prediction object to be computed in a Session
-    '''
-    # Feed the paths to the MLP: path_embeddings is
-    # [num_batch_paths, output_dim], and when we multiply it by W
-    # ([output_dim, num_classes]), we get a matrix of class distributions:
-    # [num_batch_paths, num_classes].
-    self.distributions = tf.matmul(self.path_embeddings, self.weights1)
+        # override in derived classes
+    def _extractrgb(self, mo):
+        return [int(x) for x in mo.group('red', 'green', 'blue')]
     
-            name, domain = args[0:2]
-        module = sanitize_module_name(name)
+            # C function: METH_NOARGS
+        (globals, (), IGNORE_RESULT),
     
-        def test_types(self):
-        headers = {'Cookie': 'foo=bar'}
-        response = self.fetch('/typecheck?foo=bar', headers=headers)
-        data = json_decode(response.body)
-        self.assertEqual(data, {})
+            Returns a string containing documentation for the specified method.'''
     
-        # Do a little work. Alternately, could leave this script running and
-    # poke at it with a browser.
-    client = httpclient.AsyncHTTPClient()
-    yield client.fetch('http://127.0.0.1:8888/dummy/')
-    yield client.fetch('http://127.0.0.1:8888/dummyasync/', raise_error=False)
+            pyop_m_self = self.pyop_field('m_self')
+        if pyop_m_self.is_null():
+            return BuiltInFunctionProxy(ml_name)
+        else:
+            return BuiltInMethodProxy(ml_name, pyop_m_self)
     
-        def contribute(self):
-        self.blackboard.common_state['problems'] += random.randint(10, 20)
-        self.blackboard.common_state['suggestions'] += random.randint(10, 20)
-        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
-        self.blackboard.common_state['progress'] += random.randint(10, 30)
-    
-    
-class CommandTest(unittest.TestCase):
-    
-        message_center.update()
-    
-    
-class TestRunnerFacilities(unittest.TestCase):
-    
-        requests *= 10000
-    client1_delegate = timeit(client1.delegate)
-    client2_delegate = timeit(client2.delegate)
-    with suppress_stdout():
-        client1_delegate(requests)
-        client2_delegate(requests)
-    # lets check which is faster
-    print(client1_delegate._time, client2_delegate._time)
-    
-        def is_satisfied_by(self, candidate):
-        return bool(self._one.is_satisfied_by(candidate) or
-                    self._other.is_satisfied_by(candidate))
+            def NoNullHandle(value):
+            if not value:
+                raise WinError()
+            return value
