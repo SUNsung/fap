@@ -1,128 +1,109 @@
 
         
-          def relative_url_redirect_with_status_hash
-    redirect_to('/things/stuff', status: 301)
-  end
-    
-            # Require the adapter itself and give useful feedback about
-        #   1. Missing adapter gems and
-        #   2. Adapter gems' missing dependencies.
-        path_to_adapter = 'action_cable/subscription_adapter/#{adapter}'
-        begin
-          require path_to_adapter
-        rescue LoadError => e
-          # We couldn't require the adapter itself. Raise an exception that
-          # points out config typos and missing gems.
-          if e.path == path_to_adapter
-            # We can assume that a non-builtin adapter was specified, so it's
-            # either misspelled or missing from Gemfile.
-            raise e.class, 'Could not load the '#{adapter}' Action Cable pubsub adapter. Ensure that the adapter is spelled correctly in config/cable.yml and that you've added the necessary adapter gem to your Gemfile.', e.backtrace
-    
-            def test_spec_name_on_key_lookup
-          spec = spec(:readonly, 'readonly' => { 'adapter' => 'sqlite3' })
-          assert_equal 'readonly', spec.name
-        end
-    
-      test 'helpers' do
-    assert_response_code_range 200..299, :successful?
-    assert_response_code_range [404],    :not_found?
-    assert_response_code_range 300..399, :redirection?
-    assert_response_code_range 500..599, :server_error?
-    assert_response_code_range 400..499, :client_error?
-  end
-    
-        test 'middleware stack accepts only and except as options' do
-      result = ActionsController.action(:show).call(env_for('/'))
-      assert_equal 'First!', result[1]['Middleware-Order']
-    
-        def wrap_delivery_behavior!(*args) # :nodoc:
-      self.class.wrap_delivery_behavior(message, *args)
-    end
-  end
-end
-
-    
-        # An email was generated.
-    def process(event)
-      debug do
-        mailer = event.payload[:mailer]
-        action = event.payload[:action]
-        '#{mailer}##{action}: processed outbound mail in #{event.duration.round(1)}ms'
-      end
+            def self.git_log_between(pretty_format, from, to, merge_commit_filtering, date_format = nil, ancestry_path)
+      command = ['git log']
+      command << '--pretty=\'#{pretty_format}\''
+      command << '--date=\'#{date_format}\'' if date_format
+      command << '--ancestry-path' if ancestry_path
+      command << '#{from.shellescape}...#{to.shellescape}'
+      command << git_log_merge_commit_filtering_option(merge_commit_filtering)
+      Actions.sh(command.compact.join(' '), log: false).chomp
+    rescue
+      nil
     end
     
-          private
-        def method_missing(method_name, *args)
-          if @mailer.action_methods.include?(method_name.to_s)
-            ActionMailer::Parameterized::MessageDelivery.new(@mailer, method_name, @params, *args)
-          else
-            super
-          end
-        end
-    
-            def application_mailer_file_name
-          @_application_mailer_file_name ||= if mountable_engine?
-            'app/mailers/#{namespaced_path}/application_mailer.rb'
-          else
-            'app/mailers/application_mailer.rb'
-          end
-        end
-    end
-  end
-end
-
-    
-      def validate_type
-    errors.add(:type, 'cannot be changed once an instance has been created') if type_changed? && !new_record?
-    errors.add(:type, 'is not a valid type') unless self.class.valid_type?(type)
-  end
-    
-          _form_configurable_fields[name] = options
-    end
-    
-          respond_with do |format|
-        format.html { redirect_to admin_pods_path }
-        format.json { render json: PodPresenter.new(pod).as_json }
-      end
-    end
-  end
-end
-
-    
-          def http_error_page_as_json(e)
-        render json: {error: :invalid_request, error_description: e.message}, status: 400
-      end
-    
-          def validate!
-        super
-        raise Informative, 'Existing Podfile found in directory' unless config.podfile_path_in_dir(Pathname.pwd).nil?
-        if @project_path
-          help! 'Xcode project at #{@project_path} does not exist' unless File.exist? @project_path
-          project_path = @project_path
+            if params[:name]
+          escaped_name = params[:name].shellescape
+          keychain_path = '~/Library/Keychains/#{escaped_name}'
         else
-          raise Informative, 'No Xcode project found, please specify one' unless @project_paths.length > 0
-          raise Informative, 'Multiple Xcode projects found, please specify one' unless @project_paths.length == 1
-          project_path = @project_paths.first
+          keychain_path = params[:path].shellescape
         end
-        @xcode_project = Xcodeproj::Project.open(project_path)
+    
+          it 'does switch to plain text when xml is toggled off' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            cloc(xml: false)
+          end').runner.execute(:test)
+    
+        context 'GIT repository' do
+      before do
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_svn?).and_return(false)
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git_svn?).and_return(false)
+        expect(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git?).and_return(true)
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_hg?).and_return(false)
       end
     
-    # usage rake isolate[my-post]
-desc 'Move all other posts than the one currently being worked on to a temporary stash location (stash) so regenerating the site happens much more quickly.'
-task :isolate, :filename do |t, args|
-  stash_dir = '#{source_dir}/#{stash_dir}'
-  FileUtils.mkdir(stash_dir) unless File.exist?(stash_dir)
-  Dir.glob('#{source_dir}/#{posts_dir}/*.*') do |post|
-    FileUtils.mv post, stash_dir unless post.include?(args.filename)
+          it 'it increments all targets minor version number' do
+        Fastlane::FastFile.new.parse('lane :test do
+          increment_version_number(bump_type: 'minor')
+        end').runner.execute(:test)
+    
+      def failure
+    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
+    redirect_to after_omniauth_failure_path_for(resource_name)
+  end
+    
+        # The path used after unlocking the resource
+    def after_unlock_path_for(resource)
+      new_session_path(resource)  if is_navigational_format?
+    end
+    
+      if respond_to?(:helper_method)
+    helpers = %w(resource scope_name resource_name signed_in_resource
+                 resource_class resource_params devise_mapping)
+    helper_method(*helpers)
+  end
+    
+    module Devise
+  module Controllers
+    # A module that may be optionally included in a controller in order
+    # to provide remember me behavior. Useful when signing in is done
+    # through a callback, like in OmniAuth.
+    module Rememberable
+      # Return default cookie values retrieved from session options.
+      def self.cookie_values
+        Rails.configuration.session_options.slice(:path, :domain, :secure)
+      end
+    
+            routes.each do |module_name, actions|
+          [:path, :url].each do |path_or_url|
+            actions.each do |action|
+              action = action ? '#{action}_' : ''
+              method = :'#{action}#{module_name}_#{path_or_url}'
+    
+      def recipients(payload = {})
+    emails = interpolated(payload)['recipients']
+    if emails.present?
+      if emails.is_a?(String)
+        [emails]
+      else
+        emails
+      end
+    else
+      [user.email]
+    end
+  end
+    
+      def evernote_consumer_key
+    (config = Devise.omniauth_configs[:evernote]) && config.strategy.consumer_key
+  end
+    
+      def tumblr
+    Tumblr.configure do |config|
+      config.consumer_key = tumblr_consumer_key
+      config.consumer_secret = tumblr_consumer_secret
+      config.oauth_token = tumblr_oauth_token
+      config.oauth_token_secret = tumblr_oauth_token_secret
+    end
+    
+    Tumblr::Client.new
   end
 end
     
-        def initialize(tag_name, markup, tokens)
-      attributes = ['class', 'src', 'width', 'height', 'title']
+            MSG = 'Use only a single space inside array percent literal.'.freeze
+        MULTIPLE_SPACES_BETWEEN_ITEMS_REGEX =
+          /(?:[\S&&[^\\]](?:\\ )*)( {2,})(?=\S)/
     
-        def initialize(tag_name, markup, tokens)
-      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
-      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
-      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
-      super
-    end
+            def autocorrect(node)
+          # Regexp#match can take a second argument, but this cop doesn't
+          # register an offense in that case
+          return unless node.first_argument.regexp_type?
