@@ -1,217 +1,143 @@
 
         
-            def test_database_schema_hive(self):
-        sqlalchemy_uri = 'hive://hive@hive.airbnb.io:10000/default?auth=NOSASL'
-        model = Database(sqlalchemy_uri=sqlalchemy_uri)
-        db = make_url(model.get_sqla_engine().url).database
-        self.assertEquals('default', db)
+        '''
+    The approach taken is explained below. I decided to do it simply.
+    Initially I was considering parsing the data into some sort of
+    structure and then generating an appropriate README. I am still
+    considering doing it - but for now this should work. The only issue
+    I see is that it only sorts the entries at the lowest level, and that
+    the order of the top-level contents do not match the order of the actual
+    entries.
     
-        # DESCRIBE | DESC qualifiedName
-    def test_describe(self):
-        self.assertEquals({'t1'}, self.extract_tables('DESCRIBE t1'))
-        self.assertEquals({'t1'}, self.extract_tables('DESC t1'))
+    filenames = {
+    'bin': 'youtube-dl',
+    'exe': 'youtube-dl.exe',
+    'tar': 'youtube-dl-%s.tar.gz' % version}
+build_dir = os.path.join('..', '..', 'build', version)
+for key, filename in filenames.items():
+    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
+    fn = os.path.join(build_dir, filename)
+    with open(fn, 'rb') as f:
+        data = f.read()
+    if not data:
+        raise ValueError('File %s is empty!' % fn)
+    sha256sum = hashlib.sha256(data).hexdigest()
+    new_version[key] = (url, sha256sum)
     
-    
-cleanup_permissions()
-
-    
-        id = Column(Integer, primary_key=True)
-    column_name = Column(String(255))
-    verbose_name = Column(String(1024))
-    is_active = Column(Boolean, default=True)
-    type = Column(String(32))
-    groupby = Column(Boolean, default=False)
-    count_distinct = Column(Boolean, default=False)
-    sum = Column(Boolean, default=False)
-    avg = Column(Boolean, default=False)
-    max = Column(Boolean, default=False)
-    min = Column(Boolean, default=False)
-    filterable = Column(Boolean, default=False)
-    description = Column(Text)
-    is_dttm = None
-    
-        list_columns = [
-        'link', 'database',
-        'changed_by_', 'modified']
-    order_columns = ['modified']
-    add_columns = ['database', 'schema', 'table_name']
-    edit_columns = [
-        'table_name', 'sql', 'filter_select_enabled', 'slices',
-        'fetch_values_predicate', 'database', 'schema',
-        'description', 'owner',
-        'main_dttm_col', 'default_endpoint', 'offset', 'cache_timeout']
-    show_columns = edit_columns + ['perm']
-    related_views = [TableColumnInlineView, SqlMetricInlineView]
-    base_order = ('changed_on', 'desc')
-    search_columns = (
-        'database', 'schema', 'table_name', 'owner',
-    )
-    description_columns = {
-        'slices': _(
-            'The list of slices associated with this table. By '
-            'altering this datasource, you may change how these associated '
-            'slices behave. '
-            'Also note that slices need to point to a datasource, so '
-            'this form will fail at saving if removing slices from a '
-            'datasource. If you want to change the datasource for a slice, '
-            'overwrite the slice from the 'explore view''),
-        'offset': _('Timezone offset (in hours) for this datasource'),
-        'table_name': _(
-            'Name of the table that exists in the source database'),
-        'schema': _(
-            'Schema, as used only in some databases like Postgres, Redshift '
-            'and DB2'),
-        'description': Markup(
-            'Supports <a href='https://daringfireball.net/projects/markdown/'>'
-            'markdown</a>'),
-        'sql': _(
-            'This fields acts a Superset view, meaning that Superset will '
-            'run a query against this string as a subquery.',
-        ),
-        'fetch_values_predicate': _(
-            'Predicate applied when fetching distinct value to '
-            'populate the filter control component. Supports '
-            'jinja template syntax. Applies only when '
-            '`Enable Filter Select` is on.',
-        ),
-        'default_endpoint': _(
-            'Redirects to this endpoint when clicking on the table '
-            'from the table list'),
-        'filter_select_enabled': _(
-            'Whether to populate the filter's dropdown in the explore '
-            'view's filter section with a list of distinct values fetched '
-            'from the backend on the fly'),
-    }
-    base_filters = [['id', DatasourceFilter, lambda: []]]
-    label_columns = {
-        'slices': _('Associated Charts'),
-        'link': _('Table'),
-        'changed_by_': _('Changed By'),
-        'database': _('Database'),
-        'changed_on_': _('Last Changed'),
-        'filter_select_enabled': _('Enable Filter Select'),
-        'schema': _('Schema'),
-        'default_endpoint': _('Default Endpoint'),
-        'offset': _('Offset'),
-        'cache_timeout': _('Cache Timeout'),
-        'table_name': _('Table Name'),
-        'fetch_values_predicate': _('Fetch Values Predicate'),
-        'owner': _('Owner'),
-        'main_dttm_col': _('Main Datetime Column'),
-        'description': _('Description'),
-    }
-    
-        # find if the column was already imported
-    existing_column = lookup_obj(i_obj)
-    i_obj.table = None
-    if existing_column:
-        existing_column.override(i_obj)
-        session.flush()
-        return existing_column
-    
-    import logging
-from logging.config import fileConfig
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
     
-def _convert(value, T):
-    '''Convert value to given numeric type T.'''
-    if type(value) is T:
-        # This covers the cases where T is Fraction, or where value is
-        # a NAN or INF (Decimal or float).
-        return value
-    if issubclass(T, int) and value.denominator != 1:
-        T = float
+def try_rm(filename):
+    ''' Remove a file if it exists '''
     try:
-        # FIXME: what do we do if this overflows?
-        return T(value)
-    except TypeError:
-        if issubclass(T, Decimal):
-            return T(value.numerator)/T(value.denominator)
-        else:
+        os.remove(filename)
+    except OSError as ose:
+        if ose.errno != errno.ENOENT:
             raise
     
-        def _explain_to(self, message):
-        '''Copy Maildir-specific state to message insofar as possible.'''
-        if isinstance(message, MaildirMessage):
-            message.set_flags(self.get_flags())
-            message.set_subdir(self.get_subdir())
-            message.set_date(self.get_date())
-        elif isinstance(message, _mboxMMDFMessage):
-            flags = set(self.get_flags())
-            if 'S' in flags:
-                message.add_flag('R')
-            if self.get_subdir() == 'cur':
-                message.add_flag('O')
-            if 'T' in flags:
-                message.add_flag('D')
-            if 'F' in flags:
-                message.add_flag('F')
-            if 'R' in flags:
-                message.add_flag('A')
-            message.set_from('MAILER-DAEMON', time.gmtime(self.get_date()))
-        elif isinstance(message, MHMessage):
-            flags = set(self.get_flags())
-            if 'S' not in flags:
-                message.add_sequence('unseen')
-            if 'R' in flags:
-                message.add_sequence('replied')
-            if 'F' in flags:
-                message.add_sequence('flagged')
-        elif isinstance(message, BabylMessage):
-            flags = set(self.get_flags())
-            if 'S' not in flags:
-                message.add_label('unseen')
-            if 'T' in flags:
-                message.add_label('deleted')
-            if 'R' in flags:
-                message.add_label('answered')
-            if 'P' in flags:
-                message.add_label('forwarded')
-        elif isinstance(message, Message):
-            pass
-        else:
-            raise TypeError('Cannot convert to specified type: %s' %
-                            type(message))
+            webpage = self._download_webpage(url, playlist_id)
+        title = self._html_search_regex(
+            r'<h1 class='playlist-name'[^>]*?>(.*?)</h1>', webpage, 'title')
+        description = self._html_search_regex(
+            r'<p class='excerpt'[^>]*?>(.*?)</p>',
+            webpage, 'description', fatal=False)
+        urls = re.findall(
+            r'<li class='lecture-preview'>\s*?<a target='_blank' href='([^']+)'>',
+            webpage)
+        entries = [self.url_result(u) for u in urls]
     
-        def abort(self):
-        # What does it mean to 'clear' a document?  Does the
-        # documentElement disappear?
-        raise NotImplementedError(
-            'haven't figured out what this means yet')
+            return self._extract_nuevo(
+            'http://www.anitube.se/nuevo/econfig.php?key=%s' % key, video_id)
+
     
-            self.assertEqual(s(1, 2), 3)
-        self.assertEqual(c(1, 2), 3)
-        # The following no longer raises a TypeError - it is now
-        # possible, as in C, to call cdecl functions with more parameters.
-        #self.assertRaises(TypeError, c, 1, 2, 3)
-        self.assertEqual(c(1, 2, 3, 4, 5, 6), 3)
-        if not WINFUNCTYPE is CFUNCTYPE:
-            self.assertRaises(TypeError, s, 1, 2, 3)
+        try:
+        r = http(
+            httpbin + BASIC_AUTH_URL,
+            '--auth-type',
+            Plugin.auth_type,
+            '--auth',
+            USERNAME,
+        )
+        assert HTTP_OK in r
+        assert r.json == AUTH_OK
+    finally:
+        plugin_manager.unregister(Plugin)
+
     
-    ctype_types = [c_byte, c_ubyte, c_short, c_ushort, c_int, c_uint,
-                 c_long, c_ulong, c_longlong, c_ulonglong, c_double, c_float]
-python_types = [int, int, int, int, int, int,
-                int, int, int, int, float, float]
+        @property
+    def headers(self):
+        '''Return a `str` with the message's headers.'''
+        raise NotImplementedError()
     
-        @abc.abstractmethod
-    def contribute(self):
-        raise NotImplementedError('Must provide implementation in subclass.')
+        exc = Timeout('Request timed out')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR_TIMEOUT
+    assert error_msg == 'Request timed out (30s).'
+
     
-        def test_human_shall_speak(self):
-        noise = self.human.speak()
-        expected_noise = ''hello''
-        self.assertEqual(noise, expected_noise)
+        alpha = 0.01  # regularization parameter
     
-        def test_cat_eng_localization(self):
-        self.assertEqual(self.e.get('cat'), 'cat')
+    n_samples = np.logspace(.5, 3, 9)
+n_features = np.logspace(1, 3.5, 7)
+N_samples, N_features = np.meshgrid(n_samples,
+                                    n_features)
+scikits_time = np.zeros(N_samples.shape)
+scipy_time = np.zeros(N_samples.shape)
     
-        def test_display_current_time_at_midnight(self):
-        '''
-        Would almost always fail (despite of right at/after midnight) if
-        untestable production code would have been used.
-        '''
-        time_provider_stub = MidnightTimeProvider()
-        class_under_test = TimeDisplay()
-        class_under_test.set_time_provider(time_provider_stub)
-        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
+    pages = {
+    u'ar': u'http://ar.wikipedia.org/wiki/%D9%88%D9%8A%D9%83%D9%8A%D8%A8%D9%8A%D8%AF%D9%8A%D8%A7',
+    u'de': u'http://de.wikipedia.org/wiki/Wikipedia',
+    u'en': u'https://en.wikipedia.org/wiki/Wikipedia',
+    u'es': u'http://es.wikipedia.org/wiki/Wikipedia',
+    u'fr': u'http://fr.wikipedia.org/wiki/Wikip%C3%A9dia',
+    u'it': u'http://it.wikipedia.org/wiki/Wikipedia',
+    u'ja': u'http://ja.wikipedia.org/wiki/Wikipedia',
+    u'nl': u'http://nl.wikipedia.org/wiki/Wikipedia',
+    u'pl': u'http://pl.wikipedia.org/wiki/Wikipedia',
+    u'pt': u'http://pt.wikipedia.org/wiki/Wikip%C3%A9dia',
+    u'ru': u'http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F',
+#    u'zh': u'http://zh.wikipedia.org/wiki/Wikipedia',
+}
+    
+    import os
+import tarfile
+from contextlib import closing
+try:
+    from urllib import urlopen
+except ImportError:
+    from urllib.request import urlopen
+    
+        ax1.plot([0, 1], [0, 1], 'k:', label='Perfectly calibrated')
+    for clf, name in [(lr, 'Logistic'),
+                      (est, name),
+                      (isotonic, name + ' + Isotonic'),
+                      (sigmoid, name + ' + Sigmoid')]:
+        clf.fit(X_train, y_train)
+        y_pred = clf.predict(X_test)
+        if hasattr(clf, 'predict_proba'):
+            prob_pos = clf.predict_proba(X_test)[:, 1]
+        else:  # use decision function
+            prob_pos = clf.decision_function(X_test)
+            prob_pos = \
+                (prob_pos - prob_pos.min()) / (prob_pos.max() - prob_pos.min())
+    
+        # View probabilities=
+    probas = classifier.predict_proba(Xfull)
+    n_classes = np.unique(y_pred).size
+    for k in range(n_classes):
+        plt.subplot(n_classifiers, n_classes, index * n_classes + k + 1)
+        plt.title('Class %d' % k)
+        if k == 0:
+            plt.ylabel(name)
+        imshow_handle = plt.imshow(probas[:, k].reshape((100, 100)),
+                                   extent=(3, 9, 1, 5), origin='lower')
+        plt.xticks(())
+        plt.yticks(())
+        idx = (y_pred == k)
+        if idx.any():
+            plt.scatter(X[idx, 0], X[idx, 1], marker='o', c='k')
+    
+        This returns an array of input data with shape `(n_samples, n_features)`
+    and an array of `n_samples` target labels.
