@@ -1,60 +1,73 @@
 
         
-            context 'while processing' do
-      setup do
-        clear_dest
-        @site.config['title'] = 'Test Site'
-        @page = setup_page('physical.html', :base => test_dir('fixtures'))
-      end
-    
-    def dest_dir(*subdirs)
-  test_dir('dest', *subdirs)
-end
-    
-        def filter(entries)
-      entries.reject do |e|
-        unless included?(e)
-          special?(e) || backup?(e) || excluded?(e) || symlink?(e)
+        
+    {    # @include transition(#{border-color ease-in-out .15s, box-shadow ease-in-out .15s})
+    # to
+    # @include transition(border-color ease-in-out .15s, box-shadow ease-in-out .15s)
+    def deinterpolate_vararg_mixins(scss)
+      scss = scss.dup
+      VARARG_MIXINS.each do |mixin|
+        if scss.gsub! /(@include\s*#{Regexp.quote(mixin)})\(\s*\#\{([^}]+)\}\s*\)/, '\1(\2)'
+          log_transform mixin
         end
       end
+      scss
     end
     
-    If you run into trouble, you can find helpful resources at https://jekyllrb.com/help/!
-            MSG
-            raise Jekyll::Errors::MissingDependencyException, name
-          end
-        end
+      # Do not eager load code on boot. This avoids loading your whole application
+  # just for the purpose of running a single test. If you are using a tool that
+  # preloads Rails for running tests, you may have to set it to true.
+  config.eager_load = false
+    
+        def path_for(file)
+      return file.path if file.is_a?(File)
+      return file if file.is_a?(String)
+    end
+    
+          # Returns the time the given Sass file was last modified.
+      #
+      # If the given file has been deleted or the time can't be accessed
+      # for some other reason, this should return nil.
+      #
+      # @param uri [String] The URI of the file to check.
+      #   Comes from a `:filename` option set on an engine returned by this importer.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` currently being checked.
+      # @return [Time, nil]
+      def mtime(uri, options)
+        Sass::Util.abstract(self)
       end
+    
+        def initialize(tag_name, markup, tokens)
+      @by = nil
+      @source = nil
+      @title = nil
+      if markup =~ FullCiteWithTitle
+        @by = $1
+        @source = $2 + $3
+        @title = $4.titlecase.strip
+      elsif markup =~ FullCite
+        @by = $1
+        @source = $2 + $3
+      elsif markup =~ AuthorTitle
+        @by = $1
+        @title = $2.titlecase.strip
+      elsif markup =~ Author
+        @by = $1
+      end
+      super
+    end
+    
+        def post_render(page)
+      OctopressFilters::post_filter(page)
     end
   end
-end
-
     
-          # Group an array of items by an expression
-      #
-      # input - the object array
-      # variable - the variable to assign each item to in the expression
-      # expression -a Liquid comparison expression passed in as a string
-      #
-      # Returns the filtered array of objects
-      def group_by_exp(input, variable, expression)
-        return input unless groupable?(input)
-    
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
-    
-    def list_login_items_for_app(app_path)
-  out, err, status = Open3.capture3(
-    '/usr/bin/osascript', '-e',
-    'tell application \'System Events\' to get the name of every login item ' \
-    'whose path contains \'#{File.basename(app_path)}\''
-  )
-  if status.exitstatus > 0
-    $stderr.puts err
-    exit status.exitstatus
+    describe 'border-color' do
+  before(:all) do
+    ParserSupport.parse_file('library/border-color')
   end
-  puts out.gsub(', ', '\n')
-end
+    
+      context 'called with four styles' do
+    it 'applies different styles to all sides' do
+      rule = 'border-style: dotted groove ridge none'
