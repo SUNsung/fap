@@ -1,234 +1,346 @@
 
         
-        
-    {
-    {bool RunQuit(const grpc::string& credential_type);
-}  // namespace testing
-}  // namespace grpc
+        #include <boost/asio/detail/config.hpp>
     
+    #ifndef BOOST_ASIO_DETAIL_BASE_FROM_COMPLETION_COND_HPP
+#define BOOST_ASIO_DETAIL_BASE_FROM_COMPLETION_COND_HPP
     
-    {  return 0;
+      // Consume multiple bytes from the beginning of the buffer.
+  void consume(size_type count)
+  {
+    BOOST_ASIO_ASSERT(begin_offset_ + count <= end_offset_);
+    begin_offset_ += count;
+    if (empty())
+      clear();
+  }
+    
+      descriptor_read_op(int descriptor,
+      const MutableBufferSequence& buffers, Handler& handler)
+    : descriptor_read_op_base<MutableBufferSequence>(
+        descriptor, buffers, &descriptor_read_op::do_complete),
+      handler_(BOOST_ASIO_MOVE_CAST(Handler)(handler))
+  {
+  }
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+typedef null_event event;
+#elif defined(BOOST_ASIO_WINDOWS)
+typedef win_event event;
+#elif defined(BOOST_ASIO_HAS_PTHREADS)
+typedef posix_event event;
+#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
+typedef std_event event;
+#endif
+    
+    #if defined(BOOST_ASIO_HAS_STD_FUNCTION)
+using std::function;
+#else // defined(BOOST_ASIO_HAS_STD_FUNCTION)
+using boost::function;
+#endif // defined(BOOST_ASIO_HAS_STD_FUNCTION)
+    
+    // Calls to asio_handler_allocate and asio_handler_deallocate must be made from
+// a namespace that does not contain any overloads of these functions. The
+// boost_asio_handler_alloc_helpers namespace is defined here for that purpose.
+namespace boost_asio_handler_alloc_helpers {
+    }
+    
+    template <typename Handler>
+char (&two_arg_handler_test(Handler, ...))[2];
+    
+      explicit winrt_buffer_impl(const boost::asio::mutable_buffer& b)
+  {
+    bytes_ = const_cast<byte*>(boost::asio::buffer_cast<const byte*>(b));
+    length_ = 0;
+    capacity_ = boost::asio::buffer_size(b);
+  }
+    
+      // Block on the /dev/poll descriptor.
+  ::pollfd events[128] = { { 0, 0, 0 } };
+  ::dvpoll dp = { 0, 0, 0 };
+  dp.dp_fds = events;
+  dp.dp_nfds = 128;
+  dp.dp_timeout = timeout;
+  int num_events = ::ioctl(dev_poll_fd_, DP_POLL, &dp);
+    
+     public:
+  EventFactory(EventFactory const&) = delete;
+  EventFactory& operator=(EventFactory const&) = delete;
+    
+    /// External (extensions) SQL implementation of the osquery query API.
+Status queryExternal(const std::string& query, QueryData& results);
+    
+      /// Set a registry's active plugin.
+  Status setActive(const std::string& registry_name,
+                   const std::string& item_name);
+    
+    /**
+ * @brief Access the internal storage of the Decorator parser.
+ *
+ * The decoration set is a map of column name to value. It contains the opaque
+ * set of decoration point results.
+ *
+ * Decorations are applied to log items before they are sent to the downstream
+ * logging APIs: logString, logSnapshot, etc.
+ *
+ * @param results the output parameter to write decorations.
+ */
+void getDecorations(std::map<std::string, std::string>& results);
+    
+    TEST_F(ViewsConfigParserPluginTests, test_add_view) {
+  Config c;
+  auto s = c.update(getTestConfigMap());
+  EXPECT_TRUE(s.ok());
+    }
+    
+    Status FilesystemConfigPlugin::genPack(const std::string& name,
+                                       const std::string& value,
+                                       std::string& pack) {
+  if (name == '*') {
+    // The config requested a multi-pack.
+    std::vector<std::string> paths;
+    resolveFilePattern(value, paths);
+    }
+    }
+    
+      char* buffer = (char*)malloc(range.length + 1);
+  if (buffer == nullptr) {
+    return '';
+  }
+  memset(buffer, 0, range.length + 1);
+    
+    // implements rabit error handling.
+extern 'C' {
+  void XGBoostAssert_R(int exp, const char *fmt, ...);
+  void XGBoostCheck_R(int exp, const char *fmt, ...);
 }
+    
+    
+    {
+    {
+    {  inline void PutChar(char ch) {
+    out_buf += ch;
+    if (out_buf.length() >= kBufferSize) Flush();
+  }
+  inline void Flush(void) {
+    if (out_buf.length() != 0) {
+      fp->Write(&out_buf[0], out_buf.length());
+      out_buf.clear();
+    }
+  }
+};
+}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_BASE64_H_
 
     
-    #include 'test/core/util/test_config.h'
-#include 'test/cpp/qps/benchmark_config.h'
-#include 'test/cpp/qps/driver.h'
-#include 'test/cpp/qps/report.h'
-#include 'test/cpp/qps/server.h'
-#include 'test/cpp/util/test_config.h'
-#include 'test/cpp/util/test_credentials_provider.h'
+    DMLC_REGISTRY_FILE_TAG(sparse_page_raw_format);
     
-    #include <grpc/grpc_security.h>
     
-    grpc::string DescribeMethod(const grpc::protobuf::MethodDescriptor* method) {
-  std::stringstream result;
-  result << '  rpc ' << method->name()
-         << (method->client_streaming() ? '(stream ' : '(')
-         << method->input_type()->full_name() << ') returns '
-         << (method->server_streaming() ? '(stream ' : '(')
-         << method->output_type()->full_name() << ') {}\n';
-  if (method->options().deprecated()) {
-    result << ' DEPRECATED';
+    {
+    {    double dat[2]; dat[0] = sum, dat[1] = wsum;
+    if (distributed) {
+      rabit::Allreduce<rabit::op::Sum>(dat, 2);
+    }
+    return Derived::GetFinal(dat[0], dat[1]);
   }
-  return result.str();
-}
-    
-    
-    {  gpr_subprocess* const subprocess_;
+  /*!
+   * \brief to be implemented by subclass,
+   *   get evaluation result from one row
+   * \param label label of current instance
+   * \param pred prediction value of current instance
+   * \param nclass number of class in the prediction
+   */
+  inline static bst_float EvalRow(int label,
+                                  const bst_float *pred,
+                                  size_t nclass);
+  /*!
+   * \brief to be overridden by subclass, final transformation
+   * \param esum the sum statistics returned by EvalRow
+   * \param wsum sum of weight
+   */
+  inline static bst_float GetFinal(bst_float esum, bst_float wsum) {
+    return esum / wsum;
+  }
+  // used to store error message
+  const char *error_msg_;
 };
     
-            template <typename T, typename std::enable_if<std::is_same<T, int>::value>::type* = nullptr>
-        T& Value()
-        {
-            VerifyType<T>();
-            return m_data.m_int;
+    	xlog_info.tag = tag_jstr.GetChar();
+	xlog_info.filename = filename_jstr.GetChar();
+	xlog_info.func_name = funcname_jstr.GetChar();
+    
+    static const char gs_crash_dump_header[] =
+    '*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***';
+    
+    #include 'boost/any.hpp'
+    
+    #ifndef _COMM_FUNCTION_H_
+#define _COMM_FUNCTION_H_
+    
+    
+    {
+    {        if (JNI_OK == status_) {
+            we_attach_ = true;
+            pthread_setspecific(g_env_key, env_);
+        } else {
+            ASSERT2(false, 'vm:%p, env:%p, status:%d', vm_, env_, status_);
+            env_ = NULL;
+            return;
         }
+    } while (false);
     
-        // don't allow cross network child copy unless caller explicitly handles children fixup
-    if ((flags & CopyNodeFlags::copyNodeInputLinks) &&
-        this != &fromNet && !(flags & CopyNodeFlags::copyNodeAcrossNetworks))
-    {
-        LogicError('CopyNode: Copying node children across network is invalid.');
-    }
-    
-        bnNodes = m_net->SortByGlobalEvalOrder(bnNodes);
-    for (auto& node : bnNodes)
-    {
-        let bnNode = static_pointer_cast<BatchNormalizationNode<ElemType>>(node);
-        size_t actualMBSize = 0;
-    }
-    
-    #include 'stdafx.h'
-#include 'Basics.h'
-#include 'Actions.h'
-#include 'ComputationNetwork.h'
-#include 'ComputationNode.h'
-#include 'DataReader.h'
-#include 'DataWriter.h'
-#include 'SimpleNetworkBuilder.h'
-#include 'Config.h'
-#include 'ScriptableObjects.h'
-    
-    // ---------------------------------------------------------------------------
-// ConfigException -- all errors from processing the config files are reported as ConfigException
-// ---------------------------------------------------------------------------
-    
-    // ReadConfigFile - read a configuration file, and return all lines, stripped of comments, concatenated by newlines, as one long string (no other processing, expansion etc.)
-// filePath - the path to the config file to read
-// returns: a string with the concatentated file contents
-std::string ConfigParser::ReadConfigFile(const std::wstring& filePath)
-{
-    File file(filePath, fileOptionsRead);
-    }
-    
-    public:
-    // DataWriter Constructor
-    // config - [in] configuration parameters for the datareader
-    template <class ConfigRecordType>
-    DataWriter(const ConfigRecordType& config);
-    // constructor from Scripting
-    DataWriter(const ScriptableObjects::IConfigRecordPtr configp)
-        : DataWriter(*configp)
-    {
-    }
-    virtual ~DataWriter();
-    
-    #include 'jsapi.h'
-#include 'jsfriendapi.h'
-    
-    
-    
-    
-    
-    	void Step(Settings* settings)
-	{
-		// Drive the kinematic body.
-		if (m_platform->GetType() == b2_kinematicBody)
-		{
-			b2Vec2 p = m_platform->GetTransform().p;
-			b2Vec2 v = m_platform->GetLinearVelocity();
-    }
-    }
-    
-    		b2BodyDef bd;
-		bd.type = b2_dynamicBody;
-		bd.position = body1->GetPosition();
-		bd.angle = body1->GetAngle();
-    
-    	static Test* Create()
-	{
-		return new Car;
-	}
-    
-    ExternalFunctions::ExternalFunctions() {
-#define EXT_FUNC(NAME, RETURN_TYPE, FUNC_SIG, WARN)                            \
-  this->NAME = GetFnPtr<decltype(ExternalFunctions::NAME)>(#NAME, WARN)
-    }
-    
-    
-    {} // namespace fuzzer
-    
-    // Somewhere in the past we have observed a comparison instructions
-// with arguments Arg1 Arg2. This function tries to guess a dictionary
-// entry that will satisfy that comparison.
-// It first tries to find one of the arguments (possibly swapped) in the
-// input and if it succeeds it creates a DE with a position hint.
-// Otherwise it creates a DE with one of the arguments w/o a position hint.
-template <class T>
-DictionaryEntry MutationDispatcher::MakeDictionaryEntryFromCMP(
-    T Arg1, T Arg2, const uint8_t *Data, size_t Size) {
-  ScopedDoingMyOwnMemmem scoped_doing_my_own_memmem;
-  bool HandleFirst = Rand.RandBool();
-  T ExistingBytes, DesiredBytes;
-  Word W;
-  const uint8_t *End = Data + Size;
-  for (int Arg = 0; Arg < 2; Arg++) {
-    ExistingBytes = HandleFirst ? Arg1 : Arg2;
-    DesiredBytes = HandleFirst ? Arg2 : Arg1;
-    DesiredBytes += Rand(-1, 1);
-    if (Rand.RandBool()) ExistingBytes = Bswap(ExistingBytes);
-    if (Rand.RandBool()) DesiredBytes = Bswap(DesiredBytes);
-    HandleFirst = !HandleFirst;
-    W.Set(reinterpret_cast<uint8_t*>(&DesiredBytes), sizeof(T));
-    const size_t kMaxNumPositions = 8;
-    size_t Positions[kMaxNumPositions];
-    size_t NumPositions = 0;
-    for (const uint8_t *Cur = Data;
-         Cur < End && NumPositions < kMaxNumPositions; Cur++) {
-      Cur = (uint8_t *)SearchMemory(Cur, End - Cur, &ExistingBytes, sizeof(T));
-      if (!Cur) break;
-      Positions[NumPositions++] = Cur - Data;
-    }
-    if (!NumPositions) break;
-    return DictionaryEntry(W, Positions[Rand(NumPositions)]);
-  }
-  DictionaryEntry DE(W);
-  return DE;
+    jint ret = env_->PushLocalFrame(_capacity);
+    ASSERT2(0 == ret, 'ret:%d', ret);
 }
     
-    struct FuzzingOptions {
-  int Verbosity = 1;
-  size_t MaxLen = 0;
-  int UnitTimeoutSec = 300;
-  int TimeoutExitCode = 77;
-  int ErrorExitCode = 77;
-  int MaxTotalTimeSec = 0;
-  int RssLimitMb = 0;
-  bool DoCrossOver = true;
-  int MutateDepth = 5;
-  bool UseCounters = false;
-  bool UseIndirCalls = true;
-  bool UseMemcmp = true;
-  bool UseMemmem = true;
-  bool UseCmp = false;
-  bool UseValueProfile = false;
-  bool Shrink = false;
-  int ReloadIntervalSec = 1;
-  bool ShuffleAtStartUp = true;
-  bool PreferSmall = true;
-  size_t MaxNumberOfRuns = -1L;
-  int ReportSlowUnits = 10;
-  bool OnlyASCII = false;
-  std::string OutputCorpus;
-  std::string ArtifactPrefix = './';
-  std::string ExactArtifactPath;
-  std::string ExitOnSrcPos;
-  std::string ExitOnItem;
-  bool SaveArtifacts = true;
-  bool PrintNEW = true; // Print a status line when new units are found;
-  bool OutputCSV = false;
-  bool PrintNewCovPcs = false;
-  bool PrintFinalStats = false;
-  bool PrintCorpusStats = false;
-  bool PrintCoverage = false;
-  bool DumpCoverage = false;
-  bool DetectLeaks = true;
-  int  TraceMalloc = 0;
-  bool HandleAbrt = false;
-  bool HandleBus = false;
-  bool HandleFpe = false;
-  bool HandleIll = false;
-  bool HandleInt = false;
-  bool HandleSegv = false;
-  bool HandleTerm = false;
+        // Output as Base85 encoded
+    FILE* out = stdout;
+    fprintf(out, '// File: '%s' (%d bytes)\n', filename, (int)data_sz);
+    fprintf(out, '// Exported using binary_to_compressed_c.cpp\n');
+	const char* compressed_str = use_compression ? 'compressed_' : '';
+    if (use_base85_encoding)
+    {
+        fprintf(out, 'static const char %s_%sdata_base85[%d+1] =\n    \'', symbol, compressed_str, (int)((compressed_sz+3)/4)*5);
+        char prev_c = 0;
+        for (int src_i = 0; src_i < compressed_sz; src_i += 4)
+        {
+            // This is made a little more complicated by the fact that ??X sequences are interpreted as trigraphs by old C/C++ compilers. So we need to escape pairs of ??.
+            unsigned int d = *(unsigned int*)(compressed + src_i);
+            for (unsigned int n5 = 0; n5 < 5; n5++, d /= 85)
+            {
+                char c = Encode85Byte(d);
+                fprintf(out, (c == '?' && prev_c == '?') ? '\\%c' : '%c', c);
+                prev_c = c;
+            }
+            if ((src_i % 112) == 112-4)
+                fprintf(out, '\'\n    \'');
+        }
+        fprintf(out, '\';\n\n');
+    }
+    else
+    {
+        fprintf(out, 'static const unsigned int %s_%ssize = %d;\n', symbol, compressed_str, (int)compressed_sz);
+        fprintf(out, 'static const unsigned int %s_%sdata[%d/4] =\n{', symbol, compressed_str, (int)((compressed_sz+3)/4)*4);
+        int column = 0;
+        for (int i = 0; i < compressed_sz; i += 4)
+        {
+            unsigned int d = *(unsigned int*)(compressed + i);
+            if ((column++ % 12) == 0)
+                fprintf(out, '\n    0x%08x, ', d);
+            else
+                fprintf(out, '0x%08x, ', d);
+        }
+        fprintf(out, '\n};\n\n');
+    }
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_API void        ImGui_ImplDX9_InvalidateDeviceObjects();
+IMGUI_API bool        ImGui_ImplDX9_CreateDeviceObjects();
+    
+    // Render function.
+// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
+void ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data)
+{
+    // Handle cases of screen coordinates != from framebuffer coordinates (e.g. retina displays)
+    ImGuiIO& io = ImGui::GetIO();
+    draw_data->ScaleClipRects(io.DisplayFramebufferScale);
+    }
+    
+    void CreateRenderTarget()
+{
+    ID3D11Texture2D* pBackBuffer;
+    g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+    g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &g_mainRenderTargetView);
+    pBackBuffer->Release();
+}
+    
+        // Setup ImGui binding
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    ImGui_Marmalade_Init(true);
+    
+    #endif
+
+    
+      virtual const char* Name() const override;
+    
+    void JniCallback::releaseJniEnv(jboolean& attached) const {
+  JniUtil::releaseJniEnv(m_jvm, attached);
+}
+    
+    
+    {  // Fsync directory. Can be called concurrently from multiple threads.
+  Status Fsync() {
+    return Status::OK();
+  }
 };
     
-    void TracePC::PrintModuleInfo() {
-  Printf('INFO: Loaded %zd modules (%zd guards): ', NumModules, NumGuards);
-  for (size_t i = 0; i < NumModules; i++)
-    Printf('[%p, %p), ', Modules[i].Start, Modules[i].Stop);
-  Printf('\n');
+        std::string log_line = 'ADD - ';
+    log_line += key.ToString(true);
+    log_line += ' - ';
+    AppendNumberTo(&log_line, size);
+  // @lint-ignore TXT2 T25377293 Grandfathered in
+		log_line += '\n';
+    
+      int max_height = max_height_.load(std::memory_order_relaxed);
+  while (height > max_height) {
+    if (max_height_.compare_exchange_weak(max_height, height)) {
+      // successfully updated it
+      max_height = height;
+      break;
+    }
+    // else retry, possibly exiting the loop because somebody else
+    // increased it
+  }
+  assert(max_height <= kMaxPossibleHeight);
+    
+    inline Type ToTypedVector(Type t, size_t fixed_len = 0) {
+  assert(IsTypedVectorElementType(t));
+  switch (fixed_len) {
+    case 0: return static_cast<Type>(t - TYPE_INT + TYPE_VECTOR_INT);
+    case 2: return static_cast<Type>(t - TYPE_INT + TYPE_VECTOR_INT2);
+    case 3: return static_cast<Type>(t - TYPE_INT + TYPE_VECTOR_INT3);
+    case 4: return static_cast<Type>(t - TYPE_INT + TYPE_VECTOR_INT4);
+    default: assert(0); return TYPE_NULL;
+  }
 }
     
-      // Make sure the child process uses the default handlers for the
-  // following signals rather than inheriting what the parent has.
-  sigset_t DefaultSigSet;
-  (void)sigemptyset(&DefaultSigSet);
-  (void)sigaddset(&DefaultSigSet, SIGQUIT);
-  (void)sigaddset(&DefaultSigSet, SIGINT);
-  (void)posix_spawnattr_setsigdefault(&SpawnAttributes, &DefaultSigSet);
-  // Make sure the child process doesn't block SIGCHLD
-  (void)posix_spawnattr_setsigmask(&SpawnAttributes, &OldBlockedSignalsSet);
-  short SpawnFlags = POSIX_SPAWN_SETSIGDEF | POSIX_SPAWN_SETSIGMASK;
-  (void)posix_spawnattr_setflags(&SpawnAttributes, SpawnFlags);
+      typedef void (*WarnFn)(const FlatCompiler *flatc, const std::string &warn,
+                         bool show_exe_name);
+    
+    #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <cstring>
+#include <string>
+#include <vector>
+    
+    #endif
+
+    
+    
+    {  bool Parse(std::istream &IS, bool ParseCoverage);
+  bool Parse(const std::string &Str, bool ParseCoverage);
+  void ParseOrExit(std::istream &IS, bool ParseCoverage);
+  size_t Merge(std::vector<std::string> *NewFiles);
+};
+    
+    size_t MutationDispatcher::Mutate(uint8_t *Data, size_t Size, size_t MaxSize) {
+  return MutateImpl(Data, Size, MaxSize, Mutators);
+}
+    
+    void sha1_write(sha1nfo *s, const char *data, size_t len) {
+	for (;len--;) sha1_writebyte(s, (uint8_t) *data++);
+}
+    
+    void PrintASCIIByte(uint8_t Byte) {
+  if (Byte == '\\')
+    Printf('\\\\');
+  else if (Byte == ''')
+    Printf('\\\'');
+  else if (Byte >= 32 && Byte < 127)
+    Printf('%c', Byte);
+  else
+    Printf('\\x%02x', Byte);
+}
