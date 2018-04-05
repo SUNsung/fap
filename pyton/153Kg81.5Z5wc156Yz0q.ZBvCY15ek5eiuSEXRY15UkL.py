@@ -1,223 +1,158 @@
 
-atom_template = textwrap.dedent('''\
-    <?xml version='1.0' encoding='utf-8'?>
-    <feed xmlns='http://www.w3.org/2005/Atom'>
-        <link rel='self' href='http://rg3.github.io/youtube-dl/update/releases.atom' />
-        <title>youtube-dl releases</title>
-        <id>https://yt-dl.org/feed/youtube-dl-updates-feed</id>
-        <updated>@TIMESTAMP@</updated>
-        @ENTRIES@
-    </feed>''')
-    
-        infile, outfile = args
-    
-    
-def gen_extractors():
-    ''' Return a list of an instance of every supported extractor.
-    The order does matter; the first extractor matched is the one handling the URL.
-    '''
-    return [klass() for klass in gen_extractor_classes()]
-    
-            # Request the extended version of the api for extra fields like artist and title
-        api_response = self._download_json(
-            'http://www.audiomack.com/api/music/url/song/%s?extended=1&_=%d' % (
-                album_url_tag, time.time()),
-            album_url_tag)
-    
-        def _real_extract(self, url):
-        mobj = re.match(self._VALID_URL, url, flags=re.VERBOSE)
-        text_id = mobj.group('textid')
-    
-        plugin_manager.register(Plugin)
-    try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-            '--auth',
-            USERNAME + SEP_CREDENTIALS + PASSWORD,
-        )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
-    
-        @property
-    def encoding(self):
-        return self._orig.encoding or 'utf8'
-    
-        try:
-        parsed_args = parser.parse_args(args=args, env=env)
-    except KeyboardInterrupt:
-        env.stderr.write('\n')
-        if include_traceback:
-            raise
-        exit_status = ExitStatus.ERROR_CTRL_C
-    except SystemExit as e:
-        if e.code != ExitStatus.OK:
-            env.stderr.write('\n')
-            if include_traceback:
-                raise
-            exit_status = ExitStatus.ERROR
-    else:
-        try:
-            exit_status = program(
-                args=parsed_args,
-                env=env,
-                log_error=log_error,
-            )
-        except KeyboardInterrupt:
-            env.stderr.write('\n')
-            if include_traceback:
-                raise
-            exit_status = ExitStatus.ERROR_CTRL_C
-        except SystemExit as e:
-            if e.code != ExitStatus.OK:
-                env.stderr.write('\n')
-                if include_traceback:
-                    raise
-                exit_status = ExitStatus.ERROR
-        except requests.Timeout:
-            exit_status = ExitStatus.ERROR_TIMEOUT
-            log_error('Request timed out (%ss).', parsed_args.timeout)
-        except requests.TooManyRedirects:
-            exit_status = ExitStatus.ERROR_TOO_MANY_REDIRECTS
-            log_error('Too many redirects (--max-redirects=%s).',
-                      parsed_args.max_redirects)
-        except Exception as e:
-            # TODO: Further distinction between expected and unexpected errors.
-            msg = str(e)
-            if hasattr(e, 'request'):
-                request = e.request
-                if hasattr(request, 'url'):
-                    msg += ' while doing %s request to URL: %s' % (
-                        request.method, request.url)
-            log_error('%s: %s', type(e).__name__, msg)
-            if include_traceback:
-                raise
-            exit_status = ExitStatus.ERROR
-    
-        @pytest.mark.parametrize('verify_value', ['false', 'fALse'])
-    def test_verify_false_OK(self, httpbin_secure, verify_value):
-        r = http(httpbin_secure.url + '/get', '--verify', verify_value)
-        assert HTTP_OK in r
-    
-    '''
-__version__ = '1.0.0-dev'
-__author__ = 'Jakub Roztocil'
-__licence__ = 'BSD'
-    
-        def __init__(self):
-        self._plugins = []
-    
-    
-@for_app('tar')
-def match(command):
-    return ('-C' not in command.script
-            and _is_tar_extract(command.script)
-            and _tar_file(command.script_parts) is not None)
-    
-    # Default celery config is to use SQLA as a broker, in a production setting
-# you'll want to use a proper broker as specified here:
-# http://docs.celeryproject.org/en/latest/getting-started/brokers/index.html
-'''
-# Example:
-class CeleryConfig(object):
-  BROKER_URL = 'sqla+sqlite:///celerydb.sqlite'
-  CELERY_IMPORTS = ('superset.sql_lab', )
-  CELERY_RESULT_BACKEND = 'db+sqlite:///celery_results.sqlite'
-  CELERY_ANNOTATIONS = {'tasks.add': {'rate_limit': '10/s'}}
-  CELERYD_LOG_LEVEL = 'DEBUG'
-  CELERYD_PREFETCH_MULTIPLIER = 1
-  CELERY_ACKS_LATE = True
-CELERY_CONFIG = CeleryConfig
-'''
-CELERY_CONFIG = None
-SQL_CELERY_DB_FILE_PATH = os.path.join(DATA_DIR, 'celerydb.sqlite')
-SQL_CELERY_RESULTS_DB_FILE_PATH = os.path.join(DATA_DIR, 'celery_results.sqlite')
-    
-        @classmethod
-    def log_this(cls, f):
-        '''Decorator to log user actions'''
-        @functools.wraps(f)
-        def wrapper(*args, **kwargs):
-            start_dttm = datetime.now()
-            user_id = None
-            if g.user:
-                user_id = g.user.get_id()
-            d = request.form.to_dict() or {}
-            # request parameters can overwrite post body
-            request_params = request.args.to_dict()
-            d.update(request_params)
-            d.update(kwargs)
-            slice_id = d.get('slice_id')
-    
-            metrics.append(M(
-            metric_name='count',
-            verbose_name='COUNT(*)',
-            metric_type='count',
-            expression='COUNT(*)',
-        ))
-        if not self.main_dttm_col:
-            self.main_dttm_col = any_date_col
-        self.add_missing_metrics(metrics)
-        db.session.merge(self)
-        db.session.commit()
-    
-        # 2. Clean up None permissions or view menues
-    pvms = sm.get_session.query(sm.permissionview_model).all()
-    for pvm in pvms:
-        if not (pvm.view_menu and pvm.permission):
-            sm.get_session.delete(pvm)
-    sm.get_session.commit()
-    
-        __tablename__ = None  # {connector_name}_column
-    
-        @property
-    def data(self):
-        # work around for https://github.com/pandas-dev/pandas/issues/18372
-        return [dict((k, _maybe_box_datetimelike(v))
-                     for k, v in zip(self.__df.columns, np.atleast_1d(row)))
-                for row in self.__df.values]
-    
-        def _send_switchover_response(self):
-        return 'send switchover response'
-    
-        @classmethod
-    def setUpClass(self):
+        
+            def __init__(self, groups, env=Environment(), **kwargs):
         '''
-        - Create a temporary directory and file
-        /test_command
-           /foo.txt
-        - get the temporary test directory
-        - and initializes the command stack.
-        '''
-        os.mkdir('tests/test_command')
-        open('tests/test_command/foo.txt', 'w').close()
-        self.__get_test_directory()
-        self.command_stack = []
-        self.command_stack.append(MoveFileCommand(os.path.join(
-            self.test_dir, 'foo.txt'), os.path.join(self.test_dir, 'bar.txt')))
-        self.command_stack.append(MoveFileCommand(os.path.join(
-            self.test_dir, 'bar.txt'), os.path.join(self.test_dir, 'baz.txt')))
+        :param groups: names of processor groups to be applied
+        :param env: Environment
+        :param kwargs: additional keyword arguments for processors
     
     
-if __name__ == '__main__':
-    main()
-    
-        '''def test_object(queue):
-           queue_object = QueueObject(queue, True)
-           print('Inside func: {}'.format(queue_object.object))'''
-    
-    if __name__ == '__main__':
-    print('Before subclassing: ')
-    for k in RegistryHolder.REGISTRY:
-        print(k)
-    
-        def test_dog_eng_localization(self):
-        self.assertEqual(self.e.get('dog'), 'dog')
+FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
+FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
+JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
+BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
     
     
-class OrSpecification(CompositeSpecification):
-    _one = Specification()
-    _other = Specification()
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
+
+    
+        def convert(self, content_bytes):
+        raise NotImplementedError
+    
+        ''')
+)
+positional.add_argument(
+    'method',
+    metavar='METHOD',
+    nargs=OPTIONAL,
+    default=None,
+    help='''
+    The HTTP method to be used for the request (GET, POST, PUT, DELETE, ...).
+    
+        def test_self_signed_server_cert_by_default_raises_ssl_error(
+            self,
+            httpbin_secure_untrusted):
+        with pytest.raises(SSLError):
+            http(httpbin_secure_untrusted.url + '/get')
+    
+    # TODO: ensure that history changes.
+
+    
+    
+class TextTestResult(_TextTestResult):
+    def printSummary(self, start, stop):
+        write = self.stream.write
+        writeln = self.stream.writeln
+    
+    
+class Command(ScrapyCommand):
+    
+        def post_process(self, output):
+        for x in output:
+            if isinstance(x, (BaseItem, dict)):
+                for arg in self.args:
+                    if not arg in x:
+                        raise ContractFail(''%s' field is missing' % arg)
+
+    
+        def copy_certs_and_keys(self, cert_path, key_path, chain_path=None):
+        '''Copies certs and keys into the temporary directory'''
+        cert_and_key_dir = os.path.join(self._temp_dir, 'certs_and_keys')
+        if not os.path.isdir(cert_and_key_dir):
+            os.mkdir(cert_and_key_dir)
+    
+        @mock.patch('certbot.display.enhancements.util')
+    def test_redirect(self, mock_util):
+        mock_util().menu.return_value = (display_util.OK, 1)
+        self.assertTrue(self._call('redirect'))
+    
+        @mock.patch('certbot.notify.smtplib.LMTP')
+    @mock.patch('certbot.notify.subprocess.Popen')
+    def test_everything_fails(self, mock_popen, mock_lmtp):
+        from certbot.notify import notify
+        lmtp_obj = mock.MagicMock()
+        mock_lmtp.return_value = lmtp_obj
+        lmtp_obj.sendmail.side_effect = socket.error(17)
+        proc = mock.MagicMock()
+        mock_popen.return_value = proc
+        proc.communicate.side_effect = OSError('What we have here is a '
+                                               'failure to communicate.')
+        self.assertFalse(notify('Goose', 'auntrhody@example.com',
+                                'The old grey goose is dead.'))
+        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
+        self.assertEqual(proc.communicate.call_count, 1)
+    
+    from certbot import interfaces
+from certbot.plugins import common
+    
+    from babel.messages.pofile import read_po
+    
+        def __init__(self, rules=None):
+        '''Constructs a router from an ordered list of rules::
+    
+        c-ares fails to resolve some names when ``family`` is ``AF_UNSPEC``,
+    so it is only recommended for use in ``AF_INET`` (i.e. IPv4).  This is
+    the default for ``tornado.simple_httpclient``, but other libraries
+    may default to ``AF_UNSPEC``.
+    
+        def test_failed_setup(self):
+        self.http_client = self.create_client(max_clients=1)
+        for i in range(5):
+            response = self.fetch(u'/ユニコード')
+            self.assertIsNot(response.error, None)
+
+    
+    # Increasing --n without --keepalive will eventually run into problems
+# due to TIME_WAIT sockets
+define('n', type=int, default=15000)
+define('c', type=int, default=25)
+define('keepalive', type=bool, default=False)
+define('quiet', type=bool, default=False)
+    
+    
+def main():
+    base_cmd = [
+        sys.executable, '-m', 'timeit', '-s',
+        'from stack_context_benchmark import StackBenchmark, ExceptionBenchmark']
+    cmds = [
+        'StackBenchmark().enter_exit(50)',
+        'StackBenchmark().call_wrapped(50)',
+        'StackBenchmark().enter_exit(500)',
+        'StackBenchmark().call_wrapped(500)',
+    
+    
+class ComposeHandler(BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        id = self.get_argument('id', None)
+        entry = None
+        if id:
+            entry = self.db.get('SELECT * FROM entries WHERE id = %s', int(id))
+        self.render('compose.html', entry=entry)
+    
+        def wait_for_messages(self, cursor=None):
+        # Construct a Future to return to our caller.  This allows
+        # wait_for_messages to be yielded from a coroutine even though
+        # it is not a coroutine itself.  We will set the result of the
+        # Future when results are available.
+        result_future = Future()
+        if cursor:
+            new_count = 0
+            for msg in reversed(self.cache):
+                if msg['id'] == cursor:
+                    break
+                new_count += 1
+            if new_count:
+                result_future.set_result(self.cache[-new_count:])
+                return result_future
+        self.waiters.add(result_future)
+        return result_future
