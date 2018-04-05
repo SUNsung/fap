@@ -1,51 +1,74 @@
 
         
-          # Make it so that network access from the vagrant guest is able to
-  # use SSH private keys that are present on the host without copying
-  # them into the VM.
-  config.ssh.forward_agent = true
+            @notification_setting = current_user.notification_settings_for(resource)
+    @saved = @notification_setting.update_attributes(notification_setting_params)
     
-        sidekiq_options queue: 'critical'
+        find_union(segments, Project).includes(:namespace).order_id_desc
+  end
     
-      def recipients(payload = {})
-    emails = interpolated(payload)['recipients']
-    if emails.present?
-      if emails.is_a?(String)
-        [emails]
-      else
-        emails
+          def call(env)
+        request  = Request.new(env)
+        get_was  = handle(request.GET)
+        post_was = handle(request.POST) rescue nil
+        app.call env
+      ensure
+        request.GET.replace  get_was  if get_was
+        request.POST.replace post_was if post_was
       end
+    
+      %w(POST PUT DELETE).each do |method|
+    it 'denies #{method} requests with non-whitelisted Origin' do
+      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://malicious.com')).not_to be_ok
+    end
+    
+          attr_reader :agent
+    
+        i0, s0 = index, []
+    if has_terminal?('[', false, index)
+      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
+      @index += 1
     else
-      [user.email]
+      terminal_parse_failure('[')
+      r1 = nil
     end
-  end
-    
-          if options[:roles].is_a?(Symbol)
-        options[:roles] = [options[:roles]]
+    s0 << r1
+    if r1
+      s2, i2 = [], index
+      loop do
+        if has_terminal?('\G[^\\],]', true, index)
+          r3 = true
+          @index += 1
+        else
+          r3 = nil
+        end
+        if r3
+          s2 << r3
+        else
+          break
+        end
       end
-    
-      def destroy_failed
-    Delayed::Job.where.not(failed_at: nil).delete_all
-    
-        it 'returns false if osxfuse include directory is a symlink' do
-      allow(File).to receive(:exist?).and_return(true)
-      allow(File).to receive(:symlink?).and_return(true)
-      expect(described_class).not_to be_binary_osxfuse_installed
+      if s2.empty?
+        @index = i2
+        r2 = nil
+      else
+        r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
+      end
+      s0 << r2
+      if r2
+        if has_terminal?(']', false, index)
+          r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          @index += 1
+        else
+          terminal_parse_failure(']')
+          r4 = nil
+        end
+        s0 << r4
+      end
     end
-  end
-    
-      # Removes any empty directories in the formula's prefix subtree
-  # Keeps any empty directions projected by skip_clean
-  # Removes any unresolved symlinks
-  def prune
-    dirs = []
-    symlinks = []
-    @f.prefix.find do |path|
-      if path == @f.libexec || @f.skip_clean?(path)
-        Find.prune
-      elsif path.symlink?
-        symlinks << path
-      elsif path.directory?
-        dirs << path
-      end
+    if s0.last
+      r0 = instantiate_node(LogStash::Config::AST::SelectorElement,input, i0...index, s0)
+      r0.extend(SelectorElement0)
+    else
+      @index = i0
+      r0 = nil
     end
