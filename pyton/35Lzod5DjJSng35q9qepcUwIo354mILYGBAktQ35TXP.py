@@ -1,62 +1,62 @@
 
         
-            Reference: Armin Ronacher, 'Flask for Fun and for Profit' PyBay 2016.
+                    gc.collect()
+            print('- benchmarking Lasso')
+            clf = Lasso(alpha=alpha, fit_intercept=False,
+                        precompute=precompute)
+            tstart = time()
+            clf.fit(X, Y)
+            lasso_results.append(time() - tstart)
+    
+    
+def plot_feature_errors(all_errors, batch_size, all_components, data):
+    plt.figure()
+    plot_results(all_components, all_errors['pca'], label='PCA')
+    plot_results(all_components, all_errors['ipca'],
+                 label='IncrementalPCA, bsize=%i' % batch_size)
+    plot_results(all_components, all_errors['rpca'], label='RandomizedPCA')
+    plt.legend(loc='lower left')
+    plt.suptitle('Algorithm error vs. n_components\n'
+                 'LFW, size %i x %i' % data.shape)
+    plt.xlabel('Number of components (out of max %i)' % data.shape[1])
+    plt.ylabel('Mean absolute error')
+    
+        plt.figlegend((c_bar, q_bar), ('construction', 'N-point query'),
+                  'upper right')
+    
+        from sklearn.tree import DecisionTreeRegressor
+    
+    # Split the dataset in training and test set:
+docs_train, docs_test, y_train, y_test = train_test_split(
+    dataset.data, dataset.target, test_size=0.5)
+    
     '''
-    for name in find_modules('flaskr.blueprints'):
-        mod = import_string(name)
-        if hasattr(mod, 'bp'):
-            app.register_blueprint(mod.bp)
-    return None
+print(__doc__)
+    
+        # Logistic regression with no calibration as baseline
+    lr = LogisticRegression(C=1., solver='lbfgs')
+    
+    # Plot changes in predicted probabilities via arrows
+plt.figure(0)
+colors = ['r', 'g', 'b']
+for i in range(clf_probs.shape[0]):
+    plt.arrow(clf_probs[i, 0], clf_probs[i, 1],
+              sig_clf_probs[i, 0] - clf_probs[i, 0],
+              sig_clf_probs[i, 1] - clf_probs[i, 1],
+              color=colors[y_test[i]], head_width=1e-2)
+    
+    	title = video.attributes['title'].value
+	assert title 
+    
+        fc2video_download_by_upid(upid, output_dir, merge, info_only)
+    
+            print_info(site_info, title, type_, size_full)
+        if not info_only:
+            download_urls(url_list, title, ext, total_size=size_full, output_dir=output_dir, merge=merge, headers=fake_headers)
+    else:
+        raise NotImplementedError(flashvars)
+    
+    __all__ = ['mixcloud_download']
     
     
-@app.route('/')
-def timeline():
-    '''Shows a users timeline or if no user is logged in it will
-    redirect to the public timeline.  This timeline shows the user's
-    messages as well as all the messages of followed users.
-    '''
-    if not g.user:
-        return redirect(url_for('public_timeline'))
-    return render_template('timeline.html', messages=query_db('''
-        select message.*, user.* from message, user
-        where message.author_id = user.user_id and (
-            user.user_id = ? or
-            user.user_id in (select whom_id from follower
-                                    where who_id = ?))
-        order by message.pub_date desc limit ?''',
-        [session['user_id'], session['user_id'], PER_PAGE]))
-    
-    
-def get_line_value(r, n):
-    rls = r.split('\r\n')
-    if len(rls) < n + 1:
-        return None
-    
-    ## Anything on different channel than DEFAULT_CHANNEL is not parsed
-# by parser.
-HIDDEN_CHANNEL = 99
-    
-        # Parse and validate the field names.  Validation serves two purposes,
-    # generating informative error messages and preventing template injection attacks.
-    if isinstance(field_names, basestring):
-        field_names = field_names.replace(',', ' ').split() # names separated by whitespace and/or commas
-    field_names = tuple(map(str, field_names))
-    for name in (typename,) + field_names:
-        if not all(c.isalnum() or c=='_' for c in name):
-            raise ValueError('Type names and field names can only contain alphanumeric characters and underscores: %r' % name)
-        if _iskeyword(name):
-            raise ValueError('Type names and field names cannot be a keyword: %r' % name)
-        if name[0].isdigit():
-            raise ValueError('Type names and field names cannot start with a number: %r' % name)
-    seen_names = set()
-    for name in field_names:
-        if name.startswith('_'):
-            raise ValueError('Field names cannot start with an underscore: %r' % name)
-        if name in seen_names:
-            raise ValueError('Encountered duplicate field name: %r' % name)
-        seen_names.add(name)
-    
-    
-def MergeMultipleFiletypes_test():
-    
-      Example usage:
+if __name__ == '__main__':
