@@ -1,41 +1,85 @@
 
         
-          # The CategoryIndex class creates a single category page for the specified category.
-  class CategoryIndex < Page
-    
-      # Improved version of Liquid's truncatewords:
-  # - Uses typographically correct ellipsis (…) insted of '...'
-  def truncatewords(input, length)
-    truncate = input.split(' ')
-    if truncate.length > length
-      truncate[0..length-1].join(' ').strip + ' &hellip;'
-    else
-      input
-    end
-  end
-    
-      class RenderPartialTag < Liquid::Tag
-    include OctopressFilters
-    def initialize(tag_name, markup, tokens)
-      @file = nil
-      @raw = false
-      if markup =~ /^(\S+)\s?(\w+)?/
-        @file = $1.strip
-        @raw = $2 == 'raw'
-      end
-      super
-    end
-    
-            def find_address
-          if @order.bill_address_id == params[:id].to_i
-            @order.bill_address
-          elsif @order.ship_address_id == params[:id].to_i
-            @order.ship_address
-          else
-            raise CanCan::AccessDenied
-          end
+                def test_url_sub_key_merges_correctly
+          hash = { 'url' => 'abstract://foo?encoding=utf8&', 'adapter' => 'sqlite3', 'host' => 'bar', 'pool' => '3' }
+          spec = resolve :production, 'production' => hash
+          assert_equal({
+            'adapter'  => 'abstract',
+            'host'     => 'foo',
+            'encoding' => 'utf8',
+            'pool'     => '3',
+            'name'     => 'production' }, spec)
         end
-      end
-    end
+    
+      test 'response status aliases deprecated' do
+    response = ActionDispatch::TestResponse.create
+    assert_deprecated { response.success? }
+    assert_deprecated { response.missing? }
+    assert_deprecated { response.error? }
   end
 end
+
+    
+                define_method('#{name}=') do |attribute|
+              attributes[name.to_sym] = attribute
+            end
+          end
+        end
+    
+    # These are the normal settings that will be set up by Railties
+# TODO: Have these tests support other combinations of these values
+silence_warnings do
+  Encoding.default_internal = Encoding::UTF_8
+  Encoding.default_external = Encoding::UTF_8
+end
+    
+        AssertSelectMailer.test('<div><p>foo</p><p>bar</p></div>').deliver_now
+    assert_select_email do
+      assert_select 'div:root' do
+        assert_select 'p:first-child', 'foo'
+        assert_select 'p:last-child', 'bar'
+      end
+    end
+  end
+    
+      test 'undefined delivery methods raises errors' do
+    DeliveryMailer.delivery_method = nil
+    error = assert_raise RuntimeError do
+      DeliveryMailer.welcome.deliver_now
+    end
+    assert_equal 'Delivery method cannot be nil', error.message
+  end
+    
+      # Finds the groups of the source user, optionally limited to those visible to
+  # the current user.
+  def execute(current_user = nil)
+    segments = all_groups(current_user)
+    
+    if profile_filename = ENV['PROFILE']
+  require 'ruby-prof'
+  reporter =
+    case (profile_extname = File.extname(profile_filename))
+    when '.txt'
+      RubyProf::FlatPrinterWithLineNumbers
+    when '.html'
+      RubyProf::GraphHtmlPrinter
+    when '.callgrind'
+      RubyProf::CallTreePrinter
+    else
+      raise 'Unknown profiler format indicated by extension: #{profile_extname}'
+    end
+  File.open(profile_filename, 'w') do |io|
+    reporter.new(RubyProf.profile { Pod::Command.run(ARGV) }).print(io)
+  end
+else
+  Pod::Command.run(ARGV)
+end
+
+    
+        prefixes
+  end
+    
+      context 'called with one prefix' do
+    it 'applies the prefix to the property' do
+      rule = '-webkit-appearance: none; ' +
+             'appearance: none;'
