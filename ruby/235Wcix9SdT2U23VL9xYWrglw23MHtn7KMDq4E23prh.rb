@@ -1,59 +1,60 @@
 
         
-              users = User.arel_table
-      people = Person.arel_table
-      profiles = Profile.arel_table
-      res = User.joins(person: :profile)
-      res = res.where(users[:username].matches('%#{username}%')) unless username.blank?
-      res = res.where(users[:email].matches('%#{email}%')) unless email.blank?
-      res = res.where(people[:guid].matches('%#{guid}%')) unless guid.blank?
-      res = res.where(profiles[:birthday].gt(Date.today-13.years)) if under13 == '1'
-      res
-    end
-  end
-end
-
-    
-          private
-    
-          def stage_set?
-        !!fetch(:stage, false)
+        def check_link(uri)
+  HTTParty.head(uri, :verify => false).code.to_i.tap do |status|
+    if (400..422).include?(status)
+      if status != 403 && !uri.exclude?('udemy.com')
+        raise 'Request had status #{status}'
+      else
+        putc('S')
       end
-    
-        def exit_deploy_because_of_exception(ex)
-      warn t(:deploy_failed, ex: ex.message)
-      invoke 'deploy:failed'
-      exit(false)
     end
-    
-        # @abstract
-    #
-    # Your implementation should check the existence of a cache repository on
-    # the deployment target
-    #
-    # @return [Boolean]
-    #
-    def test
-      raise NotImplementedError, 'Your SCM strategy module should provide a #test method'
-    end
-    
-      desc 'Started'
-  task :started do
-  end
-    
-        return captured_stdout.string, captured_stderr.string
-  ensure
-    $stdout = orig_stdout
-    $stderr = orig_stderr
   end
 end
-
     
-        def script_url_for(gist_id, filename)
-      url = 'https://gist.github.com/#{gist_id}.js'
-      url = '#{url}?file=#{filename}' unless filename.nil? or filename.empty?
-      url
+      def render(w, h, nsubsamples)
+    cnt = 0
+    nsf = nsubsamples.to_f
+    h.times do |y|
+      w.times do |x|
+        rad = Vec.new(0.0, 0.0, 0.0)
+    
+              fd.write(res)
+        end
+      end
+      break
+    rescue ::Timeout::Error
+      $stderr.puts '#{prefix}#{site} timed out'
+    rescue ::Interrupt
+      raise $!
+    rescue ::Exception => e
+      $stderr.puts '#{prefix}#{site} #{e.class} #{e}'
     end
+  end
     
-        def initialize(tag_name, markup, tokens)
-      attributes = ['class', 'src', 'width', 'height', 'title']
+            when :err
+          case s[:last]
+            when :pass
+              # Oops got a -ERR after a pass so its crap ignore the pass
+              # But report it, might be helpfull for guessing :-)
+    
+    
+# extract label addresses
+addrs = {}
+dtrans.each_line { |ln|
+	if ln =~ /;[^ ].*:/
+		parts = ln.split(' ')
+		label = parts[1]
+		label = label.slice(1,label.index(':')-1)
+		addr = parts[0].split(':')[1].to_i(16)
+		#puts '%s => %x' % [label, addr]
+		one = { label => addr }
+		addrs.merge!(one)
+	end
+}
+#puts addrs.inspect
+    
+            def stock_location
+          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
+          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:stock_location_id])
+        end
