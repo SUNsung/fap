@@ -1,174 +1,165 @@
 
         
-        with open('update/LATEST_VERSION', 'w') as f:
-    f.write(version)
+        from sklearn.dummy import DummyClassifier
     
-    from youtube_dl.compat import (
-    compat_print,
-    compat_urllib_request,
-)
-from youtube_dl.utils import format_bytes
+    from sklearn.datasets.samples_generator import make_regression
     
+      * scikit-learn
     
-def expect_dict(self, got_dict, expected_dict):
-    for info_field, expected in expected_dict.items():
-        got = got_dict.get(info_field)
-        expect_value(self, got, expected, info_field)
+    pages = {
+    u'ar': u'http://ar.wikipedia.org/wiki/%D9%88%D9%8A%D9%83%D9%8A%D8%A8%D9%8A%D8%AF%D9%8A%D8%A7',
+    u'de': u'http://de.wikipedia.org/wiki/Wikipedia',
+    u'en': u'https://en.wikipedia.org/wiki/Wikipedia',
+    u'es': u'http://es.wikipedia.org/wiki/Wikipedia',
+    u'fr': u'http://fr.wikipedia.org/wiki/Wikip%C3%A9dia',
+    u'it': u'http://it.wikipedia.org/wiki/Wikipedia',
+    u'ja': u'http://ja.wikipedia.org/wiki/Wikipedia',
+    u'nl': u'http://nl.wikipedia.org/wiki/Wikipedia',
+    u'pl': u'http://pl.wikipedia.org/wiki/Wikipedia',
+    u'pt': u'http://pt.wikipedia.org/wiki/Wikip%C3%A9dia',
+    u'ru': u'http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F',
+#    u'zh': u'http://zh.wikipedia.org/wiki/Wikipedia',
+}
     
-            if check_executable('mplayer', ['-h']):
-            args = [
-                'mplayer', '-really-quiet', '-vo', 'null', '-vc', 'dummy',
-                '-dumpstream', '-dumpfile', tmpfilename, url]
-        elif check_executable('mpv', ['-h']):
-            args = [
-                'mpv', '-really-quiet', '--vo=null', '--stream-dump=' + tmpfilename, url]
-        else:
-            self.report_error('MMS or RTSP download detected but neither 'mplayer' nor 'mpv' could be run. Please install any.')
-            return False
+    from sklearn import datasets
+from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import LinearSVC
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import (brier_score_loss, precision_score, recall_score,
+                             f1_score)
+from sklearn.calibration import CalibratedClassifierCV, calibration_curve
+from sklearn.model_selection import train_test_split
     
-        _TEST = {
-        'url': 'http://www.anitube.se/video/36621',
-        'md5': '59d0eeae28ea0bc8c05e7af429998d43',
-        'info_dict': {
-            'id': '36621',
-            'ext': 'mp4',
-            'title': 'Recorder to Randoseru 01',
-            'duration': 180.19,
-        },
-        'skip': 'Blocked in the US',
-    }
+    Non-adjusted measures such as the V-Measure show a dependency between
+the number of clusters and the number of samples: the mean V-Measure
+of random labeling increases significantly as the number of clusters is
+closer to the total number of samples used to compute the measure.
     
-            # API is inconsistent with errors
-        if 'url' not in api_response or not api_response['url'] or 'error' in api_response:
-            raise ExtractorError('Invalid url %s' % url)
+                # exhausted iterator
+            self.assertRaises(StopIteration, next, itorg)
+            dump = pickle.dumps((itorg, orig), proto)
+            it, d = pickle.loads(dump)
+            for i, x in enumerate(data):
+                d[i] = x
+            self.assertEqual(type(it), type(itorg))
+            self.assertEqual(list(it), [])
     
-    UNICODE = FILE_CONTENT
-
+        def test_set_properties(self):
+        morsel = cookies.Morsel()
+        with self.assertRaises(AttributeError):
+            morsel.key = ''
+        with self.assertRaises(AttributeError):
+            morsel.value = ''
+        with self.assertRaises(AttributeError):
+            morsel.coded_value = ''
     
-        def __init__(self, **kwargs):
+        def skip(self):
+        '''Skip the rest of the chunk.
+        If you are not interested in the contents of the chunk,
+        this method should be called so that the file points to
+        the start of the next chunk.
         '''
-        :param env: an class:`Environment` instance
-        :param kwargs: additional keyword argument that some
-                       processor might require.
     
-    import requests.auth
+    simple_escapes = {'a': '\a',
+                  'b': '\b',
+                  'f': '\f',
+                  'n': '\n',
+                  'r': '\r',
+                  't': '\t',
+                  'v': '\v',
+                  ''': ''',
+                  ''': ''',
+                  '\\': '\\'}
     
+        # We only ever write one 'entry point' symbol - either
+    # 'main' or 'WinMain'.  Therefore, there is no need to
+    # pass a subsystem switch to the linker as it works it
+    # out all by itself.  However, the subsystem _does_ determine
+    # the file extension and additional linker flags.
+    target_link_flags = ''
+    target_ext = '.exe'
+    if subsystem_details[vars['subsystem']][2]:
+        target_link_flags = '-dll'
+        target_ext = '.dll'
     
-class Config(BaseConfigDict):
+    class PyBaseExceptionObjectPtr(PyObjectPtr):
+    '''
+    Class wrapping a gdb.Value that's a PyBaseExceptionObject* i.e. an exception
+    within the process being debugged.
+    '''
+    _typename = 'PyBaseExceptionObject'
     
-        try:
-        s2 = os.lstat(parent)
-    except OSError:
-        # one should handle the returned OSError with more care to figure
-        # out whether this is still a mount
+        def test_help_flag(self):
+        rc, out, err = assert_python_ok('-m', 'json.tool', '-h')
+        self.assertEqual(rc, 0)
+        self.assertTrue(out.startswith(b'usage: '))
+        self.assertEqual(err, b'')
+    
+            try:
+            result = self.fn(*self.args, **self.kwargs)
+        except BaseException:
+            e = sys.exc_info()[1]
+            self.future.set_exception(e)
+        else:
+            self.future.set_result(result)
+    
+    def is_prime(n):
+    if n % 2 == 0:
         return False
     
     
-class GCPUtilsTestCase(unittest.TestCase):
-    params_dict = {
-        'url_map_name': 'foo_url_map_name',
-        'description': 'foo_url_map description',
-        'host_rules': [
-            {
-                'description': 'host rules description',
-                'hosts': [
-                        'www.example.com',
-                        'www2.example.com'
-                ],
-                'path_matcher': 'host_rules_path_matcher'
-            }
-        ],
-        'path_matchers': [
-            {
-                'name': 'path_matcher_one',
-                'description': 'path matcher one',
-                'defaultService': 'bes-pathmatcher-one-default',
-                'pathRules': [
-                        {
-                            'service': 'my-one-bes',
-                            'paths': [
-                                '/',
-                                '/aboutus'
-                            ]
-                        }
-                ]
-            },
-            {
-                'name': 'path_matcher_two',
-                'description': 'path matcher two',
-                'defaultService': 'bes-pathmatcher-two-default',
-                'pathRules': [
-                        {
-                            'service': 'my-two-bes',
-                            'paths': [
-                                '/webapp',
-                                '/graphs'
-                            ]
-                        }
-                ]
-            }
-        ]
-    }
+def _FormatCompleterDebugInfo( completer ):
+  message = '{0} completer debug information:\n'.format( completer[ 'name' ] )
+  for server in completer[ 'servers' ]:
+    name = server[ 'name' ]
+    if server[ 'is_running' ]:
+      address = server[ 'address' ]
+      port = server[ 'port' ]
+      if address and port:
+        message += '  {0} running at: http://{1}:{2}\n'.format( name,
+                                                                address,
+                                                                port )
+      else:
+        message += '  {0} running\n'.format( name )
+      message += '  {0} process ID: {1}\n'.format( name, server[ 'pid' ] )
+    else:
+      message += '  {0} not running\n'.format( name )
+    message += '  {0} executable: {1}\n'.format( name, server[ 'executable'] )
+    logfiles = server[ 'logfiles' ]
+    if logfiles:
+      message += '  {0} logfiles:\n'.format( name )
+      for logfile in logfiles:
+        message += '    {0}\n'.format( logfile )
+    else:
+      message += '  No logfiles available\n'
+    if 'extras' in server:
+      for extra in server[ 'extras' ]:
+        message += '  {0} {1}: {2}\n'.format( name,
+                                              extra[ 'key' ],
+                                              extra[ 'value' ] )
+  for item in completer[ 'items' ]:
+    message += '  {0}: {1}\n'.format( item[ 'key' ].capitalize(),
+                                      item[ 'value' ] )
+  return message
     
-        def on_open_shell(self):
-        try:
-            self._exec_cli_command('screen-length 0 temporary')
-        except AnsibleConnectionFailure:
-            raise AnsibleConnectionFailure('unable to set terminal parameters')
-
-    
-        terminal_length = os.getenv('ANSIBLE_VYOS_TERMINAL_LENGTH', 10000)
-    
-        def from_spider(self, spider, results):
-        requests = []
-        for method in self.tested_methods_from_spidercls(type(spider)):
-            bound_method = spider.__getattribute__(method)
-            requests.append(self.from_method(bound_method, results))
-    
-            try:
-            self.max_bound = int(self.args[2])
-        except IndexError:
-            self.max_bound = float('inf')
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
     
-def SendCompleterAvailableRequest( filetypes ):
-  request = CompleterAvailableRequest( filetypes )
-  # This is a blocking call.
-  request.Start()
-  return request.Response()
-
-    
-    
-def FormatDebugInfoResponse_Completer_ServerNotRunningWithNoLogfiles_test():
+def FormatDebugInfoResponse_ExtraConfFoundAndLoaded_test():
   response = deepcopy( GENERIC_RESPONSE )
-  response[ 'completer' ][ 'servers' ][ 0 ].update( {
-    'is_running': False,
-    'logfiles': []
+  response[ 'extra_conf' ].update( {
+    'is_loaded': True,
+    'path': '/path/to/extra/conf'
   } )
   assert_that(
     FormatDebugInfoResponse( response ),
     contains_string(
-      'Completer name completer debug information:\n'
-      '  Server name not running\n'
-      '  Server name executable: /path/to/executable\n'
-      '  No logfiles available\n'
-      '  Server name key: value\n'
-      '  Key: value\n'
+      'Extra configuration file found and loaded\n'
+      'Extra configuration path: /path/to/extra/conf\n'
     )
   )
-
-    
-    
-def CommaSeparatedFiletypes_test():
-    
-        def __init__(self, HierachicalStateMachine):
-        self._hsm = HierachicalStateMachine
-    
-    Test code which will almost always fail (if not exactly 12:01) when untestable
-production code (have a look into constructor_injection.py) is used:
-    
-    from dft.constructor_injection import TimeDisplay, MidnightTimeProvider, ProductionCodeTimeProvider, datetime
-    
-    
-class Transaction(object):
-    '''A transaction guard.
