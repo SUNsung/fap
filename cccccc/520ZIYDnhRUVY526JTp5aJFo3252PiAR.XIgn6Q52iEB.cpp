@@ -1,72 +1,155 @@
 
         
-          // Publish metadata about the debugged Session::Run() call.
-  //
-  // See the doc string of DebuggerStateInterface::PublishDebugMetadata() for
-  // details.
-  Status PublishDebugMetadata(const int64 global_step,
-                              const int64 session_run_count,
-                              const int64 executor_step_count,
-                              const std::vector<string>& input_names,
-                              const std::vector<string>& output_names,
-                              const std::vector<string>& target_names) override;
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-      ExpectSuccess(Builder().Input(FakeInput(3, DT_STRING)),
-                {DT_STRING, DT_STRING, DT_STRING}, {}, R'proto(
-      op: 'NPolymorphicRestrictIn'
-      input: ['a', 'a:1', 'a:2']
-      attr { key: 'N' value { i: 3 } }
-      attr { key: 'T' value { type: DT_STRING } } )proto');
-    
-    template <typename T>
-struct DynamicStitchOpCPU : DynamicStitchOpImplCPU<T, false> {
-  using DynamicStitchOpImplCPU<T, false>::DynamicStitchOpImplCPU;
-};
-    
-    void SavePageHandler::Destroy(content::DownloadItem* item) {
-  item->RemoveObserver(this);
-  delete this;
-}
-    
-    namespace content {
-class WebContents;
-}
-    
-    
+        
     { private:
-  DISALLOW_COPY_AND_ASSIGN(AtomQuotaPermissionContext);
+  std::unordered_set<string> debug_urls_;
 };
     
-     private:
-  // Must be called on IO thread.
-  void DoCancelAuth();
-  void DoLogin(const base::string16& username, const base::string16& password);
+    #include <string>
     
-    namespace asar {
+    // Estimate the cost of running a Grappler item by actually running the
+// corresponding TensorFlow graph on the specified cluster and measuring the
+// runtimes.
+class MeasuringCostEstimator : public CostEstimator {
+ public:
+  // Run the model for measurement_steps to measure its average cost.
+  // When measurement_threads is greater than 0, use a threadpool of as many
+  // threads to run the measurements; otherwise, run them serially. Does not
+  // take ownership of cluster.
+  explicit MeasuringCostEstimator(Cluster* cluster, int measurement_steps,
+                                  int measurement_threads);
+  ~MeasuringCostEstimator() override {}
     }
     
-    net::URLRequestJob* HttpProtocolHandler::MaybeCreateJob(
-    net::URLRequest* request,
-    net::NetworkDelegate* network_delegate) const {
-  return net::URLRequestHttpJob::Factory(request,
-                                         network_delegate,
-                                         scheme_);
+    // e.g. DriverVersion{346, 3, 4}
+using DriverVersion = std::tuple<int, int, int>;
+    
+      // Calls Close() and logs if an error occurs.
+  //
+  // TODO(jhseu): Require that callers explicitly call Close() and remove the
+  // implicit Close() call in the destructor.
+  ~RecordWriter();
+    
+    void SYCLDeviceContext::CopyDeviceTensorToCPU(const Tensor *device_tensor,
+                                              StringPiece edge_name,
+                                              Device *device,
+                                              Tensor *cpu_tensor,
+                                              StatusCallback done) {
+  const int64 total_bytes = device_tensor->TotalBytes();
+  if (total_bytes > 0) {
+    const void *src_ptr = DMAHelper::base(device_tensor);
+    void *dst_ptr = DMAHelper::base(cpu_tensor);
+    switch (device_tensor->dtype()) {
+      case DT_FLOAT:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<float *>(dst_ptr), static_cast<const float *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_DOUBLE:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<double *>(dst_ptr),
+            static_cast<const double *>(src_ptr), total_bytes);
+        break;
+      case DT_INT32:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<int32 *>(dst_ptr), static_cast<const int32 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_INT64:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<int64 *>(dst_ptr), static_cast<const int64 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_HALF:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<Eigen::half *>(dst_ptr),
+            static_cast<const Eigen::half *>(src_ptr), total_bytes);
+        break;
+      case DT_COMPLEX64:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<std::complex<float> *>(dst_ptr),
+            static_cast<const std::complex<float> *>(src_ptr), total_bytes);
+        break;
+      case DT_COMPLEX128:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<std::complex<double> *>(dst_ptr),
+            static_cast<const std::complex<double> *>(src_ptr), total_bytes);
+        break;
+      case DT_INT8:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<int8 *>(dst_ptr), static_cast<const int8 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_INT16:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<int16 *>(dst_ptr), static_cast<const int16 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_UINT8:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<uint8 *>(dst_ptr), static_cast<const uint8 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_UINT16:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<uint16 *>(dst_ptr),
+            static_cast<const uint16 *>(src_ptr), total_bytes);
+        break;
+      case DT_BOOL:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<bool *>(dst_ptr), static_cast<const bool *>(src_ptr),
+            total_bytes);
+        break;
+      default:
+        assert(false && 'unsupported type');
+    }
+  }
+  device->eigen_sycl_device()->synchronize();
+  done(Status::OK());
 }
     
+        const Tensor& contents = context->input(0);
+    const Tensor& file_format_tensor = context->input(1);
+    const Tensor& samples_per_second_tensor = context->input(2);
+    const Tensor& bits_per_second_tensor = context->input(3);
     
-    {  DISALLOW_COPY_AND_ASSIGN(URLRequestStringJob);
-};
-    
-    class TrayIconGtk : public TrayIcon,
-                    public views::StatusIconLinux::Delegate {
- public:
-  TrayIconGtk();
-  virtual ~TrayIconGtk();
+        // TODO(jeff): Currently we leave uninitialized any portions of
+    // merged that aren't covered by an index in indices.  What should we do?
+    if (first_dim_size > 0) {
+      // because the collision requirements, we have to deal with
+      // collion first before send data to gpu kernel.
+      // TODO(ekelsen): Instead of doing a serial scan on the CPU to pick the
+      // last of duplicated indices, it could instead be done of the GPU
+      // implicitly using atomics to make sure the last index is the final
+      // write.
+      const int slice_size = merged->flat_outer_dims<T>().dimension(1);
+      CudaDeviceArrayOnHost<int32> indices_flat(c, first_dim_size);
+      CudaDeviceArrayOnHost<const T*> data_flat(c, data_elements_size);
+      OP_REQUIRES_OK(c, indices_flat.Init());
+      OP_REQUIRES_OK(c, data_flat.Init());
+      // initialize the indices_flat (-1 represents missing indices)
+      for (int i = 0; i < first_dim_size; ++i) {
+        indices_flat.Set(i, -1);
+      }
     }
     
-    using namespace swift;
+        GraphDef result;
+    TransformFuncContext context;
+    context.input_names = {};
+    context.output_names = {'mul_node1'};
+    TF_ASSERT_OK(RemoveDevice(graph_def, context, &result));
+    
+      /// Autorelease a return value.
+  llvm::Value *emitObjCAutoreleaseReturnValue(IRGenFunction &IGF,
+                                              llvm::Value *value);
+    
+    
+    {
+    {    C[0] = C[1];
+    TargetStart = C + 1;
+    GCBForC0 = GCBForC1;
+  }
+}
     
     /// Index the given module and store the results to \p indexStorePath.
 ///
@@ -99,209 +182,353 @@ bool indexAndRecord(ModuleDecl *module, ArrayRef<std::string> indexUnitTokens,
 // FIXME: indexUnitTokens could be StringRef, but that creates an impedance
 // mismatch in the caller.
     
-      /// Indicates whether the diagnostics produced during compilation should be
-  /// checked against expected diagnostics, indicated by markers in the
-  /// input source file.
-  enum {
-    NoVerify,
-    Verify,
-    VerifyAndApplyFixes
-  } VerifyMode = NoVerify;
     
-    namespace swift {
+    {  static bool classof(const MarkupASTNode *N) {
+    return N->getKind() == ASTNodeKind::Text;
+  }
+};
+    
+    void dump(SubstitutionList subs);
+    
+    struct IndexSymbol : IndexRelation {
+  SmallVector<IndexRelation, 3> Relations;
+  unsigned line = 0;
+  unsigned column = 0;
     }
     
-    Substitution::Substitution(Type Replacement,
-                           ArrayRef<ProtocolConformanceRef> Conformance)
-  : Replacement(Replacement), Conformance(Conformance)
-{
-  // The replacement type must be materializable.
-  assert(Replacement->isMaterializable()
-         && 'cannot substitute with a non-materializable type');
+      /// Creates and adds a memory buffer to the \c SourceManager, taking
+  /// ownership of the newly created copy.
+  ///
+  /// \p InputData and \p BufIdentifier are copied, so that this memory can go
+  /// away as soon as this function returns.
+  unsigned addMemBufferCopy(StringRef InputData, StringRef BufIdentifier = '');
+    
+    
+    {  return predictions;
 }
     
     
-    {    ICOORD pt;
-    int halfwidth;
-  };
-  // Type holds the distance of each point from the fitted line and the point
-  // itself. Use of double allows integer distances from ICOORDs to be stored
-  // exactly, and also the floating point results from ConstrainedFit.
-  typedef KDPairInc<double, ICOORD> DistPointPair;
+    { protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times 1 \times K) @f$ or, if out_max_val
+   *      @f$ (N \times 2 \times K) @f$ unless axis set than e.g.
+   *      @f$ (N \times K \times H \times W) @f$ if axis == 1
+   *      the computed outputs @f$
+   *       y_n = \arg\max\limits_i x_{ni}
+   *      @f$ (for @f$ K = 1 @f$).
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  /// @brief Not implemented (non-differentiable function)
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
+    NOT_IMPLEMENTED;
+  }
+  bool out_max_val_;
+  size_t top_k_;
+  bool has_axis_;
+  int axis_;
+};
     
-    void LLSQ::remove(double x, double y) {          // delete an element
-  if (total_weight <= 0.0)                       // illegal
-    EMPTY_LLSQ.error('LLSQ::remove', ABORT, NULL);
-  total_weight--;                           // count elements
-  sigx -= x;                     // update accumulators
-  sigy -= y;
-  sigxx -= x * x;
-  sigxy -= x * y;
-  sigyy -= y * y;
+    #endif  // CAFFE_BASE_CONVOLUTION_LAYER_HPP_
+
+    
+    #endif  // CAFFE_CUDNN_POOLING_LAYER_HPP_
+
+    
+    #include 'caffe/layers/neuron_layer.hpp'
+#include 'caffe/layers/tanh_layer.hpp'
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+      // Instead of 1/0, we want to see true/false for bool values.
+  Message& operator <<(bool b) {
+    return *this << (b ? 'true' : 'false');
+  }
+    
+    // Copyright 2008, Google Inc.
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+// Authors: vladl@google.com (Vlad Losev)
+//
+// Macros and functions for implementing parameterized tests
+// in Google C++ Testing Framework (Google Test)
+//
+// This file is generated by a SCRIPT.  DO NOT EDIT BY HAND!
+//
+#ifndef GTEST_INCLUDE_GTEST_GTEST_PARAM_TEST_H_
+#define GTEST_INCLUDE_GTEST_GTEST_PARAM_TEST_H_
+    
+     private:
+  std::string file_;
+  int line_;
+  int index_;
+  int write_fd_;
+    
+    
+    {
+    {}  // namespace internal
+}  // namespace testing
+    
+    // scripts/fuse_gtest.py depends on gtest's own header being #included
+// *unconditionally*.  Therefore these #includes cannot be moved
+// inside #if GTEST_HAS_PARAM_TEST.
+#include 'gtest/internal/gtest-internal.h'
+#include 'gtest/internal/gtest-linked_ptr.h'
+#include 'gtest/internal/gtest-port.h'
+#include 'gtest/gtest-printers.h'
+    
+      // Formats an int value as '%X'.
+  static std::string FormatHexInt(int value);
+    
+    
+    {}  // namespace gtest_internal
+    
+    #include 'hphp/runtime/base/array-init.h'
+#include 'hphp/runtime/base/datetime.h'
+#include 'hphp/runtime/base/resource-data.h'
+#include 'hphp/runtime/base/type-array.h'
+#include 'hphp/runtime/base/type-string.h'
+#include 'hphp/util/timer.h'
+    
+      int64_t getTime() const;
+    
+    VcallArgsId Vunit::makeVcallArgs(VcallArgs&& args) {
+  VcallArgsId i(vcallArgs.size());
+  vcallArgs.emplace_back(std::move(args));
+  return i;
 }
     
-      tesseract::ParagraphJustification justification() const {
-    return justification_;
-  }
-  int margin() const { return margin_; }
-  int first_indent() const { return first_indent_; }
-  int body_indent() const { return body_indent_; }
-  int tolerance() const { return tolerance_; }
-  bool is_flush() const {
-    return (justification_ == tesseract::JUSTIFICATION_LEFT ||
-            justification_ == tesseract::JUSTIFICATION_RIGHT) &&
-        abs(first_indent_ - body_indent_) <= tolerance_;
-  }
-    
-    
-/**********************************************************************
- * QLSQ::fit
+    /*
+ * Vasm constant.
  *
- * Fit the given degree of polynomial and store the result.
- * This creates a quadratic of the form axx + bx + c, but limited to
- * the given degree.
- **********************************************************************/
+ * Either a 1, 4, or 8 byte unsigned value, 8 byte double, or the disp32 part
+ * of a thread-local address of an immutable constant that varies by thread.
+ * Constants may also represent an undefined value, indicated by the isUndef
+ * member.
+ *
+ * Also contains convenience constructors for various pointer and enum types.
+ */
+struct Vconst {
+  enum Kind { Quad, Long, Byte, Double };
+    }
+    
+      Object gmpObject = data.toObject();
+  if (!gmpObject.instanceof(s_GMP_GMP)) {
+    raise_warning(cs_GMP_INVALID_OBJECT, 'gmp_setbit');
+    return;
+  }
     
     
-    {}  // namespace tesseract.
     
-      // Main worker method that retrieves the next number in the sequence.
-  // Returns kInvalidVal if called more than N times after object initialization
-  int GetVal() {
-    const int kInvalidVal = -1;
-    const int kMaxNaturalNumberValue = 1 << num_bits_;
-    if (next_num_ >= kMaxNaturalNumberValue)
-      return kInvalidVal;
-    int n = next_num_;
+    #ifdef _MSC_VER
+  HMODULE moduleHandle = GetModuleHandleA(fname.data());
+  HGLOBAL loadedResource;
+  HRSRC   resourceInfo;
+  DWORD   resourceSize;
+    
+    namespace tc {
+    }
+    
+    		unsigned int left_frames = ad->buffer_frames;
+		unsigned int buffer_idx = 0;
+		while (left_frames > 0 && ad->audio_client) {
+			WaitForSingleObject(ad->event, 1000);
+    }
+    
+    #include 'io/stream_peer.h'
+    
+    
+    {	return CONNECTION_CONNECTING;
+}
+    
+    			if (op->arguments[0]->type == GDScriptParser::Node::TYPE_TYPE) {
+    }
+    
+    	pos.y += h * p_slot;
+    
+    
+    {		if (E->get() == edited_scene) {
+			entire_scene = true;
+		}
+	}
+    
+    
+    {
+    {} // namespace asio
+} // namespace boost
+    
+    template <>
+class base_from_completion_cond<transfer_all_t>
+{
+protected:
+  explicit base_from_completion_cond(transfer_all_t)
+  {
+  }
+    }
+    
+      // Resize the buffer to the specified length.
+  void resize(size_type length)
+  {
+    BOOST_ASIO_ASSERT(length <= capacity());
+    if (begin_offset_ + length <= capacity())
+    {
+      end_offset_ = begin_offset_ + length;
+    }
+    else
+    {
+      using namespace std; // For memmove.
+      memmove(&buffer_[0], &buffer_[0] + begin_offset_, size());
+      end_offset_ = length;
+      begin_offset_ = 0;
+    }
+  }
+    
+        // Find the next context with the same key.
+    Value* next_by_key() const
+    {
+      context* elem = next_;
+      while (elem)
+      {
+        if (elem->key_ == key_)
+          return elem->value_;
+        elem = elem->next_;
+      }
+      return 0;
     }
     
     
     {
-  // Total scaled error used by boosting algorithms.
-  double scaled_error_;
-  // Difference in result rating to be thought of as an 'equal' choice.
-  double rating_epsilon_;
-  // Vector indexed by font_id from the samples of error accumulators.
-  GenericVector<Counts> font_counts_;
-  // Counts of the results that map each unichar_id (from samples) to an
-  // incorrect shape_id.
-  GENERIC_2D_ARRAY<int> unichar_counts_;
-  // Count of the number of times each shape_id occurs, is correct, and multi-
-  // unichar.
-  GenericVector<int> multi_unichar_counts_;
-  // Histogram of scores (as percent) for correct answers.
-  STATS ok_score_hist_;
-  // Histogram of scores (as percent) for incorrect answers.
-  STATS bad_score_hist_;
-  // Unicharset for printing character ids in results.
-  const UNICHARSET& unicharset_;
-};
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
     
-    #define XIntersectionOf(A,B,X)  ( SlopeFrom(A,B) * ((X) - A.x) + A.y)
+    #include <boost/asio/detail/push_options.hpp>
     
-    // Returns the index of the current sample in compact charset space, so
-// in a 2-class problem between x and y, the returned indices will all be
-// 0 or 1, and have nothing to do with the unichar_ids.
-// If the charset_map_ is NULL, then this is equal to GetSparseClassID().
-int SampleIterator::GetCompactClassID() const {
-  return charset_map_ != NULL ? charset_map_->SparseToCompact(shape_index_)
-                              : GetSparseClassID();
-}
-// Returns the index of the current sample in sparse charset space, so
-// in a 2-class problem between x and y, the returned indices will all be
-// x or y, where x and y may be unichar_ids (no shape_table_) or shape_ids
-// with a shape_table_.
-int SampleIterator::GetSparseClassID() const {
-  return shape_table_ != NULL ? shape_index_ : GetSample().class_id();
-}
-    
-    bool js_cocos2dx_builder_CCBReader_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_builder_CCBReader_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_builder_CCBReader(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_builder_CCBReader_getAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readSoundKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readUTF8(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readCallbackKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getAnimationManagersForNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getNodesWithAnimationManagers(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setResolutionScale(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_CCBReader(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    {        ok &= luaval_to_boolean(tolua_S, 3,&arg1, 'cc.SimpleAudioEngine:playBackgroundMusic');
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_playBackgroundMusic'', nullptr);
-            return 0;
-        }
-        cobj->playBackgroundMusic(arg0, arg1);
-        lua_settop(tolua_S, 1);
-        return 1;
+    namespace boost {
+namespace asio {
+namespace detail {
     }
-    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.SimpleAudioEngine:playBackgroundMusic',argc, 1);
-    return 0;
-    
-    #ifdef __cplusplus
-extern 'C' {
-#endif
-#include 'tolua++.h'
-#ifdef __cplusplus
-}
-#endif
-    
-    
-    
-    
-    
-    
-    
-    	m_world->Step(timeStep, settings->velocityIterations, settings->positionIterations);
-    
-    #endif
-
-    
-    			b2FixtureDef sd1;
-			sd1.shape = &poly1;
-			sd1.density = 4.0f;
-    
-    
-    {		Test::Step(settings);
-	}
-    
-    TemporaryFile::TemporaryFile(size_t size)
-    : path_(fs::temp_directory_path() / fs::unique_path()) {
-  CHECK_EQ(size % sizeof(uint32_t), 0);
-  size /= sizeof(uint32_t);
-  const uint32_t seed = 42;
-  std::mt19937 rnd(seed);
+    }
     }
     
+        // Helper methods
+    static bool HasFamilyNamed(std::string& name, DBWrapper* db);
+    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
+        Handle<Array> array);
+    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
+        Handle<Array> array, DBWrapper* db_wrapper, std::string cf);
+    static Handle<Value> CompactRangeDefault(const v8::Arguments& args);
+    static Handle<Value> CompactColumnFamily(const Arguments& args);
+    static Handle<Value> CompactOptions(const Arguments& args);
+    static Handle<Value> CompactAll(const Arguments& args);
     
-    { private:
-  bool async_{true};
-  Optional<size_t> maxBufferSize_;
+    This pointer must be provided as 'void* state' parameter for XXH32_update().
+XXH32_update() can be called as many times as necessary.
+The user must provide a valid (allocated) input.
+The function returns an error code, with 0 meaning OK, and any other value meaning there is an error.
+Note that 'len' is type 'int', which means it is limited to 2^31-1.
+If your data is larger, it is recommended to chunk your data into blocks
+of size for example 2^30 (1GB) to avoid any 'int' overflow issue.
+    
+      virtual const char* Name() const override;
+    
+      std::string a, b, c;
+  bool sa, sb, sc;
+  sa = slists.Get('a', &a);
+  sb = slists.Get('b', &b);
+  sc = slists.Get('c', &c);
+    
+    
+    {  /// The backend rocksdb database.
+  /// Map : key --> list
+  ///       where a list is a sequence of elements
+  ///       and an element is a 4-byte integer (n), followed by n bytes of data
+  std::unique_ptr<DB> db_;
 };
     
-    /**
- * Parse a JSON configuration string.
- *
- * See the documentation in logging/docs/Config.md for a description of the
- * JSON configuration object format.
- *
- * This function uses relaxed JSON parsing, allowing C and C++ style
- * comments, as well as trailing commas.
- */
-LogConfig parseLogConfigJson(StringPiece value);
+      uint32_t ValueOffset() const {
+    return static_cast<uint32_t>(value_.data() - data_);
+  }
+    
+    namespace rocksdb {
+JniCallback::JniCallback(JNIEnv* env, jobject jcallback_obj) {
+  // Note: jcallback_obj may be accessed by multiple threads,
+  // so we ref the jvm not the env
+  const jint rs = env->GetJavaVM(&m_jvm);
+  if(rs != JNI_OK) {
+    // exception thrown
+    return;
+  }
+    }
+    }
+    
+      virtual void reset_counter() override {
+    miss_times_.store(0, std::memory_order_relaxed);
+    hit_times_.store(0, std::memory_order_relaxed);
+    SetTickerCount(stats_, SIM_BLOCK_CACHE_HIT, 0);
+    SetTickerCount(stats_, SIM_BLOCK_CACHE_MISS, 0);
+  }
+    
+      // Adds a file to the backup work queue to be copied or created if it doesn't
+  // already exist.
+  //
+  // Exactly one of src_dir and contents must be non-empty.
+  //
+  // @param src_dir If non-empty, the file in this directory named fname will be
+  //    copied.
+  // @param fname Name of destination file and, in case of copy, source file.
+  // @param contents If non-empty, the file will be created with these contents.
+  Status AddBackupFileWorkItem(
+      std::unordered_set<std::string>& live_dst_paths,
+      std::vector<BackupAfterCopyOrCreateWorkItem>& backup_items_to_finish,
+      BackupID backup_id, bool shared, const std::string& src_dir,
+      const std::string& fname,  // starts with '/'
+      RateLimiter* rate_limiter, uint64_t size_bytes, uint64_t size_limit = 0,
+      bool shared_checksum = false,
+      std::function<void()> progress_callback = []() {},
+      const std::string& contents = std::string());
+    
+      // Returns the sequence number that is guaranteed to be smaller than or equal
+  // to the sequence number of any key that could be inserted into this
+  // memtable. It can then be assumed that any write with a larger(or equal)
+  // sequence number will be present in this memtable or a later memtable.
+  //
+  // If the earliest sequence number could not be determined,
+  // kMaxSequenceNumber will be returned.
+  SequenceNumber GetEarliestSequenceNumber() {
+    return earliest_seqno_.load(std::memory_order_relaxed);
+  }
