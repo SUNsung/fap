@@ -1,386 +1,314 @@
 
         
-        void
-SyntaxASTMap::recordSyntaxMapping(RC<syntax::SyntaxData> FromNode,
-                                  ASTNode ToNode) {
-  if (FromNode->getKind() == SyntaxKind::Unknown) {
+            return;
+  } else if (method == 'ClearCache') {
+    ClearCache(GetRenderProcessHost());
     return;
+  } else if (method == 'CreateShortcut') {
+#if defined(OS_WIN)
+    base::string16 path;
+    arguments.GetString(0, &path);
+    
+    // Call method of an object in browser and return the result.
+// function CallObjectMethod(id, type, method, args);
+v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
+                                           int object_id,
+                                           const std::string& type,
+                                           const std::string& method,
+                                           v8::Handle<v8::Value> args);
+    
+    
+    {  args.GetReturnValue().Set(remote::CallObjectMethodSync(render_view->GetRoutingID(), object_id, type, method, args[3]));
+}
+    
+    void Menu::Call(const std::string& method,
+                const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  if (method == 'Append') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    Append(object_manager()->GetApiObject<MenuItem>(object_id));
+  } else if (method == 'Insert') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Remove') {
+    int object_id = 0;
+    arguments.GetInteger(0, &object_id);
+    int pos = 0;
+    arguments.GetInteger(1, &pos);
+    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
+  } else if (method == 'Popup') {
+    int x = 0;
+    arguments.GetInteger(0, &x);
+    int y = 0;
+    arguments.GetInteger(1, &y);
+    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
+    DCHECK(web_contents);
+    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
+    }
+    }
+    
+    #include 'content/nw/src/api/menuitem/menuitem.h'
+    
+    
+    {
+    {}  // namespace log
+}  // namespace leveldb
+    
+    struct FileMetaData {
+  int refs;
+  int allowed_seeks;          // Seeks allowed until compaction
+  uint64_t number;
+  uint64_t file_size;         // File size in bytes
+  InternalKey smallest;       // Smallest internal key served by table
+  InternalKey largest;        // Largest internal key served by table
+    }
+    
+      VersionEdit edit;
+  for (int i = 0; i < 4; i++) {
+    TestEncodeDecode(edit);
+    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
+                 InternalKey('foo', kBig + 500 + i, kTypeValue),
+                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
+    edit.DeleteFile(4, kBig + 700 + i);
+    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
   }
-    }
     
-    NS_ASSUME_NONNULL_END
-
-    
-    
-    {  if (!failed && !recordFile.empty())
-    callback(recordFile, SF->getFilename());
-  return failed;
-}
-    
-    public:
-  static BlockQuote *create(MarkupContext &MC, ArrayRef<MarkupASTNode *> Children);
-    
-      virtual void handleDiagnostic(SourceManager &SM, SourceLoc Loc,
-                                DiagnosticKind Kind,
-                                StringRef FormatString,
-                                ArrayRef<DiagnosticArgument> FormatArgs,
-                                const DiagnosticInfo &Info) override;
-    
-    namespace swift {
-class Decl;
-class ValueDecl;
-enum class AccessorKind;
-    }
-    
-    // Get render process host.
-RenderProcessHost* GetRenderProcessHost() {
-  RenderProcessHost* render_process_host = NULL;
-  std::vector<Shell*> windows = Shell::windows();
-  for (size_t i = 0; i < windows.size(); ++i) {
-    if (!windows[i]->is_devtools()) {
-      render_process_host = windows[i]->web_contents()->GetRenderProcessHost();
-      break;
+      // Check the crc of the type and the block contents
+  const char* data = contents.data();    // Pointer to where Read put the data
+  if (options.verify_checksums) {
+    const uint32_t crc = crc32c::Unmask(DecodeFixed32(data + n + 1));
+    const uint32_t actual = crc32c::Value(data, n + 1);
+    if (actual != crc) {
+      delete[] buf;
+      s = Status::Corruption('block checksum mismatch');
+      return s;
     }
   }
-    }
-    
-    namespace base {
-class DictionaryValue;
-class ListValue;
-}
-    
-    v8::Handle<v8::Value> CallObjectMethod(int routing_id,
-                                       int object_id,
-                                       const std::string& type,
-                                       const std::string& method,
-                                       v8::Handle<v8::Value> args) {
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  scoped_ptr<V8ValueConverter> converter(V8ValueConverter::create());
-    }
     
     
-    {  net::CertificateList merged_trust_anchors(*params.additional_trust_anchors());
-  merged_trust_anchors.insert(merged_trust_anchors.begin(),
-                              trust_anchors_.begin(), trust_anchors_.end());
-  net::CertVerifier::RequestParams new_params(
-      params.certificate(), params.hostname(), params.flags(),
-      params.ocsp_response(), merged_trust_anchors);
-  int error = delegate_->Verify(new_params, crl_set, verify_result,
-                                wrapped_callback, out_req, net_log);
-  MaybeSignalAnchorUse(error, anchor_used_callback_, *verify_result);
-  return error;
-}
-    
-    void Clipboard::Call(const std::string& method,
-                     const base::ListValue& arguments) {
-  if (method == 'Set') {
-    std::string text, type;
-    arguments.GetString(0, &text);
-    arguments.GetString(1, &type);
-    SetText(text);
-  } else if (method == 'Clear') {
-    Clear();
-  } else {
-    NOTREACHED() << 'Invalid call to Clipboard method:' << method
-                 << ' arguments:' << arguments;
+    {
+    {  STLLessThan() : cmp(BytewiseComparator()) { }
+  STLLessThan(const Comparator* c) : cmp(c) { }
+  bool operator()(const std::string& a, const std::string& b) const {
+    return cmp->Compare(Slice(a), Slice(b)) < 0;
   }
-}
-    
-    namespace nwapi {
-    }
-    
-    
-#include 'base/basictypes.h'
-    
-    
-bool MenuDelegate::GetAcceleratorForCommandId(
-      int command_id,
-      ui::Accelerator* accelerator) const {
-  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-    }
-    
-    namespace {
-    }
-    
-        cost__ = 9999;
-    
-    CV_EXPORTS Mat NormalizePixels(const Mat& imagePoints, const IntrinsicParams& param);
-    
-    
-    {}
-    
-    #include '../../precomp.hpp'
-    
-    bool OutputImageComponent::IsAllZero() const {
-  int numcoeffs = num_blocks_ * kDCTBlockSize;
-  for (int i = 0; i < numcoeffs; ++i) {
-    if (coeffs_[i] != 0) return false;
-  }
-  return true;
-}
-    
-    namespace guetzli {
-    }
-    
-    // Performs in-place floating point 8x8 DCT on block[0..63].
-// Note that the DCT used here is the DCT-2 with the first term multiplied by
-// 1/sqrt(2) and the result scaled by 1/2.
-void ComputeBlockDCTDouble(double block[64]);
-    
-    inline int Log2Floor(uint32_t n) {
-  return n == 0 ? -1 : Log2FloorNonZero(n);
-}
-    
-    // kIDCTMatrix[8*x+u] = alpha(u)*cos((2*x+1)*u*M_PI/16)*sqrt(2), with fixed 13
-// bit precision, where alpha(0) = 1/sqrt(2) and alpha(u) = 1 for u > 0.
-// Some coefficients are off by +-1 to mimick libjpeg's behaviour.
-static const int kIDCTMatrix[kDCTBlockSize] = {
-  8192,  11363,  10703,   9633,   8192,   6437,   4433,   2260,
-  8192,   9633,   4433,  -2259,  -8192, -11362, -10704,  -6436,
-  8192,   6437,  -4433, -11362,  -8192,   2261,  10704,   9633,
-  8192,   2260, -10703,  -6436,   8192,   9633,  -4433, -11363,
-  8192,  -2260, -10703,   6436,   8192,  -9633,  -4433,  11363,
-  8192,  -6437,  -4433,  11362,  -8192,  -2261,  10704,  -9633,
-  8192,  -9633,   4433,   2259,  -8192,  11362, -10704,   6436,
-  8192, -11363,  10703,  -9633,   8192,  -6437,   4433,  -2260,
 };
-    
-    namespace {
-    }
-    
-    #include <stdint.h>
-#include <string.h>
-#include <vector>
-    
-    double ButteraugliScoreForQuality(double quality) {
-  if (quality < kLowestQuality) quality = kLowestQuality;
-  if (quality > kHighestQuality) quality = kHighestQuality;
-  int index = static_cast<int>(quality);
-  double mix = quality - index;
-  return kScoreForQuality[index - kLowestQuality] * (1 - mix) +
-      kScoreForQuality[index - kLowestQuality + 1] * mix;
-}
-    
-    template <>
-FutexResult Futex<std::atomic>::futexWaitImpl(
-    uint32_t expected,
-    system_clock::time_point const* absSystemTime,
-    steady_clock::time_point const* absSteadyTime,
-    uint32_t waitMask) {
-#ifdef __linux__
-  return nativeFutexWaitImpl(
-      this, expected, absSystemTime, absSteadyTime, waitMask);
-#else
-  return emulatedFutexWaitImpl(
-      this, expected, absSystemTime, absSteadyTime, waitMask);
-#endif
-}
-    
-        // By default jemalloc has 4 arenas per cpu, and then assigns each
-    // thread to one of those arenas.  This means that in any service
-    // that doesn't perform a lot of context switching, the chances that
-    // another thread will be using the current thread's arena (and hence
-    // doing the appropriate dirty-page purging) are low.  Some good
-    // tuned configurations (such as that used by hhvm) use fewer arenas
-    // and then pin threads to avoid contended access.  In that case,
-    // purging the arenas is counter-productive.  We use the heuristic
-    // that if narenas <= 2 * num_cpus then we shouldn't do anything here,
-    // which detects when the narenas has been reduced from the default
-    unsigned narenas;
-    unsigned arenaForCurrent;
-    size_t mib[3];
-    size_t miblen = 3;
-    
-    TEST(AtomicSharedPtr, foo) {
-  c_count = 0;
-  d_count = 0;
-  {
-    atomic_shared_ptr<foo> fooptr;
-    fooptr.store(make_shared<foo>());
-    EXPECT_EQ(1, c_count);
-    EXPECT_EQ(0, d_count);
-    {
-      auto res = fooptr.load();
-      EXPECT_EQ(1, c_count);
-      EXPECT_EQ(0, d_count);
-    }
-    EXPECT_EQ(1, c_count);
-    EXPECT_EQ(0, d_count);
-  }
-  EXPECT_EQ(1, c_count);
-  EXPECT_EQ(1, d_count);
-}
-    
-    template <
-    class T,
-    class I,
-    class U = std::decay_t<T>,
-    std::enable_if_t<Not<std::is_base_of<PolyBase, U>>::value, int> = 0,
-    std::enable_if_t<std::is_constructible<AddCvrefOf<U, I>, T>::value, int> =
-        0,
-    class = MembersOf<std::decay_t<I>, U>>
-std::true_type modelsInterface_(int);
-template <class T, class I>
-std::false_type modelsInterface_(long);
+}  // namespace
     
     
     {
-    {inline size_t qfind_first_byte_of_nosse(
-    const StringPieceLite haystack,
-    const StringPieceLite needles) {
-  if (UNLIKELY(needles.empty() || haystack.empty())) {
-    return std::string::npos;
-  }
-  // The thresholds below were empirically determined by benchmarking.
-  // This is not an exact science since it depends on the CPU, the size of
-  // needles, and the size of haystack.
-  if ((needles.size() >= 4 && haystack.size() <= 10) ||
-      (needles.size() >= 16 && haystack.size() <= 64) || needles.size() >= 32) {
-    return qfind_first_byte_of_byteset(haystack, needles);
-  }
-  return qfind_first_byte_of_std(haystack, needles);
-}
-} // namespace detail
-} // namespace folly
-
+    {}  // namespace crc32c
+}  // namespace leveldb
     
-      __m128i arr1;
-  if (HAYSTACK_ALIGNED) {
-    arr1 = _mm_load_si128(
-        reinterpret_cast<const __m128i*>(haystack.data() + blockStartIdx));
-  } else {
-    arr1 = _mm_loadu_si128(
-        reinterpret_cast<const __m128i*>(haystack.data() + blockStartIdx));
-  }
+    #include <vector>
+#include <string>
     
     /**
- * ScopeGuard is a general implementation of the 'Initialization is
- * Resource Acquisition' idiom.  Basically, it guarantees that a function
- * is executed upon leaving the currrent scope unless otherwise told.
+ * @brief Singleton for queuing asynchronous tasks to be executed in parallel
  *
- * The makeGuard() function is used to create a new ScopeGuard object.
- * It can be instantiated with a lambda function, a std::function<void()>,
- * a functor, or a void(*)() function pointer.
- *
- *
- * Usage example: Add a friend to memory if and only if it is also added
- * to the db.
- *
- * void User::addFriend(User& newFriend) {
- *   // add the friend to memory
- *   friends_.push_back(&newFriend);
- *
- *   // If the db insertion that follows fails, we should
- *   // remove it from memory.
- *   auto guard = makeGuard([&] { friends_.pop_back(); });
- *
- *   // this will throw an exception upon error, which
- *   // makes the ScopeGuard execute UserCont::pop_back()
- *   // once the Guard's destructor is called.
- *   db_->addFriend(GetName(), newFriend.GetName());
- *
- *   // an exception was not thrown, so don't execute
- *   // the Guard.
- *   guard.dismiss();
- * }
- *
- * Examine ScopeGuardTest.cpp for some more sample usage.
- *
- * Stolen from:
- *   Andrei's and Petru Marginean's CUJ article:
- *     http://drdobbs.com/184403758
- *   and the loki library:
- *     http://loki-lib.sourceforge.net/index.php?n=Idioms.ScopeGuardPointer
- *   and triendl.kj article:
- *     http://www.codeproject.com/KB/cpp/scope_guard.aspx
+ * Dispatcher is a singleton which can be used to coordinate the parallel
+ * execution of asynchronous tasks across an application. Internally,
+ * Dispatcher is back by the Apache Thrift thread pool.
  */
-template <typename F>
-detail::ScopeGuardImplDecay<F> makeGuard(F&& f) noexcept(
-    noexcept(detail::ScopeGuardImplDecay<F>(static_cast<F&&>(f)))) {
-  return detail::ScopeGuardImplDecay<F>(static_cast<F&&>(f));
-}
-    
-      // Returns an index of random unit from the corpus to mutate.
-  // Hypothesis: units added to the corpus last are more likely to be
-  // interesting. This function gives more weight to the more recent units.
-  size_t ChooseUnitIdxToMutate(Random &Rand) {
-    size_t Idx = static_cast<size_t>(CorpusDistribution(Rand.Get_mt19937()));
-    assert(Idx < Inputs.size());
-    return Idx;
+class Dispatcher : private boost::noncopyable {
+ public:
+  /**
+   * @brief The primary way to access the Dispatcher factory facility.
+   *
+   * @code{.cpp} auto dispatch = osquery::Dispatcher::instance(); @endcode
+   *
+   * @return The osquery::Dispatcher instance.
+   */
+  static Dispatcher& instance() {
+    static Dispatcher instance;
+    return instance;
   }
+    }
     
-    #ifdef __x86_64
-#define ATTRIBUTE_TARGET_POPCNT __attribute__((target('popcnt')))
-#else
-#define ATTRIBUTE_TARGET_POPCNT
-#endif
+      /*
+   * @brief Check if flag value has been overridden.
+   *
+   * @param name the flag name.
+   * @return is the flag set to its default value.
+   */
+  static bool isDefault(const std::string& name);
     
-    void DupAndCloseStderr();
     
-    // Parse disk designators, like 'C:\'. If Relative == true, also accepts: 'C:'.
-// Returns number of characters considered if successful.
-static size_t ParseDrive(const std::string &FileName, const size_t Offset,
-                         bool Relative = true) {
-  if (Offset + 1 >= FileName.size() || FileName[Offset + 1] != ':')
-    return 0;
-  if (Offset + 2 >= FileName.size() || !IsSeparator(FileName[Offset + 2])) {
-    if (!Relative) // Accept relative path?
-      return 0;
-    else
-      return 2;
+    {  return KERN_SUCCESS;
+}
+    
+    #include <osquery/config.h>
+#include <osquery/database.h>
+#include <osquery/registry.h>
+    
+    
+    {
+    { private:
+  friend class TLSConfigTests;
+};
+}
+
+    
+    #include 'osquery/core/process.h'
+    
+    #include <string.h>
+#include <time.h>
+    
+    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+bool ImGui_ImplA5_ProcessEvent(ALLEGRO_EVENT *ev)
+{
+    ImGuiIO &io = ImGui::GetIO();
+    }
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+            // 1. Show a simple window.
+        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
+            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    }
+    
+    struct GLFWwindow;
+    
+        ImFontAtlasBuildFinish(atlas);
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+    #include <folly/Range.h>
+#include <folly/experimental/io/FsUtil.h>
+#include <folly/portability/Unistd.h>
+    
+    namespace folly {
+    }
+    
+    void ImmediateFileWriter::writeMessage(
+    StringPiece buffer,
+    uint32_t /* flags */) {
+  // Write the data.
+  // We are doing direct file descriptor writes here, so there is no buffering
+  // of log message data.  Each message is immediately written to the output.
+  auto ret = folly::writeFull(file_.fd(), buffer.data(), buffer.size());
+  if (ret < 0) {
+    int errnum = errno;
+    LoggerDB::internalWarning(
+        __FILE__,
+        __LINE__,
+        'error writing to log file ',
+        file_.fd(),
+        ': ',
+        errnoStr(errnum));
   }
-  return 3;
 }
     
-    
-    {}  // namespace fuzzer
-    
-    std::string Sha1ToString(const uint8_t Sha1[kSHA1NumBytes]);
-    
-    void TracePC::DumpCoverage() {
-  __sanitizer_dump_coverage(PCs, GetNumPCs());
-}
-    
-    template <class Callback>
-size_t TracePC::CollectFeatures(Callback CB) {
-  if (!UsingTracePcGuard()) return 0;
-  size_t Res = 0;
-  const size_t Step = 8;
-  assert(reinterpret_cast<uintptr_t>(Counters) % Step == 0);
-  size_t N = Min(kNumCounters, NumGuards + 1);
-  N = (N + Step - 1) & ~(Step - 1);  // Round up.
-  for (size_t Idx = 0; Idx < N; Idx += Step) {
-    uint64_t Bundle = *reinterpret_cast<uint64_t*>(&Counters[Idx]);
-    if (!Bundle) continue;
-    for (size_t i = Idx; i < Idx + Step; i++) {
-      uint8_t Counter = (Bundle >> ((i - Idx) * 8)) & 0xff;
-      if (!Counter) continue;
-      Counters[i] = 0;
-      unsigned Bit = 0;
-      /**/ if (Counter >= 128) Bit = 7;
-      else if (Counter >= 32) Bit = 6;
-      else if (Counter >= 16) Bit = 5;
-      else if (Counter >= 8) Bit = 4;
-      else if (Counter >= 4) Bit = 3;
-      else if (Counter >= 3) Bit = 2;
-      else if (Counter >= 2) Bit = 1;
-      size_t Feature = (i * 8 + Bit);
-      if (CB(Feature))
-        Res++;
+    void LogConfig::update(const LogConfig& other) {
+  // Update handlerConfigs_ with all of the entries from the other LogConfig.
+  // Any entries already present in our handlerConfigs_ are replaced wholesale.
+  for (const auto& entry : other.handlerConfigs_) {
+    if (entry.second.type.hasValue()) {
+      // This is a complete LogHandlerConfig that should be inserted
+      // or completely replace an existing handler config with this name.
+      auto result = handlerConfigs_.insert(entry);
+      if (!result.second) {
+        result.first->second = entry.second;
+      }
+    } else {
+      // This config is updating an existing LogHandlerConfig rather than
+      // completely replacing it.
+      auto iter = handlerConfigs_.find(entry.first);
+      if (iter == handlerConfigs_.end()) {
+        throw std::invalid_argument(to<std::string>(
+            'cannot update configuration for unknown log handler \'',
+            entry.first,
+            '\''));
+      }
+      iter->second.update(entry.second);
     }
   }
-  if (UseValueProfile)
-    ValueProfileMap.ForEach([&](size_t Idx) {
-      if (CB(NumGuards * 8 + Idx))
-        Res++;
-    });
-  return Res;
+    }
+    
+      LogHandlerConfig();
+  explicit LogHandlerConfig(StringPiece type);
+  explicit LogHandlerConfig(Optional<StringPiece> type);
+  LogHandlerConfig(StringPiece type, Options options);
+  LogHandlerConfig(Optional<StringPiece> type, Options options);
+    
+    
+    {
+    {#undef EXT_FUNC
+};
+} // namespace fuzzer
+    
+    namespace fuzzer {
+    }
+    
+    // Parse a file name, like: SomeFile.txt
+// Returns number of characters considered if successful.
+static size_t ParseFileName(const std::string &FileName, const size_t Offset) {
+  size_t Pos = Offset;
+  const size_t End = FileName.size();
+  for(; Pos < End && !IsSeparator(FileName[Pos]); ++Pos)
+    ;
+  return Pos - Offset;
 }
     
-    void PrintASCII(const Unit &U, const char *PrintAfter) {
-  PrintASCII(U.data(), U.size(), PrintAfter);
+    void Fuzzer::MutateAndTestOne() {
+  MD.StartMutationSequence();
+    }
+    
+    
+    {} // namespace fuzzer
+
+    
+    void MutationDispatcher::AddWordToAutoDictionary(DictionaryEntry DE) {
+  static const size_t kMaxAutoDictSize = 1 << 14;
+  if (TempAutoDictionary.size() >= kMaxAutoDictSize) return;
+  TempAutoDictionary.push_back(DE);
 }
     
-    FILE *OpenProcessPipe(const char *Command, const char *Mode);
+    // Private copy of SHA1 implementation.
+static const int kSHA1NumBytes = 20;
+    
+    // This is a reimplementation of Libc's `system()`. On Darwin the Libc
+// implementation contains a mutex which prevents it from being used
+// concurrently. This implementation **can** be used concurrently. It sets the
+// signal handlers when the first thread enters and restores them when the last
+// thread finishes execution of the function and ensures this is not racey by
+// using a mutex.
+int ExecuteCommand(const std::string &Command) {
+  posix_spawnattr_t SpawnAttributes;
+  if (posix_spawnattr_init(&SpawnAttributes))
+    return -1;
+  // Block and ignore signals of the current process when the first thread
+  // enters.
+  {
+    std::lock_guard<std::mutex> Lock(SignalMutex);
+    if (ActiveThreadCount == 0) {
+      static struct sigaction IgnoreSignalAction;
+      sigset_t BlockedSignalsSet;
+      memset(&IgnoreSignalAction, 0, sizeof(IgnoreSignalAction));
+      IgnoreSignalAction.sa_handler = SIG_IGN;
+    }
+    }
+    }
