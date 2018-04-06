@@ -1,115 +1,96 @@
 
         
-                def test_url_sub_key_for_sqlite3
-          spec = resolve :production, 'production' => { 'url' => 'sqlite3:foo?encoding=utf8' }
-          assert_equal({
-            'adapter'  => 'sqlite3',
-            'database' => 'foo',
-            'encoding' => 'utf8',
-            'name'     => 'production' }, spec)
-        end
-    
-          # Make list points stand on their own line
-      formatted.gsub!(/[ ]*([*]+) ([^*]*)/) { '  #{$1} #{$2.strip}\n' }
-      formatted.gsub!(/[ ]*([#]+) ([^#]*)/) { '  #{$1} #{$2.strip}\n' }
-    
-      private
-    
-    # No trailing slash
-Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
+          # body
+  xml.tag!('body') do
+    xml.tag!('outline', text: TITLE, title: TITLE) do
+      blogs.each do |blog|
+        xml.tag!('outline', type: 'rss', text: blog.name, title: blog.name,
+                            xmlUrl: blog.rss_url, htmlUrl: blog.web_url)
+      end
+    end
+  end
 end
     
-      p.action do |args, _|
-    if args.empty?
-      Jekyll.logger.error 'A subcommand is required.'
-      puts p
-      abort
-    else
-      subcommand = args.first
-      unless p.has_command? subcommand
-        Jekyll.logger.abort_with 'fatal: 'jekyll #{args.first}' could not' \
-          ' be found. You may need to install the jekyll-#{args.first} gem' \
-          ' or a related gem to be able to use this subcommand.'
+        # insert substitutions into text at positions (Range or Fixnum)
+    # substitutions can be passed as array or as yields from the &block called with |substring, position, text|
+    # position is a range (begin..end)
+    def replace_substrings_at(text, positions, replacements = nil, &block)
+      offset = 0
+      positions.each_with_index do |p, i|
+        p       = (p...p) if p.is_a?(Fixnum)
+        from    = p.begin + offset
+        to      = p.end + offset
+        p       = p.exclude_end? ? (from...to) : (from..to)
+        # block returns the substitution, e.g.: { |text, pos| text[pos].upcase }
+        r       = replacements ? replacements[i] : block.call(text[p], p, text)
+        text[p] = r
+        # add the change in length to offset
+        offset  += r.size - (p.end - p.begin + (p.exclude_end? ? 0 : 1))
+      end
+      text
+    end
+  end
+end
+
+    
+      # Prepend all log lines with the following tags.
+  # config.log_tags = [ :subdomain, :uuid ]
+    
+    task default: :test
+
+    
+    module Pod
+  class Command
+    class Init < Command
+      self.summary = 'Generate a Podfile for the current directory'
+      self.description = <<-DESC
+        Creates a Podfile for the current directory if none currently exists. If
+        an `XCODEPROJ` project file is specified or if there is only a single
+        project file in the current directory, targets will be automatically
+        generated based on targets defined in the project.
+    
+            def run
+          print_version
+          signal_end_of_output
+          listen
+        end
+    
+          def escape_string(str)
+        str = @escaper.escape_url(str)        if @url
+        str = @escaper.escape_html(str)       if @html
+        str = @escaper.escape_javascript(str) if @javascript
+        str
       end
     end
   end
 end
 
     
-          #
-      # Require a gem or file if it's present, otherwise silently fail.
-      #
-      # names - a string gem name or array of gem names
-      #
-      def require_if_present(names)
-        Array(names).each do |name|
-          begin
-            require name
-          rescue LoadError
-            Jekyll.logger.debug 'Couldn't load #{name}. Skipping.'
-            yield(name, version_constraint(name)) if block_given?
-            false
-          end
-        end
-      end
-    
-        def save(options = {})
-      return super unless dry_run?
-      perform_validations(options)
-    end
-    
-      def present(payload)
-    if payload.is_a?(Hash)
-      payload = ActiveSupport::HashWithIndifferentAccess.new(payload)
-      MAIN_KEYS.each do |key|
-        return { :title => payload[key].to_s, :entries => present_hash(payload, key) } if payload.has_key?(key)
-      end
-    
-      def index
-    if params[:agent_id]
-      @agent = current_user.agents.find(params[:agent_id])
-      @events = @agent.events.page(params[:page])
-    else
-      @events = current_user.events.preload(:agent).page(params[:page])
-    end
-    
-      private
-    
-    RSpec.describe BlockDomainService do
-  let(:bad_account) { Fabricate(:account, username: 'badguy666', domain: 'evil.org') }
-  let(:bad_status1) { Fabricate(:status, account: bad_account, text: 'You suck') }
-  let(:bad_status2) { Fabricate(:status, account: bad_account, text: 'Hahaha') }
-  let(:bad_attachment) { Fabricate(:media_attachment, account: bad_account, status: bad_status2, file: attachment_fixture('attachment.jpg')) }
-    
-          def handle_jwt_bearer(req)
-        jwt_string = req['client_assertion']
-        jwt = JSON::JWT.decode jwt_string, :skip_verification
-        o_auth_app = Api::OpenidConnect::OAuthApplication.find_by(client_id: jwt['iss'])
-        raise Rack::OAuth2::Server::Authorize::BadRequest(:invalid_request) unless o_auth_app
-        public_key = fetch_public_key(o_auth_app, jwt)
-        JSON::JWT.decode(jwt_string, JSON::JWK.new(public_key).to_key)
-        req.update_param('client_id', o_auth_app.client_id)
-        req.update_param('client_secret', o_auth_app.client_secret)
-      end
-    
-            MSG = 'Use only a single space inside array percent literal.'.freeze
-        MULTIPLE_SPACES_BETWEEN_ITEMS_REGEX =
-          /(?:[\S&&[^\\]](?:\\ )*)( {2,})(?=\S)/
-    
-            def autocorrect(node)
-          # Regexp#match can take a second argument, but this cop doesn't
-          # register an offense in that case
-          return unless node.first_argument.regexp_type?
-    
-              FROZEN_STRING_LITERAL_TYPES.include?(node.type) &&
-            frozen_string_literals_enabled?
-        end
-      end
-    end
+      it 'should not override the header if already set' do
+    mock_app with_headers('X-XSS-Protection' => '0')
+    expect(get('/', {}, 'wants' => 'text/html').headers['X-XSS-Protection']).to eq('0')
   end
-end
+    
+    # This file was generated by the `rspec --init` command. Conventionally, all
+# specs live under a `spec` directory, which RSpec adds to the `$LOAD_PATH`.
+# The generated `.rspec` file contains `--require spec_helper` which will cause this
+# file to always be loaded, without a need to explicitly require it in any files.
+#
+# Given that it is always loaded, you are encouraged to keep this file as
+# light-weight as possible. Requiring heavyweight dependencies from this file
+# will add to the boot time of your test suite on EVERY test run, even for an
+# individual file that may not need all of that loaded. Instead, make a
+# separate helper file that requires this one and then use it only in the specs
+# that actually need it.
+#
+# The `.rspec` file also contains a few flags that are not defaults but that
+# users commonly want.
+#
+# See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+RSpec.configure do |config|
+# The settings below are suggested to provide a good initial experience
+# with RSpec, but feel free to customize to your heart's content.
+    
+      it 'should not interfere with normal head requests' do
+    expect(head('/')).to be_ok
+  end
