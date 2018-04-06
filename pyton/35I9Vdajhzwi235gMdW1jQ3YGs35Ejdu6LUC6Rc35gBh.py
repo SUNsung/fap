@@ -1,71 +1,150 @@
 
         
-        print('Enter the PKCS1 private key, followed by a blank line:')
-privkey = b''
-while True:
-    try:
-        line = input()
-    except EOFError:
-        break
-    if line == '':
-        break
-    privkey += line.encode('ascii') + b'\n'
-privkey = rsa.PrivateKey.load_pkcs1(privkey)
-    
-        def download(self, x):
-        self.result.append(x)
-    
-    
-def gen_extractors():
-    ''' Return a list of an instance of every supported extractor.
-    The order does matter; the first extractor matched is the one handling the URL.
-    '''
-    return [klass() for klass in gen_extractor_classes()]
+        
+def get_info(package_name):
+    api_url = 'https://pypi.python.org/pypi/{}/json'.format(package_name)
+    resp = requests.get(api_url).json()
+    hasher = hashlib.sha256()
+    for release in resp['urls']:
+        download_url = release['url']
+        if download_url.endswith('.tar.gz'):
+            hasher.update(requests.get(download_url).content)
+            return {
+                'name': package_name,
+                'url': download_url,
+                'sha256': hasher.hexdigest(),
+            }
+    else:
+        raise RuntimeError(
+            '{}: download not found: {}'.format(package_name, resp))
     
     
-class AcademicEarthCourseIE(InfoExtractor):
-    _VALID_URL = r'^https?://(?:www\.)?academicearth\.org/playlists/(?P<id>[^?#/]+)'
-    IE_NAME = 'AcademicEarth:Course'
-    _TEST = {
-        'url': 'http://academicearth.org/playlists/laws-of-nature/',
-        'info_dict': {
-            'id': 'laws-of-nature',
-            'title': 'Laws of Nature',
-            'description': 'Introduce yourself to the laws of nature with these free online college lectures from Yale, Harvard, and MIT.',
-        },
-        'playlist_count': 3,
-    }
-    
-        def contribute(self):
-        self.blackboard.common_state['problems'] += random.randint(10, 20)
-        self.blackboard.common_state['suggestions'] += random.randint(10, 20)
-        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
-        self.blackboard.common_state['progress'] += random.randint(10, 30)
-    
-        def test_sequential_execution(self):
-        self.command_stack[0].execute()
-        output_after_first_execution = os.listdir(self.test_dir)
-        self.assertEqual(output_after_first_execution[0], 'bar.txt')
-        self.command_stack[1].execute()
-        output_after_second_execution = os.listdir(self.test_dir)
-        self.assertEqual(output_after_second_execution[0], 'baz.txt')
-    
-        def subscribe(self, msg, subscriber):
-        self.subscribers.setdefault(msg, []).append(subscriber)
-    
-        def test_tc1_output(self):
-        self.tc1.run()
-        output = self.out.getvalue().strip()
-        self.assertEqual(output, self.average_result_tc1)
-    
-        def now(self):
-        current_time_is_always_midnight = '24:01'
-        return current_time_is_always_midnight
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
 
     
-        @classmethod
-    def _class_method_2(cls):
-        print('Value {}'.format(cls.x2))
+        exc = Timeout('Request timed out')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR_TIMEOUT
+    assert error_msg == 'Request timed out (30s).'
+
+    
+    
+def test_max_redirects(httpbin):
+    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
+             error_exit_ok=True)
+    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+
+    
+        include_debug_info = '--debug' in args
+    include_traceback = include_debug_info or '--traceback' in args
+    
+    
+class HTTPBasicAuth(requests.auth.HTTPBasicAuth):
+    
+        # Adapters
+    def get_transport_plugins(self):
+        return [plugin for plugin in self
+                if issubclass(plugin, TransportPlugin)]
+
+    
+    
+def get_line_value(r, n):
+    rls = r.split('\r\n')
+    if len(rls) < n + 1:
+        return None
+    
+            raise NotImplementedError
+    
+    def setChannel(self, channel):
+        '''@brief Set the channel of the token
+    
+    Here is a little overview over the most commonly used classes provided by
+this runtime:
+    
+        def test_open_and_close(self):
+        # open calls create_widgets, which needs default_command
+        self.dialog.default_command = None
+    
+            entrylabel.grid(column=0, row=0, columnspan=3, padx=5, sticky=W)
+        self.entry.grid(column=0, row=1, columnspan=3, padx=5, sticky=W+E,
+                        pady=[10,0])
+        self.entry_error.grid(column=0, row=2, columnspan=3, padx=5,
+                              sticky=W+E)
+        self.button_ok.grid(column=1, row=99, padx=5)
+        self.button_cancel.grid(column=2, row=99, padx=5)
+    
+        >>> harmonic_mean([2.5, 3, 10])  # For an equal investment portfolio.
+    3.6
+    
+        def read(self, size=-1):
+        '''Read at most size bytes from the chunk.
+        If size is omitted or negative, read until the end
+        of the chunk.
+        '''
+    
+    class FormatError(Error):
+    '''A file appears to have an invalid format.'''
+
+    
+            # determine the encoding if the transport provided it
+        source.encoding = self._guess_media_encoding(source)
+    
+        def test_varargs14_kw(self):
+        msg = r'^product\(\) takes at most 1 keyword argument \(2 given\)$'
+        self.assertRaisesRegex(TypeError, msg,
+                               itertools.product, 0, repeat=1, foo=2)
+    
+            # if we predefine some constants, then eval(repr(z)) should
+        # also work, except that it might change the sign of zeros
+        inf, nan = float('inf'), float('nan')
+        infj, nanj = complex(0.0, inf), complex(0.0, nan)
+        for x in vals:
+            for y in vals:
+                z = complex(x, y)
+                roundtrip = eval(repr(z))
+                # adding 0.0 has no effect beside changing -0.0 to 0.0
+                self.assertFloatsAreIdentical(0.0 + z.real,
+                                              0.0 + roundtrip.real)
+                self.assertFloatsAreIdentical(0.0 + z.imag,
+                                              0.0 + roundtrip.imag)
+    
+        def test_comparison(self):
+        test_ranges = [range(0), range(0, -1), range(1, 1, 3),
+                       range(1), range(5, 6), range(5, 6, 2),
+                       range(5, 7, 2), range(2), range(0, 4, 2),
+                       range(0, 5, 2), range(0, 6, 2)]
+        test_tuples = list(map(tuple, test_ranges))
+    
+    
+        f = wndclass.lpfnWndProc
+    
+    
+class Student(AbstractExpert):
+    
+    
+class TestSubject(unittest.TestCase):
+    
+    '''
+Port of the Java example of 'Setter Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
+http://xunitpatterns.com/Dependency%20Injection.html.
+    
+        def now(self):
+        current_time = datetime.datetime.now()
+        current_time_formatted = '{}:{}'.format(current_time.hour, current_time.minute)
+        return current_time_formatted
     
     
 @coroutine
@@ -84,9 +163,3 @@ def coroutine2(target):
     try:
         with open('foo.txt', 'w'):  # Creating the file
             pass
-    
-        def __init__(self, value):
-        self.value = value
-    
-    
-class UserSpecification(CompositeSpecification):
