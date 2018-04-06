@@ -1,158 +1,101 @@
 
         
-            def __init__(self, groups, env=Environment(), **kwargs):
-        '''
-        :param groups: names of processor groups to be applied
-        :param env: Environment
-        :param kwargs: additional keyword arguments for processors
+        
+class HitCounts(MRJob):
     
+        @abstractmethod
+    def can_fit_in_spot(self, spot):
+        pass
     
-FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
-FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
-JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
-BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
+        return ip_string[:ip_string_size.value - 1]
     
+    site_info = '花瓣 (Huaban)'
     
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
+    def kuwo_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    if 'www.kuwo.cn/yinyue' in url:
+        rid=match1(url,'yinyue/(\d+)')
+        kuwo_download_by_rid(rid,output_dir, merge, info_only)
+    else:
+        kuwo_playlist_download(url,output_dir,merge,info_only)
+    
+            # extract raw urls
+        orig_img = match1(content,
+                         r'<meta itemprop='image' content='([^']+/originals/[^']+)'')
+        twit_img = match1(content,
+                          r'<meta property='twitter:image:src' name='twitter:image:src' content='([^']+)'')
+    
+    site_info = 'Showroom'
+download = showroom_download
+download_playlist = playlist_not_supported('showroom')
 
     
-        def convert(self, content_bytes):
-        raise NotImplementedError
+        caps = s.getcapabilities()
+    if 'STARTTLS' in caps:
+        s.starttls()
+    resp, count, first, last, name = s.group(args.group)
+    print('Group', name, 'has', count, 'articles, range', first, 'to', last)
     
-        ''')
-)
-positional.add_argument(
-    'method',
-    metavar='METHOD',
-    nargs=OPTIONAL,
-    default=None,
-    help='''
-    The HTTP method to be used for the request (GET, POST, PUT, DELETE, ...).
     
-        def test_self_signed_server_cert_by_default_raises_ssl_error(
-            self,
-            httpbin_secure_untrusted):
-        with pytest.raises(SSLError):
-            http(httpbin_secure_untrusted.url + '/get')
+class PyBoolObjectPtr(PyLongObjectPtr):
+    '''
+    Class wrapping a gdb.Value that's a PyBoolObject* i.e. one of the two
+    <bool> instances (Py_True/Py_False) within the process being debugged.
+    '''
+    def proxyval(self, visited):
+        if PyLongObjectPtr.proxyval(self, visited):
+            return True
+        else:
+            return False
     
-    # TODO: ensure that history changes.
+            test(-(1+0j), '(-1+-0j)', test_fn=self.assertNotEqual)
+    
+        def test_odd_bug(self):
+        # This used to raise a 'SystemError: NULL result without error'
+        # because the range validation step was eating the exception
+        # before NULL was returned.
+        with self.assertRaises(TypeError):
+            range([], 1, -1)
+    
+        def test_1_A(self):
+        class X(Structure):
+            pass
+        self.assertEqual(sizeof(X), 0) # not finalized
+        X._fields_ = [] # finalized
+        self.assertRaises(AttributeError, setattr, X, '_fields_', [])
+    
+        @gen_test
+    def test_http10_no_content_length(self):
+        # Regression test for a bug in which can_keep_alive would crash
+        # for an HTTP/1.0 (not 1.1) response with no content-length.
+        conn = HTTP1Connection(self.client_stream, True)
+        self.server_stream.write(b'HTTP/1.0 200 Not Modified\r\n\r\nhello')
+        self.server_stream.close()
+    
+        logging.warning('Starting fetch with curl client')
+    curl_client = CurlAsyncHTTPClient()
+    curl_client.fetch('http://localhost:%d/' % options.port,
+                      callback=callback)
+    IOLoop.current().start()
+    
+    
+class TestData(unittest.TestCase):
+    
+        @classmethod
+    def setUpClass(cls):
+        ''' Class scope setup. '''
+        cls.ntp = NoTalkProxy()
+    
+    ### OUTPUT ###
+# executed method 2!
+# Value x1
+# Value x2
+# executed method 1!
 
     
+        def _handle(self, request):
+        if 20 < request <= 30:
+            print('request {} handled in handler 3'.format(request))
+            return True
     
-class TextTestResult(_TextTestResult):
-    def printSummary(self, start, stop):
-        write = self.stream.write
-        writeln = self.stream.writeln
-    
-    
-class Command(ScrapyCommand):
-    
-        def post_process(self, output):
-        for x in output:
-            if isinstance(x, (BaseItem, dict)):
-                for arg in self.args:
-                    if not arg in x:
-                        raise ContractFail(''%s' field is missing' % arg)
-
-    
-        def copy_certs_and_keys(self, cert_path, key_path, chain_path=None):
-        '''Copies certs and keys into the temporary directory'''
-        cert_and_key_dir = os.path.join(self._temp_dir, 'certs_and_keys')
-        if not os.path.isdir(cert_and_key_dir):
-            os.mkdir(cert_and_key_dir)
-    
-        @mock.patch('certbot.display.enhancements.util')
-    def test_redirect(self, mock_util):
-        mock_util().menu.return_value = (display_util.OK, 1)
-        self.assertTrue(self._call('redirect'))
-    
-        @mock.patch('certbot.notify.smtplib.LMTP')
-    @mock.patch('certbot.notify.subprocess.Popen')
-    def test_everything_fails(self, mock_popen, mock_lmtp):
-        from certbot.notify import notify
-        lmtp_obj = mock.MagicMock()
-        mock_lmtp.return_value = lmtp_obj
-        lmtp_obj.sendmail.side_effect = socket.error(17)
-        proc = mock.MagicMock()
-        mock_popen.return_value = proc
-        proc.communicate.side_effect = OSError('What we have here is a '
-                                               'failure to communicate.')
-        self.assertFalse(notify('Goose', 'auntrhody@example.com',
-                                'The old grey goose is dead.'))
-        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
-        self.assertEqual(proc.communicate.call_count, 1)
-    
-    from certbot import interfaces
-from certbot.plugins import common
-    
-    from babel.messages.pofile import read_po
-    
-        def __init__(self, rules=None):
-        '''Constructs a router from an ordered list of rules::
-    
-        c-ares fails to resolve some names when ``family`` is ``AF_UNSPEC``,
-    so it is only recommended for use in ``AF_INET`` (i.e. IPv4).  This is
-    the default for ``tornado.simple_httpclient``, but other libraries
-    may default to ``AF_UNSPEC``.
-    
-        def test_failed_setup(self):
-        self.http_client = self.create_client(max_clients=1)
-        for i in range(5):
-            response = self.fetch(u'/ユニコード')
-            self.assertIsNot(response.error, None)
-
-    
-    # Increasing --n without --keepalive will eventually run into problems
-# due to TIME_WAIT sockets
-define('n', type=int, default=15000)
-define('c', type=int, default=25)
-define('keepalive', type=bool, default=False)
-define('quiet', type=bool, default=False)
-    
-    
-def main():
-    base_cmd = [
-        sys.executable, '-m', 'timeit', '-s',
-        'from stack_context_benchmark import StackBenchmark, ExceptionBenchmark']
-    cmds = [
-        'StackBenchmark().enter_exit(50)',
-        'StackBenchmark().call_wrapped(50)',
-        'StackBenchmark().enter_exit(500)',
-        'StackBenchmark().call_wrapped(500)',
-    
-    
-class ComposeHandler(BaseHandler):
-    @tornado.web.authenticated
-    def get(self):
-        id = self.get_argument('id', None)
-        entry = None
-        if id:
-            entry = self.db.get('SELECT * FROM entries WHERE id = %s', int(id))
-        self.render('compose.html', entry=entry)
-    
-        def wait_for_messages(self, cursor=None):
-        # Construct a Future to return to our caller.  This allows
-        # wait_for_messages to be yielded from a coroutine even though
-        # it is not a coroutine itself.  We will set the result of the
-        # Future when results are available.
-        result_future = Future()
-        if cursor:
-            new_count = 0
-            for msg in reversed(self.cache):
-                if msg['id'] == cursor:
-                    break
-                new_count += 1
-            if new_count:
-                result_future.set_result(self.cache[-new_count:])
-                return result_future
-        self.waiters.add(result_future)
-        return result_future
+    '''
+@author: Gordeev Andrey <gordeev.and.and@gmail.com>
