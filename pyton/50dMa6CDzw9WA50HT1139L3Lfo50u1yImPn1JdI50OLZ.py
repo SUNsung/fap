@@ -1,63 +1,56 @@
 
         
-            classifiers = proj_info['classifiers'],
-    
-    site = Bigthink()
-download = site.download_by_url
-
+            with io.open(infile, encoding='utf-8') as inf:
+        issue_template_tmpl = inf.read()
     
     
-def huaban_download(url, output_dir='.', **kwargs):
-    if re.match(r'http://huaban\.com/boards/\d+/', url):
-        huaban_download_board(url, output_dir, **kwargs)
-    else:
-        print('Only board (画板) pages are supported currently')
-        print('ex: http://huaban.com/boards/12345678/')
+def get_params(override=None):
+    PARAMETERS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                   'parameters.json')
+    LOCAL_PARAMETERS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                         'local_parameters.json')
+    with io.open(PARAMETERS_FILE, encoding='utf-8') as pf:
+        parameters = json.load(pf)
+    if os.path.exists(LOCAL_PARAMETERS_FILE):
+        with io.open(LOCAL_PARAMETERS_FILE, encoding='utf-8') as pf:
+            parameters.update(json.load(pf))
+    if override:
+        parameters.update(override)
+    return parameters
     
-            # extract title
-        self.title = match1(content,
-                            r'<meta property='og:description' name='og:description' content='([^']+)'')
-    
-        #title
-    title = ''
-    profile_api = 'https://www.showroom-live.com/api/room/profile?room_id={room_id}'.format(room_id = room_id)
-    html = loads(get_content(profile_api))
-    try:
-        title = html['main_name']
-    except KeyError:
-        title = 'Showroom_{room_id}'.format(room_id = room_id)
-    
-    
-    def decode(self, s, _w=WHITESPACE.match):
-        '''Return the Python representation of ``s`` (a ``str`` instance
-        containing a JSON document).
+        def test_youporn(self):
+        self._assert_restricted(
+            'http://www.youporn.com/watch/505835/sex-ed-is-it-safe-to-masturbate-daily/',
+            '505835.mp4', 2, old_age=25)
     
     
-class _AsyncDeprecatedProperty:
-    def warn(self, cls):
-        clsname = cls.__name__
-        warnings.warn(
-            '{cls}.async is deprecated; use {cls}.async_'.format(cls=clsname),
-            DeprecationWarning)
+import errno
+import io
+import json
+import re
+import subprocess
     
-        def test_varargs14_kw(self):
-        msg = r'^product\(\) takes at most 1 keyword argument \(2 given\)$'
-        self.assertRaisesRegex(TypeError, msg,
-                               itertools.product, 0, repeat=1, foo=2)
+    rootDir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     
-        def test_pointer_type_name(self):
-        LargeNamedType = type('T' * 2 ** 25, (Structure,), {})
-        self.assertTrue(POINTER(LargeNamedType))
+            if check_executable('mplayer', ['-h']):
+            args = [
+                'mplayer', '-really-quiet', '-vo', 'null', '-vc', 'dummy',
+                '-dumpstream', '-dumpfile', tmpfilename, url]
+        elif check_executable('mpv', ['-h']):
+            args = [
+                'mpv', '-really-quiet', '--vo=null', '--stream-dump=' + tmpfilename, url]
+        else:
+            self.report_error('MMS or RTSP download detected but neither 'mplayer' nor 'mpv' could be run. Please install any.')
+            return False
     
-    def download_pdf(link, location, name):
-    try:
-        response = requests.get(link)
-        with open(os.path.join(location, name), 'wb') as f:
-        	f.write(response.content)
-        	f.close()
-    except HTTPError:
-        print('>>> Error 404: cannot be downloaded!\n') 
-        raise   
-    except socket.timeout:
-        print(' '.join(('can't download', link, 'due to connection timeout!')) )
-        raise
+    import re
+    
+    from .nuevo import NuevoBaseIE
+    
+            raw_payload = self._search_regex([
+            r'class='amtv-embed'[^>]+id='([^']+)'',
+            r'class=\\'amtv-embed\\'[^>]+id=\\'([^']+)\\'',
+        ], webpage, 'raw payload')
+        _, stage_mode, video_id, lang = raw_payload.split('-')
+    
+            webpage = self._download_webpage(url, video_id)
