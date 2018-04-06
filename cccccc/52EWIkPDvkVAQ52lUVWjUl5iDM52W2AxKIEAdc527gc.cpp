@@ -1,258 +1,254 @@
 
         
-        void PartialRunMgr::PartialRunDone(int step_id, StatusCallback done,
-                                   const Status& status) {
-  Status callback_status;
-  {
-    mutex_lock l(mu_);
-    auto run_it = step_id_to_partial_run_.find(step_id);
-    if (run_it == step_id_to_partial_run_.end()) {
-      return;
-    }
-    run_it->second->final_status.Update(status);
-    if (!run_it->second->executor_done) {
-      // If we found the partial_run, we set the final callback to call only
-      // when the executor is completely done.
-      run_it->second->final_callback = std::move(done);
-      return;
-    }
-    callback_status = run_it->second->final_status;
+        #endif  // ATOM_BROWSER_API_ATOM_API_DESKTOP_CAPTURER_H_
+
+    
+    AsarProtocolHandler::AsarProtocolHandler(
+    const scoped_refptr<base::TaskRunner>& file_task_runner)
+    : file_task_runner_(file_task_runner) {}
+    
+    #include 'net/url_request/url_request_job_factory.h'
+    
+    RenderProcessPreferences::~RenderProcessPreferences() {
+}
+    
+      // We need to convert the |entries_| to ListValue for multiple times, this
+  // caches is only updated when we are sending messages.
+  bool cache_needs_update_;
+  base::ListValue cached_entries_;
+    
+    // Parse a string as an accelerator.
+bool StringToAccelerator(const std::string& description,
+                         ui::Accelerator* accelerator);
+    
+    
+    {}  // namespace atom
+    
+        UINT width = 640;
+    UINT height = 480;
+    
+            // clear for new data
+        C_est_.clear();
+        t_est_.clear();
+        cost_.clear();
+    
+            // cross two lines
+        Point2f origin1 = quad_corners[0];
+        Point2f dir1 = quad_corners[1] - quad_corners[0];
+        Point2f origin2 = quad_corners[2];
+        Point2f dir2 = quad_corners[3] - quad_corners[2];
+        double angle = acos(dir1.dot(dir2)/(norm(dir1)*norm(dir2)));
+        if(cvIsNaN(angle) || cvIsInf(angle) || angle < 0.5 || angle > CV_PI - 0.5) continue;
+    
+      // Instead of 1/0, we want to see true/false for bool values.
+  Message& operator <<(bool b) {
+    return *this << (b ? 'true' : 'false');
   }
-  // Otherwise we call the callback immediately.
-  done(callback_status);
-  mutex_lock l(mu_);
-  step_id_to_partial_run_.erase(step_id);
-}
     
-    #include 'third_party/eigen3/unsupported/Eigen/CXX11/Tensor'
-#include 'tensorflow/core/framework/tensor_types.h'
-#include 'tensorflow/core/framework/types.h'
-#include 'tensorflow/core/kernels/scatter_functor.h'
+    // Now the tricky part: you need to register all test patterns before
+// you can instantiate them.  The first argument of the macro is the
+// test case name; the rest are the names of the tests in this test
+// case.
+REGISTER_TYPED_TEST_CASE_P(FooTest,
+                           DoesBlah, HasPropertyA);
     
-    namespace tensorflow {
-namespace port {
-    }
-    }
+    // Returns the type ID of ::testing::Test.  Always call this instead
+// of GetTypeId< ::testing::Test>() to get the type ID of
+// ::testing::Test, as the latter may give the wrong result due to a
+// suspected linker bug when compiling Google Test as a Mac OS X
+// framework.
+GTEST_API_ TypeId GetTestTypeId();
     
-    void SYCLDeviceContext::CopyCPUTensorToDevice(const Tensor *cpu_tensor,
-                                              Device *device,
-                                              Tensor *device_tensor,
-                                              StatusCallback done) const {
-  const int64 total_bytes = cpu_tensor->TotalBytes();
-  if (total_bytes > 0) {
-    const void *src_ptr = DMAHelper::base(cpu_tensor);
-    void *dst_ptr = DMAHelper::base(device_tensor);
-    switch (cpu_tensor->dtype()) {
-      case DT_FLOAT:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<float *>(dst_ptr), static_cast<const float *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_DOUBLE:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<double *>(dst_ptr),
-            static_cast<const double *>(src_ptr), total_bytes);
-        break;
-      case DT_INT32:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int32 *>(dst_ptr), static_cast<const int32 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT64:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int64 *>(dst_ptr), static_cast<const int64 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_HALF:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<Eigen::half *>(dst_ptr),
-            static_cast<const Eigen::half *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX64:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<std::complex<float> *>(dst_ptr),
-            static_cast<const std::complex<float> *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX128:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<std::complex<double> *>(dst_ptr),
-            static_cast<const std::complex<double> *>(src_ptr), total_bytes);
-        break;
-      case DT_INT8:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int8 *>(dst_ptr), static_cast<const int8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT16:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int16 *>(dst_ptr), static_cast<const int16 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT8:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<uint8 *>(dst_ptr), static_cast<const uint8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT16:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<uint16 *>(dst_ptr),
-            static_cast<const uint16 *>(src_ptr), total_bytes);
-        break;
-      case DT_BOOL:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<bool *>(dst_ptr), static_cast<const bool *>(src_ptr),
-            total_bytes);
-        break;
-      default:
-        assert(false && 'unsupported type');
-    }
+      // Smart pointer members.
+  void reset(T* ptr = NULL) {
+    depart();
+    capture(ptr);
   }
-  device->eigen_sycl_device()->synchronize();
-  done(Status::OK());
+  T* get() const { return value_; }
+  T* operator->() const { return value_; }
+  T& operator*() const { return *value_; }
+    
+      // Creates a UTF-16 wide string from the given ANSI string, allocating
+  // memory using new. The caller is responsible for deleting the return
+  // value using delete[]. Returns the wide string, or NULL if the
+  // input is NULL.
+  //
+  // The wide string is created using the ANSI codepage (CP_ACP) to
+  // match the behaviour of the ANSI versions of Win32 calls and the
+  // C runtime.
+  static LPCWSTR AnsiToUtf16(const char* c_str);
+    
+    $for i [[
+$range j 1..i
+$range k 2..i
+template <$for j, [[GTEST_TEMPLATE_ T$j]]>
+struct Templates$i {
+  typedef TemplateSel<T1> Head;
+  typedef Templates$(i-1)<$for k, [[T$k]]> Tail;
+};
+    
+    void run_all_tests(std::shared_ptr<thd::DataChannel> data_channel, int workers) {
+  test_send_recv_tensor(data_channel);
+  test_send_recv_tensor_any_source(data_channel, workers);
+  test_send_recv_scalar(data_channel);
+  test_broadcast(data_channel);
+  test_reduce(data_channel, workers);
+  test_allReduce(data_channel, workers);
+  test_scatter(data_channel);
+  test_gather(data_channel);
+  test_allGather(data_channel);
+  test_barrier(data_channel);
+  test_isend(data_channel);
+  test_irecv(data_channel);
+  test_interlaces(data_channel);
+    }
+    
+    template<> AT_API Half convert(int64_t f) {
+  return convert<Half,double>(static_cast<double>(f));
+}
+template<> AT_API int64_t convert(Half f) {
+  return static_cast<int64_t>(convert<double,Half>(f));
 }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+      explicit Scalar(const detail::TensorBase & t)
+  : tag(Tag::HAS_t), t(t) {
+    AT_ASSERT(t.defined(), 'Attempting to create a Scalar from an undefined tensor');
+    AT_ASSERT(t.dim() == 0, 'Attempting to create a Scalar from a %d dim tensor', t.dim());
+  }
     
-    #include 'tensorflow/core/framework/register_types.h'
-#include 'tensorflow/core/framework/tensor_types.h'
-#include 'tensorflow/core/kernels/cuda_device_array_gpu.h'
-#include 'tensorflow/core/util/cuda_kernel_helper.h'
+    #include 'ATen/Config.h'
+namespace at {
+namespace native {
+    }
+    }
     
-    #ifndef ATOM_BROWSER_API_ATOM_API_DESKTOP_CAPTURER_H_
-#define ATOM_BROWSER_API_ATOM_API_DESKTOP_CAPTURER_H_
-    
-    #ifndef ATOM_BROWSER_API_ATOM_API_RENDER_PROCESS_PREFERENCES_H_
-#define ATOM_BROWSER_API_ATOM_API_RENDER_PROCESS_PREFERENCES_H_
-    
-      // net::URLRequestJobFactory::ProtocolHandler:
-  net::URLRequestJob* MaybeCreateJob(
-      net::URLRequest* request,
-      net::NetworkDelegate* network_delegate) const override;
-  bool IsSafeRedirectTarget(const GURL& location) const override;
-    
-    HttpProtocolHandler::~HttpProtocolHandler() {
+    struct curandStateMtgp32* THCRandom_generatorStates(struct THCState* state)
+{
+  return THCRandom_getGenerator(state)->gen_states;
 }
+    
+    #ifdef WITH_CUDA
+    
+    bool js_cocos2dx_builder_CCBReader_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_builder_CCBReader_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_builder_CCBReader(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_builder_CCBReader_getAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_setAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addOwnerOutletName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_setCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addOwnerOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_readSoundKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_readUTF8(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_readCallbackKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getAnimationManagersForNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getNodesWithAnimationManagers(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_setResolutionScale(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_CCBReader(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    bool js_cocos2dx_studio_ComController_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_ComController_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_ComController(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_ComController_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ComController_ComController(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+    
+    
+    
+    
+    #ifdef __cplusplus
+extern 'C' {
+#endif
+#include 'tolua++.h'
+#ifdef __cplusplus
+}
+#endif
+    
+    
+    {    CHECK_GL_ERROR_DEBUG();
+}
+
+    
+    
+    {
+    {			float minX = -6.0f;
+			float maxX = 0.0f;
+			float minY = 4.0f;
+			float maxY = 6.0f;
+			
+			for (int32 i = 0; i < 400; ++i)
+			{
+				b2BodyDef bd;
+				bd.type = b2_dynamicBody;
+				bd.position = b2Vec2(RandomFloat(minX,maxX),RandomFloat(minY,maxY));
+				b2Body* body = m_world->CreateBody(&bd);
+				body->CreateFixture(&shape, 0.01f);
+			}
+		}
+		
+		{
+			b2PolygonShape shape;
+			shape.SetAsBox(1.5f, 1.5f);
+			b2BodyDef bd;
+			bd.type = b2_dynamicBody;
+			bd.position.Set(-40.0f,5.0f);
+			bd.bullet = true;
+			b2Body* body = m_world->CreateBody(&bd);
+			body->CreateFixture(&shape, 1.0f);
+			body->SetLinearVelocity(b2Vec2(150.0f, 0.0f));
+		}
+	}
+    
+    			b2FixtureDef sd2;
+			sd2.shape = &poly2;
+			sd2.density = 2.0f;
+    
+    			b2FixtureDef fd;
+			fd.shape = &shape;
+			fd.density = 1.0f;
+    
+    		m_x = RandomFloat(-1.0f, 1.0f);
+		m_bullet->SetTransform(b2Vec2(m_x, 10.0f), 0.0f);
+		m_bullet->SetLinearVelocity(b2Vec2(0.0f, -50.0f));
+		m_bullet->SetAngularVelocity(0.0f);
+    
+    
+    {
+    {
+    { private:
+  /*! \brief input stream */
+  dmlc::Stream *strm_;
+  /*! \brief current buffer pointer */
+  size_t buffer_ptr_;
+  /*! \brief internal buffer */
+  std::string buffer_;
+};
+}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_IO_H_
+
+    
+      XGBOOST_DEVICE bst_gpair_internal<T> operator+(
+      const bst_gpair_internal<T> &rhs) const {
+    bst_gpair_internal<T> g;
+    g.grad_ = grad_ + rhs.grad_;
+    g.hess_ = hess_ + rhs.hess_;
+    return g;
+  }
     
     
     { private:
-  DISALLOW_COPY_AND_ASSIGN(URLRequestAsyncAsarJob);
+  /*! \brief external memory column offset */
+  std::vector<size_t> disk_offset_;
 };
-    
-    #endif  // ATOM_BROWSER_UI_TRAY_ICON_GTK_H_
-
-    
-    namespace atom {
-    }
-    
-    bool SourceKit::CodeCompletion::addCustomCompletions(
-    CompletionSink &sink, std::vector<Completion *> &completions,
-    ArrayRef<CustomCompletionInfo> customCompletions,
-    CompletionKind completionKind) {
-    }
-    
-    #ifndef SWIFT_INDEX_INDEXRECORD_H
-#define SWIFT_INDEX_INDEXRECORD_H
-    
-      /// Returns the buffer ID for the specified *valid* location.
-  ///
-  /// Because a valid source location always corresponds to a source buffer,
-  /// this routine always returns a valid buffer ID.
-  unsigned findBufferContainingLoc(SourceLoc Loc) const;
-    
-      scoped_ptr<base::Value> value_option(
-      converter->FromV8Value(options, isolate->GetCurrentContext()));
-  if (!value_option.get() ||
-      !value_option->IsType(base::Value::TYPE_DICTIONARY))
-    return isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
-        'Unable to convert 'option' passed to AllocateObject')));
-    
-    // static
-void
-DispatcherBindings::AllocateId(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  RenderView* render_view = GetCurrentRenderView();
-  if (!render_view) {
-    args.GetReturnValue().Set(isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
-                                     'Unable to get render view in AllocateId'))));
-    return;
-  }
-    }
-    
-      // Remote objects.
-  static void AllocateId(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void AllocateObject(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void DeallocateObject(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void CallObjectMethod(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void CallObjectMethodSync(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void CallStaticMethod(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void CallStaticMethodSync(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void CrashRenderer(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void SetCrashDumpDir(const v8::FunctionCallbackInfo<v8::Value>& args);
-#if defined(OS_MACOSX)
-  static void InitMsgIDMap();
-  static void GetNSStringWithFixup(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void GetNSStringFWithFixup(const v8::FunctionCallbackInfo<v8::Value>& args);
-#endif
-    
-    class DispatcherHost : public content::WebContentsObserver {
- public:
-  explicit DispatcherHost(content::RenderViewHost* render_view_host);
-  ~DispatcherHost() final;
-    }
-    
-    EventListener::EventListener(int id,
-  const base::WeakPtr<DispatcherHost>& dispatcher_host,
-  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
-    }
-    
-    void MenuItem::Call(const std::string& method,
-                    const base::ListValue& arguments,
-                    content::RenderFrameHost* rvh) {
-  if (method == 'SetLabel') {
-    std::string label;
-    arguments.GetString(0, &label);
-    SetLabel(label);
-  } else if (method == 'SetIcon') {
-    std::string icon;
-    arguments.GetString(0, &icon);
-    SetIcon(icon);
-  } else if (method == 'SetIconIsTemplate') {
-    bool isTemplate;
-    arguments.GetBoolean(0, &isTemplate);
-    SetIconIsTemplate(isTemplate);
-  } else if (method == 'SetTooltip') {
-    std::string tooltip;
-    arguments.GetString(0, &tooltip);
-    SetTooltip(tooltip);
-  } else if (method == 'SetEnabled') {
-    bool enabled = true;
-    arguments.GetBoolean(0, &enabled);
-    SetEnabled(enabled);
-  } else if (method == 'SetChecked') {
-    bool checked = false;
-    arguments.GetBoolean(0, &checked);
-    SetChecked(checked);
-  } else if (method == 'SetSubmenu') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    SetSubmenu(object_manager()->GetApiObject<Menu>(object_id));
-#if defined(OS_MACOSX)
-  } else if (method == 'SetKey') {
-    std::string key;
-    arguments.GetString(0, &key);
-    SetKey(key);
-  } else if (method == 'SetModifiers') {
-    std::string mod;
-    arguments.GetString(0, &mod);
-    SetModifiers(mod);
-#endif
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
