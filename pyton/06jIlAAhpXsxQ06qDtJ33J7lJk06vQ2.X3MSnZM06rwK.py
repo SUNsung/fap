@@ -1,228 +1,212 @@
 
         
-        entries = []
-for v in versions:
-    fields = v.split('.')
-    year, month, day = map(int, fields[:3])
-    faked = 0
-    patchlevel = 0
-    while True:
+          def testClassifierGraph(self):
+    FLAGS.rnn_num_layers = 2
+    model = graphs.VatxtModel()
+    train_op, _, _ = model.classifier_training()
+    # Pretrained vars: embedding + LSTM layers
+    self.assertEqual(
+        len(model.pretrained_variables), 1 + 2 * FLAGS.rnn_num_layers)
+    with self.test_session() as sess:
+      sess.run(tf.global_variables_initializer())
+      tf.train.start_queue_runners(sess)
+      sess.run(train_op)
+    
+    flags = tf.app.flags
+FLAGS = flags.FLAGS
+    
+    
+def put(url, data=None, **kwargs):
+    r'''Sends a PUT request.
+    
+    
+def check_compatibility(urllib3_version, chardet_version):
+    urllib3_version = urllib3_version.split('.')
+    assert urllib3_version != ['dev']  # Verify urllib3 isn't installed from git.
+    
+        def initialize_options(self):
+        TestCommand.initialize_options(self)
         try:
-            datetime.date(year, month, day)
-        except ValueError:
-            day -= 1
-            faked += 1
-            assert day > 0
-            continue
-        break
-    if len(fields) >= 4:
+            from multiprocessing import cpu_count
+            self.pytest_args = ['-n', str(cpu_count()), '--boxed']
+        except (ImportError, NotImplementedError):
+            self.pytest_args = ['-n', '1', '--boxed']
+    
+            :param method: method for the new :class:`Request` object.
+        :param url: URL for the new :class:`Request` object.
+        :param params: (optional) Dictionary or bytes to be sent in the query
+            string for the :class:`Request`.
+        :param data: (optional) Dictionary, bytes, or file-like object to send
+            in the body of the :class:`Request`.
+        :param json: (optional) json to send in the body of the
+            :class:`Request`.
+        :param headers: (optional) Dictionary of HTTP Headers to send with the
+            :class:`Request`.
+        :param cookies: (optional) Dict or CookieJar object to send with the
+            :class:`Request`.
+        :param files: (optional) Dictionary of ``'filename': file-like-objects``
+            for multipart encoding upload.
+        :param auth: (optional) Auth tuple or callable to enable
+            Basic/Digest/Custom HTTP Auth.
+        :param timeout: (optional) How long to wait for the server to send
+            data before giving up, as a float, or a :ref:`(connect timeout,
+            read timeout) <timeouts>` tuple.
+        :type timeout: float or tuple
+        :param allow_redirects: (optional) Set to True by default.
+        :type allow_redirects: bool
+        :param proxies: (optional) Dictionary mapping protocol or protocol and
+            hostname to the URL of the proxy.
+        :param stream: (optional) whether to immediately download the response
+            content. Defaults to ``False``.
+        :param verify: (optional) Either a boolean, in which case it controls whether we verify
+            the server's TLS certificate, or a string, in which case it must be a path
+            to a CA bundle to use. Defaults to ``True``.
+        :param cert: (optional) if String, path to ssl client cert file (.pem).
+            If Tuple, ('cert', 'key') pair.
+        :rtype: requests.Response
+        '''
+        # Create the Request.
+        req = Request(
+            method=method.upper(),
+            url=url,
+            headers=headers,
+            files=files,
+            data=data or {},
+            json=json,
+            params=params or {},
+            auth=auth,
+            cookies=cookies,
+            hooks=hooks,
+        )
+        prep = self.prepare_request(req)
+    
+        with server as (host, port):
+        url = 'http://{0}:{1}/'.format(host, port)
+        r = requests.get(url, auth=auth)
+        # Verify server didn't authenticate us.
+        assert r.status_code == 401
+        assert r.history[0].status_code == 401
+        close_server.set()
+    
+        (x_train, y_train), _, (sample_weight, _, _) = _get_test_data()
+    
+            def __call__(self, hidden_dims):
+            return build_fn_clf(hidden_dims)
+    
+            # Returns
+            When steps is `None`, returns the number of samples to be
+            processed based on the size of the first dimension of the
+            first input numpy array. When steps is not `None` and
+            `batch_size` is `None`, returns `None`.
+    
+    print('Convert class vector to binary class matrix '
+      '(for use with categorical_crossentropy)')
+y_train = keras.utils.to_categorical(y_train, num_classes)
+y_test = keras.utils.to_categorical(y_test, num_classes)
+print('y_train shape:', y_train.shape)
+print('y_test shape:', y_test.shape)
+    
+    
+@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
+def test_he_normal(tensor_shape):
+    fan_in, _ = initializers._compute_fans(tensor_shape)
+    scale = np.sqrt(2. / fan_in)
+    _runner(initializers.he_normal(), tensor_shape,
+            target_mean=0., target_std=None, target_max=2 * scale)
+    
+    
+@keras_test
+def test_convert_weights():
+    def get_model(shape, data_format):
+        model = Sequential()
+        model.add(Conv2D(filters=2,
+                         kernel_size=(4, 3),
+                         input_shape=shape,
+                         data_format=data_format))
+        model.add(Flatten())
+        model.add(Dense(5))
+        return model
+    
+    
+def SetUpSystemPaths():
+  sys.path.insert( 0, os.path.join( DIR_OF_YCMD ) )
+    
+        # For pickling to work, the __module__ variable needs to be set to the frame
+    # where the named tuple is created.  Bypass this step in enviroments where
+    # sys._getframe is not defined (Jython for example).
+    if hasattr(_sys, '_getframe'):
+        result.__module__ = _sys._getframe(1).f_globals.get('__name__', '__main__')
+    
+    Executor.submit() called:
+- creates a uniquely numbered _WorkItem and adds it to the 'Work Items' dict
+- adds the id of the _WorkItem to the 'Work Ids' queue
+    
+    from concurrent.futures import _base
+    
+    def download_urls_sequential(urls, timeout=60):
+    url_to_content = {}
+    for url in urls:
         try:
-            patchlevel = int(fields[3])
-        except ValueError:
-            patchlevel = 1
-    timestamp = '%04d-%02d-%02dT00:%02d:%02dZ' % (year, month, day, faked, patchlevel)
-    
-        infile, outfile = args
+            url_to_content[url] = load_url(url, timeout=timeout)
+        except:
+            pass
+    return url_to_content
     
     
-def gettestcases(include_onlymatching=False):
-    for ie in youtube_dl.extractor.gen_extractors():
-        for tc in ie.get_testcases(include_onlymatching):
-            yield tc
+class EventNotification( BaseRequest ):
+  def __init__( self, event_name, buffer_number = None, extra_data = None ):
+    super( EventNotification, self ).__init__()
+    self._event_name = event_name
+    self._buffer_number = buffer_number
+    self._extra_data = extra_data
+    self._response_future = None
+    self._cached_response = None
     
-        def test_youporn(self):
-        self._assert_restricted(
-            'http://www.youporn.com/watch/505835/sex-ed-is-it-safe-to-masturbate-daily/',
-            '505835.mp4', 2, old_age=25)
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
-            return self._extract_nuevo(
-            'http://www.anitube.se/nuevo/econfig.php?key=%s' % key, video_id)
-
+      return [ config_entry ]
     
-        def _real_extract(self, url):
-        # URLs end with [uploader name]/[uploader title]
-        # this title is whatever the user types in, and is rarely
-        # the proper song title.  Real metadata is in the api response
-        album_url_tag = self._match_id(url)
-        result = {'_type': 'playlist', 'entries': []}
-        # There is no one endpoint for album metadata - instead it is included/repeated in each song's metadata
-        # Therefore we don't know how many songs the album has and must infi-loop until failure
-        for track_no in itertools.count():
-            # Get song's metadata
-            api_response = self._download_json(
-                'http://www.audiomack.com/api/music/url/album/%s/%d?extended=1&_=%d'
-                % (album_url_tag, track_no, time.time()), album_url_tag,
-                note='Querying song information (%d)' % (track_no + 1))
+    # The default options which are only relevant to the client, not the server and
+# thus are not part of default_options.json, but are required for a working
+# YouCompleteMe object.
+DEFAULT_CLIENT_OPTIONS = {
+  'log_level': 'info',
+  'keep_logfiles': 0,
+  'extra_conf_vim_data': [],
+  'show_diagnostics_ui': 1,
+  'echo_current_diagnostic': 1,
+  'enable_diagnostic_signs': 1,
+  'enable_diagnostic_highlighting': 0,
+  'always_populate_location_list': 0,
+}
     
-        def _real_extract(self, url):
-        mobj = re.match(self._VALID_URL, url, flags=re.VERBOSE)
-        text_id = mobj.group('textid')
-    
-            String:                    '#4e9a06',        # class: 's'
-        String.Backtick:           '#4e9a06',        # class: 'sb'
-        String.Char:               '#4e9a06',        # class: 'sc'
-        String.Doc:                'italic #8f5902', # class: 'sd' - like a comment
-        String.Double:             '#4e9a06',        # class: 's2'
-        String.Escape:             '#4e9a06',        # class: 'se'
-        String.Heredoc:            '#4e9a06',        # class: 'sh'
-        String.Interpol:           '#4e9a06',        # class: 'si'
-        String.Other:              '#4e9a06',        # class: 'sx'
-        String.Regex:              '#4e9a06',        # class: 'sr'
-        String.Single:             '#4e9a06',        # class: 's1'
-        String.Symbol:             '#4e9a06',        # class: 'ss'
-    
-    Available hooks:
-    
-        def inner(*suffix):
-        return urljoin(httpbin_url, '/'.join(suffix))
-    
-    '''
-requests._internal_utils
-~~~~~~~~~~~~~~
-    
-        All keys are expected to be strings. The structure remembers the
-    case of the last key to be set, and ``iter(instance)``,
-    ``keys()``, ``items()``, ``iterkeys()``, and ``iteritems()``
-    will contain case-sensitive keys. However, querying and contains
-    testing is case insensitive::
-    
-            with Server(handler) as (host, port):
-            sock = socket.socket()
-            sock.connect((host, port))
-            sock.sendall(question)
-            text = sock.recv(1000)
-            assert text == answer
-            sock.close()
+    import r2.lib.helpers
+from r2.config.paths import (
+    get_r2_path,
+    get_built_statics_path,
+    get_raw_statics_path,
+)
+from r2.config.routing import make_map
+from r2.lib.app_globals import Globals
+from r2.lib.configparse import ConfigValue
     
     
-class RequestsDependencyWarning(RequestsWarning):
-    '''An imported dependency doesn't match the expected version range.'''
-    pass
-
+class APIv1LoginController(RedditController):
     
-    _init()
-
+        @validate(VAdmin(),
+              award = VAwardByCodename('awardcn'),
+              recipient = nop('recipient'),
+              desc = nop('desc'),
+              url = nop('url'),
+              hours = nop('hours'))
+    def GET_give(self, award, recipient, desc, url, hours):
+        if award is None:
+            abort(404, 'page not found')
     
-        kwargs = {
-        var: proxy
-    }
-    scheme = urlparse(url).scheme
-    with override_environ(**kwargs):
-        proxies = session.rebuild_proxies(prep, {})
-        assert scheme in proxies
-        assert proxies[scheme] == proxy
-    
-    
-def plot_batch_errors(all_errors, n_features, all_batch_sizes, data):
-    plt.figure()
-    plot_results(all_batch_sizes, all_errors['pca'], label='PCA')
-    plot_results(all_batch_sizes, all_errors['ipca'], label='IncrementalPCA')
-    plt.legend(loc='lower left')
-    plt.suptitle('Algorithm error vs. batch_size for n_components %i\n \
-                 LFW, size %i x %i' % (
-                 n_features, data.shape[0], data.shape[1]))
-    plt.xlabel('Batch size')
-    plt.ylabel('Mean absolute error')
-    
-    
-def compute_bench(samples_range, features_range):
-    
-                tick_vals += list(xvals + 0.5 * width)
-            tick_labels += ['%i' % val for val in vals]
-    
-        short_text_lang_folder = os.path.join(short_text_folder, lang)
-    if not os.path.exists(short_text_lang_folder):
-        os.makedirs(short_text_lang_folder)
-    
-        # TASK: Build a vectorizer / classifier pipeline that filters out tokens
-    # that are too rare or too frequent
-    pipeline = Pipeline([
-        ('vect', TfidfVectorizer(min_df=3, max_df=0.95)),
-        ('clf', LinearSVC(C=1000)),
-    ])
-    
-    # Plot the results (= shape of the data points cloud)
-plt.figure(1)  # two clusters
-plt.title('Outlier detection on a real data set (boston housing)')
-plt.scatter(X1[:, 0], X1[:, 1], color='black')
-bbox_args = dict(boxstyle='round', fc='0.8')
-arrow_args = dict(arrowstyle='->')
-plt.annotate('several confounded points', xy=(24, 19),
-             xycoords='data', textcoords='data',
-             xytext=(13, 10), bbox=bbox_args, arrowprops=arrow_args)
-plt.xlim((xx1.min(), xx1.max()))
-plt.ylim((yy1.min(), yy1.max()))
-plt.legend((legend1_values_list[0].collections[0],
-            legend1_values_list[1].collections[0],
-            legend1_values_list[2].collections[0]),
-           (legend1_keys_list[0], legend1_keys_list[1], legend1_keys_list[2]),
-           loc='upper center',
-           prop=matplotlib.font_manager.FontProperties(size=12))
-plt.ylabel('accessibility to radial highways')
-plt.xlabel('pupil-teacher ratio by town')
-    
-    The dataset is generated using the ``make_biclusters`` function, which
-creates a matrix of small values and implants bicluster with large
-values. The rows and columns are then shuffled and passed to the
-Spectral Co-Clustering algorithm. Rearranging the shuffled matrix to
-make biclusters contiguous shows how accurately the algorithm found
-the biclusters.
-    
-    # Create different classifiers. The logistic regression cannot do
-# multiclass out of the box.
-classifiers = {'L1 logistic': LogisticRegression(C=C, penalty='l1'),
-               'L2 logistic (OvR)': LogisticRegression(C=C, penalty='l2'),
-               'Linear SVC': SVC(kernel='linear', C=C, probability=True,
-                                 random_state=0),
-               'L2 logistic (Multinomial)': LogisticRegression(
-                C=C, solver='lbfgs', multi_class='multinomial'),
-               'GPC': GaussianProcessClassifier(kernel)
-               }
-    
-        description = proj_info['description'],
-    keywords = proj_info['keywords'],
-    
-            for i in html_json['sources']:
-            if 'src' in i:  #to avoid KeyError
-                if i['src'].startswith('https'):
-                    link_list.append((str(i['height']), i['src']))
-    
-    __all__ = ['cbs_download']
-    
-        while pin_count > 0:
-        json_data = extract_json_data(url, max=pin_list[-1]['pin_id'],
-                                      limit=LIMIT)
-        pins = json_data['pins']
-        pin_list += pins
-        pin_count -= len(pins)
-    
-    def kugou_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    if url.lower().find('5sing')!=-1:
-        #for 5sing.kugou.com
-        html=get_html(url)
-        ticket=r1(r''ticket':\s*'(.*)'',html)
-        j=loads(str(b64decode(ticket),encoding='utf-8'))
-        url=j['file']
-        title=j['songName']
-        songtype, ext, size = url_info(url)
-        print_info(site_info, title, songtype, size)
-        if not info_only:
-            download_urls([url], title, ext, size, output_dir, merge=merge)
-    else:
-        #for the www.kugou.com/
-        return kugou_download_playlist(url, output_dir=output_dir, merge=merge, info_only=info_only)
-        # raise NotImplementedError(url)       
-    
-    site_info = 'Mixcloud.com'
-download = mixcloud_download
-download_playlist = playlist_not_supported('mixcloud')
-
-    
-        # mgid%3Auma%3Avideo%3Amtv81.com%3A897974
-    vid = match1(html, r'getTheVideo\('(.*?)'')
-    xml = parseString(
-        get_content('http://intl.esperanto.mtvi.com/www/xml/media/mediaGen.jhtml?uri={}&flashPlayer=LNX%2013,0,0,206&geo=CN&sid=123456'.format(vid)))
-    
-            # extract title
-        self.title = match1(content,
-                            r'<meta property='og:description' name='og:description' content='([^']+)'')
+    from r2.controllers.api_docs import api_doc, api_section
+from r2.controllers.oauth2 import allow_oauth2_access
