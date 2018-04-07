@@ -1,110 +1,71 @@
 
         
-            plugin_manager.register(Plugin)
-    try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-            '--auth',
-            BASIC_AUTH_HEADER_VALUE,
-        )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
+        
+if six.PY3:
+    for line in open('tests/py3-ignores.txt'):
+        file_path = line.strip()
+        if file_path and file_path[0] != '#':
+            collect_ignore.append(file_path)
+    
+        def short_desc(self):
+        return 'Run quick benchmark test'
+    
+        def syntax(self):
+        return '[options] <spider>'
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-l', '--list', dest='list', action='store_true',
+            help='List available templates')
+        parser.add_option('-e', '--edit', dest='edit', action='store_true',
+            help='Edit spider after creating it')
+        parser.add_option('-d', '--dump', dest='dump', metavar='TEMPLATE',
+            help='Dump template to standard output')
+        parser.add_option('-t', '--template', dest='template', default='basic',
+            help='Uses a custom template.')
+        parser.add_option('--force', dest='force', action='store_true',
+            help='If the spider already exists, overwrite it with the template')
+    
+                with open('htmlout.html', 'w') as out:
+                out.write(header)
     
     
-filenames = list(rst_filenames())
-assert filenames
+def main():
+    tornado.options.parse_command_line()
+    application = tornado.web.Application([
+        (r'/', MainHandler),
+    ])
+    http_server = tornado.httpserver.HTTPServer(application)
+    http_server.listen(options.port)
+    tornado.ioloop.IOLoop.current().start()
     
+    import tornado.ioloop
+import tornado.web
+from tornado import options
     
-def test_follow_all_output_options_used_for_redirects(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 3
-    assert HTTP_OK not in r
-    
-    
-def plot_results(X, y, label):
-    plt.plot(X, y, label=label, marker='o')
-    
-    import time
-    
-    plt.matshow(data, cmap=plt.cm.Blues)
-plt.title('Original dataset')
-    
-    features_samples_ratio = np.array(n_features_range) / n_train
-    
-    
-class _BenchSpider(scrapy.Spider):
-    '''A spider that follows all links'''
-    name = 'follow'
-    total = 10000
-    show = 20
-    baseurl = 'http://localhost:8998'
-    link_extractor = LinkExtractor()
-    
-                request.callback = wrapper
-    
-        def post_process(self, output):
-        occurrences = 0
-        for x in output:
-            if isinstance(x, self.obj_type):
-                occurrences += 1
-    
-    ### OUTPUT ###
-# ['Student',
-#  'Student',
-#  'Scientist',
-#  'Student',
-#  'Scientist',
-#  'Student',
-#  'Scientist',
-#  'Student',
-#  'Scientist',
-#  'Student',
-#  'Scientist',
-#  'Professor']
-
-    
-        def test_car_adapter_shall_make_very_loud_noise(self):
-        car = Car()
-        car_adapter = Adapter(car, make_noise=car.make_noise)
-        noise = car_adapter.make_noise(10)
-        expected_noise = 'vroom!!!!!!!!!!'
-    
-        def tearDown(cls):
-        ''' Function/test case scope teardown. '''
-        cls.output.close()
-        sys.stdout = cls.saved_stdout
-    
-        def test_items_recoil(self):
-        with ObjectPool(self.sample_queue, True) as pool:
-            self.assertEqual(pool, 'first')
-        self.assertTrue(self.sample_queue.get() == 'second')
-        self.assertFalse(self.sample_queue.empty())
-        self.assertTrue(self.sample_queue.get() == 'first')
-        self.assertTrue(self.sample_queue.empty())
-    
-        def test_parrot_eng_localization(self):
-        self.assertEqual(self.e.get('parrot'), 'parrot')
-    
-        def test_tc2_output(self):
-        self.tc2.run()
-        output = self.out.getvalue().strip()
-        self.assertEqual(output, self.average_result_tc2)
-    
-    Test code which will almost always fail (if not exactly 12:01) when untestable
-production code (production code time provider is datetime) is used:
-    
-        def now(self):
-        current_time = datetime.datetime.now()
-        current_time_formatted = '{}:{}'.format(current_time.hour, current_time.minute)
-        return current_time_formatted
-    
-        def execute(self):
-        self.rename(self.src, self.dest)
+            truncated = False
+        for object_name in object_names[start_pos:]:
+            if not object_name.startswith(prefix):
+                break
+            if len(contents) >= max_keys:
+                truncated = True
+                break
+            object_path = self._object_path(bucket_name, object_name)
+            c = {'Key': object_name}
+            if not terse:
+                info = os.stat(object_path)
+                c.update({
+                    'LastModified': datetime.datetime.utcfromtimestamp(
+                        info.st_mtime),
+                    'Size': info.st_size,
+                })
+            contents.append(c)
+            marker = object_name
+        self.render_xml({'ListBucketResult': {
+            'Name': bucket_name,
+            'Prefix': prefix,
+            'Marker': marker,
+            'MaxKeys': max_keys,
+            'IsTruncated': truncated,
+            'Contents': contents,
+        }})
