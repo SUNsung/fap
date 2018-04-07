@@ -1,90 +1,66 @@
 
         
-                if ARGV.git?
-          puts 'This directory is now a git repo. Make your changes and then use:'
-          puts '  git diff | pbcopy'
-          puts 'to copy the diff to the clipboard.'
-        end
+              # This gets the value of the block with the given key.
+      def get(key)
+        key    = Regexp.quote(key)
+        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$\r?\n?(.*?)\r?\n?^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
+        match  = regexp.match(@value)
+        return nil if !match
+        match[1]
+      end
     
-      # Clean a top-level (bin, sbin, lib) directory, recursively, by fixing file
-  # permissions and removing .la files, unless the files (or parent
-  # directories) are protected by skip_clean.
-  #
-  # bin and sbin should not have any subdirectories; if either do that is
-  # caught as an audit warning
-  #
-  # lib may have a large directory tree (see Erlang for instance), and
-  # clean_dir applies cleaning rules to the entire tree
-  def clean_dir(d)
-    d.find do |path|
-      path.extend(ObserverPathnameExtension)
+              # Parse the options
+          argv = parse_options(opts)
+          return if !argv
+          raise Vagrant::Errors::CLIInvalidUsage, help: opts.help.chomp if argv.length != 3
     
-        cd HOMEBREW_PREFIX
-    exec 'find', *args
-  end
+    output = File.new(OUTPUT_FILENAME, 'wb')
+output.write(xml.target!)
+output.close
     
-    # See browser for an example
-class GithubGistFormula < ScriptFileFormula
-  def self.url(val)
-    super
-    version File.basename(File.dirname(val))[0, 6]
-  end
-end
-    
-    # grab name/url pairings from README.md
-contents = File.read INPUT_FILENAME
-matches = contents.scan(/\* (.*) (http.*)/)
-# All blogs that do not respond
-unavailable = []
-temp_ignores = [
-  'AdRoll',
-  'Buzzfeed',
-  'SourceClear',
-  'TaskRabbit',
-  'theScore',
-  'Trivago',
-  'Xmartlabs',
-  'WyeWorks',
-  'Zoosk',
-  'Rudolf Olah'
-]
-    
-    require_relative 'converter/fonts_conversion'
-require_relative 'converter/less_conversion'
-require_relative 'converter/js_conversion'
-require_relative 'converter/logger'
-require_relative 'converter/network'
-    
-      def test_image_helper
-    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
-  end
-    
-      # GET /books/new
-  def new
-    @book = Book.new
-  end
-    
-            private
-    
-              add_offense(node)
-        end
-    
-      context 'called with three styles' do
-    it 'applies second style to left and right' do
-      rule = 'border-style: dashed double solid'
-    
-          expect('.margin-all').to have_rule(rule)
+        unless user
+      EmailInviter.new(email, inviter).send!
+      flash[:notice] = 'invitation sent to #{email}'
+    else
+      flash[:notice]= 'error sending invite to #{email}'
     end
+    redirect_to user_search_path, :notice => flash[:notice]
   end
     
-      context 'called with arguments (2, $value: 4em 6em)' do
-    it 'outputs sextuple the second value from the default scale' do
-      expect('.two-double-value').to have_rule('font-size: 3.125em')
+          def handle_prompt(prompt, auth)
+        if prompt.include? 'select_account'
+          handle_params_error('account_selection_required',
+                              'There is no support for choosing among multiple accounts')
+        elsif prompt.include? 'consent'
+          request_authorization_consent_form
+        else
+          handle_authorization_form(auth)
+        end
+      end
+    
+          subdir = parent.join(leaf)
+    
     end
-  end
-end
-
     
-      context 'called with auto' do
-    it 'applies to auto to height' do
-      rule = 'height: auto; width: 100px;'
+      def prefixes
+    prefixes = ['/bin', '/usr/bin', '/usr/libexec', xcode_app_path]
+    prefixes << `brew --prefix`.strip unless `which brew`.strip.empty?
+    
+              If there is multiple cache for various versions of the requested pod,
+          you will be asked which one to clean. Use `--all` to clean them all.
+    
+            def run
+          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
+          if @pod_name.nil? # Print all
+            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
+              print_pod_cache_infos(pod_name, cache_descriptors)
+            end
+          else # Print only for the requested pod
+            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
+            if cache_descriptors.nil?
+              UI.notice('No cache for pod named #{@pod_name} found')
+            else
+              print_pod_cache_infos(@pod_name, cache_descriptors)
+            end
+          end
+        end
