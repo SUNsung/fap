@@ -1,169 +1,190 @@
 
         
-          void emitObjCGetterDescriptorParts(IRGenModule &IGM,
-                                     AbstractStorageDecl *subscript,
-                                     llvm::Constant *&selectorRef,
-                                     llvm::Constant *&atEncoding,
-                                     llvm::Constant *&impl);
+        
+    {  virtual ~SessionFactory() {}
+  static void Register(const string& runtime_type, SessionFactory* factory);
+  static Status GetFactory(const SessionOptions& options,
+                           SessionFactory** out_factory);
+};
     
-    /// A utility for finding dead-end blocks.
-///
-/// Dead-end blocks are blocks from which there is no path to the function exit
-/// (either return or throw). These are blocks which end with an unreachable
-/// instruction and blocks from which all paths end in 'unreachable' blocks.
-/// This utility is needed to determine if the a value definition can have a
-/// lack of users ignored along a specific path.
-class DeadEndBlocks {
-  llvm::SetVector<const SILBasicBlock *> ReachableBlocks;
-  const SILFunction *F;
-  bool isComputed = false;
+      Status Optimize(Cluster* cluster, const GrapplerItem& item,
+                  GraphDef* pruned_graph) override;
+    
+      void CopyCPUTensorToDevice(const Tensor *cpu_tensor, Device *device,
+                             Tensor *device_tensor,
+                             StatusCallback done) const override;
+    
+    namespace xla {
     }
     
-    #ifndef SWIFT_AST_SUBSTITUTION_LIST_H
-#define SWIFT_AST_SUBSTITUTION_LIST_H
+      // do an initial binary search and then scan linearly from there
+  // works well when there are many small segments and when the
+  // segments are much longer
+  IntType segment =
+      cuda_helper::upper_bound<IntType>(col_scan, num_inputs, gidx) - 1;
     
-    #include 'llvm/Support/raw_ostream.h'
+      int64 start(int d) const {
+    DCHECK_GE(d, 0);
+    DCHECK_LT(d, dims());
+    return starts_[d];
+  }
     
-    /**
- * @brief Initialize the extensions socket path variable for osqueryi.
- *
- * If the shell is invoked with a default extensions_socket flag there is a
- * chance the path is 'overloaded' by multiple shells, use this method to
- * determine a unique user-local path.
- *
- * @param home to user's home directory.
- */
-void initShellSocket(const std::string& home);
-    
-      /**
-   * @brief Attempt to drop privileges to that of the parent of a given path.
-   *
-   * This will return false if privileges could not be dropped or there was
-   * an previous, and still active, request for dropped privileges.
-   *
-   * @return success if privileges were dropped, otherwise false.
-   */
-  bool dropToParent(const boost::filesystem::path& path);
-    
-    Status TLSConfigPlugin::setUp() {
-  if (FLAGS_enroll_always && !FLAGS_disable_enrollment) {
-    // clear any cached node key
-    clearNodeKey();
-    auto node_key = getNodeKey('tls');
-    if (node_key.size() == 0) {
-      // Could not generate a node key, continue logging to stderr.
-      return Status(1, 'No node key, TLS config failed.');
-    }
+    ValueIteratorBase::difference_type
+ValueIteratorBase::computeDistance(const SelfType& other) const {
+#ifdef JSON_USE_CPPTL_SMALLMAP
+  return other.current_ - current_;
+#else
+  // Iterator for null value are initialized using the default
+  // constructor, which initialize current_ to the default
+  // std::map::iterator. As begin() and end() are two instance
+  // of the default std::map::iterator, they can not be compared.
+  // To allow this, we handle this comparison specifically.
+  if (isNull_ && other.isNull_) {
+    return 0;
   }
     }
     
-    int main(int argc, char** argv)
-{
-    if (argc < 3)
-    {
-        printf('Syntax: %s [-base85] [-nocompress] <inputfile> <symbolname>\n', argv[0]);
-        return 0;
-    }
-    }
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
     
-    //---- Don't implement demo windows functionality (ShowDemoWindow()/ShowStyleEditor()/ShowUserGuide() methods will be empty)
-//---- It is very strongly recommended to NOT disable the demo windows. Please read the comment at the top of imgui_demo.cpp.
-//#define IMGUI_DISABLE_DEMO_WINDOWS
+    #include <string>
     
-        // Cleanup
-    ImGui_ImplGlfwGL2_Shutdown();
-    ImGui::DestroyContext();
-    glfwTerminate();
+    #include <string>
     
+    // Author: liujisi@google.com (Pherl Liu)
     
-    {        // Rendering
-        int display_w, display_h;
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
-        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-        ImGui::Render();
-        ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
-        glfwSwapBuffers(window);
+      // Field.Builder setField(Field.Builder builderForValue)
+  WriteFieldDocComment(printer, descriptor_);
+  PrintNestedBuilderFunction(printer,
+    '$deprecation$public Builder set$capitalized_name$(\n'
+    '    $type$.Builder builderForValue)',
+    
+    namespace HPHP {
     }
     
-        // Render command lists
-    int vtx_offset = 0;
-    int idx_offset = 0;
-    for (int n = 0; n < draw_data->CmdListsCount; n++)
-    {
-        const ImDrawList* cmd_list = draw_data->CmdLists[n];
-        for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
-        {
-            const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
-            if (pcmd->UserCallback)
-            {
-                pcmd->UserCallback(cmd_list, pcmd);
-            }
-            else
-            {
-                const D3D10_RECT r = { (LONG)pcmd->ClipRect.x, (LONG)pcmd->ClipRect.y, (LONG)pcmd->ClipRect.z, (LONG)pcmd->ClipRect.w };
-                ctx->PSSetShaderResources(0, 1, (ID3D10ShaderResourceView**)&pcmd->TextureId);
-                ctx->RSSetScissorRects(1, &r);
-                ctx->DrawIndexed(pcmd->ElemCount, idx_offset, vtx_offset);
-            }
-            idx_offset += pcmd->ElemCount;
-        }
-        vtx_offset += cmd_list->VtxBuffer.Size;
-    }
+    #define INVALID_DATA 1
     
-    // GLFW callbacks (registered by default to GLFW if you enable 'install_callbacks' during initialization)
-// Provided here if you want to chain callbacks yourself. You may also handle inputs yourself and use those as a reference.
-IMGUI_API void        ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-IMGUI_API void        ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-IMGUI_API void        ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-IMGUI_API void        ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
-
+        if (s == nullptr || d == nullptr) continue;
     
-    // GLFW callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// Provided here if you want to chain callbacks.
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_API void        ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-IMGUI_API void        ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-IMGUI_API void        ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-IMGUI_API void        ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
-
     
-        // Setup display size (every frame to accommodate for window resizing)
-    int w, h;
-    int display_w, display_h;
-    glfwGetWindowSize(g_Window, &w, &h);
-    glfwGetFramebufferSize(g_Window, &display_w, &display_h);
-    io.DisplaySize = ImVec2((float)w, (float)h);
-    io.DisplayFramebufferScale = ImVec2(w > 0 ? ((float)display_w / w) : 0, h > 0 ? ((float)display_h / h) : 0);
-    
-    TEST_F(StringAppendOperatorTest, PersistentFlushAndCompaction) {
-  // Perform the following operations in limited scope
-  {
-    auto db = OpenDb('\n');
-    StringLists slists(db);
-    std::string a, b, c;
-    bool success;
-    }
-    }
-    
-    JNIEnv* JniCallback::getJniEnv(jboolean* attached) const {
-  return JniUtil::getJniEnv(m_jvm, attached);
+    {	BIND_ENUM_CONSTANT(STATUS_DISCONNECTED);
+	BIND_ENUM_CONSTANT(STATUS_CONNECTED);
+	BIND_ENUM_CONSTANT(STATUS_ERROR_NO_CERTIFICATE);
+	BIND_ENUM_CONSTANT(STATUS_ERROR_HOSTNAME_MISMATCH);
 }
     
-      virtual Status GetUpdatesSince(
-      SequenceNumber seq_number, unique_ptr<TransactionLogIterator>* iter,
-      const TransactionLogIterator::ReadOptions& read_options) override {
-    return db_->GetUpdatesSince(seq_number, iter, read_options);
+    #if defined(MBEDTLS_PLATFORM_EXIT_MACRO) &&\
+    ( defined(MBEDTLS_PLATFORM_STD_EXIT) ||\
+        defined(MBEDTLS_PLATFORM_EXIT_ALT) )
+#error 'MBEDTLS_PLATFORM_EXIT_MACRO and MBEDTLS_PLATFORM_STD_EXIT/MBEDTLS_PLATFORM_EXIT_ALT cannot be defined simultaneously'
+#endif
+    
+    			for (List<StringName>::Element *F = snames.front(); F; F = F->next()) {
+    }
+    
+    
+    {
+    {			TreeItem *item = search_options->create_item(root);
+			item->set_metadata(0, 'class_property:' + E->key() + ':' + c.properties[i].name);
+			item->set_text(0, E->key() + '.' + c.properties[i].name + ' (Property)');
+			item->set_icon(0, cicon);
+		}
+	}
+    
+    
+    {	id.type = Variant::OBJECT;
+	if (context.base)
+		id.value = context.base;
+	id.obj_type = nc->get_name();
+	return id;
+}
+    
+    
+    {		btVehicleWheelContactPoint(PhysicsDirectBodyState *s, PhysicsBody *body1, const Vector3 &frictionPosWorld, const Vector3 &frictionDirectionWorld, real_t maxImpulse);
+	};
+    
+    				MeshInstanceEditorEdgeSort edge;
+				if (use_indices) {
+					edge.a = r[ri[j + k]];
+					edge.b = r[ri[j + ((k + 1) % 3)]];
+				} else {
+					edge.a = r[j + k];
+					edge.b = r[j + ((k + 1) % 3)];
+				}
+    
+    	if (ret.length())
+		return ret;
+    
+    
+    {	if (p_idx < 0 || p_idx >= build_tabs->get_tab_count()) {
+		warnings_btn->set_visible(false);
+		errors_btn->set_visible(false);
+	} else {
+		warnings_btn->set_visible(true);
+		errors_btn->set_visible(true);
+	}
+}
+    
+    
+    {	Ref<Animation> anim = property_editor->get_variant().operator RefPtr();
+	anim_tree->animation_node_set_animation(edited_node, anim);
+	update();
+}
+    
+    				ERR_FAIL_INDEX(idx, subresources.size());
+    
+    
+    {            auto sequenceLength = currentSequence.size() / numElementsPerSample;
+            auto sequenceDataShape = sampleShape.AppendShape({ sequenceLength });
+            sequencesData.push_back(MakeSharedObject<NDArrayView>(sequenceDataShape, currentSequence));
+        }
+    
+    using namespace std;
+    
+    
+    {        // didn't find any of the tags, so just parse the whole thing as a script
+        if (!loadOrEditFound)
+        {
+            // surround text in braces so we parse correctly
+            std::string textInBraces = '[ ' + stringParse + ' ]';
+            Parse(textInBraces);
+        }
+    }
+    
+        void getlattices(const std::wstring& key, std::shared_ptr<const latticepair>& L, size_t expectedframes) const
+    {
+        std::shared_ptr<latticepair> LP(new latticepair);
+        denlattices.getlattice(key, LP->second, expectedframes); // this loads the lattice from disk, using the existing L.second object
+        L = LP;
+    }
+    
+      void wait() {
+    std::unique_lock<std::mutex> lock{_mutex};
+    if (--_count == 0) {
+      _cv.notify_all();
+    } else {
+      _cv.wait(lock);
+    }
   }
     
-    Status DateTieredDBImpl::Put(const WriteOptions& options, const Slice& key,
-                             const Slice& val) {
-  int64_t timestamp = 0;
-  Status s;
-  s = GetTimestamp(key, &timestamp);
-  if (!s.ok()) {
-    return s;
+      bool thrown = false;
+  try {
+    thpp::IntTensor &a = dynamic_cast<thpp::IntTensor&>(*tensor);
+  } catch(std::bad_cast &e) {
+    thrown = true;
   }
-  DropObsoleteColumnFamilies();
-    }
+  assert(thrown);
+    
+    int64_t stride(const Tensor& self, int64_t dim) {
+  // false is passed to maybe_wrap_dim so behavior is identical to array access (but with wrapping)
+  dim = maybe_wrap_dim(dim, self.dim(), false);
+  return self.strides()[dim];
+}
+    
+    auto ${Storage}::fast_set(std::size_t ind, Scalar value) -> ${Storage}& {
+  throw std::runtime_error('unsupported operation 'fast_set'');
+}
+    
+    
+    {  return std::make_tuple(dInput, dWeight, dBias);
+}
