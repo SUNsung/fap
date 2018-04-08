@@ -1,88 +1,150 @@
 
         
-          nfs_setting = RUBY_PLATFORM =~ /darwin/ || RUBY_PLATFORM =~ /linux/
-  config.vm.synced_folder '.', '/vagrant', id: 'vagrant-root'
-    
-      def enabled
-    object.enabled?
+          def test_realpath_taintedness
+    Dir.mktmpdir('rubytest-realpath') {|tmpdir|
+      dir = File.realpath(tmpdir).untaint
+      File.write(File.join(dir, base = 'test.file'), '')
+      base.taint
+      dir.taint
+      assert_predicate(File.realpath(base, dir), :tainted?)
+      base.untaint
+      dir.taint
+      assert_predicate(File.realpath(base, dir), :tainted?)
+      base.taint
+      dir.untaint
+      assert_predicate(File.realpath(base, dir), :tainted?)
+      base.untaint
+      dir.untaint
+      assert_not_predicate(File.realpath(base, dir), :tainted?)
+      assert_predicate(Dir.chdir(dir) {File.realpath(base)}, :tainted?)
+    }
   end
     
-      def test_shared_substring
-    bug12475 = '[ruby-dev:49655] [Bug #12475]'
-    n = [*'0'..'9'].join('')*3
-    e0 = ENV[n0 = 'E#{n}']
-    e1 = ENV[n1 = 'E#{n}.']
-    ENV[n0] = nil
-    ENV[n1] = nil
-    ENV[n1.chop] = 'T#{n}.'.chop
-    ENV[n0], e0 = e0, ENV[n0]
-    ENV[n1], e1 = e1, ENV[n1]
-    assert_equal('T#{n}', e0, bug12475)
-    assert_nil(e1, bug12475)
+      it 'ignores NULL bytes between directives' do
+    array = 'abcdefghabghefcd'.unpack(unpack_format('\000', 2))
+    array.should == [7523094288207667809, 7233738012216484449]
   end
     
-      class Honda < Car
-    def initialize(*args)
-      self.make = 'Honda'
-      super(*args)
+      def self.critical_is_reset
+    # Create another thread to verify that it can call Thread.critical=
+    t = Thread.new do
+      initial_critical = Thread.critical
+      Thread.critical = true
+      Thread.critical = false
+      initial_critical == false && Thread.critical == false
     end
-  end
-    
-        it 'runs all outer ensure clauses even if inner ensure clause raises exception' do
-      ThreadSpecs.join_dying_thread_with_outer_ensure(@method) { ScratchPad.record :in_outer_ensure_clause }
-      ScratchPad.recorded.should == :in_outer_ensure_clause
-    end
-    
-      it 'spawns a new Thread running the block' do
-    run = false
-    t = Thread.send(@method) { run = true }
-    t.should be_kind_of(Thread)
+    v = t.value
     t.join
-    
-    def each_schema_load_environment
-  # If we're in development, also run this for the test environment.
-  # This is a somewhat hacky way to do this, so here's why:
-  # 1. We have to define this before we load the schema, or we won't
-  #    have a timestamp_id function when we get to it in the schema.
-  # 2. db:setup calls db:schema:load_if_ruby, which calls
-  #    db:schema:load, which we define above as having a prerequisite
-  #    of this task.
-  # 3. db:schema:load ends up running
-  #    ActiveRecord::Tasks::DatabaseTasks.load_schema_current, which
-  #    calls a private method `each_current_configuration`, which
-  #    explicitly also does the loading for the `test` environment
-  #    if the current environment is `development`, so we end up
-  #    needing to do the same, and we can't even use the same method
-  #    to do it.
-    
-      def collection_presenter
-    ActivityPub::CollectionPresenter.new(
-      id: tag_url(@tag),
-      type: :ordered,
-      size: @tag.statuses.count,
-      items: @statuses.map { |s| ActivityPub::TagManager.instance.uri_for(s) }
-    )
+    v
   end
     
-    module Sinatra
-  class Application < Base
+      with_feature :fiber do
+    it 'kills the entire thread when a fiber is active' do
+      t = Thread.new do
+        Fiber.new do
+          sleep
+        end.resume
+        ScratchPad.record :fiber_resumed
+      end
+      Thread.pass while t.status and t.status != 'sleep'
+      t.send(@method)
+      t.join
+      ScratchPad.recorded.should == nil
+    end
+  end
     
-          def escape_string(str)
-        str = @escaper.escape_url(str)        if @url
-        str = @escaper.escape_html(str)       if @html
-        str = @escaper.escape_javascript(str) if @javascript
-        str
+        def self.names_for(klass)
+      instance.names_for(klass)
+    end
+    
+        # True if the dimensions represent a vertical rectangle
+    def vertical?
+      height > width
+    end
+    
+        def define
+      define_flush_errors
+      define_getters
+      define_setter
+      define_query
+      register_new_attachment
+      add_active_record_callbacks
+      add_paperclip_callbacks
+      add_required_validations
+    end
+    
+        # Returns the id of the instance in a split path form. e.g. returns
+    # 000/001/234 for an id of 1234.
+    def id_partition attachment, style_name
+      case id = attachment.instance.id
+      when Integer
+        ('%09d'.freeze % id).scan(/\d{3}/).join('/'.freeze)
+      when String
+        id.scan(/.{3}/).first(3).join('/'.freeze)
+      else
+        nil
+      end
+    end
+    
+            def rejecting *types
+          @rejected_types = types.flatten
+          self
+        end
+    
+            def in range
+          @low, @high = range.first, range.last
+          self
+        end
+    
+    
+    {
+    {  # Returns hash with styles for all classes using Paperclip.
+  # Unfortunately current version does not work with lambda styles:(
+  #   {
+  #     :User => {:avatar => [:small, :big]},
+  #     :Book => {
+  #       :cover => [:thumb, :croppable]},
+  #       :sample => [:thumb, :big]},
+  #     }
+  #   }
+  def self.current_attachments_styles
+    Hash.new.tap do |current_styles|
+      Paperclip::AttachmentRegistry.each_definition do |klass, attachment_name, attachment_attributes|
+        # TODO: is it even possible to take into account Procs?
+        next if attachment_attributes[:styles].kind_of?(Proc)
+        attachment_attributes[:styles].try(:keys).try(:each) do |style_name|
+          klass_sym = klass.to_s.to_sym
+          current_styles[klass_sym] ||= Hash.new
+          current_styles[klass_sym][attachment_name.to_sym] ||= Array.new
+          current_styles[klass_sym][attachment_name.to_sym] << style_name.to_sym
+          current_styles[klass_sym][attachment_name.to_sym].map!(&:to_s).sort!.map!(&:to_sym).uniq!
+        end
       end
     end
   end
-end
-
+  private_class_method :current_attachments_styles
     
-            post '/', :file => Rack::Test::UploadedFile.new(temp_file.path), :other => '<bar>'
-        expect(body).to eq('_escaped_params_tmp_file\nhello world\n&lt;bar&gt;')
-      ensure
-        File.unlink(temp_file.path)
+        def processor(name) #:nodoc:
+      @known_processors ||= {}
+      if @known_processors[name.to_s]
+        @known_processors[name.to_s]
+      else
+        name = name.to_s.camelize
+        load_processor(name) unless Paperclip.const_defined?(name)
+        processor = Paperclip.const_get(name)
+        @known_processors[name.to_s] = processor
       end
     end
+    
+        rake_tasks { load 'tasks/paperclip.rake' }
   end
-end
+    
+              def find_plugins_gem_specs
+            @specs ||= ::Gem::Specification.find_all.select{|spec| logstash_plugin_gem_spec?(spec)}
+          end
+    
+          def snapshot
+        agent.metric.collector.snapshot_metric
+      end
+    
+    module LogStash module Config module CpuCoreStrategy
