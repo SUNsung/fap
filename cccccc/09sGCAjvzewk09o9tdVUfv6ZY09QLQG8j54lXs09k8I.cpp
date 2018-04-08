@@ -1,242 +1,189 @@
 
         
-        #include <google/protobuf/descriptor_database.h>
-    
-      string data = message.SerializeAsString();
-    
-    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
-  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
-  // Identifiers can't start with digits
-  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
-  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
-}
-    
-    #include <sstream>
-    
-    class RepeatedPrimitiveFieldGenerator : public FieldGeneratorBase {
- public:
-  RepeatedPrimitiveFieldGenerator(const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options);
-  ~RepeatedPrimitiveFieldGenerator();
-    }
-    
-    
-    {}  // namespace google
-#endif  // GOOGLE_PROTOBUF_COMPILER_JAVA_DOC_COMMENT_H__
-
-    
-    // Author: kenton@google.com (Kenton Varda)
-    
-      if (superscript_debug >= 1) {
-    tprintf('Candidate for superscript detection: %s (',
-            word->best_choice->unichar_string().string());
-    if (num_leading || num_remainder_leading) {
-      tprintf('%d.%d %s-leading ', num_leading, num_remainder_leading,
-              leading_pos);
-    }
-    if (num_trailing || num_remainder_trailing) {
-      tprintf('%d.%d %s-trailing ', num_trailing, num_remainder_trailing,
-              trailing_pos);
-    }
-    tprintf(')\n');
-  }
-  if (superscript_debug >= 3) {
-    word->best_choice->print();
-  }
-  if (superscript_debug >= 2) {
-    tprintf(' Certainties -- Average: %.2f  Unlikely thresh: %.2f  ',
-            avg_certainty, unlikely_threshold);
-    if (num_leading)
-      tprintf('Orig. leading (min): %.2f  ', leading_certainty);
-    if (num_trailing)
-      tprintf('Orig. trailing (min): %.2f  ', trailing_certainty);
-    tprintf('\n');
-  }
-    
-    
-    {
-/**
- * @name tess_add_doc_word
- *
- * Add the given word to the document dictionary
- */
-void Tesseract::tess_add_doc_word(WERD_CHOICE *word_choice) {
-  getDict().add_document_word(*word_choice);
-}
-}  // namespace tesseract
-
-    
-    // Fills in the x-height range accepted by the given unichar_id, given its
-// bounding box in the usual baseline-normalized coordinates, with some
-// initial crude x-height estimate (such as word size) and this denoting the
-// transformation that was used.
-void DENORM::XHeightRange(int unichar_id, const UNICHARSET& unicharset,
-                          const TBOX& bbox,
-                          float* min_xht, float* max_xht, float* yshift) const {
-  // Default return -- accept anything.
-  *yshift = 0.0f;
-  *min_xht = 0.0f;
-  *max_xht = MAX_FLOAT32;
-    }
-    
-    #include 'publictypes.h'
-#include 'elst.h'
-#include 'strngs.h'
-    
-    #ifndef TESSERACT_CCUTIL_DOUBLEPTR_H_
-#define TESSERACT_CCUTIL_DOUBLEPTR_H_
-    
-        int argn = 1;
-    bool use_base85_encoding = false;
-    bool use_compression = true;
-    if (argv[argn][0] == '-')
-    {
-        if (strcmp(argv[argn], '-base85') == 0) { use_base85_encoding = true; argn++; }
-        else if (strcmp(argv[argn], '-nocompress') == 0) { use_compression = false; argn++; }
-        else
-        {
-            printf('Unknown argument: '%s'\n', argv[argn]);
-            return 1;
-        }
-    }
-    
-    
-    {    return g_ClipboardText;
-}
-    
-            // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
-    
-        // Main loop
-    MSG msg;
-    ZeroMemory(&msg, sizeof(msg));
-    while (msg.message != WM_QUIT)
-    {
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-            continue;
-        }
-        ImGui_ImplDX11_NewFrame();
-    }
-    
-    int main(int, char**)
-{
-    // Create application window
-    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
-    RegisterClassEx(&wc);
-    HWND hwnd = CreateWindow(_T('ImGui Example'), _T('ImGui DirectX12 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
-    }
-    
-            // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
-    
-            // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
-        if (show_another_window)
-        {
-            ImGui::Begin('Another Window', &show_another_window);
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
-        }
-    
-    #include 'imgui.h'
-#include 'imgui_impl_sdl_gl3.h'
-#include <stdio.h>
-#include <GL/gl3w.h>    // This example is using gl3w to access OpenGL functions (because it is small). You may use glew/glad/glLoadGen/etc. whatever already works for you.
-#include <SDL.h>
-    
-            // create the debug report callback
-        VkDebugReportCallbackCreateInfoEXT debug_report_ci ={};
-        debug_report_ci.sType = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT;
-        debug_report_ci.flags = VK_DEBUG_REPORT_ERROR_BIT_EXT | VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
-        debug_report_ci.pfnCallback = debug_report;
-        debug_report_ci.pUserData = NULL;
-        
-        // get the proc address of the function pointer, required for used extensions
-        PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReportCallbackEXT = 
-            (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(g_Instance, 'vkCreateDebugReportCallbackEXT');
-    
-        // Store GL version string so we can refer to it later in case we recreate shaders.
-    if (glsl_version == NULL)
-        glsl_version = '#version 150';
-    IM_ASSERT((int)strlen(glsl_version) + 2 < IM_ARRAYSIZE(g_GlslVersion));
-    strcpy(g_GlslVersion, glsl_version);
-    strcat(g_GlslVersion, '\n');
-    
-    #include <algorithm>
-#include <string>
-    
-    #include <cstddef>
-    
-    template <typename Fn>
-void DynamicParser::wrapError(const folly::dynamic* lookup_k, Fn fn) {
+          bool thrown = false;
   try {
-    fn();
-  } catch (DynamicParserLogicError&) {
-    // When the parser is misused, we throw all the way up to the user,
-    // instead of reporting it as if the input is invalid.
-    throw;
-  } catch (DynamicParserParseError&) {
-    // We are just bubbling up a parse error for OnError::THROW.
-    throw;
-  } catch (const std::exception& ex) {
-    reportError(lookup_k, ex);
+    thpp::IntTensor &a = dynamic_cast<thpp::IntTensor&>(*tensor);
+  } catch(std::bad_cast &e) {
+    thrown = true;
   }
+  assert(thrown);
+    
+    // skip isnan and isinf check for integral types
+template<typename To, typename From>
+typename std::enable_if<std::is_integral<From>::value, bool>::type overflows(From f) {
+  using limit = std::numeric_limits<To>;
+  return f < limit::lowest() || f > limit::max();
 }
     
+      //also support scalar.to<int64_t>();
+  template<typename T>
+  T to();
     
-    {
-    {    // NOTE: the way we count numProbes must be same in find(), insert(),
-    // and erase(). Otherwise it may break probing.
-    ++numProbes;
-    if (UNLIKELY(numProbes >= capacity_)) {
-      // probed every cell...fail
-      return 0;
-    }
-  }
-}
+    #include 'ATen/CUDAGenerator.h'
+#include 'ATen/Context.h'
+#include 'THCTensorRandom.h'
+#include <stdexcept>
     
-    void Node::copyStyle(Node const & other)
+    /* Get the generator for the current device, but does not initialize the state */
+static THCGenerator* THCRandom_rawGenerator(THCState* state)
 {
-    YGNodeCopyStyle(m_node, other.m_node);
+  THCRNGState* rng_state = THCState_getRngState(state);
+  int device;
+  THCudaCheck(cudaGetDevice(&device));
+  if (device >= rng_state->num_devices) THError('Invalid device index.');
+  return &rng_state->gen[device];
 }
     
-        static Node * createDefault(void);
-    static Node * createWithConfig(Config * config);
+    inline void store_scalar(void* data, at::ScalarType scalarType, PyObject* obj) {
+  switch (scalarType) {
+    case at::kByte: *(uint8_t*)data = (uint8_t)THPUtils_unpackLong(obj); break;
+    case at::kChar: *(char*)data = (char)THPUtils_unpackLong(obj); break;
+    case at::kShort: *(int16_t*)data = (int16_t)THPUtils_unpackLong(obj); break;
+    case at::kInt: *(int32_t*)data = (int32_t)THPUtils_unpackLong(obj); break;
+    case at::kLong: *(int64_t*)data = THPUtils_unpackLong(obj); break;
+    case at::kHalf:
+      *(at::Half*)data = at::convert<at::Half, double>(THPUtils_unpackDouble(obj));
+      break;
+    case at::kFloat: *(float*)data = (float)THPUtils_unpackDouble(obj); break;
+    case at::kDouble: *(double*)data = THPUtils_unpackDouble(obj); break;
+    default: throw std::runtime_error('invalid type');
+  }
+}
     
-    // This allows storing the assert message before the current process terminates due to a crash
-typedef void (*AssertHandler)(const char* message);
-void setAssertHandler(AssertHandler assertHandler);
+      auto input_size = self.sizes();
+  auto weight_size = weight.sizes();
     
-    #include <fb/visibility.h>
+    THDTensorDescriptor THDTensorDescriptor_newFromTHLongTensor(THLongTensor *tensor) {
+  return at::getType(at::Backend::CPU, at::ScalarType::Long).unsafeTensorFromTH((void*)tensor, true);
+}
+    
+      /// Construct, passing the specified argument to initialise the next layer.
+  template <typename Arg>
+  buffered_read_stream(Arg& a, std::size_t buffer_size)
+    : next_layer_(a),
+      storage_(buffer_size)
+  {
+  }
+    
+    template <typename Stream>
+class buffered_stream;
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+      std::size_t check_for_completion(
+      const boost::system::error_code& ec,
+      std::size_t total_transferred)
+  {
+    return detail::adapt_completion_condition_result(
+        completion_condition_(ec, total_transferred));
+  }
+    
+        buffer_sequence_adapter<boost::asio::mutable_buffer,
+        MutableBufferSequence> bufs(o->buffers_);
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+typedef null_event event;
+#elif defined(BOOST_ASIO_WINDOWS)
+typedef win_event event;
+#elif defined(BOOST_ASIO_HAS_PTHREADS)
+typedef posix_event event;
+#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
+typedef std_event event;
+#endif
+    
+    #if defined(BOOST_ASIO_WINDOWS) || defined(__CYGWIN__)
+typedef win_fd_set_adapter fd_set_adapter;
+#else
+typedef posix_fd_set_adapter fd_set_adapter;
+#endif
+    
+    #define BOOST_ASIO_HANDSHAKE_HANDLER_CHECK( \
+    handler_type, handler) \
+  \
+  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
+      void(boost::system::error_code)) \
+    asio_true_handler_type; \
+  \
+  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
+      sizeof(boost::asio::detail::one_arg_handler_test( \
+          boost::asio::detail::clvref< \
+            asio_true_handler_type>(), \
+          static_cast<const boost::system::error_code*>(0))) == 1, \
+      'HandshakeHandler type requirements not met') \
+  \
+  typedef boost::asio::detail::handler_type_requirements< \
+      sizeof( \
+        boost::asio::detail::argbyv( \
+          boost::asio::detail::clvref< \
+            asio_true_handler_type>())) + \
+      sizeof( \
+        boost::asio::detail::lvref< \
+          asio_true_handler_type>()( \
+            boost::asio::detail::lvref<const boost::system::error_code>()), \
+        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
+    
+    ::pollfd& dev_poll_reactor::add_pending_event_change(int descriptor)
+{
+  hash_map<int, std::size_t>::iterator iter
+    = pending_event_change_index_.find(descriptor);
+  if (iter == pending_event_change_index_.end())
+  {
+    std::size_t index = pending_event_changes_.size();
+    pending_event_changes_.reserve(pending_event_changes_.size() + 1);
+    pending_event_change_index_.insert(std::make_pair(descriptor, index));
+    pending_event_changes_.push_back(::pollfd());
+    pending_event_changes_[index].fd = descriptor;
+    pending_event_changes_[index].revents = 0;
+    return pending_event_changes_[index];
+  }
+  else
+  {
+    return pending_event_changes_[iter->second];
+  }
+}
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    #define DEFINE_HAS_MEMBER(member_name) \
+    template <typename T>\
+    class has_##member_name {\
+      private:\
+        struct yes_type { char x[1]; };\
+        struct no_type { char x[2]; };\
+        template <int> struct tester;\
+        template <typename U> static yes_type test(tester<sizeof(&U::member_name)>*);\
+        template <typename U> static no_type test(...);\
+      public:\
+        static const bool value = (sizeof(test<T>(0)) == sizeof(yes_type));\
+    };
+    
+    
+#endif /* SCOP_JENV_H_ */
+
+    
+      YGNodeStyleSetFlexShrink(child1, 1);
+    
+    #include <nbind/api.h>
+#include <nbind/BindDefiner.h>
+    
+    
+#ifdef LOG_TAG
+# define ALOGV(...) ::facebook::alog::logv(LOG_TAG, __VA_ARGS__)
+# define ALOGD(...) ::facebook::alog::logd(LOG_TAG, __VA_ARGS__)
+# define ALOGI(...) ::facebook::alog::logi(LOG_TAG, __VA_ARGS__)
+# define ALOGW(...) ::facebook::alog::logw(LOG_TAG, __VA_ARGS__)
+# define ALOGE(...) ::facebook::alog::loge(LOG_TAG, __VA_ARGS__)
+# define ALOGF(...) ::facebook::alog::logf(LOG_TAG, __VA_ARGS__)
+#endif
+    
+    #pragma once
+#include <utility>
+#include <fb/assert.h>
