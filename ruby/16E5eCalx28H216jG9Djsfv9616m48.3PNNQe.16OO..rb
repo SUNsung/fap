@@ -1,65 +1,80 @@
 
         
-        def list_login_items_for_app(app_path)
-  out, err, status = Open3.capture3(
-    '/usr/bin/osascript', '-e',
-    'tell application \'System Events\' to get the name of every login item ' \
-    'whose path contains \'#{File.basename(app_path)}\''
-  )
-  if status.exitstatus > 0
-    $stderr.puts err
-    exit status.exitstatus
-  end
-  puts out.gsub(', ', '\n')
-end
-    
-    def load_apps
-  out, err, status = Open3.capture3('/usr/bin/osascript', '-e', 'tell application 'System Events' to get (name, bundle identifier, unix id) of every process')
-  if status.exitstatus > 0
-    puts err
-    exit status.exitstatus
-  end
-  out = out.split(', ')
-  one_third   = out.length / 3
-  @app_names  = out.shift(one_third)
-  @bundle_ids = out.shift(one_third)
-  @unix_ids   = out.shift(one_third)
-end
-    
-        # Returns a String describing the file's content type
-    def detect
-      if blank_name?
-        SENSIBLE_DEFAULT
-      elsif empty_file?
-        EMPTY_TYPE
-      elsif calculated_type_matches.any?
-        calculated_type_matches.first
-      else
-        type_from_file_contents || SENSIBLE_DEFAULT
-      end.to_s
+            def types
+      const_get(:TYPES).map(&:constantize)
     end
     
-        def define_query
-      name = @name
-      @klass.send :define_method, '#{@name}?' do
-        send(name).file?
-      end
+        def cron(*args, &blk)
+      schedule(:cron, args, &blk)
     end
     
-      class Railtie < Rails::Railtie
-    initializer 'paperclip.insert_into_active_record' do |app|
-      ActiveSupport.on_load :active_record do
-        Paperclip::Railtie.insert
+      def destroy
+    @job = Delayed::Job.find(params[:id])
+    
+      def process_status_params
+    {
+      uri: @object['id'],
+      url: object_url || @object['id'],
+      account: @account,
+      text: text_from_content || '',
+      language: detected_language,
+      spoiler_text: @object['summary'] || '',
+      created_at: @options[:override_timestamps] ? nil : @object['published'],
+      reply: @object['inReplyTo'].present?,
+      sensitive: @object['sensitive'] || false,
+      visibility: visibility_from_audience,
+      thread: replied_to_status,
+      conversation: conversation_from_uri(@object['conversation']),
+      media_attachment_ids: process_attachments.take(4).map(&:id),
+    }
+  end
+    
+            render json: collection_presenter,
+               serializer: ActivityPub::CollectionSerializer,
+               adapter: ActivityPub::Adapter,
+               content_type: 'application/activity+json'
+      end
+    end
+  end
+    
+        context 'when tag exists' do
+      it 'returns http success' do
+        get :show, params: { id: 'test', max_id: late.id }
+        expect(response).to have_http_status(:success)
       end
     
-      context 'called with arguments (2, $value: 4em 6em)' do
-    it 'outputs sextuple the second value from the default scale' do
-      expect('.two-double-value').to have_rule('font-size: 3.125em')
+          expect(response).to redirect_to(settings_preferences_path)
+      user.reload
+      expect(user.settings['boost_modal']).to be true
+      expect(user.settings['delete_modal']).to be false
     end
   end
 end
 
     
-          expect('.size-implicit').to have_ruleset(rule)
+        def insert_default_vars(scss)
+      log_transform
+      scss.gsub(/^(\$.+);/, '\1 !default;')
     end
-  end
+    
+      # Disable request forgery protection in test environment.
+  config.action_controller.allow_forgery_protection = false
+    
+    class NodeMincerTest < Minitest::Test
+  DUMMY_PATH = 'test/dummy_node_mincer'
+    
+          spec['main'] =
+          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
+          find_files.(Bootstrap.fonts_path) +
+          %w(assets/javascripts/bootstrap.js)
+    
+            self.summary = 'The repl listens to commands on standard input'
+        self.description = <<-DESC
+          The repl listens to commands on standard input and prints their
+          result to standard output.
+          It accepts all the other ipc subcommands. The repl will signal the
+          end of output with the the ASCII CR+LF `\\n\\r`.
+        DESC
+    
+            extend Executable
+        executable :git
