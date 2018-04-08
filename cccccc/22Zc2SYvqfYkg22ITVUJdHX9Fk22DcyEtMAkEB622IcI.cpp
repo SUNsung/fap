@@ -1,143 +1,172 @@
 
         
-          content::WebContents* web_contents_;  // Weak Reference.
-  scoped_refptr<content::DevToolsAgentHost> agent_host_;
+            for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
+    {
+        g_driverType = driverTypes[driverTypeIndex];
+        hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
+                D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
+        if (SUCCEEDED(hr))
+            break;
+    }
+    if (FAILED(hr))
+        return hr;
     
     
-    {}  // namespace api
-    
-    
-    {}  // namespace api
-    
-      AtomQuotaPermissionContext();
-  virtual ~AtomQuotaPermissionContext();
-    
-      // JsAsker:
-  void StartAsync(std::unique_ptr<base::Value> options) override;
-    
-    gfx::Size NativeFrameView::GetMinimumSize() const {
-  return window_->GetMinimumSize();
+    {    cvReleaseMat( &(*state)->preFilteredImg0 );
+    cvReleaseMat( &(*state)->preFilteredImg1 );
+    cvReleaseMat( &(*state)->slidingSumBuf );
+    cvReleaseMat( &(*state)->disp );
+    cvReleaseMat( &(*state)->cost );
+    cvFree( state );
 }
     
-    
-    {  DISALLOW_COPY_AND_ASSIGN(NativeFrameView);
-};
-    
-                // Formal parameter name.
-            std::string m_name;
-    
-            StatusCategory Status::Category() const
-        {
-            return Ok() ? StatusCategory::NONE : m_state->m_category;
-        }
-    
-                static Common::Status UnpackTensor(const onnx::TensorProto& p_tensor, /*out*/std::string* p_data, int64_t p_expected_size);
-            static Common::Status UnpackTensor(const onnx::TensorProto& p_tensor, /*out*/bool* p_data, int64_t p_expected_size);
-    
-                If the input is a tensor of float, int32, or double, the data will be cast
-            to int64s and the cats_int64s category list will be used for the lookups.
-            )DOC')
-        .TypeConstraint('T', { 'tensor(string)', 'tensor(int64)','tensor(int32)', 'tensor(float)','tensor(double)' }, 'allowed types.')
-        .Attr('cats_int64s', 'list of cateogries, ints', AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('cats_strings', 'list of cateogries, strings', AttrType::AttributeProto_AttributeType_STRINGS)
-        .Attr('zeros', 'if true and category is not present, will return all zeros, if false and missing category, operator will return false', AttrType::AttributeProto_AttributeType_INT);
-    
-    FunctionPtr CreateRNN(const ONNXIR::Node *node, const std::vector<Variable> &inputs, const std::string &direction,
-    const std::vector<string> &activations, const std::vector<float> &activation_alpha, const std::vector<float> &activation_beta);
+    void ComputeJacobians(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
+                      const IntrinsicParams& param,  InputArray omc, InputArray Tc,
+                      const int& check_cond, const double& thresh_cond, Mat& JJ2_inv, Mat& ex3);
     
     
-    {    // also update node groups
-    for (auto groupIter : GetAllNodeGroups())
-    {
-        auto& group = *groupIter;
-        for (int i = 0; i < group.size(); i++)
-            if (group[i] == oldNode)
-                group[i] = newNode;
-    }
+    {    test_array[INPUT].push_back(NULL);
+    test_array[OUTPUT].push_back(NULL);
+    test_array[REF_OUTPUT].push_back(NULL);
 }
     
-    extern JSClass  *jsb_cocosbuilder_CCBAnimationManager_class;
-extern JSObject *jsb_cocosbuilder_CCBAnimationManager_prototype;
-    
-    bool js_cocos2dx_physics3d_Physics3DShape_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DShape_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DShape(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DShape_initConvexHull(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DShape_getbtShape(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DShape_initSphere(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DShape_initBox(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DShape_initCapsule(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DShape_initCylinder(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DShape_getShapeType(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DShape_createBox(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DShape_createCylinder(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DShape_createConvexHull(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DShape_createCapsule(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DShape_createSphere(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DShape_Physics3DShape(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    bool js_cocos2dx_studio_SkewFrame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_SkewFrame_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_SkewFrame(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_SkewFrame_getSkewY(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_SkewFrame_setSkewX(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_SkewFrame_setSkewY(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_SkewFrame_getSkewX(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_SkewFrame_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_SkewFrame_SkewFrame(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    #endif // __cocos2dx_csloader_h__
+    #endif /* OPENCV_CUDA_WARP_REDUCE_HPP__ */
 
     
-        argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsJointRotaryLimit_getMin'', nullptr);
-            return 0;
-        }
-        double ret = cobj->getMin();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
+    namespace cv
+{
+CV_EXPORTS_W void add(InputArray src1, Scalar src2, OutputArray dst, InputArray mask=noArray(), int dtype=-1);
     }
-    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.PhysicsJointRotaryLimit:getMin',argc, 0);
-    return 0;
     
-    #include 'Box2D/Box2D.h'
-#include 'cocos2d.h'
-    
-    		// Should the body break?
-		int32 count = contact->GetManifold()->pointCount;
+      // Computes all the cross product distances of the points perpendicular to
+  // the given direction, ignoring distances outside of the give distance range,
+  // storing the actual (signed) cross products in distances_.
+  void ComputeConstrainedDistances(const FCOORD& direction,
+                                   double min_dist, double max_dist);
     
     
-    {			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.position.Set(-8.0f + 8.0f * i, 12.0f);
-			b2Body* body = m_world->CreateBody(&bd);
-			body->CreateFixture(&fd);
-		}
+    {}  // namespace tesseract.
     
-    #include <assert.h>
-#include <cstdlib>
-#include <string.h>
+      tesseract::ParagraphJustification justification() const {
+    return justification_;
+  }
+  int margin() const { return margin_; }
+  int first_indent() const { return first_indent_; }
+  int body_indent() const { return body_indent_; }
+  int tolerance() const { return tolerance_; }
+  bool is_flush() const {
+    return (justification_ == tesseract::JUSTIFICATION_LEFT ||
+            justification_ == tesseract::JUSTIFICATION_RIGHT) &&
+        abs(first_indent_ - body_indent_) <= tolerance_;
+  }
     
-    #endif  // GUETZLI_COLOR_TRANSFORM_H_
-
+    #include 'intfeaturedist.h'
+#include 'intfeaturemap.h'
     
-    void IDCT1d(const double* in, int stride, double* out) {
-  for (int x = 0; x < 8; ++x) {
-    out[x * stride] = 0.0;
-    for (int u = 0; u < 8; ++u) {
-      out[x * stride] += kDCTMatrix[8 * u + x] * in[u * stride];
+    #ifndef TESSERACT_CLASSIFY_INTFEATUREDIST_H_
+#define TESSERACT_CLASSIFY_INTFEATUREDIST_H_
+    
+      // Store the specified number as the sequence number for the start of
+  // this batch.
+  static void SetSequence(WriteBatch* batch, SequenceNumber seq);
+    
+      for (size_t i = 0; i < 3; ++i) {
+    std::string res;
+    ASSERT_OK(db->Get(ReadOptions(), keys[i], &res));
+    ASSERT_TRUE(res == vals[i]);
+  }
+    
+      // create first key range
+  leveldb::WriteBatch batch;
+  for (size_t i = 0; i < kNumKeys; i++) {
+    batch.Put(Key1(i), 'value for range 1 key');
+  }
+  ASSERT_OK(db->Write(leveldb::WriteOptions(), &batch));
+    
+    Slice BlockBuilder::Finish() {
+  // Append restart array
+  for (size_t i = 0; i < restarts_.size(); i++) {
+    PutFixed32(&buffer_, restarts_[i]);
+  }
+  PutFixed32(&buffer_, restarts_.size());
+  finished_ = true;
+  return Slice(buffer_);
+}
+    
+      // Write metaindex block
+  if (ok()) {
+    BlockBuilder meta_index_block(&r->options);
+    if (r->filter_block != NULL) {
+      // Add mapping from 'filter.Name' to location of filter data
+      std::string key = 'filter.';
+      key.append(r->options.filter_policy->Name());
+      std::string handle_encoding;
+      filter_block_handle.EncodeTo(&handle_encoding);
+      meta_index_block.Add(key, handle_encoding);
+    }
+    }
+    
+    Status ReadFileToString(Env* env, const std::string& fname, std::string* data) {
+  data->clear();
+  SequentialFile* file;
+  Status s = env->NewSequentialFile(fname, &file);
+  if (!s.ok()) {
+    return s;
+  }
+  static const int kBufferSize = 8192;
+  char* space = new char[kBufferSize];
+  while (true) {
+    Slice fragment;
+    s = file->Read(kBufferSize, &fragment, space);
+    if (!s.ok()) {
+      break;
+    }
+    data->append(fragment.data(), fragment.size());
+    if (fragment.empty()) {
+      break;
     }
   }
+  delete[] space;
+  delete file;
+  return s;
 }
     
-    #endif  // GUETZLI_FAST_LOG_H_
-
+    #include 'jsapi.h'
+#include 'jsfriendapi.h'
+    
+    extern JSClass  *jsb_cocos2d_PhysicsSprite3D_class;
+extern JSObject *jsb_cocos2d_PhysicsSprite3D_prototype;
     
     
-    {}  // namespace guetzli
+    
+    
+    
+    #if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+    
+        GLfloat                glVertices[] = {
+        aabb->lowerBound.x * mRatio, aabb->lowerBound.y * mRatio,
+        aabb->upperBound.x * mRatio, aabb->lowerBound.y * mRatio,
+        aabb->upperBound.x * mRatio, aabb->upperBound.y * mRatio,
+        aabb->lowerBound.x * mRatio, aabb->upperBound.y * mRatio
+    };
+    
+        virtual void DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color);
+    
+    	void Step(Settings* settings)
+	{
+		// Drive the kinematic body.
+		if (m_platform->GetType() == b2_kinematicBody)
+		{
+			b2Vec2 p = m_platform->GetTransform().p;
+			b2Vec2 v = m_platform->GetLinearVelocity();
+    }
+    }
+    
+    			b2FixtureDef fd;
+			fd.shape = &shape;
+			fd.density = 1.0f;
+    
+    			m_bullet = m_world->CreateBody(&bd);
+			m_bullet->CreateFixture(&box, 100.0f);
