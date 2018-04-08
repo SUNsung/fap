@@ -1,68 +1,115 @@
 
         
-                entrylabel.grid(column=0, row=0, columnspan=3, padx=5, sticky=W)
-        self.entry.grid(column=0, row=1, columnspan=3, padx=5, sticky=W+E,
-                        pady=[10,0])
-        self.entry_error.grid(column=0, row=2, columnspan=3, padx=5,
-                              sticky=W+E)
-        self.button_ok.grid(column=1, row=99, padx=5)
-        self.button_cancel.grid(column=2, row=99, padx=5)
+        
+def SetUpSystemPaths():
+  sys.path.insert( 0, os.path.join( DIR_OF_YCMD ) )
+    
+            for future in as_completed(future_to_url):
+            try:
+                url_to_content[future_to_url[future]] = future.result()
+            except:
+                pass
+        return url_to_content
+    finally:
+        executor.shutdown()
     
     
-print('\n# ======================================================================')
-print('#                               Factorial')
-print('# ======================================================================\n')
+def SendEventNotificationAsync( event_name,
+                                buffer_number = None,
+                                extra_data = None ):
+  event = EventNotification( event_name, buffer_number, extra_data )
+  event.Start()
+
     
-        def isatty(self):
-        if self.closed:
-            raise ValueError('I/O operation on closed file')
-        return False
     
+class DebugInfoRequest( BaseRequest ):
+  def __init__( self, extra_data = None ):
+    super( DebugInfoRequest, self ).__init__()
+    self._extra_data = extra_data
+    self._response = None
+    
+        def unsubscribe(self, msg):
+        self.provider.unsubscribe(msg, self)
+    
+        def test_frozen_pool(self):
+        with ObjectPool(self.sample_queue) as pool:
+            self.assertEqual(pool, 'first')
+            self.assertEqual(pool, 'first')
+        self.assertTrue(self.sample_queue.get() == 'second')
+        self.assertFalse(self.sample_queue.empty())
+        self.assertTrue(self.sample_queue.get() == 'first')
+        self.assertTrue(self.sample_queue.empty())
+    
+        def test_shall_toggle_from_am_to_fm(self):
+        self.radio.toggle_amfm()
+        state = self.radio.state.name
+        expected_state_name = 'FM'
+        self.assertEqual(state, expected_state_name)
+    
+        def test_display_current_time_at_midnight(self):
         '''
-    # Note that this exception is used from _json
-    def __init__(self, msg, doc, pos):
-        lineno = doc.count('\n', 0, pos) + 1
-        colno = pos - doc.rfind('\n', 0, pos)
-        errmsg = '%s: line %d column %d (char %d)' % (msg, lineno, colno, pos)
-        ValueError.__init__(self, errmsg)
-        self.msg = msg
-        self.doc = doc
-        self.pos = pos
-        self.lineno = lineno
-        self.colno = colno
+        Would almost always fail (despite of right at/after midnight) if
+        untestable production code would have been used.
+        '''
+        time_provider_stub = MidnightTimeProvider()
+        class_under_test = TimeDisplay()
+        class_under_test.set_time_provider(time_provider_stub)
+        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
     
-    def escape(m):
-    all, tail = m.group(0, 1)
-    assert all.startswith('\\')
-    esc = simple_escapes.get(tail)
-    if esc is not None:
-        return esc
-    if tail.startswith('x'):
-        hexes = tail[1:]
-        if len(hexes) < 2:
-            raise ValueError('invalid hex string escape ('\\%s')' % tail)
-        try:
-            i = int(hexes, 16)
-        except ValueError:
-            raise ValueError('invalid hex string escape ('\\%s')' % tail) from None
-    else:
-        try:
-            i = int(tail, 8)
-        except ValueError:
-            raise ValueError('invalid octal string escape ('\\%s')' % tail) from None
-    return chr(i)
+        def get_current_time_as_html_fragment(self, time_provider):
+        current_time = time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
+    
+        def test_display_current_time_at_midnight(self):
+        '''
+        Would almost always fail (despite of right at/after midnight) if
+        untestable production code would have been used.
+        '''
+        time_provider_stub = MidnightTimeProvider()
+        class_under_test = TimeDisplay()
+        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(time_provider_stub), expected_time)
+    
+        def has_gold(self, user):
+        if not user:
+            return False
+    
+            # tell reddit_base to redirect to the appropriate subreddit for
+        # a legacy CNAME
+        if not is_subdomain(domain, g.domain):
+            environ['legacy-cname'] = domain
+            return self.app(environ, start_response)
     
     
-class DOMBuilderFilter:
-    '''Element filter which can be used to tailor construction of
-    a DOM instance.
-    '''
+def register_api_templates(template_name, template_class):
+    for style in ('api', 'api-html', 'api-compact'):
+        tpm.add_handler(
+            name=template_name,
+            style=style,
+            handler=template_class,
+        )
     
-            # complex(repr(z)) should recover z exactly, even for complex
-        # numbers involving an infinity, nan, or negative zero
-        for x in vals:
-            for y in vals:
-                z = complex(x, y)
-                roundtrip = complex(repr(z))
-                self.assertFloatsAreIdentical(z.real, roundtrip.real)
-                self.assertFloatsAreIdentical(z.imag, roundtrip.imag)
+            if target.subreddit_slow.quarantine:
+            err = RedditError('GILDING_NOT_ALLOWED')
+            self.on_validation_error(err)
+        VNotInTimeout().run(target=target, subreddit=target.subreddit_slow)
+    
+        @require_oauth2_scope('identity')
+    @validate(
+        VUser(),
+        fields=VList(
+            'fields',
+            choices=PREFS_JSON_SPEC.spec.keys(),
+            error=errors.errors.NON_PREFERENCE,
+        ),
+    )
+    @api_doc(api_section.account, uri='/api/v1/me/prefs')
+    def GET_prefs(self, fields):
+        '''Return the preference settings of the logged in user'''
+        resp = PrefsJsonTemplate(fields).data(c.oauth_user)
+        return self.api_wrapper(resp)
+    
+    import json
+import os
