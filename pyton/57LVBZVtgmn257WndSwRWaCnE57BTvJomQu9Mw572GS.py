@@ -1,128 +1,105 @@
 
         
         
-def test_urls(client):
-    r = client.get('/')
-    assert r.status_code == 200
+def build_output_stream(args, env, request, response, output_options):
+    '''Build and return a chain of iterators over the `request`-`response`
+    exchange each of which yields `bytes` chunks.
     
     
-@bp.route('/login', methods=['GET', 'POST'])
-def login():
-    error = None
-    if request.method == 'POST':
-        if request.form['username'] != current_app.config['USERNAME']:
-            error = 'Invalid username'
-        elif request.form['password'] != current_app.config['PASSWORD']:
-            error = 'Invalid password'
-        else:
-            session['logged_in'] = True
-            flash('You were logged in')
-            return redirect(url_for('flaskr.show_entries'))
-    return render_template('login.html', error=error)
-    
-        def test_basic_response(self):
-        '''the basic response server returns an empty http response'''
-        with Server.basic_response_server() as (host, port):
-            r = requests.get('http://{0}:{1}'.format(host, port))
-            assert r.status_code == 200
-            assert r.text == u''
-            assert r.headers['Content-Length'] == '0'
-    
-    #: Python 3.x?
-is_py3 = (_ver[0] == 3)
-    
-    _proxy_combos = []
-for prefix, schemes in _schemes_by_var_prefix:
-    for scheme in schemes:
-        _proxy_combos.append(('{0}_proxy'.format(prefix), scheme))
-    
-        # For pickling to work, the __module__ variable needs to be set to the frame
-    # where the named tuple is created.  Bypass this step in enviroments where
-    # sys._getframe is not defined (Jython for example).
-    if hasattr(_sys, '_getframe'):
-        result.__module__ = _sys._getframe(1).f_globals.get('__name__', '__main__')
-    
-        def test_del_shutdown(self):
-        executor = futures.ProcessPoolExecutor(max_workers=5)
-        list(executor.map(abs, range(-5, 5)))
-        queue_management_thread = executor._queue_management_thread
-        processes = executor._processes
-        del executor
+def rst_filenames():
+    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
+        if '.tox' not in root:
+            for filename in fnmatch.filter(filenames, '*.rst'):
+                yield os.path.join(root, filename)
     
     
-  # This returns a future! Use JsonFromFuture to get the value.
-  # |method| is either 'POST' or 'GET'.
-  # |timeout| is num seconds to tolerate no response from server before giving
-  # up; see Requests docs for details (we just pass the param along).
-  @staticmethod
-  def _TalkToHandlerAsync( data,
-                           handler,
-                           method,
-                           timeout = _READ_TIMEOUT_SEC ):
-    request_uri = _BuildUri( handler )
-    if method == 'POST':
-      sent_data = _ToUtf8Json( data )
-      return BaseRequest.Session().post(
-          request_uri,
-          data = sent_data,
-          headers = BaseRequest._ExtraHeaders( method,
-                                               request_uri,
-                                               sent_data ),
-          timeout = ( _CONNECT_TIMEOUT_SEC, timeout ) )
-    return BaseRequest.Session().get(
-        request_uri,
-        headers = BaseRequest._ExtraHeaders( method, request_uri ),
-        timeout = ( _CONNECT_TIMEOUT_SEC, timeout ) )
+def test_follow_redirect_output_options(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=h',
+             '--history-print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 2
+    assert 'HTTP/1.1 302 FOUND' not in r
+    assert HTTP_OK in r
     
     
-  def SubsetForTypes( self, filetypes ):
-    # check cache
-    cache_key = ','.join( filetypes )
-    cached = self._cache.get( cache_key )
-    if cached is not None:
-      return cached
+class ProgressReporterThread(threading.Thread):
+    '''
+    Reports download progress based on its status.
     
-      opts = _JavaFilter( { 'regex' : '.*taco.*',
-                        'level' : 'warning' } )
-  f = _CreateFilterForTypes( opts, [ 'java' ] )
-    
-        def setUp(self):
-        self.e, self.g = get_localizer(language='English'), \
-                         get_localizer(language='Greek')
-    
-        def test_display_current_time_at_current_time(self):
+        def __init__(self, **kwargs):
         '''
-        Just as justification for working example with the time provider used in
-        production. (Will always pass.)
+        :param env: an class:`Environment` instance
+        :param kwargs: additional keyword argument that some
+                       processor might require.
+    
+        @staticmethod
+    def make_header(username, password):
+        credentials = u'%s:%s' % (username, password)
+        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
+        return 'Basic %s' % token
+    
         '''
-        production_code_time_provider = ProductionCodeTimeProvider()
-        class_under_test = TimeDisplay()
-        current_time = datetime.datetime.now()
-        expected_time = '<span class=\'tinyBoldText\'>{}:{}</span>'.format(current_time.hour, current_time.minute)
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(production_code_time_provider), expected_time)
+)
+positional.add_argument(
+    'items',
+    metavar='REQUEST_ITEM',
+    nargs=ZERO_OR_MORE,
+    default=None,
+    type=KeyValueArgType(*SEP_GROUP_ALL_ITEMS),
+    help=r'''
+    Optional key-value pairs to be included in the request. The separator used
+    determines the type:
     
-    ### OUTPUT ###
-# request 2 handled in handler 1
-# request 5 handled in handler 1
-# request 14 handled in handler 2
-# request 22 handled in handler 3
-# request 18 handled in handler 2
-# request 3 handled in handler 1
-# end of chain, no handler for 35
-# request 27 handled in handler 3
-# request 20 handled in handler 2
-# ------------------------------
-# request 2 handled in coroutine 1
-# request 5 handled in coroutine 1
-# request 14 handled in coroutine 2
-# request 22 handled in coroutine 3
-# request 18 handled in coroutine 2
-# request 3 handled in coroutine 1
-# end of chain, no coroutine for 35
-# request 27 handled in coroutine 3
-# request 20 handled in coroutine 2
-# (0.2369999885559082, 0.16199994087219238)
-
+        # Used only when requested with --check-status:
+    ERROR_HTTP_3XX = 3
+    ERROR_HTTP_4XX = 4
+    ERROR_HTTP_5XX = 5
     
-        def commit(self):
-        self.states = [memento(target, self.deep) for target in self.targets]
+    
+ENTRY_POINT_NAMES = [
+    'httpie.plugins.auth.v1',
+    'httpie.plugins.formatter.v1',
+    'httpie.plugins.converter.v1',
+    'httpie.plugins.transport.v1',
+]
+    
+        def write(self, content):
+        self.fd.write(content + '\r\n')
+        self.fd.flush()
+    
+    - CommonTokenStream: A basic and most commonly used TokenStream
+  implementation.
+- TokenRewriteStream: A modification of CommonTokenStream that allows the
+  stream to be altered (by the Parser). See the 'tweak' example for a usecase.
+    
+    
+    def skip(self):
+        '''
+        Instruct the lexer to skip creating a token for current lexer rule
+        and look for another token.  nextToken() knows to keep looking when
+        a lexer rule finishes with token set to SKIP_TOKEN.  Recall that
+        if token==null at end of any token rule, it creates one for you
+        and emits it.
+        '''
+        
+        self._state.token = SKIP_TOKEN
+    
+            Terence implemented packed table initializers, because Java has a
+        size restriction on .class files and the lookup tables can grow
+        pretty large. The generated JavaLexer.java of the Java.g example
+        would be about 15MB with uncompressed array initializers.
+    
+        Snippets without code (only comments) or containing lines starting with ??? should not yeld files,
+    but the counter for naming snippets should still increment.
+    '''
+    parser = argparse.ArgumentParser(description='Split md file into plain text and code blocks')
+    parser.add_argument('sourcefile',
+                        help='which file to read')
+    parser.add_argument('targetfile',
+                        help='where to put plain text')
+    parser.add_argument('codedir',
+                        help='where to put codeblocks')
+    args = parser.parse_args()
