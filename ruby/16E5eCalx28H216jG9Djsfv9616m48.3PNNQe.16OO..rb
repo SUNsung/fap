@@ -1,66 +1,65 @@
 
         
-              # This gets the value of the block with the given key.
-      def get(key)
-        key    = Regexp.quote(key)
-        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$\r?\n?(.*?)\r?\n?^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
-        match  = regexp.match(@value)
-        return nil if !match
-        match[1]
-      end
-    
-              # Parse the options
-          argv = parse_options(opts)
-          return if !argv
-          raise Vagrant::Errors::CLIInvalidUsage, help: opts.help.chomp if argv.length != 3
-    
-    output = File.new(OUTPUT_FILENAME, 'wb')
-output.write(xml.target!)
-output.close
-    
-        unless user
-      EmailInviter.new(email, inviter).send!
-      flash[:notice] = 'invitation sent to #{email}'
-    else
-      flash[:notice]= 'error sending invite to #{email}'
-    end
-    redirect_to user_search_path, :notice => flash[:notice]
+        def list_login_items_for_app(app_path)
+  out, err, status = Open3.capture3(
+    '/usr/bin/osascript', '-e',
+    'tell application \'System Events\' to get the name of every login item ' \
+    'whose path contains \'#{File.basename(app_path)}\''
+  )
+  if status.exitstatus > 0
+    $stderr.puts err
+    exit status.exitstatus
   end
+  puts out.gsub(', ', '\n')
+end
     
-          def handle_prompt(prompt, auth)
-        if prompt.include? 'select_account'
-          handle_params_error('account_selection_required',
-                              'There is no support for choosing among multiple accounts')
-        elsif prompt.include? 'consent'
-          request_authorization_consent_form
-        else
-          handle_authorization_form(auth)
-        end
-      end
+    def load_apps
+  out, err, status = Open3.capture3('/usr/bin/osascript', '-e', 'tell application 'System Events' to get (name, bundle identifier, unix id) of every process')
+  if status.exitstatus > 0
+    puts err
+    exit status.exitstatus
+  end
+  out = out.split(', ')
+  one_third   = out.length / 3
+  @app_names  = out.shift(one_third)
+  @bundle_ids = out.shift(one_third)
+  @unix_ids   = out.shift(one_third)
+end
     
-          subdir = parent.join(leaf)
-    
+        # Returns a String describing the file's content type
+    def detect
+      if blank_name?
+        SENSIBLE_DEFAULT
+      elsif empty_file?
+        EMPTY_TYPE
+      elsif calculated_type_matches.any?
+        calculated_type_matches.first
+      else
+        type_from_file_contents || SENSIBLE_DEFAULT
+      end.to_s
     end
     
-      def prefixes
-    prefixes = ['/bin', '/usr/bin', '/usr/libexec', xcode_app_path]
-    prefixes << `brew --prefix`.strip unless `which brew`.strip.empty?
+        def define_query
+      name = @name
+      @klass.send :define_method, '#{@name}?' do
+        send(name).file?
+      end
+    end
     
-              If there is multiple cache for various versions of the requested pod,
-          you will be asked which one to clean. Use `--all` to clean them all.
+      class Railtie < Rails::Railtie
+    initializer 'paperclip.insert_into_active_record' do |app|
+      ActiveSupport.on_load :active_record do
+        Paperclip::Railtie.insert
+      end
     
-            def run
-          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
-          if @pod_name.nil? # Print all
-            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
-              print_pod_cache_infos(pod_name, cache_descriptors)
-            end
-          else # Print only for the requested pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            else
-              print_pod_cache_infos(@pod_name, cache_descriptors)
-            end
-          end
-        end
+      context 'called with arguments (2, $value: 4em 6em)' do
+    it 'outputs sextuple the second value from the default scale' do
+      expect('.two-double-value').to have_rule('font-size: 3.125em')
+    end
+  end
+end
+
+    
+          expect('.size-implicit').to have_ruleset(rule)
+    end
+  end
