@@ -1,58 +1,84 @@
 
         
-        
-def format_size(bytes):
-    return '%s (%d bytes)' % (format_bytes(bytes), bytes)
-    
-    from .nuevo import NuevoBaseIE
-    
-            mvp_id = self._search_mvp_id(webpage)
+          if np.isnan(loss_val):
+    raise OverflowError('Loss is nan')
     
     
-for package_info in packages.values():
-    print('''
-  resource '{name}' do
-    url '{url}'
-    sha256 '{sha256}'
-  end'''.format(**package_info))
+if __name__ == '__main__':
+  tf.test.main()
 
     
+      tf.logging.info('Eval metric values:')
+  summary = tf.summary.Summary()
+  for name, val in zip(metric_names, values):
+    summary.value.add(tag=name, simple_value=val)
+    tf.logging.info('%s = %.3f', name, val)
     
-with open(BIN_FILE_PATH, 'rb') as f:
-    BIN_FILE_CONTENT = f.read()
     
+def fill_vocab_from_doc(doc, vocab_freqs, doc_counts):
+  '''Fills vocabulary and doc counts with tokens from doc.
     
-def test_max_redirects(httpbin):
-    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
-             error_exit_ok=True)
-    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+    Computational time:
+  2 days to train 100000 steps on 1 layer 1024 hidden units LSTM,
+  256 embeddings, 400 truncated BP, 256 minibatch and on single GPU (Pascal
+  Titan X, cuDNNv5).
+'''
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+    
+    filegroup(
+    name = 'all_files',
+    srcs = glob(
+        ['**/*'],
+        exclude = [
+            '**/METADATA',
+            '**/OWNERS',
+        ],
+    ),
+    visibility = ['//tensorflow:__subpackages__'],
+)
 
     
+                gc.collect()
+            print('- benchmarking LassoLars')
+            clf = LassoLars(alpha=alpha, fit_intercept=False,
+                            normalize=False, precompute=precompute)
+            tstart = time()
+            clf.fit(X, Y)
+            lars_lasso_results.append(time() - tstart)
     
-def test_unicode_url_query_arg_item_verbose(httpbin):
-    r = http('--verbose', httpbin.url + '/get', u'test==%s' % UNICODE)
-    assert HTTP_OK in r
-    assert UNICODE in r
+                gc.collect()
+            print('benchmarking lars_path (with Gram):', end='')
+            sys.stdout.flush()
+            tstart = time()
+            G = np.dot(X.T, X)  # precomputed Gram matrix
+            Xy = np.dot(X.T, y)
+            lars_path(X, y, Xy=Xy, Gram=G, method='lasso')
+            delta = time() - tstart
+            print('%0.3fs' % delta)
+            results['lars_path (with Gram)'].append(delta)
     
-        Uses threading to periodically update the status (speed, ETA, etc.).
+        #------------------------------------------------------------
+    # varying N
+    N_results_build = dict([(alg, np.zeros(len(Nrange)))
+                            for alg in algorithms])
+    N_results_query = dict([(alg, np.zeros(len(Nrange)))
+                            for alg in algorithms])
     
-            if color_scheme != PRESET_STYLE and env.colors == 256:
-            fmt_class = Terminal256Formatter
-        else:
-            fmt_class = TerminalFormatter
-        self.formatter = fmt_class(style=style_class)
+        for line in input_file:
+        linestrip = line.strip()
+        if len(linestrip) == 0:
+            in_exercise_region = False
+        elif linestrip.startswith('# TASK:'):
+            in_exercise_region = True
     
-        def test_verify_custom_ca_bundle_invalid_path(self, httpbin_secure):
-        # since 2.14.0 requests raises IOError
-        with pytest.raises((SSLError, IOError)):
-            http(httpbin_secure.url + '/get', '--verify', '/__not_found__')
+    model = SpectralBiclustering(n_clusters=n_clusters, method='log',
+                             random_state=0)
+model.fit(data)
+score = consensus_score(model.biclusters_,
+                        (rows[:, row_idx], columns[:, col_idx]))
     
-    '''
-__version__ = '1.0.0-dev'
-__author__ = 'Jakub Roztocil'
-__licence__ = 'BSD'
-    
-        def _apply_no_options(self, no_options):
-        '''For every `--no-OPTION` in `no_options`, set `args.OPTION` to
-        its default value. This allows for un-setting of options, e.g.,
-        specified in config.
+    iris = datasets.load_iris()
+X = iris.data[:, 0:2]  # we only take the first two features for visualization
+y = iris.target
