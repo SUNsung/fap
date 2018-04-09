@@ -1,200 +1,141 @@
 
         
-                if any([s_line.startswith(s) for s in ['* [', '- [']]):
-            if indent == last_indent:
-                blocks[-1].append(line)
-            else:
-                blocks.append([line])
-            last_indent = indent
-        else:
-            blocks.append([line])
-            last_indent = None
+            def test_yahoo_https(self):
+        # https://github.com/rg3/youtube-dl/issues/2701
+        self.assertMatch(
+            'https://screen.yahoo.com/smartwatches-latest-wearable-gadgets-163745379-cbs.html',
+            ['Yahoo'])
+    
+            def _find_spec(key):
+            m = re.search(
+                r'(?m)^//\s*%s:\s*(.*?)\n' % re.escape(key), as_content)
+            if not m:
+                raise ValueError('Cannot find %s in %s' % (key, testfile))
+            return json.loads(m.group(1))
+    
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
+      def replicate_states(self, state_coll_name):
+    state_list = self._metagraph.collection_def[state_coll_name]
+    num_states = len(state_list.node_list.value)
+    for replica_id in range(1, FLAGS.num_gpus):
+      for i in range(num_states):
+        state_list.node_list.value.append(state_list.node_list.value[i])
+    for replica_id in range(FLAGS.num_gpus):
+      for i in range(num_states):
+        index = replica_id * num_states + i
+        state_list.node_list.value[index] = with_autoparallel_prefix(
+            replica_id, state_list.node_list.value[index])
+    
+      Args:
+    signal: 1D np.array of the input time-domain signal.
+    fft_length: Size of the FFT to apply.
+    hop_length: Advance (in samples) between each frame passed to FFT.
+    window_length: Length of each block of samples to pass to FFT.
     
     
-def main():
-    if len(sys.argv) < 2:
-        print('No file passed (file should contain Markdown table syntax)')
-        sys.exit(1)
-    check_format(sys.argv[1])
-    if len(errors) > 0:
-        for err in errors:
-            print(err)
-        sys.exit(1)
-    
-            print('Training %s ... ' % name, end='')
-        t0 = time()
-        clf.fit(X_train, y_train)
-        train_time[name] = time() - t0
-        t0 = time()
-        y_pred = clf.predict(X_test)
-        test_time[name] = time() - t0
-        accuracy[name] = accuracy_score(y_test, y_pred)
-        print('done')
-    
-        alpha = 0.01  # regularization parameter
-    
-        gc.collect()
-    
-    
-if not os.path.exists(html_folder):
-    os.makedirs(html_folder)
-    
-        if not os.path.exists(ARCHIVE_NAME):
-        print('Downloading dataset from %s (3 MB)' % URL)
-        opener = urlopen(URL)
-        with open(ARCHIVE_NAME, 'wb') as archive:
-            archive.write(opener.read())
-    
-    # TASK: Fit the pipeline on the training set
-    
-    solutions = os.listdir(exercise_dir)
-    
-        plt.tight_layout()
-    
-    # If true, '(C) Copyright ...' is shown in the HTML footer. Default is True.
-html_show_copyright = False
-    
-    from colorama import Fore, Style
-from flask_migrate import MigrateCommand
-from flask_script import Manager
-from pathlib2 import Path
-import yaml
-    
-        @property
-    def metrics_combo(self):
-        return sorted(
-            [
-                (m.metric_name, m.verbose_name or m.metric_name)
-                for m in self.metrics],
-            key=lambda x: x[1])
-    
-        @classmethod
-    def get_datasource_by_name(cls, session, datasource_type, datasource_name,
-                               schema, database_name):
-        datasource_class = ConnectorRegistry.sources[datasource_type]
-        datasources = session.query(datasource_class).all()
-    
-        def post_add(self, table, flash_message=True):
-        table.fetch_metadata()
-        security.merge_perm(sm, 'datasource_access', table.get_perm())
-        if table.schema:
-            security.merge_perm(sm, 'schema_access', table.schema_perm)
-    
-            logging.info('Importing %d %s',
-                     len(data.get(DRUID_CLUSTERS_KEY, [])),
-                     DRUID_CLUSTERS_KEY)
-        for datasource in data.get(DRUID_CLUSTERS_KEY, []):
-            DruidCluster.import_from_dict(session, datasource, sync=sync)
-        session.commit()
-    else:
-        logging.info('Supplied object is not a dictionary.')
+if __name__ == '__main__':
+  tf.test.main()
 
     
+    import os.path
     
-def upgrade():
-    try:
-        op.alter_column(
-            'clusters', 'changed_on',
-            existing_type=sa.DATETIME(),
-            nullable=True)
-        op.alter_column(
-            'clusters', 'created_on',
-            existing_type=sa.DATETIME(), nullable=True)
-        op.drop_constraint(None, 'columns', type_='foreignkey')
-        op.drop_constraint(None, 'columns', type_='foreignkey')
-        op.drop_column('columns', 'created_on')
-        op.drop_column('columns', 'created_by_fk')
-        op.drop_column('columns', 'changed_on')
-        op.drop_column('columns', 'changed_by_fk')
-        op.alter_column('css_templates', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('css_templates', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dashboards', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dashboards', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.create_unique_constraint(None, 'dashboards', ['slug'])
-        op.alter_column('datasources', 'changed_by_fk',
-                   existing_type=sa.INTEGER(),
-                   nullable=True)
-        op.alter_column('datasources', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('datasources', 'created_by_fk',
-                   existing_type=sa.INTEGER(),
-                   nullable=True)
-        op.alter_column('datasources', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dbs', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('dbs', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('slices', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('slices', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('sql_metrics', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('sql_metrics', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('table_columns', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('table_columns', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('tables', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('tables', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('url', 'changed_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        op.alter_column('url', 'created_on',
-                   existing_type=sa.DATETIME(),
-                   nullable=True)
-        ### end Alembic commands ###
-    except:
-        pass
+        seq_ex = seq.seq
+    fl = seq_ex.feature_lists.feature_list
+    fl_token = fl[data.SequenceWrapper.F_TOKEN_ID].feature
+    fl_label = fl[data.SequenceWrapper.F_LABEL].feature
+    fl_weight = fl[data.SequenceWrapper.F_WEIGHT].feature
+    _ = [self.assertEqual(len(f), 2) for f in [fl_token, fl_label, fl_weight]]
+    self.assertAllEqual([f.int64_list.value[0] for f in fl_token], [1, 10])
+    self.assertAllEqual([f.int64_list.value[0] for f in fl_label], [2, 20])
+    self.assertAllEqual([f.float_list.value[0] for f in fl_weight], [3.0, 30.0])
     
-    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
+      tf.logging.info('Eval metric values:')
+  summary = tf.summary.Summary()
+  for name, val in zip(metric_names, values):
+    summary.value.add(tag=name, simple_value=val)
+    tf.logging.info('%s = %.3f', name, val)
     
-	from xml.dom.minidom import parseString
-	doc = parseString(xml)
-	tab = doc.getElementsByTagName('related')[0].firstChild
+      def _lm_loss(self,
+               inputs,
+               emb_key='lm_embedded',
+               lstm_layer='lstm',
+               lm_loss_layer='lm_loss',
+               loss_name='lm_loss',
+               compute_loss=True):
+    embedded = self.layers['embedding'](inputs.tokens)
+    self.tensors[emb_key] = embedded
+    lstm_out, next_state = self.layers[lstm_layer](embedded, inputs.state,
+                                                   inputs.length)
+    if compute_loss:
+      loss = self.layers[lm_loss_layer](
+          [lstm_out, inputs.labels, inputs.weights])
+      with tf.control_dependencies([inputs.save_state(next_state)]):
+        loss = tf.identity(loss)
+        tf.summary.scalar(loss_name, loss)
     
-        def __init__(self, pin_json):
-        img_file = pin_json['file']
-        self.id = str(pin_json['pin_id'])
-        self.url = urlparse.urljoin(self.host, img_file['key'])
-        self.ext = img_file['type'].split('/')[-1]
     
-    def kugou_download_by_hash(title,hash_val,output_dir = '.', merge = True, info_only = False):
-    #sample
-    #url_sample:http://www.kugou.com/yy/album/single/536957.html
-    #hash ->key  md5(hash+kgcloud')->key  decompile swf
-    #cmd 4 for mp3 cmd 3 for m4a
-    key=hashlib.new('md5',(hash_val+'kgcloud').encode('utf-8')).hexdigest()
-    html=get_html('http://trackercdn.kugou.com/i/?pid=6&key=%s&acceptMp3=1&cmd=4&hash=%s'%(key,hash_val))
-    j=loads(html)
-    url=j['url']
-    songtype, ext, size = url_info(url)
-    print_info(site_info, title, songtype, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge=merge)
+def _build_random_sequence(vocab_ids):
+  seq_len = random.randint(10, 200)
+  ids = vocab_ids.values()
+  seq = data.SequenceWrapper()
+  for token_id in [random.choice(ids) for _ in range(seq_len)]:
+    seq.add_timestep().set_token(token_id)
+  return seq
     
-    __all__ = ['mixcloud_download']
+        n_samples = 2000
+    list_n_features = np.linspace(500, 3000, 5).astype(np.int)
+    lasso_results, lars_lasso_results = compute_bench(alpha, [n_samples],
+                                           list_n_features, precompute=False)
+    plt.subplot(212)
+    plt.plot(list_n_features, lasso_results, 'b-', label='Lasso')
+    plt.plot(list_n_features, lars_lasso_results, 'r-', label='LassoLars')
+    plt.title('%d samples, alpha=%s' % (n_samples, alpha))
+    plt.legend(loc='upper left')
+    plt.xlabel('number of features')
+    plt.ylabel('Time (s)')
+    plt.axis('tight')
+    plt.show()
+
+    
+        samples : array-like of ints (1d or 0d)
+        The number of samples to generate as input.
+    
+    
+if not os.path.exists(DATA_FOLDER):
+    
+    for f in solutions:
+    if not f.endswith('.py'):
+        continue
+    
+    
+class Controller(object):
+    def __init__(self, model):
+        self.model = model
+        self.kernel = Tk.IntVar()
+        self.surface_type = Tk.IntVar()
+        # Whether or not a model has been fitted
+        self.fitted = False
+    
+    plt.matshow(data, cmap=plt.cm.Blues)
+plt.title('Original dataset')
+    
+    
+def plot_calibration_curve(est, name, fig_index):
+    '''Plot calibration curve for est w/o and with calibration. '''
+    # Calibrated with isotonic calibration
+    isotonic = CalibratedClassifierCV(est, cv=2, method='isotonic')
+    
+    iris = datasets.load_iris()
+X = iris.data[:, 0:2]  # we only take the first two features for visualization
+y = iris.target
+    
+        When fixed_n_classes is not None the first labeling is considered a ground
+    truth class assignment with fixed number of classes.
+    '''
+    random_labels = np.random.RandomState(seed).randint
+    scores = np.zeros((len(n_clusters_range), n_runs))
