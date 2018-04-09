@@ -1,38 +1,56 @@
-old_trap = trap('INT') { exit! 130 }
+
+        
+          class FeatureTopicUsers < Jobs::Base
     
-      def origin
-    Homebrew.git_origin || '(none)'
-  end
-    
-          puts_columns Array(result)
-    else
-      query = ARGV.first
-      rx = query_regexp(query)
-      local_results = search_formulae(rx)
-      puts_columns(local_results)
-      tap_results = search_taps(rx)
-      puts_columns(tap_results)
-    
-        if initial_revision != current_revision
-      puts 'Updated Homebrew from #{shorten_revision(initial_revision)} to #{shorten_revision(current_revision)}.'
-      updated = true
+      class CachedFragment
+    def initialize(json)
+      @json = json
     end
-    
-      def self.factory(name)
-    Formulary.factory(name)
+    def as_json(*_args)
+      @json
+    end
   end
     
-          export JAVA_HOME='$(/usr/libexec/java_home)'
-      export AWS_ACCESS_KEY='<Your AWS Access ID>'
-      export AWS_SECRET_KEY='<Your AWS Secret Key>'
-      export #{home_name}='#{home_value}'
-    EOS
+            entries
+      end
+    
+              node.css('.method').each do |n|
+            next unless n.at_css('dt[id]')
+            name = n.at_css('.descname').content
+            name = '#{class_name}::#{name}()'
+            id = n.at_css('dt[id]')['id']
+            entries << [name, id]
+          end
+        end
+    
+            css('.method-name', '.property-name').each do |node|
+          source = node.at_css('a')
+          source.before(%(<span class='name'>#{source.content}</span>))
+          source.content = 'source'
+          source['class'] = 'source'
+        end
+    
+            def on_send(node)
+          return unless match_call?(node) &&
+                        (!node.value_used? || only_truthiness_matters?(node)) &&
+                        !(node.parent && node.parent.block_type?)
+    
+              FROZEN_STRING_LITERAL_TYPES.include?(node.type) &&
+            frozen_string_literals_enabled?
+        end
+      end
+    end
   end
 end
 
     
-      describe '::binary_osxfuse_installed?' do
-    it 'returns false if fuse.h does not exist' do
-      allow(File).to receive(:exist?).and_return(false)
-      expect(described_class).not_to be_binary_osxfuse_installed
+            attr_reader :lines, :annotations
+      end
     end
+  end
+end
+
+    
+        expect(cop.offenses.size).to eq(1)
+    expect(cop.messages).to eq(['Prefer `to_sym` over `intern`.'])
+    expect(cop.highlights).to eq(%w[intern])
