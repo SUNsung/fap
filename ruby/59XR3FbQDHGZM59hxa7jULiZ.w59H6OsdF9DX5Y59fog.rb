@@ -1,97 +1,54 @@
 
         
-                stdlibs = detect_stdlibs(ENV.compiler)
-        Tab.create(formula, ENV.compiler, stdlibs.first, formula.build, formula.source_modified_time).write
-    
-      def initialize(f)
-    @f = f
+          def test_simple_redirect_using_options
+    get :host_redirect
+    assert_response :redirect
+    assert_redirected_to action: 'other_host', only_path: false, host: 'other.test.host'
   end
     
-          # Find commands in the path
-      unless (exts = external_commands).empty?
-        puts
-        puts 'External commands'
-        puts_columns exts
-      end
-    end
+        assert_response :success
   end
     
-      def filtered_list
-    names = if ARGV.named.empty?
-      Formula.racks
-    else
-      ARGV.named.map { |n| HOMEBREW_CELLAR+n }.select(&:exist?)
+    require 'tmpdir'
+    
+      APP = RoutedRackApp.new(Routes)
+    
+      def search_tap(user, repo, rx)
+    if (HOMEBREW_LIBRARY/'Taps/#{user.downcase}/homebrew-#{repo.downcase}').directory? && \
+       user != 'Caskroom'
+      return []
     end
-    if ARGV.include? '--pinned'
-      pinned_versions = {}
-      names.each do |d|
-        keg_pin = (HOMEBREW_LIBRARY/'PinnedKegs'/d.basename.to_s)
-        if keg_pin.exist? || keg_pin.symlink?
-          pinned_versions[d] = keg_pin.readlink.basename.to_s
-        end
-      end
-      pinned_versions.each do |d, version|
-        puts '#{d.basename}'.concat(ARGV.include?('--versions') ? ' #{version}' : '')
-      end
-    else # --versions without --pinned
-      names.each do |d|
-        versions = d.subdirs.map { |pn| pn.basename.to_s }
-        next if ARGV.include?('--multiple') && versions.length < 2
-        puts '#{d.basename} #{versions*' '}'
-      end
-    end
+    
+      def patches
+    {}
   end
-end
     
-    include Const
+    # This formula serves as the base class for several very similar
+# formulae for Amazon Web Services related tools.
+class AmazonWebServicesFormula < Formula
+  # Use this method to peform a standard install for Java-based tools,
+  # keeping the .jars out of HOMEBREW_PREFIX/lib
+  def install
+    rm Dir['bin/*.cmd'] # Remove Windows versions
+    libexec.install Dir['*']
+    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
+  end
+  alias_method :standard_install, :install
     
-                px = (xf + (uf / nsf) - (wf / 2.0)) / (wf / 2.0)
-            py = -(yf + (vf / nsf) - (hf / 2.0)) / (hf / 2.0)
+    # puts '\nDone.'
+
     
-          if rails?
-        register_rails_engine
-      elsif lotus?
-        register_lotus
-      elsif sprockets?
-        register_sprockets
+      def test_filter!
+    h = @cls[1=>2,3=>4,5=>6]
+    assert_equal(h, h.filter! {|k, v| k + v >= 7 })
+    assert_equal({3=>4,5=>6}, h)
+    h = @cls[1=>2,3=>4,5=>6]
+    assert_equal(nil, h.filter!{true})
+  end
+    
+      Car = Struct.new(:make, :model, :year)
+    
+            sets = config.sources_manager.aggregate.all_sets
+        sets.each { |set| UI.pod(set, :name_and_version) }
+        UI.puts '\n#{sets.count} pods were found'
       end
-    
-        # replace in the top-level selector
-    # replace_in_selector('a {a: {a: a} } a {}', /a/, 'b') => 'b {a: {a: a} } b {}'
-    def replace_in_selector(css, pattern, sub)
-      # scan for selector positions in css
-      s        = CharStringScanner.new(css)
-      prev_pos = 0
-      sel_pos  = []
-      while (brace = s.scan_next(RULE_OPEN_BRACE_RE))
-        pos = s.pos
-        sel_pos << (prev_pos .. pos - 1)
-        s.pos    = close_brace_pos(css, s.pos - 1) + 1
-        prev_pos = pos
-      end
-      replace_substrings_at(css, sel_pos) { |s| s.gsub(pattern, sub) }
-    end
-    
-        def puts(*args)
-      STDERR.puts *args unless @silence
-    end
-    
-      # Send deprecation notices to registered listeners.
-  config.active_support.deprecation = :notify
-    
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
-    
-    desc 'Start a dummy (test) Rails app server'
-task :dummy_rails do
-  require 'rack'
-  require 'term/ansicolor'
-  port = ENV['PORT'] || 9292
-  puts %Q(Starting on #{Term::ANSIColor.cyan 'http://localhost:#{port}'})
-  Rack::Server.start(
-    config: 'test/dummy_rails/config.ru',
-    Port: port)
-end
