@@ -1,43 +1,55 @@
 
         
-                  # Return the registry
-          data[:communicator]
-        end
-    
-          # This gets the value of the block with the given key.
-      def get(key)
-        key    = Regexp.quote(key)
-        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$\r?\n?(.*?)\r?\n?^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
-        match  = regexp.match(@value)
-        return nil if !match
-        match[1]
+          def resource
+    @resource ||=
+      if params[:project_id].present?
+        Project.find(params[:project_id])
+      elsif params[:namespace_id].present?
+        Group.find(params[:namespace_id])
       end
+  end
     
-            self.arguments = [
-          CLAide::Argument.new('NAME', false),
-        ]
+      private
     
-            def run
-          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
-          if @pod_name.nil? # Print all
-            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
-              print_pod_cache_infos(pod_name, cache_descriptors)
-            end
-          else # Print only for the requested pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            else
-              print_pod_cache_infos(@pod_name, cache_descriptors)
-            end
-          end
+            @normalized_styles = styles.dup
+        styles.each_pair do |name, options|
+          @normalized_styles[name.to_sym] = Paperclip::Style.new(name.to_sym, options.dup, self)
         end
-    
-      TYPES = [ 'input', 'filter', 'output', 'codec' ]
-    
-          def initialize(agent)
-        @agent = agent
-        logger.debug('[api-service] start') if logger.debug?
       end
+      @normalized_styles
+    end
     
-        node_cache[:plugin_section][start_index] = r0
+        def register(klass, attachment_name, attachment_options)
+      @attachments ||= {}
+      @attachments[klass] ||= {}
+      @attachments[klass][attachment_name] = attachment_options
+    end
+    
+        def blank_name?
+      @filepath.nil? || @filepath.empty?
+    end
+    
+        # Extracts the Geometry from a 'WxH,O' string
+    # Where W is the width, H is the height,
+    # and O is the EXIF orientation
+    def self.parse(string)
+      GeometryParser.new(string).make
+    end
+    
+      context 'called with null values' do
+    it 'writes rules for other three' do
+      ruleset = 'border-top-style: inset; ' +
+                'border-right-style: none; ' +
+                'border-left-style: double;'
+      bad_rule = 'border-bottom-style: null;'
+    
+      context 'called with one color' do
+    it 'applies same width to all sides' do
+      rule = 'border-width: 1px'
+    
+      context 'called with null values' do
+    it 'writes rules for other three' do
+      ruleset = 'padding-top: 11px; ' +
+                'padding-right: 12px; ' +
+                'padding-left: 13px;'
+      bad_rule = 'padding-bottom: null;'
