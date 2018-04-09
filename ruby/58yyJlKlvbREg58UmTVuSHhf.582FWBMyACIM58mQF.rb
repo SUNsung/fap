@@ -1,180 +1,116 @@
 
         
-            it 'should have a way of getting the service configurations' do
-      configs = key.service_configs_for(Spaceship::Portal::Key::MUSIC_KIT_ID)
-      expect(configs).to be_instance_of(Array)
-      expect(configs.sample).to be_instance_of(Hash)
-      expect(configs.first['identifier']).to eq('music.com.snatchev.test')
-    end
+              attr_accessor :description
     
-          command = ['git describe']
-      command << '--tags' if match_lightweight
-      command << '`git rev-list --tags#{tag_pattern_param} --max-count=1`'
-      Actions.sh(command.compact.join(' '), log: false).chomp
-    rescue
-      nil
-    end
+            expect(result).to eq('/usr/local/bin/cloc  --by-file --xml  --out=/tmp/cloc.xml')
+      end
     
-            expect(result).to eq('svn info | grep Revision | egrep -o '[0-9]+'')
-        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('svn info | grep Revision | egrep -o '[0-9]+'')
+          it 'get SVN build number' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            get_build_number_repository
+        end').runner.execute(:test)
+    
+          it 'properly removes new lines of the build number' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          increment_build_number(build_number: '24\n', xcodeproj: '.xcproject')
+        end').runner.execute(:test)
+    
+        respond_to do |format|
+      if @user_credential.update_attributes(user_credential_params)
+        format.html { redirect_to user_credentials_path, notice: 'Your credential was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: 'edit' }
+        format.json { render json: @user_credential.errors, status: :unprocessable_entity }
       end
     end
-    
-        ret = set + [2,4,6]
-    assert_not_same(set, ret)
-    assert_equal(Set[1,2,3,4,6], ret)
   end
     
-      class Apple < Struct; end
+      # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
+  # the I18n.default_locale when a translation can not be found).
+  config.i18n.fallbacks = true
     
-      def self.dying_thread_ensures(kill_method_name=:kill)
-    Thread.new do
-      Thread.current.report_on_exception = false
+      def setup
+    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
+    success = Dir.chdir DUMMY_PATH do
+      silence_stdout_if !ENV['VERBOSE'] do
+        system 'node', 'manifest.js', tmp_dir
+      end
+    end
+    assert success, 'Node.js Mincer compilation failed'
+    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
+    css_name = manifest['assets']['application.css']
+    @css = File.read('#{tmp_dir}/#{css_name}')
+  end
+end
+
+    
+    desc 'Test all Gemfiles from test/*.gemfile'
+task :test_all_gemfiles do
+  require 'term/ansicolor'
+  require 'pty'
+  require 'shellwords'
+  cmd      = 'bundle install --quiet && bundle exec rake --trace'
+  statuses = Dir.glob('./test/gemfiles/*{[!.lock]}').map do |gemfile|
+    env = {'BUNDLE_GEMFILE' => gemfile}
+    cmd_with_env = '  (#{env.map { |k, v| 'export #{k}=#{Shellwords.escape v}' } * ' '}; #{cmd})'
+    $stderr.puts Term::ANSIColor.cyan('Testing\n#{cmd_with_env}')
+    PTY.spawn(env, cmd) do |r, _w, pid|
       begin
-        Thread.current.send(kill_method_name)
+        r.each_line { |l| puts l }
+      rescue Errno::EIO
+        # Errno:EIO error means that the process has finished giving output.
       ensure
-        yield
+        ::Process.wait pid
       end
     end
+    [$? && $?.exitstatus == 0, cmd_with_env]
   end
-    
-        it 'propagates inner exception to Thread.join if there is an outer ensure clause' do
-      thread = ThreadSpecs.dying_thread_with_outer_ensure(@method) { }
-      lambda { thread.join }.should raise_error(RuntimeError, 'In dying thread')
-    end
-    
-    (allow file-ioctl)
-(allow sysctl-read)
-(allow mach-lookup)
-(allow ipc-posix-shm)
-(allow process-fork)
-(allow system-socket)
-    
-            def validate!
-          super
-          if @pod_name.nil? && !@wipe_all
-            # Security measure, to avoid removing the pod cache too agressively by mistake
-            help! 'You should either specify a pod name or use the --all flag'
-          end
-        end
-    
-          def plugins_string
-        UI::ErrorReport.plugins_string
-      end
-    
-             RUBY
-                         else
-                           <<-RUBY
-  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
-  # use_frameworks!
-    
-            def initialize(argv)
-          @name = argv.shift_argument
-          @template_url = argv.option('template-url', TEMPLATE_REPO)
-          super
-          @additional_args = argv.remainder!
-        end
-    
-    desc 'copy dot files for deployment'
-task :copydot, :source, :dest do |t, args|
-  FileList['#{args.source}/**/.*'].exclude('**/.', '**/..', '**/.DS_Store', '**/._*').each do |file|
-    cp_r file, file.gsub(/#{args.source}/, '#{args.dest}') unless File.directory?(file)
+  failed_cmds = statuses.reject(&:first).map { |(_status, cmd_with_env)| cmd_with_env }
+  if failed_cmds.empty?
+    $stderr.puts Term::ANSIColor.green('Tests pass with all gemfiles')
+  else
+    $stderr.puts Term::ANSIColor.red('Failing (#{failed_cmds.size} / #{statuses.size})\n#{failed_cmds * '\n'}')
+    exit 1
   end
 end
     
-    def config_tag(config, key, tag=nil, classname=nil)
-  options     = key.split('.').map { |k| config[k] }.last #reference objects with dot notation
-  tag       ||= 'div'
-  classname ||= key.sub(/_/, '-').sub(/\./, '-')
-  output      = '<#{tag} class='#{classname}''
-    
-        def render(context)
-      if parts = @text.match(/([a-zA-Z\d]*) (.*)/)
-        gist, file = parts[1].strip, parts[2].strip
-      else
-        gist, file = @text.strip, ''
-      end
-      if gist.empty?
-        ''
-      else
-        script_url = script_url_for gist, file
-        code       = get_cached_gist(gist, file) || get_gist_from_web(gist, file)
-        html_output_for script_url, code
-      end
+      def user_search
+    if params[:admins_controller_user_search]
+      search_params = params.require(:admins_controller_user_search)
+                            .permit(:username, :email, :guid, :under13)
+      @search = UserSearch.new(search_params)
+      @users = @search.perform
     end
     
-      class IncludeArrayTag < Liquid::Tag
-    Syntax = /(#{Liquid::QuotedFragment}+)/
-    def initialize(tag_name, markup, tokens)
-      if markup =~ Syntax
-        @array_name = $1
-      else
-        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
-      end
+    module Api
+  module OpenidConnect
+    class TokenEndpointController < ApplicationController
+      skip_before_action :verify_authenticity_token
     
-      class IncludeCodeTag < Liquid::Tag
-    def initialize(tag_name, markup, tokens)
-      @title = nil
-      @file = nil
-      if markup.strip =~ /\s*lang:(\S+)/i
-        @filetype = $1
-        markup = markup.strip.sub(/lang:\S+/i,'')
-      end
-      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
-        @title = $1 || nil
-        @file = $3
-      end
-      super
-    end
-    
-        def add_required_validations
-      options = Paperclip::Attachment.default_options.deep_merge(@options)
-      if options[:validate_media_type] != false
-        name = @name
-        @klass.validates_media_type_spoof_detection name,
-          :if => ->(instance){ instance.send(name).dirty? }
-      end
-    end
-    
-            def error_when_not_valid?
-          @subject.send(@attachment_name).assign(nil)
-          @subject.valid?
-          @subject.errors[:'#{@attachment_name}'].present?
-        end
-    
-          if defined?(ActiveRecord)
-        Paperclip.options[:logger] = ActiveRecord::Base.logger
-        ActiveRecord::Base.send(:include, Paperclip::Glue)
-      end
+          expect('.border-width-false-third').to have_ruleset(ruleset)
+      expect('.border-width-false-third').to_not have_rule(bad_rule)
     end
   end
 end
 
     
-    module RuboCop
-  module Cop
-    class VariableForce
-      # A Variable represents existence of a local variable.
-      # This holds a variable declaration node,
-      # and some states of the variable.
-      class Variable
-        VARIABLE_DECLARATION_TYPES =
-          (VARIABLE_ASSIGNMENT_TYPES + ARGUMENT_DECLARATION_TYPES).freeze
+          expect('.all-buttons-focus').to have_ruleset(ruleset)
+    end
+  end
     
-            def_node_matcher :multiple_compare?, <<-PATTERN
-          (send (send _ {:< :> :<= :>=} $_) {:< :> :<= :>=} _)
-        PATTERN
+      context 'called with null values' do
+    it 'writes rules for other three' do
+      ruleset = 'margin-top: 11px; ' +
+                'margin-right: 12px; ' +
+                'margin-left: 13px;'
+      bad_rule = 'margin-bottom: null;'
     
-            def comparison?(node)
-          simple_comparison?(node) || nested_comparison?(node)
-        end
-      end
+      context 'called with no prefixes' do
+    it 'outputs the spec' do
+      rule = 'appearance: none;'
+    
+          expect('.all-text-inputs-invalid').to have_ruleset(ruleset)
     end
   end
 end
-
-    
-              each_misplaced_optional_arg(arguments) do |argument|
-            add_offense(argument)
-          end
-        end
