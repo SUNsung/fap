@@ -1,252 +1,443 @@
 
         
-        class SILDebuggerClient;
+        #include 'atom/browser/net/http_protocol_handler.h'
     
-    StringRef StdlibGroupsIndexRecordingConsumer::findGroupForSymbol(const IndexSymbol &sym) {
-  bool isDeclOrDef = sym.roles & ((SymbolRoleSet)SymbolRole::Declaration | (SymbolRoleSet)SymbolRole::Definition);
-  if (isDeclOrDef) {
-    if (!sym.group.empty())
-      return sym.group;
-    return findGroupNameForDecl(sym.decl);
+    #endif  // ATOM_BROWSER_UI_DRAG_UTIL_H_
+
+    
+    #ifndef ATOM_BROWSER_UI_TRAY_ICON_GTK_H_
+#define ATOM_BROWSER_UI_TRAY_ICON_GTK_H_
+    
+    
+    {}  // namespace atom
+
+    
+    #include 'atom/browser/ui/atom_menu_model.h'
+#include 'ui/views/controls/menu/menu_model_adapter.h'
+    
+    #ifndef BITCOIN_INDIRECTMAP_H
+#define BITCOIN_INDIRECTMAP_H
+    
+        // Finish and check for file errors
+    if (s.ok()) {
+      s = file->Sync();
+    }
+    if (s.ok()) {
+      s = file->Close();
+    }
+    delete file;
+    file = NULL;
+    
+    #endif  // STORAGE_LEVELDB_DB_BUILDER_H_
+
+    
+    
+    {}  // namespace leveldb
+    
+      fname = DescriptorFileName('bar', 100);
+  ASSERT_EQ('bar/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(100, number);
+  ASSERT_EQ(kDescriptorFile, type);
+    
+    class TableCache {
+ public:
+  TableCache(const std::string& dbname, const Options* options, int entries);
+  ~TableCache();
+    }
+    
+    TEST(FindFileTest, MultipleNullBoundaries) {
+  Add('150', '200');
+  Add('200', '250');
+  Add('300', '350');
+  Add('400', '450');
+  ASSERT_TRUE(! Overlaps(NULL, '149'));
+  ASSERT_TRUE(! Overlaps('451', NULL));
+  ASSERT_TRUE(Overlaps(NULL, NULL));
+  ASSERT_TRUE(Overlaps(NULL, '150'));
+  ASSERT_TRUE(Overlaps(NULL, '199'));
+  ASSERT_TRUE(Overlaps(NULL, '200'));
+  ASSERT_TRUE(Overlaps(NULL, '201'));
+  ASSERT_TRUE(Overlaps(NULL, '400'));
+  ASSERT_TRUE(Overlaps(NULL, '800'));
+  ASSERT_TRUE(Overlaps('100', NULL));
+  ASSERT_TRUE(Overlaps('200', NULL));
+  ASSERT_TRUE(Overlaps('449', NULL));
+  ASSERT_TRUE(Overlaps('450', NULL));
+}
+    
+        // Initialize db_
+    db_ = new kyotocabinet::TreeDB();
+    char file_name[100];
+    db_num_++;
+    std::string test_dir;
+    Env::Default()->GetTestDirectory(&test_dir);
+    snprintf(file_name, sizeof(file_name),
+             '%s/dbbench_polyDB-%d.kct',
+             test_dir.c_str(),
+             db_num_);
+    
+    #ifndef STORAGE_LEVELDB_INCLUDE_SLICE_H_
+#define STORAGE_LEVELDB_INCLUDE_SLICE_H_
+    
+    #include 'caffe/layers/neuron_layer.hpp'
+    
+    /**
+ * @brief Convolve the input with a bank of learned filters, and (optionally)
+ *        add biases, treating filters and convolution parameters in the
+ *        opposite sense as ConvolutionLayer.
+ *
+ *   ConvolutionLayer computes each output value by dotting an input window with
+ *   a filter; DeconvolutionLayer multiplies each input value by a filter
+ *   elementwise, and sums over the resulting output windows. In other words,
+ *   DeconvolutionLayer is ConvolutionLayer with the forward and backward passes
+ *   reversed. DeconvolutionLayer reuses ConvolutionParameter for its
+ *   parameters, but they take the opposite sense as in ConvolutionLayer (so
+ *   padding is removed from the output rather than added to the input, and
+ *   stride results in upsampling rather than downsampling).
+ */
+template <typename Dtype>
+class DeconvolutionLayer : public BaseConvolutionLayer<Dtype> {
+ public:
+  explicit DeconvolutionLayer(const LayerParameter& param)
+      : BaseConvolutionLayer<Dtype>(param) {}
+    }
+    
+    /**
+ * @brief During training only, sets a random portion of @f$x@f$ to 0, adjusting
+ *        the rest of the vector magnitude accordingly.
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$ y = |x| @f$
+ */
+template <typename Dtype>
+class DropoutLayer : public NeuronLayer<Dtype> {
+ public:
+  /**
+   * @param param provides DropoutParameter dropout_param,
+   *     with DropoutLayer options:
+   *   - dropout_ratio (\b optional, default 0.5).
+   *     Sets the probability @f$ p @f$ that any given unit is dropped.
+   */
+  explicit DropoutLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    Timer::Timer(Name name, StructuredLogEntry* log_entry)
+  : m_name(name)
+  , m_finished(false)
+  , m_start(getCPUTimeNanos())
+  , m_start_wall(getWallClockMicros())
+  , m_log_entry(log_entry)
+{
+}
+    
+    #include 'hphp/runtime/vm/jit/abi.h'
+#include 'hphp/runtime/vm/jit/arg-group.h'
+#include 'hphp/runtime/vm/jit/fixup.h'
+#include 'hphp/runtime/vm/jit/phys-reg-saver.h'
+#include 'hphp/runtime/vm/jit/vasm-gen.h'
+#include 'hphp/runtime/vm/jit/vasm-instr.h'
+#include 'hphp/runtime/vm/jit/vasm-reg.h'
+    
+      std::vector<SrcKey> targets;
+  targets.reserve(iv.size());
+  for (auto const offset : offsets) {
+    targets.emplace_back(SrcKey{curSrcKey(env), bcOff(env) + offset});
+  }
+    
+    struct IRGS;
+    
+    /*
+ * Insert a jump to destSk at toSmash. If no top translation for destSk exists
+ * no action is performed. On return, the value of smashed indicated whether a
+ * new address was written into the TC.
+ */
+TCA bindJmp(TCA toSmash, SrcKey destSk, TransFlags trflags, bool& smashed);
+    
+      // Find an arc with max weight and merge its nodes
+    
+    namespace xgboost {
+namespace common {
+    }
+    }
+    
+    /*! \brief namespace of base64 decoding and encoding table */
+namespace base64 {
+const char DecodeTable[] = {
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  62,  // '+'
+  0, 0, 0,
+  63,  // '/'
+  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
+  0, 0, 0, 0, 0, 0, 0,
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
+  0, 0, 0, 0, 0, 0,
+  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
+};
+static const char EncodeTable[] =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+}  // namespace base64
+/*! \brief the stream that reads from base64, note we take from file pointers */
+class Base64InStream: public dmlc::Stream {
+ public:
+  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
+    reader_.set_stream(fs);
+    num_prev = 0; tmp_ch = 0;
+  }
+  /*!
+   * \brief initialize the stream position to beginning of next base64 stream
+   * call this function before actually start read
+   */
+  inline void InitPosition(void) {
+    // get a character
+    do {
+      tmp_ch = reader_.GetChar();
+    } while (isspace(tmp_ch));
+  }
+  /*! \brief whether current position is end of a base64 stream */
+  inline bool IsEOF(void) const {
+    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
+  }
+  virtual size_t Read(void *ptr, size_t size) {
+    using base64::DecodeTable;
+    if (size == 0) return 0;
+    // use tlen to record left size
+    size_t tlen = size;
+    unsigned char *cptr = static_cast<unsigned char*>(ptr);
+    // if anything left, load from previous buffered result
+    if (num_prev != 0) {
+      if (num_prev == 2) {
+        if (tlen >= 2) {
+          *cptr++ = buf_prev[0];
+          *cptr++ = buf_prev[1];
+          tlen -= 2;
+          num_prev = 0;
+        } else {
+          // assert tlen == 1
+          *cptr++ = buf_prev[0]; --tlen;
+          buf_prev[0] = buf_prev[1];
+          num_prev = 1;
+        }
+      } else {
+        // assert num_prev == 1
+        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
+      }
+    }
+    if (tlen == 0) return size;
+    int nvalue;
+    // note: everything goes with 4 bytes in Base64
+    // so we process 4 bytes a unit
+    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
+      // first byte
+      nvalue = DecodeTable[tmp_ch] << 18;
+      {
+        // second byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        nvalue |= DecodeTable[tmp_ch] << 12;
+        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
+        }
+      {
+        // third byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
+        // handle termination
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == '=') << 'invalid base64 format';
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
+        }
+        nvalue |= DecodeTable[tmp_ch] << 6;
+        if (tlen) {
+          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
+        }
+      }
+      {
+        // fourth byte
+        tmp_ch = reader_.GetChar();
+        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
+            << 'invalid base64 format';
+        if (tmp_ch == '=') {
+          tmp_ch = reader_.GetChar();
+          CHECK(tmp_ch == EOF || isspace(tmp_ch))
+              << 'invalid base64 format';
+          break;
+        }
+        nvalue |= DecodeTable[tmp_ch];
+        if (tlen) {
+          *cptr++ = nvalue & 0xFF; --tlen;
+        } else {
+          buf_prev[num_prev ++] = nvalue & 0xFF;
+        }
+      }
+      // get next char
+      tmp_ch = reader_.GetChar();
+    }
+    if (kStrictCheck) {
+      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
+    }
+    return size - tlen;
+  }
+  virtual void Write(const void *ptr, size_t size) {
+    LOG(FATAL) << 'Base64InStream do not support write';
   }
     }
     
-      StringRef getTitle() const {
-    return StringRef(Title.getValue());
+      std::vector<size_t> feature_counts_;
+  std::vector<ColumnType> type_;
+  std::vector<uint32_t> index_;  // index_: may store smaller integers; needs padding
+  std::vector<size_t> row_ind_;
+  std::vector<ColumnBoundary> boundary_;
+    
+      vals_in.clear(); ss.flush(); ss.clear(); ss.str('');
+  ss << ' 321 ';
+  ss >> vals_in;
+  EXPECT_EQ(vals_in[0], 321);
+    
+    template<typename IndexType>
+class DensifyParser : public dmlc::Parser<IndexType> {
+ public:
+  DensifyParser(dmlc::Parser<IndexType>* parser, uint32_t num_col)
+      : parser_(parser), num_col_(num_col) {
   }
-    
-    namespace swift {
-namespace syntax {
-    }
     }
     
-      /// Adds a memory buffer to the SourceManager, taking ownership of it.
-  unsigned addNewSourceBuffer(std::unique_ptr<llvm::MemoryBuffer> Buffer);
-    
-    /// Substitution - A substitution into a generic specialization.
-class Substitution {
-  Type Replacement;
-  ArrayRef<ProtocolConformanceRef> Conformance;
-    }
-    
-    bool Substitution::isCanonical() const {
-  if (!getReplacement()->isCanonical())
-    return false;
-  for (auto conf : getConformances()) {
-    if (!conf.isCanonical())
-      return false;
+    SparsePage::Writer::~Writer() {
+  for (auto& queue : qworkers_) {
+    // use nullptr to signal termination.
+    std::shared_ptr<SparsePage> sig(nullptr);
+    queue.Push(std::move(sig));
   }
-  return true;
+  for (auto& thread : workers_) {
+    thread->join();
+  }
+}
+    
+    struct EvalGammaDeviance : public EvalEWiseBase<EvalGammaDeviance> {
+  const char *Name() const override {
+    return 'gamma-deviance';
+  }
+  inline bst_float EvalRow(bst_float label, bst_float pred) const {
+    bst_float epsilon = 1.0e-9;
+    bst_float tmp = label / (pred + epsilon);
+    return tmp - std::log(tmp) - 1;
+  }
+  inline static bst_float GetFinal(bst_float esum, bst_float wsum) {
+    return 2 * esum;
+  }
+};
+    
+    stb_uint stb_compress(stb_uchar *out, stb_uchar *input, stb_uint length)
+{
+    stb__out = out;
+    stb__outfile = NULL;
+    }
+    
+    int32 ImGui_Marmalade_CharCallback(void* SystemData, void* userData)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    s3eKeyboardCharEvent* e = (s3eKeyboardCharEvent*)SystemData;
+    if ((e->m_Char > 0 && e->m_Char < 0x10000))
+        io.AddInputCharacter((unsigned short)e->m_Char);
+    }
+    
+    IMGUI_API bool        ImGui_ImplGlfwGL2_Init(GLFWwindow* window, bool install_callbacks);
+IMGUI_API void        ImGui_ImplGlfwGL2_Shutdown();
+IMGUI_API void        ImGui_ImplGlfwGL2_NewFrame();
+IMGUI_API void        ImGui_ImplGlfwGL2_RenderDrawData(ImDrawData* draw_data);
+    
+    
+    {    return 0;
 }
 
     
-    // Generate param traits write methods.
-#include 'ipc/param_traits_write_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
+        /// A structure that describe a glyph.
+    struct GlyphInfo 
+    {
+        float Width;		// Glyph's width in pixels.
+        float Height;		// Glyph's height in pixels.
+        float OffsetX;		// The distance from the origin ('pen position') to the left of the glyph.
+        float OffsetY;		// The distance from the origin to the top of the glyph. This is usually a value < 0.
+        float AdvanceX;		// The distance from the origin to the origin of the next glyph. This is usually a value > 0.
+    };
     
-    void Base::CallSync(const std::string& method,
-                    const base::ListValue& arguments,
-                    base::ListValue* result) {
-  NOTREACHED() << 'Uncatched callAsync in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
+            VkInstanceCreateInfo create_info = {};
+        create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+        create_info.enabledExtensionCount = extensions_count;
+        create_info.ppEnabledExtensionNames = glfw_extensions;
     
-    #include 'content/nw/src/api/bindings_common.h'
+    //---- Avoid multiple STB libraries implementations, or redefine path/filenames to prioritize another version
+// By default the embedded implementations are declared static and not available outside of imgui cpp files.
+//#define IMGUI_STB_TRUETYPE_FILENAME   'my_folder/stb_truetype.h'
+//#define IMGUI_STB_RECT_PACK_FILENAME  'my_folder/stb_rect_pack.h'
+//#define IMGUI_DISABLE_STB_TRUETYPE_IMPLEMENTATION
+//#define IMGUI_DISABLE_STB_RECT_PACK_IMPLEMENTATION
     
-    using WebKit::WebAutofillClient;
-using WebKit::WebFormElement;
-using WebKit::WebFrame;
-using WebKit::WebInputElement;
-using WebKit::WebKeyboardEvent;
-using WebKit::WebNode;
-using WebKit::WebNodeCollection;
-using WebKit::WebOptionElement;
-using WebKit::WebString;
-    
-    namespace {
-    }
-    
-    bool MenuDelegate::HasIcon(int command_id) {
-  if (command_id < 0)
-    return false;
-    }
-    
-     private:
-  ObjectManager* object_manager_;
-    
-    
-    {  gtk_widget_show(menu_);
-  g_object_ref_sink(G_OBJECT(menu_));
-}
-    
-    NwMenuModel::NwMenuModel(Delegate* delegate) : SimpleMenuModel(delegate) {
-}
-    
-    void MenuItem::CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) {
-  if (method == 'GetChecked') {
-    result->AppendBoolean(GetChecked());
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    #include 'test/cpp/qps/benchmark_config.h'
-#include 'test/cpp/qps/driver.h'
-#include 'test/cpp/qps/report.h'
-#include 'test/cpp/qps/server.h'
-#include 'test/cpp/util/test_config.h'
-#include 'test/cpp/util/test_credentials_provider.h'
-    
-    #ifndef GRPC_INTERNAL_COMPILER_NODE_GENERATOR_HELPERS_H
-#define GRPC_INTERNAL_COMPILER_NODE_GENERATOR_HELPERS_H
-    
-    
-    {  // Get all comments (leading, leading_detached, trailing) and print them as a
-  // docstring. Any leading space of a line will be removed, but the line
-  // wrapping will not be changed.
-  void PrintAllComments(std::vector<grpc::string> comments,
-                        grpc_generator::Printer* out);
-};
-    
-    TEST_F(CodegenTestMinimal, Build) {}
-    
-    static void get_cpu_usage(unsigned long long* total_cpu_time,
-                          unsigned long long* idle_cpu_time) {
-#ifdef __linux__
-  std::ifstream proc_stat('/proc/stat');
-  proc_stat.ignore(5);
-  std::string cpu_time_str;
-  std::string first_line;
-  std::getline(proc_stat, first_line);
-  std::stringstream first_line_s(first_line);
-  for (int i = 0; i < 10; ++i) {
-    std::getline(first_line_s, cpu_time_str, ' ');
-    *total_cpu_time += std::stol(cpu_time_str);
-    if (i == 3) {
-      *idle_cpu_time = std::stol(cpu_time_str);
-    }
-  }
-#else
-  gpr_log(GPR_INFO, 'get_cpu_usage(): Non-linux platform is not supported.');
-#endif
-}
-    
-      grpc::Status GetGauge(ServerContext* context, const GaugeRequest* request,
-                        GaugeResponse* response) override;
+        // By using D3DCompile() from <d3dcompiler.h> / d3dcompiler.lib, we introduce a dependency to a given version of d3dcompiler_XX.dll (see D3DCOMPILER_DLL_A)
+    // If you would like to use this DX11 sample code but remove this dependency you can: 
+    //  1) compile once, save the compiled shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
+    //  2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL. 
+    // See https://github.com/ocornut/imgui/pull/638 for sources and details.
     
     
     { private:
-  std::mutex mu_;
-  std::vector<grpc::string> added_secure_type_names_;
-  std::vector<std::unique_ptr<CredentialTypeProvider>>
-      added_secure_type_providers_;
+  const InstructionPointer absoluteProgramCounter_;
+  const InstructionPointer libraryBase_;
+  const InstructionPointer functionAddress_;
+  const std::string libraryName_;
+  const std::string functionName_;
 };
     
-    #include <TH/TH.h>
-    
-    #undef DEFINE_ACCESSOR
-  bool isFloatingPoint() const {
-    return Tag::HAS_d == tag;
-  }
-  bool isIntegral() const {
-    return Tag::HAS_i == tag;
-  }
-  bool isBackedByTensor() const {
-    return Tag::HAS_t == tag;
+      if (state->stackTrace.size() == state->stackTrace.capacity()) {
+    return _URC_END_OF_STACK;
   }
     
-    ${Tensor}::${Tensor}(Context* context)
-: ${Tensor}(context,${THTensor}_new(${state})) {}
-    
-    /* Manually set the seed */
-void THCRandom_manualSeed(THCState* state, uint64_t seed)
-{
-  THCGenerator* gen = THCRandom_rawGenerator(state);
-  gen->initial_seed = seed;
-  if (gen->initf) {
-    createGeneratorState(gen, seed);
-  }
-}
-    
-    namespace torch { namespace utils {
-    }
-    }
-    
-    namespace at {
-namespace native {
-    }
-    }
-    
-    THDTensorDescriptor THDTensorDescriptor_newFromTHShortTensor(THShortTensor *tensor) {
-  return at::getType(at::Backend::CPU, at::ScalarType::Short).unsafeTensorFromTH((void*)tensor, true);
-}
-    
-    extern JSClass  *jsb_cocos2d_NavMeshObstacle_class;
-extern JSObject *jsb_cocos2d_NavMeshObstacle_prototype;
+      ASSERT_TRUE(YGNodeLayoutGetHadOverflow(root));
     
     
-    
-    		b2Profile aveProfile;
-		memset(&aveProfile, 0, sizeof(b2Profile));
-		if (m_stepCount > 0)
-		{
-			float32 scale = 1.0f / m_stepCount;
-			aveProfile.step = scale * m_totalProfile.step;
-			aveProfile.collide = scale * m_totalProfile.collide;
-			aveProfile.solve = scale * m_totalProfile.solve;
-			aveProfile.solveInit = scale * m_totalProfile.solveInit;
-			aveProfile.solveVelocity = scale * m_totalProfile.solveVelocity;
-			aveProfile.solvePosition = scale * m_totalProfile.solvePosition;
-			aveProfile.solveTOI = scale * m_totalProfile.solveTOI;
-			aveProfile.broadphase = scale * m_totalProfile.broadphase;
-		}
-    
-    #include <cstdlib>
-    
-    
+    {    void toJS(nbind::cbOutput expose) const
     {
-    {			float minX = -6.0f;
-			float maxX = 0.0f;
-			float minY = 4.0f;
-			float maxY = 6.0f;
-			
-			for (int32 i = 0; i < 400; ++i)
-			{
-				b2BodyDef bd;
-				bd.type = b2_dynamicBody;
-				bd.position = b2Vec2(RandomFloat(minX,maxX),RandomFloat(minY,maxY));
-				b2Body* body = m_world->CreateBody(&bd);
-				body->CreateFixture(&shape, 0.01f);
-			}
-		}
-		
-		{
-			b2PolygonShape shape;
-			shape.SetAsBox(1.5f, 1.5f);
-			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.position.Set(-40.0f,5.0f);
-			bd.bullet = true;
-			b2Body* body = m_world->CreateBody(&bd);
-			body->CreateFixture(&shape, 1.0f);
-			body->SetLinearVelocity(b2Vec2(150.0f, 0.0f));
-		}
-	}
+        expose(width, height);
+    }
+};
+
     
+    // Keeps a thread-local reference to the current thread's JNIEnv.
+struct Environment {
+  // May be null if this thread isn't attached to the JVM
+  FBEXPORT static JNIEnv* current();
+  static void initialize(JavaVM* vm);
+    }
     
-    {			b2PolygonShape shape;
-			shape.SetAsBox(0.2f, 1.0f, b2Vec2(0.5f, 1.0f), 0.0f);
-			body->CreateFixture(&shape, 0.0f);
-		}
+      static local_ref<JByteBuffer> wrapBytes(uint8_t* data, size_t size);
     
-    			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.position.Set(0.0f, 1.0f);
-			m_car = m_world->CreateBody(&bd);
-			m_car->CreateFixture(&chassis, 1.0f);
+      void AllocateCurrentUnitData();
+  uint8_t *CurrentUnitData = nullptr;
+  std::atomic<size_t> CurrentUnitSize;
+  uint8_t BaseSha1[kSHA1NumBytes];  // Checksum of the base unit.
+  bool RunningCB = false;
+    
+    // Decides which files need to be merged (add thost to NewFiles).
+// Returns the number of new features added.
+size_t Merger::Merge(std::vector<std::string> *NewFiles) {
+  NewFiles->clear();
+  assert(NumFilesInFirstCorpus <= Files.size());
+  std::set<uint32_t> AllFeatures;
+    }
