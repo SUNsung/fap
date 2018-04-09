@@ -1,247 +1,300 @@
 
         
-        
+        // To write value-parameterized tests, first you should define a fixture
+// class. It is usually derived from testing::TestWithParam<T> (see below for
+// another inheritance scheme that's sometimes useful in more complicated
+// class hierarchies), where the type of your parameter values.
+// TestWithParam<T> is itself derived from testing::Test. T can be any
+// copyable type. If it's a raw pointer, you are responsible for managing the
+// lifespan of the pointed values.
     
-    
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
+    // ValuesIn() function allows generation of tests with parameters coming from
+// a container.
+//
+// Synopsis:
+// ValuesIn(const T (&array)[N])
+//   - returns a generator producing sequences with elements from
+//     a C-style array.
+// ValuesIn(const Container& container)
+//   - returns a generator producing sequences with elements from
+//     an STL-style container.
+// ValuesIn(Iterator begin, Iterator end)
+//   - returns a generator producing sequences with elements from
+//     a range [begin, end) defined by a pair of STL-style iterators. These
+//     iterators can also be plain C pointers.
+//
+// Please note that ValuesIn copies the values from the containers
+// passed in and keeps them to generate tests in RUN_ALL_TESTS().
+//
+// Examples:
+//
+// This instantiates tests from test case StringTest
+// each with C-string values of 'foo', 'bar', and 'baz':
+//
+// const char* strings[] = {'foo', 'bar', 'baz'};
+// INSTANTIATE_TEST_CASE_P(StringSequence, SrtingTest, ValuesIn(strings));
+//
+// This instantiates tests from test case StlStringTest
+// each with STL strings with values 'a' and 'b':
+//
+// ::std::vector< ::std::string> GetParameterStrings() {
+//   ::std::vector< ::std::string> v;
+//   v.push_back('a');
+//   v.push_back('b');
+//   return v;
+// }
+//
+// INSTANTIATE_TEST_CASE_P(CharSequence,
+//                         StlStringTest,
+//                         ValuesIn(GetParameterStrings()));
+//
+//
+// This will also instantiate tests from CharTest
+// each with parameter values 'a' and 'b':
+//
+// ::std::list<char> GetParameterChars() {
+//   ::std::list<char> list;
+//   list.push_back('a');
+//   list.push_back('b');
+//   return list;
+// }
+// ::std::list<char> l = GetParameterChars();
+// INSTANTIATE_TEST_CASE_P(CharSequence2,
+//                         CharTest,
+//                         ValuesIn(l.begin(), l.end()));
+//
+template <typename ForwardIterator>
+internal::ParamGenerator<
+  typename ::testing::internal::IteratorTraits<ForwardIterator>::value_type>
+ValuesIn(ForwardIterator begin, ForwardIterator end) {
+  typedef typename ::testing::internal::IteratorTraits<ForwardIterator>
+      ::value_type ParamType;
+  return internal::ParamGenerator<ParamType>(
+      new internal::ValuesInIteratorRangeGenerator<ParamType>(begin, end));
 }
     
-      scoped_ptr<base::Value> value_option(
-      converter->FromV8Value(options, isolate->GetCurrentContext()));
-  if (!value_option.get() ||
-      !value_option->IsType(base::Value::TYPE_DICTIONARY))
-    return isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
-        'Unable to convert 'option' passed to AllocateObject')));
+    // A helper class for implementing EXPECT_FATAL_FAILURE() and
+// EXPECT_NONFATAL_FAILURE().  Its destructor verifies that the given
+// TestPartResultArray contains exactly one failure that has the given
+// type and contains the given substring.  If that's not the case, a
+// non-fatal failure will be generated.
+class GTEST_API_ SingleFailureChecker {
+ public:
+  // The constructor remembers the arguments.
+  SingleFailureChecker(const TestPartResultArray* results,
+                       TestPartResult::Type type,
+                       const string& substr);
+  ~SingleFailureChecker();
+ private:
+  const TestPartResultArray* const results_;
+  const TestPartResult::Type type_;
+  const string substr_;
+    }
     
-    #endif  // CONTENT_SHELL_PATHS_MAC_H_
+    #ifndef GTEST_INCLUDE_GTEST_GTEST_TYPED_TEST_H_
+#define GTEST_INCLUDE_GTEST_GTEST_TYPED_TEST_H_
+    
+    #define GTEST_MESSAGE_AT_(file, line, message, result_type) \
+  ::testing::internal::AssertHelper(result_type, file, line, message) \
+    = ::testing::Message()
+    
+      bool operator==(T* p) const { return value_ == p; }
+  bool operator!=(T* p) const { return value_ != p; }
+  template <typename U>
+  bool operator==(linked_ptr<U> const& ptr) const {
+    return value_ == ptr.get();
+  }
+  template <typename U>
+  bool operator!=(linked_ptr<U> const& ptr) const {
+    return value_ != ptr.get();
+  }
+    
+    
+    {    const ParamGeneratorInterface<ParamType>* const base_;
+    // begin[i]_ and end[i]_ define the i-th range that Iterator traverses.
+    // current[i]_ is the actual traversing iterator.
+    const typename ParamGenerator<T1>::iterator begin1_;
+    const typename ParamGenerator<T1>::iterator end1_;
+    typename ParamGenerator<T1>::iterator current1_;
+    const typename ParamGenerator<T2>::iterator begin2_;
+    const typename ParamGenerator<T2>::iterator end2_;
+    typename ParamGenerator<T2>::iterator current2_;
+    const typename ParamGenerator<T3>::iterator begin3_;
+    const typename ParamGenerator<T3>::iterator end3_;
+    typename ParamGenerator<T3>::iterator current3_;
+    const typename ParamGenerator<T4>::iterator begin4_;
+    const typename ParamGenerator<T4>::iterator end4_;
+    typename ParamGenerator<T4>::iterator current4_;
+    const typename ParamGenerator<T5>::iterator begin5_;
+    const typename ParamGenerator<T5>::iterator end5_;
+    typename ParamGenerator<T5>::iterator current5_;
+    const typename ParamGenerator<T6>::iterator begin6_;
+    const typename ParamGenerator<T6>::iterator end6_;
+    typename ParamGenerator<T6>::iterator current6_;
+    const typename ParamGenerator<T7>::iterator begin7_;
+    const typename ParamGenerator<T7>::iterator end7_;
+    typename ParamGenerator<T7>::iterator current7_;
+    const typename ParamGenerator<T8>::iterator begin8_;
+    const typename ParamGenerator<T8>::iterator end8_;
+    typename ParamGenerator<T8>::iterator current8_;
+    const typename ParamGenerator<T9>::iterator begin9_;
+    const typename ParamGenerator<T9>::iterator end9_;
+    typename ParamGenerator<T9>::iterator current9_;
+    ParamType current_value_;
+  };  // class CartesianProductGenerator9::Iterator
+    
+    
+    {
+    {
+    {        int i = 0;
+        for (typename ParamGenerator<ParamType>::iterator param_it =
+                 generator.begin();
+             param_it != generator.end(); ++param_it, ++i) {
+          Message test_name_stream;
+          test_name_stream << test_info->test_base_name << '/' << i;
+          MakeAndRegisterTestInfo(
+              test_case_name.c_str(),
+              test_name_stream.GetString().c_str(),
+              NULL,  // No type parameter.
+              PrintToString(*param_it).c_str(),
+              GetTestCaseTypeId(),
+              TestCase::SetUpTestCase,
+              TestCase::TearDownTestCase,
+              test_info->test_meta_factory->CreateTestFactory(*param_it));
+        }  // for param_it
+      }  // for gen_it
+    }  // for test_it
+  }  // RegisterTests
+    
+    // <regex.h> is not available on Windows.  Use our own simple regex
+// implementation instead.
+# define GTEST_USES_SIMPLE_RE 1
+    
+    // A sample program demonstrating using Google C++ testing framework.
+//
+// Author: wan@google.com (Zhanyong Wan)
+    
+      /**
+   * Invoked when there is no data to be read or written and the stream is
+   * closed successfully remotely and locally. Once invoked, no further callback
+   * methods will be invoked.
+   */
+  void (*on_succeded)(bidirectional_stream* stream);
+    
+    #endif
 
     
-      bool SupportsOCSPStapling() override;
+    std::string GetDbFileContent(int argc, char** argv);
     
-      static v8::Handle<v8::Object> GetObjectRegistry();
-  static v8::Handle<v8::Value> GetWindowId(blink::WebFrame* frame);
-  static void ZoomLevelChanged(blink::WebView* web_view);
-  static void willHandleNavigationPolicy(
-    content::RenderView* rv,
-    blink::WebFrame* frame,
-    const blink::WebURLRequest& request,
-    blink::WebNavigationPolicy* policy,
-    blink::WebString* manifest);
+      bool Generate(const grpc::protobuf::FileDescriptor* file,
+                const grpc::string& parameter,
+                grpc::protobuf::compiler::GeneratorContext* context,
+                grpc::string* error) const;
     
-    // static
-void
-DispatcherBindings::DeallocateObject(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  RenderView* render_view = GetCurrentRenderView();
-  if (!render_view) {
-    args.GetReturnValue().Set(isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
-                                     'Unable to get render view in DeallocateObject'))));
-    return;
+    class CodegenTestMinimal : public ::testing::Test {};
+    
+    #ifndef TEST_QPS_STATS_UTILS_H
+#define TEST_QPS_STATS_UTILS_H
+    
+    #ifndef TEST_QPS_USAGE_TIMER_H
+#define TEST_QPS_USAGE_TIMER_H
+    
+    grpc::string DescribeService(const grpc::protobuf::ServiceDescriptor* service) {
+  grpc::string result;
+  if (service->options().deprecated()) {
+    result.append('DEPRECATED\n');
   }
+  result.append('filename: ' + service->file()->name() + '\n');
     }
     
-    #include 'base/values.h'
-#include 'components/zoom/zoom_controller.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/web_contents.h'
-#include 'content/public/common/page_zoom.h'
-#include 'ui/views/controls/menu/menu_runner.h'
+     private:
+  SubProcess(const SubProcess& other);
+  SubProcess& operator=(const SubProcess& other);
     
-    class ObjectManager;
-    
-    
-// Called on every log record (each one of which is a WriteBatch)
-// found in a kLogFile.
-static void WriteBatchPrinter(uint64_t pos, Slice record, WritableFile* dst) {
-  std::string r = '--- offset ';
-  AppendNumberTo(&r, pos);
-  r += '; ';
-  if (record.size() < 12) {
-    r += 'log record length ';
-    AppendNumberTo(&r, record.size());
-    r += ' is too small\n';
-    dst->Append(r);
-    return;
+      std::shared_ptr<ServerCredentials> GetServerCredentials(
+      const grpc::string& type) override {
+    if (type == grpc::testing::kInsecureCredentialsType) {
+      return InsecureServerCredentials();
+    } else if (type == grpc::testing::kTlsCredentialsType) {
+      SslServerCredentialsOptions::PemKeyCertPair pkcp = {test_server1_key,
+                                                          test_server1_cert};
+      SslServerCredentialsOptions ssl_opts;
+      ssl_opts.pem_root_certs = '';
+      ssl_opts.pem_key_cert_pairs.push_back(pkcp);
+      return SslServerCredentials(ssl_opts);
+    } else {
+      std::unique_lock<std::mutex> lock(mu_);
+      auto it(std::find(added_secure_type_names_.begin(),
+                        added_secure_type_names_.end(), type));
+      if (it == added_secure_type_names_.end()) {
+        gpr_log(GPR_ERROR, 'Unsupported credentials type %s.', type.c_str());
+        return nullptr;
+      }
+      return added_secure_type_providers_[it - added_secure_type_names_.begin()]
+          ->GetServerCredentials();
+    }
   }
-  WriteBatch batch;
-  WriteBatchInternal::SetContents(&batch, record);
-  r += 'sequence ';
-  AppendNumberTo(&r, WriteBatchInternal::Sequence(&batch));
-  r.push_back('\n');
-  dst->Append(r);
-  WriteBatchItemPrinter batch_item_printer;
-  batch_item_printer.dst_ = dst;
-  Status s = batch.Iterate(&batch_item_printer);
-  if (!s.ok()) {
-    dst->Append('  error: ' + s.ToString() + '\n');
+  std::vector<grpc::string> GetSecureCredentialsTypeList() override {
+    std::vector<grpc::string> types;
+    types.push_back(grpc::testing::kTlsCredentialsType);
+    std::unique_lock<std::mutex> lock(mu_);
+    for (auto it = added_secure_type_names_.begin();
+         it != added_secure_type_names_.end(); it++) {
+      types.push_back(*it);
+    }
+    return types;
+  }
+    
+    struct Barrier {
+  Barrier() : _count(0) {}
+  Barrier(std::size_t count) : _count(count) {}
+    }
+    
+    void test_allReduce_group(std::shared_ptr<thd::DataChannel> data_channel,
+                          THDGroup group, std::vector<thd::rank_type> group_ranks) {
+  if (contains(group_ranks, data_channel->getRank())) {
+    auto int_tensor = buildTensor({1, 2, 3, 4, 5, 6, 7, 100}, 10);
+    data_channel->allReduce(*int_tensor, THDReduceOp::THDReduceSUM, group);
+    ASSERT_TENSOR_VALUE(int, *int_tensor, 10 * group_ranks.size())
+  } else {
+    auto int_tensor = buildTensor({1, 2, 3, 4, 5, 6, 7, 100}, 1000);
+    data_channel->allReduce(*int_tensor, THDReduceOp::THDReduceSUM, group);
+    ASSERT_TENSOR_VALUE(int, *int_tensor, 1000)
   }
 }
     
+    constexpr ptrdiff_t STORAGE_SIZE = 10;
+constexpr size_t VEC_SIZE = 3;
     
-    {}  // namespace leveldb
-    
-    TEST(WriteBatchTest, Multiple) {
-  WriteBatch batch;
-  batch.Put(Slice('foo'), Slice('bar'));
-  batch.Delete(Slice('box'));
-  batch.Put(Slice('baz'), Slice('boo'));
-  WriteBatchInternal::SetSequence(&batch, 100);
-  ASSERT_EQ(100, WriteBatchInternal::Sequence(&batch));
-  ASSERT_EQ(3, WriteBatchInternal::Count(&batch));
-  ASSERT_EQ('Put(baz, boo)@102'
-            'Delete(box)@101'
-            'Put(foo, bar)@100',
-            PrintContents(&batch));
+    auto ${Storage}::fill(Scalar value) -> ${Storage}& {
+  ${THStorage}_fill(${state,} storage, ${to_th_type}(value.to${ScalarName}()));
+  return *this;
 }
     
-    bool js_cocos2dx_physics3d_Physics3DConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DConstraint_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DConstraint(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DConstraint_setEnabled(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_setBreakingImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getUserData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getBreakingImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getBodyA(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_isEnabled(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getOverrideNumSolverIterations(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getBodyB(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_setOverrideNumSolverIterations(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getConstraintType(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_setUserData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConstraint_getbtContraint(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    
-        argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        double arg0;
-    }
-    
-    	if (settings->drawContactPoints)
-	{
-		const float32 k_impulseScale = 0.1f;
-		const float32 k_axisScale = 0.3f;
-    }
-    
-    
-    {			b2Vec2 anchor(-15.0f + 1.0f * e_count, 5.0f);
-			jd.Initialize(prevBody, ground, anchor);
-			m_world->CreateJoint(&jd);
-		}
-    
-    // array to help compression of decompression.
-template<typename DType>
-class CompressArray {
- public:
-  // the data content.
-  std::vector<DType> data;
-  // Decompression helper
-  // number of chunks
-  inline int num_chunk() const {
-    CHECK_GT(raw_chunks_.size(), 1);
-    return static_cast<int>(raw_chunks_.size() - 1);
-  }
-  // raw bytes
-  inline size_t RawBytes() const {
-    return raw_chunks_.back() * sizeof(DType);
-  }
-  // encoded bytes
-  inline size_t EncodedBytes() const {
-    return encoded_chunks_.back() +
-        (encoded_chunks_.size() + raw_chunks_.size()) * sizeof(bst_uint);
-  }
-  // load the array from file.
-  inline void Read(dmlc::SeekStream* fi);
-  // run decode on chunk_id
-  inline void Decompress(int chunk_id);
-  // Compression helper
-  // initialize the compression chunks
-  inline void InitCompressChunks(const std::vector<bst_uint>& chunk_ptr);
-  // initialize the compression chunks
-  inline void InitCompressChunks(size_t chunk_size, size_t max_nchunk);
-  // run decode on chunk_id, level = -1 means default.
-  inline void Compress(int chunk_id, bool use_hc);
-  // save the output buffer into file.
-  inline void Write(dmlc::Stream* fo);
-    }
-    
-    
-    { private:
-  std::istream &fin;
-};
-    
-    #else
-/*!
- * \brief global random engine
- */
-typedef RandomEngine GlobalRandomEngine;
+      // NOTE: this function needs to be thread safe
+  std::shared_ptr<buffer_type> createBuffer(std::size_t bytes, DeviceType device) const {
+    if (device == DeviceType::CPU) {
+      return std::shared_ptr<buffer_type>(new char[bytes],
+                                          std::default_delete<char[]>());
+#ifdef WITH_CUDA
+    } else if (device == DeviceType::CUDA) {
+      buffer_type *buf;
+      THCudaCheck(THCudaMalloc(THDGetCudaState(), (void**)&buf, bytes));
+      return std::shared_ptr<buffer_type>(buf, [](char* ptr) { THCudaFree(THDGetCudaState(), ptr); });
 #endif
-    
-    template<typename IndexType>
-class DensifyParser : public dmlc::Parser<IndexType> {
- public:
-  DensifyParser(dmlc::Parser<IndexType>* parser, uint32_t num_col)
-      : parser_(parser), num_col_(num_col) {
-  }
+    } else {
+      throw std::runtime_error('unsupported device in GlooCache::createBuffer');
     }
-    
-    struct EvalMAE : public EvalEWiseBase<EvalMAE> {
-  const char *Name() const override {
-    return 'mae';
   }
-  inline bst_float EvalRow(bst_float label, bst_float pred) const {
-    return std::abs(label - pred);
-  }
-};
     
+      auto ilen = input_size[0];
+  auto batchSize = input_size[1];
+  auto inputPlanes = input_size[2];
+  auto outputPlanes = weight_size[2];
+  auto kw = weight_size[0];
+  auto olen = input_size[0] - kw + 1 + pad * 2;
+  auto real_pad = (olen - ilen + kw - 1) / 2;
     
-    {
-    {XGBOOST_REGISTER_METRIC(MultiLogLoss, 'mlogloss')
-.describe('Multiclass negative loglikelihood.')
-.set_body([](const char* param) { return new EvalMultiLogLoss(); });
-}  // namespace metric
-}  // namespace xgboost
-
-    
-    	extern jobject getLoadLibraries(JNIEnv *_env);
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    int Test_Spy_Sample::__TestFun1(int i)
-{
-    SPY_HOOK_THIS_API(__TestFun1, i);
-    xinfo2(TSF'Test');
-    return i+1;
+    THDTensorDescriptor THDTensorDescriptor_newFromTHCudaShortTensor(THCudaShortTensor *tensor) {
+  return at::getType(at::Backend::CUDA, at::ScalarType::Short).unsafeTensorFromTH((void*)tensor, true);
 }
-
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    
-#define DEFINE_HAS_MEMBER_WITH_TYPE(member_name, member_type) \
-    template <typename T>\
-    class has_##member_name {\
-      private:\
-        struct yes_type { char x[1]; };\
-        struct no_type { char x[2]; };\
-        template <member_type (T::*)> struct tester;\
-        template <typename U> static yes_type test(tester<&U::member_name>*);\
-        template <typename U> static no_type test(...);\
-      public:\
-        static const bool value = (sizeof(test<T>(0)) == sizeof(yes_type));\
-    };
-    
-        JNIEnv* GetEnv();
-    int Status();
