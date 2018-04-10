@@ -1,302 +1,186 @@
 
         
-        #include <google/protobuf/stubs/logging.h>
-#include <google/protobuf/stubs/common.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/pyext/message.h>
-#include <google/protobuf/pyext/scoped_pyobject_ptr.h>
-    
-    #include <string>
-    
-      std::string namespace_;
-  std::string reflectionClassname_;
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/wire_format.h>
-    
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
-}
-    
-    #include <string>
-#include <google/protobuf/compiler/code_generator.h>
-    
-    #endif // incl_HPHP_TIMER_H_
-
-    
-      /**
-   * Get a description of the type of transport.
-   */
-  String describe() const override {
-    return s_pagelet;
-  }
-    
-    void Vunit::freeScratchBlock(Vlabel l) {
-  // This will leak blocks if anything's been added since the corresponding
-  // call to makeScratchBlock(), but it's harmless.
-  if (l == blocks.size() - 1) blocks.pop_back();
-}
-    
-      // We lower Switch to a series of comparisons if any of the successors are in
-  // included in the region.
-  auto const shouldLower =
-    std::any_of(offsets.begin(), offsets.end(), [&](Offset o) {
-      SrcKey sk(curSrcKey(env), bcOff(env) + o);
-      return env.irb->hasBlock(sk);
-    });
-  if (shouldLower && profile.optimizing()) {
-    auto const values = sortedSwitchProfile(profile, iv.size());
-    FTRACE(2, 'Switch profile data for Switch @ {}\n', bcOff(env));
-    for (UNUSED auto const& val : values) {
-      FTRACE(2, '  case {} hit {} times\n', val.caseIdx, val.count);
-    }
+        TEST(EnvPosixTest, TestOpenOnRead) {
+  // Write some test data to a single file that will be opened |n| times.
+  std::string test_dir;
+  ASSERT_OK(env_->GetTestDirectory(&test_dir));
+  std::string test_file = test_dir + '/open_on_read.txt';
     }
     
-    /*
- * Returns an IR block corresponding to the given bytecode offset. If the block
- * starts with a DefLabel expecting a StkPtr, this function will return an
- * intermediate block that passes the current sp.
- */
-Block* getBlock(IRGS& env, Offset offset);
     
-    
-    {
-    {///////////////////////////////////////////////////////////////////////////////
-}}
-#endif
-
-    
-    namespace {
-void freezeClusters(const TargetGraph& cg, std::vector<Cluster>& clusters) {
-  uint32_t totalSize = 0;
-  std::sort(clusters.begin(), clusters.end(), compareClustersDensity);
-  for (auto& cluster : clusters) {
-    uint32_t newSize = totalSize + cluster.size;
-    if (newSize > kFrozenPages * kPageSize) break;
-    cluster.frozen = true;
-    totalSize = newSize;
-    auto fid = cluster.targets[0];
-    HFTRACE(1, 'freezing cluster for func %d, size = %u, samples = %u)\n',
-            fid, cg.targets[fid].size, cg.targets[fid].samples);
-  }
-}
-    }
-    
-    bool js_cocos2dx_builder_CCBAnimationManager_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_builder_CCBAnimationManager_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_builder_CCBAnimationManager(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_builder_CCBAnimationManager_moveAnimationsFromNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setAutoPlaySequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_actionForSoundChannel(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setBaseValue(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getLastCompletedSequenceName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setRootNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceNamedTweenDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentOutletName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRootContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setDocumentControllerName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_actionForCallbackChannel(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_init(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getKeyframeCallbacks(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setRootContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceIdTweenDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRunningSequenceName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getAutoPlaySequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRootNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setDelegate(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getSequenceDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceNamed(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getSequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setSequences(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_debug(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentControllerName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_CCBAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    bool js_cocos2dx_physics3d_Physics3DSliderConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DSliderConstraint_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DSliderConstraint(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setPoweredAngMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingLimAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionDirLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getLinearPos(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetA(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetB(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setPoweredLinMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingDirAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionLimLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessLimLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getAngularPos(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionLimAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setUpperLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingDirLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUpperAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingDirLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessDirAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getPoweredAngMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setLowerAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setUpperAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingLimAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionLimAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setLowerLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionDirLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getLowerLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessLimLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessDirAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getPoweredLinMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingDirAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setFrames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUpperLinLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessLimAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionDirAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingLimLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getLowerAngLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionDirAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionLimLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingOrthoLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingLimLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessDirLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessDirLin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessLimAng(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DSliderConstraint_Physics3DSliderConstraint(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    
-    
-    
-    
-    
-    
-    {		Test::Step(settings);
-		m_debugDraw.DrawString(5, m_textLine, 'Keys: (d) dynamic, (s) static, (k) kinematic');
-		m_textLine += DRAW_STRING_NEW_LINE;
-	}
-    
-    
-    {	bool m_broke;
-	bool m_break;
+    { private:
+  // Dummy head of doubly-linked list of snapshots
+  SnapshotImpl list_;
 };
     
-    #ifndef CANTILEVER_H
-#define CANTILEVER_H
-    
-    			b2RevoluteJointDef jd;
-    
-    #include <vector>
-    
-    #endif  // GUETZLI_DCT_DOUBLE_H_
-
-    
-    #include <math.h>
-    
-    namespace guetzli {
-    }
-    
-    #ifndef GUETZLI_JPEG_ERROR_H_
-#define GUETZLI_JPEG_ERROR_H_
-    
-      void ApplyGlobalQuantization(const int q[3][kDCTBlockSize]);
-    
-    // Copyright (C) 2015 by Giovanni Zito
-// This file is part of ImGui
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-        // FreeType glyph rasterizer.
-    // NB: No ctor/dtor, explicitly call Init()/Shutdown()
-    struct FreeTypeFont
-    {
-        bool        Init(const ImFontConfig& cfg, unsigned int extra_user_flags);   // Initialize from an external data buffer. Doesn't copy data, and you must ensure it stays valid up to this object lifetime.
-        void        Shutdown();
-        void        SetPixelHeight(int pixel_height);                               // Change font pixel size. All following calls to RasterizeGlyph() will use this size
-    }
-    
-        // Main loop
-    while (!glfwWindowShouldClose(window))
-    {
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        glfwPollEvents();
-        ImGui_ImplGlfwGL3_NewFrame();
-    }
-    
-            // 1. Show a simple window.
-        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    }
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    //---- Tip: You can add extra functions within the ImGui:: namespace, here or in your own headers files.
-/*
-namespace ImGui
-{
-    void MyFunction(const char* name, const MyMatrix44& v);
+    static void TestEncodeDecode(const VersionEdit& edit) {
+  std::string encoded, encoded2;
+  edit.EncodeTo(&encoded);
+  VersionEdit parsed;
+  Status s = parsed.DecodeFrom(encoded);
+  ASSERT_TRUE(s.ok()) << s.ToString();
+  parsed.EncodeTo(&encoded2);
+  ASSERT_EQ(encoded, encoded2);
 }
-*/
+    
+      Benchmark()
+  : db_(NULL),
+    db_num_(0),
+    num_(FLAGS_num),
+    reads_(FLAGS_reads < 0 ? FLAGS_num : FLAGS_reads),
+    bytes_(0),
+    rand_(301) {
+    std::vector<std::string> files;
+    std::string test_dir;
+    Env::Default()->GetTestDirectory(&test_dir);
+    Env::Default()->GetChildren(test_dir, &files);
+    if (!FLAGS_use_existing_db) {
+      for (int i = 0; i < files.size(); i++) {
+        if (Slice(files[i]).starts_with('dbbench_sqlite3')) {
+          std::string file_name(test_dir);
+          file_name += '/';
+          file_name += files[i];
+          Env::Default()->DeleteFile(file_name.c_str());
+        }
+      }
+    }
+  }
+    
+     private:
+  const Comparator* comparator_;
+  std::string data_;
+  Block* block_;
+    
+    const char* GetVarint64Ptr(const char* p, const char* limit, uint64_t* value) {
+  uint64_t result = 0;
+  for (uint32_t shift = 0; shift <= 63 && p < limit; shift += 7) {
+    uint64_t byte = *(reinterpret_cast<const unsigned char*>(p));
+    p++;
+    if (byte & 128) {
+      // More bytes are present
+      result |= ((byte & 127) << shift);
+    } else {
+      result |= (byte << shift);
+      *value = result;
+      return reinterpret_cast<const char*>(p);
+    }
+  }
+  return NULL;
+}
+    
+    namespace leveldb {
+    }
+    
+    
+    {// Enable LOG(CONSOLE) for print messages to console.
+#define LOG_CONSOLE ::xgboost::ConsoleLogger()
+// Enable LOG(TRACKER) for print messages to tracker
+#define LOG_TRACKER ::xgboost::TrackerLogger()
+}  // namespace xgboost.
+#endif  // XGBOOST_LOGGING_H_
 
     
-            D3DCompile(vertexShader, strlen(vertexShader), NULL, NULL, NULL, 'main', 'vs_4_0', 0, 0, &g_pVertexShaderBlob, NULL);
-        if (g_pVertexShaderBlob == NULL) // NB: Pass ID3D10Blob* pErrorBlob to D3DCompile() to get error showing in (const char*)pErrorBlob->GetBufferPointer(). Make sure to Release() the blob!
-            return false;
-        if (g_pd3dDevice->CreateVertexShader((DWORD*)g_pVertexShaderBlob->GetBufferPointer(), g_pVertexShaderBlob->GetBufferSize(), &g_pVertexShader) != S_OK)
-            return false;
+     protected:
+  /*!
+   * \brief to be implemented by subclass,
+   * get next token, return EOF if end of file
+   */
+  virtual char GetChar(void) = 0;
+  /*! \brief to be implemented by child, check if end of stream */
+  virtual bool IsEnd(void) = 0;
+    
+    
+    {  friend std::ostream &operator<<(std::ostream &os,
+                                  const bst_gpair_internal<T> &g) {
+    os << g.GetGrad() << '/' << g.GetHess();
+    return os;
+  }
+};
+    
+    // Saves the COM marker segment as a string to *jpg.
+bool ProcessCOM(const uint8_t* data, const size_t len, size_t* pos,
+                JPEGData* jpg) {
+  VERIFY_LEN(2);
+  size_t marker_len = ReadUint16(data, pos);
+  VERIFY_INPUT(marker_len, 2, 65535, MARKER_LEN);
+  VERIFY_LEN(marker_len - 2);
+  std::string com_str(reinterpret_cast<const char*>(
+      &data[*pos - 2]), marker_len);
+  *pos += marker_len - 2;
+  jpg->com_data.push_back(com_str);
+  return true;
+}
+    
+      // Sets the coordinates of the current macro-block for the purpose of
+  // CompareBlock() calls.
+  virtual void SwitchBlock(int block_x, int block_y,
+                           int factor_x, int factor_y) = 0;
+    
+    
+    {}  // namespace guetzli
+    
+      tmp0 = in[4 * stride];
+  tmp1 = kIDCTMatrix[ 4] * tmp0;
+  out[0] += tmp1;
+  out[1] -= tmp1;
+  out[2] -= tmp1;
+  out[3] += tmp1;
+  out[4] += tmp1;
+  out[5] -= tmp1;
+  out[6] -= tmp1;
+  out[7] += tmp1;
+    
+    
+    {}  // namespace guetzli
+    
+    // Creates a JPEG from the rgb pixel data. Returns true on success. The given
+// quantization table must have 3 * kDCTBlockSize values.
+bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     const int* quant, JPEGData* jpg);
+    
+    #endif  // GUETZLI_JPEG_ERROR_H_
+
+    
+    AsyncIOOp::~AsyncIOOp() {
+  CHECK_NE(state_, State::PENDING);
+}
+    
+      std::shared_ptr<LogHandler> createHandler(const Options& options) override;
+    
+    namespace folly {
+    }
+    
+    
+    {private:
+  uint8_t Size = 0;
+  uint8_t Data[kMaxSize];
+};
+    
+    long GetEpoch(const std::string &Path) {
+  struct stat St;
+  if (stat(Path.c_str(), &St))
+    return 0;  // Can't stat, be conservative.
+  return St.st_mtime;
+}
+    
+    void ListFilesInDirRecursive(const std::string &Dir, long *Epoch,
+                             std::vector<std::string> *V, bool TopDir) {
+  auto E = GetEpoch(Dir);
+  if (Epoch)
+    if (E && *Epoch >= E) return;
+    }
+    
+    // Crash on a single malloc that exceeds the rss limit.
+void Fuzzer::HandleMalloc(size_t Size) {
+  if (!Options.RssLimitMb || (Size >> 20) < (size_t)Options.RssLimitMb)
+    return;
+  Printf('==%d== ERROR: libFuzzer: out-of-memory (malloc(%zd))\n', GetPid(),
+         Size);
+  Printf('   To change the out-of-memory limit use -rss_limit_mb=<N>\n\n');
+  if (EF->__sanitizer_print_stack_trace)
+    EF->__sanitizer_print_stack_trace();
+  DumpCurrentUnit('oom-');
+  Printf('SUMMARY: libFuzzer: out-of-memory\n');
+  PrintFinalStats();
+  _Exit(Options.ErrorExitCode); // Stop right now.
+}
