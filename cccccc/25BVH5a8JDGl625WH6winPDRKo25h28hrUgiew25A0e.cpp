@@ -1,300 +1,338 @@
 
         
-        // To write value-parameterized tests, first you should define a fixture
-// class. It is usually derived from testing::TestWithParam<T> (see below for
-// another inheritance scheme that's sometimes useful in more complicated
-// class hierarchies), where the type of your parameter values.
-// TestWithParam<T> is itself derived from testing::Test. T can be any
-// copyable type. If it's a raw pointer, you are responsible for managing the
-// lifespan of the pointed values.
+        #ifndef TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
+#define TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
     
-    // ValuesIn() function allows generation of tests with parameters coming from
-// a container.
-//
-// Synopsis:
-// ValuesIn(const T (&array)[N])
-//   - returns a generator producing sequences with elements from
-//     a C-style array.
-// ValuesIn(const Container& container)
-//   - returns a generator producing sequences with elements from
-//     an STL-style container.
-// ValuesIn(Iterator begin, Iterator end)
-//   - returns a generator producing sequences with elements from
-//     a range [begin, end) defined by a pair of STL-style iterators. These
-//     iterators can also be plain C pointers.
-//
-// Please note that ValuesIn copies the values from the containers
-// passed in and keeps them to generate tests in RUN_ALL_TESTS().
-//
-// Examples:
-//
-// This instantiates tests from test case StringTest
-// each with C-string values of 'foo', 'bar', and 'baz':
-//
-// const char* strings[] = {'foo', 'bar', 'baz'};
-// INSTANTIATE_TEST_CASE_P(StringSequence, SrtingTest, ValuesIn(strings));
-//
-// This instantiates tests from test case StlStringTest
-// each with STL strings with values 'a' and 'b':
-//
-// ::std::vector< ::std::string> GetParameterStrings() {
-//   ::std::vector< ::std::string> v;
-//   v.push_back('a');
-//   v.push_back('b');
-//   return v;
-// }
-//
-// INSTANTIATE_TEST_CASE_P(CharSequence,
-//                         StlStringTest,
-//                         ValuesIn(GetParameterStrings()));
-//
-//
-// This will also instantiate tests from CharTest
-// each with parameter values 'a' and 'b':
-//
-// ::std::list<char> GetParameterChars() {
-//   ::std::list<char> list;
-//   list.push_back('a');
-//   list.push_back('b');
-//   return list;
-// }
-// ::std::list<char> l = GetParameterChars();
-// INSTANTIATE_TEST_CASE_P(CharSequence2,
-//                         CharTest,
-//                         ValuesIn(l.begin(), l.end()));
-//
-template <typename ForwardIterator>
-internal::ParamGenerator<
-  typename ::testing::internal::IteratorTraits<ForwardIterator>::value_type>
-ValuesIn(ForwardIterator begin, ForwardIterator end) {
-  typedef typename ::testing::internal::IteratorTraits<ForwardIterator>
-      ::value_type ParamType;
-  return internal::ParamGenerator<ParamType>(
-      new internal::ValuesInIteratorRangeGenerator<ParamType>(begin, end));
-}
+    #include <string>
     
-    // A helper class for implementing EXPECT_FATAL_FAILURE() and
-// EXPECT_NONFATAL_FAILURE().  Its destructor verifies that the given
-// TestPartResultArray contains exactly one failure that has the given
-// type and contains the given substring.  If that's not the case, a
-// non-fatal failure will be generated.
-class GTEST_API_ SingleFailureChecker {
+    class SmoothHingeLossUpdater : public DualLossUpdater {
  public:
-  // The constructor remembers the arguments.
-  SingleFailureChecker(const TestPartResultArray* results,
-                       TestPartResult::Type type,
-                       const string& substr);
-  ~SingleFailureChecker();
- private:
-  const TestPartResultArray* const results_;
-  const TestPartResult::Type type_;
-  const string substr_;
+  // Computes the updated dual variable (corresponding) to a single example. The
+  // updated dual value maximizes the objective function of the dual
+  // optimization problem associated with smooth hinge loss. The computations
+  // are detailed in readme.md.
+  double ComputeUpdatedDual(const int num_partitions, const double label,
+                            const double example_weight,
+                            const double current_dual, const double wx,
+                            const double weighted_example_norm) const final {
+    // Intutitvely there are 3 cases:
+    // a. new optimal value of the dual variable falls within the admissible
+    // range [0, 1]. In this case we set new dual to this value.
+    // b. new optimal value is < 0. Then, because of convexity, the optimal
+    // valid value for new dual = 0
+    // c. new optimal value > 1.0. Then new optimal value should be set to 1.0.
+    const double candidate_optimal_dual =
+        current_dual +
+        (label - wx - gamma * current_dual) /
+            (num_partitions * example_weight * weighted_example_norm + gamma);
+    if (label * candidate_optimal_dual < 0) {
+      return 0.0;
+    }
+    if (label * candidate_optimal_dual > 1.0) {
+      return label;
+    }
+    return candidate_optimal_dual;
+  }
     }
     
-    #ifndef GTEST_INCLUDE_GTEST_GTEST_TYPED_TEST_H_
-#define GTEST_INCLUDE_GTEST_GTEST_TYPED_TEST_H_
     
-    #define GTEST_MESSAGE_AT_(file, line, message, result_type) \
-  ::testing::internal::AssertHelper(result_type, file, line, message) \
-    = ::testing::Message()
-    
-      bool operator==(T* p) const { return value_ == p; }
-  bool operator!=(T* p) const { return value_ != p; }
-  template <typename U>
-  bool operator==(linked_ptr<U> const& ptr) const {
-    return value_ == ptr.get();
+    {  template <typename Packet>
+  inline Packet packetOp(const Packet& y) const {
+    const Packet one = internal::pset1<Packet>(1);
+    return internal::pmul(internal::psub(one, y), y);
   }
-  template <typename U>
-  bool operator!=(linked_ptr<U> const& ptr) const {
-    return value_ != ptr.get();
+};
+    
+      // If instruction is part of inputs, don't reset the bit_vector.
+  if (std::find(inputs.begin(), inputs.end(), instruction) == inputs.end()) {
+    bit_vector.SetToZero();
   }
-    
-    
-    {    const ParamGeneratorInterface<ParamType>* const base_;
-    // begin[i]_ and end[i]_ define the i-th range that Iterator traverses.
-    // current[i]_ is the actual traversing iterator.
-    const typename ParamGenerator<T1>::iterator begin1_;
-    const typename ParamGenerator<T1>::iterator end1_;
-    typename ParamGenerator<T1>::iterator current1_;
-    const typename ParamGenerator<T2>::iterator begin2_;
-    const typename ParamGenerator<T2>::iterator end2_;
-    typename ParamGenerator<T2>::iterator current2_;
-    const typename ParamGenerator<T3>::iterator begin3_;
-    const typename ParamGenerator<T3>::iterator end3_;
-    typename ParamGenerator<T3>::iterator current3_;
-    const typename ParamGenerator<T4>::iterator begin4_;
-    const typename ParamGenerator<T4>::iterator end4_;
-    typename ParamGenerator<T4>::iterator current4_;
-    const typename ParamGenerator<T5>::iterator begin5_;
-    const typename ParamGenerator<T5>::iterator end5_;
-    typename ParamGenerator<T5>::iterator current5_;
-    const typename ParamGenerator<T6>::iterator begin6_;
-    const typename ParamGenerator<T6>::iterator end6_;
-    typename ParamGenerator<T6>::iterator current6_;
-    const typename ParamGenerator<T7>::iterator begin7_;
-    const typename ParamGenerator<T7>::iterator end7_;
-    typename ParamGenerator<T7>::iterator current7_;
-    const typename ParamGenerator<T8>::iterator begin8_;
-    const typename ParamGenerator<T8>::iterator end8_;
-    typename ParamGenerator<T8>::iterator current8_;
-    const typename ParamGenerator<T9>::iterator begin9_;
-    const typename ParamGenerator<T9>::iterator end9_;
-    typename ParamGenerator<T9>::iterator current9_;
-    ParamType current_value_;
-  };  // class CartesianProductGenerator9::Iterator
+  bit_vector.Set(GetIndex(instruction));
+  for (const HloInstruction* input : inputs) {
+    bit_vector.OrWith(GetBitVector(input));
+  }
     
     
     {
-    {
-    {        int i = 0;
-        for (typename ParamGenerator<ParamType>::iterator param_it =
-                 generator.begin();
-             param_it != generator.end(); ++param_it, ++i) {
-          Message test_name_stream;
-          test_name_stream << test_info->test_base_name << '/' << i;
-          MakeAndRegisterTestInfo(
-              test_case_name.c_str(),
-              test_name_stream.GetString().c_str(),
-              NULL,  // No type parameter.
-              PrintToString(*param_it).c_str(),
-              GetTestCaseTypeId(),
-              TestCase::SetUpTestCase,
-              TestCase::TearDownTestCase,
-              test_info->test_meta_factory->CreateTestFactory(*param_it));
-        }  // for param_it
-      }  // for gen_it
-    }  // for test_it
-  }  // RegisterTests
-    
-    // <regex.h> is not available on Windows.  Use our own simple regex
-// implementation instead.
-# define GTEST_USES_SIMPLE_RE 1
-    
-    // A sample program demonstrating using Google C++ testing framework.
-//
-// Author: wan@google.com (Zhanyong Wan)
-    
-      /**
-   * Invoked when there is no data to be read or written and the stream is
-   * closed successfully remotely and locally. Once invoked, no further callback
-   * methods will be invoked.
-   */
-  void (*on_succeded)(bidirectional_stream* stream);
-    
-    #endif
+    {}  // namespace ffmpeg
+}  // namespace tensorflow
 
     
-    std::string GetDbFileContent(int argc, char** argv);
-    
-      bool Generate(const grpc::protobuf::FileDescriptor* file,
-                const grpc::string& parameter,
-                grpc::protobuf::compiler::GeneratorContext* context,
-                grpc::string* error) const;
-    
-    class CodegenTestMinimal : public ::testing::Test {};
-    
-    #ifndef TEST_QPS_STATS_UTILS_H
-#define TEST_QPS_STATS_UTILS_H
-    
-    #ifndef TEST_QPS_USAGE_TIMER_H
-#define TEST_QPS_USAGE_TIMER_H
-    
-    grpc::string DescribeService(const grpc::protobuf::ServiceDescriptor* service) {
-  grpc::string result;
-  if (service->options().deprecated()) {
-    result.append('DEPRECATED\n');
-  }
-  result.append('filename: ' + service->file()->name() + '\n');
+     protected:
+  // Check if data0.shape[indices0.dims():] == data1.shape[indices1.dims():]
+  static bool SameExtraShape(const Tensor& data0, const Tensor& indices0,
+                             const Tensor& data1, const Tensor& indices1) {
+    const int extra0 = data0.dims() - indices0.dims();
+    const int extra1 = data1.dims() - indices1.dims();
+    if (extra0 != extra1) return false;
+    for (int i = 0; i < extra0; i++) {
+      if (data0.dim_size(indices0.dims() + i) !=
+          data1.dim_size(indices1.dims() + i)) {
+        return false;
+      }
     }
+    return true;
+  }
     
      private:
-  SubProcess(const SubProcess& other);
-  SubProcess& operator=(const SubProcess& other);
+  const scoped_refptr<base::TaskRunner> file_task_runner_;
     
-      std::shared_ptr<ServerCredentials> GetServerCredentials(
-      const grpc::string& type) override {
-    if (type == grpc::testing::kInsecureCredentialsType) {
-      return InsecureServerCredentials();
-    } else if (type == grpc::testing::kTlsCredentialsType) {
-      SslServerCredentialsOptions::PemKeyCertPair pkcp = {test_server1_key,
-                                                          test_server1_cert};
-      SslServerCredentialsOptions ssl_opts;
-      ssl_opts.pem_root_certs = '';
-      ssl_opts.pem_key_cert_pairs.push_back(pkcp);
-      return SslServerCredentials(ssl_opts);
-    } else {
-      std::unique_lock<std::mutex> lock(mu_);
-      auto it(std::find(added_secure_type_names_.begin(),
-                        added_secure_type_names_.end(), type));
-      if (it == added_secure_type_names_.end()) {
-        gpr_log(GPR_ERROR, 'Unsupported credentials type %s.', type.c_str());
-        return nullptr;
+    namespace atom {
+    }
+    
+    #endif  // ATOM_BROWSER_NET_URL_REQUEST_ASYNC_ASAR_JOB_H_
+
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(URLRequestStringJob);
+};
+    
+      // Called by NativeWindow when it show/hides.
+  void OnWindowMapped();
+  void OnWindowUnmapped();
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(NativeFrameView);
+};
+    
+    struct netlinkrequest {
+	nlmsghdr header;
+	ifaddrmsg msg;
+};
+    
+    
+    {	if (ret < 0 && ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
+		_print_error(ret);
+		disconnect_from_stream();
+		return;
+	}
+}
+    
+    #ifndef STREAM_PEER_OPEN_SSL_H
+#define STREAM_PEER_OPEN_SSL_H
+    
+    
+    {	doc = memnew(DocData);
+	doc->generate(true);
+	DocData compdoc;
+	compdoc.load_compressed(_doc_data_compressed, _doc_data_compressed_size, _doc_data_uncompressed_size);
+	doc->merge_from(compdoc); //ensure all is up to date
+}
+    
+    			Ref<NavigationMesh> nmesh = memnew(NavigationMesh);
+    
+    			anim_tree->transition_node_delete_input(rclick_node, rclick_slot);
+			update();
+		} break;
+		case NODE_SET_AUTOADVANCE: {
+    
+    
+    {      if (contents_.size() < n) {
+        n = contents_.size();
+        returned_partial_ = true;
       }
-      return added_secure_type_providers_[it - added_secure_type_names_.begin()]
-          ->GetServerCredentials();
-    }
-  }
-  std::vector<grpc::string> GetSecureCredentialsTypeList() override {
-    std::vector<grpc::string> types;
-    types.push_back(grpc::testing::kTlsCredentialsType);
-    std::unique_lock<std::mutex> lock(mu_);
-    for (auto it = added_secure_type_names_.begin();
-         it != added_secure_type_names_.end(); it++) {
-      types.push_back(*it);
-    }
-    return types;
-  }
-    
-    struct Barrier {
-  Barrier() : _count(0) {}
-  Barrier(std::size_t count) : _count(count) {}
+      *result = Slice(contents_.data(), n);
+      contents_.remove_prefix(n);
+      return Status::OK();
     }
     
-    void test_allReduce_group(std::shared_ptr<thd::DataChannel> data_channel,
-                          THDGroup group, std::vector<thd::rank_type> group_ranks) {
-  if (contains(group_ranks, data_channel->getRank())) {
-    auto int_tensor = buildTensor({1, 2, 3, 4, 5, 6, 7, 100}, 10);
-    data_channel->allReduce(*int_tensor, THDReduceOp::THDReduceSUM, group);
-    ASSERT_TENSOR_VALUE(int, *int_tensor, 10 * group_ranks.size())
-  } else {
-    auto int_tensor = buildTensor({1, 2, 3, 4, 5, 6, 7, 100}, 1000);
-    data_channel->allReduce(*int_tensor, THDReduceOp::THDReduceSUM, group);
-    ASSERT_TENSOR_VALUE(int, *int_tensor, 1000)
+    
+    {  SnapshotList* list_;                 // just for sanity checks
+};
+    
+      for (size_t i = 0; i < compact_pointers_.size(); i++) {
+    PutVarint32(dst, kCompactPointer);
+    PutVarint32(dst, compact_pointers_[i].first);  // level
+    PutLengthPrefixedSlice(dst, compact_pointers_[i].second.Encode());
+  }
+    
+    TEST(FindFileTest, Single) {
+  Add('p', 'q');
+  ASSERT_EQ(0, Find('a'));
+  ASSERT_EQ(0, Find('p'));
+  ASSERT_EQ(0, Find('p1'));
+  ASSERT_EQ(0, Find('q'));
+  ASSERT_EQ(1, Find('q1'));
+  ASSERT_EQ(1, Find('z'));
+    }
+    
+     public:
+  RandomGenerator() {
+    // We use a limited amount of data over and over again and ensure
+    // that it is larger than the compression window (32KB), and also
+    // large enough to serve all typical value sizes we want to write.
+    Random rnd(301);
+    std::string piece;
+    while (data_.size() < 1048576) {
+      // Add a short fragment that is as compressible as specified
+      // by FLAGS_compression_ratio.
+      test::CompressibleString(&rnd, FLAGS_compression_ratio, 100, &piece);
+      data_.append(piece);
+    }
+    pos_ = 0;
+  }
+    
+      // Check that the file exists.
+  ASSERT_TRUE(env_->FileExists('/dir/f'));
+  ASSERT_OK(env_->GetFileSize('/dir/f', &file_size));
+  ASSERT_EQ(0, file_size);
+  ASSERT_OK(env_->GetChildren('/dir', &children));
+  ASSERT_EQ(1, children.size());
+  ASSERT_EQ('f', children[0]);
+    
+      // Check second filter
+  ASSERT_TRUE(reader.KeyMayMatch(3100, 'box'));
+  ASSERT_TRUE(! reader.KeyMayMatch(3100, 'foo'));
+  ASSERT_TRUE(! reader.KeyMayMatch(3100, 'bar'));
+  ASSERT_TRUE(! reader.KeyMayMatch(3100, 'hello'));
+    
+    namespace leveldb {
+    }
+    
+      Slice block_contents;
+  CompressionType type = r->options.compression;
+  // TODO(postrelease): Support more compression options: zlib?
+  switch (type) {
+    case kNoCompression:
+      block_contents = raw;
+      break;
+    }
+    
+      memset(buf, 0xff, sizeof(buf));
+  ASSERT_EQ(0x62a8ab43, Value(buf, sizeof(buf)));
+    
+    #include 'leveldb/env.h'
+    
+    #include <boost/algorithm/string/trim.hpp>
+#include <boost/lexical_cast.hpp>
+    
+    #pragma once
+    
+    /**
+ * @brief Create an osquery extension 'module', if an expression is true.
+ *
+ * This is a helper testing wrapper around CREATE_MODULE and DECLARE_MODULE.
+ * It allows unit and integration tests to generate global construction code
+ * that depends on data/variables available during global construction.
+ *
+ * And example use includes checking if a process environment variable is
+ * defined. If defined the module is declared.
+ */
+#define CREATE_MODULE_IF(expr, name, version, min_sdk_version)                 \
+  extern 'C' EXPORT_FUNCTION void initModule(void);                            \
+  struct osquery_InternalStructCreateModule {                                  \
+    osquery_InternalStructCreateModule(void) {                                 \
+      if ((expr)) {                                                            \
+        Registry::get().declareModule(                                         \
+            name, version, min_sdk_version, OSQUERY_SDK_VERSION);              \
+      }                                                                        \
+    }                                                                          \
+  };                                                                           \
+  static osquery_InternalStructCreateModule osquery_internal_module_instance_;
+    
+      /**
+   * @brief A getter for the message property
+   *
+   * @return a string representing arbitrary additional information about the
+   * success or failure of an operation. On successful operations, the idiom
+   * is for the message to be 'OK'
+   */
+  std::string getMessage() const { return message_; }
+    
+    TEST_F(ViewsConfigParserPluginTests, test_swap_view) {
+  Config c;
+  std::vector<std::string> old_views_vec;
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  old_views_vec.clear();
+  auto s = c.update(getTestConfigMap('view_test.conf'));
+  EXPECT_TRUE(s.ok());
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  EXPECT_EQ(old_views_vec[0], 'config_views.kernel_hashes_new');
+    }
+    
+    #include <string.h>
+#include <time.h>
+    
+    void DropPrivileges::restoreGroups() {
+  if (group_size_ > 0) {
+    setgroups(group_size_, original_groups_);
+    group_size_ = 0;
+    free(original_groups_);
+  }
+  original_groups_ = nullptr;
+}
+    
+    ////////////////////////////////////////////////////////////////////////////////
+/// Disclaimer: This is intended only as a partial stand-in for
+/// std::pmr::memory_resource (C++17) as needed for developing a
+/// hazptr prototype.
+////////////////////////////////////////////////////////////////////////////////
+    
+      /**
+   * If POLLABLE, return a file descriptor that can be passed to poll / epoll
+   * and will become readable when any async IO operations have completed.
+   * If NOT_POLLABLE, return -1.
+   */
+  int pollFd() const {
+    return pollFd_;
+  }
+    
+    #include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+    
+    class FileHandlerFactory::WriterFactory
+    : public StandardLogHandlerFactory::WriterFactory {
+ public:
+  bool processOption(StringPiece name, StringPiece value) override {
+    if (name == 'path') {
+      path_ = value.str();
+      return true;
+    }
+    }
+    }
+    
+      auto basename = message.getFileBaseName();
+  auto headerFormatter = folly::format(
+      '{}{:02d}{:02d} {:02d}:{:02d}:{:02d}.{:06d} {:5d} {}:{}] ',
+      getGlogLevelName(message.getLevel())[0],
+      ltime.tm_mon + 1,
+      ltime.tm_mday,
+      ltime.tm_hour,
+      ltime.tm_min,
+      ltime.tm_sec,
+      usecs.count(),
+      message.getThreadID(),
+      basename,
+      message.getLineNumber());
+    
+      /**
+   * The LogLevel for this category.
+   */
+  LogLevel level{LogLevel::WARNING};
+    
+    
+    {  // Update categoryConfigs_ with all of the entries from the other LogConfig.
+  //
+  // Any entries already present in our categoryConfigs_ are merged: if the new
+  // configuration does not include handler settings our entry's settings are
+  // maintained.
+  for (const auto& entry : other.categoryConfigs_) {
+    auto result = categoryConfigs_.insert(entry);
+    if (!result.second) {
+      auto* existingEntry = &result.first->second;
+      auto oldHandlers = std::move(existingEntry->handlers);
+      *existingEntry = entry.second;
+      if (!existingEntry->handlers.hasValue()) {
+        existingEntry->handlers = std::move(oldHandlers);
+      }
+    }
   }
 }
     
-    constexpr ptrdiff_t STORAGE_SIZE = 10;
-constexpr size_t VEC_SIZE = 3;
+    #include <folly/experimental/logging/LogLevel.h>
     
-    auto ${Storage}::fill(Scalar value) -> ${Storage}& {
-  ${THStorage}_fill(${state,} storage, ${to_th_type}(value.to${ScalarName}()));
-  return *this;
-}
-    
-      // NOTE: this function needs to be thread safe
-  std::shared_ptr<buffer_type> createBuffer(std::size_t bytes, DeviceType device) const {
-    if (device == DeviceType::CPU) {
-      return std::shared_ptr<buffer_type>(new char[bytes],
-                                          std::default_delete<char[]>());
-#ifdef WITH_CUDA
-    } else if (device == DeviceType::CUDA) {
-      buffer_type *buf;
-      THCudaCheck(THCudaMalloc(THDGetCudaState(), (void**)&buf, bytes));
-      return std::shared_ptr<buffer_type>(buf, [](char* ptr) { THCudaFree(THDGetCudaState(), ptr); });
-#endif
-    } else {
-      throw std::runtime_error('unsupported device in GlooCache::createBuffer');
-    }
-  }
-    
-      auto ilen = input_size[0];
-  auto batchSize = input_size[1];
-  auto inputPlanes = input_size[2];
-  auto outputPlanes = weight_size[2];
-  auto kw = weight_size[0];
-  auto olen = input_size[0] - kw + 1 + pad * 2;
-  auto real_pad = (olen - ilen + kw - 1) / 2;
-    
-    THDTensorDescriptor THDTensorDescriptor_newFromTHCudaShortTensor(THCudaShortTensor *tensor) {
-  return at::getType(at::Backend::CUDA, at::ScalarType::Short).unsafeTensorFromTH((void*)tensor, true);
-}
+      bool operator==(const LogHandlerConfig& other) const;
+  bool operator!=(const LogHandlerConfig& other) const;
