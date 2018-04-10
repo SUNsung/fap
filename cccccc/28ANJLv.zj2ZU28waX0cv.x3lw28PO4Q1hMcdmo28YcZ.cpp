@@ -1,206 +1,346 @@
 
         
-        namespace cv
-{
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    // ResourceOpKernel<T> is a virtual base class for resource op implementing
+// interface type T. The inherited op looks up the resource name (determined by
+// ContainerInfo), and creates a new resource if necessary.
+//
+// Requirements:
+//  - Op must be marked as stateful.
+//  - Op must have `container` and `shared_name` attributes. Empty `container`
+//  means using the default container. Empty `shared_name` means private
+//  resource.
+//  - Subclass must override CreateResource().
+//  - Subclass is encouraged to override VerifyResource().
+template <typename T>
+class ResourceOpKernel : public OpKernel {
+ public:
+  explicit ResourceOpKernel(OpKernelConstruction* context) : OpKernel(context) {
+    OP_REQUIRES_OK(context,
+                   context->allocate_persistent(DT_STRING, TensorShape({2}),
+                                                &handle_, nullptr));
+  }
     }
     
-            // Version: 3.1
-        SAMPLER_2D_RECT                  = 0x8B63,
-        SAMPLER_2D_RECT_SHADOW           = 0x8B64,
-        SAMPLER_BUFFER                   = 0x8DC2,
-        INT_SAMPLER_2D_RECT              = 0x8DCD,
-        INT_SAMPLER_BUFFER               = 0x8DD0,
-        UNSIGNED_INT_SAMPLER_2D_RECT     = 0x8DD5,
-        UNSIGNED_INT_SAMPLER_BUFFER      = 0x8DD8,
-        TEXTURE_BUFFER                   = 0x8C2A,
-        MAX_TEXTURE_BUFFER_SIZE          = 0x8C2B,
-        TEXTURE_BINDING_BUFFER           = 0x8C2C,
-        TEXTURE_BUFFER_DATA_STORE_BINDING = 0x8C2D,
-        TEXTURE_RECTANGLE                = 0x84F5,
-        TEXTURE_BINDING_RECTANGLE        = 0x84F6,
-        PROXY_TEXTURE_RECTANGLE          = 0x84F7,
-        MAX_RECTANGLE_TEXTURE_SIZE       = 0x84F8,
-        RED_SNORM                        = 0x8F90,
-        RG_SNORM                         = 0x8F91,
-        RGB_SNORM                        = 0x8F92,
-        RGBA_SNORM                       = 0x8F93,
-        R8_SNORM                         = 0x8F94,
-        RG8_SNORM                        = 0x8F95,
-        RGB8_SNORM                       = 0x8F96,
-        RGBA8_SNORM                      = 0x8F97,
-        R16_SNORM                        = 0x8F98,
-        RG16_SNORM                       = 0x8F99,
-        RGB16_SNORM                      = 0x8F9A,
-        RGBA16_SNORM                     = 0x8F9B,
-        SIGNED_NORMALIZED                = 0x8F9C,
-        PRIMITIVE_RESTART                = 0x8F9D,
-        PRIMITIVE_RESTART_INDEX          = 0x8F9E,
     
-    #  define ASSERT_DEBUG_DEATH(statement, regex) \
-  GTEST_EXECUTE_STATEMENT_(statement, regex)
+    {}  // namespace xla
     
-      // Streams a pointer value to this object.
-  //
-  // This function is an overload of the previous one.  When you
-  // stream a pointer to a Message, this definition will be used as it
-  // is more specialized.  (The C++ Standard, section
-  // [temp.func.order].)  If you stream a non-pointer, then the
-  // previous definition will be used.
-  //
-  // The reason for this overload is that streaming a NULL pointer to
-  // ostream is undefined behavior.  Depending on the compiler, you
-  // may get '0', '(nil)', '(null)', or an access violation.  To
-  // ensure consistent result across compilers, we always treat NULL
-  // as '(null)'.
-  template <typename T>
-  inline Message& operator <<(T* const& pointer) {  // NOLINT
-    if (pointer == NULL) {
-      *ss_ << '(null)';
-    } else {
-      *ss_ << pointer;
+    // A PluginConfig describes the set of plugins to be used by a StreamExecutor
+// instance. Each plugin is defined by an arbitrary identifier, usually best set
+// to the address static member in the implementation (to avoid conflicts).
+//
+// A PluginConfig may be passed to the StreamExecutor constructor - the plugins
+// described therein will be used to provide BLAS, DNN, FFT, and RNG
+// functionality. Platform-appropriate defaults will be used for any un-set
+// libraries. If a platform does not support a specified plugin (ex. cuBLAS on
+// an OpenCL executor), then an error will be logged and no plugin operations
+// will succeed.
+//
+// The StreamExecutor BUILD target does not link ANY plugin libraries - even
+// common host fallbacks! Any plugins must be explicitly linked by dependent
+// targets. See the cuda, opencl and host BUILD files for implemented plugin
+// support (search for 'plugin').
+class PluginConfig {
+ public:
+  // Value specifying the platform's default option for that plugin.
+  static const PluginId kDefault;
     }
-    return *this;
-  }
-#endif  // GTEST_OS_SYMBIAN
     
-    INSTANTIATE_TEST_CASE_P(InstantiationName,
-                        FooTest,
-                        Values('meeny', 'miny', 'moe'));
+      static RecordWriterOptions CreateRecordWriterOptions(
+      const string& compression_type);
     
-    #define EXPECT_NONFATAL_FAILURE_ON_ALL_THREADS(statement, substr) \
-  do {\
-    ::testing::TestPartResultArray gtest_failures;\
-    ::testing::internal::SingleFailureChecker gtest_checker(\
-        &gtest_failures, ::testing::TestPartResult::kNonFatalFailure, \
-        (substr));\
-    {\
-      ::testing::ScopedFakeTestPartResultReporter gtest_reporter(\
-          ::testing::ScopedFakeTestPartResultReporter::INTERCEPT_ALL_THREADS, \
-          &gtest_failures);\
-      if (::testing::internal::AlwaysTrue()) { statement; }\
-    }\
-  } while (::testing::internal::AlwaysFalse())
+    #include 'third_party/eigen3/unsupported/Eigen/CXX11/Tensor'
     
-    // This header implements typed tests and type-parameterized tests.
+        // Validate that data[i].shape = indices[i].shape + constant
+    OP_REQUIRES_OK(c, c->input_list('data', data_inputs));
+    const Tensor& data0 = (*data_inputs)[0];
+    const Tensor& indices0 = (*indices_inputs)[0];
+    for (int input_num = 0; input_num < indices_inputs->size(); input_num++) {
+      const Tensor& indices = (*indices_inputs)[input_num];
+      const Tensor& data = (*data_inputs)[input_num];
+      OP_REQUIRES(
+          c, TensorShapeUtils::StartsWith(data.shape(), indices.shape()),
+          errors::InvalidArgument('data[', input_num,
+                                  '].shape = ', data.shape().DebugString(),
+                                  ' does not start with indices[', input_num,
+                                  '].shape = ', indices.shape().DebugString()));
+      OP_REQUIRES(
+          c, input_num == 0 || SameExtraShape(data0, indices0, data, indices),
+          errors::InvalidArgument(
+              'Need data[0].shape[', indices0.dims(), ':] = data[', input_num,
+              '].shape[', indices.dims(),
+              ':], got data[0].shape = ', data0.shape().DebugString(),
+              ', data[', input_num, '].shape = ', data.shape().DebugString(),
+              ', indices[0].shape = ', indices0.shape().DebugString(),
+              ', indices[', input_num,
+              '].shape = ', indices.shape().DebugString()));
+    }
     
-      // Copy an existing linked_ptr<>, adding ourselves to the list of references.
-  template <typename U> linked_ptr(linked_ptr<U> const& ptr) { copy(&ptr); }
-  linked_ptr(linked_ptr const& ptr) {  // NOLINT
-    assert(&ptr != this);
-    copy(&ptr);
-  }
+    // Generate param traits write methods.
+#include 'ipc/param_traits_write_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
     
-    #ifdef __BORLANDC__
-// string.h is not guaranteed to provide strcpy on C++ Builder.
-# include <mem.h>
+    namespace base {
+class DictionaryValue;
+class ListValue;
+}
+    
+      scoped_ptr<V8ValueConverter> converter(V8ValueConverter::create());
+  converter->SetStripNullFromObjects(true);
+    
+    namespace nwapi {
+    }
+    
+    #ifndef CONTENT_NW_SRC_API_DISPATCHER_H_
+#define CONTENT_NW_SRC_API_DISPATCHER_H_
+    
+      // Remote objects.
+  static void AllocateId(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void AllocateObject(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void DeallocateObject(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void CallObjectMethod(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void CallObjectMethodSync(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void CallStaticMethod(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void CallStaticMethodSync(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void CrashRenderer(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void SetCrashDumpDir(const v8::FunctionCallbackInfo<v8::Value>& args);
+#if defined(OS_MACOSX)
+  static void InitMsgIDMap();
+  static void GetNSStringWithFixup(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void GetNSStringFWithFixup(const v8::FunctionCallbackInfo<v8::Value>& args);
 #endif
     
+    DispatcherHost*
+FindDispatcherHost(content::RenderViewHost* render_view_host) {
+  std::map<content::RenderViewHost*, DispatcherHost*>::iterator it
+    = g_dispatcher_host_map.find(render_view_host);
+  if (it == g_dispatcher_host_map.end())
+    return NULL;
+  return it->second;
+}
     
-    {    return -1;
+    EventListener::~EventListener() {
+  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
+    delete i->second;
+  }
+}
+    
+    #include 'content/nw/src/api/base/base.h'
+#include 'ui/gfx/display_observer.h'
+    
+    
+    {}  // namespace nwapi
+
+    
+       bool HasIcon(int command_id) override;
+    
+    #include 'base/logging.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/nw/src/nw_shell.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/browser/render_widget_host_view.h'
+#include 'ui/gfx/point.h'
+#include 'vector'
+#include 'gtk/gtk.h'
+    
+    void MenuItem::CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) {
+  if (method == 'GetChecked') {
+    result->AppendBoolean(GetChecked());
+  } else {
+    NOTREACHED() << 'Invalid call to MenuItem method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
+    
+      std::string m_url;
+  HeaderMap m_requestHeaders;
+  bool m_get;
+  std::string m_postData;
+  std::string m_remoteHost;
+    
+    
+    {  unsigned next_vr{Vreg::V0};
+  Vlabel entry;
+  jit::vector<Vframe> frames;
+  jit::vector<Vblock> blocks;
+  jit::hash_map<Vconst,Vreg,Vconst::Hash> constToReg;
+  jit::hash_map<size_t,Vconst> regToConst;
+  jit::vector<VregList> tuples;
+  jit::vector<VcallArgs> vcallArgs;
+  jit::vector<VdataBlock> dataBlocks;
+  uint16_t cur_voff{0};  // current instruction index managed by Vout
+  bool padding{false};
+  bool profiling{false};
+  folly::Optional<TransContext> context;
+  StructuredLogEntry* log_entry{nullptr};
+};
+    
+      /* First, try to get user-specific magic file */
+  if ((home = getenv('LOCALAPPDATA')) == NULL) {
+    if ((home = getenv('USERPROFILE')) != NULL)
+      if (asprintf(&tmppath,
+          '%s/Local Settings/Application Data%s', home,
+          hmagic) < 0)
+        tmppath = NULL;
+  } else {
+    if (asprintf(&tmppath, '%s%s', home, hmagic) < 0)
+      tmppath = NULL;
   }
     
+    /*
+ * Emit the prologue dispatch for func which contains dvs DV initializers, and
+ * return its start address.  The `kind' of translation argument is used to
+ * decide what area of the code cache will be used (hot, main, or prof).
+ */
+TCA emitFuncBodyDispatch(Func* func, const DVFuncletsVec& dvs, TransKind kind);
     
-    {  return result;
+    
+    {
+    {  ~CodeCursor() { undo(); }
+};
 }
     
-    void QLSQ::clear() {  // initialize
-  a = 0.0;
-  b = 0.0;
-  c = 0.0;
-  n = 0;                           // No elements.
-  sigx = 0.0;                      // Zero accumulators.
-  sigy = 0.0;
-  sigxx = 0.0;
-  sigxy = 0.0;
-  sigyy = 0.0;
-  sigxxx = 0.0;
-  sigxxy = 0.0;
-  sigxxxx = 0.0;
-}
+    #include 'hphp/util/disasm.h'
     
-    class QRSequenceGenerator {
- public:
-  // Object is initalized with the size of the output range.
-  explicit QRSequenceGenerator(int N) : N_(N), next_num_(0) {
-    num_bits_ = static_cast<int>(ceil(log(static_cast<double>(N)) / log(2.0)));
-  }
+        for (auto it : c2arcs) {
+      auto const c = it.second;
+      auto const c2arc = it.first;
     }
     
-      // Sets the report string to a combined human and machine-readable report
-  // string of the error rates.
-  // Returns false if there is no data, leaving report unchanged, unless
-  // even_if_empty is true.
-  static bool ReportString(bool even_if_empty, const Counts& counts,
-                           STRING* report);
+      static FILE *LightPopenImpl(const char *cmd, const char *type,
+                              const char *cwd);
+  static FILE *HeavyPopenImpl(const char *cmd, const char *type,
+                              const char *cwd);
     
-    // Initialize the table to the given size of feature space.
-void IntFeatureDist::Init(const IntFeatureMap* feature_map) {
-  size_ = feature_map->sparse_size();
-  Clear();
-  feature_map_ = feature_map;
-  features_ = new bool[size_];
-  features_delta_one_ = new bool[size_];
-  features_delta_two_ = new bool[size_];
-  memset(features_, false, size_ * sizeof(features_[0]));
-  memset(features_delta_one_, false, size_ * sizeof(features_delta_one_[0]));
-  memset(features_delta_two_, false, size_ * sizeof(features_delta_two_[0]));
-  total_feature_weight_ = 0.0;
-}
-    
-    class EnvPosixTest {
- public:
-  Env* env_;
-  EnvPosixTest() : env_(Env::Default()) { }
+    void AsyncIOQueue::maybeDequeue() {
+  while (!queue_.empty() && asyncIO_->pending() < asyncIO_->capacity()) {
+    auto& opFactory = queue_.front();
+    auto op = opFactory();
+    queue_.pop_front();
+    }
     }
     
+    // Functions defined in this file are meant to extend the
+// boost::filesystem library; functions will be named according to boost's
+// naming conventions instead of ours.  For convenience, import the
+// boost::filesystem namespace into folly::fs.
+using namespace ::boost::filesystem;
     
-    {      if (contents_.size() < n) {
-        n = contents_.size();
-        returned_partial_ = true;
+      using LogWriter::writeMessage;
+  void writeMessage(folly::StringPiece buffer, uint32_t flags = 0) override;
+  void flush() override;
+    
+    
+    {  // Update categoryConfigs_ with all of the entries from the other LogConfig.
+  //
+  // Any entries already present in our categoryConfigs_ are merged: if the new
+  // configuration does not include handler settings our entry's settings are
+  // maintained.
+  for (const auto& entry : other.categoryConfigs_) {
+    auto result = categoryConfigs_.insert(entry);
+    if (!result.second) {
+      auto* existingEntry = &result.first->second;
+      auto oldHandlers = std::move(existingEntry->handlers);
+      *existingEntry = entry.second;
+      if (!existingEntry->handlers.hasValue()) {
+        existingEntry->handlers = std::move(oldHandlers);
       }
-      *result = Slice(contents_.data(), n);
-      contents_.remove_prefix(n);
-      return Status::OK();
     }
-    
-    static void TestEncodeDecode(const VersionEdit& edit) {
-  std::string encoded, encoded2;
-  edit.EncodeTo(&encoded);
-  VersionEdit parsed;
-  Status s = parsed.DecodeFrom(encoded);
-  ASSERT_TRUE(s.ok()) << s.ToString();
-  parsed.EncodeTo(&encoded2);
-  ASSERT_EQ(encoded, encoded2);
+  }
 }
     
-    namespace leveldb {
-    }
+    #include <string>
+#include <unordered_map>
     
-    // A internal wrapper class with an interface similar to Iterator that
-// caches the valid() and key() results for an underlying iterator.
-// This can help avoid virtual function calls and also gives better
-// cache locality.
-class IteratorWrapper {
+    /**
+ * LogHandler represents a generic API for processing log messages.
+ *
+ * LogHandlers have an associated log level.  The LogHandler will discard any
+ * messages below its log level.  This allows specific LogHandlers to perform
+ * additional filtering of messages even if the messages were enabled at the
+ * LogCategory level.  For instance, a single LogCategory may have two
+ * LogHandlers attached, one that logs locally to a file, and one that sends
+ * messages to a remote logging service.  The local LogHandler may be
+ * configured to record all messages, but the remote LogHandler may want to
+ * only process ERROR messages and above, even when debug logging is enabled
+ * for this LogCategory.
+ *
+ * By default the LogHandler level is set to LogLevel::NONE, which means that
+ * all log messages will be processed.
+ */
+class LogHandler {
  public:
-  IteratorWrapper(): iter_(NULL), valid_(false) { }
-  explicit IteratorWrapper(Iterator* iter): iter_(NULL) {
-    Set(iter);
-  }
-  ~IteratorWrapper() { delete iter_; }
-  Iterator* iter() const { return iter_; }
+  virtual ~LogHandler() = default;
     }
     
-    char* EncodeVarint64(char* dst, uint64_t v) {
-  static const int B = 128;
-  unsigned char* ptr = reinterpret_cast<unsigned char*>(dst);
-  while (v >= B) {
-    *(ptr++) = (v & (B-1)) | B;
-    v >>= 7;
-  }
-  *(ptr++) = static_cast<unsigned char>(v);
-  return reinterpret_cast<char*>(ptr);
+      size_t GetFeature(size_t Idx) const { return InputSizesPerFeature[Idx]; }
+    
+    class Dictionary {
+ public:
+  static const size_t kMaxDictSize = 1 << 14;
+    }
+    
+    #include 'FuzzerExtFunctions.def'
+    
+    
+    {#undef EXT_FUNC
 }
     
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
+    static FILE *OutputFile = stderr;
+    
+    #include 'FuzzerExtFunctions.h'
+#include 'FuzzerIO.h'
+#include <cstdarg>
+#include <cstdio>
+#include <dirent.h>
+#include <fstream>
+#include <iterator>
+#include <libgen.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+    
+    
+    {
+    {      ListFilesInDirRecursive(FileName, Epoch, V, false);
+    }
+    else if (IsFile(FileName, FindInfo.dwFileAttributes))
+      V->push_back(FileName);
+  } while (FindNextFileA(FindHandle, &FindInfo));
+    
+    std::string DescribePC(const char *SymbolizedFMT, uintptr_t PC) {
+  if (!EF->__sanitizer_symbolize_pc) return '<can not symbolize>';
+  char PcDescr[1024];
+  EF->__sanitizer_symbolize_pc(reinterpret_cast<void*>(PC),
+                               SymbolizedFMT, PcDescr, sizeof(PcDescr));
+  PcDescr[sizeof(PcDescr) - 1] = 0;  // Just in case.
+  return PcDescr;
 }
+    
+    
+    {
+    {      (void)sigemptyset(&BlockedSignalsSet);
+      (void)sigaddset(&BlockedSignalsSet, SIGCHLD);
+      if (sigprocmask(SIG_BLOCK, &BlockedSignalsSet, &OldBlockedSignalsSet) ==
+          -1) {
+        Printf('Failed to block SIGCHLD\n');
+        // Try our best to restore the signal handlers.
+        (void)sigaction(SIGQUIT, &OldSigQuitAction, NULL);
+        (void)sigaction(SIGINT, &OldSigIntAction, NULL);
+        (void)posix_spawnattr_destroy(&SpawnAttributes);
+        return -1;
+      }
+    }
+    ++ActiveThreadCount;
+  }
