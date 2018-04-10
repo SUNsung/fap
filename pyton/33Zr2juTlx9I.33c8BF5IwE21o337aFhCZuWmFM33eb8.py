@@ -1,204 +1,91 @@
 
         
-        with open('update/versions.json', 'w') as jsonf:
-    json.dump(versions_info, jsonf, indent=4, sort_keys=True)
+                return '\r\n'.join(headers)
+    
+    from httpie.compat import str
+from httpie.context import Environment
+from httpie.models import HTTPRequest, HTTPResponse
+from httpie.input import (OUT_REQ_BODY, OUT_REQ_HEAD,
+                          OUT_RESP_HEAD, OUT_RESP_BODY)
+from httpie.output.processing import Formatting, Conversion
+    
+        # 'A byte-content-range-spec with a byte-range-resp-spec whose
+    # last- byte-pos value is less than its first-byte-pos value,
+    # or whose instance-length value is less than or equal to its
+    # last-byte-pos value, is invalid. The recipient of an invalid
+    # byte-content-range- spec MUST ignore it and any content
+    # transferred along with it.'
+    if (first_byte_pos >= last_byte_pos or
+            (instance_length is not None and
+             instance_length <= last_byte_pos)):
+        raise ContentRangeError(
+            'Invalid Content-Range returned: %r' % content_range)
+    
+        def _migrate_implicit_content_type(self):
+        '''Migrate the removed implicit_content_type config option'''
+        try:
+            implicit_content_type = self.pop('implicit_content_type')
+        except KeyError:
+            self.save()
+        else:
+            if implicit_content_type == 'form':
+                self['default_options'].insert(0, '--form')
+            self.save()
+            self.load()
 
     
-    import rsa
-import json
-from binascii import hexlify
+                if self.args.auth is None or not plugin.auth_parse:
+                self.args.auth = plugin.get_auth()
+            else:
+                if already_parsed:
+                    # from the URL
+                    credentials = self.args.auth
+                else:
+                    credentials = parse_auth(self.args.auth)
     
-    entries = []
-for v in versions:
-    fields = v.split('.')
-    year, month, day = map(int, fields[:3])
-    faked = 0
-    patchlevel = 0
-    while True:
-        try:
-            datetime.date(year, month, day)
-        except ValueError:
-            day -= 1
-            faked += 1
-            assert day > 0
-            continue
-        break
-    if len(fields) >= 4:
-        try:
-            patchlevel = int(fields[3])
-        except ValueError:
-            patchlevel = 1
-    timestamp = '%04d-%02d-%02dT00:%02d:%02dZ' % (year, month, day, faked, patchlevel)
+    '''Tests for word2vec_optimized module.'''
+    
+        # Evaluate the model.
+    eval_result = classifier.evaluate(
+        input_fn=lambda:iris_data.eval_input_fn(test_x, test_y, args.batch_size))
+    
+      @tf.test.mock.patch.dict(custom_estimator.__dict__,
+                           {'load_data': four_lines_data})
+  def test_custom_estimator(self):
+    custom_estimator.main([None, '--train_steps=1'])
     
     
-def format_size(bytes):
-    return '%s (%d bytes)' % (format_bytes(bytes), bytes)
+def main(_):
+  '''Trains Language Model.'''
+  tf.logging.set_verbosity(tf.logging.INFO)
+  with tf.device(tf.train.replica_device_setter(FLAGS.ps_tasks)):
+    model = graphs.get_model()
+    train_op, loss, global_step = model.language_model_training()
+    train_utils.run_training(train_op, loss, global_step)
     
     
-class TestAllURLsMatching(unittest.TestCase):
-    def setUp(self):
-        self.ies = gen_extractors()
+collect_ignore = [
+    # deprecated or moved modules
+    'scrapy/conf.py',
+    'scrapy/stats.py',
+    'scrapy/project.py',
+    'scrapy/utils/decorator.py',
+    'scrapy/statscol.py',
+    'scrapy/squeue.py',
+    'scrapy/log.py',
+    'scrapy/dupefilter.py',
+    'scrapy/command.py',
+    'scrapy/linkextractor.py',
+    'scrapy/spider.py',
     
-            if check_executable('mplayer', ['-h']):
-            args = [
-                'mplayer', '-really-quiet', '-vo', 'null', '-vc', 'dummy',
-                '-dumpstream', '-dumpfile', tmpfilename, url]
-        elif check_executable('mpv', ['-h']):
-            args = [
-                'mpv', '-really-quiet', '--vo=null', '--stream-dump=' + tmpfilename, url]
-        else:
-            self.report_error('MMS or RTSP download detected but neither 'mplayer' nor 'mpv' could be run. Please install any.')
-            return False
+        def __init__(self):
+        Resource.__init__(self)
+        self.concurrent = 0
+        self.tail = deque(maxlen=100)
+        self._reset_stats()
     
-    
-def gen_extractor_classes():
-    ''' Return a list of supported extractors.
-    The order does matter; the first extractor matched is the one handling the URL.
-    '''
-    return _ALL_CLASSES
-    
-        _TEST = {
-        'url': 'http://www.anitube.se/video/36621',
-        'md5': '59d0eeae28ea0bc8c05e7af429998d43',
-        'info_dict': {
-            'id': '36621',
-            'ext': 'mp4',
-            'title': 'Recorder to Randoseru 01',
-            'duration': 180.19,
-        },
-        'skip': 'Blocked in the US',
-    }
-    
-    from .common import InfoExtractor
-from ..utils import (
-    int_or_none,
-    parse_iso8601,
-    sanitized_Request,
-)
+            if opts.pdb:
+            failure.startDebugMode()
     
     
-    {        webpage = self._download_webpage(url, text_id)
-        sohu_video_info_str = self._search_regex(
-            r'var\s+sohuVideoInfo\s*=\s*({[^}]+});', webpage, 'Sohu video info', default=None)
-        if sohu_video_info_str:
-            sohu_video_info = self._parse_json(
-                sohu_video_info_str, text_id, transform_source=js_to_json)
-            return self.url_result(sohu_video_info['url'], 'Sohu')
-    
-            runtime = self._search_regex(
-            r'Runtime\s*:\s*(.+?) \|', webpage, 'duration', default=None)
-        if runtime:
-            runtime = re.sub(r'[\s-]', '', runtime)
-        duration = parse_duration(runtime)
-        view_count = int_or_none(self._search_regex(
-            r'Views\s*:\s*(\d+)', webpage, 'view count', default=None))
-        comment_count = int_or_none(self._search_regex(
-            r'Comments\s*:\s*(\d+)', webpage, 'comment count', default=None))
-    
-        if WSAAddressToStringA(
-            ctypes.byref(addr),
-            addr_size,
-            None,
-            ip_string,
-            ctypes.byref(ip_string_size)
-    ) != 0:
-        raise socket.error(ctypes.FormatError())
-    
-    This module contains all support classes, which are needed to use recognizers
-generated by ANTLR3.
-    
-            self.inserted = inserted
-    
-            If marker is None:
-        Rewind to the input position of the last marker.
-        Used currently only after a cyclic DFA and just
-        before starting a sem/syn predicate to get the
-        input position back to the start of the decision.
-        Do not 'pop' the marker off the state.  mark(i)
-        and rewind(i) should balance still. It is
-        like invoking rewind(last marker) but it should not 'pop'
-        the marker off.  It's like seek(last marker's input position).       
-	'''
-    
-        def test_same_server(self):
-        from certbot_apache.obj import VirtualHost
-        no_name1 = VirtualHost(
-            'fp', 'vhp', set([self.addr1]), False, False, None)
-        no_name2 = VirtualHost(
-            'fp', 'vhp', set([self.addr2]), False, False, None)
-        no_name3 = VirtualHost(
-            'fp', 'vhp', set([self.addr_default]),
-            False, False, None)
-        no_name4 = VirtualHost(
-            'fp', 'vhp', set([self.addr2, self.addr_default]),
-            False, False, None)
-    
-    # If true, SmartyPants will be used to convert quotes and dashes to
-# typographically correct entities.
-#html_use_smartypants = True
-    
-        def get_all_names_answer(self):
-        '''Returns the set of domain names that the plugin should find'''
-        if self._all_names:
-            return self._all_names
-        else:
-            raise errors.Error('No configuration file loaded')
-    
-        @mock.patch('certbot_compatibility_test.validator.requests.get')
-    def test_redirect_wrong_status_code(self, mock_get_request):
-        mock_get_request.return_value = create_response(
-            201, {'location': 'https://test.com'})
-        self.assertFalse(self.validator.redirect('test.com'))
-    
-        for url in urls:
-        if not url.startswith('http'):
-            print('markdown file name: ' + url)
-            continue
-        if check_live_url(url):
-            print(url)
-        else:
-            print(url, file=sys.stderr)
-    
-    
-class EventNotification( BaseRequest ):
-  def __init__( self, event_name, buffer_number = None, extra_data = None ):
-    super( EventNotification, self ).__init__()
-    self._event_name = event_name
-    self._buffer_number = buffer_number
-    self._extra_data = extra_data
-    self._response_future = None
-    self._cached_response = None
-    
-    
-def _FormatYcmdDebugInfo( ycmd ):
-  python = ycmd[ 'python' ]
-  clang = ycmd[ 'clang' ]
-  message = ( 'Server Python interpreter: {0}\n'
-              'Server Python version: {1}\n'
-              'Server has Clang support compiled in: {2}\n'
-              'Clang version: {3}\n'.format( python[ 'executable' ],
-                                             python[ 'version' ],
-                                             clang[ 'has_support' ],
-                                             clang[ 'version' ] ) )
-  extra_conf = ycmd[ 'extra_conf' ]
-  extra_conf_path = extra_conf[ 'path' ]
-  if not extra_conf_path:
-    message += 'No extra configuration file found\n'
-  elif not extra_conf[ 'is_loaded' ]:
-    message += ( 'Extra configuration file found but not loaded\n'
-                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
-  else:
-    message += ( 'Extra configuration file found and loaded\n'
-                 'Extra configuration path: {0}\n'.format( extra_conf_path ) )
-  return message
-    
-    
-def ExtractKeywordsFromGroup_Basic_test():
-  assert_that( syntax_parse._ExtractKeywordsFromGroup(
-                 syntax_parse.SyntaxGroup( '', [
-                   'foo bar',
-                   'zoo goo',
-                 ] ) ),
-               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
-    
-      Do NOT attach it to test generators but directly to the yielded tests.
+class _BenchServer(object):
