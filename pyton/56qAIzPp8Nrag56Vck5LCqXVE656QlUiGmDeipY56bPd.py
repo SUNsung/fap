@@ -1,214 +1,251 @@
 
         
-        
-if six.PY3:
-    for line in open('tests/py3-ignores.txt'):
-        file_path = line.strip()
-        if file_path and file_path[0] != '#':
-            collect_ignore.append(file_path)
+        versions_info['versions'][version] = new_version
+versions_info['latest'] = version
     
-        def _finish(self, request):
-        self.concurrent -= 1
-        if not request.finished and not request._disconnected:
-            request.finish()
+    if isinstance(helptext, bytes):
+    helptext = helptext.decode('utf-8')
     
-    
-class _BenchSpider(scrapy.Spider):
-    '''A spider that follows all links'''
-    name = 'follow'
-    total = 10000
-    show = 20
-    baseurl = 'http://localhost:8998'
-    link_extractor = LinkExtractor()
-    
-            # start checks
-        if opts.list:
-            for spider, methods in sorted(contract_reqs.items()):
-                if not methods and not opts.verbose:
-                    continue
-                print(spider)
-                for method in sorted(methods):
-                    print('  * %s' % method)
-        else:
-            start = time.time()
-            self.crawler_process.start()
-            stop = time.time()
-    
-        def get(self, key):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                return item.value
-        raise KeyError('Key not found')
-    
-        def __init__(self, MAX_SIZE):
-        self.MAX_SIZE = MAX_SIZE
-        self.size = 0
-        self.lookup = {}
-        self.linked_list = LinkedList()
-    
-        def bfs(self, source, dest):
-        if source is None:
-            return False
-        queue = deque()
-        queue.append(source)
-        source.visit_state = State.visited
-        while queue:
-            node = queue.popleft()
-            print(node)
-            if dest is node:
-                return True
-            for adjacent_node in node.adj_nodes.values():
-                if adjacent_node.visit_state == State.unvisited:
-                    queue.append(adjacent_node)
-                    adjacent_node.visit_state = State.visited
-        return False
-    
-    def kugou_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    if url.lower().find('5sing')!=-1:
-        #for 5sing.kugou.com
-        html=get_html(url)
-        ticket=r1(r''ticket':\s*'(.*)'',html)
-        j=loads(str(b64decode(ticket),encoding='utf-8'))
-        url=j['file']
-        title=j['songName']
-        songtype, ext, size = url_info(url)
-        print_info(site_info, title, songtype, size)
-        if not info_only:
-            download_urls([url], title, ext, size, output_dir, merge=merge)
-    else:
-        #for the www.kugou.com/
-        return kugou_download_playlist(url, output_dir=output_dir, merge=merge, info_only=info_only)
-        # raise NotImplementedError(url)       
-    
-    #----------------------------------------------------------------------
-def showroom_get_roomid_by_room_url_key(room_url_key):
-    '''str->str'''
-    fake_headers_mobile = {
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Charset': 'UTF-8,*;q=0.5',
-        'Accept-Encoding': 'gzip,deflate,sdch',
-        'Accept-Language': 'en-US,en;q=0.8',
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36'
+        params = {
+        'age_limit': age,
+        'skip_download': True,
+        'writeinfojson': True,
+        'outtmpl': '%(id)s.%(ext)s',
     }
-    webpage_url = 'https://www.showroom-live.com/' + room_url_key
-    html = get_content(webpage_url, headers = fake_headers_mobile)
-    roomid = match1(html, r'room\?room_id\=(\d+)')
-    assert roomid
-    return roomid
+    ydl = YoutubeDL(params)
+    ydl.add_default_info_extractors()
+    json_filename = os.path.splitext(filename)[0] + '.info.json'
+    try_rm(json_filename)
+    ydl.download([url])
+    res = os.path.exists(json_filename)
+    try_rm(json_filename)
+    return res
     
-        def test_make_entry(self):
-        equal = self.assertEqual
-        self.dialog.row = 0
-        self.dialog.top = self.root
-        entry, label = self.dialog.make_entry('Test:', 'hello')
-        equal(label['text'], 'Test:')
+        def _real_extract(self, url):
+        playlist_id = self._match_id(url)
     
-        def entry_ok(self):
-        'Return apparently valid (name, path) or None'
-        self.entry_error['text'] = ''
-        self.path_error['text'] = ''
-        name = self.item_ok()
-        path = self.path_ok()
-        return None if name is None or path is None else (name, path)
+    from .nuevo import NuevoBaseIE
+    
+    # utilities we import from Werkzeug and Jinja2 that are unused
+# in the module but are exported as public interface.
+from werkzeug.exceptions import abort
+from werkzeug.utils import redirect
+from jinja2 import Markup, escape
     
     
-print('\n# ======================================================================')
-print('#                   Calculating pi, 10000 iterations')
-print('# ======================================================================\n')
+# Certain versions of pypy have a bug where clearing the exception stack
+# breaks the __exit__ function in a very peculiar way.  The second level of
+# exception blocks is necessary because pypy seems to forget to check if an
+# exception happened until the next bytecode instruction?
+#
+# Relevant PyPy bugfix commit:
+# https://bitbucket.org/pypy/pypy/commits/77ecf91c635a287e88e60d8ddb0f4e9df4003301
+# According to ronan on #pypy IRC, it is released in PyPy2 2.3 and later
+# versions.
+#
+# Ubuntu 14.04 has PyPy 2.2.1, which does exhibit this bug.
+BROKEN_PYPY_CTXMGR_EXIT = False
+if hasattr(sys, 'pypy_version_info'):
+    class _Mgr(object):
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            if hasattr(sys, 'exc_clear'):
+                # Python 3 (PyPy3) doesn't have exc_clear
+                sys.exc_clear()
+    try:
+        try:
+            with _Mgr():
+                raise AssertionError()
+        except:
+            raise
+    except TypeError:
+        BROKEN_PYPY_CTXMGR_EXIT = True
+    except AssertionError:
+        pass
+
+    
+        def default(self, o):
+        '''Implement this method in a subclass such that it returns a
+        serializable object for ``o``, or calls the base implementation (to
+        raise a :exc:`TypeError`).
+    
+    
+@pytest.mark.parametrize('value,path,result', (
+    ('test', cwd, 'test'),
+    ('test.py', cwd, 'test'),
+    ('a/test', os.path.join(cwd, 'a'), 'test'),
+    ('test/__init__.py', cwd, 'test'),
+    ('test/__init__', cwd, 'test'),
+    # nested package
+    (
+        os.path.join(test_path, 'cliapp', 'inner1', '__init__'),
+        test_path, 'cliapp.inner1'
+    ),
+    (
+        os.path.join(test_path, 'cliapp', 'inner1', 'inner2'),
+        test_path, 'cliapp.inner1.inner2'
+    ),
+    # dotted name
+    ('test.a.b', cwd, 'test.a.b'),
+    (os.path.join(test_path, 'cliapp.app'), test_path, 'cliapp.app'),
+    # not a Python file, will be caught during import
+    (
+        os.path.join(test_path, 'cliapp', 'message.txt'),
+        test_path, 'cliapp.message.txt'
+    ),
+))
+def test_prepare_import(request, value, path, result):
+    '''Expect the correct path to be set and the correct import and app names
+    to be returned.
+    
+    
+@pytest.fixture
+def httpbin_secure(httpbin_secure):
+    return prepare_url(httpbin_secure)
+
+    
+        :param url: URL for the new :class:`Request` object.
+    :param data: (optional) Dictionary (will be form-encoded), bytes, or file-like object to send in the body of the :class:`Request`.
+    :param json: (optional) json data to send in the body of the :class:`Request`.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
+    '''
+    
+    import threading
+import socket
+import select
+    
+    from urllib3.fields import RequestField
+from urllib3.filepost import encode_multipart_formdata
+from urllib3.util import parse_url
+from urllib3.exceptions import (
+    DecodeError, ReadTimeoutError, ProtocolError, LocationParseError)
+    
+            :param name: a string containing name of cookie
+        :param domain: (optional) string containing domain of cookie
+        :param path: (optional) string containing path of cookie
+        :raises KeyError: if cookie is not found
+        :raises CookieConflictError: if there are multiple cookies
+            that match name and optionally domain and path
+        :return: cookie.value
+        '''
+        toReturn = None
+        for cookie in iter(self):
+            if cookie.name == name:
+                if domain is None or cookie.domain == domain:
+                    if path is None or cookie.path == path:
+                        if toReturn is not None:  # if there are multiple cookies that meet passed in criteria
+                            raise CookieConflictError('There are multiple cookies with name, %r' % (name))
+                        toReturn = cookie.value  # we will eventually return this as long as no cookie conflict
+    
+    with open('README.rst', 'r', 'utf-8') as f:
+    readme = f.read()
+with open('HISTORY.rst', 'r', 'utf-8') as f:
+    history = f.read()
+    
+        def long_desc(self):
+        '''A long description of the command. Return short description when not
+        available. It cannot contain newlines, since contents will be formatted
+        by optparser which removes newlines and wraps text.
+        '''
+        return self.short_desc()
+    
+            return self
     
             if self.closed:
             raise ValueError('I/O operation on closed file')
-        if not self.seekable:
-            raise OSError('cannot seek')
-        if whence == 1:
-            pos = pos + self.size_read
-        elif whence == 2:
-            pos = pos + self.chunksize
-        if pos < 0 or pos > self.chunksize:
-            raise RuntimeError
-        self.file.seek(self.offset + pos, 0)
-        self.size_read = pos
+        if self.seekable:
+            try:
+                n = self.chunksize - self.size_read
+                # maybe fix alignment
+                if self.align and (self.chunksize & 1):
+                    n = n + 1
+                self.file.seek(n, 1)
+                self.size_read = self.size_read + n
+                return
+            except OSError:
+                pass
+        while self.size_read < self.chunksize:
+            n = min(8192, self.chunksize - self.size_read)
+            dummy = self.read(n)
+            if not dummy:
+                raise EOFError
+
     
-        def get_file(self, key):
-        '''Return a file-like representation or raise a KeyError.'''
-        raise NotImplementedError('Method must be implemented by subclass')
+            if nextchar == ''':
+            return parse_string(string, idx + 1, strict)
+        elif nextchar == '{':
+            return parse_object((string, idx + 1), strict,
+                _scan_once, object_hook, object_pairs_hook, memo)
+        elif nextchar == '[':
+            return parse_array((string, idx + 1), _scan_once)
+        elif nextchar == 'n' and string[idx:idx + 4] == 'null':
+            return None, idx + 4
+        elif nextchar == 't' and string[idx:idx + 4] == 'true':
+            return True, idx + 4
+        elif nextchar == 'f' and string[idx:idx + 5] == 'false':
+            return False, idx + 5
+    }
+    
+    def evalString(s):
+    assert s.startswith(''') or s.startswith('''), repr(s[:1])
+    q = s[0]
+    if s[:3] == q*3:
+        q = q*3
+    assert s.endswith(q), repr(s[-len(q):])
+    assert len(s) >= 2*len(q)
+    s = s[len(q):-len(q)]
+    return re.sub(r'\\(\'|\'|\\|[abfnrtv]|x.{0,2}|[0-7]{1,3})', escape, s)
     
     
-class MultiPathXMLRPCServer(SimpleXMLRPCServer):
-    '''Multipath XML-RPC Server
-    This specialization of SimpleXMLRPCServer allows the user to create
-    multiple Dispatcher instances and assign them to different
-    HTTP request paths.  This makes it possible to run two or more
-    'virtual XML-RPC servers' at the same port.
-    Make sure that the requestHandler accepts the paths in question.
-    '''
-    def __init__(self, addr, requestHandler=SimpleXMLRPCRequestHandler,
-                 logRequests=True, allow_none=False, encoding=None,
-                 bind_and_activate=True, use_builtin_types=False):
+def triplet_to_brightness(rgbtuple):
+    # return the brightness (grey level) along the scale 0.0==black to
+    # 1.0==white
+    r = 0.299
+    g = 0.587
+    b = 0.114
+    return r*rgbtuple[0] + g*rgbtuple[1] + b*rgbtuple[2]
     
-            # Now test range() with longs
-        for x in [range(-2**100),
-                  range(0, -2**100),
-                  range(0, 2**100, -1)]:
-            self.assertEqual(list(x), [])
-            self.assertFalse(x)
+        def user_has_beta_enabled(self, user):
+        if not user:
+            return False
+        return user.pref_beta
     
-        def test_bug_1467852(self):
-        # http://sourceforge.net/tracker/?func=detail&atid=532154&aid=1467852&group_id=71702
-        x = c_int(5)
-        dummy = []
-        for i in range(32000):
-            dummy.append(c_int(i))
-        y = c_int(6)
-        p = pointer(x)
-        pp = pointer(p)
-        q = pointer(y)
-        pp[0] = q         # <==
-        self.assertEqual(p[0], 6)
-    def test_c_void_p(self):
-        # http://sourceforge.net/tracker/?func=detail&aid=1518190&group_id=5470&atid=105470
-        if sizeof(c_void_p) == 4:
-            self.assertEqual(c_void_p(0xFFFFFFFF).value,
-                                 c_void_p(-1).value)
-            self.assertEqual(c_void_p(0xFFFFFFFFFFFFFFFF).value,
-                                 c_void_p(-1).value)
-        elif sizeof(c_void_p) == 8:
-            self.assertEqual(c_void_p(0xFFFFFFFF).value,
-                                 0xFFFFFFFF)
-            self.assertEqual(c_void_p(0xFFFFFFFFFFFFFFFF).value,
-                                 c_void_p(-1).value)
-            self.assertEqual(c_void_p(0xFFFFFFFFFFFFFFFFFFFFFFFF).value,
-                                 c_void_p(-1).value)
+    from pylons import request
+from pylons import tmpl_context as c
+from pylons import app_globals as g
     
-        def test___get__(self):
-        class MyCStruct(Structure):
-            _fields_ = (('field', c_int),)
-        self.assertRaises(TypeError,
-                          MyCStruct.field.__get__, 'wrong type self', 42)
+    class EmbedController(RedditController):
+    allow_stylesheets = True
     
-        def test_string(self):
-        self.assertIs('xyz'.endswith('z'), True)
-        self.assertIs('xyz'.endswith('x'), False)
-        self.assertIs('xyz0123'.isalnum(), True)
-        self.assertIs('@#$%'.isalnum(), False)
-        self.assertIs('xyz'.isalpha(), True)
-        self.assertIs('@#$%'.isalpha(), False)
-        self.assertIs('0123'.isdigit(), True)
-        self.assertIs('xyz'.isdigit(), False)
-        self.assertIs('xyz'.islower(), True)
-        self.assertIs('XYZ'.islower(), False)
-        self.assertIs('0123'.isdecimal(), True)
-        self.assertIs('xyz'.isdecimal(), False)
-        self.assertIs('0123'.isnumeric(), True)
-        self.assertIs('xyz'.isnumeric(), False)
-        self.assertIs(' '.isspace(), True)
-        self.assertIs('\xa0'.isspace(), True)
-        self.assertIs('\u3000'.isspace(), True)
-        self.assertIs('XYZ'.isspace(), False)
-        self.assertIs('X'.istitle(), True)
-        self.assertIs('x'.istitle(), False)
-        self.assertIs('XYZ'.isupper(), True)
-        self.assertIs('xyz'.isupper(), False)
-        self.assertIs('xyz'.startswith('x'), True)
-        self.assertIs('xyz'.startswith('z'), False)
+        @validate(
+        container_id=VGTMContainerId('id')
+    )
+    def GET_jail(self, container_id):
+        return GoogleTagManagerJail(container_id=container_id).render()
+    
+        def GET_cachehealth(self):
+        results = {}
+        behaviors = {
+            # Passed on to poll(2) in milliseconds
+            'connect_timeout': 1000,
+            # Passed on to setsockopt(2) in microseconds
+            'receive_timeout': int(1e6),
+            'send_timeout': int(1e6),
+        }
+        for server in cache._CACHE_SERVERS:
+            try:
+                if server.startswith('udp:'):
+                    # libmemcached doesn't support UDP get/fetch operations
+                    continue
+                mc = pylibmc.Client([server], behaviors=behaviors)
+                # it's ok that not all caches are mcrouter, we'll just ignore
+                # the miss either way
+                mc.get('__mcrouter__.version')
+                results[server] = 'OK'
+            except pylibmc.Error as e:
+                g.log.warning('Health check for %s FAILED: %s', server, e)
+                results[server] = 'FAILED %s' % e
+        return json.dumps(results)
