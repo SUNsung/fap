@@ -1,25 +1,43 @@
 
         
-        
-# Mel spectrum constants and functions.
-_MEL_BREAK_FREQUENCY_HERTZ = 700.0
-_MEL_HIGH_FREQUENCY_Q = 1127.0
+                e = d.__copy__()
+        self.assertEqual(type(d), type(e))
+        self.assertEqual(list(d), list(e))
     
-      def __enter__(self):
-    return self
+    __all__ = ['make_scanner']
     
-    import os.path
+            for func, args, kwargs, expected in self.CALLS_KWARGS:
+            with self.subTest(func=func, args=args, kwargs=kwargs):
+                result = _testcapi.pyobject_fastcalldict(func, args, kwargs)
+                self.check_result(result, expected)
     
-      with build_shuffling_tf_record_writer(data.ALL_LM) as writer_lm_all:
-    with build_shuffling_tf_record_writer(data.ALL_SA) as writer_seq_ae_all:
+            If the optional allow_dotted_names argument is true and the
+        instance does not have a _dispatch method, method names
+        containing dots are supported and resolved, as long as none of
+        the name segments start with an '_'.
     
-      Args:
-    filename: The name of the current file.
-    clean_lines: A CleansedLines instance containing the file.
-    linenum: The number of the line to check.
-    error: The function to call with any errors found.
-  '''
-  # Look for 'virtual' on current line.
-  line = clean_lines.elided[linenum]
-  virtual = Match(r'^(.*)(\bvirtual\b)(.*)$', line)
-  if not virtual: return
+    class PyCFunctionObjectPtr(PyObjectPtr):
+    '''
+    Class wrapping a gdb.Value that's a PyCFunctionObject*
+    (see Include/methodobject.h and Objects/methodobject.c)
+    '''
+    _typename = 'PyCFunctionObject'
+    
+            self.assertRaises(TypeError, complex, '1', '1')
+        self.assertRaises(TypeError, complex, 1, '1')
+    
+            self.assertRaises(TypeError, Array.from_buffer_copy, b'123')
+        self.assertRaises(TypeError, Structure.from_buffer_copy, b'123')
+        self.assertRaises(TypeError, Union.from_buffer_copy, b'123')
+        self.assertRaises(TypeError, _CFuncPtr.from_buffer_copy, b'123')
+        self.assertRaises(TypeError, _Pointer.from_buffer_copy, b'123')
+        self.assertRaises(TypeError, _SimpleCData.from_buffer_copy, b'123')
+    
+        def test_4(self):
+        class X(Structure):
+            pass
+        class Y(X):
+            pass
+        self.assertRaises(AttributeError, setattr, X, '_fields_', [])
+        Y._fields_ = []
+        self.assertRaises(AttributeError, setattr, X, '_fields_', [])
