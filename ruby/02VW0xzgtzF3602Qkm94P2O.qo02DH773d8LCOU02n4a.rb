@@ -1,81 +1,68 @@
 
         
-          def import
-    if params[:file]
-      file = params[:file]
-      content = JSON.parse(file.read)
-      new_credentials = content.map do |hash|
-        current_user.user_credentials.build(hash.slice('credential_name', 'credential_value', 'mode'))
-      end
-    
-      def participation_count
-    poll_answers.sum('vote_count')
-  end
+            def translation_scope
+      'devise.unlocks'
+    end
 end
 
     
-          respond_with do |format|
-        format.html { redirect_to admin_pods_path }
-        format.json { render json: PodPresenter.new(pod).as_json }
+        if last_request_at.is_a? Integer
+      last_request_at = Time.at(last_request_at).utc
+    elsif last_request_at.is_a? String
+      last_request_at = Time.parse(last_request_at)
+    end
+    
+      # Read and eval a .rake file in such a way that `self` within the .rake file
+  # refers to this plugin instance. This gives the tasks in the file access to
+  # helper methods defined by the plugin.
+  def eval_rakefile(path)
+    contents = IO.read(path)
+    instance_eval(contents, path, 1)
+  end
+    
+      deploy_rb = File.expand_path('../../templates/deploy.rb.erb', __FILE__)
+  stage_rb = File.expand_path('../../templates/stage.rb.erb', __FILE__)
+  capfile = File.expand_path('../../templates/Capfile', __FILE__)
+    
+      Rake::Task[:copydot].invoke(source_dir, public_dir)
+  Rake::Task['#{deploy_default}'].execute
+end
+    
+        def cache(gist, file, data)
+      cache_file = get_cache_file_for gist, file
+      File.open(cache_file, 'w') do |io|
+        io.write data
       end
     end
-  end
-end
-
     
-          def find
-        client = Api::OpenidConnect::OAuthApplication.find_by(client_name: params[:client_name])
-        if client
-          render json: {client_id: client.client_id}
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
         else
-          render json: {error: 'Client with name #{params[:client_name]} does not exist'}
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
         end
+        @img['class'].gsub!(/'/, '') if @img['class']
       end
+      super
+    end
     
-          rescue_from Rack::OAuth2::Server::Authorize::BadRequest,
-                  JSON::JWT::InvalidFormat, JSON::JWK::UnknownAlgorithm do |e|
-        logger.info e.backtrace[0, 10].join('\n')
-        render json: {error: :invalid_request, error_description: e.message, status: 400}
-      end
-      rescue_from JSON::JWT::VerificationFailed do |e|
-        logger.info e.backtrace[0, 10].join('\n')
-        render json: {error: :invalid_grant, error_description: e.message, status: 400}
-      end
+          super
+    end
+    
+      # Summary is used on the Archive pages to return the first block of content from a post.
+  def summary(input)
+    if input.index(/\n\n/)
+      input.split(/\n\n/)[0]
+    else
+      input
     end
   end
-end
-
     
-          def call
-        title('Gems')
-        table(all_gem_names) do |gem, row|
-          row.yellow if update_available?(gem)
-          row << gem
-          row << installed_gem_version(gem)
-          row << '(update available)' if update_available?(gem)
-        end
-      end
+    require 'pathname'
+require './plugins/octopress_filters'
     
-          def collect_rows(records)
-        records.map do |rec|
-          Row.new.tap { |row| yield(rec, row) }
-        end
-      end
-    
-      desc 'Build all spree gems'
-  task :build do
-    pkgdir = File.expand_path('../pkg', __FILE__)
-    FileUtils.mkdir_p pkgdir
-    
-          expect('.border-width-false-third').to have_ruleset(ruleset)
-      expect('.border-width-false-third').to_not have_rule(bad_rule)
+        def poster
+      'poster='#{@poster}'' if @poster
     end
-  end
-end
-
-    
-      context 'called with arguments (1, $value: 4em 6em)' do
-    it 'outputs quadruple the first value from the default scale' do
-      expect('.one-double-value').to have_rule('font-size: 1.024em')
-    end
-  end
