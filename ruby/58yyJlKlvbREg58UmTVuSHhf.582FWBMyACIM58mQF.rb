@@ -1,116 +1,87 @@
 
         
-              attr_accessor :description
+            def find_local(username)
+      find_remote(username, nil)
+    end
     
-            expect(result).to eq('/usr/local/bin/cloc  --by-file --xml  --out=/tmp/cloc.xml')
+      class << self
+    # Our ID will be composed of the following:
+    # 6 bytes (48 bits) of millisecond-level timestamp
+    # 2 bytes (16 bits) of sequence data
+    #
+    # The 'sequence data' is intended to be unique within a
+    # given millisecond, yet obscure the 'serial number' of
+    # this row.
+    #
+    # To do this, we hash the following data:
+    # * Table name (if provided, skipped if not)
+    # * Secret salt (should not be guessable)
+    # * Timestamp (again, millisecond-level granularity)
+    #
+    # We then take the first two bytes of that value, and add
+    # the lowest two bytes of the table ID sequence number
+    # (`table_name`_id_seq). This means that even if we insert
+    # two rows at the same millisecond, they will have
+    # distinct 'sequence data' portions.
+    #
+    # If this happens, and an attacker can see both such IDs,
+    # they can determine which of the two entries was inserted
+    # first, but not the total number of entries in the table
+    # (even mod 2**16).
+    #
+    # The table name is included in the hash to ensure that
+    # different tables derive separate sequence bases so rows
+    # inserted in the same millisecond in different tables do
+    # not reveal the table ID sequence number for one another.
+    #
+    # The secret salt is included in the hash to ensure that
+    # external users cannot derive the sequence base given the
+    # timestamp and table name, which would allow them to
+    # compute the table ID sequence number.
+    def define_timestamp_id
+      return if already_defined?
+    
+      # Before we load the schema, define the timestamp_id function.
+  # Idiomatically, we might do this in a migration, but then it
+  # wouldn't end up in schema.rb, so we'd need to figure out a way to
+  # get it in before doing db:setup as well. This is simpler, and
+  # ensures it's always in place.
+  Rake::Task['db:schema:load'].enhance ['db:define_timestamp_id']
+    
+      def preview_url
+    if object.needs_redownload?
+      media_proxy_url(object.id, :small)
+    else
+      full_asset_url(object.file.url(:small))
+    end
+  end
+    
+          private
+    
+          def stage_definitions
+        stage_config_path.join('*.rb')
       end
     
-          it 'get SVN build number' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            get_build_number_repository
-        end').runner.execute(:test)
+      deploy_rb = File.expand_path('../../templates/deploy.rb.erb', __FILE__)
+  stage_rb = File.expand_path('../../templates/stage.rb.erb', __FILE__)
+  capfile = File.expand_path('../../templates/Capfile', __FILE__)
     
-          it 'properly removes new lines of the build number' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          increment_build_number(build_number: '24\n', xcodeproj: '.xcproject')
-        end').runner.execute(:test)
+          describe 'fetching servers by role' do
+        subject { dsl.roles(:app) }
     
-        respond_to do |format|
-      if @user_credential.update_attributes(user_credential_params)
-        format.html { redirect_to user_credentials_path, notice: 'Your credential was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @user_credential.errors, status: :unprocessable_entity }
-      end
+      it 'overrides the rake method, but still prints the rake version' do
+    out, _err = capture_io do
+      flags '--version', '-V'
     end
+    expect(out).to match(/\bCapistrano Version\b/)
+    expect(out).to match(/\b#{Capistrano::VERSION}\b/)
+    expect(out).to match(/\bRake Version\b/)
+    expect(out).to match(/\b#{Rake::VERSION}\b/)
   end
     
-      # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
-  # the I18n.default_locale when a translation can not be found).
-  config.i18n.fallbacks = true
-    
-      def setup
-    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
-    success = Dir.chdir DUMMY_PATH do
-      silence_stdout_if !ENV['VERBOSE'] do
-        system 'node', 'manifest.js', tmp_dir
-      end
+      def for_each_gem
+    SPREE_GEMS.each do |gem_name|
+      yield 'pkg/spree_#{gem_name}-#{version}.gem'
     end
-    assert success, 'Node.js Mincer compilation failed'
-    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
-    css_name = manifest['assets']['application.css']
-    @css = File.read('#{tmp_dir}/#{css_name}')
+    yield 'pkg/spree-#{version}.gem'
   end
-end
-
-    
-    desc 'Test all Gemfiles from test/*.gemfile'
-task :test_all_gemfiles do
-  require 'term/ansicolor'
-  require 'pty'
-  require 'shellwords'
-  cmd      = 'bundle install --quiet && bundle exec rake --trace'
-  statuses = Dir.glob('./test/gemfiles/*{[!.lock]}').map do |gemfile|
-    env = {'BUNDLE_GEMFILE' => gemfile}
-    cmd_with_env = '  (#{env.map { |k, v| 'export #{k}=#{Shellwords.escape v}' } * ' '}; #{cmd})'
-    $stderr.puts Term::ANSIColor.cyan('Testing\n#{cmd_with_env}')
-    PTY.spawn(env, cmd) do |r, _w, pid|
-      begin
-        r.each_line { |l| puts l }
-      rescue Errno::EIO
-        # Errno:EIO error means that the process has finished giving output.
-      ensure
-        ::Process.wait pid
-      end
-    end
-    [$? && $?.exitstatus == 0, cmd_with_env]
-  end
-  failed_cmds = statuses.reject(&:first).map { |(_status, cmd_with_env)| cmd_with_env }
-  if failed_cmds.empty?
-    $stderr.puts Term::ANSIColor.green('Tests pass with all gemfiles')
-  else
-    $stderr.puts Term::ANSIColor.red('Failing (#{failed_cmds.size} / #{statuses.size})\n#{failed_cmds * '\n'}')
-    exit 1
-  end
-end
-    
-      def user_search
-    if params[:admins_controller_user_search]
-      search_params = params.require(:admins_controller_user_search)
-                            .permit(:username, :email, :guid, :under13)
-      @search = UserSearch.new(search_params)
-      @users = @search.perform
-    end
-    
-    module Api
-  module OpenidConnect
-    class TokenEndpointController < ApplicationController
-      skip_before_action :verify_authenticity_token
-    
-          expect('.border-width-false-third').to have_ruleset(ruleset)
-      expect('.border-width-false-third').to_not have_rule(bad_rule)
-    end
-  end
-end
-
-    
-          expect('.all-buttons-focus').to have_ruleset(ruleset)
-    end
-  end
-    
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'margin-top: 11px; ' +
-                'margin-right: 12px; ' +
-                'margin-left: 13px;'
-      bad_rule = 'margin-bottom: null;'
-    
-      context 'called with no prefixes' do
-    it 'outputs the spec' do
-      rule = 'appearance: none;'
-    
-          expect('.all-text-inputs-invalid').to have_ruleset(ruleset)
-    end
-  end
-end
