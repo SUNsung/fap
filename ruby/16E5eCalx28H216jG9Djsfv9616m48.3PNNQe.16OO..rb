@@ -1,80 +1,58 @@
 
         
-            def types
-      const_get(:TYPES).map(&:constantize)
-    end
-    
-        def cron(*args, &blk)
-      schedule(:cron, args, &blk)
-    end
-    
-      def destroy
-    @job = Delayed::Job.find(params[:id])
-    
-      def process_status_params
-    {
-      uri: @object['id'],
-      url: object_url || @object['id'],
-      account: @account,
-      text: text_from_content || '',
-      language: detected_language,
-      spoiler_text: @object['summary'] || '',
-      created_at: @options[:override_timestamps] ? nil : @object['published'],
-      reply: @object['inReplyTo'].present?,
-      sensitive: @object['sensitive'] || false,
-      visibility: visibility_from_audience,
-      thread: replied_to_status,
-      conversation: conversation_from_uri(@object['conversation']),
-      media_attachment_ids: process_attachments.take(4).map(&:id),
-    }
-  end
-    
-            render json: collection_presenter,
-               serializer: ActivityPub::CollectionSerializer,
-               adapter: ActivityPub::Adapter,
-               content_type: 'application/activity+json'
-      end
-    end
-  end
-    
-        context 'when tag exists' do
-      it 'returns http success' do
-        get :show, params: { id: 'test', max_id: late.id }
-        expect(response).to have_http_status(:success)
-      end
-    
-          expect(response).to redirect_to(settings_preferences_path)
-      user.reload
-      expect(user.settings['boost_modal']).to be true
-      expect(user.settings['delete_modal']).to be false
-    end
-  end
+        # No trailing slash
+Benchmark.ips do |x|
+  path = '/some/very/very/long/path/to/a/file/i/like/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
 end
 
     
-        def insert_default_vars(scss)
-      log_transform
-      scss.gsub(/^(\$.+);/, '\1 !default;')
+    # No trailing slash
+Benchmark.ips do |x|
+  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
+  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
+  x.compare!
+end
+
+    
+    module Jekyll
+  binding.pry
+end
+
+    
+            c.action do |args, opts|
+          Jekyll::Commands::NewTheme.process(args, opts)
+        end
+      end
     end
     
-      # Disable request forgery protection in test environment.
-  config.action_controller.allow_forgery_protection = false
+          private
     
-    class NodeMincerTest < Minitest::Test
-  DUMMY_PATH = 'test/dummy_node_mincer'
+      def object_url
+    return if @object['url'].blank?
     
-          spec['main'] =
-          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
-          find_files.(Bootstrap.fonts_path) +
-          %w(assets/javascripts/bootstrap.js)
+        def matching_username
+      Account.where(Account.arel_table[:username].lower.eq username.to_s.downcase)
+    end
     
-            self.summary = 'The repl listens to commands on standard input'
-        self.description = <<-DESC
-          The repl listens to commands on standard input and prints their
-          result to standard output.
-          It accepts all the other ipc subcommands. The repl will signal the
-          end of output with the the ASCII CR+LF `\\n\\r`.
-        DESC
+      describe 'GET #show' do
+    it 'returns http success' do
+      get :show
+      expect(response).to have_http_status(:success)
+    end
+  end
     
-            extend Executable
-        executable :git
+        def register_lotus
+      Lotus::Assets.sources << assets_path
+    end
+    
+        # These mixins will get vararg definitions in SCSS (not supported by LESS):
+    VARARG_MIXINS               = %w(
+      scale transition transition-duration transition-property transition-transform box-shadow
+    )
+    
+      # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
+  # config.force_ssl = true
