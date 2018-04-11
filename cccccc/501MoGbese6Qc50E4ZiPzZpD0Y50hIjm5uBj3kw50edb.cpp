@@ -1,181 +1,233 @@
 
         
-        namespace testing {
+          LOG(INFO) << 'Writing Training data';
+  for (int fileid = 0; fileid < kCIFARTrainBatches; ++fileid) {
+    // Open files
+    LOG(INFO) << 'Training Batch ' << fileid + 1;
+    string batchFileName = input_folder + '/data_batch_'
+      + caffe::format_int(fileid+1) + '.bin';
+    std::ifstream data_file(batchFileName.c_str(),
+        std::ios::in | std::ios::binary);
+    CHECK(data_file) << 'Unable to open train file #' << fileid + 1;
+    for (int itemid = 0; itemid < kCIFARBatchSize; ++itemid) {
+      read_image(&data_file, &label, str_buffer);
+      datum.set_label(label);
+      datum.set_data(str_buffer, kCIFARImageNBytes);
+      string out;
+      CHECK(datum.SerializeToString(&out));
+      txn->Put(caffe::format_int(fileid * kCIFARBatchSize + itemid, 5), out);
     }
-    
-    # define TEST_P(test_case_name, test_name) \
-  class GTEST_TEST_CLASS_NAME_(test_case_name, test_name) \
-      : public test_case_name { \
-   public: \
-    GTEST_TEST_CLASS_NAME_(test_case_name, test_name)() {} \
-    virtual void TestBody(); \
-   private: \
-    static int AddToRegistry() { \
-      ::testing::UnitTest::GetInstance()->parameterized_test_registry(). \
-          GetTestCasePatternHolder<test_case_name>(\
-              #test_case_name, __FILE__, __LINE__)->AddTestPattern(\
-                  #test_case_name, \
-                  #test_name, \
-                  new ::testing::internal::TestMetaFactory< \
-                      GTEST_TEST_CLASS_NAME_(test_case_name, test_name)>()); \
-      return 0; \
-    } \
-    static int gtest_registering_dummy_; \
-    GTEST_DISALLOW_COPY_AND_ASSIGN_(\
-        GTEST_TEST_CLASS_NAME_(test_case_name, test_name)); \
-  }; \
-  int GTEST_TEST_CLASS_NAME_(test_case_name, \
-                             test_name)::gtest_registering_dummy_ = \
-      GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::AddToRegistry(); \
-  void GTEST_TEST_CLASS_NAME_(test_case_name, test_name)::TestBody()
-    
-    // Prints the given number of elements in an array, without printing
-// the curly braces.
-template <typename T>
-void PrintRawArrayTo(const T a[], size_t count, ::std::ostream* os) {
-  UniversalPrint(a[0], os);
-  for (size_t i = 1; i != count; i++) {
-    *os << ', ';
-    UniversalPrint(a[i], os);
   }
-}
+  txn->Commit();
+  train_db->Close();
     
-      virtual ParamIteratorInterface<T>* Begin() const {
-    return new Iterator(this, begin_, 0, step_);
-  }
-  virtual ParamIteratorInterface<T>* End() const {
-    return new Iterator(this, end_, end_index_, step_);
+      // Open leveldb
+  leveldb::DB* db;
+  leveldb::Options options;
+  options.create_if_missing = true;
+  options.error_if_exists = true;
+  leveldb::Status status = leveldb::DB::Open(
+      options, db_filename, &db);
+  CHECK(status.ok()) << 'Failed to open leveldb ' << db_filename
+      << '. Is it already existing?';
+    
+      static CreatorRegistry& Registry() {
+    static CreatorRegistry* g_registry_ = new CreatorRegistry();
+    return *g_registry_;
   }
     
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7>
-struct Templates7 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates6<T2, T3, T4, T5, T6, T7> Tail;
-};
-    
-      // Trivial case 2: even numbers
-  if (n % 2 == 0) return n == 2;
-    
-      /// Move-construct a basic_socket_acceptor from an acceptor of another
-  /// protocol type.
-  /**
-   * This constructor moves an acceptor from one object to another.
+      /**
+   * @brief Computes the error gradient w.r.t. the reordered input.
    *
-   * @param other The other basic_socket_acceptor object from which the move
-   * will occur.
-   *
-   * @note Following the move, the moved-from object is in the same state as if
-   * constructed using the @c basic_socket(io_service&) constructor.
+   * @param top output Blob vector (length 1), providing the error gradient
+   *        with respect to the outputs
+   *   -# @f$ (M \times ...) @f$:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2):
+   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
+   *     required) back to the input x_1
+   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
+   *     false.
    */
-  template <typename Protocol1, typename SocketAcceptorService1>
-  basic_socket_acceptor(
-      basic_socket_acceptor<Protocol1, SocketAcceptorService1>&& other,
-      typename enable_if<is_convertible<Protocol1, Protocol>::value>::type* = 0)
-    : basic_io_object<SocketAcceptorService>(other.get_io_service())
-  {
-    this->get_service().template converting_move_construct<Protocol1>(
-        this->get_implementation(), other.get_implementation());
-  }
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    #include 'caffe/layers/neuron_layer.hpp'
     
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
     
-    namespace boost {
-    }
+    {}  // namespace caffe
     
-    class ptime;
+    #include <vector>
     
-    #include <boost/asio/detail/config.hpp>
-    
-    #if defined(BOOST_ASIO_WINDOWS) || defined(__CYGWIN__)
-typedef win_fd_set_adapter fd_set_adapter;
-#else
-typedef posix_fd_set_adapter fd_set_adapter;
-#endif
-    
-    // Calls to asio_handler_allocate and asio_handler_deallocate must be made from
-// a namespace that does not contain any overloads of these functions. The
-// boost_asio_handler_alloc_helpers namespace is defined here for that purpose.
-namespace boost_asio_handler_alloc_helpers {
-    }
-    
-    #include <boost/asio/detail/pop_options.hpp>
-    
-    // This function will create a Huffman tree.
-//
-// The catch here is that the tree cannot be arbitrarily deep.
-// Brotli specifies a maximum depth of 15 bits for 'code trees'
-// and 7 bits for 'code length code trees.'
-//
-// count_limit is the value that is to be faked as the minimum value
-// and this minimum value is raised until the tree matches the
-// maximum length requirement.
-//
-// This algorithm is not of excellent performance for very long data blocks,
-// especially when population counts are longer than 2**tree_limit, but
-// we are not planning to use this with extremely long blocks.
-//
-// See http://en.wikipedia.org/wiki/Huffman_coding
-void CreateHuffmanTree(const uint32_t *data,
-                       const size_t length,
-                       const int tree_limit,
-                       HuffmanTree* tree,
-                       uint8_t *depth) {
-  // For block sizes below 64 kB, we never need to do a second iteration
-  // of this loop. Probably all of our block sizes will be smaller than
-  // that, so this loop is mostly of academic interest. If we actually
-  // would need this, we would be better off with the Katajainen algorithm.
-  for (uint32_t count_limit = 1; ; count_limit *= 2) {
-    size_t n = 0;
-    for (size_t i = length; i != 0;) {
-      --i;
-      if (data[i]) {
-        const uint32_t count = std::max<uint32_t>(data[i], count_limit);
-        tree[n++] = HuffmanTree(count, -1, static_cast<int16_t>(i));
-      }
-    }
-    }
-    }
-    
-    inline int Log2FloorNonZero(uint32_t n) {
-#ifdef __GNUC__
-  return 31 ^ __builtin_clz(n);
-#else
-  unsigned int result = 0;
-  while (n >>= 1) result++;
-  return result;
-#endif
+    bool cudnn_is_acceptable(const Tensor& self) {
+  if (!globalContext().userEnabledCuDNN()) return false;
+  if (!self.is_cuda()) return false;
+  auto st = self.type().scalarType();
+  if (!(st == kDouble || st == kFloat || st == kHalf)) return false;
+  if (!AT_CUDNN_ENABLED()) return false;
+  // NB: In the old Python code, there was also a test to see if the
+  // cuDNN library was actually dynamically linked or not.  I'm not
+  // sure if we can actually test this.
+  return true;
 }
     
-    // Computes the DCT (Discrete Cosine Transform) of the 8x8 array in 'block',
-// scaled up by a factor of 16. The values in 'block' are laid out row-by-row
-// and the result is written to the same memory area.
-void ComputeBlockDCT(coeff_t* block);
+    CUDAGenerator& CUDAGenerator::copy(const Generator& from) {
+  throw std::runtime_error('CUDAGenerator::copy() not implemented');
+}
     
-      int iquant[3 * kDCTBlockSize];
-  int idx = 0;
-  for (int i = 0; i < 3; ++i) {
-    for (int j = 0; j < kDCTBlockSize; ++j) {
-      int v = quant[idx];
-      jpg->quant[i].values[j] = v;
-      iquant[idx++] = ((1 << kIQuantBits) + 1) / v;
+    
+    {
+    {}}  // namespace torch::utils
+
+    
+    bool js_cocos2dx_physics3d_Physics3DHingeConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DHingeConstraint_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DHingeConstraint(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getHingeAngle(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetA(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetB(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_enableAngularMotor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getUpperLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getLowerLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getEnableAngularMotor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_enableMotor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getBFrame(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setFrames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setAngularOnly(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setMotorTarget(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getAngularOnly(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setAxis(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getAFrame(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_Physics3DHingeConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    bool js_cocos2dx_studio_ZOrderFrame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_ZOrderFrame_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_ZOrderFrame(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_ZOrderFrame_getZOrder(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ZOrderFrame_setZOrder(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ZOrderFrame_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ZOrderFrame_ZOrderFrame(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+    
+    
+    
+    
+    		// Define platform
+		{
+			b2BodyDef bd;
+			bd.type = b2_dynamicBody;
+			bd.position.Set(-4.0f, 5.0f);
+			m_platform = m_world->CreateBody(&bd);
     }
-  }
     
-    struct HuffmanCodeTable {
-  uint8_t depth[256];
-  int code[256];
+    			b2WeldJointDef jd;
+    
+        // Store our identifier
+    io.Fonts->TexID = (void*)cloned_img;
+    g_Texture = cloned_img;
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_API void        ImGui_ImplGlfwGL2_InvalidateDeviceObjects();
+IMGUI_API bool        ImGui_ImplGlfwGL2_CreateDeviceObjects();
+    
+        // Cleanup
+    ImGui_ImplA5_Shutdown();
+    ImGui::DestroyContext();
+    al_destroy_event_queue(queue);
+    al_destroy_display(display);
+    
+    struct GLFWwindow;
+    
+    //---- Use 32-bit vertex indices (default is 16-bit) to allow meshes with more than 64K vertices. Render function needs to support it.
+//#define ImDrawIdx unsigned int
+    
+    // Implemented features:
+//  [X] User texture binding. Use 'ID3D11ShaderResourceView*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+    
+    // Demo helper function to select among loaded fonts.
+// Here we use the regular BeginCombo()/EndCombo() api which is more the more flexible one.
+void ImGui::ShowFontSelector(const char* label)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    ImFont* font_current = ImGui::GetFont();
+    if (ImGui::BeginCombo(label, font_current->GetDebugName()))
+    {
+        for (int n = 0; n < io.Fonts->Fonts.Size; n++)
+            if (ImGui::Selectable(io.Fonts->Fonts[n]->GetDebugName(), io.Fonts->Fonts[n] == font_current))
+                io.FontDefault = io.Fonts->Fonts[n];
+        ImGui::EndCombo();
+    }
+    ImGui::SameLine(); 
+    ShowHelpMarker(
+        '- Load additional fonts with io.Fonts->AddFontFromFileTTF().\n'
+        '- The font atlas is built when calling io.Fonts->GetTexDataAsXXXX() or io.Fonts->Build().\n'
+        '- Read FAQ and documentation in misc/fonts/ for more details.\n'
+        '- If you need to add/remove fonts at runtime (e.g. for DPI change), do it before calling NewFrame().');
+}
+    
+    // TODO(mmukhi): Add client-stream and completion-queue headers.
+grpc::string GetMockIncludes(grpc_generator::File *file,
+                             const Parameters &params) {
+  grpc::string output;
+  {
+    // Scope the output stream so it closes and finalizes output to the string.
+    auto printer = file->CreatePrinter(&output);
+    std::map<grpc::string, grpc::string> vars;
+    }
+    }
+    
+    struct CommentConfig {
+  const char *first_line;
+  const char *content_line_prefix;
+  const char *last_line;
 };
     
+      // Parameters required to initialize the FlatCompiler.
+  struct InitParams {
+    InitParams()
+        : generators(nullptr),
+          num_generators(0),
+          warn_fn(nullptr),
+          error_fn(nullptr) {}
+    }
     
-    {}  // namespace guetzli
+    static void Error(const flatbuffers::FlatCompiler *flatc,
+                  const std::string &err, bool usage, bool show_exe_name) {
+  if (show_exe_name) { printf('%s: ', g_program_name); }
+  printf('error: %s\n', err.c_str());
+  if (usage) { printf('%s', flatc->GetUsageString(g_program_name).c_str()); }
+  exit(1);
+}
     
-    constexpr int kLowestQuality = 70;
-constexpr int kHighestQuality = 110;
+    template<class T> std::string GenFullName(const T *enum_def) {
+  std::string full_name;
+  const auto &name_spaces = enum_def->defined_namespace->components;
+  for (auto ns = name_spaces.cbegin(); ns != name_spaces.cend(); ++ns) {
+    full_name.append(*ns + '_');
+  }
+  full_name.append(enum_def->name);
+  return full_name;
+}
+    
+    // SliceAllocator is a gRPC-specific allocator that uses the `grpc_slice`
+// refcounted slices to manage memory ownership. This makes it easy and
+// efficient to transfer buffers to gRPC.
+class SliceAllocator : public Allocator {
+ public:
+  SliceAllocator() : slice_(grpc_empty_slice()) {}
+    }
