@@ -1,77 +1,58 @@
 
         
-        class Converter
-  extend Forwardable
-  include Network
-  include LessConversion
-  include JsConversion
-  include FontsConversion
-    
-    desc 'Start a dummy (test) Rails app server'
-task :dummy_rails do
-  require 'rack'
-  require 'term/ansicolor'
-  port = ENV['PORT'] || 9292
-  puts %Q(Starting on #{Term::ANSIColor.cyan 'http://localhost:#{port}'})
-  Rack::Server.start(
-    config: 'test/dummy_rails/config.ru',
-    Port: port)
-end
-    
-          spec['version'] = Bootstrap::VERSION
-    
-      def icon
-    object.image
+          def redirect_back_with_status
+    redirect_back(fallback_location: '/things/stuff', status: 307)
   end
     
-      let(:user) { Fabricate(:user) }
+      def test_lib_helper_methods_after_clear_helpers
+    assert_nothing_raised do
+      call_controller(JustMeController, 'lib')
+    end
+  end
     
-          expect(response).to redirect_to(settings_preferences_path)
-      user.reload
-      expect(user.locale).to eq 'en'
-      expect(user.filtered_languages).to eq ['es', 'fr']
+        # An email was generated.
+    def process(event)
+      debug do
+        mailer = event.payload[:mailer]
+        action = event.payload[:action]
+        '#{mailer}##{action}: processed outbound mail in #{event.duration.round(1)}ms'
+      end
     end
     
-    RSpec.describe BlockDomainService do
-  let(:bad_account) { Fabricate(:account, username: 'badguy666', domain: 'evil.org') }
-  let(:bad_status1) { Fabricate(:status, account: bad_account, text: 'You suck') }
-  let(:bad_status2) { Fabricate(:status, account: bad_account, text: 'Hahaha') }
-  let(:bad_attachment) { Fabricate(:media_attachment, account: bad_account, status: bad_status2, file: attachment_fixture('attachment.jpg')) }
+          private
     
-          def update_available?(gem_name)
-        latest = Gem.latest_version_for(gem_name)
-        return false if latest.nil?
-        latest > installed_gem_version(gem_name)
+    module Rails
+  module Generators
+    class MailerGenerator < NamedBase
+      source_root File.expand_path('templates', __dir__)
+    
+    class ActiveSupport::TestCase
+  include ActiveSupport::Testing::MethodCallAssertions
+    
+      GEMFILE_EXTENSIONS.each do |extension|
+    extension_pathname = root.join('Gemfile#{extension}')
+    
+      File.unlink(out) if (File.size(out) == 0)
+    
+          case matched
+        when :ok
+          # Last command was successful, in addition most servers transmit a banner with the first +OK
+          case s[:last]
+            when nil
+              # Its the first +OK must include the banner, worst case its just +OK
+              s[:info]  = matches
+              s[:proto] = 'tcp'
+              s[:name]  = 'pop3'
+              report_service(s)
+    
+          if(pkt.payload =~ self.sigs[k])
+        matched = k
+        matches = $1
+        sessions[s[:session]].merge!({k => matches})
       end
     
-          expect('.border-color-all').to have_rule(rule)
-    end
+    meterp = Rex::Post::Meterpreter::Client.new(sock)
+    
+      get(/.+/) do
+    send_sinatra_file(request.path) {404}
   end
-    
-      context 'called with three styles' do
-    it 'applies second style to left and right' do
-      rule = 'border-style: dashed double solid'
-    
-      context 'called with four sizes' do
-    it 'applies different widths to all sides' do
-      rule = 'margin: 7px 8px 9px 10px'
-    
-      context 'called with arguments (1, $ratio: $golden-ratio)' do
-    it 'output the first value from the golden ratio scale' do
-      expect('.one-golden-ratio').to have_rule('font-size: 1.618em')
-    end
-  end
-    
-      context 'called with multiple prefixes' do
-    it 'applies the prefixes to the property' do
-      rule = '-moz-appearance: none; ' +
-             '-ms-appearance: none; ' +
-             'appearance: none;'
-    
-          expect('.size-both').to have_ruleset(rule)
-    end
-  end
-    
-    describe 'text-inputs' do
-  before(:all) do
-    ParserSupport.parse_file('library/text-inputs')
