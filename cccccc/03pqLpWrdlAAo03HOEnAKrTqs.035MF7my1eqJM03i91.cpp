@@ -1,138 +1,135 @@
 
         
-        
+        bool SavePageHandler::Handle(const base::FilePath& full_path,
+                             const content::SavePageType& save_type) {
+  auto download_manager = content::BrowserContext::GetDownloadManager(
+      web_contents_->GetBrowserContext());
+  download_manager->AddObserver(this);
+  // Chromium will create a 'foo_files' directory under the directory of saving
+  // page 'foo.html' for holding other resource files of 'foo.html'.
+  base::FilePath saved_main_directory_path = full_path.DirName().Append(
+      full_path.RemoveExtension().BaseName().value() +
+      FILE_PATH_LITERAL('_files'));
+  bool result = web_contents_->SavePage(full_path,
+                                        saved_main_directory_path,
+                                        save_type);
+  download_manager->RemoveObserver(this);
+  // If initialization fails which means fail to create |DownloadItem|, we need
+  // to delete the |SavePageHandler| instance to avoid memory-leak.
+  if (!result)
+    delete this;
+  return result;
+}
+    
+    
+    {}  // namespace api
+    
+    namespace asar {
+    }
+    
+    namespace base {
+class TaskRunner;
+}
+    
+    HttpProtocolHandler::~HttpProtocolHandler() {
+}
+    
+    
     { private:
-  shared_ptr<Net<float> > net_;
-  cv::Size input_geometry_;
-  int num_channels_;
-  cv::Mat mean_;
-  std::vector<string> labels_;
+  std::string scheme_;
 };
     
-    #ifndef CPU_ONLY
-  void forward_gpu_gemm(const Dtype* col_input, const Dtype* weights,
-      Dtype* output, bool skip_im2col = false);
-  void forward_gpu_bias(Dtype* output, const Dtype* bias);
-  void backward_gpu_gemm(const Dtype* input, const Dtype* weights,
-      Dtype* col_output);
-  void weight_gpu_gemm(const Dtype* col_input, const Dtype* output, Dtype*
-      weights);
-  void backward_gpu_bias(Dtype* bias, const Dtype* input);
-#endif
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of PoolingLayer.
- *        Fallback to PoolingLayer for CPU mode.
-*/
-template <typename Dtype>
-class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
+    // Like URLRequestAsarJob, but asks the JavaScript handler for file path.
+class URLRequestAsyncAsarJob : public JsAsker<asar::URLRequestAsarJob> {
  public:
-  explicit CuDNNPoolingLayer(const LayerParameter& param)
-      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNPoolingLayer();
-  // Currently, cuDNN does not support the extra top blob.
-  virtual inline int MinTopBlobs() const { return -1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
+  URLRequestAsyncAsarJob(net::URLRequest*, net::NetworkDelegate*);
     }
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    /**
- * @brief A layer for learning 'embeddings' of one-hot vector input.
- *        Equivalent to an InnerProductLayer with one-hot vectors as input, but
- *        for efficiency the input is the 'hot' index of each column itself.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-template <typename Dtype>
-class EmbedLayer : public Layer<Dtype> {
+    {}  // namespace atom
+    
+    // Like the views::NativeFrameView, but returns the min/max size from the
+// NativeWindowViews.
+class NativeFrameView : public views::NativeFrameView {
  public:
-  explicit EmbedLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+  NativeFrameView(NativeWindow* window, views::Widget* widget);
     }
     
-      void PrintFeatureSet() {
-    for (size_t i = 0; i < kFeatureSetSize; i++) {
-      if(size_t Sz = GetFeature(i))
-        Printf('[%zd: id %zd sz%zd] ', i, SmallestElementPerFeature[i], Sz);
+    
+    {}  // namespace atom
+    
+    namespace tesseract {
     }
-    Printf('\n\t');
-    for (size_t i = 0; i < Inputs.size(); i++)
-      if (size_t N = Inputs[i]->NumFeatures)
-        Printf(' %zd=>%zd ', i, N);
-    Printf('\n');
+    
+    // A useful base class to facilitate the common operation of sorting a vector
+// of owned pointer data using a separate key. This class owns its data pointer,
+// deleting it when it has finished with it, and providing copy constructor and
+// operator= that have move semantics so that the data does not get copied and
+// only a single instance of KDPtrPair holds a specific data pointer.
+template <typename Key, typename Data>
+class KDPtrPair {
+ public:
+  KDPtrPair() : data_(NULL) {}
+  KDPtrPair(Key k, Data* d) : data_(d), key_(k) {}
+  // Copy constructor steals the pointer from src and NULLs it in src, thereby
+  // moving the (single) ownership of the data.
+  KDPtrPair(KDPtrPair& src) : data_(src.data_), key_(src.key_) {
+    src.data_ = NULL;
   }
-    
-      void Set(const uint8_t *B, uint8_t S) {
-    assert(S <= kMaxSize);
-    memcpy(Data, B, S);
-    Size = S;
+  // Destructor deletes data, assuming it is the sole owner.
+  ~KDPtrPair() {
+    delete this->data_;
+    this->data_ = NULL;
   }
-    
-    int CloseFile(int fd) {
-  return close(fd);
-}
-    
-    #include 'FuzzerDefs.h'
-#include 'FuzzerExtFunctions.h'
-#include 'FuzzerInterface.h'
-#include 'FuzzerOptions.h'
-#include 'FuzzerSHA1.h'
-#include 'FuzzerValueBitMap.h'
-#include <algorithm>
-#include <atomic>
-#include <chrono>
-#include <climits>
-#include <cstdlib>
-#include <string.h>
-    
-    // Decides which files need to be merged (add thost to NewFiles).
-// Returns the number of new features added.
-size_t Merger::Merge(std::vector<std::string> *NewFiles) {
-  NewFiles->clear();
-  assert(NumFilesInFirstCorpus <= Files.size());
-  std::set<uint32_t> AllFeatures;
+  // Operator= steals the pointer from src and NULLs it in src, thereby
+  // moving the (single) ownership of the data.
+  void operator=(KDPtrPair& src) {
+    delete this->data_;
+    this->data_ = src.data_;
+    src.data_ = NULL;
+    this->key_ = src.key_;
+  }
     }
     
-    size_t MutationDispatcher::Mutate_InsertByte(uint8_t *Data, size_t Size,
-                                             size_t MaxSize) {
-  if (Size >= MaxSize) return 0;
-  size_t Idx = Rand(Size + 1);
-  // Insert new value at Data[Idx].
-  memmove(Data + Idx + 1, Data + Idx, Size - Idx);
-  Data[Idx] = RandCh(Rand);
-  return Size + 1;
-}
     
-    namespace fuzzer {
+    {}  // namespace tesseract.
+    
+    void NormalizeOutline(MFOUTLINE Outline,
+                      FLOAT32 XOrigin);
+    
+    // See class comment for arguments.
+void SampleIterator::Init(const IndexMapBiDi* charset_map,
+                          const ShapeTable* shape_table,
+                          bool randomize,
+                          TrainingSampleSet* sample_set) {
+  Clear();
+  charset_map_ = charset_map;
+  shape_table_ = shape_table;
+  sample_set_ = sample_set;
+  randomize_ = randomize;
+  if (shape_table_ == NULL && charset_map_ != NULL) {
+    // The caller wishes to iterate by class. The easiest way to do this
+    // is to create a dummy shape_table_ that we will own.
+    int num_fonts = sample_set_->NumFonts();
+    owned_shape_table_ = new ShapeTable(sample_set_->unicharset());
+    int charsetsize = sample_set_->unicharset().size();
+    for (int c = 0; c < charsetsize; ++c) {
+      // We always add a shape for each character to keep the index in sync
+      // with the unichar_id.
+      int shape_id = owned_shape_table_->AddShape(c, 0);
+      for (int f = 1; f < num_fonts; ++f) {
+        if (sample_set_->NumClassSamples(f, c, true) > 0) {
+          owned_shape_table_->AddToShape(shape_id, c, f);
+        }
+      }
     }
-    
-    __attribute__((visibility('default')))
-void __sanitizer_cov_trace_cmp8(uint64_t Arg1, uint64_t Arg2) {
-  fuzzer::TPC.HandleCmp(__builtin_return_address(0), Arg1, Arg2);
-}
-__attribute__((visibility('default')))
-void __sanitizer_cov_trace_cmp4(uint32_t Arg1, uint32_t Arg2) {
-  fuzzer::TPC.HandleCmp(__builtin_return_address(0), Arg1, Arg2);
-}
-__attribute__((visibility('default')))
-void __sanitizer_cov_trace_cmp2(uint16_t Arg1, uint16_t Arg2) {
-  fuzzer::TPC.HandleCmp(__builtin_return_address(0), Arg1, Arg2);
-}
-__attribute__((visibility('default')))
-void __sanitizer_cov_trace_cmp1(uint8_t Arg1, uint8_t Arg2) {
-  fuzzer::TPC.HandleCmp(__builtin_return_address(0), Arg1, Arg2);
+    shape_table_ = owned_shape_table_;
+  }
+  if (shape_table_ != NULL) {
+    num_shapes_ = shape_table_->NumShapes();
+  } else {
+    num_shapes_ = randomize ? sample_set_->num_samples()
+                            : sample_set_->num_raw_samples();
+  }
+  Begin();
 }
