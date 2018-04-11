@@ -1,147 +1,87 @@
 
         
-              BOOLEAN_ATTRIBUTES = %w(allowfullscreen async autofocus autoplay checked
-                              compact controls declare default defaultchecked
-                              defaultmuted defaultselected defer disabled
-                              enabled formnovalidate hidden indeterminate inert
-                              ismap itemscope loop multiple muted nohref
-                              noresize noshade novalidate nowrap open
-                              pauseonexit readonly required reversed scoped
-                              seamless selected sortable truespeed typemustmatch
-                              visible).to_set
+                assert_predicate(x, :autoclose?)
+        assert_equal Encoding::ASCII_8BIT, x.external_encoding
+        x.write 'hello'
     
-          # Returns constant of subscription adapter specified in config/cable.yml.
-      # If the adapter cannot be found, this will default to the Redis adapter.
-      # Also makes sure proper dependencies are required.
-      def pubsub_adapter
-        adapter = (cable.fetch('adapter') { 'redis' })
+      # Classifies the set by the return value of the given block and
+  # returns a hash of {value => set of elements} pairs.  The block is
+  # called once for each element of the set, passing the element as
+  # parameter.
+  #
+  #   require 'set'
+  #   files = Set.new(Dir.glob('*.rb'))
+  #   hash = files.classify { |f| File.mtime(f).year }
+  #   hash       #=> {2000=>#<Set: {'a.rb', 'b.rb'}>,
+  #              #    2001=>#<Set: {'c.rb', 'd.rb', 'e.rb'}>,
+  #              #    2002=>#<Set: {'f.rb'}>}
+  #
+  # Returns an enumerator if no block is given.
+  def classify # :yields: o
+    block_given? or return enum_for(__method__) { size }
     
-          def subscribe(channel, callback, success_callback = nil)
-        listener.add_subscriber(channel, callback, success_callback)
+      it 'adds nil for each element requested beyond the end of the String' do
+    [ ['\xff\x00\xff\x00\xff\x00\xff',  [nil, nil, nil]],
+      ['\xb8\x1e\x85\xebQ\xb8\xf6?abc', [1.42, nil, nil]],
+      ['333333\x07@ffffff\xf6?abcd',    [2.9, 1.4, nil]]
+    ].should be_computed_by(:unpack, unpack_format(3))
+  end
+    
+      it 'decodes the number of bytes specified by the count modifier including whitespace bytes' do
+    [ ['a bc',  ['a b', 'c']],
+      ['a\fbc', ['a\fb', 'c']],
+      ['a\nbc', ['a\nb', 'c']],
+      ['a\rbc', ['a\rb', 'c']],
+      ['a\tbc', ['a\tb', 'c']],
+      ['a\vbc', ['a\vb', 'c']]
+    ].should be_computed_by(:unpack, unpack_format(3)+unpack_format)
+  end
+    
+      it 'decodes the number of characters specified by the count modifier' do
+    [ ['\xc2\x80\xc2\x81\xc2\x82\xc2\x83', 'U1', [0x80]],
+      ['\xc2\x80\xc2\x81\xc2\x82\xc2\x83', 'U2', [0x80, 0x81]],
+      ['\xc2\x80\xc2\x81\xc2\x82\xc2\x83', 'U3', [0x80, 0x81, 0x82]]
+    ].should be_computed_by(:unpack)
+  end
+    
+      context 'with redirect reaction' do
+    before(:each) do
+      mock_app do
+        use Rack::Protection::CookieTossing, :reaction => :redirect
+        run DummyApp
       end
+    end
     
-    module ActiveRecord
-  module ConnectionAdapters
-    class ConnectionSpecification
-      class ResolverTest < ActiveRecord::TestCase
-        def resolve(spec, config = {})
-          Resolver.new(config).resolve(spec)
+        expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('ALLOW-FROM foo')
+  end
+    
+      it 'denies requests with a changing Accept-Language header' do
+    session = {:foo => :bar}
+    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'a'
+    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'b'
+    expect(session).to be_empty
+  end
+    
+        expect(get('/').headers['X-Content-Type-Options']).to be_nil
+  end
+    
+            def expected_attachment
+          'Expected #{@attachment_name}:\n'
         end
     
-        test 'middleware stack accepts only and except as options' do
-      result = ActionsController.action(:show).call(env_for('/'))
-      assert_equal 'First!', result[1]['Middleware-Order']
+      context 'called with null values' do
+    it 'writes rules for other three' do
+      ruleset = 'margin-top: 11px; ' +
+                'margin-right: 12px; ' +
+                'margin-left: 13px;'
+      bad_rule = 'margin-bottom: null;'
     
-        included do
-      # Do not make this inheritable, because we always want it to propagate
-      cattr_accessor :raise_delivery_errors, default: true
-      cattr_accessor :perform_deliveries, default: true
-      cattr_accessor :deliver_later_queue_name, default: :mailers
+      context 'called with four sizes' do
+    it 'applies different widths to all sides' do
+      rule = 'padding: 7px 8px 9px 10px'
     
-          hook_for :template_engine, :test_framework
-    
-    module Homebrew
-  def build_env_keys(env)
-    %w[
-      CC CXX LD OBJC OBJCXX
-      HOMEBREW_CC HOMEBREW_CXX
-      CFLAGS CXXFLAGS CPPFLAGS LDFLAGS SDKROOT MAKEFLAGS
-      CMAKE_PREFIX_PATH CMAKE_INCLUDE_PATH CMAKE_LIBRARY_PATH CMAKE_FRAMEWORK_PATH
-      MACOSX_DEPLOYMENT_TARGET PKG_CONFIG_PATH PKG_CONFIG_LIBDIR
-      HOMEBREW_DEBUG HOMEBREW_MAKE_JOBS HOMEBREW_VERBOSE
-      HOMEBREW_SVN HOMEBREW_GIT
-      HOMEBREW_SDKROOT HOMEBREW_BUILD_FROM_SOURCE
-      MAKE GIT CPP
-      ACLOCAL_PATH PATH CPATH].select { |key| env.key?(key) }
-  end
-    
-          # Find commands in Homebrew/dev-cmd
-      if ARGV.homebrew_developer?
-        puts
-        puts 'Built-in development commands'
-        puts_columns internal_development_commands
-      end
-    
-        if ARGV.named.empty?
-      slow_checks = %w[
-        check_for_broken_symlinks
-        check_missing_deps
-        check_for_outdated_homebrew
-        check_for_linked_keg_only_brews
-      ]
-      methods = (checks.all.sort - slow_checks) + slow_checks
-    else
-      methods = ARGV.named
-    end
-    
-      def patches
-    {}
-  end
-    
-        def to_json
-      JSON.generate(as_json)
-    end
-    
-            entries
-      end
-    end
-  end
-end
-
-    
-    @@ layout
-<html>
-  <head>
-    <title>Super Simple Chat with Sinatra</title>
-    <meta charset='utf-8' />
-    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'></script>
-  </head>
-  <body><%= yield %></body>
-</html>
-    
-    module Sinatra
-  class Application < Base
-    
-          def escape_string(str)
-        str = @escaper.escape_url(str)        if @url
-        str = @escaper.escape_html(str)       if @html
-        str = @escaper.escape_javascript(str) if @javascript
-        str
-      end
-    end
-  end
-end
-
-    
-        it 'leaves normal params untouched' do
-      mock_app do |env|
-        request = Rack::Request.new(env)
-        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']]]
-      end
-      get '/', :foo => 'bar'
-      expect(body).to eq('bar')
-    end
-    
-      # Print the 10 slowest examples and example groups at the
-  # end of the spec run, to help surface which specs are running
-  # particularly slow.
-  config.profile_examples = 10
-    
-          expect('.border-style-false-third').to have_ruleset(ruleset)
-      expect('.border-style-false-third').to_not have_rule(bad_rule)
-    end
-  end
-end
-
-    
-          expect('.border-width-implied-left').to have_rule(rule)
-    end
-  end
-    
-          expect('.all-buttons-focus').to have_ruleset(ruleset)
-    end
-  end
-    
-      context 'called with one size' do
-    it 'applies same width to all sides' do
-      rule = 'margin: 1px'
+      context 'called with multiple prefixes' do
+    it 'applies the prefixes to the property' do
+      rule = '-moz-appearance: none; ' +
+             '-ms-appearance: none; ' +
+             'appearance: none;'
