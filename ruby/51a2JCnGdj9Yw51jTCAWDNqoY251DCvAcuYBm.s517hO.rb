@@ -1,58 +1,62 @@
 
         
-          def redirect_back_with_status
-    redirect_back(fallback_location: '/things/stuff', status: 307)
+          def test_recursive_key
+    h = @cls[]
+    assert_nothing_raised { h[h] = :foo }
+    h.rehash
+    assert_equal(:foo, h[h])
   end
     
-      def test_lib_helper_methods_after_clear_helpers
-    assert_nothing_raised do
-      call_controller(JustMeController, 'lib')
+      it 'decodes the number of shorts requested by the count modifier' do
+    'abcdef'.unpack(unpack_format(3)).should == [25185, 25699, 26213]
+  end
+    
+      class Honda < Car
+    def initialize(*args)
+      self.make = 'Honda'
+      super(*args)
     end
   end
     
-        # An email was generated.
-    def process(event)
-      debug do
-        mailer = event.payload[:mailer]
-        action = event.payload[:action]
-        '#{mailer}##{action}: processed outbound mail in #{event.duration.round(1)}ms'
+      it 'respects Thread subclasses' do
+    c = Class.new(Thread)
+    t = c.send(@method) { }
+    t.should be_kind_of(c)
+    
+        def log_http_get_files(files, from, cached = false)
+      return if files.empty?
+      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
       end
     end
     
-          private
-    
-    module Rails
-  module Generators
-    class MailerGenerator < NamedBase
-      source_root File.expand_path('templates', __dir__)
-    
-    class ActiveSupport::TestCase
-  include ActiveSupport::Testing::MethodCallAssertions
-    
-      GEMFILE_EXTENSIONS.each do |extension|
-    extension_pathname = root.join('Gemfile#{extension}')
-    
-      File.unlink(out) if (File.size(out) == 0)
-    
-          case matched
-        when :ok
-          # Last command was successful, in addition most servers transmit a banner with the first +OK
-          case s[:last]
-            when nil
-              # Its the first +OK must include the banner, worst case its just +OK
-              s[:info]  = matches
-              s[:proto] = 'tcp'
-              s[:name]  = 'pop3'
-              report_service(s)
-    
-          if(pkt.payload =~ self.sigs[k])
-        matched = k
-        matches = $1
-        sessions[s[:session]].merge!({k => matches})
+      def setup
+    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
+    success = Dir.chdir DUMMY_PATH do
+      silence_stdout_if !ENV['VERBOSE'] do
+        system 'node', 'manifest.js', tmp_dir
       end
-    
-    meterp = Rex::Post::Meterpreter::Client.new(sock)
-    
-      get(/.+/) do
-    send_sinatra_file(request.path) {404}
+    end
+    assert success, 'Node.js Mincer compilation failed'
+    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
+    css_name = manifest['assets']['application.css']
+    @css = File.read('#{tmp_dir}/#{css_name}')
   end
+end
+
+    
+    desc 'Start a dummy (test) Rails app server'
+task :dummy_rails do
+  require 'rack'
+  require 'term/ansicolor'
+  port = ENV['PORT'] || 9292
+  puts %Q(Starting on #{Term::ANSIColor.cyan 'http://localhost:#{port}'})
+  Rack::Server.start(
+    config: 'test/dummy_rails/config.ru',
+    Port: port)
+end
+    
+      private
