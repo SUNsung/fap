@@ -1,91 +1,205 @@
 
         
-                return '\r\n'.join(headers)
+        from sklearn.dummy import DummyClassifier
     
-    from httpie.compat import str
-from httpie.context import Environment
-from httpie.models import HTTPRequest, HTTPResponse
-from httpie.input import (OUT_REQ_BODY, OUT_REQ_HEAD,
-                          OUT_RESP_HEAD, OUT_RESP_BODY)
-from httpie.output.processing import Formatting, Conversion
-    
-        # 'A byte-content-range-spec with a byte-range-resp-spec whose
-    # last- byte-pos value is less than its first-byte-pos value,
-    # or whose instance-length value is less than or equal to its
-    # last-byte-pos value, is invalid. The recipient of an invalid
-    # byte-content-range- spec MUST ignore it and any content
-    # transferred along with it.'
-    if (first_byte_pos >= last_byte_pos or
-            (instance_length is not None and
-             instance_length <= last_byte_pos)):
-        raise ContentRangeError(
-            'Invalid Content-Range returned: %r' % content_range)
-    
-        def _migrate_implicit_content_type(self):
-        '''Migrate the removed implicit_content_type config option'''
-        try:
-            implicit_content_type = self.pop('implicit_content_type')
-        except KeyError:
-            self.save()
-        else:
-            if implicit_content_type == 'form':
-                self['default_options'].insert(0, '--form')
-            self.save()
-            self.load()
+        plt.legend(['Ridge', 'OLS', 'LassoLars'], loc='upper left')
+    plt.axis('tight')
+    plt.show()
 
     
-                if self.args.auth is None or not plugin.auth_parse:
-                self.args.auth = plugin.get_auth()
+    plt.figure('scikit-learn Ward's method benchmark results')
+plt.imshow(np.log(ratio), aspect='auto', origin='lower')
+plt.colorbar()
+plt.contour(ratio, levels=[1, ], colors='k')
+plt.yticks(range(len(n_features)), n_features.astype(np.int))
+plt.ylabel('N features')
+plt.xticks(range(len(n_samples)), n_samples.astype(np.int))
+plt.xlabel('N samples')
+plt.title('Scikit's time, in units of scipy time (log)')
+plt.show()
+
+    
+        op.add_option('--algorithm',
+                  dest='selected_algorithm',
+                  default=default_algorithms,
+                  type=str,
+                  help='Comma-separated list of transformer to benchmark. '
+                       'Default: %default. \nAvailable: %default')
+    
+    # to store the results
+scikit_classifier_results = []
+scikit_regressor_results = []
+    
+        fn = os.path.relpath(fn,
+                         start=os.path.dirname(__import__(package).__file__))
+    try:
+        lineno = inspect.getsourcelines(obj)[1]
+    except Exception:
+        lineno = ''
+    return url_fmt.format(revision=revision, package=package,
+                          path=fn, lineno=lineno)
+    
+    import numpy as np
+from sklearn.covariance import EllipticEnvelope
+from sklearn.svm import OneClassSVM
+import matplotlib.pyplot as plt
+import matplotlib.font_manager
+from sklearn.datasets import load_boston
+    
+    
+class Model(object):
+    '''The Model which hold the data. It implements the
+    observable in the observer pattern and notifies the
+    registered observers on change event.
+    '''
+    
+    # Author: Olivier Grisel <olivier.grisel@ensta.org>
+# License: BSD 3 clause
+    
+        def remove(self, key):
+        hash_index = self._hash_function(key)
+        for index, item in enumerate(self.table[hash_index]):
+            if item.key == key:
+                del self.table[hash_index][index]
+                return
+        raise KeyError('Key not found')
+    
+    
+if __name__ == '__main__':
+    RemoveDuplicateUrls.run()
+
+    
+        def reject_friend_request(self, friend_id):
+        pass
+    
+            When updating an entry, updates its position to the front of the LRU list.
+        If the entry is new and the cache is at capacity, removes the oldest entry
+        before the new entry is added.
+        '''
+        node = self.map[query]
+        if node is not None:
+            # Key exists in cache, update the value
+            node.results = results
+            self.linked_list.move_to_front(node)
+        else:
+            # Key does not exist in cache
+            if self.size == self.MAX_SIZE:
+                # Remove the oldest entry from the linked list and lookup
+                self.lookup.pop(self.linked_list.tail.query, None)
+                self.linked_list.remove_from_tail()
             else:
-                if already_parsed:
-                    # from the URL
-                    credentials = self.args.auth
-                else:
-                    credentials = parse_auth(self.args.auth)
+                self.size += 1
+            # Add the new key and value
+            new_node = Node(query, results)
+            self.linked_list.append_to_front(new_node)
+            self.lookup[query] = new_node
+
     
-    '''Tests for word2vec_optimized module.'''
+        def prepare(self, **kwargs):
     
-        # Evaluate the model.
-    eval_result = classifier.evaluate(
-        input_fn=lambda:iris_data.eval_input_fn(test_x, test_y, args.batch_size))
+    	html = get_html(url)
+	contentid = r1(r'<meta name='contentid' scheme='DMINSTR2' content='([^']+)' />', html)
+	vid = r1(r''demand_ehow_videoid':'([^']+)'', html)
+	assert vid
     
-      @tf.test.mock.patch.dict(custom_estimator.__dict__,
-                           {'load_data': four_lines_data})
-  def test_custom_estimator(self):
-    custom_estimator.main([None, '--train_steps=1'])
+            if s: self.streams['video'] = {'url': s }
+        if mp3: self.streams['audio'] = { 'url': mp3 }
+        if pdf: self.streams['slides'] = { 'url': pdf }
     
+        #title
+    title = ''
+    profile_api = 'https://www.showroom-live.com/api/room/profile?room_id={room_id}'.format(room_id = room_id)
+    html = loads(get_content(profile_api))
+    try:
+        title = html['main_name']
+    except KeyError:
+        title = 'Showroom_{room_id}'.format(room_id = room_id)
     
-def main(_):
-  '''Trains Language Model.'''
-  tf.logging.set_verbosity(tf.logging.INFO)
-  with tf.device(tf.train.replica_device_setter(FLAGS.ps_tasks)):
-    model = graphs.get_model()
-    train_op, loss, global_step = model.language_model_training()
-    train_utils.run_training(train_op, loss, global_step)
+            Args:
+            max_workers: The maximum number of threads that can be used to
+                execute the given calls.
+        '''
+        self._max_workers = max_workers
+        self._work_queue = queue.Queue()
+        self._threads = set()
+        self._shutdown = False
+        self._shutdown_lock = threading.Lock()
     
+    def sequential():
+    return list(map(is_prime, PRIMES))
     
-collect_ignore = [
-    # deprecated or moved modules
-    'scrapy/conf.py',
-    'scrapy/stats.py',
-    'scrapy/project.py',
-    'scrapy/utils/decorator.py',
-    'scrapy/statscol.py',
-    'scrapy/squeue.py',
-    'scrapy/log.py',
-    'scrapy/dupefilter.py',
-    'scrapy/command.py',
-    'scrapy/linkextractor.py',
-    'scrapy/spider.py',
-    
-        def __init__(self):
-        Resource.__init__(self)
-        self.concurrent = 0
-        self.tail = deque(maxlen=100)
-        self._reset_stats()
-    
-            if opts.pdb:
-            failure.startDebugMode()
+        def test_del_shutdown(self):
+        executor = futures.ProcessPoolExecutor(max_workers=5)
+        list(executor.map(abs, range(-5, 5)))
+        queue_management_thread = executor._queue_management_thread
+        processes = executor._processes
+        del executor
     
     
-class _BenchServer(object):
+  @staticmethod
+  def _ExtraHeaders( method, request_uri, request_body = None ):
+    if not request_body:
+      request_body = bytes( b'' )
+    headers = dict( _HEADERS )
+    headers[ _HMAC_HEADER ] = b64encode(
+        CreateRequestHmac( ToBytes( method ),
+                           ToBytes( urlparse( request_uri ).path ),
+                           request_body,
+                           BaseRequest.hmac_secret ) )
+    return headers
+    
+    
+def ExtractKeywordsFromGroup_KeywordAssignAndMiddle_test():
+  assert_that( syntax_parse._ExtractKeywordsFromGroup(
+                 syntax_parse.SyntaxGroup( '', [
+                   'nextgroup=zoo foo skipnl bar',
+                   'zoo goo',
+                 ] ) ),
+               contains_inanyorder( 'foo', 'skipnl', 'bar', 'zoo', 'goo' ) )
+    
+    
+def StopServer( ycm ):
+  try:
+    ycm.OnVimLeave()
+    WaitUntilProcessIsTerminated( ycm._server_popen )
+    CloseStandardStreams( ycm._server_popen )
+  except Exception:
+    pass
+    
+    print 'PLUGIN_I18N_PATHS := ' + ','.join(os.path.relpath(plugin.path)
+                                         for plugin in plugins
+                                         if plugin.needs_translation)
+    
+    # class specific overrides
+api('link',          LinkJsonTemplate)
+api('promotedlink',  PromotedLinkJsonTemplate)
+api('message',       MessageJsonTemplate)
+api('subreddit',     SubredditJsonTemplate)
+api('labeledmulti',  LabeledMultiJsonTemplate)
+api('reddit',        RedditJsonTemplate)
+api('panestack',     PanestackJsonTemplate)
+api('htmlpanestack', NullJsonTemplate)
+api('listing',       ListingJsonTemplate)
+api('searchlisting', SearchListingJsonTemplate)
+api('userlisting',   UserListingJsonTemplate)
+api('usertableitem', UserTableItemJsonTemplate)
+api('account',       AccountJsonTemplate)
+    
+        @csrf_exempt
+    @json_validate(
+        VRatelimit(rate_ip=True, prefix='rate_register_'),
+        signature=VSigned(),
+        name=VUname(['user']),
+        email=ValidEmail('email'),
+        password=VPasswordChange(['passwd', 'passwd2']),
+    )
+    def POST_register(self, responder, name, email, password, **kwargs):
+        kwargs.update(dict(
+            controller=self,
+            form=responder('noop'),
+            responder=responder,
+            name=name,
+            email=email,
+            password=password,
+        ))
+        return handle_register(**kwargs)
