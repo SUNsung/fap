@@ -1,178 +1,186 @@
 
         
-        
-@mock.patch('httpie.core.get_response')
-def test_error_traceback(get_response):
-    exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    with raises(ConnectionError):
-        main(['--ignore-stdin', '--traceback', 'www.google.com'])
+        new_version = {}
     
-        @staticmethod
-    def make_header(username, password):
-        credentials = u'%s:%s' % (username, password)
-        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
-        return 'Basic %s' % token
+        with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(out)
     
-        '''
-)
-network.add_argument(
-    '--check-status',
-    default=False,
-    action='store_true',
-    help='''
-    By default, HTTPie exits with 0 when no network or other fatal errors
-    occur. This flag instructs HTTPie to also check the HTTP status code and
-    exit with an error if the status indicates one.
     
-        def test_verify_custom_ca_bundle_invalid_path(self, httpbin_secure):
-        # since 2.14.0 requests raises IOError
-        with pytest.raises((SSLError, IOError)):
-            http(httpbin_secure.url + '/get', '--verify', '/__not_found__')
+from youtube_dl import YoutubeDL
     
-        def prompt_password(self, host):
-        try:
-            self.value = self._getpass(
-                'http: password for %s@%s: ' % (self.key, host))
-        except (EOFError, KeyboardInterrupt):
-            sys.stderr.write('\n')
-            sys.exit(0)
+    try:
+    from .lazy_extractors import *
+    from .lazy_extractors import _ALL_CLASSES
+    _LAZY_LOADER = True
+except ImportError:
+    _LAZY_LOADER = False
+    from .extractors import *
     
-        def _hash_function(self, key):
-        return key % self.size
+            duration = parse_duration(self._search_regex(
+            r'<b>Duration:</b> (?:<q itemprop='duration'>)?(\d+:\d+)', webpage, 'duration', fatal=False))
+        view_count = int_or_none(self._html_search_regex(
+            r'<b>Views:</b> (\d+)', webpage, 'view count', fatal=False))
     
-    seller_category_map = {}
-seller_category_map['Exxon'] = DefaultCategories.GAS
-seller_category_map['Target'] = DefaultCategories.SHOPPING
     
-    from mrjob.job import MRJob
+class AudiomackIE(InfoExtractor):
+    _VALID_URL = r'https?://(?:www\.)?audiomack\.com/song/(?P<id>[\w/-]+)'
+    IE_NAME = 'audiomack'
+    _TESTS = [
+        # hosted on audiomack
+        {
+            'url': 'http://www.audiomack.com/song/roosh-williams/extraordinary',
+            'info_dict':
+            {
+                'id': '310086',
+                'ext': 'mp3',
+                'uploader': 'Roosh Williams',
+                'title': 'Extraordinary'
+            }
+        },
+        # audiomack wrapper around soundcloud song
+        {
+            'add_ie': ['Soundcloud'],
+            'url': 'http://www.audiomack.com/song/hip-hop-daily/black-mamba-freestyle',
+            'info_dict': {
+                'id': '258901379',
+                'ext': 'mp3',
+                'description': 'mamba day freestyle for the legend Kobe Bryant ',
+                'title': 'Black Mamba Freestyle [Prod. By Danny Wolf]',
+                'uploader': 'ILOVEMAKONNEN',
+                'upload_date': '20160414',
+            }
+        },
+    ]
     
-            When updating an entry, updates its position to the front of the LRU list.
-        If the entry is new and the cache is at capacity, removes the oldest entry
-        before the new entry is added.
-        '''
-        node = self.lookup[query]
-        if node is not None:
-            # Key exists in cache, update the value
-            node.results = results
-            self.linked_list.move_to_front(node)
+    
+class ClipRsIE(OnetBaseIE):
+    _VALID_URL = r'https?://(?:www\.)?clip\.rs/(?P<id>[^/]+)/\d+'
+    _TEST = {
+        'url': 'http://www.clip.rs/premijera-frajle-predstavljaju-novi-spot-za-pesmu-moli-me-moli/3732',
+        'md5': 'c412d57815ba07b56f9edc7b5d6a14e5',
+        'info_dict': {
+            'id': '1488842.1399140381',
+            'ext': 'mp4',
+            'title': 'PREMIJERA Frajle predstavljaju novi spot za pesmu Moli me, moli',
+            'description': 'md5:56ce2c3b4ab31c5a2e0b17cb9a453026',
+            'duration': 229,
+            'timestamp': 1459850243,
+            'upload_date': '20160405',
+        }
+    }
+    
+        unweighted_metric = history.history['output2_' + loss_full_name][0]
+    weighted_metric = history.history['output2_weighted_' + loss_full_name][0]
+    
+        @property
+    def updates(self):
+        if hasattr(self.forward_layer, 'updates'):
+            return self.forward_layer.updates + self.backward_layer.updates
+        return []
+    
+        x = Input(shape=(1,))
+    y = inner_model(x)
+    outer_model = Model(x, y)
+    assert outer_model.trainable_weights == inner_model.trainable_weights
+    inner_model.trainable = False
+    assert outer_model.trainable_weights == []
+    inner_model.trainable = True
+    inner_model.layers[-1].trainable = False
+    assert outer_model.trainable_weights == []
+    
+            couples += [[words[i % len(words)],
+                    random.randint(1, vocabulary_size - 1)]
+                    for i in range(num_negative_samples)]
+        if categorical:
+            labels += [[1, 0]] * num_negative_samples
         else:
-            # Key does not exist in cache
-            if self.size == self.MAX_SIZE:
-                # Remove the oldest entry from the linked list and lookup
-                self.lookup.pop(self.linked_list.tail.query, None)
-                self.linked_list.remove_from_tail()
-            else:
-                self.size += 1
-            # Add the new key and value
-            new_node = Node(results)
-            self.linked_list.append_to_front(new_node)
-            self.lookup[query] = new_node
-
+            labels += [0] * num_negative_samples
     
-    from superset import db
-from superset.models.core import Database
+        layer_test(local.LocallyConnected1D,
+               kwargs={'filters': filters,
+                       'kernel_size': filter_length,
+                       'padding': padding,
+                       'kernel_regularizer': 'l2',
+                       'bias_regularizer': 'l2',
+                       'activity_regularizer': 'l2',
+                       'strides': strides},
+               input_shape=(num_samples, num_steps, input_dim))
     
-        # DESCRIBE | DESC qualifiedName
-    def test_describe(self):
-        self.assertEquals({'t1'}, self.extract_tables('DESCRIBE t1'))
-        self.assertEquals({'t1'}, self.extract_tables('DESC t1'))
+    from keras.preprocessing import sequence
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation
+from keras.layers import Embedding
+from keras.layers import LSTM
+from keras.layers import Conv1D, MaxPooling1D
+from keras.datasets import imdb
     
-        # 4. Delete empty roles from permission view menues
-    pvms = sm.get_session.query(sm.permissionview_model).all()
-    for pvm in pvms:
-        pvm.role = [r for r in pvm.role if r]
-    sm.get_session.commit()
+    args = parser.parse_args()
+base_image_path = args.base_image_path
+style_reference_image_path = args.style_reference_image_path
+result_prefix = args.result_prefix
+iterations = args.iter
     
-        def get_query_str(self, query_obj):
-        '''Returns a query as a string
+        for data_format in ['channels_first', 'channels_last']:
+        if data_format == 'channels_first':
+            shape = (3, 5, 5)
+            target_shape = (5, 5, 3)
+            prev_shape = (2, 3, 2)
+            flip = lambda x: np.flip(np.flip(x, axis=2), axis=3)
+            transpose = lambda x: np.transpose(x, (0, 2, 3, 1))
+            target_data_format = 'channels_last'
+        elif data_format == 'channels_last':
+            shape = (5, 5, 3)
+            target_shape = (3, 5, 5)
+            prev_shape = (2, 2, 3)
+            flip = lambda x: np.flip(np.flip(x, axis=1), axis=2)
+            transpose = lambda x: np.transpose(x, (0, 3, 1, 2))
+            target_data_format = 'channels_first'
     
-    from sqlalchemy.orm.session import make_transient
+    
+def test_serialization():
+    all_activations = ['max_norm', 'non_neg',
+                       'unit_norm', 'min_max_norm']
+    for name in all_activations:
+        fn = constraints.get(name)
+        ref_fn = getattr(constraints, name)()
+        assert fn.__class__ == ref_fn.__class__
+        config = constraints.serialize(fn)
+        fn = constraints.deserialize(config)
+        assert fn.__class__ == ref_fn.__class__
+    
+        def remove(self, key):
+        hash_index = self._hash_function(key)
+        for index, item in enumerate(self.table[hash_index]):
+            if item.key == key:
+                del self.table[hash_index][index]
+                return
+        raise KeyError('Key not found')
+    
+            The shuffle/sort step of MapReduce will then do a
+        distributed sort on the keys, resulting in:
+    
+        def _park_starting_at_spot(self, spot, vehicle):
+        '''Occupy starting at spot.spot_number to vehicle.spot_size.'''
+        pass
+    
+        def dispatch_call(self, call):
+        if call.rank not in (Rank.OPERATOR, Rank.SUPERVISOR, Rank.DIRECTOR):
+            raise ValueError('Invalid call rank: {}'.format(call.rank))
+        employee = None
+        if call.rank == Rank.OPERATOR:
+            employee = self._dispatch_call(call, self.operators)
+        if call.rank == Rank.SUPERVISOR or employee is None:
+            employee = self._dispatch_call(call, self.supervisors)
+        if call.rank == Rank.DIRECTOR or employee is None:
+            employee = self._dispatch_call(call, self.directors)
+        if employee is None:
+            self.queued_calls.append(call)
     
     
-def cast_form_data(form_data):
-    '''Translates old to new form_data'''
-    d = {}
-    fields = frontend_config.get('controls', {})
-    for k, v in form_data.items():
-        field_config = fields.get(k, {})
-        ft = field_config.get('type')
-        if ft == 'CheckboxControl':
-            # bug in some urls with dups on bools
-            if isinstance(v, list):
-                v = 'y' in v
-            else:
-                v = True if v in ('true', 'y') or v is True else False
-        elif v and ft == 'TextControl' and field_config.get('isInt'):
-            v = int(v) if v != '' else None
-        elif v and ft == 'TextControl' and field_config.get('isFloat'):
-            v = float(v) if v != '' else None
-        elif v and ft == 'SelectControl':
-            if field_config.get('multi'):
-                if type(form_data).__name__ == 'ImmutableMultiDict':
-                    v = form_data.getlist(k)
-                elif not isinstance(v, list):
-                    v = [v]
-        if d.get('slice_id'):
-            d['slice_id'] = int(d['slice_id'])
+class Cache(object):
     
-        It also understands ``NaN``, ``Infinity``, and ``-Infinity`` as
-    their corresponding ``float`` values, which is outside the JSON spec.
     
-            m = match_number(string, idx)
-        if m is not None:
-            integer, frac, exp = m.groups()
-            if frac or exp:
-                res = parse_float(integer + (frac or '') + (exp or ''))
-            else:
-                res = parse_int(integer)
-            return res, m.end()
-        elif nextchar == 'N' and string[idx:idx + 3] == 'NaN':
-            return parse_constant('NaN'), idx + 3
-        elif nextchar == 'I' and string[idx:idx + 8] == 'Infinity':
-            return parse_constant('Infinity'), idx + 8
-        elif nextchar == '-' and string[idx:idx + 9] == '-Infinity':
-            return parse_constant('-Infinity'), idx + 9
-        else:
-            raise StopIteration(idx)
+class Cache(object):
     
-        print('$(target)$(debug_suffix)%s: $(temp_dir) $(OBJS)' % (target_ext))
-    print('\tlink -out:$(target)$(debug_suffix)%s %s' %
-          (target_ext, target_link_flags), '@<<')
-    print('\t$(OBJS)')
-    print('\t$(LIBS)')
-    print('\t$(ADDN_LINK_FILES)')
-    print('\t$(pythonlib) $(lcustom) $(l_debug)')
-    print('\t$(resources)')
-    print('<<')
-    print()
-    print('clean:')
-    print('\t-del /f *.obj')
-    print('\t-del /f $(target).exe')
-
     
-                    if not args:
-                    # args=NULL, nargs=0, kwargs=NULL
-                    result = _testcapi.pyobject_fastcalldict(func, None, None)
-                    self.check_result(result, expected)
-    
-        # We divide frames into:
-    #   - 'python frames':
-    #       - 'bytecode frames' i.e. PyEval_EvalFrameEx
-    #       - 'other python frames': things that are of interest from a python
-    #         POV, but aren't bytecode (e.g. GC, GIL)
-    #   - everything else
-    
-        def _create_infile(self):
-        infile = support.TESTFN
-        with open(infile, 'w') as fp:
-            self.addCleanup(os.remove, infile)
-            fp.write(self.data)
-        return infile
-    
-    class X(Structure):
-    _fields_ = [('c_int', c_int)]
-    init_called = False
-    def __init__(self):
-        self._init_called = True
+class PersonServer(object):
