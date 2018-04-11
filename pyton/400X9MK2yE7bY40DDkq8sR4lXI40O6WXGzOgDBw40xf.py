@@ -1,64 +1,40 @@
 
         
-                (category1, 1), product4
-        (category1, 2), product1
-        (category1, 3), product2
-        (category2, 3), product1
-        (category2, 7), product3
-        '''
-        category, product_id = key
-        quantity = value
-        yield (category, quantity), product_id
+            for filename in filenames:
+        fd = codecs.open(filename, mode='r', encoding='utf-8')
+        for line in fd.readlines():
+            refs = re.findall(r'(?<=<a href=')[^']*', markdown.markdown(line))
+            for ref in refs:
+                if ref not in urls:
+                    urls.append(ref)
     
-        def __init__(self, from_user_id, to_user_id, request_status, timestamp):
-        self.from_user_id = from_user_id
-        self.to_user_id = to_user_id
-        self.request_status = request_status
-        self.timestamp = timestamp
+    from r2.lib.translation import I18N_PATH
+from r2.lib.plugin import PluginLoader
+from r2.lib import js
     
-        def __init__(self, value, suit):
-        super(BlackJackCard, self).__init__(value, suit)
+        app.config = config
     
+    api('reltableitem', RelTableItemJsonTemplate)
+api('bannedtableitem', BannedTableItemJsonTemplate)
+api('mutedtableitem', MutedTableItemJsonTemplate)
+api('invitedmodtableitem', InvitedModTableItemJsonTemplate)
+api('friendtableitem', FriendTableItemJsonTemplate)
     
-@zope.interface.implementer(interfaces.IAuthenticator)
-@zope.interface.provider(interfaces.IPluginFactory)
-class Authenticator(common.Plugin):
-    '''Example Authenticator.'''
+        @csrf_exempt
+    @json_validate(
+        signature=VSigned(),
+        user=VThrottledLogin(['user', 'passwd']),
+    )
+    def POST_login(self, responder, user, **kwargs):
+        kwargs.update(dict(
+            controller=self,
+            form=responder('noop'),
+            responder=responder,
+            user=user,
+        ))
+        return handle_login(**kwargs)
     
-            # Convert unsigned big-endian byte arrays to integers.
-        tests3 = {
-            b'': 0,
-            b'\x00': 0,
-            b'\x01': 1,
-            b'\x7f': 127,
-            b'\x80': 128,
-            b'\xff': 255,
-            b'\x01\x00': 256,
-            b'\x7f\xff': 32767,
-            b'\x80\x00': 32768,
-            b'\xff\xff': 65535,
-            b'\x01\x00\x00': 65536,
-        }
-        check(tests3, 'big', signed=False)
-    
-        def test_create_widgets(self):
-        self.dialog.create_entries = Func()
-        self.dialog.create_option_buttons = Func()
-        self.dialog.create_other_buttons = Func()
-        self.dialog.create_command_buttons = Func()
-    
-        def proxyval(self, visited):
-        return None
-    
-            self.assertRaises(TypeError, _CFuncPtr, 13, 'name', 42, 'iid')
-    
-    class StructFieldsTestCase(unittest.TestCase):
-    # Structure/Union classes must get 'finalized' sooner or
-    # later, when one of these things happen:
-    #
-    # 1. _fields_ is set.
-    # 2. An instance is created.
-    # 3. The type is used as field of another Structure/Union.
-    # 4. The type is subclassed
-    #
-    # When they are finalized, assigning _fields_ is no longer allowed.
+        def GET_health(self):
+        if os.path.exists('/var/opt/reddit/quiesce'):
+            request.environ['usable_error_content'] = 'No thanks, I'm full.'
+            abort(503)
