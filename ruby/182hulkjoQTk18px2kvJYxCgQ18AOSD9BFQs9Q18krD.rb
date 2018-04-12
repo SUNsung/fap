@@ -1,114 +1,95 @@
 
         
-          # Allows a bottle tag to specify a specific OS or later,
-  # so the same bottle can target multiple OSs.
-  # Not used in core, used in taps.
-  def find_or_later_tag(tag)
-    begin
-      tag_version = MacOS::Version.from_symbol(tag)
-    rescue ArgumentError
-      return
-    end
-    
-    require 'global'
-require 'build_options'
-require 'cxxstdlib'
-require 'keg'
-require 'extend/ENV'
-require 'debrew'
-require 'fcntl'
-require 'socket'
-    
-      # Removes any empty directories in the formula's prefix subtree
-  # Keeps any empty directions projected by skip_clean
-  # Removes any unresolved symlinks
-  def prune
-    dirs = []
-    symlinks = []
-    @f.prefix.find do |path|
-      if path == @f.libexec || @f.skip_clean?(path)
-        Find.prune
-      elsif path.symlink?
-        symlinks << path
-      elsif path.directory?
-        dirs << path
-      end
-    end
-    
-        h = base.dup
-    assert_equal(nil, h.reject! { false })
-    assert_equal(@cls[],  h.reject! { true })
-    
-      it 'decodes the remaining floats when passed the '*' modifier after another directive' do
-    array = '@\xa9\x99\x9aA\x1333'.unpack(unpack_format()+unpack_format('*'))
-    array.should == [5.300000190734863, 9.199999809265137]
+          def self.fragment_cache
+    @cache ||= DistributedCache.new('am_serializer_fragment_cache')
   end
     
-      def self.clear_state
-    @state = nil
-  end
-    
-        t.status.should == false
-    t.join
-  end
-    
-        def register_compass_extension
-      ::Compass::Frameworks.register(
-          'bootstrap',
-          :version               => Bootstrap::VERSION,
-          :path                  => gem_path,
-          :stylesheets_directory => stylesheets_path,
-          :templates_directory   => File.join(gem_path, 'templates')
-      )
+        def reset_password_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :reset_password_instructions, opts)
     end
     
-      # Eager load code on boot. This eager loads most of Rails and
-  # your application in memory, allowing both thread web servers
-  # and those relying on copy on write to perform better.
-  # Rake tasks automatically ignore this option for performance.
-  config.eager_load = true
+          def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
+        end
     
-      # Show full error reports and disable caching.
-  config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
-    
-            def initialize(name, declaration_node, scope)
-          unless VARIABLE_DECLARATION_TYPES.include?(declaration_node.type)
-            raise ArgumentError,
-                  'Node type must be any of #{VARIABLE_DECLARATION_TYPES}, ' \
-                  'passed #{declaration_node.type}'
-          end
-    
-                lambda do |corrector|
-              new_source = receiver.source + '.start_with?(' +
-                           to_string_literal(regex_str) + ')'
-              corrector.replace(node.source_range, new_source)
-            end
+                # Break out if we're supposed to. Otherwise re-raise the error
+            # because it is a real problem.
+            break if breakable
+            raise
           end
         end
+    
+              opts = OptionParser.new do |o|
+            o.banner = 'Usage: vagrant box remove <name>'
+            o.separator ''
+            o.separator 'Options:'
+            o.separator ''
+    
+              # Repackage the box
+          output_name = @env.vagrantfile.config.package.name || 'package.box'
+          output_path = Pathname.new(File.expand_path(output_name, FileUtils.pwd))
+          box.repackage(output_path)
+    
+            # Parse the options
+        argv = parse_options(opts)
+        return if !argv
+        if argv.length < 2
+          raise Vagrant::Errors::CLIInvalidUsage,
+            help: opts.help.chomp
+        end
+    
+    answer_ary = answer.to_a
+# puts answer_ary
+
+    
+            def log_levels
+          @log_levels ||= {}
+        end
+    
+      module Sass::Plugin::Configuration
+    # Different default options in a m environment.
+    def default_options
+      @default_options ||= begin
+        version = Merb::VERSION.split('.').map {|n| n.to_i}
+        if version[0] <= 0 && version[1] < 5
+          root = MERB_ROOT
+          env  = MERB_ENV
+        else
+          root = Merb.root.to_s
+          env  = Merb.environment
+        end
+    
+        # Converts a script node into a corresponding string interpolation
+    # expression.
+    #
+    # @param node_or_interp [Sass::Script::Tree::Node]
+    # @return [Sass::Script::Tree::StringInterpolation]
+    def to_string_interpolation(node_or_interp)
+      unless node_or_interp.is_a?(Interpolation)
+        node = node_or_interp
+        return string_literal(node.value.to_s) if node.is_a?(Literal)
+        if node.is_a?(StringInterpolation)
+          return concat(string_literal(node.quote), concat(node, string_literal(node.quote)))
+        end
+        return StringInterpolation.new(string_literal(''), node, string_literal(''))
       end
+    
+    end
+    
+      context 'called with arguments (2, $value: 4em 6em)' do
+    it 'outputs sextuple the second value from the default scale' do
+      expect('.two-double-value').to have_rule('font-size: 3.125em')
     end
   end
 end
 
     
-    module RuboCop
-  module Cop
-    module Style
-      # This cop checks for optional arguments to methods
-      # that do not come at the end of the argument list
-      #
-      # @example
-      #   # bad
-      #   def foo(a = 1, b, c)
-      #   end
-      #
-      #   # good
-      #   def baz(a, b, c = 1)
-      #   end
-      #
-      #   def foobar(a = 1, b = 2, c = 3)
-      #   end
-      class OptionalArguments < Cop
-        MSG = 'Optional arguments should appear at the end ' \
-              'of the argument list.'.freeze
+      context 'called with null values' do
+    it 'writes rules for others' do
+      ruleset = 'position: static; ' +
+                'top: 11px; ' +
+                'left: 13px;'
+      bad_rule = 'position-bottom: null; position-right: null;'
