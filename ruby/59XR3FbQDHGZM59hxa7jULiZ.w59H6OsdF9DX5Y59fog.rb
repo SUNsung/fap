@@ -1,54 +1,62 @@
 
         
-          def test_simple_redirect_using_options
-    get :host_redirect
-    assert_response :redirect
-    assert_redirected_to action: 'other_host', only_path: false, host: 'other.test.host'
-  end
+        def dest_dir(*subdirs)
+  test_dir('dest', *subdirs)
+end
     
-        assert_response :success
-  end
-    
-    require 'tmpdir'
-    
-      APP = RoutedRackApp.new(Routes)
-    
-      def search_tap(user, repo, rx)
-    if (HOMEBREW_LIBRARY/'Taps/#{user.downcase}/homebrew-#{repo.downcase}').directory? && \
-       user != 'Caskroom'
-      return []
-    end
-    
-      def patches
-    {}
-  end
-    
-    # This formula serves as the base class for several very similar
-# formulae for Amazon Web Services related tools.
-class AmazonWebServicesFormula < Formula
-  # Use this method to peform a standard install for Java-based tools,
-  # keeping the .jars out of HOMEBREW_PREFIX/lib
-  def install
-    rm Dir['bin/*.cmd'] # Remove Windows versions
-    libexec.install Dir['*']
-    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
-  end
-  alias_method :standard_install, :install
-    
-    # puts '\nDone.'
+    puts 'Results stored in #{PROF_OUTPUT_FILE}'
 
     
-      def test_filter!
-    h = @cls[1=>2,3=>4,5=>6]
-    assert_equal(h, h.filter! {|k, v| k + v >= 7 })
-    assert_equal({3=>4,5=>6}, h)
-    h = @cls[1=>2,3=>4,5=>6]
-    assert_equal(nil, h.filter!{true})
+      next if extensions.empty?
+  mimes[mime] = [] if mimes[mime].nil?
+  mimes[mime].concat extensions
+end
+    
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
+    end
   end
+end
+
     
-      Car = Struct.new(:make, :model, :year)
+          private
+      def parse_expression(str)
+        Liquid::Variable.new(str, Liquid::ParseContext.new)
+      end
     
-            sets = config.sources_manager.aggregate.all_sets
-        sets.each { |set| UI.pod(set, :name_and_version) }
-        UI.puts '\n#{sets.count} pods were found'
+    if profile_filename = ENV['PROFILE']
+  require 'ruby-prof'
+  reporter =
+    case (profile_extname = File.extname(profile_filename))
+    when '.txt'
+      RubyProf::FlatPrinterWithLineNumbers
+    when '.html'
+      RubyProf::GraphHtmlPrinter
+    when '.callgrind'
+      RubyProf::CallTreePrinter
+    else
+      raise 'Unknown profiler format indicated by extension: #{profile_extname}'
+    end
+  File.open(profile_filename, 'w') do |io|
+    reporter.new(RubyProf.profile { Pod::Command.run(ARGV) }).print(io)
+  end
+else
+  Pod::Command.run(ARGV)
+end
+
+    
+            self.description = <<-DESC
+          Creates a scaffold for the development of a new Pod named `NAME`
+          according to the CocoaPods best practices.
+          If a `TEMPLATE_URL`, pointing to a git repo containing a compatible
+          template, is specified, it will be used in place of the default one.
+        DESC
+    
+          def self.options
+        [
+          ['--update', 'Run `pod repo update` before listing'],
+          ['--stats',  'Show additional stats (like GitHub watchers and forks)'],
+        ].concat(super)
       end
