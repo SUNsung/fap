@@ -1,338 +1,435 @@
 
         
-        #ifndef TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
-#define TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
+          // Publish metadata about the debugged Session::Run() call.
+  //
+  // See the doc string of DebuggerStateInterface::PublishDebugMetadata() for
+  // details.
+  Status PublishDebugMetadata(const int64 global_step,
+                              const int64 session_run_count,
+                              const int64 executor_step_count,
+                              const std::vector<string>& input_names,
+                              const std::vector<string>& output_names,
+                              const std::vector<string>& target_names) override;
     
-    #include <string>
+     protected:
+  // Variables accessible from subclasses.
+  mutex mu_;
+  ContainerInfo cinfo_ GUARDED_BY(mu_);
+  T* resource_ GUARDED_BY(mu_) = nullptr;
     
-    class SmoothHingeLossUpdater : public DualLossUpdater {
- public:
-  // Computes the updated dual variable (corresponding) to a single example. The
-  // updated dual value maximizes the objective function of the dual
-  // optimization problem associated with smooth hinge loss. The computations
-  // are detailed in readme.md.
-  double ComputeUpdatedDual(const int num_partitions, const double label,
-                            const double example_weight,
-                            const double current_dual, const double wx,
-                            const double weighted_example_norm) const final {
-    // Intutitvely there are 3 cases:
-    // a. new optimal value of the dual variable falls within the admissible
-    // range [0, 1]. In this case we set new dual to this value.
-    // b. new optimal value is < 0. Then, because of convexity, the optimal
-    // valid value for new dual = 0
-    // c. new optimal value > 1.0. Then new optimal value should be set to 1.0.
-    const double candidate_optimal_dual =
-        current_dual +
-        (label - wx - gamma * current_dual) /
-            (num_partitions * example_weight * weighted_example_norm + gamma);
-    if (label * candidate_optimal_dual < 0) {
-      return 0.0;
-    }
-    if (label * candidate_optimal_dual > 1.0) {
-      return label;
-    }
-    return candidate_optimal_dual;
-  }
-    }
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+        http://www.apache.org/licenses/LICENSE-2.0
     
     
-    {  template <typename Packet>
-  inline Packet packetOp(const Packet& y) const {
-    const Packet one = internal::pset1<Packet>(1);
-    return internal::pmul(internal::psub(one, y), y);
-  }
+    {// Options specific to zlib compression.
+#if !defined(IS_SLIM_BUILD)
+  ZlibCompressionOptions zlib_options;
+#endif  // IS_SLIM_BUILD
 };
     
-      // If instruction is part of inputs, don't reset the bit_vector.
-  if (std::find(inputs.begin(), inputs.end(), instruction) == inputs.end()) {
-    bit_vector.SetToZero();
+        NodeDef* const_node1 = graph_def.add_node();
+    const_node1->set_name('const_node1');
+    const_node1->set_op('Const');
+    
+    MPIUtils::MPIUtils(const std::string& worker_name) {
+  InitMPI();
+  // Connect the MPI process IDs to the worker names that are used by TF.
+  // Gather the names of all the active processes (name can't be longer than
+  // 128 bytes)
+  int proc_id = 0, number_of_procs = 1;
+  char my_name[max_worker_name_length];
+  MPI_CHECK(MPI_Comm_rank(MPI_COMM_WORLD, &proc_id));
+  MPI_CHECK(MPI_Comm_size(MPI_COMM_WORLD, &number_of_procs));
+    }
+    
+    #include <string>
+#include 'third_party/eigen3/unsupported/Eigen/CXX11/Tensor'
+#include 'tensorflow/core/framework/tensor_shape.h'
+#include 'tensorflow/core/framework/tensor_slice.pb.h'
+#include 'tensorflow/core/lib/core/status.h'
+#include 'tensorflow/core/lib/core/stringpiece.h'
+#include 'tensorflow/core/lib/gtl/inlined_vector.h'
+#include 'tensorflow/core/platform/logging.h'
+    
+    // A comparator for internal keys that uses a specified comparator for
+// the user key portion and breaks ties by decreasing sequence number.
+class InternalKeyComparator : public Comparator {
+ private:
+  const Comparator* user_comparator_;
+ public:
+  explicit InternalKeyComparator(const Comparator* c) : user_comparator_(c) { }
+  virtual const char* Name() const;
+  virtual int Compare(const Slice& a, const Slice& b) const;
+  virtual void FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const;
+  virtual void FindShortSuccessor(std::string* key) const;
+    }
+    
+      while (msg == NULL && GetVarint32(&input, &tag)) {
+    switch (tag) {
+      case kComparator:
+        if (GetLengthPrefixedSlice(&input, &str)) {
+          comparator_ = str.ToString();
+          has_comparator_ = true;
+        } else {
+          msg = 'comparator name';
+        }
+        break;
+    }
+    }
+    
+      Benchmark()
+  : db_(NULL),
+    num_(FLAGS_num),
+    reads_(FLAGS_reads < 0 ? FLAGS_num : FLAGS_reads),
+    bytes_(0),
+    rand_(301) {
+    std::vector<std::string> files;
+    std::string test_dir;
+    Env::Default()->GetTestDirectory(&test_dir);
+    Env::Default()->GetChildren(test_dir.c_str(), &files);
+    if (!FLAGS_use_existing_db) {
+      for (int i = 0; i < files.size(); i++) {
+        if (Slice(files[i]).starts_with('dbbench_polyDB')) {
+          std::string file_name(test_dir);
+          file_name += '/';
+          file_name += files[i];
+          Env::Default()->DeleteFile(file_name.c_str());
+        }
+      }
+    }
   }
-  bit_vector.Set(GetIndex(instruction));
-  for (const HloInstruction* input : inputs) {
-    bit_vector.OrWith(GetBitVector(input));
-  }
+    
+    // Returns a new environment that stores its data in memory and delegates
+// all non-file-storage tasks to base_env. The caller must delete the result
+// when it is no longer needed.
+// *base_env must remain live while the result is in use.
+Env* NewMemEnv(Env* base_env);
+    
+    // Dump the contents of the file named by fname in text format to
+// *dst.  Makes a sequence of dst->Append() calls; each call is passed
+// the newline-terminated text corresponding to a single item found
+// in the file.
+//
+// Returns a non-OK result if fname does not name a leveldb storage
+// file, or if the file cannot be read.
+Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
+    
+      // Return the name of this policy.  Note that if the filter encoding
+  // changes in an incompatible way, the name returned by this method
+  // must be changed.  Otherwise, old incompatible filters may be
+  // passed to methods of this type.
+  virtual const char* Name() const = 0;
     
     
     {
-    {}  // namespace ffmpeg
-}  // namespace tensorflow
-
-    
-     protected:
-  // Check if data0.shape[indices0.dims():] == data1.shape[indices1.dims():]
-  static bool SameExtraShape(const Tensor& data0, const Tensor& indices0,
-                             const Tensor& data1, const Tensor& indices1) {
-    const int extra0 = data0.dims() - indices0.dims();
-    const int extra1 = data1.dims() - indices1.dims();
-    if (extra0 != extra1) return false;
-    for (int i = 0; i < extra0; i++) {
-      if (data0.dim_size(indices0.dims() + i) !=
-          data1.dim_size(indices1.dims() + i)) {
-        return false;
+    {    if (debug) {
+      if (is_italic) {
+        tprintf(' Rejecting: superscript is italic.\n');
+      }
+      if (is_punc) {
+        tprintf(' Rejecting: punctuation present.\n');
+      }
+      const char *char_str = wc.unicharset()->id_to_unichar(unichar_id);
+      if (bad_certainty) {
+        tprintf(' Rejecting: don't believe character %s with certainty %.2f '
+                'which is less than threshold %.2f\n', char_str,
+                char_certainty, certainty_threshold);
+      }
+      if (bad_height) {
+        tprintf(' Rejecting: character %s seems too small @ %.2f versus '
+                'expected %.2f\n', char_str, char_height, normal_height);
       }
     }
-    return true;
-  }
-    
-     private:
-  const scoped_refptr<base::TaskRunner> file_task_runner_;
-    
-    namespace atom {
+    if (bad_certainty || bad_height || is_punc || is_italic) {
+      if (ok_run_count == i) {
+        initial_ok_run_count = ok_run_count;
+      }
+      ok_run_count = 0;
+    } else {
+      ok_run_count++;
     }
+    if (char_certainty < worst_certainty) {
+      worst_certainty = char_certainty;
+    }
+  }
+  bool all_ok = ok_run_count == wc.length();
+  if (all_ok && debug) {
+    tprintf(' Accept: worst revised certainty is %.2f\n', worst_certainty);
+  }
+  if (!all_ok) {
+    if (left_ok) *left_ok = initial_ok_run_count;
+    if (right_ok) *right_ok = ok_run_count;
+  }
+  return all_ok;
+}
     
-    #endif  // ATOM_BROWSER_NET_URL_REQUEST_ASYNC_ASAR_JOB_H_
+    
+    {  // We shouldn't try calculations if the characters are very short (for example
+  // for punctuation).
+  if (min_height > kBlnXHeight / 8 && height > 0) {
+    float result = height * kBlnXHeight * yscale / min_height;
+    *max_xht = result + kFinalPixelTolerance;
+    result = height * kBlnXHeight * yscale / max_height;
+    *min_xht = result - kFinalPixelTolerance;
+  }
+}
+    
+    
+    {  // Best available image.
+  Pix* pix_;
+  // True if the source image is white-on-black.
+  bool inverse_;
+  // Block the word came from. If not null, block->re_rotation() takes the
+  // 'untransformed' coordinates even further back to the original image.
+  // Used only on the first DENORM in a chain.
+  const BLOCK* block_;
+  // Rotation to apply between translation to the origin and scaling.
+  const FCOORD* rotation_;
+  // Previous transformation in a chain.
+  const DENORM* predecessor_;
+  // Non-linear transformation maps directly from each integer offset from the
+  // origin to the corresponding x-coord. Owned by the DENORM.
+  GenericVector<float>* x_map_;
+  // Non-linear transformation maps directly from each integer offset from the
+  // origin to the corresponding y-coord. Owned by the DENORM.
+  GenericVector<float>* y_map_;
+  // x-coordinate to be mapped to final_xshift_ in the result.
+  float x_origin_;
+  // y-coordinate to be mapped to final_yshift_ in the result.
+  float y_origin_;
+  // Scale factors for x and y coords. Applied to pre-rotation system.
+  float x_scale_;
+  float y_scale_;
+  // Destination coords of the x_origin_ and y_origin_.
+  float final_xshift_;
+  float final_yshift_;
+};
+#endif
 
     
-    
-    {  DISALLOW_COPY_AND_ASSIGN(URLRequestStringJob);
-};
-    
-      // Called by NativeWindow when it show/hides.
-  void OnWindowMapped();
-  void OnWindowUnmapped();
+    class ParagraphModel;
     
     
-    {  DISALLOW_COPY_AND_ASSIGN(NativeFrameView);
-};
+/**********************************************************************
+ * QLSQ::fit
+ *
+ * Fit the given degree of polynomial and store the result.
+ * This creates a quadratic of the form axx + bx + c, but limited to
+ * the given degree.
+ **********************************************************************/
     
-    struct netlinkrequest {
-	nlmsghdr header;
-	ifaddrmsg msg;
-};
+    /**----------------------------------------------------------------------------
+            Macros
+----------------------------------------------------------------------------**/
+/* macros for computing miscellaneous functions of 2 points */
+#define XDelta(A,B)   ( (B).x - (A).x )
+#define YDelta(A,B)   ( (B).y - (A).y )
+#define SlopeFrom(A,B)    ( YDelta(A,B) / XDelta(A,B) )
+#define AngleFrom(A,B)		( atan2((double) YDelta(A,B),		\
+					(double) XDelta(A,B) ) )
     
+    #endif  // TESSERACT_CLASSIFY_INTFEATUREDIST_H_
+
     
-    {	if (ret < 0 && ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
-		_print_error(ret);
-		disconnect_from_stream();
-		return;
-	}
-}
+    /*----------------------------------------------------------------------------
+          Private Function Prototypes
+-----------------------------------------------------------------------------*/
+void ChangeDirection(MFOUTLINE Start, MFOUTLINE End, DIRECTION Direction);
     
-    #ifndef STREAM_PEER_OPEN_SSL_H
-#define STREAM_PEER_OPEN_SSL_H
+    			/* is this a mandated initial header? If not, stop parsing */
+			if (!ogg_page_bos(&og)) {
+				/* don't leak the page; get it into the appropriate stream */
+				queue_page(&og);
+				stateflag = 1;
+				break;
+			}
     
+    	ERR_FAIL_COND_V(!connected, ERR_UNCONFIGURED);
     
-    {	doc = memnew(DocData);
-	doc->generate(true);
-	DocData compdoc;
-	compdoc.load_compressed(_doc_data_compressed, _doc_data_compressed_size, _doc_data_uncompressed_size);
-	doc->merge_from(compdoc); //ensure all is up to date
-}
-    
-    			Ref<NavigationMesh> nmesh = memnew(NavigationMesh);
-    
-    			anim_tree->transition_node_delete_input(rclick_node, rclick_slot);
-			update();
-		} break;
-		case NODE_SET_AUTOADVANCE: {
-    
-    
-    {      if (contents_.size() < n) {
-        n = contents_.size();
-        returned_partial_ = true;
-      }
-      *result = Slice(contents_.data(), n);
-      contents_.remove_prefix(n);
-      return Status::OK();
+    void WebSocketClient::_on_disconnect() {
     }
     
     
-    {  SnapshotList* list_;                 // just for sanity checks
+    {	WebSocketClient();
+	~WebSocketClient();
 };
     
-      for (size_t i = 0; i < compact_pointers_.size(); i++) {
-    PutVarint32(dst, kCompactPointer);
-    PutVarint32(dst, compact_pointers_[i].first);  // level
-    PutLengthPrefixedSlice(dst, compact_pointers_[i].second.Encode());
+    		real_t projVel = wheel.m_raycastInfo.m_contactNormalWS.dot(chassis_velocity_at_contactPoint);
+    
+    			if (has_indices) {
+				t[0] = r[ir[i + 0]];
+				t[1] = r[ir[i + 1]];
+				t[2] = r[ir[i + 2]];
+			} else {
+				t[0] = r[i + 0];
+				t[1] = r[i + 1];
+				t[2] = r[i + 2];
+			}
+    
+    void AnimationTreePlayer::node_set_position(const StringName &p_node, const Vector2 &p_pos) {
+    }
+    
+    
+    {
+    {}  // namespace log
+}  // namespace leveldb
+    
+      DB *db;
+  Options options;
+  options.create_if_missing = true;
+  ASSERT_OK(DB::Open(options, dbpath, &db));
+    
+    static int NextLength(int length) {
+  if (length < 10) {
+    length += 1;
+  } else if (length < 100) {
+    length += 10;
+  } else if (length < 1000) {
+    length += 100;
+  } else {
+    length += 1000;
   }
-    
-    TEST(FindFileTest, Single) {
-  Add('p', 'q');
-  ASSERT_EQ(0, Find('a'));
-  ASSERT_EQ(0, Find('p'));
-  ASSERT_EQ(0, Find('p1'));
-  ASSERT_EQ(0, Find('q'));
-  ASSERT_EQ(1, Find('q1'));
-  ASSERT_EQ(1, Find('z'));
-    }
-    
-     public:
-  RandomGenerator() {
-    // We use a limited amount of data over and over again and ensure
-    // that it is larger than the compression window (32KB), and also
-    // large enough to serve all typical value sizes we want to write.
-    Random rnd(301);
-    std::string piece;
-    while (data_.size() < 1048576) {
-      // Add a short fragment that is as compressible as specified
-      // by FLAGS_compression_ratio.
-      test::CompressibleString(&rnd, FLAGS_compression_ratio, 100, &piece);
-      data_.append(piece);
-    }
-    pos_ = 0;
-  }
-    
-      // Check that the file exists.
-  ASSERT_TRUE(env_->FileExists('/dir/f'));
-  ASSERT_OK(env_->GetFileSize('/dir/f', &file_size));
-  ASSERT_EQ(0, file_size);
-  ASSERT_OK(env_->GetChildren('/dir', &children));
-  ASSERT_EQ(1, children.size());
-  ASSERT_EQ('f', children[0]);
-    
-      // Check second filter
-  ASSERT_TRUE(reader.KeyMayMatch(3100, 'box'));
-  ASSERT_TRUE(! reader.KeyMayMatch(3100, 'foo'));
-  ASSERT_TRUE(! reader.KeyMayMatch(3100, 'bar'));
-  ASSERT_TRUE(! reader.KeyMayMatch(3100, 'hello'));
+  return length;
+}
     
     namespace leveldb {
+namespace log {
+    }
     }
     
-      Slice block_contents;
-  CompressionType type = r->options.compression;
-  // TODO(postrelease): Support more compression options: zlib?
-  switch (type) {
-    case kNoCompression:
-      block_contents = raw;
+      // Create a writer that will append data to '*dest'.
+  // '*dest' must have initial length 'dest_length'.
+  // '*dest' must remain live while this Writer is in use.
+  Writer(WritableFile* dest, uint64_t dest_length);
+    
+    namespace guetzli {
+    }
+    
+    // Performs in-place floating point 8x8 inverse DCT on block[0..63].
+void ComputeBlockIDCTDouble(double block[64]);
+    
+        if (n == 1) {
+      depth[tree[0].index_right_or_value_] = 1;      // Only one element.
       break;
     }
     
-      memset(buf, 0xff, sizeof(buf));
-  ASSERT_EQ(0x62a8ab43, Value(buf, sizeof(buf)));
-    
-    #include 'leveldb/env.h'
-    
-    #include <boost/algorithm/string/trim.hpp>
-#include <boost/lexical_cast.hpp>
-    
-    #pragma once
-    
-    /**
- * @brief Create an osquery extension 'module', if an expression is true.
- *
- * This is a helper testing wrapper around CREATE_MODULE and DECLARE_MODULE.
- * It allows unit and integration tests to generate global construction code
- * that depends on data/variables available during global construction.
- *
- * And example use includes checking if a process environment variable is
- * defined. If defined the module is declared.
- */
-#define CREATE_MODULE_IF(expr, name, version, min_sdk_version)                 \
-  extern 'C' EXPORT_FUNCTION void initModule(void);                            \
-  struct osquery_InternalStructCreateModule {                                  \
-    osquery_InternalStructCreateModule(void) {                                 \
-      if ((expr)) {                                                            \
-        Registry::get().declareModule(                                         \
-            name, version, min_sdk_version, OSQUERY_SDK_VERSION);              \
-      }                                                                        \
-    }                                                                          \
-  };                                                                           \
-  static osquery_InternalStructCreateModule osquery_internal_module_instance_;
-    
-      /**
-   * @brief A getter for the message property
-   *
-   * @return a string representing arbitrary additional information about the
-   * success or failure of an operation. On successful operations, the idiom
-   * is for the message to be 'OK'
-   */
-  std::string getMessage() const { return message_; }
-    
-    TEST_F(ViewsConfigParserPluginTests, test_swap_view) {
-  Config c;
-  std::vector<std::string> old_views_vec;
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  old_views_vec.clear();
-  auto s = c.update(getTestConfigMap('view_test.conf'));
-  EXPECT_TRUE(s.ok());
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  EXPECT_EQ(old_views_vec[0], 'config_views.kernel_hashes_new');
-    }
-    
-    #include <string.h>
-#include <time.h>
-    
-    void DropPrivileges::restoreGroups() {
-  if (group_size_ > 0) {
-    setgroups(group_size_, original_groups_);
-    group_size_ = 0;
-    free(original_groups_);
-  }
-  original_groups_ = nullptr;
-}
-    
-    ////////////////////////////////////////////////////////////////////////////////
-/// Disclaimer: This is intended only as a partial stand-in for
-/// std::pmr::memory_resource (C++17) as needed for developing a
-/// hazptr prototype.
-////////////////////////////////////////////////////////////////////////////////
-    
-      /**
-   * If POLLABLE, return a file descriptor that can be passed to poll / epoll
-   * and will become readable when any async IO operations have completed.
-   * If NOT_POLLABLE, return -1.
-   */
-  int pollFd() const {
-    return pollFd_;
-  }
-    
-    #include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-    
-    class FileHandlerFactory::WriterFactory
-    : public StandardLogHandlerFactory::WriterFactory {
- public:
-  bool processOption(StringPiece name, StringPiece value) override {
-    if (name == 'path') {
-      path_ = value.str();
-      return true;
-    }
-    }
-    }
-    
-      auto basename = message.getFileBaseName();
-  auto headerFormatter = folly::format(
-      '{}{:02d}{:02d} {:02d}:{:02d}:{:02d}.{:06d} {:5d} {}:{}] ',
-      getGlogLevelName(message.getLevel())[0],
-      ltime.tm_mon + 1,
-      ltime.tm_mday,
-      ltime.tm_hour,
-      ltime.tm_min,
-      ltime.tm_sec,
-      usecs.count(),
-      message.getThreadID(),
-      basename,
-      message.getLineNumber());
-    
-      /**
-   * The LogLevel for this category.
-   */
-  LogLevel level{LogLevel::WARNING};
-    
-    
-    {  // Update categoryConfigs_ with all of the entries from the other LogConfig.
-  //
-  // Any entries already present in our categoryConfigs_ are merged: if the new
-  // configuration does not include handler settings our entry's settings are
-  // maintained.
-  for (const auto& entry : other.categoryConfigs_) {
-    auto result = categoryConfigs_.insert(entry);
-    if (!result.second) {
-      auto* existingEntry = &result.first->second;
-      auto oldHandlers = std::move(existingEntry->handlers);
-      *existingEntry = entry.second;
-      if (!existingEntry->handlers.hasValue()) {
-        existingEntry->handlers = std::move(oldHandlers);
+      // Fill in 2nd level tables and add pointers to root table.
+  table += table_size;
+  table_size = 0;
+  low = 0;
+  for (len = kJpegHuffmanRootTableBits + 1;
+       len <= kJpegHuffmanMaxBitLength; ++len) {
+    for (; count[len] > 0; --count[len]) {
+      // Start a new sub-table if the previous one is full.
+      if (low >= table_size) {
+        table += table_size;
+        table_bits = NextTableBitSize(count, len);
+        table_size = 1 << table_bits;
+        total_size += table_size;
+        low = 0;
+        lut[key].bits = table_bits + kJpegHuffmanRootTableBits;
+        lut[key].value = (table - lut) - key;
+        ++key;
+      }
+      code.bits = len - kJpegHuffmanRootTableBits;
+      code.value = symbols[idx++];
+      reps = 1 << (table_bits - code.bits);
+      while (reps--) {
+        table[low++] = code;
       }
     }
   }
-}
     
-    #include <folly/experimental/logging/LogLevel.h>
+    typedef GRPC_CUSTOM_STRING string;
     
-      bool operator==(const LogHandlerConfig& other) const;
-  bool operator!=(const LogHandlerConfig& other) const;
+    
+	//Service Descriptor
+	printer->Print(vars, 'var $ServiceDesc$ = $grpc$.ServiceDesc{\n');
+	printer->Indent();
+	printer->Print(vars, 'ServiceName: \'$Package$.$Service$\',\n');
+	printer->Print(vars, 'HandlerType: (*$Service$Server)(nil),\n');
+	printer->Print(vars, 'Methods: []$grpc$.MethodDesc{\n');
+	printer->Indent();
+	for (int i = 0; i < service->method_count(); i++) {
+		auto method = service->method(i);
+		vars['Method'] = method->name();
+		vars['Handler'] = '_' + vars['Service'] + '_' + vars['Method'] + '_Handler';
+		if (method->NoStreaming()) {
+			printer->Print('{\n');
+			printer->Indent();
+			printer->Print(vars, 'MethodName: \'$Method$\',\n');
+			printer->Print(vars, 'Handler: $Handler$, \n');
+			printer->Outdent();
+			printer->Print('},\n');
+		}
+	}
+	printer->Outdent();
+	printer->Print('},\n');
+	printer->Print(vars, 'Streams: []$grpc$.StreamDesc{\n');
+	printer->Indent();
+	for (int i = 0; i < service->method_count(); i++) {
+		auto method = service->method(i);
+		vars['Method'] = method->name();
+		vars['Handler'] = '_' + vars['Service'] + '_' + vars['Method'] + '_Handler';
+		if (!method->NoStreaming()) {
+			printer->Print('{\n');
+			printer->Indent();
+			printer->Print(vars, 'StreamName: \'$Method$\',\n');
+			printer->Print(vars, 'Handler: $Handler$, \n');
+			if (ClientOnlyStreaming(method.get())) {
+				printer->Print('ClientStreams: true,\n');
+			} else if (ServerOnlyStreaming(method.get())) {
+				printer->Print('ServerStreams: true,\n');
+			} else {
+				printer->Print('ServerStreams: true,\n');
+				printer->Print('ClientStreams: true,\n');
+			}
+			printer->Outdent();
+			printer->Print('},\n');
+		}
+	}
+	printer->Outdent();
+	printer->Print('},\n');
+	printer->Outdent();
+	printer->Print('}\n\n');
+    
+    // Return the source of the generated service file.
+grpc::string GenerateServiceSource(grpc_generator::File *file,
+                                   const grpc_generator::Service *service,
+                                   grpc_go_generator::Parameters *parameters);
+    
+      std::string SayHello(const std::string &name) {
+    flatbuffers::grpc::MessageBuilder mb;
+    auto name_offset = mb.CreateString(name);
+    auto request_offset = CreateHelloRequest(mb, name_offset);
+    mb.Finish(request_offset);
+    auto request_msg = mb.ReleaseMessage<HelloRequest>();
+    }
+    
+    namespace grpc {
+class CompletionQueue;
+class Channel;
+class ServerCompletionQueue;
+class ServerContext;
+}  // namespace grpc
+    
+      // Server side - Streamed Unary
+  for (int i = 0; i < service->method_count(); ++i) {
+    (*vars)['Idx'] = as_string(i);
+    PrintHeaderServerMethodStreamedUnary(printer, service->method(i).get(),
+                                         vars);
+  }
+    
+      // Returns the current contents of the CodeWriter as a std::string.
+  std::string ToString() const { return stream_.str(); }
+    
+    namespace flatbuffers {
+    }
+    
+    namespace jsons {
+    }
