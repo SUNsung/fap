@@ -1,150 +1,110 @@
 
         
-            plugin_manager.register(Plugin)
-    try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-        )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
+            old_layer = keras.layers.LSTM(input_dim=5, input_length=3,
+                                  output_dim=2, name='d', consume_less='mem')
+    new_layer = keras.layers.LSTM(2, input_shape=[3, 5], name='d', implementation=1)
+    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
     
-    
-PACKAGES = [
-    'httpie',
-    'requests',
-    'pygments',
-]
-    
-            headers = dict(self._orig.headers)
-        if 'Host' not in self._orig.headers:
-            headers['Host'] = url.netloc.split('@')[-1]
-    
-        # Build candidate mime type and lexer names.
-    mime_types, lexer_names = [mime], []
-    type_, subtype = mime.split('/', 1)
-    if '+' not in subtype:
-        lexer_names.append(subtype)
-    else:
-        subtype_name, subtype_suffix = subtype.split('+', 1)
-        lexer_names.extend([subtype_name, subtype_suffix])
-        mime_types.extend([
-            '%s/%s' % (type_, subtype_name),
-            '%s/%s' % (type_, subtype_suffix)
-        ])
-    
-        # 128+2 SIGINT <http://www.tldp.org/LDP/abs/html/exitcodes.html>
-    ERROR_CTRL_C = 130
-    
-        # noinspection PyMethodOverriding
-    def __setitem__(self, key, value):
-        ''' If `key` is assigned more than once, `self[key]` holds a
-        `list` of all the values.
-    
-        def unregister(self, plugin):
-        self._plugins.remove(plugin)
-    
-    # If true, sectionauthor and moduleauthor directives will be shown in the
-# output. They are ignored by default.
-#show_authors = False
-    
-    import blueprintexample
-    
-    
-def login(client, username, password):
-    return client.post('/login', data=dict(
-        username=username,
-        password=password
-    ), follow_redirects=True)
-    
-    import time
-from sqlite3 import dbapi2 as sqlite3
-from hashlib import md5
-from datetime import datetime
-from flask import Flask, request, session, url_for, redirect, \
-     render_template, abort, g, flash, _app_ctx_stack
-from werkzeug import check_password_hash, generate_password_hash
-    
-            Punctuation:               'bold #000000',   # class: 'p'
-    
-        def prepare(self,
-            method=None, url=None, headers=None, files=None, data=None,
-            params=None, auth=None, cookies=None, hooks=None, json=None):
-        '''Prepares the entire request with the given parameters.'''
-    
-        def __init__(self, data=None, **kwargs):
-        self._store = OrderedDict()
-        if data is None:
-            data = {}
-        self.update(data, **kwargs)
-    
-        @pytest.fixture(autouse=True)
-    def setup(self):
-        '''LookupDict instance with 'bad_gateway' attribute.'''
-        self.lookup_dict = LookupDict('test')
-        self.lookup_dict.bad_gateway = 502
-    
-        # Check chardet for compatibility.
-    major, minor, patch = chardet_version.split('.')[:3]
-    major, minor, patch = int(major), int(minor), int(patch)
-    # chardet >= 3.0.2, < 3.1.0
-    assert major == 3
-    assert minor < 1
-    assert patch >= 2
-    
-    This module contains the set of Requests' exceptions.
-'''
-from urllib3.exceptions import HTTPError as BaseHTTPError
-    
-            return self.request('POST', url, data=data, json=json, **kwargs)
-    
-        def setUp(self):
-        from acme.errors import BadNonce
-        self.error = BadNonce(nonce='xxx', error='error')
-    
-    
-@zope.interface.implementer(interfaces.IInstaller)
-@zope.interface.provider(interfaces.IPluginFactory)
-class Installer(common.Plugin):
-    '''Example Installer.'''
-    
-        .. versionadded:: 4.4
+        # Output shape
+        5D tensor with shape:
+        - If `data_format` is `'channels_last'`:
+            `(batch, first_cropped_axis, second_cropped_axis, third_cropped_axis, depth)`
+        - If `data_format` is `'channels_first'`:
+            `(batch, depth, first_cropped_axis, second_cropped_axis, third_cropped_axis)`
     '''
-    return _re_unescape_pattern.sub(_re_unescape_replacement, s)
+    
+        layer_test(local.LocallyConnected1D,
+               kwargs={'filters': filters,
+                       'kernel_size': filter_length,
+                       'padding': padding,
+                       'kernel_regularizer': 'l2',
+                       'bias_regularizer': 'l2',
+                       'activity_regularizer': 'l2',
+                       'strides': strides},
+               input_shape=(num_samples, num_steps, input_dim))
+    
+    # Training
+batch_size = 30
+epochs = 2
+    
+    # get the symbolic outputs of each 'key' layer (we gave them unique names).
+outputs_dict = dict([(layer.name, layer.output) for layer in model.layers])
     
     
-@unittest.skipIf(pycurl is None, 'pycurl module not present')
-class CurlHTTPClientTestCase(AsyncHTTPTestCase):
-    def setUp(self):
-        super(CurlHTTPClientTestCase, self).setUp()
-        self.http_client = self.create_client()
+@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
+def test_truncated_normal(tensor_shape):
+    _runner(initializers.TruncatedNormal(mean=0, stddev=1), tensor_shape,
+            target_mean=0., target_std=None, target_max=2)
     
-            sock, port = bind_unused_port()
-        server = TestServer()
-        server.add_socket(sock)
-        server_addr = ('localhost', port)
-        N = 40
-        clients = [IOStream(socket.socket()) for i in range(N)]
-        connected_clients = []
+            assert_allclose(convout1, convout2, atol=1e-5)
     
+        # generate char sequences of length 'sequence_length' out of alphabet and store the next char as label (e.g. 'ab'->'c')
+    sequence_length = 2
+    sentences = [alphabet[i: i + sequence_length] for i in range(len(alphabet) - sequence_length)]
+    next_chars = [alphabet[i + sequence_length] for i in range(len(alphabet) - sequence_length)]
     
-if __name__ == '__main__':
-    main()
-
+        test_values = get_standard_values()
+    result = f([test_values])[0]
+    assert_allclose(result, test_values, rtol=1e-05)
     
     
-class FeedHandler(BaseHandler):
-    def get(self):
-        entries = self.db.query('SELECT * FROM entries ORDER BY published '
-                                'DESC LIMIT 10')
-        self.set_header('Content-Type', 'application/atom+xml')
-        self.render('feed.xml', entries=entries)
+collect_ignore = [
+    # deprecated or moved modules
+    'scrapy/conf.py',
+    'scrapy/stats.py',
+    'scrapy/project.py',
+    'scrapy/utils/decorator.py',
+    'scrapy/statscol.py',
+    'scrapy/squeue.py',
+    'scrapy/log.py',
+    'scrapy/dupefilter.py',
+    'scrapy/command.py',
+    'scrapy/linkextractor.py',
+    'scrapy/spider.py',
     
+        def __init__(self):
+        Resource.__init__(self)
+        self.concurrent = 0
+        self.tail = deque(maxlen=100)
+        self._reset_stats()
     
-# Making this a non-singleton is left as an exercise for the reader.
-global_message_buffer = MessageBuffer()
+        def __exit__(self, exc_type, exc_value, traceback):
+        self.proc.kill()
+        self.proc.wait()
+        time.sleep(0.2)
     
-    define('port', default=8888, help='run on the given port', type=int)
+            return [token.text for token in tokens]
+    
+                    # throw exception unless disjoint or identical
+                disjoint = (prevRop.lastIndex < rop.index
+                            or prevRop.index > rop.lastIndex)
+                same = (prevRop.index == rop.index
+                        and prevRop.lastIndex == rop.lastIndex)
+                if not disjoint and not same:
+                    raise ValueError(
+                        'replace op boundaries of %s overlap with previous %s'
+                        % (rop, prevRop))
+    
+    - CommonToken: A basic and most commonly used Token implementation.
+- ClassicToken: A Token object as used in ANTLR 2.x, used to %tree
+  construction.
+    
+    import tornado.httpserver
+import tornado.ioloop
+import tornado.options
+import tornado.web
+    
+                self.finish(resources[path])
+    
+        `mask` is a `bytes` object of length 4; `data` is a `bytes` object of any length.
+    Returns a `bytes` object of the same length as `data` with the mask applied
+    as specified in section 5.3 of RFC 6455.
+    
+        For use on platforms that don't have os.pipe() (or where pipes cannot
+    be passed to select()), but do have sockets.  This includes Windows
+    and Jython.
+    '''
+    def __init__(self):
+        from .auto import set_close_exec
+        # Based on Zope select_trigger.py:
+        # https://github.com/zopefoundation/Zope/blob/master/src/ZServer/medusa/thread/select_trigger.py
