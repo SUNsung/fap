@@ -1,53 +1,20 @@
 
         
-                return a.casecmp(b) if a_length == 1 && b_length == 1
-        return 1 if a_length == 1
-        return -1 if b_length == 1
+        codez = Array.new
     
-        def name=(value)
-      @name = value.try :strip
-    end
-    
-              # Underscore methods
-          if name.start_with?('Underscore')
-            node.at_css('~ ul').css('li').each do |li|
-              name = [type.downcase, li.at_css('a').content.split.first].join('.')
-              id = name.parameterize
-              li['id'] = id
-              entries << [name, id, type]
-            end
-            next
-          end
-    
-              id = link['href'].remove('#')
-          entries << [name, id]
-          next if name =~ /Sass|Less|Glyphicons/
-    
-            doc
+          unless leaf.respond_to?(:empty?) && !leaf.empty?
+        raise CaskError, 'Cannot create metadata subdir for empty leaf.'
       end
-    end
-  end
-end
-
     
-            p environment.var(name)
-      else
-        p Script::Parser.parse(text, @line, 0).perform(environment)
+          it 'reports that 32-bit Intel machines can't run x86_64 executables' do
+        allow(Hardware::CPU).to receive(:type).and_return :intel
+        allow(Hardware::CPU).to receive(:bits).and_return 32
+        expect(Hardware::CPU.can_run?(:x86_64)).to be false
       end
-    rescue Sass::SyntaxError => e
-      puts 'SyntaxError: #{e.message}'
-      if @options[:trace]
-        e.backtrace.each do |line|
-          puts '\tfrom #{line}'
-        end
-      end
-    end
-  end
-end
-
     
-      def transform_r(source, target)
-    Dir.entries(source).each do |entry|
-      next if [ '.', '..' ].include?(entry)
-      source_entry = File.join(source, entry)
-      target_entry = File.join(target, entry)
+        # See \{#modifier}.
+    # @return [String]
+    def resolved_modifier
+      # modifier should contain only a single string
+      modifier.first || ''
+    end
