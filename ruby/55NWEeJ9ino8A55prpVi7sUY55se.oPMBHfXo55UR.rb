@@ -1,74 +1,98 @@
 
         
-            @notification_setting = current_user.notification_settings_for(resource)
-    @saved = @notification_setting.update_attributes(notification_setting_params)
+          describe '.create' do
+    it 'creates a key with the client' do
+      expected_service_configs = {
+        'U27F4V844T' => [],
+        'DQ8HTZ7739' => [],
+        '6A7HVUVQ3M' => ['some-music-id']
+      }
+      mock_client_response(:create_key!, with: { name: 'New Key', service_configs: expected_service_configs }) do
+        {
+          keyId: 'a-new-key-id'
+        }
+      end
     
-        find_union(segments, Project).includes(:namespace).order_id_desc
+          it 'renders HTML' do
+        capture = render(options, screenshots)
+        expect(capture).to match(/<html>/)
+        expect(capture).to include('<li>Some</li>')
+        expect(capture).to include('<li>key</li>')
+        expect(capture).to include('<li>words</li>')
+      end
+    end
+    
+          private
+    
+            expect(result).to eq('git svn info | grep Revision | egrep -o '[0-9]+'')
+        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('git svn info | grep Revision | egrep -o '[0-9]+'')
+      end
+    end
+    
+      def failure_message
+    exception = request.respond_to?(:get_header) ? request.get_header('omniauth.error') : request.env['omniauth.error']
+    error   = exception.error_reason if exception.respond_to?(:error_reason)
+    error ||= exception.error        if exception.respond_to?(:error)
+    error ||= (request.respond_to?(:get_header) ? request.get_header('omniauth.error.type') : request.env['omniauth.error.type']).to_s
+    error.to_s.humanize if error
   end
     
-          def call(env)
-        request  = Request.new(env)
-        get_was  = handle(request.GET)
-        post_was = handle(request.POST) rescue nil
-        app.call env
-      ensure
-        request.GET.replace  get_was  if get_was
-        request.POST.replace post_was if post_was
-      end
+    source 'https://rubygems.org'
     
-      %w(POST PUT DELETE).each do |method|
-    it 'denies #{method} requests with non-whitelisted Origin' do
-      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://malicious.com')).not_to be_ok
+    # Each time a record is set we check whether its session has already timed out
+# or not, based on last request time. If so, the record is logged out and
+# redirected to the sign in page. Also, each time the request comes and the
+# record is set, we set the last request time inside its scoped session to
+# verify timeout in the following request.
+Warden::Manager.after_set_user do |record, warden, options|
+  scope = options[:scope]
+  env   = warden.request.env
+    
+    BASE_URI = ENV['BASE_URI'] || 'https://github.com/jondot/awesome-react-native'
+    
+    ## -- Rsync Deploy config -- ##
+# Be sure your public key is listed in your server's ~/.ssh/authorized_keys file
+ssh_user       = 'user@domain.com'
+ssh_port       = '22'
+document_root  = '~/website.com/'
+rsync_delete   = false
+rsync_args     = ''  # Any extra arguments to pass to rsync
+deploy_default = 'rsync'
+    
+      # The Site class is a built-in Jekyll class with access to global site config information.
+  class Site
+    
+        def get_gist_from_web(gist, file)
+      gist_url = get_gist_url_for(gist, file)
+      data     = get_web_content(gist_url)
+    
+      class IncludeCodeTag < Liquid::Tag
+    def initialize(tag_name, markup, tokens)
+      @title = nil
+      @file = nil
+      if markup.strip =~ /\s*lang:(\S+)/i
+        @filetype = $1
+        markup = markup.strip.sub(/lang:\S+/i,'')
+      end
+      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
+        @title = $1 || nil
+        @file = $3
+      end
+      super
     end
     
-          attr_reader :agent
+      context 'expands plain buttons' do
+    it 'finds selectors' do
+      list = @buttons_list.join(', ')
+      ruleset = 'content: #{list};'
     
-        i0, s0 = index, []
-    if has_terminal?('[', false, index)
-      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
-      @index += 1
-    else
-      terminal_parse_failure('[')
-      r1 = nil
-    end
-    s0 << r1
-    if r1
-      s2, i2 = [], index
-      loop do
-        if has_terminal?('\G[^\\],]', true, index)
-          r3 = true
-          @index += 1
-        else
-          r3 = nil
-        end
-        if r3
-          s2 << r3
-        else
-          break
-        end
-      end
-      if s2.empty?
-        @index = i2
-        r2 = nil
-      else
-        r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
-      end
-      s0 << r2
-      if r2
-        if has_terminal?(']', false, index)
-          r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
-          @index += 1
-        else
-          terminal_parse_failure(']')
-          r4 = nil
-        end
-        s0 << r4
-      end
-    end
-    if s0.last
-      r0 = instantiate_node(LogStash::Config::AST::SelectorElement,input, i0...index, s0)
-      r0.extend(SelectorElement0)
-    else
-      @index = i0
-      r0 = nil
-    end
+    describe 'size' do
+  before(:all) do
+    ParserSupport.parse_file('library/size')
+  end
+    
+      context 'expands active text inputs' do
+    it 'finds selectors' do
+      list = @inputs_list.map { |input| '#{input}:active' }
+      list = list.join(', ')
+      ruleset = 'content: #{list};'
