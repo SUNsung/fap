@@ -1,55 +1,80 @@
 
         
-          def resource
-    @resource ||=
-      if params[:project_id].present?
-        Project.find(params[:project_id])
-      elsif params[:namespace_id].present?
-        Group.find(params[:namespace_id])
+              alias_method :include?, :key?
+      alias_method :has_key?, :key?
+      alias_method :member?, :key?
+    
+            while true
+          begin
+            if Platform.windows?
+              # Windows doesn't support non-blocking reads on
+              # file descriptors or pipes so we have to get
+              # a bit more creative.
+    
+              opts = OptionParser.new do |o|
+            o.banner = 'Usage: vagrant box remove <name>'
+            o.separator ''
+            o.separator 'Options:'
+            o.separator ''
+    
+            # Parse the options
+        argv = parse_options(opts)
+        return if !argv
+        if argv.length < 2
+          raise Vagrant::Errors::CLIInvalidUsage,
+            help: opts.help.chomp
+        end
+    
+      attributes :id, :type, :name, :updated
+    
+    require_relative 'converter/fonts_conversion'
+require_relative 'converter/less_conversion'
+require_relative 'converter/js_conversion'
+require_relative 'converter/logger'
+require_relative 'converter/network'
+    
+        def log_http_get_files(files, from, cached = false)
+      return if files.empty?
+      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
       end
+    end
+    
+      # Disable request forgery protection in test environment.
+  config.action_controller.allow_forgery_protection = false
+    
+      def test_image_helper
+    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
   end
     
-      private
+      describe 'environment' do
+    it 'adds the fuse directories to the appropriate paths' do
+      expect(ENV).to receive(:append_path).with('PKG_CONFIG_PATH', any_args)
+      expect(ENV).to receive(:append_path).with('HOMEBREW_LIBRARY_PATHS', any_args)
+      expect(ENV).to receive(:append_path).with('HOMEBREW_INCLUDE_PATHS', any_args)
+      subject.modify_build_environment
+    end
+  end
+end
     
-            @normalized_styles = styles.dup
-        styles.each_pair do |name, options|
-          @normalized_styles[name.to_sym] = Paperclip::Style.new(name.to_sym, options.dup, self)
-        end
+    module Hardware
+  describe CPU do
+    describe '::type' do
+      it 'returns the current CPU's type as a symbol, or :dunno if it cannot be detected' do
+        expect(
+          [
+            :intel,
+            :ppc,
+            :dunno,
+          ],
+        ).to include(described_class.type)
       end
-      @normalized_styles
     end
     
-        def register(klass, attachment_name, attachment_options)
-      @attachments ||= {}
-      @attachments[klass] ||= {}
-      @attachments[klass][attachment_name] = attachment_options
-    end
-    
-        def blank_name?
-      @filepath.nil? || @filepath.empty?
-    end
-    
-        # Extracts the Geometry from a 'WxH,O' string
-    # Where W is the width, H is the height,
-    # and O is the EXIF orientation
-    def self.parse(string)
-      GeometryParser.new(string).make
-    end
-    
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'border-top-style: inset; ' +
-                'border-right-style: none; ' +
-                'border-left-style: double;'
-      bad_rule = 'border-bottom-style: null;'
-    
-      context 'called with one color' do
-    it 'applies same width to all sides' do
-      rule = 'border-width: 1px'
-    
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'padding-top: 11px; ' +
-                'padding-right: 12px; ' +
-                'padding-left: 13px;'
-      bad_rule = 'padding-bottom: null;'
+      def participation_count
+    poll_answers.sum('vote_count')
+  end
+end
