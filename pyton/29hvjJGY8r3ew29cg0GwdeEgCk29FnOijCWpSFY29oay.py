@@ -1,71 +1,77 @@
 
         
         
-if six.PY3:
-    for line in open('tests/py3-ignores.txt'):
-        file_path = line.strip()
-        if file_path and file_path[0] != '#':
-            collect_ignore.append(file_path)
+def get_function_signature(function, method=True):
+    wrapped = getattr(function, '_original_function', None)
+    if wrapped is None:
+        signature = inspect.getargspec(function)
+    else:
+        signature = inspect.getargspec(wrapped)
+    defaults = signature.defaults
+    if method:
+        args = signature.args[1:]
+    else:
+        args = signature.args
+    if defaults:
+        kwargs = zip(args[-len(defaults):], defaults)
+        args = args[:-len(defaults)]
+    else:
+        kwargs = []
+    st = '%s.%s(' % (function.__module__, function.__name__)
     
-        def short_desc(self):
-        return 'Run quick benchmark test'
+            self.kernel_constraint = constraints.get(kernel_constraint)
+        self.recurrent_constraint = constraints.get(recurrent_constraint)
+        self.bias_constraint = constraints.get(bias_constraint)
     
-        def syntax(self):
-        return '[options] <spider>'
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-l', '--list', dest='list', action='store_true',
-            help='List available templates')
-        parser.add_option('-e', '--edit', dest='edit', action='store_true',
-            help='Edit spider after creating it')
-        parser.add_option('-d', '--dump', dest='dump', metavar='TEMPLATE',
-            help='Dump template to standard output')
-        parser.add_option('-t', '--template', dest='template', default='basic',
-            help='Uses a custom template.')
-        parser.add_option('--force', dest='force', action='store_true',
-            help='If the spider already exists, overwrite it with the template')
-    
-                with open('htmlout.html', 'w') as out:
-                out.write(header)
+    print('Convert class vector to binary class matrix '
+      '(for use with categorical_crossentropy)')
+y_train = keras.utils.to_categorical(y_train, num_classes)
+y_test = keras.utils.to_categorical(y_test, num_classes)
+print('y_train shape:', y_train.shape)
+print('y_test shape:', y_test.shape)
     
     
-def main():
-    tornado.options.parse_command_line()
-    application = tornado.web.Application([
-        (r'/', MainHandler),
-    ])
-    http_server = tornado.httpserver.HTTPServer(application)
-    http_server.listen(options.port)
-    tornado.ioloop.IOLoop.current().start()
+@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
+def test_orthogonal(tensor_shape):
+    _runner(initializers.orthogonal(), tensor_shape,
+            target_mean=0.)
     
-    import tornado.ioloop
-import tornado.web
-from tornado import options
+        x = (100 * np.random.random((100, 2))).astype('int32')
+    y = np.random.random((100, 8))
+    z = np.random.random((100, 6))
+    labels = np.random.random((100, 16))
+    model.fit([x, y, z], labels, epochs=1)
     
-            truncated = False
-        for object_name in object_names[start_pos:]:
-            if not object_name.startswith(prefix):
-                break
-            if len(contents) >= max_keys:
-                truncated = True
-                break
-            object_path = self._object_path(bucket_name, object_name)
-            c = {'Key': object_name}
-            if not terse:
-                info = os.stat(object_path)
-                c.update({
-                    'LastModified': datetime.datetime.utcfromtimestamp(
-                        info.st_mtime),
-                    'Size': info.st_size,
-                })
-            contents.append(c)
-            marker = object_name
-        self.render_xml({'ListBucketResult': {
-            'Name': bucket_name,
-            'Prefix': prefix,
-            'Marker': marker,
-            'MaxKeys': max_keys,
-            'IsTruncated': truncated,
-            'Contents': contents,
-        }})
+        result = f([test_values])[0]
+    expected = hard_sigmoid(test_values)
+    assert_allclose(result, expected, rtol=1e-05)
+    
+        #print(len(urls))
+    
+        def __init__(self, name, action):
+        self.name = name
+        self.action = action
+    
+        def get_current_time_as_html_fragment(self):
+        current_time = self.time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
+'''
+    
+        def test_display_current_time_at_current_time(self):
+        '''
+        Just as justification for working example with the time provider used in
+        production. (Will always pass.)
+        '''
+        production_code_time_provider = ProductionCodeTimeProvider()
+        class_under_test = TimeDisplay()
+        current_time = datetime.datetime.now()
+        expected_time = '<span class=\'tinyBoldText\'>{}:{}</span>'.format(current_time.hour, current_time.minute)
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(production_code_time_provider), expected_time)
+    
+        def update(self, subject):
+        print(u'HexViewer: Subject %s has data 0x%x' %
+              (subject.name, subject.data))
+    
+    
+class CompositeSpecification(Specification):
