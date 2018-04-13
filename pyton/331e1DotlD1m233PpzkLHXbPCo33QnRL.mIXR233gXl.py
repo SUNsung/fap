@@ -1,178 +1,194 @@
 
         
-            '''
-    is_windows = is_windows
-    config_dir = DEFAULT_CONFIG_DIR
-    stdin = sys.stdin
-    stdin_isatty = stdin.isatty()
-    stdin_encoding = None
-    stdout = sys.stdout
-    stdout_isatty = stdout.isatty()
-    stdout_encoding = None
-    stderr = sys.stderr
-    stderr_isatty = stderr.isatty()
-    colors = 256
-    if not is_windows:
-        if curses:
-            try:
-                curses.setupterm()
-                colors = curses.tigetnum('colors')
-            except curses.error:
-                pass
-    else:
-        # noinspection PyUnresolvedReferences
-        import colorama.initialise
-        stdout = colorama.initialise.wrap_stream(
-            stdout, convert=None, strip=None,
-            autoreset=True, wrap=True
-        )
-        stderr = colorama.initialise.wrap_stream(
-            stderr, convert=None, strip=None,
-            autoreset=True, wrap=True
-        )
-        del colorama
+          words, _ = list(zip(*count_pairs))
+  word_to_id = dict(zip(words, range(len(words))))
     
-        def format_body(self, content, mime):
-        if is_valid_mime(mime):
-            for p in self.enabled_plugins:
-                content = p.format_body(content, mime)
-        return content
+    
+                                     predictions
+                                          ^
+                                          |
+                                       logits
+                                          ^
+                                          |
+                                (fully connected layers)
+                                          ^
+                                          |
+                                   pre_logits_concat
+                                          ^
+                                          |
+                                    (concatenate)
+    
+      Returns:
+    labels: An int64 tf.Placeholder with shape [batch_size].
+  '''
+  batch_size = None  # Batch size will be dynamically specified.
+  return tf.placeholder(dtype=tf.int64, shape=[batch_size], name='labels')
+
+    
+    '''Utility functions for configurations.'''
+    
+    
+if __name__ == '__main__':
+  FLAGS, unparsed = parser.parse_known_args()
+  tf.app.run(argv=[sys.argv[0]] + unparsed)
+
+    
+    Note that these steps are colloquially referred to as 'ResNet preprocessing,'
+and they differ from 'VGG preprocessing,' which does not use bounding boxes
+and instead does an aspect-preserving resize followed by random crop during
+training. (These both differ from 'Inception preprocessing,' which introduces
+color distortion steps.)
+    
+      Args:
+    pairs: the word pairs (list of tuple of two strings).
+    labels: the gold-standard labels for these pairs (array of rel ID).
+    predictions: the predicted labels for these pairs (array of rel ID).
+    classes: a list of relation names.
+    predictions_file: where to save the predictions.
+  '''
+  with open(predictions_file, 'w') as f_out:
+    for pair, label, pred in zip(pairs, labels, predictions):
+      w1, w2 = pair
+      f_out.write('\t'.join([w1, w2, classes[label], classes[pred]]) + '\n')
 
     
     
-def patharg(path):
-    '''
-    Back slashes need to be escaped in ITEM args,
-    even in Windows paths.
+def _get_file_names():
+  '''Returns the file names expected to exist in the input_dir.'''
+  file_names = {}
+  file_names['train'] = ['data_batch_%d' % i for i in xrange(1, 5)]
+  file_names['validation'] = ['data_batch_5']
+  file_names['eval'] = ['test_batch']
+  return file_names
     
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
+        # This matches an IPv6 address, but also permits range expressions.
+    #
+    # This expression looks complex, but it really only spells out the various
+    # combinations in which the basic unit of an IPv6 address (0..ffff) can be
+    # written, from :: to 1:2:3:4:5:6:7:8, plus the IPv4-in-IPv6 variants such
+    # as ::ffff:192.0.2.3.
+    #
+    # Note that we can't just use ipaddress.ip_address() because we also have to
+    # accept ranges in place of each component.
+    
+    try:
+    import json
+except ImportError:
+    import simplejson as json
+    
+    from ansible.plugins.terminal import TerminalBase
+from ansible.errors import AnsibleConnectionFailure
+    
+    import re
+    
+        plt.figure('scikit-learn LASSO benchmark results')
+    plt.subplot(211)
+    plt.plot(list_n_samples, lasso_results, 'b-',
+                            label='Lasso')
+    plt.plot(list_n_samples, lars_lasso_results, 'r-',
+                            label='LassoLars')
+    plt.title('precomputed Gram matrix, %d features, alpha=%s' % (n_features,
+                            alpha))
+    plt.legend(loc='upper left')
+    plt.xlabel('number of samples')
+    plt.ylabel('Time (s)')
+    plt.axis('tight')
+    
+    ratio = scikits_time / scipy_time
+    
+        op.add_option('--density',
+                  dest='density', default=1 / 3,
+                  help='Density used by the sparse random projection.'
+                       ' ('auto' or float (0.0, 1.0]')
+    
+        plt.show()
+
     
     
-def test_follow_redirect_output_options(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=h',
-             '--history-print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 2
-    assert 'HTTP/1.1 302 FOUND' not in r
-    assert HTTP_OK in r
+if not os.path.exists(html_folder):
+    os.makedirs(html_folder)
     
-        def test_cert_and_key(self, httpbin_secure):
-        r = http(httpbin_secure + '/get',
-                 '--cert', CLIENT_CERT,
-                 '--cert-key', CLIENT_KEY)
-        assert HTTP_OK in r
+    import os
+import tarfile
+from contextlib import closing
+try:
+    from urllib import urlopen
+except ImportError:
+    from urllib.request import urlopen
     
-                RuleRouter([
-                Rule(PathMatches('/handler'), Target),
-                # ... more rules
-            ])
     
-        .. versionadded:: 4.4
-    '''
-    return _re_unescape_pattern.sub(_re_unescape_replacement, s)
+if __name__ == '__main__':
+    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
+    # block to be able to use a multi-core grid search that also works under
+    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
+    # The multiprocessing module is used as the backend of joblib.Parallel
+    # that is used when n_jobs != 1 in GridSearchCV
     
-        @gen_test
-    def test_task_done_delay(self):
-        # Verify it is task_done(), not get(), that unblocks join().
-        q = self.queue_class()
-        q.put_nowait(0)
-        join = q.join()
-        self.assertFalse(join.done())
-        yield q.get()
-        self.assertFalse(join.done())
-        yield gen.moment
-        self.assertFalse(join.done())
-        q.task_done()
-        self.assertTrue(join.done())
+        # TASK: Build a vectorizer / classifier pipeline that filters out tokens
+    # that are too rare or too frequent
+    pipeline = Pipeline([
+        ('vect', TfidfVectorizer(min_df=3, max_df=0.95)),
+        ('clf', LinearSVC(C=1000)),
+    ])
     
-        logging.warning('Starting fetch with simple client')
-    simple_client = SimpleAsyncHTTPClient()
-    simple_client.fetch('http://localhost:%d/' % options.port,
-                        callback=callback)
-    IOLoop.current().start()
+    # Author: Virgile Fritsch <virgile.fritsch@inria.fr>
+# License: BSD 3 clause
     
-        def wait_for_messages(self, cursor=None):
-        # Construct a Future to return to our caller.  This allows
-        # wait_for_messages to be yielded from a coroutine even though
-        # it is not a coroutine itself.  We will set the result of the
-        # Future when results are available.
-        result_future = Future()
-        if cursor:
-            new_count = 0
-            for msg in reversed(self.cache):
-                if msg['id'] == cursor:
-                    break
-                new_count += 1
-            if new_count:
-                result_future.set_result(self.cache[-new_count:])
-                return result_future
-        self.waiters.add(result_future)
-        return result_future
+        def remove_surface(self):
+        '''Remove old decision surface.'''
+        if len(self.contours) > 0:
+            for contour in self.contours:
+                if isinstance(contour, ContourSet):
+                    for lineset in contour.collections:
+                        lineset.remove()
+                else:
+                    contour.remove()
+            self.contours = []
     
-    extension_mapping = {
-    'rss': ('xml', 'application/atom+xml; charset=UTF-8'),
-    'xml': ('xml', 'application/atom+xml; charset=UTF-8'),
-    'js': ('js', 'text/javascript; charset=UTF-8'),
-    'embed': ('htmllite', 'text/javascript; charset=UTF-8'),
-    'mobile': ('mobile', 'text/html; charset=UTF-8'),
-    'png': ('png', 'image/png'),
-    'css': ('css', 'text/css'),
-    'csv': ('csv', 'text/csv; charset=UTF-8'),
-    'api': (api_type(), 'application/json; charset=UTF-8'),
-    'json-html': (api_type('html'), 'application/json; charset=UTF-8'),
-    'json-compact': (api_type('compact'), 'application/json; charset=UTF-8'),
-    'compact': ('compact', 'text/html; charset=UTF-8'),
-    'json': (api_type(), 'application/json; charset=UTF-8'),
-    'i': ('compact', 'text/html; charset=UTF-8'),
-}
+    The data is generated with the ``make_checkerboard`` function, then
+shuffled and passed to the Spectral Biclustering algorithm. The rows
+and columns of the shuffled matrix are rearranged to show the
+biclusters found by the algorithm.
     
-        @csrf_exempt
-    @json_validate(
-        VRatelimit(rate_ip=True, prefix='rate_register_'),
-        signature=VSigned(),
-        name=VUname(['user']),
-        email=ValidEmail('email'),
-        password=VPasswordChange(['passwd', 'passwd2']),
-    )
-    def POST_register(self, responder, name, email, password, **kwargs):
-        kwargs.update(dict(
-            controller=self,
-            form=responder('noop'),
-            responder=responder,
-            name=name,
-            email=email,
-            password=password,
-        ))
-        return handle_register(**kwargs)
+        fig = plt.figure(fig_index, figsize=(10, 10))
+    ax1 = plt.subplot2grid((3, 1), (0, 0), rowspan=2)
+    ax2 = plt.subplot2grid((3, 1), (2, 0))
     
-        @require_oauth2_scope('identity')
-    @validate(
-        VUser(),
-        fields=VList(
-            'fields',
-            choices=PREFS_JSON_SPEC.spec.keys(),
-            error=errors.errors.NON_PREFERENCE,
-        ),
-    )
-    @api_doc(api_section.account, uri='/api/v1/me/prefs')
-    def GET_prefs(self, fields):
-        '''Return the preference settings of the logged in user'''
-        resp = PrefsJsonTemplate(fields).data(c.oauth_user)
-        return self.api_wrapper(resp)
     
-            An iden is given as the `captcha` field with a `BAD_CAPTCHA`
-        error, you should use this endpoint if you get a
-        `BAD_CAPTCHA` error response.
+n_train = 20  # samples for training
+n_test = 200  # samples for testing
+n_averages = 50  # how often to repeat classification
+n_features_max = 75  # maximum number of features
+step = 4  # step size for the calculation
     
-        g.log.debug('Pulling %s for help' % u)
+        def _scan_once(string, idx):
+        try:
+            nextchar = string[idx]
+        except IndexError:
+            raise StopIteration(idx) from None
+    
+        errorHandler = None
+    filter = None
+    
+        print('# The following line assumes you have built Python using the standard instructions')
+    print('# Otherwise fix the following line to point to the library.')
+    print('pythonlib = '$(pythonhome)/pcbuild/python%s$(debug_suffix).lib'' % version_suffix)
+    print()
+    
+        def test_4(self):
+        class X(Structure):
+            pass
+        class Y(X):
+            pass
+        self.assertRaises(AttributeError, setattr, X, '_fields_', [])
+        Y._fields_ = []
+        self.assertRaises(AttributeError, setattr, X, '_fields_', [])
+    
+        def test_fileclosed(self):
+        try:
+            f = open(support.TESTFN, 'w')
+            self.assertIs(f.closed, False)
+            f.close()
+            self.assertIs(f.closed, True)
+        finally:
+            os.remove(support.TESTFN)
