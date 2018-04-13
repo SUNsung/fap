@@ -1,19 +1,11 @@
 
         
-        namespace tensorflow {
-    }
-    
-    
-    {  void Feedback(Cluster* cluster, const GrapplerItem& item,
-                const GraphDef& pruned_graph, double result) override;
-};
-    
-    
-    { private:
-  // Smoothness constant of smooth hinge loss
-  // TODO(sibyl-Aix6ihai): expose this parameter
-  const double gamma = 1;
-};
+          // During the first Compute(), resource is either created or looked up using
+  // shared_name. In the latter case, the resource found should be verified if
+  // it is compatible with this op's configuration. The verification may fail in
+  // cases such as two graphs asking queues of the same shared name to have
+  // inconsistent capacities.
+  virtual Status VerifyResource(T* resource) { return Status::OK(); }
     
     Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an 'AS IS' BASIS,
@@ -22,29 +14,62 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
     
-    class RecordWriter {
- public:
-  // Create a writer that will append data to '*dest'.
-  // '*dest' must be initially empty.
-  // '*dest' must remain live while this Writer is in use.
-  RecordWriter(WritableFile* dest,
-               const RecordWriterOptions& options = RecordWriterOptions());
+    
+    {  // The underlying CUDA event element.
+  CUevent cuda_event_;
+};
+    
+    // Prefetching support
+//
+// Defined behavior on some of the uarchs:
+// PREFETCH_HINT_T0:
+//   prefetch to all levels of the hierarchy (except on p4: prefetch to L2)
+// PREFETCH_HINT_NTA:
+//   p4: fetch to L2, but limit to 1 way (out of the 8 ways)
+//   core: skip L2, go directly to L1
+//   k8 rev E and later: skip L2, can go to either of the 2-ways in L1
+enum PrefetchHint {
+  PREFETCH_HINT_T0 = 3,  // More temporal locality
+  PREFETCH_HINT_T1 = 2,
+  PREFETCH_HINT_T2 = 1,  // Less temporal locality
+  PREFETCH_HINT_NTA = 0  // No temporal locality
+};
+template <PrefetchHint hint>
+void prefetch(const void* x);
+    
+    namespace tensorflow {
     }
     
-    namespace internal {
-template <typename T>
-struct functor_traits<scalar_tanh_fast_derivative_op<T> > {
-  enum {
-    Cost = NumTraits<T>::AddCost * 2 + NumTraits<T>::MulCost * 1,
-    PacketAccess = packet_traits<T>::HasAdd && packet_traits<T>::HasMul &&
-                   packet_traits<T>::HasNegate
-  };
+    
+    {  void CopyDeviceTensorToCPU(const Tensor *device_tensor, StringPiece edge_name,
+                             Device *device, Tensor *cpu_tensor,
+                             StatusCallback done) override;
 };
-}  // namespace internal
     
     
-    {}  // namespace tensorflow
-
+    { private:
+  enum { kBufferSize = 256 << 10 /* 256 kB */ };
+  const int skip_header_lines_;
+  Env* const env_;
+  int64 line_number_;
+  std::unique_ptr<RandomAccessFile> file_;  // must outlive input_buffer_
+  std::unique_ptr<io::InputBuffer> input_buffer_;
+};
+    
+        NodeDef* const_node3 = graph_def.add_node();
+    const_node3->set_name('const_node3');
+    const_node3->set_op('Const');
+    
+    
+    {  if (proc_id == 0) LOG(INFO) << 'MPI process-ID to gRPC server name map: \n';
+  for (int i = 0; i < number_of_procs; i++) {
+    name_to_id_[std::string(&worker_names[i * 128])] = i;
+    if (proc_id == 0)
+      LOG(INFO) << 'Process: ' << i
+                << '\tgRPC-name: ' << std::string(&worker_names[i * 128])
+                << std::endl;
+  }
+}
     
       // Fill *indices and *sizes from *this (so that we can use the slice()
   // function in eigen tensor). We need a tensor shape in case some of the
@@ -57,214 +82,125 @@ struct functor_traits<scalar_tanh_fast_derivative_op<T> > {
       Eigen::DSizes<Eigen::DenseIndex, NDIMS>* indices,
       Eigen::DSizes<Eigen::DenseIndex, NDIMS>* sizes) const;
     
-      v8::Handle<v8::Value> val = GetWindowId(web_view->mainFrame());
-  if (val.IsEmpty())
-    return;
-  if (val->IsNull() || val->IsUndefined())
-    return;
+      // Appends the TestPartResult object to the TestPartResultArray
+  // received in the constructor.
+  //
+  // This method is from the TestPartResultReporterInterface
+  // interface.
+  virtual void ReportTestPartResult(const TestPartResult& result);
+ private:
+  void Init();
     
-      static v8::Handle<v8::Object> GetObjectRegistry();
-  static v8::Handle<v8::Value> GetWindowId(blink::WebFrame* frame);
-  static void ZoomLevelChanged(blink::WebView* web_view);
-  static void willHandleNavigationPolicy(
-    content::RenderView* rv,
-    blink::WebFrame* frame,
-    const blink::WebURLRequest& request,
-    blink::WebNavigationPolicy* policy,
-    blink::WebString* manifest);
+    // This is used internally by all instances of linked_ptr<>.  It needs to be
+// a non-template class because different types of linked_ptr<> can refer to
+// the same object (linked_ptr<Superclass>(obj) vs linked_ptr<Subclass>(obj)).
+// So, it needs to be possible for different types of linked_ptr to participate
+// in the same circular linked list, so we need a single class type here.
+//
+// DO NOT USE THIS CLASS DIRECTLY YOURSELF.  Use linked_ptr<T>.
+class linked_ptr_internal {
+ public:
+  // Create a new circle that includes only this instance.
+  void join_new() {
+    next_ = this;
+  }
+    }
     
-     private:
-  // Helper functions for bindings.
-  static void RequireNwGui(const v8::FunctionCallbackInfo<v8::Value>& args);
-  static void GetAbsolutePath(const v8::FunctionCallbackInfo<v8::Value>& args);
+    #ifndef GTEST_HAS_STD_WSTRING
+// The user didn't tell us whether ::std::wstring is available, so we need
+// to figure it out.
+// TODO(wan@google.com): uses autoconf to detect whether ::std::wstring
+//   is available.
     
+      // Creates an ANSI string from the given wide string, allocating
+  // memory using new. The caller is responsible for deleting the return
+  // value using delete[]. Returns the ANSI string, or NULL if the
+  // input is NULL.
+  //
+  // The returned string is created using the ANSI codepage (CP_ACP) to
+  // match the behaviour of the ANSI versions of Win32 calls and the
+  // C runtime.
+  static const char* Utf16ToAnsi(LPCWSTR utf16_str);
+#endif
     
-    {} // namespace nwapi
-
+        for (int i = 2; i <= max; i++) {
+      if (!is_prime_[i]) continue;
+    }
     
+    // A sample program demonstrating using Google C++ testing framework.
+//
+// Author: wan@google.com (Zhanyong Wan)
     
-    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-  return item->is_enabled_;
-}
+        HTKChunkInfo() : m_chunkId(ChunkIdMax) { };
     
+                    // loop over sub-ranges of the dot product (full dot product will exceed the L1 cache)
+                float patchbuffer[rowstripehM * colstripewV + 3]; // note: don't forget column rounding
+                // 128 * 16 -> 8 KB
+                ssematrixbase patch(patchbuffer, i1 - i0, j1 - j0);
     
-    {  DISALLOW_COPY_AND_ASSIGN(MenuDelegate);
-};
-    
-    #include <string.h>
-    
-    /* Bidirectional Stream API */
-    
-    
-    {  return 0;
-}
-
+      /// Peek at the incoming data on the stream. Returns the number of bytes read.
+  /// Throws an exception on failure.
+  template <typename MutableBufferSequence>
+  std::size_t peek(const MutableBufferSequence& buffers);
     
     
     {
-    {}  // namespace testing
-}  // namespace grpc
+    {} // namespace asio
+} // namespace boost
     
-    // Data pertaining to configuration of the generator with respect to anything
-// that may be used internally at Google.
-struct GeneratorConfiguration {
-  GeneratorConfiguration();
-  grpc::string grpc_package_root;
-  // TODO(https://github.com/grpc/grpc/issues/8622): Drop this.
-  grpc::string beta_package_root;
-  // TODO(https://github.com/google/protobuf/issues/888): Drop this.
-  grpc::string import_prefix;
-};
+    #endif // BOOST_ASIO_BUFFERED_WRITE_STREAM_FWD_HPP
+
     
-    namespace grpc {
-namespace {
+      std::size_t check_for_completion(
+      const boost::system::error_code& ec,
+      std::size_t total_transferred)
+  {
+    return detail::adapt_completion_condition_result(
+        completion_condition_(ec, total_transferred));
+  }
+    
+      BOOST_ASIO_DECL static void init_native_buffer(
+      native_buffer_type& buf,
+      const boost::asio::mutable_buffer& buffer);
+    
+        // Push the key/value pair on to the stack.
+    context(Key* k, Value& v)
+      : key_(k),
+        value_(&v),
+        next_(call_stack<Key, Value>::top_)
+    {
+      call_stack<Key, Value>::top_ = this;
     }
-    }
     
-    static void get_resource_usage(double* utime, double* stime) {
-#ifdef __linux__
-  struct rusage usage;
-  getrusage(RUSAGE_SELF, &usage);
-  *utime = time_double(&usage.ru_utime);
-  *stime = time_double(&usage.ru_stime);
-#else
-  *utime = 0;
-  *stime = 0;
-#endif
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+        BOOST_ASIO_HANDLER_COMPLETION((o));
+    
+    #include <boost/asio/detail/posix_fd_set_adapter.hpp>
+#include <boost/asio/detail/win_fd_set_adapter.hpp>
+    
+    template <typename Time_Traits>
+std::size_t epoll_reactor::cancel_timer(timer_queue<Time_Traits>& queue,
+    typename timer_queue<Time_Traits>::per_timer_data& timer,
+    std::size_t max_cancelled)
+{
+  mutex::scoped_lock lock(mutex_);
+  op_queue<operation> ops;
+  std::size_t n = queue.cancel_timer(timer, ops, max_cancelled);
+  lock.unlock();
+  io_service_.post_deferred_completions(ops);
+  return n;
 }
     
-      /**
-   * @brief Halt the EventPublisher run loop.
-   *
-   * Any EventSubscriber%s with Subscription%s for this EventPublisher will
-   * become useless. osquery callers MUST deregister events.
-   * EventPublisher%s assume they can hook/trampoline, which requires cleanup.
-   * This will tear down and remove the publisher if the run loop did not start.
-   * Otherwise it will call end on the publisher and assume the run loop will
-   * tear down and remove.
-   *
-   * @param pub The string label for the EventPublisher.
-   *
-   * @return Did the EventPublisher deregister cleanly.
-   */
-  static Status deregisterEventPublisher(const EventPublisherRef& pub);
     
-      Status getQueryTables(const std::string& query,
-                        std::vector<std::string>& tables) const override {
-    return Status(0, 'Not used');
-  }
-    
-    
-    {  /// Configurations may set 'custom_' flags.
-  std::map<std::string, std::string> custom_;
-};
-    
-    /// Inspect the number of internal-buffered status log lines.
-size_t queuedStatuses();
-    
-      EXPECT_EQ(carves.size(), 2U);
-  s = archive(carves,
-              carveFSPath + '/' + kTestCarveNamePrefix + guid_ + '.tar');
-  EXPECT_TRUE(s.ok());
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_API void        ImGui_Marmalade_InvalidateDeviceObjects();
-IMGUI_API bool        ImGui_Marmalade_CreateDeviceObjects();
-    
-    
-    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-        }
-    
-    
-    {    return true;
+    {
+    {// use R's PRNG to replacd
+CustomGlobalRandomEngine::result_type
+CustomGlobalRandomEngine::operator()() {
+  return static_cast<result_type>(
+      std::floor(unif_rand() * CustomGlobalRandomEngine::max()));
 }
-    
-        // Channels
-    // - Use to simulate layers. By switching channels to can render out-of-order (e.g. submit foreground primitives before background primitives)
-    // - Use to minimize draw calls (e.g. if going back-and-forth between multiple non-overlapping clipping rectangles, prefer to append into separate channels then merge at the end)
-    IMGUI_API void  ChannelsSplit(int channels_count);
-    IMGUI_API void  ChannelsMerge();
-    IMGUI_API void  ChannelsSetCurrent(int channel_index);
-    
-            // Decode and advance source
-        unsigned int c = (unsigned int)*s;
-        if (c < 0x80)
-        {
-            s += 1;
-        }
-        else
-        {
-            s += ImTextCharFromUtf8(&c, s, text_end);
-            if (c == 0) // Malformed UTF-8?
-                break;
-        }
-    
-    unsigned int XXH32 (const void* input, int len, unsigned int seed);
-    
-      std::string res;
-  std::unique_ptr<rocksdb::Iterator> it(db_->NewIterator(ReadOptions()));
-  std::string k1('k1');
-  std::string k2('k2');
-  bool first = true;
-  for (it->Seek(k1); it->Valid(); it->Next()) {
-    res = it->value().ToString();
-    if (first) {
-      ASSERT_EQ(res, 'v1,v2,v3');
-      first = false;
-    } else {
-      ASSERT_EQ(res, 'a1,a2,a3');
-    }
-  }
-  slists.Append('k2', 'a4');
-  slists.Append('k1', 'v4');
-    
-      virtual void SeekToFirst() override;
-    
-    
-    {    // if file not exist
-    if (ret < 0) {
-      _file_size = 0;
-    }
-  }
-    
-      WriteOptions write_options;
-  // Insert something into CFB so lots of log files will be kept
-  // before creating the checkpoint.
-  ASSERT_OK(txdb->CreateColumnFamily(cf_options, 'CFB', &cfb));
-  ASSERT_OK(txdb->Put(write_options, cfb, '', ''));
-    
-      // Allocate a buf of len size for storing key. The idea is that a
-  // specific memtable representation knows its underlying data structure
-  // better. By allowing it to allocate memory, it can possibly put
-  // correlated stuff in consecutive memory area to make processor
-  // prefetching more efficient.
-  virtual KeyHandle Allocate(const size_t len, char** buf);
-    
-      void Validate(TestInlineSkipList* list) {
-    // Check keys exist.
-    for (Key key : keys_) {
-      ASSERT_TRUE(list->Contains(Encode(&key)));
-    }
-    // Iterate over the list, make sure keys appears in order and no extra
-    // keys exist.
-    TestInlineSkipList::Iterator iter(list);
-    ASSERT_FALSE(iter.Valid());
-    Key zero = 0;
-    iter.Seek(Encode(&zero));
-    for (Key key : keys_) {
-      ASSERT_TRUE(iter.Valid());
-      ASSERT_EQ(key, Decode(iter.key()));
-      iter.Next();
-    }
-    ASSERT_FALSE(iter.Valid());
-    // Validate the list is well-formed.
-    list->TEST_Validate();
-  }
-    
-    void SyncPoint::LoadDependencyAndMarkers(
-  const std::vector<SyncPointPair>& dependencies,
-  const std::vector<SyncPointPair>& markers) {
-  impl_->LoadDependencyAndMarkers(dependencies, markers);
-}
+}  // namespace common
+}  // namespace xgboost
