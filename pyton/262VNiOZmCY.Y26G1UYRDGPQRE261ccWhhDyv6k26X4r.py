@@ -1,113 +1,118 @@
 
         
-        
-def _tar_file(cmd):
-    for c in cmd:
-        for ext in tar_extensions:
-            if c.endswith(ext):
-                return (c, c[0:len(c) - len(ext)])
+            return inner
     
-    containers = (('thefuck/python3-fish',
-               u'''FROM python:3
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'),
-              ('thefuck/python2-fish',
-               u'''FROM python:2
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'))
-    
-    
-def ismount(path):
-    '''Test whether a path is a mount point
-    clone of os.path.ismount (from cpython Lib/posixpath.py)
-    fixed to solve https://github.com/ansible/ansible-modules-core/issues/2186
-    and workaround non-fixed http://bugs.python.org/issue2466
-    this should be rewritten as soon as python issue 2466 is fixed
-    probably check for python version and use os.path.ismount if fixed
-    
-    
-def secure_hash_s(data, hash_func=sha1):
-    ''' Return a secure hash hex digest of data. '''
-    
-        # First, we extract the port number if one is specified.
-    
-        def __init__(self, galaxy):
-        self.galaxy = galaxy
-        self.token = GalaxyToken()
-        self._api_server = C.GALAXY_SERVER
-        self._validate_certs = not galaxy.options.ignore_certs
-        self.baseurl = None
-        self.version = None
-        self.initialized = False
-    
-        def on_open_shell(self):
-        try:
-            self._exec_cli_command('screen-length 0 temporary')
-        except AnsibleConnectionFailure:
-            raise AnsibleConnectionFailure('unable to set terminal parameters')
-
-    
-        plt.figure('scikit-learn parallel %s benchmark results' % func.__name__)
-    plt.plot(sample_sizes, one_core, label='one core')
-    plt.plot(sample_sizes, multi_core, label='multi core')
-    plt.xlabel('n_samples')
-    plt.ylabel('Time (s)')
-    plt.title('Parallel %s' % func.__name__)
-    plt.legend()
-    
+        :param url: URL for the new :class:`Request` object.
+    :param data: (optional) Dictionary (will be form-encoded), bytes, or file-like object to send in the body of the :class:`Request`.
+    :param json: (optional) json data to send in the body of the :class:`Request`.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
     '''
-from __future__ import division
-from __future__ import print_function
     
-            # split the paragraph into fake smaller paragraphs to make the
-        # problem harder e.g. more similar to tweets
-        if lang in ('zh', 'ja'):
-        # FIXME: whitespace tokenizing does not work on chinese and japanese
-            continue
-        words = content.split()
-        n_groups = len(words) / n_words_per_short_text
-        if n_groups < 1:
-            continue
-        groups = np.array_split(words, n_groups)
+        def __getitem__(self, key):
+        # We allow fall-through here, so values default to None
     
-    # Author: Kemal Eren <kemal@kemaleren.com>
-# License: BSD 3 clause
+            :param name: a string containing name of cookie
+        :param domain: (optional) string containing domain of cookie
+        :param path: (optional) string containing path of cookie
+        :raises KeyError: if cookie is not found
+        :raises CookieConflictError: if there are multiple cookies
+            that match name and optionally domain and path
+        :return: cookie.value
+        '''
+        toReturn = None
+        for cookie in iter(self):
+            if cookie.name == name:
+                if domain is None or cookie.domain == domain:
+                    if path is None or cookie.path == path:
+                        if toReturn is not None:  # if there are multiple cookies that meet passed in criteria
+                            raise CookieConflictError('There are multiple cookies with name, %r' % (name))
+                        toReturn = cookie.value  # we will eventually return this as long as no cookie conflict
     
-            clf1 = LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto').fit(X, y)
-        clf2 = LinearDiscriminantAnalysis(solver='lsqr', shrinkage=None).fit(X, y)
+            auth = HTTPDigestAuth('user', 'wrongpass')
+        url = httpbin('digest-auth', 'auth', 'user', 'pass')
     
-            #out = subprocess.check_output(cmd, startupinfo=startupinfo)
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, startupinfo=startupinfo)
-        out, unused_err = process.communicate()
-        retcode = process.poll()
-        if retcode:
-            return out + '\n retcode:%s\n unused_err:%s\n' % (retcode, unused_err)
-    except Exception as e:
-        out = 'Exception:%r' % e
+    current_path = os.path.dirname(os.path.abspath(__file__))
+root_path = os.path.abspath(os.path.join(current_path, os.pardir, os.pardir, os.pardir))
+data_path = os.path.abspath(os.path.join(root_path, os.pardir, os.pardir, 'data', 'gae_proxy'))
+if not os.path.isdir(data_path):
+    data_path = current_path
+    
+                            #print 'no viable alt'
+                        self.noViableAlt(s, input)
+                        return 0
+    
+            if self._state is None:
+            # no shared state work to do
+            return
+        
+        # wack Lexer state variables
+        self._state.token = None
+        self._state.type = INVALID_TOKEN_TYPE
+        self._state.channel = DEFAULT_CHANNEL
+        self._state.tokenStartCharIndex = -1
+        self._state.tokenStartLine = -1
+        self._state.tokenStartCharPositionInLine = -1
+        self._state.text = None
+    
+    URLS = ['http://www.google.com/',
+        'http://www.apple.com/',
+        'http://www.ibm.com',
+        'http://www.thisurlprobablydoesnotexist.com',
+        'http://www.slashdot.org/',
+        'http://www.python.org/',
+        'http://www.bing.com/',
+        'http://www.facebook.com/',
+        'http://www.yahoo.com/',
+        'http://www.youtube.com/',
+        'http://www.blogger.com/']
+    
+      return {
+    'filepath': current_filepath,
+    'line_num': line + 1,
+    'column_num': column + 1,
+    'working_dir': working_dir,
+    'file_data': vimsupport.GetUnsavedAndSpecifiedBufferData( current_buffer,
+                                                              current_filepath )
+  }
     
     
-runtime_version_str = __version__
-runtime_version = version_str_to_tuple(runtime_version_str)
+def _FormatCompleterDebugInfo( completer ):
+  message = '{0} completer debug information:\n'.format( completer[ 'name' ] )
+  for server in completer[ 'servers' ]:
+    name = server[ 'name' ]
+    if server[ 'is_running' ]:
+      address = server[ 'address' ]
+      port = server[ 'port' ]
+      if address and port:
+        message += '  {0} running at: http://{1}:{2}\n'.format( name,
+                                                                address,
+                                                                port )
+      else:
+        message += '  {0} running\n'.format( name )
+      message += '  {0} process ID: {1}\n'.format( name, server[ 'pid' ] )
+    else:
+      message += '  {0} not running\n'.format( name )
+    message += '  {0} executable: {1}\n'.format( name, server[ 'executable'] )
+    logfiles = server[ 'logfiles' ]
+    if logfiles:
+      message += '  {0} logfiles:\n'.format( name )
+      for logfile in logfiles:
+        message += '    {0}\n'.format( logfile )
+    else:
+      message += '  No logfiles available\n'
+    if 'extras' in server:
+      for extra in server[ 'extras' ]:
+        message += '  {0} {1}: {2}\n'.format( name,
+                                              extra[ 'key' ],
+                                              extra[ 'value' ] )
+  for item in completer[ 'items' ]:
+    message += '  {0}: {1}\n'.format( item[ 'key' ].capitalize(),
+                                      item[ 'value' ] )
+  return message
     
-        def __init__(self, decisionNumber, input):
-        RecognitionException.__init__(self, input)
     
-    ############################################################################
-#
-# basic token interface
-#
-############################################################################
-    
-    This module contains all support classes, which are needed to use recognizers
-generated by ANTLR3.
-    
-        What it should do it take a markdown file, and split it into more files. A targetfile should have the same
-    number of lines as the original, with source code snippets and markdown non-words removed, for spell-checking.
+  def Start( self ):
+    with HandleServerException( display = False ):
+      self.PostDataToHandler( {}, 'shutdown', TIMEOUT_SECONDS )
