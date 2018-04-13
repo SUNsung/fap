@@ -1,114 +1,117 @@
 
         
-        # Just a slash
-Benchmark.ips do |x|
-  path = '/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
+        def envygeeks(url)
+  return url if url.end_with?(FORWARD_SLASH) || url == FORWARD_SLASH
     
-      def self.source_dir; SOURCE_DIR; end
-end
-    
-          #
-      # The version constraint required to activate a given gem.
-      # Usually the gem version requirement is '> 0,' because any version
-      # will do. In the case of jekyll-docs, however, we require the exact
-      # same version as Jekyll.
-      #
-      # Returns a String version constraint in a parseable form for
-      # RubyGems.
-      def version_constraint(gem_name)
-        return '= #{Jekyll::VERSION}' if gem_name.to_s.eql?('jekyll-docs')
-        '> 0'
+          private
+      def grouped_array(groups)
+        groups.each_with_object([]) do |item, array|
+          array << {
+            'name'  => item.first,
+            'items' => item.last,
+            'size'  => item.last.size,
+          }
+        end
       end
-    
-          if options[:roles].is_a?(Symbol)
-        options[:roles] = [options[:roles]]
-      end
-    
-        respond_to do |format|
-      format.html { redirect_to services_path }
-      format.json { render json: @service }
     end
   end
 end
 
     
-        def log_file_info(s)
-      puts '    #{magenta s}'
-    end
+          def warnings
+        @template.warnings
+      end
     
-      get(/.+/) do
-    send_sinatra_file(request.path) {404}
-  end
-    
-        def paragraphize(input)
-      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
-    end
-  end
-end
-    
-        # Returns the content_type of the file as originally assigned, and lives
-    # in the <attachment>_content_type attribute of the model.
-    def content_type
-      instance_read(:content_type)
-    end
-    
-        def define_class_getter
-      @klass.extend(ClassMethods)
-    end
-    
-        # Returns an extension based on the content type. e.g. 'jpeg' for
-    # 'image/jpeg'. If the style has a specified format, it will override the
-    # content-type detection.
+        # Public: Setup the plugin search path
     #
-    # Each mime type generally has multiple extensions associated with it, so
-    # if the extension from the original filename is one of these extensions,
-    # that extension is used, otherwise, the first in the list is used.
-    def content_type_extension attachment, style_name
-      mime_type = MIME::Types[attachment.content_type]
-      extensions_for_mime_type = unless mime_type.empty?
-        mime_type.first.extensions
+    # Returns an Array of plugin search paths
+    def plugins_path
+      if site.config['plugins_dir'].eql? Jekyll::Configuration::DEFAULTS['plugins_dir']
+        [site.in_source_dir(site.config['plugins_dir'])]
       else
-        []
+        Array(site.config['plugins_dir']).map { |d| File.expand_path(d) }
       end
+    end
     
-            def matches? subject
-          @subject = subject
-          @subject = @subject.class unless Class === @subject
-          responds? && has_column?
-        end
-    
-            def no_error_when_valid?
-          @file = StringIO.new('.')
-          @subject.send(@attachment_name).assign(@file)
-          @subject.valid?
-          expected_message = [
-            @attachment_name.to_s.titleize,
-            I18n.t(:blank, scope: [:errors, :messages])
-          ].join(' ')
-          @subject.errors.full_messages.exclude?(expected_message)
-        end
-      end
+      def preview_url
+    if object.needs_redownload?
+      media_proxy_url(object.id, :small)
+    else
+      full_asset_url(object.file.url(:small))
     end
   end
-end
+    
+      def id
+    ActivityPub::TagManager.instance.uri_for(object)
+  end
+    
+      describe 'PUT #update' do
+    it 'updates notifications settings' do
+      user.settings['notification_emails'] = user.settings['notification_emails'].merge('follow' => false)
+      user.settings['interactions'] = user.settings['interactions'].merge('must_be_follower' => true)
+    
+    process_args
+list_login_items_for_app $app_path
 
     
-        def clear_processors!
-      @known_processors.try(:clear)
+        # Returns an array of addresses ranges
+    #
+    # @return [Array<String>]
+    def addresses
+      (boundary || '').split('\n')
     end
     
-        module TableDefinition
-      def attachment(*attachment_names)
-        options = attachment_names.extract_options!
-        attachment_names.each do |attachment_name|
-          COLUMNS.each_pair do |column_name, column_type|
-            column_options = options.merge(options[column_name.to_sym] || {})
-            column('#{attachment_name}_#{column_name}', column_type, column_options)
-          end
+              fd.write(res)
         end
       end
+      break
+    rescue ::Timeout::Error
+      $stderr.puts '#{prefix}#{site} timed out'
+    rescue ::Interrupt
+      raise $!
+    rescue ::Exception => e
+      $stderr.puts '#{prefix}#{site} #{e.class} #{e}'
+    end
+  end
+    
+              s[:pass] = ''
+          return
+        end
+    
+    
+    
+            def expected_attachment
+          'Expected #{@attachment_name}:\n'
+        end
+    
+            def failure_message
+          'Attachment #{@attachment_name} should be required'
+        end
+    
+      context 'called with two styles' do
+    it 'applies to alternating sides' do
+      rule = 'border-style: dotted dashed'
+    
+          expect('.all-buttons-focus').to have_ruleset(ruleset)
+    end
+  end
+    
+      context 'called with arguments (1, $ratio: $golden-ratio)' do
+    it 'output the first value from the golden ratio scale' do
+      expect('.one-golden-ratio').to have_rule('font-size: 1.618em')
+    end
+  end
+    
+      context 'called with two sizes' do
+    it 'applies to alternating sides' do
+      rule = 'padding: 2px 3px'
+    
+          expect('.position-implied-left').to have_ruleset(ruleset)
+    end
+  end
+    
+      context 'expands hover text inputs' do
+    it 'finds selectors' do
+      list = @inputs_list.map { |input| '#{input}:hover' }
+      list = list.join(', ')
+      ruleset = 'content: #{list};'
