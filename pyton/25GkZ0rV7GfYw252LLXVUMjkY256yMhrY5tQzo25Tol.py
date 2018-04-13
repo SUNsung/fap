@@ -1,142 +1,79 @@
 
         
-        versions_info = json.load(open('update/versions.json'))
-if 'signature' in versions_info:
-    del versions_info['signature']
-    
-    try:
-    input = raw_input
-except NameError:
-    pass
-    
-    from __future__ import unicode_literals
-    
-    # Allow direct execution
-import os
-import sys
-import unittest
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
-            # Audiomack wraps a lot of soundcloud tracks in their branded wrapper
-        # if so, pass the work off to the soundcloud extractor
-        if SoundcloudIE.suitable(api_response['url']):
-            return {'_type': 'url', 'url': api_response['url'], 'ie_key': 'Soundcloud'}
-    
-        old_layer = keras.layers.Convolution3D(5, 3, 3, 4,
-                                           init='normal',
-                                           subsample=(2, 2, 2),
-                                           border_mode='valid',
-                                           dim_ordering='th',
-                                           W_regularizer='l1',
-                                           b_regularizer='l2',
-                                           W_constraint='maxnorm',
-                                           b_constraint='unitnorm',
-                                           name='conv')
-    new_layer = keras.layers.Conv3D(5, (3, 3, 4),
-                                    kernel_initializer='normal',
-                                    strides=(2, 2, 2),
-                                    padding='valid',
-                                    kernel_regularizer='l1',
-                                    bias_regularizer='l2',
-                                    kernel_constraint='max_norm',
-                                    bias_constraint='unit_norm',
-                                    data_format='channels_first',
-                                    name='conv')
+        
+@keras_test
+def test_cropping2d_legacy_interface():
+    old_layer = keras.layers.Cropping2D(dim_ordering='tf', name='c2d')
+    new_layer = keras.layers.Cropping2D(data_format='channels_last', name='c2d')
     assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
     
-        def __init__(self):
-        super(TerminateOnNaN, self).__init__()
-    
-        The sampling probabilities are generated according
-    to the sampling distribution used in word2vec:
+            return h, [h, c]
     
     
 @keras_test
-def test_min_max_norm():
-    array = get_example_array()
-    for m in get_test_values():
-        norm_instance = constraints.min_max_norm(min_value=m, max_value=m * 2)
-        normed = norm_instance(K.variable(array))
-        value = K.eval(normed)
-        l2 = np.sqrt(np.sum(np.square(value), axis=0))
-        assert not l2[l2 < m]
-        assert not l2[l2 > m * 2 + 1e-5]
-    
-    
-@keras_test
-def test_temporal_classification_functional():
-    '''
-    Classify temporal sequences of float numbers
-    of length 3 into 2 classes using
-    single layer of GRU units and softmax applied
-    to the last activations of the units
-    '''
+def test_masking():
     np.random.seed(1337)
-    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=200,
-                                                         num_test=20,
-                                                         input_shape=(3, 4),
-                                                         classification=True,
-                                                         num_classes=2)
-    y_train = to_categorical(y_train)
-    y_test = to_categorical(y_test)
+    x = np.array([[[1], [1]],
+                  [[0], [0]]])
+    model = Sequential()
+    model.add(Masking(mask_value=0, input_shape=(2, 1)))
+    model.add(TimeDistributed(Dense(1, kernel_initializer='one')))
+    model.compile(loss='mse', optimizer='sgd')
+    y = np.array([[[1], [1]],
+                  [[1], [1]]])
+    loss = model.train_on_batch(x, y)
+    assert loss == 0
     
-        result = f([test_values])[0]
-    expected = sigmoid(test_values)
-    assert_allclose(result, expected, rtol=1e-05)
+        layer_test(local.LocallyConnected1D,
+               kwargs={'filters': filters,
+                       'kernel_size': filter_length,
+                       'padding': padding,
+                       'kernel_regularizer': 'l2',
+                       'bias_regularizer': 'l2',
+                       'activity_regularizer': 'l2',
+                       'strides': strides},
+               input_shape=(num_samples, num_steps, input_dim))
     
-                # test for return state:
-            x = Input(batch_shape=inputs.shape)
-            kwargs = {'data_format': data_format,
-                      'return_sequences': return_sequences,
-                      'return_state': True,
-                      'stateful': True,
-                      'filters': filters,
-                      'kernel_size': (num_row, num_col),
-                      'padding': 'valid'}
-            layer = convolutional_recurrent.ConvLSTM2D(**kwargs)
-            layer.build(inputs.shape)
-            outputs = layer(x)
-            output, states = outputs[0], outputs[1:]
-            assert len(states) == 2
-            model = Model(x, states[0])
-            state = model.predict(inputs)
-            np.testing.assert_allclose(
-                K.eval(layer.states[0]), state, atol=1e-4)
+    from keras import backend as K
+from keras import constraints
+from keras.utils.test_utils import keras_test
     
-        # Returns
-        Layer instance (may be Model, Sequential, Layer...)
-    '''
-    from .. import models
-    globs = globals()  # All layers.
-    globs['Model'] = models.Model
-    globs['Sequential'] = models.Sequential
-    return deserialize_keras_object(config,
-                                    module_objects=globs,
-                                    custom_objects=custom_objects,
-                                    printable_module_name='layer')
+        print('20 newsgroups')
+    print('=============')
+    print('X_train.shape = {0}'.format(X_train.shape))
+    print('X_train.format = {0}'.format(X_train.format))
+    print('X_train.dtype = {0}'.format(X_train.dtype))
+    print('X_train density = {0}'
+          ''.format(X_train.nnz / np.product(X_train.shape)))
+    print('y_train {0}'.format(y_train.shape))
+    print('X_test {0}'.format(X_test.shape))
+    print('X_test.format = {0}'.format(X_test.format))
+    print('X_test.dtype = {0}'.format(X_test.dtype))
+    print('y_test {0}'.format(y_test.shape))
+    print()
+    
+        n_samples = 2000
+    list_n_features = np.linspace(500, 3000, 5).astype(np.int)
+    lasso_results, lars_lasso_results = compute_bench(alpha, [n_samples],
+                                           list_n_features, precompute=False)
+    plt.subplot(212)
+    plt.plot(list_n_features, lasso_results, 'b-', label='Lasso')
+    plt.plot(list_n_features, lars_lasso_results, 'r-', label='LassoLars')
+    plt.title('%d samples, alpha=%s' % (n_samples, alpha))
+    plt.legend(loc='upper left')
+    plt.xlabel('number of features')
+    plt.ylabel('Time (s)')
+    plt.axis('tight')
+    plt.show()
 
     
-            print('Training %s ... ' % name, end='')
-        t0 = time()
-        clf.fit(X_train, y_train)
-        train_time[name] = time() - t0
-        t0 = time()
-        y_pred = clf.predict(X_test)
-        test_time[name] = time() - t0
-        accuracy[name] = accuracy_score(y_test, y_pred)
-        print('done')
+        plt.figure(figsize=(8, 11))
     
-        for i, kk in enumerate(krange):
-        print('k = %i (%i out of %i)' % (kk, i + 1, len(krange)))
-        for algorithm in algorithms:
-            nbrs = neighbors.NearestNeighbors(n_neighbors=kk,
-                                              algorithm=algorithm,
-                                              leaf_size=leaf_size)
-            t0 = time()
-            nbrs.fit(X)
-            t1 = time()
-            nbrs.kneighbors(X)
-            t2 = time()
+            text_filename = os.path.join(text_lang_folder,
+                                     '%s_%04d.txt' % (lang, i))
+        print('Writing %s' % text_filename)
+        open(text_filename, 'wb').write(content.encode('utf-8', 'ignore'))
+        i += 1
     
         if not os.path.exists(ARCHIVE_NAME):
         print('Downloading dataset from %s (3 MB)' % URL)
@@ -144,19 +81,116 @@ def test_temporal_classification_functional():
         with open(ARCHIVE_NAME, 'wb') as archive:
             archive.write(opener.read())
     
-        # TASK: Build a vectorizer / classifier pipeline that filters out tokens
-    # that are too rare or too frequent
-    pipeline = Pipeline([
-        ('vect', TfidfVectorizer(min_df=3, max_df=0.95)),
-        ('clf', LinearSVC(C=1000)),
-    ])
+    Sentiment analysis can be casted as a binary text classification problem,
+that is fitting a linear classifier on features extracted from the text
+of the user messages so as to guess wether the opinion of the author is
+positive or negative.
+    
+        if f == os.path.basename(__file__):
+        continue
+    
+            if event == 'surface':
+            self.remove_surface()
+            self.plot_support_vectors(model.clf.support_vectors_)
+            self.plot_decision_surface(model.surface, model.surface_type)
+    
+    plt.title('Change of predicted probabilities after sigmoid calibration')
+plt.xlabel('Probability class 1')
+plt.ylabel('Probability class 2')
+plt.xlim(-0.05, 1.05)
+plt.ylim(-0.05, 1.05)
+plt.legend(loc='best')
+    
+    plt.figure(2)
+    
+            log.write('\n>: %s\n------------------------------------' % cmd)
+        out = run(cmd)
+        log.write(out)
+        outs.append(out)
+    return '\r\n'.join(outs)
+    
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
+    
+            Using setter/getter methods is deprecated. Use o.index instead.'''
     
     '''
-print(__doc__)
     
-    # Train uncalibrated random forest classifier on whole train and validation
-# data and evaluate on test data
-clf = RandomForestClassifier(n_estimators=25)
-clf.fit(X_train_valid, y_train_valid)
-clf_probs = clf.predict_proba(X_test)
-score = log_loss(y_test, clf_probs)
+                # exhausted iterator
+            self.assertRaises(StopIteration, next, itorg)
+            dump = pickle.dumps((itorg, orig), proto)
+            it, d = pickle.loads(dump)
+            for i, x in enumerate(data):
+                d[i] = x
+            self.assertEqual(type(it), type(itorg))
+            self.assertEqual(list(it), [])
+    
+        def get_visible(self):
+        '''Return a Message representation of visible headers.'''
+        return Message(self._visible)
+    
+    
+class DOMBuilderFilter:
+    '''Element filter which can be used to tailor construction of
+    a DOM instance.
+    '''
+    
+    
+    print('# As the target uses Python%s.dll, we must use this compiler option!' % version_suffix)
+    print('cdl = /MD')
+    print()
+    print('all: $(target)$(debug_suffix)%s' % (target_ext))
+    print()
+    
+            # empty presentation type should still be analogous to str,
+        # even when format string is nonempty (issue #5920).
+        self.assertEqual(format(3.2+0j, '-'), str(3.2+0j))
+        self.assertEqual(format(3.2+0j, '<'), str(3.2+0j))
+        z = 4/7. - 100j/7.
+        self.assertEqual(format(z, ''), str(z))
+        self.assertEqual(format(z, '-'), str(z))
+        self.assertEqual(format(z, '<'), str(z))
+        self.assertEqual(format(z, '10'), str(z))
+        z = complex(0.0, 3.0)
+        self.assertEqual(format(z, ''), str(z))
+        self.assertEqual(format(z, '-'), str(z))
+        self.assertEqual(format(z, '<'), str(z))
+        self.assertEqual(format(z, '2'), str(z))
+        z = complex(-0.0, 2.0)
+        self.assertEqual(format(z, ''), str(z))
+        self.assertEqual(format(z, '-'), str(z))
+        self.assertEqual(format(z, '<'), str(z))
+        self.assertEqual(format(z, '3'), str(z))
+    
+            self.assertIn(a, [obj.obj if isinstance(obj, memoryview) else obj
+                          for obj in x._objects.values()])
+    
+    if __name__ == '__main__':
+    unittest.main()
