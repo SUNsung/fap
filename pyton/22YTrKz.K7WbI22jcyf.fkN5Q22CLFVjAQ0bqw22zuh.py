@@ -1,56 +1,66 @@
 
         
-        # The master toctree document.
-master_doc = 'index'
+        	type, ext, size = url_info(url)
+	print_info(site_info, title, type, size)
+	
+	if not info_only:
+		download_urls([url], title, ext, size, output_dir, merge = merge)
     
+    def kugou_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    if url.lower().find('5sing')!=-1:
+        #for 5sing.kugou.com
+        html=get_html(url)
+        ticket=r1(r''ticket':\s*'(.*)'',html)
+        j=loads(str(b64decode(ticket),encoding='utf-8'))
+        url=j['file']
+        title=j['songName']
+        songtype, ext, size = url_info(url)
+        print_info(site_info, title, songtype, size)
+        if not info_only:
+            download_urls([url], title, ext, size, output_dir, merge=merge)
+    else:
+        #for the www.kugou.com/
+        return kugou_download_playlist(url, output_dir=output_dir, merge=merge, info_only=info_only)
+        # raise NotImplementedError(url)       
     
-@bp.route('/add', methods=['POST'])
-def add_entry():
-    if not session.get('logged_in'):
-        abort(401)
-    db = get_db()
-    db.execute('insert into entries (title, text) values (?, ?)',
-               [request.form['title'], request.form['text']])
-    db.commit()
-    flash('New entry was successfully posted')
-    return redirect(url_for('flaskr.show_entries'))
+    def mixcloud_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html(url, faker=True)
+    title = r1(r'<meta property='og:title' content='([^']*)'', html)
+    preview_url = r1(r'm-preview=\'([^\']+)\'', html)
+    preview = r1(r'previews(.*)\.mp3$', preview_url)
     
-    from flask import Flask, jsonify, render_template, request
-app = Flask(__name__)
+    from html.parser import HTMLParser
     
+            Args:
+            max_workers: The maximum number of threads that can be used to
+                execute the given calls.
+        '''
+        self._max_workers = max_workers
+        self._work_queue = queue.Queue()
+        self._threads = set()
+        self._shutdown = False
+        self._shutdown_lock = threading.Lock()
     
-@app.before_request
-def before_request():
-    g.user = None
-    if 'user_id' in session:
-        g.user = query_db('select * from user where user_id = ?',
-                          [session['user_id']], one=True)
+            Returns:
+            An iterator equivalent to: map(func, *iterables) but the calls may
+            be evaluated out-of-order.
     
-                # report after inserting so AW sees the token in the exception
-            self.reportError(e)
-            return inserted
+    # Controls how many more calls than processes will be queued in the call queue.
+# A smaller number will mean that processes spend more time idle waiting for
+# work while a larger number will make Future.cancel() succeed less frequently
+# (Futures in the call queue cannot be cancelled).
+EXTRA_QUEUED_CALLS = 1
     
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
-def is_translated(msg):
-    if isinstance(msg.string, basestring):
-        return bool(msg.string)
-    for item in msg.string:
-        if not item:
-            return False
-    return True
-    
-    def api_type(subtype = ''):
-    return 'api-' + subtype if subtype else 'api'
-    
-        def url_features(self):
-        return set(request.GET.getall('feature'))
-    
-            bjs = self.get_wrapped_link(url, wrapper = builder_wrapper)
-        response.content_type = 'text/javascript'
-        return bjs.render()
-    
-        def GET_faq(self):
-        if c.default_sr:
-            return self.redirect('/help/faq')
-        else:
-            return self.renderurl('/help/faqs/' + c.site.name)
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
