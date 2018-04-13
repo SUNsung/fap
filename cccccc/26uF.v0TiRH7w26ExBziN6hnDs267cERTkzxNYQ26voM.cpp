@@ -1,415 +1,263 @@
 
         
-          /// Get the type encoding for an ObjC property.
-  void getObjCEncodingForPropertyType(IRGenModule &IGM, VarDecl *property,
-                                      std::string &s);
-  
-  /// Produces extended encoding of ObjC block signature.
-  /// \returns the encoded type.
-  llvm::Constant *getBlockTypeExtendedEncoding(IRGenModule &IGM,
-                                               CanSILFunctionType invokeTy);
-  
-  /// Produces extended encoding of method type.
-  /// \returns the encoded type.
-  llvm::Constant *getMethodTypeExtendedEncoding(IRGenModule &IGM,
-                                                AbstractFunctionDecl *method);
-  
-  /// Build an Objective-C method descriptor for the given getter method.
-  void emitObjCGetterDescriptor(IRGenModule &IGM,
-                                ConstantArrayBuilder &descriptors,
-                                AbstractStorageDecl *storage);
+        // FIXME: Soon this will change.
+using SubstitutionList = ArrayRef<Substitution>;
     
-    #include 'swift/Index/IndexRecord.h'
-#include 'swift/AST/ASTContext.h'
-#include 'swift/AST/Decl.h'
-#include 'swift/AST/Expr.h'
+    /// Options for controlling diagnostics.
+class DiagnosticOptions {
+public:
+  /// Indicates whether textual diagnostics should use color.
+  bool UseColor = false;
+    }
+    
+    namespace swift {
+  class GenericEnvironment;
+  class SubstitutionMap;
+    }
+    
+    #include 'swift/AST/ASTContext.h'
+#include 'swift/AST/GenericEnvironment.h'
 #include 'swift/AST/Module.h'
-#include 'swift/AST/ParameterList.h'
-#include 'swift/AST/Pattern.h'
-#include 'swift/AST/Stmt.h'
+#include 'swift/AST/ProtocolConformance.h'
+#include 'swift/AST/SubstitutionMap.h'
 #include 'swift/AST/Types.h'
-#include 'swift/AST/DiagnosticsFrontend.h'
-#include 'swift/AST/ModuleLoader.h'
-#include 'swift/ClangImporter/ClangModule.h'
-#include 'swift/Index/Index.h'
-#include 'swift/Strings.h'
-#include 'clang/Basic/FileManager.h'
-#include 'clang/Frontend/CompilerInstance.h'
-#include 'clang/Index/IndexingAction.h'
-#include 'clang/Index/IndexRecordWriter.h'
-#include 'clang/Index/IndexUnitWriter.h'
-#include 'clang/Lex/Preprocessor.h'
-#include 'llvm/Support/Path.h'
+#include 'llvm/ADT/DenseMap.h'
     
-      swift::markup::CommentParts getParts() const {
-    return Parts;
+    static const int kValueSize = 200 * 1024;
+static const int kTotalSize = 100 * 1024 * 1024;
+static const int kCount = kTotalSize / kValueSize;
+    
+      Cache::Handle* handle = NULL;
+  Status s = FindTable(file_number, file_size, &handle);
+  if (!s.ok()) {
+    return NewErrorIterator(s);
   }
     
-    class Code final : public InlineContent {
-  StringRef LiteralContent;
-    }
-    
-    using clang::index::SymbolKind;
-using clang::index::SymbolLanguage;
-using clang::index::SymbolSubKind;
-using clang::index::SymbolProperty;
-using clang::index::SymbolPropertySet;
-using clang::index::SymbolRole;
-using clang::index::SymbolRoleSet;
-using clang::index::SymbolRelation;
-using clang::index::SymbolInfo;
-    
-      /// Returns the buffer ID for the specified *valid* location.
-  ///
-  /// Because a valid source location always corresponds to a source buffer,
-  /// this routine always returns a valid buffer ID.
-  unsigned findBufferContainingLoc(SourceLoc Loc) const;
-    
-    /// Substitution - A substitution into a generic specialization.
-class Substitution {
-  Type Replacement;
-  ArrayRef<ProtocolConformanceRef> Conformance;
-    }
-    
-    // On other platforms swift_once_t is std::once_flag
-typedef std::once_flag swift_once_t;
-    
-      AutoCompactTest() {
-    dbname_ = test::TmpDir() + '/autocompact_test';
-    tiny_cache_ = NewLRUCache(100);
-    options_.block_cache = tiny_cache_;
-    DestroyDB(dbname_, options_);
-    options_.create_if_missing = true;
-    options_.compression = kNoCompression;
-    ASSERT_OK(DB::Open(options_, dbname_, &db_));
-  }
-    
-    struct leveldb_filterpolicy_t : public FilterPolicy {
-  void* state_;
-  void (*destructor_)(void*);
-  const char* (*name_)(void*);
-  char* (*create_)(
-      void*,
-      const char* const* key_array, const size_t* key_length_array,
-      int num_keys,
-      size_t* filter_length);
-  unsigned char (*key_match_)(
-      void*,
-      const char* key, size_t length,
-      const char* filter, size_t filter_length);
-    }
-    
-      DBIter(DBImpl* db, const Comparator* cmp, Iterator* iter, SequenceNumber s,
-         uint32_t seed)
-      : db_(db),
-        user_comparator_(cmp),
-        iter_(iter),
-        sequence_(s),
-        direction_(kForward),
-        valid_(false),
-        rnd_(seed),
-        bytes_counter_(RandomPeriod()) {
-  }
-  virtual ~DBIter() {
-    delete iter_;
-  }
-  virtual bool Valid() const { return valid_; }
-  virtual Slice key() const {
-    assert(valid_);
-    return (direction_ == kForward) ? ExtractUserKey(iter_->key()) : saved_key_;
-  }
-  virtual Slice value() const {
-    assert(valid_);
-    return (direction_ == kForward) ? iter_->value() : saved_value_;
-  }
-  virtual Status status() const {
-    if (status_.ok()) {
-      return iter_->status();
-    } else {
-      return status_;
-    }
-  }
-    
-    class DBImpl;
+     private:
+  Env* const env_;
+  const std::string dbname_;
+  const Options* options_;
+  Cache* cache_;
     
     namespace leveldb {
     }
     
-    // To write value-parameterized tests, first you should define a fixture
-// class. It is usually derived from testing::TestWithParam<T> (see below for
-// another inheritance scheme that's sometimes useful in more complicated
-// class hierarchies), where the type of your parameter values.
-// TestWithParam<T> is itself derived from testing::Test. T can be any
-// copyable type. If it's a raw pointer, you are responsible for managing the
-// lifespan of the pointed values.
+    
+    {    // Write to database
+    for (int i = 0; i < num_entries; i++)
+    {
+      const int k = (order == SEQUENTIAL) ? i : (rand_.Next() % num_entries);
+      char key[100];
+      snprintf(key, sizeof(key), '%016d', k);
+      bytes_ += value_size + strlen(key);
+      std::string cpp_key = key;
+      if (!db_->set(cpp_key, gen_.Generate(value_size).ToString())) {
+        fprintf(stderr, 'set error: %s\n', db_->error().name());
+      }
+      FinishedSingleOp();
+    }
+  }
     
     
-    {}  // namespace testing_internal
+    {}  // namespace leveldb
+    
+    #include <assert.h>
+#include <stddef.h>
+#include <string.h>
+#include <string>
+    
+        for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
+    {
+        g_driverType = driverTypes[driverTypeIndex];
+        hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
+                D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
+        if (SUCCEEDED(hr))
+            break;
+    }
+    if (FAILED(hr))
+        return hr;
+    
+            std::vector<std::vector<Point> > white_contours, black_contours;
+        std::vector<Vec4i> white_hierarchy, black_hierarchy;
+        findContours(black_comp, black_contours, black_hierarchy, RETR_LIST, CHAIN_APPROX_SIMPLE);
+        findContours(white_comp, white_contours, white_hierarchy, RETR_LIST, CHAIN_APPROX_SIMPLE);
     
     
-    {  // The name of the source file where the test part took place, or
-  // '' if the source file is unknown.
-  std::string file_name_;
-  // The line in the source file where the test part took place, or -1
-  // if the line number is unknown.
-  int line_number_;
-  std::string summary_;  // The test failure summary.
-  std::string message_;  // The test failure message.
-};
-    
-      // Many linked_ptr operations may change p.link_ for some linked_ptr
-  // variable p in the same circle as this object.  Therefore we need
-  // to prevent two such operations from occurring concurrently.
-  //
-  // Note that different types of linked_ptr objects can coexist in a
-  // circle (e.g. linked_ptr<Base>, linked_ptr<Derived1>, and
-  // linked_ptr<Derived2>).  Therefore we must use a single mutex to
-  // protect all linked_ptr objects.  This can create serious
-  // contention in production code, but is acceptable in a testing
-  // framework.
-    
-    #include 'test/cpp/qps/report.h'
-    
-    // Get leading or trailing comments in a string. Comment lines start with '// '.
-// Leading detached comments are put in in front of leading comments.
-template <typename DescriptorType>
-inline grpc::string GetNodeComments(const DescriptorType* desc, bool leading) {
-  return grpc_generator::GetPrefixedComments(desc, leading, '//');
-}
-    
-    
-    { private:
-  GeneratorConfiguration config_;
-};
-    
-    #if TARGET_OS_IPHONE
-GRPC_XMACRO_ITEM(isWWAN, IsWWAN)
-#endif
-GRPC_XMACRO_ITEM(reachable, Reachable)
-GRPC_XMACRO_ITEM(transientConnection, TransientConnection)
-GRPC_XMACRO_ITEM(connectionRequired, ConnectionRequired)
-GRPC_XMACRO_ITEM(connectionOnTraffic, ConnectionOnTraffic)
-GRPC_XMACRO_ITEM(interventionRequired, InterventionRequired)
-GRPC_XMACRO_ITEM(connectionOnDemand, ConnectionOnDemand)
-GRPC_XMACRO_ITEM(isLocalAddress, IsLocalAddress)
-GRPC_XMACRO_ITEM(isDirect, IsDirect)
-
-    
-    
-    {  return 0;
-}
-
-    
-                // Verify that there's indeed a single layout
-            for (const auto& iter : inputMatrices)
+    {
+    {
+    {            static __device__ __forceinline__ int atomicMax(int* address, int val)
             {
-                assert(iter.second.pMBLayout == pMBLayout);
-                // TODO: This must be a runtime check, not an assert().
-                UNUSED(iter);
+                return ::atomicMax(address, val);
             }
-    
-    
-    {            specifiedMBSize *= numParallelSequences; // assume 'specifiedMBSize' refers to truncation size
-        }
-        // end bug post-fix
-        // TODO: This ^^ should go away once SGD gets fixed to take the truncation size as a parameter.
-    
-        Status Model::Save(Model& p_model, int p_fd)
-    {
-        if (p_fd < 0)
-        {
-            return Status(ONNX, INVALID_ARGUMENT, '<p_fd> is less than 0.');
-        }
-    }
-    
-    #endif // ! ONNXIR_UTILS_H
-
-    
-    namespace ONNXIR {
-    // Taken from ONNX
-    REGISTER_OPERATOR_SCHEMA(Sigmoid)
-        .Description('Sigmoid takes one input data (Tensor<T>) and produces one output data '
-            '(Tensor<T>) where the sigmoid function, y = 1 / (1 + exp(-x)), is applied to the '
-            'tensor elementwise.')
-        .Input('X', 'input tensor', 'T')
-        .Output('Y', 'The sigmoid value of the input tensor computed element-wise', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.');
-    }
-    
-        // Taken from RS4
-    REGISTER_OPERATOR_SCHEMA(Upsample)
-        .Description('Scale up spatial dimensions.  Use interpolation to fill in values')
-        .Input('input', 'Input tensor of shape [N,C,H,W]', 'T')
-        .Output('output', 'Result, has same shape and type as X', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' }, 'Constrain input and '
-            'output types to float tensors.')
-        .Attr('mode', 'enum {'NEAREST', 'BILINEAR' }, Nearest neighbor or bilinear upsampling.',
-            AttrType::AttributeProto_AttributeType_STRING)
-        .Attr('width_scale', 'Scale along width dimension', AttrType::AttributeProto_AttributeType_FLOAT)
-        .Attr('height_scale', 'Scale along height dimension', AttrType::AttributeProto_AttributeType_FLOAT);
-    
-        // Taken from ONNX
-    REGISTER_OPERATOR_SCHEMA(Squeeze)
-        .Description('Remove single-dimensional entries from the shape of a tensor. '
-            'Takes a  parameter `axes` with a list of axes to squeeze.')
-        .Input('data', 'Tensors with at least max(dims) dimensions.', 'T')
-        .Output('squeezed', 'Reshaped tensor with same data as input.', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.')
-        .Attr('axes',
-            'List of positive integers, indicate the dimensions to squeeze.',
-            AttrType::AttributeProto_AttributeType_INTS, int64_t(1));
-    
-    
-    {
-    {            if (verbosity)
+            static __device__ __forceinline__ float atomicMax(float* address, float val)
             {
-                fprintf(stderr, 'HTKChunkInfo::RequireData: read physical chunk %u (%' PRIu64 ' utterances, %' PRIu64 ' frames, %' PRIu64 ' bytes)\n',
-                        m_chunkId,
-                        m_utterances.size(),
-                        m_totalFrames,
-                        sizeof(float) * m_frames.rows() * m_frames.cols());
+            #if __CUDA_ARCH__ >= 120
+                int* address_as_i = (int*) address;
+                int old = *address_as_i, assumed;
+                do {
+                    assumed = old;
+                    old = ::atomicCAS(address_as_i, assumed,
+                        __float_as_int(::fmaxf(val, __int_as_float(assumed))));
+                } while (assumed != old);
+                return __int_as_float(old);
+            #else
+                (void) address;
+                (void) val;
+                return 0.0f;
+            #endif
             }
-        }
-        catch (...)
-        {
-            // Releasing all data
-            m_frames.resize(0, 0);
-            throw;
-        }
+            static __device__ __forceinline__ double atomicMax(double* address, double val)
+            {
+            #if __CUDA_ARCH__ >= 130
+                unsigned long long int* address_as_ull = (unsigned long long int*) address;
+                unsigned long long int old = *address_as_ull, assumed;
+                do {
+                    assumed = old;
+                    old = ::atomicCAS(address_as_ull, assumed,
+                        __double_as_longlong(::fmax(val, __longlong_as_double(assumed))));
+                } while (assumed != old);
+                return __longlong_as_double(old);
+            #else
+                (void) address;
+                (void) val;
+                return 0.0;
+            #endif
+            }
+        };
+    }; //struct Emulation
+}}} // namespace cv { namespace cuda { namespace cudev
+    
+    CV_EXPORTS_W void divide(InputArray src1, Scalar src2, OutputArray dst, double scale=1, int dtype=-1);
+    
+    static void* openclamdblas_check_fn(int ID)
+{
+    assert(ID >= 0 && ID < (int)(sizeof(openclamdblas_fn)/sizeof(openclamdblas_fn[0])));
+    const struct DynamicFnEntry* e = openclamdblas_fn[ID];
+    void* func = CV_CL_GET_PROC_ADDRESS(e->fnName);
+    if (!func)
+    {
+        throw cv::Exception(cv::Error::OpenCLApiCallError,
+                cv::format('OpenCL AMD BLAS function is not available: [%s]', e->fnName),
+                CV_Func, __FILE__, __LINE__);
     }
-    
-            const size_t colstripewV = cacheablecolsV; // width of col stripe of V
-        const size_t rowstripehM = 128;            // height of row stripe of M
-        const size_t dotprodstep = cacheablerowsV; // chunk size of dot product
-    
-    
-    {  size_t len = end - tls_stackLimit;
-  assert((len & (pageSize() - 1)) == 0);
-  if (madvise((void*)tls_stackLimit, len, MADV_DONTNEED) != 0) {
-    // It is likely that the stack vma hasn't been fully grown.  In this
-    // case madvise will apply dontneed to the present vmas, then return
-    // errno of ENOMEM.  We can also get an EAGAIN, theoretically.
-    // EINVAL means either an invalid alignment or length, or that some
-    // of the pages are locked or shared.  Neither should occur.
-    assert(errno == EAGAIN || errno == ENOMEM);
-  }
+    *(e->ppFn) = func;
+    return func;
 }
     
-      T operator^=(T v) noexcept {
-    DeterministicSchedule::beforeSharedAccess();
-    T rv = (data ^= v);
-    FOLLY_TEST_DSCHED_VLOG(this << ' ^= ' << std::hex << v << ' -> ' << std::hex
-                                << rv);
-    DeterministicSchedule::afterSharedAccess(true);
-    return rv;
+    #if GTEST_OS_SYMBIAN
+  // These are needed as the Nokia Symbian Compiler cannot decide between
+  // const T& and const T* in a function template. The Nokia compiler _can_
+  // decide between class template specializations for T and T*, so a
+  // tr1::type_traits-like is_pointer works, and we can overload on that.
+  template <typename T>
+  inline void StreamHelper(internal::true_type /*is_pointer*/, T* pointer) {
+    if (pointer == NULL) {
+      *ss_ << '(null)';
+    } else {
+      *ss_ << pointer;
+    }
   }
+  template <typename T>
+  inline void StreamHelper(internal::false_type /*is_pointer*/,
+                           const T& value) {
+    // See the comments in Message& operator <<(const T&) above for why
+    // we need this using statement.
+    using ::operator <<;
+    *ss_ << value;
+  }
+#endif  // GTEST_OS_SYMBIAN
     
-    // A const-qualified function type means the user is trying to disambiguate
-// a member function pointer.
-template <class Fun> // Fun = R(As...) const
-struct Sig {
-  template <class T>
-  constexpr Fun T::*operator()(Fun T::*t) const /* nolint */ volatile noexcept {
-    return t;
-  }
-  template <class F, class T>
-  constexpr F T::*operator()(F T::*t) const /* nolint */ volatile noexcept {
-    return t;
-  }
+    class FooTest : public ::testing::TestWithParam<const char*> {
+  // You can implement all the usual class fixture members here.
 };
     
-    
-    {
-    {
-    {  return std::string::npos;
-}
-}
-}
-#endif
-
-    
-      const T* operator->() const {
-    return get();
+    // Used to print a pointer that is neither a char pointer nor a member
+// pointer, when the user doesn't define PrintTo() for it.  (A member
+// variable pointer or member function pointer doesn't really point to
+// a location in the address space.  Their representation is
+// implementation-defined.  Therefore they will be printed as raw
+// bytes.)
+template <typename T>
+void DefaultPrintTo(IsNotContainer /* dummy */,
+                    true_type /* is a pointer */,
+                    T* p, ::std::ostream* os) {
+  if (p == NULL) {
+    *os << 'NULL';
+  } else {
+    // C++ doesn't allow casting from a function pointer to any object
+    // pointer.
+    //
+    // IsTrue() silences warnings: 'Condition is always true',
+    // 'unreachable code'.
+    if (IsTrue(ImplicitlyConvertible<T*, const void*>::value)) {
+      // T is not a function type.  We just call << to print p,
+      // relying on ADL to pick up user-defined << for their pointer
+      // types, if any.
+      *os << p;
+    } else {
+      // T is a function type, so '*os << p' doesn't do what we want
+      // (it just prints p as bool).  We want to print p as a const
+      // void*.  However, we cannot cast it to const void* directly,
+      // even using reinterpret_cast, as earlier versions of gcc
+      // (e.g. 3.4.5) cannot compile the cast when p is a function
+      // pointer.  Casting to UInt64 first solves the problem.
+      *os << reinterpret_cast<const void*>(
+          reinterpret_cast<internal::UInt64>(p));
+    }
   }
-    
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-    
-    #include <iostream>
-#include <map>
-    
-      uint32_t ValueOffset() const {
-    return static_cast<uint32_t>(value_.data() - data_);
-  }
-    
-      // Extend record types with the following special values
-  enum {
-    kEof = kMaxRecordType + 1,
-    // Returned whenever we find an invalid physical record.
-    // Currently there are three situations in which this happens:
-    // * The record has an invalid CRC (ReadPhysicalRecord reports a drop)
-    // * The record is a 0-length record (No drop is reported)
-    // * The record is below constructor's initial_offset (No drop is reported)
-    kBadRecord = kMaxRecordType + 2,
-    // Returned when we fail to read a valid header.
-    kBadHeader = kMaxRecordType + 3,
-    // Returned when we read an old record from a previous user of the log.
-    kOldRecord = kMaxRecordType + 4,
-    // Returned when we get a bad record length
-    kBadRecordLen = kMaxRecordType + 5,
-    // Returned when we get a bad record checksum
-    kBadRecordChecksum = kMaxRecordType + 6,
-  };
-    
-    /*
- * Class:     org_rocksdb_IngestExternalFileOptions
- * Method:    newIngestExternalFileOptions
- * Signature: ()J
- */
-jlong Java_org_rocksdb_IngestExternalFileOptions_newIngestExternalFileOptions__(
-    JNIEnv* env, jclass jclazz) {
-  auto* options = new rocksdb::IngestExternalFileOptions();
-  return reinterpret_cast<jlong>(options);
 }
     
-    /**
- * @brief return subfile names of dir.
- * @details
- *  RocksDB has a 2-level structure, so all keys
- *  that have dir as prefix are subfiles of dir.
- *  So we can just return these files' name.
- *
- * @param dir [description]
- * @param result [description]
- *
- * @return [description]
- */
-Status EnvLibrados::_GetSubFnames(
-  const std::string& dir,
-  std::vector<std::string> * result
-) {
-  std::string start_after(dir);
-  std::string filter_prefix(dir);
-  std::map<std::string, librados::bufferlist> kvs;
-  _db_pool_ioctx.omap_get_vals(_db_name,
-                               start_after, filter_prefix,
-                               MAX_ITEMS_IN_FS, &kvs);
+      // Same as above, but you can choose the interception scope of this object.
+  ScopedFakeTestPartResultReporter(InterceptMode intercept_mode,
+                                   TestPartResultArray* result);
+    
+    // Type-parameterized tests are abstract test patterns parameterized
+// by a type.  Compared with typed tests, type-parameterized tests
+// allow you to define the test pattern without knowing what the type
+// parameters are.  The defined pattern can be instantiated with
+// different types any number of times, in any number of translation
+// units.
+//
+// If you are designing an interface or concept, you can define a
+// suite of type-parameterized tests to verify properties that any
+// valid implementation of the interface/concept should have.  Then,
+// each implementation can easily instantiate the test suite to verify
+// that it conforms to the requirements, without having to write
+// similar tests repeatedly.  Here's an example:
+    
+    template <typename T>
+class linked_ptr {
+ public:
+  typedef T element_type;
     }
     
+        const typename ParamGenerator<T$j>::iterator begin$(j)_;
+    const typename ParamGenerator<T$j>::iterator end$(j)_;
+    typename ParamGenerator<T$j>::iterator current$(j)_;
+]]
     
-    {
-    {    // Restore DB name
-    dbname_ = test::TmpDir(env_) + '/db_test';
-  }
+    // A sample program demonstrating using Google C++ testing framework.
+//
+// Author: wan@google.com (Zhanyong Wan)
+    
+    	mbedtls_ssl_set_bio(&ssl, this, bio_send, bio_recv, NULL);
+    
+    	virtual Error put_data(const uint8_t *p_data, int p_bytes);
+	virtual Error put_partial_data(const uint8_t *p_data, int p_bytes, int &r_sent);
+    
+    #if defined(MBEDTLS_SSL_TLS_C) && (!defined(MBEDTLS_SSL_PROTO_SSL3) && \
+    !defined(MBEDTLS_SSL_PROTO_TLS1) && !defined(MBEDTLS_SSL_PROTO_TLS1_1) && \
+    !defined(MBEDTLS_SSL_PROTO_TLS1_2))
+#error 'MBEDTLS_SSL_TLS_C defined, but no protocols are active'
+#endif
+    
+    	void set_break_language(ScriptLanguage *p_lang);
+	ScriptLanguage *get_break_language() const;
+    
+    
+    {	search_box->set_text('');
+	_update_class_list();
 }
+    
+    public:
+	HBoxContainer *get_toolbar() const { return toolbar; }
