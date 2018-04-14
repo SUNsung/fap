@@ -1,57 +1,75 @@
 
         
-              message = TestMailer.send_test(args[:to_address])
-      Email::Sender.new(message, :test_message).send
+          it 'kills sleeping thread' do
+    sleeping_thread = Thread.new do
+      sleep
+      ScratchPad.record :after_sleep
     end
-    
-      def revoke_moderation!
-    set_permission('moderator', false)
+    Thread.pass while sleeping_thread.status and sleeping_thread.status != 'sleep'
+    sleeping_thread.send(@method)
+    sleeping_thread.join
+    ScratchPad.recorded.should == nil
   end
     
-        assert_equal(6, e.size)
-    set << 42
-    assert_equal(7, e.size)
-  end
-    
-      it 'implicitly has a count of one when no count is specified' do
-    'abc'.unpack(unpack_format).should == ['a']
-  end
-    
-      it 'does not decode any items for directives exceeding the input string size' do
-    '\xc2\x80'.unpack('UUUU').should == [0x80]
-  end
-    
-      # TODO: In the great Thread spec rewrite, abstract this
-  class << self
-    attr_accessor :state
-  end
-    
-          users = User.arel_table
-      people = Person.arel_table
-      profiles = Profile.arel_table
-      res = User.joins(person: :profile)
-      res = res.where(users[:username].matches('%#{username}%')) unless username.blank?
-      res = res.where(users[:email].matches('%#{email}%')) unless email.blank?
-      res = res.where(people[:guid].matches('%#{guid}%')) unless guid.blank?
-      res = res.where(profiles[:birthday].gt(Date.today-13.years)) if under13 == '1'
-      res
-    end
+        ScratchPad.recorded.should == nil
   end
 end
 
     
-          def request_authorization_consent_form
-        add_claims_to_scopes
-        endpoint = Api::OpenidConnect::AuthorizationPoint::EndpointStartPoint.new(current_user)
-        handle_start_point_response(endpoint)
-      end
+    public_dir      = 'public'    # compiled site directory
+source_dir      = 'source'    # source file directory
+blog_index_dir  = 'source'    # directory for your blog's index page (if you put your index in source/blog/index.html, set this to 'source/blog')
+deploy_dir      = '_deploy'   # deploy directory (for Github pages deployment)
+stash_dir       = '_stash'    # directory to stash posts for speedy generation
+posts_dir       = '_posts'    # directory for blog files
+themes_dir      = '.themes'   # directory for blog files
+new_post_ext    = 'markdown'  # default new post file extension when using the new_post task
+new_page_ext    = 'markdown'  # default new page file extension when using the new_page task
+server_port     = '4000'      # port for preview server eg. localhost:4000
     
-          def create
-        req = Rack::Request.new(request.env)
-        if req['client_assertion_type'] == 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
-          handle_jwt_bearer(req)
+    run SinatraStaticServer
+
+    
+        def render(context)
+      quote = paragraphize(super)
+      author = '<strong>#{@by.strip}</strong>' if @by
+      if @source
+        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
+        parts = []
+        url.each do |part|
+          if (parts + [part]).join('/').length < 32
+            parts << part
+          end
         end
-        self.status, headers, self.response_body = Api::OpenidConnect::TokenEndpoint.new.call(request.env)
-        headers.each {|name, value| response.headers[name] = value }
-        nil
+        source = parts.join('/')
+        source << '/&hellip;' unless source == @source
+      end
+      if !@source.nil?
+        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
+      elsif !@title.nil?
+        cite = ' <cite>#{@title}</cite>'
+      end
+      blockquote = if @by.nil?
+        quote
+      elsif cite
+        '#{quote}<footer>#{author + cite}</footer>'
+      else
+        '#{quote}<footer>#{author}</footer>'
+      end
+      '<blockquote>#{blockquote}</blockquote>'
+    end
+    
+      # Improved version of Liquid's truncate:
+  # - Doesn't cut in the middle of a word.
+  # - Uses typographically correct ellipsis (…) insted of '...'
+  def truncate(input, length)
+    if input.length > length && input[0..(length-1)] =~ /(.+)\b.+$/im
+      $1.strip + ' &hellip;'
+    else
+      input
+    end
+  end
+    
+          unless file.file?
+        return 'File #{file} could not be found'
       end
