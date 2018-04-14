@@ -1,112 +1,108 @@
 
         
-          def execute
-    Gitlab::Metrics.measure(:import_export_clean_up) do
-      return unless File.directory?(path)
-    
-      def evernote_oauth_token
-    service && service.token
+          # Setting the :extname option will control what extension (if any) is appended to the url for assets
+  def test_javascript_include_tag
+    assert_dom_equal '<script src='/foo.js'></script>',  javascript_include_tag('/foo')
+    assert_dom_equal '<script src='/foo'></script>',     javascript_include_tag('/foo', extname: false)
+    assert_dom_equal '<script src='/foo.bar'></script>', javascript_include_tag('/foo', extname: '.bar')
   end
-end
+    
+            routes &&
+          (routes.named_routes.route_defined?(name) ||
+           routes.mounted_helpers.method_defined?(name))
+      end
+    end
+    
+    class TestResponseTest < ActiveSupport::TestCase
+  def assert_response_code_range(range, predicate)
+    response = ActionDispatch::TestResponse.new
+    (0..599).each do |status|
+      response.status = status
+      assert_equal range.include?(status), response.send(predicate),
+                   'ActionDispatch::TestResponse.new(#{status}).#{predicate}'
+    end
+  end
+    
+          assert_response :success
+      assert_equal 'Hello Secret', @response.body, 'Authentication failed for request header #{header}'
+    end
+    test 'successful authentication with #{header.downcase} and long credentials' do
+      @request.env[header] = encode_credentials('1234567890123456789012345678901234567890', algorithm: 'test')
+      get :show
+    
+    module ActionMailer
+  # The <tt>ActionMailer::DeliveryJob</tt> class is used when you
+  # want to send emails outside of the request-response cycle.
+  #
+  # Exceptions are rescued and handled by the mailer class.
+  class DeliveryJob < ActiveJob::Base # :nodoc:
+    queue_as { ActionMailer::Base.deliver_later_queue_name }
+    
+            def set_expected_mail
+          @expected = Mail.new
+          @expected.content_type ['text', 'plain', { 'charset' => charset }]
+          @expected.mime_version = '1.0'
+        end
+    
+          hook_for :template_engine, :test_framework
+    
+          timestamp = time.strftime('%Y%m%d%H%M%S')
+      fraction = format('%.3f', time.to_f - time.to_i)[1..-1]
+    
+    profile = Profile.new
+# puts profile.generate
+command = ['/usr/bin/sandbox-exec', '-p', profile.generate, profile.pod_bin, *ARGV]
+exec(*command)
 
     
-      def set_table_sort(sort_options)
-    valid_sorts = sort_options[:sorts] or raise ArgumentError.new('You must specify :sorts as an array of valid sort attributes.')
-    default = sort_options[:default] || { valid_sorts.first.to_sym => :desc }
+            private
     
-      def index
-    set_table_sort sorts: %w[provider name global], default: { provider: :asc }
-    
-      def update
-    @user_credential = current_user.user_credentials.find(params[:id])
-    
-          # This inserts a block with the given key and value.
+          # @param  [[Xcodeproj::PBXTarget]] targets
+      #         An array which always has a target as its first item
+      #         and may optionally contain related test targets
       #
-      # @param [String] key
-      # @param [String] value
-      def insert(key, value)
-        # Insert the new block into the value
-        new_block = <<BLOCK
-# VAGRANT-BEGIN: #{key}
-#{value.strip}
-# VAGRANT-END: #{key}
-BLOCK
+      # @return [String] the text for the target module
+      #
+      def target_module(app, tests)
+        target_module = '\ntarget '#{app.name.gsub(/'/, '\\\\\'')}' do\n'
     
-              opts = OptionParser.new do |o|
-            o.banner = 'Usage: vagrant box remove <name>'
-            o.separator ''
-            o.separator 'Options:'
-            o.separator ''
+          def self.options
+        [
+          ['--update', 'Run `pod repo update` before listing'],
+          ['--stats',  'Show additional stats (like GitHub watchers and forks)'],
+        ].concat(super)
+      end
     
-            # Parse the options
-        argv = parse_options(opts)
-        return if !argv
-        if argv.length < 2
-          raise Vagrant::Errors::CLIInvalidUsage,
-            help: opts.help.chomp
+    ##############
+# Deploying  #
+##############
+    
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
         end
-    
-        prune
-  end
-    
-          it 'reports that 32-bit PowerPC machines can't run ppc64 executables' do
-        allow(Hardware::CPU).to receive(:type).and_return :ppc
-        allow(Hardware::CPU).to receive(:bits).and_return 32
-        expect(Hardware::CPU.can_run?(:ppc64)).to be false
+        @img['class'].gsub!(/'/, '') if @img['class']
       end
-    
-        # we assume that the first file that requires 'sinatra' is the
-    # app_file. all other path related options are calculated based
-    # on this path by default.
-    set :app_file, caller_files.first || $0
-    
-          def accepts?(env)
-        cookie_header = env['HTTP_COOKIE']
-        cookies = Rack::Utils.parse_query(cookie_header, ';,') { |s| s }
-        cookies.each do |k, v|
-          if k == session_key && Array(v).size > 1
-            bad_cookies << k
-          elsif k != session_key && Rack::Utils.unescape(k) == session_key
-            bad_cookies << k
-          end
-        end
-        bad_cookies.empty?
-      end
-    
-            post '/', :file => Rack::Test::UploadedFile.new(temp_file.path), :other => '<bar>'
-        expect(body).to eq('_escaped_params_tmp_file\nhello world\n&lt;bar&gt;')
-      ensure
-        File.unlink(temp_file.path)
-      end
-    end
-  end
-end
-
-    
-    
-  it 'should allow changing the protection mode to a string' do
-    # I have no clue what other modes are available
-    mock_app do
-      use Rack::Protection::FrameOptions, :frame_options => 'ALLOW-FROM foo'
-      run DummyApp
+      super
     end
     
-      %w(GET HEAD POST PUT DELETE).each do |method|
-    it 'accepts #{method} requests when allow_if is true' do
-      mock_app do
-        use Rack::Protection::HttpOrigin, :allow_if => lambda{|env| env.has_key?('HTTP_ORIGIN') }
-        run DummyApp
-      end
-      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://any.domain.com')).to be_ok
+        def poster
+      'poster='#{@poster}'' if @poster
+    end
+    
+      # DELETE /books/1
+  # DELETE /books/1.json
+  def destroy
+    @book.destroy
+    respond_to do |format|
+      format.html { redirect_to books_url, notice: 'Book was successfully destroyed.' }
+      format.json { head :no_content }
     end
   end
     
-      it 'accepts requests with the same Accept-Language header' do
-    session = {:foo => :bar}
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'a'
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'a'
-    expect(session).not_to be_empty
-  end
-    
-        expect(get('/..', :foo => '<bar>')).to be_ok
-  end
+      it 'registers an offense' do
+    inspect_source(source)
