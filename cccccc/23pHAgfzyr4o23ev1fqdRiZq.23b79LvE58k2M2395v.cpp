@@ -1,21 +1,7 @@
 
         
-        namespace {
-// TODO(suharshs): Move this to a common location to allow other part of the
-// repo to use it.
-template <typename T, typename... Args>
-std::unique_ptr<T> MakeUnique(Args&&... args) {
-  return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
-}
-}  // namespace
-    
-    namespace tensorflow {
-class CostGraphDef;
-class GraphDef;
-}  // namespace tensorflow
-    
-      // Inserts the event at the current position into the specified stream.
-  port::Status Record(CUDAStream* stream);
+        #endif  // TENSORFLOW_DEBUGGER_STATE_IMPL_H_
+
     
     namespace internal {
 template <typename T>
@@ -28,367 +14,335 @@ struct functor_traits<scalar_tanh_fast_derivative_op<T> > {
 };
 }  // namespace internal
     
-    #if TENSORFLOW_USE_SYCL
+        http://www.apache.org/licenses/LICENSE-2.0
     
-      Status OnWorkFinishedLocked() override {
-    reader_.reset(nullptr);
-    file_.reset(nullptr);
-    return Status::OK();
-  }
+    The input audio has one row of the tensor for each channel in the audio file.
+Each channel contains audio samples starting at the beginning of the audio and
+having `1/samples_per_second` time between them. The output file will contain
+all of the audio channels contained in the tensor.
     
-    bool HloReachabilityMap::IsConnected(const HloInstruction* a,
-                                     const HloInstruction* b) const {
-  return IsReachable(a, b) || IsReachable(b, a);
-}
-    
-    sampled_audio: A rank 2 tensor containing all tracks of the audio. Dimension 0
-    is time and dimension 1 is the channel.
-contents: The binary audio file contents.
-file_format: A string describing the audio file format. This must be 'wav'.
-samples_per_second: The number of samples per second that the audio should have.
-bits_per_second: The approximate bitrate of the encoded audio file. This is
-    ignored by the 'wav' file format.
-)doc');
-    
-    #define EIGEN_USE_GPU
-    
-    #include 'tensorflow/compiler/xla/service/backend.h'
-#include 'tensorflow/compiler/xla/service/compiler.h'
-#include 'tensorflow/compiler/xla/service/service.h'
-#include 'tensorflow/compiler/xla/statusor.h'
-#include 'tensorflow/compiler/xla/xla_data.pb.h'
-#include 'tensorflow/core/platform/stream_executor_no_cuda.h'
-    
-    namespace nw {
-    }
-    
-    v8::Handle<v8::Value> AllocateId(int routing_id);
+    TEST_F(RemoveDeviceTest, TestRemoveDevice) { TestRemoveDevice(); }
     
     
-    {}  // namespace nwapi
-    
-    
-    {  v8::Local<v8::Value> val = policy_obj->Get(v8_str('val'));
-  if (!val->IsString())
-    return;
-  v8::String::Utf8Value policy_str(val);
-  if (!strcmp(*policy_str, 'ignore'))
-    *policy = blink::WebNavigationPolicyIgnore;
-  else if (!strcmp(*policy_str, 'download'))
-    *policy = blink::WebNavigationPolicyDownload;
-  else if (!strcmp(*policy_str, 'current'))
-    *policy = blink::WebNavigationPolicyCurrentTab;
-  else if (!strcmp(*policy_str, 'new-window'))
-    *policy = blink::WebNavigationPolicyNewWindow;
-  else if (!strcmp(*policy_str, 'new-popup'))
-    *policy = blink::WebNavigationPolicyNewPopup;
-}
-    
-      // Get Shell's corresponding js object's id.
-  static void GetShellIdForCurrentContext(
-      const v8::FunctionCallbackInfo<v8::Value>& args);
-    
-    
-  void OnAllocateObject(int object_id,
-                        const std::string& type,
-                        const base::DictionaryValue& option);
-  void OnDeallocateObject(int object_id);
-  void OnCallObjectMethod(int object_id,
-                          const std::string& type,
-                          const std::string& method,
-                          const base::ListValue& arguments);
-  void OnCallObjectMethodSync(int object_id,
-                              const std::string& type,
-                              const std::string& method,
-                              const base::ListValue& arguments,
-                              base::ListValue* result);
-  void OnCallStaticMethod(const std::string& type,
-                          const std::string& method,
-                          const base::ListValue& arguments);
-  void OnCallStaticMethodSync(const std::string& type,
-                              const std::string& method,
-                              const base::ListValue& arguments,
-                              base::ListValue* result);
-  void OnUncaughtException(const std::string& err);
-  void OnGetShellId(int* id);
-  void OnCreateShell(const std::string& url,
-                     const base::DictionaryValue& manifest,
-                     int* routing_id);
-  void OnAllocateId(int* ret);
-  void OnSetForceClose(bool force, int* ret);
-    
-    #include 'content/nw/src/api/base/base.h'
-#include 'ui/gfx/display_observer.h'
-    
-    
-    {  *icon = item->icon_;
-  return true;
-}
-    
-    namespace nw {
-    }
-    
-    void Menu::Remove(MenuItem* menu_item, int pos) {
-  std::vector<MenuItem*>::iterator begin = menu_items.begin();
-  menu_items.erase(begin+pos);
-  gtk_container_remove(GTK_CONTAINER(menu_), menu_item->menu_item_);
-}
-    
-    
-    {}
-    
-    static const int kIconWidth = 16;
-static const int kIconHeight = 16;
-    
-     protected:
-  ~NwAppCrashBrowserFunction() override {}
-    
-            void GetSubMinibatchToNet(size_t iSubminibatch)
-        {
-            Matrices decimatedMatrices;
-            MBLayoutPtr decimatedLayout;
-            pair<size_t, size_t> seqRange = DataReaderHelpers::DecimateMinibatch<ElemType>(m_inputMatricesCache, decimatedMatrices, m_MBLayoutCache, decimatedLayout, m_numSubminibatches, iSubminibatch);
-            //  NOTE: deimatedMatrices must be released by caller
-    }
-    
-    namespace ONNXIR
-{
-    Model::Model(const std::string& p_graphName,
-        bool p_isONNX,
-        const ModelMetaData& p_modelMetaData)
-    {
-        m_modelProto.reset(new ModelProto);
-        m_modelProto->set_ir_version(Version::IR_VERSION);
-        m_modelProto->mutable_graph()->set_name(p_graphName);
-        m_modelMetaData = p_modelMetaData;
-        for (auto& metaData : m_modelMetaData)
-        {
-            auto prop = m_modelProto->add_metadata_props();
-            prop->set_key(metaData.first);
-            prop->set_value(metaData.second);
-        }
-        // Set m_domainToVersion to contain related domains with latest version.
-        AddImportOpSets(p_isONNX);
-        m_graph.reset(new Graph(m_modelProto->mutable_graph(), m_domainToVersion, p_isONNX));
-    }
-    }
-    
-            void StringRange::RestartCapture()
-        {
-            m_start = m_data;
-            m_end = m_data;
-        }
-    
-        inline Status FileOpenRd(const std::string& p_path, /*out*/ int* p_fd)
-    {
-#ifdef _WIN32
-        _sopen_s(p_fd, p_path.c_str(), _O_RDONLY | _O_SEQUENTIAL | _O_BINARY, _SH_DENYWR, _S_IREAD | _S_IWRITE);
-#else
-        *p_fd = open(p_path.c_str(), O_RDONLY);
-#endif
-        if (0 > *p_fd)
-        {
-            return Status(SYSTEM, errno);
-        }
-        return Status::OK();
-    }
-    
-        //‘GREATER’, ‘LESS’, ‘EQUALS,
-    REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Greater)
-        REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Less)
-        REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Equal)
-    
-        // Taken from Caffe2
-    REGISTER_OPERATOR_SCHEMA(MaxRoiPool)
-        .Description('ROI max pool consumes an input tensor X and region of interests (RoIs) to '
-            'apply max pooling across each RoI, to produce output 4-D tensor of shape '
-            '(num_rois, channels, pooled_shape[0], pooled_shape[1]).')
-        .Input('X', 'The input 4-D tensor of data. Only NCHW order is currently supported.', 'T')
-        .Input('rois', 'RoIs (Regions of Interest) to pool over. Should be a 2-D tensor of '
-            'shape (num_rois, 5) given as [[batch_id, x1, y1, x2, y2], ...].', 'T')
-        .Output('Y', 'RoI pooled output 4-D tensor of shape '
-            '(num_rois, channels, pooled_h, pooled_w).', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.')
-        .Attr('pooled_shape', 'ROI pool output shape (height, width).',
-            AttrType::AttributeProto_AttributeType_FLOATS)
-        .Attr('spatial_scale', 'Multiplicative spatial scale factor to translate ROI '
-            'coordinates from their input scale to the scale used when pooling (Default: 1.0).',
-            AttrType::AttributeProto_AttributeType_FLOAT, float(1.0));
-    
-        // Returns all frames of a given utterance.
-    msra::dbn::matrixstripe GetUtteranceFrames(size_t index) const
-    {
-        if (!IsInRam())
-        {
-            LogicError('GetUtteranceFrames was called when data have not yet been paged in.');
-        }
-    }
-    
-    const std::string GRUInputInitialHNameHint = '_initial_h_';
-    
-    static bool GetLevel(Slice* input, int* level) {
-  uint32_t v;
-  if (GetVarint32(input, &v) &&
-      v < config::kNumLevels) {
-    *level = v;
-    return true;
-  } else {
-    return false;
-  }
-}
-    
-    // Helper routine: decode the next block entry starting at 'p',
-// storing the number of shared key bytes, non_shared key bytes,
-// and the length of the value in '*shared', '*non_shared', and
-// '*value_length', respectively.  Will not dereference past 'limit'.
-//
-// If any errors are detected, returns NULL.  Otherwise, returns a
-// pointer to the key delta (just past the three decoded values).
-static inline const char* DecodeEntry(const char* p, const char* limit,
-                                      uint32_t* shared,
-                                      uint32_t* non_shared,
-                                      uint32_t* value_length) {
-  if (limit - p < 3) return NULL;
-  *shared = reinterpret_cast<const unsigned char*>(p)[0];
-  *non_shared = reinterpret_cast<const unsigned char*>(p)[1];
-  *value_length = reinterpret_cast<const unsigned char*>(p)[2];
-  if ((*shared | *non_shared | *value_length) < 128) {
-    // Fast path: all three values are encoded in one byte each
-    p += 3;
-  } else {
-    if ((p = GetVarint32Ptr(p, limit, shared)) == NULL) return NULL;
-    if ((p = GetVarint32Ptr(p, limit, non_shared)) == NULL) return NULL;
-    if ((p = GetVarint32Ptr(p, limit, value_length)) == NULL) return NULL;
-  }
-    }
-    
-    Status Footer::DecodeFrom(Slice* input) {
-  const char* magic_ptr = input->data() + kEncodedLength - 8;
-  const uint32_t magic_lo = DecodeFixed32(magic_ptr);
-  const uint32_t magic_hi = DecodeFixed32(magic_ptr + 4);
-  const uint64_t magic = ((static_cast<uint64_t>(magic_hi) << 32) |
-                          (static_cast<uint64_t>(magic_lo)));
-  if (magic != kTableMagicNumber) {
-    return Status::Corruption('not an sstable (bad magic number)');
-  }
-    }
-    
-    namespace {
-class MergingIterator : public Iterator {
- public:
-  MergingIterator(const Comparator* comparator, Iterator** children, int n)
-      : comparator_(comparator),
-        children_(new IteratorWrapper[n]),
-        n_(n),
-        current_(NULL),
-        direction_(kForward) {
-    for (int i = 0; i < n; i++) {
-      children_[i].Set(children[i]);
-    }
-  }
-    }
-    }
-    
-    static const int kVerbose = 1;
-    
-    class CRC { };
-    
-    int Packer_Unpack(const void* _rawbuf, size_t _rawlen, std::string& _url, unsigned int& _sequence, size_t& _packlen, AutoBuffer& _data) {
-    if (_rawlen < sizeof(LongLinkPack)) return LONGLINKPACK_CONTINUE;
-    }
-    
-    #endif
-
-    
-    
-    {  private:
-//    int m_t;
+    {  // The compiler for the target platform.  This is included in place of
+  // the Service::execute_backend_'s compiler, since execute_backend_ is a
+  // nullptr in CompileOnlyService.
+  Compiler* compiler_;
 };
     
-    int TSpy::__TestFun1(int i)
-{
-    return reinterpret_cast<Test_Spy_Sample*>(This())->__TestFun1(i);
+      // content::DevToolsAgentHostClient:
+  void AgentHostClosed(content::DevToolsAgentHost* agent_host,
+                       bool replaced_with_another_client) override;
+  void DispatchProtocolMessage(content::DevToolsAgentHost* agent_host,
+                               const std::string& message) override;
+    
+    namespace api {
+    }
+    
+     private:
+  atom::RenderProcessPreferences preferences_;
+    
+      // content::DownloadItem::Observer:
+  void OnDownloadUpdated(content::DownloadItem* item) override;
+    
+    #include 'storage/common/quota/quota_types.h'
+    
+    HttpProtocolHandler::HttpProtocolHandler(const std::string& scheme)
+    : scheme_(scheme) {
 }
     
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
+    // Identical to RelaunchApp, but uses |helper| as the path to the relauncher
+// process, and allows additional arguments to be supplied to the relauncher
+// process in relauncher_args. Unlike args[0], |helper| must be a pathname to
+// an executable file. The helper path given must be from the same version of
+// Chrome as the running parent browser process, as there are no guarantees
+// that the parent and relauncher processes from different versions will be
+// able to communicate with one another. This variant can be useful to
+// relaunch the same version of Chrome from another location, using that
+// location's helper.
+bool RelaunchAppWithHelper(const base::FilePath& helper,
+                           const StringVector& relauncher_args,
+                           const StringVector& args);
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-        JNIEnv* GetEnv();
-    int Status();
-    
-    // Return the epilogue of the generated header file.
-grpc::string GetHeaderEpilogue(grpc_generator::File *file,
-                               const Parameters &params);
-    
-    	bool genSend = method->BidiStreaming() || ClientOnlyStreaming(method);
-	bool genRecv = method->BidiStreaming() || ServerOnlyStreaming(method);
-	bool genCloseAndRecv = ClientOnlyStreaming(method);
-    
-    #endif  // NET_GRPC_COMPILER_JAVA_GENERATOR_H_
-
-    
-    
-    {  printf('The FlatBuffer was successfully created and verified!\n');
+    RenderProcessPreferences::~RenderProcessPreferences() {
 }
+    
+    #include 'base/callback.h'
+#include 'base/values.h'
+#include 'content/public/browser/notification_observer.h'
+#include 'content/public/browser/notification_registrar.h'
+    
+    #endif  // ATOM_BROWSER_UI_DRAG_UTIL_H_
 
     
-    // This is an example of parsing text straight into a buffer and then
-// generating flatbuffer (JSON) text from the buffer.
-int main(int /*argc*/, const char * /*argv*/ []) {
-  // load FlatBuffer schema (.fbs) and JSON from disk
-  std::string schemafile;
-  std::string jsonfile;
-  bool ok = flatbuffers::LoadFile('samples/monster.fbs', false, &schemafile) &&
-            flatbuffers::LoadFile('samples/monsterdata.json', false, &jsonfile);
-  if (!ok) {
-    printf('couldn't load files!\n');
-    return 1;
+    #ifndef ATOM_BROWSER_UI_VIEWS_MENU_MODEL_ADAPTER_H_
+#define ATOM_BROWSER_UI_VIEWS_MENU_MODEL_ADAPTER_H_
+    
+    
+    {}  // namespace atom
+    
+    #ifndef TEST_QPS_DRIVER_H
+#define TEST_QPS_DRIVER_H
+    
+    #include <algorithm>
+#include <cctype>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include 'route_guide.grpc.pb.h'
+    
+    grpc::string DescribeServiceList(std::vector<grpc::string> service_list,
+                                 grpc::protobuf::DescriptorPool& desc_pool) {
+  std::stringstream result;
+  for (auto it = service_list.begin(); it != service_list.end(); it++) {
+    auto const& service = *it;
+    const grpc::protobuf::ServiceDescriptor* service_desc =
+        desc_pool.FindServiceByName(service);
+    if (service_desc != nullptr) {
+      result << DescribeService(service_desc);
+    }
   }
-    }
+  return result.str();
+}
+    
+    #endif  // GRPC_TEST_CPP_UTIL_SUBPROCESS_H
+
+    
+    #include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/compiler/python/python_generator.h>
     
     
-    {  // Deserialize by pulling the
-  static grpc::Status Deserialize(grpc_byte_buffer *buffer,
-                                  flatbuffers::grpc::Message<T> *msg) {
-    if (!buffer) {
-      return ::grpc::Status(::grpc::StatusCode::INTERNAL, 'No payload');
-    }
-    // Check if this is a single uncompressed slice.
-    if ((buffer->type == GRPC_BB_RAW) &&
-        (buffer->data.raw.compression == GRPC_COMPRESS_NONE) &&
-        (buffer->data.raw.slice_buffer.count == 1)) {
-      // If it is, then we can reference the `grpc_slice` directly.
-      grpc_slice slice = buffer->data.raw.slice_buffer.slices[0];
-      // We wrap a `Message<T>` around the slice, incrementing the refcount.
-      *msg = flatbuffers::grpc::Message<T>(slice, true);
-    } else {
-      // Otherwise, we need to use `grpc_byte_buffer_reader_readall` to read
-      // `buffer` into a single contiguous `grpc_slice`. The gRPC reader gives
-      // us back a new slice with the refcount already incremented.
-      grpc_byte_buffer_reader reader;
-      grpc_byte_buffer_reader_init(&reader, buffer);
-      grpc_slice slice = grpc_byte_buffer_reader_readall(&reader);
-      grpc_byte_buffer_reader_destroy(&reader);
-      // We wrap a `Message<T>` around the slice, but dont increment refcount
-      *msg = flatbuffers::grpc::Message<T>(slice, false);
-    }
-    grpc_byte_buffer_destroy(buffer);
-#if FLATBUFFERS_GRPC_DISABLE_AUTO_VERIFICATION
-    return ::grpc::Status::OK;
+    {	return paused;
+};
+    
+    	if (!connected)
+		return;
+    
+    	static void _bind_methods();
+    
+    
+    {		} break;
+    
+    
+    {	// !BAS! But seeing we apply this frame by frame, makes more sense to me to make this time based
+	// keeping in mind our anti roll factor
+	real_t contactDamping = s->get_step() / p_rollInfluence;
+#define ONLY_USE_LINEAR_MASS
+#ifdef ONLY_USE_LINEAR_MASS
+	real_t massTerm = real_t(1.) / ((1.0 / mass) + b2invmass);
+	impulse = -contactDamping * rel_vel * massTerm;
 #else
-    if (msg->Verify()) {
-      return ::grpc::Status::OK;
-    } else {
-      return ::grpc::Status(::grpc::StatusCode::INTERNAL,
-                            'Message verification failed');
-    }
+	real_t velocityImpulse = -contactDamping * rel_vel * jacDiagABInv;
+	impulse = velocityImpulse;
 #endif
+}
+    
+    
+    {			facesptr[i+old_faces]=face;
+		}
+    
+    #endif // BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
+
+    
+    #endif // BOOST_ASIO_BUFFERED_WRITE_STREAM_FWD_HPP
+
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+// Nothing to include.
+#elif defined(BOOST_ASIO_HAS_STD_ATOMIC)
+# include <atomic>
+#else // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+# include <boost/detail/atomic_count.hpp>
+#endif // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+    
+    namespace boost {
+namespace asio {
+namespace detail {
+    }
+    }
+    }
+    
+    #include <boost/asio/detail/config.hpp>
+    
+    ::pollfd& dev_poll_reactor::add_pending_event_change(int descriptor)
+{
+  hash_map<int, std::size_t>::iterator iter
+    = pending_event_change_index_.find(descriptor);
+  if (iter == pending_event_change_index_.end())
+  {
+    std::size_t index = pending_event_changes_.size();
+    pending_event_changes_.reserve(pending_event_changes_.size() + 1);
+    pending_event_change_index_.insert(std::make_pair(descriptor, index));
+    pending_event_changes_.push_back(::pollfd());
+    pending_event_changes_[index].fd = descriptor;
+    pending_event_changes_[index].revents = 0;
+    return pending_event_changes_[index];
+  }
+  else
+  {
+    return pending_event_changes_[iter->second];
+  }
+}
+    
+    // Header is checksum (4 bytes), length (2 bytes), type (1 byte).
+static const int kHeaderSize = 4 + 2 + 1;
+    
+    TEST(VersionEditTest, EncodeDecode) {
+  static const uint64_t kBig = 1ull << 50;
+    }
+    
+    namespace leveldb {
+    }
+    
+      // Third filter is empty
+    
+    
+    {  ASSERT_EQ(Hash(0, 0, 0xbc9f1d34), 0xbc9f1d34);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data1), sizeof(data1), 0xbc9f1d34),
+      0xef1345c4);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data2), sizeof(data2), 0xbc9f1d34),
+      0x5b663814);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data3), sizeof(data3), 0xbc9f1d34),
+      0x323c078f);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data4), sizeof(data4), 0xbc9f1d34),
+      0xed21633a);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data5), sizeof(data5), 0x12345678),
+      0xf333dabb);
+}
+    
+    
+    {  // Skewed: pick 'base' uniformly from range [0,max_log] and then
+  // return 'base' random bits.  The effect is to pick a number in the
+  // range [0,2^max_log-1] with exponential bias towards smaller numbers.
+  uint32_t Skewed(int max_log) {
+    return Uniform(1 << Uniform(max_log + 1));
   }
 };
+    
+    #if 0
+static void DumpInternalIter(Iterator* iter) {
+  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
+    ParsedInternalKey k;
+    if (!ParseInternalKey(iter->key(), &k)) {
+      fprintf(stderr, 'Corrupt '%s'\n', EscapeString(iter->key()).c_str());
+    } else {
+      fprintf(stderr, '@ '%s'\n', k.DebugString().c_str());
+    }
+  }
+}
+#endif
+    
+      // When user keys are different, but correctly ordered
+  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('hello', 200, kTypeValue)));
+    
+     private:
+  WritableFile* dest_;
+  int block_offset_;       // Current offset in block
+    
+    bool MemTable::Get(const LookupKey& key, std::string* value, Status* s) {
+  Slice memkey = key.memtable_key();
+  Table::Iterator iter(&table_);
+  iter.Seek(memkey.data());
+  if (iter.Valid()) {
+    // entry format is:
+    //    klength  varint32
+    //    userkey  char[klength]
+    //    tag      uint64
+    //    vlength  varint32
+    //    value    char[vlength]
+    // Check that it belongs to same user key.  We do not check the
+    // sequence number since the Seek() call above should have skipped
+    // all entries with overly large sequence numbers.
+    const char* entry = iter.key();
+    uint32_t key_length;
+    const char* key_ptr = GetVarint32Ptr(entry, entry+5, &key_length);
+    if (comparator_.comparator.user_comparator()->Compare(
+            Slice(key_ptr, key_length - 8),
+            key.user_key()) == 0) {
+      // Correct user key
+      const uint64_t tag = DecodeFixed64(key_ptr + key_length - 8);
+      switch (static_cast<ValueType>(tag & 0xff)) {
+        case kTypeValue: {
+          Slice v = GetLengthPrefixedSlice(key_ptr + key_length);
+          value->assign(v.data(), v.size());
+          return true;
+        }
+        case kTypeDeletion:
+          *s = Status::NotFound(Slice());
+          return true;
+      }
+    }
+  }
+  return false;
+}
+    
+        // Build atlas
+    unsigned char* tex_pixels = NULL;
+    int tex_w, tex_h;
+    io.Fonts->GetTexDataAsRGBA32(&tex_pixels, &tex_w, &tex_h);
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_API void        ImGui_ImplSdlGL2_InvalidateDeviceObjects();
+IMGUI_API bool        ImGui_ImplSdlGL2_CreateDeviceObjects();
+
+    
+            ImGui::BeginChild('#colors', ImVec2(0, 300), true, ImGuiWindowFlags_AlwaysVerticalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar | ImGuiWindowFlags_NavFlattened);
+        ImGui::PushItemWidth(-160);
+        for (int i = 0; i < ImGuiCol_COUNT; i++)
+        {
+            const char* name = ImGui::GetStyleColorName(i);
+            if (!filter.PassFilter(name))
+                continue;
+            ImGui::PushID(i);
+            ImGui::ColorEdit4('##color', (float*)&style.Colors[i], ImGuiColorEditFlags_AlphaBar | alpha_flags);
+            if (memcmp(&style.Colors[i], &ref->Colors[i], sizeof(ImVec4)) != 0)
+            {
+                // Tips: in a real user application, you may want to merge and use an icon font into the main font, so instead of 'Save'/'Revert' you'd use icons.
+                // Read the FAQ and misc/fonts/README.txt about using icon fonts. It's really easy and super convenient!
+                ImGui::SameLine(0.0f, style.ItemInnerSpacing.x); if (ImGui::Button('Save')) ref->Colors[i] = style.Colors[i];
+                ImGui::SameLine(0.0f, style.ItemInnerSpacing.x); if (ImGui::Button('Revert')) style.Colors[i] = ref->Colors[i];
+            }
+            ImGui::SameLine(0.0f, style.ItemInnerSpacing.x);
+            ImGui::TextUnformatted(name);
+            ImGui::PopID();
+        }
+        ImGui::PopItemWidth();
+        ImGui::EndChild();
+    
+    
+    {        g_pSwapChain->Present(1, 0); // Present with vsync
+        //g_pSwapChain->Present(0, 0); // Present without vsync
+    }
+    
+    #ifdef IMGUI_VULKAN_DEBUG_REPORT
+static VKAPI_ATTR VkBool32 VKAPI_CALL debug_report(
+    VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType, uint64_t object, size_t location, int32_t messageCode, const char* pLayerPrefix, const char* pMessage, void* pUserData)
+{
+    (void)flags; (void)object; (void)pUserData; (void)pLayerPrefix; (void)messageCode; (void)location;
+    printf('[vulkan] ObjectType: %i\nMessage: %s\n\n', objectType, pMessage );
+    return VK_FALSE;
+}
+#endif // IMGUI_VULKAN_DEBUG_REPORT
+    
+    void ImFontAtlasBuildSetupFont(ImFontAtlas* atlas, ImFont* font, ImFontConfig* font_config, float ascent, float descent)
+{
+    if (!font_config->MergeMode)
+    {
+        font->ClearOutputData();
+        font->FontSize = font_config->SizePixels;
+        font->ConfigData = font_config;
+        font->ContainerAtlas = atlas;
+        font->Ascent = ascent;
+        font->Descent = descent;
+    }
+    font->ConfigDataCount++;
+}
