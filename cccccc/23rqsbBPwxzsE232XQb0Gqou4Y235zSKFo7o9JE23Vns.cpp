@@ -1,128 +1,81 @@
-    // Threshold size in bytes for single gradient to do packing
-    size_t m_packThresholdSizeInBytes;
+
+        
+        // The browser want to open a file.
+IPC_MESSAGE_CONTROL1(ShellViewMsg_Open,
+                     std::string /* file name */)
     
-        if (!NodeNameExists(toName))
-    {
-        pToNode = pFromNode->Duplicate(toName, flags);
-        AddNodeToNet(pToNode);
-    }
-    else
-    {
-        // node already exists
-        pToNode = GetNodeFromName(toName);
-    }
+    // Call method of an object in browser and return the result.
+// function CallObjectMethod(id, type, method, args);
+v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
+                                           int object_id,
+                                           const std::string& type,
+                                           const std::string& method,
+                                           v8::Handle<v8::Value> args);
     
-        // vector of sub-sections of this section
-    vector<Section*> m_sections; // sub-sections of this section
-    std::wstring m_name;         // name of this section, if empty use first part of description (before colon)
+    #include 'base/values.h'
+#include 'base/strings/utf_string_conversions.h'
+#include 'base/strings/string16.h'
+#include 'content/nw/src/api/dispatcher_host.h'
+#include 'ui/base/clipboard/clipboard.h'
     
-    
-    {    // events
-    cudaEventCreateWithFlags(&m_fetchCompleteEvent, flags) || 'cudaEventCreateWithFlags failed';
-    cudaEventCreateWithFlags(&m_assignCompleteEvent, flags) || 'cudaEventCreateWithFlags failed';
-    cudaEventCreateWithFlags(&m_syncEvent, cudaEventDisableTiming) || 'cudaEventCreateWithFlags failed';
+    // static
+void DispatcherBindings::CrashRenderer(
+    const v8::FunctionCallbackInfo<v8::Value>& args) {
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  RenderView* render_view = GetCurrentRenderView();
+  if (!render_view) {
+    args.GetReturnValue().Set(isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
+                                     'Unable to get render view in CallObjectMethod'))));
+    return;
+  }
+  int* ptr = NULL;
+  *ptr = 1;
 }
     
-            // Sync during or after all iters of a BN node are equivalent
-        if (useParallelTrain)
-        {
-            if (m_gradHeader == nullptr)
-            {
-                m_gradHeader.reset(DistGradHeader::Create(evalNodes.size()), [](DistGradHeader* ptr)
-                {
-                    DistGradHeader::Destroy(ptr);
-                });
-            }
+    
+    {  template<typename T> bool RemoveListener() {
+    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
+    if (i!=listerners_.end()) {
+      delete i->second;
+      listerners_.erase(i);
+      return true;
     }
-    
-    template <class ConfigRecordType, typename ElemType>
-bool TryGetNetworkFactory(const ConfigRecordType& config, function<ComputationNetworkPtr(DEVICEID_TYPE)>& createNetworkFn)
-{
-    DEVICEID_TYPE deviceId = DeviceFromConfig(config);
-    }
-    
-            // load and then execute
-        if (sections.Exists('edit'))
-        {
-            auto config = ConfigArray(sections('edit'));
-            for (int i = 0; i < config.size(); ++i)
-            {
-                Parse(sections(config[i]));
-            }
-            loadOrEditFound = true;
-        }
-    
-    
-    {  SnapshotList* list_;                 // just for sanity checks
+    return false;
+  }
+private:
+  DISALLOW_COPY_AND_ASSIGN(EventListener);
 };
     
-      ASSERT_OK(env_->CreateDir('/dir'));
     
-    void Mutex::Unlock() { PthreadCall('unlock', pthread_mutex_unlock(&mu_)); }
+    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+  return item->is_modified_;
+}
     
+    #ifndef CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
+#define CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
     
-    {      // Ok
-      break;
-    case kSnappyCompression: {
-      size_t ulength = 0;
-      if (!port::Snappy_GetUncompressedLength(data, n, &ulength)) {
-        delete[] buf;
-        return Status::Corruption('corrupted compressed block contents');
-      }
-      char* ubuf = new char[ulength];
-      if (!port::Snappy_Uncompress(data, n, ubuf)) {
-        delete[] buf;
-        delete[] ubuf;
-        return Status::Corruption('corrupted compressed block contents');
-      }
-      delete[] buf;
-      result->data = Slice(ubuf, ulength);
-      result->heap_allocated = true;
-      result->cachable = true;
-      break;
+    static stb_uint stb_adler32(stb_uint adler32, stb_uchar *buffer, stb_uint buflen)
+{
+    const unsigned long ADLER_MOD = 65521;
+    unsigned long s1 = adler32 & 0xffff, s2 = adler32 >> 16;
+    unsigned long blocklen, i;
     }
-    default:
-      delete[] buf;
-      return Status::Corruption('bad block type');
-  }
     
+    // Implemented features:
+//  [X] User texture binding. Cast 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+//  [X] Gamepad navigation mapping. Enable with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
     
-    {    current_->Next();
-    FindSmallest();
-  }
+            max_glyph_size.x = ImMax(max_glyph_size.x, font_face.Info.MaxAdvanceWidth);
+        max_glyph_size.y = ImMax(max_glyph_size.y, font_face.Info.Ascender - font_face.Info.Descender);
     
-    char* EncodeVarint32(char* dst, uint32_t v) {
-  // Operate on characters as unsigneds
-  unsigned char* ptr = reinterpret_cast<unsigned char*>(dst);
-  static const int B = 128;
-  if (v < (1<<7)) {
-    *(ptr++) = v;
-  } else if (v < (1<<14)) {
-    *(ptr++) = v | B;
-    *(ptr++) = v>>7;
-  } else if (v < (1<<21)) {
-    *(ptr++) = v | B;
-    *(ptr++) = (v>>7) | B;
-    *(ptr++) = v>>14;
-  } else if (v < (1<<28)) {
-    *(ptr++) = v | B;
-    *(ptr++) = (v>>7) | B;
-    *(ptr++) = (v>>14) | B;
-    *(ptr++) = v>>21;
-  } else {
-    *(ptr++) = v | B;
-    *(ptr++) = (v>>7) | B;
-    *(ptr++) = (v>>14) | B;
-    *(ptr++) = (v>>21) | B;
-    *(ptr++) = v>>28;
-  }
-  return reinterpret_cast<char*>(ptr);
-}
+        // Setup back-end capabilities flags
+    ImGuiIO& io = ImGui::GetIO();
+    io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;   // We can honor GetMouseCursor() values (optional)
+    io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;    // We can honor io.WantSetMousePos requests (optional, rarely used)
     
-    TEST(CRC, Mask) {
-  uint32_t crc = Value('foo', 3);
-  ASSERT_NE(crc, Mask(crc));
-  ASSERT_NE(crc, Mask(Mask(crc)));
-  ASSERT_EQ(crc, Unmask(Mask(crc)));
-  ASSERT_EQ(crc, Unmask(Unmask(Mask(Mask(crc)))));
-}
+            ID3D12Resource* uploadBuffer = NULL;
+        HRESULT hr = g_pd3dDevice->CreateCommittedResource(&props, D3D12_HEAP_FLAG_NONE, &desc,
+            D3D12_RESOURCE_STATE_GENERIC_READ, NULL, IID_PPV_ARGS(&uploadBuffer));
+        IM_ASSERT(SUCCEEDED(hr));
