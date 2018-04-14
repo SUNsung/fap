@@ -1,51 +1,54 @@
 
         
-                new_content = sock.recv(chunks)
-        if not new_content:
-            break
+        
+from __future__ import with_statement
+import threading
+import weakref
+import sys
     
-        if not isinstance(password, basestring):
-        warnings.warn(
-            'Non-string passwords will no longer be supported in Requests '
-            '3.0.0. Please convert the object you've passed in ({0!r}) to '
-            'a string or bytes object in the near future to avoid '
-            'problems.'.format(password),
-            category=DeprecationWarning,
-        )
-        password = str(password)
-    # -- End Removal --
+        def _start_queue_management_thread(self):
+        # When the executor gets lost, the weakref callback will wake up
+        # the queue management thread.
+        def weakref_cb(_, q=self._result_queue):
+            q.put(None)
+        if self._queue_management_thread is None:
+            self._queue_management_thread = threading.Thread(
+                    target=_queue_management_worker,
+                    args=(weakref.ref(self, weakref_cb),
+                          self._processes,
+                          self._pending_work_items,
+                          self._work_ids,
+                          self._call_queue,
+                          self._result_queue))
+            self._queue_management_thread.daemon = True
+            self._queue_management_thread.start()
+            _threads_queues[self._queue_management_thread] = self._result_queue
     
-    if is_py2:
-    from urllib import (
-        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
-        proxy_bypass, proxy_bypass_environment, getproxies_environment)
-    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
-    from urllib2 import parse_http_list
-    import cookielib
-    from Cookie import Morsel
-    from StringIO import StringIO
+                self._work_queue.put(w)
+            self._adjust_thread_count()
+            return f
+    submit.__doc__ = _base.Executor.submit.__doc__
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
     
-@pytest.mark.skipif(sys.version_info[:2] != (2,6), reason='Only run on Python 2.6')
-def test_system_ssl_py26():
-    '''OPENSSL_VERSION_NUMBER isn't provided in Python 2.6, verify we don't
-    blow up in this case.
-    '''
-    assert info()['system_ssl'] == {'version': ''}
+# This class can be used to keep the ycmd server alive for the duration of the
+# life of the client. By default, ycmd shuts down if it doesn't see a request in
+# a while.
+class YcmdKeepalive( object ):
+  def __init__( self, ping_interval_seconds = 60 * 10 ):
+    self._keepalive_thread = Thread( target = self._ThreadMain )
+    self._keepalive_thread.daemon = True
+    self._ping_interval_seconds = ping_interval_seconds
     
-    about = {}
-with open(os.path.join(here, 'requests', '__version__.py'), 'r', 'utf-8') as f:
-    exec(f.read(), about)
-    
-                prepared_request.url = to_native_string(url)
-    
-        def mapper(self, _, line):
-        yield line, 1
-    
-            Accessing a node updates its position to the front of the LRU list.
-        '''
-        node = self.lookup[query]
-        if node is None:
-            return None
-        self.linked_list.move_to_front(node)
-        return node.results
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
