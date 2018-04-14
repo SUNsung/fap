@@ -1,66 +1,69 @@
 
         
-        def test_dir(*subdirs)
-  File.join(TEST_DIR, *subdirs)
-end
+            def register_rails_engine
+      require 'bootstrap-sass/engine'
+    end
     
-        puts 'GC Stats:'
-    GC.start(full_mark: true, immediate_sweep: false)
-    puts JSON.pretty_generate(GC.stat)
+      # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is 'scratch space' for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
+  config.cache_classes = true
+    
+      path = 'assets/stylesheets'
+  css_path = args.with_defaults(css_path: 'tmp')[:css_path]
+  puts Term::ANSIColor.bold 'Compiling SCSS in #{path}'
+  Dir.mkdir(css_path) unless File.directory?(css_path)
+  %w(_bootstrap bootstrap/_theme).each do |file|
+    save_path = '#{css_path}/#{file.sub(/(^|\/)?_+/, '\1').sub('/', '-')}.css'
+    puts Term::ANSIColor.cyan('  #{save_path}') + '...'
+    engine    = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
+    css       = engine.render
+    File.open(save_path, 'w') { |f| f.write css }
   end
 end
     
-        def filter(entries)
-      entries.reject do |e|
-        unless included?(e)
-          special?(e) || backup?(e) || excluded?(e) || symlink?(e)
-        end
-      end
+          spec['version'] = Bootstrap::VERSION
+    
+    begin
+  require 'bundler/setup'
+rescue LoadError
+  $stderr.puts '[*] Metasploit requires the Bundler gem to be installed'
+  $stderr.puts '    $ gem install bundler'
+  exit(1)
+end
+    
+      let(:help_output) do
+    out, _err = capture_io do
+      flags '--help', '-h'
     end
+    out
+  end
     
-        # Initialize a new Layout.
-    #
-    # site - The Site.
-    # base - The String path to the source.
-    # name - The String filename of the post file.
-    def initialize(site, base, name)
-      @site = site
-      @base = base
-      @name = name
-    
-        class CreateKeychainAction < Action
-      def self.run(params)
-        escaped_password = params[:password].shellescape
-    
-          it 'pass a custom build number to the tool' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          increment_build_number(build_number: 24, xcodeproj: '.xcproject')
-        end').runner.execute(:test)
-    
-    File.readlines(sitelist).each do |site|
-  site.strip!
-  next if site.length == 0
-  next if site =~ /^#/
-    
-    
-    
-    meterp.core.use('Stdapi')
-    
-    
-
-    
-        def missing_required_validator?
-      (active_validator_classes.flat_map(&:ancestors) & Paperclip::REQUIRED_VALIDATORS).empty?
+          expect('.border-color-all').to have_rule(rule)
     end
+  end
     
-            def description
-          'validate the content types allowed on attachment #{@attachment_name}'
-        end
+          expect('.border-width-alternate').to have_rule(rule)
+    end
+  end
     
-              @subject.send(@attachment_name).post_processing = false
-          @subject.send(@attachment_name).assign(file)
-          @subject.valid?
-          @subject.errors[:'#{@attachment_name}_file_size'].blank?
-        ensure
-          @subject.send(@attachment_name).post_processing = true
-        end
+          expect('.padding-implied-left').to have_rule(rule)
+    end
+  end
+    
+      context 'called with null values' do
+    it 'writes rules for others' do
+      ruleset = 'position: static; ' +
+                'top: 11px; ' +
+                'left: 13px;'
+      bad_rule = 'position-bottom: null; position-right: null;'
+    
+    describe 'size' do
+  before(:all) do
+    ParserSupport.parse_file('library/size')
+  end
+    
+          expect('.all-text-inputs-active').to have_ruleset(ruleset)
+    end
+  end
