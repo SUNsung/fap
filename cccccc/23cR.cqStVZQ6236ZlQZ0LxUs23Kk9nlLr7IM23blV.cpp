@@ -1,168 +1,134 @@
 
         
-          virtual bool lookupAdditions(DeclBaseName Name, DeclContext *DC,
-                               SourceLoc Loc, bool IsTypeLookup,
-                               ResultVector &RV) = 0;
+        #include <string>
     
     
-    {  SyntaxMap[FromNode] = ToNode;
+    {  content::WebContents* web_contents_;  // weak
+  SavePageCallback callback_;
+};
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(LoginHandler);
+};
+    
+    #include 'base/memory/ref_counted.h'
+#include 'net/url_request/url_request_job_factory.h'
+    
+    #endif  // ATOM_BROWSER_NET_HTTP_PROTOCOL_HANDLER_H_
+
+    
+    class URLRequestStringJob : public JsAsker<net::URLRequestSimpleJob> {
+ public:
+  URLRequestStringJob(net::URLRequest*, net::NetworkDelegate*);
+    }
+    
+    #include <vector>
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    
+    {  /**
+   * @brief Computes the error gradient w.r.t. the BNLL inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+};
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    
+    {}  // namespace caffe
+    
+    
+    { protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual inline bool reverse_dimensions() { return true; }
+  virtual void compute_output_shape();
+};
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the computed outputs. At training time, we have @f$
+   *      y_{\mbox{train}} = \left\{
+   *         \begin{array}{ll}
+   *            \frac{x}{1 - p} & \mbox{if } u > p \\
+   *            0 & \mbox{otherwise}
+   *         \end{array} \right.
+   *      @f$, where @f$ u \sim U(0, 1)@f$ is generated independently for each
+   *      input at each iteration. At test time, we simply have
+   *      @f$ y_{\mbox{test}} = \mathbb{E}[y_{\mbox{train}}] = x @f$.
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    }
+    
+      virtual inline const char* type() const { return 'Eltwise'; }
+  virtual inline int MinBottomBlobs() const { return 2; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the forwarded inputs.
+   *
+   * @param top output Blob vector (length 1+), providing the error gradient with
+   *        respect to the outputs
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2+), into which the top error
+   *        gradient is copied
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+    const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    template<> AT_API Half convert(float f);
+template<> AT_API float convert(Half f);
+template<> AT_API Half convert(double f);
+template<> AT_API double convert(Half f);
+template<> AT_API Half convert(int64_t f);
+template<> AT_API int64_t convert(Half f);
+    
+    std::size_t ${Storage}::elementSize() const {
+  return sizeof(${ScalarType});
 }
     
-      /// Build the components of an Objective-C method descriptor for the given
-  /// subscript's method implementations.
-  void emitObjCSetterDescriptorParts(IRGenModule &IGM,
-                                     SubscriptDecl *subscript,
-                                     llvm::Constant *&selectorRef,
-                                     llvm::Constant *&atEncoding,
-                                     llvm::Constant *&impl);
-    
-    using namespace SourceKit;
-using namespace CodeCompletion;
-using namespace swift;
-using namespace ide;
-    
-      GraphemeClusterBreakProperty GCBForC0 = getGraphemeClusterBreakProperty(C[0]);
-  while (true) {
-    if (isExtendedGraphemeClusterBoundaryAfter(GCBForC0))
-      return S.slice(0, SourceNext - SourceStart);
-    }
-    
-    /// \brief Diagnostic consumer that displays diagnostics to standard error.
-class PrintingDiagnosticConsumer : public DiagnosticConsumer {
-  llvm::raw_ostream &Stream;
-  bool ForceColors = false;
-  bool DidErrorOccur = false;
-public:
-  PrintingDiagnosticConsumer(llvm::raw_ostream &stream = llvm::errs()) :
-    Stream(stream) { }
-    }
-    
-        DXGI_SWAP_CHAIN_DESC sd;
-    ZeroMemory( &sd, sizeof( sd ) );
-    sd.BufferCount = 1;
-    sd.BufferDesc.Width = width;
-    sd.BufferDesc.Height = height;
-#ifdef CHECK_NV12
-    sd.BufferDesc.Format = DXGI_FORMAT_NV12;
-#else
-    sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-#endif
-    sd.BufferDesc.RefreshRate.Numerator = 60;
-    sd.BufferDesc.RefreshRate.Denominator = 1;
-    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    sd.OutputWindow = NULL; //g_hWnd;
-    sd.SampleDesc.Count = 1;
-    sd.SampleDesc.Quality = 0;
-    sd.Windowed = TRUE;
-    
-        // F1 COEFFICIENT
-    
-            if(quantile_sum - low_sum > out_of_bells_fraction*total_sum)
-        {
-            if(max_segment_length < x - start_x)
-            {
-                max_segment_length = x - start_x;
-                max_start_x = start_x;
-                max_end_x = x;
-            }
-    }
-    
-            struct smem
-        {
-            enum { TAG_MASK = (1U << ( (sizeof(unsigned int) << 3) - 5U)) - 1U };
-    }
-    
-    #ifndef GLEXT_64_TYPES_DEFINED
-    // This code block is duplicated in glxext.h, so must be protected
-    #define GLEXT_64_TYPES_DEFINED
-    
-    #include 'opencv2/core/opencl/runtime/opencl_core.hpp'
-#include 'opencv2/core/opencl/runtime/opencl_clamdblas.hpp'
-    
-    namespace cv { namespace ocl { namespace runtime {
-    }
-    }
-    }
-    
-    #endif // __cocos2dx_builder_h__
-
-    
-    extern JSClass  *jsb_cocos2d_NavMesh_class;
-extern JSObject *jsb_cocos2d_NavMesh_prototype;
-    
-    int register_all_cocos2dx_cocosdenshion(lua_State* tolua_S);
-    
-    #if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,'#ferror in function 'lua_cocos2dx_physics_PhysicsWorld_getSpeed'.',&tolua_err);
-#endif
-    
-        glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, 0, vertices);
-    glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
-    
-    	b2BodyDef bd;
-	bd.type = b2_dynamicBody;
-	bd.position = position;
-	bd.bullet = true;
-	m_bomb = m_world->CreateBody(&bd);
-	m_bomb->SetLinearVelocity(velocity);
-	
-	b2CircleShape circle;
-	circle.m_radius = 0.3f;
-    
-    
-    {			b2PolygonShape shape;
-			shape.SetAsBox(0.5f, 2.0f);
-			m_attachment->CreateFixture(&shape, 2.0f);
-		}
-    
-    			b2FixtureDef fd;
-			fd.shape = &shape;
-			fd.density = 1.0f;
-    
-    		b2_gjkCalls = 0;
-		b2_gjkIters = 0;
-		b2_gjkMaxIters = 0;
-    
-    namespace xgboost {
-namespace common {
-    }
-    }
-    
-    
-    {
-    {}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_RANDOM_H_
-
-    
-      ASSERT_EQ(GetFileSize(tmp_file), 76)
-    << 'Expected saved binary file size to be same as object size';
-    
-    
-    {DMLC_REGISTER_DATA_PARSER(uint32_t, dense_libsvm, data::CreateDenseLibSVMParser<uint32_t>);
-}  // namespace dmlc
-
-    
-        void Dump(const std::string& _processname);
-    const std::vector<std::string>& StackList() const;
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    namespace mars_boost {} namespace boost = mars_boost; namespace mars_boost {
-    }
-    
-    #define DEFINE_HAS_MEMBER(member_name) \
-    template <typename T>\
-    class has_##member_name {\
-      private:\
-        struct yes_type { char x[1]; };\
-        struct no_type { char x[2]; };\
-        template <int> struct tester;\
-        template <typename U> static yes_type test(tester<sizeof(&U::member_name)>*);\
-        template <typename U> static no_type test(...);\
-      public:\
-        static const bool value = (sizeof(test<T>(0)) == sizeof(yes_type));\
-    };
+    #include 'python_numbers.h'
+#include 'torch/csrc/Exceptions.h'
