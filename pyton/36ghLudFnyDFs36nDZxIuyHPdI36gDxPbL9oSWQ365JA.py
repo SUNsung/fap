@@ -1,117 +1,199 @@
 
         
-        
-def maybe_restore_pretrained_model(sess, saver_for_restore, model_dir):
-  '''Restores pretrained model if there is no ckpt model.'''
-  ckpt = tf.train.get_checkpoint_state(FLAGS.train_dir)
-  checkpoint_exists = ckpt and ckpt.model_checkpoint_path
-  if checkpoint_exists:
-    tf.logging.info('Checkpoint exists in FLAGS.train_dir; skipping '
-                    'pretraining restore')
-    return
+            with io.open(outfile, 'w', encoding='utf-8') as outf:
+        outf.write(out)
     
-      @tf.test.mock.patch.dict(premade_estimator.__dict__,
-                           {'load_data': four_lines_data})
-  def test_premade_estimator(self):
-    premade_estimator.main([None, '--train_steps=1'])
+        def test_youtube_feeds(self):
+        self.assertMatch('https://www.youtube.com/feed/watch_later', ['youtube:watchlater'])
+        self.assertMatch('https://www.youtube.com/feed/subscriptions', ['youtube:subscriptions'])
+        self.assertMatch('https://www.youtube.com/feed/recommended', ['youtube:recommended'])
+        self.assertMatch('https://www.youtube.com/my_favorites', ['youtube:favorites'])
     
-      def __init__(self,
-               batch,
-               state_name=None,
-               tokens=None,
-               num_states=0,
-               eos_id=None):
-    '''Construct VatxtInput.
+            self.port = random.randint(20000, 30000)
+        self.server_process = subprocess.Popen([
+            'srelay', '-f', '-i', '127.0.0.1:%d' % self.port],
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
+            webpage = self._download_webpage(url, playlist_id)
+        title = self._html_search_regex(
+            r'<h1 class='playlist-name'[^>]*?>(.*?)</h1>', webpage, 'title')
+        description = self._html_search_regex(
+            r'<p class='excerpt'[^>]*?>(.*?)</p>',
+            webpage, 'description', fatal=False)
+        urls = re.findall(
+            r'<li class='lecture-preview'>\s*?<a target='_blank' href='([^']+)'>',
+            webpage)
+        entries = [self.url_result(u) for u in urls]
     
-if __name__ == '__main__':
-  tf.app.run()
+                return {
+                'id': video_id,
+                'title': json_data['title'],
+                'description': json_data.get('subtitle'),
+                'thumbnail': json_data.get('thumbnail_image', {}).get('file'),
+                'timestamp': parse_iso8601(json_data.get('publication_date')),
+                'duration': int_or_none(json_data.get('duration')),
+                'view_count': int_or_none(json_data.get('view_count')),
+                'formats': formats,
+            }
 
     
+        def _real_extract(self, url):
+        # URLs end with [uploader name]/[uploader title]
+        # this title is whatever the user types in, and is rarely
+        # the proper song title.  Real metadata is in the api response
+        album_url_tag = self._match_id(url)
+        result = {'_type': 'playlist', 'entries': []}
+        # There is no one endpoint for album metadata - instead it is included/repeated in each song's metadata
+        # Therefore we don't know how many songs the album has and must infi-loop until failure
+        for track_no in itertools.count():
+            # Get song's metadata
+            api_response = self._download_json(
+                'http://www.audiomack.com/api/music/url/album/%s/%d?extended=1&_=%d'
+                % (album_url_tag, track_no, time.time()), album_url_tag,
+                note='Querying song information (%d)' % (track_no + 1))
     
-def main(_):
-  '''Trains LSTM classification model.'''
-  tf.logging.set_verbosity(tf.logging.INFO)
-  with tf.device(tf.train.replica_device_setter(FLAGS.ps_tasks)):
-    model = graphs.get_model()
-    train_op, loss, global_step = model.classifier_training()
-    train_utils.run_training(
-        train_op,
-        loss,
-        global_step,
-        variables_to_restore=model.pretrained_variables,
-        pretrained_model_dir=FLAGS.pretrained_model_dir)
+            # Video URL construction algorithm is reverse-engineered from cwhplayer.swf
+        rtmp_url = 'rtmp://camwithher.tv/clipshare/%s' % (
+            ('mp4:%s.mp4' % flv_id) if int(flv_id) > 2010 else flv_id)
     
-        # Loads the final mapping of integer node ID to human-readable string
-    node_id_to_name = {}
-    for key, val in node_id_to_uid.items():
-      if val not in uid_to_human:
-        tf.logging.fatal('Failed to locate: %s', val)
-      name = uid_to_human[val]
-      node_id_to_name[key] = name
+            .. versionadded:: 0.11
+        '''
+        mappings = []
+        if len(mapping) == 1:
+            if hasattr(mapping[0], 'items'):
+                mappings.append(mapping[0].items())
+            else:
+                mappings.append(mapping[0])
+        elif len(mapping) > 1:
+            raise TypeError(
+                'expected at most 1 positional argument, got %d' % len(mapping)
+            )
+        mappings.append(kwargs.items())
+        for mapping in mappings:
+            for (key, value) in mapping:
+                if key.isupper():
+                    self[key] = value
+        return True
     
-    Input: '535+61'
-Output: '596'
-Padding is handled by using a repeated sentinel character (space)
+        for idx, (loader, srcobj, triple) in enumerate(attempts):
+        if isinstance(srcobj, Flask):
+            src_info = 'application '%s'' % srcobj.import_name
+        elif isinstance(srcobj, Blueprint):
+            src_info = 'blueprint '%s' (%s)' % (srcobj.name,
+                                                srcobj.import_name)
+        else:
+            src_info = repr(srcobj)
     
-    try:
-    path = get_file('babi-tasks-v1-2.tar.gz', origin='https://s3.amazonaws.com/text-datasets/babi_tasks_1-20_v1-2.tar.gz')
-except:
-    print('Error downloading dataset, please download it manually:\n'
-          '$ wget http://www.thespermwhale.com/jaseweston/babi/tasks_1-20_v1-2.tar.gz\n'
-          '$ mv tasks_1-20_v1-2.tar.gz ~/.keras/datasets/babi-tasks-v1-2.tar.gz')
-    raise
+        :copyright: © 2010 by the Pallets team.
+    :license: BSD, see LICENSE for more details.
+'''
     
-        # Returns
-        Preprocessed tensor.
-    '''
-    global _IMAGENET_MEAN
     
-        def parse(self, response):
-        for link in self.link_extractor.extract_links(response):
-            yield scrapy.Request(link.url, callback=self.parse)
+def set_filename_version(filename, version_number, pattern):
+    changed = []
+    
+        def _reset_stats(self):
+        self.tail.clear()
+        self.start = self.lastmark = self.lasttime = time()
+    
+    del sys
 
     
-        description = 'Example Authenticator plugin'
+        exitcode = 0
+    
+        requires_project = True
+    
+        def tested_methods_from_spidercls(self, spidercls):
+        methods = []
+        for key, value in vars(spidercls).items():
+            if (callable(value) and value.__doc__ and
+                    re.search(r'^\s*@', value.__doc__, re.MULTILINE)):
+                methods.append(key)
+    
+        def set(self, key, value):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                item.value = value
+                return
+        self.table[hash_index].append(Item(key, value))
+    
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer)
+        ]
+    
+        def __init__(self, license_plate):
+        super(Bus, self).__init__(VehicleSize.LARGE, license_plate, spot_size=5)
+    
+        def append_to_front(self, node):
+        pass
+    
+        def set(self, results, query):
+        '''Set the result for the given query key in the cache.
+    
+    # -- General configuration ------------------------------------------------
+    
+    # Theme options are theme-specific and customize the look and feel of a theme
+# further.  For a list of options available for each theme, see the
+# documentation.
+#html_theme_options = {}
     
     
-def main():
-    tornado.options.parse_command_line()
-    application = tornado.web.Application([
-        (r'/', MainHandler),
-    ])
-    http_server = tornado.httpserver.HTTPServer(application)
-    http_server.listen(options.port)
-    tornado.ioloop.IOLoop.current().start()
+class NotifyTests(unittest.TestCase):
+    '''Tests for the notifier.'''
     
+    from tornado.http1connection import HTTP1Connection
+from tornado.httputil import HTTPMessageDelegate
+from tornado.iostream import IOStream
+from tornado.locks import Event
+from tornado.netutil import add_accept_handler
+from tornado.testing import AsyncTestCase, bind_unused_port, gen_test
     
-def handle_sigchld(sig, frame):
-    IOLoop.current().add_callback_from_signal(IOLoop.current().stop)
+            @gen.coroutine
+        def worker():
+            while True:
+                item = yield q.get()
+                self.accumulator += item
+                q.task_done()
+                yield gen.sleep(random() * 0.01)
     
+            # It would be better to run the wsgiref server implementation in
+        # another thread instead of using our own WSGIContainer, but this
+        # fits better in our async testing framework and the wsgiref
+        # validator should keep us honest
+        return WSGIContainer(validator(WSGIApplication([
+            ('/', HelloHandler),
+            ('/path/(.*)', PathQuotingHandler),
+            ('/typecheck', TypeCheckHandler),
+        ])))
     
-class ChunkHandler(RequestHandler):
-    def get(self):
-        for i in xrange(options.num_chunks):
-            self.write('A' * options.chunk_size)
-            self.flush()
-        self.finish()
+            self.reader, addr = a.accept()
+        set_close_exec(self.reader.fileno())
+        self.reader.setblocking(0)
+        self.writer.setblocking(0)
+        a.close()
+        self.reader_fd = self.reader.fileno()
     
+        @gen_test
+    def test_garbage_collection(self):
+        # Test that timed-out waiters are occasionally cleaned from the queue.
+        sem = locks.Semaphore(value=0)
+        futures = [sem.acquire(timedelta(seconds=0.01)) for _ in range(101)]
     
-class MessageBuffer(object):
-    def __init__(self):
-        self.waiters = set()
-        self.cache = []
-        self.cache_size = 200
+                server = TCPServer()
+            server.bind(0, address='127.0.0.1')
+            server.start(3)
+            IOLoop.current().run_sync(lambda: None)
+            print(task_id(), end='')
+        ''')
+        out = self.run_subproc(code)
+        self.assertEqual(''.join(sorted(out)), '012')
     
-        @classmethod
-    def send_updates(cls, chat):
-        logging.info('sending message to %d waiters', len(cls.waiters))
-        for waiter in cls.waiters:
-            try:
-                waiter.write_message(chat)
-            except:
-                logging.error('Error sending message', exc_info=True)
-    
-    
-class FixFutureImports(fixer_base.BaseFix):
-    BM_compatible = True
+        def get_current_user(self):
+        user_id = self.get_secure_cookie('blogdemo_user')
+        if not user_id:
+            return None
+        return self.db.get('SELECT * FROM authors WHERE id = %s', int(user_id))
