@@ -1,27 +1,31 @@
 
         
-              raise Discourse::InvalidParameters.new(:to_address) unless args[:to_address].present?
-    
-        def to_json
-      JSON.generate(as_json)
+          def complete_option(method)
+    if self.respond_to? 'complete_#{method}'.to_sym
+      self.send('complete_#{method}'.to_sym)
     end
-    
-            css('.toplang', '#quickview', '.top').remove
-    
-          def get_type
-        name
-      end
-    
-          def collect_rows(records)
-        records.map do |rec|
-          Row.new.tap { |row| yield(rec, row) }
-        end
-      end
-    
-      it 'overrides the rake method, and sets the sshkit_backend to SSHKit::Backend::Printer' do
-    capture_io do
-      flags '--dry-run', '-n'
-    end
-    sshkit_backend = Capistrano::Configuration.fetch(:sshkit_backend)
-    expect(sshkit_backend).to eq(SSHKit::Backend::Printer)
   end
+    
+        def clear
+      @attachments = Hash.new { |h,k| h[k] = {} }
+    end
+    
+        private
+    
+          class ValidateAttachmentPresenceMatcher
+        def initialize attachment_name
+          @attachment_name = attachment_name
+        end
+    
+            required = directories.map do |directory|
+          pathname = File.expand_path(Rails.root.join(directory, filename))
+          file_exists = File.exist?(pathname)
+          require pathname if file_exists
+          file_exists
+        end
+    
+      class Railtie < Rails::Railtie
+    initializer 'paperclip.insert_into_active_record' do |app|
+      ActiveSupport.on_load :active_record do
+        Paperclip::Railtie.insert
+      end
