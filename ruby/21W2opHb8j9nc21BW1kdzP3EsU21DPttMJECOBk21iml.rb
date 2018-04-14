@@ -1,94 +1,57 @@
 
         
-          end
+              message = TestMailer.send_test(args[:to_address])
+      Email::Sender.new(message, :test_message).send
+    end
     
       def revoke_moderation!
     set_permission('moderator', false)
   end
     
-        find_union(segments, Group).order_id_desc
+        assert_equal(6, e.size)
+    set << 42
+    assert_equal(7, e.size)
   end
     
-        def to_a
-      @filters.dup
-    end
-    
-      def test_frozen
-    ENV[PATH_ENV] = '/'
-    ENV.each do |k, v|
-      assert_predicate(k, :frozen?)
-      assert_predicate(v, :frozen?)
-    end
-    ENV.each_key do |k|
-      assert_predicate(k, :frozen?)
-    end
-    ENV.each_value do |v|
-      assert_predicate(v, :frozen?)
-    end
-    ENV.each_key do |k|
-      assert_predicate(ENV[k], :frozen?, '[#{k.dump}]')
-      assert_predicate(ENV.fetch(k), :frozen?, 'fetch(#{k.dump})')
-    end
+      it 'implicitly has a count of one when no count is specified' do
+    'abc'.unpack(unpack_format).should == ['a']
   end
     
-      class Honda < Car
-    def initialize(*args)
-      self.make = 'Honda'
-      super(*args)
-    end
+      it 'does not decode any items for directives exceeding the input string size' do
+    '\xc2\x80'.unpack('UUUU').should == [0x80]
   end
     
-      it 'respects Thread subclasses' do
-    c = Class.new(Thread)
-    t = c.send(@method) { }
-    t.should be_kind_of(c)
-    
-        def metadata_subdir(leaf, version: self.version, timestamp: :latest, create: false)
-      if create && timestamp == :latest
-        raise CaskError, 'Cannot create metadata subdir when timestamp is :latest.'
-      end
-    
-      # Clean a top-level (bin, sbin, lib) directory, recursively, by fixing file
-  # permissions and removing .la files, unless the files (or parent
-  # directories) are protected by skip_clean.
-  #
-  # bin and sbin should not have any subdirectories; if either do that is
-  # caught as an audit warning
-  #
-  # lib may have a large directory tree (see Erlang for instance), and
-  # clean_dir applies cleaning rules to the entire tree
-  def clean_dir(d)
-    d.find do |path|
-      path.extend(ObserverPathnameExtension)
-    
-      context 'called with three colors' do
-    it 'applies second color to left and right' do
-      rule = 'border-color: #f00 #0f0 #00f'
-    
-          expect('.all-buttons-active').to have_ruleset(ruleset)
-    end
+      # TODO: In the great Thread spec rewrite, abstract this
+  class << self
+    attr_accessor :state
   end
     
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'margin-top: 11px; ' +
-                'margin-right: 12px; ' +
-                'margin-left: 13px;'
-      bad_rule = 'margin-bottom: null;'
-    
-      context 'called with one size' do
-    it 'applies same width to all sides' do
-      rule = 'padding: 1px'
-    
-      context 'called with two sizes' do
-    it 'applies to alternating sides' do
-      ruleset = 'position: absolute; ' +
-                'top: 2px; ' +
-                'right: 3px; ' +
-                'bottom: 2px; ' +
-                'left: 3px;'
-    
-          expect('.prefix--moz-ms').to have_ruleset(rule)
+          users = User.arel_table
+      people = Person.arel_table
+      profiles = Profile.arel_table
+      res = User.joins(person: :profile)
+      res = res.where(users[:username].matches('%#{username}%')) unless username.blank?
+      res = res.where(users[:email].matches('%#{email}%')) unless email.blank?
+      res = res.where(people[:guid].matches('%#{guid}%')) unless guid.blank?
+      res = res.where(profiles[:birthday].gt(Date.today-13.years)) if under13 == '1'
+      res
     end
   end
 end
+
+    
+          def request_authorization_consent_form
+        add_claims_to_scopes
+        endpoint = Api::OpenidConnect::AuthorizationPoint::EndpointStartPoint.new(current_user)
+        handle_start_point_response(endpoint)
+      end
+    
+          def create
+        req = Rack::Request.new(request.env)
+        if req['client_assertion_type'] == 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
+          handle_jwt_bearer(req)
+        end
+        self.status, headers, self.response_body = Api::OpenidConnect::TokenEndpoint.new.call(request.env)
+        headers.each {|name, value| response.headers[name] = value }
+        nil
+      end
