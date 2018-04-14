@@ -1,123 +1,137 @@
 
         
-                webpage = self._download_webpage(url, playlist_id)
-        title = self._html_search_regex(
-            r'<h1 class='playlist-name'[^>]*?>(.*?)</h1>', webpage, 'title')
-        description = self._html_search_regex(
-            r'<p class='excerpt'[^>]*?>(.*?)</p>',
-            webpage, 'description', fatal=False)
-        urls = re.findall(
-            r'<li class='lecture-preview'>\s*?<a target='_blank' href='([^']+)'>',
-            webpage)
-        entries = [self.url_result(u) for u in urls]
+            xx = np.arange(100, 100 + n * step, step)
+    plt.figure('scikit-learn vs. glmnet benchmark results')
+    plt.title('Regression in high dimensional spaces (%d samples)' % n_samples)
+    plt.plot(xx, scikit_results, 'b-', label='scikit-learn')
+    plt.plot(xx, glmnet_results, 'r-', label='glmnet')
+    plt.legend()
+    plt.xlabel('number of features')
+    plt.ylabel('Time (s)')
+    plt.axis('tight')
+    plt.show()
+
+    
+        #------------------------------------------------------------
+    # varying N
+    N_results_build = dict([(alg, np.zeros(len(Nrange)))
+                            for alg in algorithms])
+    N_results_query = dict([(alg, np.zeros(len(Nrange)))
+                            for alg in algorithms])
+    
+            start = time.time()
+        func(X, n_jobs=1)
+        one_core.append(time.time() - start)
+    
+        ###########################################################################
+    # Numpy permutation based
+    sampling_algorithm['numpy-permutation'] = \
+        lambda n_population, n_sample: \
+            np.random.permutation(n_population)[:n_sample]
+    
+    plt.matshow(fit_data, cmap=plt.cm.Blues)
+plt.title('After biclustering; rearranged to show biclusters')
+    
+    from sklearn import datasets
+from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import LinearSVC
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import (brier_score_loss, precision_score, recall_score,
+                             f1_score)
+from sklearn.calibration import CalibratedClassifierCV, calibration_curve
+from sklearn.model_selection import train_test_split
     
     
-class AnySexIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?anysex\.com/(?P<id>\d+)'
-    _TEST = {
-        'url': 'http://anysex.com/156592/',
-        'md5': '023e9fbb7f7987f5529a394c34ad3d3d',
-        'info_dict': {
-            'id': '156592',
-            'ext': 'mp4',
-            'title': 'Busty and sexy blondie in her bikini strips for you',
-            'description': 'md5:de9e418178e2931c10b62966474e1383',
-            'categories': ['Erotic'],
-            'duration': 270,
-            'age_limit': 18,
-        }
-    }
+class Command(ScrapyCommand):
+    requires_project = True
+    default_settings = {'LOG_ENABLED': False}
     
-        _TESTS = [{
-        'url': 'http://camwithher.tv/view_video.php?viewkey=6e9a24e2c0e842e1f177&page=&viewtype=&category=',
-        'info_dict': {
-            'id': '5644',
-            'ext': 'flv',
-            'title': 'Periscope Tease',
-            'description': 'In the clouds teasing on periscope to my favorite song',
-            'duration': 240,
-            'view_count': int,
-            'comment_count': int,
-            'uploader': 'MileenaK',
-            'upload_date': '20160322',
-        },
-        'params': {
-            'skip_download': True,
-        }
-    }, {
-        'url': 'http://camwithher.tv/view_video.php?viewkey=6dfd8b7c97531a459937',
-        'only_matching': True,
-    }, {
-        'url': 'http://camwithher.tv/view_video.php?page=&viewkey=6e9a24e2c0e842e1f177&viewtype=&category=',
-        'only_matching': True,
-    }, {
-        'url': 'http://camwithher.tv/view_video.php?viewkey=b6c3b5bea9515d1a1fc4&page=&viewtype=&category=mv',
-        'only_matching': True,
-    }]
+        def from_spider(self, spider, results):
+        requests = []
+        for method in self.tested_methods_from_spidercls(type(spider)):
+            bound_method = spider.__getattribute__(method)
+            requests.append(self.from_method(bound_method, results))
     
-        plugin_manager.register(Plugin)
-    try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-            '--auth',
-            BASIC_AUTH_HEADER_VALUE,
-        )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
     
-        # Set to `False` to make it possible to invoke this auth
-    # plugin without requiring the user to specify credentials
-    # through `--auth, -a`.
-    auth_require = True
+def SetUpSystemPaths():
+  sys.path.insert( 0, os.path.join( DIR_OF_YCMD ) )
     
-            if color_scheme == PRESET_STYLE:
-            self.http_lexer = PygmentsHttpLexer()
-        else:
-            self.http_lexer = HTTPLexer()
+        # Parse and validate the field names.  Validation serves two purposes,
+    # generating informative error messages and preventing template injection attacks.
+    if isinstance(field_names, basestring):
+        field_names = field_names.replace(',', ' ').split() # names separated by whitespace and/or commas
+    field_names = tuple(map(str, field_names))
+    for name in (typename,) + field_names:
+        if not all(c.isalnum() or c=='_' for c in name):
+            raise ValueError('Type names and field names can only contain alphanumeric characters and underscores: %r' % name)
+        if _iskeyword(name):
+            raise ValueError('Type names and field names cannot be a keyword: %r' % name)
+        if name[0].isdigit():
+            raise ValueError('Type names and field names cannot start with a number: %r' % name)
+    seen_names = set()
+    for name in field_names:
+        if name.startswith('_'):
+            raise ValueError('Field names cannot start with an underscore: %r' % name)
+        if name in seen_names:
+            raise ValueError('Encountered duplicate field name: %r' % name)
+        seen_names.add(name)
     
-    # FIXME:
-# We test against a local httpbin instance which uses a self-signed cert.
-# Requests without --verify=<CA_BUNDLE> will fail with a verification error.
-# See: https://github.com/kevin1024/pytest-httpbin#https-support
-CA_BUNDLE = pytest_httpbin.certs.where()
+    from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
     
-        title = match1(html, r'&title=([^&]+)')
+        def test_exception_with_success(self):
+        def notification():
+            # Wait until the main thread is waiting for the exception.
+            time.sleep(1)
+            with f1._condition:
+                f1._state = FINISHED
+                f1._exception = IOError()
+                f1._condition.notify_all()
     
-            # extract raw urls
-        orig_img = match1(content,
-                         r'<meta itemprop='image' content='([^']+/originals/[^']+)'')
-        twit_img = match1(content,
-                          r'<meta property='twitter:image:src' name='twitter:image:src' content='([^']+)'')
     
-        #This is mainly for testing the M3U FFmpeg parser so I would ignore any non-m3u ones
-    stream_url = [i['url'] for i in html['streaming_url_list'] if i['is_default'] and i['type'] == 'hls'][0]
+  # This is the blocking version of the method. See below for async.
+  # |timeout| is num seconds to tolerate no response from server before giving
+  # up; see Requests docs for details (we just pass the param along).
+  @staticmethod
+  def PostDataToHandler( data, handler, timeout = _READ_TIMEOUT_SEC ):
+    return JsonFromFuture( BaseRequest.PostDataToHandlerAsync( data,
+                                                               handler,
+                                                               timeout ) )
     
-        def test_extra_data(self):
-        s = '[1, 2, 3]5'
-        msg = 'Extra data'
-        self.assertRaisesRegex(self.JSONDecodeError, msg, self.loads, s)
     
-        def get_info(self):
-        '''Get the message's 'info' as a string.'''
-        return self._info
+def Main():
+  build_file = p.join( DIR_OF_THIS_SCRIPT, 'third_party', 'ycmd', 'build.py' )
     
-            pyop_attrdict = self.get_attr_dict()
-        _write_instance_repr(out, visited,
-                             self.safe_tp_name(), pyop_attrdict, self.as_address())
+    import time
+from threading import Thread
+from ycm.client.base_request import BaseRequest, HandleServerException
     
-            class BadExc(Exception):
-            pass
     
-            self.assertEqual(x[:], a.tolist()[1:])
-        with self.assertRaises(ValueError):
-            c_int.from_buffer(a, -1)
-        with self.assertRaises(ValueError):
-            (c_int * 16).from_buffer(a, sizeof(c_int))
-        with self.assertRaises(ValueError):
-            (c_int * 1).from_buffer(a, 16 * sizeof(c_int))
+def KeywordsFromSyntaxListOutput_ContainedArgAllowed_test():
+  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
+phpFunctions   xxx contained gzclose yaz_syntax html_entity_decode fbsql_read_blob png2wbmp mssql_init cpdf_set_title gztell fbsql_insert_id empty cpdf_restore mysql_field_type closelog swftext ldap_search curl_errno gmp_div_r mssql_data_seek getmyinode printer_draw_pie mcve_initconn ncurses_getmaxyx defined
+                   contained replace_child has_attributes specified insertdocument assign node_name hwstat addshape get_attribute_node html_dump_mem userlist
+                   links to Function''' ), # noqa
+              has_items( 'gzclose', 'userlist', 'ldap_search' ) )
     
-            self.assertRaises(TypeError, _CFuncPtr, 13, 'name', 42, 'iid')
+        def __init__(self, name):
+        self.name = name
+    
+        parameter
+    '''
+    
+        def __init__(self, src, dest):
+        self.src = src
+        self.dest = dest
+    
+        def __get__(self, obj, T):
+        def transaction(*args, **kwargs):
+            state = memento(obj)
+            try:
+                return self.method(obj, *args, **kwargs)
+            except Exception as e:
+                state()
+                raise e
+    
+    
+# Example usage
+class Data(Subject):
