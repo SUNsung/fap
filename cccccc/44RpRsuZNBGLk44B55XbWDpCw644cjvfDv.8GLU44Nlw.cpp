@@ -1,106 +1,70 @@
 
         
-        SavePageHandler::SavePageHandler(content::WebContents* web_contents,
-                                 const SavePageCallback& callback)
-    : web_contents_(web_contents),
-      callback_(callback) {
-}
+        
+    {}  // namespace api
     
-    namespace base {
-class FilePath;
-}
+    #endif  // ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
+
+    
+     private:
+  const scoped_refptr<base::TaskRunner> file_task_runner_;
+    
+     private:
+  std::string mime_type_;
+  std::string charset_;
+  scoped_refptr<base::RefCountedBytes> data_;
+  net::HttpStatusCode status_code_;
+    
+    typedef struct { int position; atom::AtomMenuModel* model; } MenuItem;
+typedef std::map<ui::Accelerator, MenuItem> AcceleratorTable;
+    
+    #ifndef ATOM_BROWSER_UI_DRAG_UTIL_H_
+#define ATOM_BROWSER_UI_DRAG_UTIL_H_
+    
+      std::unique_ptr<views::StatusIconLinux> icon_;
     
     
-    { private:
-  DISALLOW_COPY_AND_ASSIGN(AtomQuotaPermissionContext);
+    {  DISALLOW_COPY_AND_ASSIGN(MenuModelAdapter);
 };
     
-      NativeWindowViews* window_;
-  gfx::AcceleratedWidget xid_;
+    #endif  // ATOM_BROWSER_UI_VIEWS_WIN_FRAME_VIEW_H_
+
     
-    
-    {  /// Return a hash code of any components from these options that should
-  /// contribute to a Swift Bridging PCH hash.
-  llvm::hash_code getPCHHashComponents() const {
-    // Nothing here that contributes anything significant when emitting the PCH.
-    return llvm::hash_value(0);
+      caffe::Datum datum;
+  datum.set_channels(2);  // one channel for each image in the pair
+  datum.set_height(rows);
+  datum.set_width(cols);
+  LOG(INFO) << 'A total of ' << num_items << ' items.';
+  LOG(INFO) << 'Rows: ' << rows << ' Cols: ' << cols;
+  for (int itemid = 0; itemid < num_items; ++itemid) {
+    int i = caffe::caffe_rng_rand() % num_items;  // pick a random  pair
+    int j = caffe::caffe_rng_rand() % num_items;
+    read_image(&image_file, &label_file, i, rows, cols,
+        pixels, &label_i);
+    read_image(&image_file, &label_file, j, rows, cols,
+        pixels + (rows * cols), &label_j);
+    datum.set_data(pixels, 2*rows*cols);
+    if (label_i  == label_j) {
+      datum.set_label(1);
+    } else {
+      datum.set_label(0);
+    }
+    datum.SerializeToString(&value);
+    std::string key_str = caffe::format_int(itemid, 8);
+    db->Put(leveldb::WriteOptions(), key_str, value);
   }
-};
     
-    #include 'swift/AST/ASTContext.h'
-#include 'swift/AST/GenericEnvironment.h'
-#include 'swift/AST/Module.h'
-#include 'swift/AST/ProtocolConformance.h'
-#include 'swift/AST/SubstitutionMap.h'
-#include 'swift/AST/Types.h'
-#include 'llvm/ADT/DenseMap.h'
+      static vector<string> LayerTypeList() {
+    CreatorRegistry& registry = Registry();
+    vector<string> layer_types;
+    for (typename CreatorRegistry::iterator iter = registry.begin();
+         iter != registry.end(); ++iter) {
+      layer_types.push_back(iter->first);
+    }
+    return layer_types;
+  }
     
-    #endif
-
-    
-    #endif
-    
-      void WrapInputLayer(std::vector<cv::Mat>* input_channels);
-    
-    #include 'caffe/common.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    
-    {  /**
-   * @brief Computes the error gradient w.r.t. the absolute value inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x} =
-   *            \mathrm{sign}(x) \frac{\partial E}{\partial y}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-#include 'caffe/util/im2col.hpp'
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #endif  // CAFFE_ELU_LAYER_HPP_
-
+    #include 'caffe/layers/base_conv_layer.hpp'
     
     /**
  * @brief A layer for learning 'embeddings' of one-hot vector input.
@@ -120,80 +84,82 @@ class EmbedLayer : public Layer<Dtype> {
       const vector<Blob<Dtype>*>& top);
     }
     
-    Handle<Value> DBWrapper::CompactRange(const Arguments& args) {
-  HandleScope scope;
+    DEFINE_int32(driver_port, 0, 'Port for communication with driver');
+DEFINE_int32(server_port, 0, 'Port for operation as a server');
+DEFINE_string(credential_type, grpc::testing::kInsecureCredentialsType,
+              'Credential type for communication with driver');
+    
+      bool Finished() {
+    return current_ >= db_.size();
+  }
+    
+    namespace routeguide {
+class Feature;
     }
     
-    #pragma once
-#include 'rocksdb/merge_operator.h'
-#include 'rocksdb/slice.h'
+    #endif  // GRPC_INTERNAL_COMPILER_NODE_GENERATOR_HELPERS_H
+
     
-      // when we know more data has been written to the file. we can use this
-  // function to force the reader to look again in the file.
-  // Also aligns the file position indicator to the start of the next block
-  // by reading the rest of the data from the EOF position to the end of the
-  // block that was partially read.
-  void UnmarkEOF();
-    
-    
-    {
-    {  releaseJniEnv(attached_thread);
-}
-// @lint-ignore TXT4 T25377293 Grandfathered in
-}  // namespace rocksdb
-    
-    
-    {}  // namespace rocksdb
-    
-    
-    {    return status;
-  }
-    
-    
-    {private:
-  uint8_t Size = 0;
-  uint8_t Data[kMaxSize];
-};
-    
-    extern 'C' {
-// Declare these symbols as weak to allow them to be optionally defined.
-#define EXT_FUNC(NAME, RETURN_TYPE, FUNC_SIG, WARN)                            \
-  RETURN_TYPE NAME##Def FUNC_SIG {                                             \
-    Printf('ERROR: Function \'%s\' not defined.\n', #NAME);                    \
-    exit(1);                                                                   \
-  }                                                                            \
-  RETURN_TYPE NAME FUNC_SIG __attribute__((weak, alias(#NAME 'Def')));
+    // Tucks all generator state in an anonymous namespace away from
+// PythonGrpcGenerator and the header file, mostly to encourage future changes
+// to not require updates to the grpcio-tools C++ code part. Assumes that it is
+// only ever used from a single thread.
+struct PrivateGenerator {
+  const GeneratorConfiguration& config;
+  const grpc_generator::File* file;
     }
     
+    #ifndef TEST_QPS_USAGE_TIMER_H
+#define TEST_QPS_USAGE_TIMER_H
     
-    {  for (const auto &U : *InitialCorpus) {
-    if (size_t NumFeatures = RunOne(U)) {
-      CheckExitOnSrcPosOrItem();
-      Corpus.AddToCorpus(U, NumFeatures);
-      if (Options.Verbosity >= 2)
-        Printf('NEW0: %zd L %zd\n', MaxCoverage.BlockCoverage, U.size());
+    #ifndef BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
+#define BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
+    
+      std::size_t check_for_completion(
+      const boost::system::error_code& ec,
+      std::size_t total_transferred)
+  {
+    return detail::adapt_completion_condition_result(
+        completion_condition_(ec, total_transferred));
+  }
+    
+    namespace boost {
+namespace asio {
+namespace detail {
     }
-    TryDetectingAMemoryLeak(U.data(), U.size(),
-                            /*DuringInitialCorpusExecution*/ true);
-  }
-  PrintStats('INITED');
-  if (Corpus.empty()) {
-    Printf('ERROR: no interesting inputs were found. '
-           'Is the code instrumented for coverage? Exiting.\n');
-    exit(1);
-  }
-}
+    }
+    }
     
-      void StartTraceRecording() {
-    if (!Options.UseMemcmp)
-      return;
-    RecordingMemcmp = Options.UseMemcmp;
-    RecordingMemmem = Options.UseMemmem;
-    NumMutations = 0;
-    InterestingWords.clear();
-    MD.ClearAutoDictionary();
-  }
+    template<class T, class TimeSystem>
+class base_time;
     
-    // Changes U to contain only ASCII (isprint+isspace) characters.
-// Returns true iff U has been changed.
-bool ToASCII(uint8_t *Data, size_t Size);
+    // Calls to asio_handler_allocate and asio_handler_deallocate must be made from
+// a namespace that does not contain any overloads of these functions. The
+// boost_asio_handler_alloc_helpers namespace is defined here for that purpose.
+namespace boost_asio_handler_alloc_helpers {
+    }
+    
+    #define BOOST_ASIO_HANDSHAKE_HANDLER_CHECK( \
+    handler_type, handler) \
+  \
+  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
+      void(boost::system::error_code)) \
+    asio_true_handler_type; \
+  \
+  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
+      sizeof(boost::asio::detail::one_arg_handler_test( \
+          boost::asio::detail::clvref< \
+            asio_true_handler_type>(), \
+          static_cast<const boost::system::error_code*>(0))) == 1, \
+      'HandshakeHandler type requirements not met') \
+  \
+  typedef boost::asio::detail::handler_type_requirements< \
+      sizeof( \
+        boost::asio::detail::argbyv( \
+          boost::asio::detail::clvref< \
+            asio_true_handler_type>())) + \
+      sizeof( \
+        boost::asio::detail::lvref< \
+          asio_true_handler_type>()( \
+            boost::asio::detail::lvref<const boost::system::error_code>()), \
+        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
