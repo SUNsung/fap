@@ -1,56 +1,40 @@
 
         
-            if (has_actual_code and not has_question_marks):
-        linebuffer = clean_trailing_newlines(linebuffer)
-        write_with_harness(codefile, sourcefile, start_linenum, linebuffer)
-    return (line, linenum)
-    
-        def add_done_callback(self, fn):
-        '''Attaches a callable that will be called when the future finishes.
-    
-    # If true, an OpenSearch description file will be output, and all pages will
-# contain a <link> tag referring to it.  The value of this option must be the
-# base URL from which the finished HTML is served.
-#html_use_opensearch = ''
-    
-    if __name__ == '__main__':
-    main()
-
+        '''
+requests.hooks
+~~~~~~~~~~~~~~
     
     
-  def Start( self ):
-    request_data = BuildRequestData()
-    if self._extra_data:
-      request_data.update( self._extra_data )
-    with HandleServerException( display = False ):
-      self._response = self.PostDataToHandler( request_data, 'debug_info' )
+class Server(threading.Thread):
+    '''Dummy server using for unit testing'''
+    WAIT_EVENT_TIMEOUT = 5
+    
+        @property
+    def text(self):
+        '''Content of the response, in unicode.
+    
+    import collections
+    
+        @pytest.fixture(autouse=True)
+    def setup(self):
+        '''CaseInsensitiveDict instance with 'Accept' header.'''
+        self.case_insensitive_dict = CaseInsensitiveDict()
+        self.case_insensitive_dict['Accept'] = 'application/json'
     
     
-def FormatDebugInfoResponse_NoExtraConf_test():
-  response = deepcopy( GENERIC_RESPONSE )
-  response[ 'extra_conf' ].update( {
-    'is_loaded': False,
-    'path': None
-  } )
-  assert_that(
-    FormatDebugInfoResponse( response ),
-    contains_string(
-      'No extra configuration file found\n'
-    )
-  )
+class InvalidURL(RequestException, ValueError):
+    '''The URL provided was somehow invalid.'''
+    
+        global __doc__
+    __doc__ = (__doc__ + '\n' +
+               '\n'.join(doc(code) for code in sorted(_codes)))
+    
+    ]
+test_requirements = ['pytest-httpbin==0.0.7', 'pytest-cov', 'pytest-mock', 'pytest-xdist', 'PySocks>=1.5.6, !=1.5.7', 'pytest>=2.8.0']
     
     
-def KeywordsFromSyntaxListOutput_TypeHierarchy_test():
-  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
-baa xxx foo bar
-        links to Foo
-Foo xxx zoo goo
-        links to Bar
-Bar xxx qux moo
-        links to Type''' ),
-              contains_inanyorder( 'foo', 'bar', 'zoo', 'goo', 'qux', 'moo' ) )
+SendCall = collections.namedtuple('SendCall', ('args', 'kwargs'))
     
-    from ycm.client.base_request import BaseRequest
-from ycm.youcompleteme import YouCompleteMe
-from ycmd import user_options_store
-from ycmd.utils import CloseStandardStreams, WaitUntilProcessIsTerminated
+        #Writing names of all directories inside 'pages' to a list
+    for os_dir in os.listdir(loc):
+        oslist.append(os_dir)
