@@ -1,113 +1,82 @@
 
         
-              # Forgets the given resource by deleting a cookie
-      def forget_me(resource)
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.forget_me!
-        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
+          def redirect_with_header_break
+    redirect_to '/lol\r\nwat'
+  end
+    
+          def clear_all # :nodoc:
+        reset_all
+        current_instances.clear
       end
     
-    # Each time a record is set we check whether its session has already timed out
-# or not, based on last request time. If so, the record is logged out and
-# redirected to the sign in page. Also, each time the request comes and the
-# record is set, we set the last request time inside its scoped session to
-# verify timeout in the following request.
-Warden::Manager.after_set_user do |record, warden, options|
-  scope = options[:scope]
-  env   = warden.request.env
+          test 'when :only is specified, a before action is triggered on that action' do
+        @controller.process(:index)
+        assert_equal 'Hello, World', @controller.response_body
+      end
     
-        SPLIT_INTS = /(?<=\d)\.(?=[\s\d])/.freeze
+    require 'abstract_unit'
     
-        def as_json
-      @pages
-    end
-    
-        if run? && ARGV.any?
-      require 'optparse'
-      OptionParser.new { |op|
-        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
-        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
-        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
-        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
-        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
-        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
-      }.parse!(ARGV.dup)
+        def index
+      self.response_body = 'Hello World'
     end
   end
     
-    module Rack
-  module Protection
-    ##
-    # Prevented attack::   Cookie Tossing
-    # Supported browsers:: all
-    # More infos::         https://github.com/blog/1466-yummy-cookies-across-domains
-    #
-    # Does not accept HTTP requests if the HTTP_COOKIE header contains more than one
-    # session cookie. This does not protect against a cookie overflow attack.
-    #
-    # Options:
-    #
-    # session_key:: The name of the session cookie (default: 'rack.session')
-    class CookieTossing < Base
-      default_reaction :deny
-    
-          def escape(object)
-        case object
-        when Hash   then escape_hash(object)
-        when Array  then object.map { |o| escape(o) }
-        when String then escape_string(object)
-        when Tempfile then object
-        else nil
-        end
-      end
-    
-        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
-      env = {'HTTP_HOST' => 'foo.com'}
-      subject.options[:allow_empty_referrer] = false
-      expect(subject.referrer(env)).to be_nil
+      private
+    def with_params_parsers(parsers = {})
+      old_session = @integration_session
+      original_parsers = ActionDispatch::Request.parameter_parsers
+      ActionDispatch::Request.parameter_parsers = original_parsers.merge parsers
+      reset!
+      yield
+    ensure
+      ActionDispatch::Request.parameter_parsers = original_parsers
+      @integration_session = old_session
     end
     
-        it 'reports attacks if reaction is to report' do
-      io = StringIO.new
-      mock_app do
-        use Rack::Protection, :reaction => :report, :logger => Logger.new(io)
-        run DummyApp
-      end
-      post('/', {}, 'rack.session' => {}, 'HTTP_ORIGIN' => 'http://malicious.com')
-      expect(io.string).to match(/reported.*Origin/)
-      expect(io.string).not_to match(/prevented.*Origin/)
-    end
+    require 'active_support/log_subscriber'
     
-        private
+    module ActionMailer
+  # Provides helper methods for ActionMailer::Base that can be used for easily
+  # formatting messages, accessing mailer or message instances, and the
+  # attachments list.
+  module MailHelper
+    # Take the text and format it, indented two spaces for each line, and
+    # wrapped at 72 columns:
+    #
+    #   text = <<-TEXT
+    #     This is
+    #     the      paragraph.
+    #
+    #     * item1 * item2
+    #   TEXT
+    #
+    #   block_format text
+    #   # => '  This is the paragraph.\n\n  * item1\n  * item2\n'
+    def block_format(text)
+      formatted = text.split(/\n\r?\n/).collect { |paragraph|
+        format_paragraph(paragraph)
+      }.join('\n\n')
     
-              @subject.send(@attachment_name).post_processing = false
-          @subject.send(@attachment_name).assign(file)
-          @subject.valid?
-          @subject.errors[:'#{@attachment_name}_file_size'].blank?
-        ensure
-          @subject.send(@attachment_name).post_processing = true
+          private
+        def method_missing(method_name, *args)
+          if @mailer.action_methods.include?(method_name.to_s)
+            ActionMailer::Parameterized::MessageDelivery.new(@mailer, method_name, @params, *args)
+          else
+            super
+          end
         end
     
-          def drop_attached_file(*args)
-        ActiveSupport::Deprecation.warn 'Method `drop_attached_file` in the migration has been deprecated and will be replaced by `remove_attachment`.'
-        remove_attachment(*args)
-      end
+    class AssertSelectEmailTest < ActionMailer::TestCase
+  class AssertSelectMailer < ActionMailer::Base
+    def test(html)
+      mail body: html, content_type: 'text/html',
+        subject: 'Test e-mail', from: 'test@test.host', to: 'test <test@test.host>'
     end
+  end
     
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'border-top-width: 11px; ' +
-                'border-right-width: 12px; ' +
-                'border-left-width: 13px;'
-      bad_rule = 'border-bottom-width: null;'
-    
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'margin-top: 11px; ' +
-                'margin-right: 12px; ' +
-                'margin-left: 13px;'
-      bad_rule = 'margin-bottom: null;'
-    
-          expect('.position-alternate').to have_ruleset(ruleset)
     end
+
+    
+      def regular?
+    !staff?
   end
