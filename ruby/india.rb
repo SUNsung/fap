@@ -1,176 +1,113 @@
 
         
-            can?(current_user, ability_name, resource)
+          test 'token_and_options returns empty string with empty token' do
+    token = ''.dup
+    actual = ActionController::HttpAuthentication::Token.token_and_options(sample_request(token)).first
+    expected = token
+    assert_equal(expected, actual)
   end
     
-        groups
-  end
-end
-
-    
-      def initialize(mmin = LAST_MODIFIED_TIME_IN_MINUTES)
-    @mmin = mmin
-    @path = Gitlab::ImportExport.storage_path
-  end
-    
-        if resource.errors.empty?
-      set_flash_message! :notice, :unlocked
-      respond_with_navigational(resource){ redirect_to after_unlock_path_for(resource) }
-    else
-      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
-    end
-  end
-    
-      # Returns real navigational formats which are supported by Rails
-  def navigational_formats
-    @navigational_formats ||= Devise.navigational_formats.select { |format| Mime::EXTENSION_LOOKUP[format.to_s] }
-  end
-    
-        def form_configurable_fields
-      self._form_configurable_fields
-    end
-    
-      module SortableTableHelper
-    # :call-seq:
-    #   sortable_column(attribute, default_direction = 'desc', name: attribute.humanize)
-    def sortable_column(attribute, default_direction = nil, options = nil)
-      if options.nil? && (options = Hash.try_convert(default_direction))
-        default_direction = nil
+        class MessageDelivery < ActionMailer::MessageDelivery # :nodoc:
+      def initialize(mailer_class, action, params, *args)
+        super(mailer_class, action, *args)
+        @params = params
       end
-      default_direction ||= 'desc'
-      options ||= {}
-      name = options[:name] || attribute.humanize
-      selected = @table_sort_info[:attribute].to_s == attribute
-      if selected
-        direction = @table_sort_info[:direction]
-        new_direction = direction.to_s == 'desc' ? 'asc' : 'desc'
-        classes = 'selected #{direction}'
-      else
-        classes = ''
-        new_direction = default_direction
-      end
-      link_to(name, url_for(sort: '#{attribute}.#{new_direction}'), class: classes)
-    end
-  end
-end
-
     
-        private
-    
-      # Use a different logger for distributed setups.
-  # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
-    
-      def setup
-    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
-    success = Dir.chdir DUMMY_PATH do
-      silence_stdout_if !ENV['VERBOSE'] do
-        system 'node', 'manifest.js', tmp_dir
-      end
-    end
-    assert success, 'Node.js Mincer compilation failed'
-    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
-    css_name = manifest['assets']['application.css']
-    @css = File.read('#{tmp_dir}/#{css_name}')
-  end
-end
-
-    
-    msfenv_real_pathname = Pathname.new(__FILE__).realpath
-root = msfenv_real_pathname.parent.parent
-    
-                  if(inp.attributes[ikey] =~ /^http/i)
-                inp[ikey] = ''
-                next
-              end
-    
-          case matched
-      when :webhost
-        sessions[s[:session]].merge!({k => matches})
-        if(s[:get])
-          print_status('HTTP GET: #{s[:session]} http://#{s[:webhost]}#{s[:get]}')
-          sessions.delete(s[:session])
-          return
-        end
-      when nil
-        # No matches, no saved state
-      end # end case matched
-    end # end of each_key
-  end # end of parse
-end # end of URL sniffer
-    
-    puts '* Initializing Meterpreter'
-    
-    # This is a completely hackish way to do this, and could break with future
-# versions of the JDK.  Need to find a better way to use sun.security.tools.KeyTool
-# and .JarSigner than modifying the source.  These rely on internal APIs that may
-# change.
-signer = Rjb::import('javaCompile.SignJar')
-#clsKeyTool = Rjb::import('sun.security.tools.KeyTool')
-#clsKeyTool = Rjb::import('sun.security.tools.KeyToolMSF')
-#clsJarSigner = Rjb::import('javaCompile.SignJar.JarSignerMSF')
-#clsJarSigner = Rjb::import('sun.security.tools.JarSigner')
-#clsJarSigner = Rjb::import('sun.security.tools.JarSignerMSF')
-    
-      def parse
-vers = [
-  '6.1.4',
-  '6.1.3',
-  '6.1.2',
-  '6.1.1',
-  '6.1.0',
-  '5.3.10',
-  '5.3.9',
-  '5.3.8',
-  '5.3.7',
-]
-    
-            def log_levels
-          @log_levels ||= {}
+            def set_expected_mail
+          @expected = Mail.new
+          @expected.content_type ['text', 'plain', { 'charset' => charset }]
+          @expected.mime_version = '1.0'
         end
     
-            {
-          :always_update     => false,
-          :template_location => root + '/public/stylesheets/sass',
-          :css_location      => root + '/public/stylesheets',
-          :cache_location    => root + '/tmp/sass-cache',
-          :always_check      => env != 'production',
-          :quiet             => env != 'production',
-          :full_exception    => env != 'production'
-        }.freeze
+    # Emulate AV railtie
+require 'action_view'
+ActionMailer::Base.include(ActionView::Layouts)
+    
+        def length
+      @entries.length
+    end
+    
+        def contains?(url, options = nil)
+      !!subpath_to(url, options)
+    end
+    
+            css('> .section', '#preamble', 'a[href*='dict.html']', 'code var', 'code strong').each do |node|
+          node.before(node.children).remove
+        end
+    
+              # Underscore methods
+          if name.start_with?('Underscore')
+            node.at_css('~ ul').css('li').each do |li|
+              name = [type.downcase, li.at_css('a').content.split.first].join('.')
+              id = name.parameterize
+              li['id'] = id
+              entries << [name, id, type]
+            end
+            next
+          end
+    
+            css('.method-signature', 'pre').each do |node|
+          node.name = 'pre'
+          node.content = node.content.strip
+          node['data-language'] = 'php'
+        end
+    
+            # Helper method to get access to the class variable. This is mostly
+        # exposed for tests. This shouldn't be mucked with directly, since it's
+        # structure may change at any time.
+        def registered; @@registered; end
       end
     end
   end
-    
-          # @param  [Xcodeproj::Project] project
-      #         The xcode project to generate a podfile for.
-      #
-      # @return [String] the text of the Podfile for the provided project
-      #
-      def podfile_template(project)
-        podfile = ''
-        podfile << 'project '#{@project_path}'\n\n' if @project_path
-        podfile << <<-PLATFORM.strip_heredoc
-          # Uncomment the next line to define a global platform for your project
-          # platform :ios, '9.0'
-        PLATFORM
-    
-        def after(task, post_task, *args, &block)
-      Rake::Task.define_task(post_task, *args, &block) if block_given?
-      task = Rake::Task[task]
-      task.enhance do
-        post = Rake.application.lookup(post_task, task.scope)
-        raise ArgumentError, 'Task #{post_task.inspect} not found' unless post
-        post.invoke
-      end
-    end
-    
-      puts I18n.t :capified, scope: :capistrano
 end
 
     
-            private
+          def initialize(string)
+        @value = string
+      end
     
-    module LogStash module Config module CpuCoreStrategy
+              # Repackage the box
+          output_name = @env.vagrantfile.config.package.name || 'package.box'
+          output_path = Pathname.new(File.expand_path(output_name, FileUtils.pwd))
+          box.repackage(output_path)
     
-        r0
+            type = argv.shift.to_sym
+        name = argv.shift.to_sym
+    
+        def initialize(attributes={})
+      assign_attributes(attributes)
+      yield(self) if block_given?
+    end
+    
+        @inner.log_level = log_level
+    Sass.logger = @inner
   end
+    
+            def log_level?(level, min_level)
+          log_levels[level] >= log_levels[min_level]
+        end
+    
+        # Returns a representation of the query as an array of strings and
+    # potentially {Sass::Script::Tree::Node}s (if there's interpolation in it).
+    # When the interpolation is resolved and the strings are joined together,
+    # this will be the string representation of this query.
+    #
+    # @return [Array<String, Sass::Script::Tree::Node>]
+    def to_a
+      Sass::Util.intersperse(queries.map {|q| q.to_a}, ', ').flatten
+    end
+    
+            def on_send(node)
+          return unless node.receiver && node.method?(:freeze) &&
+                        immutable_literal?(node.receiver)
+    
+            # @param lines [Array<String>]
+        # @param annotations [Array<(Integer, String)>]
+        #   each entry is the annotated line number and the annotation text
+        #
+        # @note annotations are sorted so that reconstructing the annotation
+        #   text via {#to_s} is deterministic
+        def initialize(lines, annotations)
+          @lines       = lines.freeze
+          @annotations = annotations.sort.freeze
+        end
