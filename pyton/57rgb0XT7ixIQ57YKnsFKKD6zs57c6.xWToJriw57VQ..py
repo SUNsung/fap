@@ -1,157 +1,176 @@
 
         
-                    if lines and lines[-1] and chunk and lines[-1][-1] == chunk[-1]:
-                pending = lines.pop()
-            else:
-                pending = None
+        with io.open(README_FILE, 'w', encoding='utf-8') as f:
+    f.write(header)
+    f.write(options)
+    f.write(footer)
+
     
-    import collections
+        def _real_extract(self, url):
+        playlist_id = self._match_id(url)
     
-    from requests.structures import CaseInsensitiveDict, LookupDict
+    import re
     
-            if algorithm is None:
-            _algorithm = 'MD5'
-        else:
-            _algorithm = algorithm.upper()
-        # lambdas assume digest modules are imported at the top level
-        if _algorithm == 'MD5' or _algorithm == 'MD5-SESS':
-            def md5_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.md5(x).hexdigest()
-            hash_utf8 = md5_utf8
-        elif _algorithm == 'SHA':
-            def sha_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.sha1(x).hexdigest()
-            hash_utf8 = sha_utf8
-    
-    This module contains the set of Requests' exceptions.
-'''
-from urllib3.exceptions import HTTPError as BaseHTTPError
-    
-            errno = pytest.main(self.pytest_args)
-        sys.exit(errno)
-    
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licence]
-    
-    MIN_TOKEN_TYPE = UP+1
-    
-        def test_conflicts(self):
-        # Note: Defined IP is more important than defined port in match
-        self.assertTrue(self.addr.conflicts(self.addr1))
-        self.assertTrue(self.addr.conflicts(self.addr2))
-        self.assertTrue(self.addr.conflicts(self.addr_defined))
-        self.assertFalse(self.addr.conflicts(self.addr_default))
+    from .onet import OnetBaseIE
     
     
-# http://docs.readthedocs.org/en/latest/faq.html#i-get-import-errors-on-libraries-that-depend-on-c-modules
-# c.f. #262
-sys.modules.update(
-    (mod_name, mock.MagicMock()) for mod_name in ['augeas'])
+@keras_test
+def test_upsampling1d_legacy_interface():
+    old_layer = keras.layers.UpSampling1D(length=3, name='us1d')
+    new_layer_1 = keras.layers.UpSampling1D(size=3, name='us1d')
+    new_layer_2 = keras.layers.UpSampling1D(3, name='us1d')
+    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer_1.get_config())
+    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer_2.get_config())
     
-    # Add any extra paths that contain custom files (such as robots.txt or
-# .htaccess) here, relative to this directory. These files are copied
-# directly to the root of the documentation.
-#html_extra_path = []
+    - Models
+    About Keras models
+        explain when one should use Sequential or functional API
+        explain compilation step
+        explain weight saving, weight loading
+        explain serialization, deserialization
+    Sequential
+    Model (functional API)
     
-    # Documents to append as an appendix to all manuals.
-#texinfo_appendices = []
+    print('Pad sequences (samples x time)')
+x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
+x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
+print('x_train shape:', x_train.shape)
+print('x_test shape:', x_test.shape)
     
-        def tearDown(self):
-        logging.disable(logging.NOTSET)
+    from keras import backend as K
+from keras.models import Sequential, Model
+from keras.layers import convolutional_recurrent, Input
+from keras.utils.test_utils import layer_test
+from keras import regularizers
     
-    import mock
     
-        '''def test_object(queue):
-           queue_object = QueueObject(queue, True)
-           print('Inside func: {}'.format(queue_object.object))'''
+collect_ignore = [
+    # deprecated or moved modules
+    'scrapy/conf.py',
+    'scrapy/stats.py',
+    'scrapy/project.py',
+    'scrapy/utils/decorator.py',
+    'scrapy/statscol.py',
+    'scrapy/squeue.py',
+    'scrapy/log.py',
+    'scrapy/dupefilter.py',
+    'scrapy/command.py',
+    'scrapy/linkextractor.py',
+    'scrapy/spider.py',
     
-        def test_display_current_time_at_midnight(self):
+        def __enter__(self):
+        from scrapy.utils.test import get_testenv
+        pargs = [sys.executable, '-u', '-m', 'scrapy.utils.benchserver']
+        self.proc = subprocess.Popen(pargs, stdout=subprocess.PIPE,
+                                     env=get_testenv())
+        self.proc.stdout.readline()
+    
+        def syntax(self):
+        return '[options] <spider>'
+    
+            return requests
+    
+        if WSAStringToAddressA(
+            ip_string,
+            address_family,
+            None,
+            ctypes.byref(addr),
+            ctypes.byref(addr_size)
+    ) != 0:
+        raise socket.error(ctypes.FormatError())
+    
+    A Parser needs a TokenStream as input (which in turn is usually fed by a
+Lexer):
+    
+            Python does not have any size restrictions, but the compilation of
+        such large source files seems to be pretty memory hungry. The memory
+        consumption of the python process grew to >1.5GB when importing a
+        15MB lexer, eating all my swap space and I was to impacient to see,
+        if it could finish at all. With packed initializers that are unpacked
+        at import time of the lexer module, everything works like a charm.
+        
         '''
-        Will almost always fail (despite of right at/after midnight).
-        '''
-        time_provider_stub = MidnightTimeProvider()
-        class_under_test = TimeDisplay(time_provider_stub)
-        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
+        
+        ret = []
+        for i in range(len(string) / 2):
+            (n, v) = ord(string[i*2]), ord(string[i*2+1])
     
-        def __init__(self):
-        self.time_provider = datetime.datetime
+            Negative indexes are allowed.  LA(-1) is previous token (token
+	just matched).  LA(-i) where i is before first token should
+	yield -1, invalid char / EOF.
+	'''
+        
+        raise NotImplementedError
+        
     
-        def __init__(self, src, dest):
-        self.src = src
-        self.dest = dest
+        def __init__(
+        self,
+        recognizer, decisionNumber,
+        eot, eof, min, max, accept, special, transition
+        ):
+        ## Which recognizer encloses this DFA?  Needed to check backtracking
+        self.recognizer = recognizer
     
-        That is, standard diff tools should be able to identify new or fixed
-    violations by comparing results of this function
+        def test_eq(self):
+        self.assertTrue(self.vhost1b == self.vhost1)
+        self.assertFalse(self.vhost1 == self.vhost2)
+        self.assertEqual(str(self.vhost1b), str(self.vhost1))
+        self.assertFalse(self.vhost1b == 1234)
     
-    def get_api_subtype():
-    if is_api() and c.render_style.startswith('api-'):
-        return c.render_style[4:]
+        def __init__(self, args):
+        '''Initializes the plugin with the given command line args'''
+        self._temp_dir = tempfile.mkdtemp()
+        self.le_config = util.create_le_config(self._temp_dir)
+        config_dir = util.extract_configs(args.configs, self._temp_dir)
+        self._configs = [
+            os.path.join(config_dir, config)
+            for config in os.listdir(config_dir)]
     
-    # class specific overrides
-api('link',          LinkJsonTemplate)
-api('promotedlink',  PromotedLinkJsonTemplate)
-api('message',       MessageJsonTemplate)
-api('subreddit',     SubredditJsonTemplate)
-api('labeledmulti',  LabeledMultiJsonTemplate)
-api('reddit',        RedditJsonTemplate)
-api('panestack',     PanestackJsonTemplate)
-api('htmlpanestack', NullJsonTemplate)
-api('listing',       ListingJsonTemplate)
-api('searchlisting', SearchListingJsonTemplate)
-api('userlisting',   UserListingJsonTemplate)
-api('usertableitem', UserTableItemJsonTemplate)
-api('account',       AccountJsonTemplate)
+        @mock.patch('certbot.notify.smtplib.LMTP')
+    @mock.patch('certbot.notify.subprocess.Popen')
+    def test_everything_fails(self, mock_popen, mock_lmtp):
+        from certbot.notify import notify
+        lmtp_obj = mock.MagicMock()
+        mock_lmtp.return_value = lmtp_obj
+        lmtp_obj.sendmail.side_effect = socket.error(17)
+        proc = mock.MagicMock()
+        mock_popen.return_value = proc
+        proc.communicate.side_effect = OSError('What we have here is a '
+                                               'failure to communicate.')
+        self.assertFalse(notify('Goose', 'auntrhody@example.com',
+                                'The old grey goose is dead.'))
+        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
+        self.assertEqual(proc.communicate.call_count, 1)
     
-        def GET_button_demo_page(self):
-        # no buttons for domain listings -> redirect to top level
-        if isinstance(c.site, DomainSR):
-            return self.redirect('/buttons')
-        return BoringPage(_('reddit buttons'),
-                          show_sidebar = False, 
-                          content=ButtonDemoPanel()).render()
+    For full examples, see `certbot.plugins`.
+    
+                group.append(HTML('htmlout.html').render())
+            print('Rendered page {} of the directory {}'.format(str(i), operating_sys))
+            i += 1
+        
+        allmd.clear()
+    
+    print 'PLUGIN_I18N_PATHS := ' + ','.join(os.path.relpath(plugin.path)
+                                         for plugin in plugins
+                                         if plugin.needs_translation)
+    
+        return config
+
+    
+    class HTTPTooManyRequests(webob.exc.HTTPClientError):
+    code = 429
+    title = 'Too Many Requests'
+    explanation = ('The server has received too many requests from the client.')
+    
+        @validate(VAdmin(),
+              award = VAwardByCodename('awardcn'),
+              recipient = nop('recipient'),
+              desc = nop('desc'),
+              url = nop('url'),
+              hours = nop('hours'))
+    def GET_give(self, award, recipient, desc, url, hours):
+        if award is None:
+            abort(404, 'page not found')
     
     from r2.controllers.api_docs import api_doc, api_section
 from r2.controllers.oauth2 import allow_oauth2_access
-    
-    
-    def send400(self):
-        if 'usable_error_content' in request.environ:
-            return request.environ['usable_error_content']
-        else:
-            res = pages.RedditError(
-                title=_('bad request (%(domain)s)') % dict(domain=g.domain),
-                message=_('you sent an invalid request'),
-                explanation=request.GET.get('explanation'))
-            return res.render()
