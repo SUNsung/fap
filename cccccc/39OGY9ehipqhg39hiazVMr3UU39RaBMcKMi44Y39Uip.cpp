@@ -1,186 +1,353 @@
 
         
-          static v8::Handle<v8::Object> GetObjectRegistry();
-  static v8::Handle<v8::Value> GetWindowId(blink::WebFrame* frame);
-  static void ZoomLevelChanged(blink::WebView* web_view);
-  static void willHandleNavigationPolicy(
-    content::RenderView* rv,
-    blink::WebFrame* frame,
-    const blink::WebURLRequest& request,
-    blink::WebNavigationPolicy* policy,
-    blink::WebString* manifest);
-    
-    
-namespace nwapi {
-    }
-    
-    
-#include 'base/basictypes.h'
-    
-       bool IsCommandIdChecked(int command_id) const override;
-   bool IsCommandIdEnabled(int command_id) const override;
-    
-    void MenuItem::CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) {
-  if (method == 'GetChecked') {
-    result->AppendBoolean(GetChecked());
-  } else {
-    NOTREACHED() << 'Invalid call to MenuItem method:' << method
-                 << ' arguments:' << arguments;
-  }
+        
+    {  SyntaxMap[FromNode] = ToNode;
 }
     
-      /// Cancel all asynchronous operations associated with the acceptor.
-  /**
-   * This function causes all outstanding asynchronous connect, send and receive
-   * operations to finish immediately, and the handlers for cancelled operations
-   * will be passed the boost::asio::error::operation_aborted error.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   */
-  void cancel()
-  {
-    boost::system::error_code ec;
-    this->get_service().cancel(this->get_implementation(), ec);
-    boost::asio::detail::throw_error(ec, 'cancel');
-  }
+    /// Index the given module and store the results to \p indexStorePath.
+///
+/// \param module The module to index.
+///
+/// \param indexUnitTokens A list of unique identifiers for the index units to
+/// be written. This may either be one unit per source file of \p module, or it
+/// may be a single unit, in which case all the index information will be
+/// combined into a single unit.
+///
+/// \param moduleUnitToken A unique identifier for this module unit in the form
+/// of a file path. Only used if \p indexUnitTokens are specified for each
+/// source file, otherwise the single \p indexUnitTokens value is used instead.
+///
+/// \param indexStorePath The location to write the indexing data to.
+///
+/// \param indexSystemModules If true, emit index data for imported serialized
+/// swift system modules.
+///
+/// \param isDebugCompilation true for non-optimized compiler invocation.
+///
+/// \param targetTriple The target for this compilation.
+///
+/// \param dependencyTracker The set of dependencies seen while building.
+bool indexAndRecord(ModuleDecl *module, ArrayRef<std::string> indexUnitTokens,
+                    StringRef moduleUnitToken, StringRef indexStorePath,
+                    bool indexSystemModules, bool isDebugCompilation,
+                    StringRef targetTriple,
+                    const DependencyTracker &dependencyTracker);
+// FIXME: indexUnitTokens could be StringRef, but that creates an impedance
+// mismatch in the caller.
     
-      BOOST_ASIO_DECL static void init_native_buffer(
-      native_buffer_type& buf,
-      const boost::asio::mutable_buffer& buffer);
+        bool failed = false;
+    StdlibGroupsIndexRecordingConsumer groupIndexConsumer([&](StringRef groupName, SymbolTracker &tracker) -> bool {
+      SmallString<128> moduleName;
+      makeSubmoduleNameFromGroupName(groupName, moduleName);
+      SmallString<256> fileNameWithGroup = filename;
+      appendGroupNameForFilename(groupName, fileNameWithGroup);
+    }
     
-      // Consume multiple bytes from the beginning of the buffer.
-  void consume(size_type count)
-  {
-    BOOST_ASIO_ASSERT(begin_offset_ + count <= end_offset_);
-    begin_offset_ += count;
-    if (empty())
-      clear();
-  }
+    #include 'llvm/ADT/IntrusiveRefCntPtr.h'
     
-    #include <boost/asio/detail/config.hpp>
-    
-    #endif // BOOST_ASIO_DETAIL_FUNCTION_HPP
-
-    
-    template <typename Time_Traits>
-std::size_t epoll_reactor::cancel_timer(timer_queue<Time_Traits>& queue,
-    typename timer_queue<Time_Traits>::per_timer_data& timer,
-    std::size_t max_cancelled)
-{
-  mutex::scoped_lock lock(mutex_);
-  op_queue<operation> ops;
-  std::size_t n = queue.cancel_timer(timer, ops, max_cancelled);
-  lock.unlock();
-  io_service_.post_deferred_completions(ops);
-  return n;
+    bool Substitution::operator==(const Substitution &other) const {
+  // The archetypes may be missing, but we can compare them directly
+  // because archetypes are always canonical.
+  return
+    Replacement->isEqual(other.Replacement) &&
+    Conformance.equals(other.Conformance);
 }
-    
-    class SparsePageRawFormat : public SparsePage::Format {
- public:
-  bool Read(SparsePage* page, dmlc::SeekStream* fi) override {
-    if (!fi->Read(&(page->offset))) return false;
-    CHECK_NE(page->offset.size(), 0U) << 'Invalid SparsePage file';
-    page->data.resize(page->offset.back());
-    if (page->data.size() != 0) {
-      CHECK_EQ(fi->Read(dmlc::BeginPtr(page->data),
-                        (page->data).size() * sizeof(SparseBatch::Entry)),
-               (page->data).size() * sizeof(SparseBatch::Entry))
-          << 'Invalid SparsePage file';
-    }
-    return true;
-  }
-    }
-    
-    struct EvalLogLoss : public EvalEWiseBase<EvalLogLoss> {
-  const char *Name() const override {
-    return 'logloss';
-  }
-  inline bst_float EvalRow(bst_float y, bst_float py) const {
-    const bst_float eps = 1e-16f;
-    const bst_float pneg = 1.0f - py;
-    if (py < eps) {
-      return -y * std::log(eps) - (1.0f - y)  * std::log(1.0f - eps);
-    } else if (pneg < eps) {
-      return -y * std::log(1.0f - eps) - (1.0f - y)  * std::log(eps);
-    } else {
-      return -y * std::log(py) - (1.0f - y) * std::log(pneg);
-    }
-  }
-};
-    
-        totalConnections = atoi(argv[1]);
-    port = atoi(argv[2]);
     
     
     {
-    {                    // Perform first batch of echo sending
-                    if (sockets.size() == connections) {
-                        startPoint = high_resolution_clock::now();
-                        echo();
-                    } else {
-                        newConnection();
-                    }
-                }
-                delete [] buf->base;
-            });
+  shared_ptr<Caffe::RNG> rng_;
+  Phase phase_;
+  Blob<Dtype> data_mean_;
+  vector<Dtype> mean_values_;
+};
     
+     private:
+  // Layer registry should never be instantiated - everything is done with its
+  // static variables.
+  LayerRegistry() {}
     
-    {}
-
+      /**
+   * @brief Computes the error gradient w.r.t. the reordered input.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient
+   *        with respect to the outputs
+   *   -# @f$ (M \times ...) @f$:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2):
+   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
+   *     required) back to the input x_1
+   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
+   *     false.
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-                if (ssl) {
-                sent = SSL_write(ssl, message->data, (int) message->length);
-                if (sent == (ssize_t) message->length) {
-                    wasTransferred = false;
-                    return true;
-                } else if (sent < 0) {
-                    switch (SSL_get_error(ssl, (int) sent)) {
-                    case SSL_ERROR_WANT_READ:
-                        break;
-                    case SSL_ERROR_WANT_WRITE:
-                        if ((getPoll() & UV_WRITABLE) == 0) {
-                            setPoll(getPoll() | UV_WRITABLE);
-                            changePoll(this);
-                        }
-                        break;
-                    default:
-                        return false;
-                    }
-                }
-            } else {
-                sent = ::send(getFd(), message->data, message->length, MSG_NOSIGNAL);
-                if (sent == (ssize_t) message->length) {
-                    wasTransferred = false;
-                    return true;
-                } else if (sent == SOCKET_ERROR) {
-                    if (!nodeData->netContext->wouldBlock()) {
-                        return false;
-                    }
-                } else {
-                    message->length -= sent;
-                    message->data += sent;
-                }
+    /**
+ * @brief Computes @f$ y = x + \log(1 + \exp(-x)) @f$ if @f$ x > 0 @f$;
+ *        @f$ y = \log(1 + \exp(x)) @f$ otherwise.
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$
+ *      y = \left\{
+ *         \begin{array}{ll}
+ *            x + \log(1 + \exp(-x)) & \mbox{if } x > 0 \\
+ *            \log(1 + \exp(x)) & \mbox{otherwise}
+ *         \end{array} \right.
+ *      @f$
+ */
+template <typename Dtype>
+class BNLLLayer : public NeuronLayer<Dtype> {
+ public:
+  explicit BNLLLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+    }
     }
     
-    #ifdef UWS_THREADSAFE
-    std::lock_guard<std::recursive_mutex> lockGuard(*nodeData->asyncMutex);
-    if (isClosed()) {
-        return;
+    /**
+ * @brief Takes at least two Blob%s and concatenates them along either the num
+ *        or channel dimension, outputting the result.
+ */
+template <typename Dtype>
+class ConcatLayer : public Layer<Dtype> {
+ public:
+  explicit ConcatLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
+    
+    #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of PoolingLayer.
+ *        Fallback to PoolingLayer for CPU mode.
+*/
+template <typename Dtype>
+class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
+ public:
+  explicit CuDNNPoolingLayer(const LayerParameter& param)
+      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNPoolingLayer();
+  // Currently, cuDNN does not support the extra top blob.
+  virtual inline int MinTopBlobs() const { return -1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    }
+    
+    #ifdef USE_CUDNN
+/**
+ * @brief cuDNN implementation of SoftmaxLayer.
+ *        Fallback to SoftmaxLayer for CPU mode.
+ */
+template <typename Dtype>
+class CuDNNSoftmaxLayer : public SoftmaxLayer<Dtype> {
+ public:
+  explicit CuDNNSoftmaxLayer(const LayerParameter& param)
+      : SoftmaxLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNSoftmaxLayer();
+    }
+    
+      virtual inline const char* type() const { return 'Eltwise'; }
+  virtual inline int MinBottomBlobs() const { return 2; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    
+    /**
+ * @brief A layer for learning 'embeddings' of one-hot vector input.
+ *        Equivalent to an InnerProductLayer with one-hot vectors as input, but
+ *        for efficiency the input is the 'hot' index of each column itself.
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+template <typename Dtype>
+class EmbedLayer : public Layer<Dtype> {
+ public:
+  explicit EmbedLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    // WorkloadStats is used to track per request timing for different states
+// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
+// should be made to guard the state change with appropriate timers and
+// counters.
+//
+// The states tracked are:
+//  - In a request (this is a superset of the interpreter state)
+//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
+//  - In the JIT (currently tracks time inside the translate routine)
+//
+// Note the time in the TC is not tracked.  This is roughly:
+//   Time in request - Time in interp
+//
+// This gives us the relative interp time formula of:
+//   Relative interp time = Time in interp / Time in request
+struct WorkloadStats final {
+  enum State {
+    InRequest,
+    // -> InInterp   Okay (entering Dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InInterp,
+    // -> InRequest  Okay (leaving the dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InTrans,
+    // -> InRequest  Okay (leaving translate)
+    // -> InInterp   Okay (leaving translate)
+  };
+    }
+    
+    
+    {  auto const ret = make_map_array(
+    s_sec, (int)tp.tv_sec,
+    s_usec, (int)tp.tv_usec,
+    s_minuteswest, (int)(-offset->offset / 60),
+    s_dsttime, (int)offset->is_dst
+  );
+  timelib_time_offset_dtor(offset);
+  return ret;
+}
+    
+    static int64_t to_usec(const timeval& tv) {
+  return (int64_t(tv.tv_sec) * 1000000) + tv.tv_usec;
+}
+    
+    #ifdef PHP_WIN32
+# undef S_IFLNK
+# undef S_IFIFO
 #endif
     
-        void start(Loop *loop, Poll *self, int events) {
-        epoll_event event;
-        event.events = events;
-        event.data.ptr = self;
-        epoll_ctl(loop->epfd, EPOLL_CTL_ADD, state.fd, &event);
+    namespace irgen {
     }
     
-    namespace uWS {
+    TCA OfflineCode::collectJmpTargets(FILE *file,
+                                   TCA fileStartAddr,
+                                   TCA codeStartAddr,
+                                   uint64_t codeLen,
+                                   vector<TCA> *jmpTargets) {
+  return 0;
+}
+    
+        // Find best predecessor.
+    TargetId bestPred = InvalidId;
+    double bestProb = 0;
+    
+      while (to_read > 0) {
+    auto const read = folly::readNoInt(source_file, buffer,
+                                       std::min(sizeof(buffer), to_read));
+    if (read <= 0) {
+      Logger::Error('dlopen_embedded_data: Error reading from section: %s',
+                    folly::errnoStr(errno).c_str());
+      return nullptr;
+    }
+    if (folly::writeFull(dest_file, buffer, read) <= 0) {
+      Logger::Error('dlopen_embedded_data: Error writing to temporary file: %s',
+                    folly::errnoStr(errno).c_str());
+      return nullptr;
+    }
+    to_read -= read;
+  }
+    
+                void operator++();
+    
+            static Status Load(int p_fd, /*out*/ std::shared_ptr<Model>* p_model);
+    
+        // Taken from Caffe2
+    REGISTER_OPERATOR_SCHEMA(DepthToSpace)
+        .Description('DepthToSpace for 4-D tensors of type T. '
+            'Rearranges (permutes) data from channel into blocks of spatial data, '
+            'followed by cropping. This is the reverse transformation of '
+            'SpaceToDepth. More specifically, this op outputs a copy of the input '
+            'tensor where values from the channel dimension are moved in spatial '
+            'blocks to the height and width dimensions, followed by cropping along '
+            'the height and width dimensions.')
+        .Input('input', 'Input tensor of [N,C,H,W]', 'T')
+        .Output('output', 'Output tensor of [N, C/(blocksize * blocksize), H * blocksize, '
+            'W * blocksize]', 'T')
+        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
+            'Constrain input and output types to float tensors.')
+        .Attr('blocksize', 'Blocks of [blocksize,blocksize] are moved.', AttrType::AttributeProto_AttributeType_INT);
+    
+    // Generate text for a scalar field.
+template<typename T> static bool GenField(const FieldDef &fd,
+                                          const Table *table, bool fixed,
+                                          const IDLOptions &opts,
+                                          int indent,
+                                          std::string *_text) {
+  return Print(fixed ?
+    reinterpret_cast<const Struct *>(table)->GetField<T>(fd.value.offset) :
+    table->GetField<T>(fd.value.offset,
+    IsFloat(fd.value.type.base_type) ?
+    static_cast<T>(strtod(fd.value.constant.c_str(), nullptr)) :
+    static_cast<T>(StringToInt(fd.value.constant.c_str()))),
+    fd.value.type, indent, nullptr, opts, _text);
+}
+    
+    //go generator is used to generate GRPC code for serialization system, such as flatbuffers
+#include <memory>
+#include <vector>
+    
+    
+    {  server->Wait();
+}
+    
+      std::string WrapInNameSpace(const Definition &def) const;
+    
+      // Parameters required to initialize the FlatCompiler.
+  struct InitParams {
+    InitParams()
+        : generators(nullptr),
+          num_generators(0),
+          warn_fn(nullptr),
+          error_fn(nullptr) {}
     }
     
-        void upgrade(const char *secKey, const char *extensions,
-                 size_t extensionsLength, const char *subprotocol,
-                 size_t subprotocolLength, bool *perMessageDeflate);
+    #ifndef FLATBUFFERS_MINIREFLECT_H_
+#define FLATBUFFERS_MINIREFLECT_H_
+    
+    // Set any table field as a string, regardless of what type it is.
+inline bool SetAnyFieldS(Table *table, const reflection::Field &field,
+                         const char *val) {
+  auto field_ptr = table->GetAddressOf(field.offset());
+  if (!field_ptr) return false;
+  SetAnyValueS(field.type()->base_type(), field_ptr, val);
+  return true;
+}
+    
+    static void Error(const flatbuffers::FlatCompiler *flatc,
+                  const std::string &err, bool usage, bool show_exe_name) {
+  if (show_exe_name) { printf('%s: ', g_program_name); }
+  printf('error: %s\n', err.c_str());
+  if (usage) { printf('%s', flatc->GetUsageString(g_program_name).c_str()); }
+  exit(1);
+}
+    
+    namespace fuzzer {
+    }
+    
+    
+    {  for (size_t i = 0; i < NumCases; i++) {
+    TryToAddDesiredData(Val, Cases[i], ValSize);
+    if (TryShort)
+      TryToAddDesiredData(Val, Cases[i], 2);
+  }
+}
+    
+    void PrintASCII(const Unit &U, const char *PrintAfter = '');
