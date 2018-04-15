@@ -1,86 +1,62 @@
 
         
-              it 'raises an exception when use passes workspace' do
-        expect do
-          Fastlane::FastFile.new.parse('lane :test do
-            increment_build_number(xcodeproj: 'project.xcworkspace')
-          end').runner.execute(:test)
-        end.to raise_error('Please pass the path to the project, not the workspace')
+          def test_bom_16be
+    assert_bom(['\xFE', '\xFF'], __method__)
+  end
+    
+        h[1] = 1
+    h[nil] = 99
+    h['nil'] = nil
+    z = [1,2]
+    h[z] = 256
+    assert_equal(1,       h[1])
+    assert_equal('two',   h[2])
+    assert_equal('three', h[3])
+    assert_equal('self',  h[self])
+    assert_equal('time',  h[t])
+    assert_equal(99,      h[nil])
+    assert_equal(nil,     h['nil'])
+    assert_equal(nil,     h['koala'])
+    assert_equal(256,     h[z])
+  end
+    
+      it 'decodes the remaining doubles when passed the '*' modifier after another directive' do
+    array = '333333\x15@ffffff\x22@'.unpack(unpack_format()+unpack_format('*'))
+    array.should == [5.3, 9.2]
+  end
+    
+      it 'decodes the number of bytes specified by the count modifier including whitespace bytes' do
+    [ ['a bc',  ['a b', 'c']],
+      ['a\fbc', ['a\fb', 'c']],
+      ['a\nbc', ['a\nb', 'c']],
+      ['a\rbc', ['a\rb', 'c']],
+      ['a\tbc', ['a\tb', 'c']],
+      ['a\vbc', ['a\vb', 'c']]
+    ].should be_computed_by(:unpack, unpack_format(3)+unpack_format)
+  end
+    
+        respond_to do |format|
+      format.html do
+        serializable_resource = ActiveModelSerializers::SerializableResource.new(InitialStatePresenter.new(initial_state_params), serializer: InitialStateSerializer)
+        @initial_state_json   = serializable_resource.to_json
       end
     
-          it 'automatically removes new lines from the version number' do
-        Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number(version_number: '1.77.3\n', bump_type: 'major')
-        end').runner.execute(:test)
+      context 'expands active buttons' do
+    it 'finds selectors' do
+      list = @buttons_list.map { |input| '#{input}:active' }
+      list = list.join(', ')
+      ruleset = 'content: #{list};'
     
-      # GET /resource/unlock/new
-  def new
-    self.resource = resource_class.new
+    describe 'modular-scale' do
+  before(:all) do
+    ParserSupport.parse_file('library/modular-scale')
   end
     
-          def remember_key(resource, scope)
-        resource.rememberable_options.fetch(:key, 'remember_#{scope}_token')
-      end
+          expect('.padding-implied-left').to have_rule(rule)
     end
   end
-end
-
     
-            routes.each do |module_name, actions|
-          [:path, :url].each do |path_or_url|
-            actions.each do |action|
-              action = action ? '#{action}_' : ''
-              method = :'#{action}#{module_name}_#{path_or_url}'
-    
-    class REST::MediaAttachmentSerializer < ActiveModel::Serializer
-  include RoutingHelper
-    
-            expect(response).to have_http_status(:missing)
-      end
-    end
+    describe 'size' do
+  before(:all) do
+    ParserSupport.parse_file('library/size')
   end
-end
-
-    
-          subdir
-    end
-    
-            def self.options
-          [[
-            '--all', 'Remove all the cached pods without asking'
-          ]].concat(super)
-        end
-    
-            # Runs the template configuration utilities.
-        #
-        # @return [void]
-        #
-        def print_info
-          UI.puts '\nTo learn more about the template see `#{template_repo_url}`.'
-          UI.puts 'To learn more about creating a new pod, see `#{CREATE_NEW_POD_INFO_URL}`.'
-        end
-    
-            def operator_assignment_node
-          return nil unless node.parent
-          return nil unless OPERATOR_ASSIGNMENT_TYPES.include?(node.parent.type)
-          return nil unless node.sibling_index.zero?
-          node.parent
-        end
-    
-              lambda do |corrector|
-            corrector.replace(center.source_range, new_center)
-          end
-        end
-      end
-    end
-  end
-end
-
-    
-              annotations.reverse_each do |line_number, annotation|
-            reconstructed.insert(line_number, annotation)
-          end
-    
-        expect(corrected).to eq(''something'.to_sym')
-  end
-end
