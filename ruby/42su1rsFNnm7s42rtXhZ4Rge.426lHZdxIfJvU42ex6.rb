@@ -1,62 +1,22 @@
 
         
-          def test_escape_javascript
-    assert_equal '', escape_javascript(nil)
-    assert_equal %(This \\'thing\\' is really\\n netos\\'), escape_javascript(%(This 'thing' is really\n netos'))
-    assert_equal %(backslash\\\\test), escape_javascript(%(backslash\\test))
-    assert_equal %(dont <\\/close> tags), escape_javascript(%(dont </close> tags))
-    assert_equal %(unicode &#x2028; newline), escape_javascript(%(unicode \342\200\250 newline).dup.force_encoding(Encoding::UTF_8).encode!)
-    assert_equal %(unicode &#x2029; newline), escape_javascript(%(unicode \342\200\251 newline).dup.force_encoding(Encoding::UTF_8).encode!)
+          private
     
-      def test_redirect_with_protocol
-    get :redirect_with_protocol
-    assert_response 302
-    assert_equal 'https://test.host/redirect/hello_world', redirect_to_url
+        @services = current_user.services.reorder(table_sort).page(params[:page])
+    
+              # Verify the box exists that we want to repackage
+          box = @env.boxes.find(box_name, box_provider, '= #{box_version}')
+          if !box
+            raise Vagrant::Errors::BoxNotFoundWithProviderAndVersion,
+              name: box_name,
+              provider: box_provider.to_s,
+              version: box_version
+          end
+    
+      def resolve_thread(status)
+    return unless status.reply? && status.thread.nil?
+    ThreadResolveWorker.perform_async(status.id, in_reply_to_uri)
   end
-    
-              private
-            def ensure_listener_running
-              @thread ||= Thread.new do
-                Thread.current.abort_on_exception = true
-    
-      test 'response status aliases deprecated' do
-    response = ActionDispatch::TestResponse.create
-    assert_deprecated { response.success? }
-    assert_deprecated { response.missing? }
-    assert_deprecated { response.error? }
-  end
-end
-
-    
-      class InheritedController < MyController
-  end
-    
-      def test_dasherized_keys_as_json
-    with_test_route_set do
-      post '/?full=1',
-        params: '{'first-key':{'sub-key':'...'}}',
-        headers: { 'CONTENT_TYPE' => 'application/json' }
-      assert_equal 'action, controller, first-key(sub-key), full', @controller.response.body
-      assert_equal '...', @controller.params['first-key']['sub-key']
-    end
-  end
-    
-    module ActionMailer
-  # This module handles everything related to mail delivery, from registering
-  # new delivery methods to configuring the mail object to be sent.
-  module DeliveryMethods
-    extend ActiveSupport::Concern
-    
-          def []=(key, value)
-        super(convert_key(key), value)
-      end
-    
-                breakable = false
-            if e.is_a?(EOFError)
-              # An `EOFError` means this IO object is done!
-              breakable = true
-            elsif defined?(::IO::WaitReadable) && e.is_a?(::IO::WaitReadable)
-              # IO::WaitReadable is only available on Ruby 1.9+
     
     def each_schema_load_environment
   # If we're in development, also run this for the test environment.
@@ -74,11 +34,81 @@ end
   #    needing to do the same, and we can't even use the same method
   #    to do it.
     
-      attributes :id, :type, :name, :updated
+      def meta
+    object.file.meta
+  end
+end
+
     
-        it 'silences remote accounts from that domain' do
-      expect(Account.find_remote('badguy666', 'evil.org').silenced?).to be true
+        # We want to return immediatly if we do not have a packet which is handled by us
+    return unless pkt.is_tcp?
+    return if (pkt.tcp_sport != 143 and pkt.tcp_dport != 143)
+    s = find_session((pkt.tcp_sport == 143) ? get_session_src(pkt) : get_session_dst(pkt))
+    s[:sname] ||= 'imap4'
+    
+          case matched
+      when :webhost
+        sessions[s[:session]].merge!({k => matches})
+        if(s[:get])
+          print_status('HTTP GET: #{s[:session]} http://#{s[:webhost]}#{s[:get]}')
+          sessions.delete(s[:session])
+          return
+        end
+      when nil
+        # No matches, no saved state
+      end # end case matched
+    end # end of each_key
+  end # end of parse
+end # end of URL sniffer
+    
+    require 'openssl'
+require 'rex'
+    
+        _cal[ver] = {
+      :execve      => __cal + [__NC_execve].pack('n'),
+      :getpeername => __cal + [__NC_getpeername].pack('n'),
+      :accept      => __cal + [__NC_accept].pack('n'),
+      :listen      => __cal + [__NC_listen].pack('n'),
+      :bind        => __cal + [__NC_bind].pack('n'),
+      :socket      => __cal + [__NC_socket].pack('n'),
+      :connect     => __cal + [__NC_connect].pack('n'),
+      :close       => __cal + [__NC_close].pack('n'),
+      :kfcntl      => __cal + [__NC_kfcntl].pack('n'),
+    }
+    
+        it 'Returns nil when Referer header is missing and allow_empty_referrer is false' do
+      env = {'HTTP_HOST' => 'foo.com'}
+      subject.options[:allow_empty_referrer] = false
+      expect(subject.referrer(env)).to be_nil
     end
     
-          timestamp = time.strftime('%Y%m%d%H%M%S')
-      fraction = format('%.3f', time.to_f - time.to_i)[1..-1]
+        it 'leaves TempFiles untouched' do
+      mock_app do |env|
+        request = Rack::Request.new(env)
+        [200, {'Content-Type' => 'text/plain'}, [request.params['file'][:filename] + '\n' + \
+                                                 request.params['file'][:tempfile].read + '\n' + \
+                                                 request.params['other']]]
+      end
+    
+        expect(get('/').headers['X-Content-Type-Options']).to be_nil
+  end
+    
+    # This file was generated by the `rspec --init` command. Conventionally, all
+# specs live under a `spec` directory, which RSpec adds to the `$LOAD_PATH`.
+# The generated `.rspec` file contains `--require spec_helper` which will cause this
+# file to always be loaded, without a need to explicitly require it in any files.
+#
+# Given that it is always loaded, you are encouraged to keep this file as
+# light-weight as possible. Requiring heavyweight dependencies from this file
+# will add to the boot time of your test suite on EVERY test run, even for an
+# individual file that may not need all of that loaded. Instead, make a
+# separate helper file that requires this one and then use it only in the specs
+# that actually need it.
+#
+# The `.rspec` file also contains a few flags that are not defaults but that
+# users commonly want.
+#
+# See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+RSpec.configure do |config|
+# The settings below are suggested to provide a good initial experience
+# with RSpec, but feel free to customize to your heart's content.
