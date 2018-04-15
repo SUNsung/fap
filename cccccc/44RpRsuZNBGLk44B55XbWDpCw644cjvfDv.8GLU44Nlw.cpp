@@ -1,165 +1,96 @@
 
         
-        
-    {}  // namespace api
+          assert(peekType(msg) == thpp::Type::LONG_LONG);
+  int64_t arg4 = unpackInteger(msg);
+  assert(arg4 == LLONG_MAX);
     
-    #endif  // ATOM_BROWSER_ATOM_QUOTA_PERMISSION_CONTEXT_H_
-
+    #include 'ATen/Tensor.h'
+#include 'ATen/Context.h'
     
-     private:
-  const scoped_refptr<base::TaskRunner> file_task_runner_;
+    bool cudnn_is_acceptable(const Tensor& self) {
+  if (!globalContext().userEnabledCuDNN()) return false;
+  if (!self.is_cuda()) return false;
+  auto st = self.type().scalarType();
+  if (!(st == kDouble || st == kFloat || st == kHalf)) return false;
+  if (!AT_CUDNN_ENABLED()) return false;
+  // NB: In the old Python code, there was also a test to see if the
+  // cuDNN library was actually dynamically linked or not.  I'm not
+  // sure if we can actually test this.
+  return true;
+}
     
-     private:
-  std::string mime_type_;
-  std::string charset_;
-  scoped_refptr<base::RefCountedBytes> data_;
-  net::HttpStatusCode status_code_;
+    inline PyObject* load_scalar(void* data, at::ScalarType scalarType) {
+  switch (scalarType) {
+    case at::kByte: return THPUtils_packInt64(*(uint8_t*)data);
+    case at::kChar: return THPUtils_packInt64(*(char*)data);
+    case at::kShort: return THPUtils_packInt64(*(int16_t*)data);
+    case at::kInt: return THPUtils_packInt64(*(int32_t*)data);
+    case at::kLong: return THPUtils_packInt64(*(int64_t*)data);
+    case at::kHalf: return PyFloat_FromDouble(at::convert<double, at::Half>(*(at::Half*)data));
+    case at::kFloat: return PyFloat_FromDouble(*(float*)data);
+    case at::kDouble: return PyFloat_FromDouble(*(double*)data);
+    default: throw std::runtime_error('invalid type');
+  }
+}
     
-    typedef struct { int position; atom::AtomMenuModel* model; } MenuItem;
-typedef std::map<ui::Accelerator, MenuItem> AcceleratorTable;
-    
-    #ifndef ATOM_BROWSER_UI_DRAG_UTIL_H_
-#define ATOM_BROWSER_UI_DRAG_UTIL_H_
-    
-      std::unique_ptr<views::StatusIconLinux> icon_;
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(MenuModelAdapter);
+    template <typename T>
+struct constexpr_abs_helper<
+    T,
+    typename std::enable_if<
+        std::is_integral<T>::value && !std::is_same<T, bool>::value &&
+        std::is_unsigned<T>::value>::type> {
+  static constexpr T go(T t) {
+    return t;
+  }
 };
     
-    #endif  // ATOM_BROWSER_UI_VIEWS_WIN_FRAME_VIEW_H_
-
+      /*
+   * Returns a new TDigest constructed with values merged from the current
+   * digest and the given sortedValues.
+   */
+  TDigest merge(Range<const double*> sortedValues) const;
     
-      caffe::Datum datum;
-  datum.set_channels(2);  // one channel for each image in the pair
-  datum.set_height(rows);
-  datum.set_width(cols);
-  LOG(INFO) << 'A total of ' << num_items << ' items.';
-  LOG(INFO) << 'Rows: ' << rows << ' Cols: ' << cols;
-  for (int itemid = 0; itemid < num_items; ++itemid) {
-    int i = caffe::caffe_rng_rand() % num_items;  // pick a random  pair
-    int j = caffe::caffe_rng_rand() % num_items;
-    read_image(&image_file, &label_file, i, rows, cols,
-        pixels, &label_i);
-    read_image(&image_file, &label_file, j, rows, cols,
-        pixels + (rows * cols), &label_j);
-    datum.set_data(pixels, 2*rows*cols);
-    if (label_i  == label_j) {
-      datum.set_label(1);
-    } else {
-      datum.set_label(0);
-    }
-    datum.SerializeToString(&value);
-    std::string key_str = caffe::format_int(itemid, 8);
-    db->Put(leveldb::WriteOptions(), key_str, value);
-  }
+    enum : uint16_t {
+  kHeapMagic = 0xa5a5,
+  // This memory segment contains an IOBuf that is still in use
+  kIOBufInUse = 0x01,
+  // This memory segment contains buffer data that is still in use
+  kDataInUse = 0x02,
+};
     
-      static vector<string> LayerTypeList() {
-    CreatorRegistry& registry = Registry();
-    vector<string> layer_types;
-    for (typename CreatorRegistry::iterator iter = registry.begin();
-         iter != registry.end(); ++iter) {
-      layer_types.push_back(iter->first);
-    }
-    return layer_types;
-  }
+    using namespace folly;
     
-    #include 'caffe/layers/base_conv_layer.hpp'
+     private:
+  void onCompleted(AsyncIOOp* op);
+  void maybeDequeue();
     
-    /**
- * @brief A layer for learning 'embeddings' of one-hot vector input.
- *        Equivalent to an InnerProductLayer with one-hot vectors as input, but
- *        for efficiency the input is the 'hot' index of each column itself.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-template <typename Dtype>
-class EmbedLayer : public Layer<Dtype> {
- public:
-  explicit EmbedLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+    
+    {}  // namespace fuzzer
+    
+    // Parse a location, like:
+// \\?\UNC\Server\Share\  \\?\C:\  \\Server\Share\  \  C:\  C:
+// Returns number of characters considered if successful.
+static size_t ParseLocation(const std::string &FileName) {
+  size_t Pos = 0, Res;
     }
     
-    DEFINE_int32(driver_port, 0, 'Port for communication with driver');
-DEFINE_int32(server_port, 0, 'Port for operation as a server');
-DEFINE_string(credential_type, grpc::testing::kInsecureCredentialsType,
-              'Credential type for communication with driver');
+      void HandleMalloc(size_t Size);
     
-      bool Finished() {
-    return current_ >= db_.size();
-  }
+      /// Mutates data by adding a word from the temporary automatic dictionary.
+  size_t Mutate_AddWordFromTemporaryAutoDictionary(uint8_t *Data, size_t Size,
+                                                   size_t MaxSize);
     
-    namespace routeguide {
-class Feature;
-    }
+    using fuzzer::TS;
+using fuzzer::RecordingMemcmp;
     
-    #endif  // GRPC_INTERNAL_COMPILER_NODE_GENERATOR_HELPERS_H
-
+    bool ExecuteCommandAndReadOutput(const std::string &Command, std::string *Out) {
+  FILE *Pipe = OpenProcessPipe(Command.c_str(), 'r');
+  if (!Pipe) return false;
+  char Buff[1024];
+  size_t N;
+  while ((N = fread(Buff, 1, sizeof(Buff), Pipe)) > 0)
+    Out->append(Buff, N);
+  return true;
+}
     
-    // Tucks all generator state in an anonymous namespace away from
-// PythonGrpcGenerator and the header file, mostly to encourage future changes
-// to not require updates to the grpcio-tools C++ code part. Assumes that it is
-// only ever used from a single thread.
-struct PrivateGenerator {
-  const GeneratorConfiguration& config;
-  const grpc_generator::File* file;
-    }
-    
-    #ifndef TEST_QPS_USAGE_TIMER_H
-#define TEST_QPS_USAGE_TIMER_H
-    
-    #ifndef BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
-#define BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
-    
-      std::size_t check_for_completion(
-      const boost::system::error_code& ec,
-      std::size_t total_transferred)
-  {
-    return detail::adapt_completion_condition_result(
-        completion_condition_(ec, total_transferred));
-  }
-    
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
-    }
-    
-    template<class T, class TimeSystem>
-class base_time;
-    
-    // Calls to asio_handler_allocate and asio_handler_deallocate must be made from
-// a namespace that does not contain any overloads of these functions. The
-// boost_asio_handler_alloc_helpers namespace is defined here for that purpose.
-namespace boost_asio_handler_alloc_helpers {
-    }
-    
-    #define BOOST_ASIO_HANDSHAKE_HANDLER_CHECK( \
-    handler_type, handler) \
-  \
-  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
-      void(boost::system::error_code)) \
-    asio_true_handler_type; \
-  \
-  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
-      sizeof(boost::asio::detail::one_arg_handler_test( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>(), \
-          static_cast<const boost::system::error_code*>(0))) == 1, \
-      'HandshakeHandler type requirements not met') \
-  \
-  typedef boost::asio::detail::handler_type_requirements< \
-      sizeof( \
-        boost::asio::detail::argbyv( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>())) + \
-      sizeof( \
-        boost::asio::detail::lvref< \
-          asio_true_handler_type>()( \
-            boost::asio::detail::lvref<const boost::system::error_code>()), \
-        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
+    int ExecuteCommand(const std::string &Command);
