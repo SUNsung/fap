@@ -1,100 +1,147 @@
 
         
-          def replicate_states(self, state_coll_name):
-    state_list = self._metagraph.collection_def[state_coll_name]
-    num_states = len(state_list.node_list.value)
-    for replica_id in range(1, FLAGS.num_gpus):
-      for i in range(num_states):
-        state_list.node_list.value.append(state_list.node_list.value[i])
-    for replica_id in range(FLAGS.num_gpus):
-      for i in range(num_states):
-        index = replica_id * num_states + i
-        state_list.node_list.value[index] = with_autoparallel_prefix(
-            replica_id, state_list.node_list.value[index])
-    
-      Args:
-    seq: SequenceWrapper.
-    class_label: integer, starting from 0.
-    label_gain: bool. If True, class_label will be put on every timestep and
-      weight will increase linearly from 0 to 1.
-    
-        # Create training op.
-    assert mode == tf.estimator.ModeKeys.TRAIN
-    
-    data = data_utils
-    
-      summary_args = utils.Foo(display_interval=1, test_iters=100)
-    
-    py_library(
-    name = 'cifar10_input',
-    srcs = ['cifar10_input.py'],
-    srcs_version = 'PY2AND3',
-    visibility = ['//tensorflow:internal'],
-    deps = [
-        '//tensorflow:tensorflow_py',
-    ],
-)
-    
-    filegroup(
-    name = 'all_files',
-    srcs = glob(
-        ['**/*'],
-        exclude = [
-            '**/METADATA',
-            '**/OWNERS',
-        ],
-    ),
-    visibility = ['//tensorflow:__subpackages__'],
-)
-
-    
-        temporal_y_train = np.reshape(y_train, (len(y_train), 1, y_train.shape[1]))
-    temporal_y_train = np.repeat(temporal_y_train, timesteps, axis=1)
-    temporal_y_test = np.reshape(y_test, (len(y_test), 1, y_test.shape[1]))
-    temporal_y_test = np.repeat(temporal_y_test, timesteps, axis=1)
+                def get_auth(self, username=None, password=None):
+            assert self.raw_auth == USERNAME + SEP_CREDENTIALS + PASSWORD
+            assert username == USERNAME
+            assert password == PASSWORD
+            return basic_auth()
     
     
-@keras_test
-def test_TimeDistributed_trainable():
-    # test layers that need learning_phase to be set
-    x = Input(shape=(3, 2))
-    layer = wrappers.TimeDistributed(layers.BatchNormalization())
-    _ = layer(x)
-    assert len(layer.updates) == 2
-    assert len(layer.trainable_weights) == 2
-    layer.trainable = False
-    assert len(layer.updates) == 0
-    assert len(layer.trainable_weights) == 0
-    layer.trainable = True
-    assert len(layer.updates) == 2
-    assert len(layer.trainable_weights) == 2
-    
-            def __call__(self, hidden_dims):
-            return build_fn_reg(hidden_dims)
-    
-            layer_test(local.LocallyConnected2D,
-                   kwargs={'filters': filters,
-                           'kernel_size': (3, 3),
-                           'padding': padding,
-                           'kernel_regularizer': 'l2',
-                           'bias_regularizer': 'l2',
-                           'activity_regularizer': 'l2',
-                           'strides': strides,
-                           'data_format': 'channels_first'},
-                   input_shape=(num_samples, stack_size, num_row, num_col))
-    
-            name, domain = args[0:2]
-        module = sanitize_module_name(name)
-    
-        def __init__(self, method, *args):
-        self.testcase_pre = _create_testcase(method, '@%s pre-hook' % self.name)
-        self.testcase_post = _create_testcase(method, '@%s post-hook' % self.name)
-        self.args = args
-    
-    here = os.path.abspath(os.path.dirname(__file__))
+def get_stream_type(env, args):
+    '''Pick the right stream type based on `env` and `args`.
+    Wrap it in a partial with the type-specific args so that
+    we don't need to think what stream we are dealing with.
     
     
-@zope.interface.implementer(interfaces.IInstaller)
-@zope.interface.provider(interfaces.IPluginFactory)
-class Installer(common.Plugin):
-    '''Example Installer.'''
+@mock.patch('httpie.core.get_response')
+def test_timeout(get_response):
+    def error(msg, *args, **kwargs):
+        global error_msg
+        error_msg = msg % args
+    
+    '''
+import sys
+import errno
+import platform
+    
+            if self._output_file:
+            if self._resume and response.status_code == PARTIAL_CONTENT:
+                total_size = parse_content_range(
+                    response.headers.get('Content-Range'),
+                    self._resumed_from
+                )
+    
+    
+class ExitStatus:
+    '''Exit status code constants.'''
+    OK = 0
+    ERROR = 1
+    PLUGIN_ERROR = 7
+    
+        @cookies.setter
+    def cookies(self, jar):
+        '''
+        :type jar: CookieJar
+        '''
+        # http://docs.python.org/2/library/cookielib.html#cookie-objects
+        stored_attrs = ['value', 'path', 'secure', 'expires']
+        self['cookies'] = {}
+        for cookie in jar:
+            self['cookies'][cookie.name] = {
+                attname: getattr(cookie, attname)
+                for attname in stored_attrs
+            }
+    
+        def slow_format(self, x, base):
+        digits = []
+        sign = 0
+        if x < 0:
+            sign, x = 1, -x
+        while x:
+            x, r = divmod(x, base)
+            digits.append(int(r))
+        digits.reverse()
+        digits = digits or [0]
+        return '-'[:sign] + \
+               {2: '0b', 8: '0o', 10: '', 16: '0x'}[base] + \
+               ''.join('0123456789abcdef'[i] for i in digits)
+    
+            self = cls(transitions, type_indices, ttis, abbrs)
+        self.tzh = tzh
+    
+        def aliases_of(self, red, green, blue):
+        try:
+            name, aliases = self.__byrgb[(red, green, blue)]
+        except KeyError:
+            raise BadColor((red, green, blue)) from None
+        return [name] + aliases
+    
+        def test_oldargs0_1(self):
+        msg = r'keys\(\) takes no arguments \(1 given\)'
+        self.assertRaisesRegex(TypeError, msg, {}.keys, 0)
+    
+        def check_div(self, x, y):
+        '''Compute complex z=x*y, and check that z/x==y and z/y==x.'''
+        z = x * y
+        if x != 0:
+            q = z / x
+            self.assertClose(q, y)
+            q = z.__truediv__(x)
+            self.assertClose(q, y)
+        if y != 0:
+            q = z / y
+            self.assertClose(q, x)
+            q = z.__truediv__(y)
+            self.assertClose(q, x)
+    
+            # Check that the range.__contains__ optimization is only
+        # used for ints, not for instances of subclasses of int.
+        class C3(int):
+            def __eq__(self, other): return True
+        self.assertIn(C3(11), range(10))
+        self.assertIn(C3(11), list(range(10)))
+    
+            self.result = []
+    
+    # Can't import these from paths.py because that uses `future` imports
+DIR_OF_CURRENT_SCRIPT = os.path.dirname( os.path.abspath( __file__ ) )
+DIR_OF_YCMD = os.path.join( DIR_OF_CURRENT_SCRIPT, '..', '..', 'third_party',
+                            'ycmd' )
+    
+        Raises:
+        TimeoutError: If the entire result iterator could not be generated
+            before the given timeout.
+    '''
+    if timeout is not None:
+        end_time = timeout + time.time()
+    
+    # Workers are created as daemon threads and processes. This is done to allow the
+# interpreter to exit when there are still idle processes in a
+# ProcessPoolExecutor's process pool (i.e. shutdown() was not called). However,
+# allowing workers to die with the interpreter has two undesirable properties:
+#   - The workers would still be running during interpretor shutdown,
+#     meaning that they would fail in unpredictable ways.
+#   - The workers could be killed while evaluating a work item, which could
+#     be bad if the callable being evaluated has external side-effects e.g.
+#     writing to a file.
+#
+# To work around this problem, an exit handler is installed which tells the
+# workers to exit when their work queues are empty and then waits until the
+# threads/processes finish.
+    
+    # For 'manual' documents, if this is true, then toplevel headings are parts,
+# not chapters.
+#latex_use_parts = False
+    
+    def is_prime(n):
+    if n % 2 == 0:
+        return False
+    
+    
+def ExtractKeywordsFromGroup_Basic_test():
+  assert_that( syntax_parse._ExtractKeywordsFromGroup(
+                 syntax_parse.SyntaxGroup( '', [
+                   'foo bar',
+                   'zoo goo',
+                 ] ) ),
+               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
