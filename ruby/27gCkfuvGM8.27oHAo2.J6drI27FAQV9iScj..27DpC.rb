@@ -1,96 +1,160 @@
 
         
-          # body
-  xml.tag!('body') do
-    xml.tag!('outline', text: TITLE, title: TITLE) do
-      blogs.each do |blog|
-        xml.tag!('outline', type: 'rss', text: blog.name, title: blog.name,
-                            xmlUrl: blog.rss_url, htmlUrl: blog.web_url)
-      end
+                # Require the adapter itself and give useful feedback about
+        #   1. Missing adapter gems and
+        #   2. Adapter gems' missing dependencies.
+        path_to_adapter = 'action_cable/subscription_adapter/#{adapter}'
+        begin
+          require path_to_adapter
+        rescue LoadError => e
+          # We couldn't require the adapter itself. Raise an exception that
+          # points out config typos and missing gems.
+          if e.path == path_to_adapter
+            # We can assume that a non-builtin adapter was specified, so it's
+            # either misspelled or missing from Gemfile.
+            raise e.class, 'Could not load the '#{adapter}' Action Cable pubsub adapter. Ensure that the adapter is spelled correctly in config/cable.yml and that you've added the necessary adapter gem to your Gemfile.', e.backtrace
+    
+        test 'middleware that is 'use'd is called as part of the Rack application' do
+      result = @app.call(env_for('/'))
+      assert_equal ['Hello World'], [].tap { |a| result[2].each { |x| a << x } }
+      assert_equal 'Success', result[1]['Middleware-Test']
     end
-  end
-end
     
-        # insert substitutions into text at positions (Range or Fixnum)
-    # substitutions can be passed as array or as yields from the &block called with |substring, position, text|
-    # position is a range (begin..end)
-    def replace_substrings_at(text, positions, replacements = nil, &block)
-      offset = 0
-      positions.each_with_index do |p, i|
-        p       = (p...p) if p.is_a?(Fixnum)
-        from    = p.begin + offset
-        to      = p.end + offset
-        p       = p.exclude_end? ? (from...to) : (from..to)
-        # block returns the substitution, e.g.: { |text, pos| text[pos].upcase }
-        r       = replacements ? replacements[i] : block.call(text[p], p, text)
-        text[p] = r
-        # add the change in length to offset
-        offset  += r.size - (p.end - p.begin + (p.exclude_end? ? 0 : 1))
+      def test_parsing_json_doesnot_rescue_exception
+    req = Class.new(ActionDispatch::Request) do
+      def params_parsers
+        { json: Proc.new { |data| raise Interrupt } }
       end
-      text
-    end
-  end
-end
-
     
-      # Prepend all log lines with the following tags.
-  # config.log_tags = [ :subdomain, :uuid ]
+        # Helpers for creating and wrapping delivery behavior, used by DeliveryMethods.
+    module ClassMethods
+      # Provides a list of emails that have been delivered by Mail::TestMailer
+      delegate :deliveries, :deliveries=, to: Mail::TestMailer
     
-    task default: :test
-
-    
-    module Pod
-  class Command
-    class Init < Command
-      self.summary = 'Generate a Podfile for the current directory'
-      self.description = <<-DESC
-        Creates a Podfile for the current directory if none currently exists. If
-        an `XCODEPROJ` project file is specified or if there is only a single
-        project file in the current directory, targets will be automatically
-        generated based on targets defined in the project.
-    
-            def run
-          print_version
-          signal_end_of_output
-          listen
+          private
+        def file_name # :doc:
+          @_file_name ||= super.gsub(/_mailer/i, '')
         end
     
-          def escape_string(str)
-        str = @escaper.escape_url(str)        if @url
-        str = @escaper.escape_html(str)       if @html
-        str = @escaper.escape_javascript(str) if @javascript
-        str
+              if %w(Events Sync).include?(type)
+            name.prepend 'Backbone.'
+          elsif type == 'History'
+            name.prepend 'Backbone.history.'
+          elsif name == 'extend'
+            name.prepend '#{type}.'
+          elsif name.start_with? 'constructor'
+            name = type
+          elsif type != 'Utility'
+            name.prepend '#{type.downcase}.'
+          end
+    
+            css('.function').each do |node|
+          name = '#{node.at_css('.descname').content}()'
+          id = node.at_css('dt[id]')['id']
+          entries << [name, id]
+        end
+    
+            css('.method-signature', 'pre').each do |node|
+          node.name = 'pre'
+          node.content = node.content.strip
+          node['data-language'] = 'php'
+        end
+    
+      def test_file_share_delete
+    Dir.mktmpdir(__method__.to_s) do |tmpdir|
+      tmp = File.join(tmpdir, 'x')
+      File.open(tmp, mode: IO::WRONLY | IO::CREAT | IO::BINARY | IO::SHARE_DELETE) do |f|
+        assert_file.exist?(tmp)
+        assert_nothing_raised do
+          File.unlink(tmp)
+        end
+      end
+      assert_file.not_exist?(tmp)
+    end
+  end
+    
+    class TestEnv < Test::Unit::TestCase
+  IGNORE_CASE = /bccwin|mswin|mingw/ =~ RUBY_PLATFORM
+  PATH_ENV = 'PATH'
+  INVALID_ENVVARS = [
+    'foo\0bar',
+    '\xa1\xa1'.force_encoding(Encoding::UTF_16LE),
+    'foo'.force_encoding(Encoding::ISO_2022_JP),
+  ]
+    
+    describe :string_unpack_Aa, shared: true do
+  it 'decodes the number of bytes specified by the count modifier including NULL bytes' do
+    'a\x00bc'.unpack(unpack_format(3)+unpack_format).should == ['a\x00b', 'c']
+  end
+    
+      def setup
+    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
+    success = Dir.chdir DUMMY_PATH do
+      silence_stdout_if !ENV['VERBOSE'] do
+        system 'node', 'manifest.js', tmp_dir
+      end
+    end
+    assert success, 'Node.js Mincer compilation failed'
+    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
+    css_name = manifest['assets']['application.css']
+    @css = File.read('#{tmp_dir}/#{css_name}')
+  end
+end
+
+    
+        export LANG=en_US.UTF-8
+    DOC
+  else
+    STDERR.puts <<-DOC
+    \e[33mWARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
+    Consider adding the following to ~/.profile:
+    
+            def execute_repl_command(repl_command)
+          unless repl_command == '\n'
+            repl_commands = repl_command.split
+            subcommand = repl_commands.shift.capitalize
+            arguments = repl_commands
+            subcommand_class = Pod::Command::IPC.const_get(subcommand)
+            subcommand_class.new(CLAide::ARGV.new(arguments)).run
+            signal_end_of_output
+          end
+        end
       end
     end
   end
 end
 
     
-      it 'should not override the header if already set' do
-    mock_app with_headers('X-XSS-Protection' => '0')
-    expect(get('/', {}, 'wants' => 'text/html').headers['X-XSS-Protection']).to eq('0')
-  end
+            # Clones the template from the remote in the working directory using
+        # the name of the Pod.
+        #
+        # @return [void]
+        #
+        def clone_template
+          UI.section('Cloning `#{template_repo_url}` into `#{@name}`.') do
+            git! ['clone', template_repo_url, @name]
+          end
+        end
     
-    # This file was generated by the `rspec --init` command. Conventionally, all
-# specs live under a `spec` directory, which RSpec adds to the `$LOAD_PATH`.
-# The generated `.rspec` file contains `--require spec_helper` which will cause this
-# file to always be loaded, without a need to explicitly require it in any files.
-#
-# Given that it is always loaded, you are encouraged to keep this file as
-# light-weight as possible. Requiring heavyweight dependencies from this file
-# will add to the boot time of your test suite on EVERY test run, even for an
-# individual file that may not need all of that loaded. Instead, make a
-# separate helper file that requires this one and then use it only in the specs
-# that actually need it.
-#
-# The `.rspec` file also contains a few flags that are not defaults but that
-# users commonly want.
-#
-# See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-RSpec.configure do |config|
-# The settings below are suggested to provide a good initial experience
-# with RSpec, but feel free to customize to your heart's content.
+          private
     
-      it 'should not interfere with normal head requests' do
-    expect(head('/')).to be_ok
+            on roles(target_roles) do
+          unless test '[ -f #{file.to_s.shellescape} ]'
+            info 'Uploading #{prerequisite_file} to #{file}'
+            upload! File.open(prerequisite_file), file
+          end
+        end
+      end
+    end
+    
+        # Fetch a var from the context
+    # @param [Symbol] variable The variable to fetch
+    # @param [Object] default  The default value if not found
+    #
+    def fetch(*args)
+      context.fetch(*args)
+    end
+    
+      desc 'Published'
+  task :published do
   end
