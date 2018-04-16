@@ -1,113 +1,112 @@
 
         
-          test 'token_and_options returns empty string with empty token' do
-    token = ''.dup
-    actual = ActionController::HttpAuthentication::Token.token_and_options(sample_request(token)).first
-    expected = token
-    assert_equal(expected, actual)
-  end
-    
-        class MessageDelivery < ActionMailer::MessageDelivery # :nodoc:
-      def initialize(mailer_class, action, params, *args)
-        super(mailer_class, action, *args)
-        @params = params
-      end
-    
-            def set_expected_mail
-          @expected = Mail.new
-          @expected.content_type ['text', 'plain', { 'charset' => charset }]
-          @expected.mime_version = '1.0'
-        end
-    
-    # Emulate AV railtie
-require 'action_view'
-ActionMailer::Base.include(ActionView::Layouts)
-    
-        def length
-      @entries.length
-    end
-    
-        def contains?(url, options = nil)
-      !!subpath_to(url, options)
-    end
-    
-            css('> .section', '#preamble', 'a[href*='dict.html']', 'code var', 'code strong').each do |node|
-          node.before(node.children).remove
-        end
-    
-              # Underscore methods
-          if name.start_with?('Underscore')
-            node.at_css('~ ul').css('li').each do |li|
-              name = [type.downcase, li.at_css('a').content.split.first].join('.')
-              id = name.parameterize
-              li['id'] = id
-              entries << [name, id, type]
+                      when_connected do
+                send_command('unsubscribe')
+                @raw_client = nil
+              end
             end
-            next
-          end
     
-            css('.method-signature', 'pre').each do |node|
-          node.name = 'pre'
-          node.content = node.content.strip
-          node['data-language'] = 'php'
+            def test_spec_name_with_inline_config
+          spec = spec('adapter' => 'sqlite3')
+          assert_equal 'primary', spec.name, 'should default to primary id'
         end
-    
-            # Helper method to get access to the class variable. This is mostly
-        # exposed for tests. This shouldn't be mucked with directly, since it's
-        # structure may change at any time.
-        def registered; @@registered; end
       end
     end
   end
 end
 
     
-          def initialize(string)
-        @value = string
+        class TestCallbacksWithArgs < ActiveSupport::TestCase
+      test 'callbacks still work when invoking process with multiple arguments' do
+        controller = CallbacksWithArgs.new
+        controller.process(:index, ' Howdy!')
+        assert_equal 'Hello world Howdy!', controller.response_body
       end
-    
-              # Repackage the box
-          output_name = @env.vagrantfile.config.package.name || 'package.box'
-          output_path = Pathname.new(File.expand_path(output_name, FileUtils.pwd))
-          box.repackage(output_path)
-    
-            type = argv.shift.to_sym
-        name = argv.shift.to_sym
-    
-        def initialize(attributes={})
-      assign_attributes(attributes)
-      yield(self) if block_given?
     end
+  end
+end
+
     
-        @inner.log_level = log_level
-    Sass.logger = @inner
+        # Returns +text+ wrapped at +len+ columns and indented +indent+ spaces.
+    # By default column length +len+ equals 72 characters and indent
+    # +indent+ equal two spaces.
+    #
+    #   my_text = 'Here is a sample text with more than 40 characters'
+    #
+    #   format_paragraph(my_text, 25, 4)
+    #   # => '    Here is a sample text with\n    more than 40 characters'
+    def format_paragraph(text, len = 72, indent = 2)
+      sentences = [[]]
+    
+    FIXTURE_LOAD_PATH = File.expand_path('fixtures', __dir__)
+ActionMailer::Base.view_paths = FIXTURE_LOAD_PATH
+    
+    class ActionMailerI18nWithControllerTest < ActionDispatch::IntegrationTest
+  Routes = ActionDispatch::Routing::RouteSet.new
+  Routes.draw do
+    ActiveSupport::Deprecation.silence do
+      get ':controller(/:action(/:id))'
+    end
   end
     
-            def log_level?(level, min_level)
-          log_levels[level] >= log_levels[min_level]
-        end
+        alias_method :insert_before, :insert
     
-        # Returns a representation of the query as an array of strings and
-    # potentially {Sass::Script::Tree::Node}s (if there's interpolation in it).
-    # When the interpolation is resolved and the strings are joined together,
-    # this will be the string representation of this query.
-    #
-    # @return [Array<String, Sass::Script::Tree::Node>]
-    def to_a
-      Sass::Util.intersperse(queries.map {|q| q.to_a}, ', ').flatten
+          if dest.end_with? '/'
+        dest_dir.relative_path_from(base_dir).to_s.tap do |result|
+          result << '/' if result != '.'
+        end
+      else
+        dest_dir.parent.relative_path_from(base_dir).join(dest.split('/').last).to_s
+      end
     end
     
-            def on_send(node)
-          return unless node.receiver && node.method?(:freeze) &&
-                        immutable_literal?(node.receiver)
+              # Verify the box exists that we want to repackage
+          box = @env.boxes.find(box_name, box_provider, '= #{box_version}')
+          if !box
+            raise Vagrant::Errors::BoxNotFoundWithProviderAndVersion,
+              name: box_name,
+              provider: box_provider.to_s,
+              version: box_version
+          end
     
-            # @param lines [Array<String>]
-        # @param annotations [Array<(Integer, String)>]
-        #   each entry is the annotated line number and the annotation text
-        #
-        # @note annotations are sorted so that reconstructing the annotation
-        #   text via {#to_s} is deterministic
-        def initialize(lines, annotations)
-          @lines       = lines.freeze
-          @annotations = annotations.sort.freeze
-        end
+        def find_remote(username, domain)
+      AccountFinder.new(username, domain).account
+    end
+  end
+    
+      def updated
+    object.updated_at.iso8601
+  end
+    
+    require 'open-uri'
+require 'json'
+require 'strscan'
+require 'forwardable'
+require 'term/ansicolor'
+require 'fileutils'
+    
+        # #gradient > { @mixin horizontal ... }
+    # to:
+    # @mixin gradient-horizontal
+    def flatten_mixins(file, container, prefix)
+      log_transform container, prefix
+      replace_rules file, Regexp.escape(container) do |mixins_css|
+        unindent unwrap_rule_block(mixins_css).gsub(/@mixin\s*([\w-]+)/, '@mixin #{prefix}-\\1')
+      end
+    end
+    
+        def log_http_get_file(url, cached = false)
+      s = '  #{'CACHED ' if cached}GET #{url}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
+      end
+    end
+    
+      # Version of your assets, change this if you want to expire all your assets.
+  config.assets.version = '1.0'
+    
+      def test_image_helper
+    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
+  end
