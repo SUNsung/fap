@@ -1,267 +1,223 @@
 
         
-          content::WebContents* web_contents_;  // Weak Reference.
-  scoped_refptr<content::DevToolsAgentHost> agent_host_;
-    
-    #ifndef ATOM_BROWSER_API_ATOM_API_WEB_REQUEST_H_
-#define ATOM_BROWSER_API_ATOM_API_WEB_REQUEST_H_
-    
-    void AtomQuotaPermissionContext::RequestQuotaPermission(
-    const content::StorageQuotaParams& params,
-    int render_process_id,
-    const PermissionCallback& callback) {
-  callback.Run(response::QUOTA_PERMISSION_RESPONSE_ALLOW);
+        
+    {  if (value_type == kTypeDeletion) {
+    // End
+    valid_ = false;
+    saved_key_.clear();
+    ClearSavedValue();
+    direction_ = kForward;
+  } else {
+    valid_ = true;
+  }
 }
     
+    // Return the name of the sstable with the specified number
+// in the db named by 'dbname'.  The result will be prefixed with
+// 'dbname'.
+extern std::string TableFileName(const std::string& dbname, uint64_t number);
     
-    {  DISALLOW_COPY_AND_ASSIGN(LoginHandler);
-};
+      // If a seek to internal key 'k' in specified file finds an entry,
+  // call (*handle_result)(arg, found_key, found_value).
+  Status Get(const ReadOptions& options,
+             uint64_t file_number,
+             uint64_t file_size,
+             const Slice& k,
+             void* arg,
+             void (*handle_result)(void*, const Slice&, const Slice&));
     
-    #ifndef ATOM_BROWSER_NET_URL_REQUEST_ASYNC_ASAR_JOB_H_
-#define ATOM_BROWSER_NET_URL_REQUEST_ASYNC_ASAR_JOB_H_
+      for (DeletedFileSet::const_iterator iter = deleted_files_.begin();
+       iter != deleted_files_.end();
+       ++iter) {
+    PutVarint32(dst, kDeletedFile);
+    PutVarint32(dst, iter->first);   // level
+    PutVarint64(dst, iter->second);  // file number
+  }
     
-      // Sets the accelerator for |item|.
-  void RegisterAccelerator(DbusmenuMenuitem* item,
-                           const ui::Accelerator& accelerator);
-    
-    namespace atom {
-    }
-    
-      void EncodeTo(std::string* dst) const;
-  Status DecodeFrom(const Slice& src);
-    
-    class Env;
+    #ifndef STORAGE_LEVELDB_INCLUDE_DUMPFILE_H_
+#define STORAGE_LEVELDB_INCLUDE_DUMPFILE_H_
     
     #endif  // STORAGE_LEVELDB_INCLUDE_FILTER_POLICY_H_
 
     
-    bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DConeTwistConstraint_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DConeTwistConstraint(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getBFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFixThresh(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFixThresh(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan2(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan1(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFrames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistAngle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistSpan(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setDamping(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getAFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_enableMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_Physics3DConeTwistConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+    void convert_dataset(const char* image_filename, const char* label_filename,
+        const char* db_filename) {
+  // Open files
+  std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
+  std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
+  CHECK(image_file) << 'Unable to open file ' << image_filename;
+  CHECK(label_file) << 'Unable to open file ' << label_filename;
+  // Read the magic and the meta data
+  uint32_t magic;
+  uint32_t num_items;
+  uint32_t num_labels;
+  uint32_t rows;
+  uint32_t cols;
+    }
+    
+      virtual inline int MinBottomBlobs() const { return 1; }
+  virtual inline int MinTopBlobs() const { return 1; }
+  virtual inline bool EqualNumBottomTopBlobs() const { return true; }
+    
+      /**
+   * @brief Computes the Contrastive error gradient w.r.t. the inputs.
+   *
+   * Computes the gradients with respect to the two input vectors (bottom[0] and
+   * bottom[1]), but not the similarity label (bottom[2]).
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+   *      This Blob's diff will simply contain the loss_weight* @f$ \lambda @f$,
+   *      as @f$ \lambda @f$ is the coefficient of this layer's output
+   *      @f$\ell_i@f$ in the overall Net loss
+   *      @f$ E = \lambda_i \ell_i + \mbox{other loss terms}@f$; hence
+   *      @f$ \frac{\partial E}{\partial \ell_i} = \lambda_i @f$.
+   *      (*Assuming that this top Blob is not used as a bottom (input) by any
+   *      other layer of the Net.)
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$a@f$; Backward fills their diff with
+   *      gradients if propagate_down[0]
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$b@f$; Backward fills their diff with gradients if
+   *      propagate_down[1]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    namespace caffe {
+    }
     
     
-#endif // __cocos2dx_navmesh_h__
-#endif //#if CC_USE_NAVMESH
+    {}  // namespace caffe
+    
+    namespace caffe {
+    }
+    
+      /// Sets the non-blocking mode of the acceptor.
+  /**
+   * @param mode If @c true, the acceptor's synchronous operations will fail
+   * with boost::asio::error::would_block if they are unable to perform the
+   * requested operation immediately. If @c false, synchronous operations will
+   * block until complete.
+   *
+   * @param ec Set to indicate what error occurred, if any.
+   *
+   * @note The non-blocking mode has no effect on the behaviour of asynchronous
+   * operations. Asynchronous operations will never fail with the error
+   * boost::asio::error::would_block.
+   */
+  boost::system::error_code non_blocking(
+      bool mode, boost::system::error_code& ec)
+  {
+    return this->get_service().non_blocking(
+        this->get_implementation(), mode, ec);
+  }
+    
+    
+    {  // The data in the buffer.
+  detail::buffered_stream_storage storage_;
+};
+    
+    template <typename CompletionCondition>
+class base_from_completion_cond
+{
+protected:
+  explicit base_from_completion_cond(CompletionCondition completion_condition)
+    : completion_condition_(completion_condition)
+  {
+  }
+    }
+    
+    #include <boost/asio/detail/pop_options.hpp>
+    
+    
+    {private:
+  // The top of the stack of calls for the current thread.
+  static tss_ptr<context> top_;
+};
+    
+    #endif // BOOST_ASIO_DETAIL_DATE_TIME_FWD_HPP
 
     
+    inline std::size_t calculate_hash_value(int i)
+{
+  return static_cast<std::size_t>(i);
+}
     
+    #if defined(BOOST_ASIO_HAS_DEV_POLL)
     
-    #if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,'invalid 'cobj' in function 'lua_cocos2dx_physics_PhysicsJointMotor_createConstraints'', nullptr);
-        return 0;
+    namespace boost {
+namespace asio {
+namespace detail {
     }
+    }
+    }
+    
+        // stream signature
+    stb_out(0x57); stb_out(0xbc);
+    stb_out2(0);
+    
+    IMGUI_API bool        ImGui_ImplDX10_Init(void* hwnd, ID3D10Device* device);
+IMGUI_API void        ImGui_ImplDX10_Shutdown();
+IMGUI_API void        ImGui_ImplDX10_NewFrame();
+IMGUI_API void        ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
+    
+        // Upload texture to graphics system
+    g_FontTexture = new CIwTexture();
+    g_FontTexture->SetModifiable(true);
+    CIwImage& image = g_FontTexture->GetImage();
+    image.SetFormat(CIwImage::ARGB_8888);
+    image.SetWidth(width);
+    image.SetHeight(height);
+    image.SetBuffers();                                    // allocates and own buffers
+    image.ReadTexels(pixels);
+    g_FontTexture->SetMipMapping(false);
+    g_FontTexture->SetFiltering(false);
+    g_FontTexture->Upload();
+    
+            // 1. Show a simple window.
+        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
+            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    }
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+                ImGui::Text('NavInputs down:'); for (int i = 0; i < IM_ARRAYSIZE(io.NavInputs); i++) if (io.NavInputs[i] > 0.0f)                    { ImGui::SameLine(); ImGui::Text('[%d] %.2f', i, io.NavInputs[i]); }
+            ImGui::Text('NavInputs pressed:'); for (int i = 0; i < IM_ARRAYSIZE(io.NavInputs); i++) if (io.NavInputsDownDuration[i] == 0.0f)    { ImGui::SameLine(); ImGui::Text('[%d]', i); }
+            ImGui::Text('NavInputs duration:'); for (int i = 0; i < IM_ARRAYSIZE(io.NavInputs); i++) if (io.NavInputsDownDuration[i] >= 0.0f)   { ImGui::SameLine(); ImGui::Text('[%d] %.2f', i, io.NavInputsDownDuration[i]); }
+    
+                if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+                counter++;
+            ImGui::SameLine();
+            ImGui::Text('counter = %d', counter);
+    
+    // Helpers: Math
+// We are keeping those not leaking to the user by default, in the case the user has implicit cast operators between ImVec2 and its own types (when IM_VEC2_CLASS_EXTRA is defined)
+#ifdef IMGUI_DEFINE_MATH_OPERATORS
+static inline ImVec2 operator*(const ImVec2& lhs, const float rhs)              { return ImVec2(lhs.x*rhs, lhs.y*rhs); }
+static inline ImVec2 operator/(const ImVec2& lhs, const float rhs)              { return ImVec2(lhs.x/rhs, lhs.y/rhs); }
+static inline ImVec2 operator+(const ImVec2& lhs, const ImVec2& rhs)            { return ImVec2(lhs.x+rhs.x, lhs.y+rhs.y); }
+static inline ImVec2 operator-(const ImVec2& lhs, const ImVec2& rhs)            { return ImVec2(lhs.x-rhs.x, lhs.y-rhs.y); }
+static inline ImVec2 operator*(const ImVec2& lhs, const ImVec2& rhs)            { return ImVec2(lhs.x*rhs.x, lhs.y*rhs.y); }
+static inline ImVec2 operator/(const ImVec2& lhs, const ImVec2& rhs)            { return ImVec2(lhs.x/rhs.x, lhs.y/rhs.y); }
+static inline ImVec2& operator+=(ImVec2& lhs, const ImVec2& rhs)                { lhs.x += rhs.x; lhs.y += rhs.y; return lhs; }
+static inline ImVec2& operator-=(ImVec2& lhs, const ImVec2& rhs)                { lhs.x -= rhs.x; lhs.y -= rhs.y; return lhs; }
+static inline ImVec2& operator*=(ImVec2& lhs, const float rhs)                  { lhs.x *= rhs; lhs.y *= rhs; return lhs; }
+static inline ImVec2& operator/=(ImVec2& lhs, const float rhs)                  { lhs.x /= rhs; lhs.y /= rhs; return lhs; }
+static inline ImVec4 operator+(const ImVec4& lhs, const ImVec4& rhs)            { return ImVec4(lhs.x+rhs.x, lhs.y+rhs.y, lhs.z+rhs.z, lhs.w+rhs.w); }
+static inline ImVec4 operator-(const ImVec4& lhs, const ImVec4& rhs)            { return ImVec4(lhs.x-rhs.x, lhs.y-rhs.y, lhs.z-rhs.z, lhs.w-rhs.w); }
+static inline ImVec4 operator*(const ImVec4& lhs, const ImVec4& rhs)            { return ImVec4(lhs.x*rhs.x, lhs.y*rhs.y, lhs.z*rhs.z, lhs.w*rhs.w); }
 #endif
-    
-    
-    
-        glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, 0, glVertices);
-    glDrawArrays(GL_LINE_LOOP, 0, 4);
-    
-    #endif
-
-    
-    
-    {	b2Body* m_attachment;
-	b2Body* m_platform;
-	float32 m_speed;
-};
-    
-    			b2Body* prevBody = ground;
-			for (int32 i = 0; i < e_count; ++i)
-			{
-				b2BodyDef bd;
-				bd.type = b2_dynamicBody;
-				bd.position.Set(-14.5f + 1.0f * i, 5.0f);
-				b2Body* body = m_world->CreateBody(&bd);
-				body->CreateFixture(&fd);
-    }
-    
-    
-    {	b2Body* m_middle;
-};
-    
-    // Implemented features:
-//  [X] User texture binding. Use 'CIwTexture*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-    
-    IMGUI_API bool        ImGui_ImplGlfwGL3_Init(GLFWwindow* window, bool install_callbacks, const char* glsl_version = NULL);
-IMGUI_API void        ImGui_ImplGlfwGL3_Shutdown();
-IMGUI_API void        ImGui_ImplGlfwGL3_NewFrame();
-IMGUI_API void        ImGui_ImplGlfwGL3_RenderDrawData(ImDrawData* draw_data);
-    
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-    // Implemented features:
-//  [X] User texture binding. Cast 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-// Missing features:
-//  [ ] SDL2 handling of IME under Windows appears to be broken and it explicitly disable the regular Windows IME. You can restore Windows IME by compiling SDL with SDL_DISABLE_WINDOWS_IME.
-    
-    // Helper: Manually clip large list of items.
-// If you are submitting lots of evenly spaced items and you have a random access to the list, you can perform coarse clipping based on visibility to save yourself from processing those items at all.
-// The clipper calculates the range of visible items and advance the cursor to compensate for the non-visible items we have skipped. 
-// ImGui already clip items based on their bounds but it needs to measure text size to do so. Coarse clipping before submission makes this cost and your own data fetching/submission cost null.
-// Usage:
-//     ImGuiListClipper clipper(1000);  // we have 1000 elements, evenly spaced.
-//     while (clipper.Step())
-//         for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
-//             ImGui::Text('line number %d', i);
-// - Step 0: the clipper let you process the first element, regardless of it being visible or not, so we can measure the element height (step skipped if we passed a known height as second arg to constructor).
-// - Step 1: the clipper infer height from first element, calculate the actual range of elements to display, and position the cursor before the first element.
-// - (Step 2: dummy step only required if an explicit items_height was passed to constructor or Begin() and user call Step(). Does nothing and switch to Step 3.)
-// - Step 3: the clipper validate that we have reached the expected Y position (corresponding to element DisplayEnd), advance the cursor to the end of the list and then returns 'false' to end the loop.
-struct ImGuiListClipper
-{
-    float   StartPosY;
-    float   ItemsHeight;
-    int     ItemsCount, StepNo, DisplayStart, DisplayEnd;
-    }
-    
-    // DirectX data
-static LPDIRECT3DDEVICE9        g_pd3dDevice = NULL;
-static LPDIRECT3DVERTEXBUFFER9  g_pVB = NULL;
-static LPDIRECT3DINDEXBUFFER9   g_pIB = NULL;
-static LPDIRECT3DTEXTURE9       g_FontTexture = NULL;
-static int                      g_VertexBufferSize = 5000, g_IndexBufferSize = 10000;
-    
-    static uint32_t ImGui_ImplGlfwVulkan_MemoryType(VkMemoryPropertyFlags properties, uint32_t type_bits)
-{
-    VkPhysicalDeviceMemoryProperties prop;
-    vkGetPhysicalDeviceMemoryProperties(g_Gpu, &prop);
-    for (uint32_t i = 0; i < prop.memoryTypeCount; i++)
-        if ((prop.memoryTypes[i].propertyFlags & properties) == properties && type_bits & (1<<i))
-            return i;
-    return 0xffffffff; // Unable to find memoryType
-}
-    
-    
-    {    return 0;
-}
-
-    
-    
-/*
- * DumpCrashStack.h
- *
- *  Created on: 2012-9-28
- *      Author: yerungui
- */
-    
-        if (st.url_length + st.head_length > st.total_length) return __LINE__;
-    
-            __FirstGetCreater(T::ServiceName());
-    
-    
-    
-    
-    {  private:
-    JavaVM* vm_;
-    JNIEnv* env_;
-    bool we_attach_;
-    int status_;
-};
-    
-    std::string CloneArgsWithoutX(const std::vector<std::string> &Args,
-                              const char *X1, const char *X2) {
-  std::string Cmd;
-  for (auto &S : Args) {
-    if (FlagValue(S.c_str(), X1) || FlagValue(S.c_str(), X2))
-      continue;
-    Cmd += S + ' ';
-  }
-  return Cmd;
-}
-    
-    private:
-  void AlarmCallback();
-  void CrashCallback();
-  void InterruptCallback();
-  void MutateAndTestOne();
-  void ReportNewCoverage(InputInfo *II, const Unit &U);
-  size_t RunOne(const Unit &U) { return RunOne(U.data(), U.size()); }
-  void WriteToOutputCorpus(const Unit &U);
-  void WriteUnitToFileWithPrefix(const Unit &U, const char *Prefix);
-  void PrintStats(const char *Where, const char *End = '\n', size_t Units = 0);
-  void PrintStatusForNewUnit(const Unit &U);
-  void ShuffleCorpus(UnitVector *V);
-  void AddToCorpus(const Unit &U);
-  void CheckExitOnSrcPosOrItem();
-    
-    // The control file example:
-//
-// 3 # The number of inputs
-// 1 # The number of inputs in the first corpus, <= the previous number
-// file0
-// file1
-// file2  # One file name per line.
-// STARTED 0 123  # FileID, file size
-// DONE 0 1 4 6 8  # FileID COV1 COV2 ...
-// STARTED 1 456  # If DONE is missing, the input crashed while processing.
-// STARTED 2 567
-// DONE 2 8 9
-bool Merger::Parse(std::istream &IS, bool ParseCoverage) {
-  LastFailure.clear();
-  std::string Line;
-    }
-    
-    /* public API - prototypes - TODO: doxygen*/
-    
-      pid_t Pid;
-  char **Environ = environ; // Read from global
-  const char *CommandCStr = Command.c_str();
-  const char *Argv[] = {'sh', '-c', CommandCStr, NULL};
-  int ErrorCode = 0, ProcessStatus = 0;
-  // FIXME: We probably shouldn't hardcode the shell path.
-  ErrorCode = posix_spawn(&Pid, '/bin/sh', NULL, &SpawnAttributes,
-                          (char *const *)Argv, Environ);
-  (void)posix_spawnattr_destroy(&SpawnAttributes);
-  if (!ErrorCode) {
-    pid_t SavedPid = Pid;
-    do {
-      // Repeat until call completes uninterrupted.
-      Pid = waitpid(SavedPid, &ProcessStatus, /*options=*/0);
-    } while (Pid == -1 && errno == EINTR);
-    if (Pid == -1) {
-      // Fail for some other reason.
-      ProcessStatus = -1;
-    }
-  } else if (ErrorCode == ENOMEM || ErrorCode == EAGAIN) {
-    // Fork failure.
-    ProcessStatus = -1;
-  } else {
-    // Shell execution failure.
-    ProcessStatus = W_EXITCODE(127, 0);
-  }
