@@ -1,172 +1,78 @@
 
         
-            for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
-    {
-        g_driverType = driverTypes[driverTypeIndex];
-        hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-                D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
-        if (SUCCEEDED(hr))
-            break;
+        /// Status get a list of active extenions.
+Status getExtensions(ExtensionList& extensions);
+    
+      /**
+   * @brief See the usesLogStatus method, log a Glog status.
+   *
+   * @param log A vector of parsed Glog log lines.
+   * @return Status non-op indicating success or failure.
+   */
+  virtual Status logStatus(const std::vector<StatusLogLine>& log) {
+    (void)log;
+    return Status(1, 'Not enabled');
+  }
+    
+    /**
+ * @brief Getter for an instance uuid
+ *
+ * @return ok on success and ident is set to the instance uuid, otherwise
+ * failure.
+ */
+Status getInstanceUUID(std::string& ident);
+    
+    static int osquery_close(dev_t dev, int flag, int fmt, struct proc *p) {
+  // Only one daemon should request a close.
+  lck_mtx_lock(osquery.mtx);
+  if (osquery.open_count == 1) {
+    unsubscribe_all_events();
+    cleanup_user_kernel_buffer();
+    osquery.open_count--;
+  }
+  lck_mtx_unlock(osquery.mtx);
     }
-    if (FAILED(hr))
-        return hr;
+    
+    /**
+ * @brief Access the internal storage of the Decorator parser.
+ *
+ * The decoration set is a map of column name to value. It contains the opaque
+ * set of decoration point results.
+ *
+ * Decorations are applied to log items before they are sent to the downstream
+ * logging APIs: logString, logSnapshot, etc.
+ *
+ * @param results the output parameter to write decorations.
+ */
+void getDecorations(std::map<std::string, std::string>& results);
+    
+    #include <gtest/gtest.h>
+    
+    DEFINE_FIND_STATIC_METHOD(KXlog_logWrite, KXlog, 'logWrite', '(Lcom/tencent/mars/xlog/Xlog$XLoggerInfo;Ljava/lang/String;)V')
+JNIEXPORT void JNICALL Java_com_tencent_mars_xlog_Xlog_logWrite
+  (JNIEnv *env, jclass, jobject _log_info, jstring _log) {
+    }
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
     
     
-    {    cvReleaseMat( &(*state)->preFilteredImg0 );
-    cvReleaseMat( &(*state)->preFilteredImg1 );
-    cvReleaseMat( &(*state)->slidingSumBuf );
-    cvReleaseMat( &(*state)->disp );
-    cvReleaseMat( &(*state)->cost );
-    cvFree( state );
+    {    SPY_DETACH_VARIABLE('TestFun0 i');
 }
     
-    void ComputeJacobians(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
-                      const IntrinsicParams& param,  InputArray omc, InputArray Tc,
-                      const int& check_cond, const double& thresh_cond, Mat& JJ2_inv, Mat& ex3);
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
     
     
-    {    test_array[INPUT].push_back(NULL);
-    test_array[OUTPUT].push_back(NULL);
-    test_array[REF_OUTPUT].push_back(NULL);
-}
-    
-    #endif /* OPENCV_CUDA_WARP_REDUCE_HPP__ */
-
-    
-    namespace cv
-{
-CV_EXPORTS_W void add(InputArray src1, Scalar src2, OutputArray dst, InputArray mask=noArray(), int dtype=-1);
-    }
-    
-      // Computes all the cross product distances of the points perpendicular to
-  // the given direction, ignoring distances outside of the give distance range,
-  // storing the actual (signed) cross products in distances_.
-  void ComputeConstrainedDistances(const FCOORD& direction,
-                                   double min_dist, double max_dist);
-    
-    
-    {}  // namespace tesseract.
-    
-      tesseract::ParagraphJustification justification() const {
-    return justification_;
-  }
-  int margin() const { return margin_; }
-  int first_indent() const { return first_indent_; }
-  int body_indent() const { return body_indent_; }
-  int tolerance() const { return tolerance_; }
-  bool is_flush() const {
-    return (justification_ == tesseract::JUSTIFICATION_LEFT ||
-            justification_ == tesseract::JUSTIFICATION_RIGHT) &&
-        abs(first_indent_ - body_indent_) <= tolerance_;
-  }
-    
-    #include 'intfeaturedist.h'
-#include 'intfeaturemap.h'
-    
-    #ifndef TESSERACT_CLASSIFY_INTFEATUREDIST_H_
-#define TESSERACT_CLASSIFY_INTFEATUREDIST_H_
-    
-      // Store the specified number as the sequence number for the start of
-  // this batch.
-  static void SetSequence(WriteBatch* batch, SequenceNumber seq);
-    
-      for (size_t i = 0; i < 3; ++i) {
-    std::string res;
-    ASSERT_OK(db->Get(ReadOptions(), keys[i], &res));
-    ASSERT_TRUE(res == vals[i]);
-  }
-    
-      // create first key range
-  leveldb::WriteBatch batch;
-  for (size_t i = 0; i < kNumKeys; i++) {
-    batch.Put(Key1(i), 'value for range 1 key');
-  }
-  ASSERT_OK(db->Write(leveldb::WriteOptions(), &batch));
-    
-    Slice BlockBuilder::Finish() {
-  // Append restart array
-  for (size_t i = 0; i < restarts_.size(); i++) {
-    PutFixed32(&buffer_, restarts_[i]);
-  }
-  PutFixed32(&buffer_, restarts_.size());
-  finished_ = true;
-  return Slice(buffer_);
-}
-    
-      // Write metaindex block
-  if (ok()) {
-    BlockBuilder meta_index_block(&r->options);
-    if (r->filter_block != NULL) {
-      // Add mapping from 'filter.Name' to location of filter data
-      std::string key = 'filter.';
-      key.append(r->options.filter_policy->Name());
-      std::string handle_encoding;
-      filter_block_handle.EncodeTo(&handle_encoding);
-      meta_index_block.Add(key, handle_encoding);
-    }
-    }
-    
-    Status ReadFileToString(Env* env, const std::string& fname, std::string* data) {
-  data->clear();
-  SequentialFile* file;
-  Status s = env->NewSequentialFile(fname, &file);
-  if (!s.ok()) {
-    return s;
-  }
-  static const int kBufferSize = 8192;
-  char* space = new char[kBufferSize];
-  while (true) {
-    Slice fragment;
-    s = file->Read(kBufferSize, &fragment, space);
-    if (!s.ok()) {
-      break;
-    }
-    data->append(fragment.data(), fragment.size());
-    if (fragment.empty()) {
-      break;
-    }
-  }
-  delete[] space;
-  delete file;
-  return s;
-}
-    
-    #include 'jsapi.h'
-#include 'jsfriendapi.h'
-    
-    extern JSClass  *jsb_cocos2d_PhysicsSprite3D_class;
-extern JSObject *jsb_cocos2d_PhysicsSprite3D_prototype;
-    
-    
-    
-    
-    
-    #if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-    
-        GLfloat                glVertices[] = {
-        aabb->lowerBound.x * mRatio, aabb->lowerBound.y * mRatio,
-        aabb->upperBound.x * mRatio, aabb->lowerBound.y * mRatio,
-        aabb->upperBound.x * mRatio, aabb->upperBound.y * mRatio,
-        aabb->lowerBound.x * mRatio, aabb->upperBound.y * mRatio
-    };
-    
-        virtual void DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color);
-    
-    	void Step(Settings* settings)
-	{
-		// Drive the kinematic body.
-		if (m_platform->GetType() == b2_kinematicBody)
-		{
-			b2Vec2 p = m_platform->GetTransform().p;
-			b2Vec2 v = m_platform->GetLinearVelocity();
-    }
-    }
-    
-    			b2FixtureDef fd;
-			fd.shape = &shape;
-			fd.density = 1.0f;
-    
-    			m_bullet = m_world->CreateBody(&bd);
-			m_bullet->CreateFixture(&box, 100.0f);
+    {  private:
+    JavaVM* vm_;
+    JNIEnv* env_;
+    bool we_attach_;
+    int status_;
+};
