@@ -1,300 +1,334 @@
 
         
-                // cross two lines
-        Point2f origin1 = quad_corners[0];
-        Point2f dir1 = quad_corners[1] - quad_corners[0];
-        Point2f origin2 = quad_corners[2];
-        Point2f dir2 = quad_corners[3] - quad_corners[2];
-        double angle = acos(dir1.dot(dir2)/(norm(dir1)*norm(dir2)));
-        if(cvIsNaN(angle) || cvIsInf(angle) || angle < 0.5 || angle > CV_PI - 0.5) continue;
-    
-    //! @endcond
-    
-    int lapack_LU32f(float* a, size_t a_step, int m, float* b, size_t b_step, int n, int* info);
-int lapack_LU64f(double* a, size_t a_step, int m, double* b, size_t b_step, int n, int* info);
-int lapack_Cholesky32f(float* a, size_t a_step, int m, float* b, size_t b_step, int n, bool* info);
-int lapack_Cholesky64f(double* a, size_t a_step, int m, double* b, size_t b_step, int n, bool* info);
-int lapack_SVD32f(float* a, size_t a_step, float* w, float* u, size_t u_step, float* vt, size_t v_step, int m, int n, int flags);
-int lapack_SVD64f(double* a, size_t a_step, double* w, double* u, size_t u_step, double* vt, size_t v_step, int m, int n, int flags);
-int lapack_QR32f(float* src1, size_t src1_step, int m, int n, int k, float* src2, size_t src2_step, float* dst, int* info);
-int lapack_QR64f(double* src1, size_t src1_step, int m, int n, int k, double* src2, size_t src2_step, double* dst, int* info);
-int lapack_gemm32f(const float* src1, size_t src1_step, const float* src2, size_t src2_step,
-                   float alpha, const float* src3, size_t src3_step, float beta, float* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm64f(const double* src1, size_t src1_step, const double* src2, size_t src2_step,
-                   double alpha, const double* src3, size_t src3_step, double beta, double* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm32fc(const float* src1, size_t src1_step, const float* src2, size_t src2_step,
-                   float alpha, const float* src3, size_t src3_step, float beta, float* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm64fc(const double* src1, size_t src1_step, const double* src2, size_t src2_step,
-                   double alpha, const double* src3, size_t src3_step, double beta, double* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-    
-        static void* GetProcAddress (const char* name)
-    {
-        static void* h = NULL;
-        if (!h)
-        {
-            h = dlopen('libclAmdBlas.so', RTLD_LAZY | RTLD_GLOBAL);
-            if (!h)
-                return NULL;
-        }
-    }
-    
-      /// Get a reference to the lowest layer.
-  lowest_layer_type& lowest_layer()
-  {
-    return next_layer_.lowest_layer();
-  }
-    
-    template <typename Stream>
-class buffered_read_stream;
-    
-    #ifndef BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
-#define BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-// Nothing to include.
-#elif defined(BOOST_ASIO_HAS_STD_ATOMIC)
-# include <atomic>
-#else // defined(BOOST_ASIO_HAS_STD_ATOMIC)
-# include <boost/detail/atomic_count.hpp>
-#endif // defined(BOOST_ASIO_HAS_STD_ATOMIC)
-    
-    
-    {private:
-  Handler handler_;
-};
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-      // Dispatch the waiting events.
-  for (int i = 0; i < num_events; ++i)
-  {
-    int descriptor = events[i].fd;
-    if (descriptor == interrupter_.read_descriptor())
-    {
-      interrupter_.reset();
-    }
-    else
-    {
-      bool more_reads = false;
-      bool more_writes = false;
-      bool more_except = false;
-    }
-    }
-    
-      gen::byLine('/proc/mounts') | gen::eachAs<StringPiece>() |
-      [&](StringPiece line) {
-        parts.clear();
-        split(' ', line, parts);
-        // device path fstype options uid gid
-        if (parts.size() != 6) {
-          throw std::runtime_error('Invalid /proc/mounts line');
-        }
-        if (parts[2] != 'hugetlbfs') {
-          return; // we only care about hugetlbfs
-        }
-    }
-    
-    
-    {} // namespace folly
+        
+    {}  // namespace atom
 
     
-    #include <folly/experimental/logging/LogHandlerFactory.h>
+    #include 'atom/browser/net/asar/url_request_asar_job.h'
+#include 'net/base/filename_util.h'
+#include 'net/base/net_errors.h'
     
-    std::shared_ptr<LogWriter> FileWriterFactory::createWriter(File file) {
-  // Determine whether we should use ImmediateFileWriter or AsyncFileWriter
-  if (async_) {
-    auto asyncWriter = make_shared<AsyncFileWriter>(std::move(file));
-    if (maxBufferSize_.hasValue()) {
-      asyncWriter->setMaxBufferSize(maxBufferSize_.value());
-    }
-    return asyncWriter;
-  } else {
-    if (maxBufferSize_.hasValue()) {
-      throw std::invalid_argument(to<string>(
-          'the \'max_buffer_size\' option is only valid for async file '
-          'handlers'));
-    }
-    return make_shared<ImmediateFileWriter>(std::move(file));
-  }
-}
+     private:
+  const scoped_refptr<base::TaskRunner> file_task_runner_;
     
-    bool LogCategoryConfig::operator!=(const LogCategoryConfig& other) const {
-  return !(*this == other);
-}
+      // Manages our notification registrations.
+  content::NotificationRegistrar registrar_;
     
+      std::unique_ptr<views::StatusIconLinux> icon_;
     
-    {  /**
-   * An optional list of LogHandler names to use for this category.
-   *
-   * When applying config changes to an existing LogCategory, the existing
-   * LogHandler list will be left unchanged if this field is unset.
-   */
-  Optional<std::vector<std::string>> handlers;
-};
-    
-    namespace folly {
+    namespace {
     }
     
-    LogHandlerConfig::LogHandlerConfig(Optional<StringPiece> t, Options opts)
-    : type{t.hasValue() ? Optional<string>{t->str()} : Optional<string>{}},
-      options{std::move(opts)} {}
+    namespace atom {
+    }
+    
+      // views::NonClientFrameView:
+  gfx::Rect GetWindowBoundsForClientBounds(
+      const gfx::Rect& client_bounds) const override;
+  int NonClientHitTest(const gfx::Point& point) override;
     
     
-    {} // namespace folly
-
-    
-        // C++ mappings of API methods
-    static Persistent<v8::Function> constructor;
-    static Handle<Value> Open(const Arguments& args);
-    static Handle<Value> New(const Arguments& args);
-    static Handle<Value> Get(const Arguments& args);
-    static Handle<Value> Put(const Arguments& args);
-    static Handle<Value> Delete(const Arguments& args);
-    static Handle<Value> Dump(const Arguments& args);
-    static Handle<Value> WriteBatch(const Arguments& args);
-    static Handle<Value> CreateColumnFamily(const Arguments& args);
-    static Handle<Value> CompactRange(const Arguments& args);
-    static Handle<Value> Close(const Arguments& args);
-    
-      virtual bool Merge(const Slice& key,
-                     const Slice* existing_value,
-                     const Slice& value,
-                     std::string* new_value,
-                     Logger* logger) const override;
-    
-      // start from k2 this time.
-  for (it->Seek(k2); it->Valid(); it->Next()) {
-    res = it->value().ToString();
-    if (first) {
-      ASSERT_EQ(res, 'v1,v2,v3,v4');
-      first = false;
+    {
+    {    if (SemanticNode.is<Expr *>()) {
+      SemanticNode.get<Expr *>()->dump(llvm::errs());
+    } else if (SemanticNode.is<Decl *>()) {
+      SemanticNode.get<Decl *>()->dump(llvm::errs());
+    } else if (SemanticNode.is<Expr *>()) {
+      SemanticNode.get<Expr *>()->dump(llvm::errs());
     } else {
-      ASSERT_EQ(res, 'a1,a2,a3,a4');
+      llvm_unreachable('ASTNode has pointer to unknown thing!');
+    }
+    llvm::errs() << '\n=====================================================\n';
+  }
+}
+
+    
+    /// Index the given source file and store the results to \p indexStorePath.
+///
+/// \param primarySourceFile The source file to index.
+///
+/// \param indexUnitToken A unique identifier for this translation unit in the
+/// form of a file path.
+///
+/// \param indexStorePath The location to write the indexing data to.
+///
+/// \param indexSystemModules If true, emit index data for imported serialized
+/// swift system modules.
+///
+/// \param isDebugCompilation true for non-optimized compiler invocation.
+///
+/// \param targetTriple The target for this compilation.
+///
+/// \param dependencyTracker The set of dependencies seen while building.
+bool indexAndRecord(SourceFile *primarySourceFile, StringRef indexUnitToken,
+                    StringRef indexStorePath, bool indexSystemModules,
+                    bool isDebugCompilation, StringRef targetTriple,
+                    const DependencyTracker &dependencyTracker);
+    
+      ArrayRef<MarkupASTNode *> getChildren() {
+    return {getTrailingObjects<MarkupASTNode *>(), NumChildren};
+  }
+    
+    namespace swift {
+    }
+    
+    #include 'llvm/ADT/IntrusiveRefCntPtr.h'
+    
+    // On non-Darwin platforms we do not assume any barrier-free inline path
+// and SwiftTargetInfo.OnceDonePredicateValue is unset in the compiler.
+    
+    void cvValidateDisparity( CvArr* _disp, const CvArr* _cost, int minDisparity,
+                         int numberOfDisparities, int disp12MaxDiff )
+{
+    cv::Mat disp = cv::cvarrToMat(_disp), cost = cv::cvarrToMat(_cost);
+    cv::validateDisparity( disp, cost, minDisparity, numberOfDisparities, disp12MaxDiff );
+}
+
+    
+    #if 0
+    
+    const int kCIFARSize = 32;
+const int kCIFARImageNBytes = 3072;
+const int kCIFARBatchSize = 10000;
+const int kCIFARTrainBatches = 5;
+    
+    
+    {
+    {    if (++count % 1000 == 0) {
+      txn->Commit();
+    }
+  }
+  // write the last batch
+  if (count % 1000 != 0) {
+      txn->Commit();
+  }
+  LOG(INFO) << 'Processed ' << count << ' files.';
+  delete[] pixels;
+  db->Close();
+}
+    
+      virtual inline int ExactNumBottomBlobs() const { return 3; }
+  virtual inline const char* type() const { return 'ContrastiveLoss'; }
+  /**
+   * Unlike most loss layers, in the ContrastiveLossLayer we can backpropagate
+   * to the first two inputs.
+   */
+  virtual inline bool AllowForceBackward(const int bottom_index) const {
+    return bottom_index != 2;
+  }
+    
+    
+    {  int size_;
+  Dtype alpha_, beta_, k_;
+};
+#endif
+    
+    
+    {  bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnTensorDescriptor_t bottom_desc_;
+  cudnnTensorDescriptor_t top_desc_;
+  cudnnActivationDescriptor_t activ_desc_;
+};
+#endif
+    
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #endif  // CAFFE_FILTER_LAYER_HPP_
+
+    
+    template<> inline
+dnnError_t dnnWaitFor<float>(dnnPrimitive_t primitive)
+{
+    return dnnWaitFor_F32(primitive);
+}
+    
+                    msra::math::float4 m0 = *pusij; // gets i..i+3
+                msra::math::float4 m1 = *pusijp1;
+                msra::math::float4 m2 = *pusijp2;
+                msra::math::float4 m3 = *pusijp3;
+    
+    cudaStream_t GPUDataTransferer::s_assignStream = NULL;
+    
+    
+    {
+    {            // get the average mean and variance across all the workers
+            for (auto& parameter : learnParamsValues)
+            {
+                (*parameter) /= (ElemType)m_mpi->NumNodesInUse();
+            }
+        }
+    }
+    
+    
+    {
+    {
+    {}}}
+
+    
+        // construction
+    TextLocation()
+        : lineNo(SIZE_MAX), charPos(SIZE_MAX), sourceFileAsIndex(SIZE_MAX)
+    {
+    } // default constructor constructs an unmissably invalid object
+    bool IsValid() const;
+    
+    // LoadConfigFile - load a configuration file, and add to config parameters
+// filePath - filePath to the file to read
+void ConfigParser::LoadConfigFile(const std::wstring& filePath)
+{
+    // read and then parse
+    FileParse(ReadConfigFile(filePath));
+}
+    
+    
+    {    // loop over all rows and fill column entries
+    // num_nonzeros[fid] = how many nonzeros have this feature accumulated so far?
+    std::vector<size_t> num_nonzeros;
+    num_nonzeros.resize(nfeature);
+    std::fill(num_nonzeros.begin(), num_nonzeros.end(), 0);
+    for (size_t rid = 0; rid < nrow; ++rid) {
+      const size_t ibegin = gmat.row_ptr[rid];
+      const size_t iend = gmat.row_ptr[rid + 1];
+      size_t fid = 0;
+      for (size_t i = ibegin; i < iend; ++i) {
+        const uint32_t bin_id = gmat.index[i];
+        while (bin_id >= gmat.cut->row_ptr[fid + 1]) {
+          ++fid;
+        }
+        if (type_[fid] == kDenseColumn) {
+          XGBOOST_TYPE_SWITCH(this->dtype, {
+            const size_t block_offset = boundary_[fid].index_begin / packing_factor_;
+            const size_t elem_offset = boundary_[fid].index_begin % packing_factor_;
+            DType* begin = reinterpret_cast<DType*>(&index_[block_offset]) + elem_offset;
+            begin[rid] = static_cast<DType>(bin_id - index_base_[fid]);
+          });
+        } else {
+          XGBOOST_TYPE_SWITCH(this->dtype, {
+            const size_t block_offset = boundary_[fid].index_begin / packing_factor_;
+            const size_t elem_offset = boundary_[fid].index_begin % packing_factor_;
+            DType* begin = reinterpret_cast<DType*>(&index_[block_offset]) + elem_offset;
+            begin[num_nonzeros[fid]] = static_cast<DType>(bin_id - index_base_[fid]);
+          });
+          row_ind_[boundary_[fid].row_ind_begin + num_nonzeros[fid]] = rid;
+          ++num_nonzeros[fid];
+        }
+      }
     }
   }
     
     
-    {  /// The backend rocksdb database.
-  /// Map : key --> list
-  ///       where a list is a sequence of elements
-  ///       and an element is a 4-byte integer (n), followed by n bytes of data
-  std::unique_ptr<DB> db_;
+namespace detail {
+/*! \brief Implementation of gradient statistics pair. Template specialisation
+ * may be used to overload different gradients types e.g. low precision, high
+ * precision, integer, floating point. */
+template <typename T>
+class bst_gpair_internal {
+  /*! \brief gradient statistics */
+  T grad_;
+  /*! \brief second order gradient statistics */
+  T hess_;
+    }
+    }
+    
+    #if DMLC_ENABLE_STD_THREAD
+namespace xgboost {
+namespace data {
+    }
+    }
+    
+    /*! \brief match error */
+struct EvalMultiLogLoss : public EvalMClassBase<EvalMultiLogLoss> {
+  const char* Name() const override {
+    return 'mlogloss';
+  }
+  inline static bst_float EvalRow(int label,
+                                  const bst_float *pred,
+                                  size_t nclass) {
+    const bst_float eps = 1e-16f;
+    size_t k = static_cast<size_t>(label);
+    if (pred[k] > eps) {
+      return -std::log(pred[k]);
+    } else {
+      return -std::log(eps);
+    }
+  }
 };
     
-    /*
- * Class:     org_rocksdb_IngestExternalFileOptions
- * Method:    newIngestExternalFileOptions
- * Signature: (ZZZZ)J
- */
-jlong Java_org_rocksdb_IngestExternalFileOptions_newIngestExternalFileOptions__ZZZZ(
-    JNIEnv* env, jclass jcls, jboolean jmove_files,
-    jboolean jsnapshot_consistency, jboolean jallow_global_seqno,
-    jboolean jallow_blocking_flush) {
-  auto* options = new rocksdb::IngestExternalFileOptions();
-  options->move_files = static_cast<bool>(jmove_files);
-  options->snapshot_consistency = static_cast<bool>(jsnapshot_consistency);
-  options->allow_global_seqno = static_cast<bool>(jallow_global_seqno);
-  options->allow_blocking_flush = static_cast<bool>(jallow_blocking_flush);
-  return reinterpret_cast<jlong>(options);
-}
+      void Initialize(const Comparator* comparator, const char* data,
+                  uint32_t restarts, uint32_t num_restarts,
+                  BlockPrefixIndex* prefix_index, SequenceNumber global_seqno,
+                  BlockReadAmpBitmap* read_amp_bitmap) {
+    assert(data_ == nullptr);           // Ensure it is called only once
+    assert(num_restarts > 0);           // Ensure the param is valid
+    }
     
     #include <assert.h>
 #include 'rocksjni/jnicallback.h'
 #include 'rocksjni/portal.h'
     
-    void FlushJob::ReportStartedFlush() {
-  ThreadStatusUtil::SetColumnFamily(cfd_, cfd_->ioptions()->env,
-                                    db_options_.enable_thread_tracking);
-  ThreadStatusUtil::SetThreadOperation(ThreadStatus::OP_FLUSH);
-  ThreadStatusUtil::SetThreadOperationProperty(
-      ThreadStatus::COMPACTION_JOB_ID,
-      job_context_->job_id);
-  IOSTATS_RESET(bytes_written);
-}
     
-    TEST_P(DBWriteTest, IOErrorOnWALWritePropagateToWriteThreadFollower) {
-  constexpr int kNumThreads = 5;
-  std::unique_ptr<FaultInjectionTestEnv> mock_env(
-      new FaultInjectionTestEnv(Env::Default()));
-  Options options = GetOptions();
-  options.env = mock_env.get();
-  Reopen(options);
-  std::atomic<int> ready_count{0};
-  std::atomic<int> leader_count{0};
-  std::vector<port::Thread> threads;
-  mock_env->SetFilesystemActive(false);
-  // Wait until all threads linked to write threads, to make sure
-  // all threads join the same batch group.
-  SyncPoint::GetInstance()->SetCallBack(
-      'WriteThread::JoinBatchGroup:Wait', [&](void* arg) {
-        ready_count++;
-        auto* w = reinterpret_cast<WriteThread::Writer*>(arg);
-        if (w->state == WriteThread::STATE_GROUP_LEADER) {
-          leader_count++;
-          while (ready_count < kNumThreads) {
-            // busy waiting
-          }
-        }
-      });
-  SyncPoint::GetInstance()->EnableProcessing();
-  for (int i = 0; i < kNumThreads; i++) {
-    threads.push_back(port::Thread(
-        [&](int index) {
-          // All threads should fail.
-          ASSERT_FALSE(Put('key' + ToString(index), 'value').ok());
-        },
-        i));
-  }
-  for (int i = 0; i < kNumThreads; i++) {
-    threads[i].join();
-  }
-  ASSERT_EQ(1, leader_count);
-  // Close before mock_env destruct.
-  Close();
-}
+    {}  // namespace rocksdb
     
-        method(setPadding);
-    method(setPaddingPercent);
+    class Arena;
+class Allocator;
+class LookupKey;
+class SliceTransform;
+class Logger;
     
-    template<typename... ARGS>
-inline void logi(const char* tag, const char* msg, ARGS... args) noexcept {
-  log(ANDROID_LOG_INFO, tag, msg, args...);
-}
+        void SetObjectField(jobject obj, jfieldID fieldID, jobject value)
+    { functions->SetObjectField(this, obj, fieldID, value); }
+    void SetBooleanField(jobject obj, jfieldID fieldID, jboolean value)
+    { functions->SetBooleanField(this, obj, fieldID, value); }
+    void SetByteField(jobject obj, jfieldID fieldID, jbyte value)
+    { functions->SetByteField(this, obj, fieldID, value); }
+    void SetCharField(jobject obj, jfieldID fieldID, jchar value)
+    { functions->SetCharField(this, obj, fieldID, value); }
+    void SetShortField(jobject obj, jfieldID fieldID, jshort value)
+    { functions->SetShortField(this, obj, fieldID, value); }
+    void SetIntField(jobject obj, jfieldID fieldID, jint value)
+    { functions->SetIntField(this, obj, fieldID, value); }
+    void SetLongField(jobject obj, jfieldID fieldID, jlong value)
+    { functions->SetLongField(this, obj, fieldID, value); }
+    void SetFloatField(jobject obj, jfieldID fieldID, jfloat value)
+    { functions->SetFloatField(this, obj, fieldID, value); }
+    void SetDoubleField(jobject obj, jfieldID fieldID, jdouble value)
+    { functions->SetDoubleField(this, obj, fieldID, value); }
     
-    // This allows storing the assert message before the current process terminates due to a crash
-typedef void (*AssertHandler)(const char* message);
-void setAssertHandler(AssertHandler assertHandler);
+    TEST_F(YogaTest_HadOverflowTests, children_overflow_no_wrap_and_no_flex_children) {
+  const YGNodeRef child0 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child0, 80);
+  YGNodeStyleSetHeight(child0, 40);
+  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
+  YGNodeStyleSetMargin(child0, YGEdgeBottom, 15);
+  YGNodeInsertChild(root, child0, 0);
+  const YGNodeRef child1 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child1, 80);
+  YGNodeStyleSetHeight(child1, 40);
+  YGNodeStyleSetMargin(child1, YGEdgeBottom, 5);
+  YGNodeInsertChild(root, child1, 1);
+    }
     
-      std::string name('world');
+        method(markDirty);
+    method(isDirty);
     
-    #include <iostream>
-#include <memory>
-#include <string>
+    namespace facebook {
+    }
     
-      static const char *FlatBuffersGeneratedWarning();
+    namespace facebook {
+    }
     
-    // Get a field, if you know it's a struct.
-inline const Struct *GetFieldStruct(const Table &table,
-                                    const reflection::Field &field) {
-  // TODO: This does NOT check if the field is a table or struct, but we'd need
-  // access to the schema to check the is_struct flag.
-  assert(field.type()->base_type() == reflection::Obj);
-  return table.GetStruct<const Struct *>(field.offset());
-}
     
-      flatbuffers::FlatCompiler::InitParams params;
-  params.generators = generators;
-  params.num_generators = sizeof(generators) / sizeof(generators[0]);
-  params.warn_fn = Warn;
-  params.error_fn = Error;
     
-    bool FileExistsRaw(const char *name) {
-  std::ifstream ifs(name);
-  return ifs.good();
-}
+    namespace facebook {
+namespace jni {
+    }
+    }
