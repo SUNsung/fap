@@ -1,576 +1,399 @@
 
         
-        void takesData(NSData *object);
-NSData *returnsData();
-BOOL identityOfData(NSData *data);
-    
-    /// Format a Syntax tree with the given rules.
-Syntax format(Syntax Tree);
-// TODO: Representation for formatting rules, etc. This is just a figment
-// for now.
-    
-    
-    {  /// Return a hash code of any components from these options that should
-  /// contribute to a Swift Bridging PCH hash.
-  llvm::hash_code getPCHHashComponents() const {
-    // Nothing here that contributes anything significant when emitting the PCH.
-    return llvm::hash_value(0);
-  }
-};
-    
-    /// \brief Diagnostic consumer that displays diagnostics to standard error.
-class PrintingDiagnosticConsumer : public DiagnosticConsumer {
-  llvm::raw_ostream &Stream;
-  bool ForceColors = false;
-  bool DidErrorOccur = false;
-public:
-  PrintingDiagnosticConsumer(llvm::raw_ostream &stream = llvm::errs()) :
-    Stream(stream) { }
+        namespace tensorflow {
+namespace port {
+    }
     }
     
-      /// Creates and adds a memory buffer to the \c SourceManager, taking
-  /// ownership of the newly created copy.
-  ///
-  /// \p InputData and \p BufIdentifier are copied, so that this memory can go
-  /// away as soon as this function returns.
-  unsigned addMemBufferCopy(StringRef InputData, StringRef BufIdentifier = '');
     
-    #ifndef SWIFT_SYNTAX_REFERENCES_H
-#define SWIFT_SYNTAX_REFERENCES_H
+    {  // Invalid names.
+  EXPECT_FALSE(IsSameAddrSp('random_invalid_target', 'random_invalid_target'));
+  EXPECT_FALSE(IsSameAddrSp('/job:/replica:10/task:10/cpu:0',
+                            '/job:/replica:10/task:10/cpu:1'));
+  EXPECT_FALSE(IsSameAddrSp('/job:mnist/replica:xx/task:10/cpu:0',
+                            '/job:mnist/replica:xx/task:10/cpu:1'));
+  EXPECT_FALSE(IsSameAddrSp('/job:mnist/replica:10/task:yy/cpu:0',
+                            '/job:mnist/replica:10/task:yy/cpu:1'));
+}
     
-      /// Get the canonicalized substitution. If wasCanonical is not nullptr,
-  /// store there whether the current substitution was canonical already.
-  Substitution getCanonicalSubstitution(bool *wasCanonical = nullptr) const;
-    
-      // Get a layer using a LayerParameter.
-  static shared_ptr<Layer<Dtype> > CreateLayer(const LayerParameter& param) {
-    if (Caffe::root_solver()) {
-      LOG(INFO) << 'Creating layer ' << param.name();
+    int main(int argc, char** argv) {
+  FLAGS_alsologtostderr = 1;
     }
-    const string& type = param.type();
-    CreatorRegistry& registry = Registry();
-    CHECK_EQ(registry.count(type), 1) << 'Unknown layer type: ' << type
-        << ' (known types: ' << LayerTypeListString() << ')';
-    return registry[type](param);
-  }
     
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2+)
-   *   -# @f$ (N \times ...) @f$
-   *      the inputs @f$ x_1 @f$
-   *   -# @f$ (M) @f$
-   *      the inputs @f$ x_2 @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (M \times ...) @f$:
-   *      the reindexed array @f$
-   *        y = x_1[x_2]
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+      FLAGS_alsologtostderr = 1;
     
-      /**
-   * @brief Computes the error gradient w.r.t. the concatenate inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *        respect to the outputs
-   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
-   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length K), into which the top gradient
-   *        @f$ \frac{\partial E}{\partial y} @f$ is deconcatenated back to the
-   *        inputs @f$
-   *        \left[ \begin{array}{cccc}
-   *          \frac{\partial E}{\partial x_1} &
-   *          \frac{\partial E}{\partial x_2} &
-   *          ... &
-   *          \frac{\partial E}{\partial x_K}
-   *        \end{array} \right] =
-   *        \frac{\partial E}{\partial y}
-   *        @f$
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    void read_image(std::ifstream* image_file, std::ifstream* label_file,
+        uint32_t index, uint32_t rows, uint32_t cols,
+        char* pixels, char* label) {
+  image_file->seekg(index * rows * cols + 16);
+  image_file->read(pixels, rows * cols);
+  label_file->seekg(index + 8);
+  label_file->read(label, 1);
+}
     
     #include <vector>
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    #endif  // CAFFE_ARGMAX_LAYER_HPP_
+
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_;
-  cudnnTensorDescriptor_t top_desc_;
-  cudnnActivationDescriptor_t activ_desc_;
-};
-#endif
+    /**
+ * @brief Computes @f$ y = x + \log(1 + \exp(-x)) @f$ if @f$ x > 0 @f$;
+ *        @f$ y = \log(1 + \exp(x)) @f$ otherwise.
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$
+ *      y = \left\{
+ *         \begin{array}{ll}
+ *            x + \log(1 + \exp(-x)) & \mbox{if } x > 0 \\
+ *            \log(1 + \exp(x)) & \mbox{otherwise}
+ *         \end{array} \right.
+ *      @f$
+ */
+template <typename Dtype>
+class BNLLLayer : public NeuronLayer<Dtype> {
+ public:
+  explicit BNLLLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+    }
+    }
     
     #include 'caffe/blob.hpp'
 #include 'caffe/layer.hpp'
 #include 'caffe/proto/caffe.pb.h'
     
-        ModelProto Model::ToProto()
-    {
-        *(m_modelProto->mutable_graph()) = m_graph->ToGraphProto();
-        return *m_modelProto;
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    namespace caffe {
     }
     
+      /// Get the native acceptor representation.
+  /**
+   * This function may be used to obtain the underlying representation of the
+   * acceptor. This is intended to allow access to native acceptor functionality
+   * that is not otherwise provided.
+   */
+  native_handle_type native_handle()
+  {
+    return this->get_service().native_handle(this->get_implementation());
+  }
     
-    {
-    {        const std::string& Status::EmptyString()
-        {
-            static std::string s_emptyStr = '';
-            return s_emptyStr;
-        }
-    }
+    /// Create a new modifiable buffer that is offset from the start of another.
+/**
+ * @relates mutable_buffer
+ */
+inline mutable_buffer operator+(const mutable_buffer& b, std::size_t start)
+{
+  if (start > buffer_size(b))
+    return mutable_buffer();
+  char* new_data = buffer_cast<char*>(b) + start;
+  std::size_t new_size = buffer_size(b) - start;
+  return mutable_buffer(new_data, new_size
+#if defined(BOOST_ASIO_ENABLE_BUFFER_DEBUGGING)
+      , b.get_debug_check()
+#endif // BOOST_ASIO_ENABLE_BUFFER_DEBUGGING
+      );
 }
+    
+      /// Start an asynchronous read. The buffer into which the data will be read
+  /// must be valid for the lifetime of the asynchronous operation.
+  template <typename MutableBufferSequence, typename ReadHandler>
+  BOOST_ASIO_INITFN_RESULT_TYPE(ReadHandler,
+      void (boost::system::error_code, std::size_t))
+  async_read_some(const MutableBufferSequence& buffers,
+      BOOST_ASIO_MOVE_ARG(ReadHandler) handler);
+    
+    
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
+    
+      STDMETHODIMP Buffer(byte** value)
+  {
+    *value = bytes_;
+    return S_OK;
+  }
+    
+        // Check if we need to run the operation again.
+    if (ec == boost::asio::error::would_block
+        || ec == boost::asio::error::try_again)
+      return false;
+    
+      // Block on the /dev/poll descriptor.
+  ::pollfd events[128] = { { 0, 0, 0 } };
+  ::dvpoll dp = { 0, 0, 0 };
+  dp.dp_fds = events;
+  dp.dp_nfds = 128;
+  dp.dp_timeout = timeout;
+  int num_events = ::ioctl(dev_poll_fd_, DP_POLL, &dp);
+    
+      // Read sequentially.
+  ASSERT_OK(env_->NewSequentialFile('/dir/f', &seq_file));
+  ASSERT_OK(seq_file->Read(5, &result, scratch)); // Read 'hello'.
+  ASSERT_EQ(0, result.compare('hello'));
+  ASSERT_OK(seq_file->Skip(1));
+  ASSERT_OK(seq_file->Read(1000, &result, scratch)); // Read 'world'.
+  ASSERT_EQ(0, result.compare('world'));
+  ASSERT_OK(seq_file->Read(1000, &result, scratch)); // Try reading past EOF.
+  ASSERT_EQ(0, result.size());
+  ASSERT_OK(seq_file->Skip(100)); // Try to skip past end of file.
+  ASSERT_OK(seq_file->Read(1000, &result, scratch));
+  ASSERT_EQ(0, result.size());
+  delete seq_file;
+    
+      ReadOptions read_options;
+  Iterator *iter = db->NewIterator(read_options);
+    
+      // Pick up four bytes at a time
+  while (data + 4 <= limit) {
+    uint32_t w = DecodeFixed32(data);
+    data += 4;
+    h += w;
+    h *= m;
+    h ^= (h >> 16);
+  }
+    
+    
+    {    // Compute (product % M) using the fact that ((x << 31) % M) == x.
+    seed_ = static_cast<uint32_t>((product >> 31) + (product & M));
+    // The first reduction may overflow by 1 bit, so we may need to
+    // repeat.  mod == M is not possible; using > allows the faster
+    // sign-bit-based test.
+    if (seed_ > M) {
+      seed_ -= M;
+    }
+    return seed_;
+  }
+  // Returns a uniformly distributed value in the range [0..n-1]
+  // REQUIRES: n > 0
+  uint32_t Uniform(int n) { return Next() % n; }
+    
+      uint64_t Size(const Slice& start, const Slice& limit) {
+    Range r(start, limit);
+    uint64_t size;
+    db_->GetApproximateSizes(&r, 1, &size);
+    return size;
+  }
+    
+    void DBIter::SeekToFirst() {
+  direction_ = kForward;
+  ClearSavedValue();
+  iter_->SeekToFirst();
+  if (iter_->Valid()) {
+    FindNextUserEntry(false, &saved_key_ /* temporary storage */);
+  } else {
+    valid_ = false;
+  }
+}
+    
+    class StdoutPrinter : public WritableFile {
+ public:
+  virtual Status Append(const Slice& data) {
+    fwrite(data.data(), 1, data.size(), stdout);
+    return Status::OK();
+  }
+  virtual Status Close() { return Status::OK(); }
+  virtual Status Flush() { return Status::OK(); }
+  virtual Status Sync() { return Status::OK(); }
+};
+    
+    extern JSClass  *jsb_cocos2d_Physics3DRigidBody_class;
+extern JSObject *jsb_cocos2d_Physics3DRigidBody_prototype;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    #if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,'invalid 'cobj' in function 'lua_cocos2dx_physics_PhysicsJoint_setTag'', nullptr);
+        return 0;
+    }
+#endif
+    
+    
+    
+        void DrawTitle(const char *string);
+	virtual void Step(Settings* settings);
+	virtual void Keyboard(unsigned char key) { B2_NOT_USED(key); }
+	virtual void KeyboardUp(unsigned char key) { B2_NOT_USED(key); }
+	void ShiftMouseDown(const b2Vec2& p);
+	virtual bool MouseDown(const b2Vec2& p);
+	virtual void MouseUp(const b2Vec2& p);
+	void MouseMove(const b2Vec2& p);
+	void LaunchBomb();
+	void LaunchBomb(const b2Vec2& position, const b2Vec2& velocity);
+	
+	void SpawnBomb(const b2Vec2& worldPt);
+	void CompleteBombSpawn(const b2Vec2& p);
+    
+    			m_shape1.SetAsBox(0.5f, 0.5f, b2Vec2(-0.5f, 0.0f), 0.0f);
+			m_piece1 = m_body1->CreateFixture(&m_shape1, 1.0f);
+    
+    			m_body = m_world->CreateBody(&bd);
+			m_body->CreateFixture(&box, 1.0f);
+    
+    static const uint8_t* kRangeLimit = kRangeLimitLut + 384;
+    
+    namespace guetzli {
+    }
+    
+    
+    {}  // namespace guetzli
+    
+    namespace guetzli {
+    }
+    
+    namespace guetzli {
+    }
+    
+    
+    {}  // namespace guetzli
+    
+    enum JPEGReadError {
+  JPEG_OK = 0,
+  JPEG_SOI_NOT_FOUND,
+  JPEG_SOF_NOT_FOUND,
+  JPEG_UNEXPECTED_EOF,
+  JPEG_MARKER_BYTE_NOT_FOUND,
+  JPEG_UNSUPPORTED_MARKER,
+  JPEG_WRONG_MARKER_SIZE,
+  JPEG_INVALID_PRECISION,
+  JPEG_INVALID_WIDTH,
+  JPEG_INVALID_HEIGHT,
+  JPEG_INVALID_NUMCOMP,
+  JPEG_INVALID_SAMP_FACTOR,
+  JPEG_INVALID_START_OF_SCAN,
+  JPEG_INVALID_END_OF_SCAN,
+  JPEG_INVALID_SCAN_BIT_POSITION,
+  JPEG_INVALID_COMPS_IN_SCAN,
+  JPEG_INVALID_HUFFMAN_INDEX,
+  JPEG_INVALID_QUANT_TBL_INDEX,
+  JPEG_INVALID_QUANT_VAL,
+  JPEG_INVALID_MARKER_LEN,
+  JPEG_INVALID_SAMPLING_FACTORS,
+  JPEG_INVALID_HUFFMAN_CODE,
+  JPEG_INVALID_SYMBOL,
+  JPEG_NON_REPRESENTABLE_DC_COEFF,
+  JPEG_NON_REPRESENTABLE_AC_COEFF,
+  JPEG_INVALID_SCAN,
+  JPEG_OVERLAPPING_SCANS,
+  JPEG_INVALID_SCAN_ORDER,
+  JPEG_EXTRA_ZERO_RUN,
+  JPEG_DUPLICATE_DRI,
+  JPEG_DUPLICATE_SOF,
+  JPEG_WRONG_RESTART_MARKER,
+  JPEG_DUPLICATE_COMPONENT_ID,
+  JPEG_COMPONENT_NOT_FOUND,
+  JPEG_HUFFMAN_TABLE_NOT_FOUND,
+  JPEG_HUFFMAN_TABLE_ERROR,
+  JPEG_QUANT_TABLE_NOT_FOUND,
+  JPEG_EMPTY_DHT,
+  JPEG_EMPTY_DQT,
+  JPEG_OUT_OF_BAND_COEFF,
+  JPEG_EOB_RUN_TOO_LONG,
+  JPEG_IMAGE_TOO_LARGE,
+};
+    
+    #endif  // GUETZLI_JPEG_HUFFMAN_DECODE_H_
 
     
-        // Taken from ONNX
-    REGISTER_OPERATOR_SCHEMA(LeakyRelu)
-        .Description('LeakyRelu takes input data (Tensor<T>) and an argument alpha, '
-            'and produces one output data (Tensor<T>) where the function '
-            ':`f(x) = alpha * x for x < 0`, `f(x) = x for x >= 0`, is applied to the data '
-            'tensor elementwise.')
-        .Input('X', 'input tensor', 'T')
-        .Output('Y', 'The LeakyRelu value of the input tensor computed element-wise', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.')
-        .Attr('alpha','Coefficient of leakage', AttrType::AttributeProto_AttributeType_FLOAT);
-    
-    #define REGISTER_BINARY_LOGIC_OPERATOR_SCHEMA(OpName)                                                           \
-    REGISTER_OPERATOR_SCHEMA(OpName)                                                                            \
-        .Description('Returns the tensor resulted from performing the ''#OpName'' logical operation'            \
-            'elementwise on the input tensors A and B. If broadcasting is enabled, the right-hand-side'         \
-            'argument will be broadcasted to match the shape of left-hand-side argument. Refer to Add'          \
-            ' for a detailed description of the broadcasting rules.')                                           \
-        .Input('A', 'First operand.', 'T')                                                                      \
-        .Input('B', 'Second operand. With broadcasting can be of smaller size than A. If broadcasting'          \
-            'is disabled, it should be of the same size.', 'T')                                                 \
-        .Output('C', 'Result, has same dimensions and A and type bool.', 'T')                                   \
-        .TypeConstraint('T', { 'tensor(bool)' }, 'Constrain input and output types to bool tensor.')            \
-        .Attr('axis', 'If set, defines the broadcast dimensions.',                                              \
-            AttrType::AttributeProto_AttributeType_INT)                                                         \
-        .Attr('broadcast', 'Pass 1 to enable broadcasting.',                                                    \
-            AttrType::AttributeProto_AttributeType_INT);
-    
-        // Taken from Caffe2
-    REGISTER_OPERATOR_SCHEMA(Clip)
-        .Description('Clip operator limits the given input within an interval. '
-            'The interval is specified with arguments 'min' and 'max'. They default to '
-            'numeric_limits::lowest() and numeric_limits::max() respectively. The clipping '
-            'operation can be done in in-place fashion too, where the input and output blobs '
-            'are the same.')
-        .Input('input', 'Input tensor of any shape', 'T')
-        .Output('output', 'Output tensor of same shape and type as input X.', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.')
-        .Attr('min', 'Minimum value, under which element is replaced by min',
-            AttrType::AttributeProto_AttributeType_FLOAT)
-        .Attr('max', 'Maximum value, under which element is replaced by max',
-            AttrType::AttributeProto_AttributeType_FLOAT);
-    
-    
-    // Input: X, output: Y
-    REGISTER_OPERATOR_SCHEMA(Scaler)
-        .SetDomain(c_mlDomain)
-        .Input('X', 'Data to be scaled', 'T')
-        .Output('Y', 'Scaled output data', 'tensor(float)')
-        .Description(R'DOC(
-            Rescale input data, for example to standardize features by removing the mean and scaling to unit variance.
-            )DOC')
-        .TypeConstraint('T', { 'tensor(float)', 'tensor(double)', 'tensor(int64)', 'tensor(int32)' }, ' allowed types.')
-        .Attr('scale', 'second, multiply by this', AttrType::AttributeProto_AttributeType_FLOATS)
-        .Attr('offset', 'first, offset by thisfirst, offset by this, can be one value or a separate value for each feature', AttrType::AttributeProto_AttributeType_FLOATS);
-    
-            if (m_verbosity == 1)
-            fprintf(stderr, 'Reading lattice from file '%ls'\n', fileName.c_str());
-    
-    
-    {        // Check sample shape.
-        const auto& sampleShape = m_prefetchBuffers[i->first].m_sampleShape;
-        if (i->second.sampleLayout.size() == 0 || AsNDShape(i->second.sampleLayout).IsUnknown()) // Not set.
-        {
-            i->second.sampleLayout = AsTensorShape(sampleShape);
-        }
-        else if (i->second.sampleLayout.GetNumElements() != AsTensorShape(sampleShape).GetNumElements())
-        {
-            RuntimeError('Sample shape for '%ls' provided by the deserializer '%s' does not match the shape expected by the network '%s'.', 
-                i->first.c_str(), string(AsTensorShape(sampleShape)).c_str(), string(i->second.sampleLayout).c_str());
-        }
-    }
-    
-    #pragma warning(push)
-#pragma warning(disable : 4200) // warning C4200: nonstandard extension used : zero-sized array in struct/union
-// Section Header on Disk
-struct SectionHeader
-{
-    WORD wMagic;            // magic number ACE9
-    WORD version;           // version number ##.## in hex
-    WORD sizeHeader;        // size of this header (rounded up to mappable boundary)
-    WORD dataSections;      // number of data sub-sections (for nesting)
-    WORD sectionType;       // what is the type of the data in this section
-    WORD sectionData;       // type of section (SectionData enum)
-    WORD bytesPerElement;   // number of bytes per element, (0 means variable)
-    WORD customStructureID; // ID for custom structure
-    WORD elementsPerRecord; // number of elements per Record
-    WORD flags;             // bit flags, dependent on sectionType
-    WORD writtenID;         // unique ID so files written at the same time can be identified
-    WORD unusedWords[5];
-    size_t elementsCount; // number of total elements stored
-    // * section specific data goes below here * //
-    WORD labelKind;                                                    // kind of label (LabelKind type)
-    WORD labelDim;                                                     // number of possible states for labels (category type)
-    char unused[descriptionSize - 18 * sizeof(WORD) - sizeof(size_t)]; // space for future expansion (zero out in current versions)
-    char nameDescription[descriptionSize];                             // name and description of section contents in this format (name: description) (string, with extra bytes zeroed out, at least one null terminator required)
-    size_t size;                                                       // size of this section (including header)
-    size_t sizeAll;                                                    // size of this section (including header and all sub-sections)
-    size_t sectionFilePosition[];                                      // sub-section file offsets (if needed), assumed to be in File Position order
-};
-#pragma warning(pop)
-    
-    /*! \brief namespace of base64 decoding and encoding table */
-namespace base64 {
-const char DecodeTable[] = {
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  62,  // '+'
-  0, 0, 0,
-  63,  // '/'
-  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
-  0, 0, 0, 0, 0, 0, 0,
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
-  0, 0, 0, 0, 0, 0,
-  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
-  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
-};
-static const char EncodeTable[] =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-}  // namespace base64
-/*! \brief the stream that reads from base64, note we take from file pointers */
-class Base64InStream: public dmlc::Stream {
- public:
-  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
-    reader_.set_stream(fs);
-    num_prev = 0; tmp_ch = 0;
-  }
-  /*!
-   * \brief initialize the stream position to beginning of next base64 stream
-   * call this function before actually start read
-   */
-  inline void InitPosition(void) {
-    // get a character
-    do {
-      tmp_ch = reader_.GetChar();
-    } while (isspace(tmp_ch));
-  }
-  /*! \brief whether current position is end of a base64 stream */
-  inline bool IsEOF(void) const {
-    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    using base64::DecodeTable;
-    if (size == 0) return 0;
-    // use tlen to record left size
-    size_t tlen = size;
-    unsigned char *cptr = static_cast<unsigned char*>(ptr);
-    // if anything left, load from previous buffered result
-    if (num_prev != 0) {
-      if (num_prev == 2) {
-        if (tlen >= 2) {
-          *cptr++ = buf_prev[0];
-          *cptr++ = buf_prev[1];
-          tlen -= 2;
-          num_prev = 0;
-        } else {
-          // assert tlen == 1
-          *cptr++ = buf_prev[0]; --tlen;
-          buf_prev[0] = buf_prev[1];
-          num_prev = 1;
-        }
-      } else {
-        // assert num_prev == 1
-        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
-      }
-    }
-    if (tlen == 0) return size;
-    int nvalue;
-    // note: everything goes with 4 bytes in Base64
-    // so we process 4 bytes a unit
-    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
-      // first byte
-      nvalue = DecodeTable[tmp_ch] << 18;
-      {
-        // second byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        nvalue |= DecodeTable[tmp_ch] << 12;
-        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
-        }
-      {
-        // third byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        // handle termination
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == '=') << 'invalid base64 format';
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch] << 6;
-        if (tlen) {
-          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
-        }
-      }
-      {
-        // fourth byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
-            << 'invalid base64 format';
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch];
-        if (tlen) {
-          *cptr++ = nvalue & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev ++] = nvalue & 0xFF;
-        }
-      }
-      // get next char
-      tmp_ch = reader_.GetChar();
-    }
-    if (kStrictCheck) {
-      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
-    }
-    return size - tlen;
-  }
-  virtual void Write(const void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64InStream do not support write';
-  }
-    }
-    
-    namespace xgboost {
-namespace common {
-/*!
- * \brief base implementation of config reader
- */
-class ConfigReaderBase {
- public:
-  /*!
-   * \brief get current name, called after Next returns true
-   * \return current parameter name
-   */
-  inline const char *name(void) const {
-    return s_name.c_str();
-  }
-  /*!
-   * \brief get current value, called after Next returns true
-   * \return current parameter value
-   */
-  inline const char *val(void) const {
-    return s_val.c_str();
-  }
-  /*!
-   * \brief move iterator to next position
-   * \return true if there is value in next position
-   */
-  inline bool Next(void) {
-    while (!this->IsEnd()) {
-      GetNextToken(&s_name);
-      if (s_name == '=') return false;
-      if (GetNextToken(&s_buf) || s_buf != '=')  return false;
-      if (GetNextToken(&s_val) || s_val == '=')  return false;
-      return true;
-    }
-    return false;
-  }
-  // called before usage
-  inline void Init(void) {
-    ch_buf = this->GetChar();
-  }
-    }
-    }
-    }
-    
-    #if XGBOOST_CUSTOMIZE_GLOBAL_PRNG
-/*!
- * \brief An customized random engine, used to be plugged in PRNG from other systems.
- *  The implementation of this library is not provided by xgboost core library.
- *  Instead the other library can implement this class, which will be used as GlobalRandomEngine
- *  If XGBOOST_RANDOM_CUSTOMIZE = 1, by default this is switched off.
- */
-class CustomGlobalRandomEngine {
- public:
-  /*! \brief The result type */
-  typedef size_t result_type;
-  /*! \brief The minimum of random numbers generated */
-  inline static constexpr result_type min() {
-    return 0;
-  }
-  /*! \brief The maximum random numbers generated */
-  inline static constexpr result_type max() {
-    return std::numeric_limits<size_t>::max();
-  }
-  /*!
-   * \brief seed function, to be implemented
-   * \param val The value of the seed.
-   */
-  void seed(result_type val);
-  /*!
-   * \return next random number.
-   */
-  result_type operator()();
-};
-    
-      uint64_t uint64_t2[2] = {1U, 2U};
-  EXPECT_EQ(info.group_ptr.size(), 0);
-  info.SetInfo('group', uint64_t2, xgboost::kUInt64, 2);
-  ASSERT_EQ(info.group_ptr.size(), 3);
-  EXPECT_EQ(info.group_ptr[2], 3);
-    
-    
-    {  vals_in.clear(); ss.flush(); ss.clear(); ss.str('');
-  ss << '(3,2,1';
-  ss >> vals_in;
-  EXPECT_NE(vals_in, vals);
+    double ButteraugliScoreForQuality(double quality) {
+  if (quality < kLowestQuality) quality = kLowestQuality;
+  if (quality > kHighestQuality) quality = kHighestQuality;
+  int index = static_cast<int>(quality);
+  double mix = quality - index;
+  return kScoreForQuality[index - kLowestQuality] * (1 - mix) +
+      kScoreForQuality[index - kLowestQuality + 1] * mix;
 }
     
-      const dmlc::RowBlock<IndexType>& Value() const override {
-    return out_;
+    
+    {} // namespace rocksdb
+
+    
+      SequentialFileReader* file() { return file_.get(); }
+    
+      if (!s.ok()) {
+    ROCKS_LOG_ERROR(info_log_, 'Failed to mark %s as trash', file_path.c_str());
+    s = env_->DeleteFile(file_path);
+    if (s.ok()) {
+      sst_file_manager_->OnDeleteFile(file_path);
+    }
+    return s;
   }
     
-    struct EvalPoissonNegLogLik : public EvalEWiseBase<EvalPoissonNegLogLik> {
-  const char *Name() const override {
-    return 'poisson-nloglik';
-  }
-  inline bst_float EvalRow(bst_float y, bst_float py) const {
-    const bst_float eps = 1e-16f;
-    if (py < eps) py = eps;
-    return common::LogGamma(y + 1.0f) + py - std::log(py) * y;
-  }
-};
+      // enable sync point processing (disabled on startup)
+  void EnableProcessing();
     
-    /*! \brief match error */
-struct EvalMultiLogLoss : public EvalMClassBase<EvalMultiLogLoss> {
-  const char* Name() const override {
-    return 'mlogloss';
+      bool HasPositionHint() const { return PositionHint != std::numeric_limits<size_t>::max(); }
+  size_t GetPositionHint() const {
+    assert(HasPositionHint());
+    return PositionHint;
   }
-  inline static bst_float EvalRow(int label,
-                                  const bst_float *pred,
-                                  size_t nclass) {
-    const bst_float eps = 1e-16f;
-    size_t k = static_cast<size_t>(label);
-    if (pred[k] > eps) {
-      return -std::log(pred[k]);
-    } else {
-      return -std::log(eps);
-    }
-  }
-};
+  void IncUseCount() { UseCount++; }
+  void IncSuccessCount() { SuccessCount++; }
+  size_t GetUseCount() const { return UseCount; }
+  size_t GetSuccessCount() const {return SuccessCount; }
     
-    // Print a vector a sequence of JSON values, comma separated, wrapped in '[]'.
-template<typename T>
-bool PrintVector(const Vector<T> &v, Type type, int indent,
-                 const IDLOptions &opts, std::string *_text) {
-  std::string &text = *_text;
-  text += '[';
-  text += NewLine(opts);
-  for (uoffset_t i = 0; i < v.size(); i++) {
-    if (i) {
-      if (!opts.protobuf_ascii_alike) text += ',';
-      text += NewLine(opts);
-    }
-    text.append(indent + Indent(opts), ' ');
-    if (IsStruct(type)) {
-      if (!Print(v.GetStructFromOffset(i * type.struct_def->bytesize), type,
-                 indent + Indent(opts), nullptr, opts, _text)) {
-        return false;
-      }
-    } else {
-      if (!Print(v[i], type, indent + Indent(opts), nullptr, opts, _text)) {
-        return false;
-      }
-    }
+      if (Options.MaxLen == 0) {
+    size_t MaxLen = 0;
+    for (auto &U : InitialCorpus)
+      MaxLen = std::max(U.size(), MaxLen);
+    F->SetMaxInputLen(std::min(std::max(kMinDefaultLen, MaxLen), kMaxSaneLen));
   }
-  text += NewLine(opts);
-  text.append(indent, ' ');
-  text += ']';
-  return true;
+    
+    #if defined(__has_include)
+#if __has_include(<sanitizer / coverage_interface.h>)
+#include <sanitizer/coverage_interface.h>
+#endif
+#if __has_include(<sanitizer / lsan_interface.h>)
+#include <sanitizer/lsan_interface.h>
+#endif
+#endif
+    
+    struct Merger {
+  std::vector<MergeFileInfo> Files;
+  size_t NumFilesInFirstCorpus = 0;
+  size_t FirstNotProcessedFile = 0;
+  std::string LastFailure;
+    }
+    
+    size_t MutationDispatcher::ApplyDictionaryEntry(uint8_t *Data, size_t Size,
+                                                size_t MaxSize,
+                                                DictionaryEntry &DE) {
+  const Word &W = DE.GetW();
+  bool UsePositionHint = DE.HasPositionHint() &&
+                         DE.GetPositionHint() + W.size() < Size &&
+                         Rand.RandBool();
+  if (Rand.RandBool()) {  // Insert W.
+    if (Size + W.size() > MaxSize) return 0;
+    size_t Idx = UsePositionHint ? DE.GetPositionHint() : Rand(Size + 1);
+    memmove(Data + Idx + W.size(), Data + Idx, Size - Idx);
+    memcpy(Data + Idx, W.data(), W.size());
+    Size += W.size();
+  } else {  // Overwrite some bytes with W.
+    if (W.size() > Size) return 0;
+    size_t Idx = UsePositionHint ? DE.GetPositionHint() : Rand(Size - W.size());
+    memcpy(Data + Idx, W.data(), W.size());
+  }
+  return Size;
 }
     
-    #include <grpc++/impl/codegen/async_stream.h>
-#include <grpc++/impl/codegen/async_unary_call.h>
-#include <grpc++/impl/codegen/method_handler_impl.h>
-#include <grpc++/impl/codegen/proto_utils.h>
-#include <grpc++/impl/codegen/rpc_method.h>
-#include <grpc++/impl/codegen/service_type.h>
-#include <grpc++/impl/codegen/status.h>
-#include <grpc++/impl/codegen/stub_options.h>
-#include <grpc++/impl/codegen/sync_stream.h>
-    
-    // Abort the program after logging the mesage.
-#define GRPC_CODEGEN_FAIL GRPC_CODEGEN_CHECK(false)
-    
-      std::string GetUsageString(const char *program_name) const;
-    
-    // Convenience class to easily parse or generate text for arbitrary FlatBuffers.
-// Simply pre-populate it with all schema filenames that may be in use, and
-// This class will look them up using the file_identifier declared in the
-// schema.
-class Registry {
- public:
-  // Call this for all schemas that may be in use. The identifier has
-  // a function in the generated code, e.g. MonsterIdentifier().
-  void Register(const char *file_identifier, const char *schema_path) {
-    Schema schema;
-    schema.path_ = schema_path;
-    schemas_[file_identifier] = schema;
-  }
-    }
-    
-    
-    {  StructBuilderBody(struct_def, '', code_ptr);
-  EndBuilderBody(code_ptr);
-}
-    
-    bool DirExists(const char *name) {
-  // clang-format off
-  #ifdef _WIN32
-    #define flatbuffers_stat _stat
-    #define FLATBUFFERS_S_IFDIR _S_IFDIR
-  #else
-    #define flatbuffers_stat stat
-    #define FLATBUFFERS_S_IFDIR S_IFDIR
-  #endif
-  // clang-format on
-  struct flatbuffers_stat file_info;
-  if (flatbuffers_stat(name, &file_info) != 0) return false;
-  return (file_info.st_mode & FLATBUFFERS_S_IFDIR) != 0;
-}
+      struct Mutator {
+    size_t (MutationDispatcher::*Fn)(uint8_t *Data, size_t Size, size_t Max);
+    const char *Name;
+  };
