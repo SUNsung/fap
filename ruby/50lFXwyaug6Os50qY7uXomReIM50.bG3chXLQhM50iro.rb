@@ -1,58 +1,66 @@
 
         
-          def all_projects(current_user)
-    projects = []
+            def index
+      self.response_body = 'index'
+    end
     
-    def check_link(uri)
-  HTTParty.head(uri, :verify => false).code.to_i.tap do |status|
-    if (400..422).include?(status)
-      if status != 403 && !uri.exclude?('udemy.com')
-        raise 'Request had status #{status}'
-      else
-        putc('S')
-      end
+        def wrap_delivery_behavior!(*args) # :nodoc:
+      self.class.wrap_delivery_behavior(message, *args)
     end
   end
 end
+
     
-      fd  = File.open(out, 'a')
+    module Rails
+  def self.root
+    File.expand_path('..', __dir__)
+  end
+end
     
-      def parse(pkt)
-    # We want to return immediatly if we do not have a packet which is handled by us
-    return unless pkt.is_tcp?
-    return if (pkt.tcp_sport != 110 and pkt.tcp_dport != 110)
-    s = find_session((pkt.tcp_sport == 110) ? get_session_src(pkt) : get_session_dst(pkt))
+    class MyCustomDelivery
+end
     
-    puts '* System info:'
+            self.description = <<-DESC
+          Remove the cache for a given pod, or clear the cache completely.
     
-    require 'rubygems'
-require 'rjb'
+    run SinatraStaticServer
+
     
-      when '6.1.1'
-    __NR_execve      = 7
-    __NR_getpeername = 202
-    __NR_accept      = 229
-    __NR_listen      = 232
-    __NR_bind        = 234
-    __NR_socket      = 235
-    __NR_connect     = 236
-    __NR_close       = 269
-    __NR_kfcntl      = 614
+    Liquid::Template.register_tag('blockquote', Jekyll::Blockquote)
+
     
-      # A single media query.
-  #
-  #     [ [ONLY | NOT]? S* media_type S* | expression ] [ AND S* expression ]*
-  class Query
-    # The modifier for the query.
-    #
-    # When parsed as Sass code, this contains strings and SassScript nodes. When
-    # parsed as CSS, it contains a single string (accessible via
-    # \{#resolved_modifier}).
-    #
-    # @return [Array<String, Sass::Script::Tree::Node>]
-    attr_accessor :modifier
-    
-            Readline::HISTORY << text
-        parse_input(environment, text)
+        def handle_gist_redirecting(data)
+      redirected_url = data.header['Location']
+      if redirected_url.nil? || redirected_url.empty?
+        raise ArgumentError, 'GitHub replied with a 302 but didn't provide a location in the response headers.'
       end
+    
+          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
+        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
+        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
+          @img['title']  = title
+          @img['alt']    = alt
+        else
+          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
+        end
+        @img['class'].gsub!(/'/, '') if @img['class']
+      end
+      super
     end
+    
+    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
+
+    
+          expect('.border-width-implied-left').to have_rule(rule)
+    end
+  end
+    
+      context 'called with argument (2)' do
+    it 'outputs the second value from the default scale' do
+      expect('.two-base-one').to have_rule('font-size: 1.5625em')
+    end
+  end
+    
+          expect('.prefix--webkit').to have_ruleset(rule)
+    end
+  end
