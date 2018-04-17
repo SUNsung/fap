@@ -1,75 +1,47 @@
 
         
-          it 'kills sleeping thread' do
-    sleeping_thread = Thread.new do
-      sleep
-      ScratchPad.record :after_sleep
-    end
-    Thread.pass while sleeping_thread.status and sleeping_thread.status != 'sleep'
-    sleeping_thread.send(@method)
-    sleeping_thread.join
-    ScratchPad.recorded.should == nil
+        class Converter
+  extend Forwardable
+  include Network
+  include LessConversion
+  include JsConversion
+  include FontsConversion
+    
+        alias log puts
+    
+      def test_font_helper_without_suffix
+    assert_match %r(url\(['']?/assets/.*eot['']?\)), @css
   end
     
-        ScratchPad.recorded.should == nil
+      def as_json(options={})
+    {
+      poll_id:             id,
+      post_id:             status_message.id,
+      question:            question,
+      poll_answers:        poll_answers,
+      participation_count: participation_count
+    }
   end
-end
-
     
-    public_dir      = 'public'    # compiled site directory
-source_dir      = 'source'    # source file directory
-blog_index_dir  = 'source'    # directory for your blog's index page (if you put your index in source/blog/index.html, set this to 'source/blog')
-deploy_dir      = '_deploy'   # deploy directory (for Github pages deployment)
-stash_dir       = '_stash'    # directory to stash posts for speedy generation
-posts_dir       = '_posts'    # directory for blog files
-themes_dir      = '.themes'   # directory for blog files
-new_post_ext    = 'markdown'  # default new post file extension when using the new_post task
-new_page_ext    = 'markdown'  # default new page file extension when using the new_page task
-server_port     = '4000'      # port for preview server eg. localhost:4000
-    
-    run SinatraStaticServer
-
-    
-        def render(context)
-      quote = paragraphize(super)
-      author = '<strong>#{@by.strip}</strong>' if @by
-      if @source
-        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
-        parts = []
-        url.each do |part|
-          if (parts + [part]).join('/').length < 32
-            parts << part
+          def handle_prompt_with_signed_in_user
+        client_id = params[:client_id]
+        if client_id
+          auth = Api::OpenidConnect::Authorization.find_by_client_id_user_and_scopes(client_id,
+                                                                                     current_user, params[:scope])
+          if auth
+            process_authorization_consent('true')
+          else
+            handle_params_error('interaction_required', 'User must already be authorized when `prompt` is `none`')
           end
+        else
+          handle_params_error('bad_request', 'Client ID is missing from request')
         end
-        source = parts.join('/')
-        source << '/&hellip;' unless source == @source
       end
-      if !@source.nil?
-        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
-      elsif !@title.nil?
-        cite = ' <cite>#{@title}</cite>'
-      end
-      blockquote = if @by.nil?
-        quote
-      elsif cite
-        '#{quote}<footer>#{author + cite}</footer>'
-      else
-        '#{quote}<footer>#{author}</footer>'
-      end
-      '<blockquote>#{blockquote}</blockquote>'
-    end
     
-      # Improved version of Liquid's truncate:
-  # - Doesn't cut in the middle of a word.
-  # - Uses typographically correct ellipsis (…) insted of '...'
-  def truncate(input, length)
-    if input.length > length && input[0..(length-1)] =~ /(.+)\b.+$/im
-      $1.strip + ' &hellip;'
-    else
-      input
-    end
+      protected
+  def extract_fields(filter_string)
+    (filter_string.empty? ? [] : filter_string.split(',').map { |s| s.strip.to_sym })
   end
     
-          unless file.file?
-        return 'File #{file} could not be found'
-      end
+        r0
+  end
