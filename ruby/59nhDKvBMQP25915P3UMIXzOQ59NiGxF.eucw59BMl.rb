@@ -1,41 +1,35 @@
 
         
-              def []=(key, value)
-        super(convert_key(key), value)
+          def self.fragment_cache
+    @cache ||= DistributedCache.new('am_serializer_fragment_cache')
+  end
+    
+    EOS
+end
+    
+      class IncludeArrayTag < Liquid::Tag
+    Syntax = /(#{Liquid::QuotedFragment}+)/
+    def initialize(tag_name, markup, tokens)
+      if markup =~ Syntax
+        @array_name = $1
+      else
+        raise SyntaxError.new('Error in tag 'include_array' - Valid syntax: include_array [array from _config.yml]')
       end
     
-            while true
-          begin
-            if Platform.windows?
-              # Windows doesn't support non-blocking reads on
-              # file descriptors or pipes so we have to get
-              # a bit more creative.
+    module Jekyll
     
-        set = Set.new(1..10)
-    enum = set.keep_if
-    assert_equal(set.size, enum.size)
-    assert_same(set, enum.each { |i| i % 3 != 0 })
-    assert_equal(Set[1,2,4,5,7,8,10], set)
-  end
-    
-    describe :string_unpack_32bit_be, shared: true do
-  it 'decodes one int for a single format character' do
-    'dcba'.unpack(unpack_format).should == [1684234849]
-  end
-    
-        t.join
-  end
-    
-      describe '::binary_osxfuse_installed?' do
-    it 'returns false if fuse.h does not exist' do
-      allow(File).to receive(:exist?).and_return(false)
-      expect(described_class).not_to be_binary_osxfuse_installed
+        def poster
+      'poster='#{@poster}'' if @poster
     end
     
-            unless guarded && environment.var(name)
-          environment.set_var(name, val.perform(environment))
-        end
+        def initialize
+      clear
+    end
     
-          def started?
-        true
-      end
+      # Get list of styles saved on previous deploy (running rake paperclip:refresh:missing_styles)
+  def self.get_registered_attachments_styles
+    YAML.load_file(Paperclip.registered_attachments_styles_path)
+  rescue Errno::ENOENT
+    nil
+  end
+  private_class_method :get_registered_attachments_styles
