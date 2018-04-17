@@ -1,212 +1,209 @@
 
         
-            def getChild(self, request, name):
-        return self
-    
-    # Declare top-level shortcuts
-from scrapy.spiders import Spider
-from scrapy.http import Request, FormRequest
-from scrapy.selector import Selector
-from scrapy.item import Item, Field
-    
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-l', '--list', dest='list', action='store_true',
-                          help='only list contracts, without checking them')
-        parser.add_option('-v', '--verbose', dest='verbose', default=False, action='store_true',
-                          help='print contract tests for all spiders')
-    
-        def _list_templates(self):
-        print('Available templates:')
-        for filename in sorted(os.listdir(self.templates_dir)):
-            if filename.endswith('.tmpl'):
-                print('  %s' % splitext(filename)[0])
-    
-        def set(self, key, value):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                item.value = value
-                return
-        self.table[hash_index].append(Item(key, value))
-    
-        def crawl_page(self, page):
-        for url in page.child_urls:
-            self.data_store.add_link_to_crawl(url)
-        self.reverse_index_queue.generate(page)
-        self.doc_index_queue.generate(page)
-        self.data_store.remove_link_to_crawl(page.url)
-        self.data_store.insert_crawled_link(page.url, page.signature)
-    
-        def has_more_configs(self):
-        '''Returns true if there are more configs to test'''
-        return bool(self._configs)
-    
-        @mock.patch('certbot.notify.smtplib.LMTP')
-    @mock.patch('certbot.notify.subprocess.Popen')
-    def test_everything_fails(self, mock_popen, mock_lmtp):
-        from certbot.notify import notify
-        lmtp_obj = mock.MagicMock()
-        mock_lmtp.return_value = lmtp_obj
-        lmtp_obj.sendmail.side_effect = socket.error(17)
-        proc = mock.MagicMock()
-        mock_popen.return_value = proc
-        proc.communicate.side_effect = OSError('What we have here is a '
-                                               'failure to communicate.')
-        self.assertFalse(notify('Goose', 'auntrhody@example.com',
-                                'The old grey goose is dead.'))
-        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
-        self.assertEqual(proc.communicate.call_count, 1)
-    
-        # Implement all methods from IAuthenticator, remembering to add
-    # 'self' as first argument, e.g. def prepare(self)...
-    
-        author = proj_info['author'],
-    author_email = proj_info['author_email'],
-    url = proj_info['url'],
-    license = proj_info['license'],
-    
-    __all__ = ['ehow_download']
+        
+with codecs.open(FILE_PATH, encoding='utf8') as f:
+    # Strip because we don't want new lines in the data so that we can
+    # easily count occurrences also when embedded in JSON (where the new
+    # line would be escaped).
+    FILE_CONTENT = f.read().strip()
     
     
-def huaban_download(url, output_dir='.', **kwargs):
-    if re.match(r'http://huaban\.com/boards/\d+/', url):
-        huaban_download_board(url, output_dir, **kwargs)
-    else:
-        print('Only board (画板) pages are supported currently')
-        print('ex: http://huaban.com/boards/12345678/')
+filenames = list(rst_filenames())
+assert filenames
     
-            print_info(site_info, title, type_, size_full)
-        if not info_only:
-            download_urls(url_list, title, ext, total_size=size_full, output_dir=output_dir, merge=merge, headers=fake_headers)
-    else:
-        raise NotImplementedError(flashvars)
+        Pre-process args, handle some special types of invocations,
+    and run the main program with error handling.
     
-    `Router` interface extends `~.httputil.HTTPServerConnectionDelegate`
-to provide additional routing capabilities. This also means that any
-`Router` implementation can be used directly as a ``request_callback``
-for `~.httpserver.HTTPServer` constructor.
+        >>> humanize_bytes(1)
+    '1 B'
+    >>> humanize_bytes(1024, precision=1)
+    '1.0 kB'
+    >>> humanize_bytes(1024 * 123, precision=1)
+    '123.0 kB'
+    >>> humanize_bytes(1024 * 12342, precision=1)
+    '12.1 MB'
+    >>> humanize_bytes(1024 * 12342, precision=2)
+    '12.05 MB'
+    >>> humanize_bytes(1024 * 1234, precision=2)
+    '1.21 MB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
+    '1.31 GB'
+    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
+    '1.3 GB'
     
-        @gen_test
-    def test_put_with_getters(self):
-        q = queues.Queue()
-        get0 = q.get()
-        get1 = q.get()
-        yield q.put(0)
-        self.assertEqual(0, (yield get0))
-        yield q.put(1)
-        self.assertEqual(1, (yield get1))
+        requests_session.cookies = session.cookies
     
+        for node in data:
+        for value in node['tags']:
+            groups[value].append(node['hostname'])
     
-class DigestAuthHandler(RequestHandler):
-    def get(self):
-        realm = 'test'
-        opaque = 'asdf'
-        # Real implementations would use a random nonce.
-        nonce = '1234'
-        username = 'foo'
-        password = 'bar'
+        result[app_name] = {}
+    result[app_name]['hosts'] = []
+    result[app_name]['hosts'].append(host)
+    result[app_name]['vars'] = {}
+    result[app_name]['vars']['ansible_ssh_user'] = user
     
-    # Repeat the entire benchmark this many times (on different ports)
-# This gives JITs time to warm up, etc.  Pypy needs 3-5 runs at
-# --n=15000 for its JIT to reach full effectiveness
-define('num_runs', type=int, default=1)
+    # Backwards compat only
+try:
+    from hashlib import md5 as _md5
+except ImportError:
+    try:
+        from md5 import md5 as _md5
+    except ImportError:
+        # Assume we're running in FIPS mode here
+        _md5 = None
     
-        def call_wrapped(self, count):
-        '''Wraps and calls a function at each level of stack depth
-        to measure the overhead of the wrapped function.
-        '''
-        # This queue is analogous to IOLoop.add_callback, but lets us
-        # benchmark the stack_context in isolation without system call
-        # overhead.
-        queue = collections.deque()
-        self.call_wrapped_inner(queue, count)
-        while queue:
-            queue.popleft()()
-    
-    import bcrypt
-import concurrent.futures
-import MySQLdb
-import markdown
-import os.path
-import re
-import subprocess
-import torndb
-import tornado.escape
-from tornado import gen
-import tornado.httpserver
-import tornado.ioloop
-import tornado.options
-import tornado.web
-import unicodedata
-    
-    from tornado.options import define, options
-    
-    
-def linear_model_main(_distances, _press_times, target_distance):
-    regr = LinearRegression()
-    regr.fit(_distances, _press_times)
-    predict_press_time = regr.predict(target_distance)
-    result = {}
-    # 截距 b
-    result['intercept'] = regr.intercept_
-    # 斜率值 k
-    result['coefficient'] = regr.coef_
-    # 预估的按压时间
-    result['value'] = predict_press_time
-    return result
-    
-        cmd = 'shell input swipe {x1} {y1} {x2} {y2} {duration}'.format(
-        x1=swipe_x1,
-        y1=swipe_y1,
-        x2=swipe_x2,
-        y2=swipe_y2,
-        duration=press_time + delta_piece_y
+    ipv4_component = r'''
+    (?:
+        [01]?[0-9]{{1,2}}|              # 0..199
+        2[0-4][0-9]|                    # 200..249
+        25[0-5]|                        # 250..255
+        {range}                         # or a numeric range
     )
-    print(cmd)
-    adb.run(cmd)
-    return press_time
+'''.format(range=numeric_range)
     
-            self.client = wda.Client()
-        self.session = self.client.session()
-    
-        if model == 'ip':
-        bot_params['TIME_COEFF'] = 2.
-        bot_params['COORD_Y_START_SCAN'] = 200
-        bot_params['PIECE_BASE_HEIGHT_HALF'] = 13
-        bot_params['PIECE_BODY_WIDTH'] = 49
-        bot_params['SWIPE_X1'] = 375
-        bot_params['SWIPE_Y1'] = 1055
-        bot_params['SWIPE_X2'] = 375
-        bot_params['SWIPE_Y2'] = 1055
-    
-        img = cv2.imread('./autojump.png')
-    img = cv2.resize(img, (0, 0), fx=scale, fy=scale)
-    img, src_x, src_y = search(img)
-    return img
-    
-    def pixel_division(img,w,h):
-    pixels = list(img.getdata())
-    row_pix=np.zeros([1,h])
-    col_pix=np.zeros([1,w])
-    for i in range(w):
-        for j in range(h):
-            if pixels[j*w+i]<100:
-                row_pix[0,j]+=1
-                col_pix[0,i]+=1
-    start_h=0
-    end_h=0
-    flag=0
-    for j in range(h):
-        if row_pix[0,j]>=1 and flag==0:
-            start_h=j
-            flag=1
-        if row_pix[0,j]>=1:
-            end_h=j
+    from ansible.plugins.terminal import TerminalBase
+from ansible.errors import AnsibleConnectionFailure
     
     
-def on_click(event):
-    global update
-    global ix, iy
-    global click_count
-    global cor
+def get_group_vars(groups):
+    
+        terminal_stderr_re = [
+        re.compile(br'Error:'),
+    ]
+    
+        for n_components in [i.astype(int) for i in
+                         np.linspace(data.shape[1] // 10,
+                                     data.shape[1], num=4)]:
+        all_times = defaultdict(list)
+        all_errors = defaultdict(list)
+        pca = PCA(n_components=n_components)
+        rpca = RandomizedPCA(n_components=n_components, random_state=1999)
+        results_dict = {k: benchmark(est, data) for k, est in [('pca', pca),
+                                                               ('rpca', rpca)]}
+    
+        op.add_option('--eps',
+                  dest='eps', default=0.5, type=float,
+                  help='See the documentation of the underlying transformers.')
+    
+        fn = os.path.relpath(fn,
+                         start=os.path.dirname(__import__(package).__file__))
+    try:
+        lineno = inspect.getsourcelines(obj)[1]
+    except Exception:
+        lineno = ''
+    return url_fmt.format(revision=revision, package=package,
+                          path=fn, lineno=lineno)
+    
+    
+if not os.path.exists(html_folder):
+    os.makedirs(html_folder)
+    
+    # Print the classification report
+print(metrics.classification_report(y_test, y_predicted,
+                                    target_names=dataset.target_names))
+    
+        # split the dataset in training and test set:
+    docs_train, docs_test, y_train, y_test = train_test_split(
+        dataset.data, dataset.target, test_size=0.25, random_state=None)
+    
+    fit_data = data[np.argsort(model.row_labels_)]
+fit_data = fit_data[:, np.argsort(model.column_labels_)]
+    
+            ax1.plot(mean_predicted_value, fraction_of_positives, 's-',
+                 label='%s (%1.3f)' % (name, clf_score))
+    
+    # Plot boundaries of unit simplex
+plt.plot([0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], 'k', label='Simplex')
+    
+    for index, (name, classifier) in enumerate(classifiers.items()):
+    classifier.fit(X, y)
+    
+        This returns an array of input data with shape `(n_samples, n_features)`
+    and an array of `n_samples` target labels.
+    
+    from ..common import *
+    
+    
+download = huaban_download
+download_playlist = playlist_not_supported('huaban')
+
+    
+    #----------------------------------------------------------------------
+def sina_xml_to_url_list(xml_data):
+    '''str->list
+    Convert XML to URL List.
+    From Biligrab.
+    '''
+    rawurl = []
+    dom = parseString(xml_data)
+    for node in dom.getElementsByTagName('durl'):
+        url = node.getElementsByTagName('url')[0]
+        rawurl.append(url.childNodes[0].data)
+    return rawurl
+    
+        def extract(self, **kwargs):
+        for i in self.streams:
+            # for each available stream
+            s = self.streams[i]
+            # fill in 'container' field and 'size' field (optional)
+            _, s['container'], s['size'] = url_info(s['url'])
+            # 'src' field is a list of processed urls for direct downloading
+            # usually derived from 'url'
+            s['src'] = [s['url']]
+    
+        #title
+    title = ''
+    profile_api = 'https://www.showroom-live.com/api/room/profile?room_id={room_id}'.format(room_id = room_id)
+    html = loads(get_content(profile_api))
+    try:
+        title = html['main_name']
+    except KeyError:
+        title = 'Showroom_{room_id}'.format(room_id = room_id)
+    
+    print 'PLUGIN_I18N_PATHS := ' + ','.join(os.path.relpath(plugin.path)
+                                         for plugin in plugins
+                                         if plugin.needs_translation)
+    
+            AJAX login handler, used by both login and register to set the
+        user cookie and send back a redirect.
+        '''
+        c.user = user
+        c.user_is_loggedin = True
+        self.login(user, rem=rem)
+    
+        @require_oauth2_scope('account')
+    @validate(
+        VUser(),
+        validated_prefs=PREFS_JSON_VALIDATOR,
+    )
+    @api_doc(api_section.account, json_model=PREFS_JSON_VALIDATOR,
+             uri='/api/v1/me/prefs')
+    def PATCH_prefs(self, validated_prefs):
+        user_prefs = c.user.preferences()
+        for short_name, new_value in validated_prefs.iteritems():
+            pref_name = 'pref_' + short_name
+            user_prefs[pref_name] = new_value
+        vprefs.filter_prefs(user_prefs, c.user)
+        vprefs.set_prefs(c.user, user_prefs)
+        c.user._commit()
+        return self.api_wrapper(PrefsJsonTemplate().data(c.user))
+    
+    from pylons import request
+from pylons import app_globals as g
+from reddit_base import RedditController
+from r2.lib.pages import AdminPage, AdminAwards
+from r2.lib.pages import AdminAwardGive, AdminAwardWinners
+from r2.lib.validator import *
+    
+    from reddit_base import RedditController, UnloggedUser
+from r2.lib.pages import (ButtonLite, ButtonDemoPanel, WidgetDemoPanel,
+                          BoringPage)
+from r2.lib.pages.things import wrap_links
+from r2.models import *
+from r2.lib.validator import *
+from pylons import request, response
+from pylons import tmpl_context as c
+from pylons.i18n import _
+    
+            c.allow_framing = True
