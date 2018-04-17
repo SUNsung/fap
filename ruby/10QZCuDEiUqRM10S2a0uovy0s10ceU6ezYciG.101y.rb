@@ -1,44 +1,55 @@
 
         
-              def task_available?(task)
-        load_all_tasks
-        return tasks.collect(&:title).include?(task)
+            def log_http_get_file(url, cached = false)
+      s = '  #{'CACHED ' if cached}GET #{url}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
       end
+    end
     
-            expect(result).to eq('/usr/local/bin/cloc  --by-file --xml  --out=/tmp/cloc.xml')
-      end
-    
-          it 'pass a custom build number to the tool' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          increment_build_number(build_number: 24, xcodeproj: '.xcproject')
-        end').runner.execute(:test)
-    
-        groups
-  end
+    desc 'Start a dummy (test) Rails app server'
+task :dummy_rails do
+  require 'rack'
+  require 'term/ansicolor'
+  port = ENV['PORT'] || 9292
+  puts %Q(Starting on #{Term::ANSIColor.cyan 'http://localhost:#{port}'})
+  Rack::Server.start(
+    config: 'test/dummy_rails/config.ru',
+    Port: port)
 end
-
     
+          spec['main'] =
+          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
+          find_files.(Bootstrap.fonts_path) +
+          %w(assets/javascripts/bootstrap.js)
     
-  it 'should allow changing the protection mode to a string' do
-    # I have no clue what other modes are available
-    mock_app do
-      use Rack::Protection::FrameOptions, :frame_options => 'ALLOW-FROM foo'
-      run DummyApp
-    end
-    
-      %w(GET HEAD).each do |method|
-    it 'accepts #{method} requests with non-whitelisted Origin' do
-      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://malicious.com')).to be_ok
-    end
-  end
-    
-      it 'should allow changing the protection mode' do
-    # I have no clue what other modes are available
-    mock_app do
-      use Rack::Protection::XSSHeader, :xss_mode => :foo
-      run DummyApp
-    end
-    
-            def address_params
-          params.require(:address).permit(permitted_address_attributes)
+              @meta_assignment_node
         end
+    
+            # This is a convenient way to check whether the variable is used
+        # in its entire variable lifetime.
+        # For more precise usage check, refer Assignment#used?.
+        #
+        # Once the variable is captured by a block, we have no idea
+        # when, where and how many times the block would be invoked
+        # and it means we cannot track the usage of the variable.
+        # So we consider it's used to suppress false positive offenses.
+        def used?
+          @captured_by_block || referenced?
+        end
+    
+    module RuboCop
+  module Cop
+    module Style
+      # This cop check for uses of Object#freeze on immutable objects.
+      #
+      # @example
+      #   # bad
+      #   CONST = 1.freeze
+      #
+      #   # good
+      #   CONST = 1
+      class RedundantFreeze < Cop
+        include FrozenStringLiteral
