@@ -1,53 +1,59 @@
 
         
-          def self.fragment_cache
-    @cache ||= DistributedCache.new('am_serializer_fragment_cache')
+          def present_hash(hash, skip_key = nil)
+    hash.to_a.sort_by {|a| a.first.to_s }.map { |k, v| '#{k}: #{v}' unless k.to_s == skip_key.to_s }.compact
   end
-    
-        def reset_password_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :reset_password_instructions, opts)
-    end
-    
-          def self.generate_helpers!(routes=nil)
-        routes ||= begin
-          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
-          Devise::URL_HELPERS.slice(*mappings)
-        end
-    
-                # Break out if we're supposed to. Otherwise re-raise the error
-            # because it is a real problem.
-            break if breakable
-            raise
-          end
-        end
-    
-              opts = OptionParser.new do |o|
-            o.banner = 'Usage: vagrant box remove <name>'
-            o.separator ''
-            o.separator 'Options:'
-            o.separator ''
-    
-              # Repackage the box
-          output_name = @env.vagrantfile.config.package.name || 'package.box'
-          output_path = Pathname.new(File.expand_path(output_name, FileUtils.pwd))
-          box.repackage(output_path)
-    
-            # Parse the options
-        argv = parse_options(opts)
-        return if !argv
-        if argv.length < 2
-          raise Vagrant::Errors::CLIInvalidUsage,
-            help: opts.help.chomp
-        end
-    
-    answer_ary = answer.to_a
-# puts answer_ary
+end
 
     
-            def log_levels
-          @log_levels ||= {}
-        end
+          if options[:type] == :array && (options[:values].blank? || !options[:values].is_a?(Array))
+        raise ArgumentError.new('When using :array as :type you need to provide the :values as an Array')
+      end
+    
+        respond_to do |format|
+      format.html
+      format.json { render json: @user_credential }
+    end
+  end
+    
+        def matching_username
+      Account.where(Account.arel_table[:username].lower.eq username.to_s.downcase)
+    end
+    
+      describe 'PUT #update' do
+    it 'updates notifications settings' do
+      user.settings['notification_emails'] = user.settings['notification_emails'].merge('follow' => false)
+      user.settings['interactions'] = user.settings['interactions'].merge('must_be_follower' => true)
+    
+    describe Settings::PreferencesController do
+  render_views
+    
+    module Admin
+  class PodsController < AdminController
+    respond_to :html, :json, :mobile
+    
+        def initialize(attributes={})
+      assign_attributes(attributes)
+      yield(self) if block_given?
+    end
+    
+          # Inspired by https://github.com/nov/openid_connect_sample/blob/master/app/controllers/connect/clients_controller.rb#L24
+      def create
+        registrar = OpenIDConnect::Client::Registrar.new(request.url, params)
+        client = Api::OpenidConnect::OAuthApplication.register! registrar
+        render json: client.as_json(root: false)
+      end
+    
+    module Api
+  module OpenidConnect
+    class TokenEndpointController < ApplicationController
+      skip_before_action :verify_authenticity_token
+    
+      def _log(level, message)
+    @messages << [level, message]
+  end
+end
+
     
       module Sass::Plugin::Configuration
     # Different default options in a m environment.
@@ -62,34 +68,36 @@
           env  = Merb.environment
         end
     
-        # Converts a script node into a corresponding string interpolation
-    # expression.
-    #
-    # @param node_or_interp [Sass::Script::Tree::Node]
-    # @return [Sass::Script::Tree::StringInterpolation]
-    def to_string_interpolation(node_or_interp)
-      unless node_or_interp.is_a?(Interpolation)
-        node = node_or_interp
-        return string_literal(node.value.to_s) if node.is_a?(Literal)
-        if node.is_a?(StringInterpolation)
-          return concat(string_literal(node.quote), concat(node, string_literal(node.quote)))
+        # Starts the read-eval-print loop.
+    def run
+      environment = Environment.new
+      @line = 0
+      loop do
+        @line += 1
+        unless (text = Readline.readline('>> '))
+          puts
+          return
         end
-        return StringInterpolation.new(string_literal(''), node, string_literal(''))
-      end
     
-    end
+            def keyword_argument?
+          %i[kwarg kwoptarg].include?(@declaration_node.type)
+        end
     
-      context 'called with arguments (2, $value: 4em 6em)' do
-    it 'outputs sextuple the second value from the default scale' do
-      expect('.two-double-value').to have_rule('font-size: 3.125em')
-    end
-  end
-end
-
+              each_misplaced_optional_arg(arguments) do |argument|
+            add_offense(argument)
+          end
+        end
     
-      context 'called with null values' do
-    it 'writes rules for others' do
-      ruleset = 'position: static; ' +
-                'top: 11px; ' +
-                'left: 13px;'
-      bad_rule = 'position-bottom: null; position-right: null;'
+    module RuboCop
+  module Cop
+    module Style
+      # This cop check for uses of Object#freeze on immutable objects.
+      #
+      # @example
+      #   # bad
+      #   CONST = 1.freeze
+      #
+      #   # good
+      #   CONST = 1
+      class RedundantFreeze < Cop
+        include FrozenStringLiteral
