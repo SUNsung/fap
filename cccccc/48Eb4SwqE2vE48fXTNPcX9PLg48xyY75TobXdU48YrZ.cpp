@@ -1,182 +1,556 @@
 
         
-            void Model::SetModelversion(VERSION p_modelVersion)
+          int called = 0;
+  partial_run_mgr.PartialRunDone(
+      step_id, [&called](Status status) { called++; }, Status::OK());
+  partial_run_mgr.ExecutorDone(step_id, Status::OK());
+    
+    class RecordWriter {
+ public:
+  // Create a writer that will append data to '*dest'.
+  // '*dest' must be initially empty.
+  // '*dest' must remain live while this Writer is in use.
+  RecordWriter(WritableFile* dest,
+               const RecordWriterOptions& options = RecordWriterOptions());
+    }
+    
+    void SYCLDeviceContext::CopyDeviceTensorToCPU(const Tensor *device_tensor,
+                                              StringPiece edge_name,
+                                              Device *device,
+                                              Tensor *cpu_tensor,
+                                              StatusCallback done) {
+  const int64 total_bytes = device_tensor->TotalBytes();
+  if (total_bytes > 0) {
+    const void *src_ptr = DMAHelper::base(device_tensor);
+    void *dst_ptr = DMAHelper::base(cpu_tensor);
+    switch (device_tensor->dtype()) {
+      case DT_FLOAT:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<float *>(dst_ptr), static_cast<const float *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_DOUBLE:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<double *>(dst_ptr),
+            static_cast<const double *>(src_ptr), total_bytes);
+        break;
+      case DT_INT32:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<int32 *>(dst_ptr), static_cast<const int32 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_INT64:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<int64 *>(dst_ptr), static_cast<const int64 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_HALF:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<Eigen::half *>(dst_ptr),
+            static_cast<const Eigen::half *>(src_ptr), total_bytes);
+        break;
+      case DT_COMPLEX64:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<std::complex<float> *>(dst_ptr),
+            static_cast<const std::complex<float> *>(src_ptr), total_bytes);
+        break;
+      case DT_COMPLEX128:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<std::complex<double> *>(dst_ptr),
+            static_cast<const std::complex<double> *>(src_ptr), total_bytes);
+        break;
+      case DT_INT8:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<int8 *>(dst_ptr), static_cast<const int8 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_INT16:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<int16 *>(dst_ptr), static_cast<const int16 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_UINT8:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<uint8 *>(dst_ptr), static_cast<const uint8 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_UINT16:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<uint16 *>(dst_ptr),
+            static_cast<const uint16 *>(src_ptr), total_bytes);
+        break;
+      case DT_BOOL:
+        device->eigen_sycl_device()->memcpyDeviceToHost(
+            static_cast<bool *>(dst_ptr), static_cast<const bool *>(src_ptr),
+            total_bytes);
+        break;
+      default:
+        assert(false && 'unsupported type');
+    }
+  }
+  device->eigen_sycl_device()->synchronize();
+  done(Status::OK());
+}
+    
+    
+    {    io::RecordReaderOptions options =
+        io::RecordReaderOptions::CreateRecordReaderOptions(compression_type_);
+    reader_.reset(new io::RecordReader(file_.get(), options));
+    return Status::OK();
+  }
+    
+    bool HloReachabilityMap::IsReachable(const HloInstruction* a,
+                                     const HloInstruction* b) const {
+  return GetBitVector(b).Get(GetIndex(a));
+}
+    
+    
+    {  std::vector<string> workers;
+  cc->ListWorkers(&workers);
+  std::sort(workers.begin(), workers.end());
+  EXPECT_EQ(std::vector<string>({'/job:mnist/replica:0/task:0',
+                                 '/job:mnist/replica:0/task:3',
+                                 '/job:mnist/replica:0/task:4'}),
+            workers);
+}
+    
+        NodeDef* add_node2 = graph_def.add_node();
+    add_node2->set_name('add_node2');
+    add_node2->set_op('Add');
+    add_node2->add_input('const_node1');
+    add_node2->add_input('const_node2');
+    add_node2->set_device('//device:GPU:1');
+    
+    void MPIUtils::InitMPI() {
+  // Initialize the MPI environment if that hasn't been done
+  int flag = 0;
+  MPI_CHECK(MPI_Initialized(&flag));
+  if (!flag) {
+    int proc_id = 0, number_of_procs = 1, len = -1;
+    char my_host_name[max_worker_name_length];
+    // MPI_CHECK(MPI_Init_thread(0, 0, MPI_THREAD_MULTIPLE, &flag));
+    MPI_CHECK(MPI_Init(0, 0));
+    MPI_CHECK(MPI_Comm_rank(MPI_COMM_WORLD, &proc_id));
+    MPI_CHECK(MPI_Comm_size(MPI_COMM_WORLD, &number_of_procs));
+    MPI_CHECK(MPI_Get_processor_name(my_host_name, &len));
+    fprintf(stderr,
+            'MPI Environment initialized. Process id: %d Total processes: %d '
+            '|| Hostname: %s \n',
+            proc_id, number_of_procs, my_host_name);
+  }
+}
+    
+        // Ignore first non-switch arg if it's not a standalone package.
+    bool ignore_arg = !package->self_extract();
+    for (unsigned i = 1; i < argv.size(); ++i) {
+      if (ignore_arg && argv[i] == args[0]) {
+        ignore_arg = false;
+        continue;
+      }
+    }
+    
+    using content::RenderView;
+using content::RenderThread;
+using content::V8ValueConverter;
+using blink::WebFrame;
+using blink::WebLocalFrame;
+using blink::WebView;
+    
+    // Call method of an object in browser.
+// function CallObjectMethod(id, type, method, args);
+v8::Handle<v8::Value> CallObjectMethod(int routing_id,
+                                       int object_id,
+                                       const std::string& type,
+                                       const std::string& method,
+                                       v8::Handle<v8::Value> args);
+    
+      template<typename T> T* AddListener() {
+    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
+    if (i==listerners_.end()) {
+      T* listener_object = new T(this);
+      listerners_[T::id] = listener_object;
+      return listener_object;
+    }
+    return NULL;
+  }
+    
+    bool MenuDelegate::GetIconForCommandId(int command_id,
+                                       gfx::Image* icon) const {
+  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
+  if (!item)
+    return false;
+  if (item->icon_.IsEmpty())
+    return false;
+    }
+    
+      if (menu_item->submenu_)
+    menu_model_->InsertSubMenuAt(pos, menu_item->id(), menu_item->label_,
+                                 menu_item->submenu_->menu_model_.get());
+  else if (menu_item->type_ == 'normal')
+    menu_model_->InsertItemAt(pos, menu_item->id(), menu_item->label_);
+  else if (menu_item->type_ == 'checkbox')
+    menu_model_->InsertCheckItemAt(pos, menu_item->id(), menu_item->label_);
+  else if (menu_item->type_ == 'separator')
+    menu_model_->InsertSeparatorAt(pos, ui::NORMAL_SEPARATOR);
+    
+        int menu_id;
+    if (option.GetInteger('submenu', &menu_id))
+      SetSubmenu(dispatcher_host()->GetApiObject<Menu>(menu_id));
+    std::string key;
+    if (option.GetString('key',&key)){
+      enable_shortcut = true;
+      std::string modifiers = '';
+      option.GetString('modifiers',&modifiers);
+      modifiers_mask = GdkModifierType(0);
+      if (modifiers.size() != 0){
+        if (modifiers.find('ctrl') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_CONTROL_MASK);
+        }
+        if (modifiers.find('alt') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_MOD1_MASK);
+        }
+        if (modifiers.find('super') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SUPER_MASK);
+        }
+        if (modifiers.find('meta') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_META_MASK);
+        }
+        
+        if (modifiers.find('shift') != std::string::npos){
+          modifiers_mask = GdkModifierType(modifiers_mask|GDK_SHIFT_MASK);
+        }
+    }
+    }
+    
+    
+    {} // namespace
+    
+    void Value::swap(Value& other) {
+  swapPayload(other);
+  std::swap(comments_, other.comments_);
+  std::swap(start_, other.start_);
+  std::swap(limit_, other.limit_);
+}
+    
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_ENUM_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_ENUM_H__
+    
+      void Generate(io::Printer* printer);
+    
+    void RepeatedEnumFieldGenerator::WriteEquals(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    'if(!$name$_.Equals(other.$name$_)) return false;\n');
+}
+    
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
+    
+    
+    {}
+    
+    #include <gtest/gtest.h>
+    
+    MessageGenerator* ImmutableGeneratorFactory::NewMessageGenerator(
+    const Descriptor* descriptor) const {
+  if (HasDescriptorMethods(descriptor, context_->EnforceLite())) {
+    return new ImmutableMessageGenerator(descriptor, context_);
+  } else {
+    return new ImmutableMessageLiteGenerator(descriptor, context_);
+  }
+}
+    
+    namespace protobuf {
+namespace compiler {
+namespace java {
+    }
+    }
+    }
+    
+    
     {
-        m_modelProto->set_model_version(p_modelVersion);
+    {    if (debug) {
+      if (is_italic) {
+        tprintf(' Rejecting: superscript is italic.\n');
+      }
+      if (is_punc) {
+        tprintf(' Rejecting: punctuation present.\n');
+      }
+      const char *char_str = wc.unicharset()->id_to_unichar(unichar_id);
+      if (bad_certainty) {
+        tprintf(' Rejecting: don't believe character %s with certainty %.2f '
+                'which is less than threshold %.2f\n', char_str,
+                char_certainty, certainty_threshold);
+      }
+      if (bad_height) {
+        tprintf(' Rejecting: character %s seems too small @ %.2f versus '
+                'expected %.2f\n', char_str, char_height, normal_height);
+      }
     }
-    
-    using namespace onnx;
-    
-        // Taken from RS4
-    REGISTER_OPERATOR_SCHEMA(HardSigmoid)
-        .Description('HardSigmoid takes one input data (Tensor<T>) and produces one output '
-            'data (Tensor<T>) where the hard sigmoid function, f(x) = max⁡(0,min⁡(alpha*x+beta,1)), '
-            'is applied to the  tensor elementwise.')
-        .Input('X', 'Input tensor of any shape', 'T')
-        .Output('Y', 'Output tensor of same shape and type as input X.', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.')
-        .Attr('alpha', 'Scaling value', AttrType::AttributeProto_AttributeType_FLOAT)
-        .Attr('beta', 'Scalar offset', AttrType::AttributeProto_AttributeType_FLOAT);
-    
-    namespace ONNXIR {
+    if (bad_certainty || bad_height || is_punc || is_italic) {
+      if (ok_run_count == i) {
+        initial_ok_run_count = ok_run_count;
+      }
+      ok_run_count = 0;
+    } else {
+      ok_run_count++;
     }
-    
-        // Get utterance description by its index.
-    const UtteranceDescription* GetUtterance(size_t index) const
-    {
-        return &m_utterances[index];
+    if (char_certainty < worst_certainty) {
+      worst_certainty = char_certainty;
     }
+  }
+  bool all_ok = ok_run_count == wc.length();
+  if (all_ok && debug) {
+    tprintf(' Accept: worst revised certainty is %.2f\n', worst_certainty);
+  }
+  if (!all_ok) {
+    if (left_ok) *left_ok = initial_ok_run_count;
+    if (right_ok) *right_ok = ok_run_count;
+  }
+  return all_ok;
+}
     
-    void TraceLSTMPathes(const FunctionPtr& src, string &f_activation, string &g_activation, string &h_activation,
-    RNNDirection &direction, Variable &initStateH, Variable &initStateC, Variable &peepholeCi, Variable &peepholeCo, Variable &peepholeCf,
-    double &stabilizer_dh, double &stabilizer_dc, double &stabilizer_c);
+    // Computes the absolute error distances of the points from the line,
+// and returns the squared upper-quartile error distance.
+double DetLineFit::ComputeUpperQuartileError() {
+  int num_errors = distances_.size();
+  if (num_errors == 0) return 0.0;
+  // Get the absolute values of the errors.
+  for (int i = 0; i < num_errors; ++i) {
+    if (distances_[i].key < 0) distances_[i].key = -distances_[i].key;
+  }
+  // Now get the upper quartile distance.
+  int index = distances_.choose_nth_item(3 * num_errors / 4);
+  double dist = distances_[index].key;
+  // The true distance is the square root of the dist squared / square_length.
+  // Don't bother with the square root. Just return the square distance.
+  return square_length_ > 0.0 ? dist * dist / square_length_ : 0.0;
+}
     
-    void DebugHUD_DoInterface(DebugHUD *hud)
+      // Arguments:
+  // block: if not NULL, then this is the first transformation, and
+  //        block->re_rotation() needs to be used after the Denorm
+  //        transformation to get back to the image coords.
+  // rotation: if not NULL, apply this rotation after translation to the
+  //           origin and scaling. (Usually a classify rotation.)
+  // predecessor: if not NULL, then predecessor has been applied to the
+  //              input space and needs to be undone to complete the inverse.
+  // The above pointers are not owned by this DENORM and are assumed to live
+  // longer than this denorm, except rotation, which is deep copied on input.
+  //
+  // x_origin: The x origin which will be mapped to final_xshift in the result.
+  // y_origin: The y origin which will be mapped to final_yshift in the result.
+  //           Added to result of row->baseline(x) if not NULL.
+  //
+  // x_scale: scale factor for the x-coordinate.
+  // y_scale: scale factor for the y-coordinate. Ignored if segs is given.
+  // Note that these scale factors apply to the same x and y system as the
+  // x-origin and y-origin apply, ie after any block rotation, but before
+  // the rotation argument is applied.
+  //
+  // final_xshift: The x component of the final translation.
+  // final_yshift: The y component of the final translation.
+  //
+  // In theory, any of the commonly used normalizations can be setup here:
+  // * Traditional baseline normalization on a word:
+  // SetupNormalization(block, NULL, NULL,
+  //                    box.x_middle(), baseline,
+  //                    kBlnXHeight / x_height, kBlnXHeight / x_height,
+  //                    0, kBlnBaselineOffset);
+  // * 'Numeric mode' baseline normalization on a word, in which the blobs
+  //   are positioned with the bottom as the baseline is achieved by making
+  //   a separate DENORM for each blob.
+  // SetupNormalization(block, NULL, NULL,
+  //                    box.x_middle(), box.bottom(),
+  //                    kBlnXHeight / x_height, kBlnXHeight / x_height,
+  //                    0, kBlnBaselineOffset);
+  // * Anisotropic character normalization used by IntFx.
+  // SetupNormalization(NULL, NULL, denorm,
+  //                    centroid_x, centroid_y,
+  //                    51.2 / ry, 51.2 / rx, 128, 128);
+  // * Normalize blob height to x-height (current OSD):
+  // SetupNormalization(NULL, &rotation, NULL,
+  //                    box.rotational_x_middle(rotation),
+  //                    box.rotational_y_middle(rotation),
+  //                    kBlnXHeight / box.rotational_height(rotation),
+  //                    kBlnXHeight / box.rotational_height(rotation),
+  //                    0, kBlnBaselineOffset);
+  // * Secondary normalization for classification rotation (current):
+  // FCOORD rotation = block->classify_rotation();
+  // float target_height = kBlnXHeight / CCStruct::kXHeightCapRatio;
+  // SetupNormalization(NULL, &rotation, denorm,
+  //                    box.rotational_x_middle(rotation),
+  //                    box.rotational_y_middle(rotation),
+  //                    target_height / box.rotational_height(rotation),
+  //                    target_height / box.rotational_height(rotation),
+  //                    0, kBlnBaselineOffset);
+  // * Proposed new normalizations for CJK: Between them there is then
+  // no need for further normalization at all, and the character fills the cell.
+  // ** Replacement for baseline normalization on a word:
+  // Scales height and width independently so that modal height and pitch
+  // fill the cell respectively.
+  // float cap_height = x_height / CCStruct::kXHeightCapRatio;
+  // SetupNormalization(block, NULL, NULL,
+  //                    box.x_middle(), cap_height / 2.0f,
+  //                    kBlnCellHeight / fixed_pitch,
+  //                    kBlnCellHeight / cap_height,
+  //                    0, 0);
+  // ** Secondary normalization for classification (with rotation) (proposed):
+  // Requires a simple translation to the center of the appropriate character
+  // cell, no further scaling and a simple rotation (or nothing) about the
+  // cell center.
+  // FCOORD rotation = block->classify_rotation();
+  // SetupNormalization(NULL, &rotation, denorm,
+  //                    fixed_pitch_cell_center,
+  //                    0.0f,
+  //                    1.0f,
+  //                    1.0f,
+  //                    0, 0);
+  void SetupNormalization(const BLOCK* block,
+                          const FCOORD* rotation,
+                          const DENORM* predecessor,
+                          float x_origin, float y_origin,
+                          float x_scale, float y_scale,
+                          float final_xshift, float final_yshift);
+    
+    #ifndef TESSERACT_CCUTIL_DOUBLEPTR_H_
+#define TESSERACT_CCUTIL_DOUBLEPTR_H_
+    
+    /*---------------------------------------------------------------------------
+          Macros
+----------------------------------------------------------------------------*/
+/* macros for controlling the display of recognized characters */
+#define EnableCharDisplay()   (DisplayCharacters = TRUE)
+#define DisableCharDisplay()    (DisplayCharacters = FALSE)
+    
+    // Sets the report string to a combined human and machine-readable report
+// string of the error rates.
+// Returns false if there is no data, leaving report unchanged, unless
+// even_if_empty is true.
+bool ErrorCounter::ReportString(bool even_if_empty, const Counts& counts,
+                                STRING* report) {
+  // Compute the error rates.
+  double rates[CT_SIZE];
+  if (!ComputeRates(counts, rates) && !even_if_empty)
+    return false;
+  // Using %.4g%%, the length of the output string should exactly match the
+  // length of the format string, but in case of overflow, allow for +eddd
+  // on each number.
+  const int kMaxExtraLength = 5;  // Length of +eddd.
+  // Keep this format string and the snprintf in sync with the CountTypes enum.
+  const char* format_str = 'Unichar=%.4g%%[1], %.4g%%[2], %.4g%%[n], %.4g%%[T] '
+                           'Mult=%.4g%%, Jn=%.4g%%, Brk=%.4g%%, Rej=%.4g%%, '
+                           'FontAttr=%.4g%%, Multi=%.4g%%, '
+                           'Answers=%.3g, Rank=%.3g, '
+                           'OKjunk=%.4g%%, Badjunk=%.4g%%';
+  int max_str_len = strlen(format_str) + kMaxExtraLength * (CT_SIZE - 1) + 1;
+  char* formatted_str = new char[max_str_len];
+  snprintf(formatted_str, max_str_len, format_str,
+           rates[CT_UNICHAR_TOP1_ERR] * 100.0,
+           rates[CT_UNICHAR_TOP2_ERR] * 100.0,
+           rates[CT_UNICHAR_TOPN_ERR] * 100.0,
+           rates[CT_UNICHAR_TOPTOP_ERR] * 100.0,
+           rates[CT_OK_MULTI_UNICHAR] * 100.0,
+           rates[CT_OK_JOINED] * 100.0,
+           rates[CT_OK_BROKEN] * 100.0,
+           rates[CT_REJECT] * 100.0,
+           rates[CT_FONT_ATTR_ERR] * 100.0,
+           rates[CT_OK_MULTI_FONT] * 100.0,
+           rates[CT_NUM_RESULTS],
+           rates[CT_RANK],
+           100.0 * rates[CT_REJECTED_JUNK],
+           100.0 * rates[CT_ACCEPTED_JUNK]);
+  *report = formatted_str;
+  delete [] formatted_str;
+  // Now append each field of counts with a tab in front so the result can
+  // be loaded into a spreadsheet.
+  for (int ct = 0; ct < CT_SIZE; ++ct)
+    report->add_str_int('\t', counts.n[ct]);
+  return true;
+}
+    
+    /**----------------------------------------------------------------------------
+          Include Files and Type Defines
+----------------------------------------------------------------------------**/
+#include 'host.h'
+#include <stdio.h>
+#include <math.h>
+    
+    IntFeatureDist::~IntFeatureDist() {
+  Clear();
+}
+    
+    SampleIterator::SampleIterator()
+  : charset_map_(NULL),
+    shape_table_(NULL),
+    sample_set_(NULL),
+    randomize_(false),
+    owned_shape_table_(NULL) {
+  num_shapes_ = 0;
+  Begin();
+}
+    
+    bool js_cocos2dx_studio_AlphaFrame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_AlphaFrame_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_AlphaFrame(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_AlphaFrame_getAlpha(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_AlphaFrame_setAlpha(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_AlphaFrame_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_AlphaFrame_AlphaFrame(JSContext *cx, uint32_t argc, jsval *vp);
+    
+        tolua_beginmodule(tolua_S,'SimpleAudioEngine');
+        tolua_function(tolua_S,'preloadMusic',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_preloadBackgroundMusic);
+        tolua_function(tolua_S,'stopMusic',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_stopBackgroundMusic);
+        tolua_function(tolua_S,'stopAllEffects',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_stopAllEffects);
+        tolua_function(tolua_S,'getMusicVolume',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_getBackgroundMusicVolume);
+        tolua_function(tolua_S,'resumeMusic',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_resumeBackgroundMusic);
+        tolua_function(tolua_S,'setMusicVolume',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_setBackgroundMusicVolume);
+        tolua_function(tolua_S,'preloadEffect',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_preloadEffect);
+        tolua_function(tolua_S,'isMusicPlaying',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_isBackgroundMusicPlaying);
+        tolua_function(tolua_S,'getEffectsVolume',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_getEffectsVolume);
+        tolua_function(tolua_S,'willPlayMusic',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_willPlayBackgroundMusic);
+        tolua_function(tolua_S,'pauseEffect',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_pauseEffect);
+        tolua_function(tolua_S,'playEffect',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_playEffect);
+        tolua_function(tolua_S,'rewindMusic',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_rewindBackgroundMusic);
+        tolua_function(tolua_S,'playMusic',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_playBackgroundMusic);
+        tolua_function(tolua_S,'resumeAllEffects',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_resumeAllEffects);
+        tolua_function(tolua_S,'setEffectsVolume',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_setEffectsVolume);
+        tolua_function(tolua_S,'stopEffect',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_stopEffect);
+        tolua_function(tolua_S,'pauseMusic',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_pauseBackgroundMusic);
+        tolua_function(tolua_S,'pauseAllEffects',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_pauseAllEffects);
+        tolua_function(tolua_S,'unloadEffect',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_unloadEffect);
+        tolua_function(tolua_S,'resumeEffect',lua_cocos2dx_cocosdenshion_SimpleAudioEngine_resumeEffect);
+        tolua_function(tolua_S,'destroyInstance', lua_cocos2dx_cocosdenshion_SimpleAudioEngine_end);
+        tolua_function(tolua_S,'getInstance', lua_cocos2dx_cocosdenshion_SimpleAudioEngine_getInstance);
+    tolua_endmodule(tolua_S);
+    std::string typeName = typeid(CocosDenshion::SimpleAudioEngine).name();
+    g_luaType[typeName] = 'cc.SimpleAudioEngine';
+    g_typeCast['SimpleAudioEngine'] = 'cc.SimpleAudioEngine';
+    return 1;
+}
+TOLUA_API int register_all_cocos2dx_cocosdenshion(lua_State* tolua_S)
 {
-    // 1. Show a simple window.
-    // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-    {
-        static float f = 0.0f;
-        static int counter = 0;
-        ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-        ImGui::ColorEdit3('clear color', hud->clearColor);      // Edit 3 floats representing a color
-    }
-    }
+	tolua_open(tolua_S);
+	
+	tolua_module(tolua_S,'cc',0);
+	tolua_beginmodule(tolua_S,'cc');
     
+    			b2Transform xf2;
+			xf2.q.Set(-0.3524f * b2_pi);
+			xf2.p = -xf2.q.GetXAxis();
     
-    {        ImGui::Render();
-    }
+    #ifndef BULLET_TEST_H
+#define BULLET_TEST_H
     
-    
-    {    // Restore modified state
-    al_set_blender(op, src, dst);
-    al_set_clipping_rectangle(0, 0, al_get_display_width(g_Display), al_get_display_height(g_Display));
-}
-    
-    struct ID3D10Device;
-    
-    // Copyright (C) 2015 by Giovanni Zito
-// This file is part of ImGui
-    
-    IMGUI_API bool        ImGui_ImplGlfwGL2_Init(GLFWwindow* window, bool install_callbacks);
-IMGUI_API void        ImGui_ImplGlfwGL2_Shutdown();
-IMGUI_API void        ImGui_ImplGlfwGL2_NewFrame();
-IMGUI_API void        ImGui_ImplGlfwGL2_RenderDrawData(ImDrawData* draw_data);
-    
-            // Rendering
-        g_pd3dDevice->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
-        g_pd3dDevice->ClearRenderTargetView(g_mainRenderTargetView, (float*)&clear_color);
-        ImGui::Render();
-        ImGui_ImplDX10_RenderDrawData(ImGui::GetDrawData());
-    
-            // 1. Show a simple window.
-        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
-    }
-    
-            // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
-        if (show_demo_window)
-        {
-            ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-            ImGui::ShowDemoWindow(&show_demo_window);
-        }
-    
-        // Main loop
-    bool done = false;
-    while (!done)
-    {
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
-        {
-            ImGui_ImplSdlGL2_ProcessEvent(&event);
-            if (event.type == SDL_QUIT)
-                done = true;
-        }
-        ImGui_ImplSdlGL2_NewFrame(window);
-    }
-    
-        // Upload texture to graphics system
-    GLint last_texture;
-    glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
-    glGenTextures(1, &g_FontTexture);
-    glBindTexture(GL_TEXTURE_2D, g_FontTexture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_API void        ImGui_ImplSdlGL2_InvalidateDeviceObjects();
-IMGUI_API bool        ImGui_ImplSdlGL2_CreateDeviceObjects();
-
-    
-    // Implemented features:
-//  [X] User texture binding. Cast 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-// Missing features:
-//  [ ] SDL2 handling of IME under Windows appears to be broken and it explicitly disable the regular Windows IME. You can restore Windows IME by compiling SDL with SDL_DISABLE_WINDOWS_IME.
-    
-    
-    {  return scope.Close(v);
-}
-    
-    
-    {};
-    
-    
-    {  std::string res;
-  slists.Get('k1', &res);
-  ASSERT_EQ(res, 'v1|v2|v3');
-}
-    
-      virtual void Prev() override;
-    
-    
-    {}  // namespace rocksdb
-    
-      virtual bool Ref(Handle* handle) override { return cache_->Ref(handle); }
-    
-    	// NewClient
-	printer->Print(vars, 'func New$Service$Client(cc *$grpc$.ClientConn) $Service$Client {\n');
-	printer->Indent();
-	printer->Print(vars, 'return &$ServiceUnexported$Client{cc}');
-	printer->Outdent();
-	printer->Print('\n}\n\n');
-    
-        vars['filename'] = file->filename();
-    vars['filename_base'] = file->filename_without_ext();
-    vars['message_header_ext'] = message_header_ext();
-    vars['service_header_ext'] = service_header_ext();
-    
-      virtual grpc::string name() const = 0;
-    
-      // Returns a human readable error if any of the above functions fail.
-  const std::string &GetLastError() { return lasterror_; }
-    
-      // Get and test the `Equipment` union (`equipped` field).
-  assert(monster->equipped_type() == Equipment_Weapon);
-  auto equipped = static_cast<const Weapon *>(monster->equipped());
-  assert(equipped->name()->str() == 'Axe');
-  assert(equipped->damage() == 5);
-  (void)equipped;
-    
-    #include <iostream>
-#include 'flatbuffers/code_generators.h'
-#include 'flatbuffers/idl.h'
-#include 'flatbuffers/util.h'
-    
-    // Begin the creator function signature.
-static void BeginBuilderArgs(const StructDef &struct_def,
-                             std::string *code_ptr) {
-  std::string &code = *code_ptr;
-    }
+    				if (i > 0)
+				{
+					b2Vec2 anchor(5.0f + 1.0f * i, 10.0f);
+					jd.Initialize(prevBody, body, anchor);
+					m_world->CreateJoint(&jd);
+				}
