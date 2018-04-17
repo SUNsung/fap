@@ -1,176 +1,194 @@
 
         
-          virtual bool lookupAdditions(DeclBaseName Name, DeclContext *DC,
-                               SourceLoc Loc, bool IsTypeLookup,
-                               ResultVector &RV) = 0;
-    
-    @interface MutableDataVerifier : NSMutableData {
-    ObjectBehaviorVerifier *_verifier;
-    NSMutableData *_data;
-}
-@property (readonly) ObjectBehaviorVerifier *verifier;
-@end
-    
-    SILDebugScope::SILDebugScope(SILLocation Loc, SILFunction *SILFn,
-                             const SILDebugScope *ParentScope ,
-                             const SILDebugScope *InlinedCallSite)
-    : Loc(Loc), InlinedCallSite(InlinedCallSite) {
-  if (ParentScope)
-    Parent = ParentScope;
-  else {
-    assert(SILFn && 'no parent provided');
-    Parent = SILFn;
-  }
-}
-    
-    #endif // SWIFT_INDEX_INDEXSYMBOL_H
-
-    
-      /// Checks whether the current substitution is canonical.
-  bool isCanonical() const;
-    
-    #endif  // GTEST_HAS_PARAM_TEST
-    
-    // Unary predicate assertion macros.
-#define EXPECT_PRED_FORMAT1(pred_format, v1) \
-  GTEST_PRED_FORMAT1_(pred_format, v1, GTEST_NONFATAL_FAILURE_)
-#define EXPECT_PRED1(pred, v1) \
-  GTEST_PRED1_(pred, v1, GTEST_NONFATAL_FAILURE_)
-#define ASSERT_PRED_FORMAT1(pred_format, v1) \
-  GTEST_PRED_FORMAT1_(pred_format, v1, GTEST_FATAL_FAILURE_)
-#define ASSERT_PRED1(pred, v1) \
-  GTEST_PRED1_(pred, v1, GTEST_FATAL_FAILURE_)
-    
-     private:
-  // Replaces multiple consecutive separators with a single separator.
-  // For example, 'bar///foo' becomes 'bar/foo'. Does not eliminate other
-  // redundancies that might be in a pathname involving '.' or '..'.
-  //
-  // A pathname with multiple consecutive separators may occur either through
-  // user error or as a result of some scripts or APIs that generate a pathname
-  // with a trailing separator. On other platforms the same API or script
-  // may NOT generate a pathname with a trailing '/'. Then elsewhere that
-  // pathname may have another '/' and pathname components added to it,
-  // without checking for the separator already being there.
-  // The script language and operating system may allow paths like 'foo//bar'
-  // but some of the functions in FilePath will not handle that correctly. In
-  // particular, RemoveTrailingPathSeparator() only removes one separator, and
-  // it is called in CreateDirectoriesRecursively() assuming that it will change
-  // a pathname from directory syntax (trailing separator) to filename syntax.
-  //
-  // On Windows this method also replaces the alternate path separator '/' with
-  // the primary path separator '\\', so that for example 'bar\\/\\foo' becomes
-  // 'bar\\foo'.
-    
-     private:
-  // LocalTestInfo structure keeps information about a single test registered
-  // with TEST_P macro.
-  struct TestInfo {
-    TestInfo(const char* a_test_case_base_name,
-             const char* a_test_base_name,
-             TestMetaFactoryBase<ParamType>* a_test_meta_factory) :
-        test_case_base_name(a_test_case_base_name),
-        test_base_name(a_test_base_name),
-        test_meta_factory(a_test_meta_factory) {}
-    }
-    
-      tuple& operator=(const tuple& t) { return CopyFrom(t); }
-    
-    // Known limitations: we don't support passing an
-// std::tr1::reference_wrapper<T> to make_tuple().  And we don't
-// implement tie().
-    
-    // The template 'selector' struct TemplateSel<Tmpl> is used to
-// represent Tmpl, which must be a class template with one type
-// parameter, as a type.  TemplateSel<Tmpl>::Bind<T>::type is defined
-// as the type Tmpl<T>.  This allows us to actually instantiate the
-// template 'selected' by TemplateSel<Tmpl>.
-//
-// This trick is necessary for simulating typedef for class templates,
-// which C++ doesn't support directly.
-template <GTEST_TEMPLATE_ Tmpl>
-struct TemplateSel {
-  template <typename T>
-  struct Bind {
-    typedef Tmpl<T> type;
-  };
+        
+    {  /**
+   * @brief Computes the error gradient w.r.t. the BNLL inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
 };
     
-        next_layer_.async_write_some(buffers,
-        BOOST_ASIO_MOVE_CAST(BOOST_ASIO_HANDLER_TYPE(WriteHandler,
-            void (boost::system::error_code, std::size_t)))(init.handler));
-    
-    #endif // BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
-
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    class ptime;
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-# include <boost/asio/detail/null_event.hpp>
-#elif defined(BOOST_ASIO_WINDOWS)
-# include <boost/asio/detail/win_event.hpp>
-#elif defined(BOOST_ASIO_HAS_PTHREADS)
-# include <boost/asio/detail/posix_event.hpp>
-#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
-# include <boost/asio/detail/std_event.hpp>
-#else
-# error Only Windows, POSIX and std::condition_variable are supported!
-#endif
-    
-    #if !defined(BOOST_ASIO_WINDOWS_RUNTIME)
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DConeTwistConstraint_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DConeTwistConstraint(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getBFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFixThresh(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFixThresh(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan2(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan1(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFrames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistAngle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistSpan(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setDamping(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_setLimit(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_getAFrame(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_enableMotor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DConeTwistConstraint_Physics3DConeTwistConstraint(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    extern JSClass  *jsb_cocostudio_timeline_BoneNode_class;
-extern JSObject *jsb_cocostudio_timeline_BoneNode_prototype;
-    
-    int lua_register_cocos2dx_physics_PhysicsJointLimit(lua_State* tolua_S)
-{
-    tolua_usertype(tolua_S,'cc.PhysicsJointLimit');
-    tolua_cclass(tolua_S,'PhysicsJointLimit','cc.PhysicsJointLimit','cc.PhysicsJoint',nullptr);
+    #ifdef USE_CUDNN
+/*
+ * @brief cuDNN implementation of ConvolutionLayer.
+ *        Fallback to ConvolutionLayer for CPU mode.
+ *
+ * cuDNN accelerates convolution through forward kernels for filtering and bias
+ * plus backward kernels for the gradient w.r.t. the filters, biases, and
+ * inputs. Caffe + cuDNN further speeds up the computation through forward
+ * parallelism across groups and backward parallelism across gradients.
+ *
+ * The CUDNN engine does not have memory overhead for matrix buffers. For many
+ * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
+ * but for fully-convolutional models and large inputs the CAFFE engine can be
+ * faster as long as it fits in memory.
+*/
+template <typename Dtype>
+class CuDNNConvolutionLayer : public ConvolutionLayer<Dtype> {
+ public:
+  explicit CuDNNConvolutionLayer(const LayerParameter& param)
+      : ConvolutionLayer<Dtype>(param), handles_setup_(false) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual ~CuDNNConvolutionLayer();
     }
     
-    	b2Body* m_groundBody;
-	b2AABB m_worldAABB;
-	ContactPoint m_points[k_maxContactPoints];
-	int32 m_pointCount;
-	DestructionListener m_destructionListener;
-	GLESDebugDraw m_debugDraw;
-	int32 m_textLine;
-	b2World* m_world;
-	b2Body* m_bomb;
-	b2MouseJoint* m_mouseJoint;
-	b2Vec2 m_bombSpawnPoint;
-	bool m_bombSpawning;
-	b2Vec2 m_mouseWorld;
-	int32 m_stepCount;
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    
+
+    
+      // The first paragraph on a page often lacks a first line indent, but should
+  // still be modeled by the same model as other body text paragraphs on the
+  // page.
+  bool is_very_first_or_continuation;
+    
+    #include 'fontinfo.h'
+#include 'ndminx.h'
+#include 'sampleiterator.h'
+#include 'shapeclassifier.h'
+#include 'shapetable.h'
+#include 'trainingsample.h'
+#include 'trainingsampleset.h'
+#include 'unicity_table.h'
+    
+    FLOAT32 DistanceBetween(FPOINT A, FPOINT B);
+    
+    #include <folly/Optional.h>
+    
+    
+    {  unsigned next_vr{Vreg::V0};
+  Vlabel entry;
+  jit::vector<Vframe> frames;
+  jit::vector<Vblock> blocks;
+  jit::hash_map<Vconst,Vreg,Vconst::Hash> constToReg;
+  jit::hash_map<size_t,Vconst> regToConst;
+  jit::vector<VregList> tuples;
+  jit::vector<VcallArgs> vcallArgs;
+  jit::vector<VdataBlock> dataBlocks;
+  uint16_t cur_voff{0};  // current instruction index managed by Vout
+  bool padding{false};
+  bool profiling{false};
+  folly::Optional<TransContext> context;
+  StructuredLogEntry* log_entry{nullptr};
+};
+    
+      if (default_magic) {
+    free(default_magic);
+    default_magic = NULL;
+  }
+    
+    void OfflineCode::disasm(FILE* file,
+                         TCA fileStartAddr,
+                         TCA codeStartAddr,
+                         uint64_t codeLen,
+                         const PerfEventsMap<TCA>& perfEvents,
+                         BCMappingInfo bcMappingInfo,
+                         bool printAddr,
+                         bool printBinary) {
+    }
+    
+    
+    {}
+    
+    bool js_cocos2dx_physics3d_Physics3DPointToPointConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DPointToPointConstraint_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DPointToPointConstraint(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DPointToPointConstraint_getPivotPointInA(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DPointToPointConstraint_getPivotPointInB(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DPointToPointConstraint_init(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DPointToPointConstraint_setPivotPointInA(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DPointToPointConstraint_setPivotPointInB(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DPointToPointConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DPointToPointConstraint_Physics3DPointToPointConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+    
+    
+    			// Top horizontal
+			shape.Set(b2Vec2(-20.0f, 20.0f), b2Vec2(20.0f, 20.0f));
+			ground->CreateFixture(&sd);
+    
+    	void Break()
+	{
+		// Create two bodies from one.
+		b2Body* body1 = m_piece1->GetBody();
+		b2Vec2 center = body1->GetWorldCenter();
+    }
+    
+        // Try to grow in place.
+    //
+    // Note that xallocx(MALLOCX_ZERO) will only zero newly allocated memory,
+    // even if a previous allocation allocated more than we requested.
+    // This is fine; we always use MALLOCX_ZERO with jemalloc and we
+    // always expand our allocation to the real size.
+    if (prevCapacity * sizeof(ElementWrapper) >= jemallocMinInPlaceExpandable) {
+      success =
+          (xallocx(threadEntry->elements, newByteSize, 0, MALLOCX_ZERO) ==
+           newByteSize);
+    }
+    
+    template <typename T>
+struct constexpr_abs_helper<
+    T,
+    typename std::enable_if<std::is_floating_point<T>::value>::type> {
+  static constexpr T go(T t) {
+    return t < static_cast<T>(0) ? -t : t;
+  }
+};
+    
+    TDigest TDigest::merge(Range<const TDigest*> digests) {
+  size_t nCentroids = 0;
+  for (auto it = digests.begin(); it != digests.end(); it++) {
+    nCentroids += it->centroids_.size();
+  }
+    }
+    
+    using namespace folly;
+    
+      switch (cb.aio_lio_opcode) {
+    case IO_CMD_PREAD:
+    case IO_CMD_PWRITE:
+      os << folly::format(
+          'buf={}, offset={}, nbytes={}, ',
+          cb.u.c.buf,
+          cb.u.c.offset,
+          cb.u.c.nbytes);
+      break;
+    default:
+      os << '[TODO: write debug string for '
+         << iocbCmdToString(cb.aio_lio_opcode) << '] ';
+      break;
+  }
+    
+    TEST(AsyncIO, ZeroAsyncDataPollable) {
+  testReads({{0, 0}}, AsyncIO::POLLABLE);
+}
+    
+    
+    { private:
+  class WriterFactory;
+};
