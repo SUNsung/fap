@@ -1,105 +1,124 @@
 
         
-            with open('README.md', 'w+') as sorted_file:
-        sorted_file.write(final_README)
+        from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import MultinomialNB
     
-    filenames = {
-    'bin': 'youtube-dl',
-    'exe': 'youtube-dl.exe',
-    'tar': 'youtube-dl-%s.tar.gz' % version}
-build_dir = os.path.join('..', '..', 'build', version)
-for key, filename in filenames.items():
-    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
-    fn = os.path.join(build_dir, filename)
-    with open(fn, 'rb') as f:
-        data = f.read()
-    if not data:
-        raise ValueError('File %s is empty!' % fn)
-    sha256sum = hashlib.sha256(data).hexdigest()
-    new_version[key] = (url, sha256sum)
+    In the second benchmark, we increase the number of dimensions of the
+training set. Then we plot the computation time as function of
+the number of dimensions.
     
-        def test_youtube_extract(self):
-        assertExtractId = lambda url, id: self.assertEqual(YoutubeIE.extract_id(url), id)
-        assertExtractId('http://www.youtube.com/watch?&v=BaW_jenozKc', 'BaW_jenozKc')
-        assertExtractId('https://www.youtube.com/watch?&v=BaW_jenozKc', 'BaW_jenozKc')
-        assertExtractId('https://www.youtube.com/watch?feature=player_embedded&v=BaW_jenozKc', 'BaW_jenozKc')
-        assertExtractId('https://www.youtube.com/watch_popup?v=BaW_jenozKc', 'BaW_jenozKc')
-        assertExtractId('http://www.youtube.com/watch?v=BaW_jenozKcsharePLED17F32AD9753930', 'BaW_jenozKc')
-        assertExtractId('BaW_jenozKc', 'BaW_jenozKc')
+        Returns
+    -------
+    array of floats shaped like (metrics, formats, samples, classes, density)
+        Time in seconds.
+    '''
+    metrics = np.atleast_1d(metrics)
+    samples = np.atleast_1d(samples)
+    classes = np.atleast_1d(classes)
+    density = np.atleast_1d(density)
+    formats = np.atleast_1d(formats)
+    out = np.zeros((len(metrics), len(formats), len(samples), len(classes),
+                    len(density)), dtype=float)
+    it = itertools.product(samples, classes, density)
+    for i, (s, c, d) in enumerate(it):
+        _, y_true = make_multilabel_classification(n_samples=s, n_features=1,
+                                                   n_classes=c, n_labels=d * c,
+                                                   random_state=42)
+        _, y_pred = make_multilabel_classification(n_samples=s, n_features=1,
+                                                   n_classes=c, n_labels=d * c,
+                                                   random_state=84)
+        for j, f in enumerate(formats):
+            f_true = f(y_true)
+            f_pred = f(y_pred)
+            for k, metric in enumerate(metrics):
+                t = timeit(partial(metric, f_true, f_pred), number=n_times)
     
-            formats = [
-            {
-                'format_id': f['type'],
-                'filesize': int(f['filesize']),
-                'url': f['url']
-            } for f in info['rfiles']
-        ]
-        self._sort_formats(formats)
+    from sklearn import clone
+from sklearn.externals.six.moves import xrange
+from sklearn.random_projection import (SparseRandomProjection,
+                                       GaussianRandomProjection,
+                                       johnson_lindenstrauss_min_dim)
     
     
-@pytest.fixture
-def httpbin_secure(httpbin_secure):
-    return prepare_url(httpbin_secure)
+def _linkcode_resolve(domain, info, package, url_fmt, revision):
+    '''Determine a link to online source for a class/method/function
+    
+    # Illustrate calibrator
+plt.figure(1)
+# generate grid over 2-simplex
+p1d = np.linspace(0, 1, 20)
+p0, p1 = np.meshgrid(p1d, p1d)
+p2 = 1 - p0 - p1
+p = np.c_[p0.ravel(), p1.ravel(), p2.ravel()]
+p = p[p[:, 2] >= 0]
+    
+    plt.legend(loc=1, prop={'size': 12})
+plt.suptitle('Linear Discriminant Analysis vs. \
+shrinkage Linear Discriminant Analysis (1 discriminative feature)')
+plt.show()
 
     
-            self.wait_to_close_event = wait_to_close_event
-        self.ready_event = threading.Event()
-        self.stop_event = threading.Event()
+        def can_fit_in_spot(self, spot):
+        return True
     
-        @pytest.mark.parametrize(
-        'stream, value', (
-            (StringIO.StringIO, 'Test'),
-            (BytesIO, b'Test'),
-            pytest.mark.skipif('cStringIO is None')((cStringIO, 'Test')),
-        ))
-    def test_io_streams(self, stream, value):
-        '''Ensures that we properly deal with different kinds of IO streams.'''
-        assert super_len(stream()) == 0
-        assert super_len(stream(value)) == 4
+        READY = 0
+    IN_PROGRESS = 1
+    COMPLETE = 2
     
-    from r2.lib.translation import I18N_PATH
-from r2.lib.plugin import PluginLoader
-from r2.lib import js
     
-        config.init_app(global_conf, app_conf, package='r2', paths=paths)
+class BlackJackCard(Card):
     
-    api('wikibasepage', WikiJsonTemplate)
-api('wikipagerevisions', WikiJsonTemplate)
-api('wikiview', WikiViewJsonTemplate)
-api('wikirevision', WikiRevisionJsonTemplate)
+        _legal_actions = (ACTION_REPLACE, ACTION_APPEND_AS_CHILDREN,
+                      ACTION_INSERT_AFTER, ACTION_INSERT_BEFORE)
     
-                send_gift(
-                buyer=buyer,
-                recipient=recipient,
-                months=months,
-                days=months * 31,
-                signed=False,
-                giftmessage=None,
-                thing_fullname=thing_fullname,
-                note=note,
-            )
+        objects = []
+    libs = ['shell32.lib', 'comdlg32.lib', 'wsock32.lib', 'user32.lib', 'oleaut32.lib']
+    for moddefn in moddefns:
+        print('# Module', moddefn.name)
+        for file in moddefn.sourceFiles:
+            base = os.path.basename(file)
+            base, ext = os.path.splitext(base)
+            objects.append(base + '.obj')
+            print(r'$(temp_dir)\%s.obj: '%s'' % (base, file))
+            print('\t@$(CC) -c -nologo /Fo$* $(cdl) $(c_debug) /D BUILD_FREEZE', end=' ')
+            print(''-I$(pythonhome)/Include'  '-I$(pythonhome)/PC' \\')
+            print('\t\t$(cflags) $(cdebug) $(cinclude) \\')
+            extra = moddefn.GetCompilerOptions()
+            if extra:
+                print('\t\t%s \\' % (' '.join(extra),))
+            print('\t\t'%s'' % file)
+            print()
     
-        @validate(VAdmin(),
-              award = VAwardByCodename('awardcn'),
-              recipient = nop('recipient'),
-              desc = nop('desc'),
-              url = nop('url'),
-              hours = nop('hours'))
-    def GET_give(self, award, recipient, desc, url, hours):
-        if award is None:
-            abort(404, 'page not found')
+            a = int(10 * sys.maxsize)
+        b = int(100 * sys.maxsize)
+        c = int(50 * sys.maxsize)
     
-    class CaptchaController(RedditController):
-    @allow_oauth2_access
-    @api_doc(api_section.captcha, uri='/captcha/{iden}')
-    def GET_captchaimg(self, iden):
-        '''
-        Request a CAPTCHA image given an `iden`.
+        c = Controller(blackboard)
+    contributions = c.run_loop()
     
-                    errpage = pages.InterstitialPage(
-                    _('suspended'),
-                    content=pages.InTimeoutInterstitial(
-                        timeout_days_remaining=timeout_days_remaining,
-                    ),
-                )
-                request.environ['usable_error_content'] = errpage.render()
+        def tearDown(cls):
+        ''' Function/test case scope teardown. '''
+        cls.output.close()
+        sys.stdout = cls.saved_stdout
+    
+        def test_display_current_time_at_midnight(self):
+        class_under_test = TimeDisplay()
+        expected_time = '24:01'
+        result = class_under_test.get_current_time_as_as_html_fragment()
+        self.assertEqual(result, expected_time)
+'''
+    
+        def rename(self, src, dest):
+        print(u'renaming %s to %s' % (src, dest))
+        os.rename(src, dest)
+    
+        @Transactional
+    def do_stuff(self):
+        self.value = '1111'  # <- invalid value
+        self.increment()  # <- will fail and rollback
+    
+    
+class UserSpecification(CompositeSpecification):
