@@ -1,87 +1,94 @@
 
         
-        with io.open(README_FILE, encoding='utf-8') as f:
-    oldreadme = f.read()
+                with server as address:
+            sock = socket.socket()
+            sock.connect(address)
+            time.sleep(1.5)
+            sock.sendall(b'hehehe, not received')
+            sock.close()
     
-    # Allow direct execution
-import os
-import sys
-import unittest
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        # Redirection.
+    300: ('multiple_choices',),
+    301: ('moved_permanently', 'moved', '\\o-'),
+    302: ('found',),
+    303: ('see_other', 'other'),
+    304: ('not_modified',),
+    305: ('use_proxy',),
+    306: ('switch_proxy',),
+    307: ('temporary_redirect', 'temporary_moved', 'temporary'),
+    308: ('permanent_redirect',
+          'resume_incomplete', 'resume',),  # These 2 to be removed in 3.0
     
-    # Allow direct execution
-import os
-import sys
-import unittest
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
-    
-def list_extractors(age_limit):
-    '''
-    Return a list of extractors that are suitable for the given age,
-    sorted by extractor ID.
-    '''
-    
-            return {
-            'id': api_response.get('id', album_url_tag),
-            'uploader': api_response.get('artist'),
-            'title': api_response.get('title'),
-            'url': api_response['url'],
-        }
-    
-            (2016-01, url0), 2
-        (2016-01, url1), 1
-        '''
-        yield key, sum(values)
-    
-        def reducer(self, key, values):
-        total = sum(values)
-        if total == 1:
-            yield key, total
-    
-        def __init__(self, from_user_id, to_user_id, request_status, timestamp):
-        self.from_user_id = from_user_id
-        self.to_user_id = to_user_id
-        self.request_status = request_status
-        self.timestamp = timestamp
-    
-        def crawl_page(self, page):
-        for url in page.child_urls:
-            self.data_store.add_link_to_crawl(url)
-        self.reverse_index_queue.generate(page)
-        self.doc_index_queue.generate(page)
-        self.data_store.remove_link_to_crawl(page.url)
-        self.data_store.insert_crawled_link(page.url, page.signature)
+        kwargs = {
+        var: proxy
+    }
+    scheme = urlparse(url).scheme
+    with override_environ(**kwargs):
+        proxies = session.rebuild_proxies(prep, {})
+        assert scheme in proxies
+        assert proxies[scheme] == proxy
     
     
-class BlackJackHand(Hand):
+def best_server():
+    # TODO: find and use the best server
+    # teredo.remlab.net / teredo - debian.remlab.net(Germany)
+    # teredo.ngix.ne.kr(South Korea)
+    # teredo.managemydedi.com(USA, Chicago)
+    # teredo.trex.fi(Finland)
+    # win8.ipv6.microsoft.com(The Teredo server hidden in Windows RT 8.1) of which Windows 7 has no knowledge.
+    # win10.ipv6.microsoft.com
+    return 'teredo.remlab.net'
     
-        theplatform_download_by_pid(pid, title, output_dir=output_dir, merge=merge, info_only=info_only)
+    if hasattr(ctypes, 'windll'):
+    WSAStringToAddressA = ctypes.windll.ws2_32.WSAStringToAddressA
+    WSAAddressToStringA = ctypes.windll.ws2_32.WSAAddressToStringA
+else:
+    def not_windows():
+        raise SystemError(
+            'Invalid platform. ctypes.windll must be available.'
+        )
+    WSAStringToAddressA = not_windows
+    WSAAddressToStringA = not_windows
     
-    	for video in tab.childNodes:
-		if re.search(contentid, video.attributes['link'].value):
-			url = video.attributes['flv'].value
-			break
+    	# The current Token when an error occurred.  Since not all streams
+	# can retrieve the ith Token, we have to track the Token object.
+	# For parsers.  Even when it's a tree parser, token might be set.
+        self.token = None
     
-    from ..common import *
+    A Lexer emits Token objects which are usually buffered by a TokenStream. A
+Parser can build a Tree, if the output=AST option has been set in the grammar.
     
-            # cookie handler
-        ssl_context = request.HTTPSHandler(
-            context=ssl.SSLContext(ssl.PROTOCOL_TLSv1))
-        cookie_handler = request.HTTPCookieProcessor()
-        opener = request.build_opener(ssl_context, cookie_handler)
-        opener.addheaders = [
-            ('Referer', self.url),
-            ('Cookie',
-             'CloudFront-Policy=%s;CloudFront-Signature=%s;CloudFront-Key-Pair-Id=%s' % (scp, scs, sck))
-        ]
-        request.install_opener(opener)
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
     
-    from ..common import *
-import re
-    
-                group.append(HTML('htmlout.html').render())
-            print('Rendered page {} of the directory {}'.format(str(i), operating_sys))
-            i += 1
-        
-        allmd.clear()
+                    if c >= self.min[s] and c <= self.max[s]:
+                    # move to next state
+                    snext = self.transition[s][c-self.min[s]]
+                    #print 'in range, next state = %d' % snext
