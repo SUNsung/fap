@@ -1,206 +1,171 @@
 
         
-          // During the first Compute(), resource is either created or looked up using
-  // shared_name. In the latter case, the resource found should be verified if
-  // it is compatible with this op's configuration. The verification may fail in
-  // cases such as two graphs asking queues of the same shared name to have
-  // inconsistent capacities.
-  virtual Status VerifyResource(T* resource) { return Status::OK(); }
+        
+    {}  // namespace tensorflow
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    
-    {  // The underlying CUDA event element.
-  CUevent cuda_event_;
-};
-    
-    // Prefetching support
-//
-// Defined behavior on some of the uarchs:
-// PREFETCH_HINT_T0:
-//   prefetch to all levels of the hierarchy (except on p4: prefetch to L2)
-// PREFETCH_HINT_NTA:
-//   p4: fetch to L2, but limit to 1 way (out of the 8 ways)
-//   core: skip L2, go directly to L1
-//   k8 rev E and later: skip L2, can go to either of the 2-ways in L1
-enum PrefetchHint {
-  PREFETCH_HINT_T0 = 3,  // More temporal locality
-  PREFETCH_HINT_T1 = 2,
-  PREFETCH_HINT_T2 = 1,  // Less temporal locality
-  PREFETCH_HINT_NTA = 0  // No temporal locality
-};
-template <PrefetchHint hint>
-void prefetch(const void* x);
-    
-    namespace tensorflow {
+    /** scalar_tanh_fast_derivative_op
+  * \ingroup CXX11_NeuralNetworks_Module
+  * \brief Template functor to compute the fast derivative of a tanh
+  *
+  * Input should be the backpropagated gradient.
+  *
+  * \sa class CwiseUnaryOp, Cwise::tanh_fast_derivative()
+  */
+template <typename T>
+struct scalar_tanh_fast_derivative_op {
+  EIGEN_EMPTY_STRUCT_CTOR(scalar_tanh_fast_derivative_op)
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE T operator()(const T& y) const {
+    const T one = T(1);
+    return one - (y * y);
+  }
     }
     
-    
-    {  void CopyDeviceTensorToCPU(const Tensor *device_tensor, StringPiece edge_name,
-                             Device *device, Tensor *cpu_tensor,
-                             StatusCallback done) override;
-};
-    
-    
-    { private:
-  enum { kBufferSize = 256 << 10 /* 256 kB */ };
-  const int skip_header_lines_;
-  Env* const env_;
-  int64 line_number_;
-  std::unique_ptr<RandomAccessFile> file_;  // must outlive input_buffer_
-  std::unique_ptr<io::InputBuffer> input_buffer_;
-};
-    
-        NodeDef* const_node3 = graph_def.add_node();
-    const_node3->set_name('const_node3');
-    const_node3->set_op('Const');
-    
-    
-    {  if (proc_id == 0) LOG(INFO) << 'MPI process-ID to gRPC server name map: \n';
-  for (int i = 0; i < number_of_procs; i++) {
-    name_to_id_[std::string(&worker_names[i * 128])] = i;
-    if (proc_id == 0)
-      LOG(INFO) << 'Process: ' << i
-                << '\tgRPC-name: ' << std::string(&worker_names[i * 128])
-                << std::endl;
-  }
+    std::ostream& operator<<(std::ostream& out,
+                         const VersionedComputationHandle& versioned_handle) {
+  out << versioned_handle.ToString();
+  return out;
 }
     
-      // Fill *indices and *sizes from *this (so that we can use the slice()
-  // function in eigen tensor). We need a tensor shape in case some of the
-  // slices are full slices.
-  // We allow NDIMS to be greater than dims(), in which case we will pad the
-  // higher dimensions with trivial dimensions.
-  template <int NDIMS>
-  void FillIndicesAndSizes(
-      const TensorShape& shape,
-      Eigen::DSizes<Eigen::DenseIndex, NDIMS>* indices,
-      Eigen::DSizes<Eigen::DenseIndex, NDIMS>* sizes) const;
-    
-      // Appends the TestPartResult object to the TestPartResultArray
-  // received in the constructor.
-  //
-  // This method is from the TestPartResultReporterInterface
-  // interface.
-  virtual void ReportTestPartResult(const TestPartResult& result);
- private:
-  void Init();
-    
-    // This is used internally by all instances of linked_ptr<>.  It needs to be
-// a non-template class because different types of linked_ptr<> can refer to
-// the same object (linked_ptr<Superclass>(obj) vs linked_ptr<Subclass>(obj)).
-// So, it needs to be possible for different types of linked_ptr to participate
-// in the same circular linked list, so we need a single class type here.
-//
-// DO NOT USE THIS CLASS DIRECTLY YOURSELF.  Use linked_ptr<T>.
-class linked_ptr_internal {
- public:
-  // Create a new circle that includes only this instance.
-  void join_new() {
-    next_ = this;
-  }
-    }
-    
-    #ifndef GTEST_HAS_STD_WSTRING
-// The user didn't tell us whether ::std::wstring is available, so we need
-// to figure it out.
-// TODO(wan@google.com): uses autoconf to detect whether ::std::wstring
-//   is available.
-    
-      // Creates an ANSI string from the given wide string, allocating
-  // memory using new. The caller is responsible for deleting the return
-  // value using delete[]. Returns the ANSI string, or NULL if the
-  // input is NULL.
-  //
-  // The returned string is created using the ANSI codepage (CP_ACP) to
-  // match the behaviour of the ANSI versions of Win32 calls and the
-  // C runtime.
-  static const char* Utf16ToAnsi(LPCWSTR utf16_str);
-#endif
-    
-        for (int i = 2; i <= max; i++) {
-      if (!is_prime_[i]) continue;
-    }
-    
-    // A sample program demonstrating using Google C++ testing framework.
-//
-// Author: wan@google.com (Zhanyong Wan)
-    
-        HTKChunkInfo() : m_chunkId(ChunkIdMax) { };
-    
-                    // loop over sub-ranges of the dot product (full dot product will exceed the L1 cache)
-                float patchbuffer[rowstripehM * colstripewV + 3]; // note: don't forget column rounding
-                // 128 * 16 -> 8 KB
-                ssematrixbase patch(patchbuffer, i1 - i0, j1 - j0);
-    
-      /// Peek at the incoming data on the stream. Returns the number of bytes read.
-  /// Throws an exception on failure.
-  template <typename MutableBufferSequence>
-  std::size_t peek(const MutableBufferSequence& buffers);
-    
-    
-    {
-    {} // namespace asio
-} // namespace boost
-    
-    #endif // BOOST_ASIO_BUFFERED_WRITE_STREAM_FWD_HPP
+    void cvValidateDisparity( CvArr* _disp, const CvArr* _cost, int minDisparity,
+                         int numberOfDisparities, int disp12MaxDiff )
+{
+    cv::Mat disp = cv::cvarrToMat(_disp), cost = cv::cvarrToMat(_cost);
+    cv::validateDisparity( disp, cost, minDisparity, numberOfDisparities, disp12MaxDiff );
+}
 
     
-      std::size_t check_for_completion(
-      const boost::system::error_code& ec,
-      std::size_t total_transferred)
-  {
-    return detail::adapt_completion_condition_result(
-        completion_condition_(ec, total_transferred));
-  }
+    void ComputeExtrinsicRefine(const Mat& imagePoints, const Mat& objectPoints, Mat& rvec,
+                            Mat&  tvec, Mat& J, const int MaxIter,
+                            const IntrinsicParams& param, const double thresh_cond);
+CV_EXPORTS Mat ComputeHomography(Mat m, Mat M);
     
-      BOOST_ASIO_DECL static void init_native_buffer(
-      native_buffer_type& buf,
-      const boost::asio::mutable_buffer& buffer);
-    
-        // Push the key/value pair on to the stack.
-    context(Key* k, Value& v)
-      : key_(k),
-        value_(&v),
-        next_(call_stack<Key, Value>::top_)
-    {
-      call_stack<Key, Value>::top_ = this;
+                template<typename T>
+            static __device__ __forceinline__ T atomicAdd(T* address, T val)
+            {
+#if defined (__CUDA_ARCH__) && (__CUDA_ARCH__ < 120)
+                T count;
+                unsigned int tag = threadIdx.x << ( (sizeof(unsigned int) << 3) - 5U);
+                do
+                {
+                    count = *address & TAG_MASK;
+                    count = tag | (count + val);
+                    *address = count;
+                } while (*address != count);
     }
     
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
     
-        BOOST_ASIO_HANDLER_COMPLETION((o));
+    {
+    {
+    {} } } // namespace cv::ocl::runtime
     
-    #include <boost/asio/detail/posix_fd_set_adapter.hpp>
-#include <boost/asio/detail/win_fd_set_adapter.hpp>
+    extern JSClass  *jsb_cocos2d_Physics3DConeTwistConstraint_class;
+extern JSObject *jsb_cocos2d_Physics3DConeTwistConstraint_prototype;
     
-    template <typename Time_Traits>
-std::size_t epoll_reactor::cancel_timer(timer_queue<Time_Traits>& queue,
-    typename timer_queue<Time_Traits>::per_timer_data& timer,
-    std::size_t max_cancelled)
-{
-  mutex::scoped_lock lock(mutex_);
-  op_queue<operation> ops;
-  std::size_t n = queue.cancel_timer(timer, ops, max_cancelled);
-  lock.unlock();
-  io_service_.post_deferred_completions(ops);
-  return n;
-}
+    
+    
+    
     
     
     {
-    {// use R's PRNG to replacd
-CustomGlobalRandomEngine::result_type
-CustomGlobalRandomEngine::operator()() {
-  return static_cast<result_type>(
-      std::floor(unif_rand() * CustomGlobalRandomEngine::max()));
+    {				// We are done, terminate the query.
+				return false;
+			}
+		}
+    
+    
+    {	static Test* Create()
+	{
+		return new AddPair;
+	}
+};
+    
+    // Reads the Define Quantization Table (DQT) marker segment and fills in *jpg
+// with the parsed data.
+bool ProcessDQT(const uint8_t* data, const size_t len, size_t* pos,
+                JPEGData* jpg) {
+  const size_t start_pos = *pos;
+  VERIFY_LEN(2);
+  size_t marker_len = ReadUint16(data, pos);
+  if (marker_len == 2) {
+    fprintf(stderr, 'DQT marker: no quantization table found\n');
+    jpg->error = JPEG_EMPTY_DQT;
+    return false;
+  }
+  while (*pos < start_pos + marker_len && jpg->quant.size() < kMaxQuantTables) {
+    VERIFY_LEN(1);
+    int quant_table_index = ReadUint8(data, pos);
+    int quant_table_precision = quant_table_index >> 4;
+    quant_table_index &= 0xf;
+    VERIFY_INPUT(quant_table_index, 0, 3, QUANT_TBL_INDEX);
+    VERIFY_LEN((quant_table_precision ? 2 : 1) * kDCTBlockSize);
+    JPEGQuantTable table;
+    table.index = quant_table_index;
+    table.precision = quant_table_precision;
+    for (int i = 0; i < kDCTBlockSize; ++i) {
+      int quant_val = quant_table_precision ?
+          ReadUint16(data, pos) :
+          ReadUint8(data, pos);
+      VERIFY_INPUT(quant_val, 1, 65535, QUANT_VAL);
+      table.values[kJPEGNaturalOrder[i]] = quant_val;
+    }
+    table.is_last = (*pos == start_pos + marker_len);
+    jpg->quant.push_back(table);
+  }
+  VERIFY_MARKER_END();
+  return true;
 }
-}  // namespace common
-}  // namespace xgboost
+    
+    // This function will create a Huffman tree.
+//
+// The catch here is that the tree cannot be arbitrarily deep.
+// Brotli specifies a maximum depth of 15 bits for 'code trees'
+// and 7 bits for 'code length code trees.'
+//
+// count_limit is the value that is to be faked as the minimum value
+// and this minimum value is raised until the tree matches the
+// maximum length requirement.
+//
+// This algorithm is not of excellent performance for very long data blocks,
+// especially when population counts are longer than 2**tree_limit, but
+// we are not planning to use this with extremely long blocks.
+//
+// See http://en.wikipedia.org/wiki/Huffman_coding
+void CreateHuffmanTree(const uint32_t *data,
+                       const size_t length,
+                       const int tree_limit,
+                       HuffmanTree* tree,
+                       uint8_t *depth) {
+  // For block sizes below 64 kB, we never need to do a second iteration
+  // of this loop. Probably all of our block sizes will be smaller than
+  // that, so this loop is mostly of academic interest. If we actually
+  // would need this, we would be better off with the Katajainen algorithm.
+  for (uint32_t count_limit = 1; ; count_limit *= 2) {
+    size_t n = 0;
+    for (size_t i = length; i != 0;) {
+      --i;
+      if (data[i]) {
+        const uint32_t count = std::max<uint32_t>(data[i], count_limit);
+        tree[n++] = HuffmanTree(count, -1, static_cast<int16_t>(i));
+      }
+    }
+    }
+    }
+    
+    // Integer implementation of the Inverse Discrete Cosine Transform (IDCT).
+    
+    #include 'guetzli/output_image.h'
+    
+    bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     const int* quant, JPEGData* jpg) {
+  if (w < 0 || w >= 1 << 16 || h < 0 || h >= 1 << 16 ||
+      rgb.size() != 3 * w * h) {
+    return false;
+  }
+  InitJPEGDataForYUV444(w, h, jpg);
+  AddApp0Data(jpg);
+    }
+    
+      // Fills in out[] array with the floating-point precision pixel view of the
+  // component.
+  // REQUIRES: factor_x() == 1 and factor_y() == 1.
+  void ToFloatPixels(float* out, int stride) const;
