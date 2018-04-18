@@ -1,62 +1,80 @@
 
         
-          def test_bom_16be
-    assert_bom(['\xFE', '\xFF'], __method__)
-  end
-    
-        h[1] = 1
-    h[nil] = 99
-    h['nil'] = nil
-    z = [1,2]
-    h[z] = 256
-    assert_equal(1,       h[1])
-    assert_equal('two',   h[2])
-    assert_equal('three', h[3])
-    assert_equal('self',  h[self])
-    assert_equal('time',  h[t])
-    assert_equal(99,      h[nil])
-    assert_equal(nil,     h['nil'])
-    assert_equal(nil,     h['koala'])
-    assert_equal(256,     h[z])
-  end
-    
-      it 'decodes the remaining doubles when passed the '*' modifier after another directive' do
-    array = '333333\x15@ffffff\x22@'.unpack(unpack_format()+unpack_format('*'))
-    array.should == [5.3, 9.2]
-  end
-    
-      it 'decodes the number of bytes specified by the count modifier including whitespace bytes' do
-    [ ['a bc',  ['a b', 'c']],
-      ['a\fbc', ['a\fb', 'c']],
-      ['a\nbc', ['a\nb', 'c']],
-      ['a\rbc', ['a\rb', 'c']],
-      ['a\tbc', ['a\tb', 'c']],
-      ['a\vbc', ['a\vb', 'c']]
-    ].should be_computed_by(:unpack, unpack_format(3)+unpack_format)
-  end
-    
-        respond_to do |format|
-      format.html do
-        serializable_resource = ActiveModelSerializers::SerializableResource.new(InitialStatePresenter.new(initial_state_params), serializer: InitialStateSerializer)
-        @initial_state_json   = serializable_resource.to_json
+              def sanitized_opts(opts, is_safe)
+        if is_safe
+          Hash[[
+            [:startinline, opts.fetch(:startinline, nil)],
+            [:hl_lines,    opts.fetch(:hl_lines, nil)],
+            [:linenos,     opts.fetch(:linenos, nil)],
+            [:encoding,    opts.fetch(:encoding, 'utf-8')],
+            [:cssclass,    opts.fetch(:cssclass, nil)],
+          ].reject { |f| f.last.nil? }]
+        else
+          opts
+        end
       end
     
-      context 'expands active buttons' do
-    it 'finds selectors' do
-      list = @buttons_list.map { |input| '#{input}:active' }
-      list = list.join(', ')
-      ruleset = 'content: #{list};'
+    #
     
-    describe 'modular-scale' do
-  before(:all) do
-    ParserSupport.parse_file('library/modular-scale')
-  end
-    
-          expect('.padding-implied-left').to have_rule(rule)
+        if resource.errors.empty?
+      set_flash_message!(:notice, :confirmed)
+      respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
+    else
+      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
     end
   end
     
-    describe 'size' do
-  before(:all) do
-    ParserSupport.parse_file('library/size')
+      # Helper for use in before_actions where no authentication is required.
+  #
+  # Example:
+  #   before_action :require_no_authentication, only: :new
+  def require_no_authentication
+    assert_is_devise_resource!
+    return unless is_navigational_format?
+    no_input = devise_mapping.no_input_strategies
+    
+        if record.timedout?(last_request_at) &&
+        !env['devise.skip_timeout'] &&
+        !proxy.remember_me_is_active?(record)
+      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
+      throw :warden, scope: scope, message: :timeout
+    end
+    
+        def add(path, content)
+      @pages[path] = content
+    end
+    
+            css('.class').each do |node|
+          class_name = node.at_css('dt > .descname').content
+          class_id = node.at_css('dt[id]')['id']
+          entries << [class_name, class_id]
+    
+        def to_a
+      [major, minor, patch, pre].compact
+    end
+    
+            protected
+    
+            def less_than size
+          @high = size
+          self
+        end
+    
+        module TableDefinition
+      def attachment(*attachment_names)
+        options = attachment_names.extract_options!
+        attachment_names.each do |attachment_name|
+          COLUMNS.each_pair do |column_name, column_type|
+            column_options = options.merge(options[column_name.to_sym] || {})
+            column('#{attachment_name}_#{column_name}', column_type, column_options)
+          end
+        end
+      end
+    
+      def human?
+    params.has_key?('human') && (params['human'].nil? || as_boolean(params['human']) == true)
   end
+end
+
+    
+      extend self
