@@ -1,169 +1,228 @@
 
         
-        
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
+        header = oldreadme[:oldreadme.index('# OPTIONS')]
+footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
+    
+        params = {
+        'age_limit': age,
+        'skip_download': True,
+        'writeinfojson': True,
+        'outtmpl': '%(id)s.%(ext)s',
+    }
+    ydl = YoutubeDL(params)
+    ydl.add_default_info_extractors()
+    json_filename = os.path.splitext(filename)[0] + '.info.json'
+    try_rm(json_filename)
+    ydl.download([url])
+    res = os.path.exists(json_filename)
+    try_rm(json_filename)
+    return res
+    
+            if check_executable('mplayer', ['-h']):
+            args = [
+                'mplayer', '-really-quiet', '-vo', 'null', '-vc', 'dummy',
+                '-dumpstream', '-dumpfile', tmpfilename, url]
+        elif check_executable('mpv', ['-h']):
+            args = [
+                'mpv', '-really-quiet', '--vo=null', '--stream-dump=' + tmpfilename, url]
+        else:
+            self.report_error('MMS or RTSP download detected but neither 'mplayer' nor 'mpv' could be run. Please install any.')
+            return False
+    
+    
+class AudiomackAlbumIE(InfoExtractor):
+    _VALID_URL = r'https?://(?:www\.)?audiomack\.com/album/(?P<id>[\w/-]+)'
+    IE_NAME = 'audiomack:album'
+    _TESTS = [
+        # Standard album playlist
+        {
+            'url': 'http://www.audiomack.com/album/flytunezcom/tha-tour-part-2-mixtape',
+            'playlist_count': 15,
+            'info_dict':
+            {
+                'id': '812251',
+                'title': 'Tha Tour: Part 2 (Official Mixtape)'
+            }
+        },
+        # Album playlist ripped from fakeshoredrive with no metadata
+        {
+            'url': 'http://www.audiomack.com/album/fakeshoredrive/ppp-pistol-p-project',
+            'info_dict': {
+                'title': 'PPP (Pistol P Project)',
+                'id': '837572',
+            },
+            'playlist': [{
+                'info_dict': {
+                    'title': 'PPP (Pistol P Project) - 9. Heaven or Hell (CHIMACA) ft Zuse (prod by DJ FU)',
+                    'id': '837577',
+                    'ext': 'mp3',
+                    'uploader': 'Lil Herb a.k.a. G Herbo',
+                }
+            }],
+            'params': {
+                'playliststart': 9,
+                'playlistend': 9,
+            }
+        }
+    ]
+    
+    
+class C56IE(InfoExtractor):
+    _VALID_URL = r'https?://(?:(?:www|player)\.)?56\.com/(?:.+?/)?(?:v_|(?:play_album.+-))(?P<textid>.+?)\.(?:html|swf)'
+    IE_NAME = '56.com'
+    _TESTS = [{
+        'url': 'http://www.56.com/u39/v_OTM0NDA3MTY.html',
+        'md5': 'e59995ac63d0457783ea05f93f12a866',
+        'info_dict': {
+            'id': '93440716',
+            'ext': 'flv',
+            'title': '网事知多少 第32期：车怒',
+            'duration': 283.813,
+        },
+    }, {
+        'url': 'http://www.56.com/u47/v_MTM5NjQ5ODc2.html',
+        'md5': '',
+        'info_dict': {
+            'id': '82247482',
+            'title': '爱的诅咒之杜鹃花开',
+        },
+        'playlist_count': 7,
+        'add_ie': ['Sohu'],
+    }]
+    
+    from .onet import OnetBaseIE
+    
+        model.fit(temporal_x_train, temporal_y_train, batch_size=batch_size,
+              epochs=epochs // 3, verbose=0,
+              sample_weight=temporal_sample_weight)
+    model.fit(temporal_x_train, temporal_y_train, batch_size=batch_size,
+              epochs=epochs // 3, verbose=0,
+              sample_weight=temporal_sample_weight,
+              validation_split=0.1)
+    
+        # fit generator with validation data and accuracy
+    model.fit_generator(data_generator(True), len(X_train), epochs=2,
+                        validation_data=([X_test] * 2, [y_test] * 2),
+                        callbacks=callbacks_factory(histogram_freq=1))
+    
+    # Embedding
+max_features = 20000
+maxlen = 100
+embedding_size = 128
+    
+    
+if __name__ == '__main__':
+    pytest.main([__file__])
 
     
+        inputs = layers.Input(shape=(x_train.shape[1], x_train.shape[2]))
+    x = layers.SimpleRNN(8)(inputs)
+    outputs = layers.Dense(y_train.shape[-1], activation='softmax')(x)
+    model = keras.models.Model(inputs, outputs)
+    model.compile(loss='categorical_crossentropy',
+                  optimizer='rmsprop',
+                  metrics=['accuracy'])
+    history = model.fit(x_train, y_train, epochs=4, batch_size=10,
+                        validation_data=(x_test, y_test),
+                        verbose=0)
+    assert(history.history['acc'][-1] >= 0.8)
     
-def test_unicode_basic_auth(httpbin):
-    # it doesn't really authenticate us because httpbin
-    # doesn't interpret the utf8-encoded auth
-    http('--verbose', '--auth', u'test:%s' % UNICODE,
-         httpbin.url + u'/basic-auth/test/' + UNICODE)
-    
-        @staticmethod
-    def make_header(username, password):
-        credentials = u'%s:%s' % (username, password)
-        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
-        return 'Basic %s' % token
-    
-    import pygments.lexer
-import pygments.token
-import pygments.styles
-import pygments.lexers
-import pygments.style
-from pygments.formatters.terminal import TerminalFormatter
-from pygments.formatters.terminal256 import Terminal256Formatter
-from pygments.lexers.special import TextLexer
-from pygments.lexers.text import HttpLexer as PygmentsHttpLexer
-from pygments.util import ClassNotFound
+                # test for output shape:
+            output = layer_test(convolutional_recurrent.ConvLSTM2D,
+                                kwargs={'data_format': data_format,
+                                        'return_sequences': return_sequences,
+                                        'filters': filters,
+                                        'kernel_size': (num_row, num_col),
+                                        'padding': 'valid'},
+                                input_shape=inputs.shape)
     
     
-CLIENT_CERT = os.path.join(TESTS_ROOT, 'client_certs', 'client.crt')
-CLIENT_KEY = os.path.join(TESTS_ROOT, 'client_certs', 'client.key')
-CLIENT_PEM = os.path.join(TESTS_ROOT, 'client_certs', 'client.pem')
-    
-        >>> humanize_bytes(1)
-    '1 B'
-    >>> humanize_bytes(1024, precision=1)
-    '1.0 kB'
-    >>> humanize_bytes(1024 * 123, precision=1)
-    '123.0 kB'
-    >>> humanize_bytes(1024 * 12342, precision=1)
-    '12.1 MB'
-    >>> humanize_bytes(1024 * 12342, precision=2)
-    '12.05 MB'
-    >>> humanize_bytes(1024 * 1234, precision=2)
-    '1.21 MB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
-    '1.31 GB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
-    '1.3 GB'
-    
-        def call(self, inputs, training=None, mask=None, initial_state=None):
-        kwargs = {}
-        if has_arg(self.layer.call, 'training'):
-            kwargs['training'] = training
-        if has_arg(self.layer.call, 'mask'):
-            kwargs['mask'] = mask
-    
-        # test with BatchNormalization
-    model = Sequential()
-    model.add(wrappers.TimeDistributed(
-        layers.BatchNormalization(center=True, scale=True),
-        name='bn', input_shape=(10, 2)))
-    model.compile(optimizer='rmsprop', loss='mse')
-    # Assert that mean and variance are 0 and 1.
-    td = model.layers[0]
-    assert np.array_equal(td.get_weights()[2], np.array([0, 0]))
-    assert np.array_equal(td.get_weights()[3], np.array([1, 1]))
-    # Train
-    model.train_on_batch(np.random.normal(loc=2, scale=2, size=(1, 10, 2)),
-                         np.broadcast_to(np.array([0, 1]), (1, 10, 2)))
-    # Assert that mean and variance changed.
-    assert not np.array_equal(td.get_weights()[2], np.array([0, 0]))
-    assert not np.array_equal(td.get_weights()[3], np.array([1, 1]))
-    # Verify input_map has one mapping from inputs to reshaped inputs.
-    uid = _object_list_uid(model.inputs)
-    assert len(td._input_map.keys()) == 1
-    assert uid in td._input_map
-    assert K.int_shape(td._input_map[uid]) == (None, 2)
-    
-    print('Starting autogeneration.')
-for page_data in PAGES:
-    blocks = []
-    classes = page_data.get('classes', [])
-    for module in page_data.get('all_module_classes', []):
-        module_classes = []
-        for name in dir(module):
-            if name[0] == '_' or name in EXCLUDE:
-                continue
-            module_member = getattr(module, name)
-            if inspect.isclass(module_member):
-                cls = module_member
-                if cls.__module__ == module.__name__:
-                    if cls not in module_classes:
-                        module_classes.append(cls)
-        module_classes.sort(key=lambda x: id(x))
-        classes += module_classes
-    
-            # Arguments
-            x: Numpy array of test data,
-                or list of Numpy arrays if the model has multiple inputs.
-                If all inputs in the model are named,
-                you can also pass a dictionary
-                mapping input names to Numpy arrays.
-            y: Numpy array of target data,
-                or list of Numpy arrays if the model has multiple outputs.
-                If all outputs in the model are named,
-                you can also pass a dictionary
-                mapping output names to Numpy arrays.
-            sample_weight: Optional array of the same length as x, containing
-                weights to apply to the model's loss for each sample.
-                In the case of temporal data, you can pass a 2D array
-                with shape (samples, sequence_length),
-                to apply a different weight to every timestep of every sample.
-                In this case you should make sure to specify
-                sample_weight_mode='temporal' in compile().
-    
-        # `sample_weight_mode` does not match output_names.
-    with pytest.raises(ValueError):
-        model.compile(optimizer, loss='mse', sample_weight_mode={'lstm': 'temporal'})
-    
-        # case 5
-    save_best_only = False
-    period = 2
-    mode = 'auto'
-    filepath = 'checkpoint.{epoch:02d}.h5'
-    cbks = [callbacks.ModelCheckpoint(filepath, monitor=monitor,
-                                      save_best_only=save_best_only, mode=mode,
-                                      period=period)]
-    model.fit(X_train, y_train, batch_size=batch_size,
-              validation_data=(X_test, y_test), callbacks=cbks, epochs=4)
-    assert os.path.isfile(filepath.format(epoch=2))
-    assert os.path.isfile(filepath.format(epoch=4))
-    assert not os.path.exists(filepath.format(epoch=1))
-    assert not os.path.exists(filepath.format(epoch=3))
-    os.remove(filepath.format(epoch=2))
-    os.remove(filepath.format(epoch=4))
-    assert not tmpdir.listdir()
-    
-        # Note
-        By convention, index 0 in the vocabulary is
-        a non-word and will be skipped.
+@keras_test
+def test_vector_regression():
     '''
-    couples = []
-    labels = []
-    for i, wi in enumerate(sequence):
-        if not wi:
-            continue
-        if sampling_table is not None:
-            if sampling_table[wi] < random.random():
-                continue
+    Perform float data prediction (regression) using 2 layer MLP
+    with tanh and sigmoid activations.
+    '''
+    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=500,
+                                                         num_test=200,
+                                                         input_shape=(20,),
+                                                         output_shape=(num_classes,),
+                                                         classification=False)
     
-        input_a = layers.Input(shape=input_shapes[0][1:])
-    input_b = layers.Input(shape=input_shapes[1][1:])
-    merged = legacy_layers.merge([input_a, input_b], mode=fn_mode, output_shape=lambda s: s[0], arguments={'a': 0.7, 'b': 0.3})
-    model = models.Model([input_a, input_b], merged)
-    output = model.predict(inputs)
     
-    from babel.messages.pofile import read_po
+def _get_test_data():
+    np.random.seed(1234)
+    
+    # encoding=utf8  
+import sys  
+try:
+    reload(sys)
+except NameError:
+    pass
+try:
+    sys.setdefaultencoding('utf8')
+except AttributeError:
+    pass
+    
+        def result(self, timeout=None):
+        '''Return the result of the call that the future represents.
+    
+        >>> Point = namedtuple('Point', 'x y')
+    >>> Point.__doc__                   # docstring for the new class
+    'Point(x, y)'
+    >>> p = Point(11, y=22)             # instantiate with positional args or keywords
+    >>> p[0] + p[1]                     # indexable like a plain tuple
+    33
+    >>> x, y = p                        # unpack like a regular tuple
+    >>> x, y
+    (11, 22)
+    >>> p.x + p.y                       # fields also accessable by name
+    33
+    >>> d = p._asdict()                 # convert to a dictionary
+    >>> d['x']
+    11
+    >>> Point(**d)                      # convert from a dictionary
+    Point(x=11, y=22)
+    >>> p._replace(x=100)               # _replace() is like str.replace() but targets named fields
+    Point(x=100, y=22)
+    
+    atexit.register(_python_exit)
+
+    
+    def download_urls_with_executor(urls, executor, timeout=60):
+    try:
+        url_to_content = {}
+        future_to_url = dict((executor.submit(load_url, url, timeout), url)
+                             for url in urls)
+    
+    PY_MAJOR, PY_MINOR = sys.version_info[ 0 : 2 ]
+if not ( ( PY_MAJOR == 2 and PY_MINOR >= 6 ) or
+         ( PY_MAJOR == 3 and PY_MINOR >= 3 ) or
+         PY_MAJOR > 3 ):
+  sys.exit( 'YouCompleteMe requires Python >= 2.6 or >= 3.3; '
+            'your version of Python is ' + sys.version )
+    
+        # build a new DiagnosticFilter merging all filters
+    #  for the provided filetypes
+    spec = []
+    for filetype in filetypes:
+      type_specific = self._all_filters.get( filetype, [] )
+      spec.extend( type_specific )
+    
+    
+def _ConvertVimDatasToCompletionDatas( response_data ):
+  return [ ConvertVimDataToCompletionData( x )
+           for x in response_data ]
+
+    
+      eq_( request.Response(), {
+    'completions': results,
+    'completion_start_column': 1
+  } )
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
