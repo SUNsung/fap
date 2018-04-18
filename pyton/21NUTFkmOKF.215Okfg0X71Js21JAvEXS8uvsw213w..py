@@ -1,123 +1,195 @@
 
         
-        containers = (('thefuck/python3-tcsh',
-               u'''FROM python:3
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'),
-              ('thefuck/python2-tcsh',
-               u'''FROM python:2
-                   RUN apt-get update
-                   RUN apt-get install -yy tcsh''',
-               u'tcsh'))
+        '''
+requests._internal_utils
+~~~~~~~~~~~~~~
+    
+        def __getstate__(self):
+        # Consume everything; accessing the content attribute makes
+        # sure the content has been fully read.
+        if not self._content_consumed:
+            self.content
+    
+        If the constructor, ``.update``, or equality comparison
+    operations are given keys that have equal ``.lower()``s, the
+    behavior is undefined.
+    '''
+    
+        :param cookie_dict: Dict of key/values to insert into CookieJar.
+    :param cookiejar: (optional) A cookiejar to add the cookies to.
+    :param overwrite: (optional) If False, will not replace cookies
+        already in the jar with new ones.
+    '''
+    if cookiejar is None:
+        cookiejar = RequestsCookieJar()
+    
+    import sys
+    
+            return self.request('DELETE', url, **kwargs)
+    
+    here = os.path.abspath(os.path.dirname(__file__))
+    
+        # test with a custom metric function
+    def mse(y_true, y_pred):
+        return K.mean(K.pow(y_true - y_pred, 2))
     
     
-def dispatch_hook(key, hooks, hook_data, **kwargs):
-    '''Dispatches a hook dictionary on a given piece of data.'''
-    hooks = hooks or dict()
-    hooks = hooks.get(key)
-    if hooks:
-        if hasattr(hooks, '__call__'):
-            hooks = [hooks]
-        for hook in hooks:
-            _hook_data = hook(hook_data, **kwargs)
-            if _hook_data is not None:
-                hook_data = _hook_data
-    return hook_data
-
+@keras_test
+def test_masking():
+    np.random.seed(1337)
+    x = np.array([[[1], [1]],
+                  [[0], [0]]])
+    model = Sequential()
+    model.add(Masking(mask_value=0, input_shape=(2, 1)))
+    model.add(TimeDistributed(Dense(1, kernel_initializer='one')))
+    model.compile(loss='mse', optimizer='sgd')
+    y = np.array([[[1], [1]],
+                  [[1], [1]]])
+    loss = model.train_on_batch(x, y)
+    assert loss == 0
     
-        def _handle_requests(self):
-        for _ in range(self.requests_to_handle):
-            sock = self._accept_connection()
-            if not sock:
-                break
+        for strides in [(1, 1), (2, 2)]:
+        layer_test(local.LocallyConnected2D,
+                   kwargs={'filters': filters,
+                           'kernel_size': 3,
+                           'padding': padding,
+                           'kernel_regularizer': 'l2',
+                           'bias_regularizer': 'l2',
+                           'activity_regularizer': 'l2',
+                           'strides': strides,
+                           'data_format': 'channels_last'},
+                   input_shape=(num_samples, num_row, num_col, stack_size))
     
-    
-def unicode_is_ascii(u_string):
-    '''Determine if unicode string only contains ASCII characters.
-    
-        def prepare(self):
-        '''Constructs a :class:`PreparedRequest <PreparedRequest>` for transmission and returns it.'''
-        p = PreparedRequest()
-        p.prepare(
-            method=self.method,
-            url=self.url,
-            headers=self.headers,
-            files=self.files,
-            data=self.data,
-            json=self.json,
-            params=self.params,
-            auth=self.auth,
-            cookies=self.cookies,
-            hooks=self.hooks,
-        )
-        return p
+    print('Building model...')
+model = Sequential()
+model.add(Dense(512, input_shape=(max_words,)))
+model.add(Activation('relu'))
+model.add(Dropout(0.5))
+model.add(Dense(num_classes))
+model.add(Activation('softmax'))
     
     
-@pytest.mark.skipif(sys.version_info < (2,7), reason='Only run on Python 2.7+')
-def test_system_ssl():
-    '''Verify we're actually setting system_ssl when it should be available.'''
-    assert info()['system_ssl']['version'] != ''
+@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
+def test_he_uniform(tensor_shape):
+    fan_in, _ = initializers._compute_fans(tensor_shape)
+    scale = np.sqrt(6. / fan_in)
+    _runner(initializers.he_uniform(), tensor_shape,
+            target_mean=0., target_max=scale, target_min=-scale)
     
-            assert r.status_code == 200
-        assert len(r.history) == 2
-        assert r.history[0].request.url == url
+            x = np.random.random((1,) + shape)
     
-      Args:
-    string: Serialized DatumProto string.
+        a = layers.Input(shape=(2,), dtype='int32')
+    b = layers.Input(shape=(8,))
+    c = layers.Input(shape=(6,))
+    o = model([a, b, c])
     
-          # Start input enqueue threads.
-      coord = tf.train.Coordinator()
-      threads = tf.train.start_queue_runners(sess=sess, coord=coord)
-      start = time.clock()
-      for i in range(num_images):
-        # Write to log-info once in a while.
-        if i == 0:
-          tf.logging.info('Starting to extract DELF features from images...')
-        elif i % _STATUS_CHECK_ITERATIONS == 0:
-          elapsed = (time.clock() - start)
-          tf.logging.info('Processing image %d out of %d, last %d '
-                          'images took %f seconds', i, num_images,
-                          _STATUS_CHECK_ITERATIONS, elapsed)
-          start = time.clock()
+        negative_values = np.array([[-1, -2]], dtype=K.floatx())
+    result = f([negative_values])[0]
+    true_result = (np.exp(negative_values) - 1) / 2
     
-      def testWriteAndReadToFile(self):
-    locations, scales, descriptors, attention, orientations = create_data()
+                # check dropout
+            layer_test(convolutional_recurrent.ConvLSTM2D,
+                       kwargs={'data_format': data_format,
+                               'return_sequences': return_sequences,
+                               'filters': filters,
+                               'kernel_size': (num_row, num_col),
+                               'padding': 'same',
+                               'dropout': 0.1,
+                               'recurrent_dropout': 0.1},
+                       input_shape=inputs.shape)
     
-        self.conv1 = tf.layers.Conv2D(
-        32, 5, padding='same', data_format=data_format, activation=tf.nn.relu)
-    self.conv2 = tf.layers.Conv2D(
-        64, 5, padding='same', data_format=data_format, activation=tf.nn.relu)
-    self.fc1 = tf.layers.Dense(1024, activation=tf.nn.relu)
-    self.fc2 = tf.layers.Dense(10)
-    self.dropout = tf.layers.Dropout(0.4)
-    self.max_pool2d = tf.layers.MaxPooling2D(
-        (2, 2), (2, 2), padding='same', data_format=data_format)
+        # Arguments
+        layer: a Layer object.
     
-      def testPtbProducer(self):
-    raw_data = [4, 3, 2, 1, 0, 5, 6, 1, 1, 1, 1, 0, 3, 4, 1]
-    batch_size = 3
-    num_steps = 2
-    x, y = reader.ptb_producer(raw_data, batch_size, num_steps)
-    with self.test_session() as session:
-      coord = tf.train.Coordinator()
-      tf.train.start_queue_runners(session, coord=coord)
-      try:
-        xval, yval = session.run([x, y])
-        self.assertAllEqual(xval, [[4, 3], [5, 6], [1, 0]])
-        self.assertAllEqual(yval, [[3, 2], [6, 1], [0, 3]])
-        xval, yval = session.run([x, y])
-        self.assertAllEqual(xval, [[2, 1], [1, 1], [3, 4]])
-        self.assertAllEqual(yval, [[1, 0], [1, 1], [4, 1]])
-      finally:
-        coord.request_stop()
-        coord.join()
+        # test serialization
+    config = model.get_config()
+    Sequential.from_config(config)
     
+        toplot = track[i, ::, ::, 0]
     
-def main(argv):
-    args = parser.parse_args(argv[1:])
+            d = deque('superman')
+        self.assertEqual(d[0], 's')
+        self.assertEqual(d[-1], 'n')
+        d = deque()
+        self.assertRaises(IndexError, d.__getitem__, 0)
+        self.assertRaises(IndexError, d.__getitem__, -1)
     
-            if infos:
-            writeln(' (%s)' % (', '.join(infos),))
+        def check_keys_reuse(self, source, loads):
+        rval = loads(source)
+        (a, b), (c, d) = sorted(rval[0]), sorted(rval[1])
+        self.assertIs(a, c)
+        self.assertIs(b, d)
+    
+    simple_escapes = {'a': '\a',
+                  'b': '\b',
+                  'f': '\f',
+                  'n': '\n',
+                  'r': '\r',
+                  't': '\t',
+                  'v': '\v',
+                  ''': ''',
+                  ''': ''',
+                  '\\': '\\'}
+    
+        def _parse_bytestream(self, stream, options):
+        import xml.dom.expatbuilder
+        builder = xml.dom.expatbuilder.makeBuilder(options)
+        return builder.parseFile(stream)
+    
+            if isinstance(object, tuple):
+            argspec = object[0] or argspec
+            docstring = object[1] or ''
         else:
-            write('\n')
+            docstring = pydoc.getdoc(object)
+    
+            class complex2(complex):
+            '''Make sure that __complex__() calls fail if anything other than a
+            complex is returned'''
+            def __complex__(self):
+                return None
+    
+            a = -sys.maxsize
+        b = sys.maxsize
+        expected_len = b - a
+        x = range(a, b)
+        self.assertIn(a, x)
+        self.assertNotIn(b, x)
+        self.assertRaises(OverflowError, len, x)
+        self.assertTrue(x)
+        self.assertEqual(_range_len(x), expected_len)
+        self.assertEqual(x[0], a)
+        idx = sys.maxsize+1
+        self.assertEqual(x[idx], a+idx)
+        self.assertEqual(x[idx:idx+1][0], a+idx)
+        with self.assertRaises(IndexError):
+            x[-expected_len-1]
+        with self.assertRaises(IndexError):
+            x[expected_len]
+    
+    class StructFieldsTestCase(unittest.TestCase):
+    # Structure/Union classes must get 'finalized' sooner or
+    # later, when one of these things happen:
+    #
+    # 1. _fields_ is set.
+    # 2. An instance is created.
+    # 3. The type is used as field of another Structure/Union.
+    # 4. The type is subclassed
+    #
+    # When they are finalized, assigning _fields_ is no longer allowed.
+    
+    def api(type, cls):
+    tpm.add_handler(type, 'api', cls())
+    tpm.add_handler(type, 'api-html', cls())
+    tpm.add_handler(type, 'api-compact', cls())
+    
+                note = None
+            buyer = c.user
+            if c.user.name.lower() in g.live_config['proxy_gilding_accounts']:
+                note = 'proxy-%s' % c.user.name
+                if proxying_for:
+                    try:
+                        buyer = Account._by_name(proxying_for)
+                    except NotFound:
+                        pass
+    
+        GET_help = POST_help = renderurl
