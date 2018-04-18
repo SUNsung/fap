@@ -1,393 +1,235 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    class TestRandomAccessFile : public RandomAccessFile {
-  // The file contents is 10 bytes of all A's
-  Status Read(uint64 offset, size_t n, StringPiece* result,
-              char* scratch) const override {
-    Status s;
-    for (int i = 0; i < n; ++i) {
-      if (offset + i >= 10) {
-        n = i;
-        s = errors::OutOfRange('EOF');
-        break;
-      }
-      scratch[i] = 'A';
+        namespace api {
     }
-    *result = StringPiece(scratch, n);
-    return s;
+    
+    
+    {}  // namespace atom
+
+    
+    class HttpProtocolHandler : public net::URLRequestJobFactory::ProtocolHandler {
+ public:
+  explicit HttpProtocolHandler(const std::string&);
+  virtual ~HttpProtocolHandler();
+    }
+    
+    void RenderProcessPreferences::UpdateCache() {
+  if (!cache_needs_update_)
+    return;
+    }
+    
+    namespace accelerator_util {
+    }
+    
+    #include 'ui/gfx/image/image.h'
+    
+    #ifndef ATOM_BROWSER_UI_VIEWS_WIN_FRAME_VIEW_H_
+#define ATOM_BROWSER_UI_VIEWS_WIN_FRAME_VIEW_H_
+    
+    
+    {  LOG(INFO) << 'Writing Testing data';
+  scoped_ptr<db::DB> test_db(db::GetDB(db_type));
+  test_db->Open(output_folder + '/cifar10_test_' + db_type, db::NEW);
+  txn.reset(test_db->NewTransaction());
+  // Open files
+  std::ifstream data_file((input_folder + '/test_batch.bin').c_str(),
+      std::ios::in | std::ios::binary);
+  CHECK(data_file) << 'Unable to open test file.';
+  for (int itemid = 0; itemid < kCIFARBatchSize; ++itemid) {
+    read_image(&data_file, &label, str_buffer);
+    datum.set_label(label);
+    datum.set_data(str_buffer, kCIFARImageNBytes);
+    string out;
+    CHECK(datum.SerializeToString(&out));
+    txn->Put(caffe::format_int(itemid, 5), out);
   }
-};
+  txn->Commit();
+  test_db->Close();
+}
     
-      Status Optimize(Cluster* cluster, const GrapplerItem& item,
-                  GraphDef* pruned_graph) override;
+      image_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2051) << 'Incorrect image file magic.';
+  label_file.read(reinterpret_cast<char*>(&magic), 4);
+  magic = swap_endian(magic);
+  CHECK_EQ(magic, 2049) << 'Incorrect label file magic.';
+  image_file.read(reinterpret_cast<char*>(&num_items), 4);
+  num_items = swap_endian(num_items);
+  label_file.read(reinterpret_cast<char*>(&num_labels), 4);
+  num_labels = swap_endian(num_labels);
+  CHECK_EQ(num_items, num_labels);
+  image_file.read(reinterpret_cast<char*>(&rows), 4);
+  rows = swap_endian(rows);
+  image_file.read(reinterpret_cast<char*>(&cols), 4);
+  cols = swap_endian(cols);
     
-    int SubProcess::Communicate(const string* stdin_input, string* stdout_output,
-                            string* stderr_output) {
-  struct pollfd fds[kNFds];
-  size_t nbytes[kNFds];
-  string* iobufs[kNFds];
-  int fd_count = 0;
-    }
+      void Transform(const Datum& datum, Dtype* transformed_data);
+  // Tranformation parameters
+  TransformationParameter param_;
+    
+    #define REGISTER_LAYER_CLASS(type)                                             \
+  template <typename Dtype>                                                    \
+  shared_ptr<Layer<Dtype> > Creator_##type##Layer(const LayerParameter& param) \
+  {                                                                            \
+    return shared_ptr<Layer<Dtype> >(new type##Layer<Dtype>(param));           \
+  }                                                                            \
+  REGISTER_LAYER_CREATOR(type, Creator_##type##Layer)
     
     /**
- * \ingroup CXX11_NeuralNetworks_Module
- * \brief Template functor to clip the magnitude of the first scalar.
+ * @brief Compute the index of the @f$ K @f$ max values for each datum across
+ *        all dimensions @f$ (C \times H \times W) @f$.
  *
- * \sa class CwiseBinaryOp, MatrixBase::Clip
+ * Intended for use after a classification layer to produce a prediction.
+ * If parameter out_max_val is set to true, output is a vector of pairs
+ * (max_ind, max_val) for each image. The axis parameter specifies an axis
+ * along which to maximise.
+ *
+ * NOTE: does not implement Backwards operation.
  */
-template <typename Scalar>
-struct scalar_clip_op {
-  EIGEN_EMPTY_STRUCT_CTOR(scalar_clip_op)
-  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const Scalar
-  operator()(const Scalar& a, const Scalar& b) const {
-    return numext::mini(numext::maxi(a, -b), b);
-  }
-  template <typename Packet>
-  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE const Packet
-  packetOp(const Packet& a, const Packet& b) const {
-    return internal::pmin(internal::pmax(a, internal::pnegate(b)), b);
-  }
+template <typename Dtype>
+class ArgMaxLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides ArgMaxParameter argmax_param,
+   *     with ArgMaxLayer options:
+   *   - top_k (\b optional uint, default 1).
+   *     the number @f$ K @f$ of maximal items to output.
+   *   - out_max_val (\b optional bool, default false).
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
+   */
+  explicit ArgMaxLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    #include <utility>
+#include <vector>
+    
+    
+    {}  // namespace caffe
+    
+    
+    { protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual inline bool reverse_dimensions() { return false; }
+  virtual void compute_output_shape();
 };
     
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    {}  // namespace xla
+    #endif  // CAFFE_CUDNN_SIGMOID_LAYER_HPP_
 
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
     
-        int32 max_index = -1;
-    if (data_elements_size) {
-      *data_elements_size = 0;
-    }
-    for (const Tensor& indices : *indices_inputs) {
-      if (indices.NumElements() > 0) {
-        Eigen::Tensor<int32, 0, Eigen::RowMajor> m =
-            indices.flat<int32>().maximum();
-        max_index = std::max(m(), max_index);
-      }
-      if (data_elements_size) {
-        *data_elements_size += indices.NumElements();
-      }
-    }
-    
-    #define REGISTER_GPUCONCAT32(T)                                               \
-  template void ConcatGPUSlice<T, int32>(                                     \
-      const Eigen::GpuDevice& gpu_device,                                     \
-      const std::vector<std::unique_ptr<typename TTypes<T, 2>::ConstMatrix>>& \
-          inputs_flat,                                                        \
-      typename TTypes<T, 2>::Matrix* output);
-    
-    IPC_MESSAGE_ROUTED3(ShellViewHostMsg_Call_Static_Method,
-                    std::string /* type name */,
-                    std::string /* method name */,
-                    base::ListValue /* arguments */)
-    
-      base::WaitableEvent done(false, false);
-  BrowserThread::PostTask(
-      BrowserThread::IO, FROM_HERE,
-      base::Bind(&SetProxyConfigCallback, &done,
-                 make_scoped_refptr(context_getter), config));
-  done.Wait();
-    
-    
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    // static
-void DispatcherBindings::CallStaticMethodSync(
-    const v8::FunctionCallbackInfo<v8::Value>& args) {
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  if (args.Length() < 3) {
-    args.GetReturnValue().Set(isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
-                                     'CallStaticMethodSync requries 3 arguments'))));
-    return;
-  }
-    }
-    
-    Menu::Menu(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-           const std::string& extension_id)
-  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
-  Create(option);
-}
-    
-    void Menu::Create(const base::DictionaryValue& option) {
-  gtk_accel_group = NULL;
-  std::string type;
-  if (option.GetString('type', &type) && type == 'menubar')
-    menu_ = gtk_menu_bar_new();
-  else
-    menu_ = gtk_menu_new();
-    }
-    
-    
-    {}
-    
-      n = get_bits(8);
-    
-    /*The number of extra bits of precision at which to store rate metrics.*/
-# define OC_BIT_SCALE  (6)
-/*The number of extra bits of precision at which to store RMSE metrics.
-  This must be at least half OC_BIT_SCALE (rounded up).*/
-# define OC_RMSE_SCALE (5)
-/*The number of bins to partition statistics into.*/
-# define OC_SAD_BINS   (24)
-/*The number of bits of precision to drop from SAD scores to assign them to a
-   bin.*/
-# define OC_SAD_SHIFT  (9)
-    
-    
-    {
-    {    {&_44pn1_p5_0,&_44pn1_p5_1,&_44pn1_p4_1},
-    {&_44pn1_p6_0,&_44pn1_p6_1,&_44pn1_p6_2},
-   }
+    {  bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnTensorDescriptor_t bottom_desc_;
+  cudnnTensorDescriptor_t top_desc_;
+  cudnnActivationDescriptor_t activ_desc_;
 };
-    
-    /* Frequency to octave.  We arbitrarily declare 63.5 Hz to be octave
-   0.0 */
-    
-    #elif (defined(OPUS_X86_MAY_HAVE_SSE) && !defined(OPUS_X86_PRESUME_SSE)) || \
-  (defined(OPUS_X86_MAY_HAVE_SSE2) && !defined(OPUS_X86_PRESUME_SSE2)) || \
-  (defined(OPUS_X86_MAY_HAVE_SSE4_1) && !defined(OPUS_X86_PRESUME_SSE4_1)) || \
-  (defined(OPUS_X86_MAY_HAVE_AVX) && !defined(OPUS_X86_PRESUME_AVX))
-    
-    #if (HAVE_LRINTF)
-    
-    #undef silk_ADD_POS_SAT32
-static OPUS_INLINE opus_int32 silk_ADD_POS_SAT32(opus_int64 a, opus_int64 b){
-    opus_int32 tmp;
-    ops_count += 1;
-    tmp = (opus_int32)((((a)+(b)) & 0x80000000) ? silk_int32_MAX : ((a)+(b)));
-    return(tmp);
-}
-    
-    
-    
-    #endif // __cocos2dx_experimental_video_h__
-#endif //#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) && !defined(CC_TARGET_OS_TVOS)
-
-    
-    #if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,'invalid 'cobj' in function 'lua_cocos2dx_physics_PhysicsShapeEdgeSegment_getPointB'', nullptr);
-        return 0;
-    }
 #endif
     
+     protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
     
-    mShaderProgram->setUniformLocationWith4f(mColorLocation, color.r, color.g, color.b, 1);
-    glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
+      size_t Read(void* dptr, size_t size) override {
+    size_t nbuffer = buffer_.length() - buffer_ptr_;
+    if (nbuffer == 0) return strm_->Read(dptr, size);
+    if (nbuffer < size) {
+      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, nbuffer);
+      buffer_ptr_ += nbuffer;
+      return nbuffer + strm_->Read(reinterpret_cast<char*>(dptr) + nbuffer,
+                                   size - nbuffer);
+    } else {
+      std::memcpy(dptr, dmlc::BeginPtr(buffer_) + buffer_ptr_, size);
+      buffer_ptr_ += size;
+      return size;
+    }
+  }
+    
+    /*!
+ * \brief global random engine
+ */
+typedef CustomGlobalRandomEngine GlobalRandomEngine;
+    
+        // want to compute storage boundary for each feature
+    // using variants of prefix sum scan
+    boundary_.resize(nfeature);
+    size_t accum_index_ = 0;
+    size_t accum_row_ind_ = 0;
+    for (bst_uint fid = 0; fid < nfeature; ++fid) {
+      boundary_[fid].index_begin = accum_index_;
+      boundary_[fid].row_ind_begin = accum_row_ind_;
+      if (type_[fid] == kDenseColumn) {
+        accum_index_ += static_cast<size_t>(nrow);
+      } else {
+        accum_index_ += feature_counts_[fid];
+        accum_row_ind_ += feature_counts_[fid];
+      }
+      boundary_[fid].index_end = accum_index_;
+      boundary_[fid].row_ind_end = accum_row_ind_;
+    }
+    
+      uint64_t uint64_t2[2] = {1U, 2U};
+  EXPECT_EQ(info.group_ptr.size(), 0);
+  info.SetInfo('group', uint64_t2, xgboost::kUInt64, 2);
+  ASSERT_EQ(info.group_ptr.size(), 3);
+  EXPECT_EQ(info.group_ptr[2], 3);
+    
+    #endif  // DMLC_ENABLE_STD_THREAD
+
     
     
     {
-    {		case 'k':
-			m_platform->SetType(b2_kinematicBody);
-			m_platform->SetLinearVelocity(b2Vec2(-m_speed, 0.0f));
-			m_platform->SetAngularVelocity(0.0f);
-			break;
-		}
-	}
-    
-    #define EXPECT_MARKER() \
-  if (pos + 2 > len || data[pos] != 0xff) {                             \
-    fprintf(stderr, 'Marker byte (0xff) expected, found: %d '           \
-            'pos=%d len=%d\n',                                          \
-            (pos < len ? data[pos] : 0), static_cast<int>(pos),         \
-            static_cast<int>(len));                                     \
-    jpg->error = JPEG_MARKER_BYTE_NOT_FOUND;                            \
-    return false;                                                       \
+    {    double dat[2]; dat[0] = sum, dat[1] = wsum;
+    if (distributed) {
+      rabit::Allreduce<rabit::op::Sum>(dat, 2);
+    }
+    return Derived::GetFinal(dat[0], dat[1]);
   }
-    
-      // Compute Huffman codes for each histograms.
-  for (int i = 0; i < num_histo; ++i) {
-    const bool is_dc = static_cast<size_t>(i) < num_dc_histo;
-    const int idx = is_dc ? i : i - num_dc_histo;
-    int counts[kJpegHuffmanMaxBitLength + 1] = { 0 };
-    int values[JpegHistogram::kSize] = { 0 };
-    BuildHuffmanCode(&depths[i * JpegHistogram::kSize], counts, values);
-    HuffmanCodeTable table;
-    for (int j = 0; j < 256; ++j) table.depth[j] = 255;
-    BuildHuffmanCodeTable(counts, values, &table);
-    for (int c = 0; c < ncomps; ++c) {
-      if (is_dc) {
-        if (dc_histo_indexes[c] == idx) (*dc_huff_tables)[c] = table;
-      } else {
-        if (ac_histo_indexes[c] == idx) (*ac_huff_tables)[c] = table;
-      }
-    }
-    int max_length = kJpegHuffmanMaxBitLength;
-    while (max_length > 0 && counts[max_length] == 0) --max_length;
-    --counts[max_length];
-    int total_count = 0;
-    for (int j = 0; j <= max_length; ++j) total_count += counts[j];
-    data[pos++] = is_dc ? i : static_cast<uint8_t>(i - num_dc_histo + 0x10);
-    for (size_t j = 1; j <= kJpegHuffmanMaxBitLength; ++j) {
-      data[pos++] = counts[j];
-    }
-    for (int j = 0; j < total_count; ++j) {
-      data[pos++] = values[j];
-    }
+  /*!
+   * \brief to be implemented by subclass,
+   *   get evaluation result from one row
+   * \param label label of current instance
+   * \param pred prediction value of current instance
+   * \param nclass number of class in the prediction
+   */
+  inline static bst_float EvalRow(int label,
+                                  const bst_float *pred,
+                                  size_t nclass);
+  /*!
+   * \brief to be overridden by subclass, final transformation
+   * \param esum the sum statistics returned by EvalRow
+   * \param wsum sum of weight
+   */
+  inline static bst_float GetFinal(bst_float esum, bst_float wsum) {
+    return esum / wsum;
   }
-    
-    void SetDownsampledCoefficients(const std::vector<float>& pixels,
-                                int factor_x, int factor_y,
-                                OutputImageComponent* comp) {
-  assert(pixels.size() == comp->width() * comp->height());
-  comp->Reset(factor_x, factor_y);
-  for (int block_y = 0; block_y < comp->height_in_blocks(); ++block_y) {
-    for (int block_x = 0; block_x < comp->width_in_blocks(); ++block_x) {
-      double blockd[kDCTBlockSize];
-      int x0 = 8 * block_x * factor_x;
-      int y0 = 8 * block_y * factor_y;
-      assert(x0 < comp->width());
-      assert(y0 < comp->height());
-      for (int iy = 0; iy < 8; ++iy) {
-        for (int ix = 0; ix < 8; ++ix) {
-          float avg = 0.0;
-          for (int j = 0; j < factor_y; ++j) {
-            for (int i = 0; i < factor_x; ++i) {
-              int x = std::min(x0 + ix * factor_x + i, comp->width() - 1);
-              int y = std::min(y0 + iy * factor_y + j, comp->height() - 1);
-              avg += pixels[y * comp->width() + x];
-            }
-          }
-          avg /= factor_x * factor_y;
-          blockd[iy * 8 + ix] = avg;
-        }
-      }
-      ComputeBlockDCTDouble(blockd);
-      blockd[0] -= 1024.0;
-      coeff_t block[kDCTBlockSize];
-      for (int k = 0; k < kDCTBlockSize; ++k) {
-        block[k] = static_cast<coeff_t>(std::round(blockd[k]));
-      }
-      comp->SetCoeffBlock(block_x, block_y, block);
-    }
-  }
-}
-    
-    // kDCTMatrix[8*u+x] = 0.5*alpha(u)*cos((2*x+1)*u*M_PI/16),
-// where alpha(0) = 1/sqrt(2) and alpha(u) = 1 for u > 0.
-static const double kDCTMatrix[64] = {
-  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
-  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
-  0.4903926402,  0.4157348062,  0.2777851165,  0.0975451610,
- -0.0975451610, -0.2777851165, -0.4157348062, -0.4903926402,
-  0.4619397663,  0.1913417162, -0.1913417162, -0.4619397663,
- -0.4619397663, -0.1913417162,  0.1913417162,  0.4619397663,
-  0.4157348062, -0.0975451610, -0.4903926402, -0.2777851165,
-  0.2777851165,  0.4903926402,  0.0975451610, -0.4157348062,
-  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
-  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
-  0.2777851165, -0.4903926402,  0.0975451610,  0.4157348062,
- -0.4157348062, -0.0975451610,  0.4903926402, -0.2777851165,
-  0.1913417162, -0.4619397663,  0.4619397663, -0.1913417162,
- -0.1913417162,  0.4619397663, -0.4619397663,  0.1913417162,
-  0.0975451610, -0.2777851165,  0.4157348062, -0.4903926402,
-  0.4903926402, -0.4157348062,  0.2777851165, -0.0975451610,
+  // used to store error message
+  const char *error_msg_;
 };
-    
-    bool SetDepth(int p0, HuffmanTree *pool, uint8_t *depth, int max_depth) {
-  int stack[17];
-  int level = 0;
-  int p = p0;
-  assert(max_depth <= 16);
-  stack[0] = -1;
-  while (true) {
-    if (pool[p].index_left_ >= 0) {
-      level++;
-      if (level > max_depth) return false;
-      stack[level] = pool[p].index_right_or_value_;
-      p = pool[p].index_left_;
-      continue;
-    } else {
-      depth[pool[p].index_right_or_value_] = static_cast<uint8_t>(level);
-    }
-    while (level >= 0 && stack[level] == -1) level--;
-    if (level < 0) return true;
-    p = stack[level];
-    stack[level] = -1;
-  }
-}
-    
-    #endif  // GUETZLI_FDCT_H_
-
-    
-    
-    {}  // namespace guetzli
-
-    
-    // Library to decode jpeg coefficients into an RGB image.
-    
-    // Gamma-compensated chroma subsampling.
-// Returns Y, U, V image planes, each with width x height dimensions, but the
-// U and V planes are composed of 2x2 blocks with the same values.
-std::vector<std::vector<float> > RGBToYUV420(
-    const std::vector<uint8_t>& rgb_in, const int width, const int height);
-    
-    template <class Clock>
-struct timespec
-timeSpecFromTimePoint(time_point<Clock> absTime)
-{
-  auto epoch = absTime.time_since_epoch();
-  if (epoch.count() < 0) {
-    // kernel timespec_valid requires non-negative seconds and nanos in [0,1G)
-    epoch = Clock::duration::zero();
-  }
-    }
-    
-    #endif
-    
-    // This is ugly, but better perf for DeterministicAtomic translates
-// directly to more states explored and tested
-#define FOLLY_TEST_DSCHED_VLOG(...)                             \
-  do {                                                          \
-    if (false) {                                                \
-      VLOG(2) << std::hex << std::this_thread::get_id() << ': ' \
-              << __VA_ARGS__;                                   \
-    }                                                           \
-  } while (false)
-    
-    TEST(AtomicSharedPtr, exchange) {
-  atomic_shared_ptr<int> fooptr;
-  auto a = make_shared<int>(1);
-  fooptr.store(std::move(a));
-  auto b = fooptr.exchange(make_shared<int>());
-  EXPECT_EQ(*b, 1);
-}
-    
-    #include <folly/Conv.h>
-    
-    namespace {
-folly::dynamic& insertAtKey(
-    folly::dynamic* d, bool allow_non_string_keys, const folly::dynamic& key) {
-  if (key.isString()) {
-    return (*d)[key];
-  // folly::dynamic allows non-null scalars for keys.
-  } else if (key.isNumber() || key.isBool()) {
-    return allow_non_string_keys ? (*d)[key] : (*d)[key.asString()];
-  }
-  // One cause might be oddness like p.optional(dynamic::array(...), ...);
-  throw DynamicParserLogicError(
-    'Unsupported key type ', key.typeName(), ' of ', detail::toPseudoJson(key)
-  );
-}
-} // namespace
