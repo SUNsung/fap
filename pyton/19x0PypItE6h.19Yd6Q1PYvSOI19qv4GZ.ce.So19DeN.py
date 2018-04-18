@@ -1,48 +1,34 @@
 
         
-            # Separating the 'table of contents' from the contents (blocks)
-    table_of_contents = ''.join(read_me.split('- - -')[0])
-    blocks = ''.join(read_me.split('- - -')[1]).split('\n# ')
-    for i in range(len(blocks)):
-        if i == 0:
-            blocks[i] = blocks[i] + '\n'
-        else:
-            blocks[i] = '# ' + blocks[i] + '\n'
+        
+class TerminalModule(TerminalBase):
     
-            Example of module-based configuration::
+            for n in (-10, -1, 0, 1, 2, 10, 499, 500, 501, 1000):
+            d = deque('abcdef', 500)
+            d *= n
+            self.assertEqual(d, deque(('abcdef' * n)[-500:]))
+            self.assertEqual(d.maxlen, 500)
     
-            if key not in self.tags:
-            return value
+        def __init__(self):
+        CGIXMLRPCRequestHandler.__init__(self)
+        XMLRPCDocGenerator.__init__(self)
     
-        #: When data is read or written, this is set to ``True``. Used by
-    # :class:`.SecureCookieSessionInterface` to add a ``Vary: Cookie``
-    #: header, which allows caching proxies to cache different pages for
-    #: different users.
-    accessed = False
+            del x; del y; gc.collect(); gc.collect(); gc.collect()
+        a.append(100)
+        a.pop()
+        x = (c_int * 16).from_buffer(a)
     
+            WNDPROC_2 = WINFUNCTYPE(c_long, c_int, c_int, c_int, c_int)
     
-def parse_date(string):
-    string = _date_strip_re.sub('', string)
-    return datetime.strptime(string, '%B %d %Y')
-    
-        @mock.patch('certbot.notify.smtplib.LMTP')
-    @mock.patch('certbot.notify.subprocess.Popen')
-    def test_everything_fails(self, mock_popen, mock_lmtp):
-        from certbot.notify import notify
-        lmtp_obj = mock.MagicMock()
-        mock_lmtp.return_value = lmtp_obj
-        lmtp_obj.sendmail.side_effect = socket.error(17)
-        proc = mock.MagicMock()
-        mock_popen.return_value = proc
-        proc.communicate.side_effect = OSError('What we have here is a '
-                                               'failure to communicate.')
-        self.assertFalse(notify('Goose', 'auntrhody@example.com',
-                                'The old grey goose is dead.'))
-        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
-        self.assertEqual(proc.communicate.call_count, 1)
-    
-    
-@zope.interface.implementer(interfaces.IInstaller)
-@zope.interface.provider(interfaces.IPluginFactory)
-class Installer(common.Plugin):
-    '''Example Installer.'''
+    def download_pdf(link, location, name):
+    try:
+        response = requests.get(link)
+        with open(os.path.join(location, name), 'wb') as f:
+        	f.write(response.content)
+        	f.close()
+    except HTTPError:
+        print('>>> Error 404: cannot be downloaded!\n') 
+        raise   
+    except socket.timeout:
+        print(' '.join(('can't download', link, 'due to connection timeout!')) )
+        raise
