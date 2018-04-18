@@ -1,245 +1,219 @@
 
         
-        Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-    
-    {  EXPECT_EQ(status(), param.expected_status);
-}
-    
-    #include 'tensorflow/core/kernels/loss.h'
-#include 'tensorflow/core/lib/core/errors.h'
-#include 'tensorflow/core/lib/core/status.h'
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    #include 'tensorflow/stream_executor/platform/port.h'
-#include <tuple>
-    
-      ExpectSuccess(Builder().Input(FakeInput({DT_STRING, DT_INT32})),
-                {DT_STRING, DT_INT32}, {}, R'proto(
-      op: 'TypeList' input: ['a', 'a:1']
-      attr { key: 'T' value { list { type: [DT_STRING, DT_INT32] } } }
-      )proto');
-    
-    string VersionedComputationHandle::ToString() const {
-  return tensorflow::strings::StrCat(handle.handle(), ':v', version);
-}
-    
-          // data_flat index
-      int32 idx = 0;
-      // sum of indices_inputs[i].NumElements() for compute indicies_flat value.
-      int32 base_size = 0;
-      for (int i = 0; i < indices_inputs.size(); ++i) {
-        auto indices_vec = indices_inputs[i].flat<int32>();
-        auto data_ptr_base = data_inputs[i].template flat<T>().data();
-        for (int j = 0; j < indices_vec.size(); ++j) {
-          // indices_flat's indices represent the indices of output.
-          // indices_flat's values represent the indices of input_data where the
-          // data located.
-          indices_flat.Set(indices_vec(j), base_size + j);
-          data_flat.Set(
-              idx, const_cast<T*>(reinterpret_cast<const T*>(data_ptr_base) +
-                                  j * slice_size));
-          ++idx;
-        }
-        base_size += indices_vec.size();
-      }
-      OP_REQUIRES_OK(c, indices_flat.Finalize());
-      OP_REQUIRES_OK(c, data_flat.Finalize());
-    
-    
-    {    EXPECT_NE(a_1_1.get(), d_4_2.get());
-    EXPECT_NE(a_1_1.get(), e_5_2.get());
-    EXPECT_NE(d_4_1.get(), e_5_2.get());
-  }
-    
-    #endif // SWIFT_INDEX_INDEXRECORD_H
-
-    
-      ArrayRef<MarkupASTNode *> getChildren() {
-    return {getTrailingObjects<MarkupASTNode *>(), NumChildren};
-  }
-    
-    #include 'swift/AST/Type.h'
-#include 'llvm/ADT/ArrayRef.h'
-#include 'llvm/ADT/Optional.h'
-    
-      static v8::Handle<v8::Object> GetObjectRegistry();
-  static v8::Handle<v8::Value> GetWindowId(blink::WebFrame* frame);
-  static void ZoomLevelChanged(blink::WebView* web_view);
-  static void willHandleNavigationPolicy(
-    content::RenderView* rv,
-    blink::WebFrame* frame,
-    const blink::WebURLRequest& request,
-    blink::WebNavigationPolicy* policy,
-    blink::WebString* manifest);
-    
-      static int getUID() {
-    static int id = 0;
-    return ++id;
-  }
-    
-    
-    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return;
-  item->OnClick();
-}
-    
-    #ifndef CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
-#define CONTENT_NW_SRC_API_MENU_MENU_DELEGATE_H_
-    
-      for(auto* item: menu_items_) {
-    item->RemoveKeys();
-  }
-    
-    #include 'content/nw/src/api/menuitem/menuitem.h'
-    
-    struct RepoAuthType;
-struct StringData;
-    
-    #include 'hphp/runtime/vm/jit/types.h'
-#include 'hphp/runtime/vm/jit/containers.h'
-#include 'hphp/runtime/vm/jit/vasm.h'
-#include 'hphp/runtime/vm/jit/vasm-data.h'
-#include 'hphp/runtime/vm/jit/vasm-instr.h'
-#include 'hphp/runtime/vm/jit/vasm-reg.h'
-    
-    NormalizedInstruction::NormalizedInstruction() { }
-    
-    /*
- * A NormalizedInstruction contains information about a decoded bytecode
- * instruction, including the unit it lives in, decoded immediates, and a few
- * flags of interest the various parts of the jit.
- */
-struct NormalizedInstruction {
-  SrcKey source;
-  const Func* funcd; // The Func in the topmost AR on the stack. Guaranteed to
-                     // be accurate. Don't guess about this. Note that this is
-                     // *not* the function whose body the NI belongs to.
-                     // Note that for an FPush* may be set to the (statically
-                     // known Func* that /this/ instruction is pushing)
-  const Unit* m_unit;
+        	FILE *g;
+	//printf('opening file %s\n', p_fname.c_str());
+	String filename = fix_path(p_name);
+	g = _wfopen(filename.c_str(), L'rb');
+	if (g == NULL) {
     }
     
-      // We rebuild a variant type here because using boosts fails on opensource
-  // builds because it at some point requires a copy construction.
-  // This vector has one entry per prologue/translation stored in the two
-  // vectors above, and it encodes the order in which they should be published.
-  std::vector<Kind> order;
+    StreamPeerSSL::LoadCertsFromMemory StreamPeerSSL::load_certs_func = NULL;
+bool StreamPeerSSL::available = false;
+bool StreamPeerSSL::initialize_certs = true;
     
-    static int set_addresses(struct ifaddrs* ifaddr, ifaddrmsg* msg, void* data,
-		  size_t len) {
-	if (msg->ifa_family == AF_INET) {
-		sockaddr_in* sa = new sockaddr_in;
-		sa->sin_family = AF_INET;
-		memcpy(&sa->sin_addr, data, len);
-		ifaddr->ifa_addr = reinterpret_cast<sockaddr*>(sa);
-	} else if (msg->ifa_family == AF_INET6) {
-		sockaddr_in6* sa = new sockaddr_in6;
-		sa->sin6_family = AF_INET6;
-		sa->sin6_scope_id = msg->ifa_index;
-		memcpy(&sa->sin6_addr, data, len);
-		ifaddr->ifa_addr = reinterpret_cast<sockaddr*>(sa);
-	} else {
-		return -1;
-	}
-	return 0;
-}
+    #ifndef STREAM_PEER_SSL_H
+#define STREAM_PEER_SSL_H
     
-      &_huff_book_line_128x11_0sub0,
-  &_huff_book_line_128x11_1sub0,
-  &_huff_book_line_128x11_1sub1,
-  &_huff_book_line_128x11_2sub1,
-  &_huff_book_line_128x11_2sub2,
-  &_huff_book_line_128x11_2sub3,
-  &_huff_book_line_128x11_3sub1,
-  &_huff_book_line_128x11_3sub2,
-  &_huff_book_line_128x11_3sub3,
+    
+    {	ScriptDebugger();
+	virtual ~ScriptDebugger() { singleton = NULL; }
 };
-static const static_codebook*const _floor_128x17_books[]={
-  &_huff_book_line_128x17_class1,
-  &_huff_book_line_128x17_class2,
-  &_huff_book_line_128x17_class3,
     
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+    void EditorHelp::_class_desc_select(const String &p_select) {
+    }
     
-       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+    	for (const List<StringName>::Element *E = order.back(); E; E = E->prev()) {
+    }
     
-    #undef MULT16_16_Q15_ADD
-static inline int MULT16_16_Q15_ADD(int a, int b, int c, int d) {
-    int m;
-    asm volatile('MULT $ac1, %0, %1' : : 'r' ((int)a), 'r' ((int)b));
-    asm volatile('madd $ac1, %0, %1' : : 'r' ((int)c), 'r' ((int)d));
-    asm volatile('EXTR.W %0,$ac1, %1' : '=r' (m): 'i' (15));
-    return m;
-}
+    	EditorNode *editor;
+	UndoRedo *undo_redo;
+	Control *canvas_item_editor;
     
-    # if defined(OPUS_HAVE_RTCD)
-int opus_select_arch(void);
-# endif
+    XGBOOST_REGISTER_SPARSE_PAGE_FORMAT(lz4hc)
+.describe('Apply LZ4 binary data compression(high compression ratio) for ext memory.')
+.set_body([]() {
+    return new SparsePageLZ4Format<bst_uint>(true);
+  });
     
-    static OPUS_INLINE opus_int64 silk_SaveCount(){
-    return(ops_count);
-}
     
-    #include <fb/visibility.h>
-    
-    bool Config::isExperimentalFeatureEnabled(int feature) const
-{
-    return YGConfigIsExperimentalFeatureEnabled(m_config, static_cast<YGExperimentalFeature>(feature));
-}
+    {
+    {
+    {  inline void PutChar(char ch) {
+    out_buf += ch;
+    if (out_buf.length() >= kBufferSize) Flush();
+  }
+  inline void Flush(void) {
+    if (out_buf.length() != 0) {
+      fp->Write(&out_buf[0], out_buf.length());
+      out_buf.clear();
+    }
+  }
+};
+}  // namespace common
+}  // namespace xgboost
+#endif  // XGBOOST_COMMON_BASE64_H_
 
     
-        void setExperimentalFeatureEnabled(int feature, bool enabled);
-    void setPointScaleFactor(float pixelsInPoint);
- 
- public: // Getters
-    
-    
-    {  // There are subtle issues with calling the next functions directly. It is
-  // much better to always use a ThreadScope to manage attaching/detaching for
-  // you.
-  FBEXPORT static JNIEnv* ensureCurrentThreadIsAttached();
-  FBEXPORT static void detachCurrentThread();
-};
-    
-      void reset() {
-    unrefIfNecessary(m_ptr);
-    m_ptr = nullptr;
+      inline void SkipLine(void) {
+    do {
+      ch_buf = this->GetChar();
+    } while (ch_buf != EOF && ch_buf != '\n' && ch_buf != '\r');
   }
     
-      template <typename ...Args>
-  void initialize(Args&&... arguments) {
-    FBASSERT(!m_instance);
-    m_instance = new T(std::forward<Args>(arguments)...);
+    #if XGBOOST_CUSTOMIZE_GLOBAL_PRNG
+/*!
+ * \brief An customized random engine, used to be plugged in PRNG from other systems.
+ *  The implementation of this library is not provided by xgboost core library.
+ *  Instead the other library can implement this class, which will be used as GlobalRandomEngine
+ *  If XGBOOST_RANDOM_CUSTOMIZE = 1, by default this is switched off.
+ */
+class CustomGlobalRandomEngine {
+ public:
+  /*! \brief The result type */
+  typedef size_t result_type;
+  /*! \brief The minimum of random numbers generated */
+  inline static constexpr result_type min() {
+    return 0;
+  }
+  /*! \brief The maximum random numbers generated */
+  inline static constexpr result_type max() {
+    return std::numeric_limits<size_t>::max();
+  }
+  /*!
+   * \brief seed function, to be implemented
+   * \param val The value of the seed.
+   */
+  void seed(result_type val);
+  /*!
+   * \return next random number.
+   */
+  result_type operator()();
+};
+    
+      uint64_t uint64_t2[2] = {1U, 2U};
+  EXPECT_EQ(info.group_ptr.size(), 0);
+  info.SetInfo('group', uint64_t2, xgboost::kUInt64, 2);
+  ASSERT_EQ(info.group_ptr.size(), 3);
+  EXPECT_EQ(info.group_ptr[2], 3);
+    
+    struct EvalPoissonNegLogLik : public EvalEWiseBase<EvalPoissonNegLogLik> {
+  const char *Name() const override {
+    return 'poisson-nloglik';
+  }
+  inline bst_float EvalRow(bst_float y, bst_float py) const {
+    const bst_float eps = 1e-16f;
+    if (py < eps) py = eps;
+    return common::LogGamma(y + 1.0f) + py - std::log(py) * y;
+  }
+};
+    
+    namespace rocksdb {
+    }
+    
+    #pragma once
+#include <deque>
+#include <string>
+    
+    #include 'rocksjni/statisticsjni.h'
+    
+    namespace rocksdb {
+    }
+    
+    /**
+ * @brief rename fid
+ * @details Only modify object in rados once,
+ * so this rename operation is atomic in term of rados
+ *
+ * @param old_fname [description]
+ * @param new_fname [description]
+ *
+ * @return [description]
+ */
+Status EnvLibrados::_RenameFid(const std::string& old_fname,
+                               const std::string& new_fname) {
+  std::string fid;
+  Status s = _GetFid(old_fname, fid);
+    }
+    
+    inline
+bool BlockFetcher::TryGetCompressedBlockFromPersistentCache() {
+  if (cache_options_.persistent_cache &&
+      cache_options_.persistent_cache->IsCompressed()) {
+    // lookup uncompressed cache mode p-cache
+    status_ = PersistentCacheHelper::LookupRawPage(
+        cache_options_, handle_, &heap_buf_, block_size_ + kBlockTrailerSize);
+    if (status_.ok()) {
+      used_buf_ = heap_buf_.get();
+      slice_ = Slice(heap_buf_.get(), block_size_);
+      return true;
+    } else if (!status_.IsNotFound() && ioptions_.info_log) {
+      assert(!status_.ok());
+      ROCKS_LOG_INFO(ioptions_.info_log,
+                     'Error reading from persistent cache. %s',
+                     status_.ToString().c_str());
+    }
+  }
+  return false;
+}
+    
+      void LoadDependency(const std::vector<SyncPointPair>& dependencies);
+  void LoadDependencyAndMarkers(const std::vector<SyncPointPair>& dependencies,
+    const std::vector<SyncPointPair>& markers);
+  bool PredecessorsAllCleared(const std::string& point);
+  void SetCallBack(const std::string& point,
+    const std::function<void(void*)>& callback) {
+  std::lock_guard<std::mutex> lock(mutex_);
+  callbacks_[point] = callback;
+}
+    
+    #pragma once
+    
+    void setAssertHandler(AssertHandler assertHandler) {
+    gAssertHandler = assertHandler;
+}
+    
+    /**
+ * RAII Object that attaches a thread to the JVM. Failing to detach from a thread before it
+ * exits will cause a crash, as will calling Detach an extra time, and this guard class helps
+ * keep that straight. In addition, it remembers whether it performed the attach or not, so it
+ * is safe to nest it with itself or with non-fbjni code that manages the attachment correctly.
+ *
+ * Potential concerns:
+ *  - Attaching to the JVM is fast (~100us on MotoG), but ideally you would attach while the
+ *    app is not busy.
+ *  - Having a thread detach at arbitrary points is not safe in Dalvik; you need to be sure that
+ *    there is no Java code on the current stack or you run the risk of a crash like:
+ *      ERROR: detaching thread with interp frames (count=18)
+ *    (More detail at https://groups.google.com/forum/#!topic/android-ndk/2H8z5grNqjo)
+ *    ThreadScope won't do a detach if the thread was already attached before the guard is
+ *    instantiated, but there's probably some usage that could trip this up.
+ *  - Newly attached C++ threads only get the bootstrap class loader -- i.e. java language
+ *    classes, not any of our application's classes. This will be different behavior than threads
+ *    that were initiated on the Java side. A workaround is to pass a global reference for a
+ *    class or instance to the new thread; this bypasses the need for the class loader.
+ *    (See http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/invocation.html#attach_current_thread)
+ *    If you need access to the application's classes, you can use ThreadScope::WithClassLoader.
+ */
+class FBEXPORT ThreadScope {
+ public:
+  ThreadScope();
+  ThreadScope(ThreadScope&) = delete;
+  ThreadScope(ThreadScope&&) = default;
+  ThreadScope& operator=(ThreadScope&) = delete;
+  ThreadScope& operator=(ThreadScope&&) = delete;
+  ~ThreadScope();
+    }
+    
+    #pragma once
+#include <cstring>
+#include <string>
+#include <sstream>
+    
+      // The STL assumes rvalue references are unique and for simplicity's sake, we
+  // make the same assumption here, that &ref != this.
+  RefPtr<T>& operator=(RefPtr<T>&& ref) {
+    unrefIfNecessary(m_ptr);
+    m_ptr = ref.m_ptr;
+    ref.m_ptr = nullptr;
+    return *this;
   }
