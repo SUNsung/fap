@@ -1,274 +1,333 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+        /// Format a Syntax tree with the given rules.
+Syntax format(Syntax Tree);
+// TODO: Representation for formatting rules, etc. This is just a figment
+// for now.
     
-    // A pass which performs constant folding in order to avoid unnecessary
-// computation on constants.
-class HloConstantFolding : public HloPassInterface {
- public:
-  tensorflow::StringPiece name() const override { return 'constant_folding'; }
+      /// Indicates whether the diagnostics produced during compilation should be
+  /// checked against expected diagnostics, indicated by markers in the
+  /// input source file.
+  enum {
+    NoVerify,
+    Verify,
+    VerifyAndApplyFixes
+  } VerifyMode = NoVerify;
+    
+    namespace swift {
     }
     
     
-    {    input_buffer_.reset(new io::InputBuffer(file_.get(), kBufferSize));
-    for (; line_number_ < skip_header_lines_; ++line_number_) {
-      string line_contents;
-      Status status = input_buffer_->ReadLine(&line_contents);
-      if (errors::IsOutOfRange(status)) {
-        // We ignore an end of file error when skipping header lines.
-        // We will end up skipping this file.
-        return Status::OK();
-      }
-      TF_RETURN_IF_ERROR(status);
-    }
-    return Status::OK();
+    {  bool operator!=(const Substitution &other) const { return !(*this == other); }
+  bool operator==(const Substitution &other) const;
+  void print(llvm::raw_ostream &os,
+             const PrintOptions &PO = PrintOptions()) const;
+  void dump() const;
+  void dump(llvm::raw_ostream &os, unsigned indent = 0) const;
+};
+    
+    bool Substitution::isCanonical() const {
+  if (!getReplacement()->isCanonical())
+    return false;
+  for (auto conf : getConformances()) {
+    if (!conf.isCanonical())
+      return false;
   }
-    
-    template <typename T>
-void DynamicStitchGPUImpl(const Eigen::GpuDevice& gpu_device,
-                          const int32 slice_size, const int32 first_dim_size,
-                          const CudaDeviceArrayStruct<int>& input_indices,
-                          const CudaDeviceArrayStruct<const T*>& input_ptrs,
-                          T* output) {
-  const int32 output_size = first_dim_size * slice_size;
-  auto config = GetCudaLaunchConfig(output_size, gpu_device);
-    }
-    
-    // Gets the path to the content shell's pak file.
-bool GetResourcesPakFilePath(base::FilePath& output);
-    
-    namespace net {
-class CertVerifyProc;
-class CertVerifyResult;
-class X509Certificate;
-typedef std::vector<scoped_refptr<X509Certificate> > CertificateList;
+  return true;
 }
-    
-    AutofillAgent::AutofillAgent(content::RenderView* render_view)
-    : content::RenderViewObserver(render_view),
-      weak_ptr_factory_(this) {
-  render_view->GetWebView()->setAutofillClient(this);
-}
-    
-    std::string Clipboard::GetText() {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  base::string16 text;
-  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
-  return base::UTF16ToUTF8(text);
-}
-    
-    #endif  // CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
 
     
-    class DispatcherHost : public content::WebContentsObserver {
- public:
-  explicit DispatcherHost(content::RenderViewHost* render_view_host);
-  ~DispatcherHost() final;
-    }
-    
-    void Menu::OnMenuClosed() {
-  CHECK(!message_loop_quit_.is_null());
-  message_loop_quit_.Run();
-  
-#if !defined(OS_WIN)
-  // Ask PlatformEventSource to stop dispatching
-  // events in this message loop
-  // iteration. We want our menu's loop to return
-  // before the next event.
-  if (ui::PlatformEventSource::GetInstance())
-    ui::PlatformEventSource::GetInstance()->StopCurrentEventStream();
-#endif
-}
-    
-    void MenuItem::SetSubmenu(Menu* sub_menu) {
-  submenu_ = sub_menu;
-  if (GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    sub_menu->UpdateKeys(gtk_accel_group);
-  }
-  if (sub_menu == NULL)
-    gtk_menu_item_remove_submenu(GTK_MENU_ITEM(menu_item_));
-  else
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_item_), sub_menu->menu_);
-}
-    
-      ClientConfig client_config;
-  client_config.set_client_type(SYNC_CLIENT);
-  client_config.set_outstanding_rpcs_per_channel(1);
-  client_config.set_client_channels(1);
-  client_config.set_rpc_type(UNARY);
-  client_config.mutable_load_params()->mutable_closed_loop();
-    
-    #include <algorithm>
-    
-    SecureAuthContext::~SecureAuthContext() {
-  if (take_ownership_) grpc_auth_context_release(ctx_);
-}
+    #endif
     
     
-    {  const Result start_;
+    {  // No copying allowed
+  DBIter(const DBIter&);
+  void operator=(const DBIter&);
 };
     
-    #include <iostream>
-#include <sstream>
-#include <string>
-#include <vector>
+    Status DumpFile(Env* env, const std::string& fname, WritableFile* dst) {
+  FileType ftype;
+  if (!GuessType(fname, &ftype)) {
+    return Status::InvalidArgument(fname + ': unknown file type');
+  }
+  switch (ftype) {
+    case kLogFile:         return DumpLog(env, fname, dst);
+    case kDescriptorFile:  return DumpDescriptor(env, fname, dst);
+    case kTableFile:       return DumpTable(env, fname, dst);
+    default:
+      break;
+  }
+  return Status::InvalidArgument(fname + ': not a dump-able file type');
+}
     
-      std::shared_ptr<ChannelCredentials> GetChannelCredentials(
-      const grpc::string& type, ChannelArguments* args) override {
-    if (type == grpc::testing::kInsecureCredentialsType) {
-      return InsecureChannelCredentials();
-    } else if (type == grpc::testing::kTlsCredentialsType) {
-      SslCredentialsOptions ssl_opts = {test_root_cert, '', ''};
-      args->SetSslTargetNameOverride('foo.test.google.fr');
-      return SslCredentials(ssl_opts);
-    } else {
-      std::unique_lock<std::mutex> lock(mu_);
-      auto it(std::find(added_secure_type_names_.begin(),
-                        added_secure_type_names_.end(), type));
-      if (it == added_secure_type_names_.end()) {
-        gpr_log(GPR_ERROR, 'Unsupported credentials type %s.', type.c_str());
-        return nullptr;
+    std::string CurrentFileName(const std::string& dbname) {
+  return dbname + '/CURRENT';
+}
+    
+    
+    {  fname = TempFileName('tmp', 999);
+  ASSERT_EQ('tmp/', std::string(fname.data(), 4));
+  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
+  ASSERT_EQ(999, number);
+  ASSERT_EQ(kTempFile, type);
+}
+    
+      void Add(const char* smallest, const char* largest,
+           SequenceNumber smallest_seq = 100,
+           SequenceNumber largest_seq = 100) {
+    FileMetaData* f = new FileMetaData;
+    f->number = files_.size() + 1;
+    f->smallest = InternalKey(smallest, smallest_seq, kTypeValue);
+    f->largest = InternalKey(largest, largest_seq, kTypeValue);
+    files_.push_back(f);
+  }
+    
+      // Return the name of this policy.  Note that if the filter encoding
+  // changes in an incompatible way, the name returned by this method
+  // must be changed.  Otherwise, old incompatible filters may be
+  // passed to methods of this type.
+  virtual const char* Name() const = 0;
+    
+    /**
+ * @name tess_acceptable_word
+ *
+ * @return true if the word is regarded as 'good enough'.
+ * @param word_choice after context
+ * @param raw_choice before context
+ */
+bool Tesseract::tess_acceptable_word(WERD_RES* word) {
+  return getDict().AcceptableResult(word);
+}
+    
+    // Computes all the cross product distances of the points from the line,
+// storing the actual (signed) cross products in distances.
+// Ignores distances of points that are further away than the previous point,
+// and overlaps the previous point by at least half.
+void DetLineFit::ComputeDistances(const ICOORD& start, const ICOORD& end) {
+  distances_.truncate(0);
+  ICOORD line_vector = end;
+  line_vector -= start;
+  square_length_ = line_vector.sqlength();
+  int line_length = IntCastRounded(sqrt(square_length_));
+  // Compute the distance of each point from the line.
+  int prev_abs_dist = 0;
+  int prev_dot = 0;
+  for (int i = 0; i < pts_.size(); ++i) {
+    ICOORD pt_vector = pts_[i].pt;
+    pt_vector -= start;
+    int dot = line_vector % pt_vector;
+    // Compute |line_vector||pt_vector|sin(angle between)
+    int dist = line_vector * pt_vector;
+    int abs_dist = dist < 0 ? -dist : dist;
+    if (abs_dist > prev_abs_dist && i > 0) {
+      // Ignore this point if it overlaps the previous one.
+      int separation = abs(dot - prev_dot);
+      if (separation < line_length * pts_[i].halfwidth ||
+          separation < line_length * pts_[i - 1].halfwidth)
+        continue;
+    }
+    distances_.push_back(DistPointPair(dist, pts_[i].pt));
+    prev_abs_dist = abs_dist;
+    prev_dot = dot;
+  }
+}
+    
+     private:
+  // Simple struct to hold an ICOORD point and a halfwidth representing half
+  // the 'width' (supposedly approximately parallel to the direction of the
+  // line) of each point, such that distant points can be discarded when they
+  // overlap nearer points. (Think i dot and other diacritics or noise.)
+  struct PointWidth {
+    PointWidth() : pt(ICOORD(0, 0)), halfwidth(0) {}
+    PointWidth(const ICOORD& pt0, int halfwidth0)
+      : pt(pt0), halfwidth(halfwidth0) {}
+    }
+    
+      // Calculate the scale factor we'll use to get to image y-pixels
+  double midx = (bbox.left() + bbox.right()) / 2.0;
+  double ydiff = (bbox.top() - bbox.bottom()) + 2.0;
+  FCOORD mid_bot(midx, bbox.bottom()), tmid_bot;
+  FCOORD mid_high(midx, bbox.bottom() + ydiff), tmid_high;
+  DenormTransform(NULL, mid_bot, &tmid_bot);
+  DenormTransform(NULL, mid_high, &tmid_high);
+    
+      // Copying a DENORM is allowed.
+  DENORM(const DENORM &);
+  DENORM& operator=(const DENORM&);
+  ~DENORM();
+    
+    #ifndef TESSERACT_CCUTIL_QRSEQUENCE_H_
+#define TESSERACT_CCUTIL_QRSEQUENCE_H_
+    
+      // Map to subset the actual charset space.
+  const IndexMapBiDi* charset_map_;
+  // Shape table to recombine character classes into shapes
+  const ShapeTable* shape_table_;
+  // The samples to iterate over.
+  TrainingSampleSet* sample_set_;
+  // Flag to control randomizing the sample features.
+  bool randomize_;
+  // Shape table owned by this used to iterate character classes.
+  ShapeTable* owned_shape_table_;
+    
+    
+    {	playing = true;
+	delay_compensation = ProjectSettings::get_singleton()->get('audio/video_delay_compensation_ms');
+	delay_compensation /= 1000.0;
+};
+    
+    
+    {	int got;
+	Error err = sp->base->get_partial_data((uint8_t *)buf, len, got);
+	if (err != OK) {
+		return MBEDTLS_ERR_SSL_INTERNAL_ERROR;
+	}
+	if (got == 0) {
+		return MBEDTLS_ERR_SSL_WANT_READ;
+	}
+	return got;
+}
+    
+    
+    {	return 0;
+}
+    
+    	static void bind_integer_constant(const StringName &p_class, const StringName &p_enum, const StringName &p_name, int p_constant);
+	static void get_integer_constant_list(const StringName &p_class, List<String> *p_constants, bool p_no_inheritance = false);
+	static int get_integer_constant(const StringName &p_class, const StringName &p_name, bool *p_success = NULL);
+    
+    
+    {					String framework_path = path_join(mono_reg_info.assembly_dir, 'mono', '4.5');
+					*r_framework_path = GDMonoMarshal::mono_string_from_godot(framework_path);
+				} else {
+					ERR_PRINT('Cannot find Mono's assemblies directory in the registry');
+				}
+    
+    					if (points.size() == 0)
+						return false;
+    
+    	bool hasHit() {
+		return m_penetration_distance < 0;
+	}
+    
+    class TileMapEditor : public VBoxContainer {
+    }
+    
+    	ClassDB::bind_method(D_METHOD('get_current_library_path'), &GDNativeLibrary::get_current_library_path);
+	ClassDB::bind_method(D_METHOD('get_current_dependencies'), &GDNativeLibrary::get_current_dependencies);
+    
+    #ifdef WITH_GLOO
+void init_gloo_master(int workers) {
+  g_mutex.lock();
+  setenv(WORLD_SIZE_ENV, std::to_string((workers + 1)).data(), 1);
+  setenv(RANK_ENV, '0', 1);
+  setenv(MASTER_PORT_ENV, std::to_string(MASTER_PORT).data(), 1);
+  auto masterChannel = std::make_shared<thd::DataChannelGloo>(thd::getInitConfig('env://')); // reads all env variable
+  g_mutex.unlock();
+    }
+    
+      AT_FORALL_SCALAR_TYPES(DEFINE_ACCESSOR)
+    
+    ${Storage}::${Storage}(Context* context,
+  void * data, std::size_t size, const std::function<void(void*)> & deleter)
+  : storage(${THStorage}_newWithDataAndAllocator(${state,}
+     static_cast<${THScalarType}*>(data), size,
+     &storage_deleter,
+     new std::function<void(void*)>(deleter)
+    )),
+    context(context) {
+    ${THStorage}_clearFlag(${state,} storage, TH_STORAGE_RESIZABLE);
+}
+    
+      template<typename T>
+  void allReduceT(at::Tensor& data, THDReduceOp operation,
+                  THDGroup group_id = THDGroupWORLD);
+    
+    THDTensorDescriptor THDTensorDescriptor_newFromTHShortTensor(THShortTensor *tensor) {
+  return at::getType(at::Backend::CPU, at::ScalarType::Short).unsafeTensorFromTH((void*)tensor, true);
+}
+    
+    bool ReadJpeg(const uint8_t* data, const size_t len, JpegReadMode mode,
+              JPEGData* jpg) {
+  size_t pos = 0;
+  // Check SOI marker.
+  EXPECT_MARKER();
+  int marker = data[pos + 1];
+  pos += 2;
+  if (marker != 0xd8) {
+    fprintf(stderr, 'Did not find expected SOI marker, actual=%d\n', marker);
+    jpg->error = JPEG_SOI_NOT_FOUND;
+    return false;
+  }
+  int lut_size = kMaxHuffmanTables * kJpegHuffmanLutSize;
+  std::vector<HuffmanTableEntry> dc_huff_lut(lut_size);
+  std::vector<HuffmanTableEntry> ac_huff_lut(lut_size);
+  bool found_sof = false;
+  uint16_t scan_progression[kMaxComponents][kDCTBlockSize] = { { 0 } };
+    }
+    
+    void OutputImageComponent::ToFloatPixels(float* out, int stride) const {
+  assert(factor_x_ == 1);
+  assert(factor_y_ == 1);
+  for (int block_y = 0; block_y < height_in_blocks_; ++block_y) {
+    for (int block_x = 0; block_x < width_in_blocks_; ++block_x) {
+      coeff_t block[kDCTBlockSize];
+      GetCoeffBlock(block_x, block_y, block);
+      double blockd[kDCTBlockSize];
+      for (int k = 0; k < kDCTBlockSize; ++k) {
+        blockd[k] = block[k];
       }
-      return added_secure_type_providers_[it - added_secure_type_names_.begin()]
-          ->GetChannelCredentials(args);
+      ComputeBlockIDCTDouble(blockd);
+      for (int iy = 0; iy < 8; ++iy) {
+        for (int ix = 0; ix < 8; ++ix) {
+          int y = block_y * 8 + iy;
+          int x = block_x * 8 + ix;
+          if (y >= height_ || x >= width_) continue;
+          out[(y * width_ + x) * stride] = static_cast<float>(blockd[8 * iy + ix] + 128.0);
+        }
+      }
     }
   }
-    
-    namespace jpgd
-{
-  typedef unsigned char  uint8;
-  typedef   signed short int16;
-  typedef unsigned short uint16;
-  typedef unsigned int   uint;
-  typedef   signed int   int32;
-    }
-    
-    
-int             oc_has_mode_metrics;
-oc_mode_metrics OC_MODE_METRICS[64][3][2][OC_SAD_BINS];
-# endif
-    
-    /*Accesses one of four (signed) bytes given an index.
-  This can be used to avoid small lookup tables.*/
-#define OC_BYTE_TABLE32(_a,_b,_c,_d,_i) \
-  ((signed char) \
-   (((_a)&0xFF|((_b)&0xFF)<<8|((_c)&0xFF)<<16|((_d)&0xFF)<<24)>>(_i)*8))
-/*Accesses one of eight (unsigned) nibbles given an index.
-  This can be used to avoid small lookup tables.*/
-#define OC_UNIBBLE_TABLE32(_a,_b,_c,_d,_e,_f,_g,_h,_i) \
-  ((((_a)&0xF|((_b)&0xF)<<4|((_c)&0xF)<<8|((_d)&0xF)<<12| \
-   ((_e)&0xF)<<16|((_f)&0xF)<<20|((_g)&0xF)<<24|((_h)&0xF)<<28)>>(_i)*4)&0xF)
-    
-    
-static const vorbis_mapping_template _mapres_template_16_uncoupled[3]={
-  { _map_nominal_u, _res_16u_0 }, /* 0 */
-  { _map_nominal_u, _res_16u_1 }, /* 1 */
-  { _map_nominal_u, _res_16u_2 }, /* 2 */
-};
-
-    
-    static const static_bookblock _resbook_44s_n1={
-  {
-    {0},{0,0,&_44cn1_s_p1_0},{0,0,&_44cn1_s_p2_0},
-    {0,0,&_44cn1_s_p3_0},{0,0,&_44cn1_s_p4_0},{0,0,&_44cn1_s_p5_0},
-    {&_44cn1_s_p6_0,&_44cn1_s_p6_1},{&_44cn1_s_p7_0,&_44cn1_s_p7_1},
-    {&_44cn1_s_p8_0,&_44cn1_s_p8_1,&_44cn1_s_p8_2}
-   }
-};
-static const static_bookblock _resbook_44sm_n1={
-  {
-    {0},{0,0,&_44cn1_sm_p1_0},{0,0,&_44cn1_sm_p2_0},
-    {0,0,&_44cn1_sm_p3_0},{0,0,&_44cn1_sm_p4_0},{0,0,&_44cn1_sm_p5_0},
-    {&_44cn1_sm_p6_0,&_44cn1_sm_p6_1},{&_44cn1_sm_p7_0,&_44cn1_sm_p7_1},
-    {&_44cn1_sm_p8_0,&_44cn1_sm_p8_1,&_44cn1_sm_p8_2}
-   }
-};
-    
-      {2,0,30,  &_residue_44p_hi,
-   &_huff_book__44p7_long,&_huff_book__44p7_long,
-   &_resbook_44p_7,&_resbook_44p_7},
-    
-      {1,0,32,  &_residue_44_low_un,
-   &_huff_book__44u3__long,&_huff_book__44u3__long,
-   &_resbook_44u_3,&_resbook_44u_3}
-};
-static const vorbis_residue_template _res_44u_4[]={
-  {1,0,16,  &_residue_44_low_un,
-   &_huff_book__44u4__short,&_huff_book__44u4__short,
-   &_resbook_44u_4,&_resbook_44u_4},
-    
-    #define fromdB(x) (exp((x)*.11512925f))
-    
-    
-/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
-#undef MULT16_32_Q15
-static OPUS_INLINE opus_val32 MULT16_32_Q15_armv4(opus_val16 a, opus_val32 b)
-{
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-      '#MULT16_32_Q15\n\t'
-      'smull %0, %1, %2, %3\n\t'
-      : '=&r'(rd_lo), '=&r'(rd_hi)
-      : '%r'(b), 'r'(a<<16)
-  );
-  /*We intentionally don't OR in the high bit of rd_lo for speed.*/
-  return rd_hi<<1;
-}
-#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv4(a, b))
-    
-    /*Constants used by the entropy encoder/decoder.*/
-    
-        /* increment using fractional part of input */
-    y = silk_SMLAWB(y, y, silk_SMULBB(213, frac_Q7));
-    
-    
-    {    ret = ((limit1) > (limit2) ? ((a) > (limit1) ? (limit1) : ((a) < (limit2) ? (limit2) : (a))) \
-        : ((a) > (limit2) ? (limit2) : ((a) < (limit1) ? (limit1) : (a))));
-    return(ret);
 }
     
-        Value(void)
-    : unit(YGUnitUndefined)
-    , value(0.0)
+    
+    {}  // namespace guetzli
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    // Returns the table width of the next 2nd level table, count is the histogram
+// of bit lengths for the remaining symbols, len is the code length of the next
+// processed symbol.
+static inline int NextTableBitSize(const int* count, int len) {
+  int left = 1 << (len - kJpegHuffmanRootTableBits);
+  while (len < kJpegHuffmanMaxBitLength) {
+    left -= count[len];
+    if (left <= 0) break;
+    ++len;
+    left <<= 1;
+  }
+  return len - kJpegHuffmanRootTableBits;
+}
+    
+      void ToLinearRGB(std::vector<std::vector<float> >* rgb) const;
+    
+    
+    {    return true;
+}
+    
+        // Setup ImGui binding
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    ImGui_ImplSdlGL3_Init(window);
+    
+        // Main loop
+    while (!glfwWindowShouldClose(window))
     {
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        glfwPollEvents();
+        ImGui_ImplGlfwGL3_NewFrame();
     }
-    
-    TEST_F(YogaTest_HadOverflowTests, spacing_overflow_no_wrap_and_no_flex_children) {
-  const YGNodeRef child0 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child0, 80);
-  YGNodeStyleSetHeight(child0, 40);
-  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
-  YGNodeStyleSetMargin(child0, YGEdgeBottom, 10);
-  YGNodeInsertChild(root, child0, 0);
-  const YGNodeRef child1 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child1, 80);
-  YGNodeStyleSetHeight(child1, 40);
-  YGNodeStyleSetMargin(child1, YGEdgeBottom, 5);
-  YGNodeInsertChild(root, child1, 1);
-    }
-    
-    void Node::setHeight(double height)
-{
-    YGNodeStyleSetHeight(m_node, height);
-}
-    
-        method(getMinWidth);
-    method(getMinHeight);
-    
-      void unref() {
-    if (0 == --m_refcount) {
-      delete this;
-    }
-  }
-    
-    template <typename T> template <typename U>
-RefPtr<T>::operator RefPtr<U>() const {
-  static_assert(std::is_base_of<T, U>::value, 'Invalid static cast');
-  return assumeAlreadyReffedOrNull<U>(static_cast<U*>(m_ptr));
-}
