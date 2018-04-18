@@ -1,92 +1,114 @@
 
         
-              # Returns constant of subscription adapter specified in config/cable.yml.
-      # If the adapter cannot be found, this will default to the Redis adapter.
-      # Also makes sure proper dependencies are required.
-      def pubsub_adapter
-        adapter = (cable.fetch('adapter') { 'redis' })
+            s = nil
+    homebrew_site_packages = Language::Python.homebrew_site_packages
+    user_site_packages = Language::Python.user_site_packages 'python'
+    pth_file = user_site_packages/'homebrew.pth'
+    instructions = <<-EOS.undent.gsub(/^/, '  ')
+      mkdir -p #{user_site_packages}
+      echo 'import site; site.addsitedir('#{homebrew_site_packages}')' >> #{pth_file}
+    EOS
     
-            def test_url_memory_db_for_sqlite3
-          spec = resolve 'sqlite3::memory:'
-          assert_equal(':memory:', spec['database'])
-        end
-    
-      test 'helpers' do
-    assert_response_code_range 200..299, :successful?
-    assert_response_code_range [404],    :not_found?
-    assert_response_code_range 300..399, :redirection?
-    assert_response_code_range 500..599, :server_error?
-    assert_response_code_range 400..499, :client_error?
-  end
-    
-        # Access the message attachments list.
-    def attachments
-      mailer.attachments
+        def self.cleanup_logs
+      return unless HOMEBREW_LOGS.directory?
+      HOMEBREW_LOGS.subdirs.each do |dir|
+        cleanup_path(dir) { dir.rmtree } if prune?(dir, :days_default => 14)
+      end
     end
     
-            def enqueue_delivery(delivery_method, options = {})
-          if processed?
-            super
-          else
-            args = @mailer_class.name, @action.to_s, delivery_method.to_s, @params, *@args
-            ActionMailer::Parameterized::DeliveryJob.set(options).perform_later(*args)
+        def merge(hash)
+      return super unless hash.is_a? Hash
+      dup.merge!(hash)
+    end
+    
+              # Underscore methods
+          if name.start_with?('Underscore')
+            node.at_css('~ ul').css('li').each do |li|
+              name = [type.downcase, li.at_css('a').content.split.first].join('.')
+              id = name.parameterize
+              li['id'] = id
+              entries << [name, id, type]
+            end
+            next
           end
+    
+            css('.property-detail').each do |node|
+          node.at_css('.property-name')['id'] = node.at_css('a')['id']
         end
-    end
     
-      class AssertMultipartSelectMailer < ActionMailer::Base
-    def test(options)
-      mail subject: 'Test e-mail', from: 'test@test.host', to: 'test <test@test.host>' do |format|
-        format.text { render plain: options[:text] }
-        format.html { render plain: options[:html] }
-      end
-    end
+        s = Set.new(ary) { |o| o * 2 }
+    assert_equal([2,4,6], s.sort)
   end
     
-      test 'delivery method can be customized per instance' do
-    stub_any_instance(Mail::SMTP, instance: Mail::SMTP.new({})) do |instance|
-      assert_called(instance, :deliver!) do
-        email = DeliveryMailer.welcome.deliver_now
-        assert_instance_of Mail::SMTP, email.delivery_method
-        email = DeliveryMailer.welcome(delivery_method: :test).deliver_now
-        assert_instance_of Mail::TestMailer, email.delivery_method
-      end
-    end
-  end
-    
-          while size = q1.pop
-        assert_equal size, File.size(f.path)
-        assert_equal size, f.size
-        q2.push true
-      end
-      th.join
-    end
-  end
-    
-      def test_2038
-    if no_leap_seconds?
-      assert_equal(0x80000000, Time.utc(2038, 1, 19, 3, 14, 8).tv_sec)
-    end
-    [
-      [2038, 1, 19, 3, 14, 7],
-      [2038, 1, 19, 3, 14, 8],
-      [2038, 1, 19, 3, 14, 9],
-      [2039, 1, 1, 0, 0, 0],
-    ].each {|year, mon, day, hour, min, sec|
-      t = Time.utc(year, mon, day, hour, min, sec)
-      assert_equal(year, t.year)
-      assert_equal(mon, t.mon)
-      assert_equal(day, t.day)
-      assert_equal(hour, t.hour)
-      assert_equal(min, t.min)
-      assert_equal(sec, t.sec)
-    }
+      it 'decodes negative Infinity' do
+    '\xff\x80\x00\x00'.unpack(unpack_format).should == [-infinity_value]
   end
     
       class Apple < Struct; end
     
-      def self.status_of_completed_thread
-    t = completed_thread
-    t.join
-    Status.new t
+      def self.completed_thread
+    Thread.new {}
   end
+    
+        # margin: a -b
+    # LESS: sets 2 values
+    # Sass: sets 1 value (a-b)
+    # This wraps a and -b so they evaluates to 2 values in Sass
+    def replace_calculation_semantics(file)
+      # split_prop_val.call('(@navbar-padding-vertical / 2) -@navbar-padding-horizontal')
+      # #=> ['(navbar-padding-vertical / 2)', '-navbar-padding-horizontal']
+      split_prop_val = proc { |val|
+        s         = CharStringScanner.new(val)
+        r         = []
+        buff      = ''
+        d         = 0
+        prop_char = %r([\$\w\-/\*\+%!])
+        while (token = s.scan_next(/([\)\(]|\s+|#{prop_char}+)/))
+          buff << token
+          case token
+            when '('
+              d += 1
+            when ')'
+              d -= 1
+              if d == 0
+                r << buff
+                buff = ''
+              end
+            when /\s/
+              if d == 0 && !buff.strip.empty?
+                r << buff
+                buff = ''
+              end
+          end
+        end
+        r << buff unless buff.empty?
+        r.map(&:strip)
+      }
+    
+        def log_http_get_files(files, from, cached = false)
+      return if files.empty?
+      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
+      if cached
+        puts dark green s
+      else
+        puts dark cyan s
+      end
+    end
+    
+            def rejected_types_rejected?
+          @missing_rejected_types ||= @rejected_types.select { |type| type_allowed?(type) }
+          @missing_rejected_types.none?
+        end
+      end
+    end
+  end
+end
+
+    
+    module Paperclip
+  # Provides helper methods that can be used in migrations.
+  module Schema
+    COLUMNS = {:file_name    => :string,
+               :content_type => :string,
+               :file_size    => :integer,
+               :updated_at   => :datetime}
