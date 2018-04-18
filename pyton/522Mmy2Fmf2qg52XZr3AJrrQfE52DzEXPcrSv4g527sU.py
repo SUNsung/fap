@@ -1,78 +1,307 @@
 
         
-                (foo, 2), p1
-        (bar, 3), p1
-        (foo, 3), p2
-        (bar, 10), p3
-        (foo, 1), p4
-    
-        def __init__(self, chat_id):
-        self.chat_id = chat_id
-        self.users = []
-        self.messages = []
-    
-        if address_family == socket.AF_INET:
-        if len(packed_ip) != ctypes.sizeof(addr.ipv4_addr):
-            raise socket.error('packed IP wrong length for inet_ntoa')
-        ctypes.memmove(addr.ipv4_addr, packed_ip, 4)
-    elif address_family == socket.AF_INET6:
-        if len(packed_ip) != ctypes.sizeof(addr.ipv6_addr):
-            raise socket.error('packed IP wrong length for inet_ntoa')
-        ctypes.memmove(addr.ipv6_addr, packed_ip, 16)
-    else:
-        raise socket.error('unknown address family')
-    
-    ## All tokens go to the parser (unless skip() is called in that rule)
-# on a particular 'channel'.  The parser tunes to a particular channel
-# so that whitespace etc... can go to the parser on a 'hidden' channel.
-DEFAULT_CHANNEL = 0
-    
-            return cert, key, chain
-    
-        # Implement all methods from IAuthenticator, remembering to add
-    # 'self' as first argument, e.g. def prepare(self)...
-    
-        def check_float_conversion(self, n):
-        # Check that int -> float conversion behaviour matches
-        # that of the pure Python version above.
         try:
-            actual = float(n)
-        except OverflowError:
-            actual = 'overflow'
+    input = raw_input
+except NameError:
+    pass
     
-            entrylabel.grid(column=0, row=0, columnspan=3, padx=5, sticky=W)
-        self.entry.grid(column=0, row=1, columnspan=3, padx=5, sticky=W+E,
-                        pady=[10,0])
-        self.entry_error.grid(column=0, row=2, columnspan=3, padx=5,
-                              sticky=W+E)
-        self.button_ok.grid(column=1, row=99, padx=5)
-        self.button_cancel.grid(column=2, row=99, padx=5)
+        with io.open(infile, encoding='utf-8') as inf:
+        issue_template_tmpl = inf.read()
     
-    BIG = 100000
+    import itertools
+import json
+import os
+import re
+import sys
     
-        _mangle_from_ = True
+        def test_cache(self):
+        ydl = FakeYDL({
+            'cachedir': self.test_dir,
+        })
+        c = Cache(ydl)
+        obj = {'x': 1, 'y': ['ä', '\\a', True]}
+        self.assertEqual(c.load('test_cache', 'k.'), None)
+        c.store('test_cache', 'k.', obj)
+        self.assertEqual(c.load('test_cache', 'k2'), None)
+        self.assertFalse(_is_empty(self.test_dir))
+        self.assertEqual(c.load('test_cache', 'k.'), obj)
+        self.assertEqual(c.load('test_cache', 'y'), None)
+        self.assertEqual(c.load('test_cache2', 'k.'), None)
+        c.remove()
+        self.assertFalse(os.path.exists(self.test_dir))
+        self.assertEqual(c.load('test_cache', 'k.'), None)
     
-        def head(self, message_spec=None, *, file=None):
-        '''Process a HEAD command.  Argument:
-        - message_spec: article number or message id
-        - file: filename string or file object to store the headers in
-        Returns:
-        - resp: server response if successful
-        - ArticleInfo: (article number, message id, list of header lines)
-        '''
-        if message_spec is not None:
-            cmd = 'HEAD {0}'.format(message_spec)
+    
+    {        webpage = self._download_webpage(url, text_id)
+        sohu_video_info_str = self._search_regex(
+            r'var\s+sohuVideoInfo\s*=\s*({[^}]+});', webpage, 'Sohu video info', default=None)
+        if sohu_video_info_str:
+            sohu_video_info = self._parse_json(
+                sohu_video_info_str, text_id, transform_source=js_to_json)
+            return self.url_result(sohu_video_info['url'], 'Sohu')
+    
+            mvp_id = self._search_mvp_id(webpage)
+    
+      def setUp(self):
+    FLAGS.train_data = os.path.join(self.get_temp_dir(), 'test-text.txt')
+    FLAGS.eval_data = os.path.join(self.get_temp_dir(), 'eval-text.txt')
+    FLAGS.save_path = self.get_temp_dir()
+    with open(FLAGS.train_data, 'w') as f:
+      f.write(
+          '''alice was beginning to get very tired of sitting by her sister on
+          the bank, and of having nothing to do: once or twice she had peeped
+          into the book her sister was reading, but it had no pictures or
+          conversations in it, 'and what is the use of a book,' thought alice
+          'without pictures or conversations?' So she was considering in her own
+          mind (as well as she could, for the hot day made her feel very sleepy
+          and stupid), whether the pleasure of making a daisy-chain would be
+          worth the trouble of getting up and picking the daisies, when suddenly
+          a White rabbit with pink eyes ran close by her.\n''')
+      with open(FLAGS.eval_data, 'w') as f:
+        f.write('alice she rabbit once\n')
+    
+    '''Tests for models.tutorials.rnn.ptb.reader.'''
+    
+        # 3. Training mode
+    
+      def testATMethods(self):
+    at_methods = [None, 'rp', 'at', 'vat', 'atvat']
+    for method in at_methods:
+      FLAGS.adv_training_method = method
+      with tf.Graph().as_default():
+        graphs.VatxtModel().classifier_graph()
+    
+    Computational time:
+  1.8 hours to train 10000 steps without adversarial or virtual adversarial
+    training, on 1 layer 1024 hidden units LSTM, 256 embeddings, 400 truncated
+    BP, 64 minibatch and on single GPU (Pascal Titan X, cuDNNv5).
+    
+    py_library(
+    name = 'package',
+    srcs = [
+        '__init__.py',
+    ],
+    srcs_version = 'PY2AND3',
+    deps = [
+        ':rnn',
+        ':rnn_cell',
+        ':seq2seq',
+    ],
+)
+    
+        Any state that has a semantic predicate edge is special; those states
+    are generated with if-then-else structures in a specialStateTransition()
+    which is generated by cyclicDFA template.
+    
+    '''
+    
+    def __init__(
+        self,
+        recognizer, decisionNumber,
+        eot, eof, min, max, accept, special, transition
+        ):
+        ## Which recognizer encloses this DFA?  Needed to check backtracking
+        self.recognizer = recognizer
+    
+                # late import to avoid cyclic dependencies
+            from antlr3.streams import TokenStream, CharStream
+            from antlr3.tree import TreeNodeStream
+    
+    
+def write_with_harness(codefile, sourcefile, start_linenum, linebuffer):
+    '''write output with additional lines to make code likely compilable'''
+    # add commonly used headers, so that lines can likely compile.
+    # This is work in progress, the main issue remains handling class
+    # declarations in in-function code differently
+    with io.open(codefile, 'w') as code_filehandle:
+        code_filehandle.write('''\
+#include<stdio.h>      // by md-split
+#include<stdlib.h>     // by md-split
+#include<tuple>        // by md-split
+#include<utility>      // by md-split
+#include<limits>       // by md-split
+#include<functional>   // by md-split
+#include<string>       // by md-split
+#include<map>          // by md-split
+#include<iostream>     // by md-split
+#include<vector>       // by md-split
+#include<algorithm>    // by md-split
+#include<memory>       // by md-split
+using namespace std;   // by md-split
+// %s : %s
+''' % (sourcefile, start_linenum))
+        # TODO: if not toplevel code, wrap inside class
+        for codeline in linebuffer:
+            code_filehandle.write(codeline)
+    
+            if self.closed:
+            raise ValueError('I/O operation on closed file')
+        if not self.seekable:
+            raise OSError('cannot seek')
+        if whence == 1:
+            pos = pos + self.size_read
+        elif whence == 2:
+            pos = pos + self.chunksize
+        if pos < 0 or pos > self.chunksize:
+            raise RuntimeError
+        self.file.seek(self.offset + pos, 0)
+        self.size_read = pos
+    
+            m = match_number(string, idx)
+        if m is not None:
+            integer, frac, exp = m.groups()
+            if frac or exp:
+                res = parse_float(integer + (frac or '') + (exp or ''))
+            else:
+                res = parse_int(integer)
+            return res, m.end()
+        elif nextchar == 'N' and string[idx:idx + 3] == 'NaN':
+            return parse_constant('NaN'), idx + 3
+        elif nextchar == 'I' and string[idx:idx + 8] == 'Infinity':
+            return parse_constant('Infinity'), idx + 8
+        elif nextchar == '-' and string[idx:idx + 9] == '-Infinity':
+            return parse_constant('-Infinity'), idx + 9
         else:
-            cmd = 'HEAD'
-        return self._artcmd(cmd, file)
+            raise StopIteration(idx)
     
-        def test_1_A(self):
-        class X(Structure):
-            pass
-        self.assertEqual(sizeof(X), 0) # not finalized
-        X._fields_ = [] # finalized
-        self.assertRaises(AttributeError, setattr, X, '_fields_', [])
+    # RFC 977 by Brian Kantor and Phil Lapsley.
+# xover, xgtitle, xpath, date methods by Kevan Heydon
     
-        with open('README.md') as readme:
-        readme_html = mistune.markdown(readme.read())
-        readme_soup = BeautifulSoup.BeautifulSoup(readme_html, 'html.parser')
+    def rrggbb_to_triplet(color):
+    '''Converts a #rrggbb color to the tuple (red, green, blue).'''
+    rgbtuple = _namedict.get(color)
+    if rgbtuple is None:
+        if color[0] != '#':
+            raise BadColor(color)
+        red = color[1:3]
+        green = color[3:5]
+        blue = color[5:7]
+        rgbtuple = int(red, 16), int(green, 16), int(blue, 16)
+        _namedict[color] = rgbtuple
+    return rgbtuple
+    
+        tokens = {}
+    prev_val = None
+    for line in lines:
+        match = prog.match(line)
+        if match:
+            name, val = match.group(1, 2)
+            val = int(val)
+            tokens[val] = {'token': name}          # reverse so we can sort them...
+            prev_val = val
+        else:
+            comment_match = comment_regex.match(line)
+            if comment_match and prev_val is not None:
+                comment = comment_match.group(1)
+                tokens[prev_val]['comment'] = comment
+    keys = sorted(tokens.keys())
+    # load the output skeleton from the target:
+    try:
+        fp = open(outFileName)
+    except OSError as err:
+        sys.stderr.write('I/O error: %s\n' % str(err))
+        sys.exit(2)
+    with fp:
+        format = fp.read().split('\n')
+    try:
+        start = format.index('#--start constants--') + 1
+        end = format.index('#--end constants--')
+    except ValueError:
+        sys.stderr.write('target does not contain format markers')
+        sys.exit(3)
+    lines = []
+    for key in keys:
+        lines.append('%s = %d' % (tokens[key]['token'], key))
+        if 'comment' in tokens[key]:
+            lines.append('# %s' % tokens[key]['comment'])
+    format[start:end] = lines
+    try:
+        fp = open(outFileName, 'w')
+    except OSError as err:
+        sys.stderr.write('I/O error: %s\n' % str(err))
+        sys.exit(4)
+    with fp:
+        fp.write('\n'.join(format))
+    
+            If the registered instance has a _dispatch method then that
+        method will be called with the name of the XML-RPC method and
+        its parameters as a tuple
+        e.g. instance._dispatch('add',(2,3))
+    
+                    it = pickle.loads(d)
+                try:
+                    next(it)
+                except StopIteration:
+                    continue
+                d = pickle.dumps(it, proto)
+                it = pickle.loads(d)
+                self.assertEqual(list(it), data[1:])
+    
+    # Can't import these from paths.py because that uses `future` imports
+DIR_OF_CURRENT_SCRIPT = os.path.dirname( os.path.abspath( __file__ ) )
+DIR_OF_YCMD = os.path.join( DIR_OF_CURRENT_SCRIPT, '..', '..', 'third_party',
+                            'ycmd' )
+    
+        # Parse and validate the field names.  Validation serves two purposes,
+    # generating informative error messages and preventing template injection attacks.
+    if isinstance(field_names, basestring):
+        field_names = field_names.replace(',', ' ').split() # names separated by whitespace and/or commas
+    field_names = tuple(map(str, field_names))
+    for name in (typename,) + field_names:
+        if not all(c.isalnum() or c=='_' for c in name):
+            raise ValueError('Type names and field names can only contain alphanumeric characters and underscores: %r' % name)
+        if _iskeyword(name):
+            raise ValueError('Type names and field names cannot be a keyword: %r' % name)
+        if name[0].isdigit():
+            raise ValueError('Type names and field names cannot start with a number: %r' % name)
+    seen_names = set()
+    for name in field_names:
+        if name.startswith('_'):
+            raise ValueError('Field names cannot start with an underscore: %r' % name)
+        if name in seen_names:
+            raise ValueError('Encountered duplicate field name: %r' % name)
+        seen_names.add(name)
+    
+    PY_MAJOR, PY_MINOR = sys.version_info[ 0 : 2 ]
+if not ( ( PY_MAJOR == 2 and PY_MINOR >= 6 ) or
+         ( PY_MAJOR == 3 and PY_MINOR >= 3 ) or
+         PY_MAJOR > 3 ):
+  sys.exit( 'YouCompleteMe requires Python >= 2.6 or >= 3.3; '
+            'your version of Python is ' + sys.version )
+    
+      if config_entry is None:
+    return []
+    
+    
+def KeywordsFromSyntaxListOutput_PythonSyntax_test():
+  expected_keywords = (
+    'bytearray', 'IndexError', 'all', 'help', 'vars', 'SyntaxError', 'global',
+    'elif', 'unicode', 'sorted', 'memoryview', 'isinstance', 'except',
+    'nonlocal', 'NameError', 'finally', 'BytesWarning', 'dict', 'IOError',
+    'pass', 'oct', 'bin', 'SystemExit', 'return', 'StandardError', 'format',
+    'TabError', 'break', 'next', 'not', 'UnicodeDecodeError', 'False',
+    'RuntimeWarning', 'list', 'iter', 'try', 'reload', 'Warning', 'round',
+    'dir', 'cmp', 'set', 'bytes', 'UnicodeTranslateError', 'intern',
+    'issubclass', 'yield', 'Ellipsis', 'hash', 'locals', 'BufferError',
+    'slice', 'for', 'FloatingPointError', 'sum', 'VMSError', 'getattr', 'abs',
+    'print', 'import', 'True', 'FutureWarning', 'ImportWarning', 'None',
+    'EOFError', 'len', 'frozenset', 'ord', 'super', 'raise', 'TypeError',
+    'KeyboardInterrupt', 'UserWarning', 'filter', 'range', 'staticmethod',
+    'SystemError', 'or', 'BaseException', 'pow', 'RuntimeError', 'float',
+    'MemoryError', 'StopIteration', 'globals', 'divmod', 'enumerate', 'apply',
+    'LookupError', 'open', 'basestring', 'from', 'UnicodeError', 'zip', 'hex',
+    'long', 'IndentationError', 'int', 'chr', '__import__', 'type',
+    'Exception', 'continue', 'tuple', 'reduce', 'reversed', 'else', 'assert',
+    'UnicodeEncodeError', 'input', 'with', 'hasattr', 'delattr', 'setattr',
+    'raw_input', 'PendingDeprecationWarning', 'compile', 'ArithmeticError',
+    'while', 'del', 'str', 'property', 'def', 'and', 'GeneratorExit',
+    'ImportError', 'xrange', 'is', 'EnvironmentError', 'KeyError', 'coerce',
+    'SyntaxWarning', 'file', 'in', 'unichr', 'ascii', 'any', 'as', 'if',
+    'OSError', 'DeprecationWarning', 'min', 'UnicodeWarning', 'execfile', 'id',
+    'complex', 'bool', 'ValueError', 'NotImplemented', 'map', 'exec', 'buffer',
+    'max', 'class', 'object', 'repr', 'callable', 'ZeroDivisionError', 'eval',
+    '__debug__', 'ReferenceError', 'AssertionError', 'classmethod',
+    'UnboundLocalError', 'NotImplementedError', 'lambda', 'AttributeError',
+    'OverflowError', 'WindowsError' )
+    
+      eq_( request.Done(), True )
