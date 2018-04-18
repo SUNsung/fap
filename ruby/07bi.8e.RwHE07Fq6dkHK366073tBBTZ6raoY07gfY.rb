@@ -1,108 +1,84 @@
 
         
-          # Setting the :extname option will control what extension (if any) is appended to the url for assets
-  def test_javascript_include_tag
-    assert_dom_equal '<script src='/foo.js'></script>',  javascript_include_tag('/foo')
-    assert_dom_equal '<script src='/foo'></script>',     javascript_include_tag('/foo', extname: false)
-    assert_dom_equal '<script src='/foo.bar'></script>', javascript_include_tag('/foo', extname: '.bar')
-  end
+              private
     
-            routes &&
-          (routes.named_routes.route_defined?(name) ||
-           routes.mounted_helpers.method_defined?(name))
-      end
-    end
+            a_split.each_with_index { |s, i| a_split[i] = s.to_i unless i == a_length - 1 }
+        b_split.each_with_index { |s, i| b_split[i] = s.to_i unless i == b_length - 1 }
     
-    class TestResponseTest < ActiveSupport::TestCase
-  def assert_response_code_range(range, predicate)
-    response = ActionDispatch::TestResponse.new
-    (0..599).each do |status|
-      response.status = status
-      assert_equal range.include?(status), response.send(predicate),
-                   'ActionDispatch::TestResponse.new(#{status}).#{predicate}'
-    end
-  end
+        def relative_path_to(url)
+      url = self.class.parse(url)
+      return unless origin == url.origin
     
-          assert_response :success
-      assert_equal 'Hello Secret', @response.body, 'Authentication failed for request header #{header}'
-    end
-    test 'successful authentication with #{header.downcase} and long credentials' do
-      @request.env[header] = encode_credentials('1234567890123456789012345678901234567890', algorithm: 'test')
-      get :show
-    
-    module ActionMailer
-  # The <tt>ActionMailer::DeliveryJob</tt> class is used when you
-  # want to send emails outside of the request-response cycle.
-  #
-  # Exceptions are rescued and handled by the mailer class.
-  class DeliveryJob < ActiveJob::Base # :nodoc:
-    queue_as { ActionMailer::Base.deliver_later_queue_name }
-    
-            def set_expected_mail
-          @expected = Mail.new
-          @expected.content_type ['text', 'plain', { 'charset' => charset }]
-          @expected.mime_version = '1.0'
+            css('p > code:first-child:last-child', 'td > code:first-child:last-child').each do |node|
+          next if node.previous.try(:content).present? || node.next.try(:content).present?
+          node.inner_html = node.inner_html.squish.gsub(/<br(\ \/)?>\s*/, '\n')
+          node.content = node.content.strip
+          node.name = 'pre' if node.content =~ /\s/
+          node.parent.before(node.parent.children).remove if node.parent.name == 'p'
         end
     
-          hook_for :template_engine, :test_framework
-    
-          timestamp = time.strftime('%Y%m%d%H%M%S')
-      fraction = format('%.3f', time.to_f - time.to_i)[1..-1]
-    
-    profile = Profile.new
-# puts profile.generate
-command = ['/usr/bin/sandbox-exec', '-p', profile.generate, profile.pod_bin, *ARGV]
-exec(*command)
-
-    
-            private
-    
-          # @param  [[Xcodeproj::PBXTarget]] targets
-      #         An array which always has a target as its first item
-      #         and may optionally contain related test targets
-      #
-      # @return [String] the text for the target module
-      #
-      def target_module(app, tests)
-        target_module = '\ntarget '#{app.name.gsub(/'/, '\\\\\'')}' do\n'
-    
-          def self.options
-        [
-          ['--update', 'Run `pod repo update` before listing'],
-          ['--stats',  'Show additional stats (like GitHub watchers and forks)'],
-        ].concat(super)
+            entries
       end
     
-    ##############
-# Deploying  #
-##############
-    
-          if markup =~ /(?<class>\S.*\s+)?(?<src>(?:https?:\/\/|\/|\S+\/)\S+)(?:\s+(?<width>\d+))?(?:\s+(?<height>\d+))?(?<title>\s+.+)?/i
-        @img = attributes.reduce({}) { |img, attr| img[attr] = $~[attr].strip if $~[attr]; img }
-        if /(?:'|')(?<title>[^'']+)?(?:'|')\s+(?:'|')(?<alt>[^'']+)?(?:'|')/ =~ @img['title']
-          @img['title']  = title
-          @img['alt']    = alt
-        else
-          @img['alt']    = @img['title'].gsub!(/'/, '&#34;') if @img['title']
-        end
-        @img['class'].gsub!(/'/, '') if @img['class']
+      def test_realpath
+    Dir.mktmpdir('rubytest-realpath') {|tmpdir|
+      realdir = File.realpath(tmpdir)
+      tst = realdir + (File::SEPARATOR*3 + '.')
+      assert_equal(realdir, File.realpath(tst))
+      assert_equal(realdir, File.realpath('.', tst))
+      if File::ALT_SEPARATOR
+        bug2961 = '[ruby-core:28653]'
+        assert_equal(realdir, File.realpath(realdir.tr(File::SEPARATOR, File::ALT_SEPARATOR)), bug2961)
       end
-      super
-    end
-    
-        def poster
-      'poster='#{@poster}'' if @poster
-    end
-    
-      # DELETE /books/1
-  # DELETE /books/1.json
-  def destroy
-    @book.destroy
-    respond_to do |format|
-      format.html { redirect_to books_url, notice: 'Book was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    }
   end
     
-      it 'registers an offense' do
-    inspect_source(source)
+      def test_delegate
+    d1 = SimpleDelegator.new(t1 = Time.utc(2000))
+    d2 = SimpleDelegator.new(t2 = Time.utc(2001))
+    assert_equal(-1, t1 <=> t2)
+    assert_equal(1, t2 <=> t1)
+    assert_equal(-1, d1 <=> d2)
+    assert_equal(1, d2 <=> d1)
+  end
+    
+      it 'decodes the number of characters specified by the count modifier' do
+    [ ['\xc2\x80\xc2\x81\xc2\x82\xc2\x83', 'U1', [0x80]],
+      ['\xc2\x80\xc2\x81\xc2\x82\xc2\x83', 'U2', [0x80, 0x81]],
+      ['\xc2\x80\xc2\x81\xc2\x82\xc2\x83', 'U3', [0x80, 0x81, 0x82]]
+    ].should be_computed_by(:unpack)
+  end
+    
+    # include would include the module in Object
+# extend only extends the `main` object
+extend Sinatra::Delegator
+    
+          def call(env)
+        request  = Request.new(env)
+        get_was  = handle(request.GET)
+        post_was = handle(request.POST) rescue nil
+        app.call env
+      ensure
+        request.GET.replace  get_was  if get_was
+        request.POST.replace post_was if post_was
+      end
+    
+      %w(POST PUT DELETE).each do |method|
+    it 'denies #{method} requests with non-whitelisted Origin' do
+      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://malicious.com')).not_to be_ok
+    end
+    
+      # Run specs in random order to surface order dependencies. If you find an
+  # order dependency and want to debug it, you can fix the order by providing
+  # the seed, which is printed after each run.
+  #     --seed 1234
+  config.order = :random
+    
+            def failure_message
+          'Should have an attachment named #{@attachment_name}'
+        end
+    
+            protected
+    
+    module Paperclip
+  require 'rails'
