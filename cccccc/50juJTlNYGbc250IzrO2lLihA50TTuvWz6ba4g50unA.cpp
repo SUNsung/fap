@@ -1,224 +1,242 @@
-  // Deallocates any platform-specific elements of this object. This is broken
-  // out (not part of the destructor) to allow for error reporting.
-  port::Status Destroy();
+
+        
+        // Build a Table file from the contents of *iter.  The generated file
+// will be named according to meta->number.  On success, the rest of
+// *meta will be filled with metadata about the generated table.
+// If no data is present in *iter, meta->file_size will be set to
+// zero, and no Table file will be produced.
+extern Status BuildTable(const std::string& dbname,
+                         Env* env,
+                         const Options& options,
+                         TableCache* table_cache,
+                         Iterator* iter,
+                         FileMetaData* meta);
     
-    #endif  // TENSORFLOW_PLATFORM_PREFETCH_H_
+    class DBImpl;
+    
+    
+// Called on every log record (each one of which is a WriteBatch)
+// found in a kLogFile.
+static void WriteBatchPrinter(uint64_t pos, Slice record, WritableFile* dst) {
+  std::string r = '--- offset ';
+  AppendNumberTo(&r, pos);
+  r += '; ';
+  if (record.size() < 12) {
+    r += 'log record length ';
+    AppendNumberTo(&r, record.size());
+    r += ' is too small\n';
+    dst->Append(r);
+    return;
+  }
+  WriteBatch batch;
+  WriteBatchInternal::SetContents(&batch, record);
+  r += 'sequence ';
+  AppendNumberTo(&r, WriteBatchInternal::Sequence(&batch));
+  r.push_back('\n');
+  dst->Append(r);
+  WriteBatchItemPrinter batch_item_printer;
+  batch_item_printer.dst_ = dst;
+  Status s = batch.Iterate(&batch_item_printer);
+  if (!s.ok()) {
+    dst->Append('  error: ' + s.ToString() + '\n');
+  }
+}
+    
+    Status SetCurrentFile(Env* env, const std::string& dbname,
+                      uint64_t descriptor_number) {
+  // Remove leading 'dbname/' and add newline to manifest file name
+  std::string manifest = DescriptorFileName(dbname, descriptor_number);
+  Slice contents = manifest;
+  assert(contents.starts_with(dbname + '/'));
+  contents.remove_prefix(dbname.size() + 1);
+  std::string tmp = TempFileName(dbname, descriptor_number);
+  Status s = WriteStringToFileSync(env, contents.ToString() + '\n', tmp);
+  if (s.ok()) {
+    s = env->RenameFile(tmp, CurrentFileName(dbname));
+  }
+  if (!s.ok()) {
+    env->DeleteFile(tmp);
+  }
+  return s;
+}
+    
+      // Delete the specified 'file' from the specified 'level'.
+  void DeleteFile(int level, uint64_t file) {
+    deleted_files_.insert(std::make_pair(level, file));
+  }
+    
+    
+TEST(FindFileTest, Multiple) {
+  Add('150', '200');
+  Add('200', '250');
+  Add('300', '350');
+  Add('400', '450');
+  ASSERT_EQ(0, Find('100'));
+  ASSERT_EQ(0, Find('150'));
+  ASSERT_EQ(0, Find('151'));
+  ASSERT_EQ(0, Find('199'));
+  ASSERT_EQ(0, Find('200'));
+  ASSERT_EQ(1, Find('201'));
+  ASSERT_EQ(1, Find('249'));
+  ASSERT_EQ(1, Find('250'));
+  ASSERT_EQ(2, Find('251'));
+  ASSERT_EQ(2, Find('299'));
+  ASSERT_EQ(2, Find('300'));
+  ASSERT_EQ(2, Find('349'));
+  ASSERT_EQ(2, Find('350'));
+  ASSERT_EQ(3, Find('351'));
+  ASSERT_EQ(3, Find('400'));
+  ASSERT_EQ(3, Find('450'));
+  ASSERT_EQ(4, Find('451'));
+    }
+    
+    TEST(WriteBatchTest, Empty) {
+  WriteBatch batch;
+  ASSERT_EQ('', PrintContents(&batch));
+  ASSERT_EQ(0, WriteBatchInternal::Count(&batch));
+}
+    
+        // Check for synchronous flag in options
+    std::string sync_stmt = (write_sync) ? 'PRAGMA synchronous = FULL' :
+                                           'PRAGMA synchronous = OFF';
+    status = sqlite3_exec(db_, sync_stmt.c_str(), NULL, NULL, &err_msg);
+    ExecErrorCheck(status, err_msg);
+    
+      void Run() {
+    PrintHeader();
+    Open(false);
+    }
+    
+    #endif  // STORAGE_LEVELDB_HELPERS_MEMENV_MEMENV_H_
 
     
-    void SYCLDeviceContext::CopyDeviceTensorToCPU(const Tensor *device_tensor,
-                                              StringPiece edge_name,
-                                              Device *device,
-                                              Tensor *cpu_tensor,
-                                              StatusCallback done) {
-  const int64 total_bytes = device_tensor->TotalBytes();
-  if (total_bytes > 0) {
-    const void *src_ptr = DMAHelper::base(device_tensor);
-    void *dst_ptr = DMAHelper::base(cpu_tensor);
-    switch (device_tensor->dtype()) {
-      case DT_FLOAT:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<float *>(dst_ptr), static_cast<const float *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_DOUBLE:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<double *>(dst_ptr),
-            static_cast<const double *>(src_ptr), total_bytes);
-        break;
-      case DT_INT32:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<int32 *>(dst_ptr), static_cast<const int32 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT64:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<int64 *>(dst_ptr), static_cast<const int64 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_HALF:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<Eigen::half *>(dst_ptr),
-            static_cast<const Eigen::half *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX64:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<std::complex<float> *>(dst_ptr),
-            static_cast<const std::complex<float> *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX128:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<std::complex<double> *>(dst_ptr),
-            static_cast<const std::complex<double> *>(src_ptr), total_bytes);
-        break;
-      case DT_INT8:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<int8 *>(dst_ptr), static_cast<const int8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT16:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<int16 *>(dst_ptr), static_cast<const int16 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT8:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<uint8 *>(dst_ptr), static_cast<const uint8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT16:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<uint16 *>(dst_ptr),
-            static_cast<const uint16 *>(src_ptr), total_bytes);
-        break;
-      case DT_BOOL:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<bool *>(dst_ptr), static_cast<const bool *>(src_ptr),
-            total_bytes);
-        break;
-      default:
-        assert(false && 'unsupported type');
+    class Slice;
+    
+    PowerIphone::~PowerIphone() {
+	// TODO Auto-generated destructor stub
+}
+
+    
+    float VideoStreamPlaybackTheora::get_length() const {
     }
-  }
-  device->eigen_sycl_device()->synchronize();
-  done(Status::OK());
-}
     
-    string VersionedComputationHandle::ToString() const {
-  return tensorflow::strings::StrCat(handle.handle(), ':v', version);
-}
+    void WebSocketClient::_bind_methods() {
+	ClassDB::bind_method(D_METHOD('connect_to_url', 'url', 'protocols', 'gd_mp_api'), &WebSocketClient::connect_to_url, DEFVAL(PoolVector<String>()), DEFVAL(false));
+	ClassDB::bind_method(D_METHOD('disconnect_from_host'), &WebSocketClient::disconnect_from_host);
+	ClassDB::bind_method(D_METHOD('set_verify_ssl_enabled', 'enabled'), &WebSocketClient::set_verify_ssl_enabled);
+	ClassDB::bind_method(D_METHOD('is_verify_ssl_enabled'), &WebSocketClient::is_verify_ssl_enabled);
+    }
     
-      void Attach(mate::Arguments* args);
-  bool IsAttached();
-  void Detach();
-  void SendCommand(mate::Arguments* args);
+    void MeshInstanceEditor::_menu_option(int p_option) {
+    }
     
+    		String options;
+		for (int i = 0; i < AudioServer::get_singleton()->get_bus_count(); i++) {
+			if (i > 0)
+				options += ',';
+			String name = AudioServer::get_singleton()->get_bus_name(i);
+			options += name;
+		}
     
-    {  DISALLOW_COPY_AND_ASSIGN(RenderProcessPreferences);
-};
+    					Vector2 from = xform.xform(node->map_to_world(Vector2(i, j), true) + ofs);
+					Vector2 to = xform.xform(node->map_to_world(Vector2(i, j + 1), true) + ofs);
+					Color col = i == 0 ? Color(1, 0.8, 0.2, 0.5) : Color(1, 0.3, 0.1, 0.2);
+					canvas_item_editor->draw_line(from, to, col, 1);
     
+    struct GodotAllContactResultCallback : public btCollisionWorld::ContactResultCallback {
+public:
+	const btCollisionObject *m_self_object;
+	PhysicsDirectSpaceState::ShapeResult *m_results;
+	int m_resultMax;
+	int m_count;
+	const Set<RID> *m_exclude;
+    }
     
-    {  DISALLOW_COPY_AND_ASSIGN(WebRequest);
-};
-    
-    bool SavePageHandler::Handle(const base::FilePath& full_path,
-                             const content::SavePageType& save_type) {
-  auto download_manager = content::BrowserContext::GetDownloadManager(
-      web_contents_->GetBrowserContext());
-  download_manager->AddObserver(this);
-  // Chromium will create a 'foo_files' directory under the directory of saving
-  // page 'foo.html' for holding other resource files of 'foo.html'.
-  base::FilePath saved_main_directory_path = full_path.DirName().Append(
-      full_path.RemoveExtension().BaseName().value() +
-      FILE_PATH_LITERAL('_files'));
-  bool result = web_contents_->SavePage(full_path,
-                                        saved_main_directory_path,
-                                        save_type);
-  download_manager->RemoveObserver(this);
-  // If initialization fails which means fail to create |DownloadItem|, we need
-  // to delete the |SavePageHandler| instance to avoid memory-leak.
-  if (!result)
-    delete this;
-  return result;
-}
-    
-    AtomQuotaPermissionContext::~AtomQuotaPermissionContext() {
-}
-    
-    #include <string>
-    
-    #if defined(OS_POSIX)
-// The 'magic' file descriptor that the relauncher process' write side of the
-// pipe shows up on. Chosen to avoid conflicting with stdin, stdout, and
-// stderr.
-extern const int kRelauncherSyncFD;
-#endif
+    				String name = _validate_name('new_function');
+				selected = name;
+				edited_func = selected;
     
     
-    {  cached_entries_.Clear();
-  for (const auto& iter : entries_)
-    cached_entries_.Append(iter.second->CreateDeepCopy());
-  cache_needs_update_ = false;
-}
+    {                if (m_LearnableNodePtr.find(name) == m_LearnableNodePtr.end())
+                    LogicError('DoneWithCurrentSubMinibatch: Node '%ls' not found in LearnableNode set.', name.c_str());
+                m_LearnableNodePtr[name]->Gradient().SetValue(accumulategrad);
+                accumulategrad.SetValue(0);
+            }
+            // also revert net.m_MBLayoutPtr
+            m_netMBLayoutPtr->CopyFrom(m_MBLayoutCache);
     
-    #include 'ui/gfx/image/image.h'
+        bool UsingGradientAggregation(size_t epochNumber) const
+    {
+        return ((GetParallelizationMethod() == ParallelizationMethod::dataParallelSGD) && (epochNumber >= m_parallelizationStartEpochNum));
+    }
     
-    #include 'atom/browser/ui/atom_menu_model.h'
-#include 'ui/views/controls/menu/menu_model_adapter.h'
-    
-     protected:
-  // views::View:
-  gfx::Size GetMinimumSize() const override;
-  gfx::Size GetMaximumSize() const override;
-  const char* GetClassName() const override;
-    
-    #include <xgboost/logging.h>
-#include 'src/common/random.h'
-#include './xgboost_R.h'
-    
-    #include <dmlc/io.h>
-#include <string>
-#include <cstring>
-#include './sync.h'
+    // ===========================================================================
+// DoConvertFromDbn() - implements CNTK 'convertdbn' command
+// ===========================================================================
     
     
     {
-    {void SparsePage::Writer::Alloc(std::shared_ptr<SparsePage>* out_page) {
-  CHECK(out_page->get() == nullptr);
-  if (num_free_buffer_ != 0) {
-    out_page->reset(new SparsePage());
-    --num_free_buffer_;
-  } else {
-    CHECK(qrecycle_.Pop(out_page));
+    {
+    {            std::vector<std::string> filePathVec = msra::strfun::split(filePaths, '+');
+            for (auto filePath : filePathVec)
+            {
+                // if file hasn't already been resolved (the resolvedPaths vector doesn't contain it), resolve it.
+                if (std::find(resolvedConfigFiles.begin(), resolvedConfigFiles.end(), filePath) == resolvedConfigFiles.end())
+                {
+                    // Recursively resolve the include statements in the included config files.
+                    // Ensure that the same config file isn't included twice, by keeping track of the config
+                    // files that have already been resolved in the resolvedPaths vector.
+                    resolvedConfigFiles.push_back(filePath);
+                    newConfigString += ResolveIncludeStatements(ReadConfigFile(filePath), resolvedConfigFiles);
+                }
+                else
+                {
+                    // We already resolved this path.  Write a warning so that user is aware of this.
+                    // TODO: This message is written to stderr before stderr gets redirected to the specified file.  Fix this.
+                    fprintf(stderr, 'Warning: Config file included multiple times.  Not including config file again: %s', filePath.c_str());
+                }
+            }
+        }
+        else
+        {
+            newConfigString += (line + '\n');
+        }
+    }
+    return newConfigString;
+}
+    
+    // ---------------------------------------------------------------------------
+// array_ref -- wraps a C pointer to an array together with its size.
+//
+// Called _ref because this is a reference to the array rather than the array
+// itself (since it wraps a pointer). No need to pass an array_ref by reference.
+//
+// operator[] checks index bounds in Debug builds. size() is provided such
+// that this class can be substituted for STL vector in many cases.
+// ---------------------------------------------------------------------------
+    
+      template<typename T>
+  void allReduceT(at::Tensor& data, THDReduceOp operation,
+                  THDGroup group_id = THDGroupWORLD);
+    
+    THCGenerator* THCRandom_getGenerator(THCState* state);
+    
+    static PyObject* recursive_to_list(
+    char* data, IntList sizes, IntList strides, int64_t dim,
+    ScalarType scalarType, int64_t elementSize)
+{
+  int64_t ndim = sizes.size();
+  if (dim == ndim) {
+    return torch::utils::load_scalar(data, scalarType);
   }
+  auto n = sizes[dim];
+  auto list = THPObjectPtr(PyList_New(n));
+  if (!list) throw python_error();
+  for (int64_t i = 0; i < n; i++) {
+    PyObject* obj = recursive_to_list(data, sizes, strides, dim + 1, scalarType, elementSize);
+    if (!obj) throw python_error();
+    PyList_SET_ITEM(list.get(), i, obj);
+    data += strides[dim] * elementSize;
+  }
+  return list.release();
 }
-}  // namespace data
-}  // namespace xgboost
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    /*
- * baseevent.h
- *
- *  Created on: 2016年3月24日
- *      Author: caoshaokun
- */
-    
-    
-    {    void throw_exception( std::exception const & e ) {
-        xfatal2(TSF'boost exception:%_', e.what());
-        
-#ifdef ANDROID
-        char stack[4096] = {0};
-        android_callstack(stack, sizeof(stack));
-        xfatal2(TSF'%_', stack);
-#endif
-    }
-}
-
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    #define DEFINE_HAS_MEMBER(member_name) \
-    template <typename T>\
-    class has_##member_name {\
-      private:\
-        struct yes_type { char x[1]; };\
-        struct no_type { char x[2]; };\
-        template <int> struct tester;\
-        template <typename U> static yes_type test(tester<sizeof(&U::member_name)>*);\
-        template <typename U> static no_type test(...);\
-      public:\
-        static const bool value = (sizeof(test<T>(0)) == sizeof(yes_type));\
-    };
-    
-    class ScopeJEnv {
-  public:
-    ScopeJEnv(JavaVM* jvm, jint _capacity = 16);
-    ~ScopeJEnv();
-    }
