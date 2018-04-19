@@ -1,301 +1,216 @@
 
         
-        class ScrollView;
-class SVMenuNode;
-struct SVEvent;
-    
-      if (num_chopped_trailing > 0) {
-    int split_pt = num_chopped - num_chopped_trailing - num_chopped_leading;
-    split_word(core, split_pt, &suffix, &bb1);
+          // Check for input iterator errors
+  if (!iter->status().ok()) {
+    s = iter->status();
   }
     
-    namespace tesseract {
-void Tesseract::tess_segment_pass_n(int pass_n, WERD_RES *word) {
-  int saved_enable_assoc = 0;
-  int saved_chop_enable = 0;
-    }
-    }
+      virtual ~leveldb_comparator_t() {
+    (*destructor_)(state_);
+  }
     
-    CCStruct::CCStruct() {}
-    
-    
-    {  // Stores all the source points in the order they were given and their
-  // halfwidths, if any.
-  GenericVector<PointWidth> pts_;
-  // Stores the computed perpendicular distances of (some of) the pts_ from a
-  // given vector (assuming it goes through the origin, making it a line).
-  // Since the distances may be a subset of the input points, and get
-  // re-ordered by the nth_item function, the original point is stored
-  // along side the distance.
-  GenericVector<DistPointPair> distances_;  // Distances of points.
-  // The squared length of the vector used to compute distances_.
-  double square_length_;
+    // Value types encoded as the last component of internal keys.
+// DO NOT CHANGE THESE ENUM VALUES: they are embedded in the on-disk
+// data structures.
+enum ValueType {
+  kTypeDeletion = 0x0,
+  kTypeValue = 0x1
 };
+// kValueTypeForSeek defines the ValueType that should be passed when
+// constructing a ParsedInternalKey object for seeking to a particular
+// sequence number (since we sort sequence numbers in decreasing order
+// and the value type is embedded as the low 8 bits in the sequence
+// number in internal keys, we need to use the highest-numbered
+// ValueType, not the lowest).
+static const ValueType kValueTypeForSeek = kTypeValue;
     
-      // Connects this and other, discarding any existing connections.
-  void Connect(DoublePtr* other) {
-    other->Disconnect();
-    Disconnect();
-    other->other_end_ = this;
-    other_end_ = other;
+    class FileNameTest { };
+    
+      void SetComparatorName(const Slice& name) {
+    has_comparator_ = true;
+    comparator_ = name.ToString();
   }
-  // Disconnects this and other, making OtherEnd() return NULL for both.
-  void Disconnect() {
-    if (other_end_ != NULL) {
-      other_end_->other_end_ = NULL;
-      other_end_ = NULL;
+  void SetLogNumber(uint64_t num) {
+    has_log_number_ = true;
+    log_number_ = num;
+  }
+  void SetPrevLogNumber(uint64_t num) {
+    has_prev_log_number_ = true;
+    prev_log_number_ = num;
+  }
+  void SetNextFile(uint64_t num) {
+    has_next_file_number_ = true;
+    next_file_number_ = num;
+  }
+  void SetLastSequence(SequenceNumber seq) {
+    has_last_sequence_ = true;
+    last_sequence_ = seq;
+  }
+  void SetCompactPointer(int level, const InternalKey& key) {
+    compact_pointers_.push_back(std::make_pair(level, key));
+  }
+    
+    class VersionEditTest { };
+    
+    
+TEST(FindFileTest, Multiple) {
+  Add('150', '200');
+  Add('200', '250');
+  Add('300', '350');
+  Add('400', '450');
+  ASSERT_EQ(0, Find('100'));
+  ASSERT_EQ(0, Find('150'));
+  ASSERT_EQ(0, Find('151'));
+  ASSERT_EQ(0, Find('199'));
+  ASSERT_EQ(0, Find('200'));
+  ASSERT_EQ(1, Find('201'));
+  ASSERT_EQ(1, Find('249'));
+  ASSERT_EQ(1, Find('250'));
+  ASSERT_EQ(2, Find('251'));
+  ASSERT_EQ(2, Find('299'));
+  ASSERT_EQ(2, Find('300'));
+  ASSERT_EQ(2, Find('349'));
+  ASSERT_EQ(2, Find('350'));
+  ASSERT_EQ(3, Find('351'));
+  ASSERT_EQ(3, Find('400'));
+  ASSERT_EQ(3, Find('450'));
+  ASSERT_EQ(4, Find('451'));
     }
-  }
-  // Returns the pointer to the other end of the double pointer.
-  DoublePtr* OtherEnd() const {
-    return other_end_;
-  }
     
-    
-    {  int total_samples = 0;
-  int error_samples = 25;
-  int total_new_errors = 0;
-  // Iterate over all the samples, accumulating errors.
-  for (it->Begin(); !it->AtEnd(); it->Next()) {
-    TrainingSample* mutable_sample = it->MutableSample();
-    int page_index = mutable_sample->page_num();
-    Pix* page_pix = 0 <= page_index && page_index < page_images.size()
-                  ? page_images[page_index] : NULL;
-    // No debug, no keep this.
-    old_classifier->UnicharClassifySample(*mutable_sample, page_pix, 0,
-                                          INVALID_UNICHAR_ID, &results);
-    int correct_id = mutable_sample->class_id();
-    if (correct_id != 0 &&
-        !old_counter.AccumulateErrors(true, boosting_mode, fontinfo_table,
-                                      results, mutable_sample)) {
-      // old classifier was correct, check the new one.
-      new_classifier->UnicharClassifySample(*mutable_sample, page_pix, 0,
-                                            INVALID_UNICHAR_ID, &results);
-      if (correct_id != 0 &&
-          new_counter.AccumulateErrors(true, boosting_mode, fontinfo_table,
-                                        results, mutable_sample)) {
-        tprintf('New Error on sample %d: Classifier debug output:\n',
-                it->GlobalSampleIndex());
-        ++total_new_errors;
-        new_classifier->UnicharClassifySample(*mutable_sample, page_pix, 1,
-                                              correct_id, &results);
-        if (results.size() > 0 && error_samples > 0) {
-          new_classifier->DebugDisplay(*mutable_sample, page_pix, correct_id);
-          --error_samples;
-        }
-      }
+      void PrintEnvironment() {
+    fprintf(stderr, 'SQLite:     version %s\n', SQLITE_VERSION);
     }
-    ++total_samples;
-  }
-  tprintf('Total new errors = %d\n', total_new_errors);
-}
     
-      // Accumulates counts for junk. Counts only whether the junk was correctly
-  // rejected or not.
-  bool AccumulateJunk(bool debug, const GenericVector<UnicharRating>& results,
-                      TrainingSample* sample);
+            // Indicates whether <*this> node arg exists or not.
+        // Optional inputs are allowed in ONNX. Empty arg name represents 
+        // a non-existing input argument.
+        bool Exist() const;
     
-    
-    
-        {&_44p3_p6_0,&_44p3_p6_1,&_44p3_p5_1},
-    {&_44p3_p7_0,&_44p3_p7_1,&_44p3_p7_2,&_44p3_p7_3}
-   }
-};
-static const static_bookblock _resbook_44p_4={
-  {
-    {0},
-    {0,0,&_44p4_p1_0},
-    {0,&_44p4_p2_0,0},
-    
-    /*      These defines enable functionality introduced with the 1999 ISO C
-**      standard. They must be defined before the inclusion of math.h to
-**      engage them. If optimisation is enabled, these functions will be
-**      inlined. With optimisation switched off, you have to link in the
-**      maths library using -lm.
-*/
-    
-    /*The number of bits to output at a time.*/
-# define EC_SYM_BITS   (8)
-/*The total number of bits in each of the state registers.*/
-# define EC_CODE_BITS  (32)
-/*The maximum symbol value.*/
-# define EC_SYM_MAX    ((1U<<EC_SYM_BITS)-1)
-/*Bits to shift by to move a symbol into the high-order position.*/
-# define EC_CODE_SHIFT (EC_CODE_BITS-EC_SYM_BITS-1)
-/*Carry bit of the high-order range symbol.*/
-# define EC_CODE_TOP   (((opus_uint32)1U)<<(EC_CODE_BITS-1))
-/*Low-order bit of the high-order range symbol.*/
-# define EC_CODE_BOT   (EC_CODE_TOP>>EC_SYM_BITS)
-/*The number of bits available for the last, partial symbol in the code field.*/
-# define EC_CODE_EXTRA ((EC_CODE_BITS-2)%EC_SYM_BITS+1)
-#endif
-
-    
-    #ifndef SILK_FIX_INLINES_H
-#define SILK_FIX_INLINES_H
-    
-        size_t TrainOneEpoch(ComputationNetworkPtr net,
-                         ComputationNetworkPtr refNet,
-                         const ComputationNodeBasePtr& refNode,
-                         const int epochNumber,
-                         const size_t epochSize,
-                         IDataReader* trainSetDataReader,
-                         const double learnRatePerSample,
-                         size_t tunedMBSize,
-                         const std::vector<ComputationNodeBasePtr>& featureNodes,
-                         const std::vector<ComputationNodeBasePtr>& labelNodes,
-                         const std::vector<ComputationNodeBasePtr>& criterionNodes,
-                         const std::vector<ComputationNodeBasePtr>& evaluationNodes,
-                         StreamMinibatchInputs* inputMatrices,
-                         const std::list<ComputationNodeBasePtr>& learnableNodes,
-                         std::list<Matrix<ElemType>>& smoothedGradients, std::vector<double>& smoothedCounts,
-                         /*out*/ EpochCriterion& epochCriterion,
-                         /*out*/ std::vector<EpochCriterion>& epochEvalErrors,
-                         const std::string& prefixMsg = '',
-                         const size_t maxNumberOfSamples = SIZE_MAX,
-                         const size_t totalMBsSeenBefore = 0,
-                         ::CNTK::Internal::TensorBoardFileWriterPtr tensorBoardWriter = nullptr,
-                         const int startEpoch = 0);
-    
-            // Get node arg name.
-        const std::string& Name() const;
-    
-        Status Model::Load(int p_fd, std::shared_ptr<Model>* p_model)
-    {
-        if (p_fd < 0 || nullptr == p_model)
+            if (0 == m_modelProto->opset_import_size())
         {
-            return Status(ONNX, INVALID_ARGUMENT, '<p_fd> less than 0 or <p_model> is nullptr.');
+            // Operator sets are not specified in this model.
+            // Will use global operator store instead.
+            AddImportOpSets(false);
         }
-    }
-    
-        const OperatorSchema* OpSchemaRegistry::Schema(
-        const std::string& p_key,
-        const int p_maxInclusiveVersion,
-        const std::string& p_domain)
-    {
-        auto& m = map();
-        if (m.count(p_key) && m[p_key].count(p_domain))
+        else
         {
-            auto pos = m[p_key][p_domain].lower_bound(p_maxInclusiveVersion);
-            if (m[p_key][p_domain].begin() == pos && pos->first > p_maxInclusiveVersion)
+            for (auto& opSet : m_modelProto->opset_import())
             {
-                // All versions are greater than specified version.
-                return nullptr;
+                m_domainToVersion[opSet.domain()] = static_cast<int>(opSet.version());
             }
-    }
-    }
+        }
+    
+    using namespace onnx;
+    
+        // Taken from ONNX
+    REGISTER_OPERATOR_SCHEMA(Floor)
+        .Description('Floor takes one input data (Tensor<T>) and produces one output data '
+            '(Tensor<T>) where the floor is, y = floor(x), is applied to '
+            'the tensor elementwise.')
+        .Input('input', 'Input tensor of any shape', 'T')
+        .Output('output', 'Output tensor of same shape and type as input X.', 'T')
+        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
+            'Constrain input and output types to float tensors.');
     
     
-    REGISTER_OPERATOR_SCHEMA(OneHotEncoder)
+    REGISTER_OPERATOR_SCHEMA(TreeEnsembleRegressor)
         .SetDomain(c_mlDomain)
-        .Input('X', 'Data to be encoded', 'T')
-        .Output('Y', 'encoded output data', 'tensor(float)')
+        .Input('X', 'Input N,F', 'T')
+        .Output('Y', 'NxE floats', 'tensor(float)')
         .Description(R'DOC(
-            Replace the inputs with an array of ones and zeros, where the only
-            one is the zero-based category that was passed in.  The total category count
-            will determine the length of the vector. For example if we pass a
-            tensor with a single value of 4, and a category count of 8, the
-            output will be a tensor with 0,0,0,0,1,0,0,0 .
-            This operator assumes every input in X is of the same category set
-            (meaning there is only one category count).
+            Tree Ensemble regressor.  Returns the regressed values for each input in N.
+            All args with nodes_ are fields of a tuple of tree nodes, and
+            it is assumed they are the same length, and an index i will decode the
+            tuple across these inputs.  Each node id can appear only once
+            for each tree id.
+            All fields prefixed with target_ are tuples of votes at the leaves.
+            A leaf may have multiple votes, where each vote is weighted by
+            the associated target_weights index.
+            All trees must have their node ids start at 0 and increment by 1.
+            Mode enum is BRANCH_LEQ, BRANCH_LT, BRANCH_GTE, BRANCH_GT, BRANCH_EQ, BRANCH_NEQ, LEAF
+            )DOC')
+        .TypeConstraint('T', { 'tensor(float)', 'tensor(double)', 'tensor(int64)', 'tensor(int32)' }, ' allowed types.')
+        .Attr('nodes_treeids', 'tree id for this node', AttrType::AttributeProto_AttributeType_INTS)
+        .Attr('nodes_nodeids', 'node id for this node, node ids may restart at zero for each tree (but not required).', AttrType::AttributeProto_AttributeType_INTS)
+        .Attr('nodes_featureids', 'feature id for this node', AttrType::AttributeProto_AttributeType_INTS)
+        .Attr('nodes_values', 'thresholds to do the splitting on for this node.', AttrType::AttributeProto_AttributeType_FLOATS)
+        .Attr('nodes_hitrates', '', AttrType::AttributeProto_AttributeType_FLOATS)
+        .Attr('nodes_modes', 'enum of behavior for this node.  enum 'BRANCH_LEQ', 'BRANCH_LT', 'BRANCH_GTE', 'BRANCH_GT', 'BRANCH_EQ', 'BRANCH_NEQ', 'LEAF'', AttrType::AttributeProto_AttributeType_STRINGS)
+        .Attr('nodes_truenodeids', 'child node if expression is true', AttrType::AttributeProto_AttributeType_INTS)
+        .Attr('nodes_falsenodeids', 'child node if expression is false', AttrType::AttributeProto_AttributeType_INTS)
+        .Attr('nodes_missing_value_tracks_true', 'for each node, decide if the value is missing (nan) then use true branch, this field can be left unset and will assume false for all nodes', AttrType::AttributeProto_AttributeType_INTS)
+        .Attr('target_treeids', 'tree that this node is in', AttrType::AttributeProto_AttributeType_INTS)
+        .Attr('target_nodeids', 'node id that this weight is for', AttrType::AttributeProto_AttributeType_INTS)
+        .Attr('target_ids', 'index of the class list that this weight is for', AttrType::AttributeProto_AttributeType_INTS)
+        .Attr('target_weights', 'the weight for the class in target_id', AttrType::AttributeProto_AttributeType_FLOATS)
+        .Attr('n_targets', 'number of regression targets', AttrType::AttributeProto_AttributeType_INT)
+        .Attr('post_transform', 'post eval transform for score, enum 'NONE', 'SOFTMAX', 'LOGISTIC', 'SOFTMAX_ZERO', 'PROBIT'', AttrType::AttributeProto_AttributeType_STRING)
+        .Attr('aggregate_function', 'post eval transform for score,  enum 'AVERAGE', 'SUM', 'MIN', 'MAX'', AttrType::AttributeProto_AttributeType_STRING)
+        .Attr('base_values', 'base values for regression, added to final score, size must be the same as n_outputs or can be left unassigned (assumed 0)', AttrType::AttributeProto_AttributeType_FLOATS);
     
-        virtual void /*ComputationNodeBase::*/ Validate(bool isFinalValidationPass) override
+    const std::string GRUInputInitialHNameHint = '_initial_h_';
+    
+    
     {
-        Base::Validate(isFinalValidationPass);
-        InferMBLayoutFromInputsForStandardCase(isFinalValidationPass);
+    {        if (flags & CopyNodeFlags::copyNodeInputLinks)
+        {
+            // copy the children structure but use the new nodes generated
+            for (int i = 0; i < fromNode->GetNumInputs(); i++)
+                toNode->SetInput(i, GetNodeFromName(toNamePrefix + fromNode->GetInputs()[i]->NodeName()));
+        }
     }
-    
-    
-    {template class ReaderShim<float>;
-template class ReaderShim<double>;
 }
-
     
-    #if 0 // unused--delete
-// We only remove the node from the net, not destruct it.
-ComputationNodeBasePtr ComputationNetwork::RemoveFeatureNode(ComputationNodeBasePtr featureNode)
+    bool js_cocos2dx_physics3d_PhysicsSprite3D_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_PhysicsSprite3D_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_PhysicsSprite3D(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_PhysicsSprite3D_syncNodeToPhysics(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_PhysicsSprite3D_syncPhysicsToNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_PhysicsSprite3D_getPhysicsObj(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_PhysicsSprite3D_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_PhysicsSprite3D_PhysicsSprite3D(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    void GLESDebugDraw::DrawAABB(b2AABB* aabb, const b2Color& color)
 {
-    InvalidateCompiledNetwork();
+    mShaderProgram->use();
+    mShaderProgram->setUniformsForBuiltins();
     }
     
-      /// Copy data from the internal buffer to the specified target buffer, without
-  /// removing the data from the internal buffer. Returns the number of bytes
-  /// copied.
-  template <typename MutableBufferSequence>
-  std::size_t peek_copy(const MutableBufferSequence& buffers)
-  {
-    return boost::asio::buffer_copy(buffers, storage_.data(), storage_.size());
-  }
+    
+    {		// Continue the query.
+		return true;
+	}
+    
+    	void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
+	{
+		if (m_broke)
+		{
+			// The body already broke.
+			return;
+		}
+    }
+    
+    namespace xgboost {
+    }
+    
+      double double2[2] = {1.0, 2.0};
+  EXPECT_EQ(info.GetRoot(1), 0)
+    << 'When no root_index is given, was expecting default value 0';
+  info.SetInfo('root_index', double2, xgboost::kDouble, 2);
+  EXPECT_EQ(info.GetRoot(1), 2.0f);
+    
+      vals_in.clear(); ss.flush(); ss.clear(); ss.str('');
+  ss << ' 321 ';
+  ss >> vals_in;
+  EXPECT_EQ(vals_in[0], 321);
     
     
-    {
-    {} // namespace asio
-} // namespace boost
-    
-    #include <boost/asio/detail/config.hpp>
-#include <boost/asio/completion_condition.hpp>
-    
-      // Return the maximum size for data in the buffer.
-  size_type capacity() const
-  {
-    return buffer_.size();
-  }
-    
-    class ptime;
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-      const SnapshotImpl* New(SequenceNumber seq) {
-    SnapshotImpl* s = new SnapshotImpl;
-    s->number_ = seq;
-    s->list_ = this;
-    s->next_ = &list_;
-    s->prev_ = list_.prev_;
-    s->prev_->next_ = s;
-    s->next_->prev_ = s;
-    return s;
-  }
-    
-    static void TestEncodeDecode(const VersionEdit& edit) {
-  std::string encoded, encoded2;
-  edit.EncodeTo(&encoded);
-  VersionEdit parsed;
-  Status s = parsed.DecodeFrom(encoded);
-  ASSERT_TRUE(s.ok()) << s.ToString();
-  parsed.EncodeTo(&encoded2);
-  ASSERT_EQ(encoded, encoded2);
-}
-    
-    
-    {  ASSERT_TRUE(! Overlaps(NULL, 'j'));
-  ASSERT_TRUE(! Overlaps('r', NULL));
-  ASSERT_TRUE(Overlaps(NULL, 'p'));
-  ASSERT_TRUE(Overlaps(NULL, 'p1'));
-  ASSERT_TRUE(Overlaps('q', NULL));
-  ASSERT_TRUE(Overlaps(NULL, NULL));
-}
-    
-      // count the keys
-  leveldb::Iterator* iter = db->NewIterator(leveldb::ReadOptions());
-  size_t num_keys = 0;
-  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-    num_keys++;
-  }
-  delete iter;
-  ASSERT_EQ(kNumKeys, num_keys) << 'Bad number of keys';
-    
-      WriteOptions write_options;
-  ASSERT_OK(db->Put(write_options, '1', 'b'));
-  ASSERT_OK(db->Put(write_options, '2', 'c'));
-  ASSERT_OK(db->Put(write_options, '3', 'd'));
-  ASSERT_OK(db->Put(write_options, '4', 'e'));
-  ASSERT_OK(db->Put(write_options, '5', 'f'));
-    
-      void Add(const Slice& s) {
-    keys_.push_back(s.ToString());
-  }
+    { private:
+  RowBlock<IndexType> out_;
+  std::unique_ptr<Parser<IndexType> > parser_;
+  uint32_t num_col_;
+  std::vector<size_t> offset_;
+  std::vector<IndexType> dense_index_;
+  std::vector<xgboost::bst_float> dense_value_;
+};
