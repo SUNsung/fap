@@ -1,53 +1,135 @@
 
         
-          def test_read_all_extended_file
-    [nil, {:textmode=>true}, {:binmode=>true}].each do |mode|
-      Tempfile.create('test-extended-file', mode) {|f|
-        assert_nil(f.getc)
-        f.print 'a'
-        f.rewind
-        assert_equal('a', f.read, 'mode = <#{mode}>')
-      }
+              https://pip.readthedocs.org/en/stable/installing/#install-pip
+    EOS
+  when 'pil' then <<-EOS.undent
+    Instead of PIL, consider `pip install pillow` or `brew install Homebrew/python/pillow`.
+    EOS
+  when 'macruby' then <<-EOS.undent
+    MacRuby works better when you install their package:
+      http://www.macruby.org/
+    EOS
+  when /(lib)?lzma/
+    'lzma is now part of the xz formula.'
+  when 'xcode'
+    if MacOS.version >= :lion
+      <<-EOS.undent
+      Xcode can be installed from the App Store.
+      EOS
+    else
+      <<-EOS.undent
+      Xcode can be installed from https://developer.apple.com/xcode/downloads/
+      EOS
+    end
+  when 'gtest', 'googletest', 'google-test' then <<-EOS.undent
+    Installing gtest system-wide is not recommended; it should be vendored
+    in your projects that use it.
+    EOS
+  when 'gmock', 'googlemock', 'google-mock' then <<-EOS.undent
+    Installing gmock system-wide is not recommended; it should be vendored
+    in your projects that use it.
+    EOS
+  when 'sshpass' then <<-EOS.undent
+    We won't add sshpass because it makes it too easy for novice SSH users to
+    ruin SSH's security.
+    EOS
+  when 'gsutil' then <<-EOS.undent
+    Install gsutil with `pip install gsutil`
+    EOS
+  when 'clojure' then <<-EOS.undent
+    Clojure isn't really a program but a library managed as part of a
+    project and Leiningen is the user interface to that library.
+    
+      def std?
+    @settings.include? :std
+  end
+    
+      # True if a {Formula} is being built in C++11 mode.
+  def cxx11?
+    include?('c++11') && option_defined?('c++11')
+  end
+    
+        if ARGV.include?('--pinned') || ARGV.include?('--versions')
+      filtered_list
+    elsif ARGV.named.empty?
+      if ARGV.include? '--full-name'
+        full_names = Formula.installed.map(&:full_name).sort do |a, b|
+          if a.include?('/') && !b.include?('/')
+            1
+          elsif !a.include?('/') && b.include?('/')
+            -1
+          else
+            a <=> b
+          end
+        end
+        puts_columns full_names
+      else
+        ENV['CLICOLOR'] = nil
+        exec 'ls', *ARGV.options_only << HOMEBREW_CELLAR
+      end
+    elsif ARGV.verbose? || !$stdout.tty?
+      exec 'find', *ARGV.kegs.map(&:to_s) + %w[-not -type d -print]
+    else
+      ARGV.kegs.each { |keg| PrettyListing.new keg }
     end
   end
     
-      def assert_invalid_env(msg = nil)
-    all_assertions(msg) do |a|
-      INVALID_ENVVARS.each do |v|
-        a.for(v) do
-          assert_raise(ArgumentError) {yield v}
+        @report = Hash.new { |h, k| h[k] = [] }
+    return @report unless updated?
+    
+    class Ray
+  def initialize(org, dir)
+    @org = org
+    @dir = dir
+  end
+    
+        # Returns a String describing the file's content type
+    def detect
+      if blank_name?
+        SENSIBLE_DEFAULT
+      elsif empty_file?
+        EMPTY_TYPE
+      elsif calculated_type_matches.any?
+        calculated_type_matches.first
+      else
+        type_from_file_contents || SENSIBLE_DEFAULT
+      end.to_s
+    end
+    
+        # Returns the pluralized form of the attachment name. e.g.
+    # 'avatars' for an attachment of :avatar
+    def attachment attachment, style_name
+      plural_cache.pluralize_symbol(attachment.name)
+    end
+    
+          class HaveAttachedFileMatcher
+        def initialize attachment_name
+          @attachment_name = attachment_name
         end
+    
+            def lower_than_low?
+          @low.nil? || !passes_validation_with_size(@low - 1)
+        end
+    
+          if app.config.respond_to?(:paperclip_defaults)
+        Paperclip::Attachment.default_options.merge!(app.config.paperclip_defaults)
       end
     end
+    
+          expect('.border-style-alternate').to have_rule(rule)
+    end
   end
     
-      it 'decodes the remaining floats when passed the '*' modifier after another directive' do
-    array = '\x9a\x99\xa9@33\x13A'.unpack(unpack_format()+unpack_format('*'))
-    array.should == [5.300000190734863, 9.199999809265137]
-  end
+      context 'called with null values' do
+    it 'writes rules for other three' do
+      ruleset = 'margin-top: 11px; ' +
+                'margin-right: 12px; ' +
+                'margin-left: 13px;'
+      bad_rule = 'margin-bottom: null;'
     
-      it 'ignores spaces between directives' do
-    'badc'.unpack(unpack_format(' ', 2)).should == [25185, 25699]
+      context 'called with arguments (2, $value: 4em 6em)' do
+    it 'outputs sextuple the second value from the default scale' do
+      expect('.two-double-value').to have_rule('font-size: 3.125em')
+    end
   end
 end
-    
-        it 'Reads referrer from Host header when Referer header is relative' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => '/valid'}
-      expect(subject.referrer(env)).to eq('foo.com')
-    end
-    
-    
-  it 'should allow changing the protection mode to a string' do
-    # I have no clue what other modes are available
-    mock_app do
-      use Rack::Protection::FrameOptions, :frame_options => 'ALLOW-FROM foo'
-      run DummyApp
-    end
-    
-      it 'accepts requests with a changing Accept-Encoding header' do
-    # this is tested because previously it led to clearing the session
-    session = {:foo => :bar}
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_ENCODING' => 'a'
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_ENCODING' => 'b'
-    expect(session).not_to be_empty
-  end
