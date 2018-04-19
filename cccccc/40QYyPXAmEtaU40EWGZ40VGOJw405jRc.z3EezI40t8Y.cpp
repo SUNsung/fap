@@ -1,333 +1,206 @@
 
         
-        /// Format a Syntax tree with the given rules.
-Syntax format(Syntax Tree);
-// TODO: Representation for formatting rules, etc. This is just a figment
-// for now.
+        #if PY_MAJOR_VERSION >= 3
+static struct PyModuleDef _module = {
+  PyModuleDef_HEAD_INIT,
+  kModuleName,
+  kModuleDocstring,
+  -1,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL
+};
+#define INITFUNC PyInit__api_implementation
+#define INITFUNC_ERRORVAL NULL
+#else
+#define INITFUNC init_api_implementation
+#define INITFUNC_ERRORVAL
+#endif
     
-      /// Indicates whether the diagnostics produced during compilation should be
-  /// checked against expected diagnostics, indicated by markers in the
-  /// input source file.
-  enum {
-    NoVerify,
-    Verify,
-    VerifyAndApplyFixes
-  } VerifyMode = NoVerify;
+    // This file defines a C++ DescriptorDatabase, which wraps a Python Database
+// and delegate all its operations to Python methods.
     
-    namespace swift {
+      // Find the file which defines an extension extending the given message type
+  // with the given field number.
+  // Containing_type must be a fully-qualified type name.
+  // Python objects are not required to implement this method.
+  bool FindFileContainingExtension(const string& containing_type,
+                                   int field_number,
+                                   FileDescriptorProto* output);
+    
+    #include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+#include <google/protobuf/io/printer.h>
+    
+      virtual void WriteHash(io::Printer* printer);
+  virtual void WriteEquals(io::Printer* printer);
+  virtual void WriteToString(io::Printer* printer);
+    
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_REFLECTION_CLASS_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_REFLECTION_CLASS_H__
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
     }
     
+        'ensure$capitalized_name$IsMutable();\n'
+    '$name$_.remove(index);\n'
+    '$on_changed$\n',
     
-    {  bool operator!=(const Substitution &other) const { return !(*this == other); }
-  bool operator==(const Substitution &other) const;
-  void print(llvm::raw_ostream &os,
-             const PrintOptions &PO = PrintOptions()) const;
-  void dump() const;
-  void dump(llvm::raw_ostream &os, unsigned indent = 0) const;
-};
-    
-    bool Substitution::isCanonical() const {
-  if (!getReplacement()->isCanonical())
-    return false;
-  for (auto conf : getConformances()) {
-    if (!conf.isCanonical())
-      return false;
+    #if GTEST_OS_SYMBIAN
+  // Streams a value (either a pointer or not) to this object.
+  template <typename T>
+  inline Message& operator <<(const T& value) {
+    StreamHelper(typename internal::is_pointer<T>::type(), value);
+    return *this;
   }
-  return true;
-}
-
-    
-    #endif
-    
-    
-    {  // No copying allowed
-  DBIter(const DBIter&);
-  void operator=(const DBIter&);
-};
-    
-    Status DumpFile(Env* env, const std::string& fname, WritableFile* dst) {
-  FileType ftype;
-  if (!GuessType(fname, &ftype)) {
-    return Status::InvalidArgument(fname + ': unknown file type');
-  }
-  switch (ftype) {
-    case kLogFile:         return DumpLog(env, fname, dst);
-    case kDescriptorFile:  return DumpDescriptor(env, fname, dst);
-    case kTableFile:       return DumpTable(env, fname, dst);
-    default:
-      break;
-  }
-  return Status::InvalidArgument(fname + ': not a dump-able file type');
-}
-    
-    std::string CurrentFileName(const std::string& dbname) {
-  return dbname + '/CURRENT';
-}
-    
-    
-    {  fname = TempFileName('tmp', 999);
-  ASSERT_EQ('tmp/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(999, number);
-  ASSERT_EQ(kTempFile, type);
-}
-    
-      void Add(const char* smallest, const char* largest,
-           SequenceNumber smallest_seq = 100,
-           SequenceNumber largest_seq = 100) {
-    FileMetaData* f = new FileMetaData;
-    f->number = files_.size() + 1;
-    f->smallest = InternalKey(smallest, smallest_seq, kTypeValue);
-    f->largest = InternalKey(largest, largest_seq, kTypeValue);
-    files_.push_back(f);
+#else
+  // Streams a non-pointer value to this object.
+  template <typename T>
+  inline Message& operator <<(const T& val) {
+    // Some libraries overload << for STL containers.  These
+    // overloads are defined in the global namespace instead of ::std.
+    //
+    // C++'s symbol lookup rule (i.e. Koenig lookup) says that these
+    // overloads are visible in either the std namespace or the global
+    // namespace, but not other namespaces, including the testing
+    // namespace which Google Test's Message class is in.
+    //
+    // To allow STL containers (and other types that has a << operator
+    // defined in the global namespace) to be used in Google Test
+    // assertions, testing::Message must access the custom << operator
+    // from the global namespace.  With this using declaration,
+    // overloads of << defined in the global namespace and those
+    // visible via Koenig lookup are both exposed in this function.
+    using ::operator <<;
+    *ss_ << val;
+    return *this;
   }
     
-      // Return the name of this policy.  Note that if the filter encoding
-  // changes in an incompatible way, the name returned by this method
-  // must be changed.  Otherwise, old incompatible filters may be
-  // passed to methods of this type.
-  virtual const char* Name() const = 0;
+    #if !GTEST_OS_SYMBIAN
+# include <utility>
+#endif
     
-    /**
- * @name tess_acceptable_word
- *
- * @return true if the word is regarded as 'good enough'.
- * @param word_choice after context
- * @param raw_choice before context
+    // Makes sure this header is not included before gtest.h.
+#ifndef GTEST_INCLUDE_GTEST_GTEST_H_
+# error Do not include gtest_pred_impl.h directly.  Include gtest.h instead.
+#endif  // GTEST_INCLUDE_GTEST_GTEST_H_
+    
+      virtual ParamIteratorInterface<ParamType>* Begin() const {
+    return new Iterator(this, g1_, g1_.begin(), g2_, g2_.begin());
+  }
+  virtual ParamIteratorInterface<ParamType>* End() const {
+    return new Iterator(this, g1_, g1_.end(), g2_, g2_.end());
+  }
+    
+      // Compares two wide C strings.  Returns true iff they have the same
+  // content.
+  //
+  // Unlike wcscmp(), this function can handle NULL argument(s).  A
+  // NULL C string is considered different to any non-NULL C string,
+  // including the empty string.
+  static bool WideCStringEquals(const wchar_t* lhs, const wchar_t* rhs);
+    
+    template <GTEST_10_TYPENAMES_(T), GTEST_10_TYPENAMES_(U)>
+inline bool operator==(const GTEST_10_TUPLE_(T)& t,
+                       const GTEST_10_TUPLE_(U)& u) {
+  return gtest_internal::SameSizeTuplePrefixComparator<
+      tuple_size<GTEST_10_TUPLE_(T) >::value,
+      tuple_size<GTEST_10_TUPLE_(U) >::value>::Eq(t, u);
+}
+    
+    
+// Step 1. Include necessary header files such that the stuff your
+// test logic needs is declared.
+//
+// Don't forget gtest.h, which declares the testing framework.
+    
+    // WorkloadStats is used to track per request timing for different states
+// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
+// should be made to guard the state change with appropriate timers and
+// counters.
+//
+// The states tracked are:
+//  - In a request (this is a superset of the interpreter state)
+//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
+//  - In the JIT (currently tracks time inside the translate routine)
+//
+// Note the time in the TC is not tracked.  This is roughly:
+//   Time in request - Time in interp
+//
+// This gives us the relative interp time formula of:
+//   Relative interp time = Time in interp / Time in request
+struct WorkloadStats final {
+  enum State {
+    InRequest,
+    // -> InInterp   Okay (entering Dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InInterp,
+    // -> InRequest  Okay (leaving the dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InTrans,
+    // -> InRequest  Okay (leaving translate)
+    // -> InInterp   Okay (leaving translate)
+  };
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    
+    namespace HPHP { namespace jit {
+    }
+    }
+    
+    SSATmp* implInstanceOfD(IRGS& env, SSATmp* src, const StringData* className);
+    
+    #include 'hphp/util/safe-cast.h'
+    
+    void numa_local(void* start, size_t size) {
+  if (!use_numa) return;
+  numa_setlocal_memory(start, size);
+}
+    
+    /*
+ * Returns an IR block corresponding to the given bytecode offset. If the block
+ * starts with a DefLabel expecting a StkPtr, this function will return an
+ * intermediate block that passes the current sp.
  */
-bool Tesseract::tess_acceptable_word(WERD_RES* word) {
-  return getDict().AcceptableResult(word);
-}
+Block* getBlock(IRGS& env, Offset offset);
     
-    // Computes all the cross product distances of the points from the line,
-// storing the actual (signed) cross products in distances.
-// Ignores distances of points that are further away than the previous point,
-// and overlaps the previous point by at least half.
-void DetLineFit::ComputeDistances(const ICOORD& start, const ICOORD& end) {
-  distances_.truncate(0);
-  ICOORD line_vector = end;
-  line_vector -= start;
-  square_length_ = line_vector.sqlength();
-  int line_length = IntCastRounded(sqrt(square_length_));
-  // Compute the distance of each point from the line.
-  int prev_abs_dist = 0;
-  int prev_dot = 0;
-  for (int i = 0; i < pts_.size(); ++i) {
-    ICOORD pt_vector = pts_[i].pt;
-    pt_vector -= start;
-    int dot = line_vector % pt_vector;
-    // Compute |line_vector||pt_vector|sin(angle between)
-    int dist = line_vector * pt_vector;
-    int abs_dist = dist < 0 ? -dist : dist;
-    if (abs_dist > prev_abs_dist && i > 0) {
-      // Ignore this point if it overlaps the previous one.
-      int separation = abs(dot - prev_dot);
-      if (separation < line_length * pts_[i].halfwidth ||
-          separation < line_length * pts_[i - 1].halfwidth)
-        continue;
-    }
-    distances_.push_back(DistPointPair(dist, pts_[i].pt));
-    prev_abs_dist = abs_dist;
-    prev_dot = dot;
-  }
-}
+    #include <cstdint>
+#include <cstring>
+#include <map>
+#include <set>
     
-     private:
-  // Simple struct to hold an ICOORD point and a halfwidth representing half
-  // the 'width' (supposedly approximately parallel to the direction of the
-  // line) of each point, such that distant points can be discarded when they
-  // overlap nearer points. (Think i dot and other diacritics or noise.)
-  struct PointWidth {
-    PointWidth() : pt(ICOORD(0, 0)), halfwidth(0) {}
-    PointWidth(const ICOORD& pt0, int halfwidth0)
-      : pt(pt0), halfwidth(halfwidth0) {}
-    }
+    GodotSharpBuilds *GodotSharpBuilds::singleton = NULL;
     
-      // Calculate the scale factor we'll use to get to image y-pixels
-  double midx = (bbox.left() + bbox.right()) / 2.0;
-  double ydiff = (bbox.top() - bbox.bottom()) + 2.0;
-  FCOORD mid_bot(midx, bbox.bottom()), tmid_bot;
-  FCOORD mid_high(midx, bbox.bottom() + ydiff), tmid_high;
-  DenormTransform(NULL, mid_bot, &tmid_bot);
-  DenormTransform(NULL, mid_high, &tmid_high);
-    
-      // Copying a DENORM is allowed.
-  DENORM(const DENORM &);
-  DENORM& operator=(const DENORM&);
-  ~DENORM();
-    
-    #ifndef TESSERACT_CCUTIL_QRSEQUENCE_H_
-#define TESSERACT_CCUTIL_QRSEQUENCE_H_
-    
-      // Map to subset the actual charset space.
-  const IndexMapBiDi* charset_map_;
-  // Shape table to recombine character classes into shapes
-  const ShapeTable* shape_table_;
-  // The samples to iterate over.
-  TrainingSampleSet* sample_set_;
-  // Flag to control randomizing the sample features.
-  bool randomize_;
-  // Shape table owned by this used to iterate character classes.
-  ShapeTable* owned_shape_table_;
+    /*Note that we do not provide a macro for abs(), because it is provided as a
+   library function, which we assume is translated into an intrinsic to avoid
+   the function call overhead and then implemented in the smartest way for the
+   target platform.
+  With modern gcc (4.x), this is true: it uses cmov instructions if the
+   architecture supports it and branchless bit-twiddling if it does not (the
+   speed difference between the two approaches is not measurable).
+  Interestingly, the bit-twiddling method was patented in 2000 (US 6,073,150)
+   by Sun Microsystems, despite prior art dating back to at least 1996:
+   http://web.archive.org/web/19961201174141/www.x86.org/ftp/articles/pentopt/PENTOPT.TXT
+  On gcc 3.x, however, our assumption is not true, as abs() is translated to a
+   conditional jump, which is horrible on deeply piplined architectures (e.g.,
+   all consumer architectures for the past decade or more).
+  Also be warned that -C*abs(x) where C is a constant is mis-optimized as
+   abs(C*x) on every gcc release before 4.2.3.
+  See bug http://gcc.gnu.org/bugzilla/show_bug.cgi?id=34130 */
     
     
-    {	playing = true;
-	delay_compensation = ProjectSettings::get_singleton()->get('audio/video_delay_compensation_ms');
-	delay_compensation /= 1000.0;
+static const vorbis_mapping_template _mapres_template_16_uncoupled[3]={
+  { _map_nominal_u, _res_16u_0 }, /* 0 */
+  { _map_nominal_u, _res_16u_1 }, /* 1 */
+  { _map_nominal_u, _res_16u_2 }, /* 2 */
 };
-    
-    
-    {	int got;
-	Error err = sp->base->get_partial_data((uint8_t *)buf, len, got);
-	if (err != OK) {
-		return MBEDTLS_ERR_SSL_INTERNAL_ERROR;
-	}
-	if (got == 0) {
-		return MBEDTLS_ERR_SSL_WANT_READ;
-	}
-	return got;
-}
-    
-    
-    {	return 0;
-}
-    
-    	static void bind_integer_constant(const StringName &p_class, const StringName &p_enum, const StringName &p_name, int p_constant);
-	static void get_integer_constant_list(const StringName &p_class, List<String> *p_constants, bool p_no_inheritance = false);
-	static int get_integer_constant(const StringName &p_class, const StringName &p_name, bool *p_success = NULL);
-    
-    
-    {					String framework_path = path_join(mono_reg_info.assembly_dir, 'mono', '4.5');
-					*r_framework_path = GDMonoMarshal::mono_string_from_godot(framework_path);
-				} else {
-					ERR_PRINT('Cannot find Mono's assemblies directory in the registry');
-				}
-    
-    					if (points.size() == 0)
-						return false;
-    
-    	bool hasHit() {
-		return m_penetration_distance < 0;
-	}
-    
-    class TileMapEditor : public VBoxContainer {
-    }
-    
-    	ClassDB::bind_method(D_METHOD('get_current_library_path'), &GDNativeLibrary::get_current_library_path);
-	ClassDB::bind_method(D_METHOD('get_current_dependencies'), &GDNativeLibrary::get_current_dependencies);
-    
-    #ifdef WITH_GLOO
-void init_gloo_master(int workers) {
-  g_mutex.lock();
-  setenv(WORLD_SIZE_ENV, std::to_string((workers + 1)).data(), 1);
-  setenv(RANK_ENV, '0', 1);
-  setenv(MASTER_PORT_ENV, std::to_string(MASTER_PORT).data(), 1);
-  auto masterChannel = std::make_shared<thd::DataChannelGloo>(thd::getInitConfig('env://')); // reads all env variable
-  g_mutex.unlock();
-    }
-    
-      AT_FORALL_SCALAR_TYPES(DEFINE_ACCESSOR)
-    
-    ${Storage}::${Storage}(Context* context,
-  void * data, std::size_t size, const std::function<void(void*)> & deleter)
-  : storage(${THStorage}_newWithDataAndAllocator(${state,}
-     static_cast<${THScalarType}*>(data), size,
-     &storage_deleter,
-     new std::function<void(void*)>(deleter)
-    )),
-    context(context) {
-    ${THStorage}_clearFlag(${state,} storage, TH_STORAGE_RESIZABLE);
-}
-    
-      template<typename T>
-  void allReduceT(at::Tensor& data, THDReduceOp operation,
-                  THDGroup group_id = THDGroupWORLD);
-    
-    THDTensorDescriptor THDTensorDescriptor_newFromTHShortTensor(THShortTensor *tensor) {
-  return at::getType(at::Backend::CPU, at::ScalarType::Short).unsafeTensorFromTH((void*)tensor, true);
-}
-    
-    bool ReadJpeg(const uint8_t* data, const size_t len, JpegReadMode mode,
-              JPEGData* jpg) {
-  size_t pos = 0;
-  // Check SOI marker.
-  EXPECT_MARKER();
-  int marker = data[pos + 1];
-  pos += 2;
-  if (marker != 0xd8) {
-    fprintf(stderr, 'Did not find expected SOI marker, actual=%d\n', marker);
-    jpg->error = JPEG_SOI_NOT_FOUND;
-    return false;
-  }
-  int lut_size = kMaxHuffmanTables * kJpegHuffmanLutSize;
-  std::vector<HuffmanTableEntry> dc_huff_lut(lut_size);
-  std::vector<HuffmanTableEntry> ac_huff_lut(lut_size);
-  bool found_sof = false;
-  uint16_t scan_progression[kMaxComponents][kDCTBlockSize] = { { 0 } };
-    }
-    
-    void OutputImageComponent::ToFloatPixels(float* out, int stride) const {
-  assert(factor_x_ == 1);
-  assert(factor_y_ == 1);
-  for (int block_y = 0; block_y < height_in_blocks_; ++block_y) {
-    for (int block_x = 0; block_x < width_in_blocks_; ++block_x) {
-      coeff_t block[kDCTBlockSize];
-      GetCoeffBlock(block_x, block_y, block);
-      double blockd[kDCTBlockSize];
-      for (int k = 0; k < kDCTBlockSize; ++k) {
-        blockd[k] = block[k];
-      }
-      ComputeBlockIDCTDouble(blockd);
-      for (int iy = 0; iy < 8; ++iy) {
-        for (int ix = 0; ix < 8; ++ix) {
-          int y = block_y * 8 + iy;
-          int x = block_x * 8 + ix;
-          if (y >= height_ || x >= width_) continue;
-          out[(y * width_ + x) * stride] = static_cast<float>(blockd[8 * iy + ix] + 128.0);
-        }
-      }
-    }
-  }
-}
-    
-    
-    {}  // namespace guetzli
-    
-    #include 'guetzli/jpeg_data.h'
-    
-    // Returns the table width of the next 2nd level table, count is the histogram
-// of bit lengths for the remaining symbols, len is the code length of the next
-// processed symbol.
-static inline int NextTableBitSize(const int* count, int len) {
-  int left = 1 << (len - kJpegHuffmanRootTableBits);
-  while (len < kJpegHuffmanMaxBitLength) {
-    left -= count[len];
-    if (left <= 0) break;
-    ++len;
-    left <<= 1;
-  }
-  return len - kJpegHuffmanRootTableBits;
-}
-    
-      void ToLinearRGB(std::vector<std::vector<float> >* rgb) const;
-    
-    
-    {    return true;
-}
-    
-        // Setup ImGui binding
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    ImGui_ImplSdlGL3_Init(window);
-    
-        // Main loop
-    while (!glfwWindowShouldClose(window))
-    {
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        glfwPollEvents();
-        ImGui_ImplGlfwGL3_NewFrame();
-    }
