@@ -1,135 +1,157 @@
 
         
-        bool SavePageHandler::Handle(const base::FilePath& full_path,
-                             const content::SavePageType& save_type) {
-  auto download_manager = content::BrowserContext::GetDownloadManager(
-      web_contents_->GetBrowserContext());
-  download_manager->AddObserver(this);
-  // Chromium will create a 'foo_files' directory under the directory of saving
-  // page 'foo.html' for holding other resource files of 'foo.html'.
-  base::FilePath saved_main_directory_path = full_path.DirName().Append(
-      full_path.RemoveExtension().BaseName().value() +
-      FILE_PATH_LITERAL('_files'));
-  bool result = web_contents_->SavePage(full_path,
-                                        saved_main_directory_path,
-                                        save_type);
-  download_manager->RemoveObserver(this);
-  // If initialization fails which means fail to create |DownloadItem|, we need
-  // to delete the |SavePageHandler| instance to avoid memory-leak.
-  if (!result)
-    delete this;
-  return result;
+        Vtuple Vunit::makeTuple(VregList&& regs) {
+  auto i = tuples.size();
+  tuples.emplace_back(std::move(regs));
+  return Vtuple{i};
 }
     
-    
-    {}  // namespace api
-    
-    namespace asar {
-    }
-    
-    namespace base {
-class TaskRunner;
-}
-    
-    HttpProtocolHandler::~HttpProtocolHandler() {
-}
-    
-    
-    { private:
-  std::string scheme_;
+    /*
+ * Source operands for vcall/vinvoke instructions, packed into a struct for
+ * convenience and to keep the instructions compact.
+ */
+struct VcallArgs {
+  VregList args;
+  VregList simdArgs;
+  VregList stkArgs;
+  VregList indRetArgs;
 };
     
-    // Like URLRequestAsarJob, but asks the JavaScript handler for file path.
-class URLRequestAsyncAsarJob : public JsAsker<asar::URLRequestAsarJob> {
- public:
-  URLRequestAsyncAsarJob(net::URLRequest*, net::NetworkDelegate*);
-    }
-    
-    
-    {}  // namespace atom
-    
-    // Like the views::NativeFrameView, but returns the min/max size from the
-// NativeWindowViews.
-class NativeFrameView : public views::NativeFrameView {
- public:
-  NativeFrameView(NativeWindow* window, views::Widget* widget);
-    }
-    
-    
-    {}  // namespace atom
-    
-    namespace tesseract {
-    }
-    
-    // A useful base class to facilitate the common operation of sorting a vector
-// of owned pointer data using a separate key. This class owns its data pointer,
-// deleting it when it has finished with it, and providing copy constructor and
-// operator= that have move semantics so that the data does not get copied and
-// only a single instance of KDPtrPair holds a specific data pointer.
-template <typename Key, typename Data>
-class KDPtrPair {
- public:
-  KDPtrPair() : data_(NULL) {}
-  KDPtrPair(Key k, Data* d) : data_(d), key_(k) {}
-  // Copy constructor steals the pointer from src and NULLs it in src, thereby
-  // moving the (single) ownership of the data.
-  KDPtrPair(KDPtrPair& src) : data_(src.data_), key_(src.key_) {
-    src.data_ = NULL;
-  }
-  // Destructor deletes data, assuming it is the sole owner.
-  ~KDPtrPair() {
-    delete this->data_;
-    this->data_ = NULL;
-  }
-  // Operator= steals the pointer from src and NULLs it in src, thereby
-  // moving the (single) ownership of the data.
-  void operator=(KDPtrPair& src) {
-    delete this->data_;
-    this->data_ = src.data_;
-    src.data_ = NULL;
-    this->key_ = src.key_;
-  }
-    }
-    
-    
-    {}  // namespace tesseract.
-    
-    void NormalizeOutline(MFOUTLINE Outline,
-                      FLOAT32 XOrigin);
-    
-    // See class comment for arguments.
-void SampleIterator::Init(const IndexMapBiDi* charset_map,
-                          const ShapeTable* shape_table,
-                          bool randomize,
-                          TrainingSampleSet* sample_set) {
-  Clear();
-  charset_map_ = charset_map;
-  shape_table_ = shape_table;
-  sample_set_ = sample_set;
-  randomize_ = randomize;
-  if (shape_table_ == NULL && charset_map_ != NULL) {
-    // The caller wishes to iterate by class. The easiest way to do this
-    // is to create a dummy shape_table_ that we will own.
-    int num_fonts = sample_set_->NumFonts();
-    owned_shape_table_ = new ShapeTable(sample_set_->unicharset());
-    int charsetsize = sample_set_->unicharset().size();
-    for (int c = 0; c < charsetsize; ++c) {
-      // We always add a shape for each character to keep the index in sync
-      // with the unichar_id.
-      int shape_id = owned_shape_table_->AddShape(c, 0);
-      for (int f = 1; f < num_fonts; ++f) {
-        if (sample_set_->NumClassSamples(f, c, true) > 0) {
-          owned_shape_table_->AddToShape(shape_id, c, f);
-        }
-      }
-    }
-    shape_table_ = owned_shape_table_;
-  }
-  if (shape_table_ != NULL) {
-    num_shapes_ = shape_table_->NumShapes();
+      Offset defaultOff = bcOff(env) + iv.vec32()[iv.size() - 1];
+  Offset zeroOff = 0;
+  if (base <= 0 && (base + nTargets) > 0) {
+    zeroOff = bcOff(env) + iv.vec32()[0 - base];
   } else {
-    num_shapes_ = randomize ? sample_set_->num_samples()
-                            : sample_set_->num_raw_samples();
+    zeroOff = defaultOff;
   }
-  Begin();
+    
+    bool CurlShareResource::setLongOption(long option, long value) {
+  CURLSHcode error = CURLSHE_OK;
+  error = curl_share_setopt(m_share,
+                            (CURLSHoption)option,
+                            value);
+  return error == CURLSHE_OK;
 }
+    
+    namespace HPHP {
+/////////////////////////////////////////////////////////////////////////////
+    }
+    
+    static int populate_ifaddrs(struct ifaddrs* ifaddr, ifaddrmsg* msg, void* bytes,
+		     size_t len) {
+	if (set_ifname(ifaddr, msg->ifa_index) != 0) {
+		return -1;
+	}
+	if (set_flags(ifaddr) != 0) {
+		return -1;
+	}
+	if (set_addresses(ifaddr, msg, bytes, len) != 0) {
+		return -1;
+	}
+	if (make_prefixes(ifaddr, msg->ifa_family, msg->ifa_prefixlen) != 0) {
+		return -1;
+	}
+	return 0;
+}
+    
+    void StreamPeerSSL::_bind_methods() {
+    }
+    
+    	friend class Main;
+	static bool initialize_certs;
+    
+    
+    {	available = true;
+}
+    
+    
+    {	if (_is_multiplayer) {
+		emit_signal('connection_failed');
+	} else {
+		emit_signal('connection_closed');
+	}
+}
+    
+    
+    {	static void init_languages();
+	static void finish_languages();
+};
+    
+    class EditorHelp : public VBoxContainer {
+	GDCLASS(EditorHelp, VBoxContainer);
+    }
+    
+    
+    {
+    {			ofs.y += h;
+		}
+	} else {
+		ofs.y += h;
+	}
+    
+    	updating_graph = true;
+    
+    	Label *select_func_text;
+    
+    #endif
+
+    
+      std::vector<std::shared_ptr<thpp::IntTensor>> tensors;
+  std::vector<thpp::Tensor*> raw_tensors;
+  if (data_channel->getRank() == 0) {
+    for (std::size_t i = 0; i < data_channel->getNumProcesses(); ++i) {
+      tensors.push_back(buildTensor<int>({1, 2, 3, 4, 5}, i));
+      raw_tensors.push_back(tensors.back().get());
+    }
+  }
+    
+    
+    {private:
+  enum class Tag { HAS_d, HAS_i, HAS_t };
+  Tag tag;
+  union {
+    double d;
+    int64_t i;
+  } v;
+  detail::TensorBase t;
+  friend struct Type;
+};
+    
+    namespace at {
+    }
+    
+    inline int Log2Floor(uint32_t n) {
+  return n == 0 ? -1 : Log2FloorNonZero(n);
+}
+    
+      std::vector<uint8_t> ToSRGB() const;
+    
+    #endif  // GUETZLI_PREPROCESS_DOWNSAMPLE_H_
+
+    
+    double ButteraugliScoreForQuality(double quality) {
+  if (quality < kLowestQuality) quality = kLowestQuality;
+  if (quality > kHighestQuality) quality = kHighestQuality;
+  int index = static_cast<int>(quality);
+  double mix = quality - index;
+  return kScoreForQuality[index - kLowestQuality] * (1 - mix) +
+      kScoreForQuality[index - kLowestQuality + 1] * mix;
+}
+    
+    
+    {    pclose(stream);
+}
+    
+    #ifndef DUMPCRASHSTACK_H_
+#define DUMPCRASHSTACK_H_
+    
+        void Lock(int64_t _timelock);  // ms
+    void Lock();
+    void Unlock();
+    bool IsLocking();
+    
+    
+class ServiceBase;
+typedef std::map<std::string, ServiceBase*> TServicesMap;
+    
+    #include 'comm/debugger/testspy.h'
