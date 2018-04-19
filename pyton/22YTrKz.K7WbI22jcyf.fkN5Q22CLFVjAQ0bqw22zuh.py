@@ -1,228 +1,153 @@
 
         
-        header = oldreadme[:oldreadme.index('# OPTIONS')]
-footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
-    
-        params = {
-        'age_limit': age,
-        'skip_download': True,
-        'writeinfojson': True,
-        'outtmpl': '%(id)s.%(ext)s',
-    }
-    ydl = YoutubeDL(params)
-    ydl.add_default_info_extractors()
-    json_filename = os.path.splitext(filename)[0] + '.info.json'
-    try_rm(json_filename)
-    ydl.download([url])
-    res = os.path.exists(json_filename)
-    try_rm(json_filename)
-    return res
-    
-            if check_executable('mplayer', ['-h']):
-            args = [
-                'mplayer', '-really-quiet', '-vo', 'null', '-vc', 'dummy',
-                '-dumpstream', '-dumpfile', tmpfilename, url]
-        elif check_executable('mpv', ['-h']):
-            args = [
-                'mpv', '-really-quiet', '--vo=null', '--stream-dump=' + tmpfilename, url]
-        else:
-            self.report_error('MMS or RTSP download detected but neither 'mplayer' nor 'mpv' could be run. Please install any.')
-            return False
+        
+packages = {
+    package_name: get_info(package_name) for package_name in PACKAGES
+}
     
     
-class AudiomackAlbumIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?audiomack\.com/album/(?P<id>[\w/-]+)'
-    IE_NAME = 'audiomack:album'
-    _TESTS = [
-        # Standard album playlist
-        {
-            'url': 'http://www.audiomack.com/album/flytunezcom/tha-tour-part-2-mixtape',
-            'playlist_count': 15,
-            'info_dict':
-            {
-                'id': '812251',
-                'title': 'Tha Tour: Part 2 (Official Mixtape)'
-            }
-        },
-        # Album playlist ripped from fakeshoredrive with no metadata
-        {
-            'url': 'http://www.audiomack.com/album/fakeshoredrive/ppp-pistol-p-project',
-            'info_dict': {
-                'title': 'PPP (Pistol P Project)',
-                'id': '837572',
-            },
-            'playlist': [{
-                'info_dict': {
-                    'title': 'PPP (Pistol P Project) - 9. Heaven or Hell (CHIMACA) ft Zuse (prod by DJ FU)',
-                    'id': '837577',
-                    'ext': 'mp3',
-                    'uploader': 'Lil Herb a.k.a. G Herbo',
-                }
-            }],
-            'params': {
-                'playliststart': 9,
-                'playlistend': 9,
-            }
-        }
-    ]
-    
-    
-class C56IE(InfoExtractor):
-    _VALID_URL = r'https?://(?:(?:www|player)\.)?56\.com/(?:.+?/)?(?:v_|(?:play_album.+-))(?P<textid>.+?)\.(?:html|swf)'
-    IE_NAME = '56.com'
-    _TESTS = [{
-        'url': 'http://www.56.com/u39/v_OTM0NDA3MTY.html',
-        'md5': 'e59995ac63d0457783ea05f93f12a866',
-        'info_dict': {
-            'id': '93440716',
-            'ext': 'flv',
-            'title': '网事知多少 第32期：车怒',
-            'duration': 283.813,
-        },
-    }, {
-        'url': 'http://www.56.com/u47/v_MTM5NjQ5ODc2.html',
-        'md5': '',
-        'info_dict': {
-            'id': '82247482',
-            'title': '爱的诅咒之杜鹃花开',
-        },
-        'playlist_count': 7,
-        'add_ie': ['Sohu'],
-    }]
-    
-    from .onet import OnetBaseIE
-    
-        model.fit(temporal_x_train, temporal_y_train, batch_size=batch_size,
-              epochs=epochs // 3, verbose=0,
-              sample_weight=temporal_sample_weight)
-    model.fit(temporal_x_train, temporal_y_train, batch_size=batch_size,
-              epochs=epochs // 3, verbose=0,
-              sample_weight=temporal_sample_weight,
-              validation_split=0.1)
-    
-        # fit generator with validation data and accuracy
-    model.fit_generator(data_generator(True), len(X_train), epochs=2,
-                        validation_data=([X_test] * 2, [y_test] * 2),
-                        callbacks=callbacks_factory(histogram_freq=1))
-    
-    # Embedding
-max_features = 20000
-maxlen = 100
-embedding_size = 128
-    
-    
-if __name__ == '__main__':
-    pytest.main([__file__])
-
-    
-        inputs = layers.Input(shape=(x_train.shape[1], x_train.shape[2]))
-    x = layers.SimpleRNN(8)(inputs)
-    outputs = layers.Dense(y_train.shape[-1], activation='softmax')(x)
-    model = keras.models.Model(inputs, outputs)
-    model.compile(loss='categorical_crossentropy',
-                  optimizer='rmsprop',
-                  metrics=['accuracy'])
-    history = model.fit(x_train, y_train, epochs=4, batch_size=10,
-                        validation_data=(x_test, y_test),
-                        verbose=0)
-    assert(history.history['acc'][-1] >= 0.8)
-    
-                # test for output shape:
-            output = layer_test(convolutional_recurrent.ConvLSTM2D,
-                                kwargs={'data_format': data_format,
-                                        'return_sequences': return_sequences,
-                                        'filters': filters,
-                                        'kernel_size': (num_row, num_col),
-                                        'padding': 'valid'},
-                                input_shape=inputs.shape)
-    
-    
-@keras_test
-def test_vector_regression():
-    '''
-    Perform float data prediction (regression) using 2 layer MLP
-    with tanh and sigmoid activations.
-    '''
-    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=500,
-                                                         num_test=200,
-                                                         input_shape=(20,),
-                                                         output_shape=(num_classes,),
-                                                         classification=False)
-    
-    
-def _get_test_data():
-    np.random.seed(1234)
-    
-    # encoding=utf8  
-import sys  
-try:
-    reload(sys)
-except NameError:
-    pass
-try:
-    sys.setdefaultencoding('utf8')
-except AttributeError:
-    pass
-    
-        def result(self, timeout=None):
-        '''Return the result of the call that the future represents.
-    
-        >>> Point = namedtuple('Point', 'x y')
-    >>> Point.__doc__                   # docstring for the new class
-    'Point(x, y)'
-    >>> p = Point(11, y=22)             # instantiate with positional args or keywords
-    >>> p[0] + p[1]                     # indexable like a plain tuple
-    33
-    >>> x, y = p                        # unpack like a regular tuple
-    >>> x, y
-    (11, 22)
-    >>> p.x + p.y                       # fields also accessable by name
-    33
-    >>> d = p._asdict()                 # convert to a dictionary
-    >>> d['x']
-    11
-    >>> Point(**d)                      # convert from a dictionary
-    Point(x=11, y=22)
-    >>> p._replace(x=100)               # _replace() is like str.replace() but targets named fields
-    Point(x=100, y=22)
-    
-    atexit.register(_python_exit)
-
-    
-    def download_urls_with_executor(urls, executor, timeout=60):
+def has_docutils():
     try:
-        url_to_content = {}
-        future_to_url = dict((executor.submit(load_url, url, timeout), url)
-                             for url in urls)
-    
-    PY_MAJOR, PY_MINOR = sys.version_info[ 0 : 2 ]
-if not ( ( PY_MAJOR == 2 and PY_MINOR >= 6 ) or
-         ( PY_MAJOR == 3 and PY_MINOR >= 3 ) or
-         PY_MAJOR > 3 ):
-  sys.exit( 'YouCompleteMe requires Python >= 2.6 or >= 3.3; '
-            'your version of Python is ' + sys.version )
-    
-        # build a new DiagnosticFilter merging all filters
-    #  for the provided filetypes
-    spec = []
-    for filetype in filetypes:
-      type_specific = self._all_filters.get( filetype, [] )
-      spec.extend( type_specific )
+        # noinspection PyUnresolvedReferences
+        import docutils
+        return True
+    except ImportError:
+        return False
     
     
-def _ConvertVimDatasToCompletionDatas( response_data ):
-  return [ ConvertVimDataToCompletionData( x )
-           for x in response_data ]
+def test_follow_all_output_options_used_for_redirects(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 3
+    assert HTTP_OK not in r
+    
+    
+DEFAULT_CONFIG_DIR = str(os.environ.get(
+    'HTTPIE_CONFIG_DIR',
+    os.path.expanduser('~/.httpie') if not is_windows else
+    os.path.expandvars(r'%APPDATA%\\httpie')
+))
+    
+    
+@pytest.mark.functional
+def test_with_confirmation(proc, TIMEOUT):
+    with_confirmation(proc, TIMEOUT)
+    
+    # TODO: ensure that history changes.
 
     
-      eq_( request.Response(), {
-    'completions': results,
-    'completion_start_column': 1
-  } )
+        def inner(*suffix):
+        return urljoin(httpbin_url, '/'.join(suffix))
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+        :param url: URL for the new :class:`Request` object.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
+    '''
+    
+        def lower_items(self):
+        '''Like iteritems(), but with all lowercase keys.'''
+        return (
+            (lowerkey, keyval[1])
+            for (lowerkey, keyval)
+            in self._store.items()
+        )
+    
+                X /= np.sqrt(np.sum(X ** 2, axis=0))  # Normalize data
+    
+        for n_components in [i.astype(int) for i in
+                         np.linspace(data.shape[1] // 10,
+                                     data.shape[1], num=4)]:
+        all_times = defaultdict(list)
+        all_errors = defaultdict(list)
+        pca = PCA(n_components=n_components)
+        rpca = RandomizedPCA(n_components=n_components, random_state=1999)
+        results_dict = {k: benchmark(est, data) for k, est in [('pca', pca),
+                                                               ('rpca', rpca)]}
+    
+    ARCHIVE_NAME = URL.rsplit('/', 1)[1]
+DATA_FOLDER = 'txt_sentoken'
+    
+        if not os.path.exists(ARCHIVE_NAME):
+        print('Downloading dataset from %s (14 MB)' % URL)
+        opener = urlopen(URL)
+        with open(ARCHIVE_NAME, 'wb') as archive:
+            archive.write(opener.read())
+    
+            if event == 'clear':
+            self.ax.clear()
+            self.ax.set_xticks([])
+            self.ax.set_yticks([])
+            self.contours = []
+            self.c_labels = None
+            self.plot_kernels()
+    
+    # Illustrate calibrator
+plt.figure(1)
+# generate grid over 2-simplex
+p1d = np.linspace(0, 1, 20)
+p0, p1 = np.meshgrid(p1d, p1d)
+p2 = 1 - p0 - p1
+p = np.c_[p0.ravel(), p1.ravel(), p2.ravel()]
+p = p[p[:, 2] >= 0]
+    
+    
+class QueueBasicTest(AsyncTestCase):
+    def test_repr_and_str(self):
+        q = queues.Queue(maxsize=1)
+        self.assertIn(hex(id(q)), repr(q))
+        self.assertNotIn(hex(id(q)), str(q))
+        q.get()
+    
+        def consume(self):
+        try:
+            while True:
+                result = self.reader.recv(1024)
+                if not result:
+                    break
+        except (IOError, socket.error):
+            pass
+    
+    from tornado.auth import TwitterMixin
+from tornado.escape import json_decode, json_encode
+from tornado.ioloop import IOLoop
+from tornado import gen
+from tornado.options import define, options, parse_command_line, parse_config_file
+from tornado.web import Application, RequestHandler, authenticated
+    
+    # Most of our tests depend on IOLoop, which is not usable on app engine.
+# Run the tests that work, and check that everything else is at least
+# importable (via tornado.test.import_test)
+TEST_MODULES = [
+    'tornado.httputil.doctests',
+    'tornado.iostream.doctests',
+    'tornado.util.doctests',
+    #'tornado.test.auth_test',
+    #'tornado.test.concurrent_test',
+    #'tornado.test.curl_httpclient_test',
+    'tornado.test.escape_test',
+    #'tornado.test.gen_test',
+    #'tornado.test.httpclient_test',
+    #'tornado.test.httpserver_test',
+    'tornado.test.httputil_test',
+    'tornado.test.import_test',
+    #'tornado.test.ioloop_test',
+    #'tornado.test.iostream_test',
+    'tornado.test.locale_test',
+    #'tornado.test.netutil_test',
+    #'tornado.test.log_test',
+    'tornado.test.options_test',
+    #'tornado.test.process_test',
+    #'tornado.test.simple_httpclient_test',
+    #'tornado.test.stack_context_test',
+    'tornado.test.template_test',
+    #'tornado.test.testing_test',
+    #'tornado.test.twisted_test',
+    'tornado.test.util_test',
+    #'tornado.test.web_test',
+    #'tornado.test.websocket_test',
+    #'tornado.test.wsgi_test',
+]
