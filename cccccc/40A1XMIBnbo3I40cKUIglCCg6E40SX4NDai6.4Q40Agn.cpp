@@ -1,93 +1,172 @@
 
         
-        ScrollView* bln_word_window_handle();  //return handle
-void build_image_window(int width, int height);
-void display_bln_lines(ScrollView window,
-                       ScrollView::Color colour,
-                       float scale_factor,
-                       float y_offset,
-                       float minx,
-                       float maxx);
-                                 //function to call
-void pgeditor_msg(  //message display
-                  const char *msg);
-void pgeditor_show_point(  //display coords
-                         SVEvent *event);
-                                 //put bln word in       box
-void show_point(PAGE_RES* page_res, float x, float y);
-    
-    
-    {}  // namespace tesseract.
-
-    
-      // Clip the top and bottom to the limit of normalized feature space.
-  int top = ClipToRange<int>(bbox.top(), 0, kBlnCellHeight - 1);
-  int bottom = ClipToRange<int>(bbox.bottom(), 0, kBlnCellHeight - 1);
-  // A tolerance of yscale corresponds to 1 pixel in the image.
-  double tolerance = y_scale();
-  // If the script doesn't have upper and lower-case characters, widen the
-  // tolerance to allow sloppy baseline/x-height estimates.
-  if (!unicharset.script_has_upper_lower())
-    tolerance = y_scale() * kSloppyTolerance;
-    
-    // Possible normalization methods. Use NEGATIVE values as these also
-// double up as markers for the last sub-classifier.
-enum NormalizationMode {
-  NM_BASELINE = -3,         // The original BL normalization mode.
-  NM_CHAR_ISOTROPIC = -2,   // Character normalization but isotropic.
-  NM_CHAR_ANISOTROPIC = -1  // The original CN normalization mode.
-};
-    
-    /**----------------------------------------------------------------------------
-          Include Files and Type Defines
-----------------------------------------------------------------------------**/
-#include 'strngs.h'
-    
-      // Initialize the bool array to the given size of feature space.
-  // The feature_map is just borrowed, and must exist for the entire
-  // lifetime of the IntFeatureDist.
-  void Init(const IntFeatureMap* feature_map);
-    
-    namespace jpgd
-{
-  typedef unsigned char  uint8;
-  typedef   signed short int16;
-  typedef unsigned short uint16;
-  typedef unsigned int   uint;
-  typedef   signed int   int32;
+        namespace message_descriptor {
+PyObject* NewMessageFieldsByName(const Descriptor* descriptor);
+PyObject* NewMessageFieldsByCamelcaseName(const Descriptor* descriptor);
+PyObject* NewMessageFieldsByNumber(const Descriptor* descriptor);
+PyObject* NewMessageFieldsSeq(const Descriptor* descriptor);
     }
     
-    # if defined(OC_COLLECT_METRICS)
-typedef struct oc_mode_metrics oc_mode_metrics;
-# endif
-typedef struct oc_mode_rd      oc_mode_rd;
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
     
-      &_huff_book_line_1024x27_0sub0,
-  &_huff_book_line_1024x27_1sub0,
-  &_huff_book_line_1024x27_1sub1,
-  &_huff_book_line_1024x27_2sub0,
-  &_huff_book_line_1024x27_2sub1,
-  &_huff_book_line_1024x27_3sub1,
-  &_huff_book_line_1024x27_3sub2,
-  &_huff_book_line_1024x27_3sub3,
-  &_huff_book_line_1024x27_4sub1,
-  &_huff_book_line_1024x27_4sub2,
-  &_huff_book_line_1024x27_4sub3,
+    #include <string>
+    
+      void WriteIntroduction(io::Printer* printer);
+  void WriteDescriptor(io::Printer* printer);
+  void WriteGeneratedCodeInfo(const Descriptor* descriptor,
+                              io::Printer* printer,
+                              bool last);
+    
+    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_ENUM_FIELD_H__
+    
+    void SourceGeneratorBase::WriteGeneratedCodeAttributes(io::Printer* printer) {
+  printer->Print('[global::System.Diagnostics.DebuggerNonUserCodeAttribute]\n');
+}
+    
+    
+    {  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(SourceGeneratorBase);
 };
-static const static_codebook*const _floor_2048x27_books[]={
-  &_huff_book_line_2048x27_class1,
-  &_huff_book_line_2048x27_class2,
-  &_huff_book_line_2048x27_class3,
-  &_huff_book_line_2048x27_class4,
     
-    #else
-    
-    #if defined(HAVE_ARM_NE10)
-    
-    #if !defined(_mfrngcode_H)
-# define _mfrngcode_H (1)
-# include 'entcode.h'
+    #include <google/protobuf/compiler/java/java_generator_factory.h>
     
     
-    {    return y;
+    {
+    {
+    {
+    {                        const float eps = 1e-4f;
+                        //TODO: perhaps it is better to normalize the cross product by norms of the tangent vectors
+                        if (fabs(tangentVector_1.cross(tangentVector_2)) < eps)
+                        {
+                            isGeneralPosition = false;
+                        }
+                    }
+                }
+            }
+        }
+        while(!isGeneralPosition);
+    }
+    else
+    {
+        //create points in a degenerate position (there are at least 3 points belonging to the same line)
+    
+      virtual ParamIteratorInterface<ParamType>* Begin() const {
+    return new Iterator(this, g1_, g1_.begin(), g2_, g2_.begin(), g3_,
+        g3_.begin(), g4_, g4_.begin());
+  }
+  virtual ParamIteratorInterface<ParamType>* End() const {
+    return new Iterator(this, g1_, g1_.end(), g2_, g2_.end(), g3_, g3_.end(),
+        g4_, g4_.end());
+  }
+    
+    
+    {        static_cast<ParamGenerator<T$j> >(g$(j)_)
+]]));
+  }
+    
+      template <GTEST_9_TYPENAMES_(U)>
+  tuple& operator=(const GTEST_9_TUPLE_(U)& t) {
+    return CopyFrom(t);
+  }
+    
+      // Returns true iff n is a prime number.
+  virtual bool IsPrime(int n) const = 0;
+    
+    template <typename Stream>
+class buffered_stream;
+    
+    #endif // BOOST_ASIO_DETAIL_ATOMIC_COUNT_HPP
+
+    
+      std::size_t count() const
+  {
+    return count_;
+  }
+    
+      STDMETHODIMP put_Length(UINT32 value)
+  {
+    if (value > capacity_)
+      return E_INVALIDARG;
+    length_ = value;
+    return S_OK;
+  }
+    
+    #include <boost/asio/detail/config.hpp>
+    
+    
+    {}  // namespace guetzli
+    
+    namespace guetzli {
+    }
+    
+    // Output callback function with associated data.
+struct JPEGOutput {
+  JPEGOutput(JPEGOutputHook cb, void* data) : cb(cb), data(data) {}
+  bool Write(const uint8_t* buf, size_t len) const {
+    return (len == 0) || (cb(data, buf, len) == len);
+  }
+ private:
+  JPEGOutputHook cb;
+  void* data;
+};
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    struct HuffmanTableEntry {
+  // Initialize the value to an invalid symbol so that we can recognize it
+  // when reading the bit stream using a Huffman code with space > 0.
+  HuffmanTableEntry() : bits(0), value(0xffff) {}
+    }
+    
+    
+    {}  // namespace
+    
+    
+    {    void toJS(nbind::cbOutput expose) const
+    {
+        expose(unit, value);
+    }
+};
+
+    
+    TEST_F(YogaTest_HadOverflowTests, spacing_overflow_no_wrap_and_no_flex_children) {
+  const YGNodeRef child0 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child0, 80);
+  YGNodeStyleSetHeight(child0, 40);
+  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
+  YGNodeStyleSetMargin(child0, YGEdgeBottom, 10);
+  YGNodeInsertChild(root, child0, 0);
+  const YGNodeRef child1 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child1, 80);
+  YGNodeStyleSetHeight(child1, 40);
+  YGNodeStyleSetMargin(child1, YGEdgeBottom, 5);
+  YGNodeInsertChild(root, child1, 1);
+    }
+    
+    #pragma once
+    
+    void Node::setFlexBasisPercent(double flexBasis)
+{
+    YGNodeStyleSetFlexBasisPercent(m_node, flexBasis);
+}
+    
+    private:
+  void ref() {
+    ++m_refcount;
+  }
+    
+      std::string asFormattedString() const {
+    std::stringstream str;
+    str << 'Function ' << m_functionName << ' in file ' << m_fileName << ':' << m_lineNumber;
+    return str.str();
+  }
+    
+    template <typename T, typename U>
+inline bool operator==(const RefPtr<T>& ref, U* ptr) {
+  return ref.get() == ptr;
 }
