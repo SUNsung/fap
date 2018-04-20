@@ -1,85 +1,127 @@
 
         
-                    plt.text((i + 0.02) / len(algorithms), 0.98, alg,
-                     transform=ax.transAxes,
-                     ha='left',
-                     va='top',
-                     bbox=dict(facecolor='w', edgecolor='w', alpha=0.5))
+                from .debughelpers import explain_template_loading_attempts
+        explain_template_loading_attempts(self.app, template, attempts)
     
-            start = time.time()
-        func(X, n_jobs=1)
-        one_core.append(time.time() - start)
-    
-    from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import Perceptron
-from sklearn.pipeline import Pipeline
-from sklearn.datasets import load_files
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
-    
-    import socket
-import ctypes
-import os
+        flask.appcontext_pushed.connect(record_push, app)
+    flask.appcontext_popped.connect(record_pop, app)
+    try:
+        with app.test_client() as c:
+            rv = c.get('/')
+            assert rv.data == b'Hello'
+            assert recorded == ['push']
+        assert recorded == ['push', 'pop']
+    finally:
+        flask.appcontext_pushed.disconnect(record_push, app)
+        flask.appcontext_popped.disconnect(record_pop, app)
     
     
-    def unpack(cls, string):
-        '''@brief Unpack the runlength encoded table data.
-    
-            return '[@%d,%d:%d=%r,<%d>%s,%d:%d]' % (
-            self.index,
-            self.start, self.stop,
-            txt,
-            self.type, channelStr,
-            self.line, self.charPositionInLine
-            )
+class Root(Resource):
     
     
+class _BenchSpider(scrapy.Spider):
+    '''A spider that follows all links'''
+    name = 'follow'
+    total = 10000
+    show = 20
+    baseurl = 'http://localhost:8998'
+    link_extractor = LinkExtractor()
     
-def wrap_web_tests_adapter():
-    result = {}
-    for cls in web_test.wsgi_safe_tests:
-        class WSGIAdapterWrappedTest(cls):  # type: ignore
-            def get_app(self):
-                self.app = Application(self.get_handlers(),
-                                       **self.get_app_kwargs())
-                return WSGIContainer(validator(WSGIAdapter(self.app)))
-        result['WSGIAdapter_' + cls.__name__] = WSGIAdapterWrappedTest
-    return result
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
+                          help='set spider argument (may be repeated)')
+        parser.add_option('-o', '--output', metavar='FILE',
+                          help='dump scraped items into FILE (use - for stdout)')
+        parser.add_option('-t', '--output-format', metavar='FORMAT',
+                          help='format to use for dumping items with -o')
     
-        For use on platforms that don't have os.pipe() (or where pipes cannot
-    be passed to select()), but do have sockets.  This includes Windows
-    and Jython.
+        def run(self, args, opts):
+        if opts.list:
+            self._list_templates()
+            return
+        if opts.dump:
+            template_file = self._find_template(opts.dump)
+            if template_file:
+                with open(template_file, 'r') as f:
+                    print(f.read())
+            return
+        if len(args) != 2:
+            raise UsageError()
+    
+        :param filepath: Optional filepath the the blns.txt file
+    :returns: The list of naughty strings
     '''
-    def __init__(self):
-        from .auto import set_close_exec
-        # Based on Zope select_trigger.py:
-        # https://github.com/zopefoundation/Zope/blob/master/src/ZServer/medusa/thread/select_trigger.py
+    
+        def get_testable_domain_names(self):
+        '''Returns the set of domain names that can be tested against'''
+        if self._test_names:
+            return self._test_names
+        else:
+            return {'example.com'}
+    
+    # If true, the current module name will be prepended to all description
+# unit titles (such as .. function::).
+#add_module_names = True
+    
+        def tearDown(self):
+        logging.disable(logging.NOTSET)
+    
+    if __name__ == '__main__':
+    unittest.main()  # pragma: no cover
+
+    
+        while pin_count > 0:
+        json_data = extract_json_data(url, max=pin_list[-1]['pin_id'],
+                                      limit=LIMIT)
+        pins = json_data['pins']
+        pin_list += pins
+        pin_count -= len(pins)
+    
+    __all__ = ['mixcloud_download']
+    
+    site = MusicPlayOn()
+download = site.download_by_url
+# TBD: implement download_playlist
+
+    
+            Args:
+            fn: A callable that will take as many arguments as there are
+                passed iterables.
+            timeout: The maximum number of seconds to wait. If None, then there
+                is no limit on the wait time.
+    
+        # Execute the template string in a temporary namespace and
+    # support tracing utilities by setting a value for frame.f_globals['__name__']
+    namespace = dict(_itemgetter=_itemgetter, __name__='namedtuple_%s' % typename,
+                     _property=property, _tuple=tuple)
+    try:
+        exec(template, namespace)
+    except SyntaxError:
+        e = _sys.exc_info()[1]
+        raise SyntaxError(e.message + ':\n' + template)
+    result = namespace[typename]
     
     
-class AutoreloadTest(unittest.TestCase):
-    def test_reload_module(self):
-        # Create temporary test application
-        path = mkdtemp()
-        os.mkdir(os.path.join(path, 'testapp'))
-        open(os.path.join(path, 'testapp/__init__.py'), 'w').close()
-        with open(os.path.join(path, 'testapp/__main__.py'), 'w') as f:
-            f.write(MAIN)
+@contextlib.contextmanager
+def captured_stderr():
+    '''Return a context manager used by captured_stdout/stdin/stderr
+    that temporarily replaces the sys stream *stream_name* with a StringIO.'''
+    logging_stream = StringIO()
+    handler = logging.StreamHandler(logging_stream)
+    logging.root.addHandler(handler)
     
-        def get_app(self):
-        return Application([
-            ('/digest', DigestAuthHandler),
-            ('/custom_reason', CustomReasonHandler),
-            ('/custom_fail_reason', CustomFailReasonHandler),
-        ])
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
-        @gen_test
-    def test_wait_timeout_preempted(self):
-        c = locks.Condition()
+      Example usage:
     
-                server = TCPServer()
-            server.listen(0, address='127.0.0.1')
-            IOLoop.current().run_sync(lambda: None)
-            print('012', end='')
-        ''')
-        out = self.run_subproc(code)
-        self.assertEqual(''.join(sorted(out)), '012')
+    
+def OverlapLength_NoOverlap_test():
+  eq_( 0, base.OverlapLength( 'foobar', 'goobar' ) )
+  eq_( 0, base.OverlapLength( 'foobar', '(^($@#$#@' ) )
+  eq_( 0, base.OverlapLength( 'foo bar zoo', 'foo zoo bar' ) )
