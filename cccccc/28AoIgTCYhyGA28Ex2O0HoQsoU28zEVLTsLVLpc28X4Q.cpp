@@ -1,213 +1,345 @@
 
         
-            DXGI_SWAP_CHAIN_DESC sd;
-    ZeroMemory( &sd, sizeof( sd ) );
-    sd.BufferCount = 1;
-    sd.BufferDesc.Width = width;
-    sd.BufferDesc.Height = height;
-#ifdef CHECK_NV12
-    sd.BufferDesc.Format = DXGI_FORMAT_NV12;
-#else
-    sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-#endif
-    sd.BufferDesc.RefreshRate.Numerator = 60;
-    sd.BufferDesc.RefreshRate.Denominator = 1;
-    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    sd.OutputWindow = NULL; //g_hWnd;
-    sd.SampleDesc.Count = 1;
-    sd.SampleDesc.Quality = 0;
-    sd.Windowed = TRUE;
-    
-    //
-// BEGIN OF CUSTOM FUNCTIONS
-//
-    
-    #ifndef incl_HPHP_WORKLOAD_STATS_H_
-#define incl_HPHP_WORKLOAD_STATS_H_
-    
-    struct PageletServer {
-  static bool Enabled();
-  static void Restart();
-  static void Stop();
-    }
-    
-    VcallArgsId Vunit::makeVcallArgs(VcallArgs&& args) {
-  VcallArgsId i(vcallArgs.size());
-  vcallArgs.emplace_back(std::move(args));
-  return i;
-}
-    
-      bool ret = true;
-  bitmask* run_nodes = numa_get_run_node_mask();
-  bitmask* mem_nodes = numa_get_mems_allowed();
-  for (int i = 0; i <= max_node; i++) {
-    if (!numa_bitmask_isbitset(run_nodes, i) ||
-        !numa_bitmask_isbitset(mem_nodes, i)) {
-      // Only deal with the case of a contiguous set of nodes where we can
-      // run/allocate memory on each node.
-      ret = false;
-      break;
-    }
-    numa_node_set |= (uint32_t)1 << i;
-    numa_num_nodes++;
-  }
-  numa_bitmask_free(run_nodes);
-  numa_bitmask_free(mem_nodes);
-    
-    #include 'hphp/runtime/vm/jit/normalized-instruction.h'
-#include 'hphp/runtime/vm/jit/switch-profile.h'
-#include 'hphp/runtime/vm/jit/target-profile.h'
-    
-    //////////////////////////////////////////////////////////////////////
-    
-      void undo() {
-    m_cb.setFrontier(m_oldFrontier);
-  }
-    
-    
+        
     {
-    {  if (c1headc2head == max) {
-    // flip c1
-    std::reverse(c1->targets.begin(), c1->targets.end());
-  } else if (c1headc2tail == max) {
-    // flip c1 c2
-    std::reverse(c1->targets.begin(), c1->targets.end());
-    std::reverse(c2->targets.begin(), c2->targets.end());
-  } else if (c1tailc2tail == max) {
-    // flip c2
-    std::reverse(c2->targets.begin(), c2->targets.end());
+/**
+ * @name tess_add_doc_word
+ *
+ * Add the given word to the document dictionary
+ */
+void Tesseract::tess_add_doc_word(WERD_CHOICE *word_choice) {
+  getDict().add_document_word(*word_choice);
+}
+}  // namespace tesseract
+
+    
+    // Computes all the cross product distances of the points from the line,
+// storing the actual (signed) cross products in distances.
+// Ignores distances of points that are further away than the previous point,
+// and overlaps the previous point by at least half.
+void DetLineFit::ComputeDistances(const ICOORD& start, const ICOORD& end) {
+  distances_.truncate(0);
+  ICOORD line_vector = end;
+  line_vector -= start;
+  square_length_ = line_vector.sqlength();
+  int line_length = IntCastRounded(sqrt(square_length_));
+  // Compute the distance of each point from the line.
+  int prev_abs_dist = 0;
+  int prev_dot = 0;
+  for (int i = 0; i < pts_.size(); ++i) {
+    ICOORD pt_vector = pts_[i].pt;
+    pt_vector -= start;
+    int dot = line_vector % pt_vector;
+    // Compute |line_vector||pt_vector|sin(angle between)
+    int dist = line_vector * pt_vector;
+    int abs_dist = dist < 0 ? -dist : dist;
+    if (abs_dist > prev_abs_dist && i > 0) {
+      // Ignore this point if it overlaps the previous one.
+      int separation = abs(dot - prev_dot);
+      if (separation < line_length * pts_[i].halfwidth ||
+          separation < line_length * pts_[i - 1].halfwidth)
+        continue;
+    }
+    distances_.push_back(DistPointPair(dist, pts_[i].pt));
+    prev_abs_dist = abs_dist;
+    prev_dot = dot;
   }
 }
-}
     
     
-    {  if (n == 1) {
-    if (imm_s == 0x3F) {
-      return 0;
+/**********************************************************************
+ * QLSQ::fit
+ *
+ * Fit the given degree of polynomial and store the result.
+ * This creates a quadratic of the form axx + bx + c, but limited to
+ * the given degree.
+ **********************************************************************/
+    
+    class QRSequenceGenerator {
+ public:
+  // Object is initalized with the size of the output range.
+  explicit QRSequenceGenerator(int N) : N_(N), next_num_(0) {
+    num_bits_ = static_cast<int>(ceil(log(static_cast<double>(N)) / log(2.0)));
+  }
     }
-    uint64_t bits = (1UL << (imm_s + 1)) - 1;
-    return RotateRight(bits, imm_r, 64);
-  } else {
-    if ((imm_s >> 1) == 0x1F) {
-      return 0;
-    }
-    for (int width = 0x20; width >= 0x2; width >>= 1) {
-      if ((imm_s & width) == 0) {
-        int mask = width - 1;
-        if ((imm_s & mask) == mask) {
-          return 0;
+    
+    
+    {  int total_samples = 0;
+  int error_samples = 25;
+  int total_new_errors = 0;
+  // Iterate over all the samples, accumulating errors.
+  for (it->Begin(); !it->AtEnd(); it->Next()) {
+    TrainingSample* mutable_sample = it->MutableSample();
+    int page_index = mutable_sample->page_num();
+    Pix* page_pix = 0 <= page_index && page_index < page_images.size()
+                  ? page_images[page_index] : NULL;
+    // No debug, no keep this.
+    old_classifier->UnicharClassifySample(*mutable_sample, page_pix, 0,
+                                          INVALID_UNICHAR_ID, &results);
+    int correct_id = mutable_sample->class_id();
+    if (correct_id != 0 &&
+        !old_counter.AccumulateErrors(true, boosting_mode, fontinfo_table,
+                                      results, mutable_sample)) {
+      // old classifier was correct, check the new one.
+      new_classifier->UnicharClassifySample(*mutable_sample, page_pix, 0,
+                                            INVALID_UNICHAR_ID, &results);
+      if (correct_id != 0 &&
+          new_counter.AccumulateErrors(true, boosting_mode, fontinfo_table,
+                                        results, mutable_sample)) {
+        tprintf('New Error on sample %d: Classifier debug output:\n',
+                it->GlobalSampleIndex());
+        ++total_new_errors;
+        new_classifier->UnicharClassifySample(*mutable_sample, page_pix, 1,
+                                              correct_id, &results);
+        if (results.size() > 0 && error_samples > 0) {
+          new_classifier->DebugDisplay(*mutable_sample, page_pix, correct_id);
+          --error_samples;
         }
-        uint64_t bits = (1UL << ((imm_s & mask) + 1)) - 1;
-        return RepeatBitsAcrossReg(reg_size,
-                                   RotateRight(bits, imm_r & mask, width),
-                                   width);
       }
     }
+    ++total_samples;
   }
-  not_reached();
-  return 0;
+  tprintf('Total new errors = %d\n', total_new_errors);
 }
     
-    namespace HPHP {
-    }
+      // Compute the distance between the given feature vector and the last
+  // Set feature vector.
+  double FeatureDistance(const GenericVector<int>& features) const;
+  double DebugFeatureDistance(const GenericVector<int>& features) const;
     
-        do 
+    bool SampleIterator::AtEnd() const {
+  return shape_index_ >= num_shapes_;
+}
+    
+    template<> AT_API Half convert(float f) {
+  Half t;
+  TH_float2halfbits(&f,&t.x);
+  return t;
+}
+template<> AT_API float convert(Half f) {
+  float t;
+  TH_halfbits2float(&f.x,&t);
+  return t;
+}
+    
+    	FAIL_ON_ERROR(RegSetValue(command, L'', REG_SZ, commandStr, NULL));
+    
+    private:
+  /// Copy data out of the internal buffer to the specified target buffer.
+  /// Returns the number of bytes copied.
+  template <typename MutableBufferSequence>
+  std::size_t copy(const MutableBufferSequence& buffers)
+  {
+    std::size_t bytes_copied = boost::asio::buffer_copy(
+        buffers, storage_.data(), storage_.size());
+    storage_.consume(bytes_copied);
+    return bytes_copied;
+  }
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+      static void validate(const Buffers& buffer_sequence)
+  {
+    typename Buffers::const_iterator iter = buffer_sequence.begin();
+    typename Buffers::const_iterator end = buffer_sequence.end();
+    for (; iter != end; ++iter)
     {
-        if (argc == 1)
-        {
-            double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, 'cc.PhysicsBody:create');
-            if (!ok) { break; }
-            cocos2d::PhysicsBody* ret = cocos2d::PhysicsBody::create(arg0);
-            object_to_luaval<cocos2d::PhysicsBody>(tolua_S, 'cc.PhysicsBody',(cocos2d::PhysicsBody*)ret);
-            return 1;
-        }
-    } while (0);
-    ok  = true;
-    do 
-    {
-        if (argc == 0)
-        {
-            cocos2d::PhysicsBody* ret = cocos2d::PhysicsBody::create();
-            object_to_luaval<cocos2d::PhysicsBody>(tolua_S, 'cc.PhysicsBody',(cocos2d::PhysicsBody*)ret);
-            return 1;
-        }
-    } while (0);
-    ok  = true;
-    do 
-    {
-        if (argc == 2)
-        {
-            double arg0;
-            ok &= luaval_to_number(tolua_S, 2,&arg0, 'cc.PhysicsBody:create');
-            if (!ok) { break; }
-            double arg1;
-            ok &= luaval_to_number(tolua_S, 3,&arg1, 'cc.PhysicsBody:create');
-            if (!ok) { break; }
-            cocos2d::PhysicsBody* ret = cocos2d::PhysicsBody::create(arg0, arg1);
-            object_to_luaval<cocos2d::PhysicsBody>(tolua_S, 'cc.PhysicsBody',(cocos2d::PhysicsBody*)ret);
-            return 1;
-        }
-    } while (0);
-    ok  = true;
-    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d', 'cc.PhysicsBody:create',argc, 2);
-    return 0;
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,'#ferror in function 'lua_cocos2dx_physics_PhysicsBody_create'.',&tolua_err);
+      Buffer buffer(*iter);
+      boost::asio::buffer_cast<const void*>(buffer);
+    }
+  }
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+typedef null_event event;
+#elif defined(BOOST_ASIO_WINDOWS)
+typedef win_event event;
+#elif defined(BOOST_ASIO_HAS_PTHREADS)
+typedef posix_event event;
+#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
+typedef std_event event;
 #endif
-    return 0;
-}
-int lua_cocos2dx_physics_PhysicsBody_createEdgeBox(lua_State* tolua_S)
+    
+    
+    {private:
+  static void barrier()
+  {
+#if defined(__ARM_ARCH_4__) \
+    || defined(__ARM_ARCH_4T__) \
+    || defined(__ARM_ARCH_5__) \
+    || defined(__ARM_ARCH_5E__) \
+    || defined(__ARM_ARCH_5T__) \
+    || defined(__ARM_ARCH_5TE__) \
+    || defined(__ARM_ARCH_5TEJ__) \
+    || defined(__ARM_ARCH_6__) \
+    || defined(__ARM_ARCH_6J__) \
+    || defined(__ARM_ARCH_6K__) \
+    || defined(__ARM_ARCH_6Z__) \
+    || defined(__ARM_ARCH_6ZK__) \
+    || defined(__ARM_ARCH_6T2__)
+# if defined(__thumb__)
+    // This is just a placeholder and almost certainly not sufficient.
+    __asm__ __volatile__ ('' : : : 'memory');
+# else // defined(__thumb__)
+    int a = 0, b = 0;
+    __asm__ __volatile__ ('swp %0, %1, [%2]'
+        : '=&r'(a) : 'r'(1), 'r'(&b) : 'memory', 'cc');
+# endif // defined(__thumb__)
+#else
+    // ARMv7 and later.
+    __asm__ __volatile__ ('dmb' : : : 'memory');
+#endif
+  }
+};
+    
+    #include <boost/asio/detail/push_options.hpp>
+    
+    void dev_poll_reactor::cancel_ops_unlocked(socket_type descriptor,
+    const boost::system::error_code& ec)
 {
-    int argc = 0;
-    bool ok  = true;
+  bool need_interrupt = false;
+  op_queue<operation> ops;
+  for (int i = 0; i < max_ops; ++i)
+    need_interrupt = op_queue_[i].cancel_operations(
+        descriptor, ops, ec) || need_interrupt;
+  io_service_.post_deferred_completions(ops);
+  if (need_interrupt)
+    interrupter_.interrupt();
+}
     
-        GLfloat    glVertices[] = 
+    void OutputImage::Downsample(const DownsampleConfig& cfg) {
+  if (components_[1].IsAllZero() && components_[2].IsAllZero()) {
+    // If the image is already grayscale, nothing to do.
+    return;
+  }
+  if (cfg.use_silver_screen &&
+      cfg.u_factor_x == 2 && cfg.u_factor_y == 2 &&
+      cfg.v_factor_x == 2 && cfg.v_factor_y == 2) {
+    std::vector<uint8_t> rgb = ToSRGB();
+    std::vector<std::vector<float> > yuv = RGBToYUV420(rgb, width_, height_);
+    SetDownsampledCoefficients(yuv[0], 1, 1, &components_[0]);
+    SetDownsampledCoefficients(yuv[1], 2, 2, &components_[1]);
+    SetDownsampledCoefficients(yuv[2], 2, 2, &components_[2]);
+    return;
+  }
+  // Get the floating-point precision YUV array represented by the set of
+  // DCT coefficients.
+  std::vector<std::vector<float> > yuv(3, std::vector<float>(width_ * height_));
+  for (int c = 0; c < 3; ++c) {
+    components_[c].ToFloatPixels(&yuv[c][0], 1);
+  }
+    }
+    
+    
+    {}  // namespace
+    
+    // This function will create a Huffman tree.
+//
+// The catch here is that the tree cannot be arbitrarily deep.
+// Brotli specifies a maximum depth of 15 bits for 'code trees'
+// and 7 bits for 'code length code trees.'
+//
+// count_limit is the value that is to be faked as the minimum value
+// and this minimum value is raised until the tree matches the
+// maximum length requirement.
+//
+// This algorithm is not of excellent performance for very long data blocks,
+// especially when population counts are longer than 2**tree_limit, but
+// we are not planning to use this with extremely long blocks.
+//
+// See http://en.wikipedia.org/wiki/Huffman_coding
+void CreateHuffmanTree(const uint32_t *data,
+                       const size_t length,
+                       const int tree_limit,
+                       HuffmanTree* tree,
+                       uint8_t *depth) {
+  // For block sizes below 64 kB, we never need to do a second iteration
+  // of this loop. Probably all of our block sizes will be smaller than
+  // that, so this loop is mostly of academic interest. If we actually
+  // would need this, we would be better off with the Katajainen algorithm.
+  for (uint32_t count_limit = 1; ; count_limit *= 2) {
+    size_t n = 0;
+    for (size_t i = length; i != 0;) {
+      --i;
+      if (data[i]) {
+        const uint32_t count = std::max<uint32_t>(data[i], count_limit);
+        tree[n++] = HuffmanTree(count, -1, static_cast<int16_t>(i));
+      }
+    }
+    }
+    }
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    struct JpegHistogram {
+  static const int kSize = kJpegHuffmanAlphabetSize + 1;
+    }
+    
+    // Preprocesses U and V channel for better results after downsampling.
+    
+    double ButteraugliScoreForQuality(double quality) {
+  if (quality < kLowestQuality) quality = kLowestQuality;
+  if (quality > kHighestQuality) quality = kHighestQuality;
+  int index = static_cast<int>(quality);
+  double mix = quality - index;
+  return kScoreForQuality[index - kLowestQuality] * (1 - mix) +
+      kScoreForQuality[index - kLowestQuality + 1] * mix;
+}
+    
+        stb_uchar **chash;
+    chash = (stb_uchar**) malloc(stb__hashsize * sizeof(stb_uchar*));
+    if (chash == NULL) return 0; // failure
+    for (i=0; i < stb__hashsize; ++i)
+        chash[i] = NULL;
+    
+    int main(int, char**)
+{
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    }
+    
+        // Main loop
+    bool done = false;
+    while (!done)
     {
-        p1.x * mRatio, p1.y * mRatio,
-        p2.x * mRatio, p2.y * mRatio
-    };
-    glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, 0, glVertices);
-    
-    			b2FixtureDef sd1;
-			sd1.shape = &poly1;
-			sd1.density = 4.0f;
-    
-    	void Step(Settings* settings)
-	{
-		m_debugDraw.DrawString(5, m_textLine, 'Keys: left = a, brake = s, right = d, hz down = q, hz up = e');
-		m_textLine += DRAW_STRING_NEW_LINE;
-		m_debugDraw.DrawString(5, m_textLine, 'frequency = %g hz, damping ratio = %g', m_hz, m_zeta);
-		m_textLine += DRAW_STRING_NEW_LINE;
-    }
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    // bool JNU_Jstring2Wstring( JNIEnv* _env, const jstring jstr, std::wstring& wstr); //in linux sizeof(wchar_t)==4 but sizeof(jchar)==2
-wchar_t* JNU_Jstring2Wchar(JNIEnv* _env, const jstring jstr);
-void JNU_FreeWchar(JNIEnv* _env, jstring str, wchar_t* wchar);
-jstring JNU_Wstring2Jstring(JNIEnv* _env, const std::wstring& wstr);
-jstring JNU_Wchar2JString(JNIEnv* _env, wchar_t* wchar);
-    
-    ScopeJEnv::ScopeJEnv(JavaVM* jvm, jint _capacity)
-    : vm_(jvm), env_(NULL), we_attach_(false), status_(0) {
-    ASSERT(jvm);
-    do {
-        env_ = (JNIEnv*)pthread_getspecific(g_env_key);
-        
-        if (NULL != env_) {
-            break;
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            ImGui_ImplSdlGL3_ProcessEvent(&event);
+            if (event.type == SDL_QUIT)
+                done = true;
         }
-        
-        status_ = vm_->GetEnv((void**) &env_, JNI_VERSION_1_6);
+        ImGui_ImplSdlGL3_NewFrame(window);
     }
-    }
+    
+            // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
+        if (show_another_window)
+        {
+            ImGui::Begin('Another Window', &show_another_window);
+            ImGui::Text('Hello from another window!');
+            if (ImGui::Button('Close Me'))
+                show_another_window = false;
+            ImGui::End();
+        }
+    
+            // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
+        if (show_demo_window)
+        {
+            ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
+            ImGui::ShowDemoWindow(&show_demo_window);
+        }
+    
+        // Upload texture to graphics system
+    GLint last_texture;
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
+    glGenTextures(1, &g_FontTexture);
+    glBindTexture(GL_TEXTURE_2D, g_FontTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
