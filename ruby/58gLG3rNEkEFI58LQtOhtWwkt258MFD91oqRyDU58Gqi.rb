@@ -1,23 +1,33 @@
 
         
-                def test_spec_name_on_key_lookup
-          spec = spec(:readonly, 'readonly' => { 'adapter' => 'sqlite3' })
-          assert_equal 'readonly', spec.name
+                def test_url_sub_key
+          spec = resolve :production, 'production' => { 'url' => 'abstract://foo?encoding=utf8' }
+          assert_equal({
+            'adapter'  => 'abstract',
+            'host'     => 'foo',
+            'encoding' => 'utf8',
+            'name'     => 'production' }, spec)
         end
     
-      test 'raw_params returns a tuple of two key value pair strings' do
-    auth = sample_request('rcHu+HzSFw89Ypyhn/896A=').authorization.to_s
-    actual = ActionController::HttpAuthentication::Token.raw_params(auth)
-    expected = ['token=\'rcHu+HzSFw89Ypyhn/896A=\'', 'nonce=\'def\'']
-    assert_equal(expected, actual)
-  end
-    
-      class MyController < ActionController::Metal
-    use BlockMiddleware do |config|
-      config.configurable_message = 'Configured by block.'
+        test 'head :switching_protocols (101) does not return a content-type header' do
+      headers = HeadController.action(:switching_protocols).call(Rack::MockRequest.env_for('/')).second
+      assert_nil headers['Content-Type']
+      assert_nil headers['Content-Length']
     end
-    use MyMiddleware
-    middleware.insert_before MyMiddleware, ExclaimerMiddleware
+    
+        def perform(mailer, mail_method, delivery_method, *args) #:nodoc:
+      mailer.constantize.public_send(mail_method, *args).send(delivery_method)
+    end
+    
+            def enqueue_delivery(delivery_method, options = {})
+          if processed?
+            super
+          else
+            args = @mailer_class.name, @action.to_s, delivery_method.to_s, @params, *@args
+            ActionMailer::Parameterized::DeliveryJob.set(options).perform_later(*args)
+          end
+        end
+    end
     
       test 'does not increment the deliveries collection on bogus deliveries' do
     old_raise_delivery_errors = DeliveryMailer.raise_delivery_errors
@@ -33,78 +43,125 @@
 end
 
     
-    gem 'activemodel-serializers-xml', github: 'rails/activemodel-serializers-xml'
+          def initialize(*args, &block)
+        @bypass_confirmation_postpone = false
+        @skip_reconfirmation_in_callback = false
+        @reconfirmation_required = false
+        @skip_confirmation_notification = false
+        @raw_confirmation_token = nil
+        super
+      end
     
-    class Devise::PasswordsController < DeviseController
-  prepend_before_action :require_no_authentication
-  # Render the #edit only if coming from a reset password email link
-  append_before_action :assert_reset_token_passed, only: :edit
+      protected
+    def after_resetting_password_path_for(resource)
+      Devise.sign_in_after_reset_password ? after_sign_in_path_for(resource) : new_session_path(resource_name)
+    end
     
-      # GET /resource/sign_in
-  def new
-    self.resource = resource_class.new(sign_in_params)
-    clean_up_passwords(resource)
-    yield resource if block_given?
-    respond_with(resource, serialize_options(resource))
+        media_attachments
   end
     
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
+        def source_base_url
+      'https://github.com/tootsuite/mastodon'
     end
     
-          # Remembers the given resource by setting up a cookie
-      def remember_me(resource)
-        return if request.env['devise.skip_storage']
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.remember_me!
-        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
+    input = ARGV.shift() || usage()
+    
+                  # Remove it form the session objects so freeup
+              sessions.delete(s[:session])
+    
+    ip   = ARGV.shift() || exit
+port = ARGV.shift() || 31337
+    
+    #Rjb::load('.', jvmargs=[])
+Rjb::load('#{ENV['JAVA_HOME']}/lib/tools.jar:.',jvmargs=[])
+    
+    outputJar = 'output.jar'
+    
+          opts.on('--unix-newlines', 'Use Unix-style newlines in written files.',
+                                 ('Always true on Unix.' unless Sass::Util.windows?)) do
+        @options[:unix_newlines] = true if Sass::Util.windows?
+      end
+    end
+    
+          # Returns the time the given Sass file was last modified.
+      #
+      # If the given file has been deleted or the time can't be accessed
+      # for some other reason, this should return nil.
+      #
+      # @param uri [String] The URI of the file to check.
+      #   Comes from a `:filename` option set on an engine returned by this importer.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` currently being checked.
+      # @return [Time, nil]
+      def mtime(uri, options)
+        Sass::Util.abstract(self)
       end
     
-        def http_auth
-      self.status = 401
-      self.headers['WWW-Authenticate'] = %(Basic realm=#{Devise.http_authentication_realm.inspect}) if http_auth_header?
-      self.content_type = request.format.to_s
-      self.response_body = http_auth_body
+      config = Merb::Plugins.config[:sass] || Merb::Plugins.config['sass'] || {}
+    
+        # Starts the read-eval-print loop.
+    def run
+      environment = Environment.new
+      @line = 0
+      loop do
+        @line += 1
+        unless (text = Readline.readline('>> '))
+          puts
+          return
+        end
+    
+    class SinatraStaticServer < Sinatra::Base
+    
+    module Jekyll
+    
+        def sizes
+      attrs = 'width='#{@sizes[0]}'' if @sizes[0]
+      attrs += ' height='#{@sizes[1]}'' if @sizes[1]
+      attrs
     end
+  end
+end
     
-    puts 'Validating #{links.size} links...'
-    
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
+          instance.run_paperclip_callbacks(:post_process) do
+        instance.run_paperclip_callbacks(:'#{name}_post_process') do
+          if !@options[:check_validity_before_processing] || !instance.errors.any?
+            post_process_styles(*style_args)
+          end
+        end
       end
-      super
     end
     
-        def html_output_for(script_url, code)
-      code = CGI.escapeHTML code
-      <<-HTML
-<div><script src='#{script_url}'></script>
-<noscript><pre><code>#{code}</code></pre></noscript></div>
-      HTML
-    end
+            def responds?
+          methods = @subject.instance_methods.map(&:to_s)
+          methods.include?('#{@attachment_name}') &&
+            methods.include?('#{@attachment_name}=') &&
+            methods.include?('#{@attachment_name}?')
+        end
     
-          unless file.file?
-        return 'File #{file} could not be found'
+    module Paperclip
+  # Provides helper methods that can be used in migrations.
+  module Schema
+    COLUMNS = {:file_name    => :string,
+               :content_type => :string,
+               :file_size    => :integer,
+               :updated_at   => :datetime}
+    
+              add_offense(node)
+        end
+    
+            def comparison?(node)
+          simple_comparison?(node) || nested_comparison?(node)
+        end
       end
+    end
+  end
+end
+
     
-        def render(context)
-      file_dir = (context.registers[:site].source || 'source')
-      file_path = Pathname.new(file_dir).expand_path
-      file = file_path + @file
-    
-          attr_reader :agent
+              annotated_source.each_line do |source_line|
+            if source_line =~ ANNOTATION_PATTERN
+              annotations << [source.size, source_line]
+            else
+              source << source_line
+            end
+          end
