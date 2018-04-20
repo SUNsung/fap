@@ -1,94 +1,87 @@
 
         
-                with server as address:
-            sock = socket.socket()
-            sock.connect(address)
-            time.sleep(1.5)
-            sock.sendall(b'hehehe, not received')
-            sock.close()
+        
+@keras_test
+def test_conv1d_legacy_interface():
+    old_layer = keras.layers.Convolution1D(5,
+                                           filter_length=3,
+                                           input_dim=3,
+                                           input_length=4,
+                                           name='conv')
+    new_layer = keras.layers.Conv1D(5, 3, name='conv', input_shape=(4, 3))
+    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
     
-        # Redirection.
-    300: ('multiple_choices',),
-    301: ('moved_permanently', 'moved', '\\o-'),
-    302: ('found',),
-    303: ('see_other', 'other'),
-    304: ('not_modified',),
-    305: ('use_proxy',),
-    306: ('switch_proxy',),
-    307: ('temporary_redirect', 'temporary_moved', 'temporary'),
-    308: ('permanent_redirect',
-          'resume_incomplete', 'resume',),  # These 2 to be removed in 3.0
+        # test fit
+    out = model.fit(None,
+                    output_a_np, epochs=1, batch_size=10)
+    out = model.fit(None,
+                    output_a_np, epochs=1, batch_size=10)
     
-        kwargs = {
-        var: proxy
-    }
-    scheme = urlparse(url).scheme
-    with override_environ(**kwargs):
-        proxies = session.rebuild_proxies(prep, {})
-        assert scheme in proxies
-        assert proxies[scheme] == proxy
+    from keras.models import Sequential
+from keras.engine.training import _weighted_masked_objective
+from keras.layers import TimeDistributed, Masking, Dense
+from keras.utils.test_utils import keras_test
+from keras import losses
+from keras import backend as K
+    
+    print('Build model...')
     
     
-def best_server():
-    # TODO: find and use the best server
-    # teredo.remlab.net / teredo - debian.remlab.net(Germany)
-    # teredo.ngix.ne.kr(South Korea)
-    # teredo.managemydedi.com(USA, Chicago)
-    # teredo.trex.fi(Finland)
-    # win8.ipv6.microsoft.com(The Teredo server hidden in Windows RT 8.1) of which Windows 7 has no knowledge.
-    # win10.ipv6.microsoft.com
-    return 'teredo.remlab.net'
+@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
+def test_glorot_uniform(tensor_shape):
+    fan_in, fan_out = initializers._compute_fans(tensor_shape)
+    scale = np.sqrt(6. / (fan_in + fan_out))
+    _runner(initializers.glorot_uniform(), tensor_shape,
+            target_mean=0., target_max=scale, target_min=-scale)
     
-    if hasattr(ctypes, 'windll'):
-    WSAStringToAddressA = ctypes.windll.ws2_32.WSAStringToAddressA
-    WSAAddressToStringA = ctypes.windll.ws2_32.WSAAddressToStringA
-else:
-    def not_windows():
-        raise SystemError(
-            'Invalid platform. ctypes.windll must be available.'
-        )
-    WSAStringToAddressA = not_windows
-    WSAAddressToStringA = not_windows
     
-    	# The current Token when an error occurred.  Since not all streams
-	# can retrieve the ith Token, we have to track the Token object.
-	# For parsers.  Even when it's a tree parser, token might be set.
-        self.token = None
+@keras_test
+def test_unit_norm():
+    unit_norm_instance = constraints.unit_norm()
+    normalized = unit_norm_instance(K.variable(get_example_array()))
+    norm_of_normalized = np.sqrt(np.sum(K.eval(normalized) ** 2, axis=0))
+    # In the unit norm constraint, it should be equal to 1.
+    difference = norm_of_normalized - 1.
+    largest_difference = np.max(np.abs(difference))
+    assert(np.abs(largest_difference) < 10e-5)
     
-    A Lexer emits Token objects which are usually buffered by a TokenStream. A
-Parser can build a Tree, if the output=AST option has been set in the grammar.
+        # Test with Sequential API
+    model = Sequential([
+        layers.Dense(16, input_shape=(x_train.shape[-1],), activation='relu'),
+        layers.Dense(8),
+        layers.Activation('relu'),
+        layers.Dense(num_classes, activation='softmax')
+    ])
+    model.compile(loss='categorical_crossentropy',
+                  optimizer='rmsprop',
+                  metrics=['accuracy'])
+    model.summary()
+    history = model.fit(x_train, y_train, epochs=15, batch_size=16,
+                        validation_data=(x_test, y_test),
+                        verbose=0)
+    assert(history.history['val_acc'][-1] > 0.8)
+    config = model.get_config()
+    model = Sequential.from_config(config)
     
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licence]
+    for j in range(16):
+    new_pos = seq.predict(track[np.newaxis, ::, ::, ::, ::])
+    new = new_pos[::, -1, ::, ::, ::]
+    track = np.concatenate((track, new), axis=0)
     
-                    if c >= self.min[s] and c <= self.max[s]:
-                    # move to next state
-                    snext = self.transition[s][c-self.min[s]]
-                    #print 'in range, next state = %d' % snext
+        def __init__(self, size):
+        self.size = size
+        self.table = [[] for _ in range(self.size)]
+    
+        def deal_card(self):
+        try:
+            card = self.cards[self.deal_index]
+            card.is_available = False
+            self.deal_index += 1
+        except IndexError:
+            return None
+        return card
+    
+        def __init__(self, person_ids, lookup):
+        self.lookup = lookup
+        self.person_ids = person_ids
+        self.visited_ids = set()
