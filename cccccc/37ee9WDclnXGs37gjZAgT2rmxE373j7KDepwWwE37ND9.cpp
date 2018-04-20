@@ -1,136 +1,144 @@
 
         
-        // CodeGenerator implementation which generates a C++ source file and
-// header.  If you create your own protocol compiler binary and you want
-// it to support C++ output, you can do so by registering an instance of this
-// CodeGenerator with the CommandLineInterface in your main() function.
-class LIBPROTOC_EXPORT CppGenerator : public CodeGenerator {
+        // Sent by the renderer when the draggable regions are updated.
+IPC_MESSAGE_ROUTED1(ShellViewHostMsg_UpdateDraggableRegions,
+                    std::vector<extensions::DraggableRegion> /* regions */)
+    
+    class Base {
  public:
-  CppGenerator();
-  ~CppGenerator();
+  Base(int id,
+       const base::WeakPtr<ObjectManager>& manager,
+       const base::DictionaryValue& option,
+       const std::string& extension_id);
+  virtual ~Base();
     }
     
-    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
-  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
-  // Identifiers can't start with digits
-  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
-  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
+    #include 'content/nw/src/api/clipboard/clipboard.h'
+    
+    class Clipboard : public Base {
+ public:
+  Clipboard(int id,
+            const base::WeakPtr<DispatcherHost>& dispatcher_host,
+            const base::DictionaryValue& option);
+  ~Clipboard() override;
+    }
+    
+    void DispatcherHost::OnCallStaticMethod(
+    const std::string& type,
+    const std::string& method,
+    const base::ListValue& arguments) {
+  DLOG(INFO) << 'OnCallStaticMethod: '
+             << ' type:' << type
+             << ' method:' << method
+             << ' arguments:' << arguments;
+    }
+    
+    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardReadAvailableTypesFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    #include <set>
+    
+    #include <chrono>
+#include <thread>
+#include <vector>
+    
+    #include <utility>
+    
+    static void sigint_handler(int x) {
+  gpr_atm_no_barrier_store(&grpc::testing::interop::g_got_sigint, true);
 }
     
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/stubs/strutil.h>
+      // Create a QpsGauge with name 'name'. is_present is set to true if the Gauge
+  // is already present in the map.
+  // NOTE: CreateQpsGauge can be called anytime (i.e before or after calling
+  // StartServer).
+  std::shared_ptr<QpsGauge> CreateQpsGauge(const grpc::string& name,
+                                           bool* already_present);
     
-     private:
-  const FileDescriptor* file_;
+    #ifndef GRPC_TEST_CPP_UTIL_SUBPROCESS_H
+#define GRPC_TEST_CPP_UTIL_SUBPROCESS_H
     
-    #include <string>
     
-    TEST(JavaDocCommentTest, Escaping) {
-  EXPECT_EQ('foo /&#42; bar *&#47; baz', EscapeJavadoc('foo /* bar */ baz'));
-  EXPECT_EQ('foo /&#42;&#47; baz', EscapeJavadoc('foo /*/ baz'));
-  EXPECT_EQ('{&#64;foo}', EscapeJavadoc('{@foo}'));
-  EXPECT_EQ('&lt;i&gt;&amp;&lt;/i&gt;', EscapeJavadoc('<i>&</i>'));
-  EXPECT_EQ('foo&#92;u1234bar', EscapeJavadoc('foo\\u1234bar'));
-  EXPECT_EQ('&#64;deprecated', EscapeJavadoc('@deprecated'));
-}
+    {
+    {} // namespace asio
+} // namespace boost
     
-        // return a reasonable initial learning rate based on the initial mbsize
-    double SearchForBestLearnRate(ComputationNetworkPtr net,
-                                  ComputationNetworkPtr refNet,
-                                  const ComputationNodeBasePtr& refNode, const int epochNumber,
-                                  const double curLearnRate,
-                                  IDataReader* trainSetDataReader,
-                                  const std::vector<ComputationNodeBasePtr>& featureNodes,
-                                  const std::vector<ComputationNodeBasePtr>& labelNodes,
-                                  const std::vector<ComputationNodeBasePtr>& criterionNodes,
-                                  const std::vector<ComputationNodeBasePtr>& evaluationNodes,
-                                  StreamMinibatchInputs* inputMatrices,
-                                  const std::list<ComputationNodeBasePtr>& learnableNodes,
-                                  std::list<Matrix<ElemType>>& smoothedGradients, std::vector<double> smoothedCounts,
-                                  const bool learnRateInitialized,
-                                  const double largestPrevLearnRatePerSample);
     
-    enum LabelKind
-{
-    labelNone = 0,       // no labels to worry about
-    labelCategory = 1,   // category labels, creates mapping tables
-    labelRegression = 2, // regression labels
-    labelOther = 3,      // some other type of label
+    {private:
+  CompletionCondition completion_condition_;
 };
     
-        // ProcessPassNDLScript - Process a pass of the NDL script
-    // script - NDL Script to process
-    // ndlPass - complete processing for this pass, all passes if ndlPassAll
-    // skipThrough - for iterative processing, skip through this node in the script (used for in-line MEL processing)
-    // fullValidate - validate as a complete network? (false if this might be a snippet of a full network)
-    // returns: last NDL node processed
-    NDLNode<ElemType>* ProcessPassNDLScript(NDLScript<ElemType>* script, NDLPass ndlPass, NDLNode<ElemType>* skipThrough = nullptr, bool fullValidate = false, const std::wstring& dumpFileName = L'')
-    {
-        if (ndlPass == ndlPassFinal)
-        {
-            // make sure to clear the caches so we pick up the new nodes
-            m_net->InvalidateCompiledNetwork();
-            // if requested then dump the nodes
-            // Note: This happens on the invalidated network.
-            if (dumpFileName != L'')
-                m_net->DumpAllNodesToFile(false, true, dumpFileName);
-        }
-        NDLNodeEvaluatorImpl<ElemType> ndlEvaluator(m_net);
-        NDLNode<ElemType>* lastNode = script->Evaluate(ndlEvaluator, L'', ndlPass, skipThrough);
-        if (ndlPass == ndlPassResolve)
-            SetOutputNodes(script);
-        return lastNode;
-    }
+    #endif // BOOST_ASIO_DETAIL_FUNCTION_HPP
+
     
-    namespace Microsoft { namespace MSR { namespace BS {
-    }
-    }
-    }
+    #include <boost/asio/detail/push_options.hpp>
     
-    // Trim - trim white space off the start and end of the string
-// str - string to trim
-// NOTE: if the entire string is empty, then the string will be set to an empty string
-void Trim(std::string& str)
+    int dev_poll_reactor::register_descriptor(socket_type, per_descriptor_data&)
 {
-    auto found = str.find_first_not_of(' \t');
-    if (found == npos)
-    {
-        str.erase(0);
-        return;
-    }
-    str.erase(0, found);
-    found = str.find_last_not_of(' \t');
-    if (found != npos)
-        str.erase(found + 1);
+  return 0;
 }
     
-    public:
-    static bool GetTracingFlag()
-    {
-        return GetStaticInstance().m_tracingFlag;
+    size_t LogTest::initial_offset_record_sizes_[] =
+    {10000,  // Two sizable records in first block
+     10000,
+     2 * log::kBlockSize - 1000,  // Span three blocks
+     1,
+     13716,  // Consume all but two bytes of block 3.
+     log::kBlockSize - kHeaderSize, // Consume the entirety of block 4.
+    };
+    
+    #include 'db/version_edit.h'
+#include 'util/testharness.h'
+    
+      // Add an element that should not be reflected in the iterator.
+  ASSERT_OK(db->Put(write_options, '25', 'cd'));
+    
+    
+    {}  // namespace leveldb
+    
+    // A very simple random number generator.  Not especially good at
+// generating truly random bits, but good enough for our needs in this
+// package.
+class Random {
+ private:
+  uint32_t seed_;
+ public:
+  explicit Random(uint32_t s) : seed_(s & 0x7fffffffu) {
+    // Avoid bad seeds.
+    if (seed_ == 0 || seed_ == 2147483647L) {
+      seed_ = 1;
+    }
+  }
+  uint32_t Next() {
+    static const uint32_t M = 2147483647L;   // 2^31-1
+    static const uint64_t A = 16807;  // bits 14, 8, 7, 5, 2, 1, 0
+    // We are computing
+    //       seed_ = (seed_ * A) % M,    where M = 2^31-1
+    //
+    // seed_ must not be zero or M, or else all subsequent computed values
+    // will be zero or M respectively.  For all other values, seed_ will end
+    // up cycling through every number in [1,M-1]
+    uint64_t product = seed_ * A;
+    }
     }
     
-        bool empty() const
-    {
-#ifndef NONUMLATTICEMMI // TODO:set NUM lattice to null so as to save memory
-        if (numlattices.empty() ^ denlattices.empty())
-            RuntimeError('latticesource: numerator and denominator lattices must be either both empty or both not empty');
-#endif
-        return denlattices.empty();
+    TEST(FormatTest, InternalKeyShortestSuccessor) {
+  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
+            ShortSuccessor(IKey('foo', 100, kTypeValue)));
+  ASSERT_EQ(IKey('\xff\xff', 100, kTypeValue),
+            ShortSuccessor(IKey('\xff\xff', 100, kTypeValue)));
+}
+    
+        const size_t avail = kBlockSize - block_offset_ - kHeaderSize;
+    const size_t fragment_length = (left < avail) ? left : avail;
+    
+    class Writer {
+ public:
+  // Create a writer that will append data to '*dest'.
+  // '*dest' must be initially empty.
+  // '*dest' must remain live while this Writer is in use.
+  explicit Writer(WritableFile* dest);
     }
