@@ -1,117 +1,149 @@
 
         
-        def envygeeks(url)
-  return url if url.end_with?(FORWARD_SLASH) || url == FORWARD_SLASH
+        class TestResponseTest < ActiveSupport::TestCase
+  def assert_response_code_range(range, predicate)
+    response = ActionDispatch::TestResponse.new
+    (0..599).each do |status|
+      response.status = status
+      assert_equal range.include?(status), response.send(predicate),
+                   'ActionDispatch::TestResponse.new(#{status}).#{predicate}'
+    end
+  end
     
-          private
-      def grouped_array(groups)
-        groups.each_with_object([]) do |item, array|
-          array << {
-            'name'  => item.first,
-            'items' => item.last,
-            'size'  => item.last.size,
-          }
-        end
+      class MyController < ActionController::Metal
+    use BlockMiddleware do |config|
+      config.configurable_message = 'Configured by block.'
+    end
+    use MyMiddleware
+    middleware.insert_before MyMiddleware, ExclaimerMiddleware
+    
+    ActionMailer::LogSubscriber.attach_to :action_mailer
+
+    
+        module ClassMethods
+      # Provide the parameters to the mailer in order to use them in the instance methods and callbacks.
+      #
+      #   InvitationsMailer.with(inviter: person_a, invitee: person_b).account_invitation.deliver_later
+      #
+      # See Parameterized documentation for full example.
+      def with(params)
+        ActionMailer::Parameterized::Mailer.new(self, params)
       end
+    end
+    
+          included do
+        class_attribute :_mailer_class
+        setup :initialize_test_deliveries
+        setup :set_expected_mail
+        teardown :restore_test_deliveries
+        ActiveSupport.run_load_hooks(:action_mailer_test_case, self)
+      end
+    
+            def application_mailer_file_name
+          @_application_mailer_file_name ||= if mountable_engine?
+            'app/mailers/#{namespaced_path}/application_mailer.rb'
+          else
+            'app/mailers/application_mailer.rb'
+          end
+        end
     end
   end
 end
 
     
-          def warnings
-        @template.warnings
-      end
-    
-        # Public: Setup the plugin search path
-    #
-    # Returns an Array of plugin search paths
-    def plugins_path
-      if site.config['plugins_dir'].eql? Jekyll::Configuration::DEFAULTS['plugins_dir']
-        [site.in_source_dir(site.config['plugins_dir'])]
-      else
-        Array(site.config['plugins_dir']).map { |d| File.expand_path(d) }
-      end
+      test 'non registered delivery methods raises errors' do
+    DeliveryMailer.delivery_method = :unknown
+    error = assert_raise RuntimeError do
+      DeliveryMailer.welcome.deliver_now
     end
-    
-      def preview_url
-    if object.needs_redownload?
-      media_proxy_url(object.id, :small)
-    else
-      full_asset_url(object.file.url(:small))
-    end
+    assert_equal 'Invalid delivery method :unknown', error.message
   end
     
-      def id
-    ActivityPub::TagManager.instance.uri_for(object)
+      teardown do
+    I18n.locale = I18n.default_locale
   end
     
-      describe 'PUT #update' do
-    it 'updates notifications settings' do
-      user.settings['notification_emails'] = user.settings['notification_emails'].merge('follow' => false)
-      user.settings['interactions'] = user.settings['interactions'].merge('must_be_follower' => true)
+      # POST /resource/password
+  def create
+    self.resource = resource_class.send_reset_password_instructions(resource_params)
+    yield resource if block_given?
     
-    process_args
-list_login_items_for_app $app_path
+      # GET /resource/sign_in
+  def new
+    self.resource = resource_class.new(sign_in_params)
+    clean_up_passwords(resource)
+    yield resource if block_given?
+    respond_with(resource, serialize_options(resource))
+  end
+    
+      # GET /resource/unlock/new
+  def new
+    self.resource = resource_class.new
+  end
+    
+        if record.timedout?(last_request_at) &&
+        !env['devise.skip_timeout'] &&
+        !proxy.remember_me_is_active?(record)
+      Devise.sign_out_all_scopes ? proxy.sign_out : proxy.sign_out(scope)
+      throw :warden, scope: scope, message: :timeout
+    end
+    
+        def initialize
+      @pages = {}
+    end
+    
+              entries << [name, node['id'], type]
+        end
+    
+      def supported_object_type?
+    SUPPORTED_TYPES.include?(@object['type'])
+  end
+    
+                sequence_base := (
+              'x' ||
+              -- Take the first two bytes (four hex characters)
+              substr(
+                -- Of the MD5 hash of the data we documented
+                md5(table_name ||
+                  '#{SecureRandom.hex(16)}' ||
+                  time_part::text
+                ),
+                1, 4
+              )
+            -- And turn it into a bigint
+            )::bit(16)::bigint;
+    
+            expect_any_instance_of(ActivityPub::LinkedDataSignature).to receive(:verify_account!).and_return(actor)
+        expect(ActivityPub::Activity).to receive(:factory).with(instance_of(Hash), actor, instance_of(Hash))
+    
+      def initial_state_params
+    {
+      settings: {},
+      token: current_session&.token,
+    }
+  end
+end
 
     
-        # Returns an array of addresses ranges
-    #
-    # @return [Array<String>]
-    def addresses
-      (boundary || '').split('\n')
-    end
+    RSpec.describe TagsController, type: :controller do
+  render_views
     
-              fd.write(res)
-        end
-      end
-      break
-    rescue ::Timeout::Error
-      $stderr.puts '#{prefix}#{site} timed out'
-    rescue ::Interrupt
-      raise $!
-    rescue ::Exception => e
-      $stderr.puts '#{prefix}#{site} #{e.class} #{e}'
-    end
-  end
+      describe 'PUT #update' do
+    it 'updates the user record' do
+      put :update, params: { user: { locale: 'en', filtered_languages: ['es', 'fr', ''] } }
     
-              s[:pass] = ''
-          return
+              if @address.update_attributes(address_params)
+            respond_with(@address, default_template: :show)
+          else
+            invalid_resource!(@address)
+          end
         end
     
-    
-    
-            def expected_attachment
-          'Expected #{@attachment_name}:\n'
+            def update
+          authorize! :update, stock_location
+          if stock_location.update_attributes(stock_location_params)
+            respond_with(stock_location, status: 200, default_template: :show)
+          else
+            invalid_resource!(stock_location)
+          end
         end
-    
-            def failure_message
-          'Attachment #{@attachment_name} should be required'
-        end
-    
-      context 'called with two styles' do
-    it 'applies to alternating sides' do
-      rule = 'border-style: dotted dashed'
-    
-          expect('.all-buttons-focus').to have_ruleset(ruleset)
-    end
-  end
-    
-      context 'called with arguments (1, $ratio: $golden-ratio)' do
-    it 'output the first value from the golden ratio scale' do
-      expect('.one-golden-ratio').to have_rule('font-size: 1.618em')
-    end
-  end
-    
-      context 'called with two sizes' do
-    it 'applies to alternating sides' do
-      rule = 'padding: 2px 3px'
-    
-          expect('.position-implied-left').to have_ruleset(ruleset)
-    end
-  end
-    
-      context 'expands hover text inputs' do
-    it 'finds selectors' do
-      list = @inputs_list.map { |input| '#{input}:hover' }
-      list = list.join(', ')
-      ruleset = 'content: #{list};'
