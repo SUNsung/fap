@@ -1,53 +1,72 @@
 
         
-            def mapper(self, _, line):
-        '''Parse each log line, extract and transform relevant lines.
+            app.testing = False
+    stream = StringIO()
+    rv = client.get('/', errors_stream=stream)
+    assert rv.status_code == 500
+    assert rv.data
+    err = stream.getvalue()
+    assert 'Exception on / [GET]' in err
+    assert 'Exception: test' in err
+
     
-        def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
     
-        @mock.patch('certbot.display.enhancements.util')
-    def test_redirect(self, mock_util):
-        mock_util().menu.return_value = (display_util.OK, 1)
-        self.assertTrue(self._call('redirect'))
+def test_before_render_template():
+    app = flask.Flask(__name__)
     
-            Returns:
-            A Future representing the given call.
+    parser = argparse.ArgumentParser()
+parser.add_argument('--batch_size', default=100, type=int, help='batch size')
+parser.add_argument('--train_steps', default=1000, type=int,
+                    help='number of training steps')
+    
+        # All our inputs are feature columns of type numeric_column
+    feature_columns = [
+        tf.feature_column.numeric_column(feature_names[0]),
+        tf.feature_column.numeric_column(feature_names[1]),
+        tf.feature_column.numeric_column(feature_names[2]),
+        tf.feature_column.numeric_column(feature_names[3])
+    ]
+    
+      tf.logging.info('Generating IMDB documents...')
+    
+    import graphs
+import train_utils
+    
+      task_params = utils.Foo(num_actions=4, step_size=4, num_steps=0,
+                          batch_size=32, room_seed=0, base_class='Building',
+                          task='mapping', n_ori=6, data_augment=data_augment,
+                          output_transform_to_global_map=False,
+                          output_canonical_map=False,
+                          output_incremental_transform=False,
+                          output_free_space=False, move_type='shortest_path',
+                          toy_problem=0)
+    
+    
+    def predict(self, input):
         '''
-        raise NotImplementedError()
+        From the input stream, predict what alternative will succeed
+	using this DFA (representing the covering regular approximation
+	to the underlying CFL).  Return an alternative number 1..n.  Throw
+	 an exception upon error.
+	'''
+        mark = input.mark()
+        s = 0 # we always start at s0
+        try:
+            for _ in xrange(50000):
+                #print '***Current state = %d' % s
+                
+                specialState = self.special[s]
+                if specialState >= 0:
+                    #print 'is special'
+                    s = self.specialStateTransition(specialState, input)
+                    if s == -1:
+                        self.noViableAlt(s, input)
+                        return 0
+                    input.consume()
+                    continue
     
-      return {
-    'filepath': current_filepath,
-    'line_num': line + 1,
-    'column_num': column + 1,
-    'working_dir': working_dir,
-    'file_data': vimsupport.GetUnsavedAndSpecifiedBufferData( current_buffer,
-                                                              current_filepath )
-  }
-    
-    
-class EventNotification( BaseRequest ):
-  def __init__( self, event_name, buffer_number = None, extra_data = None ):
-    super( EventNotification, self ).__init__()
-    self._event_name = event_name
-    self._buffer_number = buffer_number
-    self._extra_data = extra_data
-    self._response_future = None
-    self._cached_response = None
-    
-    
-  def Start( self ):
-    request_data = BuildRequestData()
-    if self._extra_data:
-      request_data.update( self._extra_data )
-    with HandleServerException( display = False ):
-      self._response = self.PostDataToHandler( request_data, 'debug_info' )
-    
-    
-def RegexNotFiltered_test():
-  opts = _JavaFilter( { 'regex' : 'taco' } )
-  f = _CreateFilterForTypes( opts, [ 'cs' ] )
+    \note Please be warned that the line numbers in the API documentation do not
+match the real locations in the source code of the package. This is an
+unintended artifact of doxygen, which I could only convince to use the
+correct module names by concatenating all files from the package into a single
+module file...
