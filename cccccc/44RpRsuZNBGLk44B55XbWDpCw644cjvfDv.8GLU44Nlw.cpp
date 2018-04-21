@@ -1,308 +1,137 @@
 
         
-        #ifndef incl_HPHP_WORKLOAD_STATS_H_
-#define incl_HPHP_WORKLOAD_STATS_H_
+        namespace nw {
+    }
     
-      /*
-   * Return true iff this Vunit needs register allocation before it can be
-   * emitted, either because it uses virtual registers or contains instructions
-   * that must be lowered by xls.
-   */
-  bool needsRegAlloc() const;
-    
-    /*
- * Passes.
- */
-void allocateRegisters(Vunit&, const Abi&);
-void annotateSFUses(Vunit&);
-void fuseBranches(Vunit&);
-void optimizeCopies(Vunit&, const Abi&);
-void optimizeExits(Vunit&);
-void optimizeJmps(Vunit&);
-void optimizePhis(Vunit&);
-void removeDeadCode(Vunit&);
-void removeTrivialNops(Vunit&);
-void reuseImmq(Vunit&);
-template<typename Folder> void foldImms(Vunit&);
-void simplify(Vunit&);
-    
-    
-    {}
-    
-    #ifndef incl_HPHP_JIT_TC_PROLOGUE_H_
-#define incl_HPHP_JIT_TC_PROLOGUE_H_
-    
-      /**
-   * Opens a process with given cwd and environment variables.
-   *
-   * The parameters 'created' and 'desired' describe the pipes that need to
-   * be setup for the child process: 'created' contains created fd for child,
-   * and 'desired' contains desired fd in child.
-   *
-   * The parameter env contains strings of the form <name>=<content>.
-   */
-  static pid_t proc_open(const char *cmd, const std::vector<int> &created,
-                         const std::vector<int> &desired,
-                         const char *cwd, const std::vector<std::string> &env);
-    
-    std::string Key1(int i) {
-  char buf[100];
-  snprintf(buf, sizeof(buf), 'my_key_%d', i);
-  return buf;
+    namespace content {
+class RenderFrameHost;
 }
     
-    size_t BlockBuilder::CurrentSizeEstimate() const {
-  return (buffer_.size() +                        // Raw data buffer
-          restarts_.size() * sizeof(uint32_t) +   // Restart array
-          sizeof(uint32_t));                      // Restart array length
+    v8::Handle<v8::Value> AllocateId(int routing_id);
+    
+    #include 'base/compiler_specific.h'
+#include 'content/nw/src/api/base/base.h'
+    
+    #include <string>
+#include <set>
+    
+    #endif //CONTENT_NW_SRC_API_EVENT_EVENT_H_
+
+    
+    #ifndef GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
+#define GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
+    
+    #endif  // GRPC_INTERNAL_COMPILER_PYTHON_PRIVATE_GENERATOR_H
+
+    
+    static void sigint_handler(int x) {
+  gpr_atm_no_barrier_store(&grpc::testing::interop::g_got_sigint, true);
 }
     
-    namespace leveldb {
-    }
     
-    std::string Histogram::ToString() const {
-  std::string r;
-  char buf[200];
-  snprintf(buf, sizeof(buf),
-           'Count: %.0f  Average: %.4f  StdDev: %.2f\n',
-           num_, Average(), StandardDeviation());
-  r.append(buf);
-  snprintf(buf, sizeof(buf),
-           'Min: %.4f  Median: %.4f  Max: %.4f\n',
-           (num_ == 0.0 ? 0.0 : min_), Median(), max_);
-  r.append(buf);
-  r.append('------------------------------------------------------\n');
-  const double mult = 100.0 / num_;
-  double sum = 0;
-  for (int b = 0; b < kNumBuckets; b++) {
-    if (buckets_[b] <= 0.0) continue;
-    sum += buckets_[b];
-    snprintf(buf, sizeof(buf),
-             '[ %7.0f, %7.0f ) %7.0f %7.3f%% %7.3f%% ',
-             ((b == 0) ? 0.0 : kBucketLimit[b-1]),      // left
-             kBucketLimit[b],                           // right
-             buckets_[b],                               // count
-             mult * buckets_[b],                        // percentage
-             mult * sum);                               // cumulative percentage
-    r.append(buf);
+    {
+    {}  // namespace testing
+}  // namespace grpc
+    
+    namespace xgboost {
+namespace common {
+TEST(CompressedIterator, Test) {
+  ASSERT_TRUE(detail::SymbolBits(256) == 8);
+  ASSERT_TRUE(detail::SymbolBits(150) == 8);
+  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
+  int num_elements = 1000;
+  int repetitions = 1000;
+  srand(9);
+    }
     }
     }
     
-      ~Writer();
     
-      virtual Status status() const { return Status::OK(); }
-    
-      inline void ParseStr(std::string *tok) {
-    while ((ch_buf = this->GetChar()) != EOF) {
-      switch (ch_buf) {
-        case '\\': *tok += this->GetChar(); break;
-        case '\'': return;
-        case '\r':
-        case '\n': LOG(FATAL)<< 'ConfigReader: unterminated string';
-        default: *tok += ch_buf;
+    {  // We have checked above that none of the sampling factors are 0, so the max
+  // sampling factors can not be 0.
+  jpg->MCU_rows = DivCeil(jpg->height, jpg->max_v_samp_factor * 8);
+  jpg->MCU_cols = DivCeil(jpg->width, jpg->max_h_samp_factor * 8);
+  // Compute the block dimensions for each component.
+  if (mode == JPEG_READ_ALL) {
+    for (size_t i = 0; i < jpg->components.size(); ++i) {
+      JPEGComponent* c = &jpg->components[i];
+      if (jpg->max_h_samp_factor % c->h_samp_factor != 0 ||
+          jpg->max_v_samp_factor % c->v_samp_factor != 0) {
+        fprintf(stderr, 'Non-integral subsampling ratios.\n');
+        jpg->error = JPEG_INVALID_SAMPLING_FACTORS;
+        return false;
       }
+      c->width_in_blocks = jpg->MCU_cols * c->h_samp_factor;
+      c->height_in_blocks = jpg->MCU_rows * c->v_samp_factor;
+      const uint64_t num_blocks =
+          static_cast<uint64_t>(c->width_in_blocks) * c->height_in_blocks;
+      if (num_blocks > (1ull << 21)) {
+        // Refuse to allocate more than 1 GB of memory for the coefficients,
+        // that is 2M blocks x 64 coeffs x 2 bytes per coeff x max 4 components.
+        // TODO(user) Add this limit to a GuetzliParams struct.
+        fprintf(stderr, 'Image too large.\n');
+        jpg->error = JPEG_IMAGE_TOO_LARGE;
+        return false;
+      }
+      c->num_blocks = static_cast<int>(num_blocks);
+      c->coeffs.resize(c->num_blocks * kDCTBlockSize);
     }
-    LOG(FATAL) << 'ConfigReader: unterminated string';
   }
-  inline void ParseStrML(std::string *tok) {
-    while ((ch_buf = this->GetChar()) != EOF) {
-      switch (ch_buf) {
-        case '\\': *tok += this->GetChar(); break;
-        case '\'': return;
-        default: *tok += ch_buf;
-      }
-    }
-    LOG(FATAL) << 'unterminated string';
-  }
-  // return newline
-  inline bool GetNextToken(std::string *tok) {
-    tok->clear();
-    bool new_line = false;
-    while (ch_buf != EOF) {
-      switch (ch_buf) {
-        case '#' : SkipLine(); new_line = true; break;
-        case '\'':
-          if (tok->length() == 0) {
-            ParseStr(tok); ch_buf = this->GetChar(); return new_line;
-          } else {
-            LOG(FATAL) << 'ConfigReader: token followed directly by string';
-          }
-        case '\'':
-          if (tok->length() == 0) {
-            ParseStrML(tok); ch_buf = this->GetChar(); return new_line;
-          } else {
-            LOG(FATAL) << 'ConfigReader: token followed directly by string';
-          }
-        case '=':
-          if (tok->length() == 0) {
-            ch_buf = this->GetChar();
-            *tok = '=';
-          }
-          return new_line;
-        case '\r':
-        case '\n':
-          if (tok->length() == 0) new_line = true;
-        case '\t':
-        case ' ' :
-          ch_buf = this->GetChar();
-          if (tok->length() != 0) return new_line;
-          break;
-        default:
-          *tok += ch_buf;
-          ch_buf = this->GetChar();
-          break;
-      }
-    }
-    if (tok->length() == 0) {
+  VERIFY_MARKER_END();
+  return true;
+}
+    
+    // Mimic libjpeg's heuristics to guess jpeg color space.
+// Requires that the jpg has 3 components.
+bool HasYCbCrColorSpace(const JPEGData& jpg) {
+  bool has_Adobe_marker = false;
+  uint8_t Adobe_transform = 0;
+  for (const std::string& app : jpg.app_data) {
+    if (static_cast<uint8_t>(app[0]) == 0xe0) {
       return true;
-    } else {
-      return false;
+    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
+      has_Adobe_marker = true;
+      Adobe_transform = app[14];
     }
   }
-};
-/*!
- * \brief an iterator use stream base, allows use all types of istream
+  if (has_Adobe_marker) {
+    return (Adobe_transform != 0);
+  }
+  const int cid0 = jpg.components[0].id;
+  const int cid1 = jpg.components[1].id;
+  const int cid2 = jpg.components[2].id;
+  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
+}
+    
+    #include 'guetzli/jpeg_data_encoder.h'
+    
+    // Definition of error codes for parsing jpeg files.
+    
+    // Builds jpeg-style Huffman lookup table from the given symbols.
+// The symbols are in order of increasing bit lengths. The number of symbols
+// with bit length n is given in counts[n] for each n >= 1.
+// Returns the size of the lookup table.
+int BuildJpegHuffmanTable(const int* counts, const int* symbols,
+                          HuffmanTableEntry* lut);
+    
+    #include <stdint.h>
+#include <vector>
+    
+    #include 'boost/function.hpp'
+    
+      public:
+    template<typename T>
+    T* Service() {
+        if (m_publicservices.end() != m_publicservices.find(T::ServiceName()))
+            return (T*)m_publicservices[T::ServiceName()];
+    }
+    
+    
+/*
+ * ServiceBase.h
+ *
+ *  Created on: 2013-6-20
+ *      Author: yerungui
  */
-class ConfigStreamReader: public ConfigReaderBase {
- public:
-  /*!
-   * \brief constructor
-   * \param fin istream input stream
-   */
-  explicit ConfigStreamReader(std::istream &fin) : fin(fin) {}
     
-    template<typename IndexType>
-class DensifyParser : public dmlc::Parser<IndexType> {
- public:
-  DensifyParser(dmlc::Parser<IndexType>* parser, uint32_t num_col)
-      : parser_(parser), num_col_(num_col) {
-  }
-    }
-    
-      // Returns the combined score of the output image in the last Compare() call
-  // (or the baseline image, if Compare() was not called yet), based on output
-  // size and the similarity metric.
-  virtual double ScoreOutputSize(int size) const = 0;
-    
-    void OutputImageComponent::ToFloatPixels(float* out, int stride) const {
-  assert(factor_x_ == 1);
-  assert(factor_y_ == 1);
-  for (int block_y = 0; block_y < height_in_blocks_; ++block_y) {
-    for (int block_x = 0; block_x < width_in_blocks_; ++block_x) {
-      coeff_t block[kDCTBlockSize];
-      GetCoeffBlock(block_x, block_y, block);
-      double blockd[kDCTBlockSize];
-      for (int k = 0; k < kDCTBlockSize; ++k) {
-        blockd[k] = block[k];
-      }
-      ComputeBlockIDCTDouble(blockd);
-      for (int iy = 0; iy < 8; ++iy) {
-        for (int ix = 0; ix < 8; ++ix) {
-          int y = block_y * 8 + iy;
-          int x = block_x * 8 + ix;
-          if (y >= height_ || x >= width_) continue;
-          out[(y * width_ + x) * stride] = static_cast<float>(blockd[8 * iy + ix] + 128.0);
-        }
-      }
-    }
-  }
-}
-    
-    inline void ColorTransformYCbCrToRGB(uint8_t* pixel) {
-  int y  = pixel[0];
-  int cb = pixel[1];
-  int cr = pixel[2];
-  pixel[0] = kRangeLimit[y + kCrToRedTable[cr]];
-  pixel[1] = kRangeLimit[y +
-                         ((kCrToGreenTable[cr] + kCbToGreenTable[cb]) >> 16)];
-  pixel[2] = kRangeLimit[y + kCbToBlueTable[cb]];
-}
-    
-    
-    {
-    {
-    {      // Add back the last sentinel node.
-      tree[j_end + 1] = sentinel;
-    }
-    if (SetDepth(static_cast<int>(2 * n - 1), &tree[0], depth, tree_limit)) {
-      /* We need to pack the Huffman tree in tree_limit bits. If this was not
-         successful, add fake entities to the lowest values and retry. */
-      break;
-    }
-  }
-}
-    
-    
-    {}  // namespace guetzli
-    
-    
-    {}  // namespace guetzli
-    
-    #include <cmath>
-    
-      tmp0 = in[4 * stride];
-  tmp1 = kIDCTMatrix[ 4] * tmp0;
-  out[0] += tmp1;
-  out[1] -= tmp1;
-  out[2] -= tmp1;
-  out[3] += tmp1;
-  out[4] += tmp1;
-  out[5] -= tmp1;
-  out[6] -= tmp1;
-  out[7] += tmp1;
-    
-    // Parses the jpeg stream contained in data[*pos ... len) and fills in *jpg with
-// the parsed information.
-// If mode is JPEG_READ_HEADER, it fills in only the image dimensions in *jpg.
-// Returns false if the data is not valid jpeg, or if it contains an unsupported
-// jpeg feature.
-bool ReadJpeg(const uint8_t* data, const size_t len, JpegReadMode mode,
-              JPEGData* jpg);
-// string variant
-bool ReadJpeg(const std::string& data, JpegReadMode mode,
-              JPEGData* jpg);
-    
-    enum JPEGReadError {
-  JPEG_OK = 0,
-  JPEG_SOI_NOT_FOUND,
-  JPEG_SOF_NOT_FOUND,
-  JPEG_UNEXPECTED_EOF,
-  JPEG_MARKER_BYTE_NOT_FOUND,
-  JPEG_UNSUPPORTED_MARKER,
-  JPEG_WRONG_MARKER_SIZE,
-  JPEG_INVALID_PRECISION,
-  JPEG_INVALID_WIDTH,
-  JPEG_INVALID_HEIGHT,
-  JPEG_INVALID_NUMCOMP,
-  JPEG_INVALID_SAMP_FACTOR,
-  JPEG_INVALID_START_OF_SCAN,
-  JPEG_INVALID_END_OF_SCAN,
-  JPEG_INVALID_SCAN_BIT_POSITION,
-  JPEG_INVALID_COMPS_IN_SCAN,
-  JPEG_INVALID_HUFFMAN_INDEX,
-  JPEG_INVALID_QUANT_TBL_INDEX,
-  JPEG_INVALID_QUANT_VAL,
-  JPEG_INVALID_MARKER_LEN,
-  JPEG_INVALID_SAMPLING_FACTORS,
-  JPEG_INVALID_HUFFMAN_CODE,
-  JPEG_INVALID_SYMBOL,
-  JPEG_NON_REPRESENTABLE_DC_COEFF,
-  JPEG_NON_REPRESENTABLE_AC_COEFF,
-  JPEG_INVALID_SCAN,
-  JPEG_OVERLAPPING_SCANS,
-  JPEG_INVALID_SCAN_ORDER,
-  JPEG_EXTRA_ZERO_RUN,
-  JPEG_DUPLICATE_DRI,
-  JPEG_DUPLICATE_SOF,
-  JPEG_WRONG_RESTART_MARKER,
-  JPEG_DUPLICATE_COMPONENT_ID,
-  JPEG_COMPONENT_NOT_FOUND,
-  JPEG_HUFFMAN_TABLE_NOT_FOUND,
-  JPEG_HUFFMAN_TABLE_ERROR,
-  JPEG_QUANT_TABLE_NOT_FOUND,
-  JPEG_EMPTY_DHT,
-  JPEG_EMPTY_DQT,
-  JPEG_OUT_OF_BAND_COEFF,
-  JPEG_EOB_RUN_TOO_LONG,
-  JPEG_IMAGE_TOO_LARGE,
-};
+    #endif
