@@ -1,57 +1,86 @@
 
         
-        def test_dir(*subdirs)
-  File.join(TEST_DIR, *subdirs)
-end
-    
-    MODE = ARGV.first || 'cpu'
-PROF_OUTPUT_FILE = File.expand_path('../tmp/stackprof-#{MODE}-#{Time.now.strftime('%Y%m%d%H%M')}.dump', __dir__)
-    
-    config = File.expand_path '../lib/jekyll/mime.types', __dir__
-    
-        # --
-    # Check if an entry matches a specific pattern and return true,false.
-    # Returns true if path matches against any glob pattern.
-    # --
-    def glob_include?(enum, e)
-      entry = Pathutil.new(site.in_source_dir).join(e)
-      enum.any? do |exp|
-        # Users who send a Regexp knows what they want to
-        # exclude, so let them send a Regexp to exclude files,
-        # we will not bother caring if it works or not, it's
-        # on them at this point.
-    
-    module Jekyll
-  class Layout
-    include Convertible
-    
-          def warnings
-        @template.warnings
+              def convert_key(key)
+        key.is_a?(Symbol) ? key.to_s : key
       end
-    
-      # Resets the internal state after modification to existing elements
-  # and returns self.
-  #
-  # Elements will be reindexed and deduplicated.
-  def reset
-    if @hash.respond_to?(:rehash)
-      @hash.rehash # This should perform frozenness check.
-    else
-      raise 'can't modify frozen #{self.class.name}' if frozen?
     end
-    self
   end
+end
+
     
-      it 'decodes the remaining doubles when passed the '*' modifier' do
-    array = '@\x07333333?\xf6ffffff@\x20ffffff'.unpack(unpack_format('*'))
-    array.should == [2.9, 1.4, 8.2]
+                breakable = false
+            if e.is_a?(EOFError)
+              # An `EOFError` means this IO object is done!
+              breakable = true
+            elsif defined?(::IO::WaitReadable) && e.is_a?(::IO::WaitReadable)
+              # IO::WaitReadable is only available on Ruby 1.9+
+    
+              @env.action_runner.run(Vagrant::Action.action_box_remove, {
+            box_name:     argv[0],
+            box_provider: options[:provider],
+            box_version:  options[:version],
+            force_confirm_box_remove: options[:force],
+            box_remove_all_versions: options[:all],
+          })
+    
+            # Get the proper capability host to check
+        cap_host = nil
+        if type == :host
+          cap_host = @env.host
+        else
+          with_target_vms([]) do |vm|
+            cap_host = case type
+                       when :provider
+                         vm.provider
+                       when :guest
+                         vm.guest
+                       else
+                         raise Vagrant::Errors::CLIInvalidUsage,
+                           help: opts.help.chomp
+                       end
+          end
+        end
+    
+      GEMFILE_EXTENSIONS.each do |extension|
+    extension_pathname = root.join('Gemfile#{extension}')
+    
+          when nil
+        # No matches, no saved state
+      else
+        sessions[s[:session]].merge!({k => matches})
+      end # end case matched
+    
+          when :login_pass
+    
+      @src.__NR_execve      = __NR_execve
+  @src.__NR_getpeername = __NR_getpeername
+  @src.__NR_accept      = __NR_accept
+  @src.__NR_listen      = __NR_listen
+  @src.__NR_bind        = __NR_bind
+  @src.__NR_socket      = __NR_socket
+  @src.__NR_connect     = __NR_connect
+  @src.__NR_close       = __NR_close
+  @src.__NR_kfcntl      = __NR_kfcntl
+    
+          def initialize(pairs = {})
+        @pairs = pairs
+        pairs.each do |key, value|
+          raise 'invalid container key: '#{key.inspect}'' unless VALID_KEYS.include?(key)
+          send(:'#{key}=', value)
+        end
+    
+        # Many formulae include 'lib/charset.alias', but it is not strictly needed
+    # and will conflict if more than one formula provides it
+    observe_file_removal @f.lib/'charset.alias'
+    
+          it 'identifies that Intel and PowerPC machines can't run each others' executables' do
+        allow(Hardware::CPU).to receive(:type).and_return :ppc
+        expect(Hardware::CPU.can_run?(:i386)).to be false
+        expect(Hardware::CPU.can_run?(:x86_64)).to be false
+    
+      def create_pull_request(repo, title, head, base, body)
+    url = 'https://api.github.com/repos/#{repo}/pulls'
+    data = { title: title, head: head, base: base, body: body }
+    scopes = CREATE_ISSUE_FORK_OR_PR_SCOPES
+    open_api(url, data: data, scopes: scopes)
   end
-    
-      it 'decodes the number of shorts requested by the count modifier' do
-    'badcfe'.unpack(unpack_format(3)).should == [25185, 25699, 26213]
-  end
-    
-      it 'does not result in a deadlock' do
-    t = Thread.new do
-      100.times { Thread.stop }
-    end
