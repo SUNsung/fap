@@ -1,391 +1,323 @@
-#ifndef TENSORFLOW_FRAMEWORK_RESOURCE_OP_KERNEL_H_
-#define TENSORFLOW_FRAMEWORK_RESOURCE_OP_KERNEL_H_
-    
-    #ifndef TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
-#define TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-      // TODO(josh11b): Implement serializing and restoring the state.
-    
-        OP_REQUIRES(context, file_format == 'wav',
-                errors::InvalidArgument(
-                    'file_format must be \'wav\', but got: ', file_format));
-    OP_REQUIRES(context, samples_per_second > 0,
-                errors::InvalidArgument(
-                    'samples_per_second must be positive, but got: ',
-                    samples_per_second));
-    OP_REQUIRES(
-        context, bits_per_second > 0,
-        errors::InvalidArgument('bits_per_second must be positive, but got: ',
-                                bits_per_second));
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    namespace message_descriptor {
-PyObject* NewMessageFieldsByName(const Descriptor* descriptor);
-PyObject* NewMessageFieldsByCamelcaseName(const Descriptor* descriptor);
-PyObject* NewMessageFieldsByNumber(const Descriptor* descriptor);
-PyObject* NewMessageFieldsSeq(const Descriptor* descriptor);
-    }
-    
-      // Find the file which defines an extension extending the given message type
-  // with the given field number.
-  // Containing_type must be a fully-qualified type name.
-  // Python objects are not required to implement this method.
-  bool FindFileContainingExtension(const string& containing_type,
-                                   int field_number,
-                                   FileDescriptorProto* output);
-    
-    void RepeatedEnumFieldGenerator::WriteToString(io::Printer* printer) {
-  printer->Print(variables_,
-    'PrintField(\'$descriptor_name$\', $name$_, writer);\n');
-}
-    
-    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_ENUM_FIELD_H__
-    
-    void RepeatedPrimitiveFieldGenerator::GenerateParsingCode(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    '$name$_.AddEntriesFrom(input, _repeated_$name$_codec);\n');
-}
-    
-    class RepeatedPrimitiveFieldGenerator : public FieldGeneratorBase {
- public:
-  RepeatedPrimitiveFieldGenerator(const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options);
-  ~RepeatedPrimitiveFieldGenerator();
-    }
-    
-    class SourceGeneratorBase {
- protected:
-  SourceGeneratorBase(const FileDescriptor* descriptor, const Options* options);
-  virtual ~SourceGeneratorBase();
-    }
-    
-    MessageGenerator* ImmutableGeneratorFactory::NewMessageGenerator(
-    const Descriptor* descriptor) const {
-  if (HasDescriptorMethods(descriptor, context_->EnforceLite())) {
-    return new ImmutableMessageGenerator(descriptor, context_);
-  } else {
-    return new ImmutableMessageLiteGenerator(descriptor, context_);
-  }
-}
-    
-    // Factory that creates generators for immutable-default messages.
-class ImmutableGeneratorFactory : public GeneratorFactory {
- public:
-  ImmutableGeneratorFactory(Context* context);
-  virtual ~ImmutableGeneratorFactory();
-    }
-    
-      /// Set of instantiated EventSubscriber subscriptions.
-  std::map<std::string, EventSubscriberRef> event_subs_;
-    
-      static Flag& instance() {
-    static Flag f;
-    return f;
-  }
-    
-    /**
- * @brief Logger plugin feature bits for complicated loggers.
- *
- * Logger plugins may opt-in to additional features like explicitly handling
- * Glog status events or requesting event subscribers to forward each event
- * directly to the logger. This enumeration tracks, and corresponds to, each
- * of the feature methods defined in a logger plugin.
- *
- * A specific registry call action can be used to retrieve an overloaded Status
- * object containing all of the opt-in features.
- */
-enum LoggerFeatures {
-  LOGGER_FEATURE_BLANK = 0,
-  LOGGER_FEATURE_LOGSTATUS = 1,
-  LOGGER_FEATURE_LOGEVENT = 2,
-};
-    
-      /// The group this instance dropped privileges to.
-  gid_t to_group_{0};
-    
-    /**
- * @brief Create an osquery extension 'module', if an expression is true.
- *
- * This is a helper testing wrapper around CREATE_MODULE and DECLARE_MODULE.
- * It allows unit and integration tests to generate global construction code
- * that depends on data/variables available during global construction.
- *
- * And example use includes checking if a process environment variable is
- * defined. If defined the module is declared.
- */
-#define CREATE_MODULE_IF(expr, name, version, min_sdk_version)                 \
-  extern 'C' EXPORT_FUNCTION void initModule(void);                            \
-  struct osquery_InternalStructCreateModule {                                  \
-    osquery_InternalStructCreateModule(void) {                                 \
-      if ((expr)) {                                                            \
-        Registry::get().declareModule(                                         \
-            name, version, min_sdk_version, OSQUERY_SDK_VERSION);              \
-      }                                                                        \
-    }                                                                          \
-  };                                                                           \
-  static osquery_InternalStructCreateModule osquery_internal_module_instance_;
-    
-    namespace osquery {
-    }
-    
-    class ViewsConfigParserPluginTests : public testing::Test {};
-    
-    class TLSConfigPlugin : public ConfigPlugin,
-                        public std::enable_shared_from_this<TLSConfigPlugin> {
- public:
-  Status setUp() override;
-  Status genConfig(std::map<std::string, std::string>& config) override;
-    }
-    
-    std::string platformAsctime(const struct tm* timeptr) {
-  if (timeptr == nullptr) {
-    return '';
-  }
-    }
-    
-      // The pid is running, check if it is an osqueryd process by name.
-  std::stringstream query_text;
-    
-    int main(int, char**)
-{
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    }
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_API void        ImGui_ImplDX10_InvalidateDeviceObjects();
-IMGUI_API bool        ImGui_ImplDX10_CreateDeviceObjects();
-    
-        // Setup ImGui binding
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    ImGui_Marmalade_Init(true);
-    
-        SDL_GL_DeleteContext(gl_context);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-    
-    // Implemented features:
-//  [X] User texture binding. Cast 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-// Missing features:
-//  [ ] SDL2 handling of IME under Windows appears to be broken and it explicitly disable the regular Windows IME. You can restore Windows IME by compiling SDL with SDL_DISABLE_WINDOWS_IME.
-    
-    //---- Tip: You can add extra functions within the ImGui:: namespace, here or in your own headers files.
-/*
-namespace ImGui
-{
-    void MyFunction(const char* name, const MyMatrix44& v);
-}
-*/
 
+        
+          /**
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to a cv::Mat
+   *
+   * @param cv_img
+   *    cv::Mat containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See image_data_layer.cpp for an example.
+   */
+  void Transform(const cv::Mat& cv_img, Blob<Dtype>* transformed_blob);
+#endif  // USE_OPENCV
     
-            // 2. Show another simple window. In most cases you will use an explicit Begin/End pair to name your windows.
-        if (show_another_window)
+    
+template <typename Dtype>
+class LayerRegisterer {
+ public:
+  LayerRegisterer(const string& type,
+                  shared_ptr<Layer<Dtype> > (*creator)(const LayerParameter&)) {
+    // LOG(INFO) << 'Registering layer type: ' << type;
+    LayerRegistry<Dtype>::AddCreator(type, creator);
+  }
+};
+    
+    
+    {  /**
+   * @brief Computes the error gradient w.r.t. the BNLL inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+};
+    
+    #include 'caffe/layers/conv_layer.hpp'
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include 'caffe/layers/pooling_layer.hpp'
+    
+    
+    {  bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnTensorDescriptor_t bottom_desc_;
+  cudnnTensorDescriptor_t top_desc_;
+};
+#endif
+    
+    #include 'caffe/layers/base_conv_layer.hpp'
+    
+    namespace caffe {
+    }
+    
+    /**
+ * @brief Exponential Linear Unit non-linearity @f$
+ *        y = \left\{
+ *        \begin{array}{lr}
+ *            x                  & \mathrm{if} \; x > 0 \\
+ *            \alpha (\exp(x)-1) & \mathrm{if} \; x \le 0
+ *        \end{array} \right.
+ *      @f$.  
+ */
+template <typename Dtype>
+class ELULayer : public NeuronLayer<Dtype> {
+ public:
+  /**
+   * @param param provides ELUParameter elu_param,
+   *     with ELULayer options:
+   *   - alpha (\b optional, default 1).
+   *     the value @f$ \alpha @f$ by which controls saturation for negative inputs.
+   */
+  explicit ELULayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+    }
+    }
+    
+    static int set_ifname(struct ifaddrs* ifaddr, int interface) {
+	char buf[IFNAMSIZ] = {0};
+	char* name = if_indextoname(interface, buf);
+	if (name == NULL) {
+		return -1;
+	}
+	ifaddr->ifa_name = new char[strlen(name) + 1];
+	strncpy(ifaddr->ifa_name, name, strlen(name) + 1);
+	return 0;
+}
+    
+    	if (certs_path != '') {
+    }
+    
+    	void _on_peer_packet();
+	void _on_connect(String p_protocol);
+	void _on_disconnect();
+	void _on_error();
+    
+    public:
+	virtual bool can_instance() const = 0;
+    
+    		real_t hitDistance = param * raylen;
+		wheel.m_raycastInfo.m_suspensionLength = hitDistance - wheel.m_wheelRadius;
+		//clamp on max suspension travel
+    
+    	for (int i = 0; i < anim_tree->node_get_input_count(p_node); i++) {
+    }
+    
+    
+    {
+    {		property.hint_string = options;
+	}
+}
+    
+    						copydata.clear();
+						selection_active = false;
+    
+    		Dictionary d = script->call('get_variable_info', var);
+    
+      /// Construct, passing the specified argument to initialise the next layer.
+  template <typename Arg>
+  explicit buffered_read_stream(Arg& a)
+    : next_layer_(a),
+      storage_(default_buffer_size)
+  {
+  }
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    #include <boost/asio/detail/config.hpp>
+    
+    #if defined(BOOST_ASIO_HAS_STD_FUNCTION)
+using std::function;
+#else // defined(BOOST_ASIO_HAS_STD_FUNCTION)
+using boost::function;
+#endif // defined(BOOST_ASIO_HAS_STD_FUNCTION)
+    
+    template <typename Handler>
+inline void* allocate(std::size_t s, Handler& h)
+{
+#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
+  return ::operator new(s);
+#else
+  using boost::asio::asio_handler_allocate;
+  return asio_handler_allocate(s, boost::asio::detail::addressof(h));
+#endif
+}
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+        size_t bucket = calculate_hash_value(it->first) % num_buckets_;
+    bool is_first = (it == buckets_[bucket].first);
+    bool is_last = (it == buckets_[bucket].last);
+    if (is_first && is_last)
+      buckets_[bucket].first = buckets_[bucket].last = values_.end();
+    else if (is_first)
+      ++buckets_[bucket].first;
+    else if (is_last)
+      --buckets_[bucket].last;
+    
+      STDMETHODIMP put_Length(UINT32 value)
+  {
+    if (value > capacity_)
+      return E_INVALIDARG;
+    length_ = value;
+    return S_OK;
+  }
+    
+    bool js_cocos2dx_builder_CCBReader_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_builder_CCBReader_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_builder_CCBReader(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_builder_CCBReader_getAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_setAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addOwnerOutletName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_setCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addOwnerOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_readSoundKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_readUTF8(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_addOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getOwnerOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_readCallbackKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getAnimationManagersForNodes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_getNodesWithAnimationManagers(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_setResolutionScale(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_builder_CCBReader_CCBReader(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    extern JSClass  *jsb_cocos2d_NavMeshObstacle_class;
+extern JSObject *jsb_cocos2d_NavMeshObstacle_prototype;
+    
+    extern JSClass  *jsb_cocos2d_Physics3DSliderConstraint_class;
+extern JSObject *jsb_cocos2d_Physics3DSliderConstraint_prototype;
+    
+    
+    {        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, 'cc.SimpleAudioEngine:preloadBackgroundMusic'); arg0 = arg0_tmp.c_str();
+        if(!ok)
         {
-            ImGui::Begin('Another Window', &show_another_window);
-            ImGui::Text('Hello from another window!');
-            if (ImGui::Button('Close Me'))
-                show_another_window = false;
-            ImGui::End();
+            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_preloadBackgroundMusic'', nullptr);
+            return 0;
         }
-    
-    static int const                    NUM_BACK_BUFFERS = 3;
-static ID3D12Device*                g_pd3dDevice = NULL;
-static ID3D12DescriptorHeap*        g_pd3dRtvDescHeap = NULL;
-static ID3D12DescriptorHeap*        g_pd3dSrvDescHeap = NULL;
-static ID3D12CommandQueue*          g_pd3dCommandQueue = NULL;
-static ID3D12GraphicsCommandList*   g_pd3dCommandList = NULL;
-static ID3D12Fence*                 g_fence = NULL;
-static HANDLE                       g_fenceEvent = NULL;
-static UINT64                       g_fenceLastSignaledValue = 0;
-static IDXGISwapChain3*             g_pSwapChain = NULL;
-static HANDLE                       g_hSwapChainWaitableObject = NULL;
-static ID3D12Resource*              g_mainRenderTargetResource[NUM_BACK_BUFFERS] = {};
-static D3D12_CPU_DESCRIPTOR_HANDLE  g_mainRenderTargetDescriptor[NUM_BACK_BUFFERS] = {};
-    
-            // 1. Show a simple window.
-        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-        {
-            static float f = 0.0f;
-            static int counter = 0;
-            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+        cobj->preloadBackgroundMusic(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
     }
-    
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-    
-    {    ImGuiIO& io = ImGui::GetIO();
-    switch (msg)
-    {
-    case WM_LBUTTONDOWN: case WM_LBUTTONDBLCLK:
-    case WM_RBUTTONDOWN: case WM_RBUTTONDBLCLK:
-    case WM_MBUTTONDOWN: case WM_MBUTTONDBLCLK:
-    {
-        int button = 0;
-        if (msg == WM_LBUTTONDOWN || msg == WM_LBUTTONDBLCLK) button = 0;
-        if (msg == WM_RBUTTONDOWN || msg == WM_RBUTTONDBLCLK) button = 1;
-        if (msg == WM_MBUTTONDOWN || msg == WM_MBUTTONDBLCLK) button = 2;
-        if (!ImGui::IsAnyMouseDown() && ::GetCapture() == NULL)
-            ::SetCapture(hwnd);
-        io.MouseDown[button] = true;
-        return 0;
-    }
-    case WM_LBUTTONUP:
-    case WM_RBUTTONUP:
-    case WM_MBUTTONUP:
-    {
-        int button = 0;
-        if (msg == WM_LBUTTONUP) button = 0;
-        if (msg == WM_RBUTTONUP) button = 1;
-        if (msg == WM_MBUTTONUP) button = 2;
-        io.MouseDown[button] = false;
-        if (!ImGui::IsAnyMouseDown() && ::GetCapture() == hwnd)
-            ::ReleaseCapture();
-        return 0;
-    }
-    case WM_MOUSEWHEEL:
-        io.MouseWheel += GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f;
-        return 0;
-    case WM_MOUSEHWHEEL:
-        io.MouseWheelH += GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f;
-        return 0;
-    case WM_MOUSEMOVE:
-        io.MousePos.x = (signed short)(lParam);
-        io.MousePos.y = (signed short)(lParam >> 16);
-        return 0;
-    case WM_KEYDOWN:
-    case WM_SYSKEYDOWN:
-        if (wParam < 256)
-            io.KeysDown[wParam] = 1;
-        return 0;
-    case WM_KEYUP:
-    case WM_SYSKEYUP:
-        if (wParam < 256)
-            io.KeysDown[wParam] = 0;
-        return 0;
-    case WM_CHAR:
-        // You can also use ToAscii()+GetKeyboardState() to retrieve characters.
-        if (wParam > 0 && wParam < 0x10000)
-            io.AddInputCharacter((unsigned short)wParam);
-        return 0;
-    case WM_SETCURSOR:
-        if (LOWORD(lParam) == HTCLIENT && ImGui_ImplWin32_UpdateMouseCursor())
-            return 1;
-        return 0;
-    }
+    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.SimpleAudioEngine:preloadBackgroundMusic',argc, 1);
     return 0;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        const float32 k_segments = 16.0f;
+    int vertexCount=16;
+    const float32 k_increment = 2.0f * b2_pi / k_segments;
+    float32 theta = 0.0f;
+    
+    GLfloat*    glVertices = new (std::nothrow) GLfloat[vertexCount*2];
+    for (int i = 0; i < k_segments; ++i)
+    {
+        b2Vec2 v = center + radius * b2Vec2(cosf(theta), sinf(theta));
+        glVertices[i*2]=v.x * mRatio;
+        glVertices[i*2+1]=v.y * mRatio;
+        theta += k_increment;
+    }
+    
+    mShaderProgram->setUniformLocationWith4f(mColorLocation, color.r, color.g, color.b, 1);
+    glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, 0, glVertices);
+    
+    				// For a circle: I = 0.5 * m * r * r ==> r = sqrt(2 * I / m)
+				float32 radius = b2Sqrt(2.0f * I / mass);
+    
+    			b2Body* prevBody = ground;
+			for (int32 i = 0; i < e_count; ++i)
+			{
+				b2BodyDef bd;
+				bd.type = b2_dynamicBody;
+				bd.position.Set(5.5f + 1.0f * i, 10.0f);
+				b2Body* body = m_world->CreateBody(&bd);
+				body->CreateFixture(&fd);
+    }
+    
+    TEST_F(YogaTest_HadOverflowTests, no_overflow_no_wrap_and_flex_children) {
+  const YGNodeRef child0 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child0, 80);
+  YGNodeStyleSetHeight(child0, 40);
+  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
+  YGNodeStyleSetMargin(child0, YGEdgeBottom, 10);
+  YGNodeInsertChild(root, child0, 0);
+  const YGNodeRef child1 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child1, 80);
+  YGNodeStyleSetHeight(child1, 40);
+  YGNodeStyleSetMargin(child1, YGEdgeBottom, 5);
+  YGNodeStyleSetFlexShrink(child1, 1);
+  YGNodeInsertChild(root, child1, 1);
+    }
+    
+    /* static */ void Config::destroy(Config * node)
+{
+    delete node;
 }
     
-    std::string DirName(const std::string &FileName) {
-  char *Tmp = new char[FileName.size() + 1];
-  memcpy(Tmp, FileName.c_str(), FileName.size() + 1);
-  std::string Res = dirname(Tmp);
-  delete [] Tmp;
-  return Res;
+     public:
+    
+    double Node::getFlexShrink(void) const
+{
+    return YGNodeStyleGetFlexShrink(m_node);
 }
     
-      /// Mutates data by adding a word from the temporary automatic dictionary.
-  size_t Mutate_AddWordFromTemporaryAutoDictionary(uint8_t *Data, size_t Size,
-                                                   size_t MaxSize);
+    namespace facebook {
+    }
     
-    struct FuzzingOptions {
-  int Verbosity = 1;
-  size_t MaxLen = 0;
-  int UnitTimeoutSec = 300;
-  int TimeoutExitCode = 77;
-  int ErrorExitCode = 77;
-  int MaxTotalTimeSec = 0;
-  int RssLimitMb = 0;
-  bool DoCrossOver = true;
-  int MutateDepth = 5;
-  bool UseCounters = false;
-  bool UseIndirCalls = true;
-  bool UseMemcmp = true;
-  bool UseMemmem = true;
-  bool UseCmp = false;
-  bool UseValueProfile = false;
-  bool Shrink = false;
-  int ReloadIntervalSec = 1;
-  bool ShuffleAtStartUp = true;
-  bool PreferSmall = true;
-  size_t MaxNumberOfRuns = -1L;
-  int ReportSlowUnits = 10;
-  bool OnlyASCII = false;
-  std::string OutputCorpus;
-  std::string ArtifactPrefix = './';
-  std::string ExactArtifactPath;
-  std::string ExitOnSrcPos;
-  std::string ExitOnItem;
-  bool SaveArtifacts = true;
-  bool PrintNEW = true; // Print a status line when new units are found;
-  bool OutputCSV = false;
-  bool PrintNewCovPcs = false;
-  bool PrintFinalStats = false;
-  bool PrintCorpusStats = false;
-  bool PrintCoverage = false;
-  bool DumpCoverage = false;
-  bool DetectLeaks = true;
-  int  TraceMalloc = 0;
-  bool HandleAbrt = false;
-  bool HandleBus = false;
-  bool HandleFpe = false;
-  bool HandleIll = false;
-  bool HandleInt = false;
-  bool HandleSegv = false;
-  bool HandleTerm = false;
-};
+      const char* functionName() const { return m_functionName; }
+  const char* fileName() const { return m_fileName; }
+  int lineNumber() const { return m_lineNumber; }
     
+    namespace facebook {
+    }
     
-/* code */
-#define SHA1_K0  0x5a827999
-#define SHA1_K20 0x6ed9eba1
-#define SHA1_K40 0x8f1bbcdc
-#define SHA1_K60 0xca62c1d6
-    
-    
-    {  static const size_t kMaxMutations = 1 << 16;
-  size_t NumMutations;
-  TraceBasedMutation Mutations[kMaxMutations];
-  // TODO: std::set is too inefficient, need to have a custom DS here.
-  std::set<Word> InterestingWords;
-  MutationDispatcher &MD;
-  const FuzzingOptions Options;
-  const Fuzzer *F;
-  std::map<Word, size_t> AutoDictUnitCounts;
-  size_t AutoDictAdds = 0;
-};
-    
-    void PrintASCII(const Unit &U, const char *PrintAfter) {
-  PrintASCII(U.data(), U.size(), PrintAfter);
-}
-    
-    bool IsASCII(const uint8_t *Data, size_t Size);
+    private:
+  void initialize() {
+    int ret = pthread_key_create(&m_key, m_cleanup);
+    if (ret != 0) {
+      const char *msg = '(unknown error)';
+      switch (ret) {
+      case EAGAIN:
+        msg = 'PTHREAD_KEYS_MAX (1024) is exceeded';
+        break;
+      case ENOMEM:
+        msg = 'Out-of-memory';
+        break;
+      }
+      (void) msg;
+      FBASSERTMSGF(0, 'pthread_key_create failed: %d %s', ret, msg);
+    }
+  }
