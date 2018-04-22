@@ -1,49 +1,80 @@
 
         
-                It is possible to specify a list of dependencies which will be used by
-        the template in the `Podfile.default` (normal targets) `Podfile.test`
-        (test targets) files which should be stored in the
-        `~/.cocoapods/templates` folder.
-      DESC
-      self.arguments = [
-        CLAide::Argument.new('XCODEPROJ', :false),
-      ]
-    
-        # Returns the public URL of the attachment with a given style. This does
-    # not necessarily need to point to a file that your Web server can access
-    # and can instead point to an action in your app, for example for fine grained
-    # security; this has a serious performance tradeoff.
-    #
-    # Options:
-    #
-    # +timestamp+ - Add a timestamp to the end of the URL. Default: true.
-    # +escape+    - Perform URI escaping to the URL. Default: true.
-    #
-    # Global controls (set on has_attached_file):
-    #
-    # +interpolator+  - The object that fills in a URL pattern's variables.
-    # +default_url+   - The image to show when the attachment has no image.
-    # +url+           - The URL for a saved image.
-    # +url_generator+ - The object that generates a URL. Default: Paperclip::UrlGenerator.
-    #
-    # As mentioned just above, the object that generates this URL can be passed
-    # in, for finer control. This object must respond to two methods:
-    #
-    # +#new(Paperclip::Attachment, options_hash)+
-    # +#for(style_name, options_hash)+
-    
-      def pretty?
-    params.has_key?('pretty')
-  end
-    
-            end
-      end
+          class CachedFragment
+    def initialize(json)
+      @json = json
+    end
+    def as_json(*_args)
+      @json
     end
   end
-end
-
     
-    module LogStash
-  module Api
-    class Service
-      include LogStash::Util::Loggable
+            expect_any_instance_of(ActivityPub::LinkedDataSignature).to receive(:verify_account!).and_return(actor)
+        expect(ActivityPub::Activity).to receive(:factory).with(instance_of(Hash), actor, instance_of(Hash))
+    
+            <<~EOS
+          A .pydistutils.cfg file was found in $HOME, which may cause Python
+          builds to fail. See:
+            #{Formatter.url('https://bugs.python.org/issue6138')}
+            #{Formatter.url('https://bugs.python.org/issue4655')}
+        EOS
+      end
+    
+        expect(subject.check_user_path_1)
+      .to match('/usr/bin occurs before #{HOMEBREW_PREFIX}/bin')
+  end
+    
+          out =
+        Sass::Util.silence_sass_warnings do
+          if @options[:from] == :css
+            require 'sass/css'
+            Sass::CSS.new(read(input), @options[:for_tree]).render(@options[:to])
+          else
+            if input_path
+              Sass::Engine.for_file(input_path, @options[:for_engine])
+            else
+              Sass::Engine.new(read(input), @options[:for_engine])
+            end.to_tree.send('to_#{@options[:to]}', @options[:for_tree])
+          end
+        end
+    
+      # Creates a delayed logger wrapping `inner`.
+  #
+  # @param inner [Sass::Logger::Base] The wrapped logger.
+  def initialize(inner)
+    self.log_level = inner.log_level
+    @inner = inner
+    @messages = []
+  end
+    
+            def log_level?(level, min_level)
+          log_levels[level] >= log_levels[min_level]
+        end
+    
+      require 'sass/plugin/rack'
+  class Sass::Plugin::MerbBootLoader < Merb::BootLoader
+    after Merb::BootLoader::RackUpApplication
+    
+        def parse_input(environment, text)
+      case text
+      when Script::MATCH
+        name = $1
+        guarded = !!$3
+        val = Script::Parser.parse($2, @line, text.size - ($3 || '').size - $2.size)
+    
+    When /^(?:|I )select '([^']*)' from '([^']*)'$/ do |value, field|
+  select(value, :from => field)
+end
+    
+        # Returns a String describing the file's content type
+    def detect
+      if blank_name?
+        SENSIBLE_DEFAULT
+      elsif empty_file?
+        EMPTY_TYPE
+      elsif calculated_type_matches.any?
+        calculated_type_matches.first
+      else
+        type_from_file_contents || SENSIBLE_DEFAULT
+      end.to_s
+    end
