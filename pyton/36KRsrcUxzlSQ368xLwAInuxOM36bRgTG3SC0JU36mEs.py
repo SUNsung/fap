@@ -1,174 +1,115 @@
 
         
-          Args:
-    raw_data: one of the raw data outputs from ptb_raw_data.
-    batch_size: int, the batch size.
-    num_steps: int, the number of unrolls.
-    name: the name of this operation (optional).
+        try:
+    input = raw_input
+except NameError:
+    pass
     
     
-def _set_int64_feature(ex, name, value):
-  '''Sets the value of an int64 feature in a tensorflow.train.Example proto.'''
-  assert name not in ex.features.feature, 'Duplicate feature: %s' % name
-  ex.features.feature[name].int64_list.value.extend([int(v) for v in value])
+def assertRegexpMatches(self, text, regexp, msg=None):
+    if hasattr(self, 'assertRegexp'):
+        return self.assertRegexp(text, regexp, msg)
+    else:
+        m = re.match(regexp, text)
+        if not m:
+            note = 'Regexp didn\'t match: %r not found' % (regexp)
+            if len(text) < 1000:
+                note += ' in %r' % text
+            if msg is None:
+                msg = note
+            else:
+                msg = note + ', ' + msg
+            self.assertTrue(m, msg)
     
     
-def _recursive_set_batch_size(tensor_or_collection, batch_size):
-  '''Recursively sets the batch size in a Tensor or collection of Tensors.'''
-  if isinstance(tensor_or_collection, tf.Tensor):
-    t = tensor_or_collection
-    shape = t.shape.as_list()
-    shape[0] = batch_size
-    t.set_shape(t.shape.merge_with(shape))
-  elif isinstance(tensor_or_collection, dict):
-    for t in six.itervalues(tensor_or_collection):
-      _recursive_set_batch_size(t, batch_size)
-  elif isinstance(tensor_or_collection, collections.Iterable):
-    for t in tensor_or_collection:
-      _recursive_set_batch_size(t, batch_size)
-  else:
-    raise ValueError('Unknown input type: %s' % tensor_or_collection)
+def _download_restricted(url, filename, age):
+    ''' Returns true if the file has been downloaded '''
     
-          # Evaluate spline at the time points.
-      spline = curve.value(time)[0]
-    except (IndexError, TypeError) as e:
-      raise SplineError(
-          'Fitting spline failed with error: '%s'. This might be caused by the '
-          'breakpoint spacing being too small, and/or there being insufficient '
-          'points to fit the spline in one of the intervals.' % e)
+        def test_cache(self):
+        ydl = FakeYDL({
+            'cachedir': self.test_dir,
+        })
+        c = Cache(ydl)
+        obj = {'x': 1, 'y': ['ä', '\\a', True]}
+        self.assertEqual(c.load('test_cache', 'k.'), None)
+        c.store('test_cache', 'k.', obj)
+        self.assertEqual(c.load('test_cache', 'k2'), None)
+        self.assertFalse(_is_empty(self.test_dir))
+        self.assertEqual(c.load('test_cache', 'k.'), obj)
+        self.assertEqual(c.load('test_cache', 'y'), None)
+        self.assertEqual(c.load('test_cache2', 'k.'), None)
+        c.remove()
+        self.assertFalse(os.path.exists(self.test_dir))
+        self.assertEqual(c.load('test_cache', 'k.'), None)
     
-      Print the performance on the validation set, and update the saved model if
-  its performance is better on the previous ones. If the performance dropped,
-  tell the training to stop.
-    
-    import lexnet_common
-import path_model
-from sklearn import metrics
-import tensorflow as tf
-    
-      def testConversion3dWithType(self):
-    self.Conversion3dTestWithType(np.int8)
-    self.Conversion3dTestWithType(np.int16)
-    self.Conversion3dTestWithType(np.int32)
-    self.Conversion3dTestWithType(np.int64)
-    self.Conversion3dTestWithType(np.float16)
-    self.Conversion3dTestWithType(np.float32)
-    self.Conversion3dTestWithType(np.float64)
+    # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
     
-#
-# Backwards compat functions.  Some modules include md5s in their return values
-# Continue to support that for now.  As of ansible-1.8, all of those modules
-# should also return 'checksum' (sha1 for now)
-# Do not use md5 unless it is needed for:
-# 1) Optional backwards compatibility
-# 2) Compliance with a third party protocol
-#
-# MD5 will not work on systems which are FIPS-140-2 compliant.
-#
+class RtspFD(FileDownloader):
+    def real_download(self, filename, info_dict):
+        url = info_dict['url']
+        self.report_destination(filename)
+        tmpfilename = self.temp_name(filename)
     
-        if not args.test:
-        response = requests.get(url, headers=headers)
+            title = self._html_search_regex(r'<title>(.*?)</title>', webpage, 'title')
+        description = self._html_search_regex(
+            r'<div class='description'[^>]*>([^<]+)</div>', webpage, 'description', fatal=False)
+        thumbnail = self._html_search_regex(
+            r'preview_url\s*:\s*\'(.*?)\'', webpage, 'thumbnail', fatal=False)
     
+            return {
+            'id': flv_id,
+            'url': rtmp_url,
+            'ext': 'flv',
+            'no_resume': True,
+            'title': title,
+            'description': description,
+            'duration': duration,
+            'view_count': view_count,
+            'comment_count': comment_count,
+            'uploader': uploader,
+            'upload_date': upload_date,
+        }
+
     
-def get_group_vars(groups):
+    from .globals import request
     
-    Data comes from a random square matrix.
+        #: When data is read or written, this is set to ``True``. Used by
+    # :class:`.SecureCookieSessionInterface` to add a ``Vary: Cookie``
+    #: header, which allows caching proxies to cache different pages for
+    #: different users.
+    accessed = False
     
-        for i, DD in enumerate(Drange):
-        print('D = %i (%i out of %i)' % (DD, i + 1, len(Drange)))
-        X = get_data(N, DD, dataset)
-        for algorithm in algorithms:
-            nbrs = neighbors.NearestNeighbors(n_neighbors=k,
-                                              algorithm=algorithm,
-                                              leaf_size=leaf_size)
-            t0 = time()
-            nbrs.fit(X)
-            t1 = time()
-            nbrs.kneighbors(X)
-            t2 = time()
+        # SSLContext
+    if sys.version_info < (2, 7):
+        ssl_context = object()
+    else:
+        ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
     
-    ratio = scikits_time / scipy_time
+        rv = app.test_client().get('/', errors_stream=out)
+    assert rv.status_code == 500
+    assert b'Internal Server Error' in rv.data
+    assert not out.getvalue()
+
     
-        package is the name of the root module of the package
-    
-    import os
-import tarfile
-from contextlib import closing
-try:
-    from urllib import urlopen
-except ImportError:
-    from urllib.request import urlopen
-    
-    Sentiment analysis can be casted as a binary text classification problem,
-that is fitting a linear classifier on features extracted from the text
-of the user messages so as to guess wether the opinion of the author is
-positive or negative.
-    
-        print('Generating skeleton for %s' % f)
-    
-    calibrated_classifier = sig_clf.calibrated_classifiers_[0]
-prediction = np.vstack([calibrator.predict(this_p)
-                        for calibrator, this_p in
-                        zip(calibrated_classifier.calibrators_, p.T)]).T
-prediction /= prediction.sum(axis=1)[:, None]
-    
-        def extract(self, **kwargs):
-        for i in self.streams:
-            s = self.streams[i]
-            _, s['container'], s['size'] = url_info(s['url'])
-            s['src'] = [s['url']]
-    
-        type, ext, size = url_info(video_url, headers=fake_headers)
-    
-    def kugou_download_by_hash(title,hash_val,output_dir = '.', merge = True, info_only = False):
-    #sample
-    #url_sample:http://www.kugou.com/yy/album/single/536957.html
-    #hash ->key  md5(hash+kgcloud')->key  decompile swf
-    #cmd 4 for mp3 cmd 3 for m4a
-    key=hashlib.new('md5',(hash_val+'kgcloud').encode('utf-8')).hexdigest()
-    html=get_html('http://trackercdn.kugou.com/i/?pid=6&key=%s&acceptMp3=1&cmd=4&hash=%s'%(key,hash_val))
-    j=loads(html)
-    url=j['url']
-    songtype, ext, size = url_info(url)
-    print_info(site_info, title, songtype, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge=merge)
-    
-            self.title = match1(content,
-                            r'setup\[\'title\'\] = '([^']+)';')
-    
-    #----------------------------------------------------------------------
-def showroom_get_roomid_by_room_url_key(room_url_key):
-    '''str->str'''
-    fake_headers_mobile = {
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Charset': 'UTF-8,*;q=0.5',
-        'Accept-Encoding': 'gzip,deflate,sdch',
-        'Accept-Language': 'en-US,en;q=0.8',
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36'
-    }
-    webpage_url = 'https://www.showroom-live.com/' + room_url_key
-    html = get_content(webpage_url, headers = fake_headers_mobile)
-    roomid = match1(html, r'room\?room_id\=(\d+)')
-    assert roomid
-    return roomid
-    
-            '''
-        err = None
-        if 'name' in notes_json and notes_json['name'] != friend:
-            # The 'name' in the JSON is optional, but if present, must
-            # match the username from the URL
-            err = errors.RedditError('BAD_USERNAME', fields='name')
-        if 'note' in notes_json and not c.user.gold:
-            err = errors.RedditError('GOLD_REQUIRED', fields='note')
-        if err:
-            self.on_validation_error(err)
+        def mapper(self, _, line):
+        yield line, 1
     
     
-class GoogleTagManagerController(MinimalController):
-    def pre(self):
-        if request.host != g.media_domain:
-            # don't serve up untrusted content except on our
-            # specifically untrusted domain
-            self.abort404()
+class Chat(metaclass=ABCMeta):
+    
+            Accessing a node updates its position to the front of the LRU list.
+        '''
+        node = self.lookup[query]
+        if node is None:
+            return None
+        self.linked_list.move_to_front(node)
+        return node.results
+    
+        def __init__(self, query, results):
+        self.query = query
+        self.results = results
