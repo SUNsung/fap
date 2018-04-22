@@ -1,124 +1,149 @@
 
         
-            Code is a simple port of what is already in the /scripts directory
+            #: When data is read or written, this is set to ``True``. Used by
+    # :class:`.SecureCookieSessionInterface` to add a ``Vary: Cookie``
+    #: header, which allows caching proxies to cache different pages for
+    #: different users.
+    accessed = False
     
-        def on_fault_trigger(self):
-        self._hsm._next_state('suspect')
-        self._hsm._send_diagnostics_request()
-        self._hsm._raise_alarm()
+        class _FakeSignal(object):
+        '''If blinker is unavailable, create a fake class with the same
+        interface that allows sending of signals but will fail with an
+        error on anything else.  Instead of doing anything on send, it
+        will just ignore the arguments and do nothing instead.
+        '''
     
-        def setUp(self):
-        self.e, self.g = get_localizer(language='English'), \
-                         get_localizer(language='Greek')
     
-        def test_initial_am_station(self):
-        station = self.radio.state.stations[self.radio.state.pos]
-        expected_station = '1250'
-        self.assertEqual(station, expected_station)
+def test_get_namespace():
+    app = flask.Flask(__name__)
+    app.config['FOO_OPTION_1'] = 'foo option 1'
+    app.config['FOO_OPTION_2'] = 'foo option 2'
+    app.config['BAR_STUFF_1'] = 'bar stuff 1'
+    app.config['BAR_STUFF_2'] = 'bar stuff 2'
+    foo_options = app.config.get_namespace('FOO_')
+    assert 2 == len(foo_options)
+    assert 'foo option 1' == foo_options['option_1']
+    assert 'foo option 2' == foo_options['option_2']
+    bar_options = app.config.get_namespace('BAR_', lowercase=False)
+    assert 2 == len(bar_options)
+    assert 'bar stuff 1' == bar_options['STUFF_1']
+    assert 'bar stuff 2' == bar_options['STUFF_2']
+    foo_options = app.config.get_namespace('FOO_', trim_namespace=False)
+    assert 2 == len(foo_options)
+    assert 'foo option 1' == foo_options['foo_option_1']
+    assert 'foo option 2' == foo_options['foo_option_2']
+    bar_options = app.config.get_namespace('BAR_', lowercase=False, trim_namespace=False)
+    assert 2 == len(bar_options)
+    assert 'bar stuff 1' == bar_options['BAR_STUFF_1']
+    assert 'bar stuff 2' == bar_options['BAR_STUFF_2']
     
-        def setUp(self):
-        self.tc1 = TC1()
-        self.tc2 = TC2()
-        self.tc3 = TC3()
-        self.average_result_tc1 = '###### In Test 1 ######\n' + \
-                                  'Setting up\n' + \
-                                  'Running test\n' + \
-                                  'Tearing down\n' + \
-                                  'Test Finished'
-        self.average_result_tc2 = '###### In Test 2 ######\n' + \
-                                  'Setting up\n' + \
-                                  'Running test\n' + \
-                                  'Tearing down\n' + \
-                                  'Test Finished'
-        self.average_result_tc3 = '###### In Test 3 ######\n' + \
-                                  'Setting up\n' + \
-                                  'Running test\n' + \
-                                  'Tearing down\n' + \
-                                  'Test Finished'
-        self.runner = TestRunner()
-        self.out = StringIO()
-        self.saved_stdout = sys.stdout
-        sys.stdout = self.out
+        logging.root.handlers[:] = root_handlers
+    logging.root.setLevel(root_level)
     
-        def get_current_time_as_html_fragment(self, time_provider):
-        current_time = time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
+    Available hooks:
     
+        :param url: URL for the new :class:`Request` object.
+    :param data: (optional) Dictionary (will be form-encoded), bytes, or file-like object to send in the body of the :class:`Request`.
+    :param json: (optional) json data to send in the body of the :class:`Request`.
+    :param \*\*kwargs: Optional arguments that ``request`` takes.
+    :return: :class:`Response <Response>` object
+    :rtype: requests.Response
     '''
-Port of the Java example of 'Parameter Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
-http://xunitpatterns.com/Dependency%20Injection.html.
     
-        def delegate(self, requests):
-        for request in requests:
-            self.target.send(request)
-    
-            # and can also be undone at will
-        for cmd in reversed(command_stack):
-            cmd.undo()
-    finally:
-        os.unlink('foo.txt')
-    
-        def update(self, subject):
-        print(u'HexViewer: Subject %s has data 0x%x' %
-              (subject.name, subject.data))
+        :param str u_string: unicode string to check. Must be unicode
+        and not Python 2 `str`.
+    :rtype: bool
+    '''
+    assert isinstance(u_string, str)
+    try:
+        u_string.encode('ascii')
+        return True
+    except UnicodeEncodeError:
+        return False
+
     
     
-def get_changed_files(old_ref, new_ref):
-    '''Return a list of files that have changed from one ref to another.'''
-    root = get_root()
-    changed_files_text = subprocess.check_output(['git', 'diff', '--name-only',
-                                                  old_ref, new_ref])
-    changed_files = changed_files_text.splitlines()
-    return [os.path.join(root, x) for x in changed_files]
+class TestTestServer:
+    
+    Requests is an HTTP library, written in Python, for human beings. Basic GET
+usage:
     
     
-# blanket fallback rule
-api('templated', NullJsonTemplate)
+class URLRequired(RequestException):
+    '''A valid URL is required to make a request.'''
     
-            The user's response to the CAPTCHA should be sent as `captcha`
-        along with your request.
+    packages = ['requests']
     
-    from BeautifulSoup import BeautifulSoup, Tag
     
-                if code in (204, 304):
-                # NEVER return a content body on 204/304 or downstream
-                # caches may become very confused.
-                return ''
-            elif c.render_style not in self.allowed_render_styles:
-                return str(code)
-            elif c.render_style in extensions.API_TYPES:
-                data = request.environ.get('extra_error_data', {'error': code})
-                message = request.GET.get('message', '')
-                if message:
-                    data['message'] = message
-                if request.environ.get('WANT_RAW_JSON'):
-                    return scriptsafe_dumps(data)
-                return websafe_json(json.dumps(data))
-            elif takedown and code == 404:
-                link = Link._by_fullname(takedown)
-                return pages.TakedownPage(link).render()
-            elif code == 400:
-                return self.send400()
-            elif code == 403:
-                return self.send403()
-            elif code == 429:
-                return self.send429()
-            elif code == 500:
-                failien_url = make_failien_url()
-                sad_message = get_funny_translated_string('500_page')
-                sad_message %= {'admin': random.choice(self.admins)}
-                sad_message = safemarkdown(sad_message)
-                return redditbroke % (failien_url, sad_message)
-            elif code == 503:
-                return self.send503()
-            elif c.site:
-                return self.send404()
-            else:
-                return 'page not found'
-        except Exception as e:
-            return handle_awful_failure('ErrorController.GET_document: %r' % e)
+def _lcut_internal_no_hmm(s):
+    return dt._lcut_internal_no_hmm(s)
     
-            c.allow_framing = True
+    result = jieba.tokenize('永和服装饰品有限公司')
+for tk in result:
+    print('word %s\t\t start: %d \t\t end:%d' % (tk[0],tk[1],tk[2]))
+    
+    parser = OptionParser(USAGE)
+parser.add_option('-k', dest='topK')
+opt, args = parser.parse_args()
+    
+    parser = OptionParser(USAGE)
+parser.add_option('-k', dest='topK')
+opt, args = parser.parse_args()
+    
+    import jieba
+import jieba.analyse
+from optparse import OptionParser
+    
+        def testPosseg(self):
+        import jieba.posseg as pseg
+        for content in test_contents:
+            result = pseg.cut(content)
+            assert isinstance(result, types.GeneratorType), 'Test Posseg Generator error'
+            result = list(result)
+            assert isinstance(result, list), 'Test Posseg error on content: %s' % content
+            print(' , '.join([w.word + ' / ' + w.flag for w in result]), file=sys.stderr)
+        print('testPosseg', file=sys.stderr)
+    
+    latex_symbols = {
+    }
+    
+    Authors:
+    
+    def test_autocall_binops():
+    '''See https://github.com/ipython/ipython/issues/81'''
+    ip.magic('autocall 2')
+    f = lambda x: x
+    ip.user_ns['f'] = f
+    try:
+        nt.assert_equal(ip.prefilter('f 1'),'f(1)')
+        for t in ['f +1', 'f -1']:
+            nt.assert_equal(ip.prefilter(t), t)
+    
+    A print function that pretty prints sympy Basic objects.
+    
+        def checkTables(self):
+        version = int(self.execute('PRAGMA user_version').fetchone()[0])
+        self.log.debug('Db version: %s, needed: %s' % (version, self.version))
+        if version < self.version:
+            self.createTables()
+        else:
+            self.execute('VACUUM')
+    
+        def removeCerts(self):
+        if config.keep_ssl_cert:
+            return False
+        for file_name in ['cert-rsa.pem', 'key-rsa.pem']:
+            file_path = '%s/%s' % (config.data_dir, file_name)
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+    
+    ACTION_HEADER_PREFIX = 'DynamoDBStreams_20120810'
+    
+        # make test request to gateway
+    result = requests.get(url)
+    assert result.status_code == 200
+    assert to_str(result.content) == '{}'
+    data = {'data': 123}
+    result = requests.post(url, data=json.dumps(data))
+    assert result.status_code == 200
+    assert json.loads(to_str(result.content)) == data
