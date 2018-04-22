@@ -1,108 +1,75 @@
 
         
-            # To avoid having to always use the '|safe' filter in flatpage templates,
-    # mark the title and content as already safe (since they are raw HTML
-    # content in the first place).
-    f.title = mark_safe(f.title)
-    f.content = mark_safe(f.content)
+        signature = hexlify(rsa.pkcs1.sign(json.dumps(versions_info, sort_keys=True).encode('utf-8'), privkey, 'SHA-256')).decode()
+print('signature: ' + signature)
     
-        def test_create_entries(self):
-        self.dialog.top = self.root
-        self.dialog.row = 0
-        self.engine.setpat('hello')
-        self.dialog.create_entries()
-        self.assertIn(self.dialog.ent.get(), 'hello')
-    
-        def test_delitem(self):
-        n = 500         # O(n**2) test, don't make this too big
-        d = deque(range(n))
-        self.assertRaises(IndexError, d.__delitem__, -n-1)
-        self.assertRaises(IndexError, d.__delitem__, n)
-        for i in range(n):
-            self.assertEqual(len(d), n-i)
-            j = random.randrange(-len(d), len(d))
-            val = d[j]
-            self.assertIn(val, d)
-            del d[j]
-            self.assertNotIn(val, d)
-        self.assertEqual(len(d), 0)
-    
-        def set_sequences(self, sequences):
-        '''Set sequences using the given name-to-key-list dictionary.'''
-        f = open(os.path.join(self._path, '.mh_sequences'), 'r+', encoding='ASCII')
-        try:
-            os.close(os.open(f.name, os.O_WRONLY | os.O_TRUNC))
-            for name, keys in sequences.items():
-                if len(keys) == 0:
+                for video_version in json_data.get('video_versions'):
+                video_version_url = video_version.get('download_url') or video_version.get('stream_url')
+                if not video_version_url:
                     continue
-                f.write(name + ':')
-                prev = None
-                completing = False
-                for key in sorted(set(keys)):
-                    if key - 1 == prev:
-                        if not completing:
-                            completing = True
-                            f.write('-')
-                    elif completing:
-                        completing = False
-                        f.write('%s %s' % (prev, key))
-                    else:
-                        f.write(' %s' % key)
-                    prev = key
-                if completing:
-                    f.write(str(prev) + '\n')
-                else:
-                    f.write('\n')
-        finally:
-            _sync_close(f)
+                f = {
+                    'url': video_version_url,
+                    'width': int_or_none(video_version.get('width')),
+                    'height': int_or_none(video_version.get('height')),
+                    'abr': int_or_none(video_version.get('audio_bitrate')),
+                    'vbr': int_or_none(video_version.get('video_bitrate')),
+                }
+                bitrate = self._search_regex(r'(\d+)k', video_version_url, 'bitrate', default=None)
+                if bitrate:
+                    f.update({
+                        'format_id': 'http-%s' % bitrate,
+                    })
+                formats.append(f)
+            self._sort_formats(formats)
     
-    def _parse_overview_fmt(lines):
-    '''Parse a list of string representing the response to LIST OVERVIEW.FMT
-    and return a list of header/metadata names.
-    Raises NNTPDataError if the response is not compliant
-    (cf. RFC 3977, section 8.4).'''
-    fmt = []
-    for line in lines:
-        if line[0] == ':':
-            # Metadata name (e.g. ':bytes')
-            name, _, suffix = line[1:].partition(':')
-            name = ':' + name
-        else:
-            # Header name (e.g. 'Subject:' or 'Xref:full')
-            name, _, suffix = line.partition(':')
-        name = name.lower()
-        name = _OVERVIEW_FMT_ALTERNATIVES.get(name, name)
-        # Should we do something with the suffix?
-        fmt.append(name)
-    defaults = _DEFAULT_OVERVIEW_FMT
-    if len(fmt) < len(defaults):
-        raise NNTPDataError('LIST OVERVIEW.FMT response too short')
-    if fmt[:len(defaults)] != defaults:
-        raise NNTPDataError('LIST OVERVIEW.FMT redefines default fields')
-    return fmt
+        def inner(*suffix):
+        return urljoin(httpbin_url, '/'.join(suffix))
     
-        whatToShow = NodeFilter.SHOW_ALL
+        @pytest.fixture(autouse=True)
+    def setup(self):
+        '''LookupDict instance with 'bad_gateway' attribute.'''
+        self.lookup_dict = LookupDict('test')
+        self.lookup_dict.bad_gateway = 502
     
-        print('$(temp_dir):')
-    print(r'  if not exist $(temp_dir)\. mkdir $(temp_dir)')
-    print()
+        def __call__(self, r):
+        # Initialize per-thread state, if needed
+        self.init_per_thread_state()
+        # If we have a saved nonce, skip the 401
+        if self._thread_local.last_nonce:
+            r.headers['Authorization'] = self.build_digest_header(r.method, r.url)
+        try:
+            self._thread_local.pos = r.body.tell()
+        except AttributeError:
+            # In the case of HTTPDigestAuth being reused and the body of
+            # the previous request was a file-like object, pos has the
+            # file position of the previous body. Ensure it's set to
+            # None.
+            self._thread_local.pos = None
+        r.register_hook('response', self.handle_401)
+        r.register_hook('response', self.handle_redirect)
+        self._thread_local.num_401_calls = 1
     
-        def __init__(self, func, args, kwds):
-        self.gen = func(*args, **kwds)
-        self.func, self.args, self.kwds = func, args, kwds
-        # Issue 19330: ensure context manager instances have good docstrings
-        doc = getattr(func, '__doc__', None)
-        if doc is None:
-            doc = type(self).__doc__
-        self.__doc__ = doc
-        # Unfortunately, this still doesn't provide good help output when
-        # inspecting the created context manager instances, since pydoc
-        # currently bypasses the instance docstring and shows the docstring
-        # for the class instead.
-        # See http://bugs.python.org/issue19404 for more details.
+        def __getstate__(self):
+        '''Unlike a normal CookieJar, this class is pickleable.'''
+        state = self.__dict__.copy()
+        # remove the unpickleable RLock object
+        state.pop('_cookies_lock')
+        return state
     
-            # Alternate doesn't make a difference for these, they format the same with or without it
-        self.assertEqual(format(1+1j, '.1e'),  '1.0e+00+1.0e+00j')
-        self.assertEqual(format(1+1j, '#.1e'), '1.0e+00+1.0e+00j')
-        self.assertEqual(format(1+1j, '.1f'),  '1.0+1.0j')
-        self.assertEqual(format(1+1j, '#.1f'), '1.0+1.0j')
+            #: A CookieJar containing all currently outstanding cookies set on this
+        #: session. By default it is a
+        #: :class:`RequestsCookieJar <requests.cookies.RequestsCookieJar>`, but
+        #: may be any other ``cookielib.CookieJar`` compatible object.
+        self.cookies = cookiejar_from_dict({})
+    
+        def redirect_resp_handler(sock):
+        consume_socket_content(sock, timeout=0.5)
+        location = u'//{0}:{1}/{2}'.format(host, port, path)
+        sock.send(
+            b'HTTP/1.1 301 Moved Permanently\r\n'
+            b'Content-Length: 0\r\n'
+            b'Location: ' + location.encode('utf8') + b'\r\n'
+            b'\r\n'
+        )
+        redirect_request.append(consume_socket_content(sock, timeout=0.5))
+        sock.send(b'HTTP/1.1 200 OK\r\n\r\n')
