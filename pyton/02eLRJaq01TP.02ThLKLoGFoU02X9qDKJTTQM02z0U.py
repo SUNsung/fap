@@ -1,100 +1,85 @@
 
         
-                buf.append('  Make sure to directly send your %s-request to this URL '
-                   'since we can\'t make browsers or HTTP clients redirect '
-                   'with form data reliably or without user interaction.' %
-                   request.method)
-        buf.append('\n\nNote: this exception is only raised in debug mode')
-        AssertionError.__init__(self, ''.join(buf).encode('utf-8'))
+            def inner(*suffix):
+        return urljoin(httpbin_url, '/'.join(suffix))
     
     
-def test_get_version(test_apps, capsys):
-    '''Test of get_version.'''
-    from flask import __version__ as flask_ver
-    from sys import version as py_ver
-    
-        app = flask.Flask(__name__)
-    app.config.from_mapping(
-        SECRET_KEY='config',
-        TEST_KEY='foo'
-    )
-    common_object_test(app)
-    
-        old_layer = keras.layers.AveragePooling2D((2, 2), padding='valid', dim_ordering='th', name='avgpooling2d')
-    new_layer = keras.layers.AvgPool2D(pool_size=2, padding='valid', data_format='channels_first', name='avgpooling2d')
-    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
-    
-    - Getting started
-    Getting started with the sequential model
-    Getting started with the functional api
-    FAQ
-    
-        def compute_output_shape(self, input_shape):
-        if self.data_format == 'channels_last':
-            space = input_shape[1:-1]
-            new_space = []
-            for i in range(len(space)):
-                new_dim = conv_utils.conv_output_length(
-                    space[i],
-                    self.kernel_size[i],
-                    padding=self.padding,
-                    stride=self.strides[i],
-                    dilation=self.dilation_rate[i])
-                new_space.append(new_dim)
-            return (input_shape[0],) + tuple(new_space) + (self.filters,)
-        if self.data_format == 'channels_first':
-            space = input_shape[2:]
-            new_space = []
-            for i in range(len(space)):
-                new_dim = conv_utils.conv_output_length(
-                    space[i],
-                    self.kernel_size[i],
-                    padding=self.padding,
-                    stride=self.strides[i],
-                    dilation=self.dilation_rate[i])
-                new_space.append(new_dim)
-            return (input_shape[0], self.filters) + tuple(new_space)
+class VersionedPackage(object):
+    def __init__(self, version):
+        self.__version__ = version
     
     
-class ProgbarLogger(Callback):
-    '''Callback that prints metrics to stdout.
+    {    # Server Error.
+    500: ('internal_server_error', 'server_error', '/o\\', '✗'),
+    501: ('not_implemented',),
+    502: ('bad_gateway',),
+    503: ('service_unavailable', 'unavailable'),
+    504: ('gateway_timeout',),
+    505: ('http_version_not_supported', 'http_version'),
+    506: ('variant_also_negotiates',),
+    507: ('insufficient_storage',),
+    509: ('bandwidth_limit_exceeded', 'bandwidth'),
+    510: ('not_extended',),
+    511: ('network_authentication_required', 'network_auth', 'network_authentication'),
+}
+    
+                    out[k, j].flat[i] = t
+    return out
     
     
-@keras_test
-def test_LearningRateScheduler():
-    np.random.seed(1337)
-    (X_train, y_train), (X_test, y_test) = get_test_data(num_train=train_samples,
-                                                         num_test=test_samples,
-                                                         input_shape=(input_dim,),
-                                                         classification=True,
-                                                         num_classes=num_classes)
-    y_test = np_utils.to_categorical(y_test)
-    y_train = np_utils.to_categorical(y_train)
-    model = Sequential()
-    model.add(Dense(num_hidden, input_dim=input_dim, activation='relu'))
-    model.add(Dense(num_classes, activation='softmax'))
-    model.compile(loss='categorical_crossentropy',
-                  optimizer='sgd',
-                  metrics=['accuracy'])
+def _get_git_revision():
+    try:
+        revision = subprocess.check_output(REVISION_CMD.split()).strip()
+    except (subprocess.CalledProcessError, OSError):
+        print('Failed to execute git to get revision')
+        return None
+    return revision.decode('utf-8')
     
-    max_words = 1000
-batch_size = 32
-epochs = 5
+    Sentiment analysis can be casted as a binary text classification problem,
+that is fitting a linear classifier on features extracted from the text
+of the user messages so as to guess wether the opinion of the author is
+positive or negative.
     
-            if opts.nolog:
-            self.settings.set('LOG_ENABLED', False, priority='cmdline')
+            C = float(self.complexity.get())
+        gamma = float(self.gamma.get())
+        coef0 = float(self.coef0.get())
+        degree = int(self.degree.get())
+        kernel_map = {0: 'linear', 1: 'rbf', 2: 'poly'}
+        if len(np.unique(y)) == 1:
+            clf = svm.OneClassSVM(kernel=kernel_map[self.kernel.get()],
+                                  gamma=gamma, coef0=coef0, degree=degree)
+            clf.fit(X)
+        else:
+            clf = svm.SVC(kernel=kernel_map[self.kernel.get()], C=C,
+                          gamma=gamma, coef0=coef0, degree=degree)
+            clf.fit(X, y)
+        if hasattr(clf, 'score'):
+            print('Accuracy:', clf.score(X, y) * 100)
+        X1, X2, Z = self.decision_surface(clf)
+        self.model.clf = clf
+        self.model.set_surface((X1, X2, Z))
+        self.model.surface_type = self.surface_type.get()
+        self.fitted = True
+        self.model.changed('surface')
     
-        def syntax(self):
-        return '[options] <spider>'
+    from sklearn.datasets import make_biclusters
+from sklearn.datasets import samples_generator as sg
+from sklearn.cluster.bicluster import SpectralCoclustering
+from sklearn.metrics import consensus_score
     
-        def _find_template(self, template):
-        template_file = join(self.templates_dir, '%s.tmpl' % template)
-        if exists(template_file):
-            return template_file
-        print('Unable to find template: %s\n' % template)
-        print('Use 'scrapy genspider --list' to see all available templates.')
+    The second figure shows the calibration curve of a linear support-vector
+classifier (LinearSVC). LinearSVC shows the opposite behavior as Gaussian
+naive Bayes: the calibration curve has a sigmoid curve, which is typical for
+an under-confident classifier. In the case of LinearSVC, this is caused by the
+margin property of the hinge loss, which lets the model focus on hard samples
+that are close to the decision boundary (the support vectors).
     
-                    contracts.append(self.contracts[name](method, *args))
+    plt.show()
+
     
-                raise ContractFail('Returned %s %s, expected %s' % \
-                (occurrences, self.obj_name, expected))
+        def short_desc(self):
+        return 'Check spider contracts'
+    
+    
+class Contract(object):
+    ''' Abstract class for contracts '''
