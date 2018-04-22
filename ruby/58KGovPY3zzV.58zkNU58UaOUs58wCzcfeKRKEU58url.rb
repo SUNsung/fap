@@ -1,49 +1,70 @@
 
         
-        unless ENV['BUNDLE_GEMFILE']
-  require 'pathname'
+        #
     
-                end
+    require 'erb'
     
-      def parse(pkt)
-    # We want to return immediatly if we do not have a packet which is handled by us
-    return unless pkt.is_tcp?
-    return if (pkt.tcp_sport != 21 and pkt.tcp_dport != 21)
-    s = find_session((pkt.tcp_sport == 21) ? get_session_src(pkt) : get_session_dst(pkt))
-    s[:sname] ||= 'ftp'
-    
-                  s[:proto] = 'tcp'
-              s[:name]  = 'pop3'
-              s[:extra] = 'Successful Login. Banner: #{s[:banner]}'
-              report_auth_info(s)
-              print_status('Successful POP3 Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]} (#{s[:banner].strip})')
-    
-    # Sniffer class for GET URL's
-class SnifferURL < BaseProtocolParser
-  def register_sigs
-    self.sigs = {
-      :get		=> /^GET\s+([^\n]+)\s+HTTP\/\d\.\d/i,
-      :webhost	=> /^HOST\:\s+([^\n\r]+)/i,
-    }
+        @status
   end
     
-    fileOutJar 	= clsFile.new_with_sig('Ljava.lang.String;', 'output.jar')
-filesIn		= Array.new
-    
-    parser = Parser.new(filename)
-parser.parse
-print parser.get_result
-    
-      context 'called with four colors' do
-    it 'applies different colors to all sides' do
-      rule = 'border-color: #00f #0f0 #f00 #ff0'
-    
-      context 'called with arguments (1, $value: 4em 6em)' do
-    it 'outputs quadruple the first value from the default scale' do
-      expect('.one-double-value').to have_rule('font-size: 1.024em')
+        def initialize(username, domain)
+      @username = username
+      @domain = domain
     end
-  end
     
-          expect('.padding-explicit').to have_rule(rule)
+        def minor
+      3
     end
+    
+      def meta
+    object.file.meta
   end
+end
+
+    
+      describe 'for a silence with reject media' do
+    before do
+      subject.call(DomainBlock.create!(domain: 'evil.org', severity: :silence, reject_media: true))
+    end
+    
+    ###
+### methods
+###
+    
+          def call(env)
+        request  = Request.new(env)
+        get_was  = handle(request.GET)
+        post_was = handle(request.POST) rescue nil
+        app.call env
+      ensure
+        request.GET.replace  get_was  if get_was
+        request.POST.replace post_was if post_was
+      end
+    
+        { # yes, this is ugly, feel free to change that
+      '/..' => '/', '/a/../b' => '/b', '/a/../b/' => '/b/', '/a/.' => '/a/',
+      '/%2e.' => '/', '/a/%2E%2e/b' => '/b', '/a%2f%2E%2e%2Fb/' => '/b/',
+      '//' => '/', '/%2fetc%2Fpasswd' => '/etc/passwd'
+    }.each do |a, b|
+      it('replaces #{a.inspect} with #{b.inspect}') { expect(get(a).body).to eq(b) }
+    end
+    
+      # Run specs in random order to surface order dependencies. If you find an
+  # order dependency and want to debug it, you can fix the order by providing
+  # the seed, which is printed after each run.
+  #     --seed 1234
+  config.order = :random
+    
+      it 'should not leak changes to env' do
+    klass    = described_class
+    detector = Struct.new(:app) do
+      def call(env)
+        was = env.dup
+        res = app.call(env)
+        was.each do |k,v|
+          next if env[k] == v
+          fail 'env[#{k.inspect}] changed from #{v.inspect} to #{env[k].inspect}'
+        end
+        res
+      end
+    end
