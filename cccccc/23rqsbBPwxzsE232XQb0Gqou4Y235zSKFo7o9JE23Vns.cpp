@@ -1,301 +1,256 @@
 
         
-        v8::Handle<v8::Value> AllocateObject(int routing_id,
-                                     int object_id,
-                                     const std::string& type,
-                                     v8::Handle<v8::Value> options) {
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  v8::EscapableHandleScope handle_scope(isolate);
-    }
-    
-    // Call method of an object in browser and return the result.
-// function CallObjectMethod(id, type, method, args);
-v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
-                                           int object_id,
-                                           const std::string& type,
-                                           const std::string& method,
-                                           v8::Handle<v8::Value> args);
-    
-    namespace ui {
-    }
-    
-        std::string label;
-    if (option.GetString('label', &label))
-      SetLabel(label);
-    
-    
+        
     {
-  DECLARE_EXTENSION_FUNCTION('nw.App.setProxyConfig', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwAppSetProxyConfigFunction);
-};
-    
-        // passthrough (pointer interface)
-    std::pair<iterator, bool> insert(const value_type& value) { return m.insert(value); }
-    
-    // Build a Table file from the contents of *iter.  The generated file
-// will be named according to meta->number.  On success, the rest of
-// *meta will be filled with metadata about the generated table.
-// If no data is present in *iter, meta->file_size will be set to
-// zero, and no Table file will be produced.
-extern Status BuildTable(const std::string& dbname,
-                         Env* env,
-                         const Options& options,
-                         TableCache* table_cache,
-                         Iterator* iter,
-                         FileMetaData* meta);
-    
-    static void TestKey(const std::string& key,
-                    uint64_t seq,
-                    ValueType vt) {
-  std::string encoded = IKey(key, seq, vt);
+    {    if (SemanticNode.is<Expr *>()) {
+      SemanticNode.get<Expr *>()->dump(llvm::errs());
+    } else if (SemanticNode.is<Decl *>()) {
+      SemanticNode.get<Decl *>()->dump(llvm::errs());
+    } else if (SemanticNode.is<Expr *>()) {
+      SemanticNode.get<Expr *>()->dump(llvm::errs());
+    } else {
+      llvm_unreachable('ASTNode has pointer to unknown thing!');
     }
-    
-    Status DumpTable(Env* env, const std::string& fname, WritableFile* dst) {
-  uint64_t file_size;
-  RandomAccessFile* file = NULL;
-  Table* table = NULL;
-  Status s = env->GetFileSize(fname, &file_size);
-  if (s.ok()) {
-    s = env->NewRandomAccessFile(fname, &file);
+    llvm::errs() << '\n=====================================================\n';
   }
-  if (s.ok()) {
-    // We use the default comparator, which may or may not match the
-    // comparator used in this database. However this should not cause
-    // problems since we only use Table operations that do not require
-    // any comparisons.  In particular, we do not call Seek or Prev.
-    s = Table::Open(Options(), file, file_size, &table);
-  }
-  if (!s.ok()) {
-    delete table;
-    delete file;
-    return s;
-  }
-    }
-    
-    
-    {  Status result;
-  if (msg != NULL) {
-    result = Status::Corruption('VersionEdit', msg);
-  }
-  return result;
 }
-    
-    
-    {    // Write to database
-    for (int i = 0; i < num_entries; i++)
-    {
-      const int k = (order == SEQUENTIAL) ? i : (rand_.Next() % num_entries);
-      char key[100];
-      snprintf(key, sizeof(key), '%016d', k);
-      bytes_ += value_size + strlen(key);
-      std::string cpp_key = key;
-      if (!db_->set(cpp_key, gen_.Generate(value_size).ToString())) {
-        fprintf(stderr, 'set error: %s\n', db_->error().name());
-      }
-      FinishedSingleOp();
-    }
-  }
-    
-    // Returns a new environment that stores its data in memory and delegates
-// all non-file-storage tasks to base_env. The caller must delete the result
-// when it is no longer needed.
-// *base_env must remain live while the result is in use.
-Env* NewMemEnv(Env* base_env);
-    
-    PyDescriptorDatabase::~PyDescriptorDatabase() { Py_DECREF(py_database_); }
-    
-    
-    {}  // namespace google
-#endif  // GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_DATABASE_H__
 
     
-    class EnumGenerator : public SourceGeneratorBase {
- public:
-  EnumGenerator(const EnumDescriptor* descriptor, const Options* options);
-  ~EnumGenerator();
+          CCOK::PlusEq,   // +=
+      CCOK::MinusEq,  // -=
+      CCOK::StarEq,   // *=
+      CCOK::SlashEq,  // /=
+      CCOK::ModuloEq, // %=
+    
+    #ifndef SWIFT_SIL_OWNERSHIPCHECKER_H
+#define SWIFT_SIL_OWNERSHIPCHECKER_H
+    
+    /// Index the given module and store the results to \p indexStorePath.
+///
+/// \param module The module to index.
+///
+/// \param indexUnitTokens A list of unique identifiers for the index units to
+/// be written. This may either be one unit per source file of \p module, or it
+/// may be a single unit, in which case all the index information will be
+/// combined into a single unit.
+///
+/// \param moduleUnitToken A unique identifier for this module unit in the form
+/// of a file path. Only used if \p indexUnitTokens are specified for each
+/// source file, otherwise the single \p indexUnitTokens value is used instead.
+///
+/// \param indexStorePath The location to write the indexing data to.
+///
+/// \param indexSystemModules If true, emit index data for imported serialized
+/// swift system modules.
+///
+/// \param isDebugCompilation true for non-optimized compiler invocation.
+///
+/// \param targetTriple The target for this compilation.
+///
+/// \param dependencyTracker The set of dependencies seen while building.
+bool indexAndRecord(ModuleDecl *module, ArrayRef<std::string> indexUnitTokens,
+                    StringRef moduleUnitToken, StringRef indexStorePath,
+                    bool indexSystemModules, bool isDebugCompilation,
+                    StringRef targetTriple,
+                    const DependencyTracker &dependencyTracker);
+// FIXME: indexUnitTokens could be StringRef, but that creates an impedance
+// mismatch in the caller.
+    
+    /// Create a canonicalized substitution list from subs.
+/// subs is the substitution list to be canonicalized.
+/// canSubs is an out-parameter, which is used to store the results in case
+/// the list of substitutions was not canonical.
+/// The function returns a list of canonicalized substitutions.
+/// If the substitution list subs was canonical already, it will be returned and
+/// canSubs out-parameter will be empty.
+/// If something had to be canonicalized, then the canSubs out-parameter will be
+/// populated and the returned SubstitutionList would refer to canSubs storage.
+SubstitutionList
+getCanonicalSubstitutionList(SubstitutionList subs,
+                             SmallVectorImpl<Substitution> &canSubs);
+    
+    #include 'llvm/Support/raw_ostream.h'
+    
+    leveldb_writeoptions_t* leveldb_writeoptions_create() {
+  return new leveldb_writeoptions_t;
+}
+    
+    void DBIter::Seek(const Slice& target) {
+  direction_ = kForward;
+  ClearSavedValue();
+  saved_key_.clear();
+  AppendInternalKey(
+      &saved_key_, ParsedInternalKey(target, sequence_, kValueTypeForSeek));
+  iter_->Seek(saved_key_);
+  if (iter_->Valid()) {
+    FindNextUserEntry(false, &saved_key_ /* temporary storage */);
+  } else {
+    valid_ = false;
+  }
+}
+    
+    Iterator* TableCache::NewIterator(const ReadOptions& options,
+                                  uint64_t file_number,
+                                  uint64_t file_size,
+                                  Table** tableptr) {
+  if (tableptr != NULL) {
+    *tableptr = NULL;
+  }
     }
     
-    void RepeatedEnumFieldGenerator::WriteToString(io::Printer* printer) {
-  printer->Print(variables_,
-    'PrintField(\'$descriptor_name$\', $name$_, writer);\n');
-}
-    
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_ENUM_FIELD_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_ENUM_FIELD_H__
-    
-    void RepeatedPrimitiveFieldGenerator::GenerateFreezingCode(io::Printer* printer) {
-}
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/csharp/csharp_field_base.h>
-    
-    
-    {}  // namespace testing
-    
-    #define GTEST_TEST_NO_FATAL_FAILURE_(statement, fail) \
-  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
-  if (::testing::internal::AlwaysTrue()) { \
-    ::testing::internal::HasNewFatalFailureHelper gtest_fatal_failure_checker; \
-    GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
-    if (gtest_fatal_failure_checker.has_new_fatal_failure()) { \
-      goto GTEST_CONCAT_TOKEN_(gtest_label_testnofatal_, __LINE__); \
-    } \
-  } else \
-    GTEST_CONCAT_TOKEN_(gtest_label_testnofatal_, __LINE__): \
-      fail('Expected: ' #statement ' doesn't generate new fatal ' \
-           'failures in the current thread.\n' \
-           '  Actual: it does.')
-    
-      template <typename T>
-  operator ParamGenerator<T>() const {
-    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
-        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
-        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
-        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
-        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_),
-        static_cast<T>(v15_), static_cast<T>(v16_), static_cast<T>(v17_),
-        static_cast<T>(v18_), static_cast<T>(v19_), static_cast<T>(v20_),
-        static_cast<T>(v21_), static_cast<T>(v22_), static_cast<T>(v23_),
-        static_cast<T>(v24_), static_cast<T>(v25_), static_cast<T>(v26_),
-        static_cast<T>(v27_), static_cast<T>(v28_), static_cast<T>(v29_),
-        static_cast<T>(v30_), static_cast<T>(v31_), static_cast<T>(v32_),
-        static_cast<T>(v33_), static_cast<T>(v34_), static_cast<T>(v35_),
-        static_cast<T>(v36_), static_cast<T>(v37_), static_cast<T>(v38_),
-        static_cast<T>(v39_), static_cast<T>(v40_), static_cast<T>(v41_),
-        static_cast<T>(v42_)};
-    return ValuesIn(array);
+      for (size_t i = 0; i < compact_pointers_.size(); i++) {
+    PutVarint32(dst, kCompactPointer);
+    PutVarint32(dst, compact_pointers_[i].first);  // level
+    PutLengthPrefixedSlice(dst, compact_pointers_[i].second.Encode());
   }
     
-    // INTERNAL IMPLEMENTATION - DO NOT USE.
-//
-// GTEST_CHECK_ is an all-mode assert. It aborts the program if the condition
-// is not satisfied.
-//  Synopsys:
-//    GTEST_CHECK_(boolean_condition);
-//     or
-//    GTEST_CHECK_(boolean_condition) << 'Additional message';
-//
-//    This checks the condition and if the condition is not satisfied
-//    it prints message about the condition violation, including the
-//    condition itself, plus additional message streamed into it, if any,
-//    and then it aborts the program. It aborts the program irrespective of
-//    whether it is built in the debug mode or not.
-#define GTEST_CHECK_(condition) \
-    GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
-    if (::testing::internal::IsTrue(condition)) \
-      ; \
-    else \
-      GTEST_LOG_(FATAL) << 'Condition ' #condition ' failed. '
     
-      template <GTEST_10_TYPENAMES_(U)>
-  tuple& CopyFrom(const GTEST_10_TUPLE_(U)& t) {
-    f0_ = t.f0_;
-    f1_ = t.f1_;
-    f2_ = t.f2_;
-    f3_ = t.f3_;
-    f4_ = t.f4_;
-    f5_ = t.f5_;
-    f6_ = t.f6_;
-    f7_ = t.f7_;
-    f8_ = t.f8_;
-    f9_ = t.f9_;
-    return *this;
-  }
+    {}  // namespace leveldb
     
-    template <GTEST_TEMPLATE_ T1, GTEST_TEMPLATE_ T2, GTEST_TEMPLATE_ T3,
-    GTEST_TEMPLATE_ T4, GTEST_TEMPLATE_ T5, GTEST_TEMPLATE_ T6,
-    GTEST_TEMPLATE_ T7, GTEST_TEMPLATE_ T8, GTEST_TEMPLATE_ T9,
-    GTEST_TEMPLATE_ T10, GTEST_TEMPLATE_ T11, GTEST_TEMPLATE_ T12,
-    GTEST_TEMPLATE_ T13, GTEST_TEMPLATE_ T14, GTEST_TEMPLATE_ T15,
-    GTEST_TEMPLATE_ T16, GTEST_TEMPLATE_ T17, GTEST_TEMPLATE_ T18,
-    GTEST_TEMPLATE_ T19, GTEST_TEMPLATE_ T20, GTEST_TEMPLATE_ T21,
-    GTEST_TEMPLATE_ T22, GTEST_TEMPLATE_ T23, GTEST_TEMPLATE_ T24,
-    GTEST_TEMPLATE_ T25, GTEST_TEMPLATE_ T26, GTEST_TEMPLATE_ T27,
-    GTEST_TEMPLATE_ T28, GTEST_TEMPLATE_ T29, GTEST_TEMPLATE_ T30,
-    GTEST_TEMPLATE_ T31, GTEST_TEMPLATE_ T32, GTEST_TEMPLATE_ T33,
-    GTEST_TEMPLATE_ T34, GTEST_TEMPLATE_ T35, GTEST_TEMPLATE_ T36,
-    GTEST_TEMPLATE_ T37, GTEST_TEMPLATE_ T38, GTEST_TEMPLATE_ T39,
-    GTEST_TEMPLATE_ T40, GTEST_TEMPLATE_ T41>
-struct Templates41 {
-  typedef TemplateSel<T1> Head;
-  typedef Templates40<T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14,
-      T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-      T29, T30, T31, T32, T33, T34, T35, T36, T37, T38, T39, T40, T41> Tail;
-};
-    
-    // Implementation #2 pre-calculates the primes and stores the result
-// in an array.
-class PreCalculatedPrimeTable : public PrimeTable {
- public:
-  // 'max' specifies the maximum number the prime table holds.
-  explicit PreCalculatedPrimeTable(int max)
-      : is_prime_size_(max + 1), is_prime_(new bool[max + 1]) {
-    CalculatePrimesUpTo(max);
-  }
-  virtual ~PreCalculatedPrimeTable() { delete[] is_prime_; }
+        const char* benchmarks = FLAGS_benchmarks;
+    while (benchmarks != NULL) {
+      const char* sep = strchr(benchmarks, ',');
+      Slice name;
+      if (sep == NULL) {
+        name = benchmarks;
+        benchmarks = NULL;
+      } else {
+        name = Slice(benchmarks, sep - benchmarks);
+        benchmarks = sep + 1;
+      }
     }
     
-    #include 'ifaddrs_android.h'
-#include <stdlib.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/utsname.h>
-#include <sys/ioctl.h>
-#include <netinet/in.h>
-#include <net/if.h>
-#include <unistd.h>
-#include <errno.h>
-#include <linux/netlink.h>
-#include <linux/rtnetlink.h>
+      void FinishedSingleOp() {
+    if (FLAGS_histogram) {
+      double now = Env::Default()->NowMicros() * 1e-6;
+      double micros = (now - last_op_finish_) * 1e6;
+      hist_.Add(micros);
+      if (micros > 20000) {
+        fprintf(stderr, 'long op: %.1f micros%30s\r', micros, '');
+        fflush(stderr);
+      }
+      last_op_finish_ = now;
+    }
+    }
     
-    int PowerIphone::get_power_seconds_left() {
-	if (UpdatePowerInfo()) {
-		return nsecs_left;
-	} else {
-		return -1;
-	}
+    inline bool operator!=(const Slice& x, const Slice& y) {
+  return !(x == y);
 }
     
-    	ERR_FAIL_COND_V(!connected, ERR_UNCONFIGURED);
-    
-    #if defined(MBEDTLS_PLATFORM_FPRINTF_ALT) && !defined(MBEDTLS_PLATFORM_C)
-#error 'MBEDTLS_PLATFORM_FPRINTF_ALT defined, but not all prerequisites'
+    #ifdef min
+#undef min // some garbage from some Windows header that conflicts with std::min()
 #endif
     
-    
-    {		GLOBAL_LOCK_FUNCTION;
-		T::initialize_class();
-		ClassInfo *t = classes.getptr(T::get_class_static());
-		ERR_FAIL_COND(!t);
-		t->exposed = true;
-		//nothing
-	}
+        if (useDistributedMBReading)
+        dataReader->StartDistributedMinibatchLoop(mbSize, 0, m_mpi->CurrentNodeRank(), m_mpi->NumNodesInUse(), inputMatrices.GetStreamDescriptions(), totalEpochSize);
+    else
+        dataReader->StartMinibatchLoop(mbSize, 0, inputMatrices.GetStreamDescriptions(), totalEpochSize);
     
     
-    {			add_type(inherits, p_types, p_root);
-		}
+    {
+    {
+    {}}} // end namespaces
+
     
-    void VehicleWheel::set_use_as_traction(bool p_enable) {
+        // construction
+    TextLocation()
+        : lineNo(SIZE_MAX), charPos(SIZE_MAX), sourceFileAsIndex(SIZE_MAX)
+    {
+    } // default constructor constructs an unmissably invalid object
+    bool IsValid() const;
+    
+        // SaveData - save data in the file/files
+    // recordStart - Starting record number
+    // matricies - a map of section name (section:subsection) to data pointer. Data sepcifications from config file will be used to determine where and how to save data
+    // numRecords - number of records we are saving, can be zero if not applicable
+    // datasetSize - size of the dataset (in records)
+    // byteVariableSized - for variable sized data, size of current block to be written, zero when not used, or ignored if not variable sized data
+    virtual bool SaveData(size_t recordStart, const std::map<std::wstring, void*, nocase_compare>& matrices, size_t numRecords, size_t datasetSize, size_t byteVariableSized = 0);
+    
+    #pragma once
+    
+    template <class _T>
+class const_array_ref
+{
+    const _T* data;
+    size_t n;
+    inline void check_index(size_t i) const
+    {
+        i;
+        assert(i < n);
+    }
+    inline void check_ptr() const
+    {
+        n;
+        data;
+        assert(n == 0 || data != NULL);
+    }
     }
     
+    DMLC_REGISTRY_FILE_TAG(sparse_page_lz4_format);
     
-    {	singleton = NULL;
-}
+    void CheckObjFunction(xgboost::ObjFunction * obj,
+                      std::vector<xgboost::bst_float> preds,
+                      std::vector<xgboost::bst_float> labels,
+                      std::vector<xgboost::bst_float> weights,
+                      std::vector<xgboost::bst_float> out_grad,
+                      std::vector<xgboost::bst_float> out_hess);
     
-    void VideoPlayer::set_buffering_msec(int p_msec) {
+      for (auto alphabet_size : test_cases) {
+    for (int i = 0; i < repetitions; i++) {
+      std::vector<int> input(num_elements);
+      std::generate(input.begin(), input.end(),
+        [=]() { return rand() % alphabet_size; });
+      CompressedBufferWriter cbw(alphabet_size);
+    }
     }
     
-    		Ref<VisualScriptNode> vnode;
-		if (use_set) {
-			Ref<VisualScriptVariableSet> vnodes;
-			vnodes.instance();
-			vnodes->set_variable(d['variable']);
-			vnode = vnodes;
-		} else {
+    // common regressions
+// linear regression
+struct LinearSquareLoss {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return true; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
+  }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    return 1.0f;
+  }
+  template <typename T>
+  static T PredTransform(T x) { return x; }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) { return T(1.0f); }
+  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
+  static const char* LabelErrorMsg() { return ''; }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
+};
+    
+    TEST(Metric, MAP) {
+  xgboost::Metric * metric = xgboost::Metric::Create('map');
+  ASSERT_STREQ(metric->Name(), 'map');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 1, 1e-10);
+  EXPECT_NEAR(GetMetricEval(metric,
+                            {0.1f, 0.9f, 0.1f, 0.9f},
+                            {  0,   0,   1,   1}),
+              0.5f, 0.001f);
+  EXPECT_NEAR(GetMetricEval(metric, {}, {}), 1, 1e-10);
     }
     
-    			if (skip) {
-				continue;
-			}
+      /*! \brief an instance of sparse vector in the batch */
+  struct Inst {
+    /*! \brief pointer to the elements*/
+    const Entry *data{nullptr};
+    /*! \brief length of the instance */
+    bst_uint length{0};
+    /*! \brief constructor */
+    Inst()  = default;
+    Inst(const Entry *data, bst_uint length) : data(data), length(length) {}
+    /*! \brief get i-th pair in the sparse vector*/
+    inline const Entry& operator[](size_t i) const {
+      return data[i];
+    }
+  };
