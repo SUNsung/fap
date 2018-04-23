@@ -1,85 +1,118 @@
 
         
-          describe '.all' do
-    it 'uses the client to fetch all keys' do
-      mock_client_response(:list_keys, with: no_args) do
-        [
-          {
-            canDownload: false,
-            canRevoke: true,
-            keyId: 'some-key-id',
-            keyName: 'Test Key via fastlane',
-            servicesCount: 2
-          },
-          {
-            canDownload: true,
-            canRevoke: true,
-            keyId: 'B92NE4F7RG',
-            keyName: 'Test Key via browser',
-            servicesCount: 2
-          }
-        ]
-      end
-    
-          # Run a certain action
-      def trigger(command: nil, serial: nil)
-        android_serial = serial != '' ? 'ANDROID_SERIAL=#{serial}' : nil
-        command = [android_serial, adb_path, command].join(' ')
-        Action.sh(command)
-      end
-    
-          it 'does set the source directory' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-            cloc(source_directory: 'MyCoolApp')
-          end').runner.execute(:test)
-    
-      attributes :id, :type, :name, :updated
-    
-        it 'removes the remote accounts\'s statuses and media attachments' do
-      expect { bad_status1.reload }.to raise_exception ActiveRecord::RecordNotFound
-      expect { bad_status2.reload }.to raise_exception ActiveRecord::RecordNotFound
-      expect { bad_attachment.reload }.to raise_exception ActiveRecord::RecordNotFound
-    end
-  end
-    
-      def enough_poll_answers
-    errors.add(:poll_answers, I18n.t('activerecord.errors.models.poll.attributes.poll_answers.not_enough_poll_answers')) if poll_answers.size < 2
-  end
-    
-        def initialize
-      clear
+            it 'should have a way of getting the service configurations' do
+      configs = key.service_configs_for(Spaceship::Portal::Key::MUSIC_KIT_ID)
+      expect(configs).to be_instance_of(Array)
+      expect(configs.sample).to be_instance_of(Hash)
+      expect(configs.first['identifier']).to eq('music.com.snatchev.test')
     end
     
-        EMPTY_TYPE = 'inode/x-empty'
-    SENSIBLE_DEFAULT = 'application/octet-stream'
-    
-        # Returns the id of the instance in a split path form. e.g. returns
-    # 000/001/234 for an id of 1234.
-    def id_partition attachment, style_name
-      case id = attachment.instance.id
-      when Integer
-        ('%09d'.freeze % id).scan(/\d{3}/).join('/'.freeze)
-      when String
-        id.scan(/.{3}/).first(3).join('/'.freeze)
-      else
-        nil
+            expect(result).to eq('git svn info | grep Revision | egrep -o '[0-9]+'')
+        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('git svn info | grep Revision | egrep -o '[0-9]+'')
       end
     end
     
-        Hash.new.tap do |missing_styles|
-      current_styles.each do |klass, attachment_definitions|
-        attachment_definitions.each do |attachment_name, styles|
-          registered = registered_styles[klass][attachment_name] || [] rescue []
-          missed = styles - registered
-          if missed.present?
-            klass_sym = klass.to_s.to_sym
-            missing_styles[klass_sym] ||= Hash.new
-            missing_styles[klass_sym][attachment_name.to_sym] ||= Array.new
-            missing_styles[klass_sym][attachment_name.to_sym].concat(missed.to_a)
-            missing_styles[klass_sym][attachment_name.to_sym].map!(&:to_s).sort!.map!(&:to_sym).uniq!
+        def merge!(hash)
+      return super unless hash.is_a? Hash
+      hash.assert_valid_keys URI::Generic::COMPONENT
+      hash.each_pair do |key, value|
+        send '#{key}=', value
+      end
+      self
+    end
+    
+              id = link['href'].remove('#')
+          entries << [name, id]
+          next if name =~ /Sass|Less|Glyphicons/
+    
+              node.css('.method').each do |n|
+            next unless n.at_css('dt[id]')
+            name = n.at_css('.descname').content
+            name = '#{class_name}::#{name}()'
+            id = n.at_css('dt[id]')['id']
+            entries << [name, id]
           end
         end
+    
+    module Sass::Exec
+  # The `sass-convert` executable.
+  class SassConvert < Base
+    # @param args [Array<String>] The command-line arguments
+    def initialize(args)
+      super
+      require 'sass'
+      @options[:for_tree] = {}
+      @options[:for_engine] = {:cache => false, :read_cache => true}
+    end
+    
+      # Converts an interpolation array to source.
+  #
+  # @param interp [Array<String, Sass::Script::Tree::Node>] The interpolation array to convert.
+  # @param options [{Symbol => Object}] An options hash (see {Sass::CSS#initialize}).
+  # @return [String]
+  def self._interp_to_src(interp, options)
+    interp.map {|r| r.is_a?(String) ? r : r.to_sass(options)}.join
+  end
+end
+
+    
+        private
+    
+          def call(env)
+        request  = Request.new(env)
+        get_was  = handle(request.GET)
+        post_was = handle(request.POST) rescue nil
+        app.call env
+      ensure
+        request.GET.replace  get_was  if get_was
+        request.POST.replace post_was if post_was
+      end
+    
+      describe '#random_string' do
+    it 'outputs a string of 32 characters' do
+      expect(subject.random_string.length).to eq(32)
+    end
+  end
+    
+          get '/', {}, 'HTTP_COOKIE' => '_session=EVIL_SESSION_TOKEN; _session=SESSION_TOKEN'
+      expect(last_response).not_to be_ok
+    end
+  end
+end
+
+    
+            post '/', :file => Rack::Test::UploadedFile.new(temp_file.path), :other => '<bar>'
+        expect(body).to eq('_escaped_params_tmp_file\nhello world\n&lt;bar&gt;')
+      ensure
+        File.unlink(temp_file.path)
       end
     end
   end
 end
+
+    
+      it 'allows passing on values in env' do
+    klass    = described_class
+    changer  = Struct.new(:app) do
+      def call(env)
+        env['foo.bar'] = 42
+        app.call(env)
+      end
+    end
+    detector = Struct.new(:app) do
+      def call(env)
+        app.call(env)
+      end
+    end
+    
+          expect('.border-color-all').to have_rule(rule)
+    end
+  end
+    
+          expect('.margin-alternate').to have_rule(rule)
+    end
+  end
+    
+          expect('.size-implicit').to have_ruleset(rule)
+    end
+  end
