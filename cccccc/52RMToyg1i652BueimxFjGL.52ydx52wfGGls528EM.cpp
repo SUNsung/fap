@@ -1,251 +1,248 @@
 
         
-        namespace leveldb {
-    }
+          /// \brief Return a list of the member names.
+  ///
+  /// If null, return an empty list.
+  /// \pre type() is objectValue or nullValue
+  /// \post if type() was nullValue, it remains nullValue
+  Members getMemberNames() const;
     
-    void leveldb_iter_destroy(leveldb_iterator_t* iter) {
-  delete iter->rep;
-  delete iter;
+    // Convert a Python object to a FileDescriptorProto pointer.
+// Handles all kinds of Python errors, which are simply logged.
+static bool GetFileDescriptorProto(PyObject* py_descriptor,
+                                   FileDescriptorProto* output) {
+  if (py_descriptor == NULL) {
+    if (PyErr_ExceptionMatches(PyExc_KeyError)) {
+      // Expected error: item was simply not found.
+      PyErr_Clear();
+    } else {
+      GOOGLE_LOG(ERROR) << 'DescriptorDatabase method raised an error';
+      PyErr_Print();
+    }
+    return false;
+  }
+  if (py_descriptor == Py_None) {
+    return false;
+  }
+  const Descriptor* filedescriptor_descriptor =
+      FileDescriptorProto::default_instance().GetDescriptor();
+  CMessage* message = reinterpret_cast<CMessage*>(py_descriptor);
+  if (PyObject_TypeCheck(py_descriptor, &CMessage_Type) &&
+      message->message->GetDescriptor() == filedescriptor_descriptor) {
+    // Fast path: Just use the pointer.
+    FileDescriptorProto* file_proto =
+        static_cast<FileDescriptorProto*>(message->message);
+    *output = *file_proto;
+    return true;
+  } else {
+    // Slow path: serialize the message. This allows to use databases which
+    // use a different implementation of FileDescriptorProto.
+    ScopedPyObjectPtr serialized_pb(
+        PyObject_CallMethod(py_descriptor, 'SerializeToString', NULL));
+    if (serialized_pb == NULL) {
+      GOOGLE_LOG(ERROR)
+          << 'DescriptorDatabase method did not return a FileDescriptorProto';
+      PyErr_Print();
+      return false;
+    }
+    char* str;
+    Py_ssize_t len;
+    if (PyBytes_AsStringAndSize(serialized_pb.get(), &str, &len) < 0) {
+      GOOGLE_LOG(ERROR)
+          << 'DescriptorDatabase method did not return a FileDescriptorProto';
+      PyErr_Print();
+      return false;
+    }
+    FileDescriptorProto file_proto;
+    if (!file_proto.ParseFromArray(str, len)) {
+      GOOGLE_LOG(ERROR)
+          << 'DescriptorDatabase method did not return a FileDescriptorProto';
+      return false;
+    }
+    *output = file_proto;
+    return true;
+  }
 }
     
-    Status SetCurrentFile(Env* env, const std::string& dbname,
-                      uint64_t descriptor_number) {
-  // Remove leading 'dbname/' and add newline to manifest file name
-  std::string manifest = DescriptorFileName(dbname, descriptor_number);
-  Slice contents = manifest;
-  assert(contents.starts_with(dbname + '/'));
-  contents.remove_prefix(dbname.size() + 1);
-  std::string tmp = TempFileName(dbname, descriptor_number);
-  Status s = WriteStringToFileSync(env, contents.ToString() + '\n', tmp);
-  if (s.ok()) {
-    s = env->RenameFile(tmp, CurrentFileName(dbname));
-  }
-  if (!s.ok()) {
-    env->DeleteFile(tmp);
-  }
-  return s;
-}
-    
-    // Make the CURRENT file point to the descriptor file with the
-// specified number.
-extern Status SetCurrentFile(Env* env, const std::string& dbname,
-                             uint64_t descriptor_number);
-    
-    struct FileMetaData {
-  int refs;
-  int allowed_seeks;          // Seeks allowed until compaction
-  uint64_t number;
-  uint64_t file_size;         // File size in bytes
-  InternalKey smallest;       // Smallest internal key served by table
-  InternalKey largest;        // Largest internal key served by table
+    class ReflectionClassGenerator : public SourceGeneratorBase {
+ public:
+  ReflectionClassGenerator(const FileDescriptor* file, const Options* options);
+  ~ReflectionClassGenerator();
     }
     
-    namespace leveldb {
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
     }
     
-    #endif  // STORAGE_LEVELDB_HELPERS_MEMENV_MEMENV_H_
+    // Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+    
+    
+    {}  // namespace google
+#endif  // GOOGLE_PROTOBUF_COMPILER_JAVA_EXTENSION_LITE_H__
 
     
     
-    {  // 'filter' contains the data appended by a preceding call to
-  // CreateFilter() on this class.  This method must return true if
-  // the key was in the list of keys passed to CreateFilter().
-  // This method may return true or false if the key was not on the
-  // list, but it should aim to return false with a high probability.
-  virtual bool KeyMayMatch(const Slice& key, const Slice& filter) const = 0;
+    {            ptr[tid] = partial = partial + ptr[tid + 16];
+            ptr[tid] = partial = partial + ptr[tid + 8];
+            ptr[tid] = partial = partial + ptr[tid + 4];
+            ptr[tid] = partial = partial + ptr[tid + 2];
+            ptr[tid] = partial = partial + ptr[tid + 1];
+        }
+    
+    CV_EXPORTS_W void max(InputArray src1, Scalar src2, OutputArray dst);
+    
+    /* End of file. */
+
+    
+      ClientConfig client_config;
+  client_config.set_client_type(ASYNC_CLIENT);
+  client_config.set_outstanding_rpcs_per_channel(1000);
+  client_config.set_client_channels(8);
+  client_config.set_async_client_threads(8);
+  client_config.set_rpc_type(STREAMING);
+  client_config.mutable_load_params()->mutable_poisson()->set_offered_load(
+      1000.0 / grpc_test_slowdown_factor());
+    
+      grpc::testing::RunServer();
+    
+    
+    { private:
+  GeneratorConfiguration config_;
 };
     
-    	if (PathFileExists(cpuCfgPath)) {
-		if (PathFileExists(cfgPath)) {
-			if (!CopyFile(cfgPath, cpuCfgPath, FALSE))
-			{
-				MessageBox(NULL,
-					(GetLastError() == ERROR_ACCESS_DENIED)
-					? L'Failed to copy ConEmu.xml file to ConEmu-%COMPUTERNAME%.xml backup location! Restart Cmder as Administrator.'
-					: L'Failed to copy ConEmu.xml file to ConEmu-%COMPUTERNAME%.xml backup location!', MB_TITLE, MB_ICONSTOP);
-				exit(1);
-			}
-		}
-		else
-		{
-			if (!CopyFile(cpuCfgPath, cfgPath, FALSE))
-			{
-				MessageBox(NULL,
-					(GetLastError() == ERROR_ACCESS_DENIED)
-					? L'Failed to copy ConEmu-%COMPUTERNAME%.xml file to vendored ConEmu.xml location! Restart Cmder as Administrator.'
-					: L'Failed to copy ConEmu-%COMPUTERNAME%.xml file to vendored ConEmu.xml location!', MB_TITLE, MB_ICONSTOP);
-				exit(1);
-			}
-		}
-	}
-	else if (PathFileExists(userCfgPath)) {
-		if (PathFileExists(cfgPath)) {
-			if (!CopyFile(cfgPath, userCfgPath, FALSE))
-			{
-				MessageBox(NULL,
-					(GetLastError() == ERROR_ACCESS_DENIED)
-					? L'Failed to copy ConEmu.xml file to backup location! Restart Cmder as Administrator.'
-					: L'Failed to copy ConEmu.xml file to backup location!', MB_TITLE, MB_ICONSTOP);
-				exit(1);
-			}
-		}
-		else
-		{
-			if (!CopyFile(userCfgPath, cfgPath, FALSE))
-			{
-				MessageBox(NULL,
-					(GetLastError() == ERROR_ACCESS_DENIED)
-					? L'Failed to copy ConEmu.xml file to vendored ConEmu.xml location! Restart Cmder as Administrator.'
-					: L'Failed to copy ConEmu.xml file to vendored ConEmu.xml location!', MB_TITLE, MB_ICONSTOP);
-				exit(1);
-			}
-		}
-	}
-	else if (PathFileExists(cfgPath)) {
-		if (!CopyFile(cfgPath, userCfgPath, FALSE))
-		{
-			MessageBox(NULL,
-				(GetLastError() == ERROR_ACCESS_DENIED)
-				? L'Failed to copy ConEmu.xml file to user-conemu.xml backup location! Restart Cmder as Administrator.'
-				: L'Failed to copy ConEmu.xml file to user-conemu.xml backup location!', MB_TITLE, MB_ICONSTOP);
-			exit(1);
-		}
-	}
-	else {
-		if (!CopyFile(defaultCfgPath, cfgPath, FALSE))
-		{
-			MessageBox(NULL,
-				(GetLastError() == ERROR_ACCESS_DENIED)
-				? L'Failed to copy Cmder default ConEmu.xml file to vendored ConEmu.xml location! Restart Cmder as Administrator.'
-				: L'Failed to copy Cmder default ConEmu.xml file to vendored ConEmu.xml location!', MB_TITLE, MB_ICONSTOP);
-			exit(1);
-		}
-	}
-    
-    /// See FLAG, but EXTENSION_FLAG%s are only available to extensions.
-#define EXTENSION_FLAG(t, n, v, d) OSQUERY_FLAG(t, n, v, d, 0, 1, 0, 0)
-    
-      // Enables use of gtest (ASSERT|EXPECT)_NE
-  bool operator!=(const Status& rhs) const { return !operator==(rhs); }
-    
-     protected:
-  void SetUp() override {
-    createMockFileStructure();
+    AuthPropertyIterator SecureAuthContext::begin() const {
+  if (ctx_) {
+    grpc_auth_property_iterator iter =
+        grpc_auth_context_property_iterator(ctx_);
+    const grpc_auth_property* property =
+        grpc_auth_property_iterator_next(&iter);
+    return AuthPropertyIterator(property, &iter);
+  } else {
+    return end();
   }
-    
-    TEST_F(ViewsConfigParserPluginTests, test_swap_view) {
-  Config c;
-  std::vector<std::string> old_views_vec;
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  old_views_vec.clear();
-  auto s = c.update(getTestConfigMap('view_test.conf'));
-  EXPECT_TRUE(s.ok());
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  EXPECT_EQ(old_views_vec[0], 'config_views.kernel_hashes_new');
-    }
-    
-    namespace osquery {
-    }
-    
-                // FIXME-OPT: Merge the different loops, possibly remove the temporary buffer.
-            unsigned int idx1 = _VtxCurrentIdx;
-            for (int i1 = 0; i1 < count; i1++)
-            {
-                const int i2 = (i1+1) == points_count ? 0 : i1+1;
-                unsigned int idx2 = (i1+1) == points_count ? _VtxCurrentIdx : idx1+3;
-    }
-    
-        // Main loop
-    bool done = false;
-    while (!done)
-    {
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
-        {
-            ImGui_ImplSdlGL2_ProcessEvent(&event);
-            if (event.type == SDL_QUIT)
-                done = true;
-        }
-        ImGui_ImplSdlGL2_NewFrame(window);
-    }
-    
-    
-    {    (void)mods; // Modifiers are not reliable across systems
-    io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
-    io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
-    io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
-    io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
 }
     
-        void SetStaticObjectField(jclass clazz, jfieldID fieldID, jobject value)
-    { functions->SetStaticObjectField(this, clazz, fieldID, value); }
-    void SetStaticBooleanField(jclass clazz, jfieldID fieldID, jboolean value)
-    { functions->SetStaticBooleanField(this, clazz, fieldID, value); }
-    void SetStaticByteField(jclass clazz, jfieldID fieldID, jbyte value)
-    { functions->SetStaticByteField(this, clazz, fieldID, value); }
-    void SetStaticCharField(jclass clazz, jfieldID fieldID, jchar value)
-    { functions->SetStaticCharField(this, clazz, fieldID, value); }
-    void SetStaticShortField(jclass clazz, jfieldID fieldID, jshort value)
-    { functions->SetStaticShortField(this, clazz, fieldID, value); }
-    void SetStaticIntField(jclass clazz, jfieldID fieldID, jint value)
-    { functions->SetStaticIntField(this, clazz, fieldID, value); }
-    void SetStaticLongField(jclass clazz, jfieldID fieldID, jlong value)
-    { functions->SetStaticLongField(this, clazz, fieldID, value); }
-    void SetStaticFloatField(jclass clazz, jfieldID fieldID, jfloat value)
-    { functions->SetStaticFloatField(this, clazz, fieldID, value); }
-    void SetStaticDoubleField(jclass clazz, jfieldID fieldID, jdouble value)
-    { functions->SetStaticDoubleField(this, clazz, fieldID, value); }
+      grpc::testing::interop::RunServer(
+      grpc::testing::CreateInteropServerCredentials());
     
-    #pragma once
+    double UsageTimer::Now() {
+  auto ts = gpr_now(GPR_CLOCK_REALTIME);
+  return ts.tv_sec + 1e-9 * ts.tv_nsec;
+}
     
-    class ProgramLocation {
-public:
-  ProgramLocation() : m_functionName('Unspecified'), m_fileName('Unspecified'), m_lineNumber(0) {}
+    grpc::string DescribeService(const grpc::protobuf::ServiceDescriptor* service) {
+  grpc::string result;
+  if (service->options().deprecated()) {
+    result.append('DEPRECATED\n');
+  }
+  result.append('filename: ' + service->file()->name() + '\n');
     }
     
-      T *get() const {
-    return (T*)pthread_getspecific(m_key);
-  }
     
-    #if ENABLE_FBASSERT
-#define FBASSERTMSGF(expr, msg, ...) !(expr) ? facebook::assertInternal('Assert (%s:%d): ' msg, __FILE__, __LINE__, ##__VA_ARGS__) : (void) 0
-#else
-#define FBASSERTMSGF(expr, msg, ...)
-#endif // ENABLE_FBASSERT
     
-    #include <cassert>
-#include <cstddef>
-#include <cstdint>
-#include <cstring>
-#include <string>
-#include <vector>
     
-    #endif // LIBFUZZER_APPLE
+    
+    void GLESDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
+{
+    mShaderProgram->use();
+    mShaderProgram->setUniformsForBuiltins();
+    }
+    
+        virtual void DrawPoint(const b2Vec2& p, float32 size, const b2Color& color);
+    
+    class ApplyForce : public Test
+{
+public:
+	ApplyForce()
+	{
+		m_world->SetGravity(b2Vec2(0.0f, 0.0f));
+    }
+    }
+    
+    
+    {			b2BodyDef bd;
+			bd.type = b2_dynamicBody;
+			bd.position.Set(-8.0f + 8.0f * i, 12.0f);
+			b2Body* body = m_world->CreateBody(&bd);
+			body->CreateFixture(&fd);
+		}
+    
+    		{
+			b2BodyDef bd;
+			bd.type = b2_dynamicBody;
+			bd.position.Set(0.0f, 4.0f);
+    }
+    
+    namespace {
+    }
+    
+    #endif  // GUETZLI_ENTROPY_ENCODE_H_
 
     
-    static FILE *OutputFile = stderr;
+    namespace guetzli {
+    }
+    
+      // Fills in block[] with the 8x8 coefficient block with block coordinates
+  // (block_x, block_y).
+  // NOTE: If the component is 2x2 subsampled, this corresponds to the 16x16
+  // pixel area with upper-left corner (16 * block_x, 16 * block_y).
+  void GetCoeffBlock(int block_x, int block_y,
+                     coeff_t block[kDCTBlockSize]) const;
     
     
-    {}  // namespace fuzzer
+    {}  // namespace guetzli
+
     
-    using namespace std::chrono;
+    #include <string>
+#include <vector>
     
-    void sha1_addUncounted(sha1nfo *s, uint8_t data) {
-	uint8_t * const b = (uint8_t*) s->buffer;
-#ifdef SHA_BIG_ENDIAN
-	b[s->bufferOffset] = data;
-#else
-	b[s->bufferOffset ^ 3] = data;
-#endif
-	s->bufferOffset++;
-	if (s->bufferOffset == BLOCK_LENGTH) {
-		sha1_hashBlock(s);
-		s->bufferOffset = 0;
-	}
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    void Test_Spy_Sample::TestFun0()
+{
+    SPY_HOOK_THIS_API(TestFun0);
+    int i = 0;
+    SPY_ATTACH_VARIABLE('TestFun0 i', i);
+    i++;
+    xinfo2(TSF'Test');
+    }
+    
+    
+/*
+ * scop_jenv.cpp
+ *
+ *  Created on: 2012-8-21
+ *      Author: yanguoyue
+ */
+    
+    namespace fuzzer {
+    }
+    
+    
+    {  T.seekg(0, T.beg);
+  Unit Res(FileLen);
+  T.read(reinterpret_cast<char *>(Res.data()), FileLen);
+  return Res;
+}
+    
+    
+    {  bool Parse(std::istream &IS, bool ParseCoverage);
+  bool Parse(const std::string &Str, bool ParseCoverage);
+  void ParseOrExit(std::istream &IS, bool ParseCoverage);
+  size_t Merge(std::vector<std::string> *NewFiles);
+};
+    
+    size_t MutationDispatcher::Mutate_AddWordFromPersistentAutoDictionary(
+    uint8_t *Data, size_t Size, size_t MaxSize) {
+  return AddWordFromDictionary(PersistentAutoDictionary, Data, Size, MaxSize);
 }
