@@ -1,435 +1,464 @@
 
         
-          // Publish metadata about the debugged Session::Run() call.
-  //
-  // See the doc string of DebuggerStateInterface::PublishDebugMetadata() for
-  // details.
-  Status PublishDebugMetadata(const int64 global_step,
-                              const int64 session_run_count,
-                              const int64 executor_step_count,
-                              const std::vector<string>& input_names,
-                              const std::vector<string>& output_names,
-                              const std::vector<string>& target_names) override;
-    
-     protected:
-  // Variables accessible from subclasses.
-  mutex mu_;
-  ContainerInfo cinfo_ GUARDED_BY(mu_);
-  T* resource_ GUARDED_BY(mu_) = nullptr;
-    
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-        http://www.apache.org/licenses/LICENSE-2.0
+         protected:
+  bool GetAccelerator(int id, ui::Accelerator* accelerator) const override;
     
     
-    {// Options specific to zlib compression.
-#if !defined(IS_SLIM_BUILD)
-  ZlibCompressionOptions zlib_options;
-#endif  // IS_SLIM_BUILD
-};
+    {}  // namespace atom
     
-        NodeDef* const_node1 = graph_def.add_node();
-    const_node1->set_name('const_node1');
-    const_node1->set_op('Const');
+    #endif  // ATOM_BROWSER_UI_VIEWS_WIN_FRAME_VIEW_H_
+
     
-    MPIUtils::MPIUtils(const std::string& worker_name) {
-  InitMPI();
-  // Connect the MPI process IDs to the worker names that are used by TF.
-  // Gather the names of all the active processes (name can't be longer than
-  // 128 bytes)
-  int proc_id = 0, number_of_procs = 1;
-  char my_name[max_worker_name_length];
-  MPI_CHECK(MPI_Comm_rank(MPI_COMM_WORLD, &proc_id));
-  MPI_CHECK(MPI_Comm_size(MPI_COMM_WORLD, &number_of_procs));
-    }
-    
-    #include <string>
-#include 'third_party/eigen3/unsupported/Eigen/CXX11/Tensor'
-#include 'tensorflow/core/framework/tensor_shape.h'
-#include 'tensorflow/core/framework/tensor_slice.pb.h'
-#include 'tensorflow/core/lib/core/status.h'
-#include 'tensorflow/core/lib/core/stringpiece.h'
-#include 'tensorflow/core/lib/gtl/inlined_vector.h'
-#include 'tensorflow/core/platform/logging.h'
-    
-    // A comparator for internal keys that uses a specified comparator for
-// the user key portion and breaks ties by decreasing sequence number.
-class InternalKeyComparator : public Comparator {
- private:
-  const Comparator* user_comparator_;
+    class UnresponsiveSuppressor {
  public:
-  explicit InternalKeyComparator(const Comparator* c) : user_comparator_(c) { }
-  virtual const char* Name() const;
-  virtual int Compare(const Slice& a, const Slice& b) const;
-  virtual void FindShortestSeparator(
-      std::string* start,
-      const Slice& limit) const;
-  virtual void FindShortSuccessor(std::string* key) const;
+  UnresponsiveSuppressor();
+  ~UnresponsiveSuppressor();
     }
     
-      while (msg == NULL && GetVarint32(&input, &tag)) {
-    switch (tag) {
-      case kComparator:
-        if (GetLengthPrefixedSlice(&input, &str)) {
-          comparator_ = str.ToString();
-          has_comparator_ = true;
-        } else {
-          msg = 'comparator name';
-        }
-        break;
-    }
+      // Called immediately after all windows are closed.
+  virtual void OnWindowAllClosed() {}
+    
+    namespace atom {
     }
     
-      Benchmark()
-  : db_(NULL),
-    num_(FLAGS_num),
-    reads_(FLAGS_reads < 0 ? FLAGS_num : FLAGS_reads),
-    bytes_(0),
-    rand_(301) {
-    std::vector<std::string> files;
-    std::string test_dir;
-    Env::Default()->GetTestDirectory(&test_dir);
-    Env::Default()->GetChildren(test_dir.c_str(), &files);
-    if (!FLAGS_use_existing_db) {
-      for (int i = 0; i < files.size(); i++) {
-        if (Slice(files[i]).starts_with('dbbench_polyDB')) {
-          std::string file_name(test_dir);
-          file_name += '/';
-          file_name += files[i];
-          Env::Default()->DeleteFile(file_name.c_str());
-        }
-      }
+    #include <memory>
+    
+    #include <windows.h>
+    
+    #endif  // CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
+
+    
+    namespace chrome {
     }
-  }
     
-    // Returns a new environment that stores its data in memory and delegates
-// all non-file-storage tasks to base_env. The caller must delete the result
-// when it is no longer needed.
-// *base_env must remain live while the result is in use.
-Env* NewMemEnv(Env* base_env);
+    // Generate constructors.
+#include 'ipc/struct_constructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
     
-    // Dump the contents of the file named by fname in text format to
-// *dst.  Makes a sequence of dst->Append() calls; each call is passed
-// the newline-terminated text corresponding to a single item found
-// in the file.
-//
-// Returns a non-OK result if fname does not name a leveldb storage
-// file, or if the file cannot be read.
-Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
+    IPC_SYNC_MESSAGE_ROUTED3_1(ShellViewHostMsg_Call_Static_Method_Sync,
+                           std::string /* type name */,
+                           std::string /* method name */,
+                           base::ListValue /* arguments */,
+                           base::ListValue /* result */)
     
-      // Return the name of this policy.  Note that if the filter encoding
-  // changes in an incompatible way, the name returned by this method
-  // must be changed.  Otherwise, old incompatible filters may be
-  // passed to methods of this type.
-  virtual const char* Name() const = 0;
+    
+    { private:
+  App();
+  DISALLOW_COPY_AND_ASSIGN(App);
+};
+    
+    namespace nw {
+    }
+    
+      bool delay_destruction() { return delay_destruction_; }
+  void set_delay_destruction(bool val) { delay_destruction_ = val; }
+  bool pending_destruction() { return pending_destruction_; }
+  void set_pending_destruction (bool val) { pending_destruction_ = val; }
+ protected:
+  int id_;
+  bool delay_destruction_;
+  bool pending_destruction_;
+  base::WeakPtr<ObjectManager> object_manager_;
+    
+    v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
+                                           int object_id,
+                                           const std::string& type,
+                                           const std::string& method,
+                                           v8::Handle<v8::Value> args) {
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  scoped_ptr<V8ValueConverter> converter(V8ValueConverter::create());
+    }
+    
+      v8::Handle<v8::Object> objects_registry = nwapi::Dispatcher::GetObjectRegistry();
+  if (objects_registry->IsUndefined())
+    return;
+    
+    
+    
+    void DispatcherHost::OnAllocateObject(int object_id,
+                                      const std::string& type,
+                                      const base::DictionaryValue& option) {
+  DVLOG(1) << 'OnAllocateObject: object_id:' << object_id
+             << ' type:' << type
+             << ' option:' << option;
+    }
+    
+    EventListener::EventListener(int id,
+  const base::WeakPtr<DispatcherHost>& dispatcher_host,
+  const base::DictionaryValue& option) : Base(id, dispatcher_host, option) {
+    }
     
     
     {
-    {    if (debug) {
-      if (is_italic) {
-        tprintf(' Rejecting: superscript is italic.\n');
+    {    if (zoom_controller) {
+      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
+      if (zoom_factor > content::kMaximumZoomFactor) {
+        zoom_factor = content::kMaximumZoomFactor;
       }
-      if (is_punc) {
-        tprintf(' Rejecting: punctuation present.\n');
+      if (zoom_factor < content::kMinimumZoomFactor) {
+        zoom_factor = content::kMinimumZoomFactor;
       }
-      const char *char_str = wc.unicharset()->id_to_unichar(unichar_id);
-      if (bad_certainty) {
-        tprintf(' Rejecting: don't believe character %s with certainty %.2f '
-                'which is less than threshold %.2f\n', char_str,
-                char_certainty, certainty_threshold);
-      }
-      if (bad_height) {
-        tprintf(' Rejecting: character %s seems too small @ %.2f versus '
-                'expected %.2f\n', char_str, char_height, normal_height);
-      }
+      x *= zoom_factor;
+      y *= zoom_factor;
     }
-    if (bad_certainty || bad_height || is_punc || is_italic) {
-      if (ok_run_count == i) {
-        initial_ok_run_count = ok_run_count;
-      }
-      ok_run_count = 0;
-    } else {
-      ok_run_count++;
-    }
-    if (char_certainty < worst_certainty) {
-      worst_certainty = char_certainty;
-    }
-  }
-  bool all_ok = ok_run_count == wc.length();
-  if (all_ok && debug) {
-    tprintf(' Accept: worst revised certainty is %.2f\n', worst_certainty);
-  }
-  if (!all_ok) {
-    if (left_ok) *left_ok = initial_ok_run_count;
-    if (right_ok) *right_ok = ok_run_count;
-  }
-  return all_ok;
-}
     
-    
-    {  // We shouldn't try calculations if the characters are very short (for example
-  // for punctuation).
-  if (min_height > kBlnXHeight / 8 && height > 0) {
-    float result = height * kBlnXHeight * yscale / min_height;
-    *max_xht = result + kFinalPixelTolerance;
-    result = height * kBlnXHeight * yscale / max_height;
-    *min_xht = result - kFinalPixelTolerance;
+    Popup(x, y, rvh);
+  } else if (method == 'EnableShowEvent') {
+    arguments.GetBoolean(0, &enable_show_event_);
+  } else {
+    NOTREACHED() << 'Invalid call to Menu method:' << method
+                 << ' arguments:' << arguments;
   }
 }
     
+    void MenuItem::CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) {
+  if (method == 'GetChecked') {
+    result->AppendBoolean(GetChecked());
+  } else {
+    NOTREACHED() << 'Invalid call to MenuItem method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
     
-    {  // Best available image.
-  Pix* pix_;
-  // True if the source image is white-on-black.
-  bool inverse_;
-  // Block the word came from. If not null, block->re_rotation() takes the
-  // 'untransformed' coordinates even further back to the original image.
-  // Used only on the first DENORM in a chain.
-  const BLOCK* block_;
-  // Rotation to apply between translation to the origin and scaling.
-  const FCOORD* rotation_;
-  // Previous transformation in a chain.
-  const DENORM* predecessor_;
-  // Non-linear transformation maps directly from each integer offset from the
-  // origin to the corresponding x-coord. Owned by the DENORM.
-  GenericVector<float>* x_map_;
-  // Non-linear transformation maps directly from each integer offset from the
-  // origin to the corresponding y-coord. Owned by the DENORM.
-  GenericVector<float>* y_map_;
-  // x-coordinate to be mapped to final_xshift_ in the result.
-  float x_origin_;
-  // y-coordinate to be mapped to final_yshift_ in the result.
-  float y_origin_;
-  // Scale factors for x and y coords. Applied to pre-rotation system.
-  float x_scale_;
-  float y_scale_;
-  // Destination coords of the x_origin_ and y_origin_.
-  float final_xshift_;
-  float final_yshift_;
+      nw::Package* package = nw::package();
+  base::CommandLine* command_line = base::CommandLine::ForCurrentProcess();
+  base::CommandLine::StringVector args = command_line->GetArgs();
+  base::CommandLine::StringVector argv = command_line->original_argv();
+    
+    #include 'base/run_loop.h'
+#include 'content/public/browser/browsing_data_remover.h'
+#include 'extensions/browser/extension_function.h'
+    
+    bool OurReader::decodeUnicodeEscapeSequence(Token& token,
+                                         Location& current,
+                                         Location end,
+                                         unsigned int& unicode) {
+  if (end - current < 4)
+    return addError(
+        'Bad unicode escape sequence in string: four digits expected.',
+        token,
+        current);
+  unicode = 0;
+  for (int index = 0; index < 4; ++index) {
+    Char c = *current++;
+    unicode *= 16;
+    if (c >= '0' && c <= '9')
+      unicode += c - '0';
+    else if (c >= 'a' && c <= 'f')
+      unicode += c - 'a' + 10;
+    else if (c >= 'A' && c <= 'F')
+      unicode += c - 'A' + 10;
+    else
+      return addError(
+          'Bad unicode escape sequence in string: hexadecimal digit expected.',
+          token,
+          current);
+  }
+  return true;
+}
+    
+    
+    {
+    {
+}  // namespace python
+}  // namespace protobuf
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
+    }
+    
+    void RepeatedPrimitiveFieldGenerator::GenerateMembers(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    'private static readonly pb::FieldCodec<$type_name$> _repeated_$name$_codec\n'
+    '    = pb::FieldCodec.For$capitalized_type_name$($tag$);\n');
+  printer->Print(variables_,
+    'private readonly pbc::RepeatedField<$type_name$> $name$_ = new pbc::RepeatedField<$type_name$>();\n');
+  WritePropertyDocComment(printer, descriptor_);
+  AddPublicMemberAttributes(printer);
+  printer->Print(
+    variables_,
+    '$access_level$ pbc::RepeatedField<$type_name$> $property_name$ {\n'
+    '  get { return $name$_; }\n'
+    '}\n');
+}
+    
+    
+    { private:
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(RepeatedPrimitiveFieldGenerator);
 };
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace java {
+namespace {
+    }
+    }
+    }
+    }
+    }
+    
+    // Author: liujisi@google.com (Pherl Liu)
+    
+        'if (value == null) {\n'
+    '  throw new NullPointerException();\n'
+    '}\n'
+    'ensure$capitalized_name$IsMutable();\n'
+    '$name$_.add(index, com.google.protobuf.LazyFieldLite.fromValue(value));\n'
+    '$on_changed$\n',
+    
+      /// Destroy and stop all osquery service threads and service objects.
+  static void stopServices();
+    
+      /*
+   * @brief Check if flag value has been overridden.
+   *
+   * @param name the flag name.
+   * @return is the flag set to its default value.
+   */
+  static bool isDefault(const std::string& name);
+    
+     private:
+  /// Boolean to track if this instance needs to restore privileges.
+  bool dropped_{false};
+    
+    static struct {
+  /// The shared (user/kernel space) circular queue holding event results.
+  osquery_cqueue_t cqueue;
+    }
+    
+    std::string generateHostUUID() {
+  std::string hardware_uuid;
+#ifdef __APPLE__
+  // Use the hardware UUID available on OSX to identify this machine
+  uuid_t id;
+  // wait at most 5 seconds for gethostuuid to return
+  const timespec wait = {5, 0};
+  if (gethostuuid(id, &wait) == 0) {
+    char out[128] = {0};
+    uuid_unparse(id, out);
+    hardware_uuid = std::string(out);
+  }
+#elif WIN32
+  WmiRequest wmiUUIDReq('Select UUID from Win32_ComputerSystemProduct');
+  std::vector<WmiResultItem>& wmiUUIDResults = wmiUUIDReq.results();
+  if (wmiUUIDResults.size() != 0) {
+    wmiUUIDResults[0].GetString('UUID', hardware_uuid);
+  }
+#else
+  readFile('/sys/class/dmi/id/product_uuid', hardware_uuid);
 #endif
-
-    
-    class ParagraphModel;
-    
-    
-/**********************************************************************
- * QLSQ::fit
- *
- * Fit the given degree of polynomial and store the result.
- * This creates a quadratic of the form axx + bx + c, but limited to
- * the given degree.
- **********************************************************************/
-    
-    /**----------------------------------------------------------------------------
-            Macros
-----------------------------------------------------------------------------**/
-/* macros for computing miscellaneous functions of 2 points */
-#define XDelta(A,B)   ( (B).x - (A).x )
-#define YDelta(A,B)   ( (B).y - (A).y )
-#define SlopeFrom(A,B)    ( YDelta(A,B) / XDelta(A,B) )
-#define AngleFrom(A,B)		( atan2((double) YDelta(A,B),		\
-					(double) XDelta(A,B) ) )
-    
-    #endif  // TESSERACT_CLASSIFY_INTFEATUREDIST_H_
-
-    
-    /*----------------------------------------------------------------------------
-          Private Function Prototypes
------------------------------------------------------------------------------*/
-void ChangeDirection(MFOUTLINE Start, MFOUTLINE End, DIRECTION Direction);
-    
-    			/* is this a mandated initial header? If not, stop parsing */
-			if (!ogg_page_bos(&og)) {
-				/* don't leak the page; get it into the appropriate stream */
-				queue_page(&og);
-				stateflag = 1;
-				break;
-			}
-    
-    	ERR_FAIL_COND_V(!connected, ERR_UNCONFIGURED);
-    
-    void WebSocketClient::_on_disconnect() {
     }
     
+    #include <osquery/core.h>
+#include <osquery/flags.h>
+#include <osquery/logger.h>
     
-    {	WebSocketClient();
-	~WebSocketClient();
+    template <typename C>
+struct compare_greater : detail::cmp_pred<C, ordering::gt, 0> {
+  using detail::cmp_pred<C, ordering::gt, 0>::cmp_pred;
 };
     
-    		real_t projVel = wheel.m_raycastInfo.m_contactNormalWS.dot(chassis_velocity_at_contactPoint);
+    #include <folly/lang/Ordering.h>
     
-    			if (has_indices) {
-				t[0] = r[ir[i + 0]];
-				t[1] = r[ir[i + 1]];
-				t[2] = r[ir[i + 2]];
-			} else {
-				t[0] = r[i + 0];
-				t[1] = r[i + 1];
-				t[2] = r[i + 2];
-			}
+    void AsyncIOOp::complete(ssize_t result) {
+  DCHECK_EQ(state_, State::PENDING);
+  state_ = State::COMPLETED;
+  result_ = result;
+  if (cb_) {
+    cb_(this);
+  }
+}
     
-    void AnimationTreePlayer::node_set_position(const StringName &p_node, const Vector2 &p_pos) {
+      /**
+   * Return the current operation state.
+   */
+  State state() const {
+    return state_;
+  }
+    
+    /**
+ * Get the path to the current executable.
+ *
+ * Note that this is not reliable and not recommended in general; it may not be
+ * implemented on your platform (in which case it will throw), the executable
+ * might have been moved or replaced while running, and applications comprising
+ * of multiple executables should use some form of configuration system to
+ * find the other executables rather than relying on relative paths from one
+ * to another.
+ *
+ * So this should only be used for tests, logging, or other innocuous purposes.
+ */
+path executable_path();
+    
+    int main(int argc, char* argv[]) {
+  gflags::ParseCommandLineFlags(&argc, &argv, true);
+  if (FLAGS_cp) {
+    if (argc != 3) {
+      usage(argv[0]);
+    }
+    copy(argv[1], argv[2]);
+  } else {
+    if (argc != 1) {
+      usage(argv[0]);
+    }
+    list();
+  }
+  return 0;
+}
+
+    
+      /**
+   * Construct an AsyncFileWriter that appends to the file at the specified
+   * path.
+   */
+  explicit AsyncFileWriter(folly::StringPiece path);
+    
+    std::shared_ptr<LogHandler> FileHandlerFactory::createHandler(
+    const Options& options) {
+  WriterFactory writerFactory;
+  return StandardLogHandlerFactory::createHandler(
+      getType(), &writerFactory, options);
+}
+    
+    /**
+ * FileHandlerFactory is a LogHandlerFactory that constructs log handlers
+ * that write to a file.
+ *
+ * Note that FileHandlerFactory allows opening and appending to arbitrary files
+ * based on the handler options.  This may make it unsafe to use
+ * FileHandlerFactory in some contexts: for instance, a setuid binary should
+ * generally avoid registering the FileHandlerFactory if they allow log
+ * handlers to be configured via command line parameters, since otherwise this
+ * may allow non-root users to append to files that they otherwise would not
+ * have write permissions for.
+ */
+class FileHandlerFactory : public LogHandlerFactory {
+ public:
+  StringPiece getType() const override {
+    return 'file';
+  }
     }
     
     
     {
-    {}  // namespace log
-}  // namespace leveldb
+    {      if (end == msgData.size()) {
+        break;
+      }
+      idx = end + 1;
+    }
+  } else {
+    buffer.reserve(headerLengthGuess + msgData.size());
+    headerFormatter.appendTo(buffer);
+    buffer.append(msgData.data(), msgData.size());
+    buffer.push_back('\n');
+  }
     
-      DB *db;
+          well_formed = db_wrapper->AddToBatch(
+          batch, true,
+          Handle<Array>::Cast(sub_batch->Get(String::NewSymbol('delete'))),
+          db_wrapper, *v8::String::Utf8Value(sub_batch->Get(
+          String::NewSymbol('column_family'))));
+    } else {
+      well_formed = db_wrapper->AddToBatch(
+          batch, false,
+          Handle<Array>::Cast(sub_batch->Get(String::NewSymbol('put'))));
+      well_formed = db_wrapper->AddToBatch(
+          batch, true,
+          Handle<Array>::Cast(sub_batch->Get(String::NewSymbol('delete'))));
+    
+    
+    {#ifndef ROCKSDB_LITE  // TtlDb is not supported in Lite
+// Open a TtlDB with a non-associative StringAppendTESTOperator
+std::shared_ptr<DB> OpenTtlDb(char delim_char) {
+  DBWithTTL* db;
   Options options;
   options.create_if_missing = true;
-  ASSERT_OK(DB::Open(options, dbpath, &db));
+  options.merge_operator.reset(new StringAppendTESTOperator(delim_char));
+  EXPECT_OK(DBWithTTL::Open(options, kDbName, &db, 123456));
+  return std::shared_ptr<DB>(db);
+}
+#endif  // !ROCKSDB_LITE
+}  // namespace
     
-    static int NextLength(int length) {
-  if (length < 10) {
-    length += 1;
-  } else if (length < 100) {
-    length += 10;
-  } else if (length < 1000) {
-    length += 100;
-  } else {
-    length += 1000;
+    #include <assert.h>
+#include 'rocksjni/jnicallback.h'
+#include 'rocksjni/portal.h'
+    
+      StatisticsJni::StatisticsJni(std::shared_ptr<Statistics> stats)
+      : StatisticsImpl(stats, false), m_ignore_histograms() {
   }
-  return length;
+    
+      class StatisticsJni : public StatisticsImpl {
+   public:
+     StatisticsJni(std::shared_ptr<Statistics> stats);
+     StatisticsJni(std::shared_ptr<Statistics> stats,
+         const std::set<uint32_t> ignore_histograms);
+     virtual bool HistEnabledForType(uint32_t type) const override;
+    }
+    
+    
+    {  // No copying allowed
+  LookupKey(const LookupKey&);
+  void operator=(const LookupKey&);
+};
+    
+    /*
+ * Prototypes for functions exported by loadable shared libs.  These are
+ * called by JNI, not provided by JNI.
+ */
+JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved);
+JNIEXPORT void JNI_OnUnload(JavaVM* vm, void* reserved);
+    
+    namespace {
+    }
+    
+    /* static */ void Config::destroy(Config * node)
+{
+    delete node;
 }
     
-    namespace leveldb {
-namespace log {
-    }
+    class Config {
     }
     
-      // Create a writer that will append data to '*dest'.
-  // '*dest' must have initial length 'dest_length'.
-  // '*dest' must remain live while this Writer is in use.
-  Writer(WritableFile* dest, uint64_t dest_length);
-    
-    namespace guetzli {
+    void assertInternal(const char* formatstr ...) {
+    va_list va_args;
+    va_start(va_args, formatstr);
+    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
+    va_end(va_args);
+    if (gAssertHandler != NULL) {
+        gAssertHandler(sAssertBuf);
     }
-    
-    // Performs in-place floating point 8x8 inverse DCT on block[0..63].
-void ComputeBlockIDCTDouble(double block[64]);
-    
-        if (n == 1) {
-      depth[tree[0].index_right_or_value_] = 1;      // Only one element.
-      break;
-    }
-    
-      // Fill in 2nd level tables and add pointers to root table.
-  table += table_size;
-  table_size = 0;
-  low = 0;
-  for (len = kJpegHuffmanRootTableBits + 1;
-       len <= kJpegHuffmanMaxBitLength; ++len) {
-    for (; count[len] > 0; --count[len]) {
-      // Start a new sub-table if the previous one is full.
-      if (low >= table_size) {
-        table += table_size;
-        table_bits = NextTableBitSize(count, len);
-        table_size = 1 << table_bits;
-        total_size += table_size;
-        low = 0;
-        lut[key].bits = table_bits + kJpegHuffmanRootTableBits;
-        lut[key].value = (table - lut) - key;
-        ++key;
-      }
-      code.bits = len - kJpegHuffmanRootTableBits;
-      code.value = symbols[idx++];
-      reps = 1 << (table_bits - code.bits);
-      while (reps--) {
-        table[low++] = code;
-      }
-    }
-  }
-    
-    typedef GRPC_CUSTOM_STRING string;
+    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
+    // crash at this specific address so that we can find our crashes easier
+    *(int*)0xdeadb00c = 0;
+    // let the compiler know we won't reach the end of the function
+     __builtin_unreachable();
+}
     
     
-	//Service Descriptor
-	printer->Print(vars, 'var $ServiceDesc$ = $grpc$.ServiceDesc{\n');
-	printer->Indent();
-	printer->Print(vars, 'ServiceName: \'$Package$.$Service$\',\n');
-	printer->Print(vars, 'HandlerType: (*$Service$Server)(nil),\n');
-	printer->Print(vars, 'Methods: []$grpc$.MethodDesc{\n');
-	printer->Indent();
-	for (int i = 0; i < service->method_count(); i++) {
-		auto method = service->method(i);
-		vars['Method'] = method->name();
-		vars['Handler'] = '_' + vars['Service'] + '_' + vars['Method'] + '_Handler';
-		if (method->NoStreaming()) {
-			printer->Print('{\n');
-			printer->Indent();
-			printer->Print(vars, 'MethodName: \'$Method$\',\n');
-			printer->Print(vars, 'Handler: $Handler$, \n');
-			printer->Outdent();
-			printer->Print('},\n');
-		}
-	}
-	printer->Outdent();
-	printer->Print('},\n');
-	printer->Print(vars, 'Streams: []$grpc$.StreamDesc{\n');
-	printer->Indent();
-	for (int i = 0; i < service->method_count(); i++) {
-		auto method = service->method(i);
-		vars['Method'] = method->name();
-		vars['Handler'] = '_' + vars['Service'] + '_' + vars['Method'] + '_Handler';
-		if (!method->NoStreaming()) {
-			printer->Print('{\n');
-			printer->Indent();
-			printer->Print(vars, 'StreamName: \'$Method$\',\n');
-			printer->Print(vars, 'Handler: $Handler$, \n');
-			if (ClientOnlyStreaming(method.get())) {
-				printer->Print('ClientStreams: true,\n');
-			} else if (ServerOnlyStreaming(method.get())) {
-				printer->Print('ServerStreams: true,\n');
-			} else {
-				printer->Print('ServerStreams: true,\n');
-				printer->Print('ClientStreams: true,\n');
-			}
-			printer->Outdent();
-			printer->Print('},\n');
-		}
-	}
-	printer->Outdent();
-	printer->Print('},\n');
-	printer->Outdent();
-	printer->Print('}\n\n');
+#ifdef LOG_TAG
+# define ALOGV(...) ::facebook::alog::logv(LOG_TAG, __VA_ARGS__)
+# define ALOGD(...) ::facebook::alog::logd(LOG_TAG, __VA_ARGS__)
+# define ALOGI(...) ::facebook::alog::logi(LOG_TAG, __VA_ARGS__)
+# define ALOGW(...) ::facebook::alog::logw(LOG_TAG, __VA_ARGS__)
+# define ALOGE(...) ::facebook::alog::loge(LOG_TAG, __VA_ARGS__)
+# define ALOGF(...) ::facebook::alog::logf(LOG_TAG, __VA_ARGS__)
+#endif
     
-    // Return the source of the generated service file.
-grpc::string GenerateServiceSource(grpc_generator::File *file,
-                                   const grpc_generator::Service *service,
-                                   grpc_go_generator::Parameters *parameters);
-    
-      std::string SayHello(const std::string &name) {
-    flatbuffers::grpc::MessageBuilder mb;
-    auto name_offset = mb.CreateString(name);
-    auto request_offset = CreateHelloRequest(mb, name_offset);
-    mb.Finish(request_offset);
-    auto request_msg = mb.ReleaseMessage<HelloRequest>();
-    }
-    
-    namespace grpc {
-class CompletionQueue;
-class Channel;
-class ServerCompletionQueue;
-class ServerContext;
-}  // namespace grpc
-    
-      // Server side - Streamed Unary
-  for (int i = 0; i < service->method_count(); ++i) {
-    (*vars)['Idx'] = as_string(i);
-    PrintHeaderServerMethodStreamedUnary(printer, service->method(i).get(),
-                                         vars);
-  }
-    
-      // Returns the current contents of the CodeWriter as a std::string.
-  std::string ToString() const { return stream_.str(); }
-    
-    namespace flatbuffers {
-    }
-    
-    namespace jsons {
-    }
+    DEFINE_BOXED_PRIMITIVE(boolean, Boolean)
+DEFINE_BOXED_PRIMITIVE(byte, Byte)
+DEFINE_BOXED_PRIMITIVE(char, Character)
+DEFINE_BOXED_PRIMITIVE(short, Short)
+DEFINE_BOXED_PRIMITIVE(int, Integer)
+DEFINE_BOXED_PRIMITIVE(long, Long)
+DEFINE_BOXED_PRIMITIVE(float, Float)
+DEFINE_BOXED_PRIMITIVE(double, Double)
