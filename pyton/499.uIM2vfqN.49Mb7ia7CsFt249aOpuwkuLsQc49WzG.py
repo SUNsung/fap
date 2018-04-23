@@ -1,112 +1,59 @@
 
         
-        
-'''Utilities for parsing PTB text files.'''
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+        versions_info = json.load(open('update/versions.json'))
+if 'signature' in versions_info:
+    del versions_info['signature']
     
-    '''Tests for word2vec module.'''
+        # Get the version from youtube_dl/version.py without importing the package
+    exec(compile(open('youtube_dl/version.py').read(),
+                 'youtube_dl/version.py', 'exec'))
     
-          content = row[1] + ' ' + row[2]
-      yield Document(
-          content=content,
-          is_validation=is_validation,
-          is_test=False,
-          label=int(row[0]) - 1,  # Labels should start from 0
-          add_tokens=True)
+            # TODO: handle s and e stage_mode (live streams and ended live streams)
+        if stage_mode not in ('s', 'e'):
+            request = sanitized_Request(
+                'https://audimedia.tv/api/video/v1/videos/%s?embed[]=video_versions&embed[]=thumbnail_image&where[content_language_iso]=%s' % (video_id, lang),
+                headers={'X-Auth-Token': self._AUTH_TOKEN})
+            json_data = self._download_json(request, video_id)['results']
+            formats = []
     
-      if summary_writer is not None:
-    global_step_val = sess.run(tf.train.get_global_step())
-    tf.logging.info('Finished eval for step ' + str(global_step_val))
-    summary_writer.add_summary(summary, global_step_val)
+            info = page['info']
     
-    # Flags controlling input are in document_generators.py
+        styles = {
+        # No corresponding class for the following:
+        #Text:                     '', # class:  ''
+        Whitespace:                'underline #f8f8f8',      # class: 'w'
+        Error:                     '#a40000 border:#ef2929', # class: 'err'
+        Other:                     '#000000',                # class 'x'
+    }
     
-      Main methods: `classifier_training()`, `language_model_training()`,
-  and `eval_graph()`.
+        while True:
+        more_to_read = select.select([sock], [], [], timeout)[0]
+        if not more_to_read:
+            break
     
-    Computational time:
-  2 days to train 100000 steps on 1 layer 1024 hidden units LSTM,
-  256 embeddings, 400 truncated BP, 256 minibatch and on single GPU (Pascal
-  Titan X, cuDNNv5).
+        return out
+    
+    Data structures that power Requests.
 '''
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
     
-    # pylint: disable=line-too-long
-DATA_URL = 'http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz'
-# pylint: enable=line-too-long
-    
-    py_library(
-    name = 'seq2seq',
-    srcs = [
-        'seq2seq.py',
-    ],
-    srcs_version = 'PY2AND3',
-    deps = [
-        ':rnn',
-        '//tensorflow:tensorflow_py',
-    ],
-)
-    
-        def __init__(self):
-        self.settings = None  # set in scrapy.cmdline
-    
-            cb = request.callback
-    
-        def setUp(self):
-        from acme.errors import MissingNonce
-        self.response = mock.MagicMock(headers={})
-        self.response.request.method = 'FOO'
-        self.error = MissingNonce(self.response)
-    
-        @gen_test
-    def test_order(self):
-        q = self.queue_class(maxsize=2)
-        q.put_nowait(1)
-        q.put_nowait(0)
-        self.assertTrue(q.full())
-        q.put(3)
-        q.put(2)
-        self.assertEqual(3, q.get_nowait())
-        self.assertEqual(2, (yield q.get()))
-        self.assertEqual(0, q.get_nowait())
-        self.assertEqual(1, (yield q.get()))
-        self.assertTrue(q.empty())
-    
-    # This import will fail if path is not set up correctly
-import testapp
+            errno = pytest.main(self.pytest_args)
+        sys.exit(errno)
     
     
-class ComposeHandler(BaseHandler):
-    @administrator
-    def get(self):
-        key = self.get_argument('key', None)
-        entry = Entry.get(key) if key else None
-        self.render('compose.html', entry=entry)
+def variable_batch_size_comparison(data):
+    batch_sizes = [i.astype(int) for i in np.linspace(data.shape[0] // 10,
+                                                      data.shape[0], num=10)]
     
-    # These benchmarks are delicate.  They hit various fast-paths in the gen
-# machinery in order to stay synchronous so we don't need an IOLoop.
-# This removes noise from the results, but it's easy to change things
-# in a way that completely invalidates the results.
+        if revision is None:
+        return
+    if domain not in ('py', 'pyx'):
+        return
+    if not info.get('module') or not info.get('fullname'):
+        return
     
-    Demonstrates a server that receives a multipart-form-encoded set of files in an
-HTTP POST, or streams in the raw data of a single file in an HTTP PUT.
+        # TASK: print the cross-validated scores for the each parameters set
+    # explored by the grid search
     
-    try:
-    from urllib.parse import quote
-except ImportError:
-    # Python 2.
-    from urllib import quote
-    
-    
-class MainHandler(BaseHandler, TwitterMixin):
-    @authenticated
-    @gen.coroutine
-    def get(self):
-        timeline = yield self.twitter_request(
-            '/statuses/home_timeline',
-            access_token=self.current_user['access_token'])
-        self.render('home.html', timeline=timeline)
+    '''
+# Author: Olivier Grisel <olivier.grisel@ensta.org>
+# License: Simplified BSD
