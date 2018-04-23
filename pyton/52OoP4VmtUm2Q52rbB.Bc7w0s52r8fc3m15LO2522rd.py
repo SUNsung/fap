@@ -1,163 +1,258 @@
-    To replace the session interface on an application all you have to do
-    is to assign :attr:`flask.Flask.session_interface`::
+
+        
+            def iter_body(self, chunk_size):
+        '''Return an iterator over the body.'''
+        raise NotImplementedError()
     
-            def __init__(self, name, doc=None):
-            self.name = name
-            self.__doc__ = doc
-        def _fail(self, *args, **kwargs):
-            raise RuntimeError('signalling support is unavailable '
-                               'because the blinker library is '
-                               'not installed.')
-        send = lambda *a, **kw: None
-        connect = disconnect = has_receivers_for = receivers_for = \
-            temporarily_connected_to = connected_to = _fail
-        del _fail
+        def get_converter(self, mime):
+        if is_valid_mime(mime):
+            for converter_class in plugin_manager.get_converters():
+                if converter_class.supports(mime):
+                    return converter_class(mime)
     
-        def __init__(self, app, **options):
-        if 'loader' not in options:
-            options['loader'] = app.create_global_jinja_loader()
-        BaseEnvironment.__init__(self, **options)
-        self.app = app
+            '''
+        self.status.chunk_downloaded(len(chunk))
     
-    
-def fail(message, *args):
-    print('Error:', message % args, file=sys.stderr)
-    sys.exit(1)
-    
-        ctx = MockCtx()
-    get_version(ctx, None, 'test')
-    out, err = capsys.readouterr()
-    assert flask_ver in out
-    assert py_ver in out
-    
-    
-def test_config_missing_json():
-    app = flask.Flask(__name__)
-    with pytest.raises(IOError) as e:
-        app.config.from_json('missing.json')
-    msg = str(e.value)
-    assert msg.startswith('[Errno 2] Unable to load configuration '
-                          'file (No such file or directory):')
-    assert msg.endswith('missing.json'')
-    assert not app.config.from_json('missing.json', silent=True)
-    
-        from config_module_app import app
-    assert app.instance_path == str(modules_tmpdir.join('instance'))
-    
-            start = time.time()
-        func(X, n_jobs=-1)
-        multi_core.append(time.time() - start)
-    
-    pages = {
-    u'ar': u'http://ar.wikipedia.org/wiki/%D9%88%D9%8A%D9%83%D9%8A%D8%A8%D9%8A%D8%AF%D9%8A%D8%A7',
-    u'de': u'http://de.wikipedia.org/wiki/Wikipedia',
-    u'en': u'https://en.wikipedia.org/wiki/Wikipedia',
-    u'es': u'http://es.wikipedia.org/wiki/Wikipedia',
-    u'fr': u'http://fr.wikipedia.org/wiki/Wikip%C3%A9dia',
-    u'it': u'http://it.wikipedia.org/wiki/Wikipedia',
-    u'ja': u'http://ja.wikipedia.org/wiki/Wikipedia',
-    u'nl': u'http://nl.wikipedia.org/wiki/Wikipedia',
-    u'pl': u'http://pl.wikipedia.org/wiki/Wikipedia',
-    u'pt': u'http://pt.wikipedia.org/wiki/Wikip%C3%A9dia',
-    u'ru': u'http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F',
-#    u'zh': u'http://zh.wikipedia.org/wiki/Wikipedia',
-}
-    
-    
-if not os.path.exists(TRAIN_FOLDER) or not os.path.exists(TEST_FOLDER):
-    
-    In both examples below, the main result is that the empirical covariance
-estimate, as a non-robust one, is highly influenced by the heterogeneous
-structure of the observations. Although the robust covariance estimate is
-able to focus on the main mode of the data distribution, it sticks to the
-assumption that the data should be Gaussian distributed, yielding some biased
-estimation of the data structure, but yet accurate to some extent.
-The One-Class SVM does not assume any parametric form of the data distribution
-and can therefore model the complex shape of the data much better.
-    
-    The data is generated with the ``make_checkerboard`` function, then
-shuffled and passed to the Spectral Biclustering algorithm. The rows
-and columns of the shuffled matrix are rearranged to show the
-biclusters found by the algorithm.
-    
-    iris = datasets.load_iris()
-X = iris.data[:, 0:2]  # we only take the first two features for visualization
-y = iris.target
-    
-        acc_clf1.append(score_clf1 / n_averages)
-    acc_clf2.append(score_clf2 / n_averages)
-    
-            self.args = args
-        self.http_port = 80
-        self.https_port = 443
-        self._configurator = self._all_names = self._test_names = None
-    
-    js.load_plugin_modules(plugins)
-modules = dict((k, m) for k, m in js.module.iteritems())
-print 'JS_MODULES := ' + ' '.join(modules.iterkeys())
-outputs = []
-for name, module in modules.iteritems():
-    outputs.extend(module.outputs)
-    print 'JS_MODULE_OUTPUTS_%s := %s' % (name, ' '.join(module.outputs))
-    print 'JS_MODULE_DEPS_%s := %s' % (name, ' '.join(module.dependencies))
-    
-        return report
-    
-        if setup_globals:
-        config['r2.import_private'] = \
-            ConfigValue.bool(global_conf['import_private'])
-        g.setup()
-        g.plugins.declare_queues(g.queues)
-    
-        @staticmethod
-    def stacked_proxy_safe_get(stacked_proxy, key, default=None):
-        '''Get a field from a StackedObjectProxy
-    
-            # remember the port
-        try:
-            environ['request_port'] = int(port)
-        except ValueError:
-            pass
-    
-    def api(type, cls):
-    tpm.add_handler(type, 'api', cls())
-    tpm.add_handler(type, 'api-html', cls())
-    tpm.add_handler(type, 'api-compact', cls())
-    
-            AJAX login handler, used by both login and register to set the
-        user cookie and send back a redirect.
         '''
-        c.user = user
-        c.user_is_loggedin = True
-        self.login(user, rem=rem)
     
-        @require_oauth2_scope('identity')
-    @validate(
-        VUser(),
-    )
-    @api_doc(
-        section=api_section.account,
-        uri='/api/v1/me/trophies',
-    )
-    def GET_trophies(self):
-        '''Return a list of trophies for the current user.'''
-        return self.api_wrapper(get_usertrophies(c.oauth_user))
+        # 128+2 SIGINT <http://www.tldp.org/LDP/abs/html/exitcodes.html>
+    ERROR_CTRL_C = 130
     
-    class ButtonsController(RedditController):
-    def get_wrapped_link(self, url, link = None, wrapper = None):
+            '''
         try:
-            links = []
-            if link:
-                links = [link]
-            else:
-                sr = None if isinstance(c.site, FakeSubreddit) else c.site
-                try:
-                    links = Link._by_url(url, sr)
-                except NotFound:
-                    pass
+            return super(AuthCredentialsArgType, self).__call__(string)
+        except ArgumentTypeError:
+            # No password provided, will prompt for it later.
+            return self.key_value_class(
+                key=string,
+                value=None,
+                sep=SEP_CREDENTIALS,
+                orig=string
+            )
     
-            template = g.mako_lookup.get_template(template_name)
-        return template.render(
-            logo_url=static(g.default_header_url),
-            retry_after=retry_after,
-        )
+    
+def get_response(requests_session, session_name,
+                 config_dir, args, read_only=False):
+    '''Like `client.get_responses`, but applies permanent
+    aspects of the session to the request.
+    
+    import tensorflow as tf
+    
+        Args:
+      initial_dictionary: Optional dictionary or ConfigDict containing initial
+        parameters.
+    '''
+    if initial_dictionary:
+      for field, value in initial_dictionary.items():
+        initial_dictionary[field] = _maybe_convert_dict(value)
+    super(ConfigDict, self).__init__(initial_dictionary)
+    
+      Args:
+    estimator: Instance of tf.Estimator.
+    train_input_fn: Input function returning a tuple (features, labels).
+    eval_input_fn: Input function returning a tuple (features, labels).
+    local_eval_frequency: The number of training steps between evaluations. If
+        None, trains until train_input_fn raises an end-of-input exception.
+    train_hooks: List of SessionRunHook subclass instances. Used for callbacks
+        inside the training call.
+    train_steps: The total number of steps to train the model for.
+    eval_steps: The number of steps for which to evaluate the model. If None,
+        evaluates until eval_input_fn raises an end-of-input exception.
+    eval_name: Name of the evaluation set, e.g. 'train' or 'val'.
+    
+      tarfile.open(filepath, 'r:gz').extractall(FLAGS.data_dir)
+    
+        Returns: the prediction object to be computed in a Session
+    '''
+    # Feed the paths to the MLP: path_embeddings is
+    # [num_batch_paths, output_dim], and when we multiply it by W
+    # ([output_dim, num_classes]), we get a matrix of class distributions:
+    # [num_batch_paths, num_classes].
+    self.distributions = tf.matmul(self.path_embeddings, self.weights1)
+    
+            (category1, 1), product4
+        (category1, 2), product1
+        (category1, 3), product2
+        (category2, 3), product1
+        (category2, 7), product3
+        '''
+        category, product_id = key
+        quantity = value
+        yield (category, quantity), product_id
+    
+        def _park_starting_at_spot(self, spot, vehicle):
+        '''Occupy starting at spot.spot_number to vehicle.spot_size.'''
+        pass
+    
+    
+class Hand(object):
+    
+            Accessing a node updates its position to the front of the LRU list.
+        '''
+        node = self.lookup[query]
+        if node is None:
+            return None
+        self.linked_list.move_to_front(node)
+        return node.results
+    
+    
+class Person(object):
+    
+    
+if __name__ == '__main__':
+    import unittest
+    unittest.main('idlelib.idle_test.test_query', verbosity=2, exit=False)
+    
+        def check_keys_reuse(self, source, loads):
+        rval = loads(source)
+        (a, b), (c, d) = sorted(rval[0]), sorted(rval[1])
+        self.assertIs(a, c)
+        self.assertIs(b, d)
+    
+    
+print('\n# ======================================================================')
+print('#                               Factorial')
+print('# ======================================================================\n')
+    
+    The interface is file-like.  The implemented methods are:
+read, close, seek, tell, isatty.
+Extra methods are: skip() (called by close, skips to the end of the chunk),
+getname() (returns the name (ID) of the chunk)
+    
+    def test():
+    for i in range(256):
+        c = chr(i)
+        s = repr(c)
+        e = evalString(s)
+        if e != c:
+            print(i, c, s, e)
+    
+        def test_2(self):
+        class X(Structure):
+            pass
+        X()
+        self.assertRaises(AttributeError, setattr, X, '_fields_', [])
+    
+    class _Waiter(object):
+    '''Provides the event that wait() and as_completed() block on.'''
+    def __init__(self):
+        self.event = threading.Event()
+        self.finished_futures = []
+    
+        >>> Point = namedtuple('Point', 'x y')
+    >>> Point.__doc__                   # docstring for the new class
+    'Point(x, y)'
+    >>> p = Point(11, y=22)             # instantiate with positional args or keywords
+    >>> p[0] + p[1]                     # indexable like a plain tuple
+    33
+    >>> x, y = p                        # unpack like a regular tuple
+    >>> x, y
+    (11, 22)
+    >>> p.x + p.y                       # fields also accessable by name
+    33
+    >>> d = p._asdict()                 # convert to a dictionary
+    >>> d['x']
+    11
+    >>> Point(**d)                      # convert from a dictionary
+    Point(x=11, y=22)
+    >>> p._replace(x=100)               # _replace() is like str.replace() but targets named fields
+    Point(x=100, y=22)
+    
+        Args:
+        call_queue: A multiprocessing.Queue of _CallItems that will be read and
+            evaluated by the worker.
+        result_queue: A multiprocessing.Queue of _ResultItems that will written
+            to by the worker.
+        shutdown: A multiprocessing.Event that will be set as a signal to the
+            worker that it should exit when call_queue is empty.
+    '''
+    while True:
+        call_item = call_queue.get(block=True)
+        if call_item is None:
+            # Wake up queue management thread
+            result_queue.put(None)
+            return
+        try:
+            r = call_item.fn(*call_item.args, **call_item.kwargs)
+        except BaseException:
+            e = sys.exc_info()[1]
+            result_queue.put(_ResultItem(call_item.work_id,
+                                         exception=e))
+        else:
+            result_queue.put(_ResultItem(call_item.work_id,
+                                         result=r))
+    
+      CheckCall( [ sys.executable, build_file ] + sys.argv[ 1: ] )
+    
+    from ycm.tests.test_utils import MockVimModule
+vim_mock = MockVimModule()
+from ycm import base
+    
+        elif isinstance( candidate, str ) or isinstance( candidate, bytes ):
+      new_candidates.append(
+        { 'abbr': candidate,
+          'word': NewCandidateInsertionText( candidate, text_after_cursor ) } )
+  return new_candidates
+    
+    
+def RawResponse_ConvertedFromOmniCompleter_test():
+  vim_results = [
+    { 'word': 'WORD', 'abbr': 'ABBR', 'menu': 'MENU',
+      'kind': 'KIND', 'info': 'INFO' },
+    { 'word': 'WORD2', 'abbr': 'ABBR2', 'menu': 'MENU2',
+      'kind': 'KIND2', 'info': 'INFO' },
+    { 'word': 'WORD', 'abbr': 'ABBR',  },
+    {  },
+  ]
+  expected_results = [
+    has_entries( { 'insertion_text': 'WORD', 'menu_text': 'ABBR',
+                   'extra_menu_info': 'MENU', 'kind': [ 'KIND' ],
+                   'detailed_info': 'INFO' } ),
+    has_entries( { 'insertion_text': 'WORD2', 'menu_text': 'ABBR2',
+                   'extra_menu_info': 'MENU2', 'kind': [ 'KIND2' ],
+                   'detailed_info': 'INFO' } ),
+    has_entries( { 'insertion_text': 'WORD', 'menu_text': 'ABBR',  } ),
+    has_entries( {  } ),
+  ]
+  request = BuildOmnicompletionRequest( vim_results )
+    
+        def contribute(self):
+        self.blackboard.common_state['problems'] += random.randint(1, 2)
+        self.blackboard.common_state['suggestions'] += random.randint(10, 20)
+        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
+        self.blackboard.common_state['progress'] += random.randint(10, 100)
+    
+        @classmethod
+    def __get_test_directory(self):
+        '''
+        Get the temporary directory for the tests.
+        '''
+        self.test_dir = os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), 'test_command')
+    
+    
+class Subscriber:
+    
+    
+class RadioTest(unittest.TestCase):
+    '''
+    Attention: Test case results depend on test case execution. The test cases
+    in this integration test class should be executed in an explicit order:
+    http://stackoverflow.com/questions/5387299/python-unittest-testcase-execution-order
+    '''
+    
+        def test_tc1_output(self):
+        self.tc1.run()
+        output = self.out.getvalue().strip()
+        self.assertEqual(output, self.average_result_tc1)
+    
+        def test_display_current_time_at_midnight(self):
+        '''
+        Would almost always fail (despite of right at/after midnight) if
+        untestable production code would have been used.
+        '''
+        time_provider_stub = MidnightTimeProvider()
+        class_under_test = TimeDisplay()
+        class_under_test.set_time_provider(time_provider_stub)
+        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
