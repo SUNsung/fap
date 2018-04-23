@@ -1,96 +1,95 @@
 
         
-            # Returns an array of addresses ranges
-    #
-    # @return [Array<String>]
-    def addresses
-      (boundary || '').split('\n')
+        puts 'Deduping #{links.size} links...'
+    
+        # The path used after resending confirmation instructions.
+    def after_resending_confirmation_instructions_path_for(resource_name)
+      is_navigational_format? ? new_session_path(resource_name) : '/'
     end
     
-        inp.attributes.keys.each do |ikey|
-      if (ikey.downcase == 'value')
-        inp[ikey] = ''
-        next
+      # GET /resource/unlock?unlock_token=abcdef
+  def show
+    self.resource = resource_class.unlock_access_by_token(params[:unlock_token])
+    yield resource if block_given?
+    
+        def email_changed(record, opts={})
+      devise_mail(record, :email_changed, opts)
+    end
+    
+          def forget_cookie_values(resource)
+        Devise::Controllers::Rememberable.cookie_values.merge!(resource.rememberable_options)
       end
     
-        # We want to return immediatly if we do not have a packet which is handled by us
-    return unless pkt.is_tcp?
-    return if (pkt.tcp_sport != 143 and pkt.tcp_dport != 143)
-    s = find_session((pkt.tcp_sport == 143) ? get_session_src(pkt) : get_session_dst(pkt))
-    s[:sname] ||= 'imap4'
+        private
     
+        def subpath_to(url, options = nil)
+      url = self.class.parse(url)
+      return unless origin == url.origin
     
-jarsignerOpts	= ['-keystore', 'msfkeystore', '-storepass', 'msfstorepass',
-		   '-keypass', 'msfkeypass', '-signedJar', 's#{outputJar}',
-		   outputJar, 'signFiles']
+            # Unregisters a SIGINT handler.
+        def unregister(sig_callback)
+          @@mutex.synchronize do
+            registered.delete(sig_callback)
     
-    		elsif line =~ /\w+:\t/
-			block_do(line)
-    
-    post '/' do
-  connections.each { |out| out << 'data: #{params[:msg]}\n\n' }
-  204 # response without entity body
-end
-    
-      context 'escaping' do
-    it 'escapes html entities' do
-      mock_app do |env|
-        request = Rack::Request.new(env)
-        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']]]
-      end
-      get '/', :foo => '<bar>'
-      expect(body).to eq('&lt;bar&gt;')
+        if object.current_account
+      store[:me]                      = object.current_account.id.to_s
+      store[:unfollow_modal]          = object.current_account.user.setting_unfollow_modal
+      store[:boost_modal]             = object.current_account.user.setting_boost_modal
+      store[:delete_modal]            = object.current_account.user.setting_delete_modal
+      store[:auto_play_gif]           = object.current_account.user.setting_auto_play_gif
+      store[:display_sensitive_media] = object.current_account.user.setting_display_sensitive_media
+      store[:reduce_motion]           = object.current_account.user.setting_reduce_motion
     end
     
-      %w(GET HEAD POST PUT DELETE).each do |method|
-    it 'accepts #{method} requests with no Origin' do
-      expect(send(method.downcase, '/')).to be_ok
-    end
+      def remove_avatar?
+    staff?
   end
     
-      context 'escaping' do
-    before do
-      mock_app { |e| [200, {'Content-Type' => 'text/plain'}, [e['PATH_INFO']]] }
-    end
+      # Before we load the schema, define the timestamp_id function.
+  # Idiomatically, we might do this in a migration, but then it
+  # wouldn't end up in schema.rb, so we'd need to figure out a way to
+  # get it in before doing db:setup as well. This is simpler, and
+  # ensures it's always in place.
+  Rake::Task['db:schema:load'].enhance ['db:define_timestamp_id']
     
-      # rspec-mocks config goes here. You can use an alternate test double
-  # library (such as bogus or mocha) by changing the `mock_with` option here.
-  config.mock_with :rspec do |mocks|
-    # Enable only the newer, non-monkey-patching expect syntax.
-    # For more details, see:
-    #   - http://teaisaweso.me/blog/2013/05/27/rspecs-new-message-expectation-syntax/
-    mocks.syntax = :expect
-    
-    When /^(?:|I )press '([^']*)'$/ do |button|
-  click_button(button)
-end
-    
-        def add_active_record_callbacks
-      name = @name
-      @klass.send(:after_save) { send(name).send(:save) }
-      @klass.send(:before_destroy) { send(name).send(:queue_all_for_delete) }
-      if @klass.respond_to?(:after_commit)
-        @klass.send(:after_commit, on: :destroy) do
-          send(name).send(:flush_deletes)
-        end
-      else
-        @klass.send(:after_destroy) { send(name).send(:flush_deletes) }
+            subject.call(json, forwarder)
       end
     end
-    
-        def load_processor(name)
-      if defined?(Rails.root) && Rails.root
-        filename = '#{name.to_s.underscore}.rb'
-        directories = %w(lib/paperclip lib/paperclip_processors)
-    
-      # GET /books/new
-  def new
-    @book = Book.new
   end
+end
+
     
-            def on_case(case_node)
-          case_node.when_branches.each_with_object([]) do |when_node, previous|
-            when_node.each_condition do |condition|
-              next unless repeated_condition?(previous, condition)
+    if profile_filename = ENV['PROFILE']
+  require 'ruby-prof'
+  reporter =
+    case (profile_extname = File.extname(profile_filename))
+    when '.txt'
+      RubyProf::FlatPrinterWithLineNumbers
+    when '.html'
+      RubyProf::GraphHtmlPrinter
+    when '.callgrind'
+      RubyProf::CallTreePrinter
+    else
+      raise 'Unknown profiler format indicated by extension: #{profile_extname}'
+    end
+  File.open(profile_filename, 'w') do |io|
+    reporter.new(RubyProf.profile { Pod::Command.run(ARGV) }).print(io)
+  end
+else
+  Pod::Command.run(ARGV)
+end
+
     
-            private
+          def executable_path
+        <<-EOS
+### Installation Source
+    
+        def after(task, post_task, *args, &block)
+      Rake::Task.define_task(post_task, *args, &block) if block_given?
+      task = Rake::Task[task]
+      task.enhance do
+        post = Rake.application.lookup(post_task, task.scope)
+        raise ArgumentError, 'Task #{post_task.inspect} not found' unless post
+        post.invoke
+      end
+    end
