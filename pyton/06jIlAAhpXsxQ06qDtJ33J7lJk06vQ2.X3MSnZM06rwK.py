@@ -1,133 +1,168 @@
 
         
-        import rsa
-import json
-from binascii import hexlify
+            Some py2/py3 compatibility support based on a stripped down
+    version of six so we don't have to depend on a specific version
+    of it.
     
-        with io.open(outfile, 'w', encoding='utf-8') as outf:
-        outf.write(out)
+        rv = app.test_client().get('/', errors_stream=out)
+    assert rv.status_code == 500
+    assert b'Internal Server Error' in rv.data
+    assert not out.getvalue()
+
     
     
-from youtube_dl import YoutubeDL
-    
-        def test_youtube_feeds(self):
-        self.assertMatch('https://www.youtube.com/feed/watch_later', ['youtube:watchlater'])
-        self.assertMatch('https://www.youtube.com/feed/subscriptions', ['youtube:subscriptions'])
-        self.assertMatch('https://www.youtube.com/feed/recommended', ['youtube:recommended'])
-        self.assertMatch('https://www.youtube.com/my_favorites', ['youtube:favorites'])
-    
-        def test_func(self):
-        as_file = os.path.join(TEST_DIR, testfile)
-        swf_file = os.path.join(TEST_DIR, test_id + '.swf')
-        if ((not os.path.exists(swf_file)) or
-                os.path.getmtime(swf_file) < os.path.getmtime(as_file)):
-            # Recompile
+def side_effect(old_cmd, command):
+    with tarfile.TarFile(_tar_file(old_cmd.script_parts)[0]) as archive:
+        for file in archive.getnames():
             try:
-                subprocess.check_call([
-                    'mxmlc', '-output', swf_file,
-                    '-static-link-runtime-shared-libraries', as_file])
-            except OSError as ose:
-                if ose.errno == errno.ENOENT:
-                    print('mxmlc not found! Skipping test.')
-                    return
-                raise
-    
-            webpage = self._download_webpage(url, playlist_id)
-        title = self._html_search_regex(
-            r'<h1 class='playlist-name'[^>]*?>(.*?)</h1>', webpage, 'title')
-        description = self._html_search_regex(
-            r'<p class='excerpt'[^>]*?>(.*?)</p>',
-            webpage, 'description', fatal=False)
-        urls = re.findall(
-            r'<li class='lecture-preview'>\s*?<a target='_blank' href='([^']+)'>',
-            webpage)
-        entries = [self.url_result(u) for u in urls]
-    
-            title = self._html_search_regex(r'<title>(.*?)</title>', webpage, 'title')
-        description = self._html_search_regex(
-            r'<div class='description'[^>]*>([^<]+)</div>', webpage, 'description', fatal=False)
-        thumbnail = self._html_search_regex(
-            r'preview_url\s*:\s*\'(.*?)\'', webpage, 'thumbnail', fatal=False)
-    
-    
-def options(url, **kwargs):
-    r'''Sends an OPTIONS request.
-    
-        :param str u_string: unicode string to check. Must be unicode
-        and not Python 2 `str`.
-    :rtype: bool
-    '''
-    assert isinstance(u_string, str)
-    try:
-        u_string.encode('ascii')
-        return True
-    except UnicodeEncodeError:
-        return False
+                os.remove(file)
+            except OSError:
+                # does not try to remove directories as we cannot know if they
+                # already existed before
+                pass
 
     
-        def test_list(self):
-        assert list(self.case_insensitive_dict) == ['Accept']
     
-                assert r.status_code == 200
-            assert r.text == u'roflol'
-            assert r.headers['Content-Length'] == '6'
+@pytest.fixture(params=containers)
+def proc(request, spawnu, TIMEOUT):
+    proc = spawnu(*request.param)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(u'tcsh')
+    proc.sendline(u'setenv PYTHONIOENCODING utf8')
+    proc.sendline(u'eval `thefuck --alias`')
+    return proc
     
-        return cookiejar
+    import tensorflow as tf
+    
+      for d, class_label in dirs:
+    for filename in os.listdir(os.path.join(FLAGS.imdb_input_dir, d)):
+      is_validation = check_is_validation(filename, class_label)
+      if is_validation and not include_validation:
+        continue
+    
+    # Dependency imports
+    
+    To initialize embedding and LSTM cell weights from a pretrained model, set
+FLAGS.pretrained_model_dir to the pretrained model's checkpoint directory.
+'''
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+    
+    py_library(
+    name = 'rnn_cell',
+    srcs = [
+        'rnn_cell.py',
+    ],
+    srcs_version = 'PY2AND3',
+    deps = [
+        ':linear',
+        '//tensorflow:tensorflow_py',
+    ],
+)
+    
+    if len(sys.argv) == 2 and sys.argv[1] == '--list':
+    print(json.dumps(result))
+elif len(sys.argv) == 3 and sys.argv[1] == '--host':
+    print(json.dumps({}))
+else:
+    print('Need an argument, either --list or --host <host>')
 
     
-    # ---------
-# Specifics
-# ---------
+        terminal_stderr_re = [
+        re.compile(br'Error:'),
+    ]
+    
+            print('Training %s ... ' % name, end='')
+        t0 = time()
+        clf.fit(X_train, y_train)
+        train_time[name] = time() - t0
+        t0 = time()
+        y_pred = clf.predict(X_test)
+        test_time[name] = time() - t0
+        accuracy[name] = accuracy_score(y_test, y_pred)
+        print('done')
+    
+                gc.collect()
+            print('- benchmarking Lasso')
+            clf = Lasso(alpha=alpha, fit_intercept=False,
+                        precompute=precompute)
+            tstart = time()
+            clf.fit(X, Y)
+            lasso_results.append(time() - tstart)
+    
+    faces = fetch_lfw_people(resize=.2, min_faces_per_person=5)
+# limit dataset to 5000 people (don't care who they are!)
+X = faces.data[:5000]
+n_samples, h, w = faces.images.shape
+n_features = X.shape[1]
     
     
-class VersionedPackage(object):
-    def __init__(self, version):
-        self.__version__ = version
+def type_auto_or_float(val):
+    if val == 'auto':
+        return 'auto'
+    else:
+        return float(val)
+    
+        print('Decompressing %s' % ARCHIVE_NAME)
+    with closing(tarfile.open(ARCHIVE_NAME, 'r:gz')) as archive:
+        archive.extractall(path='.')
+    os.remove(ARCHIVE_NAME)
+
     
     
-    {    # Server Error.
-    500: ('internal_server_error', 'server_error', '/o\\', '✗'),
-    501: ('not_implemented',),
-    502: ('bad_gateway',),
-    503: ('service_unavailable', 'unavailable'),
-    504: ('gateway_timeout',),
-    505: ('http_version_not_supported', 'http_version'),
-    506: ('variant_also_negotiates',),
-    507: ('insufficient_storage',),
-    509: ('bandwidth_limit_exceeded', 'bandwidth'),
-    510: ('not_extended',),
-    511: ('network_authentication_required', 'network_auth', 'network_authentication'),
-}
+# The training data folder must be passed as first argument
+languages_data_folder = sys.argv[1]
+dataset = load_files(languages_data_folder)
     
+        output_file.close()
+
     
-@pytest.mark.parametrize(
-    'value, expected', (
-        (
-            CaseInsensitiveDict(),
-            None
-        ),
-        (
-            CaseInsensitiveDict({'content-type': 'application/json; charset=utf-8'}),
-            'utf-8'
-        ),
-        (
-            CaseInsensitiveDict({'content-type': 'text/plain'}),
-            'ISO-8859-1'
-        ),
-    ))
-def test_get_encoding_from_headers(value, expected):
-    assert get_encoding_from_headers(value) == expected
+    # Plot calibration curve for Gaussian Naive Bayes
+plot_calibration_curve(GaussianNB(), 'Naive Bayes', 1)
     
-          >>> with requests.Session() as s:
-      >>>     s.get('http://httpbin.org/get')
-      <Response [200]>
-    '''
+    import numpy as np
+import matplotlib.pyplot as plt
     
-    from r2.lib.translation import I18N_PATH
-from r2.lib.plugin import PluginLoader
-from r2.lib import js
+        def extract_year_month(self, line):
+        '''Return the year and month portions of the timestamp.'''
+        pass
     
-        #override the default response options
-    config['pylons.response_options']['headers'] = {}
+        def mapper(self, _, line):
+        yield line, 1
     
-    from pylons import tmpl_context as c
+        def _find_available_spot(self, vehicle):
+        '''Find an available spot where vehicle can fit, or return None'''
+        pass
+    
+        def __init__(self, from_user_id, to_user_id, request_status, timestamp):
+        self.from_user_id = from_user_id
+        self.to_user_id = to_user_id
+        self.request_status = request_status
+        self.timestamp = timestamp
+    
+                # skip frames not in requested module
+            if codeMod.__name__ != module:
+                continue
+    
+            total_count = 0
+        translated_count = 0
+        with open(fn) as f:
+            catalog = read_po(f)
+            for msg in catalog:
+                total_count += 1
+                if is_translated(msg):
+                    translated_count += 1
+        pct = translated_count / float(total_count) * 100
+        click.echo('% -7s % 2d%%' % (
+            locale,
+            pct,
+        ), err=True)
+        if pct >= MINIMUM and locale not in rv:
+            rv.append(locale)
+    with open(catalog_file, 'w') as f:
+        json.dump({
+            'supported_locales': sorted(rv)
+        }, f, indent=2)
+        f.write('\n')
