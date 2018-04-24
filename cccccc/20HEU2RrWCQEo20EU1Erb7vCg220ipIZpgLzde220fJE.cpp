@@ -1,319 +1,181 @@
 
         
-        #include <folly/Optional.h>
+          ServerConfig server_config;
+  server_config.set_server_type(SYNC_SERVER);
     
-    void ThriftBuffer::flush() {
-  *m_p = '\0';
-  String data(m_buf, m_p - m_buf, CopyString);
-  m_p = m_buf;
-  flushImpl(data);
-}
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    /*
- * Returns an IR block corresponding to the given bytecode offset. If the block
- * starts with a DefLabel expecting a StkPtr, this function will return an
- * intermediate block that passes the current sp.
- */
-Block* getBlock(IRGS& env, Offset offset);
-    
-    /*
- * Emit machine code for env. Returns folly::none if the global translation
- * limit has been reached, generates an interp request if vunit is null or
- * codegen fails. If optDst is set it must be a thread local view and the
- * code lock will not be acquired while writing to it.
- *
- * The resulting translation will not yet be live.
- */
-folly::Optional<TransMetaInfo> emitTranslation(
-  TransEnv env,
-  OptView optDst = folly::none
-);
-    
-    static void RunSynchronousUnaryPingPong() {
-  gpr_log(GPR_INFO, 'Running Synchronous Unary Ping Pong');
-    }
-    
-      const auto result =
-      RunScenario(client_config, 1, server_config, 1, WARMUP, BENCHMARK, -2, '',
-                  kInsecureCredentialsType, false);
-    
-    #include <signal.h>
-    
-    void ParseDb(const std::string& db, std::vector<Feature>* feature_list);
-    
-    #include <utility>
-    
-    namespace grpc_python_generator {
-    }
-    
-    class MetricsServiceImpl final : public MetricsService::Service {
- public:
-  grpc::Status GetAllGauges(ServerContext* context, const EmptyMessage* request,
-                            ServerWriter<GaugeResponse>* writer) override;
-    }
-    
-    void test_broadcast(std::shared_ptr<thd::DataChannel> data_channel) {
-  for (std::size_t dest = 0; dest < data_channel->getNumProcesses(); ++dest) {
-    if (data_channel->getRank() == dest) {
-      auto float_tensor = buildTensor<float>({1, 2, 3, 4, 5}, 10.123);
-      data_channel->broadcast(*float_tensor, dest);
-    } else {
-      auto float_tensor = buildTensor<float>({1, 2, 3, 4, 5}, -1.0);
-      data_channel->broadcast(*float_tensor, dest);
-      ASSERT_TENSOR_VALUE(float, *float_tensor, 10.123)
-    }
-  }
-}
-    
-    ${Storage}::${Storage}(Context* context,
-  void * data, std::size_t size, const std::function<void(void*)> & deleter)
-  : storage(${THStorage}_newWithDataAndAllocator(${state,}
-     static_cast<${THScalarType}*>(data), size,
-     &storage_deleter,
-     new std::function<void(void*)>(deleter)
-    )),
-    context(context) {
-    ${THStorage}_clearFlag(${state,} storage, TH_STORAGE_RESIZABLE);
-}
-    
-    CUDAGenerator::CUDAGenerator(Context * context_)
-  : context(context_)
-{
-  // there's no reason to call THCRandom_init, because it is called
-  // during THCudaInit, which is called before this initializer
-  generator = THCRandom_getGenerator(context->thc_state);
-}
-    
-    void THCRandom_manualSeedAll(THCState* state, uint64_t seed)
-{
-  THCRNGState* rng_state = THCState_getRngState(state);
-  int currentDevice;
-  THCudaCheck(cudaGetDevice(&currentDevice));
-  for (int i = 0; i < rng_state->num_devices; ++i) {
-    THCudaCheck(cudaSetDevice(i));
-    THCRandom_manualSeed(state, seed);
-  }
-  THCudaCheck(cudaSetDevice(currentDevice));
-}
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-    
-    {  static std::size_t check_for_completion(
-      const boost::system::error_code& ec,
-      std::size_t total_transferred)
-  {
-    return transfer_all_t()(ec, total_transferred);
-  }
-};
-    
-    template <typename ConstBufferSequence>
-class descriptor_write_op_base : public reactor_op
-{
-public:
-  descriptor_write_op_base(int descriptor,
-      const ConstBufferSequence& buffers, func_type complete_func)
-    : reactor_op(&descriptor_write_op_base::do_perform, complete_func),
-      descriptor_(descriptor),
-      buffers_(buffers)
-  {
-  }
-    }
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS) \
-  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
-# include <boost/asio/detail/null_fenced_block.hpp>
-#elif defined(__MACH__) && defined(__APPLE__)
-# include <boost/asio/detail/macos_fenced_block.hpp>
-#elif defined(__sun)
-# include <boost/asio/detail/solaris_fenced_block.hpp>
-#elif defined(__GNUC__) && defined(__arm__) \
-  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
-# include <boost/asio/detail/gcc_arm_fenced_block.hpp>
-#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
-# include <boost/asio/detail/gcc_hppa_fenced_block.hpp>
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-# include <boost/asio/detail/gcc_x86_fenced_block.hpp>
-#elif defined(__GNUC__) \
-  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
-  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
-  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
-# include <boost/asio/detail/gcc_sync_fenced_block.hpp>
-#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
-# include <boost/asio/detail/win_fenced_block.hpp>
-#else
-# include <boost/asio/detail/null_fenced_block.hpp>
-#endif
-    
-    // Calls to asio_handler_allocate and asio_handler_deallocate must be made from
-// a namespace that does not contain any overloads of these functions. The
-// boost_asio_handler_alloc_helpers namespace is defined here for that purpose.
-namespace boost_asio_handler_alloc_helpers {
-    }
-    
-    
-    {private:
-  byte* bytes_;
-  UINT32 length_;
-  UINT32 capacity_;
-};
-    
-    
-    {  pollfd fds;
-  fds.fd = d;
-  fds.events = POLLOUT;
-  fds.revents = 0;
-  int timeout = (state & user_set_non_blocking) ? 0 : -1;
-  errno = 0;
-  int result = error_wrapper(::poll(&fds, 1, timeout), ec);
-  if (result == 0)
-    ec = (state & user_set_non_blocking)
-      ? boost::asio::error::would_block : boost::system::error_code();
-  else if (result > 0)
-    ec = boost::system::error_code();
-  return result;
-}
-    
-    bool js_cocos2dx_physics3d_Physics3DComponent_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DComponent_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DComponent(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DComponent_syncNodeToPhysics(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_addToPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_syncPhysicsToNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_getPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_setPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_setTransformInPhysics(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_getPhysics3DComponentName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_Physics3DComponent(JSContext *cx, uint32_t argc, jsval *vp);
-    
-        if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_end'', nullptr);
-            return 0;
-        }
-        CocosDenshion::SimpleAudioEngine::end();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d\n ', 'cc.SimpleAudioEngine:end',argc, 0);
-    return 0;
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,'#ferror in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_end'.',&tolua_err);
-#endif
-    return 0;
-}
-int lua_cocos2dx_cocosdenshion_SimpleAudioEngine_getInstance(lua_State* tolua_S)
-{
-    int argc = 0;
-    bool ok  = true;
-    
-    
-    
-    
-    
-    
-    
-    
-    
-        glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
-    
-    	b2Fixture* fixtureA = contact->GetFixtureA();
-	b2Fixture* fixtureB = contact->GetFixtureB();
-    
-    
-    {	b2Vec2 viewCenter;
-	float32 hz;
-	int32 velocityIterations;
-	int32 positionIterations;
-	int32 drawShapes;
-	int32 drawJoints;
-	int32 drawAABBs;
-	int32 drawContactPoints;
-	int32 drawContactNormals;
-	int32 drawContactImpulse;
-	int32 drawFrictionImpulse;
-	int32 drawCOMs;
-	int32 drawStats;
-	int32 drawProfile;
-	int32 enableWarmStarting;
-	int32 enableContinuous;
-	int32 enableSubStepping;
-	int32 enableSleep;
-	int32 pause;
-	int32 singleStep;
-};
-    
-    class ApplyForce : public Test
-{
-public:
-	ApplyForce()
-	{
-		m_world->SetGravity(b2Vec2(0.0f, 0.0f));
-    }
-    }
-    
-    
-    {		body2->SetAngularVelocity(m_angularVelocity);
-		body2->SetLinearVelocity(velocity2);
-	}
-    
-    
-    {
-    {				prevBody = body;
-			}
-		}
-    
-    // Print (and its template specialization below for pointers) generate text
-// for a single FlatBuffer value into JSON format.
-// The general case for scalars:
-template<typename T>
-bool Print(T val, Type type, int /*indent*/, Type * /*union_type*/,
-           const IDLOptions &opts, std::string *_text) {
-  std::string &text = *_text;
-  if (type.enum_def && opts.output_enum_identifiers) {
-    auto enum_val = type.enum_def->ReverseLookup(static_cast<int64_t>(val));
-    if (enum_val) {
-      text += '\'';
-      text += enum_val->name;
-      text += '\'';
-      return true;
-    }
-  }
-    }
-    
-      int num_greetings = 10;
-  greeter.SayManyHellos(name, num_greetings, [](const std::string &message) {
-    std::cerr << 'Greeter received: ' << message << std::endl;
-  });
-    
-    
-    {  // Package name for the service
-  grpc::string package_name;
-};
-    
-    #endif  // FLATC_H_
+    #endif  // GRPC_INTERNAL_COMPILER_NODE_GENERATOR_HELPERS_H
 
     
-    template<typename T> const char *EnumName(T tval, const TypeTable *type_table) {
-  if (!type_table || !type_table->names) return nullptr;
-  auto i = LookupEnum(static_cast<int32_t>(tval), type_table->values,
-                      type_table->num_elems);
-  if (i >= 0 && i < static_cast<int32_t>(type_table->num_elems)) {
-    return type_table->names[i];
-  }
-  return nullptr;
+    void SecureAuthContext::AddProperty(const grpc::string& key,
+                                    const grpc::string_ref& value) {
+  if (!ctx_) return;
+  grpc_auth_context_add_property(ctx_, key.c_str(), value.data(), value.size());
 }
+    
+    #endif  // GRPC_TEST_CPP_UTIL_SUBPROCESS_H
+
+    
+      /// Read some data from the stream. Returns the number of bytes read. Throws
+  /// an exception on failure.
+  template <typename MutableBufferSequence>
+  std::size_t read_some(const MutableBufferSequence& buffers);
+    
+    // Standard library components can't be forward declared, so we'll have to
+// include the array header. Fortunately, it's fairly lightweight and doesn't
+// add significantly to the compile time.
+#if defined(BOOST_ASIO_HAS_STD_ARRAY)
+# include <array>
+#endif // defined(BOOST_ASIO_HAS_STD_ARRAY)
+    
+    namespace boost {
+namespace date_time {
+    }
+    }
+    
+    #endif // BOOST_ASIO_DETAIL_FENCED_BLOCK_HPP
+
+    
+      explicit winrt_buffer_impl(const boost::asio::mutable_buffer& b)
+  {
+    bytes_ = const_cast<byte*>(boost::asio::buffer_cast<const byte*>(b));
+    length_ = 0;
+    capacity_ = boost::asio::buffer_size(b);
+  }
+    
+      if (shutdown_)
+  {
+    io_service_.post_immediate_completion(op, false);
+    return;
+  }
+    
+    Status FilesystemConfigPlugin::genPack(const std::string& name,
+                                       const std::string& value,
+                                       std::string& pack) {
+  if (name == '*') {
+    // The config requested a multi-pack.
+    std::vector<std::string> paths;
+    resolveFilePattern(value, paths);
+    }
+    }
+    
+    
+    {    // Check if overflowed
+    if (value > 0) {
+      return boost::lexical_cast<std::string>(std::llround(value));
+    }
+  }
+    
+    #include 'osquery/core/utils.h'
+    
+    struct ExceptionInfo {
+  const std::type_info* type{nullptr};
+  // The values in frames are IP (instruction pointer) addresses.
+  // They are only filled if the low-level exception tracer library is
+  // linked in or LD_PRELOADed.
+  std::vector<uintptr_t> frames; // front() is top of stack
+};
+    
+    template <typename T>
+constexpr T constexpr_log2(T t) {
+  return detail::constexpr_log2_(T(0), t);
+}
+    
+    class memory_resource {
+ public:
+  virtual ~memory_resource() = default;
+  virtual void* allocate(
+      const size_t bytes,
+      const size_t alignment = max_align_v) = 0;
+  virtual void deallocate(
+      void* p,
+      const size_t bytes,
+      const size_t alignment = max_align_v) = 0;
+};
+    
+    AsyncIO::AsyncIO(size_t capacity, PollMode pollMode) : capacity_(capacity) {
+  CHECK_GT(capacity_, 0);
+  completed_.reserve(capacity_);
+  if (pollMode == POLLABLE) {
+    pollFd_ = eventfd(0, EFD_NONBLOCK);
+    checkUnixError(pollFd_, 'AsyncIO: eventfd creation failed');
+  }
+}
+    
+    /**
+ * Canonicalize the parent path, leaving the filename (last component)
+ * unchanged.  You may use this before creating a file instead of
+ * boost::filesystem::canonical, which requires that the entire path exists.
+ */
+path canonical_parent(const path& p, const path& basePath = current_path());
+    
+    void AsyncFileWriter::writeMessage(std::string&& buffer, uint32_t flags) {
+  auto data = data_.lock();
+  if ((data->currentBufferSize >= data->maxBufferBytes) &&
+      !(flags & NEVER_DISCARD)) {
+    ++data->numDiscarded;
+    return;
+  }
+    }
+    
+      /**
+   * Get the output file.
+   */
+  const folly::File& getFile() const {
+    return file_;
+  }
+    
+    std::shared_ptr<LogHandler> FileHandlerFactory::createHandler(
+    const Options& options) {
+  WriterFactory writerFactory;
+  return StandardLogHandlerFactory::createHandler(
+      getType(), &writerFactory, options);
+}
+    
+      std::shared_ptr<LogHandler> createHandler(const Options& options) override;
+    
+    namespace folly {
+    }
+    
+      if (Att == INVALID_FILE_ATTRIBUTES) {
+    Printf('GetFileAttributesA() failed for \'%s\' (Error code: %lu).\n',
+        Path.c_str(), GetLastError());
+    return false;
+  }
+    
+    void Fuzzer::PrintStats(const char *Where, const char *End, size_t Units) {
+  size_t ExecPerSec = execPerSec();
+  if (Options.OutputCSV) {
+    static bool csvHeaderPrinted = false;
+    if (!csvHeaderPrinted) {
+      csvHeaderPrinted = true;
+      Printf('runs,block_cov,bits,cc_cov,corpus,execs_per_sec,tbms,reason\n');
+    }
+    Printf('%zd,%zd,%zd,%zd,%zd,%zd,%s\n', TotalNumberOfRuns,
+           MaxCoverage.BlockCoverage, MaxCoverage.CounterBitmapBits,
+           MaxCoverage.CallerCalleeCoverage, Corpus.size(), ExecPerSec, Where);
+  }
+    }
+    
+    size_t MutationDispatcher::ApplyDictionaryEntry(uint8_t *Data, size_t Size,
+                                                size_t MaxSize,
+                                                DictionaryEntry &DE) {
+  const Word &W = DE.GetW();
+  bool UsePositionHint = DE.HasPositionHint() &&
+                         DE.GetPositionHint() + W.size() < Size &&
+                         Rand.RandBool();
+  if (Rand.RandBool()) {  // Insert W.
+    if (Size + W.size() > MaxSize) return 0;
+    size_t Idx = UsePositionHint ? DE.GetPositionHint() : Rand(Size + 1);
+    memmove(Data + Idx + W.size(), Data + Idx, Size - Idx);
+    memcpy(Data + Idx, W.data(), W.size());
+    Size += W.size();
+  } else {  // Overwrite some bytes with W.
+    if (W.size() > Size) return 0;
+    size_t Idx = UsePositionHint ? DE.GetPositionHint() : Rand(Size - W.size());
+    memcpy(Data + Idx, W.data(), W.size());
+  }
+  return Size;
+}
+    
+    
+    {}  // namespace fuzzer
