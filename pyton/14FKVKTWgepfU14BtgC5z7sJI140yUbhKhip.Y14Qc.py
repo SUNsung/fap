@@ -1,209 +1,108 @@
 
         
-        
+            plugin_manager.register(Plugin)
+    try:
+        r = http(
+            httpbin + BASIC_AUTH_URL,
+            '--auth-type',
+            Plugin.auth_type,
+        )
+        assert HTTP_OK in r
+        assert r.json == AUTH_OK
+    finally:
+        plugin_manager.unregister(Plugin)
+    
+    
 with codecs.open(FILE_PATH, encoding='utf8') as f:
     # Strip because we don't want new lines in the data so that we can
     # easily count occurrences also when embedded in JSON (where the new
     # line would be escaped).
     FILE_CONTENT = f.read().strip()
     
+            self._progress_reporter.output.write(
+            'Downloading %sto '%s'\n' % (
+                (humanize_bytes(total_size) + ' '
+                 if total_size is not None
+                 else ''),
+                self._output_file.name
+            )
+        )
+        self._progress_reporter.start()
     
-filenames = list(rst_filenames())
-assert filenames
+        def __init__(self):
+        self._plugins = []
     
-        Pre-process args, handle some special types of invocations,
-    and run the main program with error handling.
+        return inner
     
-        >>> humanize_bytes(1)
-    '1 B'
-    >>> humanize_bytes(1024, precision=1)
-    '1.0 kB'
-    >>> humanize_bytes(1024 * 123, precision=1)
-    '123.0 kB'
-    >>> humanize_bytes(1024 * 12342, precision=1)
-    '12.1 MB'
-    >>> humanize_bytes(1024 * 12342, precision=2)
-    '12.05 MB'
-    >>> humanize_bytes(1024 * 1234, precision=2)
-    '1.21 MB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=2)
-    '1.31 GB'
-    >>> humanize_bytes(1024 * 1234 * 1111, precision=1)
-    '1.3 GB'
-    
-        requests_session.cookies = session.cookies
-    
-        for node in data:
-        for value in node['tags']:
-            groups[value].append(node['hostname'])
-    
-        result[app_name] = {}
-    result[app_name]['hosts'] = []
-    result[app_name]['hosts'].append(host)
-    result[app_name]['vars'] = {}
-    result[app_name]['vars']['ansible_ssh_user'] = user
-    
-    # Backwards compat only
-try:
-    from hashlib import md5 as _md5
-except ImportError:
-    try:
-        from md5 import md5 as _md5
-    except ImportError:
-        # Assume we're running in FIPS mode here
-        _md5 = None
-    
-    ipv4_component = r'''
-    (?:
-        [01]?[0-9]{{1,2}}|              # 0..199
-        2[0-4][0-9]|                    # 200..249
-        25[0-5]|                        # 250..255
-        {range}                         # or a numeric range
-    )
-'''.format(range=numeric_range)
-    
-    from ansible.plugins.terminal import TerminalBase
-from ansible.errors import AnsibleConnectionFailure
+            if isinstance(params, (str, bytes)):
+            params = to_native_string(params)
     
     
-def get_group_vars(groups):
+@pytest.mark.skipif(sys.version_info < (2,7), reason='Only run on Python 2.7+')
+def test_system_ssl():
+    '''Verify we're actually setting system_ssl when it should be available.'''
+    assert info()['system_ssl']['version'] != ''
     
-        terminal_stderr_re = [
-        re.compile(br'Error:'),
-    ]
+    if (twisted_version.major, twisted_version.minor, twisted_version.micro) >= (15, 5, 0):
+    collect_ignore += _py_files('scrapy/xlib/tx')
     
-        for n_components in [i.astype(int) for i in
-                         np.linspace(data.shape[1] // 10,
-                                     data.shape[1], num=4)]:
-        all_times = defaultdict(list)
-        all_errors = defaultdict(list)
-        pca = PCA(n_components=n_components)
-        rpca = RandomizedPCA(n_components=n_components, random_state=1999)
-        results_dict = {k: benchmark(est, data) for k, est in [('pca', pca),
-                                                               ('rpca', rpca)]}
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-l', '--list', dest='list', action='store_true',
+                          help='only list contracts, without checking them')
+        parser.add_option('-v', '--verbose', dest='verbose', default=False, action='store_true',
+                          help='print contract tests for all spiders')
     
-        op.add_option('--eps',
-                  dest='eps', default=0.5, type=float,
-                  help='See the documentation of the underlying transformers.')
+            if not assertion:
+            if self.min_bound == self.max_bound:
+                expected = self.min_bound
+            else:
+                expected = '%s..%s' % (self.min_bound, self.max_bound)
     
-        fn = os.path.relpath(fn,
-                         start=os.path.dirname(__import__(package).__file__))
-    try:
-        lineno = inspect.getsourcelines(obj)[1]
-    except Exception:
-        lineno = ''
-    return url_fmt.format(revision=revision, package=package,
-                          path=fn, lineno=lineno)
+    api('wikipagelisting', WikiPageListingJsonTemplate)
+api('wikipagediscussions', WikiJsonTemplate)
+api('wikipagesettings', WikiSettingsJsonTemplate)
     
+    from r2.controllers.api_docs import api_doc, api_section
+from r2.controllers.oauth2 import require_oauth2_scope
+from r2.controllers.reddit_base import OAuth2OnlyController
+from r2.controllers.ipn import send_gift
+from r2.lib.errors import RedditError
+from r2.lib.validator import (
+    validate,
+    VAccountByName,
+    VByName,
+    VInt,
+    VNotInTimeout,
+)
+from r2.models import Account, Comment, Link, NotFound
+from r2.models.gold import creddits_lock
+from r2.lib.validator import VUser
     
-if not os.path.exists(html_folder):
-    os.makedirs(html_folder)
-    
-    # Print the classification report
-print(metrics.classification_report(y_test, y_predicted,
-                                    target_names=dataset.target_names))
-    
-        # split the dataset in training and test set:
-    docs_train, docs_test, y_train, y_test = train_test_split(
-        dataset.data, dataset.target, test_size=0.25, random_state=None)
-    
-    fit_data = data[np.argsort(model.row_labels_)]
-fit_data = fit_data[:, np.argsort(model.column_labels_)]
-    
-            ax1.plot(mean_predicted_value, fraction_of_positives, 's-',
-                 label='%s (%1.3f)' % (name, clf_score))
-    
-    # Plot boundaries of unit simplex
-plt.plot([0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], 'k', label='Simplex')
-    
-    for index, (name, classifier) in enumerate(classifiers.items()):
-    classifier.fit(X, y)
-    
-        This returns an array of input data with shape `(n_samples, n_features)`
-    and an array of `n_samples` target labels.
-    
-    from ..common import *
-    
-    
-download = huaban_download
-download_playlist = playlist_not_supported('huaban')
-
-    
-    #----------------------------------------------------------------------
-def sina_xml_to_url_list(xml_data):
-    '''str->list
-    Convert XML to URL List.
-    From Biligrab.
-    '''
-    rawurl = []
-    dom = parseString(xml_data)
-    for node in dom.getElementsByTagName('durl'):
-        url = node.getElementsByTagName('url')[0]
-        rawurl.append(url.childNodes[0].data)
-    return rawurl
-    
-        def extract(self, **kwargs):
-        for i in self.streams:
-            # for each available stream
-            s = self.streams[i]
-            # fill in 'container' field and 'size' field (optional)
-            _, s['container'], s['size'] = url_info(s['url'])
-            # 'src' field is a list of processed urls for direct downloading
-            # usually derived from 'url'
-            s['src'] = [s['url']]
-    
-        #title
-    title = ''
-    profile_api = 'https://www.showroom-live.com/api/room/profile?room_id={room_id}'.format(room_id = room_id)
-    html = loads(get_content(profile_api))
-    try:
-        title = html['main_name']
-    except KeyError:
-        title = 'Showroom_{room_id}'.format(room_id = room_id)
-    
-    print 'PLUGIN_I18N_PATHS := ' + ','.join(os.path.relpath(plugin.path)
-                                         for plugin in plugins
-                                         if plugin.needs_translation)
-    
-            AJAX login handler, used by both login and register to set the
-        user cookie and send back a redirect.
-        '''
-        c.user = user
-        c.user_is_loggedin = True
-        self.login(user, rem=rem)
-    
-        @require_oauth2_scope('account')
+        @require_oauth2_scope('identity')
     @validate(
         VUser(),
-        validated_prefs=PREFS_JSON_VALIDATOR,
+        fields=VList(
+            'fields',
+            choices=PREFS_JSON_SPEC.spec.keys(),
+            error=errors.errors.NON_PREFERENCE,
+        ),
     )
-    @api_doc(api_section.account, json_model=PREFS_JSON_VALIDATOR,
-             uri='/api/v1/me/prefs')
-    def PATCH_prefs(self, validated_prefs):
-        user_prefs = c.user.preferences()
-        for short_name, new_value in validated_prefs.iteritems():
-            pref_name = 'pref_' + short_name
-            user_prefs[pref_name] = new_value
-        vprefs.filter_prefs(user_prefs, c.user)
-        vprefs.set_prefs(c.user, user_prefs)
-        c.user._commit()
-        return self.api_wrapper(PrefsJsonTemplate().data(c.user))
+    @api_doc(api_section.account, uri='/api/v1/me/prefs')
+    def GET_prefs(self, fields):
+        '''Return the preference settings of the logged in user'''
+        resp = PrefsJsonTemplate(fields).data(c.oauth_user)
+        return self.api_wrapper(resp)
     
-    from pylons import request
-from pylons import app_globals as g
-from reddit_base import RedditController
-from r2.lib.pages import AdminPage, AdminAwards
-from r2.lib.pages import AdminAwardGive, AdminAwardWinners
-from r2.lib.validator import *
+            To request a new CAPTCHA,
+        use [/api/new_captcha](#POST_api_new_captcha).
+        '''
+        image = captcha.get_image(iden)
+        f = StringIO.StringIO()
+        image.save(f, 'PNG')
+        response.content_type = 'image/png;'
+        return f.getvalue()
     
-    from reddit_base import RedditController, UnloggedUser
-from r2.lib.pages import (ButtonLite, ButtonDemoPanel, WidgetDemoPanel,
-                          BoringPage)
-from r2.lib.pages.things import wrap_links
-from r2.models import *
-from r2.lib.validator import *
-from pylons import request, response
-from pylons import tmpl_context as c
-from pylons.i18n import _
+
     
-            c.allow_framing = True
+        GET_help = POST_help = renderurl
