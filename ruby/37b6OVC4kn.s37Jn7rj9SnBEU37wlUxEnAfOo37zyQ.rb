@@ -1,40 +1,106 @@
 
         
-        # This bin wrapper runs the `pod` command in a OS X sandbox. The reason for this
-# is to ensure that people can’t use malicious code from pod specifications.
-#
-# It does this by creating a ‘seatbelt’ profile on the fly and executing the
-# given command through `/usr/bin/sandbox-exec`. This profile format is an
-# undocumented format, which uses TinyScheme to implement its DSL.
-#
-# Even though it uses a undocumented format, it’s actually very self-explanatory.
-# Because we use a whitelist approach, `(deny default)`, any action that is
-# denied is logged to `/var/log/system.log`. So tailing that should provide
-# enough information on steps that need to be take to get something to work.
-#
-# For more information see:
-#
-# * https://github.com/CocoaPods/CocoaPods/issues/939
-# * http://reverse.put.as/wp-content/uploads/2011/08/The-Apple-Sandbox-BHDC2011-Slides.pdf
-# * http://reverse.put.as/wp-content/uploads/2011/08/The-Apple-Sandbox-BHDC2011-Paper.pdf
-# * https://github.com/s7ephen/OSX-Sandbox--Seatbelt--Profiles
-# * `$ man sandbox-exec`
-# * `$ ls /usr/share/sandbox`
-    
-          def report
-        <<-EOS
-    
-            def execute_repl_command(repl_command)
-          unless repl_command == '\n'
-            repl_commands = repl_command.split
-            subcommand = repl_commands.shift.capitalize
-            arguments = repl_commands
-            subcommand_class = Pod::Command::IPC.const_get(subcommand)
-            subcommand_class.new(CLAide::ARGV.new(arguments)).run
-            signal_end_of_output
-          end
+                  send(name, *args, &block)
         end
+    end
+    
+        def index
+      head :not_found
+    end
+    
+    module ActionMailer
+  # The <tt>ActionMailer::DeliveryJob</tt> class is used when you
+  # want to send emails outside of the request-response cycle.
+  #
+  # Exceptions are rescued and handled by the mailer class.
+  class DeliveryJob < ActiveJob::Base # :nodoc:
+    queue_as { ActionMailer::Base.deliver_later_queue_name }
+    
+        # An email was generated.
+    def process(event)
+      debug do
+        mailer = event.payload[:mailer]
+        action = event.payload[:action]
+        '#{mailer}##{action}: processed outbound mail in #{event.duration.round(1)}ms'
       end
+    end
+    
+          # Make list points stand on their own line
+      formatted.gsub!(/[ ]*([*]+) ([^*]*)/) { '  #{$1} #{$2.strip}\n' }
+      formatted.gsub!(/[ ]*([#]+) ([^#]*)/) { '  #{$1} #{$2.strip}\n' }
+    
+    class U2fRegistration < ActiveRecord::Base
+  belongs_to :user
+    
+        if in_reply_to_uri.blank?
+      @replied_to_status = nil
+    else
+      @replied_to_status   = status_from_uri(in_reply_to_uri)
+      @replied_to_status ||= status_from_uri(@object['inReplyToAtomUri']) if @object['inReplyToAtomUri'].present?
+      @replied_to_status
+    end
+  end
+    
+      attributes :id, :type, :url, :preview_url,
+             :remote_url, :text_url, :meta,
+             :description
+    
+        if extension_pathname.readable?
+      ENV['BUNDLE_GEMFILE'] = extension_pathname.to_path
+      break
     end
   end
 end
+    
+    require 'rubygems'  # install rubygems
+require 'hpricot'   # gem install hpricot
+require 'timeout'
+    
+    def usage
+  $stderr.puts '#{$0} [site list] [output-dir]'
+  exit(0)
+end
+    
+      def initialize(filename)
+    begin
+      f = File.new(filename)
+      @template = f.read
+    rescue Errno::ENOENT
+    end
+  end
+    
+    	def parse_line(line)
+		if line =~ /\w+ <[\.\w]+>:/
+			# End a previous block
+			unless block_size == 0
+				block_end
+			end
+			block_begin(line)
+    
+          def all_gem_names
+        core_gem_names + plugin_gem_names
+      end
+    
+            def <<(value)
+          values << value
+        end
+    
+          private
+    
+      desc 'Updated'
+  task :updated do
+  end
+    
+      context 'called with one color' do
+    it 'applies same color to all sides' do
+      rule = 'border-color: #f00'
+    
+          expect('.border-style-explicit').to have_rule(rule)
+    end
+  end
+    
+      context 'called with arguments (1, $ratio: $golden-ratio)' do
+    it 'output the first value from the golden ratio scale' do
+      expect('.one-golden-ratio').to have_rule('font-size: 1.618em')
+    end
+  end
