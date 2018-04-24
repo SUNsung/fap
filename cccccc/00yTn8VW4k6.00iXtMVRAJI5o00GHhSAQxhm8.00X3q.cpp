@@ -1,238 +1,303 @@
 
         
-        bool ReadJpeg(const uint8_t* data, const size_t len, JpegReadMode mode,
-              JPEGData* jpg) {
-  size_t pos = 0;
-  // Check SOI marker.
-  EXPECT_MARKER();
-  int marker = data[pos + 1];
-  pos += 2;
-  if (marker != 0xd8) {
-    fprintf(stderr, 'Did not find expected SOI marker, actual=%d\n', marker);
-    jpg->error = JPEG_SOI_NOT_FOUND;
-    return false;
-  }
-  int lut_size = kMaxHuffmanTables * kJpegHuffmanLutSize;
-  std::vector<HuffmanTableEntry> dc_huff_lut(lut_size);
-  std::vector<HuffmanTableEntry> ac_huff_lut(lut_size);
-  bool found_sof = false;
-  uint16_t scan_progression[kMaxComponents][kDCTBlockSize] = { { 0 } };
-    }
+        #ifndef TENSORFLOW_GRAPPLER_COSTS_MEASURING_COST_ESTIMATOR_H_
+#define TENSORFLOW_GRAPPLER_COSTS_MEASURING_COST_ESTIMATOR_H_
     
-    #include <assert.h>
-#include <algorithm>
-    
-    void ComputeBlockIDCT(const coeff_t* block, uint8_t* out) {
-  coeff_t colidcts[kDCTBlockSize];
-  const int kColScale = 11;
-  const int kColRound = 1 << (kColScale - 1);
-  for (int x = 0; x < 8; ++x) {
-    int colbuf[8] = { 0 };
-    Compute1dIDCT(&block[x], 8, colbuf);
-    for (int y = 0; y < 8; ++y) {
-      colidcts[8 * y + x] = (colbuf[y] + kColRound) >> kColScale;
-    }
-  }
-  const int kRowScale = 18;
-  const int kRowRound = 257 << (kRowScale - 1);  // includes offset by 128
-  for (int y = 0; y < 8; ++y) {
-    const int rowidx = 8 * y;
-    int rowbuf[8] = { 0 };
-    Compute1dIDCT(&colidcts[rowidx], 1, rowbuf);
-    for (int x = 0; x < 8; ++x) {
-      out[rowidx + x] =
-          std::max(0, std::min(255, (rowbuf[x] + kRowRound) >> kRowScale));
-    }
-  }
-}
-    
-    // Returns the table width of the next 2nd level table, count is the histogram
-// of bit lengths for the remaining symbols, len is the code length of the next
-// processed symbol.
-static inline int NextTableBitSize(const int* count, int len) {
-  int left = 1 << (len - kJpegHuffmanRootTableBits);
-  while (len < kJpegHuffmanMaxBitLength) {
-    left -= count[len];
-    if (left <= 0) break;
-    ++len;
-    left <<= 1;
-  }
-  return len - kJpegHuffmanRootTableBits;
-}
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    #include <exception>
-#include 'comm/xlogger/xlogger.h'
-    
-    
-#define SPY_DEF_CLASS_NAME TSpy
-#define SPY_DEF_XLOGGER_HOOK TSpy::SpyHookLogFunc
-    
-    //============================================================================
-// Name        : has_member.h
-// Author      :
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-//============================================================================
-    
-    
-    {
-    {} // namespace exception_tracer
-} // namespace folly
+    #endif  // TENSORFLOW_LIB_IO_RECORD_WRITER_H_
 
     
-    template <typename T, typename = void>
-struct constexpr_abs_helper {};
-    
-      // Chain the buffers all together
-  // Since we are going to relinquish ownership of iob2-5 to the chain,
-  // store raw pointers to them so we can reference them later.
-  IOBuf* iob2ptr = iob2.get();
-  IOBuf* iob3ptr = iob3.get();
-  IOBuf* iob4ptr = iob4.get();
-  IOBuf* iob5ptr = iob5.get();
-    
-    
-    {  return os;
-}
-    
-    int main(int argc, char* argv[]) {
-  gflags::ParseCommandLineFlags(&argc, &argv, true);
-  if (FLAGS_cp) {
-    if (argc != 3) {
-      usage(argv[0]);
-    }
-    copy(argv[1], argv[2]);
-  } else {
-    if (argc != 1) {
-      usage(argv[0]);
-    }
-    list();
-  }
-  return 0;
-}
-
-    
-      gen::byLine('/proc/mounts') | gen::eachAs<StringPiece>() |
-      [&](StringPiece line) {
-        parts.clear();
-        split(' ', line, parts);
-        // device path fstype options uid gid
-        if (parts.size() != 6) {
-          throw std::runtime_error('Invalid /proc/mounts line');
-        }
-        if (parts[2] != 'hugetlbfs') {
-          return; // we only care about hugetlbfs
-        }
-    }
-    
-    
-    {} // namespace folly
-
-    
-      std::string scratch;
-  scratch.resize(kGood.size() + kCorrupted.size() + 16);
-  Slice result;
-  unique_ptr<RandomAccessFile> rand_file;
-  ASSERT_OK(env_->NewRandomAccessFile(kFileName, &rand_file, soptions_));
-  ASSERT_OK(rand_file->Read(0, kGood.size(), &result, &(scratch[0])));
-  ASSERT_EQ(result.compare(kGood), 0);
-    
-           * Redistributions of source code must retain the above copyright
-   notice, this list of conditions and the following disclaimer.
-       * Redistributions in binary form must reproduce the above
-   copyright notice, this list of conditions and the following disclaimer
-   in the documentation and/or other materials provided with the
-   distribution.
-    
-      const SliceTransform* const prefix_extractor_;
-  std::unique_ptr<DynamicBloom> prefix_bloom_;
-    
-      // Iteration over the contents of a skip collection
-  class Iterator {
-   public:
-    // Initialize an iterator over the specified collection.
-    // The returned iterator is not valid.
-    // explicit Iterator(const MemTableRep* collection);
-    virtual ~Iterator() {}
-    }
-    
-    class InlineSkipTest : public testing::Test {
+    class TFRecordReader : public ReaderBase {
  public:
-  void Insert(TestInlineSkipList* list, Key key) {
-    char* buf = list->AllocateKey(sizeof(Key));
-    memcpy(buf, &key, sizeof(Key));
-    list->Insert(buf);
-    keys_.insert(key);
-  }
+  TFRecordReader(const string& node_name, const string& compression_type,
+                 Env* env)
+      : ReaderBase(strings::StrCat('TFRecordReader '', node_name, ''')),
+        env_(env),
+        offset_(0),
+        compression_type_(compression_type) {}
     }
     
-    SyncPoint:: ~SyncPoint() {
-  delete impl_;
+    template <typename T>
+void DynamicStitchGPUImpl(const Eigen::GpuDevice& gpu_device,
+                          const int32 slice_size, const int32 first_dim_size,
+                          const CudaDeviceArrayStruct<int>& input_indices,
+                          const CudaDeviceArrayStruct<const T*>& input_ptrs,
+                          T* output) {
+  const int32 output_size = first_dim_size * slice_size;
+  auto config = GetCudaLaunchConfig(output_size, gpu_device);
+    }
+    
+    // TODO: Enable GPU support for angle op after resolving
+// build failures on GPU (See #10643 for context).
+#if 0 && GOOGLE_CUDA
+REGISTER_COMPLEX(GPU, float, complex64);
+REGISTER_COMPLEX(GPU, double, complex128);
+#endif
+    
+    namespace caffe {
+    }
+    
+    /**
+ * @brief Abstract base class that factors out the BLAS code common to
+ *        ConvolutionLayer and DeconvolutionLayer.
+ */
+template <typename Dtype>
+class BaseConvolutionLayer : public Layer<Dtype> {
+ public:
+  explicit BaseConvolutionLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times ...) @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (M) @f$
+   *      the inputs @f$ x_2 @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (M \times ...) @f$:
+   *      the reindexed array @f$
+   *        y = x_1[x_2]
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    #endif  // CAFFE_CONTRASTIVE_LOSS_LAYER_HPP_
+
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include 'caffe/layers/pooling_layer.hpp'
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    /**
+ * @brief During training only, sets a random portion of @f$x@f$ to 0, adjusting
+ *        the rest of the vector magnitude accordingly.
+ *
+ * @param bottom input Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the inputs @f$ x @f$
+ * @param top output Blob vector (length 1)
+ *   -# @f$ (N \times C \times H \times W) @f$
+ *      the computed outputs @f$ y = |x| @f$
+ */
+template <typename Dtype>
+class DropoutLayer : public NeuronLayer<Dtype> {
+ public:
+  /**
+   * @param param provides DropoutParameter dropout_param,
+   *     with DropoutLayer options:
+   *   - dropout_ratio (\b optional, default 0.5).
+   *     Sets the probability @f$ p @f$ that any given unit is dropped.
+   */
+  explicit DropoutLayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    
+    {  bool stable_prod_grad_;
+};
+    
+    namespace caffe {
+    }
+    
+      virtual inline const char* type() const { return 'Exp'; }
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    // Disassemble the code from the given raw file, whose initial address is given
+// by fileStartAddr, for the address range given by
+// [codeStartAddr, codeStartAddr + codeLen)
+    
+      for (auto& arc : cg.arcs) {
+    if (arc.weight == 0) continue;
+    }
+    
+    #include <string>
+#include <vector>
+#include <cstdio>
+#include <cstdlib>
+#include <map>
+    
+    
+    {  auto iov = buf->getIov();
+  transport.writev(nullptr, iov.data(), iov.size());
 }
     
-    inline
-bool BlockFetcher::TryGetUncompressBlockFromPersistentCache() {
-  if (cache_options_.persistent_cache &&
-      !cache_options_.persistent_cache->IsCompressed()) {
-    Status status = PersistentCacheHelper::LookupUncompressedPage(
-        cache_options_, handle_, contents_);
-    if (status.ok()) {
-      // uncompressed page is found for the block handle
+      /**
+   * Construct a new string by replacing the characters denoted by the half-open
+   *   range [`first`,`last`) within this string with the characters from string
+   *   `that` starting at position `that_pos`.
+   * \pre `that_pos <= that.size()`
+   * \note Equivalent to
+   *   <tt>creplace(first - data(), last - first, that, that_pos,
+   *   that.size() - that_pos)</tt>
+   */
+  template <std::size_t M>
+  constexpr BasicFixedString<Char, N + M> creplace(
+      const Char* first,
+      const Char* last,
+      const BasicFixedString<Char, M>& that,
+      std::size_t that_pos = 0u) const noexcept(false) {
+    return creplace(
+        first - data_,
+        last - first,
+        that,
+        that_pos,
+        that.size_ - detail::fixedstring::checkOverflow(that_pos, that.size_));
+  }
+    
+    size_t IOBuf::countChainElements() const {
+  size_t numElements = 1;
+  for (IOBuf* current = next_; current != this; current = current->next_) {
+    ++numElements;
+  }
+  return numElements;
+}
+    
+    Range<AsyncIO::Op**> AsyncIO::doWait(
+    WaitType type,
+    size_t minRequests,
+    size_t maxRequests,
+    std::vector<Op*>& result) {
+  io_event events[maxRequests];
+    }
+    
+    namespace folly {
+namespace fs {
+    }
+    }
+    
+            options.clear();
+        split(',', parts[3], options);
+        size_t pageSize = defaultHugePageSize;
+        // Search for the 'pagesize' option, which must have a value
+        for (auto& option : options) {
+          // key=value
+          const char* p = static_cast<const char*>(
+              memchr(option.data(), '=', option.size()));
+          if (!p) {
+            continue;
+          }
+          if (StringPiece(option.data(), p) != 'pagesize') {
+            continue;
+          }
+          pageSize = parsePageSizeValue(StringPiece(p + 1, option.end()));
+          break;
+        }
+    
+    namespace folly {
+    }
+    
+      // Updates the probability distribution for the units in the corpus.
+  // Must be called whenever the corpus or unit weights are changed.
+  void UpdateCorpusDistribution() {
+    size_t N = Inputs.size();
+    Intervals.resize(N + 1);
+    Weights.resize(N);
+    std::iota(Intervals.begin(), Intervals.end(), 0);
+    if (CountingFeatures)
+      for (size_t i = 0; i < N; i++)
+        Weights[i] = Inputs[i]->NumFeatures * (i + 1);
+    else
+      std::iota(Weights.begin(), Weights.end(), 1);
+    CorpusDistribution = std::piecewise_constant_distribution<double>(
+        Intervals.begin(), Intervals.end(), Weights.begin());
+  }
+  std::piecewise_constant_distribution<double> CorpusDistribution;
+    
+    
+#ifdef __clang__  // avoid gcc warning.
+#  define ATTRIBUTE_NO_SANITIZE_MEMORY __attribute__((no_sanitize('memory')))
+#else
+#  define ATTRIBUTE_NO_SANITIZE_MEMORY
+#endif
+    
+      bool HasPositionHint() const { return PositionHint != std::numeric_limits<size_t>::max(); }
+  size_t GetPositionHint() const {
+    assert(HasPositionHint());
+    return PositionHint;
+  }
+  void IncUseCount() { UseCount++; }
+  void IncSuccessCount() { SuccessCount++; }
+  size_t GetUseCount() const { return UseCount; }
+  size_t GetSuccessCount() const {return SuccessCount; }
+    
+    void ReadDirToVectorOfUnits(const char *Path, std::vector<Unit> *V,
+                            long *Epoch, size_t MaxSize, bool ExitOnError);
+    
+    void ListFilesInDirRecursive(const std::string &Dir, long *Epoch,
+                             std::vector<std::string> *V, bool TopDir) {
+  auto E = GetEpoch(Dir);
+  if (Epoch)
+    if (E && *Epoch >= E) return;
+    }
+    
+    
+    {  bool InMergeMode = false;
+};
+    
+    
+    {  std::ofstream OF(CFPath, std::ofstream::out | std::ofstream::app);
+  for (size_t i = M.FirstNotProcessedFile; i < M.Files.size(); i++) {
+    auto U = FileToVector(M.Files[i].Name);
+    if (U.size() > MaxInputLen) {
+      U.resize(MaxInputLen);
+      U.shrink_to_fit();
+    }
+    std::ostringstream StartedLine;
+    // Write the pre-run marker.
+    OF << 'STARTED ' << std::dec << i << ' ' << U.size() << '\n';
+    OF.flush();  // Flush is important since ExecuteCommand may crash.
+    // Run.
+    TPC.ResetMaps();
+    ExecuteCallback(U.data(), U.size());
+    // Collect coverage.
+    std::set<size_t> Features;
+    TPC.CollectFeatures([&](size_t Feature) -> bool {
+      Features.insert(Feature);
       return true;
-    } else {
-      // uncompressed page is not found
-      if (ioptions_.info_log && !status.IsNotFound()) {
-        assert(!status.ok());
-        ROCKS_LOG_INFO(ioptions_.info_log,
-                       'Error reading from persistent cache. %s',
-                       status.ToString().c_str());
-      }
-    }
+    });
+    // Show stats.
+    TotalNumberOfRuns++;
+    if (!(TotalNumberOfRuns & (TotalNumberOfRuns - 1)))
+      PrintStats('pulse ');
+    // Write the post-run marker and the coverage.
+    OF << 'DONE ' << i;
+    for (size_t F : Features)
+      OF << ' ' << std::hex << F;
+    OF << '\n';
   }
-  return false;
 }
     
-    // Return the source of the generated service file.
-grpc::string GenerateServiceSource(grpc_generator::File *file,
-                                   const grpc_generator::Service *service,
-                                   grpc_go_generator::Parameters *parameters);
     
-      auto channel =
-      grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials());
-  GreeterClient greeter(channel);
+    {  bool Parse(std::istream &IS, bool ParseCoverage);
+  bool Parse(const std::string &Str, bool ParseCoverage);
+  void ParseOrExit(std::istream &IS, bool ParseCoverage);
+  size_t Merge(std::vector<std::string> *NewFiles);
+};
     
-    namespace MyGame {
-namespace Example {
-    }
-    }
+    #ifndef LLVM_FUZZER_OPTIONS_H
+#define LLVM_FUZZER_OPTIONS_H
     
-      virtual bool get_module_and_message_path_input(
-      grpc::string *str, grpc::string generator_file_name,
-      bool generate_in_pb2_grpc, grpc::string import_prefix) const = 0;
-  virtual bool get_module_and_message_path_output(
-      grpc::string *str, grpc::string generator_file_name,
-      bool generate_in_pb2_grpc, grpc::string import_prefix) const = 0;
-    
-    class BaseGenerator {
- public:
-  virtual bool generate() = 0;
-    }
-    
-    #include 'flatbuffers/flatc.h'
-    
-    std::string GenType(const std::string &name) {
-  return '\'type\' : \'' + name + '\'';
-}
-    
-    inline const flatbuffers::TypeTable *TableInCTypeTable();
+    TracePC TPC;
