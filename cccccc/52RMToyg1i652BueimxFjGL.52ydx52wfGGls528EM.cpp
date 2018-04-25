@@ -1,248 +1,161 @@
 
         
-          /// \brief Return a list of the member names.
-  ///
-  /// If null, return an empty list.
-  /// \pre type() is objectValue or nullValue
-  /// \post if type() was nullValue, it remains nullValue
-  Members getMemberNames() const;
+        
+    { private:
+  Cluster* cluster_;  // Not owned.
+  int measurement_steps_;
+  int measurement_threads_;
+  std::vector<std::pair<string, Tensor>> feed_;
+  std::vector<string> fetch_;
+  std::unique_ptr<thread::ThreadPool> thread_pool_;
+};
     
-    // Convert a Python object to a FileDescriptorProto pointer.
-// Handles all kinds of Python errors, which are simply logged.
-static bool GetFileDescriptorProto(PyObject* py_descriptor,
-                                   FileDescriptorProto* output) {
-  if (py_descriptor == NULL) {
-    if (PyErr_ExceptionMatches(PyExc_KeyError)) {
-      // Expected error: item was simply not found.
-      PyErr_Clear();
-    } else {
-      GOOGLE_LOG(ERROR) << 'DescriptorDatabase method raised an error';
-      PyErr_Print();
-    }
-    return false;
-  }
-  if (py_descriptor == Py_None) {
-    return false;
-  }
-  const Descriptor* filedescriptor_descriptor =
-      FileDescriptorProto::default_instance().GetDescriptor();
-  CMessage* message = reinterpret_cast<CMessage*>(py_descriptor);
-  if (PyObject_TypeCheck(py_descriptor, &CMessage_Type) &&
-      message->message->GetDescriptor() == filedescriptor_descriptor) {
-    // Fast path: Just use the pointer.
-    FileDescriptorProto* file_proto =
-        static_cast<FileDescriptorProto*>(message->message);
-    *output = *file_proto;
-    return true;
-  } else {
-    // Slow path: serialize the message. This allows to use databases which
-    // use a different implementation of FileDescriptorProto.
-    ScopedPyObjectPtr serialized_pb(
-        PyObject_CallMethod(py_descriptor, 'SerializeToString', NULL));
-    if (serialized_pb == NULL) {
-      GOOGLE_LOG(ERROR)
-          << 'DescriptorDatabase method did not return a FileDescriptorProto';
-      PyErr_Print();
-      return false;
-    }
-    char* str;
-    Py_ssize_t len;
-    if (PyBytes_AsStringAndSize(serialized_pb.get(), &str, &len) < 0) {
-      GOOGLE_LOG(ERROR)
-          << 'DescriptorDatabase method did not return a FileDescriptorProto';
-      PyErr_Print();
-      return false;
-    }
-    FileDescriptorProto file_proto;
-    if (!file_proto.ParseFromArray(str, len)) {
-      GOOGLE_LOG(ERROR)
-          << 'DescriptorDatabase method did not return a FileDescriptorProto';
-      return false;
-    }
-    *output = file_proto;
-    return true;
-  }
-}
+      string name() const override { return 'model_pruner'; };
     
-    class ReflectionClassGenerator : public SourceGeneratorBase {
- public:
-  ReflectionClassGenerator(const FileDescriptor* file, const Options* options);
-  ~ReflectionClassGenerator();
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    
+    {  void CopyDeviceTensorToCPU(const Tensor *device_tensor, StringPiece edge_name,
+                             Device *device, Tensor *cpu_tensor,
+                             StatusCallback done) override;
+};
+    
+    MPIUtils::MPIUtils(const std::string& worker_name) {
+  InitMPI();
+  // Connect the MPI process IDs to the worker names that are used by TF.
+  // Gather the names of all the active processes (name can't be longer than
+  // 128 bytes)
+  int proc_id = 0, number_of_procs = 1;
+  char my_name[max_worker_name_length];
+  MPI_CHECK(MPI_Comm_rank(MPI_COMM_WORLD, &proc_id));
+  MPI_CHECK(MPI_Comm_size(MPI_COMM_WORLD, &number_of_procs));
     }
+    
+    #if defined(_MSC_VER) && _MSC_VER >= 1600 // MSVC >= 2010
+#define JSON_HAS_RVALUE_REFERENCES 1
+#endif // MSVC >= 2010
+    
+    #ifndef GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_CONTAINERS_H__
+#define GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_CONTAINERS_H__
+    
+    #include <google/protobuf/pyext/descriptor_database.h>
+    
+      // Find the file that declares the given fully-qualified symbol name.
+  bool FindFileContainingSymbol(const string& symbol_name,
+                                FileDescriptorProto* output);
+    
+    
+    {
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+    
+      virtual void WriteHash(io::Printer* printer);
+  virtual void WriteEquals(io::Printer* printer);
+  virtual void WriteToString(io::Printer* printer);
     
     namespace google {
 namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
+  namespace io {
+    class Printer;             // printer.h
+  }
+}
     }
     
-    // Author: kenton@google.com (Kenton Varda)
-//  Based on original Protocol Buffers design by
-//  Sanjay Ghemawat, Jeff Dean, and others.
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
     
     
-    {}  // namespace google
-#endif  // GOOGLE_PROTOBUF_COMPILER_JAVA_EXTENSION_LITE_H__
+    {  return 0;
+}
 
     
+    #ifndef GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
+#define GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
     
-    {            ptr[tid] = partial = partial + ptr[tid + 16];
-            ptr[tid] = partial = partial + ptr[tid + 8];
-            ptr[tid] = partial = partial + ptr[tid + 4];
-            ptr[tid] = partial = partial + ptr[tid + 2];
-            ptr[tid] = partial = partial + ptr[tid + 1];
-        }
-    
-    CV_EXPORTS_W void max(InputArray src1, Scalar src2, OutputArray dst);
-    
-    /* End of file. */
-
-    
-      ClientConfig client_config;
-  client_config.set_client_type(ASYNC_CLIENT);
-  client_config.set_outstanding_rpcs_per_channel(1000);
-  client_config.set_client_channels(8);
-  client_config.set_async_client_threads(8);
-  client_config.set_rpc_type(STREAMING);
-  client_config.mutable_load_params()->mutable_poisson()->set_offered_load(
-      1000.0 / grpc_test_slowdown_factor());
-    
-      grpc::testing::RunServer();
+    // Get leading or trailing comments in a string. Comment lines start with '// '.
+// Leading detached comments are put in in front of leading comments.
+template <typename DescriptorType>
+inline grpc::string GetNodeComments(const DescriptorType* desc, bool leading) {
+  return grpc_generator::GetPrefixedComments(desc, leading, '//');
+}
     
     
     { private:
   GeneratorConfiguration config_;
 };
     
-    AuthPropertyIterator SecureAuthContext::begin() const {
-  if (ctx_) {
-    grpc_auth_property_iterator iter =
-        grpc_auth_context_property_iterator(ctx_);
-    const grpc_auth_property* property =
-        grpc_auth_property_iterator_next(&iter);
-    return AuthPropertyIterator(property, &iter);
-  } else {
-    return end();
+    grpc::string DescribeServiceList(std::vector<grpc::string> service_list,
+                                 grpc::protobuf::DescriptorPool& desc_pool) {
+  std::stringstream result;
+  for (auto it = service_list.begin(); it != service_list.end(); it++) {
+    auto const& service = *it;
+    const grpc::protobuf::ServiceDescriptor* service_desc =
+        desc_pool.FindServiceByName(service);
+    if (service_desc != nullptr) {
+      result << DescribeService(service_desc);
+    }
   }
+  return result.str();
 }
     
-      grpc::testing::interop::RunServer(
-      grpc::testing::CreateInteropServerCredentials());
-    
-    double UsageTimer::Now() {
-  auto ts = gpr_now(GPR_CLOCK_REALTIME);
-  return ts.tv_sec + 1e-9 * ts.tv_nsec;
-}
-    
-    grpc::string DescribeService(const grpc::protobuf::ServiceDescriptor* service) {
-  grpc::string result;
-  if (service->options().deprecated()) {
-    result.append('DEPRECATED\n');
+      /// (Deprecated: Use native_handle().) Get the native acceptor representation.
+  /**
+   * This function may be used to obtain the underlying representation of the
+   * acceptor. This is intended to allow access to native acceptor functionality
+   * that is not otherwise provided.
+   */
+  native_type native()
+  {
+    return this->get_service().native_handle(this->get_implementation());
   }
-  result.append('filename: ' + service->file()->name() + '\n');
-    }
+    
+    template <typename Stream>
+class buffered_write_stream;
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+typedef long atomic_count;
+inline void increment(atomic_count& a, long b) { a += b; }
+#elif defined(BOOST_ASIO_HAS_STD_ATOMIC)
+typedef std::atomic<long> atomic_count;
+inline void increment(atomic_count& a, long b) { a += b; }
+#else // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+typedef boost::detail::atomic_count atomic_count;
+inline void increment(atomic_count& a, long b) { while (b > 0) ++a, --b; }
+#endif // defined(BOOST_ASIO_HAS_STD_ATOMIC)
     
     
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
     
-    
-    
-    void GLESDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
-{
-    mShaderProgram->use();
-    mShaderProgram->setUniformsForBuiltins();
-    }
-    
-        virtual void DrawPoint(const b2Vec2& p, float32 size, const b2Color& color);
-    
-    class ApplyForce : public Test
+    template <typename Buffer>
+class buffer_sequence_adapter<Buffer, boost::asio::mutable_buffers_1>
+  : buffer_sequence_adapter_base
 {
 public:
-	ApplyForce()
-	{
-		m_world->SetGravity(b2Vec2(0.0f, 0.0f));
+  explicit buffer_sequence_adapter(
+      const boost::asio::mutable_buffers_1& buffer_sequence)
+  {
+    init_native_buffer(buffer_, Buffer(buffer_sequence));
+    total_buffer_size_ = boost::asio::buffer_size(buffer_sequence);
+  }
     }
-    }
-    
-    
-    {			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.position.Set(-8.0f + 8.0f * i, 12.0f);
-			b2Body* body = m_world->CreateBody(&bd);
-			body->CreateFixture(&fd);
-		}
-    
-    		{
-			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.position.Set(0.0f, 4.0f);
-    }
-    
-    namespace {
-    }
-    
-    #endif  // GUETZLI_ENTROPY_ENCODE_H_
-
-    
-    namespace guetzli {
-    }
-    
-      // Fills in block[] with the 8x8 coefficient block with block coordinates
-  // (block_x, block_y).
-  // NOTE: If the component is 2x2 subsampled, this corresponds to the 16x16
-  // pixel area with upper-left corner (16 * block_x, 16 * block_y).
-  void GetCoeffBlock(int block_x, int block_y,
-                     coeff_t block[kDCTBlockSize]) const;
-    
-    
-    {}  // namespace guetzli
-
-    
-    #include <string>
-#include <vector>
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    void Test_Spy_Sample::TestFun0()
-{
-    SPY_HOOK_THIS_API(TestFun0);
-    int i = 0;
-    SPY_ATTACH_VARIABLE('TestFun0 i', i);
-    i++;
-    xinfo2(TSF'Test');
-    }
-    
-    
-/*
- * scop_jenv.cpp
- *
- *  Created on: 2012-8-21
- *      Author: yanguoyue
- */
-    
-    namespace fuzzer {
-    }
-    
-    
-    {  T.seekg(0, T.beg);
-  Unit Res(FileLen);
-  T.read(reinterpret_cast<char *>(Res.data()), FileLen);
-  return Res;
-}
-    
-    
-    {  bool Parse(std::istream &IS, bool ParseCoverage);
-  bool Parse(const std::string &Str, bool ParseCoverage);
-  void ParseOrExit(std::istream &IS, bool ParseCoverage);
-  size_t Merge(std::vector<std::string> *NewFiles);
-};
-    
-    size_t MutationDispatcher::Mutate_AddWordFromPersistentAutoDictionary(
-    uint8_t *Data, size_t Size, size_t MaxSize) {
-  return AddWordFromDictionary(PersistentAutoDictionary, Data, Size, MaxSize);
-}
