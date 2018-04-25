@@ -1,97 +1,87 @@
 
         
-        // Generate constructors.
-#include 'ipc/struct_constructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
-    
-    IPC_SYNC_MESSAGE_ROUTED3_1(ShellViewHostMsg_Call_Static_Method_Sync,
-                           std::string /* type name */,
-                           std::string /* method name */,
-                           base::ListValue /* arguments */,
-                           base::ListValue /* result */)
-    
-    namespace base {
-class ListValue;
+        
+    {
+    {    data_channel->broadcast(*int_tensor, group_ranks[0], group);
+    ASSERT_TENSOR_VALUE(int, *int_tensor, 2000)
+  } else {
+    auto int_tensor = buildTensor({1, 2, 3, 4, 5}, 1000);
+    data_channel->broadcast(*int_tensor, group_ranks[0], group);
+    ASSERT_TENSOR_VALUE(int, *int_tensor, 1000)
+  }
 }
     
-    #endif  // CONTENT_SHELL_PATHS_MAC_H_
+      for (auto s: tensor->sizes())
+    assert(s == 2);
+  for (int i = 0; i < 2; i++)
+    assert(reinterpret_cast<float*>(tensor->data())[i] == 5);
+    
+    
+    {template<> bool overflows<Half, double>(double f) {
+  return f > 65504 || f < -65504;
+}
+template<> bool overflows<Half, int64_t>(int64_t f) {
+  return f > 65504 || f < -65504;
+}
+} // namespace at
 
     
-    Clipboard::Clipboard(int id,
-           const base::WeakPtr<DispatcherHost>& dispatcher_host,
-           const base::DictionaryValue& option)
-    : Base(id, dispatcher_host, option) {
+    bool cudnn_is_acceptable(const Tensor& self) {
+  if (!globalContext().userEnabledCuDNN()) return false;
+  if (!self.is_cuda()) return false;
+  auto st = self.type().scalarType();
+  if (!(st == kDouble || st == kFloat || st == kHalf)) return false;
+  if (!AT_CUDNN_ENABLED()) return false;
+  // NB: In the old Python code, there was also a test to see if the
+  // cuDNN library was actually dynamically linked or not.  I'm not
+  // sure if we can actually test this.
+  return true;
 }
     
+    #include 'torch/csrc/Exceptions.h'
+#include 'torch/csrc/utils/auto_gil.h'
+#include 'torch/csrc/utils/python_scalars.h'
     
-    {}  // namespace nw
+      Tensor dBias = at::zeros_like(bias);
+  auto tmp = dOutput.sum(0, false);
+  dBias.copy_(tmp.sum(0));
+    
+    #define THCPDoubleStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPDoubleStorageClass)
+#define THCPFloatStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPFloatStorageClass)
+#define THCPHalfStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPHalfStorageClass)
+#define THCPLongStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPLongStorageClass)
+#define THCPIntStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPIntStorageClass)
+#define THCPShortStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPShortStorageClass)
+#define THCPCharStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPCharStorageClass)
+#define THCPByteStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPByteStorageClass)
+    
+      YGNodeStyleSetFlexShrink(child1, 1);
+    
+     public:
     
     
-void MenuItem::UpdateKeys(GtkAccelGroup *gtk_accel_group){
-  this->gtk_accel_group = gtk_accel_group;
-  if (enable_shortcut && GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    gtk_widget_add_accelerator(
-      menu_item_,
-      'activate',
-      gtk_accel_group,
-      keyval,
-      modifiers_mask,
-      GTK_ACCEL_VISIBLE);
-  }
-  if (submenu_ != NULL){
-    submenu_->UpdateKeys(gtk_accel_group);
-  }
-  return;
+    {    YGNodeSetMeasureFunc(m_node, &globalMeasureFunc);
 }
     
-    /// A millisecond internal applied to extension initialization.
-extern const size_t kExtensionInitializeLatency;
+        method(markDirty);
+    method(isDirty);
     
-    using AddExternalCallback =
-    std::function<Status(const std::string&, const PluginResponse&)>;
     
-      /**
-   * @brief Sets up the process as an osquery shell.
-   *
-   * The shell is lighter than a daemon and disables (by default) features.
-   */
-  void initShell() const;
+    {  // There are subtle issues with calling the next functions directly. It is
+  // much better to always use a ThreadScope to manage attaching/detaching for
+  // you.
+  FBEXPORT static JNIEnv* ensureCurrentThreadIsAttached();
+  FBEXPORT static void detachCurrentThread();
+};
     
-    static int osquery_close(dev_t dev, int flag, int fmt, struct proc *p) {
-  // Only one daemon should request a close.
-  lck_mtx_lock(osquery.mtx);
-  if (osquery.open_count == 1) {
-    unsubscribe_all_events();
-    cleanup_user_kernel_buffer();
-    osquery.open_count--;
+      T& operator*() const {
+    return *m_ptr;
   }
-  lck_mtx_unlock(osquery.mtx);
-    }
-    
-      /*
-   * @brief a helper variable for keeping track of the compressed tar.
-   *
-   * This variable is the absolute location of the tar archive created from
-   * zstd of the archive.
-   */
-  boost::filesystem::path compressPath_;
-    
-    
-    {  std::vector<char> hostname(size, 0x0);
-  std::string hostname_string;
-  if (hostname.data() != nullptr) {
-    gethostname(hostname.data(), size - 1);
-    hostname_string = std::string(hostname.data());
-  }
-  boost::algorithm::trim(hostname_string);
-  return hostname_string;
-}
-    
-    #include <stdint.h>
-    
-    
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
