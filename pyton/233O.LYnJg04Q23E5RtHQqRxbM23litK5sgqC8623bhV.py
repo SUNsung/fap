@@ -1,54 +1,75 @@
 
         
-        from mrjob.job import MRJob
+                '''
+        available_plugins = plugin_manager.get_formatters_grouped()
+        self.enabled_plugins = []
+        for group in groups:
+            for cls in available_plugins[group]:
+                p = cls(env=env, **kwargs)
+                if p.enabled:
+                    self.enabled_plugins.append(p)
     
-        def mapper(self, _, line):
-        yield line, 1
+    
+def test_follow_redirect_output_options(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=h',
+             '--history-print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 2
+    assert 'HTTP/1.1 302 FOUND' not in r
+    assert HTTP_OK in r
+    
+            for response in responses:
+    
+    '''
+__version__ = '1.0.0-dev'
+__author__ = 'Jakub Roztocil'
+__licence__ = 'BSD'
+    
+        def register(self, *plugins):
+        for plugin in plugins:
+            self._plugins.append(plugin)
+    
+        def __init__(self, path, *args, **kwargs):
+        super(Session, self).__init__(*args, **kwargs)
+        self._path = path
+        self['headers'] = {}
+        self['cookies'] = {}
+        self['auth'] = {
+            'type': None,
+            'username': None,
+            'password': None
+        }
     
     
-class Crawler(object):
+def make_git_tag(tag):
+    info('Tagging '%s'', tag)
+    Popen(['git', 'tag', tag]).wait()
     
-        def move_to_front(self, node):
-        ...
     
-        if WSAStringToAddressA(
-            ip_string,
-            address_family,
-            None,
-            ctypes.byref(addr),
-            ctypes.byref(addr_size)
-    ) != 0:
-        raise socket.error(ctypes.FormatError())
+def best_server():
+    # TODO: find and use the best server
+    # teredo.remlab.net / teredo - debian.remlab.net(Germany)
+    # teredo.ngix.ne.kr(South Korea)
+    # teredo.managemydedi.com(USA, Chicago)
+    # teredo.trex.fi(Finland)
+    # win8.ipv6.microsoft.com(The Teredo server hidden in Windows RT 8.1) of which Windows 7 has no knowledge.
+    # win10.ipv6.microsoft.com
+    return 'teredo.remlab.net'
     
-    ## Anything on different channel than DEFAULT_CHANNEL is not parsed
-# by parser.
-HIDDEN_CHANNEL = 99
+                else:
+                raise RuntimeError('DFA bang!')
+            
+        finally:
+            input.rewind(mark)
     
-        def __str__(self):
-        #return 'MismatchedTokenException('+self.expecting+')'
-        return 'MismatchedTokenException(%r!=%r)' % (
-            self.getUnexpectedType(), self.expecting
-            )
-    __repr__ = __str__
     
-            You must be careful, if you subclass a generated recognizers.
-        The default implementation will only search the module of self
-        for rules, but the subclass will not contain any rules.
-        You probably want to override this method to look like
+class BacktrackingFailed(Exception):
+    '''@brief Raised to signal failed backtrack attempt'''
     
-    class TimeoutError(Error):
-    '''The operation exceeded the given deadline.'''
-    pass
-    
-        def tearDown(self):
-        self.executor.shutdown(wait=True)
-        dt = time.time() - self.t1
-        if test_support.verbose:
-            print('%.2fs' % dt)
-        self.assertLess(dt, 60, 'synchronization issue: test lasted too long')
-    
-    import functools
-import os
-import requests
-import time
-import warnings
+    - CommonTokenStream: A basic and most commonly used TokenStream
+  implementation.
+- TokenRewriteStream: A modification of CommonTokenStream that allows the
+  stream to be altered (by the Parser). See the 'tweak' example for a usecase.
