@@ -1,189 +1,163 @@
 
         
         
-@mock.patch('httpie.core.get_response')
-def test_error_traceback(get_response):
-    exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    with raises(ConnectionError):
-        main(['--ignore-stdin', '--traceback', 'www.google.com'])
+class TestCaseInsensitiveDict:
     
-        # By default the `-a` argument is parsed for `username:password`.
-    # Set this to `False` to disable the parsing and error handling.
-    auth_parse = True
+        @pytest.mark.skip(reason='this fails non-deterministically under pytest-xdist')
+    def test_request_recovery(self):
+        '''can check the requests content'''
+        # TODO: figure out why this sometimes fails when using pytest-xdist.
+        server = Server.basic_response_server(requests_to_handle=2)
+        first_request = b'put your hands up in the air'
+        second_request = b'put your hand down in the floor'
     
-        def test_cert_file_not_found(self, httpbin_secure):
-        r = http(httpbin_secure + '/get',
-                 '--cert', '/__not_found__',
-                 error_exit_ok=True)
-        assert r.exit_status == ExitStatus.ERROR
-        assert 'No such file or directory' in r.stderr
+       >>> payload = dict(key1='value1', key2='value2')
+   >>> r = requests.post('http://httpbin.org/post', data=payload)
+   >>> print(r.text)
+   {
+     ...
+     'form': {
+       'key2': 'value2',
+       'key1': 'value1'
+     },
+     ...
+   }
     
     
-def repr_dict_nice(d):
-    def prepare_dict(d):
-        for k, v in d.items():
-            if isinstance(v, dict):
-                v = dict(prepare_dict(v))
-            elif isinstance(v, bytes):
-                v = v.decode('utf8')
-            elif not isinstance(v, (int, str)):
-                v = repr(v)
-            yield k, v
-    return json.dumps(
-        dict(prepare_dict(d)),
-        indent=4, sort_keys=True,
+class ProxyError(ConnectionError):
+    '''A proxy error occurred.'''
+    
+        def request(self, method, url,
+            params=None, data=None, headers=None, cookies=None, files=None,
+            auth=None, timeout=None, allow_redirects=True, proxies=None,
+            hooks=None, stream=None, verify=None, cert=None, json=None):
+        '''Constructs a :class:`Request <Request>`, prepares it and sends it.
+        Returns :class:`Response <Response>` object.
+    
+        with server as (host, port):
+        url = 'http://{0}:{1}/path/to/thing/#view=edit&token=hunter2'.format(host, port)
+        r = requests.get(url)
+        raw_request = r.content
+    
+            # Send request and simulate redirect
+        resp = s.send(prep_req)
+        resp.status_code = 302
+        resp.headers['location'] = httpbin('get')
+        redirects = s.resolve_redirects(resp, prep_req)
+        resp = next(redirects)
+    
+    from ansible.errors import AnsibleError
+from ansible.module_utils._text import to_bytes
+    
+    ipv4_component = r'''
+    (?:
+        [01]?[0-9]{{1,2}}|              # 0..199
+        2[0-4][0-9]|                    # 200..249
+        25[0-5]|                        # 250..255
+        {range}                         # or a numeric range
     )
+'''.format(range=numeric_range)
     
-        ERROR_TIMEOUT = 2
-    ERROR_TOO_MANY_REDIRECTS = 6
-    
-        def check(self, value):
-        return isinstance(value, tuple)
-    
-        def test_all_methods(self, invoke):
-        output = invoke(['routes']).output
-        assert 'GET, HEAD, OPTIONS, POST' not in output
-        output = invoke(['routes', '--all-methods']).output
-        assert 'GET, HEAD, OPTIONS, POST' in output
-    
-    
-def test_config_from_json():
-    app = flask.Flask(__name__)
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    app.config.from_json(os.path.join(current_dir, 'static', 'config.json'))
-    common_object_test(app)
-    
-        Models: `flatpages.flatpages`
-    Templates: Uses the template defined by the ``template_name`` field,
-        or :template:`flatpages/default.html` if template_name is not defined.
-    Context:
-        flatpage
-            `flatpages.flatpages` object
-    '''
-    if not url.startswith('/'):
-        url = '/' + url
-    site_id = get_current_site(request).id
-    try:
-        f = get_object_or_404(FlatPage, url=url, sites=site_id)
-    except Http404:
-        if not url.endswith('/') and settings.APPEND_SLASH:
-            url += '/'
-            f = get_object_or_404(FlatPage, url=url, sites=site_id)
-            return HttpResponsePermanentRedirect('%s/' % request.path)
-        else:
-            raise
-    return render_flatpage(request, f)
-    
-    
-if six.PY3:
-    for line in open('tests/py3-ignores.txt'):
-        file_path = line.strip()
-        if file_path and file_path[0] != '#':
-            collect_ignore.append(file_path)
-    
-    # Scrapy version
-import pkgutil
-__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
-version_info = tuple(int(v) if v.isdigit() else v
-                     for v in __version__.split('.'))
-del pkgutil
-    
-        def process_options(self, args, opts):
+        def on_open_shell(self):
         try:
-            self.settings.setdict(arglist_to_dict(opts.set),
-                                  priority='cmdline')
-        except ValueError:
-            raise UsageError('Invalid -s value, use -s NAME=VALUE', print_help=False)
-    
-                tested_methods = conman.tested_methods_from_spidercls(spidercls)
-            if opts.list:
-                for method in tested_methods:
-                    contract_reqs[spidercls.name].append(method)
-            elif tested_methods:
-                self.crawler_process.crawl(spidercls)
-    
-    
-if __name__ == '__main__':
-    SpendingByCategory.run()
+            self._exec_cli_command('screen-length 0 temporary')
+        except AnsibleConnectionFailure:
+            raise AnsibleConnectionFailure('unable to set terminal parameters')
 
     
-        def extract_url(self, line):
-        '''Extract the generated url from the log line.'''
-        pass
+        def __init__(
+        self, grammarDecisionDescription, decisionNumber, stateNumber, input
+        ):
+        RecognitionException.__init__(self, input)
     
-            (category1, 1), product4
-        (category1, 2), product1
-        (category1, 3), product2
-        (category2, 3), product1
-        (category2, 7), product3
-        '''
-        category, product_id = key
-        quantity = value
-        yield (category, quantity), product_id
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
     
+        @mock.patch(
+        'certbot_compatibility_test.validator.crypto_util.probe_sni')
+    def test_certificate_error(self, mock_probe_sni):
+        cert = OpenSSL.crypto.X509()
+        mock_probe_sni.side_effect = [acme_errors.Error]
+        self.assertFalse(self.validator.certificate(
+            cert, 'test.com', '127.0.0.1'))
     
-class RemoveDuplicateUrls(MRJob):
+    # List of patterns, relative to source directory, that match files and
+# directories to ignore when looking for source files.
+exclude_patterns = ['_build']
     
-        def __init__(self, employee_id, name):
-        super(Operator, self).__init__(employee_id, name, Rank.DIRECTOR)
+        def tearDown(self):
+        logging.disable(logging.NOTSET)
     
-        def crawl(self):
-        while True:
-            page = self.data_store.extract_max_priority_page()
-            if page is None:
-                break
-            if self.data_store.crawled_similar(page.signature):
-                self.data_store.reduce_priority_link_to_crawl(page.url)
-            else:
-                self.crawl_page(page)
-            page = self.data_store.extract_max_priority_page()
+        def contribute(self):
+        self.blackboard.common_state['problems'] += random.randint(1, 2)
+        self.blackboard.common_state['suggestions'] += random.randint(10, 20)
+        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
+        self.blackboard.common_state['progress'] += random.randint(10, 100)
+    
+        def test_car_shall_make_very_loud_noise(self):
+        noise = self.car.make_noise(10)
+        expected_noise = 'vroom!!!!!!!!!!'
+        self.assertEqual(noise, expected_noise)
+    
+        def test_data_value_shall_be_changeable(cls):
+        cls.sub.data = 20
+        cls.assertEqual(cls.sub._data, 20)
+    
+        def test_sales_manager_shall_respond_through_proxy_with_delay(cls):
+        cls.p.busy = 'Yes'
+        start_time = time()
+        cls.p.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+Sales Manager is busy\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
+    
+    ### OUTPUT ###
+# Jack move 5m then stop
 
     
-        def move_to_front(self, node):
-        pass
+        class ClassRegistree(BaseRegisteredClass):
     
-        def remove_from_tail(self):
-        ...
-    
-        #Checking correctness of path
-    if not os.path.isdir(loc):
-        print('Invalid directory. Please try again!', file = sys.stderr)
-        sys.exit(1)
-    
-        def do_action(self):
-        print(self.name, self.action.name, end=' ')
-        return self.action
-    
-    
-class Publisher:
-    
-        def test_bear_greek_localization(self):
-        self.assertEqual(self.g.get('bear'), 'bear')
+        def test_bunch_launch(self):
+        self.runner.runAll()
+        output = self.out.getvalue().strip()
+        self.assertEqual(output, str(self.average_result_tc1 + '\n\n' +
+                         self.average_result_tc2 + '\n\n' +
+                         self.average_result_tc3))
 
     
-        def test_am_station_overflow_after_scan(self):
-        self.radio.scan()
-        station = self.radio.state.stations[self.radio.state.pos]
-        expected_station = '1250'
-        self.assertEqual(station, expected_station)
-    
-        def test_display_current_time_at_midnight(self):
-        class_under_test = TimeDisplay()
-        expected_time = '24:01'
-        result = class_under_test.get_current_time_as_as_html_fragment()
-        self.assertEqual(result, expected_time)
-'''
-    
-        def prepareReporting(self):
-        rvalue = self._db.insert()
-        if rvalue == -1:
-            self._tc.setProblem(1)
-            self._reporter.prepare()
-    
-        def __init__(self, value):
-        self.value = value
-    
-    '''
-http://code.activestate.com/recipes/131499-observer-pattern/
+        def _handle(self, request):
+        if 0 < request <= 10:
+            print('request {} handled in handler 1'.format(request))
+            return True
