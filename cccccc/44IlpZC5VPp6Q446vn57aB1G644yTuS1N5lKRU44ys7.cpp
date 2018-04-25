@@ -1,132 +1,131 @@
 
         
-          DebuggerClient(ASTContext &C) : Ctx(C) { }
-  virtual ~DebuggerClient() = default;
-  
-  // DebuggerClient is consulted at the beginning of the parsing
-  // of various DeclKinds to see whether the decl should be parsed
-  // in the global context rather than the current context.
-  // This question will only be asked if the decl's current context
-  // is a function marked with the LLDBDebuggerFunction attribute.
-  virtual bool shouldGlobalize(Identifier Name, DeclKind kind) = 0;
-  
-  virtual void didGlobalize (Decl *Decl) = 0;
+        std::unique_ptr<ScenarioResult> RunScenario(
+    const grpc::testing::ClientConfig& client_config, size_t num_clients,
+    const grpc::testing::ServerConfig& server_config, size_t num_servers,
+    int warmup_seconds, int benchmark_seconds, int spawn_local_worker_count,
+    const grpc::string& qps_server_target_override,
+    const grpc::string& credential_type, bool run_inproc);
     
-        llvm::errs() << '\n=====================================================\n';
-    SyntaxNode->dump(llvm::errs());
-    llvm::errs() << '\n\n---- Maps to semantic node: ----\n\n';
+    static const int WARMUP = 5;
+static const int BENCHMARK = 5;
     
-    public:
-  ImportDepth() = default;
-  ImportDepth(ASTContext &context, CompilerInvocation &invocation);
+    // Get leading or trailing comments in a string. Comment lines start with '// '.
+// Leading detached comments are put in in front of leading comments.
+template <typename DescriptorType>
+inline grpc::string GetNodeComments(const DescriptorType* desc, bool leading) {
+  return grpc_generator::GetPrefixedComments(desc, leading, '//');
+}
     
-    #endif
+    template <class T, class F>
+double sum(const T& container, F functor) {
+  double r = 0;
+  for (auto v = container.begin(); v != container.end(); v++) {
+    r += functor(*v);
+  }
+  return r;
+}
+    
+    /*
+ * This implements a Metrics server defined in
+ * src/proto/grpc/testing/metrics.proto. Any
+ * test service can use this to export Metrics (TODO (sreek): Only Gauges for
+ * now).
+ *
+ * Example:
+ *    MetricsServiceImpl metricsImpl;
+ *    ..
+ *    // Create QpsGauge(s). Note: QpsGauges can be created even after calling
+ *    // 'StartServer'.
+ *    QpsGauge qps_gauge1 = metricsImpl.CreateQpsGauge('foo', is_present);
+ *    // qps_gauge1 can now be used anywhere in the program by first making a
+ *    // one-time call qps_gauge1.Reset() and then calling qps_gauge1.Incr()
+ *    // every time to increment a query counter
+ *
+ *    ...
+ *    // Create the metrics server
+ *    std::unique_ptr<grpc::Server> server = metricsImpl.StartServer(port);
+ *    server->Wait(); // Note: This is blocking.
+ */
+namespace grpc {
+namespace testing {
+    }
+    }
+    
+      // gRPC Python
+  grpc_python_generator::GeneratorConfiguration grpc_py_config;
+  grpc_python_generator::PythonGrpcGenerator grpc_py_generator(grpc_py_config);
+  cli.RegisterGenerator('--grpc_python_out', &grpc_py_generator,
+                        'Generate Python source file.');
+    
+    // callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_API int32       ImGui_Marmalade_PointerButtonEventCallback(void* SystemData, void* pUserData);
+IMGUI_API int32       ImGui_Marmalade_KeyCallback(void* SystemData, void* userData);
+IMGUI_API int32       ImGui_Marmalade_CharCallback(void* SystemData, void* userData);
 
     
-    typedef NS_ENUM(NSInteger, ObjectBehaviorAction) {
-    ObjectBehaviorActionRetain,
-    ObjectBehaviorActionCopy,
-    ObjectBehaviorActionMutableCopy
-};
+    IMGUI_API bool        ImGui_ImplGlfwGL3_Init(GLFWwindow* window, bool install_callbacks, const char* glsl_version = NULL);
+IMGUI_API void        ImGui_ImplGlfwGL3_Shutdown();
+IMGUI_API void        ImGui_ImplGlfwGL3_NewFrame();
+IMGUI_API void        ImGui_ImplGlfwGL3_RenderDrawData(ImDrawData* draw_data);
     
-    enum class ASTNodeKind : uint8_t {
-#define MARKUP_AST_NODE(Id, Parent) Id,
-#define ABSTRACT_MARKUP_AST_NODE(Id, Parent)
-#define MARKUP_AST_NODE_RANGE(Id, FirstId, LastId) \
-  First_##Id = FirstId, Last_##Id = LastId,
-#include 'swift/Markup/ASTNodes.def'
-};
+        // Setup time step (we don't use SDL_GetTicks() because it is using millisecond resolution)
+    static Uint64 frequency = SDL_GetPerformanceFrequency();
+    Uint64 current_time = SDL_GetPerformanceCounter();
+    io.DeltaTime = g_Time > 0 ? (float)((double)(current_time - g_Time) / frequency) : (float)(1.0f / 60.0f);
+    g_Time = current_time;
     
+        ImGui_ImplDX10_Shutdown();
+    ImGui::DestroyContext();
     
-    {} // end namespace swift
+      // REQUIRES: 'SkipWithError(...)' has not been called previously by the
+  //            current thread.
+  // Report the benchmark as resulting in an error with the specified 'msg'.
+  // After this call the user may explicitly 'return' from the benchmark.
+  //
+  // If the ranged-for style of benchmark loop is used, the user must explicitly
+  // break from the loop, otherwise all future iterations will be run.
+  // If the 'KeepRunning()' loop is used the current thread will automatically
+  // exit the loop at the end of the current iteration.
+  //
+  // For threaded benchmarks only the current thread stops executing and future
+  // calls to `KeepRunning()` will block until all threads have completed
+  // the `KeepRunning()` loop. If multiple threads report an error only the
+  // first error message is used.
+  //
+  // NOTE: Calling 'SkipWithError(...)' does not cause the benchmark to exit
+  // the current scope immediately. If the function is called from within
+  // the 'KeepRunning()' loop the current iteration will finish. It is the users
+  // responsibility to exit the scope as needed.
+  void SkipWithError(const char* msg);
     
-    #ifndef SWIFT_AST_SUBSTITUTION_H
-#define SWIFT_AST_SUBSTITUTION_H
+    DEFINE_string(benchmark_filter, '.',
+              'A regular expression that specifies the set of benchmarks '
+              'to execute.  If this flag is empty, no benchmarks are run.  '
+              'If this flag is the string \'all\', all benchmarks linked '
+              'into the process are run.');
     
-    #ifdef __APPLE__
+    void ColorPrintf(std::ostream& out, LogColor color, const char* fmt,
+                 va_list args);
+void ColorPrintf(std::ostream& out, LogColor color, const char* fmt, ...);
     
-        // pass address (value interface)
-    iterator find(const K& key)                     { return m.find(&key); }
-    const_iterator find(const K& key) const         { return m.find(&key); }
-    iterator lower_bound(const K& key)              { return m.lower_bound(&key); }
-    const_iterator lower_bound(const K& key) const  { return m.lower_bound(&key); }
-    size_type erase(const K& key)                   { return m.erase(&key); }
-    size_type count(const K& key) const             { return m.count(&key); }
+    // Function to return an string for the calculated complexity
+std::string GetBigOString(BigO complexity);
     
-    void DBIter::FindNextUserEntry(bool skipping, std::string* skip) {
-  // Loop until we hit an acceptable entry to yield
-  assert(iter_->Valid());
-  assert(direction_ == kForward);
-  do {
-    ParsedInternalKey ikey;
-    if (ParseKey(&ikey) && ikey.sequence <= sequence_) {
-      switch (ikey.type) {
-        case kTypeDeletion:
-          // Arrange to skip all upcoming entries for this key since
-          // they are hidden by this deletion.
-          SaveKey(ikey.user_key, skip);
-          skipping = true;
-          break;
-        case kTypeValue:
-          if (skipping &&
-              user_comparator_->Compare(ikey.user_key, *skip) <= 0) {
-            // Entry hidden
-          } else {
-            valid_ = true;
-            saved_key_.clear();
-            return;
-          }
-          break;
-      }
-    }
-    iter_->Next();
-  } while (iter_->Valid());
-  saved_key_.clear();
-  valid_ = false;
-}
-    
-    Status DumpFile(Env* env, const std::string& fname, WritableFile* dst) {
-  FileType ftype;
-  if (!GuessType(fname, &ftype)) {
-    return Status::InvalidArgument(fname + ': unknown file type');
+    inline LogType& GetLogInstanceForLevel(int level) {
+  if (level <= LogLevel()) {
+    return GetErrorLogInstance();
   }
-  switch (ftype) {
-    case kLogFile:         return DumpLog(env, fname, dst);
-    case kDescriptorFile:  return DumpDescriptor(env, fname, dst);
-    case kTableFile:       return DumpTable(env, fname, dst);
-    default:
-      break;
-  }
-  return Status::InvalidArgument(fname + ': not a dump-able file type');
+  return GetNullLogInstance();
 }
     
-    namespace leveldb {
-    }
+      // Compile a regular expression matcher from spec.  Returns true on success.
+  //
+  // On failure (and if error is not nullptr), error is populated with a human
+  // readable error message if an error occurs.
+  bool Init(const std::string& spec, std::string* error);
     
-    TEST(VersionEditTest, EncodeDecode) {
-  static const uint64_t kBig = 1ull << 50;
-    }
+    #include <cstdlib>
     
-    namespace leveldb {
-    }
-    
-      // Advanced functions: these are used to reduce the space requirements
-  // for internal data structures like index blocks.
-    
-    // Dump the contents of the file named by fname in text format to
-// *dst.  Makes a sequence of dst->Append() calls; each call is passed
-// the newline-terminated text corresponding to a single item found
-// in the file.
-//
-// Returns a non-OK result if fname does not name a leveldb storage
-// file, or if the file cannot be read.
-Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
-    
-    
-    {}  // namespace guetzli
-    
-    
-    {  return total_size;
-}
-    
-    // Preprocesses U and V channel for better results after downsampling.
+    #include 'sleep.h'
