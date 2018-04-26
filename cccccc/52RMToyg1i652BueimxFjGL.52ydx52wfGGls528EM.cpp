@@ -1,161 +1,146 @@
 
         
-        
-    { private:
-  Cluster* cluster_;  // Not owned.
-  int measurement_steps_;
-  int measurement_threads_;
-  std::vector<std::pair<string, Tensor>> feed_;
-  std::vector<string> fetch_;
-  std::unique_ptr<thread::ThreadPool> thread_pool_;
-};
-    
-      string name() const override { return 'model_pruner'; };
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    
-    {  void CopyDeviceTensorToCPU(const Tensor *device_tensor, StringPiece edge_name,
-                             Device *device, Tensor *cpu_tensor,
-                             StatusCallback done) override;
-};
-    
-    MPIUtils::MPIUtils(const std::string& worker_name) {
-  InitMPI();
-  // Connect the MPI process IDs to the worker names that are used by TF.
-  // Gather the names of all the active processes (name can't be longer than
-  // 128 bytes)
-  int proc_id = 0, number_of_procs = 1;
-  char my_name[max_worker_name_length];
-  MPI_CHECK(MPI_Comm_rank(MPI_COMM_WORLD, &proc_id));
-  MPI_CHECK(MPI_Comm_size(MPI_COMM_WORLD, &number_of_procs));
-    }
-    
-    #if defined(_MSC_VER) && _MSC_VER >= 1600 // MSVC >= 2010
-#define JSON_HAS_RVALUE_REFERENCES 1
-#endif // MSVC >= 2010
-    
-    #ifndef GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_CONTAINERS_H__
-#define GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_CONTAINERS_H__
-    
-    #include <google/protobuf/pyext/descriptor_database.h>
-    
-      // Find the file that declares the given fully-qualified symbol name.
-  bool FindFileContainingSymbol(const string& symbol_name,
-                                FileDescriptorProto* output);
-    
-    
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-    
-      virtual void WriteHash(io::Printer* printer);
-  virtual void WriteEquals(io::Printer* printer);
-  virtual void WriteToString(io::Printer* printer);
-    
-    namespace google {
-namespace protobuf {
-  namespace io {
-    class Printer;             // printer.h
-  }
-}
-    }
-    
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
-    
-    
-    {  return 0;
-}
+        #endif  // TENSORFLOW_DEBUGGER_STATE_IMPL_H_
 
     
-    #ifndef GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
-#define GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
     
-    // Get leading or trailing comments in a string. Comment lines start with '// '.
-// Leading detached comments are put in in front of leading comments.
-template <typename DescriptorType>
-inline grpc::string GetNodeComments(const DescriptorType* desc, bool leading) {
-  return grpc_generator::GetPrefixedComments(desc, leading, '//');
-}
+    {}  // namespace tensorflow
+
+    
+    namespace tensorflow {
+    }
     
     
-    { private:
-  GeneratorConfiguration config_;
+    {
+    {    SetReaderFactory([this, compression_type, env]() {
+      return new TFRecordReader(name(), compression_type, env);
+    });
+  }
 };
     
-    grpc::string DescribeServiceList(std::vector<grpc::string> service_list,
-                                 grpc::protobuf::DescriptorPool& desc_pool) {
-  std::stringstream result;
-  for (auto it = service_list.begin(); it != service_list.end(); it++) {
-    auto const& service = *it;
-    const grpc::protobuf::ServiceDescriptor* service_desc =
-        desc_pool.FindServiceByName(service);
-    if (service_desc != nullptr) {
-      result << DescribeService(service_desc);
-    }
-  }
-  return result.str();
+    bool HloReachabilityMap::IsReachable(const HloInstruction* a,
+                                     const HloInstruction* b) const {
+  return GetBitVector(b).Get(GetIndex(a));
 }
     
-      /// (Deprecated: Use native_handle().) Get the native acceptor representation.
-  /**
-   * This function may be used to obtain the underlying representation of the
-   * acceptor. This is intended to allow access to native acceptor functionality
-   * that is not otherwise provided.
-   */
-  native_type native()
-  {
-    return this->get_service().native_handle(this->get_implementation());
-  }
+    The input audio has one row of the tensor for each channel in the audio file.
+Each channel contains audio samples starting at the beginning of the audio and
+having `1/samples_per_second` time between them. The output file will contain
+all of the audio channels contained in the tensor.
     
-    template <typename Stream>
-class buffered_write_stream;
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-typedef long atomic_count;
-inline void increment(atomic_count& a, long b) { a += b; }
-#elif defined(BOOST_ASIO_HAS_STD_ATOMIC)
-typedef std::atomic<long> atomic_count;
-inline void increment(atomic_count& a, long b) { a += b; }
-#else // defined(BOOST_ASIO_HAS_STD_ATOMIC)
-typedef boost::detail::atomic_count atomic_count;
-inline void increment(atomic_count& a, long b) { while (b > 0) ++a, --b; }
-#endif // defined(BOOST_ASIO_HAS_STD_ATOMIC)
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-    template <typename Buffer>
-class buffer_sequence_adapter<Buffer, boost::asio::mutable_buffers_1>
-  : buffer_sequence_adapter_base
-{
-public:
-  explicit buffer_sequence_adapter(
-      const boost::asio::mutable_buffers_1& buffer_sequence)
-  {
-    init_native_buffer(buffer_, Buffer(buffer_sequence));
-    total_buffer_size_ = boost::asio::buffer_size(buffer_sequence);
-  }
+    // Cwise binary ops
+Status GradForUnaryCwise(FunctionDef* g, std::vector<FDH::Node> nodes) {
+  for (auto& n : nodes) {
+    if (n.attr.empty()) {
+      n.attr = {{'T', '$T'}};
     }
+  }
+  *g = FDH::Define(
+      // Arg defs
+      {'x: T', 'dy: T'},
+      // Ret val defs
+      {'dx: T'},
+      // Attr defs
+      {{'T: {half, float, double}'}},
+      // Nodes
+      nodes);
+  return Status::OK();
+}
+    
+    bool FileExists(const std::string name);
+    
+    SEXP XGDMatrixCreateFromMat_R(SEXP mat,
+                              SEXP missing) {
+  SEXP ret;
+  R_API_BEGIN();
+  SEXP dim = getAttrib(mat, R_DimSymbol);
+  size_t nrow = static_cast<size_t>(INTEGER(dim)[0]);
+  size_t ncol = static_cast<size_t>(INTEGER(dim)[1]);
+  const bool is_int = TYPEOF(mat) == INTSXP;
+  double *din;
+  int *iin;
+  if (is_int) {
+    iin = INTEGER(mat);
+  } else {
+    din = REAL(mat);
+  }
+  std::vector<float> data(nrow * ncol);
+  #pragma omp parallel for schedule(static)
+  for (omp_ulong i = 0; i < nrow; ++i) {
+    for (size_t j = 0; j < ncol; ++j) {
+      data[i * ncol +j] = is_int ? static_cast<float>(iin[i + nrow * j]) : din[i + nrow * j];
+    }
+  }
+  DMatrixHandle handle;
+  CHECK_CALL(XGDMatrixCreateFromMat(BeginPtr(data), nrow, ncol, asReal(missing), &handle));
+  ret = PROTECT(R_MakeExternalPtr(handle, R_NilValue, R_NilValue));
+  R_RegisterCFinalizerEx(ret, _DMatrixFinalizer, TRUE);
+  R_API_END();
+  UNPROTECT(1);
+  return ret;
+}
+    
+          cbw.Write(buffer.data(), input.begin(), input.end());
+    
+    // tress
+#include '../src/tree/tree_model.cc'
+#include '../src/tree/tree_updater.cc'
+#include '../src/tree/updater_colmaker.cc'
+#include '../src/tree/updater_fast_hist.cc'
+#include '../src/tree/updater_prune.cc'
+#include '../src/tree/updater_refresh.cc'
+#include '../src/tree/updater_sync.cc'
+#include '../src/tree/updater_histmaker.cc'
+#include '../src/tree/updater_skmaker.cc'
+    
+    TEST(Metric, AUCPR) {
+  xgboost::Metric *metric = xgboost::Metric::Create('aucpr');
+  ASSERT_STREQ(metric->Name(), 'aucpr');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 0, 1, 1}, {0, 0, 1, 1}), 1, 1e-10);
+  EXPECT_NEAR(GetMetricEval(metric, {0.1f, 0.9f, 0.1f, 0.9f}, {0, 0, 1, 1}),
+              0.5f, 0.001f);
+  EXPECT_NEAR(
+      GetMetricEval(metric,
+                    {0.4f, 0.2f, 0.9f, 0.1f, 0.2f, 0.4f, 0.1f, 0.1f, 0.2f, 0.1f},
+                    {0, 0, 0, 0, 0, 1, 0, 0, 1, 1}),
+      0.2908445f, 0.001f);
+  EXPECT_NEAR(GetMetricEval(
+                  metric, {0.87f, 0.31f, 0.40f, 0.42f, 0.25f, 0.66f, 0.95f,
+                           0.09f, 0.10f, 0.97f, 0.76f, 0.69f, 0.15f, 0.20f,
+                           0.30f, 0.14f, 0.07f, 0.58f, 0.61f, 0.08f},
+                  {0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1}),
+              0.2769199f, 0.001f);
+  EXPECT_ANY_THROW(GetMetricEval(metric, {0, 1}, {}));
+  EXPECT_ANY_THROW(GetMetricEval(metric, {0, 0}, {0, 0}));
+}
+    
+    // Data
+static double       g_Time = 0.0f;
+static bool         g_MousePressed[3] = { false, false, false };
+static CIwTexture*  g_FontTexture = NULL;
+static char*        g_ClipboardText = NULL;
+static bool         g_osdKeyboardEnabled = false;
+    
+    IMGUI_API bool        ImGui_ImplSdlGL2_Init(SDL_Window* window);
+IMGUI_API void        ImGui_ImplSdlGL2_Shutdown();
+IMGUI_API void        ImGui_ImplSdlGL2_NewFrame(SDL_Window* window);
+IMGUI_API void        ImGui_ImplSdlGL2_RenderDrawData(ImDrawData* draw_data);
+IMGUI_API bool        ImGui_ImplSdlGL2_ProcessEvent(SDL_Event* event);
+    
+        // Setup viewport
+    D3D11_VIEWPORT vp;
+    memset(&vp, 0, sizeof(D3D11_VIEWPORT));
+    vp.Width = ImGui::GetIO().DisplaySize.x;
+    vp.Height = ImGui::GetIO().DisplaySize.y;
+    vp.MinDepth = 0.0f;
+    vp.MaxDepth = 1.0f;
+    vp.TopLeftX = vp.TopLeftY = 0.0f;
+    ctx->RSSetViewports(1, &vp);
+    
+    // OpenGL data
+static GLuint       g_FontTexture = 0;
+    
+        VkPipelineViewportStateCreateInfo viewport_info = {};
+    viewport_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+    viewport_info.viewportCount = 1;
+    viewport_info.scissorCount = 1;
