@@ -1,73 +1,138 @@
 
         
-                if any([s_line.startswith(s) for s in ['* [', '- [']]):
-            if indent == last_indent:
-                blocks[-1].append(line)
-            else:
-                blocks.append([line])
-            last_indent = indent
-        else:
-            blocks.append([line])
-            last_indent = None
+          @property
+  def weight(self):
+    return self._weight.float_list.value[0]
     
-            Keyword:                   'bold #004461',   # class: 'k'
-        Keyword.Constant:          'bold #004461',   # class: 'kc'
-        Keyword.Declaration:       'bold #004461',   # class: 'kd'
-        Keyword.Namespace:         'bold #004461',   # class: 'kn'
-        Keyword.Pseudo:            'bold #004461',   # class: 'kp'
-        Keyword.Reserved:          'bold #004461',   # class: 'kr'
-        Keyword.Type:              'bold #004461',   # class: 'kt'
+    '''Tests for models.tutorials.rnn.ptb.reader.'''
+    
+        self.assertEqual(coords.to_sgf((0, 0)), 'aa')
+    self.assertEqual(coords.to_flat(utils_test.BOARD_SIZE, (0, 0)), 0)
+    self.assertEqual(coords.to_kgs(utils_test.BOARD_SIZE, (0, 0)), 'A9')
+    self.assertEqual(coords.to_pygtp(utils_test.BOARD_SIZE, (0, 0)), (1, 9))
+    
+        expected_board2 = utils_test.load_board('''
+      .XX....OO
+      X.......O
+    ''' + EMPTY_ROW * 7)
+    expected_position2 = Position(
+        utils_test.BOARD_SIZE,
+        board=expected_board2,
+        n=2,
+        komi=6.5,
+        caps=(1, 2),
+        ko=None,
+        recent=(
+            PlayerMove(BLACK, coords.from_kgs(utils_test.BOARD_SIZE, 'C9')),
+            PlayerMove(WHITE, coords.from_kgs(utils_test.BOARD_SIZE, 'J8')),),
+        to_play=BLACK,
+    )
+    actual_position2 = actual_position.play_move(coords.from_kgs(
+        utils_test.BOARD_SIZE, 'J8'))
+    self.assertEqualPositions(actual_position2, expected_position2)
+    
+        back_to_sgf = make_sgf(
+        utils_test.BOARD_SIZE,
+        last_position.recent,
+        last_position.score(),
+        komi=last_position.komi,
+    )
+    reconstructed_positions = list(replay_sgf(
+        utils_test.BOARD_SIZE, back_to_sgf))
+    second_last_position2, last_move2, _ = reconstructed_positions[-1]
+    last_position2 = second_last_position2.play_move(last_move2)
+    
+      def test_inject_noise(self):
+    player = initialize_basic_player()
+    sum_priors = np.sum(player.root.child_prior)
+    # dummyNet should return normalized priors.
+    self.assertAlmostEqual(sum_priors, 1)
+    self.assertTrue(np.all(player.root.child_U == player.root.child_U[0]))
+    
+      def assertNoPendingVirtualLosses(self, root):
+    '''Raise an error if any node in this subtree has vlosses pending.'''
+    queue = [root]
+    while queue:
+      current = queue.pop()
+      self.assertEqual(current.losses_applied, 0)
+      queue.extend(current.children.values())
     
     
-@pytest.fixture
-def httpbin_secure(httpbin_secure):
-    return prepare_url(httpbin_secure)
-
+def _py_files(folder):
+    return glob.glob(folder + '/*.py') + glob.glob(folder + '/*/*.py')
     
-        Implements all methods and operations of
-    ``collections.MutableMapping`` as well as dict's ``copy``. Also
-    provides ``lower_items``.
+            if now - self.lastmark >= 3:
+            self.lastmark = now
+            qps = len(self.tail) / sum(self.tail)
+            print('samplesize={0} concurrent={1} qps={2:0.2f}'.format(len(self.tail), self.concurrent, qps))
     
-            if algorithm is None:
-            _algorithm = 'MD5'
-        else:
-            _algorithm = algorithm.upper()
-        # lambdas assume digest modules are imported at the top level
-        if _algorithm == 'MD5' or _algorithm == 'MD5-SESS':
-            def md5_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.md5(x).hexdigest()
-            hash_utf8 = md5_utf8
-        elif _algorithm == 'SHA':
-            def sha_utf8(x):
-                if isinstance(x, str):
-                    x = x.encode('utf-8')
-                return hashlib.sha1(x).hexdigest()
-            hash_utf8 = sha_utf8
+        def _find_template(self, template):
+        template_file = join(self.templates_dir, '%s.tmpl' % template)
+        if exists(template_file):
+            return template_file
+        print('Unable to find template: %s\n' % template)
+        print('Use 'scrapy genspider --list' to see all available templates.')
     
-        def finalize_options(self):
-        TestCommand.finalize_options(self)
-        self.test_args = []
-        self.test_suite = True
+        def _getline(self, strip_crlf=True):
+        '''Internal: return one line from the server, stripping _CRLF.
+        Raise EOFError if the connection is closed.
+        Returns a bytes object.'''
+        line = self.file.readline(_MAXLINE +1)
+        if len(line) > _MAXLINE:
+            raise NNTPDataError('line too long')
+        if self.debugging > 1:
+            print('*get*', repr(line))
+        if not line: raise EOFError
+        if strip_crlf:
+            if line[-2:] == _CRLF:
+                line = line[:-2]
+            elif line[-1:] in _CRLF:
+                line = line[:-1]
+        return line
     
-        def test_super_len_with_fileno(self):
-        with open(__file__, 'rb') as f:
-            length = super_len(f)
-            file_data = f.read()
-        assert length == len(file_data)
+        def test_help_flag(self):
+        rc, out, err = assert_python_ok('-m', 'json.tool', '-h')
+        self.assertEqual(rc, 0)
+        self.assertTrue(out.startswith(b'usage: '))
+        self.assertEqual(err, b'')
     
-            # Verify we receive an Authorization header in response, then
-        # challenge again.
-        request_content = consume_socket_content(sock, timeout=0.5)
-        assert expected_digest in request_content
-        sock.send(text_401)
+            # User-defined class with an __index__ method
+        class I:
+            def __init__(self, n):
+                self.n = int(n)
+            def __index__(self):
+                return self.n
+        self.assertEqual(list(range(I(bignum), I(bignum + 1))), [bignum])
+        self.assertEqual(list(range(I(smallnum), I(smallnum + 1))), [smallnum])
     
-        def _finish(self, request):
-        self.concurrent -= 1
-        if not request.finished and not request._disconnected:
-            request.finish()
+            self.assertEqual(bool(CFUNCTYPE(None)(0)), False)
+        self.assertEqual(bool(CFUNCTYPE(None)(42)), True)
     
-            assert len(self.args) in [1, 2, 3]
-        self.obj_name = self.args[0] or None
-        self.obj_type = self.objects[self.obj_name]
+    
+class AdapterTest(unittest.TestCase):
+    
+        def test_sequential_undo(self):
+        self.command_stack = list(reversed(self.command_stack))
+        self.command_stack[0].undo()
+        output_after_first_undo = os.listdir(self.test_dir)
+        self.assertEqual(output_after_first_undo[0], 'bar.txt')
+        self.command_stack[1].undo()
+        output_after_second_undo = os.listdir(self.test_dir)
+        self.assertEqual(output_after_second_undo[0], 'foo.txt')
+    
+        def do_action(self):
+        print(self.name, self.action.name, end=' ')
+        return self.action
+    
+        fftv.publish('cartoon')
+    fftv.publish('music')
+    fftv.publish('ads')
+    fftv.publish('movie')
+    fftv.publish('cartoon')
+    fftv.publish('cartoon')
+    fftv.publish('movie')
+    fftv.publish('blank')
+    
+        print('After subclassing: ')
+    for k in RegistryHolder.REGISTRY:
+        print(k)
