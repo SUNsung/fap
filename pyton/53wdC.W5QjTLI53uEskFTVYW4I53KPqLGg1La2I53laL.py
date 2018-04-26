@@ -1,72 +1,87 @@
 
         
-        if hasattr(ctypes, 'windll'):
-    WSAStringToAddressA = ctypes.windll.ws2_32.WSAStringToAddressA
-    WSAAddressToStringA = ctypes.windll.ws2_32.WSAAddressToStringA
-else:
-    def not_windows():
-        raise SystemError(
-            'Invalid platform. ctypes.windll must be available.'
-        )
-    WSAStringToAddressA = not_windows
-    WSAAddressToStringA = not_windows
+            def approve_friend_request(self, from_user_id, to_user_id):
+        pass
     
-    	# The current Token when an error occurred.  Since not all streams
-	# can retrieve the ith Token, we have to track the Token object.
-	# For parsers.  Even when it's a tree parser, token might be set.
-        self.token = None
-    
-    from antlr3.constants import EOF, DEFAULT_CHANNEL, INVALID_TOKEN_TYPE
-    
-        unpack = classmethod(unpack)
+        def crawl(self):
+        while True:
+            page = self.data_store.extract_max_priority_page()
+            if page is None:
+                break
+            if self.data_store.crawled_similar(page.signature):
+                self.data_store.reduce_priority_link_to_crawl(page.url)
+            else:
+                self.crawl_page(page)
+            page = self.data_store.extract_max_priority_page()
 
     
+            Emit key value pairs of the form:
     
-Calculate the median, or 50th percentile, of data grouped into class intervals
-centred on the data values provided. E.g. if your data points are rounded to
-the nearest whole number:
-    
-        # verify reference counting
-    if verbose and hasattr(sys, 'gettotalrefcount'):
-        import gc
-        counts = [None] * 5
-        for i in range(len(counts)):
-            support.run_unittest(*test_classes)
-            gc.collect()
-            counts[i] = sys.gettotalrefcount()
-        print(counts)
-    
-    class TZInfo:
-    def __init__(self, transitions, type_indices, ttis, abbrs):
-        self.transitions = transitions
-        self.type_indices = type_indices
-        self.ttis = ttis
-        self.abbrs = abbrs
-    
-        def list_folders(self):
-        '''Return a list of folder names.'''
-        result = []
-        for entry in os.listdir(self._path):
-            if len(entry) > 1 and entry[0] == '.' and \
-               os.path.isdir(os.path.join(self._path, entry)):
-                result.append(entry[1:])
-        return result
-    
-        def test_infile_stdout(self):
-        infile = self._create_infile()
-        rc, out, err = assert_python_ok('-m', 'json.tool', infile)
-        self.assertEqual(rc, 0)
-        self.assertEqual(out.splitlines(), self.expect.encode().splitlines())
-        self.assertEqual(err, b'')
-    
-        def test_display_current_time_at_current_time(self):
+            When updating an entry, updates its position to the front of the LRU list.
+        If the entry is new and the cache is at capacity, removes the oldest entry
+        before the new entry is added.
         '''
-        Just as justification for working example with the time provider used in
-        production. (Will always pass.)
-        '''
-        production_code_time_provider = ProductionCodeTimeProvider()
-        class_under_test = TimeDisplay()
-        class_under_test.set_time_provider(production_code_time_provider)
-        current_time = datetime.datetime.now()
-        expected_time = '<span class=\'tinyBoldText\'>{}:{}</span>'.format(current_time.hour, current_time.minute)
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
+        node = self.lookup.get(query)
+        if node is not None:
+            # Key exists in cache, update the value
+            node.results = results
+            self.linked_list.move_to_front(node)
+        else:
+            # Key does not exist in cache
+            if self.size == self.MAX_SIZE:
+                # Remove the oldest entry from the linked list and lookup
+                self.lookup.pop(self.linked_list.tail.query, None)
+                self.linked_list.remove_from_tail()
+            else:
+                self.size += 1
+            # Add the new key and value
+            new_node = Node(results)
+            self.linked_list.append_to_front(new_node)
+            self.lookup[query] = new_node
+
+    
+        def test_same_server(self):
+        from certbot_apache.obj import VirtualHost
+        no_name1 = VirtualHost(
+            'fp', 'vhp', set([self.addr1]), False, False, None)
+        no_name2 = VirtualHost(
+            'fp', 'vhp', set([self.addr2]), False, False, None)
+        no_name3 = VirtualHost(
+            'fp', 'vhp', set([self.addr_default]),
+            False, False, None)
+        no_name4 = VirtualHost(
+            'fp', 'vhp', set([self.addr2, self.addr_default]),
+            False, False, None)
+    
+    # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
+# using the given strftime format.
+#html_last_updated_fmt = '%b %d, %Y'
+    
+        @mock.patch('certbot.display.enhancements.util')
+    def test_redirect(self, mock_util):
+        mock_util().menu.return_value = (display_util.OK, 1)
+        self.assertTrue(self._call('redirect'))
+    
+        @classmethod
+    def setUpClass(cls):
+        cls.dec_obs = DecimalViewer()
+        cls.hex_obs = HexViewer()
+        cls.sub = Data('Data')
+        # inherited behavior already tested with TestSubject
+        cls.sub.attach(cls.dec_obs)
+        cls.sub.attach(cls.hex_obs)
+    
+        @classmethod
+    def setUpClass(cls):
+        ''' Class scope setup. '''
+        cls.p = Proxy()
+    
+        def __init__(self):
+        pass
+    
+        def __init__(self):
+        self.target = coroutine1(coroutine3(coroutine2(default_coroutine())))
+    
+    from __future__ import print_function
+import os
+from os.path import lexists
