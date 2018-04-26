@@ -1,81 +1,135 @@
 
         
-            describe '#revoke!' do
-      it 'revokes the key with the client' do
-        mock_client_response(:revoke_key!)
+          def test_redirect_with_status_hash
+    get :redirect_with_status_hash
+    assert_response 301
+    assert_equal 'http://test.host/redirect/hello_world', redirect_to_url
+  end
     
-        private_class_method
-    def self.git_log_merge_commit_filtering_option(merge_commit_filtering)
-      case merge_commit_filtering
-      when :exclude_merges
-        '--no-merges'
-      when :only_include_merges
-        '--merges'
-      when :include_merges
-        nil
+            def redis_connection
+          self.class.redis_connector.call(@server.config.cable)
+        end
+    
+      test 'helpers' do
+    assert_response_code_range 200..299, :successful?
+    assert_response_code_range [404],    :not_found?
+    assert_response_code_range 300..399, :redirection?
+    assert_response_code_range 500..599, :server_error?
+    assert_response_code_range 400..499, :client_error?
+  end
+    
+            names.each do |name|
+          define_singleton_method(name) do
+            instance.public_send(name)
+          end
+    
+      def test_helper_for_nested_controller
+    assert_equal 'hello: Iz guuut!',
+      call_controller(Fun::GamesController, 'render_hello_world').last.body
+  end
+    
+    class HttpTokenAuthenticationTest < ActionController::TestCase
+  class DummyController < ActionController::Base
+    before_action :authenticate, only: :index
+    before_action :authenticate_with_request, only: :display
+    before_action :authenticate_long_credentials, only: :show
+    
+      private
+    def with_params_parsers(parsers = {})
+      old_session = @integration_session
+      original_parsers = ActionDispatch::Request.parameter_parsers
+      ActionDispatch::Request.parameter_parsers = original_parsers.merge parsers
+      reset!
+      yield
+    ensure
+      ActionDispatch::Request.parameter_parsers = original_parsers
+      @integration_session = old_session
+    end
+    
+            mail.perform_deliveries    = perform_deliveries
+        mail.raise_delivery_errors = raise_delivery_errors
+      end
+    end
+    
+      class AssertMultipartSelectMailer < ActionMailer::Base
+    def test(options)
+      mail subject: 'Test e-mail', from: 'test@test.host', to: 'test <test@test.host>' do |format|
+        format.text { render plain: options[:text] }
+        format.html { render plain: options[:html] }
+      end
+    end
+  end
+    
+        assert_equal(2, @logger.logged(:debug).size)
+    assert_match(/BaseMailer#welcome: processed outbound mail in [\d.]+ms/, @logger.logged(:debug).first)
+    assert_match(/Welcome/, @logger.logged(:debug).second)
+  ensure
+    BaseMailer.deliveries.clear
+  end
+    
+          it 'does set the exclude directories' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            cloc(exclude_dir: 'test1,test2,build')
+          end').runner.execute(:test)
+    
+            expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER]).to match(/cd .* && agvtool new-version -all 24 \&\& cd \-/)
       end
     end
   end
 end
 
     
-    module SortableTable
-  extend ActiveSupport::Concern
-    
-      def index
-    set_table_sort sorts: %w[credential_name credential_value], default: { credential_name: :asc }
+      def find_existing_status
+    status   = status_from_uri(object_uri)
+    status ||= Status.find_by(uri: @object['atomUri']) if @object['atomUri'].present?
+    status
+  end
     
         def find_local(username)
       find_remote(username, nil)
     end
     
-            expect_any_instance_of(ActivityPub::LinkedDataSignature).to receive(:verify_account!).and_return(actor)
-        expect(ActivityPub::Activity).to receive(:factory).with(instance_of(Hash), actor, instance_of(Hash))
-    
-    class REST::MediaAttachmentSerializer < ActiveModel::Serializer
-  include RoutingHelper
-    
-      describe 'GET #show' do
-    it 'returns http success' do
-      get :show
-      expect(response).to have_http_status(:success)
-    end
+      let(:payload) do
+    {
+      '@context': 'https://www.w3.org/ns/activitystreams',
+      id: 'foo',
+      type: 'Create',
+      actor: ActivityPub::TagManager.instance.uri_for(actor),
+      object: {
+        id: 'bar',
+        type: 'Note',
+        content: 'Lorem ipsum',
+      },
+    }
   end
     
-        HTTP.get(source).to_s.split('\n').each do |line|
-      next if line.start_with? '#'
-      parts = line.split(';').map(&:strip)
-      next if parts.size < 2
-      codes << [parts[0], parts[1].start_with?('fully-qualified')]
+        it 'removes remote accounts from that domain' do
+      expect(Account.find_remote('badguy666', 'evil.org').suspended?).to be true
     end
     
-        # If {#limit_to_network} is disabled, this will always return `true`.
-    # Otherwise, return `true` only if all of the given IPs are within the
-    # project {#boundary boundaries}.
+      # Extract the form
+  res = '<form'
+  form.attributes.each do |attr|
+    res << ' #{attr[0]}='#{attr[1].gsub(''', '')}''
+  end
+  res << '> '
     
-        end
+    #
+# This script extracts the forms from the main page of each
+# web site in a list. The output of this can be used with
+# Metasploit (and other tools) to obtain the saved form data
+# of these domains.
+#
     
-      def parse(pkt)
-    # We want to return immediatly if we do not have a packet which is handled by us
-    return unless pkt.is_tcp?
-    return if (pkt.tcp_sport != 110 and pkt.tcp_dport != 110)
-    s = find_session((pkt.tcp_sport == 110) ? get_session_src(pkt) : get_session_dst(pkt))
-    
-        def initialize(attributes={})
-      assign_attributes(attributes)
-      yield(self) if block_given?
+        # Hash access of interpolations. Included only for compatibility,
+    # and is not intended for normal use.
+    def self.[] name
+      method(name)
     end
     
-          def create
-        req = Rack::Request.new(request.env)
-        if req['client_assertion_type'] == 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
-          handle_jwt_bearer(req)
+            def argument?
+          ARGUMENT_DECLARATION_TYPES.include?(@declaration_node.type)
         end
-        self.status, headers, self.response_body = Api::OpenidConnect::TokenEndpoint.new.call(request.env)
-        headers.each {|name, value| response.headers[name] = value }
-        nil
-      end
     
-      context 'called with two colors' do
-    it 'applies to alternating sides' do
-      rule = 'border-color: #0f0 #00f'
+            def immutable_literal?(node)
+          return true if node.immutable_literal?
