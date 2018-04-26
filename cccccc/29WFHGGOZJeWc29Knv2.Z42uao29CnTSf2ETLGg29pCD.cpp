@@ -1,162 +1,10 @@
 
         
-        Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-      // Abort and close all existing sessions, disconnecting their resources from
-  // future sessions.
-  //
-  // Reset() allows misbehaving or slow sessions to be aborted and closed, and
-  // causes their resources eventually to be released.  Reset() does not wait
-  // for the computations in old sessions to cease; it merely starts the
-  // process of tearing them down.  However, if a new session is started after
-  // a Reset(), the new session is isolated from changes that old sessions
-  // (started prior to the Reset()) may continue to make to resources, provided
-  // all those resources are in containers listed in 'containers'.
-  //
-  // Old sessions may continue to have side-effects on resources not in
-  // containers listed in 'containers', and thus may affect future
-  // sessions' results in ways that are hard to predict.  Thus, if well-defined
-  // behavior is desired, is it recommended that all containers be listed in
-  // 'containers'.
-  //
-  // If the 'containers' vector is empty, the default container is assumed.
-  // If the 'containers' vector is non-empty, the default container should be
-  // listed explicitly.
-  //
-  // Sessions that support resource containers should override this function.
-  virtual Status Reset(const SessionOptions& options,
-                       const std::vector<string>& containers) {
-    return errors::Unimplemented('Reset()');
-  }
-    
-      double PrimalLossDerivative(const double wx, const double label,
-                              const double example_weight) const final {
-    if (label * wx >= 1) {
-      return 0;
-    }
-    if (label * wx <= 1 - gamma) {
-      return -label;
-    }
-    return (wx - label) / gamma;
-  }
-    
-    /** scalar_sigmoid_fast_derivative_op
-  * \ingroup CXX11_NeuralNetworks_Module
-  * \brief Template functor to compute the fast derivative of a sigmoid
-  *
-  * Input should be the backpropagated gradient.
-  *
-  * \sa class CwiseUnaryOp, Cwise::sigmoid_fast_derivative()
-  */
-template <typename T>
-struct scalar_sigmoid_fast_derivative_op {
-  EIGEN_EMPTY_STRUCT_CTOR(scalar_sigmoid_fast_derivative_op)
-  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE T operator()(const T& y) const {
-    const T one = T(1);
-    return (one - y) * y;
-  }
+        namespace tensorflow {
     }
     
-    
-    {
-    {}  // namespace port
-}  // namespace tensorflow
-    
-    void SYCLDeviceContext::CopyCPUTensorToDevice(const Tensor *cpu_tensor,
-                                              Device *device,
-                                              Tensor *device_tensor,
-                                              StatusCallback done) const {
-  const int64 total_bytes = cpu_tensor->TotalBytes();
-  if (total_bytes > 0) {
-    const void *src_ptr = DMAHelper::base(cpu_tensor);
-    void *dst_ptr = DMAHelper::base(device_tensor);
-    switch (cpu_tensor->dtype()) {
-      case DT_FLOAT:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<float *>(dst_ptr), static_cast<const float *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_DOUBLE:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<double *>(dst_ptr),
-            static_cast<const double *>(src_ptr), total_bytes);
-        break;
-      case DT_INT32:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int32 *>(dst_ptr), static_cast<const int32 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT64:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int64 *>(dst_ptr), static_cast<const int64 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_HALF:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<Eigen::half *>(dst_ptr),
-            static_cast<const Eigen::half *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX64:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<std::complex<float> *>(dst_ptr),
-            static_cast<const std::complex<float> *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX128:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<std::complex<double> *>(dst_ptr),
-            static_cast<const std::complex<double> *>(src_ptr), total_bytes);
-        break;
-      case DT_INT8:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int8 *>(dst_ptr), static_cast<const int8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT16:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<int16 *>(dst_ptr), static_cast<const int16 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT8:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<uint8 *>(dst_ptr), static_cast<const uint8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT16:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<uint16 *>(dst_ptr),
-            static_cast<const uint16 *>(src_ptr), total_bytes);
-        break;
-      case DT_BOOL:
-        device->eigen_sycl_device()->memcpyHostToDevice(
-            static_cast<bool *>(dst_ptr), static_cast<const bool *>(src_ptr),
-            total_bytes);
-        break;
-      default:
-        assert(false && 'unsupported type');
-    }
-  }
-  device->eigen_sycl_device()->synchronize();
-  done(Status::OK());
-}
-    
-    
-    {}  // namespace tensorflow
+    #endif  // TENSORFLOW_COMPILER_XLA_SERVICE_HLO_CONSTANT_FOLDING_H_
 
-    
-    /*
- * Deprecated in favor of EncodeAudioOpV2.
- */
-class EncodeAudioOp : public OpKernel {
- public:
-  explicit EncodeAudioOp(OpKernelConstruction* context) : OpKernel(context) {
-    OP_REQUIRES_OK(context, context->GetAttr('file_format', &file_format_));
-    file_format_ = str_util::Lowercase(file_format_);
-    OP_REQUIRES(context, file_format_ == 'wav',
-                errors::InvalidArgument('file_format arg must be \'wav\'.'));
-    }
-    }
     
     Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an 'AS IS' BASIS,
@@ -165,231 +13,245 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
     
-    Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
     
-    namespace swift {
-    }
-    
-    uint64_t swift::unicode::getUTF16Length(StringRef Str) {
-  uint64_t Length;
-  // Transcode the string to UTF-16 to get its length.
-  SmallVector<llvm::UTF16, 128> buffer(Str.size() + 1); // +1 for ending nulls.
-  const llvm::UTF8 *fromPtr = (const llvm::UTF8 *) Str.data();
-  llvm::UTF16 *toPtr = &buffer[0];
-  llvm::ConversionResult Result =
-    ConvertUTF8toUTF16(&fromPtr, fromPtr + Str.size(),
-                       &toPtr, toPtr + Str.size(),
-                       llvm::strictConversion);
-  assert(Result == llvm::conversionOK &&
-         'UTF-8 encoded string cannot be converted into UTF-16 encoding');
-  (void)Result;
-    }
-    
-    /// A SyntaxRewriter for applying a set of formatting rules to a Syntax tree.
-struct FormatSyntaxRewriter : public SyntaxRewriter {
-  virtual StructDeclSyntax
-  rewriteStructDecl(StructDeclSyntax Struct) override;
+    {  void CopyDeviceTensorToCPU(const Tensor *device_tensor, StringPiece edge_name,
+                             Device *device, Tensor *cpu_tensor,
+                             StatusCallback done) override;
 };
     
-    /// Create a canonicalized substitution list from subs.
-/// subs is the substitution list to be canonicalized.
-/// canSubs is an out-parameter, which is used to store the results in case
-/// the list of substitutions was not canonical.
-/// The function returns a list of canonicalized substitutions.
-/// If the substitution list subs was canonical already, it will be returned and
-/// canSubs out-parameter will be empty.
-/// If something had to be canonicalized, then the canSubs out-parameter will be
-/// populated and the returned SubstitutionList would refer to canSubs storage.
-SubstitutionList
-getCanonicalSubstitutionList(SubstitutionList subs,
-                             SmallVectorImpl<Substitution> &canSubs);
+    #include 'tensorflow/core/lib/strings/strcat.h'
     
-      void setCodeCompletionPoint(unsigned BufferID, unsigned Offset) {
-    assert(BufferID != 0U && 'Buffer should be valid');
-    }
+        const string file_format =
+        str_util::Lowercase(file_format_tensor.scalar<string>()());
+    const int32 samples_per_second =
+        samples_per_second_tensor.scalar<int32>()();
+    const int32 bits_per_second = bits_per_second_tensor.scalar<int32>()();
     
-      /// Get the canonicalized substitution. If wasCanonical is not nullptr,
-  /// store there whether the current substitution was canonical already.
-  Substitution getCanonicalSubstitution(bool *wasCanonical = nullptr) const;
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    #include 'swift/AST/ASTContext.h'
-#include 'swift/AST/GenericEnvironment.h'
-#include 'swift/AST/Module.h'
-#include 'swift/AST/ProtocolConformance.h'
-#include 'swift/AST/SubstitutionMap.h'
-#include 'swift/AST/Types.h'
-#include 'llvm/ADT/DenseMap.h'
     
-    #include <google/protobuf/stubs/logging.h>
-#include <google/protobuf/stubs/common.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/pyext/message.h>
-#include <google/protobuf/pyext/scoped_pyobject_ptr.h>
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace cpp {
-    }
-    }
-    }
-    }
-    
-    // Generator options (used by csharp_generator.cc):
-struct Options {
-  Options() :
-      file_extension('.cs'),
-      base_namespace(''),
-      base_namespace_specified(false),
-      internal_access(false) {
-  }
-  // Extension of the generated file. Defaults to '.cs'
-  string file_extension;
-  // Base namespace to use to create directory hierarchy. Defaults to ''.
-  // This option allows the simple creation of a conventional C# file layout,
-  // where directories are created relative to a project-specific base
-  // namespace. For example, in a project with a base namespace of PetShop, a
-  // proto of user.proto with a C# namespace of PetShop.Model.Shared would
-  // generate Model/Shared/User.cs underneath the specified --csharp_out
-  // directory.
-  //
-  // If no base namespace is specified, all files are generated in the
-  // --csharp_out directory, with no subdirectories created automatically.
-  string base_namespace;
-  // Whether the base namespace has been explicitly specified by the user.
-  // This is required as the base namespace can be explicitly set to the empty
-  // string, meaning 'create a full directory hierarchy, starting from the first
-  // segment of the namespace.'
-  bool base_namespace_specified;
-  // Whether the generated classes should have accessibility level of 'internal'.
-  // Defaults to false that generates 'public' classes.
-  bool internal_access;
+    {  WorkloadStats (const WorkloadStats&) = delete;
+  WorkloadStats& operator=(const WorkloadStats&) = delete;
 };
     
-    RepeatedEnumFieldGenerator::RepeatedEnumFieldGenerator(
-    const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options)
-    : FieldGeneratorBase(descriptor, fieldOrdinal, options) {
+    
+    {  auto const ret = make_map_array(
+    s_sec, (int)tp.tv_sec,
+    s_usec, (int)tp.tv_usec,
+    s_minuteswest, (int)(-offset->offset / 60),
+    s_dsttime, (int)offset->is_dst
+  );
+  timelib_time_offset_dtor(offset);
+  return ret;
 }
     
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
-    
-    #include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/compiler/csharp/csharp_repeated_primitive_field.h>
+    TRACE_SET_MOD(jittime);
     
     
-    { private:
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(JavaGenerator);
-};
-    
-            int black_thresh = 0, white_thresh = 0;
-        segment_hist_max(hist, black_thresh, white_thresh);
-    
-    // Like ASSERT_DEATH, but continues on to successive tests in the
-// test case, if any:
-# define EXPECT_DEATH(statement, regex) \
-    EXPECT_EXIT(statement, ::testing::internal::ExitedUnsuccessfully, regex)
-    
-    #endif  // GTEST_HAS_PARAM_TEST
-    
-    
-    {
-    {  if (count > 0) {
-    *os << ' ';
-  }
-  *os << '}';
+    {  numa_node_mask = folly::nextPowTwo(numa_num_nodes) - 1;
 }
     
-      // Gets the number of disabled tests.
-  int disabled_test_count() const;
+    namespace irgen {
+    }
     
-      // Returns true if pathname describes a directory in the file-system
-  // that exists.
-  bool DirectoryExists() const;
+      DataBlock(DataBlock&& other) = default;
+  DataBlock& operator=(DataBlock&& other) = default;
     
-    #if GTEST_HAS_EXCEPTIONS
-# include <stdexcept>
-#endif
-    
-    #if GTEST_OS_WINDOWS_MOBILE
-  // Windows CE does not have the 'ANSI' versions of Win32 APIs. To be
-  // able to pass strings to Win32 APIs on CE we need to convert them
-  // to 'Unicode', UTF-16.
-    
-      tuple& operator=(const tuple& t) { return CopyFrom(t); }
-    
-    // Step 3. Call RUN_ALL_TESTS() in main().
-//
-// We do this by linking in src/gtest_main.cc file, which consists of
-// a main() function which calls RUN_ALL_TESTS() for us.
-//
-// This runs all the tests you've defined, prints the result, and
-// returns 0 if successful, or 1 otherwise.
-//
-// Did you notice that we didn't register the tests?  The
-// RUN_ALL_TESTS() macro magically knows about all the tests we
-// defined.  Isn't this convenient?
-
-    
-    #include 'hphp/runtime/vm/jit/abi.h'
-#include 'hphp/runtime/vm/jit/arg-group.h'
-#include 'hphp/runtime/vm/jit/fixup.h'
-#include 'hphp/runtime/vm/jit/phys-reg-saver.h'
-#include 'hphp/runtime/vm/jit/vasm-gen.h'
-#include 'hphp/runtime/vm/jit/vasm-instr.h'
-#include 'hphp/runtime/vm/jit/vasm-reg.h'
-    
-    #include 'hphp/runtime/vm/jit/vasm-unit.h'
+    namespace {
+void freezeClusters(const TargetGraph& cg, std::vector<Cluster>& clusters) {
+  uint32_t totalSize = 0;
+  std::sort(clusters.begin(), clusters.end(), compareClustersDensity);
+  for (auto& cluster : clusters) {
+    uint32_t newSize = totalSize + cluster.size;
+    if (newSize > kFrozenPages * kPageSize) break;
+    cluster.frozen = true;
+    totalSize = newSize;
+    auto fid = cluster.targets[0];
+    HFTRACE(1, 'freezing cluster for func %d, size = %u, samples = %u)\n',
+            fid, cg.targets[fid].size, cg.targets[fid].samples);
+  }
+}
+    }
     
     
-    {  // Finished copying the file; now load it.
-  auto const handle = dlopen(tmp_filename, RTLD_NOW);
-  if (!handle) {
-    Logger::Error('dlopen_embedded_data: dlopen failed: %s', dlerror());
+void Instruction::SetImmPCOffsetTarget(Instruction* target,
+                                       Instruction* from) {
+  auto adjusted_target = !from ? target : target + (int64_t)(this - from);
+  if (IsPCRelAddressing()) {
+    SetPCRelImmTarget(adjusted_target);
+  } else if (IsLoadOrStore()) {
+    SetPCRelLoadStoreTarget(adjusted_target);
+  } else {
+    SetBranchImmTarget(adjusted_target);
+  }
+}
+    
+      if (::lseek(source_file, desc.m_start, SEEK_SET) < 0) {
+    Logger::Error('dlopen_embedded_data: Unable to seek to section: %s',
+                  folly::errnoStr(errno).c_str());
     return nullptr;
   }
-  return handle;
+    
+    #endif //__cplusplus
+    
+    struct CurlShareResource : SweepableResourceData {
+  DECLARE_RESOURCE_ALLOCATION(CurlShareResource)
+  CLASSNAME_IS('curl_share')
+  const String& o_getClassNameHook() const override { return classnameof(); }
+  bool isInvalid() const override { return !m_share; }
+    }
+    
+    
+    {  auto const sync_sp = v.makeReg();
+  v << lea{sp[cellsToBytes(extra->offset.offset)], sync_sp};
+  emitEagerSyncPoint(v, inst->marker().fixupSk().pc(), rvmtl(), fp, sync_sp);
 }
     
-    #ifndef incl_HPHP_JIT_TC_PROLOGUE_H_
-#define incl_HPHP_JIT_TC_PROLOGUE_H_
+    ${Storage}::${Storage}(Context* context, ${THStorage}* storage):
+    storage(storage), context(context) {}
     
-    CURLcode CurlShareResource::attachToCurlHandle(CURL *cp) {
-  return curl_easy_setopt(cp, CURLOPT_SHARE, m_share);
+      /// If a service includes a run loop it should check for interrupted.
+  std::atomic<bool> interrupted_{false};
+    
+      /// The line of the file emitting the status log.
+  size_t line;
+    
+      Status s;
+  for (const auto& p : paths_) {
+    s = carve.carve(fs::path(p));
+    EXPECT_TRUE(s.ok());
+  }
+    
+    /**
+ * @brief Access the internal storage of the Decorator parser.
+ *
+ * The decoration set is a map of column name to value. It contains the opaque
+ * set of decoration point results.
+ *
+ * Decorations are applied to log items before they are sent to the downstream
+ * logging APIs: logString, logSnapshot, etc.
+ *
+ * @param results the output parameter to write decorations.
+ */
+void getDecorations(std::map<std::string, std::string>& results);
+    
+    void customDelete(OwnershipTestClass* p) {
+  ++customDeleterCount;
+  delete p;
 }
-    
-    #include <osquery/core.h>
-#include <osquery/flags.h>
-#include <osquery/query.h>
-#include <osquery/registry.h>
     
     #pragma once
     
-    /**
- * @brief Iterate the discovered decorators for a given point type.
- *
- * The configuration maintains various sources, each may contain a set of
- * decorators. The source tracking is abstracted for the decorator iterator.
- *
- * @param point request execution of decorators for this given point.
- * @param time an optional time for points using intervals.
- * @param source restrict run to a specific config source.
- */
-void runDecorators(DecorationPoint point,
-                   size_t time = 0,
-                   const std::string& source = '');
-    
-    class TLSConfigPlugin;
-    
-    std::string platformStrerr(int errnum) {
-  return ::strerror(errnum);
+    TEST_F(OrderingTest, compare_not_equal_to) {
+  compare_not_equal_to<OddCompare<int>> op;
+  EXPECT_TRUE(op(3, 4));
+  EXPECT_FALSE(op(3, 3));
+  EXPECT_TRUE(op(4, 3));
 }
+    
+    namespace folly {
+namespace hazptr {
+    }
+    }
+    
+      enum class State {
+    UNINITIALIZED,
+    INITIALIZED,
+    PENDING,
+    COMPLETED,
+    CANCELED,
+  };
+    
+      /**
+   * Get the maximum buffer size for this AsyncFileWriter, in bytes.
+   */
+  size_t getMaxBufferSize() const;
+    
+      std::shared_ptr<LogWriter> createWriter() override {
+    // Get the output file to use
+    if (path_.empty()) {
+      throw std::invalid_argument('no path specified for file handler');
+    }
+    return fileWriterFactory_.createWriter(
+        File{path_, O_WRONLY | O_APPEND | O_CREAT});
+  }
+    
+    
+    {} // namespace folly
+
+    
+    Value Node::getFlexBasis(void) const
+{
+    return Value::fromYGValue(YGNodeStyleGetFlexBasis(m_node));
+}
+    
+        Size(double width, double height)
+    : width(width)
+    , height(height)
+    {
+    }
+    
+    class Countable : public noncopyable, public nonmovable {
+public:
+  // RefPtr expects refcount to start at 0
+  Countable() : m_refcount(0) {}
+  virtual ~Countable()
+  {
+    FBASSERT(m_refcount == 0);
+  }
+    }
+    
+    // Class that lets you declare a global but does not add a static constructor
+// to the binary. Eventually I'd like to have this auto-initialize in a
+// multithreaded environment but for now it's easiest just to use manual
+// initialization.
+template <typename T>
+class StaticInitialized {
+public:
+  constexpr StaticInitialized() :
+    m_instance(nullptr)
+  {}
+    }
+    
+    /**
+ * A thread-local object is a 'global' object within a thread. This is useful
+ * for writing apartment-threaded code, where nothing is actullay shared
+ * between different threads (hence no locking) but those variables are not
+ * on stack in local scope. To use it, just do something like this,
+ *
+ *   ThreadLocal<MyClass> static_object;
+ *     static_object->data_ = ...;
+ *     static_object->doSomething();
+ *
+ *   ThreadLocal<int> static_number;
+ *     int value = *static_number;
+ *
+ * So, syntax-wise it's similar to pointers. T can be primitive types, and if
+ * it's a class, there has to be a default constructor.
+ */
+template<typename T>
+class ThreadLocal {
+public:
+  /**
+   * Constructor that has to be called from a thread-neutral place.
+   */
+  ThreadLocal() :
+    m_key(0),
+    m_cleanup(OnThreadExit) {
+    initialize();
+  }
+    }
+    
+    DEFINE_BOXED_PRIMITIVE(boolean, Boolean)
+DEFINE_BOXED_PRIMITIVE(byte, Byte)
+DEFINE_BOXED_PRIMITIVE(char, Character)
+DEFINE_BOXED_PRIMITIVE(short, Short)
+DEFINE_BOXED_PRIMITIVE(int, Integer)
+DEFINE_BOXED_PRIMITIVE(long, Long)
+DEFINE_BOXED_PRIMITIVE(float, Float)
+DEFINE_BOXED_PRIMITIVE(double, Double)
