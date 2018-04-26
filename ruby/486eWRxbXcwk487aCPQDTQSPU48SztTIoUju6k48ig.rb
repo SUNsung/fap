@@ -1,169 +1,136 @@
 
         
-          # Clean a top-level (bin, sbin, lib) directory, recursively, by fixing file
-  # permissions and removing .la files, unless the files (or parent
-  # directories) are protected by skip_clean.
-  #
-  # bin and sbin should not have any subdirectories; if either do that is
-  # caught as an audit warning
-  #
-  # lib may have a large directory tree (see Erlang for instance), and
-  # clean_dir applies cleaning rules to the entire tree
-  def clean_dir(d)
-    d.find do |path|
-      path.extend(ObserverPathnameExtension)
-    
-      def hardware
-    'CPU: #{Hardware.cores_as_words}-core #{Hardware::CPU.bits}-bit #{Hardware::CPU.family}'
-  end
-    
-            $stderr.puts
-        opoo out
-        Homebrew.failed = true
-        first_warning = false
-      end
-    end
-    
-        projects
-  end
-end
-
-    
-            # Find a record for confirmation by unconfirmed email field
-        def find_by_unconfirmed_email_with_errors(attributes = {})
-          attributes = attributes.slice(*confirmation_keys).permit!.to_h if attributes.respond_to? :permit
-          unconfirmed_required_attributes = confirmation_keys.map { |k| k == :email ? :unconfirmed_email : k }
-          unconfirmed_attributes = attributes.symbolize_keys
-          unconfirmed_attributes[:unconfirmed_email] = unconfirmed_attributes.delete(:email)
-          find_or_initialize_with_errors(unconfirmed_required_attributes, unconfirmed_attributes, :not_found)
-        end
-    
-      test 'should be active without confirmation when confirmation is not required' do
-    user = create_user
-    user.instance_eval { def confirmation_required?; false end }
-    user.confirmation_sent_at = nil
-    user.save
-    assert user.reload.active_for_authentication?
-  end
-    
-      # GET /resource/unlock/new
-  def new
-    self.resource = resource_class.new
-  end
-    
-      # Gets the actual resource stored in the instance variable
-  def resource
-    instance_variable_get(:'@#{resource_name}')
-  end
-    
-        # Try retrieving the URL options from the parent controller (usually
-    # ApplicationController). Instance methods are not supported at the moment,
-    # so only the class-level attribute is used.
-    def self.default_url_options(*args)
-      if defined?(Devise.parent_controller.constantize)
-        Devise.parent_controller.constantize.try(:default_url_options) || {}
-      else
-        {}
-      end
-    end
-    
-            # This returns all the registered commands.
         #
-        # @return [Registry<Symbol, Array<Proc, Hash>>]
-        def commands
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.commands)
-            end
-          end
-        end
+def run_in_shell(*args)
+  p, output = Jekyll::Utils::Exec.run(*args)
     
-          protected
-    
-        end
-    
-        # We want to return immediatly if we do not have a packet which is handled by us
-    return unless pkt.is_tcp?
-    return if (pkt.tcp_sport != 143 and pkt.tcp_dport != 143)
-    s = find_session((pkt.tcp_sport == 143) ? get_session_src(pkt) : get_session_dst(pkt))
-    s[:sname] ||= 'imap4'
-    
-    fileOutJar 	= clsFile.new_with_sig('Ljava.lang.String;', 'output.jar')
-filesIn		= Array.new
-    
-        def tasks_without_stage_dependency
-      stages + default_tasks
-    end
-    
-    # IMPORTANT: The Capistrano::Plugin system is not yet considered a stable,
-# public API, and is subject to change without notice. Eventually it will be
-# officially documented and supported, but for now, use it at your own risk.
-#
-# Base class for Capistrano plugins. Makes building a Capistrano plugin as easy
-# as writing a `Capistrano::Plugin` subclass and overriding any or all of its
-# three template methods:
-#
-# * set_defaults
-# * register_hooks
-# * define_tasks
-#
-# Within the plugin you can use any methods of the Rake or Capistrano DSLs, like
-# `fetch`, `invoke`, etc. In cases when you need to use SSHKit's backend outside
-# of an `on` block, use the `backend` convenience method. E.g. `backend.test`,
-# `backend.execute`, or `backend.capture`.
-#
-# Package up and distribute your plugin class as a gem and you're good to go!
-#
-# To use a plugin, all a user has to do is install it in the Capfile, like this:
-#
-#   # Capfile
-#   require 'capistrano/superfancy'
-#   install_plugin Capistrano::Superfancy
-#
-# Or, to install the plugin without its hooks:
-#
-#   # Capfile
-#   require 'capistrano/superfancy'
-#   install_plugin Capistrano::Superfancy, load_hooks: false
-#
-class Capistrano::Plugin < Rake::TaskLib
-  include Capistrano::DSL
-    
-      deploy_rb = File.expand_path('../../templates/deploy.rb.erb', __FILE__)
-  stage_rb = File.expand_path('../../templates/stage.rb.erb', __FILE__)
-  capfile = File.expand_path('../../templates/Capfile', __FILE__)
-    
-            def on_percent_literal(node)
-          each_unnecessary_space_match(node) do |range|
-            add_offense(node, location: range)
-          end
-        end
-    
-    module RuboCop
-  module Cop
-    module Style
-      # This cop checks for optional arguments to methods
-      # that do not come at the end of the argument list
-      #
-      # @example
-      #   # bad
-      #   def foo(a = 1, b, c)
-      #   end
-      #
-      #   # good
-      #   def baz(a, b, c = 1)
-      #   end
-      #
-      #   def foobar(a = 1, b = 2, c = 3)
-      #   end
-      class OptionalArguments < Cop
-        MSG = 'Optional arguments should appear at the end ' \
-              'of the argument list.'.freeze
-    
-              FROZEN_STRING_LITERAL_TYPES.include?(node.type) &&
-            frozen_string_literals_enabled?
-        end
+          new_theme_name = args.join('_')
+      theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
+      if theme.path.exist?
+        Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.'
       end
+    
+        def process(args)
+      arg_is_present? args, '--server', 'The --server command has been replaced by the \
+                          'serve' subcommand.'
+      arg_is_present? args, '--serve', 'The --serve command has been replaced by the \
+                          'serve' subcommand.'
+      arg_is_present? args, '--no-server', 'To build Jekyll without launching a server, \
+                          use the 'build' subcommand.'
+      arg_is_present? args, '--auto', 'The switch '--auto' has been replaced with \
+                          '--watch'.'
+      arg_is_present? args, '--no-auto', 'To disable auto-replication, simply leave off \
+                          the '--watch' switch.'
+      arg_is_present? args, '--pygments', 'The 'pygments'settings has been removed in \
+                          favour of 'highlighter'.'
+      arg_is_present? args, '--paginate', 'The 'paginate' setting can only be set in \
+                          your config files.'
+      arg_is_present? args, '--url', 'The 'url' setting can only be set in your \
+                          config files.'
+      no_subcommand(args)
     end
+    
+            expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::VERSION_NUMBER]).to match(/cd .* && agvtool new-marketing-version 1.1.0/)
+      end
+    
+        h = base.dup
+    assert_equal(h1, h.delete_if {|k,v| k.instance_of?(String) })
+    assert_equal(h1, h)
+    
+      def test_strftime_flags
+    t = Time.mktime(2001, 10, 1, 2, 0, 0)
+    assert_equal('01', t.strftime('%d'))
+    assert_equal('01', t.strftime('%0d'))
+    assert_equal(' 1', t.strftime('%_d'))
+    assert_equal(' 1', t.strftime('%e'))
+    assert_equal('01', t.strftime('%0e'))
+    assert_equal(' 1', t.strftime('%_e'))
+    assert_equal('AM', t.strftime('%p'))
+    assert_equal('am', t.strftime('%#p'))
+    assert_equal('am', t.strftime('%P'))
+    assert_equal('AM', t.strftime('%#P'))
+    assert_equal('02', t.strftime('%H'))
+    assert_equal('02', t.strftime('%0H'))
+    assert_equal(' 2', t.strftime('%_H'))
+    assert_equal('02', t.strftime('%I'))
+    assert_equal('02', t.strftime('%0I'))
+    assert_equal(' 2', t.strftime('%_I'))
+    assert_equal(' 2', t.strftime('%k'))
+    assert_equal('02', t.strftime('%0k'))
+    assert_equal(' 2', t.strftime('%_k'))
+    assert_equal(' 2', t.strftime('%l'))
+    assert_equal('02', t.strftime('%0l'))
+    assert_equal(' 2', t.strftime('%_l'))
+    t = Time.mktime(2001, 10, 1, 14, 0, 0)
+    assert_equal('PM', t.strftime('%p'))
+    assert_equal('pm', t.strftime('%#p'))
+    assert_equal('pm', t.strftime('%P'))
+    assert_equal('PM', t.strftime('%#P'))
+    assert_equal('14', t.strftime('%H'))
+    assert_equal('14', t.strftime('%0H'))
+    assert_equal('14', t.strftime('%_H'))
+    assert_equal('02', t.strftime('%I'))
+    assert_equal('02', t.strftime('%0I'))
+    assert_equal(' 2', t.strftime('%_I'))
+    assert_equal('14', t.strftime('%k'))
+    assert_equal('14', t.strftime('%0k'))
+    assert_equal('14', t.strftime('%_k'))
+    assert_equal(' 2', t.strftime('%l'))
+    assert_equal('02', t.strftime('%0l'))
+    assert_equal(' 2', t.strftime('%_l'))
+    assert_equal('MON', t.strftime('%^a'))
+    assert_equal('OCT', t.strftime('%^b'))
+    
+      it 'does not decode an int when fewer bytes than an int remain and the '*' modifier is passed' do
+    'abc'.unpack(unpack_format('*')).should == []
+  end
+    
+      it 'decodes past whitespace bytes when passed the '*' modifier' do
+    [ ['a b c',    ['a b c']],
+      ['a\fb c',   ['a\fb c']],
+      ['a\nb c',   ['a\nb c']],
+      ['a\rb c',   ['a\rb c']],
+      ['a\tb c',   ['a\tb c']],
+      ['a\vb c',   ['a\vb c']],
+    ].should be_computed_by(:unpack, unpack_format('*'))
   end
 end
+    
+          sleep
+      after_sleep2 = true
+    end
+    
+        def unlink_files(files)
+      Array(files).each do |file|
+        file.close unless file.closed?
+        file.unlink if file.respond_to?(:unlink) && file.path.present? && File.exist?(file.path)
+      end
+    end
+    
+        # Swaps the height and width if necessary
+    def auto_orient
+      if EXIF_ROTATED_ORIENTATION_VALUES.include?(@orientation)
+        @height, @width = @width, @height
+        @orientation -= 4
+      end
+    end
+    
+        # Returns the filename, the same way as ':basename.:extension' would.
+    def filename attachment, style_name
+      [ basename(attachment, style_name), extension(attachment, style_name) ].delete_if(&:empty?).join('.'.freeze)
+    end
+    
+      # Get list of styles saved on previous deploy (running rake paperclip:refresh:missing_styles)
+  def self.get_registered_attachments_styles
+    YAML.load_file(Paperclip.registered_attachments_styles_path)
+  rescue Errno::ENOENT
+    nil
+  end
+  private_class_method :get_registered_attachments_styles
+    
+        def self.included(base)
+      ActiveRecord::ConnectionAdapters::Table.send :include, TableDefinition
+      ActiveRecord::ConnectionAdapters::TableDefinition.send :include, TableDefinition
+      ActiveRecord::ConnectionAdapters::AbstractAdapter.send :include, Statements
+      ActiveRecord::Migration::CommandRecorder.send :include, CommandRecorder
+    end
