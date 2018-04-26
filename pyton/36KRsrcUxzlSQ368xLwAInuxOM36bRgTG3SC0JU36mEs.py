@@ -1,115 +1,85 @@
 
         
-        try:
-    input = raw_input
-except NameError:
-    pass
+            '''
+    req_h = OUT_REQ_HEAD in output_options
+    req_b = OUT_REQ_BODY in output_options
+    resp_h = OUT_RESP_HEAD in output_options
+    resp_b = OUT_RESP_BODY in output_options
+    req = req_h or req_b
+    resp = resp_h or resp_b
     
-    
-def assertRegexpMatches(self, text, regexp, msg=None):
-    if hasattr(self, 'assertRegexp'):
-        return self.assertRegexp(text, regexp, msg)
-    else:
-        m = re.match(regexp, text)
-        if not m:
-            note = 'Regexp didn\'t match: %r not found' % (regexp)
-            if len(text) < 1000:
-                note += ' in %r' % text
-            if msg is None:
-                msg = note
-            else:
-                msg = note + ', ' + msg
-            self.assertTrue(m, msg)
-    
-    
-def _download_restricted(url, filename, age):
-    ''' Returns true if the file has been downloaded '''
-    
-        def test_cache(self):
-        ydl = FakeYDL({
-            'cachedir': self.test_dir,
-        })
-        c = Cache(ydl)
-        obj = {'x': 1, 'y': ['ä', '\\a', True]}
-        self.assertEqual(c.load('test_cache', 'k.'), None)
-        c.store('test_cache', 'k.', obj)
-        self.assertEqual(c.load('test_cache', 'k2'), None)
-        self.assertFalse(_is_empty(self.test_dir))
-        self.assertEqual(c.load('test_cache', 'k.'), obj)
-        self.assertEqual(c.load('test_cache', 'y'), None)
-        self.assertEqual(c.load('test_cache2', 'k.'), None)
-        c.remove()
-        self.assertFalse(os.path.exists(self.test_dir))
-        self.assertEqual(c.load('test_cache', 'k.'), None)
-    
-    # Allow direct execution
-import os
-import sys
-import unittest
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
-    
-class RtspFD(FileDownloader):
-    def real_download(self, filename, info_dict):
-        url = info_dict['url']
-        self.report_destination(filename)
-        tmpfilename = self.temp_name(filename)
-    
-            title = self._html_search_regex(r'<title>(.*?)</title>', webpage, 'title')
-        description = self._html_search_regex(
-            r'<div class='description'[^>]*>([^<]+)</div>', webpage, 'description', fatal=False)
-        thumbnail = self._html_search_regex(
-            r'preview_url\s*:\s*\'(.*?)\'', webpage, 'thumbnail', fatal=False)
-    
-            return {
-            'id': flv_id,
-            'url': rtmp_url,
-            'ext': 'flv',
-            'no_resume': True,
-            'title': title,
-            'description': description,
-            'duration': duration,
-            'view_count': view_count,
-            'comment_count': comment_count,
-            'uploader': uploader,
-            'upload_date': upload_date,
-        }
-
-    
-    from .globals import request
-    
-        #: When data is read or written, this is set to ``True``. Used by
-    # :class:`.SecureCookieSessionInterface` to add a ``Vary: Cookie``
-    #: header, which allows caching proxies to cache different pages for
-    #: different users.
-    accessed = False
-    
-        # SSLContext
-    if sys.version_info < (2, 7):
-        ssl_context = object()
-    else:
-        ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
-    
-        rv = app.test_client().get('/', errors_stream=out)
-    assert rv.status_code == 500
-    assert b'Internal Server Error' in rv.data
-    assert not out.getvalue()
-
-    
-        def mapper(self, _, line):
-        yield line, 1
-    
-    
-class Chat(metaclass=ABCMeta):
-    
-            Accessing a node updates its position to the front of the LRU list.
+        def __init__(self, output_file=None,
+                 resume=False, progress_file=sys.stderr):
         '''
-        node = self.lookup[query]
-        if node is None:
-            return None
-        self.linked_list.move_to_front(node)
-        return node.results
+        :param resume: Should the download resume if partial download
+                       already exists.
+        :type resume: bool
     
-        def __init__(self, query, results):
-        self.query = query
-        self.results = results
+        @staticmethod
+    def make_header(username, password):
+        credentials = u'%s:%s' % (username, password)
+        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
+        return 'Basic %s' % token
+    
+        @pytest.mark.parametrize('verify_value', ['false', 'fALse'])
+    def test_verify_false_OK(self, httpbin_secure, verify_value):
+        r = http(httpbin_secure.url + '/get', '--verify', verify_value)
+        assert HTTP_OK in r
+    
+            target.append((item.key, value))
+    
+    
+def _tar_file(cmd):
+    for c in cmd:
+        for ext in tar_extensions:
+            if c.endswith(ext):
+                return (c, c[0:len(c) - len(ext)])
+    
+        long_description = README,
+    
+        @staticmethod
+    def get_streams_by_id(account_number, video_id):
+        '''
+        int, int->list
+        
+        Get the height of the videos.
+        
+        Since brightcove is using 3 kinds of links: rtmp, http and https,
+        we will be using the HTTPS one to make it secure.
+        
+        If somehow akamaihd.net is blocked by the Great Fucking Wall,
+        change the 'startswith https' to http.
+        '''
+        endpoint = 'https://edge.api.brightcove.com/playback/v1/accounts/{account_number}/videos/{video_id}'.format(account_number = account_number, video_id = video_id)
+        fake_header_id = fake_headers
+        #is this somehow related to the time? Magic....
+        fake_header_id['Accept'] ='application/json;pk=BCpkADawqM1cc6wmJQC2tvoXZt4mrB7bFfi6zGt9QnOzprPZcGLE9OMGJwspQwKfuFYuCjAAJ53JdjI8zGFx1ll4rxhYJ255AXH1BQ10rnm34weknpfG-sippyQ'
+    
+    def mixcloud_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html(url, faker=True)
+    title = r1(r'<meta property='og:title' content='([^']*)'', html)
+    preview_url = r1(r'm-preview=\'([^\']+)\'', html)
+    preview = r1(r'previews(.*)\.mp3$', preview_url)
+    
+    from html.parser import HTMLParser
+    
+        stream_types = [
+        {'id': '720p HD'},
+        {'id': '360p SD'},
+    ]
+    
+    #----------------------------------------------------------------------
+def showroom_get_roomid_by_room_url_key(room_url_key):
+    '''str->str'''
+    fake_headers_mobile = {
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Charset': 'UTF-8,*;q=0.5',
+        'Accept-Encoding': 'gzip,deflate,sdch',
+        'Accept-Language': 'en-US,en;q=0.8',
+        'User-Agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36'
+    }
+    webpage_url = 'https://www.showroom-live.com/' + room_url_key
+    html = get_content(webpage_url, headers = fake_headers_mobile)
+    roomid = match1(html, r'room\?room_id\=(\d+)')
+    assert roomid
+    return roomid
