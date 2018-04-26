@@ -1,41 +1,40 @@
 
         
-        
-atom_template = textwrap.dedent('''\
-    <?xml version='1.0' encoding='utf-8'?>
-    <feed xmlns='http://www.w3.org/2005/Atom'>
-        <link rel='self' href='http://rg3.github.io/youtube-dl/update/releases.atom' />
-        <title>youtube-dl releases</title>
-        <id>https://yt-dl.org/feed/youtube-dl-updates-feed</id>
-        <updated>@TIMESTAMP@</updated>
-        @ENTRIES@
-    </feed>''')
+            def _migrate_implicit_content_type(self):
+        '''Migrate the removed implicit_content_type config option'''
+        try:
+            implicit_content_type = self.pop('implicit_content_type')
+        except KeyError:
+            self.save()
+        else:
+            if implicit_content_type == 'form':
+                self['default_options'].insert(0, '--form')
+            self.save()
+            self.load()
+
     
-        test_func.__name__ = str('test_swf_' + test_id)
-    setattr(TestSWFInterpreter, test_func.__name__, test_func)
+        @mock.patch('certbot_compatibility_test.validator.requests.get')
+    def test_hsts_bad_max_age(self, mock_get_request):
+        mock_get_request.return_value = create_response(
+            headers={'strict-transport-security': 'max-age=not-an-int'})
+        self.assertFalse(self.validator.hsts('test.com'))
     
-            webpage = self._download_webpage(url, playlist_id)
-        title = self._html_search_regex(
-            r'<h1 class='playlist-name'[^>]*?>(.*?)</h1>', webpage, 'title')
-        description = self._html_search_regex(
-            r'<p class='excerpt'[^>]*?>(.*?)</p>',
-            webpage, 'description', fatal=False)
-        urls = re.findall(
-            r'<li class='lecture-preview'>\s*?<a target='_blank' href='([^']+)'>',
-            webpage)
-        entries = [self.url_result(u) for u in urls]
+    # Custom sidebar templates, maps document names to template names.
+#html_sidebars = {}
     
-            title = self._html_search_regex(r'<title>(.*?)</title>', webpage, 'title')
-        description = self._html_search_regex(
-            r'<div class='description'[^>]*>([^<]+)</div>', webpage, 'description', fatal=False)
-        thumbnail = self._html_search_regex(
-            r'preview_url\s*:\s*\'(.*?)\'', webpage, 'thumbnail', fatal=False)
+    from certbot import errors
+from certbot.display import util as display_util
     
-    import itertools
-import time
-    
-    
-class CamWithHerIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?camwithher\.tv/view_video\.php\?.*\bviewkey=(?P<id>\w+)'
-    
-            webpage = self._download_webpage(url, display_id)
+        @mock.patch('certbot.notify.smtplib.LMTP')
+    @mock.patch('certbot.notify.subprocess.Popen')
+    def test_smtp_failure(self, mock_popen, mock_lmtp):
+        from certbot.notify import notify
+        lmtp_obj = mock.MagicMock()
+        mock_lmtp.return_value = lmtp_obj
+        lmtp_obj.sendmail.side_effect = socket.error(17)
+        proc = mock.MagicMock()
+        mock_popen.return_value = proc
+        self.assertTrue(notify('Goose', 'auntrhody@example.com',
+                               'The old grey goose is dead.'))
+        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
+        self.assertEqual(proc.communicate.call_count, 1)
