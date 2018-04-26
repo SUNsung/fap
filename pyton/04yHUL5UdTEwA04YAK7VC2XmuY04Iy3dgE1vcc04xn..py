@@ -1,110 +1,66 @@
 
         
-        containers = (('thefuck/python3-fish',
-               u'''FROM python:3
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'),
-              ('thefuck/python2-fish',
-               u'''FROM python:2
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'))
+        
+def get_new_command(command):
+    dir = shell.quote(_tar_file(command.script_parts)[1])
+    return shell.and_('mkdir -p {dir}', '{cmd} -C {dir}') \
+        .format(dir=dir, cmd=command.script)
     
-        plt.figure('scikit-learn GLM benchmark results')
-    plt.xlabel('Dimensions')
-    plt.ylabel('Time (s)')
-    plt.plot(dimensions, time_ridge, color='r')
-    plt.plot(dimensions, time_ols, color='g')
-    plt.plot(dimensions, time_lasso, color='b')
-    
-    
-def barplot_neighbors(Nrange=2 ** np.arange(1, 11),
-                      Drange=2 ** np.arange(7),
-                      krange=2 ** np.arange(10),
-                      N=1000,
-                      D=64,
-                      k=5,
-                      leaf_size=30,
-                      dataset='digits'):
-    algorithms = ('kd_tree', 'brute', 'ball_tree')
-    fiducial_values = {'N': N,
-                       'D': D,
-                       'k': k}
-    
-        for n_samples in sample_sizes:
-        X = random_state.rand(n_samples, 300)
-    
-        url_fmt is along the lines of ('https://github.com/USER/PROJECT/'
-                                   'blob/{revision}/{package}/'
-                                   '{path}#L{lineno}')
-    '''
-    revision = _get_git_revision()
-    return partial(_linkcode_resolve, revision=revision, package=package,
-                   url_fmt=url_fmt)
+    # TODO: ensure that history changes.
 
     
-        # Print the classification report
-    print(metrics.classification_report(y_test, y_predicted,
-                                        target_names=dataset.target_names))
+    # Note, sha1 is the only hash algorithm compatible with python2.4 and with
+# FIPS-140 mode (as of 11-2014)
+try:
+    from hashlib import sha1 as sha1
+except ImportError:
+    from sha import sha as sha1
     
-    Sentiment analysis can be casted as a binary text classification problem,
-that is fitting a linear classifier on features extracted from the text
-of the user messages so as to guess wether the opinion of the author is
-positive or negative.
+            # global URL, resource, entity, method_name
+        input_url = 'https://www.googleapis.com/compute/v1/projects/myproject/global/backendServices/mybackendservice/getHealth'
+        actual = GCPUtils.parse_gcp_url(input_url)
+        self.assertEquals('compute', actual['service'])
+        self.assertEquals('v1', actual['api_version'])
+        self.assertEquals('myproject', actual['project'])
+        self.assertTrue('global' in actual)
+        self.assertTrue(actual['global'])
+        self.assertEquals('backendServices', actual['resource_name'])
+        self.assertEquals('mybackendservice', actual['entity_name'])
+        self.assertEquals('getHealth', actual['method_name'])
     
-    The data is generated with the ``make_checkerboard`` function, then
-shuffled and passed to the Spectral Biclustering algorithm. The rows
-and columns of the shuffled matrix are rearranged to show the
-biclusters found by the algorithm.
+    from ansible.plugins.terminal import TerminalBase
+from ansible.errors import AnsibleConnectionFailure
     
-    # Author: Alexandre Gramfort <alexandre.gramfort@inria.fr>
-# License: BSD 3 clause
+        proba = clf.predict_proba(X_test, batch_size=batch_size)
+    assert proba.shape == (num_test, num_classes)
+    assert np.allclose(np.sum(proba, axis=1), np.ones(num_test))
     
-            clf1 = LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto').fit(X, y)
-        clf2 = LinearDiscriminantAnalysis(solver='lsqr', shrinkage=None).fit(X, y)
+            layer_test(local.LocallyConnected2D,
+                   kwargs={'filters': filters,
+                           'kernel_size': (3, 3),
+                           'padding': padding,
+                           'kernel_regularizer': 'l2',
+                           'bias_regularizer': 'l2',
+                           'activity_regularizer': 'l2',
+                           'strides': strides,
+                           'data_format': 'channels_first'},
+                   input_shape=(num_samples, stack_size, num_row, num_col))
     
-            for i in html_json['sources']:
-            if 'src' in i:  #to avoid KeyError
-                if i['src'].startswith('https'):
-                    link_list.append((str(i['height']), i['src']))
+            # Test equivalence of convert_dense_weights_data_format
+        out1 = model1.predict(x)
+        layer_utils.convert_dense_weights_data_format(model1.layers[2], prev_shape, target_data_format)
+        for (src, dst) in zip(model1.layers, model2.layers):
+            dst.set_weights(src.get_weights())
+        out2 = model2.predict(transpose(x))
     
-    def cbs_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    '''Downloads CBS videos by URL.
-    '''
+        model = Sequential(name='merged_branches')
+    model.add(Merge([left, right], mode='concat', name='merge'))
+    model.add(Dense(num_classes, name='final_dense'))
+    model.add(Activation('softmax', name='softmax'))
+    model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
     
-    
-def huaban_download(url, output_dir='.', **kwargs):
-    if re.match(r'http://huaban\.com/boards/\d+/', url):
-        huaban_download_board(url, output_dir, **kwargs)
-    else:
-        print('Only board (画板) pages are supported currently')
-        print('ex: http://huaban.com/boards/12345678/')
-    
-    def kugou_download_playlist(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    html=get_html(url)
-    pattern=re.compile('title='(.*?)'.* data='(\w*)\|.*?'')
-    pairs=pattern.findall(html)
-    for title,hash_val in pairs:
-        kugou_download_by_hash(title,hash_val,output_dir,merge,info_only)
-    
-    site_info = 'Mixcloud.com'
-download = mixcloud_download
-download_playlist = playlist_not_supported('mixcloud')
-
-    
-        def extract(self, **kwargs):
-        for i in self.streams:
-            # for each available stream
-            s = self.streams[i]
-            # fill in 'container' field and 'size' field (optional)
-            _, s['container'], s['size'] = url_info(s['url'])
-            # 'src' field is a list of processed urls for direct downloading
-            # usually derived from 'url'
-            s['src'] = [s['url']]
+    Gets to 0.89 test accuracy after 2 epochs.
+90s/epoch on Intel i5 2.4Ghz CPU.
+10s/epoch on Tesla K40 GPU.
+'''
+from __future__ import print_function
