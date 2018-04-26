@@ -1,112 +1,70 @@
 
         
-                      when_connected do
-                send_command('unsubscribe')
-                @raw_client = nil
-              end
-            end
-    
-            def test_spec_name_with_inline_config
-          spec = spec('adapter' => 'sqlite3')
-          assert_equal 'primary', spec.name, 'should default to primary id'
-        end
+            keys.find do |key|
+      if key.to_s.end_with?('_or_later')
+        later_tag = key.to_s[/(\w+)_or_later$/, 1].to_sym
+        MacOS::Version.from_symbol(later_tag) <= tag_version
       end
     end
   end
 end
 
     
-        class TestCallbacksWithArgs < ActiveSupport::TestCase
-      test 'callbacks still work when invoking process with multiple arguments' do
-        controller = CallbacksWithArgs.new
-        controller.process(:index, ' Howdy!')
-        assert_equal 'Hello world Howdy!', controller.response_body
+      # True if a {Formula} is being built in 32-bit/x86 mode.
+  # This is needed for some use-cases though we prefer to build Universal
+  # when a 32-bit version is needed.
+  def build_32_bit?
+    include?('32-bit') && option_defined?('32-bit')
+  end
+    
+      def llvm
+    @llvm ||= MacOS.llvm_build_version if MacOS.has_apple_developer_tools?
+  end
+    
+          To export the needed variables, add them to your dotfiles.
+       * On Bash, add them to `~/.bash_profile`.
+       * On Zsh, add them to `~/.zprofile` instead.
+    
+        def types_as_json
+      @types.values.sort! { |a, b| sort_fn(a.name, b.name) }.map(&:as_json)
+    end
+    
+          unless root?
+        raise Invalid, 'missing name' if !name || name.empty?
+        raise Invalid, 'missing path' if !path || path.empty?
+        raise Invalid, 'missing type' if !type || type.empty?
       end
+    end
+    
+          IGNORE_ENTRIES = %w(
+        Overview
+        Introduction
+        Usage
+        Methods
+        Options
+      )
     end
   end
 end
 
     
-        # Returns +text+ wrapped at +len+ columns and indented +indent+ spaces.
-    # By default column length +len+ equals 72 characters and indent
-    # +indent+ equal two spaces.
-    #
-    #   my_text = 'Here is a sample text with more than 40 characters'
-    #
-    #   format_paragraph(my_text, 25, 4)
-    #   # => '    Here is a sample text with\n    more than 40 characters'
-    def format_paragraph(text, len = 72, indent = 2)
-      sentences = [[]]
-    
-    FIXTURE_LOAD_PATH = File.expand_path('fixtures', __dir__)
-ActionMailer::Base.view_paths = FIXTURE_LOAD_PATH
-    
-    class ActionMailerI18nWithControllerTest < ActionDispatch::IntegrationTest
-  Routes = ActionDispatch::Routing::RouteSet.new
-  Routes.draw do
-    ActiveSupport::Deprecation.silence do
-      get ':controller(/:action(/:id))'
-    end
-  end
-    
-        alias_method :insert_before, :insert
-    
-          if dest.end_with? '/'
-        dest_dir.relative_path_from(base_dir).to_s.tap do |result|
-          result << '/' if result != '.'
+          def get_type
+        case slug
+        when 'api'
+          'Reference'
+        when 'configuration'
+          'Reference: Configuration'
+        when 'stpl'
+          'Reference: SimpleTemplate'
+        when 'plugindev'
+          'Reference: Plugin'
+        else
+          'Manual'
         end
-      else
-        dest_dir.parent.relative_path_from(base_dir).join(dest.split('/').last).to_s
       end
-    end
     
-              # Verify the box exists that we want to repackage
-          box = @env.boxes.find(box_name, box_provider, '= #{box_version}')
-          if !box
-            raise Vagrant::Errors::BoxNotFoundWithProviderAndVersion,
-              name: box_name,
-              provider: box_provider.to_s,
-              version: box_version
-          end
-    
-        def find_remote(username, domain)
-      AccountFinder.new(username, domain).account
-    end
-  end
-    
-      def updated
-    object.updated_at.iso8601
-  end
-    
-    require 'open-uri'
-require 'json'
-require 'strscan'
-require 'forwardable'
-require 'term/ansicolor'
-require 'fileutils'
-    
-        # #gradient > { @mixin horizontal ... }
-    # to:
-    # @mixin gradient-horizontal
-    def flatten_mixins(file, container, prefix)
-      log_transform container, prefix
-      replace_rules file, Regexp.escape(container) do |mixins_css|
-        unindent unwrap_rule_block(mixins_css).gsub(/@mixin\s*([\w-]+)/, '@mixin #{prefix}-\\1')
+      if ''.respond_to?(:encoding)  # Ruby 1.9+ M17N
+    context 'PATH_INFO's encoding' do
+      before do
+        @app = Rack::Protection::PathTraversal.new(proc { |e| [200, {'Content-Type' => 'text/plain'}, [e['PATH_INFO'].encoding.to_s]] })
       end
-    end
-    
-        def log_http_get_file(url, cached = false)
-      s = '  #{'CACHED ' if cached}GET #{url}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
-      end
-    end
-    
-      # Version of your assets, change this if you want to expire all your assets.
-  config.assets.version = '1.0'
-    
-      def test_image_helper
-    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
-  end
