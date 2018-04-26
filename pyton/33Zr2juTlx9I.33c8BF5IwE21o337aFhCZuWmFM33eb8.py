@@ -1,40 +1,84 @@
 
         
-        '''
-requests.hooks
-~~~~~~~~~~~~~~
+        entries = []
+for v in versions:
+    fields = v.split('.')
+    year, month, day = map(int, fields[:3])
+    faked = 0
+    patchlevel = 0
+    while True:
+        try:
+            datetime.date(year, month, day)
+        except ValueError:
+            day -= 1
+            faked += 1
+            assert day > 0
+            continue
+        break
+    if len(fields) >= 4:
+        try:
+            patchlevel = int(fields[3])
+        except ValueError:
+            patchlevel = 1
+    timestamp = '%04d-%02d-%02dT00:%02d:%02dZ' % (year, month, day, faked, patchlevel)
     
+    IGNORED_FILES = [
+    'setup.py',  # http://bugs.python.org/issue13943
+    'conf.py',
+    'buildserver.py',
+]
     
-class Server(threading.Thread):
-    '''Dummy server using for unit testing'''
-    WAIT_EVENT_TIMEOUT = 5
+            retval = subprocess.call(args)
+        if retval == 0:
+            fsize = os.path.getsize(encodeFilename(tmpfilename))
+            self.to_screen('\r[%s] %s bytes' % (args[0], fsize))
+            self.try_rename(tmpfilename, filename)
+            self._hook_progress({
+                'downloaded_bytes': fsize,
+                'total_bytes': fsize,
+                'filename': filename,
+                'status': 'finished',
+            })
+            return True
+        else:
+            self.to_stderr('\n')
+            self.report_error('%s exited with code %d' % (args[0], retval))
+            return False
+
     
-        @property
-    def text(self):
-        '''Content of the response, in unicode.
+    In the second benchmark, we increase the number of dimensions of the
+training set. Then we plot the computation time as function of
+the number of dimensions.
     
-    import collections
+                gc.collect()
+            print('- benchmarking LassoLars')
+            clf = LassoLars(alpha=alpha, fit_intercept=False,
+                            normalize=False, precompute=precompute)
+            tstart = time()
+            clf.fit(X, Y)
+            lars_lasso_results.append(time() - tstart)
     
-        @pytest.fixture(autouse=True)
-    def setup(self):
-        '''CaseInsensitiveDict instance with 'Accept' header.'''
-        self.case_insensitive_dict = CaseInsensitiveDict()
-        self.case_insensitive_dict['Accept'] = 'application/json'
+    from sklearn.cluster import AgglomerativeClustering
     
+        short_text_lang_folder = os.path.join(short_text_folder, lang)
+    if not os.path.exists(short_text_lang_folder):
+        os.makedirs(short_text_lang_folder)
     
-class InvalidURL(RequestException, ValueError):
-    '''The URL provided was somehow invalid.'''
+        print('Decompressing %s' % ARCHIVE_NAME)
+    with closing(tarfile.open(ARCHIVE_NAME, 'r:gz')) as archive:
+        archive.extractall(path='.')
+    os.remove(ARCHIVE_NAME)
+
     
-        global __doc__
-    __doc__ = (__doc__ + '\n' +
-               '\n'.join(doc(code) for code in sorted(_codes)))
+    ARCHIVE_NAME = URL.rsplit('/', 1)[1]
+TRAIN_FOLDER = '20news-bydate-train'
+TEST_FOLDER = '20news-bydate-test'
     
-    ]
-test_requirements = ['pytest-httpbin==0.0.7', 'pytest-cov', 'pytest-mock', 'pytest-xdist', 'PySocks>=1.5.6, !=1.5.7', 'pytest>=2.8.0']
+    # Train uncalibrated random forest classifier on whole train and validation
+# data and evaluate on test data
+clf = RandomForestClassifier(n_estimators=25)
+clf.fit(X_train_valid, y_train_valid)
+clf_probs = clf.predict_proba(X_test)
+score = log_loss(y_test, clf_probs)
     
-    
-SendCall = collections.namedtuple('SendCall', ('args', 'kwargs'))
-    
-        #Writing names of all directories inside 'pages' to a list
-    for os_dir in os.listdir(loc):
-        oslist.append(os_dir)
+    n_classifiers = len(classifiers)
