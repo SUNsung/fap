@@ -1,106 +1,68 @@
 
         
-        class Devise::PasswordsController < DeviseController
-  prepend_before_action :require_no_authentication
-  # Render the #edit only if coming from a reset password email link
-  append_before_action :assert_reset_token_passed, only: :edit
+            # change Microsoft filters to Sass calling convention
+    def replace_ms_filters(file)
+      log_transform
+      file.gsub(
+          /filter: e\(%\('progid:DXImageTransform.Microsoft.gradient\(startColorstr='%d', endColorstr='%d', GradientType=(\d)\)',argb\(([\-$\w]+)\),argb\(([\-$\w]+)\)\)\);/,
+          %Q(filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='\#{ie-hex-str(\\2)}', endColorstr='\#{ie-hex-str(\\3)}', GradientType=\\1);)
+      )
+    end
     
-              @registered.each do |plugin|
-            result += plugin.components.action_hooks[Plugin::ALL_ACTIONS]
-            result += plugin.components.action_hooks[hook_name]
-          end
+        def log_status(status)
+      puts bold status
+    end
     
-            # Get the proper capability host to check
-        cap_host = nil
-        if type == :host
-          cap_host = @env.host
-        else
-          with_target_vms([]) do |vm|
-            cap_host = case type
-                       when :provider
-                         vm.provider
-                       when :guest
-                         vm.guest
-                       else
-                         raise Vagrant::Errors::CLIInvalidUsage,
-                           help: opts.help.chomp
-                       end
-          end
-        end
+          spec['main'] =
+          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
+          find_files.(Bootstrap.fonts_path) +
+          %w(assets/javascripts/bootstrap.js)
     
-    lib_path = root.join('lib').to_path
+          case matched
     
-        res << inp.to_html
+      when '6.1.2'
+    __NR_execve      = 7
+    __NR_getpeername = 205
+    __NR_accept      = 232
+    __NR_listen      = 235
+    __NR_bind        = 237
+    __NR_socket      = 238
+    __NR_connect     = 239
+    __NR_close       = 272
+    __NR_kfcntl      = 635
+    
+          # If this importer is based on files on the local filesystem This method
+      # should return true if the file, when changed, should trigger a
+      # recompile.
+      #
+      # It is acceptable for non-sass files to be watched and trigger a recompile.
+      #
+      # @param filename [String] The absolute filename for a file that has changed.
+      # @return [Boolean] When the file changed should cause a recompile.
+      def watched_file?(filename)
+        false
+      end
+    end
   end
-  res << '</form>'
 end
+
     
-      def parse(pkt)
-    # We want to return immediatly if we do not have a packet which is handled by us
-    return unless pkt.is_tcp?
-    return if (pkt.tcp_sport != 110 and pkt.tcp_dport != 110)
-    s = find_session((pkt.tcp_sport == 110) ? get_session_src(pkt) : get_session_dst(pkt))
+            attr_writer :log_levels
     
+          # Throw an exception if the layout couldn't be found.
+      else
+        raise <<-ERR
     
-    {	if ln =~ /;(read|write)_(handle|filename)=/
-		parts = ln.split(' ')
-		if (parts[0] == 'mov')
-			parts2 = parts[2].split('=')
-			label = parts2[0]
-			label.slice!(0,1)
-			old = parts2[1]
-			new = addrs[label]
-			#puts '%32s: %s -> %x' % [label, old, new]
-			replaces << [label, old, new.to_s(16)]
-		end
-	end
-}
+          def define_deprecated_accessors_for(option, opts, &block)
+        define_deprecated_writer_for(option, opts, &block)
+      end
     
-      def parse
-    @result = ERB.new(@template).result(binding)
-  end
-    
-          it 'identifies that Intel and PowerPC machines can't run each others' executables' do
-        allow(Hardware::CPU).to receive(:type).and_return :ppc
-        expect(Hardware::CPU.can_run?(:i386)).to be false
-        expect(Hardware::CPU.can_run?(:x86_64)).to be false
-    
-      # Display a list of things.
-  # Things may either be an array, or a hash of (label -> array)
-  def display_items(label, things)
-    return if things.empty?
-    puts '#{label}:'
-    if things.is_a? Hash
-      things.keys.sort.each do |list_label|
-        things[list_label].sort.each do |item|
-          puts '  #{item} (#{list_label})'
+          origin = caller[1]
+      if origin =~ /rubygems\/custom_require/
+        origin = caller[3]
+        if origin.nil?
+          STDERR.puts 'Unknown origin'
+          STDERR.puts caller.join('\n')
         end
       end
-    else
-      things.sort.each do |item|
-        puts '  #{item}'
-      end
-    end
-  end
-    
-      def load_logs(dir)
-    logs = {}
-    if dir.exist?
-      dir.children.sort.each do |file|
-        contents = file.size? ? file.read : 'empty log'
-        # small enough to avoid GitHub 'unicorn' page-load-timeout errors
-        max_file_size = 1_000_000
-        contents = truncate_text_to_approximate_size(contents, max_file_size, front_weight: 0.2)
-        logs[file.basename.to_s] = { content: contents }
-      end
-    end
-    raise 'No logs.' if logs.empty?
-    logs
-  end
-    
-            attr_reader :name, :declaration_node, :scope,
-                    :assignments, :references, :captured_by_block
-        alias captured_by_block? captured_by_block
-    
-      let(:source) { ''something'.intern' }
-  let(:corrected) { autocorrect_source(source) }
+      origin = origin.gsub(/:[0-9]+:in .*/, '') if origin
