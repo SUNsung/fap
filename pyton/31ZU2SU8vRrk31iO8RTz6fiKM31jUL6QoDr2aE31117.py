@@ -1,171 +1,169 @@
 
         
-            @staticmethod
-    def make_header(username, password):
-        credentials = u'%s:%s' % (username, password)
-        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
-        return 'Basic %s' % token
+          def replicate_states(self, state_coll_name):
+    state_list = self._metagraph.collection_def[state_coll_name]
+    num_states = len(state_list.node_list.value)
+    for replica_id in range(1, FLAGS.num_gpus):
+      for i in range(num_states):
+        state_list.node_list.value.append(state_list.node_list.value[i])
+    for replica_id in range(FLAGS.num_gpus):
+      for i in range(num_states):
+        index = replica_id * num_states + i
+        state_list.node_list.value[index] = with_autoparallel_prefix(
+            replica_id, state_list.node_list.value[index])
+    
+      def setUp(self):
+    FLAGS.train_data = os.path.join(self.get_temp_dir() + 'test-text.txt')
+    FLAGS.eval_data = os.path.join(self.get_temp_dir() + 'eval-text.txt')
+    FLAGS.save_path = self.get_temp_dir()
+    with open(FLAGS.train_data, 'w') as f:
+      f.write(
+          '''alice was beginning to get very tired of sitting by her sister on
+          the bank, and of having nothing to do: once or twice she had peeped
+          into the book her sister was reading, but it had no pictures or
+          conversations in it, 'and what is the use of a book,' thought alice
+          'without pictures or conversations?' So she was considering in her own
+          mind (as well as she could, for the hot day made her feel very sleepy
+          and stupid), whether the pleasure of making a daisy-chain would be
+          worth the trouble of getting up and picking the daisies, when suddenly
+          a White rabbit with pink eyes ran close by her.\n''')
+      with open(FLAGS.eval_data, 'w') as f:
+        f.write('alice she rabbit once\n')
     
     
-_auth_plugins = plugin_manager.get_auth_plugins()
-auth.add_argument(
-    '--auth-type', '-A',
-    choices=_AuthTypeLazyChoices(),
-    default=None,
-    help='''
-    The authentication mechanism to be used. Defaults to '{default}'.
+def from_pygtp(board_size, pygtpc):
+  '''Converts from a pygtp coordinate to a MiniGo coordinate.'''
+  # GTP has a notion of both a Pass and a Resign, both of which are mapped to
+  # None, so the conversion is not precisely bijective.
+  if pygtpc in (gtp.PASS, gtp.RESIGN):
+    return None
+  return board_size - pygtpc[1], pygtpc[0] - 1
     
+        self.assertEqual(coords.to_sgf((0, 8)), 'ia')
+    self.assertEqual(coords.to_flat(utils_test.BOARD_SIZE, (0, 8)), 8)
+    self.assertEqual(coords.to_kgs(utils_test.BOARD_SIZE, (0, 8)), 'J9')
+    self.assertEqual(coords.to_pygtp(utils_test.BOARD_SIZE, (0, 8)), (9, 9))
     
-class ExitStatus:
-    '''Exit status code constants.'''
-    OK = 0
-    ERROR = 1
-    PLUGIN_ERROR = 7
+      def is_done(self):
+    return self.result != 0 or self.root.is_done()
     
-            # behaviour near extremes of floating-point range
-        int_dbl_max = int(DBL_MAX)
-        top_power = 2**DBL_MAX_EXP
-        halfway = (int_dbl_max + top_power)//2
-        self.assertEqual(float(int_dbl_max), DBL_MAX)
-        self.assertEqual(float(int_dbl_max+1), DBL_MAX)
-        self.assertEqual(float(halfway-1), DBL_MAX)
-        self.assertRaises(OverflowError, float, halfway)
-        self.assertEqual(float(1-halfway), -DBL_MAX)
-        self.assertRaises(OverflowError, float, -halfway)
-        self.assertRaises(OverflowError, float, top_power-1)
-        self.assertRaises(OverflowError, float, top_power)
-        self.assertRaises(OverflowError, float, top_power+1)
-        self.assertRaises(OverflowError, float, 2*top_power-1)
-        self.assertRaises(OverflowError, float, 2*top_power)
-        self.assertRaises(OverflowError, float, top_power*top_power)
+        'ipv6': re.compile(
+        r'''^
+            (?:{0}:){{7}}{0}|           # uncompressed: 1:2:3:4:5:6:7:8
+            (?:{0}:){{1,6}}:|           # compressed variants, which are all
+            (?:{0}:)(?::{0}){{1,6}}|    # a::b for various lengths of a,b
+            (?:{0}:){{2}}(?::{0}){{1,5}}|
+            (?:{0}:){{3}}(?::{0}){{1,4}}|
+            (?:{0}:){{4}}(?::{0}){{1,3}}|
+            (?:{0}:){{5}}(?::{0}){{1,2}}|
+            (?:{0}:){{6}}(?::{0})|      # ...all with 2 <= a+b <= 7
+            :(?::{0}){{1,6}}|           # ::ffff(:ffff...)
+            {0}?::|                     # ffff::, ::
+                                        # ipv4-in-ipv6 variants
+            (?:0:){{6}}(?:{0}\.){{3}}{0}|
+            ::(?:ffff:)?(?:{0}\.){{3}}{0}|
+            (?:0:){{5}}ffff:(?:{0}\.){{3}}{0}
+            $
+        '''.format(ipv6_component), re.X | re.I
+    ),
     
-        def test_extra_spaces(self):
-        C = cookies.SimpleCookie()
-        C.load('eggs  =  scrambled  ;  secure  ;  path  =  bar   ; foo=foo   ')
-        self.assertEqual(C.output(),
-            'Set-Cookie: eggs=scrambled; Path=bar; Secure\r\nSet-Cookie: foo=foo')
+            try:
+            url = '%s/roles/%d/%s/?page_size=50' % (self.baseurl, int(role_id), related)
+            data = self.__call_galaxy(url)
+            results = data['results']
+            done = (data.get('next_link', None) is None)
+            while not done:
+                url = '%s%s' % (self._api_server, data['next_link'])
+                data = self.__call_galaxy(url)
+                results += data['results']
+                done = (data.get('next_link', None) is None)
+            return results
+        except:
+            return None
     
-    The __init__ method has one required argument, a file-like object
-(including a chunk instance), and one optional argument, a flag which
-specifies whether or not chunks are aligned on 2-byte boundaries.  The
-default is 1, i.e. aligned.
-'''
+            params1 = {'three': 3, 'two': 2, 'one': 1}
+        params2 = {'one': 1, 'two': 2, 'three': 3}
+        actual = GCPUtils.are_params_equal(params1, params2)
+        self.assertTrue(actual)
     
-    def evalString(s):
-    assert s.startswith(''') or s.startswith('''), repr(s[:1])
-    q = s[0]
-    if s[:3] == q*3:
-        q = q*3
-    assert s.endswith(q), repr(s[-len(q):])
-    assert len(s) >= 2*len(q)
-    s = s[len(q):-len(q)]
-    return re.sub(r'\\(\'|\'|\\|[abfnrtv]|x.{0,2}|[0-7]{1,3})', escape, s)
+        terminal_stdout_re = [
+        re.compile(r'[\r\n]?<.+>(?:\s*)$'),
+        re.compile(r'[\r\n]?\[.+\](?:\s*)$'),
+    ]
     
-        def safe_tp_name(self):
-        try:
-            return self.type().field('tp_name').string()
-        except NullPyObjectPtr:
-            # NULL tp_name?
-            return 'unknown'
-        except RuntimeError:
-            # Can't even read the object at all?
-            return 'unknown'
+        dimensions = 500 * np.arange(1, n_iter + 1)
     
-        def test_car_adapter_shall_make_loud_noise(self):
-        car = Car()
-        car_adapter = Adapter(car, make_noise=car.make_noise)
-        noise = car_adapter.make_noise(1)
-        expected_noise = 'vroom!'
-        self.assertEqual(noise, expected_noise)
+        return delta.seconds + delta.microseconds / mu_second
     
-        @classmethod
-    def __get_test_directory(self):
-        '''
-        Get the temporary directory for the tests.
-        '''
-        self.test_dir = os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), 'test_command')
+    URL = ('http://people.csail.mit.edu/jrennie/'
+       '20Newsgroups/20news-bydate.tar.gz')
     
-    ### OUTPUT ###
-# Jack move 5m then stop
-
+    from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import Perceptron
+from sklearn.pipeline import Pipeline
+from sklearn.datasets import load_files
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
     
+    import sys
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.svm import LinearSVC
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
+from sklearn.datasets import load_files
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
     
-class RadioTest(unittest.TestCase):
-    '''
-    Attention: Test case results depend on test case execution. The test cases
-    in this integration test class should be executed in an explicit order:
-    http://stackoverflow.com/questions/5387299/python-unittest-testcase-execution-order
-    '''
+        in_exercise_region = False
     
-    '''
-Port of the Java example of 'Setter Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
-http://xunitpatterns.com/Dependency%20Injection.html.
+    Second example
+--------------
+The second example shows the ability of the Minimum Covariance Determinant
+robust estimator of covariance to concentrate on the main mode of the data
+distribution: the location seems to be well estimated, although the covariance
+is hard to estimate due to the banana-shaped distribution. Anyway, we can
+get rid of some outlying observations.
+The One-Class SVM is able to capture the real data structure, but the
+difficulty is to adjust its kernel bandwidth parameter so as to obtain
+a good compromise between the shape of the data scatter matrix and the
+risk of over-fitting the data.
     
+            cmap_group = Tk.Frame(fm)
+        Tk.Radiobutton(cmap_group, text='Hyperplanes',
+                       variable=controller.surface_type, value=0,
+                       command=controller.refit).pack(anchor=Tk.W)
+        Tk.Radiobutton(cmap_group, text='Surface',
+                       variable=controller.surface_type, value=1,
+                       command=controller.refit).pack(anchor=Tk.W)
     
-def main():
-    command_stack = []
+    The dataset is generated using the ``make_biclusters`` function, which
+creates a matrix of small values and implants bicluster with large
+values. The rows and columns are then shuffled and passed to the
+Spectral Co-Clustering algorithm. Rearranging the shuffled matrix to
+make biclusters contiguous shows how accurately the algorithm found
+the biclusters.
     
-            return coord_y_start_scan
+    # Plot boundaries of unit simplex
+plt.plot([0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], 'k', label='Simplex')
     
-    '''
-# === 思路 ===
-# 核心：每次落稳之后截图，根据截图算出棋子的坐标和下一个块顶面的中点坐标，
-#      根据两个点的距离乘以一个时间系数获得长按的时间
-# 识别棋子：靠棋子的颜色来识别位置，通过截图发现最下面一行大概是一条
-           直线，就从上往下一行一行遍历，比较颜色（颜色用了一个区间来比较）
-           找到最下面的那一行的所有点，然后求个中点，求好之后再让 Y 轴坐标
-           减小棋子底盘的一半高度从而得到中心点的坐标
-# 识别棋盘：靠底色和方块的色差来做，从分数之下的位置开始，一行一行扫描，
-           由于圆形的块最顶上是一条线，方形的上面大概是一个点，所以就
-           用类似识别棋子的做法多识别了几个点求中点，这时候得到了块中点的 X
-           轴坐标，这时候假设现在棋子在当前块的中心，根据一个通过截图获取的
-           固定的角度来推出中点的 Y 坐标
-# 最后：根据两点的坐标算距离乘以系数来获取长按时间（似乎可以直接用 X 轴距离）
-'''
-import os
-import shutil
-import time
-import math
-import random
-import json
-from PIL import Image, ImageDraw
-import wda
+        print('n = %d\n' % n)
     
-        click_count += 1
-    if click_count > 1:
-        click_count = 0
-        cor1 = cor.pop()
-        cor2 = cor.pop()
+            def c_string(init):
+            size = len(init) + 1
+            return (c_char*size)(*init)
     
-        def get_screen(self):
-        process = os.popen(self.adb_path + ' shell wm size')
-        output = process.read()
-        return output
+            pt = pointer(Table(1, 2, 3))
     
+        # __set__ and __get__ should raise a TypeError in case their self
+    # argument is not a ctype instance.
+    def test___set__(self):
+        class MyCStruct(Structure):
+            _fields_ = (('field', c_int),)
+        self.assertRaises(TypeError,
+                          MyCStruct.field.__set__, 'wrong type self', 42)
     
-def open_accordant_config():
-    '''
-    调用配置文件
-    '''
-    screen_size = _get_screen_size()
-    config_file = '{path}/config/{screen_size}/config.json'.format(
-        path=sys.path[0],
-        screen_size=screen_size
-    )
-    
-    
-def jump(distance, delta_piece_y):
-    '''
-    跳跃一定的距离
-    '''
-    # 计算程序长度与截图测得的距离的比例
-    scale = 0.945 * 2 / head_diameter
-    actual_distance = distance * scale * (math.sqrt(6) / 2)
-    press_time = (-945 + math.sqrt(945 ** 2 + 4 * 105 *
-                                   36 * actual_distance)) / (2 * 105) * 1000
-    press_time *= press_coefficient
-    press_time = max(press_time, 200)  # 设置 200ms 是最小的按压时间
-    press_time = int(press_time)
+        parser = argparse.ArgumentParser(description = 'Download all the PDF/HTML links into README.md')
+    parser.add_argument('-d', action='store', dest='directory')
+    parser.add_argument('--no-html', action='store_true', dest='nohtml', default = False)
+    parser.add_argument('--overwrite', action='store_true', default = False)    
+    results = parser.parse_args()
