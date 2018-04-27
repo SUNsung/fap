@@ -1,88 +1,115 @@
 
         
-            def replace(index, name)
-      @filters[assert_index(index)] = filter_const(name)
-    end
-    
-        def initialize
-      @pages = {}
-    end
-    
-      def apply
-    super
-  ensure
-    clear_cache
+          def <<(o)
+    @settings << o
+    self
   end
-end
-
     
-            <<~EOS
-          Anaconda is known to frequently break Homebrew builds, including Vim and
-          MacVim, due to bundling many duplicates of system and Homebrew-available
-          tools.
-    
-        if ObserverPathnameExtension.total.zero?
-      puts 'Nothing pruned' if ARGV.verbose?
+      def dump_verbose_config(f = $stdout)
+    f.puts 'HOMEBREW_VERSION: #{HOMEBREW_VERSION}'
+    f.puts 'ORIGIN: #{origin}'
+    f.puts 'HEAD: #{head}'
+    f.puts 'Last commit: #{last_commit}'
+    if CoreTap.instance.installed?
+      f.puts 'Core tap ORIGIN: #{core_tap_origin}'
+      f.puts 'Core tap HEAD: #{core_tap_head}'
+      f.puts 'Core tap last commit: #{core_tap_last_commit}'
     else
-      n, d = ObserverPathnameExtension.counts
-      print 'Pruned #{n} symbolic links '
-      print 'and #{d} directories ' if d.positive?
-      puts 'from #{HOMEBREW_PREFIX}'
+      f.puts 'Core tap: N/A'
     end
+    f.puts 'HOMEBREW_PREFIX: #{HOMEBREW_PREFIX}'
+    f.puts 'HOMEBREW_REPOSITORY: #{HOMEBREW_REPOSITORY}'
+    f.puts 'HOMEBREW_CELLAR: #{HOMEBREW_CELLAR}'
+    f.puts 'HOMEBREW_BOTTLE_DOMAIN: #{BottleSpecification::DEFAULT_DOMAIN}'
+    f.puts hardware
+    f.puts 'OS X: #{MacOS.full_version}-#{kernel}'
+    f.puts 'Xcode: #{xcode ? xcode : 'N/A'}'
+    f.puts 'CLT: #{clt ? clt : 'N/A'}'
+    f.puts 'GCC-4.0: build #{gcc_40}' if gcc_40
+    f.puts 'GCC-4.2: build #{gcc_42}' if gcc_42
+    f.puts 'LLVM-GCC: build #{llvm}'  if llvm
+    f.puts 'Clang: #{clang ? '#{clang} build #{clang_build}' : 'N/A'}'
+    f.puts 'MacPorts/Fink: #{macports_or_fink}' if macports_or_fink
+    f.puts 'X11: #{describe_x11}'
+    f.puts 'System Ruby: #{describe_system_ruby}'
+    f.puts 'Perl: #{describe_perl}'
+    f.puts 'Python: #{describe_python}'
+    f.puts 'Ruby: #{describe_ruby}'
+    f.puts 'Java: #{describe_java}'
   end
 end
 
     
-          # If the importer is based on files on the local filesystem
-      # this method should return folders which should be watched
-      # for changes.
-      #
-      # @return [Array<String>] List of absolute paths of directories to watch
-      def directories_to_watch
-        []
-      end
+        checks.inject_dump_stats! if ARGV.switch? 'D'
     
-      # Uninstalls this logger from \{Sass.logger\}. This should only be called if
-  # the logger was installed using \{#install!}
-  def uninstall!
-    if Sass.logger != self
-      throw Exception.new('Can't uninstall a logger that's not currently installed.')
+      def can_read?(resource)
+    ability_name = resource.class.name.downcase
+    ability_name = 'read_#{ability_name}'.to_sym
+    
+          # bootstrap requires minimum precision of 8, see https://github.com/twbs/bootstrap-sass/issues/409
+      ::Sass::Script::Number.precision = [8, ::Sass::Script::Number.precision].max
     end
     
-          res << val.to_s(:quote => :none)
-      res << ' ' if @after && @whitespace_after
-      res << @after.perform(environment).to_s if @after
-      str = Sass::Script::Value::String.new(
-        res, :identifier,
-        (to_quoted_equivalent.to_sass if deprecation == :potential))
-      str.source_range = source_range
-      opts(str)
-    end
+          # move bootstrap/_bootstrap.scss to _bootstrap.scss adjusting import paths
+      main_from = '#{save_to}/_bootstrap.scss'
+      main_to   = File.expand_path('#{save_to}/../_bootstrap.scss')
+      save_file main_to, File.read(main_from).gsub(/ '/, ' 'bootstrap/')
+      File.delete(main_from)
     
-            def validate!
-          super
-          if @pod_name.nil? && !@wipe_all
-            # Security measure, to avoid removing the pod cache too agressively by mistake
-            help! 'You should either specify a pod name or use the --all flag'
-          end
-        end
-    
-            attr_reader :node, :variable, :referenced, :references
-        alias referenced? referenced
-    
-            def each_unnecessary_space_match(node, &blk)
-          each_match_range(
-            contents_range(node),
-            MULTIPLE_SPACES_BETWEEN_ITEMS_REGEX,
-            &blk
-          )
-        end
+      def setup
+    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
+    success = Dir.chdir DUMMY_PATH do
+      silence_stdout_if !ENV['VERBOSE'] do
+        system 'node', 'manifest.js', tmp_dir
       end
     end
+    assert success, 'Node.js Mincer compilation failed'
+    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
+    css_name = manifest['assets']['application.css']
+    @css = File.read('#{tmp_dir}/#{css_name}')
   end
 end
 
     
-        expect(corrected).to eq(''something'.to_sym')
+        # Validates that {#boundary} is {#valid_ip_or_range? a valid IP address or
+    # IP address range}. Due to this not being tested before it was moved here
+    # from Mdm, the default workspace does not validate. We always validate boundaries
+    # and a workspace may have a blank default boundary.
+    #
+    # @return [void]
+    def boundary_must_be_ip_range
+      unless boundary.blank?
+        begin
+          boundaries = Shellwords.split(boundary)
+        rescue ArgumentError
+          boundaries = []
+        end
+    
+    # Sniffer class for GET URL's
+class SnifferURL < BaseProtocolParser
+  def register_sigs
+    self.sigs = {
+      :get		=> /^GET\s+([^\n]+)\s+HTTP\/\d\.\d/i,
+      :webhost	=> /^HOST\:\s+([^\n\r]+)/i,
+    }
   end
-end
+    
+    ip   = ARGV.shift() || exit
+port = ARGV.shift() || 31337
+    
+    require 'erb'
+    
+    		end
+	end
+    
+      context 'with redirect reaction' do
+    before(:each) do
+      mock_app do
+        use Rack::Protection::CookieTossing, :reaction => :redirect
+        run DummyApp
+      end
+    end
+    
+      it 'should set the X-Content-Type-Options' do
+    expect(get('/', {}, 'wants' => 'text/html').header['X-Content-Type-Options']).to eq('nosniff')
+  end
