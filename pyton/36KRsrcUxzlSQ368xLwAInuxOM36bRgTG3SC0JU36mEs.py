@@ -1,85 +1,98 @@
 
         
-            '''
-    req_h = OUT_REQ_HEAD in output_options
-    req_b = OUT_REQ_BODY in output_options
-    resp_h = OUT_RESP_HEAD in output_options
-    resp_b = OUT_RESP_BODY in output_options
-    req = req_h or req_b
-    resp = resp_h or resp_b
+            x = Input(shape=(1,))
+    y = inner_model(x)
+    outer_model = Model(x, y)
+    assert outer_model.trainable_weights == inner_model.trainable_weights
+    inner_model.trainable = False
+    assert outer_model.trainable_weights == []
+    inner_model.trainable = True
+    inner_model.layers[-1].trainable = False
+    assert outer_model.trainable_weights == []
     
-        def __init__(self, output_file=None,
-                 resume=False, progress_file=sys.stderr):
-        '''
-        :param resume: Should the download resume if partial download
-                       already exists.
-        :type resume: bool
+            np_output_cf = layer_test(layers.Flatten,
+                                  kwargs={'data_format':
+                                          'channels_first'},
+                                  input_data=np_inp_channels_first,
+                                  expected_output=np_output_cl)
+    test_3d()
+    test_4d()
+    test_5d()
     
-        @staticmethod
-    def make_header(username, password):
-        credentials = u'%s:%s' % (username, password)
-        token = b64encode(credentials.encode('utf8')).strip().decode('latin1')
-        return 'Basic %s' % token
-    
-        @pytest.mark.parametrize('verify_value', ['false', 'fALse'])
-    def test_verify_false_OK(self, httpbin_secure, verify_value):
-        r = http(httpbin_secure.url + '/get', '--verify', verify_value)
-        assert HTTP_OK in r
-    
-            target.append((item.key, value))
+    # build the VGG16 network with our 3 images as input
+# the model will be loaded with pre-trained ImageNet weights
+model = vgg19.VGG19(input_tensor=input_tensor,
+                    weights='imagenet', include_top=False)
+print('Model loaded.')
     
     
-def _tar_file(cmd):
-    for c in cmd:
-        for ext in tar_extensions:
-            if c.endswith(ext):
-                return (c, c[0:len(c) - len(ext)])
+@pytest.mark.parametrize('tensor_shape', [(100, 100), (1, 2, 3, 4)], ids=['FC', 'CONV'])
+def test_identity(tensor_shape):
+    if len(tensor_shape) > 2:
+        with pytest.raises(ValueError):
+            _runner(initializers.identity(), tensor_shape,
+                    target_mean=1. / tensor_shape[0], target_max=1.)
+    else:
+        _runner(initializers.identity(), tensor_shape,
+                target_mean=1. / tensor_shape[0], target_max=1.)
     
-        long_description = README,
+    - The length and noise (i.e. 'useless' story components) impact the ability for
+LSTMs / GRUs to provide the correct answer. Given only the supporting facts,
+these RNNs can achieve 100% accuracy on many tasks. Memory networks and neural
+networks that use attentional processes can efficiently search through this
+noise to find the relevant statements, improving performance substantially.
+This becomes especially obvious on QA2 and QA3, both far longer than QA1.
+'''
     
-        @staticmethod
-    def get_streams_by_id(account_number, video_id):
-        '''
-        int, int->list
-        
-        Get the height of the videos.
-        
-        Since brightcove is using 3 kinds of links: rtmp, http and https,
-        we will be using the HTTPS one to make it secure.
-        
-        If somehow akamaihd.net is blocked by the Great Fucking Wall,
-        change the 'startswith https' to http.
-        '''
-        endpoint = 'https://edge.api.brightcove.com/playback/v1/accounts/{account_number}/videos/{video_id}'.format(account_number = account_number, video_id = video_id)
-        fake_header_id = fake_headers
-        #is this somehow related to the time? Magic....
-        fake_header_id['Accept'] ='application/json;pk=BCpkADawqM1cc6wmJQC2tvoXZt4mrB7bFfi6zGt9QnOzprPZcGLE9OMGJwspQwKfuFYuCjAAJ53JdjI8zGFx1ll4rxhYJ255AXH1BQ10rnm34weknpfG-sippyQ'
+        @property
+    def is_eager_to_contribute(self):
+        return True if self.blackboard.common_state['problems'] > 100 else False
     
-    def mixcloud_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    html = get_html(url, faker=True)
-    title = r1(r'<meta property='og:title' content='([^']*)'', html)
-    preview_url = r1(r'm-preview=\'([^\']+)\'', html)
-    preview = r1(r'previews(.*)\.mp3$', preview_url)
+        def __init__(self):
+        self._active_state = Active(self)  # Unit.Inservice.Active()
+        self._standby_state = Standby(self)  # Unit.Inservice.Standby()
+        self._suspect_state = Suspect(self)  # Unit.OutOfService.Suspect()
+        self._failed_state = Failed(self)  # Unit.OutOfService.Failed()
+        self._current_state = self._standby_state
+        self.states = {'active': self._active_state,
+                       'standby': self._standby_state,
+                       'suspect': self._suspect_state,
+                       'failed': self._failed_state}
+        self.message_types = {'fault trigger': self._current_state.on_fault_trigger,
+                              'switchover': self._current_state.on_switchover,
+                              'diagnostics passed': self._current_state.on_diagnostics_passed,
+                              'diagnostics failed': self._current_state.on_diagnostics_failed,
+                              'operator inservice': self._current_state.on_operator_inservice}
     
-    from html.parser import HTMLParser
+        def test_c_observers_shall_be_detachable(cls):
+        cls.s.detach(cls.dec_obs)
+        # hex viewer shall be remaining if dec viewer is detached first
+        cls.assertEqual(isinstance(cls.s._observers[0], HexViewer), True)
+        cls.assertEqual(len(cls.s._observers), 1)
+        cls.s.detach(cls.hex_obs)
+        cls.assertEqual(len(cls.s._observers), 0)
     
-        stream_types = [
-        {'id': '720p HD'},
-        {'id': '360p SD'},
-    ]
+        def unsubscribe(self, msg):
+        self.provider.unsubscribe(msg, self)
     
-    #----------------------------------------------------------------------
-def showroom_get_roomid_by_room_url_key(room_url_key):
-    '''str->str'''
-    fake_headers_mobile = {
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Charset': 'UTF-8,*;q=0.5',
-        'Accept-Encoding': 'gzip,deflate,sdch',
-        'Accept-Language': 'en-US,en;q=0.8',
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36'
-    }
-    webpage_url = 'https://www.showroom-live.com/' + room_url_key
-    html = get_content(webpage_url, headers = fake_headers_mobile)
-    roomid = match1(html, r'room\?room_id\=(\d+)')
-    assert roomid
-    return roomid
+        def test_initial_state(self):
+        state = self.radio.state.name
+        expected_state_name = 'AM'
+        self.assertEqual(state, expected_state_name)
+    
+    '''
+Port of the Java example of 'Setter Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
+http://xunitpatterns.com/Dependency%20Injection.html.
+    
+        def tearDown(self):
+        if not self._bProblem:
+            print('Tearing down')
+            time.sleep(0.1)
+            self._tm.publishReport()
+        else:
+            print('Test not executed. No tear down required.')
+    
+    
+class SuperUserSpecification(CompositeSpecification):
