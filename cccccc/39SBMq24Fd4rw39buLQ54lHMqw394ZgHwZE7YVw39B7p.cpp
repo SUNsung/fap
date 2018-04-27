@@ -1,222 +1,227 @@
 
         
-          // content::DevToolsAgentHostClient:
-  void AgentHostClosed(content::DevToolsAgentHost* agent_host,
-                       bool replaced_with_another_client) override;
-  void DispatchProtocolMessage(content::DevToolsAgentHost* agent_host,
-                               const std::string& message) override;
+        #include 'matrix.h'
+#include 'include_gunit.h'
+#include 'genericvector.h'
+#include 'tprintf.h'
     
-     private:
-  std::unique_ptr<DesktopMediaList> media_list_;
-    
-    namespace atom {
-    }
-    
-    HttpProtocolHandler::~HttpProtocolHandler() {
+    bool TessBaseAPI::GetDoubleVariable(const char *name, double *value) const {
+  DoubleParam *p = ParamUtils::FindParam<DoubleParam>(
+      name, GlobalParams()->double_params, tesseract_->params()->double_params);
+  if (p == nullptr) return false;
+  *value = (double)(*p);
+  return true;
 }
     
-    namespace accelerator_util {
-    }
+      /**
+   * Set the value of an internal 'parameter.'
+   * Supply the name of the parameter and the value as a string, just as
+   * you would in a config file.
+   * Returns false if the name lookup failed.
+   * Eg SetVariable('tessedit_char_blacklist', 'xyz'); to ignore x, y and z.
+   * Or SetVariable('classify_bln_numeric_mode', '1'); to set numeric-only mode.
+   * SetVariable may be used before Init, but settings will revert to
+   * defaults on End().
+   *
+   * Note: Must be called after Init(). Only works for non-init variables
+   * (init variables should be passed to Init()).
+   */
+  bool SetVariable(const char* name, const char* value);
+  bool SetDebugVariable(const char* name, const char* value);
     
-    #include 'atom/browser/ui/tray_icon.h'
-#include 'ui/views/linux_ui/status_icon_linux.h'
     
-    #ifndef ATOM_BROWSER_UI_VIEWS_GLOBAL_MENU_BAR_X11_H_
-#define ATOM_BROWSER_UI_VIEWS_GLOBAL_MENU_BAR_X11_H_
-    
-    #endif  // ATOM_BROWSER_UI_VIEWS_MENU_MODEL_ADAPTER_H_
-
-    
-     protected:
-  virtual char GetChar(void) {
-    return fin.get();
-  }
-  /*! \brief to be implemented by child, check if end of stream */
-  virtual bool IsEnd(void) {
-    return fin.eof();
-  }
-    
-        index_.resize((boundary_[nfeature - 1].index_end
-                   + (packing_factor_ - 1)) / packing_factor_);
-    row_ind_.resize(boundary_[nfeature - 1].row_ind_end);
-    
-      uint64_t uint64_t2[2] = {1U, 2U};
-  EXPECT_EQ(info.group_ptr.size(), 0);
-  info.SetInfo('group', uint64_t2, xgboost::kUInt64, 2);
-  ASSERT_EQ(info.group_ptr.size(), 3);
-  EXPECT_EQ(info.group_ptr[2], 3);
-    
-      void Write(const SparsePage& page, dmlc::Stream* fo) override {
-    CHECK(page.offset.size() != 0 && page.offset[0] == 0);
-    CHECK_EQ(page.offset.back(), page.data.size());
-    fo->Write(page.offset);
-    if (page.data.size() != 0) {
-      fo->Write(dmlc::BeginPtr(page.data), page.data.size() * sizeof(SparseBatch::Entry));
-    }
-  }
-    
-    void SparsePage::Writer::PushWrite(std::shared_ptr<SparsePage>&& page) {
-  qworkers_[clock_ptr_].Push(std::move(page));
-  clock_ptr_ = (clock_ptr_ + 1) % workers_.size();
-}
-    
-    static const uint8_t kRangeLimitLut[4 * 256] = {
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
-  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
-  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
-  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
-  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
-  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
-  96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
- 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
- 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
- 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
- 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
- 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
- 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
- 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
- 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
- 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    {  // Number of 32 bit outputs held in each register.
+  int num_outputs_per_register_;
+  // Maximum number of registers that we will use to hold outputs.
+  int max_output_registers_;
+  // Number of 8 bit inputs in the inputs register.
+  int num_inputs_per_register_;
+  // Number of inputs in each weight group.
+  int num_inputs_per_group_;
+  // Number of groups of inputs to be broadcast.
+  int num_input_groups_;
+  // The weights matrix reorganized in whatever way suits this instance.
+  std::vector<int8_t> shaped_w_;
+  // A series of functions to compute a partial result.
+  std::vector<PartialFunc> partial_funcs_;
 };
     
-    namespace guetzli {
-    }
     
-    namespace guetzli {
-    }
-    
-    #ifndef GUETZLI_IDCT_H_
-#define GUETZLI_IDCT_H_
-    
-    
-    {}  // namespace guetzli
-
-    
-    #include 'guetzli/jpeg_data_encoder.h'
-    
-    // Parses the jpeg stream contained in data[*pos ... len) and fills in *jpg with
-// the parsed information.
-// If mode is JPEG_READ_HEADER, it fills in only the image dimensions in *jpg.
-// Returns false if the data is not valid jpeg, or if it contains an unsupported
-// jpeg feature.
-bool ReadJpeg(const uint8_t* data, const size_t len, JpegReadMode mode,
-              JPEGData* jpg);
-// string variant
-bool ReadJpeg(const std::string& data, JpegReadMode mode,
-              JPEGData* jpg);
-    
-    #include <stdint.h>
-#include <string.h>
-#include <vector>
-    
-      bool any_generator = false;
-  bool print_make_rules = false;
-  bool raw_binary = false;
-  bool schema_binary = false;
-  bool grpc_enabled = false;
-  std::vector<std::string> filenames;
-  std::list<std::string> include_directories_storage;
-  std::vector<const char *> include_directories;
-  std::vector<const char *> conform_include_directories;
-  std::vector<bool> generator_enabled(params_.num_generators, false);
-  size_t binary_files_from = std::numeric_limits<size_t>::max();
-  std::string conform_to_schema;
-    
-    #include <grpc++/grpc++.h>
-    
-    int main(int argc, const char *argv[]) {
-  RunServer();
-  return 0;
+    {  // ****************** Pass 6 *******************
+  // Do whole document or whole block rejection pass
+  if (!tessedit_test_adaption) {
+    set_global_loc_code(LOC_DOC_BLK_REJ);
+    quality_based_rejection(page_res_it, good_quality_doc);
+  }
 }
-
     
-      server_thread.join();
+    TEST(LogTest, UnexpectedLastType) {
+  Write('foo');
+  SetByte(6, kLastType);
+  FixChecksum(0, 3);
+  ASSERT_EQ('EOF', Read());
+  ASSERT_EQ(3, DroppedBytes());
+  ASSERT_EQ('OK', MatchError('missing start'));
+}
     
-    struct IterationVisitor {
-  // These mark the scope of a table or struct.
-  virtual void StartSequence() {}
-  virtual void EndSequence() {}
-  // Called for each field regardless of wether it is present or not.
-  // If not present, val == nullptr. set_idx is the index of all set fields.
-  virtual void Field(size_t /*field_idx*/, size_t /*set_idx*/,
-                     ElementaryType /*type*/, bool /*is_vector*/,
-                     const TypeTable * /*type_table*/, const char * /*name*/,
-                     const uint8_t * /*val*/) {}
-  // Called for a value that is actually present, after a field, or as part
-  // of a vector.
-  virtual void UType(uint8_t, const char *) {}
-  virtual void Bool(bool) {}
-  virtual void Char(int8_t, const char *) {}
-  virtual void UChar(uint8_t, const char *) {}
-  virtual void Short(int16_t, const char *) {}
-  virtual void UShort(uint16_t, const char *) {}
-  virtual void Int(int32_t, const char *) {}
-  virtual void UInt(uint32_t, const char *) {}
-  virtual void Long(int64_t) {}
-  virtual void ULong(uint64_t) {}
-  virtual void Float(float) {}
-  virtual void Double(double) {}
-  virtual void String(const String *) {}
-  virtual void Unknown(const uint8_t *) {}  // From a future version.
-  // These mark the scope of a vector.
-  virtual void StartVector() {}
-  virtual void EndVector() {}
-  virtual void Element(size_t /*i*/, ElementaryType /*type*/,
-                       const TypeTable * /*type_table*/,
-                       const uint8_t * /*val*/) {}
-  virtual ~IterationVisitor() {}
+      // Open database.  Disable compression since it affects the creation
+  // of layers and the code below is trying to test against a very
+  // specific scenario.
+  leveldb::DB* db;
+  leveldb::Options db_options;
+  db_options.create_if_missing = true;
+  db_options.compression = leveldb::kNoCompression;
+  ASSERT_OK(leveldb::DB::Open(db_options, dbpath, &db));
+    
+    #include 'table/filter_block.h'
+    
+    TEST(CRC, Extend) {
+  ASSERT_EQ(Value('hello world', 11),
+            Extend(Value('hello ', 6), 'world', 5));
+}
+    
+    
+    {  double Median() const;
+  double Percentile(double p) const;
+  double Average() const;
+  double StandardDeviation() const;
 };
     
-    // Initialize an existing object with other data, to avoid an allocation.
-static void InitializeExisting(const StructDef &struct_def,
-                               std::string *code_ptr) {
-  std::string &code = *code_ptr;
+    class Writer {
+ public:
+  // Create a writer that will append data to '*dest'.
+  // '*dest' must be initially empty.
+  // '*dest' must remain live while this Writer is in use.
+  explicit Writer(WritableFile* dest);
     }
+    
+    #endif // __cocos2dx_cocosdenshion_h__
+
+    
+    
+    
+    
+    
+        if (argc == 2)
+    {
+        cocos2d::Vec2 arg0;
+        cocos2d::Vec2 arg1;
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, 'cc.PhysicsBody:createEdgeSegment');
+        ok &= luaval_to_vec2(tolua_S, 3, &arg1, 'cc.PhysicsBody:createEdgeSegment');
+        if(!ok)
+        {
+            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsBody_createEdgeSegment'', nullptr);
+            return 0;
+        }
+        cocos2d::PhysicsBody* ret = cocos2d::PhysicsBody::createEdgeSegment(arg0, arg1);
+        object_to_luaval<cocos2d::PhysicsBody>(tolua_S, 'cc.PhysicsBody',(cocos2d::PhysicsBody*)ret);
+        return 1;
+    }
+    if (argc == 3)
+    {
+        cocos2d::Vec2 arg0;
+        cocos2d::Vec2 arg1;
+        cocos2d::PhysicsMaterial arg2;
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, 'cc.PhysicsBody:createEdgeSegment');
+        ok &= luaval_to_vec2(tolua_S, 3, &arg1, 'cc.PhysicsBody:createEdgeSegment');
+        ok &= luaval_to_physics_material(tolua_S, 4, &arg2, 'cc.PhysicsBody:createEdgeSegment');
+        if(!ok)
+        {
+            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsBody_createEdgeSegment'', nullptr);
+            return 0;
+        }
+        cocos2d::PhysicsBody* ret = cocos2d::PhysicsBody::createEdgeSegment(arg0, arg1, arg2);
+        object_to_luaval<cocos2d::PhysicsBody>(tolua_S, 'cc.PhysicsBody',(cocos2d::PhysicsBody*)ret);
+        return 1;
+    }
+    if (argc == 4)
+    {
+        cocos2d::Vec2 arg0;
+        cocos2d::Vec2 arg1;
+        cocos2d::PhysicsMaterial arg2;
+        double arg3;
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, 'cc.PhysicsBody:createEdgeSegment');
+        ok &= luaval_to_vec2(tolua_S, 3, &arg1, 'cc.PhysicsBody:createEdgeSegment');
+        ok &= luaval_to_physics_material(tolua_S, 4, &arg2, 'cc.PhysicsBody:createEdgeSegment');
+        ok &= luaval_to_number(tolua_S, 5,&arg3, 'cc.PhysicsBody:createEdgeSegment');
+        if(!ok)
+        {
+            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsBody_createEdgeSegment'', nullptr);
+            return 0;
+        }
+        cocos2d::PhysicsBody* ret = cocos2d::PhysicsBody::createEdgeSegment(arg0, arg1, arg2, arg3);
+        object_to_luaval<cocos2d::PhysicsBody>(tolua_S, 'cc.PhysicsBody',(cocos2d::PhysicsBody*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d\n ', 'cc.PhysicsBody:createEdgeSegment',argc, 2);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,'#ferror in function 'lua_cocos2dx_physics_PhysicsBody_createEdgeSegment'.',&tolua_err);
+#endif
+    return 0;
+}
+int lua_cocos2dx_physics_PhysicsBody_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+    
+    #ifdef __cplusplus
+extern 'C' {
+#endif
+#include 'tolua++.h'
+#ifdef __cplusplus
+}
+#endif
+    
+    // This class implements debug drawing callbacks that are invoked
+// inside b2World::Step.
+class GLESDebugDraw : public b2Draw
+{
+    float32 mRatio;
+    cocos2d::GLProgram* mShaderProgram;
+    GLint        mColorLocation;
+    }
+    
+    struct TestEntry
+{
+	const char *name;
+	TestCreateFcn *createFcn;
+};
+    
+    
+    {
+    {			body->CreateFixture(&fd);
+		}
+	}
+    
+    // TODO(t10737622): Improve on-device symbolification
+void getStackTraceSymbols(vector<StackTraceElement>& symbols,
+                          const vector<InstructionPointer>& trace) {
+  symbols.clear();
+  symbols.reserve(trace.size());
+    }
+    
+    #include <nbind/api.h>
+#include <nbind/BindDefiner.h>
+#include <yoga/Yoga.h>
+    
+    struct Layout
+{
+    double left;
+    double right;
+    }
+    
+    namespace facebook {
+    }
+    
+    namespace facebook {
+#define ENABLE_FBASSERT 1
+    }
+    
+    
+    {
+    {}}
