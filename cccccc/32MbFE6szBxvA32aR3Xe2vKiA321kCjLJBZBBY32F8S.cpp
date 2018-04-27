@@ -1,239 +1,430 @@
 
         
-        class NativeWindow;
+        class Clipboard : public Base {
+ public:
+  Clipboard(int id,
+            const base::WeakPtr<DispatcherHost>& dispatcher_host,
+            const base::DictionaryValue& option);
+  ~Clipboard() override;
+    }
     
-      // views::View:
-  const char* GetClassName() const override;
     
-    #include 'atom/browser/unresponsive_suppressor.h'
-    
-    #include 'ui/gfx/geometry/rect.h'
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(PreferencesManager);
+    {protected:
+  BaseEvent(){}
+  virtual ~BaseEvent(){}
 };
     
-     private:
-  // IPC message handler.
-  int32_t OnHostMsgGetDeviceID(ppapi::host::HostMessageContext* context);
-  int32_t OnHostMsgGetHmonitor(ppapi::host::HostMessageContext* context);
-  int32_t OnHostMsgMonitorIsExternal(ppapi::host::HostMessageContext* context);
+    #include 'base/values.h'
+#include 'components/zoom/zoom_controller.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/common/page_zoom.h'
+#include 'ui/views/controls/menu/menu_runner.h'
     
-    void TtsPlatformImpl::WillSpeakUtteranceWithVoice(const Utterance* utterance,
-                                                  const VoiceData& voice_data) {
-}
-    
-    #include <memory>
-    
-    const Options* SourceGeneratorBase::options() {
-  return this->options_;
-}
-    
-    namespace protobuf {
-namespace compiler {
-namespace java {
-    }
-    }
-    }
-    
-    
-    { private:
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(JavaGenerator);
-};
-    
-    void THDTensor_(_resize5d)(THDTensor *tensor, int64_t size0, int64_t size1, int64_t size2, int64_t size3, int64_t size4) {
-  int64_t sizes[] = {size0, size1, size2, size3, size4};
-  THDTensor_(_resize)(tensor, 2, sizes, nullptr);
-}
-    
-    namespace at {
-    }
-    
-    #ifdef _THP_CORE
-#define THCPStorageType TH_CONCAT_3(THCP,Real,StorageType)
-#define THCPStorageBaseStr TH_CONCAT_STRING_3(Cuda,Real,StorageBase)
-#endif
-    
-    #include <stdint.h>
-    
-    // Creates a JPEG from the rgb pixel data. Returns true on success. The given
-// quantization table must have 3 * kDCTBlockSize values.
-bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
-                     const int* quant, JPEGData* jpg);
-    
-    void UpdateACHistogramForDCTBlock(const coeff_t* coeffs,
-                                  JpegHistogram* ac_histogram);
-    
-    #endif  // GUETZLI_JPEG_ERROR_H_
-
-    
-      // Fill in root table.
-  key = 0;
-  idx = 0;
-  for (len = 1; len <= kJpegHuffmanRootTableBits; ++len) {
-    for (; count[len] > 0; --count[len]) {
-      code.bits = len;
-      code.value = symbols[idx++];
-      reps = 1 << (kJpegHuffmanRootTableBits - len);
-      while (reps--) {
-        table[key++] = code;
-      }
+    #if defined(OS_WIN) || defined(OS_LINUX)
+bool MenuItem::AcceleratorPressed(const ui::Accelerator& accelerator) {
+#if defined(OS_WIN)
+  if (meta_down_flag_) {
+    if ((::GetKeyState(VK_APPS) & 0x8000) != 0x8000) {
+      return true;
     }
   }
+#endif
+  OnClick();
+  return true;
+}
     
-    // callbacks (installed by default if you enable 'install_callbacks' during initialization)
-// You can also handle inputs yourself and use those as a reference.
-IMGUI_API int32       ImGui_Marmalade_PointerButtonEventCallback(void* SystemData, void* pUserData);
-IMGUI_API int32       ImGui_Marmalade_KeyCallback(void* SystemData, void* userData);
-IMGUI_API int32       ImGui_Marmalade_CharCallback(void* SystemData, void* userData);
-
+    void NwAppClearCacheFunction::OnBrowsingDataRemoverDone() {
+  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
+  run_loop_.Quit();
+}
     
-    // GLFW callbacks (registered by default to GLFW if you enable 'install_callbacks' during initialization)
-// Provided here if you want to chain callbacks yourself. You may also handle inputs yourself and use those as a reference.
-IMGUI_API void        ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-IMGUI_API void        ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-IMGUI_API void        ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-IMGUI_API void        ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
-
+    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringFWithFixupFunction() {}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwMenuGetNSStringFWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
+};
+    
+    /* Pair (label, confidence) representing a prediction. */
+typedef std::pair<string, float> Prediction;
+    
+      virtual inline const char* type() const { return 'ArgMax'; }
+  virtual inline int ExactNumBottomBlobs() const { return 1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
+    
+    #include 'caffe/layers/lrn_layer.hpp'
+#include 'caffe/layers/power_layer.hpp'
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the computed outputs @f$
+   *        y = \left\{
+   *        \begin{array}{lr}
+   *            x                  & \mathrm{if} \; x > 0 \\
+   *            \alpha (\exp(x)-1) & \mathrm{if} \; x \le 0
+   *        \end{array} \right.
+   *      @f$.  
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs to be filtered @f$ x_1 @f$
+   *   -# ...
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs to be filtered @f$ x_K @f$
+   *   -# @f$ (N \times 1 \times 1 \times 1) @f$
+   *      the selector blob
+   * @param top output Blob vector (length 1+)
+   *   -# @f$ (S \times C \times H \times W) @f$ ()
+   *        the filtered output @f$ x_1 @f$
+   *        where S is the number of items
+   *        that haven't been filtered
+   *      @f$ (S \times C \times H \times W) @f$
+   *        the filtered output @f$ x_K @f$
+   *        where S is the number of items
+   *        that haven't been filtered
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+    const vector<Blob<Dtype>*>& top);
+    
+      ClientConfig client_config;
+  client_config.set_client_type(SYNC_CLIENT);
+  client_config.set_outstanding_rpcs_per_channel(1);
+  client_config.set_client_channels(1);
+  client_config.set_rpc_type(UNARY);
+  client_config.mutable_load_params()->mutable_closed_loop();
     
     
-    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    {  GetReporter()->ReportQPS(*result);
+  GetReporter()->ReportLatency(*result);
+}
+    
+    
+    {  void ReadLong(long* l) {
+    size_t start = current_;
+    while (current_ != db_.size() && db_[current_] != ',' && db_[current_] != '}') {
+      current_++;
+    }
+    // It will throw an exception if fails.
+    *l = std::stol(db_.substr(start, current_ - start));
+  }
+    
+    // Data pertaining to configuration of the generator with respect to anything
+// that may be used internally at Google.
+struct GeneratorConfiguration {
+  GeneratorConfiguration();
+  grpc::string grpc_package_root;
+  // TODO(https://github.com/grpc/grpc/issues/8622): Drop this.
+  grpc::string beta_package_root;
+  // TODO(https://github.com/google/protobuf/issues/888): Drop this.
+  grpc::string import_prefix;
+};
+    
+    
+    {
+    {}  // namespace
+}  // namespace grpc
+    
+    int main(int argc, char** argv) {
+  grpc::testing::InitTest(&argc, &argv, true);
+  signal(SIGINT, sigint_handler);
+    }
+    
+    
+    {            // for sequence training
+            if (!criterionNodes.empty() && criterionNodes[0]->OperationName() == L'SequenceWithSoftmax')
+            {
+                auto node = dynamic_pointer_cast<SequenceWithSoftmaxNode<ElemType>>(criterionNodes[0]);
+                assert(node);
+                m_netLatticePtr = node->getLatticePtr();
+                m_netExtrauttMapPtr = node->getextrauttmap();
+                m_netUidPtr = node->getuidprt();
+                m_netBoundariesPtr = node->getboundaryprt();
+                m_hasLattices = true;
+            }
+            else
+            {
+                m_netLatticePtr = nullptr;
+                m_netExtrauttMapPtr = nullptr;
+                m_netUidPtr = nullptr;
+                m_netBoundariesPtr = nullptr;
+                m_hasLattices = false;
+            }
         }
     
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
+        size_t m_prevChosenMinibatchSize;
+    double m_lastFinishedEpochTrainLoss;
     
-    //---- Pack colors to BGRA8 instead of RGBA8 (if you needed to convert from one to another anyway)
-//#define IMGUI_USE_BGRA_PACKED_COLOR
+            static Status Load(const std::string& p_filePath, /*out*/ std::shared_ptr<Model>* p_model);
     
-                ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our windows open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
+    namespace ONNXIR {
+    // Taken from ONNX
+    REGISTER_OPERATOR_SCHEMA(Sigmoid)
+        .Description('Sigmoid takes one input data (Tensor<T>) and produces one output data '
+            '(Tensor<T>) where the sigmoid function, y = 1 / (1 + exp(-x)), is applied to the '
+            'tensor elementwise.')
+        .Input('X', 'input tensor', 'T')
+        .Output('Y', 'The sigmoid value of the input tensor computed element-wise', 'T')
+        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
+            'Constrain input and output types to float tensors.');
+    }
     
-    static bool ImGui_ImplWin32_UpdateMouseCursor()
+        // Taken from ONNX
+    REGISTER_OPERATOR_SCHEMA(Concat)
+        .Description('Concatenate takes as input a list of tensors, all of the same shape'
+            'expect for the concatenation axis, and returns a single tensor, the concatenation'
+            'of all inputs.')
+        .Input('input', 'A list of input tensors.', 'T')
+        .Output('concat_result', 'Concatenated tensor', 'T')
+        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
+            'Constrain input and output types to float tensors.')
+        .Attr('axis', 'Axis along which to concatenate', AttrType::AttributeProto_AttributeType_INT);
+    
+        // Stores all frames of the chunk consecutively (mutable since this is a cache).
+    mutable msra::dbn::matrix m_frames;
+    
+        Matrix<float> mB = Matrix<float>::RandomGaussian(dim2, dim1, c_deviceIdZero, 1.0f, 4.0f, IncrementCounter());
+    Matrix<float> mC = Matrix<float>::RandomGaussian(dim2, dim2, c_deviceIdZero, 1.0f, 2.0f, IncrementCounter());
+    Matrix<float> mD(mC.DeepClone());
+    
+    void GranularGPUDataTransferer::WaitForCopyGPUToCPU()
 {
-    ImGuiIO& io = ImGui::GetIO();
-    if (io.ConfigFlags & ImGuiConfigFlags_NoMouseCursorChange)
-        return false;
-    }
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    TEST(WriteChainAsyncTransportWrapperTest, TestSimpleBuf) {
-  TestWriteChainAsyncTransportWrapper transport;
-  auto buf = folly::IOBuf::copyBuffer('foobar');
-    }
-    
-    ssize_t AsyncIOOp::result() const {
-  CHECK_EQ(state_, State::COMPLETED);
-  return result_;
+    PrepareDevice(m_deviceId);
+    cudaEventSynchronize(m_fetchCompleteEvent) || 'cudaEventSynchronize failed';
 }
     
-    #include <folly/Exception.h>
+    bool js_cocos2dx_studio_InnerActionFrame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_InnerActionFrame_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_InnerActionFrame(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_InnerActionFrame_getEndFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_InnerActionFrame_getStartFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_InnerActionFrame_getInnerActionType(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_InnerActionFrame_setEndFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_InnerActionFrame_setEnterWithName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_InnerActionFrame_setSingleFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_InnerActionFrame_setStartFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_InnerActionFrame_getSingleFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_InnerActionFrame_setInnerActionType(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_InnerActionFrame_setAnimationName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_InnerActionFrame_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_InnerActionFrame_InnerActionFrame(JSContext *cx, uint32_t argc, jsval *vp);
     
-    using folly::File;
-using folly::StringPiece;
+    #if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,'#ferror in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_pauseBackgroundMusic'.',&tolua_err);
+#endif
     
     
-    {} // namespace folly
+    
+    
+    
+    
+    
+    
+    
+    
+#endif
 
     
-    bool FileWriterFactory::processOption(StringPiece name, StringPiece value) {
-  if (name == 'async') {
-    async_ = to<bool>(value);
-    return true;
-  } else if (name == 'max_buffer_size') {
-    auto size = to<size_t>(value);
-    if (size == 0) {
-      throw std::invalid_argument(to<string>('must be a positive integer'));
+    			b2Body* prevBody = ground;
+			for (int32 i = 0; i < e_count; ++i)
+			{
+				b2BodyDef bd;
+				bd.type = b2_dynamicBody;
+				bd.position.Set(-14.5f + 1.0f * i, 5.0f);
+				b2Body* body = m_world->CreateBody(&bd);
+				body->CreateFixture(&fd);
     }
-    maxBufferSize_ = size;
+    
+      // Check that opening non-existent file fails.
+  unique_ptr<SequentialFile> seq_file;
+  unique_ptr<RandomAccessFile> rand_file;
+  ASSERT_TRUE(!env_->NewSequentialFile(test_dir_ + '/non_existent', &seq_file,
+                                       soptions_)
+                   .ok());
+  ASSERT_TRUE(!seq_file);
+  ASSERT_TRUE(!env_->NewRandomAccessFile(test_dir_ + '/non_existent',
+                                         &rand_file, soptions_)
+                   .ok());
+  ASSERT_TRUE(!rand_file);
+    
+    TEST_F(MockEnvTest, FakeSleeping) {
+  int64_t now = 0;
+  auto s = env_->GetCurrentTime(&now);
+  ASSERT_OK(s);
+  env_->FakeSleepForMicroseconds(3 * 1000 * 1000);
+  int64_t after_sleep = 0;
+  s = env_->GetCurrentTime(&after_sleep);
+  ASSERT_OK(s);
+  auto delta = after_sleep - now;
+  // this will be true unless test runs for 2 seconds
+  ASSERT_TRUE(delta == 3 || delta == 4);
+}
+    
+    /* GLOBAL CONSTANT */
+const char *default_db_name     = 'default_envlibrados_db';
+const char *default_pool_name   = 'default_envlibrados_pool';
+const char *default_config_path = 'CEPH_CONFIG_PATH';           // the env variable name of ceph configure file
+// maximum dir/file that can store in the fs
+const int MAX_ITEMS_IN_FS = 1 << 30;
+// root dir tag
+const std::string ROOT_DIR_KEY = '/';
+const std::string DIR_ID_VALUE = '<DIR>';
+    
+      // if this memtable contains data from a committed
+  // two phase transaction we must take note of the
+  // log which contains that data so we can know
+  // when to relese that log
+  void RefLogContainingPrepSection(uint64_t log);
+  uint64_t GetMinLogContainingPrepSection();
+    
+      // Same as ::Insert
+  // Returns false if MemTableRepFactory::CanHandleDuplicatedKey() is true and
+  // the <key, seq> already exists.
+  virtual bool InsertKey(KeyHandle handle) {
+    Insert(handle);
     return true;
-  } else {
-    return false;
   }
+    
+    // Use TEST_SYNC_POINT to specify sync points inside code base.
+// Sync points can have happens-after depedency on other sync points,
+// configured at runtime via SyncPoint::LoadDependency. This could be
+// utilized to re-produce race conditions between threads.
+// See TransactionLogIteratorRace in db_test.cc for an example use case.
+// TEST_SYNC_POINT is no op in release build.
+#define TEST_SYNC_POINT(x) rocksdb::SyncPoint::GetInstance()->Process(x)
+#define TEST_IDX_SYNC_POINT(x, index) \
+  rocksdb::SyncPoint::GetInstance()->Process(x + std::to_string(index))
+#define TEST_SYNC_POINT_CALLBACK(x, y) \
+  rocksdb::SyncPoint::GetInstance()->Process(x, y)
+#endif  // NDEBUG
+
+    
+    
+void SyncPoint::Data::LoadDependency(const std::vector<SyncPointPair>& dependencies) {
+  std::lock_guard<std::mutex> lock(mutex_);
+  successors_.clear();
+  predecessors_.clear();
+  cleared_points_.clear();
+  for (const auto& dependency : dependencies) {
+    successors_[dependency.predecessor].push_back(dependency.successor);
+    predecessors_[dependency.successor].push_back(dependency.predecessor);
+  }
+  cv_.notify_all();
 }
     
-        jclass      (*GetObjectClass)(JNIEnv*, jobject);
-    jboolean    (*IsInstanceOf)(JNIEnv*, jobject, jclass);
-    jmethodID   (*GetMethodID)(JNIEnv*, jclass, const char*, const char*);
     
-    // Normally, pass through types unmolested.
-template <typename T, typename Enabled = void>
-struct Convert {
-  typedef T jniType;
-  static jniType fromJni(jniType t) {
-    return t;
-  }
-  static jniType toJniRet(jniType t) {
-    return t;
-  }
-  static jniType toCall(jniType t) {
-    return t;
-  }
+    {    void toJS(nbind::cbOutput expose) const
+    {
+        expose(width, height);
+    }
 };
-    
-    
-/**
- * Captures and symbolicates a stack trace
- *
- * Beware of a bug on some platforms, which makes the trace loop until the
- * buffer is full when it reaches a noexpr function. It seems to be fixed in
- * newer versions of gcc. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56846
- *
- * @param skip The number of frames before capturing the trace
- *
- * @param limit The maximum number of frames captured
- */
-FBEXPORT inline std::vector<StackTraceElement> getStackTraceSymbols(
-    size_t skip = 0,
-    size_t limit = kDefaultLimit) {
-  return getStackTraceSymbols(getStackTrace(skip + 1, limit));
-}
-    
-    #include <dlfcn.h>
-#include <unwind.h>
-    
-    Value Node::getPadding(int edge) const
-{
-    return Value::fromYGValue(YGNodeStyleGetPadding(m_node, static_cast<YGEdge>(edge)));
-}
+
     
     #pragma once
+#include <cstring>
+#include <string>
+#include <sstream>
     
-    NBIND_GLOBAL()
-{
-    function(getInstanceCount);
+    // As above, but tolerant of nullptr.
+template <typename T>
+static inline RefPtr<T> assumeAlreadyReffedOrNull(T* ptr) {
+  return ptr ? RefPtr<T>::assumeAlreadyReffed(ptr) : nullptr;
 }
     
+    namespace aria2 {
+    }
     
-#define DEFINE_BOXED_PRIMITIVE(LITTLE, BIG)                          \
-  struct J ## BIG : detail::JPrimitive<J ## BIG, j ## LITTLE> {      \
-    static auto constexpr kJavaDescriptor = 'Ljava/lang/' #BIG ';';  \
-    static auto constexpr kValueMethod = #LITTLE 'Value';            \
-    j ## LITTLE LITTLE ## Value() const {                            \
-      return value();                                                \
-    }                                                                \
-  };                                                                 \
-  inline local_ref<jobject> autobox(j ## LITTLE val) {               \
-    return J ## BIG::valueOf(val);                                   \
+    void AbstractBtMessage::setBtMessageValidator(
+    std::unique_ptr<BtMessageValidator> validator)
+{
+  validator_ = std::move(validator);
+}
+    
+    #ifdef __MINGW32__
+  HANDLE fd_;
+  // The handle for memory mapped file. mmap equivalent in Windows.
+  HANDLE mapView_;
+#else  // !__MINGW32__
+  int fd_;
+#endif // !__MINGW32__
+    
+    AbstractHttpServerResponseCommand::~AbstractHttpServerResponseCommand()
+{
+  if (readCheck_) {
+    e_->deleteSocketForReadCheck(socket_, this);
   }
+  if (writeCheck_) {
+    e_->deleteSocketForWriteCheck(socket_, this);
+  }
+}
     
-    namespace facebook {
-namespace jni {
+    const char* AbstractOptionHandler::getName() const { return pref_->k; }
+    
+    AbstractProxyRequestCommand::AbstractProxyRequestCommand(
+    cuid_t cuid, const std::shared_ptr<Request>& req,
+    const std::shared_ptr<FileEntry>& fileEntry, RequestGroup* requestGroup,
+    DownloadEngine* e, const std::shared_ptr<Request>& proxyRequest,
+    const std::shared_ptr<SocketCore>& s)
+    : AbstractCommand(cuid, req, fileEntry, requestGroup, e, s),
+      proxyRequest_(proxyRequest),
+      httpConnection_(std::make_shared<HttpConnection>(
+          cuid, s, std::make_shared<SocketRecvBuffer>(s)))
+{
+  setTimeout(std::chrono::seconds(getOption()->getAsInt(PREF_CONNECT_TIMEOUT)));
+  disableReadCheckSocket();
+  setWriteCheckSocket(getSocket());
+}
+    
+    #endif // D_ADAPTIVE_FILE_ALLOCATION_ITERATOR_H
+
+    
+    namespace {
+class FindStoppedAllowedTier {
+public:
+  bool operator()(const std::shared_ptr<AnnounceTier>& tier) const
+  {
+    switch (tier->event) {
+    case AnnounceTier::DOWNLOADING:
+    case AnnounceTier::STOPPED:
+    case AnnounceTier::COMPLETED:
+    case AnnounceTier::SEEDING:
+      return true;
+    default:
+      return false;
     }
-    }
+  }
+};
+} // namespace
+    
+      /**
+   * The internal announce URL pointer points to next URL.
+   * If the current URL is the last element of its group, then the first
+   * element of the next group is pointed.
+   */
+  void announceFailure();
+    
+      bool tryAsPKCS12(const std::string& certfile);
