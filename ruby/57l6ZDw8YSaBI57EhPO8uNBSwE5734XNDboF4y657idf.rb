@@ -1,40 +1,67 @@
 
         
-          def converted_object_type?
-    CONVERTED_TYPES.include?(@object['type'])
+                  # Bubbled up from the adapter require. Prefix the exception message
+          # with some guidance about how to address it and reraise.
+          else
+            raise e.class, 'Error loading the '#{adapter}' Action Cable pubsub adapter. Missing a gem it depends on? #{e.message}', e.backtrace
+          end
+        end
+    
+              def remove_channel(channel)
+            @subscription_lock.synchronize do
+              when_connected { send_command('unsubscribe', channel) }
+            end
+          end
+    
+                define_method('#{name}=') do |attribute|
+              attributes[name.to_sym] = attribute
+            end
+          end
+        end
+    
+        assert_response :success
   end
     
-      let(:payload) do
-    {
-      '@context': 'https://www.w3.org/ns/activitystreams',
-      id: 'foo',
-      type: 'Create',
-      actor: ActivityPub::TagManager.instance.uri_for(actor),
-      object: {
-        id: 'bar',
-        type: 'Note',
-        content: 'Lorem ipsum',
-      },
-    }
-  end
+    ActionMailer::LogSubscriber.attach_to :action_mailer
+
     
-    describe Settings::NotificationsController do
-  render_views
+    class HelperMailer < ActionMailer::Base
+  def use_mail_helper
+    @text = 'But soft! What light through yonder window breaks? It is the east, ' \
+            'and Juliet is the sun. Arise, fair sun, and kill the envious moon, ' \
+            'which is sick and pale with grief that thou, her maid, art far more ' \
+            'fair than she. Be not her maid, for she is envious! Her vestal ' \
+            'livery is but sick and green, and none but fools do wear it. Cast ' \
+            'it off!'
     
-    desc 'LESS to stdin -> Sass to stdout'
-task :less_to_scss, :branch do |t, args|
-  require './tasks/converter'
-  puts Converter.new(branch: args[:branch]).convert_less(STDIN.read)
-end
+    html_readme = '<html>#{Kramdown::Document.new(open('README.md').read).to_html}</html>'
+readme_doctree = REXML::Document.new(html_readme)
+links = REXML::XPath.match(readme_doctree, '//a')
     
-          File.open('bower.json', 'w') do |f|
-        f.puts JSON.pretty_generate(spec)
+            {
+          :always_update     => false,
+          :template_location => root + '/public/stylesheets/sass',
+          :css_location      => root + '/public/stylesheets',
+          :cache_location    => root + '/tmp/sass-cache',
+          :always_check      => env != 'production',
+          :quiet             => env != 'production',
+          :full_exception    => env != 'production'
+        }.freeze
       end
     end
   end
-end
-
     
-      def max_minus_one
-    [1, (maximum - 1)].max.floor
-  end
+        if as == :json
+      if api_error?(data)
+        data = generate_error_hash(data)
+      else
+        selected_fields = extract_fields(filter.to_s.strip)
+        data.select! { |k,v| selected_fields.include?(k) } unless selected_fields.empty?
+        unless options.include?(:exclude_default_metadata)
+          data = data.to_hash
+          if data.values.size == 0 && selected_fields.size > 0
+            raise LogStash::Api::NotFoundError
+          end
+          data = default_metadata.merge(data)
+        end
+      end
