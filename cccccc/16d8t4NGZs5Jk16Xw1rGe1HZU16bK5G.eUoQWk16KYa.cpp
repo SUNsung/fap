@@ -1,217 +1,265 @@
 
         
-        
-    {  Blob<Dtype> diff_;  // cached for backward pass
-  Blob<Dtype> dist_sq_;  // cached for backward pass
-  Blob<Dtype> diff_sq_;  // tmp storage for gpu forward pass
-  Blob<Dtype> summer_vec_;  // tmp storage for gpu forward pass
-};
-    
-    #ifdef USE_CUDNN
-template <typename Dtype>
-class CuDNNLCNLayer : public LRNLayer<Dtype> {
- public:
-  explicit CuDNNLCNLayer(const LayerParameter& param)
-      : LRNLayer<Dtype>(param), handles_setup_(false), tempDataSize(0),
-        tempData1(NULL), tempData2(NULL) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNLCNLayer();
-    }
-    
-    #include <vector>
-    
-    #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of PoolingLayer.
- *        Fallback to PoolingLayer for CPU mode.
-*/
-template <typename Dtype>
-class CuDNNPoolingLayer : public PoolingLayer<Dtype> {
- public:
-  explicit CuDNNPoolingLayer(const LayerParameter& param)
-      : PoolingLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNPoolingLayer();
-  // Currently, cuDNN does not support the extra top blob.
-  virtual inline int MinTopBlobs() const { return -1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    }
-    
-    
-    {}  // namespace caffe
-    
-    #endif  // CAFFE_ELTWISE_LAYER_HPP_
+        #endif  // TENSORFLOW_DEBUGGER_STATE_IMPL_H_
 
     
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    { private:
-  /*! \brief the underlying stream */
-  dmlc::Stream *stream_;
-  /*! \brief buffer to hold data */
-  std::string buffer_;
-  /*! \brief length of valid data in buffer */
-  size_t read_len_;
-  /*! \brief pointer in the buffer */
-  size_t read_ptr_;
-};
+      static RecordWriterOptions CreateRecordWriterOptions(
+      const string& compression_type);
     
-    
-    { private:
-  RowBlock<IndexType> out_;
-  std::unique_ptr<Parser<IndexType> > parser_;
-  uint32_t num_col_;
-  std::vector<size_t> offset_;
-  std::vector<IndexType> dense_index_;
-  std::vector<xgboost::bst_float> dense_value_;
-};
-    
-    struct EvalMAE : public EvalEWiseBase<EvalMAE> {
-  const char *Name() const override {
-    return 'mae';
+    /** scalar_sigmoid_fast_derivative_op
+  * \ingroup CXX11_NeuralNetworks_Module
+  * \brief Template functor to compute the fast derivative of a sigmoid
+  *
+  * Input should be the backpropagated gradient.
+  *
+  * \sa class CwiseUnaryOp, Cwise::sigmoid_fast_derivative()
+  */
+template <typename T>
+struct scalar_sigmoid_fast_derivative_op {
+  EIGEN_EMPTY_STRUCT_CTOR(scalar_sigmoid_fast_derivative_op)
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE T operator()(const T& y) const {
+    const T one = T(1);
+    return (one - y) * y;
   }
-  inline bst_float EvalRow(bst_float label, bst_float pred) const {
-    return std::abs(label - pred);
-  }
-};
-    
-      flatbuffers::Parser conform_parser;
-  if (!conform_to_schema.empty()) {
-    std::string contents;
-    if (!flatbuffers::LoadFile(conform_to_schema.c_str(), true, &contents))
-      Error('unable to load schema: ' + conform_to_schema);
-    ParseFile(conform_parser, conform_to_schema, contents,
-              conform_include_directories);
-  }
-    
-      FixedTypedVector AsFixedTypedVector() const {
-    if (IsFixedTypedVector(type_)) {
-      uint8_t len = 0;
-      auto vtype = ToFixedTypedVectorElementType(type_, &len);
-      return FixedTypedVector(Indirect(), byte_width_, vtype, len);
-    } else {
-      return FixedTypedVector::EmptyFixedTypedVector();
     }
+    
+    bool HloReachabilityMap::SetReachabilityToUnion(
+    tensorflow::gtl::ArraySlice<const HloInstruction*> inputs,
+    const HloInstruction* instruction) {
+  BitVector& bit_vector = GetBitVector(instruction);
+  tmp_bit_vector_ = bit_vector;
+    }
+    
+    template <typename T>
+void DynamicStitchGPUImpl(const Eigen::GpuDevice& gpu_device,
+                          const int32 slice_size, const int32 first_dim_size,
+                          const CudaDeviceArrayStruct<int>& input_indices,
+                          const CudaDeviceArrayStruct<const T*>& input_ptrs,
+                          T* output) {
+  const int32 output_size = first_dim_size * slice_size;
+  auto config = GetCudaLaunchConfig(output_size, gpu_device);
+    }
+    
+      void set_start(int d, int64 x) {
+    DCHECK_GE(d, 0);
+    DCHECK_LT(d, dims());
+    DCHECK_GE(x, 0);
+    starts_[d] = x;
   }
     
-    // Return the source of the generated service file.
-grpc::string GenerateServiceSource(grpc_generator::File *file,
-                                   const grpc_generator::Service *service,
-                                   grpc_go_generator::Parameters *parameters);
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    
-    {    auto stream = stub_->SayManyHellos(&context, request_msg);
-    while (stream->Read(&response_msg)) {
-      const HelloReply *response = response_msg.GetRoot();
-      callback(response->message()->str());
-    }
-    auto status = stream->Finish();
-    if (!status.ok()) {
-      std::cerr << status.error_code() << ': ' << status.error_message()
-                << std::endl;
-      callback('RPC failed');
-    }
+    Status MulGrad(const AttrSlice& attrs, FunctionDef* g) {
+  DataType T;
+  TF_RETURN_IF_ERROR(GetNodeAttr(attrs, 'T', &T));
+  if (T == DT_COMPLEX64 || T == DT_COMPLEX128) {
+    return GradForBinaryCwise(
+        g, {
+               {{'cy'}, 'Conj', {'y'}, {}, {'dz'}},
+               {{'gx'}, 'Mul', {'dz', 'cy'}},  // dz * Conj(y)
+               {{'cx'}, 'Conj', {'x'}, {}, {'dz'}},
+               {{'gy'}, 'Mul', {'cx', 'dz'}},  // Conj(x) * dz
+           });
+  } else {
+    // clang-format off
+    return GradForBinaryCwise(g, {
+        {{'gx'}, 'Mul', {'dz', 'y'}},  // dz * y
+        {{'gy'}, 'Mul', {'x', 'dz'}},  // x * dz
+    });
+    // clang-format on
   }
+}
+REGISTER_OP_GRADIENT('Mul', MulGrad);
     
-    // Get the inline-address of a vector element. Useful for Structs (pass Struct
-// as template arg), or being able to address a range of scalars in-line.
-// Get elem_size from GetTypeSizeInline().
-// Note: little-endian data on all platforms, use EndianScalar() instead of
-// raw pointer access with scalars).
-template<typename T>
-T *GetAnyVectorElemAddressOf(const VectorOfAny *vec, size_t i,
-                             size_t elem_size) {
-  // C-cast to allow const conversion.
-  return (T *)(vec->Data() + elem_size * i);
+    class GrpcDebugTest : public ::testing::Test {
+ protected:
+  struct ServerData {
+    int port;
+    string url;
+    std::unique_ptr<test::TestEventListenerImpl> server;
+    std::unique_ptr<thread::ThreadPool> thread_pool;
+  };
+    }
+    
+     protected:
+  // views::View:
+  gfx::Size GetMinimumSize() const override;
+  gfx::Size GetMaximumSize() const override;
+  const char* GetClassName() const override;
+    
+    #ifndef ATOM_BROWSER_UI_VIEWS_WIN_FRAME_VIEW_H_
+#define ATOM_BROWSER_UI_VIEWS_WIN_FRAME_VIEW_H_
+    
+    struct DraggableRegion {
+  bool draggable;
+  gfx::Rect bounds;
+    }
+    
+    namespace atom {
+    }
+    
+    namespace extensions {
+    }
+    
+      // Return the parent NativeView of the observed WebContents.
+  gfx::NativeView GetParentView();
+    
+    namespace chrome {
+    }
+    
+    
+    {}  // namespace chrome
+    
+                // emulate all the nodes, find nodes that have state
+            m_netStatefulNodes = EnumerateStatefulNode(*net, criterionNodes, evaluationNodes);
+            for (auto x : m_netStatefulNodes)
+            {
+                wstring name = x.first;
+                m_netStates[name] = vector<shared_ptr<INodeState>>();
+            }
+    
+                std::string result;
+    
+            std::string OpUtils::ToString(const TypeProto& p_type, const std::string& left, const std::string& right)
+        {
+            switch (p_type.value_case())
+            {
+            case TypeProto::ValueCase::kTensorType:
+            {
+                if (p_type.tensor_type().has_shape()
+                    && p_type.tensor_type().shape().dim_size() == 0)
+                {
+                    // Scalar case.
+                    return left + ToDataTypeString(p_type.tensor_type().elem_type()) + right;
+                }
+                else
+                {
+                    return left + 'tensor(' + ToDataTypeString(p_type.tensor_type().elem_type()) + ')' + right;
+                }
+            }
+            case TypeProto::ValueCase::kSequenceType:
+                return ToString(p_type.sequence_type().elem_type(), left + 'seq(', ')' + right);
+            case TypeProto::ValueCase::kMapType:
+            {
+                std::string map_str = 'map(' + ToDataTypeString(p_type.map_type().key_type()) + ',';
+                return ToString(p_type.map_type().value_type(), left + map_str, ')' + right);
+            }
+            default:
+                assert(false);
+                return '';
+            }
+        }
+    
+                Notations:
+            `X` - input tensor
+            `z` - update gate
+            `r` - reset gate
+            `h` - hidden gate
+            `t` - time step (t-1 means previous time step)
+            `W[zrh]` - W parameter weight matrix for update, reset, and hidden gates
+            `R[zrh]` - R recurrence weight matrix for update, reset, and hidden gates
+            `Wb[zrh]` - W bias vectors for update, reset, and hidden gates
+            `Rb[zrh]` - R bias vectors for update, reset, and hidden gates
+            `WB[zrh]` - W parameter weight matrix for backward update, reset, and hidden gates
+            `RB[zrh]` - R recurrence weight matrix for backward update, reset, and hidden gates
+            `WBb[zrh]` - W bias vectors for backward update, reset, and hidden gates
+            `RBb[zrh]` - R bias vectors for backward update, reset, and hidden gates
+            `tanh(X)` - hyperbolic tangent of X
+            `sigmoid(X)` - 1 / (1 + e^-X)
+            `H` - Hidden state
+            `num_directions` - 2 if direction == bidirectional else 1
+    
+        // Taken from ONNX
+    REGISTER_OPERATOR_SCHEMA(Squeeze)
+        .Description('Remove single-dimensional entries from the shape of a tensor. '
+            'Takes a  parameter `axes` with a list of axes to squeeze.')
+        .Input('data', 'Tensors with at least max(dims) dimensions.', 'T')
+        .Output('squeezed', 'Reshaped tensor with same data as input.', 'T')
+        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
+            'Constrain input and output types to float tensors.')
+        .Attr('axes',
+            'List of positive integers, indicate the dimensions to squeeze.',
+            AttrType::AttributeProto_AttributeType_INTS, int64_t(1));
+    
+        REGISTER_OPERATOR_SCHEMA(CastMap)
+        .SetDomain(c_mlDomain)
+        .Input('X', 'The input values', 'T1')
+        .Output('Y', 'The output values', 'T2')
+        .Description(R'DOC(
+            Casts the input into an output tensor.
+            )DOC')
+        .TypeConstraint('T1', { 'map(int64, string)', 'map(int64, float)' }, ' allowed input types.')
+        .TypeConstraint('T2', { 'tensor(string)','tensor(float)','tensor(int64)' }, ' allowed output types.')
+        .Attr('cast_to', 'what type of tensor to cast the input to, enum 'TO_FLOAT','TO_STRING','TO_INT64'', AttrType::AttributeProto_AttributeType_STRING)
+        .Attr('map_form', 'if casting from a map with int64 keys, should we pad spaces between the keys or pack them, enum 'PACK, 'SPARSE'', AttrType::AttributeProto_AttributeType_STRING)
+        .Attr('max_map', 'if casting from a sparse map, what is the max key in the map', AttrType::AttributeProto_AttributeType_INT);
+    
+        // First frames of all utterances. m_firstFrames[utteranceIndex] == index of the first frame of the utterance.
+    // Size of m_firstFrames should be equal to the number of utterances.
+    std::vector<size_t> m_firstFrames;
+    
+    
+    {
+    {
+    {            f.m_numberOfSamples = (uint32_t) utterance->GetNumberOfFrames();
+            result.push_back(f);
+        }
+    }
 }
     
-      // If schemas used contain include statements, call this function for every
-  // directory the parser should search them for.
-  void AddIncludeDirectory(const char *path) { include_paths_.push_back(path); }
+    void TraceLSTMPathes(const FunctionPtr& src, string &f_activation, string &g_activation, string &h_activation,
+    RNNDirection &direction, Variable &initStateH, Variable &initStateC, Variable &peepholeCi, Variable &peepholeCo, Variable &peepholeCf,
+    double &stabilizer_dh, double &stabilizer_dc, double &stabilizer_c);
     
-    std::string BaseGenerator::GetNameSpace(const Definition &def) const {
-  const Namespace *ns = def.defined_namespace;
-  if (CurrentNameSpace() == ns) return '';
-  std::string qualified_name = qualifying_start_;
-  for (auto it = ns->components.begin(); it != ns->components.end(); ++it) {
-    qualified_name += *it;
-    if ((it + 1) != ns->components.end()) {
-      qualified_name += qualifying_separator_;
-    }
-  }
+    class InterruptableRunnable {
+ public:
+  virtual ~InterruptableRunnable() = default;
     }
     
-    // End the creator function signature.
-static void EndBuilderArgs(std::string *code_ptr) {
-  std::string &code = *code_ptr;
-  code += '):\n';
-}
+      /*
+   * @brief Get the type as a string of an osquery flag.
+   *
+   * @param name the flag name.
+   */
+  static std::string getType(const std::string& name);
     
-    static LoadFileFunction g_load_file_function = LoadFileRaw;
-static FileExistsFunction g_file_exists_function = FileExistsRaw;
+      /**
+   * @brief The privilege/permissions dropper deconstructor will restore
+   * effective permissions.
+   *
+   * There should only be a single drop of privilege/permission active.
+   */
+  virtual ~DropPrivileges();
     
-    int DuplicateFile(int Fd) {
-  return dup(Fd);
-}
     
-      // Parse NumFilesInFirstCorpus.
-  if (!std::getline(IS, Line, '\n')) return false;
-  std::istringstream L2(Line);
-  NumFilesInFirstCorpus = NumFiles + 1;
-  L2 >> NumFilesInFirstCorpus;
-  if (NumFilesInFirstCorpus > NumFiles) return false;
-    
-    size_t MutationDispatcher::Mutate_ChangeBinaryInteger(uint8_t *Data,
-                                                      size_t Size,
-                                                      size_t MaxSize) {
-  if (Size > MaxSize) return 0;
-  switch (Rand(4)) {
-    case 3: return ChangeBinaryInteger<uint64_t>(Data, Size, Rand);
-    case 2: return ChangeBinaryInteger<uint32_t>(Data, Size, Rand);
-    case 1: return ChangeBinaryInteger<uint16_t>(Data, Size, Rand);
-    case 0: return ChangeBinaryInteger<uint8_t>(Data, Size, Rand);
-    default: assert(0);
-  }
-  return 0;
-}
-    
-    #endif  // LLVM_FUZZER_SHA1_H
+    {/**
+ * @brief Getter for determining Admin status
+ *
+ * @return A bool indicating if the current process is running as admin
+ */
+bool isUserAdmin();
+} // namespace osquery
 
     
-      void StartTraceRecording() {
-    if (!Options.UseMemcmp)
-      return;
-    RecordingMemcmp = Options.UseMemcmp;
-    RecordingMemmem = Options.UseMemmem;
-    NumMutations = 0;
-    InterestingWords.clear();
-    MD.ClearAutoDictionary();
-  }
+    // IOKit headers
+#include <IOKit/IOMemoryDescriptor.h>
+#include <IOKit/IOLib.h>
     
-    bool ExecuteCommandAndReadOutput(const std::string &Command, std::string *Out) {
-  FILE *Pipe = OpenProcessPipe(Command.c_str(), 'r');
-  if (!Pipe) return false;
-  char Buff[1024];
-  size_t N;
-  while ((N = fread(Buff, 1, sizeof(Buff), Pipe)) > 0)
-    Out->append(Buff, N);
-  return true;
-}
     
-          if (sigaction(SIGINT, &IgnoreSignalAction, &OldSigIntAction) == -1) {
-        Printf('Failed to ignore SIGINT\n');
-        (void)posix_spawnattr_destroy(&SpawnAttributes);
-        return -1;
-      }
-      if (sigaction(SIGQUIT, &IgnoreSignalAction, &OldSigQuitAction) == -1) {
-        Printf('Failed to ignore SIGQUIT\n');
-        // Try our best to restore the signal handlers.
-        (void)sigaction(SIGINT, &OldSigIntAction, NULL);
-        (void)posix_spawnattr_destroy(&SpawnAttributes);
-        return -1;
-      }
+    {/**
+ * @brief Start a file carve of the given paths
+ *
+ * @return A status returning if the carves were started successfully
+ */
+Status carvePaths(const std::set<std::string>& paths);
+} // namespace osquery
+
+    
+      val = getEnvVar('GTEST_OSQUERY');
+  EXPECT_FALSE(!val);
+  EXPECT_TRUE(val.is_initialized());
+  EXPECT_EQ(*val, 'true');
