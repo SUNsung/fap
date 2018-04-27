@@ -1,290 +1,155 @@
 
         
-        int main(int argc, char** argv) {
-  FLAGS_alsologtostderr = 1;
-    }
+        #include 'base/command_line.h'
+#include 'base/logging.h'
+#include 'base/message_loop/message_loop.h'
+#include 'base/values.h'
     
-    Classifier::Classifier(const string& model_file,
-                       const string& trained_file,
-                       const string& mean_file,
-                       const string& label_file) {
-#ifdef CPU_ONLY
-  Caffe::set_mode(Caffe::CPU);
-#else
-  Caffe::set_mode(Caffe::GPU);
-#endif
-    }
     
-    namespace caffe {
-    }
-    
-    #endif  // CAFFE_CUDNN_LRN_LAYER_HPP_
-
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-    #include 'caffe/layers/base_conv_layer.hpp'
-    
-    /**
- * @brief Computes @f$ y = \gamma ^ {\alpha x + \beta} @f$,
- *        as specified by the scale @f$ \alpha @f$, shift @f$ \beta @f$,
- *        and base @f$ \gamma @f$.
- */
-template <typename Dtype>
-class ExpLayer : public NeuronLayer<Dtype> {
- public:
-  /**
-   * @param param provides ExpParameter exp_param,
-   *     with ExpLayer options:
-   *   - scale (\b optional, default 1) the scale @f$ \alpha @f$
-   *   - shift (\b optional, default 0) the shift @f$ \beta @f$
-   *   - base (\b optional, default -1 for a value of @f$ e \approx 2.718 @f$)
-   *         the base @f$ \gamma @f$
-   */
-  explicit ExpLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-    CvRect cvGetValidDisparityROI( CvRect roi1, CvRect roi2, int minDisparity,
-                              int numberOfDisparities, int SADWindowSize )
-{
-    return (CvRect)cv::getValidDisparityROI( roi1, roi2, minDisparity,
-                                            numberOfDisparities, SADWindowSize );
+    {  RenderThread::Get()->Send(new ShellViewHostMsg_Call_Object_Method(
+      routing_id,
+      object_id,
+      type,
+      method,
+      *static_cast<base::ListValue*>(value_args.get())));
+  return v8::Undefined(isolate);
 }
     
-        if (rowRange_ == Range::all())
-    {
-        rows = m.rows;
-    }
-    else
-    {
-        CV_Assert( 0 <= rowRange_.start && rowRange_.start <= rowRange_.end && rowRange_.end <= m.rows );
-    }
-    
-    #undef cv_hal_SVD32f
-#define cv_hal_SVD32f lapack_SVD32f
-#undef cv_hal_SVD64f
-#define cv_hal_SVD64f lapack_SVD64f
-    
-    namespace grpc {
-namespace testing {
-    }
+      private:
+    bool ReadText(ClipboardData& data) {
+      DCHECK(data.type == TYPE_TEXT);
+      base::string16 text;
+      clipboard_->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+      data.data.reset(new std::string(base::UTF16ToUTF8(text)));
+      return true;
     }
     
-      grpc::testing::interop::RunServer(
-      grpc::testing::CreateInteropServerCredentials());
-    
-    // Standard library components can't be forward declared, so we'll have to
-// include the array header. Fortunately, it's fairly lightweight and doesn't
-// add significantly to the compile time.
-#if defined(BOOST_ASIO_HAS_STD_ARRAY)
-# include <array>
-#endif // defined(BOOST_ASIO_HAS_STD_ARRAY)
-    
-    #endif // BOOST_ASIO_DETAIL_ATOMIC_COUNT_HPP
-
-    
-      // Resize the buffer to the specified length.
-  void resize(size_type length)
-  {
-    BOOST_ASIO_ASSERT(length <= capacity());
-    if (begin_offset_ + length <= capacity())
-    {
-      end_offset_ = begin_offset_ + length;
+    class NwClipboardSetListSyncFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardSetListSyncFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     }
-    else
-    {
-      using namespace std; // For memmove.
-      memmove(&buffer_[0], &buffer_[0] + begin_offset_, size());
-      end_offset_ = length;
-      begin_offset_ = 0;
-    }
+    
+    // Computes the Otsu threshold(s) for the given histogram.
+// Also returns H = total count in histogram, and
+// omega0 = count of histogram below threshold.
+int OtsuStats(const int* histogram, int* H_out, int* omega0_out);
+    
+    #define ASSERT_HOST_MSG(x, ...)                                                \
+  if (!(x)) {                                                                  \
+    tprintf(__VA_ARGS__);                                                      \
+    ASSERT_FAILED.error(#x, ABORT, 'in file %s, line %d', __FILE__, __LINE__); \
   }
     
-    #endif // BOOST_ASIO_DETAIL_FUNCTION_HPP
-
-    
-    #endif // BOOST_ASIO_DETAIL_HANDLER_INVOKE_HELPERS_HPP
-
-    
-    
-    {
-    {// use R's PRNG to replacd
-CustomGlobalRandomEngine::result_type
-CustomGlobalRandomEngine::operator()() {
-  return static_cast<result_type>(
-      std::floor(unif_rand() * CustomGlobalRandomEngine::max()));
+    void THDTensor_(_resize3d)(THDTensor *tensor, int64_t size0, int64_t size1, int64_t size2) {
+  int64_t sizes[] = {size0, size1, size2};
+  THDTensor_(_resize)(tensor, 2, sizes, nullptr);
 }
-}  // namespace common
-}  // namespace xgboost
-
     
-        page->offset.clear();
-    page->offset.push_back(0);
-    for (bst_uint cid : sorted_index_set) {
-      page->offset.push_back(
-          page->offset.back() + disk_offset_[cid + 1] - disk_offset_[cid]);
-    }
-    page->data.resize(page->offset.back());
-    CHECK_EQ(index_.data.size(), value_.data.size());
-    CHECK_EQ(index_.data.size(), disk_offset_.back());
+    constexpr char RANK_ENV[] = 'RANK';
+constexpr char WORLD_SIZE_ENV[] = 'WORLD_SIZE';
+constexpr char MASTER_PORT_ENV[] = 'MASTER_PORT';
+constexpr char MASTER_ADDR_ENV[] = 'MASTER_ADDR';
     
-    namespace xgboost {
-namespace common {
-/*! \brief buffer reader of the stream that allows you to get */
-class StreamBufferReader {
- public:
-  explicit StreamBufferReader(size_t buffer_size)
-      :stream_(NULL),
-       read_len_(1), read_ptr_(1) {
-    buffer_.resize(buffer_size);
-  }
-  /*!
-   * \brief set input stream
-   */
-  inline void set_stream(dmlc::Stream *stream) {
-    stream_ = stream;
-    read_len_ = read_ptr_ = 1;
-  }
-  /*!
-   * \brief allows quick read using get char
-   */
-  inline char GetChar(void) {
-    while (true) {
-      if (read_ptr_ < read_len_) {
-        return buffer_[read_ptr_++];
-      } else {
-        read_len_ = stream_->Read(&buffer_[0], buffer_.length());
-        if (read_len_ == 0) return EOF;
-        read_ptr_ = 0;
-      }
-    }
-  }
-  /*! \brief whether we are reaching the end of file */
-  inline bool AtEnd(void) const {
-    return read_len_ == 0;
-  }
-    }
-    }
+    
+int main() {
+  thpp::FloatTensor *tensor = new thpp::THTensor<float>();
+  thpp::FloatTensor *tensor2 = new thpp::THTensor<float>();
+  assert(tensor->nDim() == 0);
     }
     
+    template<> AT_API Half convert(float f);
+template<> AT_API float convert(Half f);
+template<> AT_API Half convert(double f);
+template<> AT_API double convert(Half f);
+template<> AT_API Half convert(int64_t f);
+template<> AT_API int64_t convert(Half f);
     
-    {
-    {
-    { private:
-  std::ifstream fi;
-};
-}  // namespace common
-}  // namespace xgboost
-#endif  // XGBOOST_COMMON_CONFIG_H_
-
-    
-    /*!
- * \brief Input stream that support additional PeekRead
- *  operation, besides read.
- */
-class PeekableInStream : public dmlc::Stream {
- public:
-  explicit PeekableInStream(dmlc::Stream* strm)
-      : strm_(strm), buffer_ptr_(0) {}
-    }
-    
-    /*! \brief match error */
-struct EvalMatchError : public EvalMClassBase<EvalMatchError> {
-  const char* Name() const override {
-    return 'merror';
-  }
-  inline static bst_float EvalRow(int label,
-                                  const bst_float *pred,
-                                  size_t nclass) {
-    return common::FindMaxIndex(pred, pred + nclass) != pred + static_cast<int>(label);
-  }
-};
-    
-    void GenerateServerMethod(const grpc_generator::Method *method, grpc_generator::Printer *printer,
-                          std::map<grpc::string, grpc::string> vars) {
-	vars['Method'] = exportName(method->name());
-	vars['Request'] = method->get_input_type_name();
-	vars['Response'] = (vars['CustomMethodIO'] == '') ? method->get_output_type_name() : vars['CustomMethodIO'];
-	vars['FullMethodName'] = '/' + vars['Package'] + '.' + vars['Service'] + '/' + vars['Method'];
-	vars['Handler'] = '_' + vars['Service'] + '_' + vars['Method'] + '_Handler';
-	if (method->NoStreaming()) {
-		printer->Print(vars, 'func $Handler$(srv interface{}, ctx $context$.Context,\n\tdec func(interface{}) error, interceptor $grpc$.UnaryServerInterceptor) (interface{}, error) {\n');
-		printer->Indent();
-		printer->Print(vars, 'in := new($Request$)\n');
-		printer->Print('if err := dec(in); err != nil { return nil, err }\n');
-		printer->Print(vars, 'if interceptor == nil { return srv.($Service$Server).$Method$(ctx, in) }\n');
-		printer->Print(vars, 'info := &$grpc$.UnaryServerInfo{\n');
-		printer->Indent();
-		printer->Print('Server: srv,\n');
-		printer->Print(vars, 'FullMethod: \'$FullMethodName$\',\n');
-		printer->Outdent();
-		printer->Print('}\n\n');
-		printer->Print(vars, 'handler := func(ctx $context$.Context, req interface{}) (interface{}, error) {\n');
-		printer->Indent();
-		printer->Print(vars, 'return srv.($Service$Server).$Method$(ctx, req.(* $Request$))\n');
-		printer->Outdent();
-		printer->Print('}\n');
-		printer->Print('return interceptor(ctx, in, info, handler)\n');
-		printer->Outdent();
-		printer->Print('}\n\n');
-		return;
-	}
-	vars['StreamType'] = vars['ServiceUnexported'] + vars['Method'] + 'Server';
-	printer->Print(vars, 'func $Handler$(srv interface{}, stream $grpc$.ServerStream) error {\n');
-	printer->Indent();
-	if (ServerOnlyStreaming(method)) {
-		printer->Print(vars, 'm := new($Request$)\n');
-		printer->Print(vars, 'if err := stream.RecvMsg(m); err != nil { return err }\n');
-		printer->Print(vars, 'return srv.($Service$Server).$Method$(m, &$StreamType${stream})\n');
-	} else {
-		printer->Print(vars, 'return srv.($Service$Server).$Method$(&$StreamType${stream})\n');
-	}
-	printer->Outdent();
-	printer->Print('}\n\n');
-    }
-    
-    
-    {    auto status = stub_->SayHello(&context, request_msg, &response_msg);
-    if (status.ok()) {
-      const HelloReply *response = response_msg.GetRoot();
-      return response->message()->str();
+        std::shared_ptr<GlooCache::algorithm_type> algo;
+    if (device == DeviceType::CPU) {
+      algo = std::make_shared<::gloo::AllgatherRing<T>>(
+        context,
+        std::initializer_list<const T*>{reinterpret_cast<const T*>(input_buffer.get())},
+        reinterpret_cast<T*>(output_buffer.get()),
+        count);
     } else {
-      std::cerr << status.error_code() << ': ' << status.error_message()
-                << std::endl;
-      return 'RPC failed';
-    }
-  }
-    
-    ::grpc::ClientAsyncReader< flatbuffers::grpc::Message<Monster>>* MonsterStorage::Stub::AsyncRetrieveRaw(::grpc::ClientContext* context, const flatbuffers::grpc::Message<Stat>& request, ::grpc::CompletionQueue* cq, void* tag) {
-  return ::grpc::internal::ClientAsyncReaderFactory< flatbuffers::grpc::Message<Monster>>::Create(channel_.get(), cq, rpcmethod_Retrieve_, context, request, true, tag);
-}
-    
-      // Get access to the root:
-  auto monster = GetMonster(builder.GetBufferPointer());
-    
-    // This is an example of parsing text straight into a buffer and then
-// generating flatbuffer (JSON) text from the buffer.
-int main(int /*argc*/, const char * /*argv*/ []) {
-  // load FlatBuffer schema (.fbs) and JSON from disk
-  std::string schemafile;
-  std::string jsonfile;
-  bool ok = flatbuffers::LoadFile('samples/monster.fbs', false, &schemafile) &&
-            flatbuffers::LoadFile('samples/monsterdata.json', false, &jsonfile);
-  if (!ok) {
-    printf('couldn't load files!\n');
-    return 1;
-  }
+      throw std::runtime_error('unsupported device in Gloo allGather');
     }
     
-    FileExistsFunction SetFileExistsFunction(
-    FileExistsFunction file_exists_function) {
-  FileExistsFunction previous_function = g_file_exists_function;
-  g_file_exists_function =
-      file_exists_function ? file_exists_function : FileExistsRaw;
-  return previous_function;
+    #undef THPTensor_
+#undef THPTensor_stateless_
+#undef THPTensor
+#undef THPTensorStr
+#undef THPTensorBaseStr
+#undef THPTensorClass
+    
+    // Reads the Start of Scan (SOS) marker segment and fills in *scan_info with the
+// parsed data.
+bool ProcessSOS(const uint8_t* data, const size_t len, size_t* pos,
+                JPEGData* jpg) {
+  const size_t start_pos = *pos;
+  VERIFY_LEN(3);
+  size_t marker_len = ReadUint16(data, pos);
+  int comps_in_scan = ReadUint8(data, pos);
+  VERIFY_INPUT(comps_in_scan, 1, static_cast<int>(jpg->components.size()),
+               COMPS_IN_SCAN);
+    }
+    
+    std::vector<float> Blur(const std::vector<float>& image, int w, int h) {
+    // This is only made for small sigma, e.g. 1.3.
+    static const double kSigma = 1.3;
+    std::vector<double> kernel(5);
+    for (size_t i = 0; i < kernel.size(); i++) {
+      kernel[i] = Normal(1.0 * i - kernel.size() / 2, kSigma);
+    }
+    }
+    
+    
+    {
+    {
+    {      // Add back the last sentinel node.
+      tree[j_end + 1] = sentinel;
+    }
+    if (SetDepth(static_cast<int>(2 * n - 1), &tree[0], depth, tree_limit)) {
+      /* We need to pack the Huffman tree in tree_limit bits. If this was not
+         successful, add fake entities to the lowest values and retry. */
+      break;
+    }
+  }
 }
+    
+      tmp0 = in[stride];
+  tmp1 = kIDCTMatrix[ 1] * tmp0;
+  tmp2 = kIDCTMatrix[ 9] * tmp0;
+  tmp3 = kIDCTMatrix[17] * tmp0;
+  tmp4 = kIDCTMatrix[25] * tmp0;
+  out[0] += tmp1;
+  out[1] += tmp2;
+  out[2] += tmp3;
+  out[3] += tmp4;
+  out[4] -= tmp4;
+  out[5] -= tmp3;
+  out[6] -= tmp2;
+  out[7] -= tmp1;
+    
+    namespace guetzli {
+    }
+    
+    // Single pixel rgb to 16-bit yuv conversion.
+// The returned yuv values are signed integers in the
+// range [-128, 127] inclusive.
+inline static void RGBToYUV16(const uint8_t* const rgb,
+                              coeff_t *out) {
+  enum { FRAC = 16, HALF = 1 << (FRAC - 1) };
+  const int r = rgb[0];
+  const int g = rgb[1];
+  const int b = rgb[2];
+  out[0] = (19595 * r  + 38469 * g +  7471 * b - (128 << 16) + HALF) >> FRAC;
+  out[64] = (-11059 * r - 21709 * g + 32768 * b + HALF - 1) >> FRAC;
+  out[128] = (32768 * r  - 27439 * g -  5329 * b + HALF - 1) >> FRAC;
+}
+    
+    
+    {}  // namespace guetzli
+    
+    // Preprocesses U and V channel for better results after downsampling.
