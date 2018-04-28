@@ -1,80 +1,35 @@
 
         
-            to remove replace in this file ismount( -> os.path.ismount( and remove this
-    function'''
+        from . import Contract
     
-            if response.status_code != 200:
-            raise Exception(response.content)
-    
-        args = parser.parse_args()
-    
-        return results
-
-    
-        def on_open_shell(self):
-        try:
-            self._exec_cli_command(b'environment no more')
-        except AnsibleConnectionFailure:
-            raise AnsibleConnectionFailure('unable to set terminal parameters')
-
-    
-            lines = process.communicate()[0].splitlines()
-        ws_root = get_root()
-        ws_filepath = os.path.relpath(filepath, ws_root)
-        for line in lines:
-            line = extract_line_info(line, ws_filepath, toolname)
-            if line:
-                report.append(line)
-    return report
-    
-        @csrf_exempt
-    @json_validate(
-        signature=VSigned(),
-        user=VThrottledLogin(['user', 'passwd']),
-    )
-    def POST_login(self, responder, user, **kwargs):
-        kwargs.update(dict(
-            controller=self,
-            form=responder('noop'),
-            responder=responder,
-            user=user,
-        ))
-        return handle_login(**kwargs)
-    
-            def builder_wrapper(thing = None):
-            kw = {}
-            if not thing:
-                kw['url'] = url
-                kw['title'] = title
-            return ButtonLite(thing,
-                              image = 1 if buttonimage is None else buttonimage,
-                              target = '_new' if newwindow else '_parent',
-                              styled = styled, **kw)
+                elif opt in ('-f', '--force'):
+                # Force download.
+                conf['force'] = True
     
     
-def handle_awful_failure(fail_text):
-    '''
-    Makes sure that no errors generated in the error handler percolate
-    up to the user unless debug is enabled.
-    '''
-    if g.debug:
-        import sys
-        s = sys.exc_info()
-        # reraise the original error with the original stack trace
-        raise s[1], None, s[2]
-    try:
-        # log the traceback, and flag the 'path' as the error location
-        import traceback
-        log.write_error_summary(fail_text)
-        for line in traceback.format_exc().splitlines():
-            g.log.error(line)
-        return redditbroke % (make_failien_url(), websafe(fail_text))
-    except:
-        # we are doomed.  Admit defeat
-        return 'This is an error that should never occur.  You win.'
-
+def huaban_download(url, output_dir='.', **kwargs):
+    if re.match(r'http://huaban\.com/boards/\d+/', url):
+        huaban_download_board(url, output_dir, **kwargs)
+    else:
+        print('Only board (画板) pages are supported currently')
+        print('ex: http://huaban.com/boards/12345678/')
     
-        def GET_health(self):
-        if os.path.exists('/var/opt/reddit/quiesce'):
-            request.environ['usable_error_content'] = 'No thanks, I'm full.'
-            abort(503)
+        @property
+    def is_eager_to_contribute(self):
+        return True if self.blackboard.common_state['problems'] > 100 else False
+    
+        def test_display_current_time_at_midnight(self):
+        '''
+        Will almost always fail (despite of right at/after midnight).
+        '''
+        time_provider_stub = MidnightTimeProvider()
+        class_under_test = TimeDisplay(time_provider_stub)
+        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
+    
+            depending on self.param value
+        '''
+        self._class_method_choices[self.param].__get__(None, self.__class__)()
+    
+        def is_satisfied_by(self, candidate):
+        return getattr(candidate, 'super_user', False)
