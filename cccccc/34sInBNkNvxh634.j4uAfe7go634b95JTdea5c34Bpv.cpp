@@ -1,122 +1,210 @@
 
         
-        AsarProtocolHandler::~AsarProtocolHandler() {
+            60,30,500,    3,18.,  1024
+  },
+  /* 8: 2048 x 27 */
+  {
+    8,{0,1,2,2,3,3,4,4},{3,4,3,4,3},{0,1,1,2,2},{-1,0,1,2,3},
+    {{4},{5,6},{7,8},{-1,9,10,11},{-1,12,13,14}},
+    2,{0,2048,   186,46,744, 12,92,372,1500,  28,66,130, 260,520,1112,
+       6,20,36,56,  78,110,158,222,  316,440,624,  928,1300,1700},
+    
+     function: toplevel residue templates 16/22kHz
+ last mod: $Id: residue_16.h 16962 2010-03-11 07:30:34Z xiphmont $
+    
+      {2,0,32,  &_residue_44_mid,
+   &_huff_book__44c5_s_long,&_huff_book__44c5_s_long,
+   &_resbook_44s_5,&_resbook_44s_5}
+};
+static const vorbis_residue_template _res_44s_6[]={
+  {2,0,16,  &_residue_44_high,
+   &_huff_book__44c6_s_short,&_huff_book__44c6_s_short,
+   &_resbook_44s_6,&_resbook_44s_6},
+    
+      {1,2,6,  &_residue_44p_lfe,
+   &_huff_book__44p5_lfe,&_huff_book__44p5_lfe,
+   &_resbook_44p_l5,&_resbook_44p_l5}
+};
+static const vorbis_residue_template _res_44p51_6[]={
+  {2,0,15,  &_residue_44p_hi,
+   &_huff_book__44p6_short,&_huff_book__44p6_short,
+   &_resbook_44p_6,&_resbook_44p_6},
+    
+    static const static_bookblock _resbook_8s_0={
+  {
+    {0},
+    {0,0,&_8c0_s_p1_0},
+    {0},
+    {0,0,&_8c0_s_p3_0},
+    {0,0,&_8c0_s_p4_0},
+    {0,0,&_8c0_s_p5_0},
+    {0,0,&_8c0_s_p6_0},
+    {&_8c0_s_p7_0,&_8c0_s_p7_1},
+    {&_8c0_s_p8_0,&_8c0_s_p8_1},
+    {&_8c0_s_p9_0,&_8c0_s_p9_1,&_8c0_s_p9_2}
+   }
+};
+static const static_bookblock _resbook_8s_1={
+  {
+    {0},
+    {0,0,&_8c1_s_p1_0},
+    {0},
+    {0,0,&_8c1_s_p3_0},
+    {0,0,&_8c1_s_p4_0},
+    {0,0,&_8c1_s_p5_0},
+    {0,0,&_8c1_s_p6_0},
+    {&_8c1_s_p7_0,&_8c1_s_p7_1},
+    {&_8c1_s_p8_0,&_8c1_s_p8_1},
+    {&_8c1_s_p9_0,&_8c1_s_p9_1,&_8c1_s_p9_2}
+   }
+};
+    
+    static inline void vorbis_fpu_setround(vorbis_fpu_control *fpu){
+  ogg_int16_t ret;
+  ogg_int16_t temp;
+  __asm__ __volatile__('fnstcw %0\n\t'
+          'movw %0,%%dx\n\t'
+          'andw $62463,%%dx\n\t'
+          'movw %%dx,%1\n\t'
+          'fldcw %1\n\t':'=m'(ret):'m'(temp): 'dx');
+  *fpu=ret;
 }
     
-    #include <string>
+    #elif (defined(OPUS_X86_MAY_HAVE_SSE) && !defined(OPUS_X86_PRESUME_SSE)) || \
+  (defined(OPUS_X86_MAY_HAVE_SSE2) && !defined(OPUS_X86_PRESUME_SSE2)) || \
+  (defined(OPUS_X86_MAY_HAVE_SSE4_1) && !defined(OPUS_X86_PRESUME_SSE4_1)) || \
+  (defined(OPUS_X86_MAY_HAVE_AVX) && !defined(OPUS_X86_PRESUME_AVX))
     
-      // URLRequestSimpleJob:
-  int GetData(std::string* mime_type,
-              std::string* charset,
-              std::string* data,
-              const net::CompletionCallback& callback) const override;
-    
-      CHROMEG_CALLBACK_1(GlobalMenuBarX11, void, OnItemActivated, DbusmenuMenuitem*,
-                     unsigned int);
-  CHROMEG_CALLBACK_0(GlobalMenuBarX11, void, OnSubMenuShow, DbusmenuMenuitem*);
-    
-     private:
-  NativeWindow* window_;  // weak ref.
-    
-    #include 'atom/browser/ui/views/frameless_view.h'
-    
-    SlowTimer::~SlowTimer() {
-  int64_t msec = getTime();
-  if (msec >= m_msThreshold && m_msThreshold != 0) {
-    Logger::Error('SlowTimer [%' PRId64 'ms] at %s: %s',
-                  msec, m_location.c_str(), m_info.c_str());
-  }
-}
-    
-      /*
-   * allocRaw
-   * alloc
-   *
-   * Simple bump allocator, supporting power-of-two alignment. alloc<T>() is a
-   * simple typed wrapper around allocRaw().
-   */
-  void* allocRaw(size_t sz, size_t align = 16) {
-    // Round frontier up to a multiple of align
-    align = folly::nextPowTwo(align) - 1;
-    auto const nf = (uint8_t*)(((uintptr_t)m_frontier + align) & ~align);
-    assertCanEmit(nf - m_frontier + sz);
-    setFrontier(nf);
-    auto data = m_frontier;
-    m_frontier += sz;
-    assertx(m_frontier <= m_base + m_size);
-    return data;
-  }
-    
-    const char* OfflineCode::getArchName() { return 'PPC64'; }
-    
-    
-    {
-    {  if (c1headc2head == max) {
-    // flip c1
-    std::reverse(c1->targets.begin(), c1->targets.end());
-  } else if (c1headc2tail == max) {
-    // flip c1 c2
-    std::reverse(c1->targets.begin(), c1->targets.end());
-    std::reverse(c2->targets.begin(), c2->targets.end());
-  } else if (c1tailc2tail == max) {
-    // flip c2
-    std::reverse(c2->targets.begin(), c2->targets.end());
-  }
-}
-}
-    
-    namespace rabit {
-namespace utils {
-extern 'C' {
-  void (*Printf)(const char *fmt, ...) = Rprintf;
-  void (*Assert)(int exp, const char *fmt, ...) = XGBoostAssert_R;
-  void (*Check)(int exp, const char *fmt, ...) = XGBoostCheck_R;
-  void (*Error)(const char *fmt, ...) = error;
-}
-}
-}
-    
-      vals_in.clear(); ss.flush(); ss.clear(); ss.str('');
-  ss << ' 321 ';
-  ss >> vals_in;
-  EXPECT_EQ(vals_in[0], 321);
-    
-      void Write(const SparsePage& page, dmlc::Stream* fo) override {
-    CHECK(page.offset.size() != 0 && page.offset[0] == 0);
-    CHECK_EQ(page.offset.back(), page.data.size());
-    fo->Write(page.offset);
-    if (page.data.size() != 0) {
-      fo->Write(dmlc::BeginPtr(page.data), page.data.size() * sizeof(SparseBatch::Entry));
+    // Upsamples img_in with a box-filter, and returns an image with output
+// dimensions width x height.
+std::vector<float> Upsample2x2(const std::vector<float>& img_in,
+                               const int width, const int height) {
+  int w = (width + 1) / 2;
+  int h = (height + 1) / 2;
+  assert(img_in.size() == w * h);
+  std::vector<float> img_out(width * height);
+  for (int y = 0, p = 0; y < h; ++y) {
+    for (int x = 0; x < w; ++x, ++p) {
+      for (int iy = 0; iy < 2; ++iy) {
+        for (int ix = 0; ix < 2; ++ix) {
+          int yy = std::min(height - 1, 2 * y + iy);
+          int xx = std::min(width - 1, 2 * x + ix);
+          img_out[yy * width + xx] = img_in[p];
+        }
+      }
     }
   }
+  return img_out;
+}
     
-    struct EvalRMSE : public EvalEWiseBase<EvalRMSE> {
-  const char *Name() const override {
-    return 'rmse';
+    #include <cmath>
+    
+    // Decodes the parsed jpeg coefficients into an RGB image.
+// There can be only either 1 or 3 image components, in either case, an RGB
+// output image will be generated.
+// Only YUV420 and YUV444 sampling factors are supported.
+// Vector will be empty if a decoding error occurred.
+std::vector<uint8_t> DecodeJpegToRGB(const JPEGData& jpg);
+    
+    // Parses the jpeg stream contained in data[*pos ... len) and fills in *jpg with
+// the parsed information.
+// If mode is JPEG_READ_HEADER, it fills in only the image dimensions in *jpg.
+// Returns false if the data is not valid jpeg, or if it contains an unsupported
+// jpeg feature.
+bool ReadJpeg(const uint8_t* data, const size_t len, JpegReadMode mode,
+              JPEGData* jpg);
+// string variant
+bool ReadJpeg(const std::string& data, JpegReadMode mode,
+              JPEGData* jpg);
+    
+    int BuildJpegHuffmanTable(const int* count_in, const int* symbols,
+                          HuffmanTableEntry* lut) {
+  HuffmanTableEntry code;    // current table entry
+  HuffmanTableEntry* table;  // next available space in table
+  int len;         // current code length
+  int idx;         // symbol index
+  int key;         // prefix code
+  int reps;        // number of replicate key values in current table
+  int low;         // low bits for current root entry
+  int table_bits;  // key length of current table
+  int table_size;  // size of current table
+  int total_size;  // sum of root table size and 2nd level table sizes
+    }
+    
+    void assertInternal(const char* formatstr ...) {
+    va_list va_args;
+    va_start(va_args, formatstr);
+    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
+    va_end(va_args);
+    if (gAssertHandler != NULL) {
+        gAssertHandler(sAssertBuf);
+    }
+    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
+    // crash at this specific address so that we can find our crashes easier
+    *(int*)0xdeadb00c = 0;
+    // let the compiler know we won't reach the end of the function
+     __builtin_unreachable();
+}
+    
+    namespace detail {
+template <typename T, typename jprim>
+struct JPrimitive : JavaClass<T> {
+  using typename JavaClass<T>::javaobject;
+  using JavaClass<T>::javaClassStatic;
+  static local_ref<javaobject> valueOf(jprim val) {
+    static auto cls = javaClassStatic();
+    static auto method =
+      cls->template getStaticMethod<javaobject(jprim)>('valueOf');
+    return method(cls, val);
   }
-  inline bst_float EvalRow(bst_float label, bst_float pred) const {
-    bst_float diff = label - pred;
-    return diff * diff;
+  jprim value() const {
+    static auto method =
+      javaClassStatic()->template getMethod<jprim()>(T::kValueMethod);
+    return method(this->self());
   }
-  inline static bst_float GetFinal(bst_float esum, bst_float wsum) {
-    return std::sqrt(esum / wsum);
+};
+    }
+    
+    namespace aria2 {
+    }
+    
+    
+    {} // namespace aria2
+    
+      const std::shared_ptr<SocketCore>& getSocket() const { return socket_; }
+    
+      OptionHandler::ARG_TYPE argType_;
+    
+    int64_t AdaptiveFileAllocationIterator::getCurrentLength()
+{
+  if (!allocator_) {
+    return offset_;
+  }
+  else {
+    return allocator_->getCurrentLength();
+  }
+}
+    
+    void AnnounceList::announceSuccess()
+{
+  if (currentTrackerInitialized_) {
+    (*currentTier_)->nextEvent();
+    auto url = *currentTracker_;
+    (*currentTier_)->urls.erase(currentTracker_);
+    (*currentTier_)->urls.push_front(std::move(url));
+    currentTier_ = std::begin(tiers_);
+    currentTracker_ = std::begin((*currentTier_)->urls);
+  }
+}
+    
+    AnnounceTier::~AnnounceTier() = default;
+    
+    
+    {  virtual std::unique_ptr<DiskWriter>
+  newDiskWriter(const std::string& filename) CXX11_OVERRIDE
+  {
+    return make_unique<DiskWriterType>();
   }
 };
     
-    /*! \brief match error */
-struct EvalMultiLogLoss : public EvalMClassBase<EvalMultiLogLoss> {
-  const char* Name() const override {
-    return 'mlogloss';
-  }
-  inline static bst_float EvalRow(int label,
-                                  const bst_float *pred,
-                                  size_t nclass) {
-    const bst_float eps = 1e-16f;
-    size_t k = static_cast<size_t>(label);
-    if (pred[k] > eps) {
-      return -std::log(pred[k]);
-    } else {
-      return -std::log(eps);
-    }
-  }
-};
+    #include 'Notifier.h'
