@@ -1,131 +1,130 @@
 
         
-        
-FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
-FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
-JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
-BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
+            kwargs.setdefault('allow_redirects', True)
+    return request('get', url, params=params, **kwargs)
+    
+            self.handler = handler or consume_socket_content
+        self.handler_results = []
+    
+            def generate():
+            # Special case for urllib3.
+            if hasattr(self.raw, 'stream'):
+                try:
+                    for chunk in self.raw.stream(chunk_size, decode_content=True):
+                        yield chunk
+                except ProtocolError as e:
+                    raise ChunkedEncodingError(e)
+                except DecodeError as e:
+                    raise ContentDecodingError(e)
+                except ReadTimeoutError as e:
+                    raise ConnectionError(e)
+            else:
+                # Standard file-like object.
+                while True:
+                    chunk = self.raw.read(chunk_size)
+                    if not chunk:
+                        break
+                    yield chunk
+    
+    requests.utils imports from here, so be careful with imports.
+'''
+    
+        def initialize_options(self):
+        TestCommand.initialize_options(self)
+        try:
+            from multiprocessing import cpu_count
+            self.pytest_args = ['-n', str(cpu_count()), '--boxed']
+        except (ImportError, NotImplementedError):
+            self.pytest_args = ['-n', '1', '--boxed']
+    
+            if 'Authorization' in headers:
+            # If we get redirected to a new host, we should strip out any
+            # authentication headers.
+            original_parsed = urlparse(response.request.url)
+            redirect_parsed = urlparse(url)
+    
+            total_count = 0
+        translated_count = 0
+        with open(fn) as f:
+            catalog = read_po(f)
+            for msg in catalog:
+                total_count += 1
+                if is_translated(msg):
+                    translated_count += 1
+        pct = translated_count / float(total_count) * 100
+        click.echo('% -7s % 2d%%' % (
+            locale,
+            pct,
+        ), err=True)
+        if pct >= MINIMUM and locale not in rv:
+            rv.append(locale)
+    with open(catalog_file, 'w') as f:
+        json.dump({
+            'supported_locales': sorted(rv)
+        }, f, indent=2)
+        f.write('\n')
+    
+        def shutdown(self, wait=True):
+        with self._shutdown_lock:
+            self._shutdown = True
+            self._work_queue.put(None)
+        if wait:
+            for t in self._threads:
+                t.join()
+    shutdown.__doc__ = _base.Executor.shutdown.__doc__
+
+    
+            for future in as_completed(future_to_url):
+            try:
+                url_to_content[future_to_url[future]] = future.result()
+            except:
+                pass
+        return url_to_content
+    finally:
+        executor.shutdown()
     
     
-def test_follow_redirect_output_options(httpbin):
-    r = http('--check-status',
-             '--follow',
-             '--all',
-             '--print=h',
-             '--history-print=H',
-             httpbin.url + '/redirect/2')
-    assert r.count('GET /') == 2
-    assert 'HTTP/1.1 302 FOUND' not in r
-    assert HTTP_OK in r
+def BuildOmnicompletionRequest( results, start_column = 1 ):
+  omni_completer = MagicMock()
+  omni_completer.ComputeCandidates = MagicMock( return_value = results )
     
-        # Optional short description. Will be be shown in the help
-    # under --auth-type.
-    description = None
+      post_vim_message.assert_has_exact_calls( [
+    call( 'On the first day of Christmas, my VimScript gave to me',
+          warning=False,
+          truncate=True ),
+    call( 'A test file in a Command-T', warning=False, truncate=True ),
+    call( 'On the second day of Christmas, my VimScript gave to me',
+          warning=False,
+          truncate=True ),
+    call( 'Two popup menus, and a test file in a Command-T',
+          warning=False,
+          truncate=True ),
+  ] )
+
     
-        def load(self):
-        super(Config, self).load()
-        self._migrate_implicit_content_type()
+    from tornado.http1connection import HTTP1Connection
+from tornado.httputil import HTTPMessageDelegate
+from tornado.iostream import IOStream
+from tornado.locks import Event
+from tornado.netutil import add_accept_handler
+from tornado.testing import AsyncTestCase, bind_unused_port, gen_test
     
-        'ipv6': re.compile(
-        r'''^
-            (?:{0}:){{7}}{0}|           # uncompressed: 1:2:3:4:5:6:7:8
-            (?:{0}:){{1,6}}:|           # compressed variants, which are all
-            (?:{0}:)(?::{0}){{1,6}}|    # a::b for various lengths of a,b
-            (?:{0}:){{2}}(?::{0}){{1,5}}|
-            (?:{0}:){{3}}(?::{0}){{1,4}}|
-            (?:{0}:){{4}}(?::{0}){{1,3}}|
-            (?:{0}:){{5}}(?::{0}){{1,2}}|
-            (?:{0}:){{6}}(?::{0})|      # ...all with 2 <= a+b <= 7
-            :(?::{0}){{1,6}}|           # ::ffff(:ffff...)
-            {0}?::|                     # ffff::, ::
-                                        # ipv4-in-ipv6 variants
-            (?:0:){{6}}(?:{0}\.){{3}}{0}|
-            ::(?:ffff:)?(?:{0}\.){{3}}{0}|
-            (?:0:){{5}}ffff:(?:{0}\.){{3}}{0}
-            $
-        '''.format(ipv6_component), re.X | re.I
-    ),
+    define('ioloop', type=str, default=None)
     
+    print 'POTFILE := ' + os.path.join(I18N_PATH, 'r2.pot')
     
-def process_docstring(docstring):
-    # First, extract code blocks and process them.
-    code_blocks = []
-    if '```' in docstring:
-        tmp = docstring[:]
-        while '```' in tmp:
-            tmp = tmp[tmp.find('```'):]
-            index = tmp[3:].find('```') + 6
-            snippet = tmp[:index]
-            # Place marker in docstring for later reinjection.
-            docstring = docstring.replace(
-                snippet, '$CODE_BLOCK_%d' % len(code_blocks))
-            snippet_lines = snippet.split('\n')
-            # Remove leading spaces.
-            num_leading_spaces = snippet_lines[-1].find('`')
-            snippet_lines = ([snippet_lines[0]] +
-                             [line[num_leading_spaces:]
-                             for line in snippet_lines[1:]])
-            # Most code snippets have 3 or 4 more leading spaces
-            # on inner lines, but not all. Remove them.
-            inner_lines = snippet_lines[1:-1]
-            leading_spaces = None
-            for line in inner_lines:
-                if not line or line[0] == '\n':
-                    continue
-                spaces = count_leading_spaces(line)
-                if leading_spaces is None:
-                    leading_spaces = spaces
-                if spaces < leading_spaces:
-                    leading_spaces = spaces
-            if leading_spaces:
-                snippet_lines = ([snippet_lines[0]] +
-                                 [line[leading_spaces:]
-                                  for line in snippet_lines[1:-1]] +
-                                 [snippet_lines[-1]])
-            snippet = '\n'.join(snippet_lines)
-            code_blocks.append(snippet)
-            tmp = tmp[index:]
+        def current_oauth_client(self):
+        client = self.stacked_proxy_safe_get(c, 'oauth2_client', None)
+        return getattr(client, '_id', None)
     
-        @interfaces.legacy_upsampling1d_support
-    def __init__(self, size=2, **kwargs):
-        super(UpSampling1D, self).__init__(**kwargs)
-        self.size = int(size)
-        self.input_spec = InputSpec(ndim=3)
+            return self.app(environ, start_response)
     
-        # by setting the `trainable` argument, in Sequential
-    model = Sequential()
-    layer = Dense(2, input_dim=1)
-    model.add(layer)
-    assert model.trainable_weights == layer.trainable_weights
-    layer.trainable = False
-    assert model.trainable_weights == []
+    api('modaction', ModActionTemplate)
     
-    from keras.preprocessing import sequence
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation
-from keras.layers import Embedding
-from keras.layers import LSTM
-from keras.layers import Conv1D, MaxPooling1D
-from keras.datasets import imdb
+    from urllib2 import HTTPError
     
-    
-def get_example_array():
-    np.random.seed(3537)
-    example_array = np.random.random((100, 100)) * 100. - 50.
-    example_array[0, 0] = 0.  # 0 could possibly cause trouble
-    return example_array
-    
-    
-def test_get_fn():
-    '''Activations has a convenience 'get' function. All paths of this
-    function are tested here, although the behaviour in some instances
-    seems potentially surprising (e.g. situation 3)
-    '''
-    
-        model = Sequential(name='merged_branches')
-    model.add(Merge([left, right], mode='concat', name='merge'))
-    model.add(Dense(num_classes, name='final_dense'))
-    model.add(Activation('softmax', name='softmax'))
-    model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
-    
-        for operating_sys in oslist:
+        def GET_document(self):
+        try:
+            c.errors = c.errors or ErrorSet()
+            # clear cookies the old fashioned way 
+            c.cookies = Cookies()
