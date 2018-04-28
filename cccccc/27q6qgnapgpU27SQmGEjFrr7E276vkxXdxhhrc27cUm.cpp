@@ -1,154 +1,100 @@
 
         
-          SelfType operator--(int) {
-    SelfType temp(*this);
-    --*this;
-    return temp;
-  }
-    
-    Value::Value(UInt value) {
-  initBasic(uintValue);
-  value_.uint_ = value;
-}
-#if defined(JSON_HAS_INT64)
-Value::Value(Int64 value) {
-  initBasic(intValue);
-  value_.int_ = value;
-}
-Value::Value(UInt64 value) {
-  initBasic(uintValue);
-  value_.uint_ = value;
-}
-#endif // defined(JSON_HAS_INT64)
-    
-    TEST(AnyTest, TestPackAndUnpackAny) {
-  // We can pack a Any message inside another Any message.
-  protobuf_unittest::TestAny submessage;
-  submessage.set_int32_value(12345);
-  google::protobuf::Any any;
-  any.PackFrom(submessage);
-  protobuf_unittest::TestAny message;
-  message.mutable_any_value()->PackFrom(any);
-    }
-    
-      void Generate(io::Printer* printer);
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/wire_format.h>
+           void Call(const std::string& method,
+                    const base::ListValue& arguments) override;
+   void CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) override;
     
     
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
+    {}
     
-    namespace protobuf {
-namespace compiler {
-namespace java {
-    }
-    }
-    }
-    
-      virtual MessageGenerator* NewMessageGenerator(
-      const Descriptor* descriptor) const = 0;
-    
-    #include 'genericvector.h'
-#include 'kdpair.h'
-#include 'points.h'
-    
-    // Fills in the x-height range accepted by the given unichar_id, given its
-// bounding box in the usual baseline-normalized coordinates, with some
-// initial crude x-height estimate (such as word size) and this denoting the
-// transformation that was used.
-void DENORM::XHeightRange(int unichar_id, const UNICHARSET& unicharset,
-                          const TBOX& bbox,
-                          float* min_xht, float* max_xht, float* yshift) const {
-  // Default return -- accept anything.
-  *yshift = 0.0f;
-  *min_xht = 0.0f;
-  *max_xht = MAX_FLOAT32;
-    }
-    
-    #ifndef TESSERACT_CCUTIL_DOUBLEPTR_H_
-#define TESSERACT_CCUTIL_DOUBLEPTR_H_
-    
-    
-    {  double rates[CT_SIZE];
-  if (!ComputeRates(totals, rates))
-    return 0.0;
-  // Set output values if asked for.
-  if (unichar_error != NULL)
-    *unichar_error = rates[CT_UNICHAR_TOP1_ERR];
-  return rates[boosting_mode];
+    bool cudnn_is_acceptable(const Tensor& self) {
+  if (!globalContext().userEnabledCuDNN()) return false;
+  if (!self.is_cuda()) return false;
+  auto st = self.type().scalarType();
+  if (!(st == kDouble || st == kFloat || st == kHalf)) return false;
+  if (!AT_CUDNN_ENABLED()) return false;
+  // NB: In the old Python code, there was also a test to see if the
+  // cuDNN library was actually dynamically linked or not.  I'm not
+  // sure if we can actually test this.
+  return true;
 }
     
-      std::array<TimerName,kNumTimers> names_copy;
-  std::copy(s_names, s_names + kNumTimers, begin(names_copy));
-    
-    Vlabel Vunit::makeScratchBlock() {
-  return makeBlock(AreaIndex::Main, 1);
+    THDTensorDescriptor THDTensorDescriptor_newFromTHIntTensor(THIntTensor *tensor) {
+  return at::getType(at::Backend::CPU, at::ScalarType::Int).unsafeTensorFromTH((void*)tensor, true);
 }
     
-      if (!encoding.empty()) {
-    mbs_haystack.no_encoding = mbs_needle.no_encoding =
-      mbfl_name2no_encoding(encoding.data());
-    if (mbs_haystack.no_encoding == mbfl_no_encoding_invalid) {
-      raise_warning('Unknown encoding \'%s\'', encoding.data());
-      return false;
-    }
-  }
+    #define THCPDoubleStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPDoubleStorageClass)
+#define THCPFloatStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPFloatStorageClass)
+#define THCPHalfStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPHalfStorageClass)
+#define THCPLongStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPLongStorageClass)
+#define THCPIntStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPIntStorageClass)
+#define THCPShortStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPShortStorageClass)
+#define THCPCharStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPCharStorageClass)
+#define THCPByteStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPByteStorageClass)
     
-    /*
- * Returns an IR block corresponding to the given bytecode offset. If the block
- * starts with a DefLabel expecting a StkPtr, this function will return an
- * intermediate block that passes the current sp.
- */
-Block* getBlock(IRGS& env, Offset offset);
+    // Handler for Win32 messages, update mouse/keyboard data.
+// You may or not need this for your implementation, but it can serve as reference for handling inputs.
+// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
+/*
+IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+*/
+
     
-    NormalizedInstruction::NormalizedInstruction(SrcKey sk, const Unit* u)
-  : source(sk)
-  , funcd(nullptr)
-  , m_unit(u)
-  , immVec()
-  , endsRegion(false)
-  , preppedByRef(false)
-  , ignoreInnerType(false)
-  , interp(false)
-  , forceSurpriseCheck(false)
+    // Implemented features:
+//  [X] User texture binding. Cast 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+// Missing features:
+//  [ ] SDL2 handling of IME under Windows appears to be broken and it explicitly disable the regular Windows IME. You can restore Windows IME by compiling SDL with SDL_DISABLE_WINDOWS_IME.
+    
+    void    ImGui_ImplDX10_InvalidateDeviceObjects()
 {
-  memset(imm, 0, sizeof(imm));
-  populateImmediates(*this);
-}
-    
-    #include 'hphp/util/arch.h'
-#include 'hphp/util/assertions.h'
-    
-    const Arc& TargetGraph::incArcWeight(TargetId src, TargetId dst, double w) {
-  auto res = arcs.emplace(src, dst, w);
-  if (!res.second) {
-    res.first->weight += w;
-    return *res.first;
-  }
-  targets[src].succs.push_back(dst);
-  targets[dst].preds.push_back(src);
-  return *res.first;
-}
-    
-    
-// Logical immediates can't encode zero, so a return value of zero is used to
-// indicate a failure case. Specifically, where the constraints on imm_s are
-// not met.
-uint64_t Instruction::ImmLogical() {
-  unsigned reg_size = SixtyFourBits() ? kXRegSize : kWRegSize;
-  int64_t n = BitN();
-  int64_t imm_s = ImmSetBits();
-  int64_t imm_r = ImmRotate();
+    if (!g_pd3dDevice)
+        return;
     }
+    
+    // OpenGL2 Render function.
+// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
+// Note that this implementation is little overcomplicated because we are saving/setting up/restoring every OpenGL state explicitly, in order to be able to run within any OpenGL engine that doesn't do so. 
+void ImGui_ImplGlfwGL2_RenderDrawData(ImDrawData* draw_data)
+{
+    // Avoid rendering when minimized, scale coordinates for retina displays (screen coordinates != framebuffer coordinates)
+    ImGuiIO& io = ImGui::GetIO();
+    int fb_width = (int)(io.DisplaySize.x * io.DisplayFramebufferScale.x);
+    int fb_height = (int)(io.DisplaySize.y * io.DisplayFramebufferScale.y);
+    if (fb_width == 0 || fb_height == 0)
+        return;
+    draw_data->ScaleClipRects(io.DisplayFramebufferScale);
+    }
+    
+    //---- Tip: You can add extra functions within the ImGui:: namespace, here or in your own headers files.
+/*
+namespace ImGui
+{
+    void MyFunction(const char* name, const MyMatrix44& v);
+}
+*/
+
+    
+        // Setup style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
+    
+        UINT createDeviceFlags = 0;
+    //createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+    D3D_FEATURE_LEVEL featureLevel;
+    const D3D_FEATURE_LEVEL featureLevelArray[2] = { D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_0, };
+    if (D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &featureLevel, &g_pd3dDeviceContext) != S_OK)
+        return E_FAIL;
+    
+    
+    {            ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        }
