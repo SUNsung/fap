@@ -1,232 +1,307 @@
 
         
-          /// This is the second time DebuggerClient is consulted:
-  /// after all names in external Modules are checked, the client
-  /// gets a chance to add names to the list of candidates that
-  /// have been found in the external module lookup.
+            // pass address (value interface)
+    iterator find(const K& key)                     { return m.find(&key); }
+    const_iterator find(const K& key) const         { return m.find(&key); }
+    iterator lower_bound(const K& key)              { return m.lower_bound(&key); }
+    const_iterator lower_bound(const K& key) const  { return m.lower_bound(&key); }
+    size_type erase(const K& key)                   { return m.erase(&key); }
+    size_type count(const K& key) const             { return m.count(&key); }
     
-    void CodeCompletionOrganizer::addCompletionsWithFilter(
-    ArrayRef<Completion *> completions, StringRef filterText,
-    const FilterRules &rules, Completion *&exactMatch) {
-  impl.addCompletionsWithFilter(completions, filterText, options, rules,
-                                exactMatch);
-}
-    
-    
-    {} // end swift namespace
-    
-    /// Index the given module and store the results to \p indexStorePath.
-///
-/// \param module The module to index.
-///
-/// \param indexUnitTokens A list of unique identifiers for the index units to
-/// be written. This may either be one unit per source file of \p module, or it
-/// may be a single unit, in which case all the index information will be
-/// combined into a single unit.
-///
-/// \param moduleUnitToken A unique identifier for this module unit in the form
-/// of a file path. Only used if \p indexUnitTokens are specified for each
-/// source file, otherwise the single \p indexUnitTokens value is used instead.
-///
-/// \param indexStorePath The location to write the indexing data to.
-///
-/// \param indexSystemModules If true, emit index data for imported serialized
-/// swift system modules.
-///
-/// \param isDebugCompilation true for non-optimized compiler invocation.
-///
-/// \param targetTriple The target for this compilation.
-///
-/// \param dependencyTracker The set of dependencies seen while building.
-bool indexAndRecord(ModuleDecl *module, ArrayRef<std::string> indexUnitTokens,
-                    StringRef moduleUnitToken, StringRef indexStorePath,
-                    bool indexSystemModules, bool isDebugCompilation,
-                    StringRef targetTriple,
-                    const DependencyTracker &dependencyTracker);
-// FIXME: indexUnitTokens could be StringRef, but that creates an impedance
-// mismatch in the caller.
-    
-      // Module dependencies.
-  SmallVector<ModuleDecl::ImportedModule, 8> imports;
-  primarySourceFile->getImportedModules(imports, ModuleDecl::ImportFilter::All);
-  StringScratchSpace moduleNameScratch;
-  addModuleDependencies(imports, indexStorePath, indexSystemModules,
-                        targetTriple, clangCI, diags, unitWriter, moduleNameScratch);
-    
-      StringRef str() const {
-    return LiteralContent;
+      AutoCompactTest() {
+    dbname_ = test::TmpDir() + '/autocompact_test';
+    tiny_cache_ = NewLRUCache(100);
+    options_.block_cache = tiny_cache_;
+    DestroyDB(dbname_, options_);
+    options_.create_if_missing = true;
+    options_.compression = kNoCompression;
+    ASSERT_OK(DB::Open(options_, dbname_, &db_));
   }
     
-    namespace swift {
+    void InternalKeyComparator::FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const {
+  // Attempt to shorten the user portion of the key
+  Slice user_start = ExtractUserKey(*start);
+  Slice user_limit = ExtractUserKey(limit);
+  std::string tmp(user_start.data(), user_start.size());
+  user_comparator_->FindShortestSeparator(&tmp, user_limit);
+  if (tmp.size() < user_start.size() &&
+      user_comparator_->Compare(user_start, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*start, tmp) < 0);
+    assert(this->Compare(tmp, limit) < 0);
+    start->swap(tmp);
+  }
+}
+    
+    // Return the name of the log file with the specified number
+// in the db named by 'dbname'.  The result will be prefixed with
+// 'dbname'.
+extern std::string LogFileName(const std::string& dbname, uint64_t number);
+    
+    class Slice {
+ public:
+  // Create an empty slice.
+  Slice() : data_(''), size_(0) { }
     }
     
-      /// Get the canonicalized substitution. If wasCanonical is not nullptr,
-  /// store there whether the current substitution was canonical already.
-  Substitution getCanonicalSubstitution(bool *wasCanonical = nullptr) const;
+    #endif // defined(_MSC_VER)
     
-    #include 'caffe/layers/neuron_layer.hpp'
     
-    namespace caffe {
+    {
+    {    return module;
+#endif
+  }
+}
+    
+    // Initialize the various types and objects.
+bool InitDescriptorMappingTypes();
+    
+    class PyDescriptorDatabase : public DescriptorDatabase {
+ public:
+  explicit PyDescriptorDatabase(PyObject* py_database);
+  ~PyDescriptorDatabase();
     }
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+    // Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// Generates C++ code for a given .proto file.
+    
+    
+    {
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+    
+    void RepeatedPrimitiveFieldGenerator::GenerateMembers(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    'private static readonly pb::FieldCodec<$type_name$> _repeated_$name$_codec\n'
+    '    = pb::FieldCodec.For$capitalized_type_name$($tag$);\n');
+  printer->Print(variables_,
+    'private readonly pbc::RepeatedField<$type_name$> $name$_ = new pbc::RepeatedField<$type_name$>();\n');
+  WritePropertyDocComment(printer, descriptor_);
+  AddPublicMemberAttributes(printer);
+  printer->Print(
+    variables_,
+    '$access_level$ pbc::RepeatedField<$type_name$> $property_name$ {\n'
+    '  get { return $name$_; }\n'
+    '}\n');
+}
+    
+      // Returns an estimate of the number of bytes the printed code will compile to
+  virtual int GenerateNonNestedInitializationCode(io::Printer* printer);
+    
+      // implements CodeGenerator ----------------------------------------
+  bool Generate(const FileDescriptor* file,
+                const string& parameter,
+                GeneratorContext* context,
+                string* error) const;
+    
+    void RepeatedImmutableLazyMessageFieldGenerator::
+GenerateParsingCode(io::Printer* printer) const {
+  printer->Print(variables_,
+    'if (!$get_mutable_bit_parser$) {\n'
+    '  $name$_ =\n'
+    '      new java.util.ArrayList<com.google.protobuf.LazyFieldLite>();\n'
+    '  $set_mutable_bit_parser$;\n'
+    '}\n'
+    '$name$_.add(new com.google.protobuf.LazyFieldLite(\n'
+    '    extensionRegistry, input.readBytes()));\n');
+}
+    
+    /**
+ * @brief Compute the index of the @f$ K @f$ max values for each datum across
+ *        all dimensions @f$ (C \times H \times W) @f$.
+ *
+ * Intended for use after a classification layer to produce a prediction.
+ * If parameter out_max_val is set to true, output is a vector of pairs
+ * (max_ind, max_val) for each image. The axis parameter specifies an axis
+ * along which to maximise.
+ *
+ * NOTE: does not implement Backwards operation.
+ */
+template <typename Dtype>
+class ArgMaxLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides ArgMaxParameter argmax_param,
+   *     with ArgMaxLayer options:
+   *   - top_k (\b optional uint, default 1).
+   *     the number @f$ K @f$ of maximal items to output.
+   *   - out_max_val (\b optional bool, default false).
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
+   */
+  explicit ArgMaxLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
     
-    
-    {}  // namespace caffe
+      bool handles_setup_;
+  cudnnHandle_t* handle_;
+  cudaStream_t*  stream_;
     
     #include <vector>
     
-    #include 'caffe/layers/neuron_layer.hpp'
+    #include <vector>
     
-    TEST_F(BaseTest, HasFoo) {
-  // This is an ordinary non-parameterized test.
-}
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-    // The variables defined in the type-parameterized test macros are
-// static as typically these macros are used in a .h file that can be
-// #included in multiple translation units linked together.
-# define TYPED_TEST_CASE_P(CaseName) \
-  static ::testing::internal::TypedTestCasePState \
-      GTEST_TYPED_TEST_CASE_P_STATE_(CaseName)
+    #include <vector>
     
-    #undef GTEST_IMPL_FORMAT_C_STRING_AS_POINTER_
+    #ifndef BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
+#define BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
     
-      // Assumes one of the above roles.
-  virtual TestRole AssumeRole() = 0;
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
     
-      template <typename T>
-  operator ParamGenerator<T>() const {
-    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
-        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
-        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
-        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
-        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_),
-        static_cast<T>(v15_), static_cast<T>(v16_), static_cast<T>(v17_),
-        static_cast<T>(v18_), static_cast<T>(v19_), static_cast<T>(v20_),
-        static_cast<T>(v21_), static_cast<T>(v22_), static_cast<T>(v23_),
-        static_cast<T>(v24_), static_cast<T>(v25_), static_cast<T>(v26_),
-        static_cast<T>(v27_), static_cast<T>(v28_), static_cast<T>(v29_),
-        static_cast<T>(v30_), static_cast<T>(v31_), static_cast<T>(v32_),
-        static_cast<T>(v33_), static_cast<T>(v34_), static_cast<T>(v35_),
-        static_cast<T>(v36_), static_cast<T>(v37_), static_cast<T>(v38_),
-        static_cast<T>(v39_), static_cast<T>(v40_), static_cast<T>(v41_),
-        static_cast<T>(v42_), static_cast<T>(v43_)};
-    return ValuesIn(array);
-  }
-    
-    
-    {  const T1 v1_;
-};
-    
-    
-    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(Notification);
-};
-    
-      // Compares two wide C strings.  Returns true iff they have the same
-  // content.
-  //
-  // Unlike wcscmp(), this function can handle NULL argument(s).  A
-  // NULL C string is considered different to any non-NULL C string,
-  // including the empty string.
-  static bool WideCStringEquals(const wchar_t* lhs, const wchar_t* rhs);
-    
-    static void RunServer() {
-  QpsWorker worker(FLAGS_driver_port, FLAGS_server_port, FLAGS_credential_type);
-    }
-    
-    #endif  // GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
-    
-    #ifndef GRPC_INTERNAL_COMPILER_PYTHON_GENERATOR_H
-#define GRPC_INTERNAL_COMPILER_PYTHON_GENERATOR_H
-    
-    std::vector<grpc::string_ref> SecureAuthContext::FindPropertyValues(
-    const grpc::string& name) const {
-  if (!ctx_) {
-    return std::vector<grpc::string_ref>();
-  }
-  grpc_auth_property_iterator iter =
-      grpc_auth_context_find_properties_by_name(ctx_, name.c_str());
-  const grpc_auth_property* property = nullptr;
-  std::vector<grpc::string_ref> values;
-  while ((property = grpc_auth_property_iterator_next(&iter))) {
-    values.push_back(grpc::string_ref(property->value, property->value_length));
-  }
-  return values;
-}
-    
-    UsageTimer::UsageTimer() : start_(Sample()) {}
-    
-    #include <memory>
-    
-    // Keeps a thread-local reference to the current thread's JNIEnv.
-struct Environment {
-  // May be null if this thread isn't attached to the JVM
-  FBEXPORT static JNIEnv* current();
-  static void initialize(JavaVM* vm);
-    }
-    
-      bool operator==(const ProgramLocation& other) const {
-    // Assumes that the strings are static
-    return (m_functionName == other.m_functionName) && (m_fileName == other.m_fileName) && m_lineNumber == other.m_lineNumber;
-  }
-    
-      bool operator==(const FixedWord<kMaxSize> &w) const {
-    return Size == w.Size && 0 == memcmp(Data, w.Data, Size);
-  }
-    
-    #include 'FuzzerCorpus.h'
-#include 'FuzzerInterface.h'
-#include 'FuzzerInternal.h'
-#include 'FuzzerIO.h'
-#include 'FuzzerMutate.h'
-#include 'FuzzerRandom.h'
-#include 'FuzzerTracePC.h'
-#include <algorithm>
-#include <atomic>
-#include <chrono>
-#include <cstring>
-#include <mutex>
-#include <string>
-#include <thread>
-    
-    #define EXT_FUNC(NAME, RETURN_TYPE, FUNC_SIG, WARN)                            \
-  RETURN_TYPE(*NAME) FUNC_SIG = nullptr
-    
-    void CloseStdout();
-    
-    #endif // LIBFUZZER_POSIX
+    #endif // BOOST_ASIO_DETAIL_DESCRIPTOR_WRITE_OP_HPP
 
     
     
-    {}  // namespace fuzzer
+#define BOOST_ASIO_WRITE_HANDLER_CHECK( \
+    handler_type, handler) \
+  \
+  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
+      void(boost::system::error_code, std::size_t)) \
+    asio_true_handler_type; \
+  \
+  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
+      sizeof(boost::asio::detail::two_arg_handler_test( \
+          boost::asio::detail::clvref< \
+            asio_true_handler_type>(), \
+          static_cast<const boost::system::error_code*>(0), \
+          static_cast<const std::size_t*>(0))) == 1, \
+      'WriteHandler type requirements not met') \
+  \
+  typedef boost::asio::detail::handler_type_requirements< \
+      sizeof( \
+        boost::asio::detail::argbyv( \
+          boost::asio::detail::clvref< \
+            asio_true_handler_type>())) + \
+      sizeof( \
+        boost::asio::detail::lvref< \
+          asio_true_handler_type>()( \
+            boost::asio::detail::lvref<const boost::system::error_code>(), \
+            boost::asio::detail::lvref<const std::size_t>()), \
+        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
     
-    template <class T>
-ATTRIBUTE_TARGET_POPCNT
-#ifdef __clang__  // g++ can't handle this __attribute__ here :(
-__attribute__((always_inline))
-#endif  // __clang__
-void TracePC::HandleCmp(void *PC, T Arg1, T Arg2) {
-  uintptr_t PCuint = reinterpret_cast<uintptr_t>(PC);
-  uint64_t ArgXor = Arg1 ^ Arg2;
-  uint64_t ArgDistance = __builtin_popcountl(ArgXor) + 1; // [1,65]
-  uintptr_t Idx = ((PCuint & 4095) + 1) * ArgDistance;
-  if (sizeof(T) == 4)
-      TORC4.Insert(ArgXor, Arg1, Arg2);
-  else if (sizeof(T) == 8)
-      TORC8.Insert(ArgXor, Arg1, Arg2);
-  HandleValueProfile(Idx);
+        double sum = 0;
+    for (size_t i = 0; i < kernel.size(); i++) sum += kernel[i];
+    const double mul = 1.0 / sum;
+    
+    private:
+    
+      if (Flags.merge) {
+    if (Options.MaxLen == 0)
+      F->SetMaxInputLen(kMaxSaneLen);
+    if (TPC.UsingTracePcGuard()) {
+      if (Flags.merge_control_file)
+        F->CrashResistantMergeInternalStep(Flags.merge_control_file);
+      else
+        F->CrashResistantMerge(Args, *Inputs);
+    } else {
+      F->Merge(*Inputs);
+    }
+    exit(0);
+  }
+    
+    using namespace fuzzer;
+    
+    void DupAndCloseStderr();
+    
+    void RemoveFile(const std::string &Path) {
+  unlink(Path.c_str());
 }
     
-      void StartTraceRecording() {
-    if (!Options.UseMemcmp)
-      return;
-    RecordingMemcmp = Options.UseMemcmp;
-    RecordingMemmem = Options.UseMemmem;
-    NumMutations = 0;
-    InterestingWords.clear();
-    MD.ClearAutoDictionary();
+      // Parse STARTED and DONE lines.
+  size_t ExpectedStartMarker = 0;
+  const size_t kInvalidStartMarker = -1;
+  size_t LastSeenStartMarker = kInvalidStartMarker;
+  while (std::getline(IS, Line, '\n')) {
+    std::istringstream ISS1(Line);
+    std::string Marker;
+    size_t N;
+    ISS1 >> Marker;
+    ISS1 >> N;
+    if (Marker == 'STARTED') {
+      // STARTED FILE_ID FILE_SIZE
+      if (ExpectedStartMarker != N)
+        return false;
+      ISS1 >> Files[ExpectedStartMarker].Size;
+      LastSeenStartMarker = ExpectedStartMarker;
+      assert(ExpectedStartMarker < Files.size());
+      ExpectedStartMarker++;
+    } else if (Marker == 'DONE') {
+      // DONE FILE_SIZE COV1 COV2 COV3 ...
+      size_t CurrentFileIdx = N;
+      if (CurrentFileIdx != LastSeenStartMarker)
+        return false;
+      LastSeenStartMarker = kInvalidStartMarker;
+      if (ParseCoverage) {
+        auto &V = Files[CurrentFileIdx].Features;
+        V.clear();
+        while (ISS1 >> std::hex >> N)
+          V.push_back(N);
+        std::sort(V.begin(), V.end());
+      }
+    } else {
+      return false;
+    }
   }
+  if (LastSeenStartMarker != kInvalidStartMarker)
+    LastFailure = Files[LastSeenStartMarker].Name;
+    
+    #endif  // LLVM_FUZZER_OPTIONS_H
+
+    
+      void AddInterestingWord(const uint8_t *Data, size_t Size) {
+    if (!RecordingMemmem || !F->InFuzzingThread()) return;
+    if (Size <= 1) return;
+    Size = std::min(Size, Word::GetMaxSize());
+    Word W(Data, Size);
+    InterestingWords.insert(W);
+  }
+    
+    
+    {}  // namespace fuzzer
+
+    
+      virtual void enableMmap() CXX11_OVERRIDE;
+    
+    namespace {
+class FindCompletedAllowedTier {
+public:
+  bool operator()(const std::shared_ptr<AnnounceTier>& tier) const
+  {
+    switch (tier->event) {
+    case AnnounceTier::DOWNLOADING:
+    case AnnounceTier::COMPLETED:
+      return true;
+    default:
+      return false;
+    }
+  }
+};
+} // namespace
+    
+      void resetIterator();
+  void setCurrentTier(std::deque<std::shared_ptr<AnnounceTier>>::iterator itr);
