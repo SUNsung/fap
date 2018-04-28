@@ -1,87 +1,92 @@
 
         
-        filenames = {
-    'bin': 'youtube-dl',
-    'exe': 'youtube-dl.exe',
-    'tar': 'youtube-dl-%s.tar.gz' % version}
-build_dir = os.path.join('..', '..', 'build', version)
-for key, filename in filenames.items():
-    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
-    fn = os.path.join(build_dir, filename)
-    with open(fn, 'rb') as f:
-        data = f.read()
-    if not data:
-        raise ValueError('File %s is empty!' % fn)
-    sha256sum = hashlib.sha256(data).hexdigest()
-    new_version[key] = (url, sha256sum)
-    
-    
-if __name__ == '__main__':
-    unittest.main()
+        versions_info['signature'] = signature
+with open('update/versions.json', 'w') as versionsf:
+    json.dump(versions_info, versionsf, indent=4, sort_keys=True)
 
     
-            with open(swf_file, 'rb') as swf_f:
-            swf_content = swf_f.read()
-        swfi = SWFInterpreter(swf_content)
     
-            webpage = self._download_webpage(url, playlist_id)
-        title = self._html_search_regex(
-            r'<h1 class='playlist-name'[^>]*?>(.*?)</h1>', webpage, 'title')
-        description = self._html_search_regex(
-            r'<p class='excerpt'[^>]*?>(.*?)</p>',
-            webpage, 'description', fatal=False)
-        urls = re.findall(
-            r'<li class='lecture-preview'>\s*?<a target='_blank' href='([^']+)'>',
-            webpage)
-        entries = [self.url_result(u) for u in urls]
+def gen_extractor_classes():
+    ''' Return a list of supported extractors.
+    The order does matter; the first extractor matched is the one handling the URL.
+    '''
+    return _ALL_CLASSES
     
-            duration = parse_duration(self._search_regex(
-            r'<b>Duration:</b> (?:<q itemprop='duration'>)?(\d+:\d+)', webpage, 'duration', fatal=False))
-        view_count = int_or_none(self._html_search_regex(
-            r'<b>Views:</b> (\d+)', webpage, 'view count', fatal=False))
     
-            return {
-            'id': flv_id,
-            'url': rtmp_url,
-            'ext': 'flv',
-            'no_resume': True,
-            'title': title,
-            'description': description,
-            'duration': duration,
-            'view_count': view_count,
-            'comment_count': comment_count,
-            'uploader': uploader,
-            'upload_date': upload_date,
+class AnySexIE(InfoExtractor):
+    _VALID_URL = r'https?://(?:www\.)?anysex\.com/(?P<id>\d+)'
+    _TEST = {
+        'url': 'http://anysex.com/156592/',
+        'md5': '023e9fbb7f7987f5529a394c34ad3d3d',
+        'info_dict': {
+            'id': '156592',
+            'ext': 'mp4',
+            'title': 'Busty and sexy blondie in her bikini strips for you',
+            'description': 'md5:de9e418178e2931c10b62966474e1383',
+            'categories': ['Erotic'],
+            'duration': 270,
+            'age_limit': 18,
         }
-
+    }
     
-        def _real_extract(self, url):
-        display_id = self._match_id(url)
+    def plot(func):
+    random_state = check_random_state(0)
+    one_core = []
+    multi_core = []
+    sample_sizes = range(1000, 6000, 1000)
     
-    # http://docs.readthedocs.org/en/latest/theme.html#how-do-i-use-this-locally-and-on-read-the-docs
-# on_rtd is whether we are on readthedocs.org
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-if not on_rtd:  # only import and set the theme if we're building docs locally
-    import sphinx_rtd_theme
-    html_theme = 'sphinx_rtd_theme'
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-# otherwise, readthedocs.org uses their theme by default, so no need to specify it
+        An example with a long-untouched module that everyone has
+    >>> _linkcode_resolve('py', {'module': 'tty',
+    ...                          'fullname': 'setraw'},
+    ...                   package='tty',
+    ...                   url_fmt='http://hg.python.org/cpython/file/'
+    ...                           '{revision}/Lib/{package}/{path}#L{lineno}',
+    ...                   revision='xxxx')
+    'http://hg.python.org/cpython/file/xxxx/Lib/tty/tty.py#L18'
+    '''
+    
+    # Plot the results (= shape of the data points cloud)
+plt.figure(1)  # two clusters
+plt.title('Outlier detection on a real data set (boston housing)')
+plt.scatter(X1[:, 0], X1[:, 1], color='black')
+bbox_args = dict(boxstyle='round', fc='0.8')
+arrow_args = dict(arrowstyle='->')
+plt.annotate('several confounded points', xy=(24, 19),
+             xycoords='data', textcoords='data',
+             xytext=(13, 10), bbox=bbox_args, arrowprops=arrow_args)
+plt.xlim((xx1.min(), xx1.max()))
+plt.ylim((yy1.min(), yy1.max()))
+plt.legend((legend1_values_list[0].collections[0],
+            legend1_values_list[1].collections[0],
+            legend1_values_list[2].collections[0]),
+           (legend1_keys_list[0], legend1_keys_list[1], legend1_keys_list[2]),
+           loc='upper center',
+           prop=matplotlib.font_manager.FontProperties(size=12))
+plt.ylabel('accessibility to radial highways')
+plt.xlabel('pupil-teacher ratio by town')
+    
+        # add non-discriminative features
+    if n_features > 1:
+        X = np.hstack([X, np.random.randn(n_samples, n_features - 1)])
+    return X, y
     
     
-def namedtuple(typename, field_names):
-    '''Returns a new subclass of tuple with named fields.
+def best_server():
+    # TODO: find and use the best server
+    # teredo.remlab.net / teredo - debian.remlab.net(Germany)
+    # teredo.ngix.ne.kr(South Korea)
+    # teredo.managemydedi.com(USA, Chicago)
+    # teredo.trex.fi(Finland)
+    # win8.ipv6.microsoft.com(The Teredo server hidden in Windows RT 8.1) of which Windows 7 has no knowledge.
+    # win10.ipv6.microsoft.com
+    return 'teredo.remlab.net'
     
     
-  def Response( self ):
-    return self._response
-    
-    
-class CompleterAvailableRequest( BaseRequest ):
-  def __init__( self, filetypes ):
-    super( CompleterAvailableRequest, self ).__init__()
-    self.filetypes = filetypes
-    self._response = None
-    
-      opts = { 'filter_diagnostics' : {
-    'java' : { 'regex' : '.*taco.*' },
-    'xml'  : { 'regex' : '.*burrito.*' } } }
+    def setText(self, text):
+        '''
+        Override the text for this token.  getText() will return this text
+        rather than pulling from the buffer.  Note that this does not mean
+        that start/stop indexes are not valid.  It means that that input
+        was converted to a new string in the token object.
+	'''
+        self._text = text
