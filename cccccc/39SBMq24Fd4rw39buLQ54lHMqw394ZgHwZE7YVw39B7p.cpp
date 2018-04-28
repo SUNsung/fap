@@ -1,227 +1,234 @@
 
         
-        #include 'matrix.h'
-#include 'include_gunit.h'
-#include 'genericvector.h'
-#include 'tprintf.h'
+        
     
-    bool TessBaseAPI::GetDoubleVariable(const char *name, double *value) const {
-  DoubleParam *p = ParamUtils::FindParam<DoubleParam>(
-      name, GlobalParams()->double_params, tesseract_->params()->double_params);
-  if (p == nullptr) return false;
-  *value = (double)(*p);
-  return true;
-}
+    #include <Python.h>
     
-      /**
-   * Set the value of an internal 'parameter.'
-   * Supply the name of the parameter and the value as a string, just as
-   * you would in a config file.
-   * Returns false if the name lookup failed.
-   * Eg SetVariable('tessedit_char_blacklist', 'xyz'); to ignore x, y and z.
-   * Or SetVariable('classify_bln_numeric_mode', '1'); to set numeric-only mode.
-   * SetVariable may be used before Init, but settings will revert to
-   * defaults on End().
-   *
-   * Note: Must be called after Init(). Only works for non-init variables
-   * (init variables should be passed to Init()).
-   */
-  bool SetVariable(const char* name, const char* value);
-  bool SetDebugVariable(const char* name, const char* value);
+      virtual void WriteHash(io::Printer* printer);
+  virtual void WriteEquals(io::Printer* printer);
+  virtual void WriteToString(io::Printer* printer);
     
     
-    {  // Number of 32 bit outputs held in each register.
-  int num_outputs_per_register_;
-  // Maximum number of registers that we will use to hold outputs.
-  int max_output_registers_;
-  // Number of 8 bit inputs in the inputs register.
-  int num_inputs_per_register_;
-  // Number of inputs in each weight group.
-  int num_inputs_per_group_;
-  // Number of groups of inputs to be broadcast.
-  int num_input_groups_;
-  // The weights matrix reorganized in whatever way suits this instance.
-  std::vector<int8_t> shaped_w_;
-  // A series of functions to compute a partial result.
-  std::vector<PartialFunc> partial_funcs_;
+    {  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ImmutableExtensionLiteGenerator);
 };
     
-    
-    {  // ****************** Pass 6 *******************
-  // Do whole document or whole block rejection pass
-  if (!tessedit_test_adaption) {
-    set_global_loc_code(LOC_DOC_BLK_REJ);
-    quality_based_rejection(page_res_it, good_quality_doc);
+    ExtensionGenerator* ImmutableGeneratorFactory::NewExtensionGenerator(
+    const FieldDescriptor* descriptor) const {
+  if (HasDescriptorMethods(descriptor->file(), context_->EnforceLite())) {
+    return new ImmutableExtensionGenerator(descriptor, context_);
+  } else {
+    return new ImmutableExtensionLiteGenerator(descriptor, context_);
   }
 }
     
-    TEST(LogTest, UnexpectedLastType) {
-  Write('foo');
-  SetByte(6, kLastType);
-  FixChecksum(0, 3);
-  ASSERT_EQ('EOF', Read());
-  ASSERT_EQ(3, DroppedBytes());
-  ASSERT_EQ('OK', MatchError('missing start'));
-}
+    // Author: liujisi@google.com (Pherl Liu)
     
-      // Open database.  Disable compression since it affects the creation
-  // of layers and the code below is trying to test against a very
-  // specific scenario.
-  leveldb::DB* db;
-  leveldb::Options db_options;
-  db_options.create_if_missing = true;
-  db_options.compression = leveldb::kNoCompression;
-  ASSERT_OK(leveldb::DB::Open(db_options, dbpath, &db));
-    
-    #include 'table/filter_block.h'
-    
-    TEST(CRC, Extend) {
-  ASSERT_EQ(Value('hello world', 11),
-            Extend(Value('hello ', 6), 'world', 5));
-}
-    
-    
-    {  double Median() const;
-  double Percentile(double p) const;
-  double Average() const;
-  double StandardDeviation() const;
-};
-    
-    class Writer {
- public:
-  // Create a writer that will append data to '*dest'.
-  // '*dest' must be initially empty.
-  // '*dest' must remain live while this Writer is in use.
-  explicit Writer(WritableFile* dest);
-    }
-    
-    #endif // __cocos2dx_cocosdenshion_h__
+    #endif  // GRPC_TEST_CPP_UTIL_BENCHMARK_CONFIG_H
 
     
+    /* Returns true if the |stream| was successfully started and is now done
+ * (succeeded, canceled, or failed).
+ * Returns false if the |stream| stream is not yet started or is in progress.
+ */
+GRPC_SUPPORT_EXPORT
+bool bidirectional_stream_is_done(bidirectional_stream* stream);
+    
+    void ParseDb(const std::string& db, std::vector<Feature>* feature_list);
+    
+    // Data pertaining to configuration of the generator with respect to anything
+// that may be used internally at Google.
+struct GeneratorConfiguration {
+  GeneratorConfiguration();
+  grpc::string grpc_package_root;
+  // TODO(https://github.com/grpc/grpc/issues/8622): Drop this.
+  grpc::string beta_package_root;
+  // TODO(https://github.com/google/protobuf/issues/888): Drop this.
+  grpc::string import_prefix;
+};
+    
+    #include 'src/compiler/python_generator.h'
+#include 'src/compiler/schema_interface.h'
+    
+    #include 'test/cpp/interop/server_helper.h'
+#include 'test/cpp/util/test_config.h'
     
     
-    
-    
-        if (argc == 2)
-    {
-        cocos2d::Vec2 arg0;
-        cocos2d::Vec2 arg1;
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, 'cc.PhysicsBody:createEdgeSegment');
-        ok &= luaval_to_vec2(tolua_S, 3, &arg1, 'cc.PhysicsBody:createEdgeSegment');
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsBody_createEdgeSegment'', nullptr);
-            return 0;
-        }
-        cocos2d::PhysicsBody* ret = cocos2d::PhysicsBody::createEdgeSegment(arg0, arg1);
-        object_to_luaval<cocos2d::PhysicsBody>(tolua_S, 'cc.PhysicsBody',(cocos2d::PhysicsBody*)ret);
-        return 1;
-    }
-    if (argc == 3)
-    {
-        cocos2d::Vec2 arg0;
-        cocos2d::Vec2 arg1;
-        cocos2d::PhysicsMaterial arg2;
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, 'cc.PhysicsBody:createEdgeSegment');
-        ok &= luaval_to_vec2(tolua_S, 3, &arg1, 'cc.PhysicsBody:createEdgeSegment');
-        ok &= luaval_to_physics_material(tolua_S, 4, &arg2, 'cc.PhysicsBody:createEdgeSegment');
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsBody_createEdgeSegment'', nullptr);
-            return 0;
-        }
-        cocos2d::PhysicsBody* ret = cocos2d::PhysicsBody::createEdgeSegment(arg0, arg1, arg2);
-        object_to_luaval<cocos2d::PhysicsBody>(tolua_S, 'cc.PhysicsBody',(cocos2d::PhysicsBody*)ret);
-        return 1;
-    }
-    if (argc == 4)
-    {
-        cocos2d::Vec2 arg0;
-        cocos2d::Vec2 arg1;
-        cocos2d::PhysicsMaterial arg2;
-        double arg3;
-        ok &= luaval_to_vec2(tolua_S, 2, &arg0, 'cc.PhysicsBody:createEdgeSegment');
-        ok &= luaval_to_vec2(tolua_S, 3, &arg1, 'cc.PhysicsBody:createEdgeSegment');
-        ok &= luaval_to_physics_material(tolua_S, 4, &arg2, 'cc.PhysicsBody:createEdgeSegment');
-        ok &= luaval_to_number(tolua_S, 5,&arg3, 'cc.PhysicsBody:createEdgeSegment');
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsBody_createEdgeSegment'', nullptr);
-            return 0;
-        }
-        cocos2d::PhysicsBody* ret = cocos2d::PhysicsBody::createEdgeSegment(arg0, arg1, arg2, arg3);
-        object_to_luaval<cocos2d::PhysicsBody>(tolua_S, 'cc.PhysicsBody',(cocos2d::PhysicsBody*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d\n ', 'cc.PhysicsBody:createEdgeSegment',argc, 2);
-    return 0;
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,'#ferror in function 'lua_cocos2dx_physics_PhysicsBody_createEdgeSegment'.',&tolua_err);
-#endif
-    return 0;
-}
-int lua_cocos2dx_physics_PhysicsBody_create(lua_State* tolua_S)
-{
-    int argc = 0;
-    bool ok  = true;
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-    
-    #ifdef __cplusplus
-extern 'C' {
-#endif
-#include 'tolua++.h'
-#ifdef __cplusplus
-}
-#endif
-    
-    // This class implements debug drawing callbacks that are invoked
-// inside b2World::Step.
-class GLESDebugDraw : public b2Draw
-{
-    float32 mRatio;
-    cocos2d::GLProgram* mShaderProgram;
-    GLint        mColorLocation;
-    }
-    
-    struct TestEntry
-{
-	const char *name;
-	TestCreateFcn *createFcn;
+    { private:
+  std::map<string, std::shared_ptr<QpsGauge>> qps_gauges_;
+  std::mutex mu_;
 };
     
     
-    {
-    {			body->CreateFixture(&fd);
-		}
-	}
+    {  grpc::string package = service->full_name();
+  size_t pos = package.rfind('.' + service->name());
+  if (pos != grpc::string::npos) {
+    package.erase(pos);
+    result.append('package: ' + package + ';\n');
+  }
+  result.append('service ' + service->name() + ' {\n');
+  for (int i = 0; i < service->method_count(); ++i) {
+    result.append(DescribeMethod(service->method(i)));
+  }
+  result.append('}\n\n');
+  return result;
+}
     
-    // TODO(t10737622): Improve on-device symbolification
-void getStackTraceSymbols(vector<StackTraceElement>& symbols,
-                          const vector<InstructionPointer>& trace) {
-  symbols.clear();
-  symbols.reserve(trace.size());
+      // Proto2 Python
+  google::protobuf::compiler::python::Generator py_generator;
+  cli.RegisterGenerator('--python_out', &py_generator,
+                        'Generate Python source file.');
+    
+    template<typename To, typename From> To checked_convert(From f, const char* name) {
+  if (overflows<To, From>(f)) {
+    std::string msg = 'value cannot be converted to type ';
+    msg += name;
+    msg += ' without overflow: ';
+    msg += std::to_string(f);
+    throw std::domain_error(std::move(msg));
+  }
+  return convert<To, From>(f);
+}
+    
+    int64_t stride(const Tensor& self, int64_t dim) {
+  // false is passed to maybe_wrap_dim so behavior is identical to array access (but with wrapping)
+  dim = maybe_wrap_dim(dim, self.dim(), false);
+  return self.strides()[dim];
+}
+    
+    std::size_t ${Storage}::elementSize() const {
+  return sizeof(${ScalarType});
+}
+    
+    IntList ${Tensor}::sizes() const {
+  int64_t d = ${THTensor_nDimension};
+  if (d != 0) {
+    // note: this will return '{}' for a scalar because dim() will return 0 in that case.
+    return IntList(reinterpret_cast<int64_t*>(tensor->size),dim());
+  } else {
+    return IntList(kEmptySizes);
+  }
+}
+    
+      // NOTE: this function needs to be thread safe
+  std::shared_ptr<buffer_type> createBuffer(std::size_t bytes, DeviceType device) const {
+    if (device == DeviceType::CPU) {
+      return std::shared_ptr<buffer_type>(new char[bytes],
+                                          std::default_delete<char[]>());
+#ifdef WITH_CUDA
+    } else if (device == DeviceType::CUDA) {
+      buffer_type *buf;
+      THCudaCheck(THCudaMalloc(THDGetCudaState(), (void**)&buf, bytes));
+      return std::shared_ptr<buffer_type>(buf, [](char* ptr) { THCudaFree(THDGetCudaState(), ptr); });
+#endif
+    } else {
+      throw std::runtime_error('unsupported device in GlooCache::createBuffer');
+    }
+  }
+    
+      auto ilen = input_size[0];
+  auto batchSize = input_size[1];
+  auto inputPlanes = input_size[2];
+  auto outputPlanes = weight_size[2];
+  auto kw = weight.sizes()[0];
+  auto olen = input_size[0] - kw + 1 + pad * 2;
+  int real_pad = (olen - ilen + kw - 1) / 2;
+    
+    #undef THHostTensor
+#undef THHostTensor_
+#undef THHostStorage
+#undef THHostStorage_
+
+    
+    #include 'wakeuplock.h'
+#include 'assert/__assert.h'
+#include 'xlogger/xlogger.h'
+    
+    #include 'socket/unix_socket.h'
+#include 'ptrbuffer.h'
+#include 'adler32.h'
+#include 'assert/__assert.h'
+    
+    #ifndef COMM_COMM_FREQUENCY_LIMIT_H_
+#define COMM_COMM_FREQUENCY_LIMIT_H_
+    
+    
+    {  private:
+    TServicesMap m_services;
+    TServicesMap m_publicservices;
+    std::vector<ServiceBase*> m_releasevec;
+};
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    struct ExternalFunctions {
+  // Initialize function pointers. Functions that are not available will be set
+  // to nullptr.  Do not call this constructor  before ``main()`` has been
+  // entered.
+  ExternalFunctions();
     }
     
-    #include <nbind/api.h>
-#include <nbind/BindDefiner.h>
-#include <yoga/Yoga.h>
+    #include 'FuzzerExtFunctions.h'
+#include 'FuzzerIO.h'
     
-    struct Layout
-{
-    double left;
-    double right;
+    int DuplicateFile(int Fd);
+    
+      HANDLE FileHandle(
+      CreateFileA(Path.c_str(), 0, FILE_SHARE_READ, NULL, OPEN_EXISTING,
+                  FILE_FLAG_BACKUP_SEMANTICS, 0));
+    
+    // Inner process. May crash if the target crashes.
+void Fuzzer::CrashResistantMergeInternalStep(const std::string &CFPath) {
+  Printf('MERGE-INNER: using the control file '%s'\n', CFPath.c_str());
+  Merger M;
+  std::ifstream IF(CFPath);
+  M.ParseOrExit(IF, false);
+  IF.close();
+  if (!M.LastFailure.empty())
+    Printf('MERGE-INNER: '%s' caused a failure at the previous merge step\n',
+           M.LastFailure.c_str());
     }
     
-    namespace facebook {
+    struct Merger {
+  std::vector<MergeFileInfo> Files;
+  size_t NumFilesInFirstCorpus = 0;
+  size_t FirstNotProcessedFile = 0;
+  std::string LastFailure;
     }
     
-    namespace facebook {
-#define ENABLE_FBASSERT 1
-    }
     
+    {	// Append length in the last 8 bytes
+	sha1_addUncounted(s, 0); // We're only using 32 bit lengths
+	sha1_addUncounted(s, 0); // But SHA-1 supports 64 bit lengths
+	sha1_addUncounted(s, 0); // So zero pad the top bits
+	sha1_addUncounted(s, s->byteCount >> 29); // Shifting to multiply by 8
+	sha1_addUncounted(s, s->byteCount >> 21); // as SHA-1 supports bitstreams as well as
+	sha1_addUncounted(s, s->byteCount >> 13); // byte.
+	sha1_addUncounted(s, s->byteCount >> 5);
+	sha1_addUncounted(s, s->byteCount << 3);
+}
     
-    {
-    {}}
+    __attribute__((visibility('default')))
+void __sanitizer_cov_trace_pc_guard_init(uint32_t *Start, uint32_t *Stop) {
+  fuzzer::TPC.HandleInit(Start, Stop);
+}
+    
+    #include 'FuzzerUtil.h'
+#include 'FuzzerIO.h'
+#include 'FuzzerInternal.h'
+#include <cassert>
+#include <chrono>
+#include <cstring>
+#include <errno.h>
+#include <signal.h>
+#include <sstream>
+#include <stdio.h>
+#include <sys/types.h>
+#include <thread>
+    
+    #include 'FuzzerIO.h'
+#include <mutex>
+#include <signal.h>
+#include <spawn.h>
+#include <sys/wait.h>
