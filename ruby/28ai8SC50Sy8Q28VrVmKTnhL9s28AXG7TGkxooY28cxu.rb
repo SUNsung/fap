@@ -1,96 +1,86 @@
 
         
-          test 'token_and_options returns correct token with slashes' do
-    token = 'rcHu+\\\\'/896A'
-    actual = ActionController::HttpAuthentication::Token.token_and_options(sample_request(token)).first
-    expected = token
-    assert_equal(expected, actual)
-  end
+        # For this pull request, which changes Page#dir
+# https://github.com/jekyll/jekyll/pull/4403
     
-          result = ActionsController.action(:index).call(env_for('/'))
-      assert_nil result[1]['Middleware-Order']
+        Jekyll::Commands::Build.process({'source' => 'docs'})
+    
+          theme.create!
+      Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
+        ' is ready for you in #{theme.path.to_s.cyan}!'
+      Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
     end
-    
-    module ActionMailer
-  # The <tt>ActionMailer::DeliveryJob</tt> class is used when you
-  # want to send emails outside of the request-response cycle.
-  #
-  # Exceptions are rescued and handled by the mailer class.
-  class DeliveryJob < ActiveJob::Base # :nodoc:
-    queue_as { ActionMailer::Base.deliver_later_queue_name }
-    
-    require 'active_support/log_subscriber'
-    
-            def initialize(argv)
-          @pod_name = argv.shift_argument
-          @wipe_all = argv.flag?('all')
-          super
-        end
-    
-            def run
-          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
-          if @pod_name.nil? # Print all
-            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
-              print_pod_cache_infos(pod_name, cache_descriptors)
-            end
-          else # Print only for the requested pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            else
-              print_pod_cache_infos(@pod_name, cache_descriptors)
-            end
-          end
-        end
-    
-            def block_argument?
-          argument? && @scope.node.block_type?
-        end
-    
-    module RuboCop
-  module Cop
-    module Layout
-      # Checks for unnecessary additional spaces inside array percent literals
-      # (i.e. %i/%w).
-      #
-      # @example
-      #
-      #   # bad
-      #   %w(foo  bar  baz)
-      #   # good
-      #   %i(foo bar baz)
-      class SpaceInsideArrayPercentLiteral < Cop
-        include MatchRange
-        include PercentLiteral
-    
-    module RuboCop
-  module Cop
-    module Lint
-      # Don't omit the accumulator when calling `next` in a `reduce` block.
-      #
-      # @example
-      #
-      #   # bad
-      #
-      #   result = (1..4).reduce(0) do |acc, i|
-      #     next if i.odd?
-      #     acc + i
-      #   end
-      #
-      # @example
-      #
-      #   # good
-      #
-      #   result = (1..4).reduce(0) do |acc, i|
-      #     next acc if i.odd?
-      #     acc + i
-      #   end
-      class NextWithoutAccumulator < Cop
-        MSG = 'Use `next` with an accumulator argument in a `reduce`.'.freeze
-    
-              [optarg_positions, arg_positions]
-        end
-      end
-    end
+    # rubocop:enable Metrics/AbcSize
   end
 end
+
+    
+        def execute(args)
+      topic_id = args[:topic_id]
+      raise Discourse::InvalidParameters.new(:topic_id) unless topic_id.present?
+    
+        def execute(args)
+    
+      def revoke_moderation!
+    set_permission('moderator', false)
+  end
+    
+      def cache_fragment(name)
+    ApplicationSerializer.fragment_cache[name] ||= yield
+  end
+end
+
+    
+      # Finds the projects '@user' contributed to, limited to either public projects
+  # or projects visible to the given user.
+  #
+  # current_user - When given the list of the projects is limited to those only
+  #                visible by this user.
+  #
+  # Returns an ActiveRecord::Relation.
+  def execute(current_user = nil)
+    segments = all_projects(current_user)
+    
+        delegate :empty?, :blank?, to: :pages
+    
+    if profile_filename = ENV['PROFILE']
+  require 'ruby-prof'
+  reporter =
+    case (profile_extname = File.extname(profile_filename))
+    when '.txt'
+      RubyProf::FlatPrinterWithLineNumbers
+    when '.html'
+      RubyProf::GraphHtmlPrinter
+    when '.callgrind'
+      RubyProf::CallTreePrinter
+    else
+      raise 'Unknown profiler format indicated by extension: #{profile_extname}'
+    end
+  File.open(profile_filename, 'w') do |io|
+    reporter.new(RubyProf.profile { Pod::Command.run(ARGV) }).print(io)
+  end
+else
+  Pod::Command.run(ARGV)
+end
+
+    
+          def stack
+        UI::ErrorReport.stack
+      end
+    
+            # Split out the targets into app and test targets
+        test_targets, app_targets = project.native_targets.
+                              sort_by { |t| t.name.downcase }.
+                              partition(&:test_target_type?)
+    
+      tasks_dir = Pathname.new('lib/capistrano/tasks')
+  config_dir = Pathname.new('config')
+  deploy_dir = config_dir.join('deploy')
+    
+          it 'filters by roles from the :filter variable' do
+        hosts = dsl.roles(:web)
+        all = dsl.roles(:all)
+        SSHKit::Coordinator.expects(:new).with(hosts).returns(@coordinator)
+        dsl.set :filter, roles: 'web'
+        dsl.on(all)
+      end
