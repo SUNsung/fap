@@ -1,58 +1,42 @@
 
         
-        # No trailing slash
-Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
-
+                  @env.action_runner.run(Vagrant::Action.action_box_remove, {
+            box_name:     argv[0],
+            box_provider: options[:provider],
+            box_version:  options[:version],
+            force_confirm_box_remove: options[:force],
+            box_remove_all_versions: options[:all],
+          })
     
-    # No trailing slash
-Benchmark.ips do |x|
-  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
-  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
-  x.compare!
-end
-
+              tries     += 1
+          record.id += rand(100)
     
-    module Jekyll
-  binding.pry
-end
-
+          it 'processes payload with actor if valid signature exists' do
+        payload['signature'] = {'type' => 'RsaSignature2017'}
     
-            c.action do |args, opts|
-          Jekyll::Commands::NewTheme.process(args, opts)
-        end
-      end
-    end
-    
-          private
-    
-      def object_url
-    return if @object['url'].blank?
-    
-        def matching_username
-      Account.where(Account.arel_table[:username].lower.eq username.to_s.downcase)
-    end
-    
-      describe 'GET #show' do
-    it 'returns http success' do
-      get :show
-      expect(response).to have_http_status(:success)
+      def url
+    if object.needs_redownload?
+      media_proxy_url(object.id, :original)
+    else
+      full_asset_url(object.file.url(:original))
     end
   end
     
-        def register_lotus
-      Lotus::Assets.sources << assets_path
+        # Setup GitHub environment variables
+    %w[GITHUB_USER GITHUB_PASSWORD GITHUB_TOKEN].each do |env|
+      homebrew_env = ENV['HOMEBREW_#{env}']
+      next unless homebrew_env
+      next if homebrew_env.empty?
+      ENV[env] = homebrew_env
     end
     
-        # These mixins will get vararg definitions in SCSS (not supported by LESS):
-    VARARG_MIXINS               = %w(
-      scale transition transition-duration transition-property transition-transform box-shadow
-    )
+          rtn = ''
+      (context.environments.first['site'][@array_name] || []).each do |file|
+        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
+          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
+        end
     
-      # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+      # Checks for excerpts (helpful for template conditionals)
+  def has_excerpt(input)
+    input =~ /<!--\s*more\s*-->/i ? true : false
+  end
