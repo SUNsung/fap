@@ -1,219 +1,140 @@
 
         
-        for page in itertools.count(1):
-    releases = json.loads(compat_urllib_request.urlopen(
-        'https://api.github.com/repos/rg3/youtube-dl/releases?page=%s' % page
-    ).read().decode('utf-8'))
+            app.session_interface.serializer.register(TagOrderedDict, index=0)
+    
+        version, release_date, codename = rv
+    dev_version = bump_version(version) + '.dev'
     
     
-class TestMultipleSocks(unittest.TestCase):
-    @staticmethod
-    def _check_params(attrs):
-        params = get_params()
-        for attr in attrs:
-            if attr not in params:
-                print('Missing %s. Skipping.' % attr)
-                return
-        return params
+def test_config_from_json():
+    app = flask.Flask(__name__)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    app.config.from_json(os.path.join(current_dir, 'static', 'config.json'))
+    common_object_test(app)
     
-            retval = subprocess.call(args)
-        if retval == 0:
-            fsize = os.path.getsize(encodeFilename(tmpfilename))
-            self.to_screen('\r[%s] %s bytes' % (args[0], fsize))
-            self.try_rename(tmpfilename, filename)
-            self._hook_progress({
-                'downloaded_bytes': fsize,
-                'total_bytes': fsize,
-                'filename': filename,
-                'status': 'finished',
-            })
-            return True
-        else:
-            self.to_stderr('\n')
-            self.report_error('%s exited with code %d' % (args[0], retval))
-            return False
-
-    
-        def _real_extract(self, url):
-        playlist_id = self._match_id(url)
-    
-            runtime = self._search_regex(
-            r'Runtime\s*:\s*(.+?) \|', webpage, 'duration', default=None)
-        if runtime:
-            runtime = re.sub(r'[\s-]', '', runtime)
-        duration = parse_duration(runtime)
-        view_count = int_or_none(self._search_regex(
-            r'Views\s*:\s*(\d+)', webpage, 'view count', default=None))
-        comment_count = int_or_none(self._search_regex(
-            r'Comments\s*:\s*(\d+)', webpage, 'comment count', default=None))
+        if logging_plugin:
+        pytestconfig.pluginmanager.register(logging_plugin, 'logging-plugin')
     
     
-@pytest.mark.functional
-def test_refuse_with_confirmation(proc, TIMEOUT):
-    refuse_with_confirmation(proc, TIMEOUT)
+def import_state_tuples(state_tuples, name, num_replicas):
+  restored = []
+  for i in range(len(state_tuples) * num_replicas):
+    c = tf.get_collection_ref(name)[2 * i + 0]
+    h = tf.get_collection_ref(name)[2 * i + 1]
+    restored.append(tf.contrib.rnn.LSTMStateTuple(c, h))
+  return tuple(restored)
     
-        :copyright: © 2010 by the Pallets team.
-    :license: BSD, see LICENSE for more details.
-'''
+      Returns a np.array matrix A that can be used to post-multiply a matrix S of
+  spectrogram values (STFT magnitudes) arranged as frames x bins to generate a
+  'mel spectrogram' M of frames x num_mel_bins.  M = S A.
     
-            if index == -1:
-            self.order.append(tag)
-        else:
-            self.order.insert(index, tag)
+      # Init ops
+  if FLAGS.sync_replicas:
+    local_init_op = tf.get_collection('local_init_op')[0]
+    ready_for_local_init_op = tf.get_collection('ready_for_local_init_op')[0]
+  else:
+    local_init_op = tf.train.Supervisor.USE_DEFAULT
+    ready_for_local_init_op = tf.train.Supervisor.USE_DEFAULT
     
-        return logger
-
+    
+class BaseBenchmarkLogger(object):
+  '''Class to log the benchmark information to STDOUT.'''
+    
+      def test_inference(self):
+    with tempfile.TemporaryDirectory() as working_dir, \
+        tempfile.TemporaryDirectory() as export_dir:
+      dualnet.bootstrap(working_dir, model_params.DummyMiniGoParams())
+      exported_model = os.path.join(export_dir, 'bootstrap-model')
+      dualnet.export_model(working_dir, exported_model)
+    
+        left_group = lib_tracker.groups[lib_tracker.group_index[coords.from_kgs(
+        utils_test.BOARD_SIZE, 'A8')]]
+    self.assertEqual(left_group.stones, coords_from_kgs_set('A8'))
+    self.assertEqual(left_group.liberties,
+                     coords_from_kgs_set('A9 B8 A7'))
+    
+        # We're assuming that select_leaf() returns a leaf like:
+    #   root
+    #     \
+    #     leaf
+    #       \
+    #       leaf2
+    # which happens in this test because root is W to play and leaf was a W win.
+    self.assertEqual(root.position.to_play, go.WHITE)
+    leaf2 = root.select_leaf()
+    leaf2.incorporate_results(probs, -0.2, root)  # another white semi-win
+    self.assertEqual(root.N, 3)
+    # average of 0, 0, -1, -0.2
+    self.assertAlmostEqual(root.Q, -0.3)
+    
+      def test_only_check_game_end_once(self):
+    # When presented with a situation where the last move was a pass,
+    # and we have to decide whether to pass, it should be the first thing
+    # we check, but not more than that.
     
     
-def test_custom_config_class():
-    class Config(flask.Config):
-        pass
+class Categorizer(object):
     
-        Models: `flatpages.flatpages`
-    Templates: Uses the template defined by the ``template_name`` field,
-        or :template:`flatpages/default.html` if template_name is not defined.
-    Context:
-        flatpage
-            `flatpages.flatpages` object
+        def __init__(self):
+        self.lookup = {}  # key: person_id, value: person_server
+    
+        def test_get_sni_addr(self):
+        from certbot_apache.obj import Addr
+        self.assertEqual(
+            self.addr.get_sni_addr('443'), Addr.fromstring('*:443'))
+        self.assertEqual(
+            self.addr.get_sni_addr('225'), Addr.fromstring('*:225'))
+        self.assertEqual(
+            self.addr1.get_sni_addr('443'), Addr.fromstring('127.0.0.1'))
+    
+        @mock.patch('certbot_compatibility_test.validator.requests.get')
+    def test_hsts_include_subdomains(self, mock_get_request):
+        mock_get_request.return_value = create_response(
+            headers={'strict-transport-security':
+                     'max-age=31536000;includeSubDomains'})
+        self.assertTrue(self.validator.hsts('test.com'))
+    
+    # Add any paths that contain custom themes here, relative to this directory.
+#html_theme_path = []
+    
+    import mock
+    
     '''
-    if not url.startswith('/'):
-        url = '/' + url
-    site_id = get_current_site(request).id
+import zope.interface
+    
+    from babel.messages.pofile import read_po
+    
+    
+def SetUpSystemPaths():
+  sys.path.insert( 0, os.path.join( DIR_OF_YCMD ) )
+    
+        # Execute the template string in a temporary namespace and
+    # support tracing utilities by setting a value for frame.f_globals['__name__']
+    namespace = dict(_itemgetter=_itemgetter, __name__='namedtuple_%s' % typename,
+                     _property=property, _tuple=tuple)
     try:
-        f = get_object_or_404(FlatPage, url=url, sites=site_id)
-    except Http404:
-        if not url.endswith('/') and settings.APPEND_SLASH:
-            url += '/'
-            f = get_object_or_404(FlatPage, url=url, sites=site_id)
-            return HttpResponsePermanentRedirect('%s/' % request.path)
-        else:
-            raise
-    return render_flatpage(request, f)
+        exec(template, namespace)
+    except SyntaxError:
+        e = _sys.exc_info()[1]
+        raise SyntaxError(e.message + ':\n' + template)
+    result = namespace[typename]
     
     
-def post(url, data=None, json=None, **kwargs):
-    r'''Sends a POST request.
+def KeywordsFromSyntaxListOutput_MultipleStatementGroups_test():
+  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
+foogroup xxx foo bar
+             links to Statement
+bargroup xxx zoo goo
+             links to Statement''' ),
+               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
     
-        def prepare(self,
-            method=None, url=None, headers=None, files=None, data=None,
-            params=None, auth=None, cookies=None, hooks=None, json=None):
-        '''Prepares the entire request with the given parameters.'''
-    
-    from requests.structures import CaseInsensitiveDict, LookupDict
-    
-            if self._thread_local.pos is not None:
-            # Rewind the file position indicator of the body to where
-            # it was to resend the request.
-            r.request.body.seek(self._thread_local.pos)
-        s_auth = r.headers.get('www-authenticate', '')
-    
-    # Syntax sugar.
-_ver = sys.version_info
-    
-    import pytest
-    
-    
-class StreamConsumedError(RequestException, TypeError):
-    '''The content for this response was already consumed'''
-    
-        def initialize_options(self):
-        TestCommand.initialize_options(self)
-        try:
-            from multiprocessing import cpu_count
-            self.pytest_args = ['-n', str(cpu_count()), '--boxed']
-        except (ImportError, NotImplementedError):
-            self.pytest_args = ['-n', '1', '--boxed']
-    
-    
-def get_args(args_list):
-    parser = argparse.ArgumentParser(
-        description='ansible inventory script reading from landscape cluster')
-    mutex_group = parser.add_mutually_exclusive_group(required=True)
-    help_list = 'list all hosts from landscape cluster'
-    mutex_group.add_argument('--list', action='store_true', help=help_list)
-    help_host = 'display variables for a host'
-    mutex_group.add_argument('--host', help=help_host)
-    return parser.parse_args(args_list)
-    
-    # Dynamic inventory script which lets you use nodes discovered by Serf
-# (https://serfdom.io/).
-#
-# Requires the `serfclient` Python module from
-# https://pypi.python.org/pypi/serfclient
-#
-# Environment variables
-# ---------------------
-#   - `SERF_RPC_ADDR`
-#   - `SERF_RPC_AUTH`
-#
-# These variables are described at https://www.serfdom.io/docs/commands/members.html#_rpc_addr
-    
-        digest = hash_func()
-    data = to_bytes(data, errors='surrogate_or_strict')
-    digest.update(data)
-    return digest.hexdigest()
-    
-        The host identifier may be a hostname (qualified or not), an IPv4 address,
-    or an IPv6 address. If allow_ranges is True, then any of those may contain
-    [x:y] range specifications, e.g. foo[1:3] or foo[0:5]-bar[x-z].
-    
-        @mock.patch('pkg_resources.get_distribution', side_effect=build_distribution)
-    def test_check_minimum_pkg_version(self, mockobj):
-        self.assertTrue(check_min_pkg_version('foobar', '0.4.0'))
-        self.assertTrue(check_min_pkg_version('foobar', '0.5.0'))
-        self.assertFalse(check_min_pkg_version('foobar', '0.6.0'))
-    
-    
-class TerminalModule(TerminalBase):
-    
-        def on_open_shell(self):
-        try:
-            self._exec_cli_command(b'environment no more')
-        except AnsibleConnectionFailure:
-            raise AnsibleConnectionFailure('unable to set terminal parameters')
-
-    
-            cert = os.path.join(cert_and_key_dir, 'cert')
-        shutil.copy(cert_path, cert)
-        key = os.path.join(cert_and_key_dir, 'key')
-        shutil.copy(key_path, key)
-        if chain_path:
-            chain = os.path.join(cert_and_key_dir, 'chain')
-            shutil.copy(chain_path, chain)
-        else:
-            chain = None
-    
-    # Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.viewcode',
-    'repoze.sphinx.autointerface',
-]
-    
-    # If true, links to the reST sources are added to the pages.
-#html_show_sourcelink = True
-    
-    site_info = 'ehow.com'
-download = ehow_download
-download_playlist = playlist_not_supported('ehow')
-
-    
-    def kuwo_playlist_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    html=get_content(url)
-    matched=set(re.compile('yinyue/(\d+)').findall(html))#reduce duplicated
-    for rid in matched:
-        kuwo_download_by_rid(rid,output_dir,merge,info_only)
-    
-        print_info(site_info, title, ext, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir=output_dir, merge=merge)
-    
-        # mgid%3Auma%3Avideo%3Amtv81.com%3A897974
-    vid = match1(html, r'getTheVideo\('(.*?)'')
-    xml = parseString(
-        get_content('http://intl.esperanto.mtvi.com/www/xml/media/mediaGen.jhtml?uri={}&flashPlayer=LNX%2013,0,0,206&geo=CN&sid=123456'.format(vid)))
+      if 'word' in vim_data:
+    completion_data[ 'insertion_text' ] = vim_data[ 'word' ]
+  if 'abbr' in vim_data:
+    completion_data[ 'menu_text' ] = vim_data[ 'abbr' ]
+  if 'menu' in vim_data:
+    completion_data[ 'extra_menu_info' ] = vim_data[ 'menu' ]
+  if 'kind' in vim_data:
+    completion_data[ 'kind' ] = [ vim_data[ 'kind' ] ]
+  if 'info' in vim_data:
+    completion_data[ 'detailed_info' ] = vim_data[ 'info' ]
