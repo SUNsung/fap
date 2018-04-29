@@ -1,56 +1,47 @@
 
         
-            projects << @user.personal_projects.visible_to_user(current_user) if current_user
-    projects << @user.personal_projects.public_to_user(current_user)
-    
-      def present(payload)
-    if payload.is_a?(Hash)
-      payload = ActiveSupport::HashWithIndifferentAccess.new(payload)
-      MAIN_KEYS.each do |key|
-        return { :title => payload[key].to_s, :entries => present_hash(payload, key) } if payload.has_key?(key)
+              # This gets the value of the block with the given key.
+      def get(key)
+        key    = Regexp.quote(key)
+        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$\r?\n?(.*?)\r?\n?^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
+        match  = regexp.match(@value)
+        return nil if !match
+        match[1]
       end
     
-      def destroy
-    @services = current_user.services.find(params[:id])
-    @services.destroy
+    module VagrantPlugins
+  module CommandBox
+    module Command
+      class Repackage < Vagrant.plugin('2', :command)
+        def execute
+          opts = OptionParser.new do |o|
+            o.banner = 'Usage: vagrant box repackage <name> <provider> <version>'
+          end
     
-      def import
-    if params[:file]
-      file = params[:file]
-      content = JSON.parse(file.read)
-      new_credentials = content.map do |hash|
-        current_user.user_credentials.build(hash.slice('credential_name', 'credential_value', 'mode'))
-      end
+      it 'does not decode a float when fewer bytes than a float remain and the '*' modifier is passed' do
+    [ ['\xff', []],
+      ['\xff\x00', []],
+      ['\xff\x00\xff', []]
+    ].should be_computed_by(:unpack, unpack_format('*'))
+  end
     
-          def find
-        client = Api::OpenidConnect::OAuthApplication.find_by(client_name: params[:client_name])
-        if client
-          render json: {client_id: client.client_id}
-        else
-          render json: {error: 'Client with name #{params[:client_name]} does not exist'}
-        end
-      end
+        def paragraphize(input)
+      '<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>'
+    end
+  end
+end
     
-            def stock_location
-          render 'spree/api/v1/shared/stock_location_required', status: 422 and return unless params[:stock_location_id]
-          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:stock_location_id])
-        end
+    When /^(?:|I )fill in '([^']*)' with '([^']*)'$/ do |field, value|
+  fill_in(field, :with => value)
+end
     
-        def self.each_definition(&block)
-      instance.each_definition(&block)
+        def self.definitions_for(klass)
+      instance.definitions_for(klass)
     end
     
-        def cropping dst, ratio, scale
-      if ratio.horizontal? || ratio.square?
-        '%dx%d+%d+%d' % [ dst.width, dst.height, 0, (self.height * scale - dst.height) / 2 ]
-      else
-        '%dx%d+%d+%d' % [ dst.width, dst.height, (self.width * scale - dst.width) / 2, 0 ]
-      end
-    end
-    
-            required = directories.map do |directory|
-          pathname = File.expand_path(Rails.root.join(directory, filename))
-          file_exists = File.exist?(pathname)
-          require pathname if file_exists
-          file_exists
+          class ValidateAttachmentContentTypeMatcher
+        def initialize attachment_name
+          @attachment_name = attachment_name
+          @allowed_types = []
+          @rejected_types = []
         end
