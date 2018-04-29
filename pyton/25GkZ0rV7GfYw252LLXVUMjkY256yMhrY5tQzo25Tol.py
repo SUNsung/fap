@@ -1,80 +1,95 @@
 
         
-        # Note, sha1 is the only hash algorithm compatible with python2.4 and with
-# FIPS-140 mode (as of 11-2014)
-try:
-    from hashlib import sha1 as sha1
-except ImportError:
-    from sha import sha as sha1
+            packages = find_packages('src'),
+    package_dir = {'' : 'src'},
     
-        # If it isn't any of the above, we don't understand it.
-    if not host:
-        raise AnsibleError('Not a valid network hostname: %s' % address)
-    
-        indent = None
-    if format:
-        indent = 4
-    
-        @g_connect
-    def authenticate(self, github_token):
-        '''
-        Retrieve an authentication token
-        '''
-        url = '%s/tokens/' % self.baseurl
-        args = urlencode({'github_token': github_token})
-        resp = open_url(url, data=args, validate_certs=self._validate_certs, method='POST')
-        data = json.loads(to_text(resp.read(), errors='surrogate_or_strict'))
-        return data
-    
-    import re
-    
-        results = {}
-    for group in sort_groups(groups):
-        results = combine_vars(results, group.get_vars())
+        type, ext, size = url_info(video_url, headers=fake_headers)
     
     
-def best_server():
-    # TODO: find and use the best server
-    # teredo.remlab.net / teredo - debian.remlab.net(Germany)
-    # teredo.ngix.ne.kr(South Korea)
-    # teredo.managemydedi.com(USA, Chicago)
-    # teredo.trex.fi(Finland)
-    # win8.ipv6.microsoft.com(The Teredo server hidden in Windows RT 8.1) of which Windows 7 has no knowledge.
-    # win10.ipv6.microsoft.com
-    return 'teredo.remlab.net'
-    
-    
-    def setText(self, text):
-        '''
-        Override the text for this token.  getText() will return this text
-        rather than pulling from the buffer.  Note that this does not mean
-        that start/stop indexes are not valid.  It means that that input
-        was converted to a new string in the token object.
-	'''
-        self._text = text
-    
-        def test_strange_subclass(self):
-        class X(deque):
-            def __iter__(self):
-                return iter([])
-        d1 = X([1,2,3])
-        d2 = X([4,5,6])
-        d1 == d2   # not clear if this is supposed to be True or False,
-                   # but it used to give a SystemError
-    
-    
-print('\n# ======================================================================')
-print('#                   Calculating pi, 10000 iterations')
-print('# ======================================================================\n')
-    
-    make_scanner = c_make_scanner or py_make_scanner
+site_info = 'mtv81.com'
+download = mtv81_download
+download_playlist = playlist_not_supported('mtv81')
 
     
-            # RFC 4642 2.2.2: Both the client and the server MUST know if there is
-        # a TLS session active.  A client MUST NOT attempt to start a TLS
-        # session if a TLS session is already active.
-        self.tls_on = False
+        Returns:
+        An iterator that yields the given Futures as they complete (finished or
+        cancelled).
     
-        def test_from_buffer_with_offset(self):
-        a = array.array('i', range(16))
-        x = (c_int * 15).from_buffer(a, sizeof(c_int))
+    # Controls how many more calls than processes will be queued in the call queue.
+# A smaller number will mean that processes spend more time idle waiting for
+# work while a larger number will make Future.cancel() succeed less frequently
+# (Futures in the call queue cannot be cancelled).
+EXTRA_QUEUED_CALLS = 1
+    
+    def _worker(executor_reference, work_queue):
+    try:
+        while True:
+            work_item = work_queue.get(block=True)
+            if work_item is not None:
+                work_item.run()
+                continue
+            executor = executor_reference()
+            # Exit if:
+            #   - The interpreter is shutting down OR
+            #   - The executor that owns the worker has been collected OR
+            #   - The executor that owns the worker has been shutdown.
+            if _shutdown or executor is None or executor._shutdown:
+                # Notice other workers
+                work_queue.put(None)
+                return
+            del executor
+    except BaseException:
+        _base.LOGGER.critical('Exception in worker', exc_info=True)
+    
+    PRIMES = [
+    112272535095293,
+    112582705942171,
+    112272535095293,
+    115280095190773,
+    115797848077099,
+    117450548693743,
+    993960000099397]
+    
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
+    
+      if 'word' in vim_data:
+    completion_data[ 'insertion_text' ] = vim_data[ 'word' ]
+  if 'abbr' in vim_data:
+    completion_data[ 'menu_text' ] = vim_data[ 'abbr' ]
+  if 'menu' in vim_data:
+    completion_data[ 'extra_menu_info' ] = vim_data[ 'menu' ]
+  if 'kind' in vim_data:
+    completion_data[ 'kind' ] = [ vim_data[ 'kind' ] ]
+  if 'info' in vim_data:
+    completion_data[ 'detailed_info' ] = vim_data[ 'info' ]
+    
+    
+def HandlePollResponse_SingleDiagnostic_test():
+  diagnostics_handler = ExtendedMock()
+  messages = [
+    { 'filepath': 'foo', 'diagnostics': [ 'PLACEHOLDER' ] },
+  ]
+  assert_that( _HandlePollResponse( messages, diagnostics_handler ),
+               equal_to( True ) )
+  diagnostics_handler.UpdateWithNewDiagnosticsForFile.assert_has_exact_calls( [
+    call( 'foo', [ 'PLACEHOLDER' ] )
+  ] )
+    
+    
+class Student(AbstractExpert):
+    
+        def test_dog_adapter_shall_make_noise(self):
+        dog = Dog()
+        dog_adapter = Adapter(dog, make_noise=dog.bark)
+        noise = dog_adapter.make_noise()
+        expected_noise = 'woof!'
+        self.assertEqual(noise, expected_noise)
+    
+    *TL;DR80
+Traverses a container and accesses the container's elements.
+'''
