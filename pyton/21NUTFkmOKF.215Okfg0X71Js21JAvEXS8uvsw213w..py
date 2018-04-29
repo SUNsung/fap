@@ -1,98 +1,105 @@
 
         
         
-httpie_info = packages.pop('httpie')
-print('''
-  url '{url}'
-  sha256 '{sha256}'
-'''.format(**httpie_info))
+def head(url, **kwargs):
+    r'''Sends a HEAD request.
+    
+            # if the server thread fails to finish, the test suite will hang
+        # and get killed by the jenkins timeout.
+    
+        # 'I want us to put a big-ol' comment on top of it that
+    # says that this behaviour is dumb but we need to preserve
+    # it because people are relying on it.'
+    #    - Lukasa
+    #
+    # These are here solely to maintain backwards compatibility
+    # for things like ints. This will be removed in 3.0.0.
+    if not isinstance(username, basestring):
+        warnings.warn(
+            'Non-string usernames will no longer be supported in Requests '
+            '3.0.0. Please convert the object you've passed in ({0!r}) to '
+            'a string or bytes object in the near future to avoid '
+            'problems.'.format(username),
+            category=DeprecationWarning,
+        )
+        username = str(username)
+    
+        def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
     
     
-with codecs.open(FILE_PATH, encoding='utf8') as f:
-    # Strip because we don't want new lines in the data so that we can
-    # easily count occurrences also when embedded in JSON (where the new
-    # line would be escaped).
-    FILE_CONTENT = f.read().strip()
+class TestIsValidCIDR:
     
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
+    _key = 'landscape'
     
+        parser = argparse.ArgumentParser(description='Download results from a Shippable run.')
+    
+    # Make coding more python3-ish
+from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
+    
+        @g_connect
+    def create_import_task(self, github_user, github_repo, reference=None, role_name=None):
         '''
-    return [
-        arg.decode(stdin_encoding)
-        if type(arg) == bytes else arg
-        for arg in args
-    ]
-    
-        def sum_up(self):
-        actually_downloaded = (
-            self.status.downloaded - self.status.resumed_from)
-        time_taken = self.status.time_finished - self.status.time_started
-    
-        def test_verify_custom_ca_bundle_path(
-            self, httpbin_secure_untrusted):
-        r = http(httpbin_secure_untrusted + '/get', '--verify', CA_BUNDLE)
-        assert HTTP_OK in r
-    
-        def save(self):
-        self['__meta__'] = {
-            'httpie': __version__
+        Post an import request
+        '''
+        url = '%s/imports/' % self.baseurl
+        args = {
+            'github_user': github_user,
+            'github_repo': github_repo,
+            'github_reference': reference if reference else ''
         }
-        if self.helpurl:
-            self['__meta__']['help'] = self.helpurl
+        if role_name:
+            args['alternate_role_name'] = role_name
+        elif github_repo.startswith('ansible-role'):
+            args['alternate_role_name'] = github_repo[len('ansible-role') + 1:]
+        data = self.__call_galaxy(url, args=urlencode(args))
+        if data.get('results', None):
+            return data['results']
+        return data
     
+    import os
+import re
     
-ENTRY_POINT_NAMES = [
-    'httpie.plugins.auth.v1',
-    'httpie.plugins.formatter.v1',
-    'httpie.plugins.converter.v1',
-    'httpie.plugins.transport.v1',
-]
+        alpha = 0.01  # regularization parameter
     
-        def extract_year_month(self, line):
-        '''Return the year and month portions of the timestamp.'''
-        pass
+                plt.text((i + 0.02) / len(algorithms), 0.98, alg,
+                     transform=ax.transAxes,
+                     ha='left',
+                     va='top',
+                     bbox=dict(facecolor='w', edgecolor='w', alpha=0.5))
     
-    from mrjob.job import MRJob
+        scikit_regressor_results.append(
+        delta.seconds + delta.microseconds / mu_second)
     
-        def __init__(self, db):
-        self.db = db
-        pass
+    Sentiment analysis can be casted as a binary text classification problem,
+that is fitting a linear classifier on features extracted from the text
+of the user messages so as to guess wether the opinion of the author is
+positive or negative.
     
-        def _getargnames(self, func):
-        # type: (Callable) -> List[str]
-        try:
-            return getargspec(func).args
-        except TypeError:
-            if hasattr(func, 'func_code'):
-                # Cython-generated code has all the attributes needed
-                # by inspect.getargspec, but the inspect module only
-                # works with ordinary functions. Inline the portion of
-                # getargspec that we need here. Note that for static
-                # functions the @cython.binding(True) decorator must
-                # be used (for methods it works out of the box).
-                code = func.func_code  # type: ignore
-                return code.co_varnames[:code.co_argcount]
-            raise
+        # TASK: print the mean and std for each candidate along with the parameter
+    # settings for all the candidates explored by grid search.
+    n_candidates = len(grid_search.cv_results_['params'])
+    for i in range(n_candidates):
+        print(i, 'params - %s; mean - %0.2f; std - %0.2f'
+                 % (grid_search.cv_results_['params'][i],
+                    grid_search.cv_results_['mean_test_score'][i],
+                    grid_search.cv_results_['std_test_score'][i]))
     
-            event = Event()
-        test = self
-        body = []
+    # Define 'classifiers' to be used
+classifiers = {
+    'Empirical Covariance': EllipticEnvelope(support_fraction=1.,
+                                             contamination=0.261),
+    'Robust Covariance (Minimum Covariance Determinant)':
+    EllipticEnvelope(contamination=0.261),
+    'OCSVM': OneClassSVM(nu=0.261, gamma=0.05)}
+colors = ['m', 'g', 'b']
+legend1 = {}
+legend2 = {}
     
-        @gen_test
-    def test_get_timeout(self):
-        q = queues.Queue()
-        get_timeout = q.get(timeout=timedelta(seconds=0.01))
-        get = q.get()
-        with self.assertRaises(TimeoutError):
-            yield get_timeout
-    
-        def get_allowed_errors(self):
-        return []
+    model = SpectralCoclustering(n_clusters=5, random_state=0)
+model.fit(data)
+score = consensus_score(model.biclusters_,
+                        (rows[:, row_idx], columns[:, col_idx]))
