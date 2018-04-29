@@ -1,234 +1,170 @@
 
         
-        
+        #ifndef SWIFT_DEBUGGERCLIENT_H
+#define SWIFT_DEBUGGERCLIENT_H
     
-    #include <Python.h>
+    #pragma mark - NSData verification
     
-      virtual void WriteHash(io::Printer* printer);
-  virtual void WriteEquals(io::Printer* printer);
-  virtual void WriteToString(io::Printer* printer);
+    class DocComment {
+  const Decl *D;
+  const swift::markup::Document *Doc = nullptr;
+  const swift::markup::CommentParts Parts;
+    }
     
+      ArrayRef<const MarkupASTNode *> getChildren() const {
+    return {};
+  }
     
-    {  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ImmutableExtensionLiteGenerator);
-};
-    
-    ExtensionGenerator* ImmutableGeneratorFactory::NewExtensionGenerator(
-    const FieldDescriptor* descriptor) const {
-  if (HasDescriptorMethods(descriptor->file(), context_->EnforceLite())) {
-    return new ImmutableExtensionGenerator(descriptor, context_);
-  } else {
-    return new ImmutableExtensionLiteGenerator(descriptor, context_);
+    SILDebugScope::SILDebugScope(SILLocation Loc, SILFunction *SILFn,
+                             const SILDebugScope *ParentScope ,
+                             const SILDebugScope *InlinedCallSite)
+    : Loc(Loc), InlinedCallSite(InlinedCallSite) {
+  if (ParentScope)
+    Parent = ParentScope;
+  else {
+    assert(SILFn && 'no parent provided');
+    Parent = SILFn;
   }
 }
     
-    // Author: liujisi@google.com (Pherl Liu)
+    struct IndexRelation {
+  const Decl *decl;
+  SymbolInfo symInfo;
+  SymbolRoleSet roles = SymbolRoleSet(0);
+    }
     
-    #endif  // GRPC_TEST_CPP_UTIL_BENCHMARK_CONFIG_H
+    
+    {} // end namespace swift
+    
+    #include <d3d11.h>
+#pragma comment (lib, 'd3d11.lib')
+    
+    void CalibrateExtrinsics(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
+                         const IntrinsicParams& param, const int check_cond,
+                         const double thresh_cond, InputOutputArray omc, InputOutputArray Tc);
+    
+            template<int CTA_SIZE>
+        static __forceinline__ __device__ int Ballot(int predicate)
+        {
+#if defined (__CUDA_ARCH__) && (__CUDA_ARCH__ >= 200)
+            return __ballot(predicate);
+#else
+            __shared__ volatile int cta_buffer[CTA_SIZE];
+    }
+    
+    #endif /* OPENCV_CUDA_WARP_REDUCE_HPP__ */
 
     
-    /* Returns true if the |stream| was successfully started and is now done
- * (succeeded, canceled, or failed).
- * Returns false if the |stream| stream is not yet started or is in progress.
- */
-GRPC_SUPPORT_EXPORT
-bool bidirectional_stream_is_done(bidirectional_stream* stream);
+            // Version: 2.1
+        PIXEL_PACK_BUFFER                = 0x88EB,
+        PIXEL_UNPACK_BUFFER              = 0x88EC,
+        PIXEL_PACK_BUFFER_BINDING        = 0x88ED,
+        PIXEL_UNPACK_BUFFER_BINDING      = 0x88EF,
+        FLOAT_MAT2x3                     = 0x8B65,
+        FLOAT_MAT2x4                     = 0x8B66,
+        FLOAT_MAT3x2                     = 0x8B67,
+        FLOAT_MAT3x4                     = 0x8B68,
+        FLOAT_MAT4x2                     = 0x8B69,
+        FLOAT_MAT4x3                     = 0x8B6A,
+        SRGB                             = 0x8C40,
+        SRGB8                            = 0x8C41,
+        SRGB_ALPHA                       = 0x8C42,
+        SRGB8_ALPHA8                     = 0x8C43,
+        COMPRESSED_SRGB                  = 0x8C48,
+        COMPRESSED_SRGB_ALPHA            = 0x8C49,
     
-    void ParseDb(const std::string& db, std::vector<Feature>* feature_list);
+    #ifdef HAVE_LAPACK
     
-    // Data pertaining to configuration of the generator with respect to anything
-// that may be used internally at Google.
-struct GeneratorConfiguration {
-  GeneratorConfiguration();
-  grpc::string grpc_package_root;
-  // TODO(https://github.com/grpc/grpc/issues/8622): Drop this.
-  grpc::string beta_package_root;
-  // TODO(https://github.com/google/protobuf/issues/888): Drop this.
-  grpc::string import_prefix;
+    const uchar g_Saturate8u[] =
+{
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+      0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
+     16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
+     32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
+     48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
+     64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
+     80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
+     96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
+    112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
+    128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
+    144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
+    160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
+    176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
+    192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
+    208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
+    224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
+    240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+    255
 };
     
-    #include 'src/compiler/python_generator.h'
-#include 'src/compiler/schema_interface.h'
-    
-    #include 'test/cpp/interop/server_helper.h'
-#include 'test/cpp/util/test_config.h'
-    
-    
-    { private:
-  std::map<string, std::shared_ptr<QpsGauge>> qps_gauges_;
-  std::mutex mu_;
-};
-    
-    
-    {  grpc::string package = service->full_name();
-  size_t pos = package.rfind('.' + service->name());
-  if (pos != grpc::string::npos) {
-    package.erase(pos);
-    result.append('package: ' + package + ';\n');
-  }
-  result.append('service ' + service->name() + ' {\n');
-  for (int i = 0; i < service->method_count(); ++i) {
-    result.append(DescribeMethod(service->method(i)));
-  }
-  result.append('}\n\n');
-  return result;
-}
-    
-      // Proto2 Python
-  google::protobuf::compiler::python::Generator py_generator;
-  cli.RegisterGenerator('--python_out', &py_generator,
-                        'Generate Python source file.');
-    
-    template<typename To, typename From> To checked_convert(From f, const char* name) {
-  if (overflows<To, From>(f)) {
-    std::string msg = 'value cannot be converted to type ';
-    msg += name;
-    msg += ' without overflow: ';
-    msg += std::to_string(f);
-    throw std::domain_error(std::move(msg));
-  }
-  return convert<To, From>(f);
-}
-    
-    int64_t stride(const Tensor& self, int64_t dim) {
-  // false is passed to maybe_wrap_dim so behavior is identical to array access (but with wrapping)
-  dim = maybe_wrap_dim(dim, self.dim(), false);
-  return self.strides()[dim];
-}
-    
-    std::size_t ${Storage}::elementSize() const {
-  return sizeof(${ScalarType});
-}
-    
-    IntList ${Tensor}::sizes() const {
-  int64_t d = ${THTensor_nDimension};
-  if (d != 0) {
-    // note: this will return '{}' for a scalar because dim() will return 0 in that case.
-    return IntList(reinterpret_cast<int64_t*>(tensor->size),dim());
+    SEXP XGDMatrixSetInfo_R(SEXP handle, SEXP field, SEXP array) {
+  R_API_BEGIN();
+  int len = length(array);
+  const char *name = CHAR(asChar(field));
+  if (!strcmp('group', name)) {
+    std::vector<unsigned> vec(len);
+    #pragma omp parallel for schedule(static)
+    for (int i = 0; i < len; ++i) {
+      vec[i] = static_cast<unsigned>(INTEGER(array)[i]);
+    }
+    CHECK_CALL(XGDMatrixSetGroup(R_ExternalPtrAddr(handle), BeginPtr(vec), len));
   } else {
-    return IntList(kEmptySizes);
+    std::vector<float> vec(len);
+    #pragma omp parallel for schedule(static)
+    for (int i = 0; i < len; ++i) {
+      vec[i] = REAL(array)[i];
+    }
+    CHECK_CALL(XGDMatrixSetFloatInfo(R_ExternalPtrAddr(handle),
+                                   CHAR(asChar(field)),
+                                   BeginPtr(vec), len));
   }
+  R_API_END();
+  return R_NilValue;
 }
     
-      // NOTE: this function needs to be thread safe
-  std::shared_ptr<buffer_type> createBuffer(std::size_t bytes, DeviceType device) const {
-    if (device == DeviceType::CPU) {
-      return std::shared_ptr<buffer_type>(new char[bytes],
-                                          std::default_delete<char[]>());
-#ifdef WITH_CUDA
-    } else if (device == DeviceType::CUDA) {
-      buffer_type *buf;
-      THCudaCheck(THCudaMalloc(THDGetCudaState(), (void**)&buf, bytes));
-      return std::shared_ptr<buffer_type>(buf, [](char* ptr) { THCudaFree(THDGetCudaState(), ptr); });
-#endif
-    } else {
-      throw std::runtime_error('unsupported device in GlooCache::createBuffer');
-    }
-  }
     
-      auto ilen = input_size[0];
-  auto batchSize = input_size[1];
-  auto inputPlanes = input_size[2];
-  auto outputPlanes = weight_size[2];
-  auto kw = weight.sizes()[0];
-  auto olen = input_size[0] - kw + 1 + pad * 2;
-  int real_pad = (olen - ilen + kw - 1) / 2;
-    
-    #undef THHostTensor
-#undef THHostTensor_
-#undef THHostStorage
-#undef THHostStorage_
-
-    
-    #include 'wakeuplock.h'
-#include 'assert/__assert.h'
-#include 'xlogger/xlogger.h'
-    
-    #include 'socket/unix_socket.h'
-#include 'ptrbuffer.h'
-#include 'adler32.h'
-#include 'assert/__assert.h'
-    
-    #ifndef COMM_COMM_FREQUENCY_LIMIT_H_
-#define COMM_COMM_FREQUENCY_LIMIT_H_
-    
-    
-    {  private:
-    TServicesMap m_services;
-    TServicesMap m_publicservices;
-    std::vector<ServiceBase*> m_releasevec;
-};
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    struct ExternalFunctions {
-  // Initialize function pointers. Functions that are not available will be set
-  // to nullptr.  Do not call this constructor  before ``main()`` has been
-  // entered.
-  ExternalFunctions();
-    }
-    
-    #include 'FuzzerExtFunctions.h'
-#include 'FuzzerIO.h'
-    
-    int DuplicateFile(int Fd);
-    
-      HANDLE FileHandle(
-      CreateFileA(Path.c_str(), 0, FILE_SHARE_READ, NULL, OPEN_EXISTING,
-                  FILE_FLAG_BACKUP_SEMANTICS, 0));
-    
-    // Inner process. May crash if the target crashes.
-void Fuzzer::CrashResistantMergeInternalStep(const std::string &CFPath) {
-  Printf('MERGE-INNER: using the control file '%s'\n', CFPath.c_str());
-  Merger M;
-  std::ifstream IF(CFPath);
-  M.ParseOrExit(IF, false);
-  IF.close();
-  if (!M.LastFailure.empty())
-    Printf('MERGE-INNER: '%s' caused a failure at the previous merge step\n',
-           M.LastFailure.c_str());
-    }
-    
-    struct Merger {
-  std::vector<MergeFileInfo> Files;
-  size_t NumFilesInFirstCorpus = 0;
-  size_t FirstNotProcessedFile = 0;
-  std::string LastFailure;
-    }
-    
-    
-    {	// Append length in the last 8 bytes
-	sha1_addUncounted(s, 0); // We're only using 32 bit lengths
-	sha1_addUncounted(s, 0); // But SHA-1 supports 64 bit lengths
-	sha1_addUncounted(s, 0); // So zero pad the top bits
-	sha1_addUncounted(s, s->byteCount >> 29); // Shifting to multiply by 8
-	sha1_addUncounted(s, s->byteCount >> 21); // as SHA-1 supports bitstreams as well as
-	sha1_addUncounted(s, s->byteCount >> 13); // byte.
-	sha1_addUncounted(s, s->byteCount >> 5);
-	sha1_addUncounted(s, s->byteCount << 3);
+    {  delete metric;
+  metric = xgboost::Metric::Create('ndcg@2-');
+  ASSERT_STREQ(metric->Name(), 'ndcg@2-');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 1, 1e-10);
+  EXPECT_NEAR(GetMetricEval(metric,
+                            {0.1f, 0.9f, 0.1f, 0.9f},
+                            {  0,   0,   1,   1}),
+              0.3868f, 0.001f);
 }
     
-    __attribute__((visibility('default')))
-void __sanitizer_cov_trace_pc_guard_init(uint32_t *Start, uint32_t *Stop) {
-  fuzzer::TPC.HandleInit(Start, Stop);
-}
-    
-    #include 'FuzzerUtil.h'
-#include 'FuzzerIO.h'
-#include 'FuzzerInternal.h'
-#include <cassert>
-#include <chrono>
-#include <cstring>
-#include <errno.h>
-#include <signal.h>
-#include <sstream>
-#include <stdio.h>
-#include <sys/types.h>
-#include <thread>
-    
-    #include 'FuzzerIO.h'
-#include <mutex>
-#include <signal.h>
-#include <spawn.h>
-#include <sys/wait.h>
+    namespace xgboost {
+namespace linear {
+    }
+    }
