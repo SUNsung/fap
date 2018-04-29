@@ -1,136 +1,179 @@
 
         
-            Or alternatively you can define the configuration options in the
-    module that calls :meth:`from_object` or provide an import path to
-    a module that should be loaded.  It is also possible to tell it to
-    use the same module and with that provide the configuration values
-    just before the call::
+                # In case just a slash was appended we can be extra helpful
+        if request.base_url + '/' == exc.new_url.split('?')[0]:
+            buf.append('  The URL was defined with a trailing slash so '
+                       'Flask will automatically redirect to the URL '
+                       'with the trailing slash if it was accessed '
+                       'without one.')
     
-            for line in _dump_loader_info(loader):
-            info.append('       %s' % line)
+    :copyright: © 2010 by the Pallets team.
+:license: BSD, see LICENSE for more details.
+'''
     
-        __slots__ = ()
-    key = ' di'
+        #: Some implementations can detect when session data is read or
+    #: written and set this when that happens. The mixin default is hard
+    #: coded to ``True``.
+    accessed = True
+    
+        #: Setting this disables or force-enables the automatic options handling.
+    provide_automatic_options = None
+    
+        from installed_package import app
+    assert app.instance_path == \
+        modules_tmpdir.join('var').join('installed_package-instance')
+    
+        Tests the request context.
+    
+        @possible_keys
+    def test_delitem(self, key):
+        del self.case_insensitive_dict[key]
+        assert key not in self.case_insensitive_dict
+    
+    from .compat import urlparse, str, basestring
+from .cookies import extract_cookies_to_jar
+from ._internal_utils import to_native_string
+from .utils import parse_dict_header
+    
+        @property
+    def origin_req_host(self):
+        return self.get_origin_req_host()
+    
+    from . import utils
+from . import packages
+from .models import Request, Response, PreparedRequest
+from .api import request, get, head, post, patch, put, delete, options
+from .sessions import session, Session
+from .status_codes import codes
+from .exceptions import (
+    RequestException, Timeout, URLRequired,
+    TooManyRedirects, HTTPError, ConnectionError,
+    FileModeWarning, ConnectTimeout, ReadTimeout
+)
+    
+        def test_valid(self):
+        assert is_valid_cidr('192.168.1.0/24')
+    
+        def test_HTTP_302_TOO_MANY_REDIRECTS(self, httpbin):
+        try:
+            requests.get(httpbin('relative-redirect', '50'))
+        except TooManyRedirects as e:
+            url = httpbin('relative-redirect', '20')
+            assert e.request.url == url
+            assert e.response.url == url
+            assert len(e.response.history) == 30
+        else:
+            pytest.fail('Expected redirect to raise TooManyRedirects but it did not')
     
     
-# Core signals.  For usage examples grep the source code or consult
-# the API documentation in docs/api.rst as well as docs/signals.rst
-template_rendered = _signals.signal('template-rendered')
-before_render_template = _signals.signal('before-render-template')
-request_started = _signals.signal('request-started')
-request_finished = _signals.signal('request-finished')
-request_tearing_down = _signals.signal('request-tearing-down')
-got_request_exception = _signals.signal('got-request-exception')
-appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
-appcontext_pushed = _signals.signal('appcontext-pushed')
-appcontext_popped = _signals.signal('appcontext-popped')
-message_flashed = _signals.signal('message-flashed')
-
+def secure_hash_s(data, hash_func=sha1):
+    ''' Return a secure hash hex digest of data. '''
     
-            if trv is not None:
-            return trv
-        raise TemplateNotFound(template)
+        if result is None:
+        return '{}'
     
-        app = flask.Flask(__name__)
-    with pytest.raises(TypeError):
-        app.config.from_mapping(
-            {}, {}
-        )
+        history = model.fit(x_train, y_train, batch_size=batch_size,
+                        epochs=epochs // 3, verbose=0,
+                        sample_weight=sample_weight)
+    
+        if not blocks:
+        raise RuntimeError('Found no content for page ' +
+                           page_data['page'])
+    
+        # a Sequential inside a Sequential
+    inner_model = Sequential()
+    inner_model.add(Dense(2, input_dim=1))
+    outer_model = Sequential()
+    outer_model.add(inner_model)
+    assert outer_model.trainable_weights == inner_model.trainable_weights
+    inner_model.trainable = False
+    assert outer_model.trainable_weights == []
+    inner_model.trainable = True
+    inner_model.layers[-1].trainable = False
+    assert outer_model.trainable_weights == []
     
     
-@csrf_protect
-def render_flatpage(request, f):
-    '''
-    Internal interface to the flat page view.
-    '''
-    # If registration is required for accessing this page, and the user isn't
-    # logged in, redirect to the login page.
-    if f.registration_required and not request.user.is_authenticated:
-        from django.contrib.auth.views import redirect_to_login
-        return redirect_to_login(request.path)
-    if f.template_name:
-        template = loader.select_template((f.template_name, DEFAULT_TEMPLATE))
+@pytest.mark.parametrize('tensor_shape', [(100, 100), (1, 2, 3, 4)], ids=['FC', 'CONV'])
+def test_identity(tensor_shape):
+    if len(tensor_shape) > 2:
+        with pytest.raises(ValueError):
+            _runner(initializers.identity(), tensor_shape,
+                    target_mean=1. / tensor_shape[0], target_max=1.)
     else:
-        template = loader.get_template(DEFAULT_TEMPLATE)
+        _runner(initializers.identity(), tensor_shape,
+                target_mean=1. / tensor_shape[0], target_max=1.)
     
     
-@pytest.fixture
-def httpbin_secure(httpbin_secure):
-    return prepare_url(httpbin_secure)
+if __name__ == '__main__':
+    pytest.main([__file__])
 
     
-          >>> import requests
-      >>> req = requests.Request('GET', 'http://httpbin.org/get')
-      >>> req.prepare()
-      <PreparedRequest [GET]>
-    '''
+        left = Sequential()
+    left.add(Dense(num_hidden, input_shape=(input_dim,)))
+    left.add(Activation('relu'))
     
-        @get_item_parameters
-    def test_getitem(self, key, value):
-        assert self.lookup_dict[key] == value
+    # we start off with an efficient embedding layer which maps
+# our vocab indices into embedding_dims dimensions
+model.add(Embedding(max_features,
+                    embedding_dims,
+                    input_length=maxlen))
+model.add(Dropout(0.2))
     
-            realm = self._thread_local.chal['realm']
-        nonce = self._thread_local.chal['nonce']
-        qop = self._thread_local.chal.get('qop')
-        algorithm = self._thread_local.chal.get('algorithm')
-        opaque = self._thread_local.chal.get('opaque')
-        hash_utf8 = None
+    site = Bigthink()
+download = site.download_by_url
+
     
-        Basic Usage::
+    def kuwo_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    if 'www.kuwo.cn/yinyue' in url:
+        rid=match1(url,'yinyue/(\d+)')
+        kuwo_download_by_rid(rid,output_dir, merge, info_only)
+    else:
+        kuwo_playlist_download(url,output_dir,merge,info_only)
     
-    import abc
-import random
-    
-        def test_sequential_undo(self):
-        self.command_stack = list(reversed(self.command_stack))
-        self.command_stack[0].undo()
-        output_after_first_undo = os.listdir(self.test_dir)
-        self.assertEqual(output_after_first_undo[0], 'bar.txt')
-        self.command_stack[1].undo()
-        output_after_second_undo = os.listdir(self.test_dir)
-        self.assertEqual(output_after_second_undo[0], 'foo.txt')
+        def __init__(self, HierachicalStateMachine):
+        self._hsm = HierachicalStateMachine
     
         @classmethod
-    def setUpClass(cls):
-        cls.dec_obs = DecimalViewer()
-        cls.hex_obs = HexViewer()
-        cls.sub = Data('Data')
-        # inherited behavior already tested with TestSubject
-        cls.sub.attach(cls.dec_obs)
-        cls.sub.attach(cls.hex_obs)
-    
-        def __init__(self, name, action):
-        self.name = name
-        self.action = action
-    
-        def __new__(cls, name, bases, attrs):
-        new_cls = type.__new__(cls, name, bases, attrs)
+    def setUpClass(self):
         '''
-            Here the name of the class is used as key but it could be any class
-            parameter.
+        - Create a temporary directory and file
+        /test_command
+           /foo.txt
+        - get the temporary test directory
+        - and initializes the command stack.
         '''
-        cls.REGISTRY[new_cls.__name__] = new_cls
-        return new_cls
-    
-        def test_tc2_output(self):
-        self.tc2.run()
-        output = self.out.getvalue().strip()
-        self.assertEqual(output, self.average_result_tc2)
-    
-    class TimeDisplay(object):
-    
-        def _handle(self, request):
-        if 20 < request <= 30:
-            print('request {} handled in handler 3'.format(request))
-            return True
+        os.mkdir('tests/test_command')
+        open('tests/test_command/foo.txt', 'w').close()
+        self.__get_test_directory()
+        self.command_stack = []
+        self.command_stack.append(MoveFileCommand(os.path.join(
+            self.test_dir, 'foo.txt'), os.path.join(self.test_dir, 'bar.txt')))
+        self.command_stack.append(MoveFileCommand(os.path.join(
+            self.test_dir, 'bar.txt'), os.path.join(self.test_dir, 'baz.txt')))
     
     
-class MoveFileCommand(object):
+class ProxyTest(unittest.TestCase):
     
-        def __init__(self):
-        self._observers = []
+        @classmethod
+    def setUpClass(self):
+        self.radio = Radio()
     
+        def test_display_current_time_at_current_time(self):
+        '''
+        Just as justification for working example with the time provider used in
+        production. (Will always pass.)
+        '''
+        production_code_time_provider = ProductionCodeTimeProvider()
+        class_under_test = TimeDisplay()
+        class_under_test.set_time_provider(production_code_time_provider)
+        current_time = datetime.datetime.now()
+        expected_time = '<span class=\'tinyBoldText\'>{}:{}</span>'.format(current_time.hour, current_time.minute)
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
+
     
-class AndSpecification(CompositeSpecification):
-    _one = Specification()
-    _other = Specification()
+    *TL;DR80
+Traverses a container and accesses the container's elements.
+'''
+    
+    '''
+http://code.activestate.com/recipes/131499-observer-pattern/
