@@ -1,57 +1,57 @@
 
         
-              def index
-        self.response_body = @list.join(', ')
-      end
+        class ApplicationSerializer < ActiveModel::Serializer
+  embed :ids, include: true
     
-          def authenticate_long_credentials
-        authenticate_or_request_with_http_token do |token, options|
-          token == '1234567890123456789012345678901234567890' && options[:algorithm] == 'test'
-        end
-      end
-  end
+      def create
+    return render_404 unless can_read?(resource)
     
-            assert_equal 'summary, title', @controller.response.body
-        assert @controller.params.has_key?(:summary)
-        assert @controller.params.has_key?(:title)
-        assert_equal 'content...', @controller.params['summary']
-        assert_equal 'JSON', @controller.params['title']
-      end
-    end
-  end
-    
-    class ActionMailerI18nWithControllerTest < ActionDispatch::IntegrationTest
-  Routes = ActionDispatch::Routing::RouteSet.new
-  Routes.draw do
-    ActiveSupport::Deprecation.silence do
-      get ':controller(/:action(/:id))'
-    end
-  end
-    
-      end
-    
-        sidekiq_options queue: 'critical'
-    
-        if registration
-      u2f.authenticate!(challenges, response, Base64.decode64(registration.public_key), registration.counter)
-      registration.update(counter: response.counter)
-      true
-    end
-  rescue JSON::ParserError, NoMethodError, ArgumentError, U2F::Error
-    false
+        groups
   end
 end
 
     
-      # Before we load the schema, define the timestamp_id function.
-  # Idiomatically, we might do this in a migration, but then it
-  # wouldn't end up in schema.rb, so we'd need to figure out a way to
-  # get it in before doing db:setup as well. This is simpler, and
-  # ensures it's always in place.
-  Rake::Task['db:schema:load'].enhance ['db:define_timestamp_id']
+        find_union(segments, Project).includes(:namespace).order_id_desc
+  end
     
-        context 'when tag exists' do
-      it 'returns http success' do
-        get :show, params: { id: 'test', max_id: late.id }
-        expect(response).to have_http_status(:success)
+      def parse(pkt)
+    # We want to return immediantly if	we do not have a packet which is handled by us
+    return unless pkt.is_tcp?
+    return if (pkt.tcp_sport != 80 and pkt.tcp_dport != 80)
+    s = find_session((pkt.tcp_sport == 80) ? get_session_src(pkt) : get_session_dst(pkt))
+    
+    require 'rex/post/meterpreter'
+    
+    codez = Array.new
+    
+    class Poll < ApplicationRecord
+  include Diaspora::Federated::Base
+  include Diaspora::Fields::Guid
+    
+          respond_with do |format|
+        format.html do
+          gon.preloads[:pods] = pods_json
+          gon.unchecked_count = Pod.unchecked.count
+          gon.version_failed_count = Pod.version_failed.count
+          gon.error_count = Pod.check_failed.count
+    
+      def percent_change(today, yesterday)
+    sprintf( '%0.02f', ((today-yesterday) / yesterday.to_f)*100).to_f
+  end
+    
+          def to_boolean(str)
+        str.downcase == 'true'
       end
+    
+          rescue_from Rack::OAuth2::Server::Authorize::BadRequest,
+                  JSON::JWT::InvalidFormat, JSON::JWK::UnknownAlgorithm do |e|
+        logger.info e.backtrace[0, 10].join('\n')
+        render json: {error: :invalid_request, error_description: e.message, status: 400}
+      end
+      rescue_from JSON::JWT::VerificationFailed do |e|
+        logger.info e.backtrace[0, 10].join('\n')
+        render json: {error: :invalid_grant, error_description: e.message, status: 400}
+      end
+    end
+  end
+end
