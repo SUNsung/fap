@@ -1,87 +1,84 @@
 
         
-            def approve_friend_request(self, from_user_id, to_user_id):
-        pass
+                return self.__dict__.get(key, None)
     
-        def crawl(self):
-        while True:
-            page = self.data_store.extract_max_priority_page()
-            if page is None:
-                break
-            if self.data_store.crawled_similar(page.signature):
-                self.data_store.reduce_priority_link_to_crawl(page.url)
-            else:
-                self.crawl_page(page)
-            page = self.data_store.extract_max_priority_page()
-
     
-            Emit key value pairs of the form:
+def test_idna_without_version_attribute(mocker):
+    '''Older versions of IDNA don't provide a __version__ attribute, verify
+    that if we have such a package, we don't blow up.
+    '''
+    mocker.patch('requests.help.idna', new=None)
+    assert info()['idna'] == {'version': ''}
     
-            When updating an entry, updates its position to the front of the LRU list.
-        If the entry is new and the cache is at capacity, removes the oldest entry
-        before the new entry is added.
-        '''
-        node = self.lookup.get(query)
-        if node is not None:
-            # Key exists in cache, update the value
-            node.results = results
-            self.linked_list.move_to_front(node)
-        else:
-            # Key does not exist in cache
-            if self.size == self.MAX_SIZE:
-                # Remove the oldest entry from the linked list and lookup
-                self.lookup.pop(self.linked_list.tail.query, None)
-                self.linked_list.remove_from_tail()
-            else:
-                self.size += 1
-            # Add the new key and value
-            new_node = Node(results)
-            self.linked_list.append_to_front(new_node)
-            self.lookup[query] = new_node
-
+        def test_different_encodings_dont_break_post(self, httpbin):
+        r = requests.post(httpbin('post'),
+            data={'stuff': json.dumps({'a': 123})},
+            params={'blah': 'asdf1234'},
+            files={'file': ('test_requests.py', open(__file__, 'rb'))})
+        assert r.status_code == 200
     
-        def test_same_server(self):
-        from certbot_apache.obj import VirtualHost
-        no_name1 = VirtualHost(
-            'fp', 'vhp', set([self.addr1]), False, False, None)
-        no_name2 = VirtualHost(
-            'fp', 'vhp', set([self.addr2]), False, False, None)
-        no_name3 = VirtualHost(
-            'fp', 'vhp', set([self.addr_default]),
-            False, False, None)
-        no_name4 = VirtualHost(
-            'fp', 'vhp', set([self.addr2, self.addr_default]),
-            False, False, None)
+            self.concurrent -= 1
+        return ''
     
-    # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
-# using the given strftime format.
-#html_last_updated_fmt = '%b %d, %Y'
+        def from_method(self, method, results):
+        contracts = self.extract_contracts(method)
+        if contracts:
+            # calculate request args
+            args, kwargs = get_spec(Request.__init__)
+            kwargs['callback'] = method
+            for contract in contracts:
+                kwargs = contract.adjust_request_args(kwargs)
     
-        @mock.patch('certbot.display.enhancements.util')
-    def test_redirect(self, mock_util):
-        mock_util().menu.return_value = (display_util.OK, 1)
-        self.assertTrue(self._call('redirect'))
+            assertion = (self.min_bound <= occurrences <= self.max_bound)
     
-        @classmethod
-    def setUpClass(cls):
-        cls.dec_obs = DecimalViewer()
-        cls.hex_obs = HexViewer()
-        cls.sub = Data('Data')
-        # inherited behavior already tested with TestSubject
-        cls.sub.attach(cls.dec_obs)
-        cls.sub.attach(cls.hex_obs)
+    print()
     
-        @classmethod
-    def setUpClass(cls):
-        ''' Class scope setup. '''
-        cls.p = Proxy()
+        current_ref = get_current_ref()
+    base_ref = get_merge_base()
+    if options.files:
+        files = options.files
+    else:
+        files = get_changed_files(base_ref, current_ref)
+        logging.debug('files changed: %r', files)
     
-        def __init__(self):
-        pass
     
-        def __init__(self):
-        self.target = coroutine1(coroutine3(coroutine2(default_coroutine())))
+def register_api_templates(template_name, template_class):
+    for style in ('api', 'api-html', 'api-compact'):
+        tpm.add_handler(
+            name=template_name,
+            style=style,
+            handler=template_class,
+        )
     
-    from __future__ import print_function
-import os
-from os.path import lexists
+    from r2.controllers.api_docs import api_doc, api_section
+from r2.controllers.oauth2 import require_oauth2_scope
+from r2.controllers.reddit_base import OAuth2OnlyController
+from r2.controllers.ipn import send_gift
+from r2.lib.errors import RedditError
+from r2.lib.validator import (
+    validate,
+    VAccountByName,
+    VByName,
+    VInt,
+    VNotInTimeout,
+)
+from r2.models import Account, Comment, Link, NotFound
+from r2.models.gold import creddits_lock
+from r2.lib.validator import VUser
+    
+                code =  request.GET.get('code', '')
+            try:
+                code = int(code)
+            except ValueError:
+                code = 404
+            srname = request.GET.get('srname', '')
+            takedown = request.GET.get('takedown', '')
+            error_name = request.GET.get('error_name', '')
+    
+    
+class GoogleTagManagerController(MinimalController):
+    def pre(self):
+        if request.host != g.media_domain:
+            # don't serve up untrusted content except on our
+            # specifically untrusted domain
+            self.abort404()
