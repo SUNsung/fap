@@ -1,86 +1,141 @@
 
         
-              def convert_key(key)
-        key.is_a?(Symbol) ? key.to_s : key
+        Benchmark.ips do |x|
+  x.report('no body include?') { CONTENT_NOT_CONTAINING.include?('<body') }
+  x.report('no body regexp')   { CONTENT_NOT_CONTAINING =~ /<\s*body/ }
+  x.compare!
+end
+    
+    #
+    
+    html_readme = '<html>#{Kramdown::Document.new(open('README.md').read).to_html}</html>'
+readme_doctree = REXML::Document.new(html_readme)
+links = REXML::XPath.match(readme_doctree, '//a')
+    
+      def start_worker?
+    true
+  end
+    
+      def edit
+    @user_credential = current_user.user_credentials.find(params[:id])
+  end
+    
+      def test_untainted_path
+    bug5374 = '[ruby-core:39745]'
+    cwd = ('./'*40+'.'.taint).dup.untaint
+    in_safe = proc {|safe| $SAFE = safe; File.stat(cwd)}
+    assert_not_send([cwd, :tainted?])
+    (0..1).each do |level|
+      assert_nothing_raised(SecurityError, bug5374) {in_safe[level]}
+    end
+  ensure
+    $SAFE = 0
+  end
+    
+      def test_hash2
+    assert_kind_of(Integer, @cls[].hash)
+    h = @cls[1=>2]
+    h.shift
+    assert_equal({}.hash, h.hash, '[ruby-core:38650]')
+    bug9231 = '[ruby-core:58993] [Bug #9231]'
+    assert_not_equal(0, @cls[].hash, bug9231)
+  end
+    
+        set = Set.new(1..10)
+    enum = set.classify
+    
+      it 'decodes NaN' do
+    # mumble mumble NaN mumble https://bugs.ruby-lang.org/issues/5884
+    [nan_value].pack(unpack_format).unpack(unpack_format).first.nan?.should be_true
+  end
+    
+      it 'decodes the remaining ints when passed the '*' modifier' do
+    'acbdegfh'.unpack(unpack_format('*')).should == [1684169569, 1751541605]
+  end
+    
+        t.join
+  end
+    
+        t.join
+  end
+    
+      #forward some requests to status message, because a poll is just attached to a status message and is not sharable itself
+  delegate :author_id, :diaspora_handle, :public?, :subscribers, to: :status_message
+    
+      def create_hash(model, opts={})
+    opts[:range] ||= 1.day
+    plural = model.to_s.underscore.pluralize
+    eval(<<DATA
+      @#{plural} = {
+        :day_before => #{model}.where(:created_at => ((Time.now.midnight - #{opts[:range]*2})..Time.now.midnight - #{opts[:range]})).count,
+        :yesterday => #{model}.where(:created_at => ((Time.now.midnight - #{opts[:range]})..Time.now.midnight)).count
+      }
+      @#{plural}[:change] = percent_change(@#{plural}[:yesterday], @#{plural}[:day_before])
+DATA
+    )
+  end
+    
+          def handle_prompt_with_signed_in_user
+        client_id = params[:client_id]
+        if client_id
+          auth = Api::OpenidConnect::Authorization.find_by_client_id_user_and_scopes(client_id,
+                                                                                     current_user, params[:scope])
+          if auth
+            process_authorization_consent('true')
+          else
+            handle_params_error('interaction_required', 'User must already be authorized when `prompt` is `none`')
+          end
+        else
+          handle_params_error('bad_request', 'Client ID is missing from request')
+        end
+      end
+    
+            def stock_location_params
+          params.require(:stock_location).permit(permitted_stock_location_attributes)
+        end
       end
     end
   end
 end
 
     
-                breakable = false
-            if e.is_a?(EOFError)
-              # An `EOFError` means this IO object is done!
-              breakable = true
-            elsif defined?(::IO::WaitReadable) && e.is_a?(::IO::WaitReadable)
-              # IO::WaitReadable is only available on Ruby 1.9+
-    
-              @env.action_runner.run(Vagrant::Action.action_box_remove, {
-            box_name:     argv[0],
-            box_provider: options[:provider],
-            box_version:  options[:version],
-            force_confirm_box_remove: options[:force],
-            box_remove_all_versions: options[:all],
-          })
-    
-            # Get the proper capability host to check
-        cap_host = nil
-        if type == :host
-          cap_host = @env.host
-        else
-          with_target_vms([]) do |vm|
-            cap_host = case type
-                       when :provider
-                         vm.provider
-                       when :guest
-                         vm.guest
-                       else
-                         raise Vagrant::Errors::CLIInvalidUsage,
-                           help: opts.help.chomp
-                       end
-          end
+            def index
+          authorize! :read, StockMovement
+          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@stock_movements)
         end
     
-      GEMFILE_EXTENSIONS.each do |extension|
-    extension_pathname = root.join('Gemfile#{extension}')
+      context 'called with null values' do
+    it 'writes rules for other three' do
+      ruleset = 'margin-top: 11px; ' +
+                'margin-right: 12px; ' +
+                'margin-left: 13px;'
+      bad_rule = 'margin-bottom: null;'
     
-          when nil
-        # No matches, no saved state
-      else
-        sessions[s[:session]].merge!({k => matches})
-      end # end case matched
+      context 'called with two sizes' do
+    it 'applies to alternating sides' do
+      rule = 'padding: 2px 3px'
     
-          when :login_pass
+      context 'called with two sizes' do
+    it 'applies to height and width' do
+      rule = 'height: 2em; width: 1em;'
     
-      @src.__NR_execve      = __NR_execve
-  @src.__NR_getpeername = __NR_getpeername
-  @src.__NR_accept      = __NR_accept
-  @src.__NR_listen      = __NR_listen
-  @src.__NR_bind        = __NR_bind
-  @src.__NR_socket      = __NR_socket
-  @src.__NR_connect     = __NR_connect
-  @src.__NR_close       = __NR_close
-  @src.__NR_kfcntl      = __NR_kfcntl
-    
-          def initialize(pairs = {})
-        @pairs = pairs
-        pairs.each do |key, value|
-          raise 'invalid container key: '#{key.inspect}'' unless VALID_KEYS.include?(key)
-          send(:'#{key}=', value)
-        end
-    
-        # Many formulae include 'lib/charset.alias', but it is not strictly needed
-    # and will conflict if more than one formula provides it
-    observe_file_removal @f.lib/'charset.alias'
-    
-          it 'identifies that Intel and PowerPC machines can't run each others' executables' do
-        allow(Hardware::CPU).to receive(:type).and_return :ppc
-        expect(Hardware::CPU.can_run?(:i386)).to be false
-        expect(Hardware::CPU.can_run?(:x86_64)).to be false
-    
-      def create_pull_request(repo, title, head, base, body)
-    url = 'https://api.github.com/repos/#{repo}/pulls'
-    data = { title: title, head: head, base: base, body: body }
-    scopes = CREATE_ISSUE_FORK_OR_PR_SCOPES
-    open_api(url, data: data, scopes: scopes)
+        @inputs_list = %w(
+      [type='color']
+      [type='date']
+      [type='datetime']
+      [type='datetime-local']
+      [type='email']
+      [type='month']
+      [type='number']
+      [type='password']
+      [type='search']
+      [type='tel']
+      [type='text']
+      [type='time']
+      [type='url']
+      [type='week']
+      input:not([type])
+      textarea
+    )
   end
