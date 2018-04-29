@@ -1,106 +1,62 @@
 
         
-                  send(name, *args, &block)
-        end
-    end
+        html_readme = '<html>#{Kramdown::Document.new(open('README.md').read).to_html}</html>'
+readme_doctree = REXML::Document.new(html_readme)
+links = REXML::XPath.match(readme_doctree, '//a')
     
-        def index
-      head :not_found
-    end
+          t0 = Process.clock_gettime(Process::CLOCK_REALTIME)
+      File.write(path, 'foo')
+      sleep 2
+      File.write(path, 'bar')
+      sleep 2
+      File.read(path)
+      File.chmod(0644, path)
+      sleep 2
+      File.read(path)
     
-    module ActionMailer
-  # The <tt>ActionMailer::DeliveryJob</tt> class is used when you
-  # want to send emails outside of the request-response cycle.
-  #
-  # Exceptions are rescued and handled by the mailer class.
-  class DeliveryJob < ActiveJob::Base # :nodoc:
-    queue_as { ActionMailer::Base.deliver_later_queue_name }
+      it 'decodes the remaining doubles when passed the '*' modifier' do
+    array = '333333\x07@ffffff\xf6?ffffff\x20@'.unpack(unpack_format('*'))
+    array.should == [2.9, 1.4, 8.2]
+  end
     
-        # An email was generated.
-    def process(event)
-      debug do
-        mailer = event.payload[:mailer]
-        action = event.payload[:action]
-        '#{mailer}##{action}: processed outbound mail in #{event.duration.round(1)}ms'
+      it 'decodes UTF-8 BMP codepoints' do
+    [ ['\xc2\x80',      [0x80]],
+      ['\xdf\xbf',      [0x7ff]],
+      ['\xe0\xa0\x80',  [0x800]],
+      ['\xef\xbf\xbf',  [0xffff]]
+    ].should be_computed_by(:unpack, 'U')
+  end
+    
+        Thread.pass until in_ensure_clause == true
+    10.times { t.send(@method); Thread.pass }
+    exit_loop = true
+    t.join
+    ScratchPad.recorded.should == :after_stop
+  end
+  end
+    
+        time.usec.should == 0
+    time.nsec.should == 999
+  end
+    
+        # Remove directories opposite from traversal, so that a subtree with no
+    # actual files gets removed correctly.
+    dirs.reverse_each do |d|
+      if d.children.empty?
+        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
+        d.rmdir
       end
     end
     
-          # Make list points stand on their own line
-      formatted.gsub!(/[ ]*([*]+) ([^*]*)/) { '  #{$1} #{$2.strip}\n' }
-      formatted.gsub!(/[ ]*([#]+) ([^#]*)/) { '  #{$1} #{$2.strip}\n' }
-    
-    class U2fRegistration < ActiveRecord::Base
-  belongs_to :user
-    
-        if in_reply_to_uri.blank?
-      @replied_to_status = nil
-    else
-      @replied_to_status   = status_from_uri(in_reply_to_uri)
-      @replied_to_status ||= status_from_uri(@object['inReplyToAtomUri']) if @object['inReplyToAtomUri'].present?
-      @replied_to_status
+        if arg == 'help' && !cmd
+      # Command-style help: `help <cmd>` is fine, but `<cmd> help` is not.
+      help_flag = true
+    elsif !cmd && !help_flag_list.include?(arg)
+      cmd = ARGV.delete_at(i)
     end
   end
     
-      attributes :id, :type, :url, :preview_url,
-             :remote_url, :text_url, :meta,
-             :description
-    
-        if extension_pathname.readable?
-      ENV['BUNDLE_GEMFILE'] = extension_pathname.to_path
-      break
-    end
-  end
-end
-    
-    require 'rubygems'  # install rubygems
-require 'hpricot'   # gem install hpricot
-require 'timeout'
-    
-    def usage
-  $stderr.puts '#{$0} [site list] [output-dir]'
-  exit(0)
-end
-    
-      def initialize(filename)
-    begin
-      f = File.new(filename)
-      @template = f.read
-    rescue Errno::ENOENT
-    end
-  end
-    
-    	def parse_line(line)
-		if line =~ /\w+ <[\.\w]+>:/
-			# End a previous block
-			unless block_size == 0
-				block_end
-			end
-			block_begin(line)
-    
-          def all_gem_names
-        core_gem_names + plugin_gem_names
-      end
-    
-            def <<(value)
-          values << value
-        end
-    
-          private
-    
-      desc 'Updated'
-  task :updated do
-  end
-    
-      context 'called with one color' do
-    it 'applies same color to all sides' do
-      rule = 'border-color: #f00'
-    
-          expect('.border-style-explicit').to have_rule(rule)
-    end
-  end
-    
-      context 'called with arguments (1, $ratio: $golden-ratio)' do
-    it 'output the first value from the golden ratio scale' do
-      expect('.one-golden-ratio').to have_rule('font-size: 1.618em')
-    end
-  end
+          def eject(mount)
+        # realpath is a failsafe against unusual filenames
+        mountpath = Pathname.new(mount).realpath
+        return unless mountpath.exist?
