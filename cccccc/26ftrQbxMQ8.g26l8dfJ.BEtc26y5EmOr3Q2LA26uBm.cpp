@@ -1,73 +1,118 @@
 
         
-        #include 'hphp/runtime/vm/jit/abi.h'
-#include 'hphp/runtime/vm/jit/arg-group.h'
-#include 'hphp/runtime/vm/jit/fixup.h'
-#include 'hphp/runtime/vm/jit/phys-reg-saver.h'
-#include 'hphp/runtime/vm/jit/vasm-gen.h'
-#include 'hphp/runtime/vm/jit/vasm-instr.h'
-#include 'hphp/runtime/vm/jit/vasm-reg.h'
+        Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
     
-    struct PageletTransport final : Transport, Synchronizable {
-  PageletTransport(
-    const String& url, const Array& headers, const String& postData,
-    const String& remoteHost,
-    const std::set<std::string> &rfc1867UploadedFiles,
-    const Array& files, int timeoutSeconds);
+    namespace tensorflow {
     }
     
-    SSATmp* implInstanceOfD(IRGS& env, SSATmp* src, const StringData* className);
     
-    #include <algorithm>
+    {
+    {}  // namespace io
+}  // namespace tensorflow
     
-    #ifndef  lint
-FILE_RCSID('@(#)$File: magic.c,v 1.78 2013/01/07 18:20:19 christos Exp $')
-#endif  /* lint */
+    #include 'tensorflow/core/platform/platform.h'
     
-      // We rebuild a variant type here because using boosts fails on opensource
-  // builds because it at some point requires a copy construction.
-  // This vector has one entry per prologue/translation stored in the two
-  // vectors above, and it encodes the order in which they should be published.
-  std::vector<Kind> order;
+    #include 'tensorflow/core/lib/strings/strcat.h'
     
     /*
- * dlopen() the embedded shared object given by `desc'.
- *
- * Unfortunately, there's no way to do the equivalent of dlopen() on data
- * within another file, or even in memory.  This means we have to copy the
- * section into a temporary file and then dlopen() that.
- *
- * Returns the result of dlopen() on success, else nullptr.  Also logs the
- * failure condition with Logger on failure.
+ * Deprecated in favor of EncodeAudioOpV2.
  */
-void* dlopen_embedded_data(const embedded_data& desc, char* tmp_filename);
-    
-      bool initShadow(int afdt_listen,
-                  const std::string& afdt_filename, int id,
-                  const std::vector<int> &inherited_fds);
-  static void runShadow(int afdt_fd);
-  void closeShadow();
-    
-    
-    {  bool ret;
-  if (isLongOption(option)) {
-    ret = setLongOption(option, value.toInt64());
-  } else {
-    raise_warning('curl_share_setopt():'
-                  'Invalid curl share configuration option');
-    ret = false;
-  }
-  return ret;
-}
-    
-        Size(void)
-    : width(0.0)
-    , height(0.0)
-    {
+class EncodeAudioOp : public OpKernel {
+ public:
+  explicit EncodeAudioOp(OpKernelConstruction* context) : OpKernel(context) {
+    OP_REQUIRES_OK(context, context->GetAttr('file_format', &file_format_));
+    file_format_ = str_util::Lowercase(file_format_);
+    OP_REQUIRES(context, file_format_ == 'wav',
+                errors::InvalidArgument('file_format arg must be \'wav\'.'));
+    }
     }
     
-        method(setMeasureFunc);
-    method(unsetMeasureFunc);
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+      // From the zlib manual (http://www.zlib.net/manual.html):
+  // The mem_level parameter specifies how much memory should be allocated for
+  // the internal compression state. mem_level=1 uses minimum memory but is slow
+  // and reduces compression ratio; mem_level=9 uses maximum memory for optimal
+  // speed. The default value is 8.
+  int8 mem_level = 9;
+    
+            template<int CTA_SIZE>
+        static __forceinline__ __device__ int Ballot(int predicate)
+        {
+#if defined (__CUDA_ARCH__) && (__CUDA_ARCH__ >= 200)
+            return __ballot(predicate);
+#else
+            __shared__ volatile int cta_buffer[CTA_SIZE];
+    }
+    
+            // Core Extension: ARB_texture_compression_rgtc
+        COMPRESSED_RED_RGTC1             = 0x8DBB,
+        COMPRESSED_SIGNED_RED_RGTC1      = 0x8DBC,
+        COMPRESSED_RG_RGTC2              = 0x8DBD,
+        COMPRESSED_SIGNED_RG_RGTC2       = 0x8DBE,
+    
+    struct DynamicFnEntry
+{
+    const char* fnName; // 'clCreateContext'
+    void** ppFn; // &clCreateContext_pfn
+};
+    
+    #endif
+
+    
+    #include <THPP/tensors/THTensor.hpp>
+    
+    void* ${Storage}::unsafeGetTH(bool retain) const {
+  if (retain) {
+    ${THStorage}_retain(${state,} storage);
+  }
+  return storage;
+}
+    
+      auto ilen = input_size[0];
+  auto batchSize = input_size[1];
+  auto inputPlanes = input_size[2];
+  auto outputPlanes = weight_size[2];
+  auto kw = weight.sizes()[0];
+  auto olen = input_size[0] - kw + 1 + pad * 2;
+  int real_pad = (olen - ilen + kw - 1) / 2;
+    
+    THDTensorDescriptor THDTensorDescriptor_newFromTHCudaDoubleTensor(THCudaDoubleTensor *tensor) {
+  return at::getType(at::Backend::CUDA, at::ScalarType::Double).unsafeTensorFromTH((void*)tensor, true);
+}
+    
+    #undef THHostTensor
+#undef THHostTensor_
+#undef THHostStorage
+#undef THHostStorage_
+
+    
+    // TODO(t10737667): The implement a tool that parse the stack trace and
+// symbolicate it
+ostream& operator<<(ostream& out, const vector<StackTraceElement>& trace) {
+  IosFlagsSaver flags{out};
+    }
+    
+    #include <nbind/api.h>
+#include <nbind/BindDefiner.h>
+    
+        method(setMargin);
+    method(setMarginPercent);
+    method(setMarginAuto);
     
     void assertInternal(const char* formatstr ...) {
     va_list va_args;
@@ -84,13 +129,20 @@ void* dlopen_embedded_data(const embedded_data& desc, char* tmp_filename);
      __builtin_unreachable();
 }
     
-      /**
-   * This runs the closure in a scope with fbjni's classloader. This should be
-   * the same classloader as the rest of the application and thus anything
-   * running in the closure will have access to the same classes as in a normal
-   * java-create thread.
-   */
-  static void WithClassLoader(std::function<void()>&& runnable);
-    
-    namespace facebook {
+    private:
+  void initialize() {
+    int ret = pthread_key_create(&m_key, m_cleanup);
+    if (ret != 0) {
+      const char *msg = '(unknown error)';
+      switch (ret) {
+      case EAGAIN:
+        msg = 'PTHREAD_KEYS_MAX (1024) is exceeded';
+        break;
+      case ENOMEM:
+        msg = 'Out-of-memory';
+        break;
+      }
+      (void) msg;
+      FBASSERTMSGF(0, 'pthread_key_create failed: %d %s', ret, msg);
     }
+  }
