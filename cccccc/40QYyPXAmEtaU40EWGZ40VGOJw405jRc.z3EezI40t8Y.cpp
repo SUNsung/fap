@@ -1,206 +1,223 @@
 
         
-        #if PY_MAJOR_VERSION >= 3
-static struct PyModuleDef _module = {
-  PyModuleDef_HEAD_INIT,
-  kModuleName,
-  kModuleDocstring,
-  -1,
-  NULL,
-  NULL,
-  NULL,
-  NULL,
-  NULL
+                    Graph* m_graph;
+    
+    #ifdef _WIN32
+        static Status Save(Model& p_model, const std::wstring& p_filePath);
+    
+                // A set of data types supported for <*this> formal parameter.
+            // It should contain at least one element if this formal parameter
+            // is good.
+            DataTypeSet m_types;
+    
+    
+    
+            std::mutex& OpUtils::GetTypeStrLock()
+        {
+            static std::mutex lock;
+            return lock;
+        }
+    
+        // Taken from ONNX
+    REGISTER_OPERATOR_SCHEMA(Pad)
+        .Description('Given data tensor, paddings, mode, and value. '
+            'Example: Insert 0 paddings to the beginning of the second dimension. '
+            'data = [ [1.0, 1.2], [2.3, 3.4], [4.5, 5.7], ] paddings = [0, 0, 2, 0] '
+            'output = [ [ [0.0, 0.0, 1.0, 1.2], [0.0, 0.0, 2.3, 3.4], [0.0, 0.0, 4.5, 5.7] ] ]')
+        .Input('data', 'Input tensor.', 'T')
+        .Output('output', 'Tensor after padding.', 'T')
+        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
+            'Constrain input and output types to float tensors.')
+        .Attr('pads',
+              'List of integers indicate the padding sizes, paddings's length '
+              'should be the double of input's dimension. '
+              'The order should be axis_0_begin, axis_0_end, axis_1_begin, ..., '
+              'axis_n_begin, axis_n_end, n is input's dimension.',
+              AttrType::AttributeProto_AttributeType_INTS, int64_t(1))
+        .Attr('mode',
+              'Three modes: constant(default), reflect, edge',
+              AttrType::AttributeProto_AttributeType_STRING, std::string('constant'))
+        .Attr('value',
+              'One float, indicates the value to be filled, default is 0',
+              AttrType::AttributeProto_AttributeType_FLOAT, float(0));
+    
+        void BackpropToLogStddev(Matrix<ElemType>& logStddevGradientValues, const Matrix<ElemType>& gradientValues, const Matrix<ElemType>& normedDeviation,
+                             const Matrix<ElemType>& posterior, Matrix<ElemType>& temp)
+    {
+        size_t numComponent = posterior.GetNumRows();
+        size_t numSamples = posterior.GetNumCols();
+    }
+    
+        // Let's check that there is no outstanding copies.
+    // Wait on all events if there are any pending copy operations in flight.
+    if (m_dataTransferers[m_currentDataTransferIndex])
+        m_dataTransferers[m_currentDataTransferIndex]->WaitForCopyCPUToGPU();
+    
+        Matrix<float> mAsparse(mAdense.DeepClone());
+    mAsparse.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseCSC, true);
+    
+    
+    { private:
+  /*! \brief the underlying stream */
+  dmlc::Stream *stream_;
+  /*! \brief buffer to hold data */
+  std::string buffer_;
+  /*! \brief length of valid data in buffer */
+  size_t read_len_;
+  /*! \brief pointer in the buffer */
+  size_t read_ptr_;
 };
-#define INITFUNC PyInit__api_implementation
-#define INITFUNC_ERRORVAL NULL
-#else
-#define INITFUNC init_api_implementation
-#define INITFUNC_ERRORVAL
-#endif
     
-    // This file defines a C++ DescriptorDatabase, which wraps a Python Database
-// and delegate all its operations to Python methods.
     
-      // Find the file which defines an extension extending the given message type
-  // with the given field number.
-  // Containing_type must be a fully-qualified type name.
-  // Python objects are not required to implement this method.
-  bool FindFileContainingExtension(const string& containing_type,
-                                   int field_number,
-                                   FileDescriptorProto* output);
-    
-    #include <google/protobuf/compiler/command_line_interface.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/io/printer.h>
-    
-      virtual void WriteHash(io::Printer* printer);
-  virtual void WriteEquals(io::Printer* printer);
-  virtual void WriteToString(io::Printer* printer);
-    
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_REFLECTION_CLASS_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_REFLECTION_CLASS_H__
-    
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
+    {    for (size_t i = 0; i < batch.size; ++i) {
+      offset_[i + 1] = (i + 1) * num_col_;
+      Row<IndexType> row = batch[i];
+      for (uint32_t j = 0; j < num_col_; ++j) {
+        dense_index_[i * num_col_ + j] = j;
+      }
+      for (unsigned k = 0; k < row.length; ++k) {
+        uint32_t index = row.get_index(k);
+        CHECK_LT(index, num_col_)
+            << 'Featuere index larger than num_col';
+        dense_value_[i * num_col_ + index]  = row.get_value(k);
+      }
     }
-    }
-    }
-    }
-    
-        'ensure$capitalized_name$IsMutable();\n'
-    '$name$_.remove(index);\n'
-    '$on_changed$\n',
-    
-    #if GTEST_OS_SYMBIAN
-  // Streams a value (either a pointer or not) to this object.
-  template <typename T>
-  inline Message& operator <<(const T& value) {
-    StreamHelper(typename internal::is_pointer<T>::type(), value);
-    return *this;
-  }
-#else
-  // Streams a non-pointer value to this object.
-  template <typename T>
-  inline Message& operator <<(const T& val) {
-    // Some libraries overload << for STL containers.  These
-    // overloads are defined in the global namespace instead of ::std.
-    //
-    // C++'s symbol lookup rule (i.e. Koenig lookup) says that these
-    // overloads are visible in either the std namespace or the global
-    // namespace, but not other namespaces, including the testing
-    // namespace which Google Test's Message class is in.
-    //
-    // To allow STL containers (and other types that has a << operator
-    // defined in the global namespace) to be used in Google Test
-    // assertions, testing::Message must access the custom << operator
-    // from the global namespace.  With this using declaration,
-    // overloads of << defined in the global namespace and those
-    // visible via Koenig lookup are both exposed in this function.
-    using ::operator <<;
-    *ss_ << val;
-    return *this;
+    out_ = batch;
+    out_.index = dmlc::BeginPtr(dense_index_);
+    out_.value = dmlc::BeginPtr(dense_value_);
+    out_.offset = dmlc::BeginPtr(offset_);
+    return true;
   }
     
-    #if !GTEST_OS_SYMBIAN
-# include <utility>
-#endif
-    
-    // Makes sure this header is not included before gtest.h.
-#ifndef GTEST_INCLUDE_GTEST_GTEST_H_
-# error Do not include gtest_pred_impl.h directly.  Include gtest.h instead.
-#endif  // GTEST_INCLUDE_GTEST_GTEST_H_
-    
-      virtual ParamIteratorInterface<ParamType>* Begin() const {
-    return new Iterator(this, g1_, g1_.begin(), g2_, g2_.begin());
-  }
-  virtual ParamIteratorInterface<ParamType>* End() const {
-    return new Iterator(this, g1_, g1_.end(), g2_, g2_.end());
-  }
-    
-      // Compares two wide C strings.  Returns true iff they have the same
-  // content.
-  //
-  // Unlike wcscmp(), this function can handle NULL argument(s).  A
-  // NULL C string is considered different to any non-NULL C string,
-  // including the empty string.
-  static bool WideCStringEquals(const wchar_t* lhs, const wchar_t* rhs);
-    
-    template <GTEST_10_TYPENAMES_(T), GTEST_10_TYPENAMES_(U)>
-inline bool operator==(const GTEST_10_TUPLE_(T)& t,
-                       const GTEST_10_TUPLE_(U)& u) {
-  return gtest_internal::SameSizeTuplePrefixComparator<
-      tuple_size<GTEST_10_TUPLE_(T) >::value,
-      tuple_size<GTEST_10_TUPLE_(U) >::value>::Eq(t, u);
-}
+          CompressedIterator<int> ci(buffer.data(), alphabet_size);
+      std::vector<int> output(input.size());
+      for (int i = 0; i < input.size(); i++) {
+        output[i] = ci[i];
+      }
     
     
-// Step 1. Include necessary header files such that the stuff your
-// test logic needs is declared.
-//
-// Don't forget gtest.h, which declares the testing framework.
-    
-    // WorkloadStats is used to track per request timing for different states
-// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
-// should be made to guard the state change with appropriate timers and
-// counters.
-//
-// The states tracked are:
-//  - In a request (this is a superset of the interpreter state)
-//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
-//  - In the JIT (currently tracks time inside the translate routine)
-//
-// Note the time in the TC is not tracked.  This is roughly:
-//   Time in request - Time in interp
-//
-// This gives us the relative interp time formula of:
-//   Relative interp time = Time in interp / Time in request
-struct WorkloadStats final {
-  enum State {
-    InRequest,
-    // -> InInterp   Okay (entering Dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InInterp,
-    // -> InRequest  Okay (leaving the dispatch loop)
-    // -> InTrans    Okay (entering translate)
-    InTrans,
-    // -> InRequest  Okay (leaving translate)
-    // -> InInterp   Okay (leaving translate)
-  };
-    }
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    
-    namespace HPHP { namespace jit {
-    }
-    }
-    
-    SSATmp* implInstanceOfD(IRGS& env, SSATmp* src, const StringData* className);
-    
-    #include 'hphp/util/safe-cast.h'
-    
-    void numa_local(void* start, size_t size) {
-  if (!use_numa) return;
-  numa_setlocal_memory(start, size);
-}
-    
-    /*
- * Returns an IR block corresponding to the given bytecode offset. If the block
- * starts with a DefLabel expecting a StkPtr, this function will return an
- * intermediate block that passes the current sp.
+/*
+ * dns.h
+ *
+ *  Created on: 2012-11-23
+ *      Author: yanguoyue
  */
-Block* getBlock(IRGS& env, Offset offset);
     
-    #include <cstdint>
-#include <cstring>
-#include <map>
-#include <set>
-    
-    GodotSharpBuilds *GodotSharpBuilds::singleton = NULL;
-    
-    /*Note that we do not provide a macro for abs(), because it is provided as a
-   library function, which we assume is translated into an intrinsic to avoid
-   the function call overhead and then implemented in the smartest way for the
-   target platform.
-  With modern gcc (4.x), this is true: it uses cmov instructions if the
-   architecture supports it and branchless bit-twiddling if it does not (the
-   speed difference between the two approaches is not measurable).
-  Interestingly, the bit-twiddling method was patented in 2000 (US 6,073,150)
-   by Sun Microsystems, despite prior art dating back to at least 1996:
-   http://web.archive.org/web/19961201174141/www.x86.org/ftp/articles/pentopt/PENTOPT.TXT
-  On gcc 3.x, however, our assumption is not true, as abs() is translated to a
-   conditional jump, which is horrible on deeply piplined architectures (e.g.,
-   all consumer architectures for the past decade or more).
-  Also be warned that -C*abs(x) where C is a constant is mis-optimized as
-   abs(C*x) on every gcc release before 4.2.3.
-  See bug http://gcc.gnu.org/bugzilla/show_bug.cgi?id=34130 */
+    #include <stdlib.h>
     
     
-static const vorbis_mapping_template _mapres_template_16_uncoupled[3]={
-  { _map_nominal_u, _res_16u_0 }, /* 0 */
-  { _map_nominal_u, _res_16u_1 }, /* 1 */
-  { _map_nominal_u, _res_16u_2 }, /* 2 */
-};
+    static bool SpyHookLogFunc(struct XLoggerInfo_t& _info, std::string& _log);
+    void TestFun0();
+    int __TestFun1(int i);
+    
+    
+#endif /* SCOP_JENV_H_ */
+
+    
+    
+    {    if (success) {
+      // Expand to real size
+      assert(newByteSize / sizeof(ElementWrapper) >= newCapacity);
+      newCapacity = newByteSize / sizeof(ElementWrapper);
+    } else {
+      throw std::bad_alloc();
+    }
+  } else { // no jemalloc
+    // calloc() is simpler than malloc() followed by memset(), and
+    // potentially faster when dealing with a lot of memory, as it can get
+    // already-zeroed pages from the kernel.
+    reallocated = static_cast<ElementWrapper*>(
+        calloc(newCapacity, sizeof(ElementWrapper)));
+    if (!reallocated) {
+      throw std::bad_alloc();
+    }
+  }
+    
+    #include <folly/io/async/AsyncTransport.h>
+#include <folly/io/async/WriteChainAsyncTransportWrapper.h>
+#include <folly/portability/GMock.h>
+#include <folly/portability/GTest.h>
+    
+    
+  // Create a clone of a different IOBuf
+  EXPECT_FALSE(iob1->isShared());
+  EXPECT_FALSE(iob3ptr->isSharedOne());
+    
+    FOLLY_TLS sem_t* DeterministicSchedule::tls_sem;
+FOLLY_TLS DeterministicSchedule* DeterministicSchedule::tls_sched;
+FOLLY_TLS unsigned DeterministicSchedule::tls_threadId;
+thread_local AuxAct DeterministicSchedule::tls_aux_act;
+AuxChk DeterministicSchedule::aux_chk;
+    
+    #include <array>
+    
+    
+    {  EXPECT_CALL(fut, futexWaitUntil(2, forever, 0xff))
+      .WillOnce(Return(FutexResult::AWOKEN));
+  EXPECT_EQ(
+      FutexResult::AWOKEN,
+      MemoryIdler::futexWaitUntil(
+          fut, 2, forever, 0xff, std::chrono::seconds(0)));
+}
+    
+    #include <folly/detail/RangeCommon.h>
+    
+    namespace folly {
+    }
+    
+    size_t qfind_first_byte_of_sse42(
+    const StringPieceLite haystack,
+    const StringPieceLite needles) {
+  if (UNLIKELY(needles.empty() || haystack.empty())) {
+    return std::string::npos;
+  } else if (needles.size() <= 16) {
+    // we can save some unnecessary load instructions by optimizing for
+    // the common case of needles.size() <= 16
+    return qfind_first_byte_of_needles16(haystack, needles);
+  }
+    }
+    
+      // Returns an index of random unit from the corpus to mutate.
+  // Hypothesis: units added to the corpus last are more likely to be
+  // interesting. This function gives more weight to the more recent units.
+  size_t ChooseUnitIdxToMutate(Random &Rand) {
+    size_t Idx = static_cast<size_t>(CorpusDistribution(Rand.Get_mt19937()));
+    assert(Idx < Inputs.size());
+    return Idx;
+  }
+    
+      bool ContainsWord(const Word &W) const {
+    return std::any_of(begin(), end(), [&](const DictionaryEntry &DE) {
+      return DE.GetW() == W;
+    });
+  }
+  const DictionaryEntry *begin() const { return &DE[0]; }
+  const DictionaryEntry *end() const { return begin() + Size; }
+  DictionaryEntry & operator[] (size_t Idx) {
+    assert(Idx < Size);
+    return DE[Idx];
+  }
+  void push_back(DictionaryEntry DE) {
+    if (Size < kMaxDictSize)
+      this->DE[Size++] = DE;
+  }
+  void clear() { Size = 0; }
+  bool empty() const { return Size == 0; }
+  size_t size() const { return Size; }
+    
+    
+    {} // namespace fuzzer
+    
+      // Dictionary provided by the user via -dict=DICT_FILE.
+  Dictionary ManualDictionary;
+  // Temporary dictionary modified by the fuzzer itself,
+  // recreated periodically.
+  Dictionary TempAutoDictionary;
+  // Persistent dictionary modified by the fuzzer, consists of
+  // entries that led to successfull discoveries in the past mutations.
+  Dictionary PersistentAutoDictionary;
+    
+    #ifndef LLVM_FUZZER_OPTIONS_H
+#define LLVM_FUZZER_OPTIONS_H
+    
+    unsigned long GetPid();
