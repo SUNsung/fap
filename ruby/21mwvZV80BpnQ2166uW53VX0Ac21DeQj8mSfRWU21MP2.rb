@@ -1,57 +1,47 @@
 
         
-          included do
-    self.validate :validate_email_options
-  end
-    
-      def tumblr_consumer_secret
-    ENV['TUMBLR_OAUTH_SECRET']
-  end
-    
-        respond_to do |format|
-      format.html { redirect_to jobs_path, notice: 'All jobs removed.' }
-      format.json { head :no_content }
-    end
-  end
-    
-        @services = current_user.services.reorder(table_sort).page(params[:page])
-    
-    require 'builder'
-require 'feedbag'
-require 'nokogiri'
-    
-          def calculate_column_widths(rows)
-        num_columns = rows.map { |row| row.values.length }.max
-        Array.new(num_columns) do |col|
-          rows.map { |row| row.values[col].to_s.length }.max
+            describe '#download' do
+      it 'returns the p8 file' do
+        mock_client_response(:download_key) do
+          %{
+-----BEGIN PRIVATE KEY-----
+this is the encoded private key contents
+-----END PRIVATE KEY-----
+          }
         end
+        p8_string = key.download
+        expect(p8_string).to include('PRIVATE KEY')
       end
+    end
     
-          private
+          it 'it increments all targets minor version number' do
+        Fastlane::FastFile.new.parse('lane :test do
+          increment_version_number(bump_type: 'minor')
+        end').runner.execute(:test)
     
-        def deploying?
-      fetch(:deploying, false)
+              node.css('.method').each do |n|
+            next unless n.at_css('dt[id]')
+            name = n.at_css('.descname').content
+            name = '#{class_name}::#{name}()'
+            id = n.at_css('dt[id]')['id']
+            entries << [name, id]
+          end
+        end
+    
+    
+    
+      # Replaces relative urls with full urls
+  def expand_urls(input, url='')
+    url ||= '/'
+    input.gsub /(\s+(href|src|poster)\s*=\s*['|']{1})(\/[^\/>]{1}[^\''>]*)/ do
+      $1+url+$3
     end
   end
-end
-
     
-      # Implemented by subclasses to define Rake tasks. Typically a plugin will call
-  # `eval_rakefile` to load Rake tasks from a separate .rake file.
-  #
-  # Example:
-  #
-  #   def define_tasks
-  #     eval_rakefile File.expand_path('../tasks.rake', __FILE__)
-  #   end
-  #
-  # For simple tasks, you can define them inline. No need for a separate file.
-  #
-  #   def define_tasks
-  #     desc 'Do something fantastic.'
-  #     task 'my_plugin:fantastic' do
-  #       ...
-  #     end
-  #   end
-  #
-  def define_tasks; end
+            def reference!(node)
+          @references << node
+          @referenced = true
+        end
+    
+              add_offense(node)
+        end
