@@ -1,34 +1,47 @@
 
         
-        
-def has_level_handler(logger):
-    '''Check if there is a handler in the logging chain that will handle the
-    given logger's :meth:`effective level <~logging.Logger.getEffectiveLevel>`.
-    '''
-    level = logger.getEffectiveLevel()
-    current = logger
+            def remove(self, key):
+        hash_index = self._hash_function(key)
+        for index, item in enumerate(self.table[hash_index]):
+            if item.key == key:
+                del self.table[hash_index][index]
+                return
+        raise KeyError('Key not found')
     
-        def get_expiration_time(self, app, session):
-        '''A helper method that returns an expiration date for the session
-        or ``None`` if the session is linked to the browser session.  The
-        default implementation returns now + the permanent session
-        lifetime configured on the application.
+    from mrjob.job import MRJob
+    
+    
+class Operator(Employee):
+    
+        def deal_card(self):
+        try:
+            card = self.cards[self.deal_index]
+            card.is_available = False
+            self.deal_index += 1
+        except IndexError:
+            return None
+        return card
+    
+            Accessing a node updates its position to the front of the LRU list.
         '''
-        if session.permanent:
-            return datetime.utcnow() + app.permanent_session_lifetime
+        node = self.lookup[query]
+        if node is None:
+            return None
+        self.linked_list.move_to_front(node)
+        return node.results
     
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer)
+        ]
     
-def main():
-    os.chdir(os.path.join(os.path.dirname(__file__), '..'))
-    
-    
-def test_uninstalled_package_paths(modules_tmpdir, purge_module):
-    app = modules_tmpdir.mkdir('config_package_app')
-    init = app.join('__init__.py')
-    init.write(
-        'import os\n'
-        'import flask\n'
-        'here = os.path.abspath(os.path.dirname(__file__))\n'
-        'app = flask.Flask(__name__)\n'
-    )
-    purge_module('config_package_app')
+        for url in urls:
+        if not url.startswith('http'):
+            print('markdown file name: ' + url)
+            continue
+        if check_live_url(url):
+            print(url)
+        else:
+            print(url, file=sys.stderr)
