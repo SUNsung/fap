@@ -1,373 +1,372 @@
 
         
-          LOG(INFO) << 'Writing Training data';
-  for (int fileid = 0; fileid < kCIFARTrainBatches; ++fileid) {
-    // Open files
-    LOG(INFO) << 'Training Batch ' << fileid + 1;
-    string batchFileName = input_folder + '/data_batch_'
-      + caffe::format_int(fileid+1) + '.bin';
-    std::ifstream data_file(batchFileName.c_str(),
-        std::ios::in | std::ios::binary);
-    CHECK(data_file) << 'Unable to open train file #' << fileid + 1;
-    for (int itemid = 0; itemid < kCIFARBatchSize; ++itemid) {
-      read_image(&data_file, &label, str_buffer);
-      datum.set_label(label);
-      datum.set_data(str_buffer, kCIFARImageNBytes);
-      string out;
-      CHECK(datum.SerializeToString(&out));
-      txn->Put(caffe::format_int(fileid * kCIFARBatchSize + itemid, 5), out);
-    }
-  }
-  txn->Commit();
-  train_db->Close();
+        
+    { private:
+  DISALLOW_COPY_AND_ASSIGN(EventDisabler);
+};
     
-      gflags::SetUsageMessage('This script converts the MNIST dataset to\n'
-        'the lmdb/leveldb format used by Caffe to load data.\n'
-        'Usage:\n'
-        '    convert_mnist_data [FLAGS] input_image_file input_label_file '
-        'output_db_file\n'
-        'The MNIST dataset could be downloaded at\n'
-        '    http://yann.lecun.com/exdb/mnist/\n'
-        'You should gunzip them after downloading,'
-        'or directly use data/mnist/get_mnist.sh\n');
-  gflags::ParseCommandLineFlags(&argc, &argv, true);
+      std::unique_ptr<base::ListValue> preferences_;
     
     
-    {}  // namespace caffe
+    {}  // namespace chrome
     
-    namespace caffe {
+    #include <map>
+    
+    
+    {}  // namespace chrome
+    
+    void TtsPlatformImpl::clear_error() {
+  error_ = std::string();
+}
+    
+    void THDTensor_(_resize5d)(THDTensor *tensor, int64_t size0, int64_t size1, int64_t size2, int64_t size3, int64_t size4) {
+  int64_t sizes[] = {size0, size1, size2, size3, size4};
+  THDTensor_(_resize)(tensor, 2, sizes, nullptr);
+}
+    
+    auto ${Storage}::fast_get(std::size_t ind) -> Scalar {
+  if(${isCUDA})
+    throw std::runtime_error('unsupported operation 'fast_get'');
+  return static_cast<${ScalarType}>(${to_at_type}(storage->data[ind]));
+}
+    
+    namespace at {
     }
     
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2+)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_1 @f$
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_2 @f$
-   *   -# ...
-   *   - K @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_K @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
-   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
-   *      the concatenated output @f$
-   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
     
-    #include 'caffe/layers/base_conv_layer.hpp'
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-      virtual inline const char* type() const { return 'Dropout'; }
-    
+  // NOTE: this function needs to be thread safe
+  std::shared_ptr<context_type> createContext(
+    const DataChannelGloo::Group& group,
+    const std::string& prefix
+  ) {
     /**
- * @brief Compute elementwise operations, such as product and sum,
- *        along multiple input Blobs.
- *
- * TODO(dox): thorough documentation for Forward, Backward, and proto params.
- */
-template <typename Dtype>
-class EltwiseLayer : public Layer<Dtype> {
- public:
-  explicit EltwiseLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-      virtual inline const char* type() const { return 'ELU'; }
-    
-    /**
- * @brief Computes @f$ y = \gamma ^ {\alpha x + \beta} @f$,
- *        as specified by the scale @f$ \alpha @f$, shift @f$ \beta @f$,
- *        and base @f$ \gamma @f$.
- */
-template <typename Dtype>
-class ExpLayer : public NeuronLayer<Dtype> {
- public:
-  /**
-   * @param param provides ExpParameter exp_param,
-   *     with ExpLayer options:
-   *   - scale (\b optional, default 1) the scale @f$ \alpha @f$
-   *   - shift (\b optional, default 0) the shift @f$ \beta @f$
-   *   - base (\b optional, default -1 for a value of @f$ e \approx 2.718 @f$)
-   *         the base @f$ \gamma @f$
-   */
-  explicit ExpLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2+)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs to be filtered @f$ x_1 @f$
-   *   -# ...
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs to be filtered @f$ x_K @f$
-   *   -# @f$ (N \times 1 \times 1 \times 1) @f$
-   *      the selector blob
-   * @param top output Blob vector (length 1+)
-   *   -# @f$ (S \times C \times H \times W) @f$ ()
-   *        the filtered output @f$ x_1 @f$
-   *        where S is the number of items
-   *        that haven't been filtered
-   *      @f$ (S \times C \times H \times W) @f$
-   *        the filtered output @f$ x_K @f$
-   *        where S is the number of items
-   *        that haven't been filtered
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-    const vector<Blob<Dtype>*>& top);
-    
-    #include 'hphp/runtime/vm/jit/types.h'
-#include 'hphp/runtime/vm/jit/containers.h'
-#include 'hphp/runtime/vm/jit/vasm.h'
-#include 'hphp/runtime/vm/jit/vasm-data.h'
-#include 'hphp/runtime/vm/jit/vasm-instr.h'
-#include 'hphp/runtime/vm/jit/vasm-reg.h'
-    
-    #ifdef HAVE_NUMA
-    
-    /*
- * Assert ownership of the CodeCache by this thread.
- *
- * Must be held even if the current thread owns the global write lease.
- */
-void assertOwnsCodeLock(OptView v = folly::none);
-    
-    
-// Logical immediates can't encode zero, so a return value of zero is used to
-// indicate a failure case. Specifically, where the constraints on imm_s are
-// not met.
-uint64_t Instruction::ImmLogical() {
-  unsigned reg_size = SixtyFourBits() ? kXRegSize : kWRegSize;
-  int64_t n = BitN();
-  int64_t imm_s = ImmSetBits();
-  int64_t imm_r = ImmRotate();
-    }
-    
-    /*
- * Emit the prologue dispatch for func which contains dvs DV initializers, and
- * return its start address.  The `kind' of translation argument is used to
- * decide what area of the code cache will be used (hot, main, or prof).
- *
- * Precondition: calling thread owns both code and metadata locks
- */
-TCA emitFuncBodyDispatchInternal(Func* func, const DVFuncletsVec& dvs,
-                                 TransKind kind);
-    
-    void CurlShareResource::close() {
-  if (m_share) {
-    curl_share_cleanup(m_share);
-    m_share = nullptr;
+     * We currently only supports a single Infiniband interface. In other words,
+     * if there are multiple Infiniband devices in the system, Gloo will detect
+     * all of them and use the first device.
+     *
+     * TODO: This can be extended later to utilize multiple Infiniband devices
+     *
+     * For ethernet, _deviceList[0] will always have the default ethernet
+     * device that is detected from the user's provided IP address and there
+     * won't be multiple one device in _deviceList
+     *
+     * For Infiniband, _deviceList[0], which is the first found IB interfance,
+     * will be used by all Gloo operations.
+     */
+    size_t curDevice = 0;
+    auto context = std::make_shared<context_type>(
+        group.mustGetGroupRank(_rank), group.size());
+    prefix_store_type prefix_store(prefix, *group._store);
+    context->connectFullMesh(prefix_store, _deviceList[curDevice]);
+    return context;
   }
-}
     
-    constexpr char RANK_ENV[] = 'RANK';
-constexpr char WORLD_SIZE_ENV[] = 'WORLD_SIZE';
-constexpr char MASTER_PORT_ENV[] = 'MASTER_PORT';
-constexpr char MASTER_ADDR_ENV[] = 'MASTER_ADDR';
+    #define THCPStorage TH_CONCAT_3(THCP,Real,Storage)
+#define THCPStorageStr TH_CONCAT_STRING_3(torch.cuda.,Real,Storage)
+#define THCPStorageClass TH_CONCAT_3(THCP,Real,StorageClass)
+#define THCPStorage_(NAME) TH_CONCAT_4(THCP,Real,Storage_,NAME)
     
-    #include <THPP/tensors/THTensor.hpp>
+    #undef THStorage
+#undef THStorage_
+#undef THTensor
+#undef THTensor_
     
+      /// Get an option from the acceptor.
+  /**
+   * This function is used to get the current value of an option on the
+   * acceptor.
+   *
+   * @param option The option value to be obtained from the acceptor.
+   *
+   * @param ec Set to indicate what error occurred, if any.
+   *
+   * @sa GettableSocketOption @n
+   * boost::asio::socket_base::reuse_address
+   *
+   * @par Example
+   * Getting the value of the SOL_SOCKET/SO_REUSEADDR option:
+   * @code
+   * boost::asio::ip::tcp::acceptor acceptor(io_service);
+   * ...
+   * boost::asio::ip::tcp::acceptor::reuse_address option;
+   * boost::system::error_code ec;
+   * acceptor.get_option(option, ec);
+   * if (ec)
+   * {
+   *   // An error occurred.
+   * }
+   * bool is_set = option.get();
+   * @endcode
+   */
+  template <typename GettableSocketOption>
+  boost::system::error_code get_option(GettableSocketOption& option,
+      boost::system::error_code& ec)
+  {
+    return this->get_service().get_option(
+        this->get_implementation(), option, ec);
+  }
     
-namespace at {
+    /// Provides waitable timer functionality.
+/**
+ * The basic_waitable_timer class template provides the ability to perform a
+ * blocking or asynchronous wait for a timer to expire.
+ *
+ * A waitable timer is always in one of two states: 'expired' or 'not expired'.
+ * If the wait() or async_wait() function is called on an expired timer, the
+ * wait operation will complete immediately.
+ *
+ * Most applications will use one of the boost::asio::steady_timer,
+ * boost::asio::system_timer or boost::asio::high_resolution_timer typedefs.
+ *
+ * @note This waitable timer functionality is for use with the C++11 standard
+ * library's @c &lt;chrono&gt; facility, or with the Boost.Chrono library.
+ *
+ * @par Thread Safety
+ * @e Distinct @e objects: Safe.@n
+ * @e Shared @e objects: Unsafe.
+ *
+ * @par Examples
+ * Performing a blocking wait (C++11):
+ * @code
+ * // Construct a timer without setting an expiry time.
+ * boost::asio::steady_timer timer(io_service);
+ *
+ * // Set an expiry time relative to now.
+ * timer.expires_from_now(std::chrono::seconds(5));
+ *
+ * // Wait for the timer to expire.
+ * timer.wait();
+ * @endcode
+ *
+ * @par 
+ * Performing an asynchronous wait (C++11):
+ * @code
+ * void handler(const boost::system::error_code& error)
+ * {
+ *   if (!error)
+ *   {
+ *     // Timer expired.
+ *   }
+ * }
+ *
+ * ...
+ *
+ * // Construct a timer with an absolute expiry time.
+ * boost::asio::steady_timer timer(io_service,
+ *     std::chrono::steady_clock::now() + std::chrono::seconds(60));
+ *
+ * // Start an asynchronous wait.
+ * timer.async_wait(handler);
+ * @endcode
+ *
+ * @par Changing an active waitable timer's expiry time
+ *
+ * Changing the expiry time of a timer while there are pending asynchronous
+ * waits causes those wait operations to be cancelled. To ensure that the action
+ * associated with the timer is performed only once, use something like this:
+ * used:
+ *
+ * @code
+ * void on_some_event()
+ * {
+ *   if (my_timer.expires_from_now(seconds(5)) > 0)
+ *   {
+ *     // We managed to cancel the timer. Start new asynchronous wait.
+ *     my_timer.async_wait(on_timeout);
+ *   }
+ *   else
+ *   {
+ *     // Too late, timer has already expired!
+ *   }
+ * }
+ *
+ * void on_timeout(const boost::system::error_code& e)
+ * {
+ *   if (e != boost::asio::error::operation_aborted)
+ *   {
+ *     // Timer was not cancelled, take necessary action.
+ *   }
+ * }
+ * @endcode
+ *
+ * @li The boost::asio::basic_waitable_timer::expires_from_now() function
+ * cancels any pending asynchronous waits, and returns the number of
+ * asynchronous waits that were cancelled. If it returns 0 then you were too
+ * late and the wait handler has already been executed, or will soon be
+ * executed. If it returns 1 then the wait handler was successfully cancelled.
+ *
+ * @li If a wait handler is cancelled, the boost::system::error_code passed to
+ * it contains the value boost::asio::error::operation_aborted.
+ */
+template <typename Clock,
+    typename WaitTraits = boost::asio::wait_traits<Clock>,
+    typename WaitableTimerService = waitable_timer_service<Clock, WaitTraits> >
+class basic_waitable_timer
+  : public basic_io_object<WaitableTimerService>
+{
+public:
+  /// The clock type.
+  typedef Clock clock_type;
     }
     
-    int64_t ${Tensor}::dim() const {
-  if(isScalar())
-    return 0;
-  int64_t d = ${THTensor_nDimension};
-  // See Note [Empty versus 0-dim tensors]
-  if (d != 0)
-    return d;
-  return kEmptySizes.size();
-}
-    
-    #define const_generator_cast(generator) \
-  dynamic_cast<const CUDAGenerator&>(generator)
-    
-    THDTensorDescriptor THDTensorDescriptor_newFromTHShortTensor(THShortTensor *tensor) {
-  return at::getType(at::Backend::CPU, at::ScalarType::Short).unsafeTensorFromTH((void*)tensor, true);
-}
-    
-    #include <boost/asio/detail/pop_options.hpp>
-    
-    #endif // BOOST_ASIO_DETAIL_FD_SET_ADAPTER_HPP
-
+    #ifndef BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
+#define BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
     
     #include <boost/asio/detail/config.hpp>
-#include <boost/asio/detail/addressof.hpp>
-#include <boost/asio/detail/noncopyable.hpp>
-#include <boost/asio/handler_alloc_hook.hpp>
     
-    #define BOOST_ASIO_CONNECT_HANDLER_CHECK( \
-    handler_type, handler) \
-  \
-  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
-      void(boost::system::error_code)) \
-    asio_true_handler_type; \
-  \
-  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
-      sizeof(boost::asio::detail::one_arg_handler_test( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>(), \
-          static_cast<const boost::system::error_code*>(0))) == 1, \
-      'ConnectHandler type requirements not met') \
-  \
-  typedef boost::asio::detail::handler_type_requirements< \
-      sizeof( \
-        boost::asio::detail::argbyv( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>())) + \
-      sizeof( \
-        boost::asio::detail::lvref< \
-          asio_true_handler_type>()( \
-            boost::asio::detail::lvref<const boost::system::error_code>()), \
-        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
+    #include <boost/asio/detail/config.hpp>
     
+    #include <boost/asio/detail/push_options.hpp>
     
-    {    for (size_t i = 0; i < batch.size; ++i) {
-      offset_[i + 1] = (i + 1) * num_col_;
-      Row<IndexType> row = batch[i];
-      for (uint32_t j = 0; j < num_col_; ++j) {
-        dense_index_[i * num_col_ + j] = j;
+        // Find the next context with the same key.
+    Value* next_by_key() const
+    {
+      context* elem = next_;
+      while (elem)
+      {
+        if (elem->key_ == key_)
+          return elem->value_;
+        elem = elem->next_;
       }
-      for (unsigned k = 0; k < row.length; ++k) {
-        uint32_t index = row.get_index(k);
-        CHECK_LT(index, num_col_)
-            << 'Featuere index larger than num_col';
-        dense_value_[i * num_col_ + index]  = row.get_value(k);
-      }
-    }
-    out_ = batch;
-    out_.index = dmlc::BeginPtr(dense_index_);
-    out_.value = dmlc::BeginPtr(dense_value_);
-    out_.offset = dmlc::BeginPtr(offset_);
-    return true;
-  }
-    
-    // logistic loss, but predict un-transformed margin
-struct LogisticRaw : public LogisticRegression {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    const float eps = 1e-16f;
-    predt = common::Sigmoid(predt);
-    return fmaxf(predt * (1.0f - predt), eps);
-  }
-  template <typename T>
-    static T PredTransform(T x) { return x; }
-  template <typename T>
-    static T FirstOrderGradient(T predt, T label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
-  }
-  template <typename T>
-    static T SecondOrderGradient(T predt, T label) {
-    const T eps = T(1e-16f);
-    predt = common::Sigmoid(predt);
-    return std::max(predt * (T(1.0f) - predt), eps);
-  }
-  static const char* DefaultEvalMetric() { return 'auc'; }
-};
-    
-      Erode(w, h, &darkmap);
-  Erode(w, h, &darkmap);
-  Erode(w, h, &darkmap);
-    
-    static const int kCbToGreenTable[256] = {
-  2919680,  2897126,  2874572,  2852018,  2829464,  2806910,  2784356,  2761802,
-  2739248,  2716694,  2694140,  2671586,  2649032,  2626478,  2603924,  2581370,
-  2558816,  2536262,  2513708,  2491154,  2468600,  2446046,  2423492,  2400938,
-  2378384,  2355830,  2333276,  2310722,  2288168,  2265614,  2243060,  2220506,
-  2197952,  2175398,  2152844,  2130290,  2107736,  2085182,  2062628,  2040074,
-  2017520,  1994966,  1972412,  1949858,  1927304,  1904750,  1882196,  1859642,
-  1837088,  1814534,  1791980,  1769426,  1746872,  1724318,  1701764,  1679210,
-  1656656,  1634102,  1611548,  1588994,  1566440,  1543886,  1521332,  1498778,
-  1476224,  1453670,  1431116,  1408562,  1386008,  1363454,  1340900,  1318346,
-  1295792,  1273238,  1250684,  1228130,  1205576,  1183022,  1160468,  1137914,
-  1115360,  1092806,  1070252,  1047698,  1025144,  1002590,   980036,   957482,
-   934928,   912374,   889820,   867266,   844712,   822158,   799604,   777050,
-   754496,   731942,   709388,   686834,   664280,   641726,   619172,   596618,
-   574064,   551510,   528956,   506402,   483848,   461294,   438740,   416186,
-   393632,   371078,   348524,   325970,   303416,   280862,   258308,   235754,
-   213200,   190646,   168092,   145538,   122984,   100430,    77876,    55322,
-    32768,    10214,   -12340,   -34894,   -57448,   -80002,  -102556,  -125110,
-  -147664,  -170218,  -192772,  -215326,  -237880,  -260434,  -282988,  -305542,
-  -328096,  -350650,  -373204,  -395758,  -418312,  -440866,  -463420,  -485974,
-  -508528,  -531082,  -553636,  -576190,  -598744,  -621298,  -643852,  -666406,
-  -688960,  -711514,  -734068,  -756622,  -779176,  -801730,  -824284,  -846838,
-  -869392,  -891946,  -914500,  -937054,  -959608,  -982162, -1004716, -1027270,
- -1049824, -1072378, -1094932, -1117486, -1140040, -1162594, -1185148, -1207702,
- -1230256, -1252810, -1275364, -1297918, -1320472, -1343026, -1365580, -1388134,
- -1410688, -1433242, -1455796, -1478350, -1500904, -1523458, -1546012, -1568566,
- -1591120, -1613674, -1636228, -1658782, -1681336, -1703890, -1726444, -1748998,
- -1771552, -1794106, -1816660, -1839214, -1861768, -1884322, -1906876, -1929430,
- -1951984, -1974538, -1997092, -2019646, -2042200, -2064754, -2087308, -2109862,
- -2132416, -2154970, -2177524, -2200078, -2222632, -2245186, -2267740, -2290294,
- -2312848, -2335402, -2357956, -2380510, -2403064, -2425618, -2448172, -2470726,
- -2493280, -2515834, -2538388, -2560942, -2583496, -2606050, -2628604, -2651158,
- -2673712, -2696266, -2718820, -2741374, -2763928, -2786482, -2809036, -2831590,
-};
-    
-        size_t i = 0;      // Points to the next leaf node.
-    size_t j = n + 1;  // Points to the next non-leaf node.
-    for (size_t k = n - 1; k != 0; --k) {
-      size_t left, right;
-      if (tree[i].total_count_ <= tree[j].total_count_) {
-        left = i;
-        ++i;
-      } else {
-        left = j;
-        ++j;
-      }
-      if (tree[i].total_count_ <= tree[j].total_count_) {
-        right = i;
-        ++i;
-      } else {
-        right = j;
-        ++j;
-      }
+      return 0;
     }
     
-    #include 'guetzli/jpeg_data.h'
+    namespace boost {
+namespace date_time {
+    }
+    }
     
-    #include <jni.h>
+    template <typename MutableBufferSequence>
+class descriptor_read_op_base : public reactor_op
+{
+public:
+  descriptor_read_op_base(int descriptor,
+      const MutableBufferSequence& buffers, func_type complete_func)
+    : reactor_op(&descriptor_read_op_base::do_perform, complete_func),
+      descriptor_(descriptor),
+      buffers_(buffers)
+  {
+  }
+    }
     
-    static const char gs_crash_dump_header[] =
-    '*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***';
+    #ifndef BOOST_ASIO_DETAIL_EVENT_HPP
+#define BOOST_ASIO_DETAIL_EVENT_HPP
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
+    #include <boost/asio/detail/push_options.hpp>
     
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
+    void dev_poll_reactor::run(bool block, op_queue<operation>& ops)
+{
+  boost::asio::detail::mutex::scoped_lock lock(mutex_);
+    }
     
-    #include <jni.h>
+      typedef std::set< std::pair<int, uint64_t> > DeletedFileSet;
+    
+    static void TestEncodeDecode(const VersionEdit& edit) {
+  std::string encoded, encoded2;
+  edit.EncodeTo(&encoded);
+  VersionEdit parsed;
+  Status s = parsed.DecodeFrom(encoded);
+  ASSERT_TRUE(s.ok()) << s.ToString();
+  parsed.EncodeTo(&encoded2);
+  ASSERT_EQ(encoded, encoded2);
+}
+    
+      WritableFile* writable_file;
+  ASSERT_OK(env_->NewWritableFile('/dir/f', &writable_file));
+  ASSERT_OK(writable_file->Append('foo'));
+  ASSERT_OK(writable_file->Append(write_data));
+  delete writable_file;
+    
+    std::string Key2(int i) {
+  return Key1(i) + '_xxx';
+}
+    
+      // Check third filter (empty)
+  ASSERT_TRUE(! reader.KeyMayMatch(4100, 'foo'));
+  ASSERT_TRUE(! reader.KeyMayMatch(4100, 'bar'));
+  ASSERT_TRUE(! reader.KeyMayMatch(4100, 'box'));
+  ASSERT_TRUE(! reader.KeyMayMatch(4100, 'hello'));
+    
+    std::string Histogram::ToString() const {
+  std::string r;
+  char buf[200];
+  snprintf(buf, sizeof(buf),
+           'Count: %.0f  Average: %.4f  StdDev: %.2f\n',
+           num_, Average(), StandardDeviation());
+  r.append(buf);
+  snprintf(buf, sizeof(buf),
+           'Min: %.4f  Median: %.4f  Max: %.4f\n',
+           (num_ == 0.0 ? 0.0 : min_), Median(), max_);
+  r.append(buf);
+  r.append('------------------------------------------------------\n');
+  const double mult = 100.0 / num_;
+  double sum = 0;
+  for (int b = 0; b < kNumBuckets; b++) {
+    if (buckets_[b] <= 0.0) continue;
+    sum += buckets_[b];
+    snprintf(buf, sizeof(buf),
+             '[ %7.0f, %7.0f ) %7.0f %7.3f%% %7.3f%% ',
+             ((b == 0) ? 0.0 : kBucketLimit[b-1]),      // left
+             kBucketLimit[b],                           // right
+             buckets_[b],                               // count
+             mult * buckets_[b],                        // percentage
+             mult * sum);                               // cumulative percentage
+    r.append(buf);
+    }
+    }
+    
+      std::string ToString() const;
+    
+    bool js_cocos2dx_physics3d_Physics3DComponent_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DComponent_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DComponent(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DComponent_syncNodeToPhysics(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_addToPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_syncPhysicsToNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_getPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_setPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_setTransformInPhysics(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_getPhysics3DComponentName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DComponent_Physics3DComponent(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+    // Implemented features:
+//  [X] User texture binding. Use 'LPDIRECT3DTEXTURE9' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+    
+            UINT uploadPitch = (width * 4 + D3D12_TEXTURE_DATA_PITCH_ALIGNMENT - 1u) & ~(D3D12_TEXTURE_DATA_PITCH_ALIGNMENT - 1u);
+        UINT uploadSize = height * uploadPitch;
+        desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+        desc.Alignment = 0;
+        desc.Width = uploadSize;
+        desc.Height = 1;
+        desc.DepthOrArraySize = 1;
+        desc.MipLevels = 1;
+        desc.Format = DXGI_FORMAT_UNKNOWN;
+        desc.SampleDesc.Count = 1;
+        desc.SampleDesc.Quality = 0;
+        desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+        desc.Flags = D3D12_RESOURCE_FLAG_NONE;
+    
+        ImGui_ImplGlfwGL3_CreateFontsTexture();
+    
+    void CreateRenderTarget()
+{
+    ID3D12Resource* pBackBuffer;
+    for (UINT i = 0; i < NUM_BACK_BUFFERS; i++)
+    {
+        g_pSwapChain->GetBuffer(i, IID_PPV_ARGS(&pBackBuffer));
+        g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, g_mainRenderTargetDescriptor[i]);
+        g_mainRenderTargetResource[i] = pBackBuffer;
+    }
+}
+    
+        // Main loop
+    while (true)
+    {
+        if (s3eDeviceCheckQuitRequest())
+            break;
+    }
