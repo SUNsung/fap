@@ -1,15 +1,78 @@
 
         
         
-def side_effect(old_cmd, command):
-    with tarfile.TarFile(_tar_file(old_cmd.script_parts)[0]) as archive:
-        for file in archive.getnames():
-            try:
-                os.remove(file)
-            except OSError:
-                # does not try to remove directories as we cannot know if they
-                # already existed before
-                pass
+if len(sys.argv) <= 1:
+    print('Specify the version number as parameter')
+    sys.exit()
+version = sys.argv[1]
+    
+    signature = hexlify(rsa.pkcs1.sign(json.dumps(versions_info, sort_keys=True).encode('utf-8'), privkey, 'SHA-256')).decode()
+print('signature: ' + signature)
+    
+    
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
+    
+        for release in releases:
+        compat_print(release['name'])
+        for asset in release['assets']:
+            asset_name = asset['name']
+            total_bytes += asset['download_count'] * asset['size']
+            if all(not re.match(p, asset_name) for p in (
+                    r'^youtube-dl$',
+                    r'^youtube-dl-\d{4}\.\d{2}\.\d{2}(?:\.\d+)?\.tar\.gz$',
+                    r'^youtube-dl\.exe$')):
+                continue
+            compat_print(
+                ' %s size: %s downloads: %d'
+                % (asset_name, format_size(asset['size']), asset['download_count']))
+    
+    
+class TestMultipleSocks(unittest.TestCase):
+    @staticmethod
+    def _check_params(attrs):
+        params = get_params()
+        for attr in attrs:
+            if attr not in params:
+                print('Missing %s. Skipping.' % attr)
+                return
+        return params
+    
+            swf_class = swfi.extract_class(test_id)
+        func = swfi.extract_function(swf_class, 'main')
+        res = func(input_args)
+        self.assertEqual(res, output)
+    
+            return self._extract_nuevo(
+            'http://www.anitube.se/nuevo/econfig.php?key=%s' % key, video_id)
+
+    
+        def _real_extract(self, url):
+        mobj = re.match(self._VALID_URL, url)
+        video_id = mobj.group('id')
+    
+        def _real_extract(self, url):
+        video_id = self._match_id(url)
+    
+        def _real_extract(self, url):
+        display_id = self._match_id(url)
+    
+    
+    {        Generic:                   '#000000',        # class: 'g'
+        Generic.Deleted:           '#a40000',        # class: 'gd'
+        Generic.Emph:              'italic #000000', # class: 'ge'
+        Generic.Error:             '#ef2929',        # class: 'gr'
+        Generic.Heading:           'bold #000080',   # class: 'gh'
+        Generic.Inserted:          '#00A000',        # class: 'gi'
+        Generic.Output:            '#888',           # class: 'go'
+        Generic.Prompt:            '#745334',        # class: 'gp'
+        Generic.Strong:            'bold #000000',   # class: 'gs'
+        Generic.Subheading:        'bold #800080',   # class: 'gu'
+        Generic.Traceback:         'bold #a40000',   # class: 'gt'
+    }
 
     
     
@@ -26,121 +89,76 @@ def to_native_string(string, encoding='ascii'):
         else:
             out = string.decode(encoding)
     
-            with server as address:
-            sock = socket.socket()
-            sock.connect(address)
-            time.sleep(1.5)
-            sock.sendall(data)
-            sock.close()
+        @pytest.mark.parametrize(
+        'other, result', (
+            ({'AccePT': 'application/json'}, True),
+            ({}, False),
+            (None, False)
+        )
+    )
+    def test_instance_equality(self, other, result):
+        assert (self.case_insensitive_dict == other) is result
     
-            # If response is not 4xx, do not auth
-        # See https://github.com/requests/requests/issues/3772
-        if not 400 <= r.status_code < 500:
-            self._thread_local.num_401_calls = 1
-            return r
-    
-    
-def test_idna_with_version_attribute(mocker):
-    '''Verify we're actually setting idna version when it should be available.'''
-    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
-    assert info()['idna'] == {'version': '2.6'}
-
-    
-    
-def get_from_rhc_config(variable):
-    global configparser
-    CONF_FILE = os.path.expanduser('~/.openshift/express.conf')
-    if os.path.exists(CONF_FILE):
-        if not configparser:
-            ini_str = '[root]\n' + open(CONF_FILE, 'r').read()
-            configparser = ConfigParser.SafeConfigParser()
-            configparser.readfp(StringIO.StringIO(ini_str))
-        try:
-            return configparser.get('root', variable)
-        except ConfigParser.NoOptionError:
-            return None
-    
-    
-def md5(filename):
-    if not _md5:
-        raise ValueError('MD5 not available.  Possibly running in FIPS mode')
-    return secure_hash(filename, _md5)
-
-    
-    
-def get_api_key():
     '''
-    rtype: str
+requests.compat
+~~~~~~~~~~~~~~~
+    
+    
+def test_idna_without_version_attribute(mocker):
+    '''Older versions of IDNA don't provide a __version__ attribute, verify
+    that if we have such a package, we don't blow up.
     '''
-    key = os.environ.get('SHIPPABLE_KEY', None)
+    mocker.patch('requests.help.idna', new=None)
+    assert info()['idna'] == {'version': ''}
     
-        @g_connect
-    def remove_secret(self, secret_id):
-        url = '%s/notification_secrets/%s/' % (self.baseurl, secret_id)
-        data = self.__call_galaxy(url, headers=self.__auth_header(), method='DELETE')
-        return data
+        # Informational.
+    100: ('continue',),
+    101: ('switching_protocols',),
+    102: ('processing',),
+    103: ('checkpoint',),
+    122: ('uri_too_long', 'request_uri_too_long'),
+    200: ('ok', 'okay', 'all_ok', 'all_okay', 'all_good', '\\o/', '✓'),
+    201: ('created',),
+    202: ('accepted',),
+    203: ('non_authoritative_info', 'non_authoritative_information'),
+    204: ('no_content',),
+    205: ('reset_content', 'reset'),
+    206: ('partial_content', 'partial'),
+    207: ('multi_status', 'multiple_status', 'multi_stati', 'multiple_stati'),
+    208: ('already_reported',),
+    226: ('im_used',),
     
-        terminal_length = os.getenv('ANSIBLE_VYOS_TERMINAL_LENGTH', 10000)
-    
-            #out = subprocess.check_output(cmd, startupinfo=startupinfo)
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, startupinfo=startupinfo)
-        out, unused_err = process.communicate()
-        retcode = process.poll()
-        if retcode:
-            return out + '\n retcode:%s\n unused_err:%s\n' % (retcode, unused_err)
-    except Exception as e:
-        out = 'Exception:%r' % e
-    
-    
-def inet_ntop(address_family, packed_ip):
-    addr = sockaddr()
-    addr.sa_family = address_family
-    addr_size = ctypes.c_int(ctypes.sizeof(addr))
-    ip_string = ctypes.create_string_buffer(128)
-    ip_string_size = ctypes.c_int(ctypes.sizeof(ip_string))
-    
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licensc]
+    # One entry per manual page. List of tuples
+# (source start file, name, description, authors, manual section).
+man_pages = [
+    (master_doc, 'certbot-apache', u'certbot-apache Documentation',
+     [author], 1)
+]
     
     
-    def getKindOfOps(self, rewrites, kind, before=None):
-        if before is None:
-            before = len(rewrites)
-        elif before > len(rewrites):
-            before = len(rewrites)
+class RedirectTest(unittest.TestCase):
+    '''Test the redirect_by_default method.'''
+    @classmethod
+    def _call(cls):
+        from certbot.display.enhancements import redirect_by_default
+        return redirect_by_default()
     
-    EOF_TOKEN = CommonToken(type=EOF)
-	
-INVALID_TOKEN = CommonToken(type=INVALID_TOKEN_TYPE)
+    def get_extension(link):
+    extension = os.path.splitext(link)[1][1:]
+    if extension in ['pdf', 'html']:
+        return extension
+    if 'pdf' in extension:
+        return 'pdf'    
+    return 'pdf'    
     
-    A tree.TreeAdaptor is used by the parser to create tree.Tree objects for the
-input Token objects.
     
-        '''
+MINIMUM = 80
+    
+    
+from __future__ import absolute_import, division, print_function
+from datetime import timedelta
+from random import random
+    
+    
+class BaseRequestHandler(web.RequestHandler):
+    SUPPORTED_METHODS = ('PUT', 'GET', 'DELETE')
