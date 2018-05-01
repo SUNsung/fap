@@ -1,102 +1,59 @@
-        key.revoke!
-      end
-    end
-  end
-end
 
+        
+                    @adapter = adapter
+            @event_loop = event_loop
     
-          it 'it increments all targets minor version number' do
+        test 'head :no_content (204) does not return a content-type header' do
+      headers = HeadController.action(:no_content).call(Rack::MockRequest.env_for('/')).second
+      assert_nil headers['Content-Type']
+      assert_nil headers['Content-Length']
+    end
+    
+        included do
+      # Do not make this inheritable, because we always want it to propagate
+      cattr_accessor :raise_delivery_errors, default: true
+      cattr_accessor :perform_deliveries, default: true
+      cattr_accessor :deliver_later_queue_name, default: :mailers
+    
+      def self.jekyll_bin; source_dir.join('exe', 'jekyll'); end
+    
+        # Get the hash of the last commit
+    def self.last_git_commit_hash(short)
+      format_specifier = short ? '%h' : '%H'
+      string = last_git_commit_formatted_with(format_specifier).to_s
+      return string unless string.empty?
+      return nil
+    end
+    
+        context 'with keywords' do
+      let(:options) do
+        {
+          name: { 'en-US' => 'Fastlane Demo' },
+          description: { 'en-US' => 'Demo description' },
+          keywords: { 'en-US' => 'Some, key, words' }
+        }
+      end
+    
+          it 'automatically removes new lines from the version number' do
         Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number(bump_type: 'minor')
+          increment_version_number(version_number: '1.77.3\n', bump_type: 'major')
         end').runner.execute(:test)
     
-        find_union(segments, Group).order_id_desc
-  end
-    
-        registration
-  end
-    
-          def merge!(other)
-        other.each do |key, value|
-          self[convert_key(key)] = value
+            # Runs the template configuration utilities.
+        #
+        # @return [void]
+        #
+        def configure_template
+          UI.section('Configuring #{@name} template.') do
+            Dir.chdir(@name) do
+              if File.exist?('configure')
+                system({ 'COCOAPODS_VERSION' => Pod::VERSION }, './configure', @name, *@additional_args)
+              else
+                UI.warn 'Template does not have a configure file.'
+              end
+            end
+          end
         end
-        self
-      end
-    
-    namespace :db do
-  namespace :migrate do
-    desc 'Setup the db or migrate depending on state of db'
-    task setup: :environment do
-      begin
-        if ActiveRecord::Migrator.current_version.zero?
-          Rake::Task['db:migrate'].invoke
-          Rake::Task['db:seed'].invoke
-        end
-      rescue ActiveRecord::NoDatabaseError
-        Rake::Task['db:setup'].invoke
-      else
-        Rake::Task['db:migrate'].invoke
-      end
-    end
-  end
-    
-        it 'removes the remote accounts\'s statuses and media attachments' do
-      expect { bad_status1.reload }.to raise_exception ActiveRecord::RecordNotFound
-      expect { bad_status2.reload }.to raise_exception ActiveRecord::RecordNotFound
-      expect { bad_attachment.reload }.to raise_exception ActiveRecord::RecordNotFound
-    end
-  end
-    
-        # Returns whether `string` is a valid IP address or IP address range.
-    #
-    # @return [true] if valid IP address or IP address range.
-    # @return [false] otherwise.
-    def valid_ip_or_range?(string)
-      range = Rex::Socket::RangeWalker.new(string)
-      range && range.ranges && range.ranges.any?
-    end
-    
-        if extension_pathname.readable?
-      ENV['BUNDLE_GEMFILE'] = extension_pathname.to_path
-      break
-    end
-  end
-end
-    
-    def usage
-  $stderr.puts '#{$0} [site list] [output-dir]'
-  exit(0)
-end
-    
-    #
-# This script extracts the forms from the main page of each
-# web site in a list. The output of this can be used with
-# Metasploit (and other tools) to obtain the saved form data
-# of these domains.
-#
-    
-    # This is a completely hackish way to do this, and could break with future
-# versions of the JDK.  Need to find a better way to use sun.security.tools.KeyTool
-# and .JarSigner than modifying the source.  These rely on internal APIs that may
-# change.
-signer = Rjb::import('javaCompile.SignJar')
-#clsKeyTool = Rjb::import('sun.security.tools.KeyTool')
-#clsKeyTool = Rjb::import('sun.security.tools.KeyToolMSF')
-#clsJarSigner = Rjb::import('javaCompile.SignJar.JarSignerMSF')
-#clsJarSigner = Rjb::import('sun.security.tools.JarSigner')
-#clsJarSigner = Rjb::import('sun.security.tools.JarSignerMSF')
-    
-    STDOUT.sync = true if ENV['CP_STDOUT_SYNC'] == 'TRUE'
-    
-            def self.options
-          [[
-            '--all', 'Remove all the cached pods without asking'
-          ]].concat(super)
-        end
-    
-          def executable_path
-        <<-EOS
-### Installation Source
     
             sets = config.sources_manager.aggregate.all_sets
         sets.each { |set| UI.pod(set, :name_and_version) }
