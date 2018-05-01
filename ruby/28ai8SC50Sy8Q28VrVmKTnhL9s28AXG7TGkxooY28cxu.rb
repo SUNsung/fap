@@ -1,86 +1,78 @@
 
         
-        # For this pull request, which changes Page#dir
-# https://github.com/jekyll/jekyll/pull/4403
+          def update
+    @notification_setting = current_user.notification_settings.find(params[:id])
+    @saved = @notification_setting.update_attributes(notification_setting_params)
     
-        Jekyll::Commands::Build.process({'source' => 'docs'})
-    
-          theme.create!
-      Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
-        ' is ready for you in #{theme.path.to_s.cyan}!'
-      Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
-    end
-    # rubocop:enable Metrics/AbcSize
-  end
-end
-
-    
-        def execute(args)
-      topic_id = args[:topic_id]
-      raise Discourse::InvalidParameters.new(:topic_id) unless topic_id.present?
-    
-        def execute(args)
-    
-      def revoke_moderation!
-    set_permission('moderator', false)
-  end
-    
-      def cache_fragment(name)
-    ApplicationSerializer.fragment_cache[name] ||= yield
-  end
-end
-
-    
-      # Finds the projects '@user' contributed to, limited to either public projects
-  # or projects visible to the given user.
-  #
-  # current_user - When given the list of the projects is limited to those only
-  #                visible by this user.
-  #
-  # Returns an ActiveRecord::Relation.
-  def execute(current_user = nil)
-    segments = all_projects(current_user)
+      private
     
         delegate :empty?, :blank?, to: :pages
     
-    if profile_filename = ENV['PROFILE']
-  require 'ruby-prof'
-  reporter =
-    case (profile_extname = File.extname(profile_filename))
-    when '.txt'
-      RubyProf::FlatPrinterWithLineNumbers
-    when '.html'
-      RubyProf::GraphHtmlPrinter
-    when '.callgrind'
-      RubyProf::CallTreePrinter
-    else
-      raise 'Unknown profiler format indicated by extension: #{profile_extname}'
-    end
-  File.open(profile_filename, 'w') do |io|
-    reporter.new(RubyProf.profile { Pod::Command.run(ARGV) }).print(io)
-  end
+            css('.toplang', '#quickview', '.top').remove
+    
+      fd.close
+    
+              s[:pass] = ''
+          return
+        end
+    
+    meterp.sock.close
+
+    
+    filename = ARGV.shift || exit
+    
+    unless STDIN.tty?
+	p = ::Parser.new('')
+	p.parse
+	p.dump_all
 else
-  Pod::Command.run(ARGV)
+	print 'Tested with:\n'
+	print '\tGNU objdump 2.9-aix51-020209\n'
+	print '\tGNU objdump 2.15.92.0.2 20040927\n'
+	print 'Usage: objdump -dM suffix <file(s)> | ruby objdumptoc.rb\n'
 end
 
     
-          def stack
-        UI::ErrorReport.stack
+    (allow process-exec
+  (literal
+    '<%= pod_bin %>'
+    '<%= ruby_bin %>'
+  )
+  (regex
+<% prefixes.each do |prefix| %>
+    #'^<%= prefix %>/*'
+<% end %>
+  )
+)
+    
+            def self.options
+          [[
+            '--all', 'Remove all the cached pods without asking'
+          ]].concat(super)
+        end
+    
+            self.description = <<-DESC
+          Shows the content of the pods cache as a YAML tree output, organized by pod.
+          If `NAME` is given, only the caches for that pod will be included in the output.
+        DESC
+    
+          def self.options
+        [
+          ['--update', 'Run `pod repo update` before listing'],
+          ['--stats',  'Show additional stats (like GitHub watchers and forks)'],
+        ].concat(super)
       end
     
-            # Split out the targets into app and test targets
-        test_targets, app_targets = project.native_targets.
-                              sort_by { |t| t.name.downcase }.
-                              partition(&:test_target_type?)
+    module Paperclip
+  class << self
+    attr_writer :registered_attachments_styles_path
+    def registered_attachments_styles_path
+      @registered_attachments_styles_path ||= Rails.root.join('public/system/paperclip_attachments.yml').to_s
+    end
+  end
     
-      tasks_dir = Pathname.new('lib/capistrano/tasks')
-  config_dir = Pathname.new('config')
-  deploy_dir = config_dir.join('deploy')
-    
-          it 'filters by roles from the :filter variable' do
-        hosts = dsl.roles(:web)
-        all = dsl.roles(:all)
-        SSHKit::Coordinator.expects(:new).with(hosts).returns(@coordinator)
-        dsl.set :filter, roles: 'web'
-        dsl.on(all)
-      end
+      context 'called with arguments (1, $value: 2em)' do
+    it 'outputs double the first value from the default scale' do
+      expect('.one-base-two').to have_rule('font-size: 2.5em')
+    end
+  end
