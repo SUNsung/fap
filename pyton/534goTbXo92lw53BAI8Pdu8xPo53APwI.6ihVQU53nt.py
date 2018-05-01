@@ -1,59 +1,123 @@
 
         
-        import os
-import json
-import click
+        
+@for_app('tar')
+def match(command):
+    return ('-C' not in command.script
+            and _is_tar_extract(command.script)
+            and _tar_file(command.script_parts) is not None)
     
-      from ycmd import server_utils as su
-  su.AddNearestThirdPartyFoldersToSysPath( DIR_OF_CURRENT_SCRIPT )
-  # We need to import ycmd's third_party folders as well since we import and
-  # use ycmd code in the client.
-  su.AddNearestThirdPartyFoldersToSysPath( su.__file__ )
+        def start_requests(self):
+        qargs = {'total': self.total, 'show': self.show}
+        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
+        return [scrapy.Request(url, dont_filter=True)]
     
-            Args:
-            timeout: The number of seconds to wait for the exception if the
-                future isn't done. If None, then there is no limit on the wait
-                time.
+        def process_options(self, args, opts):
+        ScrapyCommand.process_options(self, args, opts)
+        try:
+            opts.spargs = arglist_to_dict(opts.spargs)
+        except ValueError:
+            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
+        if opts.output:
+            if opts.output == '-':
+                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
+            else:
+                self.settings.set('FEED_URI', opts.output, priority='cmdline')
+            feed_exporters = without_none_values(
+                self.settings.getwithbase('FEED_EXPORTERS'))
+            valid_output_formats = feed_exporters.keys()
+            if not opts.output_format:
+                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
+            if opts.output_format not in valid_output_formats:
+                raise UsageError('Unrecognized output format '%s', set one'
+                                 ' using the '-t' switch or as a file extension'
+                                 ' from the supported list %s' % (opts.output_format,
+                                                                  tuple(valid_output_formats)))
+            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
     
-        # For pickling to work, the __module__ variable needs to be set to the frame
-    # where the named tuple is created.  Bypass this step in enviroments where
-    # sys._getframe is not defined (Jython for example).
-    if hasattr(_sys, '_getframe'):
-        result.__module__ = _sys._getframe(1).f_globals.get('__name__', '__main__')
+        def clear_spots(self):
+        for spot in self.spots_taken:
+            spot.remove_vehicle(self)
+        self.spots_taken = []
     
-                f = _base.Future()
-            w = _WorkItem(f, fn, args, kwargs)
+            Emit key value pairs of the form:
     
-    # If true, links to the reST sources are added to the pages.
-#html_show_sourcelink = True
+            # put all lines in the file into a Python list
+        strings = f.readlines()
+        
+        # above line leaves trailing newline characters; strip them out
+        strings = [x.strip(u'\n') for x in strings]
+        
+        # remove empty-lines and comments
+        strings = [x for x in strings if x and not x.startswith(u'#')]
+        
+        # insert empty string since all are being removed
+        strings.insert(0, u'')
     
-      # Remove old YCM libs if present so that YCM can start.
-  old_libs = (
-    glob.glob( p.join( DIR_OF_OLD_LIBS, '*ycm_core.*' ) ) +
-    glob.glob( p.join( DIR_OF_OLD_LIBS, '*ycm_client_support.*' ) ) +
-    glob.glob( p.join( DIR_OF_OLD_LIBS, '*clang*.*') ) )
-  for lib in old_libs:
-    os.remove( lib )
+            if nextchar == ''':
+            return parse_string(string, idx + 1, strict)
+        elif nextchar == '{':
+            return parse_object((string, idx + 1), strict,
+                _scan_once, object_hook, object_pairs_hook, memo)
+        elif nextchar == '[':
+            return parse_array((string, idx + 1), _scan_once)
+        elif nextchar == 'n' and string[idx:idx + 4] == 'null':
+            return None, idx + 4
+        elif nextchar == 't' and string[idx:idx + 4] == 'true':
+            return True, idx + 4
+        elif nextchar == 'f' and string[idx:idx + 5] == 'false':
+            return False, idx + 5
+    }
     
+    # Response numbers that are followed by additional text (e.g. article)
+_LONGRESP = {
+    '100',   # HELP
+    '101',   # CAPABILITIES
+    '211',   # LISTGROUP   (also not multi-line with GROUP)
+    '215',   # LIST
+    '220',   # ARTICLE
+    '221',   # HEAD, XHDR
+    '222',   # BODY
+    '224',   # OVER, XOVER
+    '225',   # HDR
+    '230',   # NEWNEWS
+    '231',   # NEWGROUPS
+    '282',   # XGTITLE
+}
     
-def _CreateFilterForTypes( opts, types ):
-  return DiagnosticFilter.CreateFromOptions( opts ).SubsetForTypes( types )
+    subsystem_details = {
+    # -s flag        : (C entry point template), (is it __main__?), (is it a DLL?)
+    'console'        : (None,                    1,                 0),
+    'windows'        : (WINMAINTEMPLATE,         1,                 0),
+    'service'        : (SERVICETEMPLATE,         0,                 0),
+    'com_dll'        : ('',                      0,                 1),
+}
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+        # __set__ and __get__ should raise a TypeError in case their self
+    # argument is not a ctype instance.
+    def test___set__(self):
+        class MyCStruct(Structure):
+            _fields_ = (('field', c_int),)
+        self.assertRaises(TypeError,
+                          MyCStruct.field.__set__, 'wrong type self', 42)
     
+                # empty iterator
+            for i in range(1, len(orig)):
+                next(itorig)
+            d = pickle.dumps((itorig, orig), proto)
+            it, a = pickle.loads(d)
+            a[:] = data
+            self.assertEqual(type(it), type(itorig))
+            self.assertEqual(list(it), [])
     
-def LoadJsonDefaultsIntoVim():
-  defaults = user_options_store.DefaultOptions()
-  for key, value in iteritems( defaults ):
-    new_key = 'g:ycm_' + key
-    if not vimsupport.VariableExists( new_key ):
-      vimsupport.SetVariableValue( new_key, value )
+                def data_received(self, data):
+                body.append(data)
     
-    
-def PathToServerScript():
-  return os.path.join( DIR_OF_YCMD, 'ycmd' )
+            # Callbacks execute in the order they were registered.
+        self.assertEqual(list(range(3)), self.history)
+        c.notify(1)
+        self.loop_briefly()
+        self.assertEqual(list(range(4)), self.history)
+        c.notify(2)
+        self.loop_briefly()
+        self.assertEqual(list(range(6)), self.history)
