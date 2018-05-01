@@ -1,74 +1,122 @@
 
         
-            with open('README.md', 'w+') as sorted_file:
-        # Then all of the blocks are sorted individually
-        blocks = [''.join(sorted(block, key=lambda s: s.lower())) for block in blocks]
-        # And the result is written back to README.md
-        sorted_file.write(''.join(blocks))
+            # Then we call the sorting method
+    sort_blocks()
     
-        def implements_to_string(cls):
-        cls.__unicode__ = cls.__str__
-        cls.__str__ = lambda x: x.__unicode__().encode('utf-8')
-        return cls
+    Available hooks:
     
+                return self.server_sock.accept()[0]
+        except (select.error, socket.error):
+            return None
     
-def has_level_handler(logger):
-    '''Check if there is a handler in the logging chain that will handle the
-    given logger's :meth:`effective level <~logging.Logger.getEffectiveLevel>`.
-    '''
-    level = logger.getEffectiveLevel()
-    current = logger
+        def lower_items(self):
+        '''Like iteritems(), but with all lowercase keys.'''
+        return (
+            (lowerkey, keyval[1])
+            for (lowerkey, keyval)
+            in self._store.items()
+        )
     
     
-def main():
-    os.chdir(os.path.join(os.path.dirname(__file__), '..'))
+class HTTPDigestAuth(AuthBase):
+    '''Attaches HTTP Digest Authentication to the given Request object.'''
     
+        def initialize_options(self):
+        TestCommand.initialize_options(self)
+        try:
+            from multiprocessing import cpu_count
+            self.pytest_args = ['-n', str(cpu_count()), '--boxed']
+        except (ImportError, NotImplementedError):
+            self.pytest_args = ['-n', '1', '--boxed']
     
-def test_appgroup(runner):
-    '''Test of with_appcontext.'''
+            post1 = requests.post(url, data={'some': 'data'})
+        assert post1.status_code == 200
     
-    import flask
+            if args.test_results:
+            path = os.path.join(output_dir, '%s/test.json' % job_number)
+            url = 'https://api.shippable.com/jobs/%s/jobTestReports' % job_id
+            download(args, headers, path, url)
+            extract_contents(args, path, os.path.join(output_dir, '%s/test' % job_number))
     
-        data_train = fetch_20newsgroups_vectorized(subset='train')
-    data_test = fetch_20newsgroups_vectorized(subset='test')
-    X_train = check_array(data_train.data, dtype=np.float32,
-                          accept_sparse='csc')
-    X_test = check_array(data_test.data, dtype=np.float32, accept_sparse='csr')
-    y_train = data_train.target
-    y_test = data_test.target
+            return ret
     
-    fixed_batch_size_comparison(X)
-variable_batch_size_comparison(X)
-plt.show()
+        preds = reg.predict(X_test, batch_size=batch_size)
+    assert preds.shape == (num_test, )
+    
+        # by setting the `trainable` argument, in Sequential
+    model = Sequential()
+    layer = Dense(2, input_dim=1)
+    model.add(layer)
+    assert model.trainable_weights == layer.trainable_weights
+    layer.trainable = False
+    assert model.trainable_weights == []
+    
+        layer_test(local.LocallyConnected1D,
+               kwargs={'filters': filters,
+                       'kernel_size': filter_length,
+                       'padding': padding,
+                       'kernel_regularizer': 'l2',
+                       'bias_regularizer': 'l2',
+                       'activity_regularizer': 'l2',
+                       'strides': strides},
+               input_shape=(num_samples, num_steps, input_dim))
+    
+    import numpy as np
+import keras
+from keras.datasets import reuters
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation
+from keras.preprocessing.text import Tokenizer
+    
+        # concatenation
+    merged_concat = legacy_layers.merge([rnn_a, rnn_b], mode='concat', concat_axis=-1)
+    model = models.Model([input_a, input_b], [merged_concat])
+    model.compile(loss='mse', optimizer='sgd')
+    model.fit([rand(2, 3), rand(2, 3)], [rand(2, 3, 6)])
+    
+        yaml_str = model.to_yaml()
+    model_from_yaml(yaml_str)
+    
+    print('Train...')
+model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=4,
+          validation_data=[x_test, y_test])
 
     
-    from sklearn.cluster import AgglomerativeClustering
+        def set(self, key, value):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                item.value = value
+                return
+        self.table[hash_index].append(Item(key, value))
     
-    ARCHIVE_NAME = URL.rsplit('/', 1)[1]
-TRAIN_FOLDER = '20news-bydate-train'
-TEST_FOLDER = '20news-bydate-test'
+    from mrjob.job import MRJob
     
-        Both random labelings have the same number of clusters for each value
-    possible value in ``n_clusters_range``.
+    def get_api_subtype():
+    if is_api() and c.render_style.startswith('api-'):
+        return c.render_style[4:]
     
-    plt.axis('tight')
-plt.axis('off')
-plt.suptitle('Ground truth', size=20)
+        def live_config(self, name):
+        live = self.stacked_proxy_safe_get(g, 'live_config', {})
+        return live.get(name)
     
-        def test_repr(self):
-        self.assertEqual(repr(self.addr2), 'certbot_apache.obj.Addr(('127.0.0.1', '443'))')
+    api('flairlist', FlairListJsonTemplate)
+api('flaircsv', FlairCsvJsonTemplate)
+api('flairselector', FlairSelectorJsonTemplate)
     
+                    errpage = pages.InterstitialPage(
+                    _('suspended'),
+                    content=pages.InTimeoutInterstitial(
+                        timeout_days_remaining=timeout_days_remaining,
+                    ),
+                )
+                request.environ['usable_error_content'] = errpage.render()
     
-intersphinx_mapping = {
-    'python': ('https://docs.python.org/', None),
-    'acme': ('https://acme-python.readthedocs.org/en/latest/', None),
-    'certbot': ('https://certbot.eff.org/docs/', None),
-    'certbot-apache': (
-        'https://letsencrypt-apache.readthedocs.org/en/latest/', None),
-    'certbot-nginx': (
-        'https://letsencrypt-nginx.readthedocs.org/en/latest/', None),
-}
-
+            c.allow_framing = True
     
-    # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+    import pylibmc
+from pylons import request, response
+from pylons import app_globals as g
+from pylons.controllers.util import abort
