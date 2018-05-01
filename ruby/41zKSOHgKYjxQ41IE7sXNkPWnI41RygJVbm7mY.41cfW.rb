@@ -1,48 +1,75 @@
 
         
-            describe '#revoke!' do
-      it 'revokes the key with the client' do
-        mock_client_response(:revoke_key!)
+            it 'should have a way of getting the service configurations' do
+      configs = key.service_configs_for(Spaceship::Portal::Key::MUSIC_KIT_ID)
+      expect(configs).to be_instance_of(Array)
+      expect(configs.sample).to be_instance_of(Hash)
+      expect(configs.first['identifier']).to eq('music.com.snatchev.test')
+    end
     
-          it 'raises an exception when use passes workspace' do
-        expect do
-          Fastlane::FastFile.new.parse('lane :test do
-            increment_build_number(xcodeproj: 'project.xcworkspace')
-          end').runner.execute(:test)
-        end.to raise_error('Please pass the path to the project, not the workspace')
+          it 'splits correctly' do
+        expected = ['One', 'Two', 'Three', 'Four Token']
+        expect(generator.split_keywords(keywords)).to eq(expected)
       end
+    end
     
-          it 'returns the new version as return value' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number(bump_type: 'major')
-        end').runner.execute(:test)
-    
-      def translation_scope
-    'devise.omniauth_callbacks'
+            # Helper method to get access to the class variable. This is mostly
+        # exposed for tests. This shouldn't be mucked with directly, since it's
+        # structure may change at any time.
+        def registered; @@registered; end
+      end
+    end
   end
 end
 
     
-        # Check if proper Lockable module methods are present & unlock strategy
-    # allows to unlock resource on password reset
-    def unlockable?(resource)
-      resource.respond_to?(:unlock_access!) &&
-        resource.respond_to?(:unlock_strategy_enabled?) &&
-        resource.unlock_strategy_enabled?(:email)
+      GEMFILE_EXTENSIONS.each do |extension|
+    extension_pathname = root.join('Gemfile#{extension}')
+    
+      File.unlink(out) if (File.size(out) == 0)
+    
+      def parse(pkt)
+    # We want to return immediantly if	we do not have a packet which is handled by us
+    return unless pkt.is_tcp?
+    return if (pkt.tcp_sport != 80 and pkt.tcp_dport != 80)
+    s = find_session((pkt.tcp_sport == 80) ? get_session_src(pkt) : get_session_dst(pkt))
+    
+    $:.unshift(File.join(File.dirname(__FILE__), '..', '..', '..', 'lib'))
+    
+    success = clsJavaCompile._invoke('CompileFromMemory','[Ljava.lang.String;[Ljava.lang.String;[Ljava.lang.String;', classNames, codez, compileOpts)
+    
+      when '6.1.2'
+    __NR_execve      = 7
+    __NR_getpeername = 205
+    __NR_accept      = 232
+    __NR_listen      = 235
+    __NR_bind        = 237
+    __NR_socket      = 238
+    __NR_connect     = 239
+    __NR_close       = 272
+    __NR_kfcntl      = 635
+    
+    	def dump_all
+		block.each do |block|
+			block.each do |line|
+				print '#{line}\n'
+			end
+		end
+	end
+    
+        # Fetch a var from the context
+    # @param [Symbol] variable The variable to fetch
+    # @param [Object] default  The default value if not found
+    #
+    def fetch(*args)
+      context.fetch(*args)
     end
     
-        if notice
-      set_flash_message! :notice, notice
-      true
-    end
+      desc 'Revert server(s) to previous release.'
+  task :reverting do
   end
     
-    if $PROGRAM_NAME == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
-  ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
-  require 'rubygems'
-  require 'bundler/setup'
-  $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-elsif ENV['COCOAPODS_NO_BUNDLER']
-  require 'rubygems'
-  gem 'cocoapods'
-end
+            it 'returns the servers' do
+          expect(subject.map(&:hostname)).to eq %w{example3.com}
+        end
+      end
