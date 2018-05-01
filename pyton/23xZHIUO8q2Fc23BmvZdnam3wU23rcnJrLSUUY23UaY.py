@@ -1,151 +1,123 @@
-    # Separating the 'table of contents' from the contents (blocks)
-    table_of_contents = ''.join(read_me.split('- - -')[0])
-    blocks = ''.join(read_me.split('- - -')[1]).split('\n# ')
-    for i in range(len(blocks)):
-        if i == 0:
-            blocks[i] = blocks[i] + '\n'
-        else:
-            blocks[i] = '# ' + blocks[i] + '\n'
-    
-        Models: `flatpages.flatpages`
-    Templates: Uses the template defined by the ``template_name`` field,
-        or :template:`flatpages/default.html` if template_name is not defined.
-    Context:
-        flatpage
-            `flatpages.flatpages` object
-    '''
-    if not url.startswith('/'):
-        url = '/' + url
-    site_id = get_current_site(request).id
-    try:
-        f = get_object_or_404(FlatPage, url=url, sites=site_id)
-    except Http404:
-        if not url.endswith('/') and settings.APPEND_SLASH:
-            url += '/'
-            f = get_object_or_404(FlatPage, url=url, sites=site_id)
-            return HttpResponsePermanentRedirect('%s/' % request.path)
-        else:
-            raise
-    return render_flatpage(request, f)
+
+        
+            @property
+    def body(self):
+        # Only now the response body is fetched.
+        # Shouldn't be touched unless the body is actually needed.
+        return self._orig.content
     
     
-def import_state_tuples(state_tuples, name, num_replicas):
-  restored = []
-  for i in range(len(state_tuples) * num_replicas):
-    c = tf.get_collection_ref(name)[2 * i + 0]
-    h = tf.get_collection_ref(name)[2 * i + 1]
-    restored.append(tf.contrib.rnn.LSTMStateTuple(c, h))
-  return tuple(restored)
-    
-      # Create pretrain Saver
-  if pretrained_model_dir:
-    assert variables_to_restore
-    tf.logging.info('Will attempt restore from %s: %s', pretrained_model_dir,
-                    variables_to_restore)
-    saver_for_restore = tf.train.Saver(variables_to_restore)
+def rst_filenames():
+    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
+        if '.tox' not in root:
+            for filename in fnmatch.filter(filenames, '*.rst'):
+                yield os.path.join(root, filename)
     
     
-class RegressionTest(tf.test.TestCase):
-  '''Test the regression examples in this directory.'''
+def test_follow_redirect_output_options(httpbin):
+    r = http('--check-status',
+             '--follow',
+             '--all',
+             '--print=h',
+             '--history-print=H',
+             httpbin.url + '/redirect/2')
+    assert r.count('GET /') == 2
+    assert 'HTTP/1.1 302 FOUND' not in r
+    assert HTTP_OK in r
     
-      def testBidirLM(self):
-    graphs.VatxtBidirModel().language_model_graph()
+            for response in responses:
     
-    def get_vars(config_name):
-  vars = config_name.split('_')
-  if len(vars) == 1: # All data or not.
-    vars.append('noall')
-  if len(vars) == 2: # n_ori
-    vars.append('4')
-  logging.error('vars: %s', vars)
-  return vars
-    
-    py_test(
-    name = 'cifar10_input_test',
-    size = 'small',
-    srcs = ['cifar10_input_test.py'],
-    srcs_version = 'PY2AND3',
-    deps = [
-        ':cifar10_input',
-        '//tensorflow:tensorflow_py',
-        '//tensorflow/python:framework_test_lib',
-        '//tensorflow/python:platform_test',
-    ],
-)
-    
-    licenses(['notice'])  # Apache 2.0
-    
-    
-# -- Options for manual page output ---------------------------------------
-    
-    # Can't import these from paths.py because that uses `future` imports
-DIR_OF_CURRENT_SCRIPT = os.path.dirname( os.path.abspath( __file__ ) )
-DIR_OF_YCMD = os.path.join( DIR_OF_CURRENT_SCRIPT, '..', '..', 'third_party',
-                            'ycmd' )
-    
-            waiter = _create_and_install_waiters(fs, return_when)
-    
-    # Workers are created as daemon threads. This is done to allow the interpreter
-# to exit when there are still idle threads in a ThreadPoolExecutor's thread
-# pool (i.e. shutdown() was not called). However, allowing workers to die with
-# the interpreter has two undesirable properties:
-#   - The workers would still be running during interpretor shutdown,
-#     meaning that they would fail in unpredictable ways.
-#   - The workers could be killed while evaluating a work item, which could
-#     be bad if the callable being evaluated has external side-effects e.g.
-#     writing to a file.
-#
-# To work around this problem, an exit handler is installed which tells the
-# workers to exit when their work queues are empty and then waits until the
-# threads finish.
-    
-    PY_MAJOR, PY_MINOR = sys.version_info[ 0 : 2 ]
-if not ( ( PY_MAJOR == 2 and PY_MINOR >= 6 ) or
-         ( PY_MAJOR == 3 and PY_MINOR >= 3 ) or
-         PY_MAJOR > 3 ):
-  sys.exit( 'YouCompleteMe requires Python >= 2.6 or >= 3.3; '
-            'your version of Python is ' + sys.version )
-    
-    
-  @staticmethod
-  def CreateFromOptions( user_options ):
-    all_filters = dict( user_options.get( 'filter_diagnostics', {} ) )
-    compiled_by_type = {}
-    for type_spec, filter_value in iteritems( dict( all_filters ) ):
-      filetypes = [ type_spec ]
-      if type_spec.find( ',' ) != -1:
-        filetypes = type_spec.split( ',' )
-      for filetype in filetypes:
-        compiled_by_type[ filetype ] = _CompileFilters( filter_value )
-    
-    
-class OmniCompletionRequest( CompletionRequest ):
-  def __init__( self, omni_completer, request_data ):
-    super( OmniCompletionRequest, self ).__init__( request_data )
-    self._omni_completer = omni_completer
-    
-    
-def Done_AlwaysTrue_test():
-  request = BuildOmnicompletionRequest( [] )
-    
-    In Blackboard pattern several specialised sub-systems (knowledge sources)
-assemble their knowledge to build a possibly partial or approximate solution.
-In this way, the sub-systems work together to solve the problem,
-where the solution is the sum of its parts.
-    
-        def test_bunch_launch(self):
-        self.runner.runAll()
-        output = self.out.getvalue().strip()
-        self.assertEqual(output, str(self.average_result_tc1 + '\n\n' +
-                         self.average_result_tc2 + '\n\n' +
-                         self.average_result_tc3))
+        # noinspection PyMethodOverriding
+    def get_auth(self, username, password):
+        return requests.auth.HTTPDigestAuth(username, password)
 
     
-    '''
-Port of the Java example of 'Parameter Injection' in
-'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
-(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
-http://xunitpatterns.com/Dependency%20Injection.html.
+        def save(self):
+        self['__meta__'] = {
+            'httpie': __version__
+        }
+        if self.helpurl:
+            self['__meta__']['help'] = self.helpurl
     
-        def setProblem(self, value):
-        self._bProblem = value
+    
+def humanize_bytes(n, precision=2):
+    # Author: Doug Latornell
+    # Licence: MIT
+    # URL: http://code.activestate.com/recipes/577081/
+    '''Return a humanized string representation of a number of bytes.
+    
+        def get_formatters_grouped(self):
+        groups = {}
+        for group_name, group in groupby(
+                self.get_formatters(),
+                key=lambda p: getattr(p, 'group_name', 'format')):
+            groups[group_name] = list(group)
+        return groups
+    
+    containers = (('thefuck/python3-fish',
+               u'''FROM python:3
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'),
+              ('thefuck/python2-fish',
+               u'''FROM python:2
+                   # Use jessie-backports since it has the fish package. See here for details:
+                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
+                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
+                   RUN apt-get update
+                   RUN apt-get install -yy fish''',
+               u'fish'))
+    
+    containers = (('thefuck/python3-tcsh',
+               u'''FROM python:3
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'),
+              ('thefuck/python2-tcsh',
+               u'''FROM python:2
+                   RUN apt-get update
+                   RUN apt-get install -yy tcsh''',
+               u'tcsh'))
+    
+    #----------------------------------------------------------------------
+def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    '''wrapper'''
+    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
+    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
+    hostname = urlparse(url).hostname
+    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
+        return False
+    upid = match1(url, r'.+/content/(\w+)')
+    
+        t = r1(r'type=(\w+)', flashvars)
+    id = r1(r'vid=([^']+)', flashvars)
+    if t == 'youku':
+        youku_download_by_vid(id, title=title, output_dir=output_dir, merge=merge, info_only=info_only)
+    elif t == 'tudou':
+        tudou_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
+    elif t == 'sina' or t == 'video':
+        fake_headers['Referer'] = url
+        url = 'http://www.miomio.tv/mioplayer/mioplayerconfigfiles/sina.php?vid=' + id
+        xml_data = get_content(url, headers=fake_headers, decoded=True)
+        url_list = sina_xml_to_url_list(xml_data)
+    
+    def mixcloud_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    html = get_html(url, faker=True)
+    title = r1(r'<meta property='og:title' content='([^']*)'', html)
+    preview_url = r1(r'm-preview=\'([^\']+)\'', html)
+    preview = r1(r'previews(.*)\.mp3$', preview_url)
+    
+        def extract(self, **kwargs):
+        for i in self.streams:
+            # for each available stream
+            s = self.streams[i]
+            # fill in 'container' field and 'size' field (optional)
+            _, s['container'], s['size'] = url_info(s['url'])
+            # 'src' field is a list of processed urls for direct downloading
+            # usually derived from 'url'
+            s['src'] = [s['url']]
