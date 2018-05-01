@@ -1,137 +1,158 @@
 
         
-        namespace nw {
+        class NwCurrentWindowInternalGetZoomFunction : public NWSyncExtensionFunction {
+ public:
+  NwCurrentWindowInternalGetZoomFunction() {}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     }
     
-    namespace content {
-class RenderFrameHost;
-}
+    IPC_SYNC_MESSAGE_ROUTED3_1(ShellViewHostMsg_Call_Static_Method_Sync,
+                           std::string /* type name */,
+                           std::string /* method name */,
+                           base::ListValue /* arguments */,
+                           base::ListValue /* result */)
     
-    v8::Handle<v8::Value> AllocateId(int routing_id);
+    #include 'base/values.h'
+#include 'components/zoom/zoom_controller.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/common/page_zoom.h'
+#include 'ui/views/controls/menu/menu_runner.h'
     
-    #include 'base/compiler_specific.h'
-#include 'content/nw/src/api/base/base.h'
+    #include 'ui/base/models/simple_menu_model.h'
     
-    #include <string>
-#include <set>
-    
-    #endif //CONTENT_NW_SRC_API_EVENT_EVENT_H_
-
-    
-    #ifndef GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
-#define GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
-    
-    #endif  // GRPC_INTERNAL_COMPILER_PYTHON_PRIVATE_GENERATOR_H
-
-    
-    static void sigint_handler(int x) {
-  gpr_atm_no_barrier_store(&grpc::testing::interop::g_got_sigint, true);
-}
-    
-    
-    {
-    {}  // namespace testing
-}  // namespace grpc
-    
-    namespace xgboost {
-namespace common {
-TEST(CompressedIterator, Test) {
-  ASSERT_TRUE(detail::SymbolBits(256) == 8);
-  ASSERT_TRUE(detail::SymbolBits(150) == 8);
-  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
-  int num_elements = 1000;
-  int repetitions = 1000;
-  srand(9);
-    }
-    }
-    }
-    
-    
-    {  // We have checked above that none of the sampling factors are 0, so the max
-  // sampling factors can not be 0.
-  jpg->MCU_rows = DivCeil(jpg->height, jpg->max_v_samp_factor * 8);
-  jpg->MCU_cols = DivCeil(jpg->width, jpg->max_h_samp_factor * 8);
-  // Compute the block dimensions for each component.
-  if (mode == JPEG_READ_ALL) {
-    for (size_t i = 0; i < jpg->components.size(); ++i) {
-      JPEGComponent* c = &jpg->components[i];
-      if (jpg->max_h_samp_factor % c->h_samp_factor != 0 ||
-          jpg->max_v_samp_factor % c->v_samp_factor != 0) {
-        fprintf(stderr, 'Non-integral subsampling ratios.\n');
-        jpg->error = JPEG_INVALID_SAMPLING_FACTORS;
-        return false;
-      }
-      c->width_in_blocks = jpg->MCU_cols * c->h_samp_factor;
-      c->height_in_blocks = jpg->MCU_rows * c->v_samp_factor;
-      const uint64_t num_blocks =
-          static_cast<uint64_t>(c->width_in_blocks) * c->height_in_blocks;
-      if (num_blocks > (1ull << 21)) {
-        // Refuse to allocate more than 1 GB of memory for the coefficients,
-        // that is 2M blocks x 64 coeffs x 2 bytes per coeff x max 4 components.
-        // TODO(user) Add this limit to a GuetzliParams struct.
-        fprintf(stderr, 'Image too large.\n');
-        jpg->error = JPEG_IMAGE_TOO_LARGE;
-        return false;
-      }
-      c->num_blocks = static_cast<int>(num_blocks);
-      c->coeffs.resize(c->num_blocks * kDCTBlockSize);
-    }
+    aura::Window* Menu::GetActiveNativeView(content::RenderFrameHost* rfh) {
+  content::WebContents* web_contents =
+    content::WebContents::FromRenderFrameHost(rfh);
+  if (!web_contents) {
+    LOG(ERROR) << 'Menu: couldn't find WebContents';
+    return NULL;
   }
-  VERIFY_MARKER_END();
-  return true;
+  return web_contents->GetFullscreenRenderWidgetHostView()
+             ? web_contents->GetFullscreenRenderWidgetHostView()
+                   ->GetNativeView()
+             : web_contents->GetNativeView();
 }
     
-    // Mimic libjpeg's heuristics to guess jpeg color space.
-// Requires that the jpg has 3 components.
-bool HasYCbCrColorSpace(const JPEGData& jpg) {
-  bool has_Adobe_marker = false;
-  uint8_t Adobe_transform = 0;
-  for (const std::string& app : jpg.app_data) {
-    if (static_cast<uint8_t>(app[0]) == 0xe0) {
-      return true;
-    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
-      has_Adobe_marker = true;
-      Adobe_transform = app[14];
-    }
-  }
-  if (has_Adobe_marker) {
-    return (Adobe_transform != 0);
-  }
-  const int cid0 = jpg.components[0].id;
-  const int cid1 = jpg.components[1].id;
-  const int cid2 = jpg.components[2].id;
-  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
+    NwObjCallObjectMethodFunction::NwObjCallObjectMethodFunction() {
 }
     
-    #include 'guetzli/jpeg_data_encoder.h'
+    #ifndef STORAGE_LEVELDB_DB_BUILDER_H_
+#define STORAGE_LEVELDB_DB_BUILDER_H_
     
-    // Definition of error codes for parsing jpeg files.
-    
-    // Builds jpeg-style Huffman lookup table from the given symbols.
-// The symbols are in order of increasing bit lengths. The number of symbols
-// with bit length n is given in counts[n] for each n >= 1.
-// Returns the size of the lookup table.
-int BuildJpegHuffmanTable(const int* counts, const int* symbols,
-                          HuffmanTableEntry* lut);
-    
-    #include <stdint.h>
-#include <vector>
-    
-    #include 'boost/function.hpp'
-    
-      public:
-    template<typename T>
-    T* Service() {
-        if (m_publicservices.end() != m_publicservices.find(T::ServiceName()))
-            return (T*)m_publicservices[T::ServiceName()];
+    namespace leveldb {
     }
     
+    namespace leveldb {
+    }
     
-/*
- * ServiceBase.h
- *
- *  Created on: 2013-6-20
- *      Author: yerungui
- */
+     private:
+  Env* const env_;
+  const std::string dbname_;
+  const Options* options_;
+  Cache* cache_;
     
-    #endif
+      // Temporary storage for parsing
+  int level;
+  uint64_t number;
+  FileMetaData f;
+  Slice str;
+  InternalKey key;
+    
+    static void TestEncodeDecode(const VersionEdit& edit) {
+  std::string encoded, encoded2;
+  edit.EncodeTo(&encoded);
+  VersionEdit parsed;
+  Status s = parsed.DecodeFrom(encoded);
+  ASSERT_TRUE(s.ok()) << s.ToString();
+  parsed.EncodeTo(&encoded2);
+  ASSERT_EQ(encoded, encoded2);
+}
+    
+    // Use the db with the following name.
+static const char* FLAGS_db = NULL;
+    
+    // Returns a new environment that stores its data in memory and delegates
+// all non-file-storage tasks to base_env. The caller must delete the result
+// when it is no longer needed.
+// *base_env must remain live while the result is in use.
+Env* NewMemEnv(Env* base_env);
+    
+    class FilterPolicy {
+ public:
+  virtual ~FilterPolicy();
+    }
+    
+    void ComputeJacobians(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
+                      const IntrinsicParams& param,  InputArray omc, InputArray Tc,
+                      const int& check_cond, const double& thresh_cond, Mat& JJ2_inv, Mat& ex3);
+    
+      template <typename T>
+  static void init_iov_base(T& base, void* addr)
+  {
+    base = static_cast<T>(addr);
+  }
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS) \
+  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
+typedef null_fenced_block fenced_block;
+#elif defined(__MACH__) && defined(__APPLE__)
+typedef macos_fenced_block fenced_block;
+#elif defined(__sun)
+typedef solaris_fenced_block fenced_block;
+#elif defined(__GNUC__) && defined(__arm__) \
+  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
+typedef gcc_arm_fenced_block fenced_block;
+#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
+typedef gcc_hppa_fenced_block fenced_block;
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+typedef gcc_x86_fenced_block fenced_block;
+#elif defined(__GNUC__) \
+  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
+  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
+  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
+typedef gcc_sync_fenced_block fenced_block;
+#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
+typedef win_fenced_block fenced_block;
+#else
+typedef null_fenced_block fenced_block;
+#endif
+    
+    #include <boost/asio/detail/push_options.hpp>
+    
+    #include <boost/asio/detail/push_options.hpp>
+    
+      ~winrt_buffer_impl()
+  {
+  }
+    
+    template <typename C>
+struct compare_not_equal_to : detail::cmp_pred<C, ordering::eq, 1> {
+  using detail::cmp_pred<C, ordering::eq, 1>::cmp_pred;
+};
+    
+    memory_resource* get_default_resource();
+void set_default_resource(memory_resource*);
+memory_resource* new_delete_resource();
+    
+    AsyncIOQueue::AsyncIOQueue(AsyncIO* asyncIO) : asyncIO_(asyncIO) {}
+    
+    path canonical_parent(const path& pth, const path& base) {
+  return canonical(pth.parent_path(), base) / pth.filename();
+}
+    
+    [[noreturn]] void usage(const char* name) {
+  std::cerr << folly::format(
+      'Usage: {0}\n'
+      '         list all huge page sizes and their mount points\n'
+      '       {0} -cp <src_file> <dest_nameprefix>\n'
+      '         copy src_file to a huge page file\n',
+      name);
+  exit(1);
+}
+    
+      auto canceled = aioReader.cancel();
+  EXPECT_EQ(canceled.size(), ops.size() - result.size());
+  EXPECT_EQ(aioReader.pending(), 0);
+  EXPECT_EQ(completed, result.size());
