@@ -1,72 +1,100 @@
 
         
-            def ensure_id_sequences_exist
-      # Find tables using timestamp IDs.
-      connection.tables.each do |table|
-        # We're only concerned with 'id' columns.
-        next unless (id_col = connection.columns(table).find { |col| col.name == 'id' })
-    
-      yield
+        # Just a slash
+Benchmark.ips do |x|
+  path = '/'
+  x.report('pre_pr:#{path}')    { pre_pr(path) }
+  x.report('pr:#{path}')        { pr(path) }
+  x.report('envygeeks:#{path}') { pr(path) }
+  x.compare!
 end
     
-            expect_any_instance_of(ActivityPub::LinkedDataSignature).to receive(:verify_account!).and_return(actor)
-        expect(ActivityPub::Activity).to receive(:factory).with(instance_of(Hash), actor, instance_of(Hash))
+    CONTENT_CONTAINING = <<-HTML.freeze
+<!DOCTYPE HTML>
+<html lang='en-US'>
+  <head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    <meta charset='UTF-8'>
+    <title>Jemoji</title>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <link rel='stylesheet' href='/css/screen.css'>
+  </head>
+  <body class='wrap'>
+    <p><img class='emoji' title=':+1:' alt=':+1:' src='https://assets.github.com/images/icons/emoji/unicode/1f44d.png' height='20' width='20' align='absmiddle'></p>
     
-      def id
-    object.id.to_s
+    class BuildEnvironment
+  def initialize(*settings)
+    @settings = Set.new(*settings)
   end
     
-      # A single media query.
-  #
-  #     [ [ONLY | NOT]? S* media_type S* | expression ] [ AND S* expression ]*
-  class Query
-    # The modifier for the query.
-    #
-    # When parsed as Sass code, this contains strings and SassScript nodes. When
-    # parsed as CSS, it contains a single string (accessible via
-    # \{#resolved_modifier}).
-    #
-    # @return [Array<String, Sass::Script::Tree::Node>]
-    attr_accessor :modifier
+      # True if a {Formula} is being built with {Formula.head} instead of {Formula.stable}.
+  # <pre>args << '--some-new-stuff' if build.head?</pre>
+  # <pre># If there are multiple conditional arguments use a block instead of lines.
+  #  if build.head?
+  #    args << '--i-want-pizza'
+  #    args << '--and-a-cold-beer' if build.with? 'cold-beer'
+  #  end</pre>
+  def head?
+    include? 'HEAD'
+  end
     
-        def parse_input(environment, text)
-      case text
-      when Script::MATCH
-        name = $1
-        guarded = !!$3
-        val = Script::Parser.parse($2, @line, text.size - ($3 || '').size - $2.size)
-    
-        # Returns the three components of the interpolation, `before`, `mid`, and `after`.
-    #
-    # @return [Array<Node>]
-    # @see #initialize
-    # @see Node#children
-    def children
-      [@before, @mid, @after].compact
+        # Exclude cache, logs, and repository, if they are located under the prefix.
+    [HOMEBREW_CACHE, HOMEBREW_LOGS, HOMEBREW_REPOSITORY].each do |dir|
+      dirs.delete dir.relative_path_from(HOMEBREW_PREFIX).to_s
     end
+    dirs.delete 'etc'
+    dirs.delete 'var'
     
-          def update_available?(gem_name)
-        latest = Gem.latest_version_for(gem_name)
-        return false if latest.nil?
-        latest > installed_gem_version(gem_name)
-      end
+      def self.bottle_sha1(*)
+  end
     
-            def initialize
-          @values = []
+      def notification_setting_params
+    allowed_fields = NotificationSetting::EMAIL_EVENTS.dup
+    allowed_fields << :level
+    params.require(:notification_setting).permit(allowed_fields)
+  end
+end
+
+    
+      private
+    
+            def show
+          @stock_movement = scope.find(params[:id])
+          respond_with(@stock_movement)
         end
     
-      # Read and eval a .rake file in such a way that `self` within the .rake file
-  # refers to this plugin instance. This gives the tasks in the file access to
-  # helper methods defined by the plugin.
-  def eval_rakefile(path)
-    contents = IO.read(path)
-    instance_eval(contents, path, 1)
-  end
+            private
     
-        # Fetch a var from the context
-    # @param [Symbol] variable The variable to fetch
-    # @param [Object] default  The default value if not found
-    #
-    def fetch(*args)
-      context.fetch(*args)
+              lambda do |corrector|
+            corrector.replace(center.source_range, new_center)
+          end
+        end
+      end
     end
+  end
+end
+
+    
+            def_node_matcher :on_body_of_reduce, <<-PATTERN
+          (block (send _recv {:reduce :inject} !sym) _blockargs $(begin ...))
+        PATTERN
+    
+            def_node_matcher :simple_double_comparison?, '(send $lvar :== $lvar)'
+        def_node_matcher :simple_comparison?, <<-PATTERN
+          {(send $lvar :== _)
+           (send _ :== $lvar)}
+        PATTERN
+    
+    module RuboCop
+  module Cop
+    module Style
+      # This cop check for uses of Object#freeze on immutable objects.
+      #
+      # @example
+      #   # bad
+      #   CONST = 1.freeze
+      #
+      #   # good
+      #   CONST = 1
+      class RedundantFreeze < Cop
+        include FrozenStringLiteral
