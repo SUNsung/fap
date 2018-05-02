@@ -1,92 +1,100 @@
 
         
-        versions_info['signature'] = signature
-with open('update/versions.json', 'w') as versionsf:
-    json.dump(versions_info, versionsf, indent=4, sort_keys=True)
-
-    
-    
-def gen_extractor_classes():
-    ''' Return a list of supported extractors.
-    The order does matter; the first extractor matched is the one handling the URL.
-    '''
-    return _ALL_CLASSES
-    
-    
-class AnySexIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?anysex\.com/(?P<id>\d+)'
-    _TEST = {
-        'url': 'http://anysex.com/156592/',
-        'md5': '023e9fbb7f7987f5529a394c34ad3d3d',
-        'info_dict': {
-            'id': '156592',
-            'ext': 'mp4',
-            'title': 'Busty and sexy blondie in her bikini strips for you',
-            'description': 'md5:de9e418178e2931c10b62966474e1383',
-            'categories': ['Erotic'],
-            'duration': 270,
-            'age_limit': 18,
-        }
-    }
-    
-    def plot(func):
-    random_state = check_random_state(0)
-    one_core = []
-    multi_core = []
-    sample_sizes = range(1000, 6000, 1000)
-    
-        An example with a long-untouched module that everyone has
-    >>> _linkcode_resolve('py', {'module': 'tty',
-    ...                          'fullname': 'setraw'},
-    ...                   package='tty',
-    ...                   url_fmt='http://hg.python.org/cpython/file/'
-    ...                           '{revision}/Lib/{package}/{path}#L{lineno}',
-    ...                   revision='xxxx')
-    'http://hg.python.org/cpython/file/xxxx/Lib/tty/tty.py#L18'
+            * :class:`dict`
+    * :class:`tuple`
+    * :class:`bytes`
+    * :class:`~flask.Markup`
+    * :class:`~uuid.UUID`
+    * :class:`~datetime.datetime`
     '''
     
-    # Plot the results (= shape of the data points cloud)
-plt.figure(1)  # two clusters
-plt.title('Outlier detection on a real data set (boston housing)')
-plt.scatter(X1[:, 0], X1[:, 1], color='black')
-bbox_args = dict(boxstyle='round', fc='0.8')
-arrow_args = dict(arrowstyle='->')
-plt.annotate('several confounded points', xy=(24, 19),
-             xycoords='data', textcoords='data',
-             xytext=(13, 10), bbox=bbox_args, arrowprops=arrow_args)
-plt.xlim((xx1.min(), xx1.max()))
-plt.ylim((yy1.min(), yy1.max()))
-plt.legend((legend1_values_list[0].collections[0],
-            legend1_values_list[1].collections[0],
-            legend1_values_list[2].collections[0]),
-           (legend1_keys_list[0], legend1_keys_list[1], legend1_keys_list[2]),
-           loc='upper center',
-           prop=matplotlib.font_manager.FontProperties(size=12))
-plt.ylabel('accessibility to radial highways')
-plt.xlabel('pupil-teacher ratio by town')
-    
-        # add non-discriminative features
-    if n_features > 1:
-        X = np.hstack([X, np.random.randn(n_samples, n_features - 1)])
-    return X, y
+            def check(self, value):
+            return isinstance(value, Foo)
     
     
-def best_server():
-    # TODO: find and use the best server
-    # teredo.remlab.net / teredo - debian.remlab.net(Germany)
-    # teredo.ngix.ne.kr(South Korea)
-    # teredo.managemydedi.com(USA, Chicago)
-    # teredo.trex.fi(Finland)
-    # win8.ipv6.microsoft.com(The Teredo server hidden in Windows RT 8.1) of which Windows 7 has no knowledge.
-    # win10.ipv6.microsoft.com
-    return 'teredo.remlab.net'
+@pytest.mark.skipif(not PY2, reason='This only works under Python 2.')
+def test_meta_path_loader_without_is_package(request, modules_tmpdir):
+    app = modules_tmpdir.join('unimportable.py')
+    app.write('import flask\napp = flask.Flask(__name__)')
+    
+        def inner(*suffix):
+        return urljoin(httpbin_url, '/'.join(suffix))
+    
+            new_content = sock.recv(chunks)
+        if not new_content:
+            break
     
     
-    def setText(self, text):
-        '''
-        Override the text for this token.  getText() will return this text
-        rather than pulling from the buffer.  Note that this does not mean
-        that start/stop indexes are not valid.  It means that that input
-        was converted to a new string in the token object.
-	'''
-        self._text = text
+def to_native_string(string, encoding='ascii'):
+    '''Given a string object, regardless of type, returns a representation of
+    that string in the native string type, encoding and decoding where
+    necessary. This assumes ASCII unless told otherwise.
+    '''
+    if isinstance(string, builtin_str):
+        out = string
+    else:
+        if is_py2:
+            out = string.encode(encoding)
+        else:
+            out = string.decode(encoding)
+    
+        # 'I want us to put a big-ol' comment on top of it that
+    # says that this behaviour is dumb but we need to preserve
+    # it because people are relying on it.'
+    #    - Lukasa
+    #
+    # These are here solely to maintain backwards compatibility
+    # for things like ints. This will be removed in 3.0.0.
+    if not isinstance(username, basestring):
+        warnings.warn(
+            'Non-string usernames will no longer be supported in Requests '
+            '3.0.0. Please convert the object you've passed in ({0!r}) to '
+            'a string or bytes object in the near future to avoid '
+            'problems.'.format(username),
+            category=DeprecationWarning,
+        )
+        username = str(username)
+    
+    
+    {    # Server Error.
+    500: ('internal_server_error', 'server_error', '/o\\', '✗'),
+    501: ('not_implemented',),
+    502: ('bad_gateway',),
+    503: ('service_unavailable', 'unavailable'),
+    504: ('gateway_timeout',),
+    505: ('http_version_not_supported', 'http_version'),
+    506: ('variant_also_negotiates',),
+    507: ('insufficient_storage',),
+    509: ('bandwidth_limit_exceeded', 'bandwidth'),
+    510: ('not_extended',),
+    511: ('network_authentication_required', 'network_auth', 'network_authentication'),
+}
+    
+        def initialize_options(self):
+        TestCommand.initialize_options(self)
+        try:
+            from multiprocessing import cpu_count
+            self.pytest_args = ['-n', str(cpu_count()), '--boxed']
+        except (ImportError, NotImplementedError):
+            self.pytest_args = ['-n', '1', '--boxed']
+    
+            # This is testing that they are builtin strings. A bit weird, but there
+        # we go.
+        assert 'unicode' in p.headers.keys()
+        assert 'byte' in p.headers.keys()
+    
+                if not os.path.isdir(cert_loc):
+                conn.ca_certs = cert_loc
+            else:
+                conn.ca_cert_dir = cert_loc
+        else:
+            conn.cert_reqs = 'CERT_NONE'
+            conn.ca_certs = None
+            conn.ca_cert_dir = None
+    
+        def __init__(self, query, results):
+        self.query = query
+        self.results = results
+    
+    
+class LinkedList(object):
