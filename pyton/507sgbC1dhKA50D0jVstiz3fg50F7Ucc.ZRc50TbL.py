@@ -1,179 +1,153 @@
 
         
-                # In case just a slash was appended we can be extra helpful
-        if request.base_url + '/' == exc.new_url.split('?')[0]:
-            buf.append('  The URL was defined with a trailing slash so '
-                       'Flask will automatically redirect to the URL '
-                       'with the trailing slash if it was accessed '
-                       'without one.')
+            if not releases:
+        break
     
-    :copyright: © 2010 by the Pallets team.
-:license: BSD, see LICENSE for more details.
-'''
+            webpage = self._download_webpage(url, video_id)
+        key = self._search_regex(
+            r'src=['\']https?://[^/]+/embed/([A-Za-z0-9_-]+)', webpage, 'key')
     
-        #: Some implementations can detect when session data is read or
-    #: written and set this when that happens. The mixin default is hard
-    #: coded to ``True``.
-    accessed = True
+            return {
+            'id': api_response.get('id', album_url_tag),
+            'uploader': api_response.get('artist'),
+            'title': api_response.get('title'),
+            'url': api_response['url'],
+        }
     
-        #: Setting this disables or force-enables the automatic options handling.
-    provide_automatic_options = None
+    from httpie.utils import repr_dict_nice
     
-        from installed_package import app
-    assert app.instance_path == \
-        modules_tmpdir.join('var').join('installed_package-instance')
-    
-        Tests the request context.
-    
-        @possible_keys
-    def test_delitem(self, key):
-        del self.case_insensitive_dict[key]
-        assert key not in self.case_insensitive_dict
-    
-    from .compat import urlparse, str, basestring
-from .cookies import extract_cookies_to_jar
-from ._internal_utils import to_native_string
-from .utils import parse_dict_header
-    
-        @property
-    def origin_req_host(self):
-        return self.get_origin_req_host()
-    
-    from . import utils
-from . import packages
-from .models import Request, Response, PreparedRequest
-from .api import request, get, head, post, patch, put, delete, options
-from .sessions import session, Session
-from .status_codes import codes
-from .exceptions import (
-    RequestException, Timeout, URLRequired,
-    TooManyRedirects, HTTPError, ConnectionError,
-    FileModeWarning, ConnectTimeout, ReadTimeout
-)
-    
-        def test_valid(self):
-        assert is_valid_cidr('192.168.1.0/24')
-    
-        def test_HTTP_302_TOO_MANY_REDIRECTS(self, httpbin):
-        try:
-            requests.get(httpbin('relative-redirect', '50'))
-        except TooManyRedirects as e:
-            url = httpbin('relative-redirect', '20')
-            assert e.request.url == url
-            assert e.response.url == url
-            assert len(e.response.history) == 30
-        else:
-            pytest.fail('Expected redirect to raise TooManyRedirects but it did not')
+        def get_converter(self, mime):
+        if is_valid_mime(mime):
+            for converter_class in plugin_manager.get_converters():
+                if converter_class.supports(mime):
+                    return converter_class(mime)
     
     
-def secure_hash_s(data, hash_func=sha1):
-    ''' Return a secure hash hex digest of data. '''
-    
-        if result is None:
-        return '{}'
-    
-        history = model.fit(x_train, y_train, batch_size=batch_size,
-                        epochs=epochs // 3, verbose=0,
-                        sample_weight=sample_weight)
-    
-        if not blocks:
-        raise RuntimeError('Found no content for page ' +
-                           page_data['page'])
-    
-        # a Sequential inside a Sequential
-    inner_model = Sequential()
-    inner_model.add(Dense(2, input_dim=1))
-    outer_model = Sequential()
-    outer_model.add(inner_model)
-    assert outer_model.trainable_weights == inner_model.trainable_weights
-    inner_model.trainable = False
-    assert outer_model.trainable_weights == []
-    inner_model.trainable = True
-    inner_model.layers[-1].trainable = False
-    assert outer_model.trainable_weights == []
-    
-    
-@pytest.mark.parametrize('tensor_shape', [(100, 100), (1, 2, 3, 4)], ids=['FC', 'CONV'])
-def test_identity(tensor_shape):
-    if len(tensor_shape) > 2:
-        with pytest.raises(ValueError):
-            _runner(initializers.identity(), tensor_shape,
-                    target_mean=1. / tensor_shape[0], target_max=1.)
-    else:
-        _runner(initializers.identity(), tensor_shape,
-                target_mean=1. / tensor_shape[0], target_max=1.)
-    
-    
-if __name__ == '__main__':
-    pytest.main([__file__])
-
-    
-        left = Sequential()
-    left.add(Dense(num_hidden, input_shape=(input_dim,)))
-    left.add(Activation('relu'))
-    
-    # we start off with an efficient embedding layer which maps
-# our vocab indices into embedding_dims dimensions
-model.add(Embedding(max_features,
-                    embedding_dims,
-                    input_length=maxlen))
-model.add(Dropout(0.2))
-    
-    site = Bigthink()
-download = site.download_by_url
-
-    
-    def kuwo_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    if 'www.kuwo.cn/yinyue' in url:
-        rid=match1(url,'yinyue/(\d+)')
-        kuwo_download_by_rid(rid,output_dir, merge, info_only)
-    else:
-        kuwo_playlist_download(url,output_dir,merge,info_only)
-    
-        def __init__(self, HierachicalStateMachine):
-        self._hsm = HierachicalStateMachine
-    
-        @classmethod
-    def setUpClass(self):
-        '''
-        - Create a temporary directory and file
-        /test_command
-           /foo.txt
-        - get the temporary test directory
-        - and initializes the command stack.
-        '''
-        os.mkdir('tests/test_command')
-        open('tests/test_command/foo.txt', 'w').close()
-        self.__get_test_directory()
-        self.command_stack = []
-        self.command_stack.append(MoveFileCommand(os.path.join(
-            self.test_dir, 'foo.txt'), os.path.join(self.test_dir, 'bar.txt')))
-        self.command_stack.append(MoveFileCommand(os.path.join(
-            self.test_dir, 'bar.txt'), os.path.join(self.test_dir, 'baz.txt')))
-    
-    
-class ProxyTest(unittest.TestCase):
-    
-        @classmethod
-    def setUpClass(self):
-        self.radio = Radio()
-    
-        def test_display_current_time_at_current_time(self):
-        '''
-        Just as justification for working example with the time provider used in
-        production. (Will always pass.)
-        '''
-        production_code_time_provider = ProductionCodeTimeProvider()
-        class_under_test = TimeDisplay()
-        class_under_test.set_time_provider(production_code_time_provider)
-        current_time = datetime.datetime.now()
-        expected_time = '<span class=\'tinyBoldText\'>{}:{}</span>'.format(current_time.hour, current_time.minute)
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
-
-    
-    *TL;DR80
-Traverses a container and accesses the container's elements.
-'''
+with codecs.open(JSON_FILE_PATH, encoding='utf8') as f:
+    JSON_FILE_CONTENT = f.read()
     
     '''
-http://code.activestate.com/recipes/131499-observer-pattern/
+__version__ = '1.0.0-dev'
+__author__ = 'Jakub Roztocil'
+__licence__ = 'BSD'
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+    
+    
+def to_pygtp(board_size, coord):
+  '''Converts from a MiniGo coordinate to a pygtp coordinate.'''
+  if coord is None:
+    return gtp.PASS
+  return coord[1] + 1, board_size - coord[0]
+
+    
+      def test_inference(self):
+    with tempfile.TemporaryDirectory() as working_dir, \
+        tempfile.TemporaryDirectory() as export_dir:
+      dualnet.bootstrap(working_dir, model_params.DummyMiniGoParams())
+      exported_model = os.path.join(export_dir, 'bootstrap-model')
+      dualnet.export_model(working_dir, exported_model)
+    
+        Raises:
+      IllegalMove: if the input c is an illegal move.
+    '''
+    if color is None:
+      color = self.to_play
+    
+      def test_is_game_over(self):
+    root = go.Position(utils_test.BOARD_SIZE)
+    self.assertFalse(root.is_game_over())
+    first_pass = root.play_move(None)
+    self.assertFalse(first_pass.is_game_over())
+    second_pass = first_pass.play_move(None)
+    self.assertTrue(second_pass.is_game_over())
+    
+    
+class CGOSPlayer(CGOSPlayerMixin, GtpInterface):
+  pass
+    
+    
+def sgf_prop(value_list):
+  '''Converts raw sgf library output to sensible value.'''
+  if value_list is None:
+    return None
+  if len(value_list) == 1:
+    return value_list[0]
+  else:
+    return value_list
+    
+      def test_make_sgf(self):
+    all_pwcs = list(replay_sgf(utils_test.BOARD_SIZE, NO_HANDICAP_SGF))
+    second_last_position, last_move, _ = all_pwcs[-1]
+    last_position = second_last_position.play_move(last_move)
+    
+      def test_uniqueness(self):
+    all_symmetries_f = [
+        symmetries.apply_symmetry_feat(
+            s, self.feat) for s in symmetries.SYMMETRIES
+    ]
+    all_symmetries_pi = [
+        symmetries.apply_symmetry_pi(
+            utils_test.BOARD_SIZE, s, self.pi) for s in symmetries.SYMMETRIES
+    ]
+    for f1, f2 in itertools.combinations(all_symmetries_f, 2):
+      self.assertNotEqualNPArray(f1, f2)
+    for pi1, pi2 in itertools.combinations(all_symmetries_pi, 2):
+      self.assertNotEqualNPArray(pi1, pi2)
+    
+            bottom = 10 ** np.min([min(np.floor(np.log10(build_time[alg])))
+                               for alg in algorithms])
+    
+        opener = build_opener()
+    html_filename = os.path.join(html_folder, lang + '.html')
+    if not os.path.exists(html_filename):
+        print('Downloading %s' % page)
+        request = Request(page)
+        # change the User Agent to avoid being blocked by Wikipedia
+        # downloading a couple of articles should not be considered abusive
+        request.add_header('User-Agent', 'OpenAnything/1.0')
+        html_content = opener.open(request).read()
+        open(html_filename, 'wb').write(html_content)
+    
+    
+if not os.path.exists(DATA_FOLDER):
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-l', '--list', dest='list', action='store_true',
+                          help='only list contracts, without checking them')
+        parser.add_option('-v', '--verbose', dest='verbose', default=False, action='store_true',
+                          help='print contract tests for all spiders')
+    
+                elif opt in ('-l', '--playlist', '--playlists'):
+                # Download playlist whenever possible.
+                conf['playlist'] = True
+    
+    __all__ = ['cbs_download']
+    
+            # cookie handler
+        ssl_context = request.HTTPSHandler(
+            context=ssl.SSLContext(ssl.PROTOCOL_TLSv1))
+        cookie_handler = request.HTTPCookieProcessor()
+        opener = request.build_opener(ssl_context, cookie_handler)
+        opener.addheaders = [
+            ('Referer', self.url),
+            ('Cookie',
+             'CloudFront-Policy=%s;CloudFront-Signature=%s;CloudFront-Key-Pair-Id=%s' % (scp, scs, sck))
+        ]
+        request.install_opener(opener)
+    
+    
+site_info = 'kugou.com'
+download = kugou_download
+# download_playlist = playlist_not_supported('kugou')
+download_playlist=kugou_download_playlist
+
+    
+    __all__ = ['miomio_download']
+    
+    from xml.dom.minidom import parseString
+    
+    __all__ = ['showroom_download']
