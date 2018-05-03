@@ -1,253 +1,147 @@
 
         
-                    if info_dict_str:
-                info_dict_str += '\n'
-        info_dict_str += ''.join(
-            '    %s: %s,\n' % (_repr(k), _repr(test_info_dict[k]))
-            for k in missing_keys)
-        write_string(
-            '\n\'info_dict\': {\n' + info_dict_str + '},\n', out=sys.stderr)
-        self.assertFalse(
-            missing_keys,
-            'Missing keys in test definition: %s' % (
-                ', '.join(sorted(missing_keys))))
+        from flask._compat import iteritems, text_type
+from flask.json import dumps, loads
+    
+            :param filename: the filename of the config.  This can either be an
+                         absolute filename or a filename relative to the
+                         root path.
+        :param silent: set to ``True`` if you want silent failure for missing
+                       files.
     
     
-def _is_empty(d):
-    return not bool(os.listdir(d))
+def _dump_loader_info(loader):
+    yield 'class: %s.%s' % (type(loader).__module__, type(loader).__name__)
+    for key, value in sorted(loader.__dict__.items()):
+        if key.startswith('_'):
+            continue
+        if isinstance(value, (tuple, list)):
+            if not all(isinstance(x, (str, text_type)) for x in value):
+                continue
+            yield '%s:' % key
+            for item in value:
+                yield '  - %s' % item
+            continue
+        elif not isinstance(value, (str, text_type, int, float, bool)):
+            continue
+        yield '%s: %r' % (key, value)
     
-            def _find_spec(key):
-            m = re.search(
-                r'(?m)^//\s*%s:\s*(.*?)\n' % re.escape(key), as_content)
-            if not m:
-                raise ValueError('Cannot find %s in %s' % (key, testfile))
-            return json.loads(m.group(1))
+        return False
     
+            app.config['SESSION_COOKIE_DOMAIN'] = rv
+        return rv
     
-class RtspFD(FileDownloader):
-    def real_download(self, filename, info_dict):
-        url = info_dict['url']
-        self.report_destination(filename)
-        tmpfilename = self.temp_name(filename)
+                # If we have no method at all in there we don't want to add a
+            # method list. This is for instance the case for the base class
+            # or another subclass of a base method view that does not introduce
+            # new methods.
+            if methods:
+                cls.methods = methods
     
-            # TODO: handle s and e stage_mode (live streams and ended live streams)
-        if stage_mode not in ('s', 'e'):
-            request = sanitized_Request(
-                'https://audimedia.tv/api/video/v1/videos/%s?embed[]=video_versions&embed[]=thumbnail_image&where[content_language_iso]=%s' % (video_id, lang),
-                headers={'X-Auth-Token': self._AUTH_TOKEN})
-            json_data = self._download_json(request, video_id)['results']
-            formats = []
+    import logging
+import sys
     
+        def __exit__(self, exc_type, exc_value, tb):
+        gc.collect()
+        new_objects = len(gc.get_objects())
+        if new_objects > self.old_objects:
+            pytest.fail('Example code leaked')
+        _gc_lock.release()
+        gc.enable()
     
-class C56IE(InfoExtractor):
-    _VALID_URL = r'https?://(?:(?:www|player)\.)?56\.com/(?:.+?/)?(?:v_|(?:play_album.+-))(?P<textid>.+?)\.(?:html|swf)'
-    IE_NAME = '56.com'
-    _TESTS = [{
-        'url': 'http://www.56.com/u39/v_OTM0NDA3MTY.html',
-        'md5': 'e59995ac63d0457783ea05f93f12a866',
-        'info_dict': {
-            'id': '93440716',
-            'ext': 'flv',
-            'title': '网事知多少 第32期：车怒',
-            'duration': 283.813,
-        },
-    }, {
-        'url': 'http://www.56.com/u47/v_MTM5NjQ5ODc2.html',
-        'md5': '',
-        'info_dict': {
-            'id': '82247482',
-            'title': '爱的诅咒之杜鹃花开',
-        },
-        'playlist_count': 7,
-        'add_ie': ['Sohu'],
-    }]
+      def replicate_states(self, state_coll_name):
+    state_list = self._metagraph.collection_def[state_coll_name]
+    num_states = len(state_list.node_list.value)
+    for replica_id in range(1, FLAGS.num_gpus):
+      for i in range(num_states):
+        state_list.node_list.value.append(state_list.node_list.value[i])
+    for replica_id in range(FLAGS.num_gpus):
+      for i in range(num_states):
+        index = replica_id * num_states + i
+        state_list.node_list.value[index] = with_autoparallel_prefix(
+            replica_id, state_list.node_list.value[index])
     
-            uploader = self._search_regex(
-            r'Added by\s*:\s*<a[^>]+>([^<]+)</a>', webpage, 'uploader', default=None)
-        upload_date = unified_strdate(self._search_regex(
-            r'Added on\s*:\s*([\d-]+)', webpage, 'upload date', default=None))
+      is_chief = FLAGS.task == 0
+  sv = tf.train.Supervisor(
+      logdir=FLAGS.train_dir,
+      is_chief=is_chief,
+      save_summaries_secs=30,
+      save_model_secs=30,
+      local_init_op=local_init_op,
+      ready_for_local_init_op=ready_for_local_init_op,
+      global_step=global_step)
     
-        def should_set_cookie(self, app, session):
-        '''Used by session backends to determine if a ``Set-Cookie`` header
-        should be set for this session cookie for this response. If the session
-        has been modified, the cookie is set. If the session is permanent and
-        the ``SESSION_REFRESH_EACH_REQUEST`` config is true, the cookie is
-        always set.
+    FLAGS = flags.FLAGS
     
-        def test_all_methods(self, invoke):
-        output = invoke(['routes']).output
-        assert 'GET, HEAD, OPTIONS, POST' not in output
-        output = invoke(['routes', '--all-methods']).output
-        assert 'GET, HEAD, OPTIONS, POST' in output
+        classifiers = proj_info['classifiers'],
     
-        from site_app import app
-    assert app.instance_path == \
-        modules_tmpdir.join('var').join('site_app-instance')
+    from ..common import *
     
-        yield
+        video_url = match1(html, r'filepath=(.+)&sec')
+    video_url = video_url.replace('&mid', '?mid')
     
+    def kuwo_playlist_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    html=get_content(url)
+    matched=set(re.compile('yinyue/(\d+)').findall(html))#reduce duplicated
+    for rid in matched:
+        kuwo_download_by_rid(rid,output_dir,merge,info_only)
     
-def test_memory_consumption():
-    app = flask.Flask(__name__)
+            d = deque(s)
+        d.rotate(1)             # verify rot(1)
+        self.assertEqual(''.join(d), 'eabcd')
     
+    def pi_cdecimal():
+    '''cdecimal'''
+    D = C.Decimal
+    lasts, t, s, n, na, d, da = D(0), D(3), D(3), D(1), D(0), D(0), D(24)
+    while s != lasts:
+        lasts = s
+        n, na = n+na, na+8
+        d, da = d+da, da+32
+        t = (t * n) / d
+        s += t
+    return s
     
-def test_context_test(app):
-    assert not flask.request
-    assert not flask.has_request_context()
-    ctx = app.test_request_context()
-    ctx.push()
-    try:
-        assert flask.request
-        assert flask.has_request_context()
-    finally:
-        ctx.pop()
+        def test_varargs1(self):
+        {}.__contains__(0)
     
-        flask.message_flashed.connect(record, app)
-    try:
-        client = app.test_client()
-        with client.session_transaction():
-            client.get('/')
-            assert len(recorded) == 1
-            message, category = recorded[0]
-            assert message == 'This is a flash message'
-            assert category == 'notice'
-    finally:
-        flask.message_flashed.disconnect(record, app)
+    API_TYPES = ('api', 'json')
+RSS_TYPES = ('rss', 'xml')
     
+        def current_subreddit(self):
+        site = self.stacked_proxy_safe_get(c, 'site')
+        if not site:
+            # In non-request code (eg queued jobs), there isn't necessarily a
+            # site name (or other request-type data).  In those cases, we don't
+            # want to trigger any subreddit-specific code.
+            return ''
+        return site.name
+    
+        @csrf_exempt
+    @json_validate(
+        VRatelimit(rate_ip=True, prefix='rate_register_'),
+        signature=VSigned(),
+        name=VUname(['user']),
+        email=ValidEmail('email'),
+        password=VPasswordChange(['passwd', 'passwd2']),
+    )
+    def POST_register(self, responder, name, email, password, **kwargs):
+        kwargs.update(dict(
+            controller=self,
+            form=responder('noop'),
+            responder=responder,
+            name=name,
+            email=email,
+            password=password,
+        ))
+        return handle_register(**kwargs)
+    
+            To request a new CAPTCHA,
+        use [/api/new_captcha](#POST_api_new_captcha).
         '''
-    var = pvariance(data, mu)
-    try:
-        return var.sqrt()
-    except AttributeError:
-        return math.sqrt(var)
-
+        image = captcha.get_image(iden)
+        f = StringIO.StringIO()
+        image.save(f, 'PNG')
+        response.content_type = 'image/png;'
+        return f.getvalue()
     
-    def test_main(verbose=None):
-    import sys
-    test_classes = (
-        TestBasic,
-        TestVariousIteratorArgs,
-        TestSubclass,
-        TestSubclassWithKwargs,
-        TestSequence,
-    )
-    
-            Uses email.message.Message to create a 7bit clean string
-        representation of the message.'''
-        return email.message_from_bytes(self.get_bytes(key)).as_string()
-    
-        # This dictionary maps from (feature,value) to a list of
-    # (option,value) pairs that should be set on the Options object.
-    # If a (feature,value) setting is not in this dictionary, it is
-    # not supported by the DOMBuilder.
-    #
-    _settings = {
-        ('namespace_declarations', 0): [
-            ('namespace_declarations', 0)],
-        ('namespace_declarations', 1): [
-            ('namespace_declarations', 1)],
-        ('validation', 0): [
-            ('validation', 0)],
-        ('external_general_entities', 0): [
-            ('external_general_entities', 0)],
-        ('external_general_entities', 1): [
-            ('external_general_entities', 1)],
-        ('external_parameter_entities', 0): [
-            ('external_parameter_entities', 0)],
-        ('external_parameter_entities', 1): [
-            ('external_parameter_entities', 1)],
-        ('validate_if_schema', 0): [
-            ('validate_if_schema', 0)],
-        ('create_entity_ref_nodes', 0): [
-            ('create_entity_ref_nodes', 0)],
-        ('create_entity_ref_nodes', 1): [
-            ('create_entity_ref_nodes', 1)],
-        ('entities', 0): [
-            ('create_entity_ref_nodes', 0),
-            ('entities', 0)],
-        ('entities', 1): [
-            ('entities', 1)],
-        ('whitespace_in_element_content', 0): [
-            ('whitespace_in_element_content', 0)],
-        ('whitespace_in_element_content', 1): [
-            ('whitespace_in_element_content', 1)],
-        ('cdata_sections', 0): [
-            ('cdata_sections', 0)],
-        ('cdata_sections', 1): [
-            ('cdata_sections', 1)],
-        ('comments', 0): [
-            ('comments', 0)],
-        ('comments', 1): [
-            ('comments', 1)],
-        ('charset_overrides_xml_encoding', 0): [
-            ('charset_overrides_xml_encoding', 0)],
-        ('charset_overrides_xml_encoding', 1): [
-            ('charset_overrides_xml_encoding', 1)],
-        ('infoset', 0): [],
-        ('infoset', 1): [
-            ('namespace_declarations', 0),
-            ('validate_if_schema', 0),
-            ('create_entity_ref_nodes', 0),
-            ('entities', 0),
-            ('cdata_sections', 0),
-            ('datatype_normalization', 1),
-            ('whitespace_in_element_content', 1),
-            ('comments', 1),
-            ('charset_overrides_xml_encoding', 1)],
-        ('supported_mediatypes_only', 0): [
-            ('supported_mediatypes_only', 0)],
-        ('namespaces', 0): [
-            ('namespaces', 0)],
-        ('namespaces', 1): [
-            ('namespaces', 1)],
-    }
-    
-    int WINAPI WinMain(
-    HINSTANCE hInstance,      // handle to current instance
-    HINSTANCE hPrevInstance,  // handle to previous instance
-    LPSTR lpCmdLine,          // pointer to command line
-    int nCmdShow              // show state of window
-    )
-{
-    extern int Py_FrozenMain(int, char **);
-    PyImport_FrozenModules = _PyImport_FrozenModules;
-    return Py_FrozenMain(__argc, __argv);
-}
-'''
-    
-        @support.requires_IEEE_754
-    def test_overflow(self):
-        self.assertEqual(complex('1e500'), complex(INF, 0.0))
-        self.assertEqual(complex('-1e500j'), complex(0.0, -INF))
-        self.assertEqual(complex('-1e500+1.8e308j'), complex(-INF, INF))
-    
-    
-class Scientist(AbstractExpert):
-    
-        def test_shall_toggle_from_am_to_fm(self):
-        self.radio.toggle_amfm()
-        state = self.radio.state.name
-        expected_state_name = 'FM'
-        self.assertEqual(state, expected_state_name)
-    
-        def get_current_time_as_html_fragment(self, time_provider):
-        current_time = time_provider.now()
-        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
-        return current_time_as_html_fragment
-    
-        # commands are just pushed into the command stack
-    command_stack.append(MoveFileCommand('foo.txt', 'bar.txt'))
-    command_stack.append(MoveFileCommand('bar.txt', 'baz.txt'))
-    
-        def __get__(self, obj, T):
-        def transaction(*args, **kwargs):
-            state = memento(obj)
-            try:
-                return self.method(obj, *args, **kwargs)
-            except Exception as e:
-                state()
-                raise e
-    
-        print(root_specification.is_satisfied_by(andrey))
-    print(root_specification.is_satisfied_by(ivan))
-    print(root_specification.is_satisfied_by(vasiliy))
