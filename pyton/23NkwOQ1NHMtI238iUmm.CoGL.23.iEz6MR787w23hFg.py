@@ -1,49 +1,46 @@
 
         
-            out = issue_template_tmpl % {'version': locals()['__version__']}
+                # In case just a slash was appended we can be extra helpful
+        if request.base_url + '/' == exc.new_url.split('?')[0]:
+            buf.append('  The URL was defined with a trailing slash so '
+                       'Flask will automatically redirect to the URL '
+                       'with the trailing slash if it was accessed '
+                       'without one.')
     
-    from youtube_dl.compat import (
-    compat_print,
-    compat_urllib_request,
-)
-from youtube_dl.utils import format_bytes
+            if trv is not None:
+            return trv
+        raise TemplateNotFound(template)
     
+            class SecretView(View):
+            methods = ['GET']
+            decorators = [superuser_required]
     
-def assertGreaterEqual(self, got, expected, msg=None):
-    if not (got >= expected):
-        if msg is None:
-            msg = '%r not greater than or equal to %r' % (got, expected)
-        self.assertTrue(got >= expected, msg)
+        flask.got_request_exception.connect(record, app)
+    try:
+        assert app.test_client().get('/').status_code == 500
+        assert len(recorded) == 1
+        assert isinstance(recorded[0], ZeroDivisionError)
+    finally:
+        flask.got_request_exception.disconnect(record, app)
     
-                    m = re.search(r'(?<=\s)u[\''](?!\)|,|$)', code)
-                if m is not None:
-                    self.assertTrue(
-                        m is None,
-                        'u present in %s, around %s' % (
-                            fn, code[m.start() - 10:m.end() + 10]))
+        def __init__(self, employee_id, name):
+        super(Operator, self).__init__(employee_id, name, Rank.DIRECTOR)
     
-            webpage = self._download_webpage(url, playlist_id)
-        title = self._html_search_regex(
-            r'<h1 class='playlist-name'[^>]*?>(.*?)</h1>', webpage, 'title')
-        description = self._html_search_regex(
-            r'<p class='excerpt'[^>]*?>(.*?)</p>',
-            webpage, 'description', fatal=False)
-        urls = re.findall(
-            r'<li class='lecture-preview'>\s*?<a target='_blank' href='([^']+)'>',
-            webpage)
-        entries = [self.url_result(u) for u in urls]
+        def approve_friend_request(self, from_user_id, to_user_id):
+        pass
     
-        def _real_extract(self, url):
-        # URLs end with [uploader name]/[uploader title]
-        # this title is whatever the user types in, and is rarely
-        # the proper song title.  Real metadata is in the api response
-        album_url_tag = self._match_id(url)
-        result = {'_type': 'playlist', 'entries': []}
-        # There is no one endpoint for album metadata - instead it is included/repeated in each song's metadata
-        # Therefore we don't know how many songs the album has and must infi-loop until failure
-        for track_no in itertools.count():
-            # Get song's metadata
-            api_response = self._download_json(
-                'http://www.audiomack.com/api/music/url/album/%s/%d?extended=1&_=%d'
-                % (album_url_tag, track_no, time.time()), album_url_tag,
-                note='Querying song information (%d)' % (track_no + 1))
+        def __init__(self, cards):
+        super(BlackJackHand, self).__init__(cards)
+    
+            Accessing a node updates its position to the front of the LRU list.
+        '''
+        node = self.lookup[query]
+        if node is None:
+            return None
+        self.linked_list.move_to_front(node)
+        return node.results
+    
+        def __init__(self, id, name):
+        self.id = id
+        self.name = name
+        self.friend_ids = []
