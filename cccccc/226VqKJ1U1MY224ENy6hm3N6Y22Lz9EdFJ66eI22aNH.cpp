@@ -1,394 +1,383 @@
 
         
-        #include 'tensorflow/core/framework/op_kernel.h'
-#include 'tensorflow/core/framework/resource_mgr.h'
-#include 'tensorflow/core/framework/tensor_shape.h'
-#include 'tensorflow/core/platform/logging.h'
-#include 'tensorflow/core/platform/mutex.h'
-#include 'tensorflow/core/platform/thread_annotations.h'
-#include 'tensorflow/core/platform/types.h'
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-      // Runs the optimized version of the graph on the cluster, measure
-  // the runtimes of each operation, and annotated the CostGraphDef
-  // with the corresponding measurements.
-  // Returns the average latency for the whole graph.
-  Status PredictCosts(const GraphDef& optimized_graph, CostGraphDef* cost_graph,
-                      Costs* overall_cost) const override;
-    
-    
-    {
-    {}  // namespace io
-}  // namespace tensorflow
-    
-    
-    {}  // end namespace Eigen
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    class TFRecordReader : public ReaderBase {
- public:
-  TFRecordReader(const string& node_name, const string& compression_type,
-                 Env* env)
-      : ReaderBase(strings::StrCat('TFRecordReader '', node_name, ''')),
-        env_(env),
-        offset_(0),
-        compression_type_(compression_type) {}
-    }
-    
-        EXPECT_EQ(a_1_1.get(), a_1_2.get());
-    EXPECT_EQ(d_4_1.get(), d_4_2.get());
-    EXPECT_EQ(e_5_1.get(), e_5_2.get());
-    
-        NodeDef* add_node2 = graph_def.add_node();
-    add_node2->set_name('add_node2');
-    add_node2->set_op('Add');
-    add_node2->add_input('const_node1');
-    add_node2->add_input('const_node2');
-    add_node2->set_device('//device:GPU:1');
-    
-      ASSERT_FALSE(
-      DebugIO::IsDebugNodeGateOpen('foo:1:DebugIdentity', {kGrpcUrl1}));
-  ASSERT_FALSE(
-      DebugIO::IsDebugNodeGateOpen('foo:1:DebugNumericSummary', {kGrpcUrl1}));
-  ASSERT_FALSE(
-      DebugIO::IsDebugNodeGateOpen('qux:0:DebugIdentity', {kGrpcUrl1}));
-  ASSERT_TRUE(DebugIO::IsDebugNodeGateOpen('foo:0:DebugIdentity', {kGrpcUrl1}));
-  ASSERT_TRUE(DebugIO::IsDebugNodeGateOpen('bar:0:DebugIdentity', {kGrpcUrl1}));
-    
-    // Convert a Python object to a FileDescriptorProto pointer.
-// Handles all kinds of Python errors, which are simply logged.
-static bool GetFileDescriptorProto(PyObject* py_descriptor,
-                                   FileDescriptorProto* output) {
-  if (py_descriptor == NULL) {
-    if (PyErr_ExceptionMatches(PyExc_KeyError)) {
-      // Expected error: item was simply not found.
-      PyErr_Clear();
-    } else {
-      GOOGLE_LOG(ERROR) << 'DescriptorDatabase method raised an error';
-      PyErr_Print();
-    }
-    return false;
-  }
-  if (py_descriptor == Py_None) {
-    return false;
-  }
-  const Descriptor* filedescriptor_descriptor =
-      FileDescriptorProto::default_instance().GetDescriptor();
-  CMessage* message = reinterpret_cast<CMessage*>(py_descriptor);
-  if (PyObject_TypeCheck(py_descriptor, &CMessage_Type) &&
-      message->message->GetDescriptor() == filedescriptor_descriptor) {
-    // Fast path: Just use the pointer.
-    FileDescriptorProto* file_proto =
-        static_cast<FileDescriptorProto*>(message->message);
-    *output = *file_proto;
-    return true;
-  } else {
-    // Slow path: serialize the message. This allows to use databases which
-    // use a different implementation of FileDescriptorProto.
-    ScopedPyObjectPtr serialized_pb(
-        PyObject_CallMethod(py_descriptor, 'SerializeToString', NULL));
-    if (serialized_pb == NULL) {
-      GOOGLE_LOG(ERROR)
-          << 'DescriptorDatabase method did not return a FileDescriptorProto';
-      PyErr_Print();
-      return false;
-    }
-    char* str;
-    Py_ssize_t len;
-    if (PyBytes_AsStringAndSize(serialized_pb.get(), &str, &len) < 0) {
-      GOOGLE_LOG(ERROR)
-          << 'DescriptorDatabase method did not return a FileDescriptorProto';
-      PyErr_Print();
-      return false;
-    }
-    FileDescriptorProto file_proto;
-    if (!file_proto.ParseFromArray(str, len)) {
-      GOOGLE_LOG(ERROR)
-          << 'DescriptorDatabase method did not return a FileDescriptorProto';
-      return false;
-    }
-    *output = file_proto;
-    return true;
-  }
-}
-    
-      // Find the file which defines an extension extending the given message type
-  // with the given field number.
-  // Containing_type must be a fully-qualified type name.
-  // Python objects are not required to implement this method.
-  bool FindFileContainingExtension(const string& containing_type,
-                                   int field_number,
-                                   FileDescriptorProto* output);
-    
-    void RepeatedEnumFieldGenerator::GenerateSerializationCode(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    '$name$_.WriteTo(output, _repeated_$name$_codec);\n');
-}
-    
-    #include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/compiler/csharp/csharp_repeated_primitive_field.h>
-    
-    // Author: kenton@google.com (Kenton Varda)
-//  Based on original Protocol Buffers design by
-//  Sanjay Ghemawat, Jeff Dean, and others.
-//
-// Generates Java code for a given .proto file.
-    
-    ServiceGenerator* ImmutableGeneratorFactory::NewServiceGenerator(
-    const ServiceDescriptor* descriptor) const {
-  return new ImmutableServiceGenerator(descriptor, context_);
-}
-    
-    void QLSQ::clear() {  // initialize
-  a = 0.0;
-  b = 0.0;
-  c = 0.0;
-  n = 0;                           // No elements.
-  sigx = 0.0;                      // Zero accumulators.
-  sigy = 0.0;
-  sigxx = 0.0;
-  sigxy = 0.0;
-  sigyy = 0.0;
-  sigxxx = 0.0;
-  sigxxy = 0.0;
-  sigxxxx = 0.0;
-}
-    
-    /**----------------------------------------------------------------------------
-          Include Files and Type Defines
-----------------------------------------------------------------------------**/
-#include 'strngs.h'
-    
-    /* define data structure to hold 2D points or vectors using floating point */
-typedef struct
-{
-  FLOAT32 x, y;
-} FPOINT;
-typedef FPOINT FVECTOR;
-    
-    #include 'bbgrid.h'
-#include 'blobbox.h'
-    
-       private:
-    // Initializes the indices to the last valid location in the given batch
-    // index.
-    void InitToLastOfBatch(int batch);
-    // Computes and sets t_ from the current indices_.
-    void SetTFromIndices();
-    
-      pProtoList = ProtoList;
-  iterate(pProtoList)
-  {
-    Proto = (PROTOTYPE *) first_node (pProtoList);
-    if ((Proto->Significant && KeepSigProtos) ||
-        (!Proto->Significant && KeepInsigProtos))
-    {
-      NewProto = (PROTOTYPE *)Emalloc(sizeof(PROTOTYPE));
-    }
-    }
-    
-    #include 'test/core/util/test_config.h'
-#include 'test/cpp/qps/benchmark_config.h'
-#include 'test/cpp/qps/driver.h'
-#include 'test/cpp/qps/report.h'
-#include 'test/cpp/qps/server.h'
-#include 'test/cpp/util/test_config.h'
-#include 'test/cpp/util/test_credentials_provider.h'
-    
-    static const int WARMUP = 5;
-static const int BENCHMARK = 5;
-    
-    static void sigint_handler(int x) {
-  gpr_atm_no_barrier_store(&grpc::testing::interop::g_got_sigint, true);
-}
-    
-    template <class T, class F>
-double sum(const T& container, F functor) {
-  double r = 0;
-  for (auto v = container.begin(); v != container.end(); v++) {
-    r += functor(*v);
-  }
-  return r;
-}
-    
-            // An edge end. It could be input or output edge end of a node.
-        // For node's input edge end, it's the source end, as the destination
-        // end is the node itself.
-        // For node's ouput edge end, it's the destination end, as the source
-        // end is the node itself.
-        class EdgeEnd
-        {
-        public:
-    }
-    
-    
-    {            auto it = opSchema.m_opSignature.m_typeConstraintMap.find(name);
-            assert(it == opSchema.m_opSignature.m_typeConstraintMap.end());
-            DataTypeSet d;
-            for (const auto& t : types)
-            {
-                d.insert(Utils::OpUtils::ToType(t));
-            }
-            opSchema.m_opSignature.m_typeConstraintMap.insert(std::make_pair(name, std::make_pair(d, desc)));
-        }
-    
-            const Status& Status::OK()
-        {
-            static Status s_ok;
-            return s_ok;
-        }
-    
-        // Taken from RS4
-    REGISTER_OPERATOR_SCHEMA(Affine)
-        .Description('Affine takes one input data (Tensor<T>) and produces one output '
-            'data (Tensor<T>) where the affine function, f(x)= alpha * x + beta is '
-            'applied to the tensor elementwise.')
-        .Input('X', 'Input tensor of any shape', 'T')
-        .Output('Y', 'Output tensor of same shape and type as input X.', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.')
-        .Attr('alpha', 'Scalar multiplication factor', AttrType::AttributeProto_AttributeType_FLOAT)
-        .Attr('beta', 'Scalar offset', AttrType::AttributeProto_AttributeType_FLOAT);
-    
-        // Taken from ONNX
-    REGISTER_OPERATOR_SCHEMA(Reshape)
-        .Description('Reshape the input tensor similar to numpy.reshape. '
-            '                                                                                    '
-            'It takes a tensor as input and an argument `shape`. It outputs the reshaped tensor. '
-            '                                                                             '
-            'At most one dimension of the new shape can be -1. In this case, the value is '
-            'inferred from the size of the tensor and the remaining dimensions. A dimensions '
-            'could also be 0, in which case the actual dimension value is going to be copied '
-            'from the shape argument.')
-        .Input('data', 'An input tensor.', 'T')
-        .Output('reshaped', 'Reshaped data.', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.')
-        .Attr('shape', 'Tensor of shape declarations for the output. Must be compatible with '
-            'the input. At most one dimension of the new shape can be -1. In this case, the '
-            'value is inferred from the size of the tensor and the remaining dimensions. A '
-            'dimension could also be 0, in which case the actual dimension value is going to '
-            'be copied from the input tensor.', AttrType::AttributeProto_AttributeType_INTS);
-    
-        // SaveData - save data in the file/files
-    // recordStart - Starting record number
-    // matricies - a map of section name (section:subsection) to data pointer. Data sepcifications from config file will be used to determine where and how to save data
-    // numRecords - number of records we are saving, can be zero if not applicable
-    // datasetSize - Size of the dataset
-    // byteVariableSized - for variable sized data, size of current block to be written, zero when not used, or ignored if not variable sized data
-    virtual bool SaveData(size_t recordStart, const std::map<std::wstring, void*, nocase_compare>& matrices, size_t numRecords, size_t datasetSize, size_t byteVariableSized = 0);
-    
-    constexpr ptrdiff_t STORAGE_SIZE = 10;
-constexpr size_t VEC_SIZE = 3;
-    
-      vector<int64_t> sizes = {2, 2};
-  tensor2->resize(sizes);
-  tensor2->fill(4);
-  tensor->add(*tensor2, 1);
-  assert(tensor->nDim() == 2);
-    
-      GlooCache(rank_type rank,
-            std::vector<std::shared_ptr<::gloo::transport::Device>> deviceList)
-   : _rank(rank)
-   , _deviceList(deviceList)
-  {}
-    
-    CUDAGenerator::CUDAGenerator(Context * context_)
-  : context(context_)
-{
-  // there's no reason to call THCRandom_init, because it is called
-  // during THCudaInit, which is called before this initializer
-  generator = THCRandom_getGenerator(context->thc_state);
-}
-    
-    bool WriteJpeg(const JPEGData& jpg, bool strip_metadata, JPEGOutput out) {
-  static const uint8_t kSOIMarker[2] = { 0xff, 0xd8 };
-  static const uint8_t kEOIMarker[2] = { 0xff, 0xd9 };
-  std::vector<HuffmanCodeTable> dc_codes;
-  std::vector<HuffmanCodeTable> ac_codes;
-  return (JPEGWrite(out, kSOIMarker, sizeof(kSOIMarker)) &&
-          EncodeMetadata(jpg, strip_metadata, out) &&
-          EncodeDQT(jpg.quant, out) &&
-          EncodeSOF(jpg, out) &&
-          BuildAndEncodeHuffmanCodes(jpg, out, &dc_codes, &ac_codes) &&
-          EncodeScan(jpg, dc_codes, ac_codes, out) &&
-          JPEGWrite(out, kEOIMarker, sizeof(kEOIMarker)) &&
-          (strip_metadata || JPEGWrite(out, jpg.tail_data)));
-}
-    
-    // Upsamples img_in with a box-filter, and returns an image with output
-// dimensions width x height.
-std::vector<float> Upsample2x2(const std::vector<float>& img_in,
-                               const int width, const int height) {
-  int w = (width + 1) / 2;
-  int h = (height + 1) / 2;
-  assert(img_in.size() == w * h);
-  std::vector<float> img_out(width * height);
-  for (int y = 0, p = 0; y < h; ++y) {
-    for (int x = 0; x < w; ++x, ++p) {
-      for (int iy = 0; iy < 2; ++iy) {
-        for (int ix = 0; ix < 2; ++ix) {
-          int yy = std::min(height - 1, 2 * y + iy);
-          int xx = std::min(width - 1, 2 * x + ix);
-          img_out[yy * width + xx] = img_in[p];
-        }
-      }
-    }
-  }
-  return img_out;
-}
-    
-    static const int kCrToRedTable[256] = {
-  -179, -178, -177, -175, -174, -172, -171, -170, -168, -167, -165, -164,
-  -163, -161, -160, -158, -157, -156, -154, -153, -151, -150, -149, -147,
-  -146, -144, -143, -142, -140, -139, -137, -136, -135, -133, -132, -130,
-  -129, -128, -126, -125, -123, -122, -121, -119, -118, -116, -115, -114,
-  -112, -111, -109, -108, -107, -105, -104, -102, -101, -100,  -98,  -97,
-   -95,  -94,  -93,  -91,  -90,  -88,  -87,  -86,  -84,  -83,  -81,  -80,
-   -79,  -77,  -76,  -74,  -73,  -72,  -70,  -69,  -67,  -66,  -64,  -63,
-   -62,  -60,  -59,  -57,  -56,  -55,  -53,  -52,  -50,  -49,  -48,  -46,
-   -45,  -43,  -42,  -41,  -39,  -38,  -36,  -35,  -34,  -32,  -31,  -29,
-   -28,  -27,  -25,  -24,  -22,  -21,  -20,  -18,  -17,  -15,  -14,  -13,
-   -11,  -10,   -8,   -7,   -6,   -4,   -3,   -1,    0,    1,    3,    4,
-     6,    7,    8,   10,   11,   13,   14,   15,   17,   18,   20,   21,
-    22,   24,   25,   27,   28,   29,   31,   32,   34,   35,   36,   38,
-    39,   41,   42,   43,   45,   46,   48,   49,   50,   52,   53,   55,
-    56,   57,   59,   60,   62,   63,   64,   66,   67,   69,   70,   72,
-    73,   74,   76,   77,   79,   80,   81,   83,   84,   86,   87,   88,
-    90,   91,   93,   94,   95,   97,   98,  100,  101,  102,  104,  105,
-   107,  108,  109,  111,  112,  114,  115,  116,  118,  119,  121,  122,
-   123,  125,  126,  128,  129,  130,  132,  133,  135,  136,  137,  139,
-   140,  142,  143,  144,  146,  147,  149,  150,  151,  153,  154,  156,
-   157,  158,  160,  161,  163,  164,  165,  167,  168,  170,  171,  172,
-   174,  175,  177,  178
+        
+    { private:
+  DISALLOW_COPY_AND_ASSIGN(URLRequestAsyncAsarJob);
 };
     
-    #include 'guetzli/jpeg_data.h'
     
-    size_t ClusterHistograms(JpegHistogram* histo, size_t* num, int* histo_indexes,
-                         uint8_t* depths);
+    {}  // namespace atom
     
-      // Fill in root table.
-  key = 0;
-  idx = 0;
-  for (len = 1; len <= kJpegHuffmanRootTableBits; ++len) {
-    for (; count[len] > 0; --count[len]) {
-      code.bits = len;
-      code.value = symbols[idx++];
-      reps = 1 << (kJpegHuffmanRootTableBits - len);
-      while (reps--) {
-        table[key++] = code;
-      }
+      // ui::EventRewriter:
+  ui::EventRewriteStatus RewriteEvent(
+      const ui::Event& event,
+      std::unique_ptr<ui::Event>* rewritten_event) override;
+  ui::EventRewriteStatus NextDispatchEvent(
+      const ui::Event& last_event,
+      std::unique_ptr<ui::Event>* new_event) override;
+    
+    namespace atom {
+    }
+    
+    class UnresponsiveSuppressor {
+ public:
+  UnresponsiveSuppressor();
+  ~UnresponsiveSuppressor();
+    }
+    
+    #include <memory>
+    
+    #ifndef ATOM_COMMON_API_REMOTE_CALLBACK_FREER_H_
+#define ATOM_COMMON_API_REMOTE_CALLBACK_FREER_H_
+#include 'atom/common/api/object_life_monitor.h'
+#include 'content/public/browser/web_contents_observer.h'
+    
+    // Attempts to send the current command line to an already running instance of
+// Chrome via a WM_COPYDATA message.
+// Returns true if a running Chrome is found and successfully notified.
+// |fast_start| is true when this is being called on the window fast start path.
+NotifyChromeResult AttemptToNotifyRunningChrome(HWND remote_window,
+                                                bool fast_start);
+    
+    #include <windows.h>
+    
+      // Sets time interval between updates. By default list of sources and their
+  // thumbnail are updated once per second. If called after StartUpdating() then
+  // it will take effect only after the next update.
+  virtual void SetUpdatePeriod(base::TimeDelta period) = 0;
+    
+      base::Lock mutex_;  // Protects the two members below.
+  // Whether one request to FetchMonitorFromWidget() has been made already.
+  bool request_sent_;
+  // The native display ID for the RenderFrameHost.
+  CGDirectDisplayID display_id_;
+    
+      // ppapi::host::ResourceMessageFilter implementation.
+  scoped_refptr<base::TaskRunner> OverrideTaskRunnerForMessage(
+      const IPC::Message& msg) override;
+  int32_t OnResourceMessageReceived(
+      const IPC::Message& msg,
+      ppapi::host::HostMessageContext* context) override;
+    
+    void leveldb_delete(
+    leveldb_t* db,
+    const leveldb_writeoptions_t* options,
+    const char* key, size_t keylen,
+    char** errptr) {
+  SaveError(errptr, db->rep->Delete(options->rep, Slice(key, keylen)));
+}
+    
+    TEST(FormatTest, InternalKey_EncodeDecode) {
+  const char* keys[] = { '', 'k', 'hello', 'longggggggggggggggggggggg' };
+  const uint64_t seq[] = {
+    1, 2, 3,
+    (1ull << 8) - 1, 1ull << 8, (1ull << 8) + 1,
+    (1ull << 16) - 1, 1ull << 16, (1ull << 16) + 1,
+    (1ull << 32) - 1, 1ull << 32, (1ull << 32) + 1
+  };
+  for (int k = 0; k < sizeof(keys) / sizeof(keys[0]); k++) {
+    for (int s = 0; s < sizeof(seq) / sizeof(seq[0]); s++) {
+      TestKey(keys[k], seq[s], kTypeValue);
+      TestKey('hello', 1, kTypeDeletion);
     }
   }
+}
+    
+    
+    {  std::vector< std::pair<int, InternalKey> > compact_pointers_;
+  DeletedFileSet deleted_files_;
+  std::vector< std::pair<int, FileMetaData> > new_files_;
+};
+    
+    static void TestEncodeDecode(const VersionEdit& edit) {
+  std::string encoded, encoded2;
+  edit.EncodeTo(&encoded);
+  VersionEdit parsed;
+  Status s = parsed.DecodeFrom(encoded);
+  ASSERT_TRUE(s.ok()) << s.ToString();
+  parsed.EncodeTo(&encoded2);
+  ASSERT_EQ(encoded, encoded2);
+}
+    
+    namespace {
+class MemTableInserter : public WriteBatch::Handler {
+ public:
+  SequenceNumber sequence_;
+  MemTable* mem_;
+    }
+    }
+    
+        // FLAGS_page_size is defaulted to 1024
+    if (FLAGS_page_size != 1024) {
+      char page_size[100];
+      snprintf(page_size, sizeof(page_size), 'PRAGMA page_size = %d',
+               FLAGS_page_size);
+      status = sqlite3_exec(db_, page_size, NULL, NULL, &err_msg);
+      ExecErrorCheck(status, err_msg);
+    }
+    
+    // Comma-separated list of operations to run in the specified order
+//   Actual benchmarks:
+//
+//   fillseq       -- write N values in sequential key order in async mode
+//   fillrandom    -- write N values in random key order in async mode
+//   overwrite     -- overwrite N values in random key order in async mode
+//   fillseqsync   -- write N/100 values in sequential key order in sync mode
+//   fillrandsync  -- write N/100 values in random key order in sync mode
+//   fillrand100K  -- write N/1000 100K values in random order in async mode
+//   fillseq100K   -- write N/1000 100K values in seq order in async mode
+//   readseq       -- read N times sequentially
+//   readseq100K   -- read N/1000 100K values in sequential order in async mode
+//   readrand100K  -- read N/1000 100K values in sequential order in async mode
+//   readrandom    -- read N times in random order
+static const char* FLAGS_benchmarks =
+    'fillseq,'
+    'fillseqsync,'
+    'fillrandsync,'
+    'fillrandom,'
+    'overwrite,'
+    'readrandom,'
+    'readseq,'
+    'fillrand100K,'
+    'fillseq100K,'
+    'readseq100K,'
+    'readrand100K,'
+    ;
+    
+    // Dump the contents of the file named by fname in text format to
+// *dst.  Makes a sequence of dst->Append() calls; each call is passed
+// the newline-terminated text corresponding to a single item found
+// in the file.
+//
+// Returns a non-OK result if fname does not name a leveldb storage
+// file, or if the file cannot be read.
+Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
+    
+      if (!getenv('HHVM_JIT_TIMER_NO_SORT')) {
+    auto totalSort = [] (const TimerName& a, const TimerName& b) {
+      return s_counters[a.name].total > s_counters[b.name].total;
+    };
+    std::sort(begin(names_copy), end(names_copy), totalSort);
+  }
+    
+      static void GetRealtimeTime(timespec &sp);
+  static void GetMonotonicTime(timespec &sp);
+  static int64_t GetCurrentTimeMicros();
+  static int64_t GetRusageMicros(Type t, Who who);
+  static int64_t GetThreadCPUTimeNanos();
+  const char *getName() const;
+  int64_t getMicroSeconds() const;
+  void report() const;
+    
+    
+void Instruction::SetBranchImmTarget(Instruction* target) {
+  assert(((target - this) & 3) == 0);
+  Instr branch_imm = 0;
+  uint32_t imm_mask = 0;
+  int offset = (target - this) >> kInstructionSizeLog2;
+  switch (BranchType()) {
+    case CondBranchType: {
+      branch_imm = Assembler::ImmCondBranch(offset);
+      imm_mask = ImmCondBranch_mask;
+      break;
+    }
+    case UncondBranchType: {
+      branch_imm = Assembler::ImmUncondBranch(offset);
+      imm_mask = ImmUncondBranch_mask;
+      break;
+    }
+    case CompareBranchType: {
+      branch_imm = Assembler::ImmCmpBranch(offset);
+      imm_mask = ImmCmpBranch_mask;
+      break;
+    }
+    case TestBranchType: {
+      branch_imm = Assembler::ImmTestBranch(offset);
+      imm_mask = ImmTestBranch_mask;
+      break;
+    }
+    default: not_reached();
+  }
+  SetInstructionBits(Mask(~imm_mask) | branch_imm);
+}
+    
+    /*
+ * Clean up any /tmp files that we created at process shutdown time.
+ */
+void embedded_data_cleanup();
+    
+    CurlShareResource::CurlShareResource() {
+  m_share = curl_share_init();
+}
+    
+    #include 'hphp/runtime/vm/jit/abi.h'
+#include 'hphp/runtime/vm/jit/arg-group.h'
+#include 'hphp/runtime/vm/jit/bc-marker.h'
+#include 'hphp/runtime/vm/jit/call-spec.h'
+#include 'hphp/runtime/vm/jit/code-gen-helpers.h'
+#include 'hphp/runtime/vm/jit/extra-data.h'
+#include 'hphp/runtime/vm/jit/ir-instruction.h'
+#include 'hphp/runtime/vm/jit/ir-opcode.h'
+#include 'hphp/runtime/vm/jit/prof-data.h'
+#include 'hphp/runtime/vm/jit/ssa-tmp.h'
+#include 'hphp/runtime/vm/jit/tc.h'
+#include 'hphp/runtime/vm/jit/translator-inline.h'
+#include 'hphp/runtime/vm/jit/types.h'
+#include 'hphp/runtime/vm/jit/unique-stubs.h'
+#include 'hphp/runtime/vm/jit/vasm-gen.h'
+#include 'hphp/runtime/vm/jit/vasm-instr.h'
+#include 'hphp/runtime/vm/jit/vasm-reg.h'
+#include 'hphp/runtime/vm/jit/write-lease.h'
+    
+    
+    {	String idbfs_err = String::utf8(p_idbfs_err);
+	if (!idbfs_err.empty()) {
+		print_line('IndexedDB not available: ' + idbfs_err);
+	}
+	os->set_idbfs_available(idbfs_err.empty());
+	// Ease up compatibility
+	ResourceLoader::set_abort_on_missing_resources(false);
+	Main::start();
+	os->main_loop_begin();
+	emscripten_set_main_loop(main_loop, 0, false);
+}
+    
+    // YCbCr H1V1 (1x1:1:1, 3 m_blocks per MCU) to RGB
+void jpeg_decoder::H1V1Convert()
+{
+  int row = m_max_mcu_y_size - m_mcu_lines_left;
+  uint8 *d = m_pScan_line_0;
+  uint8 *s = m_pSample_buf + row * 8;
+    }
+    
+        jmp_buf m_jmp_state;
+    mem_block *m_pMem_blocks;
+    int m_image_x_size;
+    int m_image_y_size;
+    jpeg_decoder_stream *m_pStream;
+    int m_progressive_flag;
+    uint8 m_huff_ac[JPGD_MAX_HUFF_TABLES];
+    uint8* m_huff_num[JPGD_MAX_HUFF_TABLES];      // pointer to number of Huffman codes per bit size
+    uint8* m_huff_val[JPGD_MAX_HUFF_TABLES];      // pointer to Huffman codes per bit size
+    jpgd_quant_t* m_quant[JPGD_MAX_QUANT_TABLES]; // pointer to quantization tables
+    int m_scan_type;                              // Gray, Yh1v1, Yh1v2, Yh2v1, Yh2v2 (CMYK111, CMYK4114 no longer supported)
+    int m_comps_in_frame;                         // # of components in frame
+    int m_comp_h_samp[JPGD_MAX_COMPONENTS];       // component's horizontal sampling factor
+    int m_comp_v_samp[JPGD_MAX_COMPONENTS];       // component's vertical sampling factor
+    int m_comp_quant[JPGD_MAX_COMPONENTS];        // component's quantization table selector
+    int m_comp_ident[JPGD_MAX_COMPONENTS];        // component's ID
+    int m_comp_h_blocks[JPGD_MAX_COMPONENTS];
+    int m_comp_v_blocks[JPGD_MAX_COMPONENTS];
+    int m_comps_in_scan;                          // # of components in scan
+    int m_comp_list[JPGD_MAX_COMPS_IN_SCAN];      // components in this scan
+    int m_comp_dc_tab[JPGD_MAX_COMPONENTS];       // component's DC Huffman coding table selector
+    int m_comp_ac_tab[JPGD_MAX_COMPONENTS];       // component's AC Huffman coding table selector
+    int m_spectral_start;                         // spectral selection start
+    int m_spectral_end;                           // spectral selection end
+    int m_successive_low;                         // successive approximation low
+    int m_successive_high;                        // successive approximation high
+    int m_max_mcu_x_size;                         // MCU's max. X size in pixels
+    int m_max_mcu_y_size;                         // MCU's max. Y size in pixels
+    int m_blocks_per_mcu;
+    int m_max_blocks_per_row;
+    int m_mcus_per_row, m_mcus_per_col;
+    int m_mcu_org[JPGD_MAX_BLOCKS_PER_MCU];
+    int m_total_lines_left;                       // total # lines left in image
+    int m_mcu_lines_left;                         // total # lines left in this MCU
+    int m_real_dest_bytes_per_scan_line;
+    int m_dest_bytes_per_scan_line;               // rounded up
+    int m_dest_bytes_per_pixel;                   // 4 (RGB) or 1 (Y)
+    huff_tables* m_pHuff_tabs[JPGD_MAX_HUFF_TABLES];
+    coeff_buf* m_dc_coeffs[JPGD_MAX_COMPONENTS];
+    coeff_buf* m_ac_coeffs[JPGD_MAX_COMPONENTS];
+    int m_eob_run;
+    int m_block_y_mcu[JPGD_MAX_COMPONENTS];
+    uint8* m_pIn_buf_ofs;
+    int m_in_buf_left;
+    int m_tem_flag;
+    bool m_eof_flag;
+    uint8 m_in_buf_pad_start[128];
+    uint8 m_in_buf[JPGD_IN_BUF_SIZE + 128];
+    uint8 m_in_buf_pad_end[128];
+    int m_bits_left;
+    uint m_bit_buf;
+    int m_restart_interval;
+    int m_restarts_left;
+    int m_next_restart_num;
+    int m_max_mcus_per_row;
+    int m_max_blocks_per_mcu;
+    int m_expanded_blocks_per_mcu;
+    int m_expanded_blocks_per_row;
+    int m_expanded_blocks_per_component;
+    bool  m_freq_domain_chroma_upsample;
+    int m_max_mcus_per_col;
+    uint m_last_dc_val[JPGD_MAX_COMPONENTS];
+    jpgd_block_t* m_pMCU_coefficients;
+    int m_mcu_block_max_zag[JPGD_MAX_BLOCKS_PER_MCU];
+    uint8* m_pSample_buf;
+    int m_crr[256];
+    int m_cbb[256];
+    int m_crg[256];
+    int m_cbg[256];
+    uint8* m_pScan_line_0;
+    uint8* m_pScan_line_1;
+    jpgd_status m_error_code;
+    bool m_ready_flag;
+    int m_total_bytes_read;
+    
+    #endif /* HAVE_ARM_NE10 */
+    
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+    
+       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+   ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+   OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+   PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+    
+        if (sub_batch->Has(String::NewSymbol('column_family'))) {
+      if (!has_key_for_array(sub_batch, 'put') &&
+          !has_key_for_array(sub_batch, 'delete')) {
+        return scope.Close(Boolean::New(false));
+      }
+    }
+    
+     public: // Insert/Update
+  /// Insert value before/after pivot in (list: key). Return the length.
+  /// May throw RedisListException
+  int InsertBefore(const std::string& key, const std::string& pivot,
+                   const std::string& value);
+  int InsertAfter(const std::string& key, const std::string& pivot,
+                  const std::string& value);
+    
+     private:
+  std::shared_ptr<Logger> info_log_;
+  const unique_ptr<SequentialFileReader> file_;
+  Reporter* const reporter_;
+  bool const checksum_;
+  char* const backing_store_;
+  Slice buffer_;
+  bool eof_;   // Last Read() indicated EOF by returning < kBlockSize
+  bool read_error_;   // Error occurred while reading from file
+    
+    
+    {   private:
+     const std::set<uint32_t> m_ignore_histograms;
+ };
+    
+    
+    {  void clear() {
+    user_key.clear();
+    sequence = 0;
+    type = kTypeDeletion;
+  }
+};
