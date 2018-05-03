@@ -1,51 +1,72 @@
 
         
-            parser.add_argument('project',
-                        metavar='account/project',
-                        help='Shippable account/project')
+        
+def check_alphabetical(lines):
+    '''
+    checks if all entries per section are in alphabetical order based in entry title
+    '''
+    sections = {}
+    section_line_num = {}
+    for line_num, line in enumerate(lines):
+        if line.startswith(anchor):
+            category = line.split(anchor)[1].strip()
+            sections[category] = []
+            section_line_num[category] = line_num
+            continue
+        if not line.startswith('|') or line.startswith('|---'):
+            continue
+        title = [x.strip() for x in line.split('|')[1:-1]][0].upper()
+        sections[category].append(title)
     
-        'ipv6': re.compile(
-        r'''^
-            (?:{0}:){{7}}{0}|           # uncompressed: 1:2:3:4:5:6:7:8
-            (?:{0}:){{1,6}}:|           # compressed variants, which are all
-            (?:{0}:)(?::{0}){{1,6}}|    # a::b for various lengths of a,b
-            (?:{0}:){{2}}(?::{0}){{1,5}}|
-            (?:{0}:){{3}}(?::{0}){{1,4}}|
-            (?:{0}:){{4}}(?::{0}){{1,3}}|
-            (?:{0}:){{5}}(?::{0}){{1,2}}|
-            (?:{0}:){{6}}(?::{0})|      # ...all with 2 <= a+b <= 7
-            :(?::{0}){{1,6}}|           # ::ffff(:ffff...)
-            {0}?::|                     # ffff::, ::
-                                        # ipv4-in-ipv6 variants
-            (?:0:){{6}}(?:{0}\.){{3}}{0}|
-            ::(?:ffff:)?(?:{0}\.){{3}}{0}|
-            (?:0:){{5}}ffff:(?:{0}\.){{3}}{0}
-            $
-        '''.format(ipv6_component), re.X | re.I
-    ),
+        def __init__(self, request, key):
+        form_matches = request.form.getlist(key)
+        buf = ['You tried to access the file '%s' in the request.files '
+               'dictionary but it does not exist.  The mimetype for the request '
+               'is '%s' instead of 'multipart/form-data' which means that no '
+               'file contents were transmitted.  To fix this error you should '
+               'provide enctype='multipart/form-data' in your form.' %
+               (key, request.mimetype)]
+        if form_matches:
+            buf.append('\n\nThe browser instead transmitted some file names. '
+                       'This was submitted: %s' % ', '.join(''%s'' % x
+                            for x in form_matches))
+        self.msg = ''.join(buf)
     
-            return data['current_version']
-    
-        def remove(self, key):
-        hash_index = self._hash_function(key)
-        for index, item in enumerate(self.table[hash_index]):
-            if item.key == key:
-                del self.table[hash_index][index]
-                return
-        raise KeyError('Key not found')
-    
-    
-class Transaction(object):
-    
-    
-if __name__ == '__main__':
-    RemoveDuplicateUrls.run()
-
+        class _FakeSignal(object):
+        '''If blinker is unavailable, create a fake class with the same
+        interface that allows sending of signals but will fail with an
+        error on anything else.  Instead of doing anything on send, it
+        will just ignore the arguments and do nothing instead.
+        '''
     
     
-class Deck(object):
-    
-        def bfs(self, source, dest):
-        # Use self.visited_ids to track visited nodes
-        # Use self.lookup to translate a person_id to a Person
+def test_custom_config_class():
+    class Config(flask.Config):
         pass
+    
+        logging_plugin = pytestconfig.pluginmanager.unregister(
+        name='logging-plugin')
+    
+    
+def main():
+    tornado.options.parse_command_line()
+    application = tornado.web.Application([
+        (r'/', MainHandler),
+    ])
+    http_server = tornado.httpserver.HTTPServer(application)
+    http_server.listen(options.port)
+    tornado.ioloop.IOLoop.current().start()
+    
+    # Increasing --n without --keepalive will eventually run into problems
+# due to TIME_WAIT sockets
+define('n', type=int, default=15000)
+define('c', type=int, default=25)
+define('keepalive', type=bool, default=False)
+define('quiet', type=bool, default=False)
+    
+    import logging
+import tornado.escape
+import tornado.ioloop
+import tornado.web
+import os.path
+import uuid
