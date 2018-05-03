@@ -1,208 +1,128 @@
 
         
-        #include 'llvm/ADT/SetVector.h'
+        // WorkloadStats is used to track per request timing for different states
+// of the VM.  At the entrypoint to a change of vm state a WorkloadStats object
+// should be made to guard the state change with appropriate timers and
+// counters.
+//
+// The states tracked are:
+//  - In a request (this is a superset of the interpreter state)
+//  - In the interpreter through Dispatch, or DispatchBB (interpOne disregarded)
+//  - In the JIT (currently tracks time inside the translate routine)
+//
+// Note the time in the TC is not tracked.  This is roughly:
+//   Time in request - Time in interp
+//
+// This gives us the relative interp time formula of:
+//   Relative interp time = Time in interp / Time in request
+struct WorkloadStats final {
+  enum State {
+    InRequest,
+    // -> InInterp   Okay (entering Dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InInterp,
+    // -> InRequest  Okay (leaving the dispatch loop)
+    // -> InTrans    Okay (entering translate)
+    InTrans,
+    // -> InRequest  Okay (leaving translate)
+    // -> InInterp   Okay (leaving translate)
+  };
+    }
     
-    #ifndef SWIFT_SIL_OWNERSHIPCHECKER_H
-#define SWIFT_SIL_OWNERSHIPCHECKER_H
+    const StaticString
+  s_sec('sec'),
+  s_usec('usec'),
+  s_minuteswest('minuteswest'),
+  s_dsttime('dsttime');
     
-    /// Index the given module and store the results to \p indexStorePath.
-///
-/// \param module The module to index.
-///
-/// \param indexUnitTokens A list of unique identifiers for the index units to
-/// be written. This may either be one unit per source file of \p module, or it
-/// may be a single unit, in which case all the index information will be
-/// combined into a single unit.
-///
-/// \param moduleUnitToken A unique identifier for this module unit in the form
-/// of a file path. Only used if \p indexUnitTokens are specified for each
-/// source file, otherwise the single \p indexUnitTokens value is used instead.
-///
-/// \param indexStorePath The location to write the indexing data to.
-///
-/// \param indexSystemModules If true, emit index data for imported serialized
-/// swift system modules.
-///
-/// \param isDebugCompilation true for non-optimized compiler invocation.
-///
-/// \param targetTriple The target for this compilation.
-///
-/// \param dependencyTracker The set of dependencies seen while building.
-bool indexAndRecord(ModuleDecl *module, ArrayRef<std::string> indexUnitTokens,
-                    StringRef moduleUnitToken, StringRef indexStorePath,
-                    bool indexSystemModules, bool isDebugCompilation,
-                    StringRef targetTriple,
-                    const DependencyTracker &dependencyTracker);
-// FIXME: indexUnitTokens could be StringRef, but that creates an impedance
-// mismatch in the caller.
+      bool isPipelineEmpty();
     
-    /// Attempt to get a doc comment from the declaration, or other inherited
-/// sources, like from base classes or protocols.
-Optional<DocComment *> getCascadingDocComment(swift::markup::MarkupContext &MC,
-                                             const Decl *D);
+    public const char *
+magic_getpath(const char *magicfile, int action)
+{
+  if (magicfile != NULL)
+    return magicfile;
+    }
     
-    SILFunction *SILDebugScope::getParentFunction() const {
-  if (InlinedCallSite)
-    return InlinedCallSite->getParentFunction();
-  if (auto *ParentScope = Parent.dyn_cast<const SILDebugScope *>())
-    return ParentScope->getParentFunction();
-  return Parent.get<SILFunction *>();
+      auto checkBounds = [&] {
+    if (!bounded) return;
+    index = gen(env, SubInt, index, cns(env, base));
+    auto const ok = gen(env, CheckRange, index, cns(env, nTargets));
+    gen(env, JmpZero, getBlock(env, defaultOff), ok);
+    bounded = false;
+  };
+  auto const offsets = iv.range32();
+    
+    struct IRGS;
+    
+      void sync(Address begin = nullptr,  Address end = nullptr) {
+    if (!begin) begin = m_base;
+    if (!end) end = m_frontier;
+    syncDirect(toDestAddress(begin), toDestAddress(end));
+  }
+    
+      // Did you forget to specify ControlFlowInfo?
+  assertx(!instrIsControlFlow(extra->opcode));
+  auto const helper = interpOneEntryPoints[size_t(extra->opcode)];
+  auto const args = argGroup(env, inst)
+    .ssa(1)
+    .addr(sp, cellsToBytes(extra->spOffset.offset))
+    .imm(extra->bcOff);
+    
+    // When a and b are equivalent objects, we return a to
+// make sorting stable.
+template <typename T>
+constexpr T constexpr_min(T a) {
+  return a;
 }
+template <typename T, typename... Ts>
+constexpr T constexpr_min(T a, T b, Ts... ts) {
+  return b < a ? constexpr_min(b, ts...) : constexpr_min(a, ts...);
+}
+    
+      // An IOBuf around a buffer it doesn't own
+  uint8_t localbuf[1234];
+  fillBuf(localbuf, 1234, gen);
+  unique_ptr<IOBuf> iob3(IOBuf::wrapBuffer(localbuf, sizeof(localbuf)));
+    
+    #include <folly/portability/GTest.h>
+    
+    TEST(MemoryIdler, futexWaitAwokenEarly) {
+  StrictMock<Futex<MockAtom>> fut;
+  auto clock = MockClock::setup();
+  auto begin = MockClock::time_point(std::chrono::seconds(100));
+  auto idleTimeout = MemoryIdler::defaultIdleTimeout.load();
+    }
+    
+    
+    {
+    {size_t qfind_first_byte_of_byteset(
+    const StringPieceLite haystack,
+    const StringPieceLite needles) {
+  SparseByteSet s;
+  for (auto needle : needles) {
+    s.add(uint8_t(needle));
+  }
+  for (size_t index = 0; index < haystack.size(); ++index) {
+    if (s.contains(uint8_t(haystack[index]))) {
+      return index;
+    }
+  }
+  return std::string::npos;
+}
+} // namespace detail
+} // namespace folly
 
     
     
-    {  /// Return a hash code of any components from these options that should
-  /// contribute to a Swift Bridging PCH hash.
-  llvm::hash_code getPCHHashComponents() const {
-    // Nothing here that contributes anything significant when emitting the PCH.
-    return llvm::hash_value(0);
-  }
-};
-    
-    namespace swift {
-    }
-    
-    #include 'swift/AST/Type.h'
-#include 'llvm/ADT/ArrayRef.h'
-#include 'llvm/ADT/Optional.h'
-    
-    /**
- * Base class for all tesseract APIs.
- * Specific classes can add ability to work on different inputs or produce
- * different outputs.
- * This class is mostly an interface layer on top of the Tesseract instance
- * class to hide the data types so that users of this class don't have to
- * include any other Tesseract headers.
- */
-class TESS_API TessBaseAPI {
- public:
-  TessBaseAPI();
-  virtual ~TessBaseAPI();
-    }
-    
-    
-    {    FILE* fout_;                  // output file pointer
-    TessResultRenderer* next_;    // Can link multiple renderers together
-    bool happy_;                  // I get grumpy when the disk fills up, etc.
-};
-    
-    namespace tesseract {
-double DotProductAVX(const double* u, const double* v, int n) {
-  fprintf(stderr, 'DotProductAVX can't be used on Android\n');
-  abort();
-}
-}  // namespace tesseract
-    
-    // Factory makes and returns an IntSimdMatrix (sub)class of the best
-// available type for the current architecture.
-/* static */
-IntSimdMatrix* IntSimdMatrix::GetFastestMultiplier() {
-  IntSimdMatrix* multiplier = nullptr;
-  if (SIMDDetect::IsAVX2Available()) {
-    multiplier = new IntSimdMatrixAVX2();
-  } else if (SIMDDetect::IsSSEAvailable()) {
-    multiplier = new IntSimdMatrixSSE();
+    {    // Publish the map to other threads.
+    numMapsAllocated_.fetch_add(1, std::memory_order_release);
+    DCHECK_EQ(nextMapIdx + 1,
+      numMapsAllocated_.load(std::memory_order_relaxed));
   } else {
-    // Default c++ implementation.
-    multiplier = new IntSimdMatrix();
+    // If we lost the race, we'll have to wait for the next map to get
+    // allocated before doing any insertion here.
+    detail::atomic_hash_spin_wait([&] {
+      return nextMapIdx >= numMapsAllocated_.load(std::memory_order_acquire);
+    });
   }
-  return multiplier;
-}
-    
-      // Rounds the size up to a multiple of the input register size (in int8_t).
-  int RoundInputs(int size) const {
-    return Roundup(size, num_inputs_per_register_);
-  }
-  // Rounds the size up to a multiple of the output register size (in int32_t).
-  int RoundOutputs(int size) const {
-    return Roundup(size, num_outputs_per_register_);
-  }
-    
-    /*************************************************************************
- * unrej_good_chs()
- * Unreject POTENTIAL rejects if the blob passes the blob and outline checks
- *************************************************************************/
-void Tesseract::unrej_good_chs(WERD_RES *word, ROW *row) {
-  if (word->bln_boxes == nullptr ||
-      word->rebuild_word == nullptr || word->rebuild_word->blobs.empty())
-    return;
-    }
-    
-      // Make a copy of part, and reset parts_splitted.
-  ColPartition* right_part = part->CopyButDontOwnBlobs();
-  parts_splitted->delete_data_pointers();
-  parts_splitted->clear();
-    
-    	new_anim = memnew(Button);
-	new_anim->set_flat(true);
-	hbc_animlist->add_child(new_anim);
-	new_anim->set_h_size_flags(SIZE_EXPAND_FILL);
-	new_anim->connect('pressed', this, '_animation_add');
-    
-    void VideoStreamPlaybackTheora::set_mix_callback(AudioMixCallback p_callback, void *p_userdata) {
-    }
-    
-    #if defined(MBEDTLS_PLATFORM_SNPRINTF_MACRO) && !defined(MBEDTLS_PLATFORM_C)
-#error 'MBEDTLS_PLATFORM_SNPRINTF_MACRO defined, but not all prerequisites'
-#endif
-    
-    
-    {		void (*tree_create_node_func)(void *, const NodePath &p_parent, const String &p_type, const String &p_name);
-		void (*tree_instance_node_func)(void *, const NodePath &p_parent, const String &p_path, const String &p_name);
-		void (*tree_remove_node_func)(void *, const NodePath &p_at);
-		void (*tree_remove_and_keep_node_func)(void *, const NodePath &p_at, ObjectID p_keep_id);
-		void (*tree_restore_node_func)(void *, ObjectID p_id, const NodePath &p_at, int p_at_pos);
-		void (*tree_duplicate_node_func)(void *, const NodePath &p_at, const String &p_new_name);
-		void (*tree_reparent_node_func)(void *, const NodePath &p_at, const NodePath &p_new_place, const String &p_new_name, int p_at_pos);
-	};
-    
-    		class_desc->push_indent(1);
-		class_desc->push_table(2);
-		class_desc->set_table_column_expand(1, 1);
-    
-    				//const btTransform& wheelTrans = getWheelTransformWS( i );
-    
-    	// Copy the built assembly to the assemblies directory
-	String api_assembly_dir = api_sln_dir.plus_file('bin').plus_file(api_build_config);
-	if (!GodotSharpBuilds::copy_api_assembly(api_assembly_dir, res_assemblies_dir, api_name, p_api_type))
-		return false;
-    
-    	bool *bucket_cache_visited;
-	Rect2i bucket_cache_rect;
-	int bucket_cache_tile;
-	PoolVector<Vector2> bucket_cache;
-	List<Point2i> bucket_queue;
-    
-    void WakeUpLock::Lock() {
-    ::wakeupLock_Lock(object_);
-}
-    
-    #include <exception>
-#include 'comm/xlogger/xlogger.h'
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    ScopeJEnv::ScopeJEnv(JavaVM* jvm, jint _capacity)
-    : vm_(jvm), env_(NULL), we_attach_(false), status_(0) {
-    ASSERT(jvm);
-    do {
-        env_ = (JNIEnv*)pthread_getspecific(g_env_key);
-        
-        if (NULL != env_) {
-            break;
-        }
-        
-        status_ = vm_->GetEnv((void**) &env_, JNI_VERSION_1_6);
-    }
-    }
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
