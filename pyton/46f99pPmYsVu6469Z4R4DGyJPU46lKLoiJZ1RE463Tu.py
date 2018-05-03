@@ -1,196 +1,167 @@
 
         
-            def get_converter(self, mime):
-        if is_valid_mime(mime):
-            for converter_class in plugin_manager.get_converters():
-                if converter_class.supports(mime):
-                    return converter_class(mime)
+        
+def check_entry(line_num, segments):
+    # START Title
+    title = segments[index_title].upper()
+    if title.endswith(' API'):
+        add_error(line_num, 'Title should not contain 'API'')
+    # END Title
+    # START Description
+    # first character should be capitalized
+    char = segments[index_desc][0]
+    if char.upper() != char:
+        add_error(line_num, 'first character of description is not capitalized')
+    # last character should not punctuation
+    char = segments[index_desc][-1]
+    if char in punctuation:
+        add_error(line_num, 'description should not end with {}'.format(char))
+    desc_length = len(segments[index_desc])
+    if desc_length > 100:
+        add_error(line_num, 'description should not exceed 100 characters (currently {})'.format(desc_length))
+    # END Description
+    # START Auth
+    # values should conform to valid options only
+    auth = segments[index_auth]
+    if auth != 'No' and (not auth.startswith('`') or not auth.endswith('`')):
+        add_error(line_num, 'auth value is not enclosed with `backticks`')
+    if auth.replace('`', '') not in auth_keys:
+        add_error(line_num, '{} is not a valid Auth option'.format(auth))
+    # END Auth
+    # START HTTPS
+    # values should conform to valid options only
+    https = segments[index_https]
+    if https not in https_keys:
+        add_error(line_num, '{} is not a valid HTTPS option'.format(https))
+    # END HTTPS
+    # START CORS
+    # values should conform to valid options only
+    cors = segments[index_cors]
+    if cors not in cors_keys:
+        add_error(line_num, '{} is not a valid CORS option'.format(cors))
+    # END CORS
+    # START Link
+    # url should be wrapped in '[Go!]()' Markdown syntax
+    link = segments[index_link]
+    if not link.startswith('[Go!](http') or not link.endswith(')'):
+        add_error(line_num, 'link syntax should be '[Go!](LINK)'')
+    # END Link
     
-            for chunk in self.msg.iter_body(self.CHUNK_SIZE):
-            if not converter and b'\0' in chunk:
-                converter = self.conversion.get_converter(self.mime)
-                if not converter:
-                    raise BinarySuppressedError()
-            body.extend(chunk)
     
+httpie_info = packages.pop('httpie')
+print('''
+  url '{url}'
+  sha256 '{sha256}'
+'''.format(**httpie_info))
     
-@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
-@pytest.mark.parametrize('filename', filenames)
-def test_rst_file_syntax(filename):
-    p = subprocess.Popen(
-        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE
-    )
-    err = p.communicate()[1]
-    assert p.returncode == 0, err.decode('utf8')
-
+    from httpie.utils import repr_dict_nice
     
-    
-@mock.patch('httpie.core.get_response')
-def test_error_traceback(get_response):
-    exc = ConnectionError('Connection aborted')
+        exc = ConnectionError('Connection aborted')
     exc.request = Request(method='GET', url='http://www.google.com')
     get_response.side_effect = exc
-    with raises(ConnectionError):
-        main(['--ignore-stdin', '--traceback', 'www.google.com'])
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
     
     
-@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
-def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
-    r = http(follow_flag, httpbin.url + '/redirect/2')
-    assert r.count('HTTP/1.1') == 1
-    assert HTTP_OK in r
+class TestClientCert:
     
-    
-def test_unicode_form_item_verbose(httpbin):
-    r = http('--verbose', '--form',
-             'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
-    assert HTTP_OK in r
-    assert UNICODE in r
-    
-    
-DEFAULT_CONFIG_DIR = str(os.environ.get(
-    'HTTPIE_CONFIG_DIR',
-    os.path.expanduser('~/.httpie') if not is_windows else
-    os.path.expandvars(r'%APPDATA%\\httpie')
-))
-    
-        def unregister(self, plugin):
-        self._plugins.remove(plugin)
-    
-            Keyword:                   'bold #004461',   # class: 'k'
-        Keyword.Constant:          'bold #004461',   # class: 'kc'
-        Keyword.Declaration:       'bold #004461',   # class: 'kd'
-        Keyword.Namespace:         'bold #004461',   # class: 'kn'
-        Keyword.Pseudo:            'bold #004461',   # class: 'kp'
-        Keyword.Reserved:          'bold #004461',   # class: 'kr'
-        Keyword.Type:              'bold #004461',   # class: 'kt'
-    
-        return out
-    
-    # Set default logging handler to avoid 'No handler found' warnings.
-import logging
-try:  # Python 2.7+
-    from logging import NullHandler
-except ImportError:
-    class NullHandler(logging.Handler):
-        def emit(self, record):
-            pass
-    
-    Some codes have multiple names, and both upper- and lower-case versions of
-the names are allowed. For example, ``codes.ok``, ``codes.OK``, and
-``codes.okay`` all correspond to the HTTP status code 200.
-'''
-    
-    # The checksum algorithm must match with the algorithm in ShellModule.checksum() method
-checksum = secure_hash
-checksum_s = secure_hash_s
-    
-    from __future__ import print_function
-    
-        'hostname': re.compile(
-        r'''^
-            {label}                     # We must have at least one label
-            (?:\.{label})*              # Followed by zero or more .labels
-            $
-        '''.format(label=label), re.X | re.I | re.UNICODE
-    ),
-    
-        def test_get_gcp_resource_from_methodId(self):
-        input_data = 'compute.urlMaps.list'
-        actual = GCPUtils.get_gcp_resource_from_methodId(input_data)
-        self.assertEqual('urlMaps', actual)
-        input_data = None
-        actual = GCPUtils.get_gcp_resource_from_methodId(input_data)
-        self.assertFalse(actual)
-        input_data = 666
-        actual = GCPUtils.get_gcp_resource_from_methodId(input_data)
-        self.assertFalse(actual)
-    
-        terminal_stderr_re = [
-        re.compile(r'% ?Error: '),
-        re.compile(r'^% \w+', re.M),
-        re.compile(r'% ?Bad secret'),
-        re.compile(r'invalid input', re.I),
-        re.compile(r'(?:incomplete|ambiguous) command', re.I),
-        re.compile(r'connection timed out', re.I),
-        re.compile(r'[^\r\n]+ not found', re.I),
-        re.compile(r''[^']' +returned error code: ?\d+'),
-        re.compile(r'syntax error'),
-        re.compile(r'unknown command'),
-        re.compile(r'Error\[\d+\]: ', re.I),
-        re.compile(r'Error:', re.I)
-    ]
-    
-        def on_open_shell(self):
+        @property
+    def path(self):
+        '''Return the config file path creating basedir, if needed.'''
+        path = self._get_path()
         try:
-            self._exec_cli_command(b'environment no more')
-        except AnsibleConnectionFailure:
-            raise AnsibleConnectionFailure('unable to set terminal parameters')
-
+            os.makedirs(os.path.dirname(path), mode=0o700)
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise
+        return path
     
-      base.LoadJsonDefaultsIntoVim()
+        def prompt_password(self, host):
+        try:
+            self.value = self._getpass(
+                'http: password for %s@%s: ' % (self.key, host))
+        except (EOFError, KeyboardInterrupt):
+            sys.stderr.write('\n')
+            sys.exit(0)
     
-    +----------+     +----------+       +--------+     +-----------+    +---------+
-|          |  => | Work Ids |    => |        |  => | Call Q    | => |         |
-|          |     +----------+       |        |     +-----------+    |         |
-|          |     | ...      |       |        |     | ...       |    |         |
-|          |     | 6        |       |        |     | 5, call() |    |         |
-|          |     | 7        |       |        |     | ...       |    |         |
-| Process  |     | ...      |       | Local  |     +-----------+    | Process |
-|  Pool    |     +----------+       | Worker |                      |  #1..n  |
-| Executor |                        | Thread |                      |         |
-|          |     +----------- +     |        |     +-----------+    |         |
-|          | <=> | Work Items | <=> |        | <=  | Result Q  | <= |         |
-|          |     +------------+     |        |     +-----------+    |         |
-|          |     | 6: call()  |     |        |     | ...       |    |         |
-|          |     |    future  |     |        |     | 4, result |    |         |
-|          |     | ...        |     |        |     | 3, except |    |         |
-+----------+     +------------+     +--------+     +-----------+    +---------+
+    if (twisted_version.major, twisted_version.minor, twisted_version.micro) >= (15, 5, 0):
+    collect_ignore += _py_files('scrapy/xlib/tx')
     
-    def main():
-    for name, fn in [('sequential', sequential),
-                     ('processes', with_process_pool_executor),
-                     ('threads', with_thread_pool_executor)]:
-        sys.stdout.write('%s: ' % name.ljust(12))
-        start = time.time()
-        if fn() != [True] * len(PRIMES):
-            sys.stdout.write('failed\n')
-        else:
-            sys.stdout.write('%.2f seconds\n' % (time.time() - start))
+        def _reset_stats(self):
+        self.tail.clear()
+        self.start = self.lastmark = self.lasttime = time()
     
-    
-class Benchmark(object):
-    def enter_exit(self, count):
-        '''Measures the overhead of the nested 'with' statements
-        when using many contexts.
-        '''
-        if count < 0:
+        def run(self, args, opts):
+        if opts.list:
+            self._list_templates()
             return
-        with self.make_context():
-            self.enter_exit(count - 1)
+        if opts.dump:
+            template_file = self._find_template(opts.dump)
+            if template_file:
+                with open(template_file, 'r') as f:
+                    print(f.read())
+            return
+        if len(args) != 2:
+            raise UsageError()
     
     
-class Application(tornado.web.Application):
-    def __init__(self):
-        handlers = [
-            (r'/', MainHandler),
-            (r'/chatsocket', ChatSocketHandler),
-        ]
-        settings = dict(
-            cookie_secret='__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__',
-            template_path=os.path.join(os.path.dirname(__file__), 'templates'),
-            static_path=os.path.join(os.path.dirname(__file__), 'static'),
-            xsrf_cookies=True,
-        )
-        super(Application, self).__init__(handlers, **settings)
+def get_line_value(r, n):
+    rls = r.split('\r\n')
+    if len(rls) < n + 1:
+        return None
     
-        def new_future_import(self, old):
-        new = FromImport('__future__',
-                         [Name('absolute_import', prefix=' '), Comma(),
-                          Name('division', prefix=' '), Comma(),
-                          Name('print_function', prefix=' ')])
-        if old is not None:
-            new.prefix = old.prefix
-        return new
+                # Is there a bitwise operation to do this?
+            if v == 0xFFFF:
+                v = -1
+    
+    	# Track the line at which the error occurred in case this is
+	# generated from a lexer.  We need to track this since the
+        # unexpected char doesn't carry the line info.
+        self.line = None
+    
+    A character stream is usually the first element in the pipeline of a typical
+ANTLR3 application. It is used as the input for a Lexer.
+    
+            if self.closed:
+            raise ValueError('I/O operation on closed file')
+        if not self.seekable:
+            raise OSError('cannot seek')
+        if whence == 1:
+            pos = pos + self.size_read
+        elif whence == 2:
+            pos = pos + self.chunksize
+        if pos < 0 or pos > self.chunksize:
+            raise RuntimeError
+        self.file.seek(self.offset + pos, 0)
+        self.size_read = pos
+    
+        def set_debuglevel(self, level):
+        '''Set the debugging level.  Argument 'level' means:
+        0: no debugging output (default)
+        1: print commands and responses but not body text etc.
+        2: also print raw lines read and sent before stripping CR/LF'''
+    
+        objects = []
+    libs = ['shell32.lib', 'comdlg32.lib', 'wsock32.lib', 'user32.lib', 'oleaut32.lib']
+    for moddefn in moddefns:
+        print('# Module', moddefn.name)
+        for file in moddefn.sourceFiles:
+            base = os.path.basename(file)
+            base, ext = os.path.splitext(base)
+            objects.append(base + '.obj')
+            print(r'$(temp_dir)\%s.obj: '%s'' % (base, file))
+            print('\t@$(CC) -c -nologo /Fo$* $(cdl) $(c_debug) /D BUILD_FREEZE', end=' ')
+            print(''-I$(pythonhome)/Include'  '-I$(pythonhome)/PC' \\')
+            print('\t\t$(cflags) $(cdebug) $(cinclude) \\')
+            extra = moddefn.GetCompilerOptions()
+            if extra:
+                print('\t\t%s \\' % (' '.join(extra),))
+            print('\t\t'%s'' % file)
+            print()
+    
+    class BadColor(Exception):
+    pass
