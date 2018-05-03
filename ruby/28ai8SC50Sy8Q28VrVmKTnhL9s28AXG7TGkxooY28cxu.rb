@@ -1,40 +1,54 @@
 
         
-            def self.cleanup_lockfiles
-      return unless HOMEBREW_CACHE_FORMULA.directory?
-      candidates = HOMEBREW_CACHE_FORMULA.children
-      lockfiles  = candidates.select { |f| f.file? && f.extname == '.brewing' }
-      lockfiles.each do |file|
-        next unless file.readable?
-        file.open.flock(File::LOCK_EX | File::LOCK_NB) && file.unlink
-      end
-    end
-    
-          # Find commands in the path
-      unless (exts = external_commands).empty?
-        puts
-        puts 'External commands'
-        puts_columns exts
-      end
-    end
+          def evernote_consumer_secret
+    (config = Devise.omniauth_configs[:evernote]) && config.strategy.consumer_secret
   end
     
-      # Use this method to generate standard caveats.
-  def standard_instructions(home_name, home_value = libexec)
-    <<-EOS.undent
-      Before you can use these tools you must export some variables to your $SHELL.
-    
-          def self.generate_helpers!(routes=nil)
-        routes ||= begin
-          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
-          Devise::URL_HELPERS.slice(*mappings)
-        end
-    
-        proxy = Devise::Hooks::Proxy.new(warden)
-    
-        def to_a
-      [major, minor, patch, pre].compact
+        def setup!(scheduler, mutex)
+      @scheduler = scheduler
+      @mutex = mutex
+      setup if respond_to?(:setup)
     end
     
-    class ActivityPub::EmojiSerializer < ActiveModel::Serializer
-  include RoutingHelper
+      def tumblr_oauth_token
+    service.token
+  end
+    
+    require 'rubygems'  # install rubygems
+require 'hpricot'   # gem install hpricot
+require 'timeout'
+    
+      File.unlink(out) if (File.size(out) == 0)
+    
+            when :err
+          case s[:last]
+            when :pass
+              # Oops got a -ERR after a pass so its crap ignore the pass
+              # But report it, might be helpfull for guessing :-)
+    
+    
+    {	if ln =~ /;(read|write)_(handle|filename)=/
+		parts = ln.split(' ')
+		if (parts[0] == 'mov')
+			parts2 = parts[2].split('=')
+			label = parts2[0]
+			label.slice!(0,1)
+			old = parts2[1]
+			new = addrs[label]
+			#puts '%32s: %s -> %x' % [label, old, new]
+			replaces << [label, old, new.to_s(16)]
+		end
+	end
+}
+    
+          def core_gem_names
+        %w(capistrano airbrussh rake sshkit net-ssh) & Gem.loaded_specs.keys
+      end
+    
+            def <<(value)
+          values << value
+        end
+    
+      desc 'Update server(s) by setting up a new release.'
+  task :updating do
+  end
