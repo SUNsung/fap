@@ -1,11 +1,65 @@
 
         
-            fig = plt.figure('scikit-learn sample w/o replacement benchmark results')
-    plt.title('n_population = %s, n_times = %s' %
-              (opts.n_population, opts.n_times))
-    ax = fig.add_subplot(111)
-    for name in sampling_algorithm:
-        ax.plot(ratio, time[name], label=name)
+                def check(self, value):
+            return isinstance(value, Foo)
+    
+    
+def info(message, *args):
+    print(message % args, file=sys.stderr)
+    
+    
+def test_config_from_envvar_missing():
+    env = os.environ
+    try:
+        os.environ = {'FOO_SETTINGS': 'missing.cfg'}
+        with pytest.raises(IOError) as e:
+            app = flask.Flask(__name__)
+            app.config.from_envvar('FOO_SETTINGS')
+        msg = str(e.value)
+        assert msg.startswith('[Errno 2] Unable to load configuration '
+                              'file (No such file or directory):')
+        assert msg.endswith('missing.cfg'')
+        assert not app.config.from_envvar('FOO_SETTINGS', silent=True)
+    finally:
+        os.environ = env
+    
+    
+def test_installed_module_paths(modules_tmpdir, modules_tmpdir_prefix,
+                                purge_module, site_packages, limit_loader):
+    site_packages.join('site_app.py').write(
+        'import flask\n'
+        'app = flask.Flask(__name__)\n'
+    )
+    purge_module('site_app')
+    
+    from flask._compat import StringIO
+from flask.logging import default_handler, has_level_handler, \
+    wsgi_errors_stream
+    
+    
+def get_new_command(command):
+    dir = shell.quote(_tar_file(command.script_parts)[1])
+    return shell.and_('mkdir -p {dir}', '{cmd} -C {dir}') \
+        .format(dir=dir, cmd=command.script)
+    
+    
+@pytest.mark.functional
+def test_select_command_with_arrows(proc, TIMEOUT):
+    select_command_with_arrows(proc, TIMEOUT)
+    
+        print('Classifier Training')
+    print('===================')
+    accuracy, train_time, test_time = {}, {}, {}
+    for name in sorted(args['estimators']):
+        clf = ESTIMATORS[name]
+        try:
+            clf.set_params(random_state=0)
+        except (TypeError, ValueError):
+            pass
+    
+        print('')
+    print('')
+
     
         dim = start_dim
     for i in range(0, n):
@@ -19,39 +73,47 @@
         Y = np.random.randn(100)
         bench_scikit_tree_regressor(X, Y)
     
-    URL = ('http://people.csail.mit.edu/jrennie/'
-       '20Newsgroups/20news-bydate.tar.gz')
+    ARCHIVE_NAME = URL.rsplit('/', 1)[1]
+TRAIN_FOLDER = '20news-bydate-train'
+TEST_FOLDER = '20news-bydate-test'
     
-        # TASK: Build a vectorizer / classifier pipeline that filters out tokens
-    # that are too rare or too frequent
-    pipeline = Pipeline([
-        ('vect', TfidfVectorizer(min_df=3, max_df=0.95)),
-        ('clf', LinearSVC(C=1000)),
-    ])
+    # Split the dataset in training and test set:
+docs_train, docs_test, y_train, y_test = train_test_split(
+    dataset.data, dataset.target, test_size=0.5)
     
-    import tornado.httpserver
-import tornado.ioloop
-import tornado.options
-import tornado.web
-    
-    try:
-    from urllib.parse import unquote
-except ImportError:
-    # Python 2.
-    from urllib import unquote
+        in_exercise_region = False
     
     
-class CollectHandler(web.RequestHandler):
-    @gen.coroutine
-    def get(self):
-        self.write('Collected: {}\n'.format(gc.collect()))
-        self.write('Garbage: {}\n'.format(len(gc.garbage)))
-        for circular in find_circular_references():
-            print('\n==========\n Circular \n==========')
-            for item in circular:
-                print('    ', repr(item))
-            for item in circular:
-                if isinstance(item, types.FrameType):
-                    print('\nLocals:', item.f_locals)
-                    print('\nTraceback:', repr(item))
-                    traceback.print_stack(item)
+class View(object):
+    '''Test docstring. '''
+    def __init__(self, root, controller):
+        f = Figure()
+        ax = f.add_subplot(111)
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.set_xlim((x_min, x_max))
+        ax.set_ylim((y_min, y_max))
+        canvas = FigureCanvasTkAgg(f, master=root)
+        canvas.show()
+        canvas.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+        canvas._tkcanvas.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
+        canvas.mpl_connect('button_press_event', self.onclick)
+        toolbar = NavigationToolbar2TkAgg(canvas, root)
+        toolbar.update()
+        self.controllbar = ControllBar(root, controller)
+        self.f = f
+        self.ax = ax
+        self.canvas = canvas
+        self.controller = controller
+        self.contours = []
+        self.c_labels = None
+        self.plot_kernels()
+    
+    print('consensus score: {:.3f}'.format(score))
+    
+    
+n_train = 20  # samples for training
+n_test = 200  # samples for testing
+n_averages = 50  # how often to repeat classification
+n_features_max = 75  # maximum number of features
+step = 4  # step size for the calculation
