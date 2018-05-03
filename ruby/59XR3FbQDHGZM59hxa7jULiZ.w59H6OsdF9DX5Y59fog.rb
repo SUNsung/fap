@@ -1,97 +1,158 @@
 
         
-        html_readme = '<html>#{Kramdown::Document.new(open('README.md').read).to_html}</html>'
-readme_doctree = REXML::Document.new(html_readme)
-links = REXML::XPath.match(readme_doctree, '//a')
+        class JavaScriptHelperTest < ActionView::TestCase
+  tests ActionView::Helpers::JavaScriptHelper
     
-                  define_method method do |resource_or_scope, *args|
-                scope = Devise::Mapping.find_scope!(resource_or_scope)
-                router_name = Devise.mappings[scope].router_name
-                context = router_name ? send(router_name) : _devise_route_context
-                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
-              end
-            end
-          end
-        end
-      end
+    module ActionMailer
+  # The <tt>ActionMailer::DeliveryJob</tt> class is used when you
+  # want to send emails outside of the request-response cycle.
+  #
+  # Exceptions are rescued and handled by the mailer class.
+  class DeliveryJob < ActiveJob::Base # :nodoc:
+    queue_as { ActionMailer::Base.deliver_later_queue_name }
     
-        assert_raise(NoMethodError, bug5012) { t1.m }
-  end
-    
-      it 'decodes the remaining doubles when passed the '*' modifier' do
-    array = '@\x07333333?\xf6ffffff@\x20ffffff'.unpack(unpack_format('*'))
-    array.should == [2.9, 1.4, 8.2]
-  end
-    
-      it 'adds nil for each element requested beyond the end of the String' do
-    [ ['',     [nil, nil, nil]],
-      ['bac',  [25185, nil, nil]],
-      ['badc', [25185, 25699, nil]]
-    ].should be_computed_by(:unpack, unpack_format(3))
-  end
-    
-    describe :string_unpack_Aa, shared: true do
-  it 'decodes the number of bytes specified by the count modifier including NULL bytes' do
-    'a\x00bc'.unpack(unpack_format(3)+unpack_format).should == ['a\x00b', 'c']
-  end
-    
-    require 'rubygems'
-require 'rjb'
-    
-    	def parse_line(line)
-		if line =~ /\w+ <[\.\w]+>:/
-			# End a previous block
-			unless block_size == 0
-				block_end
-			end
-			block_begin(line)
-    
-    require 'stringex'
-    
-          rtn = ''
-      (context.environments.first['site'][@array_name] || []).each do |file|
-        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
-          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
-        end
-    
-      class VideoTag < Liquid::Tag
-    @video = nil
-    @poster = ''
-    @height = ''
-    @width = ''
-    
-            def create
-          authorize! :create, StockMovement
-          @stock_movement = scope.new(stock_movement_params)
-          if @stock_movement.save
-            respond_with(@stock_movement, status: 201, default_template: :show)
+            case method
+        when NilClass
+          raise 'Delivery method cannot be nil'
+        when Symbol
+          if klass = delivery_methods[method]
+            mail.delivery_method(klass, (send(:'#{method}_settings') || {}).merge(options || {}))
           else
-            invalid_resource!(@stock_movement)
+            raise 'Invalid delivery method #{method.inspect}'
           end
+        else
+          mail.delivery_method(method)
         end
     
-      def get_git_info
-    git = OpenStruct.new
-    git.author = %x{ git config --get user.name  }.strip rescue 'your_username'
-    git.email  = %x{ git config --get user.email }.strip rescue 'your_username@example.com'
-    git
+      test 'delivery method can be customized per instance' do
+    stub_any_instance(Mail::SMTP, instance: Mail::SMTP.new({})) do |instance|
+      assert_called(instance, :deliver!) do
+        email = DeliveryMailer.welcome.deliver_now
+        assert_instance_of Mail::SMTP, email.delivery_method
+        email = DeliveryMailer.welcome(delivery_method: :test).deliver_now
+        assert_instance_of Mail::TestMailer, email.delivery_method
+      end
+    end
   end
     
-        module Declaration
-      def deprecated_option(switches, type, description, opts = {})
-        Option::Definition.new(switches, type, description, opts).tap do |option|
-          declared_options << option
-          block ||= option.default_conversion_block
-          define_deprecated_accessors_for(option, opts, &block)
+      def failed_strategy
+    request.respond_to?(:get_header) ? request.get_header('omniauth.error.strategy') : request.env['omniauth.error.strategy']
+  end
+    
+    class Devise::SessionsController < DeviseController
+  prepend_before_action :require_no_authentication, only: [:new, :create]
+  prepend_before_action :allow_params_authentication!, only: :create
+  prepend_before_action :verify_signed_out_user, only: :destroy
+  prepend_before_action(only: [:create, :destroy]) { request.env['devise.skip_timeout'] = true }
+    
+      # GET /resource/unlock?unlock_token=abcdef
+  def show
+    self.resource = resource_class.unlock_access_by_token(params[:unlock_token])
+    yield resource if block_given?
+    
+          generate_helpers!(Devise::URL_HELPERS)
+    
+    # Each time a record is set we check whether its session has already timed out
+# or not, based on last request time. If so, the record is logged out and
+# redirected to the sign in page. Also, each time the request comes and the
+# record is set, we set the last request time inside its scoped session to
+# verify timeout in the following request.
+Warden::Manager.after_set_user do |record, warden, options|
+  scope = options[:scope]
+  env   = warden.request.env
+    
+      # Returns true if the set is a proper superset of the given set.
+  def proper_superset?(set)
+    case
+    when set.instance_of?(self.class) && @hash.respond_to?(:>)
+      @hash > set.instance_variable_get(:@hash)
+    when set.is_a?(Set)
+      size > set.size && set.all? { |o| include?(o) }
+    else
+      raise ArgumentError, 'value must be a set'
+    end
+  end
+  alias > proper_superset?
+    
+      it 'implicitly has a count of one when no count is specified' do
+    'abc'.unpack(unpack_format).should == ['a']
+  end
+    
+    describe :string_unpack_unicode, shared: true do
+  it 'decodes Unicode codepoints as ASCII values' do
+    [ ['\x00',      [0]],
+      ['\x01',      [1]],
+      ['\x08',      [8]],
+      ['\x0f',      [15]],
+      ['\x18',      [24]],
+      ['\x1f',      [31]],
+      ['\x7f',      [127]],
+      ['\xc2\x80',  [128]],
+      ['\xc2\x81',  [129]],
+      ['\xc3\xbf',  [255]]
+    ].should be_computed_by(:unpack, 'U')
+  end
+    
+      it 'runs nested ensure clauses' do
+    ScratchPad.record []
+    @outer = Thread.new do
+      begin
+        @inner = Thread.new do
+          begin
+            sleep
+          ensure
+            ScratchPad << :inner_ensure_clause
+          end
         end
+        sleep
+      ensure
+        ScratchPad << :outer_ensure_clause
+        @inner.send(@method)
+        @inner.join
       end
+    end
+    Thread.pass while @outer.status and @outer.status != 'sleep'
+    Thread.pass until @inner
+    Thread.pass while @inner.status and @inner.status != 'sleep'
+    @outer.send(@method)
+    @outer.join
+    ScratchPad.recorded.should include(:inner_ensure_clause)
+    ScratchPad.recorded.should include(:outer_ensure_clause)
+  end
+    
+    desc 'Start a dummy (test) Rails app server'
+task :dummy_rails do
+  require 'rack'
+  require 'term/ansicolor'
+  port = ENV['PORT'] || 9292
+  puts %Q(Starting on #{Term::ANSIColor.cyan 'http://localhost:#{port}'})
+  Rack::Server.start(
+    config: 'test/dummy_rails/config.ru',
+    Port: port)
+end
+    
+      def enough_poll_answers
+    errors.add(:poll_answers, I18n.t('activerecord.errors.models.poll.attributes.poll_answers.not_enough_poll_answers')) if poll_answers.size < 2
+  end
+    
+        def initialize(attributes={})
+      assign_attributes(attributes)
+      yield(self) if block_given?
     end
     
-            #target = $LOADED_FEATURES.grep(/#{path}/).first
-        #puts path
-        #puts caller.map { |c| '  #{c}' }.join('\n')
-        #fontsize = [10, duration * 48].max
-        puts '#{duration},#{path},#{source}'
-      end
-      #puts caller.map { |c| ' => #{c}' }.join('\n')
+      not_found do
+    send_file(File.join(File.dirname(__FILE__), 'public', '404.html'), {:status => 404})
+  end
+    
+    module Jekyll
+    
+        def script_url_for(gist_id, filename)
+      url = 'https://gist.github.com/#{gist_id}.js'
+      url = '#{url}?file=#{filename}' unless filename.nil? or filename.empty?
+      url
     end
+    
+      # Checks for excerpts (helpful for template conditionals)
+  def has_excerpt(input)
+    input =~ /<!--\s*more\s*-->/i ? true : false
+  end
