@@ -1,157 +1,142 @@
 
         
-        
-def test_follow_all_redirects_shown(httpbin):
-    r = http('--follow', '--all', httpbin.url + '/redirect/2')
-    assert r.count('HTTP/1.1') == 3
-    assert r.count('HTTP/1.1 302 FOUND', 2)
-    assert HTTP_OK in r
+            By default, it represents the actual environment.
+    All of the attributes can be overwritten though, which
+    is used by the test suite to simulate various scenarios.
     
-        '''
     
-        def test_cert_and_key(self, httpbin_secure):
-        r = http(httpbin_secure + '/get',
-                 '--cert', CLIENT_CERT,
-                 '--cert-key', CLIENT_KEY)
-        assert HTTP_OK in r
+FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
+FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
+JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
+BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
     
-        def load(self):
-        try:
-            with open(self.path, 'rt') as f:
-                try:
-                    data = json.load(f)
-                except ValueError as e:
-                    raise ValueError(
-                        'Invalid %s JSON: %s [%s]' %
-                        (type(self).__name__, str(e), self.path)
-                    )
-                self.update(data)
-        except IOError as e:
-            if e.errno != errno.ENOENT:
-                raise
     
-        :param str u_string: unicode string to check. Must be unicode
-        and not Python 2 `str`.
-    :rtype: bool
-    '''
-    assert isinstance(u_string, str)
-    try:
-        u_string.encode('ascii')
-        return True
-    except UnicodeEncodeError:
-        return False
+def test_max_redirects(httpbin):
+    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
+             error_exit_ok=True)
+    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
 
     
     
-def test_idna_with_version_attribute(mocker):
-    '''Verify we're actually setting idna version when it should be available.'''
-    mocker.patch('requests.help.idna', new=VersionedPackage('2.6'))
-    assert info()['idna'] == {'version': '2.6'}
-
-    
-            assert r.content is None
-        with pytest.raises(ValueError):
-            r.json()
-    
-        parser.add_argument('--test-results',
-                        action='store_true',
-                        help='download test results')
-    
-    
-class TerminalModule(TerminalBase):
+def create_temporal_sequential_model():
+    model = Sequential()
+    model.add(GRU(32, input_shape=(timesteps, input_dim), return_sequences=True))
+    model.add(TimeDistributed(Dense(num_classes)))
+    model.add(Activation('softmax'))
+    return model
     
     
 @keras_test
-def test_weighted_metrics_with_no_sample_weight():
-    decimal = decimal_precision[K.backend()]
-    
-        old_layer = keras.layers.SeparableConv2D(5, nb_row=3, nb_col=3, name='conv')
-    new_layer = keras.layers.SeparableConv2D(5, (3, 3), name='conv')
+def test_cropping2d_legacy_interface():
+    old_layer = keras.layers.Cropping2D(dim_ordering='tf', name='c2d')
+    new_layer = keras.layers.Cropping2D(data_format='channels_last', name='c2d')
     assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
     
-        assert_classification_works(clf)
-    assert_string_classification_works(clf)
+        # a Model inside a Sequential
+    x = Input(shape=(1,))
+    y = Dense(2)(x)
+    inner_model = Model(x, y)
+    outer_model = Sequential()
+    outer_model.add(inner_model)
+    assert outer_model.trainable_weights == inner_model.trainable_weights
+    inner_model.trainable = False
+    assert outer_model.trainable_weights == []
+    inner_model.trainable = True
+    inner_model.layers[-1].trainable = False
+    assert outer_model.trainable_weights == []
+    
+    print('Starting autogeneration.')
+for page_data in PAGES:
+    blocks = []
+    classes = page_data.get('classes', [])
+    for module in page_data.get('all_module_classes', []):
+        module_classes = []
+        for name in dir(module):
+            if name[0] == '_' or name in EXCLUDE:
+                continue
+            module_member = getattr(module, name)
+            if inspect.isclass(module_member):
+                cls = module_member
+                if cls.__module__ == module.__name__:
+                    if cls not in module_classes:
+                        module_classes.append(cls)
+        module_classes.sort(key=lambda x: id(x))
+        classes += module_classes
+    
+            # Test equivalence of convert_dense_weights_data_format
+        out1 = model1.predict(x)
+        layer_utils.convert_dense_weights_data_format(model1.layers[2], prev_shape, target_data_format)
+        for (src, dst) in zip(model1.layers, model2.layers):
+            dst.set_weights(src.get_weights())
+        out2 = model2.predict(transpose(x))
+    
+            # Exit condition: either hit max length
+        # or find stop character.
+        if (sampled_char == '\n' or
+           len(decoded_sentence) > max_decoder_seq_length):
+            stop_condition = True
+    
+        # test __getitem__
+    with pytest.raises(IndexError):
+        X_train[1000]
+    with pytest.raises(IndexError):
+        X_train[1000:1001]
+    with pytest.raises(IndexError):
+        X_train[[1000, 1001]]
+    with pytest.raises(IndexError):
+        X_train[np.array([1000])]
+    with pytest.raises(IndexError):
+        X_train[None]
+    assert (X_train[0] == X_train[:1][0]).all()
+    assert (X_train[[0, 1]] == X_train[:2]).all()
+    assert (X_train[np.array([0, 1])] == X_train[:2]).all()
     
     
-EXCLUDE = {
-    'Optimizer',
-    'Wrapper',
-    'get_session',
-    'set_session',
-    'CallbackList',
-    'serialize',
-    'deserialize',
-    'get',
-    'set_image_dim_ordering',
-    'image_dim_ordering',
-    'get_variable_shape',
-}
-    
-        cbks = [callbacks.LearningRateScheduler(lambda x: 1. / (1. + x))]
-    model.fit(X_train, y_train, batch_size=batch_size,
-              validation_data=(X_test, y_test), callbacks=cbks, epochs=5)
-    assert (float(K.get_value(model.optimizer.lr)) - 0.2) < K.epsilon()
-    
-    print('Pad sequences (samples x time)')
-x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
-x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
-print('x_train shape:', x_train.shape)
-print('x_test shape:', x_test.shape)
-    
-    
-def total_variation_loss(x):
-    assert K.ndim(x) == 4
-    if K.image_data_format() == 'channels_first':
-        a = K.square(x[:, :, :img_nrows - 1, :img_ncols - 1] - x[:, :, 1:, :img_ncols - 1])
-        b = K.square(x[:, :, :img_nrows - 1, :img_ncols - 1] - x[:, :, :img_nrows - 1, 1:])
-    else:
-        a = K.square(x[:, :img_nrows - 1, :img_ncols - 1, :] - x[:, 1:, :img_ncols - 1, :])
-        b = K.square(x[:, :img_nrows - 1, :img_ncols - 1, :] - x[:, :img_nrows - 1, 1:, :])
-    return K.sum(K.pow(a + b, 1.25))
-    
-    
-@keras_test
-def test_temporal_regression():
+def copy_weights(teacher_model, student_model, layer_names):
+    '''Copy weights from teacher_model to student_model,
+     for layers with names listed in layer_names
     '''
-    Predict float numbers (regression) based on sequences
-    of float numbers of length 3 using a single layer of GRU units
-    '''
-    np.random.seed(1337)
-    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=200,
-                                                         num_test=20,
-                                                         input_shape=(3, 5),
-                                                         output_shape=(2,),
-                                                         classification=False)
-    model = Sequential()
-    model.add(layers.LSTM(y_train.shape[-1],
-                          input_shape=(x_train.shape[1], x_train.shape[2])))
-    model.compile(loss='hinge', optimizer='adam')
-    history = model.fit(x_train, y_train, epochs=5, batch_size=16,
-                        validation_data=(x_test, y_test), verbose=0)
-    assert(history.history['loss'][-1] < 1.)
+    for name in layer_names:
+        weights = teacher_model.get_layer(name=name).get_weights()
+        student_model.get_layer(name=name).set_weights(weights)
     
-        mask_output = model.layers[-1]._output_mask(mask_input_placeholders)
-    assert np.all(K.function(mask_input_placeholders, [mask_output])(mask_inputs)[0] == expected_mask_output)
     
-                    # Shift the ground truth by 1
-                x_shift = xstart + directionx * (t + 1)
-                y_shift = ystart + directiony * (t + 1)
-                shifted_movies[i, t, x_shift - w: x_shift + w,
-                               y_shift - w: y_shift + w, 0] += 1
+def test_serialization():
+    all_activations = ['max_norm', 'non_neg',
+                       'unit_norm', 'min_max_norm']
+    for name in all_activations:
+        fn = constraints.get(name)
+        ref_fn = getattr(constraints, name)()
+        assert fn.__class__ == ref_fn.__class__
+        config = constraints.serialize(fn)
+        fn = constraints.deserialize(config)
+        assert fn.__class__ == ref_fn.__class__
     
-    print('Loading data...')
-(x_train, y_train), (x_test, y_test) = imdb.load_data(num_words=max_features)
-print(len(x_train), 'train sequences')
-print(len(x_test), 'test sequences')
     
-        url = sorted(
-        map(lambda x: x.firstChild.nodeValue, xml.getElementsByTagName('src')),
-        key=lambda x: int(match1(x, r'_(\d+?)_')))[-1]
+    
+        stream_types = [  #this is just a sample. Will make it in prepare()
+        # {'id': '1080'},
+        # {'id': '720'},
+        # {'id': '360'},
+        # {'id': '288'},
+        # {'id': '190'},
+        # {'id': '180'},
+        
+    ]
     
     from ..common import *
 from ..extractor import VideoExtractor
     
-    from ..common import *
-import urllib.error
-from json import loads
-from time import time, sleep
+    def kuwo_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    if 'www.kuwo.cn/yinyue' in url:
+        rid=match1(url,'yinyue/(\d+)')
+        kuwo_download_by_rid(rid,output_dir, merge, info_only)
+    else:
+        kuwo_playlist_download(url,output_dir,merge,info_only)
+    
+        # ordered list of supported stream types / qualities on this site
+    # order: high quality -> low quality
+    stream_types = [
+        {'id': 'original'}, # contains an 'id' or 'itag' field at minimum
+        {'id': 'small'},
+    ]
