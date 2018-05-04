@@ -1,87 +1,96 @@
 
         
-        
-    {
-    {    data_channel->broadcast(*int_tensor, group_ranks[0], group);
-    ASSERT_TENSOR_VALUE(int, *int_tensor, 2000)
-  } else {
-    auto int_tensor = buildTensor({1, 2, 3, 4, 5}, 1000);
-    data_channel->broadcast(*int_tensor, group_ranks[0], group);
-    ASSERT_TENSOR_VALUE(int, *int_tensor, 1000)
-  }
-}
-    
-      for (auto s: tensor->sizes())
-    assert(s == 2);
-  for (int i = 0; i < 2; i++)
-    assert(reinterpret_cast<float*>(tensor->data())[i] == 5);
-    
-    
-    {template<> bool overflows<Half, double>(double f) {
-  return f > 65504 || f < -65504;
-}
-template<> bool overflows<Half, int64_t>(int64_t f) {
-  return f > 65504 || f < -65504;
-}
-} // namespace at
+        #endif  // STORAGE_LEVELDB_DB_BUILDER_H_
 
     
-    bool cudnn_is_acceptable(const Tensor& self) {
-  if (!globalContext().userEnabledCuDNN()) return false;
-  if (!self.is_cuda()) return false;
-  auto st = self.type().scalarType();
-  if (!(st == kDouble || st == kFloat || st == kHalf)) return false;
-  if (!AT_CUDNN_ENABLED()) return false;
-  // NB: In the old Python code, there was also a test to see if the
-  // cuDNN library was actually dynamically linked or not.  I'm not
-  // sure if we can actually test this.
-  return true;
+    
+    {  FindPrevUserEntry();
 }
     
-    #include 'torch/csrc/Exceptions.h'
-#include 'torch/csrc/utils/auto_gil.h'
-#include 'torch/csrc/utils/python_scalars.h'
+    // Return the name of the descriptor file for the db named by
+// 'dbname' and the specified incarnation number.  The result will be
+// prefixed with 'dbname'.
+extern std::string DescriptorFileName(const std::string& dbname,
+                                      uint64_t number);
     
-      Tensor dBias = at::zeros_like(bias);
-  auto tmp = dOutput.sum(0, false);
-  dBias.copy_(tmp.sum(0));
-    
-    #define THCPDoubleStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPDoubleStorageClass)
-#define THCPFloatStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPFloatStorageClass)
-#define THCPHalfStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPHalfStorageClass)
-#define THCPLongStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPLongStorageClass)
-#define THCPIntStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPIntStorageClass)
-#define THCPShortStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPShortStorageClass)
-#define THCPCharStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPCharStorageClass)
-#define THCPByteStorage_Check(obj) \
-    PyObject_IsInstance(obj, THCPByteStorageClass)
-    
-      YGNodeStyleSetFlexShrink(child1, 1);
-    
-     public:
-    
-    
-    {    YGNodeSetMeasureFunc(m_node, &globalMeasureFunc);
+    TEST(FindFileTest, Empty) {
+  ASSERT_EQ(0, Find('foo'));
+  ASSERT_TRUE(! Overlaps('a', 'z'));
+  ASSERT_TRUE(! Overlaps(NULL, 'z'));
+  ASSERT_TRUE(! Overlaps('a', NULL));
+  ASSERT_TRUE(! Overlaps(NULL, NULL));
 }
     
-        method(markDirty);
-    method(isDirty);
+    namespace {
+class MemTableInserter : public WriteBatch::Handler {
+ public:
+  SequenceNumber sequence_;
+  MemTable* mem_;
+    }
+    }
+    
+    class Slice;
+    
+    #ifndef STORAGE_LEVELDB_INCLUDE_DUMPFILE_H_
+#define STORAGE_LEVELDB_INCLUDE_DUMPFILE_H_
+    
+    // Return a new filter policy that uses a bloom filter with approximately
+// the specified number of bits per key.  A good value for bits_per_key
+// is 10, which yields a filter with ~ 1% false positive rate.
+//
+// Callers must delete the result after any database that is using the
+// result has been closed.
+//
+// Note: if you are using a custom comparator that ignores some parts
+// of the keys being compared, you must not use NewBloomFilterPolicy()
+// and must provide your own FilterPolicy that also ignores the
+// corresponding parts of the keys.  For example, if the comparator
+// ignores trailing spaces, it would be incorrect to use a
+// FilterPolicy (like NewBloomFilterPolicy) that does not ignore
+// trailing spaces in keys.
+extern const FilterPolicy* NewBloomFilterPolicy(int bits_per_key);
     
     
-    {  // There are subtle issues with calling the next functions directly. It is
-  // much better to always use a ThreadScope to manage attaching/detaching for
-  // you.
-  FBEXPORT static JNIEnv* ensureCurrentThreadIsAttached();
-  FBEXPORT static void detachCurrentThread();
-};
+    {}  // namespace leveldb
     
-      T& operator*() const {
-    return *m_ptr;
+    
+    {}  // namespace guetzli
+
+    
+        size_t i = 0;      // Points to the next leaf node.
+    size_t j = n + 1;  // Points to the next non-leaf node.
+    for (size_t k = n - 1; k != 0; --k) {
+      size_t left, right;
+      if (tree[i].total_count_ <= tree[j].total_count_) {
+        left = i;
+        ++i;
+      } else {
+        left = j;
+        ++j;
+      }
+      if (tree[i].total_count_ <= tree[j].total_count_) {
+        right = i;
+        ++i;
+      } else {
+        right = j;
+        ++j;
+      }
+    }
+    
+    namespace guetzli {
+    }
+    
+    bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     const int* quant, JPEGData* jpg) {
+  if (w < 0 || w >= 1 << 16 || h < 0 || h >= 1 << 16 ||
+      rgb.size() != 3 * w * h) {
+    return false;
   }
+  InitJPEGDataForYUV444(w, h, jpg);
+  AddApp0Data(jpg);
+    }
+    
+    #include <stddef.h>
+#include <stdint.h>
+    
+      std::vector<uint8_t> ToSRGB() const;
