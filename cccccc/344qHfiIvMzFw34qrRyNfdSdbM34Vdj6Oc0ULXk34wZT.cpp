@@ -1,247 +1,235 @@
 
         
-        // Generate constructors.
-#include 'ipc/struct_constructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
-    
-    IPC_MESSAGE_ROUTED3(ShellViewHostMsg_Call_Static_Method,
-                    std::string /* type name */,
-                    std::string /* method name */,
-                    base::ListValue /* arguments */)
-    
-    #if defined(OS_WIN)
-#include 'base/strings/utf_string_conversions.h'
-#include 'base/files/file_path.h'
-#include 'base/files/file_util.h'
-#include 'base/win/shortcut.h'
-#include 'base/path_service.h'
-#include 'content/nw/src/common/shell_switches.h'
+        #ifdef JSON_IN_CPPTL
+#define JSON_API CPPTL_API
+#elif defined(JSON_DLL_BUILD)
+#if defined(_MSC_VER)
+#define JSON_API __declspec(dllexport)
+#define JSONCPP_DISABLE_DLL_INTERFACE_WARNING
+#endif // if defined(_MSC_VER)
+#elif defined(JSON_DLL)
+#if defined(_MSC_VER)
+#define JSON_API __declspec(dllimport)
+#define JSONCPP_DISABLE_DLL_INTERFACE_WARNING
+#endif // if defined(_MSC_VER)
+#endif // ifdef JSON_IN_CPPTL
+#if !defined(JSON_API)
+#define JSON_API
 #endif
     
-      scoped_ptr<base::Value> value_args(
-      converter->FromV8Value(args, isolate->GetCurrentContext()));
-  if (!value_args.get() ||
-      !value_args->IsType(base::Value::TYPE_LIST))
-    return isolate->ThrowException(v8::Exception::Error(v8::String::NewFromUtf8(isolate,
-        'Unable to convert 'args' passed to CallObjectMethodSync')));
-    
-    bool MenuDelegate::GetIconForCommandId(int command_id,
-                                       gfx::Image* icon) const {
-  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-  if (item->icon_.IsEmpty())
-    return false;
-    }
-    
-    #include 'base/run_loop.h'
-#include 'base/values.h'
-#include 'base/strings/utf_string_conversions.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/render_frame_host.h'
-#include 'content/public/browser/render_view_host.h'
-#include 'content/public/browser/render_widget_host_view.h'
-#include 'content/public/browser/web_contents.h'
-#include 'extensions/browser/app_window/app_window.h'
-#include 'skia/ext/image_operations.h'
-#include 'ui/aura/client/screen_position_client.h'
-#include 'ui/aura/window.h'
-#include 'ui/aura/window_tree_host.h'
-#include 'ui/events/platform/platform_event_source.h'
-#include 'ui/views/controls/menu/menu_runner.h'
-#include 'ui/views/widget/widget.h'
-#include 'ui/views/focus/focus_manager.h'
-#include 'vector'
-    
-    
-    {}
-    
-    
-    {}
-    
-      bool NwScreenGetScreensFunction::RunNWSync(base::ListValue* response, std::string* error) {
-    const std::vector<display::Display>& displays = display::Screen::GetScreen()->GetAllDisplays();
-    }
-    
-      ts->tv_sec += s_extra_request_nanoseconds / sec_to_ns;
-  auto res = ts->tv_nsec + s_extra_request_nanoseconds % sec_to_ns;
-  if (res > sec_to_ns) {
-    res -= sec_to_ns;
-    ts->tv_sec += 1;
+    bool BuiltStyledStreamWriter::isMultineArray(Value const& value) {
+  int size = value.size();
+  bool isMultiLine = size * 3 >= rightMargin_;
+  childValues_.clear();
+  for (int index = 0; index < size && !isMultiLine; ++index) {
+    Value const& childValue = value[index];
+    isMultiLine = ((childValue.isArray() || childValue.isObject()) &&
+                        childValue.size() > 0);
   }
-  ts->tv_nsec = res;
-    
-    /*
- * Check that each block has exactly one terminal instruction at the end.
- */
-bool checkBlockEnd(const Vunit& v, Vlabel b);
-    
-    #ifndef incl_HPHP_UTIL_EMBEDDED_DATA_H_
-#define incl_HPHP_UTIL_EMBEDDED_DATA_H_
-    
-    void CurlShareResource::sweep() {
-  close();
+  if (!isMultiLine) // check if line length > max line length
+  {
+    childValues_.reserve(size);
+    addChildValues_ = true;
+    int lineLength = 4 + (size - 1) * 2; // '[ ' + ', '*n + ' ]'
+    for (int index = 0; index < size; ++index) {
+      if (hasCommentForValue(value[index])) {
+        isMultiLine = true;
+      }
+      writeValue(value[index]);
+      lineLength += int(childValues_[index].length());
+    }
+    addChildValues_ = false;
+    isMultiLine = isMultiLine || lineLength >= rightMargin_;
+  }
+  return isMultiLine;
 }
     
-            // Graph inputs.
-        std::vector<const NodeArg*> m_graphInputs;
+    class PyDescriptorDatabase : public DescriptorDatabase {
+ public:
+  explicit PyDescriptorDatabase(PyObject* py_database);
+  ~PyDescriptorDatabase();
+    }
     
-    #endif
-
-    
-        // Taken from ONNX
-    REGISTER_OPERATOR_SCHEMA(Abs)
-        .Description('Absolute takes one input data (Tensor<T>) and produces one output data '
-            '(Tensor<T>) where the absolute is, y = abs(x), is applied to '
-            'the tensor elementwise.')
-        .Input('X', 'Input tensor of any shape', 'T')
-        .Output('Y', 'Output tensor of same shape and type as input X.', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.');
-    
-        REGISTER_OPERATOR_SCHEMA(MeanVarianceNormalization)
-        .Description('Perform mean variance normalization.')
-        .Input('input', 'Input tensor of any shape', 'T')
-        .Output('output', 'Output tensor of same shape and type as input X.', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' }, 'Constrain input and output '
-            'types to float tensors.')
-        .Attr('across_channels', 'If true, mean and variance are computed across channels. '
-            'Default is false.', AttrType::AttributeProto_AttributeType_INT, int64_t(0))
-        .Attr('normalize_variance', 'If false, normalize the mean only. Default is true.',
-            AttrType::AttributeProto_AttributeType_INT, int64_t(1));
-    
-    
-    {    m_currentState = m_reader->GetState();
+    void RepeatedPrimitiveFieldGenerator::GenerateParsingCode(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    '$name$_.AddEntriesFrom(input, _repeated_$name$_codec);\n');
 }
     
-    FunctionPtr CreateLSTM(const ONNXIR::Node *node, const std::vector<Variable> &inputs, const std::string &direction,
-    const std::vector<std::string> &activations, const std::vector<float> &activation_alpha, const std::vector<float> &activation_beta);
+    #include <google/protobuf/compiler/code_generator.h>
     
-    BOOST_FIXTURE_TEST_CASE(MatrixDenseTimesSparse, RandomSeedFixture)
-{
-    Matrix<float> mAdense(c_deviceIdZero);
-    mAdense.AssignTruncateBottomOf(Matrix<float>::RandomUniform(dim1, dim2, c_deviceIdZero, -3.0f, 0.1f, IncrementCounter()), 0);
+    void WriteMessageDocComment(io::Printer* printer, const Descriptor* message);
+void WriteFieldDocComment(io::Printer* printer, const FieldDescriptor* field);
+void WriteEnumDocComment(io::Printer* printer, const EnumDescriptor* enum_);
+void WriteEnumValueDocComment(io::Printer* printer,
+                              const EnumValueDescriptor* value);
+void WriteServiceDocComment(io::Printer* printer,
+                            const ServiceDescriptor* service);
+void WriteMethodDocComment(io::Printer* printer,
+                           const MethodDescriptor* method);
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace java {
+namespace {
+    }
+    }
+    }
+    }
     }
     
-    inline int ReadUint8(const uint8_t* data, size_t* pos) {
-  return data[(*pos)++];
+    
+    {            ptr[tid] = partial = partial + ptr[tid + 16];
+            ptr[tid] = partial = partial + ptr[tid + 8];
+            ptr[tid] = partial = partial + ptr[tid + 4];
+            ptr[tid] = partial = partial + ptr[tid + 2];
+            ptr[tid] = partial = partial + ptr[tid + 1];
+        }
+    
+            // Core Extension: ARB_texture_rg
+        RG                               = 0x8227,
+        RG_INTEGER                       = 0x8228,
+        R8                               = 0x8229,
+        R16                              = 0x822A,
+        RG8                              = 0x822B,
+        RG16                             = 0x822C,
+        R16F                             = 0x822D,
+        R32F                             = 0x822E,
+        RG16F                            = 0x822F,
+        RG32F                            = 0x8230,
+        R8I                              = 0x8231,
+        R8UI                             = 0x8232,
+        R16I                             = 0x8233,
+        R16UI                            = 0x8234,
+        R32I                             = 0x8235,
+        R32UI                            = 0x8236,
+        RG8I                             = 0x8237,
+        RG8UI                            = 0x8238,
+        RG16I                            = 0x8239,
+        RG16UI                           = 0x823A,
+        RG32I                            = 0x823B,
+        RG32UI                           = 0x823C,
+    
+    #ifdef HAVE_LAPACK
+    
+    #if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,'#ferror in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_stopAllEffects'.',&tolua_err);
+#endif
+    
+    
+    
+    #if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+    
+    
+    
+    	Bridge()
+	{
+		b2Body* ground = NULL;
+		{
+			b2BodyDef bd;
+			ground = m_world->CreateBody(&bd);
+    }
+    }
+    
+    			m_bullet = m_world->CreateBody(&bd);
+			m_bullet->CreateFixture(&box, 100.0f);
+    
+    namespace guetzli {
+    }
+    
+    // Performs in-place floating point 8x8 DCT on block[0..63].
+// Note that the DCT used here is the DCT-2 with the first term multiplied by
+// 1/sqrt(2) and the result scaled by 1/2.
+void ComputeBlockDCTDouble(double block[64]);
+    
+    const double* NewSrgb8ToLinearTable() {
+  double* table = new double[256];
+  int i = 0;
+  for (; i < 11; ++i) {
+    table[i] = i / 12.92;
+  }
+  for (; i < 256; ++i) {
+    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
+  }
+  return table;
 }
     
-    void OutputImageComponent::ToPixels(int xmin, int ymin, int xsize, int ysize,
-                                    uint8_t* out, int stride) const {
-  assert(xmin >= 0);
-  assert(ymin >= 0);
-  assert(xmin < width_);
-  assert(ymin < height_);
-  const int yend1 = ymin + ysize;
-  const int yend0 = std::min(yend1, height_);
-  int y = ymin;
-  for (; y < yend0; ++y) {
-    const int xend1 = xmin + xsize;
-    const int xend0 = std::min(xend1, width_);
-    int x = xmin;
-    int px = y * width_ + xmin;
-    for (; x < xend0; ++x, ++px, out += stride) {
-      *out = static_cast<uint8_t>((pixels_[px] + 8 - (x & 1)) >> 4);
-    }
-    const int offset = -stride;
-    for (; x < xend1; ++x) {
-      *out = out[offset];
-      out += stride;
+    
+    {}  // namespace guetzli
+    
+    // Mimic libjpeg's heuristics to guess jpeg color space.
+// Requires that the jpg has 3 components.
+bool HasYCbCrColorSpace(const JPEGData& jpg) {
+  bool has_Adobe_marker = false;
+  uint8_t Adobe_transform = 0;
+  for (const std::string& app : jpg.app_data) {
+    if (static_cast<uint8_t>(app[0]) == 0xe0) {
+      return true;
+    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
+      has_Adobe_marker = true;
+      Adobe_transform = app[14];
     }
   }
-  for (; y < yend1; ++y) {
-    const int offset = -stride * xsize;
-    for (int x = 0; x < xsize; ++x) {
-      *out = out[offset];
-      out += stride;
+  if (has_Adobe_marker) {
+    return (Adobe_transform != 0);
+  }
+  const int cid0 = jpg.components[0].id;
+  const int cid1 = jpg.components[1].id;
+  const int cid2 = jpg.components[2].id;
+  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
+}
+    
+      OutputImageComponent& component(int c) { return components_[c]; }
+  const OutputImageComponent& component(int c) const { return components_[c]; }
+    
+    struct ExceptionInfo {
+  const std::type_info* type{nullptr};
+  // The values in frames are IP (instruction pointer) addresses.
+  // They are only filled if the low-level exception tracer library is
+  // linked in or LD_PRELOADed.
+  std::vector<uintptr_t> frames; // front() is top of stack
+};
+    
+    ordering IOBufCompare::operator()(const IOBuf& a, const IOBuf& b) const {
+  io::Cursor ca(&a);
+  io::Cursor cb(&b);
+  for (;;) {
+    auto ba = ca.peekBytes();
+    auto bb = cb.peekBytes();
+    if (ba.empty() && bb.empty()) {
+      return ordering::eq;
+    } else if (ba.empty()) {
+      return ordering::lt;
+    } else if (bb.empty()) {
+      return ordering::gt;
     }
+    const size_t n = std::min(ba.size(), bb.size());
+    DCHECK_GT(n, 0u);
+    const ordering r = to_ordering(std::memcmp(ba.data(), bb.data(), n));
+    if (r != ordering::eq) {
+      return r;
+    }
+    ca.skip(n);
+    cb.skip(n);
   }
 }
     
-    void IDCT1d(const double* in, int stride, double* out) {
-  for (int x = 0; x < 8; ++x) {
-    out[x * stride] = 0.0;
-    for (int u = 0; u < 8; ++u) {
-      out[x * stride] += kDCTMatrix[8 * u + x] * in[u * stride];
-    }
-  }
+    TEST_F(OrderingTest, compare_equal_to) {
+  compare_equal_to<OddCompare<int>> op;
+  EXPECT_FALSE(op(3, 4));
+  EXPECT_TRUE(op(3, 3));
+  EXPECT_FALSE(op(4, 3));
 }
     
-    #include 'guetzli/entropy_encode.h'
-    
-    const double* Srgb8ToLinearTable() {
-  static const double* const kSrgb8ToLinearTable = NewSrgb8ToLinearTable();
-  return kSrgb8ToLinearTable;
-}
-    
-    #include 'guetzli/fdct.h'
-    
-    #include 'guetzli/jpeg_data.h'
-    
-      JpegHistogram() { Clear(); }
-  void Clear() {
-    memset(counts, 0, sizeof(counts));
-    counts[kSize - 1] = 1;
-  }
-  void Add(int symbol) {
-    counts[symbol] += 2;
-  }
-  void Add(int symbol, int weight) {
-    counts[symbol] += 2 * weight;
-  }
-  void AddHistogram(const JpegHistogram& other) {
-    for (int i = 0; i + 1 < kSize; ++i) {
-      counts[i] += other.counts[i];
+     private:
+  void dfs(NodeSet& visitedNodes, NodeId node) {
+    // We don't terminate early if cycle is detected, because this is considered
+    // an error condition, so not worth optimizing for.
+    if (visitedNodes.count(node)) {
+      return;
     }
-    counts[kSize - 1] = 1;
-  }
-  int NumSymbols() const {
-    int n = 0;
-    for (int i = 0; i + 1 < kSize; ++i) {
-      n += (counts[i] > 0 ? 1 : 0);
     }
-    return n;
-  }
-    
-    #endif  // GUETZLI_JPEG_ERROR_H_
-
-    
-    // Builds jpeg-style Huffman lookup table from the given symbols.
-// The symbols are in order of increasing bit lengths. The number of symbols
-// with bit length n is given in counts[n] for each n >= 1.
-// Returns the size of the lookup table.
-int BuildJpegHuffmanTable(const int* counts, const int* symbols,
-                          HuffmanTableEntry* lut);
-    
-      // If sharpen or blur are enabled, preprocesses image before downsampling U or
-  // V to improve butteraugli score and/or reduce file size.
-  // u_sharpen: sharpen the u channel in red areas to improve score (not as
-  // effective as v_sharpen, blue is not so important)
-  // u_blur: blur the u channel in some areas to reduce file size
-  // v_sharpen: sharpen the v channel in red areas to improve score
-  // v_blur: blur the v channel in some areas to reduce file size
-  struct DownsampleConfig {
-    // Default is YUV420.
-    DownsampleConfig() : u_factor_x(2), u_factor_y(2),
-                         v_factor_x(2), v_factor_y(2),
-                         u_sharpen(true), u_blur(true),
-                         v_sharpen(true), v_blur(true),
-                         use_silver_screen(false) {}
-    int u_factor_x;
-    int u_factor_y;
-    int v_factor_x;
-    int v_factor_y;
-    bool u_sharpen;
-    bool u_blur;
-    bool v_sharpen;
-    bool v_blur;
-    bool use_silver_screen;
-  };
-    
-    // Gamma-compensated chroma subsampling.
-// Returns Y, U, V image planes, each with width x height dimensions, but the
-// U and V planes are composed of 2x2 blocks with the same values.
-std::vector<std::vector<float> > RGBToYUV420(
-    const std::vector<uint8_t>& rgb_in, const int width, const int height);
