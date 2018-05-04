@@ -1,106 +1,91 @@
 
         
-          def tumblr_oauth_token_secret
-    service.secret
-  end
-    
-      def load_event
-    @event = current_user.events.find(params[:id])
+          def option_defined?(name)
+    @options.include? name
   end
 end
 
     
-        respond_to do |format|
-      if !running? && @job.destroy
-        format.html { redirect_to jobs_path, notice: 'Job deleted.' }
-        format.json { head :no_content }
-      else
-        format.html { redirect_to jobs_path, alert: 'Can not delete a running job.' }
-        format.json { render json: @job.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-    
-    def check_link(uri)
-  HTTParty.head(uri, :verify => false).code.to_i.tap do |status|
-    if (400..422).include?(status)
-      if status != 403 && !uri.exclude?('udemy.com')
-        raise 'Request had status #{status}'
-      else
-        putc('S')
-      end
-    end
-  end
-end
-    
-      if ARGV.include? '--no-ansi'
-    STDERR.puts <<-DOC
-    WARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
-    Consider adding the following to ~/.profile:
-    
-            def run
-          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
-          if @pod_name.nil? # Print all
-            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
-              print_pod_cache_infos(pod_name, cache_descriptors)
-            end
-          else # Print only for the requested pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            else
-              print_pod_cache_infos(@pod_name, cache_descriptors)
-            end
-          end
-        end
-    
-            def run
-          print_version
-          signal_end_of_output
-          listen
-        end
-    
-            # Checks if a template URL is given else returns the TEMPLATE_REPO URL
-        #
-        # @return String
-        #
-        def template_repo_url
-          @template_url || TEMPLATE_REPO
-        end
-      end
-    end
+        puts 'Your system is ready to brew.' unless Homebrew.failed?
   end
 end
 
     
-          def call(env)
-        unless accepts? env
-          instrument env
-          result = react env
-        end
-        result or app.call(env)
-      end
+              # Method
+          name = node.at_css('.header').content.split.first
     
-          post('/', {}, 'HTTP_REFERER' => 'http://example.com/foo', 'HTTP_HOST' => 'example.org')
-      expect(last_response).to be_ok
-    end
+        ret = set - [2,4,6]
+    assert_not_same(set, ret)
+    assert_equal(Set[1,3], ret)
+  end
+    
+      it 'adds nil for each element requested beyond the end of the String' do
+    [ ['',          [nil, nil, nil]],
+      ['abcde',     [1684234849, nil, nil]],
+      ['abcdefg',   [1684234849, nil, nil]],
+      ['abcdefgh',  [1684234849, 1751606885, nil]]
+    ].should be_computed_by(:unpack, unpack_format(3))
+  end
+    
+      it 'ignores spaces between directives' do
+    '\x01\x02'.unpack('U U').should == [1, 2]
   end
 end
 
     
-    module Jekyll
-    
-      # Improved version of Liquid's truncatewords:
-  # - Uses typographically correct ellipsis (…) insted of '...'
-  def truncatewords(input, length)
-    truncate = input.split(' ')
-    if truncate.length > length
-      truncate[0..length-1].join(' ').strip + ' &hellip;'
-    else
-      input
+        def fonts_path
+      File.join assets_path, 'fonts'
     end
+    
+        process_font_assets
+    process_stylesheet_assets
+    process_javascript_assets
+    store_version
   end
     
-          unless file.file?
-        return 'File #{file} could not be found'
+        # replace in the top-level selector
+    # replace_in_selector('a {a: {a: a} } a {}', /a/, 'b') => 'b {a: {a: a} } b {}'
+    def replace_in_selector(css, pattern, sub)
+      # scan for selector positions in css
+      s        = CharStringScanner.new(css)
+      prev_pos = 0
+      sel_pos  = []
+      while (brace = s.scan_next(RULE_OPEN_BRACE_RE))
+        pos = s.pos
+        sel_pos << (prev_pos .. pos - 1)
+        s.pos    = close_brace_pos(css, s.pos - 1) + 1
+        prev_pos = pos
       end
+      replace_substrings_at(css, sel_pos) { |s| s.gsub(pattern, sub) }
+    end
+    
+      def setup
+    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
+    success = Dir.chdir DUMMY_PATH do
+      silence_stdout_if !ENV['VERBOSE'] do
+        system 'node', 'manifest.js', tmp_dir
+      end
+    end
+    assert success, 'Node.js Mincer compilation failed'
+    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
+    css_name = manifest['assets']['application.css']
+    @css = File.read('#{tmp_dir}/#{css_name}')
+  end
+end
+
+    
+          spec['version'] = Bootstrap::VERSION
+    
+        def ensure_stage
+      Rake::Task.define_task(:ensure_stage) do
+        unless stage_set?
+          puts t(:stage_not_set)
+          exit 1
+        end
+      end
+    end
+    
+        it 'retrieves properties for multiple roles as a set' do
+      rps = dsl.role_properties(:app, :web)
+      expect(rps).to eq(Set[{ hostname: 'example3.com', role: :app }, { hostname: 'example1.com', role: :web, port: 80 }, { hostname: 'example2.com', role: :web, port: 81 }])
+    end
