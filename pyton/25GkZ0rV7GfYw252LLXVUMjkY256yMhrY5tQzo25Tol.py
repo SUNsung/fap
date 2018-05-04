@@ -1,95 +1,145 @@
 
         
-            packages = find_packages('src'),
-    package_dir = {'' : 'src'},
+        import word2vec_optimized
     
-        type, ext, size = url_info(video_url, headers=fake_headers)
+    FLAGS = flags.FLAGS
+    
+        self.assertLess(len(recovered_data), 50)
+    
+    import tensorflow as tf  # pylint: disable=g-bad-import-order
+    
+    import tensorflow as tf
+import pandas as pd
     
     
-site_info = 'mtv81.com'
-download = mtv81_download
-download_playlist = playlist_not_supported('mtv81')
+def class_to_docs_link(cls):
+    module_name = cls.__module__
+    assert module_name[:6] == 'keras.'
+    module_name = module_name[6:]
+    link = ROOT + module_name.replace('.', '/') + '#' + cls.__name__.lower()
+    return link
+    
+    
+@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
+def test_he_normal(tensor_shape):
+    fan_in, _ = initializers._compute_fans(tensor_shape)
+    scale = np.sqrt(2. / fan_in)
+    _runner(initializers.he_normal(), tensor_shape,
+            target_mean=0., target_std=None, target_max=2 * scale)
+    
+            # Test equivalence of convert_dense_weights_data_format
+        out1 = model1.predict(x)
+        layer_utils.convert_dense_weights_data_format(model1.layers[2], prev_shape, target_data_format)
+        for (src, dst) in zip(model1.layers, model2.layers):
+            dst.set_weights(src.get_weights())
+        out2 = model2.predict(transpose(x))
+    
+    print('Train...')
+model.fit(x_train, y_train,
+          batch_size=batch_size,
+          epochs=4,
+          validation_data=[x_test, y_test])
 
     
-        Returns:
-        An iterator that yields the given Futures as they complete (finished or
-        cancelled).
+    print('Build model...')
+model = Sequential()
     
-    # Controls how many more calls than processes will be queued in the call queue.
-# A smaller number will mean that processes spend more time idle waiting for
-# work while a larger number will make Future.cancel() succeed less frequently
-# (Futures in the call queue cannot be cancelled).
-EXTRA_QUEUED_CALLS = 1
+        # Returns
+        Tensor with one scalar loss entry per sample.
+    '''
+    def _logcosh(x):
+        return x + K.softplus(-2. * x) - K.log(2.)
+    return K.mean(_logcosh(y_pred - y_true), axis=-1)
     
-    def _worker(executor_reference, work_queue):
-    try:
-        while True:
-            work_item = work_queue.get(block=True)
-            if work_item is not None:
-                work_item.run()
-                continue
-            executor = executor_reference()
-            # Exit if:
-            #   - The interpreter is shutting down OR
-            #   - The executor that owns the worker has been collected OR
-            #   - The executor that owns the worker has been shutdown.
-            if _shutdown or executor is None or executor._shutdown:
-                # Notice other workers
-                work_queue.put(None)
-                return
-            del executor
-    except BaseException:
-        _base.LOGGER.critical('Exception in worker', exc_info=True)
+    import time
     
-    PRIMES = [
-    112272535095293,
-    112582705942171,
-    112272535095293,
-    115280095190773,
-    115797848077099,
-    117450548693743,
-    993960000099397]
+        # start time
+    t_start = datetime.now()
+    clf.fit(X)
+    delta = (datetime.now() - t_start)
+    # stop time
+    time_to_fit = compute_time(t_start, delta)
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+        try:
+        fn = inspect.getsourcefile(obj)
+    except Exception:
+        fn = None
+    if not fn:
+        try:
+            fn = inspect.getsourcefile(sys.modules[obj.__module__])
+        except Exception:
+            fn = None
+    if not fn:
+        return
     
-      if 'word' in vim_data:
-    completion_data[ 'insertion_text' ] = vim_data[ 'word' ]
-  if 'abbr' in vim_data:
-    completion_data[ 'menu_text' ] = vim_data[ 'abbr' ]
-  if 'menu' in vim_data:
-    completion_data[ 'extra_menu_info' ] = vim_data[ 'menu' ]
-  if 'kind' in vim_data:
-    completion_data[ 'kind' ] = [ vim_data[ 'kind' ] ]
-  if 'info' in vim_data:
-    completion_data[ 'detailed_info' ] = vim_data[ 'info' ]
+    Sentiment analysis can be casted as a binary text classification problem,
+that is fitting a linear classifier on features extracted from the text
+of the user messages so as to guess wether the opinion of the author is
+positive or negative.
+    
+    legend1_values_list = list(legend1.values())
+legend1_keys_list = list(legend1.keys())
+    
+    data, rows, columns = make_biclusters(
+    shape=(300, 300), n_clusters=5, noise=5,
+    shuffle=False, random_state=0)
+    
+    This module contains all support classes, which are needed to use recognizers
+generated by ANTLR3.
+    
+    ##
+# imaginary tree navigation type; traverse 'get child' link
+DOWN = 2
+##
+#imaginary tree navigation type; finish with a child list
+UP = 3
+    
+            Using setter/getter methods is deprecated. Use o.charPositionInLine instead.'''
+    
+        Args:
+        executor_reference: A weakref.ref to the ProcessPoolExecutor that owns
+            this thread. Used to determine if the ProcessPoolExecutor has been
+            garbage collected and that this function can exit.
+        process: A list of the multiprocessing.Process instances used as
+            workers.
+        pending_work_items: A dict mapping work ids to _WorkItems e.g.
+            {5: <_WorkItem...>, 6: <_WorkItem...>, ...}
+        work_ids_queue: A queue.Queue of work ids e.g. Queue([5, 6, ...]).
+        call_queue: A multiprocessing.Queue that will be filled with _CallItems
+            derived from _WorkItems for processing by the process workers.
+        result_queue: A multiprocessing.Queue of _ResultItems generated by the
+            process workers.
+    '''
+    nb_shutdown_processes = [0]
+    def shutdown_one_process():
+        '''Tell a worker to terminate, which will in turn wake us again'''
+        call_queue.put(None)
+        nb_shutdown_processes[0] += 1
+    while True:
+        _add_call_item_to_queue(pending_work_items,
+                                work_ids_queue,
+                                call_queue)
+    
+      _assert_rejects( f, 'This is a Taco' )
+  _assert_accepts( f, 'This is a Burrito' )
     
     
-def HandlePollResponse_SingleDiagnostic_test():
-  diagnostics_handler = ExtendedMock()
-  messages = [
-    { 'filepath': 'foo', 'diagnostics': [ 'PLACEHOLDER' ] },
-  ]
-  assert_that( _HandlePollResponse( messages, diagnostics_handler ),
-               equal_to( True ) )
-  diagnostics_handler.UpdateWithNewDiagnosticsForFile.assert_has_exact_calls( [
-    call( 'foo', [ 'PLACEHOLDER' ] )
-  ] )
+def ExtractKeywordsFromGroup_Commas_test():
+  assert_that( syntax_parse._ExtractKeywordsFromGroup(
+                 syntax_parse.SyntaxGroup( '', [
+                   'foo, bar,',
+                   'zoo goo',
+                 ] ) ),
+               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
     
     
-class Student(AbstractExpert):
+def AdjustCandidateInsertionText_MoreThanWordMatchingAfterCursor_test():
+  with MockTextAfterCursor( 'bar.h' ):
+    eq_( [ { 'abbr': 'foobar.h', 'word': 'foo' } ],
+         base.AdjustCandidateInsertionText( [ 'foobar.h' ] ) )
     
-        def test_dog_adapter_shall_make_noise(self):
-        dog = Dog()
-        dog_adapter = Adapter(dog, make_noise=dog.bark)
-        noise = dog_adapter.make_noise()
-        expected_noise = 'woof!'
-        self.assertEqual(noise, expected_noise)
+      return completion_data
     
-    *TL;DR80
-Traverses a container and accesses the container's elements.
-'''
+      raise RuntimeError( 'Cannot find Python 2.7 or 3.4+. '
+                      'Set the 'g:ycm_server_python_interpreter' option '
+                      'to a Python interpreter path.' )
