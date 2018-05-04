@@ -1,323 +1,258 @@
 
         
-        #ifndef ATOM_BROWSER_NET_URL_REQUEST_ASYNC_ASAR_JOB_H_
-#define ATOM_BROWSER_NET_URL_REQUEST_ASYNC_ASAR_JOB_H_
+        
+    {
+    {}  // namespace log
+}  // namespace leveldb
     
-    
-    {}  // namespace atom
+    int main(int argc, char** argv) {
+  return leveldb::test::RunAllTests();
+}
 
     
-    namespace atom {
+    uint32_t Hash(const char* data, size_t n, uint32_t seed) {
+  // Similar to murmur hash
+  const uint32_t m = 0xc6a4a793;
+  const uint32_t r = 24;
+  const char* limit = data + n;
+  uint32_t h = seed ^ (n * m);
     }
     
-    // Only lock when lockers are used in current thread.
-class Locker {
+    TEST(HASH, SignedUnsignedIssue) {
+  const unsigned char data1[1] = {0x62};
+  const unsigned char data2[2] = {0xc3, 0x97};
+  const unsigned char data3[3] = {0xe2, 0x99, 0xa5};
+  const unsigned char data4[4] = {0xe1, 0x80, 0xb9, 0x32};
+  const unsigned char data5[48] = {
+    0x01, 0xc0, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x14, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x04, 0x00,
+    0x00, 0x00, 0x00, 0x14,
+    0x00, 0x00, 0x00, 0x18,
+    0x28, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x02, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+  };
+    }
+    
+    class SCOPED_LOCKABLE MutexLock {
  public:
-  explicit Locker(v8::Isolate* isolate);
-  ~Locker();
+  explicit MutexLock(port::Mutex *mu) EXCLUSIVE_LOCK_FUNCTION(mu)
+      : mu_(mu)  {
+    this->mu_->Lock();
+  }
+  ~MutexLock() UNLOCK_FUNCTION() { this->mu_->Unlock(); }
     }
     
-    #include 'ui/gfx/geometry/rect.h'
-    
-      // Sets time interval between updates. By default list of sources and their
-  // thumbnail are updated once per second. If called after StartUpdating() then
-  // it will take effect only after the next update.
-  virtual void SetUpdatePeriod(base::TimeDelta period) = 0;
-    
-    // Wrapper used to keep track of the lifetime of a WebContents.
-// Lives on the UI thread.
-class PrintingUIWebContentsObserver : public content::WebContentsObserver {
- public:
-  explicit PrintingUIWebContentsObserver(content::WebContents* web_contents);
+      // Read until size drops significantly.
+  std::string limit_key = Key(n);
+  for (int read = 0; true; read++) {
+    ASSERT_LT(read, 100) << 'Taking too long to compact';
+    Iterator* iter = db_->NewIterator(ReadOptions());
+    for (iter->SeekToFirst();
+         iter->Valid() && iter->key().ToString() < limit_key;
+         iter->Next()) {
+      // Drop data
     }
+    delete iter;
+    // Wait a little bit to allow any triggered compactions to complete.
+    Env::Default()->SleepForMicroseconds(1000000);
+    uint64_t size = Size(Key(0), Key(n));
+    fprintf(stderr, 'iter %3d => %7.3f MB [other %7.3f MB]\n',
+            read+1, size/1048576.0, Size(Key(n), Key(kCount))/1048576.0);
+    if (size <= initial_size/10) {
+      break;
+    }
+  }
+    
+    void DBIter::SeekToFirst() {
+  direction_ = kForward;
+  ClearSavedValue();
+  iter_->SeekToFirst();
+  if (iter_->Valid()) {
+    FindNextUserEntry(false, &saved_key_ /* temporary storage */);
+  } else {
+    valid_ = false;
+  }
+}
+    
+    void InternalKeyComparator::FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const {
+  // Attempt to shorten the user portion of the key
+  Slice user_start = ExtractUserKey(*start);
+  Slice user_limit = ExtractUserKey(limit);
+  std::string tmp(user_start.data(), user_start.size());
+  user_comparator_->FindShortestSeparator(&tmp, user_limit);
+  if (tmp.size() < user_start.size() &&
+      user_comparator_->Compare(user_start, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*start, tmp) < 0);
+    assert(this->Compare(tmp, limit) < 0);
+    start->swap(tmp);
+  }
+}
+    
+      // Create a writer that will append data to '*dest'.
+  // '*dest' must have initial length 'dest_length'.
+  // '*dest' must remain live while this Writer is in use.
+  Writer(WritableFile* dest, uint64_t dest_length);
+    
+    bool SetDepth(int p0, HuffmanTree *pool, uint8_t *depth, int max_depth) {
+  int stack[17];
+  int level = 0;
+  int p = p0;
+  assert(max_depth <= 16);
+  stack[0] = -1;
+  while (true) {
+    if (pool[p].index_left_ >= 0) {
+      level++;
+      if (level > max_depth) return false;
+      stack[level] = pool[p].index_right_or_value_;
+      p = pool[p].index_left_;
+      continue;
+    } else {
+      depth[pool[p].index_right_or_value_] = static_cast<uint8_t>(level);
+    }
+    while (level >= 0 && stack[level] == -1) level--;
+    if (level < 0) return true;
+    p = stack[level];
+    stack[level] = -1;
+  }
+}
+    
+    // Computes the DCT (Discrete Cosine Transform) of the 8x8 array in 'block',
+// scaled up by a factor of 16. The values in 'block' are laid out row-by-row
+// and the result is written to the same memory area.
+void ComputeBlockDCT(coeff_t* block);
+    
+    #ifndef GUETZLI_JPEG_DATA_READER_H_
+#define GUETZLI_JPEG_DATA_READER_H_
+    
+    
+    {}  // namespace guetzli
+    
+    
+    {
+    {
+    {
+    {
+    {
+    {            /*
+             * Writing another thread's ThreadEntry from here is fine;
+             * the only other potential reader is the owning thread --
+             * from onThreadExit (which grabs the lock, so is properly
+             * synchronized with us) or from get(), which also grabs
+             * the lock if it needs to resize the elements vector.
+             *
+             * We can't conflict with reads for a get(id), because
+             * it's illegal to call get on a thread local that's
+             * destructing.
+             */
+            e->elements[id].ptr = nullptr;
+            e->elements[id].deleter1 = nullptr;
+            e->elements[id].ownsDeleter = false;
+          }
+        }
+        meta.freeIds_.push_back(id);
+      }
+    }
+    // Delete elements outside the locks.
+    for (ElementWrapper& elem : elements) {
+      elem.dispose(TLPDestructionMode::ALL_THREADS);
+    }
+  } catch (...) { // Just in case we get a lock error or something anyway...
+    LOG(WARNING) << 'Destructor discarding an exception that was thrown.';
+  }
+}
+    
+    struct ExceptionInfo {
+  const std::type_info* type{nullptr};
+  // The values in frames are IP (instruction pointer) addresses.
+  // They are only filled if the low-level exception tracer library is
+  // linked in or LD_PRELOADed.
+  std::vector<uintptr_t> frames; // front() is top of stack
+};
+    
+    
+    {    iobuf1->prependChain(IOBuf::create(10));
+    iobuf1->prependChain(IOBuf::create(10));
+    EXPECT_TRUE(c.isAtEnd());
+    iobuf1->prev()->append(5);
+    EXPECT_FALSE(c.isAtEnd());
+    c.skip(5);
+    EXPECT_TRUE(c.isAtEnd());
+  }
+    
+    enum class ordering : int { lt = -1, eq = 0, gt = 1 };
+    
+    // Specifically, this adds support for two things:
+// 1) incrementing/decrementing the shared count by more than 1 at a time
+// 2) Getting the thing the shared_ptr points to, which may be different from
+//    the aliased pointer.
+    
+      /**
+   * Set bit idx to the given value, using the given memory order. Returns
+   * the previous value of the bit.
+   *
+   * Note that the operation is a read-modify-write operation due to the use
+   * of fetch_and or fetch_or.
+   *
+   * Yes, this is an overload of set(), to keep as close to std::bitset's
+   * interface as possible.
+   */
+  bool set(size_t idx,
+           bool value,
+           std::memory_order order = std::memory_order_seq_cst);
     
      private:
-  friend class base::RefCountedThreadSafe<MonitorFinder>;
-  ~MonitorFinder();
+  friend class AtomicHashMap;
+  explicit ahm_iterator(ContT* ahm,
+                        uint32_t subMap,
+                        const SubIt& subIt)
+      : ahm_(ahm)
+      , subMap_(subMap)
+      , subIt_(subIt)
+  {}
     
-    #include <string>
-    
-        // A sub-minibatch is a part of a minibatch which helps computing large minibatches that cannot load into GPU memory in one forward-backward computation
-    // The usage would be :
-    //        SubminibatchHelpers sbhelper;
-    //        for (;;)
-    //        {
-    //            size_t nsb=sb.GetMinibatchIntoCache(...);
-    //            for (size_t i=0; i<nsb; i++)
-    //            {
-    //                sbhelper.GetSubMinibatchToNet(i);
-    //                net.Evaluate(criterionNodes[0]);
-    //                sbhelper.DoneWithCurrentSubMinibatch();
-    //            }
-    //            UpdateWeights(...);
-    //        }
-    
-            // Graph outputs.
-        std::vector<const NodeArg*> m_graphOutputs;
-    
-                static Common::Status UnpackTensor(const onnx::TensorProto& p_tensor, /*out*/std::string* p_data, int64_t p_expected_size);
-            static Common::Status UnpackTensor(const onnx::TensorProto& p_tensor, /*out*/bool* p_data, int64_t p_expected_size);
-    
-            std::string OpUtils::ToDataTypeString(const TensorProto::DataType& p_type)
-        {
-            TypesWrapper& t = TypesWrapper::GetTypesWrapper();
-            switch (p_type)
-            {
-            case TensorProto::DataType::TensorProto_DataType_BOOL:
-                return t.c_bool;
-            case TensorProto::DataType::TensorProto_DataType_STRING:
-                return t.c_string;
-            case TensorProto::DataType::TensorProto_DataType_FLOAT16:
-                return t.c_float16;
-            case TensorProto::DataType::TensorProto_DataType_FLOAT:
-                return t.c_float;
-            case TensorProto::DataType::TensorProto_DataType_DOUBLE:
-                return t.c_double;
-            case TensorProto::DataType::TensorProto_DataType_INT8:
-                return t.c_int8;
-            case TensorProto::DataType::TensorProto_DataType_INT16:
-                return t.c_int16;
-            case TensorProto::DataType::TensorProto_DataType_INT32:
-                return t.c_int32;
-            case TensorProto::DataType::TensorProto_DataType_INT64:
-                return t.c_int64;
-            case TensorProto::DataType::TensorProto_DataType_UINT8:
-                return t.c_uint8;
-            case TensorProto::DataType::TensorProto_DataType_UINT16:
-                return t.c_uint16;
-            case TensorProto::DataType::TensorProto_DataType_UINT32:
-                return t.c_uint32;
-            case TensorProto::DataType::TensorProto_DataType_UINT64:
-                return t.c_uint64;
-            case TensorProto::DataType::TensorProto_DataType_COMPLEX64:
-                return t.c_complex64;
-            case TensorProto::DataType::TensorProto_DataType_COMPLEX128:
-                return t.c_complex128;
-             case TensorProto::DataType::TensorProto_DataType_UNDEFINED:
-                return t.c_undefined;
-            }
+    #ifdef __cplusplus
+extern 'C' {
+#endif
+/*
+ * VM initialization functions.
+ *
+ * Note these are the only symbols exported for JNI by the VM.
+ */
+jint JNI_GetDefaultJavaVMInitArgs(void*);
+jint JNI_CreateJavaVM(JavaVM**, JNIEnv**, void*);
+jint JNI_GetCreatedJavaVMs(JavaVM**, jsize, jsize*);
     }
     
-        // Taken from Caffe2
-    REGISTER_OPERATOR_SCHEMA(MaxRoiPool)
-        .Description('ROI max pool consumes an input tensor X and region of interests (RoIs) to '
-            'apply max pooling across each RoI, to produce output 4-D tensor of shape '
-            '(num_rois, channels, pooled_shape[0], pooled_shape[1]).')
-        .Input('X', 'The input 4-D tensor of data. Only NCHW order is currently supported.', 'T')
-        .Input('rois', 'RoIs (Regions of Interest) to pool over. Should be a 2-D tensor of '
-            'shape (num_rois, 5) given as [[batch_id, x1, y1, x2, y2], ...].', 'T')
-        .Output('Y', 'RoI pooled output 4-D tensor of shape '
-            '(num_rois, channels, pooled_h, pooled_w).', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.')
-        .Attr('pooled_shape', 'ROI pool output shape (height, width).',
-            AttrType::AttributeProto_AttributeType_FLOATS)
-        .Attr('spatial_scale', 'Multiplicative spatial scale factor to translate ROI '
-            'coordinates from their input scale to the scale used when pooling (Default: 1.0).',
-            AttrType::AttributeProto_AttributeType_FLOAT, float(1.0));
+    #include <fb/visibility.h>
     
-        REGISTER_OPERATOR_SCHEMA(TreeEnsembleClassifier)
-        .SetDomain(c_mlDomain)
-        .Input('X', 'Data to be classified', 'T1')
-        .Output('Y', 'Classification outputs (one class per example', 'T2')
-        .Output('Z', 'Classification outputs (All classes scores per example,N,E', 'tensor(float)')
-        .Description(R'DOC(
-            Tree Ensemble classifier.  Returns the top class for each input in N.
-            All args with nodes_ are fields of a tuple of tree nodes, and
-            it is assumed they are the same length, and an index i will decode the
-            tuple across these inputs.  Each node id can appear only once
-            for each tree id.'
-            All fields prefixed with class_ are tuples of votes at the leaves.
-            A leaf may have multiple votes, where each vote is weighted by
-            the associated class_weights index.
-            It is expected that either classlabels_strings or classlabels_INTS
-            will be passed and the class_ids are an index into this list.
-            Mode enum is BRANCH_LEQ, BRANCH_LT, BRANCH_GTE, BRANCH_GT, BRANCH_EQ, BRANCH_NEQ, LEAF.
-            )DOC')
-        .TypeConstraint('T1', { 'tensor(float)', 'tensor(double)', 'tensor(int64)', 'tensor(int32)' }, ' allowed types.')
-        .TypeConstraint('T2', { 'tensor(string)', 'tensor(int64)' }, ' allowed types.')
-        .Attr('nodes_treeids', 'tree id for this node', AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('nodes_nodeids', 'node id for this node, node ids may restart at zero for each tree (but not required).', AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('nodes_featureids', 'feature id for this node', AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('nodes_values', 'thresholds to do the splitting on for this node.', AttrType::AttributeProto_AttributeType_FLOATS)
-        .Attr('nodes_hitrates', '', AttrType::AttributeProto_AttributeType_FLOATS)
-        .Attr('nodes_modes', 'enum of behavior for this node 'BRANCH_LEQ', 'BRANCH_LT', 'BRANCH_GTE', 'BRANCH_GT', 'BRANCH_EQ', 'BRANCH_NEQ', 'LEAF'', AttrType::AttributeProto_AttributeType_STRINGS)
-        .Attr('nodes_truenodeids', 'child node if expression is true', AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('nodes_falsenodeids', 'child node if expression is false', AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('nodes_missing_value_tracks_true', 'for each node, decide if the value is missing (nan) then use true branch, this field can be left unset and will assume false for all nodes', AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('base_values', 'starting values for each class, can be omitted and will be assumed as 0', AttrType::AttributeProto_AttributeType_FLOATS)
-        .Attr('class_treeids', 'tree that this node is in', AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('class_nodeids', 'node id that this weight is for', AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('class_ids', 'index of the class list that this weight is for', AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('class_weights', 'the weight for the class in class_id', AttrType::AttributeProto_AttributeType_FLOATS)
-        .Attr('post_transform', 'post eval transform for score, enum 'NONE', 'SOFTMAX', 'LOGISTIC', 'SOFTMAX_ZERO', 'PROBIT'', AttrType::AttributeProto_AttributeType_STRING)
-        .Attr('classlabels_strings', 'class labels if using string labels, size E', AttrType::AttributeProto_AttributeType_STRINGS)
-        .Attr('classlabels_int64s', 'class labels if using int labels, size E, one of the two class label fields must be used', AttrType::AttributeProto_AttributeType_INTS);
+    #pragma once
     
-    template <class ElemType>
-void ReaderShim<ElemType>::StartAsyncPrefetching()
-{
-    auto localCurrentDataTransferIndex = m_currentDataTransferIndex;
-    // Starting the prefetch task. There is always a single async read in flight.
-    // When the network requests a new minibatch, we wait for the current async to finish, swap the buffers
-    // and kick off the new prefetch.
-    m_prefetchTask = std::async(m_launchType, [this, localCurrentDataTransferIndex]()
-    {
-        return PrefetchMinibatch(localCurrentDataTransferIndex);
-    });
+        method(setExperimentalFeatureEnabled);
+    method(setPointScaleFactor);
+    
+    template<typename... ARGS>
+inline void logv(const char* tag, const char* msg, ARGS... args) noexcept {
+  log(ANDROID_LOG_VERBOSE, tag, msg, args...);
 }
     
-    enum
-{
-    GRUInputIndexX = 0,
-    GRUInputIndexW = 1,
-    GRUInputIndexR = 2,
-    GRUInputIndexB = 3,
-    GRUInputIndexSequenceLens = 4,
-    GRUInitialH = 5,
-};
+      ProgramLocation(const char* functionName, const char* fileName, int line) :
+      m_functionName(functionName),
+      m_fileName(fileName),
+      m_lineNumber(line)
+    {}
+    
+    #include <fb/visibility.h>
     
     
-    {        foreach_column (k, us)
-        {
-            size_t jj = 0;
-            foreach_row (j, m2)
-            {
-                foreach_row (i, m1)
-                {
-                    us(jj++, k) = m1(i, k) * m2(j, k);
-                }
-            }
-        }
-    }
-    
-    
-    {    // also update node groups
-    for (auto groupIter : GetAllNodeGroups())
-    {
-        auto& group = *groupIter;
-        for (int i = 0; i < group.size(); i++)
-            if (group[i] == oldNode)
-                group[i] = newNode;
-    }
-}
-    
-      void FixChecksum(int header_offset, int len) {
-    // Compute crc of type/len/data
-    uint32_t crc = crc32c::Value(&dest_.contents_[header_offset+6], 1 + len);
-    crc = crc32c::Mask(crc);
-    EncodeFixed32(&dest_.contents_[header_offset], crc);
-  }
-    
-    namespace leveldb {
-    }
-    
-      ReadOptions read_options;
-  Iterator *iter = db->NewIterator(read_options);
-    
-    void BlockBuilder::Add(const Slice& key, const Slice& value) {
-  Slice last_key_piece(last_key_);
-  assert(!finished_);
-  assert(counter_ <= options_->block_restart_interval);
-  assert(buffer_.empty() // No values yet?
-         || options_->comparator->Compare(key, last_key_piece) > 0);
-  size_t shared = 0;
-  if (counter_ < options_->block_restart_interval) {
-    // See how much sharing to do with previous string
-    const size_t min_length = std::min(last_key_piece.size(), key.size());
-    while ((shared < min_length) && (last_key_piece[shared] == key[shared])) {
-      shared++;
-    }
-  } else {
-    // Restart compression
-    restarts_.push_back(buffer_.size());
-    counter_ = 0;
-  }
-  const size_t non_shared = key.size() - shared;
-    }
-    
-    
-    {  // Verify that the size of the key space not touched by the reads
-  // is pretty much unchanged.
-  const int64_t final_other_size = Size(Key(n), Key(kCount));
-  ASSERT_LE(final_other_size, initial_other_size + 1048576);
-  ASSERT_GE(final_other_size, initial_other_size/5 - 1048576);
-}
-    
-    class StdoutPrinter : public WritableFile {
- public:
-  virtual Status Append(const Slice& data) {
-    fwrite(data.data(), 1, data.size(), stdout);
-    return Status::OK();
-  }
-  virtual Status Close() { return Status::OK(); }
-  virtual Status Flush() { return Status::OK(); }
-  virtual Status Sync() { return Status::OK(); }
-};
-    
-      // Read sampling factors and quant table index for each component.
-  std::vector<bool> ids_seen(256, false);
-  for (size_t i = 0; i < jpg->components.size(); ++i) {
-    const int id = ReadUint8(data, pos);
-    if (ids_seen[id]) {   // (cf. section B.2.2, syntax of Ci)
-      fprintf(stderr, 'Duplicate ID %d in SOF.\n', id);
-      jpg->error = JPEG_DUPLICATE_COMPONENT_ID;
-      return false;
-    }
-    ids_seen[id] = true;
-    jpg->components[i].id = id;
-    int factor = ReadUint8(data, pos);
-    int h_samp_factor = factor >> 4;
-    int v_samp_factor = factor & 0xf;
-    VERIFY_INPUT(h_samp_factor, 1, 15, SAMP_FACTOR);
-    VERIFY_INPUT(v_samp_factor, 1, 15, SAMP_FACTOR);
-    jpg->components[i].h_samp_factor = h_samp_factor;
-    jpg->components[i].v_samp_factor = v_samp_factor;
-    jpg->components[i].quant_idx = ReadUint8(data, pos);
-    jpg->max_h_samp_factor = std::max(jpg->max_h_samp_factor, h_samp_factor);
-    jpg->max_v_samp_factor = std::max(jpg->max_v_samp_factor, v_samp_factor);
-  }
-    
-    // Sort the root nodes, least popular first.
-static inline bool SortHuffmanTree(const HuffmanTree& v0,
-                                   const HuffmanTree& v1) {
-  if (v0.total_count_ != v1.total_count_) {
-    return v0.total_count_ < v1.total_count_;
-  }
-  return v0.index_right_or_value_ > v1.index_right_or_value_;
-}
-    
-    #include 'guetzli/jpeg_data.h'
-    
-    #include <algorithm>
-#include <string.h>
-    
-      bool enableMmap_;
-  unsigned char* mapaddr_;
-  int64_t maplen_;
-    
-    AbstractProxyRequestCommand::AbstractProxyRequestCommand(
-    cuid_t cuid, const std::shared_ptr<Request>& req,
-    const std::shared_ptr<FileEntry>& fileEntry, RequestGroup* requestGroup,
-    DownloadEngine* e, const std::shared_ptr<Request>& proxyRequest,
-    const std::shared_ptr<SocketCore>& s)
-    : AbstractCommand(cuid, req, fileEntry, requestGroup, e, s),
-      proxyRequest_(proxyRequest),
-      httpConnection_(std::make_shared<HttpConnection>(
-          cuid, s, std::make_shared<SocketRecvBuffer>(s)))
-{
-  setTimeout(std::chrono::seconds(getOption()->getAsInt(PREF_CONNECT_TIMEOUT)));
-  disableReadCheckSocket();
-  setWriteCheckSocket(getSocket());
-}
-    
-    std::unique_ptr<AuthConfig> AuthConfig::create(std::string user,
-                                               std::string password)
-{
-  if (user.empty()) {
-    return nullptr;
-  }
-  else {
-    return make_unique<AuthConfig>(std::move(user), std::move(password));
-  }
-}
+    {} // namespace detail
