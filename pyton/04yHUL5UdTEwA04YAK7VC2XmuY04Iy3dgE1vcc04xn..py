@@ -1,66 +1,66 @@
 
         
-        
-def get_new_command(command):
-    dir = shell.quote(_tar_file(command.script_parts)[1])
-    return shell.and_('mkdir -p {dir}', '{cmd} -C {dir}') \
-        .format(dir=dir, cmd=command.script)
+        new_version = {}
     
-    # TODO: ensure that history changes.
-
     
-    # Note, sha1 is the only hash algorithm compatible with python2.4 and with
-# FIPS-140 mode (as of 11-2014)
-try:
-    from hashlib import sha1 as sha1
-except ImportError:
-    from sha import sha as sha1
+def main():
+    parser = optparse.OptionParser(usage='%prog INFILE OUTFILE')
+    options, args = parser.parse_args()
+    if len(args) != 2:
+        parser.error('Expected an input and an output filename')
     
-            # global URL, resource, entity, method_name
-        input_url = 'https://www.googleapis.com/compute/v1/projects/myproject/global/backendServices/mybackendservice/getHealth'
-        actual = GCPUtils.parse_gcp_url(input_url)
-        self.assertEquals('compute', actual['service'])
-        self.assertEquals('v1', actual['api_version'])
-        self.assertEquals('myproject', actual['project'])
-        self.assertTrue('global' in actual)
-        self.assertTrue(actual['global'])
-        self.assertEquals('backendServices', actual['resource_name'])
-        self.assertEquals('mybackendservice', actual['entity_name'])
-        self.assertEquals('getHealth', actual['method_name'])
+            def _find_spec(key):
+            m = re.search(
+                r'(?m)^//\s*%s:\s*(.*?)\n' % re.escape(key), as_content)
+            if not m:
+                raise ValueError('Cannot find %s in %s' % (key, testfile))
+            return json.loads(m.group(1))
     
-    from ansible.plugins.terminal import TerminalBase
-from ansible.errors import AnsibleConnectionFailure
+    from .common import FileDownloader
+from ..utils import (
+    check_executable,
+    encodeFilename,
+)
     
-        proba = clf.predict_proba(X_test, batch_size=batch_size)
-    assert proba.shape == (num_test, num_classes)
-    assert np.allclose(np.sum(proba, axis=1), np.ones(num_test))
+            title = self._html_search_regex(r'<title>(.*?)</title>', webpage, 'title')
+        description = self._html_search_regex(
+            r'<div class='description'[^>]*>([^<]+)</div>', webpage, 'description', fatal=False)
+        thumbnail = self._html_search_regex(
+            r'preview_url\s*:\s*\'(.*?)\'', webpage, 'thumbnail', fatal=False)
     
-            layer_test(local.LocallyConnected2D,
-                   kwargs={'filters': filters,
-                           'kernel_size': (3, 3),
-                           'padding': padding,
-                           'kernel_regularizer': 'l2',
-                           'bias_regularizer': 'l2',
-                           'activity_regularizer': 'l2',
-                           'strides': strides,
-                           'data_format': 'channels_first'},
-                   input_shape=(num_samples, stack_size, num_row, num_col))
+                stream_url_hds = json_data.get('stream_url_hds')
+            if stream_url_hds:
+                formats.extend(self._extract_f4m_formats(
+                    stream_url_hds + '?hdcore=3.4.0',
+                    video_id, f4m_id='hds', fatal=False))
     
-            # Test equivalence of convert_dense_weights_data_format
-        out1 = model1.predict(x)
-        layer_utils.convert_dense_weights_data_format(model1.layers[2], prev_shape, target_data_format)
-        for (src, dst) in zip(model1.layers, model2.layers):
-            dst.set_weights(src.get_weights())
-        out2 = model2.predict(transpose(x))
+        def send_friend_request(self, friend_id):
+        pass
     
-        model = Sequential(name='merged_branches')
-    model.add(Merge([left, right], mode='concat', name='merge'))
-    model.add(Dense(num_classes, name='final_dense'))
-    model.add(Activation('softmax', name='softmax'))
-    model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
+    ##
+# imaginary tree navigation type; traverse 'get child' link
+DOWN = 2
+##
+#imaginary tree navigation type; finish with a child list
+UP = 3
     
-    Gets to 0.89 test accuracy after 2 epochs.
-90s/epoch on Intel i5 2.4Ghz CPU.
-10s/epoch on Tesla K40 GPU.
-'''
-from __future__ import print_function
+                else:
+                raise RuntimeError('DFA bang!')
+            
+        finally:
+            input.rewind(mark)
+    
+    
+    def setText(self, text):
+        '''
+        Override the text for this token.  getText() will return this text
+        rather than pulling from the buffer.  Note that this does not mean
+        that start/stop indexes are not valid.  It means that that input
+        was converted to a new string in the token object.
+	'''
+        self._text = text
+    
+    - BaseRecognizer: Base class with common recognizer functionality.
+- Lexer: Base class for lexers.
+- Parser: Base class for parsers.
+- tree.TreeParser: Base class for %tree parser.
