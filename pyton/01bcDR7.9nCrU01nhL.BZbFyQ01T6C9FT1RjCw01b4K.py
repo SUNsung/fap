@@ -1,74 +1,97 @@
 
         
         
-def maybe_restore_pretrained_model(sess, saver_for_restore, model_dir):
-  '''Restores pretrained model if there is no ckpt model.'''
-  ckpt = tf.train.get_checkpoint_state(FLAGS.train_dir)
-  checkpoint_exists = ckpt and ckpt.model_checkpoint_path
-  if checkpoint_exists:
-    tf.logging.info('Checkpoint exists in FLAGS.train_dir; skipping '
-                    'pretraining restore')
-    return
+@pytest.fixture
+def httpbin(httpbin):
+    return prepare_url(httpbin)
     
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+        def test_server_finishes_on_error(self):
+        '''the server thread exits even if an exception exits the context manager'''
+        server = Server.basic_response_server()
+        with pytest.raises(Exception):
+            with server:
+                raise Exception()
     
-      def test_add_child_idempotency(self):
-    root = MCTSNode(utils_test.BOARD_SIZE, go.Position(utils_test.BOARD_SIZE))
-    child = root.maybe_add_child(17)
-    current_children = copy.copy(root.children)
-    child2 = root.maybe_add_child(17)
-    self.assertEqual(child, child2)
-    self.assertEqual(current_children, root.children)
     
-      def assertEqualData(self, data1, data2):
-    # Assert that two data are equal, where both are of form:
-    # data = List<Tuple<feature_array, pi_array, value>>
-    self.assertEqual(len(data1), len(data2))
-    for datum1, datum2 in zip(data1, data2):
-      # feature
-      self.assertEqualNPArray(datum1[0], datum2[0])
-      # pi
-      self.assertEqualNPArray(datum1[1], datum2[1])
-      # value
-      self.assertEqual(datum1[2], datum2[2])
+def test_idna_without_version_attribute(mocker):
+    '''Older versions of IDNA don't provide a __version__ attribute, verify
+    that if we have such a package, we don't blow up.
+    '''
+    mocker.patch('requests.help.idna', new=None)
+    assert info()['idna'] == {'version': ''}
     
-        self.assertEqualPositions(last_position, last_position2)
+        # Check cryptography version
+    from cryptography import __version__ as cryptography_version
+    _check_cryptography(cryptography_version)
+except ImportError:
+    pass
     
-    tf.logging.set_verbosity(tf.logging.ERROR)
     
-        def set(self, key, value):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                item.value = value
-                return
-        self.table[hash_index].append(Item(key, value))
+class RequestException(IOError):
+    '''There was an ambiguous exception that occurred while handling your
+    request.
+    '''
     
-        def park_vehicle(self, vehicle):
-        pass
+                headers = prepared_request.headers
+            try:
+                del headers['Cookie']
+            except KeyError:
+                pass
     
-        def insert_crawled_link(self, url, signature):
-        '''Add the given link to `crawled_links`.'''
-        pass
     
-        def bfs(self, source, dest):
-        # Use self.visited_ids to track visited nodes
-        # Use self.lookup to translate a person_id to a Person
-        pass
+@pytest.fixture()
+def chdir(tmpdir):
+    '''Change to pytest-provided temporary directory'''
+    tmpdir.chdir()
 
     
-        def mapper(self, _, line):
-        '''Parse each log line, extract and transform relevant lines.
+            if opts.pdb:
+            failure.startDebugMode()
     
-            Emit key value pairs of the form:
     
-        for url in urls:
-        if not url.startswith('http'):
-            print('markdown file name: ' + url)
-            continue
-        if check_live_url(url):
-            print(url)
-        else:
-            print(url, file=sys.stderr)
+def sanitize_module_name(module_name):
+    '''Sanitize the given module name, by replacing dashes and points
+    with underscores and prefixing it with a letter if it doesn't start
+    with one
+    '''
+    module_name = module_name.replace('-', '_').replace('.', '_')
+    if module_name[0] not in string.ascii_letters:
+        module_name = 'a' + module_name
+    return module_name
+    
+        for filename in filenames:
+        fd = codecs.open(filename, mode='r', encoding='utf-8')
+        for line in fd.readlines():
+            refs = re.findall(r'(?<=<a href=')[^']*', markdown.markdown(line))
+            for ref in refs:
+                if ref not in urls:
+                    urls.append(ref)
+    
+    from pylons import request
+from pylons import tmpl_context as c
+from pylons import app_globals as g
+    
+            # Display error documents for 401, 403, 404 status codes (and 500 when
+        # debug is disabled)
+        app = ErrorDocuments(app, global_conf, error_mapper, **app_conf)
+    
+    api('wikibasepage', WikiJsonTemplate)
+api('wikipagerevisions', WikiJsonTemplate)
+api('wikiview', WikiViewJsonTemplate)
+api('wikirevision', WikiRevisionJsonTemplate)
+    
+                send_gift(
+                buyer=buyer,
+                recipient=recipient,
+                months=months,
+                days=months * 31,
+                signed=False,
+                giftmessage=None,
+                thing_fullname=thing_fullname,
+                note=note,
+            )
+    
+        def GET_widget_demo_page(self):
+        return BoringPage(_('reddit widget'),
+                          show_sidebar = False, 
+                          content=WidgetDemoPanel()).render()
