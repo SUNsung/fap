@@ -1,189 +1,98 @@
 
         
-          bool thrown = false;
-  try {
-    thpp::IntTensor &a = dynamic_cast<thpp::IntTensor&>(*tensor);
-  } catch(std::bad_cast &e) {
-    thrown = true;
-  }
-  assert(thrown);
-    
-    // skip isnan and isinf check for integral types
-template<typename To, typename From>
-typename std::enable_if<std::is_integral<From>::value, bool>::type overflows(From f) {
-  using limit = std::numeric_limits<To>;
-  return f < limit::lowest() || f > limit::max();
+        TEST(PartialRunMgrFindOrCreate, NewCreate) {
+  // Test that PartialRunMgr creates a new CancellationManager for new steps.
+  PartialRunMgr partial_run_mgr;
+  int step_id = 1;
+  CancellationManager* cancellation_manager;
+  partial_run_mgr.FindOrCreate(step_id, &cancellation_manager);
+  // FindOrCreate on a new step should return a new cancellation_manager.
+  int new_step_id = 2;
+  CancellationManager* new_cancellation_manager;
+  partial_run_mgr.FindOrCreate(new_step_id, &new_cancellation_manager);
+  EXPECT_NE(cancellation_manager, new_cancellation_manager);
 }
     
-      //also support scalar.to<int64_t>();
-  template<typename T>
-  T to();
+    // Prefetching support
+//
+// Defined behavior on some of the uarchs:
+// PREFETCH_HINT_T0:
+//   prefetch to all levels of the hierarchy (except on p4: prefetch to L2)
+// PREFETCH_HINT_NTA:
+//   p4: fetch to L2, but limit to 1 way (out of the 8 ways)
+//   core: skip L2, go directly to L1
+//   k8 rev E and later: skip L2, can go to either of the 2-ways in L1
+enum PrefetchHint {
+  PREFETCH_HINT_T0 = 3,  // More temporal locality
+  PREFETCH_HINT_T1 = 2,
+  PREFETCH_HINT_T2 = 1,  // Less temporal locality
+  PREFETCH_HINT_NTA = 0  // No temporal locality
+};
+template <PrefetchHint hint>
+void prefetch(const void* x);
     
-    #include 'ATen/CUDAGenerator.h'
-#include 'ATen/Context.h'
-#include 'THCTensorRandom.h'
-#include <stdexcept>
+    #if TENSORFLOW_USE_SYCL
     
-    /* Get the generator for the current device, but does not initialize the state */
-static THCGenerator* THCRandom_rawGenerator(THCState* state)
-{
-  THCRNGState* rng_state = THCState_getRngState(state);
-  int device;
-  THCudaCheck(cudaGetDevice(&device));
-  if (device >= rng_state->num_devices) THError('Invalid device index.');
-  return &rng_state->gen[device];
+    
+    {    input_buffer_.reset(new io::InputBuffer(file_.get(), kBufferSize));
+    for (; line_number_ < skip_header_lines_; ++line_number_) {
+      string line_contents;
+      Status status = input_buffer_->ReadLine(&line_contents);
+      if (errors::IsOutOfRange(status)) {
+        // We ignore an end of file error when skipping header lines.
+        // We will end up skipping this file.
+        return Status::OK();
+      }
+      TF_RETURN_IF_ERROR(status);
+    }
+    return Status::OK();
+  }
+    
+    bool HloReachabilityMap::SetReachabilityToUnion(
+    tensorflow::gtl::ArraySlice<const HloInstruction*> inputs,
+    const HloInstruction* instruction) {
+  BitVector& bit_vector = GetBitVector(instruction);
+  tmp_bit_vector_ = bit_vector;
+    }
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+        GraphDef result;
+    TransformFuncContext context;
+    context.input_names = {};
+    context.output_names = {'mul_node1'};
+    TF_ASSERT_OK(RemoveDevice(graph_def, context, &result));
+    
+    #endif  // GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
+    
+    int main(int argc, char** argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }
-    
-    inline void store_scalar(void* data, at::ScalarType scalarType, PyObject* obj) {
-  switch (scalarType) {
-    case at::kByte: *(uint8_t*)data = (uint8_t)THPUtils_unpackLong(obj); break;
-    case at::kChar: *(char*)data = (char)THPUtils_unpackLong(obj); break;
-    case at::kShort: *(int16_t*)data = (int16_t)THPUtils_unpackLong(obj); break;
-    case at::kInt: *(int32_t*)data = (int32_t)THPUtils_unpackLong(obj); break;
-    case at::kLong: *(int64_t*)data = THPUtils_unpackLong(obj); break;
-    case at::kHalf:
-      *(at::Half*)data = at::convert<at::Half, double>(THPUtils_unpackDouble(obj));
-      break;
-    case at::kFloat: *(float*)data = (float)THPUtils_unpackDouble(obj); break;
-    case at::kDouble: *(double*)data = THPUtils_unpackDouble(obj); break;
-    default: throw std::runtime_error('invalid type');
-  }
-}
-    
-      auto input_size = self.sizes();
-  auto weight_size = weight.sizes();
-    
-    THDTensorDescriptor THDTensorDescriptor_newFromTHLongTensor(THLongTensor *tensor) {
-  return at::getType(at::Backend::CPU, at::ScalarType::Long).unsafeTensorFromTH((void*)tensor, true);
-}
-    
-      /// Construct, passing the specified argument to initialise the next layer.
-  template <typename Arg>
-  buffered_read_stream(Arg& a, std::size_t buffer_size)
-    : next_layer_(a),
-      storage_(buffer_size)
-  {
-  }
-    
-    template <typename Stream>
-class buffered_stream;
-    
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
-    
-      std::size_t check_for_completion(
-      const boost::system::error_code& ec,
-      std::size_t total_transferred)
-  {
-    return detail::adapt_completion_condition_result(
-        completion_condition_(ec, total_transferred));
-  }
-    
-        buffer_sequence_adapter<boost::asio::mutable_buffer,
-        MutableBufferSequence> bufs(o->buffers_);
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-typedef null_event event;
-#elif defined(BOOST_ASIO_WINDOWS)
-typedef win_event event;
-#elif defined(BOOST_ASIO_HAS_PTHREADS)
-typedef posix_event event;
-#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
-typedef std_event event;
-#endif
-    
-    #if defined(BOOST_ASIO_WINDOWS) || defined(__CYGWIN__)
-typedef win_fd_set_adapter fd_set_adapter;
-#else
-typedef posix_fd_set_adapter fd_set_adapter;
-#endif
-    
-    #define BOOST_ASIO_HANDSHAKE_HANDLER_CHECK( \
-    handler_type, handler) \
-  \
-  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
-      void(boost::system::error_code)) \
-    asio_true_handler_type; \
-  \
-  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
-      sizeof(boost::asio::detail::one_arg_handler_test( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>(), \
-          static_cast<const boost::system::error_code*>(0))) == 1, \
-      'HandshakeHandler type requirements not met') \
-  \
-  typedef boost::asio::detail::handler_type_requirements< \
-      sizeof( \
-        boost::asio::detail::argbyv( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>())) + \
-      sizeof( \
-        boost::asio::detail::lvref< \
-          asio_true_handler_type>()( \
-            boost::asio::detail::lvref<const boost::system::error_code>()), \
-        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
-    
-    ::pollfd& dev_poll_reactor::add_pending_event_change(int descriptor)
-{
-  hash_map<int, std::size_t>::iterator iter
-    = pending_event_change_index_.find(descriptor);
-  if (iter == pending_event_change_index_.end())
-  {
-    std::size_t index = pending_event_changes_.size();
-    pending_event_changes_.reserve(pending_event_changes_.size() + 1);
-    pending_event_change_index_.insert(std::make_pair(descriptor, index));
-    pending_event_changes_.push_back(::pollfd());
-    pending_event_changes_[index].fd = descriptor;
-    pending_event_changes_[index].revents = 0;
-    return pending_event_changes_[index];
-  }
-  else
-  {
-    return pending_event_changes_[iter->second];
-  }
-}
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    #define DEFINE_HAS_MEMBER(member_name) \
-    template <typename T>\
-    class has_##member_name {\
-      private:\
-        struct yes_type { char x[1]; };\
-        struct no_type { char x[2]; };\
-        template <int> struct tester;\
-        template <typename U> static yes_type test(tester<sizeof(&U::member_name)>*);\
-        template <typename U> static no_type test(...);\
-      public:\
-        static const bool value = (sizeof(test<T>(0)) == sizeof(yes_type));\
-    };
-    
-    
-#endif /* SCOP_JENV_H_ */
 
     
-      YGNodeStyleSetFlexShrink(child1, 1);
+      struct Result {
+    double wall;
+    double user;
+    double system;
+    unsigned long long total_cpu_time;
+    unsigned long long idle_cpu_time;
+  };
     
-    #include <nbind/api.h>
-#include <nbind/BindDefiner.h>
+    #include <vector>
+#include <string>
     
+    class ViewsConfigParserPluginTests : public testing::Test {};
     
-#ifdef LOG_TAG
-# define ALOGV(...) ::facebook::alog::logv(LOG_TAG, __VA_ARGS__)
-# define ALOGD(...) ::facebook::alog::logd(LOG_TAG, __VA_ARGS__)
-# define ALOGI(...) ::facebook::alog::logi(LOG_TAG, __VA_ARGS__)
-# define ALOGW(...) ::facebook::alog::logw(LOG_TAG, __VA_ARGS__)
-# define ALOGE(...) ::facebook::alog::loge(LOG_TAG, __VA_ARGS__)
-# define ALOGF(...) ::facebook::alog::logf(LOG_TAG, __VA_ARGS__)
-#endif
+    #include <boost/filesystem/operations.hpp>
+#include <boost/property_tree/ptree.hpp>
     
-    #pragma once
-#include <utility>
-#include <fb/assert.h>
+    TEST_F(TimeTests, test_asciitimeutc) {
+  const size_t epoch = 1491518994;
+  const std::string expected = 'Thu Apr  6 22:49:54 2017 UTC';
+    }
