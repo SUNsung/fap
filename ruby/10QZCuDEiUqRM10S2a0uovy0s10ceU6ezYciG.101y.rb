@@ -1,55 +1,47 @@
 
         
-            def log_http_get_file(url, cached = false)
-      s = '  #{'CACHED ' if cached}GET #{url}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
-      end
+        
+    # immediate selector of css at pos
+    def selector_for_pos(css, pos, depth = -1)
+      css[css_def_pos(css, pos, depth)].dup.strip
     end
-    
-    desc 'Start a dummy (test) Rails app server'
-task :dummy_rails do
-  require 'rack'
-  require 'term/ansicolor'
-  port = ENV['PORT'] || 9292
-  puts %Q(Starting on #{Term::ANSIColor.cyan 'http://localhost:#{port}'})
-  Rack::Server.start(
-    config: 'test/dummy_rails/config.ru',
-    Port: port)
-end
     
           spec['main'] =
           find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
           find_files.(Bootstrap.fonts_path) +
           %w(assets/javascripts/bootstrap.js)
     
-              @meta_assignment_node
-        end
+        inp.attributes.keys.each do |ikey|
+      if (ikey.downcase == 'value')
+        inp[ikey] = ''
+        next
+      end
     
-            # This is a convenient way to check whether the variable is used
-        # in its entire variable lifetime.
-        # For more precise usage check, refer Assignment#used?.
-        #
-        # Once the variable is captured by a block, we have no idea
-        # when, where and how many times the block would be invoked
-        # and it means we cannot track the usage of the variable.
-        # So we consider it's used to suppress false positive offenses.
-        def used?
-          @captured_by_block || referenced?
-        end
+    def usage
+  $stderr.puts '#{$0} [site list] [output-dir]'
+  exit(0)
+end
     
-    module RuboCop
-  module Cop
-    module Style
-      # This cop check for uses of Object#freeze on immutable objects.
-      #
-      # @example
-      #   # bad
-      #   CONST = 1.freeze
-      #
-      #   # good
-      #   CONST = 1
-      class RedundantFreeze < Cop
-        include FrozenStringLiteral
+          if(pkt.payload =~ self.sigs[k])
+        matched = k
+        matches = $1
+      end
+    
+                  s[:proto] = 'tcp'
+              s[:name]  = 'pop3'
+              s[:extra] = 'Successful Login. Banner: #{s[:banner]}'
+              report_auth_info(s)
+              print_status('Successful POP3 Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]} (#{s[:banner].strip})')
+    
+    module GitHub
+  module_function
+    
+          opts.on('-T', '--to FORMAT',
+        'The format to convert to. Can be scss or sass.',
+        'By default, this is inferred from the output filename.',
+        'If there is none, defaults to sass.') do |name|
+        @options[:to] = name.downcase.to_sym
+        unless [:scss, :sass].include?(@options[:to])
+          raise 'Unknown format for sass-convert --to: #{name}'
+        end
+      end
