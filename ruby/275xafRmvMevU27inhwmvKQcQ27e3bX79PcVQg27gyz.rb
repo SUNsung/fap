@@ -1,65 +1,93 @@
 
         
-          def set_permission(permission_name, value)
-    self.send('#{permission_name}=', value)
-    save_and_refresh_staff_groups!
+            t1 = Time.gm(2000)
+    t2 = t1.getlocal
+    assert_equal(t1, t2)
+    t3 = t1.getlocal('-02:00')
+    assert_equal(t1, t3)
+    assert_equal(-7200, t3.utc_offset)
+    assert_equal([1999, 12, 31, 22, 0, 0], [t3.year, t3.mon, t3.mday, t3.hour, t3.min, t3.sec])
+    t1.localtime
+    assert_equal(t1, t2)
+    assert_equal(t1.gmt?, t2.gmt?)
+    assert_equal(t1, t3)
+    
+      it 'decodes the remaining doubles when passed the '*' modifier after another directive' do
+    array = '333333\x15@ffffff\x22@'.unpack(unpack_format()+unpack_format('*'))
+    array.should == [5.3, 9.2]
   end
     
-        find_union(segments, Project).includes(:namespace).order_id_desc
+      it 'implicitly has a count of one when no count is specified' do
+    'abc'.unpack(unpack_format).should == ['a']
   end
     
-    module Vagrant
-  module Plugin
-    module V2
-      # This class maintains a list of all the registered plugins as well
-      # as provides methods that allow querying all registered components of
-      # those plugins as a single unit.
-      class Manager
-        attr_reader :registered
-    
-    module VagrantPlugins
-  module CommandBox
-    module Command
-      class Remove < Vagrant.plugin('2', :command)
-        def execute
-          options = {}
-          options[:force] = false
-    
-      def display_normal_output
-    display_items 'System libraries', @system_dylibs
-    display_items 'Homebrew libraries', @brewed_dylibs
-    display_items 'Indirect dependencies with linkage', @indirect_deps
-    display_items 'Variable-referenced libraries', @variable_dylibs
-    display_items 'Missing libraries', @broken_dylibs
-    display_items 'Broken dependencies', @broken_deps
-    display_items 'Undeclared dependencies with linkage', @undeclared_deps
-    display_items 'Dependencies with no linkage', @unnecessary_deps
+      def self.clear_state
+    @state = nil
   end
     
-            # Prints the list of specs & pod cache dirs for a single pod name.
-        #
-        # This output is valid YAML so it can be parsed with 3rd party tools
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        The various infos about a pod cache. Keys are
-        #        :spec_file, :version, :release and :slug
-        #
-        def print_pod_cache_infos(pod_name, cache_descriptors)
-          UI.puts '#{pod_name}:'
-          cache_descriptors.each do |desc|
-            if @short_output
-              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
-            end
-            UI.puts('  - Version: #{desc[:version]}')
-            UI.puts('    Type:    #{pod_type(desc)}')
-            UI.puts('    Spec:    #{desc[:spec_file]}')
-            UI.puts('    Pod:     #{desc[:slug]}')
-          end
-        end
-      end
+      it 'raises an ArgumentError if not passed a block' do
+    lambda {
+      Thread.send(@method)
+    }.should raise_error(ArgumentError)
+  end
+    
+      it 'handles bad leap seconds by carrying values forward' do
+    with_timezone 'UTC' do
+      time = Time.send(@method, 2017, 7, 5, 23, 59, 60)
+      time.sec.should == 0
+      time.min.should == 0
+      time.hour.should == 0
+      time.day.should == 6
+      time.month.should == 7
+    end
+  end
+    
+        def silence_log
+      @silence = true
+      yield
+    ensure
+      @silence = false
     end
   end
 end
 
     
-          private
+    module RuboCop
+  module Cop
+    module Lint
+      # This cop checks that there are no repeated conditions
+      # used in case 'when' expressions.
+      #
+      # @example
+      #
+      #   # bad
+      #
+      #   case x
+      #   when 'first'
+      #     do_something
+      #   when 'first'
+      #     do_something_else
+      #   end
+      #
+      # @example
+      #
+      #   # good
+      #
+      #   case x
+      #   when 'first'
+      #     do_something
+      #   when 'second'
+      #     do_something_else
+      #   end
+      class DuplicateCaseCondition < Cop
+        MSG = 'Duplicate `when` condition detected.'.freeze
+    
+            def_node_matcher :simple_double_comparison?, '(send $lvar :== $lvar)'
+        def_node_matcher :simple_comparison?, <<-PATTERN
+          {(send $lvar :== _)
+           (send _ :== $lvar)}
+        PATTERN
+    
+            def each_misplaced_optional_arg(arguments)
+          optarg_positions, arg_positions = argument_positions(arguments)
+          return if optarg_positions.empty? || arg_positions.empty?
