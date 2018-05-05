@@ -1,79 +1,76 @@
 
         
-            # Remove directories opposite from traversal, so that a subtree with no
-    # actual files gets removed correctly.
-    dirs.reverse_each do |d|
-      if d.children.empty?
-        puts 'rmdir: #{d} (empty)' if ARGV.verbose?
-        d.rmdir
-      end
-    end
+            valid_oauth_providers :evernote
     
-          # Find commands in the path
-      unless (exts = external_commands).empty?
-        puts
-        puts 'External commands'
-        puts_columns exts
-      end
-    end
+      def tumblr_consumer_secret
+    ENV['TUMBLR_OAUTH_SECRET']
   end
     
-      def empty?
-    @hash.empty?
-  end
+        if params[:sort].present?
+      attribute, direction = params[:sort].downcase.split('.')
+      unless valid_sorts.include?(attribute)
+        attribute, direction = default.to_a.first
+      end
+    else
+      attribute, direction = default.to_a.first
+    end
     
-        projects << @user.contributed_projects.visible_to_user(current_user) if current_user
-    projects << @user.contributed_projects.public_to_user(current_user)
-    
-    def check_ruby
-  if RUBY_VERSION.to_f < 2.0
-    print 'You are currently using Ruby ', RUBY_VERSION, ', but version 2.0 or above is required.'
-    exit 1
+      def load_event
+    @event = current_user.events.find(params[:id])
   end
 end
+
     
-    (allow file-read-metadata)
-(allow file-read*
-  ; This is currenly only added because using `xcodebuild` to build a resource
-  ; bundle target starts a FSEvents stream on `/`. No idea why that would be
-  ; needed, but for now it doesn’t seem like a real problem.
-  (literal '/')
-  (regex
-    ; TODO see if we can restrict this more, but it's going to be hard
-    #'^/Users/[^.]+/*'
-    ;#'^/Users/[^.]+/.netrc'
-    ;#'^/Users/[^.]+/.gemrc'
-    ;#'^/Users/[^.]+/.gem/*'
-    ;#'^/Users/[^.]+/Library/.*'
-    #'^/Library/*'
-    #'^/System/Library/*'
-    #'^/usr/lib/*'
-    #'^/usr/share/*'
-    #'^/private/*'
-    #'^/dev/*'
-    #'^<%= ruby_prefix %>'
-    #'^<%= pod_prefix %>'
-    #'^<%= xcode_app_path %>'
-    #'^<%= Pod::Config.instance.repos_dir %>'
-<% prefixes.each do |prefix| %>
-    #'^<%= prefix %>/*'
-<% end %>
-  )
-)
+        respond_to do |format|
+      if !running? && @job.destroy
+        format.html { redirect_to jobs_path, notice: 'Job deleted.' }
+        format.json { head :no_content }
+      else
+        format.html { redirect_to jobs_path, alert: 'Can not delete a running job.' }
+        format.json { render json: @job.errors, status: :unprocessable_entity }
+      end
+    end
+  end
     
-            # Removes the specified cache
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        An array of caches to remove, each specified with the same
-        #        hash as cache_descriptors_per_pod especially :spec_file and :slug
-        #
-        def remove_caches(cache_descriptors)
-          cache_descriptors.each do |desc|
-            UI.message('Removing spec #{desc[:spec_file]} (v#{desc[:version]})') do
-              FileUtils.rm(desc[:spec_file])
-            end
-            UI.message('Removing cache #{desc[:slug]}') do
-              FileUtils.rm_rf(desc[:slug])
-            end
-          end
+      def toggle_availability
+    @service = current_user.services.find(params[:id])
+    @service.toggle_availability!
+    
+        def log_status(status)
+      puts bold status
+    end
+    
+              render 'admins/pods'
         end
+        format.mobile { render 'admins/pods' }
+        format.json { render json: pods_json }
+      end
+    end
+    
+      def user_search
+    if params[:admins_controller_user_search]
+      search_params = params.require(:admins_controller_user_search)
+                            .permit(:username, :email, :guid, :under13)
+      @search = UserSearch.new(search_params)
+      @users = @search.perform
+    end
+    
+      context 'called with null values' do
+    it 'writes rules for other three' do
+      ruleset = 'border-top-style: inset; ' +
+                'border-right-style: none; ' +
+                'border-left-style: double;'
+      bad_rule = 'border-bottom-style: null;'
+    
+    describe 'margin' do
+  before(:all) do
+    ParserSupport.parse_file('library/margin')
+  end
+    
+      context 'called with four sizes' do
+    it 'applies different widths to all sides' do
+      rule = 'padding: 7px 8px 9px 10px'
+    
+          expect('.all-text-inputs').to have_ruleset(ruleset)
+    end
+  end
