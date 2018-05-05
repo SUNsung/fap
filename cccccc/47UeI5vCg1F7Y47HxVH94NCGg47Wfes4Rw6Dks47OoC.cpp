@@ -1,353 +1,456 @@
 
         
-        #endif  // STORAGE_LEVELDB_DB_BUILDER_H_
-
+        #ifndef BITCOIN_INDIRECTMAP_H
+#define BITCOIN_INDIRECTMAP_H
     
-    #ifndef STORAGE_LEVELDB_DB_DB_ITER_H_
-#define STORAGE_LEVELDB_DB_DB_ITER_H_
+    #if 0
+static void DumpInternalIter(Iterator* iter) {
+  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
+    ParsedInternalKey k;
+    if (!ParseInternalKey(iter->key(), &k)) {
+      fprintf(stderr, 'Corrupt '%s'\n', EscapeString(iter->key()).c_str());
+    } else {
+      fprintf(stderr, '@ '%s'\n', k.DebugString().c_str());
+    }
+  }
+}
+#endif
     
-     private:
-  // We construct a char array of the form:
-  //    klength  varint32               <-- start_
-  //    userkey  char[klength]          <-- kstart_
-  //    tag      uint64
-  //                                    <-- end_
-  // The array is a suitable MemTable key.
-  // The suffix starting with 'userkey' can be used as an InternalKey.
-  const char* start_;
-  const char* kstart_;
-  const char* end_;
-  char space_[200];      // Avoid allocation for short keys
+    // Return a new iterator that converts internal keys (yielded by
+// '*internal_iter') that were live at the specified 'sequence' number
+// into appropriate user keys.
+extern Iterator* NewDBIterator(
+    DBImpl* db,
+    const Comparator* user_key_comparator,
+    Iterator* internal_iter,
+    SequenceNumber sequence,
+    uint32_t seed);
     
-    std::string LogFileName(const std::string& name, uint64_t number) {
-  assert(number > 0);
-  return MakeFileName(name, number, 'log');
+    static void UnrefEntry(void* arg1, void* arg2) {
+  Cache* cache = reinterpret_cast<Cache*>(arg1);
+  Cache::Handle* h = reinterpret_cast<Cache::Handle*>(arg2);
+  cache->Release(h);
 }
     
-    void TableCache::Evict(uint64_t file_number) {
-  char buf[sizeof(file_number)];
-  EncodeFixed64(buf, file_number);
-  cache_->Erase(Slice(buf, sizeof(buf)));
+    void WriteBatchInternal::SetContents(WriteBatch* b, const Slice& contents) {
+  assert(contents.size() >= kHeader);
+  b->rep_.assign(contents.data(), contents.size());
 }
     
-    void VersionEdit::Clear() {
-  comparator_.clear();
-  log_number_ = 0;
-  prev_log_number_ = 0;
-  last_sequence_ = 0;
-  next_file_number_ = 0;
-  has_comparator_ = false;
-  has_log_number_ = false;
-  has_prev_log_number_ = false;
-  has_next_file_number_ = false;
-  has_last_sequence_ = false;
-  deleted_files_.clear();
-  new_files_.clear();
-}
-    
-    #endif  // STORAGE_LEVELDB_DB_VERSION_EDIT_H_
-
-    
-    class VersionEditTest { };
-    
-    TEST(FindFileTest, Single) {
-  Add('p', 'q');
-  ASSERT_EQ(0, Find('a'));
-  ASSERT_EQ(0, Find('p'));
-  ASSERT_EQ(0, Find('p1'));
-  ASSERT_EQ(0, Find('q'));
-  ASSERT_EQ(1, Find('q1'));
-  ASSERT_EQ(1, Find('z'));
+    namespace leveldb {
     }
     
-    // Arrange to generate values that shrink to this fraction of
-// their original size after compression
-static double FLAGS_compression_ratio = 0.5;
+    // Comma-separated list of operations to run in the specified order
+//   Actual benchmarks:
+//
+//   fillseq       -- write N values in sequential key order in async mode
+//   fillrandom    -- write N values in random key order in async mode
+//   overwrite     -- overwrite N values in random key order in async mode
+//   fillseqsync   -- write N/100 values in sequential key order in sync mode
+//   fillrandsync  -- write N/100 values in random key order in sync mode
+//   fillrand100K  -- write N/1000 100K values in random order in async mode
+//   fillseq100K   -- write N/1000 100K values in seq order in async mode
+//   readseq       -- read N times sequentially
+//   readseq100K   -- read N/1000 100K values in sequential order in async mode
+//   readrand100K  -- read N/1000 100K values in sequential order in async mode
+//   readrandom    -- read N times in random order
+static const char* FLAGS_benchmarks =
+    'fillseq,'
+    'fillseqsync,'
+    'fillrandsync,'
+    'fillrandom,'
+    'overwrite,'
+    'readrandom,'
+    'readseq,'
+    'fillrand100K,'
+    'fillseq100K,'
+    'readseq100K,'
+    'readrand100K,'
+    ;
     
-        const char* benchmarks = FLAGS_benchmarks;
-    while (benchmarks != NULL) {
-      const char* sep = strchr(benchmarks, ',');
-      Slice name;
-      if (sep == NULL) {
-        name = benchmarks;
-        benchmarks = NULL;
-      } else {
-        name = Slice(benchmarks, sep - benchmarks);
-        benchmarks = sep + 1;
-      }
+    // A Comparator object provides a total order across slices that are
+// used as keys in an sstable or a database.  A Comparator implementation
+// must be thread-safe since leveldb may invoke its methods concurrently
+// from multiple threads.
+class Comparator {
+ public:
+  virtual ~Comparator();
+    }
+    
+    // Dump the contents of the file named by fname in text format to
+// *dst.  Makes a sequence of dst->Append() calls; each call is passed
+// the newline-terminated text corresponding to a single item found
+// in the file.
+//
+// Returns a non-OK result if fname does not name a leveldb storage
+// file, or if the file cannot be read.
+Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
+    
+    #ifndef CPU_ONLY
+  void forward_gpu_gemm(const Dtype* col_input, const Dtype* weights,
+      Dtype* output, bool skip_im2col = false);
+  void forward_gpu_bias(Dtype* output, const Dtype* bias);
+  void backward_gpu_gemm(const Dtype* input, const Dtype* weights,
+      Dtype* col_output);
+  void weight_gpu_gemm(const Dtype* col_input, const Dtype* output, Dtype*
+      weights);
+  void backward_gpu_bias(Dtype* bias, const Dtype* input);
+#endif
+    
+    namespace caffe {
     }
     
     
-    {  // Changes *key to a short string >= *key.
-  // Simple comparator implementations may return with *key unchanged,
-  // i.e., an implementation of this method that does nothing is correct.
-  virtual void FindShortSuccessor(std::string* key) const = 0;
+    {  int count_;
+  int num_concats_;
+  int concat_input_size_;
+  int concat_axis_;
 };
     
     
-    {    sm->compute(left, right, disp);
-}
+    {}  // namespace caffe
     
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
     
-    {    float alpha = (dir2.x*offset.y - dir2.y*offset.x)/det;
-    cross_point = origin1 + dir1*alpha;
-}
-    
-    #undef cv_hal_LU32f
-#define cv_hal_LU32f lapack_LU32f
-#undef cv_hal_LU64f
-#define cv_hal_LU64f lapack_LU64f
-    
-      /* Invoked when trailers are received before closing the stream. Only invoked
-   * when server sends trailers, which it may not. May be invoked while there is
-   * read data remaining in local buffer. Contents of |trailers| is valid for
-   * duration of the call.
+      /**
+   * Query if a task is finished. This is non-blocking and can be called as
+   * many times as desired.
    */
-  void (*on_response_trailers_received)(
-      bidirectional_stream* stream,
-      const bidirectional_stream_header_array* trailers);
+  static int64_t TaskStatus(const Resource& task);
     
-      ClientConfig client_config;
-  client_config.set_client_type(ASYNC_CLIENT);
-  client_config.set_outstanding_rpcs_per_channel(1000);
-  client_config.set_client_channels(8);
-  client_config.set_async_client_threads(8);
-  client_config.set_rpc_type(STREAMING);
-  client_config.mutable_load_params()->mutable_poisson()->set_offered_load(
-      1000.0 / grpc_test_slowdown_factor());
-    
-    DEFINE_int32(driver_port, 0, 'Port for communication with driver');
-DEFINE_int32(server_port, 0, 'Port for operation as a server');
-DEFINE_string(credential_type, grpc::testing::kInsecureCredentialsType,
-              'Credential type for communication with driver');
-    
-    // Get leading or trailing comments in a string. Comment lines start with '// '.
-// Leading detached comments are put in in front of leading comments.
-template <typename DescriptorType>
-inline grpc::string GetNodeComments(const DescriptorType* desc, bool leading) {
-  return grpc_generator::GetPrefixedComments(desc, leading, '//');
-}
-    
-    
-    {  grpc::string package = service->full_name();
-  size_t pos = package.rfind('.' + service->name());
-  if (pos != grpc::string::npos) {
-    package.erase(pos);
-    result.append('package: ' + package + ';\n');
-  }
-  result.append('service ' + service->name() + ' {\n');
-  for (int i = 0; i < service->method_count(); ++i) {
-    result.append(DescribeMethod(service->method(i)));
-  }
-  result.append('}\n\n');
-  return result;
-}
-    
-      // Proto2 Python
-  google::protobuf::compiler::python::Generator py_generator;
-  cli.RegisterGenerator('--python_out', &py_generator,
-                        'Generate Python source file.');
-    
-    bool cudnn_is_acceptable(const Tensor& self) {
-  if (!globalContext().userEnabledCuDNN()) return false;
-  if (!self.is_cuda()) return false;
-  auto st = self.type().scalarType();
-  if (!(st == kDouble || st == kFloat || st == kHalf)) return false;
-  if (!AT_CUDNN_ENABLED()) return false;
-  // NB: In the old Python code, there was also a test to see if the
-  // cuDNN library was actually dynamically linked or not.  I'm not
-  // sure if we can actually test this.
-  return true;
-}
-    
-    ${Storage}::${Storage}(Context* context,
-  void * data, std::size_t size, const std::function<void(void*)> & deleter)
-  : storage(${THStorage}_newWithDataAndAllocator(${state,}
-     static_cast<${THScalarType}*>(data), size,
-     &storage_deleter,
-     new std::function<void(void*)>(deleter)
-    )),
-    context(context) {
-    ${THStorage}_clearFlag(${state,} storage, TH_STORAGE_RESIZABLE);
-}
-    
-    const std::string kKernelSyscallAddrModifiedPath = '/sys/kernel/camb/syscall_addr_modified';
-const std::string kKernelTextHashPath = '/sys/kernel/camb/text_segment_hash';
-    
-      /// Returns the runner name
-  std::string name() const {
-    return name_;
-  }
-    
-     public:
-  /**
-   * @brief A getter for the status code property
-   *
-   * @return an integer representing the status code of the operation.
-   */
-  int getCode() const { return code_; }
-    
-    /**
- * @brief The requested exit code.
- *
- * Use Initializer::shutdown to request shutdown in most cases.
- * This will raise a signal to the main thread requesting the dispatcher to
- * interrupt all services. There is a thread requesting a join of all services
- * that will continue the shutdown process.
- */
-extern volatile std::sig_atomic_t kExitCode;
-    
-        // We should have a property tree of pack content mimicking embedded
-    // configuration packs, ready to parse as a string.
-    std::ostringstream output;
-    pt::write_json(output, multi_pack, false);
-    pack = output.str();
-    if (pack.empty()) {
-      return Status(1, 'Multi-pack content empty');
-    }
-    
-    TEST_F(ProcessTests, test_launchWorker) {
-  {
-    std::vector<char*> argv;
-    for (size_t i = 0; i < kExpectedWorkerArgsCount; i++) {
-      char* entry = new char[strlen(kExpectedWorkerArgs[i]) + 1];
-      EXPECT_NE(entry, nullptr);
-      memset(entry, '\0', strlen(kExpectedWorkerArgs[i]) + 1);
-      memcpy(entry, kExpectedWorkerArgs[i], strlen(kExpectedWorkerArgs[i]));
-      argv.push_back(entry);
-    }
-    argv.push_back(nullptr);
-    }
-    }
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    namespace detail {
-template <typename T>
-constexpr T constexpr_log2_(T a, T e) {
-  return e == T(1) ? a : constexpr_log2_(a + T(1), e / T(2));
-}
-    }
-    
-    
-    {  if (rv == 0) {
-    return FutexResult::AWOKEN;
-  } else {
-    switch(errno) {
-      case ETIMEDOUT:
-        assert(timeout != nullptr);
-        return FutexResult::TIMEDOUT;
-      case EINTR:
-        return FutexResult::INTERRUPTED;
-      case EWOULDBLOCK:
-        return FutexResult::VALUE_CHANGED;
-      default:
-        assert(false);
-        // EINVAL, EACCESS, or EFAULT.  EINVAL means there was an invalid
-        // op (should be impossible) or an invalid timeout (should have
-        // been sanitized by timeSpecFromTimePoint).  EACCESS or EFAULT
-        // means *addr points to invalid memory, which is unlikely because
-        // the caller should have segfaulted already.  We can either
-        // crash, or return a value that lets the process continue for
-        // a bit. We choose the latter. VALUE_CHANGED probably turns the
-        // caller into a spin lock.
-        return FutexResult::VALUE_CHANGED;
-    }
-  }
-}
-    
-    
-    {  /* On some systems steady_clock is just an alias for system_clock. So,
-   * we must skip run_steady_clock_test if the two clocks are the same. */
-  if (!std::is_same<system_clock,steady_clock>::value) {
-    run_steady_clock_test();
-  }
-}
-    
-    template <class I, class T>
-void* execInSitu(Op op, Data* from, void* to) {
-  switch (op) {
-    case Op::eNuke:
-      get<T>(*from).~T();
-      break;
-    case Op::eMove:
-      ::new (static_cast<void*>(&static_cast<Data*>(to)->buff_))
-          T(std::move(get<T>(*from)));
-      get<T>(*from).~T();
-      break;
-    case Op::eCopy:
-      detail::if_constexpr(std::is_copy_constructible<T>(), [&](auto id) {
-        ::new (static_cast<void*>(&static_cast<Data*>(to)->buff_))
-            T(id(get<T>(*from)));
-      });
-      break;
-    case Op::eType:
-      return const_cast<void*>(static_cast<void const*>(&typeid(T)));
-    case Op::eAddr:
-      if (*static_cast<std::type_info const*>(to) == typeid(T)) {
-        return &from->buff_;
-      }
-      throwBadPolyCast();
-    case Op::eRefr:
-      return vtableForRef<I, Uncvref<T>>(
-          static_cast<RefType>(reinterpret_cast<std::uintptr_t>(to)));
-  }
-  return nullptr;
-}
-    
-    #include <bitset>
-    
-    #pragma once
-    
-      // You really shouldn't need this if you use the SmartPtr provided by create,
-  // but if you really want to do something crazy like stick the released
-  // pointer into a DescriminatedPtr or something, you'll need this to clean up
-  // after yourself.
-  static void destroy(AtomicHashArray*);
-    
-        jobject NewObject(jclass clazz, jmethodID methodID, ...)
-    {
-        va_list args;
-        va_start(args, methodID);
-        jobject result = functions->NewObjectV(this, clazz, methodID, args);
-        va_end(args);
-        return result;
-    }
-    
-        Value(void)
-    : unit(YGUnitUndefined)
-    , value(0.0)
-    {
-    }
-    
-    #include './Config.hh'
-    
-     public: // Prevent accidental copy
-    
-    #pragma once
-    
-    
-    {};
+    #endif
 
     
-    #else
-# define ALOGV(...) ((void)0)
-# define ALOGD(...) ((void)0)
-# define ALOGI(...) ((void)0)
-# define ALOGW(...) ((void)0)
-# define ALOGE(...) ((void)0)
-# define ALOGF(...) ((void)0)
+    
+    {  unsigned next_vr{Vreg::V0};
+  Vlabel entry;
+  jit::vector<Vframe> frames;
+  jit::vector<Vblock> blocks;
+  jit::hash_map<Vconst,Vreg,Vconst::Hash> constToReg;
+  jit::hash_map<size_t,Vconst> regToConst;
+  jit::vector<VregList> tuples;
+  jit::vector<VcallArgs> vcallArgs;
+  jit::vector<VdataBlock> dataBlocks;
+  uint16_t cur_voff{0};  // current instruction index managed by Vout
+  bool padding{false};
+  bool profiling{false};
+  folly::Optional<TransContext> context;
+  StructuredLogEntry* log_entry{nullptr};
+};
+    
+      bool ret = true;
+  bitmask* run_nodes = numa_get_run_node_mask();
+  bitmask* mem_nodes = numa_get_mems_allowed();
+  for (int i = 0; i <= max_node; i++) {
+    if (!numa_bitmask_isbitset(run_nodes, i) ||
+        !numa_bitmask_isbitset(mem_nodes, i)) {
+      // Only deal with the case of a contiguous set of nodes where we can
+      // run/allocate memory on each node.
+      ret = false;
+      break;
+    }
+    numa_node_set |= (uint32_t)1 << i;
+    numa_num_nodes++;
+  }
+  numa_bitmask_free(run_nodes);
+  numa_bitmask_free(mem_nodes);
+    
+    void TargetGraph::setSamples(TargetId id, uint32_t samples) {
+  assertx(id < targets.size());
+  targets[id].samples = samples;
+}
+    
+    #include 'hphp/runtime/vm/jit/types.h'
+    
+    
+    {/////////////////////////////////////////////////////////////////////////////
+}
 #endif
 
     
-    // This allows storing the assert message before the current process terminates due to a crash
-typedef void (*AssertHandler)(const char* message);
-void setAssertHandler(AssertHandler assertHandler);
+      /*
+   * Getters for depth and disabled status.
+   */
+  bool disabled() const { return m_disabled; }
+  int  depth()    const { return m_callDepth; }
+  bool inlining() const { return depth() != 0; }
+    
+    #ifndef GRPC_TEST_CPP_UTIL_SUBPROCESS_H
+#define GRPC_TEST_CPP_UTIL_SUBPROCESS_H
+    
+    void OutputImage::Downsample(const DownsampleConfig& cfg) {
+  if (components_[1].IsAllZero() && components_[2].IsAllZero()) {
+    // If the image is already grayscale, nothing to do.
+    return;
+  }
+  if (cfg.use_silver_screen &&
+      cfg.u_factor_x == 2 && cfg.u_factor_y == 2 &&
+      cfg.v_factor_x == 2 && cfg.v_factor_y == 2) {
+    std::vector<uint8_t> rgb = ToSRGB();
+    std::vector<std::vector<float> > yuv = RGBToYUV420(rgb, width_, height_);
+    SetDownsampledCoefficients(yuv[0], 1, 1, &components_[0]);
+    SetDownsampledCoefficients(yuv[1], 2, 2, &components_[1]);
+    SetDownsampledCoefficients(yuv[2], 2, 2, &components_[2]);
+    return;
+  }
+  // Get the floating-point precision YUV array represented by the set of
+  // DCT coefficients.
+  std::vector<std::vector<float> > yuv(3, std::vector<float>(width_ * height_));
+  for (int c = 0; c < 3; ++c) {
+    components_[c].ToFloatPixels(&yuv[c][0], 1);
+  }
+    }
+    
+    void TransformBlock(double block[64], Transform1d f) {
+  double tmp[64];
+  for (int x = 0; x < 8; ++x) {
+    f(&block[x], 8, &tmp[x]);
+  }
+  for (int y = 0; y < 8; ++y) {
+    f(&tmp[8 * y], 1, &block[8 * y]);
+  }
+}
+    
+    // This function will create a Huffman tree.
+//
+// The catch here is that the tree cannot be arbitrarily deep.
+// Brotli specifies a maximum depth of 15 bits for 'code trees'
+// and 7 bits for 'code length code trees.'
+//
+// count_limit is the value that is to be faked as the minimum value
+// and this minimum value is raised until the tree matches the
+// maximum length requirement.
+//
+// This algorithm is not of excellent performance for very long data blocks,
+// especially when population counts are longer than 2**tree_limit, but
+// we are not planning to use this with extremely long blocks.
+//
+// See http://en.wikipedia.org/wiki/Huffman_coding
+void CreateHuffmanTree(const uint32_t *data,
+                       const size_t length,
+                       const int tree_limit,
+                       HuffmanTree* tree,
+                       uint8_t *depth) {
+  // For block sizes below 64 kB, we never need to do a second iteration
+  // of this loop. Probably all of our block sizes will be smaller than
+  // that, so this loop is mostly of academic interest. If we actually
+  // would need this, we would be better off with the Katajainen algorithm.
+  for (uint32_t count_limit = 1; ; count_limit *= 2) {
+    size_t n = 0;
+    for (size_t i = length; i != 0;) {
+      --i;
+      if (data[i]) {
+        const uint32_t count = std::max<uint32_t>(data[i], count_limit);
+        tree[n++] = HuffmanTree(count, -1, static_cast<int16_t>(i));
+      }
+    }
+    }
+    }
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    
+    {}  // namespace guetzli
+
+    
+      tmp0 = in[4 * stride];
+  tmp1 = kIDCTMatrix[ 4] * tmp0;
+  out[0] += tmp1;
+  out[1] -= tmp1;
+  out[2] -= tmp1;
+  out[3] += tmp1;
+  out[4] += tmp1;
+  out[5] -= tmp1;
+  out[6] -= tmp1;
+  out[7] += tmp1;
+    
+    namespace guetzli {
+    }
+    
+    // Output callback function with associated data.
+struct JPEGOutput {
+  JPEGOutput(JPEGOutputHook cb, void* data) : cb(cb), data(data) {}
+  bool Write(const uint8_t* buf, size_t len) const {
+    return (len == 0) || (cb(data, buf, len) == len);
+  }
+ private:
+  JPEGOutputHook cb;
+  void* data;
+};
+    
+    
+    {  uint8_t bits;     // number of bits used for this symbol
+  uint16_t value;   // symbol value or table offset
+};
+    
+    
+    {}  // namespace guetzli
+    
+        stb_out4(0);       // 64-bit length requires 32-bit leading 0
+    stb_out4(length);
+    stb_out4(stb__window);
+    
+            if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+            counter++;
+        ImGui::SameLine();
+        ImGui::Text('counter = %d', counter);
+    
+    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
+// **Prefer using the code in the sdl_opengl3_example/ folder**
+// This code is mostly provided as a reference to learn how ImGui integration works, because it is shorter to read.
+// If your code is using GL3+ context or any semi modern OpenGL calls, using this is likely to make everything more
+// complicated, will require your code to reset every single OpenGL attributes to their initial state, and might
+// confuse your GPU driver. 
+// The GL2 code is unable to reset attributes or even call e.g. 'glUseProgram(0)' because they don't exist in that API.
+    
+    
+    {    void Clear()            { for (int n = 0; n < IM_ARRAYSIZE(Layers); n++) Layers[n].resize(0); }
+    void ClearFreeMemory()  { for (int n = 0; n < IM_ARRAYSIZE(Layers); n++) Layers[n].clear(); }
+    IMGUI_API void FlattenIntoSingleLayer();
+};
+    
+            // Rendering
+        g_pd3dDevice->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
+        g_pd3dDevice->ClearRenderTargetView(g_mainRenderTargetView, (float*)&clear_color);
+        ImGui::Render();
+        ImGui_ImplDX10_RenderDrawData(ImGui::GetDrawData());
+    
+            // Rendering
+        g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
+        g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, (float*)&clear_color);
+        ImGui::Render();
+        ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+    
+    class InputCorpus {
+ public:
+  static const size_t kFeatureSetSize = 1 << 16;
+  InputCorpus(const std::string &OutputCorpus) : OutputCorpus(OutputCorpus) {
+    memset(InputSizesPerFeature, 0, sizeof(InputSizesPerFeature));
+    memset(SmallestElementPerFeature, 0, sizeof(SmallestElementPerFeature));
+  }
+  ~InputCorpus() {
+    for (auto II : Inputs)
+      delete II;
+  }
+  size_t size() const { return Inputs.size(); }
+  size_t SizeInBytes() const {
+    size_t Res = 0;
+    for (auto II : Inputs)
+      Res += II->U.size();
+    return Res;
+  }
+  size_t NumActiveUnits() const {
+    size_t Res = 0;
+    for (auto II : Inputs)
+      Res += !II->U.empty();
+    return Res;
+  }
+  bool empty() const { return Inputs.empty(); }
+  const Unit &operator[] (size_t Idx) const { return Inputs[Idx]->U; }
+  void AddToCorpus(const Unit &U, size_t NumFeatures, bool MayDeleteFile = false) {
+    assert(!U.empty());
+    uint8_t Hash[kSHA1NumBytes];
+    if (FeatureDebug)
+      Printf('ADD_TO_CORPUS %zd NF %zd\n', Inputs.size(), NumFeatures);
+    ComputeSHA1(U.data(), U.size(), Hash);
+    Hashes.insert(Sha1ToString(Hash));
+    Inputs.push_back(new InputInfo());
+    InputInfo &II = *Inputs.back();
+    II.U = U;
+    II.NumFeatures = NumFeatures;
+    II.MayDeleteFile = MayDeleteFile;
+    memcpy(II.Sha1, Hash, kSHA1NumBytes);
+    UpdateCorpusDistribution();
+    ValidateFeatureSet();
+  }
+    }
+    
+    extern 'C' {
+// Declare these symbols as weak to allow them to be optionally defined.
+#define EXT_FUNC(NAME, RETURN_TYPE, FUNC_SIG, WARN)                            \
+  RETURN_TYPE NAME##Def FUNC_SIG {                                             \
+    Printf('ERROR: Function \'%s\' not defined.\n', #NAME);                    \
+    exit(1);                                                                   \
+  }                                                                            \
+  RETURN_TYPE NAME FUNC_SIG __attribute__((weak, alias(#NAME 'Def')));
+    }
+    
+      T.seekg(0, T.end);
+  size_t FileLen = T.tellg();
+  if (MaxSize)
+    FileLen = std::min(FileLen, MaxSize);
+    
+    long GetEpoch(const std::string &Path);
+    
+    void ListFilesInDirRecursive(const std::string &Dir, long *Epoch,
+                             std::vector<std::string> *V, bool TopDir) {
+  auto E = GetEpoch(Dir);
+  if (Epoch)
+    if (E && *Epoch >= E) return;
+    }
+    
+      // Remove all features that we already know from all other inputs.
+  for (size_t i = NumFilesInFirstCorpus; i < Files.size(); i++) {
+    auto &Cur = Files[i].Features;
+    std::vector<uint32_t> Tmp;
+    std::set_difference(Cur.begin(), Cur.end(), AllFeatures.begin(),
+                        AllFeatures.end(), std::inserter(Tmp, Tmp.begin()));
+    Cur.swap(Tmp);
+  }
+    
+    struct Merger {
+  std::vector<MergeFileInfo> Files;
+  size_t NumFilesInFirstCorpus = 0;
+  size_t FirstNotProcessedFile = 0;
+  std::string LastFailure;
+    }
+    
+    size_t MutationDispatcher::Mutate_InsertByte(uint8_t *Data, size_t Size,
+                                             size_t MaxSize) {
+  if (Size >= MaxSize) return 0;
+  size_t Idx = Rand(Size + 1);
+  // Insert new value at Data[Idx].
+  memmove(Data + Idx + 1, Data + Idx, Size - Idx);
+  Data[Idx] = RandCh(Rand);
+  return Size + 1;
+}
+    
+      void HandleTrace(uint32_t *guard, uintptr_t PC);
+  void HandleInit(uint32_t *start, uint32_t *stop);
+  void HandleCallerCallee(uintptr_t Caller, uintptr_t Callee);
+  void HandleValueProfile(size_t Value) { ValueProfileMap.AddValue(Value); }
+  template <class T> void HandleCmp(void *PC, T Arg1, T Arg2);
+  size_t GetTotalPCCoverage();
+  void SetUseCounters(bool UC) { UseCounters = UC; }
+  void SetUseValueProfile(bool VP) { UseValueProfile = VP; }
+  void SetPrintNewPCs(bool P) { DoPrintNewPCs = P; }
+  template <class Callback> size_t CollectFeatures(Callback CB);
+  bool UpdateValueProfileMap(ValueBitMap *MaxValueProfileMap) {
+    return UseValueProfile && MaxValueProfileMap->MergeFrom(ValueProfileMap);
+  }
+    
+    int TraceState::TryToAddDesiredData(const uint8_t *PresentData,
+                                    const uint8_t *DesiredData,
+                                    size_t DataSize) {
+  if (NumMutations >= kMaxMutations || !WantToHandleOneMoreMutation()) return 0;
+  ScopedDoingMyOwnMemmem scoped_doing_my_own_memmem;
+  const uint8_t *UnitData;
+  auto UnitSize = F->GetCurrentUnitInFuzzingThead(&UnitData);
+  int Res = 0;
+  const uint8_t *Beg = UnitData;
+  const uint8_t *End = Beg + UnitSize;
+  for (const uint8_t *Cur = Beg; Cur < End; Cur++) {
+    Cur = (uint8_t *)SearchMemory(Cur, End - Cur, PresentData, DataSize);
+    if (!Cur)
+      break;
+    size_t Pos = Cur - Beg;
+    assert(Pos < UnitSize);
+    AddMutation(Pos, DataSize, DesiredData);
+    Res++;
+  }
+  return Res;
+}
+    
+    void SleepSeconds(int Seconds);
