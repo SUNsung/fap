@@ -1,220 +1,86 @@
 
         
-        from astronet.data import preprocess
-    
-      Returns:
-    labels: An int64 tf.Placeholder with shape [batch_size].
-  '''
-  batch_size = None  # Batch size will be dynamically specified.
-  return tf.placeholder(dtype=tf.int64, shape=[batch_size], name='labels')
-
-    
-    '''Configuration container for TensorFlow models.
-    
-      return all_time, all_flux
-
-    
-      Returns:
-    interp_spline: List of numpy arrays; each is the masked spline with missing
-        points linearly interpolated.
-  '''
-  interp_spline = []
-  for time, masked_time, masked_spline in zip(
-      all_time, all_masked_time, all_masked_spline):
-    if len(masked_time) > 0:  # pylint:disable=g-explicit-length-test
-      interp_spline.append(np.interp(time, masked_time, masked_spline))
-    else:
-      interp_spline.append(np.full_like(time, np.nan))
-  return interp_spline
+                def get_auth(self, username=None, password=None):
+            assert self.raw_auth == USERNAME
+            assert username == USERNAME
+            assert password is None
+            return basic_auth()
     
     
-def epoch_completed(model, session, epoch, epoch_loss,
-                    val_instances, val_labels, saver, save_path, best_f1):
-  '''Runs every time an epoch completes.
+class Formatting(object):
+    '''A delegate class that invokes the actual processors.'''
     
-      def Conversion3dTestWithType(self, dtype):
-    original_data = np.arange(24).reshape(2, 3, 4).astype(dtype)
-    serialized = datum_io.SerializeToString(original_data)
-    retrieved_data = datum_io.ParseFromString(serialized)
-    self.assertTrue(np.array_equal(original_data, retrieved_data))
     
-      @property
-  def target_layer_type(self):
-    return self._target_layer_type
+def test_follow_all_redirects_shown(httpbin):
+    r = http('--follow', '--all', httpbin.url + '/redirect/2')
+    assert r.count('HTTP/1.1') == 3
+    assert r.count('HTTP/1.1 302 FOUND', 2)
+    assert HTTP_OK in r
     
-        @property
-    def apparent_encoding(self):
-        '''The apparent encoding, provided by the chardet library.'''
-        return chardet.detect(self.content)['encoding']
     
-        if not isinstance(password, basestring):
-        warnings.warn(
-            'Non-string passwords will no longer be supported in Requests '
-            '3.0.0. Please convert the object you've passed in ({0!r}) to '
-            'a string or bytes object in the near future to avoid '
-            'problems.'.format(password),
-            category=DeprecationWarning,
-        )
-        password = str(password)
-    # -- End Removal --
+def test_unicode_raw_json_item(httpbin):
+    r = http('--json', 'POST', httpbin.url + '/post',
+             u'test:={ '%s' : [ '%s' ] }' % (UNICODE, UNICODE))
+    assert HTTP_OK in r
+    assert r.json['json'] == {'test': {UNICODE: [UNICODE]}}
     
-       >>> payload = dict(key1='value1', key2='value2')
-   >>> r = requests.post('http://httpbin.org/post', data=payload)
-   >>> print(r.text)
-   {
-     ...
-     'form': {
-       'key2': 'value2',
-       'key1': 'value1'
-     },
-     ...
-   }
+        def test_verify_custom_ca_bundle_path(
+            self, httpbin_secure_untrusted):
+        r = http(httpbin_secure_untrusted + '/get', '--verify', CA_BUNDLE)
+        assert HTTP_OK in r
     
-                # Extract any cookies sent on the response to the cookiejar
-            # in the new request. Because we've mutated our copied prepared
-            # request, use the old one that we haven't yet touched.
-            extract_cookies_to_jar(prepared_request._cookies, req, resp.raw)
-            merge_cookies(prepared_request._cookies, self.cookies)
-            prepared_request.prepare_cookies(prepared_request._cookies)
+        Handles all input (CLI args, file args, stdin), applies defaults,
+    and performs extra validation.
     
-        with server as (host, port):
-        url = 'http://{0}:{1}/'.format(host, port)
-        r = requests.get(url, auth=auth)
-        # Verify server didn't authenticate us.
-        assert r.status_code == 401
-        assert r.history[0].status_code == 401
-        close_server.set()
     
-            except MaxRetryError as e:
-            if isinstance(e.reason, ConnectTimeoutError):
-                # TODO: Remove this in 3.0.0: see #2811
-                if not isinstance(e.reason, NewConnectionError):
-                    raise ConnectTimeout(e, request=request)
+SESSIONS_DIR_NAME = 'sessions'
+DEFAULT_SESSIONS_DIR = os.path.join(DEFAULT_CONFIG_DIR, SESSIONS_DIR_NAME)
+VALID_SESSION_NAME_PATTERN = re.compile('^[a-zA-Z0-9_.-]+$')
+# Request headers starting with these prefixes won't be stored in sessions.
+# They are specific to each request.
+# http://en.wikipedia.org/wiki/List_of_HTTP_header_fields#Requests
+SESSION_IGNORED_HEADER_PREFIXES = ['Content-', 'If-']
     
-    __all__ = ['__version__', 'version_info', 'twisted_version',
-           'Spider', 'Request', 'FormRequest', 'Selector', 'Item', 'Field']
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-l', '--list', dest='list', action='store_true',
-                          help='only list contracts, without checking them')
-        parser.add_option('-v', '--verbose', dest='verbose', default=False, action='store_true',
-                          help='print contract tests for all spiders')
+@pytest.mark.functional
+def test_select_command_with_arrows(proc, TIMEOUT):
+    select_command_with_arrows(proc, TIMEOUT)
     
-            return requests
+        t = r1(r'type=(\w+)', flashvars)
+    id = r1(r'vid=([^']+)', flashvars)
+    if t == 'youku':
+        youku_download_by_vid(id, title=title, output_dir=output_dir, merge=merge, info_only=info_only)
+    elif t == 'tudou':
+        tudou_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
+    elif t == 'sina' or t == 'video':
+        fake_headers['Referer'] = url
+        url = 'http://www.miomio.tv/mioplayer/mioplayerconfigfiles/sina.php?vid=' + id
+        xml_data = get_content(url, headers=fake_headers, decoded=True)
+        url_list = sina_xml_to_url_list(xml_data)
     
-    >>> mean([-1.0, 2.5, 3.25, 5.75])
-2.625
-    
-        def test_keys_reuse(self):
-        s = '[{'a_key': 1, 'b_\xe9': 2}, {'a_key': 3, 'b_\xe9': 4}]'
-        self.check_keys_reuse(s, self.loads)
-        self.check_keys_reuse(s, self.json.decoder.JSONDecoder().decode)
-    
-    def escape(m):
-    all, tail = m.group(0, 1)
-    assert all.startswith('\\')
-    esc = simple_escapes.get(tail)
-    if esc is not None:
-        return esc
-    if tail.startswith('x'):
-        hexes = tail[1:]
-        if len(hexes) < 2:
-            raise ValueError('invalid hex string escape ('\\%s')' % tail)
-        try:
-            i = int(hexes, 16)
-        except ValueError:
-            raise ValueError('invalid hex string escape ('\\%s')' % tail) from None
-    else:
-        try:
-            i = int(tail, 8)
-        except ValueError:
-            raise ValueError('invalid octal string escape ('\\%s')' % tail) from None
-    return chr(i)
-    
-        def _longcmdstring(self, line, file=None):
-        '''Internal: send a command and get the response plus following text.
-        Same as _longcmd() and _getlongresp(), except that the returned `lines`
-        are unicode strings rather than bytes objects.
-        '''
-        self._putcmd(line)
-        resp, list = self._getlongresp(file)
-        return resp, [line.decode(self.encoding, self.errors)
-                      for line in list]
-    
-        def _get_baseURI(self):
-        return self.baseURI
-    def _set_baseURI(self, uri):
-        self.baseURI = uri
-    
-    int main( int argc, char **argv)
-{
-    PyImport_FrozenModules = _PyImport_FrozenModules;
-    return PythonService_main(argc, argv);
+    extension_mapping = {
+    'rss': ('xml', 'application/atom+xml; charset=UTF-8'),
+    'xml': ('xml', 'application/atom+xml; charset=UTF-8'),
+    'js': ('js', 'text/javascript; charset=UTF-8'),
+    'embed': ('htmllite', 'text/javascript; charset=UTF-8'),
+    'mobile': ('mobile', 'text/html; charset=UTF-8'),
+    'png': ('png', 'image/png'),
+    'css': ('css', 'text/css'),
+    'csv': ('csv', 'text/csv; charset=UTF-8'),
+    'api': (api_type(), 'application/json; charset=UTF-8'),
+    'json-html': (api_type('html'), 'application/json; charset=UTF-8'),
+    'json-compact': (api_type('compact'), 'application/json; charset=UTF-8'),
+    'compact': ('compact', 'text/html; charset=UTF-8'),
+    'json': (api_type(), 'application/json; charset=UTF-8'),
+    'i': ('compact', 'text/html; charset=UTF-8'),
 }
-'''
     
-    DEFAULT_DB = None
-SPACE = ' '
-COMMASPACE = ', '
+    api('organiclisting',       OrganicListingJsonTemplate)
+api('subreddittraffic', TrafficJsonTemplate)
+api('takedownpane', TakedownJsonTemplate)
+api('policyview', PolicyViewJsonTemplate)
     
-        def _create_infile(self):
-        infile = support.TESTFN
-        with open(infile, 'w') as fp:
-            self.addCleanup(os.remove, infile)
-            fp.write(self.data)
-        return infile
-    
-    try:
-    WINFUNCTYPE
-except NameError:
-    # fake to enable this test on Linux
-    WINFUNCTYPE = CFUNCTYPE
-    
-    
-class MainHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.write('Hello, world')
-    
-            yield conn.read_response(Delegate())
-        yield event.wait()
-        self.assertEqual(self.code, 200)
-        self.assertEqual(b''.join(body), b'hello')
-
-    
-            self.reader, addr = a.accept()
-        set_close_exec(self.reader.fileno())
-        self.reader.setblocking(0)
-        self.writer.setblocking(0)
-        a.close()
-        self.reader_fd = self.reader.fileno()
-    
-            p = Popen(
-            [sys.executable, '-m', 'testapp'], stdout=subprocess.PIPE,
-            cwd=path, env=dict(os.environ, PYTHONPATH=pythonpath),
-            universal_newlines=True)
-        out = p.communicate()[0]
-        self.assertEqual(out, 'Starting\nStarting\n')
-
-    
-    
-@skipIfNonUnix
-class TestMultiprocess(unittest.TestCase):
-    # These tests verify that the two multiprocess examples from the
-    # TCPServer docs work. Both tests start a server with three worker
-    # processes, each of which prints its task id to stdout (a single
-    # byte, so we don't have to worry about atomicity of the shared
-    # stdout stream) and then exits.
-    def run_subproc(self, code):
-        proc = subprocess.Popen(sys.executable,
-                                stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE)
-        proc.stdin.write(utf8(code))
-        proc.stdin.close()
-        proc.wait()
-        stdout = proc.stdout.read()
-        proc.stdout.close()
-        if proc.returncode != 0:
-            raise RuntimeError('Process returned %d. stdout=%r' % (
-                proc.returncode, stdout))
-        return to_unicode(stdout)
+            res = AdminPage(content = AdminAwardGive(award, recipient, desc,
+                                                 url, hours),
+                        title='give an award').render()
+        return res
