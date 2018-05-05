@@ -1,232 +1,363 @@
 
         
-        
-    {}
-
-    
-    ELISTIZEH(PARA)
-    
-    
-    {}  // namespace tesseract.
-    
-    #include 'ccutil.h'
-#include 'errcode.h'
-#include 'genericvector.h'
-#include 'tesscallback.h'
-    
-    // Initialize the table to the given size of feature space.
-void IntFeatureDist::Init(const IntFeatureMap* feature_map) {
-  size_ = feature_map->sparse_size();
-  Clear();
-  feature_map_ = feature_map;
-  features_ = new bool[size_];
-  features_delta_one_ = new bool[size_];
-  features_delta_two_ = new bool[size_];
-  memset(features_, false, size_ * sizeof(features_[0]));
-  memset(features_delta_one_, false, size_ * sizeof(features_delta_one_[0]));
-  memset(features_delta_two_, false, size_ * sizeof(features_delta_two_[0]));
-  total_feature_weight_ = 0.0;
-}
-    
-    static void RunQPS() {
-  gpr_log(GPR_INFO, 'Running QPS test, open-loop');
-    }
-    
-    namespace routeguide {
-    }
-    
-    namespace routeguide {
-class Feature;
-    }
-    
-    template <class T, class F>
-double sum(const T& container, F functor) {
-  double r = 0;
-  for (auto v = container.begin(); v != container.end(); v++) {
-    r += functor(*v);
-  }
-  return r;
-}
-    
-    #include <initializer_list>
-#include <string>
-#include <vector>
-    
-        // Taken from RS4
-    REGISTER_OPERATOR_SCHEMA(Softsign)
-        .Description('Softsign takes one input data (Tensor<T>) and produces one output '
-            'data (Tensor<T>) where the function, y = x / (1 + abs(x)), is applied to the '
-            'tensor elementwise.')
-        .Input('input', 'Input tensor, typically 1-D.', 'T')
-        .Output('output', 'Output tensor of same shape and type as input X.', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.');
-    
-        //‘GREATER’, ‘LESS’, ‘EQUALS,
-    REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Greater)
-        REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Less)
-        REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Equal)
-    
-    
-    {    private:
-        // test if data is in memory at the moment
-        bool IsInRam() const
-        {
-            return !m_frames.empty();
-        }
+        // TODO(zongheng): this should be a general functor that powers SparseAdd and
+// ScatterNd ops.  It should be moved to its own head file, once the other ops
+// are implemented.
+template <typename Device, typename T, typename Index, int NDIMS,
+          scatter_op::UpdateOp op>
+struct ScatterNdFunctor {
+  // Returns -1 on success or a nonnegative i s.t. indices[i] is a bad index.
+  Index operator()(const Device& d, typename TTypes<Index>::ConstMatrix indices,
+                   typename TTypes<T>::ConstFlat updates,
+                   typename TTypes<T, NDIMS>::Tensor out);
 };
     
-    template <class ElemType>
-void ReaderShim<ElemType>::SetCurrentSamplePosition(size_t currentSamplePosition)
-{
-    if (GetCurrentSamplePosition() == currentSamplePosition)
-        return;
-    }
     
-    	if (cmderOptions.registerApp == true) {
-		RegisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_BACKGROUND);
-		RegisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_LISTITEM);
-	}
-	else if (cmderOptions.unRegisterApp == true)
-	{
-		UnregisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_BACKGROUND);
-		UnregisterShellMenu(cmderOptions.cmderRegScope, SHELL_MENU_REGISTRY_PATH_LISTITEM);
-	}
-	else if (cmderOptions.error == true)
-	{
-		return 1;
-	}
-	else
-	{
-		StartCmder(cmderOptions.cmderStart, cmderOptions.cmderSingle, cmderOptions.cmderTask, cmderOptions.cmderCfgRoot);
-	}
-    
-    #define STB__TRY(t,p)  /* avoid retrying a match we already tried */ \
-    if (p ? dist != q-t : 1)                             \
-    if ((m = stb_matchlen(t, q, match_max)) > best)     \
-    if (stb__nc(m,q-(t)))                                \
-    best = m, dist = q - (t)
-    
-            if (ImGui::Button('Button'))                            // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-            counter++;
-        ImGui::SameLine();
-        ImGui::Text('counter = %d', counter);
-    
-    // Use if you want to reset your rendering device without losing ImGui state.
-IMGUI_API void        ImGui_ImplDX10_InvalidateDeviceObjects();
-IMGUI_API bool        ImGui_ImplDX10_CreateDeviceObjects();
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    //---- Avoid multiple STB libraries implementations, or redefine path/filenames to prioritize another version
-// By default the embedded implementations are declared static and not available outside of imgui cpp files.
-//#define IMGUI_STB_TRUETYPE_FILENAME   'my_folder/stb_truetype.h'
-//#define IMGUI_STB_RECT_PACK_FILENAME  'my_folder/stb_rect_pack.h'
-//#define IMGUI_DISABLE_STB_TRUETYPE_IMPLEMENTATION
-//#define IMGUI_DISABLE_STB_RECT_PACK_IMPLEMENTATION
-    
-    // CHANGELOG
-// (minor and older changes stripped away, please see git history for details)
-//  2018-03-20: Misc: Setup io.BackendFlags ImGuiBackendFlags_HasMouseCursors flag + honor ImGuiConfigFlags_NoMouseCursorChange flag.
-//  2018-02-16: Inputs: Added support for mouse cursors, honoring ImGui::GetMouseCursor() value.
-//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplSdlGL2_RenderDrawData() in the .h file so you can call it yourself.
-//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
-//  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
-//  2018-02-05: Misc: Using SDL_GetPerformanceCounter() instead of SDL_GetTicks() to be able to handle very high framerate (1000+ FPS).
-//  2018-02-05: Inputs: Keyboard mapping is using scancodes everywhere instead of a confusing mixture of keycodes and scancodes. 
-//  2018-01-20: Inputs: Added Horizontal Mouse Wheel support.
-//  2018-01-19: Inputs: When available (SDL 2.0.4+) using SDL_CaptureMouse() to retrieve coordinates outside of client area when dragging. Otherwise (SDL 2.0.3 and before) testing for SDL_WINDOW_INPUT_FOCUS instead of SDL_WINDOW_MOUSE_FOCUS.
-//  2018-01-18: Inputs: Added mapping for ImGuiKey_Insert.
-//  2017-09-01: OpenGL: Save and restore current polygon mode.
-//  2017-08-25: Inputs: MousePos set to -FLT_MAX,-FLT_MAX when mouse is unavailable/missing (instead of -1,-1).
-//  2016-10-15: Misc: Added a void* user_data parameter to Clipboard function handlers.
-//  2016-09-05: OpenGL: Fixed save and restore of current scissor rectangle.
-//  2016-07-29: OpenGL: Explicitly setting GL_UNPACK_ROW_LENGTH to reduce issues because SDL changes it. (#752)
-    
-    
-    {    return true;
-}
-    
-        // Create Descriptor Set:
     {
-        VkDescriptorSetAllocateInfo alloc_info = {};
-        alloc_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-        alloc_info.descriptorPool = g_DescriptorPool;
-        alloc_info.descriptorSetCount = 1;
-        alloc_info.pSetLayouts = &g_DescriptorSetLayout;
-        err = vkAllocateDescriptorSets(g_Device, &alloc_info, &g_DescriptorSet);
-        ImGui_ImplGlfwVulkan_VkResult(err);
+    {}  // namespace port
+}  // namespace tensorflow
+    
+      Status ReadLocked(string* key, string* value, bool* produced,
+                    bool* at_end) override {
+    Status status = input_buffer_->ReadLine(value);
+    ++line_number_;
+    if (status.ok()) {
+      *key = strings::StrCat(current_work(), ':', line_number_);
+      *produced = true;
+      return status;
     }
-    
-            // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
-        if (show_demo_window)
-        {
-            ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-            ImGui::ShowDemoWindow(&show_demo_window);
-        }
-    
-    /**
- * Check whether 'path' starts with 'prefix'.
- * That is, if prefix has n path elements, then the first n elements of
- * path must be the same as prefix.
- *
- * There is a special case if prefix ends with a slash:
- * /foo/bar/ is not a prefix of /foo/bar, but both /foo/bar and /foo/bar/
- * are prefixes of /foo/bar/baz.
- */
-bool starts_with(const path& p, const path& prefix);
-    
-    
-    {  size_t foundCompleted = 0;
-  for (auto& op : ops) {
-    if (op->state() == AsyncIOOp::State::COMPLETED) {
-      ++foundCompleted;
-    } else {
-      EXPECT_TRUE(op->state() == AsyncIOOp::State::CANCELED) << *op;
+    if (errors::IsOutOfRange(status)) {  // End of file, advance to the next.
+      *at_end = true;
+      return Status::OK();
+    } else {  // Some other reading error
+      return status;
     }
   }
-  EXPECT_EQ(foundCompleted, completed);
+    
+    
+    {
+    {    SetReaderFactory([this, compression_type, env]() {
+      return new TFRecordReader(name(), compression_type, env);
+    });
+  }
+};
+    
+      {
+    // NOTE(mrry): The gRPC channel doesn't expose the target, so we
+    // can't compare it for equality.
+    auto a_1_1 = cc->FindWorkerChannel('/job:mnist/replica:0/task:0');
+    auto a_1_2 = cc->FindWorkerChannel('/job:mnist/replica:0/task:0');
+    }
+    
+    class RemoveDeviceTest : public ::testing::Test {
+ protected:
+  void TestRemoveDevice() {
+    GraphDef graph_def;
+    }
+    }
+    
+    namespace tensorflow {
+    }
+    
+    // static
+void App::CloseAllWindows(bool force, bool quit) {
+  std::vector<Shell*> windows = Shell::windows();
+    }
+    
+    
+namespace nwapi {
+    }
+    
+    
+    {
+    {    if (zoom_controller) {
+      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
+      if (zoom_factor > content::kMaximumZoomFactor) {
+        zoom_factor = content::kMaximumZoomFactor;
+      }
+      if (zoom_factor < content::kMinimumZoomFactor) {
+        zoom_factor = content::kMinimumZoomFactor;
+      }
+      x *= zoom_factor;
+      y *= zoom_factor;
+    }
+    
+    Popup(x, y, rvh);
+  } else if (method == 'EnableShowEvent') {
+    arguments.GetBoolean(0, &enable_show_event_);
+  } else {
+    NOTREACHED() << 'Invalid call to Menu method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
+    
+    void Menu::Create(const base::DictionaryValue& option) {
+  gtk_accel_group = NULL;
+  std::string type;
+  if (option.GetString('type', &type) && type == 'menubar')
+    menu_ = gtk_menu_bar_new();
+  else
+    menu_ = gtk_menu_new();
+    }
+    
+      class ClipboardWriter {
+  public:
+    ClipboardWriter() {
+      scw_.reset(new ui::ScopedClipboardWriter(ui::CLIPBOARD_TYPE_COPY_PASTE));
+    }
+    }
+    
+    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
+ public:
+  NwMenuGetNSStringWithFixupFunction(){}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    
+ protected:
+  ~NwMenuGetNSStringWithFixupFunction() override {}
+    
+  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
+};
+    
+    bool NwObjCallObjectMethodFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  base::ListValue* arguments = nullptr;
+  int id = 0;
+  std::string type, method;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(2, &method));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetList(3, &arguments));
+    }
+    
+    /**
+ * @brief Iterate the discovered decorators for a given point type.
+ *
+ * The configuration maintains various sources, each may contain a set of
+ * decorators. The source tracking is abstracted for the decorator iterator.
+ *
+ * @param point request execution of decorators for this given point.
+ * @param time an optional time for points using intervals.
+ * @param source restrict run to a specific config source.
+ */
+void runDecorators(DecorationPoint point,
+                   size_t time = 0,
+                   const std::string& source = '');
+    
+    
+    {
+    {  return readFile(value, pack);
+}
 }
 
     
     
-    {} // namespace folly
+    {
+    { private:
+  friend class TLSConfigTests;
+};
+}
 
     
-      /**
-   * Get the output file.
+    std::string platformStrerr(int errnum) {
+  return ::strerror(errnum);
+}
+    
+    TEST_F(PermissionsTests, test_functional_drop) {
+  if (getuid() != 0) {
+    LOG(WARNING) << 'Not root, skipping (explicit) unprivileged testing';
+    return;
+  }
+    }
+    
+    
+    {  EXPECT_EQ(process->pid(), pid);
+}
+    
+    class TestTablePlugin : public TablePlugin {
+ public:
+  void testSetCache(size_t step, size_t interval) {
+    QueryData r;
+    QueryContext ctx;
+    ctx.useCache(true);
+    setCache(step, interval, ctx, r);
+  }
+    }
+    
+    
+    {
+    {  EXPECT_EQ(expected, toAsciiTimeUTC(&result));
+}
+}
+
+    
+    std::string platformStrerr(int errnum) {
+  std::vector<char> buffer;
+  buffer.assign(MAX_BUFFER_SIZE, '\0');
+    }
+    
+    
+    {template<typename IndexType>
+Parser<IndexType> *
+CreateDenseLibSVMParser(const std::string& path,
+                        const std::map<std::string, std::string>& args,
+                        unsigned part_index,
+                        unsigned num_parts) {
+  CHECK_NE(args.count('num_col'), 0) << 'expect num_col in dense_libsvm';
+  return new DensifyParser<IndexType>(
+            Parser<IndexType>::Create(path.c_str(), part_index, num_parts, 'libsvm'),
+           uint32_t(atoi(args.at('num_col').c_str())));
+}
+}  // namespace data
+    
+    
+    {  delete metric;
+  metric = xgboost::Metric::Create('error@0.1');
+  ASSERT_STREQ(metric->Name(), 'error@0.1');
+  EXPECT_STREQ(metric->Name(), 'error@0.1');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
+  EXPECT_NEAR(GetMetricEval(metric,
+                            {0.1f, 0.2f, 0.1f, 0.2f},
+                            {  0,   0,   1,   1}),
+              0.5f, 0.001f);
+}
+    
+    /*
+ * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
+ * Method:    XGDMatrixCreateFromDataIter
+ * Signature: (Ljava/util/Iterator;Ljava/lang/String;[J)I
+ */
+JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGDMatrixCreateFromDataIter
+  (JNIEnv *jenv, jclass jcls, jobject jiter, jstring jcache_info, jlongArray jout) {
+  DMatrixHandle result;
+  const char* cache_info = nullptr;
+  if (jcache_info != nullptr) {
+    cache_info = jenv->GetStringUTFChars(jcache_info, 0);
+  }
+  int ret = XGDMatrixCreateFromDataIter(
+      jiter, XGBoost4jCallbackDataIterNext, cache_info, &result);
+  if (cache_info) {
+    jenv->ReleaseStringUTFChars(jcache_info, cache_info);
+  }
+  setHandle(jenv, jout, result);
+  return ret;
+}
+    
+    namespace xgboost {
+/*!
+ * \brief interface of linear updater
+ */
+class LinearUpdater {
+ public:
+  /*! \brief virtual destructor */
+  virtual ~LinearUpdater() = default;
+  /*!
+   * \brief Initialize the updater with given arguments.
+   * \param args arguments to the objective function.
    */
-  const folly::File& getFile() const {
-    return file_;
-  }
-    
-    
-    {  // Propagate the message up to our parent LogCategory.
-  //
-  // Maybe in the future it might be worth adding a flag to control if a
-  // LogCategory should propagate messages to its parent or not.  (This would
-  // be similar to log4j's 'additivity' flag.)
-  // For now I don't have a strong use case for this.
-  if (parent_) {
-    parent_->processMessage(message);
-  }
-}
-    
-    namespace folly {
+  virtual void Init(
+      const std::vector<std::pair<std::string, std::string> >& args) = 0;
+    }
     }
     
-    /**
- * Parse a folly::dynamic object.
- *
- * The input should be an object data type, and is parsed the same as a JSON
- * object accpted by parseLogConfigJson().
- */
-LogConfig parseLogConfigDynamic(const dynamic& value);
+    #include 'debug_hud.h'
+#include 'imgui.h'
+    
+    // Render function.
+// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
+void ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data)
+{
+    // Handle cases of screen coordinates != from framebuffer coordinates (e.g. retina displays)
+    ImGuiIO& io = ImGui::GetIO();
+    draw_data->ScaleClipRects(io.DisplayFramebufferScale);
+    }
+    
+    IMGUI_API bool        ImGui_Marmalade_Init(bool install_callbacks);
+IMGUI_API void        ImGui_Marmalade_Shutdown();
+IMGUI_API void        ImGui_Marmalade_NewFrame();
+IMGUI_API void        ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
+    
+    static void ImGui_ImplDX10_CreateFontsTexture()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    }
+    
+            // Rendering
+        g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
+        g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, (float*)&clear_color);
+        ImGui::Render();
+        ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+    
+    Handle<Value> DBWrapper::Open(const Arguments& args) {
+  HandleScope scope;
+  DBWrapper* db_wrapper = ObjectWrap::Unwrap<DBWrapper>(args.This());
+    }
+    
+    This pointer must be provided as 'void* state' parameter for XXH32_update().
+XXH32_update() can be called as many times as necessary.
+The user must provide a valid (allocated) input.
+The function returns an error code, with 0 meaning OK, and any other value meaning there is an error.
+Note that 'len' is type 'int', which means it is limited to 2^31-1.
+If your data is larger, it is recommended to chunk your data into blocks
+of size for example 2^30 (1GB) to avoid any 'int' overflow issue.
+    
+    struct BlockContents;
+class Comparator;
+class BlockIter;
+class BlockPrefixIndex;
+    
+    namespace rocksdb {
+JniCallback::JniCallback(JNIEnv* env, jobject jcallback_obj) {
+  // Note: jcallback_obj may be accessed by multiple threads,
+  // so we ref the jvm not the env
+  const jint rs = env->GetJavaVM(&m_jvm);
+  if(rs != JNI_OK) {
+    // exception thrown
+    return;
+  }
+    }
+    }
+    
+    #include 'rocksjni/statisticsjni.h'
+    
+    // Read the key of a record from a write batch.
+// if this record represent the default column family then cf_record
+// must be passed as false, otherwise it must be passed as true.
+extern bool ReadKeyFromWriteBatchEntry(Slice* input, Slice* key,
+                                       bool cf_record);
+    
+    #include 'monitoring/perf_context_imp.h'
+#include 'monitoring/statistics.h'
+#include 'rocksdb/env.h'
+#include 'table/block.h'
+#include 'table/block_based_table_reader.h'
+#include 'table/persistent_cache_helper.h'
+#include 'table/format.h'
+#include 'util/coding.h'
+#include 'util/compression.h'
+#include 'util/crc32c.h'
+#include 'util/file_reader_writer.h'
+#include 'util/logging.h'
+#include 'util/stop_watch.h'
+#include 'util/string_util.h'
+#include 'util/xxhash.h'
+    
+    void SyncPoint::ClearAllCallBacks() {
+  impl_->ClearAllCallBacks();
+}
+    
+    void TestKillRandom(std::string kill_point, int odds,
+                    const std::string& srcfile, int srcline) {
+  for (auto& p : rocksdb_kill_prefix_blacklist) {
+    if (kill_point.substr(0, p.length()) == p) {
+      return;
+    }
+  }
+    }
+    
+      static Key MakeKey(uint64_t k, uint64_t g) {
+    assert(sizeof(Key) == sizeof(uint64_t));
+    assert(k <= K);  // We sometimes pass K to seek to the end of the skiplist
+    assert(g <= 0xffffffffu);
+    return ((k << 40) | (g << 8) | (HashNumbers(k, g) & 0xff));
+  }
