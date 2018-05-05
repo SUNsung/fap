@@ -1,67 +1,56 @@
 
         
-                  # Bubbled up from the adapter require. Prefix the exception message
-          # with some guidance about how to address it and reraise.
-          else
-            raise e.class, 'Error loading the '#{adapter}' Action Cable pubsub adapter. Missing a gem it depends on? #{e.message}', e.backtrace
-          end
-        end
-    
-              def remove_channel(channel)
-            @subscription_lock.synchronize do
-              when_connected { send_command('unsubscribe', channel) }
-            end
-          end
-    
-                define_method('#{name}=') do |attribute|
-              attributes[name.to_sym] = attribute
-            end
-          end
-        end
-    
-        assert_response :success
+            Or via the Cask:
+      brew cask install ngrok
+    EOS
   end
-    
-    ActionMailer::LogSubscriber.attach_to :action_mailer
+end
 
     
-    class HelperMailer < ActionMailer::Base
-  def use_mail_helper
-    @text = 'But soft! What light through yonder window breaks? It is the east, ' \
-            'and Juliet is the sun. Arise, fair sun, and kill the envious moon, ' \
-            'which is sick and pale with grief that thou, her maid, art far more ' \
-            'fair than she. Be not her maid, for she is envious! Her vestal ' \
-            'livery is but sick and green, and none but fools do wear it. Cast ' \
-            'it off!'
-    
-    html_readme = '<html>#{Kramdown::Document.new(open('README.md').read).to_html}</html>'
-readme_doctree = REXML::Document.new(html_readme)
-links = REXML::XPath.match(readme_doctree, '//a')
-    
-            {
-          :always_update     => false,
-          :template_location => root + '/public/stylesheets/sass',
-          :css_location      => root + '/public/stylesheets',
-          :cache_location    => root + '/tmp/sass-cache',
-          :always_check      => env != 'production',
-          :quiet             => env != 'production',
-          :full_exception    => env != 'production'
-        }.freeze
+          keg_only_deps.each do |dep|
+        ENV.prepend_path 'PATH', dep.opt_bin.to_s
+        ENV.prepend_path 'PKG_CONFIG_PATH', '#{dep.opt_lib}/pkgconfig'
+        ENV.prepend_path 'PKG_CONFIG_PATH', '#{dep.opt_share}/pkgconfig'
+        ENV.prepend_path 'ACLOCAL_PATH', '#{dep.opt_share}/aclocal'
+        ENV.prepend_path 'CMAKE_PREFIX_PATH', dep.opt_prefix.to_s
+        ENV.prepend 'LDFLAGS', '-L#{dep.opt_lib}' if dep.opt_lib.directory?
+        ENV.prepend 'CPPFLAGS', '-I#{dep.opt_include}' if dep.opt_include.directory?
       end
     end
+    
+      class SubclassX
+    attr_reader :key
+    def initialize(*)
+      @key = :value
+      super
+    end
+  end
+end
+
+    
+      it 'handles fractional usec close to rounding limit' do
+    time = Time.send(@method, 2000, 1, 1, 12, 30, 0, 9999r/10000)
+    
+      # Creates a delayed logger wrapping `inner`.
+  #
+  # @param inner [Sass::Logger::Base] The wrapped logger.
+  def initialize(inner)
+    self.log_level = inner.log_level
+    @inner = inner
+    @messages = []
   end
     
-        if as == :json
-      if api_error?(data)
-        data = generate_error_hash(data)
-      else
-        selected_fields = extract_fields(filter.to_s.strip)
-        data.select! { |k,v| selected_fields.include?(k) } unless selected_fields.empty?
-        unless options.include?(:exclude_default_metadata)
-          data = data.to_hash
-          if data.values.size == 0 && selected_fields.size > 0
-            raise LogStash::Api::NotFoundError
-          end
-          data = default_metadata.merge(data)
-        end
-      end
+        # @see \{MediaQuery#to\_a}
+    def to_a
+      res = []
+      res += modifier
+      res << ' ' unless modifier.empty?
+      res += type
+      res << ' and ' unless type.empty? || expressions.empty?
+      res += Sass::Util.intersperse(expressions, ' and ').flatten
+      res
+    end
+    
+      if defined? config.symbolize_keys!
+    config.symbolize_keys!
+  end
