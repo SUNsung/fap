@@ -1,195 +1,220 @@
 
         
-        // This file defines a C++ DescriptorDatabase, which wraps a Python Database
-// and delegate all its operations to Python methods.
+        #include <unordered_set>
+#include <vector>
     
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
+    class SmoothHingeLossUpdater : public DualLossUpdater {
+ public:
+  // Computes the updated dual variable (corresponding) to a single example. The
+  // updated dual value maximizes the objective function of the dual
+  // optimization problem associated with smooth hinge loss. The computations
+  // are detailed in readme.md.
+  double ComputeUpdatedDual(const int num_partitions, const double label,
+                            const double example_weight,
+                            const double current_dual, const double wx,
+                            const double weighted_example_norm) const final {
+    // Intutitvely there are 3 cases:
+    // a. new optimal value of the dual variable falls within the admissible
+    // range [0, 1]. In this case we set new dual to this value.
+    // b. new optimal value is < 0. Then, because of convexity, the optimal
+    // valid value for new dual = 0
+    // c. new optimal value > 1.0. Then new optimal value should be set to 1.0.
+    const double candidate_optimal_dual =
+        current_dual +
+        (label - wx - gamma * current_dual) /
+            (num_partitions * example_weight * weighted_example_norm + gamma);
+    if (label * candidate_optimal_dual < 0) {
+      return 0.0;
     }
+    if (label * candidate_optimal_dual > 1.0) {
+      return label;
     }
-    }
-    }
-    
-    #include <string>
-    
-    void RepeatedPrimitiveFieldGenerator::GenerateCloningCode(io::Printer* printer) {
-  printer->Print(variables_,
-    '$name$_ = other.$name$_.Clone();\n');
-}
-    
-      virtual void GenerateCloningCode(io::Printer* printer);
-  virtual void GenerateFreezingCode(io::Printer* printer);
-  virtual void GenerateMembers(io::Printer* printer);
-  virtual void GenerateMergingCode(io::Printer* printer);
-  virtual void GenerateParsingCode(io::Printer* printer);
-  virtual void GenerateSerializationCode(io::Printer* printer);
-  virtual void GenerateSerializedSizeCode(io::Printer* printer);
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-    
-      assert(peekType(msg) == thpp::Type::LONG);
-  int64_t arg2 = unpackInteger(msg);
-  assert(arg2 == 100);
-    
-    bool cudnn_is_acceptable(const Tensor& self) {
-  if (!globalContext().userEnabledCuDNN()) return false;
-  if (!self.is_cuda()) return false;
-  auto st = self.type().scalarType();
-  if (!(st == kDouble || st == kFloat || st == kHalf)) return false;
-  if (!AT_CUDNN_ENABLED()) return false;
-  // NB: In the old Python code, there was also a test to see if the
-  // cuDNN library was actually dynamically linked or not.  I'm not
-  // sure if we can actually test this.
-  return true;
-}
-    
-    ${Tensor}::${Tensor}(Context* context)
-: ${Tensor}(context,${THTensor}_new(${state})) {}
-    
-    
-    {    std::shared_ptr<store_type> _store;
-  };
-    
-        OperatorSchemaSetter&
-        OperatorSchemaSetter::SinceVersion(int p_opSetVersion)
-    {
-        m_opSchema.m_opSignature.m_sinceVersion = p_opSetVersion;
-        return *this;
-    }
-    
-    namespace ONNXIR
-{
-    namespace Common
-    {
-        Status::Status(StatusCategory p_category, int p_code, const std::string& p_msg)
-        {
-            m_state.reset(new State());
-            m_state->m_category = p_category;
-            m_state->m_code = p_code;
-            m_state->m_msg = p_msg;
-        }
-    }
-    }
-    
-        //‘GREATER’, ‘LESS’, ‘EQUALS,
-    REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Greater)
-        REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Less)
-        REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Equal)
-    
-        // Taken from ONNX
-    REGISTER_OPERATOR_SCHEMA(Conv)
-        .Description('The convolution operator consumes an input tensor and a filter, and'
-            'computes the output.')
-        .Input('X',
-             'Input data tensor from previous layer; has size (N x C x H x W)'
-             ', where N is the batch size, C is the number of channels, and'
-             ' H and W are the height and width. Note that this is for the 2D image.'
-             'Otherwise the size is (N x D1 x D2 ... x Dn)',
-             'T')
-        .Input('W',
-             'The weight tensor that will be used in the convolutions; has size (M x C x kH x kW), '
-             'where C is the number of channels, and kH and kW are the height and width of the kernel, '
-             'and M is the number of feature maps. For more than 2 dimensions, the kernel shape will be '
-             '(M x C x k1 x k2 x ... x kn), where is the dimension of the kernel',
-             'T')
-        .Input('B',
-            'Optional 1D bias to be added to the convolution, has size of M.',
-            'T')
-        .Output('Y',
-              'Output data tensor that contains the result of the convolution. The '
-              'output dimensions are functions of the kernel size, stride size, '
-              'and pad lengths.',
-              'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.')
-        .Attr('auto_pad',
-            'auto_pad must be either SAME_UPPER, SAME_LOWER or VALID. Where SAME_UPPER '
-            'or SAME_LOWER mean pad the input so that the ouput size match the input. '
-            'In case of odd number add the extra padding at the end for SAME_UPPER and '
-            'at the begining for SAME_LOWER. VALID mean no padding, therefore, read the '
-            'pixel values from the pads attribute.',
-            AttrType::AttributeProto_AttributeType_STRING)
-        .Attr('kernel_shape',
-            'The shape of the convolution kernel.',
-             AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('dilations',
-            'dilation value along each axis of the filter.',
-            AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('strides',
-            'stride along each axis.',
-            AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('pads',
-            'Padding for lower and upper side along each axis, it can take any value greater '
-            'than or equal to 0. The value represent the number of pixels added to the lower '
-            'and upper part of the corresponding axis. So `pads` will have two values per axis, '
-            'first value corresponding to the number of pixels added to the begining of the '
-            'axis and the second value corresponding to the number of pixels add at the end '
-            'of the axis.',
-            AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('group',
-            'number of groups input channels and output channels are divided into',
-            AttrType::AttributeProto_AttributeType_INT);
-    
-    void TraceLSTMPathes(const FunctionPtr& src, string &f_activation, string &g_activation, string &h_activation,
-    RNNDirection &direction, Variable &initStateH, Variable &initStateC, Variable &peepholeCi, Variable &peepholeCo, Variable &peepholeCf,
-    double &stabilizer_dh, double &stabilizer_dc, double &stabilizer_c);
-    
-        Matrix<float> mA2sparseCSC(mA2dense.DeepClone());
-    mA2sparseCSC.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseCSC, true);
-    
-    	jstring tag = (jstring)JNU_GetField(env, _log_info, 'tag', 'Ljava/lang/String;').l;
-	jstring filename = (jstring)JNU_GetField(env, _log_info, 'filename', 'Ljava/lang/String;').l;
-	jstring funcname = (jstring)JNU_GetField(env, _log_info, 'funcname', 'Ljava/lang/String;').l;
-	jint line = JNU_GetField(env, _log_info, 'line', 'I').i;
-	jlong pid = JNU_GetField(env, _log_info, 'pid', 'J').i;
-	jlong tid = JNU_GetField(env, _log_info, 'tid', 'J').j;
-	jlong maintid = JNU_GetField(env, _log_info, 'maintid', 'J').j;
-    
-    
-    {        vecdump_.push_back(strstack);
-        strstack.clear();
-    }
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-        if (((st.head_length + st.url_length + st.total_length) & 0xFF) != st.magic) return __LINE__;
-    
-        void* This() const {return m_this;}
-    
-    
-    {  private:
-    virtual void __OnAttach(const char* _key) {}
-    virtual void __OnDetach(const char* _key) {}
-};
-
-    
-    
-/*
- * scop_jenv.cpp
- *
- *  Created on: 2012-8-21
- *      Author: yanguoyue
- */
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    class Config {
-    }
-    
-    #pragma once
-    
-      bool operator==(const ProgramLocation& other) const {
-    // Assumes that the strings are static
-    return (m_functionName == other.m_functionName) && (m_fileName == other.m_fileName) && m_lineNumber == other.m_lineNumber;
+    return candidate_optimal_dual;
   }
+    }
+    
+    
+    {}  // namespace tensorflow
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+      // Size of the sink buffer where the compressed/decompressed data produced by
+  // zlib is cached.
+  int64 output_buffer_size = 256 << 10;
+    
+    
+    
+    namespace grpc {
+    }
+    
+    		FileAccess *f = FileAccess::open(certs_path, FileAccess::READ);
+		if (f) {
+			int flen = f->get_len();
+			out.resize(flen + 1);
+			{
+				PoolByteArray::Write w = out.write();
+				f->get_buffer(w.ptr(), flen);
+				w[flen] = 0; //end f string
+			}
+    }
+    
+    
+    {	return _peer;
+}
+    
+    	Vector<Pair<String, int> > section_line;
+	Map<String, int> method_line;
+	Map<String, int> signal_line;
+	Map<String, int> property_line;
+	Map<String, int> theme_property_line;
+	Map<String, int> constant_line;
+	Map<String, int> enum_line;
+	Map<String, Map<String, int> > enum_values_line;
+	int description_line;
+    
+    public:
+	GodotClosestRayResultCallback(const btVector3 &rayFromWorld, const btVector3 &rayToWorld, const Set<RID> *p_exclude) :
+			btCollisionWorld::ClosestRayResultCallback(rayFromWorld, rayToWorld),
+			m_exclude(p_exclude),
+			m_pickRay(false),
+			m_shapeId(0) {}
+    
+    
+    {	return NULL;
+}
+    
+    void jpeg_decoder::word_clear(void *p, uint16 c, uint n)
+{
+  uint8 *pD = (uint8*)p;
+  const uint8 l = c & 0xFF, h = (c >> 8) & 0xFF;
+  while (n)
+  {
+    pD[0] = l; pD[1] = h; pD += 2;
+    n--;
+  }
+}
+    
+      /// Open the acceptor using the specified protocol.
+  /**
+   * This function opens the socket acceptor so that it will use the specified
+   * protocol.
+   *
+   * @param protocol An object specifying which protocol is to be used.
+   *
+   * @throws boost::system::system_error Thrown on failure.
+   *
+   * @par Example
+   * @code
+   * boost::asio::ip::tcp::acceptor acceptor(io_service);
+   * acceptor.open(boost::asio::ip::tcp::v4());
+   * @endcode
+   */
+  void open(const protocol_type& protocol = protocol_type())
+  {
+    boost::system::error_code ec;
+    this->get_service().open(this->get_implementation(), protocol, ec);
+    boost::asio::detail::throw_error(ec, 'open');
+  }
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+      std::size_t check_for_completion(
+      const boost::system::error_code& ec,
+      std::size_t total_transferred)
+  {
+    return detail::adapt_completion_condition_result(
+        completion_condition_(ec, total_transferred));
+  }
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+      // Destructor.
+  ~gcc_arm_fenced_block()
+  {
+    barrier();
+  }
+    
+    bool non_blocking_read(int d, buf* bufs, std::size_t count,
+    boost::system::error_code& ec, std::size_t& bytes_transferred)
+{
+  for (;;)
+  {
+    // Read some data.
+    errno = 0;
+    signed_size_type bytes = error_wrapper(::readv(
+          d, bufs, static_cast<int>(count)), ec);
+    }
+    }
+    
+    #include <boost/asio/detail/pop_options.hpp>
+    
+      // folder with contents returns relative path to test dir
+  ASSERT_OK(env_->CreateDirIfMissing(test_dir_ + '/niu'));
+  ASSERT_OK(env_->CreateDirIfMissing(test_dir_ + '/you'));
+  ASSERT_OK(env_->CreateDirIfMissing(test_dir_ + '/guo'));
+  ASSERT_OK(env_->GetChildren(test_dir_, &children));
+  ASSERT_OK(env_->GetChildrenFileAttributes(test_dir_, &childAttr));
+  ASSERT_EQ(3U, children.size());
+  ASSERT_EQ(3U, childAttr.size());
+  for (auto each : children) {
+    env_->DeleteDir(test_dir_ + '/' + each);
+  }  // necessary for default POSIX env
+    
+    class StringAppendOperator : public AssociativeMergeOperator {
+ public:
+  // Constructor: specify delimiter
+  explicit StringAppendOperator(char delim_char);
+    }
+    
+      /// Push / Insert value at beginning/end of the list. Return the length.
+  /// May throw RedisListException
+  int PushLeft(const std::string& key, const std::string& value);
+  int PushRight(const std::string& key, const std::string& value);
+    
+      StatisticsJni::StatisticsJni(std::shared_ptr<Statistics> stats)
+      : StatisticsImpl(stats, false), m_ignore_histograms() {
+  }
+    
+    #include <memory>
+#include <set>
+#include <string>
+#include 'rocksdb/statistics.h'
+#include 'monitoring/statistics.h'
+    
+    
+    {
+    {  void ClearCallBack(const std::string& point);
+  void ClearAllCallBacks();
+  void EnableProcessing() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    enabled_ = true;
+  }
+  void DisableProcessing() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    enabled_ = false;
+  }
+  void ClearTrace() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    cleared_points_.clear();
+  }
+  bool DisabledByMarker(const std::string& point,
+                        std::thread::id thread_id) {
+    auto marked_point_iter = marked_thread_id_.find(point);
+    return marked_point_iter != marked_thread_id_.end() &&
+           thread_id != marked_point_iter->second;
+  }
+  void Process(const std::string& point, void* cb_arg);
+};
+}
+#endif // NDEBUG
