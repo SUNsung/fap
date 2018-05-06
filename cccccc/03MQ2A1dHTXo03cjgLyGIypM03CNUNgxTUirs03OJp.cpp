@@ -1,360 +1,215 @@
 
         
-        Usage:
-\code
-  using namespace Json;
-  void writeToStdout(StreamWriter::Factory const& factory, Value const& value) {
-    std::unique_ptr<StreamWriter> const writer(
-      factory.newStreamWriter());
-    writer->write(value, &std::cout);
-    std::cout << std::endl;  // add lf and flush
-  }
-\endcode
-*/
-class JSON_API StreamWriter {
-protected:
-  std::ostream* sout_;  // not owned; will not delete
-public:
-  StreamWriter();
-  virtual ~StreamWriter();
-  /** Write Value into document as configured in sub-class.
-      Do not take ownership of sout, but maintain a reference during function.
-      \pre sout != NULL
-      \return zero on success (For now, we always return zero, so check the stream instead.)
-      \throw std::exception possibly, depending on configuration
-   */
-  virtual int write(Value const& root, std::ostream* sout) = 0;
-    }
+        // Generate param traits read methods.
+#include 'ipc/param_traits_read_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
     
-    #include <Python.h>
-    
-    TEST(AnyTest, TestPackAndUnpackAny) {
-  // We can pack a Any message inside another Any message.
-  protobuf_unittest::TestAny submessage;
-  submessage.set_int32_value(12345);
-  google::protobuf::Any any;
-  any.PackFrom(submessage);
-  protobuf_unittest::TestAny message;
-  message.mutable_any_value()->PackFrom(any);
-    }
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
-    
-    #include <string>
-    
-    const Options* SourceGeneratorBase::options() {
-  return this->options_;
-}
-    
-    #include <google/protobuf/compiler/code_generator.h>
-    
-    namespace protobuf {
-namespace compiler {
-namespace java {
-    }
-    }
-    }
-    
-    
-    {    inline Status FileClose(int fd)
-    {
-        int ret = 0;
-#ifdef _WIN32
-        ret = _close(fd);
-#else
-        ret = close(fd);
-#endif
-        if (0 != ret)
-        {
-            return Status(SYSTEM, errno);
-        }
-        return Status::OK();
-    }
-}
-    
-        // Taken from ONNX
-    REGISTER_OPERATOR_SCHEMA(Exp)
-        .Description('Calculates the exponential of the given input tensor, element-wise. '
-            'This operation can be done in an in-place fashion too, by providing the same '
-            'input and output blobs.')
-        .Input('input', 'input tensor', 'T')
-        .Output('output', 'The exponential of the input tensor computed element-wise', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.');
-    
-        REGISTER_OPERATOR_SCHEMA(RNN)
-        .Description(R'DOC(
-            Computes an one-layer simple RNN. This operator is usually supported
-            via some custom implementation such as CuDNN.
-    
-            try
-        {
-            // feature reader (we reinstantiate it for each block, i.e. we reopen the file actually)
-            // if this is the first feature read ever, we explicitly open the first file to get the information such as feature dimension
-            htkfeatreader reader;
-    }
-    
-    // Describes exposed stream - a single stream of htk features.
-void HTKDeserializer::InitializeStreams(const wstring& featureName, bool definesMbSize)
-{
-    StreamInformation stream;
-    stream.m_id = 0;
-    stream.m_name = featureName;
-    stream.m_sampleLayout = NDShape({ m_dimension });
-    stream.m_elementType = m_elementType;
-    stream.m_storageFormat = StorageFormat::Dense;
-    stream.m_definesMbSize = definesMbSize;
-    m_streams.push_back(stream);
-}
-    
-        auto& index = m_indices.back();
-    // Build auxiliary for GetSequenceByKey.
-    for (const auto& chunk : index->Chunks())
-    {
-        // Preparing chunk info that will be exposed to the outside.
-        auto chunkId = static_cast<ChunkIdType>(m_chunks.size());
-        for (uint32_t i = 0; i < chunk.NumberOfSequences(); ++i)
-        {
-            const auto& sequence = chunk[i];
-            auto sequenceIndex = i;
-            m_keyToChunkLocation.push_back(std::make_tuple(sequence.m_key, chunkId, sequenceIndex));
-        }
-    }
-    
-      static void validate(const boost::array<Elem, 2>& buffer_sequence)
-  {
-    boost::asio::buffer_cast<const void*>(buffer_sequence[0]);
-    boost::asio::buffer_cast<const void*>(buffer_sequence[1]);
-  }
-    
-      // Return a pointer to the beginning of the unread data.
-  mutable_buffer data()
-  {
-    return boost::asio::buffer(buffer_) + begin_offset_;
-  }
-    
-    
-    {    // The next element in the stack.
-    context* next_;
-  };
-    
-    #endif // BOOST_ASIO_DETAIL_DATE_TIME_FWD_HPP
+    #endif  // CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
 
     
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    class BaseEvent {
+  friend class EventListener;
+  DISALLOW_COPY_AND_ASSIGN(BaseEvent);
+    }
     
-      // Constructor for a half fenced block.
-  explicit gcc_arm_fenced_block(half_t)
-  {
+       bool IsCommandIdChecked(int command_id) const override;
+   bool IsCommandIdEnabled(int command_id) const override;
+    
+    #include 'base/logging.h'
+#include 'base/strings/string_util.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menu/menu.h'
+    
+    namespace {
+    }
+    
+    class NwClipboardClearSyncFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardClearSyncFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
+    
+    #include 'test/core/util/test_config.h'
+#include 'test/cpp/qps/benchmark_config.h'
+#include 'test/cpp/qps/driver.h'
+#include 'test/cpp/qps/report.h'
+#include 'test/cpp/qps/server.h'
+#include 'test/cpp/util/test_config.h'
+#include 'test/cpp/util/test_credentials_provider.h'
+    
+    #include <algorithm>
+    
+    AuthPropertyIterator SecureAuthContext::begin() const {
+  if (ctx_) {
+    grpc_auth_property_iterator iter =
+        grpc_auth_context_property_iterator(ctx_);
+    const grpc_auth_property* property =
+        grpc_auth_property_iterator_next(&iter);
+    return AuthPropertyIterator(property, &iter);
+  } else {
+    return end();
   }
+}
     
-    template <typename Handler>
-inline void* allocate(std::size_t s, Handler& h)
-{
-#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
-  return ::operator new(s);
-#else
-  using boost::asio::asio_handler_allocate;
-  return asio_handler_allocate(s, boost::asio::detail::addressof(h));
+    static double time_double(struct timeval* tv) {
+  return tv->tv_sec + 1e-6 * tv->tv_usec;
+}
 #endif
+    
+    #include 'src/proto/grpc/testing/metrics.grpc.pb.h'
+#include 'src/proto/grpc/testing/metrics.pb.h'
+    
+    TEST(VersionEditTest, EncodeDecode) {
+  static const uint64_t kBig = 1ull << 50;
+    }
+    
+    
+    {}  // namespace leveldb
+    
+    bool HandleDumpCommand(Env* env, char** files, int num) {
+  StdoutPrinter printer;
+  bool ok = true;
+  for (int i = 0; i < num; i++) {
+    Status s = DumpFile(env, files[i], &printer);
+    if (!s.ok()) {
+      fprintf(stderr, '%s\n', s.ToString().c_str());
+      ok = false;
+    }
+  }
+  return ok;
 }
     
-    template <typename Function, typename Context>
-inline void invoke(Function& function, Context& context)
-{
-#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
-  Function tmp(function);
-  tmp();
-#else
-  using boost::asio::asio_handler_invoke;
-  asio_handler_invoke(function, boost::asio::detail::addressof(context));
+    #ifndef STORAGE_LEVELDB_TABLE_BLOCK_BUILDER_H_
+#define STORAGE_LEVELDB_TABLE_BLOCK_BUILDER_H_
+    
+    #include <boost/algorithm/string/trim.hpp>
+#include <boost/lexical_cast.hpp>
+    
+    /**
+ * @brief A utility class which is used to express the state of operations.
+ *
+ * @code{.cpp}
+ *   osquery::Status foobar() {
+ *     auto na = doSomeWork();
+ *     if (na->itWorked()) {
+ *       return osquery::Status(0, 'OK');
+ *     } else {
+ *       return osquery::Status(1, na->getErrorString());
+ *     }
+ *   }
+ * @endcode
+ */
+class Status {
+ public:
+  /**
+   * @brief Default constructor
+   *
+   * Note that the default constructor initialized an osquery::Status instance
+   * to a state such that a successful operation is indicated.
+   */
+  explicit Status(int c = 0) : code_(c), message_('OK') {}
+    }
+    
+    
+    {  // Reset the queue and remove the queue locks.
+  osquery_cqueue_teardown(&osquery.cqueue);
+  return KERN_FAILURE;
+}
+    
+      auto file_path = kTestWorkingDirectory + 'permissions-file2';
+    
+    TEST_F(StatusTests, test_constructor) {
+  auto s = Status(5, 'message');
+  EXPECT_EQ(s.getCode(), 5);
+  EXPECT_EQ(s.getMessage(), 'message');
+}
+    
+      // Now test inclusive bounds.
+  struct ConstraintList cl3;
+  constraint = Constraint(LESS_THAN_OR_EQUALS);
+  constraint.expr = '1000';
+  cl3.add(constraint);
+  constraint = Constraint(GREATER_THAN_OR_EQUALS);
+  constraint.expr = '1';
+  cl3.add(constraint);
+    
+    #include <string.h>
+#include <time.h>
+#include <vector>
+    
+     private:
+  char delim_;         // The delimiter is inserted between elements
+    
+      char delim_;         // The delimiter is inserted between elements
+    
+      // when we know more data has been written to the file. we can use this
+  // function to force the reader to look again in the file.
+  // Also aligns the file position indicator to the start of the next block
+  // by reading the rest of the data from the EOF position to the end of the
+  // block that was partially read.
+  void UnmarkEOF();
+    
+    #ifndef NDEBUG
+namespace rocksdb {
+    }
+    
+    #ifdef __cplusplus
+extern 'C' {
 #endif
-}
-    
-    #define BOOST_ASIO_COMPOSED_CONNECT_HANDLER_CHECK( \
-    handler_type, handler, iter_type) \
-  \
-  typedef BOOST_ASIO_HANDLER_TYPE(handler_type, \
-      void(boost::system::error_code, iter_type)) \
-    asio_true_handler_type; \
-  \
-  BOOST_ASIO_HANDLER_TYPE_REQUIREMENTS_ASSERT( \
-      sizeof(boost::asio::detail::two_arg_handler_test( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>(), \
-          static_cast<const boost::system::error_code*>(0), \
-          static_cast<const iter_type*>(0))) == 1, \
-      'ComposedConnectHandler type requirements not met') \
-  \
-  typedef boost::asio::detail::handler_type_requirements< \
-      sizeof( \
-        boost::asio::detail::argbyv( \
-          boost::asio::detail::clvref< \
-            asio_true_handler_type>())) + \
-      sizeof( \
-        boost::asio::detail::lvref< \
-          asio_true_handler_type>()( \
-            boost::asio::detail::lvref<const boost::system::error_code>(), \
-            boost::asio::detail::lvref<const iter_type>()), \
-        char(0))> BOOST_ASIO_UNUSED_TYPEDEF
-    
-      // Get an iterator for the beginning of the map.
-  const_iterator begin() const
-  {
-    return values_.begin();
-  }
-    
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
+/*
+ * VM initialization functions.
+ *
+ * Note these are the only symbols exported for JNI by the VM.
+ */
+jint JNI_GetDefaultJavaVMInitArgs(void*);
+jint JNI_CreateJavaVM(JavaVM**, JNIEnv**, void*);
+jint JNI_GetCreatedJavaVMs(JavaVM**, jsize, jsize*);
     }
     
-    std::size_t sync_read(int d, state_type state, buf* bufs,
-    std::size_t count, bool all_empty, boost::system::error_code& ec)
+    class FBEXPORT StackTraceElement {
+ public:
+  StackTraceElement(InstructionPointer absoluteProgramCounter,
+                    InstructionPointer libraryBase,
+                    InstructionPointer functionAddress, std::string libraryName,
+                    std::string functionName)
+      : absoluteProgramCounter_{absoluteProgramCounter},
+        libraryBase_{libraryBase},
+        functionAddress_{functionAddress},
+        libraryName_{std::move(libraryName)},
+        functionName_{std::move(functionName)} {}
+    }
+    
+    double Node::getComputedPadding(int edge) const
 {
-  if (d == -1)
+    return YGNodeLayoutGetPadding(m_node, static_cast<YGEdge>(edge));
+}
+
+    
+    class Countable : public noncopyable, public nonmovable {
+public:
+  // RefPtr expects refcount to start at 0
+  Countable() : m_refcount(0) {}
+  virtual ~Countable()
   {
-    ec = boost::asio::error::bad_descriptor;
-    return 0;
+    FBASSERT(m_refcount == 0);
   }
     }
     
-    // Header is checksum (4 bytes), length (2 bytes), type (1 byte).
-static const int kHeaderSize = 4 + 2 + 1;
-    
-      void CheckInitialOffsetRecord(uint64_t initial_offset,
-                                int expected_record_offset) {
-    WriteInitialOffsetLog();
-    reading_ = true;
-    source_.contents_ = Slice(dest_.contents_);
-    Reader* offset_reader = new Reader(&source_, &report_, true/*checksum*/,
-                                       initial_offset);
+    // Class that lets you declare a global but does not add a static constructor
+// to the binary. Eventually I'd like to have this auto-initialize in a
+// multithreaded environment but for now it's easiest just to use manual
+// initialization.
+template <typename T>
+class StaticInitialized {
+public:
+  constexpr StaticInitialized() :
+    m_instance(nullptr)
+  {}
     }
     
-    #ifndef STORAGE_LEVELDB_DB_SNAPSHOT_H_
-#define STORAGE_LEVELDB_DB_SNAPSHOT_H_
-    
-    class Issue178 { };
-    
-    Status Footer::DecodeFrom(Slice* input) {
-  const char* magic_ptr = input->data() + kEncodedLength - 8;
-  const uint32_t magic_lo = DecodeFixed32(magic_ptr);
-  const uint32_t magic_hi = DecodeFixed32(magic_ptr + 4);
-  const uint64_t magic = ((static_cast<uint64_t>(magic_hi) << 32) |
-                          (static_cast<uint64_t>(magic_lo)));
-  if (magic != kTableMagicNumber) {
-    return Status::Corruption('not an sstable (bad magic number)');
+      T *get() const {
+    return (T*)pthread_getspecific(m_key);
   }
-    }
-    
-    TEST(HASH, SignedUnsignedIssue) {
-  const unsigned char data1[1] = {0x62};
-  const unsigned char data2[2] = {0xc3, 0x97};
-  const unsigned char data3[3] = {0xe2, 0x99, 0xa5};
-  const unsigned char data4[4] = {0xe1, 0x80, 0xb9, 0x32};
-  const unsigned char data5[48] = {
-    0x01, 0xc0, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x14, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x04, 0x00,
-    0x00, 0x00, 0x00, 0x14,
-    0x00, 0x00, 0x00, 0x18,
-    0x28, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x02, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-  };
-    }
-    
-    
-    {    // Compute (product % M) using the fact that ((x << 31) % M) == x.
-    seed_ = static_cast<uint32_t>((product >> 31) + (product & M));
-    // The first reduction may overflow by 1 bit, so we may need to
-    // repeat.  mod == M is not possible; using > allows the faster
-    // sign-bit-based test.
-    if (seed_ > M) {
-      seed_ -= M;
-    }
-    return seed_;
-  }
-  // Returns a uniformly distributed value in the range [0..n-1]
-  // REQUIRES: n > 0
-  uint32_t Uniform(int n) { return Next() % n; }
-    
-    static std::string IKey(const std::string& user_key,
-                        uint64_t seq,
-                        ValueType vt) {
-  std::string encoded;
-  AppendInternalKey(&encoded, ParsedInternalKey(user_key, seq, vt));
-  return encoded;
-}
-    
-    
-    {  // No copying allowed
-  Writer(const Writer&);
-  void operator=(const Writer&);
-};
-    
-      virtual bool Valid() const { return iter_.Valid(); }
-  virtual void Seek(const Slice& k) { iter_.Seek(EncodeKey(&tmp_, k)); }
-  virtual void SeekToFirst() { iter_.SeekToFirst(); }
-  virtual void SeekToLast() { iter_.SeekToLast(); }
-  virtual void Next() { iter_.Next(); }
-  virtual void Prev() { iter_.Prev(); }
-  virtual Slice key() const { return GetLengthPrefixedSlice(iter_.key()); }
-  virtual Slice value() const {
-    Slice key_slice = GetLengthPrefixedSlice(iter_.key());
-    return GetLengthPrefixedSlice(key_slice.data() + key_slice.size());
-  }
-    
-    enum NDK_CRASH_PARSER_STATE {
-    EXPECTS_CRASH_DUMP,
-    EXPECTS_CRASH_DUMP_HEADER,
-    EXPECTS_CRASH_DUMP_CONTENT,
-    EXPECTS_CRASH_DUMP_END,
-};
-    
-    #include <vector>
-#include <string>
-    
-    
-    {        return NULL;
-    }
-    
-    Test_Spy_Sample::~Test_Spy_Sample()
-{
-    SPY_DETACH_CLASS();
-}
-    
-      private:
-    int __TestFun1(int i);
-    
-    //
-//  testspy_spy.cpp
-//  PublicComponent
-//
-//  Created by yerungui on 14-5-13.
-//
-    
-    #define DEFINE_HAS_MEMBER(member_name) \
-    template <typename T>\
-    class has_##member_name {\
-      private:\
-        struct yes_type { char x[1]; };\
-        struct no_type { char x[2]; };\
-        template <int> struct tester;\
-        template <typename U> static yes_type test(tester<sizeof(&U::member_name)>*);\
-        template <typename U> static no_type test(...);\
-      public:\
-        static const bool value = (sizeof(test<T>(0)) == sizeof(yes_type));\
-    };
-    
-    
-#endif /* SCOP_JENV_H_ */
