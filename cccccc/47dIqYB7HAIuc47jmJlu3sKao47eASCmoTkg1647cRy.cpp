@@ -1,338 +1,195 @@
 
         
-        class NwCurrentWindowInternalCapturePageInternalFunction : public AsyncExtensionFunction {
- public:
-  NwCurrentWindowInternalCapturePageInternalFunction();
+        // This file defines a C++ DescriptorDatabase, which wraps a Python Database
+// and delegate all its operations to Python methods.
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
     }
-    
-    IPC_MESSAGE_ROUTED3(ShellViewHostMsg_Call_Static_Method,
-                    std::string /* type name */,
-                    std::string /* method name */,
-                    base::ListValue /* arguments */)
-    
-        // Ignore first non-switch arg if it's not a standalone package.
-    bool ignore_arg = !package->self_extract();
-    for (unsigned i = 1; i < argv.size(); ++i) {
-      if (ignore_arg && argv[i] == args[0]) {
-        ignore_arg = false;
-        continue;
-      }
     }
-    
-    #include 'base/basictypes.h'
-#include '../dispatcher_host.h'
-    
-       void Call(const std::string& method,
-                    const base::ListValue& arguments) override;
-   void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) override;
-    
-    namespace nwapi {
-    }
-    
-    void Menu::Call(const std::string& method,
-                const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  if (method == 'Append') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    Append(object_manager()->GetApiObject<MenuItem>(object_id));
-  } else if (method == 'Insert') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    int pos = 0;
-    arguments.GetInteger(1, &pos);
-    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
-  } else if (method == 'Remove') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    int pos = 0;
-    arguments.GetInteger(1, &pos);
-    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
-  } else if (method == 'Popup') {
-    int x = 0;
-    arguments.GetInteger(0, &x);
-    int y = 0;
-    arguments.GetInteger(1, &y);
-    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
-    DCHECK(web_contents);
-    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
     }
     }
     
-    void Menu::UpdateKeys(GtkAccelGroup *gtk_accel_group){
-  this->gtk_accel_group = gtk_accel_group;
-  if (!GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    return ;
-  } else {
-    std::vector<MenuItem*>::iterator menu_item_iterator = menu_items.begin();
-    std::vector<MenuItem*>::iterator menu_item_end = menu_items.end();
-    while (menu_item_iterator != menu_item_end){
-      MenuItem *menu_item = *menu_item_iterator;
-      if (menu_item!=NULL && GTK_IS_MENU_ITEM(menu_item->menu_item_)){
-        menu_item->UpdateKeys(gtk_accel_group);
-      }
-      ++menu_item_iterator;
-    }
-  }
+    #include <string>
+    
+    void RepeatedPrimitiveFieldGenerator::GenerateCloningCode(io::Printer* printer) {
+  printer->Print(variables_,
+    '$name$_ = other.$name$_.Clone();\n');
 }
     
-    namespace ui {
-    }
-    
-        // Adds the module variable 'api_version'.
-    if (PyModule_AddIntConstant(
-        module,
-        const_cast<char*>(kImplVersionName),
-        kImplVersion))
-#if PY_MAJOR_VERSION < 3
-      return;
-#else
-      { Py_DECREF(module); return NULL; }
-    
-    
-    {  ASSERT_TRUE(message.ParseFromString(data));
-  EXPECT_TRUE(message.has_any_value());
-  ASSERT_TRUE(message.any_value().UnpackTo(&any));
-  ASSERT_TRUE(any.UnpackTo(&submessage));
-  EXPECT_EQ(12345, submessage.int32_value());
-}
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
     
     #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
     
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-namespace {
-    }
-    }
-    }
-    }
-    }
+      assert(peekType(msg) == thpp::Type::LONG);
+  int64_t arg2 = unpackInteger(msg);
+  assert(arg2 == 100);
     
-    RepeatedPrimitiveFieldGenerator::RepeatedPrimitiveFieldGenerator(
-    const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options)
-    : FieldGeneratorBase(descriptor, fieldOrdinal, options) {
+    bool cudnn_is_acceptable(const Tensor& self) {
+  if (!globalContext().userEnabledCuDNN()) return false;
+  if (!self.is_cuda()) return false;
+  auto st = self.type().scalarType();
+  if (!(st == kDouble || st == kFloat || st == kHalf)) return false;
+  if (!AT_CUDNN_ENABLED()) return false;
+  // NB: In the old Python code, there was also a test to see if the
+  // cuDNN library was actually dynamically linked or not.  I'm not
+  // sure if we can actually test this.
+  return true;
 }
     
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace csharp {
-    }
-    }
-    }
-    }
+    ${Tensor}::${Tensor}(Context* context)
+: ${Tensor}(context,${THTensor}_new(${state})) {}
     
-    namespace protobuf {
-namespace compiler {
-namespace java {
-    }
-    }
+    
+    {    std::shared_ptr<store_type> _store;
+  };
+    
+        OperatorSchemaSetter&
+        OperatorSchemaSetter::SinceVersion(int p_opSetVersion)
+    {
+        m_opSchema.m_opSignature.m_sinceVersion = p_opSetVersion;
+        return *this;
     }
     
-    #include <google/protobuf/compiler/java/java_doc_comment.h>
+    namespace ONNXIR
+{
+    namespace Common
+    {
+        Status::Status(StatusCategory p_category, int p_code, const std::string& p_msg)
+        {
+            m_state.reset(new State());
+            m_state->m_category = p_category;
+            m_state->m_code = p_code;
+            m_state->m_msg = p_msg;
+        }
+    }
+    }
     
-    // Author: liujisi@google.com (Pherl Liu)
+        //‘GREATER’, ‘LESS’, ‘EQUALS,
+    REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Greater)
+        REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Less)
+        REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Equal)
     
-      ::google::InitGoogleLogging(argv[0]);
+        // Taken from ONNX
+    REGISTER_OPERATOR_SCHEMA(Conv)
+        .Description('The convolution operator consumes an input tensor and a filter, and'
+            'computes the output.')
+        .Input('X',
+             'Input data tensor from previous layer; has size (N x C x H x W)'
+             ', where N is the batch size, C is the number of channels, and'
+             ' H and W are the height and width. Note that this is for the 2D image.'
+             'Otherwise the size is (N x D1 x D2 ... x Dn)',
+             'T')
+        .Input('W',
+             'The weight tensor that will be used in the convolutions; has size (M x C x kH x kW), '
+             'where C is the number of channels, and kH and kW are the height and width of the kernel, '
+             'and M is the number of feature maps. For more than 2 dimensions, the kernel shape will be '
+             '(M x C x k1 x k2 x ... x kn), where is the dimension of the kernel',
+             'T')
+        .Input('B',
+            'Optional 1D bias to be added to the convolution, has size of M.',
+            'T')
+        .Output('Y',
+              'Output data tensor that contains the result of the convolution. The '
+              'output dimensions are functions of the kernel size, stride size, '
+              'and pad lengths.',
+              'T')
+        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
+            'Constrain input and output types to float tensors.')
+        .Attr('auto_pad',
+            'auto_pad must be either SAME_UPPER, SAME_LOWER or VALID. Where SAME_UPPER '
+            'or SAME_LOWER mean pad the input so that the ouput size match the input. '
+            'In case of odd number add the extra padding at the end for SAME_UPPER and '
+            'at the begining for SAME_LOWER. VALID mean no padding, therefore, read the '
+            'pixel values from the pads attribute.',
+            AttrType::AttributeProto_AttributeType_STRING)
+        .Attr('kernel_shape',
+            'The shape of the convolution kernel.',
+             AttrType::AttributeProto_AttributeType_INTS)
+        .Attr('dilations',
+            'dilation value along each axis of the filter.',
+            AttrType::AttributeProto_AttributeType_INTS)
+        .Attr('strides',
+            'stride along each axis.',
+            AttrType::AttributeProto_AttributeType_INTS)
+        .Attr('pads',
+            'Padding for lower and upper side along each axis, it can take any value greater '
+            'than or equal to 0. The value represent the number of pixels added to the lower '
+            'and upper part of the corresponding axis. So `pads` will have two values per axis, '
+            'first value corresponding to the number of pixels added to the begining of the '
+            'axis and the second value corresponding to the number of pixels add at the end '
+            'of the axis.',
+            AttrType::AttributeProto_AttributeType_INTS)
+        .Attr('group',
+            'number of groups input channels and output channels are divided into',
+            AttrType::AttributeProto_AttributeType_INT);
     
-     protected:
-  /// @copydoc AbsValLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+    void TraceLSTMPathes(const FunctionPtr& src, string &f_activation, string &g_activation, string &h_activation,
+    RNNDirection &direction, Variable &initStateH, Variable &initStateC, Variable &peepholeCi, Variable &peepholeCo, Variable &peepholeCf,
+    double &stabilizer_dh, double &stabilizer_dc, double &stabilizer_c);
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+        Matrix<float> mA2sparseCSC(mA2dense.DeepClone());
+    mA2sparseCSC.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseCSC, true);
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-      // A helper class that aborts a death test when it's deleted.
-  class ReturnSentinel {
-   public:
-    explicit ReturnSentinel(DeathTest* test) : test_(test) { }
-    ~ReturnSentinel() { test_->Abort(TEST_ENCOUNTERED_RETURN_STATEMENT); }
-   private:
-    DeathTest* const test_;
-    GTEST_DISALLOW_COPY_AND_ASSIGN_(ReturnSentinel);
-  } GTEST_ATTRIBUTE_UNUSED_;
-    
-    // Finds the first element in the iterator range [begin, end) that
-// equals elem.  Element may be a native array type itself.
-template <typename Iter, typename Element>
-Iter ArrayAwareFind(Iter begin, Iter end, const Element& elem) {
-  for (Iter it = begin; it != end; ++it) {
-    if (internal::ArrayEq(*it, elem))
-      return it;
-  }
-  return end;
-}
-    
-    
-    {    linked_ptr_internal const* p = ptr;
-    while (p->next_ != ptr) p = p->next_;
-    p->next_ = this;
-    next_ = ptr;
-  }
-    
-    
-    {  const Generator1 g1_;
-  const Generator2 g2_;
-  const Generator3 g3_;
-  const Generator4 g4_;
-  const Generator5 g5_;
-  const Generator6 g6_;
-  const Generator7 g7_;
-  const Generator8 g8_;
-};  // class CartesianProductHolder8
-    
-    
-]]
-    
-      // Compares two C strings.  Returns true iff they have the same content.
-  //
-  // Unlike strcmp(), this function can handle NULL argument(s).  A
-  // NULL C string is considered different to any non-NULL C string,
-  // including the empty string.
-  static bool CStringEquals(const char* lhs, const char* rhs);
+    	jstring tag = (jstring)JNU_GetField(env, _log_info, 'tag', 'Ljava/lang/String;').l;
+	jstring filename = (jstring)JNU_GetField(env, _log_info, 'filename', 'Ljava/lang/String;').l;
+	jstring funcname = (jstring)JNU_GetField(env, _log_info, 'funcname', 'Ljava/lang/String;').l;
+	jint line = JNU_GetField(env, _log_info, 'line', 'I').i;
+	jlong pid = JNU_GetField(env, _log_info, 'pid', 'J').i;
+	jlong tid = JNU_GetField(env, _log_info, 'tid', 'J').j;
+	jlong maintid = JNU_GetField(env, _log_info, 'maintid', 'J').j;
     
     
-    {  T0 f0_;
+    {        vecdump_.push_back(strstack);
+        strstack.clear();
+    }
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+        if (((st.head_length + st.url_length + st.total_length) & 0xFF) != st.magic) return __LINE__;
+    
+        void* This() const {return m_this;}
+    
+    
+    {  private:
+    virtual void __OnAttach(const char* _key) {}
+    virtual void __OnDetach(const char* _key) {}
 };
-    
-    
-// Step 1. Include necessary header files such that the stuff your
-// test logic needs is declared.
-//
-// Don't forget gtest.h, which declares the testing framework.
-    
-      // Get an integral value, 0 or 1, for whether a syscall table pointer is modified.
-  auto f1 = osquery::readFile(kKernelSyscallAddrModifiedPath, content);
-  if (f1.ok()) {
-    boost::trim(content);
-    syscall_addr_modified = content;
-  } else {
-    VLOG(1) << 'Cannot read file: ' << kKernelSyscallAddrModifiedPath;
-    return results;
-  }
-    
-      /**
-   * @brief End all EventPublisher run loops and deregister.
-   *
-   * End is NOT the same as deregistration. End will call deregister on all
-   * publishers then either join or detach their run loop threads.
-   * See EventFactory::deregisterEventPublisher for actions taken during
-   * deregistration.
-   *
-   * @param join if true, threads will be joined
-   */
-  static void end(bool join = false);
-    
-    /**
- * @brief Iterate the discovered decorators for a given point type.
- *
- * The configuration maintains various sources, each may contain a set of
- * decorators. The source tracking is abstracted for the decorator iterator.
- *
- * @param point request execution of decorators for this given point.
- * @param time an optional time for points using intervals.
- * @param source restrict run to a specific config source.
- */
-void runDecorators(DecorationPoint point,
-                   size_t time = 0,
-                   const std::string& source = '');
-    
-    #include 'osquery/core/json.h'
-    
-    bool isLauncherProcessDead(PlatformProcess& launcher) {
-  if (!launcher.isValid()) {
-    return true;
-  }
-    }
-    
-    	const char* tag_cstr = NULL;
-	const char* filename_cstr = NULL;
-	const char* funcname_cstr = NULL;
-	const char* log_cstr = NULL;
-    
-                if (EXPECTS_CRASH_DUMP_CONTENT == _state) {
-                _state = EXPECTS_CRASH_DUMP_HEADER;
-                return 0;
-            }
-    
-    #include <vector>
-#include <string>
-    
-    //
-//  comm_frequency_limit.h
-//  comm
-//
-//  Created by liucan on 13-11-23.
-//
-    
-    #ifndef CORESERVICEBASE_H_
-#define CORESERVICEBASE_H_
-    
-      protected:
-    ServiceBase(const char* _servicename) : m_servicename(_servicename) {}
-    
-    #include 'comm/debugger/testspy.h'
-    
-    jbyteArray JNU_Buffer2JbyteArray(JNIEnv* _env, const AutoBuffer& ab);
-jbyteArray JNU_Buffer2JbyteArray(JNIEnv* _env, const void* _buffer, size_t _length);
-void JNU_FreeJbyteArray(JNIEnv* _env, jbyteArray bytes);
-    
-    
-#endif /* SCOP_JENV_H_ */
 
     
-    class TestWriteChainAsyncTransportWrapper :
-  public WriteChainAsyncTransportWrapper<folly::AsyncTransportWrapper> {
- public:
-  TestWriteChainAsyncTransportWrapper() :
-    WriteChainAsyncTransportWrapper<folly::AsyncTransportWrapper>(nullptr) {}
+    
+/*
+ * scop_jenv.cpp
+ *
+ *  Created on: 2012-8-21
+ *      Author: yanguoyue
+ */
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    class Config {
     }
     
-      uint32_t size3 = 4321;
-  unique_ptr<uint8_t[]> buf3(new uint8_t[size3]);
-  IOBuf iobuf3(IOBuf::WRAP_BUFFER, buf3.get(), size3);
-  EXPECT_EQ(buf3.get(), iobuf3.data());
-  EXPECT_EQ(size3, iobuf3.length());
-  EXPECT_EQ(buf3.get(), iobuf3.buffer());
-  EXPECT_EQ(size3, iobuf3.capacity());
+    #pragma once
     
-    memory_resource* get_default_resource();
-void set_default_resource(memory_resource*);
-memory_resource* new_delete_resource();
-    
-    #include <folly/Exception.h>
-#include <folly/Format.h>
-#include <folly/Likely.h>
-#include <folly/String.h>
-#include <folly/portability/Unistd.h>
-    
-     private:
-  struct Context {
-    folly::Synchronized<std::shared_ptr<const T>> value_;
-    folly::Synchronized<folly::Function<void()>> callback_;
-  };
-  struct Wrapper;
-  std::shared_ptr<Context> context_;
-    
-    class ObserverManager;
+      bool operator==(const ProgramLocation& other) const {
+    // Assumes that the strings are static
+    return (m_functionName == other.m_functionName) && (m_fileName == other.m_fileName) && m_lineNumber == other.m_lineNumber;
+  }
