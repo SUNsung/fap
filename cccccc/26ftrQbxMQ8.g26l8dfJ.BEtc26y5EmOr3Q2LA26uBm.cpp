@@ -1,148 +1,141 @@
 
         
-        Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+          // JsAsker:
+  void StartAsync(std::unique_ptr<base::Value> options) override;
     
-    namespace tensorflow {
+    namespace atom {
     }
+    
+    #ifndef ATOM_BROWSER_UNRESPONSIVE_SUPPRESSOR_H_
+#define ATOM_BROWSER_UNRESPONSIVE_SUPPRESSOR_H_
+    
+    
+    {}  // namespace mate
+    
+      // Sent by history when the favicon of a URL changes.  The source is the
+  // profile, and the details is FaviconChangedDetails (see
+  // chrome/browser/favicon/favicon_changed_details.h).
+  NOTIFICATION_FAVICON_CHANGED,
+    
+      // Register an observer for when a certain |accelerator| is struck. Returns
+  // true if register successfully, or false if 1) the specificied |accelerator|
+  // has been registered by another caller or other native applications, or
+  // 2) shortcut handling is suspended.
+  //
+  // Note that we do not support recognizing that an accelerator has been
+  // registered by another application on all platforms. This is a per-platform
+  // consideration.
+  bool RegisterAccelerator(const ui::Accelerator& accelerator,
+                           Observer* observer);
+    
+    /**
+ * @brief Helper logging macro for table-generated verbose log lines.
+ *
+ * Since logging in tables does not always mean a critical warning or error
+ * but more likely a parsing or expected edge-case, we provide a TLOG.
+ *
+ * The tool user can set within config or via the CLI what level of logging
+ * to tolerate. It's the table developer's job to assume consistency in logging.
+ */
+#define TLOG VLOG(1)
+    
+    /// Helper replacement for REGISTER, used within extension modules.
+#define REGISTER_MODULE(t, r, n)                                               \
+  auto t##Module = Registry::get().registry(r)->add(n, std::make_shared<t>());
+    
+     public:
+  /**
+   * @brief A getter for the status code property
+   *
+   * @return an integer representing the status code of the operation.
+   */
+  int getCode() const { return code_; }
     
     
     {
-    {}  // namespace io
-}  // namespace tensorflow
+    {  c.reset();
+}
+}
+
     
-    #include 'tensorflow/core/platform/platform.h'
     
-    #include 'tensorflow/core/lib/strings/strcat.h'
+    {} // namespace aria2
     
-    /*
- * Deprecated in favor of EncodeAudioOpV2.
- */
-class EncodeAudioOp : public OpKernel {
- public:
-  explicit EncodeAudioOp(OpKernelConstruction* context) : OpKernel(context) {
-    OP_REQUIRES_OK(context, context->GetAttr('file_format', &file_format_));
-    file_format_ = str_util::Lowercase(file_format_);
-    OP_REQUIRES(context, file_format_ == 'wav',
-                errors::InvalidArgument('file_format arg must be \'wav\'.'));
-    }
-    }
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-      // From the zlib manual (http://www.zlib.net/manual.html):
-  // The mem_level parameter specifies how much memory should be allocated for
-  // the internal compression state. mem_level=1 uses minimum memory but is slow
-  // and reduces compression ratio; mem_level=9 uses maximum memory for optimal
-  // speed. The default value is 8.
-  int8 mem_level = 9;
-    
-            template<int CTA_SIZE>
-        static __forceinline__ __device__ int Ballot(int predicate)
-        {
-#if defined (__CUDA_ARCH__) && (__CUDA_ARCH__ >= 200)
-            return __ballot(predicate);
-#else
-            __shared__ volatile int cta_buffer[CTA_SIZE];
-    }
-    
-            // Core Extension: ARB_texture_compression_rgtc
-        COMPRESSED_RED_RGTC1             = 0x8DBB,
-        COMPRESSED_SIGNED_RED_RGTC1      = 0x8DBC,
-        COMPRESSED_RG_RGTC2              = 0x8DBD,
-        COMPRESSED_SIGNED_RG_RGTC2       = 0x8DBE,
-    
-    struct DynamicFnEntry
+    void AbstractAuthResolver::setDefaultCred(std::string user,
+                                          std::string password)
 {
-    const char* fnName; // 'clCreateContext'
-    void** ppFn; // &clCreateContext_pfn
+  defaultUser_ = std::move(user);
+  defaultPassword_ = std::move(password);
+}
+    
+    
+    {
+    {    httpConnection_->sendProxyRequest(std::move(httpRequest));
+  }
+  else {
+    httpConnection_->sendPendingData();
+  }
+  if (httpConnection_->sendBufferIsEmpty()) {
+    getDownloadEngine()->addCommand(getNextCommand());
+    return true;
+  }
+  else {
+    setWriteCheckSocket(getSocket());
+    addCommandSelf();
+    return false;
+  }
+}
+    
+      virtual bool finished() CXX11_OVERRIDE;
+    
+    void AnnounceList::moveToStoppedAllowedTier()
+{
+  auto itr = find_wrap_if(std::begin(tiers_), std::end(tiers_), currentTier_,
+                          FindStoppedAllowedTier());
+  setCurrentTier(std::move(itr));
+}
+    
+      /**
+   * Counts the number of tiers to which the 'completed' event can be sent.
+   */
+  size_t countCompletedAllowedTier() const;
+    
+    
+    {  virtual std::unique_ptr<DiskWriter>
+  newDiskWriter(const std::string& filename) CXX11_OVERRIDE
+  {
+    return make_unique<DiskWriterType>();
+  }
 };
     
-    #endif
-
-    
-    #include <THPP/tensors/THTensor.hpp>
-    
-    void* ${Storage}::unsafeGetTH(bool retain) const {
-  if (retain) {
-    ${THStorage}_retain(${state,} storage);
-  }
-  return storage;
-}
-    
-      auto ilen = input_size[0];
-  auto batchSize = input_size[1];
-  auto inputPlanes = input_size[2];
-  auto outputPlanes = weight_size[2];
-  auto kw = weight.sizes()[0];
-  auto olen = input_size[0] - kw + 1 + pad * 2;
-  int real_pad = (olen - ilen + kw - 1) / 2;
-    
-    THDTensorDescriptor THDTensorDescriptor_newFromTHCudaDoubleTensor(THCudaDoubleTensor *tensor) {
-  return at::getType(at::Backend::CUDA, at::ScalarType::Double).unsafeTensorFromTH((void*)tensor, true);
-}
-    
-    #undef THHostTensor
-#undef THHostTensor_
-#undef THHostStorage
-#undef THHostStorage_
-
-    
-    // TODO(t10737667): The implement a tool that parse the stack trace and
-// symbolicate it
-ostream& operator<<(ostream& out, const vector<StackTraceElement>& trace) {
-  IosFlagsSaver flags{out};
+    class AsyncNameResolverMan {
+public:
+  AsyncNameResolverMan();
+  // Destructor does not call disableNameResolverCheck(). Application
+  // must call it before the destruction of this object.
+  ~AsyncNameResolverMan();
+  // Enable IPv4 address lookup. default: true
+  void setIPv4(bool ipv4) { ipv4_ = ipv4; }
+  // Enable IPv6 address lookup. default: true
+  void setIPv6(bool ipv6) { ipv6_ = ipv6; }
+  // Returns true if asynchronous name resolution has been started.
+  bool started() const;
+  // Starts asynchronous name resolution.
+  void startAsync(const std::string& hostname, DownloadEngine* e,
+                  Command* command);
+  // Appends resolved addresses to |res|.
+  void getResolvedAddress(std::vector<std::string>& res) const;
+  // Adds resolvers to DownloadEngine to check event notification.
+  void setNameResolverCheck(DownloadEngine* e, Command* command);
+  // Removes resolvers from DownloadEngine.
+  void disableNameResolverCheck(DownloadEngine* e, Command* command);
+  // Returns true if any of resolvers are added in DownloadEngine.
+  bool resolverChecked() const { return resolverCheck_; }
+  // Returns status value: 0 for inprogress, 1 for success and -1 for
+  // failure.
+  int getStatus() const;
+  // Returns last error string
+  const std::string& getLastError() const;
+  // Resets state. Also removes resolvers from DownloadEngine.
+  void reset(DownloadEngine* e, Command* command);
     }
-    
-    #include <nbind/api.h>
-#include <nbind/BindDefiner.h>
-    
-        method(setMargin);
-    method(setMarginPercent);
-    method(setMarginAuto);
-    
-    void assertInternal(const char* formatstr ...) {
-    va_list va_args;
-    va_start(va_args, formatstr);
-    vsnprintf(sAssertBuf, sizeof(sAssertBuf), formatstr, va_args);
-    va_end(va_args);
-    if (gAssertHandler != NULL) {
-        gAssertHandler(sAssertBuf);
-    }
-    FBLOG(LOG_FATAL, 'fbassert', '%s', sAssertBuf);
-    // crash at this specific address so that we can find our crashes easier
-    *(int*)0xdeadb00c = 0;
-    // let the compiler know we won't reach the end of the function
-     __builtin_unreachable();
-}
-    
-    private:
-  void initialize() {
-    int ret = pthread_key_create(&m_key, m_cleanup);
-    if (ret != 0) {
-      const char *msg = '(unknown error)';
-      switch (ret) {
-      case EAGAIN:
-        msg = 'PTHREAD_KEYS_MAX (1024) is exceeded';
-        break;
-      case ENOMEM:
-        msg = 'Out-of-memory';
-        break;
-      }
-      (void) msg;
-      FBASSERTMSGF(0, 'pthread_key_create failed: %d %s', ret, msg);
-    }
-  }
