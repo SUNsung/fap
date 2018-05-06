@@ -1,81 +1,95 @@
 
         
-        
+        IPC_SYNC_MESSAGE_ROUTED4_1(ShellViewHostMsg_Call_Object_Method_Sync,
+                           int /* object id */,
+                           std::string /* type name */,
+                           std::string /* method name */,
+                           base::ListValue /* arguments */,
+                           base::ListValue /* result */)
+    
+      // Post 'reopen' event.
+  // (This event is received when the user clicked the icon in the Dock).
+  static void EmitReopenEvent();
     
     
-    
-    void GLESDebugDraw::DrawTransform(const b2Transform& xf)
-{
-    b2Vec2 p1 = xf.p, p2;
-    const float32 k_axisScale = 0.4f;
-    p2 = p1 + k_axisScale * xf.q.GetXAxis();
-    DrawSegment(p1, p2, b2Color(1,0,0));
-    }
-    
-    
-#endif
-
-    
-    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
-// **Prefer using the code in the sdl_opengl3_example/ folder**
-// See imgui_impl_sdl.cpp for details.
-    
-    
-    {    // Create Framebuffer:
-    {
-        VkImageView attachment[1];
-        VkFramebufferCreateInfo info = {};
-        info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        info.renderPass = g_RenderPass;
-        info.attachmentCount = 1;
-        info.pAttachments = attachment;
-        info.width = fb_width;
-        info.height = fb_height;
-        info.layers = 1;
-        for (uint32_t i = 0; i < g_BackBufferCount; i++)
-        {
-            attachment[0] = g_BackBufferView[i];
-            err = vkCreateFramebuffer(g_Device, &info, g_Allocator, &g_Framebuffer[i]);
-            check_vk_result(err);
-        }
-    }
+void Base::Call(const std::string& method, const base::ListValue& arguments,
+                content::RenderFrameHost* rvh) {
+  NOTREACHED() << 'Uncatched call in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
 }
     
-            param[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-        param[0].Constants.ShaderRegister = 0;
-        param[0].Constants.RegisterSpace = 0;
-        param[0].Constants.Num32BitValues = 16;
-        param[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+    Clipboard::~Clipboard() {
+}
     
+    public:
+  EventListener(int id,
+                const base::WeakPtr<DispatcherHost>& dispatcher_host,
+                const base::DictionaryValue& option);
     
-    {}  // namespace grpc_cpp_generator
-    
-    struct Parameters {
-  //Defines the custom parameter types for methods
-  //eg: flatbuffers uses flatbuffers.Builder as input for the client and output for the server
-  grpc::string custom_method_io_type;
+    bool MenuDelegate::IsItemForCommandIdDynamic(int command_id) const {
+  if (command_id < 0)
+    return false;
     }
     
-    #include 'monster_test_generated.h'
-#include 'monster_test.grpc.fb.h'
+    bool NwObjCreateFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  base::DictionaryValue* options = nullptr;
+  int id = 0;
+  std::string type;
+  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
+  EXTENSION_FUNCTION_VALIDATE(args_->GetDictionary(2, &options));
+    }
     
-      // Appends the given text to the generated code as well as a newline
-  // character.  Any text within {{ and }} delimeters is replaced by values
-  // previously stored in the CodeWriter by calling SetValue above.  The newline
-  // will be suppressed if the text ends with the \\ character.
-  void operator+=(std::string text);
+    /// The following are confusable internal word punctuation symbols
+/// which we normalize to the first variant when matching in dawgs.
+extern const char *kHyphenLikeUTF8[];
+extern const char *kApostropheLikeUTF8[];
     
+    	PoolByteArray out;
+	String certs_path = GLOBAL_DEF('network/ssl/certificates', '');
+	ProjectSettings::get_singleton()->set_custom_property_info('network/ssl/certificates', PropertyInfo(Variant::STRING, 'network/ssl/certificates', PROPERTY_HINT_FILE, '*.crt'));
     
-    {  printf('The FlatBuffer was successfully created and verified!\n');
+    		case LWS_CALLBACK_CLIENT_RECEIVE:
+			peer->read_wsi(in, len);
+			if (peer->get_available_packet_count() > 0)
+				_on_peer_packet();
+			break;
+    
+    	virtual Vector<StackInfo> debug_get_current_stack_info() { return Vector<StackInfo>(); }
+    
+    	struct btVehicleWheelContactPoint {
+		PhysicsDirectBodyState *m_s;
+		PhysicsBody *m_body1;
+		Vector3 m_frictionPositionWorld;
+		Vector3 m_frictionDirectionWorld;
+		real_t m_jacDiagABInv;
+		real_t m_maxImpulse;
+    }
+    
+    	List<VisualScript::DataConnection> data_conns;
+	script->get_data_connection_list(edited_func, &data_conns);
+    
+    	Error result = OS::get_singleton()->get_dynamic_library_symbol_handle(
+			native_handle,
+			p_procedure_name,
+			r_handle,
+			p_optional);
+    
+    namespace xgboost {
+ConsoleLogger::~ConsoleLogger() {
+  dmlc::CustomLogMessage::Log(log_stream_.str());
 }
-
+TrackerLogger::~TrackerLogger() {
+  dmlc::CustomLogMessage::Log(log_stream_.str());
+}
+}  // namespace xgboost
     
-          ss << '\n';
-    
-      // Test flexbuffer if available:
-  auto flex = monster->flex();
-  // flex is a vector of bytes you can memcpy etc.
-  TEST_EQ(flex->size(), 4);  // Encoded FlexBuffer bytes.
-  // However, if you actually want to access the nested data, this is a
-  // convenient accessor that directly gives you the root value:
-  TEST_EQ(monster->flex_flexbuffer_root().AsInt16(), 1234);
+      delete metric;
+  metric = xgboost::Metric::Create('ndcg@2');
+  ASSERT_STREQ(metric->Name(), 'ndcg@2');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 1, 1e-10);
+  EXPECT_NEAR(GetMetricEval(metric,
+                            {0.1f, 0.9f, 0.1f, 0.9f},
+                            {  0,   0,   1,   1}),
+              0.3868f, 0.001f);
