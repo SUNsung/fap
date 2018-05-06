@@ -1,53 +1,114 @@
 
         
-            brew cask install mactex
-    EOS
-  when 'pip' then <<-EOS.undent
-    Homebrew provides pip via: `brew install python`. However you will then
-    have two Pythons installed on your Mac, so alternatively you can install
-    pip via the instructions at:
+              def initialize(string)
+        @value = string
+      end
     
-      # This allows generic Altivec PPC bottles to be supported in some
-  # formulae, while also allowing specific bottles in others; e.g.,
-  # sometimes a formula has just :tiger_altivec, other times it has
-  # :tiger_g4, :tiger_g5, etc.
-  def find_altivec_tag(tag)
-    if tag.to_s =~ /(\w+)_(g4|g4e|g5)$/
-      altivec_tag = '#{$1}_altivec'.to_sym
-      altivec_tag if key?(altivec_tag)
+              if argv.length == 2
+            # @deprecated
+            @env.ui.warn('WARNING: The second argument to `vagrant box remove`')
+            @env.ui.warn('is deprecated. Please use the --provider flag. This')
+            @env.ui.warn('feature will stop working in the next version.')
+            options[:provider] = argv[1]
+          end
+    
+              box_name     = argv[0]
+          box_provider = argv[1].to_sym
+          box_version  = argv[2]
+    
+      def test_each_char_extended_file
+    [nil, {:textmode=>true}, {:binmode=>true}].each do |mode|
+      Tempfile.create('test-extended-file', mode) {|f|
+        assert_nil(f.getc)
+        f.print 'a'
+        f.rewind
+        result = []
+        f.each_char {|b| result << b }
+        assert_equal([?a], result, 'mode = <#{mode}>')
+      }
     end
   end
     
-            if ARGV.git?
-          puts 'This directory is now a git repo. Make your changes and then use:'
-          puts '  git diff | pbcopy'
-          puts 'to copy the diff to the clipboard.'
+      def hash      # :nodoc:
+    @hash.hash
+  end
+    
+    class TC_Enumerable < Test::Unit::TestCase
+  def test_to_set
+    ary = [2,5,4,3,2,1,3]
+    
+      it 'kills sleeping thread' do
+    sleeping_thread = Thread.new do
+      sleep
+      ScratchPad.record :after_sleep
+    end
+    Thread.pass while sleeping_thread.status and sleeping_thread.status != 'sleep'
+    sleeping_thread.send(@method)
+    sleeping_thread.join
+    ScratchPad.recorded.should == nil
+  end
+    
+      it 'handles bad leap seconds by carrying values forward' do
+    with_timezone 'UTC' do
+      time = Time.send(@method, 2017, 7, 5, 23, 59, 60)
+      time.sec.should == 0
+      time.min.should == 0
+      time.hour.should == 0
+      time.day.should == 6
+      time.month.should == 7
+    end
+  end
+    
+    Print a list of currently running Applications and associated
+Bundle IDs, which may be useful in a Cask uninstall stanza, eg
+    
+    class Profile
+  def pod_bin
+    File.expand_path('../pod', __FILE__)
+  end
+    
+          def executable_path
+        <<-EOS
+### Installation Source
+    
+            # Clones the template from the remote in the working directory using
+        # the name of the Pod.
+        #
+        # @return [void]
+        #
+        def clone_template
+          UI.section('Cloning `#{template_repo_url}` into `#{@name}`.') do
+            git! ['clone', template_repo_url, @name]
+          end
         end
     
-      def snow_leopard_64?
-    MacOS.prefer_64_bit?
+          def update_available?(gem_name)
+        latest = Gem.latest_version_for(gem_name)
+        return false if latest.nil?
+        latest > installed_gem_version(gem_name)
+      end
+    
+      # Summary is used on the Archive pages to return the first block of content from a post.
+  def summary(input)
+    if input.index(/\n\n/)
+      input.split(/\n\n/)[0]
+    else
+      input
+    end
   end
-end
     
-        groups << @user.authorized_groups.visible_to_user(current_user) if current_user
-    groups << @user.authorized_groups.public_to_user(current_user)
+        def initialize(tag_name, markup, tokens)
+      @videos = markup.scan(/((https?:\/\/|\/)\S+\.(webm|ogv|mp4)\S*)/i).map(&:first).compact
+      @poster = markup.scan(/((https?:\/\/|\/)\S+\.(png|gif|jpe?g)\S*)/i).map(&:first).compact.first
+      @sizes  = markup.scan(/\s(\d\S+)/i).map(&:first).compact
+      super
+    end
     
-      # Finds the projects belonging to the user in '@user', limited to either
-  # public projects or projects visible to the given user.
-  #
-  # current_user - When given the list of projects is limited to those only
-  #                visible by this user.
-  #
-  # Returns an ActiveRecord::Relation.
-  def execute(current_user = nil)
-    segments = all_projects(current_user)
-    
-      # Configure static asset server for tests with Cache-Control for performance.
-  if config.respond_to?(:serve_static_files)
-    # rails >= 4.2
-    config.serve_static_files = true
-  elsif config.respond_to?(:serve_static_assets)
-    # rails < 4.2
-    config.serve_static_assets = true
-  end
-  config.static_cache_control = 'public, max-age=3600'
+            #target = $LOADED_FEATURES.grep(/#{path}/).first
+        #puts path
+        #puts caller.map { |c| '  #{c}' }.join('\n')
+        #fontsize = [10, duration * 48].max
+        puts '#{duration},#{path},#{source}'
+      end
+      #puts caller.map { |c| ' => #{c}' }.join('\n')
+    end
