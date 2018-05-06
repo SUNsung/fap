@@ -1,96 +1,102 @@
 
         
-          def describe_java
-    java_xml = Utils.popen_read('/usr/libexec/java_home', '--xml', '--failfast')
-    return 'N/A' unless $?.success?
-    javas = []
-    REXML::XPath.each(REXML::Document.new(java_xml), '//key[text()='JVMVersion']/following-sibling::string') do |item|
-      javas << item.text
-    end
-    javas.uniq.join(', ')
-  end
+            # Gets the name of this layout.
+    attr_reader :name
     
-      def self.factory(name)
-    Formulary.factory(name)
-  end
-    
-    # This formula serves as the base class for several very similar
-# formulae for Amazon Web Services related tools.
-class AmazonWebServicesFormula < Formula
-  # Use this method to peform a standard install for Java-based tools,
-  # keeping the .jars out of HOMEBREW_PREFIX/lib
-  def install
-    rm Dir['bin/*.cmd'] # Remove Windows versions
-    libexec.install Dir['*']
-    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
-  end
-  alias_method :standard_install, :install
-    
-      # GET /resource/sign_in
-  def new
-    self.resource = resource_class.new(sign_in_params)
-    clean_up_passwords(resource)
-    yield resource if block_given?
-    respond_with(resource, serialize_options(resource))
-  end
-    
-    module Devise
-  module Controllers
-    # Create url helpers to be used with resource/scope configuration. Acts as
-    # proxies to the generated routes created by devise.
-    # Resource param can be a string or symbol, a class, or an instance object.
-    # Example using a :user resource:
-    #
-    #   new_session_path(:user)      => new_user_session_path
-    #   session_path(:user)          => user_session_path
-    #   destroy_session_path(:user)  => destroy_user_session_path
-    #
-    #   new_password_path(:user)     => new_user_password_path
-    #   password_path(:user)         => user_password_path
-    #   edit_password_path(:user)    => edit_user_password_path
-    #
-    #   new_confirmation_path(:user) => new_user_confirmation_path
-    #   confirmation_path(:user)     => user_confirmation_path
-    #
-    # Those helpers are included by default to ActionController::Base.
-    #
-    # In case you want to add such helpers to another class, you can do
-    # that as long as this new class includes both url_helpers and
-    # mounted_helpers. Example:
-    #
-    #     include Rails.application.routes.url_helpers
-    #     include Rails.application.routes.mounted_helpers
-    #
-    module UrlHelpers
-      def self.remove_helpers!
-        self.instance_methods.map(&:to_s).grep(/_(url|path)$/).each do |method|
-          remove_method method
+          def parse(content)
+        measure_time do
+          @template = Liquid::Template.parse(content, :line_numbers => true)
         end
+    
+        def self.git_log_between(pretty_format, from, to, merge_commit_filtering, date_format = nil, ancestry_path)
+      command = ['git log']
+      command << '--pretty=\'#{pretty_format}\''
+      command << '--date=\'#{date_format}\'' if date_format
+      command << '--ancestry-path' if ancestry_path
+      command << '#{from.shellescape}...#{to.shellescape}'
+      command << git_log_merge_commit_filtering_option(merge_commit_filtering)
+      Actions.sh(command.compact.join(' '), log: false).chomp
+    rescue
+      nil
+    end
+    
+    describe :string_unpack_32bit_be, shared: true do
+  it 'decodes one int for a single format character' do
+    'dcba'.unpack(unpack_format).should == [1684234849]
+  end
+    
+      it 'returns empty strings for repeated formats if the input is empty' do
+    ''.unpack(unpack_format(nil, 3)).should == ['', '', '']
+  end
+    
+        it 'runs all outer ensure clauses even if inner ensure clause raises exception' do
+      ThreadSpecs.join_dying_thread_with_outer_ensure(@method) { ScratchPad.record :in_outer_ensure_clause }
+      ScratchPad.recorded.should == :in_outer_ensure_clause
+    end
+    
+      it 'interprets post-Gregorian reform dates using Gregorian calendar' do
+    Time.send(@method, 1582, 10, 15, 12).to_i.should == -12219249600 # 2299161j
+  end
+    
+          # Inspired by https://github.com/nov/openid_connect_sample/blob/master/app/controllers/connect/clients_controller.rb#L24
+      def create
+        registrar = OpenIDConnect::Client::Registrar.new(request.url, params)
+        client = Api::OpenidConnect::OAuthApplication.register! registrar
+        render json: client.as_json(root: false)
       end
     
-            def run
-          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
-          if @pod_name.nil? # Print all
-            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
-              print_pod_cache_infos(pod_name, cache_descriptors)
-            end
-          else # Print only for the requested pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            else
-              print_pod_cache_infos(@pod_name, cache_descriptors)
-            end
+    # A logger that delays messages until they're explicitly flushed to an inner
+# logger.
+#
+# This can be installed around the current logger by calling \{#install!}, and
+# the original logger can be replaced by calling \{#uninstall!}. The log
+# messages can be flushed by calling \{#flush}.
+class Sass::Logger::Delayed < Sass::Logger::Base
+  # Installs a new delayed logger as the current Sass logger, wrapping the
+  # original logger.
+  #
+  # This can be undone by calling \{#uninstall!}.
+  #
+  # @return [Sass::Logger::Delayed] The newly-created logger.
+  def self.install!
+    logger = Sass::Logger::Delayed.new(Sass.logger)
+    Sass.logger = logger
+    logger
+  end
+    
+      # Converts an interpolation array to source.
+  #
+  # @param interp [Array<String, Sass::Script::Tree::Node>] The interpolation array to convert.
+  # @param options [{Symbol => Object}] An options hash (see {Sass::CSS#initialize}).
+  # @return [String]
+  def self._interp_to_src(interp, options)
+    interp.map {|r| r.is_a?(String) ? r : r.to_sass(options)}.join
+  end
+end
+
+    
+      Sass::Plugin.options.merge!(config)
+    
+            It is possible to specify a list of dependencies which will be used by
+        the template in the `Podfile.default` (normal targets) `Podfile.test`
+        (test targets) files which should be stored in the
+        `~/.cocoapods/templates` folder.
+      DESC
+      self.arguments = [
+        CLAide::Argument.new('XCODEPROJ', :false),
+      ]
+    
+    Liquid::Template.register_tag('blockquote', Jekyll::Blockquote)
+
+    
+    Liquid::Template.register_tag('render_partial', Jekyll::RenderPartialTag)
+
+    
+            def update
+          authorize! :update, stock_location
+          if stock_location.update_attributes(stock_location_params)
+            respond_with(stock_location, status: 200, default_template: :show)
+          else
+            invalid_resource!(stock_location)
           end
         end
-    
-            target_module << '\nend\n'
-      end
-    
-            self.summary = 'The repl listens to commands on standard input'
-        self.description = <<-DESC
-          The repl listens to commands on standard input and prints their
-          result to standard output.
-          It accepts all the other ipc subcommands. The repl will signal the
-          end of output with the the ASCII CR+LF `\\n\\r`.
-        DESC
