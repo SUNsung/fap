@@ -1,47 +1,30 @@
 
         
-        
-    # immediate selector of css at pos
-    def selector_for_pos(css, pos, depth = -1)
-      css[css_def_pos(css, pos, depth)].dup.strip
-    end
+          class FeatureTopicUsers < Jobs::Base
     
-          spec['main'] =
-          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
-          find_files.(Bootstrap.fonts_path) +
-          %w(assets/javascripts/bootstrap.js)
-    
-        inp.attributes.keys.each do |ikey|
-      if (ikey.downcase == 'value')
-        inp[ikey] = ''
-        next
-      end
-    
-    def usage
-  $stderr.puts '#{$0} [site list] [output-dir]'
-  exit(0)
+      def cache_fragment(name)
+    ApplicationSerializer.fragment_cache[name] ||= yield
+  end
 end
+
     
-          if(pkt.payload =~ self.sigs[k])
-        matched = k
-        matches = $1
-      end
+      def evernote_oauth_token
+    service && service.token
+  end
+end
+
     
-                  s[:proto] = 'tcp'
-              s[:name]  = 'pop3'
-              s[:extra] = 'Successful Login. Banner: #{s[:banner]}'
-              report_auth_info(s)
-              print_status('Successful POP3 Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]} (#{s[:banner].strip})')
+      def destroy_failed
+    Delayed::Job.where.not(failed_at: nil).delete_all
     
-    module GitHub
-  module_function
-    
-          opts.on('-T', '--to FORMAT',
-        'The format to convert to. Can be scss or sass.',
-        'By default, this is inferred from the output filename.',
-        'If there is none, defaults to sass.') do |name|
-        @options[:to] = name.downcase.to_sym
-        unless [:scss, :sass].include?(@options[:to])
-          raise 'Unknown format for sass-convert --to: #{name}'
+          def handle_prompt_none
+        if params[:prompt] == 'none'
+          if user_signed_in?
+            handle_prompt_with_signed_in_user
+          else
+            handle_params_error('login_required', 'User must already be logged in when `prompt` is `none`')
+          end
+        else
+          handle_params_error('invalid_request', 'The 'none' value cannot be used with any other prompt value')
         end
       end
