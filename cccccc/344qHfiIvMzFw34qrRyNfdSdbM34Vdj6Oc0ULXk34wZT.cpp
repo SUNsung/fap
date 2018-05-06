@@ -1,235 +1,231 @@
 
         
-        #ifdef JSON_IN_CPPTL
-#define JSON_API CPPTL_API
-#elif defined(JSON_DLL_BUILD)
-#if defined(_MSC_VER)
-#define JSON_API __declspec(dllexport)
-#define JSONCPP_DISABLE_DLL_INTERFACE_WARNING
-#endif // if defined(_MSC_VER)
-#elif defined(JSON_DLL)
-#if defined(_MSC_VER)
-#define JSON_API __declspec(dllimport)
-#define JSONCPP_DISABLE_DLL_INTERFACE_WARNING
-#endif // if defined(_MSC_VER)
-#endif // ifdef JSON_IN_CPPTL
-#if !defined(JSON_API)
-#define JSON_API
-#endif
-    
-    bool BuiltStyledStreamWriter::isMultineArray(Value const& value) {
-  int size = value.size();
-  bool isMultiLine = size * 3 >= rightMargin_;
-  childValues_.clear();
-  for (int index = 0; index < size && !isMultiLine; ++index) {
-    Value const& childValue = value[index];
-    isMultiLine = ((childValue.isArray() || childValue.isObject()) &&
-                        childValue.size() > 0);
-  }
-  if (!isMultiLine) // check if line length > max line length
-  {
-    childValues_.reserve(size);
-    addChildValues_ = true;
-    int lineLength = 4 + (size - 1) * 2; // '[ ' + ', '*n + ' ]'
-    for (int index = 0; index < size; ++index) {
-      if (hasCommentForValue(value[index])) {
-        isMultiLine = true;
-      }
-      writeValue(value[index]);
-      lineLength += int(childValues_[index].length());
+        namespace swift {
     }
-    addChildValues_ = false;
-    isMultiLine = isMultiLine || lineLength >= rightMargin_;
+    
+      ConvertUTF8toUTF32(&SourceNext, SourceStart + S.size(), &TargetStart, C + 1,
+                     llvm::lenientConversion);
+  if (TargetStart == C) {
+    // The source string contains an ill-formed subsequence at the end.
+    return S;
   }
-  return isMultiLine;
+    
+    
+    {    return pair.first->second;
+  }
+    
+    
+template <typename ImplClass, typename RetTy = void, typename... Args>
+class MarkupASTVisitor {
+public:
+  RetTy visit(const MarkupASTNode *Node, Args... args) {
+    switch (Node->getKind()) {
+#define MARKUP_AST_NODE(Id, Parent) \
+    case ASTNodeKind::Id: \
+      return static_cast<ImplClass*>(this) \
+        ->visit##Id(cast<const Id>(Node), \
+                    ::std::forward<Args>(args)...);
+#define ABSTRACT_MARKUP_AST_NODE(Id, Parent)
+#define MARKUP_AST_NODE_RANGE(Id, FirstId, LastId)
+#include 'swift/Markup/ASTNodes.def'
+    }
+  }
+    }
+    
+    #endif
+
+    
+    void Base::CallSync(const std::string& method,
+                    const base::ListValue& arguments,
+                    base::ListValue* result) {
+  NOTREACHED() << 'Uncatched callAsync in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
 }
     
-    class PyDescriptorDatabase : public DescriptorDatabase {
+    void Clipboard::CallSync(const std::string& method,
+                         const base::ListValue& arguments,
+                         base::ListValue* result) {
+  if (method == 'Get') {
+    result->AppendString(GetText());
+  } else {
+    NOTREACHED() << 'Invalid call to Clipboard method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
+    
+    class Clipboard : public Base {
  public:
-  explicit PyDescriptorDatabase(PyObject* py_database);
-  ~PyDescriptorDatabase();
+  Clipboard(int id,
+            const base::WeakPtr<DispatcherHost>& dispatcher_host,
+            const base::DictionaryValue& option);
+  ~Clipboard() override;
     }
     
-    void RepeatedPrimitiveFieldGenerator::GenerateParsingCode(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    '$name$_.AddEntriesFrom(input, _repeated_$name$_codec);\n');
+    
+    {}
+    
+    void Menu::Create(const base::DictionaryValue& option) {
+  gtk_accel_group = NULL;
+  std::string type;
+  if (option.GetString('type', &type) && type == 'menubar')
+    menu_ = gtk_menu_bar_new();
+  else
+    menu_ = gtk_menu_new();
+    }
+    
+    ui::KeyboardCode GetKeycodeFromText(std::string text){
+  ui::KeyboardCode retval = ui::VKEY_UNKNOWN;
+  if (text.size() != 0){
+    std::string upperText = base::ToUpperASCII(text);
+    std::string keyName = text;
+    bool found = false;
+    if (upperText.size() == 1){
+      char key = upperText[0];
+      if (key>='0' && key<='9'){//handle digital
+        keyName = 'Digit' + upperText;
+        found = true;
+      } else if (key>='A'&&key<='Z'){//handle alphabet
+        keyName = 'Key' + upperText;
+        found = true;
+      }
+    }
+    }
+    }
+    
+    void MenuItem::SetLabel(const std::string& label) {
+  label_ = label;
+  gtk_menu_item_set_label(GTK_MENU_ITEM(menu_item_), label.c_str());
 }
     
-    #include <google/protobuf/compiler/code_generator.h>
+    class NwAppSetProxyConfigFunction : public NWSyncExtensionFunction {
+ public:
+  NwAppSetProxyConfigFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
     
-    void WriteMessageDocComment(io::Printer* printer, const Descriptor* message);
-void WriteFieldDocComment(io::Printer* printer, const FieldDescriptor* field);
-void WriteEnumDocComment(io::Printer* printer, const EnumDescriptor* enum_);
-void WriteEnumValueDocComment(io::Printer* printer,
-                              const EnumValueDescriptor* value);
-void WriteServiceDocComment(io::Printer* printer,
-                            const ServiceDescriptor* service);
-void WriteMethodDocComment(io::Printer* printer,
-                           const MethodDescriptor* method);
+    using namespace extensions::nwapi::nw__clipboard;
     
-    namespace google {
-namespace protobuf {
-namespace compiler {
-namespace java {
-namespace {
-    }
-    }
-    }
-    }
+    #include 'extensions/browser/extension_function.h'
+    
+    namespace extensions {
     }
     
     
-    {            ptr[tid] = partial = partial + ptr[tid + 16];
-            ptr[tid] = partial = partial + ptr[tid + 8];
-            ptr[tid] = partial = partial + ptr[tid + 4];
-            ptr[tid] = partial = partial + ptr[tid + 2];
-            ptr[tid] = partial = partial + ptr[tid + 1];
-        }
-    
-            // Core Extension: ARB_texture_rg
-        RG                               = 0x8227,
-        RG_INTEGER                       = 0x8228,
-        R8                               = 0x8229,
-        R16                              = 0x822A,
-        RG8                              = 0x822B,
-        RG16                             = 0x822C,
-        R16F                             = 0x822D,
-        R32F                             = 0x822E,
-        RG16F                            = 0x822F,
-        RG32F                            = 0x8230,
-        R8I                              = 0x8231,
-        R8UI                             = 0x8232,
-        R16I                             = 0x8233,
-        R16UI                            = 0x8234,
-        R32I                             = 0x8235,
-        R32UI                            = 0x8236,
-        RG8I                             = 0x8237,
-        RG8UI                            = 0x8238,
-        RG16I                            = 0x8239,
-        RG16UI                           = 0x823A,
-        RG32I                            = 0x823B,
-        RG32UI                           = 0x823C,
-    
-    #ifdef HAVE_LAPACK
-    
-    #if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,'#ferror in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_stopAllEffects'.',&tolua_err);
-#endif
-    
-    
-    
-    #if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-    
-    
-    
-    	Bridge()
-	{
-		b2Body* ground = NULL;
-		{
-			b2BodyDef bd;
-			ground = m_world->CreateBody(&bd);
-    }
-    }
-    
-    			m_bullet = m_world->CreateBody(&bd);
-			m_bullet->CreateFixture(&box, 100.0f);
-    
-    namespace guetzli {
-    }
-    
-    // Performs in-place floating point 8x8 DCT on block[0..63].
-// Note that the DCT used here is the DCT-2 with the first term multiplied by
-// 1/sqrt(2) and the result scaled by 1/2.
-void ComputeBlockDCTDouble(double block[64]);
-    
-    const double* NewSrgb8ToLinearTable() {
-  double* table = new double[256];
-  int i = 0;
-  for (; i < 11; ++i) {
-    table[i] = i / 12.92;
-  }
-  for (; i < 256; ++i) {
-    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
-  }
-  return table;
-}
-    
-    
-    {}  // namespace guetzli
-    
-    // Mimic libjpeg's heuristics to guess jpeg color space.
-// Requires that the jpg has 3 components.
-bool HasYCbCrColorSpace(const JPEGData& jpg) {
-  bool has_Adobe_marker = false;
-  uint8_t Adobe_transform = 0;
-  for (const std::string& app : jpg.app_data) {
-    if (static_cast<uint8_t>(app[0]) == 0xe0) {
-      return true;
-    } else if (static_cast<uint8_t>(app[0]) == 0xee && app.size() >= 15) {
-      has_Adobe_marker = true;
-      Adobe_transform = app[14];
-    }
-  }
-  if (has_Adobe_marker) {
-    return (Adobe_transform != 0);
-  }
-  const int cid0 = jpg.components[0].id;
-  const int cid1 = jpg.components[1].id;
-  const int cid2 = jpg.components[2].id;
-  return (cid0 != 'R' || cid1 != 'G' || cid2 != 'B');
-}
-    
-      OutputImageComponent& component(int c) { return components_[c]; }
-  const OutputImageComponent& component(int c) const { return components_[c]; }
-    
-    struct ExceptionInfo {
-  const std::type_info* type{nullptr};
-  // The values in frames are IP (instruction pointer) addresses.
-  // They are only filled if the low-level exception tracer library is
-  // linked in or LD_PRELOADed.
-  std::vector<uintptr_t> frames; // front() is top of stack
+    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.destroy', UNKNOWN)
+ private:
+  DISALLOW_COPY_AND_ASSIGN(NwObjDestroyFunction);
 };
     
-    ordering IOBufCompare::operator()(const IOBuf& a, const IOBuf& b) const {
-  io::Cursor ca(&a);
-  io::Cursor cb(&b);
-  for (;;) {
-    auto ba = ca.peekBytes();
-    auto bb = cb.peekBytes();
-    if (ba.empty() && bb.empty()) {
-      return ordering::eq;
-    } else if (ba.empty()) {
-      return ordering::lt;
-    } else if (bb.empty()) {
-      return ordering::gt;
+    std::string GetDbFileContent(int argc, char** argv);
+    
+    // Get leading or trailing comments in a string. Comment lines start with '// '.
+// Leading detached comments are put in in front of leading comments.
+template <typename DescriptorType>
+inline grpc::string GetNodeComments(const DescriptorType* desc, bool leading) {
+  return grpc_generator::GetPrefixedComments(desc, leading, '//');
+}
+    
+    TEST_F(CodegenTestMinimal, Build) {}
+    
+    #include 'test/cpp/interop/server_helper.h'
+#include 'test/cpp/util/test_config.h'
+    
+    #include 'src/proto/grpc/testing/metrics.grpc.pb.h'
+#include 'src/proto/grpc/testing/metrics.pb.h'
+    
+    
+    {
+    {
+    {      ASSERT_THROWS(
+        std::logic_error,
+        data_channel->gather(raw_tensors, *int_tensor, 1, group)
+      )
     }
-    const size_t n = std::min(ba.size(), bb.size());
-    DCHECK_GT(n, 0u);
-    const ordering r = to_ordering(std::memcmp(ba.data(), bb.data(), n));
-    if (r != ordering::eq) {
-      return r;
-    }
-    ca.skip(n);
-    cb.skip(n);
   }
 }
     
-    TEST_F(OrderingTest, compare_equal_to) {
-  compare_equal_to<OddCompare<int>> op;
-  EXPECT_FALSE(op(3, 4));
-  EXPECT_TRUE(op(3, 3));
-  EXPECT_FALSE(op(4, 3));
+    void ${Storage}::clear_flag(char flag) {
+  ${THStorage}_clearFlag(${state,} storage, flag);
 }
     
-     private:
-  void dfs(NodeSet& visitedNodes, NodeId node) {
-    // We don't terminate early if cycle is detected, because this is considered
-    // an error condition, so not worth optimizing for.
-    if (visitedNodes.count(node)) {
-      return;
+      rank_type _rank; // Current process' rank
+  std::string _addr;
+  port_type _port;
+  rank_type _num_processes; // Number of processes in network
+  /**
+   * The list of network devices (such as Infiniband) that will be used by Gloo.
+   * Currently Gloo only supports a single network device. Therefore:
+   *
+   * _deviceList.size() will always be equal or less than 1.
+   *
+   * We make it a vector for the purpose of future extension to support multiple
+   * network devices.
+   */
+  std::vector<std::shared_ptr<::gloo::transport::Device>> _deviceList;
+  std::unordered_map<THDGroup, Group> _groups;
+  int _listen_socket;
+    
+    #ifndef BOOST_ASIO_DETAIL_DATE_TIME_FWD_HPP
+#define BOOST_ASIO_DETAIL_DATE_TIME_FWD_HPP
+    
+    #include <boost/asio/detail/config.hpp>
+    
+          if (events[i].events & (POLLIN | POLLERR | POLLHUP))
+        more_reads = op_queue_[read_op].perform_operations(descriptor, ops);
+      else
+        more_reads = op_queue_[read_op].has_operation(descriptor);
+    
+        // Helper methods
+    static bool HasFamilyNamed(std::string& name, DBWrapper* db);
+    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
+        Handle<Array> array);
+    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
+        Handle<Array> array, DBWrapper* db_wrapper, std::string cf);
+    static Handle<Value> CompactRangeDefault(const v8::Arguments& args);
+    static Handle<Value> CompactColumnFamily(const Arguments& args);
+    static Handle<Value> CompactOptions(const Arguments& args);
+    static Handle<Value> CompactAll(const Arguments& args);
+    
+    
+    {}
+    
+    /**
+ * @brief get fid
+ * @details [long description]
+ *
+ * @param fname [description]
+ * @param fid [description]
+ *
+ * @return
+ *  Status::OK()
+ *  Status::NotFound()
+ */
+Status EnvLibrados::_GetFid(
+  const std::string &fname,
+  std::string& fid) {
+  std::set<std::string> keys;
+  std::map<std::string, librados::bufferlist> kvs;
+  keys.insert(fname);
+  int r = _db_pool_ioctx.omap_get_vals_by_keys(_db_name, keys, &kvs);
     }
-    }
+    
+    Status DateTieredDBImpl::Merge(const WriteOptions& options, const Slice& key,
+                               const Slice& value) {
+  // Decide column family to get from
+  int64_t timestamp = 0;
+  Status s;
+  s = GetTimestamp(key, &timestamp);
+  if (!s.ok()) {
+    // Cannot get current time
+    return s;
+  }
+  ColumnFamilyHandle* column_family;
+  s = FindColumnFamily(timestamp, &column_family, true /*create_if_missing*/);
+  if (!s.ok()) {
+    return s;
+  }
+  WriteBatch batch;
+  batch.Merge(column_family, key, value);
+  return Write(options, &batch);
+}
