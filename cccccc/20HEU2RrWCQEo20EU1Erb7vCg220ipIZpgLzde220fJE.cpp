@@ -1,325 +1,180 @@
 
         
-        // Generate param traits read methods.
-#include 'ipc/param_traits_read_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
+                // Core Extension: ARB_copy_buffer
+        COPY_READ_BUFFER                 = 0x8F36,
+        COPY_WRITE_BUFFER                = 0x8F37,
+        COPY_READ_BUFFER_BINDING         = 0x8F36,
+        COPY_WRITE_BUFFER_BINDING        = 0x8F37,
     
-    Base::Base(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-	   const std::string& extension_id)
-    : extension_id_(extension_id),
-      id_(id),
-      delay_destruction_(false),
-      pending_destruction_(false),
-      object_manager_(object_manager) {
-}
+    // Main entry point for Paragraph Detection Algorithm.
+//
+// Given a set of equally spaced textlines (described by row_infos),
+// Split them into paragraphs.  See http://goto/paragraphstalk
+//
+// Output:
+//   row_owners - one pointer for each row, to the paragraph it belongs to.
+//   paragraphs - this is the actual list of PARA objects.
+//   models - the list of paragraph models referenced by the PARA objects.
+//            caller is responsible for deleting the models.
+void DetectParagraphs(int debug_level,
+                      GenericVector<RowInfo> *row_infos,
+                      GenericVector<PARA *> *row_owners,
+                      PARA_LIST *paragraphs,
+                      GenericVector<ParagraphModel *> *models);
     
-    v8::Handle<v8::Value> DeallocateObject(int routing_id,
-                                       int object_id) {
-  RenderThread::Get()->Send(new ShellViewHostMsg_Deallocate_Object(
-      routing_id, object_id));
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  return v8::Undefined(isolate);
-}
+    ScrollView* bln_word_window_handle();  //return handle
+void build_image_window(int width, int height);
+void display_bln_lines(ScrollView window,
+                       ScrollView::Color colour,
+                       float scale_factor,
+                       float y_offset,
+                       float minx,
+                       float maxx);
+                                 //function to call
+void pgeditor_msg(  //message display
+                  const char *msg);
+void pgeditor_show_point(  //display coords
+                         SVEvent *event);
+                                 //put bln word in       box
+void show_point(PAGE_RES* page_res, float x, float y);
     
-    void Clipboard::CallSync(const std::string& method,
-                         const base::ListValue& arguments,
-                         base::ListValue* result) {
-  if (method == 'Get') {
-    result->AppendString(GetText());
-  } else {
-    NOTREACHED() << 'Invalid call to Clipboard method:' << method
-                 << ' arguments:' << arguments;
+    #endif  // TESSERACT_CCSTRUCT_CCSTRUCT_H_
+
+    
+    // Computes the absolute error distances of the points from the line,
+// and returns the squared upper-quartile error distance.
+double DetLineFit::ComputeUpperQuartileError() {
+  int num_errors = distances_.size();
+  if (num_errors == 0) return 0.0;
+  // Get the absolute values of the errors.
+  for (int i = 0; i < num_errors; ++i) {
+    if (distances_[i].key < 0) distances_[i].key = -distances_[i].key;
   }
+  // Now get the upper quartile distance.
+  int index = distances_.choose_nth_item(3 * num_errors / 4);
+  double dist = distances_[index].key;
+  // The true distance is the square root of the dist squared / square_length.
+  // Don't bother with the square root. Just return the square distance.
+  return square_length_ > 0.0 ? dist * dist / square_length_ : 0.0;
 }
     
-    
-    {protected:
-  BaseEvent(){}
-  virtual ~BaseEvent(){}
+    static const int kCrToRedTable[256] = {
+  -179, -178, -177, -175, -174, -172, -171, -170, -168, -167, -165, -164,
+  -163, -161, -160, -158, -157, -156, -154, -153, -151, -150, -149, -147,
+  -146, -144, -143, -142, -140, -139, -137, -136, -135, -133, -132, -130,
+  -129, -128, -126, -125, -123, -122, -121, -119, -118, -116, -115, -114,
+  -112, -111, -109, -108, -107, -105, -104, -102, -101, -100,  -98,  -97,
+   -95,  -94,  -93,  -91,  -90,  -88,  -87,  -86,  -84,  -83,  -81,  -80,
+   -79,  -77,  -76,  -74,  -73,  -72,  -70,  -69,  -67,  -66,  -64,  -63,
+   -62,  -60,  -59,  -57,  -56,  -55,  -53,  -52,  -50,  -49,  -48,  -46,
+   -45,  -43,  -42,  -41,  -39,  -38,  -36,  -35,  -34,  -32,  -31,  -29,
+   -28,  -27,  -25,  -24,  -22,  -21,  -20,  -18,  -17,  -15,  -14,  -13,
+   -11,  -10,   -8,   -7,   -6,   -4,   -3,   -1,    0,    1,    3,    4,
+     6,    7,    8,   10,   11,   13,   14,   15,   17,   18,   20,   21,
+    22,   24,   25,   27,   28,   29,   31,   32,   34,   35,   36,   38,
+    39,   41,   42,   43,   45,   46,   48,   49,   50,   52,   53,   55,
+    56,   57,   59,   60,   62,   63,   64,   66,   67,   69,   70,   72,
+    73,   74,   76,   77,   79,   80,   81,   83,   84,   86,   87,   88,
+    90,   91,   93,   94,   95,   97,   98,  100,  101,  102,  104,  105,
+   107,  108,  109,  111,  112,  114,  115,  116,  118,  119,  121,  122,
+   123,  125,  126,  128,  129,  130,  132,  133,  135,  136,  137,  139,
+   140,  142,  143,  144,  146,  147,  149,  150,  151,  153,  154,  156,
+   157,  158,  160,  161,  163,  164,  165,  167,  168,  170,  171,  172,
+   174,  175,  177,  178
 };
     
-    namespace nwapi {
-    }
+    // Performs in-place floating point 8x8 DCT on block[0..63].
+// Note that the DCT used here is the DCT-2 with the first term multiplied by
+// 1/sqrt(2) and the result scaled by 1/2.
+void ComputeBlockDCTDouble(double block[64]);
     
-    class NwObjCreateFunction : public NWSyncExtensionFunction {
- public:
-  NwObjCreateFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    DEFINE_string(backend, 'lmdb', 'The backend for storing the result');
-    
-      // Get a layer using a LayerParameter.
-  static shared_ptr<Layer<Dtype> > CreateLayer(const LayerParameter& param) {
-    if (Caffe::root_solver()) {
-      LOG(INFO) << 'Creating layer ' << param.name();
-    }
-    const string& type = param.type();
-    CreatorRegistry& registry = Registry();
-    CHECK_EQ(registry.count(type), 1) << 'Unknown layer type: ' << type
-        << ' (known types: ' << LayerTypeListString() << ')';
-    return registry[type](param);
+    const double* NewSrgb8ToLinearTable() {
+  double* table = new double[256];
+  int i = 0;
+  for (; i < 11; ++i) {
+    table[i] = i / 12.92;
   }
+  for (; i < 256; ++i) {
+    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
+  }
+  return table;
+}
     
-     protected:
-  /// @copydoc BNLLLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #endif  // CAFFE_CUDNN_LRN_LAYER_HPP_
+    #endif  // GUETZLI_JPEG_DATA_ENCODER_H_
 
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the computed outputs @f$
-   *        y = \gamma ^ {\alpha x + \beta}
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    // Computes all the cross product distances of the points from the line,
-// storing the actual (signed) cross products in distances.
-// Ignores distances of points that are further away than the previous point,
-// and overlaps the previous point by at least half.
-void DetLineFit::ComputeDistances(const ICOORD& start, const ICOORD& end) {
-  distances_.truncate(0);
-  ICOORD line_vector = end;
-  line_vector -= start;
-  square_length_ = line_vector.sqlength();
-  int line_length = IntCastRounded(sqrt(square_length_));
-  // Compute the distance of each point from the line.
-  int prev_abs_dist = 0;
-  int prev_dot = 0;
-  for (int i = 0; i < pts_.size(); ++i) {
-    ICOORD pt_vector = pts_[i].pt;
-    pt_vector -= start;
-    int dot = line_vector % pt_vector;
-    // Compute |line_vector||pt_vector|sin(angle between)
-    int dist = line_vector * pt_vector;
-    int abs_dist = dist < 0 ? -dist : dist;
-    if (abs_dist > prev_abs_dist && i > 0) {
-      // Ignore this point if it overlaps the previous one.
-      int separation = abs(dot - prev_dot);
-      if (separation < line_length * pts_[i].halfwidth ||
-          separation < line_length * pts_[i - 1].halfwidth)
-        continue;
-    }
-    distances_.push_back(DistPointPair(dist, pts_[i].pt));
-    prev_abs_dist = abs_dist;
-    prev_dot = dot;
+    // Output callback function with associated data.
+struct JPEGOutput {
+  JPEGOutput(JPEGOutputHook cb, void* data) : cb(cb), data(data) {}
+  bool Write(const uint8_t* buf, size_t len) const {
+    return (len == 0) || (cb(data, buf, len) == len);
   }
-}
+ private:
+  JPEGOutputHook cb;
+  void* data;
+};
     
-      // Main worker method that retrieves the next number in the sequence.
-  // Returns kInvalidVal if called more than N times after object initialization
-  int GetVal() {
-    const int kInvalidVal = -1;
-    const int kMaxNaturalNumberValue = 1 << num_bits_;
-    if (next_num_ >= kMaxNaturalNumberValue)
-      return kInvalidVal;
-    int n = next_num_;
+    
+    {  const int width_;
+  const int height_;
+  int factor_x_;
+  int factor_y_;
+  int width_in_blocks_;
+  int height_in_blocks_;
+  int num_blocks_;
+  std::vector<coeff_t> coeffs_;
+  std::vector<uint16_t> pixels_;
+  // Same as last argument of ApplyGlobalQuantization() (default is all 1s).
+  int quant_[kDCTBlockSize];
+};
+    
+    
+    {}  // namespace
+    
+    //
+// Exception tracer library.
+    
+    namespace {
+bool skipPrefix(const path& pth, const path& prefix, path::const_iterator& it) {
+  it = pth.begin();
+  for (auto& p : prefix) {
+    if (it == pth.end()) {
+      return false;
     }
-    
-    template<typename T>
-inline void
-emitTLSLoad(Vout& v, TLSDatum<ThreadLocalNoCheck<T>> datum, Vreg d) {
-  auto const off = ThreadLocalNoCheck<T>::node_ptr_offset();
-  v << load{emitTLSAddr(v, datum) + safe_cast<int32_t>(off), d};
-}
-    
-    struct PageletTransport;
-struct PageletServerTaskEvent;
-    
-    Vtuple Vunit::makeTuple(const VregList& regs) {
-  auto i = tuples.size();
-  tuples.emplace_back(regs);
-  return Vtuple{i};
-}
-    
-      Variant ret = mpzToGMPObject(gmpData);
-    
-    /*
- * find type of named file
- */
-public const char *
-magic_file(struct magic_set *ms, const char *inname)
-{
-  if (ms == NULL)
-    return NULL;
-  return file_or_stream(ms, inname, NULL);
-}
-    
-    #include 'hphp/runtime/vm/hhbc.h'
-    
-    #include <cstdint>
-#include <cstring>
-#include <map>
-#include <set>
-    
-      return true;
-#elif !defined(__APPLE__) // LINUX/ELF
-  folly::symbolizer::ElfFile file;
-  if (file.openNoThrow(fname.c_str()) != 0) return false;
-    
-      static FILE *LightPopenImpl(const char *cmd, const char *type,
-                              const char *cwd);
-  static FILE *HeavyPopenImpl(const char *cmd, const char *type,
-                              const char *cwd);
-    
-        // Parallel training related with MA / BM
-    size_t m_modelAggregationBlockSize;
-    bool   m_resetSGDMomentum; 
-    bool   m_useNesterovBlockMomentum;
-    double m_blockLearningRate; 
-    double m_blockMomentumAsTimeConstant;
-    
-            // Sync graph inputs/outputs when serializing to proto.
-        void SyncGraphInputsOutputs();
-    
-            // Attribute representation, including name, type, and allowed values.
-        // The first element of allowed values (if specified) is the default
-        // value.
-        class Attribute
-        {
-        public:
+    if (p == '.') {
+      // Should only occur at the end, if prefix ends with a slash
+      continue;
     }
-    
-    namespace ONNXIR
-{
-    namespace Common
-    {
-        Status::Status(StatusCategory p_category, int p_code, const std::string& p_msg)
-        {
-            m_state.reset(new State());
-            m_state->m_category = p_category;
-            m_state->m_code = p_code;
-            m_state->m_msg = p_msg;
-        }
-    }
-    }
-    
-            // Taken from ONNX
-        REGISTER_OPERATOR_SCHEMA(Neg)
-        .Description('Neg takes one input data (Tensor<T>) and produces one output data '
-            '(Tensor<T>) where each element flipped sign, y = -x, is applied to '
-            'the tensor elementwise.')
-        .Input('X', 'Input tensor of any shape', 'T')
-        .Output('Y', 'Output tensor of same shape and type as input X.', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.');
-    
-    
-    {}
-
-    
-    
-    REGISTER_OPERATOR_SCHEMA(LinearRegressor)
-        .SetDomain(c_mlDomain)
-        .Input('X', 'Data to be regressed', 'T')
-        .Output('Y', 'Regression outputs (one per target, per example', 'tensor(float)')
-        .Description(R'DOC(
-            Generalized linear regression evaluation.
-            If targets is set to 1 (default) then univariate regression is performed.
-            If targets is set to M then M sets of coefficients must be passed in as a sequence
-            and M results will be output for each input n in N.
-            Coefficients are of the same length as an n, and coefficents for each target are contiguous.
-           'Intercepts are optional but if provided must match the number of targets.
-            )DOC')
-        .TypeConstraint('T', { 'tensor(float)', 'tensor(double)', 'tensor(int64)', 'tensor(int32)' }, ' allowed types.')
-        .Attr('coefficients', 'weights of the model(s)', AttrType::AttributeProto_AttributeType_FLOATS)
-        .Attr('intercepts', 'weights of the intercepts (if used)', AttrType::AttributeProto_AttributeType_FLOATS)
-        .Attr('targets', 'total number of regression targets (default is 1)', AttrType::AttributeProto_AttributeType_INT)
-        .Attr('post_transform', 'post eval transform for score, enum 'NONE', 'SOFTMAX', 'LOGISTIC', 'SOFTMAX_ZERO', 'PROBIT'', AttrType::AttributeProto_AttributeType_STRING);
-    
-    
-    {        totalNumSequences += chunk.NumberOfSequences();
-        m_chunkToFileIndex.insert(make_pair(&chunk, m_latticeFiles.size() - 1));
-        m_chunks.push_back(&chunk);
-        if (m_chunks.size() >= numeric_limits<ChunkIdType>::max())
-            RuntimeError('Number of chunks exceeded overflow limit.');
-    }
-    
-      void ResetFeatureSet() {
-    assert(Inputs.empty());
-    memset(InputSizesPerFeature, 0, sizeof(InputSizesPerFeature));
-    memset(SmallestElementPerFeature, 0, sizeof(SmallestElementPerFeature));
-  }
-    
-    ExternalFunctions::ExternalFunctions() {
-#define EXT_FUNC(NAME, RETURN_TYPE, FUNC_SIG, WARN)                            \
-  this->NAME = ::NAME;                                                         \
-  CheckFnPtr((void *)::NAME, #NAME, WARN);
-    }
-    
-    
-    {} // namespace fuzzer
-    
-    // Parse a location, like:
-// \\?\UNC\Server\Share\  \\?\C:\  \\Server\Share\  \  C:\  C:
-// Returns number of characters considered if successful.
-static size_t ParseLocation(const std::string &FileName) {
-  size_t Pos = 0, Res;
-    }
-    
-    void Fuzzer::RereadOutputCorpus(size_t MaxSize) {
-  if (Options.OutputCorpus.empty() || !Options.ReloadIntervalSec) return;
-  std::vector<Unit> AdditionalCorpus;
-  ReadDirToVectorOfUnits(Options.OutputCorpus.c_str(), &AdditionalCorpus,
-                         &EpochOfLastReadOfOutputCorpus, MaxSize,
-                         /*ExitOnError*/ false);
-  if (Options.Verbosity >= 2)
-    Printf('Reload: read %zd new units.\n', AdditionalCorpus.size());
-  bool Reloaded = false;
-  for (auto &U : AdditionalCorpus) {
-    if (U.size() > MaxSize)
-      U.resize(MaxSize);
-    if (!Corpus.HasUnit(U)) {
-      if (size_t NumFeatures = RunOne(U)) {
-        CheckExitOnSrcPosOrItem();
-        Corpus.AddToCorpus(U, NumFeatures);
-        Reloaded = true;
-      }
+    if (*it++ != p) {
+      return false;
     }
   }
-  if (Reloaded)
-    PrintStats('RELOAD');
+  return true;
 }
+} // namespace
     
+    namespace folly {
+namespace fs {
+    }
+    }
     
-    {}  // namespace fuzzer
+    void copy(const char* srcFile, const char* dest) {
+  fs::path destPath(dest);
+  if (!destPath.is_absolute()) {
+    auto hp = getHugePageSize();
+    CHECK(hp) << 'no huge pages available';
+    destPath = fs::canonical_parent(destPath, hp->mountPoint);
+  }
+    }
     
-    uint32_t sha1_rol32(uint32_t number, uint8_t bits) {
-	return ((number << bits) | (number >> (32-bits)));
-}
+    #include <algorithm>
+#include <stdexcept>
+#include <system_error>
     
-    int ExecuteCommand(const std::string &Command);
+    namespace folly {
+    }
+    
+    template <typename T>
+struct SimpleObservable<T>::Wrapper {
+  using element_type = T;
+    }
