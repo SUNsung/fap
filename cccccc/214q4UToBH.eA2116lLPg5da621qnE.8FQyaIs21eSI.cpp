@@ -1,177 +1,371 @@
 
         
-          virtual void Call(const std::string& method,
-                    const base::ListValue& arguments,
-                    content::RenderFrameHost* rvh = nullptr);
-  virtual void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result);
+        
+    {}  // namespace atom
     
+    #include 'ui/gfx/image/image.h'
     
-    {} // namespace nwapi
-
+    #ifndef ATOM_BROWSER_UNRESPONSIVE_SUPPRESSOR_H_
+#define ATOM_BROWSER_UNRESPONSIVE_SUPPRESSOR_H_
     
-    void Menu::Call(const std::string& method,
-                const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  if (method == 'Append') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    Append(object_manager()->GetApiObject<MenuItem>(object_id));
-  } else if (method == 'Insert') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    int pos = 0;
-    arguments.GetInteger(1, &pos);
-    Insert(object_manager()->GetApiObject<MenuItem>(object_id), pos);
-  } else if (method == 'Remove') {
-    int object_id = 0;
-    arguments.GetInteger(0, &object_id);
-    int pos = 0;
-    arguments.GetInteger(1, &pos);
-    Remove(object_manager()->GetApiObject<MenuItem>(object_id), pos);
-  } else if (method == 'Popup') {
-    int x = 0;
-    arguments.GetInteger(0, &x);
-    int y = 0;
-    arguments.GetInteger(1, &y);
-    content::WebContents* web_contents = content::WebContents::FromRenderFrameHost(rvh);
-    DCHECK(web_contents);
-    zoom::ZoomController* zoom_controller = zoom::ZoomController::FromWebContents(web_contents);
-    }
+      // Called immediately after all windows are closed.
+  virtual void OnWindowAllClosed() {}
+    
+    struct DraggableRegion {
+  bool draggable;
+  gfx::Rect bounds;
     }
     
-      if (!item->enable_shortcut_)
-    return false;
+      virtual ~DesktopMediaList() {}
     
-      GtkRequisition menu_req;
-  gtk_widget_size_request(GTK_WIDGET(menu), &menu_req);
-  GdkScreen* screen;
-  gdk_display_get_pointer(gdk_display_get_default(), &screen, NULL, NULL, NULL);
-  gint monitor = gdk_screen_get_monitor_at_point(screen, *x, *y);
+    /// Index the given source file and store the results to \p indexStorePath.
+///
+/// \param primarySourceFile The source file to index.
+///
+/// \param indexUnitToken A unique identifier for this translation unit in the
+/// form of a file path.
+///
+/// \param indexStorePath The location to write the indexing data to.
+///
+/// \param indexSystemModules If true, emit index data for imported serialized
+/// swift system modules.
+///
+/// \param isDebugCompilation true for non-optimized compiler invocation.
+///
+/// \param targetTriple The target for this compilation.
+///
+/// \param dependencyTracker The set of dependencies seen while building.
+bool indexAndRecord(SourceFile *primarySourceFile, StringRef indexUnitToken,
+                    StringRef indexStorePath, bool indexSystemModules,
+                    bool isDebugCompilation, StringRef targetTriple,
+                    const DependencyTracker &dependencyTracker);
     
-    aura::Window* Menu::GetActiveNativeView(content::RenderFrameHost* rfh) {
-  content::WebContents* web_contents =
-    content::WebContents::FromRenderFrameHost(rfh);
-  if (!web_contents) {
-    LOG(ERROR) << 'Menu: couldn't find WebContents';
-    return NULL;
+      StringRef str() const {
+    return LiteralContent;
   }
-  return web_contents->GetFullscreenRenderWidgetHostView()
-             ? web_contents->GetFullscreenRenderWidgetHostView()
-                   ->GetNativeView()
-             : web_contents->GetNativeView();
+    
+      IndexSymbol() = default;
+    
+    #include <dispatch/dispatch.h>
+static_assert(std::is_same<swift_once_t, dispatch_once_t>::value,
+              'swift_once_t and dispatch_once_t must stay in sync');
+#else
+    
+    // Return a new iterator that converts internal keys (yielded by
+// '*internal_iter') that were live at the specified 'sequence' number
+// into appropriate user keys.
+extern Iterator* NewDBIterator(
+    DBImpl* db,
+    const Comparator* user_key_comparator,
+    Iterator* internal_iter,
+    SequenceNumber sequence,
+    uint32_t seed);
+    
+    WriteBatch::WriteBatch() {
+  Clear();
 }
     
-    #include 'content/nw/src/api/menuitem/menuitem.h'
+    inline int Slice::compare(const Slice& b) const {
+  const size_t min_len = (size_ < b.size_) ? size_ : b.size_;
+  int r = memcmp(data_, b.data_, min_len);
+  if (r == 0) {
+    if (size_ < b.size_) r = -1;
+    else if (size_ > b.size_) r = +1;
+  }
+  return r;
+}
     
-        bool Read(ClipboardData& data) {
-      switch(data.type) {
-        case TYPE_TEXT:
-        return ReadText(data);
-        break;
-        case TYPE_HTML:
-        return ReadHTML(data);
-        break;
-        case TYPE_RTF:
-        return ReadRTF(data);
-        break;
-        case TYPE_PNG:
-        case TYPE_JPEG:
-        return ReadImage(data);
-        break;
-        case TYPE_NONE:
-        NOTREACHED();
-        return false;
-      }
-      NOTREACHED();
-      return false;      
+    
+    {
+    {bool RunQuit(const grpc::string& credential_type);
+}  // namespace testing
+}  // namespace grpc
+    
+    #include <gtest/gtest.h>
+    
+    #include 'test/cpp/interop/server_helper.h'
+#include 'test/cpp/util/test_config.h'
+    
+    template <class T, class F>
+double average(const T& container, F functor) {
+  return sum(container, functor) / container.size();
+}
+    
+    UsageTimer::Result UsageTimer::Sample() {
+  Result r;
+  r.wall = Now();
+  get_resource_usage(&r.user, &r.system);
+  r.total_cpu_time = 0;
+  r.idle_cpu_time = 0;
+  get_cpu_usage(&r.total_cpu_time, &r.idle_cpu_time);
+  return r;
+}
+    
+    /*
+ * This implements a Metrics server defined in
+ * src/proto/grpc/testing/metrics.proto. Any
+ * test service can use this to export Metrics (TODO (sreek): Only Gauges for
+ * now).
+ *
+ * Example:
+ *    MetricsServiceImpl metricsImpl;
+ *    ..
+ *    // Create QpsGauge(s). Note: QpsGauges can be created even after calling
+ *    // 'StartServer'.
+ *    QpsGauge qps_gauge1 = metricsImpl.CreateQpsGauge('foo', is_present);
+ *    // qps_gauge1 can now be used anywhere in the program by first making a
+ *    // one-time call qps_gauge1.Reset() and then calling qps_gauge1.Incr()
+ *    // every time to increment a query counter
+ *
+ *    ...
+ *    // Create the metrics server
+ *    std::unique_ptr<grpc::Server> server = metricsImpl.StartServer(port);
+ *    server->Wait(); // Note: This is blocking.
+ */
+namespace grpc {
+namespace testing {
+    }
     }
     
-    class NwMenuGetNSStringWithFixupFunction : public NWSyncExtensionFunction {
- public:
-  NwMenuGetNSStringWithFixupFunction(){}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    grpc::string SummarizeMethod(const grpc::protobuf::MethodDescriptor* method) {
+  grpc::string result = method->name();
+  result.append('\n');
+  return result;
+}
     
- protected:
-  ~NwMenuGetNSStringWithFixupFunction() override {}
+            // GraphProto to store name, version, initializer.
+        // When serilizing <*this> Graph to a GraphProto, the nodes and
+        // functions in <Graph> will also be fed into <m_graphProto> so that
+        // it's consistent with <*this> graph.
+        // This pointer is owned by parent model.
+        GraphProto* m_graphProto;
     
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringWithFixupFunction);
-};
     
-                // Constructor with default value.
-            explicit Attribute(const std::string& p_attrName,
-                AttrType p_type,
-                const std::string& p_description,
-                const AttributeProto& p_defaultVal);
+    {        auto& m = map();
+        auto& op_name = p_opSchemaSetter.m_opSchema.GetName();
+        auto& op_domain = p_opSchemaSetter.m_opSchema.Domain();
+        auto ver = p_opSchemaSetter.m_opSchema.SinceVersion();
+        assert(m[op_name][op_domain].count(ver) == 0);
+        m[op_name][op_domain].emplace(std::make_pair(ver, p_opSchemaSetter.m_opSchema));
+    }
     
-        // Taken from RS4
-    REGISTER_OPERATOR_SCHEMA(HardSigmoid)
-        .Description('HardSigmoid takes one input data (Tensor<T>) and produces one output '
-            'data (Tensor<T>) where the hard sigmoid function, f(x) = max⁡(0,min⁡(alpha*x+beta,1)), '
-            'is applied to the  tensor elementwise.')
-        .Input('X', 'Input tensor of any shape', 'T')
-        .Output('Y', 'Output tensor of same shape and type as input X.', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.')
-        .Attr('alpha', 'Scaling value', AttrType::AttributeProto_AttributeType_FLOAT)
-        .Attr('beta', 'Scalar offset', AttrType::AttributeProto_AttributeType_FLOAT);
+    
+    {            TypesWrapper& t = TypesWrapper::GetTypesWrapper();
+            if (p_typeStr == t.c_bool)
+            {
+                p_type = TensorProto::DataType::TensorProto_DataType_BOOL;
+            }
+            else if (p_typeStr == t.c_float)
+            {
+                p_type = TensorProto::DataType::TensorProto_DataType_FLOAT;
+            }
+            else if (p_typeStr == t.c_float16)
+            {
+                p_type = TensorProto::DataType::TensorProto_DataType_FLOAT16;
+            }
+            else if (p_typeStr == t.c_double)
+            {
+                p_type = TensorProto::DataType::TensorProto_DataType_DOUBLE;
+            }
+            else if (p_typeStr == t.c_int8)
+            {
+                p_type = TensorProto::DataType::TensorProto_DataType_INT8;
+            }
+            else if (p_typeStr == t.c_int16)
+            {
+                p_type = TensorProto::DataType::TensorProto_DataType_INT16;
+            }
+            else if (p_typeStr == t.c_int32)
+            {
+                p_type = TensorProto::DataType::TensorProto_DataType_INT32;
+            }
+            else if (p_typeStr == t.c_int64)
+            {
+                p_type = TensorProto::DataType::TensorProto_DataType_INT64;
+            }
+            else if (p_typeStr == t.c_string)
+            {
+                p_type = TensorProto::DataType::TensorProto_DataType_STRING;
+            }
+            else if (p_typeStr == t.c_uint8)
+            {
+                p_type = TensorProto::DataType::TensorProto_DataType_UINT8;
+            }
+            else if (p_typeStr == t.c_uint16)
+            {
+                p_type = TensorProto::DataType::TensorProto_DataType_UINT16;
+            }
+            else if (p_typeStr == t.c_uint32)
+            {
+                p_type = TensorProto::DataType::TensorProto_DataType_UINT32;
+            }
+            else if (p_typeStr == t.c_uint64)
+            {
+                p_type = TensorProto::DataType::TensorProto_DataType_UINT64;
+            }
+            else if (p_typeStr == t.c_complex64)
+            {
+                p_type = TensorProto::DataType::TensorProto_DataType_COMPLEX64;
+            }
+            else if (p_typeStr == t.c_complex128)
+            {
+                p_type = TensorProto::DataType::TensorProto_DataType_COMPLEX128;
+            }
+            else
+            {
+                assert(false);
+            }
+        }
+    
+        std::function<void(OperatorSchemaSetter&)> RNNDocGeneratorActivationArgs() {
+        return [=](OperatorSchemaSetter& schema) {
+            schema.Attr('activation_alpha',
+                'Optional scaling values used by some activation functions.',
+                AttrType::AttributeProto_AttributeType_FLOATS);
+            schema.Attr('activation_beta',
+                'Optional scaling values used by some activation functions.',
+                AttrType::AttributeProto_AttributeType_FLOATS);
+        };
+    }
     
         // Taken from ONNX
-    REGISTER_OPERATOR_SCHEMA(Split)
-        .Description('Split a tensor into a list of tensors, along the specified 'axis'. '
-            'The lengths of the split can be specified using argument 'axis' or '
-            'optional second input blob to the operator. Otherwise, the tensor is split '
-            'to equal sized parts.')
-        .Input('input', 'The tensor to split', 'T')
-        .Input('split', 'Optional list of output lengths (see also arg 'split')', 'T')
-        .Output('output', 'A list of output tensors', 'T')
+    REGISTER_OPERATOR_SCHEMA(Squeeze)
+        .Description('Remove single-dimensional entries from the shape of a tensor. '
+            'Takes a  parameter `axes` with a list of axes to squeeze.')
+        .Input('data', 'Tensors with at least max(dims) dimensions.', 'T')
+        .Output('squeezed', 'Reshaped tensor with same data as input.', 'T')
         .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
             'Constrain input and output types to float tensors.')
-        .Attr('axis', 'Which axis to split on', AttrType::AttributeProto_AttributeType_INT)
-        .Attr('split', 'Number of tensors to output.', AttrType::AttributeProto_AttributeType_INTS);
+        .Attr('axes',
+            'List of positive integers, indicate the dimensions to squeeze.',
+            AttrType::AttributeProto_AttributeType_INTS, int64_t(1));
     
-    // Computes the DCT (Discrete Cosine Transform) of the 8x8 array in 'block',
-// scaled up by a factor of 16. The values in 'block' are laid out row-by-row
-// and the result is written to the same memory area.
-void ComputeBlockDCT(coeff_t* block);
+        // Let's record that we started the copy, so that the main thread can wait afterwards.
+    if (m_dataTransferers[currentDataTransferIndex])
+        m_dataTransferers[currentDataTransferIndex]->RecordCPUToGPUCopy();
     
-    namespace guetzli {
+        // file I/O
+    void write(FILE *f, const char *name) const
+    {
+        fputTag(f, 'BMAT');
+        fputstring(f, name);
+        fputint(f, (int) this->numrows);
+        fputint(f, (int) this->numcols);
+        const auto &us = *this;
+        foreach_column (j, us)
+        {
+            auto column = ssematrixbase::col(j);
+            fwriteOrDie(column, f);
+        }
+        fputTag(f, 'EMAT');
     }
     
+        bool transposeA = false, transposeB = false;
+    float alpha = 0.3f;
+    float beta = 0.0f;
+    Matrix<float>::MultiplyAndWeightedAdd(alpha, mB, transposeA, mAdense, transposeB, beta, mC);
+    Matrix<float>::MultiplyAndWeightedAdd(alpha, mB, transposeA, mAsparse, transposeB, beta, mD);
     
-    {}  // namespace guetzli
-
     
-    #include 'guetzli/jpeg_data.h'
+    {
+    {} // namespace asio
+} // namespace boost
     
-      std::vector<uint8_t> ToSRGB(int xmin, int ymin, int xsize, int ysize) const;
     
-    extern const std::string NIL;
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
     
-    void AbstractAuthResolver::setDefaultCred(std::string user,
-                                          std::string password)
+    template <>
+class base_from_completion_cond<transfer_all_t>
 {
-  defaultUser_ = std::move(user);
-  defaultPassword_ = std::move(password);
+protected:
+  explicit base_from_completion_cond(transfer_all_t)
+  {
+  }
+    }
+    
+    #ifndef BOOST_ASIO_DETAIL_HANDLER_ALLOC_HELPERS_HPP
+#define BOOST_ASIO_DETAIL_HANDLER_ALLOC_HELPERS_HPP
+    
+    #ifndef BOOST_ASIO_DETAIL_IMPL_BUFFER_SEQUENCE_ADAPTER_IPP
+#define BOOST_ASIO_DETAIL_IMPL_BUFFER_SEQUENCE_ADAPTER_IPP
+    
+    
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
+    
+    #include <boost/asio/detail/pop_options.hpp>
+    
+    
+    
+        argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_pauseAllEffects'', nullptr);
+            return 0;
+        }
+        cobj->pauseAllEffects();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.SimpleAudioEngine:pauseAllEffects',argc, 0);
+    return 0;
+    
+    
+    
+        virtual void DrawSolidPolygon(const b2Vec2* vertices, int vertexCount, const b2Color& color);
+    
+    void DestructionListener::SayGoodbye(b2Joint* joint)
+{
+	if (test->m_mouseJoint == joint)
+	{
+		test->m_mouseJoint = nullptr;
+	}
+	else
+	{
+		test->JointDestroyed(joint);
+	}
 }
     
-    private:
-  std::string userDefinedUser_;
-  std::string userDefinedPassword_;
+    /// Test settings. Some can be controlled in the GUI.
+struct Settings
+{
+	Settings()
+	{
+		viewCenter.Set(0.0f, 20.0f);
+		hz = 60.0f;
+		velocityIterations = 8;
+		positionIterations = 3;
+		drawShapes = 1;
+		drawJoints = 1;
+		drawAABBs = 0;
+		drawContactPoints = 0;
+		drawContactNormals = 0;
+		drawContactImpulse = 0;
+		drawFrictionImpulse = 0;
+		drawCOMs = 0;
+		drawStats = 0;
+		drawProfile = 0;
+		enableWarmStarting = 1;
+		enableContinuous = 1;
+		enableSubStepping = 0;
+		enableSleep = 1;
+		pause = 0;
+		singleStep = 0;
+	}
+    }
     
-    
-    {} // namespace aria2
-    
-    public:
-  AbstractOptionHandler(PrefPtr pref, const char* description = NO_DESCRIPTION,
-                        const std::string& defaultValue = NO_DEFAULT_VALUE,
-                        ARG_TYPE argType = REQ_ARG, char shortName = 0);
-    
-      std::shared_ptr<HttpConnection> httpConnection_;
-    
-    #include 'Notifier.h'
-    
-    #endif // D_ASYNC_NAME_RESOLVER_MAN_H
+    			b2RevoluteJointDef jd;
+			jd.Initialize(ground, body, body->GetPosition());
+			jd.lowerAngle = -8.0f * b2_pi / 180.0f;
+			jd.upperAngle = 8.0f * b2_pi / 180.0f;
+			jd.enableLimit = true;
+			m_world->CreateJoint(&jd);
