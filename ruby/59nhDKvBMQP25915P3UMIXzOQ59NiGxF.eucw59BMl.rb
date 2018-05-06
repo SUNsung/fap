@@ -1,85 +1,88 @@
 
         
-            brew cask install mactex
+            We recommend using a MacTeX distribution: https://www.tug.org/mactex/
+    
+    module Homebrew
+  def build_env_keys(env)
+    %w[
+      CC CXX LD OBJC OBJCXX
+      HOMEBREW_CC HOMEBREW_CXX
+      CFLAGS CXXFLAGS CPPFLAGS LDFLAGS SDKROOT MAKEFLAGS
+      CMAKE_PREFIX_PATH CMAKE_INCLUDE_PATH CMAKE_LIBRARY_PATH CMAKE_FRAMEWORK_PATH
+      MACOSX_DEPLOYMENT_TARGET PKG_CONFIG_PATH PKG_CONFIG_LIBDIR
+      HOMEBREW_DEBUG HOMEBREW_MAKE_JOBS HOMEBREW_VERBOSE
+      HOMEBREW_SVN HOMEBREW_GIT
+      HOMEBREW_SDKROOT HOMEBREW_BUILD_FROM_SOURCE
+      MAKE GIT CPP
+      ACLOCAL_PATH PATH CPATH].select { |key| env.key?(key) }
+  end
+    
+      # True if a {Formula} is being built in 32-bit/x86 mode.
+  # This is needed for some use-cases though we prefer to build Universal
+  # when a 32-bit version is needed.
+  def build_32_bit?
+    include?('32-bit') && option_defined?('32-bit')
+  end
+    
+        s = nil
+    homebrew_site_packages = Language::Python.homebrew_site_packages
+    user_site_packages = Language::Python.user_site_packages 'python'
+    pth_file = user_site_packages/'homebrew.pth'
+    instructions = <<-EOS.undent.gsub(/^/, '  ')
+      mkdir -p #{user_site_packages}
+      echo 'import site; site.addsitedir('#{homebrew_site_packages}')' >> #{pth_file}
     EOS
-  when 'pip' then <<-EOS.undent
-    Homebrew provides pip via: `brew install python`. However you will then
-    have two Pythons installed on your Mac, so alternatively you can install
-    pip via the instructions at:
     
-        ENV.activate_extensions!
-    
-          path_modified_time < prune_time
+        if ARGV.include? '--list-checks'
+      puts checks.all.sort
+      exit
     end
-  end
-end
-
     
-        if ARGV.named.empty?
-      slow_checks = %w[
-        check_for_broken_symlinks
-        check_missing_deps
-        check_for_outdated_homebrew
-        check_for_linked_keg_only_brews
-      ]
-      methods = (checks.all.sort - slow_checks) + slow_checks
+      def patches
+    {}
+  end
+    
+        if block
+      do_with_enum(enum) { |o| add(block[o]) }
     else
-      methods = ARGV.named
-    end
-    
-        raise SEARCH_ERROR_QUEUE.pop unless SEARCH_ERROR_QUEUE.empty?
-  end
-    
-      class CachedFragment
-    def initialize(json)
-      @json = json
-    end
-    def as_json(*_args)
-      @json
+      merge(enum)
     end
   end
     
-      module ClassMethods
-    def load_types_in(module_name, my_name = module_name.singularize)
-      const_set(:MODULE_NAME, module_name)
-      const_set(:BASE_CLASS_NAME, my_name)
-      const_set(:TYPES, Dir[Rails.root.join('app', 'models', module_name.underscore, '*.rb')].map { |path| module_name + '::' + File.basename(path, '.rb').camelize })
-    end
-    
-      def tumblr_oauth_token_secret
-    service.secret
+      def test_tainted_string_key
+    str = 'str'.taint
+    h = {}
+    h[str] = nil
+    key = h.keys.first
+    assert_predicate str, :tainted?
+    assert_not_predicate str, :frozen?
+    assert_predicate key, :tainted?
+    assert_predicate key, :frozen?
   end
     
-      def load_event
-    @event = current_user.events.find(params[:id])
+        t = c.send(@method) { }
+    t.join
+    
+      it 'raises a ThreadError when trying to wake up a dead thread' do
+    t = Thread.new { 1 }
+    t.join
+    lambda { t.send @method }.should raise_error(ThreadError)
   end
 end
 
     
-        respond_to do |format|
-      format.html { redirect_to services_path }
-      format.json { head :no_content }
-    end
+    puts 'DONE: #{blogs.count} written to #{OUTPUT_FILENAME}'
+    
+      def percent_change(today, yesterday)
+    sprintf( '%0.02f', ((today-yesterday) / yesterday.to_f)*100).to_f
   end
     
-          unless root?
-        raise Invalid, 'missing name' if !name || name.empty?
-        raise Invalid, 'missing path' if !path || path.empty?
-        raise Invalid, 'missing type' if !type || type.empty?
-      end
+            def stock_location
+          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:id])
+        end
+    
+        # Never trust parameters from the scary internet, only allow the white list through.
+    def book_params
+      params.require(:book).permit(:name)
     end
-    
-    module Docs
-  class PageDb
-    attr_reader :pages
-    
-      context 'called with argument (2)' do
-    it 'outputs the second value from the default scale' do
-      expect('.two-base-one').to have_rule('font-size: 1.5625em')
-    end
-  end
-    
-    describe 'prefixer' do
-  before(:all) do
-    ParserSupport.parse_file('library/prefixer')
-  end
+end
