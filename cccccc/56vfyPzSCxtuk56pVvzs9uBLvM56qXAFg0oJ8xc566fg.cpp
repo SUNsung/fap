@@ -1,110 +1,176 @@
 
         
-          /// Build the components of an Objective-C method descriptor for the given
-  /// subscript's method implementations.
-  void emitObjCGetterDescriptorParts(IRGenModule &IGM,
-                                     SubscriptDecl *subscript,
-                                     llvm::Constant *&selectorRef,
-                                     llvm::Constant *&atEncoding,
-                                     llvm::Constant *&impl);
-    
-    void CodeCompletionOrganizer::Impl::sort(Options options) {
-  sortRecursive(options, rootGroup.get(), completionHasExpectedTypes);
-  if (options.showTopNonLiteralResults != 0)
-    sortTopN(options, rootGroup.get(), completionHasExpectedTypes);
+        
+    {    return M.t();
 }
     
+        double quantile_sum = 0.0;
+    //double min_quantile = 0.2;
+    double low_sum = 0;
+    double max_segment_length = 0;
+    int max_start_x = -1;
+    int max_end_x = -1;
+    int start_x = 0;
+    const double out_of_bells_fraction = 0.1;
+    for(int x = 0; x < hist.size[0]; x++)
+    {
+        quantile_sum += hist.at<float>(x);
+        if(quantile_sum < 0.2*total_sum) continue;
+    }
     
-    {  bool checkValue(SILValue Value);
+    #include 'opencv2/core.hpp'
+    
+    #include 'precomp.hpp'
+    
+    #include 'opencv2/core/opencl/runtime/opencl_core.hpp'
+#include 'opencv2/core/opencl/runtime/opencl_clamdfft.hpp'
+    
+    using namespace cv::ocl::runtime;
+    
+    #include 'precomp.hpp'
+    
+    #include 'hphp/runtime/vm/jit/timer.h'
+    
+    namespace irgen {
+    }
+    
+    void Vunit::freeScratchBlock(Vlabel l) {
+  // This will leak blocks if anything's been added since the corresponding
+  // call to makeScratchBlock(), but it's harmless.
+  if (l == blocks.size() - 1) blocks.pop_back();
+}
+    
+      auto checkBounds = [&] {
+    if (!bounded) return;
+    index = gen(env, SubInt, index, cns(env, base));
+    auto const ok = gen(env, CheckRange, index, cns(env, nTargets));
+    gen(env, JmpZero, getBlock(env, defaultOff), ok);
+    bounded = false;
+  };
+  auto const offsets = iv.range32();
+    
+    
+    {  ~DataBlockFull() noexcept override {}
 };
     
-    - (void)appendAction:(ObjectBehaviorAction)action;
-- (void)enumerate:(void (^)(ObjectBehaviorAction))block;
-- (void)reset;
-- (void)dump;
-@end
-    
-    public:
-  /// The replacement type.
-  Type getReplacement() const { return Replacement; }
-  
-  /// The protocol conformances for the replacement. These appear in the same
-  /// order as Archetype->getConformsTo() for the substituted archetype.
-  const ArrayRef<ProtocolConformanceRef> getConformances() const {
-    return Conformance;
+    void SynchronizableMulti::setNumGroups(int num_groups) {
+  Lock l(this);
+  if (num_groups != m_cond_list_vec.size()) {
+    assert(num_groups > m_cond_list_vec.size());
+    m_cond_list_vec.resize(num_groups);
   }
-  
-  Substitution() {}
-  
-  Substitution(Type Replacement, ArrayRef<ProtocolConformanceRef> Conformance);
+}
     
-    // The compiler generates the swift_once_t values as word-sized zero-initialized
-// variables, so we want to make sure swift_once_t isn't larger than the
-// platform word or the function below might overwrite something it shouldn't.
-static_assert(sizeof(swift_once_t) <= sizeof(void*),
-              'swift_once_t must be no larger than the platform word');
-    
-    bool js_cocos2dx_builder_CCBReader_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_builder_CCBReader_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_builder_CCBReader(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_builder_CCBReader_getAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readSoundKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readUTF8(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readCallbackKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getAnimationManagersForNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getNodesWithAnimationManagers(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setResolutionScale(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_CCBReader(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    extern JSClass  *jsb_cocos2d_Physics3DObject_class;
-extern JSObject *jsb_cocos2d_Physics3DObject_prototype;
-    
-    #endif // __cocos2dx_cocosdenshion_h__
-
-    
-    
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,'cc.PhysicsJointRotaryLimit',0,&tolua_err)) goto tolua_lerror;
-#endif
-    
-    
-    
-    
-    mShaderProgram->setUniformLocationWith4f(mColorLocation, color.r, color.g, color.b, 1);
-    glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
-    
-    protected:
-	friend class DestructionListener;
-	friend class BoundaryListener;
-	friend class ContactListener;
-    friend class Box2DView;
-    
-    			// Top horizontal
-			shape.Set(b2Vec2(-20.0f, 20.0f), b2Vec2(20.0f, 20.0f));
-			ground->CreateFixture(&sd);
-    
-    class BodyTypes : public Test
-{
-public:
-	BodyTypes()
-	{
-		b2Body* ground = NULL;
-		{
-			b2BodyDef bd;
-			ground = m_world->CreateBody(&bd);
+    void StreamPeerMbedTLS::disconnect_from_stream() {
     }
+    
+    
+    {			if (E->get().from_node == F->get() || E->get().to_node == F->get()) {
+				undo_redo->add_undo_method(script.ptr(), 'sequence_connect', edited_func, E->get().from_node, E->get().from_output, E->get().to_node);
+			}
+		}
+    
+    	void _update_graph_connections();
+	void _update_graph(int p_only_id = -1);
+    
+    
+#include <ft2build.h>
+    
+    // Represents a baseline image, a comparison metric and an image acceptance
+// criteria based on this metric.
+class Comparator {
+ public:
+  Comparator() {}
+  virtual ~Comparator() {}
     }
+    
+    
+    {
+    {
+    {      // Add back the last sentinel node.
+      tree[j_end + 1] = sentinel;
     }
+    if (SetDepth(static_cast<int>(2 * n - 1), &tree[0], depth, tree_limit)) {
+      /* We need to pack the Huffman tree in tree_limit bits. If this was not
+         successful, add fake entities to the lowest values and retry. */
+      break;
+    }
+  }
+}
+    
+      // Sets the 8x8 coefficient block with block coordinates (block_x, block_y)
+  // to block[].
+  // NOTE: If the component is 2x2 subsampled, this corresponds to the 16x16
+  // pixel area with upper-left corner (16 * block_x, 16 * block_y).
+  // REQUIRES: block[k] % quant()[k] == 0 for each coefficient index k.
+  void SetCoeffBlock(int block_x, int block_y,
+                     const coeff_t block[kDCTBlockSize]);
+    
+    static void WorkerThread(const std::string &Cmd, std::atomic<unsigned> *Counter,
+                         unsigned NumJobs, std::atomic<bool> *HasErrors) {
+  while (true) {
+    unsigned C = (*Counter)++;
+    if (C >= NumJobs) break;
+    std::string Log = 'fuzz-' + std::to_string(C) + '.log';
+    std::string ToRun = Cmd + ' > ' + Log + ' 2>&1\n';
+    if (Flags.verbosity)
+      Printf('%s', ToRun.c_str());
+    int ExitCode = ExecuteCommand(ToRun);
+    if (ExitCode != 0)
+      *HasErrors = true;
+    std::lock_guard<std::mutex> Lock(Mu);
+    Printf('================== Job %u exited with exit code %d ============\n',
+           C, ExitCode);
+    fuzzer::CopyFileToErr(Log);
+  }
+}
+    
+    static FILE *OutputFile = stderr;
+    
+    size_t MutationDispatcher::Mutate_AddWordFromManualDictionary(uint8_t *Data,
+                                                              size_t Size,
+                                                              size_t MaxSize) {
+  return AddWordFromDictionary(ManualDictionary, Data, Size, MaxSize);
+}
+    
+    __attribute__((visibility('default')))
+void __sanitizer_cov_trace_pc_indir(uintptr_t Callee) {
+  uintptr_t PC = (uintptr_t)__builtin_return_address(0);
+  fuzzer::TPC.HandleCallerCallee(PC, Callee);
+}
+    
+      void AddInterestingWord(const uint8_t *Data, size_t Size) {
+    if (!RecordingMemmem || !F->InFuzzingThread()) return;
+    if (Size <= 1) return;
+    Size = std::min(Size, Word::GetMaxSize());
+    Word W(Data, Size);
+    InterestingWords.insert(W);
+  }
+    
+    std::string Base64(const Unit &U) {
+  static const char Table[] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+                              'abcdefghijklmnopqrstuvwxyz'
+                              '0123456789+/';
+  std::string Res;
+  size_t i;
+  for (i = 0; i + 2 < U.size(); i += 3) {
+    uint32_t x = (U[i] << 16) + (U[i + 1] << 8) + U[i + 2];
+    Res += Table[(x >> 18) & 63];
+    Res += Table[(x >> 12) & 63];
+    Res += Table[(x >> 6) & 63];
+    Res += Table[x & 63];
+  }
+  if (i + 1 == U.size()) {
+    uint32_t x = (U[i] << 16);
+    Res += Table[(x >> 18) & 63];
+    Res += Table[(x >> 12) & 63];
+    Res += '==';
+  } else if (i + 2 == U.size()) {
+    uint32_t x = (U[i] << 16) + (U[i + 1] << 8);
+    Res += Table[(x >> 18) & 63];
+    Res += Table[(x >> 12) & 63];
+    Res += Table[(x >> 6) & 63];
+    Res += '=';
+  }
+  return Res;
+}
