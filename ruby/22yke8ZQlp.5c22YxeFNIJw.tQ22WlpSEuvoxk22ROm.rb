@@ -1,68 +1,109 @@
 
         
-            # change Microsoft filters to Sass calling convention
-    def replace_ms_filters(file)
-      log_transform
-      file.gsub(
-          /filter: e\(%\('progid:DXImageTransform.Microsoft.gradient\(startColorstr='%d', endColorstr='%d', GradientType=(\d)\)',argb\(([\-$\w]+)\),argb\(([\-$\w]+)\)\)\);/,
-          %Q(filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='\#{ie-hex-str(\\2)}', endColorstr='\#{ie-hex-str(\\3)}', GradientType=\\1);)
-      )
-    end
-    
-        def log_status(status)
-      puts bold status
-    end
-    
-          spec['main'] =
-          find_files.(File.join(Bootstrap.stylesheets_path, '_bootstrap.scss')) +
-          find_files.(Bootstrap.fonts_path) +
-          %w(assets/javascripts/bootstrap.js)
-    
-          case matched
-    
-      when '6.1.2'
-    __NR_execve      = 7
-    __NR_getpeername = 205
-    __NR_accept      = 232
-    __NR_listen      = 235
-    __NR_bind        = 237
-    __NR_socket      = 238
-    __NR_connect     = 239
-    __NR_close       = 272
-    __NR_kfcntl      = 635
-    
-          # If this importer is based on files on the local filesystem This method
-      # should return true if the file, when changed, should trigger a
-      # recompile.
-      #
-      # It is acceptable for non-sass files to be watched and trigger a recompile.
-      #
-      # @param filename [String] The absolute filename for a file that has changed.
-      # @return [Boolean] When the file changed should cause a recompile.
-      def watched_file?(filename)
-        false
-      end
-    end
-  end
+        def fixture_site(overrides = {})
+  Jekyll::Site.new(site_configuration(overrides))
 end
-
     
-            attr_writer :log_levels
+    options = {
+  sort: true,
+  limit: 30,
+  format: :text,
+}
     
-          # Throw an exception if the layout couldn't be found.
-      else
-        raise <<-ERR
+      next if extensions.empty?
+  mimes[mime] = [] if mimes[mime].nil?
+  mimes[mime].concat extensions
+end
     
-          def define_deprecated_accessors_for(option, opts, &block)
-        define_deprecated_writer_for(option, opts, &block)
+          new_theme_name = args.join('_')
+      theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
+      if theme.path.exist?
+        Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.'
       end
     
-          origin = caller[1]
-      if origin =~ /rubygems\/custom_require/
-        origin = caller[3]
-        if origin.nil?
-          STDERR.puts 'Unknown origin'
-          STDERR.puts caller.join('\n')
+          def render(*args)
+        measure_time do
+          measure_bytes do
+            @template.render(*args)
+          end
         end
       end
-      origin = origin.gsub(/:[0-9]+:in .*/, '') if origin
+    
+            # Checks if the user confirmation happens before the token becomes invalid
+        # Examples:
+        #
+        #   # confirm_within = 3.days and confirmation_sent_at = 2.days.ago
+        #   confirmation_period_expired?  # returns false
+        #
+        #   # confirm_within = 3.days and confirmation_sent_at = 4.days.ago
+        #   confirmation_period_expired?  # returns true
+        #
+        #   # confirm_within = nil
+        #   confirmation_period_expired?  # will always return false
+        #
+        def confirmation_period_expired?
+          self.class.confirm_within && self.confirmation_sent_at && (Time.now.utc > self.confirmation_sent_at.utc + self.class.confirm_within)
+        end
+    
+        # The path used after resending confirmation instructions.
+    def after_resending_confirmation_instructions_path_for(resource_name)
+      is_navigational_format? ? new_session_path(resource_name) : '/'
+    end
+    
+        if successfully_sent?(resource)
+      respond_with({}, location: after_sending_unlock_instructions_path_for(resource))
+    else
+      respond_with(resource)
+    end
+  end
+    
+          # Remembers the given resource by setting up a cookie
+      def remember_me(resource)
+        return if request.env['devise.skip_storage']
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.remember_me!
+        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
+      end
+    
+          def self.generate_helpers!(routes=nil)
+        routes ||= begin
+          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
+          Devise::URL_HELPERS.slice(*mappings)
+        end
+    
+          attr_reader :scope_name, :resource
+    
+        def define_class_getter
+      @klass.extend(ClassMethods)
+    end
+    
+            def accepted_types_and_failures
+          if @allowed_types.present?
+            'Accept content types: #{@allowed_types.join(', ')}\n'.tap do |message|
+              if @missing_allowed_types.present?
+                message << '  #{@missing_allowed_types.join(', ')} were rejected.'
+              else
+                message << '  All were accepted successfully.'
+              end
+            end
+          end
+        end
+        def rejected_types_and_failures
+          if @rejected_types.present?
+            'Reject content types: #{@rejected_types.join(', ')}\n'.tap do |message|
+              if @missing_rejected_types.present?
+                message << '  #{@missing_rejected_types.join(', ')} were accepted.'
+              else
+                message << '  All were rejected successfully.'
+              end
+            end
+          end
+        end
+    
+        def load_processor(name)
+      if defined?(Rails.root) && Rails.root
+        filename = '#{name.to_s.underscore}.rb'
+        directories = %w(lib/paperclip lib/paperclip_processors)
+    
+    module Paperclip
+  require 'rails'
