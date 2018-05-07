@@ -1,106 +1,66 @@
 
         
-                # Keyword arguments > stream.encoding > default utf8
-        if self.stdin_encoding is None:
-            self.stdin_encoding = getattr(
-                self.stdin, 'encoding', None) or 'utf8'
-        if self.stdout_encoding is None:
-            actual_stdout = self.stdout
-            if is_windows:
-                # noinspection PyUnresolvedReferences
-                from colorama import AnsiToWin32
-                if isinstance(self.stdout, AnsiToWin32):
-                    actual_stdout = self.stdout.wrapped
-            self.stdout_encoding = getattr(
-                actual_stdout, 'encoding', None) or 'utf8'
+        # This view is called from FlatpageFallbackMiddleware.process_response
+# when a 404 is raised, which often means CsrfViewMiddleware.process_view
+# has not been called even if CsrfViewMiddleware is installed. So we need
+# to use @csrf_protect, in case the template needs {% csrf_token %}.
+# However, we can't just wrap this view; if no matching flatpage exists,
+# or a redirect is required for authentication, the 404 needs to be returned
+# without any CSRF checks. Therefore, we only
+# CSRF protect the internal implementation.
     
-            status_line = 'HTTP/{version} {status} {reason}'.format(
-            version=version,
-            status=original.status,
-            reason=original.reason
-        )
-        headers = [status_line]
-        try:
-            # `original.msg` is a `http.client.HTTPMessage` on Python 3
-            # `_headers` is a 2-tuple
-            headers.extend(
-                '%s: %s' % header for header in original.msg._headers)
-        except AttributeError:
-            # and a `httplib.HTTPMessage` on Python 2.x
-            # `headers` is a list of `name: val<CRLF>`.
-            headers.extend(h.strip() for h in original.msg.headers)
+        print(link)
+    return link
     
+    def get_header_guard_dmlc(filename):
+    '''Get Header Guard Convention for DMLC Projects.
+    For headers in include, directly use the path
+    For headers in src, use project name plus path
+    Examples: with project-name = dmlc
+        include/dmlc/timer.h -> DMLC_TIMTER_H_
+        src/io/libsvm_parser.h -> DMLC_IO_LIBSVM_PARSER_H_
+    '''
+    fileinfo = cpplint.FileInfo(filename)
+    file_path_from_root = fileinfo.RepositoryName()
+    inc_list = ['include', 'api', 'wrapper']
     
-def get_filename_max_length(directory):
-    max_len = 255
-    try:
-        pathconf = os.pathconf
-    except AttributeError:
-        pass  # non-posix
-    else:
-        try:
-            max_len = pathconf(directory, 'PC_NAME_MAX')
-        except OSError as e:
-            if e.errno != errno.EINVAL:
-                raise
-    return max_len
+        parser = argparse.ArgumentParser(description='sparse training')
+    parser.add_argument('--pruning_switch_epoch', type=str)
+    parser.add_argument('--weight_sparsity', type=str, default=None)
+    parser.add_argument('--bias_sparsity', type=str, default=None)
+    parser.add_argument('--weight_threshold', type=str, default=None)
+    parser.add_argument('--bias_threshold', type=str, default=None)
+    args = parser.parse_args()
     
-        # If both `auth_parse` and `prompt_password` are set to `True`,
-    # and the value of `-a` lacks the password part,
-    # then the user will be prompted to type the password in.
-    prompt_password = True
-    
-        def __init__(self, license_plate):
-        super(Bus, self).__init__(VehicleSize.LARGE, license_plate, spot_size=5)
-    
-        def handle_budget_notifications(self, key, total):
-        '''Call notification API if nearing or exceeded budget.'''
-        ...
+            # FC for i, u, o gates, from summation of children states to hidden state
+        hs2h_iuo = F.FullyConnected(data=hs, weight=hs2h_weight, bias=hs2h_bias,
+                                    num_hidden=self._hidden_size*3,
+                                    name='%shs2h'%name)
+        i2h_iuo = i2h_iuo + hs2h_iuo
     
     
-class ProxyTest(unittest.TestCase):
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='score a model on a dataset')
+    parser.add_argument('--model', type=str, required=True,
+                        help = 'the model name.')
+    parser.add_argument('--gpus', type=str, default='0')
+    parser.add_argument('--batch-size', type=int, default=64)
+    parser.add_argument('--rgb-mean', type=str, default='0,0,0')
+    parser.add_argument('--data-val', type=str, required=True)
+    parser.add_argument('--image-shape', type=str, default='3,224,224')
+    parser.add_argument('--data-nthreads', type=int, default=4,
+                        help='number of threads for data decoding')
+    args = parser.parse_args()
     
-        def unsubscribe(self, msg, subscriber):
-        self.subscribers[msg].remove(subscriber)
-    
-        def test_frozen_pool(self):
-        with ObjectPool(self.sample_queue) as pool:
-            self.assertEqual(pool, 'first')
-            self.assertEqual(pool, 'first')
-        self.assertTrue(self.sample_queue.get() == 'second')
-        self.assertFalse(self.sample_queue.empty())
-        self.assertTrue(self.sample_queue.get() == 'first')
-        self.assertTrue(self.sample_queue.empty())
-    
-    Test code which will almost always fail (if not exactly 12:01) when untestable
-production code (have a look into constructor_injection.py) is used:
-    
-        def test_display_current_time_at_midnight(self):
-        class_under_test = TimeDisplay()
-        expected_time = '24:01'
-        result = class_under_test.get_current_time_as_as_html_fragment()
-        self.assertEqual(result, expected_time)
-'''
-    
-    ### OUTPUT ###
-# Counting to two...
-# one two
-# Counting to five...
-# one two three four five
+        # linear classifier
+    flatten = mx.symbol.Flatten(data=pool)
+    fc1 = mx.symbol.FullyConnected(data=flatten, num_hidden=num_classes)
+    softmax = mx.symbol.SoftmaxOutput(data=fc1, name='softmax')
+    return softmax
 
     
-    
-class Transaction(object):
-    '''A transaction guard.
-    
-    
-# Example usage...
-def main():
-    data1 = Data('Data 1')
-    data2 = Data('Data 2')
-    view1 = DecimalViewer()
-    view2 = HexViewer()
-    data1.attach(view1)
-    data1.attach(view2)
-    data2.attach(view2)
-    data2.attach(view1)
+    Implemented the following paper:
+Saining Xie, Ross Girshick, Piotr Dollar, Zhuowen Tu, Kaiming He. 'Aggregated Residual Transformations for Deep Neural Network'
+'''
+import mxnet as mx
+import numpy as np
