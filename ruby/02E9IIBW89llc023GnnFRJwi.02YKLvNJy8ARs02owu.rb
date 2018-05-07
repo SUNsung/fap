@@ -1,109 +1,122 @@
 
         
-        # Just a slash
-Benchmark.ips do |x|
-  path = '/'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
-    
-      Jekyll::Command.subclasses.each { |c| c.init_with_program(p) }
-    
-    require 'erb'
-    
-      describe '.create' do
-    it 'creates a key with the client' do
-      expected_service_configs = {
-        'U27F4V844T' => [],
-        'DQ8HTZ7739' => [],
-        '6A7HVUVQ3M' => ['some-music-id']
-      }
-      mock_client_response(:create_key!, with: { name: 'New Key', service_configs: expected_service_configs }) do
-        {
-          keyId: 'a-new-key-id'
-        }
-      end
-    
-          it 'pass a custom build number to the tool' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          increment_build_number(build_number: 24, xcodeproj: '.xcproject')
-        end').runner.execute(:test)
-    
-          it 'returns the new version as return value' do
-        result = Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number(bump_type: 'major')
-        end').runner.execute(:test)
-    
-        def every(*args, &blk)
-      schedule(:every, args, &blk)
-    end
-    
-        respond_to do |format|
-      format.html { render layout: !request.xhr? }
-      format.json { render json: @jobs }
-    end
-  end
-    
-      def update
-    @user_credential = current_user.user_credentials.find(params[:id])
-    
-            # This returns all the registered configuration classes.
-        #
-        # @return [Hash]
-        def config
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.configs[:top])
-            end
-          end
-        end
-    
-            # Get the proper capability host to check
-        cap_host = nil
-        if type == :host
-          cap_host = @env.host
-        else
-          with_target_vms([]) do |vm|
-            cap_host = case type
-                       when :provider
-                         vm.provider
-                       when :guest
-                         vm.guest
-                       else
-                         raise Vagrant::Errors::CLIInvalidUsage,
-                           help: opts.help.chomp
-                       end
-          end
-        end
-    
-    require 'extend/os/cleaner'
+        puts '\nDone.'
 
     
-    # Legacy patches have no checksum and are not cached
-class LegacyPatch < ExternalPatch
-  def initialize(strip, url)
-    super(strip)
-    resource.url(url)
-    resource.download_strategy = CurlDownloadStrategy
+    html_readme = '<html>#{Kramdown::Document.new(open('README.md').read).to_html}</html>'
+readme_doctree = REXML::Document.new(html_readme)
+links = REXML::XPath.match(readme_doctree, '//a')
+    
+      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
+    @logger     = Logger.new
+    @repo       = repo
+    @branch     = branch || 'master'
+    @branch_sha = get_branch_sha
+    @cache_path = cache_path
+    @repo_url   = 'https://github.com/#@repo'
+    @save_to    = {
+        js:    'assets/javascripts/bootstrap',
+        scss:  'assets/stylesheets/bootstrap',
+        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
   end
     
-      # Hack for ruby < 1.9.3
-  def noecho_gets
-    system 'stty -echo'
-    result = $stdin.gets
-    system 'stty echo'
-    puts
-    result
-  end
-    
-        def any_searchfield_present?
-      if %w(username email guid under13).all? { |attr| public_send(attr).blank? }
-        errors.add :base, 'no fields for search set'
-      end
+        def log_transform(*args, from: caller[1][/`.*'/][1..-2].sub(/^block in /, ''))
+      puts '    #{cyan from}#{cyan ': #{args * ', '}' unless args.empty?}'
     end
     
-            def block_argument?
-          argument? && @scope.node.block_type?
+      # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is 'scratch space' for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
+  config.cache_classes = true
+    
+      def test_image_helper
+    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
+  end
+    
+      path = 'assets/stylesheets'
+  css_path = args.with_defaults(css_path: 'tmp')[:css_path]
+  puts Term::ANSIColor.bold 'Compiling SCSS in #{path}'
+  Dir.mkdir(css_path) unless File.directory?(css_path)
+  %w(_bootstrap bootstrap/_theme).each do |file|
+    save_path = '#{css_path}/#{file.sub(/(^|\/)?_+/, '\1').sub('/', '-')}.css'
+    puts Term::ANSIColor.cyan('  #{save_path}') + '...'
+    engine    = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
+    css       = engine.render
+    File.open(save_path, 'w') { |f| f.write css }
+  end
+end
+    
+    #
+# Railties
+#
+    
+            # Remove it form the session objects so freeup
+        sessions.delete(s[:session])
+    
+    
+    
+    sock = TCPSocket.new(ip, port)
+    
+    clsCreateJar._invoke('createJarArchive', 'Ljava.io.File;[Ljava.io.File;', fileOutJar, filesIn)
+    
+    get '/' do
+  halt erb(:login) unless params[:user]
+  erb :chat, :locals => { :user => params[:user].gsub(/\W/, '') }
+end
+    
+        { # yes, this is ugly, feel free to change that
+      '/..' => '/', '/a/../b' => '/b', '/a/../b/' => '/b/', '/a/.' => '/a/',
+      '/%2e.' => '/', '/a/%2E%2e/b' => '/b', '/a%2f%2E%2e%2Fb/' => '/b/',
+      '//' => '/', '/%2fetc%2Fpasswd' => '/etc/passwd'
+    }.each do |a, b|
+      it('replaces #{a.inspect} with #{b.inspect}') { expect(get(a).body).to eq(b) }
+    end
+    
+      it 'should not override the header if already set X-Content-Type-Options' do
+    mock_app with_headers('X-Content-Type-Options' => 'sniff')
+    expect(get('/', {}, 'wants' => 'text/html').headers['X-Content-Type-Options']).to eq('sniff')
+  end
+end
+
+    
+            # 'match' is a fairly generic name, so we don't flag it unless we see
+        # a string or regexp literal on one side or the other
+        def_node_matcher :match_call?, <<-PATTERN
+          {(send {str regexp} :match _)
+           (send !nil? :match {str regexp})}
+        PATTERN
+    
+            def on_send(node)
+          return unless multiple_compare?(node)
+    
+            # Annotate the source code with the RuboCop offenses provided
+        #
+        # @param offenses [Array<RuboCop::Cop::Offense>]
+        #
+        # @return [self]
+        def with_offense_annotations(offenses)
+          offense_annotations =
+            offenses.map do |offense|
+              indent     = ' ' * offense.column
+              carets     = '^' * offense.column_length
+    
+          context 'without empty line' do
+        let(:source) do
+          <<-RUBY.strip_indent
+            #{type} SomeObject
+            end
+          RUBY
         end
+    
+        def self.names_for(klass)
+      instance.names_for(klass)
+    end
+    
+      # Get list of styles saved on previous deploy (running rake paperclip:refresh:missing_styles)
+  def self.get_registered_attachments_styles
+    YAML.load_file(Paperclip.registered_attachments_styles_path)
+  rescue Errno::ENOENT
+    nil
+  end
+  private_class_method :get_registered_attachments_styles
