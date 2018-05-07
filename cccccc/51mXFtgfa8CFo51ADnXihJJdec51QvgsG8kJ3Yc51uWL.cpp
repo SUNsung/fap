@@ -1,87 +1,238 @@
 
         
-        namespace atom {
+        TEST(AnyTest, TestPackAndUnpack) {
+  protobuf_unittest::TestAny submessage;
+  submessage.set_int32_value(12345);
+  protobuf_unittest::TestAny message;
+  message.mutable_any_value()->PackFrom(submessage);
     }
     
-    namespace atom {
+      void Generate(io::Printer* printer);
+    
+    // Generator options (used by csharp_generator.cc):
+struct Options {
+  Options() :
+      file_extension('.cs'),
+      base_namespace(''),
+      base_namespace_specified(false),
+      internal_access(false) {
+  }
+  // Extension of the generated file. Defaults to '.cs'
+  string file_extension;
+  // Base namespace to use to create directory hierarchy. Defaults to ''.
+  // This option allows the simple creation of a conventional C# file layout,
+  // where directories are created relative to a project-specific base
+  // namespace. For example, in a project with a base namespace of PetShop, a
+  // proto of user.proto with a C# namespace of PetShop.Model.Shared would
+  // generate Model/Shared/User.cs underneath the specified --csharp_out
+  // directory.
+  //
+  // If no base namespace is specified, all files are generated in the
+  // --csharp_out directory, with no subdirectories created automatically.
+  string base_namespace;
+  // Whether the base namespace has been explicitly specified by the user.
+  // This is required as the base namespace can be explicitly set to the empty
+  // string, meaning 'create a full directory hierarchy, starting from the first
+  // segment of the namespace.'
+  bool base_namespace_specified;
+  // Whether the generated classes should have accessibility level of 'internal'.
+  // Defaults to false that generates 'public' classes.
+  bool internal_access;
+};
+    
+    class RepeatedPrimitiveFieldGenerator : public FieldGeneratorBase {
+ public:
+  RepeatedPrimitiveFieldGenerator(const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options);
+  ~RepeatedPrimitiveFieldGenerator();
     }
     
-    #ifndef ATOM_COMMON_DRAGGABLE_REGION_H_
-#define ATOM_COMMON_DRAGGABLE_REGION_H_
+    #include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/compiler/csharp/csharp_names.h>
+#include <google/protobuf/compiler/csharp/csharp_options.h>
     
-      // The map of accelerators that have been successfully registered as global
-  // shortcuts and their observer.
-  typedef std::map<ui::Accelerator, Observer*> AcceleratorMap;
-  AcceleratorMap accelerator_map_;
+    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_SOURCE_GENERATOR_BASE_H__
     
-    #include <windows.h>
+    void WriteMessageDocComment(io::Printer* printer, const Descriptor* message);
+void WriteFieldDocComment(io::Printer* printer, const FieldDescriptor* field);
+void WriteEnumDocComment(io::Printer* printer, const EnumDescriptor* enum_);
+void WriteEnumValueDocComment(io::Printer* printer,
+                              const EnumValueDescriptor* value);
+void WriteServiceDocComment(io::Printer* printer,
+                            const ServiceDescriptor* service);
+void WriteMethodDocComment(io::Printer* printer,
+                           const MethodDescriptor* method);
+    
+    #include <string>
+#include <google/protobuf/compiler/code_generator.h>
+    
+    // Factory that creates generators for immutable-default messages.
+class ImmutableGeneratorFactory : public GeneratorFactory {
+ public:
+  ImmutableGeneratorFactory(Context* context);
+  virtual ~ImmutableGeneratorFactory();
+    }
+    
+    int main(int argc, char** argv) {
+  FLAGS_alsologtostderr = 1;
+    }
     
     
-    {} // namespace swift
-    
-    
-    {  const SILDebugScope *Scope = this;
-  while (Scope->Parent.is<const SILDebugScope *>())
-    Scope = Scope->Parent.get<const SILDebugScope *>();
-  assert(Scope->Parent.is<SILFunction *>() && 'orphaned scope');
-  return Scope->Parent.get<SILFunction *>();
+    {  /* Copy the output layer to a std::vector */
+  Blob<float>* output_layer = net_->output_blobs()[0];
+  const float* begin = output_layer->cpu_data();
+  const float* end = begin + output_layer->channels();
+  return std::vector<float>(begin, end);
 }
     
     
-    {
-    {}
-}
+    {  /**
+   * @brief Computes the error gradient w.r.t. the absolute value inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x} =
+   *            \mathrm{sign}(x) \frac{\partial E}{\partial y}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+};
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    
+    {  size_t *workspace_fwd_sizes_;
+  size_t *workspace_bwd_data_sizes_;
+  size_t *workspace_bwd_filter_sizes_;
+  size_t workspaceSizeInBytes;  // size of underlying storage
+  void *workspaceData;  // underlying storage
+  void **workspace;  // aliases into workspaceData
+};
 #endif
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    #include 'caffe/layers/softmax_layer.hpp'
+    
+    /**
+ * @brief Exponential Linear Unit non-linearity @f$
+ *        y = \left\{
+ *        \begin{array}{lr}
+ *            x                  & \mathrm{if} \; x > 0 \\
+ *            \alpha (\exp(x)-1) & \mathrm{if} \; x \le 0
+ *        \end{array} \right.
+ *      @f$.  
+ */
+template <typename Dtype>
+class ELULayer : public NeuronLayer<Dtype> {
+ public:
+  /**
+   * @param param provides ELUParameter elu_param,
+   *     with ELULayer options:
+   *   - alpha (\b optional, default 1).
+   *     the value @f$ \alpha @f$ by which controls saturation for negative inputs.
+   */
+  explicit ELULayer(const LayerParameter& param)
+      : NeuronLayer<Dtype>(param) {}
+    }
+    }
+    
+    namespace at {
+    }
+    
+    #include '../ChannelUtils.hpp'
+#include '../DataChannel.hpp'
+#include 'DataChannelUtils.hpp'
+    
+    CUDAGenerator::CUDAGenerator(Context * context_)
+  : context(context_)
+{
+  // there's no reason to call THCRandom_init, because it is called
+  // during THCudaInit, which is called before this initializer
+  generator = THCRandom_getGenerator(context->thc_state);
+}
+    
+    PyObject* tensor_to_list(const Tensor& tensor) {
+  Tensor data = tensor;
+  if (data.type().backend() != kCPU) {
+    with_no_gil([&]() {
+      data = data.toBackend(kCPU);
+    });
+  }
+  auto& type = data.type();
+  return recursive_to_list(
+      (char*)data.data_ptr(), data.sizes(), data.strides(), 0,
+      type.scalarType(), type.elementSizeInBytes());
+}
+    
+    #undef THPStorage_
+#undef THPStorage
+#undef THPStorageBaseStr
+#undef THPStorageStr
+#undef THPStorageClass
+#undef THPStorageType
+    
+    #include <cstdint>
+#include <iosfwd>
+#include <typeinfo>
+#include <vector>
+    
+    inline namespace literals {
+inline namespace string_literals {
+inline namespace {
+// 'const std::size_t&' is so that folly::npos has the same address in every
+// translation unit. This is to avoid potential violations of the ODR.
+constexpr const std::size_t& npos = detail::fixedstring::FixedStringBase::npos;
+} // namespace
+    }
+    }
+    
+    #include <folly/lang/Ordering.h>
+    
+    #include <sys/types.h>
+    
+    #include <sys/stat.h>
+#include <sys/types.h>
+#include <cstddef>
+#include <string>
+#include <utility>
+#include <vector>
+    
+    
+    {  size_t foundCompleted = 0;
+  for (auto& op : ops) {
+    if (op->state() == AsyncIOOp::State::COMPLETED) {
+      ++foundCompleted;
+    } else {
+      EXPECT_TRUE(op->state() == AsyncIOOp::State::CANCELED) << *op;
+    }
+  }
+  EXPECT_EQ(foundCompleted, completed);
+}
 
     
-      // The following strings are guaranteed to live at least as long as the
-  // current indexing action.
-  StringRef name;
-  StringRef USR; // USR may be safely compared by pointer.
-  StringRef group;
     
-      // Updates the probability distribution for the units in the corpus.
-  // Must be called whenever the corpus or unit weights are changed.
-  void UpdateCorpusDistribution() {
-    size_t N = Inputs.size();
-    Intervals.resize(N + 1);
-    Weights.resize(N);
-    std::iota(Intervals.begin(), Intervals.end(), 0);
-    if (CountingFeatures)
-      for (size_t i = 0; i < N; i++)
-        Weights[i] = Inputs[i]->NumFeatures * (i + 1);
-    else
-      std::iota(Weights.begin(), Weights.end(), 1);
-    CorpusDistribution = std::piecewise_constant_distribution<double>(
-        Intervals.begin(), Intervals.end(), Weights.begin());
+    {      if (version_ == 0) {
+        // Re-throw exception if this is the first time we run creator
+        throw;
+      }
+    }
+    
+    
+    {    return true;
   }
-  std::piecewise_constant_distribution<double> CorpusDistribution;
-    
-    namespace fuzzer {
-// A simple POD sized array of bytes.
-template <size_t kMaxSize> class FixedWord {
-public:
-  FixedWord() {}
-  FixedWord(const uint8_t *B, uint8_t S) { Set(B, S); }
-    }
-    }
-    
-    size_t MutationDispatcher::Mutate_ChangeBinaryInteger(uint8_t *Data,
-                                                      size_t Size,
-                                                      size_t MaxSize) {
-  if (Size > MaxSize) return 0;
-  switch (Rand(4)) {
-    case 3: return ChangeBinaryInteger<uint64_t>(Data, Size, Rand);
-    case 2: return ChangeBinaryInteger<uint32_t>(Data, Size, Rand);
-    case 1: return ChangeBinaryInteger<uint16_t>(Data, Size, Rand);
-    case 0: return ChangeBinaryInteger<uint8_t>(Data, Size, Rand);
-    default: assert(0);
-  }
-  return 0;
-}
-    
-    namespace fuzzer {
-    }
-    
-    std::string CloneArgsWithoutX(const std::vector<std::string> &Args,
-                              const char *X1, const char *X2);
