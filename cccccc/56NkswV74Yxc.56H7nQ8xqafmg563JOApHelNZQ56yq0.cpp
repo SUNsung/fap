@@ -1,125 +1,245 @@
 
         
-        
-    {
-    {}  // namespace python
-}  // namespace protobuf
+            llvm::errs() << '\n=====================================================\n';
+    SyntaxNode->dump(llvm::errs());
+    llvm::errs() << '\n\n---- Maps to semantic node: ----\n\n';
     
-    #include <string>
+      /// Allocate an Objective-C object.
+  llvm::Value *emitObjCAllocObjectCall(IRGenFunction &IGF,
+                                       llvm::Value *classPtr,
+                                       SILType resultType);
+    
+    @interface TimeZoneBridgingTester : NSObject
+- (NSTimeZone *)autoupdatingCurrentTimeZone;
+- (BOOL)verifyAutoupdatingTimeZone:(NSTimeZone *)tz;
+@end
+    
+        auto makeSubmoduleNameFromGroupName = [](StringRef groupName, SmallString<128> &buf) {
+      buf += 'Swift';
+      if (groupName.empty())
+        return;
+      buf += '.';
+      for (char ch : groupName) {
+        if (ch == '/')
+          buf += '.';
+        else if (ch == ' ' || ch == '-')
+          buf += '_';
+        else
+          buf += ch;
+      }
+    };
+    auto appendGroupNameForFilename = [](StringRef groupName, SmallString<256> &buf) {
+      if (groupName.empty())
+        return;
+      buf += '_';
+      for (char ch : groupName) {
+        if (ch == '/' || ch ==' ')
+          buf += '_';
+        else
+          buf += ch;
+      }
+    };
     
     
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-    
-    #include <string>
-    
-    // Exposed for testing only.
-LIBPROTOC_EXPORT string EscapeJavadoc(const string& input);
-    
-    
-    {}  // namespace google
-#endif  // GOOGLE_PROTOBUF_COMPILER_JAVA_EXTENSION_LITE_H__
-
-    
-    // ===================================================================
-    
-    
-    {    cvReleaseMat( &(*state)->preFilteredImg0 );
-    cvReleaseMat( &(*state)->preFilteredImg1 );
-    cvReleaseMat( &(*state)->slidingSumBuf );
-    cvReleaseMat( &(*state)->disp );
-    cvReleaseMat( &(*state)->cost );
-    cvFree( state );
+    {  const SILDebugScope *Scope = this;
+  while (Scope->Parent.is<const SILDebugScope *>())
+    Scope = Scope->Parent.get<const SILDebugScope *>();
+  assert(Scope->Parent.is<SILFunction *>() && 'orphaned scope');
+  return Scope->Parent.get<SILFunction *>();
 }
     
-            template<int CTA_SIZE>
-        static __forceinline__ __device__ int Ballot(int predicate)
-        {
-#if defined (__CUDA_ARCH__) && (__CUDA_ARCH__ >= 200)
-            return __ballot(predicate);
-#else
-            __shared__ volatile int cta_buffer[CTA_SIZE];
+    
+    {  StringRef getReceiverUSR() const {
+    for (auto Relation: Relations) {
+      if (Relation.roles & (SymbolRoleSet) SymbolRole::RelationReceivedBy)
+        return Relation.USR;
+    }
+    return StringRef();
+  }
+};
+    
+      /// Add a #line-defined virtual file region.
+  ///
+  /// By default, this region continues to the end of the buffer.
+  ///
+  /// \returns True if the new file was added, false if the file already exists.
+  /// The name and line offset must match exactly in that case.
+  ///
+  /// \sa closeVirtualFile.
+  bool openVirtualFile(SourceLoc loc, StringRef name, int lineOffset);
+    
+    #ifndef SWIFT_SYNTAX_REFERENCES_H
+#define SWIFT_SYNTAX_REFERENCES_H
+    
+    namespace swift {
+class ModuleDecl;
+class SourceFile;
+class DeclContext;
     }
     
     
-    {            ptr[tid] = partial = partial + ptr[tid + 16];
-            ptr[tid] = partial = partial + ptr[tid + 8];
-            ptr[tid] = partial = partial + ptr[tid + 4];
-            ptr[tid] = partial = partial + ptr[tid + 2];
-            ptr[tid] = partial = partial + ptr[tid + 1];
-        }
+    {
+    {} // end namespace index
+} // end namespace swift
     
-    #ifndef CV_CL_GET_PROC_ADDRESS
-#ifdef __GNUC__
-#warning('OPENCV: OpenCL FFT dynamic library loader: check configuration')
+    #if PY_MAJOR_VERSION >= 3
+static struct PyModuleDef _module = {
+  PyModuleDef_HEAD_INIT,
+  kModuleName,
+  kModuleDocstring,
+  -1,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL
+};
+#define INITFUNC PyInit__api_implementation
+#define INITFUNC_ERRORVAL NULL
 #else
-#pragma message('WARNING: OPENCV: OpenCL FFT dynamic library loader: check configuration')
-#endif
-#define CV_CL_GET_PROC_ADDRESS(name) NULL
+#define INITFUNC init_api_implementation
+#define INITFUNC_ERRORVAL
 #endif
     
-    TEST_F(UnicharcompressTest, DoesJapanese) {
-  LOG(INFO) << 'Testing jpn';
-  LoadUnicharset('jpn.unicharset');
-  ExpectCorrect('jpn');
+    #include <google/protobuf/testing/googletest.h>
+#include <gtest/gtest.h>
+#include <google/protobuf/testing/file.h>
+    
+    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
+    
+    
+    {
+}  // namespace google
+#endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
+
+    
+    RepeatedEnumFieldGenerator::RepeatedEnumFieldGenerator(
+    const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options)
+    : FieldGeneratorBase(descriptor, fieldOrdinal, options) {
 }
     
-    // dims=[5, 4, 3, 2]->[5, 3, 2, 4]
-TEST_F(MatrixTest, RotatingTranspose_1_3) {
-  GENERIC_2D_ARRAY<int> m;
-  src_.RotatingTranspose(dims_, kNumDims_, 1, 3, &m);
-  m.ResizeNoInit(kInputSize_ / 4, 4);
-  // Verify that the result is:
-  // output tensor=[[[[0, 6, 12, 18][1, 7, 13, 19]]
-  //                 [[2, 8, 14, 20][3, 9, 15, 21]]
-  //                 [[4, 10, 16, 22][5, 11, 17, 23]]]
-  //                [[[24, 30, 36, 42]...
-  EXPECT_EQ(0, m(0, 0));
-  EXPECT_EQ(6, m(0, 1));
-  EXPECT_EQ(1, m(1, 0));
-  EXPECT_EQ(2, m(2, 0));
-  EXPECT_EQ(3, m(3, 0));
-  EXPECT_EQ(4, m(4, 0));
-  EXPECT_EQ(5, m(5, 0));
-  EXPECT_EQ(24, m(6, 0));
-  EXPECT_EQ(30, m(6, 1));
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_PRIMITIVE_FIELD_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_PRIMITIVE_FIELD_H__
+    
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_SOURCE_GENERATOR_BASE_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_SOURCE_GENERATOR_BASE_H__
+    
+    #include <google/protobuf/compiler/java/java_generator_factory.h>
+    
+    //////////////////////////////////////////////////////////////////////
+    
+    
+    {  int64_t measure() const;
+};
+    
+      mpz_init(gmpReturn);
+  mpz_nextprime(gmpReturn, gmpData);
+    
+    inline void initNuma() {}
+inline constexpr int next_numa_node(std::atomic_int& curr_node) { return 0; }
+inline constexpr int num_numa_nodes() { return 1; }
+inline void numa_interleave(void* start, size_t size) {}
+inline void numa_bind_to(void* start, size_t size, int node) {}
+inline constexpr bool numa_node_allowed(int node) { return true; }
+    
+    #include 'hphp/util/assertions.h'
+#include 'magic.h' // @nolint
+    
+    /*
+ * Helpers for unconditional and conditional jumps.
+ */
+void surpriseCheck(IRGS&);
+void surpriseCheck(IRGS&, Offset);
+void jmpImpl(IRGS&, Offset);
+void implCondJmp(IRGS&, Offset taken, bool negate, SSATmp*);
+    
+    
+Instruction* Instruction::ImmPCOffsetTarget(Instruction* from) {
+  ptrdiff_t offset;
+  if (IsPCRelAddressing()) {
+    // PC-relative addressing. Only ADR is supported.
+    offset = ImmPCRel();
+  } else if (IsLoadOrStore()) {
+    offset = ImmLLiteral() << kInstructionSizeLog2;
+  } else {
+    // All PC-relative branches.
+    assert(BranchType() != UnknownBranchType);
+    // Relative branch offsets are instruction-size-aligned.
+    offset = ImmBranch() << kInstructionSizeLog2;
+  }
+  return (!from ? this : from) + offset;
 }
     
-      // Writes to the given file. Returns false in case of error.
-  bool Serialize(TFile* fp) const override;
-  // Reads from the given file. Returns false in case of error.
-  bool DeSerialize(TFile* fp) override;
+      while (to_read > 0) {
+    auto const read = folly::readNoInt(source_file, buffer,
+                                       std::min(sizeof(buffer), to_read));
+    if (read <= 0) {
+      Logger::Error('dlopen_embedded_data: Error reading from section: %s',
+                    folly::errnoStr(errno).c_str());
+      return nullptr;
+    }
+    if (folly::writeFull(dest_file, buffer, read) <= 0) {
+      Logger::Error('dlopen_embedded_data: Error writing to temporary file: %s',
+                    folly::errnoStr(errno).c_str());
+      return nullptr;
+    }
+    to_read -= read;
+  }
     
-      protected:
-    /**
-     * Called by concrete classes.
-     *
-     * outputbase is the name of the output file excluding
-     * extension. For example, '/path/to/chocolate-chip-cookie-recipe'
-     *
-     * extension indicates the file extension to be used for output
-     * files. For example 'pdf' will produce a .pdf file, and 'hocr'
-     * will produce .hocr files.
-     */
-    TessResultRenderer(const char *outputbase,
-                       const char* extension);
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
     
-      // Identify the colparitions in part_grid_, label them as PT_EQUATION, and
-  // save them into cp_seeds_.
-  void IdentifySeedParts();
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
     
-    #include <boost/asio/detail/pop_options.hpp>
     
-    #if !defined(BOOST_ASIO_HAS_THREADS)
-// Nothing to include.
-#elif defined(BOOST_ASIO_HAS_STD_ATOMIC)
-# include <atomic>
-#else // defined(BOOST_ASIO_HAS_STD_ATOMIC)
-# include <boost/detail/atomic_count.hpp>
-#endif // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+    {    // The next element in the stack.
+    context* next_;
+  };
+    
+    #endif // BOOST_ASIO_DETAIL_DESCRIPTOR_READ_OP_HPP
+
+    
+    #include <boost/asio/detail/addressof.hpp>
+#include <boost/asio/detail/bind_handler.hpp>
+#include <boost/asio/detail/buffer_sequence_adapter.hpp>
+#include <boost/asio/detail/descriptor_ops.hpp>
+#include <boost/asio/detail/fenced_block.hpp>
+#include <boost/asio/detail/reactor_op.hpp>
+    
+    namespace boost {
+namespace asio {
+namespace detail {
+    }
+    }
+    }
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS) \
+  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
+typedef null_fenced_block fenced_block;
+#elif defined(__MACH__) && defined(__APPLE__)
+typedef macos_fenced_block fenced_block;
+#elif defined(__sun)
+typedef solaris_fenced_block fenced_block;
+#elif defined(__GNUC__) && defined(__arm__) \
+  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
+typedef gcc_arm_fenced_block fenced_block;
+#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
+typedef gcc_hppa_fenced_block fenced_block;
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+typedef gcc_x86_fenced_block fenced_block;
+#elif defined(__GNUC__) \
+  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
+  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
+  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
+typedef gcc_sync_fenced_block fenced_block;
+#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
+typedef win_fenced_block fenced_block;
+#else
+typedef null_fenced_block fenced_block;
+#endif
     
     namespace boost {
 namespace asio {
@@ -129,126 +249,138 @@ namespace detail {
     }
     
     
-    {private:
-  Handler handler_;
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
+    
+    #include <boost/asio/detail/config.hpp>
+#include <list>
+#include <utility>
+#include <boost/asio/detail/assert.hpp>
+#include <boost/asio/detail/noncopyable.hpp>
+    
+    #endif // defined(BOOST_ASIO_WINDOWS_RUNTIME)
+    
+        cobj = (CocosDenshion::SimpleAudioEngine*)tolua_tousertype(tolua_S,1,0);
+    
+    
+    
+        argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_physics_PhysicsContactPostSolve_getFriction'', nullptr);
+            return 0;
+        }
+        double ret = cobj->getFriction();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.PhysicsContactPostSolve:getFriction',argc, 0);
+    return 0;
+    
+        virtual void DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color);
+    
+    	b2WorldManifold worldManifold;
+	contact->GetWorldManifold(&worldManifold);
+    
+    
+    {	static Test* Create()
+	{
+		return new AddPair;
+	}
 };
     
-    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
-# pragma once
-#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    			b2Transform xf2;
+			xf2.q.Set(-0.3524f * b2_pi);
+			xf2.p = -xf2.q.GetXAxis();
     
-    #if defined(BOOST_ASIO_ENABLE_HANDLER_TYPE_REQUIREMENTS)
     
-      // Get an iterator for the beginning of the map.
-  const_iterator begin() const
-  {
-    return values_.begin();
-  }
+    {			b2EdgeShape shape;
+			shape.Set(b2Vec2(-40.0f, 0.0f), b2Vec2(40.0f, 0.0f));
+			ground->CreateFixture(&shape, 0.0f);
+		}
     
-    template <typename Time_Traits>
-std::size_t epoll_reactor::cancel_timer(timer_queue<Time_Traits>& queue,
-    typename timer_queue<Time_Traits>::per_timer_data& timer,
-    std::size_t max_cancelled)
-{
-  mutex::scoped_lock lock(mutex_);
-  op_queue<operation> ops;
-  std::size_t n = queue.cancel_timer(timer, ops, max_cancelled);
-  lock.unlock();
-  io_service_.post_deferred_completions(ops);
-  return n;
-}
-    
-    stb_uint stb_compress(stb_uchar *out, stb_uchar *input, stb_uint length)
-{
-    stb__out = out;
-    stb__outfile = NULL;
+    			b2Body* prevBody = ground;
+			for (int32 i = 0; i < e_count; ++i)
+			{
+				b2BodyDef bd;
+				bd.type = b2_dynamicBody;
+				bd.position.Set(-4.5f + 1.0f * i, 5.0f);
+				b2Body* body = m_world->CreateBody(&bd);
+				body->CreateFixture(&fd);
     }
     
-    
-    {    // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
-    if (hud->show_demo_window)
-    {
-        ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiCond_FirstUseEver); // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. Here we just want to make the demo initial state a bit more friendly!
-        ImGui::ShowDemoWindow(&hud->show_demo_window);
+    DEFINE_FIND_STATIC_METHOD(KXlog_logWrite, KXlog, 'logWrite', '(Lcom/tencent/mars/xlog/Xlog$XLoggerInfo;Ljava/lang/String;)V')
+JNIEXPORT void JNICALL Java_com_tencent_mars_xlog_Xlog_logWrite
+  (JNIEnv *env, jclass, jobject _log_info, jstring _log) {
     }
-}
-
     
-    // Handler for Win32 messages, update mouse/keyboard data.
-// You may or not need this for your implementation, but it can serve as reference for handling inputs.
-// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
+    #include 'dumpcrash_stack.h'
+    
+    
 /*
-IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-*/
-
+ * WakeUpLock.h
+ *
+ *  Created on: 2012-9-28
+ *      Author: yerungui
+ */
     
-    // Handler for Win32 messages, update mouse/keyboard data.
-// You may or not need this for your implementation, but it can serve as reference for handling inputs.
-// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
-/*
-IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-*/
-
+    //
+//  comm_frequency_limit.cc
+//  comm
+//
+//  Created by liucan on 13-11-23.
+//
     
-    // Implemented features:
-//  [X] User texture binding. Cast 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-// Missing features:
-//  [ ] SDL2 handling of IME under Windows appears to be broken and it explicitly disable the regular Windows IME. You can restore Windows IME by compiling SDL with SDL_DISABLE_WINDOWS_IME.
     
-        // Create the blending setup
-    {
-        D3D12_BLEND_DESC& desc = psoDesc.BlendState;
-        desc.AlphaToCoverageEnable = false;
-        desc.RenderTarget[0].BlendEnable = true;
-        desc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
-        desc.RenderTarget[0].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
-        desc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-        desc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_INV_SRC_ALPHA;
-        desc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
-        desc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-        desc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-    }
-    
-        // Setup style
-    ImGui::StyleColorsDark();
-    //ImGui::StyleColorsClassic();
-    
-    FrameContext* WaitForNextFrameResources()
+Test_Spy_Sample::Test_Spy_Sample()
 {
-    UINT nextFrameIndex = g_frameIndex + 1;
-    g_frameIndex = nextFrameIndex;
-    }
-    
-    #include <cstdarg>
-#include <stdio.h>
-    
-    template<typename... ARGS>
-inline void log(int level, const char* tag, const char* msg, ARGS... args) noexcept {
-  __android_log_print(level, tag, msg, args...);
+    SPY_ATTACH_CLASS(NULL);
 }
     
-      void unref() {
-    if (0 == --m_refcount) {
-      delete this;
+    void TSpy::TestFun0()
+{
+    return reinterpret_cast<Test_Spy_Sample*>(This())->TestFun0();
+}
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    
+/*
+ * scop_jenv.h
+ *
+ *  Created on: 2012-8-21
+ *      Author: yanguoyue
+ */
+    
+    class PieceStorage;
+class Peer;
+class BtMessageDispatcher;
+class BtMessageFactory;
+class BtRequestFactory;
+class PeerConnection;
+class BtMessageValidator;
+    
+    #include 'TimerA2.h'
+    
+    
+    {} // namespace aria2
+    
+      void setBtRuntime(const std::shared_ptr<BtRuntime>& btRuntime);
+    
+    namespace aria2 {
     }
-  }
     
-    
-    {}
-
-    
-    // Class that lets you declare a global but does not add a static constructor
-// to the binary. Eventually I'd like to have this auto-initialize in a
-// multithreaded environment but for now it's easiest just to use manual
-// initialization.
-template <typename T>
-class StaticInitialized {
-public:
-  constexpr StaticInitialized() :
-    m_instance(nullptr)
-  {}
-    }
-    
-    #define FBASSERT(expr) FBASSERTMSGF(expr, '%s', #expr)
-    
-    #pragma once
+    private:
+  void startAsyncFamily(const std::string& hostname, int family,
+                        DownloadEngine* e, Command* command);
+  void setNameResolverCheck(size_t resolverIndex, DownloadEngine* e,
+                            Command* command);
+  void disableNameResolverCheck(size_t index, DownloadEngine* e,
+                                Command* command);
