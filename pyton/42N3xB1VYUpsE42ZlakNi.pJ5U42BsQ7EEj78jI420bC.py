@@ -1,61 +1,66 @@
 
         
-                :param namespace: a configuration namespace
-        :param lowercase: a flag indicating if the keys of the resulting
-                          dictionary should be lowercase
-        :param trim_namespace: a flag indicating if the keys of the resulting
-                          dictionary should not include the namespace
+                X_test = X[-n_test_samples:]
+        Y_test = Y[-n_test_samples:]
+        X = X[:n_samples]
+        Y = Y[:n_samples]
+    
+    import numpy as np
+from scipy.cluster import hierarchy
+import matplotlib.pyplot as plt
+    
+        ###########################################################################
+    # Set custom tracking based method
+    sampling_algorithm['custom-tracking-selection'] = \
+        lambda n_population, n_samples, random_state=None: \
+            sample_without_replacement(n_population,
+                                       n_samples,
+                                       method='tracking_selection',
+                                       random_state=random_state)
     
     
-def render_template(template_name_or_list, **context):
-    '''Renders a template from the template folder with the given
-    context.
+def _get_git_revision():
+    try:
+        revision = subprocess.check_output(REVISION_CMD.split()).strip()
+    except (subprocess.CalledProcessError, OSError):
+        print('Failed to execute git to get revision')
+        return None
+    return revision.decode('utf-8')
     
-        def dispatch_request(self, *args, **kwargs):
-        meth = getattr(self, request.method.lower(), None)
+        # the training data folder must be passed as first argument
+    movie_reviews_data_folder = sys.argv[1]
+    dataset = load_files(movie_reviews_data_folder, shuffle=False)
+    print('n_samples: %d' % len(dataset.data))
     
-        monkeypatch.setitem(sys.modules, 'ssl_context', ssl_context)
-    ctx = run_command.make_context('run', ['--cert', 'ssl_context'])
-    assert ctx.params['cert'] is ssl_context
+    # Plot changes in predicted probabilities via arrows
+plt.figure(0)
+colors = ['r', 'g', 'b']
+for i in range(clf_probs.shape[0]):
+    plt.arrow(clf_probs[i, 0], clf_probs[i, 1],
+              sig_clf_probs[i, 0] - clf_probs[i, 0],
+              sig_clf_probs[i, 1] - clf_probs[i, 1],
+              color=colors[y_test[i]], head_width=1e-2)
     
-        app.testing = False
-    stream = StringIO()
-    rv = client.get('/', errors_stream=stream)
-    assert rv.status_code == 500
-    assert rv.data
-    err = stream.getvalue()
-    assert 'Exception on / [GET]' in err
-    assert 'Exception: test' in err
-
+        Only one feature contains discriminative information, the other features
+    contain only noise.
+    '''
+    X, y = make_blobs(n_samples=n_samples, n_features=1, centers=[[-2], [2]])
     
-    # Scrapy version
-import pkgutil
-__version__ = pkgutil.get_data(__package__, 'VERSION').decode('ascii').strip()
-version_info = tuple(int(v) if v.isdigit() else v
-                     for v in __version__.split('.'))
-del pkgutil
+            print_info(site_info, title, type_, size_full)
+        if not info_only:
+            download_urls(url_list, title, ext, total_size=size_full, output_dir=output_dir, merge=merge, headers=fake_headers)
+    else:
+        raise NotImplementedError(flashvars)
     
-        def __enter__(self):
-        from scrapy.utils.test import get_testenv
-        pargs = [sys.executable, '-u', '-m', 'scrapy.utils.benchserver']
-        self.proc = subprocess.Popen(pargs, stdout=subprocess.PIPE,
-                                     env=get_testenv())
-        self.proc.stdout.readline()
-    
-            infos = []
-        if not self.wasSuccessful():
-            write('FAILED')
-            failed, errored = map(len, (self.failures, self.errors))
-            if failed:
-                infos.append('failures=%d' % failed)
-            if errored:
-                infos.append('errors=%d' % errored)
-        else:
-            write('OK')
-    
-        def run(self, args, opts):
-        if len(args) < 1:
-            raise UsageError()
-        elif len(args) > 1:
-            raise UsageError('running 'scrapy crawl' with more than one spider is no longer supported')
-        spname = args[0]
+        mediatype, ext, size = 'mp4', 'mp4', 0
+    print_info(site_info, title, mediatype, size)
+    #
+    # rtmpdump  -r 'rtmpe://cp30865.edgefcs.net/ondemand/mtviestor/_!/intlod/MTVInternational/MBUS/GeoLocals/00JP/VIAMTVI/PYC/201304/7122HVAQ4/00JPVIAMTVIPYC7122HVAQ4_640x_360_1200_m30.mp4' -o 'title.mp4' --swfVfy http://media.mtvnservices.com/player/prime/mediaplayerprime.1.10.8.swf
+    #
+    # because rtmpdump is unstable,may try serveral times
+    #
+    if not info_only:
+        # import pdb
+        # pdb.set_trace()
+        download_rtmp_url(url=url, title=title, ext=ext, params={
+                          '--swfVfy': 'http://media.mtvnservices.com/player/prime/mediaplayerprime.1.10.8.swf'}, output_dir=output_dir)
