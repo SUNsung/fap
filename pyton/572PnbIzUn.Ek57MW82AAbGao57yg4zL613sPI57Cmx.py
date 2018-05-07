@@ -1,69 +1,103 @@
 
         
-            def __init__(self, app):
-        self.app = app
+        new_version = {}
     
-        if version in tags:
-        fail('Version '%s' is already tagged', version)
     
-        @mock.patch('certbot.notify.smtplib.LMTP')
-    @mock.patch('certbot.notify.subprocess.Popen')
-    def test_smtp_failure(self, mock_popen, mock_lmtp):
-        from certbot.notify import notify
-        lmtp_obj = mock.MagicMock()
-        mock_lmtp.return_value = lmtp_obj
-        lmtp_obj.sendmail.side_effect = socket.error(17)
-        proc = mock.MagicMock()
-        mock_popen.return_value = proc
-        self.assertTrue(notify('Goose', 'auntrhody@example.com',
-                               'The old grey goose is dead.'))
-        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
-        self.assertEqual(proc.communicate.call_count, 1)
+atom_template = textwrap.dedent('''\
+    <?xml version='1.0' encoding='utf-8'?>
+    <feed xmlns='http://www.w3.org/2005/Atom'>
+        <link rel='self' href='http://rg3.github.io/youtube-dl/update/releases.atom' />
+        <title>youtube-dl releases</title>
+        <id>https://yt-dl.org/feed/youtube-dl-updates-feed</id>
+        <updated>@TIMESTAMP@</updated>
+        @ENTRIES@
+    </feed>''')
     
-    def check_live_url(url):
     
-    extension_mapping = {
-    'rss': ('xml', 'application/atom+xml; charset=UTF-8'),
-    'xml': ('xml', 'application/atom+xml; charset=UTF-8'),
-    'js': ('js', 'text/javascript; charset=UTF-8'),
-    'embed': ('htmllite', 'text/javascript; charset=UTF-8'),
-    'mobile': ('mobile', 'text/html; charset=UTF-8'),
-    'png': ('png', 'image/png'),
-    'css': ('css', 'text/css'),
-    'csv': ('csv', 'text/csv; charset=UTF-8'),
-    'api': (api_type(), 'application/json; charset=UTF-8'),
-    'json-html': (api_type('html'), 'application/json; charset=UTF-8'),
-    'json-compact': (api_type('compact'), 'application/json; charset=UTF-8'),
-    'compact': ('compact', 'text/html; charset=UTF-8'),
-    'json': (api_type(), 'application/json; charset=UTF-8'),
-    'i': ('compact', 'text/html; charset=UTF-8'),
-}
+from test.helper import FakeYDL
+from youtube_dl.cache import Cache
     
-            '''
-        try:
-            return getattr(stacked_proxy, key)
-        except TypeError:
-            return default
     
-        @require_oauth2_scope('creddits')
-    @validate(
-        VUser(),
-        user=VAccountByName('username'),
-        months=VInt('months', min=1, max=36),
-        timeout=VNotInTimeout(),
-    )
-    @api_doc(
-        api_section.gold,
-        uri='/api/v1/gold/give/{username}',
-    )
-    def POST_give(self, user, months, timeout):
-        self._gift_using_creddits(
-            recipient=user,
-            months=months,
-            proxying_for=request.POST.get('proxying_for'),
-        )
+class TestMultipleSocks(unittest.TestCase):
+    @staticmethod
+    def _check_params(attrs):
+        params = get_params()
+        for attr in attrs:
+            if attr not in params:
+                print('Missing %s. Skipping.' % attr)
+                return
+        return params
+    
+    
+def list_extractors(age_limit):
+    '''
+    Return a list of extractors that are suitable for the given age,
+    sorted by extractor ID.
+    '''
+    
+            duration = parse_duration(self._search_regex(
+            r'<b>Duration:</b> (?:<q itemprop='duration'>)?(\d+:\d+)', webpage, 'duration', fatal=False))
+        view_count = int_or_none(self._html_search_regex(
+            r'<b>Views:</b> (\d+)', webpage, 'view count', fatal=False))
+    
+    
+class AudiMediaIE(InfoExtractor):
+    _VALID_URL = r'https?://(?:www\.)?audi-mediacenter\.com/(?:en|de)/audimediatv/(?P<id>[^/?#]+)'
+    _TEST = {
+        'url': 'https://www.audi-mediacenter.com/en/audimediatv/60-seconds-of-audi-sport-104-2015-wec-bahrain-rookie-test-1467',
+        'md5': '79a8b71c46d49042609795ab59779b66',
+        'info_dict': {
+            'id': '1565',
+            'ext': 'mp4',
+            'title': '60 Seconds of Audi Sport 104/2015 - WEC Bahrain, Rookie Test',
+            'description': 'md5:60e5d30a78ced725f7b8d34370762941',
+            'upload_date': '20151124',
+            'timestamp': 1448354940,
+            'duration': 74022,
+            'view_count': int,
+        }
+    }
+    # extracted from https://audimedia.tv/assets/embed/embedded-player.js (dataSourceAuthToken)
+    _AUTH_TOKEN = 'e25b42847dba18c6c8816d5d8ce94c326e06823ebf0859ed164b3ba169be97f2'
+    
+    
+class C56IE(InfoExtractor):
+    _VALID_URL = r'https?://(?:(?:www|player)\.)?56\.com/(?:.+?/)?(?:v_|(?:play_album.+-))(?P<textid>.+?)\.(?:html|swf)'
+    IE_NAME = '56.com'
+    _TESTS = [{
+        'url': 'http://www.56.com/u39/v_OTM0NDA3MTY.html',
+        'md5': 'e59995ac63d0457783ea05f93f12a866',
+        'info_dict': {
+            'id': '93440716',
+            'ext': 'flv',
+            'title': '网事知多少 第32期：车怒',
+            'duration': 283.813,
+        },
+    }, {
+        'url': 'http://www.56.com/u47/v_MTM5NjQ5ODc2.html',
+        'md5': '',
+        'info_dict': {
+            'id': '82247482',
+            'title': '爱的诅咒之杜鹃花开',
+        },
+        'playlist_count': 7,
+        'add_ie': ['Sohu'],
+    }]
+    
+        def __init__(self, vehicle_size, license_plate, spot_size):
+        self.vehicle_size = vehicle_size
+        self.license_plate = license_plate
+        self.spot_size
+        self.spots_taken = []
+    
+        UNREAD = 0
+    READ = 1
+    ACCEPTED = 2
+    REJECTED = 3
 
     
-            res = AdminPage(content = AdminAwardWinners(award),
-                        title='award winners').render()
-        return res
+        def mapper(self, _, line):
+        '''Parse each log line, extract and transform relevant lines.
+    
+            The shuffle/sort step of MapReduce will then do a
+        distributed sort on the keys, resulting in:
