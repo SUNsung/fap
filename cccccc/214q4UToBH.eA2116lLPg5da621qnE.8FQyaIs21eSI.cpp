@@ -1,371 +1,171 @@
 
         
-        
-    {}  // namespace atom
+          void compute();
     
-    #include 'ui/gfx/image/image.h'
+    NS_ASSUME_NONNULL_BEGIN
     
-    #ifndef ATOM_BROWSER_UNRESPONSIVE_SUPPRESSOR_H_
-#define ATOM_BROWSER_UNRESPONSIVE_SUPPRESSOR_H_
+      virtual inline const char* type() const { return 'ArgMax'; }
+  virtual inline int ExactNumBottomBlobs() const { return 1; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
     
-      // Called immediately after all windows are closed.
-  virtual void OnWindowAllClosed() {}
     
-    struct DraggableRegion {
-  bool draggable;
-  gfx::Rect bounds;
+    {}  // namespace caffe
+    
+      /**
+   * @brief Computes the Contrastive error gradient w.r.t. the inputs.
+   *
+   * Computes the gradients with respect to the two input vectors (bottom[0] and
+   * bottom[1]), but not the similarity label (bottom[2]).
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
+   *      This Blob's diff will simply contain the loss_weight* @f$ \lambda @f$,
+   *      as @f$ \lambda @f$ is the coefficient of this layer's output
+   *      @f$\ell_i@f$ in the overall Net loss
+   *      @f$ E = \lambda_i \ell_i + \mbox{other loss terms}@f$; hence
+   *      @f$ \frac{\partial E}{\partial \ell_i} = \lambda_i @f$.
+   *      (*Assuming that this top Blob is not used as a bottom (input) by any
+   *      other layer of the Net.)
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$a@f$; Backward fills their diff with
+   *      gradients if propagate_down[0]
+   *   -# @f$ (N \times C \times 1 \times 1) @f$
+   *      the features @f$b@f$; Backward fills their diff with gradients if
+   *      propagate_down[1]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    #include <vector>
+    
+    #include 'caffe/layers/softmax_layer.hpp'
+    
+    #include 'caffe/layers/neuron_layer.hpp'
+    
+    extern JSClass  *jsb_cocos2d_Physics3DShape_class;
+extern JSObject *jsb_cocos2d_Physics3DShape_prototype;
+    
+    
+    
+    
+    
+    
+    
+    
+    mShaderProgram->setUniformLocationWith4f(mColorLocation, color.r, color.g, color.b, 1);
+    glDrawArrays(GL_LINE_LOOP, 0, vertexCount);
+    
+    
+    {	static Test* Create()
+	{
+		return new AddPair;
+	}
+};
+    
+    			b2FixtureDef sd1;
+			sd1.shape = &poly1;
+			sd1.density = 4.0f;
+    
+    		for (int32 i = 0; i < 3; ++i)
+		{
+			b2CircleShape shape;
+			shape.m_radius = 0.5f;
     }
     
-      virtual ~DesktopMediaList() {}
+    #ifndef BULLET_TEST_H
+#define BULLET_TEST_H
     
-    /// Index the given source file and store the results to \p indexStorePath.
-///
-/// \param primarySourceFile The source file to index.
-///
-/// \param indexUnitToken A unique identifier for this translation unit in the
-/// form of a file path.
-///
-/// \param indexStorePath The location to write the indexing data to.
-///
-/// \param indexSystemModules If true, emit index data for imported serialized
-/// swift system modules.
-///
-/// \param isDebugCompilation true for non-optimized compiler invocation.
-///
-/// \param targetTriple The target for this compilation.
-///
-/// \param dependencyTracker The set of dependencies seen while building.
-bool indexAndRecord(SourceFile *primarySourceFile, StringRef indexUnitToken,
-                    StringRef indexStorePath, bool indexSystemModules,
-                    bool isDebugCompilation, StringRef targetTriple,
-                    const DependencyTracker &dependencyTracker);
-    
-      StringRef str() const {
-    return LiteralContent;
+    template<typename DType>
+inline void CompressArray<DType>::InitCompressChunks(
+    const std::vector<bst_uint>& chunk_ptr) {
+  raw_chunks_ = chunk_ptr;
+  CHECK_GE(raw_chunks_.size(), 2);
+  out_buffer_.resize(raw_chunks_.size() - 1);
+  for (size_t i = 0; i < out_buffer_.size(); ++i) {
+    out_buffer_[i].resize(raw_chunks_[i + 1] - raw_chunks_[i]);
   }
-    
-      IndexSymbol() = default;
-    
-    #include <dispatch/dispatch.h>
-static_assert(std::is_same<swift_once_t, dispatch_once_t>::value,
-              'swift_once_t and dispatch_once_t must stay in sync');
-#else
-    
-    // Return a new iterator that converts internal keys (yielded by
-// '*internal_iter') that were live at the specified 'sequence' number
-// into appropriate user keys.
-extern Iterator* NewDBIterator(
-    DBImpl* db,
-    const Comparator* user_key_comparator,
-    Iterator* internal_iter,
-    SequenceNumber sequence,
-    uint32_t seed);
-    
-    WriteBatch::WriteBatch() {
-  Clear();
 }
     
-    inline int Slice::compare(const Slice& b) const {
-  const size_t min_len = (size_ < b.size_) ? size_ : b.size_;
-  int r = memcmp(data_, b.data_, min_len);
-  if (r == 0) {
-    if (size_ < b.size_) r = -1;
-    else if (size_ > b.size_) r = +1;
-  }
-  return r;
-}
+    #include <xgboost/base.h>
+    
+    namespace xgboost {
+    }
     
     
-    {
-    {bool RunQuit(const grpc::string& credential_type);
-}  // namespace testing
-}  // namespace grpc
-    
-    #include <gtest/gtest.h>
-    
-    #include 'test/cpp/interop/server_helper.h'
-#include 'test/cpp/util/test_config.h'
-    
-    template <class T, class F>
-double average(const T& container, F functor) {
-  return sum(container, functor) / container.size();
-}
-    
-    UsageTimer::Result UsageTimer::Sample() {
-  Result r;
-  r.wall = Now();
-  get_resource_usage(&r.user, &r.system);
-  r.total_cpu_time = 0;
-  r.idle_cpu_time = 0;
-  get_cpu_usage(&r.total_cpu_time, &r.idle_cpu_time);
-  return r;
-}
+    {  // --- data structure ---
+  GBTreeModel model_;
+  // training parameter
+  GBTreeTrainParam tparam_;
+  // ----training fields----
+  // configurations for tree
+  std::vector<std::pair<std::string, std::string> > cfg_;
+  // the updaters that can be applied to each of tree
+  std::vector<std::unique_ptr<TreeUpdater>> updaters_;
+  // Cached matrices
+  std::vector<std::shared_ptr<DMatrix>> cache_;
+  std::unique_ptr<Predictor> predictor_;
+  common::Monitor monitor_;
+};
     
     /*
- * This implements a Metrics server defined in
- * src/proto/grpc/testing/metrics.proto. Any
- * test service can use this to export Metrics (TODO (sreek): Only Gauges for
- * now).
- *
- * Example:
- *    MetricsServiceImpl metricsImpl;
- *    ..
- *    // Create QpsGauge(s). Note: QpsGauges can be created even after calling
- *    // 'StartServer'.
- *    QpsGauge qps_gauge1 = metricsImpl.CreateQpsGauge('foo', is_present);
- *    // qps_gauge1 can now be used anywhere in the program by first making a
- *    // one-time call qps_gauge1.Reset() and then calling qps_gauge1.Incr()
- *    // every time to increment a query counter
- *
- *    ...
- *    // Create the metrics server
- *    std::unique_ptr<grpc::Server> server = metricsImpl.StartServer(port);
- *    server->Wait(); // Note: This is blocking.
+ * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
+ * Method:    XGDMatrixCreateFromCSCEx
+ * Signature: ([J[J[F)J
  */
-namespace grpc {
-namespace testing {
-    }
-    }
-    
-    grpc::string SummarizeMethod(const grpc::protobuf::MethodDescriptor* method) {
-  grpc::string result = method->name();
-  result.append('\n');
-  return result;
-}
-    
-            // GraphProto to store name, version, initializer.
-        // When serilizing <*this> Graph to a GraphProto, the nodes and
-        // functions in <Graph> will also be fed into <m_graphProto> so that
-        // it's consistent with <*this> graph.
-        // This pointer is owned by parent model.
-        GraphProto* m_graphProto;
-    
-    
-    {        auto& m = map();
-        auto& op_name = p_opSchemaSetter.m_opSchema.GetName();
-        auto& op_domain = p_opSchemaSetter.m_opSchema.Domain();
-        auto ver = p_opSchemaSetter.m_opSchema.SinceVersion();
-        assert(m[op_name][op_domain].count(ver) == 0);
-        m[op_name][op_domain].emplace(std::make_pair(ver, p_opSchemaSetter.m_opSchema));
+JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGDMatrixCreateFromCSCEx
+  (JNIEnv *jenv, jclass jcls, jlongArray jindptr, jintArray jindices, jfloatArray jdata, jint jrow, jlongArray jout) {
+  DMatrixHandle result;
+  jlong* indptr = jenv->GetLongArrayElements(jindptr, NULL);
+  jint* indices = jenv->GetIntArrayElements(jindices, 0);
+  jfloat* data = jenv->GetFloatArrayElements(jdata, NULL);
+  bst_ulong nindptr = (bst_ulong)jenv->GetArrayLength(jindptr);
+  bst_ulong nelem = (bst_ulong)jenv->GetArrayLength(jdata);
     }
     
-    
-    {            TypesWrapper& t = TypesWrapper::GetTypesWrapper();
-            if (p_typeStr == t.c_bool)
-            {
-                p_type = TensorProto::DataType::TensorProto_DataType_BOOL;
-            }
-            else if (p_typeStr == t.c_float)
-            {
-                p_type = TensorProto::DataType::TensorProto_DataType_FLOAT;
-            }
-            else if (p_typeStr == t.c_float16)
-            {
-                p_type = TensorProto::DataType::TensorProto_DataType_FLOAT16;
-            }
-            else if (p_typeStr == t.c_double)
-            {
-                p_type = TensorProto::DataType::TensorProto_DataType_DOUBLE;
-            }
-            else if (p_typeStr == t.c_int8)
-            {
-                p_type = TensorProto::DataType::TensorProto_DataType_INT8;
-            }
-            else if (p_typeStr == t.c_int16)
-            {
-                p_type = TensorProto::DataType::TensorProto_DataType_INT16;
-            }
-            else if (p_typeStr == t.c_int32)
-            {
-                p_type = TensorProto::DataType::TensorProto_DataType_INT32;
-            }
-            else if (p_typeStr == t.c_int64)
-            {
-                p_type = TensorProto::DataType::TensorProto_DataType_INT64;
-            }
-            else if (p_typeStr == t.c_string)
-            {
-                p_type = TensorProto::DataType::TensorProto_DataType_STRING;
-            }
-            else if (p_typeStr == t.c_uint8)
-            {
-                p_type = TensorProto::DataType::TensorProto_DataType_UINT8;
-            }
-            else if (p_typeStr == t.c_uint16)
-            {
-                p_type = TensorProto::DataType::TensorProto_DataType_UINT16;
-            }
-            else if (p_typeStr == t.c_uint32)
-            {
-                p_type = TensorProto::DataType::TensorProto_DataType_UINT32;
-            }
-            else if (p_typeStr == t.c_uint64)
-            {
-                p_type = TensorProto::DataType::TensorProto_DataType_UINT64;
-            }
-            else if (p_typeStr == t.c_complex64)
-            {
-                p_type = TensorProto::DataType::TensorProto_DataType_COMPLEX64;
-            }
-            else if (p_typeStr == t.c_complex128)
-            {
-                p_type = TensorProto::DataType::TensorProto_DataType_COMPLEX128;
-            }
-            else
-            {
-                assert(false);
-            }
-        }
-    
-        std::function<void(OperatorSchemaSetter&)> RNNDocGeneratorActivationArgs() {
-        return [=](OperatorSchemaSetter& schema) {
-            schema.Attr('activation_alpha',
-                'Optional scaling values used by some activation functions.',
-                AttrType::AttributeProto_AttributeType_FLOATS);
-            schema.Attr('activation_beta',
-                'Optional scaling values used by some activation functions.',
-                AttrType::AttributeProto_AttributeType_FLOATS);
-        };
-    }
-    
-        // Taken from ONNX
-    REGISTER_OPERATOR_SCHEMA(Squeeze)
-        .Description('Remove single-dimensional entries from the shape of a tensor. '
-            'Takes a  parameter `axes` with a list of axes to squeeze.')
-        .Input('data', 'Tensors with at least max(dims) dimensions.', 'T')
-        .Output('squeezed', 'Reshaped tensor with same data as input.', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.')
-        .Attr('axes',
-            'List of positive integers, indicate the dimensions to squeeze.',
-            AttrType::AttributeProto_AttributeType_INTS, int64_t(1));
-    
-        // Let's record that we started the copy, so that the main thread can wait afterwards.
-    if (m_dataTransferers[currentDataTransferIndex])
-        m_dataTransferers[currentDataTransferIndex]->RecordCPUToGPUCopy();
-    
-        // file I/O
-    void write(FILE *f, const char *name) const
-    {
-        fputTag(f, 'BMAT');
-        fputstring(f, name);
-        fputint(f, (int) this->numrows);
-        fputint(f, (int) this->numcols);
-        const auto &us = *this;
-        foreach_column (j, us)
-        {
-            auto column = ssematrixbase::col(j);
-            fwriteOrDie(column, f);
-        }
-        fputTag(f, 'EMAT');
-    }
-    
-        bool transposeA = false, transposeB = false;
-    float alpha = 0.3f;
-    float beta = 0.0f;
-    Matrix<float>::MultiplyAndWeightedAdd(alpha, mB, transposeA, mAdense, transposeB, beta, mC);
-    Matrix<float>::MultiplyAndWeightedAdd(alpha, mB, transposeA, mAsparse, transposeB, beta, mD);
-    
-    
-    {
-    {} // namespace asio
-} // namespace boost
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-    template <>
-class base_from_completion_cond<transfer_all_t>
-{
-protected:
-  explicit base_from_completion_cond(transfer_all_t)
-  {
+    // common regressions
+// linear regression
+struct LinearSquareLoss {
+  // duplication is necessary, as __device__ specifier
+  // cannot be made conditional on template parameter
+  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
+  XGBOOST_DEVICE static bool CheckLabel(bst_float x) { return true; }
+  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
+    return predt - label;
   }
+  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
+    return 1.0f;
+  }
+  template <typename T>
+  static T PredTransform(T x) { return x; }
+  template <typename T>
+  static T FirstOrderGradient(T predt, T label) { return predt - label; }
+  template <typename T>
+  static T SecondOrderGradient(T predt, T label) { return T(1.0f); }
+  static bst_float ProbToMargin(bst_float base_score) { return base_score; }
+  static const char* LabelErrorMsg() { return ''; }
+  static const char* DefaultEvalMetric() { return 'rmse'; }
+};
+    
+    // data
+#include '../src/data/data.cc'
+#include '../src/data/simple_csr_source.cc'
+#include '../src/data/simple_dmatrix.cc'
+#include '../src/data/sparse_page_raw_format.cc'
+    
+    //
+//  boost_exception.cpp
+//  comm
+//
+//  Created by yanguoyue on 16/5/20.
+//
+    
+        template<typename T>
+    T* _Service() {
+        if (m_dependservices.end() != m_dependservices.find(T::ServiceName()))
+            return (T*)m_dependservices[T::ServiceName()];
     }
-    
-    #ifndef BOOST_ASIO_DETAIL_HANDLER_ALLOC_HELPERS_HPP
-#define BOOST_ASIO_DETAIL_HANDLER_ALLOC_HELPERS_HPP
-    
-    #ifndef BOOST_ASIO_DETAIL_IMPL_BUFFER_SEQUENCE_ADAPTER_IPP
-#define BOOST_ASIO_DETAIL_IMPL_BUFFER_SEQUENCE_ADAPTER_IPP
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-    #include <boost/asio/detail/pop_options.hpp>
-    
-    
-    
-        argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,'invalid arguments in function 'lua_cocos2dx_cocosdenshion_SimpleAudioEngine_pauseAllEffects'', nullptr);
-            return 0;
-        }
-        cobj->pauseAllEffects();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, '%s has wrong number of arguments: %d, was expecting %d \n', 'cc.SimpleAudioEngine:pauseAllEffects',argc, 0);
-    return 0;
-    
-    
-    
-        virtual void DrawSolidPolygon(const b2Vec2* vertices, int vertexCount, const b2Color& color);
-    
-    void DestructionListener::SayGoodbye(b2Joint* joint)
-{
-	if (test->m_mouseJoint == joint)
-	{
-		test->m_mouseJoint = nullptr;
-	}
-	else
-	{
-		test->JointDestroyed(joint);
-	}
-}
-    
-    /// Test settings. Some can be controlled in the GUI.
-struct Settings
-{
-	Settings()
-	{
-		viewCenter.Set(0.0f, 20.0f);
-		hz = 60.0f;
-		velocityIterations = 8;
-		positionIterations = 3;
-		drawShapes = 1;
-		drawJoints = 1;
-		drawAABBs = 0;
-		drawContactPoints = 0;
-		drawContactNormals = 0;
-		drawContactImpulse = 0;
-		drawFrictionImpulse = 0;
-		drawCOMs = 0;
-		drawStats = 0;
-		drawProfile = 0;
-		enableWarmStarting = 1;
-		enableContinuous = 1;
-		enableSubStepping = 0;
-		enableSleep = 1;
-		pause = 0;
-		singleStep = 0;
-	}
-    }
-    
-    			b2RevoluteJointDef jd;
-			jd.Initialize(ground, body, body->GetPosition());
-			jd.lowerAngle = -8.0f * b2_pi / 180.0f;
-			jd.upperAngle = 8.0f * b2_pi / 180.0f;
-			jd.enableLimit = true;
-			m_world->CreateJoint(&jd);
