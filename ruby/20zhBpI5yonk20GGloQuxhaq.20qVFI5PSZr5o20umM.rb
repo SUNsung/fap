@@ -1,84 +1,83 @@
 
         
-                def current_instances
-          Thread.current[:current_attributes_instances] ||= {}
-        end
-    
-        # Generate new controller class.
-    controller_class_name = 'Helper#{@symbol}Controller'
-    eval('class #{controller_class_name} < TestController; end')
-    @controller_class = self.class.const_get(controller_class_name)
-    
-        def sample_request(token, options = { nonce: 'def' })
-      authorization = options.inject([%{Token token='#{token}'}]) do |arr, (k, v)|
-        arr << '#{k}=\'#{v}\''
-      end.join(', ')
-      mock_authorization_request(authorization)
+            def find_local(username)
+      find_remote(username, nil)
     end
     
-    module ActionMailer
-  # The <tt>ActionMailer::DeliveryJob</tt> class is used when you
-  # want to send emails outside of the request-response cycle.
+        if test_conf['database']&.present?
+      ActiveRecord::Base.establish_connection(:test)
+      yield
+      ActiveRecord::Base.establish_connection(Rails.env.to_sym)
+    end
+  end
+    
+      has_one :icon, serializer: ActivityPub::ImageSerializer
+    
+      end
+    
+          def fetch_public_key_from_json(string, jwt)
+        json = JSON.parse(string)
+        keys = json['keys']
+        public_key = get_key_from_kid(keys, jwt.header['kid'])
+        public_key
+      end
+    
+          # Override `Kernel#puts` to prepend four spaces to each line.
+      def puts(string=nil)
+        $stdout.puts(string.to_s.gsub(/^/, '    '))
+      end
+    
+      # Implemented by subclasses to hook into Capistrano's deployment flow using
+  # using the `before` and `after` DSL methods. Note that `register_hooks` will
+  # not be called if the user has opted-out of hooks when installing the plugin.
   #
-  # Exceptions are rescued and handled by the mailer class.
-  class DeliveryJob < ActiveJob::Base # :nodoc:
-    queue_as { ActionMailer::Base.deliver_later_queue_name }
+  # Example:
+  #
+  #   def register_hooks
+  #     after 'deploy:updated', 'my_plugin:do_something'
+  #   end
+  #
+  def register_hooks; end
     
-    module ActionMailer
-  # Implements the ActiveSupport::LogSubscriber for logging notifications when
-  # email is delivered or received.
-  class LogSubscriber < ActiveSupport::LogSubscriber
-    # An email was delivered.
-    def deliver(event)
-      info do
-        recipients = Array(event.payload[:to]).join(', ')
-        'Sent mail to #{recipients} (#{event.duration.round(1)}ms)'
-      end
+    desc 'Deploy a new release.'
+task :deploy do
+  set(:deploying, true)
+  %w{ starting started
+      updating updated
+      publishing published
+      finishing finished }.each do |task|
+    invoke 'deploy:#{task}'
+  end
+end
+task default: :deploy
+
     
-            # This returns all the config classes for the various pushes.
-        #
-        # @return [Registry]
-        def push_configs
-          Registry.new.tap do |result|
-            @registered.each do |plugin|
-              result.merge!(plugin.components.configs[:push])
-            end
-          end
-        end
-    
-          class << self
-        # Mark a given block of code as a 'busy' block of code, which will
-        # register a SIGINT handler for the duration of the block. When a
-        # SIGINT occurs, the `sig_callback` proc will be called. It is up
-        # to the callback to behave properly and exit the application.
-        def busy(sig_callback)
-          register(sig_callback)
-          return yield
-        ensure
-          unregister(sig_callback)
-        end
-    
-          def []=(key, value)
-        super(convert_key(key), value)
-      end
-    
-        def definitions_for(klass)
-      parent_classes = klass.ancestors.reverse
-      parent_classes.each_with_object({}) do |ancestor, inherited_definitions|
-        inherited_definitions.deep_merge! @attachments[ancestor]
+      entries.each do |entry|
+    if File.exist?(entry[:file])
+      warn '[skip] #{entry[:file]} already exists'
+    else
+      File.open(entry[:file], 'w+') do |f|
+        f.write(ERB.new(File.read(entry[:template])).result(binding))
+        puts I18n.t(:written_file, scope: :capistrano, file: entry[:file])
       end
     end
   end
-end
-
     
-        EMPTY_TYPE = 'inode/x-empty'
-    SENSIBLE_DEFAULT = 'application/octet-stream'
-    
-        def register_new_attachment
-      Paperclip::AttachmentRegistry.register(@klass, @name, @options)
+            it 'roles defined using the `role` syntax are included' do
+          as = dsl.roles(:app).map { |server| '#{server.user}@#{server.hostname}:#{server.port}' }
+          expect(as.size).to eq(2)
+          expect(as[0]).to eq('deployer@example1.com:1234')
+          expect(as[1]).to eq('@example1.com:5678')
+        end
+      end
     end
     
-            def lower_than_high?
-          @high.nil? || @high == Float::INFINITY || passes_validation_with_size(@high - 1)
-        end
+    module Jekyll
+    
+        def handle_gist_redirecting(data)
+      redirected_url = data.header['Location']
+      if redirected_url.nil? || redirected_url.empty?
+        raise ArgumentError, 'GitHub replied with a 302 but didn't provide a location in the response headers.'
+      end
+    
+    end
