@@ -1,373 +1,227 @@
 
         
-          void CopyCPUTensorToDevice(const Tensor *cpu_tensor, Device *device,
-                             Tensor *device_tensor,
-                             StatusCallback done) const override;
+          const_iterator begin() const;
+  const_iterator end() const;
     
-    namespace tensorflow {
-#define REGISTER_COMPLEX(D, R, C)                         \
-  REGISTER_KERNEL_BUILDER(Name('Angle')                   \
-                              .Device(DEVICE_##D)         \
-                              .TypeConstraint<C>('T')     \
-                              .TypeConstraint<R>('Tout'), \
-                          UnaryOp<D##Device, functor::get_angle<C>>);
+    #if PY_MAJOR_VERSION >= 3
+static struct PyModuleDef _module = {
+  PyModuleDef_HEAD_INIT,
+  kModuleName,
+  kModuleDocstring,
+  -1,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL
+};
+#define INITFUNC PyInit__api_implementation
+#define INITFUNC_ERRORVAL NULL
+#else
+#define INITFUNC init_api_implementation
+#define INITFUNC_ERRORVAL
+#endif
+    
+    // Mappings and Sequences of descriptors.
+// They implement containers like fields_by_name, EnumDescriptor.values...
+// See descriptor_containers.cc for more description.
+#include <Python.h>
+    
+      // Find the file which defines an extension extending the given message type
+  // with the given field number.
+  // Containing_type must be a fully-qualified type name.
+  // Python objects are not required to implement this method.
+  bool FindFileContainingExtension(const string& containing_type,
+                                   int field_number,
+                                   FileDescriptorProto* output);
+    
+    #include <memory>
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
     }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+      // implements CodeGenerator ----------------------------------------
+  bool Generate(const FileDescriptor* file,
+                const string& parameter,
+                GeneratorContext* context,
+                string* error) const;
     
-    IPC_SYNC_MESSAGE_ROUTED1_1(ShellViewHostMsg_SetForceClose, bool, int)
+      void OCRTester(const char* imgname, const char* groundtruth, const char* tessdatadir, const char* lang) {
+    //log.info() << tessdatadir << ' for language: ' << lang << std::endl;
+    char *outText;
+    std::locale loc('C'); // You can also use '' for the default system locale
+    std::ifstream file(groundtruth);
+    file.imbue(loc); // Use it for file input
+    std::string gtText((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+    tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
+    ASSERT_FALSE(api->Init(tessdatadir, lang)) << 'Could not initialize tesseract.';
+    Pix *image = pixRead(imgname);
+    ASSERT_TRUE(image != nullptr) << 'Failed to read test image.';
+    api->SetImage(image);
+    outText = api->GetUTF8Text();
+    EXPECT_EQ(gtText,outText) << 'Phototest.tif OCR does not match ground truth for ' << ::testing::PrintToString(lang);
+    api->End();
+    delete [] outText;
+    pixDestroy(&image);
+  }
     
-    
-    {  int result = 0;
-  RenderThread::Get()->Send(new ShellViewHostMsg_AllocateId(
-      routing_id,
-      &result));
-  return scope.Escape(v8::Integer::New(isolate, result));
+    // Tests that GetEncodingAsString returns the right result for a trivial
+// unicharset.
+TEST_F(UnicharcompressTest, GetEncodingAsString) {
+  LoadUnicharset('trivial.unicharset');
+  ExpectCorrect('trivial');
+  STRING encoding = compressed_.GetEncodingAsString(unicharset_);
+  string encoding_str(&encoding[0], encoding.length());
+  std::vector<string> lines =
+      strings::Split(encoding_str, '\n', strings::SkipEmpty());
+  EXPECT_EQ(5, lines.size());
+  // The first line is always space.
+  EXPECT_EQ('0\t ', lines[0]);
+  // Next we have i.
+  EXPECT_EQ('1\ti', lines[1]);
+  // Next we have f.
+  EXPECT_EQ('2\tf', lines[2]);
+  // Next we have the fi ligature: ﬁ. There are no nulls in it, as there are no
+  // repeated letter ligatures in this unicharset, unlike por.unicharset above.
+  EXPECT_EQ('2,1\tﬁ', lines[3]);
+  // Finally the null character.
+  EXPECT_EQ('3\t<nul>', lines[4]);
 }
     
-        blink::WebSecurityPolicy::addOriginAccessWhitelistEntry(GURL(sourceOrigin),
-                                                             blink::WebString::fromUTF8(destinationProtocol),
-                                                             blink::WebString::fromUTF8(destinationHost),
-                                                             allowDestinationSubdomains);
-    args.GetReturnValue().Set(v8::Undefined(isolate));
-    return;
-  }
-  if (type == 'App' && method == 'RemoveOriginAccessWhitelistEntry') {
-    std::string sourceOrigin        = *v8::String::Utf8Value(args[2]);
-    std::string destinationProtocol = *v8::String::Utf8Value(args[3]);
-    std::string destinationHost     = *v8::String::Utf8Value(args[4]);
-    bool allowDestinationSubdomains = args[5]->ToBoolean()->Value();
+      // Suspends/Enables training by setting the training_ flag. Serialize and
+  // DeSerialize only operate on the run-time data if state is false.
+  void SetEnableTraining(TrainingState state) override;
     
-    
-namespace nwapi {
-    }
-    
-    #include 'content/nw/src/api/menuitem/menuitem.h'
-    
-    
-    {
-  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.getListSync', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwClipboardGetListSyncFunction);
-};
-    
-        UINT width = 640;
-    UINT height = 480;
-    
-        state->preFilterType = CV_STEREO_BM_XSOBEL; //CV_STEREO_BM_NORMALIZED_RESPONSE;
-    state->preFilterSize = 9;
-    state->preFilterCap = 31;
-    state->SADWindowSize = 15;
-    state->minDisparity = 0;
-    state->numberOfDisparities = numberOfDisparities > 0 ? numberOfDisparities : 64;
-    state->textureThreshold = 10;
-    state->uniquenessRatio = 15;
-    state->speckleRange = state->speckleWindowSize = 0;
-    state->trySmallerWindows = 0;
-    state->roi1 = state->roi2 = cvRect(0,0,0,0);
-    state->disp12MaxDiff = -1;
-    
-    void compose_motion(InputArray _om1, InputArray _T1, InputArray _om2, InputArray _T2,
-                    Mat& om3, Mat& T3, Mat& dom3dom1, Mat& dom3dT1, Mat& dom3dom2,
-                    Mat& dom3dT2, Mat& dT3dom1, Mat& dT3dT1, Mat& dT3dom2, Mat& dT3dT2);
-    
-    
-    {            ptr[tid] = partial = partial + ptr[tid + 16];
-            ptr[tid] = partial = partial + ptr[tid + 8];
-            ptr[tid] = partial = partial + ptr[tid + 4];
-            ptr[tid] = partial = partial + ptr[tid + 2];
-            ptr[tid] = partial = partial + ptr[tid + 1];
-        }
-    
-        static void CODEGEN_FUNCPTR Switch_GetTexImage(GLenum target, GLint level, GLenum format, GLenum type, GLvoid *pixels)
-    {
-        GetTexImage = (PFNGETTEXIMAGEPROC)IntGetProcAddress('glGetTexImage');
-        GetTexImage(target, level, format, type, pixels);
-    }
-    
-    int lapack_LU32f(float* a, size_t a_step, int m, float* b, size_t b_step, int n, int* info);
-int lapack_LU64f(double* a, size_t a_step, int m, double* b, size_t b_step, int n, int* info);
-int lapack_Cholesky32f(float* a, size_t a_step, int m, float* b, size_t b_step, int n, bool* info);
-int lapack_Cholesky64f(double* a, size_t a_step, int m, double* b, size_t b_step, int n, bool* info);
-int lapack_SVD32f(float* a, size_t a_step, float* w, float* u, size_t u_step, float* vt, size_t v_step, int m, int n, int flags);
-int lapack_SVD64f(double* a, size_t a_step, double* w, double* u, size_t u_step, double* vt, size_t v_step, int m, int n, int flags);
-int lapack_QR32f(float* src1, size_t src1_step, int m, int n, int k, float* src2, size_t src2_step, float* dst, int* info);
-int lapack_QR64f(double* src1, size_t src1_step, int m, int n, int k, double* src2, size_t src2_step, double* dst, int* info);
-int lapack_gemm32f(const float* src1, size_t src1_step, const float* src2, size_t src2_step,
-                   float alpha, const float* src3, size_t src3_step, float beta, float* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm64f(const double* src1, size_t src1_step, const double* src2, size_t src2_step,
-                   double alpha, const double* src3, size_t src3_step, double beta, double* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm32fc(const float* src1, size_t src1_step, const float* src2, size_t src2_step,
-                   float alpha, const float* src3, size_t src3_step, float beta, float* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-int lapack_gemm64fc(const double* src1, size_t src1_step, const double* src2, size_t src2_step,
-                   double alpha, const double* src3, size_t src3_step, double beta, double* dst, size_t dst_step,
-                   int m, int n, int k, int flags);
-    
-    /**
- * @brief Applies common transformations to the input data, such as
- * scaling, mirroring, substracting the image mean...
- */
-template <typename Dtype>
-class DataTransformer {
- public:
-  explicit DataTransformer(const TransformationParameter& param, Phase phase);
-  virtual ~DataTransformer() {}
-    }
+      // Runs forward propagation of activations on the input line.
+  // See Network for a detailed discussion of the arguments.
+  void Forward(bool debug, const NetworkIO& input,
+               const TransposedArray* input_transpose, NetworkScratch* scratch,
+               NetworkIO* output) override;
     
       /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
+   * Provide an image for Tesseract to recognize. Format is as
+   * TesseractRect above. Copies the image buffer and converts to Pix.
+   * SetImage clears all recognition results, and sets the rectangle to the
+   * full image, so it may be followed immediately by a GetUTF8Text, and it
+   * will automatically perform recognition.
    */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  void SetImage(const unsigned char* imagedata, int width, int height,
+                int bytes_per_pixel, int bytes_per_line);
     
-    namespace caffe {
+    bool TessPDFRenderer::imageToPDFObj(Pix *pix,
+                                    char *filename,
+                                    long int objnum,
+                                    char **pdf_object,
+                                    long int *pdf_object_size) {
+  size_t n;
+  char b0[kBasicBufSize];
+  char b1[kBasicBufSize];
+  char b2[kBasicBufSize];
+  if (!pdf_object_size || !pdf_object)
+    return false;
+  *pdf_object = nullptr;
+  *pdf_object_size = 0;
+  if (!filename)
+    return false;
     }
     
-    #endif  // CAFFE_CONV_LAYER_HPP_
-
-    
-      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
-  cudnnTensorDescriptor_t    bias_desc_;
-  cudnnFilterDescriptor_t      filter_desc_;
-  vector<cudnnConvolutionDescriptor_t> conv_descs_;
-  int bottom_offset_, top_offset_, bias_offset_;
-    
-    
-    {}  // namespace caffe
-    
-    #ifdef USE_CUDNN
-/**
- * @brief CuDNN acceleration of TanHLayer.
- */
-template <typename Dtype>
-class CuDNNTanHLayer : public TanHLayer<Dtype> {
- public:
-  explicit CuDNNTanHLayer(const LayerParameter& param)
-      : TanHLayer<Dtype>(param), handles_setup_(false) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual ~CuDNNTanHLayer();
+    namespace tesseract {
     }
     
-    namespace caffe {
+        api.SetImage(pixs);
+    
+    // Helper returns true if all the words are acceptable.
+static bool WordsAcceptable(const PointerVector<WERD_RES>& words) {
+  for (int w = 0; w < words.size(); ++w) {
+    if (words[w]->tess_failed || !words[w]->tess_accepted) return false;
+  }
+  return true;
+}
+    
+    namespace tesseract {
     }
     
-    #include 'ifaddrs_android.h'
-#include <stdlib.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/utsname.h>
-#include <sys/ioctl.h>
-#include <netinet/in.h>
-#include <net/if.h>
-#include <unistd.h>
-#include <errno.h>
-#include <linux/netlink.h>
-#include <linux/rtnetlink.h>
+    #include <boost/asio/detail/push_options.hpp>
     
-    
-    {	_lws_poll();
-}
-    
-    		//normalize
-    
-    
-    {
-    {// use R's PRNG to replacd
-CustomGlobalRandomEngine::result_type
-CustomGlobalRandomEngine::operator()() {
-  return static_cast<result_type>(
-      std::floor(unif_rand() * CustomGlobalRandomEngine::max()));
-}
-}  // namespace common
-}  // namespace xgboost
-
-    
-    #include <xgboost/logging.h>
-#include <cctype>
-#include <cstdio>
-#include <string>
-#include './io.h'
-    
-    namespace xgboost {
-namespace tree {
-// List of files that will be force linked in static links.
-DMLC_REGISTRY_LINK_TAG(updater_colmaker);
-DMLC_REGISTRY_LINK_TAG(updater_skmaker);
-DMLC_REGISTRY_LINK_TAG(updater_refresh);
-DMLC_REGISTRY_LINK_TAG(updater_prune);
-DMLC_REGISTRY_LINK_TAG(updater_fast_hist);
-DMLC_REGISTRY_LINK_TAG(updater_histmaker);
-DMLC_REGISTRY_LINK_TAG(updater_sync);
-#ifdef XGBOOST_USE_CUDA
-DMLC_REGISTRY_LINK_TAG(updater_gpu);
-DMLC_REGISTRY_LINK_TAG(updater_gpu_hist);
-#endif
-}  // namespace tree
-}  // namespace xgboost
-
-    
-    SEXP XGDMatrixCreateFromFile_R(SEXP fname, SEXP silent) {
-  SEXP ret;
-  R_API_BEGIN();
-  DMatrixHandle handle;
-  CHECK_CALL(XGDMatrixCreateFromFile(CHAR(asChar(fname)), asInteger(silent), &handle));
-  ret = PROTECT(R_MakeExternalPtr(handle, R_NilValue, R_NilValue));
-  R_RegisterCFinalizerEx(ret, _DMatrixFinalizer, TRUE);
-  R_API_END();
-  UNPROTECT(1);
-  return ret;
-}
-    
-    
-    {
-    {}  // namespace common
-}  // namespace xgboost
-
-    
-    // logistic loss, but predict un-transformed margin
-struct LogisticRaw : public LogisticRegression {
-  // duplication is necessary, as __device__ specifier
-  // cannot be made conditional on template parameter
-  XGBOOST_DEVICE static bst_float PredTransform(bst_float x) { return x; }
-  XGBOOST_DEVICE static bst_float FirstOrderGradient(bst_float predt, bst_float label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
-  }
-  XGBOOST_DEVICE static bst_float SecondOrderGradient(bst_float predt, bst_float label) {
-    const float eps = 1e-16f;
-    predt = common::Sigmoid(predt);
-    return fmaxf(predt * (1.0f - predt), eps);
-  }
-  template <typename T>
-    static T PredTransform(T x) { return x; }
-  template <typename T>
-    static T FirstOrderGradient(T predt, T label) {
-    predt = common::Sigmoid(predt);
-    return predt - label;
-  }
-  template <typename T>
-    static T SecondOrderGradient(T predt, T label) {
-    const T eps = T(1e-16f);
-    predt = common::Sigmoid(predt);
-    return std::max(predt * (T(1.0f) - predt), eps);
-  }
-  static const char* DefaultEvalMetric() { return 'auc'; }
-};
-    
-    // implementation of inline functions.
-inline void Learner::Predict(const SparseBatch::Inst& inst,
-                             bool output_margin,
-                             HostDeviceVector<bst_float>* out_preds,
-                             unsigned ntree_limit) const {
-  gbm_->PredictInstance(inst, &out_preds->HostVector(), ntree_limit);
-  if (!output_margin) {
-    obj_->PredTransform(out_preds);
-  }
-}
-    
-      // cloneCoalesced
-  {
-    auto chainCloneCoalesced = chainClone->cloneCoalesced();
-    EXPECT_EQ(1, chainCloneCoalesced->countChainElements());
-    EXPECT_EQ(fullLength, chainCloneCoalesced->computeChainDataLength());
-    gen.seed(fillSeed);
-    checkChain(chainCloneCoalesced.get(), gen);
+      VersionEdit edit;
+  for (int i = 0; i < 4; i++) {
+    TestEncodeDecode(edit);
+    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
+                 InternalKey('foo', kBig + 500 + i, kTypeValue),
+                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
+    edit.DeleteFile(4, kBig + 700 + i);
+    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
   }
     
-      AsyncIO* asyncIO_;
-    
-    path canonical_parent(const path& pth, const path& base) {
-  return canonical(pth.parent_path(), base) / pth.filename();
-}
-    
-    int main(int argc, char* argv[]) {
-  gflags::ParseCommandLineFlags(&argc, &argv, true);
-  if (FLAGS_cp) {
-    if (argc != 3) {
-      usage(argv[0]);
+    TEST(Issue178, Test) {
+  // Get rid of any state from an old run.
+  std::string dbpath = leveldb::test::TmpDir() + '/leveldb_cbug_test';
+  DestroyDB(dbpath, leveldb::Options());
     }
-    copy(argv[1], argv[2]);
+    
+    size_t BlockBuilder::CurrentSizeEstimate() const {
+  return (buffer_.size() +                        // Raw data buffer
+          restarts_.size() * sizeof(uint32_t) +   // Restart array
+          sizeof(uint32_t));                      // Restart array length
+}
+    
+      enum { kNumBuckets = 154 };
+  static const double kBucketLimit[kNumBuckets];
+  double buckets_[kNumBuckets];
+    
+    namespace leveldb {
+    }
+    
+    inline bool DBIter::ParseKey(ParsedInternalKey* ikey) {
+  Slice k = iter_->key();
+  ssize_t n = k.size() + iter_->value().size();
+  bytes_counter_ -= n;
+  while (bytes_counter_ < 0) {
+    bytes_counter_ += RandomPeriod();
+    db_->RecordReadSample(k);
+  }
+  if (!ParseInternalKey(k, ikey)) {
+    status_ = Status::Corruption('corrupted internal key in DBIter');
+    return false;
   } else {
-    if (argc != 1) {
-      usage(argv[0]);
-    }
-    list();
+    return true;
   }
-  return 0;
 }
+    
+    // Handler for Win32 messages, update mouse/keyboard data.
+// You may or not need this for your implementation, but it can serve as reference for handling inputs.
+// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
+/*
+IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+*/
 
     
-    TemporaryFile::~TemporaryFile() {
-  try {
-    fs::remove(path_);
-  } catch (const fs::filesystem_error& e) {
-    LOG(ERROR) << 'fs::remove: ' << folly::exceptionStr(e);
-  }
-}
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_API void        ImGui_Marmalade_InvalidateDeviceObjects();
+IMGUI_API bool        ImGui_Marmalade_CreateDeviceObjects();
     
-      std::shared_ptr<LogWriter> createWriter() override {
-    // Get the output file to use
-    if (path_.empty()) {
-      throw std::invalid_argument('no path specified for file handler');
-    }
-    return fileWriterFactory_.createWriter(
-        File{path_, O_WRONLY | O_APPEND | O_CREAT});
-  }
+    // GLFW callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// Provided here if you want to chain callbacks.
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_API void        ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+IMGUI_API void        ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+IMGUI_API void        ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+IMGUI_API void        ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+
     
-    /**
- * FileHandlerFactory is a LogHandlerFactory that constructs log handlers
- * that write to a file.
- *
- * Note that FileHandlerFactory allows opening and appending to arbitrary files
- * based on the handler options.  This may make it unsafe to use
- * FileHandlerFactory in some contexts: for instance, a setuid binary should
- * generally avoid registering the FileHandlerFactory if they allow log
- * handlers to be configured via command line parameters, since otherwise this
- * may allow non-root users to append to files that they otherwise would not
- * have write permissions for.
- */
-class FileHandlerFactory : public LogHandlerFactory {
- public:
-  StringPiece getType() const override {
-    return 'file';
-  }
-    }
+    // Implemented features:
+//  [X] User texture binding. Cast 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+// Missing features:
+//  [ ] SDL2 handling of IME under Windows appears to be broken and it explicitly disable the regular Windows IME. You can restore Windows IME by compiling SDL with SDL_DISABLE_WINDOWS_IME.
     
-    #include <folly/Optional.h>
-#include <folly/Range.h>
-#include <memory>
-    
-    #include <folly/Format.h>
-#include <folly/experimental/logging/LogLevel.h>
-#include <folly/experimental/logging/LogMessage.h>
-#include <folly/portability/Time.h>
-    
-    #include <folly/FileUtil.h>
-#include <folly/String.h>
-#include <folly/experimental/logging/LoggerDB.h>
+            static float f = 0.0f;
+        ImGui::Text('Hello, world!');
+        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
+        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
+        ImGui::ShowDemoWindow(NULL);
