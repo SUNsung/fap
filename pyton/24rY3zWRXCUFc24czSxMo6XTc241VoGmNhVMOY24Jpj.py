@@ -1,266 +1,178 @@
 
         
-                Objects are usually either modules or classes. :meth:`from_object`
-        loads only the uppercase attributes of the module/class. A ``dict``
-        object will not work with :meth:`from_object` because the keys of a
-        ``dict`` are not attributes of the ``dict`` class.
+          is_chief = FLAGS.task == 0
+  sv = tf.train.Supervisor(
+      logdir=FLAGS.train_dir,
+      is_chief=is_chief,
+      save_summaries_secs=30,
+      save_model_secs=30,
+      local_init_op=local_init_op,
+      ready_for_local_init_op=ready_for_local_init_op,
+      global_step=global_step)
     
-            def __init__(self, name, doc=None):
-            self.name = name
-            self.__doc__ = doc
-        def _fail(self, *args, **kwargs):
-            raise RuntimeError('signalling support is unavailable '
-                               'because the blinker library is '
-                               'not installed.')
-        send = lambda *a, **kw: None
-        connect = disconnect = has_receivers_for = receivers_for = \
-            temporarily_connected_to = connected_to = _fail
-        del _fail
+          with self.assertRaises(tf.errors.OutOfRangeError):
+        sess.run([result.key, result.uint8image])
     
-                for key in http_method_funcs:
-                if hasattr(cls, key):
-                    methods.add(key.upper())
     
-        logger.handlers = []
-    logger.setLevel(logging.NOTSET)
+def to_kgs(board_size, coord):
+  '''Converts from a MiniGo coordinate to a KGS coordinate.'''
+  if coord is None:
+    return 'pass'
+  y, x = coord
+  return '{}{}'.format(_KGS_COLUMNS[x], board_size - y)
     
-        @app.route('/')
-    def index():
-        return None
     
-    from keras import backend as K
-from keras.utils.test_utils import get_test_data
-from keras.models import Sequential, Model
-from keras.layers import Dense, Activation, GRU, TimeDistributed, Input
-from keras.utils import np_utils
-from keras.utils.test_utils import keras_test
-from numpy.testing import assert_almost_equal, assert_array_almost_equal
+if __name__ == '__main__':
+  tf.test.main()
     
-    Gets to 0.8498 test accuracy after 2 epochs. 41s/epoch on K520 GPU.
-'''
-from __future__ import print_function
+    NO_HANDICAP_SGF = '''(;CA[UTF-8]SZ[9]PB[Murakawa Daisuke]PW[Iyama Yuta]KM[6.5]
+                   HA[0]RE[W+1.5]GM[1];B[fd];W[cf];B[eg];W[dd];B[dc];W[cc];
+                   B[de];W[cd];B[ed];W[he];B[ce];W[be];B[df];W[bf];B[hd];
+                   W[ge];B[gd];W[gg];B[db];W[cb];B[cg];W[bg];B[gh];W[fh];
+                   B[hh];W[fg];B[eh];W[ei];B[di];W[fi];B[hg];W[dh];B[ch];
+                   W[ci];B[bh];W[ff];B[fe];W[hf];B[id];W[bi];B[ah];W[ef];
+                   B[dg];W[ee];B[di];W[ig];B[ai];W[ih];B[fb];W[hi];B[ag];
+                   W[ab];B[bd];W[bc];B[ae];W[ad];B[af];W[bd];B[ca];W[ba];
+                   B[da];W[ie])'''
     
-    from keras.utils.test_utils import get_test_data, keras_test
-from keras.models import Sequential
-from keras import layers
-import keras
-from keras.utils.np_utils import to_categorical
     
-                for t in range(n_frames):
-                x_shift = xstart + directionx * t
-                y_shift = ystart + directiony * t
-                noisy_movies[i, t, x_shift - w: x_shift + w,
-                             y_shift - w: y_shift + w, 0] += 1
+def add_stones(board_size, pos, black_stones_added, white_stones_added):
+  working_board = np.copy(pos.board)
+  go.place_stones(working_board, go.BLACK, black_stones_added)
+  go.place_stones(working_board, go.WHITE, white_stones_added)
+  new_position = Position(
+      board_size, board=working_board, n=pos.n, komi=pos.komi,
+      caps=pos.caps, ko=pos.ko, recent=pos.recent, to_play=pos.to_play)
+  return new_position
     
-    print('Pad sequences (samples x time)')
-x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
-x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
-print('x_train shape:', x_train.shape)
-print('x_test shape:', x_test.shape)
-y_train = np.array(y_train)
-y_test = np.array(y_test)
+      def to_sgf(self, use_comments=True):
+    assert self.result_string is not None
+    pos = self.root.position
+    if use_comments:
+      comments = self.comments or ['No comments.']
+      comments[0] = ('Resign Threshold: %0.3f\n' %
+                     self.resign_threshold) + comments[0]
+    else:
+      comments = []
+    return sgf_wrapper.make_sgf(
+        self.board_size, pos.recent, self.result_string,
+        white_name=os.path.basename(self.network.save_file) or 'Unknown',
+        black_name=os.path.basename(self.network.save_file) or 'Unknown',
+        comments=comments)
     
-    print('Pad sequences (samples x time)')
-x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
-x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
-print('x_train shape:', x_train.shape)
-print('x_test shape:', x_test.shape)
+        # With dirichelet noise, majority of density should be in one node.
+    max_p = np.max(player.root.child_prior)
+    self.assertGreater(max_p, 3/(utils_test.BOARD_SIZE ** 2 + 1))
     
-        def syntax(self):
-        return '[options] <spider>'
+        remapped_group_index1 = [
+        lt1_mapping.get(gid, go.MISSING_GROUP_ID)
+        for gid in lib_tracker1.group_index.ravel().tolist()]
+    remapped_group_index2 = [
+        lt2_mapping.get(gid, go.MISSING_GROUP_ID)
+        for gid in lib_tracker2.group_index.ravel().tolist()]
+    self.assertEqual(remapped_group_index1, remapped_group_index2)
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
-                          help='set spider argument (may be repeated)')
-        parser.add_option('-o', '--output', metavar='FILE',
-                          help='dump scraped items into FILE (use - for stdout)')
-        parser.add_option('-t', '--output-format', metavar='FORMAT',
-                          help='format to use for dumping items with -o')
+        def ok(self, event=None):  # Do not replace.
+        '''If entry is valid, bind it to 'result' and destroy tk widget.
     
-        def post_process(self, output):
-        for x in output:
-            if isinstance(x, (BaseItem, dict)):
-                for arg in self.args:
-                    if not arg in x:
-                        raise ContractFail(''%s' field is missing' % arg)
-
-    
-        Any state that has a semantic predicate edge is special; those states
-    are generated with if-then-else structures in a specialStateTransition()
-    which is generated by cyclicDFA template.
-    
+        Coercion rules are currently an implementation detail. See the CoerceTest
+    test class in test_statistics for details.
     '''
-    
-    def __init__(
-        self,
-        recognizer, decisionNumber,
-        eot, eof, min, max, accept, special, transition
-        ):
-        ## Which recognizer encloses this DFA?  Needed to check backtracking
-        self.recognizer = recognizer
-    
-    
-class FailedPredicateException(RecognitionException):
-    '''@brief A semantic predicate failed during validation.
-    
-      from ycmd import server_utils as su
-  su.AddNearestThirdPartyFoldersToSysPath( DIR_OF_CURRENT_SCRIPT )
-  # We need to import ycmd's third_party folders as well since we import and
-  # use ycmd code in the client.
-  su.AddNearestThirdPartyFoldersToSysPath( su.__file__ )
-    
-        # For pickling to work, the __module__ variable needs to be set to the frame
-    # where the named tuple is created.  Bypass this step in enviroments where
-    # sys._getframe is not defined (Jython for example).
-    if hasattr(_sys, '_getframe'):
-        result.__module__ = _sys._getframe(1).f_globals.get('__name__', '__main__')
-    
-    def _worker(executor_reference, work_queue):
-    try:
-        while True:
-            work_item = work_queue.get(block=True)
-            if work_item is not None:
-                work_item.run()
-                continue
-            executor = executor_reference()
-            # Exit if:
-            #   - The interpreter is shutting down OR
-            #   - The executor that owns the worker has been collected OR
-            #   - The executor that owns the worker has been shutdown.
-            if _shutdown or executor is None or executor._shutdown:
-                # Notice other workers
-                work_queue.put(None)
-                return
-            del executor
-    except BaseException:
-        _base.LOGGER.critical('Exception in worker', exc_info=True)
+    # See http://bugs.python.org/issue24068.
+    assert T is not bool, 'initial type T is bool'
+    # If the types are the same, no need to coerce anything. Put this
+    # first, so that the usual case (no coercion needed) happens as soon
+    # as possible.
+    if T is S:  return T
+    # Mixed int & other coerce to the other type.
+    if S is int or S is bool:  return T
+    if T is int:  return S
+    # If one is a (strict) subclass of the other, coerce to the subclass.
+    if issubclass(S, T):  return S
+    if issubclass(T, S):  return T
+    # Ints coerce to the other type.
+    if issubclass(T, int):  return S
+    if issubclass(S, int):  return T
+    # Mixed fraction & float coerces to float (or float subclass).
+    if issubclass(T, Fraction) and issubclass(S, float):
+        return S
+    if issubclass(T, float) and issubclass(S, Fraction):
+        return T
+    # Any other combination is disallowed.
+    msg = 'don't know how to coerce %s and %s'
+    raise TypeError(msg % (T.__name__, S.__name__))
     
     
-def FormatDebugInfoResponse_ExtraConfFoundAndLoaded_test():
-  response = deepcopy( GENERIC_RESPONSE )
-  response[ 'extra_conf' ].update( {
-    'is_loaded': True,
-    'path': '/path/to/extra/conf'
-  } )
-  assert_that(
-    FormatDebugInfoResponse( response ),
-    contains_string(
-      'Extra configuration file found and loaded\n'
-      'Extra configuration path: /path/to/extra/conf\n'
-    )
-  )
+class TestDecode:
+    def test_decimal(self):
+        rval = self.loads('1.1', parse_float=decimal.Decimal)
+        self.assertTrue(isinstance(rval, decimal.Decimal))
+        self.assertEqual(rval, decimal.Decimal('1.1'))
     
+    def factorial(n, m):
+    if (n > m):
+        return factorial(m, n)
+    elif m == 0:
+        return 1
+    elif n == m:
+        return n
+    else:
+        return factorial(n, (n+m)//2) * factorial((n+m)//2 + 1, m)
     
-def ExtractKeywordsFromGroup_KeywordAssignAndMiddle_test():
-  assert_that( syntax_parse._ExtractKeywordsFromGroup(
-                 syntax_parse.SyntaxGroup( '', [
-                   'nextgroup=zoo foo skipnl bar',
-                   'zoo goo',
-                 ] ) ),
-               contains_inanyorder( 'foo', 'skipnl', 'bar', 'zoo', 'goo' ) )
+    Usually an IFF-type file consists of one or more chunks.  The proposed
+usage of the Chunk class defined here is to instantiate an instance at
+the start of each chunk and read from the instance until it reaches
+the end, after which a new instance can be instantiated.  At the end
+of the file, creating a new instance will fail with an EOFError
+exception.
     
-      It could be argued that the user actually wants the final buffer state to be
-  'foo.zoobar|' (the cursor at the end), but that would be much more difficult
-  to implement and is probably not worth doing.
-  '''
+        expect = textwrap.dedent('''\
+    [
+        [
+            'blorpie'
+        ],
+        [
+            'whoops'
+        ],
+        [],
+        'd-shtaeou',
+        'd-nthiouh',
+        'i-vhbjkhnth',
+        {
+            'nifty': 87
+        },
+        {
+            'morefield': false,
+            'field': 'yes'
+        }
+    ]
+    ''')
     
+        def test_3(self):
+        class X(Structure):
+            pass
+        class Y(Structure):
+            _fields_ = [('x', X)] # finalizes X
+        self.assertRaises(AttributeError, setattr, X, '_fields_', [])
     
-def Response_FromOmniCompleter_test():
-  results = [ { 'word': 'test' } ]
-  request = BuildOmnicompletionRequest( results )
+        def test_convert(self):
+        self.assertRaises(TypeError, bool, 42, 42)
+        self.assertIs(bool(10), True)
+        self.assertIs(bool(1), True)
+        self.assertIs(bool(-1), True)
+        self.assertIs(bool(0), False)
+        self.assertIs(bool('hello'), True)
+        self.assertIs(bool(''), False)
+        self.assertIs(bool(), False)
     
-    import argparse
-    
-      post_vim_message.assert_has_exact_calls( [
-    call( 'On the first day of Christmas, my VimScript gave to me',
-          warning=False,
-          truncate=True ),
-    call( 'A test file in a Command-T', warning=False, truncate=True ),
-    call( 'On the second day of Christmas, my VimScript gave to me',
-          warning=False,
-          truncate=True ),
-    call( 'Two popup menus, and a test file in a Command-T',
-          warning=False,
-          truncate=True ),
-  ] )
-
-    
-            yield conn.read_response(Delegate())
-        yield event.wait()
-        self.assertEqual(self.code, 200)
-        self.assertEqual(b''.join(body), b'hello')
-
-    
-        @gen_test
-    def test_garbage_collection(self):
-        # Test that timed-out waiters are occasionally cleaned from the queue.
-        sem = locks.Semaphore(value=0)
-        futures = [sem.acquire(timedelta(seconds=0.01)) for _ in range(101)]
-    
-        def get_current_user(self):
-        user_id = self.get_secure_cookie('blogdemo_user')
-        if not user_id:
-            return None
-        return self.db.get('SELECT * FROM authors WHERE id = %s', int(user_id))
-    
-    
-class Application(tornado.web.Application):
-    def __init__(self):
-        handlers = [
-            (r'/', MainHandler),
-            (r'/auth/login', AuthLoginHandler),
-            (r'/auth/logout', AuthLogoutHandler),
-        ]
-        settings = dict(
-            cookie_secret='__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__',
-            login_url='/auth/login',
-            template_path=os.path.join(os.path.dirname(__file__), 'templates'),
-            static_path=os.path.join(os.path.dirname(__file__), 'static'),
-            xsrf_cookies=True,
-            facebook_api_key=options.facebook_api_key,
-            facebook_secret=options.facebook_secret,
-            ui_modules={'Post': PostModule},
-            debug=True,
-            autoescape=None,
-        )
-        tornado.web.Application.__init__(self, handlers, **settings)
-    
-        @classmethod
-    def update_cache(cls, chat):
-        cls.cache.append(chat)
-        if len(cls.cache) > cls.cache_size:
-            cls.cache = cls.cache[-cls.cache_size:]
-    
-        def start_tree(self, tree, filename):
-        self.found_future_import = False
-    
-        def subscribe(self, msg):
-        self.provider.subscribe(msg, self)
-    
-        def test_display_current_time_at_midnight(self):
-        '''
-        Will almost always fail (despite of right at/after midnight).
-        '''
-        time_provider_stub = MidnightTimeProvider()
-        class_under_test = TimeDisplay(time_provider_stub)
-        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
-    
-        def test_display_current_time_at_midnight(self):
-        '''
-        Would almost always fail (despite of right at/after midnight) if
-        untestable production code would have been used.
-        '''
-        time_provider_stub = MidnightTimeProvider()
-        class_under_test = TimeDisplay()
-        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(time_provider_stub), expected_time)
-    
-    
-def main():
-    command_stack = []
-    
-    print('Counting to two...')
-for number in count_to_two():
-    print(number, end=' ')
+        def test_reversed_pickle(self):
+        orig = self.type2test([4, 5, 6, 7])
+        data = [10, 11, 12, 13, 14, 15]
+        for proto in range(pickle.HIGHEST_PROTOCOL + 1):
+            # initial iterator
+            itorig = reversed(orig)
+            d = pickle.dumps((itorig, orig), proto)
+            it, a = pickle.loads(d)
+            a[:] = data
+            self.assertEqual(type(it), type(itorig))
+            self.assertEqual(list(it), data[len(orig)-1::-1])
