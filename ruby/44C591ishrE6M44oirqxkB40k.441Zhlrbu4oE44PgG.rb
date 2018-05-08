@@ -1,75 +1,110 @@
 
         
-                expect(result).to eq('svn info | grep Revision | egrep -o '[0-9]+'')
-        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('svn info | grep Revision | egrep -o '[0-9]+'')
+          def grant_moderation!
+    set_permission('moderator', true)
+  end
+    
+    describe Deliver::HtmlGenerator do
+  let(:generator) { Deliver::HtmlGenerator.new }
+    
+        context 'GIT repository' do
+      before do
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_svn?).and_return(false)
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git_svn?).and_return(false)
+        expect(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git?).and_return(true)
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_hg?).and_return(false)
       end
+    
+          it 'raises an exception when xcode project path wasn't found' do
+        expect do
+          Fastlane::FastFile.new.parse('lane :test do
+            increment_version_number(xcodeproj: '/nothere')
+          end').runner.execute(:test)
+        end.to raise_error('Could not find Xcode project')
+      end
+    
+          def remember_cookie_values(resource)
+        options = { httponly: true }
+        options.merge!(forget_cookie_values(resource))
+        options.merge!(
+          value: resource.class.serialize_into_cookie(resource),
+          expires: resource.remember_expires_at
+        )
+      end
+    
+      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
+     options[:store] != false && !env['devise.skip_timeoutable']
+    last_request_at = warden.session(scope)['last_request_at']
+    
+        def name=(value)
+      @name = value.try :strip
     end
     
-      it 'adds nil for each element requested beyond the end of the String' do
-    [ ['\xff\x00\xff\x00\xff\x00\xff',  [nil, nil, nil]],
-      ['\xb8\x1e\x85\xebQ\xb8\xf6?abc', [1.42, nil, nil]],
-      ['333333\x07@ffffff\xf6?abcd',    [2.9, 1.4, nil]]
-    ].should be_computed_by(:unpack, unpack_format(3))
-  end
+              node.css('.method').each do |n|
+            next unless n.at_css('dt[id]')
+            name = n.at_css('.descname').content
+            name = '#{class_name}::#{name}()'
+            id = n.at_css('dt[id]')['id']
+            entries << [name, id]
+          end
+        end
     
-      it 'decodes UTF-8 max codepoints' do
-    [ ['\xf0\x90\x80\x80', [0x10000]],
-      ['\xf3\xbf\xbf\xbf', [0xfffff]],
-      ['\xf4\x80\x80\x80', [0x100000]],
-      ['\xf4\x8f\xbf\xbf', [0x10ffff]]
-    ].should be_computed_by(:unpack, 'U')
-  end
-    
-      # Update version.rb file with BOOTSTRAP_SHA
-  def store_version
-    path    = 'lib/bootstrap-sass/version.rb'
-    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
-    File.open(path, 'w') { |f| f.write(content) }
-  end
-end
-
-    
-        # extracts rule immediately after it's parent, and adjust the selector
-    # .x { textarea& { ... }}
-    # to:
-    # .x { ... }
-    # textarea.x { ... }
-    def extract_nested_rule(file, selector, new_selector = nil)
-      matches = []
-      # first find the rules, and remove them
-      file    = replace_rules(file, '\s*#{selector}', comments: true) { |rule, pos, css|
-        new_sel = new_selector || '#{get_selector(rule).gsub(/&/, selector_for_pos(css, pos.begin))}'
-        matches << [rule, pos, new_sel]
-        indent '// [converter] extracted #{get_selector(rule)} to #{new_sel}'.tr('\n', ' ').squeeze(' '), indent_width(rule)
-      }
-      raise 'extract_nested_rule: no such selector: #{selector}' if matches.empty?
-      # replace rule selector with new_selector
-      matches.each do |m|
-        m[0].sub! /(#{COMMENT_RE}*)^(\s*).*?(\s*){/m, '\\1\\2#{m[2]}\\3{'
-        log_transform selector, m[2]
-      end
-      replace_substrings_at file,
-                            matches.map { |_, pos| close_brace_pos(file, pos.begin, 1) + 1 },
-                            matches.map { |rule, _| '\n\n' + unindent(rule) }
-    end
-    }
-    }
-    
-    
-    
-        def render(context)
-      if @img
-        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
-      else
-        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
-      end
-    end
-  end
+    def usage
+  $stderr.puts '#{$0} [site list] [output-dir]'
+  exit(0)
 end
     
-        def render(context)
-      includes_dir = File.join(context.registers[:site].source, '_includes')
+            report_auth_info(s.merge({:active => false}))
+        print_status('Failed IMAP Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]} (#{s[:banner].strip})')
     
-    module Jekyll
+                  s[:proto] = 'tcp'
+              s[:name]  = 'pop3'
+              s[:extra] = 'Successful Login. Banner: #{s[:banner]}'
+              report_auth_info(s)
+              print_status('Successful POP3 Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]} (#{s[:banner].strip})')
     
-    Liquid::Template.register_tag('video', Jekyll::VideoTag)
+          if(pkt.payload =~ self.sigs[k])
+        matched = k
+        matches = $1
+        sessions[s[:session]].merge!({k => matches})
+      end
+    
+        _cal[ver].each_pair do |key, value|
+      cal[ver][key] = Array.new
+      cal[ver][key] << String.new
+      cal[ver][key][-1] << '#ifdef AIX%s' % ver.delete('.')
+      cal[ver][key][-1] << '\n'
+      cal[ver][key][-1] << '''.rjust(5)
+      value.each_byte do |c|
+        cal[ver][key][-1] << '\x%02x' % c
+      end
+      cal[ver][key][-1] << '''.ljust(7)
+      cal[ver][key][-1] << '/*  cal     r2,-%d(r29)' %
+          (65536 - value.unpack('nn')[1])
+      cal[ver][key][-1] << '*/'.rjust(15)
+      cal[ver][key][-1] << '\n'
+      cal[ver][key][-1] << '#endif'
+      cal[ver][key][-1] << '\n'
+    end
+    
+      def execute
+    validate_params
+    source = File.join(File.dirname(__FILE__), 'templates', '#{type}-plugin')
+    @target_path = File.join(path, full_plugin_name)
+    FileUtils.mkdir(@target_path)
+    puts ' Creating #{@target_path}'
+    
+      # Create a subclass of Clamp::Command that enforces the use of
+  # LogStash::SETTINGS for setting validation
+  class StrictCommand < Command
+    class << self
+      include ::Clamp::Option::StrictDeclaration
+    end
+    
+          expect('.all-buttons-focus').to have_ruleset(ruleset)
+    end
+  end
+    
+      context 'called with one size' do
+    it 'applies same width to all sides' do
+      rule = 'margin: 1px'
