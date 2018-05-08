@@ -1,163 +1,158 @@
 
         
         
-class TestCaseInsensitiveDict:
+@pytest.mark.functional
+def test_refuse_with_confirmation(proc, TIMEOUT):
+    refuse_with_confirmation(proc, TIMEOUT)
     
-        @pytest.mark.skip(reason='this fails non-deterministically under pytest-xdist')
-    def test_request_recovery(self):
-        '''can check the requests content'''
-        # TODO: figure out why this sometimes fails when using pytest-xdist.
-        server = Server.basic_response_server(requests_to_handle=2)
-        first_request = b'put your hands up in the air'
-        second_request = b'put your hand down in the floor'
+            input_url = 'https://www.googleapis.com/compute/v1/projects/myproject/targetHttpProxies'
+        actual = GCPUtils.parse_gcp_url(input_url)
+        self.assertEquals('compute', actual['service'])
+        self.assertEquals('v1', actual['api_version'])
+        self.assertEquals('myproject', actual['project'])
+        self.assertFalse('global' in actual)
+        self.assertEquals('targetHttpProxies', actual['resource_name'])
     
-       >>> payload = dict(key1='value1', key2='value2')
-   >>> r = requests.post('http://httpbin.org/post', data=payload)
-   >>> print(r.text)
-   {
-     ...
-     'form': {
-       'key2': 'value2',
-       'key1': 'value1'
-     },
-     ...
-   }
+    import re
     
+        return results
+
     
-class ProxyError(ConnectionError):
-    '''A proxy error occurred.'''
+                if key in mapping:
+                display.warning(u'While constructing a mapping from {1}, line {2}, column {3}, found a duplicate dict key ({0}).'
+                                u' Using last defined value only.'.format(key, *mapping.ansible_pos))
     
-        def request(self, method, url,
-            params=None, data=None, headers=None, cookies=None, files=None,
-            auth=None, timeout=None, allow_redirects=True, proxies=None,
-            hooks=None, stream=None, verify=None, cert=None, json=None):
-        '''Constructs a :class:`Request <Request>`, prepares it and sends it.
-        Returns :class:`Response <Response>` object.
+                else:
+                raise RuntimeError('DFA bang!')
+            
+        finally:
+            input.rewind(mark)
     
-        with server as (host, port):
-        url = 'http://{0}:{1}/path/to/thing/#view=edit&token=hunter2'.format(host, port)
-        r = requests.get(url)
-        raw_request = r.content
+        def getText(self):
+        '''@brief Get the text of the token.
     
-            # Send request and simulate redirect
-        resp = s.send(prep_req)
-        resp.status_code = 302
-        resp.headers['location'] = httpbin('get')
-        redirects = s.resolve_redirects(resp, prep_req)
-        resp = next(redirects)
+    from google.appengine._internal.antlr3.constants import EOF
+from google.appengine._internal.antlr3.exceptions import NoViableAltException, BacktrackingFailed
     
-    from ansible.errors import AnsibleError
-from ansible.module_utils._text import to_bytes
+        @mock.patch('certbot.notify.smtplib.LMTP')
+    @mock.patch('certbot.notify.subprocess.Popen')
+    def test_smtp_failure(self, mock_popen, mock_lmtp):
+        from certbot.notify import notify
+        lmtp_obj = mock.MagicMock()
+        mock_lmtp.return_value = lmtp_obj
+        lmtp_obj.sendmail.side_effect = socket.error(17)
+        proc = mock.MagicMock()
+        mock_popen.return_value = proc
+        self.assertTrue(notify('Goose', 'auntrhody@example.com',
+                               'The old grey goose is dead.'))
+        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
+        self.assertEqual(proc.communicate.call_count, 1)
     
-    ipv4_component = r'''
-    (?:
-        [01]?[0-9]{{1,2}}|              # 0..199
-        2[0-4][0-9]|                    # 200..249
-        25[0-5]|                        # 250..255
-        {range}                         # or a numeric range
-    )
-'''.format(range=numeric_range)
+        def test_big_queue_popleft(self):
+        pass
+        d = deque()
+        append, pop = d.append, d.popleft
+        for i in range(BIG):
+            append(i)
+        for i in range(BIG):
+            x = pop()
+            if x != i:
+                self.assertEqual(x, i)
     
-        def on_open_shell(self):
+        def test_string_with_utf8_bom(self):
+        # see #18958
+        bom_json = '[1,2,3]'.encode('utf-8-sig').decode('utf-8')
+        with self.assertRaises(self.JSONDecodeError) as cm:
+            self.loads(bom_json)
+        self.assertIn('BOM', str(cm.exception))
+        with self.assertRaises(self.JSONDecodeError) as cm:
+            self.json.load(StringIO(bom_json))
+        self.assertIn('BOM', str(cm.exception))
+        # make sure that the BOM is not detected in the middle of a string
+        bom_in_str = ''{}''.format(''.encode('utf-8-sig').decode('utf-8'))
+        self.assertEqual(self.loads(bom_in_str), '\ufeff')
+        self.assertEqual(self.json.load(StringIO(bom_in_str)), '\ufeff')
+    
+    def factorial(n, m):
+    if (n > m):
+        return factorial(m, n)
+    elif m == 0:
+        return 1
+    elif n == m:
+        return n
+    else:
+        return factorial(n, (n+m)//2) * factorial((n+m)//2 + 1, m)
+    
+    def evalString(s):
+    assert s.startswith(''') or s.startswith('''), repr(s[:1])
+    q = s[0]
+    if s[:3] == q*3:
+        q = q*3
+    assert s.endswith(q), repr(s[-len(q):])
+    assert len(s) >= 2*len(q)
+    s = s[len(q):-len(q)]
+    return re.sub(r'\\(\'|\'|\\|[abfnrtv]|x.{0,2}|[0-7]{1,3})', escape, s)
+    
+        def get_file(self, key):
+        '''Return a file-like representation or raise a KeyError.'''
         try:
-            self._exec_cli_command('screen-length 0 temporary')
-        except AnsibleConnectionFailure:
-            raise AnsibleConnectionFailure('unable to set terminal parameters')
-
+            f = open(os.path.join(self._path, str(key)), 'rb')
+        except OSError as e:
+            if e.errno == errno.ENOENT:
+                raise KeyError('No message with key: %s' % key)
+            else:
+                raise
+        return _ProxyFile(f)
     
-        def __init__(
-        self, grammarDecisionDescription, decisionNumber, stateNumber, input
-        ):
-        RecognitionException.__init__(self, input)
+            NOTE: the 'message id' form isn't supported by XOVER
+        '''
+        cmd = 'OVER' if 'OVER' in self._caps else 'XOVER'
+        if isinstance(message_spec, (tuple, list)):
+            start, end = message_spec
+            cmd += ' {0}-{1}'.format(start, end or '')
+        elif message_spec is not None:
+            cmd = cmd + ' ' + message_spec
+        resp, lines = self._longcmdstring(cmd, file)
+        fmt = self._getoverviewfmt()
+        return resp, _parse_overview(lines, fmt)
     
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licence]
+        _legal_actions = (ACTION_REPLACE, ACTION_APPEND_AS_CHILDREN,
+                      ACTION_INSERT_AFTER, ACTION_INSERT_BEFORE)
     
-        @mock.patch(
-        'certbot_compatibility_test.validator.crypto_util.probe_sni')
-    def test_certificate_error(self, mock_probe_sni):
-        cert = OpenSSL.crypto.X509()
-        mock_probe_sni.side_effect = [acme_errors.Error]
-        self.assertFalse(self.validator.certificate(
-            cert, 'test.com', '127.0.0.1'))
+            a = 0
+        b = 2 * sys.maxsize
+        expected_len = b - a
+        x = range(a, b)
+        self.assertIn(a, x)
+        self.assertNotIn(b, x)
+        self.assertRaises(OverflowError, len, x)
+        self.assertTrue(x)
+        self.assertEqual(_range_len(x), expected_len)
+        self.assertEqual(x[0], a)
+        idx = sys.maxsize+1
+        self.assertEqual(x[idx], a+idx)
+        self.assertEqual(x[idx:idx+1][0], a+idx)
+        with self.assertRaises(IndexError):
+            x[-expected_len-1]
+        with self.assertRaises(IndexError):
+            x[expected_len]
     
-    # List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-exclude_patterns = ['_build']
+        def test_boolean(self):
+        self.assertEqual(True & 1, 1)
+        self.assertNotIsInstance(True & 1, bool)
+        self.assertIs(True & True, True)
     
-        def tearDown(self):
-        logging.disable(logging.NOTSET)
+        def test_reversed_pickle(self):
+        orig = self.type2test([4, 5, 6, 7])
+        data = [10, 11, 12, 13, 14, 15]
+        for proto in range(pickle.HIGHEST_PROTOCOL + 1):
+            # initial iterator
+            itorig = reversed(orig)
+            d = pickle.dumps((itorig, orig), proto)
+            it, a = pickle.loads(d)
+            a[:] = data
+            self.assertEqual(type(it), type(itorig))
+            self.assertEqual(list(it), data[len(orig)-1::-1])
     
-        def contribute(self):
-        self.blackboard.common_state['problems'] += random.randint(1, 2)
-        self.blackboard.common_state['suggestions'] += random.randint(10, 20)
-        self.blackboard.common_state['contributions'] += [self.__class__.__name__]
-        self.blackboard.common_state['progress'] += random.randint(10, 100)
     
-        def test_car_shall_make_very_loud_noise(self):
-        noise = self.car.make_noise(10)
-        expected_noise = 'vroom!!!!!!!!!!'
-        self.assertEqual(noise, expected_noise)
-    
-        def test_data_value_shall_be_changeable(cls):
-        cls.sub.data = 20
-        cls.assertEqual(cls.sub._data, 20)
-    
-        def test_sales_manager_shall_respond_through_proxy_with_delay(cls):
-        cls.p.busy = 'Yes'
-        start_time = time()
-        cls.p.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-Sales Manager is busy\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time*10), expected_execution_time)
-    
-    ### OUTPUT ###
-# Jack move 5m then stop
-
-    
-        class ClassRegistree(BaseRegisteredClass):
-    
-        def test_bunch_launch(self):
-        self.runner.runAll()
-        output = self.out.getvalue().strip()
-        self.assertEqual(output, str(self.average_result_tc1 + '\n\n' +
-                         self.average_result_tc2 + '\n\n' +
-                         self.average_result_tc3))
-
-    
-        def _handle(self, request):
-        if 0 < request <= 10:
-            print('request {} handled in handler 1'.format(request))
-            return True
+if __name__ == '__main__':
