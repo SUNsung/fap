@@ -1,120 +1,108 @@
 
         
-            cmd = cmd.split()
+        
+@pytest.mark.parametrize('data', (
+    {' t': (1, 2, 3)},
+    {' t__': b'a'},
+    {' di': ' di'},
+    {'x': (1, 2, 3), 'y': 4},
+    (1, 2, 3),
+    [(1, 2, 3)],
+    b'\xff',
+    Markup('<html>'),
+    uuid4(),
+    datetime.utcnow().replace(microsecond=0),
+))
+def test_dump_load_unchanged(data):
+    s = TaggedJSONSerializer()
+    assert s.loads(s.dumps(data)) == data
     
-        layer_test(local.LocallyConnected1D,
-               kwargs={'filters': filters,
-                       'kernel_size': filter_length,
-                       'padding': padding,
-                       'kernel_regularizer': 'l2',
-                       'bias_regularizer': 'l2',
-                       'activity_regularizer': 'l2',
-                       'strides': strides},
-               input_shape=(num_samples, num_steps, input_dim))
+        def get_cookie_httponly(self, app):
+        '''Returns True if the session cookie should be httponly.  This
+        currently just returns the value of the ``SESSION_COOKIE_HTTPONLY``
+        config var.
+        '''
+        return app.config['SESSION_COOKIE_HTTPONLY']
     
+                for key in http_method_funcs:
+                if hasattr(cls, key):
+                    methods.add(key.upper())
     
-@keras_test
-def test_convert_weights():
-    def get_model(shape, data_format):
-        model = Sequential()
-        model.add(Conv2D(filters=2,
-                         kernel_size=(4, 3),
-                         input_shape=shape,
-                         data_format=data_format))
-        model.add(Flatten())
-        model.add(Dense(5))
-        return model
+                    if change_info:
+                    break
     
-    
-if __name__ == '__main__':
-    pytest.main([__file__])
-
-    
-        def fn_output_shape(tup):
-        s1, s2 = tup
-        return (s1[0], s1[1] + s2[1]) + s1[2:]
-    
-        if args.plot is not None:
-        print('Displaying plot', file=sys.stderr)
-        title = ('Multilabel metrics with %s' %
-                 ', '.join('{0}={1}'.format(field, getattr(args, field))
-                           for field in ['samples', 'classes', 'density']
-                           if args.plot != field))
-        _plot(results, args.metrics, args.formats, title, steps, args.plot)
-
+            # Force Python to track this dictionary at all times.
+        # This is necessary since Python only starts tracking
+        # dicts if they contain mutable objects.  It's a horrible,
+        # horrible hack but makes this kinda testable.
+        loc.__storage__['FOOO'] = [1, 2, 3]
     
     
-def benchmark(estimator, data):
-    gc.collect()
-    print('Benching %s' % estimator)
-    t0 = time()
-    estimator.fit(data)
-    training_time = time() - t0
-    data_t = estimator.transform(data)
-    data_r = estimator.inverse_transform(data_t)
-    reconstruction_error = np.mean(np.abs(data - data_r))
-    return {'time': training_time, 'error': reconstruction_error}
+def test_flash_signal(app):
+    @app.route('/')
+    def index():
+        flask.flash('This is a flash message', category='notice')
+        return flask.redirect('/other')
     
-        op.add_option('--algorithm',
-                  dest='selected_algorithm',
-                  default=default_algorithms,
-                  type=str,
-                  help='Comma-separated list of transformer to benchmark. '
-                       'Default: %default. \nAvailable: %default')
+            assert len(self.args) in [1, 2, 3]
+        self.obj_name = self.args[0] or None
+        self.obj_type = self.objects[self.obj_name]
     
-    REVISION_CMD = 'git rev-parse --short HEAD'
+        @property
+    def value(self):
+        if self.is_ace() == 1:
+            return 1
+        elif self.is_face_card():
+            return 10
+        else:
+            return self._value
     
-        # decode the payload explicitly as UTF-8 since lxml is confused for some
-    # reason
-    with codecs.open(html_filename,'r','utf-8') as html_file:
-        html_content = html_file.read()
-    tree = ElementTree(lxml.html.document_fromstring(html_content))
-    i = 0
-    j = 0
-    for p in tree.findall('//p'):
-        content = p.text_content()
-        if len(content) < 100:
-            # skip paragraphs that are too short - probably too noisy and not
-            # representative of the actual language
-            continue
+        def __init__(self):
+        self.users_by_id = {}  # key: user id, value: User
     
-    First example
--------------
-The first example illustrates how robust covariance estimation can help
-concentrating on a relevant cluster when another one exists. Here, many
-observations are confounded into one and break down the empirical covariance
-estimation.
-Of course, some screening tools would have pointed out the presence of two
-clusters (Support Vector Machines, Gaussian Mixture Models, univariate
-outlier detection, ...). But had it been a high-dimensional example, none
-of these could be applied that easily.
+    ## All tokens go to the parser (unless skip() is called in that rule)
+# on a particular 'channel'.  The parser tunes to a particular channel
+# so that whitespace etc... can go to the parser on a 'hidden' channel.
+DEFAULT_CHANNEL = 0
     
-        @classmethod
-    def setUpClass(cls):
-        cls.dec_obs = DecimalViewer()
-        cls.hex_obs = HexViewer()
-        cls.sub = Data('Data')
-        # inherited behavior already tested with TestSubject
-        cls.sub.attach(cls.dec_obs)
-        cls.sub.attach(cls.hex_obs)
     
-        def setUp(cls):
-        ''' Function/test case scope setup. '''
-        cls.output = StringIO()
-        cls.saved_stdout = sys.stdout
-        sys.stdout = cls.output
+    def deleteProgram(self, programName=DEFAULT_PROGRAM_NAME):
+        '''Reset the program so that no instructions exist'''
+            
+        self.rollback(programName, self.MIN_TOKEN_INDEX)
     
-        print('After subclassing: ')
-    for k in RegistryHolder.REGISTRY:
-        print(k)
+            self.decisionNumber = decisionNumber
+        self.eot = eot
+        self.eof = eof
+        self.min = min
+        self.max = max
+        self.accept = accept
+        self.special = special
+        self.transition = transition
     
-    from dft.constructor_injection import TimeDisplay, MidnightTimeProvider, ProductionCodeTimeProvider, datetime
+            return 'MissingTokenException'
+    __repr__ = __str__
     
-    from __future__ import print_function
     
-    '''
-http://code.activestate.com/recipes/413838-memento-closure/
+class BadNonceTest(unittest.TestCase):
+    '''Tests for acme.errors.BadNonce.'''
     
-        def update(self, subject):
-        print(u'HexViewer: Subject %s has data 0x%x' %
-              (subject.name, subject.data))
+            self.assertTrue(self.vhost1.conflicts([self.addr2]))
+        self.assertFalse(self.vhost1.conflicts([self.addr_default]))
+    
+        # The font size ('10pt', '11pt' or '12pt').
+    #'pointsize': '10pt',
+    
+    # Language to be used for generating the HTML full-text search index.
+# Sphinx supports the following languages:
+#   'da', 'de', 'en', 'es', 'fi', 'fr', 'hu', 'it', 'ja'
+#   'nl', 'no', 'pt', 'ro', 'ru', 'sv', 'tr'
+#html_search_language = 'en'
+    
+        @mock.patch('certbot.display.enhancements.util')
+    def test_cancel(self, mock_util):
+        mock_util().menu.return_value = (display_util.CANCEL, 1)
+        self.assertFalse(self._call())
+    
+        #Unless specified otherwise by the user, this is the default colorscheme
+    colorscheme = 'basic'
