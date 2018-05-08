@@ -1,190 +1,144 @@
 
         
-        
-    {  virtual ~SessionFactory() {}
-  static void Register(const string& runtime_type, SessionFactory* factory);
-  static Status GetFactory(const SessionOptions& options,
-                           SessionFactory** out_factory);
+        #include <vector>
+    
+      std::unique_ptr<gfx::SingletonHwndObserver> singleton_hwnd_observer_;
+    
+    #include 'content/public/browser/web_contents_observer.h'
+#include 'ui/gfx/native_widget_types.h'
+    
+    #include <string>
+    
+    #include 'chrome/browser/speech/tts_platform.h'
+    
+      /// \brief Return a list of the member names.
+  ///
+  /// If null, return an empty list.
+  /// \pre type() is objectValue or nullValue
+  /// \post if type() was nullValue, it remains nullValue
+  Members getMemberNames() const;
+    
+    
+    
+    
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+    
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
+    
+    #include <string>
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
+    }
+    
+    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_SOURCE_GENERATOR_BASE_H__
+    
+    #include <google/protobuf/stubs/common.h>
+#include <google/protobuf/compiler/java/java_extension.h>
+    
+    #include <google/protobuf/compiler/java/java_generator_factory.h>
+    
+    /**
+ * @brief Start status logging to a buffer until the logger plugin is online.
+ *
+ * This will also call google::InitGoogleLogging. Use the default init_glog
+ * to control this in tests to protect against calling the API twice.
+ */
+void initStatusLogger(const std::string& name, bool init_glog = true);
+    
+    namespace osquery {
+    }
+    
+    
+    {  return Status(0, 'OK');
+}
+    
+    #pragma once
+    
+    class TestTablePlugin : public TablePlugin {
+ public:
+  void testSetCache(size_t step, size_t interval) {
+    QueryData r;
+    QueryContext ctx;
+    ctx.useCache(true);
+    setCache(step, interval, ctx, r);
+  }
+    }
+    
+    
+    {  EXPECT_EQ(expected, toAsciiTime(&result));
+}
+    
+    namespace aria2 {
+    }
+    
+      void ensureMmapWrite(size_t len, int64_t offset);
+    
+    AbstractHttpServerResponseCommand::AbstractHttpServerResponseCommand(
+    cuid_t cuid, const std::shared_ptr<HttpServer>& httpServer,
+    DownloadEngine* e, const std::shared_ptr<SocketCore>& socket)
+    : Command(cuid),
+      e_(e),
+      socket_(socket),
+      httpServer_(httpServer),
+      readCheck_(false),
+      writeCheck_(true)
+{
+  setStatus(Command::STATUS_ONESHOT_REALTIME);
+  e_->addSocketForWriteCheck(socket_, this);
+}
+    
+      const std::shared_ptr<HttpConnection>& getHttpConnection() const
+  {
+    return httpConnection_;
+  }
+    
+    public:
+  AbstractProxyResponseCommand(
+      cuid_t cuid, const std::shared_ptr<Request>& req,
+      const std::shared_ptr<FileEntry>& fileEntry, RequestGroup* requestGroup,
+      const std::shared_ptr<HttpConnection>& httpConnection, DownloadEngine* e,
+      const std::shared_ptr<SocketCore>& s);
+    
+    
+    {  virtual int64_t getTotalLength() CXX11_OVERRIDE;
 };
     
-      Status Optimize(Cluster* cluster, const GrapplerItem& item,
-                  GraphDef* pruned_graph) override;
-    
-      void CopyCPUTensorToDevice(const Tensor *cpu_tensor, Device *device,
-                             Tensor *device_tensor,
-                             StatusCallback done) const override;
-    
-    namespace xla {
-    }
-    
-      // do an initial binary search and then scan linearly from there
-  // works well when there are many small segments and when the
-  // segments are much longer
-  IntType segment =
-      cuda_helper::upper_bound<IntType>(col_scan, num_inputs, gidx) - 1;
-    
-      int64 start(int d) const {
-    DCHECK_GE(d, 0);
-    DCHECK_LT(d, dims());
-    return starts_[d];
+    void AnnounceTier::nextEvent()
+{
+  switch (event) {
+  case STARTED:
+    event = DOWNLOADING;
+    break;
+  case STARTED_AFTER_COMPLETION:
+    event = SEEDING;
+    break;
+  case STOPPED:
+    event = HALTED;
+    break;
+  case COMPLETED:
+    event = SEEDING;
+    break;
+  default:
+    break;
   }
-    
-    ValueIteratorBase::difference_type
-ValueIteratorBase::computeDistance(const SelfType& other) const {
-#ifdef JSON_USE_CPPTL_SMALLMAP
-  return other.current_ - current_;
-#else
-  // Iterator for null value are initialized using the default
-  // constructor, which initialize current_ to the default
-  // std::map::iterator. As begin() and end() are two instance
-  // of the default std::map::iterator, they can not be compared.
-  // To allow this, we handle this comparison specifically.
-  if (isNull_ && other.isNull_) {
-    return 0;
-  }
-    }
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
-    
-    #include <string>
-    
-    #include <string>
-    
-    // Author: liujisi@google.com (Pherl Liu)
-    
-      // Field.Builder setField(Field.Builder builderForValue)
-  WriteFieldDocComment(printer, descriptor_);
-  PrintNestedBuilderFunction(printer,
-    '$deprecation$public Builder set$capitalized_name$(\n'
-    '    $type$.Builder builderForValue)',
-    
-    namespace HPHP {
-    }
-    
-    #define INVALID_DATA 1
-    
-        if (s == nullptr || d == nullptr) continue;
-    
-    
-    {	BIND_ENUM_CONSTANT(STATUS_DISCONNECTED);
-	BIND_ENUM_CONSTANT(STATUS_CONNECTED);
-	BIND_ENUM_CONSTANT(STATUS_ERROR_NO_CERTIFICATE);
-	BIND_ENUM_CONSTANT(STATUS_ERROR_HOSTNAME_MISMATCH);
 }
     
-    #if defined(MBEDTLS_PLATFORM_EXIT_MACRO) &&\
-    ( defined(MBEDTLS_PLATFORM_STD_EXIT) ||\
-        defined(MBEDTLS_PLATFORM_EXIT_ALT) )
-#error 'MBEDTLS_PLATFORM_EXIT_MACRO and MBEDTLS_PLATFORM_STD_EXIT/MBEDTLS_PLATFORM_EXIT_ALT cannot be defined simultaneously'
-#endif
+      bool tryAsFingerprint(const std::string& fingerprint);
     
-    			for (List<StringName>::Element *F = snames.front(); F; F = F->next()) {
-    }
-    
-    
-    {
-    {			TreeItem *item = search_options->create_item(root);
-			item->set_metadata(0, 'class_property:' + E->key() + ':' + c.properties[i].name);
-			item->set_text(0, E->key() + '.' + c.properties[i].name + ' (Property)');
-			item->set_icon(0, cicon);
-		}
-	}
-    
-    
-    {	id.type = Variant::OBJECT;
-	if (context.base)
-		id.value = context.base;
-	id.obj_type = nc->get_name();
-	return id;
-}
-    
-    
-    {		btVehicleWheelContactPoint(PhysicsDirectBodyState *s, PhysicsBody *body1, const Vector3 &frictionPosWorld, const Vector3 &frictionDirectionWorld, real_t maxImpulse);
-	};
-    
-    				MeshInstanceEditorEdgeSort edge;
-				if (use_indices) {
-					edge.a = r[ri[j + k]];
-					edge.b = r[ri[j + ((k + 1) % 3)]];
-				} else {
-					edge.a = r[j + k];
-					edge.b = r[j + ((k + 1) % 3)];
-				}
-    
-    	if (ret.length())
-		return ret;
-    
-    
-    {	if (p_idx < 0 || p_idx >= build_tabs->get_tab_count()) {
-		warnings_btn->set_visible(false);
-		errors_btn->set_visible(false);
-	} else {
-		warnings_btn->set_visible(true);
-		errors_btn->set_visible(true);
-	}
-}
-    
-    
-    {	Ref<Animation> anim = property_editor->get_variant().operator RefPtr();
-	anim_tree->animation_node_set_animation(edited_node, anim);
-	update();
-}
-    
-    				ERR_FAIL_INDEX(idx, subresources.size());
-    
-    
-    {            auto sequenceLength = currentSequence.size() / numElementsPerSample;
-            auto sequenceDataShape = sampleShape.AppendShape({ sequenceLength });
-            sequencesData.push_back(MakeSharedObject<NDArrayView>(sequenceDataShape, currentSequence));
-        }
-    
-    using namespace std;
-    
-    
-    {        // didn't find any of the tags, so just parse the whole thing as a script
-        if (!loadOrEditFound)
-        {
-            // surround text in braces so we parse correctly
-            std::string textInBraces = '[ ' + stringParse + ' ]';
-            Parse(textInBraces);
-        }
-    }
-    
-        void getlattices(const std::wstring& key, std::shared_ptr<const latticepair>& L, size_t expectedframes) const
-    {
-        std::shared_ptr<latticepair> LP(new latticepair);
-        denlattices.getlattice(key, LP->second, expectedframes); // this loads the lattice from disk, using the existing L.second object
-        L = LP;
-    }
-    
-      void wait() {
-    std::unique_lock<std::mutex> lock{_mutex};
-    if (--_count == 0) {
-      _cv.notify_all();
-    } else {
-      _cv.wait(lock);
-    }
-  }
-    
-      bool thrown = false;
-  try {
-    thpp::IntTensor &a = dynamic_cast<thpp::IntTensor&>(*tensor);
-  } catch(std::bad_cast &e) {
-    thrown = true;
-  }
-  assert(thrown);
-    
-    int64_t stride(const Tensor& self, int64_t dim) {
-  // false is passed to maybe_wrap_dim so behavior is identical to array access (but with wrapping)
-  dim = maybe_wrap_dim(dim, self.dim(), false);
-  return self.strides()[dim];
-}
-    
-    auto ${Storage}::fast_set(std::size_t ind, Scalar value) -> ${Storage}& {
-  throw std::runtime_error('unsupported operation 'fast_set'');
-}
-    
-    
-    {  return std::make_tuple(dInput, dWeight, dBias);
-}
+    #include 'a2functional.h'
