@@ -1,373 +1,231 @@
 
         
-            base::win::ShortcutProperties props;
-    base::string16 appID;
-    if (content::Shell::GetPackage()->root()->GetString('app-id', &appID) == false)
-      content::Shell::GetPackage()->root()->GetString(switches::kmName, &appID);
-    const std::wstring appName = base::UTF8ToWide(content::Shell::GetPackage()->GetName());
-    props.set_app_id(appID);
+        namespace {
+// TODO(suharshs): Move this to a common location to allow other part of the
+// repo to use it.
+template <typename T, typename... Args>
+std::unique_ptr<T> MakeUnique(Args&&... args) {
+  return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+}  // namespace
     
-    void Clipboard::SetText(std::string& text) {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  ui::Clipboard::ObjectMap map;
-  map[ui::Clipboard::CBF_TEXT].push_back(
-      std::vector<char>(text.begin(), text.end()));
-  clipboard->WriteObjects(ui::CLIPBOARD_TYPE_COPY_PASTE, map);
+    
+    {
+    {      auto h = handle_.AccessTensor(context)->template flat<string>();
+      h(0) = cinfo_.container();
+      h(1) = cinfo_.name();
+      resource_ = resource;
+    }
+    if (context->expected_output_dtype(0) == DT_RESOURCE) {
+      OP_REQUIRES_OK(context, MakeResourceHandleToOutput(
+                                  context, 0, cinfo_.container(), cinfo_.name(),
+                                  MakeTypeIndex<T>()));
+    } else {
+      context->set_output_ref(0, &mu_, handle_.AccessTensor(context));
+    }
+  }
+    
+      double PrimalLossDerivative(const double wx, const double label,
+                              const double example_weight) const final {
+    if (label * wx >= 1) {
+      return 0;
+    }
+    if (label * wx <= 1 - gamma) {
+      return -label;
+    }
+    return (wx - label) / gamma;
+  }
+    
+    
+    {  void CopyDeviceTensorToCPU(const Tensor *device_tensor, StringPiece edge_name,
+                             Device *device, Tensor *cpu_tensor,
+                             StatusCallback done) override;
+};
+    
+    #include 'tensorflow/core/lib/strings/strcat.h'
+    
+        GraphDef result;
+    TransformFuncContext context;
+    context.input_names = {};
+    context.output_names = {'mul_node1'};
+    TF_ASSERT_OK(RemoveDevice(graph_def, context, &result));
+    
+    inline ZlibCompressionOptions ZlibCompressionOptions::GZIP() {
+  ZlibCompressionOptions options = ZlibCompressionOptions();
+  options.window_bits = options.window_bits + 16;
+  return options;
 }
     
+      void OCRTester(const char* imgname, const char* groundtruth, const char* tessdatadir, const char* lang) {
+    //log.info() << tessdatadir << ' for language: ' << lang << std::endl;
+    char *outText;
+    std::locale loc('C'); // You can also use '' for the default system locale
+    std::ifstream file(groundtruth);
+    file.imbue(loc); // Use it for file input
+    std::string gtText((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+    tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
+    ASSERT_FALSE(api->Init(tessdatadir, lang)) << 'Could not initialize tesseract.';
+    Pix *image = pixRead(imgname);
+    ASSERT_TRUE(image != nullptr) << 'Failed to read test image.';
+    api->SetImage(image);
+    outText = api->GetUTF8Text();
+    EXPECT_EQ(gtText,outText) << 'Phototest.tif OCR does not match ground truth for ' << ::testing::PrintToString(lang);
+    api->End();
+    delete [] outText;
+    pixDestroy(&image);
+  }
     
-#include 'content/nw/src/api/event/event.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/dispatcher_host.h'
-#include 'ui/gfx/screen.h'
-    
-    Menu::Menu(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-           const std::string& extension_id)
-  : Base(id, object_manager, option, extension_id), enable_show_event_(false)  {
-  Create(option);
+    // Tests that the AVX2 implementation gets the same result as the vanilla.
+TEST_F(IntSimdMatrixTest, AVX2) {
+  if (SIMDDetect::IsAVX2Available()) {
+    tprintf('AVX2 found! Continuing...');
+  } else {
+    tprintf('No AVX2 found! Not Tested!');
+    return;
+  }
+  std::unique_ptr<IntSimdMatrix> matrix(new IntSimdMatrixAVX2());
+  ExpectEqualResults(matrix.get());
 }
     
-    
-    {}  // namespace nwapi
-
-    
-    
-    {  gtk_widget_show(menu_);
-  g_object_ref_sink(G_OBJECT(menu_));
+    // Tests that the RotatingTranspose function does the right thing for various
+// transformations.
+// dims=[5, 4, 3, 2]->[5, 2, 4, 3]
+TEST_F(MatrixTest, RotatingTranspose_3_1) {
+  GENERIC_2D_ARRAY<int> m;
+  src_.RotatingTranspose(dims_, kNumDims_, 3, 1, &m);
+  m.ResizeNoInit(kInputSize_ / 3, 3);
+  // Verify that the result is:
+  // output tensor=[[[[0, 2, 4][6, 8, 10][12, 14, 16][18, 20, 22]]
+  //                 [[1, 3, 5][7, 9, 11][13, 15, 17][19, 21, 23]]]
+  //                [[[24, 26, 28]...
+  EXPECT_EQ(0, m(0, 0));
+  EXPECT_EQ(2, m(0, 1));
+  EXPECT_EQ(4, m(0, 2));
+  EXPECT_EQ(6, m(1, 0));
+  EXPECT_EQ(1, m(4, 0));
+  EXPECT_EQ(24, m(8, 0));
+  EXPECT_EQ(26, m(8, 1));
+  EXPECT_EQ(25, m(12, 0));
 }
     
+    /**
+ * Recognize a rectangle from an image and return the result as a string.
+ * May be called many times for a single Init.
+ * Currently has no error checking.
+ * Greyscale of 8 and color of 24 or 32 bits per pixel may be given.
+ * Palette color images will not work properly and must be converted to
+ * 24 bit.
+ * Binary images of 1 bit per pixel may also be given but they must be
+ * byte packed with the MSB of the first byte being the first pixel, and a
+ * one pixel is WHITE. For binary images set bytes_per_pixel=0.
+ * The recognized text is returned as a char* which is coded
+ * as UTF8 and must be freed with the delete [] operator.
+ */
+char* TessBaseAPI::TesseractRect(const unsigned char* imagedata,
+                                 int bytes_per_pixel,
+                                 int bytes_per_line,
+                                 int left, int top,
+                                 int width, int height) {
+  if (tesseract_ == nullptr || width < kMinRectSize || height < kMinRectSize)
+    return nullptr;  // Nothing worth doing.
+    }
     
-    {  gtk_widget_show(menu_item_);
-  g_object_ref_sink(G_OBJECT(menu_item_));
-} 
     
-        bool Read(ClipboardData& data) {
-      switch(data.type) {
-        case TYPE_TEXT:
-        return ReadText(data);
-        break;
-        case TYPE_HTML:
-        return ReadHTML(data);
-        break;
-        case TYPE_RTF:
-        return ReadRTF(data);
-        break;
-        case TYPE_PNG:
-        case TYPE_JPEG:
-        return ReadImage(data);
-        break;
-        case TYPE_NONE:
-        NOTREACHED();
-        return false;
+    {}  // namespace tesseract
+    
+      // Check for a seed candidate using the foreground pixel density. And we
+  // return true if the density is below a certain threshold, because characters
+  // in equation regions usually are apart with more white spaces.
+  bool CheckSeedFgDensity(const float density_th, ColPartition* part);
+    
+    /* Array of request or response headers or trailers. */
+typedef struct bidirectional_stream_header_array {
+  size_t count;
+  size_t capacity;
+  bidirectional_stream_header* headers;
+} bidirectional_stream_header_array;
+    
+    
+    {
+    {}  // namespace testing
+}  // namespace grpc
+    
+    #include <string>
+#include <vector>
+    
+    gpr_atm grpc::testing::interop::g_got_sigint;
+    
+    /// Helper replacement for REGISTER, used within extension modules.
+#define REGISTER_MODULE(t, r, n)                                               \
+  auto t##Module = Registry::get().registry(r)->add(n, std::make_shared<t>());
+    
+      // Enables pretty-printing in gtest (ASSERT|EXPECT)_(EQ|NE)
+  friend ::std::ostream& operator<<(::std::ostream& os, const Status& s);
+    
+    /**
+ * @brief Access the internal storage of the Decorator parser.
+ *
+ * The decoration set is a map of column name to value. It contains the opaque
+ * set of decoration point results.
+ *
+ * Decorations are applied to log items before they are sent to the downstream
+ * logging APIs: logString, logSnapshot, etc.
+ *
+ * @param results the output parameter to write decorations.
+ */
+void getDecorations(std::map<std::string, std::string>& results);
+    
+    #include <boost/lexical_cast.hpp>
+    
+    #include <sys/resource.h>
+#include <sys/syscall.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+    
+    #include <string.h>
+#include <time.h>
+    
+    
+    {
+    {      result = poll(fds, 1, 1);
+      if (result == 0) {
+        ticks++;
       }
-      NOTREACHED();
-      return false;      
     }
+  }
     
-    
-    {
-} // namespace extensions
-
-    
-    /** @defgroup buffer_copy boost::asio::buffer_copy
- *
- * @brief The boost::asio::buffer_copy function is used to copy bytes from a
- * source buffer (or buffer sequence) to a target buffer (or buffer sequence).
- *
- * The @c buffer_copy function is available in two forms:
- *
- * @li A 2-argument form: @c buffer_copy(target, source)
- *
- * @li A 3-argument form: @c buffer_copy(target, source, max_bytes_to_copy)
-    
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
-    }
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-    #include <boost/asio/detail/config.hpp>
-#include <boost/asio/detail/addressof.hpp>
-#include <boost/asio/detail/noncopyable.hpp>
-#include <boost/asio/handler_alloc_hook.hpp>
-    
-        // Retry operation if interrupted by signal.
-    if (ec == boost::asio::error::interrupted)
-      continue;
-    
-    void dev_poll_reactor::fork_service(boost::asio::io_service::fork_event fork_ev)
-{
-  if (fork_ev == boost::asio::io_service::fork_child)
-  {
-    detail::mutex::scoped_lock lock(mutex_);
-    }
-    }
-    
-    
-    {  static void Append(WriteBatch* dst, const WriteBatch* src);
-};
-    
-    TEST(Issue200, Test) {
-  // Get rid of any state from an old run.
-  std::string dbpath = test::TmpDir() + '/leveldb_issue200_test';
-  DestroyDB(dbpath, Options());
-    }
-    
-    Status ReadBlock(RandomAccessFile* file,
-                 const ReadOptions& options,
-                 const BlockHandle& handle,
-                 BlockContents* result) {
-  result->data = Slice();
-  result->cachable = false;
-  result->heap_allocated = false;
-    }
-    
-    TEST(CRC, Values) {
-  ASSERT_NE(Value('a', 1), Value('foo', 3));
+    TEST_F(ProcessTests, test_constructor) {
+  auto p = PlatformProcess(kInvalidPid);
+  EXPECT_FALSE(p.isValid());
 }
     
-    #include 'util/hash.h'
-#include 'util/testharness.h'
     
+    {} // namespace aria2
     
-    {  void DoReads(int n);
-};
+      virtual void truncate(int64_t length) CXX11_OVERRIDE;
     
-    
-    {}  // anonymous namespace
-    
-    class StdoutPrinter : public WritableFile {
- public:
-  virtual Status Append(const Slice& data) {
-    fwrite(data.data(), 1, data.size(), stdout);
-    return Status::OK();
-  }
-  virtual Status Close() { return Status::OK(); }
-  virtual Status Flush() { return Status::OK(); }
-  virtual Status Sync() { return Status::OK(); }
-};
-    
-    Status Writer::EmitPhysicalRecord(RecordType t, const char* ptr, size_t n) {
-  assert(n <= 0xffff);  // Must fit in two bytes
-  assert(block_offset_ + kHeaderSize + n <= kBlockSize);
-    }
-    
-      ~Block();
-    
-        cobj = (cocos2d::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
-    
-    
-    
-        virtual void DrawString(int x, int y, const char* string, ...); 
-    
-    
-    {			ground->CreateFixture(&fd);
-		}
-    
-    static const uint8_t kRangeLimitLut[4 * 256] = {
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-  0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
-  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
-  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
-  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
-  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
-  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
-  96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
- 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
- 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
- 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
- 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
- 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
- 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
- 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
- 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
- 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
- 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-};
-    
-    #include 'guetzli/output_image.h'
-    
-    #ifndef GUETZLI_JPEG_DATA_DECODER_H_
-#define GUETZLI_JPEG_DATA_DECODER_H_
-    
-    enum JPEGReadError {
-  JPEG_OK = 0,
-  JPEG_SOI_NOT_FOUND,
-  JPEG_SOF_NOT_FOUND,
-  JPEG_UNEXPECTED_EOF,
-  JPEG_MARKER_BYTE_NOT_FOUND,
-  JPEG_UNSUPPORTED_MARKER,
-  JPEG_WRONG_MARKER_SIZE,
-  JPEG_INVALID_PRECISION,
-  JPEG_INVALID_WIDTH,
-  JPEG_INVALID_HEIGHT,
-  JPEG_INVALID_NUMCOMP,
-  JPEG_INVALID_SAMP_FACTOR,
-  JPEG_INVALID_START_OF_SCAN,
-  JPEG_INVALID_END_OF_SCAN,
-  JPEG_INVALID_SCAN_BIT_POSITION,
-  JPEG_INVALID_COMPS_IN_SCAN,
-  JPEG_INVALID_HUFFMAN_INDEX,
-  JPEG_INVALID_QUANT_TBL_INDEX,
-  JPEG_INVALID_QUANT_VAL,
-  JPEG_INVALID_MARKER_LEN,
-  JPEG_INVALID_SAMPLING_FACTORS,
-  JPEG_INVALID_HUFFMAN_CODE,
-  JPEG_INVALID_SYMBOL,
-  JPEG_NON_REPRESENTABLE_DC_COEFF,
-  JPEG_NON_REPRESENTABLE_AC_COEFF,
-  JPEG_INVALID_SCAN,
-  JPEG_OVERLAPPING_SCANS,
-  JPEG_INVALID_SCAN_ORDER,
-  JPEG_EXTRA_ZERO_RUN,
-  JPEG_DUPLICATE_DRI,
-  JPEG_DUPLICATE_SOF,
-  JPEG_WRONG_RESTART_MARKER,
-  JPEG_DUPLICATE_COMPONENT_ID,
-  JPEG_COMPONENT_NOT_FOUND,
-  JPEG_HUFFMAN_TABLE_NOT_FOUND,
-  JPEG_HUFFMAN_TABLE_ERROR,
-  JPEG_QUANT_TABLE_NOT_FOUND,
-  JPEG_EMPTY_DHT,
-  JPEG_EMPTY_DQT,
-  JPEG_OUT_OF_BAND_COEFF,
-  JPEG_EOB_RUN_TOO_LONG,
-  JPEG_IMAGE_TOO_LARGE,
-};
-    
-    struct HuffmanTableEntry {
-  // Initialize the value to an invalid symbol so that we can recognize it
-  // when reading the bit stream using a Huffman code with space > 0.
-  HuffmanTableEntry() : bits(0), value(0xffff) {}
-    }
-    
-    void AbstractAuthResolver::setUserDefinedCred(std::string user,
-                                              std::string password)
+    bool AbstractProxyRequestCommand::executeInternal()
 {
-  userDefinedUser_ = std::move(user);
-  userDefinedPassword_ = std::move(password);
-}
-    
-      void setDefaultCred(std::string user, std::string password);
-    
-      virtual ssize_t readData(unsigned char* data, size_t len,
-                           int64_t offset) CXX11_OVERRIDE;
-    
-    bool AbstractHttpServerResponseCommand::execute()
-{
-  if (e_->getRequestGroupMan()->downloadFinished() || e_->isHaltRequested()) {
-    return true;
-  }
-  try {
-    ssize_t len = httpServer_->sendResponse();
-    if (len > 0) {
-      timeoutTimer_ = global::wallclock();
+  // socket->setBlockingMode();
+  if (httpConnection_->sendBufferIsEmpty()) {
+    auto httpRequest = make_unique<HttpRequest>();
+    httpRequest->setUserAgent(getOption()->get(PREF_USER_AGENT));
+    httpRequest->setRequest(getRequest());
+    httpRequest->setProxyRequest(proxyRequest_);
     }
-  }
-  catch (RecoverableException& e) {
-    A2_LOG_INFO_EX(fmt('CUID#%' PRId64
-                       ' - Error occurred while transmitting response body.',
-                       getCuid()),
-                   e);
-    return true;
-  }
-  if (httpServer_->sendBufferIsEmpty()) {
-    A2_LOG_INFO(fmt('CUID#%' PRId64 ' - HttpServer: all response transmitted.',
-                    getCuid()));
-    afterSend(httpServer_, e_);
-    return true;
-  }
-  else {
-    if (timeoutTimer_.difference(global::wallclock()) >= 30_s) {
-      A2_LOG_INFO(fmt('CUID#%' PRId64
-                      ' - HttpServer: Timeout while trasmitting response.',
-                      getCuid()));
-      return true;
     }
-    else {
-      updateReadWriteCheck();
-      e_->addCommand(std::unique_ptr<Command>(this));
-      return false;
-    }
-  }
-}
     
-    #include 'AbstractCommand.h'
     
-    #include <memory>
+    {  virtual std::unique_ptr<Command> getNextCommand() = 0;
+};
     
-    namespace {
-class FindStoppedAllowedTier {
+    class ApiCallbackDownloadEventListener : public DownloadEventListener {
 public:
-  bool operator()(const std::shared_ptr<AnnounceTier>& tier) const
-  {
-    switch (tier->event) {
-    case AnnounceTier::DOWNLOADING:
-    case AnnounceTier::STOPPED:
-    case AnnounceTier::COMPLETED:
-    case AnnounceTier::SEEDING:
-      return true;
-    default:
-      return false;
+  ApiCallbackDownloadEventListener(Session* session,
+                                   DownloadEventCallback callback,
+                                   void* userData);
+  virtual ~ApiCallbackDownloadEventListener();
+  virtual void onEvent(DownloadEvent event,
+                       const RequestGroup* group) CXX11_OVERRIDE;
     }
-  }
-};
-} // namespace
-    
-      T get() { return ref_; }
