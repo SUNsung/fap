@@ -1,36 +1,59 @@
 
         
-              class << self
-        # Mark a given block of code as a 'busy' block of code, which will
-        # register a SIGINT handler for the duration of the block. When a
-        # SIGINT occurs, the `sig_callback` proc will be called. It is up
-        # to the callback to behave properly and exit the application.
-        def busy(sig_callback)
-          register(sig_callback)
-          return yield
-        ensure
-          unregister(sig_callback)
-        end
+        invalids = []
+Parallel.each(links, in_threads: 4) do |link|
+  href = link.attribute('href').to_s
+  begin
+    case check_link(URI.join(BASE_URI, href))
+    when (200...300)
+      putc('.')
+    when (300..302)
+      putc('w')
+    end
+  rescue => e
+    putc('F')
+    invalids << '#{href} (reason: #{e.message})'
+  end
+end
     
-            hash.each do |key, value|
-          self[convert_key(key)] = value
+          unless root?
+        raise Invalid, 'missing name' if !name || name.empty?
+        raise Invalid, 'missing path' if !path || path.empty?
+        raise Invalid, 'missing type' if !type || type.empty?
+      end
+    end
+    
+            entries
+      end
+    end
+  end
+end
+
+    
+      belongs_to :status_message
+  has_many :poll_answers, -> { order 'id ASC' }, dependent: :destroy
+  has_many :poll_participations, dependent: :destroy
+  has_one :author, through: :status_message
+    
+        def index
+      pods_json = PodPresenter.as_collection(Pod.all)
+    
+          def create
+        restore_request_parameters
+        process_authorization_consent(params[:approve])
+      end
+    
+          def find
+        client = Api::OpenidConnect::OAuthApplication.find_by(client_name: params[:client_name])
+        if client
+          render json: {client_id: client.client_id}
+        else
+          render json: {error: 'Client with name #{params[:client_name]} does not exist'}
         end
       end
     
-            # Get the proper capability host to check
-        cap_host = nil
-        if type == :host
-          cap_host = @env.host
-        else
-          with_target_vms([]) do |vm|
-            cap_host = case type
-                       when :provider
-                         vm.provider
-                       when :guest
-                         vm.guest
-                       else
-                         raise Vagrant::Errors::CLIInvalidUsage,
-                           help: opts.help.chomp
-                       end
-          end
+          def get_key_from_kid(keys, kid)
+        keys.each do |key|
+          return key if key.has_value?(kid)
         end
+      end
