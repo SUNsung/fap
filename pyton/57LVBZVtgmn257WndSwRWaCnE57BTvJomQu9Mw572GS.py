@@ -1,155 +1,141 @@
 
         
-        import os
-import sys
-import codecs
+        
+if len(sys.argv) <= 1:
+    print('Specify the version number as parameter')
+    sys.exit()
+version = sys.argv[1]
+    
+            with open(swf_file, 'rb') as swf_f:
+            swf_content = swf_f.read()
+        swfi = SWFInterpreter(swf_content)
+    
+                    m = re.search(r'(?<=\s)u[\''](?!\)|,|$)', code)
+                if m is not None:
+                    self.assertTrue(
+                        m is None,
+                        'u present in %s, around %s' % (
+                            fn, code[m.start() - 10:m.end() + 10]))
+    
+    try:
+    from .lazy_extractors import *
+    from .lazy_extractors import _ALL_CLASSES
+    _LAZY_LOADER = True
+except ImportError:
+    _LAZY_LOADER = False
+    from .extractors import *
+    
+            return {
+            '_type': 'playlist',
+            'id': playlist_id,
+            'title': title,
+            'description': description,
+            'entries': entries,
+        }
+
+    
+            webpage = self._download_webpage(url, video_id)
+    
+        def to_json(self, value):
+        return value.hex
+    
+        def __get__(self, obj, type=None):
+        if obj is None:
+            return self
+        rv = obj.config[self.__name__]
+        if self.get_converter is not None:
+            rv = self.get_converter(rv)
+        return rv
+    
+    
+# Core signals.  For usage examples grep the source code or consult
+# the API documentation in docs/api.rst as well as docs/signals.rst
+template_rendered = _signals.signal('template-rendered')
+before_render_template = _signals.signal('before-render-template')
+request_started = _signals.signal('request-started')
+request_finished = _signals.signal('request-finished')
+request_tearing_down = _signals.signal('request-tearing-down')
+got_request_exception = _signals.signal('got-request-exception')
+appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
+appcontext_pushed = _signals.signal('appcontext-pushed')
+appcontext_popped = _signals.signal('appcontext-popped')
+message_flashed = _signals.signal('message-flashed')
+
+    
+        This module provides class-based views inspired by the ones in Django.
+    
+                greenlets.append(greenlet(g))
+            return 'Hello World!'
+    
+    
+def rmse(a, b):
+    return np.sqrt(np.mean((a - b) ** 2))
+    
+        gc.collect()
+    
+        class_name = info['fullname'].split('.')[0]
+    if type(class_name) != str:
+        # Python 2 only
+        class_name = class_name.encode('utf-8')
+    module = __import__(info['module'], fromlist=[class_name])
+    obj = attrgetter(info['fullname'])(module)
+    
+    try:
+    from urllib import urlopen
+except ImportError:
+    from urllib.request import urlopen
+    
+    If all examples are from the same class, it uses a one-class SVM.
+    
+    data, row_idx, col_idx = sg._shuffle(data, random_state=0)
+plt.matshow(data, cmap=plt.cm.Blues)
+plt.title('Shuffled dataset')
+    
+    from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.gaussian_process.kernels import RBF
+from sklearn import datasets
+    
+    import matplotlib.pyplot as plt
+import numpy as np
+    
+    '''
+print(__doc__)
+    
+    # If true, show URL addresses after external links.
+#man_show_urls = False
+    
+    from certbot import interfaces
+from certbot.plugins import common
+    
+        test_suite = 'tests',
+    
+    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
+    
+	from xml.dom.minidom import parseString
+	doc = parseString(xml)
+	tab = doc.getElementsByTagName('related')[0].firstChild
+    
+    from ..common import *
+from hashlib import md5
+from urllib.parse import urlparse
 import re
     
-        @support.cpython_only
-    @support.bigmemtest(sys.maxsize + 1000, memuse=2/15 * 2, dry_run=False)
-    def test_huge_lshift(self, size):
-        self.assertEqual(1 << (sys.maxsize + 1000), 1 << 1000 << sys.maxsize)
     
-            self.assertIn(entry.get(), 'hello')
-        egi = entry.grid_info()
-        equal(int(egi['row']), 0)
-        equal(int(egi['column']), 1)
-        equal(int(egi['rowspan']), 1)
-        equal(int(egi['columnspan']), 1)
-        equal(self.dialog.row, 1)
+def huaban_download(url, output_dir='.', **kwargs):
+    if re.match(r'http://huaban\.com/boards/\d+/', url):
+        huaban_download_board(url, output_dir, **kwargs)
+    else:
+        print('Only board (画板) pages are supported currently')
+        print('ex: http://huaban.com/boards/12345678/')
     
-        def read(self, size=-1):
-        '''Read at most size bytes from the chunk.
-        If size is omitted or negative, read until the end
-        of the chunk.
-        '''
+        def prepare(self, **kwargs):
+        content = get_content(self.url)
+        self.title = match1(content, r'<title>([^<]+)</title>')
+        s = match1(content, r'P\.s\s*=\s*\'([^\']+)\'')
+        scp = match1(content, r'InfoQConstants\.scp\s*=\s*\'([^\']+)\'')
+        scs = match1(content, r'InfoQConstants\.scs\s*=\s*\'([^\']+)\'')
+        sck = match1(content, r'InfoQConstants\.sck\s*=\s*\'([^\']+)\'')
     
-    __all__ = ['make_scanner']
-    
-    
-
-if __name__ == '__main__':
-    colordb = get_colordb('/usr/openwin/lib/rgb.txt')
-    if not colordb:
-        print('No parseable color database found')
-        sys.exit(1)
-    # on my system, this color matches exactly
-    target = 'navy'
-    red, green, blue = rgbtuple = colordb.find_byname(target)
-    print(target, ':', red, green, blue, triplet_to_rrggbb(rgbtuple))
-    name, aliases = colordb.find_byrgb(rgbtuple)
-    print('name:', name, 'aliases:', COMMASPACE.join(aliases))
-    r, g, b = (1, 1, 128)                         # nearest to navy
-    r, g, b = (145, 238, 144)                     # nearest to lightgreen
-    r, g, b = (255, 251, 250)                     # snow
-    print('finding nearest to', target, '...')
-    import time
-    t0 = time.time()
-    nearest = colordb.nearest(r, g, b)
-    t1 = time.time()
-    print('found nearest color', nearest, 'in', t1-t0, 'seconds')
-    # dump the database
-    for n in colordb.unique_names():
-        r, g, b = colordb.find_byname(n)
-        aliases = colordb.aliases_of(r, g, b)
-        print('%20s: (%3d/%3d/%3d) == %s' % (n, r, g, b,
-                                             SPACE.join(aliases[1:])))
-
-    
-            methods = {}
-    
-            # COM methods are boolean True:
-        if sys.platform == 'win32':
-            mth = WINFUNCTYPE(None)(42, 'name', (), None)
-            self.assertEqual(bool(mth), True)
-    
-        # __set__ and __get__ should raise a TypeError in case their self
-    # argument is not a ctype instance.
-    def test___set__(self):
-        class MyCStruct(Structure):
-            _fields_ = (('field', c_int),)
-        self.assertRaises(TypeError,
-                          MyCStruct.field.__set__, 'wrong type self', 42)
-    
-            for b in False, True:
-            for i in 0, 1, 2:
-                self.assertEqual(b**i, int(b)**i)
-                self.assertIsNot(b**i, bool(int(b)**i))
-    
-    
-@click.command()
-@click.argument('catalog_file', type=click.Path())
-def cli(catalog_file):
-    # Read the old ones back.  Once we are in, we will never go.
-    with open(catalog_file) as f:
-        rv = json.load(f)['supported_locales']
-    
-      return YouCompleteMe( user_options_store.GetAll() )
-
-    
-        # For pickling to work, the __module__ variable needs to be set to the frame
-    # where the named tuple is created.  Bypass this step in enviroments where
-    # sys._getframe is not defined (Jython for example).
-    if hasattr(_sys, '_getframe'):
-        result.__module__ = _sys._getframe(1).f_globals.get('__name__', '__main__')
-    
-            try:
-            result = self.fn(*self.args, **self.kwargs)
-        except BaseException:
-            e = sys.exc_info()[1]
-            self.future.set_exception(e)
-        else:
-            self.future.set_result(result)
-    
-    def main():
-    for name, fn in [('sequential', sequential),
-                     ('processes', with_process_pool_executor),
-                     ('threads', with_thread_pool_executor)]:
-        sys.stdout.write('%s: ' % name.ljust(12))
-        start = time.time()
-        if fn() != [True] * len(PRIMES):
-            sys.stdout.write('failed\n')
-        else:
-            sys.stdout.write('%.2f seconds\n' % (time.time() - start))
-    
-            f1 = create_future(state=PENDING)
-        t = threading.Thread(target=notification)
-        t.start()
-    
-        return _MasterDiagnosticFilter( compiled_by_type )
-    
-      opts = { 'filter_diagnostics' : {
-    'java' : { 'regex' : '.*taco.*' },
-    'xml'  : { 'regex' : '.*burrito.*' } } }
-    
-    
-def KeywordsFromSyntaxListOutput_CppSyntax_test():
-  expected_keywords = (
-    'int_fast32_t', 'FILE', 'size_t', 'bitor', 'typedef', 'const', 'struct',
-    'uint8_t', 'fpos_t', 'thread_local', 'unsigned', 'uint_least16_t', 'do',
-    'intptr_t', 'uint_least64_t', 'return', 'auto', 'void', '_Complex',
-    'break', '_Alignof', 'not', 'using', '_Static_assert', '_Thread_local',
-    'public', 'uint_fast16_t', 'this', 'continue', 'char32_t', 'int16_t',
-    'intmax_t', 'static', 'clock_t', 'sizeof', 'int_fast64_t', 'mbstate_t',
-    'try', 'xor', 'uint_fast32_t', 'int_least8_t', 'div_t', 'volatile',
-    'template', 'char16_t', 'new', 'ldiv_t', 'int_least16_t', 'va_list',
-    'uint_least8_t', 'goto', 'noreturn', 'enum', 'static_assert', 'bitand',
-    'compl', 'imaginary', 'jmp_buf', 'throw', 'asm', 'ptrdiff_t', 'uint16_t',
-    'or', 'uint_fast8_t', '_Bool', 'int32_t', 'float', 'private', 'restrict',
-    'wint_t', 'operator', 'not_eq', '_Imaginary', 'alignas', 'union', 'long',
-    'uint_least32_t', 'int_least64_t', 'friend', 'uintptr_t', 'int8_t', 'else',
-    'export', 'int_fast8_t', 'catch', 'true', 'case', 'default', 'double',
-    '_Noreturn', 'signed', 'typename', 'while', 'protected', 'wchar_t',
-    'wctrans_t', 'uint64_t', 'delete', 'and', 'register', 'false', 'int',
-    'uintmax_t', 'off_t', 'char', 'int64_t', 'int_fast16_t', 'DIR', '_Atomic',
-    'time_t', 'xor_eq', 'namespace', 'virtual', 'complex', 'bool', 'mutable',
-    'if', 'int_least32_t', 'sig_atomic_t', 'and_eq', 'ssize_t', 'alignof',
-    '_Alignas', '_Generic', 'extern', 'class', 'typeid', 'short', 'for',
-    'uint_fast64_t', 'wctype_t', 'explicit', 'or_eq', 'switch', 'uint32_t',
-    'inline' )
-    
-      python_interpreter = vim.eval( 'g:ycm_server_python_interpreter' )
-  if python_interpreter:
-    python_interpreter = utils.FindExecutable( python_interpreter )
-    if python_interpreter:
-      return python_interpreter
+    __all__ = ['kuwo_download']
