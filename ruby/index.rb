@@ -1,90 +1,103 @@
 
         
-            groups
-  end
-end
-
+                if b_length > a_length
+          (b_length - a_length).times { a_split.insert(-2, 0) }
+        elsif a_length > b_length
+          (a_length - b_length).times { b_split.insert(-2, 0) }
+        end
     
-      def after_omniauth_failure_path_for(scope)
-    new_session_path(scope)
-  end
-    
-      def serialize_options(resource)
-    methods = resource_class.authentication_keys.dup
-    methods = methods.keys if methods.is_a?(Hash)
-    methods << :password if resource.respond_to?(:password)
-    { methods: methods, only: [:password] }
-  end
-    
-      def preview_url
-    if object.needs_redownload?
-      media_proxy_url(object.id, :small)
-    else
-      full_asset_url(object.file.url(:small))
+        def type=(value)
+      @type = value.try :strip
     end
-  end
     
-      attributes :id, :type, :name, :updated
+        def join(*args)
+      self.class.join self, *args
+    end
     
-    def codepoints_to_unicode(codepoints)
-  if codepoints.include?(' ')
-    codepoints.split(' ').map(&:hex).pack('U*')
-  else
-    [codepoints.hex].pack('U')
-  end
-end
+                  # Check if data is actually ready on this IO device.
+              # We have to do this since `readpartial` will actually block
+              # until data is available, which can cause blocking forever
+              # in some cases.
+              results = ::IO.select([io], nil, nil, 1.0)
+              break if !results || results[0].empty?
     
-      def perform(user_id)
-    @user = User.find(user_id)
-    deliver_digest if @user.allows_digest_emails?
-  end
-    
-      def enough_poll_answers
-    errors.add(:poll_answers, I18n.t('activerecord.errors.models.poll.attributes.poll_answers.not_enough_poll_answers')) if poll_answers.size < 2
-  end
-    
-        def recheck
-      pod = Pod.find(params[:pod_id])
-      pod.test_connection!
-    
-            def each_unnecessary_space_match(node, &blk)
-          each_match_range(
-            contents_range(node),
-            MULTIPLE_SPACES_BETWEEN_ITEMS_REGEX,
-            &blk
-          )
+          # This returns the keys (or ids) that are in the string.
+      #
+      # @return [<Array<String>]
+      def keys
+        regexp = /^#\s*VAGRANT-BEGIN:\s*(.+?)$\r?\n?(.*)$\r?\n?^#\s*VAGRANT-END:\s(\1)$/m
+        @value.scan(regexp).map do |match|
+          match[0]
         end
       end
+    
+            # Get the proper capability host to check
+        cap_host = nil
+        if type == :host
+          cap_host = @env.host
+        else
+          with_target_vms([]) do |vm|
+            cap_host = case type
+                       when :provider
+                         vm.provider
+                       when :guest
+                         vm.guest
+                       else
+                         raise Vagrant::Errors::CLIInvalidUsage,
+                           help: opts.help.chomp
+                       end
+          end
+        end
+    
+    desc 'Initial setup for Octopress: copies the default theme into the path of Jekyll's generator. Rake install defaults to rake install[classic] to install a different theme run rake install[some_theme_name]'
+task :install, :theme do |t, args|
+  if File.directory?(source_dir) || File.directory?('sass')
+    abort('rake aborted!') if ask('A theme is already installed, proceeding will overwrite existing files. Are you sure?', ['y', 'n']) == 'n'
+  end
+  # copy theme into working Jekyll directories
+  theme = args.theme || 'classic'
+  puts '## Copying '+theme+' theme into ./#{source_dir} and ./sass'
+  mkdir_p source_dir
+  cp_r '#{themes_dir}/#{theme}/source/.', source_dir
+  mkdir_p 'sass'
+  cp_r '#{themes_dir}/#{theme}/sass/.', 'sass'
+  mkdir_p '#{source_dir}/#{posts_dir}'
+  mkdir_p public_dir
+end
+    
+    # The project root directory
+$root = ::File.dirname(__FILE__)
+    
+      if options.respond_to? 'keys'
+    options.each do |k,v|
+      unless v.nil?
+        v = v.join ',' if v.respond_to? 'join'
+        v = v.to_json if v.respond_to? 'keys'
+        output += ' data-#{k.sub'_','-'}='#{v}''
+      end
+    end
+  elsif options.respond_to? 'join'
+    output += ' data-value='#{config[key].join(',')}''
+  else
+    output += ' data-value='#{config[key]}''
+  end
+  output += '></#{tag}>'
+end
+    
+      class GistTagNoCache < GistTag
+    def initialize(tag_name, text, token)
+      super
+      @cache_disabled = true
     end
   end
 end
+    
+    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
 
     
-    module RuboCop
-  module Cop
-    module Performance
-      # This cop identifies the use of `Regexp#match` or `String#match`, which
-      # returns `#<MatchData>`/`nil`. The return value of `=~` is an integral
-      # index/`nil` and is more performant.
-      #
-      # @example
-      #   # bad
-      #   do_something if str.match(/regex/)
-      #   while regex.match('str')
-      #     do_something
-      #   end
-      #
-      #   # good
-      #   method(str =~ /regex/)
-      #   return value unless regex =~ 'str'
-      class RedundantMatch < Cop
-        MSG = 'Use `=~` in places where the `MatchData` returned by ' \
-              '`#match` will not be used.'.freeze
-    
-              optarg_positions.each do |optarg_position|
-            # there can only be one group of optional arguments
-            break if optarg_position > arg_positions.max
-    
-      context 'called with three sizes' do
-    it 'applies second width to left and right' do
-      rule = 'margin: 4px 5px 6px'
+      # Extracts raw content DIV from template, used for page description as {{ content }}
+  # contains complete sub-template code on main page level
+  def raw_content(input)
+    /<div class='entry-content'>(?<content>[\s\S]*?)<\/div>\s*<(footer|\/article)>/ =~ input
+    return (content.nil?) ? input : content
+  end
