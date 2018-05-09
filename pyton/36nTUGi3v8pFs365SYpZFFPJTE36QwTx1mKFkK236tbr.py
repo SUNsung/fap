@@ -1,186 +1,164 @@
 
         
-            def __delitem__(self, key):
-        del self._store[key.lower()]
-    
-        @pytest.mark.skip(reason='this fails non-deterministically under pytest-xdist')
-    def test_request_recovery(self):
-        '''can check the requests content'''
-        # TODO: figure out why this sometimes fails when using pytest-xdist.
-        server = Server.basic_response_server(requests_to_handle=2)
-        first_request = b'put your hands up in the air'
-        second_request = b'put your hand down in the floor'
+            def append_to_front(self, node):
+        pass
     
     
-@pytest.mark.skipif(sys.version_info < (2,7), reason='Only run on Python 2.7+')
-def test_system_ssl():
-    '''Verify we're actually setting system_ssl when it should be available.'''
-    assert info()['system_ssl']['version'] != ''
+class GroupChat(Chat):
     
-    setup(
-    name=about['__title__'],
-    version=about['__version__'],
-    description=about['__description__'],
-    long_description=readme + '\n\n' + history,
-    author=about['__author__'],
-    author_email=about['__author_email__'],
-    url=about['__url__'],
-    packages=packages,
-    package_data={'': ['LICENSE', 'NOTICE'], 'requests': ['*.pem']},
-    package_dir={'requests': 'requests'},
-    include_package_data=True,
-    python_requires='>=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
-    install_requires=requires,
-    license=about['__license__'],
-    zip_safe=False,
-    classifiers=(
-        'Development Status :: 5 - Production/Stable',
-        'Intended Audience :: Developers',
-        'Natural Language :: English',
-        'License :: OSI Approved :: Apache Software License',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: Implementation :: PyPy'
-    ),
-    cmdclass={'test': PyTest},
-    tests_require=test_requirements,
-    extras_require={
-        'security': ['pyOpenSSL>=0.14', 'cryptography>=1.3.4', 'idna>=2.0.0'],
-        'socks': ['PySocks>=1.5.6, !=1.5.7'],
-        'socks:sys_platform == 'win32' and (python_version == '2.7' or python_version == '2.6')': ['win_inet_pton'],
-    },
-)
-
+        This calculates the median as the 50th percentile, and should be
+    used when your data is continuous and grouped. In the above example,
+    the values 1, 2, 3, etc. actually represent the midpoint of classes
+    0.5-1.5, 1.5-2.5, 2.5-3.5, etc. The middle value falls somewhere in
+    class 3.5-4.5, and interpolation is used to estimate it.
     
+        def test_mul(self):
+        d = deque('abc')
+        self.assertEqual(d * -5, deque())
+        self.assertEqual(d * 0, deque())
+        self.assertEqual(d * 1, deque('abc'))
+        self.assertEqual(d * 2, deque('abcabc'))
+        self.assertEqual(d * 3, deque('abcabcabc'))
+        self.assertIsNot(d * 1, d)
     
-def print_host(host):
-    data = get_landscape_members_data()
-    meta = get_meta(data)
-    print(json.dumps(meta['hostvars'][host]))
+        def skip(self):
+        '''Skip the rest of the chunk.
+        If you are not interested in the contents of the chunk,
+        this method should be called so that the file points to
+        the start of the next chunk.
+        '''
     
+    simple_escapes = {'a': '\a',
+                  'b': '\b',
+                  'f': '\f',
+                  'n': '\n',
+                  'r': '\r',
+                  't': '\t',
+                  'v': '\v',
+                  ''': ''',
+                  ''': ''',
+                  '\\': '\\'}
     
-def ismount(path):
-    '''Test whether a path is a mount point
-    clone of os.path.ismount (from cpython Lib/posixpath.py)
-    fixed to solve https://github.com/ansible/ansible-modules-core/issues/2186
-    and workaround non-fixed http://bugs.python.org/issue2466
-    this should be rewritten as soon as python issue 2466 is fixed
-    probably check for python version and use os.path.ismount if fixed
+        # This method is for backward compatibility only.
+    def next(self):
+        '''Return the next message in a one-time iteration.'''
+        if not hasattr(self, '_onetime_keys'):
+            self._onetime_keys = self.iterkeys()
+        while True:
+            try:
+                return self[next(self._onetime_keys)]
+            except StopIteration:
+                return None
+            except KeyError:
+                continue
     
+        def _set_async(self, flag):
+        if flag:
+            raise xml.dom.NotSupportedErr(
+                'asynchronous document loading is not supported')
     
-if __name__ == '__main__':
-    main()
-
+            # Add .lib files this module needs
+        for modlib in moddefn.GetLinkerLibs():
+            if modlib not in libs:
+                libs.append(modlib)
     
-        'ipv6': re.compile(
-        r'''^
-            (?:{0}:){{7}}{0}|           # uncompressed: 1:2:3:4:5:6:7:8
-            (?:{0}:){{1,6}}:|           # compressed variants, which are all
-            (?:{0}:)(?::{0}){{1,6}}|    # a::b for various lengths of a,b
-            (?:{0}:){{2}}(?::{0}){{1,5}}|
-            (?:{0}:){{3}}(?::{0}){{1,4}}|
-            (?:{0}:){{4}}(?::{0}){{1,3}}|
-            (?:{0}:){{5}}(?::{0}){{1,2}}|
-            (?:{0}:){{6}}(?::{0})|      # ...all with 2 <= a+b <= 7
-            :(?::{0}){{1,6}}|           # ::ffff(:ffff...)
-            {0}?::|                     # ffff::, ::
-                                        # ipv4-in-ipv6 variants
-            (?:0:){{6}}(?:{0}\.){{3}}{0}|
-            ::(?:ffff:)?(?:{0}\.){{3}}{0}|
-            (?:0:){{5}}ffff:(?:{0}\.){{3}}{0}
-            $
-        '''.format(ipv6_component), re.X | re.I
-    ),
+        # override in derived classes
+    def _extractrgb(self, mo):
+        return [int(x) for x in mo.group('red', 'green', 'blue')]
     
-    import re
+            self.assertAlmostEqual(complex(float2(42.)), 42)
+        self.assertAlmostEqual(complex(real=float2(17.), imag=float2(23.)), 17+23j)
+        self.assertRaises(TypeError, complex, float2(None))
+    
+        for url in urls:
+        if not url.startswith('http'):
+            print('markdown file name: ' + url)
+            continue
+        if check_live_url(url):
+            print(url)
+        else:
+            print(url, file=sys.stderr)
     
     
-class TerminalModule(TerminalBase):
+from __future__ import with_statement
+import threading
+import weakref
+import sys
     
-        return results
-
+        Args:
+        executor_reference: A weakref.ref to the ProcessPoolExecutor that owns
+            this thread. Used to determine if the ProcessPoolExecutor has been
+            garbage collected and that this function can exit.
+        process: A list of the multiprocessing.Process instances used as
+            workers.
+        pending_work_items: A dict mapping work ids to _WorkItems e.g.
+            {5: <_WorkItem...>, 6: <_WorkItem...>, ...}
+        work_ids_queue: A queue.Queue of work ids e.g. Queue([5, 6, ...]).
+        call_queue: A multiprocessing.Queue that will be filled with _CallItems
+            derived from _WorkItems for processing by the process workers.
+        result_queue: A multiprocessing.Queue of _ResultItems generated by the
+            process workers.
+    '''
+    nb_shutdown_processes = [0]
+    def shutdown_one_process():
+        '''Tell a worker to terminate, which will in turn wake us again'''
+        call_queue.put(None)
+        nb_shutdown_processes[0] += 1
+    while True:
+        _add_call_item_to_queue(pending_work_items,
+                                work_ids_queue,
+                                call_queue)
     
-    # If true, do not generate a @detailmenu in the 'Top' node's menu.
-#texinfo_no_detailmenu = False
+            for future in as_completed(future_to_url):
+            try:
+                url_to_content[future_to_url[future]] = future.result()
+            except:
+                pass
+        return url_to_content
+    finally:
+        executor.shutdown()
     
-        # Implement all methods from IInstaller, remembering to add
-    # 'self' as first argument, e.g. def get_all_names(self)...
-
+    # General information about the project.
+project = u'futures'
+copyright = u'2009-2011, Brian Quinlan'
     
-        def askfilename(self, filetypes, initdir, initfile):  # htest #
-        # Extracted from browse_file so can mock for unittests.
-        # Cannot unittest as cannot simulate button clicks.
-        # Test by running htest, such as by running this file.
-        return filedialog.Open(parent=self, filetypes=filetypes)\
-               .show(initialdir=initdir, initialfile=initfile)
+        def test_cancelled(self):
+        self.assertFalse(PENDING_FUTURE.cancelled())
+        self.assertFalse(RUNNING_FUTURE.cancelled())
+        self.assertTrue(CANCELLED_FUTURE.cancelled())
+        self.assertTrue(CANCELLED_AND_NOTIFIED_FUTURE.cancelled())
+        self.assertFalse(EXCEPTION_FUTURE.cancelled())
+        self.assertFalse(SUCCESSFUL_FUTURE.cancelled())
     
-    for prec in [9, 19]:
-    print('\nPrecision: %d decimal digits\n' % prec)
-    for func in to_benchmark:
-        start = time.time()
-        if C is not None:
-            C.getcontext().prec = prec
-        P.getcontext().prec = prec
-        for i in range(10000):
-            x = func()
-        print('%s:' % func.__name__.replace('pi_', ''))
-        print('result: %s' % str(x))
-        print('time: %fs\n' % (time.time()-start))
     
-            if nextchar == ''':
-            return parse_string(string, idx + 1, strict)
-        elif nextchar == '{':
-            return parse_object((string, idx + 1), strict,
-                _scan_once, object_hook, object_pairs_hook, memo)
-        elif nextchar == '[':
-            return parse_array((string, idx + 1), _scan_once)
-        elif nextchar == 'n' and string[idx:idx + 4] == 'null':
-            return None, idx + 4
-        elif nextchar == 't' and string[idx:idx + 4] == 'true':
-            return True, idx + 4
-        elif nextchar == 'f' and string[idx:idx + 5] == 'false':
-            return False, idx + 5
-    }
+def FormatDebugInfoResponse_Completer_ServerRunningWithoutHost_test():
+  response = deepcopy( GENERIC_RESPONSE )
+  response[ 'completer' ][ 'servers' ][ 0 ].update( {
+    'address': None,
+    'port': None
+  } )
+  assert_that(
+    FormatDebugInfoResponse( response ),
+    contains_string(
+      'Completer name completer debug information:\n'
+      '  Server name running\n'
+      '  Server name process ID: 12345\n'
+      '  Server name executable: /path/to/executable\n'
+      '  Server name logfiles:\n'
+      '    /path/to/stdout/logfile\n'
+      '    /path/to/stderr/logfile\n'
+      '  Server name key: value\n'
+      '  Key: value\n'
+    )
+  )
     
-        def last(self):
-        '''Process a LAST command.  No arguments.  Return as for STAT.'''
-        return self._statcmd('LAST')
+    from ycm.client.omni_completion_request import OmniCompletionRequest
     
-    def get_custom_entry_point(subsystem):
-    try:
-        return subsystem_details[subsystem][:2]
-    except KeyError:
-        raise ValueError('The subsystem %s is not known' % subsystem) from None
+    from nose.tools import ok_
+from ycm.paths import _EndsWithPython
     
-            a = -sys.maxsize
-        b = sys.maxsize
-        expected_len = b - a
-        x = range(a, b)
-        self.assertIn(a, x)
-        self.assertNotIn(b, x)
-        self.assertRaises(OverflowError, len, x)
-        self.assertTrue(x)
-        self.assertEqual(_range_len(x), expected_len)
-        self.assertEqual(x[0], a)
-        idx = sys.maxsize+1
-        self.assertEqual(x[idx], a+idx)
-        self.assertEqual(x[idx:idx+1][0], a+idx)
-        with self.assertRaises(IndexError):
-            x[-expected_len-1]
-        with self.assertRaises(IndexError):
-            x[expected_len]
     
-        # __set__ and __get__ should raise a TypeError in case their self
-    # argument is not a ctype instance.
-    def test___set__(self):
-        class MyCStruct(Structure):
-            _fields_ = (('field', c_int),)
-        self.assertRaises(TypeError,
-                          MyCStruct.field.__set__, 'wrong type self', 42)
+def NoseTests( parsed_args, extra_nosetests_args ):
+  # Always passing --with-id to nosetests enables non-surprising usage of
+  # its --failed flag.
+  nosetests_args = [ '-v', '--with-id' ]
