@@ -1,87 +1,68 @@
 
         
-                def test_url_from_environment
-          spec = resolve :production, 'production' => 'abstract://foo?encoding=utf8'
-          assert_equal({
-            'adapter'  =>  'abstract',
-            'host'     =>  'foo',
-            'encoding' => 'utf8',
-            'name'     => 'production' }, spec)
+              it 'does set the output directory' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            cloc(output_directory: '/tmp')
+          end').runner.execute(:test)
+    
+          it 'pass a custom build number to the tool' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          increment_build_number(build_number: 24, xcodeproj: '.xcproject')
+        end').runner.execute(:test)
+    
+        def add_entry(entry)
+      if @index.add?(entry.as_json.to_s)
+        @entries << entry.dup
+        @types[entry.type].count += 1 if entry.type
+      end
+    end
+    
+              node.css('> ul > li > a').each do |link|
+            n = link.content
+            next if n.start_with?('Ex: ') || n.start_with?('Default ') || n =~ /example/i || IGNORE_ENTRIES.include?(n)
+            id = link['href'].remove('#')
+            n.downcase!
+            n.prepend '#{name}: '
+            entries << [n, id]
+          end
         end
     
-    class TestResponseTest < ActiveSupport::TestCase
-  def assert_response_code_range(range, predicate)
-    response = ActionDispatch::TestResponse.new
-    (0..599).each do |status|
-      response.status = status
-      assert_equal range.include?(status), response.send(predicate),
-                   'ActionDispatch::TestResponse.new(#{status}).#{predicate}'
+            css('code code').each do |node|
+          node.before(node.children).remove
+        end
+    
+      def intersect(ray, isect)
+    rs = ray.org.vsub(@center)
+    b = rs.vdot(ray.dir)
+    c = rs.vdot(rs) - (@radius * @radius)
+    d = b * b - c
+    if d > 0.0 then
+      t = - b - Math.sqrt(d)
+    
+    
+# modified by K.Sasada
+    
+        def find_remote!(username, domain)
+      find_remote(username, domain) || raise(ActiveRecord::RecordNotFound)
     end
+    
+      def remote_url
+    object.remote_url.presence
   end
     
-        private
-      # 'Deserialize' the mailer class name by hand in case another argument
-      # (like a Global ID reference) raised DeserializationError.
-      def mailer_class
-        if mailer = Array(@serialized_arguments).first || Array(arguments).first
-          mailer.constantize
-        end
+    namespace :emojis do
+  desc 'Generate a unicode to filename mapping'
+  task :generate do
+    source = 'http://www.unicode.org/Public/emoji/5.0/emoji-test.txt'
+    codes  = []
+    dest   = Rails.root.join('app', 'javascript', 'mastodon', 'features', 'emoji', 'emoji_map.json')
+    
+          it 'sets the regeneration marker to expire' do
+        allow(RegenerationWorker).to receive(:perform_async)
+        get :show
+        expect(Redis.current.ttl('account:#{user.account_id}:regeneration')).to be >= 0
       end
     
-          include ActiveSupport::Testing::ConstantLookup
-      include TestHelper
-      include Rails::Dom::Testing::Assertions::SelectorAssertions
-      include Rails::Dom::Testing::Assertions::DomAssertions
-    
-    # Disable available locale checks to avoid warnings running the test suite.
-I18n.enforce_available_locales = false
-    
-        # The trailing expressions in the query.
-    #
-    # When parsed as Sass code, each expression contains strings and SassScript
-    # nodes. When parsed as CSS, each one contains a single string.
-    #
-    # @return [Array<Array<String, Sass::Script::Tree::Node>>]
-    attr_accessor :expressions
-    
-      if defined? config.symbolize_keys!
-    config.symbolize_keys!
-  end
-    
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'border-top-style: inset; ' +
-                'border-right-style: none; ' +
-                'border-left-style: double;'
-      bad_rule = 'border-bottom-style: null;'
-    
-          expect('.all-buttons-active').to have_ruleset(ruleset)
-    end
-  end
-    
-      context 'called with null values' do
-    it 'writes rules for other three' do
-      ruleset = 'padding-top: 11px; ' +
-                'padding-right: 12px; ' +
-                'padding-left: 13px;'
-      bad_rule = 'padding-bottom: null;'
-    
-        @inputs_list = %w(
-      [type='color']
-      [type='date']
-      [type='datetime']
-      [type='datetime-local']
-      [type='email']
-      [type='month']
-      [type='number']
-      [type='password']
-      [type='search']
-      [type='tel']
-      [type='text']
-      [type='time']
-      [type='url']
-      [type='week']
-      input:not([type])
-      textarea
-    )
-  end
+    class ManifestSerializer < ActiveModel::Serializer
+  include RoutingHelper
+  include ActionView::Helpers::TextHelper
