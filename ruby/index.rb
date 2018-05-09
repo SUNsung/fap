@@ -1,160 +1,90 @@
 
         
-        While attempting to convert the above code, Pygments.rb returned an unacceptable value.
-This is usually a timeout problem solved by running `jekyll build` again.
-MSG
-          raise ArgumentError, 'Pygments.rb returned an unacceptable value '\
-          'when attempting to highlight some code.'
+            groups
+  end
+end
+
+    
+      def after_omniauth_failure_path_for(scope)
+    new_session_path(scope)
+  end
+    
+      def serialize_options(resource)
+    methods = resource_class.authentication_keys.dup
+    methods = methods.keys if methods.is_a?(Hash)
+    methods << :password if resource.respond_to?(:password)
+    { methods: methods, only: [:password] }
+  end
+    
+      def preview_url
+    if object.needs_redownload?
+      media_proxy_url(object.id, :small)
+    else
+      full_asset_url(object.file.url(:small))
+    end
+  end
+    
+      attributes :id, :type, :name, :updated
+    
+    def codepoints_to_unicode(codepoints)
+  if codepoints.include?(' ')
+    codepoints.split(' ').map(&:hex).pack('U*')
+  else
+    [codepoints.hex].pack('U')
+  end
+end
+    
+      def perform(user_id)
+    @user = User.find(user_id)
+    deliver_digest if @user.allows_digest_emails?
+  end
+    
+      def enough_poll_answers
+    errors.add(:poll_answers, I18n.t('activerecord.errors.models.poll.attributes.poll_answers.not_enough_poll_answers')) if poll_answers.size < 2
+  end
+    
+        def recheck
+      pod = Pod.find(params[:pod_id])
+      pod.test_connection!
+    
+            def each_unnecessary_space_match(node, &blk)
+          each_match_range(
+            contents_range(node),
+            MULTIPLE_SPACES_BETWEEN_ITEMS_REGEX,
+            &blk
+          )
         end
-    
-      url = File.dirname(url)
-  url == FORWARD_SLASH ? url : '#{url}/'
-end
-    
-    # No trailing slash
-Benchmark.ips do |x|
-  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
-  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
-  x.compare!
-end
-
-    
-    def source_dir(*subdirs)
-  test_dir('source', *subdirs)
-end
-    
-        # Gets/Sets the Hash that holds the metadata for this layout.
-    attr_accessor :data
-    
-        # Build an array of allowed plugin gem names.
-    #
-    # Returns an array of strings, each string being the name of a gem name
-    #   that is allowed to be used.
-    def whitelist
-      @whitelist ||= Array[site.config['whitelist']].flatten
-    end
-    
-        context 'with keywords' do
-      let(:options) do
-        {
-          name: { 'en-US' => 'Fastlane Demo' },
-          description: { 'en-US' => 'Demo description' },
-          keywords: { 'en-US' => 'Some, key, words' }
-        }
       end
-    
-        @dry_run_results.update(
-      memory: memory,
-      log: log.string,
-    )
-  ensure
-    @dry_run = false
-  end
-    
-        respond_to do |format|
-      format.html
-      format.json { render json: @events }
     end
-  end
-    
-      it 'implicitly has a count of one when no count modifier is passed' do
-    '\xc2\x80\xc2\x81\xc2\x82\xc2\x83'.unpack('U1').should == [0x80]
-  end
-    
-      def self.critical_thread_yields_to_main_thread(is_thread_sleep=false, is_thread_stop=false)
-    @@after_first_sleep = false
-    
-        it 'propagates inner exception to Thread.join if there is an outer ensure clause' do
-      thread = ThreadSpecs.dying_thread_with_outer_ensure(@method) { }
-      lambda { thread.join }.should raise_error(RuntimeError, 'In dying thread')
-    end
-    
-        ScratchPad.recorded.should == nil
   end
 end
 
     
-    ###
-### methods
-###
-    
-          # A string representation of the importer.
-      # Should be overridden by subclasses.
+    module RuboCop
+  module Cop
+    module Performance
+      # This cop identifies the use of `Regexp#match` or `String#match`, which
+      # returns `#<MatchData>`/`nil`. The return value of `=~` is an integral
+      # index/`nil` and is more performant.
       #
-      # This is used to help debugging,
-      # and should usually just show the load path encapsulated by this importer.
+      # @example
+      #   # bad
+      #   do_something if str.match(/regex/)
+      #   while regex.match('str')
+      #     do_something
+      #   end
       #
-      # @return [String]
-      def to_s
-        Sass::Util.abstract(self)
-      end
+      #   # good
+      #   method(str =~ /regex/)
+      #   return value unless regex =~ 'str'
+      class RedundantMatch < Cop
+        MSG = 'Use `=~` in places where the `MatchData` returned by ' \
+              '`#match` will not be used.'.freeze
     
-            def define_logger(name, options = {})
-          class_eval <<-RUBY, __FILE__, __LINE__ + 1
-            def #{name}(message)
-              #{options.fetch(:to, :log)}(#{name.inspect}, message)
-            end
-          RUBY
-        end
-      end
-    end
-  end
-end
-
+              optarg_positions.each do |optarg_position|
+            # there can only be one group of optional arguments
+            break if optarg_position > arg_positions.max
     
-        # Returns a representation of the query as an array of strings and
-    # potentially {Sass::Script::Tree::Node}s (if there's interpolation in it).
-    # When the interpolation is resolved and the strings are joined together,
-    # this will be the string representation of this query.
-    #
-    # @return [Array<String, Sass::Script::Tree::Node>]
-    def to_a
-      Sass::Util.intersperse(queries.map {|q| q.to_a}, ', ').flatten
-    end
-    
-            {
-          :always_update     => false,
-          :template_location => root + '/public/stylesheets/sass',
-          :css_location      => root + '/public/stylesheets',
-          :cache_location    => root + '/tmp/sass-cache',
-          :always_check      => env != 'production',
-          :quiet             => env != 'production',
-          :full_exception    => env != 'production'
-        }.freeze
-      end
-    end
-  end
-    
-          def stage_definitions
-        stage_config_path.join('*.rb')
-      end
-    
-      # Read and eval a .rake file in such a way that `self` within the .rake file
-  # refers to this plugin instance. This gives the tasks in the file access to
-  # helper methods defined by the plugin.
-  def eval_rakefile(path)
-    contents = IO.read(path)
-    instance_eval(contents, path, 1)
-  end
-    
-    describe Capistrano::Application do
-  it 'provides a --trace option which enables SSHKit/NetSSH trace output'
-    
-            def update
-          authorize! :update, stock_location
-          if stock_location.update_attributes(stock_location_params)
-            respond_with(stock_location, status: 200, default_template: :show)
-          else
-            invalid_resource!(stock_location)
-          end
-        end
-    
-            def create
-          authorize! :create, StockMovement
-          @stock_movement = scope.new(stock_movement_params)
-          if @stock_movement.save
-            respond_with(@stock_movement, status: 201, default_template: :show)
-          else
-            invalid_resource!(@stock_movement)
-          end
-        end
+      context 'called with three sizes' do
+    it 'applies second width to left and right' do
+      rule = 'margin: 4px 5px 6px'
