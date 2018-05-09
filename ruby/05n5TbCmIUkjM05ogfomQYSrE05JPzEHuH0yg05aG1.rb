@@ -1,80 +1,87 @@
 
         
-              alias_method :include?, :key?
-      alias_method :has_key?, :key?
-      alias_method :member?, :key?
-    
-            while true
-          begin
-            if Platform.windows?
-              # Windows doesn't support non-blocking reads on
-              # file descriptors or pipes so we have to get
-              # a bit more creative.
-    
-              opts = OptionParser.new do |o|
-            o.banner = 'Usage: vagrant box remove <name>'
-            o.separator ''
-            o.separator 'Options:'
-            o.separator ''
-    
-            # Parse the options
-        argv = parse_options(opts)
-        return if !argv
-        if argv.length < 2
-          raise Vagrant::Errors::CLIInvalidUsage,
-            help: opts.help.chomp
+                def test_url_from_environment
+          spec = resolve :production, 'production' => 'abstract://foo?encoding=utf8'
+          assert_equal({
+            'adapter'  =>  'abstract',
+            'host'     =>  'foo',
+            'encoding' => 'utf8',
+            'name'     => 'production' }, spec)
         end
     
-      attributes :id, :type, :name, :updated
+    class TestResponseTest < ActiveSupport::TestCase
+  def assert_response_code_range(range, predicate)
+    response = ActionDispatch::TestResponse.new
+    (0..599).each do |status|
+      response.status = status
+      assert_equal range.include?(status), response.send(predicate),
+                   'ActionDispatch::TestResponse.new(#{status}).#{predicate}'
+    end
+  end
     
-    require_relative 'converter/fonts_conversion'
-require_relative 'converter/less_conversion'
-require_relative 'converter/js_conversion'
-require_relative 'converter/logger'
-require_relative 'converter/network'
-    
-        def log_http_get_files(files, from, cached = false)
-      return if files.empty?
-      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
+        private
+      # 'Deserialize' the mailer class name by hand in case another argument
+      # (like a Global ID reference) raised DeserializationError.
+      def mailer_class
+        if mailer = Array(@serialized_arguments).first || Array(arguments).first
+          mailer.constantize
+        end
       end
-    end
     
-      # Disable request forgery protection in test environment.
-  config.action_controller.allow_forgery_protection = false
+          include ActiveSupport::Testing::ConstantLookup
+      include TestHelper
+      include Rails::Dom::Testing::Assertions::SelectorAssertions
+      include Rails::Dom::Testing::Assertions::DomAssertions
     
-      def test_image_helper
-    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
+    # Disable available locale checks to avoid warnings running the test suite.
+I18n.enforce_available_locales = false
+    
+        # The trailing expressions in the query.
+    #
+    # When parsed as Sass code, each expression contains strings and SassScript
+    # nodes. When parsed as CSS, each one contains a single string.
+    #
+    # @return [Array<Array<String, Sass::Script::Tree::Node>>]
+    attr_accessor :expressions
+    
+      if defined? config.symbolize_keys!
+    config.symbolize_keys!
   end
     
-      describe 'environment' do
-    it 'adds the fuse directories to the appropriate paths' do
-      expect(ENV).to receive(:append_path).with('PKG_CONFIG_PATH', any_args)
-      expect(ENV).to receive(:append_path).with('HOMEBREW_LIBRARY_PATHS', any_args)
-      expect(ENV).to receive(:append_path).with('HOMEBREW_INCLUDE_PATHS', any_args)
-      subject.modify_build_environment
+      context 'called with null values' do
+    it 'writes rules for other three' do
+      ruleset = 'border-top-style: inset; ' +
+                'border-right-style: none; ' +
+                'border-left-style: double;'
+      bad_rule = 'border-bottom-style: null;'
+    
+          expect('.all-buttons-active').to have_ruleset(ruleset)
     end
   end
-end
     
-    module Hardware
-  describe CPU do
-    describe '::type' do
-      it 'returns the current CPU's type as a symbol, or :dunno if it cannot be detected' do
-        expect(
-          [
-            :intel,
-            :ppc,
-            :dunno,
-          ],
-        ).to include(described_class.type)
-      end
-    end
+      context 'called with null values' do
+    it 'writes rules for other three' do
+      ruleset = 'padding-top: 11px; ' +
+                'padding-right: 12px; ' +
+                'padding-left: 13px;'
+      bad_rule = 'padding-bottom: null;'
     
-      def participation_count
-    poll_answers.sum('vote_count')
+        @inputs_list = %w(
+      [type='color']
+      [type='date']
+      [type='datetime']
+      [type='datetime-local']
+      [type='email']
+      [type='month']
+      [type='number']
+      [type='password']
+      [type='search']
+      [type='tel']
+      [type='text']
+      [type='time']
+      [type='url']
+      [type='week']
+      input:not([type])
+      textarea
+    )
   end
-end
