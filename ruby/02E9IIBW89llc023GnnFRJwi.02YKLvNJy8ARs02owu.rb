@@ -1,122 +1,126 @@
 
         
-        puts '\nDone.'
-
-    
-    html_readme = '<html>#{Kramdown::Document.new(open('README.md').read).to_html}</html>'
-readme_doctree = REXML::Document.new(html_readme)
-links = REXML::XPath.match(readme_doctree, '//a')
-    
-      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
-    @logger     = Logger.new
-    @repo       = repo
-    @branch     = branch || 'master'
-    @branch_sha = get_branch_sha
-    @cache_path = cache_path
-    @repo_url   = 'https://github.com/#@repo'
-    @save_to    = {
-        js:    'assets/javascripts/bootstrap',
-        scss:  'assets/stylesheets/bootstrap',
-        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
-  end
-    
-        def log_transform(*args, from: caller[1][/`.*'/][1..-2].sub(/^block in /, ''))
-      puts '    #{cyan from}#{cyan ': #{args * ', '}' unless args.empty?}'
+            # Returns the current git branch - can be replaced using the environment variable `GIT_BRANCH`
+    def self.git_branch
+      return ENV['GIT_BRANCH'] if ENV['GIT_BRANCH'].to_s.length > 0 # set by Jenkins
+      s = Actions.sh('git rev-parse --abbrev-ref HEAD', log: false).chomp
+      return s.to_s.strip if s.to_s.length > 0
+      nil
+    rescue
+      nil
     end
     
-      # The test environment is used exclusively to run your application's
-  # test suite. You never need to work with it otherwise. Remember that
-  # your test database is 'scratch space' for the test suite and is wiped
-  # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
+          it 'get GIT-SVN build number' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+            get_build_number_repository
+        end').runner.execute(:test)
     
-      def test_image_helper
-    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
-  end
+            expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::VERSION_NUMBER]).to match(/cd .* && agvtool new-marketing-version 1.4.3/)
+      end
     
-      path = 'assets/stylesheets'
-  css_path = args.with_defaults(css_path: 'tmp')[:css_path]
-  puts Term::ANSIColor.bold 'Compiling SCSS in #{path}'
-  Dir.mkdir(css_path) unless File.directory?(css_path)
-  %w(_bootstrap bootstrap/_theme).each do |file|
-    save_path = '#{css_path}/#{file.sub(/(^|\/)?_+/, '\1').sub('/', '-')}.css'
-    puts Term::ANSIColor.cyan('  #{save_path}') + '...'
-    engine    = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
-    css       = engine.render
-    File.open(save_path, 'w') { |f| f.write css }
-  end
-end
-    
-    #
-# Railties
-#
-    
-            # Remove it form the session objects so freeup
-        sessions.delete(s[:session])
-    
-    
-    
-    sock = TCPSocket.new(ip, port)
-    
-    clsCreateJar._invoke('createJarArchive', 'Ljava.io.File;[Ljava.io.File;', fileOutJar, filesIn)
-    
-    get '/' do
-  halt erb(:login) unless params[:user]
-  erb :chat, :locals => { :user => params[:user].gsub(/\W/, '') }
-end
-    
-        { # yes, this is ugly, feel free to change that
-      '/..' => '/', '/a/../b' => '/b', '/a/../b/' => '/b/', '/a/.' => '/a/',
-      '/%2e.' => '/', '/a/%2E%2e/b' => '/b', '/a%2f%2E%2e%2Fb/' => '/b/',
-      '//' => '/', '/%2fetc%2Fpasswd' => '/etc/passwd'
-    }.each do |a, b|
-      it('replaces #{a.inspect} with #{b.inspect}') { expect(get(a).body).to eq(b) }
+      def test_gets_para_extended_file
+    [nil, {:textmode=>true}, {:binmode=>true}].each do |mode|
+      Tempfile.create('test-extended-file', mode) {|f|
+        assert_nil(f.getc)
+        f.print '\na'
+        f.rewind
+        assert_equal('a', f.gets(''), 'mode = <#{mode}>')
+      }
     end
-    
-      it 'should not override the header if already set X-Content-Type-Options' do
-    mock_app with_headers('X-Content-Type-Options' => 'sniff')
-    expect(get('/', {}, 'wants' => 'text/html').headers['X-Content-Type-Options']).to eq('sniff')
   end
-end
-
     
-            # 'match' is a fairly generic name, so we don't flag it unless we see
-        # a string or regexp literal on one side or the other
-        def_node_matcher :match_call?, <<-PATTERN
-          {(send {str regexp} :match _)
-           (send !nil? :match {str regexp})}
-        PATTERN
+      it 'decodes NaN' do
+    # mumble mumble NaN mumble https://bugs.ruby-lang.org/issues/5884
+    [nan_value].pack(unpack_format).unpack(unpack_format).first.nan?.should be_true
+  end
     
-            def on_send(node)
-          return unless multiple_compare?(node)
+      class Apple < Struct; end
     
-            # Annotate the source code with the RuboCop offenses provided
-        #
-        # @param offenses [Array<RuboCop::Cop::Offense>]
-        #
-        # @return [self]
-        def with_offense_annotations(offenses)
-          offense_annotations =
-            offenses.map do |offense|
-              indent     = ' ' * offense.column
-              carets     = '^' * offense.column_length
+        t.join
+  end
     
-          context 'without empty line' do
-        let(:source) do
-          <<-RUBY.strip_indent
-            #{type} SomeObject
-            end
-          RUBY
+          def fetch_public_key(o_auth_app, jwt)
+        public_key = fetch_public_key_from_json(o_auth_app.jwks, jwt)
+        if public_key.empty? && o_auth_app.jwks_uri
+          response = Faraday.get(o_auth_app.jwks_uri)
+          public_key = fetch_public_key_from_json(response.body, jwt)
         end
+        raise Rack::OAuth2::Server::Authorize::BadRequest(:unauthorized_client) if public_key.empty?
+        public_key
+      end
     
-        def self.names_for(klass)
-      instance.names_for(klass)
+    (allow file-write*
+  (literal
+    '/dev/dtracehelper'
+    '/dev/null'
+  )
+  (regex
+    #'^<%= Pod::Config.instance.project_root %>'
+    #'^<%= Pod::Config.instance.repos_dir %>'
+    #'^/Users/[^.]+/Library/Caches/CocoaPods/*'
+    #'^/dev/tty'
+    #'^/private/var'
+  )
+)
+    
+            # Prints the list of specs & pod cache dirs for a single pod name.
+        #
+        # This output is valid YAML so it can be parsed with 3rd party tools
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        The various infos about a pod cache. Keys are
+        #        :spec_file, :version, :release and :slug
+        #
+        def print_pod_cache_infos(pod_name, cache_descriptors)
+          UI.puts '#{pod_name}:'
+          cache_descriptors.each do |desc|
+            if @short_output
+              [:spec_file, :slug].each { |k| desc[k] = desc[k].relative_path_from(@cache.root) }
+            end
+            UI.puts('  - Version: #{desc[:version]}')
+            UI.puts('    Type:    #{pod_type(desc)}')
+            UI.puts('    Spec:    #{desc[:spec_file]}')
+            UI.puts('    Pod:     #{desc[:slug]}')
+          end
+        end
+      end
+    end
+  end
+end
+
+    
+          #-----------------------------------------------------------------------#
+    end
+  end
+end
+
+    
+      # Read and eval a .rake file in such a way that `self` within the .rake file
+  # refers to this plugin instance. This gives the tasks in the file access to
+  # helper methods defined by the plugin.
+  def eval_rakefile(path)
+    contents = IO.read(path)
+    instance_eval(contents, path, 1)
+  end
+    
+        # Provide a wrapper for the SCM that loads a strategy for the user.
+    #
+    # @param [Rake] context     The context in which the strategy should run
+    # @param [Module] strategy  A module to include into the SCM instance. The
+    #    module should provide the abstract methods of Capistrano::SCM
+    #
+    def initialize(context, strategy)
+      @context = context
+      singleton = class << self; self; end
+      singleton.send(:include, strategy)
     end
     
-      # Get list of styles saved on previous deploy (running rake paperclip:refresh:missing_styles)
-  def self.get_registered_attachments_styles
-    YAML.load_file(Paperclip.registered_attachments_styles_path)
-  rescue Errno::ENOENT
-    nil
-  end
-  private_class_method :get_registered_attachments_styles
+    Given /^(?:|I )am on (.+)$/ do |page_name|
+  visit path_to(page_name)
+end
+    
+            def matches? subject
+          @subject = subject
+          @subject = subject.new if subject.class == Class
+          error_when_not_valid? && no_error_when_valid?
+        end
