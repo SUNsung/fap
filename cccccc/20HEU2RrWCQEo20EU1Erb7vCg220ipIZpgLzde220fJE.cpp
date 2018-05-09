@@ -1,180 +1,211 @@
 
         
-                // Core Extension: ARB_copy_buffer
-        COPY_READ_BUFFER                 = 0x8F36,
-        COPY_WRITE_BUFFER                = 0x8F37,
-        COPY_READ_BUFFER_BINDING         = 0x8F36,
-        COPY_WRITE_BUFFER_BINDING        = 0x8F37,
+        	virtual void poll() = 0;
+	virtual Error accept_stream(Ref<StreamPeer> p_base) = 0;
+	virtual Error connect_to_stream(Ref<StreamPeer> p_base, bool p_validate_certs = false, const String &p_for_hostname = String()) = 0;
+	virtual Status get_status() const = 0;
     
-    // Main entry point for Paragraph Detection Algorithm.
-//
-// Given a set of equally spaced textlines (described by row_infos),
-// Split them into paragraphs.  See http://goto/paragraphstalk
-//
-// Output:
-//   row_owners - one pointer for each row, to the paragraph it belongs to.
-//   paragraphs - this is the actual list of PARA objects.
-//   models - the list of paragraph models referenced by the PARA objects.
-//            caller is responsible for deleting the models.
-void DetectParagraphs(int debug_level,
-                      GenericVector<RowInfo> *row_infos,
-                      GenericVector<PARA *> *row_owners,
-                      PARA_LIST *paragraphs,
-                      GenericVector<ParagraphModel *> *models);
+    #include 'io/stream_peer_ssl.h'
     
-    ScrollView* bln_word_window_handle();  //return handle
-void build_image_window(int width, int height);
-void display_bln_lines(ScrollView window,
-                       ScrollView::Color colour,
-                       float scale_factor,
-                       float y_offset,
-                       float minx,
-                       float maxx);
-                                 //function to call
-void pgeditor_msg(  //message display
-                  const char *msg);
-void pgeditor_show_point(  //display coords
-                         SVEvent *event);
-                                 //put bln word in       box
-void show_point(PAGE_RES* page_res, float x, float y);
+    #if defined(MBEDTLS_SSL_PROTO_TLS1_2) && ( !defined(MBEDTLS_SHA1_C) &&     \
+    !defined(MBEDTLS_SHA256_C) && !defined(MBEDTLS_SHA512_C) )
+#error 'MBEDTLS_SSL_PROTO_TLS1_2 defined, but not all prerequisites'
+#endif
     
-    #endif  // TESSERACT_CCSTRUCT_CCSTRUCT_H_
+    protected:
+	void _notification(int p_what);
+	static void _bind_methods();
+    
+    		case NOTIFICATION_ENTER_TREE: {
+    }
+    
+    	bool initialize();
+	bool terminate();
+    
+    /**
+ * oc_ilog32 - Integer binary logarithm of a 32-bit value.
+ * @_v: A 32-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * The OC_ILOG_32() or OC_ILOGNZ_32() macros may be able to use a builtin
+ *  function instead, which should be faster.
+ */
+int oc_ilog32(ogg_uint32_t _v);
+/**
+ * oc_ilog64 - Integer binary logarithm of a 64-bit value.
+ * @_v: A 64-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * The OC_ILOG_64() or OC_ILOGNZ_64() macros may be able to use a builtin
+ *  function instead, which should be faster.
+ */
+int oc_ilog64(ogg_int64_t _v);
+    
+      // delete second key range
+  batch.Clear();
+  for (size_t i = 0; i < kNumKeys; i++) {
+    batch.Delete(Key2(i));
+  }
+  ASSERT_OK(db->Write(leveldb::WriteOptions(), &batch));
+    
+    static const int kVerbose = 1;
+    
+    #include 'util/hash.h'
+#include 'util/testharness.h'
+    
+    #ifndef STORAGE_LEVELDB_UTIL_HISTOGRAM_H_
+#define STORAGE_LEVELDB_UTIL_HISTOGRAM_H_
+    
+    namespace leveldb {
+    }
+    
+    #include <stdint.h>
+    
+    #ifndef STORAGE_LEVELDB_TABLE_BLOCK_H_
+#define STORAGE_LEVELDB_TABLE_BLOCK_H_
+    
+    
+    {  // No copying allowed
+  BlockBuilder(const BlockBuilder&);
+  void operator=(const BlockBuilder&);
+};
+    
+        // Copy and convert all vertices into a single contiguous buffer
+    ImDrawVert* vtx_dst = NULL;
+    ImDrawIdx* idx_dst = NULL;
+    g_pVB->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&vtx_dst);
+    g_pIB->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&idx_dst);
+    for (int n = 0; n < draw_data->CmdListsCount; n++)
+    {
+        const ImDrawList* cmd_list = draw_data->CmdLists[n];
+        memcpy(vtx_dst, cmd_list->VtxBuffer.Data, cmd_list->VtxBuffer.Size * sizeof(ImDrawVert));
+        memcpy(idx_dst, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
+        vtx_dst += cmd_list->VtxBuffer.Size;
+        idx_dst += cmd_list->IdxBuffer.Size;
+    }
+    g_pVB->Unmap();
+    g_pIB->Unmap();
+    
+            const float ascent = font_face.Info.Ascender;
+        const float descent = font_face.Info.Descender;
+        ImFontAtlasBuildSetupFont(atlas, dst_font, &cfg, ascent, descent);
+        const float off_x = cfg.GlyphOffset.x;
+        const float off_y = cfg.GlyphOffset.y + (float)(int)(dst_font->Ascent + 0.5f);
+    
+        // Show the window
+    ShowWindow(hwnd, SW_SHOWDEFAULT);
+    UpdateWindow(hwnd);
+    
+            // 1. Show a simple window.
+        // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+            ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
+            ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
+            ImGui::ColorEdit3('clear color', (float*)&clear_color); // Edit 3 floats representing a color
+    }
+    
+    TEST(IOBuf, pushEmptyByteRange) {
+  // Test pushing an empty ByteRange.  This mainly tests that we do not
+  // trigger UBSAN warnings by calling memcpy() with an null source pointer,
+  // which is undefined behavior even if the length is 0.
+  IOBuf buf{IOBuf::CREATE, 2};
+  ByteRange emptyBytes;
+    }
+    
+    
+    {  {
+    const auto start = Clock::now();
+    const auto deadline = time_point_cast<Duration>(
+        start - 2 * start.time_since_epoch());
+    EXPECT_EQ(f.futexWaitUntil(0, deadline), FutexResult::TIMEDOUT);
+    LOG(INFO) << 'Futex wait with invalid deadline timed out after waiting for '
+              << duration_cast<milliseconds>(Clock::now() - start).count()
+              << 'ms using clock with ' << Duration::period::den
+              << ' precision, should be ~0ms';
+  }
+}
+    
+    #pragma once
+    
+    #endif
 
     
-    // Computes the absolute error distances of the points from the line,
-// and returns the squared upper-quartile error distance.
-double DetLineFit::ComputeUpperQuartileError() {
-  int num_errors = distances_.size();
-  if (num_errors == 0) return 0.0;
-  // Get the absolute values of the errors.
-  for (int i = 0; i < num_errors; ++i) {
-    if (distances_[i].key < 0) distances_[i].key = -distances_[i].key;
+      // when we know more data has been written to the file. we can use this
+  // function to force the reader to look again in the file.
+  // Also aligns the file position indicator to the start of the next block
+  // by reading the rest of the data from the EOF position to the end of the
+  // block that was partially read.
+  void UnmarkEOF();
+    
+    
+    {   private:
+     const std::set<uint32_t> m_ignore_histograms;
+ };
+    
+      /**
+   * @brief append data to file
+   * @details
+   *  Append will save all written data in buffer util buffer size
+   *  reaches buffer max size. Then, it will write buffer into rados
+   *
+   * @param data [description]
+   * @return [description]
+   */
+  Status Append(const Slice& data) {
+    // append buffer
+    LOG_DEBUG('[IN] %i | %s\n', (int)data.size(), data.data());
+    int r = 0;
+    }
+    
+      // Drop reference count.
+  // If the refcount goes to zero return this memtable, otherwise return null.
+  // REQUIRES: external synchronization to prevent simultaneous
+  // operations on the same MemTable.
+  MemTable* Unref() {
+    --refs_;
+    assert(refs_ >= 0);
+    if (refs_ <= 0) {
+      return this;
+    }
+    return nullptr;
   }
-  // Now get the upper quartile distance.
-  int index = distances_.choose_nth_item(3 * num_errors / 4);
-  double dist = distances_[index].key;
-  // The true distance is the square root of the dist squared / square_length.
-  // Don't bother with the square root. Just return the square distance.
-  return square_length_ > 0.0 ? dist * dist / square_length_ : 0.0;
+    
+    TEST_F(InlineSkipTest, InsertWithHint_Sequential) {
+  const int N = 100000;
+  Arena arena;
+  TestComparator cmp;
+  TestInlineSkipList list(cmp, &arena);
+  void* hint = nullptr;
+  for (int i = 0; i < N; i++) {
+    Key key = i;
+    InsertWithHint(&list, key, &hint);
+  }
+  Validate(&list);
 }
     
-    static const int kCrToRedTable[256] = {
-  -179, -178, -177, -175, -174, -172, -171, -170, -168, -167, -165, -164,
-  -163, -161, -160, -158, -157, -156, -154, -153, -151, -150, -149, -147,
-  -146, -144, -143, -142, -140, -139, -137, -136, -135, -133, -132, -130,
-  -129, -128, -126, -125, -123, -122, -121, -119, -118, -116, -115, -114,
-  -112, -111, -109, -108, -107, -105, -104, -102, -101, -100,  -98,  -97,
-   -95,  -94,  -93,  -91,  -90,  -88,  -87,  -86,  -84,  -83,  -81,  -80,
-   -79,  -77,  -76,  -74,  -73,  -72,  -70,  -69,  -67,  -66,  -64,  -63,
-   -62,  -60,  -59,  -57,  -56,  -55,  -53,  -52,  -50,  -49,  -48,  -46,
-   -45,  -43,  -42,  -41,  -39,  -38,  -36,  -35,  -34,  -32,  -31,  -29,
-   -28,  -27,  -25,  -24,  -22,  -21,  -20,  -18,  -17,  -15,  -14,  -13,
-   -11,  -10,   -8,   -7,   -6,   -4,   -3,   -1,    0,    1,    3,    4,
-     6,    7,    8,   10,   11,   13,   14,   15,   17,   18,   20,   21,
-    22,   24,   25,   27,   28,   29,   31,   32,   34,   35,   36,   38,
-    39,   41,   42,   43,   45,   46,   48,   49,   50,   52,   53,   55,
-    56,   57,   59,   60,   62,   63,   64,   66,   67,   69,   70,   72,
-    73,   74,   76,   77,   79,   80,   81,   83,   84,   86,   87,   88,
-    90,   91,   93,   94,   95,   97,   98,  100,  101,  102,  104,  105,
-   107,  108,  109,  111,  112,  114,  115,  116,  118,  119,  121,  122,
-   123,  125,  126,  128,  129,  130,  132,  133,  135,  136,  137,  139,
-   140,  142,  143,  144,  146,  147,  149,  150,  151,  153,  154,  156,
-   157,  158,  160,  161,  163,  164,  165,  167,  168,  170,  171,  172,
-   174,  175,  177,  178
-};
-    
-    // Performs in-place floating point 8x8 DCT on block[0..63].
-// Note that the DCT used here is the DCT-2 with the first term multiplied by
-// 1/sqrt(2) and the result scaled by 1/2.
-void ComputeBlockDCTDouble(double block[64]);
-    
-    const double* NewSrgb8ToLinearTable() {
-  double* table = new double[256];
-  int i = 0;
-  for (; i < 11; ++i) {
-    table[i] = i / 12.92;
-  }
-  for (; i < 256; ++i) {
-    table[i] = 255.0 * std::pow(((i / 255.0) + 0.055) / 1.055, 2.4);
-  }
-  return table;
+    void AbstractOptionHandler::setChangeOption(bool f)
+{
+  updateFlags(FLAG_CHANGE_OPTION, f);
 }
     
-    #endif  // GUETZLI_JPEG_DATA_ENCODER_H_
-
+    protected:
+  virtual bool executeInternal() CXX11_OVERRIDE;
     
-    // Output callback function with associated data.
-struct JPEGOutput {
-  JPEGOutput(JPEGOutputHook cb, void* data) : cb(cb), data(data) {}
-  bool Write(const uint8_t* buf, size_t len) const {
-    return (len == 0) || (cb(data, buf, len) == len);
-  }
- private:
-  JPEGOutputHook cb;
-  void* data;
-};
-    
-    
-    {  const int width_;
-  const int height_;
-  int factor_x_;
-  int factor_y_;
-  int width_in_blocks_;
-  int height_in_blocks_;
-  int num_blocks_;
-  std::vector<coeff_t> coeffs_;
-  std::vector<uint16_t> pixels_;
-  // Same as last argument of ApplyGlobalQuantization() (default is all 1s).
-  int quant_[kDCTBlockSize];
-};
-    
-    
-    {}  // namespace
-    
-    //
-// Exception tracer library.
-    
-    namespace {
-bool skipPrefix(const path& pth, const path& prefix, path::const_iterator& it) {
-  it = pth.begin();
-  for (auto& p : prefix) {
-    if (it == pth.end()) {
-      return false;
-    }
-    if (p == '.') {
-      // Should only occur at the end, if prefix ends with a slash
-      continue;
-    }
-    if (*it++ != p) {
-      return false;
-    }
-  }
-  return true;
-}
-} // namespace
-    
-    namespace folly {
-namespace fs {
-    }
+    namespace aria2 {
     }
     
-    void copy(const char* srcFile, const char* dest) {
-  fs::path destPath(dest);
-  if (!destPath.is_absolute()) {
-    auto hp = getHugePageSize();
-    CHECK(hp) << 'no huge pages available';
-    destPath = fs::canonical_parent(destPath, hp->mountPoint);
-  }
+    class ApiCallbackDownloadEventListener : public DownloadEventListener {
+public:
+  ApiCallbackDownloadEventListener(Session* session,
+                                   DownloadEventCallback callback,
+                                   void* userData);
+  virtual ~ApiCallbackDownloadEventListener();
+  virtual void onEvent(DownloadEvent event,
+                       const RequestGroup* group) CXX11_OVERRIDE;
     }
     
-    #include <algorithm>
-#include <stdexcept>
-#include <system_error>
-    
-    namespace folly {
-    }
-    
-    template <typename T>
-struct SimpleObservable<T>::Wrapper {
-  using element_type = T;
-    }
+      virtual bool getVerifyPeer() const CXX11_OVERRIDE { return verifyPeer_; }
