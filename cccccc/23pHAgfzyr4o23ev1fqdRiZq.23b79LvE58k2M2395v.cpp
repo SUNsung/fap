@@ -1,81 +1,66 @@
 
         
-        #include 'ui/gfx/image/image.h'
-    
-      // views::View:
-  const char* GetClassName() const override;
-    
-    bool IsUnresponsiveEventSuppressed() {
-  return g_suppress_level > 0;
-}
-    
-    class PreferencesManager : public content::RenderThreadObserver {
- public:
-  PreferencesManager();
-  ~PreferencesManager() override;
+        void convert_dataset(const string& input_folder, const string& output_folder,
+    const string& db_type) {
+  scoped_ptr<db::DB> train_db(db::GetDB(db_type));
+  train_db->Open(output_folder + '/cifar10_train_' + db_type, db::NEW);
+  scoped_ptr<db::Transaction> txn(train_db->NewTransaction());
+  // Data buffer
+  int label;
+  char str_buffer[kCIFARImageNBytes];
+  Datum datum;
+  datum.set_channels(3);
+  datum.set_height(kCIFARSize);
+  datum.set_width(kCIFARSize);
     }
     
-      // Suspend/Resume global shortcut handling. Note that when suspending,
-  // RegisterAccelerator/UnregisterAccelerator/UnregisterAccelerators are not
-  // allowed to be called until shortcut handling has been resumed.
-  void SetShortcutHandlingSuspended(bool suspended);
+    using namespace caffe;  // NOLINT(build/namespaces)
+using boost::scoped_ptr;
+using std::string;
     
-    #endif  // CHROME_BROWSER_PRINTING_PRINTING_UI_WEB_CONTENTS_OBSERVER_H_
-
+    #include <utility>
+#include <vector>
     
+      virtual inline const char* type() const { return 'BNLL'; }
     
-    {    // SaveMapping - save a map into the file
-    // saveId - name of the section to save into (section:subsection format)
-    // labelMapping - map we are saving to the file
-    virtual void SaveMapping(std::wstring saveId, const std::map<typename BinaryWriter<ElemType>::LabelIdType, typename BinaryWriter<ElemType>::LabelType>& labelMapping);
-    virtual bool SupportMultiUtterances() const 
-    {
-        return false;
-    };
-};
+    #include <vector>
     
-    void GPUDataTransferer::CopyGPUToCPUAsync(void* gpuBuffer, size_t totalSize, void* cpuBuffer)
+    namespace caffe {
+    }
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the computed outputs @f$
+   *        y = \left\{
+   *        \begin{array}{lr}
+   *            x                  & \mathrm{if} \; x > 0 \\
+   *            \alpha (\exp(x)-1) & \mathrm{if} \; x \le 0
+   *        \end{array} \right.
+   *      @f$.  
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+      if (state->stackTrace.size() == state->stackTrace.capacity()) {
+    return _URC_END_OF_STACK;
+  }
+    
+    void Config::setPointScaleFactor(float pixelsInPoint)
 {
-    m_inner->CopyGPUToCPUAsync(gpuBuffer, 1, totalSize, cpuBuffer);
-    m_inner->RecordGPUToCPUCopy();
+    YGConfigSetPointScaleFactor(m_config, pixelsInPoint);
 }
-    
-    
-/**
- * Captures and symbolicates a stack trace
- *
- * Beware of a bug on some platforms, which makes the trace loop until the
- * buffer is full when it reaches a noexpr function. It seems to be fixed in
- * newer versions of gcc. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=56846
- *
- * @param skip The number of frames before capturing the trace
- *
- * @param limit The maximum number of frames captured
- */
-FBEXPORT inline std::vector<StackTraceElement> getStackTraceSymbols(
-    size_t skip = 0,
-    size_t limit = kDefaultLimit) {
-  return getStackTraceSymbols(getStackTrace(skip + 1, limit));
-}
-    
-     public:
-  IosFlagsSaver(ios_base& ios)
-  : ios_(ios),
-    flags_(ios.flags())
-  {}
-    
-        void setWidth(double width);
-    void setWidthPercent(double width);
-    void setWidthAuto();
-    void setHeight(double height);
-    void setHeightPercent(double height);
-    void setHeightAuto();
-    
-    template<typename... ARGS>
-inline void logw(const char* tag, const char* msg, ARGS... args) noexcept {
-  log(ANDROID_LOG_WARN, tag, msg, args...);
-}
-    
-    #include <fb/visibility.h>
     
     #pragma once
+    
+    void Node::setFlex(double flex)
+{
+    YGNodeStyleSetFlex(m_node, flex);
+}
