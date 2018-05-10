@@ -1,121 +1,113 @@
 
         
-            model.fit(x_train, y_train, batch_size=batch_size,
-              epochs=epochs // 3, verbose=0,
-              sample_weight=sample_weight)
-    model.fit(x_train, y_train, batch_size=batch_size,
-              epochs=epochs // 3, verbose=0,
-              sample_weight=sample_weight,
-              validation_split=0.1)
-    
-    history = model.fit(x_train, y_train,
-                    batch_size=batch_size,
-                    epochs=epochs,
-                    verbose=1,
-                    validation_split=0.1)
-score = model.evaluate(x_test, y_test,
-                       batch_size=batch_size, verbose=1)
-print('Test score:', score[0])
-print('Test accuracy:', score[1])
-
-    
-    
-def test_serialization():
-    all_activations = ['softmax', 'relu', 'elu', 'tanh',
-                       'sigmoid', 'hard_sigmoid', 'linear',
-                       'softplus', 'softsign', 'selu']
-    for name in all_activations:
-        fn = activations.get(name)
-        ref_fn = getattr(activations, name)
-        assert fn == ref_fn
-        config = activations.serialize(fn)
-        fn = activations.deserialize(config)
-        assert fn == ref_fn
-    
-    # set parameters:
-max_features = 5000
-maxlen = 400
-batch_size = 32
-embedding_dims = 50
-filters = 250
-kernel_size = 3
-hidden_dims = 250
-epochs = 2
-    
-        # Arguments
-        n_dense: int > 0. Number of dense layers.
-        dense_units: int > 0. Number of dense units per layer.
-        dropout: keras.layers.Layer. A dropout layer to apply.
-        dropout_rate: 0 <= float <= 1. The rate of dropout.
-        kernel_initializer: str. The initializer for the weights.
-        optimizer: str/keras.optimizers.Optimizer. The optimizer to use.
-        num_classes: int > 0. The number of classes to predict.
-        max_words: int > 0. The maximum number of words per data point.
-    
-        for i in range(2, 9):
-        K.clear_session()
-        with tf.device('/cpu:0'):
-            model = model_cls(weights=None,
-                              input_shape=(height, width, 3),
-                              classes=num_classes)
-        parallel_model = multi_gpu_model(model, gpus=i)
-        parallel_model.compile(loss='categorical_crossentropy',
-                               optimizer='rmsprop')
-    
-    
-def test_serializing_loss_class():
-    orig_loss_class = MSE_MAE_loss(0.3)
-    with custom_object_scope({'MSE_MAE_loss': MSE_MAE_loss}):
-        serialized = losses.serialize(orig_loss_class)
-    
-    # begin[licence]
-#
-# [The 'BSD licence']
-# Copyright (c) 2005-2008 Terence Parr
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-# 3. The name of the author may not be used to endorse or promote products
-#    derived from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
-# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# end[licence]
-    
-        ANTLR generates code that throws exceptions upon recognition error and
-    also generates code to catch these exceptions in each rule.  If you
-    want to quit upon first error, you can turn off the automatic error
-    handling mechanism using rulecatch action, but you still need to
-    override methods mismatch and recoverFromMismatchSet.
-    
-    In general, the recognition exceptions can track where in a grammar a
-    problem occurred and/or what was the expected input.  While the parser
-    knows its state (such as current input symbol and line info) that
-    state can change before the exception is reported so current token index
-    is computed and stored at exception time.  From this info, you can
-    perhaps print an entire line of input not just a single token, for example.
-    Better to just say the recognizer had a problem and then let the parser
-    figure out a fancy report.
-    
+        
+def check_alphabetical(lines):
     '''
+    checks if all entries per section are in alphabetical order based in entry title
+    '''
+    sections = {}
+    section_line_num = {}
+    for line_num, line in enumerate(lines):
+        if line.startswith(anchor):
+            category = line.split(anchor)[1].strip()
+            sections[category] = []
+            section_line_num[category] = line_num
+            continue
+        if not line.startswith('|') or line.startswith('|---'):
+            continue
+        title = [x.strip() for x in line.split('|')[1:-1]][0].upper()
+        sections[category].append(title)
     
-            if self._state.backtracking > 0:
-            sys.stdout.write(' backtracking=%s' % self._state.backtracking)
+        def __delitem__(self, key):
+        del self._store[key.lower()]
     
-            return self.tokens[i]
+    import pytest
+    
+    # Set default logging handler to avoid 'No handler found' warnings.
+import logging
+try:  # Python 2.7+
+    from logging import NullHandler
+except ImportError:
+    class NullHandler(logging.Handler):
+        def emit(self, record):
+            pass
+    
+    _codes = {
+    }
+    
+        def test_super_len_with_tell(self):
+        foo = StringIO.StringIO('12345')
+        assert super_len(foo) == 5
+        foo.read(2)
+        assert super_len(foo) == 3
+    
+        def redirect_resp_handler(sock):
+        consume_socket_content(sock, timeout=0.5)
+        location = u'//{0}:{1}/{2}'.format(host, port, path)
+        sock.send(
+            b'HTTP/1.1 301 Moved Permanently\r\n'
+            b'Content-Length: 0\r\n'
+            b'Location: ' + location.encode('utf8') + b'\r\n'
+            b'\r\n'
+        )
+        redirect_request.append(consume_socket_content(sock, timeout=0.5))
+        sock.send(b'HTTP/1.1 200 OK\r\n\r\n')
+    
+    
+def vectorize_stories(data):
+    inputs, queries, answers = [], [], []
+    for story, query, answer in data:
+        inputs.append([word_idx[w] for w in story])
+        queries.append([word_idx[w] for w in query])
+        answers.append(word_idx[answer])
+    return (pad_sequences(inputs, maxlen=story_maxlen),
+            pad_sequences(queries, maxlen=query_maxlen),
+            np.array(answers))
+    
+    import numpy as np
+    
+    # Set up the decoder, using `encoder_states` as initial state.
+decoder_inputs = Input(shape=(None, num_decoder_tokens))
+# We set up our decoder to return full output sequences,
+# and to return internal states as well. We don't use the
+# return states in the training model, but we will use them in inference.
+decoder_lstm = LSTM(latent_dim, return_sequences=True, return_state=True)
+decoder_outputs, _, _ = decoder_lstm(decoder_inputs,
+                                     initial_state=encoder_states)
+decoder_dense = Dense(num_decoder_tokens, activation='softmax')
+decoder_outputs = decoder_dense(decoder_outputs)
+    
+    
+def sample(preds, temperature=1.0):
+    # helper function to sample an index from a probability array
+    preds = np.asarray(preds).astype('float64')
+    preds = np.log(preds) / temperature
+    exp_preds = np.exp(preds)
+    preds = exp_preds / np.sum(exp_preds)
+    probas = np.random.multinomial(1, preds, 1)
+    return np.argmax(probas)
+    
+                # make new noise. we generate 2 * batch size here such that we have
+            # the generator optimize over an identical number of images as the
+            # discriminator
+            noise = np.random.uniform(-1, 1, (2 * batch_size, latent_size))
+            sampled_labels = np.random.randint(0, num_classes, 2 * batch_size)
+    
+            outputs = self.model.evaluate(x, y, **kwargs)
+        if not isinstance(outputs, list):
+            outputs = [outputs]
+        for name, output in zip(self.model.metrics_names, outputs):
+            if name == 'acc':
+                return output
+        raise ValueError('The model is not configured to compute accuracy. '
+                         'You should pass `metrics=['accuracy']` to '
+                         'the `model.compile()` method.')
+    
+    
+@keras_test
+def test_max_norm():
+    array = get_example_array()
+    for m in get_test_values():
+        norm_instance = constraints.max_norm(m)
+        normed = norm_instance(K.variable(array))
+        assert(np.all(K.eval(normed) < m))
