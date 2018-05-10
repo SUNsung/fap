@@ -1,58 +1,58 @@
 
         
-            def remove(self, key):
-        hash_index = self._hash_function(key)
-        for index, item in enumerate(self.table[hash_index]):
-            if item.key == key:
-                del self.table[hash_index][index]
-                return
-        raise KeyError('Key not found')
-    
-            (foo, p1), 2
-        (bar, p1), 3
-        (foo, p2), 3
-        (bar, p3), 10
-        (foo, p4), 1
-        '''
-        yield key, sum(values)
+        header = oldreadme[:oldreadme.index('# OPTIONS')]
+footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
     
     
-# http://docs.readthedocs.org/en/latest/faq.html#i-get-import-errors-on-libraries-that-depend-on-c-modules
-# c.f. #262
-sys.modules.update(
-    (mod_name, mock.MagicMock()) for mod_name in ['augeas'])
+class TestSocks(unittest.TestCase):
+    _SKIP_SOCKS_TEST = True
     
-        # For pickling to work, the __module__ variable needs to be set to the frame
-    # where the named tuple is created.  Bypass this step in enviroments where
-    # sys._getframe is not defined (Jython for example).
-    if hasattr(_sys, '_getframe'):
-        result.__module__ = _sys._getframe(1).f_globals.get('__name__', '__main__')
+            with open(swf_file, 'rb') as swf_f:
+            swf_content = swf_f.read()
+        swfi = SWFInterpreter(swf_content)
     
     
-def FormatDebugInfoResponse_ExtraConfFoundAndLoaded_test():
-  response = deepcopy( GENERIC_RESPONSE )
-  response[ 'extra_conf' ].update( {
-    'is_loaded': True,
-    'path': '/path/to/extra/conf'
-  } )
-  assert_that(
-    FormatDebugInfoResponse( response ),
-    contains_string(
-      'Extra configuration file found and loaded\n'
-      'Extra configuration path: /path/to/extra/conf\n'
-    )
-  )
+def gen_extractors():
+    ''' Return a list of an instance of every supported extractor.
+    The order does matter; the first extractor matched is the one handling the URL.
+    '''
+    return [klass() for klass in gen_extractor_classes()]
     
-      opts = { 'filter_diagnostics' : {
-    'java' : { 'regex' : '.*taco.*' },
-    'xml'  : { 'regex' : '.*burrito.*' } } }
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+class AnySexIE(InfoExtractor):
+    _VALID_URL = r'https?://(?:www\.)?anysex\.com/(?P<id>\d+)'
+    _TEST = {
+        'url': 'http://anysex.com/156592/',
+        'md5': '023e9fbb7f7987f5529a394c34ad3d3d',
+        'info_dict': {
+            'id': '156592',
+            'ext': 'mp4',
+            'title': 'Busty and sexy blondie in her bikini strips for you',
+            'description': 'md5:de9e418178e2931c10b62966474e1383',
+            'categories': ['Erotic'],
+            'duration': 270,
+            'age_limit': 18,
+        }
+    }
     
-    from ycm.client.messages_request import _HandlePollResponse
-from ycm.tests.test_utils import ExtendedMock
+    
+if __name__ == '__main__':
+    main()
+
+    
+    class Bigthink(VideoExtractor):
+    name = 'Bigthink'
+    
+    #----------------------------------------------------------------------
+def makeMimi(upid):
+    '''From http://cdn37.atwikiimg.com/sitescript/pub/dksitescript/FC2.site.js
+    Also com.hps.util.fc2.FC2EncrptUtil.makeMimiLocal
+    L110'''
+    strSeed = 'gGddgPfeaf_gzyr'
+    prehash = upid + '_' + strSeed
+    return md5(prehash.encode('utf-8')).hexdigest()
+    
+        type_, ext, size = url_info(stream_url)
+    print_info(site_info, title, type_, size)
+    if not info_only:
+        download_url_ffmpeg(url=stream_url, title=title, ext= 'mp4', output_dir=output_dir)
