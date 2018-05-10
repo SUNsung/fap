@@ -1,104 +1,148 @@
 
         
-            find_union(segments, Group).order_id_desc
-  end
-    
-      def tumblr_consumer_key
-    ENV['TUMBLR_OAUTH_KEY']
-  end
-    
-        @table_sort_info = {
-      order: { attribute.to_sym => direction.to_sym },
-      attribute: attribute,
-      direction: direction
-    }
-  end
-    
-      def failure
-    set_flash_message! :alert, :failure, kind: OmniAuth::Utils.camelize(failed_strategy.name), reason: failure_message
-    redirect_to after_omniauth_failure_path_for(resource_name)
-  end
-    
-      protected
-    
-          # Remembers the given resource by setting up a cookie
-      def remember_me(resource)
-        return if request.env['devise.skip_storage']
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.remember_me!
-        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
-      end
-    
-          attr_reader :scope_name, :resource
-    
-      if ARGV.include? '--no-ansi'
-    STDERR.puts <<-DOC
-    WARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
-    Consider adding the following to ~/.profile:
-    
-      # TODO: raise SAFE level (0) to 4 if possible.
-  def generate
-    ERB.new(PROFILE_ERB_TEMPLATE, 0, '>').result(binding)
-  end
+          next if extensions.empty?
+  mimes[mime] = [] if mimes[mime].nil?
+  mimes[mime].concat extensions
 end
     
-            def run
-          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
-          if @pod_name.nil? # Print all
-            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
-              print_pod_cache_infos(pod_name, cache_descriptors)
-            end
-          else # Print only for the requested pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            else
-              print_pod_cache_infos(@pod_name, cache_descriptors)
-            end
-          end
+      Jekyll::Command.subclasses.each { |c| c.init_with_program(p) }
+    
+    #
+    
+            c.action do |args, opts|
+          Jekyll::Commands::NewTheme.process(args, opts)
         end
-    
-    #{stack}
-#{executable_path}
-### Plugins
-    
-            # Clones the template from the remote in the working directory using
-        # the name of the Pod.
-        #
-        # @return [void]
-        #
-        def clone_template
-          UI.section('Cloning `#{template_repo_url}` into `#{@name}`.') do
-            git! ['clone', template_repo_url, @name]
-          end
-        end
-    
-            def <<(value)
-          values << value
-        end
-    
-          def stages
-        names = Dir[stage_definitions].map { |f| File.basename(f, '.rb') }
-        assert_valid_stage_names(names)
-        names
-      end
-    
-      desc 'Reverted'
-  task :reverted do
-  end
-    
-        describe 'when defining role with reserved name' do
-      it 'fails with ArgumentError' do
-        expect do
-          dsl.role :all, %w{example1.com}
-        end.to raise_error(ArgumentError, 'all reserved name for role. Please choose another name')
       end
     end
     
-              def plugins
-            @plugins ||= find_plugins_gem_specs.map do |spec|
-              { :name => spec.name, :version => spec.version.to_s }
-            end.sort_by do |spec|
-              spec[:name]
+    module Jekyll
+  module Deprecator
+    extend self
+    
+          # Group an array of items by an expression
+      #
+      # input - the object array
+      # variable - the variable to assign each item to in the expression
+      # expression -a Liquid comparison expression passed in as a string
+      #
+      # Returns the filtered array of objects
+      def group_by_exp(input, variable, expression)
+        return input unless groupable?(input)
+    
+        # Gets/Sets the Hash that holds the metadata for this layout.
+    attr_accessor :data
+    
+          def warnings
+        @template.warnings
+      end
+    
+        def to_a
+      @filters.dup
+    end
+    
+      # Removes any empty directories in the formula's prefix subtree
+  # Keeps any empty directions projected by skip_clean
+  # Removes any unresolved symlinks
+  def prune
+    dirs = []
+    symlinks = []
+    @f.prefix.find do |path|
+      if path == @f.libexec || @f.skip_clean?(path)
+        Find.prune
+      elsif path.symlink?
+        symlinks << path
+      elsif path.directory?
+        dirs << path
+      end
+    end
+    
+      def contents
+    data = ''
+    path.open('rb') do |f|
+      loop do
+        line = f.gets
+        break if line.nil? || line =~ /^__END__$/
+      end
+      while line = f.gets
+        data << line
+      end
+    end
+    data
+  end
+end
+    
+        Keg::PRUNEABLE_DIRECTORIES.each do |dir|
+      next unless dir.directory?
+      dir.find do |path|
+        path.extend(ObserverPathnameExtension)
+        if path.symlink?
+          unless path.resolved_path_exists?
+            if path.to_s =~ Keg::INFOFILE_RX
+              path.uninstall_info unless ARGV.dry_run?
             end
-          end
+    
+        # Sort keg_only before non-keg_only formulae to avoid any needless conflicts
+    # with outdated, non-keg_only versions of formulae being upgraded.
+    formulae_to_install.sort! do |a, b|
+      if !a.keg_only? && b.keg_only?
+        1
+      elsif a.keg_only? && !b.keg_only?
+        -1
+      else
+        0
+      end
+    end
+    
+    module Capistrano
+  module Doctor
+    # Prints table of all Capistrano-related gems and their version numbers. If
+    # there is a newer version of a gem available, call attention to it.
+    class GemsDoctor
+      include Capistrano::Doctor::OutputHelpers
+    
+          def stage_set?
+        !!fetch(:stage, false)
+      end
+    
+    # IMPORTANT: The Capistrano::Plugin system is not yet considered a stable,
+# public API, and is subject to change without notice. Eventually it will be
+# officially documented and supported, but for now, use it at your own risk.
+#
+# Base class for Capistrano plugins. Makes building a Capistrano plugin as easy
+# as writing a `Capistrano::Plugin` subclass and overriding any or all of its
+# three template methods:
+#
+# * set_defaults
+# * register_hooks
+# * define_tasks
+#
+# Within the plugin you can use any methods of the Rake or Capistrano DSLs, like
+# `fetch`, `invoke`, etc. In cases when you need to use SSHKit's backend outside
+# of an `on` block, use the `backend` convenience method. E.g. `backend.test`,
+# `backend.execute`, or `backend.capture`.
+#
+# Package up and distribute your plugin class as a gem and you're good to go!
+#
+# To use a plugin, all a user has to do is install it in the Capfile, like this:
+#
+#   # Capfile
+#   require 'capistrano/superfancy'
+#   install_plugin Capistrano::Superfancy
+#
+# Or, to install the plugin without its hooks:
+#
+#   # Capfile
+#   require 'capistrano/superfancy'
+#   install_plugin Capistrano::Superfancy, load_hooks: false
+#
+class Capistrano::Plugin < Rake::TaskLib
+  include Capistrano::DSL
+    
+          describe 'using the :port property' do
+        it 'takes precedence over in the host string' do
+          dsl.server 'db@example1.com:9090', roles: %w{db}, active: true, port: 1234
+          expect(subject).to eq('db@example1.com:1234')
+        end
+      end
+    end
+  end
