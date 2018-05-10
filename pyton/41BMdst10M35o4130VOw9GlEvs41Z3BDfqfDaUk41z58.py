@@ -1,113 +1,209 @@
 
         
-        
-def check_alphabetical(lines):
-    '''
-    checks if all entries per section are in alphabetical order based in entry title
-    '''
-    sections = {}
-    section_line_num = {}
-    for line_num, line in enumerate(lines):
-        if line.startswith(anchor):
-            category = line.split(anchor)[1].strip()
-            sections[category] = []
-            section_line_num[category] = line_num
-            continue
-        if not line.startswith('|') or line.startswith('|---'):
-            continue
-        title = [x.strip() for x in line.split('|')[1:-1]][0].upper()
-        sections[category].append(title)
+        # Allow direct execution
+import os
+import sys
+import unittest
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
-        def __delitem__(self, key):
-        del self._store[key.lower()]
     
-    import pytest
+class TestSWFInterpreter(unittest.TestCase):
+    pass
     
-    # Set default logging handler to avoid 'No handler found' warnings.
-import logging
-try:  # Python 2.7+
-    from logging import NullHandler
-except ImportError:
-    class NullHandler(logging.Handler):
-        def emit(self, record):
-            pass
+            retval = subprocess.call(args)
+        if retval == 0:
+            fsize = os.path.getsize(encodeFilename(tmpfilename))
+            self.to_screen('\r[%s] %s bytes' % (args[0], fsize))
+            self.try_rename(tmpfilename, filename)
+            self._hook_progress({
+                'downloaded_bytes': fsize,
+                'total_bytes': fsize,
+                'filename': filename,
+                'status': 'finished',
+            })
+            return True
+        else:
+            self.to_stderr('\n')
+            self.report_error('%s exited with code %d' % (args[0], retval))
+            return False
+
     
-    _codes = {
-    }
+            info = page['info']
     
-        def test_super_len_with_tell(self):
-        foo = StringIO.StringIO('12345')
-        assert super_len(foo) == 5
-        foo.read(2)
-        assert super_len(foo) == 3
+            uploader = self._search_regex(
+            r'Added by\s*:\s*<a[^>]+>([^<]+)</a>', webpage, 'uploader', default=None)
+        upload_date = unified_strdate(self._search_regex(
+            r'Added on\s*:\s*([\d-]+)', webpage, 'upload date', default=None))
     
-        def redirect_resp_handler(sock):
-        consume_socket_content(sock, timeout=0.5)
-        location = u'//{0}:{1}/{2}'.format(host, port, path)
-        sock.send(
-            b'HTTP/1.1 301 Moved Permanently\r\n'
-            b'Content-Length: 0\r\n'
-            b'Location: ' + location.encode('utf8') + b'\r\n'
-            b'\r\n'
+            webpage = self._download_webpage(url, display_id)
+    
+    
+def with_metaclass(meta, *bases):
+    '''Create a base class with a metaclass.'''
+    # This requires a bit of explanation: the basic idea is to make a
+    # dummy metaclass for one level of class instantiation that replaces
+    # itself with the actual metaclass.
+    class metaclass(type):
+        def __new__(cls, name, this_bases, d):
+            return meta(name, bases, d)
+    return type.__new__(metaclass, 'temporary_class', (), {})
+    
+        def __init__(self, request, key):
+        form_matches = request.form.getlist(key)
+        buf = ['You tried to access the file '%s' in the request.files '
+               'dictionary but it does not exist.  The mimetype for the request '
+               'is '%s' instead of 'multipart/form-data' which means that no '
+               'file contents were transmitted.  To fix this error you should '
+               'provide enctype='multipart/form-data' in your form.' %
+               (key, request.mimetype)]
+        if form_matches:
+            buf.append('\n\nThe browser instead transmitted some file names. '
+                       'This was submitted: %s' % ', '.join(''%s'' % x
+                            for x in form_matches))
+        self.msg = ''.join(buf)
+    
+        with pytest.raises(AttributeError):
+        import unimportable
+
+    
+    
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
+
+    
+            self.status = Status()
+        self._progress_reporter = ProgressReporterThread(
+            status=self.status,
+            output=progress_file
         )
-        redirect_request.append(consume_socket_content(sock, timeout=0.5))
-        sock.send(b'HTTP/1.1 200 OK\r\n\r\n')
+    
+        '''
+    
+        def __call__(self, value):
+        # Session name can be a path or just a name.
+        if (os.path.sep not in value and
+                not VALID_SESSION_NAME_PATTERN.search(value)):
+            raise ArgumentError(None, self.error_message)
+        return value
+    
+        return inner
     
     
-def vectorize_stories(data):
-    inputs, queries, answers = [], [], []
-    for story, query, answer in data:
-        inputs.append([word_idx[w] for w in story])
-        queries.append([word_idx[w] for w in query])
-        answers.append(word_idx[answer])
-    return (pad_sequences(inputs, maxlen=story_maxlen),
-            pad_sequences(queries, maxlen=query_maxlen),
-            np.array(answers))
+def to_native_string(string, encoding='ascii'):
+    '''Given a string object, regardless of type, returns a representation of
+    that string in the native string type, encoding and decoding where
+    necessary. This assumes ASCII unless told otherwise.
+    '''
+    if isinstance(string, builtin_str):
+        out = string
+    else:
+        if is_py2:
+            out = string.encode(encoding)
+        else:
+            out = string.decode(encoding)
+    
+        def __eq__(self, other):
+        if isinstance(other, collections.Mapping):
+            other = CaseInsensitiveDict(other)
+        else:
+            return NotImplemented
+        # Compare insensitively
+        return dict(self.lower_items()) == dict(other.lower_items())
+    
+    from . import utils
+from . import packages
+from .models import Request, Response, PreparedRequest
+from .api import request, get, head, post, patch, put, delete, options
+from .sessions import session, Session
+from .status_codes import codes
+from .exceptions import (
+    RequestException, Timeout, URLRequired,
+    TooManyRedirects, HTTPError, ConnectionError,
+    FileModeWarning, ConnectTimeout, ReadTimeout
+)
+    
+        def __init__(self, *args, **kwargs):
+        '''Initialize RequestException with `request` and `response` objects.'''
+        response = kwargs.pop('response', None)
+        self.response = response
+        self.request = kwargs.pop('request', None)
+        if (response is not None and not self.request and
+                hasattr(response, 'request')):
+            self.request = self.response.request
+        super(RequestException, self).__init__(*args, **kwargs)
+    
+    here = os.path.abspath(os.path.dirname(__file__))
+    
+        print()
+    print('Classification performance:')
+    print('===========================')
+    print()
+    print('%s %s %s %s' % ('Classifier  ', 'train-time', 'test-time',
+                           'Accuracy'))
+    print('-' * 44)
+    for name in sorted(accuracy, key=accuracy.get):
+        print('%s %s %s %s' % (name.ljust(16),
+                               ('%.4fs' % train_time[name]).center(10),
+                               ('%.4fs' % test_time[name]).center(10),
+                               ('%.4f' % accuracy[name]).center(10)))
     
     import numpy as np
+import gc
+from time import time
+from collections import defaultdict
+import matplotlib.pyplot as plt
+from sklearn.datasets import fetch_lfw_people
+from sklearn.decomposition import IncrementalPCA, RandomizedPCA, PCA
     
-    # Set up the decoder, using `encoder_states` as initial state.
-decoder_inputs = Input(shape=(None, num_decoder_tokens))
-# We set up our decoder to return full output sequences,
-# and to return internal states as well. We don't use the
-# return states in the training model, but we will use them in inference.
-decoder_lstm = LSTM(latent_dim, return_sequences=True, return_state=True)
-decoder_outputs, _, _ = decoder_lstm(decoder_inputs,
-                                     initial_state=encoder_states)
-decoder_dense = Dense(num_decoder_tokens, activation='softmax')
-decoder_outputs = decoder_dense(decoder_outputs)
+            ax.xaxis.set_major_locator(ticker.FixedLocator(tick_vals))
+        ax.xaxis.set_major_formatter(ticker.FixedFormatter(tick_labels))
+    
+    plot(euclidean_distances)
+plot(rbf_kernels)
+plt.show()
+
+    
+        output_file.close()
+
+    
+    data, row_idx, col_idx = sg._shuffle(data, random_state=0)
+plt.matshow(data, cmap=plt.cm.Blues)
+plt.title('Shuffled dataset')
+    
+    # Create different classifiers. The logistic regression cannot do
+# multiclass out of the box.
+classifiers = {'L1 logistic': LogisticRegression(C=C, penalty='l1'),
+               'L2 logistic (OvR)': LogisticRegression(C=C, penalty='l2'),
+               'Linear SVC': SVC(kernel='linear', C=C, probability=True,
+                                 random_state=0),
+               'L2 logistic (Multinomial)': LogisticRegression(
+                C=C, solver='lbfgs', multi_class='multinomial'),
+               'GPC': GaussianProcessClassifier(kernel)
+               }
+    
+    # plot MSE
+plt.subplot(2, 1, 1)
+plt.errorbar(n_samples_range, lw_mse.mean(1), yerr=lw_mse.std(1),
+             label='Ledoit-Wolf', color='navy', lw=2)
+plt.errorbar(n_samples_range, oa_mse.mean(1), yerr=oa_mse.std(1),
+             label='OAS', color='darkorange', lw=2)
+plt.ylabel('Squared error')
+plt.legend(loc='upper right')
+plt.title('Comparison of covariance estimators')
+plt.xlim(5, 31)
     
     
-def sample(preds, temperature=1.0):
-    # helper function to sample an index from a probability array
-    preds = np.asarray(preds).astype('float64')
-    preds = np.log(preds) / temperature
-    exp_preds = np.exp(preds)
-    preds = exp_preds / np.sum(exp_preds)
-    probas = np.random.multinomial(1, preds, 1)
-    return np.argmax(probas)
-    
-                # make new noise. we generate 2 * batch size here such that we have
-            # the generator optimize over an identical number of images as the
-            # discriminator
-            noise = np.random.uniform(-1, 1, (2 * batch_size, latent_size))
-            sampled_labels = np.random.randint(0, num_classes, 2 * batch_size)
-    
-            outputs = self.model.evaluate(x, y, **kwargs)
-        if not isinstance(outputs, list):
-            outputs = [outputs]
-        for name, output in zip(self.model.metrics_names, outputs):
-            if name == 'acc':
-                return output
-        raise ValueError('The model is not configured to compute accuracy. '
-                         'You should pass `metrics=['accuracy']` to '
-                         'the `model.compile()` method.')
-    
-    
-@keras_test
-def test_max_norm():
-    array = get_example_array()
-    for m in get_test_values():
-        norm_instance = constraints.max_norm(m)
-        normed = norm_instance(K.variable(array))
-        assert(np.all(K.eval(normed) < m))
+@click.command()
+@click.argument('catalog_file', type=click.Path())
+def cli(catalog_file):
+    # Read the old ones back.  Once we are in, we will never go.
+    with open(catalog_file) as f:
+        rv = json.load(f)['supported_locales']
