@@ -1,137 +1,54 @@
 
         
-            assert_equal 'foo', output_buffer, 'javascript_tag without a block should not concat to output_buffer'
-  end
+        require 'active_job'
     
-            # Require the adapter itself and give useful feedback about
-        #   1. Missing adapter gems and
-        #   2. Adapter gems' missing dependencies.
-        path_to_adapter = 'action_cable/subscription_adapter/#{adapter}'
-        begin
-          require path_to_adapter
-        rescue LoadError => e
-          # We couldn't require the adapter itself. Raise an exception that
-          # points out config typos and missing gems.
-          if e.path == path_to_adapter
-            # We can assume that a non-builtin adapter was specified, so it's
-            # either misspelled or missing from Gemfile.
-            raise e.class, 'Could not load the '#{adapter}' Action Cable pubsub adapter. Ensure that the adapter is spelled correctly in config/cable.yml and that you've added the necessary adapter gem to your Gemfile.', e.backtrace
-    
-        def body(rack_response)
-      buf = []
-      rack_response[2].each { |x| buf << x }
-      buf.join
-    end
-  end
-    
-        # An email was received.
-    def receive(event)
-      info { 'Received mail (#{event.duration.round(1)}ms)' }
-      debug { event.payload[:mail] }
-    end
-    
-          formatted
-    end
-    
-          private
-        def processed_mailer
-          @processed_mailer ||= @mailer_class.new.tap do |mailer|
-            mailer.params = @params
-            mailer.process @action, *@args
+            def enqueue_delivery(delivery_method, options = {})
+          if processed?
+            super
+          else
+            args = @mailer_class.name, @action.to_s, delivery_method.to_s, @params, *@args
+            ActionMailer::Parameterized::DeliveryJob.set(options).perform_later(*args)
           end
         end
+    end
     
-            def restore_delivery_method
-          ActionMailer::Base.deliveries.clear
-          ActionMailer::Base.delivery_method = @old_delivery_method
-        end
-    
-        AssertSelectMailer.test('<div><p>foo</p><p>bar</p></div>').deliver_now
-    assert_select_email do
-      assert_select 'div:root' do
-        assert_select 'p:first-child', 'foo'
-        assert_select 'p:last-child', 'bar'
-      end
+        mail_with_defaults do |format|
+      format.html { render(inline: '<%= format_paragraph @text, 10, 1 %>') }
     end
   end
     
-      APP = RoutedRackApp.new(Routes)
+      def can_read?(resource)
+    ability_name = resource.class.name.downcase
+    ability_name = 'read_#{ability_name}'.to_sym
     
-        let(:key) { Spaceship::Portal::Key.new(key_attributes) }
-    
-            expect(result).to eq('/usr/local/bin/cloc  --by-file  --out=build/cloc.txt')
-      end
-    end
+        find_union(segments, Project).includes(:namespace).order_id_desc
   end
-end
-
     
-      # Removes any empty directories in the formula's prefix subtree
-  # Keeps any empty directions projected by skip_clean
-  # Removes any unresolved symlinks
-  def prune
-    dirs = []
-    symlinks = []
-    @f.prefix.find do |path|
-      if path == @f.libexec || @f.skip_clean?(path)
-        Find.prune
-      elsif path.symlink?
-        symlinks << path
-      elsif path.directory?
-        dirs << path
-      end
-    end
+      def all_projects(current_user)
+    projects = []
     
-        dirs.reverse_each do |d|
-      if ARGV.dry_run? && d.children.empty?
-        puts 'Would remove (empty directory): #{d}'
-      else
-        d.rmdir_if_possible
-      end
-    end
-    
-        formulae_maybe_with_kegs = [f] + f.old_installed_formulae
-    outdated_kegs = formulae_maybe_with_kegs
-                    .map(&:linked_keg)
-                    .select(&:directory?)
-                    .map { |k| Keg.new(k.resolved_path) }
-    linked_kegs = outdated_kegs.select(&:linked?)
-    
-            def name
-          @node.children.first
-        end
-    
-            def each_unnecessary_space_match(node, &blk)
-          each_match_range(
-            contents_range(node),
-            MULTIPLE_SPACES_BETWEEN_ITEMS_REGEX,
-            &blk
-          )
-        end
-      end
+        def register_sprockets
+      Sprockets.append_path(stylesheets_path)
+      Sprockets.append_path(fonts_path)
+      Sprockets.append_path(javascripts_path)
     end
   end
 end
+    
+      # Use default logging formatter so that PID and timestamp are not suppressed.
+  config.log_formatter = ::Logger::Formatter.new
+end
 
     
-    module RuboCop
-  module Cop
-    module Style
-      # This cop check for uses of Object#freeze on immutable objects.
-      #
-      # @example
-      #   # bad
-      #   CONST = 1.freeze
-      #
-      #   # good
-      #   CONST = 1
-      class RedundantFreeze < Cop
-        include FrozenStringLiteral
-    
-          it 'registers offenses' do
-        inspect_source(source)
-        expect(cop.messages).to eq([missing_type,
-                                    missing_begin,
-                                    missing_end,
-                                    missing_end])
-      end
+      path = 'assets/stylesheets'
+  css_path = args.with_defaults(css_path: 'tmp')[:css_path]
+  puts Term::ANSIColor.bold 'Compiling SCSS in #{path}'
+  Dir.mkdir(css_path) unless File.directory?(css_path)
+  %w(_bootstrap bootstrap/_theme).each do |file|
+    save_path = '#{css_path}/#{file.sub(/(^|\/)?_+/, '\1').sub('/', '-')}.css'
+    puts Term::ANSIColor.cyan('  #{save_path}') + '...'
+    engine    = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
+    css       = engine.render
+    File.open(save_path, 'w') { |f| f.write css }
+  end
+end
