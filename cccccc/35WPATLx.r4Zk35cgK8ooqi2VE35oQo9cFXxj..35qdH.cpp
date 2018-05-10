@@ -1,171 +1,436 @@
 
         
-        
-    {}  // namespace tensorflow
+        class NwCurrentWindowInternalSetTitleInternalFunction : public NWSyncExtensionFunction {
+ public:
+  NwCurrentWindowInternalSetTitleInternalFunction() {}
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
+    }
     
-    /** scalar_tanh_fast_derivative_op
-  * \ingroup CXX11_NeuralNetworks_Module
-  * \brief Template functor to compute the fast derivative of a tanh
-  *
-  * Input should be the backpropagated gradient.
-  *
-  * \sa class CwiseUnaryOp, Cwise::tanh_fast_derivative()
-  */
-template <typename T>
-struct scalar_tanh_fast_derivative_op {
-  EIGEN_EMPTY_STRUCT_CTOR(scalar_tanh_fast_derivative_op)
-  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE T operator()(const T& y) const {
-    const T one = T(1);
-    return one - (y * y);
+    #endif
+    
+    v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
+                                           int object_id,
+                                           const std::string& type,
+                                           const std::string& method,
+                                           v8::Handle<v8::Value> args) {
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  scoped_ptr<V8ValueConverter> converter(V8ValueConverter::create());
+    }
+    
+    namespace nw {
+    }
+    
+    void Menu::UpdateKeys(GtkAccelGroup *gtk_accel_group){
+  this->gtk_accel_group = gtk_accel_group;
+  if (!GTK_IS_ACCEL_GROUP(gtk_accel_group)){
+    return ;
+  } else {
+    std::vector<MenuItem*>::iterator menu_item_iterator = menu_items.begin();
+    std::vector<MenuItem*>::iterator menu_item_end = menu_items.end();
+    while (menu_item_iterator != menu_item_end){
+      MenuItem *menu_item = *menu_item_iterator;
+      if (menu_item!=NULL && GTK_IS_MENU_ITEM(menu_item->menu_item_)){
+        menu_item->UpdateKeys(gtk_accel_group);
+      }
+      ++menu_item_iterator;
+    }
   }
-    }
-    
-    std::ostream& operator<<(std::ostream& out,
-                         const VersionedComputationHandle& versioned_handle) {
-  out << versioned_handle.ToString();
-  return out;
 }
     
-    void cvValidateDisparity( CvArr* _disp, const CvArr* _cost, int minDisparity,
-                         int numberOfDisparities, int disp12MaxDiff )
-{
-    cv::Mat disp = cv::cvarrToMat(_disp), cost = cv::cvarrToMat(_cost);
-    cv::validateDisparity( disp, cost, minDisparity, numberOfDisparities, disp12MaxDiff );
-}
-
-    
-    void ComputeExtrinsicRefine(const Mat& imagePoints, const Mat& objectPoints, Mat& rvec,
-                            Mat&  tvec, Mat& J, const int MaxIter,
-                            const IntrinsicParams& param, const double thresh_cond);
-CV_EXPORTS Mat ComputeHomography(Mat m, Mat M);
-    
-                template<typename T>
-            static __device__ __forceinline__ T atomicAdd(T* address, T val)
-            {
-#if defined (__CUDA_ARCH__) && (__CUDA_ARCH__ < 120)
-                T count;
-                unsigned int tag = threadIdx.x << ( (sizeof(unsigned int) << 3) - 5U);
-                do
-                {
-                    count = *address & TAG_MASK;
-                    count = tag | (count + val);
-                    *address = count;
-                } while (*address != count);
-    }
-    
-    
-    {
-    {
-    {} } } // namespace cv::ocl::runtime
-    
-    extern JSClass  *jsb_cocos2d_Physics3DConeTwistConstraint_class;
-extern JSObject *jsb_cocos2d_Physics3DConeTwistConstraint_prototype;
-    
-    
-    
-    
-    
-    
-    {
-    {				// We are done, terminate the query.
-				return false;
-			}
-		}
-    
-    
-    {	static Test* Create()
-	{
-		return new AddPair;
-	}
+    static KeyMap keymap = {
+  {'`'    , 'Backquote'},
+  {'\\'   , 'Backslash'},
+  {'['    , 'BracketLeft'},
+  {']'    , 'BracketRight'},
+  {','    , 'Comma'},
+  {'='    , 'Equal'},
+  {'-'    , 'Minus'},
+  {'.'    , 'Period'},
+  {'''    , 'Quote'},
+  {';'    , 'Semicolon'},
+  {'/'    , 'Slash'},
+  {'\n'   , 'Enter'},
+  {'\t'   , 'Tab'},
+  {'UP'   , 'ArrowUp'},
+  {'DOWN' , 'ArrowDown'},
+  {'LEFT' , 'ArrowLeft'},
+  {'RIGHT', 'ArrowRight'},
+  {'ESC'  , 'Escape'},
+  {'MEDIANEXTTRACK', 'MediaTrackNext'},
+  {'MEDIAPREVTRACK', 'MediaTrackPrevious'}
 };
     
-    // Reads the Define Quantization Table (DQT) marker segment and fills in *jpg
-// with the parsed data.
-bool ProcessDQT(const uint8_t* data, const size_t len, size_t* pos,
-                JPEGData* jpg) {
-  const size_t start_pos = *pos;
-  VERIFY_LEN(2);
-  size_t marker_len = ReadUint16(data, pos);
-  if (marker_len == 2) {
-    fprintf(stderr, 'DQT marker: no quantization table found\n');
-    jpg->error = JPEG_EMPTY_DQT;
-    return false;
-  }
-  while (*pos < start_pos + marker_len && jpg->quant.size() < kMaxQuantTables) {
-    VERIFY_LEN(1);
-    int quant_table_index = ReadUint8(data, pos);
-    int quant_table_precision = quant_table_index >> 4;
-    quant_table_index &= 0xf;
-    VERIFY_INPUT(quant_table_index, 0, 3, QUANT_TBL_INDEX);
-    VERIFY_LEN((quant_table_precision ? 2 : 1) * kDCTBlockSize);
-    JPEGQuantTable table;
-    table.index = quant_table_index;
-    table.precision = quant_table_precision;
-    for (int i = 0; i < kDCTBlockSize; ++i) {
-      int quant_val = quant_table_precision ?
-          ReadUint16(data, pos) :
-          ReadUint8(data, pos);
-      VERIFY_INPUT(quant_val, 1, 65535, QUANT_VAL);
-      table.values[kJPEGNaturalOrder[i]] = quant_val;
-    }
-    table.is_last = (*pos == start_pos + marker_len);
-    jpg->quant.push_back(table);
-  }
-  VERIFY_MARKER_END();
+    void MenuItem::Destroy() {
+}
+    
+    
+    {  nw::ObjectManager* manager = nw::ObjectManager::Get(browser_context());
+  manager->OnDeallocateObject(id);
   return true;
 }
     
-    // This function will create a Huffman tree.
-//
-// The catch here is that the tree cannot be arbitrarily deep.
-// Brotli specifies a maximum depth of 15 bits for 'code trees'
-// and 7 bits for 'code length code trees.'
-//
-// count_limit is the value that is to be faked as the minimum value
-// and this minimum value is raised until the tree matches the
-// maximum length requirement.
-//
-// This algorithm is not of excellent performance for very long data blocks,
-// especially when population counts are longer than 2**tree_limit, but
-// we are not planning to use this with extremely long blocks.
-//
-// See http://en.wikipedia.org/wiki/Huffman_coding
-void CreateHuffmanTree(const uint32_t *data,
-                       const size_t length,
-                       const int tree_limit,
-                       HuffmanTree* tree,
-                       uint8_t *depth) {
-  // For block sizes below 64 kB, we never need to do a second iteration
-  // of this loop. Probably all of our block sizes will be smaller than
-  // that, so this loop is mostly of academic interest. If we actually
-  // would need this, we would be better off with the Katajainen algorithm.
-  for (uint32_t count_limit = 1; ; count_limit *= 2) {
-    size_t n = 0;
-    for (size_t i = length; i != 0;) {
-      --i;
-      if (data[i]) {
-        const uint32_t count = std::max<uint32_t>(data[i], count_limit);
-        tree[n++] = HuffmanTree(count, -1, static_cast<int16_t>(i));
+    // DO NOT EDIT. This file (and 'version') is generated by CMake.
+// Run CMake configure step to update it.
+#ifndef JSON_VERSION_H_INCLUDED
+# define JSON_VERSION_H_INCLUDED
+    
+    bool Reader::decodeNumber(Token& token, Value& decoded) {
+  // Attempts to parse the number as an integer. If the number is
+  // larger than the maximum supported value of an integer then
+  // we decode the number as a double.
+  Location current = token.start_;
+  bool isNegative = *current == '-';
+  if (isNegative)
+    ++current;
+  // TODO: Help the compiler do the div and mod at compile time or get rid of them.
+  Value::LargestUInt maxIntegerValue =
+      isNegative ? Value::LargestUInt(Value::maxLargestInt) + 1
+                 : Value::maxLargestUInt;
+  Value::LargestUInt threshold = maxIntegerValue / 10;
+  Value::LargestUInt value = 0;
+  while (current < token.end_) {
+    Char c = *current++;
+    if (c < '0' || c > '9')
+      return decodeDouble(token, decoded);
+    Value::UInt digit(c - '0');
+    if (value >= threshold) {
+      // We've hit or exceeded the max value divided by 10 (rounded down). If
+      // a) we've only just touched the limit, b) this is the last digit, and
+      // c) it's small enough to fit in that rounding delta, we're okay.
+      // Otherwise treat this number as a double to avoid overflow.
+      if (value > threshold || current != token.end_ ||
+          digit > maxIntegerValue % 10) {
+        return decodeDouble(token, decoded);
       }
     }
-    }
-    }
-    
-    // Integer implementation of the Inverse Discrete Cosine Transform (IDCT).
-    
-    #include 'guetzli/output_image.h'
-    
-    bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
-                     const int* quant, JPEGData* jpg) {
-  if (w < 0 || w >= 1 << 16 || h < 0 || h >= 1 << 16 ||
-      rgb.size() != 3 * w * h) {
-    return false;
+    value = value * 10 + digit;
   }
-  InitJPEGDataForYUV444(w, h, jpg);
-  AddApp0Data(jpg);
+  if (isNegative && value == maxIntegerValue)
+    decoded = Value::minLargestInt;
+  else if (isNegative)
+    decoded = -Value::LargestInt(value);
+  else if (value <= Value::LargestUInt(Value::maxInt))
+    decoded = Value::LargestInt(value);
+  else
+    decoded = value;
+  return true;
+}
+    
+    // Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// Generates C++ code for a given .proto file.
+    
+    // Generator options (used by csharp_generator.cc):
+struct Options {
+  Options() :
+      file_extension('.cs'),
+      base_namespace(''),
+      base_namespace_specified(false),
+      internal_access(false) {
+  }
+  // Extension of the generated file. Defaults to '.cs'
+  string file_extension;
+  // Base namespace to use to create directory hierarchy. Defaults to ''.
+  // This option allows the simple creation of a conventional C# file layout,
+  // where directories are created relative to a project-specific base
+  // namespace. For example, in a project with a base namespace of PetShop, a
+  // proto of user.proto with a C# namespace of PetShop.Model.Shared would
+  // generate Model/Shared/User.cs underneath the specified --csharp_out
+  // directory.
+  //
+  // If no base namespace is specified, all files are generated in the
+  // --csharp_out directory, with no subdirectories created automatically.
+  string base_namespace;
+  // Whether the base namespace has been explicitly specified by the user.
+  // This is required as the base namespace can be explicitly set to the empty
+  // string, meaning 'create a full directory hierarchy, starting from the first
+  // segment of the namespace.'
+  bool base_namespace_specified;
+  // Whether the generated classes should have accessibility level of 'internal'.
+  // Defaults to false that generates 'public' classes.
+  bool internal_access;
+};
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/csharp/csharp_field_base.h>
+    
+    
+    
+    // CodeGenerator implementation which generates Java code.  If you create your
+// own protocol compiler binary and you want it to support Java output, you
+// can do so by registering an instance of this CodeGenerator with the
+// CommandLineInterface in your main() function.
+class LIBPROTOC_EXPORT JavaGenerator : public CodeGenerator {
+ public:
+  JavaGenerator();
+  ~JavaGenerator();
     }
     
-      // Fills in out[] array with the floating-point precision pixel view of the
-  // component.
-  // REQUIRES: factor_x() == 1 and factor_y() == 1.
-  void ToFloatPixels(float* out, int stride) const;
+    ExtensionGenerator* ImmutableGeneratorFactory::NewExtensionGenerator(
+    const FieldDescriptor* descriptor) const {
+  if (HasDescriptorMethods(descriptor->file(), context_->EnforceLite())) {
+    return new ImmutableExtensionGenerator(descriptor, context_);
+  } else {
+    return new ImmutableExtensionLiteGenerator(descriptor, context_);
+  }
+}
+    
+    /**
+ * @brief Applies common transformations to the input data, such as
+ * scaling, mirroring, substracting the image mean...
+ */
+template <typename Dtype>
+class DataTransformer {
+ public:
+  explicit DataTransformer(const TransformationParameter& param, Phase phase);
+  virtual ~DataTransformer() {}
+    }
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the concatenate inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *        respect to the outputs
+   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
+   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to concatenated outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length K), into which the top gradient
+   *        @f$ \frac{\partial E}{\partial y} @f$ is deconcatenated back to the
+   *        inputs @f$
+   *        \left[ \begin{array}{cccc}
+   *          \frac{\partial E}{\partial x_1} &
+   *          \frac{\partial E}{\partial x_2} &
+   *          ... &
+   *          \frac{\partial E}{\partial x_K}
+   *        \end{array} \right] =
+   *        \frac{\partial E}{\partial y}
+   *        @f$
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+      virtual inline int ExactNumBottomBlobs() const { return 3; }
+  virtual inline const char* type() const { return 'ContrastiveLoss'; }
+  /**
+   * Unlike most loss layers, in the ContrastiveLossLayer we can backpropagate
+   * to the first two inputs.
+   */
+  virtual inline bool AllowForceBackward(const int bottom_index) const {
+    return bottom_index != 2;
+  }
+    
+      int size_, pre_pad_;
+  Dtype alpha_, beta_, k_;
+    
+    #include <vector>
+    
+    #endif  // GRPC_TEST_CPP_UTIL_BENCHMARK_CONFIG_H
+
+    
+    static void RunQPS() {
+  gpr_log(GPR_INFO, 'Running QPS test, open-loop');
+    }
+    
+    namespace grpc {
+namespace testing {
+    }
+    }
+    
+    std::string GetDbFileContent(int argc, char** argv) {
+  std::string db_path;
+  std::string arg_str('--db_path');
+  if (argc > 1) {
+    std::string argv_1 = argv[1];
+    size_t start_position = argv_1.find(arg_str);
+    if (start_position != std::string::npos) {
+      start_position += arg_str.size();
+      if (argv_1[start_position] == ' ' ||
+          argv_1[start_position] == '=') {
+        db_path = argv_1.substr(start_position + 1);
+      }
+    }
+  } else {
+    db_path = 'route_guide_db.json';
+  }
+  std::ifstream db_file(db_path);
+  if (!db_file.is_open()) {
+    std::cout << 'Failed to open ' << db_path << std::endl;
+    return '';
+  }
+  std::stringstream db;
+  db << db_file.rdbuf();
+  return db.str();
+}
+    
+    #include 'src/compiler/config.h'
+#include 'src/compiler/schema_interface.h'
+    
+    AuthPropertyIterator SecureAuthContext::begin() const {
+  if (ctx_) {
+    grpc_auth_property_iterator iter =
+        grpc_auth_context_property_iterator(ctx_);
+    const grpc_auth_property* property =
+        grpc_auth_property_iterator_next(&iter);
+    return AuthPropertyIterator(property, &iter);
+  } else {
+    return end();
+  }
+}
+    
+    #include 'test/cpp/qps/histogram.h'
+    
+      // Create a QpsGauge with name 'name'. is_present is set to true if the Gauge
+  // is already present in the map.
+  // NOTE: CreateQpsGauge can be called anytime (i.e before or after calling
+  // StartServer).
+  std::shared_ptr<QpsGauge> CreateQpsGauge(const grpc::string& name,
+                                           bool* already_present);
+    
+    grpc::string SummarizeMethod(const grpc::protobuf::MethodDescriptor* method) {
+  grpc::string result = method->name();
+  result.append('\n');
+  return result;
+}
+    
+      /// Perform a blocking wait on the timer.
+  /**
+   * This function is used to wait for the timer to expire. This function
+   * blocks and does not return until the timer has expired.
+   *
+   * @param ec Set to indicate what error occurred, if any.
+   */
+  void wait(boost::system::error_code& ec)
+  {
+    this->service.wait(this->implementation, ec);
+  }
+    
+    /// Copies a limited number of bytes from a source buffer to a target buffer.
+/**
+ * @param target A modifiable buffer representing the memory region to which
+ * the bytes will be copied.
+ *
+ * @param source A non-modifiable buffer representing the memory region from
+ * which the bytes will be copied.
+ *
+ * @param max_bytes_to_copy The maximum number of bytes to be copied.
+ *
+ * @returns The number of bytes copied.
+ *
+ * @note The number of bytes copied is the lesser of:
+ *
+ * @li @c buffer_size(target)
+ *
+ * @li @c buffer_size(source)
+ *
+ * @li @c max_bytes_to_copy
+ *
+ * This function is implemented in terms of @c memcpy, and consequently it
+ * cannot be used to copy between overlapping memory regions.
+ */
+inline std::size_t buffer_copy(const mutable_buffer& target,
+    const const_buffer& source, std::size_t max_bytes_to_copy)
+{
+  return buffer_copy(buffer(target, max_bytes_to_copy), source);
+}
+    
+    #include <boost/asio/detail/config.hpp>
+    
+      static bool all_empty(const boost::asio::const_buffers_1& buffer_sequence)
+  {
+    return boost::asio::buffer_size(buffer_sequence) == 0;
+  }
+    
+    template <typename Key, typename Value>
+tss_ptr<typename call_stack<Key, Value>::context>
+call_stack<Key, Value>::top_;
+    
+    #ifndef BOOST_ASIO_DETAIL_FD_SET_ADAPTER_HPP
+#define BOOST_ASIO_DETAIL_FD_SET_ADAPTER_HPP
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS) \
+  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
+typedef null_fenced_block fenced_block;
+#elif defined(__MACH__) && defined(__APPLE__)
+typedef macos_fenced_block fenced_block;
+#elif defined(__sun)
+typedef solaris_fenced_block fenced_block;
+#elif defined(__GNUC__) && defined(__arm__) \
+  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
+typedef gcc_arm_fenced_block fenced_block;
+#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
+typedef gcc_hppa_fenced_block fenced_block;
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+typedef gcc_x86_fenced_block fenced_block;
+#elif defined(__GNUC__) \
+  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
+  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
+  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
+typedef gcc_sync_fenced_block fenced_block;
+#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
+typedef win_fenced_block fenced_block;
+#else
+typedef null_fenced_block fenced_block;
+#endif
+    
+    namespace boost {
+namespace asio {
+namespace detail {
+    }
+    }
+    }
+    
+    # else // defined(BOOST_ASIO_ENABLE_HANDLER_TYPE_REQUIREMENTS_ASSERT)
+    
+    void buffer_sequence_adapter_base::init_native_buffer(
+    buffer_sequence_adapter_base::native_buffer_type& buf,
+    const boost::asio::const_buffer& buffer)
+{
+  std::memset(&buf, 0, sizeof(native_buffer_type));
+  Microsoft::WRL::ComPtr<IInspectable> insp
+    = Microsoft::WRL::Make<winrt_buffer_impl>(buffer);
+  Platform::Object^ buf_obj = reinterpret_cast<Platform::Object^>(insp.Get());
+  buf = reinterpret_cast<Windows::Storage::Streams::IBuffer^>(insp.Get());
+}
+    
+    #ifndef BOOST_ASIO_DETAIL_IMPL_EPOLL_REACTOR_HPP
+#define BOOST_ASIO_DETAIL_IMPL_EPOLL_REACTOR_HPP
+    
+      std::string scratch;
+  scratch.resize(kGood.size() + kCorrupted.size() + 16);
+  Slice result;
+  unique_ptr<RandomAccessFile> rand_file;
+  ASSERT_OK(env_->NewRandomAccessFile(kFileName, &rand_file, soptions_));
+  ASSERT_OK(rand_file->Read(0, kGood.size(), &result, &(scratch[0])));
+  ASSERT_EQ(result.compare(kGood), 0);
+    
+    #include 'rocksdb/merge_operator.h'
+#include 'rocksdb/slice.h'
+    
+    
+    {
+    {
+    {      if (rnd->Next() % 2) {
+        iter.Next();
+        pos = MakeKey(key(pos), gen(pos) + 1);
+      } else {
+        Key new_target = RandomTarget(rnd);
+        if (new_target > pos) {
+          pos = new_target;
+          iter.Seek(Encode(&new_target));
+        }
+      }
+    }
+  }
+};
+const uint32_t ConcurrentTest::K;
+    
+    INSTANTIATE_TEST_CASE_P(DBWriteTestInstance, DBWriteTest,
+                        testing::Values(DBTestBase::kDefault,
+                                        DBTestBase::kConcurrentWALWrites,
+                                        DBTestBase::kPipelinedWrite));
