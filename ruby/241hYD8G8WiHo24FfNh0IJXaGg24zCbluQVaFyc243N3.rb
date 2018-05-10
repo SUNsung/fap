@@ -1,187 +1,92 @@
 
         
-        module ActionCable
-  module SubscriptionAdapter
-    class Redis < Base # :nodoc:
-      prepend ChannelPrefix
+            assert_dom_equal '<script>\n//<![CDATA[\nalert('hello')\n//]]>\n</script>',
+      javascript_tag('alert('hello')')
     
-      class C < A
-    helper { def shout; 'C' end }
+      private
+    def dashbord_url(id, message)
+      url_for action: 'dashboard', params: { 'id' => id, 'message' => message }
+    end
+end
     
-            assert_equal 'summary, title', @controller.response.body
-        assert @controller.params.has_key?(:summary)
-        assert @controller.params.has_key?(:title)
-        assert_equal 'content...', @controller.params['summary']
-        assert_equal 'JSON', @controller.params['title']
-      end
+        # Use the logger configured for ActionMailer::Base.
+    def logger
+      ActionMailer::Base.logger
     end
   end
+end
     
-        # An email was generated.
-    def process(event)
-      debug do
-        mailer = event.payload[:mailer]
-        action = event.payload[:action]
-        '#{mailer}##{action}: processed outbound mail in #{event.duration.round(1)}ms'
-      end
+    class AMLogSubscriberTest < ActionMailer::TestCase
+  include ActiveSupport::LogSubscriber::TestHelper
+    
+    # You can also do other things. Examples:
+# https://github.com/tmm1/stackprof/blob/master/bin/stackprof
+report = StackProf::Report.new(Marshal.load(IO.binread(PROF_OUTPUT_FILE)))
+report.print_text(
+  options[:sort],
+  options[:limit],
+  options[:select_files],
+  options[:reject_files],
+  options[:select_names],
+  options[:reject_names]
+)
+    
+          # Group an array of items by an expression
+      #
+      # input - the object array
+      # variable - the variable to assign each item to in the expression
+      # expression -a Liquid comparison expression passed in as a string
+      #
+      # Returns the filtered array of objects
+      def group_by_exp(input, variable, expression)
+        return input unless groupable?(input)
+    
+          private
+    
+        #
+    
+        # Create an instance of this class.
+    #
+    # site - the instance of Jekyll::Site we're concerned with
+    #
+    # Returns nothing
+    def initialize(site)
+      @site = site
     end
     
-            def determine_default_mailer(name)
-          mailer = determine_constant_from_test_name(name) do |constant|
-            Class === constant && constant < ActionMailer::Base
-          end
-          raise NonInferrableMailerError.new(name) if mailer.nil?
-          mailer
+            if b_length > a_length
+          (b_length - a_length).times { a_split.insert(-2, 0) }
+        elsif a_length > b_length
+          (a_length - b_length).times { b_split.insert(-2, 0) }
         end
-      end
     
-    # No trailing slash
-Benchmark.ips do |x|
-  path = '/some/very/very/long/path/to/a/file/i/like'
-  x.report('pre_pr:#{path}')    { pre_pr(path) }
-  x.report('pr:#{path}')        { pr(path) }
-  x.report('envygeeks:#{path}') { pr(path) }
-  x.compare!
-end
-    
-    def site_configuration(overrides = {})
-  build_configs({
-    'source'      => source_dir,
-    'destination' => dest_dir
-  }, build_configs(overrides))
-end
-    
-      p.action do |args, _|
-    if args.empty?
-      Jekyll.logger.error 'A subcommand is required.'
-      puts p
-      abort
-    else
-      subcommand = args.first
-      unless p.has_command? subcommand
-        Jekyll.logger.abort_with 'fatal: 'jekyll #{args.first}' could not' \
-          ' be found. You may need to install the jekyll-#{args.first} gem' \
-          ' or a related gem to be able to use this subcommand.'
-      end
+        def relative_path_from(url)
+      self.class.parse(url).relative_path_to(self)
     end
   end
 end
 
     
-          theme.create!
-      Jekyll.logger.info 'Your new Jekyll theme, #{theme.name.cyan},' \
-        ' is ready for you in #{theme.path.to_s.cyan}!'
-      Jekyll.logger.info 'For help getting started, read #{theme.path}/README.md.'
-    end
-    # rubocop:enable Metrics/AbcSize
-  end
-end
-
+            css('> .section', '#preamble', 'a[href*='dict.html']', 'code var', 'code strong').each do |node|
+          node.before(node.children).remove
+        end
     
-      module Wrapper
-    attr_accessor :results
+    def each_schema_load_environment
+  # If we're in development, also run this for the test environment.
+  # This is a somewhat hacky way to do this, so here's why:
+  # 1. We have to define this before we load the schema, or we won't
+  #    have a timestamp_id function when we get to it in the schema.
+  # 2. db:setup calls db:schema:load_if_ruby, which calls
+  #    db:schema:load, which we define above as having a prerequisite
+  #    of this task.
+  # 3. db:schema:load ends up running
+  #    ActiveRecord::Tasks::DatabaseTasks.load_schema_current, which
+  #    calls a private method `each_current_configuration`, which
+  #    explicitly also does the loading for the `test` environment
+  #    if the current environment is `development`, so we end up
+  #    needing to do the same, and we can't even use the same method
+  #    to do it.
     
-    class Agents::ExampleAgent < Agent
-  include LongRunnable
-    
-      protected
-    
-      def index
-    if params[:agent_id]
-      @agent = current_user.agents.find(params[:agent_id])
-      @events = @agent.events.page(params[:page])
-    else
-      @events = current_user.events.preload(:agent).page(params[:page])
-    end
-    
-      # Update version.rb file with BOOTSTRAP_SHA
-  def store_version
-    path    = 'lib/bootstrap-sass/version.rb'
-    content = File.read(path).sub(/BOOTSTRAP_SHA\s*=\s*[''][\w]+['']/, 'BOOTSTRAP_SHA = '#@branch_sha'')
-    File.open(path, 'w') { |f| f.write(content) }
-  end
-end
-
-    
-      # Disable request forgery protection in test environment.
-  config.action_controller.allow_forgery_protection = false
-    
-      def test_image_helper
-    assert_match %r(url\(['']?/assets/apple-touch-icon-144-precomposed.*png['']?\)), @css
-  end
-    
-      desc 'update main and version in bower.json'
-  task :generate do
-    require 'bootstrap-sass'
-    Dir.chdir Bootstrap.gem_path do
-      spec       = JSON.parse(File.read 'bower.json')
-    
-    #{stack}
-#{executable_path}
-### Plugins
-    
-            target_module << if app.resolved_build_setting('SWIFT_OPTIMIZATION_LEVEL').values.any?
-                           <<-RUBY
-  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
-  use_frameworks!
-    
-    # usage rake new_post[my-new-post] or rake new_post['my new post'] or rake new_post (defaults to 'new-post')
-desc 'Begin a new post in #{source_dir}/#{posts_dir}'
-task :new_post, :title do |t, args|
-  if args.title
-    title = args.title
-  else
-    title = get_stdin('Enter a title for your post: ')
-  end
-  raise '### You haven't set anything up yet. First run `rake install` to set up an Octopress theme.' unless File.directory?(source_dir)
-  mkdir_p '#{source_dir}/#{posts_dir}'
-  filename = '#{source_dir}/#{posts_dir}/#{Time.now.strftime('%Y-%m-%d')}-#{title.to_url}.#{new_post_ext}'
-  if File.exist?(filename)
-    abort('rake aborted!') if ask('#{filename} already exists. Do you want to overwrite?', ['y', 'n']) == 'n'
-  end
-  puts 'Creating new post: #{filename}'
-  open(filename, 'w') do |post|
-    post.puts '---'
-    post.puts 'layout: post'
-    post.puts 'title: \'#{title.gsub(/&/,'&amp;')}\''
-    post.puts 'date: #{Time.now.strftime('%Y-%m-%d %H:%M:%S %z')}'
-    post.puts 'comments: true'
-    post.puts 'categories: '
-    post.puts '---'
-  end
-end
-    
-    module Jekyll
-    
-      # PATCH/PUT /books/1
-  # PATCH/PUT /books/1.json
-  def update
-    respond_to do |format|
-      if @book.update(book_params)
-        format.html { redirect_to @book, notice: 'Book was successfully updated.' }
-        format.json { render :show, status: :ok, location: @book }
-      else
-        format.html { render :edit }
-        format.json { render json: @book.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-    
-            def_node_matcher :only_truthiness_matters?, <<-PATTERN
-          ^({if while until case while_post until_post} equal?(%0) ...)
-        PATTERN
-    
-            def on_case(case_node)
-          case_node.when_branches.each_with_object([]) do |when_node, previous|
-            when_node.each_condition do |condition|
-              next unless repeated_condition?(previous, condition)
-    
-            # @param annotated_source [String] string passed to the matchers
-        #
-        # Separates annotation lines from source lines. Tracks the real
-        # source line number that each annotation corresponds to.
-        #
-        # @return [AnnotatedSource]
-        def self.parse(annotated_source)
-          source      = []
-          annotations = []
+          it 'sets a regeneration marker while regenerating' do
+        allow(RegenerationWorker).to receive(:perform_async)
+        get :show
