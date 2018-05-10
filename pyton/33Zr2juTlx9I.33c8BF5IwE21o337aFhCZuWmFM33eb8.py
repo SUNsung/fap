@@ -1,108 +1,183 @@
 
         
-        # TODO: response is the only one
+            styles = {
+        # No corresponding class for the following:
+        #Text:                     '', # class:  ''
+        Whitespace:                'underline #f8f8f8',      # class: 'w'
+        Error:                     '#a40000 border:#ef2929', # class: 'err'
+        Other:                     '#000000',                # class 'x'
+    }
     
     
-class Server(threading.Thread):
-    '''Dummy server using for unit testing'''
-    WAIT_EVENT_TIMEOUT = 5
+def unicode_is_ascii(u_string):
+    '''Determine if unicode string only contains ASCII characters.
     
-        def __init__(self):
-        self._content = False
-        self._content_consumed = False
-        self._next = None
+        def copy(self):
+        p = PreparedRequest()
+        p.method = self.method
+        p.url = self.url
+        p.headers = self.headers.copy() if self.headers is not None else None
+        p._cookies = _copy_cookie_jar(self._cookies)
+        p.body = self.body
+        p.hooks = self.hooks
+        p._body_position = self._body_position
+        return p
     
-    _init()
+                try:
+                resp.content  # Consume socket so it can be released
+            except (ChunkedEncodingError, ContentDecodingError, RuntimeError):
+                resp.raw.read(decode_content=False)
+    
+        def test_session_hooks_are_overridden_by_request_hooks(self, httpbin):
+        hook1 = lambda x, *args, **kwargs: x
+        hook2 = lambda x, *args, **kwargs: x
+        assert hook1 is not hook2
+        s = requests.Session()
+        s.hooks['response'].append(hook2)
+        r = requests.Request('GET', httpbin(), hooks={'response': [hook1]})
+        prep = s.prepare_request(r)
+        assert prep.hooks['response'] == [hook1]
+    
+            :param request: The :class:`PreparedRequest <PreparedRequest>` being sent.
+        :param stream: (optional) Whether to stream the request content.
+        :param timeout: (optional) How long to wait for the server to send
+            data before giving up, as a float, or a :ref:`(connect timeout,
+            read timeout) <timeouts>` tuple.
+        :type timeout: float or tuple or urllib3 Timeout object
+        :param verify: (optional) Either a boolean, in which case it controls whether
+            we verify the server's TLS certificate, or a string, in which case it
+            must be a path to a CA bundle to use
+        :param cert: (optional) Any user-provided SSL certificate to be trusted.
+        :param proxies: (optional) The proxies dictionary to apply to the request.
+        :rtype: requests.Response
+        '''
+    
+            # Test equivalence of convert_dense_weights_data_format
+        out1 = model1.predict(x)
+        layer_utils.convert_dense_weights_data_format(model1.layers[2], prev_shape, target_data_format)
+        for (src, dst) in zip(model1.layers, model2.layers):
+            dst.set_weights(src.get_weights())
+        out2 = model2.predict(transpose(x))
+    
+        x = K.placeholder(ndim=2)
+    f = K.function([x], [activations.sigmoid(x)])
+    test_values = get_standard_values()
+    
+    from ..utils.data_utils import get_file
+import numpy as np
+    
+        def get(self, key):
+        hash_index = self._hash_function(key)
+        for item in self.table[hash_index]:
+            if item.key == key:
+                return item.value
+        raise KeyError('Key not found')
+    
+        OPERATOR = 0
+    SUPERVISOR = 1
+    DIRECTOR = 2
+    
+        def __init__(self, vehicle_size, license_plate, spot_size):
+        self.vehicle_size = vehicle_size
+        self.license_plate = license_plate
+        self.spot_size
+        self.spots_taken = []
+    
+        # Implement all methods from IAuthenticator, remembering to add
+    # 'self' as first argument, e.g. def prepare(self)...
+    
+    
+class _RoutingDelegate(httputil.HTTPMessageDelegate):
+    def __init__(self, router, server_conn, request_conn):
+        self.server_conn = server_conn
+        self.request_conn = request_conn
+        self.delegate = None
+        self.router = router  # type: Router
+    
+        parts = name.split('.')
+    obj = __import__('.'.join(parts[:-1]), None, None, [parts[-1]], 0)
+    try:
+        return getattr(obj, parts[-1])
+    except AttributeError:
+        raise ImportError('No module named %s' % parts[-1])
+    
+        def _can_keep_alive(self, start_line, headers):
+        if self.params.no_keep_alive:
+            return False
+        connection_header = headers.get('Connection')
+        if connection_header is not None:
+            connection_header = connection_header.lower()
+        if start_line.version == 'HTTP/1.1':
+            return connection_header != 'close'
+        elif ('Content-Length' in headers or
+              headers.get('Transfer-Encoding', '').lower() == 'chunked' or
+              getattr(start_line, 'method', None) in ('HEAD', 'GET')):
+            # start_line may be a request or response start line; only
+            # the former has a method attribute.
+            return connection_header == 'keep-alive'
+        return False
+    
+        # IReactorFDSet
+    def _invoke_callback(self, fd, events):
+        if fd not in self._fds:
+            return
+        (reader, writer) = self._fds[fd]
+        if reader:
+            err = None
+            if reader.fileno() == -1:
+                err = error.ConnectionLost()
+            elif events & IOLoop.READ:
+                err = log.callWithLogger(reader, reader.doRead)
+            if err is None and events & IOLoop.ERROR:
+                err = error.ConnectionLost()
+            if err is not None:
+                self.removeReader(reader)
+                reader.readConnectionLost(failure.Failure(err))
+        if writer:
+            err = None
+            if writer.fileno() == -1:
+                err = error.ConnectionLost()
+            elif events & IOLoop.WRITE:
+                err = log.callWithLogger(writer, writer.doWrite)
+            if err is None and events & IOLoop.ERROR:
+                err = error.ConnectionLost()
+            if err is not None:
+                self.removeWriter(writer)
+                writer.writeConnectionLost(failure.Failure(err))
+    
+                with self.assertRaises((UnicodeEncodeError, HTTPClientError)):
+                # This raises UnicodeDecodeError on py3 and
+                # HTTPClientError(404) on py2. The main motivation of
+                # this test is to ensure that the UnicodeEncodeError
+                # during the setup phase doesn't lead the request to
+                # be dropped on the floor.
+                response = self.fetch(u'/ユニコード', raise_error=True)
 
     
     
-@pytest.mark.parametrize(
-    'url, expected', (
-            ('http://192.168.0.1:5000/', True),
-            ('http://192.168.0.1/', True),
-            ('http://172.16.1.1/', True),
-            ('http://172.16.1.1:5000/', True),
-            ('http://localhost.localdomain:5000/v1.0/', True),
-            ('http://172.16.1.12/', False),
-            ('http://172.16.1.12:5000/', False),
-            ('http://google.com:5000/v1.0/', False),
-    ))
-def test_should_bypass_proxies_no_proxy(
-        url, expected, monkeypatch):
-    '''Tests for function should_bypass_proxies to check if proxy
-    can be bypassed or not using the 'no_proxy' argument
-    '''
-    no_proxy = '192.168.0.0/24,127.0.0.1,localhost.localdomain,172.16.1.1'
-    # Test 'no_proxy' argument
-    assert should_bypass_proxies(url, no_proxy=no_proxy) == expected
+class BaseSSLTest(AsyncHTTPSTestCase):
+    def get_app(self):
+        return Application([('/', HelloWorldRequestHandler,
+                             dict(protocol='https'))])
     
-            except (_SSLError, _HTTPError) as e:
-            if isinstance(e, _SSLError):
-                # This branch is for urllib3 versions earlier than v1.22
-                raise SSLError(e, request=request)
-            elif isinstance(e, ReadTimeoutError):
-                raise ReadTimeout(e, request=request)
-            else:
-                raise
+        def test_hostname_mapping(self):
+        response = self.fetch(
+            'http://www.example.com:%d/hello' % self.get_http_port())
+        response.rethrow()
+        self.assertEqual(response.body, b'Hello world!')
     
-        mkdown = '\n----\n\n'.join(blocks)
-    # save module page.
-    # Either insert content into existing page,
-    # or create page otherwise
-    page_name = page_data['page']
-    path = os.path.join('sources', page_name)
-    if os.path.exists(path):
-        template = read_file(path)
-        assert '{{autogenerated}}' in template, ('Template found for ' + path +
-                                                 ' but missing {{autogenerated}} tag.')
-        mkdown = template.replace('{{autogenerated}}', mkdown)
-        print('...inserting autogenerated content into template:', path)
-    else:
-        print('...creating new page with autogenerated content:', path)
-    subdir = os.path.dirname(path)
-    if not os.path.exists(subdir):
-        os.makedirs(subdir)
-    with open(path, 'w') as f:
-        f.write(mkdown)
+            self.assertEqual(self.active_contexts, [])
+        yield run_with_stack_context(
+            StackContext(functools.partial(self.context, 'c1')),
+            f1)
+        self.assertEqual(self.active_contexts, [])
     
-    
-@keras_test
-def test_model_trainability_switch():
-    # a non-trainable model has no trainable weights
-    x = Input(shape=(1,))
-    y = Dense(2)(x)
-    model = Model(x, y)
-    model.trainable = False
-    assert model.trainable_weights == []
-    
-        # generate char sequences of length 'sequence_length' out of alphabet and store the next char as label (e.g. 'ab'->'c')
-    sequence_length = 2
-    sentences = [alphabet[i: i + sequence_length] for i in range(len(alphabet) - sequence_length)]
-    next_chars = [alphabet[i + sequence_length] for i in range(len(alphabet) - sequence_length)]
-    
-    from keras.preprocessing import sequence
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation
-from keras.layers import Embedding
-from keras.layers import Conv1D, GlobalMaxPooling1D
-from keras.datasets import imdb
-    
-    
-def test_sparse_categorical_crossentropy_4d():
-    y_pred = K.variable(np.array([[[[0.7, 0.1, 0.2],
-                                    [0.0, 0.3, 0.7],
-                                    [0.1, 0.1, 0.8]],
-                                   [[0.3, 0.7, 0.0],
-                                    [0.3, 0.4, 0.3],
-                                    [0.2, 0.5, 0.3]],
-                                   [[0.8, 0.1, 0.1],
-                                    [1.0, 0.0, 0.0],
-                                    [0.4, 0.3, 0.3]]]]))
-    y_true = K.variable(np.array([[[0, 1, 0],
-                                   [2, 1, 0],
-                                   [2, 2, 1]]]))
-    expected_loss = - (np.log(0.7) + np.log(0.3) + np.log(0.1) +
-                       np.log(K.epsilon()) + np.log(0.4) + np.log(0.2) +
-                       np.log(0.1) + np.log(K.epsilon()) + np.log(0.3)) / 9
-    loss = K.eval(losses.sparse_categorical_crossentropy(y_true, y_pred))
-    assert np.isclose(expected_loss, np.mean(loss))
+        @skipBefore35
+    @unittest.skipIf(platform.python_implementation() == 'PyPy',
+                     'pypy destructor warnings cannot be silenced')
+    def test_undecorated_coroutine(self):
+        namespace = exec_test(globals(), locals(), '''
+        class Test(AsyncTestCase):
+            async def test_coro(self):
+                pass
+        ''')
