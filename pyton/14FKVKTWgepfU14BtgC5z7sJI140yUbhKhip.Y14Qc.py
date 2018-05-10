@@ -1,108 +1,119 @@
 
         
-            plugin_manager.register(Plugin)
-    try:
-        r = http(
-            httpbin + BASIC_AUTH_URL,
-            '--auth-type',
-            Plugin.auth_type,
-        )
-        assert HTTP_OK in r
-        assert r.json == AUTH_OK
-    finally:
-        plugin_manager.unregister(Plugin)
+          Returns:
+    Object of same size as frequencies_hertz containing corresponding values
+    on the mel scale.
+  '''
+  return _MEL_HIGH_FREQUENCY_Q * np.log(
+      1.0 + (frequencies_hertz / _MEL_BREAK_FREQUENCY_HERTZ))
     
     
-with codecs.open(FILE_PATH, encoding='utf8') as f:
-    # Strip because we don't want new lines in the data so that we can
-    # easily count occurrences also when embedded in JSON (where the new
-    # line would be escaped).
-    FILE_CONTENT = f.read().strip()
+def build_labeled_sequence(seq, class_label, label_gain=False):
+  '''Builds labeled sequence from input sequence.
     
-            self._progress_reporter.output.write(
-            'Downloading %sto '%s'\n' % (
-                (humanize_bytes(total_size) + ' '
-                 if total_size is not None
-                 else ''),
-                self._output_file.name
-            )
-        )
-        self._progress_reporter.start()
+      Returns:
+    A dict of tensors (see return value of batch_parse_tf_example)
+  '''
+  shuffle_buffer_size = params.shuffle_buffer_size
+  dataset = read_tf_records(
+      shuffle_buffer_size, batch_size, tf_records, num_repeats=num_repeats,
+      shuffle_records=shuffle_records, shuffle_examples=shuffle_examples,
+      filter_amount=filter_amount)
+  dataset = dataset.filter(lambda t: tf.equal(tf.shape(t)[0], batch_size))
+  def batch_parse_tf_example(batch_size, dataset):
+    return _batch_parse_tf_example(params.board_size, batch_size, dataset)
+  dataset = dataset.map(functools.partial(
+      batch_parse_tf_example, batch_size))
+  return dataset.make_one_shot_iterator().get_next()
+    
+      def setUp(self):
+    np.random.seed(1)
+    self.feat = np.random.random(
+        [utils_test.BOARD_SIZE, utils_test.BOARD_SIZE, 3])
+    self.pi = np.random.random([utils_test.BOARD_SIZE ** 2 + 1])
+    super().setUp()
+    
+        # Fetch the data
+    (train_x, train_y), (test_x, test_y) = iris_data.load_data()
+    
+    
+class RemoveDuplicateUrls(MRJob):
     
         def __init__(self):
-        self._plugins = []
+        self.lookup = {}  # key: person_id, value: person_server
     
-        return inner
+        def steps(self):
+        '''Run the map and reduce steps.'''
+        return [
+            self.mr(mapper=self.mapper,
+                    reducer=self.reducer)
+        ]
     
-            if isinstance(params, (str, bytes)):
-            params = to_native_string(params)
+        def extract_url(self, line):
+        '''Extract the generated url from the log line.'''
+        pass
+    
+        def __init__(self, num_levels):
+        self.num_levels = num_levels
+        self.levels = []  # List of Levels
+    
+        def message_group(self, group_id, message):
+        pass
     
     
-@pytest.mark.skipif(sys.version_info < (2,7), reason='Only run on Python 2.7+')
-def test_system_ssl():
-    '''Verify we're actually setting system_ssl when it should be available.'''
-    assert info()['system_ssl']['version'] != ''
+class DefaultCategories(Enum):
     
-    if (twisted_version.major, twisted_version.minor, twisted_version.micro) >= (15, 5, 0):
-    collect_ignore += _py_files('scrapy/xlib/tx')
+            # Convert integers to unsigned little-endian byte arrays.
+        tests4 = {
+            b'': 0,
+            b'\x00': 0,
+            b'\x01': 1,
+            b'\x7f': 127,
+            b'\x80': 128,
+            b'\xff': 255,
+            b'\x00\x01': 256,
+            b'\xff\x7f': 32767,
+            b'\x00\x80': 32768,
+            b'\xff\xff': 65535,
+            b'\x00\x00\x01': 65536,
+        }
+        check(tests4, 'little', signed=False)
     
-        def add_options(self, parser):
-        ScrapyCommand.add_options(self, parser)
-        parser.add_option('-l', '--list', dest='list', action='store_true',
-                          help='only list contracts, without checking them')
-        parser.add_option('-v', '--verbose', dest='verbose', default=False, action='store_true',
-                          help='print contract tests for all spiders')
+    NUMBER_RE = re.compile(
+    r'(-?(?:0|[1-9]\d*))(\.\d+)?([eE][-+]?\d+)?',
+    (re.VERBOSE | re.MULTILINE | re.DOTALL))
     
-            if not assertion:
-            if self.min_bound == self.max_bound:
-                expected = self.min_bound
-            else:
-                expected = '%s..%s' % (self.min_bound, self.max_bound)
-    
-    api('wikipagelisting', WikiPageListingJsonTemplate)
-api('wikipagediscussions', WikiJsonTemplate)
-api('wikipagesettings', WikiSettingsJsonTemplate)
-    
-    from r2.controllers.api_docs import api_doc, api_section
-from r2.controllers.oauth2 import require_oauth2_scope
-from r2.controllers.reddit_base import OAuth2OnlyController
-from r2.controllers.ipn import send_gift
-from r2.lib.errors import RedditError
-from r2.lib.validator import (
-    validate,
-    VAccountByName,
-    VByName,
-    VInt,
-    VNotInTimeout,
-)
-from r2.models import Account, Comment, Link, NotFound
-from r2.models.gold import creddits_lock
-from r2.lib.validator import VUser
-    
-        @require_oauth2_scope('identity')
-    @validate(
-        VUser(),
-        fields=VList(
-            'fields',
-            choices=PREFS_JSON_SPEC.spec.keys(),
-            error=errors.errors.NON_PREFERENCE,
-        ),
-    )
-    @api_doc(api_section.account, uri='/api/v1/me/prefs')
-    def GET_prefs(self, fields):
-        '''Return the preference settings of the logged in user'''
-        resp = PrefsJsonTemplate(fields).data(c.oauth_user)
-        return self.api_wrapper(resp)
-    
-            To request a new CAPTCHA,
-        use [/api/new_captcha](#POST_api_new_captcha).
-        '''
-        image = captcha.get_image(iden)
-        f = StringIO.StringIO()
-        image.save(f, 'PNG')
-        response.content_type = 'image/png;'
-        return f.getvalue()
-    
+        s.quit()
 
     
-        GET_help = POST_help = renderurl
+    #  This file is automatically generated; please don't muck it up!
+#
+#  To update the symbols in this file, 'cd' to the top directory of
+#  the python source tree after building the interpreter and run:
+#
+#    ./python Lib/token.py
+    
+        def __init__(self):
+        # setup variables used for HTML documentation
+        self.server_name = 'XML-RPC Server Documentation'
+        self.server_documentation = \
+            'This server exports the following methods through the XML-RPC '\
+            'protocol.'
+        self.server_title = 'XML-RPC Server Documentation'
+    
+        def test_infile_stdout(self):
+        infile = self._create_infile()
+        rc, out, err = assert_python_ok('-m', 'json.tool', infile)
+        self.assertEqual(rc, 0)
+        self.assertEqual(out.splitlines(), self.expect.encode().splitlines())
+        self.assertEqual(err, b'')
+    
+            self.assertEqual(x[:], a.tolist()[1:])
+        with self.assertRaises(ValueError):
+            c_int.from_buffer(a, -1)
+        with self.assertRaises(ValueError):
+            (c_int * 16).from_buffer(a, sizeof(c_int))
+        with self.assertRaises(ValueError):
+            (c_int * 1).from_buffer(a, 16 * sizeof(c_int))
+    
+            pt = pointer(Table(1, 2, 3))
