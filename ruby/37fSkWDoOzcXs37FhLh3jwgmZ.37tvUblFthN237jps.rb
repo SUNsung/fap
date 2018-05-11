@@ -1,106 +1,104 @@
 
         
-          def developer_prefix
-    `xcode-select --print-path`.strip
-  end
+            def self.git_log_between(pretty_format, from, to, merge_commit_filtering, date_format = nil, ancestry_path)
+      command = ['git log']
+      command << '--pretty=\'#{pretty_format}\''
+      command << '--date=\'#{date_format}\'' if date_format
+      command << '--ancestry-path' if ancestry_path
+      command << '#{from.shellescape}...#{to.shellescape}'
+      command << git_log_merge_commit_filtering_option(merge_commit_filtering)
+      Actions.sh(command.compact.join(' '), log: false).chomp
+    rescue
+      nil
+    end
     
-          private
+      def self.authenticate(user, app_id, json_response, challenges)
+    response = U2F::SignResponse.load_from_json(json_response)
+    registration = user.u2f_registrations.find_by_key_handle(response.key_handle)
+    u2f = U2F::U2F.new(app_id)
     
-          #-----------------------------------------------------------------------#
+      included do
+    #
+    # Validations
+    #
+    
+      GEMFILE_EXTENSIONS.each do |extension|
+    extension_pathname = root.join('Gemfile#{extension}')
+    
+              fd.write(res)
+        end
+      end
+      break
+    rescue ::Timeout::Error
+      $stderr.puts '#{prefix}#{site} timed out'
+    rescue ::Interrupt
+      raise $!
+    rescue ::Exception => e
+      $stderr.puts '#{prefix}#{site} #{e.class} #{e}'
     end
   end
+    
+                  s[:proto]='pop3'
+              s[:extra]='Failed Login. Banner: #{s[:banner]}'
+              report_auth_info(s)
+              print_status('Invalid POP3 Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]} (#{s[:banner].strip})')
+              s[:pass]=''
+          end
+        when nil
+          # No matches, no saved state
+        else
+          s[:last]=matched
+          sessions[s[:session]].merge!({k => matches})
+      end # end case matched
+    end # end of each_key
+  end # end of parse
 end
-
     
-          def installed_gem_version(gem_name)
-        Gem.loaded_specs[gem_name].version
+    keytoolOpts 	= ['-genkey', '-alias', 'signFiles', '-keystore', 'msfkeystore',
+		   '-storepass', 'msfstorepass', '-dname', 'cn=#{certCN}',
+		   '-keypass', 'msfkeypass']
+    
+          def initialize(pairs = {})
+        @pairs = pairs
+        pairs.each do |key, value|
+          raise 'invalid container key: '#{key.inspect}'' unless VALID_KEYS.include?(key)
+          send(:'#{key}=', value)
+        end
+    
+      # Removes any empty directories in the formula's prefix subtree
+  # Keeps any empty directions projected by skip_clean
+  # Removes any unresolved symlinks
+  def prune
+    dirs = []
+    symlinks = []
+    @f.prefix.find do |path|
+      if path == @f.libexec || @f.skip_clean?(path)
+        Find.prune
+      elsif path.symlink?
+        symlinks << path
+      elsif path.directory?
+        dirs << path
       end
-    
-          def assert_valid_stage_names(names)
-        invalid = names.find { |n| RESERVED_NAMES.include?(n) }
-        return if invalid.nil?
-    
-      # Improved version of Liquid's truncatewords:
-  # - Uses typographically correct ellipsis (…) insted of '...'
-  def truncatewords(input, length)
-    truncate = input.split(' ')
-    if truncate.length > length
-      truncate[0..length-1].join(' ').strip + ' &hellip;'
-    else
-      input
     end
+    
+      def initialize(strip)
+    @strip = strip
   end
     
-      class RenderPartialTag < Liquid::Tag
-    include OctopressFilters
-    def initialize(tag_name, markup, tokens)
-      @file = nil
-      @raw = false
-      if markup =~ /^(\S+)\s?(\w+)?/
-        @file = $1.strip
-        @raw = $2 == 'raw'
-      end
-      super
+      def brief_build_info(f)
+    build_time_str = f.logs.ctime.strftime('%Y-%m-%d %H:%M:%S')
+    s = <<~EOS
+      Homebrew build logs for #{f.full_name} on #{OS_VERSION}
+    EOS
+    if ARGV.include?('--with-hostname')
+      hostname = Socket.gethostname
+      s << 'Host: #{hostname}\n'
     end
+    s << 'Build date: #{build_time_str}\n'
+    s
+  end
     
-        def render(context)
-      output = super
-      types = {
-        '.mp4' => 'type='video/mp4; codecs=\'avc1.42E01E, mp4a.40.2\''',
-        '.ogv' => 'type='video/ogg; codecs=theora, vorbis'',
-        '.webm' => 'type='video/webm; codecs=vp8, vorbis''
-      }
-      if @videos.size > 0
-        video =  '<video #{sizes} preload='metadata' controls #{poster}>'
-        @videos.each do |v|
-          video << '<source src='#{v}' #{types[File.extname(v)]}>'
-        end
-        video += '</video>'
-      else
-        'Error processing input, expected syntax: {% video url/to/video [url/to/video] [url/to/video] [width height] [url/to/poster] %}'
-      end
-    end
-    
-        def names_for(klass)
-      @attachments[klass].keys
-    end
-    
-        def initialize(klass, name, options)
-      @klass = klass
-      @name = name
-      @options = options
-    end
-    
-            def accepted_types_and_failures
-          if @allowed_types.present?
-            'Accept content types: #{@allowed_types.join(', ')}\n'.tap do |message|
-              if @missing_allowed_types.present?
-                message << '  #{@missing_allowed_types.join(', ')} were rejected.'
-              else
-                message << '  All were accepted successfully.'
-              end
-            end
-          end
-        end
-        def rejected_types_and_failures
-          if @rejected_types.present?
-            'Reject content types: #{@rejected_types.join(', ')}\n'.tap do |message|
-              if @missing_rejected_types.present?
-                message << '  #{@missing_rejected_types.join(', ')} were accepted.'
-              else
-                message << '  All were rejected successfully.'
-              end
-            end
-          end
-        end
-    
-        module TableDefinition
-      def attachment(*attachment_names)
-        options = attachment_names.extract_options!
-        attachment_names.each do |attachment_name|
-          COLUMNS.each_pair do |column_name, column_type|
-            column_options = options.merge(options[column_name.to_sym] || {})
-            column('#{attachment_name}_#{column_name}', column_type, column_options)
-          end
-        end
-      end
+      specify '#check_access_homebrew_repository' do
+    begin
+      mode = HOMEBREW_REPOSITORY.stat.mode & 0777
+      HOMEBREW_REPOSITORY.chmod 0555
