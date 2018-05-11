@@ -1,275 +1,273 @@
 
         
-        // Like URLRequestAsarJob, but asks the JavaScript handler for file path.
-class URLRequestAsyncAsarJob : public JsAsker<asar::URLRequestAsarJob> {
+        public:
+  /** \brief Serialize a Value in <a HREF='http://www.json.org'>JSON</a> format.
+   * \param out Stream to write to. (Can be ostringstream, e.g.)
+   * \param root Value to serialize.
+   * \note There is no point in deriving from Writer, since write() should not
+   * return a value.
+   */
+  void write(std::ostream& out, const Value& root);
+    
+      // implements CodeGenerator ----------------------------------------
+  bool Generate(const FileDescriptor* file,
+                const string& parameter,
+                GeneratorContext* generator_context,
+                string* error) const;
+    
+    class EnumGenerator : public SourceGeneratorBase {
  public:
-  URLRequestAsyncAsarJob(net::URLRequest*, net::NetworkDelegate*);
+  EnumGenerator(const EnumDescriptor* descriptor, const Options* options);
+  ~EnumGenerator();
     }
     
-    #if defined(OS_POSIX)
-// The 'magic' file descriptor that the relauncher process' write side of the
-// pipe shows up on. Chosen to avoid conflicting with stdin, stdout, and
-// stderr.
-extern const int kRelauncherSyncFD;
-#endif
-    
-    #endif  // ATOM_COMMON_DRAGGABLE_REGION_H_
-
-    
-    #ifndef ATOM_RENDERER_PREFERENCES_MANAGER_H_
-#define ATOM_RENDERER_PREFERENCES_MANAGER_H_
-    
-    
-    {}  // namespace chrome
-    
-     private:
-  // Non-owning pointer.
-  content::BrowserPpapiHost* host_;
-    
-    #ifndef CHROME_BROWSER_RENDERER_HOST_PEPPER_PEPPER_FLASH_DRM_HOST_H_
-#define CHROME_BROWSER_RENDERER_HOST_PEPPER_PEPPER_FLASH_DRM_HOST_H_
-    
-    void TtsPlatformImpl::clear_error() {
-  error_ = std::string();
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
 }
     
-      char label_i;
-  char label_j;
-  char* pixels = new char[2 * rows * cols];
-  std::string value;
     
-      /**
-   * @brief Computes the error gradient w.r.t. the reordered input.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient
-   *        with respect to the outputs
-   *   -# @f$ (M \times ...) @f$:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2):
-   *   - @f$ \frac{\partial E}{\partial y} @f$ is de-indexed (summing where
-   *     required) back to the input x_1
-   *   - This layer cannot backprop to x_2, i.e. propagate_down[1] must be
-   *     false.
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    {
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+    
+    #include <sstream>
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/csharp/csharp_field_base.h>
+    
+    class SourceGeneratorBase {
+ protected:
+  SourceGeneratorBase(const FileDescriptor* descriptor, const Options* options);
+  virtual ~SourceGeneratorBase();
+    }
+    
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
+    
+    #ifndef GOOGLE_PROTOBUF_COMPILER_JAVA_GENERATOR_FACTORY_H__
+#define GOOGLE_PROTOBUF_COMPILER_JAVA_GENERATOR_FACTORY_H__
+    
+    ImmutableLazyMessageOneofFieldGenerator::
+ImmutableLazyMessageOneofFieldGenerator(const FieldDescriptor* descriptor,
+                                        int messageBitIndex,
+                                        int builderBitIndex,
+                                        Context* context)
+    : ImmutableLazyMessageFieldGenerator(
+          descriptor, messageBitIndex, builderBitIndex, context) {
+  const OneofGeneratorInfo* info =
+      context->GetOneofGeneratorInfo(descriptor->containing_oneof());
+  SetCommonOneofVariables(descriptor, info, &variables_);
+  variables_['lazy_type'] = 'com.google.protobuf.LazyFieldLite';
+}
+    
+    namespace HPHP {
+    }
+    
+    TRACE_SET_MOD(jittime);
+    
+      std::deque<std::string> m_pipeline; // the intermediate pagelet results
+  std::set<std::string> m_rfc1867UploadedFiles;
+  std::string m_files; // serialized to use as $_FILES
+    
+    /*
+ * Assert that Vreg widths match between defs and uses.
+ *
+ * This should only be run before any zero-extending or truncating copies get
+ * reduced to regular copies---so, before simplify() or the various lowering
+ * passes.
+ */
+bool checkWidths(Vunit& unit);
+    
+      APPENDPATH();
+    
+    namespace HPHP { namespace jit { namespace irgen {
+    }
+    }
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////
     
     
-    {  size_t tempDataSize;
-  void *tempData1, *tempData2;
+    {    CondVarNode() {
+      pthread_cond_init(&m_cond, nullptr);
+    }
+    ~CondVarNode() {
+      pthread_cond_destroy(&m_cond);
+    }
+    /* implicit */ operator pthread_cond_t*() {
+      return &m_cond;
+    }
+    void unlink() {
+      if (m_listHook.is_linked()) m_listHook.unlink();
+    }
+  };
+    
+    QueryData genKernelIntegrity(QueryContext &context) {
+  QueryData results;
+  Row r;
+  std::string content;
+  std::string text_segment_hash;
+  std::string syscall_addr_modified;
+    }
+    
+      /// Return an instance to a registered EventPublisher.
+  static EventPublisherRef getEventPublisher(const std::string& pub);
+    
+    #include <osquery/config.h>
+#include <osquery/filesystem.h>
+#include <osquery/flags.h>
+#include <osquery/logger.h>
+    
+    TEST_F(ProcessTests, test_launchExtension) {
+  {
+    auto process =
+        PlatformProcess::launchExtension(kProcessTestExecPath.c_str(),
+                                         kExpectedExtensionArgs[3],
+                                         kExpectedExtensionArgs[5],
+                                         kExpectedExtensionArgs[7],
+                                         true);
+    EXPECT_NE(nullptr, process.get());
+    }
+    }
+    
+    #include <gtest/gtest.h>
+    
+    #include <osquery/core.h>
+    
+    template <typename T>
+struct constexpr_abs_helper<
+    T,
+    typename std::enable_if<
+        std::is_integral<T>::value && !std::is_same<T, bool>::value &&
+        std::is_unsigned<T>::value>::type> {
+  static constexpr T go(T t) {
+    return t;
+  }
 };
-#endif
     
-    #include 'caffe/layers/lrn_layer.hpp'
+    template <typename C>
+struct compare_not_equal_to : detail::cmp_pred<C, ordering::eq, 1> {
+  using detail::cmp_pred<C, ordering::eq, 1>::cmp_pred;
+};
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
+    #include <sys/types.h>
+    
+    // Get the default huge page size
+size_t getDefaultHugePageSize() {
+  // We need to parse /proc/meminfo
+  static const boost::regex regex(R'!(Hugepagesize:\s*(\d+)\s*kB)!');
+  size_t pageSize = 0;
+  boost::cmatch match;
+    }
     
     /**
- * @brief Exponential Linear Unit non-linearity @f$
- *        y = \left\{
- *        \begin{array}{lr}
- *            x                  & \mathrm{if} \; x > 0 \\
- *            \alpha (\exp(x)-1) & \mathrm{if} \; x \le 0
- *        \end{array} \right.
- *      @f$.  
+ * Return the mount point for the requested huge page size.
+ * 0 = use smallest available.
+ * Returns nullptr if the requested huge page size is not available.
  */
-template <typename Dtype>
-class ELULayer : public NeuronLayer<Dtype> {
- public:
-  /**
-   * @param param provides ELUParameter elu_param,
-   *     with ELULayer options:
-   *   - alpha (\b optional, default 1).
-   *     the value @f$ \alpha @f$ by which controls saturation for negative inputs.
+const HugePageSize* getHugePageSize(size_t size = 0);
+    
+      Observer<T> getObserver() &&;
+    
+      /**
+   * Gets the version of the observed object.
    */
-  explicit ELULayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-    }
-    }
-    
-    
-    {  int M_;
-  int K_;
-  int N_;
-  bool bias_term_;
-  Blob<Dtype> bias_multiplier_;
-};
-    
-    
-    {
-    {// use R's PRNG to replacd
-CustomGlobalRandomEngine::result_type
-CustomGlobalRandomEngine::operator()() {
-  return static_cast<result_type>(
-      std::floor(unif_rand() * CustomGlobalRandomEngine::max()));
-}
-}  // namespace common
-}  // namespace xgboost
-
-    
-      bool Next() override {
-    if (!parser_->Next()) return false;
-    const RowBlock<IndexType>& batch = parser_->Value();
-    LOG(INFO) << batch.size;
-    dense_index_.resize(num_col_ * batch.size);
-    dense_value_.resize(num_col_ * batch.size);
-    std::fill(dense_value_.begin(), dense_value_.end(), 0.0);
-    offset_.resize(batch.size + 1);
-    offset_[0] = 0;
-    }
-    
-    TEST(Metric, MAE) {
-  xgboost::Metric * metric = xgboost::Metric::Create('mae');
-  ASSERT_STREQ(metric->Name(), 'mae');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              0.5f, 0.001f);
-}
-    
-    namespace xgboost {
-namespace tree {
-// List of files that will be force linked in static links.
-DMLC_REGISTRY_LINK_TAG(updater_colmaker);
-DMLC_REGISTRY_LINK_TAG(updater_skmaker);
-DMLC_REGISTRY_LINK_TAG(updater_refresh);
-DMLC_REGISTRY_LINK_TAG(updater_prune);
-DMLC_REGISTRY_LINK_TAG(updater_fast_hist);
-DMLC_REGISTRY_LINK_TAG(updater_histmaker);
-DMLC_REGISTRY_LINK_TAG(updater_sync);
-#ifdef XGBOOST_USE_CUDA
-DMLC_REGISTRY_LINK_TAG(updater_gpu);
-DMLC_REGISTRY_LINK_TAG(updater_gpu_hist);
-#endif
-}  // namespace tree
-}  // namespace xgboost
-
-    
-          cbw.Write(buffer.data(), input.begin(), input.end());
-    
-    namespace xgboost {
-namespace obj {
-    }
-    }
-    
-      void PredictContribution(DMatrix* p_fmat,
-                           std::vector<bst_float>* out_contribs,
-                           unsigned ntree_limit, bool approximate, int condition = 0,
-                           unsigned condition_feature = 0) override {
-    model_.LazyInitModel();
-    CHECK_EQ(ntree_limit, 0U)
-        << 'GBLinear::PredictContribution: ntrees is only valid for gbtree predictor';
-    const std::vector<bst_float>& base_margin = p_fmat->Info().base_margin_;
-    const int ngroup = model_.param.num_output_group;
-    const size_t ncolumns = model_.param.num_feature + 1;
-    // allocate space for (#features + bias) times #groups times #rows
-    std::vector<bst_float>& contribs = *out_contribs;
-    contribs.resize(p_fmat->Info().num_row_ * ncolumns * ngroup);
-    // make sure contributions is zeroed, we could be reusing a previously allocated one
-    std::fill(contribs.begin(), contribs.end(), 0);
-    // start collecting the contributions
-    dmlc::DataIter<RowBatch>* iter = p_fmat->RowIterator();
-    iter->BeforeFirst();
-    while (iter->Next()) {
-      const RowBatch& batch = iter->Value();
-      // parallel over local batch
-      const auto nsize = static_cast<bst_omp_uint>(batch.size);
-      #pragma omp parallel for schedule(static)
-      for (bst_omp_uint i = 0; i < nsize; ++i) {
-        const RowBatch::Inst &inst = batch[i];
-        auto row_idx = static_cast<size_t>(batch.base_rowid + i);
-        // loop over output groups
-        for (int gid = 0; gid < ngroup; ++gid) {
-          bst_float *p_contribs = &contribs[(row_idx * ngroup + gid) * ncolumns];
-          // calculate linear terms' contributions
-          for (bst_uint c = 0; c < inst.length; ++c) {
-            if (inst[c].index >= model_.param.num_feature) continue;
-            p_contribs[inst[c].index] = inst[c].fvalue * model_[inst[c].index][gid];
-          }
-          // add base margin to BIAS
-          p_contribs[ncolumns - 1] = model_.bias()[gid] +
-            ((base_margin.size() != 0) ? base_margin[row_idx * ngroup + gid] : base_margin_);
-        }
-      }
-    }
+  size_t getVersion() const {
+    return version_;
   }
     
-    
-    {
-    {DMLC_REGISTER_PARAMETER(CoordinateTrainParam);
-XGBOOST_REGISTER_LINEAR_UPDATER(CoordinateUpdater, 'coord_descent')
-    .describe('Update linear model according to coordinate descent algorithm.')
-    .set_body([]() { return new CoordinateUpdater(); });
-}  // namespace linear
-}  // namespace xgboost
-
-    
-    namespace xgboost {
-namespace linear {
-    }
+        explicit DependencyRecorder(const Core& core) : dependencies_(core) {
+      DCHECK(inManagerThread());
     }
     
-    void DebugHUD_DoInterface(DebugHUD *hud)
-{
-    // 1. Show a simple window.
-    // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called 'Debug'.
-    {
-        static float f = 0.0f;
-        static int counter = 0;
-        ImGui::Text('Hello, world!');                           // Display some text (you can use a format string too)
-        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f    
-        ImGui::ColorEdit3('clear color', hud->clearColor);      // Edit 3 floats representing a color
-    }
-    }
-    
-    IMGUI_API bool        ImGui_ImplDX10_Init(void* hwnd, ID3D10Device* device);
-IMGUI_API void        ImGui_ImplDX10_Shutdown();
-IMGUI_API void        ImGui_ImplDX10_NewFrame();
-IMGUI_API void        ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
-    
-        // Create the rasterizer state
-    {
-        D3D10_RASTERIZER_DESC desc;
-        ZeroMemory(&desc, sizeof(desc));
-        desc.FillMode = D3D10_FILL_SOLID;
-        desc.CullMode = D3D10_CULL_NONE;
-        desc.ScissorEnable = true;
-        desc.DepthClipEnable = true;
-        g_pd3dDevice->CreateRasterizerState(&desc, &g_pRasterizerState);
+    int FuzzerDriver(int *argc, char ***argv, UserCallback Callback) {
+  using namespace fuzzer;
+  assert(argc && argv && 'Argument pointers cannot be nullptr');
+  EF = new ExternalFunctions();
+  if (EF->LLVMFuzzerInitialize)
+    EF->LLVMFuzzerInitialize(argc, argv);
+  const std::vector<std::string> Args(*argv, *argv + *argc);
+  assert(!Args.empty());
+  ProgName = new std::string(Args[0]);
+  ParseFlags(Args);
+  if (Flags.help) {
+    PrintHelp();
+    return 0;
+  }
     }
     
-    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-bool ImGui_ImplA5_ProcessEvent(ALLEGRO_EVENT *ev)
-{
-    ImGuiIO &io = ImGui::GetIO();
+    ExternalFunctions::ExternalFunctions() {
+#define EXT_FUNC(NAME, RETURN_TYPE, FUNC_SIG, WARN)                            \
+  this->NAME = ::NAME;                                                         \
+  CheckFnPtr((void *)::NAME, #NAME, WARN);
     }
     
-        // Setup Dear ImGui binding
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    ImGui_ImplA5_Init(display);
+    #include 'FuzzerExtFunctions.def'
     
-    // Data
-static int const                    NUM_FRAMES_IN_FLIGHT = 3;
-static FrameContext                 g_frameContext[NUM_FRAMES_IN_FLIGHT] = {};
-static UINT                         g_frameIndex = 0;
+    void CloseStdout() {
+  CloseFile(1);
+}
     
-            // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        s3eKeyboardUpdate();
-        s3ePointerUpdate();
-        ImGui_Marmalade_NewFrame();
+    void RemoveFile(const std::string &Path) {
+  unlink(Path.c_str());
+}
+    
+      system_clock::time_point ProcessStartTime = system_clock::now();
+  system_clock::time_point UnitStartTime, UnitStopTime;
+  long TimeOfLongestUnitInSeconds = 0;
+  long EpochOfLastReadOfOutputCorpus = 0;
+    
+    #ifndef LLVM_FUZZER_OPTIONS_H
+#define LLVM_FUZZER_OPTIONS_H
+    
+    namespace fuzzer {
+    }
+    
+    // This is a reimplementation of Libc's `system()`. On Darwin the Libc
+// implementation contains a mutex which prevents it from being used
+// concurrently. This implementation **can** be used concurrently. It sets the
+// signal handlers when the first thread enters and restores them when the last
+// thread finishes execution of the function and ensures this is not racey by
+// using a mutex.
+int ExecuteCommand(const std::string &Command) {
+  posix_spawnattr_t SpawnAttributes;
+  if (posix_spawnattr_init(&SpawnAttributes))
+    return -1;
+  // Block and ignore signals of the current process when the first thread
+  // enters.
+  {
+    std::lock_guard<std::mutex> Lock(SignalMutex);
+    if (ActiveThreadCount == 0) {
+      static struct sigaction IgnoreSignalAction;
+      sigset_t BlockedSignalsSet;
+      memset(&IgnoreSignalAction, 0, sizeof(IgnoreSignalAction));
+      IgnoreSignalAction.sa_handler = SIG_IGN;
+    }
+    }
+    }
