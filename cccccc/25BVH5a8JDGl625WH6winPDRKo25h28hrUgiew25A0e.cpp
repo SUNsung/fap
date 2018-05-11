@@ -1,189 +1,265 @@
 
         
-                    // The following does m_netInputMatrixPtr = decimatedMatrices; with ownership shenanigans.
-            for (auto& x : decimatedMatrices)
-            {
-                const wstring& name = x.first;
-                m_netInputMatrixPtr.GetInputMatrix<ElemType>(name).SetValue(decimatedMatrices.GetInputMatrix<ElemType>(name));
-            }
-    
-        size_t m_prevChosenMinibatchSize;
-    double m_lastFinishedEpochTrainLoss;
-    
-    
-    {            assert(false);
-            return '';
-        }
-    
-        // Taken from ONNX
-    REGISTER_OPERATOR_SCHEMA(MaxPool)
-        .Description('MaxPool consumes an input tensor X and applies max pooling across the'
-            'the tensor according to kernel sizes, stride sizes, and pad lengths.'
-            'Average pooling consisting of averaging all values of a subset of the'
-            'input tensor according to the kernel size and downsampling the'
-            'data into the output tensor Y for further processing.')
-        .Input('X',
-            'Input data tensor from the previous operator; dimensions for image case '
-            'are (N x C x H x W), where N is the batch size, C is the number of channels, '
-            'and H and W are the height and the width of the data. For non image case, the '
-            'dimension are in the form of (N x D1 x D2 ... Dn), where N is the batch size.',
-            'T')
-        .Output('Y',
-            'Output data tensor from max pooling across the input tensor. '
-            'Dimensions will vary based on various kernel, stride, and pad sizes.',
-            'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.')
-        .Attr('auto_pad',
-            'auto_pad must be either SAME_UPPER, SAME_LOWER or VALID. Where SAME_UPPER '
-            'or SAME_LOWER mean pad the input so that the ouput size match the input. '
-            'In case of odd number add the extra padding at the end for SAME_UPPER and '
-            'at the begining for SAME_LOWER. VALID mean no padding, therefore, read the '
-            'pixel values from the pads attribute.',
-            AttrType::AttributeProto_AttributeType_STRING)
-        .Attr('kernel_shape',
-            'The size of the kernel along each axis.',
-            AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('strides',
-            'Stride along each axis.',
-            AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('pads',
-            'Padding along each axis, can take the value 0 (False) or non 0 (True)',
-            AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('dilations',
-            'Dilaton along each axis, 1 mean no dilation.',
-            AttrType::AttributeProto_AttributeType_INTS);
-    
-                Equations:
-              - Ht = Activation(Wi*Xt + Ri*Ht-1 + Wbi + Rbi)
-            )DOC')
-        .FillUsing(RNNDocGeneratorInputX())
-        .Input('W',
-            'The weight tensor for input gate. Concatenation of `Wi` and `WBi` '
-            '(if bidirectional). The tensor has shape '
-            '`[num_directions, hidden_size, input_size]`.', 'T')
-        .Input('R',
-            'The recurrence weight tensor. Concatenation of `Ri` and `RBi` '
-            '(if bidirectional). The tensor has shape '
-            '`[num_directions, hidden_size, hidden_size]`.', 'T')
-        .Input('B',
-            'The bias tensor for input gate. Concatenation of `[Wbi, Rbi]` '
-            'and `[WBbi, RBbi]` (if bidirectional). The tensor has shape '
-            '`[num_directions, 2*hidden_size]`, Optional: If not specified - assumed '
-            'to be 0.', 'T',
-            true)
-        .FillUsing(RNNDocGeneratorInputSeqLen())
-        .FillUsing(RNNDocGeneratorInputInitialH())
-        .Attr('activations', 'One (or two if bidirectional) activation function for '
-            'input gate. It must be one of tanh and ReLU. Default `tanh`.',
-            AttrType::AttributeProto_AttributeType_STRINGS)
-        .FillUsing(RNNDocGeneratorActivationArgs())
-        .FillUsing(RNNDocGeneratorAttrOutput());
-    
-    
-    REGISTER_OPERATOR_SCHEMA(TreeEnsembleRegressor)
-        .SetDomain(c_mlDomain)
-        .Input('X', 'Input N,F', 'T')
-        .Output('Y', 'NxE floats', 'tensor(float)')
-        .Description(R'DOC(
-            Tree Ensemble regressor.  Returns the regressed values for each input in N.
-            All args with nodes_ are fields of a tuple of tree nodes, and
-            it is assumed they are the same length, and an index i will decode the
-            tuple across these inputs.  Each node id can appear only once
-            for each tree id.
-            All fields prefixed with target_ are tuples of votes at the leaves.
-            A leaf may have multiple votes, where each vote is weighted by
-            the associated target_weights index.
-            All trees must have their node ids start at 0 and increment by 1.
-            Mode enum is BRANCH_LEQ, BRANCH_LT, BRANCH_GTE, BRANCH_GT, BRANCH_EQ, BRANCH_NEQ, LEAF
-            )DOC')
-        .TypeConstraint('T', { 'tensor(float)', 'tensor(double)', 'tensor(int64)', 'tensor(int32)' }, ' allowed types.')
-        .Attr('nodes_treeids', 'tree id for this node', AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('nodes_nodeids', 'node id for this node, node ids may restart at zero for each tree (but not required).', AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('nodes_featureids', 'feature id for this node', AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('nodes_values', 'thresholds to do the splitting on for this node.', AttrType::AttributeProto_AttributeType_FLOATS)
-        .Attr('nodes_hitrates', '', AttrType::AttributeProto_AttributeType_FLOATS)
-        .Attr('nodes_modes', 'enum of behavior for this node.  enum 'BRANCH_LEQ', 'BRANCH_LT', 'BRANCH_GTE', 'BRANCH_GT', 'BRANCH_EQ', 'BRANCH_NEQ', 'LEAF'', AttrType::AttributeProto_AttributeType_STRINGS)
-        .Attr('nodes_truenodeids', 'child node if expression is true', AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('nodes_falsenodeids', 'child node if expression is false', AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('nodes_missing_value_tracks_true', 'for each node, decide if the value is missing (nan) then use true branch, this field can be left unset and will assume false for all nodes', AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('target_treeids', 'tree that this node is in', AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('target_nodeids', 'node id that this weight is for', AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('target_ids', 'index of the class list that this weight is for', AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('target_weights', 'the weight for the class in target_id', AttrType::AttributeProto_AttributeType_FLOATS)
-        .Attr('n_targets', 'number of regression targets', AttrType::AttributeProto_AttributeType_INT)
-        .Attr('post_transform', 'post eval transform for score, enum 'NONE', 'SOFTMAX', 'LOGISTIC', 'SOFTMAX_ZERO', 'PROBIT'', AttrType::AttributeProto_AttributeType_STRING)
-        .Attr('aggregate_function', 'post eval transform for score,  enum 'AVERAGE', 'SUM', 'MIN', 'MAX'', AttrType::AttributeProto_AttributeType_STRING)
-        .Attr('base_values', 'base values for regression, added to final score, size must be the same as n_outputs or can be left unassigned (assumed 0)', AttrType::AttributeProto_AttributeType_FLOATS);
-    
-    
-    {
-    {        m_augmentationWindow.first = m_augmentationWindow.second = extent;
+        
+template <typename ImplClass, typename RetTy = void, typename... Args>
+class MarkupASTVisitor {
+public:
+  RetTy visit(const MarkupASTNode *Node, Args... args) {
+    switch (Node->getKind()) {
+#define MARKUP_AST_NODE(Id, Parent) \
+    case ASTNodeKind::Id: \
+      return static_cast<ImplClass*>(this) \
+        ->visit##Id(cast<const Id>(Node), \
+                    ::std::forward<Args>(args)...);
+#define ABSTRACT_MARKUP_AST_NODE(Id, Parent)
+#define MARKUP_AST_NODE_RANGE(Id, FirstId, LastId)
+#include 'swift/Markup/ASTNodes.def'
     }
+  }
+    }
+    
+    SILFunction *SILDebugScope::getParentFunction() const {
+  if (InlinedCallSite)
+    return InlinedCallSite->getParentFunction();
+  if (auto *ParentScope = Parent.dyn_cast<const SILDebugScope *>())
+    return ParentScope->getParentFunction();
+  return Parent.get<SILFunction *>();
 }
-    
-    // https://github.com/onnx/onnx/blob/master/docs/Operators.md#inputs-3---6
-// size of weight/bias matrix is a multiple of hidden size
-enum
-{
-    GRUWeightDimensionHiddenMultiplier = 3,
-    GRUBiasDimensionHiddenMultiplier = 6
-};
-    
-    
-    {    // Note: keyword 'noexcept' was added so that stl vector first looks for
-    //       the move constructor instead of the private copy constructor.
-    ssematrixfrombuffer(ssematrixfrombuffer &&other) noexcept
-    {
-        std::move(other);
-    }
-};
-    
-    /// PrefetchGPUDataTransferer
-    
-    #endif // BOOST_ASIO_BUFFERED_STREAM_FWD_HPP
 
     
-    template <typename ConstBufferSequence, typename Handler>
-class descriptor_write_op
-  : public descriptor_write_op_base<ConstBufferSequence>
-{
-public:
-  BOOST_ASIO_DEFINE_HANDLER_PTR(descriptor_write_op);
+    /// A SyntaxRewriter for applying a set of formatting rules to a Syntax tree.
+struct FormatSyntaxRewriter : public SyntaxRewriter {
+  virtual StructDeclSyntax
+  rewriteStructDecl(StructDeclSyntax Struct) override;
+};
+    
+    #ifndef SWIFT_INDEX_INDEXDATACONSUMER_H
+#define SWIFT_INDEX_INDEXDATACONSUMER_H
+    
+      char label_i;
+  char label_j;
+  char* pixels = new char[2 * rows * cols];
+  std::string value;
+    
+    namespace caffe {
     }
     
-    #endif // !defined(BOOST_ASIO_WINDOWS_RUNTIME)
+    #include 'caffe/layers/conv_layer.hpp'
     
+    namespace caffe {
+    }
     
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
+    #endif  // CAFFE_EMBED_LAYER_HPP_
+
     
-    #define BOOST_ASIO_COMPOSED_CONNECT_HANDLER_CHECK( \
-    handler_type, handler, iter_type) \
-  typedef int BOOST_ASIO_UNUSED_TYPEDEF
+    #include 'master_worker/master/THDTensor.h'
+#include 'master_worker/master/THDStorage.h'
     
-      // Constructor.
-  hash_map()
-    : size_(0),
-      buckets_(0),
-      num_buckets_(0)
-  {
+      VersionEdit edit;
+  for (int i = 0; i < 4; i++) {
+    TestEncodeDecode(edit);
+    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
+                 InternalKey('foo', kBig + 500 + i, kTypeValue),
+                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
+    edit.DeleteFile(4, kBig + 700 + i);
+    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
   }
     
-    void buffer_sequence_adapter_base::init_native_buffer(
-    buffer_sequence_adapter_base::native_buffer_type& buf,
-    const boost::asio::const_buffer& buffer)
+    std::string Key2(int i) {
+  return Key1(i) + '_xxx';
+}
+    
+    class FilterBlockReader {
+ public:
+ // REQUIRES: 'contents' and *policy must stay live while *this is live.
+  FilterBlockReader(const FilterPolicy* policy, const Slice& contents);
+  bool KeyMayMatch(uint64_t block_offset, const Slice& key);
+    }
+    
+      // Check the crc of the type and the block contents
+  const char* data = contents.data();    // Pointer to where Read put the data
+  if (options.verify_checksums) {
+    const uint32_t crc = crc32c::Unmask(DecodeFixed32(data + n + 1));
+    const uint32_t actual = crc32c::Value(data, n + 1);
+    if (actual != crc) {
+      delete[] buf;
+      s = Status::Corruption('block checksum mismatch');
+      return s;
+    }
+  }
+    
+    TEST(CRC, Mask) {
+  uint32_t crc = Value('foo', 3);
+  ASSERT_NE(crc, Mask(crc));
+  ASSERT_NE(crc, Mask(Mask(crc)));
+  ASSERT_EQ(crc, Unmask(Mask(crc)));
+  ASSERT_EQ(crc, Unmask(Unmask(Mask(Mask(crc)))));
+}
+    
+    class HASH { };
+    
+    static const int kValueSize = 200 * 1024;
+static const int kTotalSize = 100 * 1024 * 1024;
+static const int kCount = kTotalSize / kValueSize;
+    
+    void InternalKeyComparator::FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const {
+  // Attempt to shorten the user portion of the key
+  Slice user_start = ExtractUserKey(*start);
+  Slice user_limit = ExtractUserKey(limit);
+  std::string tmp(user_start.data(), user_start.size());
+  user_comparator_->FindShortestSeparator(&tmp, user_limit);
+  if (tmp.size() < user_start.size() &&
+      user_comparator_->Compare(user_start, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*start, tmp) < 0);
+    assert(this->Compare(tmp, limit) < 0);
+    start->swap(tmp);
+  }
+}
+    
+    int main(int argc, char** argv) {
+  return leveldb::test::RunAllTests();
+}
+
+    
+    int main(int argc, char** argv) {
+  leveldb::Env* env = leveldb::Env::Default();
+  bool ok = true;
+  if (argc < 2) {
+    Usage();
+    ok = false;
+  } else {
+    std::string command = argv[1];
+    if (command == 'dump') {
+      ok = leveldb::HandleDumpCommand(env, argv+2, argc-2);
+    } else {
+      Usage();
+      ok = false;
+    }
+  }
+  return (ok ? 0 : 1);
+}
+
+    
+    
+    {        // see if our best match qualifies
+        if (best < 3) { // fast path literals
+            ++q;
+        } else if (best > 2  &&  best <= 0x80    &&  dist <= 0x100) {
+            outliterals(lit_start, q-lit_start); lit_start = (q += best);
+            stb_out(0x80 + best-1);
+            stb_out(dist-1);
+        } else if (best > 5  &&  best <= 0x100   &&  dist <= 0x4000) {
+            outliterals(lit_start, q-lit_start); lit_start = (q += best);
+            stb_out2(0x4000 + dist-1);       
+            stb_out(best-1);
+        } else if (best > 7  &&  best <= 0x100   &&  dist <= 0x80000) {
+            outliterals(lit_start, q-lit_start); lit_start = (q += best);
+            stb_out3(0x180000 + dist-1);     
+            stb_out(best-1);
+        } else if (best > 8  &&  best <= 0x10000 &&  dist <= 0x80000) {
+            outliterals(lit_start, q-lit_start); lit_start = (q += best);
+            stb_out3(0x100000 + dist-1);     
+            stb_out2(best-1);
+        } else if (best > 9                      &&  dist <= 0x1000000) {
+            if (best > 65536) best = 65536;
+            outliterals(lit_start, q-lit_start); lit_start = (q += best);
+            if (best <= 0x100) {
+                stb_out(0x06);
+                stb_out3(dist-1);
+                stb_out(best-1);
+            } else {
+                stb_out(0x04);
+                stb_out3(dist-1);
+                stb_out2(best-1);
+            }
+        } else {  // fallback literals if no match was a balanced tradeoff
+            ++q;
+        }
+    }
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    
+    {    // Restore modified DX state
+    ctx->RSSetScissorRects(old.ScissorRectsCount, old.ScissorRects);
+    ctx->RSSetViewports(old.ViewportsCount, old.Viewports);
+    ctx->RSSetState(old.RS); if (old.RS) old.RS->Release();
+    ctx->OMSetBlendState(old.BlendState, old.BlendFactor, old.SampleMask); if (old.BlendState) old.BlendState->Release();
+    ctx->OMSetDepthStencilState(old.DepthStencilState, old.StencilRef); if (old.DepthStencilState) old.DepthStencilState->Release();
+    ctx->PSSetShaderResources(0, 1, &old.PSShaderResource); if (old.PSShaderResource) old.PSShaderResource->Release();
+    ctx->PSSetSamplers(0, 1, &old.PSSampler); if (old.PSSampler) old.PSSampler->Release();
+    ctx->PSSetShader(old.PS); if (old.PS) old.PS->Release();
+    ctx->VSSetShader(old.VS); if (old.VS) old.VS->Release();
+    ctx->VSSetConstantBuffers(0, 1, &old.VSConstantBuffer); if (old.VSConstantBuffer) old.VSConstantBuffer->Release();
+    ctx->IASetPrimitiveTopology(old.PrimitiveTopology);
+    ctx->IASetIndexBuffer(old.IndexBuffer, old.IndexBufferFormat, old.IndexBufferOffset); if (old.IndexBuffer) old.IndexBuffer->Release();
+    ctx->IASetVertexBuffers(0, 1, &old.VertexBuffer, &old.VertexBufferStride, &old.VertexBufferOffset); if (old.VertexBuffer) old.VertexBuffer->Release();
+    ctx->IASetInputLayout(old.InputLayout); if (old.InputLayout) old.InputLayout->Release();
+}
+    
+        // We are using the OpenGL fixed pipeline to make the example code simpler to read!
+    // Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled, vertex/texcoord/color pointers, polygon fill.
+    GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
+    GLint last_polygon_mode[2]; glGetIntegerv(GL_POLYGON_MODE, last_polygon_mode);
+    GLint last_viewport[4]; glGetIntegerv(GL_VIEWPORT, last_viewport);
+    GLint last_scissor_box[4]; glGetIntegerv(GL_SCISSOR_BOX, last_scissor_box); 
+    glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TRANSFORM_BIT);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
+    glEnable(GL_SCISSOR_TEST);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    glEnable(GL_TEXTURE_2D);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
+    
+            const int* indices = NULL;
+        if (sizeof(ImDrawIdx) == 2)
+        {
+            // FIXME-OPT: Unfortunately Allegro doesn't support 16-bit indices.. You can '#define ImDrawIdx  int' in imconfig.h to request ImGui to output 32-bit indices.
+            // Otherwise, we convert them from 16-bit to 32-bit at runtime here, which works perfectly but is a little wasteful.
+            static ImVector<int> indices_converted;
+            indices_converted.resize(cmd_list->IdxBuffer.Size);
+            for (int i = 0; i < cmd_list->IdxBuffer.Size; ++i)
+                indices_converted[i] = (int)cmd_list->IdxBuffer.Data[i];
+            indices = indices_converted.Data;
+        }
+        else if (sizeof(ImDrawIdx) == 4)
+        {
+            indices = (const int*)cmd_list->IdxBuffer.Data;
+        }
+    
+    static bool ImGui_ImplDX9_CreateFontsTexture()
 {
-  std::memset(&buf, 0, sizeof(native_buffer_type));
-  Microsoft::WRL::ComPtr<IInspectable> insp
-    = Microsoft::WRL::Make<winrt_buffer_impl>(buffer);
-  Platform::Object^ buf_obj = reinterpret_cast<Platform::Object^>(insp.Get());
-  buf = reinterpret_cast<Windows::Storage::Streams::IBuffer^>(insp.Get());
-}
+    // Build texture atlas
+    ImGuiIO& io = ImGui::GetIO();
+    unsigned char* pixels;
+    int width, height, bytes_per_pixel;
+    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height, &bytes_per_pixel);
+    }
     
+    //---- Define constructor and implicit cast operators to convert back<>forth from your math types and ImVec2/ImVec4.
+// This will be inlined as part of ImVec2 and ImVec4 class declarations.
+/*
+#define IM_VEC2_CLASS_EXTRA                                                 \
+        ImVec2(const MyVec2& f) { x = f.x; y = f.y; }                       \
+        operator MyVec2() const { return MyVec2(x,y); }
     
-    {  return false;
-}
+    IOBuf IOBuf::cloneAsValue() const {
+  auto tmp = cloneOneAsValue();
+    }
+    
+    #pragma once
+    
+        version_ = version;
