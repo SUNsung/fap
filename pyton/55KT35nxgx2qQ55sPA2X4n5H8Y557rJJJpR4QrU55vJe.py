@@ -1,40 +1,52 @@
 
         
-            def _migrate_implicit_content_type(self):
-        '''Migrate the removed implicit_content_type config option'''
-        try:
-            implicit_content_type = self.pop('implicit_content_type')
-        except KeyError:
-            self.save()
-        else:
-            if implicit_content_type == 'form':
-                self['default_options'].insert(0, '--form')
-            self.save()
-            self.load()
-
+            with open('README.md', 'w+') as sorted_file:
+        # Then all of the blocks are sorted individually
+        blocks = [''.join(sorted(block, key=lambda s: s.lower())) for block in blocks]
+        # And the result is written back to README.md
+        sorted_file.write(''.join(blocks))
     
-        @mock.patch('certbot_compatibility_test.validator.requests.get')
-    def test_hsts_bad_max_age(self, mock_get_request):
-        mock_get_request.return_value = create_response(
-            headers={'strict-transport-security': 'max-age=not-an-int'})
-        self.assertFalse(self.validator.hsts('test.com'))
+    import sys
     
-    # Custom sidebar templates, maps document names to template names.
-#html_sidebars = {}
     
-    from certbot import errors
-from certbot.display import util as display_util
+#: Log messages to :func:`~flask.logging.wsgi_errors_stream` with the format
+#: ``[%(asctime)s] %(levelname)s in %(module)s: %(message)s``.
+default_handler = logging.StreamHandler(wsgi_errors_stream)
+default_handler.setFormatter(logging.Formatter(
+    '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+))
     
-        @mock.patch('certbot.notify.smtplib.LMTP')
-    @mock.patch('certbot.notify.subprocess.Popen')
-    def test_smtp_failure(self, mock_popen, mock_lmtp):
-        from certbot.notify import notify
-        lmtp_obj = mock.MagicMock()
-        mock_lmtp.return_value = lmtp_obj
-        lmtp_obj.sendmail.side_effect = socket.error(17)
-        proc = mock.MagicMock()
-        mock_popen.return_value = proc
-        self.assertTrue(notify('Goose', 'auntrhody@example.com',
-                               'The old grey goose is dead.'))
-        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
-        self.assertEqual(proc.communicate.call_count, 1)
+        class _FakeSignal(object):
+        '''If blinker is unavailable, create a fake class with the same
+        interface that allows sending of signals but will fail with an
+        error on anything else.  Instead of doing anything on send, it
+        will just ignore the arguments and do nothing instead.
+        '''
+    
+    
+def test_uninstalled_module_paths(modules_tmpdir, purge_module):
+    app = modules_tmpdir.join('config_module_app.py').write(
+        'import os\n'
+        'import flask\n'
+        'here = os.path.abspath(os.path.dirname(__file__))\n'
+        'app = flask.Flask(__name__)\n'
+    )
+    purge_module('config_module_app')
+    
+        @app.after_request
+    def after_request_handler(response):
+        calls.append('after-handler')
+        response.data = 'stuff'
+        return response
+    
+        t = r1(r'type=(\w+)', flashvars)
+    id = r1(r'vid=([^']+)', flashvars)
+    if t == 'youku':
+        youku_download_by_vid(id, title=title, output_dir=output_dir, merge=merge, info_only=info_only)
+    elif t == 'tudou':
+        tudou_download_by_id(id, title, output_dir=output_dir, merge=merge, info_only=info_only)
+    elif t == 'sina' or t == 'video':
+        fake_headers['Referer'] = url
+        url = 'http://www.miomio.tv/mioplayer/mioplayerconfigfiles/sina.php?vid=' + id
+        xml_data = get_content(url, headers=fake_headers, decoded=True)
+        url_list = sina_xml_to_url_list(xml_data)
