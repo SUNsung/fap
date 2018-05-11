@@ -1,110 +1,374 @@
 
         
-          /// Prepare a callee for an Objective-C method.
-  Callee getObjCMethodCallee(IRGenFunction &IGF, const ObjCMethod &method,
-                             llvm::Value *selfValue, CalleeInfo &&info);
+        #include 'tensorflow/core/lib/strings/strcat.h'
     
-    public:
-  DeadEndBlocks(const SILFunction *F) : F(F) {}
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-      /// Indicates whether the diagnostics produced during compilation should be
-  /// checked against expected diagnostics, indicated by markers in the
-  /// input source file.
-  enum {
-    NoVerify,
-    Verify,
-    VerifyAndApplyFixes
-  } VerifyMode = NoVerify;
+    #include 'tensorflow/compiler/xla/service/hlo_reachability.h'
     
-    /// \brief Diagnostic consumer that displays diagnostics to standard error.
-class PrintingDiagnosticConsumer : public DiagnosticConsumer {
-  llvm::raw_ostream &Stream;
-  bool ForceColors = false;
-  bool DidErrorOccur = false;
-public:
-  PrintingDiagnosticConsumer(llvm::raw_ostream &stream = llvm::errs()) :
-    Stream(stream) { }
+    #define max_worker_name_length 128
+    
+      /**
+   * @brief Applies the transformation defined in the data layer's
+   * transform_param block to the data.
+   *
+   * @param datum
+   *    Datum containing the data to be transformed.
+   * @param transformed_blob
+   *    This is destination blob. It can be part of top blob's data if
+   *    set_cpu_data() is used. See data_layer.cpp for an example.
+   */
+  void Transform(const Datum& datum, Blob<Dtype>* transformed_blob);
+    
+    #include 'caffe/common.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    
+    {  /**
+   * @brief Computes the error gradient w.r.t. the BNLL inputs.
+   *
+   * @param top output Blob vector (length 1), providing the error gradient with
+   *      respect to the outputs
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
+   *      with respect to computed outputs @f$ y @f$
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$; Backward fills their diff with
+   *      gradients @f$
+   *        \frac{\partial E}{\partial x}
+   *      @f$ if propagate_down[0]
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+};
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 2+)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_1 @f$
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_2 @f$
+   *   -# ...
+   *   - K @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x_K @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
+   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
+   *      the concatenated output @f$
+   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+    
+    {  bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
+  cudnnPoolingDescriptor_t  pooling_desc_;
+  cudnnPoolingMode_t        mode_;
+};
+#endif
+    
+      EltwiseParameter_EltwiseOp op_;
+  vector<Dtype> coeffs_;
+  Blob<int> max_idx_;
+    
+    
+    {}  // namespace caffe
+    
+    /**
+ * @brief Takes two+ Blobs, interprets last Blob as a selector and
+ *  filter remaining Blobs accordingly with selector data (0 means that
+ * the corresponding item has to be filtered, non-zero means that corresponding
+ * item needs to stay).
+ */
+template <typename Dtype>
+class FilterLayer : public Layer<Dtype> {
+ public:
+  explicit FilterLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-    #ifndef SWIFT_BASIC_SOURCEMANAGER_H
-#define SWIFT_BASIC_SOURCEMANAGER_H
     
-    #ifndef SWIFT_SYNTAX_REFERENCES_H
-#define SWIFT_SYNTAX_REFERENCES_H
+    {}  // namespace testing
     
-    Substitution::Substitution(Type Replacement,
-                           ArrayRef<ProtocolConformanceRef> Conformance)
-  : Replacement(Replacement), Conformance(Conformance)
-{
-  // The replacement type must be materializable.
-  assert(Replacement->isMaterializable()
-         && 'cannot substitute with a non-materializable type');
+      // Returns a copy of the FilePath with the case-insensitive extension removed.
+  // Example: FilePath('dir/file.exe').RemoveExtension('EXE') returns
+  // FilePath('dir/file'). If a case-insensitive extension is not
+  // found, returns a copy of the original FilePath.
+  FilePath RemoveExtension(const char* extension) const;
+    
+    // Type and function utilities for implementing parameterized tests.
+// This file is generated by a SCRIPT.  DO NOT EDIT BY HAND!
+//
+// Currently Google Test supports at most $n arguments in Values,
+// and at most $maxtuple arguments in Combine. Please contact
+// googletestframework@googlegroups.com if you need more.
+// Please note that the number of arguments to Combine is limited
+// by the maximum arity of the implementation of tr1::tuple which is
+// currently set at $maxtuple.
+    
+    ]]
+    
+    class QuickTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
+    start_time_ = time(nullptr);
+  }
+  virtual void TearDown() {
+    const time_t end_time = time(nullptr);
+    EXPECT_TRUE(end_time - start_time_ <=25) << 'The test took too long - ' << ::testing::PrintToString(end_time - start_time_);
+  }
+  time_t start_time_;
+  };
+    
+    class UnicharcompressTest : public ::testing::Test {
+ protected:
+  // Loads and compresses the given unicharset.
+  void LoadUnicharset(const string& unicharset_name) {
+    string radical_stroke_file =
+        file::JoinPath(FLAGS_test_srcdir,
+                       'langdata/radical-stroke.txt');
+    string unicharset_file = file::JoinPath(
+        FLAGS_test_srcdir, 'testdata',
+        unicharset_name);
+    string uni_data;
+    CHECK_OK(file::GetContents(unicharset_file, &uni_data, file::Defaults()));
+    string radical_data;
+    CHECK_OK(file::GetContents(radical_stroke_file, &radical_data,
+                               file::Defaults()));
+    CHECK(
+        unicharset_.load_from_inmemory_file(uni_data.data(), uni_data.size()));
+    STRING radical_str(radical_data.c_str());
+    null_char_ =
+        unicharset_.has_special_codes() ? UNICHAR_BROKEN : unicharset_.size();
+    compressed_.ComputeEncoding(unicharset_, null_char_, &radical_str);
+    // Get the encoding of the null char.
+    RecodedCharID code;
+    compressed_.EncodeUnichar(null_char_, &code);
+    encoded_null_char_ = code(0);
+    string output_name = file::JoinPath(
+        FLAGS_test_tmpdir, absl::StrCat(unicharset_name, '.encoding.txt'));
+    STRING encoding = compressed_.GetEncodingAsString(unicharset_);
+    string encoding_str(&encoding[0], encoding.size());
+    CHECK_OK(file::SetContents(output_name, encoding_str, file::Defaults()));
+    LOG(INFO) << 'Wrote encoding to:' << output_name;
+  }
+  // Serializes and de-serializes compressed_ over itself.
+  void SerializeAndUndo() {
+    GenericVector<char> data;
+    TFile wfp;
+    wfp.OpenWrite(&data);
+    EXPECT_TRUE(compressed_.Serialize(&wfp));
+    TFile rfp;
+    rfp.Open(&data[0], data.size());
+    EXPECT_TRUE(compressed_.DeSerialize(&rfp));
+  }
+  // Returns true if the lang is in CJK.
+  bool IsCJKLang(const string& lang) {
+    return lang == 'chi_sim' || lang == 'chi_tra' || lang == 'kor' ||
+           lang == 'jpn';
+  }
+  // Returns true if the lang is Indic.
+  bool IsIndicLang(const string& lang) {
+    return lang == 'asm' || lang == 'ben' || lang == 'bih' || lang == 'hin' ||
+           lang == 'mar' || lang == 'nep' || lang == 'san' || lang == 'bod' ||
+           lang == 'dzo' || lang == 'guj' || lang == 'kan' || lang == 'mal' ||
+           lang == 'ori' || lang == 'pan' || lang == 'sin' || lang == 'tam' ||
+           lang == 'tel';
+  }
+    }
+    
+    // dims=[5, 4, 3, 2]->[3, 5, 4, 2]
+TEST_F(MatrixTest, RotatingTranspose_2_0) {
+  GENERIC_2D_ARRAY<int> m;
+  src_.RotatingTranspose(dims_, kNumDims_, 2, 0, &m);
+  m.ResizeNoInit(kInputSize_ / 2, 2);
+  // Verify that the result is:
+  // output tensor=[[[[0, 1][6, 7][12, 13][18, 19]]
+  //                 [[24, 25][30, 31][36, 37][42, 43]]
+  //                 [[48, 49][54, 55][60, 61][66, 67]]
+  //                 [[72, 73][78, 79][84, 85][90, 91]]
+  //                 [[96, 97][102, 103][108, 109][114, 115]]]
+  //                [[[2,3]...
+  EXPECT_EQ(0, m(0, 0));
+  EXPECT_EQ(1, m(0, 1));
+  EXPECT_EQ(6, m(1, 0));
+  EXPECT_EQ(7, m(1, 1));
+  EXPECT_EQ(24, m(4, 0));
+  EXPECT_EQ(25, m(4, 1));
+  EXPECT_EQ(30, m(5, 0));
+  EXPECT_EQ(2, m(20, 0));
 }
     
-    ScrollView* bln_word_window_handle();  //return handle
-void build_image_window(int width, int height);
-void display_bln_lines(ScrollView window,
-                       ScrollView::Color colour,
-                       float scale_factor,
-                       float y_offset,
-                       float minx,
-                       float maxx);
-                                 //function to call
-void pgeditor_msg(  //message display
-                  const char *msg);
-void pgeditor_show_point(  //display coords
-                         SVEvent *event);
-                                 //put bln word in       box
-void show_point(PAGE_RES* page_res, float x, float y);
+      if (!current || !other_it->current)
+    DONT_EXCHANGE_DELETED.error ('ELIST_ITERATOR.exchange', ABORT, nullptr);
     
-      // Connects this and other, discarding any existing connections.
-  void Connect(DoublePtr* other) {
-    other->Disconnect();
-    Disconnect();
-    other->other_end_ = this;
-    other_end_ = other;
-  }
-  // Disconnects this and other, making OtherEnd() return NULL for both.
-  void Disconnect() {
-    if (other_end_ != NULL) {
-      other_end_->other_end_ = NULL;
-      other_end_ = NULL;
-    }
-  }
-  // Returns the pointer to the other end of the double pointer.
-  DoublePtr* OtherEnd() const {
-    return other_end_;
-  }
+      /** Common code for setting the image. Returns true if Init has been called. */
+  TESS_LOCAL bool InternalSetImage();
     
-    // Tests a classifier, computing its error rate.
-// See errorcounter.h for description of arguments.
-// Iterates over the samples, calling the classifier in normal/silent mode.
-// If the classifier makes a CT_UNICHAR_TOPN_ERR error, and the appropriate
-// report_level is set (4 or greater), it will then call the classifier again
-// with a debug flag and a keep_this argument to find out what is going on.
-double ErrorCounter::ComputeErrorRate(ShapeClassifier* classifier,
-    int report_level, CountTypes boosting_mode,
-    const FontInfoTable& fontinfo_table,
-    const GenericVector<Pix*>& page_images, SampleIterator* it,
-    double* unichar_error,  double* scaled_error, STRING* fonts_report) {
-  int fontsize = it->sample_set()->NumFonts();
-  ErrorCounter counter(classifier->GetUnicharset(), fontsize);
-  GenericVector<UnicharRating> results;
+    
+    {  char *p = *pdf_object;
+  memcpy(p, b1, b1_len);
+  p += b1_len;
+  memcpy(p, colorspace, colorspace_len);
+  p += colorspace_len;
+  memcpy(p, b2, b2_len);
+  p += b2_len;
+  memcpy(p, cid->datacomp, cid->nbytescomp);
+  p += cid->nbytescomp;
+  memcpy(p, b3, b3_len);
+  l_CIDataDestroy(&cid);
+  return true;
+}
+    
+    namespace tesseract {
     }
     
+    // Computes a reshaped copy of the weight matrix w. If there are no
+// partial_funcs_, it does nothing.
+void IntSimdMatrix::Init(const GENERIC_2D_ARRAY<int8_t>& w) {
+  if (partial_funcs_.empty()) return;
+  int num_out = w.dim1();
+  int num_in = w.dim2() - 1;
+  // The rounded-up sizes of the reshaped weight matrix, excluding biases.
+  int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
+  int rounded_num_out = RoundOutputs(num_out);
+  // Add the bias and compute the required size.
+  shaped_w_.resize((rounded_num_in + 1) * rounded_num_out, 0);
+  int shaped_index = 0;
+  int output = 0;
+  // Each number of registers needs a different format! Iterates over the
+  // different numbers of registers (each a power of 2).
+  for (int num_registers = max_output_registers_; num_registers >= 1;
+       num_registers /= 2) {
+    // The number of outputs that we will generate with this many registers.
+    int num_outputs_per_register_set =
+        num_registers * num_outputs_per_register_;
+    // Use the max number of registers until we have to go fewer.
+    while (output + num_outputs_per_register_set <= rounded_num_out) {
+      // Accumulating outputs in registers saves iterating over the inputs, so
+      // we only have to do it once per output register set.
+      for (int input = 0; input < num_in; input += num_inputs_per_group_) {
+        // Iterate over the number of outputs in a register set.
+        for (int j = 0; j < num_outputs_per_register_set; ++j) {
+          // Inner-most loop corresponds to the number of inputs in an input
+          // group.
+          for (int i = 0; i < num_inputs_per_group_; ++i) {
+            int8_t weight = 0;
+            if (output + j < num_out && input + i < num_in)
+              weight = w(output + j, input + i);
+            shaped_w_[shaped_index++] = weight;
+          }
+        }
+      }
+      // Append the bias weights for the register set.
+      for (int j = 0; j < num_outputs_per_register_set; ++j) {
+        int8_t weight = 0;
+        if (output + j < num_out) weight = w(output + j, num_in);
+        shaped_w_[shaped_index++] = weight;
+      }
+      output += num_outputs_per_register_set;
+    }
+  }
+}
     
     
-        template <typename ElementType>
-    ElementType Value::AsScalar() const
-    {
-        if (Mask())
-            LogicError('Value::AsScalar: Scalar Value object must not have an associated mask');
+    {  WordData word_data(*pr_it);
+  SetupWordPassN(2, &word_data);
+  // LSTM doesn't run on pass2, but we want to run pass2 for tesseract.
+  if (lstm_recognizer_ == nullptr) {
+    classify_word_and_language(2, pr_it, &word_data);
+  } else {
+    classify_word_and_language(1, pr_it, &word_data);
+  }
+  if (tessedit_debug_quality_metrics) {
+    WERD_RES* word_res = pr_it->word();
+    word_char_quality(word_res, pr_it->row()->row, &char_qual, &good_char_qual);
+    tprintf('\n%d chars;  word_blob_quality: %d;  outline_errs: %d; '
+            'char_quality: %d; good_char_quality: %d\n',
+            word_res->reject_map.length(),
+            word_blob_quality(word_res, pr_it->row()->row),
+            word_outline_errs(word_res), char_qual, good_char_qual);
+  }
+  return TRUE;
+}
+    
+    
+    {  // The number of pages we have processed.
+  int page_count_;
+};
+    
+    bool WebSocketClient::is_server() const {
     }
     
-        mAsparse.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseCSR, true);
-    mBsparse.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseCSR, true);
-    Matrix<float>::ScaleAndAdd(alpha, mAsparse, mBsparse);
+    #if defined(MBEDTLS_SSL_TICKET_C) && !defined(MBEDTLS_CIPHER_C)
+#error 'MBEDTLS_SSL_TICKET_C defined, but not all prerequisites'
+#endif
     
-        StreamMinibatchInputs inputMatrices;
-    for (auto& node : featureNodes)
-        inputMatrices.AddInput(node->NodeName(), node->ValuePtr(), node->GetMBLayout(), node->GetSampleLayout());
+    // When DEBUG_METHODS_ENABLED is set this will let the engine know
+// the argument names for easier debugging.
+#define D_METHOD(m_c, ...) m_c
+    
+    			if (!FileAccess::exists(msbuild_path)) {
+				WARN_PRINTS('Cannot find msbuild ('mono/builds/build_tool'). Tried with path: ' + msbuild_path);
+			}
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+    
+    
+    {  return c;
+}
+    
+    
+    {    // The read() method is called when the internal input buffer is empty.
+    // Parameters:
+    // pBuf - input buffer
+    // max_bytes_to_read - maximum bytes that can be written to pBuf
+    // pEOF_flag - set this to true if at end of stream (no more bytes remaining)
+    // Returns -1 on error, otherwise return the number of bytes actually written to the buffer (which may be 0).
+    // Notes: This method will be called in a loop until you set *pEOF_flag to true or the internal buffer is full.
+    virtual int read(uint8 *pBuf, int max_bytes_to_read, bool *pEOF_flag) = 0;
+  };
+    
+    /*Note that we do not provide a macro for abs(), because it is provided as a
+   library function, which we assume is translated into an intrinsic to avoid
+   the function call overhead and then implemented in the smartest way for the
+   target platform.
+  With modern gcc (4.x), this is true: it uses cmov instructions if the
+   architecture supports it and branchless bit-twiddling if it does not (the
+   speed difference between the two approaches is not measurable).
+  Interestingly, the bit-twiddling method was patented in 2000 (US 6,073,150)
+   by Sun Microsystems, despite prior art dating back to at least 1996:
+   http://web.archive.org/web/19961201174141/www.x86.org/ftp/articles/pentopt/PENTOPT.TXT
+  On gcc 3.x, however, our assumption is not true, as abs() is translated to a
+   conditional jump, which is horrible on deeply piplined architectures (e.g.,
+   all consumer architectures for the past decade or more).
+  Also be warned that -C*abs(x) where C is a constant is mis-optimized as
+   abs(C*x) on every gcc release before 4.2.3.
+  See bug http://gcc.gnu.org/bugzilla/show_bug.cgi?id=34130 */
