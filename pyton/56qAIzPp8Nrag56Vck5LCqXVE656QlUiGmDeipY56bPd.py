@@ -1,144 +1,128 @@
 
         
-        
-def test_duplicate_tag():
-    class TagDict(JSONTag):
-        key = ' d'
-    
-            os.environ = {'FOO_SETTINGS': __file__.rsplit('.', 1)[0] + '.py'}
-        assert app.config.from_envvar('FOO_SETTINGS')
-        common_object_test(app)
-    finally:
-        os.environ = env
-    
-        logger.propagate = False
-    assert not has_level_handler(logger)
-    logger.propagate = True
-    
-        def __init__(self, groups, env=Environment(), **kwargs):
-        '''
-        :param groups: names of processor groups to be applied
-        :param env: Environment
-        :param kwargs: additional keyword arguments for processors
-    
-        '''
-    if not env.stdout_isatty and not args.prettify:
-        Stream = partial(
-            RawStream,
-            chunk_size=RawStream.CHUNK_SIZE_BY_LINE
-            if args.stream
-            else RawStream.CHUNK_SIZE
-        )
-    elif args.prettify:
-        Stream = partial(
-            PrettyStream if args.stream else BufferedPrettyStream,
-            env=env,
-            conversion=Conversion(),
-            formatting=Formatting(
-                env=env,
-                groups=args.prettify,
-                color_scheme=args.style,
-                explicit_json=args.json,
-            ),
-        )
-    else:
-        Stream = partial(EncodedStream, env=env)
+        from httpie.compat import str
+from httpie.context import Environment
+from httpie.models import HTTPRequest, HTTPResponse
+from httpie.input import (OUT_REQ_BODY, OUT_REQ_HEAD,
+                          OUT_RESP_HEAD, OUT_RESP_BODY)
+from httpie.output.processing import Formatting, Conversion
     
     
-def test_follow_all_redirects_shown(httpbin):
-    r = http('--follow', '--all', httpbin.url + '/redirect/2')
-    assert r.count('HTTP/1.1') == 3
-    assert r.count('HTTP/1.1 302 FOUND', 2)
-    assert HTTP_OK in r
-    
-    
-class Downloader(object):
-    
-        def __call__(self, r):
-        '''
-        Override username/password serialization to allow unicode.
-    
-        def test_cert_pem(self, httpbin_secure):
-        r = http(httpbin_secure + '/get',
-                 '--cert', CLIENT_PEM)
-        assert HTTP_OK in r
-    
-    
-def get_response(requests_session, session_name,
-                 config_dir, args, read_only=False):
-    '''Like `client.get_responses`, but applies permanent
-    aspects of the session to the request.
-    
-        print('Classifier Training')
-    print('===================')
-    accuracy, train_time, test_time = {}, {}, {}
-    for name in sorted(args['estimators']):
-        clf = ESTIMATORS[name]
-        try:
-            clf.set_params(random_state=0)
-        except (TypeError, ValueError):
-            pass
-    
-    
-def plot_feature_times(all_times, batch_size, all_components, data):
-    plt.figure()
-    plot_results(all_components, all_times['pca'], label='PCA')
-    plot_results(all_components, all_times['ipca'],
-                 label='IncrementalPCA, bsize=%i' % batch_size)
-    plot_results(all_components, all_times['rpca'], label='RandomizedPCA')
-    plt.legend(loc='upper left')
-    plt.suptitle('Algorithm runtime vs. n_components\n \
-                 LFW, size %i x %i' % data.shape)
-    plt.xlabel('Number of components (out of max %i)' % data.shape[1])
-    plt.ylabel('Time (seconds)')
-    
-    import numpy as np
-import scipy.sparse as sp
-    
-        xx = np.arange(start_dim, start_dim + n * step, step)
-    plt.subplot(212)
-    plt.title('Learning in high dimensional spaces')
-    plt.plot(xx, scikit_classifier_results, 'g-', label='classification')
-    plt.plot(xx, scikit_regressor_results, 'r-', label='regression')
-    plt.legend(loc='upper left')
-    plt.xlabel('number of dimensions')
-    plt.ylabel('Time (s)')
-    plt.axis('tight')
-    plt.show()
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
 
     
     
-if not os.path.exists(DATA_FOLDER):
+def test_unicode_basic_auth(httpbin):
+    # it doesn't really authenticate us because httpbin
+    # doesn't interpret the utf8-encoded auth
+    http('--verbose', '--auth', u'test:%s' % UNICODE,
+         httpbin.url + u'/basic-auth/test/' + UNICODE)
     
-    for s, p in zip(sentences, predicted):
-    print(u'The language of '%s' is '%s'' % (s, dataset.target_names[p]))
-
+            if downloader and exit_status == ExitStatus.OK:
+            # Last response body download.
+            download_stream, download_to = downloader.start(final_response)
+            write_stream(
+                stream=download_stream,
+                outfile=download_to,
+                flush=False,
+            )
+            downloader.finish()
+            if downloader.interrupted:
+                exit_status = ExitStatus.ERROR
+                log_error('Incomplete download: size=%d; downloaded=%d' % (
+                    downloader.status.total_size,
+                    downloader.status.downloaded
+                ))
+        return exit_status
+    
+    content_type = parser.add_argument_group(
+    title='Predefined Content Types',
+    description=None
+)
+    
+    - Preprocessing
+    Sequence Preprocessing
+    Text Preprocessing
+    Image Preprocessing
     
     
-if __name__ == '__main__':
-    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
-    # block to be able to use a multi-core grid search that also works under
-    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
-    # The multiprocessing module is used as the backend of joblib.Parallel
-    # that is used when n_jobs != 1 in GridSearchCV
+@keras_test
+def test_min_max_norm():
+    array = get_example_array()
+    for m in get_test_values():
+        norm_instance = constraints.min_max_norm(min_value=m, max_value=m * 2)
+        normed = norm_instance(K.variable(array))
+        value = K.eval(normed)
+        l2 = np.sqrt(np.sum(np.square(value), axis=0))
+        assert not l2[l2 < m]
+        assert not l2[l2 > m * 2 + 1e-5]
     
-    y_min, y_max = -50, 50
-x_min, x_max = -50, 50
+        # learn the alphabet with stacked LSTM
+    model = Sequential([
+        layers.LSTM(16, return_sequences=True, input_shape=(sequence_length, number_of_chars)),
+        layers.LSTM(16, return_sequences=False),
+        layers.Dense(number_of_chars, activation='softmax')
+    ])
+    model.compile(loss='categorical_crossentropy', optimizer='adam')
+    model.fit(x, y, batch_size=1, epochs=60, verbose=1)
     
-    plt.show()
-
+    print('Build model...')
+model = Sequential()
+model.add(Embedding(max_features, 128))
+model.add(LSTM(128, dropout=0.2, recurrent_dropout=0.2))
+model.add(Dense(1, activation='sigmoid'))
     
-    if __name__ == '__main__':
-    main()
-
+    - Klambauer, G., Unterthiner, T., Mayr, A., & Hochreiter, S. (2017).
+  Self-Normalizing Neural Networks. arXiv preprint arXiv:1706.02515.
+  https://arxiv.org/abs/1706.02515
+'''
+from __future__ import print_function
     
-        theplatform_download_by_pid(pid, title, output_dir=output_dir, merge=merge, info_only=info_only)
+            # Inference
+        start_time = time.time()
+        parallel_model.predict(x, batch_size=batch_size)
+        total_time = time.time() - start_time
+        print('%d gpus inference:' % i, total_time)
     
-    def ehow_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-	
-	assert re.search(r'http://www.ehow.com/video_', url), 'URL you entered is not supported'
     
-        fc2video_download_by_upid(upid, output_dir, merge, info_only)
+def timedelta_to_seconds(td):
+    # type: (datetime.timedelta) -> float
+    '''Equivalent to td.total_seconds() (introduced in python 2.7).'''
+    return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10 ** 6) / float(10 ** 6)
     
-    from ..common import *
-from ..extractor import VideoExtractor
+    
+class QueueBasicTest(AsyncTestCase):
+    def test_repr_and_str(self):
+        q = queues.Queue(maxsize=1)
+        self.assertIn(hex(id(q)), repr(q))
+        self.assertNotIn(hex(id(q)), str(q))
+        q.get()
+    
+    '''`StackContext` allows applications to maintain threadlocal-like state
+that follows execution as it moves to other execution contexts.
+    
+        @skipOnTravis
+    def test_hello_world(self):
+        response = self.fetch('/hello')
+        self.assertEqual(response.code, 200)
+        self.assertEqual(response.headers['Content-Type'], 'text/plain')
+        self.assertEqual(response.body, b'Hello world!')
+        self.assertEqual(int(response.request_time), 0)
+    
+            # The tokens are cross-compatible.
+        for cookie_token, body_token in ((v1_token, v2_token),
+                                         (v2_token, v1_token)):
+            response = self.fetch(
+                '/', method='POST',
+                body=urllib_parse.urlencode(dict(_xsrf=body_token)),
+                headers=self.cookie_headers(cookie_token))
+            self.assertEqual(response.code, 200)
