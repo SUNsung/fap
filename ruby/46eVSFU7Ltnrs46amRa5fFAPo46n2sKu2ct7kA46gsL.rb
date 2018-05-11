@@ -1,132 +1,85 @@
 
         
-            groups << @user.authorized_groups.visible_to_user(current_user) if current_user
-    groups << @user.authorized_groups.public_to_user(current_user)
+            # Get the hash of the last commit
+    def self.last_git_commit_hash(short)
+      format_specifier = short ? '%h' : '%H'
+      string = last_git_commit_formatted_with(format_specifier).to_s
+      return string unless string.empty?
+      return nil
+    end
     
-          def get_type
-        name
-      end
+          it 'pass a custom build number to the tool' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          increment_build_number(build_number: 24, xcodeproj: '.xcproject')
+        end').runner.execute(:test)
     
-            doc
+      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
+    @logger     = Logger.new
+    @repo       = repo
+    @branch     = branch || 'master'
+    @branch_sha = get_branch_sha
+    @cache_path = cache_path
+    @repo_url   = 'https://github.com/#@repo'
+    @save_to    = {
+        js:    'assets/javascripts/bootstrap',
+        scss:  'assets/stylesheets/bootstrap',
+        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
+  end
+    
+        # convert recursively evaluated selector $list to @for loop
+    def mixin_all_grid_columns(css, selector: raise('pass class'), from: 1, to: raise('pass to'))
+      mxn_def = css.each_line.first.strip
+      # inject local variables as default arguments
+      # this is to avoid overwriting outer variables with the same name with Sass <= 3.3
+      # see also: https://github.com/twbs/bootstrap-sass/issues/636
+      locals = <<-SASS.strip
+        $i: #{from}, $list: '#{selector}'
+      SASS
+      mxn_def.sub!(/(\(?)(\)\s*\{)/) {  '#{$1}#{', ' if $1.empty?}#{locals}#{$2}' }
+      step_body = (css =~ /\$list \{\n(.*?)\n[ ]*\}/m) && $1
+<<-SASS
+// [converter] This is defined recursively in LESS, but Sass supports real loops
+#{mxn_def}
+  @for $i from (#{from} + 1) through #{to} {
+    $list: '\#{$list}, #{selector}';
+  }
+  \#{$list} {
+#{unindent step_body, 2}
+  }
+}
+SASS
+    end
+    
+      # Raise exceptions instead of rendering exception templates.
+  config.action_dispatch.show_exceptions = false
+    
+            def multiple_assignment_node
+          grandparent_node = node.parent ? node.parent.parent : nil
+          return nil unless grandparent_node
+          return nil unless grandparent_node.type == MULTIPLE_ASSIGNMENT_TYPE
+          return nil unless node.parent.type == MULTIPLE_LEFT_HAND_SIDE_TYPE
+          grandparent_node
+        end
       end
     end
   end
 end
 
     
-      def test_marshal_zone_gc
-    assert_separately(%w(--disable-gems), <<-'end;', timeout: 30)
-      ENV['TZ'] = 'JST-9'
-      s = Marshal.dump(Time.now)
-      t = Marshal.load(s)
-      n = 0
-      done = 100000
-      while t.zone.dup == 'JST' && n < done
-        n += 1
-      end
-      assert_equal done, n, 'Bug #9652'
-      assert_equal 'JST', t.zone, 'Bug #9652'
-    end;
-  end
-    
-        run.should be_true
-  end
-    
-        uninstall login_item: 'login item name'
-    
-      def_delegators :@logger, :log, :log_status, :log_processing, :log_transform, :log_file_info, :log_processed, :log_http_get_file, :log_http_get_files, :silence_log
-    
-        def shared_mixins
-      @shared_mixins ||= begin
-        log_status '  Reading shared mixins from mixins.less'
-        CLASSES_TO_MIXINS + read_mixins(read_files('less', bootstrap_less_files.grep(/mixins\//)).values.join('\n'),
-                                        nested: NESTED_MIXINS)
-      end
-    end
-    
-        def log_processing(name)
-      puts yellow '  #{File.basename(name)}'
-    end
-    
-    msfenv_real_pathname = Pathname.new(__FILE__).realpath
-root = msfenv_real_pathname.parent.parent
-    
-            def run
-          UI.puts('$CACHE_ROOT: #{@cache.root}') if @short_output
-          if @pod_name.nil? # Print all
-            @cache.cache_descriptors_per_pod.each do |pod_name, cache_descriptors|
-              print_pod_cache_infos(pod_name, cache_descriptors)
-            end
-          else # Print only for the requested pod
-            cache_descriptors = @cache.cache_descriptors_per_pod[@pod_name]
-            if cache_descriptors.nil?
-              UI.notice('No cache for pod named #{@pod_name} found')
-            else
-              print_pod_cache_infos(@pod_name, cache_descriptors)
-            end
+            def on_percent_literal(node)
+          each_unnecessary_space_match(node) do |range|
+            add_offense(node, location: range)
           end
         end
     
-          # @param  [[Xcodeproj::PBXTarget]] targets
-      #         An array which always has a target as its first item
-      #         and may optionally contain related test targets
-      #
-      # @return [String] the text for the target module
-      #
-      def target_module(app, tests)
-        target_module = '\ntarget '#{app.name.gsub(/'/, '\\\\\'')}' do\n'
-    
-        it 'redirects requests with sneaky encoded session cookies' do
-      get '/path', {}, 'HTTP_COOKIE' => 'rack.%73ession=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
-      expect(last_response).to be_redirect
-      expect(last_response.location).to eq('/path')
+            def repeated_condition?(previous, condition)
+          previous.any? { |c| c.include?(condition) }
+        end
+      end
     end
   end
-    
-      it 'should not set the X-Frame-Options for other content types' do
-    expect(get('/', {}, 'wants' => 'text/foo').headers['X-Frame-Options']).to be_nil
-  end
-    
-      if ''.respond_to?(:encoding)  # Ruby 1.9+ M17N
-    context 'PATH_INFO's encoding' do
-      before do
-        @app = Rack::Protection::PathTraversal.new(proc { |e| [200, {'Content-Type' => 'text/plain'}, [e['PATH_INFO'].encoding.to_s]] })
-      end
-    
-      it 'denies requests with a changing User-Agent header' do
-    session = {:foo => :bar}
-    get '/', {}, 'rack.session' => session, 'HTTP_USER_AGENT' => 'a'
-    get '/', {}, 'rack.session' => session, 'HTTP_USER_AGENT' => 'b'
-    expect(session).to be_empty
-  end
-    
-            attr_reader :node, :variable, :referenced, :references
-        alias referenced? referenced
-    
-            def_node_matcher :multiple_compare?, <<-PATTERN
-          (send (send _ {:< :> :<= :>=} $_) {:< :> :<= :>=} _)
-        PATTERN
-    
-    module RuboCop
-  module Cop
-    module Style
-      # This cop checks for optional arguments to methods
-      # that do not come at the end of the argument list
-      #
-      # @example
-      #   # bad
-      #   def foo(a = 1, b, c)
-      #   end
-      #
-      #   # good
-      #   def baz(a, b, c = 1)
-      #   end
-      #
-      #   def foobar(a = 1, b = 2, c = 3)
-      #   end
-      class OptionalArguments < Cop
-        MSG = 'Optional arguments should appear at the end ' \
-              'of the argument list.'.freeze
+end
+
     
       let(:source) { ''something'.intern' }
   let(:corrected) { autocorrect_source(source) }
