@@ -1,73 +1,92 @@
 
         
-            for category, entries in sections.items():
-        if sorted(entries) != entries:
-            add_error(section_line_num[category], '{} section is not in alphabetical order'.format(category))
+        
+MIME_RE = re.compile(r'^[^/]+/[^/]+$')
     
-        print('20 newsgroups')
-    print('=============')
-    print('X_train.shape = {0}'.format(X_train.shape))
-    print('X_train.format = {0}'.format(X_train.format))
-    print('X_train.dtype = {0}'.format(X_train.dtype))
-    print('X_train density = {0}'
-          ''.format(X_train.nnz / np.product(X_train.shape)))
-    print('y_train {0}'.format(y_train.shape))
-    print('X_test {0}'.format(X_test.shape))
-    print('X_test.format = {0}'.format(X_test.format))
-    print('X_test.dtype = {0}'.format(X_test.dtype))
-    print('y_test {0}'.format(y_test.shape))
-    print()
     
-        url_fmt is along the lines of ('https://github.com/USER/PROJECT/'
-                                   'blob/{revision}/{package}/'
-                                   '{path}#L{lineno}')
-    '''
-    revision = _get_git_revision()
-    return partial(_linkcode_resolve, revision=revision, package=package,
-                   url_fmt=url_fmt)
-
+BINARY_SUPPRESSED_NOTICE = (
+    b'\n'
+    b'+-----------------------------------------+\n'
+    b'| NOTE: binary data not shown in terminal |\n'
+    b'+-----------------------------------------+'
+)
     
-    ARCHIVE_NAME = URL.rsplit('/', 1)[1]
-TRAIN_FOLDER = '20news-bydate-train'
-TEST_FOLDER = '20news-bydate-test'
     
-    data, row_idx, col_idx = sg._shuffle(data, random_state=0)
-plt.matshow(data, cmap=plt.cm.Blues)
-plt.title('Shuffled dataset')
+CLIENT_CERT = os.path.join(TESTS_ROOT, 'client_certs', 'client.crt')
+CLIENT_KEY = os.path.join(TESTS_ROOT, 'client_certs', 'client.key')
+CLIENT_PEM = os.path.join(TESTS_ROOT, 'client_certs', 'client.pem')
     
-    plt.show()
-
+        def get_formatters_grouped(self):
+        groups = {}
+        for group_name, group in groupby(
+                self.get_formatters(),
+                key=lambda p: getattr(p, 'group_name', 'format')):
+            groups[group_name] = list(group)
+        return groups
     
-    X = list()
-y = list()
-for i, (phi, a) in enumerate([(.5, .15), (.5, .6), (.3, .2)]):
-    for _ in range(30):
-        phase_noise = .01 * np.random.normal()
-        amplitude_noise = .04 * np.random.normal()
-        additional_noise = 1 - 2 * np.random.rand(n_features)
-        # Make the noise sparse
-        additional_noise[np.abs(additional_noise) < .997] = 0
+        return groups
     
-    from .theplatform import theplatform_download_by_pid
+        if os.path.exists(path):
+        return
     
-    def kugou_download_by_hash(title,hash_val,output_dir = '.', merge = True, info_only = False):
-    #sample
-    #url_sample:http://www.kugou.com/yy/album/single/536957.html
-    #hash ->key  md5(hash+kgcloud')->key  decompile swf
-    #cmd 4 for mp3 cmd 3 for m4a
-    key=hashlib.new('md5',(hash_val+'kgcloud').encode('utf-8')).hexdigest()
-    html=get_html('http://trackercdn.kugou.com/i/?pid=6&key=%s&acceptMp3=1&cmd=4&hash=%s'%(key,hash_val))
-    j=loads(html)
-    url=j['url']
-    songtype, ext, size = url_info(url)
-    print_info(site_info, title, songtype, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge=merge)
+        project_id = response.json()[0]['id']
     
-            for s in self.stream_types:
-            quality = s['id']
-            src = match1(content,
-                         r'src: '([^']+)', 'data-res': '%s'' % quality)
-            if src is not None:
-                url = 'http://en.musicplayon.com%s' % src
-                self.streams[quality] = {'url': url}
+        branch_pool = AveragePooling2D((3, 3), strides=(1, 1), padding='same')(x)
+    branch_pool = conv2d_bn(branch_pool, 64, 1, 1)
+    x = layers.concatenate(
+        [branch1x1, branch5x5, branch3x3dbl, branch_pool],
+        axis=channel_axis,
+        name='mixed2')
+    
+            inputs = np.random.random((num_samples, timesteps, input_size))
+        state = model.predict(inputs)
+        np.testing.assert_allclose(
+            keras.backend.eval(layer.states[0]), state, atol=1e-4)
+    
+        xs = []
+    for i in range(output_length):
+        slice_length = slice(i * stride,
+                             i * stride + kernel_size[0])
+        xs.append(reshape(inputs[:, slice_length, :],
+                          (-1, 1, feature_dim)))
+    x_aggregate = concatenate(xs, axis=1)
+    # transpose kernel to output_filters first, to apply broadcast
+    weight = permute_dimensions(kernel, (2, 0, 1))
+    # Shape: (batch, filters, output_length, input_length * kernel_size)
+    output = x_aggregate * weight
+    # Shape: (batch, filters, output_length)
+    output = sum(output, axis=3)
+    # Shape: (batch, output_length, filters)
+    return permute_dimensions(output, (0, 2, 1))
+    
+                # Test cases with `y = None`
+            x = generator.flow(images, None, batch_size=3).next()
+            assert type(x) is np.ndarray
+            assert x.shape == images[:3].shape
+            x = generator.flow((images, x_misc1), None,
+                               batch_size=3, shuffle=False).next()
+            assert type(x) is list
+            assert x[0].shape == images[:3].shape
+            assert (x[1] == x_misc1[:3]).all()
+            x = generator.flow((images, [x_misc1, x_misc2]), None,
+                               batch_size=3, shuffle=False).next()
+            assert type(x) is list
+            assert x[0].shape == images[:3].shape
+            assert (x[1] == x_misc1[:3]).all()
+            assert (x[2] == x_misc2[:3]).all()
+    
+            self.kernel_constraint = constraints.get(kernel_constraint)
+        self.recurrent_constraint = constraints.get(recurrent_constraint)
+        self.bias_constraint = constraints.get(bias_constraint)
+    
+    from setuptools import setup, find_packages
+setup(
+    name = proj_info['name'],
+    version = VERSION,
+    
+    	for video in tab.childNodes:
+		if re.search(contentid, video.attributes['link'].value):
+			url = video.attributes['flv'].value
+			break
+    
+        type, ext, size = url_info(video_url, headers=fake_headers)
