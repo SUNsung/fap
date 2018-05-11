@@ -1,146 +1,66 @@
 
         
-            seems_fishy = False
-    if total_found == 0:
-        info.append('Error: the template could not be found.')
-        seems_fishy = True
-    elif total_found > 1:
-        info.append('Warning: multiple loaders returned a match for the template.')
-        seems_fishy = True
+        
+class Word2VecTest(tf.test.TestCase):
     
     
-class NullSession(SecureCookieSession):
-    '''Class used to generate nicer error messages if sessions are not
-    available.  Will still allow read-only access to the empty session
-    but fail on setting.
-    '''
+class Word2VecTest(tf.test.TestCase):
     
-    signals_available = False
-try:
-    from blinker import Namespace
-    signals_available = True
-except ImportError:
-    class Namespace(object):
-        def signal(self, name, doc=None):
-            return _FakeSignal(name, doc)
+        self.assertEqual(captured, set())
     
+      def cmd_loadsgf(self, arguments):
+    args = arguments.split()
+    if len(args) == 2:
+      file_, movenum = args
+      movenum = int(movenum)
+      print('movenum =', movenum, file=sys.stderr)
+    else:
+      file_ = args[0]
+      movenum = None
     
-def download(args, headers, path, url, is_json=True):
-    '''
-    :type args: any
-    :type headers: dict[str, str]
-    :type path: str
-    :type url: str
-    :type is_json: bool
-    '''
-    if args.verbose or args.test:
-        print(path)
+        # and even after injecting noise, we should still not select an illegal move
+    for _ in range(10):
+      root.inject_noise()
+      leaf = root.select_leaf()
+      self.assertNotEqual(leaf.fmove, 1)
     
+      It does NOT return the very final position, as there is no follow up.
+  To get the final position, call pwc.position.play_move(pwc.next_move)
+  on the last PositionWithContext returned.
+  Example usage:
+  with open(filename) as f:
+    for position_w_context in replay_sgf(f.read()):
+      print(position_w_context.position)
     
-def parse_address(address, allow_ranges=False):
-    '''
-    Takes a string and returns a (host, port) tuple. If the host is None, then
-    the string could not be parsed as a host identifier with an optional port
-    specification. If the port is None, then no port was specified.
+      def should_resign(self):
+    '''Returns true if the player resigned.
     
+      def test_proper_move_transform(self):
+    # Check that the reinterpretation of 362 = 19*19 + 1 during symmetry
+    # application is consistent with coords.from_flat
+    move_array = np.arange(utils_test.BOARD_SIZE ** 2 + 1)
+    coord_array = np.zeros([utils_test.BOARD_SIZE, utils_test.BOARD_SIZE])
+    for c in range(utils_test.BOARD_SIZE ** 2):
+      coord_array[coords.from_flat(utils_test.BOARD_SIZE, c)] = c
+    for s in symmetries.SYMMETRIES:
+      with self.subTest(symmetry=s):
+        transformed_moves = symmetries.apply_symmetry_pi(
+            utils_test.BOARD_SIZE, s, move_array)
+        transformed_board = symmetries.apply_symmetry_feat(s, coord_array)
+        for new_coord, old_coord in enumerate(transformed_moves[:-1]):
+          self.assertEqual(
+              old_coord,
+              transformed_board[
+                  coords.from_flat(utils_test.BOARD_SIZE, new_coord)])
     
-def jsonify(result, format=False):
-    ''' format JSON output (uncompressed or uncompressed) '''
-    
-            input_url = 'https://www.googleapis.com/compute/v1/projects/myproject/targetHttpProxies'
-        actual = GCPUtils.parse_gcp_url(input_url)
-        self.assertEquals('compute', actual['service'])
-        self.assertEquals('v1', actual['api_version'])
-        self.assertEquals('myproject', actual['project'])
-        self.assertFalse('global' in actual)
-        self.assertEquals('targetHttpProxies', actual['resource_name'])
-    
-        default_settings = {
-        'LOG_LEVEL': 'INFO',
-        'LOGSTATS_INTERVAL': 1,
-        'CLOSESPIDER_TIMEOUT': 10,
-    }
+    # Windows users: You only need to change PATH, rest is platform independent
+PATH = '/tmp/tf_custom_estimators'
     
         def syntax(self):
         return '[options] <spider>'
     
-            if not assertion:
-            if self.min_bound == self.max_bound:
-                expected = self.min_bound
-            else:
-                expected = '%s..%s' % (self.min_bound, self.max_bound)
-    
-    # There are two options for replacing |today|: either, you set today to some
-# non-false value, then it is used:
-#today = ''
-# Else, today_fmt is used as the format for a strftime call.
-#today_fmt = '%B %d, %Y'
-    
-    from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
-    
-    
-def FormatDebugInfoResponse_Completer_ServerNotRunningWithNoLogfiles_test():
-  response = deepcopy( GENERIC_RESPONSE )
-  response[ 'completer' ][ 'servers' ][ 0 ].update( {
-    'is_running': False,
-    'logfiles': []
-  } )
-  assert_that(
-    FormatDebugInfoResponse( response ),
-    contains_string(
-      'Completer name completer debug information:\n'
-      '  Server name not running\n'
-      '  Server name executable: /path/to/executable\n'
-      '  No logfiles available\n'
-      '  Server name key: value\n'
-      '  Key: value\n'
-    )
-  )
-
-    
-    
-def KeywordsFromSyntaxListOutput_StatementAndTypeHierarchy_test():
-  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
-tBaa xxx foo bar
-         links to tFoo
-tFoo xxx zoo goo
-         links to tBar
-tBar xxx qux moo
-         links to Type
-sBaa xxx na bar
-         links to sFoo
-sFoo xxx zoo nb
-         links to sBar
-sBar xxx qux nc
-         links to Statement''' ),
-              contains_inanyorder( 'foo', 'bar', 'zoo', 'goo', 'qux', 'moo',
-                                   'na', 'nb', 'nc' ) )
-    
-    
-def OverlapLength_Basic_test():
-  eq_( 3, base.OverlapLength( 'foo bar', 'bar zoo' ) )
-  eq_( 3, base.OverlapLength( 'foobar', 'barzoo' ) )
-    
-    
-class OmniCompletionRequest( CompletionRequest ):
-  def __init__( self, omni_completer, request_data ):
-    super( OmniCompletionRequest, self ).__init__( request_data )
-    self._omni_completer = omni_completer
-    
-      # As a last resort, we search python in the PATH. We prefer Python 2 over 3
-  # for the sake of backwards compatibility with ycm_extra_conf.py files out
-  # there; few people wrote theirs to work on py3.
-  # So we check 'python2' before 'python' because on some distributions (Arch
-  # Linux for example), python refers to python3.
-  python_interpreter = utils.PathToFirstExistingExecutable( [ 'python2',
-                                                              'python',
-                                                              'python3' ] )
-  if python_interpreter:
-    return python_interpreter
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+        @property
+    def templates_dir(self):
+        _templates_base_dir = self.settings['TEMPLATES_DIR'] or \
+            join(scrapy.__path__[0], 'templates')
+        return join(_templates_base_dir, 'spiders')
