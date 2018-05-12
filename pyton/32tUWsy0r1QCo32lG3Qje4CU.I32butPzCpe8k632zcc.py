@@ -1,144 +1,133 @@
 
         
-            preds = reg.predict(X_test, batch_size=batch_size)
-    assert preds.shape == (num_test, )
+        
+def get_info(package_name):
+    api_url = 'https://pypi.python.org/pypi/{}/json'.format(package_name)
+    resp = requests.get(api_url).json()
+    hasher = hashlib.sha256()
+    for release in resp['urls']:
+        download_url = release['url']
+        if download_url.endswith('.tar.gz'):
+            hasher.update(requests.get(download_url).content)
+            return {
+                'name': package_name,
+                'url': download_url,
+                'sha256': hasher.hexdigest(),
+            }
+    else:
+        raise RuntimeError(
+            '{}: download not found: {}'.format(package_name, resp))
     
-    - Models
-    About Keras models
-        explain when one should use Sequential or functional API
-        explain compilation step
-        explain weight saving, weight loading
-        explain serialization, deserialization
-    Sequential
-    Model (functional API)
-    
-    
-@keras_test
-def test_layer_trainability_switch():
-    # with constructor argument, in Sequential
-    model = Sequential()
-    model.add(Dense(2, trainable=False, input_dim=1))
-    assert model.trainable_weights == []
-    
-    import numpy as np
-import keras
-from keras.datasets import reuters
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation
-from keras.preprocessing.text import Tokenizer
+    error_msg = None
     
     
-@keras_test
-def test_vector_classification_functional():
-    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=500,
-                                                         num_test=200,
-                                                         input_shape=(20,),
-                                                         classification=True,
-                                                         num_classes=num_classes)
-    # Test with functional API
-    inputs = layers.Input(shape=(x_train.shape[-1],))
-    x = layers.Dense(16, activation=keras.activations.relu)(inputs)
-    x = layers.Dense(8)(x)
-    x = layers.Activation('relu')(x)
-    outputs = layers.Dense(num_classes, activation='softmax')(x)
-    model = keras.models.Model(inputs, outputs)
-    model.compile(loss=keras.losses.sparse_categorical_crossentropy,
-                  optimizer=keras.optimizers.RMSprop(),
-                  metrics=['acc'])
-    history = model.fit(x_train, y_train, epochs=15, batch_size=16,
-                        validation_data=(x_test, y_test),
-                        verbose=0)
-    assert(history.history['val_acc'][-1] > 0.8)
-    
-    plt.plot(range(epochs),
-         history_model1.history['val_loss'],
-         'g-',
-         label='Network 1 Val Loss')
-plt.plot(range(epochs),
-         history_model2.history['val_loss'],
-         'r-',
-         label='Network 2 Val Loss')
-plt.plot(range(epochs),
-         history_model1.history['loss'],
-         'g--',
-         label='Network 1 Loss')
-plt.plot(range(epochs),
-         history_model2.history['loss'],
-         'r--',
-         label='Network 2 Loss')
-plt.xlabel('Epochs')
-plt.ylabel('Loss')
-plt.legend()
-plt.savefig('comparison_of_networks.png')
+def test_unicode_digest_auth(httpbin):
+    # it doesn't really authenticate us because httpbin
+    # doesn't interpret the utf8-encoded auth
+    http('--auth-type=digest',
+         '--auth', u'test:%s' % UNICODE,
+         httpbin.url + u'/digest-auth/auth/test/' + UNICODE)
 
     
+    The input TCEs and their associated labels are specified by the DR24 TCE Table,
+which can be downloaded in CSV format from the NASA Exoplanet Archive at:
     
-def test_objective_shapes_2d():
-    y_a = K.variable(np.random.random((6, 7)))
-    y_b = K.variable(np.random.random((6, 7)))
-    for obj in allobj:
-        objective_output = obj(y_a, y_b)
-        assert K.eval(objective_output).shape == (6,)
-    
-        class CustomRouter(Router):
-        def find_handler(self, request, **kwargs):
-            # some routing logic providing a suitable HTTPMessageDelegate instance
-            return MessageDelegate(request.connection)
+        # Parse the features.
+    parsed_features = tf.parse_single_example(
+        serialized_example, features=data_fields)
     
     
-class PriorityQueueJoinTest(QueueJoinTest):
-    queue_class = queues.PriorityQueue
+def split(all_time, all_flux, gap_width=0.75):
+  '''Splits a light curve on discontinuities (gaps).
     
-            count = 0
-        while 1:
-            count += 1
-            # Bind to a local port; for efficiency, let the OS pick
-            # a free port for us.
-            # Unfortunately, stress tests showed that we may not
-            # be able to connect to that port ('Address already in
-            # use') despite that the OS picked it.  This appears
-            # to be a race bug in the Windows socket implementation.
-            # So we loop until a connect() succeeds (almost always
-            # on the first try).  See the long thread at
-            # http://mail.zope.org/pipermail/zope/2005-July/160433.html
-            # for hideous details.
-            a = socket.socket()
-            set_close_exec(a.fileno())
-            a.bind(('127.0.0.1', 0))
-            a.listen(1)
-            connect_address = a.getsockname()  # assigned (host, port) pair
-            try:
-                self.writer.connect(connect_address)
-                break    # success
-            except socket.error as detail:
-                if (not hasattr(errno, 'WSAEADDRINUSE') or
-                        errno_from_exception(detail) != errno.WSAEADDRINUSE):
-                    # 'Address already in use' is the only error
-                    # I've seen on two WinXP Pro SP2 boxes, under
-                    # Pythons 2.3.5 and 2.4.1.
-                    raise
-                # (10048, 'Address already in use')
-                # assert count <= 2 # never triggered in Tim's tests
-                if count >= 10:  # I've never seen it go above 2
-                    a.close()
-                    self.writer.close()
-                    raise socket.error('Cannot bind trigger!')
-                # Close `a` and try again.  Note:  I originally put a short
-                # sleep() here, but it didn't appear to help or hurt.
-                a.close()
     
-    print('Starting')
-if 'TESTAPP_STARTED' not in os.environ:
-    os.environ['TESTAPP_STARTED'] = '1'
-    sys.stdout.flush()
-    autoreload._reload()
-'''
+if __name__ == '__main__':
+  FLAGS, unparsed = parser.parse_known_args()
+  tf.app.run(argv=[sys.argv[0]] + unparsed)
+
     
-    import logging
-from tornado.curl_httpclient import CurlAsyncHTTPClient
-from tornado.simple_httpclient import SimpleAsyncHTTPClient
-from tornado.ioloop import IOLoop
-from tornado.options import define, options, parse_command_line
-from tornado.web import RequestHandler, Application
+      eval_file_path = os.path.join(FLAGS.data_dir, EVAL_FILE)
+  _download_and_clean_file(eval_file_path, EVAL_URL)
     
-        PATTERN = '''import_from< 'from' module_name='__future__' 'import' any >'''
+    tf.flags.DEFINE_string(
+    'embeddings_base_path', 'embeddings',
+    'Embeddings base directory')
+    
+        # Print the best performance on the validation set
+    print('Best performance on the validation set: F1=%.3f' %
+          epoch_completed.best_f1)
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+    
+        Args:
+      images: A tensor of size [batch, height, width, channels].
+      is_training: Whether or not the model is in training mode.
+      global_pool: If True, perform global average pooling after feature
+        extraction. This may be useful for DELF's descriptor fine-tuning stage.
+      reuse: Whether or not the layer and its variables should be reused.
+    
+        def test_get_sni_addr(self):
+        from certbot_apache.obj import Addr
+        self.assertEqual(
+            self.addr.get_sni_addr('443'), Addr.fromstring('*:443'))
+        self.assertEqual(
+            self.addr.get_sni_addr('225'), Addr.fromstring('*:225'))
+        self.assertEqual(
+            self.addr1.get_sni_addr('443'), Addr.fromstring('127.0.0.1'))
+    
+    # A shorter title for the navigation bar.  Default is the same as html_title.
+#html_short_title = None
+    
+        @mock.patch('certbot_compatibility_test.validator.requests.get')
+    def test_redirect_wrong_status_code(self, mock_get_request):
+        mock_get_request.return_value = create_response(
+            201, {'location': 'https://test.com'})
+        self.assertFalse(self.validator.redirect('test.com'))
+    
+    # Grouping the document tree into LaTeX files. List of tuples
+# (source start file, target name, title,
+#  author, documentclass [howto, manual, or own class]).
+latex_documents = [
+    (master_doc, 'certbot-compatibility-test.tex',
+     u'certbot-compatibility-test Documentation',
+     u'Certbot Project', 'manual'),
+]
+    
+        failures = []
+    while point is not None:
+        if point.name:
+            if re.search('h[1-2]', point.name):
+                if point.name == 'h1':
+                    h1_directory = os.path.join(output_directory, clean_text(point.text))
+                    current_directory = h1_directory
+                elif point.name == 'h2':
+                    current_directory = os.path.join(h1_directory, clean_text(point.text))  
+                if not os.path.exists(current_directory):
+                    os.makedirs(current_directory)
+                print_title(point.text)
+    
+    extension_mapping = {
+    'rss': ('xml', 'application/atom+xml; charset=UTF-8'),
+    'xml': ('xml', 'application/atom+xml; charset=UTF-8'),
+    'js': ('js', 'text/javascript; charset=UTF-8'),
+    'embed': ('htmllite', 'text/javascript; charset=UTF-8'),
+    'mobile': ('mobile', 'text/html; charset=UTF-8'),
+    'png': ('png', 'image/png'),
+    'css': ('css', 'text/css'),
+    'csv': ('csv', 'text/csv; charset=UTF-8'),
+    'api': (api_type(), 'application/json; charset=UTF-8'),
+    'json-html': (api_type('html'), 'application/json; charset=UTF-8'),
+    'json-compact': (api_type('compact'), 'application/json; charset=UTF-8'),
+    'compact': ('compact', 'text/html; charset=UTF-8'),
+    'json': (api_type(), 'application/json; charset=UTF-8'),
+    'i': ('compact', 'text/html; charset=UTF-8'),
+}
+    
+        `full_stack`
+        Whether or not this application provides a full WSGI stack (by default,
+        meaning it handles its own exceptions and errors). Disable full_stack
+        when this application is 'managed' by another WSGI middleware.
+    
+            MinimalController.pre(self)
