@@ -1,34 +1,47 @@
 
         
-            `mask` is a `bytes` object of length 4; `data` is a `bytes` object of any length.
-    Returns a `bytes` object of the same length as `data` with the mask applied
-    as specified in section 5.3 of RFC 6455.
+        import datetime
+import io
+import json
+import textwrap
     
-            # We don't yield between get() and task_done(), so get() must wait for
-        # the next tick. Otherwise we'd immediately call task_done and unblock
-        # join() before q.put() resumes, and we'd only process the first four
-        # items.
-        @gen.coroutine
-        def consumer():
-            while True:
-                history.append((yield q.get()))
-                q.task_done()
+            def report_warning(self, message):
+            if re.match(regex, message):
+                return
+            old_report_warning(message)
+        self.report_warning = types.MethodType(report_warning, self)
     
+            def _find_spec(key):
+            m = re.search(
+                r'(?m)^//\s*%s:\s*(.*?)\n' % re.escape(key), as_content)
+            if not m:
+                raise ValueError('Cannot find %s in %s' % (key, testfile))
+            return json.loads(m.group(1))
     
-class FeedHandler(BaseHandler):
-    def get(self):
-        entries = db.Query(Entry).order('-published').fetch(limit=10)
-        self.set_header('Content-Type', 'application/atom+xml')
-        self.render('feed.xml', entries=entries)
-    
-    
-if __name__ == '__main__':
-    main()
+            return self._extract_nuevo(
+            'http://www.anitube.se/nuevo/econfig.php?key=%s' % key, video_id)
 
     
-    See file_uploader.py in this directory for code that uploads files in this format.
-'''
+                for video_version in json_data.get('video_versions'):
+                video_version_url = video_version.get('download_url') or video_version.get('stream_url')
+                if not video_version_url:
+                    continue
+                f = {
+                    'url': video_version_url,
+                    'width': int_or_none(video_version.get('width')),
+                    'height': int_or_none(video_version.get('height')),
+                    'abr': int_or_none(video_version.get('audio_bitrate')),
+                    'vbr': int_or_none(video_version.get('video_bitrate')),
+                }
+                bitrate = self._search_regex(r'(\d+)k', video_version_url, 'bitrate', default=None)
+                if bitrate:
+                    f.update({
+                        'format_id': 'http-%s' % bitrate,
+                    })
+                formats.append(f)
+            self._sort_formats(formats)
     
+            page = self._download_json(
+            'http://vxml.56.com/json/%s/' % text_id, text_id, 'Downloading video info')
     
-class BaseHandler(RequestHandler):
-    COOKIE_NAME = 'twitterdemo_user'
+            webpage = self._download_webpage(url, display_id)
