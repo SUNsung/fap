@@ -1,58 +1,81 @@
 
         
-        header = oldreadme[:oldreadme.index('# OPTIONS')]
-footer = oldreadme[oldreadme.index('# CONFIGURATION'):]
+                # Arguments
+            chars: Characters that can appear in the input.
+        '''
+        self.chars = sorted(set(chars))
+        self.char_indices = dict((c, i) for i, c in enumerate(self.chars))
+        self.indices_char = dict((i, c) for i, c in enumerate(self.chars))
     
-    
-class TestSocks(unittest.TestCase):
-    _SKIP_SOCKS_TEST = True
-    
-            with open(swf_file, 'rb') as swf_f:
-            swf_content = swf_f.read()
-        swfi = SWFInterpreter(swf_content)
-    
-    
-def gen_extractors():
-    ''' Return a list of an instance of every supported extractor.
-    The order does matter; the first extractor matched is the one handling the URL.
+        # Returns
+        Scalar loss (if the model has a single output and no metrics)
+        or list of scalars (if the model has multiple outputs
+        and/or metrics). The attribute `model.metrics_names` will give you
+        the display labels for the scalar outputs.
     '''
-    return [klass() for klass in gen_extractor_classes()]
+    
+        def __init__(self, filters,
+                 kernel_size,
+                 strides=(1, 1, 1),
+                 padding='valid',
+                 data_format=None,
+                 activation=None,
+                 use_bias=True,
+                 kernel_initializer='glorot_uniform',
+                 bias_initializer='zeros',
+                 kernel_regularizer=None,
+                 bias_regularizer=None,
+                 activity_regularizer=None,
+                 kernel_constraint=None,
+                 bias_constraint=None,
+                 **kwargs):
+        super(Conv3DTranspose, self).__init__(
+            filters,
+            kernel_size,
+            strides=strides,
+            padding=padding,
+            data_format=data_format,
+            activation=activation,
+            use_bias=use_bias,
+            kernel_initializer=kernel_initializer,
+            bias_initializer=bias_initializer,
+            kernel_regularizer=kernel_regularizer,
+            bias_regularizer=bias_regularizer,
+            activity_regularizer=activity_regularizer,
+            kernel_constraint=kernel_constraint,
+            bias_constraint=bias_constraint,
+            **kwargs)
+        self.input_spec = InputSpec(ndim=5)
     
     
-class AnySexIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?anysex\.com/(?P<id>\d+)'
-    _TEST = {
-        'url': 'http://anysex.com/156592/',
-        'md5': '023e9fbb7f7987f5529a394c34ad3d3d',
-        'info_dict': {
-            'id': '156592',
-            'ext': 'mp4',
-            'title': 'Busty and sexy blondie in her bikini strips for you',
-            'description': 'md5:de9e418178e2931c10b62966474e1383',
-            'categories': ['Erotic'],
-            'duration': 270,
-            'age_limit': 18,
-        }
-    }
+def class_to_docs_link(cls):
+    module_name = cls.__module__
+    assert module_name[:6] == 'keras.'
+    module_name = module_name[6:]
+    link = ROOT + module_name.replace('.', '/') + '#' + cls.__name__.lower()
+    return link
     
     
 if __name__ == '__main__':
-    main()
+    pytest.main([__file__])
 
     
-    class Bigthink(VideoExtractor):
-    name = 'Bigthink'
+        def load_config(self):
+        '''Returns the next config directory to be tested'''
+        shutil.rmtree(self.le_config.work_dir, ignore_errors=True)
+        backup = os.path.join(self.le_config.work_dir, constants.BACKUP_DIR)
+        os.makedirs(backup)
+        return self._configs.pop()
     
-    #----------------------------------------------------------------------
-def makeMimi(upid):
-    '''From http://cdn37.atwikiimg.com/sitescript/pub/dksitescript/FC2.site.js
-    Also com.hps.util.fc2.FC2EncrptUtil.makeMimiLocal
-    L110'''
-    strSeed = 'gGddgPfeaf_gzyr'
-    prehash = upid + '_' + strSeed
-    return md5(prehash.encode('utf-8')).hexdigest()
+    import mock
+import OpenSSL
     
-        type_, ext, size = url_info(stream_url)
-    print_info(site_info, title, type_, size)
-    if not info_only:
-        download_url_ffmpeg(url=stream_url, title=title, ext= 'mp4', output_dir=output_dir)
+        # Implement all methods from IInstaller, remembering to add
+    # 'self' as first argument, e.g. def get_all_names(self)...
+
+    
+        parser = argparse.ArgumentParser(description = 'Download all the PDF/HTML links into README.md')
+    parser.add_argument('-d', action='store', dest='directory')
+    parser.add_argument('--no-html', action='store_true', dest='nohtml', default = False)
+    parser.add_argument('--overwrite', action='store_true', default = False)    
+    results = parser.parse_args()
