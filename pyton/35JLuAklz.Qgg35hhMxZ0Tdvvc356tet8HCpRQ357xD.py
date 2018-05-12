@@ -1,103 +1,106 @@
 
         
-        versions_info = json.load(open('update/versions.json'))
-if 'signature' in versions_info:
-    del versions_info['signature']
+        
+#
+# Backwards compat functions.  Some modules include md5s in their return values
+# Continue to support that for now.  As of ansible-1.8, all of those modules
+# should also return 'checksum' (sha1 for now)
+# Do not use md5 unless it is needed for:
+# 1) Optional backwards compatibility
+# 2) Compliance with a third party protocol
+#
+# MD5 will not work on systems which are FIPS-140-2 compliant.
+#
     
-    with io.open('update/releases.atom', 'w', encoding='utf-8') as atom_file:
-    atom_file.write(atom_template)
+        # What we're left with now must be an IPv4 or IPv6 address, possibly with
+    # numeric ranges, or a hostname with alphanumeric ranges.
+    
+        def on_open_shell(self):
+        try:
+            self._exec_cli_command('screen-length 0 temporary')
+        except AnsibleConnectionFailure:
+            raise AnsibleConnectionFailure('unable to set terminal parameters')
 
     
-            self.port = random.randint(20000, 30000)
-        self.server_process = subprocess.Popen([
-            'srelay', '-f', '-i', '127.0.0.1:%d' % self.port],
-            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    #############################################
+from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
     
-                    m = re.search(r'(?<=\s)u[\''](?!\)|,|$)', code)
-                if m is not None:
-                    self.assertTrue(
-                        m is None,
-                        'u present in %s, around %s' % (
-                            fn, code[m.start() - 10:m.end() + 10]))
+    from ansible.plugins.terminal import TerminalBase
+from ansible.errors import AnsibleConnectionFailure
     
-    from .common import FileDownloader
-from ..utils import (
-    check_executable,
-    encodeFilename,
-)
+        def construct_mapping(self, node, deep=False):
+        # Most of this is from yaml.constructor.SafeConstructor.  We replicate
+        # it here so that we can warn users when they have duplicate dict keys
+        # (pyyaml silently allows overwriting keys)
+        if not isinstance(node, MappingNode):
+            raise ConstructorError(None, None,
+                                   'expected a mapping node, but found %s' % node.id,
+                                   node.start_mark)
+        self.flatten_mapping(node)
+        mapping = AnsibleMapping()
     
-        _ALL_CLASSES = [
-        klass
-        for name, klass in globals().items()
-        if name.endswith('IE') and name != 'GenericIE'
-    ]
-    _ALL_CLASSES.append(GenericIE)
+        def run(self, args, opts):
+        # load contracts
+        contracts = build_component_list(self.settings.getwithbase('SPIDER_CONTRACTS'))
+        conman = ContractsManager(load_object(c) for c in contracts)
+        runner = TextTestRunner(verbosity=2 if opts.verbose else 1)
+        result = TextTestResult(runner.stream, runner.descriptions, runner.verbosity)
     
-            # TODO: handle s and e stage_mode (live streams and ended live streams)
-        if stage_mode not in ('s', 'e'):
-            request = sanitized_Request(
-                'https://audimedia.tv/api/video/v1/videos/%s?embed[]=video_versions&embed[]=thumbnail_image&where[content_language_iso]=%s' % (video_id, lang),
-                headers={'X-Auth-Token': self._AUTH_TOKEN})
-            json_data = self._download_json(request, video_id)['results']
-            formats = []
+    PROJ_METADATA = '%s.json' % PROJ_NAME
     
-    class _WorkItem(object):
-    def __init__(self, future, fn, args, kwargs):
-        self.future = future
-        self.fn = fn
-        self.args = args
-        self.kwargs = kwargs
+        print_info(site_info, title, type, size)
+    if not info_only:
+        download_urls([video_url], title, ext, size, output_dir, merge=merge, headers = fake_headers)
+    
+    import ssl
     
     
-def namedtuple(typename, field_names):
-    '''Returns a new subclass of tuple with named fields.
-    
-    if __name__ == '__main__':
-    main()
+site_info = 'kugou.com'
+download = kugou_download
+# download_playlist = playlist_not_supported('kugou')
+download_playlist=kugou_download_playlist
 
     
+    def kuwo_download_by_rid(rid, output_dir = '.', merge = True, info_only = False):
+    html=get_content('http://player.kuwo.cn/webmusic/st/getNewMuiseByRid?rid=MUSIC_%s'%rid)
+    title=match1(html,r'<name>(.*)</name>')
+    #to get title
+    #format =aac|mp3 ->to get aac format=mp3 ->to get mp3
+    url=get_content('http://antiserver.kuwo.cn/anti.s?format=mp3&rid=MUSIC_%s&type=convert_url&response=url'%rid)
+    songtype, ext, size = url_info(url)
+    print_info(site_info, title, songtype, size)
+    if not info_only:
+        download_urls([url], title, ext, size, output_dir)
     
-def FormatDebugInfoResponse( response ):
-  if not response:
-    return 'Server errored, no debug info from server\n'
-  message = _FormatYcmdDebugInfo( response )
-  completer = response[ 'completer' ]
-  if completer:
-    message += _FormatCompleterDebugInfo( completer )
-  return message
+    #----------------------------------------------------------------------
+def sina_xml_to_url_list(xml_data):
+    '''str->list
+    Convert XML to URL List.
+    From Biligrab.
+    '''
+    rawurl = []
+    dom = parseString(xml_data)
+    for node in dom.getElementsByTagName('durl'):
+        url = node.getElementsByTagName('url')[0]
+        rawurl.append(url.childNodes[0].data)
+    return rawurl
     
-      # Remove old YCM libs if present so that YCM can start.
-  old_libs = (
-    glob.glob( p.join( DIR_OF_OLD_LIBS, '*ycm_core.*' ) ) +
-    glob.glob( p.join( DIR_OF_OLD_LIBS, '*ycm_client_support.*' ) ) +
-    glob.glob( p.join( DIR_OF_OLD_LIBS, '*clang*.*') ) )
-  for lib in old_libs:
-    os.remove( lib )
-    
-    
-def FormatDebugInfoResponse_Completer_ServerRunningWithHost_test():
-  response = deepcopy( GENERIC_RESPONSE )
-  assert_that(
-    FormatDebugInfoResponse( response ),
-    contains_string(
-      'Completer name completer debug information:\n'
-      '  Server name running at: http://127.0.0.1:1234\n'
-      '  Server name process ID: 12345\n'
-      '  Server name executable: /path/to/executable\n'
-      '  Server name logfiles:\n'
-      '    /path/to/stdout/logfile\n'
-      '    /path/to/stderr/logfile\n'
-      '  Server name key: value\n'
-      '  Key: value\n'
-    )
-  )
-    
-    
-def ExtractKeywordsFromGroup_ContainedSyntaxArgAllowed_test():
-  assert_that( syntax_parse._ExtractKeywordsFromGroup(
-                 syntax_parse.SyntaxGroup( '', [
-                   'contained foo zoq',
-                   'contained bar goo',
-                   'far'
-                 ] ) ),
-               contains_inanyorder( 'foo', 'zoq', 'bar', 'goo', 'far' ) )
+      Args:
+    filename: The name of the current file.
+    clean_lines: A CleansedLines instance containing the file.
+    linenum: The number of the line to check.
+    error: The function to call with any errors found.
+  '''
+  # Look for closing parenthesis nearby.  We need one to confirm where
+  # the declarator ends and where the virt-specifier starts to avoid
+  # false positives.
+  line = clean_lines.elided[linenum]
+  declarator_end = line.rfind(')')
+  if declarator_end >= 0:
+    fragment = line[declarator_end:]
+  else:
+    if linenum > 1 and clean_lines.elided[linenum - 1].rfind(')') >= 0:
+      fragment = line
+    else:
+      return
