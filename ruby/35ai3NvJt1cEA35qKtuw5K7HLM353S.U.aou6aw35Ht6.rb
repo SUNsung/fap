@@ -1,64 +1,84 @@
-  def notification_setting_params
-    allowed_fields = NotificationSetting::EMAIL_EVENTS.dup
-    allowed_fields << :level
-    params.require(:notification_setting).permit(allowed_fields)
-  end
-end
 
-    
-    
-    {    def replace_escaping(less)
-      less = less.gsub(/~'([^']+)'/, '\1').gsub(/~'([^']+)'/, '\1') # Get rid of ~'' escape
-      less.gsub!(/\$\{([^}]+)\}/, '$\1') # Get rid of @{} escape
-      less.gsub!(/'([^'\n]*)(\$[\w\-]+)([^'\n]*)'/, ''\1#{\2}\3'') # interpolate variable in string, e.g. url('$file-1x') => url('#{$file-1x}')
-      less.gsub(/(\W)e\(%\('?([^']*)'?\)\)/, '\1\2') # Get rid of e(%('')) escape
-    end
-    
-            def rejected_types_rejected?
-          @missing_rejected_types ||= @rejected_types.select { |type| type_allowed?(type) }
-          @missing_rejected_types.none?
+        
+          def test_redirect_to_with_block_and_accepted_options
+    with_routing do |set|
+      set.draw do
+        ActiveSupport::Deprecation.silence do
+          get ':controller/:action'
         end
       end
-    end
-  end
-end
-
     
-            def failure_message
-          'Attachment #{@attachment_name} must be between #{@low} and #{@high} bytes'
-        end
-    
-    
-    {
-    {  # Returns hash with styles for all classes using Paperclip.
-  # Unfortunately current version does not work with lambda styles:(
-  #   {
-  #     :User => {:avatar => [:small, :big]},
-  #     :Book => {
-  #       :cover => [:thumb, :croppable]},
-  #       :sample => [:thumb, :big]},
-  #     }
-  #   }
-  def self.current_attachments_styles
-    Hash.new.tap do |current_styles|
-      Paperclip::AttachmentRegistry.each_definition do |klass, attachment_name, attachment_attributes|
-        # TODO: is it even possible to take into account Procs?
-        next if attachment_attributes[:styles].kind_of?(Proc)
-        attachment_attributes[:styles].try(:keys).try(:each) do |style_name|
-          klass_sym = klass.to_s.to_sym
-          current_styles[klass_sym] ||= Hash.new
-          current_styles[klass_sym][attachment_name.to_sym] ||= Array.new
-          current_styles[klass_sym][attachment_name.to_sym] << style_name.to_sym
-          current_styles[klass_sym][attachment_name.to_sym].map!(&:to_s).sort!.map!(&:to_sym).uniq!
-        end
+        # Reset all attributes. Should be called before and after actions, when used as a per-request singleton.
+    def reset
+      run_callbacks :reset do
+        self.attributes = {}
       end
     end
-  end
-  private_class_method :current_attachments_styles
     
-            attachment_names.each do |attachment_name|
-          COLUMNS.keys.each do |column_name|
-            remove_column(table_name, '#{attachment_name}_#{column_name}')
+      test 'token_and_options returns nil with no value after the equal sign' do
+    actual = ActionController::HttpAuthentication::Token.token_and_options(malformed_request).first
+    assert_nil actual
+  end
+    
+      class MyController < ActionController::Metal
+    use BlockMiddleware do |config|
+      config.configurable_message = 'Configured by block.'
+    end
+    use MyMiddleware
+    middleware.insert_before MyMiddleware, ExclaimerMiddleware
+    
+    class CustomDeliveryMethodsTest < ActiveSupport::TestCase
+  setup do
+    @old_delivery_method = ActionMailer::Base.delivery_method
+    ActionMailer::Base.add_delivery_method :custom, MyCustomDelivery
+  end
+    
+        puts 'Downloading emojos from source... (#{source})'
+    
+          it 'sets a regeneration marker while regenerating' do
+        allow(RegenerationWorker).to receive(:perform_async)
+        get :show
+    
+      def scope
+    root_url
+  end
+    
+          opts.on('-C', '--no-cache', 'Don't cache to sassc files.') do
+        @options[:for_engine][:read_cache] = false
+      end
+    
+            def validate!
+          super
+          if @pod_name.nil? && !@wipe_all
+            # Security measure, to avoid removing the pod cache too agressively by mistake
+            help! 'You should either specify a pod name or use the --all flag'
           end
         end
+    
+            # !@group Private helpers
+    
+      %w(GET HEAD POST PUT DELETE).each do |method|
+    it 'accepts #{method} requests when allow_if is true' do
+      mock_app do
+        use Rack::Protection::HttpOrigin, :allow_if => lambda{|env| env.has_key?('HTTP_ORIGIN') }
+        run DummyApp
       end
+      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://any.domain.com')).to be_ok
+    end
+  end
+    
+      it 'accepts requests with a changing Version header'do
+    session = {:foo => :bar}
+    get '/', {}, 'rack.session' => session, 'HTTP_VERSION' => '1.0'
+    get '/', {}, 'rack.session' => session, 'HTTP_VERSION' => '1.1'
+    expect(session[:foo]).to eq(:bar)
+  end
+end
+
+    
+      # These two settings work together to allow you to limit a spec run
+  # to individual examples or groups you care about by tagging them with
+  # `:focus` metadata. When nothing is tagged with `:focus`, all examples
+  # get run.
+  config.filter_run :focus
+  config.run_all_when_everything_filtered = true
