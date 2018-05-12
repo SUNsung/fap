@@ -1,265 +1,235 @@
 
         
-        
-template <typename ImplClass, typename RetTy = void, typename... Args>
-class MarkupASTVisitor {
-public:
-  RetTy visit(const MarkupASTNode *Node, Args... args) {
-    switch (Node->getKind()) {
-#define MARKUP_AST_NODE(Id, Parent) \
-    case ASTNodeKind::Id: \
-      return static_cast<ImplClass*>(this) \
-        ->visit##Id(cast<const Id>(Node), \
-                    ::std::forward<Args>(args)...);
-#define ABSTRACT_MARKUP_AST_NODE(Id, Parent)
-#define MARKUP_AST_NODE_RANGE(Id, FirstId, LastId)
-#include 'swift/Markup/ASTNodes.def'
-    }
-  }
+        // Generate constructors.
+#include 'ipc/struct_constructor_macros.h'
+#include 'content/nw/src/common/common_message_generator.h'
+    
+    void Base::CallSync(const std::string& method,
+                    const base::ListValue& arguments,
+                    base::ListValue* result) {
+  NOTREACHED() << 'Uncatched callAsync in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
+}
+    
+    #include 'base/files/file_path.h'
+#include 'base/strings/string_util.h'
+#include 'base/strings/utf_string_conversions.h'
+#include 'base/threading/thread_restrictions.h'
+#include 'base/values.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menu/menu.h'
+#include 'content/nw/src/nw_base.h'
+#include 'content/nw/src/nw_content.h'
+#include 'content/nw/src/nw_package.h'
+#include 'ui/base/accelerators/accelerator.h'
+#include 'ui/gfx/image/image_skia_operations.h'
+#include 'ui/events/event_constants.h'//for modifier key code
+#include 'base/logging.h'
+    
+    class NwClipboardSetListSyncFunction : public NWSyncExtensionFunction {
+ public:
+  NwClipboardSetListSyncFunction();
+  bool RunNWSync(base::ListValue* response, std::string* error) override;
     }
     
-    SILFunction *SILDebugScope::getParentFunction() const {
-  if (InlinedCallSite)
-    return InlinedCallSite->getParentFunction();
-  if (auto *ParentScope = Parent.dyn_cast<const SILDebugScope *>())
-    return ParentScope->getParentFunction();
-  return Parent.get<SILFunction *>();
-}
+    
+    {} // namespace thd
 
     
-    /// A SyntaxRewriter for applying a set of formatting rules to a Syntax tree.
-struct FormatSyntaxRewriter : public SyntaxRewriter {
-  virtual StructDeclSyntax
-  rewriteStructDecl(StructDeclSyntax Struct) override;
+    template <typename T, typename U>
+struct is_any_of : std::false_type {};
+    
+    static void RunSynchronousUnaryPingPong() {
+  gpr_log(GPR_INFO, 'Running Synchronous Unary Ping Pong');
+    }
+    
+    #endif  // GRPC_INTERNAL_COMPILER_NODE_GENERATOR_HELPERS_H
+
+    
+    #endif  // GRPC_INTERNAL_COMPILER_PYTHON_GENERATOR_H
+
+    
+    #endif  // TEST_QPS_TIMER_H
+
+    
+    grpc::string DescribeService(const grpc::protobuf::ServiceDescriptor* service) {
+  grpc::string result;
+  if (service->options().deprecated()) {
+    result.append('DEPRECATED\n');
+  }
+  result.append('filename: ' + service->file()->name() + '\n');
+    }
+    
+    class Issue178 { };
+    
+    BlockBuilder::BlockBuilder(const Options* options)
+    : options_(options),
+      restarts_(),
+      counter_(0),
+      finished_(false) {
+  assert(options->block_restart_interval >= 1);
+  restarts_.push_back(0);       // First restart point is at offset 0
+}
+    
+    
+    { private:
+  const FilterPolicy* policy_;
+  const char* data_;    // Pointer to filter data (at block-start)
+  const char* offset_;  // Pointer to beginning of offset array (at block-end)
+  size_t num_;          // Number of entries in offset array
+  size_t base_lg_;      // Encoding parameter (see kFilterBaseLg in .cc file)
 };
     
-    #ifndef SWIFT_INDEX_INDEXDATACONSUMER_H
-#define SWIFT_INDEX_INDEXDATACONSUMER_H
     
-      char label_i;
-  char label_j;
-  char* pixels = new char[2 * rows * cols];
-  std::string value;
-    
-    namespace caffe {
-    }
-    
-    #include 'caffe/layers/conv_layer.hpp'
-    
-    namespace caffe {
-    }
-    
-    #endif  // CAFFE_EMBED_LAYER_HPP_
+    {}  // namespace leveldb
 
     
-    #include 'master_worker/master/THDTensor.h'
-#include 'master_worker/master/THDStorage.h'
+    #ifndef STORAGE_LEVELDB_UTIL_HISTOGRAM_H_
+#define STORAGE_LEVELDB_UTIL_HISTOGRAM_H_
     
-      VersionEdit edit;
-  for (int i = 0; i < 4; i++) {
-    TestEncodeDecode(edit);
-    edit.AddFile(3, kBig + 300 + i, kBig + 400 + i,
-                 InternalKey('foo', kBig + 500 + i, kTypeValue),
-                 InternalKey('zoo', kBig + 600 + i, kTypeDeletion));
-    edit.DeleteFile(4, kBig + 700 + i);
-    edit.SetCompactPointer(i, InternalKey('x', kBig + 900 + i, kTypeValue));
-  }
-    
-    std::string Key2(int i) {
-  return Key1(i) + '_xxx';
-}
-    
-    class FilterBlockReader {
- public:
- // REQUIRES: 'contents' and *policy must stay live while *this is live.
-  FilterBlockReader(const FilterPolicy* policy, const Slice& contents);
-  bool KeyMayMatch(uint64_t block_offset, const Slice& key);
-    }
-    
-      // Check the crc of the type and the block contents
-  const char* data = contents.data();    // Pointer to where Read put the data
-  if (options.verify_checksums) {
-    const uint32_t crc = crc32c::Unmask(DecodeFixed32(data + n + 1));
-    const uint32_t actual = crc32c::Value(data, n + 1);
-    if (actual != crc) {
-      delete[] buf;
-      s = Status::Corruption('block checksum mismatch');
-      return s;
+    int InternalKeyComparator::Compare(const Slice& akey, const Slice& bkey) const {
+  // Order by:
+  //    increasing user key (according to user-supplied comparator)
+  //    decreasing sequence number
+  //    decreasing type (though sequence# should be enough to disambiguate)
+  int r = user_comparator_->Compare(ExtractUserKey(akey), ExtractUserKey(bkey));
+  if (r == 0) {
+    const uint64_t anum = DecodeFixed64(akey.data() + akey.size() - 8);
+    const uint64_t bnum = DecodeFixed64(bkey.data() + bkey.size() - 8);
+    if (anum > bnum) {
+      r = -1;
+    } else if (anum < bnum) {
+      r = +1;
     }
   }
-    
-    TEST(CRC, Mask) {
-  uint32_t crc = Value('foo', 3);
-  ASSERT_NE(crc, Mask(crc));
-  ASSERT_NE(crc, Mask(Mask(crc)));
-  ASSERT_EQ(crc, Unmask(Mask(crc)));
-  ASSERT_EQ(crc, Unmask(Unmask(Mask(Mask(crc)))));
+  return r;
 }
     
-    class HASH { };
     
-    static const int kValueSize = 200 * 1024;
-static const int kTotalSize = 100 * 1024 * 1024;
-static const int kCount = kTotalSize / kValueSize;
-    
-    void InternalKeyComparator::FindShortestSeparator(
-      std::string* start,
-      const Slice& limit) const {
-  // Attempt to shorten the user portion of the key
-  Slice user_start = ExtractUserKey(*start);
-  Slice user_limit = ExtractUserKey(limit);
-  std::string tmp(user_start.data(), user_start.size());
-  user_comparator_->FindShortestSeparator(&tmp, user_limit);
-  if (tmp.size() < user_start.size() &&
-      user_comparator_->Compare(user_start, tmp) < 0) {
-    // User key has become shorter physically, but larger logically.
-    // Tack on the earliest possible number to the shortened user key.
-    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
-    assert(this->Compare(*start, tmp) < 0);
-    assert(this->Compare(tmp, limit) < 0);
-    start->swap(tmp);
-  }
+    {  // When limit user key is prefix of start user key
+  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
+            Shorten(IKey('foobar', 100, kTypeValue),
+                    IKey('foo', 200, kTypeValue)));
 }
     
-    int main(int argc, char** argv) {
-  return leveldb::test::RunAllTests();
-}
-
-    
-    int main(int argc, char** argv) {
-  leveldb::Env* env = leveldb::Env::Default();
+    bool HandleDumpCommand(Env* env, char** files, int num) {
+  StdoutPrinter printer;
   bool ok = true;
-  if (argc < 2) {
-    Usage();
-    ok = false;
-  } else {
-    std::string command = argv[1];
-    if (command == 'dump') {
-      ok = leveldb::HandleDumpCommand(env, argv+2, argc-2);
-    } else {
-      Usage();
+  for (int i = 0; i < num; i++) {
+    Status s = DumpFile(env, files[i], &printer);
+    if (!s.ok()) {
+      fprintf(stderr, '%s\n', s.ToString().c_str());
       ok = false;
     }
   }
-  return (ok ? 0 : 1);
+  return ok;
 }
-
     
     
-    {        // see if our best match qualifies
-        if (best < 3) { // fast path literals
-            ++q;
-        } else if (best > 2  &&  best <= 0x80    &&  dist <= 0x100) {
-            outliterals(lit_start, q-lit_start); lit_start = (q += best);
-            stb_out(0x80 + best-1);
-            stb_out(dist-1);
-        } else if (best > 5  &&  best <= 0x100   &&  dist <= 0x4000) {
-            outliterals(lit_start, q-lit_start); lit_start = (q += best);
-            stb_out2(0x4000 + dist-1);       
-            stb_out(best-1);
-        } else if (best > 7  &&  best <= 0x100   &&  dist <= 0x80000) {
-            outliterals(lit_start, q-lit_start); lit_start = (q += best);
-            stb_out3(0x180000 + dist-1);     
-            stb_out(best-1);
-        } else if (best > 8  &&  best <= 0x10000 &&  dist <= 0x80000) {
-            outliterals(lit_start, q-lit_start); lit_start = (q += best);
-            stb_out3(0x100000 + dist-1);     
-            stb_out2(best-1);
-        } else if (best > 9                      &&  dist <= 0x1000000) {
-            if (best > 65536) best = 65536;
-            outliterals(lit_start, q-lit_start); lit_start = (q += best);
-            if (best <= 0x100) {
-                stb_out(0x06);
-                stb_out3(dist-1);
-                stb_out(best-1);
-            } else {
-                stb_out(0x04);
-                stb_out3(dist-1);
-                stb_out2(best-1);
-            }
-        } else {  // fallback literals if no match was a balanced tradeoff
-            ++q;
-        }
+    
+        argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        cocos2d::Vec2 arg0;
     }
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    
-    {    // Restore modified DX state
-    ctx->RSSetScissorRects(old.ScissorRectsCount, old.ScissorRects);
-    ctx->RSSetViewports(old.ViewportsCount, old.Viewports);
-    ctx->RSSetState(old.RS); if (old.RS) old.RS->Release();
-    ctx->OMSetBlendState(old.BlendState, old.BlendFactor, old.SampleMask); if (old.BlendState) old.BlendState->Release();
-    ctx->OMSetDepthStencilState(old.DepthStencilState, old.StencilRef); if (old.DepthStencilState) old.DepthStencilState->Release();
-    ctx->PSSetShaderResources(0, 1, &old.PSShaderResource); if (old.PSShaderResource) old.PSShaderResource->Release();
-    ctx->PSSetSamplers(0, 1, &old.PSSampler); if (old.PSSampler) old.PSSampler->Release();
-    ctx->PSSetShader(old.PS); if (old.PS) old.PS->Release();
-    ctx->VSSetShader(old.VS); if (old.VS) old.VS->Release();
-    ctx->VSSetConstantBuffers(0, 1, &old.VSConstantBuffer); if (old.VSConstantBuffer) old.VSConstantBuffer->Release();
-    ctx->IASetPrimitiveTopology(old.PrimitiveTopology);
-    ctx->IASetIndexBuffer(old.IndexBuffer, old.IndexBufferFormat, old.IndexBufferOffset); if (old.IndexBuffer) old.IndexBuffer->Release();
-    ctx->IASetVertexBuffers(0, 1, &old.VertexBuffer, &old.VertexBufferStride, &old.VertexBufferOffset); if (old.VertexBuffer) old.VertexBuffer->Release();
-    ctx->IASetInputLayout(old.InputLayout); if (old.InputLayout) old.InputLayout->Release();
-}
-    
-        // We are using the OpenGL fixed pipeline to make the example code simpler to read!
-    // Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled, vertex/texcoord/color pointers, polygon fill.
-    GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
-    GLint last_polygon_mode[2]; glGetIntegerv(GL_POLYGON_MODE, last_polygon_mode);
-    GLint last_viewport[4]; glGetIntegerv(GL_VIEWPORT, last_viewport);
-    GLint last_scissor_box[4]; glGetIntegerv(GL_SCISSOR_BOX, last_scissor_box); 
-    glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_TRANSFORM_BIT);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glDisable(GL_CULL_FACE);
-    glDisable(GL_DEPTH_TEST);
-    glEnable(GL_SCISSOR_TEST);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
-    glEnable(GL_TEXTURE_2D);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
-    
-            const int* indices = NULL;
-        if (sizeof(ImDrawIdx) == 2)
-        {
-            // FIXME-OPT: Unfortunately Allegro doesn't support 16-bit indices.. You can '#define ImDrawIdx  int' in imconfig.h to request ImGui to output 32-bit indices.
-            // Otherwise, we convert them from 16-bit to 32-bit at runtime here, which works perfectly but is a little wasteful.
-            static ImVector<int> indices_converted;
-            indices_converted.resize(cmd_list->IdxBuffer.Size);
-            for (int i = 0; i < cmd_list->IdxBuffer.Size; ++i)
-                indices_converted[i] = (int)cmd_list->IdxBuffer.Data[i];
-            indices = indices_converted.Data;
-        }
-        else if (sizeof(ImDrawIdx) == 4)
-        {
-            indices = (const int*)cmd_list->IdxBuffer.Data;
-        }
-    
-    static bool ImGui_ImplDX9_CreateFontsTexture()
+    void GLESDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
 {
-    // Build texture atlas
+    mShaderProgram->use();
+    mShaderProgram->setUniformsForBuiltins();
+    }
+    
+    		b2Color c;
+		c.Set(0.0f, 1.0f, 0.0f);
+		m_debugDraw.DrawPoint(p1, 4.0f, c);
+		m_debugDraw.DrawPoint(p2, 4.0f, c);
+    
+    #ifndef AddPair_H
+#define AddPair_H
+    
+    		// Car
+		{
+			b2PolygonShape chassis;
+			b2Vec2 vertices[8];
+			vertices[0].Set(-1.5f, -0.5f);
+			vertices[1].Set(1.5f, -0.5f);
+			vertices[2].Set(1.5f, 0.0f);
+			vertices[3].Set(0.0f, 0.9f);
+			vertices[4].Set(-1.15f, 0.9f);
+			vertices[5].Set(-1.5f, 0.2f);
+			chassis.Set(vertices, 6);
+    }
+    
+        if (install_callbacks)
+    {
+        s3ePointerRegister(S3E_POINTER_BUTTON_EVENT, ImGui_Marmalade_PointerButtonEventCallback, 0);
+        s3eKeyboardRegister(S3E_KEYBOARD_KEY_EVENT, ImGui_Marmalade_KeyCallback, 0);
+        s3eKeyboardRegister(S3E_KEYBOARD_CHAR_EVENT, ImGui_Marmalade_CharCallback, 0);
+    }
+    
+        // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array that we will update during the application lifetime.
+    io.KeyMap[ImGuiKey_Tab] = VK_TAB;
+    io.KeyMap[ImGuiKey_LeftArrow] = VK_LEFT;
+    io.KeyMap[ImGuiKey_RightArrow] = VK_RIGHT;
+    io.KeyMap[ImGuiKey_UpArrow] = VK_UP;
+    io.KeyMap[ImGuiKey_DownArrow] = VK_DOWN;
+    io.KeyMap[ImGuiKey_PageUp] = VK_PRIOR;
+    io.KeyMap[ImGuiKey_PageDown] = VK_NEXT;
+    io.KeyMap[ImGuiKey_Home] = VK_HOME;
+    io.KeyMap[ImGuiKey_End] = VK_END;
+    io.KeyMap[ImGuiKey_Insert] = VK_INSERT;
+    io.KeyMap[ImGuiKey_Delete] = VK_DELETE;
+    io.KeyMap[ImGuiKey_Backspace] = VK_BACK;
+    io.KeyMap[ImGuiKey_Space] = VK_SPACE;
+    io.KeyMap[ImGuiKey_Enter] = VK_RETURN;
+    io.KeyMap[ImGuiKey_Escape] = VK_ESCAPE;
+    io.KeyMap[ImGuiKey_A] = 'A';
+    io.KeyMap[ImGuiKey_C] = 'C';
+    io.KeyMap[ImGuiKey_V] = 'V';
+    io.KeyMap[ImGuiKey_X] = 'X';
+    io.KeyMap[ImGuiKey_Y] = 'Y';
+    io.KeyMap[ImGuiKey_Z] = 'Z';
+    
+    // OpenGL2 Render function.
+// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
+// Note that this implementation is little overcomplicated because we are saving/setting up/restoring every OpenGL state explicitly, in order to be able to run within any OpenGL engine that doesn't do so. 
+void ImGui_ImplGlfwGL2_RenderDrawData(ImDrawData* draw_data)
+{
+    // Avoid rendering when minimized, scale coordinates for retina displays (screen coordinates != framebuffer coordinates)
     ImGuiIO& io = ImGui::GetIO();
-    unsigned char* pixels;
-    int width, height, bytes_per_pixel;
-    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height, &bytes_per_pixel);
+    int fb_width = (int)(io.DisplaySize.x * io.DisplayFramebufferScale.x);
+    int fb_height = (int)(io.DisplaySize.y * io.DisplayFramebufferScale.y);
+    if (fb_width == 0 || fb_height == 0)
+        return;
+    draw_data->ScaleClipRects(io.DisplayFramebufferScale);
     }
     
-    //---- Define constructor and implicit cast operators to convert back<>forth from your math types and ImVec2/ImVec4.
-// This will be inlined as part of ImVec2 and ImVec4 class declarations.
-/*
-#define IM_VEC2_CLASS_EXTRA                                                 \
-        ImVec2(const MyVec2& f) { x = f.x; y = f.y; }                       \
-        operator MyVec2() const { return MyVec2(x,y); }
-    
-    IOBuf IOBuf::cloneAsValue() const {
-  auto tmp = cloneOneAsValue();
+        for (int i = 0; i < IMGUI_VK_QUEUED_FRAMES; i++)
+    {
+        if (g_VertexBuffer[i])          { vkDestroyBuffer(g_Device, g_VertexBuffer[i], g_Allocator); g_VertexBuffer[i] = VK_NULL_HANDLE; }
+        if (g_VertexBufferMemory[i])    { vkFreeMemory(g_Device, g_VertexBufferMemory[i], g_Allocator); g_VertexBufferMemory[i] = VK_NULL_HANDLE; }
+        if (g_IndexBuffer[i])           { vkDestroyBuffer(g_Device, g_IndexBuffer[i], g_Allocator); g_IndexBuffer[i] = VK_NULL_HANDLE; }
+        if (g_IndexBufferMemory[i])     { vkFreeMemory(g_Device, g_IndexBufferMemory[i], g_Allocator); g_IndexBufferMemory[i] = VK_NULL_HANDLE; }
     }
     
-    #pragma once
+        CreateRenderTarget();
     
-        version_ = version;
+            static float f = 0.0f;
+        ImGui::Text('Hello, world!');
+        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
+        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
+        ImGui::ShowDemoWindow(NULL);
+    
+    
+    {        // Rendering
+        int display_w, display_h;
+        glfwGetFramebufferSize(window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+        glClear(GL_COLOR_BUFFER_BIT);
+        //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound, but prefer using the GL3+ code.
+        ImGui::Render();
+        ImGui_ImplGlfwGL2_RenderDrawData(ImGui::GetDrawData());
+        glfwSwapBuffers(window);
+    }
