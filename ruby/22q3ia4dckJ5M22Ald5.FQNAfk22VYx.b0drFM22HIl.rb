@@ -1,26 +1,61 @@
 
         
-            #@posts[:new_public] = Post.where(:type => ['StatusMessage','ActivityStreams::Photo'],
-    #                                 :public => true).order('created_at DESC').limit(15).all
-    
-          def create
-        req = Rack::Request.new(request.env)
-        if req['client_assertion_type'] == 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
-          handle_jwt_bearer(req)
-        end
-        self.status, headers, self.response_body = Api::OpenidConnect::TokenEndpoint.new.call(request.env)
-        headers.each {|name, value| response.headers[name] = value }
-        nil
+              def self.available_options
+        [
+          FastlaneCore::ConfigItem.new(key: :name,
+                                       env_name: 'KEYCHAIN_NAME',
+                                       description: 'Keychain name',
+                                       conflicting_options: [:path],
+                                       is_string: true,
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :path,
+                                       env_name: 'KEYCHAIN_PATH',
+                                       description: 'Path to keychain',
+                                       is_string: true,
+                                       conflicting_options: [:name],
+                                       optional: true),
+          FastlaneCore::ConfigItem.new(key: :password,
+                                       env_name: 'KEYCHAIN_PASSWORD',
+                                       description: 'Password for the keychain',
+                                       sensitive: true,
+                                       optional: false),
+          FastlaneCore::ConfigItem.new(key: :default_keychain,
+                                       description: 'Should the newly created Keychain be the new system default keychain',
+                                       is_string: false,
+                                       default_value: false),
+          FastlaneCore::ConfigItem.new(key: :unlock,
+                                       description: 'Unlock keychain after create',
+                                       is_string: false,
+                                       default_value: false),
+          FastlaneCore::ConfigItem.new(key: :timeout,
+                                       description: 'timeout interval in seconds. Set `false` if you want to specify 'no time-out'',
+                                       is_string: false,
+                                       default_value: 300),
+          FastlaneCore::ConfigItem.new(key: :lock_when_sleeps,
+                                       description: 'Lock keychain when the system sleeps',
+                                       is_string: false,
+                                       default_value: false),
+          FastlaneCore::ConfigItem.new(key: :lock_after_timeout,
+                                       description: 'Lock keychain after timeout interval',
+                                       is_string: false,
+                                       default_value: false),
+          FastlaneCore::ConfigItem.new(key: :add_to_search_list,
+                                       description: 'Add keychain to search list',
+                                       is_string: false,
+                                       default_value: true)
+        ]
       end
     
-        it 'Returns nil when Referer header is invalid' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
-      expect(subject.referrer(env)).to be_nil
+            expect(result).to eq('git rev-parse --short HEAD')
+        expect(Fastlane::Actions.lane_context[Fastlane::Actions::SharedValues::BUILD_NUMBER_REPOSITORY]).to eq('git rev-parse --short HEAD')
+      end
     end
-  end
-end
-
     
-      it 'should set the X-Frame-Options' do
-    expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('SAMEORIGIN')
+          it 'it increments all targets minor version major' do
+        Fastlane::FastFile.new.parse('lane :test do
+          increment_version_number(bump_type: 'major')
+        end').runner.execute(:test)
+    
+      it 'should not set the X-XSS-Protection for other content types' do
+    expect(get('/', {}, 'wants' => 'application/foo').headers['X-XSS-Protection']).to be_nil
   end
