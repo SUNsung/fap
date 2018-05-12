@@ -1,118 +1,201 @@
 
         
-        
-def test_auth_plugin_require_auth_false_and_auth_provided(httpbin):
+            s.register(Tag1, index=-1)
+    assert isinstance(s.order[-2], Tag1)
     
-        @property
-    def encoding(self):
-        return 'utf8'
+        implements_to_string = _identity
+    
+        seems_fishy = False
+    if total_found == 0:
+        info.append('Error: the template could not be found.')
+        seems_fishy = True
+    elif total_found > 1:
+        info.append('Warning: multiple loaders returned a match for the template.')
+        seems_fishy = True
+    
+        If :meth:`open_session` returns ``None`` Flask will call into
+    :meth:`make_null_session` to create a session that acts as replacement
+    if the session support cannot work because some requirement is not
+    fulfilled.  The default :class:`NullSession` class that is created
+    will complain that the secret key was not set.
+    
+        :copyright: © 2010 by the Pallets team.
+    :license: BSD, see LICENSE for more details.
+'''
     
     
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
+def _render(template, context, app):
+    '''Renders the template and fires the signal'''
     
-    error_msg = None
+        from site_app import app
+    assert app.instance_path == \
+        modules_tmpdir.join('var').join('site_app-instance')
     
-        def log_error(msg, *args, **kwargs):
-        msg = msg % args
-        level = kwargs.get('level', 'error')
-        assert level in ['error', 'warning']
-        env.stderr.write('\nhttp: %s: %s\n' % (level, msg))
+    import pytest
     
-        @property
-    def interrupted(self):
-        return (
-            self.finished and
-            self.status.total_size and
-            self.status.total_size != self.status.downloaded
-        )
+            # Force Python to track this dictionary at all times.
+        # This is necessary since Python only starts tracking
+        # dicts if they contain mutable objects.  It's a horrible,
+        # horrible hack but makes this kinda testable.
+        loc.__storage__['FOOO'] = [1, 2, 3]
     
-    import requests.auth
     
+@pytest.fixture
+def httpbin(httpbin):
+    return prepare_url(httpbin)
+    
+                handler_result = self.handler(sock)
+    
+                # Consume content and release the original connection
+            # to allow our new request to reuse the same one.
+            r.content
+            r.close()
+            prep = r.request.copy()
+            extract_cookies_to_jar(prep._cookies, r.request, r.raw)
+            prep.prepare_cookies(prep._cookies)
+    
+        def has_header(self, name):
+        return name in self._r.headers or name in self._new_headers
+    
+            :param conn: The urllib3 connection object associated with the cert.
+        :param url: The requested URL.
+        :param verify: Either a boolean, in which case it controls whether we verify
+            the server's TLS certificate, or a string, in which case it must be a path
+            to a CA bundle to use
+        :param cert: The SSL certificate to verify.
         '''
+        if url.lower().startswith('https') and verify:
+    
+        print('Classifier Training')
+    print('===================')
+    accuracy, train_time, test_time = {}, {}, {}
+    for name in sorted(args['estimators']):
+        clf = ESTIMATORS[name]
+        try:
+            clf.set_params(random_state=0)
+        except (TypeError, ValueError):
+            pass
+    
+    if __name__ == '__main__':
+    barplot_neighbors(dataset='digits')
+    barplot_neighbors(dataset='dense')
+    plt.show()
+
+    
+        try:
+        fn = inspect.getsourcefile(obj)
+    except Exception:
+        fn = None
+    if not fn:
+        try:
+            fn = inspect.getsourcefile(sys.modules[obj.__module__])
+        except Exception:
+            fn = None
+    if not fn:
+        return
+    
+    pages = {
+    u'ar': u'http://ar.wikipedia.org/wiki/%D9%88%D9%8A%D9%83%D9%8A%D8%A8%D9%8A%D8%AF%D9%8A%D8%A7',
+    u'de': u'http://de.wikipedia.org/wiki/Wikipedia',
+    u'en': u'https://en.wikipedia.org/wiki/Wikipedia',
+    u'es': u'http://es.wikipedia.org/wiki/Wikipedia',
+    u'fr': u'http://fr.wikipedia.org/wiki/Wikip%C3%A9dia',
+    u'it': u'http://it.wikipedia.org/wiki/Wikipedia',
+    u'ja': u'http://ja.wikipedia.org/wiki/Wikipedia',
+    u'nl': u'http://nl.wikipedia.org/wiki/Wikipedia',
+    u'pl': u'http://pl.wikipedia.org/wiki/Wikipedia',
+    u'pt': u'http://pt.wikipedia.org/wiki/Wikip%C3%A9dia',
+    u'ru': u'http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F',
+#    u'zh': u'http://zh.wikipedia.org/wiki/Wikipedia',
+}
     
     
-class PluginManager(object):
+if __name__ == '__main__':
+    # NOTE: we put the following in a 'if __name__ == '__main__'' protected
+    # block to be able to use a multi-core grid search that also works under
+    # Windows, see: http://docs.python.org/library/multiprocessing.html#windows
+    # The multiprocessing module is used as the backend of joblib.Parallel
+    # that is used when n_jobs != 1 in GridSearchCV
     
-      # Edit final timestep to have class label and weight = 1.
-  final_timestep.set_label(int(class_label)).set_weight(1.0)
+        # TASK: print the mean and std for each candidate along with the parameter
+    # settings for all the candidates explored by grid search.
+    n_candidates = len(grid_search.cv_results_['params'])
+    for i in range(n_candidates):
+        print(i, 'params - %s; mean - %0.2f; std - %0.2f'
+                 % (grid_search.cv_results_['params'][i],
+                    grid_search.cv_results_['mean_test_score'][i],
+                    grid_search.cv_results_['std_test_score'][i]))
     
-        self.assertEqualNPArray(f[:, :, 4], utils_test.load_board('''
-      .X.......
-      .........''' + EMPTY_ROW * 7))
+    for f in solutions:
+    if not f.endswith('.py'):
+        continue
     
-        # ...and retaking ko is always illegal
-    if self.ko is not None:
-      legal_moves[self.ko] = 0
+        __unicode__ = __str__
     
-      def test_place_stone(self):
-    board = utils_test.load_board('X........' + EMPTY_ROW * 8)
-    lib_tracker = LibertyTracker.from_board(utils_test.BOARD_SIZE, board)
-    lib_tracker.add_stone(BLACK, coords.from_kgs(utils_test.BOARD_SIZE, 'B9'))
-    self.assertEqual(len(lib_tracker.groups), 1)
-    self.assertNotEqual(
-        lib_tracker.group_index[coords.from_kgs(
-            utils_test.BOARD_SIZE, 'A9')], go.MISSING_GROUP_ID)
-    self.assertEqual(lib_tracker.liberty_cache[coords.from_kgs(
-        utils_test.BOARD_SIZE, 'A9')], 3)
-    self.assertEqual(lib_tracker.liberty_cache[coords.from_kgs(
-        utils_test.BOARD_SIZE, 'B9')], 3)
-    sole_group = lib_tracker.groups[lib_tracker.group_index[coords.from_kgs(
-        utils_test.BOARD_SIZE, 'A9')]]
-    self.assertEqual(sole_group.stones, coords_from_kgs_set('A9 B9'))
-    self.assertEqual(sole_group.liberties,
-                     coords_from_kgs_set('C9 A8 B8'))
-    self.assertEqual(sole_group.color, BLACK)
+        def get(self):
+        params = self._oauth_request_parameters(
+            'http://www.example.com/api/asdf',
+            dict(key='uiop', secret='5678'),
+            parameters=dict(foo='bar'))
+        self.write(params)
     
-      def cmd_q_heatmap(self, arguments):
-    sort_order = list(range(self._game.size * self._game.size + 1))
-    reverse = True if self._game.root.position.to_play is go.BLACK else False
-    sort_order.sort(
-        key=lambda i: self._game.root.child_Q[i], reverse=reverse)
-    return self.heatmap(sort_order, self._game.root, 'child_Q')
+        def test_timeout_environment_variable(self):
+        @gen_test(timeout=0.5)
+        def test_long_timeout(self):
+            yield gen.sleep(0.25)
     
+        def test_get_query_arguments(self):
+        # send as a post so we can ensure the separation between query
+        # string and body arguments.
+        body = urllib_parse.urlencode(dict(foo='hello'))
+        response = self.fetch('/get_argument?source=query&foo=bar',
+                              method='POST', body=body)
+        self.assertEqual(response.body, b'bar')
+        response = self.fetch('/get_argument?source=query&foo=',
+                              method='POST', body=body)
+        self.assertEqual(response.body, b'')
+        response = self.fetch('/get_argument?source=query',
+                              method='POST', body=body)
+        self.assertEqual(response.body, b'default')
     
-class MCTSNode(object):
-  '''A node of a MCTS search tree.
+        def __init__(self):
+        self.time_provider = datetime.datetime
     
-        # Compute evaluation metrics.
-    accuracy = tf.metrics.accuracy(labels=labels,
-                                   predictions=predicted_classes,
-                                   name='acc_op')
-    metrics = {'accuracy': accuracy}
-    tf.summary.scalar('accuracy', accuracy[1])
+    '''
+Port of the Java example of 'Parameter Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
+http://xunitpatterns.com/Dependency%20Injection.html.
     
-      @tf.test.mock.patch.dict(premade_estimator.__dict__,
-                           {'load_data': four_lines_data})
-  def test_premade_estimator(self):
-    premade_estimator.main([None, '--train_steps=1'])
+    '''
+http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
+Implementation of the iterator pattern with a generator
     
-    # Can't import these from paths.py because that uses `future` imports
-DIR_OF_CURRENT_SCRIPT = os.path.dirname( os.path.abspath( __file__ ) )
-DIR_OF_YCMD = os.path.join( DIR_OF_CURRENT_SCRIPT, '..', '..', 'third_party',
-                            'ycmd' )
-    
-            for future in as_completed(future_to_url):
-            try:
-                url_to_content[future_to_url[future]] = future.result()
-            except:
-                pass
-        return url_to_content
-    finally:
-        executor.shutdown()
-    
-    def with_process_pool_executor():
-    with ProcessPoolExecutor(10) as executor:
-        return list(executor.map(is_prime, PRIMES))
+        @property
+    def data(self):
+        return self._data
     
     
-def ExtractKeywordsFromGroup_Basic_test():
-  assert_that( syntax_parse._ExtractKeywordsFromGroup(
-                 syntax_parse.SyntaxGroup( '', [
-                   'foo bar',
-                   'zoo goo',
-                 ] ) ),
-               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
+class Specification(object):
+    
+    print 'POTFILE := ' + os.path.join(I18N_PATH, 'r2.pot')
+    
+        @require_oauth2_scope('identity')
+    @validate(
+        VUser(),
+    )
+    @api_doc(
+        section=api_section.account,
+        uri='/api/v1/me/trophies',
+    )
+    def GET_trophies(self):
+        '''Return a list of trophies for the current user.'''
+        return self.api_wrapper(get_usertrophies(c.oauth_user))
+    
+    class EmbedController(RedditController):
+    allow_stylesheets = True
+    
+    import pylibmc
+from pylons import request, response
+from pylons import app_globals as g
+from pylons.controllers.util import abort
