@@ -1,92 +1,111 @@
 
         
-        
-MIME_RE = re.compile(r'^[^/]+/[^/]+$')
+            s.register(Tag1, index=-1)
+    assert isinstance(s.order[-2], Tag1)
+    
+        def __init__(self, app, **options):
+        if 'loader' not in options:
+            options['loader'] = app.create_global_jinja_loader()
+        BaseEnvironment.__init__(self, **options)
+        self.app = app
+    
+        app.testing = False
+    stream = StringIO()
+    rv = client.get('/', errors_stream=stream)
+    assert rv.status_code == 500
+    assert rv.data
+    err = stream.getvalue()
+    assert 'Exception on / [GET]' in err
+    assert 'Exception: test' in err
+
+    
+        Tests regressions.
+    
+            # because special names such as Name.Class, Name.Function, etc.
+        # are not recognized as such later in the parsing, we choose them
+        # to look the same as ordinary variables.
+        Name:                      '#000000',        # class: 'n'
+        Name.Attribute:            '#c4a000',        # class: 'na' - to be revised
+        Name.Builtin:              '#004461',        # class: 'nb'
+        Name.Builtin.Pseudo:       '#3465a4',        # class: 'bp'
+        Name.Class:                '#000000',        # class: 'nc' - to be revised
+        Name.Constant:             '#000000',        # class: 'no' - to be revised
+        Name.Decorator:            '#888',           # class: 'nd' - to be revised
+        Name.Entity:               '#ce5c00',        # class: 'ni'
+        Name.Exception:            'bold #cc0000',   # class: 'ne'
+        Name.Function:             '#000000',        # class: 'nf'
+        Name.Property:             '#000000',        # class: 'py'
+        Name.Label:                '#f57900',        # class: 'nl'
+        Name.Namespace:            '#000000',        # class: 'nn' - to be revised
+        Name.Other:                '#000000',        # class: 'nx'
+        Name.Tag:                  'bold #004461',   # class: 'nt' - like a keyword
+        Name.Variable:             '#000000',        # class: 'nv' - to be revised
+        Name.Variable.Class:       '#000000',        # class: 'vc' - to be revised
+        Name.Variable.Global:      '#000000',        # class: 'vg' - to be revised
+        Name.Variable.Instance:    '#000000',        # class: 'vi' - to be revised
     
     
-BINARY_SUPPRESSED_NOTICE = (
-    b'\n'
-    b'+-----------------------------------------+\n'
-    b'| NOTE: binary data not shown in terminal |\n'
-    b'+-----------------------------------------+'
-)
+def default_hooks():
+    return dict((event, []) for event in HOOKS)
+    
+        def __repr__(self):
+        return str(dict(self.items()))
+    
+    requires = [
+    'chardet>=3.0.2,<3.1.0',
+    'idna>=2.5,<2.7',
+    'urllib3>=1.21.1,<1.23',
+    'certifi>=2017.4.17'
     
     
-CLIENT_CERT = os.path.join(TESTS_ROOT, 'client_certs', 'client.crt')
-CLIENT_KEY = os.path.join(TESTS_ROOT, 'client_certs', 'client.key')
-CLIENT_PEM = os.path.join(TESTS_ROOT, 'client_certs', 'client.pem')
+@pytest.mark.parametrize(
+    'value, expected', (
+        ('example.com/path', 'http://example.com/path'),
+        ('//example.com/path', 'http://example.com/path'),
+    ))
+def test_prepend_scheme_if_needed(value, expected):
+    assert prepend_scheme_if_needed(value, 'http') == expected
     
-        def get_formatters_grouped(self):
-        groups = {}
-        for group_name, group in groupby(
-                self.get_formatters(),
-                key=lambda p: getattr(p, 'group_name', 'format')):
-            groups[group_name] = list(group)
-        return groups
+            def mako_module_path(filename, uri):
+            filename = filename.lstrip('/').replace('/', '-')
+            path = os.path.join(module_directory, filename + '.py')
+            return os.path.abspath(path)
+    else:
+        # disable caching templates since we don't know where they should go.
+        module_directory = mako_module_path = None
     
-        return groups
+    def set_extension(environ, ext):
+    environ['extension'] = ext
+    environ['render_style'], environ['content_type'] = extension_mapping[ext]
+
     
-        if os.path.exists(path):
-        return
+        def pre(self):
+        super(APIv1LoginController, self).pre()
+        c.extension = 'json'
+        set_extension(request.environ, 'json')
     
-        project_id = response.json()[0]['id']
+        @require_oauth2_scope('account')
+    @validate(
+        VUser(),
+        validated_prefs=PREFS_JSON_VALIDATOR,
+    )
+    @api_doc(api_section.account, json_model=PREFS_JSON_VALIDATOR,
+             uri='/api/v1/me/prefs')
+    def PATCH_prefs(self, validated_prefs):
+        user_prefs = c.user.preferences()
+        for short_name, new_value in validated_prefs.iteritems():
+            pref_name = 'pref_' + short_name
+            user_prefs[pref_name] = new_value
+        vprefs.filter_prefs(user_prefs, c.user)
+        vprefs.set_prefs(c.user, user_prefs)
+        c.user._commit()
+        return self.api_wrapper(PrefsJsonTemplate().data(c.user))
     
-        branch_pool = AveragePooling2D((3, 3), strides=(1, 1), padding='same')(x)
-    branch_pool = conv2d_bn(branch_pool, 64, 1, 1)
-    x = layers.concatenate(
-        [branch1x1, branch5x5, branch3x3dbl, branch_pool],
-        axis=channel_axis,
-        name='mixed2')
+            res = AdminPage(content = AdminAwardGive(award, recipient, desc,
+                                                 url, hours),
+                        title='give an award').render()
+        return res
     
-            inputs = np.random.random((num_samples, timesteps, input_size))
-        state = model.predict(inputs)
-        np.testing.assert_allclose(
-            keras.backend.eval(layer.states[0]), state, atol=1e-4)
-    
-        xs = []
-    for i in range(output_length):
-        slice_length = slice(i * stride,
-                             i * stride + kernel_size[0])
-        xs.append(reshape(inputs[:, slice_length, :],
-                          (-1, 1, feature_dim)))
-    x_aggregate = concatenate(xs, axis=1)
-    # transpose kernel to output_filters first, to apply broadcast
-    weight = permute_dimensions(kernel, (2, 0, 1))
-    # Shape: (batch, filters, output_length, input_length * kernel_size)
-    output = x_aggregate * weight
-    # Shape: (batch, filters, output_length)
-    output = sum(output, axis=3)
-    # Shape: (batch, output_length, filters)
-    return permute_dimensions(output, (0, 2, 1))
-    
-                # Test cases with `y = None`
-            x = generator.flow(images, None, batch_size=3).next()
-            assert type(x) is np.ndarray
-            assert x.shape == images[:3].shape
-            x = generator.flow((images, x_misc1), None,
-                               batch_size=3, shuffle=False).next()
-            assert type(x) is list
-            assert x[0].shape == images[:3].shape
-            assert (x[1] == x_misc1[:3]).all()
-            x = generator.flow((images, [x_misc1, x_misc2]), None,
-                               batch_size=3, shuffle=False).next()
-            assert type(x) is list
-            assert x[0].shape == images[:3].shape
-            assert (x[1] == x_misc1[:3]).all()
-            assert (x[2] == x_misc2[:3]).all()
-    
-            self.kernel_constraint = constraints.get(kernel_constraint)
-        self.recurrent_constraint = constraints.get(recurrent_constraint)
-        self.bias_constraint = constraints.get(bias_constraint)
-    
-    from setuptools import setup, find_packages
-setup(
-    name = proj_info['name'],
-    version = VERSION,
-    
-    	for video in tab.childNodes:
-		if re.search(contentid, video.attributes['link'].value):
-			url = video.attributes['flv'].value
-			break
-    
-        type, ext, size = url_info(video_url, headers=fake_headers)
+        def GET_blog(self):
+        return self.redirect('https://blog.%s/' %
+                             get_domain(subreddit=False, no_www=True))
