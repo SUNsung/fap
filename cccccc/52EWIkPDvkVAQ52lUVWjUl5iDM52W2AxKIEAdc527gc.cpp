@@ -1,73 +1,84 @@
 
         
-        namespace grpc {
-namespace testing {
-    }
-    }
-    
-    #include 'test/cpp/qps/benchmark_config.h'
-#include 'test/cpp/qps/driver.h'
-#include 'test/cpp/qps/report.h'
-#include 'test/cpp/qps/server.h'
-#include 'test/cpp/util/test_config.h'
-#include 'test/cpp/util/test_credentials_provider.h'
-    
-    static const int WARMUP = 5;
-static const int BENCHMARK = 5;
+        #ifndef GRPC_INTERNAL_COMPILER_PYTHON_GENERATOR_H
+#define GRPC_INTERNAL_COMPILER_PYTHON_GENERATOR_H
     
     #include <signal.h>
     
-      // Proto2 Python
-  google::protobuf::compiler::python::Generator py_generator;
-  cli.RegisterGenerator('--python_out', &py_generator,
-                        'Generate Python source file.');
+     private:
+  static Result Sample();
     
-    TEST_F(MockEnvTest, Corrupt) {
-  const std::string kGood = 'this is a good string, synced to disk';
-  const std::string kCorrupted = 'this part may be corrupted';
-  const std::string kFileName = '/dir/f';
-  unique_ptr<WritableFile> writable_file;
-  ASSERT_OK(env_->NewWritableFile(kFileName, &writable_file, soptions_));
-  ASSERT_OK(writable_file->Append(kGood));
-  ASSERT_TRUE(writable_file->GetFileSize() == kGood.size());
-    }
+      void SetComparatorName(const Slice& name) {
+    has_comparator_ = true;
+    comparator_ = name.ToString();
+  }
+  void SetLogNumber(uint64_t num) {
+    has_log_number_ = true;
+    log_number_ = num;
+  }
+  void SetPrevLogNumber(uint64_t num) {
+    has_prev_log_number_ = true;
+    prev_log_number_ = num;
+  }
+  void SetNextFile(uint64_t num) {
+    has_next_file_number_ = true;
+    next_file_number_ = num;
+  }
+  void SetLastSequence(SequenceNumber seq) {
+    has_last_sequence_ = true;
+    last_sequence_ = seq;
+  }
+  void SetCompactPointer(int level, const InternalKey& key) {
+    compact_pointers_.push_back(std::make_pair(level, key));
+  }
     
-    
-    {} // namespace rocksdb
-
-    
-    TEST_F(StringAppendOperatorTest, SimpleDelimiterTest) {
-  auto db = OpenDb('|');
-  StringLists slists(db);
-    }
-    
-      /// If list is empty, return false and leave *result unchanged.
-  /// Else, remove the first/last elem, store it in *result, and return true
-  bool PopLeft(const std::string& key, std::string* result);  // First
-  bool PopRight(const std::string& key, std::string* result); // Last
-    
-      Options GetOptions() { return DBTestBase::GetOptions(GetParam()); }
-    
-    // Return the length of the encoding of 'key'.
-inline size_t InternalKeyEncodingLength(const ParsedInternalKey& key) {
-  return key.user_key.size() + 8;
+    static Slice Key(int i, char* buffer) {
+  EncodeFixed32(buffer, i);
+  return Slice(buffer, sizeof(uint32_t));
 }
     
-      // Returns an estimate of the number of bytes of data in use by this
-  // data structure.
-  //
-  // REQUIRES: external synchronization to prevent simultaneous
-  // operations on the same MemTable (unless this Memtable is immutable).
-  size_t ApproximateMemoryUsage();
+      // Pick next gap with average value of config::kReadBytesPeriod.
+  ssize_t RandomPeriod() {
+    return rnd_.Uniform(2*config::kReadBytesPeriod);
+  }
     
-    TEST_F(InlineSkipTest, ConcurrentInsertWithoutThreads) {
-  ConcurrentTest test;
-  Random rnd(test::RandomSeed());
-  for (int i = 0; i < 10000; i++) {
-    test.ReadStep(&rnd);
-    uint32_t base = rnd.Next();
-    for (int j = 0; j < 4; ++j) {
-      test.ConcurrentWriteStep((base + j) % ConcurrentTest::K);
-    }
+    class FormatTest { };
+    
+      // Finish building the block and return a slice that refers to the
+  // block contents.  The returned slice will remain valid for the
+  // lifetime of this builder or until Reset() is called.
+  Slice Finish();
+    
+    
+    {} // namespace A2STR
+    
+      virtual bool getInitialOption() const CXX11_OVERRIDE;
+    
+    
+    {
+    {    httpConnection_->sendProxyRequest(std::move(httpRequest));
+  }
+  else {
+    httpConnection_->sendPendingData();
+  }
+  if (httpConnection_->sendBufferIsEmpty()) {
+    getDownloadEngine()->addCommand(getNextCommand());
+    return true;
+  }
+  else {
+    setWriteCheckSocket(getSocket());
+    addCommandSelf();
+    return false;
   }
 }
+    
+    class AbstractProxyRequestCommand : public AbstractCommand {
+private:
+  std::shared_ptr<Request> proxyRequest_;
+    }
+    
+    
+    {} // namespace aria2
+    
+    
+    {} // namespace aria2
