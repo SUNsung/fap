@@ -1,153 +1,278 @@
 
         
         
-def _is_tar_extract(cmd):
-    if '--extract' in cmd:
-        return True
+class NullSession(SecureCookieSession):
+    '''Class used to generate nicer error messages if sessions are not
+    available.  Will still allow read-only access to the empty session
+    but fail on setting.
+    '''
     
-    containers = (('thefuck/python3-fish',
-               u'''FROM python:3
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'),
-              ('thefuck/python2-fish',
-               u'''FROM python:2
-                   # Use jessie-backports since it has the fish package. See here for details:
-                   # https://github.com/tianon/docker-brew-debian/blob/88ae21052affd8a14553bb969f9d41c464032122/jessie/backports/Dockerfile
-                   RUN awk '$1 ~ '^deb' { $3 = $3 '-backports'; print; exit }' /etc/apt/sources.list > /etc/apt/sources.list.d/backports.list
-                   RUN apt-get update
-                   RUN apt-get install -yy fish''',
-               u'fish'))
+        @app.route('/')
+    def index():
+        raise Exception('test')
     
-                    if path.endswith('.json'):
-                    contents = json.dumps(json.loads(contents), sort_keys=True, indent=4)
+      Returns:
+    2D np.array where each row contains the magnitudes of the fft_length/2+1
+    unique values of the FFT for the corresponding frame of input samples.
+  '''
+  frames = frame(signal, window_length, hop_length)
+  # Apply frame window to each frame. We use a periodic Hann (cosine of period
+  # window_length) instead of the symmetric Hann of np.hanning (period
+  # window_length-1).
+  window = periodic_hann(window_length)
+  windowed_frames = frames * window
+  return np.abs(np.fft.rfft(windowed_frames, int(fft_length)))
     
-        old_layer = keras.layers.BatchNormalization(mode=0,
-                                                beta_init='one',
-                                                gamma_init='uniform',
-                                                name='bn')
-    new_layer = keras.layers.BatchNormalization(beta_initializer='ones',
-                                                gamma_initializer='uniform',
-                                                name='bn')
-    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
     
-    from keras.utils.test_utils import keras_test
-from keras.models import Model, Sequential
-from keras.layers import Dense, Input
+if __name__ == '__main__':
+  tf.test.main()
+
     
-    - We start with input sequences from a domain (e.g. English sentences)
-    and correspding target sequences from another domain
-    (e.g. French sentences).
-- An encoder LSTM turns input sequences to 2 state vectors
-    (we keep the last LSTM state and discard the outputs).
-- A decoder LSTM is trained to turn the target sequences into
-    the same sequence but offset by one timestep in the future,
-    a training process called 'teacher forcing' in this context.
-    Is uses as initial state the state vectors from the encoder.
-    Effectively, the decoder learns to generate `targets[t+1...]`
-    given `targets[...t]`, conditioned on the input sequence.
-- In inference mode, when we want to decode unknown input sequences, we:
-    - Encode the input sequence into state vectors
-    - Start with a target sequence of size 1
-        (just the start-of-sequence character)
-    - Feed the state vectors and 1-char target sequence
-        to the decoder to produce predictions for the next character
-    - Sample the next character using these predictions
-        (we simply use argmax).
-    - Append the sampled character to the target sequence
-    - Repeat until we generate the end-of-sequence character or we
-        hit the character limit.
+      def setUp(self):
+    FLAGS.train_data = os.path.join(self.get_temp_dir(), 'test-text.txt')
+    FLAGS.eval_data = os.path.join(self.get_temp_dir(), 'eval-text.txt')
+    FLAGS.save_path = self.get_temp_dir()
+    with open(FLAGS.train_data, 'w') as f:
+      f.write(
+          '''alice was beginning to get very tired of sitting by her sister on
+          the bank, and of having nothing to do: once or twice she had peeped
+          into the book her sister was reading, but it had no pictures or
+          conversations in it, 'and what is the use of a book,' thought alice
+          'without pictures or conversations?' So she was considering in her own
+          mind (as well as she could, for the hot day made her feel very sleepy
+          and stupid), whether the pleasure of making a daisy-chain would be
+          worth the trouble of getting up and picking the daisies, when suddenly
+          a White rabbit with pink eyes ran close by her.\n''')
+      with open(FLAGS.eval_data, 'w') as f:
+        f.write('alice she rabbit once\n')
     
-        # upsample to (14, 14, ...)
-    cnn.add(Conv2DTranspose(96, 5, strides=2, padding='same',
-                            activation='relu',
-                            kernel_initializer='glorot_normal'))
-    cnn.add(BatchNormalization())
+      def test_train(self):
+    with tempfile.TemporaryDirectory() as working_dir, \
+        tempfile.NamedTemporaryFile() as tf_record:
+      preprocessing.make_dataset_from_sgf(
+          utils_test.BOARD_SIZE, 'example_game.sgf', tf_record.name)
+      dualnet.train(
+          working_dir, [tf_record.name], 1, model_params.DummyMiniGoParams())
     
-        # Transform sequences and labels into 'one-hot' encoding
-    x = np.zeros((len(sentences), sequence_length, number_of_chars), dtype=np.bool)
-    y = np.zeros((len(sentences), number_of_chars), dtype=np.bool)
-    for i, sentence in enumerate(sentences):
-        for t, char in enumerate(sentence):
-            x[i, t, ord(char) - ord('a')] = 1
-        y[i, ord(next_chars[i]) - ord('a')] = 1
+        for i in range(10, 16):
+      self.assertEqualNPArray(
+          f[:, :, i], np.zeros([utils_test.BOARD_SIZE, utils_test.BOARD_SIZE]))
     
-    from sklearn.datasets import fetch_20newsgroups_vectorized
-from sklearn.metrics import accuracy_score
-from sklearn.utils.validation import check_array
+          for _ in batches:
+        preprocessing.write_tf_examples(
+            rewritten_file.name, all_batches, serialize=False)
     
-        n_iter = 40
+    import os
+import random
+import re
+import tempfile
+import time
     
-            for iteration in xrange(opts.n_times):
-            print('\titer %s...' % iteration, end='')
-            time_to_fit, time_to_transform = bench_scikit_transformer(X_dense,
-              transformers[name])
-            time_fit[name].append(time_to_fit)
-            time_transform[name].append(time_to_transform)
-            print('done')
+    '''
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
     
-        ###########################################################################
-    # Set custom tracking based method
-    sampling_algorithm['custom-tracking-selection'] = \
-        lambda n_population, n_samples, random_state=None: \
-            sample_without_replacement(n_population,
-                                       n_samples,
-                                       method='tracking_selection',
-                                       random_state=random_state)
+        # Input shape
+        5D tensor with shape:
+        `(samples, channels, dim1, dim2, dim3)` if data_format='channels_first'
+        or 5D tensor with shape:
+        `(samples, dim1, dim2, dim3, channels)` if data_format='channels_last'.
     
-        short_text_lang_folder = os.path.join(short_text_folder, lang)
-    if not os.path.exists(short_text_lang_folder):
-        os.makedirs(short_text_lang_folder)
+            h_tm1 = states[0]  # previous memory state
+        c_tm1 = states[1]  # previous carry state
     
-        if not os.path.exists(ARCHIVE_NAME):
-        print('Downloading dataset from %s (3 MB)' % URL)
-        opener = urlopen(URL)
-        with open(ARCHIVE_NAME, 'wb') as archive:
-            archive.write(opener.read())
+        # Returns
+        A Keras Optimizer instance.
+    '''
+    all_classes = {
+        'sgd': SGD,
+        'rmsprop': RMSprop,
+        'adagrad': Adagrad,
+        'adadelta': Adadelta,
+        'adam': Adam,
+        'adamax': Adamax,
+        'nadam': Nadam,
+        'tfoptimizer': TFOptimizer,
+    }
+    # Make deserialization case-insensitive for built-in optimizers.
+    if config['class_name'].lower() in all_classes:
+        config['class_name'] = config['class_name'].lower()
+    return deserialize_keras_object(config,
+                                    module_objects=all_classes,
+                                    custom_objects=custom_objects,
+                                    printable_module_name='optimizer')
     
-    Sentiment analysis can be casted as a binary text classification problem,
-that is fitting a linear classifier on features extracted from the text
-of the user messages so as to guess wether the opinion of the author is
-positive or negative.
+        # Returns:
+        z (tensor): sampled latent vector
+    '''
     
-    The data is generated with the ``make_checkerboard`` function, then
-shuffled and passed to the Spectral Biclustering algorithm. The rows
-and columns of the shuffled matrix are rearranged to show the
-biclusters found by the algorithm.
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
     
-    Both kinds of calibration can fix this issue and yield nearly identical
-results. This shows that sigmoid calibration can deal with situations where
-the calibration curve of the base classifier is sigmoid (e.g., for LinearSVC)
-but not where it is transposed-sigmoid (e.g., Gaussian naive Bayes).
+        if version_str == 'HEAD':
+        return (sys.maxint, sys.maxint, sys.maxint, sys.maxint)
+    
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
+    
+    
+    def __str__(self):
+        #return 'MismatchedTokenException('+self.expecting+')'
+        return 'MismatchedTokenException(%r!=%r)' % (
+            self.getUnexpectedType(), self.expecting
+            )
+    __repr__ = __str__
+    
+    def cbs_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
+    '''Downloads CBS videos by URL.
+    '''
+    
+    import json
+import os
+import re
+import math
+import traceback
+import urllib.parse as urlparse
+    
+    import ssl
+    
+        #This is mainly for testing the M3U FFmpeg parser so I would ignore any non-m3u ones
+    stream_url = [i['url'] for i in html['streaming_url_list'] if i['is_default'] and i['type'] == 'hls'][0]
+    
+            class LongTrunc:
+            # __long__ should be ignored in 3.x
+            def __long__(self):
+                return 42
+            def __trunc__(self):
+                return 1729
+        self.assertEqual(int(LongTrunc()), 1729)
+    
+        The harmonic mean, sometimes called the subcontrary mean, is the
+    reciprocal of the arithmetic mean of the reciprocals of the data,
+    and is often appropriate when averaging quantities which are rates
+    or ratios, for example speeds. Example:
+    
+    def pi_decimal():
+    '''decimal'''
+    D = P.Decimal
+    lasts, t, s, n, na, d, da = D(0), D(3), D(3), D(1), D(0), D(0), D(24)
+    while s != lasts:
+        lasts = s
+        n, na = n+na, na+8
+        d, da = d+da, da+32
+        t = (t * n) / d
+        s += t
+    return s
+    
+        FILTER_ACCEPT = 1
+    FILTER_REJECT = 2
+    FILTER_SKIP = 3
+    FILTER_INTERRUPT = 4
+    
+            see http://www.xmlrpc.com/discuss/msgReader$1208'''
+    
+        def test_from_buffer_copy(self):
+        a = array.array('i', range(16))
+        x = (c_int * 16).from_buffer_copy(a)
+    
+        def test_car_shall_make_very_loud_noise(self):
+        noise = self.car.make_noise(10)
+        expected_noise = 'vroom!!!!!!!!!!'
+        self.assertEqual(noise, expected_noise)
+    
+        def amount(self, val):
+        print(val, end=' ')
+        return self
+    
+    
+class RadioTest(unittest.TestCase):
+    '''
+    Attention: Test case results depend on test case execution. The test cases
+    in this integration test class should be executed in an explicit order:
+    http://stackoverflow.com/questions/5387299/python-unittest-testcase-execution-order
+    '''
+    
+        def get_current_time_as_html_fragment(self):
+        current_time = self.time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
 '''
-print(__doc__)
     
-    from sklearn.datasets import make_blobs
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.calibration import CalibratedClassifierCV
-from sklearn.metrics import log_loss
+    class ParameterInjectionTest(unittest.TestCase):
     
-    Shows how shrinkage improves classification.
+    
+class ClientCoroutine:
+    
+    print('Counting to five...')
+for number in count_to_five():
+    print(number, end=' ')
+    
+        def tearDown(self):
+        if not self._bProblem:
+            print('Tearing down')
+            time.sleep(0.1)
+            self._tm.publishReport()
+        else:
+            print('Test not executed. No tear down required.')
+    
+        def __repr__(self):
+        return '<%s: %r>' % (self.__class__.__name__, self.value)
+    
+    *TL;DR80
+Maintains a list of dependents and notifies them of any state changes.
 '''
-    
-                def finish(self):
-                event.set()
-    
-    
-class BoundedSemaphoreTest(AsyncTestCase):
-    def test_release_unacquired(self):
-        sem = locks.BoundedSemaphore()
-        self.assertRaises(ValueError, sem.release)
-        # Value is 0.
-        sem.acquire()
-        # Block on acquire().
-        future = sem.acquire()
-        self.assertFalse(future.done())
-        sem.release()
-        self.assertTrue(future.done())
-        # Value is 1.
-        sem.release()
-        self.assertRaises(ValueError, sem.release)
