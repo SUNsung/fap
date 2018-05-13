@@ -1,111 +1,142 @@
 
         
         
-@keras_test
-def test_weighted_metrics_with_multiple_outputs():
-    decimal = decimal_precision[K.backend()]
+    {        Generic:                   '#000000',        # class: 'g'
+        Generic.Deleted:           '#a40000',        # class: 'gd'
+        Generic.Emph:              'italic #000000', # class: 'ge'
+        Generic.Error:             '#ef2929',        # class: 'gr'
+        Generic.Heading:           'bold #000080',   # class: 'gh'
+        Generic.Inserted:          '#00A000',        # class: 'gi'
+        Generic.Output:            '#888',           # class: 'go'
+        Generic.Prompt:            '#745334',        # class: 'gp'
+        Generic.Strong:            'bold #000000',   # class: 'gs'
+        Generic.Subheading:        'bold #800080',   # class: 'gu'
+        Generic.Traceback:         'bold #a40000',   # class: 'gt'
+    }
+
+    
+    Available hooks:
+    
+        def run(self):
+        try:
+            self.server_sock = self._create_socket_and_bind()
+            # in case self.port = 0
+            self.port = self.server_sock.getsockname()[1]
+            self.ready_event.set()
+            self._handle_requests()
+    
+        def __init__(self):
+        #: HTTP verb to send to the server.
+        self.method = None
+        #: HTTP URL to send the request to.
+        self.url = None
+        #: dictionary of HTTP headers.
+        self.headers = None
+        # The `CookieJar` used to create the Cookie header will be stored here
+        # after prepare_cookies is called
+        self._cookies = None
+        #: request body to send to the server.
+        self.body = None
+        #: dictionary of callback hooks, for internal usage.
+        self.hooks = default_hooks()
+        #: integer denoting starting position of a readable file-like body.
+        self._body_position = None
+    
+    # urllib3's DependencyWarnings should be silenced.
+from urllib3.exceptions import DependencyWarning
+warnings.simplefilter('ignore', DependencyWarning)
+    
+        def test_params_original_order_is_preserved_by_default(self):
+        param_ordered_dict = OrderedDict((('z', 1), ('a', 1), ('k', 1), ('d', 1)))
+        session = requests.Session()
+        request = requests.Request('GET', 'http://example.com/', params=param_ordered_dict)
+        prep = session.prepare_request(request)
+        assert prep.url == 'http://example.com/?z=1&a=1&k=1&d=1'
+    
+        stream_types = [  #this is just a sample. Will make it in prepare()
+        # {'id': '1080'},
+        # {'id': '720'},
+        # {'id': '360'},
+        # {'id': '288'},
+        # {'id': '190'},
+        # {'id': '180'},
+        
+    ]
     
     
-def render_function(function, method=True):
-    subblocks = []
-    signature = get_function_signature(function, method=method)
-    signature = signature.replace(function.__module__ + '.', '')
-    level = 3
-    subblocks.append('#' * level + ' ' + function.__name__ + '\n')
-    subblocks.append(code_snippet(signature))
-    docstring = function.__doc__
-    if docstring:
-        subblocks.append(process_docstring(docstring))
-    return '\n\n'.join(subblocks)
+def huaban_download(url, output_dir='.', **kwargs):
+    if re.match(r'http://huaban\.com/boards/\d+/', url):
+        huaban_download_board(url, output_dir, **kwargs)
+    else:
+        print('Only board (画板) pages are supported currently')
+        print('ex: http://huaban.com/boards/12345678/')
     
-            layer_test(local.LocallyConnected2D,
-                   kwargs={'filters': filters,
-                           'kernel_size': (3, 3),
-                           'padding': padding,
-                           'kernel_regularizer': 'l2',
-                           'bias_regularizer': 'l2',
-                           'activity_regularizer': 'l2',
-                           'strides': strides,
-                           'data_format': 'channels_first'},
-                   input_shape=(num_samples, stack_size, num_row, num_col))
+        # mgid%3Auma%3Avideo%3Amtv81.com%3A897974
+    vid = match1(html, r'getTheVideo\('(.*?)'')
+    xml = parseString(
+        get_content('http://intl.esperanto.mtvi.com/www/xml/media/mediaGen.jhtml?uri={}&flashPlayer=LNX%2013,0,0,206&geo=CN&sid=123456'.format(vid)))
     
-    print('Convert class vector to binary class matrix '
-      '(for use with categorical_crossentropy)')
-y_train = keras.utils.to_categorical(y_train, num_classes)
-y_test = keras.utils.to_categorical(y_test, num_classes)
-print('y_train shape:', y_train.shape)
-print('y_test shape:', y_test.shape)
+    import json
+    
+        def add_expert(self, expert):
+        self.experts.append(expert)
+    
+        def test_sales_manager_shall_not_respond_through_proxy_with_delay(cls):
+        cls.ntp.busy = 'Yes'
+        start_time = time()
+        cls.ntp.talk()
+        end_time = time()
+        execution_time = end_time - start_time
+        print_output = cls.output.getvalue()
+        expected_print_output = 'Proxy checking for Sales Manager availability\n\
+This Sales Manager will not talk to you whether he/she is busy or not\n'
+        cls.assertEqual(print_output, expected_print_output)
+        expected_execution_time = 1
+        cls.assertEqual(int(execution_time*10), expected_execution_time)
+
+    
+        def test_pool_behavior_with_single_object_inside(self):
+        sample_queue = queue.Queue()
+        sample_queue.put('yam')
+        with ObjectPool(sample_queue) as obj:
+            # print('Inside with: {}'.format(obj))
+            self.assertEqual(obj, 'yam')
+        self.assertFalse(sample_queue.empty())
+        self.assertTrue(sample_queue.get() == 'yam')
+        self.assertTrue(sample_queue.empty())
+        
+    
+        def __new__(cls, name, bases, attrs):
+        new_cls = type.__new__(cls, name, bases, attrs)
+        '''
+            Here the name of the class is used as key but it could be any class
+            parameter.
+        '''
+        cls.REGISTRY[new_cls.__name__] = new_cls
+        return new_cls
     
     
-@pytest.mark.parametrize('tensor_shape', [FC_SHAPE, CONV_SHAPE], ids=['FC', 'CONV'])
-def test_normal(tensor_shape):
-    _runner(initializers.RandomNormal(mean=0, stddev=1), tensor_shape,
-            target_mean=0., target_std=1)
-    
-            # Test equivalence of convert_dense_weights_data_format
-        out1 = model1.predict(x)
-        layer_utils.convert_dense_weights_data_format(model1.layers[2], prev_shape, target_data_format)
-        for (src, dst) in zip(model1.layers, model2.layers):
-            dst.set_weights(src.get_weights())
-        out2 = model2.predict(transpose(x))
-    
-    
-@keras_test
-def test_vector_regression():
+class RadioTest(unittest.TestCase):
     '''
-    Perform float data prediction (regression) using 2 layer MLP
-    with tanh and sigmoid activations.
+    Attention: Test case results depend on test case execution. The test cases
+    in this integration test class should be executed in an explicit order:
+    http://stackoverflow.com/questions/5387299/python-unittest-testcase-execution-order
     '''
-    (x_train, y_train), (x_test, y_test) = get_test_data(num_train=500,
-                                                         num_test=200,
-                                                         input_shape=(20,),
-                                                         output_shape=(num_classes,),
-                                                         classification=False)
     
-            start_time = time.time()
-        parallel_model.fit(x, y, epochs=epochs, batch_size=batch_size)
-        total_time = time.time() - start_time
-        print('%d gpus training:' % i, total_time)
+        def test_display_current_time_at_midnight(self):
+        '''
+        Would almost always fail (despite of right at/after midnight) if
+        untestable production code would have been used.
+        '''
+        time_provider_stub = MidnightTimeProvider()
+        class_under_test = TimeDisplay()
+        class_under_test.set_time_provider(time_provider_stub)
+        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
     
+        def __init__(self, src, dest):
+        self.src = src
+        self.dest = dest
     
-def check_ref_out(ref):
-    '''Ask git to check out the specified ref.'''
-    try:
-        subprocess.check_call(
-            ['git', 'checkout', ref],
-            stdout=DEVNULL,
-            stderr=DEVNULL,
-        )
-    except subprocess.CalledProcessError:
-        logging.error('failed to check out %s', ref)
-        sys.exit(1)
-    
-        FRIEND_JSON_SPEC = VValidatedJSON.PartialObject({
-        'name': VAccountByName('name'),
-        'note': VLength('note', 300),
-    })
-    FRIEND_JSON_VALIDATOR = VValidatedJSON('json', spec=FRIEND_JSON_SPEC,
-                                           body=True)
-    @require_oauth2_scope('subscribe')
-    @validate(
-        VUser(),
-        friend=VAccountByName('username'),
-        notes_json=FRIEND_JSON_VALIDATOR,
-    )
-    @api_doc(api_section.users, json_model=FRIEND_JSON_VALIDATOR,
-             uri='/api/v1/me/friends/{username}')
-    def PUT_friends(self, friend, notes_json):
-        '''Create or update a 'friend' relationship.
-    
-    from reddit_base import RedditController, UnloggedUser
-from r2.lib.pages import (ButtonLite, ButtonDemoPanel, WidgetDemoPanel,
-                          BoringPage)
-from r2.lib.pages.things import wrap_links
-from r2.models import *
-from r2.lib.validator import *
-from pylons import request, response
-from pylons import tmpl_context as c
-from pylons.i18n import _
-    
-    from r2.controllers.reddit_base import MinimalController
-from r2.lib import promote, cache
+    '''
+http://web.archive.org/web/20120309135549/http://dpip.testingperspective.com/?p=28
