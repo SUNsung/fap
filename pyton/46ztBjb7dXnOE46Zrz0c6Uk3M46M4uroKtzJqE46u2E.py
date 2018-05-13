@@ -1,69 +1,62 @@
 
         
-        
-class _BenchServer(object):
+            # start time
+    tstart = time()
+    clf = factory(alpha=alpha).fit(X, Y)
+    delta = (time() - tstart)
+    # stop time
     
-        def _clean_req(self, request, method, results):
-        ''' stop the request from returning objects and records any errors '''
+        for n_components in [i.astype(int) for i in
+                         np.linspace(data.shape[1] // 10,
+                                     data.shape[1], num=4)]:
+        all_times = defaultdict(list)
+        all_errors = defaultdict(list)
+        pca = PCA(n_components=n_components)
+        rpca = RandomizedPCA(n_components=n_components, random_state=1999)
+        results_dict = {k: benchmark(est, data) for k, est in [('pca', pca),
+                                                               ('rpca', rpca)]}
     
-        def post_process(self, output):
-        for x in output:
-            if isinstance(x, (BaseItem, dict)):
-                for arg in self.args:
-                    if not arg in x:
-                        raise ContractFail(''%s' field is missing' % arg)
+                plt.ylabel('Time (s)')
+    
+    
+def _get_git_revision():
+    try:
+        revision = subprocess.check_output(REVISION_CMD.split()).strip()
+    except (subprocess.CalledProcessError, OSError):
+        print('Failed to execute git to get revision')
+        return None
+    return revision.decode('utf-8')
+    
+    from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.gaussian_process.kernels import RBF
+from sklearn import datasets
+    
+    
+plt.show()
 
     
-        def test_sequential_undo(self):
-        self.command_stack = list(reversed(self.command_stack))
-        self.command_stack[0].undo()
-        output_after_first_undo = os.listdir(self.test_dir)
-        self.assertEqual(output_after_first_undo[0], 'bar.txt')
-        self.command_stack[1].undo()
-        output_after_second_undo = os.listdir(self.test_dir)
-        self.assertEqual(output_after_second_undo[0], 'foo.txt')
     
-    from __future__ import print_function
-    
-        def test_frozen_pool(self):
-        with ObjectPool(self.sample_queue) as pool:
-            self.assertEqual(pool, 'first')
-            self.assertEqual(pool, 'first')
-        self.assertTrue(self.sample_queue.get() == 'second')
-        self.assertFalse(self.sample_queue.empty())
-        self.assertTrue(self.sample_queue.get() == 'first')
-        self.assertTrue(self.sample_queue.empty())
-    
-        def test_am_station_overflow_after_scan(self):
-        self.radio.scan()
-        station = self.radio.state.stations[self.radio.state.pos]
-        expected_station = '1250'
-        self.assertEqual(station, expected_station)
-    
-        def test_bunch_launch(self):
-        self.runner.runAll()
-        output = self.out.getvalue().strip()
-        self.assertEqual(output, str(self.average_result_tc1 + '\n\n' +
-                         self.average_result_tc2 + '\n\n' +
-                         self.average_result_tc3))
-
-    
-            depending on self.param value
-        '''
-        self._static_method_choices[self.param]()
-    
-            # and can also be undone at will
-        for cmd in reversed(command_stack):
-            cmd.undo()
-    finally:
-        os.unlink('foo.txt')
+def regression_report(options):
+    added, removed = 0, 0
+    for line in diff_report(options):
+        line = line.strip()
+        if line == '+++' or line == '---':
+            continue
+        if line.startswith('+'):
+            added += 1
+        elif line.startswith('-'):
+            removed += 1
     
     
-def count_to(count):
-    '''Counts by word numbers, up to a maximum of five'''
-    numbers = ['one', 'two', 'three', 'four', 'five']
-    for number in numbers[:count]:
-        yield number
-    
-        def __repr__(self):
-        return '<%s: %r>' % (self.__class__.__name__, self.value)
+class APIv1UserController(OAuth2OnlyController):
+    @require_oauth2_scope('identity')
+    @validate(
+        VUser(),
+    )
+    @api_doc(api_section.account)
+    def GET_me(self):
+        'Returns the identity of the user currently authenticated via OAuth.'
+        resp = IdentityJsonTemplate().data(c.oauth_user)
+        return self.api_wrapper(resp)
