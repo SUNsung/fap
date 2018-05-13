@@ -1,183 +1,187 @@
 
         
-        int main(int argc, char** argv) {
-  if (argc != 4) {
-    printf('This script converts the MNIST dataset to the leveldb format used\n'
-           'by caffe to train a siamese network.\n'
-           'Usage:\n'
-           '    convert_mnist_data input_image_file input_label_file '
-           'output_db_file\n'
-           'The MNIST dataset could be downloaded at\n'
-           '    http://yann.lecun.com/exdb/mnist/\n'
-           'You should gunzip them after downloading.\n');
-  } else {
-    google::InitGoogleLogging(argv[0]);
-    convert_dataset(argv[1], argv[2], argv[3]);
+          /**
+   * @brief implicit conversion to bool
+   *
+   * Allows easy use of Status in an if statement, as below:
+   *
+   * @code{.cpp}
+   *   if (doSomethingThatReturnsStatus()) {
+   *     LOG(INFO) << 'Success!';
+   *   }
+   * @endcode
+   */
+  /* explicit */ explicit operator bool() const {
+    return ok();
   }
-  return 0;
+    
+    class TLSConfigPlugin : public ConfigPlugin,
+                        public std::enable_shared_from_this<TLSConfigPlugin> {
+ public:
+  Status setUp() override;
+  Status genConfig(std::map<std::string, std::string>& config) override;
+    }
+    
+      // Attempt to drop to nobody based on ownership of paths.
+  auto nobody = getpwnam('nobody');
+  ASSERT_NE(nobody, nullptr);
+    
+    
+    {
+    {
+    {    int code = 0;
+    EXPECT_TRUE(getProcessExitCode(*process, code));
+    EXPECT_EQ(code, WORKER_SUCCESS_CODE);
+  }
 }
-#else
-int main(int argc, char** argv) {
-  LOG(FATAL) << 'This example requires LevelDB; compile with USE_LEVELDB.';
 }
-#endif  // USE_LEVELDB
 
     
-     private:
-  // wrap im2col/col2im so we don't have to remember the (long) argument lists
-  inline void conv_im2col_cpu(const Dtype* data, Dtype* col_buff) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      im2col_cpu(data, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
-    } else {
-      im2col_nd_cpu(data, num_spatial_axes_, conv_input_shape_.cpu_data(),
-          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
-          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), col_buff);
-    }
-  }
-  inline void conv_col2im_cpu(const Dtype* col_buff, Dtype* data) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      col2im_cpu(col_buff, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
-    } else {
-      col2im_nd_cpu(col_buff, num_spatial_axes_, conv_input_shape_.cpu_data(),
-          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
-          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), data);
-    }
-  }
-#ifndef CPU_ONLY
-  inline void conv_im2col_gpu(const Dtype* data, Dtype* col_buff) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      im2col_gpu(data, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
-    } else {
-      im2col_nd_gpu(data, num_spatial_axes_, num_kernels_im2col_,
-          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
-          kernel_shape_.gpu_data(), pad_.gpu_data(),
-          stride_.gpu_data(), dilation_.gpu_data(), col_buff);
-    }
-  }
-  inline void conv_col2im_gpu(const Dtype* col_buff, Dtype* data) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      col2im_gpu(col_buff, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
-    } else {
-      col2im_nd_gpu(col_buff, num_spatial_axes_, num_kernels_col2im_,
-          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
-          kernel_shape_.gpu_data(), pad_.gpu_data(), stride_.gpu_data(),
-          dilation_.gpu_data(), data);
-    }
-  }
-#endif
-    
-    #endif  // CAFFE_CUDNN_CONV_LAYER_HPP_
-
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include <vector>
-    
-    #endif  // CAFFE_DECONV_LAYER_HPP_
-
-    
-     protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {  for (int i = 0; i < height; ++i) {
-    memcpy(reinterpret_cast<unsigned char*>(pix->data + i * pix->wpl) + 1,
-           cairo_image_surface_get_data(surface) + i * byte_stride,
-           byte_stride - ((i == height - 1) ? 1 : 0));
-  }
-  return pix;
+    TEST_F(StatusTests, test_constructor) {
+  auto s = Status(5, 'message');
+  EXPECT_EQ(s.getCode(), 5);
+  EXPECT_EQ(s.getMessage(), 'message');
 }
     
-      // Provides a pointer to a TRand for any networks that care to use it.
-  // Note that randomizer is a borrowed pointer that should outlive the network
-  // and should not be deleted by any of the networks.
-  void SetRandomizer(TRand* randomizer) override;
+    #include <string>
     
-    /**********************************************************************
- * Osd Text Renderer interface implementation
- **********************************************************************/
-TessOsdRenderer::TessOsdRenderer(const char* outputbase)
-    : TessResultRenderer(outputbase, 'osd') {}
+    bool js_cocos2dx_physics3d_Physics3DShape_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DShape_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DShape(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DShape_initConvexHull(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_getbtShape(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_initSphere(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_initBox(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_initCapsule(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_initCylinder(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_getShapeType(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_createBox(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_createCylinder(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_createConvexHull(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_createCapsule(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_createSphere(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DShape_Physics3DShape(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    bool js_cocos2dx_studio_SkeletonNode_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_SkeletonNode_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_SkeletonNode(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_SkeletonNode_getBoneNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_SkeletonNode_changeSkins(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_SkeletonNode_addSkinGroup(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_SkeletonNode_getAllSubBonesMap(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_SkeletonNode_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_SkeletonNode_SkeletonNode(JSContext *cx, uint32_t argc, jsval *vp);
     
     
-    {    FILE* fout_;                  // output file pointer
-    TessResultRenderer* next_;    // Can link multiple renderers together
-    bool happy_;                  // I get grumpy when the disk fills up, etc.
-};
     
-        api->GetBoolVariable('tessedit_create_tsv', &b);
-    if (b) {
-      bool font_info;
-      api->GetBoolVariable('hocr_font_info', &font_info);
-      renderers->push_back(
-          new tesseract::TessTsvRenderer(outputbase, font_info));
+    
+    
+    
+    
+    
+    
+        const float32 k_segments = 16.0f;
+    int vertexCount=16;
+    const float32 k_increment = 2.0f * b2_pi / k_segments;
+    float32 theta = 0.0f;
+    
+    GLfloat*    glVertices = new (std::nothrow) GLfloat[vertexCount*2];
+    for (int i = 0; i < k_segments; ++i)
+    {
+        b2Vec2 v = center + radius * b2Vec2(cosf(theta), sinf(theta));
+        glVertices[i*2]=v.x * mRatio;
+        glVertices[i*2+1]=v.y * mRatio;
+        theta += k_increment;
     }
     
-    void ParseDb(const std::string& db, std::vector<Feature>* feature_list);
+    mShaderProgram->setUniformLocationWith4f(mColorLocation, color.r, color.g, color.b, 1);
+    glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 2, GL_FLOAT, GL_FALSE, 0, glVertices);
+    
+    #ifndef RENDER_H
+#define RENDER_H
+    
+    	// Track maximum profile times
+	{
+		const b2Profile& p = m_world->GetProfile();
+		m_maxProfile.step = b2Max(m_maxProfile.step, p.step);
+		m_maxProfile.collide = b2Max(m_maxProfile.collide, p.collide);
+		m_maxProfile.solve = b2Max(m_maxProfile.solve, p.solve);
+		m_maxProfile.solveInit = b2Max(m_maxProfile.solveInit, p.solveInit);
+		m_maxProfile.solveVelocity = b2Max(m_maxProfile.solveVelocity, p.solveVelocity);
+		m_maxProfile.solvePosition = b2Max(m_maxProfile.solvePosition, p.solvePosition);
+		m_maxProfile.solveTOI = b2Max(m_maxProfile.solveTOI, p.solveTOI);
+		m_maxProfile.broadphase = b2Max(m_maxProfile.broadphase, p.broadphase);
+    }
+    
+    		const float32 k_restitution = 0.4f;
+    
+    	enum
+	{
+		e_count = 7
+	};
+    
+    			b2PolygonShape box;
+			box.SetAsBox(2.0f, 0.1f);
+    
+    			b2RevoluteJointDef jd;
+			jd.Initialize(ground, body, body->GetPosition());
+			jd.lowerAngle = -8.0f * b2_pi / 180.0f;
+			jd.upperAngle = 8.0f * b2_pi / 180.0f;
+			jd.enableLimit = true;
+			m_world->CreateJoint(&jd);
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    IMGUI_API bool        ImGui_ImplGlfwGL3_Init(GLFWwindow* window, bool install_callbacks, const char* glsl_version = NULL);
+IMGUI_API void        ImGui_ImplGlfwGL3_Shutdown();
+IMGUI_API void        ImGui_ImplGlfwGL3_NewFrame();
+IMGUI_API void        ImGui_ImplGlfwGL3_RenderDrawData(ImDrawData* draw_data);
     
     
-    {}  // namespace grpc_node_generator
+    {    switch (msg)
+    {
+    case WM_SIZE:
+        if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
+        {
+            ImGui_ImplDX9_InvalidateDeviceObjects();
+            g_d3dpp.BackBufferWidth  = LOWORD(lParam);
+            g_d3dpp.BackBufferHeight = HIWORD(lParam);
+            HRESULT hr = g_pd3dDevice->Reset(&g_d3dpp);
+            if (hr == D3DERR_INVALIDCALL)
+                IM_ASSERT(0);
+            ImGui_ImplDX9_CreateDeviceObjects();
+        }
+        return 0;
+    case WM_SYSCOMMAND:
+        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
+            return 0;
+        break;
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hWnd, msg, wParam, lParam);
+}
     
-    #include <yoga/Yoga.h>
-    
-    /* static */ void Config::destroy(Config * node)
+    int main(int, char**)
 {
-    delete node;
-}
-    
-        void setFlex(double flex);
-    void setFlexBasis(double flexBasis);
-    void setFlexBasisPercent(double flexBasis);
-    void setFlexBasisAuto();
-    void setFlexGrow(double flexGrow);
-    void setFlexShrink(double flexShrink);
-    
-    #pragma once
-    
-    class Countable : public noncopyable, public nonmovable {
-public:
-  // RefPtr expects refcount to start at 0
-  Countable() : m_refcount(0) {}
-  virtual ~Countable()
-  {
-    FBASSERT(m_refcount == 0);
-  }
+    // Setup window
+    glfwSetErrorCallback(glfw_error_callback);
+    if (!glfwInit())
+        return 1;
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#if __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+    GLFWwindow* window = glfwCreateWindow(1280, 720, 'ImGui GLFW+OpenGL3 example', NULL, NULL);
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(1); // Enable vsync
+    gl3wInit();
     }
-    
-    #include 'CoreClasses.h'
-    
-    
-    {  uint8_t* getDirectBytes() const;
-  size_t getDirectSize() const;
-};
