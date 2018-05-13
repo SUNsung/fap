@@ -1,183 +1,260 @@
 
         
-          /// When evaluating an expression in the context of an existing source file,
-  /// we may want to prefer declarations from that source file.
-  /// The DebuggerClient can return a private-discriminator to tell lookup to
-  /// prefer these certain decls.
-  virtual Identifier getPreferredPrivateDiscriminator() = 0;
+        #include 'content/nw/src/api/base/base.h'
     
+    #ifndef CONTENT_NW_SRC_API_BASE_BASE_H_
+#define CONTENT_NW_SRC_API_BASE_BASE_H_
     
-    {  /// Returns true if \p BB is a dead-end block.
-  bool isDeadEnd(SILBasicBlock *BB) {
-    if (!isComputed) {
-      // Lazily compute the dataflow.
-      compute();
-      isComputed = true;
-    }
-    return ReachableBlocks.count(BB) == 0;
-  }
-};
-    
-      std::string error;
-  auto isUptodateOpt = parentUnitWriter.isUnitUpToDateForOutputFile(/*FilePath=*/filename,
-                                                                /*TimeCompareFilePath=*/filename, error);
-  if (!isUptodateOpt.hasValue()) {
-    diags.diagnose(SourceLoc(), diag::error_index_failed_status_check, error);
-    return true;
-  }
-  if (*isUptodateOpt)
-    return false;
-    
-    class SoftBreak final : public InlineContent {
-  SoftBreak() : InlineContent(ASTNodeKind::SoftBreak) {}
-public:
-  static SoftBreak *create(MarkupContext &MC);
-    }
-    
-    
-    {  const SILDebugScope *Scope = this;
-  while (Scope->Parent.is<const SILDebugScope *>())
-    Scope = Scope->Parent.get<const SILDebugScope *>();
-  assert(Scope->Parent.is<SILFunction *>() && 'orphaned scope');
-  return Scope->Parent.get<SILFunction *>();
+    std::string Clipboard::GetText() {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  base::string16 text;
+  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
+  return base::UTF16ToUTF8(text);
 }
     
-    #endif
-
+    class ObjectManager;
     
-    static int set_ifname(struct ifaddrs* ifaddr, int interface) {
-	char buf[IFNAMSIZ] = {0};
-	char* name = if_indextoname(interface, buf);
-	if (name == NULL) {
-		return -1;
-	}
-	ifaddr->ifa_name = new char[strlen(name) + 1];
-	strncpy(ifaddr->ifa_name, name, strlen(name) + 1);
-	return 0;
+    void Menu::UpdateStates() {
 }
     
-    int PowerIphone::get_power_percent_left() {
-	if (UpdatePowerInfo()) {
-		return percent_left;
-	} else {
-		return -1;
-	}
-}
-    
-    WebSocketClient::~WebSocketClient() {
-}
-    
-    #if ( defined(MBEDTLS_HAVE_INT32) || defined(MBEDTLS_HAVE_INT64) ) && \
-    defined(MBEDTLS_HAVE_ASM)
-#error 'MBEDTLS_HAVE_INT32/MBEDTLS_HAVE_INT64 and MBEDTLS_HAVE_ASM cannot be defined simultaneously'
-#endif /* (MBEDTLS_HAVE_INT32 || MBEDTLS_HAVE_INT64) && MBEDTLS_HAVE_ASM */
-    
-    void ClassDB::get_virtual_methods(const StringName &p_class, List<MethodInfo> *p_methods, bool p_no_inheritance) {
-    }
-    
-    	static StringName get_category(const StringName &p_node);
-    
-    #ifdef TOOLS_ENABLED
-    
-    void THDTensor_(_resize2d)(THDTensor *tensor, int64_t size0, int64_t size1) {
-  int64_t sizes[] = {size0, size1};
-  THDTensor_(_resize)(tensor, 2, sizes, nullptr);
-}
-    
-      assert(peekType(msg) == thpp::Type::FLOAT);
-  double arg1 = unpackFloat(msg);
-  assert(arg1 == 1.0);
-    
-      // return a new scalar that is guarenteed to be not backed by a tensor.
-  Scalar local() const {
-    if (Tag::HAS_t != tag) {
-      return *this;
-    }
-    return t.pImpl->localScalar();
-  }
-    
-      rank_type getRank() override;
-  rank_type getNumProcesses() override;
+    /** Returns the benchmark Reporter instance.
+ *
+ * The returned instance will take care of generating reports for all the actual
+ * reporters configured via the 'enable_*_reporter' command line flags (see
+ * benchmark_config.cc). */
+std::shared_ptr<Reporter> GetReporter();
     
     
-    {    void SynchronizeWorkers()
     {
-        if (m_mpi != nullptr && GetParallelizationMethod() != ParallelizationMethod::dataParallelASGD)
-        {
-            m_mpi->WaitAll();
-        }
-        if (m_mpi != nullptr && GetParallelizationMethod() == ParallelizationMethod::dataParallelASGD)
-        {
-            m_pASGDHelper->WaitAll();
-        }
-        return;
-    }
-};
+}  // namespace routeguide
     
-            static Status Load(const std::wstring& p_filePath, /*out*/ std::shared_ptr<Model>* p_model);
-#endif
-        static Status Save(Model& p_model, const std::string& p_filePath);
+    #ifndef GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
+#define GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
     
+    #include 'src/compiler/config.h'
+#include 'src/compiler/schema_interface.h'
     
-    std::function<void(OperatorSchemaSetter&)> LRNDocGenerator() {
-        return [=](OperatorSchemaSetter& schema) {
-            schema.Description('Perform local response normalization. '
-                'NOTE: Only supports Caffe across channel mode. ');
-            schema.Input('X', 'Input tensor of any shape', 'T');
-            schema.Output('Y', 'Output tensor of same shape and type as input X.', 'T');
-            schema.TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-                'Constrain input and output types to float tensors.');
-            schema.Attr('size', '[default 5]: the number of channels to sum over (for cross '
-                  'channel LRN) or the side length of the square region to sum over (for within '
-                  'channel LRN)', AttrType::AttributeProto_AttributeType_INT, int64_t(5));
-            schema.Attr('alpha', 'Scalar scaling factor. Default is 0.0001',
-                AttrType::AttributeProto_AttributeType_FLOAT, float(0.0001));
-            schema.Attr('beta', 'Scalar exponent in the LRN.  Default is 0.5.',
-                AttrType::AttributeProto_AttributeType_FLOAT, float(0.5));
-            schema.Attr('bias', 'An offset (must be positive to avoid dividing by 0). Defaults to 1.0.',
-                AttrType::AttributeProto_AttributeType_FLOAT, float(1.0));
-        };
-    }
+            // Get model's doc string.
+        // Return null pointer if not specified.
+        const std::string& DocString() const;
+        // Set models' doc string.
+        void SetDocString(const std::string& p_docString);
     
-        // Taken from ONNX
-    REGISTER_OPERATOR_SCHEMA(Reshape)
-        .Description('Reshape the input tensor similar to numpy.reshape. '
-            '                                                                                    '
-            'It takes a tensor as input and an argument `shape`. It outputs the reshaped tensor. '
-            '                                                                             '
-            'At most one dimension of the new shape can be -1. In this case, the value is '
-            'inferred from the size of the tensor and the remaining dimensions. A dimensions '
-            'could also be 0, in which case the actual dimension value is going to be copied '
-            'from the shape argument.')
-        .Input('data', 'An input tensor.', 'T')
-        .Output('reshaped', 'Reshaped data.', 'T')
+                // Get to know whether this attribute has default value,
+            // if yes, <p_value> will be assigned to be the default value.
+            bool HasDefaultValue(const AttributeProto** p_value) const;
+    
+                    if (IsLittleEndianOrder())
+                {
+                    memcpy((void*)p_data, (void*)buff, raw_data.size() * sizeof(char));
+                }
+                else
+                {
+                    for (size_t i = 0; i < raw_data.size(); i += typeSize, buff += typeSize)
+                    {
+                        T result;
+                        const char* tempBytes = reinterpret_cast<char*>(&result);
+                        for (size_t j = 0; j < typeSize; ++j)
+                        {
+                            memcpy((void*)&tempBytes[j], (void*)&buff[typeSize - 1 - i], sizeof(char));
+                        }
+                        p_data[i] = result;
+                    }
+                }
+    
+        // Taken from Caffe2
+    REGISTER_OPERATOR_SCHEMA(SpaceToDepth)
+        .Description('SpaceToDepth for 4-D tensors of type T. '
+            'Zero-pads and then rearranges (permutes) blocks of spatial data into '
+            'channel. More specifically, this op outputs a copy of the input tensor '
+            'where values from the height and width dimensions are moved to the '
+            'channel dimension. After the zero-padding, both height and width of the '
+            'input must be divisible by the block size.')
+        .Input('input', 'Input tensor of [N,C,H,W]', 'T')
+        .Output('output', 'Output tensor of [N, C * blocksize * blocksize, H/blocksize, '
+            'W/blocksize]', 'T')
         .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
             'Constrain input and output types to float tensors.')
-        .Attr('shape', 'Tensor of shape declarations for the output. Must be compatible with '
-            'the input. At most one dimension of the new shape can be -1. In this case, the '
-            'value is inferred from the size of the tensor and the remaining dimensions. A '
-            'dimension could also be 0, in which case the actual dimension value is going to '
-            'be copied from the input tensor.', AttrType::AttributeProto_AttributeType_INTS);
+        .Attr('blocksize', 'Blocks of [blocksize,blocksize] are moved.', AttrType::AttributeProto_AttributeType_INT);
     
-    template <class ElemType>
-void ReaderShim<ElemType>::CopyMBLayoutTo(MBLayoutPtr layout)
+    // Gets information about available chunks.
+std::vector<ChunkInfo> HTKDeserializer::ChunkInfos()
 {
-    // This method is inherited from IDataReader and should be removed in the near future.
-    NOT_IMPLEMENTED;
+    std::vector<ChunkInfo> chunks;
+    chunks.reserve(m_chunks.size());
+    }
+    
+    static const wchar_t* SectionTypeStrings[sectionTypeMax] =
+    {
+        L'Null',
+        L'File',           // file header
+        L'Data',           // data section
+        L'Labels',         // label data
+        L'LabelMapping',   // label mapping table (array of strings)
+        L'Stats',          // data statistics
+        L'CategoryLabels', // labels in category format (float type, all zeros with a single 1.0 per column)
+};
+    
+    BOOST_FIXTURE_TEST_CASE(MatrixSparsePlusDense, RandomSeedFixture)
+{
+    std::mt19937 rng(0);
+    Matrix<float> mAdense(c_deviceIdZero);
+    mAdense.AssignTruncateBottomOf(Matrix<float>::RandomUniform(dim1, dim2, c_deviceIdZero, -3.0f, 0.1f, IncrementCounter()), 0);
+    Matrix<float> mAsparse(mAdense.DeepClone());
+    }
+    
+      /// The time point type of the clock.
+  typedef typename clock_type::time_point time_point;
+    
+    #ifndef BOOST_ASIO_BUFFERED_WRITE_STREAM_FWD_HPP
+#define BOOST_ASIO_BUFFERED_WRITE_STREAM_FWD_HPP
+    
+    
+    {    // Make the upcall if required.
+    if (owner)
+    {
+      fenced_block b(fenced_block::half);
+      BOOST_ASIO_HANDLER_INVOCATION_BEGIN((handler.arg1_, handler.arg2_));
+      boost_asio_handler_invoke_helpers::invoke(handler, handler.handler_);
+      BOOST_ASIO_HANDLER_INVOCATION_END;
+    }
+  }
+    
+    #ifndef BOOST_ASIO_DETAIL_EVENT_HPP
+#define BOOST_ASIO_DETAIL_EVENT_HPP
+    
+    // Calls to asio_handler_allocate and asio_handler_deallocate must be made from
+// a namespace that does not contain any overloads of these functions. The
+// boost_asio_handler_alloc_helpers namespace is defined here for that purpose.
+namespace boost_asio_handler_alloc_helpers {
+    }
+    
+    #endif // BOOST_ASIO_DETAIL_IMPL_BUFFER_SEQUENCE_ADAPTER_IPP
+
+    
+    #if defined(BOOST_ASIO_HAS_DEV_POLL)
+    
+    
+    {  return 0;
 }
     
-        // SaveData - save data in the file/files
-    // recordStart - Starting record number
-    // matricies - a map of section name (section:subsection) to data pointer. Data sepcifications from config file will be used to determine where and how to save data
-    // numRecords - number of records we are saving, can be zero if not applicable
-    // datasetSize - Size of the dataset
-    // byteVariableSized - for variable sized data, size of current block to be written, zero when not used, or ignored if not variable sized data
-    virtual bool SaveData(size_t recordStart, const std::map<std::wstring, void*, nocase_compare>& matrices, size_t numRecords, size_t datasetSize, size_t byteVariableSized = 0);
+    
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
+    
+      for (const auto& iter : line) {
+    options_index++;
+    if (iter[0] == '/') {
+      line_exports.push_back(iter);
+    } else {
+      break;
+    }
+  }
+    
+      // Get an integral value, 0 or 1, for whether a syscall table pointer is modified.
+  auto f1 = osquery::readFile(kKernelSyscallAddrModifiedPath, content);
+  if (f1.ok()) {
+    boost::trim(content);
+    syscall_addr_modified = content;
+  } else {
+    VLOG(1) << 'Cannot read file: ' << kKernelSyscallAddrModifiedPath;
+    return results;
+  }
     
     
-    {}  // namespace xgboost
+    {
+    {  c.reset();
+}
+}
+
     
-          // Test write entire array
-      std::vector<unsigned char> buffer(
-        CompressedBufferWriter::CalculateBufferSize(input.size(),
-          alphabet_size));
+      std::stringstream result;
+  CFDataGetBytes(cf_data, range, (UInt8*)buffer);
+  for (CFIndex i = 0; i < range.length; ++i) {
+    uint8_t byte = buffer[i];
+    if (isprint(byte)) {
+      result << byte;
+    } else if (buffer[i] == 0) {
+      result << ' ';
+    } else {
+      result << '%' << std::setfill('0') << std::setw(2) << std::hex
+             << (int)byte;
+    }
+  }
+    
+    namespace osquery {
+    }
+    
+    namespace rabit {
+namespace utils {
+extern 'C' {
+  void (*Printf)(const char *fmt, ...) = Rprintf;
+  void (*Assert)(int exp, const char *fmt, ...) = XGBoostAssert_R;
+  void (*Check)(int exp, const char *fmt, ...) = XGBoostCheck_R;
+  void (*Error)(const char *fmt, ...) = error;
+}
+}
+}
+    
+    // array to help compression of decompression.
+template<typename DType>
+class CompressArray {
+ public:
+  // the data content.
+  std::vector<DType> data;
+  // Decompression helper
+  // number of chunks
+  inline int num_chunk() const {
+    CHECK_GT(raw_chunks_.size(), 1);
+    return static_cast<int>(raw_chunks_.size() - 1);
+  }
+  // raw bytes
+  inline size_t RawBytes() const {
+    return raw_chunks_.back() * sizeof(DType);
+  }
+  // encoded bytes
+  inline size_t EncodedBytes() const {
+    return encoded_chunks_.back() +
+        (encoded_chunks_.size() + raw_chunks_.size()) * sizeof(bst_uint);
+  }
+  // load the array from file.
+  inline void Read(dmlc::SeekStream* fi);
+  // run decode on chunk_id
+  inline void Decompress(int chunk_id);
+  // Compression helper
+  // initialize the compression chunks
+  inline void InitCompressChunks(const std::vector<bst_uint>& chunk_ptr);
+  // initialize the compression chunks
+  inline void InitCompressChunks(size_t chunk_size, size_t max_nchunk);
+  // run decode on chunk_id, level = -1 means default.
+  inline void Compress(int chunk_id, bool use_hc);
+  // save the output buffer into file.
+  inline void Write(dmlc::Stream* fo);
+    }
+    
+          cbw.Write(buffer.data(), input.begin(), input.end());
+    
+        bool Check();  // true pass, false limit
+    
+    //
+//  testspy.cpp
+//  PublicComponent
+//
+//  Created by yerungui on 14-5-13.
+//
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    #include <jni.h>
+#include <string>
+struct JniMethodInfo;
+class AutoBuffer;
+    
+        JNIEnv* GetEnv();
+    int Status();
