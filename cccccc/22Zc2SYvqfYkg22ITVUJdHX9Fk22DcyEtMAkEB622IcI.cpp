@@ -1,111 +1,158 @@
 
         
-        #include 'simddetect.h'
-#include 'tprintf.h'
+        namespace HPHP { namespace jit {
+    }
+    }
     
-    #ifndef TESSERACT_CCSTRUCT_CCSTRUCT_H_
-#define TESSERACT_CCSTRUCT_CCSTRUCT_H_
+        HHVM_FE(gmp_abs);
+    HHVM_FE(gmp_add);
+    HHVM_FE(gmp_and);
+    HHVM_FE(gmp_clrbit);
+    HHVM_FE(gmp_cmp);
+    HHVM_FE(gmp_com);
+    HHVM_FE(gmp_div_q);
+    HHVM_FALIAS(gmp_div, gmp_div_q);
+    HHVM_FE(gmp_div_qr);
+    HHVM_FE(gmp_div_r);
+    HHVM_FE(gmp_divexact);
+    HHVM_FE(gmp_fact);
+    HHVM_FE(gmp_gcd);
+    HHVM_FE(gmp_gcdext);
+    HHVM_FE(gmp_hamdist);
+    HHVM_FE(gmp_init);
+    HHVM_FE(gmp_intval);
+    HHVM_FE(gmp_invert);
+    HHVM_FE(gmp_jacobi);
+    HHVM_FE(gmp_legendre);
+    HHVM_FE(gmp_mod);
+    HHVM_FE(gmp_mul);
+    HHVM_FE(gmp_neg);
+    HHVM_FE(gmp_nextprime);
+    HHVM_FE(gmp_or);
+    HHVM_FE(gmp_perfect_square);
+    HHVM_FE(gmp_popcount);
+    HHVM_FE(gmp_pow);
+    HHVM_FE(gmp_powm);
+    HHVM_FE(gmp_prob_prime);
+    HHVM_FE(gmp_random);
+    HHVM_FE(gmp_root);
+    HHVM_FE(gmp_rootrem);
+    HHVM_FE(gmp_scan0);
+    HHVM_FE(gmp_scan1);
+    HHVM_FE(gmp_setbit);
+    HHVM_FE(gmp_sign);
+    HHVM_FE(gmp_sqrt);
+    HHVM_FE(gmp_sqrtrem);
+    HHVM_FE(gmp_strval);
+    HHVM_FE(gmp_sub);
+    HHVM_FE(gmp_testbit);
+    HHVM_FE(gmp_xor);
     
-    #endif  // TESSERACT_CCSTRUCT_DEBUGPIXA_H_
-
+    #include <string>
+#include <vector>
+#include <cstdio>
+#include <cstdlib>
+#include <map>
     
-    #ifndef GRPC_TEST_CPP_UTIL_BENCHMARK_CONFIG_H
-#define GRPC_TEST_CPP_UTIL_BENCHMARK_CONFIG_H
-    
-    #include 'src/proto/grpc/testing/control.pb.h'
-#include 'test/cpp/qps/histogram.h'
-    
-    // Get leading or trailing comments in a string. Comment lines start with '// '.
-// Leading detached comments are put in in front of leading comments.
-template <typename DescriptorType>
-inline grpc::string GetNodeComments(const DescriptorType* desc, bool leading) {
-  return grpc_generator::GetPrefixedComments(desc, leading, '//');
+    CurlShareResource::CurlShareResource() {
+  m_share = curl_share_init();
 }
     
-    int main(int argc, char** argv) {
-  grpc::testing::InitTest(&argc, &argv, true);
-  signal(SIGINT, sigint_handler);
+    void SynchronizableMulti::notifyAll() {
+  for (auto& cond_list : m_cond_list_vec) {
+    while (!cond_list.empty()) {
+      pthread_cond_signal(cond_list.front());
+      cond_list.pop_front();
     }
-    
-    class QpsGauge {
- public:
-  QpsGauge();
-    }
-    
-    grpc::string DescribeService(const grpc::protobuf::ServiceDescriptor* service) {
-  grpc::string result;
-  if (service->options().deprecated()) {
-    result.append('DEPRECATED\n');
   }
-  result.append('filename: ' + service->file()->name() + '\n');
-    }
+}
     
     
-    {
-    {} // namespace asio
-} // namespace boost
-    
-    
-    {private:
-  native_buffer_type buffers_[2];
-  std::size_t total_buffer_size_;
+    {  T* operator->() const {
+    return m_instance;
+  }
+private:
+  T* m_instance;
 };
     
-    } // namespace date_time
-namespace posix_time {
-    
-    namespace boost {
-namespace asio {
-namespace detail {
+    /**
+ * A thread-local object is a 'global' object within a thread. This is useful
+ * for writing apartment-threaded code, where nothing is actullay shared
+ * between different threads (hence no locking) but those variables are not
+ * on stack in local scope. To use it, just do something like this,
+ *
+ *   ThreadLocal<MyClass> static_object;
+ *     static_object->data_ = ...;
+ *     static_object->doSomething();
+ *
+ *   ThreadLocal<int> static_number;
+ *     int value = *static_number;
+ *
+ * So, syntax-wise it's similar to pointers. T can be primitive types, and if
+ * it's a class, there has to be a default constructor.
+ */
+template<typename T>
+class ThreadLocal {
+public:
+  /**
+   * Constructor that has to be called from a thread-neutral place.
+   */
+  ThreadLocal() :
+    m_key(0),
+    m_cleanup(OnThreadExit) {
+    initialize();
+  }
     }
-    }
-    }
+    
+    #define FBASSERT(expr) FBASSERTMSGF(expr, '%s', #expr)
     
     
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
+    {} // namespace aria2
     
-    template <typename Time_Traits>
-void epoll_reactor::add_timer_queue(timer_queue<Time_Traits>& queue)
+    AbstractHttpServerResponseCommand::AbstractHttpServerResponseCommand(
+    cuid_t cuid, const std::shared_ptr<HttpServer>& httpServer,
+    DownloadEngine* e, const std::shared_ptr<SocketCore>& socket)
+    : Command(cuid),
+      e_(e),
+      socket_(socket),
+      httpServer_(httpServer),
+      readCheck_(false),
+      writeCheck_(true)
 {
-  do_add_timer_queue(queue);
+  setStatus(Command::STATUS_ONESHOT_REALTIME);
+  e_->addSocketForWriteCheck(socket_, this);
 }
     
-    bool js_cocos2dx_builder_CCBReader_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_builder_CCBReader_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_builder_CCBReader(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_builder_CCBReader_getAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readSoundKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getCCBRootPath(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readUTF8(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_addOwnerCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getOwnerOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_readCallbackKeyframesForSeq(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getAnimationManagersForNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_getNodesWithAnimationManagers(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_setResolutionScale(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBReader_CCBReader(JSContext *cx, uint32_t argc, jsval *vp);
+    bool AbstractProxyRequestCommand::executeInternal()
+{
+  // socket->setBlockingMode();
+  if (httpConnection_->sendBufferIsEmpty()) {
+    auto httpRequest = make_unique<HttpRequest>();
+    httpRequest->setUserAgent(getOption()->get(PREF_USER_AGENT));
+    httpRequest->setRequest(getRequest());
+    httpRequest->setProxyRequest(proxyRequest_);
+    }
+    }
     
+    #endif // D_ABSTRACT_PROXY_RESPONSE_COMMAND_H
+
     
-    {    mColorLocation = glGetUniformLocation( mShaderProgram->getProgram(), 'u_color');
+    namespace aria2 {
+    }
+    
+    int64_t AdaptiveFileAllocationIterator::getTotalLength()
+{
+  return totalLength_;
 }
     
-    			b2RevoluteJointDef jd;
-			jd.Initialize(ground, body, body->GetPosition());
-			jd.lowerAngle = -8.0f * b2_pi / 180.0f;
-			jd.upperAngle = 8.0f * b2_pi / 180.0f;
-			jd.enableLimit = true;
-			m_world->CreateJoint(&jd);
+      bool currentTierAcceptsStoppedEvent() const;
+    
+      SecIdentityRef id;
+  while (SecIdentitySearchCopyNext(search, &id) == errSecSuccess) {
+    if (!checkIdentity(id, fp, ht)) {
+      continue;
+    }
+    A2_LOG_INFO('Found cert with matching fingerprint');
+    credentials_ = id;
+    return true;
+  }
