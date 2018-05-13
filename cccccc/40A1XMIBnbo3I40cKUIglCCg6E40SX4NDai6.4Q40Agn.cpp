@@ -1,328 +1,279 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+        #include <vector>
+#include <string>
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    
-    {}  // namespace tensorflow
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-        OP_REQUIRES(context, file_format == 'wav',
-                errors::InvalidArgument(
-                    'file_format must be \'wav\', but got: ', file_format));
-    OP_REQUIRES(context, samples_per_second > 0,
-                errors::InvalidArgument(
-                    'samples_per_second must be positive, but got: ',
-                    samples_per_second));
-    OP_REQUIRES(
-        context, bits_per_second > 0,
-        errors::InvalidArgument('bits_per_second must be positive, but got: ',
-                                bits_per_second));
-    
-        NodeDef* const_node1 = graph_def.add_node();
-    const_node1->set_name('const_node1');
-    const_node1->set_op('Const');
-    
-    MPIUtils::MPIUtils(const std::string& worker_name) {
-  InitMPI();
-  // Connect the MPI process IDs to the worker names that are used by TF.
-  // Gather the names of all the active processes (name can't be longer than
-  // 128 bytes)
-  int proc_id = 0, number_of_procs = 1;
-  char my_name[max_worker_name_length];
-  MPI_CHECK(MPI_Comm_rank(MPI_COMM_WORLD, &proc_id));
-  MPI_CHECK(MPI_Comm_size(MPI_COMM_WORLD, &number_of_procs));
+    QueryData genKernelIntegrity(QueryContext &context) {
+  QueryData results;
+  Row r;
+  std::string content;
+  std::string text_segment_hash;
+  std::string syscall_addr_modified;
     }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+      mPlatformType = PlatformType::TYPE_OSX | PlatformType::TYPE_POSIX;
+  EXPECT_TRUE(isPlatform(PlatformType::TYPE_POSIX, mPlatformType));
+  EXPECT_TRUE(isPlatform(PlatformType::TYPE_OSX, mPlatformType));
     
     
-    {}
-    
-    class BaseEvent {
-  friend class EventListener;
-  DISALLOW_COPY_AND_ASSIGN(BaseEvent);
-    }
-    
-    class NwClipboardSetListSyncFunction : public NWSyncExtensionFunction {
- public:
-  NwClipboardSetListSyncFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    #include <vector>
-    
-    bool NwObjCreateFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  base::DictionaryValue* options = nullptr;
-  int id = 0;
-  std::string type;
-  EXTENSION_FUNCTION_VALIDATE(args_->GetInteger(0, &id));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetString(1, &type));
-  EXTENSION_FUNCTION_VALIDATE(args_->GetDictionary(2, &options));
-    }
-    
-    
-    {  protobuf_unittest::TestAny message;
-  message.mutable_any_value()->PackFrom(any);
-  ASSERT_TRUE(message.ParseFromString(message.SerializeAsString()));
-  EXPECT_FALSE(message.any_value().Is<protobuf_unittest::TestAny>());
-  EXPECT_TRUE(message.any_value().Is<google::protobuf::Any>());
-}
-    
-    class MapFieldGenerator : public FieldGeneratorBase {
- public:
-  MapFieldGenerator(const FieldDescriptor* descriptor,
-                    int fieldOrdinal,
-                    const Options* options);
-  ~MapFieldGenerator();
-    }
-    
-    // TODO(jonskeet): Refactor repeated field support; all the implementations are *really* similar. We
-// should probably have a RepeatedFieldGeneratorBase.
-class RepeatedEnumFieldGenerator : public FieldGeneratorBase {
- public:
-  RepeatedEnumFieldGenerator(const FieldDescriptor* descriptor,
-                             int fieldOrdinal,
-                             const Options *options);
-  ~RepeatedEnumFieldGenerator();
-    }
-    
-    #endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_PRIMITIVE_FIELD_H__
-    
-    #include <string>
-    
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
-    
-    template <typename T1, typename T2, typename T3, typename T4, typename T5,
-    typename T6, typename T7, typename T8, typename T9, typename T10,
-    typename T11, typename T12, typename T13, typename T14, typename T15,
-    typename T16, typename T17, typename T18, typename T19, typename T20,
-    typename T21, typename T22, typename T23, typename T24, typename T25,
-    typename T26, typename T27, typename T28, typename T29, typename T30,
-    typename T31, typename T32, typename T33, typename T34, typename T35,
-    typename T36, typename T37, typename T38>
-internal::ValueArray38<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13,
-    T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28,
-    T29, T30, T31, T32, T33, T34, T35, T36, T37, T38> Values(T1 v1, T2 v2,
-    T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9, T10 v10, T11 v11, T12 v12,
-    T13 v13, T14 v14, T15 v15, T16 v16, T17 v17, T18 v18, T19 v19, T20 v20,
-    T21 v21, T22 v22, T23 v23, T24 v24, T25 v25, T26 v26, T27 v27, T28 v28,
-    T29 v29, T30 v30, T31 v31, T32 v32, T33 v33, T34 v34, T35 v35, T36 v36,
-    T37 v37, T38 v38) {
-  return internal::ValueArray38<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11,
-      T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25,
-      T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36, T37, T38>(v1, v2,
-      v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18,
-      v19, v20, v21, v22, v23, v24, v25, v26, v27, v28, v29, v30, v31, v32,
-      v33, v34, v35, v36, v37, v38);
-}
-    
-      // Leave whatever circle we're part of.  Returns true if we were the
-  // last member of the circle.  Once this is done, you can join() another.
-  bool depart()
-      GTEST_LOCK_EXCLUDED_(g_linked_ptr_mutex) {
-    MutexLock lock(&g_linked_ptr_mutex);
-    }
-    
-    
-    {  const T1 v1_;
-  const T2 v2_;
-  const T3 v3_;
-  const T4 v4_;
-  const T5 v5_;
-  const T6 v6_;
-  const T7 v7_;
-  const T8 v8_;
-  const T9 v9_;
-  const T10 v10_;
-  const T11 v11_;
-  const T12 v12_;
-  const T13 v13_;
-};
-    
-    
-    {  const T1 v1_;
-};
-    
-    // A handy wrapper for AddRef.
-#define GTEST_ADD_REF_(T) typename ::std::tr1::gtest_internal::AddRef<T>::type
-    
-        for (int i = 2; i <= max; i++) {
-      if (!is_prime_[i]) continue;
-    }
-    
-      // Try to divide n by every odd number i, starting from 3
-  for (int i = 3; ; i += 2) {
-    // We only have to try i up to the squre root of n
-    if (i > n/i) break;
-    }
-    
-    // A sample program demonstrating using Google C++ testing framework.
-//
-// Author: wan@google.com (Zhanyong Wan)
-    
-    
-    {                                 //sublist = whole list
-  if (prev == other_it->current) {
-    list->last = nullptr;
-    prev = current = next = nullptr;
-    other_it->prev = other_it->current = other_it->next = nullptr;
+    {  if (handle) {
+    ::CloseHandle(handle);
   }
-  else {
-    prev->next = other_it->next;
-    current = other_it->current = nullptr;
-    next = other_it->next;
-    other_it->prev = prev;
-  }
-  return end_of_new_list;
 }
-
+#else
+TEST_F(ProcessTests, test_constructorPosix) {
+  auto p = PlatformProcess(getpid());
+  EXPECT_TRUE(p.isValid());
+  EXPECT_EQ(p.nativeHandle(), getpid());
+}
+#endif
     
-    #endif  // TESSERACT_LSTM_FULLYCONNECTED_H_
-
-    
-    // Factory makes and returns an IntSimdMatrix (sub)class of the best
-// available type for the current architecture.
-/* static */
-IntSimdMatrix* IntSimdMatrix::GetFastestMultiplier() {
-  IntSimdMatrix* multiplier = nullptr;
-  if (SIMDDetect::IsAVX2Available()) {
-    multiplier = new IntSimdMatrixAVX2();
-  } else if (SIMDDetect::IsSSEAvailable()) {
-    multiplier = new IntSimdMatrixSSE();
-  } else {
-    // Default c++ implementation.
-    multiplier = new IntSimdMatrix();
-  }
-  return multiplier;
+    TEST_F(StatusTests, test_ok) {
+  auto s1 = Status(5, 'message');
+  EXPECT_FALSE(s1.ok());
+  auto s2 = Status(0, 'message');
+  EXPECT_TRUE(s2.ok());
 }
     
+    namespace osquery {
+    }
     
-    {	if (_is_multiplayer) {
-		// need to wait for ID confirmation...
-	} else {
-		emit_signal('connection_established', p_protocol);
+    bool js_cocos2dx_physics3d_Physics3DHingeConstraint_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_physics3d_Physics3DHingeConstraint_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_physics3d_Physics3DHingeConstraint(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getHingeAngle(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetA(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetB(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_enableAngularMotor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getUpperLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getLowerLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getEnableAngularMotor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_enableMotor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getBFrame(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setFrames(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getUseFrameOffset(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setAngularOnly(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setLimit(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setMotorTarget(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getAngularOnly(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_setAxis(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_getAFrame(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_physics3d_Physics3DHingeConstraint_Physics3DHingeConstraint(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+    
+    
+    
+    
+    
+    {    mColorLocation = glGetUniformLocation( mShaderProgram->getProgram(), 'u_color');
+}
+    
+    
+    {
+    {
+    {			if (settings->drawFrictionImpulse == 1)
+			{
+				b2Vec2 tangent = b2Cross(point->normal, 1.0f);
+				b2Vec2 p1 = point->position;
+				b2Vec2 p2 = p1 + k_impulseScale * point->tangentImpulse * tangent;
+				m_debugDraw.DrawSegment(p1, p2, b2Color(0.9f, 0.9f, 0.3f));
+			}
+		}
 	}
 }
     
-    	String breakpoint_find_source(const String &p_source) const;
-	void insert_breakpoint(int p_line, const StringName &p_source);
-	void remove_breakpoint(int p_line, const StringName &p_source);
-	bool is_breakpoint(int p_line, const StringName &p_source) const;
-	bool is_breakpoint_line(int p_line) const;
-	void clear_breakpoints();
+    	// Callbacks for derived classes.
+	virtual void BeginContact(b2Contact* contact) { B2_NOT_USED(contact); }
+	virtual void EndContact(b2Contact* contact) { B2_NOT_USED(contact); }
+	virtual void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
+	virtual void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
+	{
+		B2_NOT_USED(contact);
+		B2_NOT_USED(impulse);
+	}
     
-    	if (cd.properties.size()) {
+    #endif
+
+    
+    
+    {	b2Body* m_middle;
+};
+    
+    
+    {	b2Body* m_middle;
+};
+    
+    TEST(IOBuf, PullAndPeek) {
+  std::unique_ptr<IOBuf> iobuf1(IOBuf::create(10));
+  append(iobuf1, 'he');
+  std::unique_ptr<IOBuf> iobuf2(IOBuf::create(10));
+  append(iobuf2, 'llo ');
+  std::unique_ptr<IOBuf> iobuf3(IOBuf::create(10));
+  append(iobuf3, 'world');
+  iobuf1->prependChain(std::move(iobuf2));
+  iobuf1->prependChain(std::move(iobuf3));
+  EXPECT_EQ(3, iobuf1->countChainElements());
+  EXPECT_EQ(11, iobuf1->computeChainDataLength());
     }
     
-    	String get_class();
+      for (size_t i = 0; i < count - 1; i++) {
+    auto buf2 = IOBuf::create(len + 1);
+    buf2->append(rand() % len + 1);
+    fillBuf(buf2.get(), gen);
+    buf->prependChain(std::move(buf2));
+  }
+  EXPECT_EQ(count, buf->countChainElements());
     
-    class btVehicleJacobianEntry {
-public:
-	Vector3 m_linearJointAxis;
-	Vector3 m_aJ;
-	Vector3 m_bJ;
-	Vector3 m_0MinvJt;
-	Vector3 m_1MinvJt;
-	//Optimization: can be stored in the w/last component of one of the vectors
-	real_t m_Adiag;
+    namespace detail {
     }
     
-    	void set_config_file(Ref<ConfigFile> p_config_file);
+    class OrderingTest : public testing::Test {};
+    
+    /// Futex<MockAtom> is our mocked futex implementation.  Note that the
+/// method signatures differ from the real Futex because we have elided
+/// unused default params and collapsed templated methods into the
+/// used type
+template <>
+struct Futex<MockAtom> {
+  MOCK_METHOD2(futexWait, FutexResult(uint32_t, uint32_t));
+  MOCK_METHOD3(futexWaitUntil,
+               FutexResult(uint32_t, const MockClock::time_point&, uint32_t));
+};
+    
+    namespace detail {
+    }
+    
+    #include <folly/Portability.h>
+    
+    /**
+ *  AtomicHashArray is the building block for AtomicHashMap.  It provides the
+ *  core lock-free functionality, but is limited by the fact that it cannot
+ *  grow past its initialization size and is a little more awkward (no public
+ *  constructor, for example).  If you're confident that you won't run out of
+ *  space, don't mind the awkardness, and really need bare-metal performance,
+ *  feel free to use AHA directly.
+ *
+ *  Check out AtomicHashMap.h for more thorough documentation on perf and
+ *  general pros and cons relative to other hash maps.
+ *
+ *  @author Spencer Ahrens <sahrens@fb.com>
+ *  @author Jordan DeLong <delong.j@fb.com>
+ */
+    
+    
+unsigned int XXH32_intermediateDigest (void* state);
+/*
+This function does the same as XXH32_digest(), generating a 32-bit hash,
+but preserve memory context.
+This way, it becomes possible to generate intermediate hashes, and then continue feeding data with XXH32_update().
+To free memory context, use XXH32_digest(), or free().
+*/
+    
+        // Compact, Get
+    db->CompactRange(CompactRangeOptions(), nullptr, nullptr);
+    ASSERT_EQ(a, 'x\nt\nr\nsa\ngh\njk');
+    ASSERT_EQ(b, 'y\n2\nmonkey\ndf\nl;');
+    ASSERT_EQ(c, 'asdasd\nasdasd\nbbnagnagsx\nrogosh');
+    
+    class InlineSkipTest : public testing::Test {
+ public:
+  void Insert(TestInlineSkipList* list, Key key) {
+    char* buf = list->AllocateKey(sizeof(Key));
+    memcpy(buf, &key, sizeof(Key));
+    list->Insert(buf);
+    keys_.insert(key);
+  }
+    }
+    
+      // call once at the beginning of a test to setup the dependency between
+  // sync points
+  void LoadDependency(const std::vector<SyncPointPair>& dependencies);
+    
+      std::unique_ptr<AuthConfig> getDefaultAuthConfig() const;
+    
+    AbstractHttpServerResponseCommand::AbstractHttpServerResponseCommand(
+    cuid_t cuid, const std::shared_ptr<HttpServer>& httpServer,
+    DownloadEngine* e, const std::shared_ptr<SocketCore>& socket)
+    : Command(cuid),
+      e_(e),
+      socket_(socket),
+      httpServer_(httpServer),
+      readCheck_(false),
+      writeCheck_(true)
+{
+  setStatus(Command::STATUS_ONESHOT_REALTIME);
+  e_->addSocketForWriteCheck(socket_, this);
+}
     
     
     {} // namespace aria2
-
     
-      void setUserDefinedCred(std::string user, std::string password);
+    bool AbstractOptionHandler::hasTag(uint32_t tag) const
+{
+  return (tags_ & (1 << tag));
+}
     
-    #ifdef ENABLE_ASYNC_DNS
-  std::unique_ptr<AsyncNameResolverMan> asyncNameResolverMan_;
-#endif // ENABLE_ASYNC_DNS
-    
-    class AbstractHttpServerResponseCommand : public Command {
-private:
-  DownloadEngine* e_;
-  std::shared_ptr<SocketCore> socket_;
-  std::shared_ptr<HttpServer> httpServer_;
-  Timer timeoutTimer_;
-  bool readCheck_;
-  bool writeCheck_;
+    class AbstractOptionHandler : public OptionHandler {
+protected:
+  PrefPtr pref_;
     }
     
-    void AnnounceList::announceSuccess()
-{
-  if (currentTrackerInitialized_) {
-    (*currentTier_)->nextEvent();
-    auto url = *currentTracker_;
-    (*currentTier_)->urls.erase(currentTracker_);
-    (*currentTier_)->urls.push_front(std::move(url));
-    currentTier_ = std::begin(tiers_);
-    currentTracker_ = std::begin((*currentTier_)->urls);
+      /**
+   * Counts the number of tiers to which the 'completed' event can be sent.
+   */
+  size_t countCompletedAllowedTier() const;
+    
+      A2_LOG_ERROR(
+      fmt('Failed to lookup %s in your KeyChain', fingerprint.c_str()));
+  return false;
+    
+    
+    {} // namespace fuzzer
+    
+      // Parse NumFilesInFirstCorpus.
+  if (!std::getline(IS, Line, '\n')) return false;
+  std::istringstream L2(Line);
+  NumFilesInFirstCorpus = NumFiles + 1;
+  L2 >> NumFilesInFirstCorpus;
+  if (NumFilesInFirstCorpus > NumFiles) return false;
+    
+    namespace fuzzer {
+    }
+    
+      void StopTraceRecording() {
+    if (!RecordingMemcmp)
+      return;
+    RecordingMemcmp = false;
+    for (size_t i = 0; i < NumMutations; i++) {
+      auto &M = Mutations[i];
+      if (Options.Verbosity >= 2) {
+        AutoDictUnitCounts[M.W]++;
+        AutoDictAdds++;
+        if ((AutoDictAdds & (AutoDictAdds - 1)) == 0) {
+          typedef std::pair<size_t, Word> CU;
+          std::vector<CU> CountedUnits;
+          for (auto &I : AutoDictUnitCounts)
+            CountedUnits.push_back(std::make_pair(I.second, I.first));
+          std::sort(CountedUnits.begin(), CountedUnits.end(),
+                    [](const CU &a, const CU &b) { return a.first > b.first; });
+          Printf('AutoDict:\n');
+          for (auto &I : CountedUnits) {
+            Printf('   %zd ', I.first);
+            PrintASCII(I.second.data(), I.second.size());
+            Printf('\n');
+          }
+        }
+      }
+      MD.AddWordToAutoDictionary({M.W, M.Pos});
+    }
+    for (auto &W : InterestingWords)
+      MD.AddWordToAutoDictionary({W});
   }
-}
-    
-    void AnnounceTier::nextEvent()
-{
-  switch (event) {
-  case STARTED:
-    event = DOWNLOADING;
-    break;
-  case STARTED_AFTER_COMPLETION:
-    event = SEEDING;
-    break;
-  case STOPPED:
-    event = HALTED;
-    break;
-  case COMPLETED:
-    event = SEEDING;
-    break;
-  default:
-    break;
-  }
-}
-    
-      bool tryAsFingerprint(const std::string& fingerprint);
-    
-    
-    {  std::shared_ptr<AsyncNameResolver> asyncNameResolver_[2];
-  size_t numResolver_;
-  int resolverCheck_;
-  bool ipv4_;
-  bool ipv6_;
-};
