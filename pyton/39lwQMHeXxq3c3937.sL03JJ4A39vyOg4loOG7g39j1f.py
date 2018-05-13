@@ -1,153 +1,109 @@
 
         
-        import pytest
+                super(EncodedStream, self).__init__(**kwargs)
     
-        seems_fishy = False
-    if total_found == 0:
-        info.append('Error: the template could not be found.')
-        seems_fishy = True
-    elif total_found > 1:
-        info.append('Warning: multiple loaders returned a match for the template.')
-        seems_fishy = True
+        exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
+    assert ret == ExitStatus.ERROR
+    assert error_msg == (
+        'ConnectionError: '
+        'Connection aborted while doing GET request to URL: '
+        'http://www.google.com')
     
-        If there is no handler for the logger's effective level, add a
-    :class:`~logging.StreamHandler` for
-    :func:`~flask.logging.wsgi_errors_stream` with a basic format.
+    
+def get_unique_filename(filename, exists=os.path.exists):
+    attempt = 0
+    while True:
+        suffix = '-' + str(attempt) if attempt > 0 else ''
+        try_filename = trim_filename_if_needed(filename, extra=len(suffix))
+        try_filename += suffix
+        if not exists(try_filename):
+            return try_filename
+        attempt += 1
+    
+    
+class DigestAuthPlugin(BuiltinAuthPlugin):
+    
+        @pytest.mark.parametrize('verify_value', ['false', 'fALse'])
+    def test_verify_false_OK(self, httpbin_secure, verify_value):
+        r = http(httpbin_secure.url + '/get', '--verify', verify_value)
+        assert HTTP_OK in r
+    
+    
+@keras_test
+def test_saving_without_compilation():
+    '''Test saving model without compiling.
     '''
-    logger = logging.getLogger('flask.app')
+    model = Sequential()
+    model.add(Dense(2, input_shape=(3,)))
+    model.add(Dense(3))
     
+        x = conv_block(x, 3, [256, 256, 1024], stage=4, block='a')
+    x = identity_block(x, 3, [256, 256, 1024], stage=4, block='b')
+    x = identity_block(x, 3, [256, 256, 1024], stage=4, block='c')
+    x = identity_block(x, 3, [256, 256, 1024], stage=4, block='d')
+    x = identity_block(x, 3, [256, 256, 1024], stage=4, block='e')
+    x = identity_block(x, 3, [256, 256, 1024], stage=4, block='f')
     
-# Core signals.  For usage examples grep the source code or consult
-# the API documentation in docs/api.rst as well as docs/signals.rst
-template_rendered = _signals.signal('template-rendered')
-before_render_template = _signals.signal('before-render-template')
-request_started = _signals.signal('request-started')
-request_finished = _signals.signal('request-finished')
-request_tearing_down = _signals.signal('request-tearing-down')
-got_request_exception = _signals.signal('got-request-exception')
-appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
-appcontext_pushed = _signals.signal('appcontext-pushed')
-appcontext_popped = _signals.signal('appcontext-popped')
-message_flashed = _signals.signal('message-flashed')
-
+        @interfaces.legacy_spatialdropoutNd_support
+    def __init__(self, rate, data_format=None, **kwargs):
+        super(SpatialDropout2D, self).__init__(rate, **kwargs)
+        if data_format is None:
+            data_format = K.image_data_format()
+        if data_format not in {'channels_last', 'channels_first'}:
+            raise ValueError('`data_format` must be in '
+                             '{`'channels_last'`, `'channels_first'`}')
+        self.data_format = data_format
+        self.input_spec = InputSpec(ndim=4)
     
-            for blueprint in self.app.iter_blueprints():
-            loader = blueprint.jinja_loader
-            if loader is not None:
-                for template in loader.list_templates():
-                    result.add(template)
+            return x
     
+        for data_format in ['channels_first', 'channels_last']:
+        if data_format == 'channels_first':
+            inputs = np.random.rand(num_samples, stack_size,
+                                    input_len_dim1, input_len_dim2)
+        else:
+            inputs = np.random.rand(num_samples,
+                                    input_len_dim1, input_len_dim2,
+                                    stack_size)
+        # another correctness test (no cropping)
+        cropping = ((0, 0), (0, 0))
+        layer = convolutional.Cropping2D(cropping=cropping,
+                                         data_format=data_format)
+        layer.build(inputs.shape)
+        outputs = layer(K.variable(inputs))
+        np_output = K.eval(outputs)
+        # compare with input
+        assert_allclose(np_output, inputs)
     
-def test_config_from_mapping():
-    app = flask.Flask(__name__)
-    app.config.from_mapping({
-        'SECRET_KEY': 'config',
-        'TEST_KEY': 'foo'
-    })
-    common_object_test(app)
+    from .. import backend as K
+from .. import activations
+from .. import initializers
+from .. import regularizers
+from .. import constraints
+from .recurrent import _generate_dropout_mask
+from .recurrent import _standardize_args
     
+        @mock.patch('certbot_compatibility_test.validator.requests.get')
+    def test_hsts(self, mock_get_request):
+        mock_get_request.return_value = create_response(
+            headers={'strict-transport-security': 'max-age=31536000'})
+        self.assertTrue(self.validator.hsts('test.com'))
     
-def test_explicit_instance_paths(modules_tmpdir):
-    with pytest.raises(ValueError) as excinfo:
-        flask.Flask(__name__, instance_path='instance')
-    assert 'must be absolute' in str(excinfo.value)
+    # If true, an OpenSearch description file will be output, and all pages will
+# contain a <link> tag referring to it.  The value of this option must be the
+# base URL from which the finished HTML is served.
+#html_use_opensearch = ''
     
-        def entry_ok(self):
-        'Return apparently valid (name, path) or None'
-        self.entry_error['text'] = ''
-        self.path_error['text'] = ''
-        name = self.item_ok()
-        path = self.path_ok()
-        return None if name is None or path is None else (name, path)
-    
-        print('int:')
-    print('calculation time: %fs' % (end_calc-start_calc))
-    print('conversion time: %fs\n\n' % (end_conv-start_conv))
-    
-        def seek(self, pos, whence=0):
-        '''Seek to specified position into the chunk.
-        Default position is 0 (start of chunk).
-        If the file is not seekable, this will result in an error.
-        '''
-    
-    def py_make_scanner(context):
-    parse_object = context.parse_object
-    parse_array = context.parse_array
-    parse_string = context.parse_string
-    match_number = NUMBER_RE.match
-    strict = context.strict
-    parse_float = context.parse_float
-    parse_int = context.parse_int
-    parse_constant = context.parse_constant
-    object_hook = context.object_hook
-    object_pairs_hook = context.object_pairs_hook
-    memo = context.memo
-    
-        def _grouplist(self, lines):
-        # Parse lines into 'group last first flag'
-        return [GroupInfo(*line.split()) for line in lines]
-    
-        The DOMBuilder class uses an instance of this class to pass settings to
-    the ExpatBuilder class.
-    '''
-    
-        def find_byname(self, name):
-        '''Return (red, green, blue) for name'''
-        name = name.lower()
-        try:
-            return self.__byname[name]
-        except KeyError:
-            raise BadColor(name) from None
-    
-                    # kwargs={}
-                result = _testcapi.pyobject_fastcalldict(func, args, {})
-                self.check_result(result, expected)
-    
-            class complex2(complex):
-            '''Make sure that __complex__() calls fail if anything other than a
-            complex is returned'''
-            def __complex__(self):
-                return None
-    
-        def test_infile_outfile(self):
-        infile = self._create_infile()
-        outfile = support.TESTFN + '.out'
-        rc, out, err = assert_python_ok('-m', 'json.tool', infile, outfile)
-        self.addCleanup(os.remove, outfile)
-        with open(outfile, 'r') as fp:
-            self.assertEqual(fp.read(), self.expect)
-        self.assertEqual(rc, 0)
-        self.assertEqual(out, b'')
-        self.assertEqual(err, b'')
-    
-        def test_math(self):
-        self.assertEqual(+False, 0)
-        self.assertIsNot(+False, False)
-        self.assertEqual(-False, 0)
-        self.assertIsNot(-False, False)
-        self.assertEqual(abs(False), 0)
-        self.assertIsNot(abs(False), False)
-        self.assertEqual(+True, 1)
-        self.assertIsNot(+True, True)
-        self.assertEqual(-True, -1)
-        self.assertEqual(abs(True), 1)
-        self.assertIsNot(abs(True), True)
-        self.assertEqual(~False, -1)
-        self.assertEqual(~True, -2)
-    
-                # exhausted iterator
-            self.assertRaises(StopIteration, next, itorig)
-            d = pickle.dumps((itorig, orig), proto)
-            it, a = pickle.loads(d)
-            a[:] = data
-            self.assertEqual(list(it), [])
-    
-    class _AcquireFutures(object):
-    '''A context manager that does an ordered acquire of Future conditions.'''
-    
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+    # encoding=utf8  
+import sys  
+try:
+    reload(sys)
+except NameError:
+    pass
+try:
+    sys.setdefaultencoding('utf8')
+except AttributeError:
+    pass
