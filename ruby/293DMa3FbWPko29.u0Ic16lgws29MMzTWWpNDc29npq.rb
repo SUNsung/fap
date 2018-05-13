@@ -1,130 +1,126 @@
 
         
-            def filter_const(name)
-      if name.is_a? Array
-        name.map &method(:filter_const)
-      else
-        Docs.const_get '#{name}_filter'.camelize
-      end
+        invalids = []
+Parallel.each(links, in_threads: 4) do |link|
+  href = link.attribute('href').to_s
+  begin
+    case check_link(URI.join(BASE_URI, href))
+    when (200...300)
+      putc('.')
+    when (300..302)
+      putc('w')
     end
-    
-              css('##{dom_id}-methods ~ h4 code').each do |node|
-            next unless name = node.content[/\('(\w+)'\)/, 1]
-            id = node.parent['id'] = '#{dom_id}-#{name.parameterize}-method'
-            name.prepend '#{dom_id.singularize.titleize}: '
-            name << ' (method)'
-            entries << [name, id]
-          end
-        end
-    
-    desc 'Convert bootstrap to bootstrap-sass'
-task :convert, :branch do |t, args|
-  require './tasks/converter'
-  Converter.new(branch: args[:branch]).process_bootstrap
+  rescue => e
+    putc('F')
+    invalids << '#{href} (reason: #{e.message})'
+  end
 end
     
-      desc 'update main and version in bower.json'
-  task :generate do
-    require 'bootstrap-sass'
-    Dir.chdir Bootstrap.gem_path do
-      spec       = JSON.parse(File.read 'bower.json')
-    
-            # Removes the specified cache
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        An array of caches to remove, each specified with the same
-        #        hash as cache_descriptors_per_pod especially :spec_file and :slug
-        #
-        def remove_caches(cache_descriptors)
-          cache_descriptors.each do |desc|
-            UI.message('Removing spec #{desc[:spec_file]} (v#{desc[:version]})') do
-              FileUtils.rm(desc[:spec_file])
-            end
-            UI.message('Removing cache #{desc[:slug]}') do
-              FileUtils.rm_rf(desc[:slug])
-            end
-          end
-        end
-    
-            def self.options
-          [[
-            '--short', 'Only print the path relative to the cache root'
-          ]].concat(super)
-        end
-    
-          def run
-        UI.puts report
+        def create_event(event)
+      return super unless dry_run?
+      if can_create_events?
+        event = build_event(event)
+        @dry_run_results[:events] << event.payload
+        event
+      else
+        error 'This Agent cannot create events!'
       end
-    
-          def update_if_necessary!
-        if @update && config.verbose?
-          UI.section('\nUpdating Spec Repositories\n'.yellow) do
-            Repo.new(ARGV.new(['update'])).run
-          end
-        end
-      end
-    
-      def send_sinatra_file(path, &missing_file_block)
-    file_path = File.join(File.dirname(__FILE__), 'public',  path)
-    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
-    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
-  end
-    
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
     end
   end
+end
+
     
-      class IncludeCodeTag < Liquid::Tag
-    def initialize(tag_name, markup, tokens)
-      @title = nil
-      @file = nil
-      if markup.strip =~ /\s*lang:(\S+)/i
-        @filetype = $1
-        markup = markup.strip.sub(/lang:\S+/i,'')
+      def present(payload)
+    if payload.is_a?(Hash)
+      payload = ActiveSupport::HashWithIndifferentAccess.new(payload)
+      MAIN_KEYS.each do |key|
+        return { :title => payload[key].to_s, :entries => present_hash(payload, key) } if payload.has_key?(key)
       end
-      if markup.strip =~ /(.*)?(\s+|^)(\/*\S+)/i
-        @title = $1 || nil
-        @file = $3
-      end
-      super
+    
+        validate :validate_evernote_options
+    
+      def tumblr
+    Tumblr.configure do |config|
+      config.consumer_key = tumblr_consumer_key
+      config.consumer_secret = tumblr_consumer_secret
+      config.oauth_token = tumblr_oauth_token
+      config.oauth_token_secret = tumblr_oauth_token_secret
     end
     
-            def initialize(node, variable)
-          unless VARIABLE_ASSIGNMENT_TYPES.include?(node.type)
-            raise ArgumentError,
-                  'Node type must be any of #{VARIABLE_ASSIGNMENT_TYPES}, ' \
-                  'passed #{node.type}'
-          end
+    Tumblr::Client.new
+  end
+end
     
-            def block_argument?
-          argument? && @scope.node.block_type?
-        end
+      def load_event
+    @event = current_user.events.find(params[:id])
+  end
+end
+
     
-            def on_case(case_node)
-          case_node.when_branches.each_with_object([]) do |when_node, previous|
-            when_node.each_condition do |condition|
-              next unless repeated_condition?(previous, condition)
+      def destroy
+    @job = Delayed::Job.find(params[:id])
     
-            def on_block(node)
-          on_body_of_reduce(node) do |body|
-            void_next = body.each_node(:next).find do |n|
-              n.children.empty? && parent_block_node(n) == node
-            end
+          case Rails.env
+      when 'development'
+        config.eager_load = false
+      when 'test'
+        config.eager_load = false
+      when 'production'
+        config.eager_load = true
+      end
+    end
+  end
+end
     
-      it 'registers an offense' do
-    inspect_source(source)
+        self.sigs.each_key do |k|
+      # There is only one pattern per run to test
+      matched = nil
+      matches = nil
     
-          attr_reader :agent
+        # We want to return immediatly if we do not have a packet which is handled by us
+    return unless pkt.is_tcp?
+    return if (pkt.tcp_sport != 143 and pkt.tcp_dport != 143)
+    s = find_session((pkt.tcp_sport == 143) ? get_session_src(pkt) : get_session_dst(pkt))
+    s[:sname] ||= 'imap4'
     
-      context 'called with three styles' do
-    it 'applies second style to left and right' do
-      rule = 'border-style: dashed double solid'
+    success = clsJavaCompile._invoke('CompileFromMemory','[Ljava.lang.String;[Ljava.lang.String;[Ljava.lang.String;', classNames, codez, compileOpts)
+    
+        _cal[ver].each_pair do |key, value|
+      cal[ver][key] = Array.new
+      cal[ver][key] << String.new
+      cal[ver][key][-1] << '#ifdef AIX%s' % ver.delete('.')
+      cal[ver][key][-1] << '\n'
+      cal[ver][key][-1] << '''.rjust(5)
+      value.each_byte do |c|
+        cal[ver][key][-1] << '\x%02x' % c
+      end
+      cal[ver][key][-1] << '''.ljust(7)
+      cal[ver][key][-1] << '/*  cal     r2,-%d(r29)' %
+          (65536 - value.unpack('nn')[1])
+      cal[ver][key][-1] << '*/'.rjust(15)
+      cal[ver][key][-1] << '\n'
+      cal[ver][key][-1] << '#endif'
+      cal[ver][key][-1] << '\n'
+    end
+    
+        def render(context)
+      if @img
+        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      else
+        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
+      end
+    end
+  end
+end
+    
+          Dir.chdir(code_path) do
+        code = file.read
+        @filetype = file.extname.sub('.','') if @filetype.nil?
+        title = @title ? '#{@title} (#{file.basename})' : file.basename
+        url = '/#{code_dir}/#{@file}'
+        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
+        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
+        TemplateWrapper::safe_wrap(source)
+      end
+    end
+  end
