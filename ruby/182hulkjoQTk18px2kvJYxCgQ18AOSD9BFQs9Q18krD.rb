@@ -1,153 +1,104 @@
 
         
-            response = ActionDispatch::TestResponse.create(200, { 'Content-Type' => 'application/json' }, '{ 'foo': 'fighters' }')
-    assert_equal({ 'foo' => 'fighters' }, response.parsed_body)
+                key.revoke!
+      end
+    end
   end
+end
+
     
-        def show
-      render plain: 'Only for loooooong credentials'
+        # Gets the last git commit information formatted into a String by the provided
+    # pretty format String. See the git-log documentation for valid format placeholders
+    def self.last_git_commit_formatted_with(pretty_format, date_format = nil)
+      command = ['git log -1']
+      command << '--pretty=\'#{pretty_format}\''
+      command << '--date=\'#{date_format}\'' if date_format
+      Actions.sh(command.compact.join(' '), log: false).chomp
+    rescue
+      nil
     end
     
-            case method
-        when NilClass
-          raise 'Delivery method cannot be nil'
-        when Symbol
-          if klass = delivery_methods[method]
-            mail.delivery_method(klass, (send(:'#{method}_settings') || {}).merge(options || {}))
-          else
-            raise 'Invalid delivery method #{method.inspect}'
-          end
-        else
-          mail.delivery_method(method)
-        end
+            expect(result).to eq('/usr/local/bin/cloc  --by-file  --out=build/cloc.txt')
+      end
+    end
+  end
+end
+
     
-    module ActionMailer
-  # Provides the option to parameterize mailers in order to share instance variable
-  # setup, processing, and common headers.
-  #
-  # Consider this example that does not use parameterization:
-  #
-  #   class InvitationsMailer < ApplicationMailer
-  #     def account_invitation(inviter, invitee)
-  #       @account = inviter.account
-  #       @inviter = inviter
-  #       @invitee = invitee
-  #
-  #       subject = '#{@inviter.name} invited you to their Basecamp (#{@account.name})'
-  #
-  #       mail \
-  #         subject:   subject,
-  #         to:        invitee.email_address,
-  #         from:      common_address(inviter),
-  #         reply_to:  inviter.email_address_with_name
-  #     end
-  #
-  #     def project_invitation(project, inviter, invitee)
-  #       @account = inviter.account
-  #       @project = project
-  #       @inviter = inviter
-  #       @invitee = invitee
-  #       @summarizer = ProjectInvitationSummarizer.new(@project.bucket)
-  #
-  #       subject = '#{@inviter.name.familiar} added you to a project in Basecamp (#{@account.name})'
-  #
-  #       mail \
-  #         subject:   subject,
-  #         to:        invitee.email_address,
-  #         from:      common_address(inviter),
-  #         reply_to:  inviter.email_address_with_name
-  #     end
-  #
-  #     def bulk_project_invitation(projects, inviter, invitee)
-  #       @account  = inviter.account
-  #       @projects = projects.sort_by(&:name)
-  #       @inviter  = inviter
-  #       @invitee  = invitee
-  #
-  #       subject = '#{@inviter.name.familiar} added you to some new stuff in Basecamp (#{@account.name})'
-  #
-  #       mail \
-  #         subject:   subject,
-  #         to:        invitee.email_address,
-  #         from:      common_address(inviter),
-  #         reply_to:  inviter.email_address_with_name
-  #     end
-  #   end
-  #
-  #   InvitationsMailer.account_invitation(person_a, person_b).deliver_later
-  #
-  # Using parameterized mailers, this can be rewritten as:
-  #
-  #   class InvitationsMailer < ApplicationMailer
-  #     before_action { @inviter, @invitee = params[:inviter], params[:invitee] }
-  #     before_action { @account = params[:inviter].account }
-  #
-  #     default to:       -> { @invitee.email_address },
-  #             from:     -> { common_address(@inviter) },
-  #             reply_to: -> { @inviter.email_address_with_name }
-  #
-  #     def account_invitation
-  #       mail subject: '#{@inviter.name} invited you to their Basecamp (#{@account.name})'
-  #     end
-  #
-  #     def project_invitation
-  #       @project    = params[:project]
-  #       @summarizer = ProjectInvitationSummarizer.new(@project.bucket)
-  #
-  #       mail subject: '#{@inviter.name.familiar} added you to a project in Basecamp (#{@account.name})'
-  #     end
-  #
-  #     def bulk_project_invitation
-  #       @projects = params[:projects].sort_by(&:name)
-  #
-  #       mail subject: '#{@inviter.name.familiar} added you to some new stuff in Basecamp (#{@account.name})'
-  #     end
-  #   end
-  #
-  #   InvitationsMailer.with(inviter: person_a, invitee: person_b).account_invitation.deliver_later
-  module Parameterized
-    extend ActiveSupport::Concern
-    
-            def initialize_test_deliveries
-          set_delivery_method :test
-          @old_perform_deliveries = ActionMailer::Base.perform_deliveries
-          ActionMailer::Base.perform_deliveries = true
-          ActionMailer::Base.deliveries.clear
-        end
-    
-    require 'active_support/testing/autorun'
-require 'active_support/testing/method_call_assertions'
-require 'action_mailer'
-require 'action_mailer/test_case'
-    
-    class I18nTestMailer < ActionMailer::Base
-  configure do |c|
-    c.assets_dir = ''
+        find_union(segments, Project).includes(:namespace).order_id_desc
   end
     
-          def sanitized_opts(opts, is_safe)
-        if is_safe
-          Hash[[
-            [:startinline, opts.fetch(:startinline, nil)],
-            [:hl_lines,    opts.fetch(:hl_lines, nil)],
-            [:linenos,     opts.fetch(:linenos, nil)],
-            [:encoding,    opts.fetch(:encoding, 'utf-8')],
-            [:cssclass,    opts.fetch(:cssclass, nil)],
-          ].reject { |f| f.last.nil? }]
-        else
-          opts
+        begin
+      response = U2F::RegisterResponse.load_from_json(params[:device_response])
+      registration_data = u2f.register!(challenges, response)
+      registration.update(certificate: registration_data.certificate,
+                          key_handle: registration_data.key_handle,
+                          public_key: registration_data.public_key,
+                          counter: registration_data.counter,
+                          user: user,
+                          name: params[:name])
+    rescue JSON::ParserError, NoMethodError, ArgumentError
+      registration.errors.add(:base, 'Your U2F device did not send a valid JSON response.')
+    rescue U2F::Error => e
+      registration.errors.add(:base, e.message)
+    end
+    
+        def rails?
+      defined?(::Rails)
+    end
+    
+      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
+    @logger     = Logger.new
+    @repo       = repo
+    @branch     = branch || 'master'
+    @branch_sha = get_branch_sha
+    @cache_path = cache_path
+    @repo_url   = 'https://github.com/#@repo'
+    @save_to    = {
+        js:    'assets/javascripts/bootstrap',
+        scss:  'assets/stylesheets/bootstrap',
+        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
+  end
+    
+        # Returns true if a file has been assigned.
+    def file?
+      original_filename.present?
+    end
+    
+        def type_from_mime_magic
+      @type_from_mime_magic ||= File.open(@filepath) do |file|
+        MimeMagic.by_magic(file).try(:type)
+      end
+    end
+    
+            attachment_names.each do |attachment_name|
+          COLUMNS.keys.each do |column_name|
+            remove_column(table_name, '#{attachment_name}_#{column_name}')
+          end
         end
       end
     
-    strlen = mimes.keys.max_by(&:length).length
-output = ''
-output << '# Woah there. Do not edit this file directly.\n'
-output << '# This file is generated automatically by script/vendor-mimes.\n\n'
-mimes = mimes.sort_by { |k,v| k }
-output << mimes.map { |mime,extensions| '#{mime.ljust(strlen)} #{extensions.join(' ')}' }.join('\n')
+      TYPES = [ 'input', 'filter', 'output', 'codec' ]
     
-      class FeatureTopicUsers < Jobs::Base
+              def plugins
+            @plugins ||= find_plugins_gem_specs.map do |spec|
+              { :name => spec.name, :version => spec.version.to_s }
+            end.sort_by do |spec|
+              spec[:name]
+            end
+          end
     
-          message = TestMailer.send_test(args[:to_address])
-      Email::Sender.new(message, :test_message).send
-    end
+          def initialize(agent)
+        @agent = agent
+        logger.debug('[api-service] start') if logger.debug?
+      end
+    
+          origin = caller[1]
+      if origin =~ /rubygems\/custom_require/
+        origin = caller[3]
+        if origin.nil?
+          STDERR.puts 'Unknown origin'
+          STDERR.puts caller.join('\n')
+        end
+      end
+      origin = origin.gsub(/:[0-9]+:in .*/, '') if origin
