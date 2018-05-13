@@ -1,85 +1,76 @@
 
         
-        import reader
+            '''
+    req_h = OUT_REQ_HEAD in output_options
+    req_b = OUT_REQ_BODY in output_options
+    resp_h = OUT_RESP_HEAD in output_options
+    resp_b = OUT_RESP_BODY in output_options
+    req = req_h or req_b
+    resp = resp_h or resp_b
     
-      def test_parsing_9x9(self):
-    self.assertEqual(coords.from_sgf('aa'), (0, 0))
-    self.assertEqual(coords.from_sgf('ac'), (2, 0))
-    self.assertEqual(coords.from_sgf('ca'), (0, 2))
-    self.assertEqual(coords.from_sgf(''), None)
-    self.assertEqual(coords.to_sgf(None), '')
-    self.assertEqual('aa', coords.to_sgf(coords.from_sgf('aa')))
-    self.assertEqual('sa', coords.to_sgf(coords.from_sgf('sa')))
-    self.assertEqual((1, 17), coords.from_sgf(coords.to_sgf((1, 17))))
-    self.assertEqual(coords.from_kgs(utils_test.BOARD_SIZE, 'A1'), (8, 0))
-    self.assertEqual(coords.from_kgs(utils_test.BOARD_SIZE, 'A9'), (0, 0))
-    self.assertEqual(coords.from_kgs(utils_test.BOARD_SIZE, 'C2'), (7, 2))
-    self.assertEqual(coords.from_kgs(utils_test.BOARD_SIZE, 'J2'), (7, 8))
-    self.assertEqual(coords.from_pygtp(utils_test.BOARD_SIZE, (1, 1)), (8, 0))
-    self.assertEqual(coords.from_pygtp(utils_test.BOARD_SIZE, (1, 9)), (0, 0))
-    self.assertEqual(coords.from_pygtp(utils_test.BOARD_SIZE, (3, 2)), (7, 2))
-    self.assertEqual(coords.to_pygtp(utils_test.BOARD_SIZE, (8, 0)), (1, 1))
-    self.assertEqual(coords.to_pygtp(utils_test.BOARD_SIZE, (0, 0)), (1, 9))
-    self.assertEqual(coords.to_pygtp(utils_test.BOARD_SIZE, (7, 2)), (3, 2))
     
-      def test_train(self):
-    with tempfile.TemporaryDirectory() as working_dir, \
-        tempfile.NamedTemporaryFile() as tf_record:
-      preprocessing.make_dataset_from_sgf(
-          utils_test.BOARD_SIZE, 'example_game.sgf', tf_record.name)
-      dualnet.train(
-          working_dir, [tf_record.name], 1, model_params.DummyMiniGoParams())
-    
-      Yields:
-    The go.PositionWithContext instances.
-  '''
-  collection = sgf.parse(sgf_contents)
-  game = collection.children[0]
-  props = game.root.properties
-  assert int(sgf_prop(props.get('GM', ['1']))) == 1, 'Not a Go SGF!'
-    
-      def test_make_sgf(self):
-    all_pwcs = list(replay_sgf(utils_test.BOARD_SIZE, NO_HANDICAP_SGF))
-    second_last_position, last_move, _ = all_pwcs[-1]
-    last_position = second_last_position.play_move(last_move)
-    
-        # Compute logits (1 per class).
-    logits = tf.layers.dense(net, params['n_classes'], activation=None)
-    
-    site_info = 'FC2Video'
-download = fc2video_download
-download_playlist = playlist_not_supported('fc2video')
-
-    
-        def prepare(self, **kwargs):
-        content = get_content(self.url)
-        self.title = match1(content, r'<title>([^<]+)</title>')
-        s = match1(content, r'P\.s\s*=\s*\'([^\']+)\'')
-        scp = match1(content, r'InfoQConstants\.scp\s*=\s*\'([^\']+)\'')
-        scs = match1(content, r'InfoQConstants\.scs\s*=\s*\'([^\']+)\'')
-        sck = match1(content, r'InfoQConstants\.sck\s*=\s*\'([^\']+)\'')
-    
-    #----------------------------------------------------------------------
-def sina_xml_to_url_list(xml_data):
-    '''str->list
-    Convert XML to URL List.
-    From Biligrab.
+class AuthPlugin(BasePlugin):
     '''
-    rawurl = []
-    dom = parseString(xml_data)
-    for node in dom.getElementsByTagName('durl'):
-        url = node.getElementsByTagName('url')[0]
-        rawurl.append(url.childNodes[0].data)
-    return rawurl
+    Base auth plugin class.
     
-    from ..common import *
+        # noinspection PyMethodOverriding
+    def get_auth(self, username, password):
+        return HTTPBasicAuth(username, password)
     
-    from ..common import *
+        test_mode = False
     
-    site = MusicPlayOn()
-download = site.download_by_url
-# TBD: implement download_playlist
-
+        @require_oauth2_scope('creddits')
+    @validate(
+        VUser(),
+        target=VByName('fullname'),
+    )
+    @api_doc(
+        api_section.gold,
+        uri='/api/v1/gold/gild/{fullname}',
+    )
+    def POST_gild(self, target):
+        if not isinstance(target, (Comment, Link)):
+            err = RedditError('NO_THING_ID')
+            self.on_validation_error(err)
     
-    from ..common import *
-from ..extractor import VideoExtractor
+        @csrf_exempt
+    @json_validate(
+        VRatelimit(rate_ip=True, prefix='rate_register_'),
+        signature=VSigned(),
+        name=VUname(['user']),
+        email=ValidEmail('email'),
+        password=VPasswordChange(['passwd', 'passwd2']),
+    )
+    def POST_register(self, responder, name, email, password, **kwargs):
+        kwargs.update(dict(
+            controller=self,
+            form=responder('noop'),
+            responder=responder,
+            name=name,
+            email=email,
+            password=password,
+        ))
+        return handle_register(**kwargs)
+    
+    class CaptchaController(RedditController):
+    @allow_oauth2_access
+    @api_doc(api_section.captcha, uri='/captcha/{iden}')
+    def GET_captchaimg(self, iden):
+        '''
+        Request a CAPTCHA image given an `iden`.
+    
+            # c.error_page is special-cased in a couple places to bypass
+        # c.site checks. We shouldn't allow the user to get here other
+        # than through `middleware.py:error_mapper`.
+        if not request.environ.get('pylons.error_call'):
+            abort(403, 'direct access to error controller disallowed')
+    
+    from r2.controllers.reddit_base import MinimalController
+from r2.lib.pages import (
+    GoogleTagManagerJail,
+    GoogleTagManager,
+)
+from r2.lib.validator import (
+    validate,
+    VGTMContainerId,
+)
