@@ -1,181 +1,169 @@
 
         
-        
-class HTTPResponse(HTTPMessage):
-    '''A :class:`requests.models.Response` wrapper.'''
+        filenames = {
+    'bin': 'youtube-dl',
+    'exe': 'youtube-dl.exe',
+    'tar': 'youtube-dl-%s.tar.gz' % version}
+build_dir = os.path.join('..', '..', 'build', version)
+for key, filename in filenames.items():
+    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
+    fn = os.path.join(build_dir, filename)
+    with open(fn, 'rb') as f:
+        data = f.read()
+    if not data:
+        raise ValueError('File %s is empty!' % fn)
+    sha256sum = hashlib.sha256(data).hexdigest()
+    new_version[key] = (url, sha256sum)
     
-        '''
-    if not env.stdout_isatty and not args.prettify:
-        Stream = partial(
-            RawStream,
-            chunk_size=RawStream.CHUNK_SIZE_BY_LINE
-            if args.stream
-            else RawStream.CHUNK_SIZE
-        )
-    elif args.prettify:
-        Stream = partial(
-            PrettyStream if args.stream else BufferedPrettyStream,
-            env=env,
-            conversion=Conversion(),
-            formatting=Formatting(
-                env=env,
-                groups=args.prettify,
-                color_scheme=args.style,
-                explicit_json=args.json,
-            ),
-        )
-    else:
-        Stream = partial(EncodedStream, env=env)
+    versions_info = json.load(open('update/versions.json'))
+versions = list(versions_info['versions'].keys())
+versions.sort()
     
-        '''
-    return path.replace('\\', '\\\\\\')
-    
-    
-def rst_filenames():
-    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
-        if '.tox' not in root:
-            for filename in fnmatch.filter(filenames, '*.rst'):
-                yield os.path.join(root, filename)
-    
-                for prefix in SESSION_IGNORED_HEADER_PREFIXES:
-                if name.lower().startswith(prefix.lower()):
-                    break
-            else:
-                self['headers'][name] = value
-    
-      def setUp(self):
-    FLAGS.train_data = os.path.join(self.get_temp_dir(), 'test-text.txt')
-    FLAGS.eval_data = os.path.join(self.get_temp_dir(), 'eval-text.txt')
-    FLAGS.save_path = self.get_temp_dir()
-    with open(FLAGS.train_data, 'w') as f:
-      f.write(
-          '''alice was beginning to get very tired of sitting by her sister on
-          the bank, and of having nothing to do: once or twice she had peeped
-          into the book her sister was reading, but it had no pictures or
-          conversations in it, 'and what is the use of a book,' thought alice
-          'without pictures or conversations?' So she was considering in her own
-          mind (as well as she could, for the hot day made her feel very sleepy
-          and stupid), whether the pleasure of making a daisy-chain would be
-          worth the trouble of getting up and picking the daisies, when suddenly
-          a White rabbit with pink eyes ran close by her.\n''')
-      with open(FLAGS.eval_data, 'w') as f:
-        f.write('alice she rabbit once\n')
-    
-    import tensorflow as tf
-    
-            # Ensure variables have been reused
-        # Embedding + 2 LSTM layers + hidden layers + logits layer
-        expected_num_vars = 1 + 2 * 2 * FLAGS.rnn_num_layers + 2 * (
-            FLAGS.cl_num_layers) + 2
-        self.assertEqual(len(tf.trainable_variables()), expected_num_vars)
-    
-      @property
-  def state(self):
-    # LSTM tuple states
-    state_names = _get_tuple_state_names(self._num_states, self._state_name)
-    return tuple([
-        tf.contrib.rnn.LSTMStateTuple(
-            self._batch.state(c_name), self._batch.state(h_name))
-        for c_name, h_name in state_names
-    ])
-    
-    import graphs
-import train_utils
-    
-        fig = plt.figure('scikit-learn Lasso path benchmark results')
-    i = 1
-    for c, (label, timings) in zip('bcry', sorted(results.items())):
-        ax = fig.add_subplot(2, 2, i, projection='3d')
-        X, Y = np.meshgrid(samples_range, features_range)
-        Z = np.asarray(timings).reshape(samples_range.shape[0],
-                                        features_range.shape[0])
-    
-        print('Decompressing %s' % ARCHIVE_NAME)
-    with closing(tarfile.open(ARCHIVE_NAME, 'r:gz')) as archive:
-        archive.extractall(path='.')
-    os.remove(ARCHIVE_NAME)
+    if __name__ == '__main__':
+    main()
 
     
-    # Plot the results (= shape of the data points cloud)
-plt.figure(1)  # two clusters
-plt.title('Outlier detection on a real data set (boston housing)')
-plt.scatter(X1[:, 0], X1[:, 1], color='black')
-bbox_args = dict(boxstyle='round', fc='0.8')
-arrow_args = dict(arrowstyle='->')
-plt.annotate('several confounded points', xy=(24, 19),
-             xycoords='data', textcoords='data',
-             xytext=(13, 10), bbox=bbox_args, arrowprops=arrow_args)
-plt.xlim((xx1.min(), xx1.max()))
-plt.ylim((yy1.min(), yy1.max()))
-plt.legend((legend1_values_list[0].collections[0],
-            legend1_values_list[1].collections[0],
-            legend1_values_list[2].collections[0]),
-           (legend1_keys_list[0], legend1_keys_list[1], legend1_keys_list[2]),
-           loc='upper center',
-           prop=matplotlib.font_manager.FontProperties(size=12))
-plt.ylabel('accessibility to radial highways')
-plt.xlabel('pupil-teacher ratio by town')
+        def test_vimeo_matching(self):
+        self.assertMatch('https://vimeo.com/channels/tributes', ['vimeo:channel'])
+        self.assertMatch('https://vimeo.com/channels/31259', ['vimeo:channel'])
+        self.assertMatch('https://vimeo.com/channels/31259/53576664', ['vimeo'])
+        self.assertMatch('https://vimeo.com/user7108434', ['vimeo:user'])
+        self.assertMatch('https://vimeo.com/user7108434/videos', ['vimeo:user'])
+        self.assertMatch('https://vimeo.com/user21297594/review/75524534/3c257a1b5d', ['vimeo:review'])
     
-    from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.backends.backend_tkagg import NavigationToolbar2TkAgg
-from matplotlib.figure import Figure
-from matplotlib.contour import ContourSet
+    try:
+    from .lazy_extractors import *
+    from .lazy_extractors import _ALL_CLASSES
+    _LAZY_LOADER = True
+except ImportError:
+    _LAZY_LOADER = False
+    from .extractors import *
     
-    from sklearn.datasets import make_biclusters
-from sklearn.datasets import samples_generator as sg
-from sklearn.cluster.bicluster import SpectralCoclustering
-from sklearn.metrics import consensus_score
+        def _real_extract(self, url):
+        video_id = self._match_id(url)
+    
+        @property
+    def headers(self):
+        '''Return a `str` with the message's headers.'''
+        raise NotImplementedError()
     
     
-n_train = 20  # samples for training
-n_test = 200  # samples for testing
-n_averages = 50  # how often to repeat classification
-n_features_max = 75  # maximum number of features
-step = 4  # step size for the calculation
+FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
+FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
+JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
+BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
     
-    import json
     
-        html = get_content(url)
-    pid = match1(html, r'video\.settings\.pid\s*=\s*\'([^\']+)\'')
-    title = match1(html, r'video\.settings\.title\s*=\s*\'([^\']+)\'')
+@mock.patch('httpie.core.get_response')
+def test_error_traceback(get_response):
+    exc = ConnectionError('Connection aborted')
+    exc.request = Request(method='GET', url='http://www.google.com')
+    get_response.side_effect = exc
+    with raises(ConnectionError):
+        main(['--ignore-stdin', '--traceback', 'www.google.com'])
     
-    from ..common import *
+    # def test_unicode_url_verbose(self):
+#     r = http(httpbin.url + '--verbose', u'/get?test=' + UNICODE)
+#     assert HTTP_OK in r
     
-    #----------------------------------------------------------------------
-def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    '''wrapper'''
-    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
-    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
-    hostname = urlparse(url).hostname
-    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
-        return False
-    upid = match1(url, r'.+/content/(\w+)')
     
-    def kugou_download(url, output_dir='.', merge=True, info_only=False, **kwargs):
-    if url.lower().find('5sing')!=-1:
-        #for 5sing.kugou.com
-        html=get_html(url)
-        ticket=r1(r''ticket':\s*'(.*)'',html)
-        j=loads(str(b64decode(ticket),encoding='utf-8'))
-        url=j['file']
-        title=j['songName']
-        songtype, ext, size = url_info(url)
-        print_info(site_info, title, songtype, size)
-        if not info_only:
-            download_urls([url], title, ext, size, output_dir, merge=merge)
+class FormatterPlugin(object):
+    
+    # Separators for raw JSON items
+SEP_GROUP_RAW_JSON_ITEMS = frozenset([
+    SEP_DATA_RAW_JSON,
+    SEP_DATA_EMBED_RAW_JSON_FILE,
+])
+    
+    from httpie.compat import urlsplit
+from httpie.config import BaseConfigDict, DEFAULT_CONFIG_DIR
+from httpie.plugins import plugin_manager
+    
+            plot_batch_times(all_times, n_components, batch_sizes, data)
+        # RandomizedPCA error is always worse (approx 100x) than other PCA
+        # tests
+        plot_batch_errors(all_errors, n_components, batch_sizes, data)
+    
+            start = time.time()
+        func(X, n_jobs=-1)
+        multi_core.append(time.time() - start)
+    
+        n = 10
+    step = 10000
+    n_samples = 10000
+    dim = 10
+    n_classes = 10
+    for i in range(n):
+        print('============================================')
+        print('Entering iteration %s of %s' % (i, n))
+        print('============================================')
+        n_samples += step
+        X = np.random.randn(n_samples, dim)
+        Y = np.random.randint(0, n_classes, (n_samples,))
+        bench_scikit_tree_classifier(X, Y)
+        Y = np.random.randn(n_samples)
+        bench_scikit_tree_regressor(X, Y)
+    
+    solutions = os.listdir(exercise_dir)
+    
+        def prepare(self, **kwargs):
+    
+        mediatype, ext, size = 'mp4', 'mp4', 0
+    print_info(site_info, title, mediatype, size)
+    #
+    # rtmpdump  -r 'rtmpe://cp30865.edgefcs.net/ondemand/mtviestor/_!/intlod/MTVInternational/MBUS/GeoLocals/00JP/VIAMTVI/PYC/201304/7122HVAQ4/00JPVIAMTVIPYC7122HVAQ4_640x_360_1200_m30.mp4' -o 'title.mp4' --swfVfy http://media.mtvnservices.com/player/prime/mediaplayerprime.1.10.8.swf
+    #
+    # because rtmpdump is unstable,may try serveral times
+    #
+    if not info_only:
+        # import pdb
+        # pdb.set_trace()
+        download_rtmp_url(url=url, title=title, ext=ext, params={
+                          '--swfVfy': 'http://media.mtvnservices.com/player/prime/mediaplayerprime.1.10.8.swf'}, output_dir=output_dir)
+    
+        '''
+    if tool == 'pep8':
+        # E501 line too long (91 characters)
+        errtype, sep, message = violation.partition(' ')
+        if not sep:
+            errtype = 'PEP8'
+    elif tool == 'pep257':
+        errtype = 'PEP257'
+    elif tool == 'pyflakes':
+        errtype = 'pyflakes'
+    return errtype
+    
+        if ConfigValue.bool(global_conf.get('uncompressedJS')):
+        paths['static_files'] = get_raw_statics_path()
     else:
-        #for the www.kugou.com/
-        return kugou_download_playlist(url, output_dir=output_dir, merge=merge, info_only=info_only)
-        # raise NotImplementedError(url)       
+        paths['static_files'] = get_built_statics_path()
     
-        for i in range(10, 30):
-        url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
-            i = i,
-            p = preview
-        )
-        try:
-            mime, ext, size = url_info(url)
-            break
-        except: continue
+    def api_type(subtype = ''):
+    return 'api-' + subtype if subtype else 'api'
+    
+                try:
+                cl_int = int(environ[cl_key])
+            except ValueError:
+                if is_api:
+                    return _wsgi_json(start_response, 400)
+                else:
+                    start_response('400 Bad Request', [])
+                    return ['<html><body>bad request</body></html>']
+    
+        @require_oauth2_scope('creddits')
+    @validate(
+        VUser(),
+        target=VByName('fullname'),
+    )
+    @api_doc(
+        api_section.gold,
+        uri='/api/v1/gold/gild/{fullname}',
+    )
+    def POST_gild(self, target):
+        if not isinstance(target, (Comment, Link)):
+            err = RedditError('NO_THING_ID')
+            self.on_validation_error(err)
+    
+            return HelpPage(_('help'),
+                        content = Embed(content=output),
+                        show_sidebar = None).render()
