@@ -1,147 +1,170 @@
 
         
-        from flask._compat import iteritems, text_type
-from flask.json import dumps, loads
+        
+@pytest.fixture(params=containers)
+def proc(request, spawnu, TIMEOUT):
+    proc = spawnu(*request.param)
+    proc.sendline(u'pip install /src')
+    assert proc.expect([TIMEOUT, u'Successfully installed'])
+    proc.sendline(u'tcsh')
+    proc.sendline(u'setenv PYTHONIOENCODING utf8')
+    proc.sendline(u'eval `thefuck --alias`')
+    return proc
     
-            :param filename: the filename of the config.  This can either be an
-                         absolute filename or a filename relative to the
-                         root path.
-        :param silent: set to ``True`` if you want silent failure for missing
-                       files.
+    # This view is called from FlatpageFallbackMiddleware.process_response
+# when a 404 is raised, which often means CsrfViewMiddleware.process_view
+# has not been called even if CsrfViewMiddleware is installed. So we need
+# to use @csrf_protect, in case the template needs {% csrf_token %}.
+# However, we can't just wrap this view; if no matching flatpage exists,
+# or a redirect is required for authentication, the 404 needs to be returned
+# without any CSRF checks. Therefore, we only
+# CSRF protect the internal implementation.
     
-    
-def _dump_loader_info(loader):
-    yield 'class: %s.%s' % (type(loader).__module__, type(loader).__name__)
-    for key, value in sorted(loader.__dict__.items()):
-        if key.startswith('_'):
-            continue
-        if isinstance(value, (tuple, list)):
-            if not all(isinstance(x, (str, text_type)) for x in value):
-                continue
-            yield '%s:' % key
-            for item in value:
-                yield '  - %s' % item
-            continue
-        elif not isinstance(value, (str, text_type, int, float, bool)):
-            continue
-        yield '%s: %r' % (key, value)
-    
-        return False
-    
-            app.config['SESSION_COOKIE_DOMAIN'] = rv
-        return rv
-    
-                # If we have no method at all in there we don't want to add a
-            # method list. This is for instance the case for the base class
-            # or another subclass of a base method view that does not introduce
-            # new methods.
-            if methods:
-                cls.methods = methods
-    
-    import logging
-import sys
-    
-        def __exit__(self, exc_type, exc_value, tb):
-        gc.collect()
-        new_objects = len(gc.get_objects())
-        if new_objects > self.old_objects:
-            pytest.fail('Example code leaked')
-        _gc_lock.release()
-        gc.enable()
-    
-      def replicate_states(self, state_coll_name):
-    state_list = self._metagraph.collection_def[state_coll_name]
-    num_states = len(state_list.node_list.value)
-    for replica_id in range(1, FLAGS.num_gpus):
-      for i in range(num_states):
-        state_list.node_list.value.append(state_list.node_list.value[i])
-    for replica_id in range(FLAGS.num_gpus):
-      for i in range(num_states):
-        index = replica_id * num_states + i
-        state_list.node_list.value[index] = with_autoparallel_prefix(
-            replica_id, state_list.node_list.value[index])
-    
-      is_chief = FLAGS.task == 0
-  sv = tf.train.Supervisor(
-      logdir=FLAGS.train_dir,
-      is_chief=is_chief,
-      save_summaries_secs=30,
-      save_model_secs=30,
-      local_init_op=local_init_op,
-      ready_for_local_init_op=ready_for_local_init_op,
-      global_step=global_step)
-    
-    FLAGS = flags.FLAGS
-    
-        classifiers = proj_info['classifiers'],
-    
-    from ..common import *
-    
-        video_url = match1(html, r'filepath=(.+)&sec')
-    video_url = video_url.replace('&mid', '?mid')
-    
-    def kuwo_playlist_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    html=get_content(url)
-    matched=set(re.compile('yinyue/(\d+)').findall(html))#reduce duplicated
-    for rid in matched:
-        kuwo_download_by_rid(rid,output_dir,merge,info_only)
-    
-            d = deque(s)
-        d.rotate(1)             # verify rot(1)
-        self.assertEqual(''.join(d), 'eabcd')
-    
-    def pi_cdecimal():
-    '''cdecimal'''
-    D = C.Decimal
-    lasts, t, s, n, na, d, da = D(0), D(3), D(3), D(1), D(0), D(0), D(24)
-    while s != lasts:
-        lasts = s
-        n, na = n+na, na+8
-        d, da = d+da, da+32
-        t = (t * n) / d
-        s += t
-    return s
-    
-        def test_varargs1(self):
-        {}.__contains__(0)
-    
-    API_TYPES = ('api', 'json')
-RSS_TYPES = ('rss', 'xml')
-    
-        def current_subreddit(self):
-        site = self.stacked_proxy_safe_get(c, 'site')
-        if not site:
-            # In non-request code (eg queued jobs), there isn't necessarily a
-            # site name (or other request-type data).  In those cases, we don't
-            # want to trigger any subreddit-specific code.
-            return ''
-        return site.name
-    
-        @csrf_exempt
-    @json_validate(
-        VRatelimit(rate_ip=True, prefix='rate_register_'),
-        signature=VSigned(),
-        name=VUname(['user']),
-        email=ValidEmail('email'),
-        password=VPasswordChange(['passwd', 'passwd2']),
-    )
-    def POST_register(self, responder, name, email, password, **kwargs):
-        kwargs.update(dict(
-            controller=self,
-            form=responder('noop'),
-            responder=responder,
-            name=name,
-            email=email,
-            password=password,
-        ))
-        return handle_register(**kwargs)
-    
-            To request a new CAPTCHA,
-        use [/api/new_captcha](#POST_api_new_captcha).
+            When updating an entry, updates its position to the front of the LRU list.
+        If the entry is new and the cache is at capacity, removes the oldest entry
+        before the new entry is added.
         '''
-        image = captcha.get_image(iden)
-        f = StringIO.StringIO()
-        image.save(f, 'PNG')
-        response.content_type = 'image/png;'
-        return f.getvalue()
+        node = self.map[query]
+        if node is not None:
+            # Key exists in cache, update the value
+            node.results = results
+            self.linked_list.move_to_front(node)
+        else:
+            # Key does not exist in cache
+            if self.size == self.MAX_SIZE:
+                # Remove the oldest entry from the linked list and lookup
+                self.lookup.pop(self.linked_list.tail.query, None)
+                self.linked_list.remove_from_tail()
+            else:
+                self.size += 1
+            # Add the new key and value
+            new_node = Node(query, results)
+            self.linked_list.append_to_front(new_node)
+            self.lookup[query] = new_node
+
     
+        def mapper(self, _, line):
+        '''Parse each log line, extract and transform relevant lines.
+    
+        if address_family == socket.AF_INET:
+        if len(packed_ip) != ctypes.sizeof(addr.ipv4_addr):
+            raise socket.error('packed IP wrong length for inet_ntoa')
+        ctypes.memmove(addr.ipv4_addr, packed_ip, 4)
+    elif address_family == socket.AF_INET6:
+        if len(packed_ip) != ctypes.sizeof(addr.ipv6_addr):
+            raise socket.error('packed IP wrong length for inet_ntoa')
+        ctypes.memmove(addr.ipv6_addr, packed_ip, 16)
+    else:
+        raise socket.error('unknown address family')
+    
+    
+    def mismatchIsMissingToken(self, input, follow):
+        if follow is None:
+            # we have no information about the follow; we can only consume
+            # a single token and hope for the best
+            return False
+        
+        # compute what can follow this grammar element reference
+        if EOR_TOKEN_TYPE in follow:
+            if len(self._state.following) > 0:
+                # remove EOR if we're not the start symbol
+                follow = follow - set([EOR_TOKEN_TYPE])
+    
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licensc]
+    
+    
+class Active(Inservice):
+    
+        def test_sequential_execution(self):
+        self.command_stack[0].execute()
+        output_after_first_execution = os.listdir(self.test_dir)
+        self.assertEqual(output_after_first_execution[0], 'bar.txt')
+        self.command_stack[1].execute()
+        output_after_second_execution = os.listdir(self.test_dir)
+        self.assertEqual(output_after_second_execution[0], 'baz.txt')
+    
+        def test_bunch_launch(self):
+        self.runner.runAll()
+        output = self.out.getvalue().strip()
+        self.assertEqual(output, str(self.average_result_tc1 + '\n\n' +
+                         self.average_result_tc2 + '\n\n' +
+                         self.average_result_tc3))
+
+    
+        def test_display_current_time_at_midnight(self):
+        '''
+        Will almost always fail (despite of right at/after midnight).
+        '''
+        time_provider_stub = MidnightTimeProvider()
+        class_under_test = TimeDisplay(time_provider_stub)
+        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
+    
+        def test_display_current_time_at_midnight(self):
+        '''
+        Would almost always fail (despite of right at/after midnight) if
+        untestable production code would have been used.
+        '''
+        time_provider_stub = MidnightTimeProvider()
+        class_under_test = TimeDisplay()
+        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
+        self.assertEqual(class_under_test.get_current_time_as_html_fragment(time_provider_stub), expected_time)
+    
+        _instance_method_choices = {'param_value_1': _instance_method_1,
+                                'param_value_2': _instance_method_2}
+    
+        def rename(self, src, dest):
+        print(u'renaming %s to %s' % (src, dest))
+        os.rename(src, dest)
+    
+        @Transactional
+    def do_stuff(self):
+        self.value = '1111'  # <- invalid value
+        self.increment()  # <- will fail and rollback
+    
+    ### OUTPUT ###
+# Setting Data 1 = 10
+# DecimalViewer: Subject Data 1 has data 10
+# HexViewer: Subject Data 1 has data 0xa
+# Setting Data 2 = 15
+# HexViewer: Subject Data 2 has data 0xf
+# DecimalViewer: Subject Data 2 has data 15
+# Setting Data 1 = 3
+# DecimalViewer: Subject Data 1 has data 3
+# HexViewer: Subject Data 1 has data 0x3
+# Setting Data 2 = 5
+# HexViewer: Subject Data 2 has data 0x5
+# DecimalViewer: Subject Data 2 has data 5
+# Detach HexViewer from data1 and data2.
+# Setting Data 1 = 10
+# DecimalViewer: Subject Data 1 has data 10
+# Setting Data 2 = 15
+# DecimalViewer: Subject Data 2 has data 15
