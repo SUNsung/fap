@@ -1,230 +1,158 @@
 
         
-        bool NwCurrentWindowInternalReloadIgnoringCacheFunction::RunAsync() {
-  content::WebContents* web_contents = GetSenderWebContents();
-  web_contents->GetController().Reload(content::ReloadType::BYPASSING_CACHE, false);
-  SendResponse(true);
-  return true;
-}
-    
-    Base::Base(int id,
-           const base::WeakPtr<ObjectManager>& object_manager,
-           const base::DictionaryValue& option,
-	   const std::string& extension_id)
-    : extension_id_(extension_id),
-      id_(id),
-      delay_destruction_(false),
-      pending_destruction_(false),
-      object_manager_(object_manager) {
-}
-    
-    // Call method of an object in browser.
-// function CallObjectMethod(id, type, method, args);
-v8::Handle<v8::Value> CallObjectMethod(int routing_id,
-                                       int object_id,
-                                       const std::string& type,
-                                       const std::string& method,
-                                       v8::Handle<v8::Value> args);
-    
-    
-    {} // namespace nwapi
-
-    
-    namespace nw {
+        class GlobalShortcut : public extensions::GlobalShortcutListener::Observer,
+                       public mate::TrackableObject<GlobalShortcut> {
+ public:
+  static mate::Handle<GlobalShortcut> Create(v8::Isolate* isolate);
     }
     
-     protected:
-  ~NwAppGetArgvSyncFunction() override;
+      // views::NonClientFrameView:
+  gfx::Rect GetWindowBoundsForClientBounds(
+      const gfx::Rect& client_bounds) const override;
+  int NonClientHitTest(const gfx::Point& point) override;
     
     
-    {
-} // namespace extensions
-#endif
-
-    
-            // TODO: encapsulate it into a destructor? Note: Cannot throw exceptions in destructor.
-        void DoneWithCurrentSubMinibatch(size_t iSubminibatch)
-        {
-            // accumulate gradient here
-            for (auto x : m_cachedGradient)
-            {
-                wstring nodename = x.first;
-                if (m_LearnableNodePtr.find(nodename) == m_LearnableNodePtr.end())
-                {
-                    RuntimeError('ERROR: in DoneWithCurrentSubMinibatch: node %ls not found in LeanrableNode', nodename.c_str());
-                }
-                shared_ptr<ComputationNode<ElemType>> pNode = m_LearnableNodePtr[nodename];
-                m_cachedGradient.GetInputMatrix<ElemType>(nodename) += pNode->Gradient();
-                pNode->Gradient().SetValue(0);
-            }
-            // accumulate criterion value
-            if (!m_netCriterionNodes.empty())
-            {
-                Matrix<ElemType>::AddElementToElement(m_netCriterionNodes[0]->Value(), 0, 0,
-                                                      *m_netCriterionAccumulator, 0, 0);
-                m_netCriterionNodes[0]->Value().SetValue(0);
-            }
-            // accumulate evaluation value
-            for (size_t i = 0; i < m_netEvaluationNodes.size(); i++)
-            {
-                Matrix<ElemType>::AddElementToElement(m_netEvaluationNodes[i]->Value(), 0, 0,
-                                                      *m_netEvaluationAccumulator, 0, i);
-                m_netEvaluationNodes[i]->Value().SetValue(0);
-            }
-    }
-    
-    struct GradientUpdateInfo
-{
-    GradientsUpdateType type = GradientsUpdateType::AdaGrad;
-    float gaussianNoiseInjectStd = 0.0075f;
-    }
-    
-    void GranularGPUDataTransferer::RecordGPUToCPUCopy()
-{
-    cudaEventRecord(m_fetchCompleteEvent, GetFetchStream()) || 'cudaEventRecord failed';
-}
-    
-            // Sync during or after all iters of a BN node are equivalent
-        if (useParallelTrain)
-        {
-            if (m_gradHeader == nullptr)
-            {
-                m_gradHeader.reset(DistGradHeader::Create(evalNodes.size()), [](DistGradHeader* ptr)
-                {
-                    DistGradHeader::Destroy(ptr);
-                });
-            }
-    }
-    
-    // -----------------------------------------------------------------------
-// functions exposed by this module
-// -----------------------------------------------------------------------
-    
-    // TrimQuotes - trim surrounding quotation marks
-// str - string to trim
-void TrimQuotes(std::string& str)
-{
-    if (str.empty())
-        return;
-    if (str.front() == ''' && str.back() == ''')
-        str = str.substr(1, str.size() - 2);
-}
-    
-    /*static*/ class ProgressTracing
-{
-    bool m_enabled;
-    bool m_tracingFlag;
-    bool m_timestampFlag;        // TODO: What does this do? TODO: camelCase
-    size_t m_totalNumberOfSteps; // total number of epochs in entire training run
-    size_t m_currentStepOffset;  // current offset
-    Timer m_progressTracingTimer;
-    }
-    
-    #if 0
-    // save a float4 to RAM bypassing the cache ('without polluting the cache')
-    void storewithoutcache (float4 * p4) const
-    {
-        // _mm_stream_ps ((float*) p4, v);
-        *p4 = v;
-    }
-    
-      /// Construct an acceptor without opening it.
-  /**
-   * This constructor creates an acceptor without opening it to listen for new
-   * connections. The open() function must be called before the acceptor can
-   * accept new socket connections.
-   *
-   * @param io_service The io_service object that the acceptor will use to
-   * dispatch handlers for any asynchronous operations performed on the
-   * acceptor.
-   */
-  explicit basic_socket_acceptor(boost::asio::io_service& io_service)
-    : basic_io_object<SocketAcceptorService>(io_service)
-  {
-  }
-    
-    namespace boost {
-namespace asio {
-    }
-    }
-    
-      std::size_t check_for_completion(
-      const boost::system::error_code& ec,
-      std::size_t total_transferred)
-  {
-    return detail::adapt_completion_condition_result(
-        completion_condition_(ec, total_transferred));
-  }
-    
-      // Obtain the value at the top of the stack.
-  static Value* top()
-  {
-    context* elem = top_;
-    return elem ? elem->value_ : 0;
-  }
-    
-    } // namespace date_time
-namespace posix_time {
-    
-    #ifndef BOOST_ASIO_DETAIL_DESCRIPTOR_WRITE_OP_HPP
-#define BOOST_ASIO_DETAIL_DESCRIPTOR_WRITE_OP_HPP
-    
-    #endif // BOOST_ASIO_DETAIL_FUNCTION_HPP
-
-    
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-      bool ContainsWord(const Word &W) const {
-    return std::any_of(begin(), end(), [&](const DictionaryEntry &DE) {
-      return DE.GetW() == W;
-    });
-  }
-  const DictionaryEntry *begin() const { return &DE[0]; }
-  const DictionaryEntry *end() const { return begin() + Size; }
-  DictionaryEntry & operator[] (size_t Idx) {
-    assert(Idx < Size);
-    return DE[Idx];
-  }
-  void push_back(DictionaryEntry DE) {
-    if (Size < kMaxDictSize)
-      this->DE[Size++] = DE;
-  }
-  void clear() { Size = 0; }
-  bool empty() const { return Size == 0; }
-  size_t size() const { return Size; }
-    
-    char GetSeparator() {
-  return '/';
-}
-    
-      if ((Res = ParseDrive(FileName, Pos)))
-    return Pos + Res;
-    
-    
-    {    size_t BlockCoverage;
-    size_t CallerCalleeCoverage;
-    // Precalculated number of bits in CounterBitmap.
-    size_t CounterBitmapBits;
-    std::vector<uint8_t> CounterBitmap;
-    ValueBitMap VPMap;
-  };
-    
-    
-    {  bool Parse(std::istream &IS, bool ParseCoverage);
-  bool Parse(const std::string &Str, bool ParseCoverage);
-  void ParseOrExit(std::istream &IS, bool ParseCoverage);
-  size_t Merge(std::vector<std::string> *NewFiles);
+    {  DISALLOW_COPY_AND_ASSIGN(PreferencesManager);
 };
     
-    // The rest is added for LibFuzzer
-void ComputeSHA1(const uint8_t *Data, size_t Len, uint8_t *Out) {
-  sha1nfo s;
-  sha1_init(&s);
-  sha1_write(&s, (const char*)Data, Len);
-  memcpy(Out, sha1_result(&s), HASH_LENGTH);
+    
+    {  if (s.ok() && meta->file_size > 0) {
+    // Keep it
+  } else {
+    env->DeleteFile(fname);
+  }
+  return s;
+}
+    
+    // Soft limit on number of level-0 files.  We slow down writes at this point.
+static const int kL0_SlowdownWritesTrigger = 8;
+    
+    namespace {
+    }
+    
+    // Return the name of the log file with the specified number
+// in the db named by 'dbname'.  The result will be prefixed with
+// 'dbname'.
+extern std::string LogFileName(const std::string& dbname, uint64_t number);
+    
+    
+    {  for (size_t i = 0; i < new_files_.size(); i++) {
+    const FileMetaData& f = new_files_[i].second;
+    PutVarint32(dst, kNewFile);
+    PutVarint32(dst, new_files_[i].first);  // level
+    PutVarint64(dst, f.number);
+    PutVarint64(dst, f.file_size);
+    PutLengthPrefixedSlice(dst, f.smallest.Encode());
+    PutLengthPrefixedSlice(dst, f.largest.Encode());
+  }
+}
+    
+    #ifndef STORAGE_LEVELDB_DB_VERSION_EDIT_H_
+#define STORAGE_LEVELDB_DB_VERSION_EDIT_H_
+    
+    namespace leveldb {
+    }
+    
+    // Dump the contents of the file named by fname in text format to
+// *dst.  Makes a sequence of dst->Append() calls; each call is passed
+// the newline-terminated text corresponding to a single item found
+// in the file.
+//
+// Returns a non-OK result if fname does not name a leveldb storage
+// file, or if the file cannot be read.
+Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
+    
+    bool StreamPeerSSL::is_available() {
+	return available;
+}
+    
+    
+    {	return CONNECTION_CONNECTING;
+}
+    
+    #if defined(MBEDTLS_X509_CRT_PARSE_C) && ( !defined(MBEDTLS_X509_USE_C) )
+#error 'MBEDTLS_X509_CRT_PARSE_C defined, but not all prerequisites'
+#endif
+    
+    public:
+	struct PropertySetGet {
+    }
+    
+    	Transform m_worldTransform;
+	Transform local_xform;
+	bool engine_traction;
+	bool steers;
+    
+    	GodotKinClosestConvexResultCallback(const btVector3 &convexFromWorld, const btVector3 &convexToWorld, const RigidBodyBullet *p_self_object, bool p_infinite_inertia) :
+			btCollisionWorld::ClosestConvexResultCallback(convexFromWorld, convexToWorld),
+			m_self_object(p_self_object),
+			m_infinite_inertia(p_infinite_inertia) {}
+    
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+    
+                if (k < prev_num_set)
+            {
+              int n = JPGD_MIN(r, prev_num_set - k);
+              int kt = k;
+              while (n--)
+                p[g_ZAG[kt++]] = 0;
+            }
+    
+    
+    {    // Make sure this ThreadEntry is available if ThreadLocal A is accessed in
+    // ThreadLocal B destructor.
+    pthread_setspecific(meta.pthreadKey_, threadEntry);
+    SharedMutex::ReadHolder rlock(nullptr);
+    if (meta.strict_) {
+      rlock = SharedMutex::ReadHolder(meta.accessAllThreadsLock_);
+    }
+    {
+      std::lock_guard<std::mutex> g(meta.lock_);
+      meta.erase(&(*threadEntry));
+      // No need to hold the lock any longer; the ThreadEntry is private to this
+      // thread now that it's been removed from meta.
+    }
+    // NOTE: User-provided deleter / object dtor itself may be using ThreadLocal
+    // with the same Tag, so dispose() calls below may (re)create some of the
+    // elements or even increase elementsCapacity, thus multiple cleanup rounds
+    // may be required.
+    for (bool shouldRun = true; shouldRun;) {
+      shouldRun = false;
+      FOR_EACH_RANGE (i, 0, threadEntry->elementsCapacity) {
+        if (threadEntry->elements[i].dispose(TLPDestructionMode::THIS_THREAD)) {
+          shouldRun = true;
+        }
+      }
+    }
+    pthread_setspecific(meta.pthreadKey_, nullptr);
+  }
+    
+    template <typename K, typename M, typename H, typename E, typename A>
+void swap(
+    F14NodeMap<K, M, H, E, A>& lhs,
+    F14NodeMap<K, M, H, E, A>& rhs) noexcept(noexcept(lhs.swap(rhs))) {
+  lhs.swap(rhs);
+}
+    
+      explicit F14BasicSet(
+      std::size_t initialCapacity,
+      hasher const& hash = hasher{},
+      key_equal const& eq = key_equal{},
+      allocator_type const& alloc = allocator_type{})
+      : table_{initialCapacity, hash, eq, alloc} {}
+    
+    #include <folly/ExceptionString.h>
+    
+      static KeepAlive<SerialExecutor> create(
+      KeepAlive<Executor> parent = getKeepAliveToken(getCPUExecutor().get()));
+    
+    FOLLY_ALWAYS_INLINE int __builtin_popcountll(unsigned long long x) {
+  return int(__popcnt64(x));
 }
