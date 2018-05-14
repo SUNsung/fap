@@ -1,372 +1,268 @@
 
         
-        
-    { private:
-  DISALLOW_COPY_AND_ASSIGN(EventDisabler);
+        #include 'atom/browser/ui/views/frameless_view.h'
+    
+    UnresponsiveSuppressor::~UnresponsiveSuppressor() {
+  g_suppress_level--;
+}
+    
+    #ifndef ATOM_COMMON_DRAGGABLE_REGION_H_
+#define ATOM_COMMON_DRAGGABLE_REGION_H_
+    
+      // The session service has been saved.  This notification type is only sent
+  // if there were new SessionService commands to save, and not for no-op save
+  // operations.
+  NOTIFICATION_SESSION_SERVICE_SAVED,
+    
+    #include 'base/time/time.h'
+    
+    
+    {}  // namespace printing
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(ChromeBrowserPepperHostFactory);
 };
     
-      std::unique_ptr<base::ListValue> preferences_;
+      /// Return true if the object has a member named key.
+  /// \note 'key' must be null-terminated.
+  bool isMember(const char* key) const;
+  /// Return true if the object has a member named key.
+  /// \param key may contain embedded nulls.
+  bool isMember(const std::string& key) const;
+  /// Same as isMember(std::string const& key)const
+  bool isMember(const char* begin, const char* end) const;
+#ifdef JSON_USE_CPPTL
+  /// Return true if the object has a member named key.
+  bool isMember(const CppTL::ConstString& key) const;
+#endif
     
-    
-    {}  // namespace chrome
-    
-    #include <map>
-    
-    
-    {}  // namespace chrome
-    
-    void TtsPlatformImpl::clear_error() {
-  error_ = std::string();
-}
-    
-    void THDTensor_(_resize5d)(THDTensor *tensor, int64_t size0, int64_t size1, int64_t size2, int64_t size3, int64_t size4) {
-  int64_t sizes[] = {size0, size1, size2, size3, size4};
-  THDTensor_(_resize)(tensor, 2, sizes, nullptr);
-}
-    
-    auto ${Storage}::fast_get(std::size_t ind) -> Scalar {
-  if(${isCUDA})
-    throw std::runtime_error('unsupported operation 'fast_get'');
-  return static_cast<${ScalarType}>(${to_at_type}(storage->data[ind]));
-}
-    
-    namespace at {
-    }
-    
-    
-  // NOTE: this function needs to be thread safe
-  std::shared_ptr<context_type> createContext(
-    const DataChannelGloo::Group& group,
-    const std::string& prefix
-  ) {
-    /**
-     * We currently only supports a single Infiniband interface. In other words,
-     * if there are multiple Infiniband devices in the system, Gloo will detect
-     * all of them and use the first device.
-     *
-     * TODO: This can be extended later to utilize multiple Infiniband devices
-     *
-     * For ethernet, _deviceList[0] will always have the default ethernet
-     * device that is detected from the user's provided IP address and there
-     * won't be multiple one device in _deviceList
-     *
-     * For Infiniband, _deviceList[0], which is the first found IB interfance,
-     * will be used by all Gloo operations.
-     */
-    size_t curDevice = 0;
-    auto context = std::make_shared<context_type>(
-        group.mustGetGroupRank(_rank), group.size());
-    prefix_store_type prefix_store(prefix, *group._store);
-    context->connectFullMesh(prefix_store, _deviceList[curDevice]);
-    return context;
+    // Find the file which defines an extension extending the given message type
+// with the given field number.
+// Python DescriptorDatabases are not required to implement this method.
+bool PyDescriptorDatabase::FindFileContainingExtension(
+    const string& containing_type, int field_number,
+    FileDescriptorProto* output) {
+  ScopedPyObjectPtr py_method(
+      PyObject_GetAttrString(py_database_, 'FindFileContainingExtension'));
+  if (py_method == NULL) {
+    // This method is not implemented, returns without error.
+    PyErr_Clear();
+    return false;
   }
-    
-    #define THCPStorage TH_CONCAT_3(THCP,Real,Storage)
-#define THCPStorageStr TH_CONCAT_STRING_3(torch.cuda.,Real,Storage)
-#define THCPStorageClass TH_CONCAT_3(THCP,Real,StorageClass)
-#define THCPStorage_(NAME) TH_CONCAT_4(THCP,Real,Storage_,NAME)
-    
-    #undef THStorage
-#undef THStorage_
-#undef THTensor
-#undef THTensor_
-    
-      /// Get an option from the acceptor.
-  /**
-   * This function is used to get the current value of an option on the
-   * acceptor.
-   *
-   * @param option The option value to be obtained from the acceptor.
-   *
-   * @param ec Set to indicate what error occurred, if any.
-   *
-   * @sa GettableSocketOption @n
-   * boost::asio::socket_base::reuse_address
-   *
-   * @par Example
-   * Getting the value of the SOL_SOCKET/SO_REUSEADDR option:
-   * @code
-   * boost::asio::ip::tcp::acceptor acceptor(io_service);
-   * ...
-   * boost::asio::ip::tcp::acceptor::reuse_address option;
-   * boost::system::error_code ec;
-   * acceptor.get_option(option, ec);
-   * if (ec)
-   * {
-   *   // An error occurred.
-   * }
-   * bool is_set = option.get();
-   * @endcode
-   */
-  template <typename GettableSocketOption>
-  boost::system::error_code get_option(GettableSocketOption& option,
-      boost::system::error_code& ec)
-  {
-    return this->get_service().get_option(
-        this->get_implementation(), option, ec);
-  }
-    
-    /// Provides waitable timer functionality.
-/**
- * The basic_waitable_timer class template provides the ability to perform a
- * blocking or asynchronous wait for a timer to expire.
- *
- * A waitable timer is always in one of two states: 'expired' or 'not expired'.
- * If the wait() or async_wait() function is called on an expired timer, the
- * wait operation will complete immediately.
- *
- * Most applications will use one of the boost::asio::steady_timer,
- * boost::asio::system_timer or boost::asio::high_resolution_timer typedefs.
- *
- * @note This waitable timer functionality is for use with the C++11 standard
- * library's @c &lt;chrono&gt; facility, or with the Boost.Chrono library.
- *
- * @par Thread Safety
- * @e Distinct @e objects: Safe.@n
- * @e Shared @e objects: Unsafe.
- *
- * @par Examples
- * Performing a blocking wait (C++11):
- * @code
- * // Construct a timer without setting an expiry time.
- * boost::asio::steady_timer timer(io_service);
- *
- * // Set an expiry time relative to now.
- * timer.expires_from_now(std::chrono::seconds(5));
- *
- * // Wait for the timer to expire.
- * timer.wait();
- * @endcode
- *
- * @par 
- * Performing an asynchronous wait (C++11):
- * @code
- * void handler(const boost::system::error_code& error)
- * {
- *   if (!error)
- *   {
- *     // Timer expired.
- *   }
- * }
- *
- * ...
- *
- * // Construct a timer with an absolute expiry time.
- * boost::asio::steady_timer timer(io_service,
- *     std::chrono::steady_clock::now() + std::chrono::seconds(60));
- *
- * // Start an asynchronous wait.
- * timer.async_wait(handler);
- * @endcode
- *
- * @par Changing an active waitable timer's expiry time
- *
- * Changing the expiry time of a timer while there are pending asynchronous
- * waits causes those wait operations to be cancelled. To ensure that the action
- * associated with the timer is performed only once, use something like this:
- * used:
- *
- * @code
- * void on_some_event()
- * {
- *   if (my_timer.expires_from_now(seconds(5)) > 0)
- *   {
- *     // We managed to cancel the timer. Start new asynchronous wait.
- *     my_timer.async_wait(on_timeout);
- *   }
- *   else
- *   {
- *     // Too late, timer has already expired!
- *   }
- * }
- *
- * void on_timeout(const boost::system::error_code& e)
- * {
- *   if (e != boost::asio::error::operation_aborted)
- *   {
- *     // Timer was not cancelled, take necessary action.
- *   }
- * }
- * @endcode
- *
- * @li The boost::asio::basic_waitable_timer::expires_from_now() function
- * cancels any pending asynchronous waits, and returns the number of
- * asynchronous waits that were cancelled. If it returns 0 then you were too
- * late and the wait handler has already been executed, or will soon be
- * executed. If it returns 1 then the wait handler was successfully cancelled.
- *
- * @li If a wait handler is cancelled, the boost::system::error_code passed to
- * it contains the value boost::asio::error::operation_aborted.
- */
-template <typename Clock,
-    typename WaitTraits = boost::asio::wait_traits<Clock>,
-    typename WaitableTimerService = waitable_timer_service<Clock, WaitTraits> >
-class basic_waitable_timer
-  : public basic_io_object<WaitableTimerService>
-{
-public:
-  /// The clock type.
-  typedef Clock clock_type;
-    }
-    
-    #ifndef BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
-#define BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    #include <boost/asio/detail/config.hpp>
-    
-    #include <boost/asio/detail/push_options.hpp>
-    
-        // Find the next context with the same key.
-    Value* next_by_key() const
-    {
-      context* elem = next_;
-      while (elem)
-      {
-        if (elem->key_ == key_)
-          return elem->value_;
-        elem = elem->next_;
-      }
-      return 0;
-    }
-    
-    namespace boost {
-namespace date_time {
-    }
-    }
-    
-    template <typename MutableBufferSequence>
-class descriptor_read_op_base : public reactor_op
-{
-public:
-  descriptor_read_op_base(int descriptor,
-      const MutableBufferSequence& buffers, func_type complete_func)
-    : reactor_op(&descriptor_read_op_base::do_perform, complete_func),
-      descriptor_(descriptor),
-      buffers_(buffers)
-  {
-  }
-    }
-    
-    #ifndef BOOST_ASIO_DETAIL_EVENT_HPP
-#define BOOST_ASIO_DETAIL_EVENT_HPP
-    
-    #include <boost/asio/detail/push_options.hpp>
-    
-    void dev_poll_reactor::run(bool block, op_queue<operation>& ops)
-{
-  boost::asio::detail::mutex::scoped_lock lock(mutex_);
-    }
-    
-      typedef std::set< std::pair<int, uint64_t> > DeletedFileSet;
-    
-    static void TestEncodeDecode(const VersionEdit& edit) {
-  std::string encoded, encoded2;
-  edit.EncodeTo(&encoded);
-  VersionEdit parsed;
-  Status s = parsed.DecodeFrom(encoded);
-  ASSERT_TRUE(s.ok()) << s.ToString();
-  parsed.EncodeTo(&encoded2);
-  ASSERT_EQ(encoded, encoded2);
+  ScopedPyObjectPtr py_descriptor(
+      PyObject_CallFunction(py_method.get(), 's#i', containing_type.c_str(),
+                            containing_type.size(), field_number));
+  return GetFileDescriptorProto(py_descriptor.get(), output);
 }
     
-      WritableFile* writable_file;
-  ASSERT_OK(env_->NewWritableFile('/dir/f', &writable_file));
-  ASSERT_OK(writable_file->Append('foo'));
-  ASSERT_OK(writable_file->Append(write_data));
-  delete writable_file;
+      // Find the file which defines an extension extending the given message type
+  // with the given field number.
+  // Containing_type must be a fully-qualified type name.
+  // Python objects are not required to implement this method.
+  bool FindFileContainingExtension(const string& containing_type,
+                                   int field_number,
+                                   FileDescriptorProto* output);
     
-    std::string Key2(int i) {
-  return Key1(i) + '_xxx';
-}
     
-      // Check third filter (empty)
-  ASSERT_TRUE(! reader.KeyMayMatch(4100, 'foo'));
-  ASSERT_TRUE(! reader.KeyMayMatch(4100, 'bar'));
-  ASSERT_TRUE(! reader.KeyMayMatch(4100, 'box'));
-  ASSERT_TRUE(! reader.KeyMayMatch(4100, 'hello'));
     
-    std::string Histogram::ToString() const {
-  std::string r;
-  char buf[200];
-  snprintf(buf, sizeof(buf),
-           'Count: %.0f  Average: %.4f  StdDev: %.2f\n',
-           num_, Average(), StandardDeviation());
-  r.append(buf);
-  snprintf(buf, sizeof(buf),
-           'Min: %.4f  Median: %.4f  Max: %.4f\n',
-           (num_ == 0.0 ? 0.0 : min_), Median(), max_);
-  r.append(buf);
-  r.append('------------------------------------------------------\n');
-  const double mult = 100.0 / num_;
-  double sum = 0;
-  for (int b = 0; b < kNumBuckets; b++) {
-    if (buckets_[b] <= 0.0) continue;
-    sum += buckets_[b];
-    snprintf(buf, sizeof(buf),
-             '[ %7.0f, %7.0f ) %7.0f %7.3f%% %7.3f%% ',
-             ((b == 0) ? 0.0 : kBucketLimit[b-1]),      // left
-             kBucketLimit[b],                           // right
-             buckets_[b],                               // count
-             mult * buckets_[b],                        // percentage
-             mult * sum);                               // cumulative percentage
-    r.append(buf);
-    }
+    
+    {  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ReflectionClassGenerator);
+};
+    
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_PRIMITIVE_FIELD_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_REPEATED_PRIMITIVE_FIELD_H__
+    
+    // Generates code for a lite extension, which may be within the scope of some
+// message or may be at file scope.  This is much simpler than FieldGenerator
+// since extensions are just simple identifiers with interesting types.
+class ImmutableExtensionLiteGenerator : public ExtensionGenerator {
+ public:
+  explicit ImmutableExtensionLiteGenerator(const FieldDescriptor* descriptor,
+                                           Context* context);
+  virtual ~ImmutableExtensionLiteGenerator();
     }
     
-      std::string ToString() const;
+    // CodeGenerator implementation which generates Java code.  If you create your
+// own protocol compiler binary and you want it to support Java output, you
+// can do so by registering an instance of this CodeGenerator with the
+// CommandLineInterface in your main() function.
+class LIBPROTOC_EXPORT JavaGenerator : public CodeGenerator {
+ public:
+  JavaGenerator();
+  ~JavaGenerator();
+    }
     
-    bool js_cocos2dx_physics3d_Physics3DComponent_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DComponent_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DComponent(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DComponent_syncNodeToPhysics(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_addToPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_syncPhysicsToNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_getPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_setPhysics3DObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_setTransformInPhysics(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_getPhysics3DComponentName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DComponent_Physics3DComponent(JSContext *cx, uint32_t argc, jsval *vp);
+      // Set up security params
+  SecurityParams security;
+  security.set_use_test_ca(true);
+  security.set_server_host_override('foo.test.google.fr');
+  client_config.mutable_security_params()->CopyFrom(security);
+  server_config.mutable_security_params()->CopyFrom(security);
+    
+    #endif  // GRPC_INTERNAL_COMPILER_PYTHON_GENERATOR_H
+
+    
+      Result Mark() const;
+    
+    #include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+    
+                if (rv == 0)
+                rv = numCols;
+            else if (rv != numCols)
+                LogicError('DecimateMinibatch: Inconsistent number of columns among inputs (found %d and %d).', (int) rv, (int) numCols);
+    
+        // Parallel training related with ASGD 
+    intargvector m_nSyncSamplesPerWorker;
+    bool m_isAsyncBufferEnabled;
+    bool m_isSimulateMA;
+    AdjustLearningRateAtBeginning m_adjustLearningRateAtBeginning;
+    double m_adjustCoefficient;
+    size_t m_adjustPerMinibatches;
+    
+            const VERSION c_noVersion = INT64_MAX;
+    
+        const OpSignature& OperatorSchema::GetOpSignature() const
+    {
+        return m_opSignature;
+    }
+    
+            bool StringRange::EndsWith(const StringRange& p_str) const
+        {
+            return ((m_size >= p_str.m_size) &&
+                (memcmp(m_data + (m_size - p_str.m_size), p_str.m_data, p_str.m_size) == 0));
+        }
+    
+        // Taken from ONNX
+    REGISTER_OPERATOR_SCHEMA(BatchNormalization)
+        .Description('Carries out batch normalization as described in the paper'
+            'https://arxiv.org/abs/1502.03167. Depending on the mode it is being run,'
+            'there are multiple cases for the number of outputs, which we list below:'
+            ''
+            'Output case #1: Y, mean, var, saved_mean, saved_var (training mode)'
+            'Output case #2: Y (test mode)')
+        .Input('X',
+            'The input 4-dimensional tensor of shape NCHW or NHWC depending '
+            'on the order parameter.',
+            'T')
+        .Input('scale',
+            'The scale as a 1-dimensional tensor of size C to be applied to the '
+            'output.',
+            'T')
+        .Input('B',
+            'The bias as a 1-dimensional tensor of size C to be applied to the '
+            'output.',
+            'T')
+        .Input('mean',
+            'The running mean (training) or the estimated mean (testing) '
+            'as a 1-dimensional tensor of size C.',
+            'T')
+        .Input('var',
+            'The running variance (training) or the estimated '
+            'variance (testing) as a 1-dimensional tensor of size C.',
+            'T')
+        .Output('Y', 'The output 4-dimensional tensor of the same shape as X.',
+            'T')
+        .Output('mean',
+            'The running mean after the BatchNormalization operator. Must be in-place '
+            'with the input mean. Should not be used for testing.',
+            'T')
+        .Output('var',
+            'The running variance after the BatchNormalization operator. Must be '
+            'in-place with the input var. Should not be used for testing.',
+            'T')
+        .Output('saved_mean',
+            'Saved mean used during training to speed up gradient '
+            'computation. Should not be used for testing.',
+            'T')
+        .Output('saved_var',
+            'Saved variance used during training to speed up '
+            'gradient computation. Should not be used for testing.',
+            'T')
+        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
+            'Constrain input and output types to float tensors.')
+        .Attr('epsilon',
+            'The epsilon value to use to avoid division by zero.',
+            AttrType::AttributeProto_AttributeType_FLOAT)
+        .Attr('is_test',
+            'If set to nonzero, run spatial batch normalization in test mode.',
+            AttrType::AttributeProto_AttributeType_INT)
+        .Attr('momentum',
+            'Factor used in computing the running mean and variance.'
+            'e.g., running_mean = running_mean * momentum + mean * (1 - momentum)',
+            AttrType::AttributeProto_AttributeType_FLOAT)
+        .Attr('spatial',
+            'Compute the mean and variance across all spatial elements or per feature.',
+            AttrType::AttributeProto_AttributeType_INT);
+    
+    #define LONGTHREADID2INT(a) ((a >> 32)^((a & 0xFFFF)))
+DEFINE_FIND_CLASS(KXlog, 'com/tencent/mars/xlog/Xlog')
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    //
+//  comm_frequency_limit.h
+//  comm
+//
+//  Created by liucan on 13-11-23.
+//
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    #define DEFINE_HAS_MEMBER(member_name) \
+    template <typename T>\
+    class has_##member_name {\
+      private:\
+        struct yes_type { char x[1]; };\
+        struct no_type { char x[2]; };\
+        template <int> struct tester;\
+        template <typename U> static yes_type test(tester<sizeof(&U::member_name)>*);\
+        template <typename U> static no_type test(...);\
+      public:\
+        static const bool value = (sizeof(test<T>(0)) == sizeof(yes_type));\
+    };
+    
+        JNIEnv* GetEnv();
+    int Status();
     
     
+    {} // namespace aria2
     
-    // Implemented features:
-//  [X] User texture binding. Use 'LPDIRECT3DTEXTURE9' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
+      std::unique_ptr<AuthConfig> getDefaultAuthConfig() const;
     
-            UINT uploadPitch = (width * 4 + D3D12_TEXTURE_DATA_PITCH_ALIGNMENT - 1u) & ~(D3D12_TEXTURE_DATA_PITCH_ALIGNMENT - 1u);
-        UINT uploadSize = height * uploadPitch;
-        desc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-        desc.Alignment = 0;
-        desc.Width = uploadSize;
-        desc.Height = 1;
-        desc.DepthOrArraySize = 1;
-        desc.MipLevels = 1;
-        desc.Format = DXGI_FORMAT_UNKNOWN;
-        desc.SampleDesc.Count = 1;
-        desc.SampleDesc.Quality = 0;
-        desc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-        desc.Flags = D3D12_RESOURCE_FLAG_NONE;
-    
-        ImGui_ImplGlfwGL3_CreateFontsTexture();
-    
-    void CreateRenderTarget()
+    AbstractBtMessage::AbstractBtMessage(uint8_t id, const char* name)
+    : BtMessage(id),
+      invalidate_(false),
+      uploading_(false),
+      cuid_(0),
+      name_(name),
+      pieceStorage_(nullptr),
+      dispatcher_(nullptr),
+      messageFactory_(nullptr),
+      requestFactory_(nullptr),
+      peerConnection_(nullptr),
+      metadataGetMode_(false)
 {
-    ID3D12Resource* pBackBuffer;
-    for (UINT i = 0; i < NUM_BACK_BUFFERS; i++)
-    {
-        g_pSwapChain->GetBuffer(i, IID_PPV_ARGS(&pBackBuffer));
-        g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, g_mainRenderTargetDescriptor[i]);
-        g_mainRenderTargetResource[i] = pBackBuffer;
-    }
 }
     
-        // Main loop
-    while (true)
-    {
-        if (s3eDeviceCheckQuitRequest())
-            break;
+    class AbstractHttpServerResponseCommand : public Command {
+private:
+  DownloadEngine* e_;
+  std::shared_ptr<SocketCore> socket_;
+  std::shared_ptr<HttpServer> httpServer_;
+  Timer timeoutTimer_;
+  bool readCheck_;
+  bool writeCheck_;
     }
+    
+    bool AbstractOptionHandler::getChangeGlobalOption() const
+{
+  return flags_ & FLAG_CHANGE_GLOBAL_OPTION;
+}
