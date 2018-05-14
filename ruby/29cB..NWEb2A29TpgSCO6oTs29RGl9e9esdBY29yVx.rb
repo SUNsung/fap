@@ -1,22 +1,19 @@
 
         
-          end
-    
-      def resource
-    @resource ||=
-      if params[:project_id].present?
-        Project.find(params[:project_id])
-      elsif params[:namespace_id].present?
-        Group.find(params[:namespace_id])
+              def handle_start_point_response(endpoint)
+        _status, header, response = endpoint.call(request.env)
+        if response.redirect?
+          redirect_to header['Location']
+        else
+          save_params_and_render_consent_form(endpoint)
+        end
       end
-  end
     
-          unless root?
-        raise Invalid, 'missing name' if !name || name.empty?
-        raise Invalid, 'missing path' if !path || path.empty?
-        raise Invalid, 'missing type' if !type || type.empty?
-      end
-    end
+      module Option
     
-          def additional_entries
-        entries = []
+      puts '\n== Removing old logs and tempfiles =='
+  system 'rm -f log/*'
+  system 'rm -rf tmp/cache'
+    
+      # Raise an error on page load if there are pending migrations.
+  config.active_record.migration_error = :page_load
