@@ -1,144 +1,196 @@
 
         
-        // Sent by the renderer when the draggable regions are updated.
-IPC_MESSAGE_ROUTED1(ShellViewHostMsg_UpdateDraggableRegions,
-                    std::vector<extensions::DraggableRegion> /* regions */)
-    
-    class Base {
- public:
-  Base(int id,
-       const base::WeakPtr<ObjectManager>& manager,
-       const base::DictionaryValue& option,
-       const std::string& extension_id);
-  virtual ~Base();
+        void dls::compute_eigenvec(const cv::Mat& Mtilde, cv::Mat& eigenval_real, cv::Mat& eigenval_imag,
+                                                  cv::Mat& eigenvec_real, cv::Mat& eigenvec_imag)
+{
+#ifdef HAVE_EIGEN
+    Eigen::MatrixXd Mtilde_eig, zeros_eig;
+    cv::cv2eigen(Mtilde, Mtilde_eig);
+    cv::cv2eigen(cv::Mat::zeros(27, 27, CV_64F), zeros_eig);
     }
     
-    #include 'content/nw/src/api/clipboard/clipboard.h'
+    #ifndef GL_VERSION_2_0
+    // GL type for program/shader text
+    typedef char GLchar;
+#endif
     
-    class Clipboard : public Base {
- public:
-  Clipboard(int id,
-            const base::WeakPtr<DispatcherHost>& dispatcher_host,
-            const base::DictionaryValue& option);
-  ~Clipboard() override;
-    }
-    
-    void DispatcherHost::OnCallStaticMethod(
-    const std::string& type,
-    const std::string& method,
-    const base::ListValue& arguments) {
-  DLOG(INFO) << 'OnCallStaticMethod: '
-             << ' type:' << type
-             << ' method:' << method
-             << ' arguments:' << arguments;
-    }
-    
-    class NwClipboardReadAvailableTypesFunction : public NWSyncExtensionFunction {
- public:
-  NwClipboardReadAvailableTypesFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    #include <set>
-    
-    #include <chrono>
-#include <thread>
-#include <vector>
-    
-    #include <utility>
-    
-    static void sigint_handler(int x) {
-  gpr_atm_no_barrier_store(&grpc::testing::interop::g_got_sigint, true);
-}
-    
-      // Create a QpsGauge with name 'name'. is_present is set to true if the Gauge
-  // is already present in the map.
-  // NOTE: CreateQpsGauge can be called anytime (i.e before or after calling
-  // StartServer).
-  std::shared_ptr<QpsGauge> CreateQpsGauge(const grpc::string& name,
-                                           bool* already_present);
-    
-    #ifndef GRPC_TEST_CPP_UTIL_SUBPROCESS_H
-#define GRPC_TEST_CPP_UTIL_SUBPROCESS_H
-    
-    
-    {
-    {} // namespace asio
-} // namespace boost
-    
-    
-    {private:
-  CompletionCondition completion_condition_;
+    /* [-255..255].^2 */
+const ushort g_8x16uSqrTab[] =
+{
+    65025, 64516, 64009, 63504, 63001, 62500, 62001, 61504, 61009, 60516, 60025, 59536,
+    59049, 58564, 58081, 57600, 57121, 56644, 56169, 55696, 55225, 54756, 54289, 53824,
+    53361, 52900, 52441, 51984, 51529, 51076, 50625, 50176, 49729, 49284, 48841, 48400,
+    47961, 47524, 47089, 46656, 46225, 45796, 45369, 44944, 44521, 44100, 43681, 43264,
+    42849, 42436, 42025, 41616, 41209, 40804, 40401, 40000, 39601, 39204, 38809, 38416,
+    38025, 37636, 37249, 36864, 36481, 36100, 35721, 35344, 34969, 34596, 34225, 33856,
+    33489, 33124, 32761, 32400, 32041, 31684, 31329, 30976, 30625, 30276, 29929, 29584,
+    29241, 28900, 28561, 28224, 27889, 27556, 27225, 26896, 26569, 26244, 25921, 25600,
+    25281, 24964, 24649, 24336, 24025, 23716, 23409, 23104, 22801, 22500, 22201, 21904,
+    21609, 21316, 21025, 20736, 20449, 20164, 19881, 19600, 19321, 19044, 18769, 18496,
+    18225, 17956, 17689, 17424, 17161, 16900, 16641, 16384, 16129, 15876, 15625, 15376,
+    15129, 14884, 14641, 14400, 14161, 13924, 13689, 13456, 13225, 12996, 12769, 12544,
+    12321, 12100, 11881, 11664, 11449, 11236, 11025, 10816, 10609, 10404, 10201, 10000,
+     9801,  9604,  9409,  9216,  9025,  8836,  8649,  8464,  8281,  8100,  7921,  7744,
+     7569,  7396,  7225,  7056,  6889,  6724,  6561,  6400,  6241,  6084,  5929,  5776,
+     5625,  5476,  5329,  5184,  5041,  4900,  4761,  4624,  4489,  4356,  4225,  4096,
+     3969,  3844,  3721,  3600,  3481,  3364,  3249,  3136,  3025,  2916,  2809,  2704,
+     2601,  2500,  2401,  2304,  2209,  2116,  2025,  1936,  1849,  1764,  1681,  1600,
+     1521,  1444,  1369,  1296,  1225,  1156,  1089,  1024,   961,   900,   841,   784,
+      729,   676,   625,   576,   529,   484,   441,   400,   361,   324,   289,   256,
+      225,   196,   169,   144,   121,   100,    81,    64,    49,    36,    25,    16,
+        9,     4,     1,     0,     1,     4,     9,    16,    25,    36,    49,    64,
+       81,   100,   121,   144,   169,   196,   225,   256,   289,   324,   361,   400,
+      441,   484,   529,   576,   625,   676,   729,   784,   841,   900,   961,  1024,
+     1089,  1156,  1225,  1296,  1369,  1444,  1521,  1600,  1681,  1764,  1849,  1936,
+     2025,  2116,  2209,  2304,  2401,  2500,  2601,  2704,  2809,  2916,  3025,  3136,
+     3249,  3364,  3481,  3600,  3721,  3844,  3969,  4096,  4225,  4356,  4489,  4624,
+     4761,  4900,  5041,  5184,  5329,  5476,  5625,  5776,  5929,  6084,  6241,  6400,
+     6561,  6724,  6889,  7056,  7225,  7396,  7569,  7744,  7921,  8100,  8281,  8464,
+     8649,  8836,  9025,  9216,  9409,  9604,  9801, 10000, 10201, 10404, 10609, 10816,
+    11025, 11236, 11449, 11664, 11881, 12100, 12321, 12544, 12769, 12996, 13225, 13456,
+    13689, 13924, 14161, 14400, 14641, 14884, 15129, 15376, 15625, 15876, 16129, 16384,
+    16641, 16900, 17161, 17424, 17689, 17956, 18225, 18496, 18769, 19044, 19321, 19600,
+    19881, 20164, 20449, 20736, 21025, 21316, 21609, 21904, 22201, 22500, 22801, 23104,
+    23409, 23716, 24025, 24336, 24649, 24964, 25281, 25600, 25921, 26244, 26569, 26896,
+    27225, 27556, 27889, 28224, 28561, 28900, 29241, 29584, 29929, 30276, 30625, 30976,
+    31329, 31684, 32041, 32400, 32761, 33124, 33489, 33856, 34225, 34596, 34969, 35344,
+    35721, 36100, 36481, 36864, 37249, 37636, 38025, 38416, 38809, 39204, 39601, 40000,
+    40401, 40804, 41209, 41616, 42025, 42436, 42849, 43264, 43681, 44100, 44521, 44944,
+    45369, 45796, 46225, 46656, 47089, 47524, 47961, 48400, 48841, 49284, 49729, 50176,
+    50625, 51076, 51529, 51984, 52441, 52900, 53361, 53824, 54289, 54756, 55225, 55696,
+    56169, 56644, 57121, 57600, 58081, 58564, 59049, 59536, 60025, 60516, 61009, 61504,
+    62001, 62500, 63001, 63504, 64009, 64516, 65025
 };
     
-    #endif // BOOST_ASIO_DETAIL_FUNCTION_HPP
-
+    Classifier::Classifier(const string& model_file,
+                       const string& trained_file,
+                       const string& mean_file,
+                       const string& label_file) {
+#ifdef CPU_ONLY
+  Caffe::set_mode(Caffe::CPU);
+#else
+  Caffe::set_mode(Caffe::GPU);
+#endif
+    }
     
-    #include <boost/asio/detail/push_options.hpp>
+    void convert_dataset(const char* image_filename, const char* label_filename,
+        const char* db_path, const string& db_backend) {
+  // Open files
+  std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
+  std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
+  CHECK(image_file) << 'Unable to open file ' << image_filename;
+  CHECK(label_file) << 'Unable to open file ' << label_filename;
+  // Read the magic and the meta data
+  uint32_t magic;
+  uint32_t num_items;
+  uint32_t num_labels;
+  uint32_t rows;
+  uint32_t cols;
+    }
     
-    int dev_poll_reactor::register_descriptor(socket_type, per_descriptor_data&)
-{
-  return 0;
+    void read_image(std::ifstream* image_file, std::ifstream* label_file,
+        uint32_t index, uint32_t rows, uint32_t cols,
+        char* pixels, char* label) {
+  image_file->seekg(index * rows * cols + 16);
+  image_file->read(pixels, rows * cols);
+  label_file->seekg(index + 8);
+  label_file->read(label, 1);
 }
     
-    size_t LogTest::initial_offset_record_sizes_[] =
-    {10000,  // Two sizable records in first block
-     10000,
-     2 * log::kBlockSize - 1000,  // Span three blocks
-     1,
-     13716,  // Consume all but two bytes of block 3.
-     log::kBlockSize - kHeaderSize, // Consume the entirety of block 4.
-    };
+    namespace caffe {
+    }
     
-    #include 'db/version_edit.h'
-#include 'util/testharness.h'
+      virtual inline const char* type() const { return 'BatchReindex'; }
+  virtual inline int ExactNumBottomBlobs() const { return 2; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
     
-      // Add an element that should not be reflected in the iterator.
-  ASSERT_OK(db->Put(write_options, '25', 'cd'));
-    
-    
-    {}  // namespace leveldb
-    
-    // A very simple random number generator.  Not especially good at
-// generating truly random bits, but good enough for our needs in this
-// package.
-class Random {
- private:
-  uint32_t seed_;
+    /**
+ * @brief Takes at least two Blob%s and concatenates them along either the num
+ *        or channel dimension, outputting the result.
+ */
+template <typename Dtype>
+class ConcatLayer : public Layer<Dtype> {
  public:
-  explicit Random(uint32_t s) : seed_(s & 0x7fffffffu) {
-    // Avoid bad seeds.
-    if (seed_ == 0 || seed_ == 2147483647L) {
-      seed_ = 1;
-    }
-  }
-  uint32_t Next() {
-    static const uint32_t M = 2147483647L;   // 2^31-1
-    static const uint64_t A = 16807;  // bits 14, 8, 7, 5, 2, 1, 0
-    // We are computing
-    //       seed_ = (seed_ * A) % M,    where M = 2^31-1
-    //
-    // seed_ must not be zero or M, or else all subsequent computed values
-    // will be zero or M respectively.  For all other values, seed_ will end
-    // up cycling through every number in [1,M-1]
-    uint64_t product = seed_ * A;
-    }
+  explicit ConcatLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
     
-    TEST(FormatTest, InternalKeyShortestSuccessor) {
-  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
-            ShortSuccessor(IKey('foo', 100, kTypeValue)));
-  ASSERT_EQ(IKey('\xff\xff', 100, kTypeValue),
-            ShortSuccessor(IKey('\xff\xff', 100, kTypeValue)));
-}
     
-        const size_t avail = kBlockSize - block_offset_ - kHeaderSize;
-    const size_t fragment_length = (left < avail) ? left : avail;
+    { protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual inline bool reverse_dimensions() { return false; }
+  virtual void compute_output_shape();
+};
     
-    class Writer {
- public:
-  // Create a writer that will append data to '*dest'.
-  // '*dest' must be initially empty.
-  // '*dest' must remain live while this Writer is in use.
-  explicit Writer(WritableFile* dest);
+      bool handles_setup_;
+  cudnnHandle_t             handle_;
+  cudnnLRNDescriptor_t norm_desc_;
+  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
+    
+     protected:
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    
+    { protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual inline bool reverse_dimensions() { return true; }
+  virtual void compute_output_shape();
+};
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    DEFINE_FIND_STATIC_METHOD(KXlog_appenderOpenWithMultipathWithLevel, KXlog, 'appenderOpen', '(IILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V')
+JNIEXPORT void JNICALL Java_com_tencent_mars_xlog_Xlog_appenderOpen
+	(JNIEnv *env, jclass, jint level, jint mode, jstring _cache_dir, jstring _log_dir, jstring _nameprefix, jstring _pubkey) {
+	if (NULL == _log_dir || NULL == _nameprefix) {
+		return;
+	}
     }
+    
+    #include 'wakeuplock.h'
+#include 'assert/__assert.h'
+#include 'xlogger/xlogger.h'
+    
+        _packlen = ntoh(*(T*)_rawbuf);
+    
+    
+    {  private:
+    size_t count_;
+    uint64_t time_span_;
+    std::list<uint64_t> touch_times_;
+};
+    
+      private:
+    SpyCore() {}
+    ~SpyCore() {}
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    #ifndef COMM_HAS_MEMBER_H_
+#define COMM_HAS_MEMBER_H_
