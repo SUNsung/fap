@@ -1,109 +1,75 @@
 
         
-        def fixture_site(overrides = {})
-  Jekyll::Site.new(site_configuration(overrides))
+          File.unlink(out) if (File.size(out) == 0)
+    
+    
+    
+    
+    
+            def self.options
+          [[
+            '--short', 'Only print the path relative to the cache root'
+          ]].concat(super)
+        end
+    
+    get '/' do
+  halt erb(:login) unless params[:user]
+  erb :chat, :locals => { :user => params[:user].gsub(/\W/, '') }
 end
     
-    options = {
-  sort: true,
-  limit: 30,
-  format: :text,
-}
-    
-      next if extensions.empty?
-  mimes[mime] = [] if mimes[mime].nil?
-  mimes[mime].concat extensions
-end
-    
-          new_theme_name = args.join('_')
-      theme = Jekyll::ThemeBuilder.new(new_theme_name, opts)
-      if theme.path.exist?
-        Jekyll.logger.abort_with 'Conflict:', '#{theme.path} already exists.'
-      end
-    
-          def render(*args)
-        measure_time do
-          measure_bytes do
-            @template.render(*args)
-          end
+          def escape(object)
+        case object
+        when Hash   then escape_hash(object)
+        when Array  then object.map { |o| escape(o) }
+        when String then escape_string(object)
+        when Tempfile then object
+        else nil
         end
       end
     
-            # Checks if the user confirmation happens before the token becomes invalid
-        # Examples:
-        #
-        #   # confirm_within = 3.days and confirmation_sent_at = 2.days.ago
-        #   confirmation_period_expired?  # returns false
-        #
-        #   # confirm_within = 3.days and confirmation_sent_at = 4.days.ago
-        #   confirmation_period_expired?  # returns true
-        #
-        #   # confirm_within = nil
-        #   confirmation_period_expired?  # will always return false
-        #
-        def confirmation_period_expired?
-          self.class.confirm_within && self.confirmation_sent_at && (Time.now.utc > self.confirmation_sent_at.utc + self.class.confirm_within)
-        end
-    
-        # The path used after resending confirmation instructions.
-    def after_resending_confirmation_instructions_path_for(resource_name)
-      is_navigational_format? ? new_session_path(resource_name) : '/'
-    end
-    
-        if successfully_sent?(resource)
-      respond_with({}, location: after_sending_unlock_instructions_path_for(resource))
-    else
-      respond_with(resource)
+          get '/', {}, 'HTTP_COOKIE' => '_session=EVIL_SESSION_TOKEN; _session=SESSION_TOKEN'
+      expect(last_response).not_to be_ok
     end
   end
+end
+
     
-          # Remembers the given resource by setting up a cookie
-      def remember_me(resource)
-        return if request.env['devise.skip_storage']
-        scope = Devise::Mapping.find_scope!(resource)
-        resource.remember_me!
-        cookies.signed[remember_key(resource, scope)] = remember_cookie_values(resource)
+        it 'copes with nested arrays' do
+      mock_app do |env|
+        request = Rack::Request.new(env)
+        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']['bar']]]
       end
-    
-          def self.generate_helpers!(routes=nil)
-        routes ||= begin
-          mappings = Devise.mappings.values.map(&:used_helpers).flatten.uniq
-          Devise::URL_HELPERS.slice(*mappings)
-        end
-    
-          attr_reader :scope_name, :resource
-    
-        def define_class_getter
-      @klass.extend(ClassMethods)
+      get '/', :foo => {:bar => '<bar>'}
+      expect(body).to eq('&lt;bar&gt;')
     end
     
-            def accepted_types_and_failures
-          if @allowed_types.present?
-            'Accept content types: #{@allowed_types.join(', ')}\n'.tap do |message|
-              if @missing_allowed_types.present?
-                message << '  #{@missing_allowed_types.join(', ')} were rejected.'
-              else
-                message << '  All were accepted successfully.'
-              end
-            end
-          end
-        end
-        def rejected_types_and_failures
-          if @rejected_types.present?
-            'Reject content types: #{@rejected_types.join(', ')}\n'.tap do |message|
-              if @missing_rejected_types.present?
-                message << '  #{@missing_rejected_types.join(', ')} were accepted.'
-              else
-                message << '  All were rejected successfully.'
-              end
-            end
-          end
+        expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('DENY')
+  end
+    
+    
+  it 'should set the X-Content-Type-Options for other content types' do
+    expect(get('/', {}, 'wants' => 'application/foo').header['X-Content-Type-Options']).to eq('nosniff')
+  end
+    
+      it 'should not interfere with normal head requests' do
+    expect(head('/')).to be_ok
+  end
+    
+            def find_order
+          @order = Spree::Order.find_by!(number: order_id)
         end
     
-        def load_processor(name)
-      if defined?(Rails.root) && Rails.root
-        filename = '#{name.to_s.underscore}.rb'
-        directories = %w(lib/paperclip lib/paperclip_processors)
+        def add_active_record_callbacks
+      name = @name
+      @klass.send(:after_save) { send(name).send(:save) }
+      @klass.send(:before_destroy) { send(name).send(:queue_all_for_delete) }
+      if @klass.respond_to?(:after_commit)
+        @klass.send(:after_commit, on: :destroy) do
+          send(name).send(:flush_deletes)
+        end
+      else
+        @klass.send(:after_destroy) { send(name).send(:flush_deletes) }
+      end
+    end
     
-    module Paperclip
-  require 'rails'
+        module StrictDeclaration
