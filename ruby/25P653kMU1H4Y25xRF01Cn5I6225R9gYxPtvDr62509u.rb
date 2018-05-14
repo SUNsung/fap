@@ -1,42 +1,53 @@
 
         
-          class CachedFragment
-    def initialize(json)
-      @json = json
+        require 'abstract_unit'
+    
+        test 'the middleware stack is exposed as 'middleware' in the controller' do
+      result = @app.call(env_for('/'))
+      assert_equal 'First!', result[1]['Middleware-Order']
     end
-    def as_json(*_args)
-      @json
+    
+          add_delivery_method :file, Mail::FileDelivery,
+        location: defined?(Rails.root) ? '#{Rails.root}/tmp/mails' : '#{Dir.tmpdir}/mails'
+    
+    class AssertSelectEmailTest < ActionMailer::TestCase
+  class AssertSelectMailer < ActionMailer::Base
+    def test(html)
+      mail body: html, content_type: 'text/html',
+        subject: 'Test e-mail', from: 'test@test.host', to: 'test <test@test.host>'
     end
   end
     
-            expect_any_instance_of(ActivityPub::LinkedDataSignature).to receive(:verify_account!).and_return(actor)
-        expect(ActivityPub::Activity).to receive(:factory).with(instance_of(Hash), actor, instance_of(Hash))
-    
-            <<~EOS
-          A .pydistutils.cfg file was found in $HOME, which may cause Python
-          builds to fail. See:
-            #{Formatter.url('https://bugs.python.org/issue6138')}
-            #{Formatter.url('https://bugs.python.org/issue4655')}
-        EOS
-      end
-    
-        expect(subject.check_user_path_1)
-      .to match('/usr/bin occurs before #{HOMEBREW_PREFIX}/bin')
+      def use_message
+    mail_with_defaults do |format|
+      format.html { render(inline: '<%= message.subject %>') }
+    end
   end
     
-          out =
-        Sass::Util.silence_sass_warnings do
-          if @options[:from] == :css
-            require 'sass/css'
-            Sass::CSS.new(read(input), @options[:for_tree]).render(@options[:to])
-          else
-            if input_path
-              Sass::Engine.for_file(input_path, @options[:for_engine])
-            else
-              Sass::Engine.new(read(input), @options[:for_engine])
-            end.to_tree.send('to_#{@options[:to]}', @options[:for_tree])
-          end
+    unless invalids.empty?
+  puts '\n\nFailed links:'
+  invalids.each do |link|
+    puts '- #{link}'
+  end
+  puts 'Done with errors.'
+  exit(1)
+end
+    
+          class << self
+        # Mark a given block of code as a 'busy' block of code, which will
+        # register a SIGINT handler for the duration of the block. When a
+        # SIGINT occurs, the `sig_callback` proc will be called. It is up
+        # to the callback to behave properly and exit the application.
+        def busy(sig_callback)
+          register(sig_callback)
+          return yield
+        ensure
+          unregister(sig_callback)
         end
+    
+          def [](key)
+        super(convert_key(key))
+      end
     
       # Creates a delayed logger wrapping `inner`.
   #
@@ -47,34 +58,44 @@
     @messages = []
   end
     
-            def log_level?(level, min_level)
-          log_levels[level] >= log_levels[min_level]
-        end
+        # Evaluates the interpolation.
+    #
+    # @param environment [Sass::Environment] The environment in which to evaluate the SassScript
+    # @return [Sass::Script::Value::String]
+    #   The SassScript string that is the value of the interpolation
+    def _perform(environment)
+      res = ''
+      res << @before.perform(environment).to_s if @before
+      res << ' ' if @before && @whitespace_before
     
-      require 'sass/plugin/rack'
-  class Sass::Plugin::MerbBootLoader < Merb::BootLoader
-    after Merb::BootLoader::RackUpApplication
+          private
     
-        def parse_input(environment, text)
-      case text
-      when Script::MATCH
-        name = $1
-        guarded = !!$3
-        val = Script::Parser.parse($2, @line, text.size - ($3 || '').size - $2.size)
-    
-    When /^(?:|I )select '([^']*)' from '([^']*)'$/ do |value, field|
-  select(value, :from => field)
-end
-    
-        # Returns a String describing the file's content type
-    def detect
-      if blank_name?
-        SENSIBLE_DEFAULT
-      elsif empty_file?
-        EMPTY_TYPE
-      elsif calculated_type_matches.any?
-        calculated_type_matches.first
-      else
-        type_from_file_contents || SENSIBLE_DEFAULT
-      end.to_s
+      def command_line(*options)
+    options.each { |opt| ARGV << opt }
+    subject.define_singleton_method(:exit) do |*_args|
+      throw(:system_exit, :exit)
     end
+    subject.run
+    subject.options
+  end
+    
+    __END__
+    
+          it 'should remain unchanged as ASCII-8BIT' do
+        body = @app.call({ 'PATH_INFO' => '/'.encode('ASCII-8BIT') })[2][0]
+        expect(body).to eq('ASCII-8BIT')
+      end
+    end
+  end
+end
+
+    
+      # rspec-expectations config goes here. You can use an alternate
+  # assertion/expectation library such as wrong or the stdlib/minitest
+  # assertions if you prefer.
+  config.expect_with :rspec do |expectations|
+    # Enable only the newer, non-monkey-patching expect syntax.
+    # For more details, see:
+    #   - http://myronmars.to/n/dev-blog/2012/06/rspecs-new-expectation-syntax
+    expectations.syntax = :expect
+  end
