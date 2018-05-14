@@ -1,209 +1,279 @@
 
         
-        namespace {
-// TODO(suharshs): Move this to a common location to allow other part of the
-// repo to use it.
-template <typename T, typename... Args>
-std::unique_ptr<T> MakeUnique(Args&&... args) {
-  return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
-}
-}  // namespace
+        class DebugGraphDecorator : public DebugGraphDecoratorInterface {
+ public:
+  DebugGraphDecorator(const DebugOptions& debug_options)
+      : debug_options_(debug_options) {}
+  virtual ~DebugGraphDecorator() {}
+    }
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    // ResourceOpKernel<T> is a virtual base class for resource op implementing
+// interface type T. The inherited op looks up the resource name (determined by
+// ContainerInfo), and creates a new resource if necessary.
+//
+// Requirements:
+//  - Op must be marked as stateful.
+//  - Op must have `container` and `shared_name` attributes. Empty `container`
+//  means using the default container. Empty `shared_name` means private
+//  resource.
+//  - Subclass must override CreateResource().
+//  - Subclass is encouraged to override VerifyResource().
+template <typename T>
+class ResourceOpKernel : public OpKernel {
+ public:
+  explicit ResourceOpKernel(OpKernelConstruction* context) : OpKernel(context) {
+    OP_REQUIRES_OK(context,
+                   context->allocate_persistent(DT_STRING, TensorShape({2}),
+                                                &handle_, nullptr));
+  }
+    }
+    
+    namespace internal {
+template <typename T>
+struct functor_traits<scalar_tanh_fast_derivative_op<T> > {
+  enum {
+    Cost = NumTraits<T>::AddCost * 2 + NumTraits<T>::MulCost * 1,
+    PacketAccess = packet_traits<T>::HasAdd && packet_traits<T>::HasMul &&
+                   packet_traits<T>::HasNegate
+  };
+};
+}  // namespace internal
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
     
     {
-    {      auto h = handle_.AccessTensor(context)->template flat<string>();
-      h(0) = cinfo_.container();
-      h(1) = cinfo_.name();
-      resource_ = resource;
-    }
-    if (context->expected_output_dtype(0) == DT_RESOURCE) {
-      OP_REQUIRES_OK(context, MakeResourceHandleToOutput(
-                                  context, 0, cinfo_.container(), cinfo_.name(),
-                                  MakeTypeIndex<T>()));
-    } else {
-      context->set_output_ref(0, &mu_, handle_.AccessTensor(context));
-    }
+    {    SetReaderFactory([this, compression_type, env]() {
+      return new TFRecordReader(name(), compression_type, env);
+    });
   }
-    
-      double PrimalLossDerivative(const double wx, const double label,
-                              const double example_weight) const final {
-    if (label * wx >= 1) {
-      return 0;
-    }
-    if (label * wx <= 1 - gamma) {
-      return -label;
-    }
-    return (wx - label) / gamma;
-  }
-    
-    
-    {  void CopyDeviceTensorToCPU(const Tensor *device_tensor, StringPiece edge_name,
-                             Device *device, Tensor *cpu_tensor,
-                             StatusCallback done) override;
 };
     
-    #include 'tensorflow/core/lib/strings/strcat.h'
     
-        GraphDef result;
-    TransformFuncContext context;
-    context.input_names = {};
-    context.output_names = {'mul_node1'};
-    TF_ASSERT_OK(RemoveDevice(graph_def, context, &result));
+    {}  // namespace tensorflow
+
     
-    inline ZlibCompressionOptions ZlibCompressionOptions::GZIP() {
-  ZlibCompressionOptions options = ZlibCompressionOptions();
-  options.window_bits = options.window_bits + 16;
-  return options;
+        NodeDef* mul_node1 = graph_def.add_node();
+    mul_node1->set_name('mul_node1');
+    mul_node1->set_op('Mul');
+    mul_node1->set_device('//cpu:0');
+    mul_node1->add_input('add_node2');
+    mul_node1->add_input('add_node3');
+    
+    
+    {  // file:// debug URLs are not subject to grpc gating.
+  ASSERT_TRUE(DebugIO::IsCopyNodeGateOpen(
+      {DebugWatchAndURLSpec('foo:0:DebugIdentity', kGrpcUrl1, true),
+       DebugWatchAndURLSpec('foo:0:DebugIdentity', 'file:///tmp/tfdbg_1',
+                            false)}));
 }
     
-      void OCRTester(const char* imgname, const char* groundtruth, const char* tessdatadir, const char* lang) {
-    //log.info() << tessdatadir << ' for language: ' << lang << std::endl;
-    char *outText;
-    std::locale loc('C'); // You can also use '' for the default system locale
-    std::ifstream file(groundtruth);
-    file.imbue(loc); // Use it for file input
-    std::string gtText((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-    tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
-    ASSERT_FALSE(api->Init(tessdatadir, lang)) << 'Could not initialize tesseract.';
-    Pix *image = pixRead(imgname);
-    ASSERT_TRUE(image != nullptr) << 'Failed to read test image.';
-    api->SetImage(image);
-    outText = api->GetUTF8Text();
-    EXPECT_EQ(gtText,outText) << 'Phototest.tif OCR does not match ground truth for ' << ::testing::PrintToString(lang);
-    api->End();
-    delete [] outText;
-    pixDestroy(&image);
-  }
+    // Build a Table file from the contents of *iter.  The generated file
+// will be named according to meta->number.  On success, the rest of
+// *meta will be filled with metadata about the generated table.
+// If no data is present in *iter, meta->file_size will be set to
+// zero, and no Table file will be produced.
+extern Status BuildTable(const std::string& dbname,
+                         Env* env,
+                         const Options& options,
+                         TableCache* table_cache,
+                         Iterator* iter,
+                         FileMetaData* meta);
     
-    // Tests that the AVX2 implementation gets the same result as the vanilla.
-TEST_F(IntSimdMatrixTest, AVX2) {
-  if (SIMDDetect::IsAVX2Available()) {
-    tprintf('AVX2 found! Continuing...');
-  } else {
-    tprintf('No AVX2 found! Not Tested!');
-    return;
-  }
-  std::unique_ptr<IntSimdMatrix> matrix(new IntSimdMatrixAVX2());
-  ExpectEqualResults(matrix.get());
-}
+    class DBImpl;
     
-    // Tests that the RotatingTranspose function does the right thing for various
-// transformations.
-// dims=[5, 4, 3, 2]->[5, 2, 4, 3]
-TEST_F(MatrixTest, RotatingTranspose_3_1) {
-  GENERIC_2D_ARRAY<int> m;
-  src_.RotatingTranspose(dims_, kNumDims_, 3, 1, &m);
-  m.ResizeNoInit(kInputSize_ / 3, 3);
-  // Verify that the result is:
-  // output tensor=[[[[0, 2, 4][6, 8, 10][12, 14, 16][18, 20, 22]]
-  //                 [[1, 3, 5][7, 9, 11][13, 15, 17][19, 21, 23]]]
-  //                [[[24, 26, 28]...
-  EXPECT_EQ(0, m(0, 0));
-  EXPECT_EQ(2, m(0, 1));
-  EXPECT_EQ(4, m(0, 2));
-  EXPECT_EQ(6, m(1, 0));
-  EXPECT_EQ(1, m(4, 0));
-  EXPECT_EQ(24, m(8, 0));
-  EXPECT_EQ(26, m(8, 1));
-  EXPECT_EQ(25, m(12, 0));
-}
+    typedef uint64_t SequenceNumber;
     
-    /**
- * Recognize a rectangle from an image and return the result as a string.
- * May be called many times for a single Init.
- * Currently has no error checking.
- * Greyscale of 8 and color of 24 or 32 bits per pixel may be given.
- * Palette color images will not work properly and must be converted to
- * 24 bit.
- * Binary images of 1 bit per pixel may also be given but they must be
- * byte packed with the MSB of the first byte being the first pixel, and a
- * one pixel is WHITE. For binary images set bytes_per_pixel=0.
- * The recognized text is returned as a char* which is coded
- * as UTF8 and must be freed with the delete [] operator.
- */
-char* TessBaseAPI::TesseractRect(const unsigned char* imagedata,
-                                 int bytes_per_pixel,
-                                 int bytes_per_line,
-                                 int left, int top,
-                                 int width, int height) {
-  if (tesseract_ == nullptr || width < kMinRectSize || height < kMinRectSize)
-    return nullptr;  // Nothing worth doing.
+    class TableCache {
+ public:
+  TableCache(const std::string& dbname, const Options* options, int entries);
+  ~TableCache();
     }
     
+    void WriteBatch::Clear() {
+  rep_.clear();
+  rep_.resize(kHeader);
+}
     
-    {}  // namespace tesseract
+    TEST(WriteBatchTest, Multiple) {
+  WriteBatch batch;
+  batch.Put(Slice('foo'), Slice('bar'));
+  batch.Delete(Slice('box'));
+  batch.Put(Slice('baz'), Slice('boo'));
+  WriteBatchInternal::SetSequence(&batch, 100);
+  ASSERT_EQ(100, WriteBatchInternal::Sequence(&batch));
+  ASSERT_EQ(3, WriteBatchInternal::Count(&batch));
+  ASSERT_EQ('Put(baz, boo)@102'
+            'Delete(box)@101'
+            'Put(foo, bar)@100',
+            PrintContents(&batch));
+}
     
-      // Check for a seed candidate using the foreground pixel density. And we
-  // return true if the density is below a certain threshold, because characters
-  // in equation regions usually are apart with more white spaces.
-  bool CheckSeedFgDensity(const float density_th, ColPartition* part);
+    // Helper for quickly generating random data.
+namespace {
+class RandomGenerator {
+ private:
+  std::string data_;
+  int pos_;
+    }
+    }
     
-    /* Array of request or response headers or trailers. */
-typedef struct bidirectional_stream_header_array {
-  size_t count;
-  size_t capacity;
-  bidirectional_stream_header* headers;
-} bidirectional_stream_header_array;
+    #ifndef STORAGE_LEVELDB_INCLUDE_FILTER_POLICY_H_
+#define STORAGE_LEVELDB_INCLUDE_FILTER_POLICY_H_
     
+    template<typename T>
+std::shared_ptr<thpp::THTensor<T>> buildTensor(std::vector<int64_t> shape, T value) {
+  auto tensor = std::make_shared<thpp::THTensor<T>>();
+  tensor->resize(shape);
+  tensor->fill(value);
+  return tensor;
+}
     
+    using namespace std;
+    
+    PyObject* tensor_to_list(const Tensor& tensor) {
+  Tensor data = tensor;
+  if (data.type().backend() != kCPU) {
+    with_no_gil([&]() {
+      data = data.toBackend(kCPU);
+    });
+  }
+  auto& type = data.type();
+  return recursive_to_list(
+      (char*)data.data_ptr(), data.sizes(), data.strides(), 0,
+      type.scalarType(), type.elementSizeInBytes());
+}
+    
+    #endif
+
+    
+    #undef THPTensor_
+#undef THPTensor_stateless_
+#undef THPTensor
+#undef THPTensorStr
+#undef THPTensorBaseStr
+#undef THPTensorClass
+    
+      int timeout = -1;
+  std::vector<int> to_add;
+  std::vector<int> to_remove;
+  for (;;) {
+    int nevents;
+    if (client_sessions.size() == 0)
+      timeout = SHUTDOWN_TIMEOUT;
+    SYSCHECK(nevents = poll(pollfds.data(), pollfds.size(), timeout));
+    timeout = -1;
+    if (nevents == 0 && client_sessions.size() == 0)
+      break;
+    }
+    
+      /// Constructor.
+  /**
+   * This constructor creates a timer without setting an expiry time. The
+   * expires_at() or expires_from_now() functions must be called to set an
+   * expiry time before the timer can be waited on.
+   *
+   * @param io_service The io_service object that the timer will use to dispatch
+   * handlers for any asynchronous operations performed on the timer.
+   */
+  explicit basic_waitable_timer(boost::asio::io_service& io_service)
+    : basic_io_object<WaitableTimerService>(io_service)
+  {
+  }
+    
+    #ifndef BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
+#define BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
+    
+    template <typename Stream>
+class buffered_stream;
+    
+        // Find the next context with the same key.
+    Value* next_by_key() const
     {
-    {}  // namespace testing
-}  // namespace grpc
-    
-    #include <string>
-#include <vector>
-    
-    gpr_atm grpc::testing::interop::g_got_sigint;
-    
-    /// Helper replacement for REGISTER, used within extension modules.
-#define REGISTER_MODULE(t, r, n)                                               \
-  auto t##Module = Registry::get().registry(r)->add(n, std::make_shared<t>());
-    
-      // Enables pretty-printing in gtest (ASSERT|EXPECT)_(EQ|NE)
-  friend ::std::ostream& operator<<(::std::ostream& os, const Status& s);
-    
-    /**
- * @brief Access the internal storage of the Decorator parser.
- *
- * The decoration set is a map of column name to value. It contains the opaque
- * set of decoration point results.
- *
- * Decorations are applied to log items before they are sent to the downstream
- * logging APIs: logString, logSnapshot, etc.
- *
- * @param results the output parameter to write decorations.
- */
-void getDecorations(std::map<std::string, std::string>& results);
-    
-    #include <boost/lexical_cast.hpp>
-    
-    #include <sys/resource.h>
-#include <sys/syscall.h>
-#include <sys/time.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-    
-    #include <string.h>
-#include <time.h>
-    
-    
-    {
-    {      result = poll(fds, 1, 1);
-      if (result == 0) {
-        ticks++;
+      context* elem = next_;
+      while (elem)
+      {
+        if (elem->key_ == key_)
+          return elem->value_;
+        elem = elem->next_;
       }
+      return 0;
     }
-  }
     
-    TEST_F(ProcessTests, test_constructor) {
-  auto p = PlatformProcess(kInvalidPid);
-  EXPECT_FALSE(p.isValid());
+    } // namespace date_time
+namespace posix_time {
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS) \
+  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
+# include <boost/asio/detail/null_fenced_block.hpp>
+#elif defined(__MACH__) && defined(__APPLE__)
+# include <boost/asio/detail/macos_fenced_block.hpp>
+#elif defined(__sun)
+# include <boost/asio/detail/solaris_fenced_block.hpp>
+#elif defined(__GNUC__) && defined(__arm__) \
+  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
+# include <boost/asio/detail/gcc_arm_fenced_block.hpp>
+#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
+# include <boost/asio/detail/gcc_hppa_fenced_block.hpp>
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+# include <boost/asio/detail/gcc_x86_fenced_block.hpp>
+#elif defined(__GNUC__) \
+  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
+  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
+  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
+# include <boost/asio/detail/gcc_sync_fenced_block.hpp>
+#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
+# include <boost/asio/detail/win_fenced_block.hpp>
+#else
+# include <boost/asio/detail/null_fenced_block.hpp>
+#endif
+    
+    #ifndef BOOST_ASIO_DETAIL_FUNCTION_HPP
+#define BOOST_ASIO_DETAIL_FUNCTION_HPP
+    
+    template <typename Handler>
+inline void* allocate(std::size_t s, Handler& h)
+{
+#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
+  return ::operator new(s);
+#else
+  using boost::asio::asio_handler_allocate;
+  return asio_handler_allocate(s, boost::asio::detail::addressof(h));
+#endif
 }
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    #endif // defined(BOOST_ASIO_HAS_EPOLL)
+    
+      std::unique_ptr<AuthConfig> getDefaultAuthConfig() const;
+    
+    
+    {} // namespace aria2
+
     
     
     {} // namespace aria2
     
-      virtual void truncate(int64_t length) CXX11_OVERRIDE;
+      const char* description_;
     
     bool AbstractProxyRequestCommand::executeInternal()
 {
@@ -216,16 +286,16 @@ void getDecorations(std::map<std::string, std::string>& results);
     }
     }
     
+    #include <memory>
     
-    {  virtual std::unique_ptr<Command> getNextCommand() = 0;
-};
     
-    class ApiCallbackDownloadEventListener : public DownloadEventListener {
-public:
-  ApiCallbackDownloadEventListener(Session* session,
-                                   DownloadEventCallback callback,
-                                   void* userData);
-  virtual ~ApiCallbackDownloadEventListener();
-  virtual void onEvent(DownloadEvent event,
-                       const RequestGroup* group) CXX11_OVERRIDE;
-    }
+    {} // namespace aria2
+    
+    TLSContext* TLSContext::make(TLSSessionSide side, TLSVersion ver)
+{
+  return new AppleTLSContext(side, ver);
+}
+    
+    #include <vector>
+#include <string>
+#include <memory>
