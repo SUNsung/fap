@@ -1,50 +1,76 @@
 
         
-                '''
-        assert all(hasattr(type(self), attr) for attr in kwargs.keys())
-        self.__dict__.update(**kwargs)
-    
-    
-FIXTURES_ROOT = path.join(path.abspath(path.dirname(__file__)))
-FILE_PATH = path.join(FIXTURES_ROOT, 'test.txt')
-JSON_FILE_PATH = path.join(FIXTURES_ROOT, 'test.json')
-BIN_FILE_PATH = path.join(FIXTURES_ROOT, 'test.bin')
-    
-    # def test_unicode_url_verbose(self):
-#     r = http(httpbin.url + '--verbose', u'/get?test=' + UNICODE)
-#     assert HTTP_OK in r
-    
-    
-def program(args, env, log_error):
+        
+def attach_enctype_error_multidict(request):
+    '''Since Flask 0.8 we're monkeypatching the files object in case a
+    request is detected that does not use multipart form data but the files
+    object is accessed.
     '''
-    The main program without error handling
+    oldcls = request.files.__class__
+    class newcls(oldcls):
+        def __getitem__(self, key):
+            try:
+                return oldcls.__getitem__(self, key)
+            except KeyError:
+                if key not in request.form:
+                    raise
+                raise DebugFilesKeyError(request, key)
+    newcls.__name__ = oldcls.__name__
+    newcls.__module__ = oldcls.__module__
+    request.files.__class__ = newcls
     
+        def get_cookie_secure(self, app):
+        '''Returns True if the cookie should be secure.  This currently
+        just returns the value of the ``SESSION_COOKIE_SECURE`` setting.
+        '''
+        return app.config['SESSION_COOKIE_SECURE']
+    
+        :param source: the source code of the template to be
+                   rendered
+    :param context: the variables that should be available in the
+                    context of the template.
+    '''
+    ctx = _app_ctx_stack.top
+    ctx.app.update_template_context(context)
+    return _render(ctx.app.jinja_env.from_string(source),
+                   context, ctx.app)
+
+    
+        #: The canonical way to decorate class-based views is to decorate the
+    #: return value of as_view().  However since this moves parts of the
+    #: logic from the class declaration to the place where it's hooked
+    #: into the routing system.
+    #:
+    #: You can place one or more decorators in this list and whenever the
+    #: view function is created the result is automatically decorated.
+    #:
+    #: .. versionadded:: 0.8
+    decorators = ()
+    
+                    if change_info:
+                    break
+    
+        import site_package
+    assert site_package.app.instance_path == \
+        modules_tmpdir.join('var').join('site_package-instance')
+    
+        with app.test_request_context():
+        assert buffer == []
         try:
-        # hide console in MS windows
-        startupinfo = subprocess.STARTUPINFO()
-        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-        startupinfo.wShowWindow = subprocess.SW_HIDE
+            raise Exception('dummy')
+        except Exception:
+            pass
+    assert buffer == [None]
     
-    - tree.CommonTreeAdaptor: A basic and most commonly used tree.TreeAdaptor
-implementation.
-    
-    EOF = -1
-    
-            # if next token is what we are looking for then 'delete' this token
-        if self. mismatchIsUnwantedToken(input, ttype):
-            e = UnwantedTokenException(ttype, input)
-    
-    define('port', default=8888, help='run on the given port', type=int)
-    
-        def call_wrapped_inner(self, queue, count):
-        if count < 0:
-            return
-        with self.make_context():
-            queue.append(stack_context.wrap(
-                functools.partial(self.call_wrapped_inner, queue, count - 1)))
-    
-        def get_current_user(self):
-        user_id = self.get_secure_cookie('blogdemo_user')
-        if not user_id:
+            Accessing a node updates its position to the front of the LRU list.
+        '''
+        node = self.lookup[query]
+        if node is None:
             return None
-        return self.db.get('SELECT * FROM authors WHERE id = %s', int(user_id))
+        self.linked_list.move_to_front(node)
+        return node.results
+    
+            Emit key value pairs of the form:
+    
+    
+class SalesRanker(MRJob):
