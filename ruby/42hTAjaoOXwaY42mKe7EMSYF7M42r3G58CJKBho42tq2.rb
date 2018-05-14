@@ -1,83 +1,87 @@
 
         
-              out = checks.send(method)
-      unless out.nil? || out.empty?
-        if first_warning
-          $stderr.puts <<-EOS.undent
-            #{Tty.white}Please note that these warnings are just used to help the Homebrew maintainers
-            with debugging if you file an issue. If everything you use Homebrew for is
-            working fine: please don't worry and just ignore them. Thanks!#{Tty.reset}
-          EOS
-        end
+        FORWARD_SLASH = '/'.freeze
     
-              if File.extname(file) == '.rb'
-            tree[subtree] ||= []
-            tree[subtree] << file
-          end
-        end
-      end
+      next if extensions.empty?
+  mimes[mime] = [] if mimes[mime].nil?
+  mimes[mime].concat extensions
+end
     
-          def task_available?(task)
-        load_all_tasks
-        return tasks.collect(&:title).include?(task)
-      end
+    Jekyll::PluginManager.require_from_bundler
     
-          it 'it increments all targets minor version number' do
-        Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number(bump_type: 'minor')
-        end').runner.execute(:test)
-    
-    def each_schema_load_environment
-  # If we're in development, also run this for the test environment.
-  # This is a somewhat hacky way to do this, so here's why:
-  # 1. We have to define this before we load the schema, or we won't
-  #    have a timestamp_id function when we get to it in the schema.
-  # 2. db:setup calls db:schema:load_if_ruby, which calls
-  #    db:schema:load, which we define above as having a prerequisite
-  #    of this task.
-  # 3. db:schema:load ends up running
-  #    ActiveRecord::Tasks::DatabaseTasks.load_schema_current, which
-  #    calls a private method `each_current_configuration`, which
-  #    explicitly also does the loading for the `test` environment
-  #    if the current environment is `development`, so we end up
-  #    needing to do the same, and we can't even use the same method
-  #    to do it.
-    
-      def theme_color
-    '#282c37'
-  end
-    
-      def register_sigs
-    self.sigs = {
-      :banner		=> /^(\*\s+OK[^\n\r]*)/i,
-      :login		=> /^CAPABILITY\s+LOGIN\s+([^\s]+)\s+([^\n\r]+)/i,
-      :login_pass => /^CAPABILITY\s+OK\s+(Login[^\n\r]*)/i,
-      :login_bad	=> /^CAPABILITY\s+BAD\s+(Login[^\n\r]*)/i,
-      :login_fail => /^CAPABILITY\s+NO\s+(Login[^\n\r]*)/i
-    }
-  end
-    
-        def calculated_type_matches
-      possible_types.select do |content_type|
-        content_type == type_from_file_contents
-      end
-    end
-    
-            def description
-          'validate the content types allowed on attachment #{@attachment_name}'
-        end
-    
-            def no_error_when_valid?
-          @file = StringIO.new('.')
-          @subject.send(@attachment_name).assign(@file)
-          @subject.valid?
-          expected_message = [
-            @attachment_name.to_s.titleize,
-            I18n.t(:blank, scope: [:errors, :messages])
-          ].join(' ')
-          @subject.errors.full_messages.exclude?(expected_message)
-        end
-      end
+        def defaults_deprecate_type(old, current)
+      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
+      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
+                        'type: #{current}'.'
     end
   end
 end
+
+    
+          process(name)
+      read_yaml(base, name)
+    end
+    
+          def parse(content)
+        measure_time do
+          @template = Liquid::Template.parse(content, :line_numbers => true)
+        end
+    
+        # Get or set the safety of this plugin. When called without an argument
+    # it returns the safety. When an argument is given, it will set the
+    # safety.
+    #
+    # safe - The Boolean safety (default: nil).
+    #
+    # Returns the safety Boolean.
+    def self.safe(safe = nil)
+      unless defined?(@safe) && safe.nil?
+        @safe = safe
+      end
+      @safe || false
+    end
+    
+        # Require all the plugins which are allowed.
+    #
+    # Returns nothing
+    def conscientious_require
+      require_theme_deps if site.theme
+      require_plugin_files
+      require_gems
+      deprecation_checks
+    end
+    
+        def logger
+      return super unless dry_run?
+      @dry_run_logger
+    end
+    
+      def complete_option(method)
+    if self.respond_to? 'complete_#{method}'.to_sym
+      self.send('complete_#{method}'.to_sym)
+    end
+  end
+    
+      it 'decodes the number of floats requested by the count modifier' do
+    array = '\x9a\x999@33\xb3?33\x03A'.unpack(unpack_format(3))
+    array.should == [2.9000000953674316, 1.399999976158142, 8.199999809265137]
+  end
+    
+      it 'decodes the number of characters specified by the count modifier' do
+    [ ['\xc2\x80\xc2\x81\xc2\x82\xc2\x83', 'U1', [0x80]],
+      ['\xc2\x80\xc2\x81\xc2\x82\xc2\x83', 'U2', [0x80, 0x81]],
+      ['\xc2\x80\xc2\x81\xc2\x82\xc2\x83', 'U3', [0x80, 0x81, 0x82]]
+    ].should be_computed_by(:unpack)
+  end
+    
+        exit_loop = true
+    
+    See CONTRIBUTING.md for more information.
+    
+    STDOUT.sync = true if ENV['CP_STDOUT_SYNC'] == 'TRUE'
+    
+            def listen
+          while repl_command = STDIN.gets
+            execute_repl_command(repl_command)
+          end
+        end
