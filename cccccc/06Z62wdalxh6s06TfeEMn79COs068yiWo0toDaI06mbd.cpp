@@ -1,392 +1,357 @@
 
         
-        // This flag controls the style of death tests.  Valid values are 'threadsafe',
-// meaning that the death test child process will re-execute the test binary
-// from the start, running only a single death test, or 'fast',
-// meaning that the child process will execute the test logic immediately
-// after forking.
-GTEST_DECLARE_string_(death_test_style);
+        #endif  // ATOM_COMMON_API_LOCKER_H_
+
     
-      // Gets the summary of the failure message by omitting the stack
-  // trace in it.
-  static std::string ExtractSummary(const char* message);
+     protected:
+  RemoteCallbackFreer(v8::Isolate* isolate,
+                      v8::Local<v8::Object> target,
+                      int object_id,
+                      content::WebContents* web_conents);
+  ~RemoteCallbackFreer() override;
     
-    // This macro is for implementing ASSERT/EXPECT_DEBUG_DEATH when compiled in
-// NDEBUG mode. In this case we need the statements to be executed, the regex is
-// ignored, and the macro must accept a streamed message even though the message
-// is never printed.
-# define GTEST_EXECUTE_STATEMENT_(statement, regex) \
-  GTEST_AMBIGUOUS_ELSE_BLOCKER_ \
-  if (::testing::internal::AlwaysTrue()) { \
-     GTEST_SUPPRESS_UNREACHABLE_CODE_WARNING_BELOW_(statement); \
-  } else \
-    ::testing::Message()
+    #ifndef ATOM_COMMON_DRAGGABLE_REGION_H_
+#define ATOM_COMMON_DRAGGABLE_REGION_H_
     
-    // If *pstr starts with the given prefix, modifies *pstr to be right
-// past the prefix and returns true; otherwise leaves *pstr unchanged
-// and returns false.  None of pstr, *pstr, and prefix can be NULL.
-GTEST_API_ bool SkipPrefix(const char* prefix, const char** pstr);
+      // Sent when one or more URLs are deleted.
+  //
+  // The source is the profile owning the history service that changed, and
+  // the details is history::URLsDeletedDetails that lists the deleted URLs.
+  NOTIFICATION_HISTORY_URLS_DELETED,
     
-    $for j [[
+      // Returns whether shortcut handling is currently suspended.
+  bool IsShortcutHandlingSuspended() const;
     
-        virtual const ParamGeneratorInterface<T>* BaseGenerator() const {
-      return base_;
+    #include 'content/public/browser/web_contents_observer.h'
+#include 'ui/gfx/native_widget_types.h'
+    
+     private:
+  friend class base::RefCountedThreadSafe<MonitorFinder>;
+  ~MonitorFinder();
+    
+    #include 'base/memory/ref_counted.h'
+#include 'chrome/browser/ui/views/color_chooser_dialog.h'
+#include 'third_party/skia/include/core/SkColor.h'
+#include 'ui/shell_dialogs/base_shell_dialog.h'
+#include 'ui/shell_dialogs/base_shell_dialog_win.h'
+    
+      assert(peekType(msg) == thpp::Type::LONG_STORAGE);
+  THLongStorage *storage2 = unpackTHLongStorage(msg);
+  assert(storage2->size == STORAGE_SIZE);
+  for (int64_t i = 0; i < STORAGE_SIZE; i++)
+    assert(storage2->data[i] == i);
+  
+  int vec_size = unpackInteger(msg);
+  assert(vec_size == VEC_SIZE);
+  for (int i = 0; i < VEC_SIZE; i++)
+    assert(unpackInteger(msg) == 7);
+    
+    #undef THStoragePtr
+#undef THPStoragePtr
+#undef THTensorPtr
+#undef THPTensorPtr
+    
+    #define THPStorage TH_CONCAT_3(THP,Real,Storage)
+#define THPStorageStr TH_CONCAT_STRING_3(torch.,Real,Storage)
+#define THPStorageClass TH_CONCAT_3(THP,Real,StorageClass)
+#define THPStorage_(NAME) TH_CONCAT_4(THP,Real,Storage_,NAME)
+    
+    using THDGeneratorTypes = std::tuple<THDGenerator>;
+    
+    /** Returns the benchmark Reporter instance.
+ *
+ * The returned instance will take care of generating reports for all the actual
+ * reporters configured via the 'enable_*_reporter' command line flags (see
+ * benchmark_config.cc). */
+std::shared_ptr<Reporter> GetReporter();
+    
+    void ParseDb(const std::string& db, std::vector<Feature>* feature_list) {
+  feature_list->clear();
+  std::string db_content(db);
+  db_content.erase(
+      std::remove_if(db_content.begin(), db_content.end(), isspace),
+      db_content.end());
     }
-    virtual void Advance() {
-      ++iterator_;
-      value_.reset();
-    }
-    virtual ParamIteratorInterface<T>* Clone() const {
-      return new Iterator(*this);
-    }
-    // We need to use cached value referenced by iterator_ because *iterator_
-    // can return a temporary object (and of type other then T), so just
-    // having 'return &*iterator_;' doesn't work.
-    // value_ is updated here and not in Advance() because Advance()
-    // can advance iterator_ beyond the end of the range, and we cannot
-    // detect that fact. The client code, on the other hand, is
-    // responsible for not calling Current() on an out-of-range iterator.
-    virtual const T* Current() const {
-      if (value_.get() == NULL)
-        value_.reset(new T(*iterator_));
-      return value_.get();
-    }
-    virtual bool Equals(const ParamIteratorInterface<T>& other) const {
-      // Having the same base generator guarantees that the other
-      // iterator is of the same type and we can downcast.
-      GTEST_CHECK_(BaseGenerator() == other.BaseGenerator())
-          << 'The program attempted to compare iterators '
-          << 'from different generators.' << std::endl;
-      return iterator_ ==
-          CheckedDowncastToActualType<const Iterator>(&other)->iterator_;
+    
+    // Get leading or trailing comments in a string. Comment lines start with '// '.
+// Leading detached comments are put in in front of leading comments.
+template <typename DescriptorType>
+inline grpc::string GetNodeComments(const DescriptorType* desc, bool leading) {
+  return grpc_generator::GetPrefixedComments(desc, leading, '//');
+}
+    
+    std::vector<grpc::string_ref> SecureAuthContext::GetPeerIdentity() const {
+  if (!ctx_) {
+    return std::vector<grpc::string_ref>();
+  }
+  grpc_auth_property_iterator iter = grpc_auth_context_peer_identity(ctx_);
+  std::vector<grpc::string_ref> identity;
+  const grpc_auth_property* property = nullptr;
+  while ((property = grpc_auth_property_iterator_next(&iter))) {
+    identity.push_back(
+        grpc::string_ref(property->value, property->value_length));
+  }
+  return identity;
+}
+    
+    
+    {  grpc::string package = service->full_name();
+  size_t pos = package.rfind('.' + service->name());
+  if (pos != grpc::string::npos) {
+    package.erase(pos);
+    result.append('package: ' + package + ';\n');
+  }
+  result.append('service ' + service->name() + ' {\n');
+  for (int i = 0; i < service->method_count(); ++i) {
+    result.append(DescribeMethod(service->method(i)));
+  }
+  result.append('}\n\n');
+  return result;
+}
+    
+    int protoc_main(int argc, char* argv[]) {
+  google::protobuf::compiler::CommandLineInterface cli;
+  cli.AllowPlugins('protoc-');
     }
     
-    // Downcasts the pointer of type Base to Derived.
-// Derived must be a subclass of Base. The parameter MUST
-// point to a class of type Derived, not any subclass of it.
-// When RTTI is available, the function performs a runtime
-// check to enforce this.
-template <class Derived, class Base>
-Derived* CheckedDowncastToActualType(Base* base) {
-#if GTEST_HAS_RTTI
-  GTEST_CHECK_(typeid(*base) == typeid(Derived));
-  return dynamic_cast<Derived*>(base);  // NOLINT
+    
+    {    get_bits_no_markers(8 + (23 - ofs));
+  }
+  else
+    get_bits_no_markers(pH->code_size[symbol]);
+    
+    #ifndef M_PI
+#  define M_PI (3.1415926536f)
+#endif
+    
+    
+/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
+#undef MULT16_32_Q15
+static OPUS_INLINE opus_val32 MULT16_32_Q15_armv4(opus_val16 a, opus_val32 b)
+{
+  unsigned rd_lo;
+  int rd_hi;
+  __asm__(
+      '#MULT16_32_Q15\n\t'
+      'smull %0, %1, %2, %3\n\t'
+      : '=&r'(rd_lo), '=&r'(rd_hi)
+      : '%r'(b), 'r'(a<<16)
+  );
+  /*We intentionally don't OR in the high bit of rd_lo for speed.*/
+  return rd_hi<<1;
+}
+#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv4(a, b))
+    
+        // return true if precomputation is executed.
+    bool PreCompute(ComputationNetworkPtr net,
+                    IDataReader* trainSetDataReader,
+                    const std::vector<ComputationNodeBasePtr>& featureNodes,
+                    const std::vector<ComputationNodeBasePtr>& labelNodes,
+                    StreamMinibatchInputs* inputMatrices);
+    
+        const std::unordered_map<std::string, std::pair<int, int>>&
+        OpSchemaRegistry::DomainToVersionRange::Map() const
+    {
+        return m_map;
+    }
+    
+        // Taken from ONNX
+    REGISTER_OPERATOR_SCHEMA(PRelu)
+        .Description('PRelu takes input data (Tensor<T>) and slope tensor as input, '
+            'and produces one output data (Tensor<T>) where the function '
+            '`f(x) = slope * x for x < 0`, `f(x) = x for x >= 0`., is applied to the '
+            'data tensor elementwise.')
+        .Input('X', 'Input tensor', 'T')
+        .Input('Slope', 'Slope tensor. If `Slope` is of size 1, the value is shared'
+            'across different channels', 'T')
+        .Output('Y', 'The PRelu value of the input tensor computed element-wise', 'T')
+        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
+            'Constrain input and output types to float tensors.');
+    
+        //‘GREATER’, ‘LESS’, ‘EQUALS,
+    REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Greater)
+        REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Less)
+        REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Equal)
+    
+                Equations (GRU with default activations):
+              - zt = sigmoid(Wz*Xt + Rz*Ht-1 + Wbz + Rbz)
+              - rt = sigmoid(Wr*Xt + Rr*Ht-1 + Wbr + Rbr)
+              - ht = tanh(Wh*Xt + rt*(Rh*Ht-1 + Rbh) + Wbh)
+              - H = (1 - zt) (.) ht + it (.) Ht-1
+            )DOC')
+        .FillUsing(RNNDocGeneratorInputX())
+        .Input('W',
+            'The weight tensor for the gates. Concatenation of `W[zrh]` and `WB[zrh]` '
+            '(if bidirectional) along dimension 0. This tensor has shape '
+            '`[num_directions, 3*hidden_size, input_size]`.', 'T')
+        .Input('R',
+            'The recurrence weight tensor. Concatenation of `R[zrh]` and `RB[zrh]` '
+            '(if bidirectional) along dimension 0. This tensor has shape '
+            '`[num_directions, 3*hidden_size, hidden_size]`.', 'T')
+        .Input('B',
+            'The bias tensor for the gates. Concatenation of `[Wb[zrh], Rb[zrh]]` and '
+            '`[WBb[zrh], RBb[zrh]]` (if bidirectional) along dimension 0. This tensor '
+            'has shape `[num_directions, 6*hidden_size]`. Optional: If not specified '
+            '- assumed to be 0', 'T',
+            true /*optional*/)
+        .FillUsing(RNNDocGeneratorInputSeqLen())
+        .FillUsing(RNNDocGeneratorInputInitialH())
+        .Attr('activations', 'A list of 3 (or 6 if bidirectional) activation functions '
+            'for update, reset, and hidden gates. The activation functions must be '
+            'one of sigmoid and tanh. See the equations for default.',
+            AttrType::AttributeProto_AttributeType_STRINGS)
+        .FillUsing(RNNDocGeneratorActivationArgs())
+        .FillUsing(RNNDocGeneratorAttrOutput());
+    
+        // Taken from ONNX
+    REGISTER_OPERATOR_SCHEMA(Split)
+        .Description('Split a tensor into a list of tensors, along the specified 'axis'. '
+            'The lengths of the split can be specified using argument 'axis' or '
+            'optional second input blob to the operator. Otherwise, the tensor is split '
+            'to equal sized parts.')
+        .Input('input', 'The tensor to split', 'T')
+        .Input('split', 'Optional list of output lengths (see also arg 'split')', 'T')
+        .Output('output', 'A list of output tensors', 'T')
+        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
+            'Constrain input and output types to float tensors.')
+        .Attr('axis', 'Which axis to split on', AttrType::AttributeProto_AttributeType_INT)
+        .Attr('split', 'Number of tensors to output.', AttrType::AttributeProto_AttributeType_INTS);
+    
+            try
+        {
+            // feature reader (we reinstantiate it for each block, i.e. we reopen the file actually)
+            // if this is the first feature read ever, we explicitly open the first file to get the information such as feature dimension
+            htkfeatreader reader;
+    }
+    
+    // Gets sequences for a particular chunk.
+// This information is used by the randomizer to fill in current windows of sequences.
+void LatticeDeserializer::SequenceInfosForChunk(ChunkIdType, vector<SequenceInfo>& result)
+{
+    UNUSED(result);
+    LogicError('Lattice deserializer does not support primary mode, it cannot control chunking. '
+        'Please specify HTK deserializer as the first deserializer in your config file.');
+    }
+    
+    
+    {    RemoveNodeFromNet(node);        // take it out remporarily
+    node->SetNodeName(newNodeName); // change the name
+    AddNodeToNet(node);             // and put it back
+}
+    
+      /// Perform an IO control command on the acceptor.
+  /**
+   * This function is used to execute an IO control command on the acceptor.
+   *
+   * @param command The IO control command to be performed on the acceptor.
+   *
+   * @param ec Set to indicate what error occurred, if any.
+   *
+   * @sa IoControlCommand @n
+   * boost::asio::socket_base::non_blocking_io
+   *
+   * @par Example
+   * Getting the number of bytes ready to read:
+   * @code
+   * boost::asio::ip::tcp::acceptor acceptor(io_service);
+   * ...
+   * boost::asio::ip::tcp::acceptor::non_blocking_io command(true);
+   * boost::system::error_code ec;
+   * socket.io_control(command, ec);
+   * if (ec)
+   * {
+   *   // An error occurred.
+   * }
+   * @endcode
+   */
+  template <typename IoControlCommand>
+  boost::system::error_code io_control(IoControlCommand& command,
+      boost::system::error_code& ec)
+  {
+    return this->get_service().io_control(
+        this->get_implementation(), command, ec);
+  }
+    
+    #ifndef BOOST_ASIO_DETAIL_FENCED_BLOCK_HPP
+#define BOOST_ASIO_DETAIL_FENCED_BLOCK_HPP
+    
+    namespace boost {
+namespace asio {
+namespace detail {
+    }
+    }
+    }
+    
+    template <typename Function, typename Context>
+inline void invoke(const Function& function, Context& context)
+{
+#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
+  Function tmp(function);
+  tmp();
 #else
-  return static_cast<Derived*>(base);  // Poor man's downcast.
+  using boost::asio::asio_handler_invoke;
+  asio_handler_invoke(function, boost::asio::detail::addressof(context));
 #endif
 }
     
-      // Compares two wide C strings, ignoring case.  Returns true iff they
-  // have the same content.
-  //
-  // Unlike wcscasecmp(), this function can handle NULL argument(s).
-  // A NULL C string is considered different to any non-NULL wide C string,
-  // including the empty string.
-  // NB: The implementations on different platforms slightly differ.
-  // On windows, this method uses _wcsicmp which compares according to LC_CTYPE
-  // environment variable. On GNU platform this method uses wcscasecmp
-  // which compares according to LC_CTYPE category of the current locale.
-  // On MacOS X, it uses towlower, which also uses LC_CTYPE category of the
-  // current locale.
-  static bool CaseInsensitiveWideCStringEquals(const wchar_t* lhs,
-                                               const wchar_t* rhs);
     
-    template <GTEST_10_TYPENAMES_(T), GTEST_10_TYPENAMES_(U)>
-inline bool operator==(const GTEST_10_TUPLE_(T)& t,
-                       const GTEST_10_TUPLE_(U)& u) {
-  return gtest_internal::SameSizeTuplePrefixComparator<
-      tuple_size<GTEST_10_TUPLE_(T) >::value,
-      tuple_size<GTEST_10_TUPLE_(U) >::value>::Eq(t, u);
-}
-    
-    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_TYPE_UTIL_H_
-
-    
-      void OCRTester(const char* imgname, const char* groundtruth, const char* tessdatadir, const char* lang) {
-    //log.info() << tessdatadir << ' for language: ' << lang << std::endl;
-    char *outText;
-    std::locale loc('C'); // You can also use '' for the default system locale
-    std::ifstream file(groundtruth);
-    file.imbue(loc); // Use it for file input
-    std::string gtText((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-    tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
-    ASSERT_FALSE(api->Init(tessdatadir, lang)) << 'Could not initialize tesseract.';
-    Pix *image = pixRead(imgname);
-    ASSERT_TRUE(image != nullptr) << 'Failed to read test image.';
-    api->SetImage(image);
-    outText = api->GetUTF8Text();
-    EXPECT_EQ(gtText,outText) << 'Phototest.tif OCR does not match ground truth for ' << ::testing::PrintToString(lang);
-    api->End();
-    delete [] outText;
-    pixDestroy(&image);
-  }
-    
-    DetLineFit::~DetLineFit() {
-}
-    
-    
-    {}  // namespace tesseract
-    
-    
-/**********************************************************************
- * QLSQ::remove
- *
- * Delete an element from the accumulator.
- **********************************************************************/
-    
-    
-    {
-    {    data_channel->gather(raw_tensors, *int_tensor, 0);
-    for (std::size_t i = 0; i < tensors.size(); ++i)
-      ASSERT_TENSOR_VALUE(int, *(tensors[i]), i)
-  } else {
-    data_channel->gather(raw_tensors, *int_tensor, 0);
-  }
-}
-    
-    template<> AT_API Half convert(float f);
-template<> AT_API float convert(Half f);
-template<> AT_API Half convert(double f);
-template<> AT_API double convert(Half f);
-template<> AT_API Half convert(int64_t f);
-template<> AT_API int64_t convert(Half f);
-    
-      std::unique_ptr<GlooCache> _cache;
-    
-    #define THDPStorage TH_CONCAT_3(THDP,Real,Storage)
-#define THDPStorageStr TH_CONCAT_STRING_3(torch.cuda.,Real,Storage)
-#define THDPStorageClass TH_CONCAT_3(THDP,Real,StorageClass)
-#define THDPStorage_(NAME) TH_CONCAT_4(THDP,Real,Storage_,NAME)
-    
-    #undef THPStorage_
-#undef THPStorage
-#undef THPStorageBaseStr
-#undef THPStorageStr
-#undef THPStorageClass
-#undef THPStorageType
-    
-    
-void register_fd(int fd) {
-  struct pollfd pfd = {0};
-  pfd.fd = fd;
-  pfd.events = POLLIN;
-  pollfds.push_back(pfd);
-}
-    
-    ByteArray::~ByteArray() {}
-    
-      std::string to_string() const;
-    
-    template <typename T, typename U>
-struct is_any_of<T, std::tuple<U>> : std::is_same<T, U> {};
-    
-    /* Set of callbacks used to receive callbacks from bidirectional stream. */
-typedef struct bidirectional_stream_callback {
-  /* Invoked when the stream is ready for reading and writing.
-   * Consumer may call bidirectional_stream_read() to start reading data.
-   * Consumer may call bidirectional_stream_write() to start writing
-   * data.
-   */
-  void (*on_stream_ready)(bidirectional_stream* stream);
-    }
-    
-    #include <signal.h>
-    
-    namespace grpc_node_generator {
-    }
-    
-    // Data pertaining to configuration of the generator with respect to anything
-// that may be used internally at Google.
-struct GeneratorConfiguration {
-  GeneratorConfiguration();
-  grpc::string grpc_package_root;
-  // TODO(https://github.com/grpc/grpc/issues/8622): Drop this.
-  grpc::string beta_package_root;
-  // TODO(https://github.com/google/protobuf/issues/888): Drop this.
-  grpc::string import_prefix;
+    {  // Returns a heuristic cutoff on block errors in the sense that we won't
+  // consider distortions where a block error is greater than this.
+  virtual float BlockErrorLimit() const = 0;
+  // Given the search direction (+1 for upwards and -1 for downwards) and the
+  // current distance map, fills in *block_weight image with the relative block
+  // error adjustment weights.
+  // The target_mul param has the same semantics as in DistanceOK().
+  // Note that this is essentially a static function in the sense that it does
+  // not depend on the last Compare() call.
+  virtual void ComputeBlockErrorAdjustmentWeights(
+      int direction, int max_block_dist, double target_mul, int factor_x,
+      int factor_y, const std::vector<float>& distmap,
+      std::vector<float>* block_weight) = 0;
 };
     
-    #include <string>
-    
-    UsageTimer::Result UsageTimer::Sample() {
-  Result r;
-  r.wall = Now();
-  get_resource_usage(&r.user, &r.system);
-  r.total_cpu_time = 0;
-  r.idle_cpu_time = 0;
-  get_cpu_usage(&r.total_cpu_time, &r.idle_cpu_time);
-  return r;
+    void OutputImage::ToLinearRGB(int xmin, int ymin, int xsize, int ysize,
+                              std::vector<std::vector<float> >* rgb) const {
+  const double* lut = Srgb8ToLinearTable();
+  std::vector<uint8_t> rgb_pixels = ToSRGB(xmin, ymin, xsize, ysize);
+  for (int p = 0; p < xsize * ysize; ++p) {
+    for (int i = 0; i < 3; ++i) {
+      (*rgb)[i][p] = static_cast<float>(lut[rgb_pixels[3 * p + i]]);
+    }
+  }
 }
     
-      static double Now();
+    void ComputeBlockDCTDouble(double block[64]) {
+  TransformBlock(block, DCT1d);
+}
     
+    // Performs in-place floating point 8x8 DCT on block[0..63].
+// Note that the DCT used here is the DCT-2 with the first term multiplied by
+// 1/sqrt(2) and the result scaled by 1/2.
+void ComputeBlockDCTDouble(double block[64]);
     
-    {
-    {}  // namespace testing
-}  // namespace grpc
+    // This function will create a Huffman tree.
+//
+// The (data,length) contains the population counts.
+// The tree_limit is the maximum bit depth of the Huffman codes.
+//
+// The depth contains the tree, i.e., how many bits are used for
+// the symbol.
+//
+// The actual Huffman tree is constructed in the tree[] array, which has to
+// be at least 2 * length + 1 long.
+//
+// See http://en.wikipedia.org/wiki/Huffman_coding
+void CreateHuffmanTree(const uint32_t *data,
+                       const size_t length,
+                       const int tree_limit,
+                       HuffmanTree* tree,
+                       uint8_t *depth);
+    
+    #include <math.h>
+    
+    #endif  // GUETZLI_FDCT_H_
 
     
-    /**
- * \fn  std::shared_ptr<xgboost::DMatrix> CreateDMatrix(int rows, int columns, float sparsity, int seed);
- *
- * \brief Creates dmatrix with uniform random data between 0-1.
- *
- * \param rows      The rows.
- * \param columns   The columns.
- * \param sparsity  The sparsity.
- * \param seed      The seed.
- *
- * \return  The new d matrix.
- */
-    
-    /*
- * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
- * Method:    RabitGetRank
- * Signature: ([I)I
- */
-JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_RabitGetRank
-  (JNIEnv *jenv, jclass jcls, jintArray jout) {
-  jint rank = RabitGetRank();
-  jenv->SetIntArrayRegion(jout, 0, 1, &rank);
-  return 0;
-}
-    
-    
-    {  EXPECT_ANY_THROW(GetMetricEval(metric, {0, 1}, {}));
-}
-    
-    
-    {  /*!
-   * \brief Create a linear updater given name
-   * \param name Name of the linear updater.
-   */
-  static LinearUpdater* Create(const std::string& name);
-};
-    
-      void LazySumWeights(DMatrix *p_fmat) {
-    if (!sum_weight_complete_) {
-      auto &info = p_fmat->Info();
-      for (size_t i = 0; i < info.num_row_; i++) {
-        sum_instance_weight_ += info.GetWeight(i);
-      }
-      sum_weight_complete_ = true;
-    }
-  }
-    
-    // Used to encapsulate a particular instance of an opened database.
-//
-// This object should not be used directly in C++; it exists solely to provide
-// a mapping from a JavaScript object to a C++ code that can use the RocksDB
-// API.
-class DBWrapper : public node::ObjectWrap {
-  public:
-    static void Init(Handle<Object> exports);
-    }
-    
-    
-int           XXH32_sizeofState();
-XXH_errorcode XXH32_resetState(void* state, unsigned int seed);
-    
-      // Offset of the last record returned by ReadRecord.
-  uint64_t last_record_offset_;
-  // Offset of the first location past the end of buffer_.
-  uint64_t end_of_buffer_offset_;
-    
-    namespace rocksdb {
-JniCallback::JniCallback(JNIEnv* env, jobject jcallback_obj) {
-  // Note: jcallback_obj may be accessed by multiple threads,
-  // so we ref the jvm not the env
-  const jint rs = env->GetJavaVM(&m_jvm);
-  if(rs != JNI_OK) {
-    // exception thrown
-    return;
-  }
-    }
-    }
-    
-    // We want to make sure that with a single writer and multiple
-// concurrent readers (with no synchronization other than when a
-// reader's iterator is created), the reader always observes all the
-// data that was present in the skip list when the iterator was
-// constructor.  Because insertions are happening concurrently, we may
-// also observe new values that were inserted since the iterator was
-// constructed, but we should never miss any values that were present
-// at iterator construction time.
-//
-// We generate multi-part keys:
-//     <key,gen,hash>
-// where:
-//     key is in range [0..K-1]
-//     gen is a generation number for key
-//     hash is hash(key,gen)
-//
-// The insertion code picks a random key, sets gen to be 1 + the last
-// generation number inserted for that key, and sets hash to Hash(key,gen).
-//
-// At the beginning of a read, we snapshot the last inserted
-// generation number for each key.  We then iterate, including random
-// calls to Next() and Seek().  For every key we encounter, we
-// check that it is either expected given the initial snapshot or has
-// been concurrently added since the iterator started.
-class ConcurrentTest {
- public:
-  static const uint32_t K = 8;
-    }
-    
-    
-    {}  // namespace rocksdb
-    
-    InternalIterator* MergeIteratorBuilder::Finish() {
-  InternalIterator* ret = nullptr;
-  if (!use_merging_iter) {
-    ret = first_iter;
-    first_iter = nullptr;
-  } else {
-    ret = merge_iter;
-    merge_iter = nullptr;
-  }
-  return ret;
-}
-    
-    
-    {  return _URC_NO_REASON;
-}
-    
-      YGNodeCalculateLayout(root, 200, 100, YGDirectionLTR);
-    
-    /* static */ Config * Config::create(void)
-{
-    return new Config();
-}
-    
-    Value Node::getMinWidth(void) const
-{
-    return Value::fromYGValue(YGNodeStyleGetMinWidth(m_node));
-}
-    
-     public:
-    
-    #include <cstdarg>
-#include <stdio.h>
-    
-      // Creates a strong reference from a raw pointer, assuming that it points to a
-  // freshly-created object. See the documentation for RefPtr for usage.
-  static inline RefPtr<T> adoptRef(T* ptr) {
-    return RefPtr<T>(ptr, ConstructionMode::Adopted);
-  }
-    
-    // Class that lets you declare a global but does not add a static constructor
-// to the binary. Eventually I'd like to have this auto-initialize in a
-// multithreaded environment but for now it's easiest just to use manual
-// initialization.
-template <typename T>
-class StaticInitialized {
-public:
-  constexpr StaticInitialized() :
-    m_instance(nullptr)
-  {}
-    }
-    
-    #include <fb/visibility.h>
-    
-    #pragma once
+    #ifndef GUETZLI_JPEG_DATA_DECODER_H_
+#define GUETZLI_JPEG_DATA_DECODER_H_
