@@ -1,141 +1,181 @@
 
         
-        
-if len(sys.argv) <= 1:
-    print('Specify the version number as parameter')
-    sys.exit()
-version = sys.argv[1]
+            # Then we cluster the lines together as blocks
+    # Each block represents a collection of lines that should be sorted
+    # This was done by assuming only links ([...](...)) are meant to be sorted
+    # Clustering is done by indentation
+    blocks = []
+    last_indent = None
+    for line in read_me:
+        s_line = line.lstrip()
+        indent = len(line) - len(s_line)
     
-            with open(swf_file, 'rb') as swf_f:
-            swf_content = swf_f.read()
-        swfi = SWFInterpreter(swf_content)
     
-                    m = re.search(r'(?<=\s)u[\''](?!\)|,|$)', code)
-                if m is not None:
-                    self.assertTrue(
-                        m is None,
-                        'u present in %s, around %s' % (
-                            fn, code[m.start() - 10:m.end() + 10]))
+def test_auth_plugin_require_auth_false(httpbin):
     
-    try:
-    from .lazy_extractors import *
-    from .lazy_extractors import _ALL_CLASSES
-    _LAZY_LOADER = True
-except ImportError:
-    _LAZY_LOADER = False
-    from .extractors import *
+            # Keyword arguments > stream.encoding > default utf8
+        if self.stdin_encoding is None:
+            self.stdin_encoding = getattr(
+                self.stdin, 'encoding', None) or 'utf8'
+        if self.stdout_encoding is None:
+            actual_stdout = self.stdout
+            if is_windows:
+                # noinspection PyUnresolvedReferences
+                from colorama import AnsiToWin32
+                if isinstance(self.stdout, AnsiToWin32):
+                    actual_stdout = self.stdout.wrapped
+            self.stdout_encoding = getattr(
+                actual_stdout, 'encoding', None) or 'utf8'
     
-            return {
-            '_type': 'playlist',
-            'id': playlist_id,
-            'title': title,
-            'description': description,
-            'entries': entries,
-        }
+    
+class HTTPResponse(HTTPMessage):
+    '''A :class:`requests.models.Response` wrapper.'''
+    
+    
+with codecs.open(JSON_FILE_PATH, encoding='utf8') as f:
+    JSON_FILE_CONTENT = f.read()
+    
+    
+def rst_filenames():
+    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
+        if '.tox' not in root:
+            for filename in fnmatch.filter(filenames, '*.rst'):
+                yield os.path.join(root, filename)
+    
+            if (not isinstance(args, list) and args.output_file and
+                args.output_file_specified):
+            args.output_file.close()
+    
+        # noinspection PyMethodOverriding
+    def get_auth(self, username, password):
+        return requests.auth.HTTPDigestAuth(username, password)
 
     
-            webpage = self._download_webpage(url, video_id)
+        def test_cert_and_key(self, httpbin_secure):
+        r = http(httpbin_secure + '/get',
+                 '--cert', CLIENT_CERT,
+                 '--cert-key', CLIENT_KEY)
+        assert HTTP_OK in r
     
-        def to_json(self, value):
-        return value.hex
+        if is_pypy and is_py27:
+        # Manually set keys when initialized with an iterable as PyPy
+        # doesn't call __setitem__ in such case (pypy3 does).
+        def __init__(self, *args, **kwargs):
+            if len(args) == 1 and isinstance(args[0], Iterable):
+                super(RequestItemsDict, self).__init__(**kwargs)
+                for k, v in args[0]:
+                    self[k] = v
+            else:
+                super(RequestItemsDict, self).__init__(*args, **kwargs)
     
-        def __get__(self, obj, type=None):
-        if obj is None:
-            return self
-        rv = obj.config[self.__name__]
-        if self.get_converter is not None:
-            rv = self.get_converter(rv)
-        return rv
+        def get_formatters_grouped(self):
+        groups = {}
+        for group_name, group in groupby(
+                self.get_formatters(),
+                key=lambda p: getattr(p, 'group_name', 'format')):
+            groups[group_name] = list(group)
+        return groups
     
+            # host:port => host_port
+        hostname = hostname.replace(':', '_')
+        path = os.path.join(config_dir,
+                            SESSIONS_DIR_NAME,
+                            hostname,
+                            session_name + '.json')
     
-# Core signals.  For usage examples grep the source code or consult
-# the API documentation in docs/api.rst as well as docs/signals.rst
-template_rendered = _signals.signal('template-rendered')
-before_render_template = _signals.signal('before-render-template')
-request_started = _signals.signal('request-started')
-request_finished = _signals.signal('request-finished')
-request_tearing_down = _signals.signal('request-tearing-down')
-got_request_exception = _signals.signal('got-request-exception')
-appcontext_tearing_down = _signals.signal('appcontext-tearing-down')
-appcontext_pushed = _signals.signal('appcontext-pushed')
-appcontext_popped = _signals.signal('appcontext-popped')
-message_flashed = _signals.signal('message-flashed')
+    from scrapy.utils.conf import arglist_to_dict
+from scrapy.exceptions import UsageError
+    
+        default_settings = {
+        'LOG_LEVEL': 'INFO',
+        'LOGSTATS_INTERVAL': 1,
+        'CLOSESPIDER_TIMEOUT': 10,
+    }
+    
+            request.callback = cb_wrapper
+        request.errback = eb_wrapper
+    
+        name = 'scrapes'
+    
+        def add_link_to_crawl(self, url):
+        '''Add the given link to `links_to_crawl`.'''
+        pass
+    
+        def extract_year_month(self, timestamp):
+        '''Return the year and month portions of the timestamp.'''
+        ...
+    
+        def reject_friend_request(self, from_user_id, to_user_id):
+        pass
+    
+        def __init__(self, template_categories_to_budget_map):
+        self.categories_to_budget_map = template_categories_to_budget_map
+    
+            self.assertFalse(self.addr_defined.conflicts(self.addr1))
+        self.assertFalse(self.addr_defined.conflicts(self.addr2))
+        self.assertFalse(self.addr_defined.conflicts(self.addr))
+        self.assertFalse(self.addr_defined.conflicts(self.addr_default))
+    
+    # List of patterns, relative to source directory, that match files and
+# directories to ignore when looking for source files.
+exclude_patterns = ['_build']
+    
+        @mock.patch(
+        'certbot_compatibility_test.validator.crypto_util.probe_sni')
+    def test_certificate_success(self, mock_probe_sni):
+        cert = OpenSSL.crypto.X509()
+        mock_probe_sni.return_value = cert
+        self.assertTrue(self.validator.certificate(
+            cert, 'test.com', '127.0.0.1'))
+    
+        @mock.patch('certbot.notify.smtplib.LMTP')
+    @mock.patch('certbot.notify.subprocess.Popen')
+    def test_everything_fails(self, mock_popen, mock_lmtp):
+        from certbot.notify import notify
+        lmtp_obj = mock.MagicMock()
+        mock_lmtp.return_value = lmtp_obj
+        lmtp_obj.sendmail.side_effect = socket.error(17)
+        proc = mock.MagicMock()
+        mock_popen.return_value = proc
+        proc.communicate.side_effect = OSError('What we have here is a '
+                                               'failure to communicate.')
+        self.assertFalse(notify('Goose', 'auntrhody@example.com',
+                                'The old grey goose is dead.'))
+        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
+        self.assertEqual(proc.communicate.call_count, 1)
+    
+        # Implement all methods from IInstaller, remembering to add
+    # 'self' as first argument, e.g. def get_all_names(self)...
 
     
-        This module provides class-based views inspired by the ones in Django.
+                RuleRouter([
+                ('/handler', Target),
+            ])
     
-                greenlets.append(greenlet(g))
-            return 'Hello World!'
-    
-    
-def rmse(a, b):
-    return np.sqrt(np.mean((a - b) ** 2))
-    
-        gc.collect()
-    
-        class_name = info['fullname'].split('.')[0]
-    if type(class_name) != str:
-        # Python 2 only
-        class_name = class_name.encode('utf-8')
-    module = __import__(info['module'], fromlist=[class_name])
-    obj = attrgetter(info['fullname'])(module)
-    
-    try:
-    from urllib import urlopen
-except ImportError:
-    from urllib.request import urlopen
-    
-    If all examples are from the same class, it uses a one-class SVM.
-    
-    data, row_idx, col_idx = sg._shuffle(data, random_state=0)
-plt.matshow(data, cmap=plt.cm.Blues)
-plt.title('Shuffled dataset')
-    
-    from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC
-from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.gaussian_process.kernels import RBF
-from sklearn import datasets
-    
-    import matplotlib.pyplot as plt
-import numpy as np
-    
-    '''
-print(__doc__)
-    
-    # If true, show URL addresses after external links.
-#man_show_urls = False
-    
-    from certbot import interfaces
-from certbot.plugins import common
-    
-        test_suite = 'tests',
-    
-    	xml = get_html('http://www.ehow.com/services/video/series.xml?demand_ehow_videoid=%s' % vid)
-    
-	from xml.dom.minidom import parseString
-	doc = parseString(xml)
-	tab = doc.getElementsByTagName('related')[0].firstChild
-    
-    from ..common import *
-from hashlib import md5
-from urllib.parse import urlparse
+    import array
+import atexit
+import os
 import re
+import sys
+import zlib
+    
+        def test_nonblocking_get_exception(self):
+        q = queues.Queue()
+        self.assertRaises(queues.QueueEmpty, q.get_nowait)
+    
+        def test_twitter_show_user_legacy(self):
+        response = self.fetch('/legacy/twitter/client/show_user?name=somebody')
+        response.rethrow()
+        self.assertEqual(json_decode(response.body),
+                         {'name': 'Somebody', 'screen_name': 'somebody'})
     
     
-def huaban_download(url, output_dir='.', **kwargs):
-    if re.match(r'http://huaban\.com/boards/\d+/', url):
-        huaban_download_board(url, output_dir, **kwargs)
-    else:
-        print('Only board (画板) pages are supported currently')
-        print('ex: http://huaban.com/boards/12345678/')
+class RequestProxyTest(unittest.TestCase):
+    def test_request_set(self):
+        proxy = _RequestProxy(HTTPRequest('http://example.com/',
+                                          user_agent='foo'),
+                              dict())
+        self.assertEqual(proxy.user_agent, 'foo')
     
-        def prepare(self, **kwargs):
-        content = get_content(self.url)
-        self.title = match1(content, r'<title>([^<]+)</title>')
-        s = match1(content, r'P\.s\s*=\s*\'([^\']+)\'')
-        scp = match1(content, r'InfoQConstants\.scp\s*=\s*\'([^\']+)\'')
-        scs = match1(content, r'InfoQConstants\.scs\s*=\s*\'([^\']+)\'')
-        sck = match1(content, r'InfoQConstants\.sck\s*=\s*\'([^\']+)\'')
-    
-    __all__ = ['kuwo_download']
+            result = yield self.resolver.resolve('google.com', 80, socket.AF_INET6)
+        self.assertIn((socket.AF_INET6, ('2a02:6b8:7c:40c:c51e:495f:e23a:3', 80, 0, 0)), result)
