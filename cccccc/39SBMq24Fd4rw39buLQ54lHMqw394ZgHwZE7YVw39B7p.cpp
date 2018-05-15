@@ -1,170 +1,184 @@
 
         
-        #ifndef SWIFT_DEBUGGERCLIENT_H
-#define SWIFT_DEBUGGERCLIENT_H
+        
     
-    #pragma mark - NSData verification
-    
-    class DocComment {
-  const Decl *D;
-  const swift::markup::Document *Doc = nullptr;
-  const swift::markup::CommentParts Parts;
-    }
-    
-      ArrayRef<const MarkupASTNode *> getChildren() const {
-    return {};
-  }
-    
-    SILDebugScope::SILDebugScope(SILLocation Loc, SILFunction *SILFn,
-                             const SILDebugScope *ParentScope ,
-                             const SILDebugScope *InlinedCallSite)
-    : Loc(Loc), InlinedCallSite(InlinedCallSite) {
-  if (ParentScope)
-    Parent = ParentScope;
-  else {
-    assert(SILFn && 'no parent provided');
-    Parent = SILFn;
-  }
-}
-    
-    struct IndexRelation {
-  const Decl *decl;
-  SymbolInfo symInfo;
-  SymbolRoleSet roles = SymbolRoleSet(0);
+    TEST(AnyTest, TestIs) {
+  protobuf_unittest::TestAny submessage;
+  submessage.set_int32_value(12345);
+  google::protobuf::Any any;
+  any.PackFrom(submessage);
+  ASSERT_TRUE(any.ParseFromString(any.SerializeAsString()));
+  EXPECT_TRUE(any.Is<protobuf_unittest::TestAny>());
+  EXPECT_FALSE(any.Is<google::protobuf::Any>());
     }
     
     
-    {} // end namespace swift
+    {
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
     
-    #include <d3d11.h>
-#pragma comment (lib, 'd3d11.lib')
+    #include <memory>
     
-    void CalibrateExtrinsics(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
-                         const IntrinsicParams& param, const int check_cond,
-                         const double thresh_cond, InputOutputArray omc, InputOutputArray Tc);
     
-            template<int CTA_SIZE>
-        static __forceinline__ __device__ int Ballot(int predicate)
-        {
-#if defined (__CUDA_ARCH__) && (__CUDA_ARCH__ >= 200)
-            return __ballot(predicate);
-#else
-            __shared__ volatile int cta_buffer[CTA_SIZE];
-    }
-    
-    #endif /* OPENCV_CUDA_WARP_REDUCE_HPP__ */
+    {
+}  // namespace google
+#endif  // GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
 
     
-            // Version: 2.1
-        PIXEL_PACK_BUFFER                = 0x88EB,
-        PIXEL_UNPACK_BUFFER              = 0x88EC,
-        PIXEL_PACK_BUFFER_BINDING        = 0x88ED,
-        PIXEL_UNPACK_BUFFER_BINDING      = 0x88EF,
-        FLOAT_MAT2x3                     = 0x8B65,
-        FLOAT_MAT2x4                     = 0x8B66,
-        FLOAT_MAT3x2                     = 0x8B67,
-        FLOAT_MAT3x4                     = 0x8B68,
-        FLOAT_MAT4x2                     = 0x8B69,
-        FLOAT_MAT4x3                     = 0x8B6A,
-        SRGB                             = 0x8C40,
-        SRGB8                            = 0x8C41,
-        SRGB_ALPHA                       = 0x8C42,
-        SRGB8_ALPHA8                     = 0x8C43,
-        COMPRESSED_SRGB                  = 0x8C48,
-        COMPRESSED_SRGB_ALPHA            = 0x8C49,
     
-    #ifdef HAVE_LAPACK
-    
-    const uchar g_Saturate8u[] =
-{
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-      0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
-     16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
-     32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
-     48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
-     64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
-     80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
-     96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
-    112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
-    128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
-    144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
-    160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
-    176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
-    192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
-    208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
-    224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
-    240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255
+    {  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ReflectionClassGenerator);
 };
     
-    SEXP XGDMatrixSetInfo_R(SEXP handle, SEXP field, SEXP array) {
-  R_API_BEGIN();
-  int len = length(array);
-  const char *name = CHAR(asChar(field));
-  if (!strcmp('group', name)) {
-    std::vector<unsigned> vec(len);
-    #pragma omp parallel for schedule(static)
-    for (int i = 0; i < len; ++i) {
-      vec[i] = static_cast<unsigned>(INTEGER(array)[i]);
+    
+    
+     private:
+  const FieldDescriptor* descriptor_;
+  Context* context_;
+  ClassNameResolver* name_resolver_;
+  string scope_;
+    
+    // CodeGenerator implementation which generates Java code.  If you create your
+// own protocol compiler binary and you want it to support Java output, you
+// can do so by registering an instance of this CodeGenerator with the
+// CommandLineInterface in your main() function.
+class LIBPROTOC_EXPORT JavaGenerator : public CodeGenerator {
+ public:
+  JavaGenerator();
+  ~JavaGenerator();
     }
-    CHECK_CALL(XGDMatrixSetGroup(R_ExternalPtrAddr(handle), BeginPtr(vec), len));
-  } else {
-    std::vector<float> vec(len);
-    #pragma omp parallel for schedule(static)
-    for (int i = 0; i < len; ++i) {
-      vec[i] = REAL(array)[i];
-    }
-    CHECK_CALL(XGDMatrixSetFloatInfo(R_ExternalPtrAddr(handle),
-                                   CHAR(asChar(field)),
-                                   BeginPtr(vec), len));
+    
+    #if GTEST_HAS_DEATH_TEST
+    
+      // Since the basic IO manipulators are overloaded for both narrow
+  // and wide streams, we have to provide this specialized definition
+  // of operator <<, even though its body is the same as the
+  // templatized version above.  Without this definition, streaming
+  // endl or other basic IO manipulators to Message will confuse the
+  // compiler.
+  Message& operator <<(BasicNarrowIoManip val) {
+    *ss_ << val;
+    return *this;
   }
-  R_API_END();
-  return R_NilValue;
+    
+    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE DIRECTLY.
+//
+// Expands to the name of the variable used to remember the names of
+// the registered tests in the given test case.
+# define GTEST_REGISTERED_TEST_NAMES_(TestCaseName) \
+  gtest_registered_test_names_##TestCaseName##_
+    
+      // Stores result of the assertion predicate.
+  bool success_;
+  // Stores the message describing the condition in case the expectation
+  // construct is not satisfied with the predicate's outcome.
+  // Referenced via a pointer to avoid taking too much stack frame space
+  // with test assertions.
+  internal::scoped_ptr< ::std::string> message_;
+    
+    
+    
+      FilePath& operator=(const FilePath& rhs) {
+    Set(rhs);
+    return *this;
+  }
+    
+    // The base case for the compile time recursion.
+template <GTEST_TEMPLATE_ Fixture, typename Types>
+class TypeParameterizedTestCase<Fixture, Templates0, Types> {
+ public:
+  static bool Register(const char* /*prefix*/, const char* /*case_name*/,
+                       const char* /*test_names*/) {
+    return true;
+  }
+};
+    
+      // Smart pointer members.
+  void reset(T* ptr = NULL) {
+    depart();
+    capture(ptr);
+  }
+  T* get() const { return value_; }
+  T* operator->() const { return value_; }
+  T& operator*() const { return *value_; }
+    
+    // A handy wrapper for AddRef.
+#define GTEST_ADD_REF_(T) typename ::std::tr1::gtest_internal::AddRef<T>::type
+    
+    
+    {    // Now, we have i <= n/i < n.
+    // If n is divisible by i, n is not prime.
+    if (n % i == 0) return false;
+  }
+    
+    
+    {    return net;
 }
     
     
-    {  delete metric;
-  metric = xgboost::Metric::Create('ndcg@2-');
-  ASSERT_STREQ(metric->Name(), 'ndcg@2-');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 1, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              0.3868f, 0.001f);
-}
+    {
+    {
+    {}}} // end namespaces
+
     
-    namespace xgboost {
-namespace linear {
+            // Process any outstanding NDL Scripts
+        bool crossNetwork = netNdlTo->cn != netNdlFrom->cn;
+        ProcessNDLScript(netNdlFrom, ndlPassAll);
+        if (crossNetwork)
+        {
+            ProcessNDLScript(netNdlTo, ndlPassAll);
+        }
+    
+    // GetWriter - get a reader type from the DLL
+// The F version gets the 'float' version, and D gets 'double'.
+extern 'C' DATAWRITER_API void GetWriterF(IDataWriter** pwriter);
+extern 'C' DATAWRITER_API void GetWriterD(IDataWriter** pwriter);
+    
+    // ---------------------------------------------------------------------------
+// ProgressTracing -- static helper class for logging a progress indicator
+//
+// This is for use by the cluster management tools for indicating global progress to the user.
+//
+// This logs to stdout (not stderr) in a specific format, e.g. understood by the Philly cluster. The format is:
+//  PROGRESS xx.xx%
+//  EVALERR xx.xx%
+//
+// Specifically, this class handles a two-level progress computation:
+//  - outer level: loop over multiple training phases, each running multiple steps (epochs)
+//  - inner level in one training phase: loop over multiple steps, *without* knowledge about the other training phases
+//
+// In order for the inner level to log correctly in the global context, the outer loop
+// must inform this class about the total number of steps and the current offset to apply in the inner level.
+// ---------------------------------------------------------------------------
+    
+    class latticepair : public std::pair<msra::lattices::lattice, msra::lattices::lattice>
+{
+public:
+    // NOTE: we don't check numerator lattice now
+    size_t getnumframes() const
+    {
+        return second.getnumframes();
     }
+    size_t getnumnodes() const
+    {
+        return second.getnumnodes();
     }
+    size_t getnumedges() const
+    {
+        return second.getnumedges();
+    }
+    std::wstring getkey() const
+    {
+        return second.getkey();
+    }
+};
+    
+        // save a float to RAM bypassing the cache ('without polluting the cache')
+    void storewithoutcache (float & r) const
+    {
+        _mm_stream_ss (&r, v);
+    }
+#endif
