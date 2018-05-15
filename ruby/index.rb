@@ -1,103 +1,86 @@
 
         
-                if b_length > a_length
-          (b_length - a_length).times { a_split.insert(-2, 0) }
-        elsif a_length > b_length
-          (a_length - b_length).times { b_split.insert(-2, 0) }
-        end
-    
-        def type=(value)
-      @type = value.try :strip
+          def find_matching_tag(tag)
+    if key?(tag)
+      tag
+    else
+      find_altivec_tag(tag) || find_or_later_tag(tag)
     end
+  end
     
-        def join(*args)
-      self.class.join self, *args
-    end
-    
-                  # Check if data is actually ready on this IO device.
-              # We have to do this since `readpartial` will actually block
-              # until data is available, which can cause blocking forever
-              # in some cases.
-              results = ::IO.select([io], nil, nil, 1.0)
-              break if !results || results[0].empty?
-    
-          # This returns the keys (or ids) that are in the string.
-      #
-      # @return [<Array<String>]
-      def keys
-        regexp = /^#\s*VAGRANT-BEGIN:\s*(.+?)$\r?\n?(.*)$\r?\n?^#\s*VAGRANT-END:\s(\1)$/m
-        @value.scan(regexp).map do |match|
-          match[0]
-        end
-      end
-    
-            # Get the proper capability host to check
-        cap_host = nil
-        if type == :host
-          cap_host = @env.host
+          if path.symlink? || path.directory?
+        next
+      elsif path.extname == '.la'
+        path.unlink
+      else
+        # Set permissions for executables and non-executables
+        perms = if path.mach_o_executable? || path.text_executable?
+          0555
         else
-          with_target_vms([]) do |vm|
-            cap_host = case type
-                       when :provider
-                         vm.provider
-                       when :guest
-                         vm.guest
-                       else
-                         raise Vagrant::Errors::CLIInvalidUsage,
-                           help: opts.help.chomp
-                       end
+          0444
+        end
+        if ARGV.debug?
+          old_perms = path.stat.mode & 0777
+          if perms != old_perms
+            puts 'Fixing #{path} permissions from #{old_perms.to_s(8)} to #{perms.to_s(8)}'
+          end
+        end
+        path.chmod perms
+      end
+    end
+  end
+end
+
+    
+        results.map do |name|
+      begin
+        formula = Formulary.factory(name)
+        canonical_name = formula.name
+        canonical_full_name = formula.full_name
+      rescue
+        canonical_name = canonical_full_name = name
+      end
+      # Ignore aliases from results when the full name was also found
+      if aliases.include?(name) && results.include?(canonical_full_name)
+        next
+      elsif (HOMEBREW_CELLAR/canonical_name).directory?
+        pretty_installed(name)
+      else
+        name
+      end
+    end.compact
+  end
+end
+
+    
+    if $PROGRAM_NAME == __FILE__ && !ENV['COCOAPODS_NO_BUNDLER']
+  ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
+  require 'rubygems'
+  require 'bundler/setup'
+  $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+elsif ENV['COCOAPODS_NO_BUNDLER']
+  require 'rubygems'
+  gem 'cocoapods'
+end
+    
+            private
+    
+            def create
+          authorize! :create, StockLocation
+          @stock_location = StockLocation.new(stock_location_params)
+          if @stock_location.save
+            respond_with(@stock_location, status: 201, default_template: :show)
+          else
+            invalid_resource!(@stock_location)
           end
         end
     
-    desc 'Initial setup for Octopress: copies the default theme into the path of Jekyll's generator. Rake install defaults to rake install[classic] to install a different theme run rake install[some_theme_name]'
-task :install, :theme do |t, args|
-  if File.directory?(source_dir) || File.directory?('sass')
-    abort('rake aborted!') if ask('A theme is already installed, proceeding will overwrite existing files. Are you sure?', ['y', 'n']) == 'n'
-  end
-  # copy theme into working Jekyll directories
-  theme = args.theme || 'classic'
-  puts '## Copying '+theme+' theme into ./#{source_dir} and ./sass'
-  mkdir_p source_dir
-  cp_r '#{themes_dir}/#{theme}/source/.', source_dir
-  mkdir_p 'sass'
-  cp_r '#{themes_dir}/#{theme}/sass/.', 'sass'
-  mkdir_p '#{source_dir}/#{posts_dir}'
-  mkdir_p public_dir
-end
-    
-    # The project root directory
-$root = ::File.dirname(__FILE__)
-    
-      if options.respond_to? 'keys'
-    options.each do |k,v|
-      unless v.nil?
-        v = v.join ',' if v.respond_to? 'join'
-        v = v.to_json if v.respond_to? 'keys'
-        output += ' data-#{k.sub'_','-'}='#{v}''
-      end
-    end
-  elsif options.respond_to? 'join'
-    output += ' data-value='#{config[key].join(',')}''
-  else
-    output += ' data-value='#{config[key]}''
-  end
-  output += '></#{tag}>'
-end
-    
-      class GistTagNoCache < GistTag
-    def initialize(tag_name, text, token)
-      super
-      @cache_disabled = true
-    end
-  end
-end
-    
-    Liquid::Template.register_tag('include_code', Jekyll::IncludeCodeTag)
-
-    
-      # Extracts raw content DIV from template, used for page description as {{ content }}
-  # contains complete sub-template code on main page level
-  def raw_content(input)
-    /<div class='entry-content'>(?<content>[\s\S]*?)<\/div>\s*<(footer|\/article)>/ =~ input
-    return (content.nil?) ? input : content
-  end
+            def create
+          authorize! :create, StockMovement
+          @stock_movement = scope.new(stock_movement_params)
+          if @stock_movement.save
+            respond_with(@stock_movement, status: 201, default_template: :show)
+          else
+            invalid_resource!(@stock_movement)
+          end
+        end
