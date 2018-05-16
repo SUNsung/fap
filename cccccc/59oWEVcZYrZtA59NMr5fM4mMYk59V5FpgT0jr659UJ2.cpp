@@ -1,260 +1,311 @@
 
         
-        #include 'content/nw/src/api/base/base.h'
+        #endif
+// TENSORFLOW_KERNELS_SMOOTH_HINGE_LOSS_H_
+
     
-    #ifndef CONTENT_NW_SRC_API_BASE_BASE_H_
-#define CONTENT_NW_SRC_API_BASE_BASE_H_
-    
-    std::string Clipboard::GetText() {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  base::string16 text;
-  clipboard->ReadText(ui::CLIPBOARD_TYPE_COPY_PASTE, &text);
-  return base::UTF16ToUTF8(text);
-}
-    
-    class ObjectManager;
-    
-    void Menu::UpdateStates() {
-}
-    
-    /** Returns the benchmark Reporter instance.
- *
- * The returned instance will take care of generating reports for all the actual
- * reporters configured via the 'enable_*_reporter' command line flags (see
- * benchmark_config.cc). */
-std::shared_ptr<Reporter> GetReporter();
-    
-    
-    {
-}  // namespace routeguide
-    
-    #ifndef GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
-#define GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
-    
-    #include 'src/compiler/config.h'
-#include 'src/compiler/schema_interface.h'
-    
-            // Get model's doc string.
-        // Return null pointer if not specified.
-        const std::string& DocString() const;
-        // Set models' doc string.
-        void SetDocString(const std::string& p_docString);
-    
-                // Get to know whether this attribute has default value,
-            // if yes, <p_value> will be assigned to be the default value.
-            bool HasDefaultValue(const AttributeProto** p_value) const;
-    
-                    if (IsLittleEndianOrder())
-                {
-                    memcpy((void*)p_data, (void*)buff, raw_data.size() * sizeof(char));
-                }
-                else
-                {
-                    for (size_t i = 0; i < raw_data.size(); i += typeSize, buff += typeSize)
-                    {
-                        T result;
-                        const char* tempBytes = reinterpret_cast<char*>(&result);
-                        for (size_t j = 0; j < typeSize; ++j)
-                        {
-                            memcpy((void*)&tempBytes[j], (void*)&buff[typeSize - 1 - i], sizeof(char));
-                        }
-                        p_data[i] = result;
-                    }
-                }
-    
-        // Taken from Caffe2
-    REGISTER_OPERATOR_SCHEMA(SpaceToDepth)
-        .Description('SpaceToDepth for 4-D tensors of type T. '
-            'Zero-pads and then rearranges (permutes) blocks of spatial data into '
-            'channel. More specifically, this op outputs a copy of the input tensor '
-            'where values from the height and width dimensions are moved to the '
-            'channel dimension. After the zero-padding, both height and width of the '
-            'input must be divisible by the block size.')
-        .Input('input', 'Input tensor of [N,C,H,W]', 'T')
-        .Output('output', 'Output tensor of [N, C * blocksize * blocksize, H/blocksize, '
-            'W/blocksize]', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.')
-        .Attr('blocksize', 'Blocks of [blocksize,blocksize] are moved.', AttrType::AttributeProto_AttributeType_INT);
-    
-    // Gets information about available chunks.
-std::vector<ChunkInfo> HTKDeserializer::ChunkInfos()
-{
-    std::vector<ChunkInfo> chunks;
-    chunks.reserve(m_chunks.size());
+    namespace Eigen {
     }
     
-    static const wchar_t* SectionTypeStrings[sectionTypeMax] =
-    {
-        L'Null',
-        L'File',           // file header
-        L'Data',           // data section
-        L'Labels',         // label data
-        L'LabelMapping',   // label mapping table (array of strings)
-        L'Stats',          // data statistics
-        L'CategoryLabels', // labels in category format (float type, all zeros with a single 1.0 per column)
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    
+    {    OP_REQUIRES_OK(
+        context, context->GetAttr('samples_per_second', &samples_per_second_));
+    OP_REQUIRES(context, samples_per_second_ > 0,
+                errors::InvalidArgument('samples_per_second must be > 0.'));
+    OP_REQUIRES_OK(context,
+                   context->GetAttr('bits_per_second', &bits_per_second_));
+  }
+    
+    #include 'tensorflow/core/framework/register_types.h'
+#include 'tensorflow/core/framework/tensor_types.h'
+#include 'tensorflow/core/kernels/cuda_device_array_gpu.h'
+#include 'tensorflow/core/util/cuda_kernel_helper.h'
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    #endif  // GOOGLE_CUDA
+
+    
+      const std::vector<string> urls({server_data_.url});
+  for (int i = 0; i < 3; ++i) {
+    server_data_.server->ClearReceivedDebugData();
+    const uint64 wall_time = Env::Default()->NowMicros();
+    }
+    
+      class MatchGroundTruth : public QuickTest ,
+      public ::testing::WithParamInterface<const char*> {
+  };
+  
+  TEST_P(MatchGroundTruth, FastPhototestOCR) {
+    OCRTester(TESTING_DIR '/phototest.tif',
+              TESTING_DIR '/phototest.txt',
+              TESSDATA_DIR '_fast', GetParam());
+  }
+  
+  INSTANTIATE_TEST_CASE_P( EngLatinDevaArabLang, MatchGroundTruth, 
+                        ::testing::Values('eng', 'script/Latin', 'script/Devanagari', 'script/Arabic') );
+    
+    // dims=[5, 4, 3, 2]->[3, 5, 4, 2]
+TEST_F(MatrixTest, RotatingTranspose_2_0) {
+  GENERIC_2D_ARRAY<int> m;
+  src_.RotatingTranspose(dims_, kNumDims_, 2, 0, &m);
+  m.ResizeNoInit(kInputSize_ / 2, 2);
+  // Verify that the result is:
+  // output tensor=[[[[0, 1][6, 7][12, 13][18, 19]]
+  //                 [[24, 25][30, 31][36, 37][42, 43]]
+  //                 [[48, 49][54, 55][60, 61][66, 67]]
+  //                 [[72, 73][78, 79][84, 85][90, 91]]
+  //                 [[96, 97][102, 103][108, 109][114, 115]]]
+  //                [[[2,3]...
+  EXPECT_EQ(0, m(0, 0));
+  EXPECT_EQ(1, m(0, 1));
+  EXPECT_EQ(6, m(1, 0));
+  EXPECT_EQ(7, m(1, 1));
+  EXPECT_EQ(24, m(4, 0));
+  EXPECT_EQ(25, m(4, 1));
+  EXPECT_EQ(30, m(5, 0));
+  EXPECT_EQ(2, m(20, 0));
+}
+    
+    // Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+double DotProductSSE(const double* u, const double* v, int n);
+// Computes and returns the dot product of the n-vectors u and v.
+// Uses Intel SSE intrinsics to access the SIMD instruction set.
+int32_t IntDotProductSSE(const int8_t* u, const int8_t* v, int n);
+    
+    // Computes all the cross product distances of the points from the line,
+// storing the actual (signed) cross products in distances.
+// Ignores distances of points that are further away than the previous point,
+// and overlaps the previous point by at least half.
+void DetLineFit::ComputeDistances(const ICOORD& start, const ICOORD& end) {
+  distances_.truncate(0);
+  ICOORD line_vector = end;
+  line_vector -= start;
+  square_length_ = line_vector.sqlength();
+  int line_length = IntCastRounded(sqrt(square_length_));
+  // Compute the distance of each point from the line.
+  int prev_abs_dist = 0;
+  int prev_dot = 0;
+  for (int i = 0; i < pts_.size(); ++i) {
+    ICOORD pt_vector = pts_[i].pt;
+    pt_vector -= start;
+    int dot = line_vector % pt_vector;
+    // Compute |line_vector||pt_vector|sin(angle between)
+    int dist = line_vector * pt_vector;
+    int abs_dist = dist < 0 ? -dist : dist;
+    if (abs_dist > prev_abs_dist && i > 0) {
+      // Ignore this point if it overlaps the previous one.
+      int separation = abs(dot - prev_dot);
+      if (separation < line_length * pts_[i].halfwidth ||
+          separation < line_length * pts_[i - 1].halfwidth)
+        continue;
+    }
+    distances_.push_back(DistPointPair(dist, pts_[i].pt));
+    prev_abs_dist = abs_dist;
+    prev_dot = dot;
+  }
+}
+    
+    static STRING ParagraphJustificationToString(
+    tesseract::ParagraphJustification justification) {
+  switch (justification) {
+    case JUSTIFICATION_LEFT:
+      return 'LEFT';
+    case JUSTIFICATION_RIGHT:
+      return 'RIGHT';
+    case JUSTIFICATION_CENTER:
+      return 'CENTER';
+    default:
+      return 'UNKNOWN';
+  }
+}
+    
+    #endif  // TESSERACT_CCMAIN_OTSUTHR_H_
+
+    
+    // Maximum number of unichars in the small and medium sized words
+static const int kMaxSmallWordUnichars = 3;
+static const int kMaxMediumWordUnichars = 6;
+    
+    #ifndef TESSERACT_CCUTIL_UNICODES_H_
+#define TESSERACT_CCUTIL_UNICODES_H_
+    
+    
+    {}
+    
+    
+    {  auto& counter = s_counters[m_name];
+  counter.total += elapsed;
+  ++counter.count;
+  counter.max = std::max(counter.max, elapsed);
+  counter.wall_time_elapsed += elapsed_wall_clock;
+  m_finished = true;
+  return elapsed;
+}
+    
+    public const char *
+magic_stream(struct magic_set *ms, php_stream *stream)
+{
+  if (ms == NULL)
+    return NULL;
+  return file_or_stream(ms, NULL, stream);
+}
+    
+    /*
+ * Returns an IR block corresponding to the given bytecode offset. If the block
+ * starts with a DefLabel expecting a StkPtr, this function will return an
+ * intermediate block that passes the current sp.
+ */
+Block* getBlock(IRGS& env, Offset offset);
+    
+        if (s == nullptr || d == nullptr) continue;
+    
+    
+inline int Instruction::ImmBranch() const {
+  switch (BranchType()) {
+    case CondBranchType: return ImmCondBranch();
+    case UncondBranchType: return ImmUncondBranch();
+    case CompareBranchType: return ImmCmpBranch();
+    case TestBranchType: return ImmTestBranch();
+    default: not_reached();
+  }
+  return 0;
+}
+    
+      resourceInfo = FindResource(moduleHandle, section, RT_RCDATA);
+  if (!resourceInfo) {
+    return false;
+  }
+    
+    enum RecordType {
+  // Zero is reserved for preallocated files
+  kZeroType = 0,
+    }
+    
+    
+    {  FileMetaData() : refs(0), allowed_seeks(1 << 30), file_size(0) { }
 };
     
-    BOOST_FIXTURE_TEST_CASE(MatrixSparsePlusDense, RandomSeedFixture)
-{
-    std::mt19937 rng(0);
-    Matrix<float> mAdense(c_deviceIdZero);
-    mAdense.AssignTruncateBottomOf(Matrix<float>::RandomUniform(dim1, dim2, c_deviceIdZero, -3.0f, 0.1f, IncrementCounter()), 0);
-    Matrix<float> mAsparse(mAdense.DeepClone());
-    }
     
-      /// The time point type of the clock.
-  typedef typename clock_type::time_point time_point;
+    {  static void Append(WriteBatch* dst, const WriteBatch* src);
+};
     
-    #ifndef BOOST_ASIO_BUFFERED_WRITE_STREAM_FWD_HPP
-#define BOOST_ASIO_BUFFERED_WRITE_STREAM_FWD_HPP
-    
-    
-    {    // Make the upcall if required.
-    if (owner)
-    {
-      fenced_block b(fenced_block::half);
-      BOOST_ASIO_HANDLER_INVOCATION_BEGIN((handler.arg1_, handler.arg2_));
-      boost_asio_handler_invoke_helpers::invoke(handler, handler.handler_);
-      BOOST_ASIO_HANDLER_INVOCATION_END;
-    }
+    Slice BlockBuilder::Finish() {
+  // Append restart array
+  for (size_t i = 0; i < restarts_.size(); i++) {
+    PutFixed32(&buffer_, restarts_[i]);
   }
-    
-    #ifndef BOOST_ASIO_DETAIL_EVENT_HPP
-#define BOOST_ASIO_DETAIL_EVENT_HPP
-    
-    // Calls to asio_handler_allocate and asio_handler_deallocate must be made from
-// a namespace that does not contain any overloads of these functions. The
-// boost_asio_handler_alloc_helpers namespace is defined here for that purpose.
-namespace boost_asio_handler_alloc_helpers {
-    }
-    
-    #endif // BOOST_ASIO_DETAIL_IMPL_BUFFER_SEQUENCE_ADAPTER_IPP
-
-    
-    #if defined(BOOST_ASIO_HAS_DEV_POLL)
-    
-    
-    {  return 0;
+  PutFixed32(&buffer_, restarts_.size());
+  finished_ = true;
+  return Slice(buffer_);
 }
     
-    
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-      for (const auto& iter : line) {
-    options_index++;
-    if (iter[0] == '/') {
-      line_exports.push_back(iter);
-    } else {
-      break;
-    }
-  }
-    
-      // Get an integral value, 0 or 1, for whether a syscall table pointer is modified.
-  auto f1 = osquery::readFile(kKernelSyscallAddrModifiedPath, content);
-  if (f1.ok()) {
-    boost::trim(content);
-    syscall_addr_modified = content;
-  } else {
-    VLOG(1) << 'Cannot read file: ' << kKernelSyscallAddrModifiedPath;
-    return results;
-  }
-    
-    
-    {
-    {  c.reset();
-}
-}
-
-    
-      std::stringstream result;
-  CFDataGetBytes(cf_data, range, (UInt8*)buffer);
-  for (CFIndex i = 0; i < range.length; ++i) {
-    uint8_t byte = buffer[i];
-    if (isprint(byte)) {
-      result << byte;
-    } else if (buffer[i] == 0) {
-      result << ' ';
-    } else {
-      result << '%' << std::setfill('0') << std::setw(2) << std::hex
-             << (int)byte;
-    }
-  }
-    
-    namespace osquery {
-    }
-    
-    namespace rabit {
-namespace utils {
-extern 'C' {
-  void (*Printf)(const char *fmt, ...) = Rprintf;
-  void (*Assert)(int exp, const char *fmt, ...) = XGBoostAssert_R;
-  void (*Check)(int exp, const char *fmt, ...) = XGBoostCheck_R;
-  void (*Error)(const char *fmt, ...) = error;
-}
-}
-}
-    
-    // array to help compression of decompression.
-template<typename DType>
-class CompressArray {
- public:
-  // the data content.
-  std::vector<DType> data;
-  // Decompression helper
-  // number of chunks
-  inline int num_chunk() const {
-    CHECK_GT(raw_chunks_.size(), 1);
-    return static_cast<int>(raw_chunks_.size() - 1);
-  }
-  // raw bytes
-  inline size_t RawBytes() const {
-    return raw_chunks_.back() * sizeof(DType);
-  }
-  // encoded bytes
-  inline size_t EncodedBytes() const {
-    return encoded_chunks_.back() +
-        (encoded_chunks_.size() + raw_chunks_.size()) * sizeof(bst_uint);
-  }
-  // load the array from file.
-  inline void Read(dmlc::SeekStream* fi);
-  // run decode on chunk_id
-  inline void Decompress(int chunk_id);
-  // Compression helper
-  // initialize the compression chunks
-  inline void InitCompressChunks(const std::vector<bst_uint>& chunk_ptr);
-  // initialize the compression chunks
-  inline void InitCompressChunks(size_t chunk_size, size_t max_nchunk);
-  // run decode on chunk_id, level = -1 means default.
-  inline void Compress(int chunk_id, bool use_hc);
-  // save the output buffer into file.
-  inline void Write(dmlc::Stream* fo);
-    }
-    
-          cbw.Write(buffer.data(), input.begin(), input.end());
-    
-        bool Check();  // true pass, false limit
-    
-    //
-//  testspy.cpp
-//  PublicComponent
-//
-//  Created by yerungui on 14-5-13.
-//
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    #include <jni.h>
+    #include <stddef.h>
+#include <stdint.h>
 #include <string>
-struct JniMethodInfo;
-class AutoBuffer;
+#include <vector>
+#include 'leveldb/slice.h'
+#include 'util/hash.h'
     
-        JNIEnv* GetEnv();
-    int Status();
+      memset(buf, 0, sizeof(buf));
+  ASSERT_EQ(0x8a9136aa, Value(buf, sizeof(buf)));
+    
+    namespace leveldb {
+    }
+    
+    std::string ParsedInternalKey::DebugString() const {
+  char buf[50];
+  snprintf(buf, sizeof(buf), '' @ %llu : %d',
+           (unsigned long long) sequence,
+           int(type));
+  std::string result = ''';
+  result += EscapeString(user_key.ToString());
+  result += buf;
+  return result;
+}
+    
+    int main(int argc, char** argv) {
+  leveldb::Env* env = leveldb::Env::Default();
+  bool ok = true;
+  if (argc < 2) {
+    Usage();
+    ok = false;
+  } else {
+    std::string command = argv[1];
+    if (command == 'dump') {
+      ok = leveldb::HandleDumpCommand(env, argv+2, argc-2);
+    } else {
+      Usage();
+      ok = false;
+    }
+  }
+  return (ok ? 0 : 1);
+}
+
+    
+      const char* data_;
+  size_t size_;
+  uint32_t restart_offset_;     // Offset in data_ of restart array
+  bool owned_;                  // Block owns data_[]
+    
+    
+    {  // No copying allowed
+  BlockBuilder(const BlockBuilder&);
+  void operator=(const BlockBuilder&);
+};
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    IMGUI_API bool        ImGui_ImplDX9_Init(void* hwnd, IDirect3DDevice9* device);
+IMGUI_API void        ImGui_ImplDX9_Shutdown();
+IMGUI_API void        ImGui_ImplDX9_NewFrame();
+IMGUI_API void        ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data);
+    
+    struct GLFWwindow;
+    
+    IMGUI_API bool        ImGui_ImplSdlGL2_Init(SDL_Window* window);
+IMGUI_API void        ImGui_ImplSdlGL2_Shutdown();
+IMGUI_API void        ImGui_ImplSdlGL2_NewFrame(SDL_Window* window);
+IMGUI_API void        ImGui_ImplSdlGL2_RenderDrawData(ImDrawData* draw_data);
+IMGUI_API bool        ImGui_ImplSdlGL2_ProcessEvent(SDL_Event* event);
+    
+    int main(int, char**)
+{
+    // Create application window
+    WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T('ImGui Example'), NULL };
+    RegisterClassEx(&wc);
+    HWND hwnd = CreateWindow(_T('ImGui Example'), _T('ImGui DirectX11 Example'), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
+    }
+    
+    #endif // D_A2_STR_H
+
+    
+    void AnnounceList::announceSuccess()
+{
+  if (currentTrackerInitialized_) {
+    (*currentTier_)->nextEvent();
+    auto url = *currentTracker_;
+    (*currentTier_)->urls.erase(currentTracker_);
+    (*currentTier_)->urls.push_front(std::move(url));
+    currentTier_ = std::begin(tiers_);
+    currentTracker_ = std::begin((*currentTier_)->urls);
+  }
+}
+    
+    #endif // D_ANNOUNCE_LIST_H
+
+    
+      AnnounceTier(std::deque<std::string> urls);
+    
+    #include 'common.h'
