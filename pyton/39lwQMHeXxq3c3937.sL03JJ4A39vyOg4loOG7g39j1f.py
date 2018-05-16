@@ -1,109 +1,199 @@
 
         
-                super(EncodedStream, self).__init__(**kwargs)
+            net = inputs
+    with tf.variable_scope(scope):
+      # First layer is optionally implemented as a wide convolution for
+      # invariance to small translations.
+      if hparams.translation_delta > 0:
+        kernel_size = inputs.shape.as_list()[1] - 2 * hparams.translation_delta
+        net = tf.expand_dims(net, -1)  # [batch, length, channels=1]
+        net = tf.layers.conv1d(
+            inputs=net,
+            filters=hparams.local_layer_size,
+            kernel_size=kernel_size,
+            padding='valid',
+            activation=tf.nn.relu,
+            name='conv1d')
     
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
+    The downloaded CSV file should contain at least the following column names:
+  rowid: Integer ID of the row in the TCE table.
+  kepid: Kepler ID of the target star.
+  tce_plnt_num: TCE number within the target star.
+  tce_period: Orbital period of the detected event, in days.
+  tce_time0bk: The time corresponding to the center of the first detected
+      traisit in Barycentric Julian Day (BJD) minus a constant offset of
+      2,454,833.0 days.
+  tce_duration: Duration of the detected transit, in hours.
+  av_training_set: Autovetter training set label; one of PC (planet candidate),
+      AFP (astrophysical false positive), NTP (non-transiting phenomenon),
+      UNK (unknown).
+    
+    from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+    
+        # One aux feature.
+    config = configdict.ConfigDict({
+        'time_feature_1': {
+            'length': 14,
+            'is_time_series': True,
+        },
+        'aux_feature_1': {
+            'length': 1,
+            'is_time_series': False,
+        }
+    })
+    expected_shapes = {
+        'time_series_features': {
+            'time_feature_1': [None, 14],
+        },
+        'aux_features': {
+            'aux_feature_1': [None, 1]
+        }
+    }
+    features = input_ops.build_feature_placeholders(config)
+    self.assertFeatureShapesEqual(expected_shapes, features)
     
     
-def get_unique_filename(filename, exists=os.path.exists):
-    attempt = 0
-    while True:
-        suffix = '-' + str(attempt) if attempt > 0 else ''
-        try_filename = trim_filename_if_needed(filename, extra=len(suffix))
-        try_filename += suffix
-        if not exists(try_filename):
-            return try_filename
-        attempt += 1
+def _maybe_convert_dict(value):
+  if isinstance(value, dict):
+    return ConfigDict(value)
+    
+      tarfile.open(filepath, 'r:gz').extractall(FLAGS.data_dir)
+    
+      Args:
+    image_buffer: scalar string Tensor representing the raw JPEG image buffer.
+    bbox: 3-D float Tensor of bounding boxes arranged [1, num_boxes, coords]
+      where each coordinate is [0, 1) and the coordinates are arranged as
+      [ymin, xmin, ymax, xmax].
+    num_channels: Integer depth of the image buffer for decoding.
+    
+      Print the performance on the validation set, and update the saved model if
+  its performance is better on the previous ones. If the performance dropped,
+  tell the training to stop.
+    
+        # Define the variables
+    (self.batch_paths,
+     self.path_counts,
+     self.seq_lengths,
+     self.path_strings,
+     self.batch_labels) = _parse_tensorflow_example(
+         self.instance, self.hparams.max_path_len, self.hparams.input_keep_prob)
+    
+      def testConversion3dWithType(self):
+    self.Conversion3dTestWithType(np.int8)
+    self.Conversion3dTestWithType(np.int16)
+    self.Conversion3dTestWithType(np.int32)
+    self.Conversion3dTestWithType(np.int64)
+    self.Conversion3dTestWithType(np.float16)
+    self.Conversion3dTestWithType(np.float32)
+    self.Conversion3dTestWithType(np.float64)
     
     
-class DigestAuthPlugin(BuiltinAuthPlugin):
+if __name__ == '__main__':
+    pytest.main([__file__])
+
     
-        @pytest.mark.parametrize('verify_value', ['false', 'fALse'])
-    def test_verify_false_OK(self, httpbin_secure, verify_value):
-        r = http(httpbin_secure.url + '/get', '--verify', verify_value)
-        assert HTTP_OK in r
+        x = Input(shape=(1,))
+    y = inner_model(x)
+    outer_model = Model(x, y)
+    assert outer_model.trainable_weights == inner_model.trainable_weights
+    inner_model.trainable = False
+    assert outer_model.trainable_weights == []
+    inner_model.trainable = True
+    inner_model.layers[-1].trainable = False
+    assert outer_model.trainable_weights == []
+    
+        if include_top:
+        # Classification block
+        x = Flatten(name='flatten')(x)
+        x = Dense(4096, activation='relu', name='fc1')(x)
+        x = Dense(4096, activation='relu', name='fc2')(x)
+        x = Dense(classes, activation='softmax', name='predictions')(x)
+    else:
+        if pooling == 'avg':
+            x = GlobalAveragePooling2D()(x)
+        elif pooling == 'max':
+            x = GlobalMaxPooling2D()(x)
     
     
-@keras_test
-def test_saving_without_compilation():
-    '''Test saving model without compiling.
-    '''
-    model = Sequential()
-    model.add(Dense(2, input_shape=(3,)))
-    model.add(Dense(3))
+WEIGHTS_PATH = 'https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg19_weights_tf_dim_ordering_tf_kernels.h5'
+WEIGHTS_PATH_NO_TOP = 'https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg19_weights_tf_dim_ordering_tf_kernels_notop.h5'
     
-        x = conv_block(x, 3, [256, 256, 1024], stage=4, block='a')
-    x = identity_block(x, 3, [256, 256, 1024], stage=4, block='b')
-    x = identity_block(x, 3, [256, 256, 1024], stage=4, block='c')
-    x = identity_block(x, 3, [256, 256, 1024], stage=4, block='d')
-    x = identity_block(x, 3, [256, 256, 1024], stage=4, block='e')
-    x = identity_block(x, 3, [256, 256, 1024], stage=4, block='f')
+                with pytest.raises(ValueError):
+                generator.flow(images, np.arange(images.shape[0]),
+                               shuffle=False, batch_size=3,
+                               subset='foo')
     
-        @interfaces.legacy_spatialdropoutNd_support
-    def __init__(self, rate, data_format=None, **kwargs):
-        super(SpatialDropout2D, self).__init__(rate, **kwargs)
-        if data_format is None:
-            data_format = K.image_data_format()
-        if data_format not in {'channels_last', 'channels_first'}:
-            raise ValueError('`data_format` must be in '
-                             '{`'channels_last'`, `'channels_first'`}')
-        self.data_format = data_format
-        self.input_spec = InputSpec(ndim=4)
-    
-            return x
-    
-        for data_format in ['channels_first', 'channels_last']:
-        if data_format == 'channels_first':
-            inputs = np.random.rand(num_samples, stack_size,
-                                    input_len_dim1, input_len_dim2)
-        else:
-            inputs = np.random.rand(num_samples,
-                                    input_len_dim1, input_len_dim2,
-                                    stack_size)
-        # another correctness test (no cropping)
-        cropping = ((0, 0), (0, 0))
-        layer = convolutional.Cropping2D(cropping=cropping,
-                                         data_format=data_format)
-        layer.build(inputs.shape)
-        outputs = layer(K.variable(inputs))
-        np_output = K.eval(outputs)
-        # compare with input
-        assert_allclose(np_output, inputs)
-    
-    from .. import backend as K
-from .. import activations
-from .. import initializers
-from .. import regularizers
-from .. import constraints
-from .recurrent import _generate_dropout_mask
-from .recurrent import _standardize_args
+        for strides in [(1, 1), (2, 2)]:
+        layer_test(local.LocallyConnected2D,
+                   kwargs={'filters': filters,
+                           'kernel_size': 3,
+                           'padding': padding,
+                           'kernel_regularizer': 'l2',
+                           'bias_regularizer': 'l2',
+                           'activity_regularizer': 'l2',
+                           'strides': strides,
+                           'data_format': 'channels_last'},
+                   input_shape=(num_samples, num_row, num_col, stack_size))
     
         @mock.patch('certbot_compatibility_test.validator.requests.get')
-    def test_hsts(self, mock_get_request):
+    def test_hsts_include_subdomains(self, mock_get_request):
         mock_get_request.return_value = create_response(
-            headers={'strict-transport-security': 'max-age=31536000'})
+            headers={'strict-transport-security':
+                     'max-age=31536000;includeSubDomains'})
         self.assertTrue(self.validator.hsts('test.com'))
     
-    # If true, an OpenSearch description file will be output, and all pages will
-# contain a <link> tag referring to it.  The value of this option must be the
-# base URL from which the finished HTML is served.
-#html_use_opensearch = ''
     
-    # encoding=utf8  
-import sys  
-try:
-    reload(sys)
-except NameError:
-    pass
-try:
-    sys.setdefaultencoding('utf8')
-except AttributeError:
-    pass
+class AskTest(unittest.TestCase):
+    '''Test the ask method.'''
+    def setUp(self):
+        logging.disable(logging.CRITICAL)
+    
+                        # Now |value| = top * 2**e exactly.
+                    if e >= 0:
+                        n = top << e
+                        d = 1
+                    else:
+                        n = top
+                        d = 1 << -e
+                    if value < 0:
+                        n = -n
+                    self.n = n
+                    self.d = d
+                    assert float(n) / float(d) == value
+                else:
+                    raise TypeError('can't deal with %r' % value)
+    
+    def get_colordb(file, filetype=None):
+    colordb = None
+    fp = open(file)
+    try:
+        line = fp.readline()
+        if not line:
+            return None
+        # try to determine the type of RGB file it is
+        if filetype is None:
+            filetypes = FILETYPES
+        else:
+            filetypes = [filetype]
+        for typere, class_ in filetypes:
+            mo = typere.search(line)
+            if mo:
+                break
+        else:
+            # no matching type
+            return None
+        # we know the type and the class to grok the type, so suck it in
+        colordb = class_(fp)
+    finally:
+        fp.close()
+    # save a global copy
+    global DEFAULT_DB
+    DEFAULT_DB = colordb
+    return colordb
+    
+    def clean_text(text, replacements = {':': '_', ' ': '_', '/': '_', '.': '', ''': ''}):
+    for key, rep in replacements.items():
+        text = text.replace(key, rep)
+    return text    
