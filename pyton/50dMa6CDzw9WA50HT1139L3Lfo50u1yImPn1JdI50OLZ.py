@@ -1,61 +1,144 @@
 
         
-            xx = range(0, n * step, step)
-    plt.figure('scikit-learn tree benchmark results')
-    plt.subplot(211)
-    plt.title('Learning with varying number of samples')
-    plt.plot(xx, scikit_classifier_results, 'g-', label='classification')
-    plt.plot(xx, scikit_regressor_results, 'r-', label='regression')
-    plt.legend(loc='upper left')
-    plt.xlabel('number of samples')
-    plt.ylabel('Time (s)')
+            'bracketed_hostport': re.compile(
+        r'''^
+            \[(.+)\]                    # [host identifier]
+            :([0-9]+)                   # :port number
+            $
+        ''', re.X
+    ),
     
-        # TASK: Build a vectorizer / classifier pipeline that filters out tokens
-    # that are too rare or too frequent
+    
+def build_distribution(version):
+    obj = mock.MagicMock()
+    obj.version = '0.5.0'
+    return obj
+    
+    from ansible.plugins.terminal import TerminalBase
+from ansible.errors import AnsibleConnectionFailure
+    
+        def construct_mapping(self, node, deep=False):
+        # Most of this is from yaml.constructor.SafeConstructor.  We replicate
+        # it here so that we can warn users when they have duplicate dict keys
+        # (pyyaml silently allows overwriting keys)
+        if not isinstance(node, MappingNode):
+            raise ConstructorError(None, None,
+                                   'expected a mapping node, but found %s' % node.id,
+                                   node.start_mark)
+        self.flatten_mapping(node)
+        mapping = AnsibleMapping()
+    
+        print()
+    print('Classification performance:')
+    print('===========================')
+    print()
+    print('%s %s %s %s' % ('Classifier  ', 'train-time', 'test-time',
+                           'Accuracy'))
+    print('-' * 44)
+    for name in sorted(accuracy, key=accuracy.get):
+        print('%s %s %s %s' % (name.ljust(16),
+                               ('%.4fs' % train_time[name]).center(10),
+                               ('%.4fs' % test_time[name]).center(10),
+                               ('%.4f' % accuracy[name]).center(10)))
+    
+    
+if __name__ == '__main__':
+    from glmnet.elastic_net import Lasso as GlmnetLasso
+    from sklearn.linear_model import Lasso as ScikitLasso
+    # Delayed import of matplotlib.pyplot
+    import matplotlib.pyplot as plt
+    
+    
+def plot_feature_times(all_times, batch_size, all_components, data):
+    plt.figure()
+    plot_results(all_components, all_times['pca'], label='PCA')
+    plot_results(all_components, all_times['ipca'],
+                 label='IncrementalPCA, bsize=%i' % batch_size)
+    plot_results(all_components, all_times['rpca'], label='RandomizedPCA')
+    plt.legend(loc='upper left')
+    plt.suptitle('Algorithm runtime vs. n_components\n \
+                 LFW, size %i x %i' % data.shape)
+    plt.xlabel('Number of components (out of max %i)' % data.shape[1])
+    plt.ylabel('Time (seconds)')
+    
+        ###########################################################################
+    # Numpy permutation based
+    sampling_algorithm['numpy-permutation'] = \
+        lambda n_population, n_sample: \
+            np.random.permutation(n_population)[:n_sample]
+    
+    import lxml.html
+from lxml.etree import ElementTree
+import numpy as np
+    
+        print('Decompressing %s' % ARCHIVE_NAME)
+    with closing(tarfile.open(ARCHIVE_NAME, 'r:gz')) as archive:
+        archive.extractall(path='.')
+    os.remove(ARCHIVE_NAME)
+
+    
+    URL = ('http://people.csail.mit.edu/jrennie/'
+       '20Newsgroups/20news-bydate.tar.gz')
+    
+    Sentiment analysis can be casted as a binary text classification problem,
+that is fitting a linear classifier on features extracted from the text
+of the user messages so as to guess wether the opinion of the author is
+positive or negative.
+    
+        input_file = open(os.path.join(exercise_dir, f))
+    output_file = open(os.path.join(skeleton_dir, f), 'w')
+    
+    First example
+-------------
+The first example illustrates how robust covariance estimation can help
+concentrating on a relevant cluster when another one exists. Here, many
+observations are confounded into one and break down the empirical covariance
+estimation.
+Of course, some screening tools would have pointed out the presence of two
+clusters (Support Vector Machines, Gaussian Mixture Models, univariate
+outlier detection, ...). But had it been a high-dimensional example, none
+of these could be applied that easily.
     
     The data is generated with the ``make_checkerboard`` function, then
 shuffled and passed to the Spectral Biclustering algorithm. The rows
 and columns of the shuffled matrix are rearranged to show the
 biclusters found by the algorithm.
     
-        # View probabilities=
-    probas = classifier.predict_proba(Xfull)
-    n_classes = np.unique(y_pred).size
-    for k in range(n_classes):
-        plt.subplot(n_classifiers, n_classes, index * n_classes + k + 1)
-        plt.title('Class %d' % k)
-        if k == 0:
-            plt.ylabel(name)
-        imshow_handle = plt.imshow(probas[:, k].reshape((100, 100)),
-                                   extent=(3, 9, 1, 5), origin='lower')
-        plt.xticks(())
-        plt.yticks(())
-        idx = (y_pred == k)
-        if idx.any():
-            plt.scatter(X[idx, 0], X[idx, 1], marker='o', c='k')
+    from sklearn.datasets import make_biclusters
+from sklearn.datasets import samples_generator as sg
+from sklearn.cluster.bicluster import SpectralCoclustering
+from sklearn.metrics import consensus_score
     
-    print 'PLUGIN_I18N_PATHS := ' + ','.join(os.path.relpath(plugin.path)
-                                         for plugin in plugins
-                                         if plugin.needs_translation)
+        def test_types(self):
+        headers = {'Cookie': 'foo=bar'}
+        response = self.fetch('/typecheck?foo=bar', headers=headers)
+        data = json_decode(response.body)
+        self.assertEqual(data, {})
     
-        # when mako loads a previously compiled template file from its cache, it
-    # doesn't check that the original template path matches the current path.
-    # in the event that a new plugin defines a template overriding a reddit
-    # template, unless the mtime newer, mako doesn't update the compiled
-    # template. as a workaround, this makes mako store compiled templates with
-    # the original path in the filename, forcing it to update with the path.
-    if 'cache_dir' in app_conf:
-        module_directory = os.path.join(app_conf['cache_dir'], 'templates')
+    ``Futures`` are a pattern for concurrent programming introduced in
+Python 3.2 in the `concurrent.futures` package, and also adopted (in a
+slightly different form) in Python 3.4's `asyncio` package. This
+package defines a ``Future`` class that is an alias for `asyncio.Future`
+when available, and a compatible implementation for older versions of
+Python. It also includes some utility functions for interacting with
+``Future`` objects.
     
-        def __call__(self, environ, start_response):
-        g = self.config['pylons.app_globals']
-        http_host = environ.get('HTTP_HOST', 'localhost').lower()
-        domain, s, port = http_host.partition(':')
+        def start(self, runner):
+        self.runner = runner
     
-    api('wikipagelisting', WikiPageListingJsonTemplate)
-api('wikipagediscussions', WikiJsonTemplate)
-api('wikipagesettings', WikiSettingsJsonTemplate)
+        def _handle_read(self):
+        try:
+            pos = self._read_to_buffer_loop()
+        except UnsatisfiableReadError:
+            raise
+        except Exception as e:
+            gen_log.warning('error on read: %s' % e)
+            self.close(exc_info=e)
+            return
+        if pos is not None:
+            self._read_from_buffer(pos)
+            return
+        else:
+            self._maybe_run_close_callback()
     
-    import json
-import os
-import random
+        .. testoutput:: semaphore
