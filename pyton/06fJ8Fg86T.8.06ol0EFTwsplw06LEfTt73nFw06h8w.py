@@ -1,111 +1,132 @@
 
         
-        with open('update/LATEST_VERSION', 'w') as f:
-    f.write(version)
+        new_version = {}
     
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
-if __name__ == '__main__':
-    unittest.main()
+        _TEST = {
+        'url': 'http://www.anitube.se/video/36621',
+        'md5': '59d0eeae28ea0bc8c05e7af429998d43',
+        'info_dict': {
+            'id': '36621',
+            'ext': 'mp4',
+            'title': 'Recorder to Randoseru 01',
+            'duration': 180.19,
+        },
+        'skip': 'Blocked in the US',
+    }
+    
+    '''
+import hashlib
+import requests
+    
+        def format_body(self, content, mime):
+        if is_valid_mime(mime):
+            for p in self.enabled_plugins:
+                content = p.format_body(content, mime)
+        return content
 
     
-        def tearDown(self):
-        if os.path.exists(self.test_dir):
-            shutil.rmtree(self.test_dir)
+    
+def patharg(path):
+    '''
+    Back slashes need to be escaped in ITEM args,
+    even in Windows paths.
     
     
-TEST_DIR = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), 'swftests')
+def print_debug_info(env):
+    env.stderr.writelines([
+        'HTTPie %s\n' % httpie_version,
+        'Requests %s\n' % requests_version,
+        'Pygments %s\n' % pygments_version,
+        'Python %s\n%s\n' % (sys.version, sys.executable),
+        '%s %s' % (platform.system(), platform.release()),
+    ])
+    env.stderr.write('\n\n')
+    env.stderr.write(repr(env))
+    env.stderr.write('\n')
+    
+        def convert(self, content_bytes):
+        raise NotImplementedError
     
     
-class TestUnicodeLiterals(unittest.TestCase):
-    def test_all_files(self):
-        for dirpath, dirnames, filenames in os.walk(rootDir):
-            for ignore_dir in IGNORED_DIRS:
-                if ignore_dir in dirnames:
-                    # If we remove the directory from dirnames os.walk won't
-                    # recurse into it
-                    dirnames.remove(ignore_dir)
-            for basename in filenames:
-                if not basename.endswith('.py'):
-                    continue
-                if basename in IGNORED_FILES:
-                    continue
-    
-            # Request the extended version of the api for extra fields like artist and title
-        api_response = self._download_json(
-            'http://www.audiomack.com/api/music/url/song/%s?extended=1&_=%d' % (
-                album_url_tag, time.time()),
-            album_url_tag)
-    
-    
-class CloserToTruthIE(InfoExtractor):
-    _VALID_URL = r'https?://(?:www\.)?closertotruth\.com/(?:[^/]+/)*(?P<id>[^/?#&]+)'
-    _TESTS = [{
-        'url': 'http://closertotruth.com/series/solutions-the-mind-body-problem#video-3688',
-        'info_dict': {
-            'id': '0_zof1ktre',
-            'display_id': 'solutions-the-mind-body-problem',
-            'ext': 'mov',
-            'title': 'Solutions to the Mind-Body Problem?',
-            'upload_date': '20140221',
-            'timestamp': 1392956007,
-            'uploader_id': 'CTTXML'
-        },
-        'params': {
-            'skip_download': True,
-        },
-    }, {
-        'url': 'http://closertotruth.com/episodes/how-do-brains-work',
-        'info_dict': {
-            'id': '0_iuxai6g6',
-            'display_id': 'how-do-brains-work',
-            'ext': 'mov',
-            'title': 'How do Brains Work?',
-            'upload_date': '20140221',
-            'timestamp': 1392956024,
-            'uploader_id': 'CTTXML'
-        },
-        'params': {
-            'skip_download': True,
-        },
-    }, {
-        'url': 'http://closertotruth.com/interviews/1725',
-        'info_dict': {
-            'id': '1725',
-            'title': 'AyaFr-002',
-        },
-        'playlist_mincount': 2,
-    }]
-    
-        output_directory = 'pdfs' if results.directory is None else results.directory
-    
-    class ProcessPoolExecutor(_base.Executor):
-    def __init__(self, max_workers=None):
-        '''Initializes a new ProcessPoolExecutor instance.
-    
+@pytest.mark.parametrize('ssl_version', SSL_VERSION_ARG_MAPPING.keys())
+def test_ssl_version(httpbin_secure, ssl_version):
+    try:
+        r = http(
+            '--ssl', ssl_version,
+            httpbin_secure + '/get'
+        )
+        assert HTTP_OK in r
+    except SSLError as e:
+        if ssl_version == 'ssl3':
+            # pytest-httpbin doesn't support ssl3
+            assert 'SSLV3_ALERT_HANDSHAKE_FAILURE' in str(e)
         else:
-      self._filters = _CompileFilters( config_or_filters )
+            raise
+    
+            class Escaped(str):
+            '''Represents an escaped character.'''
+    
+            This attribute checks if the status code of the response is between
+        400 and 600 to see if there was a client error or a server error. If
+        the status code, is between 200 and 400, this will return True. This
+        is **not** a check to see if the response code is ``200 OK``.
+        '''
+        return self.ok
+    
+        possible_keys = pytest.mark.parametrize('key', ('accept', 'ACCEPT', 'aCcEpT', 'Accept'))
+    
+        def init_per_thread_state(self):
+        # Ensure state is initialized just once per-thread
+        if not hasattr(self._thread_local, 'init'):
+            self._thread_local.init = True
+            self._thread_local.last_nonce = ''
+            self._thread_local.nonce_count = 0
+            self._thread_local.chal = {}
+            self._thread_local.pos = None
+            self._thread_local.num_401_calls = None
     
     
-def FormatDebugInfoResponse_Completer_ServerRunningWithHost_test():
-  response = deepcopy( GENERIC_RESPONSE )
-  assert_that(
-    FormatDebugInfoResponse( response ),
-    contains_string(
-      'Completer name completer debug information:\n'
-      '  Server name running at: http://127.0.0.1:1234\n'
-      '  Server name process ID: 12345\n'
-      '  Server name executable: /path/to/executable\n'
-      '  Server name logfiles:\n'
-      '    /path/to/stdout/logfile\n'
-      '    /path/to/stderr/logfile\n'
-      '  Server name key: value\n'
-      '  Key: value\n'
-    )
-  )
+class ContentDecodingError(RequestException, BaseHTTPError):
+    '''Failed to decode response content'''
     
-      _assert_rejects( f, 'This is a Taco' )
-  _assert_rejects( f, 'This is a Burrito' )
+        old_layer = keras.layers.LSTM(input_shape=[3, 5], output_dim=2, name='d', consume_less='mem')
+    new_layer = keras.layers.LSTM(2, input_shape=[3, 5], name='d', implementation=1)
+    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
     
-      for path in not_python_paths:
-    yield EndsWithPython_Bad, path
+        # a Model inside a Model
+    x = Input(shape=(1,))
+    y = Dense(2)(x)
+    inner_model = Model(x, y)
+    x = Input(shape=(1,))
+    y = inner_model(x)
+    outer_model = Model(x, y)
+    assert outer_model.trainable_weights == inner_model.trainable_weights
+    inner_model.trainable = False
+    assert outer_model.trainable_weights == []
+    inner_model.trainable = True
+    inner_model.layers[-1].trainable = False
+    assert outer_model.trainable_weights == []
+    
+        x = Input(shape=(2,), name='outer_model_input')
+    f = nested_model(x)
+    f = Dense(2, name='outer_model_output')(f)
+    
+        When using this layer as the first layer in a model,
+    provide the keyword argument `input_shape`
+    (tuple of integers, does not include the sample axis),
+    e.g. `input_shape=(128, 128, 128, 3)` for a 128x128x128 volume with 3 channels
+    if `data_format='channels_last'`.
+    
+        ld = layers.Lambda(f)
+    config = ld.get_config()
+    ld = deserialize_layer({'class_name': 'Lambda', 'config': config})
+    
+    from keras.preprocessing import sequence
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation
+from keras.layers import Embedding
+from keras.layers import LSTM
+from keras.layers import Conv1D, MaxPooling1D
+from keras.datasets import imdb
