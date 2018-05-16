@@ -1,28 +1,13 @@
 
         
-        with open('update/versions.json', 'w') as jsonf:
-    json.dump(versions_info, jsonf, indent=4, sort_keys=True)
+        new_version = {}
+    
+    from test.helper import try_rm
+    
+    
+if __name__ == '__main__':
+    unittest.main()
 
-    
-        infile, outfile = args
-    
-    README_FILE = 'README.md'
-helptext = sys.stdin.read()
-    
-        def tearDown(self):
-        if os.path.exists(self.test_dir):
-            shutil.rmtree(self.test_dir)
-    
-        def test_secondary_proxy_https(self):
-        params = self._check_params(['secondary_proxy', 'secondary_server_ip'])
-        if params is None:
-            return
-        ydl = FakeYDL()
-        req = compat_urllib_request.Request('https://yt-dl.org/ip')
-        req.add_header('Ytdl-request-proxy', params['secondary_proxy'])
-        self.assertEqual(
-            ydl.urlopen(req).read().decode('utf-8'),
-            params['secondary_server_ip'])
     
                     if ''' not in code and ''' not in code:
                     continue
@@ -32,25 +17,88 @@ helptext = sys.stdin.read()
                     r'(?:(?:#.*?|\s*)\n)*from __future__ import (?:[a-z_]+,\s*)*unicode_literals',
                     'unicode_literals import  missing in %s' % fn)
     
-            # TODO: handle s and e stage_mode (live streams and ended live streams)
-        if stage_mode not in ('s', 'e'):
-            request = sanitized_Request(
-                'https://audimedia.tv/api/video/v1/videos/%s?embed[]=video_versions&embed[]=thumbnail_image&where[content_language_iso]=%s' % (video_id, lang),
-                headers={'X-Auth-Token': self._AUTH_TOKEN})
-            json_data = self._download_json(request, video_id)['results']
-            formats = []
+            if check_executable('mplayer', ['-h']):
+            args = [
+                'mplayer', '-really-quiet', '-vo', 'null', '-vc', 'dummy',
+                '-dumpstream', '-dumpfile', tmpfilename, url]
+        elif check_executable('mpv', ['-h']):
+            args = [
+                'mpv', '-really-quiet', '--vo=null', '--stream-dump=' + tmpfilename, url]
+        else:
+            self.report_error('MMS or RTSP download detected but neither 'mplayer' nor 'mpv' could be run. Please install any.')
+            return False
     
-            # Video URL construction algorithm is reverse-engineered from cwhplayer.swf
-        rtmp_url = 'rtmp://camwithher.tv/clipshare/%s' % (
-            ('mp4:%s.mp4' % flv_id) if int(flv_id) > 2010 else flv_id)
+        gold_doc = sentence_pb2.Sentence()
+    text_format.Parse(_DUMMY_GOLD_SENTENCE, gold_doc)
+    gold_doc_2 = sentence_pb2.Sentence()
+    text_format.Parse(_DUMMY_GOLD_SENTENCE_2, gold_doc_2)
+    gold_reader_strings = [
+        gold_doc.SerializeToString(),
+        gold_doc_2.SerializeToString()
+    ]
     
-            title = self._search_regex(
-            r'<title>(.+?)\s*\|\s*.+?</title>', webpage, 'video title')
     
-        def mapper(self, _, line):
-        yield line, 1
+@csrf_protect
+def render_flatpage(request, f):
+    '''
+    Internal interface to the flat page view.
+    '''
+    # If registration is required for accessing this page, and the user isn't
+    # logged in, redirect to the login page.
+    if f.registration_required and not request.user.is_authenticated:
+        from django.contrib.auth.views import redirect_to_login
+        return redirect_to_login(request.path)
+    if f.template_name:
+        template = loader.select_template((f.template_name, DEFAULT_TEMPLATE))
+    else:
+        template = loader.get_template(DEFAULT_TEMPLATE)
     
-        def reducer_identity(self, key, value):
-        yield key, value
+        config = PylonsConfig()
     
-        By default this will get the strings from the blns.txt file
+        def user_has_beta_enabled(self, user):
+        if not user:
+            return False
+        return user.pref_beta
+    
+    api('reltableitem', RelTableItemJsonTemplate)
+api('bannedtableitem', BannedTableItemJsonTemplate)
+api('mutedtableitem', MutedTableItemJsonTemplate)
+api('invitedmodtableitem', InvitedModTableItemJsonTemplate)
+api('friendtableitem', FriendTableItemJsonTemplate)
+    
+                send_gift(
+                buyer=buyer,
+                recipient=recipient,
+                months=months,
+                days=months * 31,
+                signed=False,
+                giftmessage=None,
+                thing_fullname=thing_fullname,
+                note=note,
+            )
+    
+        @validate(VAdmin(),
+              award = VAwardByCodename('awardcn'),
+              recipient = nop('recipient'),
+              desc = nop('desc'),
+              url = nop('url'),
+              hours = nop('hours'))
+    def GET_give(self, award, recipient, desc, url, hours):
+        if award is None:
+            abort(404, 'page not found')
+    
+            if not url:
+            url = request.referer
+    
+    class CaptchaController(RedditController):
+    @allow_oauth2_access
+    @api_doc(api_section.captcha, uri='/captcha/{iden}')
+    def GET_captchaimg(self, iden):
+        '''
+        Request a CAPTCHA image given an `iden`.
+    
+        def GET_faq(self):
+        if c.default_sr:
+            return self.redirect('/help/faq')
+        else:
+            return self.renderurl('/help/faqs/' + c.site.name)
