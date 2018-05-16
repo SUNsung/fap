@@ -1,137 +1,265 @@
 
         
-        TCA OfflineCode::collectJmpTargets(FILE *file,
-                                   TCA fileStartAddr,
-                                   TCA codeStartAddr,
-                                   uint64_t codeLen,
-                                   vector<TCA> *jmpTargets) {
-  return 0;
-}
+        #endif  // ATOM_BROWSER_WINDOW_LIST_OBSERVER_H_
+
     
-        // update funcCluster
+     protected:
+  RemoteCallbackFreer(v8::Isolate* isolate,
+                      v8::Local<v8::Object> target,
+                      int object_id,
+                      content::WebContents* web_conents);
+  ~RemoteCallbackFreer() override;
     
-      /*
-   * Update context to begin inlining of callee with cost zero.
-   */
-  void initWithCallee(const Func* callee);
+    #include <memory>
     
-        // Taken from ONNX
-    REGISTER_OPERATOR_SCHEMA(Sqrt)
-        .Description('Square root takes one input data (Tensor<T>) and produces one output '
-            'data Tensor<T>) where the square root is, y = x^0.5, is applied to '
-            'the tensor elementwise. If x is negative, then it will return NaN.')
-        .Input('X', 'Input tensor of any shape', 'T')
-        .Output('Y', 'Output tensor of same shape and type as input X.', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.');
+    #include 'content/public/browser/web_contents_observer.h'
+#include 'ui/gfx/native_widget_types.h'
     
-        // Taken from ONNX
-    REGISTER_OPERATOR_SCHEMA(Conv)
-        .Description('The convolution operator consumes an input tensor and a filter, and'
-            'computes the output.')
-        .Input('X',
-             'Input data tensor from previous layer; has size (N x C x H x W)'
-             ', where N is the batch size, C is the number of channels, and'
-             ' H and W are the height and width. Note that this is for the 2D image.'
-             'Otherwise the size is (N x D1 x D2 ... x Dn)',
-             'T')
-        .Input('W',
-             'The weight tensor that will be used in the convolutions; has size (M x C x kH x kW), '
-             'where C is the number of channels, and kH and kW are the height and width of the kernel, '
-             'and M is the number of feature maps. For more than 2 dimensions, the kernel shape will be '
-             '(M x C x k1 x k2 x ... x kn), where is the dimension of the kernel',
-             'T')
-        .Input('B',
-            'Optional 1D bias to be added to the convolution, has size of M.',
-            'T')
-        .Output('Y',
-              'Output data tensor that contains the result of the convolution. The '
-              'output dimensions are functions of the kernel size, stride size, '
-              'and pad lengths.',
-              'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.')
-        .Attr('auto_pad',
-            'auto_pad must be either SAME_UPPER, SAME_LOWER or VALID. Where SAME_UPPER '
-            'or SAME_LOWER mean pad the input so that the ouput size match the input. '
-            'In case of odd number add the extra padding at the end for SAME_UPPER and '
-            'at the begining for SAME_LOWER. VALID mean no padding, therefore, read the '
-            'pixel values from the pads attribute.',
-            AttrType::AttributeProto_AttributeType_STRING)
-        .Attr('kernel_shape',
-            'The shape of the convolution kernel.',
-             AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('dilations',
-            'dilation value along each axis of the filter.',
-            AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('strides',
-            'stride along each axis.',
-            AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('pads',
-            'Padding for lower and upper side along each axis, it can take any value greater '
-            'than or equal to 0. The value represent the number of pixels added to the lower '
-            'and upper part of the corresponding axis. So `pads` will have two values per axis, '
-            'first value corresponding to the number of pixels added to the begining of the '
-            'axis and the second value corresponding to the number of pixels add at the end '
-            'of the axis.',
-            AttrType::AttributeProto_AttributeType_INTS)
-        .Attr('group',
-            'number of groups input channels and output channels are divided into',
-            AttrType::AttributeProto_AttributeType_INT);
+      // ppapi::host::ResourceMessageFilter implementation.
+  scoped_refptr<base::TaskRunner> OverrideTaskRunnerForMessage(
+      const IPC::Message& msg) override;
+  int32_t OnResourceMessageReceived(
+      const IPC::Message& msg,
+      ppapi::host::HostMessageContext* context) override;
     
-                Notations:
-            `X` - input tensor
-            `z` - update gate
-            `r` - reset gate
-            `h` - hidden gate
-            `t` - time step (t-1 means previous time step)
-            `W[zrh]` - W parameter weight matrix for update, reset, and hidden gates
-            `R[zrh]` - R recurrence weight matrix for update, reset, and hidden gates
-            `Wb[zrh]` - W bias vectors for update, reset, and hidden gates
-            `Rb[zrh]` - R bias vectors for update, reset, and hidden gates
-            `WB[zrh]` - W parameter weight matrix for backward update, reset, and hidden gates
-            `RB[zrh]` - R recurrence weight matrix for backward update, reset, and hidden gates
-            `WBb[zrh]` - W bias vectors for backward update, reset, and hidden gates
-            `RBb[zrh]` - R bias vectors for backward update, reset, and hidden gates
-            `tanh(X)` - hyperbolic tangent of X
-            `sigmoid(X)` - 1 / (1 + e^-X)
-            `H` - Hidden state
-            `num_directions` - 2 if direction == bidirectional else 1
+    #include 'swift/AST/NameLookup.h'
     
-        // Let's check that there is no outstanding copies.
-    // Wait on all events if there are any pending copy operations in flight.
-    if (m_dataTransferers[m_currentDataTransferIndex])
-        m_dataTransferers[m_currentDataTransferIndex]->WaitForCopyCPUToGPU();
+    @interface LocaleBridgingTester : NSObject
+- (NSLocale *)autoupdatingCurrentLocale;
+- (BOOL)verifyAutoupdatingLocale:(NSLocale *)locale;
+@end
     
+      /// When emitting fixits as code edits, apply all fixits from diagnostics
+  /// without any filtering.
+  bool FixitCodeForAllDiagnostics = false;
     
-    {
-    {            // nodeToDelete is a child
-            if (child == nodeToDelete)
-            {
-                // this used to call DetatchInputs(), but it's better for MEL to retain other inputs
-                node->SetInput(i, nullptr);
-                break;
-            }
-        }
+    public:
+  enum Action {Skip, Abort, Continue};
+    
+    namespace google {
+namespace protobuf {
+    }
     }
     
     
-    {    BOOST_CHECK(mD.IsEqualTo(mC, c_epsilonFloatE4));
+    { private:
+  // The python object that implements the database. The reference is owned.
+  PyObject* py_database_;
+};
+    
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_ENUM_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_ENUM_H__
+    
+    RepeatedPrimitiveFieldGenerator::RepeatedPrimitiveFieldGenerator(
+    const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options)
+    : FieldGeneratorBase(descriptor, fieldOrdinal, options) {
 }
     
-    void GPUDataTransferer::CopyCPUToGPUAsync(void* cpuBuffer, size_t totalSize, void* gpuBuffer)
+    
+    
+    // CodeGenerator implementation which generates Java code.  If you create your
+// own protocol compiler binary and you want it to support Java output, you
+// can do so by registering an instance of this CodeGenerator with the
+// CommandLineInterface in your main() function.
+class LIBPROTOC_EXPORT JavaGenerator : public CodeGenerator {
+ public:
+  JavaGenerator();
+  ~JavaGenerator();
+    }
+    
+        totalSize = 1;
+    for (std::ptrdiff_t d = self->nDimension - 1; d >= 0; d--) {
+      self->size[d] = size[d];
+      if (stride && (stride[d] >= 0)) {
+        self->stride[d] = stride[d];
+      } else {
+        if (d == self->nDimension-1)
+          self->stride[d] = 1;
+        else
+          self->stride[d] = self->size[d+1]*self->stride[d+1];
+      }
+      totalSize += (self->size[d]-1)*self->stride[d];
+    }
+    
+      assert(peekType(msg) == thpp::Type::FLOAT);
+  double arg1 = unpackFloat(msg);
+  assert(arg1 == 1.0);
+    
+    
+    {private:
+  std::string _data;
+};
+    
+    template <typename T, typename... Ts>
+struct or_trait<T, Ts...>
+  : std::conditional<T::value, T, or_trait<Ts...>>::type {};
+    
+    void Timer::report() const {
+  int64_t ms = getMicroSeconds();
+  int seconds = ms / 1000000;
+  PRINT_MSG('%s took %d'%02d\' (%' PRId64 ' us) %s', m_name.c_str(),
+            seconds / 60, seconds % 60, ms, getName());
+}
+    
+    
+    {  int64_t measure() const;
+};
+    
+      // ref counting
+  void incRefCount();
+  void decRefCount();
+    
+    void Vunit::freeScratchBlock(Vlabel l) {
+  // This will leak blocks if anything's been added since the corresponding
+  // call to makeScratchBlock(), but it's harmless.
+  if (l == blocks.size() - 1) blocks.pop_back();
+}
+    
+    namespace HPHP { namespace jit {
+///////////////////////////////////////////////////////////////////////////////
+    }
+    }
+    
+    private const char *
+file_or_stream(struct magic_set *ms, const char *inname, php_stream *stream)
 {
-    m_inner->CopyCPUToGPUAsync(cpuBuffer, 1, totalSize, gpuBuffer);
-    m_inner->RecordCPUToGPUCopy();
+  int  rv = -1;
+  unsigned char *buf;
+  struct stat  sb;
+  ssize_t nbytes = 0;  /* number of bytes read from a datafile */
+  HPHP::req::ptr<HPHP::File> file;
+    }
+    
+      if (type <= TNull) {
+    gen(env, Jmp, getBlock(env, zeroOff));
+    return;
+  }
+  if (type <= TBool) {
+    Offset nonZeroOff = bcOff(env) + iv.vec32()[iv.size() - 2];
+    gen(env, JmpNZero, getBlock(env, nonZeroOff), switchVal);
+    gen(env, Jmp, getBlock(env, zeroOff));
+    return;
+  }
+  if (type <= TArrLike) {
+    decRef(env, switchVal);
+    gen(env, Jmp, getBlock(env, defaultOff));
+    return;
+  }
+    
+    struct IRGS;
+    
+      Address m_base{nullptr};
+  Address m_frontier{nullptr};
+  size_t  m_size{0};
+  size_t  m_maxGrow{0};
+  std::string m_name;
+    
+      // Return the set of clusters that are left, which are the ones that
+  // didn't get merged.
+    
+    CurlShareResource::CurlShareResource() {
+  m_share = curl_share_init();
 }
     
-    // Handler for Win32 messages, update mouse/keyboard data.
-// You may or not need this for your implementation, but it can serve as reference for handling inputs.
-// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
-/*
-IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-*/
+    struct CurlShareResource : SweepableResourceData {
+  DECLARE_RESOURCE_ALLOCATION(CurlShareResource)
+  CLASSNAME_IS('curl_share')
+  const String& o_getClassNameHook() const override { return classnameof(); }
+  bool isInvalid() const override { return !m_share; }
+    }
+    
+                // 3. for bits in seq. training
+            if (m_hasLattices)
+            {
+                m_LatticeCache.clear();
+                m_uidCache.clear();
+                m_extrauttmapCache.clear();
+                m_BoundariesCache.clear();
+    }
+    
+    // ===========================================================================
+// DoConvertFromDbn() - implements CNTK 'convertdbn' command
+// ===========================================================================
+    
+    // understand and execute from the syntactic expression tree
+ConfigValuePtr Evaluate(ExpressionPtr);                               // evaluate the expression tree
+void Do(ExpressionPtr e);                                             // evaluate e.do
+shared_ptr<Object> EvaluateField(ExpressionPtr e, const wstring& id); // for experimental CNTK integration
+    
+            // take off the prefix
+        if (firstStartOut == symbolOut.length())
+        {
+            // this case is just the model label with nothing else, in that case we want the all nodes
+            search = '*';
+            outWildcard = true;
+        }
+        else
+        {
+            search = symbolOut.substr(firstStartOut);
+        }
+    
+        bool haslattice(std::wstring key) const
+    {
+#ifdef NONUMLATTICEMMI
+        return denlattices.haslattice(key);
+#else
+        return numlattices.haslattice(key) && denlattices.haslattice(key);
+#endif
+    }
+    
+    
+    {public:
+    inline hardcoded_array() throw()
+    {
+    }
+    inline hardcoded_array(size_t n) throw()
+    {
+        check_size(n);
+    } // we can instantiate with a size parameter--just checks the size
+    inline hardcoded_array(size_t n, const _T& val) throw()
+    {
+        check_size(n);
+        for (size_t i = 0; i < n; i++)
+            data[i] = val;
+    }
+    inline _T& operator[](size_t i) throw()
+    {
+        check_index(i);
+        return data[i];
+    }
+    inline const _T& operator[](size_t i) const throw()
+    {
+        check_index(i);
+        return data[i];
+    }
+    inline size_t size() const throw()
+    {
+        return _N;
+    }
+};
 
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    // callbacks (installed by default if you enable 'install_callbacks' during initialization)
+// You can also handle inputs yourself and use those as a reference.
+IMGUI_API int32       ImGui_Marmalade_PointerButtonEventCallback(void* SystemData, void* pUserData);
+IMGUI_API int32       ImGui_Marmalade_KeyCallback(void* SystemData, void* userData);
+IMGUI_API int32       ImGui_Marmalade_CharCallback(void* SystemData, void* userData);
+
+    
+            // Create the input layout
+        D3D10_INPUT_ELEMENT_DESC local_layout[] = 
+        {
+            { 'POSITION', 0, DXGI_FORMAT_R32G32_FLOAT,   0, (size_t)(&((ImDrawVert*)0)->pos), D3D10_INPUT_PER_VERTEX_DATA, 0 },
+            { 'TEXCOORD', 0, DXGI_FORMAT_R32G32_FLOAT,   0, (size_t)(&((ImDrawVert*)0)->uv),  D3D10_INPUT_PER_VERTEX_DATA, 0 },
+            { 'COLOR',    0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, (size_t)(&((ImDrawVert*)0)->col), D3D10_INPUT_PER_VERTEX_DATA, 0 },
+        };
+        if (g_pd3dDevice->CreateInputLayout(local_layout, 3, g_pVertexShaderBlob->GetBufferPointer(), g_pVertexShaderBlob->GetBufferSize(), &g_pInputLayout) != S_OK)
+            return false;
     
         // Copy and convert all vertices into a single contiguous buffer
     D3D11_MAPPED_SUBRESOURCE vtx_resource, idx_resource;
@@ -152,29 +280,8 @@ IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM w
     ctx->Unmap(g_pVB, 0);
     ctx->Unmap(g_pIB, 0);
     
-        // Hide OS mouse cursor if ImGui is drawing it
-    if (io.MouseDrawCursor)
-    {
-        al_set_mouse_cursor(g_Display, g_MouseCursorInvisible);
-    }
-    else
-    {
-        ALLEGRO_SYSTEM_MOUSE_CURSOR cursor_id = ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT;
-        switch (ImGui::GetMouseCursor())
-        {
-        case ImGuiMouseCursor_TextInput:    cursor_id = ALLEGRO_SYSTEM_MOUSE_CURSOR_EDIT; break;
-        case ImGuiMouseCursor_ResizeAll:    cursor_id = ALLEGRO_SYSTEM_MOUSE_CURSOR_MOVE; break;
-        case ImGuiMouseCursor_ResizeNS:     cursor_id = ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_N; break;
-        case ImGuiMouseCursor_ResizeEW:     cursor_id = ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_E; break;
-        case ImGuiMouseCursor_ResizeNESW:   cursor_id = ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_NE; break;
-        case ImGuiMouseCursor_ResizeNWSE:   cursor_id = ALLEGRO_SYSTEM_MOUSE_CURSOR_RESIZE_NW; break;
-        }
-        al_set_system_mouse_cursor(g_Display, cursor_id);
-    }
-    
-    #include 'imgui.h'
-#include 'imgui_impl_marmalade.h'
-#include <stdio.h>
+            max_glyph_size.x = ImMax(max_glyph_size.x, font_face.Info.MaxAdvanceWidth);
+        max_glyph_size.y = ImMax(max_glyph_size.y, font_face.Info.Ascender - font_face.Info.Descender);
     
             // 3. Show the ImGui demo window. Most of the sample code is in ImGui::ShowDemoWindow(). Read its code to learn more about Dear ImGui!
         if (show_demo_window)
@@ -183,142 +290,6 @@ IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM w
             ImGui::ShowDemoWindow(&show_demo_window);
         }
     
-    	jint level = JNU_GetField(env, _log_info, 'level', 'I').i;
     
-    
-    {    _state = EXPECTS_CRASH_DUMP_END;
-    return 0;
-}
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-        if (st.url_length + st.head_length > st.total_length) return __LINE__;
-    
-    CommFrequencyLimit::~CommFrequencyLimit()
-{}
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    #endif
-
-    
-    //============================================================================
-// Name        : has_member.h
-// Author      :
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-//============================================================================
-    
-    jvalue JNU_CallMethodByName(JNIEnv* _env, jobject obj, const char* _name, const char* descriptor, ...);
-jvalue JNU_CallStaticMethodByName(JNIEnv* _env, jclass clazz, const char* _name, const char* descriptor, ...);
-jvalue JNU_CallStaticMethodByName(JNIEnv* _env, const char* _class_name, const char* _name, const char* descriptor, ...);
-jvalue JNU_CallStaticMethodByMethodInfo(JNIEnv* _env, JniMethodInfo _method_info, ...);
-jvalue JNU_GetStaticField(JNIEnv* _env, jclass clazz, const char* _name, const char* sig);
-jvalue JNU_GetField(JNIEnv* _env, jobject obj, const char* _name, const char* sig);
-    
-      if (state->stackTrace.size() == state->stackTrace.capacity()) {
-    return _URC_END_OF_STACK;
-  }
-    
-        void setAlignContent(int alignContent);
-    void setAlignItems(int alignItems);
-    void setAlignSelf(int alignSelf);
-    void setFlexDirection(int flexDirection);
-    void setFlexWrap(int flexWrap);
-    void setJustifyContent(int justifyContent);
-    
-    namespace facebook {
-    }
-    
-    #pragma once
-#include <functional>
-#include <string>
-#include <jni.h>
-    
-      /**
-   * Access object's member or method through this operator overload.
-   */
-  T *operator->() const {
-    return get();
-  }
-    
-    // This allows storing the assert message before the current process terminates due to a crash
-typedef void (*AssertHandler)(const char* message);
-void setAssertHandler(AssertHandler assertHandler);
-    
-    inline uint8_t  Bswap(uint8_t x)  { return x; }
-inline uint16_t Bswap(uint16_t x) { return __builtin_bswap16(x); }
-inline uint32_t Bswap(uint32_t x) { return __builtin_bswap32(x); }
-inline uint64_t Bswap(uint64_t x) { return __builtin_bswap64(x); }
-    
-    #include 'FuzzerExtFunctions.def'
-    
-    
-    {  bool InMergeMode = false;
-};
-    
-      ExecuteCallback(Data, Size);
-    
-    
-    {  bool Parse(std::istream &IS, bool ParseCoverage);
-  bool Parse(const std::string &Str, bool ParseCoverage);
-  void ParseOrExit(std::istream &IS, bool ParseCoverage);
-  size_t Merge(std::vector<std::string> *NewFiles);
-};
-    
-    struct FuzzingOptions {
-  int Verbosity = 1;
-  size_t MaxLen = 0;
-  int UnitTimeoutSec = 300;
-  int TimeoutExitCode = 77;
-  int ErrorExitCode = 77;
-  int MaxTotalTimeSec = 0;
-  int RssLimitMb = 0;
-  bool DoCrossOver = true;
-  int MutateDepth = 5;
-  bool UseCounters = false;
-  bool UseIndirCalls = true;
-  bool UseMemcmp = true;
-  bool UseMemmem = true;
-  bool UseCmp = false;
-  bool UseValueProfile = false;
-  bool Shrink = false;
-  int ReloadIntervalSec = 1;
-  bool ShuffleAtStartUp = true;
-  bool PreferSmall = true;
-  size_t MaxNumberOfRuns = -1L;
-  int ReportSlowUnits = 10;
-  bool OnlyASCII = false;
-  std::string OutputCorpus;
-  std::string ArtifactPrefix = './';
-  std::string ExactArtifactPath;
-  std::string ExitOnSrcPos;
-  std::string ExitOnItem;
-  bool SaveArtifacts = true;
-  bool PrintNEW = true; // Print a status line when new units are found;
-  bool OutputCSV = false;
-  bool PrintNewCovPcs = false;
-  bool PrintFinalStats = false;
-  bool PrintCorpusStats = false;
-  bool PrintCoverage = false;
-  bool DumpCoverage = false;
-  bool DetectLeaks = true;
-  int  TraceMalloc = 0;
-  bool HandleAbrt = false;
-  bool HandleBus = false;
-  bool HandleFpe = false;
-  bool HandleIll = false;
-  bool HandleInt = false;
-  bool HandleSegv = false;
-  bool HandleTerm = false;
-};
-    
-    namespace fuzzer {
+    {        ImGui::Render();
     }
