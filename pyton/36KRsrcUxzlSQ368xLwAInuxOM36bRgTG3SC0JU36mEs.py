@@ -1,103 +1,58 @@
 
         
-        
-if __name__ == '__main__':
-    main(sys.argv[1:])
-
-    
-        to remove replace in this file ismount( -> os.path.ismount( and remove this
-    function'''
-    
-    
-def secure_hash_s(data, hash_func=sha1):
-    ''' Return a secure hash hex digest of data. '''
-    
-            params1 = {'three': 3, 'two': 2, 'one': 1}
-        params2 = {'one': 1, 'two': 2, 'three': 3}
-        actual = GCPUtils.are_params_equal(params1, params2)
-        self.assertTrue(actual)
-    
-        Parameters
-    ----------
-    metrics : array-like of callables (1d or 0d)
-        The metric functions to time.
-    
-    n_samples = np.logspace(.5, 3, 9)
-n_features = np.logspace(1, 3.5, 7)
-N_samples, N_features = np.meshgrid(n_samples,
-                                    n_features)
-scikits_time = np.zeros(N_samples.shape)
-scipy_time = np.zeros(N_samples.shape)
-    
-        plt.show()
-
-    
-    
-def get_parser():
-    from optparse import OptionParser
-    op = OptionParser()
-    op.add_option('--output',
-                  action='store', type='str', dest='output',
-                  help='Path where to dump data.')
-    return op
-    
-    The dataset is generated using the ``make_biclusters`` function, which
-creates a matrix of small values and implants bicluster with large
-values. The rows and columns are then shuffled and passed to the
-Spectral Co-Clustering algorithm. Rearranging the shuffled matrix to
-make biclusters contiguous shows how accurately the algorithm found
-the biclusters.
-    
-    
-# Plot the distances
-for index, metric in enumerate(['cosine', 'euclidean', 'cityblock']):
-    avg_dist = np.zeros((n_clusters, n_clusters))
-    plt.figure(figsize=(5, 4.5))
-    for i in range(n_clusters):
-        for j in range(n_clusters):
-            avg_dist[i, j] = pairwise_distances(X[y == i], X[y == j],
-                                                metric=metric).mean()
-    avg_dist /= avg_dist.max()
-    for i in range(n_clusters):
-        for j in range(n_clusters):
-            plt.text(i, j, '%5.3f' % avg_dist[i, j],
-                     verticalalignment='center',
-                     horizontalalignment='center')
-    
-            for i in html_json['sources']:
-            if 'src' in i:  #to avoid KeyError
-                if i['src'].startswith('https'):
-                    link_list.append((str(i['height']), i['src']))
-    
-    __all__ = ['fc2video_download']
-    
-        for i in range(10, 30):
-        url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
-            i = i,
-            p = preview
-        )
-        try:
-            mime, ext, size = url_info(url)
-            break
-        except: continue
-    
-        @classmethod
-    def __get_test_directory(self):
         '''
-        Get the temporary directory for the tests.
+import hashlib
+import requests
+    
+    
+MIME_RE = re.compile(r'^[^/]+/[^/]+$')
+    
+    
+with codecs.open(FILE_PATH, encoding='utf8') as f:
+    # Strip because we don't want new lines in the data so that we can
+    # easily count occurrences also when embedded in JSON (where the new
+    # line would be escaped).
+    FILE_CONTENT = f.read().strip()
+    
+    
+def rst_filenames():
+    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
+        if '.tox' not in root:
+            for filename in fnmatch.filter(filenames, '*.rst'):
+                yield os.path.join(root, filename)
+    
+    from httpie import ExitStatus
+from utils import http, HTTP_OK
+    
+        def __call__(self, r):
         '''
-        self.test_dir = os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), 'test_command')
+        Override username/password serialization to allow unicode.
     
+        # 128+2 SIGINT <http://www.tldp.org/LDP/abs/html/exitcodes.html>
+    ERROR_CTRL_C = 130
     
-class Action(object):
+        def get_formatters_grouped(self):
+        groups = {}
+        for group_name, group in groupby(
+                self.get_formatters(),
+                key=lambda p: getattr(p, 'group_name', 'format')):
+            groups[group_name] = list(group)
+        return groups
     
-        jim = Subscriber('jim', message_center)
-    jim.subscribe('cartoon')
-    jack = Subscriber('jack', message_center)
-    jack.subscribe('music')
-    gee = Subscriber('gee', message_center)
-    gee.subscribe('movie')
-    vani = Subscriber('vani', message_center)
-    vani.subscribe('movie')
-    vani.unsubscribe('movie')
+    URLS = ['http://www.google.com/',
+        'http://www.apple.com/',
+        'http://www.ibm.com',
+        'http://www.thisurlprobablydoesnotexist.com',
+        'http://www.slashdot.org/',
+        'http://www.python.org/',
+        'http://www.bing.com/',
+        'http://www.facebook.com/',
+        'http://www.yahoo.com/',
+        'http://www.youtube.com/',
+        'http://www.blogger.com/']
+    
+    # The paper size ('letter' or 'a4').
+#latex_paper_size = 'letter'
+    
+    sys.path.insert( 1, p.abspath( p.join( DIR_OF_YCMD_THIRD_PARTY,
+                                       'argparse' ) ) )
