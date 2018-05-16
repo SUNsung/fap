@@ -1,139 +1,126 @@
 
         
-                def test_spec_name_with_inline_config
-          spec = spec('adapter' => 'sqlite3')
-          assert_equal 'primary', spec.name, 'should default to primary id'
+          def dump_build_env(env, f = $stdout)
+    keys = build_env_keys(env)
+    keys -= %w[CC CXX OBJC OBJCXX] if env['CC'] == env['HOMEBREW_CC']
+    
+          # we readlink because this path probably doesn't exist since caveats
+      # occurs before the link step of installation
+      # Yosemite security measures mildly tighter rules:
+      # https://github.com/Homebrew/homebrew/issues/33815
+      if !plist_path.file? || !plist_path.symlink?
+        if f.plist_startup
+          s << 'To have launchd start #{f.full_name} at startup:'
+          s << '  sudo mkdir -p #{destination}' unless destination_path.directory?
+          s << '  sudo cp -fv #{f.opt_prefix}/*.plist #{destination}'
+          s << '  sudo chown root #{plist_link}'
+        else
+          s << 'To have launchd start #{f.full_name} at login:'
+          s << '  mkdir -p #{destination}' unless destination_path.directory?
+          s << '  ln -sfv #{f.opt_prefix}/*.plist #{destination}'
         end
+        s << 'Then to load #{f.full_name} now:'
+        if f.plist_startup
+          s << '  sudo launchctl load #{plist_link}'
+        else
+          s << '  launchctl load #{plist_link}'
+        end
+      # For startup plists, we cannot tell whether it's running on launchd,
+      # as it requires for `sudo launchctl list` to get real result.
+      elsif f.plist_startup
+        s << 'To reload #{f.full_name} after an upgrade:'
+        s << '  sudo launchctl unload #{plist_link}'
+        s << '  sudo cp -fv #{f.opt_prefix}/*.plist #{destination}'
+        s << '  sudo chown root #{plist_link}'
+        s << '  sudo launchctl load #{plist_link}'
+      elsif Kernel.system '/bin/launchctl list #{plist_domain} &>/dev/null'
+        s << 'To reload #{f.full_name} after an upgrade:'
+        s << '  launchctl unload #{plist_link}'
+        s << '  launchctl load #{plist_link}'
+      else
+        s << 'To load #{f.full_name}:'
+        s << '  launchctl load #{plist_link}'
+      end
+    
+          if path.symlink? || path.directory?
+        next
+      elsif path.extname == '.la'
+        path.unlink
+      else
+        # Set permissions for executables and non-executables
+        perms = if path.mach_o_executable? || path.text_executable?
+          0555
+        else
+          0444
+        end
+        if ARGV.debug?
+          old_perms = path.stat.mode & 0777
+          if perms != old_perms
+            puts 'Fixing #{path} permissions from #{old_perms.to_s(8)} to #{perms.to_s(8)}'
+          end
+        end
+        path.chmod perms
       end
     end
   end
 end
 
     
-      def test_parsing_json_doesnot_rescue_exception
-    req = Class.new(ActionDispatch::Request) do
-      def params_parsers
-        { json: Proc.new { |data| raise Interrupt } }
+          begin
+        migrator = Migrator.new(f)
+        migrator.migrate
+      rescue Migrator::MigratorDifferentTapsError
+      rescue Exception => e
+        onoe e
       end
-    
-    require 'active_job'
-    
-          private
-    
-    class DefaultsDeliveryMethodsTest < ActiveSupport::TestCase
-  test 'default smtp settings' do
-    settings = { address:              'localhost',
-                 port:                 25,
-                 domain:               'localhost.localdomain',
-                 user_name:            nil,
-                 password:             nil,
-                 authentication:       nil,
-                 enable_starttls_auto: true }
-    assert_equal settings, ActionMailer::Base.smtp_settings
-  end
-    
-      def set_logger(logger)
-    ActionMailer::Base.logger = logger
-  end
-    
-      def test_getc_extended_file
-    [nil, {:textmode=>true}, {:binmode=>true}].each do |mode|
-      Tempfile.create('test-extended-file', mode) {|f|
-        assert_nil(f.getc)
-        f.print 'a'
-        f.rewind
-        assert_equal(?a, f.getc, 'mode = <#{mode}>')
-      }
     end
   end
     
-      def test_callcc_iter_level
-    bug9105 = '[ruby-dev:47803] [Bug #9105]'
-    h = @cls[1=>2, 3=>4]
-    c = nil
-    f = false
-    h.each {callcc {|c2| c = c2}}
-    unless f
-      f = true
-      c.call
-    end
-    assert_nothing_raised(RuntimeError, bug9105) do
-      h.each {|i, j|
-        h.delete(i);
-        assert_not_equal(false, i, bug9105)
-      }
-    end
+    # This formula serves as the base class for several very similar
+# formulae for Amazon Web Services related tools.
+class AmazonWebServicesFormula < Formula
+  # Use this method to peform a standard install for Java-based tools,
+  # keeping the .jars out of HOMEBREW_PREFIX/lib
+  def install
+    rm Dir['bin/*.cmd'] # Remove Windows versions
+    libexec.install Dir['*']
+    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
   end
+  alias_method :standard_install, :install
     
-      def test_s_new
-    assert_nothing_raised {
-      Set.new()
-      Set.new(nil)
-      Set.new([])
-      Set.new([1,2])
-      Set.new('a'..'c')
-    }
-    assert_raise(ArgumentError) {
-      Set.new(false)
-    }
-    assert_raise(ArgumentError) {
-      Set.new(1)
-    }
-    assert_raise(ArgumentError) {
-      Set.new(1,2)
-    }
+            %w(modals dropdowns scrollspy tabs tooltips popovers alerts buttons collapse carousel affix).each do |dom_id|
+          css('##{dom_id}-options + p + div tbody td:first-child').each do |node|
+            name = node.content.strip
+            id = node.parent['id'] = '#{dom_id}-#{name.parameterize}-option'
+            name.prepend '#{dom_id.singularize.titleize}: '
+            name << ' (option)'
+            entries << [name, id]
+          end
     
-      it 'adds nil for each element requested beyond the end of the String' do
-    [ ['',     [nil, nil, nil]],
-      ['abc',  [25185, nil, nil]],
-      ['abcd', [25185, 25699, nil]]
-    ].should be_computed_by(:unpack, unpack_format(3))
-  end
+            css('h6').each do |node|
+          node.name = 'h4'
+        end
     
-      it 'does not decode any items for directives exceeding the input string size' do
-    '\xc2\x80'.unpack('UUUU').should == [0x80]
-  end
-    
-      class SubclassX
-    attr_reader :key
-    def initialize(*)
-      @key = :value
-      super
+    module Clamp
+  module Attribute
+    class Instance
+      def default_from_environment
+        # we don't want uncontrolled var injection from the environment
+        # since we're establishing that settings can be pulled from only three places:
+        # 1. default settings
+        # 2. yaml file
+        # 3. cli arguments
+      end
     end
   end
-end
-
     
-      it 'raises an ArgumentError if not passed a block' do
-    lambda {
-      Thread.send(@method)
-    }.should raise_error(ArgumentError)
-  end
-    
-      # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/follow
-  def follow
-    f = Follow.last
-    NotificationMailer.follow(f.target_account, Notification.find_by(activity: f))
-  end
-    
-        # Returns the CSS for the media query.
-    #
-    # @return [String]
-    def to_css
-      css = ''
-      css << resolved_modifier
-      css << ' ' unless resolved_modifier.empty?
-      css << resolved_type
-      css << ' and ' unless resolved_type.empty? || expressions.empty?
-      css << expressions.map do |e|
-        # It's possible for there to be script nodes in Expressions even when
-        # we're converting to CSS in the case where we parsed the document as
-        # CSS originally (as in css_test.rb).
-        e.map {|c| c.is_a?(Sass::Script::Tree::Node) ? c.to_sass : c.to_s}.join
-      end.join(' and ')
-      css
+        execute 'ensure-sidekiq-is-setup-with-monit' do 
+      command %Q{ 
+        monit reload 
+      } 
     end
     
-      puts '== Installing dependencies =='
-  system 'gem install bundler --conservative'
-  system 'bundle check || bundle install'
+      # puts '\n== Copying sample files =='
+  # unless File.exist?('config/database.yml')
+  #   system 'cp config/database.yml.sample config/database.yml'
+  # end
