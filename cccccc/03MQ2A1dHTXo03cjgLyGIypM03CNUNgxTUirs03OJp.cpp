@@ -1,46 +1,58 @@
 
         
-        // Generate param traits read methods.
-#include 'ipc/param_traits_read_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
+        // Get string from resource_id.
+base::StringPiece GetStringResource(int resource_id);
     
-    #endif  // CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
-
+    EventListener::~EventListener() {
+  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
+    delete i->second;
+  }
+}
     
-    class BaseEvent {
-  friend class EventListener;
-  DISALLOW_COPY_AND_ASSIGN(BaseEvent);
+    
+    {  template<typename T> bool RemoveListener() {
+    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
+    if (i!=listerners_.end()) {
+      delete i->second;
+      listerners_.erase(i);
+      return true;
     }
+    return false;
+  }
+private:
+  DISALLOW_COPY_AND_ASSIGN(EventListener);
+};
     
-       bool IsCommandIdChecked(int command_id) const override;
-   bool IsCommandIdEnabled(int command_id) const override;
+    class ObjectManager;
     
-    #include 'base/logging.h'
-#include 'base/strings/string_util.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menu/menu.h'
+    void Menu::Remove(MenuItem* menu_item, int pos) {
+  std::vector<MenuItem*>::iterator begin = menu_items.begin();
+  menu_items.erase(begin+pos);
+  gtk_container_remove(GTK_CONTAINER(menu_), menu_item->menu_item_);
+}
     
-    namespace {
-    }
+      std::string icon;
+  if (option.GetString('icon', &icon) && !icon.empty())
+    SetIcon(icon);
     
-    class NwClipboardClearSyncFunction : public NWSyncExtensionFunction {
- public:
-  NwClipboardClearSyncFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
+     protected:
+  ~NwAppClearCacheFunction() override;
     
-    #include 'test/core/util/test_config.h'
-#include 'test/cpp/qps/benchmark_config.h'
-#include 'test/cpp/qps/driver.h'
-#include 'test/cpp/qps/report.h'
-#include 'test/cpp/qps/server.h'
-#include 'test/cpp/util/test_config.h'
-#include 'test/cpp/util/test_credentials_provider.h'
+    NwObjCallObjectMethodFunction::~NwObjCallObjectMethodFunction() {
+}
     
-    #include <algorithm>
+    #ifndef TEST_QPS_DRIVER_H
+#define TEST_QPS_DRIVER_H
+    
+    #ifndef GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
+#define GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
+    
+    inline grpc::string GetJSServiceFilename(const grpc::string& filename) {
+  return grpc_generator::StripProto(filename) + '_grpc_pb.js';
+}
+    
+    
+    {}  // namespace grpc_python_generator
     
     AuthPropertyIterator SecureAuthContext::begin() const {
   if (ctx_) {
@@ -54,162 +66,230 @@ namespace IPC {
   }
 }
     
-    static double time_double(struct timeval* tv) {
-  return tv->tv_sec + 1e-6 * tv->tv_usec;
-}
-#endif
-    
-    #include 'src/proto/grpc/testing/metrics.grpc.pb.h'
-#include 'src/proto/grpc/testing/metrics.pb.h'
-    
-    TEST(VersionEditTest, EncodeDecode) {
-  static const uint64_t kBig = 1ull << 50;
+    namespace grpc {
+namespace {
+    }
     }
     
+    #include 'test/cpp/interop/server_helper.h'
+#include 'test/cpp/util/test_config.h'
     
-    {}  // namespace leveldb
-    
-    bool HandleDumpCommand(Env* env, char** files, int num) {
-  StdoutPrinter printer;
-  bool ok = true;
-  for (int i = 0; i < num; i++) {
-    Status s = DumpFile(env, files[i], &printer);
-    if (!s.ok()) {
-      fprintf(stderr, '%s\n', s.ToString().c_str());
-      ok = false;
+    grpc::string DescribeServiceList(std::vector<grpc::string> service_list,
+                                 grpc::protobuf::DescriptorPool& desc_pool) {
+  std::stringstream result;
+  for (auto it = service_list.begin(); it != service_list.end(); it++) {
+    auto const& service = *it;
+    const grpc::protobuf::ServiceDescriptor* service_desc =
+        desc_pool.FindServiceByName(service);
+    if (service_desc != nullptr) {
+      result << DescribeService(service_desc);
     }
   }
-  return ok;
+  return result.str();
 }
     
-    #ifndef STORAGE_LEVELDB_TABLE_BLOCK_BUILDER_H_
-#define STORAGE_LEVELDB_TABLE_BLOCK_BUILDER_H_
     
-    #include <boost/algorithm/string/trim.hpp>
-#include <boost/lexical_cast.hpp>
+    {  FileMetaData() : refs(0), allowed_seeks(1 << 30), file_size(0) { }
+};
+    
+    #include 'helpers/memenv/memenv.h'
+    
+      // count the keys
+  leveldb::Iterator* iter = db->NewIterator(leveldb::ReadOptions());
+  size_t num_keys = 0;
+  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
+    num_keys++;
+  }
+  delete iter;
+  ASSERT_EQ(kNumKeys, num_keys) << 'Bad number of keys';
+    
+    class CRC { };
+    
+    void Histogram::Merge(const Histogram& other) {
+  if (other.min_ < min_) min_ = other.min_;
+  if (other.max_ > max_) max_ = other.max_;
+  num_ += other.num_;
+  sum_ += other.sum_;
+  sum_squares_ += other.sum_squares_;
+  for (int b = 0; b < kNumBuckets; b++) {
+    buckets_[b] += other.buckets_[b];
+  }
+}
+    
+      enum { kNumBuckets = 154 };
+  static const double kBucketLimit[kNumBuckets];
+  double buckets_[kNumBuckets];
+    
+    TEST(AutoCompactTest, ReadHalf) {
+  DoReads(kCount/2);
+}
+    
+    void DBIter::SeekToFirst() {
+  direction_ = kForward;
+  ClearSavedValue();
+  iter_->SeekToFirst();
+  if (iter_->Valid()) {
+    FindNextUserEntry(false, &saved_key_ /* temporary storage */);
+  } else {
+    valid_ = false;
+  }
+}
+    
+    const char* InternalKeyComparator::Name() const {
+  return 'leveldb.InternalKeyComparator';
+}
+    
+    extern JSClass  *jsb_cocostudio_timeline_SkeletonNode_class;
+extern JSObject *jsb_cocostudio_timeline_SkeletonNode_prototype;
+    
+    
+    
+        void initShader( void );
+public:
+    GLESDebugDraw();
+    
+    			b2Vec2 vertices[3];
+			vertices[0] = b2Mul(xf1, b2Vec2(-1.0f, 0.0f));
+			vertices[1] = b2Mul(xf1, b2Vec2(1.0f, 0.0f));
+			vertices[2] = b2Mul(xf1, b2Vec2(0.0f, 0.5f));
+			
+			b2PolygonShape poly1;
+			poly1.Set(vertices, 3);
+    
+    
+    {		Test::Step(settings);
+	}
+    
+    class TestWriteChainAsyncTransportWrapper :
+  public WriteChainAsyncTransportWrapper<folly::AsyncTransportWrapper> {
+ public:
+  TestWriteChainAsyncTransportWrapper() :
+    WriteChainAsyncTransportWrapper<folly::AsyncTransportWrapper>(nullptr) {}
+    }
+    
+        // The fifth element has '3'
+    buf = IOBuf::create(40);
+    app = Appender{buf.get(), 0};
+    app.push(StringPiece('3'));
+    chain->prependChain(std::move(buf));
+    
+    FOLLY_ALWAYS_INLINE int __builtin_ctz(unsigned int x) {
+  unsigned long index;
+  return int(_BitScanForward(&index, (unsigned long)x) ? index : 32);
+}
+    
+    #ifndef HAZPTR_TC
     
     /**
- * @brief A utility class which is used to express the state of operations.
- *
- * @code{.cpp}
- *   osquery::Status foobar() {
- *     auto na = doSomeWork();
- *     if (na->itWorked()) {
- *       return osquery::Status(0, 'OK');
- *     } else {
- *       return osquery::Status(1, na->getErrorString());
- *     }
- *   }
- * @endcode
- */
-class Status {
- public:
-  /**
-   * @brief Default constructor
-   *
-   * Note that the default constructor initialized an osquery::Status instance
-   * to a state such that a successful operation is indicated.
-   */
-  explicit Status(int c = 0) : code_(c), message_('OK') {}
-    }
+  Make a completed void Future.
     
-    
-    {  // Reset the queue and remove the queue locks.
-  osquery_cqueue_teardown(&osquery.cqueue);
-  return KERN_FAILURE;
+    TEST(Collect, collectAllVariadicReferences) {
+  Promise<bool> pb;
+  Promise<int> pi;
+  Future<bool> fb = pb.getFuture();
+  Future<int> fi = pi.getFuture();
+  bool flag = false;
+  collectAll(fb, fi)
+    .then([&](std::tuple<Try<bool>, Try<int>> tup) {
+      flag = true;
+      EXPECT_TRUE(std::get<0>(tup).hasValue());
+      EXPECT_EQ(std::get<0>(tup).value(), true);
+      EXPECT_TRUE(std::get<1>(tup).hasValue());
+      EXPECT_EQ(std::get<1>(tup).value(), 42);
+    });
+  pb.setValue(true);
+  EXPECT_FALSE(flag);
+  pi.setValue(42);
+  EXPECT_TRUE(flag);
 }
     
-      auto file_path = kTestWorkingDirectory + 'permissions-file2';
     
-    TEST_F(StatusTests, test_constructor) {
-  auto s = Status(5, 'message');
-  EXPECT_EQ(s.getCode(), 5);
-  EXPECT_EQ(s.getMessage(), 'message');
+    {  cerr << 'SSLClientTest test completed' << endl;
 }
     
-      // Now test inclusive bounds.
-  struct ConstraintList cl3;
-  constraint = Constraint(LESS_THAN_OR_EQUALS);
-  constraint.expr = '1000';
-  cl3.add(constraint);
-  constraint = Constraint(GREATER_THAN_OR_EQUALS);
-  constraint.expr = '1';
-  cl3.add(constraint);
     
-    #include <string.h>
-#include <time.h>
-#include <vector>
-    
-     private:
-  char delim_;         // The delimiter is inserted between elements
-    
-      char delim_;         // The delimiter is inserted between elements
-    
-      // when we know more data has been written to the file. we can use this
-  // function to force the reader to look again in the file.
-  // Also aligns the file position indicator to the start of the next block
-  // by reading the rest of the data from the EOF position to the end of the
-  // block that was partially read.
-  void UnmarkEOF();
-    
-    #ifndef NDEBUG
-namespace rocksdb {
+Handle<Value> DBWrapper::New(const Arguments& args) {
+  HandleScope scope;
+  Handle<Value> to_return;
     }
     
-    #ifdef __cplusplus
-extern 'C' {
-#endif
-/*
- * VM initialization functions.
- *
- * Note these are the only symbols exported for JNI by the VM.
- */
-jint JNI_GetDefaultJavaVMInitArgs(void*);
-jint JNI_CreateJavaVM(JavaVM**, JNIEnv**, void*);
-jint JNI_GetCreatedJavaVMs(JavaVM**, jsize, jsize*);
+    
+    {}  // namespace rocksdb
+    
+    // Used to encapsulate a particular instance of an opened database.
+//
+// This object should not be used directly in C++; it exists solely to provide
+// a mapping from a JavaScript object to a C++ code that can use the RocksDB
+// API.
+class DBWrapper : public node::ObjectWrap {
+  public:
+    static void Init(Handle<Object> exports);
     }
     
-    class FBEXPORT StackTraceElement {
- public:
-  StackTraceElement(InstructionPointer absoluteProgramCounter,
-                    InstructionPointer libraryBase,
-                    InstructionPointer functionAddress, std::string libraryName,
-                    std::string functionName)
-      : absoluteProgramCounter_{absoluteProgramCounter},
-        libraryBase_{libraryBase},
-        functionAddress_{functionAddress},
-        libraryName_{std::move(libraryName)},
-        functionName_{std::move(functionName)} {}
-    }
-    
-    double Node::getComputedPadding(int edge) const
-{
-    return YGNodeLayoutGetPadding(m_node, static_cast<YGEdge>(edge));
+    SyncPoint* SyncPoint::GetInstance() {
+  static SyncPoint sync_point;
+  return &sync_point;
 }
-
     
-    class Countable : public noncopyable, public nonmovable {
-public:
-  // RefPtr expects refcount to start at 0
-  Countable() : m_refcount(0) {}
-  virtual ~Countable()
-  {
-    FBASSERT(m_refcount == 0);
+      void LoadDependency(const std::vector<SyncPointPair>& dependencies);
+  void LoadDependencyAndMarkers(const std::vector<SyncPointPair>& dependencies,
+    const std::vector<SyncPointPair>& markers);
+  bool PredecessorsAllCleared(const std::string& point);
+  void SetCallBack(const std::string& point,
+    const std::function<void(void*)>& callback) {
+  std::lock_guard<std::mutex> lock(mutex_);
+  callbacks_[point] = callback;
+}
+    
+    inline
+bool BlockFetcher::TryGetCompressedBlockFromPersistentCache() {
+  if (cache_options_.persistent_cache &&
+      cache_options_.persistent_cache->IsCompressed()) {
+    // lookup uncompressed cache mode p-cache
+    status_ = PersistentCacheHelper::LookupRawPage(
+        cache_options_, handle_, &heap_buf_, block_size_ + kBlockTrailerSize);
+    if (status_.ok()) {
+      used_buf_ = heap_buf_.get();
+      slice_ = Slice(heap_buf_.get(), block_size_);
+      return true;
+    } else if (!status_.IsNotFound() && ioptions_.info_log) {
+      assert(!status_.ok());
+      ROCKS_LOG_INFO(ioptions_.info_log,
+                     'Error reading from persistent cache. %s',
+                     status_.ToString().c_str());
+    }
   }
-    }
+  return false;
+}
     
-    // Class that lets you declare a global but does not add a static constructor
-// to the binary. Eventually I'd like to have this auto-initialize in a
-// multithreaded environment but for now it's easiest just to use manual
-// initialization.
-template <typename T>
-class StaticInitialized {
-public:
-  constexpr StaticInitialized() :
-    m_instance(nullptr)
-  {}
+    // Open the db inside DateTieredDBImpl because options needs pointer to its ttl
+DateTieredDBImpl::DateTieredDBImpl(
+    DB* db, Options options,
+    const std::vector<ColumnFamilyDescriptor>& descriptors,
+    const std::vector<ColumnFamilyHandle*>& handles, int64_t ttl,
+    int64_t column_family_interval)
+    : db_(db),
+      cf_options_(ColumnFamilyOptions(options)),
+      ioptions_(ImmutableCFOptions(options)),
+      icomp_(cf_options_.comparator),
+      ttl_(ttl),
+      column_family_interval_(column_family_interval),
+      mutex_(options.statistics.get(), db->GetEnv(), DB_MUTEX_WAIT_MICROS,
+             options.use_adaptive_mutex) {
+  latest_timebound_ = std::numeric_limits<int64_t>::min();
+  for (size_t i = 0; i < handles.size(); ++i) {
+    const auto& name = descriptors[i].name;
+    int64_t timestamp = 0;
+    try {
+      timestamp = ParseUint64(name);
+    } catch (const std::invalid_argument&) {
+      // Bypass unrelated column family, e.g. default
+      db_->DestroyColumnFamilyHandle(handles[i]);
+      continue;
     }
-    
-      T *get() const {
-    return (T*)pthread_getspecific(m_key);
+    if (timestamp > latest_timebound_) {
+      latest_timebound_ = timestamp;
+    }
+    handle_map_.insert(std::make_pair(timestamp, handles[i]));
   }
+}
