@@ -1,156 +1,115 @@
 
         
-          # True if a {Formula} is being built with a specific option
-  # (which isn't named `with-*` or `without-*`).
-  # @deprecated
-  def include?(name)
-    @args.include?('--#{name}')
-  end
-    
-      def app_caveats
-    if keg && keg.app_installed?
-      <<-EOS.undent
-        .app bundles were installed.
-        Run `brew linkapps #{keg.name}` to symlink these to /Applications.
-      EOS
-    end
-  end
-    
-        # Get rid of any info 'dir' files, so they don't conflict at the link stage
-    info_dir_file = @f.info + 'dir'
-    if info_dir_file.file? && !@f.skip_clean?(info_dir_file)
-      observe_file_removal info_dir_file
+            it 'should have a way of getting the service configurations' do
+      configs = key.service_configs_for(Spaceship::Portal::Key::MUSIC_KIT_ID)
+      expect(configs).to be_instance_of(Array)
+      expect(configs.sample).to be_instance_of(Hash)
+      expect(configs.first['identifier']).to eq('music.com.snatchev.test')
     end
     
-      def dump_verbose_config(f = $stdout)
-    f.puts 'HOMEBREW_VERSION: #{HOMEBREW_VERSION}'
-    f.puts 'ORIGIN: #{origin}'
-    f.puts 'HEAD: #{head}'
-    f.puts 'Last commit: #{last_commit}'
-    if CoreTap.instance.installed?
-      f.puts 'Core tap ORIGIN: #{core_tap_origin}'
-      f.puts 'Core tap HEAD: #{core_tap_head}'
-      f.puts 'Core tap last commit: #{core_tap_last_commit}'
-    else
-      f.puts 'Core tap: N/A'
-    end
-    f.puts 'HOMEBREW_PREFIX: #{HOMEBREW_PREFIX}'
-    f.puts 'HOMEBREW_REPOSITORY: #{HOMEBREW_REPOSITORY}'
-    f.puts 'HOMEBREW_CELLAR: #{HOMEBREW_CELLAR}'
-    f.puts 'HOMEBREW_BOTTLE_DOMAIN: #{BottleSpecification::DEFAULT_DOMAIN}'
-    f.puts hardware
-    f.puts 'OS X: #{MacOS.full_version}-#{kernel}'
-    f.puts 'Xcode: #{xcode ? xcode : 'N/A'}'
-    f.puts 'CLT: #{clt ? clt : 'N/A'}'
-    f.puts 'GCC-4.0: build #{gcc_40}' if gcc_40
-    f.puts 'GCC-4.2: build #{gcc_42}' if gcc_42
-    f.puts 'LLVM-GCC: build #{llvm}'  if llvm
-    f.puts 'Clang: #{clang ? '#{clang} build #{clang_build}' : 'N/A'}'
-    f.puts 'MacPorts/Fink: #{macports_or_fink}' if macports_or_fink
-    f.puts 'X11: #{describe_x11}'
-    f.puts 'System Ruby: #{describe_system_ruby}'
-    f.puts 'Perl: #{describe_perl}'
-    f.puts 'Python: #{describe_python}'
-    f.puts 'Ruby: #{describe_ruby}'
-    f.puts 'Java: #{describe_java}'
-  end
-end
-
-    
-        root.children.sort.each do |pn|
-      if pn.directory?
-        dirs << pn
-      elsif block_given? && yield(pn)
-        puts pn
-        other = 'other '
-      else
-        remaining_root_files << pn unless pn.basename.to_s == '.DS_Store'
+        context 'Mercurial repository' do
+      before do
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_svn?).and_return(false)
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git_svn?).and_return(false)
+        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git?).and_return(false)
+        expect(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_hg?).and_return(true)
       end
-    end
     
-      def shorten_revision(revision)
-    Utils.popen_read('git', '-C', HOMEBREW_REPOSITORY, 'rev-parse', '--short', revision).chomp
+    class NodeMincerTest < Minitest::Test
+  DUMMY_PATH = 'test/dummy_node_mincer'
+    
+            def signal_end_of_output
+          output_pipe.puts(END_OF_OUTPUT_SIGNAL)
+          STDOUT.flush
+        end
+    
+      def send_sinatra_file(path, &missing_file_block)
+    file_path = File.join(File.dirname(__FILE__), 'public',  path)
+    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
+    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
   end
     
-    class Formula
-  include FormulaCompat
-  extend FormulaCompat
+          rtn = ''
+      (context.environments.first['site'][@array_name] || []).each do |file|
+        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
+          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
+        end
     
-          To export the needed variables, add them to your dotfiles.
-       * On Bash, add them to `~/.bash_profile`.
-       * On Zsh, add them to `~/.zprofile` instead.
+        def render(context)
+      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
+      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
+      file = code_path + @file
     
-          private
-    
-        # Fetch a var from the context
-    # @param [Symbol] variable The variable to fetch
-    # @param [Object] default  The default value if not found
-    #
-    def fetch(*args)
-      context.fetch(*args)
-    end
-    
-        return captured_stdout.string, captured_stderr.string
-  ensure
-    $stdout = orig_stdout
-    $stderr = orig_stderr
-  end
-end
-
-    
-        SPREE_GEMS.each do |gem_name|
-      Dir.chdir(gem_name) do
-        sh 'gem build spree_#{gem_name}.gemspec'
-        mv 'spree_#{gem_name}-#{version}.gem', pkgdir
-      end
-    end
+              if @address.update_attributes(address_params)
+            respond_with(@address, default_template: :show)
+          else
+            invalid_resource!(@address)
+          end
+        end
     
             def create
-          authorize! :create, StockMovement
-          @stock_movement = scope.new(stock_movement_params)
-          if @stock_movement.save
-            respond_with(@stock_movement, status: 201, default_template: :show)
+          authorize! :create, StockLocation
+          @stock_location = StockLocation.new(stock_location_params)
+          if @stock_location.save
+            respond_with(@stock_location, status: 201, default_template: :show)
           else
-            invalid_resource!(@stock_movement)
+            invalid_resource!(@stock_location)
           end
         end
     
-            def multiple_assignment_node
-          grandparent_node = node.parent ? node.parent.parent : nil
-          return nil unless grandparent_node
-          return nil unless grandparent_node.type == MULTIPLE_ASSIGNMENT_TYPE
-          return nil unless node.parent.type == MULTIPLE_LEFT_HAND_SIDE_TYPE
-          grandparent_node
+            def index
+          authorize! :read, StockMovement
+          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@stock_movements)
+        end
+    
+    When /^(?:|I )go to (.+)$/ do |page_name|
+  visit path_to(page_name)
+end
+    
+        def only_process
+      only_process = @options[:only_process].dup
+      only_process = only_process.call(self) if only_process.respond_to?(:call)
+      only_process.map(&:to_sym)
+    end
+    
+      # Defines the geometry of an image.
+  class Geometry
+    attr_accessor :height, :width, :modifier
+    
+        # Perform the actual interpolation. Takes the pattern to interpolate
+    # and the arguments to pass, which are the attachment and style name.
+    # You can pass a method name on your record as a symbol, which should turn
+    # an interpolation pattern for Paperclip to use.
+    def self.interpolate pattern, *args
+      pattern = args.first.instance.send(pattern) if pattern.kind_of? Symbol
+      result = pattern.dup
+      interpolators_cache.each do |method, token|
+        result.gsub!(token) { send(method, *args) } if result.include?(token)
+      end
+      result
+    end
+    
+            def type_allowed?(type)
+          @subject.send('#{@attachment_name}_content_type=', type)
+          @subject.valid?
+          @subject.errors[:'#{@attachment_name}_content_type'].blank?
+        end
+    
+        Hash.new.tap do |missing_styles|
+      current_styles.each do |klass, attachment_definitions|
+        attachment_definitions.each do |attachment_name, styles|
+          registered = registered_styles[klass][attachment_name] || [] rescue []
+          missed = styles - registered
+          if missed.present?
+            klass_sym = klass.to_s.to_sym
+            missing_styles[klass_sym] ||= Hash.new
+            missing_styles[klass_sym][attachment_name.to_sym] ||= Array.new
+            missing_styles[klass_sym][attachment_name.to_sym].concat(missed.to_a)
+            missing_styles[klass_sym][attachment_name.to_sym].map!(&:to_s).sort!.map!(&:to_sym).uniq!
+          end
         end
       end
     end
   end
 end
-
-    
-                lambda do |corrector|
-              new_source = receiver.source + '.end_with?(' +
-                           to_string_literal(regex_str) + ')'
-              corrector.replace(node.source_range, new_source)
-            end
-          end
-        end
-      end
-    end
-  end
-end
-
-    
-            private
-    
-          expect('.margin-all').to have_rule(rule)
-    end
-  end
-    
-          expect('.padding-all').to have_rule(rule)
-    end
-  end
-    
-          expect('.prefix--webkit').to have_ruleset(rule)
-    end
-  end
