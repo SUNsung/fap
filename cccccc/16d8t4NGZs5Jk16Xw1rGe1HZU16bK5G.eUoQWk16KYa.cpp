@@ -1,254 +1,275 @@
 
         
-        void convert_dataset(const string& input_folder, const string& output_folder,
-    const string& db_type) {
-  scoped_ptr<db::DB> train_db(db::GetDB(db_type));
-  train_db->Open(output_folder + '/cifar10_train_' + db_type, db::NEW);
-  scoped_ptr<db::Transaction> txn(train_db->NewTransaction());
-  // Data buffer
-  int label;
-  char str_buffer[kCIFARImageNBytes];
-  Datum datum;
-  datum.set_channels(3);
-  datum.set_height(kCIFARSize);
-  datum.set_width(kCIFARSize);
+        
+    {PyObject* NewFileDependencies(const FileDescriptor* descriptor);
+PyObject* NewFilePublicDependencies(const FileDescriptor* descriptor);
+}  // namespace file_descriptor
+    
+    TEST(AnyTest, TestIs) {
+  protobuf_unittest::TestAny submessage;
+  submessage.set_int32_value(12345);
+  google::protobuf::Any any;
+  any.PackFrom(submessage);
+  ASSERT_TRUE(any.ParseFromString(any.SerializeAsString()));
+  EXPECT_TRUE(any.Is<protobuf_unittest::TestAny>());
+  EXPECT_FALSE(any.Is<google::protobuf::Any>());
     }
     
-    void convert_dataset(const char* image_filename, const char* label_filename,
-        const char* db_filename) {
-  // Open files
-  std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
-  std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
-  CHECK(image_file) << 'Unable to open file ' << image_filename;
-  CHECK(label_file) << 'Unable to open file ' << label_filename;
-  // Read the magic and the meta data
-  uint32_t magic;
-  uint32_t num_items;
-  uint32_t num_labels;
-  uint32_t rows;
-  uint32_t cols;
+      virtual void Generate(io::Printer* printer);
+    
+    // Tucks all generator state in an anonymous namespace away from
+// PythonGrpcGenerator and the header file, mostly to encourage future changes
+// to not require updates to the grpcio-tools C++ code part. Assumes that it is
+// only ever used from a single thread.
+struct PrivateGenerator {
+  const GeneratorConfiguration& config;
+  const grpc_generator::File* file;
+    }
+    
+    static void sigint_handler(int x) {
+  gpr_atm_no_barrier_store(&grpc::testing::interop::g_got_sigint, true);
+}
+    
+    namespace grpc {
+    }
+    
+    QueryData genKernelIntegrity(QueryContext &context) {
+  QueryData results;
+  Row r;
+  std::string content;
+  std::string text_segment_hash;
+  std::string syscall_addr_modified;
+    }
+    
+    
+    {  if (osquery.buffer) {
+    IOFreeAligned(osquery.buffer, osquery.buf_size);
+    osquery.buffer = NULL;
+  }
+}
+    
+    
+    {  c.reset();
+}
+    
+    
+    {  // Cleanup allocations.
+  free(buffer);
+  return result.str();
+}
+    
+    #include 'osquery/core/utils.h'
+    
+    #include <gtest/gtest.h>
+    
+      EXPECT_FALSE(cl3.matches(1001));
+  EXPECT_TRUE(cl3.matches(1000));
+    
+    
+    {
+    {  EXPECT_EQ(expected, toAsciiTimeUTC(&result));
+}
+}
+
+    
+     public:
+  /// Data retrieval method.
+  Status get(const std::string& domain,
+             const std::string& key,
+             std::string& value) const override;
+    
+        // Helper methods
+    static bool HasFamilyNamed(std::string& name, DBWrapper* db);
+    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
+        Handle<Array> array);
+    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
+        Handle<Array> array, DBWrapper* db_wrapper, std::string cf);
+    static Handle<Value> CompactRangeDefault(const v8::Arguments& args);
+    static Handle<Value> CompactColumnFamily(const Arguments& args);
+    static Handle<Value> CompactOptions(const Arguments& args);
+    static Handle<Value> CompactAll(const Arguments& args);
+    
+      virtual const char* Name() const override;
+    
+    
+    {  ASSERT_TRUE(status);
+  ASSERT_EQ(res, 'v1,v2,v3');
+}
+    
+    namespace log {
+    }
+    
+    void JniCallback::releaseJniEnv(jboolean& attached) const {
+  JniUtil::releaseJniEnv(m_jvm, attached);
+}
+    
+      bool StatisticsJni::HistEnabledForType(uint32_t type) const {
+    if (type >= HISTOGRAM_ENUM_MAX) {
+      return false;
+    }
+    
+    if (m_ignore_histograms.count(type) > 0) {
+        return false;
+    }
     }
     
       /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
+   * @brief append data to file
+   * @details
+   *  Append will save all written data in buffer util buffer size
+   *  reaches buffer max size. Then, it will write buffer into rados
    *
-   * @param datum
-   *    Datum containing the data to be transformed.
+   * @param data [description]
+   * @return [description]
    */
-  vector<int> InferBlobShape(const Datum& datum);
-  /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *    It uses the first element to infer the shape of the blob.
-   *
-   * @param datum_vector
-   *    A vector of Datum containing the data to be transformed.
-   */
-  vector<int> InferBlobShape(const vector<Datum> & datum_vector);
-  /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *    It uses the first element to infer the shape of the blob.
-   *
-   * @param mat_vector
-   *    A vector of Mat containing the data to be transformed.
-   */
-#ifdef USE_OPENCV
-  vector<int> InferBlobShape(const vector<cv::Mat> & mat_vector);
-  /**
-   * @brief Infers the shape of transformed_blob will have when
-   *    the transformation is applied to the data.
-   *
-   * @param cv_img
-   *    cv::Mat containing the data to be transformed.
-   */
-  vector<int> InferBlobShape(const cv::Mat& cv_img);
-#endif  // USE_OPENCV
-    
-    
-    {  /**
-   * @brief Computes the error gradient w.r.t. the BNLL inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
-    
-    #include 'caffe/layers/lrn_layer.hpp'
-#include 'caffe/layers/power_layer.hpp'
-    
-    
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_;
-  cudnnTensorDescriptor_t top_desc_;
-  cudnnActivationDescriptor_t activ_desc_;
-};
-#endif
-    
-    /**
- * @brief During training only, sets a random portion of @f$x@f$ to 0, adjusting
- *        the rest of the vector magnitude accordingly.
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$ y = |x| @f$
- */
-template <typename Dtype>
-class DropoutLayer : public NeuronLayer<Dtype> {
- public:
-  /**
-   * @param param provides DropoutParameter dropout_param,
-   *     with DropoutLayer options:
-   *   - dropout_ratio (\b optional, default 0.5).
-   *     Sets the probability @f$ p @f$ that any given unit is dropped.
-   */
-  explicit DropoutLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+  Status Append(const Slice& data) {
+    // append buffer
+    LOG_DEBUG('[IN] %i | %s\n', (int)data.size(), data.data());
+    int r = 0;
     }
     
-      template<typename T>
-  void broadcastT(at::Tensor& data, rank_type src_rank,
-                  THDGroup group_id = THDGroupWORLD);
+      virtual MemTableRep* CreateMemTableRep(const MemTableRep::KeyComparator&,
+                                         Allocator*, const SliceTransform*,
+                                         Logger* logger) = 0;
+  virtual MemTableRep* CreateMemTableRep(
+      const MemTableRep::KeyComparator& key_cmp, Allocator* allocator,
+      const SliceTransform* slice_transform, Logger* logger,
+      uint32_t /* column_family_id */) {
+    return CreateMemTableRep(key_cmp, allocator, slice_transform, logger);
+  }
     
-    CUDAGenerator::CUDAGenerator(Context * context_)
-  : context(context_)
+    void SyncPoint::SetCallBack(const std::string& point,
+  const std::function<void(void*)>& callback) {
+  impl_->SetCallBack(point, callback);
+}
+    
+      void Clear() { rep_.clear(); }
+    
+    
+    {  return _URC_NO_REASON;
+}
+    
+    NBIND_CLASS(Value)
 {
-  // there's no reason to call THCRandom_init, because it is called
-  // during THCudaInit, which is called before this initializer
-  generator = THCRandom_getGenerator(context->thc_state);
+    construct<>();
+    construct<int, double>();
 }
     
-    THDTensorDescriptor THDTensorDescriptor_newFromTHByteTensor(THByteTensor *tensor) {
-  return at::getType(at::Backend::CPU, at::ScalarType::Byte).unsafeTensorFromTH((void*)tensor, true);
+    namespace facebook {
+    }
+    
+    
+    {  // There are subtle issues with calling the next functions directly. It is
+  // much better to always use a ThreadScope to manage attaching/detaching for
+  // you.
+  FBEXPORT static JNIEnv* ensureCurrentThreadIsAttached();
+  FBEXPORT static void detachCurrentThread();
+};
+    
+    private:
+  void initialize() {
+    int ret = pthread_key_create(&m_key, m_cleanup);
+    if (ret != 0) {
+      const char *msg = '(unknown error)';
+      switch (ret) {
+      case EAGAIN:
+        msg = 'PTHREAD_KEYS_MAX (1024) is exceeded';
+        break;
+      case ENOMEM:
+        msg = 'Out-of-memory';
+        break;
+      }
+      (void) msg;
+      FBASSERTMSGF(0, 'pthread_key_create failed: %d %s', ret, msg);
+    }
+  }
+    
+    int RunOneTest(Fuzzer *F, const char *InputFilePath, size_t MaxLen) {
+  Unit U = FileToVector(InputFilePath);
+  if (MaxLen && MaxLen < U.size())
+    U.resize(MaxLen);
+  F->RunOne(U.data(), U.size());
+  F->TryDetectingAMemoryLeak(U.data(), U.size(), true);
+  return 0;
 }
     
-    #endif
+    #endif // LIBFUZZER_APPLE
 
     
-    #undef THPTensorStatelessType
-#undef THPTensorStateless
-#undef THPTensorType
+    ExternalFunctions::ExternalFunctions() {
+#define EXT_FUNC(NAME, RETURN_TYPE, FUNC_SIG, WARN)                            \
+  this->NAME = ::NAME;                                                         \
+  CheckFnPtr((void *)::NAME, #NAME, WARN);
+    }
     
-    #include <string>
-    
-    std::unique_ptr<AuthConfig> AbstractAuthResolver::getDefaultAuthConfig() const
-{
-  return AuthConfig::create(defaultUser_, defaultPassword_);
+    int DuplicateFile(int Fd) {
+  return dup(Fd);
 }
     
-    bool AbstractHttpServerResponseCommand::execute()
-{
-  if (e_->getRequestGroupMan()->downloadFinished() || e_->isHaltRequested()) {
-    return true;
+      DWORD LastError = GetLastError();
+  if (LastError != ERROR_NO_MORE_FILES)
+    Printf('FindNextFileA failed (Error code: %lu).\n', LastError);
+    
+      bool HasMoreMallocsThanFrees = false;
+  size_t NumberOfLeakDetectionAttempts = 0;
+    
+    struct FuzzingOptions {
+  int Verbosity = 1;
+  size_t MaxLen = 0;
+  int UnitTimeoutSec = 300;
+  int TimeoutExitCode = 77;
+  int ErrorExitCode = 77;
+  int MaxTotalTimeSec = 0;
+  int RssLimitMb = 0;
+  bool DoCrossOver = true;
+  int MutateDepth = 5;
+  bool UseCounters = false;
+  bool UseIndirCalls = true;
+  bool UseMemcmp = true;
+  bool UseMemmem = true;
+  bool UseCmp = false;
+  bool UseValueProfile = false;
+  bool Shrink = false;
+  int ReloadIntervalSec = 1;
+  bool ShuffleAtStartUp = true;
+  bool PreferSmall = true;
+  size_t MaxNumberOfRuns = -1L;
+  int ReportSlowUnits = 10;
+  bool OnlyASCII = false;
+  std::string OutputCorpus;
+  std::string ArtifactPrefix = './';
+  std::string ExactArtifactPath;
+  std::string ExitOnSrcPos;
+  std::string ExitOnItem;
+  bool SaveArtifacts = true;
+  bool PrintNEW = true; // Print a status line when new units are found;
+  bool OutputCSV = false;
+  bool PrintNewCovPcs = false;
+  bool PrintFinalStats = false;
+  bool PrintCorpusStats = false;
+  bool PrintCoverage = false;
+  bool DumpCoverage = false;
+  bool DetectLeaks = true;
+  int  TraceMalloc = 0;
+  bool HandleAbrt = false;
+  bool HandleBus = false;
+  bool HandleFpe = false;
+  bool HandleIll = false;
+  bool HandleInt = false;
+  bool HandleSegv = false;
+  bool HandleTerm = false;
+};
+    
+      std::string CoveredDirsStr;
+  for (auto &Dir : CoveredDirs) {
+    if (!CoveredDirsStr.empty())
+      CoveredDirsStr += ',';
+    CoveredDirsStr += Dir;
   }
-  try {
-    ssize_t len = httpServer_->sendResponse();
-    if (len > 0) {
-      timeoutTimer_ = global::wallclock();
-    }
-  }
-  catch (RecoverableException& e) {
-    A2_LOG_INFO_EX(fmt('CUID#%' PRId64
-                       ' - Error occurred while transmitting response body.',
-                       getCuid()),
-                   e);
-    return true;
-  }
-  if (httpServer_->sendBufferIsEmpty()) {
-    A2_LOG_INFO(fmt('CUID#%' PRId64 ' - HttpServer: all response transmitted.',
-                    getCuid()));
-    afterSend(httpServer_, e_);
-    return true;
-  }
-  else {
-    if (timeoutTimer_.difference(global::wallclock()) >= 30_s) {
-      A2_LOG_INFO(fmt('CUID#%' PRId64
-                      ' - HttpServer: Timeout while trasmitting response.',
-                      getCuid()));
-      return true;
-    }
-    else {
-      updateReadWriteCheck();
-      e_->addCommand(std::unique_ptr<Command>(this));
-      return false;
-    }
-  }
+  Printf('COVERED_DIRS: %s\n', CoveredDirsStr.c_str());
+    
+    void Print(const Unit &v, const char *PrintAfter) {
+  PrintHexArray(v.data(), v.size(), PrintAfter);
 }
     
-    bool AbstractOptionHandler::getEraseAfterParse() const
-{
-  return flags_ & FLAG_ERASE_AFTER_PARSE;
-}
-    
-    namespace aria2 {
-    }
-    
-    void AdaptiveFileAllocationIterator::allocateChunk()
-{
-  if (!allocator_) {
-#ifdef HAVE_FALLOCATE
-    try {
-      A2_LOG_DEBUG('Testing file system supports fallocate.');
-      if (offset_ < totalLength_) {
-        int64_t len =
-            std::min(totalLength_ - offset_, static_cast<int64_t>(4_k));
-        stream_->allocate(offset_, len, false);
-        offset_ += len;
-      }
-      A2_LOG_DEBUG('File system supports fallocate.');
-      allocator_ = make_unique<FallocFileAllocationIterator>(stream_, offset_,
-                                                             totalLength_);
-    }
-    catch (RecoverableException& e) {
-      A2_LOG_DEBUG('File system does not support fallocate.');
-      auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
-                                                              totalLength_);
-      salloc->init();
-      allocator_ = std::move(salloc);
-    }
-#else  // !HAVE_FALLOCATE
-    auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
-                                                            totalLength_);
-    salloc->init();
-    allocator_ = std::move(salloc);
-#endif // !HAVE_FALLOCATE
-    allocator_->allocateChunk();
-  }
-  else {
-    allocator_->allocateChunk();
-  }
-}
-    
-    class AdaptiveFileAllocationIterator : public FileAllocationIterator {
-private:
-  std::unique_ptr<FileAllocationIterator> allocator_;
-    }
-    
-      void resetIterator();
-  void setCurrentTier(std::deque<std::shared_ptr<AnnounceTier>>::iterator itr);
-    
-    #include 'DiskWriterFactory.h'
-#include 'a2functional.h'
+    FILE *OpenProcessPipe(const char *Command, const char *Mode);
