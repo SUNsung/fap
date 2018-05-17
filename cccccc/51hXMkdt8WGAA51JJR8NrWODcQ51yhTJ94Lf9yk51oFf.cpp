@@ -1,312 +1,299 @@
 
         
-        Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    class WritableFile;
-    
-    namespace Eigen {
-    }
-    
-    #ifndef TENSORFLOW_PLATFORM_PREFETCH_H_
-#define TENSORFLOW_PLATFORM_PREFETCH_H_
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-      // Returns the value of the length field in an Extent, or -1 if it
-  // is not present.
-  static int64 GetExtentLength(const TensorSliceProto::Extent& extent);
-    
-    TRACE_SET_MOD(jittime);
-    
-    #include 'hphp/runtime/vm/jit/abi.h'
-#include 'hphp/runtime/vm/jit/arg-group.h'
-#include 'hphp/runtime/vm/jit/fixup.h'
-#include 'hphp/runtime/vm/jit/phys-reg-saver.h'
-#include 'hphp/runtime/vm/jit/vasm-gen.h'
-#include 'hphp/runtime/vm/jit/vasm-instr.h'
-#include 'hphp/runtime/vm/jit/vasm-reg.h'
-    
-    struct SSATmp;
-struct Type;
-    
-    bool Vunit::needsRegAlloc() const {
-  if (next_vr > Vreg::V0) return true;
-    }
-    
-    #define DECLARE_VNUM(Vnum, check, prefix)                 \
-struct Vnum {                                             \
-  Vnum() {}                                               \
-  explicit Vnum(size_t n) : n(safe_cast<uint32_t>(n)) {}  \
-                                                          \
-  /* implicit */ operator size_t() const {                \
-    if (check) assertx(n != kInvalidId);                   \
-    return n;                                             \
-  }                                                       \
-                                                          \
-  bool isValid() const {                                  \
-    return n != kInvalidId;                               \
-  }                                                       \
-                                                          \
-  std::string toString() const {                          \
-    if (n == kInvalidId) return prefix '?';               \
-    return folly::to<std::string>(prefix, n);             \
-  }                                                       \
-                                                          \
-private:                                                  \
-  static constexpr uint32_t kInvalidId = 0xffffffff;      \
-  uint32_t n{kInvalidId};                                 \
+        // ---------------------------------------------------------------------------
+// Inline implementation
+// ---------------------------------------------------------------------------
+template <PrefetchHint hint>
+inline void prefetch(const void* x) {
+// Check of COMPILER_GCC macro below is kept only for backward-compatibility
+// reasons. COMPILER_GCC3 is the macro that actually enables prefetch.
+#if defined(__llvm__) || defined(COMPILER_GCC) || defined(COMPILER_GCC3)
+  __builtin_prefetch(x, 0, hint);
+#else
+// You get no effect.  Feel free to add more sections above.
+#endif
 }
     
-    void initNuma() {
-  if (getenv('HHVM_DISABLE_NUMA')) {
-    return;
+    REGISTER_KERNEL_BUILDER(Name('EncodeAudio').Device(DEVICE_CPU), EncodeAudioOp);
+    
+        http://www.apache.org/licenses/LICENSE-2.0
+    
+    // Adds resource events for a single device.
+void AddResourceMetadata(uint32 device_id,
+                         const std::map<uint32, const Resource *> &resources,
+                         string *json) {
+  for (const auto &pair : resources) {
+    uint32 resource_id = pair.first;
+    const Resource &resource = *pair.second;
+    if (!resource.name().empty()) {
+      Appendf(json,
+              R'({'ph':'M','pid':%u,'tid':%u,)'
+              R'('name':'thread_name','args':{)',
+              device_id, resource_id);
+      AppendEscapedName(json, resource.name());
+      Appendf(json, '}},');
+    }
+    Appendf(json,
+            R'({'ph':'M','pid':%u,'tid':%u,)'
+            R'('name':'thread_sort_index','args':{'sort_index':%u}},)',
+            device_id, resource_id, resource_id);
   }
-  // When linked dynamically numa_init() is called before JEMallocInitializer()
-  // numa_init is not exported by libnuma.so so it will be NULL
-  // however when linked statically numa_init() is not guaranteed to be called
-  // before JEMallocInitializer(), so call it here.
-  if (&numa_init) {
-    numa_init();
-  }
-  if (numa_available() < 0) return;
+}
+    
+      // Find the file which defines an extension extending the given message type
+  // with the given field number.
+  // Containing_type must be a fully-qualified type name.
+  // Python objects are not required to implement this method.
+  bool FindFileContainingExtension(const string& containing_type,
+                                   int field_number,
+                                   FileDescriptorProto* output);
+    
+    void RepeatedEnumFieldGenerator::WriteToString(io::Printer* printer) {
+  printer->Print(variables_,
+    'PrintField(\'$descriptor_name$\', $name$_, writer);\n');
+}
+    
+    void RepeatedPrimitiveFieldGenerator::GenerateParsingCode(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    '$name$_.AddEntriesFrom(input, _repeated_$name$_codec);\n');
+}
+    
+    #include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/compiler/csharp/csharp_names.h>
+#include <google/protobuf/compiler/csharp/csharp_options.h>
+    
+    // Author: kenton@google.com (Kenton Varda)
+    
+    // ===================================================================
+    
+        std::function<void(OperatorSchemaSetter&)> RNNDocGeneratorInputSeqLen() {
+        return [=](OperatorSchemaSetter& schema) {
+            schema.Input('sequence_lens',
+                'Optional tensor specifying lengths of the sequences in a batch. '
+                'If not specified - assumed all sequences in the batch to have '
+                'length `seq_length`. It has shape `[batch_size]`.', 'T1', true /*optional*/);
+            schema.TypeConstraint('T1', { 'tensor(int32)' }, 'Constrain seq_lens to integer tensor.');
+        };
     }
     
-    /* XXX this functionality is excluded in php, enable it in apprentice.c:340 */
-#if 0
-private const char *
-get_default_magic(void)
+    template <class ElemType>
+void ReaderShim<ElemType>::SetConfiguration(const ReaderConfiguration& config, const std::map<std::wstring, int>& inputDescriptions)
 {
-  static const char hmagic[] = '/.magic/magic.mgc';
-  static char *default_magic;
-  char *home, *hmagicpath;
+    // Make sure there are no outstanding reads.
+    if (m_prefetchTask.valid())
+        m_prefetchTask.get();
     }
     
+    /// Adds buffering to the read-related operations of a stream.
+/**
+ * The buffered_read_stream class template can be used to add buffering to the
+ * synchronous and asynchronous read operations of a stream.
+ *
+ * @par Thread Safety
+ * @e Distinct @e objects: Safe.@n
+ * @e Shared @e objects: Unsafe.
+ *
+ * @par Concepts:
+ * AsyncReadStream, AsyncWriteStream, Stream, SyncReadStream, SyncWriteStream.
+ */
+template <typename Stream>
+class buffered_read_stream
+  : private noncopyable
+{
+public:
+  /// The type of the next layer.
+  typedef typename remove_reference<Stream>::type next_layer_type;
+    }
     
-inline int Instruction::ImmBranch() const {
-  switch (BranchType()) {
-    case CondBranchType: return ImmCondBranch();
-    case UncondBranchType: return ImmUncondBranch();
-    case CompareBranchType: return ImmCmpBranch();
-    case TestBranchType: return ImmTestBranch();
-    default: not_reached();
+    #ifndef BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
+#define BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
+    
+      // Return a pointer to the beginning of the unread data.
+  const_buffer data() const
+  {
+    return boost::asio::buffer(buffer_) + begin_offset_;
   }
+    
+      static void do_complete(io_service_impl* owner, operation* base,
+      const boost::system::error_code& /*ec*/,
+      std::size_t /*bytes_transferred*/)
+  {
+    // Take ownership of the handler object.
+    descriptor_read_op* o(static_cast<descriptor_read_op*>(base));
+    ptr p = { boost::asio::detail::addressof(o->handler_), o, o };
+    }
+    
+      STDMETHODIMP get_Length(UINT32 *value)
+  {
+    *value = length_;
+    return S_OK;
+  }
+    
+    template <typename Time_Traits>
+void dev_poll_reactor::schedule_timer(timer_queue<Time_Traits>& queue,
+    const typename Time_Traits::time_type& time,
+    typename timer_queue<Time_Traits>::per_timer_data& timer, wait_op* op)
+{
+  boost::asio::detail::mutex::scoped_lock lock(mutex_);
+    }
+    
+    #include <boost/asio/detail/pop_options.hpp>
+    
+      // All control should be from a single daemon.
+  // Wrap all IOCTL API handling in locks to guarantee proper use.
+  lck_mtx_lock(osquery.mtx);
+  switch (cmd) {
+  // Daemon is requesting a new subscription (e.g., monitored path).
+  case OSQUERY_IOCTL_SUBSCRIPTION:
+    sub = (osquery_subscription_args_t *)data;
+    if ((err = subscribe_to_event(sub->event, sub->subscribe))) {
+      goto error_exit;
+    }
+    break;
+    }
+    
+    TEST_F(ViewsConfigParserPluginTests, test_add_view) {
+  Config c;
+  auto s = c.update(getTestConfigMap());
+  EXPECT_TRUE(s.ok());
+    }
+    
+    #include <osquery/config.h>
+#include <osquery/dispatcher.h>
+    
+    #include <poll.h>
+#include <pwd.h>
+    
+    #include 'osquery/core/utils.h'
+#include 'osquery/tests/test_util.h'
+    
+    /// Backing-storage provider for osquery internal/core.
+REGISTER_INTERNAL(EphemeralDatabasePlugin, 'database', 'ephemeral');
+    
+    TEST(Metric, LogLoss) {
+  xgboost::Metric * metric = xgboost::Metric::Create('logloss');
+  ASSERT_STREQ(metric->Name(), 'logloss');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
+  EXPECT_NEAR(GetMetricEval(metric,
+                            {0.1f, 0.9f, 0.1f, 0.9f},
+                            {  0,   0,   1,   1}),
+              1.2039f, 0.001f);
+}
+    
+    SEXP XGBoosterSetAttr_R(SEXP handle, SEXP name, SEXP val) {
+  R_API_BEGIN();
+  const char *v = isNull(val) ? nullptr : CHAR(asChar(val));
+  CHECK_CALL(XGBoosterSetAttr(R_ExternalPtrAddr(handle),
+                              CHAR(asChar(name)), v));
+  R_API_END();
+  return R_NilValue;
+}
+    
+    /*
+ * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
+ * Method:    RabitVersionNumber
+ * Signature: ([I)I
+ */
+JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_RabitVersionNumber
+  (JNIEnv *jenv, jclass jcls, jintArray jout) {
+  jint out = RabitVersionNumber();
+  jenv->SetIntArrayRegion(jout, 0, 1, &out);
   return 0;
 }
     
+            ID3DBlob* blob = NULL;
+        if (D3D12SerializeRootSignature(&desc, D3D_ROOT_SIGNATURE_VERSION_1, &blob, NULL) != S_OK)
+            return false;
     
-    {/// Clear decorations for a source when it updates.
-void clearDecorations(const std::string& source);
+    
+    {    // At this point note that we set ImGui::GetIO().Fonts->TexID to be == g_FontTexture, so clear both.
+    ImGuiIO& io = ImGui::GetIO();
+    IM_ASSERT(g_FontTexture == io.Fonts->TexID);
+    if (g_FontTexture)
+        g_FontTexture->Release();
+    g_FontTexture = NULL;
+    io.Fonts->TexID = NULL;
 }
-
     
-    namespace osquery {
-    }
+                    // Copy rasterized pixels to main texture
+                uint8_t* blit_dst = atlas->TexPixelsAlpha8 + rect.y * atlas->TexWidth + rect.x;
+                font_face.BlitGlyph(ft_glyph_bitmap, blit_dst, atlas->TexWidth, multiply_enabled ? multiply_table : NULL);
+                FT_Done_Glyph(ft_glyph);
     
-    #include <iomanip>
-    
-    TEST_F(ProcessTests, test_envVar) {
-  auto val = getEnvVar('GTEST_OSQUERY');
-  EXPECT_FALSE(val);
-  EXPECT_FALSE(val.is_initialized());
-    }
-    
-      struct ConstraintList cl2;
-  cl2.affinity = INTEGER_TYPE;
-  constraint = Constraint(LESS_THAN);
-  constraint.expr = '1000';
-  cl2.add(constraint);
-  constraint = Constraint(GREATER_THAN);
-  constraint.expr = '1';
-  cl2.add(constraint);
-    
-    #pragma once
-    
-    namespace osquery {
-    }
-    
-    extern JSClass  *jsb_cocos2d_Physics3DHingeConstraint_class;
-extern JSObject *jsb_cocos2d_Physics3DHingeConstraint_prototype;
-    
-    #if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-    
-    
-    
-    
-    
-    void GLESDebugDraw::DrawAABB(b2AABB* aabb, const b2Color& color)
-{
-    mShaderProgram->use();
-    mShaderProgram->setUniformsForBuiltins();
-    }
-    
-    extern TestEntry g_testEntries[];
-// This is called when a joint in the world is implicitly destroyed
-// because an attached body is destroyed. This gives us a chance to
-// nullify the mouse joint.
-class DestructionListener : public b2DestructionListener
-{
-public:
-	void SayGoodbye(b2Fixture* fixture) { B2_NOT_USED(fixture); }
-	void SayGoodbye(b2Joint* joint);
-    }
-    
-      DBWrapper* db_wrapper = ObjectWrap::Unwrap<DBWrapper>(args.This());
-  std::string key       = *v8::String::Utf8Value(args[0]->ToString());
-  std::string cf        = *v8::String::Utf8Value(args[1]->ToString());
-  std::string value;
-    
-    
-    {};
-    
-        slists.Append('c', 'asdasd');
-    slists.Append('a', 'x');
-    slists.Append('b', 'y');
-    slists.Append('a', 't');
-    slists.Append('a', 'r');
-    slists.Append('b', '2');
-    slists.Append('c', 'asdasd');
-    
-      if(m_jcallback_obj != nullptr) {    
-    env->DeleteGlobalRef(m_jcallback_obj);
-  }
-    
-      // Return true if the current MemTableRep supports concurrent inserts
-  // Default: false
-  virtual bool IsInsertConcurrentlySupported() const { return false; }
-    
-    
-    {
-    {
-    {      if (rnd->Next() % 2) {
-        iter.Next();
-        pos = MakeKey(key(pos), gen(pos) + 1);
-      } else {
-        Key new_target = RandomTarget(rnd);
-        if (new_target > pos) {
-          pos = new_target;
-          iter.Seek(Encode(&new_target));
+            // Rendering
+        ImGui::EndFrame();
+        g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, false);
+        g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
+        g_pd3dDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, false);
+        D3DCOLOR clear_col_dx = D3DCOLOR_RGBA((int)(clear_color.x*255.0f), (int)(clear_color.y*255.0f), (int)(clear_color.z*255.0f), (int)(clear_color.w*255.0f));
+        g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, clear_col_dx, 1.0f, 0);
+        if (g_pd3dDevice->BeginScene() >= 0)
+        {
+            ImGui::Render();
+            ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+            g_pd3dDevice->EndScene();
         }
-      }
-    }
-  }
-};
-const uint32_t ConcurrentTest::K;
+        HRESULT result = g_pd3dDevice->Present(NULL, NULL, NULL, NULL);
     
-    // This class provides facility to reproduce race conditions deterministically
-// in unit tests.
-// Developer could specify sync points in the codebase via TEST_SYNC_POINT.
-// Each sync point represents a position in the execution stream of a thread.
-// In the unit test, 'Happens After' relationship among sync points could be
-// setup via SyncPoint::LoadDependency, to reproduce a desired interleave of
-// threads execution.
-// Refer to (DBTest,TransactionLogIteratorRace), for an example use case.
-    
-    void TestKillRandom(std::string kill_point, int odds,
-                    const std::string& srcfile, int srcline) {
-  for (auto& p : rocksdb_kill_prefix_blacklist) {
-    if (kill_point.substr(0, p.length()) == p) {
-      return;
-    }
-  }
+    int main(int, char**)
+{
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
     }
     
-    TEST_P(DBWriteTest, IOErrorOnWALWritePropagateToWriteThreadFollower) {
-  constexpr int kNumThreads = 5;
-  std::unique_ptr<FaultInjectionTestEnv> mock_env(
-      new FaultInjectionTestEnv(Env::Default()));
-  Options options = GetOptions();
-  options.env = mock_env.get();
-  Reopen(options);
-  std::atomic<int> ready_count{0};
-  std::atomic<int> leader_count{0};
-  std::vector<port::Thread> threads;
-  mock_env->SetFilesystemActive(false);
-  // Wait until all threads linked to write threads, to make sure
-  // all threads join the same batch group.
-  SyncPoint::GetInstance()->SetCallBack(
-      'WriteThread::JoinBatchGroup:Wait', [&](void* arg) {
-        ready_count++;
-        auto* w = reinterpret_cast<WriteThread::Writer*>(arg);
-        if (w->state == WriteThread::STATE_GROUP_LEADER) {
-          leader_count++;
-          while (ready_count < kNumThreads) {
-            // busy waiting
-          }
-        }
-      });
-  SyncPoint::GetInstance()->EnableProcessing();
-  for (int i = 0; i < kNumThreads; i++) {
-    threads.push_back(port::Thread(
-        [&](int index) {
-          // All threads should fail.
-          ASSERT_FALSE(Put('key' + ToString(index), 'value').ok());
-        },
-        i));
-  }
-  for (int i = 0; i < kNumThreads; i++) {
-    threads[i].join();
-  }
-  ASSERT_EQ(1, leader_count);
-  // Close before mock_env destruct.
-  Close();
+    static void glfw_error_callback(int error, const char* description)
+{
+    fprintf(stderr, 'Error %d: %s\n', error, description);
 }
     
-      void Set(const uint8_t *B, uint8_t S) {
-    assert(S <= kMaxSize);
-    memcpy(Data, B, S);
-    Size = S;
+        // Setup Dear ImGui binding
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    ImGui_ImplSdlGL2_Init(window);
+    
+      using ByteAlloc = typename std::allocator_traits<
+      allocator_type>::template rebind_alloc<uint8_t>;
+  using BytePtr = typename std::allocator_traits<ByteAlloc>::pointer;
+    
+    template <size_t M>
+FOLLY_ALWAYS_INLINE hazptr_array<M>& hazptr_array<M>::operator=(
+    hazptr_array&& other) noexcept {
+  HAZPTR_DEBUG_PRINT(this << ' ' << M << ' ' << &other);
+  auto h = reinterpret_cast<hazptr_holder*>(&raw_);
+  for (size_t i = 0; i < M; ++i) {
+    h[i] = std::move(other[i]);
+    HAZPTR_DEBUG_PRINT(i << ' ' << &h[i] << ' ' << &other[i]);
   }
-    
-    #include 'FuzzerCorpus.h'
-#include 'FuzzerInterface.h'
-#include 'FuzzerInternal.h'
-#include 'FuzzerIO.h'
-#include 'FuzzerMutate.h'
-#include 'FuzzerRandom.h'
-#include 'FuzzerTracePC.h'
-#include <algorithm>
-#include <atomic>
-#include <chrono>
-#include <cstring>
-#include <mutex>
-#include <string>
-#include <thread>
-    
-    class Fuzzer {
-public:
-    }
-    
-    static void PrintASCII(const Word &W, const char *PrintAfter) {
-  PrintASCII(W.data(), W.size(), PrintAfter);
+  empty_ = other.empty_;
+  other.empty_ = true;
+  return *this;
 }
     
-      void SetCorpus(const InputCorpus *Corpus) { this->Corpus = Corpus; }
     
+    {template <class T>
+T* pointerFlagSet(T* p) {
+  return reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(p) | 1);
+}
+template <class T>
+bool pointerFlagGet(T* p) {
+  return reinterpret_cast<uintptr_t>(p) & 1;
+}
+template <class T>
+T* pointerFlagClear(T* p) {
+  return reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(p) & ~uintptr_t(1));
+}
+inline void* shiftPointer(void* p, size_t sizeBytes) {
+  return static_cast<char*>(p) + sizeBytes;
+}
+} // namespace detail
     
-    {
-    {      (void)sigemptyset(&BlockedSignalsSet);
-      (void)sigaddset(&BlockedSignalsSet, SIGCHLD);
-      if (sigprocmask(SIG_BLOCK, &BlockedSignalsSet, &OldBlockedSignalsSet) ==
-          -1) {
-        Printf('Failed to block SIGCHLD\n');
-        // Try our best to restore the signal handlers.
-        (void)sigaction(SIGQUIT, &OldSigQuitAction, NULL);
-        (void)sigaction(SIGINT, &OldSigIntAction, NULL);
-        (void)posix_spawnattr_destroy(&SpawnAttributes);
-        return -1;
-      }
-    }
-    ++ActiveThreadCount;
-  }
+    std::ostream& operator << (std::ostream& os,
+                           const AsyncSocket::StateEnum& state) {
+  os << static_cast<int>(state);
+  return os;
+}
