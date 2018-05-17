@@ -1,127 +1,89 @@
 
         
-                      if very_raw_connection && very_raw_connection.respond_to?(:flush)
-                very_raw_connection.flush
-              end
-            end
-        end
-    end
+          def regular?
+    !staff?
   end
-end
-
     
-              define_singleton_method('#{name}=') do |attribute|
-            instance.public_send('#{name}=', attribute)
+      # Finds the projects belonging to the user in '@user', limited to either
+  # public projects or projects visible to the given user.
+  #
+  # current_user - When given the list of projects is limited to those only
+  #                visible by this user.
+  #
+  # Returns an ActiveRecord::Relation.
+  def execute(current_user = nil)
+    segments = all_projects(current_user)
+    
+        def root?
+      path == 'index'
+    end
+    
+        def add(path, content)
+      @pages[path] = content
+    end
+    
+              if %w(Events Sync).include?(type)
+            name.prepend 'Backbone.'
+          elsif type == 'History'
+            name.prepend 'Backbone.history.'
+          elsif name == 'extend'
+            name.prepend '#{type}.'
+          elsif name.start_with? 'constructor'
+            name = type
+          elsif type != 'Utility'
+            name.prepend '#{type.downcase}.'
+          end
+    
+              css('##{dom_id}-methods ~ h4 code').each do |node|
+            next unless name = node.content[/\('(\w+)'\)/, 1]
+            id = node.parent['id'] = '#{dom_id}-#{name.parameterize}-method'
+            name.prepend '#{dom_id.singularize.titleize}: '
+            name << ' (method)'
+            entries << [name, id]
           end
         end
-      end
     
-        test 'head :no_content (204) does not return a content-type header' do
-      headers = HeadController.action(:no_content).call(Rack::MockRequest.env_for('/')).second
-      assert_nil headers['Content-Type']
-      assert_nil headers['Content-Length']
-    end
-    
-          add_delivery_method :smtp, Mail::SMTP,
-        address:              'localhost',
-        port:                 25,
-        domain:               'localhost.localdomain',
-        user_name:            nil,
-        password:             nil,
-        authentication:       nil,
-        enable_starttls_auto: true
-    
-            def restore_delivery_method
-          ActionMailer::Base.deliveries.clear
-          ActionMailer::Base.delivery_method = @old_delivery_method
+          def get_type
+        case slug
+        when 'api'
+          'Reference'
+        when 'configuration'
+          'Reference: Configuration'
+        when 'stpl'
+          'Reference: SimpleTemplate'
+        when 'plugindev'
+          'Reference: Plugin'
+        else
+          'Manual'
         end
-    
-      def test_assert_select_email_multipart
-    AssertMultipartSelectMailer.test(html: '<div><p>foo</p><p>bar</p></div>', text: 'foo bar').deliver_now
-    assert_select_email do
-      assert_select 'div:root' do
-        assert_select 'p:first-child', 'foo'
-        assert_select 'p:last-child', 'bar'
       end
+    
+      def remote_url
+    object.remote_url.presence
+  end
+    
+        def sass_fn_exists(fn)
+      %Q{(#{fn}('') != unquote('#{fn}('')'))}
     end
+    
+      # Prepend all log lines with the following tags.
+  # config.log_tags = [ :subdomain, :uuid ]
+    
+      # Do not eager load code on boot. This avoids loading your whole application
+  # just for the purpose of running a single test. If you are using a tool that
+  # preloads Rails for running tests, you may have to set it to true.
+  config.eager_load = false
+    
+      def test_font_helper_with_suffix_question
+    assert_match %r(url\(['']?/assets/.*eot\?.*['']?\)), @css
+  end
+    
+    desc 'Dumps output to a CSS file for testing'
+task :debug do
+  require 'sass'
+  path = Bootstrap.stylesheets_path
+  %w(bootstrap).each do |file|
+    engine = Sass::Engine.for_file('#{path}/#{file}.scss', syntax: :scss, load_paths: [path])
+    File.open('./#{file}.css', 'w') { |f| f.write(engine.render) }
   end
 end
-
-    
-      def setup
-    super
-    ActionMailer::LogSubscriber.attach_to :action_mailer
-  end
-    
-    * item1 * item2
-  * item3
-    TEXT
-    
-    #
-    
-    # No trailing slash
-Benchmark.ips do |x|
-  x.report('with body include?') { CONTENT_CONTAINING.include?('<body') }
-  x.report('with body regexp')   { CONTENT_CONTAINING =~ /<\s*body/ }
-  x.compare!
-end
-
-    
-        Jekyll::Commands::Build.process({'source' => 'docs'})
-    
-          def measure_bytes
-        yield.tap do |str|
-          @renderer.increment_bytes(@filename, str.bytesize)
-        end
-      end
-    
-      end
-    
-      # Asynchronously send an email
-  class TestEmail < Jobs::Base
-    
-    require 'hbc/container/base'
-    
-      // writing
-  $('form').on('submit',function(e) {
-    $.post('/', {msg: '<%= user %>: ' + $('#msg').val()});
-    $('#msg').val(''); $('#msg').focus();
-    e.preventDefault();
-  });
-</script>
-    
-      describe '#referrer' do
-    it 'Reads referrer from Referer header' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/valid'}
-      expect(subject.referrer(env)).to eq('bar.com')
-    end
-    
-      %w(GET HEAD).each do |method|
-    it 'accepts #{method} requests with non-whitelisted Origin' do
-      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://malicious.com')).to be_ok
-    end
-  end
-    
-      it 'should not leak changes to env' do
-    klass    = described_class
-    detector = Struct.new(:app) do
-      def call(env)
-        was = env.dup
-        res = app.call(env)
-        was.each do |k,v|
-          next if env[k] == v
-          fail 'env[#{k.inspect}] changed from #{v.inspect} to #{env[k].inspect}'
-        end
-        res
-      end
-    end
-    
-          origin = caller[1]
-      if origin =~ /rubygems\/custom_require/
-        origin = caller[3]
-        if origin.nil?
-          STDERR.puts 'Unknown origin'
-          STDERR.puts caller.join('\n')
-        end
-      end
-      origin = origin.gsub(/:[0-9]+:in .*/, '') if origin
