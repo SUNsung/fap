@@ -1,286 +1,179 @@
 
         
-        
-    {}  // namespace atom
-    
-      // ui::EventRewriter:
-  ui::EventRewriteStatus RewriteEvent(
-      const ui::Event& event,
-      std::unique_ptr<ui::Event>* rewritten_event) override;
-  ui::EventRewriteStatus NextDispatchEvent(
-      const ui::Event& last_event,
-      std::unique_ptr<ui::Event>* new_event) override;
-    
-    #ifndef ATOM_COMMON_API_LOCKER_H_
-#define ATOM_COMMON_API_LOCKER_H_
-    
-    #endif  // ATOM_COMMON_DRAGGABLE_REGION_H_
-
-    
-    
-    {}  // namespace chrome
-    
-      const int process_id_;
-  const int render_frame_id_;
-    
-    
-    {  DISALLOW_COPY_AND_ASSIGN(PepperFlashDRMHost);
-};
-    
-    /// A utility for finding dead-end blocks.
-///
-/// Dead-end blocks are blocks from which there is no path to the function exit
-/// (either return or throw). These are blocks which end with an unreachable
-/// instruction and blocks from which all paths end in 'unreachable' blocks.
-/// This utility is needed to determine if the a value definition can have a
-/// lack of users ignored along a specific path.
-class DeadEndBlocks {
-  llvm::SetVector<const SILBasicBlock *> ReachableBlocks;
-  const SILFunction *F;
-  bool isComputed = false;
+            // allocation size needed   --buffer must have this size
+    static size_t elementsneeded(size_t n, size_t m)
+    {
+        const size_t colstride = (n + 3) & ~3;
+        return colstride * m;
     }
     
-    /// Index the given module and store the results to \p indexStorePath.
-///
-/// \param module The module to index.
-///
-/// \param indexUnitTokens A list of unique identifiers for the index units to
-/// be written. This may either be one unit per source file of \p module, or it
-/// may be a single unit, in which case all the index information will be
-/// combined into a single unit.
-///
-/// \param moduleUnitToken A unique identifier for this module unit in the form
-/// of a file path. Only used if \p indexUnitTokens are specified for each
-/// source file, otherwise the single \p indexUnitTokens value is used instead.
-///
-/// \param indexStorePath The location to write the indexing data to.
-///
-/// \param indexSystemModules If true, emit index data for imported serialized
-/// swift system modules.
-///
-/// \param isDebugCompilation true for non-optimized compiler invocation.
-///
-/// \param targetTriple The target for this compilation.
-///
-/// \param dependencyTracker The set of dependencies seen while building.
-bool indexAndRecord(ModuleDecl *module, ArrayRef<std::string> indexUnitTokens,
-                    StringRef moduleUnitToken, StringRef indexStorePath,
-                    bool indexSystemModules, bool isDebugCompilation,
-                    StringRef targetTriple,
-                    const DependencyTracker &dependencyTracker);
-// FIXME: indexUnitTokens could be StringRef, but that creates an impedance
-// mismatch in the caller.
+    using namespace std;
+using namespace Microsoft::MSR::ScriptableObjects;
     
-      Document(ArrayRef<MarkupASTNode*> Children);
+            // Process any outstanding NDL Scripts
+        bool crossNetwork = netNdlTo->cn != netNdlFrom->cn;
+        ProcessNDLScript(netNdlFrom, ndlPassAll);
+        if (crossNetwork)
+        {
+            ProcessNDLScript(netNdlTo, ndlPassAll);
+        }
     
-    #include 'swift/SIL/SILDebugScope.h'
-#include 'swift/SIL/SILFunction.h'
-    
-    #include 'swift/Syntax/Rewriter.h'
-    
-      /// Indicates whether diagnostic passes should be skipped.
-  bool SkipDiagnosticPasses = false;
-    
-    // On OS X and iOS, swift_once_t matches dispatch_once_t.
-typedef long swift_once_t;
-    
-    // Returns a Boolean value indicating whether the caller is currently
-// executing in the context of the death test child process.  Tools such as
-// Valgrind heap checkers may need this to modify their behavior in death
-// tests.  IMPORTANT: This is an internal utility.  Using it may break the
-// implementation of death tests.  User code MUST NOT use it.
-GTEST_API_ bool InDeathTestChild();
-    
-    // Overloads for various char types.
-GTEST_API_ void PrintTo(unsigned char c, ::std::ostream* os);
-GTEST_API_ void PrintTo(signed char c, ::std::ostream* os);
-inline void PrintTo(char c, ::std::ostream* os) {
-  // When printing a plain char, we always treat it as unsigned.  This
-  // way, the output won't be affected by whether the compiler thinks
-  // char is signed or not.
-  PrintTo(static_cast<unsigned char>(c), os);
-}
-    
-    // An array of TestPartResult objects.
-//
-// Don't inherit from TestPartResultArray as its destructor is not
-// virtual.
-class GTEST_API_ TestPartResultArray {
- public:
-  TestPartResultArray() {}
-    }
-    
-     private:
-  // Registers and returns a global test environment.  When a test
-  // program is run, all global test environments will be set-up in
-  // the order they were registered.  After all tests in the program
-  // have finished, all global test environments will be torn-down in
-  // the *reverse* order they were registered.
-  //
-  // The UnitTest object takes ownership of the given environment.
-  //
-  // This method can only be called from the main thread.
-  Environment* AddEnvironment(Environment* env);
-    
-    // This generic version is used when k is 0.
-template <typename T, typename U>
-inline bool ArrayEq(const T& lhs, const U& rhs) { return lhs == rhs; }
-    
-      // Now, we have that n is odd and n >= 3.
-    
-    // This event listener monitors how many Water objects are created and
-// destroyed by each test, and reports a failure if a test leaks some Water
-// objects. It does this by comparing the number of live Water objects at
-// the beginning of a test and at the end of a test.
-class LeakChecker : public EmptyTestEventListener {
- private:
-  // Called before a test starts.
-  virtual void OnTestStart(const TestInfo& /* test_info */) {
-    initially_allocated_ = Water::allocated();
-  }
-    }
-    
-    #include 'power_iphone.h'
-    
-    
-    {		float tdiff = videobuf_time - get_time();
-		/*If we have lots of extra time, increase the post-processing level.*/
-		if (tdiff > ti.fps_denominator * 0.25 / ti.fps_numerator) {
-			pp_inc = pp_level < pp_level_max ? 1 : 0;
-		} else if (tdiff < ti.fps_denominator * 0.05 / ti.fps_numerator) {
-			pp_inc = pp_level > 0 ? -1 : 0;
-		}
-	}
-    
-    public:
-	enum Status {
-		STATUS_DISCONNECTED,
-		STATUS_CONNECTED,
-		STATUS_ERROR_NO_CERTIFICATE,
-		STATUS_ERROR_HOSTNAME_MISMATCH
-	};
-    
-    	while (p_bytes > 0) {
-		err = put_partial_data(p_data, p_bytes, sent);
-    }
-    
-    	bool hasHit() {
-		return m_penetration_distance < 0;
-	}
-    
-    class AbstractAuthResolver : public AuthResolver {
-public:
-  AbstractAuthResolver();
-    }
-    
-    
-    {} // namespace aria2
-    
-    public:
-  AbstractHttpServerResponseCommand(
-      cuid_t cuid, const std::shared_ptr<HttpServer>& httpServer,
-      DownloadEngine* e, const std::shared_ptr<SocketCore>& socket);
-    
-    void AbstractOptionHandler::setChangeGlobalOption(bool f)
+    // Same as 'ReadConfigFiles' function below, but takes as input string instead of wstring
+std::string ConfigParser::ReadConfigFiles(const std::string& filePaths)
 {
-  updateFlags(FLAG_CHANGE_GLOBAL_OPTION, f);
+    return ReadConfigFiles(msra::strfun::utf16(filePaths));
 }
     
-    #endif // D_ABSTRACT_PROXY_RESPONSE_COMMAND_H
+    
+    {
+    {
+    {    void setverbosity(int veb)
+    {
+        verbosity = veb;
+        numlattices.setverbosity(veb);
+        denlattices.setverbosity(veb);
+    }
+};
+} }
 
     
+      /// Perform an IO control command on the acceptor.
+  /**
+   * This function is used to execute an IO control command on the acceptor.
+   *
+   * @param command The IO control command to be performed on the acceptor.
+   *
+   * @throws boost::system::system_error Thrown on failure.
+   *
+   * @sa IoControlCommand @n
+   * boost::asio::socket_base::non_blocking_io
+   *
+   * @par Example
+   * Getting the number of bytes ready to read:
+   * @code
+   * boost::asio::ip::tcp::acceptor acceptor(io_service);
+   * ...
+   * boost::asio::ip::tcp::acceptor::non_blocking_io command(true);
+   * socket.io_control(command);
+   * @endcode
+   */
+  template <typename IoControlCommand>
+  void io_control(IoControlCommand& command)
+  {
+    boost::system::error_code ec;
+    this->get_service().io_control(this->get_implementation(), command, ec);
+    boost::asio::detail::throw_error(ec, 'io_control');
+  }
     
-    {} // namespace aria2
+    
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
+    
+    #if !defined(BOOST_ASIO_WINDOWS) && !defined(__CYGWIN__)
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    // GLFW callbacks (registered by default to GLFW if you enable 'install_callbacks' during initialization)
+// Provided here if you want to chain callbacks yourself. You may also handle inputs yourself and use those as a reference.
+IMGUI_API void        ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+IMGUI_API void        ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+IMGUI_API void        ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+IMGUI_API void        ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
 
     
-    
-    {  return false;
-}
-    
-      void resetIterator();
-  void setCurrentTier(std::deque<std::shared_ptr<AnnounceTier>>::iterator itr);
-    
-      AnnounceEvent event;
-  std::deque<std::string> urls;
-    
-    namespace aria2 {
+        // Main loop
+    bool running = true;
+    while (running)
+    {
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        ALLEGRO_EVENT ev;
+        while (al_get_next_event(queue, &ev))
+        {
+            ImGui_ImplA5_ProcessEvent(&ev);
+            if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
+                running = false;
+            if (ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE)
+            {
+                ImGui_ImplA5_InvalidateDeviceObjects();
+                al_acknowledge_resize(display);
+                Imgui_ImplA5_CreateDeviceObjects();
+            }
+        }
+        ImGui_ImplA5_NewFrame();
     }
     
-      void Set(const uint8_t *B, uint8_t S) {
-    assert(S <= kMaxSize);
-    memcpy(Data, B, S);
-    Size = S;
-  }
+        CleanupDeviceD3D();
+    DestroyWindow(hwnd);
+    UnregisterClass(_T('ImGui Example'), wc.hInstance);
     
-      if (InitialCorpus.empty()) {
-    InitialCorpus.push_back(Unit({'\n'}));  // Valid ASCII input.
-    if (Options.Verbosity)
-      Printf('INFO: A corpus is not provided, starting from an empty corpus\n');
-  }
-  F->ShuffleAndMinimize(&InitialCorpus);
-  InitialCorpus.clear();  // Don't need this memory any more.
-  F->Loop();
     
-    void RemoveFile(const std::string &Path);
+    {        // Handle loss of D3D9 device
+        if (result == D3DERR_DEVICELOST && g_pd3dDevice->TestCooperativeLevel() == D3DERR_DEVICENOTRESET)
+        {
+            ImGui_ImplDX9_InvalidateDeviceObjects();
+            g_pd3dDevice->Reset(&g_d3dpp);
+            ImGui_ImplDX9_CreateDeviceObjects();
+        }
+    }
     
-      /// Creates a cross-over of two pieces of Data, returns its size.
-  size_t CrossOver(const uint8_t *Data1, size_t Size1, const uint8_t *Data2,
-                   size_t Size2, uint8_t *Out, size_t MaxOutSize);
+            // Rendering
+        IwGxSetColClear(clear_color.x * 255, clear_color.y * 255, clear_color.z * 255, clear_color.w * 255);
+        IwGxClear();
+        ImGui::Render();
+        ImGui_Marmalade_RenderDrawData(ImGui::GetDrawData());
+        IwGxSwapBuffers();
     
-    struct FuzzingOptions {
-  int Verbosity = 1;
-  size_t MaxLen = 0;
-  int UnitTimeoutSec = 300;
-  int TimeoutExitCode = 77;
-  int ErrorExitCode = 77;
-  int MaxTotalTimeSec = 0;
-  int RssLimitMb = 0;
-  bool DoCrossOver = true;
-  int MutateDepth = 5;
-  bool UseCounters = false;
-  bool UseIndirCalls = true;
-  bool UseMemcmp = true;
-  bool UseMemmem = true;
-  bool UseCmp = false;
-  bool UseValueProfile = false;
-  bool Shrink = false;
-  int ReloadIntervalSec = 1;
-  bool ShuffleAtStartUp = true;
-  bool PreferSmall = true;
-  size_t MaxNumberOfRuns = -1L;
-  int ReportSlowUnits = 10;
-  bool OnlyASCII = false;
-  std::string OutputCorpus;
-  std::string ArtifactPrefix = './';
-  std::string ExactArtifactPath;
-  std::string ExitOnSrcPos;
-  std::string ExitOnItem;
-  bool SaveArtifacts = true;
-  bool PrintNEW = true; // Print a status line when new units are found;
-  bool OutputCSV = false;
-  bool PrintNewCovPcs = false;
-  bool PrintFinalStats = false;
-  bool PrintCorpusStats = false;
-  bool PrintCoverage = false;
-  bool DumpCoverage = false;
-  bool DetectLeaks = true;
-  int  TraceMalloc = 0;
-  bool HandleAbrt = false;
-  bool HandleBus = false;
-  bool HandleFpe = false;
-  bool HandleIll = false;
-  bool HandleInt = false;
-  bool HandleSegv = false;
-  bool HandleTerm = false;
-};
+    int main(int, char**)
+{
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    }
     
-      std::string CoveredDirsStr;
-  for (auto &Dir : CoveredDirs) {
-    if (!CoveredDirsStr.empty())
-      CoveredDirsStr += ',';
-    CoveredDirsStr += Dir;
-  }
-  Printf('COVERED_DIRS: %s\n', CoveredDirsStr.c_str());
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
     
-    #ifndef LLVM_FUZZER_UTIL_H
-#define LLVM_FUZZER_UTIL_H
+        // Main loop
+    bool done = false;
+    while (!done)
+    {
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            ImGui_ImplSdlGL3_ProcessEvent(&event);
+            if (event.type == SDL_QUIT)
+                done = true;
+        }
+        ImGui_ImplSdlGL3_NewFrame(window);
+    }
+    
+    // DirectX data
+static LPDIRECT3DDEVICE9        g_pd3dDevice = NULL;
+static LPDIRECT3DVERTEXBUFFER9  g_pVB = NULL;
+static LPDIRECT3DINDEXBUFFER9   g_pIB = NULL;
+static LPDIRECT3DTEXTURE9       g_FontTexture = NULL;
+static int                      g_VertexBufferSize = 5000, g_IndexBufferSize = 10000;
