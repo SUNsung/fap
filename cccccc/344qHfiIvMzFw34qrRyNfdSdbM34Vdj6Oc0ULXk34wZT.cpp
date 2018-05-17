@@ -1,231 +1,181 @@
 
         
-        namespace swift {
+        
+    {  /// Returns true if \p BB is a dead-end block.
+  bool isDeadEnd(SILBasicBlock *BB) {
+    if (!isComputed) {
+      // Lazily compute the dataflow.
+      compute();
+      isComputed = true;
     }
-    
-      ConvertUTF8toUTF32(&SourceNext, SourceStart + S.size(), &TargetStart, C + 1,
-                     llvm::lenientConversion);
-  if (TargetStart == C) {
-    // The source string contains an ill-formed subsequence at the end.
-    return S;
+    return ReachableBlocks.count(BB) == 0;
   }
-    
-    
-    {    return pair.first->second;
-  }
-    
-    
-template <typename ImplClass, typename RetTy = void, typename... Args>
-class MarkupASTVisitor {
-public:
-  RetTy visit(const MarkupASTNode *Node, Args... args) {
-    switch (Node->getKind()) {
-#define MARKUP_AST_NODE(Id, Parent) \
-    case ASTNodeKind::Id: \
-      return static_cast<ImplClass*>(this) \
-        ->visit##Id(cast<const Id>(Node), \
-                    ::std::forward<Args>(args)...);
-#define ABSTRACT_MARKUP_AST_NODE(Id, Parent)
-#define MARKUP_AST_NODE_RANGE(Id, FirstId, LastId)
-#include 'swift/Markup/ASTNodes.def'
-    }
-  }
-    }
-    
-    #endif
-
-    
-    void Base::CallSync(const std::string& method,
-                    const base::ListValue& arguments,
-                    base::ListValue* result) {
-  NOTREACHED() << 'Uncatched callAsync in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    void Clipboard::CallSync(const std::string& method,
-                         const base::ListValue& arguments,
-                         base::ListValue* result) {
-  if (method == 'Get') {
-    result->AppendString(GetText());
-  } else {
-    NOTREACHED() << 'Invalid call to Clipboard method:' << method
-                 << ' arguments:' << arguments;
-  }
-}
-    
-    class Clipboard : public Base {
- public:
-  Clipboard(int id,
-            const base::WeakPtr<DispatcherHost>& dispatcher_host,
-            const base::DictionaryValue& option);
-  ~Clipboard() override;
-    }
-    
-    
-    {}
-    
-    void Menu::Create(const base::DictionaryValue& option) {
-  gtk_accel_group = NULL;
-  std::string type;
-  if (option.GetString('type', &type) && type == 'menubar')
-    menu_ = gtk_menu_bar_new();
-  else
-    menu_ = gtk_menu_new();
-    }
-    
-    ui::KeyboardCode GetKeycodeFromText(std::string text){
-  ui::KeyboardCode retval = ui::VKEY_UNKNOWN;
-  if (text.size() != 0){
-    std::string upperText = base::ToUpperASCII(text);
-    std::string keyName = text;
-    bool found = false;
-    if (upperText.size() == 1){
-      char key = upperText[0];
-      if (key>='0' && key<='9'){//handle digital
-        keyName = 'Digit' + upperText;
-        found = true;
-      } else if (key>='A'&&key<='Z'){//handle alphabet
-        keyName = 'Key' + upperText;
-        found = true;
-      }
-    }
-    }
-    }
-    
-    void MenuItem::SetLabel(const std::string& label) {
-  label_ = label;
-  gtk_menu_item_set_label(GTK_MENU_ITEM(menu_item_), label.c_str());
-}
-    
-    class NwAppSetProxyConfigFunction : public NWSyncExtensionFunction {
- public:
-  NwAppSetProxyConfigFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    }
-    
-    using namespace extensions::nwapi::nw__clipboard;
-    
-    #include 'extensions/browser/extension_function.h'
-    
-    namespace extensions {
-    }
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Obj.destroy', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwObjDestroyFunction);
 };
     
-    std::string GetDbFileContent(int argc, char** argv);
+    typedef NS_ENUM(NSInteger, ObjectBehaviorAction) {
+    ObjectBehaviorActionRetain,
+    ObjectBehaviorActionCopy,
+    ObjectBehaviorActionMutableCopy
+};
     
-    // Get leading or trailing comments in a string. Comment lines start with '// '.
-// Leading detached comments are put in in front of leading comments.
-template <typename DescriptorType>
-inline grpc::string GetNodeComments(const DescriptorType* desc, bool leading) {
-  return grpc_generator::GetPrefixedComments(desc, leading, '//');
-}
-    
-    TEST_F(CodegenTestMinimal, Build) {}
-    
-    #include 'test/cpp/interop/server_helper.h'
-#include 'test/cpp/util/test_config.h'
-    
-    #include 'src/proto/grpc/testing/metrics.grpc.pb.h'
-#include 'src/proto/grpc/testing/metrics.pb.h'
-    
-    
-    {
-    {
-    {      ASSERT_THROWS(
-        std::logic_error,
-        data_channel->gather(raw_tensors, *int_tensor, 1, group)
-      )
+      void finish() override {
+    for (auto &pair : TrackerByGroup) {
+      StringRef groupName = pair.first();
+      SymbolTracker &tracker = *pair.second;
+      bool cont = onFinish(groupName, tracker);
+      if (!cont)
+        break;
     }
   }
+    
+      ArrayRef<const MarkupASTNode *> getChildren() const {
+    return {};
+  }
+    
+    using namespace swift;
+    
+    #include 'llvm/ADT/IntrusiveRefCntPtr.h'
+    
+    // On macOS and iOS, swift_once is implemented using GCD.
+// The compiler emits an inline check matching the barrier-free inline fast
+// path of dispatch_once(). See SwiftTargetInfo.OnceDonePredicateValue.
+    
+    // Each function below returns a Mapping, or a Sequence of descriptors.
+// They all return a new reference.
+    
+    
+    {
+    {}  // namespace
+}  // namespace protobuf
+    
+    #include <string>
+#include <google/protobuf/compiler/code_generator.h>
+    
+      void Generate(io::Printer* printer);
+    
+    class ReflectionClassGenerator : public SourceGeneratorBase {
+ public:
+  ReflectionClassGenerator(const FileDescriptor* file, const Options* options);
+  ~ReflectionClassGenerator();
+    }
+    
+    void RepeatedEnumFieldGenerator::GenerateSerializedSizeCode(io::Printer* printer) {  
+  printer->Print(
+    variables_,
+    'size += $name$_.CalculateSize(_repeated_$name$_codec);\n');
 }
     
-    void ${Storage}::clear_flag(char flag) {
-  ${THStorage}_clearFlag(${state,} storage, flag);
-}
+    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
+//   can only really compare the output against a golden value, which is a
+//   fairly tedious and fragile testing strategy.  If we want to go that route,
+//   it probably makes sense to bite the bullet and write a test that compares
+//   the whole generated output for unittest.proto against a golden value, with
+//   a very simple script that can be run to regenerate it with the latest code.
+//   This would mean that updates to the golden file would have to be included
+//   in any change to the code generator, which would actually be fairly useful
+//   as it allows the reviewer to see clearly how the generated code is
+//   changing.
     
-      rank_type _rank; // Current process' rank
-  std::string _addr;
-  port_type _port;
-  rank_type _num_processes; // Number of processes in network
-  /**
-   * The list of network devices (such as Infiniband) that will be used by Gloo.
-   * Currently Gloo only supports a single network device. Therefore:
-   *
-   * _deviceList.size() will always be equal or less than 1.
-   *
-   * We make it a vector for the purpose of future extension to support multiple
-   * network devices.
-   */
-  std::vector<std::shared_ptr<::gloo::transport::Device>> _deviceList;
-  std::unordered_map<THDGroup, Group> _groups;
-  int _listen_socket;
-    
-    #ifndef BOOST_ASIO_DETAIL_DATE_TIME_FWD_HPP
-#define BOOST_ASIO_DETAIL_DATE_TIME_FWD_HPP
-    
-    #include <boost/asio/detail/config.hpp>
-    
-          if (events[i].events & (POLLIN | POLLERR | POLLHUP))
-        more_reads = op_queue_[read_op].perform_operations(descriptor, ops);
-      else
-        more_reads = op_queue_[read_op].has_operation(descriptor);
-    
-        // Helper methods
-    static bool HasFamilyNamed(std::string& name, DBWrapper* db);
-    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
-        Handle<Array> array);
-    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
-        Handle<Array> array, DBWrapper* db_wrapper, std::string cf);
-    static Handle<Value> CompactRangeDefault(const v8::Arguments& args);
-    static Handle<Value> CompactColumnFamily(const Arguments& args);
-    static Handle<Value> CompactOptions(const Arguments& args);
-    static Handle<Value> CompactAll(const Arguments& args);
+      // Builder addRepeatedField(Field value)
+  WriteFieldDocComment(printer, descriptor_);
+  PrintNestedBuilderFunction(printer,
+    '$deprecation$public Builder add$capitalized_name$($type$ value)',
     
     
     {}
     
-    /**
- * @brief get fid
- * @details [long description]
- *
- * @param fname [description]
- * @param fid [description]
- *
- * @return
- *  Status::OK()
- *  Status::NotFound()
- */
-Status EnvLibrados::_GetFid(
-  const std::string &fname,
-  std::string& fid) {
-  std::set<std::string> keys;
-  std::map<std::string, librados::bufferlist> kvs;
-  keys.insert(fname);
-  int r = _db_pool_ioctx.omap_get_vals_by_keys(_db_name, keys, &kvs);
+    struct IRGS;
+    
+    #if defined(HAVE_UTIMES)
+# include <sys/time.h>
+#elif defined(HAVE_UTIME)
+# if defined(HAVE_SYS_UTIME_H)
+#  include <sys/utime.h>
+# elif defined(HAVE_UTIME_H)
+#  include <utime.h>
+# endif
+#endif
+    
+      Instr imm = Assembler::ImmPCRelAddress(target - this);
+    
+      typedef std::function<void(pid_t)> LostChildHandler;
+  static void SetLostChildHandler(const LostChildHandler& handler);
+    
+    
+    {  while (!got_sigint && !worker.Done()) {
+    gpr_sleep_until(gpr_time_add(gpr_now(GPR_CLOCK_REALTIME),
+                                 gpr_time_from_seconds(5, GPR_TIMESPAN)));
+  }
+}
+    
+    #endif  // GRPC_COMMON_CPP_ROUTE_GUIDE_HELPER_H_
+    
+    namespace {
     }
     
-    Status DateTieredDBImpl::Merge(const WriteOptions& options, const Slice& key,
-                               const Slice& value) {
-  // Decide column family to get from
-  int64_t timestamp = 0;
-  Status s;
-  s = GetTimestamp(key, &timestamp);
-  if (!s.ok()) {
-    // Cannot get current time
-    return s;
+    int main(int argc, char** argv) {
+  grpc::testing::InitTest(&argc, &argv, true);
+  signal(SIGINT, sigint_handler);
+    }
+    
+    #include 'test/cpp/qps/usage_timer.h'
+    
+    double Node::getComputedWidth(void) const
+{
+    return YGNodeLayoutGetWidth(m_node);
+}
+    
+        method(getComputedWidth);
+    method(getComputedHeight);
+    
+    
+    {} // namespace facebook
+
+    
+    #define FROM_HERE facebook::ProgramLocation(__FUNCTION__, __FILE__, __LINE__)
+    
+      void PrintFeatureSet() {
+    for (size_t i = 0; i < kFeatureSetSize; i++) {
+      if(size_t Sz = GetFeature(i))
+        Printf('[%zd: id %zd sz%zd] ', i, SmallestElementPerFeature[i], Sz);
+    }
+    Printf('\n\t');
+    for (size_t i = 0; i < Inputs.size(); i++)
+      if (size_t N = Inputs[i]->NumFeatures)
+        Printf(' %zd=>%zd ', i, N);
+    Printf('\n');
   }
-  ColumnFamilyHandle* column_family;
-  s = FindColumnFamily(timestamp, &column_family, true /*create_if_missing*/);
-  if (!s.ok()) {
-    return s;
+    
+    extern 'C' {
+// Declare these symbols as weak to allow them to be optionally defined.
+#define EXT_FUNC(NAME, RETURN_TYPE, FUNC_SIG, WARN)                            \
+  __attribute__((weak)) RETURN_TYPE NAME FUNC_SIG
+    }
+    
+    std::string Base64(const Unit &U) {
+  static const char Table[] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+                              'abcdefghijklmnopqrstuvwxyz'
+                              '0123456789+/';
+  std::string Res;
+  size_t i;
+  for (i = 0; i + 2 < U.size(); i += 3) {
+    uint32_t x = (U[i] << 16) + (U[i + 1] << 8) + U[i + 2];
+    Res += Table[(x >> 18) & 63];
+    Res += Table[(x >> 12) & 63];
+    Res += Table[(x >> 6) & 63];
+    Res += Table[x & 63];
   }
-  WriteBatch batch;
-  batch.Merge(column_family, key, value);
-  return Write(options, &batch);
+  if (i + 1 == U.size()) {
+    uint32_t x = (U[i] << 16);
+    Res += Table[(x >> 18) & 63];
+    Res += Table[(x >> 12) & 63];
+    Res += '==';
+  } else if (i + 2 == U.size()) {
+    uint32_t x = (U[i] << 16) + (U[i + 1] << 8);
+    Res += Table[(x >> 18) & 63];
+    Res += Table[(x >> 12) & 63];
+    Res += Table[(x >> 6) & 63];
+    Res += '=';
+  }
+  return Res;
 }
