@@ -1,130 +1,126 @@
 
         
-        
-@keras_test
-def test_conv2d_legacy_interface():
-    old_layer = keras.layers.Convolution2D(5, 3, 3, name='conv')
-    new_layer = keras.layers.Conv2D(5, (3, 3), name='conv')
-    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
+        def main():
+    # First, we load the current README into memory as an array of lines
+    with open('README.md', 'r') as read_me_file:
+        read_me = read_me_file.readlines()
     
-    print('Building model...')
-model = Sequential()
-model.add(Dense(512, input_shape=(max_words,)))
-model.add(Activation('relu'))
-model.add(Dropout(0.5))
-model.add(Dense(num_classes))
-model.add(Activation('softmax'))
+    from tensorflow.python.framework import test_util
+from tensorflow.python.platform import googletest
+from google.protobuf import text_format
     
-    print('-')
-print('Vocab size:', vocab_size, 'unique words')
-print('Story max length:', story_maxlen, 'words')
-print('Query max length:', query_maxlen, 'words')
-print('Number of training stories:', len(train_stories))
-print('Number of test stories:', len(test_stories))
-print('-')
-print('Here\'s what a 'story' tuple looks like (input, query, answer):')
-print(train_stories[0])
-print('-')
-print('Vectorizing the word sequences...')
+          self.assertAllEqual(potentials.eval(), [[[6, 2, 3],
+                                               [2, 7, 4],
+                                               [3, 4, 8]],
+                                              [[8, 4, 5],
+                                               [2, 7, 4],
+                                               [1, 2, 6]]])  # pyformat: disable
     
-            # Sample a token
-        sampled_token_index = np.argmax(output_tokens[0, -1, :])
-        sampled_char = reverse_target_char_index[sampled_token_index]
-        decoded_sentence += sampled_char
+          signature_map = {
+          signature_name:
+              tf.saved_model.signature_def_utils.build_signature_def(
+                  inputs={
+                      'inputs':
+                          tf.saved_model.utils.build_tensor_info(
+                              annotation['input_batch'])
+                  },
+                  outputs={
+                      'annotations':
+                          tf.saved_model.utils.build_tensor_info(
+                              annotation['annotations'])
+                  },
+                  method_name=tf.saved_model.signature_constants.
+                  PREDICT_METHOD_NAME),
+      }
     
-        # Returns
-        Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+          # Check that the non-averaged version does not exist.
+      with self.assertRaises(KeyError):
+        restored_graph.get_operation_by_name(non_averaged_hook_name)
     
+    PROJ_METADATA = '%s.json' % PROJ_NAME
     
-def test_io_utils(in_tmpdir):
-    '''Tests the HDF5Matrix code using the sample from @jfsantos at
-    https://gist.github.com/jfsantos/e2ef822c744357a4ed16ec0c885100a3
-    '''
-    h5_path = 'test.h5'
-    create_dataset(h5_path)
+            link_list = []
     
+        url = sorted(
+        map(lambda x: x.firstChild.nodeValue, xml.getElementsByTagName('src')),
+        key=lambda x: int(match1(x, r'_(\d+?)_')))[-1]
     
-def test_serialization():
-    all_activations = ['max_norm', 'non_neg',
-                       'unit_norm', 'min_max_norm']
-    for name in all_activations:
-        fn = constraints.get(name)
-        ref_fn = getattr(constraints, name)()
-        assert fn.__class__ == ref_fn.__class__
-        config = constraints.serialize(fn)
-        fn = constraints.deserialize(config)
-        assert fn.__class__ == ref_fn.__class__
-    
-        def shuffle(self):
-        pass
-
-    
-        def __init__(self, id, name):
-        self.id = id
-        self.name = name
-        self.friend_ids = []
-    
-            Emit key value pairs of the form:
-    
-            When updating an entry, updates its position to the front of the LRU list.
-        If the entry is new and the cache is at capacity, removes the oldest entry
-        before the new entry is added.
-        '''
-        node = self.lookup.get(query)
-        if node is not None:
-            # Key exists in cache, update the value
-            node.results = results
-            self.linked_list.move_to_front(node)
-        else:
-            # Key does not exist in cache
-            if self.size == self.MAX_SIZE:
-                # Remove the oldest entry from the linked list and lookup
-                self.lookup.pop(self.linked_list.tail.query, None)
-                self.linked_list.remove_from_tail()
-            else:
-                self.size += 1
-            # Add the new key and value
-            new_node = Node(results)
-            self.linked_list.append_to_front(new_node)
-            self.lookup[query] = new_node
-
-    
-        def __init__(self, message_id, message, timestamp):
-        self.message_id = message_id
-        self.message = message
-        self.timestamp = timestamp
-    
-    from enum import Enum
-    
-        def test_cat_adapter_shall_make_noise(self):
-        cat = Cat()
-        cat_adapter = Adapter(cat, make_noise=cat.meow)
-        noise = cat_adapter.make_noise()
-        expected_noise = 'meow!'
-        self.assertEqual(noise, expected_noise)
-    
-        def test_sales_manager_shall_respond_through_proxy_with_delay(cls):
-        cls.p.busy = 'Yes'
-        start_time = time()
-        cls.p.talk()
-        end_time = time()
-        execution_time = end_time - start_time
-        print_output = cls.output.getvalue()
-        expected_print_output = 'Proxy checking for Sales Manager availability\n\
-Sales Manager is busy\n'
-        cls.assertEqual(print_output, expected_print_output)
-        expected_execution_time = 1
-        cls.assertEqual(int(execution_time*10), expected_execution_time)
+                f = _base.Future()
+            w = _WorkItem(f, fn, args, kwargs)
     
     
-@contextmanager
-def suppress_stdout():
-    try:
-        stdout, sys.stdout = sys.stdout, open(os.devnull, 'w')
-        yield
-    finally:
-        sys.stdout = stdout
+def EndsWithPython_Python2Paths_test():
+  python_paths = [
+    'python',
+    'python2',
+    '/usr/bin/python2.7',
+    '/home/user/.pyenv/shims/python2.7',
+    r'C:\Python27\python.exe',
+    '/Contents/MacOS/Python'
+  ]
     
-        @property
-    def data(self):
-        return self._data
+    
+@patch( 'ycm.client.messages_request.PostVimMessage',
+        new_callable = ExtendedMock )
+def HandlePollResponse_MultipleMessagesAndDiagnostics_test( post_vim_message ):
+  diagnostics_handler = ExtendedMock()
+  messages = [
+    { 'filepath': 'foo', 'diagnostics': [ 'PLACEHOLDER1' ] },
+    { 'message': 'On the first day of Christmas, my VimScript gave to me' },
+    { 'filepath': 'bar', 'diagnostics': [ 'PLACEHOLDER2' ] },
+    { 'message': 'A test file in a Command-T' },
+    { 'filepath': 'baz', 'diagnostics': [ 'PLACEHOLDER3' ] },
+    { 'message': 'On the second day of Christmas, my VimScript gave to me' },
+    { 'filepath': 'foo', 'diagnostics': [ 'PLACEHOLDER4' ] },
+    { 'message': 'Two popup menus, and a test file in a Command-T' },
+  ]
+  assert_that( _HandlePollResponse( messages, diagnostics_handler ),
+               equal_to( True ) )
+  diagnostics_handler.UpdateWithNewDiagnosticsForFile.assert_has_exact_calls( [
+    call ( 'foo', [ 'PLACEHOLDER1' ] ),
+    call ( 'bar', [ 'PLACEHOLDER2' ] ),
+    call ( 'baz', [ 'PLACEHOLDER3' ] ),
+    call ( 'foo', [ 'PLACEHOLDER4' ] )
+  ] )
+    
+    js.load_plugin_modules(plugins)
+modules = dict((k, m) for k, m in js.module.iteritems())
+print 'JS_MODULES := ' + ' '.join(modules.iterkeys())
+outputs = []
+for name, module in modules.iteritems():
+    outputs.extend(module.outputs)
+    print 'JS_MODULE_OUTPUTS_%s := %s' % (name, ' '.join(module.outputs))
+    print 'JS_MODULE_DEPS_%s := %s' % (name, ' '.join(module.dependencies))
+    
+        @validate(VAdmin(),
+              award = VAwardByCodename('awardcn'),
+              recipient = nop('recipient'),
+              desc = nop('desc'),
+              url = nop('url'),
+              hours = nop('hours'))
+    def GET_give(self, award, recipient, desc, url, hours):
+        if award is None:
+            abort(404, 'page not found')
+    
+            def builder_wrapper(thing = None):
+            kw = {}
+            if not thing:
+                kw['url'] = url
+                kw['title'] = title
+            return ButtonLite(thing,
+                              image = 1 if buttonimage is None else buttonimage,
+                              target = '_new' if newwindow else '_parent',
+                              styled = styled, **kw)
+    
+    from r2.controllers.reddit_base import MinimalController
+from r2.lib.pages import (
+    GoogleTagManagerJail,
+    GoogleTagManager,
+)
+from r2.lib.validator import (
+    validate,
+    VGTMContainerId,
+)
+    
+    import json
+import os
