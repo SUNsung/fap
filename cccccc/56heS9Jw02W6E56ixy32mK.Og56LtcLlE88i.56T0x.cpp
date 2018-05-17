@@ -1,378 +1,314 @@
 
         
-          /// Build the components of an Objective-C method descriptor for the given
-  /// property's method implementations.
-  void emitObjCGetterDescriptorParts(IRGenModule &IGM,
-                                     VarDecl *property,
-                                     llvm::Constant *&selectorRef,
-                                     llvm::Constant *&atEncoding,
-                                     llvm::Constant *&impl);
+        IPC_MESSAGE_ROUTED3(ShellViewHostMsg_Call_Static_Method,
+                    std::string /* type name */,
+                    std::string /* method name */,
+                    base::ListValue /* arguments */)
     
+      static void ClearCache(content::RenderProcessHost* render_view_host);
+  static void SetProxyConfig(content::RenderProcessHost* render_process_host,
+                             const std::string& proxy_config);
     
-    {  const SILDebugScope *Scope = this;
-  while (Scope->Parent.is<const SILDebugScope *>())
-    Scope = Scope->Parent.get<const SILDebugScope *>();
-  assert(Scope->Parent.is<SILFunction *>() && 'orphaned scope');
-  return Scope->Parent.get<SILFunction *>();
+    Base::Base(int id,
+           const base::WeakPtr<ObjectManager>& object_manager,
+           const base::DictionaryValue& option,
+	   const std::string& extension_id)
+    : extension_id_(extension_id),
+      id_(id),
+      delay_destruction_(false),
+      pending_destruction_(false),
+      object_manager_(object_manager) {
 }
     
-    namespace swift {
+    class Clipboard : public Base {
+ public:
+  Clipboard(int id,
+            const base::WeakPtr<DispatcherHost>& dispatcher_host,
+            const base::DictionaryValue& option);
+  ~Clipboard() override;
     }
     
+    MenuDelegate::~MenuDelegate() {
+}
     
-    {}
-    
-    #include 'Private.h'
-#include 'swift/Runtime/Once.h'
-#include 'swift/Runtime/Debug.h'
-#include <type_traits>
-    
-    
-    {}  // namespace leveldb
-    
-      if (direction_ == kReverse) {  // Switch directions?
-    direction_ = kForward;
-    // iter_ is pointing just before the entries for this->key(),
-    // so advance into the range of entries for this->key() and then
-    // use the normal skipping code below.
-    if (!iter_->Valid()) {
-      iter_->SeekToFirst();
-    } else {
-      iter_->Next();
+    namespace nw {
     }
-    if (!iter_->Valid()) {
-      valid_ = false;
-      saved_key_.clear();
-      return;
+    
+      std::string icon;
+  if (option.GetString('icon', &icon) && !icon.empty())
+    SetIcon(icon);
+    
+    NwAppClearAppCacheFunction::NwAppClearAppCacheFunction() {
+}
+    
+        bool ReadImage(ClipboardData& data) {
+      DCHECK(data.type == TYPE_PNG || data.type == TYPE_JPEG);
+      std::vector<unsigned char> encoded_image;
+      SkBitmap bitmap = clipboard_->ReadImage(ui::CLIPBOARD_TYPE_COPY_PASTE);
     }
-    // saved_key_ already contains the key to skip past.
+    
+     protected:
+  ~NwObjCallObjectMethodAsyncFunction() override;
+    
+    // Build a Table file from the contents of *iter.  The generated file
+// will be named according to meta->number.  On success, the rest of
+// *meta will be filled with metadata about the generated table.
+// If no data is present in *iter, meta->file_size will be set to
+// zero, and no Table file will be produced.
+extern Status BuildTable(const std::string& dbname,
+                         Env* env,
+                         const Options& options,
+                         TableCache* table_cache,
+                         Iterator* iter,
+                         FileMetaData* meta);
+    
+      Status status_;
+  std::string saved_key_;     // == current key when direction_==kReverse
+  std::string saved_value_;   // == current raw value when direction_==kReverse
+  Direction direction_;
+  bool valid_;
+    
+    class DBImpl;
+    
+    
+    {  // When limit user key is prefix of start user key
+  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
+            Shorten(IKey('foobar', 100, kTypeValue),
+                    IKey('foo', 200, kTypeValue)));
+}
+    
+    
+// Called on every log record (each one of which is a WriteBatch)
+// found in a kLogFile.
+static void WriteBatchPrinter(uint64_t pos, Slice record, WritableFile* dst) {
+  std::string r = '--- offset ';
+  AppendNumberTo(&r, pos);
+  r += '; ';
+  if (record.size() < 12) {
+    r += 'log record length ';
+    AppendNumberTo(&r, record.size());
+    r += ' is too small\n';
+    dst->Append(r);
+    return;
+  }
+  WriteBatch batch;
+  WriteBatchInternal::SetContents(&batch, record);
+  r += 'sequence ';
+  AppendNumberTo(&r, WriteBatchInternal::Sequence(&batch));
+  r.push_back('\n');
+  dst->Append(r);
+  WriteBatchItemPrinter batch_item_printer;
+  batch_item_printer.dst_ = dst;
+  Status s = batch.Iterate(&batch_item_printer);
+  if (!s.ok()) {
+    dst->Append('  error: ' + s.ToString() + '\n');
+  }
+}
+    
+    // Return the name of the current file.  This file contains the name
+// of the current manifest file.  The result will be prefixed with
+// 'dbname'.
+extern std::string CurrentFileName(const std::string& dbname);
+    
+     private:
+  Env* const env_;
+  const std::string dbname_;
+  const Options* options_;
+  Cache* cache_;
+    
+    TEST(WriteBatchTest, Multiple) {
+  WriteBatch batch;
+  batch.Put(Slice('foo'), Slice('bar'));
+  batch.Delete(Slice('box'));
+  batch.Put(Slice('baz'), Slice('boo'));
+  WriteBatchInternal::SetSequence(&batch, 100);
+  ASSERT_EQ(100, WriteBatchInternal::Sequence(&batch));
+  ASSERT_EQ(3, WriteBatchInternal::Count(&batch));
+  ASSERT_EQ('Put(baz, boo)@102'
+            'Delete(box)@101'
+            'Put(foo, bar)@100',
+            PrintContents(&batch));
+}
+    
+        sqlite3_stmt *replace_stmt, *begin_trans_stmt, *end_trans_stmt;
+    std::string replace_str = 'REPLACE INTO test (key, value) VALUES (?, ?)';
+    std::string begin_trans_str = 'BEGIN TRANSACTION;';
+    std::string end_trans_str = 'END TRANSACTION;';
+    
+    TRACE_SET_MOD(jittime);
+    
+    #define DECLARE_VNUM(Vnum, check, prefix)                 \
+struct Vnum {                                             \
+  Vnum() {}                                               \
+  explicit Vnum(size_t n) : n(safe_cast<uint32_t>(n)) {}  \
+                                                          \
+  /* implicit */ operator size_t() const {                \
+    if (check) assertx(n != kInvalidId);                   \
+    return n;                                             \
+  }                                                       \
+                                                          \
+  bool isValid() const {                                  \
+    return n != kInvalidId;                               \
+  }                                                       \
+                                                          \
+  std::string toString() const {                          \
+    if (n == kInvalidId) return prefix '?';               \
+    return folly::to<std::string>(prefix, n);             \
+  }                                                       \
+                                                          \
+private:                                                  \
+  static constexpr uint32_t kInvalidId = 0xffffffff;      \
+  uint32_t n{kInvalidId};                                 \
+}
+    
+      /* First, try to get user-specific magic file */
+  if ((home = getenv('LOCALAPPDATA')) == NULL) {
+    if ((home = getenv('USERPROFILE')) != NULL)
+      if (asprintf(&tmppath,
+          '%s/Local Settings/Application Data%s', home,
+          hmagic) < 0)
+        tmppath = NULL;
   } else {
-    // Store in saved_key_ the current key so we skip it below.
-    SaveKey(ExtractUserKey(iter_->key()), &saved_key_);
+    if (asprintf(&tmppath, '%s%s', home, hmagic) < 0)
+      tmppath = NULL;
   }
     
-    LookupKey::LookupKey(const Slice& user_key, SequenceNumber s) {
-  size_t usize = user_key.size();
-  size_t needed = usize + 13;  // A conservative estimate
-  char* dst;
-  if (needed <= sizeof(space_)) {
-    dst = space_;
-  } else {
-    dst = new char[needed];
+      bool grow(size_t nBytes) {
+    if (m_maxGrow == m_size) return false;
+    assertx(m_destBase != m_base);
+    }
+    
+    TCA OfflineCode::collectJmpTargets(FILE *file,
+                                   TCA fileStartAddr,
+                                   TCA codeStartAddr,
+                                   uint64_t codeLen,
+                                   vector<TCA> *jmpTargets) {
+  return 0;
+}
+    
+    
+    {    CondVarNode() {
+      pthread_cond_init(&m_cond, nullptr);
+    }
+    ~CondVarNode() {
+      pthread_cond_destroy(&m_cond);
+    }
+    /* implicit */ operator pthread_cond_t*() {
+      return &m_cond;
+    }
+    void unlink() {
+      if (m_listHook.is_linked()) m_listHook.unlink();
+    }
+  };
+    
+      /* Invoked when trailers are received before closing the stream. Only invoked
+   * when server sends trailers, which it may not. May be invoked while there is
+   * read data remaining in local buffer. Contents of |trailers| is valid for
+   * duration of the call.
+   */
+  void (*on_response_trailers_received)(
+      bidirectional_stream* stream,
+      const bidirectional_stream_header_array* trailers);
+    
+    std::unique_ptr<ScenarioResult> RunScenario(
+    const grpc::testing::ClientConfig& client_config, size_t num_clients,
+    const grpc::testing::ServerConfig& server_config, size_t num_servers,
+    int warmup_seconds, int benchmark_seconds, int spawn_local_worker_count,
+    const grpc::string& qps_server_target_override,
+    const grpc::string& credential_type, bool run_inproc);
+    
+    #include <chrono>
+#include <thread>
+#include <vector>
+    
+     private:
+  static Result Sample();
+    
+    grpc::string SummarizeService(
+    const grpc::protobuf::ServiceDescriptor* service) {
+  grpc::string result;
+  for (int i = 0; i < service->method_count(); ++i) {
+    result.append(SummarizeMethod(service->method(i)));
   }
-  start_ = dst;
-  dst = EncodeVarint32(dst, usize + 8);
-  kstart_ = dst;
-  memcpy(dst, user_key.data(), usize);
-  dst += usize;
-  EncodeFixed64(dst, PackSequenceAndType(s, kValueTypeForSeek));
-  dst += 8;
-  end_ = dst;
+  return result;
 }
     
-      fname = LockFileName('foo');
-  ASSERT_EQ('foo/', std::string(fname.data(), 4));
-  ASSERT_TRUE(ParseFileName(fname.c_str() + 4, &number, &type));
-  ASSERT_EQ(0, number);
-  ASSERT_EQ(kDBLockFile, type);
+    class SubProcess {
+ public:
+  SubProcess(const std::vector<std::string>& args);
+  ~SubProcess();
+    }
     
-      // If a seek to internal key 'k' in specified file finds an entry,
-  // call (*handle_result)(arg, found_key, found_value).
-  Status Get(const ReadOptions& options,
-             uint64_t file_number,
-             uint64_t file_size,
-             const Slice& k,
-             void* arg,
-             void (*handle_result)(void*, const Slice&, const Slice&));
+    #include <google/protobuf/compiler/command_line_interface.h>
+#include <google/protobuf/compiler/python/python_generator.h>
     
-    // Return a builtin comparator that uses lexicographic byte-wise
-// ordering.  The result remains the property of this module and
-// must not be deleted.
-extern const Comparator* BytewiseComparator();
+      DBWrapper* db_wrapper = ObjectWrap::Unwrap<DBWrapper>(args.This());
+  rocksdb::Slice begin  = *v8::String::Utf8Value(args[0]->ToString());
+  rocksdb::Slice end    = *v8::String::Utf8Value(args[1]->ToString());
+  std::string cf        = *v8::String::Utf8Value(args[2]->ToString());
+  db_wrapper->status_    = db_wrapper->db_->CompactRange(
+      db_wrapper->columnFamilies_[cf], &begin, &end);
     
-    #include <string>
-    
-    Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the 'Software'), to deal in the Software without
-restriction, including without limitation the rights to use, copy,
-modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-    
-    PyObject* NewFileServicesByName(const FileDescriptor* descriptor);
-    
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/wire_format.h>
-    
-      virtual void GenerateCloningCode(io::Printer* printer);
-  virtual void GenerateFreezingCode(io::Printer* printer);
-  virtual void GenerateMembers(io::Printer* printer);
-  virtual void GenerateMergingCode(io::Printer* printer);
-  virtual void GenerateParsingCode(io::Printer* printer);
-  virtual void GenerateSerializationCode(io::Printer* printer);
-  virtual void GenerateSerializedSizeCode(io::Printer* printer);
-    
-    
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-    
-        'return this;\n');
-    
-    // dims=[5, 4, 3, 2]->[5, 3, 2, 4]
-TEST_F(MatrixTest, RotatingTranspose_1_3) {
-  GENERIC_2D_ARRAY<int> m;
-  src_.RotatingTranspose(dims_, kNumDims_, 1, 3, &m);
-  m.ResizeNoInit(kInputSize_ / 4, 4);
-  // Verify that the result is:
-  // output tensor=[[[[0, 6, 12, 18][1, 7, 13, 19]]
-  //                 [[2, 8, 14, 20][3, 9, 15, 21]]
-  //                 [[4, 10, 16, 22][5, 11, 17, 23]]]
-  //                [[[24, 30, 36, 42]...
-  EXPECT_EQ(0, m(0, 0));
-  EXPECT_EQ(6, m(0, 1));
-  EXPECT_EQ(1, m(1, 0));
-  EXPECT_EQ(2, m(2, 0));
-  EXPECT_EQ(3, m(3, 0));
-  EXPECT_EQ(4, m(4, 0));
-  EXPECT_EQ(5, m(5, 0));
-  EXPECT_EQ(24, m(6, 0));
-  EXPECT_EQ(30, m(6, 1));
-}
-    
-    // A small event handler class to process incoming events to
-// this window.
-class PGEventHandler : public SVEventHandler {
-  public:
-   PGEventHandler(tesseract::Tesseract* tess) : tess_(tess) {
-   }
-   void Notify(const SVEvent* sve);
-  private:
-    tesseract::Tesseract* tess_;
-};
-    
-    // The number of points to consider at each end.
-const int kNumEndPoints = 3;
-// The minimum number of points at which to switch to number of points
-// for badly fitted lines.
-// To ensure a sensible error metric, kMinPointsForErrorCount should be at
-// least kMaxRealDistance / (1 - %ile) where %ile is the fractile used in
-// ComputeUpperQuartileError.
-const int kMinPointsForErrorCount = 16;
-// The maximum real distance to use before switching to number of
-// mis-fitted points, which will get square-rooted for true distance.
-const int kMaxRealDistance = 2.0;
-    
-    // Computes the Otsu threshold(s) for the given image rectangle, making one
-// for each channel. Each channel is always one byte per pixel.
-// Returns an array of threshold values and an array of hi_values, such
-// that a pixel value >threshold[channel] is considered foreground if
-// hi_values[channel] is 0 or background if 1. A hi_value of -1 indicates
-// that there is no apparent foreground. At least one hi_value will not be -1.
-// Delete thresholds and hi_values with delete [] after use.
-// The return value is the number of channels in the input image, being
-// the size of the output thresholds and hi_values arrays.
-int OtsuThreshold(Pix* src_pix, int left, int top, int width, int height,
-                  int** thresholds, int** hi_values);
-    
-    #include          'host.h'
-    
-    template<typename T>
-typename std::enable_if<std::numeric_limits<T>::is_integer, bool>::type
-    check_equal(T x, T y) {
-  return x == y;
-}
-    
-    #define THCPStorage TH_CONCAT_3(THCP,Real,Storage)
-#define THCPStorageStr TH_CONCAT_STRING_3(torch.cuda.,Real,Storage)
-#define THCPStorageClass TH_CONCAT_3(THCP,Real,StorageClass)
-#define THCPStorage_(NAME) TH_CONCAT_4(THCP,Real,Storage_,NAME)
-    
-    #define THPDoubleStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPDoubleStorageClass)
-#define THPFloatStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPFloatStorageClass)
-#define THPHalfStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPFloatStorageClass)
-#define THPLongStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPLongStorageClass)
-#define THPIntStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPIntStorageClass)
-#define THPShortStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPShortStorageClass)
-#define THPCharStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPCharStorageClass)
-#define THPByteStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPByteStorageClass)
-    
-      for (auto &obj_name: used_objects) {
-    DEBUG('freeing %s', obj_name.c_str());
-    shm_unlink(obj_name.c_str());
+    // Returns a vector of 0 or 1 Env*, depending whether an Env is registered for
+// TEST_ENV_URI.
+//
+// The purpose of returning an empty vector (instead of nullptr) is that gtest
+// ValuesIn() will skip running tests when given an empty collection.
+std::vector<Env*> GetCustomEnvs() {
+  static Env* custom_env;
+  static std::unique_ptr<Env> custom_env_guard;
+  static bool init = false;
+  if (!init) {
+    init = true;
+    const char* uri = getenv('TEST_ENV_URI');
+    if (uri != nullptr) {
+      custom_env = NewCustomObject<Env>(uri, &custom_env_guard);
+    }
   }
+    }
     
-    namespace thd { namespace rpc {
+      private:
+    explicit DBWrapper();
+    ~DBWrapper();
+    
+    xxHash is an extremely fast Hash algorithm, running at RAM speed limits.
+It also successfully passes all tests from the SMHasher suite.
+    
+      bool StatisticsJni::HistEnabledForType(uint32_t type) const {
+    if (type >= HISTOGRAM_ENUM_MAX) {
+      return false;
+    }
+    
+    if (m_ignore_histograms.count(type) > 0) {
+        return false;
     }
     }
     
-      THDTensor_(checkTransposed)(ru);
-    
-            // Get model's producer name.
-        // Return null pointer if not specified.
-        const std::string& ProducerName() const;
-        // Set model's producer name.
-        void SetProducerName(const std::string& p_producerName);
-    
-    namespace ONNXIR
-{
-    namespace Common
-    {
-        Status::Status(StatusCategory p_category, int p_code, const std::string& p_msg)
-        {
-            m_state.reset(new State());
-            m_state->m_category = p_category;
-            m_state->m_code = p_code;
-            m_state->m_msg = p_msg;
-        }
-    }
-    }
-    
-    #define REGISTER_ELEMENTWISE_BROADCAST_OPERATOR_SCHEMA(OpName)                                          \
-    REGISTER_OPERATOR_SCHEMA(OpName)                                                                        \
-        .Description(                                                                                        \
-            'Performs element-wise binary '#OpName' (with limited broadcast support).'                        \
-                                                                                                            \
-            'If necessary, the right-hand-side argument will be broadcasted to match the shape of'            \
-            'left-handside argument. When broadcasting is specified, the second tensor can either be of'    \
-            'size 1 (a scalar value) or having its shape as a contiguous subset of the first tensor's'        \
-            'shape. The starting of the mutually equal shape is specified by the argument \'axis\' and if'    \
-            'it is not set, suffix matching is assumed. 1-dim expansion doesn't work yet. '                    \
-                                                                                                            \
-            'For example, the following tensor shapes are supported (with broadcast=1): '                    \
-            'shape(A) = (2, 3, 4, 5), shape(B) = (,), i.e. B is a scalar'                                    \
-            'shape(A) = (2, 3, 4, 5), shape(B) = (5,)'                                                        \
-            'shape(A) = (2, 3, 4, 5), shape(B) = (4, 5)'                                                    \
-            'shape(A) = (2, 3, 4, 5), shape(B) = (3, 4), with axis=1'                                        \
-            'shape(A) = (2, 3, 4, 5), shape(B) = (2), with axis=0'                                            \
-                                                                                                            \
-            'Attribute broadcast=1 needs to be passed to enable broadcasting')                                \
-        .Input('A', 'First operand, should share the type with the second operand.', 'T')                   \
-        .Input('B', 'Second operand. With broadcasting can be of smaller size than A. '                     \
-            'If broadcasting is disabled it should be of the same size..', 'T')                             \
-        .Output('C', 'Result, has same dimensions and type as A.', 'T')                                     \
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },                      \
-            'Constrain input and output types to float tensors.')                                           \
-        .Attr('axis', 'If set, defines the broadcast dimensions.',                                          \
-            AttrType::AttributeProto_AttributeType_INT)                                                     \
-        .Attr('broadcast', 'Enable broadcasting.',                                                          \
-            AttrType::AttributeProto_AttributeType_INT);
-    
-            if (isFinalValidationPass) 
-        {
-            if (!(Input(0)->GetSampleMatrixNumRows() == Input(1)->GetSampleMatrixNumRows() && // match vector dimension
-                Input(0)->HasMBLayout() &&
-                Input(0)->GetMBLayout() == Input(1)->GetMBLayout()))
-            {
-                LogicError('The Matrix dimension in the ForwardBackwardNode operation does not match.');
-            }
-    }
+    // This class contains a fixed array of buckets, each
+// pointing to a skiplist (null if the bucket is empty).
+// bucket_count: number of fixed array buckets
+// skiplist_height: the max height of the skiplist
+// skiplist_branching_factor: probabilistic size ratio between adjacent
+//                            link lists in the skiplist
+extern MemTableRepFactory* NewHashSkipListRepFactory(
+    size_t bucket_count = 1000000, int32_t skiplist_height = 4,
+    int32_t skiplist_branching_factor = 4
+);
     
     
-    {public:
-    SectionStats(SectionFile* file, Section* parentSection, SectionHeader* sectionHeader, size_t filePosition, MappingType mappingType = mappingParent, size_t size = 0);
-    SectionStats(SectionFile* file, Section* parentSection, size_t filePosition, MappingType mappingType = mappingParent, size_t size = 0);
-    void InitCompute(const ConfigArray& compute);
-    void SetCompute(const std::string& name, double value);
-    double GetCompute(const std::string& name);
-    void Store();
-};
-    
-      std::vector<std::string> line_exports;
-  unsigned int readonly = 0;
-  int options_index = -1;
-    
-      // Get the hash value for the kernel's .text memory segment
-  auto f2 = osquery::readFile(kKernelTextHashPath, content);
-  if (f2.ok()) {
-    boost::trim(content);
-    text_segment_hash = content;
-  } else {
-    VLOG(1) << 'Cannot read file: ' << kKernelTextHashPath;
-    return results;
-  }
-    
-    namespace osquery {
-    }
-    
-        auto process = PlatformProcess::launchWorker(
-        kProcessTestExecPath.c_str(),
-        static_cast<int>(kExpectedWorkerArgsCount),
-        &argv[0]);
-    for (size_t i = 0; i < argv.size(); i++) {
-      delete[] argv[i];
-    }
-    
-      EXPECT_TRUE(cl.notExistsOrMatches('some'));
-  EXPECT_TRUE(cl.matches('some'));
-  EXPECT_FALSE(cl.notExistsOrMatches('not_some'));
-    
-    #include 'db/log_format.h'
-#include 'rocksdb/slice.h'
-#include 'rocksdb/status.h'
-#include 'rocksdb/options.h'
-    
-    // A file abstraction for reading sequentially through a file
-class LibradosSequentialFile : public SequentialFile {
-  librados::IoCtx * _io_ctx;
-  std::string _fid;
-  std::string _hint;
-  int _offset;
-public:
-  LibradosSequentialFile(librados::IoCtx * io_ctx, std::string fid, std::string hint):
-    _io_ctx(io_ctx), _fid(fid), _hint(hint), _offset(0) {}
-    }
-    
-    void SyncPoint::ClearAllCallBacks() {
-  impl_->ClearAllCallBacks();
+    {  InlineSkipList<TestComparator>::Iterator iter(&list);
+  ASSERT_TRUE(!iter.Valid());
+  iter.SeekToFirst();
+  ASSERT_TRUE(!iter.Valid());
+  key = 100;
+  iter.Seek(Encode(&key));
+  ASSERT_TRUE(!iter.Valid());
+  iter.SeekForPrev(Encode(&key));
+  ASSERT_TRUE(!iter.Valid());
+  iter.SeekToLast();
+  ASSERT_TRUE(!iter.Valid());
 }
     
-      void LoadDependency(const std::vector<SyncPointPair>& dependencies);
-  void LoadDependencyAndMarkers(const std::vector<SyncPointPair>& dependencies,
-    const std::vector<SyncPointPair>& markers);
-  bool PredecessorsAllCleared(const std::string& point);
-  void SetCallBack(const std::string& point,
-    const std::function<void(void*)>& callback) {
-  std::lock_guard<std::mutex> lock(mutex_);
-  callbacks_[point] = callback;
+    void SyncPoint::DisableProcessing() {
+  impl_->DisableProcessing();
 }
-    
-    
-    {  void Open() { DBTestBase::Reopen(GetOptions()); }
-};
-    
-        int getOverflow(void) const;
-    int getDisplay(void) const;
-    
-    template<typename... ARGS>
-inline void logd(const char* tag, const char* msg, ARGS... args) noexcept {
-  log(ANDROID_LOG_DEBUG, tag, msg, args...);
-}
-    
-    #pragma once
-#include <atomic>
-#include <fb/assert.h>
-#include <fb/noncopyable.h>
-#include <fb/nonmovable.h>
-#include <fb/RefPtr.h>
