@@ -1,123 +1,84 @@
 
         
         
-@for_app('tar')
-def match(command):
-    return ('-C' not in command.script
-            and _is_tar_extract(command.script)
-            and _tar_file(command.script_parts) is not None)
+def _plot(results, metrics, formats, title, x_ticks, x_label,
+          format_markers=('x', '|', 'o', '+'),
+          metric_colors=('c', 'm', 'y', 'k', 'g', 'r', 'b')):
+    '''
+    Plot the results by metric, format and some other variable given by
+    x_label
+    '''
+    fig = plt.figure('scikit-learn multilabel metrics benchmarks')
+    plt.title(title)
+    ax = fig.add_subplot(111)
+    for i, metric in enumerate(metrics):
+        for j, format in enumerate(formats):
+            ax.plot(x_ticks, results[i, j].flat,
+                    label='{}, {}'.format(metric, format),
+                    marker=format_markers[j],
+                    color=metric_colors[i % len(metric_colors)])
+    ax.set_xlabel(x_label)
+    ax.set_ylabel('Time (s)')
+    ax.legend()
+    plt.show()
     
-        def start_requests(self):
-        qargs = {'total': self.total, 'show': self.show}
-        url = '{}?{}'.format(self.baseurl, urlencode(qargs, doseq=1))
-        return [scrapy.Request(url, dont_filter=True)]
+            plt.text(0.99, 0.5, descr_string,
+                 transform=ax.transAxes, rotation=-90,
+                 ha='right', va='center')
     
-        def process_options(self, args, opts):
-        ScrapyCommand.process_options(self, args, opts)
-        try:
-            opts.spargs = arglist_to_dict(opts.spargs)
-        except ValueError:
-            raise UsageError('Invalid -a value, use -a NAME=VALUE', print_help=False)
-        if opts.output:
-            if opts.output == '-':
-                self.settings.set('FEED_URI', 'stdout:', priority='cmdline')
-            else:
-                self.settings.set('FEED_URI', opts.output, priority='cmdline')
-            feed_exporters = without_none_values(
-                self.settings.getwithbase('FEED_EXPORTERS'))
-            valid_output_formats = feed_exporters.keys()
-            if not opts.output_format:
-                opts.output_format = os.path.splitext(opts.output)[1].replace('.', '')
-            if opts.output_format not in valid_output_formats:
-                raise UsageError('Unrecognized output format '%s', set one'
-                                 ' using the '-t' switch or as a file extension'
-                                 ' from the supported list %s' % (opts.output_format,
-                                                                  tuple(valid_output_formats)))
-            self.settings.set('FEED_FORMAT', opts.output_format, priority='cmdline')
+            start = time.time()
+        func(X, n_jobs=-1)
+        multi_core.append(time.time() - start)
     
-        def clear_spots(self):
-        for spot in self.spots_taken:
-            spot.remove_vehicle(self)
-        self.spots_taken = []
+        opener = build_opener()
+    html_filename = os.path.join(html_folder, lang + '.html')
+    if not os.path.exists(html_filename):
+        print('Downloading %s' % page)
+        request = Request(page)
+        # change the User Agent to avoid being blocked by Wikipedia
+        # downloading a couple of articles should not be considered abusive
+        request.add_header('User-Agent', 'OpenAnything/1.0')
+        html_content = opener.open(request).read()
+        open(html_filename, 'wb').write(html_content)
     
-            Emit key value pairs of the form:
+    try:
+    from urllib import urlopen
+except ImportError:
+    from urllib.request import urlopen
     
-            # put all lines in the file into a Python list
-        strings = f.readlines()
-        
-        # above line leaves trailing newline characters; strip them out
-        strings = [x.strip(u'\n') for x in strings]
-        
-        # remove empty-lines and comments
-        strings = [x for x in strings if x and not x.startswith(u'#')]
-        
-        # insert empty string since all are being removed
-        strings.insert(0, u'')
+    solutions = os.listdir(exercise_dir)
     
-            if nextchar == ''':
-            return parse_string(string, idx + 1, strict)
-        elif nextchar == '{':
-            return parse_object((string, idx + 1), strict,
-                _scan_once, object_hook, object_pairs_hook, memo)
-        elif nextchar == '[':
-            return parse_array((string, idx + 1), _scan_once)
-        elif nextchar == 'n' and string[idx:idx + 4] == 'null':
-            return None, idx + 4
-        elif nextchar == 't' and string[idx:idx + 4] == 'true':
-            return True, idx + 4
-        elif nextchar == 'f' and string[idx:idx + 5] == 'false':
-            return False, idx + 5
-    }
+    We add observation noise to these waveforms. We generate very sparse
+noise: only 6% of the time points contain noise. As a result, the
+l1 norm of this noise (ie 'cityblock' distance) is much smaller than it's
+l2 norm ('euclidean' distance). This can be seen on the inter-class
+distance matrices: the values on the diagonal, that characterize the
+spread of the class, are much bigger for the Euclidean distance than for
+the cityblock distance.
     
-    # Response numbers that are followed by additional text (e.g. article)
-_LONGRESP = {
-    '100',   # HELP
-    '101',   # CAPABILITIES
-    '211',   # LISTGROUP   (also not multi-line with GROUP)
-    '215',   # LIST
-    '220',   # ARTICLE
-    '221',   # HEAD, XHDR
-    '222',   # BODY
-    '224',   # OVER, XOVER
-    '225',   # HDR
-    '230',   # NEWNEWS
-    '231',   # NEWGROUPS
-    '282',   # XGTITLE
-}
     
-    subsystem_details = {
-    # -s flag        : (C entry point template), (is it __main__?), (is it a DLL?)
-    'console'        : (None,                    1,                 0),
-    'windows'        : (WINMAINTEMPLATE,         1,                 0),
-    'service'        : (SERVICETEMPLATE,         0,                 0),
-    'com_dll'        : ('',                      0,                 1),
-}
+class ScrapyCommand(object):
     
-        # __set__ and __get__ should raise a TypeError in case their self
-    # argument is not a ctype instance.
-    def test___set__(self):
-        class MyCStruct(Structure):
-            _fields_ = (('field', c_int),)
-        self.assertRaises(TypeError,
-                          MyCStruct.field.__set__, 'wrong type self', 42)
+        def short_desc(self):
+        return 'Check spider contracts'
     
-                # empty iterator
-            for i in range(1, len(orig)):
-                next(itorig)
-            d = pickle.dumps((itorig, orig), proto)
-            it, a = pickle.loads(d)
-            a[:] = data
-            self.assertEqual(type(it), type(itorig))
-            self.assertEqual(list(it), [])
+        def syntax(self):
+        return '[options] <spider>'
     
-                def data_received(self, data):
-                body.append(data)
+    PRIMES = [
+    112272535095293,
+    112582705942171,
+    112272535095293,
+    115280095190773,
+    115797848077099,
+    117450548693743,
+    993960000099397]
     
-            # Callbacks execute in the order they were registered.
-        self.assertEqual(list(range(3)), self.history)
-        c.notify(1)
-        self.loop_briefly()
-        self.assertEqual(list(range(4)), self.history)
-        c.notify(2)
-        self.loop_briefly()
-        self.assertEqual(list(range(6)), self.history)
+    
+def _CreateFilterForTypes( opts, types ):
+  return DiagnosticFilter.CreateFromOptions( opts ).SubsetForTypes( types )
+    
+      eq_( request.Response(), {
+    'completions': results,
+    'completion_start_column': 1
+  } )
