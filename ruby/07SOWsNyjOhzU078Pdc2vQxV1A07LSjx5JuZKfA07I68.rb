@@ -1,1 +1,8 @@
-BASE_URI = ENV['BASE_URI'] || 'https://github.com/jondot/awesome-react-native'
+
+        
+                    # Break out if we're supposed to. Otherwise re-raise the error
+            # because it is a real problem.
+            break if breakable
+            raise
+          end
+        end
