@@ -1,271 +1,202 @@
 
         
-          /**
-   * Extract the OCR results, costs (penalty points for uncertainty),
-   * and the bounding boxes of the characters.
+        namespace tensorflow {
+namespace functor {
+    }
+    }
+    
+    /** scalar_sigmoid_fast_derivative_op
+  * \ingroup CXX11_NeuralNetworks_Module
+  * \brief Template functor to compute the fast derivative of a sigmoid
+  *
+  * Input should be the backpropagated gradient.
+  *
+  * \sa class CwiseUnaryOp, Cwise::sigmoid_fast_derivative()
+  */
+template <typename T>
+struct scalar_sigmoid_fast_derivative_op {
+  EIGEN_EMPTY_STRUCT_CTOR(scalar_sigmoid_fast_derivative_op)
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE T operator()(const T& y) const {
+    const T one = T(1);
+    return (one - y) * y;
+  }
+    }
+    
+    #include 'tensorflow/core/common_runtime/device.h'
+#include 'tensorflow/core/framework/device_base.h'
+    
+    class TextLineReaderOp : public ReaderOpKernel {
+ public:
+  explicit TextLineReaderOp(OpKernelConstruction* context)
+      : ReaderOpKernel(context) {
+    int skip_header_lines = -1;
+    OP_REQUIRES_OK(context,
+                   context->GetAttr('skip_header_lines', &skip_header_lines));
+    OP_REQUIRES(context, skip_header_lines >= 0,
+                errors::InvalidArgument('skip_header_lines must be >= 0 not ',
+                                        skip_header_lines));
+    Env* env = context->env();
+    SetReaderFactory([this, skip_header_lines, env]() {
+      return new TextLineReader(name(), skip_header_lines, env);
+    });
+  }
+};
+    
+    HloReachabilityMap::HloReachabilityMap(
+    const std::list<HloInstruction*>& instructions)
+    : size_(instructions.size()) {
+  bit_vectors_.reserve(size_);
+  for (const HloInstruction* hlo : instructions) {
+    indices_[hlo] = bit_vectors_.size();
+    bit_vectors_.emplace_back(size_);
+  }
+  CHECK_EQ(size_, indices_.size());  // instructions should be unique
+}
+    
+    namespace tensorflow {
+namespace ffmpeg {
+namespace {
+    }
+    }
+    }
+    
+        auto e_5_1 = cc->FindWorkerChannel('/job:mnist/replica:0/task:4');
+    auto e_5_2 = cc->FindWorkerChannel('/job:mnist/replica:0/task:4');
+    
+    #endif  // TENSORFLOW_USE_MPI
+
+    
+    class TensorSlice {
+ public:
+  // Construct a tensor slice: you have a number of ways:
+  // -- creating an empty slice
+  // -- from just a dimension (in this case it will create a full slice)
+  // -- from an array of pairs of integers.
+  // -- from a TensorSliceProto protocol buffer
+  // -- from a string format of 'start,length:start,length...' where each
+  //    'start,length' pair represents the slice on one dimension. We allow a
+  //    special '-' that means 'everything for this dimension'. One such example
+  //    is:  0,10:-:14,1:-:-
+  TensorSlice() {}
+  explicit TensorSlice(int dim);
+  explicit TensorSlice(const TensorSliceProto& proto);
+  explicit TensorSlice(std::initializer_list<std::pair<int64, int64>> extents);
+    }
+    
+    namespace HPHP {
+    }
+    
+      std::string rows;
+  for (auto const& pair : names_copy) {
+    auto const& counter = s_counters[pair.name];
+    if (counter.total == 0 && counter.count == 0) continue;
+    }
+    
+    namespace HPHP { namespace jit {
+    }
+    }
+    
+    VcallArgsId Vunit::makeVcallArgs(VcallArgs&& args) {
+  VcallArgsId i(vcallArgs.size());
+  vcallArgs.emplace_back(std::move(args));
+  return i;
+}
+    
+      friend bool operator==(const ClusterArc& lhs, const ClusterArc& rhs) {
+    return lhs.c1 == rhs.c1 && lhs.c2 == rhs.c2;
+  }
+    
+      /**
+   * The main process is not the (direct) parent of the worker process,
+   * and therefore it has to delegate to the shadow process to do waitpid.
+   * There can be a timeout (in seconds), after which SIGKILL is sent to
+   * the child process.
    */
-  TESS_LOCAL static int TesseractExtractResult(char** text,
-                                    int** lengths,
-                                    float** costs,
-                                    int** x0,
-                                    int** y0,
-                                    int** x1,
-                                    int** y1,
-                                    PAGE_RES* page_res);
+  static pid_t waitpid(pid_t pid, int *stat_loc, int options, int timeout = 0);
     
+    CURLcode CurlShareResource::attachToCurlHandle(CURL *cp) {
+  return curl_easy_setopt(cp, CURLOPT_SHARE, m_share);
+}
     
-    {}  // namespace tesseract.
-    
-    // Computes and returns the dot product of the n-vectors u and v.
-// Uses Intel SSE intrinsics to access the SIMD instruction set.
-double DotProductSSE(const double* u, const double* v, int n) {
-  int max_offset = n - 2;
-  int offset = 0;
-  // Accumulate a set of 2 sums in sum, by loading pairs of 2 values from u and
-  // v, and multiplying them together in parallel.
-  __m128d sum = _mm_setzero_pd();
-  if (offset <= max_offset) {
-    offset = 2;
-    // Aligned load is reputedly faster but requires 16 byte aligned input.
-    if ((reinterpret_cast<uintptr_t>(u) & 15) == 0 &&
-        (reinterpret_cast<uintptr_t>(v) & 15) == 0) {
-      // Use aligned load.
-      sum = _mm_load_pd(u);
-      __m128d floats2 = _mm_load_pd(v);
-      // Multiply.
-      sum = _mm_mul_pd(sum, floats2);
-      while (offset <= max_offset) {
-        __m128d floats1 = _mm_load_pd(u + offset);
-        floats2 = _mm_load_pd(v + offset);
-        offset += 2;
-        floats1 = _mm_mul_pd(floats1, floats2);
-        sum = _mm_add_pd(sum, floats1);
-      }
-    } else {
-      // Use unaligned load.
-      sum = _mm_loadu_pd(u);
-      __m128d floats2 = _mm_loadu_pd(v);
-      // Multiply.
-      sum = _mm_mul_pd(sum, floats2);
-      while (offset <= max_offset) {
-        __m128d floats1 = _mm_loadu_pd(u + offset);
-        floats2 = _mm_loadu_pd(v + offset);
-        offset += 2;
-        floats1 = _mm_mul_pd(floats1, floats2);
-        sum = _mm_add_pd(sum, floats1);
-      }
+    namespace HPHP {
+/////////////////////////////////////////////////////////////////////////////
     }
-  }
-  // Add the 2 sums in sum horizontally.
-  sum = _mm_hadd_pd(sum, sum);
-  // Extract the low result.
-  double result = _mm_cvtsd_f64(sum);
-  // Add on any left-over products.
-  while (offset < n) {
-    result += u[offset] * v[offset];
-    ++offset;
-  }
-  return result;
-}
     
-    // Computes a reshaped copy of the weight matrix w. If there are no
-// partial_funcs_, it does nothing.
-void IntSimdMatrix::Init(const GENERIC_2D_ARRAY<int8_t>& w) {
-  if (partial_funcs_.empty()) return;
-  int num_out = w.dim1();
-  int num_in = w.dim2() - 1;
-  // The rounded-up sizes of the reshaped weight matrix, excluding biases.
-  int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
-  int rounded_num_out = RoundOutputs(num_out);
-  // Add the bias and compute the required size.
-  shaped_w_.resize((rounded_num_in + 1) * rounded_num_out, 0);
-  int shaped_index = 0;
-  int output = 0;
-  // Each number of registers needs a different format! Iterates over the
-  // different numbers of registers (each a power of 2).
-  for (int num_registers = max_output_registers_; num_registers >= 1;
-       num_registers /= 2) {
-    // The number of outputs that we will generate with this many registers.
-    int num_outputs_per_register_set =
-        num_registers * num_outputs_per_register_;
-    // Use the max number of registers until we have to go fewer.
-    while (output + num_outputs_per_register_set <= rounded_num_out) {
-      // Accumulating outputs in registers saves iterating over the inputs, so
-      // we only have to do it once per output register set.
-      for (int input = 0; input < num_in; input += num_inputs_per_group_) {
-        // Iterate over the number of outputs in a register set.
-        for (int j = 0; j < num_outputs_per_register_set; ++j) {
-          // Inner-most loop corresponds to the number of inputs in an input
-          // group.
-          for (int i = 0; i < num_inputs_per_group_; ++i) {
-            int8_t weight = 0;
-            if (output + j < num_out && input + i < num_in)
-              weight = w(output + j, input + i);
-            shaped_w_[shaped_index++] = weight;
-          }
-        }
-      }
-      // Append the bias weights for the register set.
-      for (int j = 0; j < num_outputs_per_register_set; ++j) {
-        int8_t weight = 0;
-        if (output + j < num_out) weight = w(output + j, num_in);
-        shaped_w_[shaped_index++] = weight;
-      }
-      output += num_outputs_per_register_set;
-    }
-  }
-}
-    
-    
-    {  ASSERT_HOST(word->raw_choice != nullptr);
-}
-    
-    // Returns the number of misfit blob tops in this word.
-int Tesseract::CountMisfitTops(WERD_RES *word_res) {
-  int bad_blobs = 0;
-  int num_blobs = word_res->rebuild_word->NumBlobs();
-  for (int blob_id = 0; blob_id < num_blobs; ++blob_id) {
-    TBLOB* blob = word_res->rebuild_word->blobs[blob_id];
-    UNICHAR_ID class_id = word_res->best_choice->unichar_id(blob_id);
-    if (unicharset.get_isalpha(class_id) || unicharset.get_isdigit(class_id)) {
-      int top = blob->bounding_box().top();
-      if (top >= INT_FEAT_RANGE)
-        top = INT_FEAT_RANGE - 1;
-      int min_bottom, max_bottom, min_top, max_top;
-      unicharset.get_top_bottom(class_id, &min_bottom, &max_bottom,
-                                &min_top, &max_top);
-      if (max_top - min_top > kMaxCharTopRange)
-        continue;
-      bool bad =  top < min_top - x_ht_acceptance_tolerance ||
-                  top > max_top + x_ht_acceptance_tolerance;
-      if (bad)
-        ++bad_blobs;
-      if (debug_x_ht_level >= 1) {
-        tprintf('Class %s is %s with top %d vs limits of %d->%d, +/-%d\n',
-                unicharset.id_to_unichar(class_id),
-                bad ? 'Misfit' : 'OK', top, min_top, max_top,
-                static_cast<int>(x_ht_acceptance_tolerance));
-      }
-    }
-  }
-  return bad_blobs;
-}
-    
-    #ifndef incl_HPHP_WORKLOAD_STATS_H_
-#define incl_HPHP_WORKLOAD_STATS_H_
-    
-    int64_t SlowTimer::getTime() const {
-  return m_timer.getMicroSeconds() / 1000;
-}
-    
-    #include <string>
-#include <atomic>
-#include <set>
-#include <deque>
-    
-      /*
-   * Create a block intended to be used temporarily, as part of modifying
-   * existing code.
-   *
-   * Although not necessary for correctness, the block may be freed with
-   * freeScratchBlock when finished.
-   */
-  Vlabel makeScratchBlock();
-    
-    #ifdef HAVE_NUMA
-    
-    //////////////////////////////////////////////////////////////////////
-    
-    using std::vector;
-    
-    /*
- * Emit a function prologue from rec.
+    /**
+ * @brief Sink a set of buffered status logs.
  *
- * Precondition: calling thread owns both code and metadata locks
+ * When the osquery daemon uses a watcher/worker set, the watcher's status logs
+ * are accumulated in a buffered log sink. Well-performing workers should have
+ * the set of watcher status logs relayed and sent to the configured logger
+ * plugin.
+ *
+ * Status logs from extensions will be forwarded to the extension manager (core)
+ * normally, but the watcher does not receive or send registry requests.
+ * Extensions, the registry, configuration, and optional config/logger plugins
+ * are all protected as a monitored worker.
  */
-TCA emitFuncPrologueOptInternal(ProfTransRec* rec);
+void relayStatusLogs(bool async = false);
     
-      vector<int64_t> sizes = {2, 2};
-  tensor2->resize(sizes);
-  tensor2->fill(4);
-  tensor->add(*tensor2, 1);
-  assert(tensor->nDim() == 2);
-    
-    template<> AT_API Half convert(float f) {
-  Half t;
-  TH_float2halfbits(&f,&t.x);
-  return t;
-}
-template<> AT_API float convert(Half f) {
-  float t;
-  TH_halfbits2float(&f.x,&t);
-  return t;
-}
-    
-    auto ${Storage}::retain() -> ${Storage}& {
-  ${THStorage}_retain(${state,} storage);
-  return *this;
-}
-    
-    const char * ${Tensor}::typeString() {
-  return '${Type}';
-}
-void * ${Tensor}::unsafeGetTH(bool retain) {
-  if (retain)
-      ${THTensor}_retain(${state,} tensor);
-  return tensor;
-}
+    #include <osquery/config.h>
+#include <osquery/core.h>
+#include <osquery/database.h>
+#include <osquery/events.h>
+#include <osquery/extensions.h>
+#include <osquery/filesystem.h>
+#include <osquery/flags.h>
+#include <osquery/logger.h>
+#include <osquery/registry.h>
+#include <osquery/sql.h>
+#include <osquery/status.h>
+#include <osquery/tables.h>
     
     
-    {
-    {}
+    {/// Clear decorations for a source when it updates.
+void clearDecorations(const std::string& source);
 }
 
     
-    #define THDPDoubleStorage_Check(obj) \
-    PyObject_IsInstance(obj, THDPDoubleStorageClass)
-#define THDPFloatStorage_Check(obj) \
-    PyObject_IsInstance(obj, THDPFloatStorageClass)
-#define THDPHalfStorage_Check(obj) \
-    PyObject_IsInstance(obj, THDPHalfStorageClass)
-#define THDPLongStorage_Check(obj) \
-    PyObject_IsInstance(obj, THDPLongStorageClass)
-#define THDPIntStorage_Check(obj) \
-    PyObject_IsInstance(obj, THDPIntStorageClass)
-#define THDPShortStorage_Check(obj) \
-    PyObject_IsInstance(obj, THDPShortStorageClass)
-#define THDPCharStorage_Check(obj) \
-    PyObject_IsInstance(obj, THDPCharStorageClass)
-#define THDPByteStorage_Check(obj) \
-    PyObject_IsInstance(obj, THDPByteStorageClass)
-    
-      if (!db_wrapper->status_.ok()) {
-    return scope.Close(Boolean::New(db_wrapper->status_.ok()));
-  }
-    
-      uint32_t GetRestartPoint(uint32_t index) {
-    assert(index < num_restarts_);
-    return DecodeFixed32(data_ + restarts_ + index * sizeof(uint32_t));
-  }
-    
-      // returns true if the reader has encountered an eof condition.
-  bool IsEOF() {
-    return eof_;
-  }
-    
-    
-// Directory object represents collection of files and implements
-// filesystem operations that can be executed on directories.
-class LibradosDirectory : public Directory {
-  librados::IoCtx * _io_ctx;
-  std::string _fid;
-public:
-  explicit LibradosDirectory(librados::IoCtx * io_ctx, std::string fid):
-    _io_ctx(io_ctx), _fid(fid) {}
+    TEST_F(ViewsConfigParserPluginTests, test_update_view) {
+  Config c;
+  std::vector<std::string> old_views_vec;
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  old_views_vec.clear();
+  auto s = c.update(getTestConfigMap('view_test2.conf'));
+  EXPECT_TRUE(s.ok());
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  std::string query;
+  getDatabaseValue(kQueries, 'config_views.kernel_hashes_new', query);
+  EXPECT_EQ(query,
+            'select hash.path as binary, version, hash.sha256 as SHA256, '
+            'hash.sha1 as SHA1, hash.md5 as MD5 from (select path || '
+            ''/Contents/MacOS/' as directory, name, version from '
+            'kernel_extensions) join hash using (directory)');
     }
     
-    SyncPoint:: ~SyncPoint() {
-  delete impl_;
-}
+      auto nobody = getpwnam('nobody');
+  EXPECT_NE(nobody, nullptr);
+  {
+    auto dropper = DropPrivileges::get();
+    EXPECT_TRUE(dropper->dropTo(nobody->pw_uid, nobody->pw_gid));
+    EXPECT_EQ(geteuid(), nobody->pw_uid);
+    }
     
-    #pragma once
+    
+    {  bool testIsCached(size_t interval) {
+    QueryContext ctx;
+    ctx.useCache(true);
+    return isCached(interval, ctx);
+  }
+};
+    
+      struct tm result;
+  localtime_r((time_t*)&epoch, &result);
+    
+    #include 'osquery/core/utils.h'
+    
+    WmiResultItem::WmiResultItem(WmiResultItem&& src) {
+  result_ = nullptr;
+  std::swap(result_, src.result_);
+}
