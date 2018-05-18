@@ -1,299 +1,234 @@
 
         
-        // ---------------------------------------------------------------------------
-// Inline implementation
-// ---------------------------------------------------------------------------
-template <PrefetchHint hint>
-inline void prefetch(const void* x) {
-// Check of COMPILER_GCC macro below is kept only for backward-compatibility
-// reasons. COMPILER_GCC3 is the macro that actually enables prefetch.
-#if defined(__llvm__) || defined(COMPILER_GCC) || defined(COMPILER_GCC3)
-  __builtin_prefetch(x, 0, hint);
-#else
-// You get no effect.  Feel free to add more sections above.
-#endif
-}
+        #ifndef STREAM_PEER_SSL_H
+#define STREAM_PEER_SSL_H
     
-    REGISTER_KERNEL_BUILDER(Name('EncodeAudio').Device(DEVICE_CPU), EncodeAudioOp);
-    
-        http://www.apache.org/licenses/LICENSE-2.0
-    
-    // Adds resource events for a single device.
-void AddResourceMetadata(uint32 device_id,
-                         const std::map<uint32, const Resource *> &resources,
-                         string *json) {
-  for (const auto &pair : resources) {
-    uint32 resource_id = pair.first;
-    const Resource &resource = *pair.second;
-    if (!resource.name().empty()) {
-      Appendf(json,
-              R'({'ph':'M','pid':%u,'tid':%u,)'
-              R'('name':'thread_name','args':{)',
-              device_id, resource_id);
-      AppendEscapedName(json, resource.name());
-      Appendf(json, '}},');
+    		case NOTIFICATION_INTERNAL_PROCESS: {
     }
-    Appendf(json,
-            R'({'ph':'M','pid':%u,'tid':%u,)'
-            R'('name':'thread_sort_index','args':{'sort_index':%u}},)',
-            device_id, resource_id, resource_id);
-  }
-}
     
-      // Find the file which defines an extension extending the given message type
-  // with the given field number.
-  // Containing_type must be a fully-qualified type name.
-  // Python objects are not required to implement this method.
-  bool FindFileContainingExtension(const string& containing_type,
-                                   int field_number,
-                                   FileDescriptorProto* output);
+      Copyright 2003 by
+  Francesco Zappa Nardelli
     
-    void RepeatedEnumFieldGenerator::WriteToString(io::Printer* printer) {
-  printer->Print(variables_,
-    'PrintField(\'$descriptor_name$\', $name$_, writer);\n');
-}
-    
-    void RepeatedPrimitiveFieldGenerator::GenerateParsingCode(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    '$name$_.AddEntriesFrom(input, _repeated_$name$_codec);\n');
-}
-    
-    #include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/compiler/csharp/csharp_names.h>
-#include <google/protobuf/compiler/csharp/csharp_options.h>
-    
-    // Author: kenton@google.com (Kenton Varda)
-    
-    // ===================================================================
-    
-        std::function<void(OperatorSchemaSetter&)> RNNDocGeneratorInputSeqLen() {
-        return [=](OperatorSchemaSetter& schema) {
-            schema.Input('sequence_lens',
-                'Optional tensor specifying lengths of the sequences in a batch. '
-                'If not specified - assumed all sequences in the batch to have '
-                'length `seq_length`. It has shape `[batch_size]`.', 'T1', true /*optional*/);
-            schema.TypeConstraint('T1', { 'tensor(int32)' }, 'Constrain seq_lens to integer tensor.');
-        };
+    // Finds the start of image (SOI) marker.
+// This code is rather defensive: it only checks the first 512 bytes to avoid
+// false positives.
+void jpeg_decoder::locate_soi_marker()
+{
+  uint lastchar, thischar;
+  uint bytesleft;
     }
+    
+      // Loads a JPEG image from a memory buffer or a file.
+  // req_comps can be 1 (grayscale), 3 (RGB), or 4 (RGBA).
+  // On return, width/height will be set to the image's dimensions, and actual_comps will be set to the either 1 (grayscale) or 3 (RGB).
+  // Notes: For more control over where and how the source data is read, see the decompress_jpeg_image_from_stream() function below, or call the jpeg_decoder class directly.
+  // Requesting a 8 or 32bpp image is currently a little faster than 24bpp because the jpeg_decoder class itself currently always unpacks to either 8 or 32bpp.
+  unsigned char *decompress_jpeg_image_from_memory(const unsigned char *pSrc_data, int src_data_size, int *width, int *height, int *actual_comps, int req_comps);
+  unsigned char *decompress_jpeg_image_from_file(const char *pSrc_filename, int *width, int *height, int *actual_comps, int req_comps);
+    
+        double m_increaseLearnRateIfImproveMoreThan;
+    double m_learnRateIncreaseFactor;
+    double m_learnRateDecreaseFactor;
+    bool m_autoAdjustMinibatch;
+    size_t m_minibatchSearchCriterionErrorMargin;
+    size_t m_minibatchSizeTuningFrequency;
+    size_t m_minibatchSizeTuningMax;
+    
+            static Status Load(const std::string& p_filePath, /*out*/ std::shared_ptr<Model>* p_model);
+    
+    
+    {
+    {            if (m[p_key][p_domain].end() == pos || pos->first > p_maxInclusiveVersion)
+            {
+                // All versions are less than specified version, or,
+                // The <pos> version is greater than specified version.
+                pos--;
+                return &(pos->second);
+            }
+            // Schema with exact version as specified one exists.
+            return &(pos->second);
+        }
+        else {
+            return nullptr;
+        }
+    }
+    
+            // Get output formal parameters.
+        const std::vector<FormalParameter>& GetOutputs() const;
+    
+        // Taken from RS4
+    REGISTER_OPERATOR_SCHEMA(Identity)
+        .Description('Identity takes one input data (Tensor<T>) and produces one '
+            'output data (Tensor<T>) where the function, y = x, is applied to the '
+            'tensor elementwise.')
+        .Input('input', 'input tensor', 'T')
+        .Output('output', 'output tensor', 'T')
+        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
+            'Constrain input and output types to float tensors.');
+    
+        //‘GREATER’, ‘LESS’, ‘EQUALS,
+    REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Greater)
+        REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Less)
+        REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Equal)
+    
+    
+    REGISTER_OPERATOR_SCHEMA(OneHotEncoder)
+        .SetDomain(c_mlDomain)
+        .Input('X', 'Data to be encoded', 'T')
+        .Output('Y', 'encoded output data', 'tensor(float)')
+        .Description(R'DOC(
+            Replace the inputs with an array of ones and zeros, where the only
+            one is the zero-based category that was passed in.  The total category count
+            will determine the length of the vector. For example if we pass a
+            tensor with a single value of 4, and a category count of 8, the
+            output will be a tensor with 0,0,0,0,1,0,0,0 .
+            This operator assumes every input in X is of the same category set
+            (meaning there is only one category count).
     
     template <class ElemType>
-void ReaderShim<ElemType>::SetConfiguration(const ReaderConfiguration& config, const std::map<std::wstring, int>& inputDescriptions)
+void ReaderShim<ElemType>::StartEpoch(const EpochConfiguration& config, const std::unordered_set<InputStreamDescription>& inputs)
 {
-    // Make sure there are no outstanding reads.
+    // For adaptive minibatch, make sure there are no outstanding reads.
     if (m_prefetchTask.valid())
         m_prefetchTask.get();
     }
     
-    /// Adds buffering to the read-related operations of a stream.
-/**
- * The buffered_read_stream class template can be used to add buffering to the
- * synchronous and asynchronous read operations of a stream.
- *
- * @par Thread Safety
- * @e Distinct @e objects: Safe.@n
- * @e Shared @e objects: Unsafe.
- *
- * @par Concepts:
- * AsyncReadStream, AsyncWriteStream, Stream, SyncReadStream, SyncWriteStream.
- */
-template <typename Stream>
-class buffered_read_stream
-  : private noncopyable
+    void GPUDataTransferer::CopyGPUToCPUAsync(void* gpuBuffer, size_t totalSize, void* cpuBuffer)
 {
-public:
-  /// The type of the next layer.
-  typedef typename remove_reference<Stream>::type next_layer_type;
+    m_inner->CopyGPUToCPUAsync(gpuBuffer, 1, totalSize, cpuBuffer);
+    m_inner->RecordGPUToCPUCopy();
+}
+    
+    static const uint8_t kRangeLimitLut[4 * 256] = {
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+  0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,
+  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
+  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,
+  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,
+  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,
+  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,
+  96,  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
+ 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127,
+ 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143,
+ 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
+ 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175,
+ 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
+ 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207,
+ 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223,
+ 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
+ 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+};
+    
+    // kDCTMatrix[8*u+x] = 0.5*alpha(u)*cos((2*x+1)*u*M_PI/16),
+// where alpha(0) = 1/sqrt(2) and alpha(u) = 1 for u > 0.
+static const double kDCTMatrix[64] = {
+  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
+  0.3535533906,  0.3535533906,  0.3535533906,  0.3535533906,
+  0.4903926402,  0.4157348062,  0.2777851165,  0.0975451610,
+ -0.0975451610, -0.2777851165, -0.4157348062, -0.4903926402,
+  0.4619397663,  0.1913417162, -0.1913417162, -0.4619397663,
+ -0.4619397663, -0.1913417162,  0.1913417162,  0.4619397663,
+  0.4157348062, -0.0975451610, -0.4903926402, -0.2777851165,
+  0.2777851165,  0.4903926402,  0.0975451610, -0.4157348062,
+  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
+  0.3535533906, -0.3535533906, -0.3535533906,  0.3535533906,
+  0.2777851165, -0.4903926402,  0.0975451610,  0.4157348062,
+ -0.4157348062, -0.0975451610,  0.4903926402, -0.2777851165,
+  0.1913417162, -0.4619397663,  0.4619397663, -0.1913417162,
+ -0.1913417162,  0.4619397663, -0.4619397663,  0.1913417162,
+  0.0975451610, -0.2777851165,  0.4157348062, -0.4903926402,
+  0.4903926402, -0.4157348062,  0.2777851165, -0.0975451610,
+};
+    
+        if (n == 1) {
+      depth[tree[0].index_right_or_value_] = 1;      // Only one element.
+      break;
     }
     
-    #ifndef BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
-#define BOOST_ASIO_DETAIL_ARRAY_FWD_HPP
+    #ifndef GUETZLI_FDCT_H_
+#define GUETZLI_FDCT_H_
     
-      // Return a pointer to the beginning of the unread data.
-  const_buffer data() const
-  {
-    return boost::asio::buffer(buffer_) + begin_offset_;
+      virtual void writeData(const unsigned char* data, size_t len,
+                         int64_t offset) CXX11_OVERRIDE;
+    
+    AbstractHttpServerResponseCommand::~AbstractHttpServerResponseCommand()
+{
+  if (readCheck_) {
+    e_->deleteSocketForReadCheck(socket_, this);
   }
-    
-      static void do_complete(io_service_impl* owner, operation* base,
-      const boost::system::error_code& /*ec*/,
-      std::size_t /*bytes_transferred*/)
-  {
-    // Take ownership of the handler object.
-    descriptor_read_op* o(static_cast<descriptor_read_op*>(base));
-    ptr p = { boost::asio::detail::addressof(o->handler_), o, o };
-    }
-    
-      STDMETHODIMP get_Length(UINT32 *value)
-  {
-    *value = length_;
-    return S_OK;
+  if (writeCheck_) {
+    e_->deleteSocketForWriteCheck(socket_, this);
   }
+}
     
-    template <typename Time_Traits>
-void dev_poll_reactor::schedule_timer(timer_queue<Time_Traits>& queue,
-    const typename Time_Traits::time_type& time,
-    typename timer_queue<Time_Traits>::per_timer_data& timer, wait_op* op)
+      virtual bool hasTag(uint32_t tag) const CXX11_OVERRIDE;
+    
+    bool AbstractProxyRequestCommand::executeInternal()
 {
-  boost::asio::detail::mutex::scoped_lock lock(mutex_);
+  // socket->setBlockingMode();
+  if (httpConnection_->sendBufferIsEmpty()) {
+    auto httpRequest = make_unique<HttpRequest>();
+    httpRequest->setUserAgent(getOption()->get(PREF_USER_AGENT));
+    httpRequest->setRequest(getRequest());
+    httpRequest->setProxyRequest(proxyRequest_);
+    }
     }
     
-    #include <boost/asio/detail/pop_options.hpp>
+    #include 'common.h'
     
-      // All control should be from a single daemon.
-  // Wrap all IOCTL API handling in locks to guarantee proper use.
-  lck_mtx_lock(osquery.mtx);
-  switch (cmd) {
-  // Daemon is requesting a new subscription (e.g., monitored path).
-  case OSQUERY_IOCTL_SUBSCRIPTION:
-    sub = (osquery_subscription_args_t *)data;
-    if ((err = subscribe_to_event(sub->event, sub->subscribe))) {
-      goto error_exit;
-    }
-    break;
-    }
-    
-    TEST_F(ViewsConfigParserPluginTests, test_add_view) {
-  Config c;
-  auto s = c.update(getTestConfigMap());
-  EXPECT_TRUE(s.ok());
-    }
-    
-    #include <osquery/config.h>
-#include <osquery/dispatcher.h>
-    
-    #include <poll.h>
-#include <pwd.h>
-    
-    #include 'osquery/core/utils.h'
-#include 'osquery/tests/test_util.h'
-    
-    /// Backing-storage provider for osquery internal/core.
-REGISTER_INTERNAL(EphemeralDatabasePlugin, 'database', 'ephemeral');
-    
-    TEST(Metric, LogLoss) {
-  xgboost::Metric * metric = xgboost::Metric::Create('logloss');
-  ASSERT_STREQ(metric->Name(), 'logloss');
-  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
-  EXPECT_NEAR(GetMetricEval(metric,
-                            {0.1f, 0.9f, 0.1f, 0.9f},
-                            {  0,   0,   1,   1}),
-              1.2039f, 0.001f);
-}
-    
-    SEXP XGBoosterSetAttr_R(SEXP handle, SEXP name, SEXP val) {
-  R_API_BEGIN();
-  const char *v = isNull(val) ? nullptr : CHAR(asChar(val));
-  CHECK_CALL(XGBoosterSetAttr(R_ExternalPtrAddr(handle),
-                              CHAR(asChar(name)), v));
-  R_API_END();
-  return R_NilValue;
-}
-    
-    /*
- * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
- * Method:    RabitVersionNumber
- * Signature: ([I)I
- */
-JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_RabitVersionNumber
-  (JNIEnv *jenv, jclass jcls, jintArray jout) {
-  jint out = RabitVersionNumber();
-  jenv->SetIntArrayRegion(jout, 0, 1, &out);
-  return 0;
-}
-    
-            ID3DBlob* blob = NULL;
-        if (D3D12SerializeRootSignature(&desc, D3D_ROOT_SIGNATURE_VERSION_1, &blob, NULL) != S_OK)
-            return false;
-    
-    
-    {    // At this point note that we set ImGui::GetIO().Fonts->TexID to be == g_FontTexture, so clear both.
-    ImGuiIO& io = ImGui::GetIO();
-    IM_ASSERT(g_FontTexture == io.Fonts->TexID);
-    if (g_FontTexture)
-        g_FontTexture->Release();
-    g_FontTexture = NULL;
-    io.Fonts->TexID = NULL;
-}
-    
-                    // Copy rasterized pixels to main texture
-                uint8_t* blit_dst = atlas->TexPixelsAlpha8 + rect.y * atlas->TexWidth + rect.x;
-                font_face.BlitGlyph(ft_glyph_bitmap, blit_dst, atlas->TexWidth, multiply_enabled ? multiply_table : NULL);
-                FT_Done_Glyph(ft_glyph);
-    
-            // Rendering
-        ImGui::EndFrame();
-        g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, false);
-        g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
-        g_pd3dDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, false);
-        D3DCOLOR clear_col_dx = D3DCOLOR_RGBA((int)(clear_color.x*255.0f), (int)(clear_color.y*255.0f), (int)(clear_color.z*255.0f), (int)(clear_color.w*255.0f));
-        g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, clear_col_dx, 1.0f, 0);
-        if (g_pd3dDevice->BeginScene() >= 0)
-        {
-            ImGui::Render();
-            ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
-            g_pd3dDevice->EndScene();
-        }
-        HRESULT result = g_pd3dDevice->Present(NULL, NULL, NULL, NULL);
-    
-    int main(int, char**)
-{
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    }
-    
-    static void glfw_error_callback(int error, const char* description)
-{
-    fprintf(stderr, 'Error %d: %s\n', error, description);
-}
-    
-        // Setup Dear ImGui binding
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    ImGui_ImplSdlGL2_Init(window);
-    
-      using ByteAlloc = typename std::allocator_traits<
-      allocator_type>::template rebind_alloc<uint8_t>;
-  using BytePtr = typename std::allocator_traits<ByteAlloc>::pointer;
-    
-    template <size_t M>
-FOLLY_ALWAYS_INLINE hazptr_array<M>& hazptr_array<M>::operator=(
-    hazptr_array&& other) noexcept {
-  HAZPTR_DEBUG_PRINT(this << ' ' << M << ' ' << &other);
-  auto h = reinterpret_cast<hazptr_holder*>(&raw_);
-  for (size_t i = 0; i < M; ++i) {
-    h[i] = std::move(other[i]);
-    HAZPTR_DEBUG_PRINT(i << ' ' << &h[i] << ' ' << &other[i]);
+      // Deprecated as of 10.7
+  OSStatus err = SecIdentitySearchCreate(0, CSSM_KEYUSE_SIGN, &raw_search);
+  if (err != errSecSuccess) {
+    A2_LOG_ERROR('Certificate search failed: ' + errToString(err));
   }
-  empty_ = other.empty_;
-  other.empty_ = true;
-  return *this;
-}
+  search.reset(raw_search);
     
-    
-    {template <class T>
-T* pointerFlagSet(T* p) {
-  return reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(p) | 1);
-}
-template <class T>
-bool pointerFlagGet(T* p) {
-  return reinterpret_cast<uintptr_t>(p) & 1;
-}
-template <class T>
-T* pointerFlagClear(T* p) {
-  return reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(p) & ~uintptr_t(1));
-}
-inline void* shiftPointer(void* p, size_t sizeBytes) {
-  return static_cast<char*>(p) + sizeBytes;
-}
-} // namespace detail
-    
-    std::ostream& operator << (std::ostream& os,
-                           const AsyncSocket::StateEnum& state) {
-  os << static_cast<int>(state);
-  return os;
-}
+    #include 'TLSContext.h'
+#include 'DlAbortEx.h'
