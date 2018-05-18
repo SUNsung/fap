@@ -1,41 +1,40 @@
 
         
-            def _perform_switchover(self):
-        return 'perform switchover'
+        
+def test_log_view_exception(app, client):
+    @app.route('/')
+    def index():
+        raise Exception('test')
     
-        # if not sample_queue.empty():
-
+        def record(sender, message, category):
+        recorded.append((message, category))
     
-    ###  OUTPUT ###
-# Before subclassing:
-# BaseRegisteredClass
-# After subclassing:
-# BaseRegisteredClass
-# ClassRegistree
-
+        Returned ``port`` will be ``None`` if not present.
     
-        def test_bear_greek_localization(self):
-        self.assertEqual(self.g.get('bear'), 'bear')
-
-    
-        def test_display_current_time_at_midnight(self):
-        class_under_test = TimeDisplay()
-        expected_time = '24:01'
-        result = class_under_test.get_current_time_as_as_html_fragment()
-        self.assertEqual(result, expected_time)
-'''
-    
-    class TimeDisplay(object):
+        def get_app(self):
+        return Application([
+            ('/digest', DigestAuthHandler),
+            ('/custom_reason', CustomReasonHandler),
+            ('/custom_fail_reason', CustomFailReasonHandler),
+        ])
     
     
-@coroutine
-def coroutine1(target):
-    while True:
-        request = yield
-        if 0 < request <= 10:
-            print('request {} handled in coroutine 1'.format(request))
-        else:
-            target.send(request)
+class ChunkHandler(RequestHandler):
+    @gen.coroutine
+    def get(self):
+        self.write('asdf')
+        self.flush()
+        # Wait a bit to ensure the chunks are sent and received separately.
+        yield gen.sleep(0.01)
+        self.write('qwer')
     
-        def and_specification(self, candidate):
-        return AndSpecification(self, candidate)
+        def test_add_timeout_timedelta(self):
+        self.io_loop.add_timeout(datetime.timedelta(microseconds=1), self.stop)
+        self.wait()
+    
+            self.fail('import timed out')
+    
+            def library_inner_callback(callback):
+            self.assertEqual(self.active_contexts[-2:],
+                             ['application', 'library'])
+            callback()
