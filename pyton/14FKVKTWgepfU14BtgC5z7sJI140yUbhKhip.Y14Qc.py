@@ -1,119 +1,96 @@
 
         
-          Returns:
-    Object of same size as frequencies_hertz containing corresponding values
-    on the mel scale.
-  '''
-  return _MEL_HIGH_FREQUENCY_Q * np.log(
-      1.0 + (frequencies_hertz / _MEL_BREAK_FREQUENCY_HERTZ))
+        with open('update/LATEST_VERSION', 'w') as f:
+    f.write(version)
+    
+    now = datetime.datetime.now()
+now_iso = now.isoformat() + 'Z'
+    
+        infile, outfile = args
+    
+        def test_youporn(self):
+        self._assert_restricted(
+            'http://www.youporn.com/watch/505835/sex-ed-is-it-safe-to-masturbate-daily/',
+            '505835.mp4', 2, old_age=25)
     
     
-def build_labeled_sequence(seq, class_label, label_gain=False):
-  '''Builds labeled sequence from input sequence.
+class TestCache(unittest.TestCase):
+    def setUp(self):
+        TEST_DIR = os.path.dirname(os.path.abspath(__file__))
+        TESTDATA_DIR = os.path.join(TEST_DIR, 'testdata')
+        _mkdir(TESTDATA_DIR)
+        self.test_dir = os.path.join(TESTDATA_DIR, 'cache_test')
+        self.tearDown()
     
-      Returns:
-    A dict of tensors (see return value of batch_parse_tf_example)
-  '''
-  shuffle_buffer_size = params.shuffle_buffer_size
-  dataset = read_tf_records(
-      shuffle_buffer_size, batch_size, tf_records, num_repeats=num_repeats,
-      shuffle_records=shuffle_records, shuffle_examples=shuffle_examples,
-      filter_amount=filter_amount)
-  dataset = dataset.filter(lambda t: tf.equal(tf.shape(t)[0], batch_size))
-  def batch_parse_tf_example(batch_size, dataset):
-    return _batch_parse_tf_example(params.board_size, batch_size, dataset)
-  dataset = dataset.map(functools.partial(
-      batch_parse_tf_example, batch_size))
-  return dataset.make_one_shot_iterator().get_next()
-    
-      def setUp(self):
-    np.random.seed(1)
-    self.feat = np.random.random(
-        [utils_test.BOARD_SIZE, utils_test.BOARD_SIZE, 3])
-    self.pi = np.random.random([utils_test.BOARD_SIZE ** 2 + 1])
-    super().setUp()
-    
-        # Fetch the data
-    (train_x, train_y), (test_x, test_y) = iris_data.load_data()
+        def test_secondary_proxy_http(self):
+        params = self._check_params(['secondary_proxy', 'secondary_server_ip'])
+        if params is None:
+            return
+        ydl = FakeYDL()
+        req = compat_urllib_request.Request('http://yt-dl.org/ip')
+        req.add_header('Ytdl-request-proxy', params['secondary_proxy'])
+        self.assertEqual(
+            ydl.urlopen(req).read().decode('utf-8'),
+            params['secondary_server_ip'])
     
     
-class RemoveDuplicateUrls(MRJob):
+TEST_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), 'swftests')
     
-        def __init__(self):
-        self.lookup = {}  # key: person_id, value: person_server
+    from .common import FileDownloader
+from ..utils import (
+    check_executable,
+    encodeFilename,
+)
     
-        def steps(self):
-        '''Run the map and reduce steps.'''
-        return [
-            self.mr(mapper=self.mapper,
-                    reducer=self.reducer)
-        ]
+            select = self._search_regex(
+            r'(?s)<select[^>]+id='select-version'[^>]*>(.+?)</select>',
+            webpage, 'select version', default=None)
+        if select:
+            entry_ids = set()
+            entries = []
+            for mobj in re.finditer(
+                    r'<option[^>]+value=(['\'])(?P<id>[0-9a-z_]+)(?:#.+?)?\1[^>]*>(?P<title>[^<]+)',
+                    webpage):
+                entry_id = mobj.group('id')
+                if entry_id in entry_ids:
+                    continue
+                entry_ids.add(entry_id)
+                entries.append({
+                    '_type': 'url_transparent',
+                    'url': 'kaltura:%s:%s' % (partner_id, entry_id),
+                    'ie_key': 'Kaltura',
+                    'title': mobj.group('title'),
+                })
+            if entries:
+                return self.playlist_result(entries, display_id, title)
     
-        def extract_url(self, line):
-        '''Extract the generated url from the log line.'''
-        pass
     
-        def __init__(self, num_levels):
-        self.num_levels = num_levels
-        self.levels = []  # List of Levels
+@keras_test
+def test_sequential_sample_weights():
+    model = create_sequential_model()
+    model.compile(loss=loss, optimizer='rmsprop')
     
-        def message_group(self, group_id, message):
-        pass
+        # Returns
+        Preprocessed array.
+    '''
+    return imagenet_utils.preprocess_input(x, mode='tf')
     
+        # Arguments
+        input_tensor: input tensor
+        kernel_size: default 3, the kernel size of middle conv layer at main path
+        filters: list of integers, the filters of 3 conv layer at main path
+        stage: integer, current stage label, used for generating layer names
+        block: 'a','b'..., current block label, used for generating layer names
     
-class DefaultCategories(Enum):
+    from ..utils.data_utils import get_file
+from .. import backend as K
     
-            # Convert integers to unsigned little-endian byte arrays.
-        tests4 = {
-            b'': 0,
-            b'\x00': 0,
-            b'\x01': 1,
-            b'\x7f': 127,
-            b'\x80': 128,
-            b'\xff': 255,
-            b'\x00\x01': 256,
-            b'\xff\x7f': 32767,
-            b'\x00\x80': 32768,
-            b'\xff\xff': 65535,
-            b'\x00\x00\x01': 65536,
-        }
-        check(tests4, 'little', signed=False)
+        indices_for_conversion_to_dense = []
+    for i in range(len(model._feed_inputs)):
+        if issparse(ins[i]) and not K.is_sparse(model._feed_inputs[i]):
+            indices_for_conversion_to_dense.append(i)
     
-    NUMBER_RE = re.compile(
-    r'(-?(?:0|[1-9]\d*))(\.\d+)?([eE][-+]?\d+)?',
-    (re.VERBOSE | re.MULTILINE | re.DOTALL))
-    
-        s.quit()
-
-    
-    #  This file is automatically generated; please don't muck it up!
-#
-#  To update the symbols in this file, 'cd' to the top directory of
-#  the python source tree after building the interpreter and run:
-#
-#    ./python Lib/token.py
-    
-        def __init__(self):
-        # setup variables used for HTML documentation
-        self.server_name = 'XML-RPC Server Documentation'
-        self.server_documentation = \
-            'This server exports the following methods through the XML-RPC '\
-            'protocol.'
-        self.server_title = 'XML-RPC Server Documentation'
-    
-        def test_infile_stdout(self):
-        infile = self._create_infile()
-        rc, out, err = assert_python_ok('-m', 'json.tool', infile)
-        self.assertEqual(rc, 0)
-        self.assertEqual(out.splitlines(), self.expect.encode().splitlines())
-        self.assertEqual(err, b'')
-    
-            self.assertEqual(x[:], a.tolist()[1:])
-        with self.assertRaises(ValueError):
-            c_int.from_buffer(a, -1)
-        with self.assertRaises(ValueError):
-            (c_int * 16).from_buffer(a, sizeof(c_int))
-        with self.assertRaises(ValueError):
-            (c_int * 1).from_buffer(a, 16 * sizeof(c_int))
-    
-            pt = pointer(Table(1, 2, 3))
+        :param filepath: Optional filepath the the blns.txt file
+    :returns: The list of naughty strings
+    '''
