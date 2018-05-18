@@ -1,190 +1,100 @@
 
         
-        
-def has_docutils():
-    try:
-        # noinspection PyUnresolvedReferences
-        import docutils
-        return True
-    except ImportError:
-        return False
-    
-        exc = ConnectionError('Connection aborted')
-    exc.request = Request(method='GET', url='http://www.google.com')
-    get_response.side_effect = exc
-    ret = main(['--ignore-stdin', 'www.google.com'], custom_log_error=error)
-    assert ret == ExitStatus.ERROR
-    assert error_msg == (
-        'ConnectionError: '
-        'Connection aborted while doing GET request to URL: '
-        'http://www.google.com')
+            s.register(Tag2, index=None)
+    assert isinstance(s.order[-1], Tag2)
+
     
     
-@pytest.mark.parametrize('follow_flag', ['--follow', '-F'])
-def test_follow_without_all_redirects_hidden(httpbin, follow_flag):
-    r = http(follow_flag, httpbin.url + '/redirect/2')
-    assert r.count('HTTP/1.1') == 1
-    assert HTTP_OK in r
+class SessionMixin(MutableMapping):
+    '''Expands a basic dictionary with session attributes.'''
     
-    from httpie.plugins.base import AuthPlugin
+        def get_source(self, environment, template):
+        if self.app.config['EXPLAIN_TEMPLATE_LOADING']:
+            return self._get_source_explained(environment, template)
+        return self._get_source_fast(environment, template)
     
-      # Add discrete features of the predicted parse tree so far, like in Parsey
-  # McParseface.
-  parser.add_fixed_feature(name='labels', embedding_dim=16,
-                           fml=' '.join([
-                               'stack.child(1).label',
-                               'stack.child(1).sibling(-1).label',
-                               'stack.child(-1).label',
-                               'stack.child(-1).sibling(1).label',
-                               'stack(1).child(1).label',
-                               'stack(1).child(1).sibling(-1).label',
-                               'stack(1).child(-1).label',
-                               'stack(1).child(-1).sibling(1).label',
-                               'stack.child(2).label',
-                               'stack.child(-2).label',
-                               'stack(1).child(2).label',
-                               'stack(1).child(-2).label']))
     
-    cc_library(
-    name = 'mst_solver',
-    hdrs = ['mst_solver.h'],
+def test_log_view_exception(app, client):
+    @app.route('/')
+    def index():
+        raise Exception('test')
+    
+            for chunk in self.msg.iter_body(self.CHUNK_SIZE):
+            if not converter and b'\0' in chunk:
+                converter = self.conversion.get_converter(self.mime)
+                if not converter:
+                    raise BinarySuppressedError()
+            body.extend(chunk)
+    
+    
+def rst_filenames():
+    for root, dirnames, filenames in os.walk(os.path.dirname(TESTS_ROOT)):
+        if '.tox' not in root:
+            for filename in fnmatch.filter(filenames, '*.rst'):
+                yield os.path.join(root, filename)
+    
+            Return a ``requests.auth.AuthBase`` subclass instance.
+    
+        def _getpass(self, prompt):
+        # To allow mocking.
+        return getpass.getpass(str(prompt))
+    
+    cc_test(
+    name = 'syntaxnet_transition_state_test',
+    srcs = ['syntaxnet_transition_state_test.cc'],
+    data = [':testdata'],
     deps = [
-        ':disjoint_set_forest',
+        ':syntaxnet_component',
+        ':syntaxnet_transition_state',
+        '//dragnn/core:input_batch_cache',
+        '//dragnn/core/test:generic',
+        '//dragnn/core/test:mock_transition_state',
+        '//dragnn/io:sentence_input_batch',
+        '//dragnn/protos:spec_proto_cc',
         '//syntaxnet:base',
-        '@org_tensorflow//tensorflow/core:lib',
+        '//syntaxnet:sentence_proto_cc',
+        '//syntaxnet:test_main',
+    ],
+)
+
+    
+    cc_test(
+    name = 'dragnn_op_kernels_test',
+    srcs = ['ops/dragnn_op_kernels_test.cc'],
+    deps = [
+        ':compute_session',
+        ':compute_session_pool',
+        ':dragnn_op_kernels',
+        ':resource_container',
+        '//dragnn/core/test:generic',
+        '//dragnn/core/test:mock_compute_session',
+        '//dragnn/core/util:label',
+        '//syntaxnet:base',
+        '//syntaxnet:test_main',
+        '@org_tensorflow//tensorflow/core:protos_all_cc',
+        '@org_tensorflow//tensorflow/core/kernels:ops_testutil',
+        '@org_tensorflow//tensorflow/core/kernels:ops_util',
+        '@org_tensorflow//tensorflow/core/kernels:quantized_ops',
     ],
 )
     
-      def __init__(self):
-    self.spec = spec_pb2.MasterSpec()
-    self.hyperparams = spec_pb2.GridPoint()
-    self.lookup_component = {
-        'previous': MockComponent(self, spec_pb2.ComponentSpec())
-    }
+      The digraph is 'unlabeled' in that there is at most one arc between any pair
+  of tokens.  If labels are required, the BiaffineLabelNetwork can be used to
+  label a set of selected arcs.
     
-            # reset stats on high iter-request times caused by client restarts
-        if delta > 3: # seconds
-            self._reset_stats()
-            return ''
+      Returns:
+    [B,M,M] tensor A with 0/1 indicators of valid arcs.  Specifically,
+      A_{b,t,s} = t,s < lengths[b] ? 1 : 0
+    [B,M] matrix T with 0/1 indicators of valid tokens.  Specifically,
+      T_{b,t} = t < lengths[b] ? 1 : 0
+  '''
+  lengths_bx1 = tf.expand_dims(lengths, 1)
+  sequence_m = tf.range(tf.cast(max_length, lengths.dtype.base_dtype))
+  sequence_1xm = tf.expand_dims(sequence_m, 0)
     
-        def _genspider(self, module, name, domain, template_name, template_file):
-        '''Generate the spider module, based on the given template'''
-        tvars = {
-            'project_name': self.settings.get('BOT_NAME'),
-            'ProjectName': string_camelcase(self.settings.get('BOT_NAME')),
-            'module': module,
-            'name': name,
-            'domain': domain,
-            'classname': '%sSpider' % ''.join(s.capitalize() \
-                for s in module.split('_'))
-        }
-        if self.settings.get('NEWSPIDER_MODULE'):
-            spiders_module = import_module(self.settings['NEWSPIDER_MODULE'])
-            spiders_dir = abspath(dirname(spiders_module.__file__))
-        else:
-            spiders_module = None
-            spiders_dir = '.'
-        spider_file = '%s.py' % join(spiders_dir, module)
-        shutil.copyfile(template_file, spider_file)
-        render_templatefile(spider_file, **tvars)
-        print('Created spider %r using template %r ' % (name, \
-            template_name), end=('' if spiders_module else '\n'))
-        if spiders_module:
-            print('in module:\n  %s.%s' % (spiders_module.__name__, module))
+        with open(empty_input_path, 'w'):
+      pass
     
-        def post_process(self, output):
-        occurrences = 0
-        for x in output:
-            if isinstance(x, self.obj_type):
-                occurrences += 1
-    
-            # put all lines in the file into a Python list
-        strings = f.readlines()
-        
-        # above line leaves trailing newline characters; strip them out
-        strings = [x.strip(u'\n') for x in strings]
-        
-        # remove empty-lines and comments
-        strings = [x for x in strings if x and not x.startswith(u'#')]
-        
-        # insert empty string since all are being removed
-        strings.insert(0, u'')
-    
-    # Language to be used for generating the HTML full-text search index.
-# Sphinx supports the following languages:
-#   'da', 'de', 'en', 'es', 'fi', 'fr', 'hu', 'it', 'ja'
-#   'nl', 'no', 'pt', 'ro', 'ru', 'sv', 'tr'
-#html_search_language = 'en'
-    
-        if headers:
-        response.headers = headers
-    
-    
-class AskTest(unittest.TestCase):
-    '''Test the ask method.'''
-    def setUp(self):
-        logging.disable(logging.CRITICAL)
-    
-    # Documents to append as an appendix to all manuals.
-#latex_appendices = []
-    
-    
-  def IsAllowed( self, diagnostic ):
-    # NOTE: a diagnostic IsAllowed() ONLY if NO filters match it
-    for filterMatches in self._filters:
-      if filterMatches( diagnostic ):
-        return False
-    
-    from hamcrest import assert_that, equal_to
-from ycm.diagnostic_filter import DiagnosticFilter
-    
-    
-def KeywordsFromSyntaxListOutput_JunkIgnored_test():
-  assert_that( syntax_parse._KeywordsFromSyntaxListOutput( '''
---- Syntax items ---
-foogroup xxx foo bar
-             zoo goo
-             links to Statement
-Spell        cluster=NONE
-NoSpell      cluster=NONE''' ),
-               contains_inanyorder( 'foo', 'bar', 'zoo', 'goo' ) )
-    
-    
-def _EndsWithPython( path ):
-  '''Check if given path ends with a python 2.7 or 3.4+ name.'''
-  return path and PYTHON_BINARY_REGEX.search( path ) is not None
-    
-    import os
-import subprocess
-import os.path as p
-import sys
-    
-    def get_api_subtype():
-    if is_api() and c.render_style.startswith('api-'):
-        return c.render_style[4:]
-    
-    # class specific overrides
-api('link',          LinkJsonTemplate)
-api('promotedlink',  PromotedLinkJsonTemplate)
-api('message',       MessageJsonTemplate)
-api('subreddit',     SubredditJsonTemplate)
-api('labeledmulti',  LabeledMultiJsonTemplate)
-api('reddit',        RedditJsonTemplate)
-api('panestack',     PanestackJsonTemplate)
-api('htmlpanestack', NullJsonTemplate)
-api('listing',       ListingJsonTemplate)
-api('searchlisting', SearchListingJsonTemplate)
-api('userlisting',   UserListingJsonTemplate)
-api('usertableitem', UserTableItemJsonTemplate)
-api('account',       AccountJsonTemplate)
-    
-        @require_oauth2_scope('mysubreddits')
-    @validate(
-        VUser(),
-        friend_rel=VFriendOfMine('username'),
-    )
-    @api_doc(api_section.users, uri='/api/v1/me/friends/{username}')
-    def GET_friends(self, friend_rel):
-        '''Get information about a specific 'friend', such as notes.'''
-        rel_view = FriendTableItem(friend_rel)
-        return self.api_wrapper(FriendTableItemJsonTemplate().data(rel_view))
+      TODO(googleuser): Try improving the condition number of the Laplacian matrix
+  directly, instead of using the indirect approach above.  For example, one
+  could add c*I to the Laplacian (i.e., Tikhonov regularization).
