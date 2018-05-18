@@ -1,73 +1,70 @@
 
         
-        end
-
+            s = nil
+    homebrew_site_packages = Language::Python.homebrew_site_packages
+    user_site_packages = Language::Python.user_site_packages 'python'
+    pth_file = user_site_packages/'homebrew.pth'
+    instructions = <<-EOS.undent.gsub(/^/, '  ')
+      mkdir -p #{user_site_packages}
+      echo 'import site; site.addsitedir('#{homebrew_site_packages}')' >> #{pth_file}
+    EOS
     
-      it 'decodes the remaining floats when passed the '*' modifier' do
-    array = '\x9a\x999@33\xb3?33\x03A'.unpack(unpack_format('*'))
-    array.should == [2.9000000953674316, 1.399999976158142, 8.199999809265137]
-  end
+    def usage
+  <<-EOS
+list_running_app_ids [ -t <bundle-id> ]
     
-      it 'runs nested ensure clauses' do
-    ScratchPad.record []
-    @outer = Thread.new do
-      begin
-        @inner = Thread.new do
-          begin
-            sleep
-          ensure
-            ScratchPad << :inner_ensure_clause
-          end
+          case matched
+      when :webhost
+        sessions[s[:session]].merge!({k => matches})
+        if(s[:get])
+          print_status('HTTP GET: #{s[:session]} http://#{s[:webhost]}#{s[:get]}')
+          sessions.delete(s[:session])
+          return
         end
-        sleep
-      ensure
-        ScratchPad << :outer_ensure_clause
-        @inner.send(@method)
-        @inner.join
+      when nil
+        # No matches, no saved state
+      end # end case matched
+    end # end of each_key
+  end # end of parse
+end # end of URL sniffer
+    
+            def yellow
+          @color = :yellow
+        end
       end
-    end
-    Thread.pass while @outer.status and @outer.status != 'sleep'
-    Thread.pass until @inner
-    Thread.pass while @inner.status and @inner.status != 'sleep'
-    @outer.send(@method)
-    @outer.join
-    ScratchPad.recorded.should include(:inner_ensure_clause)
-    ScratchPad.recorded.should include(:outer_ensure_clause)
-  end
     
-        t.join
-  end
-    
-          time.sec.should == 0
-      time.min.should == 0
-      time.hour.should == 0
-      time.day.should == 1
-      time.month.should == 7
-    end
+      # Convenience to access the current SSHKit backend outside of an `on` block.
+  def backend
+    SSHKit::Backend.current
   end
 end
 
     
+        # @abstract
+    #
+    # Your implementation should check if the specified remote-repository is
+    # available.
+    #
+    # @return [Boolean]
+    #
+    def check
+      raise NotImplementedError, 'Your SCM strategy module should provide a #check method'
     end
     
-            def print_version
-          output_pipe.puts 'version: '#{Pod::VERSION}''
+          describe 'setting an internal role filter' do
+        subject { dsl.roles(:app) }
+        it 'ignores it' do
+          dsl.set :filter, role: :web
+          expect(subject.map(&:hostname)).to eq(['example3.com', 'example4.com'])
         end
+      end
     
             def show
-          authorize! :read, @order, order_token
-          @address = find_address
-          respond_with(@address)
+          respond_with(stock_location)
         end
     
-          expect('.margin-false-third').to have_ruleset(ruleset)
-      expect('.margin-false-third').to_not have_rule(bad_rule)
-    end
-  end
-end
-
-    
-          expect('.size-auto').to have_ruleset(rule)
-    end
-  end
-end
+            def index
+          authorize! :read, StockMovement
+          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@stock_movements)
+        end
