@@ -1,374 +1,354 @@
 
         
-        #include 'tensorflow/core/lib/strings/strcat.h'
+        namespace swift {
+class DependencyTracker;
+class ModuleDecl;
+class SourceFile;
+    }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+    /// Get a parsed documentation comment for the declaration, if there is one.
+Optional<DocComment *>getSingleDocComment(swift::markup::MarkupContext &Context,
+                                          const Decl *D);
     
-    #include 'tensorflow/compiler/xla/service/hlo_reachability.h'
+    SILFunction *SILDebugScope::getInlinedFunction() const {
+  if (Parent.isNull())
+    return nullptr;
+    }
     
-    #define max_worker_name_length 128
+    using clang::index::SymbolKind;
+using clang::index::SymbolLanguage;
+using clang::index::SymbolSubKind;
+using clang::index::SymbolProperty;
+using clang::index::SymbolPropertySet;
+using clang::index::SymbolRole;
+using clang::index::SymbolRoleSet;
+using clang::index::SymbolRelation;
+using clang::index::SymbolInfo;
     
-      /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to the data.
-   *
-   * @param datum
-   *    Datum containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See data_layer.cpp for an example.
-   */
-  void Transform(const Datum& datum, Blob<Dtype>* transformed_blob);
+      /// Adds a memory buffer to the SourceManager, taking ownership of it.
+  unsigned addNewSourceBuffer(std::unique_ptr<llvm::MemoryBuffer> Buffer);
     
-    #include 'caffe/common.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
+    #ifndef SWIFT_RUNTIME_ONCE_H
+#define SWIFT_RUNTIME_ONCE_H
     
-    
-    {  /**
-   * @brief Computes the error gradient w.r.t. the BNLL inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to computed outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x @f$; Backward fills their diff with
-   *      gradients @f$
-   *        \frac{\partial E}{\partial x}
-   *      @f$ if propagate_down[0]
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-};
-    
-     protected:
-  /**
-   * @param bottom input Blob vector (length 2+)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_1 @f$
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_2 @f$
-   *   -# ...
-   *   - K @f$ (N \times C \times H \times W) @f$
-   *      the inputs @f$ x_K @f$
-   * @param top output Blob vector (length 1)
-   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
-   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
-   *      the concatenated output @f$
-   *        y = [\begin{array}{cccc} x_1 & x_2 & ... & x_K \end{array}]
-   *      @f$
-   */
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-    
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
-  cudnnPoolingDescriptor_t  pooling_desc_;
-  cudnnPoolingMode_t        mode_;
-};
+    /// Runs the given function with the given context argument exactly once.
+/// The predicate argument must point to a global or static variable of static
+/// extent of type swift_once_t.
+void swift::swift_once(swift_once_t *predicate, void (*fn)(void *),
+                       void *context) {
+#if defined(__APPLE__)
+  dispatch_once_f(predicate, context, fn);
+#elif defined(__CYGWIN__)
+  _swift_once_f(predicate, context, fn);
+#else
+  std::call_once(*predicate, [fn, context]() { fn(context); });
 #endif
+}
+
     
-      EltwiseParameter_EltwiseOp op_;
-  vector<Dtype> coeffs_;
-  Blob<int> max_idx_;
+    /// An abstract class for working with results.of applies.
+class ResultPlan {
+public:
+  virtual RValue finish(SILGenFunction &SGF, SILLocation loc, CanType substType,
+                        ArrayRef<ManagedValue> &directResults) = 0;
+  virtual ~ResultPlan() = default;
+    }
+    
+    // Generate param traits write methods.
+#include 'ipc/param_traits_write_macros.h'
+namespace IPC {
+#include 'content/nw/src/common/common_message_generator.h'
+}  // namespace IPC
+    
+    #include 'base/values.h'
+#include 'extensions/common/draggable_region.h'
+#include 'content/public/common/common_param_traits.h'
+#include 'ipc/ipc_message_macros.h'
+#include 'ui/gfx/ipc/gfx_param_traits.h'
+    
+      // Try to close all windows (then will cause whole app to quit).
+  static void CloseAllWindows(bool force = false, bool quit = false);
+    
+    #include 'base/values.h'
+#include 'components/zoom/zoom_controller.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/public/browser/web_contents.h'
+#include 'content/public/common/page_zoom.h'
+#include 'ui/views/controls/menu/menu_runner.h'
+    
+       bool GetAcceleratorForCommandId(
+      int command_id,
+      ui::Accelerator* accelerator) const override;
     
     
-    {}  // namespace caffe
+    {} // namespace extensions
+#endif
+
     
-    /**
- * @brief Takes two+ Blobs, interprets last Blob as a selector and
- *  filter remaining Blobs accordingly with selector data (0 means that
- * the corresponding item has to be filtered, non-zero means that corresponding
- * item needs to stay).
+    /* Map whose keys are pointers, but are compared by their dereferenced values.
+ *
+ * Differs from a plain std::map<const K*, T, DereferencingComparator<K*> > in
+ * that methods that take a key for comparison take a K rather than taking a K*
+ * (taking a K* would be confusing, since it's the value rather than the address
+ * of the object for comparison that matters due to the dereferencing comparator).
+ *
+ * Objects pointed to by keys must not be modified in any way that changes the
+ * result of DereferencingComparator.
  */
-template <typename Dtype>
-class FilterLayer : public Layer<Dtype> {
- public:
-  explicit FilterLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+template <class K, class T>
+class indirectmap {
+private:
+    typedef std::map<const K*, T, DereferencingComparator<const K*> > base;
+    base m;
+public:
+    typedef typename base::iterator iterator;
+    typedef typename base::const_iterator const_iterator;
+    typedef typename base::size_type size_type;
+    typedef typename base::value_type value_type;
     }
     
+      // Fill database
+  for (int i = 0; i < kCount; i++) {
+    ASSERT_OK(db_->Put(WriteOptions(), Key(i), value));
+  }
+  ASSERT_OK(dbi->TEST_CompactMemTable());
     
-    {}  // namespace testing
+    Status BuildTable(const std::string& dbname,
+                  Env* env,
+                  const Options& options,
+                  TableCache* table_cache,
+                  Iterator* iter,
+                  FileMetaData* meta) {
+  Status s;
+  meta->file_size = 0;
+  iter->SeekToFirst();
+    }
     
-      // Returns a copy of the FilePath with the case-insensitive extension removed.
-  // Example: FilePath('dir/file.exe').RemoveExtension('EXE') returns
-  // FilePath('dir/file'). If a case-insensitive extension is not
-  // found, returns a copy of the original FilePath.
-  FilePath RemoveExtension(const char* extension) const;
+      ReadOptions ro;
+  ro.fill_cache = false;
+  Iterator* iter = table->NewIterator(ro);
+  std::string r;
+  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
+    r.clear();
+    ParsedInternalKey key;
+    if (!ParseInternalKey(iter->key(), &key)) {
+      r = 'badkey '';
+      AppendEscapedStringTo(&r, iter->key());
+      r += '' => '';
+      AppendEscapedStringTo(&r, iter->value());
+      r += ''\n';
+      dst->Append(r);
+    } else {
+      r = ''';
+      AppendEscapedStringTo(&r, key.user_key);
+      r += '' @ ';
+      AppendNumberTo(&r, key.sequence);
+      r += ' : ';
+      if (key.type == kTypeDeletion) {
+        r += 'del';
+      } else if (key.type == kTypeValue) {
+        r += 'val';
+      } else {
+        AppendNumberTo(&r, key.type);
+      }
+      r += ' => '';
+      AppendEscapedStringTo(&r, iter->value());
+      r += ''\n';
+      dst->Append(r);
+    }
+  }
+  s = iter->status();
+  if (!s.ok()) {
+    dst->Append('iterator error: ' + s.ToString() + '\n');
+  }
     
-    // Type and function utilities for implementing parameterized tests.
-// This file is generated by a SCRIPT.  DO NOT EDIT BY HAND!
+    
+    {
+}  // namespace leveldb
+    
+    TEST(WriteBatchTest, Multiple) {
+  WriteBatch batch;
+  batch.Put(Slice('foo'), Slice('bar'));
+  batch.Delete(Slice('box'));
+  batch.Put(Slice('baz'), Slice('boo'));
+  WriteBatchInternal::SetSequence(&batch, 100);
+  ASSERT_EQ(100, WriteBatchInternal::Sequence(&batch));
+  ASSERT_EQ(3, WriteBatchInternal::Count(&batch));
+  ASSERT_EQ('Put(baz, boo)@102'
+            'Delete(box)@101'
+            'Put(foo, bar)@100',
+            PrintContents(&batch));
+}
+    
+    
+    {  leveldb::Benchmark benchmark;
+  benchmark.Run();
+  return 0;
+}
+
+    
+      // Three-way comparison.  Returns value:
+  //   < 0 iff 'a' < 'b',
+  //   == 0 iff 'a' == 'b',
+  //   > 0 iff 'a' > 'b'
+  virtual int Compare(const Slice& a, const Slice& b) const = 0;
+    
+    // Dump the contents of the file named by fname in text format to
+// *dst.  Makes a sequence of dst->Append() calls; each call is passed
+// the newline-terminated text corresponding to a single item found
+// in the file.
 //
-// Currently Google Test supports at most $n arguments in Values,
-// and at most $maxtuple arguments in Combine. Please contact
-// googletestframework@googlegroups.com if you need more.
-// Please note that the number of arguments to Combine is limited
-// by the maximum arity of the implementation of tr1::tuple which is
-// currently set at $maxtuple.
+// Returns a non-OK result if fname does not name a leveldb storage
+// file, or if the file cannot be read.
+Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
     
-    ]]
     
-    class QuickTest : public testing::Test {
- protected:
-  virtual void SetUp() {
-    start_time_ = time(nullptr);
-  }
-  virtual void TearDown() {
-    const time_t end_time = time(nullptr);
-    EXPECT_TRUE(end_time - start_time_ <=25) << 'The test took too long - ' << ::testing::PrintToString(end_time - start_time_);
-  }
-  time_t start_time_;
-  };
+    {					if (videobuf_time >= get_time()) {
+						frame_done = true;
+					} else {
+						/*If we are too slow, reduce the pp level.*/
+						pp_inc = pp_level > 0 ? -1 : 0;
+					}
+				} else {
+				}
     
-    class UnicharcompressTest : public ::testing::Test {
- protected:
-  // Loads and compresses the given unicharset.
-  void LoadUnicharset(const string& unicharset_name) {
-    string radical_stroke_file =
-        file::JoinPath(FLAGS_test_srcdir,
-                       'langdata/radical-stroke.txt');
-    string unicharset_file = file::JoinPath(
-        FLAGS_test_srcdir, 'testdata',
-        unicharset_name);
-    string uni_data;
-    CHECK_OK(file::GetContents(unicharset_file, &uni_data, file::Defaults()));
-    string radical_data;
-    CHECK_OK(file::GetContents(radical_stroke_file, &radical_data,
-                               file::Defaults()));
-    CHECK(
-        unicharset_.load_from_inmemory_file(uni_data.data(), uni_data.size()));
-    STRING radical_str(radical_data.c_str());
-    null_char_ =
-        unicharset_.has_special_codes() ? UNICHAR_BROKEN : unicharset_.size();
-    compressed_.ComputeEncoding(unicharset_, null_char_, &radical_str);
-    // Get the encoding of the null char.
-    RecodedCharID code;
-    compressed_.EncodeUnichar(null_char_, &code);
-    encoded_null_char_ = code(0);
-    string output_name = file::JoinPath(
-        FLAGS_test_tmpdir, absl::StrCat(unicharset_name, '.encoding.txt'));
-    STRING encoding = compressed_.GetEncodingAsString(unicharset_);
-    string encoding_str(&encoding[0], encoding.size());
-    CHECK_OK(file::SetContents(output_name, encoding_str, file::Defaults()));
-    LOG(INFO) << 'Wrote encoding to:' << output_name;
-  }
-  // Serializes and de-serializes compressed_ over itself.
-  void SerializeAndUndo() {
-    GenericVector<char> data;
-    TFile wfp;
-    wfp.OpenWrite(&data);
-    EXPECT_TRUE(compressed_.Serialize(&wfp));
-    TFile rfp;
-    rfp.Open(&data[0], data.size());
-    EXPECT_TRUE(compressed_.DeSerialize(&rfp));
-  }
-  // Returns true if the lang is in CJK.
-  bool IsCJKLang(const string& lang) {
-    return lang == 'chi_sim' || lang == 'chi_tra' || lang == 'kor' ||
-           lang == 'jpn';
-  }
-  // Returns true if the lang is Indic.
-  bool IsIndicLang(const string& lang) {
-    return lang == 'asm' || lang == 'ben' || lang == 'bih' || lang == 'hin' ||
-           lang == 'mar' || lang == 'nep' || lang == 'san' || lang == 'bod' ||
-           lang == 'dzo' || lang == 'guj' || lang == 'kan' || lang == 'mal' ||
-           lang == 'ori' || lang == 'pan' || lang == 'sin' || lang == 'tam' ||
-           lang == 'tel';
-  }
+    	i.context = context;
+	i.protocol = _lws_ref->lws_names;
+	i.address = abuf;
+	i.host = hbuf;
+	i.path = pbuf;
+	i.port = p_port;
+    
+    void WebSocketClient::_bind_methods() {
+	ClassDB::bind_method(D_METHOD('connect_to_url', 'url', 'protocols', 'gd_mp_api'), &WebSocketClient::connect_to_url, DEFVAL(PoolVector<String>()), DEFVAL(false));
+	ClassDB::bind_method(D_METHOD('disconnect_from_host'), &WebSocketClient::disconnect_from_host);
+	ClassDB::bind_method(D_METHOD('set_verify_ssl_enabled', 'enabled'), &WebSocketClient::set_verify_ssl_enabled);
+	ClassDB::bind_method(D_METHOD('is_verify_ssl_enabled'), &WebSocketClient::is_verify_ssl_enabled);
     }
     
-    // dims=[5, 4, 3, 2]->[3, 5, 4, 2]
-TEST_F(MatrixTest, RotatingTranspose_2_0) {
-  GENERIC_2D_ARRAY<int> m;
-  src_.RotatingTranspose(dims_, kNumDims_, 2, 0, &m);
-  m.ResizeNoInit(kInputSize_ / 2, 2);
-  // Verify that the result is:
-  // output tensor=[[[[0, 1][6, 7][12, 13][18, 19]]
-  //                 [[24, 25][30, 31][36, 37][42, 43]]
-  //                 [[48, 49][54, 55][60, 61][66, 67]]
-  //                 [[72, 73][78, 79][84, 85][90, 91]]
-  //                 [[96, 97][102, 103][108, 109][114, 115]]]
-  //                [[[2,3]...
-  EXPECT_EQ(0, m(0, 0));
-  EXPECT_EQ(1, m(0, 1));
-  EXPECT_EQ(6, m(1, 0));
-  EXPECT_EQ(7, m(1, 1));
-  EXPECT_EQ(24, m(4, 0));
-  EXPECT_EQ(25, m(4, 1));
-  EXPECT_EQ(30, m(5, 0));
-  EXPECT_EQ(2, m(20, 0));
-}
-    
-      if (!current || !other_it->current)
-    DONT_EXCHANGE_DELETED.error ('ELIST_ITERATOR.exchange', ABORT, nullptr);
-    
-      /** Common code for setting the image. Returns true if Init has been called. */
-  TESS_LOCAL bool InternalSetImage();
+    #include 'core/error_list.h'
+#include 'websocket_multiplayer.h'
+#include 'websocket_peer.h'
     
     
-    {  char *p = *pdf_object;
-  memcpy(p, b1, b1_len);
-  p += b1_len;
-  memcpy(p, colorspace, colorspace_len);
-  p += colorspace_len;
-  memcpy(p, b2, b2_len);
-  p += b2_len;
-  memcpy(p, cid->datacomp, cid->nbytescomp);
-  p += cid->nbytescomp;
-  memcpy(p, b3, b3_len);
-  l_CIDataDestroy(&cid);
-  return true;
-}
-    
-    namespace tesseract {
-    }
-    
-    // Computes a reshaped copy of the weight matrix w. If there are no
-// partial_funcs_, it does nothing.
-void IntSimdMatrix::Init(const GENERIC_2D_ARRAY<int8_t>& w) {
-  if (partial_funcs_.empty()) return;
-  int num_out = w.dim1();
-  int num_in = w.dim2() - 1;
-  // The rounded-up sizes of the reshaped weight matrix, excluding biases.
-  int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
-  int rounded_num_out = RoundOutputs(num_out);
-  // Add the bias and compute the required size.
-  shaped_w_.resize((rounded_num_in + 1) * rounded_num_out, 0);
-  int shaped_index = 0;
-  int output = 0;
-  // Each number of registers needs a different format! Iterates over the
-  // different numbers of registers (each a power of 2).
-  for (int num_registers = max_output_registers_; num_registers >= 1;
-       num_registers /= 2) {
-    // The number of outputs that we will generate with this many registers.
-    int num_outputs_per_register_set =
-        num_registers * num_outputs_per_register_;
-    // Use the max number of registers until we have to go fewer.
-    while (output + num_outputs_per_register_set <= rounded_num_out) {
-      // Accumulating outputs in registers saves iterating over the inputs, so
-      // we only have to do it once per output register set.
-      for (int input = 0; input < num_in; input += num_inputs_per_group_) {
-        // Iterate over the number of outputs in a register set.
-        for (int j = 0; j < num_outputs_per_register_set; ++j) {
-          // Inner-most loop corresponds to the number of inputs in an input
-          // group.
-          for (int i = 0; i < num_inputs_per_group_; ++i) {
-            int8_t weight = 0;
-            if (output + j < num_out && input + i < num_in)
-              weight = w(output + j, input + i);
-            shaped_w_[shaped_index++] = weight;
-          }
-        }
-      }
-      // Append the bias weights for the register set.
-      for (int j = 0; j < num_outputs_per_register_set; ++j) {
-        int8_t weight = 0;
-        if (output + j < num_out) weight = w(output + j, num_in);
-        shaped_w_[shaped_index++] = weight;
-      }
-      output += num_outputs_per_register_set;
-    }
-  }
-}
-    
-    
-    {  WordData word_data(*pr_it);
-  SetupWordPassN(2, &word_data);
-  // LSTM doesn't run on pass2, but we want to run pass2 for tesseract.
-  if (lstm_recognizer_ == nullptr) {
-    classify_word_and_language(2, pr_it, &word_data);
-  } else {
-    classify_word_and_language(1, pr_it, &word_data);
-  }
-  if (tessedit_debug_quality_metrics) {
-    WERD_RES* word_res = pr_it->word();
-    word_char_quality(word_res, pr_it->row()->row, &char_qual, &good_char_qual);
-    tprintf('\n%d chars;  word_blob_quality: %d;  outline_errs: %d; '
-            'char_quality: %d; good_char_quality: %d\n',
-            word_res->reject_map.length(),
-            word_blob_quality(word_res, pr_it->row()->row),
-            word_outline_errs(word_res), char_qual, good_char_qual);
-  }
-  return TRUE;
-}
-    
-    
-    {  // The number of pages we have processed.
-  int page_count_;
+    {	if (p_db < -79)
+		set_volume(0);
+	else
+		set_volume(Math::db2linear(p_db));
 };
     
-    bool WebSocketClient::is_server() const {
+    #endif
+
+    
+        60,30,500,    3,18.,  1024
+  },
+  /* 8: 2048 x 27 */
+  {
+    8,{0,1,2,2,3,3,4,4},{3,4,3,4,3},{0,1,1,2,2},{-1,0,1,2,3},
+    {{4},{5,6},{7,8},{-1,9,10,11},{-1,12,13,14}},
+    2,{0,2048,   186,46,744, 12,92,372,1500,  28,66,130, 260,520,1112,
+       6,20,36,56,  78,110,158,222,  316,440,624,  928,1300,1700},
+    
+    namespace osquery {
+namespace tables {
+    }
     }
     
-    #if defined(MBEDTLS_SSL_TICKET_C) && !defined(MBEDTLS_CIPHER_C)
-#error 'MBEDTLS_SSL_TICKET_C defined, but not all prerequisites'
-#endif
     
-    // When DEBUG_METHODS_ENABLED is set this will let the engine know
-// the argument names for easier debugging.
-#define D_METHOD(m_c, ...) m_c
-    
-    			if (!FileAccess::exists(msbuild_path)) {
-				WARN_PRINTS('Cannot find msbuild ('mono/builds/build_tool'). Tried with path: ' + msbuild_path);
-			}
-    
-    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-*/
-    
-    
-    {  return c;
+    {  std::vector<std::string> old_views_vec;
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  c.reset();
 }
     
+    std::string platformAsctime(const struct tm* timeptr) {
+  if (timeptr == nullptr) {
+    return '';
+  }
+    }
     
-    {    // The read() method is called when the internal input buffer is empty.
-    // Parameters:
-    // pBuf - input buffer
-    // max_bytes_to_read - maximum bytes that can be written to pBuf
-    // pEOF_flag - set this to true if at end of stream (no more bytes remaining)
-    // Returns -1 on error, otherwise return the number of bytes actually written to the buffer (which may be 0).
-    // Notes: This method will be called in a loop until you set *pEOF_flag to true or the internal buffer is full.
-    virtual int read(uint8 *pBuf, int max_bytes_to_read, bool *pEOF_flag) = 0;
-  };
+      // Now emulate a rapid increase in CPU requirements.
+  r['user_time'] = INTEGER(1024 * 1024 * 1024);
+  runner.setProcessRow({r});
+  runner.isWatcherHealthy(*test_process, state);
+  EXPECT_EQ(1U, state.sustained_latency);
     
-    /*Note that we do not provide a macro for abs(), because it is provided as a
-   library function, which we assume is translated into an intrinsic to avoid
-   the function call overhead and then implemented in the smartest way for the
-   target platform.
-  With modern gcc (4.x), this is true: it uses cmov instructions if the
-   architecture supports it and branchless bit-twiddling if it does not (the
-   speed difference between the two approaches is not measurable).
-  Interestingly, the bit-twiddling method was patented in 2000 (US 6,073,150)
-   by Sun Microsystems, despite prior art dating back to at least 1996:
-   http://web.archive.org/web/19961201174141/www.x86.org/ftp/articles/pentopt/PENTOPT.TXT
-  On gcc 3.x, however, our assumption is not true, as abs() is translated to a
-   conditional jump, which is horrible on deeply piplined architectures (e.g.,
-   all consumer architectures for the past decade or more).
-  Also be warned that -C*abs(x) where C is a constant is mis-optimized as
-   abs(C*x) on every gcc release before 4.2.3.
-  See bug http://gcc.gnu.org/bugzilla/show_bug.cgi?id=34130 */
+    #include <osquery/core.h>
+    
+      void ValidateFeatureSet() {
+    if (!CountingFeatures) return;
+    if (FeatureDebug)
+      PrintFeatureSet();
+    for (size_t Idx = 0; Idx < kFeatureSetSize; Idx++)
+      if (GetFeature(Idx))
+        Inputs[SmallestElementPerFeature[Idx]]->Tmp++;
+    for (auto II: Inputs) {
+      if (II->Tmp != II->NumFeatures)
+        Printf('ZZZ %zd %zd\n', II->Tmp, II->NumFeatures);
+      assert(II->Tmp == II->NumFeatures);
+      II->Tmp = 0;
+    }
+  }
+    
+    #ifdef __x86_64
+#define ATTRIBUTE_TARGET_POPCNT __attribute__((target('popcnt')))
+#else
+#define ATTRIBUTE_TARGET_POPCNT
+#endif
+    
+        Printf('CRASH_MIN: executing: %s\n', Cmd.c_str());
+    int ExitCode = ExecuteCommand(Cmd);
+    if (ExitCode == 0) {
+      Printf('ERROR: the input %s did not crash\n', CurrentFilePath.c_str());
+      exit(1);
+    }
+    Printf('CRASH_MIN: '%s' (%zd bytes) caused a crash. Will try to minimize '
+           'it further\n',
+           CurrentFilePath.c_str(), U.size());
+    
+    #include 'FuzzerExtFunctions.def'
+    
+    #include 'FuzzerExtFunctions.def'
+    
+    namespace fuzzer {
+    }
+    
+    
+    {  // Execute the inner process untill it passes.
+  // Every inner process should execute at least one input.
+  std::string BaseCmd = CloneArgsWithoutX(Args, 'keep-all-flags');
+  for (size_t i = 1; i <= AllFiles.size(); i++) {
+    Printf('MERGE-OUTER: attempt %zd\n', i);
+    auto ExitCode =
+        ExecuteCommand(BaseCmd + ' -merge_control_file=' + CFPath);
+    if (!ExitCode) {
+      Printf('MERGE-OUTER: succesfull in %zd attempt(s)\n', i);
+      break;
+    }
+  }
+  // Read the control file and do the merge.
+  Merger M;
+  std::ifstream IF(CFPath);
+  M.ParseOrExit(IF, true);
+  IF.close();
+  std::vector<std::string> NewFiles;
+  size_t NumNewFeatures = M.Merge(&NewFiles);
+  Printf('MERGE-OUTER: %zd new files with %zd new features added\n',
+         NewFiles.size(), NumNewFeatures);
+  for (auto &F: NewFiles)
+    WriteToOutputCorpus(FileToVector(F));
+  // We are done, delete the control file.
+  RemoveFile(CFPath);
+}
+    
+    #if LLVM_FUZZER_DEFINES_SANITIZER_WEAK_HOOOKS
+void __sanitizer_weak_hook_memcmp(void *caller_pc, const void *s1,
+                                  const void *s2, size_t n, int result) {
+  fuzzer::TPC.AddValueForMemcmp(caller_pc, s1, s2, n);
+  if (!RecordingMemcmp) return;
+  if (result == 0) return;  // No reason to mutate.
+  if (n <= 1) return;  // Not interesting.
+  TS->TraceMemcmpCallback(n, reinterpret_cast<const uint8_t *>(s1),
+                          reinterpret_cast<const uint8_t *>(s2));
+}
