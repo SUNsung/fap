@@ -1,16 +1,10 @@
 
         
-              T* resource;
-      OP_REQUIRES_OK(
-          context,
-          mgr->LookupOrCreate<T>(cinfo_.container(), cinfo_.name(), &resource,
-                                 [this](T** ret) EXCLUSIVE_LOCKS_REQUIRED(mu_) {
-                                   Status s = CreateResource(ret);
-                                   if (!s.ok() && *ret != nullptr) {
-                                     CHECK((*ret)->Unref());
-                                   }
-                                   return s;
-                                 }));
+        namespace tensorflow {
+    }
+    
+    
+    {}  // namespace xla
     
       double ComputeDualLoss(const double current_dual, const double example_label,
                          const double example_weight) const final {
@@ -26,174 +20,179 @@
     
         http://www.apache.org/licenses/LICENSE-2.0
     
+    /** scalar_sigmoid_fast_derivative_op
+  * \ingroup CXX11_NeuralNetworks_Module
+  * \brief Template functor to compute the fast derivative of a sigmoid
+  *
+  * Input should be the backpropagated gradient.
+  *
+  * \sa class CwiseUnaryOp, Cwise::sigmoid_fast_derivative()
+  */
+template <typename T>
+struct scalar_sigmoid_fast_derivative_op {
+  EIGEN_EMPTY_STRUCT_CTOR(scalar_sigmoid_fast_derivative_op)
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE T operator()(const T& y) const {
+    const T one = T(1);
+    return (one - y) * y;
+  }
+    }
+    
     #include 'tensorflow/core/common_runtime/dma_helper.h'
 #include 'tensorflow/core/common_runtime/sycl/sycl_device_context.h'
     
-    string VersionedComputationHandle::ToString() const {
-  return tensorflow::strings::StrCat(handle.handle(), ':v', version);
+    std::ostream& operator<<(std::ostream& out,
+                         const VersionedComputationHandle& versioned_handle) {
+  out << versioned_handle.ToString();
+  return out;
 }
     
-    HloReachabilityMap::HloReachabilityMap(
-    const std::list<HloInstruction*>& instructions)
-    : size_(instructions.size()) {
-  bit_vectors_.reserve(size_);
-  for (const HloInstruction* hlo : instructions) {
-    indices_[hlo] = bit_vectors_.size();
-    bit_vectors_.emplace_back(size_);
-  }
-  CHECK_EQ(size_, indices_.size());  // instructions should be unique
+    REGISTER_KERNEL_BUILDER(Name('TFRecordReader').Device(DEVICE_CPU),
+                        TFRecordReaderOp);
+REGISTER_KERNEL_BUILDER(Name('TFRecordReaderV2').Device(DEVICE_CPU),
+                        TFRecordReaderOp);
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    Status AtanhGrad(const AttrSlice& attrs, FunctionDef* g) {
+  // clang-format off
+  return GradForUnaryCwise(g, {
+    {{'x2'}, 'Square', {'x'}},
+    FDH::Const('const', 1.0f),
+    {{'one'}, 'Cast', {'const'}, {{'SrcT', DT_FLOAT}, {'DstT', '$T'}}},
+    {{'a'}, 'Sub', {'one', 'x2'}}, // 1 - x^2
+    {{'inv'}, 'Reciprocal', {'a'}},
+    {{'dx'}, 'Mul', {'dy', 'inv'}}
+  });
+  // clang-format on
+}
+REGISTER_OP_GRADIENT('Atanh', AtanhGrad);
+    
+    inline ZlibCompressionOptions ZlibCompressionOptions::GZIP() {
+  ZlibCompressionOptions options = ZlibCompressionOptions();
+  options.window_bits = options.window_bits + 16;
+  return options;
 }
     
-    namespace tensorflow {
-#define REGISTER_COMPLEX(D, R, C)                         \
-  REGISTER_KERNEL_BUILDER(Name('Angle')                   \
-                              .Device(DEVICE_##D)         \
-                              .TypeConstraint<C>('T')     \
-                              .TypeConstraint<R>('Tout'), \
-                          UnaryOp<D##Device, functor::get_angle<C>>);
+            if (lane < 16)
+        {
+            T partial = ptr[tid];
     }
     
-    // TODO: Enable GPU support for angle op after resolving
-// build failures on GPU (See #10643 for context).
-#if 0 && GOOGLE_CUDA
+    #include 'opencv2/core.hpp'
     
+    #define THCPDoubleStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPDoubleStorageClass)
+#define THCPFloatStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPFloatStorageClass)
+#define THCPHalfStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPHalfStorageClass)
+#define THCPLongStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPLongStorageClass)
+#define THCPIntStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPIntStorageClass)
+#define THCPShortStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPShortStorageClass)
+#define THCPCharStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPCharStorageClass)
+#define THCPByteStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPByteStorageClass)
     
-    {  std::vector<string> debug_urls_1;
-  ASSERT_FALSE(
-      DebugIO::IsDebugNodeGateOpen('foo:1:DebugIdentity', debug_urls_1));
+    #define THDPStorage TH_CONCAT_3(THDP,Real,Storage)
+#define THDPStorageStr TH_CONCAT_STRING_3(torch.cuda.,Real,Storage)
+#define THDPStorageClass TH_CONCAT_3(THDP,Real,StorageClass)
+#define THDPStorage_(NAME) TH_CONCAT_4(THDP,Real,Storage_,NAME)
+    
+    namespace thd { namespace rpc {
+    }
+    }
+    
+    // Header is checksum (4 bytes), length (2 bytes), type (1 byte).
+static const int kHeaderSize = 4 + 2 + 1;
+    
+      ASSERT_OK(env_->CreateDir('/dir'));
+    
+    Slice BlockBuilder::Finish() {
+  // Append restart array
+  for (size_t i = 0; i < restarts_.size(); i++) {
+    PutFixed32(&buffer_, restarts_[i]);
+  }
+  PutFixed32(&buffer_, restarts_.size());
+  finished_ = true;
+  return Slice(buffer_);
 }
     
-    #include 'grpc++/grpc++.h'
-#include 'tensorflow/core/debug/debug_io_utils.h'
-#include 'tensorflow/core/debug/debug_service.grpc.pb.h'
-#include 'tensorflow/core/framework/tensor.h'
-#include 'tensorflow/core/platform/mutex.h'
     
-    
-    {  // ExtensionFunction:
-  bool RunAsync() override;
-  DECLARE_EXTENSION_FUNCTION('nw.currentWindowInternal.setBadgeLabel', UNKNOWN)
+    {  double FalsePositiveRate() {
+    char buffer[sizeof(int)];
+    int result = 0;
+    for (int i = 0; i < 10000; i++) {
+      if (Matches(Key(i + 1000000000, buffer))) {
+        result++;
+      }
+    }
+    return result / 10000.0;
+  }
 };
     
-    // Tell browser we have an uncaughtException from node.
-IPC_MESSAGE_ROUTED1(ShellViewHostMsg_UncaughtException,
-                    std::string /* err */)
-    
-        base::win::ShortcutProperties props;
-    base::string16 appID;
-    if (content::Shell::GetPackage()->root()->GetString('app-id', &appID) == false)
-      content::Shell::GetPackage()->root()->GetString(switches::kmName, &appID);
-    const std::wstring appName = base::UTF8ToWide(content::Shell::GetPackage()->GetName());
-    props.set_app_id(appID);
-    
-    // Tell browser to allocate a new object.
-// function AllocateObject(id, name, options);
-v8::Handle<v8::Value> AllocateObject(int routing_id,
-                                     int object_id,
-                                     const std::string& type,
-                                     v8::Handle<v8::Value> options);
-    
-    EventListener::~EventListener() {
-  for (std::map<int, BaseEvent*>::iterator i = listerners_.begin(); i != listerners_.end(); i++) {
-    delete i->second;
+      for (int i = 0; i < 32; i++) {
+    buf[i] = i;
   }
-}
-    
-      template<typename T> T* AddListener() {
-    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
-    if (i==listerners_.end()) {
-      T* listener_object = new T(this);
-      listerners_[T::id] = listener_object;
-      return listener_object;
-    }
-    return NULL;
-  }
-    
-    void Menu::Destroy() {
-}
-    
-    void MenuItem::UpdateKeys(views::FocusManager *focus_manager){
-  if (focus_manager == NULL){
-    return ;
-  } else {
-    focus_manager_ = focus_manager;
-    if (enable_shortcut_){
-      focus_manager->RegisterAccelerator(
-        accelerator_,
-        ui::AcceleratorManager::kHighPriority,
-        this);
-    }
-    if (submenu_ != NULL){
-      submenu_->UpdateKeys(focus_manager);
-    }
-  }
-}
-    
-    bool NwClipboardReadAvailableTypesFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  bool contains_filenames;
-  std::vector<base::string16> types;
-  clipboard->ReadAvailableTypes(ui::CLIPBOARD_TYPE_COPY_PASTE, &types, &contains_filenames);
-  for(std::vector<base::string16>::iterator it = types.begin(); it != types.end(); it++) {
-    if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypeText)) {
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_TEXT))));
-    } else if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypeHTML)) {
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_HTML))));
-    } else if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypeRTF)) {
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_RTF))));
-    } else if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypePNG)) {
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_PNG))));
-      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_JPEG))));
-    }
-  }
-  return true;
-}
-    
-    
-    {  // Verify that the size of the key space not touched by the reads
-  // is pretty much unchanged.
-  const int64_t final_other_size = Size(Key(n), Key(kCount));
-  ASSERT_LE(final_other_size, initial_other_size + 1048576);
-  ASSERT_GE(final_other_size, initial_other_size/5 - 1048576);
-}
-    
-    static char* CopyString(const std::string& str) {
-  char* result = reinterpret_cast<char*>(malloc(sizeof(char) * str.size()));
-  memcpy(result, str.data(), sizeof(char) * str.size());
-  return result;
-}
-    
-    
-    {}  // namespace leveldb
+  ASSERT_EQ(0x46dd794e, Value(buf, sizeof(buf)));
     
     namespace leveldb {
     }
     
-        if (bytes_ > 0) {
-      char rate[100];
-      snprintf(rate, sizeof(rate), '%6.1f MB/s',
-               (bytes_ / 1048576.0) / (finish - start_));
-      if (!message_.empty()) {
-        message_  = std::string(rate) + ' ' + message_;
-      } else {
-        message_ = rate;
-      }
+      // Read until size drops significantly.
+  std::string limit_key = Key(n);
+  for (int read = 0; true; read++) {
+    ASSERT_LT(read, 100) << 'Taking too long to compact';
+    Iterator* iter = db_->NewIterator(ReadOptions());
+    for (iter->SeekToFirst();
+         iter->Valid() && iter->key().ToString() < limit_key;
+         iter->Next()) {
+      // Drop data
     }
-    
-    // A Comparator object provides a total order across slices that are
-// used as keys in an sstable or a database.  A Comparator implementation
-// must be thread-safe since leveldb may invoke its methods concurrently
-// from multiple threads.
-class Comparator {
- public:
-  virtual ~Comparator();
+    delete iter;
+    // Wait a little bit to allow any triggered compactions to complete.
+    Env::Default()->SleepForMicroseconds(1000000);
+    uint64_t size = Size(Key(0), Key(n));
+    fprintf(stderr, 'iter %3d => %7.3f MB [other %7.3f MB]\n',
+            read+1, size/1048576.0, Size(Key(n), Key(kCount))/1048576.0);
+    if (size <= initial_size/10) {
+      break;
     }
+  }
     
-    
-    {  // 'filter' contains the data appended by a preceding call to
-  // CreateFilter() on this class.  This method must return true if
-  // the key was in the list of keys passed to CreateFilter().
-  // This method may return true or false if the key was not on the
-  // list, but it should aim to return false with a high probability.
-  virtual bool KeyMayMatch(const Slice& key, const Slice& filter) const = 0;
-};
+    int InternalKeyComparator::Compare(const Slice& akey, const Slice& bkey) const {
+  // Order by:
+  //    increasing user key (according to user-supplied comparator)
+  //    decreasing sequence number
+  //    decreasing type (though sequence# should be enough to disambiguate)
+  int r = user_comparator_->Compare(ExtractUserKey(akey), ExtractUserKey(bkey));
+  if (r == 0) {
+    const uint64_t anum = DecodeFixed64(akey.data() + akey.size() - 8);
+    const uint64_t bnum = DecodeFixed64(bkey.data() + bkey.size() - 8);
+    if (anum > bnum) {
+      r = -1;
+    } else if (anum < bnum) {
+      r = +1;
+    }
+  }
+  return r;
+}
