@@ -1,181 +1,221 @@
 
         
-        filenames = {
-    'bin': 'youtube-dl',
-    'exe': 'youtube-dl.exe',
-    'tar': 'youtube-dl-%s.tar.gz' % version}
-build_dir = os.path.join('..', '..', 'build', version)
-for key, filename in filenames.items():
-    url = 'https://yt-dl.org/downloads/%s/%s' % (version, filename)
-    fn = os.path.join(build_dir, filename)
-    with open(fn, 'rb') as f:
-        data = f.read()
-    if not data:
-        raise ValueError('File %s is empty!' % fn)
-    sha256sum = hashlib.sha256(data).hexdigest()
-    new_version[key] = (url, sha256sum)
-    
-    
-def expect_value(self, got, expected, field):
-    if isinstance(expected, compat_str) and expected.startswith('re:'):
-        match_str = expected[len('re:'):]
-        match_rex = re.compile(match_str)
-    
-        def _real_extract(self, url):
-        mobj = re.match(self._VALID_URL, url)
-        video_id = mobj.group('id')
-    
-            mvp_id = self._search_mvp_id(webpage)
-    
-        # ssh://520311404832ce3e570000ff@blog-johndoe.example.org
-    (user, host) = app['ssh_url'][6:].split('@')
-    app_name = host.split('-')[0]
-    
-    # Backwards compat only
-try:
-    from hashlib import md5 as _md5
-except ImportError:
+            Models: `flatpages.flatpages`
+    Templates: Uses the template defined by the ``template_name`` field,
+        or :template:`flatpages/default.html` if template_name is not defined.
+    Context:
+        flatpage
+            `flatpages.flatpages` object
+    '''
+    if not url.startswith('/'):
+        url = '/' + url
+    site_id = get_current_site(request).id
     try:
-        from md5 import md5 as _md5
-    except ImportError:
-        # Assume we're running in FIPS mode here
-        _md5 = None
+        f = get_object_or_404(FlatPage, url=url, sites=site_id)
+    except Http404:
+        if not url.endswith('/') and settings.APPEND_SLASH:
+            url += '/'
+            f = get_object_or_404(FlatPage, url=url, sites=site_id)
+            return HttpResponsePermanentRedirect('%s/' % request.path)
+        else:
+            raise
+    return render_flatpage(request, f)
     
-    label = r'''
-    (?:[\w]|{range})                    # Starts with an alphanumeric or a range
-    (?:[\w_-]|{range})*                 # Then zero or more of the same or [_-]
-    (?<![_-])                           # ...as long as it didn't end with [_-]
-'''.format(range=alphanumeric_range)
+    # Dynamic inventory script which lets you use nodes discovered by Canonical's
+# Landscape (http://www.ubuntu.com/management/landscape-features).
+#
+# Requires the `landscape_api` Python module
+# See:
+#   - https://landscape.canonical.com/static/doc/api/api-client-package.html
+#   - https://landscape.canonical.com/static/doc/api/python-api.html
+#
+# Environment variables
+# ---------------------
+#   - `LANDSCAPE_API_URI`
+#   - `LANDSCAPE_API_KEY`
+#   - `LANDSCAPE_API_SECRET`
+#   - `LANDSCAPE_API_SSL_CA_FILE` (optional)
     
-    import os
-import re
+        parser.add_argument('--job-number',
+                        metavar='N',
+                        action='append',
+                        type=int,
+                        help='limit downloads to the given job number')
     
-        results = {}
-    for group in sort_groups(groups):
-        results = combine_vars(results, group.get_vars())
+        terminal_stderr_re = [
+        re.compile(r'% ?Error: '),
+        re.compile(r'^% \w+', re.M),
+        re.compile(r'% ?Bad secret'),
+        re.compile(r'invalid input', re.I),
+        re.compile(r'(?:incomplete|ambiguous) command', re.I),
+        re.compile(r'connection timed out', re.I),
+        re.compile(r'[^\r\n]+ not found', re.I),
+        re.compile(r''[^']' +returned error code: ?\d+'),
+        re.compile(r'syntax error'),
+        re.compile(r'unknown command'),
+        re.compile(r'Error\[\d+\]: ', re.I),
+        re.compile(r'Error:', re.I)
+    ]
     
-        def on_open_shell(self):
-        try:
-            self._exec_cli_command(b'environment no more')
-        except AnsibleConnectionFailure:
-            raise AnsibleConnectionFailure('unable to set terminal parameters')
+        def test_max_delay(self):
+        strategy = _exponential_backoff(retries=7, delay=1, backoff=2, max_delay=60)
+        result = list(strategy())
+        self.assertEquals(result, [1, 2, 4, 8, 16, 32, 60])
+    
+    from ..models import Model
+from ..layers import Flatten
+from ..layers import Dense
+from ..layers import Input
+from ..layers import Conv2D
+from ..layers import MaxPooling2D
+from ..layers import GlobalAveragePooling2D
+from ..layers import GlobalMaxPooling2D
+from ..engine import get_source_inputs
+from ..utils import layer_utils
+from ..utils.data_utils import get_file
+from .. import backend as K
+from .imagenet_utils import decode_predictions
+from .imagenet_utils import preprocess_input
+from .imagenet_utils import _obtain_input_shape
+    
+        # Returns
+        A Keras model instance.
+    
+        # test stacked bidirectional layers
+    model = keras.Sequential()
+    model.add(keras.layers.Bidirectional(rnn(output_dim,
+                                             return_sequences=True),
+                                         merge_mode=mode,
+                                         input_shape=(None, dim)))
+    model.add(keras.layers.Bidirectional(rnn(output_dim), merge_mode=mode))
+    model.compile(loss='mse', optimizer='sgd')
+    model.fit(x, y, epochs=1, batch_size=1)
+    
+        # Load the manually-saved binary data, and make sure the model is intact.
+    with h5py.File(fname, mode='r') as h5file:
+        loaded_model = load_model(h5file)
+        out2 = loaded_model.predict(x)
+    
+        filename = os.path.join(model_name, 'digits_over_latent.png')
+    # display a 30x30 2D manifold of digits
+    n = 30
+    digit_size = 28
+    figure = np.zeros((digit_size * n, digit_size * n))
+    # linearly spaced coordinates corresponding to the 2D plot
+    # of digit classes in the latent space
+    grid_x = np.linspace(-4, 4, n)
+    grid_y = np.linspace(-4, 4, n)[::-1]
+    
+    import numpy as np
+import keras
+from keras.datasets import reuters
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation
+from keras.preprocessing.text import Tokenizer
+    
+            try:
+            spidercls = self.crawler_process.spider_loader.load(name)
+        except KeyError:
+            pass
+        else:
+            # if spider already exists and not --force then halt
+            if not opts.force:
+                print('Spider %r already exists in module:' % name)
+                print('  %s' % spidercls.__module__)
+                return
+        template_file = self._find_template(opts.template)
+        if template_file:
+            self._genspider(module, name, domain, opts.template, template_file)
+            if opts.edit:
+                self.exitcode = os.system('scrapy edit '%s'' % name)
+    
+        html = get_content(url)
+    pid = match1(html, r'video\.settings\.pid\s*=\s*\'([^\']+)\'')
+    title = match1(html, r'video\.settings\.title\s*=\s*\'([^\']+)\'')
+    
+    #----------------------------------------------------------------------
+def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
+    '''wrapper'''
+    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
+    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
+    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
+    hostname = urlparse(url).hostname
+    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
+        return False
+    upid = match1(url, r'.+/content/(\w+)')
+    
+        def __init__(self, pin_json):
+        img_file = pin_json['file']
+        self.id = str(pin_json['pin_id'])
+        self.url = urlparse.urljoin(self.host, img_file['key'])
+        self.ext = img_file['type'].split('/')[-1]
+    
+    
+    
+    #----------------------------------------------------------------------
+def showroom_get_roomid_by_room_url_key(room_url_key):
+    '''str->str'''
+    fake_headers_mobile = {
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Charset': 'UTF-8,*;q=0.5',
+        'Accept-Encoding': 'gzip,deflate,sdch',
+        'Accept-Language': 'en-US,en;q=0.8',
+        'User-Agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36'
+    }
+    webpage_url = 'https://www.showroom-live.com/' + room_url_key
+    html = get_content(webpage_url, headers = fake_headers_mobile)
+    roomid = match1(html, r'room\?room_id\=(\d+)')
+    assert roomid
+    return roomid
+    
+            def accept_callback(conn, addr):
+            self.server_stream = IOStream(conn)
+            self.addCleanup(self.server_stream.close)
+            event.set()
+    
+    
+@unittest.skipIf(pycurl is None, 'pycurl module not present')
+class CurlHTTPClientTestCase(AsyncHTTPTestCase):
+    def setUp(self):
+        super(CurlHTTPClientTestCase, self).setUp()
+        self.http_client = self.create_client()
+    
+        def test_multiple_errors(self):
+        with ignore_deprecation():
+            def fail(message):
+                raise Exception(message)
+            self.io_loop.add_callback(lambda: fail('error one'))
+            self.io_loop.add_callback(lambda: fail('error two'))
+            # The first error gets raised; the second gets logged.
+            with ExpectLog(app_log, 'multiple unhandled exceptions'):
+                with self.assertRaises(Exception) as cm:
+                    self.wait()
+            self.assertEqual(str(cm.exception), 'error one')
+    
+    plugins = PluginLoader()
+print 'PLUGINS := ' + ' '.join(plugin.name for plugin in plugins
+                               if plugin.needs_static_build)
+    
+    def set_extension(environ, ext):
+    environ['extension'] = ext
+    environ['render_style'], environ['content_type'] = extension_mapping[ext]
 
     
-    ESTIMATORS = {
-    'dummy': DummyClassifier(),
-    'random_forest': RandomForestClassifier(n_estimators=100,
-                                            max_features='sqrt',
-                                            min_samples_split=10),
-    'extra_trees': ExtraTreesClassifier(n_estimators=100,
-                                        max_features='sqrt',
-                                        min_samples_split=10),
-    'logistic_regression': LogisticRegression(),
-    'naive_bayes': MultinomialNB(),
-    'adaboost': AdaBoostClassifier(n_estimators=10),
-}
+        def has_gold(self, user):
+        if not user:
+            return False
     
+        @require_oauth2_scope('mysubreddits')
+    @validate(
+        VUser(),
+        friend_rel=VFriendOfMine('username'),
+    )
+    @api_doc(api_section.users, uri='/api/v1/me/friends/{username}')
+    def GET_friends(self, friend_rel):
+        '''Get information about a specific 'friend', such as notes.'''
+        rel_view = FriendTableItem(friend_rel)
+        return self.api_wrapper(FriendTableItemJsonTemplate().data(rel_view))
     
-if __name__ == '__main__':
-    from sklearn.linear_model import Lasso, LassoLars
-    import matplotlib.pyplot as plt
-    
-    
-if __name__ == '__main__':
-    ap = argparse.ArgumentParser()
-    ap.add_argument('metrics', nargs='*', default=sorted(METRICS),
-                    help='Specifies metrics to benchmark, defaults to all. '
-                         'Choices are: {}'.format(sorted(METRICS)))
-    ap.add_argument('--formats', nargs='+', choices=sorted(FORMATS),
-                    help='Specifies multilabel formats to benchmark '
-                         '(defaults to all).')
-    ap.add_argument('--samples', type=int, default=1000,
-                    help='The number of samples to generate')
-    ap.add_argument('--classes', type=int, default=10,
-                    help='The number of classes')
-    ap.add_argument('--density', type=float, default=.2,
-                    help='The average density of labels per sample')
-    ap.add_argument('--plot', choices=['classes', 'density', 'samples'],
-                    default=None,
-                    help='Plot time with respect to this parameter varying '
-                         'up to the specified value')
-    ap.add_argument('--n-steps', default=10, type=int,
-                    help='Plot this many points for each metric')
-    ap.add_argument('--n-times',
-                    default=5, type=int,
-                    help='Time performance over n_times trials')
-    args = ap.parse_args()
-    
-            # Create flat baselines to compare the variation over batch size
-        all_times['pca'].extend([results_dict['pca']['time']] *
-                                len(batch_sizes))
-        all_errors['pca'].extend([results_dict['pca']['error']] *
-                                 len(batch_sizes))
-        all_times['rpca'].extend([results_dict['rpca']['time']] *
-                                 len(batch_sizes))
-        all_errors['rpca'].extend([results_dict['rpca']['error']] *
-                                  len(batch_sizes))
-        for batch_size in batch_sizes:
-            ipca = IncrementalPCA(n_components=n_components,
-                                  batch_size=batch_size)
-            results_dict = {k: benchmark(est, data) for k, est in [('ipca',
-                                                                   ipca)]}
-            all_times['ipca'].append(results_dict['ipca']['time'])
-            all_errors['ipca'].append(results_dict['ipca']['error'])
-    
-        ###########################################################################
-    # Generate dataset
-    ###########################################################################
-    n_nonzeros = int(opts.ratio_nonzeros * opts.n_features)
-    
-        ###########################################################################
-    # Set custom reservoir based method
-    sampling_algorithm['custom-reservoir-sampling'] = \
-        lambda n_population, n_samples, random_state=None: \
-            sample_without_replacement(n_population,
-                                       n_samples,
-                                       method='reservoir_sampling',
-                                       random_state=random_state)
-    
-        gc.collect()
-    
-        class_name = info['fullname'].split('.')[0]
-    if type(class_name) != str:
-        # Python 2 only
-        class_name = class_name.encode('utf-8')
-    module = __import__(info['module'], fromlist=[class_name])
-    obj = attrgetter(info['fullname'])(module)
-    
-        if not os.path.exists(ARCHIVE_NAME):
-        print('Downloading dataset from %s (14 MB)' % URL)
-        opener = urlopen(URL)
-        with open(ARCHIVE_NAME, 'wb') as archive:
-            archive.write(opener.read())
-    
-    import sys
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import LinearSVC
-from sklearn.pipeline import Pipeline
-from sklearn.model_selection import GridSearchCV
-from sklearn.datasets import load_files
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
-    
-        def decision_surface(self, cls):
-        delta = 1
-        x = np.arange(x_min, x_max + delta, delta)
-        y = np.arange(y_min, y_max + delta, delta)
-        X1, X2 = np.meshgrid(x, y)
-        Z = cls.decision_function(np.c_[X1.ravel(), X2.ravel()])
-        Z = Z.reshape(X1.shape)
-        return X1, X2, Z
-    
-    n_clusters = (4, 3)
-data, rows, columns = make_checkerboard(
-    shape=(300, 300), n_clusters=n_clusters, noise=10,
-    shuffle=False, random_state=0)
-    
-        When fixed_n_classes is not None the first labeling is considered a ground
-    truth class assignment with fixed number of classes.
-    '''
-    random_labels = np.random.RandomState(seed).randint
-    scores = np.zeros((len(n_clusters_range), n_runs))
+            Responds with a 120x50 `image/png` which should be displayed
+        to the user.
