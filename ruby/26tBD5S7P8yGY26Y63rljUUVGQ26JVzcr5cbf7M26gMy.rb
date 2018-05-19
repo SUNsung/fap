@@ -1,44 +1,14 @@
 
         
-              def _routes
-        @controller._routes if @controller.respond_to?(:_routes)
-      end
+          def can_read?(resource)
+    ability_name = resource.class.name.downcase
+    ability_name = 'read_#{ability_name}'.to_sym
     
-                          until @when_connected.empty?
-                        @when_connected.shift.call
-                      end
-                    end
+      def self.authenticate(user, app_id, json_response, challenges)
+    response = U2F::SignResponse.load_from_json(json_response)
+    registration = user.u2f_registrations.find_by_key_handle(response.key_handle)
+    u2f = U2F::U2F.new(app_id)
     
-      def test_assert_select_email_multipart
-    AssertMultipartSelectMailer.test(html: '<div><p>foo</p><p>bar</p></div>', text: 'foo bar').deliver_now
-    assert_select_email do
-      assert_select 'div:root' do
-        assert_select 'p:first-child', 'foo'
-        assert_select 'p:last-child', 'bar'
-      end
-    end
-  end
-end
-
-    
-      test 'does not append the deliveries collection if told not to perform the delivery' do
-    old_perform_deliveries = DeliveryMailer.perform_deliveries
-    begin
-      DeliveryMailer.perform_deliveries = false
-      DeliveryMailer.welcome.deliver_now
-      assert_equal [], DeliveryMailer.deliveries
-    ensure
-      DeliveryMailer.perform_deliveries = old_perform_deliveries
-    end
-  end
-    
-        mail_with_defaults do |format|
-      format.html { render(inline: '<%= format_paragraph @text, 15, 1 %>') }
-    end
-  end
-    
-          raise Discourse::InvalidParameters.new(:to_address) unless args[:to_address].present?
-    
-      def grant_admin!
-    set_permission('admin', true)
+      def external?
+    true
   end
