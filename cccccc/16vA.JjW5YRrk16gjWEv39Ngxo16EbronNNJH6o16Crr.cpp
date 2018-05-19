@@ -1,362 +1,226 @@
 
         
-        
-    
-    #ifndef GRPC_INTERNAL_COMPILER_NODE_GENERATOR_HELPERS_H
-#define GRPC_INTERNAL_COMPILER_NODE_GENERATOR_HELPERS_H
-    
-    std::vector<grpc::string_ref> SecureAuthContext::GetPeerIdentity() const {
-  if (!ctx_) {
-    return std::vector<grpc::string_ref>();
-  }
-  grpc_auth_property_iterator iter = grpc_auth_context_peer_identity(ctx_);
-  std::vector<grpc::string_ref> identity;
-  const grpc_auth_property* property = nullptr;
-  while ((property = grpc_auth_property_iterator_next(&iter))) {
-    identity.push_back(
-        grpc::string_ref(property->value, property->value_length));
-  }
-  return identity;
+        namespace base {
+class FilePath;
 }
     
-    #include <gtest/gtest.h>
+    #include 'base/macros.h'
     
-    static void get_cpu_usage(unsigned long long* total_cpu_time,
-                          unsigned long long* idle_cpu_time) {
-#ifdef __linux__
-  std::ifstream proc_stat('/proc/stat');
-  proc_stat.ignore(5);
-  std::string cpu_time_str;
-  std::string first_line;
-  std::getline(proc_stat, first_line);
-  std::stringstream first_line_s(first_line);
-  for (int i = 0; i < 10; ++i) {
-    std::getline(first_line_s, cpu_time_str, ' ');
-    *total_cpu_time += std::stol(cpu_time_str);
-    if (i == 3) {
-      *idle_cpu_time = std::stol(cpu_time_str);
+    class NativeWindow;
+    
+    #ifndef ATOM_COMMON_API_LOCKER_H_
+#define ATOM_COMMON_API_LOCKER_H_
+    
+    #ifndef ATOM_COMMON_DRAGGABLE_REGION_H_
+#define ATOM_COMMON_DRAGGABLE_REGION_H_
+    
+      const base::ListValue* preferences() const { return preferences_.get(); }
+    
+      // Starts updating the model. The model is initially empty, so OnSourceAdded()
+  // notifications will be generated for each existing source as it is
+  // enumerated. After the initial enumeration the model will be refreshed based
+  // on the update period, and notifications generated only for changes in the
+  // model.
+  virtual void StartUpdating(DesktopMediaListObserver* observer) = 0;
+    
+      // Checks if the given |monitor_id| represents a built-in display.
+  static bool IsMonitorBuiltIn(int64_t monitor_id);
+    
+    void TtsPlatformImpl::set_error(const std::string& error) {
+  error_ = error;
+}
+    
+    // File name of the Pepper Flash plugin on different platforms.
+const base::FilePath::CharType kPepperFlashPluginFilename[] =
+#if defined(OS_MACOSX)
+    FPL('PepperFlashPlayer.plugin');
+#elif defined(OS_WIN)
+    FPL('pepflashplayer.dll');
+#else  // OS_LINUX, etc.
+    FPL('libpepflashplayer.so');
+#endif
+    
+    static std::string IKey(const std::string& user_key,
+                        uint64_t seq,
+                        ValueType vt) {
+  std::string encoded;
+  AppendInternalKey(&encoded, ParsedInternalKey(user_key, seq, vt));
+  return encoded;
+}
+    
+    
+    {}  // namespace leveldb
+    
+    #endif  // STORAGE_LEVELDB_HELPERS_MEMENV_MEMENV_H_
+
+    
+    protected:
+    void get_test_array_types_and_sizes( int test_case_idx, vector<vector<Size> >& sizes, vector<vector<int> >& types );
+    void fill_array( int test_case_idx, int i, int j, Mat& arr );
+    double get_success_error_level( int test_case_idx, int i, int j );
+    void run_func();
+    void prepare_to_validation( int test_case_idx );
+    
+    #if defined(_WIN32)
+#include <windows.h>
+    
+    //#include 'log.h'
+#include 'include_gunit.h'
+#include 'baseapi.h'
+#include 'leptonica/allheaders.h'
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <locale>
+#include <limits.h>
+#include <time.h>
+    
+    #endif  // GRAPHICS_DISABLED
+
+    
+    #ifndef TESSERACT_LSTM_FULLYCONNECTED_H_
+#define TESSERACT_LSTM_FULLYCONNECTED_H_
+    
+    bool TessTsvRenderer::EndDocumentHandler() { return true; }
+    
+    #include 'dotproductsse.h'
+#include <stdio.h>
+#include <stdlib.h>
+    
+    // Computes part of matrix.vector v = Wu. Computes N=8 results.
+// For details see PartialMatrixDotVector64 with N=8.
+static void PartialMatrixDotVector8(const int8_t* wi, const double* scales,
+                                    const int8_t* u, int num_in, int num_out,
+                                    double* v) {
+  // Register containing 16-bit ones for horizontal add with 16->32 bit
+  // conversion.
+  __m256i ones =
+      _mm256_set_epi16(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+  __m256i shift_id = _mm256_set_epi32(0, 7, 6, 5, 4, 3, 2, 1);
+  // Initialize all the results to 0.
+  __m256i result0 = _mm256_setzero_si256();
+  // Iterate over the input (u), one registerful at a time.
+  for (int j = 0; j < num_in;) {
+    __m256i inputs =
+        _mm256_loadu_si256(reinterpret_cast<const __m256i*>(u + j));
+    // Inputs are processed in groups of kNumInputsPerGroup, replicated
+    // kNumInputGroups times.
+    for (int ig = 0; ig < kNumInputGroups && j < num_in;
+         ++ig, j += kNumInputsPerGroup) {
+      // Replicate the low 32 bits (4 inputs) 8 times.
+      __m256i rep_input =
+          _mm256_broadcastd_epi32(_mm256_castsi256_si128(inputs));
+      // Rotate the inputs in groups of 4, so the next 4 inputs are ready.
+      inputs = _mm256_permutevar8x32_epi32(inputs, shift_id);
+      __m256i weights, reps;
+      // Mul-add, with horizontal add of the 4 inputs to each of the results.
+      MultiplyGroup(rep_input, ones, wi, weights, reps, result0);
     }
   }
+  ExtractResults(result0, shift_id, wi, scales, num_out, v);
+}
 #else
-  gpr_log(GPR_INFO, 'get_cpu_usage(): Non-linux platform is not supported.');
-#endif
+namespace tesseract {
+#endif  // __AVX2__
+    }
+    
+    void Tesseract::classify_word_pass2(const WordData& word_data,
+                                    WERD_RES** in_word,
+                                    PointerVector<WERD_RES>* out_words) {
+  // Return if we do not want to run Tesseract.
+  if (tessedit_ocr_engine_mode == OEM_LSTM_ONLY) {
+    return;
+  }
+  ROW* row = word_data.row;
+  BLOCK* block = word_data.block;
+  WERD_RES* word = *in_word;
+  prev_word_best_choice_ = word_data.prev_word != nullptr
+      ? word_data.prev_word->word->best_choice : nullptr;
+    }
+    
+    GDCINULL(WebSocketClient);
+    
+    protected:
+	Ref<WebSocketPeer> _peer;
+	bool verify_ssl;
+    
+    	GDCLASS(VehicleBody, RigidBody);
+    
+    
+    {	for (int i = 0; i < AudioServer::get_singleton()->get_bus_count(); i++) {
+		if (AudioServer::get_singleton()->get_bus_name(i) == bus) {
+			return bus;
+		}
+	}
+	return 'Master';
 }
     
-      struct Result {
-    double wall;
-    double user;
-    double system;
-    unsigned long long total_cpu_time;
-    unsigned long long idle_cpu_time;
+      // Success/failure error codes.
+  enum jpgd_status
+  {
+    JPGD_SUCCESS = 0, JPGD_FAILED = -1, JPGD_DONE = 1,
+    JPGD_BAD_DHT_COUNTS = -256, JPGD_BAD_DHT_INDEX, JPGD_BAD_DHT_MARKER, JPGD_BAD_DQT_MARKER, JPGD_BAD_DQT_TABLE, 
+    JPGD_BAD_PRECISION, JPGD_BAD_HEIGHT, JPGD_BAD_WIDTH, JPGD_TOO_MANY_COMPONENTS, 
+    JPGD_BAD_SOF_LENGTH, JPGD_BAD_VARIABLE_MARKER, JPGD_BAD_DRI_LENGTH, JPGD_BAD_SOS_LENGTH,
+    JPGD_BAD_SOS_COMP_ID, JPGD_W_EXTRA_BYTES_BEFORE_MARKER, JPGD_NO_ARITHMITIC_SUPPORT, JPGD_UNEXPECTED_MARKER,
+    JPGD_NOT_JPEG, JPGD_UNSUPPORTED_MARKER, JPGD_BAD_DQT_LENGTH, JPGD_TOO_MANY_BLOCKS,
+    JPGD_UNDEFINED_QUANT_TABLE, JPGD_UNDEFINED_HUFF_TABLE, JPGD_NOT_SINGLE_SCAN, JPGD_UNSUPPORTED_COLORSPACE,
+    JPGD_UNSUPPORTED_SAMP_FACTORS, JPGD_DECODE_ERROR, JPGD_BAD_RESTART_MARKER, JPGD_ASSERTION_ERROR,
+    JPGD_BAD_SOS_SPECTRAL, JPGD_BAD_SOS_SUCCESSIVE, JPGD_STREAM_READ, JPGD_NOTENOUGHMEM
   };
     
-    namespace grpc {
-namespace testing {
-    }
-    }
-    
-    struct netlinkrequest {
-	nlmsghdr header;
-	ifaddrmsg msg;
-};
-    
-    #include 'power_iphone.h'
-    
-    	virtual int get_available_bytes() const;
-    
-    
-    {	return CONNECTION_CONNECTING;
-}
-    
-    	// Path
-	p_len = host.find('/');
-	if (p_len != -1) {
-		path = host.substr(p_len, host.length() - p_len);
-		host = host.substr(0, p_len);
-	}
-    
-    #include 'servers/physics_server.h'
-    
-      if ((m_bits_left -= num_bits) <= 0)
+  // Input stream interface.
+  // Derive from this class to read input data from sources other than files or memory. Set m_eof_flag to true when no more data is available.
+  // The decoder is rather greedy: it will keep on calling this method until its internal input buffer is full, or until the EOF flag is set.
+  // It the input stream contains data after the JPEG stream's EOI (end of image) marker it will probably be pulled into the internal buffer.
+  // Call the get_total_bytes_read() method to determine the actual size of the JPEG stream after successful decoding.
+  class jpeg_decoder_stream
   {
-    m_bit_buf <<= (num_bits += m_bits_left);
+  public:
+    jpeg_decoder_stream() { }
+    virtual ~jpeg_decoder_stream() { }
     }
     
-    # ifdef __GNUC_PREREQ
-#  if __GNUC_PREREQ(3,4)
-#   include <limits.h>
-/*Note the casts to (int) below: this prevents OC_CLZ{32|64}_OFFS from
-   'upgrading' the type of an entire expression to an (unsigned) size_t.*/
-#   if INT_MAX>=2147483647
-#    define OC_CLZ32_OFFS ((int)sizeof(unsigned)*CHAR_BIT)
-#    define OC_CLZ32(_x) (__builtin_clz(_x))
-#   elif LONG_MAX>=2147483647L
-#    define OC_CLZ32_OFFS ((int)sizeof(unsigned long)*CHAR_BIT)
-#    define OC_CLZ32(_x) (__builtin_clzl(_x))
-#   endif
-#   if INT_MAX>=9223372036854775807LL
-#    define OC_CLZ64_OFFS ((int)sizeof(unsigned)*CHAR_BIT)
-#    define OC_CLZ64(_x) (__builtin_clz(_x))
-#   elif LONG_MAX>=9223372036854775807LL
-#    define OC_CLZ64_OFFS ((int)sizeof(unsigned long)*CHAR_BIT)
-#    define OC_CLZ64(_x) (__builtin_clzl(_x))
-#   elif LLONG_MAX>=9223372036854775807LL|| \
-     __LONG_LONG_MAX__>=9223372036854775807LL
-#    define OC_CLZ64_OFFS ((int)sizeof(unsigned long long)*CHAR_BIT)
-#    define OC_CLZ64(_x) (__builtin_clzll(_x))
-#   endif
-#  endif
-# endif
+        60,30,500,    3,18.,  1024
+  },
+  /* 8: 2048 x 27 */
+  {
+    8,{0,1,2,2,3,3,4,4},{3,4,3,4,3},{0,1,1,2,2},{-1,0,1,2,3},
+    {{4},{5,6},{7,8},{-1,9,10,11},{-1,12,13,14}},
+    2,{0,2048,   186,46,744, 12,92,372,1500,  28,66,130, 260,520,1112,
+       6,20,36,56,  78,110,158,222,  316,440,624,  928,1300,1700},
     
-    namespace xgboost {
-namespace common {
-    }
-    }
     
-    /*! \brief namespace of base64 decoding and encoding table */
-namespace base64 {
-const char DecodeTable[] = {
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  62,  // '+'
-  0, 0, 0,
-  63,  // '/'
-  52, 53, 54, 55, 56, 57, 58, 59, 60, 61,  // '0'-'9'
-  0, 0, 0, 0, 0, 0, 0,
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
-  13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  // 'A'-'Z'
-  0, 0, 0, 0, 0, 0,
-  26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
-  39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  // 'a'-'z'
-};
-static const char EncodeTable[] =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-}  // namespace base64
-/*! \brief the stream that reads from base64, note we take from file pointers */
-class Base64InStream: public dmlc::Stream {
- public:
-  explicit Base64InStream(dmlc::Stream *fs) : reader_(256) {
-    reader_.set_stream(fs);
-    num_prev = 0; tmp_ch = 0;
-  }
-  /*!
-   * \brief initialize the stream position to beginning of next base64 stream
-   * call this function before actually start read
-   */
-  inline void InitPosition(void) {
-    // get a character
-    do {
-      tmp_ch = reader_.GetChar();
-    } while (isspace(tmp_ch));
-  }
-  /*! \brief whether current position is end of a base64 stream */
-  inline bool IsEOF(void) const {
-    return num_prev == 0 && (tmp_ch == EOF || isspace(tmp_ch));
-  }
-  virtual size_t Read(void *ptr, size_t size) {
-    using base64::DecodeTable;
-    if (size == 0) return 0;
-    // use tlen to record left size
-    size_t tlen = size;
-    unsigned char *cptr = static_cast<unsigned char*>(ptr);
-    // if anything left, load from previous buffered result
-    if (num_prev != 0) {
-      if (num_prev == 2) {
-        if (tlen >= 2) {
-          *cptr++ = buf_prev[0];
-          *cptr++ = buf_prev[1];
-          tlen -= 2;
-          num_prev = 0;
-        } else {
-          // assert tlen == 1
-          *cptr++ = buf_prev[0]; --tlen;
-          buf_prev[0] = buf_prev[1];
-          num_prev = 1;
-        }
-      } else {
-        // assert num_prev == 1
-        *cptr++ = buf_prev[0]; --tlen; num_prev = 0;
-      }
-    }
-    if (tlen == 0) return size;
-    int nvalue;
-    // note: everything goes with 4 bytes in Base64
-    // so we process 4 bytes a unit
-    while (tlen && tmp_ch != EOF && !isspace(tmp_ch)) {
-      // first byte
-      nvalue = DecodeTable[tmp_ch] << 18;
-      {
-        // second byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        nvalue |= DecodeTable[tmp_ch] << 12;
-        *cptr++ = (nvalue >> 16) & 0xFF; --tlen;
-        }
-      {
-        // third byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch)) << 'invalid base64 format';
-        // handle termination
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == '=') << 'invalid base64 format';
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch] << 6;
-        if (tlen) {
-          *cptr++ = (nvalue >> 8) & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev++] = (nvalue >> 8) & 0xFF;
-        }
-      }
-      {
-        // fourth byte
-        tmp_ch = reader_.GetChar();
-        CHECK(tmp_ch != EOF && !isspace(tmp_ch))
-            << 'invalid base64 format';
-        if (tmp_ch == '=') {
-          tmp_ch = reader_.GetChar();
-          CHECK(tmp_ch == EOF || isspace(tmp_ch))
-              << 'invalid base64 format';
-          break;
-        }
-        nvalue |= DecodeTable[tmp_ch];
-        if (tlen) {
-          *cptr++ = nvalue & 0xFF; --tlen;
-        } else {
-          buf_prev[num_prev ++] = nvalue & 0xFF;
-        }
-      }
-      // get next char
-      tmp_ch = reader_.GetChar();
-    }
-    if (kStrictCheck) {
-      CHECK_EQ(tlen, 0) << 'Base64InStream: read incomplete';
-    }
-    return size - tlen;
-  }
-  virtual void Write(const void *ptr, size_t size) {
-    LOG(FATAL) << 'Base64InStream do not support write';
-  }
-    }
+/*
+ * dns.h
+ *
+ *  Created on: 2012-11-23
+ *      Author: yanguoyue
+ */
     
-    namespace xgboost {
-namespace common {
-TEST(CompressedIterator, Test) {
-  ASSERT_TRUE(detail::SymbolBits(256) == 8);
-  ASSERT_TRUE(detail::SymbolBits(150) == 8);
-  std::vector<int> test_cases = {1, 3, 426, 21, 64, 256, 100000, INT32_MAX};
-  int num_elements = 1000;
-  int repetitions = 1000;
-  srand(9);
-    }
-    }
-    }
+    #endif /* DUMPCRASHSTACK_H_ */
+
     
-      virtual void Update(HostDeviceVector<GradientPair>* in_gpair, DMatrix* data,
-                      gbm::GBLinearModel* model,
-                      double sum_instance_weight) = 0;
     
-    bool ReadJpeg(const uint8_t* data, const size_t len, JpegReadMode mode,
-              JPEGData* jpg) {
-  size_t pos = 0;
-  // Check SOI marker.
-  EXPECT_MARKER();
-  int marker = data[pos + 1];
-  pos += 2;
-  if (marker != 0xd8) {
-    fprintf(stderr, 'Did not find expected SOI marker, actual=%d\n', marker);
-    jpg->error = JPEG_SOI_NOT_FOUND;
-    return false;
-  }
-  int lut_size = kMaxHuffmanTables * kJpegHuffmanLutSize;
-  std::vector<HuffmanTableEntry> dc_huff_lut(lut_size);
-  std::vector<HuffmanTableEntry> ac_huff_lut(lut_size);
-  bool found_sof = false;
-  uint16_t scan_progression[kMaxComponents][kDCTBlockSize] = { { 0 } };
-    }
-    
-      // Returns true if the argument of the last Compare() call (or the baseline
-  // image, if Compare() was not called yet) meets the image acceptance
-  // criteria. The target_mul modifies the acceptance criteria used in this call
-  // the following way:
-  //    = 1.0 : the original acceptance criteria is used,
-  //    < 1.0 : a more strict acceptance criteria is used,
-  //    > 1.0 : a less strict acceptance criteria is used.
-  virtual bool DistanceOK(double target_mul) const = 0;
-    
-      // Map of areas where to allow blurring, only where it is not too sharp
-  std::vector<bool> blurmap(image[0].size(), false);
-  std::vector<float> edge = Convolve2D(yuv[channel], w, h, kEdgeMatrix, 3);
-  for (int y = 0; y < h; y++) {
-    for (int x = 0; x < w; x++) {
-      size_t index = y * w + x;
-      float u = yuv[1][index];
-      float v = yuv[2][index];
-      if (sharpenmap[index]) continue;
-      if (!darkmap[index]) continue;
-      if (fabs(edge[index]) < threshold && v < -0.162 * u) {
-        blurmap[index] = true;
-      }
-    }
-  }
-  Erode(w, h, &blurmap);
-  Erode(w, h, &blurmap);
-    
-    bool SetDepth(int p0, HuffmanTree *pool, uint8_t *depth, int max_depth) {
-  int stack[17];
-  int level = 0;
-  int p = p0;
-  assert(max_depth <= 16);
-  stack[0] = -1;
-  while (true) {
-    if (pool[p].index_left_ >= 0) {
-      level++;
-      if (level > max_depth) return false;
-      stack[level] = pool[p].index_right_or_value_;
-      p = pool[p].index_left_;
-      continue;
-    } else {
-      depth[pool[p].index_right_or_value_] = static_cast<uint8_t>(level);
-    }
-    while (level >= 0 && stack[level] == -1) level--;
-    if (level < 0) return true;
-    p = stack[level];
-    stack[level] = -1;
-  }
+    {    ::wakeupLock_delete(object_);
 }
     
-    // Integer implementation of the Inverse Discrete Cosine Transform (IDCT).
-    
-    namespace guetzli {
+    // true pass, false limit
+bool CommFrequencyLimit::Check() {
+    uint64_t now = ::gettickcount();
+    if (!touch_times_.empty() && (now<touch_times_.front()) ) { //if user modify the time, amend it
+    	xwarn2(TSF'Must be modified time.now=%_', now);
+    	size_t size = touch_times_.size();
+    	touch_times_.clear();
+    	for (size_t i=0; i<size; ++i) {
+    		touch_times_.push_back(now-1);
+    	}
+    }
     }
     
-      int width() const { return width_; }
-  int height() const { return height_; }
+    class TSpy :  public Spy {
+  public:
+    TSpy(void* _this): Spy(_this) {}
+    }
     
-    #include <stdint.h>
-#include <vector>
-    
-      DBWrapper* db_wrapper     = ObjectWrap::Unwrap<DBWrapper>(args.This());
-  Handle<Array> sub_batches = Handle<Array>::Cast(args[0]);
-  Local<Object> sub_batch;
-  rocksdb::WriteBatch batch;
-  bool well_formed;
-    
-    /* GLOBAL CONSTANT */
-const char *default_db_name     = 'default_envlibrados_db';
-const char *default_pool_name   = 'default_envlibrados_pool';
-const char *default_config_path = 'CEPH_CONFIG_PATH';           // the env variable name of ceph configure file
-// maximum dir/file that can store in the fs
-const int MAX_ITEMS_IN_FS = 1 << 30;
-// root dir tag
-const std::string ROOT_DIR_KEY = '/';
-const std::string DIR_ID_VALUE = '<DIR>';
-    
-      // triggered by TEST_SYNC_POINT, blocking execution until all predecessors
-  // are executed.
-  // And/or call registered callback function, with argument `cb_arg`
-  void Process(const std::string& point, void* cb_arg = nullptr);
+    bool JNU_JbyteArray2Buffer(JNIEnv* _env, const jbyteArray bytes, AutoBuffer& ab);
