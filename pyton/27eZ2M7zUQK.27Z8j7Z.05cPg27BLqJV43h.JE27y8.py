@@ -1,83 +1,57 @@
 
         
         
-def check_alphabetical(lines):
-    '''
-    checks if all entries per section are in alphabetical order based in entry title
-    '''
-    sections = {}
-    section_line_num = {}
-    for line_num, line in enumerate(lines):
-        if line.startswith(anchor):
-            category = line.split(anchor)[1].strip()
-            sections[category] = []
-            section_line_num[category] = line_num
-            continue
-        if not line.startswith('|') or line.startswith('|---'):
-            continue
-        title = [x.strip() for x in line.split('|')[1:-1]][0].upper()
-        sections[category].append(title)
+response = get_json_from_api(broker_url + '/domains', username, password)
     
-        base = 'src/sentry/locale'
-    for locale in os.listdir(base):
-        fn = os.path.join(base, locale, 'LC_MESSAGES', 'django.po')
-        if not os.path.isfile(fn):
-            continue
+    import os
     
-    from tornado.options import define, options
+            expected = {
+            'name': 'myhealthcheck',
+            'checkIntervalSec': 5,
+            'port': 443,
+            'unhealthyThreshold': 2,
+            'healthyThreshold': 2,
+            'host': '',
+            'timeoutSec': 5,
+            'requestPath': '/'}
     
-        .. versionchanged:: 5.0:
-       Unified ``tornado.gen.TimeoutError`` and
-       ``tornado.ioloop.TimeoutError`` as ``tornado.util.TimeoutError``.
-       Both former names remain as aliases.
-    '''
+    from ansible.plugins.terminal import TerminalBase
+from ansible.errors import AnsibleConnectionFailure
     
-    
-def wrap_web_tests_application():
-    result = {}
-    for cls in web_test.wsgi_safe_tests:
-        def class_factory():
-            class WSGIApplicationWrappedTest(cls):  # type: ignore
-                def setUp(self):
-                    self.warning_catcher = ignore_deprecation()
-                    self.warning_catcher.__enter__()
-                    super(WSGIApplicationWrappedTest, self).setUp()
-    
-    import twisted.internet.abstract  # type: ignore
-from twisted.internet.defer import Deferred  # type: ignore
-from twisted.internet.posixbase import PosixReactorBase  # type: ignore
-from twisted.internet.interfaces import IReactorFDSet, IDelayedCall, IReactorTime, IReadDescriptor, IWriteDescriptor  # type: ignore # noqa: E501
-from twisted.python import failure, log  # type: ignore
-from twisted.internet import error  # type: ignore
-import twisted.names.cache  # type: ignore
-import twisted.names.client  # type: ignore
-import twisted.names.hosts  # type: ignore
-import twisted.names.resolve  # type: ignore
-    
-        def _release(self):
-        if self.release_callback is not None:
-            release_callback = self.release_callback
-            self.release_callback = None
-            release_callback()
-    
-        return exc
-    
-        def test_remove_without_add(self):
-        # remove_handler should not throw an exception if called on an fd
-        # was never added.
-        sock, port = bind_unused_port()
-        try:
-            self.io_loop.remove_handler(sock.fileno())
-        finally:
-            sock.close()
+        def construct_vault_encrypted_unicode(self, node):
+        value = self.construct_scalar(node)
+        b_ciphertext_data = to_bytes(value)
+        # could pass in a key id here to choose the vault to associate with
+        # TODO/FIXME: plugin vault selector
+        vault = self._vaults['default']
+        if vault.secrets is None:
+            raise ConstructorError(context=None, context_mark=None,
+                                   problem='found !vault but no vault password provided',
+                                   problem_mark=node.start_mark,
+                                   note=None)
+        ret = AnsibleVaultEncryptedUnicode(b_ciphertext_data)
+        ret.vault = vault
+        return ret
     
     
-class AsyncTestCaseTest(AsyncTestCase):
-    def test_exception_in_callback(self):
-        with ignore_deprecation():
-            self.io_loop.add_callback(lambda: 1 / 0)
-            try:
-                self.wait()
-                self.fail('did not get expected exception')
-            except ZeroDivisionError:
-                pass
+class FullJitterBackoffStrategyTestCase(unittest.TestCase):
+    def test_no_retries(self):
+        strategy = _full_jitter_backoff(retries=0)
+        result = list(strategy())
+        self.assertEquals(result, [], 'list should be empty')
+    
+        def __init__(self, employee_id, name, rank, call_center):
+        self.employee_id = employee_id
+        self.name = name
+        self.rank = rank
+        self.call = None
+        self.call_center = call_center
+    
+    
+class Page(object):
+    
+    
+class SalesRanker(MRJob):
+    
+        def get(self, query):
+        '''Get the stored query result from the cache.
