@@ -1,237 +1,250 @@
 
         
-          base::win::ScopedHICON icon;
-  HWND hWnd = getHWND(getAppWindow(this));
-  if (hWnd == NULL) {
-    error_ = kNoAssociatedAppWindow;
-    LOG(ERROR) << error_;
-    return false;
-  }
-  const float scale = display::win::GetDPIScale();
-  if (badge.size())
-    icon = createBadgeIcon(hWnd, base::UTF8ToUTF16(badge).c_str(), 16 * scale, 16 * scale);
+        // Tell browser we have an uncaughtException from node.
+IPC_MESSAGE_ROUTED1(ShellViewHostMsg_UncaughtException,
+                    std::string /* err */)
     
-    
-    {}  // namespace
-    
-    
-    {  MenuItem* item = object_manager_->GetApiObject<MenuItem>(command_id);
-  if (!item)
-    return false;
-  return !item->icon_.IsEmpty();
-}
-    
-       bool GetAcceleratorForCommandId(
-      int command_id,
-      ui::Accelerator* accelerator) const override;
-    
-    void Menu::Remove(MenuItem* menu_item, int pos) {
-  std::vector<MenuItem*>::iterator begin = menu_items.begin();
-  menu_items.erase(begin+pos);
-  gtk_container_remove(GTK_CONTAINER(menu_), menu_item->menu_item_);
-}
-    
-      if (type == 'separator') {
-    menu_item_ = gtk_separator_menu_item_new();
-  } else {
-    if (type == 'checkbox') {
-      menu_item_ = gtk_check_menu_item_new();
-      bool checked;
-      if (option.GetBoolean('checked', &checked))
-        SetChecked(checked);
-    } else {
-      menu_item_ = gtk_image_menu_item_new();
-      std::string icon;
-      if (option.GetString('icon', &icon))
-        SetIcon(icon);
-    }
+    namespace nw {
     }
     
-    
-    {  if (menu_)
-    menu_->UpdateStates();
+    v8::Handle<v8::Value> DeallocateObject(int routing_id,
+                                       int object_id) {
+  RenderThread::Get()->Send(new ShellViewHostMsg_Deallocate_Object(
+      routing_id, object_id));
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  return v8::Undefined(isolate);
 }
     
-    class NwMenuGetNSStringFWithFixupFunction : public NWSyncExtensionFunction {
+    // Call method of an object in browser and return the result.
+// function CallObjectMethod(id, type, method, args);
+v8::Handle<v8::Value> CallObjectMethodSync(int routing_id,
+                                           int object_id,
+                                           const std::string& type,
+                                           const std::string& method,
+                                           v8::Handle<v8::Value> args);
+    
+    
+    {protected:
+  BaseEvent(){}
+  virtual ~BaseEvent(){}
+};
+    
+    void Menu::Destroy() {
+  gtk_widget_destroy(menu_);
+  g_object_unref(G_OBJECT(menu_));
+}
+    
+     protected:
+  ~NwClipboardSetListSyncFunction() override;
+    
+    // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
+//
+// Expands to the name of the variable used to remember the names of
+// the defined tests in the given test case.
+# define GTEST_TYPED_TEST_CASE_P_STATE_(TestCaseName) \
+  gtest_typed_test_case_p_state_##TestCaseName##_
+    
+    template <typename T1, typename T2, typename T3, typename T4, typename T5,
+    typename T6, typename T7, typename T8, typename T9, typename T10,
+    typename T11, typename T12, typename T13, typename T14, typename T15>
+class ValueArray15 {
  public:
-  NwMenuGetNSStringFWithFixupFunction() {}
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
-    
- protected:
-  ~NwMenuGetNSStringFWithFixupFunction() override {}
-    
-  DECLARE_EXTENSION_FUNCTION('nw.Menu.getNSStringFWithFixup', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwMenuGetNSStringFWithFixupFunction);
-};
-    
-    /** Consume entire stream and use its begin/end.
-  * Someday we might have a real StreamReader, but for now this
-  * is convenient.
-  */
-bool JSON_API parseFromStream(
-    CharReader::Factory const&,
-    std::istream&,
-    Value* root, std::string* errs);
-    
-    
-    {  if (!indented_) writeIndent();
-  const std::string& comment = root.getComment(commentBefore);
-  std::string::const_iterator iter = comment.begin();
-  while (iter != comment.end()) {
-    *sout_ << *iter;
-    if (*iter == '\n' &&
-       (iter != comment.end() && *(iter + 1) == '/'))
-      // writeIndent();  // would write extra newline
-      *sout_ << indentString_;
-    ++iter;
-  }
-  indented_ = false;
-}
-    
-    TEST(AnyTest, TestPackAndUnpackAny) {
-  // We can pack a Any message inside another Any message.
-  protobuf_unittest::TestAny submessage;
-  submessage.set_int32_value(12345);
-  google::protobuf::Any any;
-  any.PackFrom(submessage);
-  protobuf_unittest::TestAny message;
-  message.mutable_any_value()->PackFrom(any);
+  ValueArray15(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7, T8 v8, T9 v9,
+      T10 v10, T11 v11, T12 v12, T13 v13, T14 v14, T15 v15) : v1_(v1), v2_(v2),
+      v3_(v3), v4_(v4), v5_(v5), v6_(v6), v7_(v7), v8_(v8), v9_(v9), v10_(v10),
+      v11_(v11), v12_(v12), v13_(v13), v14_(v14), v15_(v15) {}
     }
     
-      std::string namespace_;
-  std::string reflectionClassname_;
+    #ifdef __BORLANDC__
+// string.h is not guaranteed to provide strcpy on C++ Builder.
+# include <mem.h>
+#endif
     
-    #include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/compiler/csharp/csharp_names.h>
-#include <google/protobuf/compiler/csharp/csharp_options.h>
-    
-    void WriteMessageDocComment(io::Printer* printer, const Descriptor* message);
-void WriteFieldDocComment(io::Printer* printer, const FieldDescriptor* field);
-void WriteEnumDocComment(io::Printer* printer, const EnumDescriptor* enum_);
-void WriteEnumValueDocComment(io::Printer* printer,
-                              const EnumValueDescriptor* value);
-void WriteServiceDocComment(io::Printer* printer,
-                            const ServiceDescriptor* service);
-void WriteMethodDocComment(io::Printer* printer,
-                           const MethodDescriptor* method);
+    // This provides interface PrimeTable that determines whether a number is a
+// prime and determines a next prime number. This interface is used
+// in Google Test samples demonstrating use of parameterized tests.
     
     
-    { private:
-  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(JavaGenerator);
-};
+    {  // <TechnicalDetails>
+  //
+  // EXPECT_EQ(expected, actual) is the same as
+  //
+  //   EXPECT_TRUE((expected) == (actual))
+  //
+  // except that it will print both the expected value and the actual
+  // value when the assertion fails.  This is very helpful for
+  // debugging.  Therefore in this case EXPECT_EQ is preferred.
+  //
+  // On the other hand, EXPECT_TRUE accepts any Boolean expression,
+  // and is thus more general.
+  //
+  // </TechnicalDetails>
+}
+    
+    #pragma warning(disable : 4100) // unused p_optional
+    OperatorSchemaSetter&
+        OperatorSchemaSetter::Input(const std::string& p_inputName,
+            const std::string& p_description,
+            const std::string& p_type,
+            bool p_optional) /* TODO: add logic for this */
+    {
+        m_inputs.push_back(std::make_tuple(p_inputName, p_description, p_type));
+        return *this;
+    }
+    
+            // Attribute representation, including name, type, and allowed values.
+        // The first element of allowed values (if specified) is the default
+        // value.
+        class Attribute
+        {
+        public:
+    }
+    
+            int Status::Code() const
+        {
+            return Ok() ? static_cast<int>(StatusCode::OK) : m_state->m_code;
+        }
+    
+                static Common::Status UnpackTensor(const onnx::TensorProto& p_tensor, /*out*/std::string* p_data, int64_t p_expected_size);
+            static Common::Status UnpackTensor(const onnx::TensorProto& p_tensor, /*out*/bool* p_data, int64_t p_expected_size);
+    
+            size_t StringRange::Find(const char p_ch) const
+        {
+            size_t idx = 0;
+            while (idx < m_size)
+            {
+                if (m_data[idx] == p_ch)
+                {
+                    return idx;
+                }
+                idx++;
+            }
+            return std::string::npos;
+        }
+    
+        // Taken from RS4
+    REGISTER_OPERATOR_SCHEMA(Affine)
+        .Description('Affine takes one input data (Tensor<T>) and produces one output '
+            'data (Tensor<T>) where the affine function, f(x)= alpha * x + beta is '
+            'applied to the tensor elementwise.')
+        .Input('X', 'Input tensor of any shape', 'T')
+        .Output('Y', 'Output tensor of same shape and type as input X.', 'T')
+        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
+            'Constrain input and output types to float tensors.')
+        .Attr('alpha', 'Scalar multiplication factor', AttrType::AttributeProto_AttributeType_FLOAT)
+        .Attr('beta', 'Scalar offset', AttrType::AttributeProto_AttributeType_FLOAT);
+    
+        // Taken from Caffe2
+    REGISTER_OPERATOR_SCHEMA(SpaceToDepth)
+        .Description('SpaceToDepth for 4-D tensors of type T. '
+            'Zero-pads and then rearranges (permutes) blocks of spatial data into '
+            'channel. More specifically, this op outputs a copy of the input tensor '
+            'where values from the height and width dimensions are moved to the '
+            'channel dimension. After the zero-padding, both height and width of the '
+            'input must be divisible by the block size.')
+        .Input('input', 'Input tensor of [N,C,H,W]', 'T')
+        .Output('output', 'Output tensor of [N, C * blocksize * blocksize, H/blocksize, '
+            'W/blocksize]', 'T')
+        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
+            'Constrain input and output types to float tensors.')
+        .Attr('blocksize', 'Blocks of [blocksize,blocksize] are moved.', AttrType::AttributeProto_AttributeType_INT);
+    
+    
+    {    for (ChunkIdType i = 0; i < m_chunks.size(); ++i)
+    {
+        ChunkInfo cd;
+        cd.m_id = i;
+        cd.m_numberOfSamples = m_chunks[i].GetTotalFrames();
+        // In frame mode, each frame is represented as sequence.
+        // The augmentation is still done for frames in the same sequence only, please see GetSequenceById method.
+        cd.m_numberOfSequences = m_frameMode ? m_chunks[i].GetTotalFrames() : m_chunks[i].GetNumberOfUtterances();
+        chunks.push_back(cd);
+    }
+    return chunks;
+}
+    
+    // SectionString - section to hold variable length zero terminated UTF8 strings
+// supports mapping tables
+// for faster access, a section with offsets to the beginning of the strings can be saved as well
+class SectionString : public Section
+{
+public:
+    typedef std::string LabelType; // TODO: are these supposed to be the same as the DataReader's?
+    typedef unsigned LabelIdType;
+    }
+    
+    // allows to write cudaFunction() || 'error'   (CUDA runtime)
+static
+#ifdef WIN32
+    __declspec(noinline)
+#endif
+        void
+        operator||(cudaError_t rc, const char* msg)
+{
+    if (rc != cudaSuccess)
+    {
+        char buf[1000];
+        sprintf_s(buf, 1000, '%s: %s (cuda error %d)', msg, cudaGetErrorString(rc), rc);
+        cudafail(buf);
+    }
+}
     
     
     {
-    {}}
+    {    // We failed to update the flags.  Some other thread probably updated them
+    // and cleared some of the other bits.  Continue around the loop to see if
+    // we are the last user now, or if we need to try updating the flags again.
+  }
+}
     
-    #ifndef OPENCV_CUDA_EMULATION_HPP_
-#define OPENCV_CUDA_EMULATION_HPP_
+    int getdtablesize() {
+  return _getmaxstdio();
+}
     
-    CV_EXPORTS_W void multiply(InputArray src1, Scalar src2, OutputArray dst, double scale=1, int dtype=-1);
+      // Sugar for the most common case
+  template <class Collection, class F>
+  auto map(Collection&& c, F&& func)
+      -> decltype(map(c.begin(), c.end(), func)) {
+    return map(c.begin(), c.end(), std::forward<F>(func));
+  }
     
-      /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a cv::Mat
-   *
-   * @param cv_img
-   *    cv::Mat containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See image_data_layer.cpp for an example.
-   */
-  void Transform(const cv::Mat& cv_img, Blob<Dtype>* transformed_blob);
-#endif  // USE_OPENCV
-    
-    
-    {}  // namespace caffe
-    
-    
-    {}  // namespace caffe
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    
-    {  bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
-  cudnnPoolingDescriptor_t  pooling_desc_;
-  cudnnPoolingMode_t        mode_;
-};
-#endif
-    
-    namespace caffe {
+    AsyncSocket::WriteResult AsyncSocket::performWrite(
+    const iovec* vec,
+    uint32_t count,
+    WriteFlags flags,
+    uint32_t* countWritten,
+    uint32_t* partialWritten) {
+  // We use sendmsg() instead of writev() so that we can pass in MSG_NOSIGNAL
+  // We correctly handle EPIPE errors, so we never want to receive SIGPIPE
+  // (since it may terminate the program if the main program doesn't explicitly
+  // ignore it).
+  struct msghdr msg;
+  msg.msg_name = nullptr;
+  msg.msg_namelen = 0;
+  msg.msg_iov = const_cast<iovec *>(vec);
+  msg.msg_iovlen = std::min<size_t>(count, kIovMax);
+  msg.msg_flags = 0;
+  msg.msg_controllen = sendMsgParamCallback_->getAncillaryDataSize(flags);
+  CHECK_GE(AsyncSocket::SendMsgParamsCallback::maxAncillaryDataSize,
+           msg.msg_controllen);
     }
     
-    #endif  // CAFFE_CUDNN_TANH_LAYER_HPP_
-
-    
-    
-    {}  // namespace caffe
-    
-     protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    #include <vector>
-    
-    bool js_cocos2dx_navmesh_NavMeshObstacle_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_navmesh_NavMeshObstacle_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_navmesh_NavMeshObstacle(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_navmesh(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_initWith(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_syncToObstacle(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_syncToNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getHeight(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getRadius(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_getNavMeshObstacleComponentName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_navmesh_NavMeshObstacle_NavMeshObstacle(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    bool js_cocos2dx_studio_ZOrderFrame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_ZOrderFrame_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_ZOrderFrame(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_ZOrderFrame_getZOrder(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ZOrderFrame_setZOrder(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ZOrderFrame_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_ZOrderFrame_ZOrderFrame(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    #ifdef __cplusplus
-extern 'C' {
-#endif
-#include 'tolua++.h'
-#ifdef __cplusplus
-}
-#endif
-    
-    #endif // __cocos2dx_experimental_video_h__
-#endif //#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) && !defined(CC_TARGET_OS_TVOS)
-
-    
-    			bd.position.Set(1.0f, 0.4f);
-			m_wheel2 = m_world->CreateBody(&bd);
-			m_wheel2->CreateFixture(&fd);
-    
-    #define ASSERT_BUF_SIZE 4096
-static char sAssertBuf[ASSERT_BUF_SIZE];
-static AssertHandler gAssertHandler;
-    
-      template <typename ...Args>
-  void initialize(Args&&... arguments) {
-    FBASSERT(!m_instance);
-    m_instance = new T(std::forward<Args>(arguments)...);
-  }
+    #ifndef OPENSSL_NO_TLSEXT
+/**
+ * 1. Client sends TLSEXT_HOSTNAME in client hello.
+ * 2. Server found a match SSL_CTX and use this SSL_CTX to
+ *    continue the SSL handshake.
+ * 3. Server sends back TLSEXT_HOSTNAME in server hello.
+ */
+TEST(AsyncSSLSocketTest, SNITestMatch) {
+  EventBase eventBase;
+  std::shared_ptr<SSLContext> clientCtx(new SSLContext);
+  std::shared_ptr<SSLContext> dfServerCtx(new SSLContext);
+  // Use the same SSLContext to continue the handshake after
+  // tlsext_hostname match.
+  std::shared_ptr<SSLContext> hskServerCtx(dfServerCtx);
+  const std::string serverName('xyz.newdev.facebook.com');
+  int fds[2];
+  getfds(fds);
+  getctx(clientCtx, dfServerCtx);
+    }
