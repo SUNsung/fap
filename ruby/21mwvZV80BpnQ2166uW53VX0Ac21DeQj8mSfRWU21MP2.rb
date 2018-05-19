@@ -1,47 +1,55 @@
 
         
-            describe '#download' do
-      it 'returns the p8 file' do
-        mock_client_response(:download_key) do
-          %{
------BEGIN PRIVATE KEY-----
-this is the encoded private key contents
------END PRIVATE KEY-----
-          }
-        end
-        p8_string = key.download
-        expect(p8_string).to include('PRIVATE KEY')
-      end
+              s << '' << 'WARNING: launchctl will fail when run under tmux.' if ENV['TMUX']
     end
+    s.join('\n') + '\n' unless s.empty?
+  end
+end
+
     
-          it 'it increments all targets minor version number' do
-        Fastlane::FastFile.new.parse('lane :test do
-          increment_version_number(bump_type: 'minor')
-        end').runner.execute(:test)
+          # Find commands in Homebrew/dev-cmd
+      if ARGV.homebrew_developer?
+        puts
+        puts 'Built-in development commands'
+        puts_columns internal_development_commands
+      end
     
-              node.css('.method').each do |n|
-            next unless n.at_css('dt[id]')
-            name = n.at_css('.descname').content
-            name = '#{class_name}::#{name}()'
-            id = n.at_css('dt[id]')['id']
-            entries << [name, id]
-          end
+          out = checks.send(method)
+      unless out.nil? || out.empty?
+        if first_warning
+          $stderr.puts <<-EOS.undent
+            #{Tty.white}Please note that these warnings are just used to help the Homebrew maintainers
+            with debugging if you file an issue. If everything you use Homebrew for is
+            working fine: please don't worry and just ignore them. Thanks!#{Tty.reset}
+          EOS
         end
     
-    
-    
-      # Replaces relative urls with full urls
-  def expand_urls(input, url='')
-    url ||= '/'
-    input.gsub /(\s+(href|src|poster)\s*=\s*['|']{1})(\/[^\/>]{1}[^\''>]*)/ do
-      $1+url+$3
+      def print_remaining_files(files, root, other = '')
+    case files.length
+    when 0
+      # noop
+    when 1
+      puts files
+    else
+      puts '#{root}/ (#{files.length} #{other}files)'
     end
   end
+end
+
     
-            def reference!(node)
-          @references << node
-          @referenced = true
-        end
+          export JAVA_HOME='$(/usr/libexec/java_home)'
+      export AWS_ACCESS_KEY='<Your AWS Access ID>'
+      export AWS_SECRET_KEY='<Your AWS Secret Key>'
+      export #{home_name}='#{home_value}'
+    EOS
+  end
+end
+
     
-              add_offense(node)
-        end
+          def exists?(klass)
+        any? { |entry| entry.klass == klass }
+      end
+    
+    Dir.chdir APP_ROOT do
+  # This script is a starting point to setup your application.
+  # Add necessary setup steps to this file:
