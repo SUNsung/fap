@@ -1,35 +1,50 @@
 
         
-            if address_family == socket.AF_INET:
-        if len(packed_ip) != ctypes.sizeof(addr.ipv4_addr):
-            raise socket.error('packed IP wrong length for inet_ntoa')
-        ctypes.memmove(addr.ipv4_addr, packed_ip, 4)
-    elif address_family == socket.AF_INET6:
-        if len(packed_ip) != ctypes.sizeof(addr.ipv6_addr):
-            raise socket.error('packed IP wrong length for inet_ntoa')
-        ctypes.memmove(addr.ipv6_addr, packed_ip, 16)
-    else:
-        raise socket.error('unknown address family')
+                if not assertion:
+            if self.min_bound == self.max_bound:
+                expected = self.min_bound
+            else:
+                expected = '%s..%s' % (self.min_bound, self.max_bound)
     
-            Python does not have any size restrictions, but the compilation of
-        such large source files seems to be pretty memory hungry. The memory
-        consumption of the python process grew to >1.5GB when importing a
-        15MB lexer, eating all my swap space and I was to impacient to see,
-        if it could finish at all. With packed initializers that are unpacked
-        at import time of the lexer module, everything works like a charm.
-        
-        '''
-        
-        ret = []
-        for i in range(len(string) / 2):
-            (n, v) = ord(string[i*2]), ord(string[i*2+1])
     
-            raise NotImplementedError
+def human(report):
+    '''Convert the report to a list of human useful lines.'''
+    updated = []
+    for toolname, violations in report.iteritems():
+        updated.append(toolname)
+        updated.extend('%(file)s:%(line)s %(violation)s' % v
+                       for v in violations)
+        updated.append('')
+    return updated
     
-    def setType(self, ttype):
-        '''@brief Get the type of the token.
+    def is_api(subtype = ''):
+    return c.render_style and c.render_style.startswith(api_type(subtype))
     
-    	# Track the line at which the error occurred in case this is
-	# generated from a lexer.  We need to track this since the
-        # unexpected char doesn't carry the line info.
-        self.line = None
+            # tell reddit_base to redirect to the appropriate subreddit for
+        # a legacy CNAME
+        if not is_subdomain(domain, g.domain):
+            environ['legacy-cname'] = domain
+            return self.app(environ, start_response)
+    
+        @require_oauth2_scope('creddits')
+    @validate(
+        VUser(),
+        user=VAccountByName('username'),
+        months=VInt('months', min=1, max=36),
+        timeout=VNotInTimeout(),
+    )
+    @api_doc(
+        api_section.gold,
+        uri='/api/v1/gold/give/{username}',
+    )
+    def POST_give(self, user, months, timeout):
+        self._gift_using_creddits(
+            recipient=user,
+            months=months,
+            proxying_for=request.POST.get('proxying_for'),
+        )
+
+    
+        def GET_promohealth(self):
+        response.content_type = 'application/json'
+        return json.dumps(promote.health_check())
