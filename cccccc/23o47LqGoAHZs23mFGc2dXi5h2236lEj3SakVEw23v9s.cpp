@@ -1,179 +1,131 @@
 
         
-            // allocation size needed   --buffer must have this size
-    static size_t elementsneeded(size_t n, size_t m)
-    {
-        const size_t colstride = (n + 3) & ~3;
-        return colstride * m;
-    }
-    
-    using namespace std;
-using namespace Microsoft::MSR::ScriptableObjects;
-    
-            // Process any outstanding NDL Scripts
-        bool crossNetwork = netNdlTo->cn != netNdlFrom->cn;
-        ProcessNDLScript(netNdlFrom, ndlPassAll);
-        if (crossNetwork)
-        {
-            ProcessNDLScript(netNdlTo, ndlPassAll);
-        }
-    
-    // Same as 'ReadConfigFiles' function below, but takes as input string instead of wstring
-std::string ConfigParser::ReadConfigFiles(const std::string& filePaths)
-{
-    return ReadConfigFiles(msra::strfun::utf16(filePaths));
-}
-    
-    
-    {
-    {
-    {    void setverbosity(int veb)
-    {
-        verbosity = veb;
-        numlattices.setverbosity(veb);
-        denlattices.setverbosity(veb);
-    }
+        
+    { private:
+  DISALLOW_COPY_AND_ASSIGN(UnresponsiveSuppressor);
 };
-} }
-
     
-      /// Perform an IO control command on the acceptor.
-  /**
-   * This function is used to execute an IO control command on the acceptor.
-   *
-   * @param command The IO control command to be performed on the acceptor.
-   *
-   * @throws boost::system::system_error Thrown on failure.
-   *
-   * @sa IoControlCommand @n
-   * boost::asio::socket_base::non_blocking_io
-   *
-   * @par Example
-   * Getting the number of bytes ready to read:
-   * @code
-   * boost::asio::ip::tcp::acceptor acceptor(io_service);
-   * ...
-   * boost::asio::ip::tcp::acceptor::non_blocking_io command(true);
-   * socket.io_control(command);
-   * @endcode
-   */
-  template <typename IoControlCommand>
-  void io_control(IoControlCommand& command)
-  {
-    boost::system::error_code ec;
-    this->get_service().io_control(this->get_implementation(), command, ec);
-    boost::asio::detail::throw_error(ec, 'io_control');
-  }
+    namespace atom {
+    }
     
+    namespace chrome {
+class MonitorFinder;
+    }
     
-    {
-    {
-    {} // namespace detail
-} // namespace asio
-} // namespace boost
-    
-    #if !defined(BOOST_ASIO_WINDOWS) && !defined(__CYGWIN__)
+    #include <set>
+#include <string>
     
     #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
 #endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
     
-    // GLFW callbacks (registered by default to GLFW if you enable 'install_callbacks' during initialization)
-// Provided here if you want to chain callbacks yourself. You may also handle inputs yourself and use those as a reference.
-IMGUI_API void        ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-IMGUI_API void        ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-IMGUI_API void        ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-IMGUI_API void        ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c);
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    
+    {} // namespace boost
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+// Nothing to include.
+#elif defined(BOOST_ASIO_HAS_STD_ATOMIC)
+# include <atomic>
+#else // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+# include <boost/detail/atomic_count.hpp>
+#endif // defined(BOOST_ASIO_HAS_STD_ATOMIC)
+    
+    #include <boost/asio/detail/push_options.hpp>
+    
+    #endif // BOOST_ASIO_DETAIL_DATE_TIME_FWD_HPP
 
     
-        // Main loop
-    bool running = true;
-    while (running)
-    {
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        ALLEGRO_EVENT ev;
-        while (al_get_next_event(queue, &ev))
-        {
-            ImGui_ImplA5_ProcessEvent(&ev);
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
-                running = false;
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE)
-            {
-                ImGui_ImplA5_InvalidateDeviceObjects();
-                al_acknowledge_resize(display);
-                Imgui_ImplA5_CreateDeviceObjects();
-            }
-        }
-        ImGui_ImplA5_NewFrame();
-    }
+    #endif // BOOST_ASIO_DETAIL_EVENT_HPP
+
     
-        CleanupDeviceD3D();
-    DestroyWindow(hwnd);
-    UnregisterClass(_T('ImGui Example'), wc.hInstance);
+    #ifndef BOOST_ASIO_DETAIL_FD_SET_ADAPTER_HPP
+#define BOOST_ASIO_DETAIL_FD_SET_ADAPTER_HPP
     
-    
-    {        // Handle loss of D3D9 device
-        if (result == D3DERR_DEVICELOST && g_pd3dDevice->TestCooperativeLevel() == D3DERR_DEVICENOTRESET)
-        {
-            ImGui_ImplDX9_InvalidateDeviceObjects();
-            g_pd3dDevice->Reset(&g_d3dpp);
-            ImGui_ImplDX9_CreateDeviceObjects();
-        }
-    }
-    
-            // Rendering
-        IwGxSetColClear(clear_color.x * 255, clear_color.y * 255, clear_color.z * 255, clear_color.w * 255);
-        IwGxClear();
-        ImGui::Render();
-        ImGui_Marmalade_RenderDrawData(ImGui::GetDrawData());
-        IwGxSwapBuffers();
-    
-    int main(int, char**)
+    template <typename Handler>
+inline void deallocate(void* p, std::size_t s, Handler& h)
 {
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
+#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
+  ::operator delete(p);
+#else
+  using boost::asio::asio_handler_deallocate;
+  asio_handler_deallocate(p, s, boost::asio::detail::addressof(h));
+#endif
+}
+    
+    #include 'Common.h'
+#include 'References.h'
+    
+    /* static */ void Config::destroy(Config * node)
+{
+    delete node;
+}
+    
+        bool isExperimentalFeatureEnabled(int feature) const;
+    
+        void setFlex(double flex);
+    void setFlexBasis(double flexBasis);
+    void setFlexBasisPercent(double flexBasis);
+    void setFlexBasisAuto();
+    void setFlexGrow(double flexGrow);
+    void setFlexShrink(double flexShrink);
+    
+    #define ASSERT_BUF_SIZE 4096
+static char sAssertBuf[ASSERT_BUF_SIZE];
+static AssertHandler gAssertHandler;
+    
+      const char* functionName() const { return m_functionName; }
+  const char* fileName() const { return m_fileName; }
+  int lineNumber() const { return m_lineNumber; }
+    
+      T* release() {
+    T* obj = get();
+    pthread_setspecific(m_key, NULL);
+    return obj;
+  }
+    
+    #pragma once
+    
+    namespace aria2 {
     }
     
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-        // Main loop
-    bool done = false;
-    while (!done)
-    {
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
-        {
-            ImGui_ImplSdlGL3_ProcessEvent(&event);
-            if (event.type == SDL_QUIT)
-                done = true;
-        }
-        ImGui_ImplSdlGL3_NewFrame(window);
+    bool AbstractProxyRequestCommand::executeInternal()
+{
+  // socket->setBlockingMode();
+  if (httpConnection_->sendBufferIsEmpty()) {
+    auto httpRequest = make_unique<HttpRequest>();
+    httpRequest->setUserAgent(getOption()->get(PREF_USER_AGENT));
+    httpRequest->setRequest(getRequest());
+    httpRequest->setProxyRequest(proxyRequest_);
+    }
     }
     
-    // DirectX data
-static LPDIRECT3DDEVICE9        g_pd3dDevice = NULL;
-static LPDIRECT3DVERTEXBUFFER9  g_pVB = NULL;
-static LPDIRECT3DINDEXBUFFER9   g_pIB = NULL;
-static LPDIRECT3DTEXTURE9       g_FontTexture = NULL;
-static int                      g_VertexBufferSize = 5000, g_IndexBufferSize = 10000;
+    namespace aria2 {
+    }
+    
+    
+    {} // namespace aria2
+    
+    #include <algorithm>
+    
+      // Alrighty, search the fingerprint.
+  const size_t nvals = CFArrayGetCount(identities);
+  for (size_t i = 0; i < nvals; ++i) {
+    SecIdentityRef id = (SecIdentityRef)CFArrayGetValueAtIndex(identities, i);
+    if (!id) {
+      A2_LOG_ERROR('Failed to get a value!');
+      continue;
+    }
+    if (!checkIdentity(id, fp, ht)) {
+      continue;
+    }
+    A2_LOG_INFO('Found cert with matching fingerprint');
+    credentials_ = id;
+    CFRetain(id);
+    return true;
+  }
+    
+      virtual bool getVerifyPeer() const CXX11_OVERRIDE { return verifyPeer_; }
