@@ -1,283 +1,335 @@
 
         
-          AcceleratorCallbackMap accelerator_callback_map_;
+        #ifndef TENSORFLOW_DEBUGGER_STATE_IMPL_H_
+#define TENSORFLOW_DEBUGGER_STATE_IMPL_H_
     
-    void DragFileItems(const std::vector<base::FilePath>& files,
-                   const gfx::Image& icon,
-                   gfx::NativeView view);
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    namespace atom {
-    }
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    
-    {}  // namespace atom
-    
-    
-    { protected:
-  virtual ~WindowListObserver() {}
-};
-    
-      // Sets ID of the hosting desktop picker dialog. The window with this ID will
-  // be filtered out from the list of sources.
-  virtual void SetViewDialogWindowId(content::DesktopMediaID::Id dialog_id) = 0;
-    
-      base::WeakPtrFactory<PepperFlashDRMHost> weak_factory_;
-    
-    #include <string>
-    
-    #ifdef _MSC_VER
-    
-    IPC_MESSAGE_ROUTED3(ShellViewMsg_Object_On_Event,
-                    int /* object id */,
-                    std::string /* event name */,
-                    base::ListValue /* arguments */)
+    #include 'tensorflow/core/common_runtime/device.h'
+#include 'tensorflow/core/framework/device_base.h'
     
     
-void Base::Call(const std::string& method, const base::ListValue& arguments,
-                content::RenderFrameHost* rvh) {
-  NOTREACHED() << 'Uncatched call in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
+    {    EXPECT_NE(a_1_1.get(), d_4_2.get());
+    EXPECT_NE(a_1_1.get(), e_5_2.get());
+    EXPECT_NE(d_4_1.get(), e_5_2.get());
+  }
+    
+        NodeDef* const_node1 = graph_def.add_node();
+    const_node1->set_name('const_node1');
+    const_node1->set_op('Const');
+    
+    Licensed under the Apache License, Version 2.0 (the 'License');
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+    
+    Status TanhGrad(const AttrSlice& attrs, FunctionDef* g) {
+  // clang-format off
+  return GradForUnaryCwise(g, {
+      {{'y'}, 'Tanh', {'x'}},
+      {{'y2'}, 'Square', {'y'}, {}, {'dy'}},
+      FDH::Const('const', 1.0f),
+      {{'one'}, 'Cast', {'const'}, {{'SrcT', DT_FLOAT}, {'DstT', '$T'}}},
+      {{'a'}, 'Sub', {'one', 'y2'}},
+      {{'dx'}, 'Mul', {'dy', 'a'}},           // dy * (1 - y*y)
+  });
+  // clang-format on
 }
+REGISTER_OP_GRADIENT('Tanh', TanhGrad);
     
-    namespace nw {
-    }
+        http://www.apache.org/licenses/LICENSE-2.0
     
-    void Menu::Create(const base::DictionaryValue& option) {
-  is_menu_modified_ = true;
-  menu_delegate_.reset(new MenuDelegate(object_manager()));
-  menu_model_.reset(new ui::NwMenuModel(menu_delegate_.get()));
-    }
+    THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+========================================================================
+(END LICENSE TEXT)
     
-    void cvFindStereoCorrespondenceBM( const CvArr* leftarr, const CvArr* rightarr,
-                                   CvArr* disparr, CvStereoBMState* state )
-{
-    cv::Mat left = cv::cvarrToMat(leftarr), right = cv::cvarrToMat(rightarr);
-    const cv::Mat disp = cv::cvarrToMat(disparr);
-    }
+    #include <google/protobuf/pyext/descriptor_database.h>
     
-    void ComputeExtrinsicRefine(const Mat& imagePoints, const Mat& objectPoints, Mat& rvec,
-                            Mat&  tvec, Mat& J, const int MaxIter,
-                            const IntrinsicParams& param, const double thresh_cond);
-CV_EXPORTS Mat ComputeHomography(Mat m, Mat M);
-    
-    
-    {        return ptr[tid - lane];
-    }
-}}} // namespace cv { namespace cuda { namespace cudev {
-    
-    namespace cv { namespace ocl { namespace runtime {
-    }
-    }
-    }
-    
-    	wchar_t commandStr[MAX_PATH + 20] = { 0 };
-	swprintf_s(commandStr, L'\'%s\' \'%%V\'', exePath);
-    
-      // Store the specified number as the sequence number for the start of
-  // this batch.
-  static void SetSequence(WriteBatch* batch, SequenceNumber seq);
-    
-      void StartBlock(uint64_t block_offset);
-  void AddKey(const Slice& key);
-  Slice Finish();
-    
-    uint32_t Hash(const char* data, size_t n, uint32_t seed) {
-  // Similar to murmur hash
-  const uint32_t m = 0xc6a4a793;
-  const uint32_t r = 24;
-  const char* limit = data + n;
-  uint32_t h = seed ^ (n * m);
-    }
-    
-    
-    {}  // namespace leveldb
-    
-    // Handler for Win32 messages, update mouse/keyboard data.
-// You may or not need this for your implementation, but it can serve as reference for handling inputs.
-// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
-/*
-IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-*/
-
-    
-    
-    {        // Create the constant buffer
-        {
-            D3D10_BUFFER_DESC desc;
-            desc.ByteWidth = sizeof(VERTEX_CONSTANT_BUFFER);
-            desc.Usage = D3D10_USAGE_DYNAMIC;
-            desc.BindFlags = D3D10_BIND_CONSTANT_BUFFER;
-            desc.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
-            desc.MiscFlags = 0;
-            g_pd3dDevice->CreateBuffer(&desc, NULL, &g_pVertexConstantBuffer);
-        }
-    }
-    
-            D3D12_RESOURCE_DESC desc;
-        ZeroMemory(&desc, sizeof(desc));
-        desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-        desc.Alignment = 0;
-        desc.Width = width;
-        desc.Height = height;
-        desc.DepthOrArraySize = 1;
-        desc.MipLevels = 1;
-        desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        desc.SampleDesc.Count = 1;
-        desc.SampleDesc.Quality = 0;
-        desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
-        desc.Flags = D3D12_RESOURCE_FLAG_NONE;
-    
-    bool    ImGui_ImplGlfwGL2_Init(GLFWwindow* window, bool install_callbacks)
-{
-    g_Window = window;
-    }
-    
-        ImGuiIO& io = ImGui::GetIO();
-    io.KeyMap[ImGuiKey_Tab] = ALLEGRO_KEY_TAB;
-    io.KeyMap[ImGuiKey_LeftArrow] = ALLEGRO_KEY_LEFT;
-    io.KeyMap[ImGuiKey_RightArrow] = ALLEGRO_KEY_RIGHT;
-    io.KeyMap[ImGuiKey_UpArrow] = ALLEGRO_KEY_UP;
-    io.KeyMap[ImGuiKey_DownArrow] = ALLEGRO_KEY_DOWN;
-    io.KeyMap[ImGuiKey_PageUp] = ALLEGRO_KEY_PGUP;
-    io.KeyMap[ImGuiKey_PageDown] = ALLEGRO_KEY_PGDN;
-    io.KeyMap[ImGuiKey_Home] = ALLEGRO_KEY_HOME;
-    io.KeyMap[ImGuiKey_End] = ALLEGRO_KEY_END;
-    io.KeyMap[ImGuiKey_Insert] = ALLEGRO_KEY_INSERT;
-    io.KeyMap[ImGuiKey_Delete] = ALLEGRO_KEY_DELETE;
-    io.KeyMap[ImGuiKey_Backspace] = ALLEGRO_KEY_BACKSPACE;
-    io.KeyMap[ImGuiKey_Space] = ALLEGRO_KEY_SPACE;
-    io.KeyMap[ImGuiKey_Enter] = ALLEGRO_KEY_ENTER;
-    io.KeyMap[ImGuiKey_Escape] = ALLEGRO_KEY_ESCAPE;
-    io.KeyMap[ImGuiKey_A] = ALLEGRO_KEY_A;
-    io.KeyMap[ImGuiKey_C] = ALLEGRO_KEY_C;
-    io.KeyMap[ImGuiKey_V] = ALLEGRO_KEY_V;
-    io.KeyMap[ImGuiKey_X] = ALLEGRO_KEY_X;
-    io.KeyMap[ImGuiKey_Y] = ALLEGRO_KEY_Y;
-    io.KeyMap[ImGuiKey_Z] = ALLEGRO_KEY_Z;
-    
-    //---- Define constructor and implicit cast operators to convert back<>forth from your math types and ImVec2/ImVec4.
-// This will be inlined as part of ImVec2 and ImVec4 class declarations.
-/*
-#define IM_VEC2_CLASS_EXTRA                                                 \
-        ImVec2(const MyVec2& f) { x = f.x; y = f.y; }                       \
-        operator MyVec2() const { return MyVec2(x,y); }
-    
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-    // Licensed under the MIT License (the 'License'); you may not use this file except in 
-// compliance with the License. You may obtain a copy of the License at
-// http://opensource.org/licenses/MIT
-    
-    // true pass, false limit
-bool CommFrequencyLimit::Check() {
-    uint64_t now = ::gettickcount();
-    if (!touch_times_.empty() && (now<touch_times_.front()) ) { //if user modify the time, amend it
-    	xwarn2(TSF'Must be modified time.now=%_', now);
-    	size_t size = touch_times_.size();
-    	touch_times_.clear();
-    	for (size_t i=0; i<size; ++i) {
-    		touch_times_.push_back(now-1);
-    	}
-    }
-    }
-    
-    
-    {  private:
-    void* m_this;
-    std::map<const std::string, boost::any> m_variablemap;
-};
-    
-    
-    
-    
-bool TSpy::SpyHookLogFunc(XLoggerInfo_t& _info, std::string& _log)
-{
-    __attribute__((unused)) int i = 0;
-    return true;
+    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
+  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
+  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
+  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
+  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
+  // Identifiers can't start with digits
+  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
+  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
 }
-    
-    #include <jni.h>
-#include <string>
-struct JniMethodInfo;
-class AutoBuffer;
     
     
     {
     {
-    {}  // namespace math
-}  // namespace common
-}  // namespace apollo
-
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
     
-    void SubTopoGraph::AddPotentialOutEdge(
-    TopoNode* const sub_node,
-    const std::unordered_set<const TopoEdge*> origin_edge) {
-  std::unordered_set<TopoNode*> other_sub_nodes;
-  for (const auto* out_edge : origin_edge) {
-    if (GetSubNodes(out_edge->ToNode(), &other_sub_nodes)) {
-      for (auto* sub_to_node : other_sub_nodes) {
-        if (sub_node->GetOutEdgeTo(sub_to_node) != nullptr) {
-          continue;
-        }
-        if (!IsReachable(sub_node, sub_to_node)) {
-          continue;
-        }
-        std::shared_ptr<TopoEdge> topo_edge_ptr;
-        topo_edge_ptr.reset(
-            new TopoEdge(out_edge->PbEdge(), sub_node, sub_to_node));
-        sub_node->AddOutEdge(topo_edge_ptr.get());
-        sub_to_node->AddInEdge(topo_edge_ptr.get());
-        topo_edges_.push_back(std::move(topo_edge_ptr));
-      }
-    } else {
-      if (sub_node->GetOutEdgeTo(out_edge->ToNode()) != nullptr) {
-        continue;
-      }
-      std::shared_ptr<TopoEdge> topo_edge_ptr;
-      topo_edge_ptr.reset(
-          new TopoEdge(out_edge->PbEdge(), sub_node, out_edge->ToNode()));
-      sub_node->AddOutEdge(topo_edge_ptr.get());
-      topo_edges_.push_back(std::move(topo_edge_ptr));
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_SOURCE_GENERATOR_BASE_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_SOURCE_GENERATOR_BASE_H__
+    
+    void ImmutableLazyMessageOneofFieldGenerator::
+GenerateSerializationCode(io::Printer* printer) const {
+  // Do not de-serialize lazy fields.
+  printer->Print(variables_,
+    'if ($has_oneof_case_message$) {\n'
+    '  output.writeBytes(\n'
+    '      $number$, (($lazy_type$) $oneof_name$_).toByteString());\n'
+    '}\n');
+}
+    
+    
+    {  WorkloadStats (const WorkloadStats&) = delete;
+  WorkloadStats& operator=(const WorkloadStats&) = delete;
+};
+    
+        HHVM_FE(fb_setprofile);
+    HHVM_FE(xhprof_frame_begin);
+    HHVM_FE(xhprof_frame_end);
+    HHVM_FE(xhprof_enable);
+    HHVM_FE(xhprof_disable);
+    HHVM_FE(xhprof_network_enable);
+    HHVM_FE(xhprof_network_disable);
+    HHVM_FE(xhprof_sample_enable);
+    HHVM_FE(xhprof_sample_disable);
+    
+    #ifdef FACEBOOK
+  uint64_t time;
+  if (!fb_perf_get_thread_cputime_ns(&time)) {
+    return time + s_extra_request_nanoseconds;
+  }
+#endif
+    
+    void Vunit::freeScratchBlock(Vlabel l) {
+  // This will leak blocks if anything's been added since the corresponding
+  // call to makeScratchBlock(), but it's harmless.
+  if (l == blocks.size() - 1) blocks.pop_back();
+}
+    
+      // set interleave for early code. we'll then force interleave for a few
+  // regions, and switch to local for the threads
+  numa_set_interleave_mask(numa_all_nodes_ptr);
+    
+      resourceInfo = FindResource(moduleHandle, section, RT_RCDATA);
+  if (!resourceInfo) {
+    return false;
+  }
+    
+      typedef std::function<void(pid_t)> LostChildHandler;
+  static void SetLostChildHandler(const LostChildHandler& handler);
+    
+    #include 'hphp/runtime/ext/curl/curl-share-resource.h'
+#include 'hphp/runtime/ext/curl/curl-resource.h'
+#include 'hphp/runtime/base/builtin-functions.h'
+    
+    
+    {  CurlShareResource();
+  ~CurlShareResource() { close(); }
+  void close();
+  bool setOption(int option, const Variant& value);
+  static bool isLongOption(long option);
+  bool setLongOption(long option, long value);
+  CURLcode attachToCurlHandle(CURL *cp);
+ private:
+  CURLSH* m_share;
+  // CURLSH is a typedef to void
+  TYPE_SCAN_IGNORE_FIELD(m_share);
+};
+    
+    namespace HPHP {
+///////////////////////////////////////////////////////////////////////////////
     }
+    
+      // In order to find the start of the (post guard) prologue after
+  // possibly relocating the code, we add a watchpoint that points to
+  // &unit.prologueStart. In some situations (eg tc-relocate) we will
+  // relocate the code again - but at that point, unit has gone (and
+  // tc-relocate tracks the start of the prologue for itself). So we
+  // need to remove it here, to prevent wild writes to dead stack
+  // locations.
+  auto it = std::find_if(fixups.watchpoints.begin(), fixups.watchpoints.end(),
+                         [&] (TCA* p) { return p == &unit.prologueStart; });
+  assertx(it != fixups.watchpoints.end());
+  fixups.watchpoints.erase(it);
+    
+    template<typename DType>
+inline void CompressArray<DType>::InitCompressChunks(
+    const std::vector<bst_uint>& chunk_ptr) {
+  raw_chunks_ = chunk_ptr;
+  CHECK_GE(raw_chunks_.size(), 2);
+  out_buffer_.resize(raw_chunks_.size() - 1);
+  for (size_t i = 0; i < out_buffer_.size(); ++i) {
+    out_buffer_[i].resize(raw_chunks_[i + 1] - raw_chunks_[i]);
   }
 }
     
-    double Accel6b::longitudinal_acceleration(const std::uint8_t *bytes,
-                                          const int32_t length) const {
-  DCHECK_GE(length, 4);
-  return parse_two_frames(bytes[2], bytes[3]);
+      EXPECT_ANY_THROW(xgboost::Metric::Create('error@abc'));
+  delete metric;
+  metric = xgboost::Metric::Create('error@0.5f');
+  EXPECT_STREQ(metric->Name(), 'error');
+    
+    SEXP XGDMatrixGetInfo_R(SEXP handle, SEXP field) {
+  SEXP ret;
+  R_API_BEGIN();
+  bst_ulong olen;
+  const float *res;
+  CHECK_CALL(XGDMatrixGetFloatInfo(R_ExternalPtrAddr(handle),
+                                   CHAR(asChar(field)),
+                                 &olen,
+                                 &res));
+  ret = PROTECT(allocVector(REALSXP, olen));
+  for (size_t i = 0; i < olen; ++i) {
+    REAL(ret)[i] = res[i];
+  }
+  R_API_END();
+  UNPROTECT(1);
+  return ret;
 }
     
-    bool Brakeinfo74::is_abs_enabled(const std::uint8_t *bytes,
-                                 int32_t length) const {
-  Byte frame(bytes + 7);
-  return frame.is_bit_1(3);
+    
+/*
+ * Class:     ml_dmlc_xgboost4j_java_XGBoostJNI
+ * Method:    XGBoosterSetParam
+ * Signature: (JLjava/lang/String;Ljava/lang/String;)V
+ */
+JNIEXPORT jint JNICALL Java_ml_dmlc_xgboost4j_java_XGBoostJNI_XGBoosterSetParam
+  (JNIEnv *jenv, jclass jcls, jlong jhandle, jstring jname, jstring jvalue) {
+  BoosterHandle handle = (BoosterHandle) jhandle;
+  const char* name = jenv->GetStringUTFChars(jname, 0);
+  const char* value = jenv->GetStringUTFChars(jvalue, 0);
+  int ret = XGBoosterSetParam(handle, name, value);
+  //release
+  if (name) jenv->ReleaseStringUTFChars(jname, name);
+  if (value) jenv->ReleaseStringUTFChars(jvalue, value);
+  return ret;
 }
     
-    using ::apollo::drivers::canbus::Byte;
+    /*!
+ * \brief Registry entry for linear updater.
+ */
+struct LinearUpdaterReg
+    : public dmlc::FunctionRegEntryBase<LinearUpdaterReg,
+                                        std::function<LinearUpdater*()> > {};
     
-    int32_t Gear67::gear_state(const std::uint8_t *bytes, int32_t length) const {
-  Byte frame(bytes + 0);
-  int32_t x = frame.get_byte(0, 3);
-  return x;
+    namespace xgboost {
+namespace linear {
+    }
+    }
+    
+        // Create the pixel shader
+    {
+        static const char* pixelShader =
+            'struct PS_INPUT\
+            {\
+            float4 pos : SV_POSITION;\
+            float4 col : COLOR0;\
+            float2 uv  : TEXCOORD0;\
+            };\
+            sampler sampler0;\
+            Texture2D texture0;\
+            \
+            float4 main(PS_INPUT input) : SV_Target\
+            {\
+            float4 out_col = input.col * texture0.Sample(sampler0, input.uv); \
+            return out_col; \
+            }';
+    }
+    
+    
+    {        D3DCompile(pixelShader, strlen(pixelShader), NULL, NULL, NULL, 'main', 'ps_4_0', 0, 0, &g_pPixelShaderBlob, NULL);
+        if (g_pPixelShaderBlob == NULL)  // NB: Pass ID3D10Blob* pErrorBlob to D3DCompile() to get error showing in (const char*)pErrorBlob->GetBufferPointer(). Make sure to Release() the blob!
+            return false;
+        if (g_pd3dDevice->CreatePixelShader((DWORD*)g_pPixelShaderBlob->GetBufferPointer(), g_pPixelShaderBlob->GetBufferSize(), NULL, &g_pPixelShader) != S_OK)
+            return false;
+    }
+    
+    
+    {    return true;
 }
     
-    int32_t Gps6e::seconds(const std::uint8_t *bytes, int32_t length) const {
-  Byte frame(bytes + 5);
-  int32_t x = frame.get_byte(0, 6);
-  return x;
+            const float ascent = font_face.Info.Ascender;
+        const float descent = font_face.Info.Descender;
+        ImFontAtlasBuildSetupFont(atlas, dst_font, &cfg, ascent, descent);
+        const float off_x = cfg.GlyphOffset.x;
+        const float off_y = cfg.GlyphOffset.y + (float)(int)(dst_font->Ascent + 0.5f);
+    
+    TEST_F(OrderingTest, compare_less_equal) {
+  compare_less_equal<OddCompare<int>> op;
+  EXPECT_FALSE(op(3, 4));
+  EXPECT_TRUE(op(3, 3));
+  EXPECT_TRUE(op(4, 3));
 }
+    
+      static F14Chunk* emptyInstance() {
+    auto rv = static_cast<F14Chunk*>(static_cast<void*>(&kEmptyTagVector));
+    FOLLY_SAFE_DCHECK(
+        !rv->occupied(0) && rv->chunk0Capacity() == 0 &&
+            rv->outboundOverflowCount() == 0,
+        '');
+    return rv;
+  }
+    
+    
+    {/// Sugar for the most common case
+template <class Collection, class T, class F>
+auto unorderedReduce(Collection&& c, T&& initial, F&& func)
+    -> decltype(unorderedReduce(c.begin(), c.end(), std::forward<T>(initial),
+                std::forward<F>(func))) {
+  return unorderedReduce(
+      c.begin(),
+      c.end(),
+      std::forward<T>(initial),
+      std::forward<F>(func));
+}
+} // namespace folly
+
+    
+      std::vector<std::thread> ts;
+  boost::barrier barrier(ps.size() + 1);
+  for (size_t i = 0; i < ps.size(); i++) {
+    ts.emplace_back([&ps, &barrier, i]() {
+      barrier.wait();
+      if (i == (ps.size()/2)) {
+        ps[i].setException(eggs);
+      } else {
+        ps[i].setValue(i);
+      }
+    });
+  }
+    
+    /**
+ * Finds the first occurrence of needle in haystack. The algorithm is on
+ * average faster than O(haystack.size() * needle.size()) but not as fast
+ * as Boyer-Moore. On the upside, it does not do any upfront
+ * preprocessing and does not allocate memory.
+ */
+template <
+    class Iter,
+    class Comp = std::equal_to<typename Range<Iter>::value_type>>
+inline size_t
+qfind(const Range<Iter>& haystack, const Range<Iter>& needle, Comp eq = Comp());
