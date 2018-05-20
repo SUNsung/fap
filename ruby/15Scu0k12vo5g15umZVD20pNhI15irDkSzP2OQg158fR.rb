@@ -1,87 +1,140 @@
 
         
-              key = Spaceship::Portal::Key.find('some-key-id')
-      expect(key).to be_instance_of(Spaceship::Portal::Key)
-      expect(key.id).to eq('some-key-id')
-    end
-  end
-    
-      def test_EQUAL # '=='
-    h1 = @cls[ 'a' => 1, 'c' => 2 ]
-    h2 = @cls[ 'a' => 1, 'c' => 2, 7 => 35 ]
-    h3 = @cls[ 'a' => 1, 'c' => 2, 7 => 35 ]
-    h4 = @cls[ ]
-    assert_equal(h1, h1)
-    assert_equal(h2, h2)
-    assert_equal(h3, h3)
-    assert_equal(h4, h4)
-    assert_not_equal(h1, h2)
-    assert_equal(h2, h3)
-    assert_not_equal(h3, h4)
-  end
-    
-      def test_freeze_dup
-    set1 = SortedSet[1,2,3]
-    set1.freeze
-    set2 = set1.dup
-    
-        t = Time.at(10000000000000000000000)
-    assert_equal('<<10000000000000000000000>>', t.strftime('<<%s>>'))
-    assert_equal('<<010000000000000000000000>>', t.strftime('<<%24s>>'))
-    assert_equal('<<010000000000000000000000>>', t.strftime('<<%024s>>'))
-    assert_equal('<< 10000000000000000000000>>', t.strftime('<<%_24s>>'))
-  end
-    
-    describe :string_unpack_Aa, shared: true do
-  it 'decodes the number of bytes specified by the count modifier including NULL bytes' do
-    'a\x00bc'.unpack(unpack_format(3)+unpack_format).should == ['a\x00b', 'c']
-  end
-    
-        10.times { t.send(@method); Thread.pass }
-    t.status.should_not == 'sleep'
-    
-      def participation_answer(user)
-    poll_participations.find_by(author_id: user.person.id)
-  end
-    
-      describe '#random_string' do
-    it 'outputs a string of 32 characters' do
-      expect(subject.random_string.length).to eq(32)
-    end
-  end
-    
-        it 'denies requests with sneaky encoded session cookies' do
-      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.%73ession=SESSION_TOKEN'
-      expect(last_response).not_to be_ok
-    end
-    
-        it 'leaves normal params untouched' do
-      mock_app do |env|
-        request = Rack::Request.new(env)
-        [200, {'Content-Type' => 'text/plain'}, [request.params['foo']]]
+          describe '.all' do
+    it 'uses the client to fetch all keys' do
+      mock_client_response(:list_keys, with: no_args) do
+        [
+          {
+            canDownload: false,
+            canRevoke: true,
+            keyId: 'some-key-id',
+            keyName: 'Test Key via fastlane',
+            servicesCount: 2
+          },
+          {
+            canDownload: true,
+            canRevoke: true,
+            keyId: 'B92NE4F7RG',
+            keyName: 'Test Key via browser',
+            servicesCount: 2
+          }
+        ]
       end
-      get '/', :foo => 'bar'
-      expect(body).to eq('bar')
+    
+          it 'splits correctly' do
+        expected = [
+          'One',
+          'Two',
+          'Three',
+          'Four Token',
+          'Or',
+          'Newlines',
+          'Everywhere'
+        ]
+        expect(generator.split_keywords(keywords)).to eq(expected)
+      end
+    end
+  end
+end
+
+    
+            expect(result).to eq('/usr/local/bin/cloc  --by-file --xml  --out=/tmp/cloc.xml')
+      end
+    
+          it 'returns the new version as return value' do
+        result = Fastlane::FastFile.new.parse('lane :test do
+          increment_version_number(bump_type: 'major')
+        end').runner.execute(:test)
+    
+        case list
+    when Hash
+      list
+    when Array, String, :DATA
+      { p1: list }
+    else
+      {}
+    end.each_pair do |strip, urls|
+      Array(urls).each do |url|
+        case url
+        when :DATA
+          patch = DATAPatch.new(strip)
+        else
+          patch = LegacyPatch.new(strip, url)
+        end
+        patches << patch
+      end
     end
     
-        expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('ALLOW-FROM foo')
+      def gistify_logs(f)
+    files = load_logs(f.logs)
+    build_time = f.logs.ctime
+    timestamp = build_time.strftime('%Y-%m-%d_%H-%M-%S')
+    
+    class MPIRequirement < Requirement
+  fatal true
+  satisfy do
+    odisabled('MPIRequirement', ''depends_on \'open-mpi\''')
+  end
+end
+    
+    Description:
+  Converts between CSS, indented syntax, and SCSS files. For example,
+  this can convert from the indented syntax to SCSS, or from CSS to
+  SCSS (adding appropriate nesting).
+END
+    
+          # Get the publicly-visible URL for an imported file. This URL is used by
+      # source maps to link to the source stylesheet. This may return `nil` to
+      # indicate that no public URL is available; however, this will cause
+      # sourcemap generation to fail if any CSS is generated from files imported
+      # from this importer.
+      #
+      # If an absolute 'file:' URI can be produced for an imported file, that
+      # should be preferred to returning `nil`. However, a URL relative to
+      # `sourcemap_directory` should be preferred over an absolute 'file:' URI.
+      #
+      # @param uri [String] A URI known to be valid for this importer.
+      # @param sourcemap_directory [String, NilClass] The absolute path to a
+      #   directory on disk where the sourcemap will be saved. If uri refers to
+      #   a file on disk that's accessible relative to sourcemap_directory, this
+      #   may return a relative URL. This may be `nil` if the sourcemap's
+      #   eventual location is unknown.
+      # @return [String?] The publicly-visible URL for this file, or `nil`
+      #   indicating that no publicly-visible URL exists. This should be
+      #   appropriately URL-escaped.
+      def public_url(uri, sourcemap_directory)
+        return if @public_url_warning_issued
+        @public_url_warning_issued = true
+        Sass::Util.sass_warn <<WARNING
+WARNING: #{self.class.name} should define the #public_url method.
+WARNING
+        nil
+      end
+    
+        # The trailing expressions in the query.
+    #
+    # When parsed as Sass code, each expression contains strings and SassScript
+    # nodes. When parsed as CSS, each one contains a single string.
+    #
+    # @return [Array<Array<String, Sass::Script::Tree::Node>>]
+    attr_accessor :expressions
+    
+            {
+          :always_update     => false,
+          :template_location => root + '/public/stylesheets/sass',
+          :css_location      => root + '/public/stylesheets',
+          :cache_location    => root + '/tmp/sass-cache',
+          :always_check      => env != 'production',
+          :quiet             => env != 'production',
+          :full_exception    => env != 'production'
+        }.freeze
+      end
+    end
   end
     
-      # These two settings work together to allow you to limit a spec run
-  # to individual examples or groups you care about by tagging them with
-  # `:focus` metadata. When nothing is tagged with `:focus`, all examples
-  # get run.
-  config.filter_run :focus
-  config.run_all_when_everything_filtered = true
-    
-    module Sidekiq
-  module Extensions
-    ##
-    # Adds 'delay', 'delay_for' and `delay_until` methods to ActionMailer to offload arbitrary email
-    # delivery to Sidekiq.  Example:
-    #
-    #    UserMailer.delay.send_welcome_email(new_user)
-    #    UserMailer.delay_for(5.days).send_welcome_email(new_user)
-    #    UserMailer.delay_until(5.days.from_now).send_welcome_email(new_user)
-    class DelayedMailer
-      include Sidekiq::Worker
+        def parse_input(environment, text)
+      case text
+      when Script::MATCH
+        name = $1
+        guarded = !!$3
+        val = Script::Parser.parse($2, @line, text.size - ($3 || '').size - $2.size)
