@@ -1,68 +1,45 @@
 
         
-        // Reads the DRI marker and saved the restart interval into *jpg.
-bool ProcessDRI(const uint8_t* data, const size_t len, size_t* pos,
-                JPEGData* jpg) {
-  if (jpg->restart_interval > 0) {
-    fprintf(stderr, 'Duplicate DRI marker.\n');
-    jpg->error = JPEG_DUPLICATE_DRI;
-    return false;
-  }
-  const size_t start_pos = *pos;
-  VERIFY_LEN(4);
-  size_t marker_len = ReadUint16(data, pos);
-  int restart_interval = ReadUint16(data, pos);
-  jpg->restart_interval = restart_interval;
-  VERIFY_MARKER_END();
-  return true;
+        #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
+#define GOOGLE_PROTOBUF_COMPILER_CSHARP_MAP_FIELD_H__
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/csharp/csharp_source_generator_base.h>
+    
+      virtual void WriteHash(io::Printer* printer);
+  virtual void WriteEquals(io::Printer* printer);
+  virtual void WriteToString(io::Printer* printer);
+    
+    #include <google/protobuf/compiler/code_generator.h>
+#include <google/protobuf/compiler/plugin.h>
+#include <google/protobuf/descriptor.h>
+#include <google/protobuf/descriptor.pb.h>
+#include <google/protobuf/io/printer.h>
+#include <google/protobuf/io/zero_copy_stream.h>
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace csharp {
+    }
+    }
+    }
+    }
+    
+    #include <google/protobuf/compiler/java/java_context.h>
+#include <google/protobuf/compiler/java/java_enum_field.h>
+#include <google/protobuf/compiler/java/java_extension.h>
+#include <google/protobuf/compiler/java/java_extension_lite.h>
+#include <google/protobuf/compiler/java/java_field.h>
+#include <google/protobuf/compiler/java/java_helpers.h>
+#include <google/protobuf/compiler/java/java_message.h>
+#include <google/protobuf/compiler/java/java_message_lite.h>
+#include <google/protobuf/compiler/java/java_service.h>
+    
+    void ImmutableLazyMessageFieldGenerator::
+GenerateParsingCode(io::Printer* printer) const {
+  printer->Print(variables_,
+    '$name$_.setByteString(input.readBytes(), extensionRegistry);\n');
+  printer->Print(variables_,
+    '$set_has_field_bit_message$;\n');
 }
-    
-    static const uint8_t* kRangeLimit = kRangeLimitLut + 384;
-    
-    void BuildDCHistograms(const JPEGData& jpg, JpegHistogram* histo);
-void BuildACHistograms(const JPEGData& jpg, JpegHistogram* histo);
-size_t JpegHeaderSize(const JPEGData& jpg, bool strip_metadata);
-size_t EstimateJpegDataSize(const int num_components,
-                            const std::vector<JpegHistogram>& histograms);
-    
-      DBWrapper* db_wrapper = ObjectWrap::Unwrap<DBWrapper>(args.This());
-  rocksdb::Slice begin  = *v8::String::Utf8Value(args[0]->ToString());
-  rocksdb::Slice end    = *v8::String::Utf8Value(args[1]->ToString());
-  std::string cf        = *v8::String::Utf8Value(args[2]->ToString());
-  db_wrapper->status_    = db_wrapper->db_->CompactRange(
-      db_wrapper->columnFamilies_[cf], &begin, &end);
-    
-        // C++ mappings of API methods
-    static Persistent<v8::Function> constructor;
-    static Handle<Value> Open(const Arguments& args);
-    static Handle<Value> New(const Arguments& args);
-    static Handle<Value> Get(const Arguments& args);
-    static Handle<Value> Put(const Arguments& args);
-    static Handle<Value> Delete(const Arguments& args);
-    static Handle<Value> Dump(const Arguments& args);
-    static Handle<Value> WriteBatch(const Arguments& args);
-    static Handle<Value> CreateColumnFamily(const Arguments& args);
-    static Handle<Value> CompactRange(const Arguments& args);
-    static Handle<Value> Close(const Arguments& args);
-    
-      virtual bool PartialMergeMulti(const Slice& key,
-                                 const std::deque<Slice>& operand_list,
-                                 std::string* new_value, Logger* logger) const
-      override;
-    
-      // Generate a list of random keys and values
-  const int kWordCount = 15;
-  std::string words[] = {'sdasd', 'triejf', 'fnjsdfn', 'dfjisdfsf', '342839',
-                         'dsuha', 'mabuais', 'sadajsid', 'jf9834hf', '2d9j89',
-                         'dj9823jd', 'a', 'dk02ed2dh', '$(jd4h984$(*', 'mabz'};
-  const int kKeyCount = 6;
-  std::string keys[] = {'dhaiusdhu', 'denidw', 'daisda', 'keykey', 'muki',
-                        'shzassdianmd'};
-    
-      /// Return (list: key)[first..last] (inclusive)
-  /// May throw RedisListException
-  std::vector<std::string> Range(const std::string& key,
-                                 int32_t first, int32_t last);
-    
-      // which log number this is
-  uint64_t const log_number_;
