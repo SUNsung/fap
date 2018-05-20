@@ -1,149 +1,77 @@
 
         
-          @property
-  def _tokens(self):
-    return self._flist[SequenceWrapper.F_TOKEN_ID].feature
-    
-    import os
-    
-      def test_neighbors(self):
-    corner = coords.from_kgs(utils_test.BOARD_SIZE, 'A1')
-    neighbors = [
-        utils_test.EMPTY_BOARD[c] for c in utils_test.NEIGHBORS[corner]]
-    self.assertEqual(len(neighbors), 2)
+        
+def test_classify_inherit_class_build_fn():
+    class InheritClassBuildFnClf(KerasClassifier):
     
     
-def parse_message(message):
-  message = gtp.pre_engine(message).strip()
-  first, rest = (message.split(' ', 1) + [None])[:2]
-  if first.isdigit():
-    message_id = int(first)
-    if rest is not None:
-      command, arguments = (rest.split(' ', 1) + [None])[:2]
-    else:
-      command, arguments = None, None
-  else:
-    message_id = None
-    command, arguments = first, rest
+@keras_test
+def test_Bidirectional_with_constants_layer_passing_initial_state():
+    class RNNCellWithConstants(Layer):
+        def __init__(self, units, **kwargs):
+            self.units = units
+            self.state_size = units
+            super(RNNCellWithConstants, self).__init__(**kwargs)
     
-        start = time.time()
+            # check that output changes after states are reset
+        # (even though the model itself didn't change)
+        layer.reset_states()
+        out3 = model.predict(np.ones((num_samples, timesteps)))
+        assert(out2.max() != out3.max())
     
-    import itertools
+        def test_batch_standardize(self):
+        # ImageDataGenerator.standardize should work on batches
+        for test_images in self.all_test_images:
+            img_list = []
+            for im in test_images:
+                img_list.append(image.img_to_array(im)[None, ...])
     
-        proba = clf.predict_proba(X_test, batch_size=batch_size)
-    assert proba.shape == (num_test, num_classes)
-    assert np.allclose(np.sum(proba, axis=1), np.ones(num_test))
+    def clean_pdf_link(link):
+    if 'arxiv' in link:
+        link = link.replace('abs', 'pdf')   
+        if not(link.endswith('.pdf')):
+            link = '.'.join((link, 'pdf'))
     
+        return difflib.unified_diff(old_report, new_report)
     
-def collect_class_methods(cls, methods):
-    if isinstance(methods, (list, tuple)):
-        return [getattr(cls, m) if isinstance(m, str) else m for m in methods]
-    methods = []
-    for _, method in inspect.getmembers(cls, predicate=inspect.isroutine):
-        if method.__name__[0] == '_' or method.__name__ in EXCLUDE:
-            continue
-        methods.append(method)
-    return methods
+        @require_oauth2_scope('creddits')
+    @validate(
+        VUser(),
+        user=VAccountByName('username'),
+        months=VInt('months', min=1, max=36),
+        timeout=VNotInTimeout(),
+    )
+    @api_doc(
+        api_section.gold,
+        uri='/api/v1/gold/give/{username}',
+    )
+    def POST_give(self, user, months, timeout):
+        self._gift_using_creddits(
+            recipient=user,
+            months=months,
+            proxying_for=request.POST.get('proxying_for'),
+        )
+
     
-        layer_test(local.LocallyConnected1D,
-               kwargs={'filters': filters,
-                       'kernel_size': filter_length,
-                       'padding': padding,
-                       'kernel_regularizer': 'l2',
-                       'bias_regularizer': 'l2',
-                       'activity_regularizer': 'l2',
-                       'strides': strides},
-               input_shape=(num_samples, num_steps, input_dim))
+        @require_oauth2_scope('subscribe')
+    @validate(
+        VUser(),
+        friend_rel=VFriendOfMine('username'),
+    )
+    @api_doc(api_section.users, uri='/api/v1/me/friends/{username}')
+    def DELETE_friends(self, friend_rel):
+        '''Stop being friends with a user.'''
+        c.user.remove_friend(friend_rel._thing2)
+        if c.user.gold:
+            c.user.friend_rels_cache(_update=True)
+        response.status = 204
+
     
-    # Convolution
-kernel_size = 5
-filters = 64
-pool_size = 4
+        def rendercontent(self, input, fp):
+        soup = BeautifulSoup(input)
     
-    
-def test_hard_sigmoid():
-    '''Test using a reference hard sigmoid implementation.
-    '''
-    def ref_hard_sigmoid(x):
-        x = (x * 0.2) + 0.5
-        z = 0.0 if x <= 0 else (1.0 if x >= 1 else x)
-        return z
-    hard_sigmoid = np.vectorize(ref_hard_sigmoid)
-    
-    The dataset is actually too small for LSTM to be of any advantage
-compared to simpler, much faster methods such as TF-IDF + LogReg.
-    
-        def set(self, key, value):
-        hash_index = self._hash_function(key)
-        for item in self.table[hash_index]:
-            if item.key == key:
-                item.value = value
-                return
-        self.table[hash_index].append(Item(key, value))
-    
-        def __init__(self, employee_id, name, rank, call_center):
-        self.employee_id = employee_id
-        self.name = name
-        self.rank = rank
-        self.call = None
-        self.call_center = call_center
-    
-    
-class AddRequest(object):
-    
-    
-class LookupService(object):
-    
-            (2016-01, shopping), 25
-        (2016-01, shopping), 100
-        (2016-01, gas), 50
-        '''
-        timestamp, seller, amount = line.split('\t')
-        period = self. extract_year_month(timestamp)
-        if period == self.current_year_month():
-            yield (period, category), amount
-    
-    from mrjob.job import MRJob
-    
-    import os
-import sys
-import codecs
-import re
-    
-    
-class UnsupportedMessageType(BaseException):
-    pass
-    
-        def do_action(self):
-        print(self.name, self.action.name, end=' ')
-        return self.action
-    
-    
-def main():
-    message_center = Provider()
-    
-    
-@coroutine
-def coroutine3(target):
-    while True:
-        request = yield
-        if 20 < request <= 30:
-            print('request {} handled in coroutine 3'.format(request))
-        else:
-            target.send(request)
-    
-        print(u'Setting Data 1 = 10')
-    data1.data = 10
-    print(u'Setting Data 2 = 15')
-    data2.data = 15
-    print(u'Setting Data 1 = 3')
-    data1.data = 3
-    print(u'Setting Data 2 = 5')
-    data2.data = 5
-    print(u'Detach HexViewer from data1 and data2.')
-    data1.detach(view2)
-    data2.detach(view2)
-    print(u'Setting Data 1 = 10')
-    data1.data = 10
-    print(u'Setting Data 2 = 15')
-    data2.data = 15
+        @validate(
+        container_id=VGTMContainerId('id')
+    )
+    def GET_jail(self, container_id):
+        return GoogleTagManagerJail(container_id=container_id).render()
