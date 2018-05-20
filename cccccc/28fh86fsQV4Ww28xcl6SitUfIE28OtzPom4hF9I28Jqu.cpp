@@ -1,273 +1,194 @@
 
         
-        public:
-  /** \brief Serialize a Value in <a HREF='http://www.json.org'>JSON</a> format.
-   * \param out Stream to write to. (Can be ostringstream, e.g.)
-   * \param root Value to serialize.
-   * \note There is no point in deriving from Writer, since write() should not
-   * return a value.
-   */
-  void write(std::ostream& out, const Value& root);
+        
+    {}  // namespace atom
     
-      // implements CodeGenerator ----------------------------------------
-  bool Generate(const FileDescriptor* file,
-                const string& parameter,
-                GeneratorContext* generator_context,
-                string* error) const;
+    namespace atom {
+    }
     
-    class EnumGenerator : public SourceGeneratorBase {
+    namespace atom {
+    }
+    
+      // External notification requesting a sync datatype refresh for the current
+  // profile. The details value is a const syncer::ObjectIdInvalidationMap.
+  // If the payload map is empty, it should be treated as an invalidation for
+  // all enabled types. This is used for notifications on Android.
+  NOTIFICATION_SYNC_REFRESH_REMOTE,
+    
+    class ChromeBrowserPepperHostFactory : public ppapi::host::HostFactory {
  public:
-  EnumGenerator(const EnumDescriptor* descriptor, const Options* options);
-  ~EnumGenerator();
+  // Non-owning pointer to the filter must outlive this class.
+  explicit ChromeBrowserPepperHostFactory(content::BrowserPpapiHost* host);
+  ~ChromeBrowserPepperHostFactory() override;
     }
     
-    TEST(CSharpEnumValue, PascalCasedPrefixStripping) {
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'FOO__BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'FOO_BAR_BAZ'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'Foo_BarBaz'));
-  EXPECT_EQ('Bar', GetEnumValueName('FO_O', 'FOO_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('FOO', 'F_O_O_BAR'));
-  EXPECT_EQ('Bar', GetEnumValueName('Foo', 'BAR'));
-  EXPECT_EQ('BarBaz', GetEnumValueName('Foo', 'BAR_BAZ'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO'));
-  EXPECT_EQ('Foo', GetEnumValueName('Foo', 'FOO___'));
-  // Identifiers can't start with digits
-  EXPECT_EQ('_2Bar', GetEnumValueName('Foo', 'FOO_2_BAR'));
-  EXPECT_EQ('_2', GetEnumValueName('Foo', 'FOO___2'));
-}
+     private:
+  PepperIsolatedFileSystemMessageFilter(int render_process_id,
+                                        const base::FilePath& profile_directory,
+                                        const GURL& document_url,
+                                        ppapi::host::PpapiHost* ppapi_host_);
+    
+    decltype(__pfnDliNotifyHook2) __pfnDliNotifyHook2 = load_exe_hook;
+    
+       void Call(const std::string& method,
+                    const base::ListValue& arguments) override;
+   void CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result) override;
     
     
-    {
-    {
-    {
-    {}  // namespace csharp
-}  // namespace compiler
-}  // namespace protobuf
-}  // namespace google
-    
-    #include <sstream>
-    
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/csharp/csharp_field_base.h>
-    
-    class SourceGeneratorBase {
- protected:
-  SourceGeneratorBase(const FileDescriptor* descriptor, const Options* options);
-  virtual ~SourceGeneratorBase();
+namespace nwapi {
     }
     
-    // TODO(kenton):  It's hard to write a robust test of the doc comments -- we
-//   can only really compare the output against a golden value, which is a
-//   fairly tedious and fragile testing strategy.  If we want to go that route,
-//   it probably makes sense to bite the bullet and write a test that compares
-//   the whole generated output for unittest.proto against a golden value, with
-//   a very simple script that can be run to regenerate it with the latest code.
-//   This would mean that updates to the golden file would have to be included
-//   in any change to the code generator, which would actually be fairly useful
-//   as it allows the reviewer to see clearly how the generated code is
-//   changing.
-    
-    #ifndef GOOGLE_PROTOBUF_COMPILER_JAVA_GENERATOR_FACTORY_H__
-#define GOOGLE_PROTOBUF_COMPILER_JAVA_GENERATOR_FACTORY_H__
-    
-    ImmutableLazyMessageOneofFieldGenerator::
-ImmutableLazyMessageOneofFieldGenerator(const FieldDescriptor* descriptor,
-                                        int messageBitIndex,
-                                        int builderBitIndex,
-                                        Context* context)
-    : ImmutableLazyMessageFieldGenerator(
-          descriptor, messageBitIndex, builderBitIndex, context) {
-  const OneofGeneratorInfo* info =
-      context->GetOneofGeneratorInfo(descriptor->containing_oneof());
-  SetCommonOneofVariables(descriptor, info, &variables_);
-  variables_['lazy_type'] = 'com.google.protobuf.LazyFieldLite';
-}
-    
-    namespace HPHP {
+      template<typename T> T* AddListener() {
+    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
+    if (i==listerners_.end()) {
+      T* listener_object = new T(this);
+      listerners_[T::id] = listener_object;
+      return listener_object;
     }
-    
-    TRACE_SET_MOD(jittime);
-    
-      std::deque<std::string> m_pipeline; // the intermediate pagelet results
-  std::set<std::string> m_rfc1867UploadedFiles;
-  std::string m_files; // serialized to use as $_FILES
-    
-    /*
- * Assert that Vreg widths match between defs and uses.
- *
- * This should only be run before any zero-extending or truncating copies get
- * reduced to regular copies---so, before simplify() or the various lowering
- * passes.
- */
-bool checkWidths(Vunit& unit);
-    
-      APPENDPATH();
-    
-    namespace HPHP { namespace jit { namespace irgen {
-    }
-    }
-    }
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    
-    
-    {    CondVarNode() {
-      pthread_cond_init(&m_cond, nullptr);
-    }
-    ~CondVarNode() {
-      pthread_cond_destroy(&m_cond);
-    }
-    /* implicit */ operator pthread_cond_t*() {
-      return &m_cond;
-    }
-    void unlink() {
-      if (m_listHook.is_linked()) m_listHook.unlink();
-    }
-  };
-    
-    QueryData genKernelIntegrity(QueryContext &context) {
-  QueryData results;
-  Row r;
-  std::string content;
-  std::string text_segment_hash;
-  std::string syscall_addr_modified;
-    }
-    
-      /// Return an instance to a registered EventPublisher.
-  static EventPublisherRef getEventPublisher(const std::string& pub);
-    
-    #include <osquery/config.h>
-#include <osquery/filesystem.h>
-#include <osquery/flags.h>
-#include <osquery/logger.h>
-    
-    TEST_F(ProcessTests, test_launchExtension) {
-  {
-    auto process =
-        PlatformProcess::launchExtension(kProcessTestExecPath.c_str(),
-                                         kExpectedExtensionArgs[3],
-                                         kExpectedExtensionArgs[5],
-                                         kExpectedExtensionArgs[7],
-                                         true);
-    EXPECT_NE(nullptr, process.get());
-    }
-    }
-    
-    #include <gtest/gtest.h>
-    
-    #include <osquery/core.h>
-    
-    template <typename T>
-struct constexpr_abs_helper<
-    T,
-    typename std::enable_if<
-        std::is_integral<T>::value && !std::is_same<T, bool>::value &&
-        std::is_unsigned<T>::value>::type> {
-  static constexpr T go(T t) {
-    return t;
+    return NULL;
   }
+    
+    void Menu::UpdateKeys(GtkAccelGroup *gtk_accel_group){
+  this->gtk_accel_group = gtk_accel_group;
+  if (!GTK_IS_ACCEL_GROUP(gtk_accel_group)){
+    return ;
+  } else {
+    std::vector<MenuItem*>::iterator menu_item_iterator = menu_items.begin();
+    std::vector<MenuItem*>::iterator menu_item_end = menu_items.end();
+    while (menu_item_iterator != menu_item_end){
+      MenuItem *menu_item = *menu_item_iterator;
+      if (menu_item!=NULL && GTK_IS_MENU_ITEM(menu_item->menu_item_)){
+        menu_item->UpdateKeys(gtk_accel_group);
+      }
+      ++menu_item_iterator;
+    }
+  }
+}
+    
+    void MenuItem::SetChecked(bool checked) {
+  // Set active will cause 'activate' to be emitted, so block here
+  block_active_ = true;
+  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menu_item_), checked);
+  block_active_ = false;
+}
+    
+    bool NwAppCloseAllWindowsFunction::RunAsync() {
+  AppWindowRegistry* registry = AppWindowRegistry::Get(browser_context());
+  if (!registry)
+    return false;
+    }
+    
+    bool NwClipboardClearSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  clipboard->Clear(ui::CLIPBOARD_TYPE_COPY_PASTE);
+  return true;
+}
+    
+    public:
+  typedef Value value_type;
+  typedef unsigned int size_t;
+  typedef int difference_type;
+  typedef Value& reference;
+  typedef Value* pointer;
+  typedef ValueIterator SelfType;
+    
+    void RepeatedEnumFieldGenerator::WriteHash(io::Printer* printer) {
+  printer->Print(
+    variables_,
+    'hash ^= $name$_.GetHashCode();\n');
+}
+    
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
+    
+    #include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
+#include <google/protobuf/compiler/csharp/csharp_helpers.h>
+#include <google/protobuf/compiler/csharp/csharp_repeated_primitive_field.h>
+    
+    #if defined(_MSC_VER) && _MSC_VER < 1400
+// This is the only specialization that allows VC++ 7.1 to remove const in
+// 'const int[3] and 'const int[3][4]'.  However, it causes trouble with GCC
+// and thus needs to be conditionally compiled.
+template <typename T, size_t N>
+struct RemoveConst<T[N]> {
+  typedef typename RemoveConst<T>::type type[N];
 };
+#endif
     
-    template <typename C>
-struct compare_not_equal_to : detail::cmp_pred<C, ordering::eq, 1> {
-  using detail::cmp_pred<C, ordering::eq, 1>::cmp_pred;
-};
-    
-    #include <sys/types.h>
-    
-    // Get the default huge page size
-size_t getDefaultHugePageSize() {
-  // We need to parse /proc/meminfo
-  static const boost::regex regex(R'!(Hugepagesize:\s*(\d+)\s*kB)!');
-  size_t pageSize = 0;
-  boost::cmatch match;
-    }
-    
-    /**
- * Return the mount point for the requested huge page size.
- * 0 = use smallest available.
- * Returns nullptr if the requested huge page size is not available.
- */
-const HugePageSize* getHugePageSize(size_t size = 0);
-    
-      Observer<T> getObserver() &&;
-    
-      /**
-   * Gets the version of the observed object.
-   */
-  size_t getVersion() const {
-    return version_;
-  }
-    
-        explicit DependencyRecorder(const Core& core) : dependencies_(core) {
-      DCHECK(inManagerThread());
-    }
-    
-    int FuzzerDriver(int *argc, char ***argv, UserCallback Callback) {
-  using namespace fuzzer;
-  assert(argc && argv && 'Argument pointers cannot be nullptr');
-  EF = new ExternalFunctions();
-  if (EF->LLVMFuzzerInitialize)
-    EF->LLVMFuzzerInitialize(argc, argv);
-  const std::vector<std::string> Args(*argv, *argv + *argc);
-  assert(!Args.empty());
-  ProgName = new std::string(Args[0]);
-  ParseFlags(Args);
-  if (Flags.help) {
-    PrintHelp();
-    return 0;
+    // This is used internally by all instances of linked_ptr<>.  It needs to be
+// a non-template class because different types of linked_ptr<> can refer to
+// the same object (linked_ptr<Superclass>(obj) vs linked_ptr<Subclass>(obj)).
+// So, it needs to be possible for different types of linked_ptr to participate
+// in the same circular linked list, so we need a single class type here.
+//
+// DO NOT USE THIS CLASS DIRECTLY YOURSELF.  Use linked_ptr<T>.
+class linked_ptr_internal {
+ public:
+  // Create a new circle that includes only this instance.
+  void join_new() {
+    next_ = this;
   }
     }
     
-    ExternalFunctions::ExternalFunctions() {
-#define EXT_FUNC(NAME, RETURN_TYPE, FUNC_SIG, WARN)                            \
-  this->NAME = ::NAME;                                                         \
-  CheckFnPtr((void *)::NAME, #NAME, WARN);
+    #ifndef GTEST_INCLUDE_GTEST_INTERNAL_GTEST_PARAM_UTIL_H_
+#define GTEST_INCLUDE_GTEST_INTERNAL_GTEST_PARAM_UTIL_H_
+    
+      // Clones a 0-terminated C string, allocating memory using new.  The
+  // caller is responsible for deleting the return value using
+  // delete[].  Returns the cloned string, or NULL if the input is
+  // NULL.
+  //
+  // This is different from strdup() in string.h, which allocates
+  // memory using malloc().
+  static const char* CloneCString(const char* c_str);
+    
+        for (int i = 2; i*i <= n; i++) {
+      // n is divisible by an integer other than 1 and itself.
+      if ((n % i) == 0) return false;
     }
     
-    #include 'FuzzerExtFunctions.def'
+    // Returns n! (the factorial of n).  For negative n, n! is defined to be 1.
+int Factorial(int n) {
+  int result = 1;
+  for (int i = 1; i <= n; i++) {
+    result *= i;
+  }
+    }
     
-    void CloseStdout() {
-  CloseFile(1);
+    static const int kBlockSize = 32768;
+    
+    namespace leveldb {
+    }
+    
+    
+    {  ASSERT_EQ(Hash(0, 0, 0xbc9f1d34), 0xbc9f1d34);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data1), sizeof(data1), 0xbc9f1d34),
+      0xef1345c4);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data2), sizeof(data2), 0xbc9f1d34),
+      0x5b663814);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data3), sizeof(data3), 0xbc9f1d34),
+      0x323c078f);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data4), sizeof(data4), 0xbc9f1d34),
+      0xed21633a);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data5), sizeof(data5), 0x12345678),
+      0xf333dabb);
 }
     
-    void RemoveFile(const std::string &Path) {
-  unlink(Path.c_str());
-}
     
-      system_clock::time_point ProcessStartTime = system_clock::now();
-  system_clock::time_point UnitStartTime, UnitStopTime;
-  long TimeOfLongestUnitInSeconds = 0;
-  long EpochOfLastReadOfOutputCorpus = 0;
+#endif  // STORAGE_LEVELDB_UTIL_MUTEXLOCK_H_
+
     
-    #ifndef LLVM_FUZZER_OPTIONS_H
-#define LLVM_FUZZER_OPTIONS_H
-    
-    namespace fuzzer {
-    }
-    
-    // This is a reimplementation of Libc's `system()`. On Darwin the Libc
-// implementation contains a mutex which prevents it from being used
-// concurrently. This implementation **can** be used concurrently. It sets the
-// signal handlers when the first thread enters and restores them when the last
-// thread finishes execution of the function and ensures this is not racey by
-// using a mutex.
-int ExecuteCommand(const std::string &Command) {
-  posix_spawnattr_t SpawnAttributes;
-  if (posix_spawnattr_init(&SpawnAttributes))
-    return -1;
-  // Block and ignore signals of the current process when the first thread
-  // enters.
-  {
-    std::lock_guard<std::mutex> Lock(SignalMutex);
-    if (ActiveThreadCount == 0) {
-      static struct sigaction IgnoreSignalAction;
-      sigset_t BlockedSignalsSet;
-      memset(&IgnoreSignalAction, 0, sizeof(IgnoreSignalAction));
-      IgnoreSignalAction.sa_handler = SIG_IGN;
-    }
-    }
+    namespace leveldb {
     }
