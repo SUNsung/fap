@@ -1,110 +1,129 @@
 
         
-          def grant_moderation!
-    set_permission('moderator', true)
+          def after_omniauth_failure_path_for(scope)
+    new_session_path(scope)
   end
     
-    describe Deliver::HtmlGenerator do
-  let(:generator) { Deliver::HtmlGenerator.new }
+      def respond_to_on_destroy
+    # We actually need to hardcode this as Rails default responder doesn't
+    # support returning empty response on GET request
+    respond_to do |format|
+      format.all { head :no_content }
+      format.any(*navigational_formats) { redirect_to after_sign_out_path_for(resource_name) }
+    end
+  end
+end
+
     
-        context 'GIT repository' do
-      before do
-        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_svn?).and_return(false)
-        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git_svn?).and_return(false)
-        expect(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_git?).and_return(true)
-        allow(Fastlane::Actions::GetBuildNumberRepositoryAction).to receive(:is_hg?).and_return(false)
+    module Devise
+  module Controllers
+    # A module that may be optionally included in a controller in order
+    # to provide remember me behavior. Useful when signing in is done
+    # through a callback, like in OmniAuth.
+    module Rememberable
+      # Return default cookie values retrieved from session options.
+      def self.cookie_values
+        Rails.configuration.session_options.slice(:path, :domain, :secure)
       end
     
-          it 'raises an exception when xcode project path wasn't found' do
-        expect do
-          Fastlane::FastFile.new.parse('lane :test do
-            increment_version_number(xcodeproj: '/nothere')
-          end').runner.execute(:test)
-        end.to raise_error('Could not find Xcode project')
+          # Set up a subject doing an I18n lookup. At first, it attempts to set a subject
+      # based on the current mapping:
+      #
+      #   en:
+      #     devise:
+      #       mailer:
+      #         confirmation_instructions:
+      #           user_subject: '...'
+      #
+      # If one does not exist, it fallbacks to ActionMailer default:
+      #
+      #   en:
+      #     devise:
+      #       mailer:
+      #         confirmation_instructions:
+      #           subject: '...'
+      #
+      def subject_for(key)
+        I18n.t(:'#{devise_mapping.name}_subject', scope: [:devise, :mailer, key],
+          default: [:subject, key.to_s.humanize])
       end
+    end
+  end
+end
+
     
-          def remember_cookie_values(resource)
-        options = { httponly: true }
-        options.merge!(forget_cookie_values(resource))
-        options.merge!(
-          value: resource.class.serialize_into_cookie(resource),
-          expires: resource.remember_expires_at
-        )
-      end
-    
-      if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
-     options[:store] != false && !env['devise.skip_timeoutable']
-    last_request_at = warden.session(scope)['last_request_at']
-    
-        def name=(value)
-      @name = value.try :strip
+        # Create magic predicates for verifying what module is activated by this map.
+    # Example:
+    #
+    #   def confirmable?
+    #     self.modules.include?(:confirmable)
+    #   end
+    #
+    def self.add_module(m)
+      class_eval <<-METHOD, __FILE__, __LINE__ + 1
+        def #{m}?
+          self.modules.include?(:#{m})
+        end
+      METHOD
     end
     
-              node.css('.method').each do |n|
-            next unless n.at_css('dt[id]')
-            name = n.at_css('.descname').content
-            name = '#{class_name}::#{name}()'
-            id = n.at_css('dt[id]')['id']
-            entries << [name, id]
+      def parse(pkt)
+    # We want to return immediantly if	we do not have a packet which is handled by us
+    return unless pkt.is_tcp?
+    return if (pkt.tcp_sport != 80 and pkt.tcp_dport != 80)
+    s = find_session((pkt.tcp_sport == 80) ? get_session_src(pkt) : get_session_dst(pkt))
+    
+    fileOutJar 	= clsFile.new_with_sig('Ljava.lang.String;', 'output.jar')
+filesIn		= Array.new
+    
+      end
+    
+        if as == :json
+      if api_error?(data)
+        data = generate_error_hash(data)
+      else
+        selected_fields = extract_fields(filter.to_s.strip)
+        data.select! { |k,v| selected_fields.include?(k) } unless selected_fields.empty?
+        unless options.include?(:exclude_default_metadata)
+          data = data.to_hash
+          if data.values.size == 0 && selected_fields.size > 0
+            raise LogStash::Api::NotFoundError
+          end
+          data = default_metadata.merge(data)
+        end
+      end
+    
+      def _nt_number
+    start_index = index
+    if node_cache[:number].has_key?(index)
+      cached = node_cache[:number][index]
+      if cached
+        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        @index = cached.interval.end
+      end
+      return cached
+    end
+    
+      def download(url, output)
+    uri = URI(url)
+    digest = Digest::SHA1.new
+    tmp = '#{output}.tmp'
+    Net::HTTP.start(uri.host, uri.port, :use_ssl => (uri.scheme == 'https')) do |http|
+      request = Net::HTTP::Get.new(uri.path)
+      http.request(request) do |response|
+        fail 'HTTP fetch failed for #{url}. #{response}' if [200, 301].include?(response.code)
+        size = (response['content-length'].to_i || -1).to_f
+        count = 0
+        File.open(tmp, 'w') do |fd|
+          response.read_body do |chunk|
+            fd.write(chunk)
+            digest << chunk
+            if size > 0 && $stdout.tty?
+              count += chunk.bytesize
+              $stdout.write(sprintf('\r%0.2f%%', count/size * 100))
+            end
           end
         end
-    
-    def usage
-  $stderr.puts '#{$0} [site list] [output-dir]'
-  exit(0)
-end
-    
-            report_auth_info(s.merge({:active => false}))
-        print_status('Failed IMAP Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]} (#{s[:banner].strip})')
-    
-                  s[:proto] = 'tcp'
-              s[:name]  = 'pop3'
-              s[:extra] = 'Successful Login. Banner: #{s[:banner]}'
-              report_auth_info(s)
-              print_status('Successful POP3 Login: #{s[:session]} >> #{s[:user]} / #{s[:pass]} (#{s[:banner].strip})')
-    
-          if(pkt.payload =~ self.sigs[k])
-        matched = k
-        matches = $1
-        sessions[s[:session]].merge!({k => matches})
+        $stdout.write('\r      \r') if $stdout.tty?
       end
-    
-        _cal[ver].each_pair do |key, value|
-      cal[ver][key] = Array.new
-      cal[ver][key] << String.new
-      cal[ver][key][-1] << '#ifdef AIX%s' % ver.delete('.')
-      cal[ver][key][-1] << '\n'
-      cal[ver][key][-1] << '''.rjust(5)
-      value.each_byte do |c|
-        cal[ver][key][-1] << '\x%02x' % c
-      end
-      cal[ver][key][-1] << '''.ljust(7)
-      cal[ver][key][-1] << '/*  cal     r2,-%d(r29)' %
-          (65536 - value.unpack('nn')[1])
-      cal[ver][key][-1] << '*/'.rjust(15)
-      cal[ver][key][-1] << '\n'
-      cal[ver][key][-1] << '#endif'
-      cal[ver][key][-1] << '\n'
     end
-    
-      def execute
-    validate_params
-    source = File.join(File.dirname(__FILE__), 'templates', '#{type}-plugin')
-    @target_path = File.join(path, full_plugin_name)
-    FileUtils.mkdir(@target_path)
-    puts ' Creating #{@target_path}'
-    
-      # Create a subclass of Clamp::Command that enforces the use of
-  # LogStash::SETTINGS for setting validation
-  class StrictCommand < Command
-    class << self
-      include ::Clamp::Option::StrictDeclaration
-    end
-    
-          expect('.all-buttons-focus').to have_ruleset(ruleset)
-    end
-  end
-    
-      context 'called with one size' do
-    it 'applies same width to all sides' do
-      rule = 'margin: 1px'
