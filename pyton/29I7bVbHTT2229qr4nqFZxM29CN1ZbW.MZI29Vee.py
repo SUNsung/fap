@@ -1,67 +1,79 @@
 
         
-          with gfile.FastGFile(FLAGS.spec_file, 'w') as f:
-    f.write(str(master_spec).encode('utf-8'))
+            tag = to_json
+    
+        class Tag2(JSONTag):
+        key = ' 2'
+    
+        def from_object(self, obj):
+        '''Updates the values from the given object.  An object can be of one
+        of the following two types:
+    
+            if not current.propagate:
+            break
+    
+            def __init__(self, name, doc=None):
+            self.name = name
+            self.__doc__ = doc
+        def _fail(self, *args, **kwargs):
+            raise RuntimeError('signalling support is unavailable '
+                               'because the blinker library is '
+                               'not installed.')
+        send = lambda *a, **kw: None
+        connect = disconnect = has_receivers_for = receivers_for = \
+            temporarily_connected_to = connected_to = _fail
+        del _fail
+    
+        if not git_is_clean():
+        fail('You have uncommitted changes in git')
+    
+        from config_package_app import app
+    assert app.instance_path == str(modules_tmpdir.join('instance'))
     
     
-import tensorflow as tf
+def test_logger_debug(app):
+    app.debug = True
+    assert app.logger.level == logging.DEBUG
+    assert app.logger.handlers == [default_handler]
     
-      def testArcSourcePotentialsFromTokens(self):
-    with self.test_session():
-      tokens = tf.constant([[[4, 5, 6],
-                             [5, 6, 7],
-                             [6, 7, 8]],
-                            [[6, 7, 8],
-                             [5, 6, 7],
-                             [4, 5, 6]]], tf.float32)  # pyformat: disable
-      weights = tf.constant([2, 3, 5], tf.float32)
+        # Parse and validate the field names.  Validation serves two purposes,
+    # generating informative error messages and preventing template injection attacks.
+    if isinstance(field_names, basestring):
+        field_names = field_names.replace(',', ' ').split() # names separated by whitespace and/or commas
+    field_names = tuple(map(str, field_names))
+    for name in (typename,) + field_names:
+        if not all(c.isalnum() or c=='_' for c in name):
+            raise ValueError('Type names and field names can only contain alphanumeric characters and underscores: %r' % name)
+        if _iskeyword(name):
+            raise ValueError('Type names and field names cannot be a keyword: %r' % name)
+        if name[0].isdigit():
+            raise ValueError('Type names and field names cannot start with a number: %r' % name)
+    seen_names = set()
+    for name in field_names:
+        if name.startswith('_'):
+            raise ValueError('Field names cannot start with an underscore: %r' % name)
+        if name in seen_names:
+            raise ValueError('Encountered duplicate field name: %r' % name)
+        seen_names.add(name)
     
-          logging.info('Initializing data for component '%s'', comp.name)
-      handle = dragnn_ops.init_component_data(
-          handle, beam_size=comp.training_beam_size, component=comp.name)
-      # TODO(googleuser): Phase out component.MasterState.
-      master_state = component.MasterState(handle,
-                                           dragnn_ops.batch_size(
-                                               handle, component=comp.name))
-      with tf.control_dependencies([handle, cost]):
-        args = (master_state, network_states)
-        if unroll_using_oracle[component_index]:
+    +----------+     +----------+       +--------+     +-----------+    +---------+
+|          |  => | Work Ids |    => |        |  => | Call Q    | => |         |
+|          |     +----------+       |        |     +-----------+    |         |
+|          |     | ...      |       |        |     | ...       |    |         |
+|          |     | 6        |       |        |     | 5, call() |    |         |
+|          |     | 7        |       |        |     | ...       |    |         |
+| Process  |     | ...      |       | Local  |     +-----------+    | Process |
+|  Pool    |     +----------+       | Worker |                      |  #1..n  |
+| Executor |                        | Thread |                      |         |
+|          |     +----------- +     |        |     +-----------+    |         |
+|          | <=> | Work Items | <=> |        | <=  | Result Q  | <= |         |
+|          |     +------------+     |        |     +-----------+    |         |
+|          |     | 6: call()  |     |        |     | ...       |    |         |
+|          |     |    future  |     |        |     | 4, result |    |         |
+|          |     | ...        |     |        |     | 3, except |    |         |
++----------+     +------------+     +--------+     +-----------+    +---------+
     
-    - RecognitionException
-  - MismatchedRangeException
-  - MismatchedSetException
-    - MismatchedNotSetException
-    .
-  - MismatchedTokenException
-  - MismatchedTreeNodeException
-  - NoViableAltException
-  - EarlyExitException
-  - FailedPredicateException
-  .
-.
-    
-        To avoid English-only error messages and to generally make things
-    as flexible as possible, these exceptions are not created with strings,
-    but rather the information necessary to generate an error.  Then
-    the various reporting methods in Parser and Lexer can be overridden
-    to generate a localized error message.  For example, MismatchedToken
-    exceptions are built with the expected token type.
-    So, don't expect getMessage() to return anything.
-    
-        major = int(m.group(1))
-    minor = int(m.group(2))
-    patch = int(m.group(4) or 0)
-    beta = int(m.group(6) or sys.maxint)
-    
-    
-def AdjustCandidateInsertionText_NotSuffix_test():
-  with MockTextAfterCursor( 'bar' ):
-    eq_( [ { 'abbr': 'foofoo', 'word': 'foofoo' } ],
-         base.AdjustCandidateInsertionText( [ 'foofoo' ] ) )
-    
-    
-  def Done( self ):
-    return True
+        return _MasterDiagnosticFilter( compiled_by_type )
     
     from __future__ import unicode_literals
 from __future__ import print_function
@@ -69,27 +81,3 @@ from __future__ import division
 from __future__ import absolute_import
 # Not installing aliases from python-future; it's unreliable and slow.
 from builtins import *  # noqa
-    
-        def on_message(self, message_type):  # message ignored
-        if message_type in self.message_types.keys():
-            self.message_types[message_type]()
-        else:
-            raise UnsupportedMessageType
-    
-        def setUp(cls):
-        ''' Function/test case scope setup. '''
-        cls.output = StringIO()
-        cls.saved_stdout = sys.stdout
-        sys.stdout = cls.output
-    
-        def do_action(self):
-        print(self.name, self.action.name, end=' ')
-        return self.action
-    
-        @classmethod
-    def get_registry(cls):
-        return dict(cls.REGISTRY)
-    
-        def prepare(self):
-        print('Reporter Class is preparing to report the results')
-        time.sleep(0.1)
