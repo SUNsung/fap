@@ -1,303 +1,365 @@
 
         
-        std::string ComputeTreeHashRoot(const std::vector<std::string>& leaf_hashes,
-                                int branch_factor) {
-  if (leaf_hashes.empty() || branch_factor < 2)
-    return std::string();
-    }
+        #include <vector>
     
-      static void Call(content::Shell* shell,
-                   const std::string& method,
-                   const base::ListValue& arguments,
-                   base::ListValue* result,
-                   DispatcherHost* dispatcher_host);
-    
-    #include 'base/logging.h'
-#include 'base/values.h'
-    
-    
-    {}  // namespace nwapi
-    
-    namespace nwapi {
-    }
-    
-    #ifndef CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
-#define CONTENT_NW_SRC_API_CLIPBOARD_CLIPBOARD_H_
-    
-     private:
-  ObjectManager* object_manager_;
-    
-    void Menu::UpdateKeys(views::FocusManager *focus_manager){
-  if (focus_manager == NULL){
-    return ;
-  } else {
-    focus_manager_ = focus_manager;
-    for(auto* item : menu_items_) {
-      item->UpdateKeys(focus_manager);
-    }
-  }
-}
-    
-    void MenuItem::Destroy() {
-  gtk_widget_destroy(menu_item_);
-  g_object_unref(G_OBJECT(menu_item_));
-}
-    
-    #include 'base/files/file_path.h'
-#include 'base/strings/string_util.h'
-#include 'base/strings/utf_string_conversions.h'
-#include 'base/threading/thread_restrictions.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menu/menu.h'
-#include 'content/nw/src/nw_base.h'
-#include 'content/nw/src/nw_content.h'
-#include 'content/nw/src/nw_package.h'
-#include 'ui/base/accelerators/accelerator.h'
-#include 'ui/gfx/image/image_skia_operations.h'
-#include 'ui/events/event_constants.h'//for modifier key code
-#include 'base/logging.h'
-    
-    NwAppGetArgvSyncFunction::NwAppGetArgvSyncFunction() {
-}
-    
-    
-    {  DECLARE_EXTENSION_FUNCTION('nw.Clipboard.readAvailableTypes', UNKNOWN)
- private:
-  DISALLOW_COPY_AND_ASSIGN(NwClipboardReadAvailableTypesFunction);
-};
-    
-      /**
-   * @brief Applies the transformation defined in the data layer's
-   * transform_param block to a cv::Mat
-   *
-   * @param cv_img
-   *    cv::Mat containing the data to be transformed.
-   * @param transformed_blob
-   *    This is destination blob. It can be part of top blob's data if
-   *    set_cpu_data() is used. See image_data_layer.cpp for an example.
-   */
-  void Transform(const cv::Mat& cv_img, Blob<Dtype>* transformed_blob);
-#endif  // USE_OPENCV
-    
-    namespace caffe {
-    }
-    
-     private:
-  // wrap im2col/col2im so we don't have to remember the (long) argument lists
-  inline void conv_im2col_cpu(const Dtype* data, Dtype* col_buff) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      im2col_cpu(data, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
-    } else {
-      im2col_nd_cpu(data, num_spatial_axes_, conv_input_shape_.cpu_data(),
-          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
-          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), col_buff);
-    }
-  }
-  inline void conv_col2im_cpu(const Dtype* col_buff, Dtype* data) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      col2im_cpu(col_buff, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
-    } else {
-      col2im_nd_cpu(col_buff, num_spatial_axes_, conv_input_shape_.cpu_data(),
-          col_buffer_shape_.data(), kernel_shape_.cpu_data(),
-          pad_.cpu_data(), stride_.cpu_data(), dilation_.cpu_data(), data);
-    }
-  }
-#ifndef CPU_ONLY
-  inline void conv_im2col_gpu(const Dtype* data, Dtype* col_buff) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      im2col_gpu(data, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buff);
-    } else {
-      im2col_nd_gpu(data, num_spatial_axes_, num_kernels_im2col_,
-          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
-          kernel_shape_.gpu_data(), pad_.gpu_data(),
-          stride_.gpu_data(), dilation_.gpu_data(), col_buff);
-    }
-  }
-  inline void conv_col2im_gpu(const Dtype* col_buff, Dtype* data) {
-    if (!force_nd_im2col_ && num_spatial_axes_ == 2) {
-      col2im_gpu(col_buff, conv_in_channels_,
-          conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
-          kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
-          pad_.cpu_data()[0], pad_.cpu_data()[1],
-          stride_.cpu_data()[0], stride_.cpu_data()[1],
-          dilation_.cpu_data()[0], dilation_.cpu_data()[1], data);
-    } else {
-      col2im_nd_gpu(col_buff, num_spatial_axes_, num_kernels_col2im_,
-          conv_input_shape_.gpu_data(), col_buffer_.gpu_shape(),
-          kernel_shape_.gpu_data(), pad_.gpu_data(), stride_.gpu_data(),
-          dilation_.gpu_data(), data);
-    }
-  }
+      window->menu_ = menu;
+  
+#if defined(OS_MACOSX)
+  response->Append(NWChangeAppMenu(menu));
 #endif
     
-    /**
- * @brief Computes @f$ y = x + \log(1 + \exp(-x)) @f$ if @f$ x > 0 @f$;
- *        @f$ y = \log(1 + \exp(x)) @f$ otherwise.
- *
- * @param bottom input Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the inputs @f$ x @f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (N \times C \times H \times W) @f$
- *      the computed outputs @f$
- *      y = \left\{
- *         \begin{array}{ll}
- *            x + \log(1 + \exp(-x)) & \mbox{if } x > 0 \\
- *            \log(1 + \exp(x)) & \mbox{otherwise}
- *         \end{array} \right.
- *      @f$
- */
-template <typename Dtype>
-class BNLLLayer : public NeuronLayer<Dtype> {
- public:
-  explicit BNLLLayer(const LayerParameter& param)
-      : NeuronLayer<Dtype>(param) {}
-    }
-    }
-    
-      /**
-   * @brief Computes the error gradient w.r.t. the concatenate inputs.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *        respect to the outputs
-   *   -# @f$ (KN \times C \times H \times W) @f$ if axis == 0, or
-   *      @f$ (N \times KC \times H \times W) @f$ if axis == 1:
-   *      containing error gradients @f$ \frac{\partial E}{\partial y} @f$
-   *      with respect to concatenated outputs @f$ y @f$
-   * @param propagate_down see Layer::Backward.
-   * @param bottom input Blob vector (length K), into which the top gradient
-   *        @f$ \frac{\partial E}{\partial y} @f$ is deconcatenated back to the
-   *        inputs @f$
-   *        \left[ \begin{array}{cccc}
-   *          \frac{\partial E}{\partial x_1} &
-   *          \frac{\partial E}{\partial x_2} &
-   *          ... &
-   *          \frac{\partial E}{\partial x_K}
-   *        \end{array} \right] =
-   *        \frac{\partial E}{\partial y}
-   *        @f$
-   */
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-    
-    /**
- * @brief Computes the contrastive loss @f$
- *          E = \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
- *              \left(1-y\right) \max \left(margin-d, 0\right)^2
- *          @f$ where @f$
- *          d = \left| \left| a_n - b_n \right| \right|_2 @f$. This can be
- *          used to train siamese networks.
- *
- * @param bottom input Blob vector (length 3)
- *   -# @f$ (N \times C \times 1 \times 1) @f$
- *      the features @f$ a \in [-\infty, +\infty]@f$
- *   -# @f$ (N \times C \times 1 \times 1) @f$
- *      the features @f$ b \in [-\infty, +\infty]@f$
- *   -# @f$ (N \times 1 \times 1 \times 1) @f$
- *      the binary similarity @f$ s \in [0, 1]@f$
- * @param top output Blob vector (length 1)
- *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
- *      the computed contrastive loss: @f$ E =
- *          \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
- *          \left(1-y\right) \max \left(margin-d, 0\right)^2
- *          @f$ where @f$
- *          d = \left| \left| a_n - b_n \right| \right|_2 @f$.
- * This can be used to train siamese networks.
- */
-template <typename Dtype>
-class ContrastiveLossLayer : public LossLayer<Dtype> {
- public:
-  explicit ContrastiveLossLayer(const LayerParameter& param)
-      : LossLayer<Dtype>(param), diff_() {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    }
-    
-      bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnLRNDescriptor_t norm_desc_;
-  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
-    
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    IPC_SYNC_MESSAGE_ROUTED4_1(ShellViewHostMsg_Call_Object_Method_Sync,
+                           int /* object id */,
+                           std::string /* type name */,
+                           std::string /* method name */,
+                           base::ListValue /* arguments */,
+                           base::ListValue /* result */)
     
     
-    {
-    {}  // namespace log
-}  // namespace leveldb
-    
-      void StartBlock(uint64_t block_offset);
-  void AddKey(const Slice& key);
-  Slice Finish();
-    
-    
-    {  // Verify that the size of the key space not touched by the reads
-  // is pretty much unchanged.
-  const int64_t final_other_size = Size(Key(n), Key(kCount));
-  ASSERT_LE(final_other_size, initial_other_size + 1048576);
-  ASSERT_GE(final_other_size, initial_other_size/5 - 1048576);
+    {  RenderThread::Get()->Send(new ShellViewHostMsg_Call_Object_Method(
+      routing_id,
+      object_id,
+      type,
+      method,
+      *static_cast<base::ListValue*>(value_args.get())));
+  return v8::Undefined(isolate);
 }
     
-    int InternalKeyComparator::Compare(const Slice& akey, const Slice& bkey) const {
-  // Order by:
-  //    increasing user key (according to user-supplied comparator)
-  //    decreasing sequence number
-  //    decreasing type (though sequence# should be enough to disambiguate)
-  int r = user_comparator_->Compare(ExtractUserKey(akey), ExtractUserKey(bkey));
-  if (r == 0) {
-    const uint64_t anum = DecodeFixed64(akey.data() + akey.size() - 8);
-    const uint64_t bnum = DecodeFixed64(bkey.data() + bkey.size() - 8);
-    if (anum > bnum) {
-      r = -1;
-    } else if (anum < bnum) {
-      r = +1;
-    }
+    
+    {} // namespace nwapi
+
+    
+    void Menu::OnMenuClosed() {
+  CHECK(!message_loop_quit_.is_null());
+  message_loop_quit_.Run();
+  
+#if !defined(OS_WIN)
+  // Ask PlatformEventSource to stop dispatching
+  // events in this message loop
+  // iteration. We want our menu's loop to return
+  // before the next event.
+  if (ui::PlatformEventSource::GetInstance())
+    ui::PlatformEventSource::GetInstance()->StopCurrentEventStream();
+#endif
+}
+    
+    void MenuItem::SetSubmenu(Menu* sub_menu) {
+  submenu_ = sub_menu;
+  if (GTK_IS_ACCEL_GROUP(gtk_accel_group)){
+    sub_menu->UpdateKeys(gtk_accel_group);
   }
-  return r;
+  if (sub_menu == NULL)
+    gtk_menu_item_remove_submenu(GTK_MENU_ITEM(menu_item_));
+  else
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_item_), sub_menu->menu_);
 }
+    
+    using namespace extensions::nwapi::nw__app;
+    
+      tensor->resize({1, 2, 3});
+  assert(tensor->nDim() == 3);
+  int i = 0;
+  for (auto s: tensor->sizes())
+    assert(s == ++i);
+    
+      struct RequestGloo : DataChannel::Request {
+    RequestGloo(QueueWorker::Request&& request);
+    virtual ~RequestGloo();
+    }
+    
+    PyObject* tensor_to_list(const Tensor& tensor) {
+  Tensor data = tensor;
+  if (data.type().backend() != kCPU) {
+    with_no_gil([&]() {
+      data = data.toBackend(kCPU);
+    });
+  }
+  auto& type = data.type();
+  return recursive_to_list(
+      (char*)data.data_ptr(), data.sizes(), data.strides(), 0,
+      type.scalarType(), type.elementSizeInBytes());
+}
+    
+    #define THCPDoubleStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPDoubleStorageClass)
+#define THCPFloatStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPFloatStorageClass)
+#define THCPHalfStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPHalfStorageClass)
+#define THCPLongStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPLongStorageClass)
+#define THCPIntStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPIntStorageClass)
+#define THCPShortStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPShortStorageClass)
+#define THCPCharStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPCharStorageClass)
+#define THCPByteStorage_Check(obj) \
+    PyObject_IsInstance(obj, THCPByteStorageClass)
+    
+    ByteArray::ByteArray(const char* arr, std::size_t size)
+  : _data(arr, arr + size)
+{}
+    
+        template<class ElemType>
+    static size_t GetNumSubminibatchesNeeded(IDataReader* dataReader,
+                                           size_t maxSamplesInRAM,
+                                           size_t numSubminibatches,
+                                           size_t tunedMBSize)
+    {
+        if (numSubminibatches > 1) // user-specified maximum number of samples
+            return numSubminibatches;
+    }
+    
+                // Get attribute type.
+            AttrType GetType() const;
+    
+                if (StatusCategory::SYSTEM == m_state->m_category)
+            {
+                result += 'SystemError';
+                result += ' : ';
+                result += std::to_string(errno);
+            }
+            else if (StatusCategory::ONNX == m_state->m_category)
+            {
+                result += '[ONNXError]';
+                result += ' : ';
+                result += std::to_string(static_cast<int>(Code()));
+                std::string msg;
+                switch (static_cast<StatusCode>(Code()))
+                {
+                case INVALID_ARGUMENT:
+                    msg = 'INVALID_ARGUMENT';
+                    break;
+                case NO_SUCHFILE:
+                    msg = 'NO_SUCHFILE';
+                    break;
+                case NO_MODEL:
+                    msg = 'NO_MODEL';
+                    break;
+                case ENGINE_ERROR:
+                    msg = 'ENGINE_ERROR';
+                    break;
+                case RUNTIME_EXCEPTION:
+                    msg = 'RUNTIME_EXCEPTION';
+                    break;
+                case INVALID_PROTOBUF:
+                    msg = 'INVALID_PROTOBUF';
+                    break;
+                case MODEL_LOADED:
+                    msg = 'MODEL_LOADED';
+                    break;
+                case ONNX_NOT_IMPLEMENTED:
+                    msg = 'NOT_IMPLEMENTED';
+                    break;
+                default:
+                    msg = 'GENERAL ERROR';
+                    break;
+                }
+                result += ' : ';
+                result += msg;
+                result += ' : ';
+                result += m_state->m_msg;
+            }
+    
+        // Taken from RS4
+    REGISTER_OPERATOR_SCHEMA(Softsign)
+        .Description('Softsign takes one input data (Tensor<T>) and produces one output '
+            'data (Tensor<T>) where the function, y = x / (1 + abs(x)), is applied to the '
+            'tensor elementwise.')
+        .Input('input', 'Input tensor, typically 1-D.', 'T')
+        .Output('output', 'Output tensor of same shape and type as input X.', 'T')
+        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
+            'Constrain input and output types to float tensors.');
+    
+            REGISTER_OPERATOR_SCHEMA(Not)
+        .Description('Performs element-wise negation.')
+        .Input('X', 'Input tensor of type bool.', 'T')
+        .Output('Y', '  Output tensor of type bool.', 'T')
+        .TypeConstraint('T', { 'tensor(bool)' }, 'Constrain input and output types to bool tensor.');
+    
+        const auto* chunk = m_chunks[chunkId];
+    const auto& sequence = chunk->Sequences()[sequenceIndexInChunk];
+    result.m_indexInChunk = sequenceIndexInChunk;
+    result.m_numberOfSamples = sequence.m_numberOfSamples;
+    
+    enum {
+    LSTMPeepholeCountCiIndex = 0,
+    LSTMPeepholeCountCoIndex = 1,
+    LSTMPeepholeCountCfIndex = 2,
+    LSTMPeepholeCount = 3
+};
+    
+      void CheckOffsetPastEndReturnsNoRecords(uint64_t offset_past_end) {
+    WriteInitialOffsetLog();
+    reading_ = true;
+    source_.contents_ = Slice(dest_.contents_);
+    Reader* offset_reader = new Reader(&source_, &report_, true/*checksum*/,
+                                       WrittenBytes() + offset_past_end);
+    Slice record;
+    std::string scratch;
+    ASSERT_TRUE(!offset_reader->ReadRecord(&record, &scratch));
+    delete offset_reader;
+  }
     
     int main(int argc, char** argv) {
-  leveldb::Env* env = leveldb::Env::Default();
-  bool ok = true;
-  if (argc < 2) {
-    Usage();
-    ok = false;
-  } else {
-    std::string command = argv[1];
-    if (command == 'dump') {
-      ok = leveldb::HandleDumpCommand(env, argv+2, argc-2);
-    } else {
-      Usage();
-      ok = false;
-    }
-  }
-  return (ok ? 0 : 1);
+  return leveldb::test::RunAllTests();
 }
 
     
-    #ifndef STORAGE_LEVELDB_DB_LOG_WRITER_H_
-#define STORAGE_LEVELDB_DB_LOG_WRITER_H_
+      switch (data[n]) {
+    case kNoCompression:
+      if (data != buf) {
+        // File implementation gave us pointer to some other data.
+        // Use it directly under the assumption that it will be live
+        // while the file is open.
+        delete[] buf;
+        result->data = Slice(data, n);
+        result->heap_allocated = false;
+        result->cachable = false;  // Do not double-cache
+      } else {
+        result->data = Slice(buf, n);
+        result->heap_allocated = true;
+        result->cachable = true;
+      }
+    }
+    
+    
+    {  ASSERT_EQ(Hash(0, 0, 0xbc9f1d34), 0xbc9f1d34);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data1), sizeof(data1), 0xbc9f1d34),
+      0xef1345c4);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data2), sizeof(data2), 0xbc9f1d34),
+      0x5b663814);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data3), sizeof(data3), 0xbc9f1d34),
+      0x323c078f);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data4), sizeof(data4), 0xbc9f1d34),
+      0xed21633a);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data5), sizeof(data5), 0x12345678),
+      0xf333dabb);
+}
+    
+    double Histogram::Percentile(double p) const {
+  double threshold = num_ * (p / 100.0);
+  double sum = 0;
+  for (int b = 0; b < kNumBuckets; b++) {
+    sum += buckets_[b];
+    if (sum >= threshold) {
+      // Scale linearly within this bucket
+      double left_point = (b == 0) ? 0 : kBucketLimit[b-1];
+      double right_point = kBucketLimit[b];
+      double left_sum = sum - buckets_[b];
+      double right_sum = sum;
+      double pos = (threshold - left_sum) / (right_sum - left_sum);
+      double r = left_point + (right_point - left_point) * pos;
+      if (r < min_) r = min_;
+      if (r > max_) r = max_;
+      return r;
+    }
+  }
+  return max_;
+}
+    
+    
+    {    // Compute (product % M) using the fact that ((x << 31) % M) == x.
+    seed_ = static_cast<uint32_t>((product >> 31) + (product & M));
+    // The first reduction may overflow by 1 bit, so we may need to
+    // repeat.  mod == M is not possible; using > allows the faster
+    // sign-bit-based test.
+    if (seed_ > M) {
+      seed_ -= M;
+    }
+    return seed_;
+  }
+  // Returns a uniformly distributed value in the range [0..n-1]
+  // REQUIRES: n > 0
+  uint32_t Uniform(int n) { return Next() % n; }
+    
+    static void Usage() {
+  fprintf(
+      stderr,
+      'Usage: leveldbutil command...\n'
+      '   dump files...         -- dump contents of specified files\n'
+      );
+}
+    
+    #include <stdint.h>
+#include 'db/log_format.h'
+#include 'leveldb/slice.h'
+#include 'leveldb/status.h'
     
     namespace leveldb {
     }
+    
+    /**
+ * \fn  std::shared_ptr<xgboost::DMatrix> CreateDMatrix(int rows, int columns, float sparsity, int seed);
+ *
+ * \brief Creates dmatrix with uniform random data between 0-1.
+ *
+ * \param rows      The rows.
+ * \param columns   The columns.
+ * \param sparsity  The sparsity.
+ * \param seed      The seed.
+ *
+ * \return  The new d matrix.
+ */
+    
+    // objectives
+#include '../src/objective/objective.cc'
+#include '../src/objective/regression_obj.cc'
+#include '../src/objective/multiclass_obj.cc'
+#include '../src/objective/rank_obj.cc'
+    
+    
+    {    // lock-free parallel updates of weights
+    selector_->Setup(*model, in_gpair->HostVector(), p_fmat,
+                     param_.reg_alpha_denorm, param_.reg_lambda_denorm, 0);
+    dmlc::DataIter<ColBatch> *iter = p_fmat->ColIterator();
+    while (iter->Next()) {
+      const ColBatch &batch = iter->Value();
+      const auto nfeat = static_cast<bst_omp_uint>(batch.size);
+#pragma omp parallel for schedule(static)
+      for (bst_omp_uint i = 0; i < nfeat; ++i) {
+        int ii = selector_->NextFeature(i, *model, 0, in_gpair->HostVector(), p_fmat,
+                                       param_.reg_alpha_denorm, param_.reg_lambda_denorm);
+        if (ii < 0) continue;
+        const bst_uint fid = batch.col_index[ii];
+        ColBatch::Inst col = batch[ii];
+        for (int gid = 0; gid < ngroup; ++gid) {
+          double sum_grad = 0.0, sum_hess = 0.0;
+          for (bst_uint j = 0; j < col.length; ++j) {
+            GradientPair &p = gpair[col[j].index * ngroup + gid];
+            if (p.GetHess() < 0.0f) continue;
+            const bst_float v = col[j].fvalue;
+            sum_grad += p.GetGrad() * v;
+            sum_hess += p.GetHess() * v * v;
+          }
+          bst_float &w = (*model)[fid][gid];
+          auto dw = static_cast<bst_float>(
+              param_.learning_rate *
+              CoordinateDelta(sum_grad, sum_hess, w, param_.reg_alpha_denorm,
+                              param_.reg_lambda_denorm));
+          if (dw == 0.f) continue;
+          w += dw;
+          // update grad values
+          for (bst_uint j = 0; j < col.length; ++j) {
+            GradientPair &p = gpair[col[j].index * ngroup + gid];
+            if (p.GetHess() < 0.0f) continue;
+            p += GradientPair(p.GetHess() * col[j].fvalue * dw, 0);
+          }
+        }
+      }
+    }
+  }
+    
+      XGBOOST_DEVICE GradientPairInternal<T> operator-(
+      const GradientPairInternal<T> &rhs) const {
+    GradientPairInternal<T> g;
+    g.grad_ = grad_ - rhs.grad_;
+    g.hess_ = hess_ - rhs.hess_;
+    return g;
+  }
