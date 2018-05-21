@@ -1,354 +1,327 @@
 
         
-        namespace swift {
-class DependencyTracker;
-class ModuleDecl;
-class SourceFile;
+        class SmoothHingeLossUpdater : public DualLossUpdater {
+ public:
+  // Computes the updated dual variable (corresponding) to a single example. The
+  // updated dual value maximizes the objective function of the dual
+  // optimization problem associated with smooth hinge loss. The computations
+  // are detailed in readme.md.
+  double ComputeUpdatedDual(const int num_partitions, const double label,
+                            const double example_weight,
+                            const double current_dual, const double wx,
+                            const double weighted_example_norm) const final {
+    // Intutitvely there are 3 cases:
+    // a. new optimal value of the dual variable falls within the admissible
+    // range [0, 1]. In this case we set new dual to this value.
+    // b. new optimal value is < 0. Then, because of convexity, the optimal
+    // valid value for new dual = 0
+    // c. new optimal value > 1.0. Then new optimal value should be set to 1.0.
+    const double candidate_optimal_dual =
+        current_dual +
+        (label - wx - gamma * current_dual) /
+            (num_partitions * example_weight * weighted_example_norm + gamma);
+    if (label * candidate_optimal_dual < 0) {
+      return 0.0;
+    }
+    if (label * candidate_optimal_dual > 1.0) {
+      return label;
+    }
+    return candidate_optimal_dual;
+  }
     }
     
-    /// Get a parsed documentation comment for the declaration, if there is one.
-Optional<DocComment *>getSingleDocComment(swift::markup::MarkupContext &Context,
-                                          const Decl *D);
     
-    SILFunction *SILDebugScope::getInlinedFunction() const {
-  if (Parent.isNull())
-    return nullptr;
+    {}  // end namespace Eigen
+    
+    
+    {  void CopyDeviceTensorToCPU(const Tensor *device_tensor, StringPiece edge_name,
+                             Device *device, Tensor *cpu_tensor,
+                             StatusCallback done) override;
+};
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    class TextLineReaderOp : public ReaderOpKernel {
+ public:
+  explicit TextLineReaderOp(OpKernelConstruction* context)
+      : ReaderOpKernel(context) {
+    int skip_header_lines = -1;
+    OP_REQUIRES_OK(context,
+                   context->GetAttr('skip_header_lines', &skip_header_lines));
+    OP_REQUIRES(context, skip_header_lines >= 0,
+                errors::InvalidArgument('skip_header_lines must be >= 0 not ',
+                                        skip_header_lines));
+    Env* env = context->env();
+    SetReaderFactory([this, skip_header_lines, env]() {
+      return new TextLineReader(name(), skip_header_lines, env);
+    });
+  }
+};
+    
+        NodeDef* const_node2 = graph_def.add_node();
+    const_node2->set_name('const_node2');
+    const_node2->set_op('Const');
+    
+      int64 start(int d) const {
+    DCHECK_GE(d, 0);
+    DCHECK_LT(d, dims());
+    return starts_[d];
+  }
+    
+    void AddDeviceMetadata(const std::map<uint32, const Device *> &devices,
+                       string *json) {
+  for (const auto &pair : devices) {
+    uint32 device_id = pair.first;
+    const Device &device = *pair.second;
+    if (!device.name().empty()) {
+      Appendf(json,
+              R'({'ph':'M','pid':%u,'name':'process_name',)'
+              R'('args':{)',
+              device_id);
+      AppendEscapedName(json, device.name());
+      StrAppend(json, '}},');
     }
-    
-    using clang::index::SymbolKind;
-using clang::index::SymbolLanguage;
-using clang::index::SymbolSubKind;
-using clang::index::SymbolProperty;
-using clang::index::SymbolPropertySet;
-using clang::index::SymbolRole;
-using clang::index::SymbolRoleSet;
-using clang::index::SymbolRelation;
-using clang::index::SymbolInfo;
-    
-      /// Adds a memory buffer to the SourceManager, taking ownership of it.
-  unsigned addNewSourceBuffer(std::unique_ptr<llvm::MemoryBuffer> Buffer);
-    
-    #ifndef SWIFT_RUNTIME_ONCE_H
-#define SWIFT_RUNTIME_ONCE_H
-    
-    /// Runs the given function with the given context argument exactly once.
-/// The predicate argument must point to a global or static variable of static
-/// extent of type swift_once_t.
-void swift::swift_once(swift_once_t *predicate, void (*fn)(void *),
-                       void *context) {
-#if defined(__APPLE__)
-  dispatch_once_f(predicate, context, fn);
-#elif defined(__CYGWIN__)
-  _swift_once_f(predicate, context, fn);
-#else
-  std::call_once(*predicate, [fn, context]() { fn(context); });
-#endif
+    Appendf(json,
+            R'({'ph':'M','pid':%u,'name':'process_sort_index',)'
+            R'('args':{'sort_index':%u}},)',
+            device_id, device_id);
+    // Convert to a std::map so that devices are sorted by the device id.
+    std::map<uint32, const Resource *> sorted_resources;
+    for (const auto &pair : device.resources()) {
+      sorted_resources[pair.first] = &pair.second;
+    }
+    AddResourceMetadata(device_id, sorted_resources, json);
+  }
 }
+    
+      /** \brief An error tagged with where in the JSON text it was encountered.
+   *
+   * The offsets give the [start, limit) range of bytes within the text. Note
+   * that this is bytes, not codepoints.
+   *
+   */
+  struct StructuredError {
+    size_t offset_start;
+    size_t offset_limit;
+    std::string message;
+  };
+    
+    
+    {}  // namespace google
+#endif  // GOOGLE_PROTOBUF_PYTHON_CPP_DESCRIPTOR_CONTAINERS_H__
 
     
-    /// An abstract class for working with results.of applies.
-class ResultPlan {
-public:
-  virtual RValue finish(SILGenFunction &SGF, SILLocation loc, CanType substType,
-                        ArrayRef<ManagedValue> &directResults) = 0;
-  virtual ~ResultPlan() = default;
+    TEST(AnyTest, TestPackAndUnpackAny) {
+  // We can pack a Any message inside another Any message.
+  protobuf_unittest::TestAny submessage;
+  submessage.set_int32_value(12345);
+  google::protobuf::Any any;
+  any.PackFrom(submessage);
+  protobuf_unittest::TestAny message;
+  message.mutable_any_value()->PackFrom(any);
     }
     
-    // Generate param traits write methods.
-#include 'ipc/param_traits_write_macros.h'
-namespace IPC {
-#include 'content/nw/src/common/common_message_generator.h'
-}  // namespace IPC
-    
-    #include 'base/values.h'
-#include 'extensions/common/draggable_region.h'
-#include 'content/public/common/common_param_traits.h'
-#include 'ipc/ipc_message_macros.h'
-#include 'ui/gfx/ipc/gfx_param_traits.h'
-    
-      // Try to close all windows (then will cause whole app to quit).
-  static void CloseAllWindows(bool force = false, bool quit = false);
-    
-    #include 'base/values.h'
-#include 'components/zoom/zoom_controller.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menuitem/menuitem.h'
-#include 'content/public/browser/web_contents.h'
-#include 'content/public/common/page_zoom.h'
-#include 'ui/views/controls/menu/menu_runner.h'
-    
-       bool GetAcceleratorForCommandId(
-      int command_id,
-      ui::Accelerator* accelerator) const override;
-    
-    
-    {} // namespace extensions
-#endif
-
-    
-    /* Map whose keys are pointers, but are compared by their dereferenced values.
- *
- * Differs from a plain std::map<const K*, T, DereferencingComparator<K*> > in
- * that methods that take a key for comparison take a K rather than taking a K*
- * (taking a K* would be confusing, since it's the value rather than the address
- * of the object for comparison that matters due to the dereferencing comparator).
- *
- * Objects pointed to by keys must not be modified in any way that changes the
- * result of DereferencingComparator.
- */
-template <class K, class T>
-class indirectmap {
-private:
-    typedef std::map<const K*, T, DereferencingComparator<const K*> > base;
-    base m;
-public:
-    typedef typename base::iterator iterator;
-    typedef typename base::const_iterator const_iterator;
-    typedef typename base::size_type size_type;
-    typedef typename base::value_type value_type;
+    // CodeGenerator implementation which generates a C++ source file and
+// header.  If you create your own protocol compiler binary and you want
+// it to support C++ output, you can do so by registering an instance of this
+// CodeGenerator with the CommandLineInterface in your main() function.
+class LIBPROTOC_EXPORT CppGenerator : public CodeGenerator {
+ public:
+  CppGenerator();
+  ~CppGenerator();
     }
-    
-      // Fill database
-  for (int i = 0; i < kCount; i++) {
-    ASSERT_OK(db_->Put(WriteOptions(), Key(i), value));
-  }
-  ASSERT_OK(dbi->TEST_CompactMemTable());
-    
-    Status BuildTable(const std::string& dbname,
-                  Env* env,
-                  const Options& options,
-                  TableCache* table_cache,
-                  Iterator* iter,
-                  FileMetaData* meta) {
-  Status s;
-  meta->file_size = 0;
-  iter->SeekToFirst();
-    }
-    
-      ReadOptions ro;
-  ro.fill_cache = false;
-  Iterator* iter = table->NewIterator(ro);
-  std::string r;
-  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-    r.clear();
-    ParsedInternalKey key;
-    if (!ParseInternalKey(iter->key(), &key)) {
-      r = 'badkey '';
-      AppendEscapedStringTo(&r, iter->key());
-      r += '' => '';
-      AppendEscapedStringTo(&r, iter->value());
-      r += ''\n';
-      dst->Append(r);
-    } else {
-      r = ''';
-      AppendEscapedStringTo(&r, key.user_key);
-      r += '' @ ';
-      AppendNumberTo(&r, key.sequence);
-      r += ' : ';
-      if (key.type == kTypeDeletion) {
-        r += 'del';
-      } else if (key.type == kTypeValue) {
-        r += 'val';
-      } else {
-        AppendNumberTo(&r, key.type);
-      }
-      r += ' => '';
-      AppendEscapedStringTo(&r, iter->value());
-      r += ''\n';
-      dst->Append(r);
-    }
-  }
-  s = iter->status();
-  if (!s.ok()) {
-    dst->Append('iterator error: ' + s.ToString() + '\n');
-  }
     
     
     {
-}  // namespace leveldb
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
     
-    TEST(WriteBatchTest, Multiple) {
-  WriteBatch batch;
-  batch.Put(Slice('foo'), Slice('bar'));
-  batch.Delete(Slice('box'));
-  batch.Put(Slice('baz'), Slice('boo'));
-  WriteBatchInternal::SetSequence(&batch, 100);
-  ASSERT_EQ(100, WriteBatchInternal::Sequence(&batch));
-  ASSERT_EQ(3, WriteBatchInternal::Count(&batch));
-  ASSERT_EQ('Put(baz, boo)@102'
-            'Delete(box)@101'
-            'Put(foo, bar)@100',
-            PrintContents(&batch));
-}
+    #include <string>
     
+      virtual void GenerateCloningCode(io::Printer* printer);
+  virtual void GenerateFreezingCode(io::Printer* printer);
+  virtual void GenerateMembers(io::Printer* printer);
+  virtual void GenerateMergingCode(io::Printer* printer);
+  virtual void GenerateParsingCode(io::Printer* printer);
+  virtual void GenerateSerializationCode(io::Printer* printer);
+  virtual void GenerateSerializedSizeCode(io::Printer* printer);
     
-    {  leveldb::Benchmark benchmark;
-  benchmark.Run();
-  return 0;
-}
-
-    
-      // Three-way comparison.  Returns value:
-  //   < 0 iff 'a' < 'b',
-  //   == 0 iff 'a' == 'b',
-  //   > 0 iff 'a' > 'b'
-  virtual int Compare(const Slice& a, const Slice& b) const = 0;
-    
-    // Dump the contents of the file named by fname in text format to
-// *dst.  Makes a sequence of dst->Append() calls; each call is passed
-// the newline-terminated text corresponding to a single item found
-// in the file.
-//
-// Returns a non-OK result if fname does not name a leveldb storage
-// file, or if the file cannot be read.
-Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
-    
-    
-    {					if (videobuf_time >= get_time()) {
-						frame_done = true;
-					} else {
-						/*If we are too slow, reduce the pp level.*/
-						pp_inc = pp_level > 0 ? -1 : 0;
-					}
-				} else {
-				}
-    
-    	i.context = context;
-	i.protocol = _lws_ref->lws_names;
-	i.address = abuf;
-	i.host = hbuf;
-	i.path = pbuf;
-	i.port = p_port;
-    
-    void WebSocketClient::_bind_methods() {
-	ClassDB::bind_method(D_METHOD('connect_to_url', 'url', 'protocols', 'gd_mp_api'), &WebSocketClient::connect_to_url, DEFVAL(PoolVector<String>()), DEFVAL(false));
-	ClassDB::bind_method(D_METHOD('disconnect_from_host'), &WebSocketClient::disconnect_from_host);
-	ClassDB::bind_method(D_METHOD('set_verify_ssl_enabled', 'enabled'), &WebSocketClient::set_verify_ssl_enabled);
-	ClassDB::bind_method(D_METHOD('is_verify_ssl_enabled'), &WebSocketClient::is_verify_ssl_enabled);
+    class RepeatedPrimitiveFieldGenerator : public FieldGeneratorBase {
+ public:
+  RepeatedPrimitiveFieldGenerator(const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options);
+  ~RepeatedPrimitiveFieldGenerator();
     }
     
-    #include 'core/error_list.h'
-#include 'websocket_multiplayer.h'
-#include 'websocket_peer.h'
+    ExtensionGenerator* ImmutableGeneratorFactory::NewExtensionGenerator(
+    const FieldDescriptor* descriptor) const {
+  if (HasDescriptorMethods(descriptor->file(), context_->EnforceLite())) {
+    return new ImmutableExtensionGenerator(descriptor, context_);
+  } else {
+    return new ImmutableExtensionLiteGenerator(descriptor, context_);
+  }
+}
     
+    std::unique_ptr<ScenarioResult> RunScenario(
+    const grpc::testing::ClientConfig& client_config, size_t num_clients,
+    const grpc::testing::ServerConfig& server_config, size_t num_servers,
+    int warmup_seconds, int benchmark_seconds, int spawn_local_worker_count,
+    const grpc::string& qps_server_target_override,
+    const grpc::string& credential_type, bool run_inproc);
     
-    {	if (p_db < -79)
-		set_volume(0);
-	else
-		set_volume(Math::db2linear(p_db));
-};
+    #include 'test/cpp/qps/benchmark_config.h'
+#include 'test/cpp/qps/driver.h'
+#include 'test/cpp/qps/report.h'
+#include 'test/cpp/qps/server.h'
+#include 'test/cpp/util/test_config.h'
+#include 'test/cpp/util/test_credentials_provider.h'
     
-    #endif
+      bool SetFailedAndReturnFalse() {
+    failed_ = true;
+    return false;
+  }
+    
+    #include <algorithm>
+    
+    #endif  // GRPC_INTERNAL_COMPILER_PYTHON_PRIVATE_GENERATOR_H
 
     
-        60,30,500,    3,18.,  1024
-  },
-  /* 8: 2048 x 27 */
-  {
-    8,{0,1,2,2,3,3,4,4},{3,4,3,4,3},{0,1,1,2,2},{-1,0,1,2,3},
-    {{4},{5,6},{7,8},{-1,9,10,11},{-1,12,13,14}},
-    2,{0,2048,   186,46,744, 12,92,372,1500,  28,66,130, 260,520,1112,
-       6,20,36,56,  78,110,158,222,  316,440,624,  928,1300,1700},
+    
+    {}  // namespace grpc
+
+    
+    TEST_F(CodegenTestMinimal, Build) {}
     
     namespace osquery {
 namespace tables {
     }
     }
     
+    /// Helper replacement for REGISTER, used within extension modules.
+#define REGISTER_MODULE(t, r, n)                                               \
+  auto t##Module = Registry::get().registry(r)->add(n, std::make_shared<t>());
     
-    {  std::vector<std::string> old_views_vec;
-  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
-  EXPECT_EQ(old_views_vec.size(), 1U);
-  c.reset();
+    
+    {
+    { private:
+  friend class TLSConfigTests;
+};
 }
+
     
-    std::string platformAsctime(const struct tm* timeptr) {
-  if (timeptr == nullptr) {
-    return '';
-  }
+    
+    {
+    {  ::strncpy(dst, src, count);
+  return Status(0, 'OK');
+}
+}
+
+    
+    class EphemeralDatabasePlugin : public DatabasePlugin {
+  using DBType = std::map<std::string, std::map<std::string, std::string>>;
     }
     
-      // Now emulate a rapid increase in CPU requirements.
-  r['user_time'] = INTEGER(1024 * 1024 * 1024);
-  runner.setProcessRow({r});
-  runner.isWatcherHealthy(*test_process, state);
-  EXPECT_EQ(1U, state.sustained_latency);
+    bool js_cocos2dx_navmesh_NavMeshAgent_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_navmesh_NavMeshAgent_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_navmesh_NavMeshAgent(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_navmesh(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_navmesh_NavMeshAgent_setMaxSpeed(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_syncToNode(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_completeOffMeshLink(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getSeparationWeight(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_setAutoTraverseOffMeshLink(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getCurrentVelocity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_syncToAgent(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_isOnOffMeshLink(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_setSeparationWeight(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_pause(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_setAutoOrientation(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getHeight(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getMaxSpeed(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getCurrentOffMeshLinkData(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getRadius(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_setSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getSyncFlag(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_resume(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_stop(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_setMaxAcceleration(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_setOrientationRefAxes(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getMaxAcceleration(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_setHeight(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getObstacleAvoidanceType(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getVelocity(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_setRadius(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_setObstacleAvoidanceType(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_getNavMeshAgentComponentName(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_navmesh_NavMeshAgent_NavMeshAgent(JSContext *cx, uint32_t argc, jsval *vp);
     
-    #include <osquery/core.h>
+    extern JSClass  *jsb_cocos2d_Physics3DComponent_class;
+extern JSObject *jsb_cocos2d_Physics3DComponent_prototype;
     
-      void ValidateFeatureSet() {
-    if (!CountingFeatures) return;
-    if (FeatureDebug)
-      PrintFeatureSet();
-    for (size_t Idx = 0; Idx < kFeatureSetSize; Idx++)
-      if (GetFeature(Idx))
-        Inputs[SmallestElementPerFeature[Idx]]->Tmp++;
-    for (auto II: Inputs) {
-      if (II->Tmp != II->NumFeatures)
-        Printf('ZZZ %zd %zd\n', II->Tmp, II->NumFeatures);
-      assert(II->Tmp == II->NumFeatures);
-      II->Tmp = 0;
-    }
-  }
+    bool js_cocos2dx_studio_ColorFrame_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_ColorFrame_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_ColorFrame(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_ColorFrame_getColor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ColorFrame_setColor(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ColorFrame_create(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ColorFrame_ColorFrame(JSContext *cx, uint32_t argc, jsval *vp);
     
-    #ifdef __x86_64
-#define ATTRIBUTE_TARGET_POPCNT __attribute__((target('popcnt')))
-#else
-#define ATTRIBUTE_TARGET_POPCNT
+    
+    
+    int register_all_cocos2dx_experimental(lua_State* tolua_S);
+    
+    #if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,'#ferror in function 'lua_cocos2dx_physics_EventListenerPhysicsContactWithShapes_hitTest'.',&tolua_err);
 #endif
     
-        Printf('CRASH_MIN: executing: %s\n', Cmd.c_str());
-    int ExitCode = ExecuteCommand(Cmd);
-    if (ExitCode == 0) {
-      Printf('ERROR: the input %s did not crash\n', CurrentFilePath.c_str());
-      exit(1);
+    
+    
+    				b2Vec2 anchor(160.0f + 2.0f * i, -0.125f);
+				jd.Initialize(prevBody, body, anchor);
+				m_world->CreateJoint(&jd);
+    
+    #ifndef GUETZLI_COMPARATOR_H_
+#define GUETZLI_COMPARATOR_H_
+    
+    bool EncodeSOF(const JPEGData& jpg, JPEGOutput out) {
+  const size_t ncomps = jpg.components.size();
+  const size_t marker_len = 8 + 3 * ncomps;
+  std::vector<uint8_t> data(marker_len + 2);
+  size_t pos = 0;
+  data[pos++] = 0xff;
+  data[pos++] = 0xc1;
+  data[pos++] = static_cast<uint8_t>(marker_len >> 8);
+  data[pos++] = marker_len & 0xff;
+  data[pos++] = kJpegPrecision;
+  data[pos++] = jpg.height >> 8;
+  data[pos++] = jpg.height & 0xff;
+  data[pos++] = jpg.width >> 8;
+  data[pos++] = jpg.width & 0xff;
+  data[pos++] = static_cast<uint8_t>(ncomps);
+  for (size_t i = 0; i < ncomps; ++i) {
+    data[pos++] = jpg.components[i].id;
+    data[pos++] = ((jpg.components[i].h_samp_factor << 4) |
+                      (jpg.components[i].v_samp_factor));
+    const size_t quant_idx = jpg.components[i].quant_idx;
+    if (quant_idx >= jpg.quant.size()) {
+      return false;
     }
-    Printf('CRASH_MIN: '%s' (%zd bytes) caused a crash. Will try to minimize '
-           'it further\n',
-           CurrentFilePath.c_str(), U.size());
-    
-    #include 'FuzzerExtFunctions.def'
-    
-    #include 'FuzzerExtFunctions.def'
-    
-    namespace fuzzer {
-    }
-    
-    
-    {  // Execute the inner process untill it passes.
-  // Every inner process should execute at least one input.
-  std::string BaseCmd = CloneArgsWithoutX(Args, 'keep-all-flags');
-  for (size_t i = 1; i <= AllFiles.size(); i++) {
-    Printf('MERGE-OUTER: attempt %zd\n', i);
-    auto ExitCode =
-        ExecuteCommand(BaseCmd + ' -merge_control_file=' + CFPath);
-    if (!ExitCode) {
-      Printf('MERGE-OUTER: succesfull in %zd attempt(s)\n', i);
-      break;
-    }
+    data[pos++] = jpg.quant[quant_idx].index;
   }
-  // Read the control file and do the merge.
-  Merger M;
-  std::ifstream IF(CFPath);
-  M.ParseOrExit(IF, true);
-  IF.close();
-  std::vector<std::string> NewFiles;
-  size_t NumNewFeatures = M.Merge(&NewFiles);
-  Printf('MERGE-OUTER: %zd new files with %zd new features added\n',
-         NewFiles.size(), NumNewFeatures);
-  for (auto &F: NewFiles)
-    WriteToOutputCorpus(FileToVector(F));
-  // We are done, delete the control file.
-  RemoveFile(CFPath);
+  return JPEGWrite(out, &data[0], pos);
 }
     
-    #if LLVM_FUZZER_DEFINES_SANITIZER_WEAK_HOOOKS
-void __sanitizer_weak_hook_memcmp(void *caller_pc, const void *s1,
-                                  const void *s2, size_t n, int result) {
-  fuzzer::TPC.AddValueForMemcmp(caller_pc, s1, s2, n);
-  if (!RecordingMemcmp) return;
-  if (result == 0) return;  // No reason to mutate.
-  if (n <= 1) return;  // Not interesting.
-  TS->TraceMemcmpCallback(n, reinterpret_cast<const uint8_t *>(s1),
-                          reinterpret_cast<const uint8_t *>(s2));
-}
+    #include 'guetzli/jpeg_data.h'
+    
+    #include <stdint.h>
