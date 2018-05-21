@@ -1,194 +1,191 @@
 
         
-        #else // USE_GCC_FAST_TLS
-    
-    #include 'hphp/runtime/vm/jit/vasm-unit.h'
-    
-    /*
- * Block of Vinstrs, managed by Vunit.
- *
- * A Vblock, in addition to containing a Vinstr stream, also specifies where it
- * should be emitted to.
- */
-struct Vblock {
-  explicit Vblock(AreaIndex area_idx, uint64_t w)
-    : area_idx(area_idx)
-    , weight(w) {}
-    }
-    
-        if (mpz_sgn(gmpData) < 0) {
-      mpz_clear(gmpData);
-    }
-    
-    #ifdef HAVE_NUMA
-    
-    inline void initNuma() {}
-inline constexpr int next_numa_node(std::atomic_int& curr_node) { return 0; }
-inline constexpr int num_numa_nodes() { return 1; }
-inline void numa_interleave(void* start, size_t size) {}
-inline void numa_bind_to(void* start, size_t size, int node) {}
-inline constexpr bool numa_node_allowed(int node) { return true; }
-    
-    /*
- * Helpers for unconditional and conditional jumps.
- */
-void surpriseCheck(IRGS&);
-void surpriseCheck(IRGS&, Offset);
-void jmpImpl(IRGS&, Offset);
-void implCondJmp(IRGS&, Offset taken, bool negate, SSATmp*);
-    
-    /*
- * dlopen() the embedded shared object given by `desc'.
- *
- * Unfortunately, there's no way to do the equivalent of dlopen() on data
- * within another file, or even in memory.  This means we have to copy the
- * section into a temporary file and then dlopen() that.
- *
- * Returns the result of dlopen() on success, else nullptr.  Also logs the
- * failure condition with Logger on failure.
- */
-void* dlopen_embedded_data(const embedded_data& desc, char* tmp_filename);
-    
-    
-    {/////////////////////////////////////////////////////////////////////////////
-}
-#endif
+        
+    {  class EuroText : public QuickTest {
+  };
+  
+  TEST_F(EuroText, FastOCR) {
+    OCRTester(TESTING_DIR '/eurotext.tif',
+              TESTING_DIR '/eurotext.txt',
+              TESSDATA_DIR '_fast', 'script/Latin');
+  }
+  
+}  // namespace
 
     
-    TEST(LogTest, ReadThirdStart) {
-  CheckInitialOffsetRecord(20014, 2);
+    // dims=[5, 4, 3, 2]->[4, 3, 5, 2]
+TEST_F(MatrixTest, RotatingTranspose_0_2) {
+  GENERIC_2D_ARRAY<int> m;
+  src_.RotatingTranspose(dims_, kNumDims_, 0, 2, &m);
+  m.ResizeNoInit(kInputSize_ / 2, 2);
+  // Verify that the result is:
+  // output tensor=[[[[0, 1][24, 25][48, 49][72, 73][96, 97]]
+  //                 [[2, 3][26, 27][50, 51][74, 75][98, 99]]
+  //                 [[4, 5][28, 29][52, 53][76, 77][100, 101]]]
+  //                [[[6, 7]...
+  EXPECT_EQ(0, m(0, 0));
+  EXPECT_EQ(1, m(0, 1));
+  EXPECT_EQ(24, m(1, 0));
+  EXPECT_EQ(25, m(1, 1));
+  EXPECT_EQ(96, m(4, 0));
+  EXPECT_EQ(97, m(4, 1));
+  EXPECT_EQ(2, m(5, 0));
+  EXPECT_EQ(6, m(15, 0));
 }
     
-    
-    {  edit.SetComparatorName('foo');
-  edit.SetLogNumber(kBig + 100);
-  edit.SetNextFile(kBig + 200);
-  edit.SetLastSequence(kBig + 1000);
-  TestEncodeDecode(edit);
+    TESS_API void TESS_CALL TessBaseAPISetThresholder(TessBaseAPI* handle, TessImageThresholder* thresholder)
+{
+    handle->SetThresholder(thresholder);
 }
     
-    // Helper class that locks a mutex on construction and unlocks the mutex when
-// the destructor of the MutexLock object is invoked.
-//
-// Typical usage:
-//
-//   void MyClass::MyMethod() {
-//     MutexLock l(&mu_);       // mu_ is an instance variable
-//     ... some complex code, possibly with multiple return paths ...
-//   }
+    // Returns the pointer to the string with misadaption information for this word.
+// Assumes that the word's blamer_bundle is not nullptr.
+const char *LTRResultIterator::GetBlamerMisadaptionDebug() const {
+  return it_->word()->blamer_bundle->misadaption_debug().string();
+}
     
-    // A very simple random number generator.  Not especially good at
-// generating truly random bits, but good enough for our needs in this
-// package.
-class Random {
- private:
-  uint32_t seed_;
- public:
-  explicit Random(uint32_t s) : seed_(s & 0x7fffffffu) {
-    // Avoid bad seeds.
-    if (seed_ == 0 || seed_ == 2147483647L) {
-      seed_ = 1;
+      // ============= Moving around within the page ============.
+    
+    // This function takes tif/box pair of files and runs recognition on the image,
+// while making sure that the word bounds that tesseract identified roughly
+// match to those specified by the input box file. For each word (ngram in a
+// single bounding box from the input box file) it outputs the ocred result,
+// the correct label, rating and certainty.
+void Tesseract::recog_training_segmented(const STRING &fname,
+                                         PAGE_RES *page_res,
+                                         volatile ETEXT_DESC *monitor,
+                                         FILE *output_file) {
+  STRING box_fname = fname;
+  const char *lastdot = strrchr(box_fname.string(), '.');
+  if (lastdot != nullptr) box_fname[lastdot - box_fname.string()] = '\0';
+  box_fname += '.box';
+  // ReadNextBox() will close box_file
+  FILE *box_file = open_file(box_fname.string(), 'r');
     }
+    
+    
+    {  int chopped_start = LeadingUnicharsToChopped(word, rebuilt_blob_index);
+  int num_chopped_pieces = word->best_state[rebuilt_blob_index];
+  ScriptPos last_pos = SP_NORMAL;
+  int trailing_outliers = 0;
+  for (int i = 0; i < num_chopped_pieces; i++) {
+    TBOX box = word->chopped_word->blobs[chopped_start + i]->bounding_box();
+    ScriptPos pos = SP_NORMAL;
+    if (box.bottom() >= super_y_bottom) {
+      pos = SP_SUPERSCRIPT;
+    } else if (box.top() <= sub_y_top) {
+      pos = SP_SUBSCRIPT;
+    }
+    if (pos == SP_NORMAL) {
+      if (trailing_outliers == i) {
+        *num_leading_outliers = trailing_outliers;
+        *leading_pos = last_pos;
+      }
+      trailing_outliers = 0;
+    } else {
+      if (pos == last_pos) {
+        trailing_outliers++;
+      } else {
+        trailing_outliers = 1;
+      }
+    }
+    last_pos = pos;
   }
-  uint32_t Next() {
-    static const uint32_t M = 2147483647L;   // 2^31-1
-    static const uint64_t A = 16807;  // bits 14, 8, 7, 5, 2, 1, 0
-    // We are computing
-    //       seed_ = (seed_ * A) % M,    where M = 2^31-1
-    //
-    // seed_ must not be zero or M, or else all subsequent computed values
-    // will be zero or M respectively.  For all other values, seed_ will end
-    // up cycling through every number in [1,M-1]
-    uint64_t product = seed_ * A;
+  *num_trailing_outliers = trailing_outliers;
+  *trailing_pos = last_pos;
+}
+    
+    	ClassDB::bind_method(D_METHOD('poll'), &StreamPeerSSL::poll);
+	ClassDB::bind_method(D_METHOD('accept_stream', 'stream'), &StreamPeerSSL::accept_stream);
+	ClassDB::bind_method(D_METHOD('connect_to_stream', 'stream', 'validate_certs', 'for_hostname'), &StreamPeerSSL::connect_to_stream, DEFVAL(false), DEFVAL(String()));
+	ClassDB::bind_method(D_METHOD('get_status'), &StreamPeerSSL::get_status);
+	ClassDB::bind_method(D_METHOD('disconnect_from_stream'), &StreamPeerSSL::disconnect_from_stream);
+    
+    
+    {    bool open(const uint8 *pSrc_data, uint size);
+    void close() { m_pSrc_data = NULL; m_ofs = 0; m_size = 0; }
+    
+    virtual int read(uint8 *pBuf, int max_bytes_to_read, bool *pEOF_flag);
+  };
+    
+    /**
+ * oc_ilog32 - Integer binary logarithm of a 32-bit value.
+ * @_v: A 32-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * The OC_ILOG_32() or OC_ILOGNZ_32() macros may be able to use a builtin
+ *  function instead, which should be faster.
+ */
+int oc_ilog32(ogg_uint32_t _v);
+/**
+ * oc_ilog64 - Integer binary logarithm of a 64-bit value.
+ * @_v: A 64-bit value.
+ * Returns floor(log2(_v))+1, or 0 if _v==0.
+ * This is the number of bits that would be required to represent _v in two's
+ *  complement notation with all of the leading zeros stripped.
+ * The OC_ILOG_64() or OC_ILOGNZ_64() macros may be able to use a builtin
+ *  function instead, which should be faster.
+ */
+int oc_ilog64(ogg_int64_t _v);
+    
+    SEXP XGBoosterLoadModelFromRaw_R(SEXP handle, SEXP raw) {
+  R_API_BEGIN();
+  CHECK_CALL(XGBoosterLoadModelFromBuffer(R_ExternalPtrAddr(handle),
+                                          RAW(raw),
+                                          length(raw)));
+  R_API_END();
+  return R_NilValue;
+}
+    
+    // logistic loss for binary classification task
+struct LogisticClassification : public LogisticRegression {
+  static const char* DefaultEvalMetric() { return 'error'; }
+};
+    
+      /**
+   * \brief Updates linear model given gradients.
+   *
+   * \param in_gpair            The gradient pair statistics of the data.
+   * \param data                Input data matrix.
+   * \param model               Model to be updated.
+   * \param sum_instance_weight The sum instance weights, used to normalise l1/l2 penalty.
+   */
+    
+      XGBOOST_DEVICE GradientPairInternal<T> operator+(
+      const GradientPairInternal<T> &rhs) const {
+    GradientPairInternal<T> g;
+    g.grad_ = grad_ + rhs.grad_;
+    g.hess_ = hess_ + rhs.hess_;
+    return g;
+  }
+    
+    #ifndef COMM_COMM_DNS_H_
+#define COMM_COMM_DNS_H_
+    
+        st.total_length = ntohl(st.total_length);
+    st.sequence = ntohl(st.sequence);
+    st.hash = ntohl(st.hash);
+    
+    
+    {}
+    
+    
+    {  private:
+//    int m_t;
+};
+    
+    void TSpy::TestFun0()
+{
+    return reinterpret_cast<Test_Spy_Sample*>(This())->TestFun0();
+}
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    class ScopeJEnv {
+  public:
+    ScopeJEnv(JavaVM* jvm, jint _capacity = 16);
+    ~ScopeJEnv();
     }
-    }
-    
-    
-    {}  // namespace leveldb
-    
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-        io.KeyCtrl = s3eKeyboardGetState(s3eKeyLeftControl) == S3E_KEY_STATE_DOWN || s3eKeyboardGetState(s3eKeyRightControl) == S3E_KEY_STATE_DOWN;
-    io.KeyShift = s3eKeyboardGetState(s3eKeyLeftShift) == S3E_KEY_STATE_DOWN || s3eKeyboardGetState(s3eKeyRightShift) == S3E_KEY_STATE_DOWN;
-    io.KeyAlt = s3eKeyboardGetState(s3eKeyLeftAlt) == S3E_KEY_STATE_DOWN || s3eKeyboardGetState(s3eKeyRightAlt) == S3E_KEY_STATE_DOWN;
-    io.KeySuper = s3eKeyboardGetState(s3eKeyLeftWindows) == S3E_KEY_STATE_DOWN || s3eKeyboardGetState(s3eKeyRightWindows) == S3E_KEY_STATE_DOWN;
-    
-    // Win32 data
-static HWND                     g_hWnd = 0;
-static INT64                    g_Time = 0;
-static INT64                    g_TicksPerSecond = 0;
-static ImGuiMouseCursor         g_LastMouseCursor = ImGuiMouseCursor_COUNT;
-    
-        // Main loop
-    bool running = true;
-    while (running)
-    {
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        ALLEGRO_EVENT ev;
-        while (al_get_next_event(queue, &ev))
-        {
-            ImGui_ImplA5_ProcessEvent(&ev);
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
-                running = false;
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE)
-            {
-                ImGui_ImplA5_InvalidateDeviceObjects();
-                al_acknowledge_resize(display);
-                Imgui_ImplA5_CreateDeviceObjects();
-            }
-        }
-        ImGui_ImplA5_NewFrame();
-    }
-    
-        // Main loop
-    MSG msg;
-    ZeroMemory(&msg, sizeof(msg));
-    while (msg.message != WM_QUIT)
-    {
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-            continue;
-        }
-        ImGui_ImplDX10_NewFrame();
-    }
-    
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-        // Main loop
-    while (!glfwWindowShouldClose(window))
-    {
-        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-        glfwPollEvents();
-        ImGui_ImplGlfwGL3_NewFrame();
-    }
-    
-                ImGui::Checkbox('Demo Window', &show_demo_window);      // Edit bools storing our windows open/close state
-            ImGui::Checkbox('Another Window', &show_another_window);
