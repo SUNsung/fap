@@ -1,155 +1,156 @@
 
         
-        #ifndef TENSORFLOW_LIB_IO_RECORD_WRITER_H_
-#define TENSORFLOW_LIB_IO_RECORD_WRITER_H_
+        #endif  // TENSORFLOW_COMMON_RUNTIME_SESSION_FACTORY_H_
+
     
     #include 'third_party/eigen3/unsupported/Eigen/CXX11/Tensor'
+#include 'tensorflow/core/framework/tensor_types.h'
+#include 'tensorflow/core/framework/types.h'
+#include 'tensorflow/core/kernels/scatter_functor.h'
     
-        http://www.apache.org/licenses/LICENSE-2.0
+    #include 'tensorflow/core/lib/strings/strcat.h'
     
-      Status ReadLocked(string* key, string* value, bool* produced,
-                    bool* at_end) override {
-    Status status = input_buffer_->ReadLine(value);
-    ++line_number_;
-    if (status.ok()) {
-      *key = strings::StrCat(current_work(), ':', line_number_);
-      *produced = true;
-      return status;
-    }
-    if (errors::IsOutOfRange(status)) {  // End of file, advance to the next.
-      *at_end = true;
-      return Status::OK();
-    } else {  // Some other reading error
-      return status;
-    }
+    
+    {}  // namespace tensorflow
+
+    
+    REGISTER_OP('EncodeAudioV2')
+    .Input('sampled_audio: float')
+    .Input('file_format: string')
+    .Input('samples_per_second: int32')
+    .Input('bits_per_second: int32')
+    .Output('contents: string')
+    .SetShapeFn(shape_inference::ScalarShape)
+    .Doc(R'doc(
+Processes a `Tensor` containing sampled audio with the number of channels
+and length of the audio specified by the dimensions of the `Tensor`. The
+audio is converted into a string that, when saved to disk, will be equivalent
+to the audio in the specified audio format.
+    
+    #undef REGISTER_GPU
+    
+      ArrayRef<const MarkupASTNode *> getChildren() const {
+    return {getTrailingObjects<MarkupASTNode *>(), NumChildren};
   }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
+      virtual bool enableWarnings() { return false; }
+  virtual bool indexLocals() { return false; }
     
-    #if GOOGLE_CUDA
+    class QuickTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
+    start_time_ = time(nullptr);
+  }
+  virtual void TearDown() {
+    const time_t end_time = time(nullptr);
+    EXPECT_TRUE(end_time - start_time_ <=25) << 'The test took too long - ' << ::testing::PrintToString(end_time - start_time_);
+  }
+  time_t start_time_;
+  };
     
-    bool IsUnresponsiveEventSuppressed() {
-  return g_suppress_level > 0;
-}
-    
-      // Whether this object is listening for global shortcuts.
-  bool is_listening_;
-    
-    static bool extractFirstUnicodeScalarImpl(StringRef S, unsigned &Scalar) {
-  if (S.empty())
-    return false;
+    namespace tesseract {
+namespace {
+    }
     }
     
-    #include 'swift/Index/IndexRecord.h'
-#include 'swift/AST/ASTContext.h'
-#include 'swift/AST/Decl.h'
-#include 'swift/AST/Expr.h'
-#include 'swift/AST/Module.h'
-#include 'swift/AST/ParameterList.h'
-#include 'swift/AST/Pattern.h'
-#include 'swift/AST/Stmt.h'
-#include 'swift/AST/Types.h'
-#include 'swift/AST/DiagnosticsFrontend.h'
-#include 'swift/AST/ModuleLoader.h'
-#include 'swift/ClangImporter/ClangModule.h'
-#include 'swift/Index/Index.h'
-#include 'swift/Strings.h'
-#include 'clang/Basic/FileManager.h'
-#include 'clang/Frontend/CompilerInstance.h'
-#include 'clang/Index/IndexingAction.h'
-#include 'clang/Index/IndexRecordWriter.h'
-#include 'clang/Index/IndexUnitWriter.h'
-#include 'clang/Lex/Preprocessor.h'
-#include 'llvm/Support/Path.h'
+    TESS_API BOOL TESS_CALL TessResultIteratorSymbolIsSuperscript(const TessResultIterator* handle)
+{
+    return handle->SymbolIsSuperscript() ? TRUE : FALSE;
+}
     
-    #ifndef SWIFT_PRINTINGDIAGNOSTICCONSUMER_H
-#define SWIFT_PRINTINGDIAGNOSTICCONSUMER_H
+      // CIDFONTTYPE2
+  n = snprintf(buf, sizeof(buf),
+               '4 0 obj\n'
+               '<<\n'
+               '  /BaseFont /GlyphLessFont\n'
+               '  /CIDToGIDMap %ld 0 R\n'
+               '  /CIDSystemInfo\n'
+               '  <<\n'
+               '     /Ordering (Identity)\n'
+               '     /Registry (Adobe)\n'
+               '     /Supplement 0\n'
+               '  >>\n'
+               '  /FontDescriptor %ld 0 R\n'
+               '  /Subtype /CIDFontType2\n'
+               '  /Type /Font\n'
+               '  /DW %d\n'
+               '>>\n'
+               'endobj\n',
+               5L,         // CIDToGIDMap
+               7L,         // Font descriptor
+               1000 / kCharWidth);
+  if (n >= sizeof(buf)) return false;
+  AppendPDFObject(buf);
     
-    // The compiler generates the swift_once_t values as word-sized zero-initialized
-// variables, so we want to make sure swift_once_t isn't larger than the
-// platform word or the function below might overwrite something it shouldn't.
-static_assert(sizeof(swift_once_t) <= sizeof(void*),
-              'swift_once_t must be no larger than the platform word');
     
-    // Read through the first n keys repeatedly and check that they get
-// compacted (verified by checking the size of the key space).
-void AutoCompactTest::DoReads(int n) {
-  std::string value(kValueSize, 'x');
-  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
+/**********************************************************************
+ * UTF8 Text Renderer interface implementation
+ **********************************************************************/
+TessTextRenderer::TessTextRenderer(const char *outputbase)
+    : TessResultRenderer(outputbase, 'txt') {
+}
+    
+    #include <ctype.h>
+#include 'reject.h'
+#include 'statistc.h'
+#include 'control.h'
+#include 'fixspace.h'
+#include 'genblob.h'
+#include 'tessvars.h'
+#include 'tessbox.h'
+#include 'globals.h'
+#include 'tesseractclass.h'
+    
+      // Print statistics.
+  void print_scores(void) const;
+  void print_scores(int orientation_id) const;
+    
+      // If the current WERD_RES (it_->word()) is not nullptr, sets the BlamerBundle
+  // of the current word to the given pointer (takes ownership of the pointer)
+  // and returns true.
+  // Can only be used when iterating on the word level.
+  bool SetWordBlamerBundle(BlamerBundle *blamer_bundle);
+    
+    Variant HHVM_FUNCTION(xhprof_network_disable) {
+  return ServerStats::EndNetworkProfile();
+}
+    
+      if ((ms->flags & MAGIC_PRESERVE_ATIME) != 0) {
+    /*
+     * Try to restore access, modification times if read it.
+     * This is really *bad* because it will modify the status
+     * time of the file... And of course this will affect
+     * backup programs
+     */
+#ifdef HAVE_UTIMES
+    struct timeval  utsbuf[2];
+    (void)memset(utsbuf, 0, sizeof(utsbuf));
+    utsbuf[0].tv_sec = sb->st_atime;
+    utsbuf[1].tv_sec = sb->st_mtime;
     }
     
-          case kPrevLogNumber:
-        if (GetVarint64(&input, &prev_log_number_)) {
-          has_prev_log_number_ = true;
-        } else {
-          msg = 'previous log number';
-        }
-        break;
+      void init(Address start, Address dest, size_t sz, const char* name) {
+    init(start, dest, sz, sz, name);
+  }
     
-    static void TestEncodeDecode(const VersionEdit& edit) {
-  std::string encoded, encoded2;
-  edit.EncodeTo(&encoded);
-  VersionEdit parsed;
-  Status s = parsed.DecodeFrom(encoded);
-  ASSERT_TRUE(s.ok()) << s.ToString();
-  parsed.EncodeTo(&encoded2);
-  ASSERT_EQ(encoded, encoded2);
-}
+    // Disassemble the code from the given raw file, whose initial address is given
+// by fileStartAddr, for the address range given by
+// [codeStartAddr, codeStartAddr + codeLen)
     
-    #include <string>
+        for (auto it : c2arcs) {
+      auto const c = it.second;
+      auto const c2arc = it.first;
+    }
     
-    #ifdef WITH_MPI
-    std::cout << '--------------------------' << std::endl;
-    
-      for (auto s: tensor->sizes())
-    assert(s == 2);
-  for (int i = 0; i < 2; i++)
-    assert(reinterpret_cast<float*>(tensor->data())[i] == 5);
-    
-    template<typename To, typename From> To convert(From f) {
-  return static_cast<To>(f);
-}
-    
-      rank_type getRank() override;
-  rank_type getNumProcesses() override;
-    
-    #define THCPDoubleStorage_CData(obj)  (obj)->cdata
-#define THCPFloatStorage_CData(obj)   (obj)->cdata
-#define THCPLongStorage_CData(obj)    (obj)->cdata
-#define THCPIntStorage_CData(obj)     (obj)->cdata
-#define THCPShortStorage_CData(obj)   (obj)->cdata
-#define THCPCharStorage_CData(obj)    (obj)->cdata
-#define THCPByteStorage_CData(obj)    (obj)->cdata
-    
-    #undef THPStorage_
-#undef THPStorage
-#undef THPStorageBaseStr
-#undef THPStorageStr
-#undef THPStorageClass
-#undef THPStorageType
-    
-    #define THPDoubleStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPDoubleStorageClass)
-#define THPFloatStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPFloatStorageClass)
-#define THPHalfStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPFloatStorageClass)
-#define THPLongStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPLongStorageClass)
-#define THPIntStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPIntStorageClass)
-#define THPShortStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPShortStorageClass)
-#define THPCharStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPCharStorageClass)
-#define THPByteStorage_Check(obj) \
-    PyObject_IsInstance(obj, THPByteStorageClass)
-    
-    using THDGeneratorPtrTypes = map_to_ptr<std::add_const, THDGeneratorTypes>::type;
-using THDTensorPtrTypes = map_to_ptr<std::add_const, THDTensorTypes>::type;
-using THDStoragePtrTypes = map_to_ptr<std::add_const, THDStorageTypes>::type;
+      /**
+   * Opens a process with given cwd and environment variables.
+   *
+   * The parameters 'created' and 'desired' describe the pipes that need to
+   * be setup for the child process: 'created' contains created fd for child,
+   * and 'desired' contains desired fd in child.
+   *
+   * The parameter env contains strings of the form <name>=<content>.
+   */
+  static pid_t proc_open(const char *cmd, const std::vector<int> &created,
+                         const std::vector<int> &desired,
+                         const char *cwd, const std::vector<std::string> &env);
