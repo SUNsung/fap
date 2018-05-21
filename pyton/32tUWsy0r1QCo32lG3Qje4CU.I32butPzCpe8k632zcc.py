@@ -1,133 +1,118 @@
 
         
+                print('Training %s ... ' % name, end='')
+        t0 = time()
+        clf.fit(X_train, y_train)
+        train_time[name] = time() - t0
+        t0 = time()
+        y_pred = clf.predict(X_test)
+        test_time[name] = time() - t0
+        accuracy[name] = accuracy_score(y_test, y_pred)
+        print('done')
+    
+    Does two benchmarks
+    
+    if __name__ == '__main__':
+    main(sys.argv)
+
+    
+    # Train random forest classifier, calibrate on validation data and evaluate
+# on test data
+clf = RandomForestClassifier(n_estimators=25)
+clf.fit(X_train, y_train)
+clf_probs = clf.predict_proba(X_test)
+sig_clf = CalibratedClassifierCV(clf, method='sigmoid', cv='prefit')
+sig_clf.fit(X_valid, y_valid)
+sig_clf_probs = sig_clf.predict_proba(X_test)
+sig_score = log_loss(y_test, sig_clf_probs)
+    
+        return ip_string[:ip_string_size.value - 1]
+    
+    ## All tokens go to the parser (unless skip() is called in that rule)
+# on a particular 'channel'.  The parser tunes to a particular channel
+# so that whitespace etc... can go to the parser on a 'hidden' channel.
+DEFAULT_CHANNEL = 0
+    
+            if self._state is None:
+            # no shared state work to do
+            return
         
-def get_info(package_name):
-    api_url = 'https://pypi.python.org/pypi/{}/json'.format(package_name)
-    resp = requests.get(api_url).json()
-    hasher = hashlib.sha256()
-    for release in resp['urls']:
-        download_url = release['url']
-        if download_url.endswith('.tar.gz'):
-            hasher.update(requests.get(download_url).content)
-            return {
-                'name': package_name,
-                'url': download_url,
-                'sha256': hasher.hexdigest(),
-            }
-    else:
-        raise RuntimeError(
-            '{}: download not found: {}'.format(package_name, resp))
-    
-    error_msg = None
+        # wack Lexer state variables
+        self._state.token = None
+        self._state.type = INVALID_TOKEN_TYPE
+        self._state.channel = DEFAULT_CHANNEL
+        self._state.tokenStartCharIndex = -1
+        self._state.tokenStartLine = -1
+        self._state.tokenStartCharPositionInLine = -1
+        self._state.text = None
     
     
-def test_unicode_digest_auth(httpbin):
-    # it doesn't really authenticate us because httpbin
-    # doesn't interpret the utf8-encoded auth
-    http('--auth-type=digest',
-         '--auth', u'test:%s' % UNICODE,
-         httpbin.url + u'/digest-auth/auth/test/' + UNICODE)
-
+    def getDescription(self):
+        return 'n/a'
     
-    The input TCEs and their associated labels are specified by the DR24 TCE Table,
-which can be downloaded in CSV format from the NASA Exoplanet Archive at:
+    # The name of a javascript file (relative to the configuration directory) that
+# implements a search results scorer. If empty, the default will be used.
+#html_search_scorer = 'scorer.js'
     
-        # Parse the features.
-    parsed_features = tf.parse_single_example(
-        serialized_example, features=data_fields)
-    
-    
-def split(all_time, all_flux, gap_width=0.75):
-  '''Splits a light curve on discontinuities (gaps).
+        @mock.patch('certbot.notify.smtplib.LMTP')
+    def test_smtp_success(self, mock_lmtp):
+        from certbot.notify import notify
+        lmtp_obj = mock.MagicMock()
+        mock_lmtp.return_value = lmtp_obj
+        self.assertTrue(notify('Goose', 'auntrhody@example.com',
+                               'The old grey goose is dead.'))
+        self.assertEqual(lmtp_obj.connect.call_count, 1)
+        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
     
     
-if __name__ == '__main__':
-  FLAGS, unparsed = parser.parse_known_args()
-  tf.app.run(argv=[sys.argv[0]] + unparsed)
-
+def main():
+    tornado.options.parse_command_line()
+    application = tornado.web.Application([
+        (r'/', MainHandler),
+    ])
+    http_server = tornado.httpserver.HTTPServer(application)
+    http_server.listen(options.port)
+    tornado.ioloop.IOLoop.current().start()
     
-      eval_file_path = os.path.join(FLAGS.data_dir, EVAL_FILE)
-  _download_and_clean_file(eval_file_path, EVAL_URL)
     
-    tf.flags.DEFINE_string(
-    'embeddings_base_path', 'embeddings',
-    'Embeddings base directory')
+class HTTP1ConnectionTest(AsyncTestCase):
+    def setUp(self):
+        super(HTTP1ConnectionTest, self).setUp()
+        self.asyncSetUp()
     
-        # Print the best performance on the validation set
-    print('Best performance on the validation set: F1=%.3f' %
-          epoch_completed.best_f1)
+        @gen.coroutine
+    def _read_chunked_body(self, delegate):
+        # TODO: 'chunk extensions' http://tools.ietf.org/html/rfc2616#section-3.6.1
+        total_size = 0
+        while True:
+            chunk_len = yield self.stream.read_until(b'\r\n', max_bytes=64)
+            chunk_len = int(chunk_len.strip(), 16)
+            if chunk_len == 0:
+                crlf = yield self.stream.read_bytes(2)
+                if crlf != b'\r\n':
+                    raise httputil.HTTPInputError('improperly terminated chunked request')
+                return
+            total_size += chunk_len
+            if total_size > self._max_body_size:
+                raise httputil.HTTPInputError('chunked body too large')
+            bytes_to_read = chunk_len
+            while bytes_to_read:
+                chunk = yield self.stream.read_bytes(
+                    min(bytes_to_read, self.params.chunk_size), partial=True)
+                bytes_to_read -= len(chunk)
+                if not self._write_finished or self.is_client:
+                    with _ExceptionLoggingContext(app_log):
+                        ret = delegate.data_received(chunk)
+                        if ret is not None:
+                            yield ret
+            # chunk ends with \r\n
+            crlf = yield self.stream.read_bytes(2)
+            assert crlf == b'\r\n'
     
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
     
-        Args:
-      images: A tensor of size [batch, height, width, channels].
-      is_training: Whether or not the model is in training mode.
-      global_pool: If True, perform global average pooling after feature
-        extraction. This may be useful for DELF's descriptor fine-tuning stage.
-      reuse: Whether or not the layer and its variables should be reused.
+class SSLXHeaderTest(AsyncHTTPSTestCase, HandlerBaseTestCase):
+    def get_app(self):
+        return Application([('/', XHeaderTest.Handler)])
     
-        def test_get_sni_addr(self):
-        from certbot_apache.obj import Addr
-        self.assertEqual(
-            self.addr.get_sni_addr('443'), Addr.fromstring('*:443'))
-        self.assertEqual(
-            self.addr.get_sni_addr('225'), Addr.fromstring('*:225'))
-        self.assertEqual(
-            self.addr1.get_sni_addr('443'), Addr.fromstring('127.0.0.1'))
-    
-    # A shorter title for the navigation bar.  Default is the same as html_title.
-#html_short_title = None
-    
-        @mock.patch('certbot_compatibility_test.validator.requests.get')
-    def test_redirect_wrong_status_code(self, mock_get_request):
-        mock_get_request.return_value = create_response(
-            201, {'location': 'https://test.com'})
-        self.assertFalse(self.validator.redirect('test.com'))
-    
-    # Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title,
-#  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (master_doc, 'certbot-compatibility-test.tex',
-     u'certbot-compatibility-test Documentation',
-     u'Certbot Project', 'manual'),
-]
-    
-        failures = []
-    while point is not None:
-        if point.name:
-            if re.search('h[1-2]', point.name):
-                if point.name == 'h1':
-                    h1_directory = os.path.join(output_directory, clean_text(point.text))
-                    current_directory = h1_directory
-                elif point.name == 'h2':
-                    current_directory = os.path.join(h1_directory, clean_text(point.text))  
-                if not os.path.exists(current_directory):
-                    os.makedirs(current_directory)
-                print_title(point.text)
-    
-    extension_mapping = {
-    'rss': ('xml', 'application/atom+xml; charset=UTF-8'),
-    'xml': ('xml', 'application/atom+xml; charset=UTF-8'),
-    'js': ('js', 'text/javascript; charset=UTF-8'),
-    'embed': ('htmllite', 'text/javascript; charset=UTF-8'),
-    'mobile': ('mobile', 'text/html; charset=UTF-8'),
-    'png': ('png', 'image/png'),
-    'css': ('css', 'text/css'),
-    'csv': ('csv', 'text/csv; charset=UTF-8'),
-    'api': (api_type(), 'application/json; charset=UTF-8'),
-    'json-html': (api_type('html'), 'application/json; charset=UTF-8'),
-    'json-compact': (api_type('compact'), 'application/json; charset=UTF-8'),
-    'compact': ('compact', 'text/html; charset=UTF-8'),
-    'json': (api_type(), 'application/json; charset=UTF-8'),
-    'i': ('compact', 'text/html; charset=UTF-8'),
-}
-    
-        `full_stack`
-        Whether or not this application provides a full WSGI stack (by default,
-        meaning it handles its own exceptions and errors). Disable full_stack
-        when this application is 'managed' by another WSGI middleware.
-    
-            MinimalController.pre(self)
+    from tornado.platform import interface
+from tornado.util import errno_from_exception
