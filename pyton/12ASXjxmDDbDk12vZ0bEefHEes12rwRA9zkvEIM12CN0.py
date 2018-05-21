@@ -1,109 +1,68 @@
 
         
-        
-def side_effect(old_cmd, command):
-    with tarfile.TarFile(_tar_file(old_cmd.script_parts)[0]) as archive:
-        for file in archive.getnames():
-            try:
-                os.remove(file)
-            except OSError:
-                # does not try to remove directories as we cannot know if they
-                # already existed before
-                pass
-
+        from datetime import datetime
+from uuid import uuid4
     
+        for idx, (loader, srcobj, triple) in enumerate(attempts):
+        if isinstance(srcobj, Flask):
+            src_info = 'application '%s'' % srcobj.import_name
+        elif isinstance(srcobj, Blueprint):
+            src_info = 'blueprint '%s' (%s)' % (srcobj.name,
+                                                srcobj.import_name)
+        else:
+            src_info = repr(srcobj)
     
-# Executing the interpreter in a subprocess
-def _assert_python(expected_success, *args, **env_vars):
-    cmd_line = [sys.executable]
-    if not env_vars:
-        cmd_line.append('-E')
-    # Need to preserve the original environment, for in-place testing of
-    # shared library builds.
-    env = os.environ.copy()
-    # But a special flag that can be set to override -- in this case, the
-    # caller is responsible to pass the full environment.
-    if env_vars.pop('__cleanenv', None):
-        env = {}
-    env.update(env_vars) 
-    cmd_line.extend(args)
-    p = subprocess.Popen(cmd_line, stdin=subprocess.PIPE,
-                         stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                         env=env)
-    try:
-        out, err = p.communicate()
-    finally:
-        subprocess._cleanup()
-        p.stdout.close()
-        p.stderr.close()
-    rc = p.returncode
-    err = strip_python_stderr(err)
-    if (rc and expected_success) or (not rc and not expected_success):
-        raise AssertionError(
-            'Process return code is %d, '
-            'stderr follows:\n%s' % (rc, err.decode('ascii', 'ignore')))
-    return rc, out, err
+        #: When data is read or written, this is set to ``True``. Used by
+    # :class:`.SecureCookieSessionInterface` to add a ``Vary: Cookie``
+    #: header, which allows caching proxies to cache different pages for
+    #: different users.
+    accessed = False
     
-      f = _CreateFilterForTypes( opts, [ 'cs' ] )
-    
-    
-def get_changed_files(old_ref, new_ref):
-    '''Return a list of files that have changed from one ref to another.'''
-    root = get_root()
-    changed_files_text = subprocess.check_output(['git', 'diff', '--name-only',
-                                                  old_ref, new_ref])
-    changed_files = changed_files_text.splitlines()
-    return [os.path.join(root, x) for x in changed_files]
-    
-    from r2.controllers.api_docs import api_doc, api_section
-from r2.controllers.oauth2 import require_oauth2_scope
-from r2.controllers.reddit_base import OAuth2OnlyController
-from r2.lib.jsontemplates import (
-    FriendTableItemJsonTemplate,
-    get_usertrophies,
-    IdentityJsonTemplate,
-    KarmaListJsonTemplate,
-    PrefsJsonTemplate,
-)
-from r2.lib.pages import FriendTableItem
-from r2.lib.validator import (
-    validate,
-    VAccountByName,
-    VFriendOfMine,
-    VLength,
-    VList,
-    VUser,
-    VValidatedJSON,
-)
-from r2.models import Account, Trophy
-import r2.lib.errors as errors
-import r2.lib.validator.preferences as vprefs
-    
-    from pylons import request
-from pylons import app_globals as g
-from reddit_base import RedditController
-from r2.lib.pages import AdminPage, AdminAwards
-from r2.lib.pages import AdminAwardGive, AdminAwardWinners
-from r2.lib.validator import *
-    
-        @validate(buttonimage = VInt('i', 0, 14),
-              title = nop('title'),
-              url = VSanitizedUrl('url'),
-              newwindow = VBoolean('newwindow', default = False),
-              styled = VBoolean('styled', default=True))
-    def GET_button_lite(self, buttonimage, title, url, styled, newwindow):
-        c.user = UnloggedUser([c.lang])
-        c.user_is_loggedin = False
-        c.render_style = 'js'
-    
-    class CaptchaController(RedditController):
-    @allow_oauth2_access
-    @api_doc(api_section.captcha, uri='/captcha/{iden}')
-    def GET_captchaimg(self, iden):
+        class _FakeSignal(object):
+        '''If blinker is unavailable, create a fake class with the same
+        interface that allows sending of signals but will fail with an
+        error on anything else.  Instead of doing anything on send, it
+        will just ignore the arguments and do nothing instead.
         '''
-        Request a CAPTCHA image given an `iden`.
     
-            fp, content = renderurl_cached(path)
-        if content is None:
-            self.abort404()
-        return self.rendercontent(content, fp)
+    
+def rmse(a, b):
+    return np.sqrt(np.mean((a - b) ** 2))
+    
+    In the second benchmark, we increase the number of dimensions of the
+training set. Then we plot the computation time as function of
+the number of dimensions.
+    
+    # to store the results
+scikit_classifier_results = []
+scikit_regressor_results = []
+    
+        try:
+        fn = inspect.getsourcefile(obj)
+    except Exception:
+        fn = None
+    if not fn:
+        try:
+            fn = inspect.getsourcefile(sys.modules[obj.__module__])
+        except Exception:
+            fn = None
+    if not fn:
+        return
+    
+        in_exercise_region = False
+    
+            controller.coef0 = Tk.StringVar()
+        controller.coef0.set('0')
+        r = Tk.Frame(valbox)
+        Tk.Label(r, text='coef0:', anchor='e', width=7).pack(side=Tk.LEFT)
+        Tk.Entry(r, width=6, textvariable=controller.coef0).pack(side=Tk.LEFT)
+        r.pack()
+        valbox.pack(side=Tk.LEFT)
+    
+    ax = plt.axes([0.15, 0.04, 0.7, 0.05])
+plt.title('Probability')
+plt.colorbar(imshow_handle, cax=ax, orientation='horizontal')
+    
+    Only adjusted measures can hence safely be used as a consensus index
+to evaluate the average stability of clustering algorithms for a given
+value of k on various overlapping sub-samples of the dataset.
