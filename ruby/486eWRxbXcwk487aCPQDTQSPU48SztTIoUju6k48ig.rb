@@ -1,31 +1,57 @@
 
         
-              if options[:type] == :array && (options[:values].blank? || !options[:values].is_a?(Array))
-        raise ArgumentError.new('When using :array as :type you need to provide the :values as an Array')
-      end
+        def bottle_resolve_formula_names(bottle_file)
+  receipt_file_path = bottle_receipt_path bottle_file
+  receipt_file = Utils.popen_read('tar', '-xOzf', bottle_file, receipt_file_path)
+  name = receipt_file_path.split('/').first
+  tap = Tab.from_file_content(receipt_file, '#{bottle_file}/#{receipt_file_path}').tap
     
-      def load_event
-    @event = current_user.events.find(params[:id])
+      def describe_perl
+    describe_path(which 'perl')
   end
-end
-
     
-      def destroy
-    @job = Delayed::Job.find(params[:id])
+        checks.inject_dump_stats! if ARGV.switch? 'D'
     
-          def merge!(other)
-        other.each do |key, value|
-          self[convert_key(key)] = value
+        dirs.each do |d|
+      files = []
+      d.find { |pn| files << pn unless pn.directory? }
+      print_remaining_files files, d
+    end
+    
+      private
+    
+          _form_configurable_fields[name] = options
+    end
+    
+      def retry_queued
+    @jobs = Delayed::Job.awaiting_retry.update_all(run_at: Time.zone.now)
+    
+    respond_to do |format|
+      format.html { redirect_to jobs_path, notice: 'Queued jobs getting retried.' }
+      format.json { head :no_content }
+    end
+  end
+    
+        respond_to do |format|
+      format.html
+      format.json {
+        send_data Utils.pretty_jsonify(@user_credentials.limit(nil).as_json), disposition: 'attachment'
+      }
+    end
+  end
+    
+            # Fires all the registered callbacks.
+        def fire_callbacks
+          registered.reverse.each { |r| r.call }
         end
-        self
-      end
     
-          # This deletes the block with the given key if it exists.
-      def delete(key)
-        key    = Regexp.quote(key)
-        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$.*^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
-        @value.gsub!(regexp, '')
-      end
+              # Parse the options
+          argv = parse_options(opts)
+          return if !argv
+          if argv.empty? || argv.length > 2
+            raise Vagrant::Errors::CLIInvalidUsage,
+              help: opts.help.chomp
+          end
     
     module VagrantPlugins
   module CommandBox
@@ -36,33 +62,28 @@ end
             o.banner = 'Usage: vagrant box repackage <name> <provider> <version>'
           end
     
-      get(/.+/) do
-    send_sinatra_file(request.path) {404}
+      validate :enough_poll_answers
+  validates :question, presence: true
+    
+    public_dir      = 'public'    # compiled site directory
+source_dir      = 'source'    # source file directory
+blog_index_dir  = 'source'    # directory for your blog's index page (if you put your index in source/blog/index.html, set this to 'source/blog')
+deploy_dir      = '_deploy'   # deploy directory (for Github pages deployment)
+stash_dir       = '_stash'    # directory to stash posts for speedy generation
+posts_dir       = '_posts'    # directory for blog files
+themes_dir      = '.themes'   # directory for blog files
+new_post_ext    = 'markdown'  # default new post file extension when using the new_post task
+new_page_ext    = 'markdown'  # default new page file extension when using the new_page task
+server_port     = '4000'      # port for preview server eg. localhost:4000
+    
+      def send_sinatra_file(path, &missing_file_block)
+    file_path = File.join(File.dirname(__FILE__), 'public',  path)
+    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
+    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
   end
     
-    module Jekyll
+    Liquid::Template.register_tag('img', Jekyll::ImageTag)
+
     
-            def method_argument?
-          argument? && %i[def defs].include?(@scope.node.type)
-        end
-    
-                  add_offense(condition)
-            end
-    
-              add_offense(node)
-        end
-    
-            def on_if(node)
-          return unless nested_variable_comparison?(node.condition)
-          add_offense(node)
-        end
-    
-    RSpec.describe RuboCop::Cop::Style::StringMethods, :config do
-  subject(:cop) { described_class.new(config) }
-    
-              it 'autocorrects the offenses' do
-            new_source = autocorrect_source(source)
-            expect(new_source).to eq(<<-RUBY.strip_indent)
-              #{type} Parent
-                #{type} SomeObject
-                  URL = %q(http://example.com)
+      # Do not eager load code on boot.
+  config.eager_load = false
