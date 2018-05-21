@@ -1,131 +1,77 @@
 
         
-          # This allows generic Altivec PPC bottles to be supported in some
-  # formulae, while also allowing specific bottles in others; e.g.,
-  # sometimes a formula has just :tiger_altivec, other times it has
-  # :tiger_g4, :tiger_g5, etc.
-  def find_altivec_tag(tag)
-    if tag.to_s =~ /(\w+)_(g4|g4e|g5)$/
-      altivec_tag = '#{$1}_altivec'.to_sym
-      altivec_tag if key?(altivec_tag)
+        require 'json'
+require 'open-uri'
+    
+        def no_subcommand(args)
+      unless args.empty? ||
+          args.first !~ %r(!/^--/!) || %w(--help --version).include?(args.first)
+        deprecation_message 'Jekyll now uses subcommands instead of just switches. \
+                          Run `jekyll help` to find out more.'
+        abort
+      end
+    end
+    
+        # Get or set the priority of this plugin. When called without an
+    # argument it returns the priority. When an argument is given, it will
+    # set the priority.
+    #
+    # priority - The Symbol priority (default: nil). Valid options are:
+    #            :lowest, :low, :normal, :high, :highest
+    #
+    # Returns the Symbol priority.
+    def self.priority(priority = nil)
+      @priority ||= nil
+      if priority && PRIORITIES.key?(priority)
+        @priority = priority
+      end
+      @priority || :normal
+    end
+    
+      def tumblr_consumer_key
+    ENV['TUMBLR_OAUTH_KEY']
+  end
+    
+      def reemit
+    @event.reemit!
+    respond_to do |format|
+      format.html { redirect_back event_path(@event), notice: 'Event re-emitted.' }
     end
   end
     
-          Find.prune if @f.skip_clean? path
+        respond_to do |format|
+      format.html { redirect_to jobs_path, notice: 'All jobs removed.' }
+      format.json { head :no_content }
+    end
+  end
     
-      private
+      def destroy
+    @services = current_user.services.find(params[:id])
+    @services.destroy
     
-      SEARCHABLE_TAPS = OFFICIAL_TAPS.map { |tap| ['Homebrew', tap] } + [
-    %w[Caskroom cask],
-    %w[Caskroom versions]
-  ]
+      # Before we load the schema, define the timestamp_id function.
+  # Idiomatically, we might do this in a migration, but then it
+  # wouldn't end up in schema.rb, so we'd need to figure out a way to
+  # get it in before doing db:setup as well. This is simpler, and
+  # ensures it's always in place.
+  Rake::Task['db:schema:load'].enhance ['db:define_timestamp_id']
     
-            private
+      def type
+    'Emoji'
+  end
     
-          # @param  [[Xcodeproj::PBXTarget]] targets
-      #         An array which always has a target as its first item
-      #         and may optionally contain related test targets
-      #
-      # @return [String] the text for the target module
-      #
-      def target_module(app, tests)
-        target_module = '\ntarget '#{app.name.gsub(/'/, '\\\\\'')}' do\n'
+    namespace :emojis do
+  desc 'Generate a unicode to filename mapping'
+  task :generate do
+    source = 'http://www.unicode.org/Public/emoji/5.0/emoji-test.txt'
+    codes  = []
+    dest   = Rails.root.join('app', 'javascript', 'mastodon', 'features', 'emoji', 'emoji_map.json')
     
-            def execute_repl_command(repl_command)
-          unless repl_command == '\n'
-            repl_commands = repl_command.split
-            subcommand = repl_commands.shift.capitalize
-            arguments = repl_commands
-            subcommand_class = Pod::Command::IPC.const_get(subcommand)
-            subcommand_class.new(CLAide::ARGV.new(arguments)).run
-            signal_end_of_output
+    module LogStash
+  module Api
+    module Commands
+      module System
+        class Plugins < Commands::Base
+          def run
+            { :total => plugins.count, :plugins => plugins }
           end
-        end
-      end
-    end
-  end
-end
-
-    
-    @@ layout
-<html>
-  <head>
-    <title>Super Simple Chat with Sinatra</title>
-    <meta charset='utf-8' />
-    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'></script>
-  </head>
-  <body><%= yield %></body>
-</html>
-    
-        %w[/foo/bar /foo/bar/ / /.f /a.x].each do |path|
-      it('does not touch #{path.inspect}') { expect(get(path).body).to eq(path) }
-    end
-    
-      it 'accepts requests with the same Accept-Language header' do
-    session = {:foo => :bar}
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'a'
-    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'a'
-    expect(session).not_to be_empty
-  end
-    
-      it 'allows passing on values in env' do
-    klass    = described_class
-    changer  = Struct.new(:app) do
-      def call(env)
-        env['foo.bar'] = 42
-        app.call(env)
-      end
-    end
-    detector = Struct.new(:app) do
-      def call(env)
-        app.call(env)
-      end
-    end
-    
-        def initialize(tag_name, markup, tokens)
-      @by = nil
-      @source = nil
-      @title = nil
-      if markup =~ FullCiteWithTitle
-        @by = $1
-        @source = $2 + $3
-        @title = $4.titlecase.strip
-      elsif markup =~ FullCite
-        @by = $1
-        @source = $2 + $3
-      elsif markup =~ AuthorTitle
-        @by = $1
-        @title = $2.titlecase.strip
-      elsif markup =~ Author
-        @by = $1
-      end
-      super
-    end
-    
-    class ConfigTag < Liquid::Tag
-  def initialize(tag_name, options, tokens)
-    super
-    options = options.split(' ').map {|i| i.strip }
-    @key = options.slice!(0)
-    @tag = nil
-    @classname = nil
-    options.each do |option|
-      @tag = $1 if option =~ /tag:(\S+)/ 
-      @classname = $1 if option =~ /classname:(\S+)/
-    end
-  end
-    
-    
-    
-          def create_worker_spec
-        template_file = File.join(
-            'spec/workers',
-            class_path,
-            '#{file_name}_worker_spec.rb'
-        )
-        template 'worker_spec.rb.erb', template_file
-      end
-    
-    Dir.chdir APP_ROOT do
-  # This script is a starting point to setup your application.
-  # Add necessary setup steps to this file:
