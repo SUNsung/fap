@@ -1,194 +1,276 @@
 
         
         
-    {}  // namespace atom
-    
-    namespace atom {
-    }
-    
-    namespace atom {
-    }
-    
-      // External notification requesting a sync datatype refresh for the current
-  // profile. The details value is a const syncer::ObjectIdInvalidationMap.
-  // If the payload map is empty, it should be treated as an invalidation for
-  // all enabled types. This is used for notifications on Android.
-  NOTIFICATION_SYNC_REFRESH_REMOTE,
-    
-    class ChromeBrowserPepperHostFactory : public ppapi::host::HostFactory {
- public:
-  // Non-owning pointer to the filter must outlive this class.
-  explicit ChromeBrowserPepperHostFactory(content::BrowserPpapiHost* host);
-  ~ChromeBrowserPepperHostFactory() override;
-    }
-    
-     private:
-  PepperIsolatedFileSystemMessageFilter(int render_process_id,
-                                        const base::FilePath& profile_directory,
-                                        const GURL& document_url,
-                                        ppapi::host::PpapiHost* ppapi_host_);
-    
-    decltype(__pfnDliNotifyHook2) __pfnDliNotifyHook2 = load_exe_hook;
-    
-       void Call(const std::string& method,
-                    const base::ListValue& arguments) override;
-   void CallSync(const std::string& method,
-                        const base::ListValue& arguments,
-                        base::ListValue* result) override;
+    {}  // namespace xla
     
     
-namespace nwapi {
-    }
-    
-      template<typename T> T* AddListener() {
-    std::map<int, BaseEvent*>::iterator i = listerners_.find(T::id);
-    if (i==listerners_.end()) {
-      T* listener_object = new T(this);
-      listerners_[T::id] = listener_object;
-      return listener_object;
-    }
-    return NULL;
-  }
-    
-    void Menu::UpdateKeys(GtkAccelGroup *gtk_accel_group){
-  this->gtk_accel_group = gtk_accel_group;
-  if (!GTK_IS_ACCEL_GROUP(gtk_accel_group)){
-    return ;
-  } else {
-    std::vector<MenuItem*>::iterator menu_item_iterator = menu_items.begin();
-    std::vector<MenuItem*>::iterator menu_item_end = menu_items.end();
-    while (menu_item_iterator != menu_item_end){
-      MenuItem *menu_item = *menu_item_iterator;
-      if (menu_item!=NULL && GTK_IS_MENU_ITEM(menu_item->menu_item_)){
-        menu_item->UpdateKeys(gtk_accel_group);
-      }
-      ++menu_item_iterator;
-    }
-  }
-}
-    
-    void MenuItem::SetChecked(bool checked) {
-  // Set active will cause 'activate' to be emitted, so block here
-  block_active_ = true;
-  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menu_item_), checked);
-  block_active_ = false;
-}
-    
-    bool NwAppCloseAllWindowsFunction::RunAsync() {
-  AppWindowRegistry* registry = AppWindowRegistry::Get(browser_context());
-  if (!registry)
-    return false;
-    }
-    
-    bool NwClipboardClearSyncFunction::RunNWSync(base::ListValue* response, std::string* error) {
-  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
-  clipboard->Clear(ui::CLIPBOARD_TYPE_COPY_PASTE);
-  return true;
-}
-    
-    public:
-  typedef Value value_type;
-  typedef unsigned int size_t;
-  typedef int difference_type;
-  typedef Value& reference;
-  typedef Value* pointer;
-  typedef ValueIterator SelfType;
-    
-    void RepeatedEnumFieldGenerator::WriteHash(io::Printer* printer) {
-  printer->Print(
-    variables_,
-    'hash ^= $name$_.GetHashCode();\n');
-}
-    
-      virtual void GenerateCloningCode(io::Printer* printer);
-  virtual void GenerateFreezingCode(io::Printer* printer);
-  virtual void GenerateMembers(io::Printer* printer);
-  virtual void GenerateMergingCode(io::Printer* printer);
-  virtual void GenerateParsingCode(io::Printer* printer);
-  virtual void GenerateSerializationCode(io::Printer* printer);
-  virtual void GenerateSerializedSizeCode(io::Printer* printer);
-    
-    #include <google/protobuf/compiler/csharp/csharp_doc_comment.h>
-#include <google/protobuf/compiler/csharp/csharp_helpers.h>
-#include <google/protobuf/compiler/csharp/csharp_repeated_primitive_field.h>
-    
-    #if defined(_MSC_VER) && _MSC_VER < 1400
-// This is the only specialization that allows VC++ 7.1 to remove const in
-// 'const int[3] and 'const int[3][4]'.  However, it causes trouble with GCC
-// and thus needs to be conditionally compiled.
-template <typename T, size_t N>
-struct RemoveConst<T[N]> {
-  typedef typename RemoveConst<T>::type type[N];
+    { private:
+  enum { kBufferSize = 256 << 10 /* 256 kB */ };
+  const int skip_header_lines_;
+  Env* const env_;
+  int64 line_number_;
+  std::unique_ptr<RandomAccessFile> file_;  // must outlive input_buffer_
+  std::unique_ptr<io::InputBuffer> input_buffer_;
 };
-#endif
     
-    // This is used internally by all instances of linked_ptr<>.  It needs to be
-// a non-template class because different types of linked_ptr<> can refer to
-// the same object (linked_ptr<Superclass>(obj) vs linked_ptr<Subclass>(obj)).
-// So, it needs to be possible for different types of linked_ptr to participate
-// in the same circular linked list, so we need a single class type here.
-//
-// DO NOT USE THIS CLASS DIRECTLY YOURSELF.  Use linked_ptr<T>.
-class linked_ptr_internal {
- public:
-  // Create a new circle that includes only this instance.
-  void join_new() {
-    next_ = this;
+      Status ReadLocked(string* key, string* value, bool* produced,
+                    bool* at_end) override {
+    *key = strings::StrCat(current_work(), ':', offset_);
+    Status status = reader_->ReadRecord(&offset_, value);
+    if (errors::IsOutOfRange(status)) {
+      *at_end = true;
+      return Status::OK();
+    }
+    if (!status.ok()) return status;
+    *produced = true;
+    return Status::OK();
   }
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    TEST(GrpcChannelTest, SparseHostPorts) {
+  GrpcChannelSpec spec;
+  TF_EXPECT_OK(
+      spec.AddHostPortsJob('mnist', {{0, 'a:1'}, {3, 'd:4'}, {4, 'e:5'}}));
+  ChannelCreationFunction channel_func =
+      ConvertToChannelCreationFunction(NewHostPortGrpcChannel);
+  std::unique_ptr<GrpcChannelCache> cc(NewGrpcChannelCache(spec, channel_func));
     }
     
-    #ifndef GTEST_INCLUDE_GTEST_INTERNAL_GTEST_PARAM_UTIL_H_
-#define GTEST_INCLUDE_GTEST_INTERNAL_GTEST_PARAM_UTIL_H_
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-      // Clones a 0-terminated C string, allocating memory using new.  The
-  // caller is responsible for deleting the return value using
-  // delete[].  Returns the cloned string, or NULL if the input is
-  // NULL.
-  //
-  // This is different from strdup() in string.h, which allocates
-  // memory using malloc().
-  static const char* CloneCString(const char* c_str);
-    
-        for (int i = 2; i*i <= n; i++) {
-      // n is divisible by an integer other than 1 and itself.
-      if ((n % i) == 0) return false;
-    }
-    
-    // Returns n! (the factorial of n).  For negative n, n! is defined to be 1.
-int Factorial(int n) {
-  int result = 1;
-  for (int i = 1; i <= n; i++) {
-    result *= i;
-  }
-    }
-    
-    static const int kBlockSize = 32768;
-    
-    namespace leveldb {
-    }
+    Status AsinhGrad(const AttrSlice& attrs, FunctionDef* g) {
+  // clang-format off
+  return GradForUnaryCwise(g, {
+      {{'y'}, 'Asinh', {'x'}},
+      {{'cosh'}, 'Cosh', {'y'}},
+      {{'dx'}, 'Mul', {'dy', 'cosh'}},  // dy * cosh(y)
+  });
+  // clang-format on
+}
+REGISTER_OP_GRADIENT('Asinh', AsinhGrad);
     
     
-    {  ASSERT_EQ(Hash(0, 0, 0xbc9f1d34), 0xbc9f1d34);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data1), sizeof(data1), 0xbc9f1d34),
-      0xef1345c4);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data2), sizeof(data2), 0xbc9f1d34),
-      0x5b663814);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data3), sizeof(data3), 0xbc9f1d34),
-      0x323c078f);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data4), sizeof(data4), 0xbc9f1d34),
-      0xed21633a);
-  ASSERT_EQ(
-      Hash(reinterpret_cast<const char*>(data5), sizeof(data5), 0x12345678),
-      0xf333dabb);
+    {    cvReleaseMat( &(*state)->preFilteredImg0 );
+    cvReleaseMat( &(*state)->preFilteredImg1 );
+    cvReleaseMat( &(*state)->slidingSumBuf );
+    cvReleaseMat( &(*state)->disp );
+    cvReleaseMat( &(*state)->cost );
+    cvFree( state );
 }
     
     
-#endif  // STORAGE_LEVELDB_UTIL_MUTEXLOCK_H_
+    {}
+#endif //0
 
     
-    namespace leveldb {
+            // Core Extension: ARB_map_buffer_range
+        MAP_READ_BIT                     = 0x0001,
+        MAP_WRITE_BIT                    = 0x0002,
+        MAP_INVALIDATE_RANGE_BIT         = 0x0004,
+        MAP_INVALIDATE_BUFFER_BIT        = 0x0008,
+        MAP_FLUSH_EXPLICIT_BIT           = 0x0010,
+        MAP_UNSYNCHRONIZED_BIT           = 0x0020,
+    
+      string model_file   = argv[1];
+  string trained_file = argv[2];
+  string mean_file    = argv[3];
+  string label_file   = argv[4];
+  Classifier classifier(model_file, trained_file, mean_file, label_file);
+    
+     protected:
+   /**
+   * @brief Generates a random integer from Uniform({0, 1, ..., n-1}).
+   *
+   * @param n
+   *    The upperbound (exclusive) value of the random number.
+   * @return
+   *    A uniformly random integer value from ({0, 1, ..., n-1}).
+   */
+  virtual int Rand(int n);
+    
+    /**
+ * @brief Compute the index of the @f$ K @f$ max values for each datum across
+ *        all dimensions @f$ (C \times H \times W) @f$.
+ *
+ * Intended for use after a classification layer to produce a prediction.
+ * If parameter out_max_val is set to true, output is a vector of pairs
+ * (max_ind, max_val) for each image. The axis parameter specifies an axis
+ * along which to maximise.
+ *
+ * NOTE: does not implement Backwards operation.
+ */
+template <typename Dtype>
+class ArgMaxLayer : public Layer<Dtype> {
+ public:
+  /**
+   * @param param provides ArgMaxParameter argmax_param,
+   *     with ArgMaxLayer options:
+   *   - top_k (\b optional uint, default 1).
+   *     the number @f$ K @f$ of maximal items to output.
+   *   - out_max_val (\b optional bool, default false).
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
+   */
+  explicit ArgMaxLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
     }
+    
+      virtual inline int ExactNumBottomBlobs() const { return 3; }
+  virtual inline const char* type() const { return 'ContrastiveLoss'; }
+  /**
+   * Unlike most loss layers, in the ContrastiveLossLayer we can backpropagate
+   * to the first two inputs.
+   */
+  virtual inline bool AllowForceBackward(const int bottom_index) const {
+    return bottom_index != 2;
+  }
+    
+    
+    {}  // namespace caffe
+    
+    #include 'caffe/blob.hpp'
+#include 'caffe/layer.hpp'
+#include 'caffe/proto/caffe.pb.h'
+    
+    /**
+ * @brief Compute elementwise operations, such as product and sum,
+ *        along multiple input Blobs.
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+template <typename Dtype>
+class EltwiseLayer : public Layer<Dtype> {
+ public:
+  explicit EltwiseLayer(const LayerParameter& param)
+      : Layer<Dtype>(param) {}
+  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    }
+    
+    #include <vector>
+    
+     protected:
+  /**
+   * @param bottom input Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the inputs @f$ x @f$
+   * @param top output Blob vector (length 1)
+   *   -# @f$ (N \times C \times H \times W) @f$
+   *      the computed outputs @f$
+   *        y = \gamma ^ {\alpha x + \beta}
+   *      @f$
+   */
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+    
+      /**
+   * @brief Computes the error gradient w.r.t. the forwarded inputs.
+   *
+   * @param top output Blob vector (length 1+), providing the error gradient with
+   *        respect to the outputs
+   * @param propagate_down see Layer::Backward.
+   * @param bottom input Blob vector (length 2+), into which the top error
+   *        gradient is copied
+   */
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+    const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    
+    // Tests that a unicharset that contains double-letter ligatures (eg ff) has
+// no null char in the encoding at all.
+TEST_F(UnicharcompressTest, DoesLigaturesWithDoubles) {
+  LOG(INFO) << 'Testing por with ligatures';
+  LoadUnicharset('por.unicharset');
+  ExpectCorrect('por');
+  // Check that any unichar-id that is encoded with multiple codes has the
+  // correct encoded_nulll_char_ in between.
+  for (int u = 0; u <= unicharset_.size(); ++u) {
+    RecodedCharID code;
+    int len = compressed_.EncodeUnichar(u, &code);
+    if (len > 1) {
+      // The should not be any null char in the code.
+      for (int i = 0; i < len; ++i) {
+        EXPECT_NE(encoded_null_char_, code(i));
+      }
+    }
+  }
+}
+    
+      // Updates the weights using the given learning rate, momentum and adam_beta.
+  // num_samples is used in the adam computation iff use_adam_ is true.
+  void Update(float learning_rate, float momentum, float adam_beta,
+              int num_samples) override;
+  // Sums the products of weight updates in *this and other, splitting into
+  // positive (same direction) in *same and negative (different direction) in
+  // *changed.
+  void CountAlternators(const Network& other, double* same,
+                        double* changed) const override;
+    
+    
+    {}  // namespace tesseract.
+    
+      // Check the density for a seed candidate (part) using its math density and
+  // italic density, returns true if the check passed.
+  bool CheckSeedDensity(const float math_density_high,
+                        const float math_density_low,
+                        const ColPartition* part) const;
+    
+    class TESS_API PageIterator {
+ public:
+  /**
+   * page_res and tesseract come directly from the BaseAPI.
+   * The rectangle parameters are copied indirectly from the Thresholder,
+   * via the BaseAPI. They represent the coordinates of some rectangle in an
+   * original image (in top-left-origin coordinates) and therefore the top-left
+   * needs to be added to any output boxes in order to specify coordinates
+   * in the original image. See TessBaseAPI::SetRectangle.
+   * The scale and scaled_yres are in case the Thresholder scaled the image
+   * rectangle prior to thresholding. Any coordinates in tesseract's image
+   * must be divided by scale before adding (rect_left, rect_top).
+   * The scaled_yres indicates the effective resolution of the binary image
+   * that tesseract has been given by the Thresholder.
+   * After the constructor, Begin has already been called.
+   */
+  PageIterator(PAGE_RES* page_res, Tesseract* tesseract,
+               int scale, int scaled_yres,
+               int rect_left, int rect_top,
+               int rect_width, int rect_height);
+  virtual ~PageIterator();
+    }
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+      private:
+    void __StartupCreater();
+    void __FirstGetCreater(const std::string& _servicename);
+    void __Creater(std::vector<ServiceRegister>& _vec);
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
