@@ -1,102 +1,25 @@
 
         
-                @disable_request_forgery_protection = false
+        class JavaScriptHelperTest < ActionView::TestCase
+  tests ActionView::Helpers::JavaScriptHelper
+    
+            @disable_request_forgery_protection = false
         @allow_same_origin_as_host = true
       end
     
-      test 'helpers' do
-    assert_response_code_range 200..299, :successful?
-    assert_response_code_range [404],    :not_found?
-    assert_response_code_range 300..399, :redirection?
-    assert_response_code_range 500..599, :server_error?
-    assert_response_code_range 400..499, :client_error?
+        def index
+      self.response_body = 'Hello World'
+    end
   end
     
-    module ActiveSupport
-  # Abstract super class that provides a thread-isolated attributes singleton, which resets automatically
-  # before and after each request. This allows you to keep all the per-request attributes easily
-  # available to the whole system.
-  #
-  # The following full app-like example demonstrates how to use a Current class to
-  # facilitate easy access to the global, per-request attributes without passing them deeply
-  # around everywhere:
-  #
-  #   # app/models/current.rb
-  #   class Current < ActiveSupport::CurrentAttributes
-  #     attribute :account, :user
-  #     attribute :request_id, :user_agent, :ip_address
-  #
-  #     resets { Time.zone = nil }
-  #
-  #     def user=(user)
-  #       super
-  #       self.account = user.account
-  #       Time.zone    = user.time_zone
-  #     end
-  #   end
-  #
-  #   # app/controllers/concerns/authentication.rb
-  #   module Authentication
-  #     extend ActiveSupport::Concern
-  #
-  #     included do
-  #       before_action :authenticate
-  #     end
-  #
-  #     private
-  #       def authenticate
-  #         if authenticated_user = User.find_by(id: cookies.encrypted[:user_id])
-  #           Current.user = authenticated_user
-  #         else
-  #           redirect_to new_session_url
-  #         end
-  #       end
-  #   end
-  #
-  #   # app/controllers/concerns/set_current_request_details.rb
-  #   module SetCurrentRequestDetails
-  #     extend ActiveSupport::Concern
-  #
-  #     included do
-  #       before_action do
-  #         Current.request_id = request.uuid
-  #         Current.user_agent = request.user_agent
-  #         Current.ip_address = request.ip
-  #       end
-  #     end
-  #   end
-  #
-  #   class ApplicationController < ActionController::Base
-  #     include Authentication
-  #     include SetCurrentRequestDetails
-  #   end
-  #
-  #   class MessagesController < ApplicationController
-  #     def create
-  #       Current.account.messages.create(message_params)
-  #     end
-  #   end
-  #
-  #   class Message < ApplicationRecord
-  #     belongs_to :creator, default: -> { Current.user }
-  #     after_create { |message| Event.create(record: message) }
-  #   end
-  #
-  #   class Event < ApplicationRecord
-  #     before_create do
-  #       self.request_id = Current.request_id
-  #       self.user_agent = Current.user_agent
-  #       self.ip_address = Current.ip_address
-  #     end
-  #   end
-  #
-  # A word of caution: It's easy to overdo a global singleton like Current and tangle your model as a result.
-  # Current should only be used for a few, top-level globals, like account, user, and request details.
-  # The attributes stuck in Current should be used by more or less all actions on all requests. If you start
-  # sticking controller-specific attributes in there, you're going to create a mess.
-  class CurrentAttributes
-    include ActiveSupport::Callbacks
-    define_callbacks :reset
+            assert_equal 'summary, title', @controller.response.body
+        assert @controller.params.has_key?(:summary)
+        assert @controller.params.has_key?(:title)
+        assert_equal 'content...', @controller.params['summary']
+        assert_equal 'JSON', @controller.params['title']
+      end
+    end
+  end
     
     module ActionMailer
   # The <tt>ActionMailer::DeliveryJob</tt> class is used when you
@@ -106,78 +29,107 @@
   class DeliveryJob < ActiveJob::Base # :nodoc:
     queue_as { ActionMailer::Base.deliver_later_queue_name }
     
-          module ClassMethods
-        def tests(mailer)
-          case mailer
-          when String, Symbol
-            self._mailer_class = mailer.to_s.camelize.constantize
-          when Module
-            self._mailer_class = mailer
-          else
-            raise NonInferrableMailerError.new(mailer)
-          end
-        end
+    module ActionMailer
+  # This module handles everything related to mail delivery, from registering
+  # new delivery methods to configuring the mail object to be sent.
+  module DeliveryMethods
+    extend ActiveSupport::Concern
     
-    require 'active_support/testing/autorun'
-require 'active_support/testing/method_call_assertions'
-require 'action_mailer'
-require 'action_mailer/test_case'
-    
-      def test_send_mail
-    stub_any_instance(Mail::SMTP, instance: Mail::SMTP.new({})) do |instance|
-      assert_called(instance, :deliver!) do
-        with_translation 'de', email_subject: '[Anmeldung] Willkommen' do
-          get '/test/send_mail'
-          assert_equal 'Mail sent - Subject: [Anmeldung] Willkommen', @response.body
+          text.split.each do |word|
+        if sentences.first.present? && (sentences.last + [word]).join(' ').length > len
+          sentences << [word]
+        else
+          sentences.last << word
         end
       end
+    
+    module ActionMailer
+  class NonInferrableMailerError < ::StandardError
+    def initialize(name)
+      super 'Unable to determine the mailer to test from #{name}. ' \
+        'You'll need to specify it using tests YourMailer in your ' \
+        'test case definition'
     end
   end
     
-        mail_with_defaults do |format|
-      format.html { render(inline: '<%= format_paragraph @text, 15, 1 %>') }
+          return true if prune == 'all'
+    
+      def xcode
+    if instance_variable_defined?(:@xcode)
+      @xcode
+    elsif MacOS::Xcode.installed?
+      @xcode = MacOS::Xcode.version
+      @xcode += ' => #{MacOS::Xcode.prefix}' unless MacOS::Xcode.default_prefix?
+      @xcode
     end
   end
     
-      private
+      # Optional
+  #   Override this method if you need to group multiple agents based on an API key,
+  #   or server they connect to.
+  #   Have a look at the TwitterStreamAgent for an example.
+  def self.setup_worker; end
     
-      private
+      included do
+    include Oauthable
     
-        def types
-      const_get(:TYPES).map(&:constantize)
+      def destroy_all
+    Delayed::Job.where(locked_at: nil).delete_all
+    
+      def update
+    @user_credential = current_user.user_credentials.find(params[:id])
+    
+              self.confirmed_at = Time.now.utc
+    
+        def translation_scope
+      'devise.unlocks'
     end
-    
-      def evernote_oauth_token
-    service && service.token
-  end
 end
 
     
-      def destroy
-    @user_credential = current_user.user_credentials.find(params[:id])
-    @user_credential.destroy
+        def unlock_instructions(record, token, opts={})
+      @token = token
+      devise_mail(record, :unlock_instructions, opts)
+    end
     
-      # PUT /resource/password
-  def update
-    self.resource = resource_class.reset_password_by_token(resource_params)
-    yield resource if block_given?
-    
-          protected
-    
-          def merge!(other)
-        other.each do |key, value|
-          self[convert_key(key)] = value
-        end
-        self
+          # Forgets the given resource by deleting a cookie
+      def forget_me(resource)
+        scope = Devise::Mapping.find_scope!(resource)
+        resource.forget_me!
+        cookies.delete(remember_key(resource, scope), forget_cookie_values(resource))
       end
     
-              @env.action_runner.run(Vagrant::Action.action_box_remove, {
-            box_name:     argv[0],
-            box_provider: options[:provider],
-            box_version:  options[:version],
-            force_confirm_box_remove: options[:force],
-            box_remove_all_versions: options[:all],
-          })
+                  define_method method do |resource_or_scope, *args|
+                scope = Devise::Mapping.find_scope!(resource_or_scope)
+                router_name = Devise.mappings[scope].router_name
+                context = router_name ? send(router_name) : _devise_route_context
+                context.send('#{action}#{scope}_#{module_name}_#{path_or_url}', *args)
+              end
+            end
+          end
+        end
+      end
+    
+    # Each time a record is set we check whether its session has already timed out
+# or not, based on last request time. If so, the record is logged out and
+# redirected to the sign in page. Also, each time the request comes and the
+# record is set, we set the last request time inside its scoped session to
+# verify timeout in the following request.
+Warden::Manager.after_set_user do |record, warden, options|
+  scope = options[:scope]
+  env   = warden.request.env
+    
+          def devise_mapping
+        @devise_mapping ||= Devise.mappings[scope_name]
+      end
+    
+            # Registers a SIGINT handler. This typically is called from {busy}.
+        # Callbacks are only registered once, so calling this multiple times
+        # with the same callback has no consequence.
+        def register(sig_callback)
+          @@mutex.synchronize do
+            registered << sig_callback
+            registered.uniq!
     
               # Verify the box exists that we want to repackage
           box = @env.boxes.find(box_name, box_provider, '= #{box_version}')
@@ -188,24 +140,37 @@ end
               version: box_version
           end
     
-        def log_http_get_files(files, from, cached = false)
-      return if files.empty?
-      s = '  #{'CACHED ' if cached}GET #{files.length} files from #{from} #{files * ' '}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
+          opts.on('-?', '-h', '--help', 'Show this help message.') do
+        puts opts
+        exit
       end
-    end
     
-          Dir.chdir(code_path) do
-        code = file.read
-        @filetype = file.extname.sub('.','') if @filetype.nil?
-        title = @title ? '#{@title} (#{file.basename})' : file.basename
-        url = '/#{code_dir}/#{@file}'
-        source = '<figure class='code'><figcaption><span>#{title}</span> <a href='#{url}'>download</a></figcaption>\n'
-        source += '#{HighlightCode::highlight(code, @filetype)}</figure>'
-        TemplateWrapper::safe_wrap(source)
+        # Merges this query with another. The returned query queries for
+    # the intersection between the two inputs.
+    #
+    # Both queries should be resolved.
+    #
+    # @param other [Query]
+    # @return [Query?] The merged query, or nil if there is no intersection.
+    def merge(other)
+      m1, t1 = resolved_modifier.downcase, resolved_type.downcase
+      m2, t2 = other.resolved_modifier.downcase, other.resolved_type.downcase
+      t1 = t2 if t1.empty?
+      t2 = t1 if t2.empty?
+      if (m1 == 'not') ^ (m2 == 'not')
+        return if t1 == t2
+        type = m1 == 'not' ? t2 : t1
+        mod = m1 == 'not' ? m2 : m1
+      elsif m1 == 'not' && m2 == 'not'
+        # CSS has no way of representing 'neither screen nor print'
+        return unless t1 == t2
+        type = t1
+        mod = 'not'
+      elsif t1 != t2
+        return
+      else # t1 == t2, neither m1 nor m2 are 'not'
+        type = t1
+        mod = m1.empty? ? m2 : m1
       end
+      Query.new([mod], [type], other.expressions + expressions)
     end
-  end
