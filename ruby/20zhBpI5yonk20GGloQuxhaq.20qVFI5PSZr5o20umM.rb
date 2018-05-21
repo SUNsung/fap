@@ -1,83 +1,112 @@
 
         
-            def find_local(username)
-      find_remote(username, nil)
-    end
-    
-        if test_conf['database']&.present?
-      ActiveRecord::Base.establish_connection(:test)
-      yield
-      ActiveRecord::Base.establish_connection(Rails.env.to_sym)
-    end
+          # Setting the :extname option will control what extension (if any) is appended to the url for assets
+  def test_javascript_include_tag
+    assert_dom_equal '<script src='/foo.js'></script>',  javascript_include_tag('/foo')
+    assert_dom_equal '<script src='/foo'></script>',     javascript_include_tag('/foo', extname: false)
+    assert_dom_equal '<script src='/foo.bar'></script>', javascript_include_tag('/foo', extname: '.bar')
   end
     
-      has_one :icon, serializer: ActivityPub::ImageSerializer
+          INTERNAL_IVARS = [
+        :@NAME,
+        :@failures,
+        :@assertions,
+        :@__io__,
+        :@_assertion_wrapped,
+        :@_assertions,
+        :@_result,
+        :@_routes,
+        :@controller,
+        :@_layouts,
+        :@_files,
+        :@_rendered_views,
+        :@method_name,
+        :@output_buffer,
+        :@_partials,
+        :@passed,
+        :@rendered,
+        :@request,
+        :@routes,
+        :@tagged_logger,
+        :@_templates,
+        :@options,
+        :@test_passed,
+        :@view,
+        :@view_context_class,
+        :@view_flow,
+        :@_subscribers,
+        :@html_document
+      ]
     
+            adapter = adapter.camelize
+        adapter = 'PostgreSQL' if adapter == 'Postgresql'
+        'ActionCable::SubscriptionAdapter::#{adapter}'.constantize
       end
-    
-          def fetch_public_key_from_json(string, jwt)
-        json = JSON.parse(string)
-        keys = json['keys']
-        public_key = get_key_from_kid(keys, jwt.header['kid'])
-        public_key
-      end
-    
-          # Override `Kernel#puts` to prepend four spaces to each line.
-      def puts(string=nil)
-        $stdout.puts(string.to_s.gsub(/^/, '    '))
-      end
-    
-      # Implemented by subclasses to hook into Capistrano's deployment flow using
-  # using the `before` and `after` DSL methods. Note that `register_hooks` will
-  # not be called if the user has opted-out of hooks when installing the plugin.
-  #
-  # Example:
-  #
-  #   def register_hooks
-  #     after 'deploy:updated', 'my_plugin:do_something'
-  #   end
-  #
-  def register_hooks; end
-    
-    desc 'Deploy a new release.'
-task :deploy do
-  set(:deploying, true)
-  %w{ starting started
-      updating updated
-      publishing published
-      finishing finished }.each do |task|
-    invoke 'deploy:#{task}'
+    end
   end
 end
-task default: :deploy
 
     
-      entries.each do |entry|
-    if File.exist?(entry[:file])
-      warn '[skip] #{entry[:file]} already exists'
-    else
-      File.open(entry[:file], 'w+') do |f|
-        f.write(ERB.new(File.read(entry[:template])).result(binding))
-        puts I18n.t(:written_file, scope: :capistrano, file: entry[:file])
-      end
-    end
+            def spec(spec, config = {})
+          Resolver.new(config).spec(spec)
+        end
+    
+          def trash_paths(*paths, command: nil, **_)
+        result = command.run!('/usr/bin/osascript', args: ['-e', <<~'EOS', *paths])
+          on run argv
+            repeat with i from 1 to (count argv)
+              set item i of argv to (item i of argv as POSIX file)
+            end repeat
+    
+      it 'should not set the X-Frame-Options for other content types' do
+    expect(get('/', {}, 'wants' => 'text/foo').headers['X-Frame-Options']).to be_nil
   end
     
-            it 'roles defined using the `role` syntax are included' do
-          as = dsl.roles(:app).map { |server| '#{server.user}@#{server.hostname}:#{server.port}' }
-          expect(as.size).to eq(2)
-          expect(as[0]).to eq('deployer@example1.com:1234')
-          expect(as[1]).to eq('@example1.com:5678')
+      # rspec-mocks config goes here. You can use an alternate test double
+  # library (such as bogus or mocha) by changing the `mock_with` option here.
+  config.mock_with :rspec do |mocks|
+    # Enable only the newer, non-monkey-patching expect syntax.
+    # For more details, see:
+    #   - http://teaisaweso.me/blog/2013/05/27/rspecs-new-message-expectation-syntax/
+    mocks.syntax = :expect
+    
+      it 'should not leak changes to env' do
+    klass    = described_class
+    detector = Struct.new(:app) do
+      def call(env)
+        was = env.dup
+        res = app.call(env)
+        was.each do |k,v|
+          next if env[k] == v
+          fail 'env[#{k.inspect}] changed from #{v.inspect} to #{env[k].inspect}'
+        end
+        res
+      end
+    end
+    
+            def used?
+          @variable.captured_by_block? || @referenced
+        end
+    
+            def each_unnecessary_space_match(node, &blk)
+          each_match_range(
+            contents_range(node),
+            MULTIPLE_SPACES_BETWEEN_ITEMS_REGEX,
+            &blk
+          )
         end
       end
     end
+  end
+end
+
     
-    module Jekyll
-    
-        def handle_gist_redirecting(data)
-      redirected_url = data.header['Location']
-      if redirected_url.nil? || redirected_url.empty?
-        raise ArgumentError, 'GitHub replied with a 302 but didn't provide a location in the response headers.'
+            attr_reader :lines, :annotations
       end
-    
     end
+  end
+end
+
+    
+      it 'registers an offense' do
+    inspect_source(source)
