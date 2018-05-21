@@ -1,104 +1,57 @@
 
         
-                key.revoke!
-      end
-    end
+          def id
+    object.id.to_s
   end
-end
+    
+      def perform(user_id)
+    @user = User.find(user_id)
+    deliver_digest if @user.allows_digest_emails?
+  end
+    
+      # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/follow
+  def follow
+    f = Follow.last
+    NotificationMailer.follow(f.target_account, Notification.find_by(activity: f))
+  end
+    
+    # Silence warnings about this defaulting to true
+I18n.enforce_available_locales = true
 
     
-        # Gets the last git commit information formatted into a String by the provided
-    # pretty format String. See the git-log documentation for valid format placeholders
-    def self.last_git_commit_formatted_with(pretty_format, date_format = nil)
-      command = ['git log -1']
-      command << '--pretty=\'#{pretty_format}\''
-      command << '--date=\'#{date_format}\'' if date_format
-      Actions.sh(command.compact.join(' '), log: false).chomp
-    rescue
-      nil
-    end
+    #
+# This script extracts the forms from the main page of each
+# web site in a list. The output of this can be used with
+# Metasploit (and other tools) to obtain the saved form data
+# of these domains.
+#
     
-            expect(result).to eq('/usr/local/bin/cloc  --by-file  --out=build/cloc.txt')
-      end
-    end
-  end
-end
-
-    
-        find_union(segments, Project).includes(:namespace).order_id_desc
+      def register_sigs
+    self.sigs = {
+      :banner		=> /^(220\s*[^\r\n]+)/i,
+      :user		=> /^USER\s+([^\s]+)/i,
+      :pass		=> /^PASS\s+([^\s]+)/i,
+      :login_pass => /^(230\s*[^\n]+)/i,
+      :login_fail => /^(5\d\d\s*[^\n]+)/i,
+      :bye      => /^221/
+    }
   end
     
-        begin
-      response = U2F::RegisterResponse.load_from_json(params[:device_response])
-      registration_data = u2f.register!(challenges, response)
-      registration.update(certificate: registration_data.certificate,
-                          key_handle: registration_data.key_handle,
-                          public_key: registration_data.public_key,
-                          counter: registration_data.counter,
-                          user: user,
-                          name: params[:name])
-    rescue JSON::ParserError, NoMethodError, ArgumentError
-      registration.errors.add(:base, 'Your U2F device did not send a valid JSON response.')
-    rescue U2F::Error => e
-      registration.errors.add(:base, e.message)
-    end
+    # This is a completely hackish way to do this, and could break with future
+# versions of the JDK.  Need to find a better way to use sun.security.tools.KeyTool
+# and .JarSigner than modifying the source.  These rely on internal APIs that may
+# change.
+signer = Rjb::import('javaCompile.SignJar')
+#clsKeyTool = Rjb::import('sun.security.tools.KeyTool')
+#clsKeyTool = Rjb::import('sun.security.tools.KeyToolMSF')
+#clsJarSigner = Rjb::import('javaCompile.SignJar.JarSignerMSF')
+#clsJarSigner = Rjb::import('sun.security.tools.JarSigner')
+#clsJarSigner = Rjb::import('sun.security.tools.JarSignerMSF')
     
-        def rails?
-      defined?(::Rails)
-    end
+    task default: :test
     
-      def initialize(repo: 'twbs/bootstrap', branch: 'master', save_to: {}, cache_path: 'tmp/converter-cache-bootstrap')
-    @logger     = Logger.new
-    @repo       = repo
-    @branch     = branch || 'master'
-    @branch_sha = get_branch_sha
-    @cache_path = cache_path
-    @repo_url   = 'https://github.com/#@repo'
-    @save_to    = {
-        js:    'assets/javascripts/bootstrap',
-        scss:  'assets/stylesheets/bootstrap',
-        fonts: 'assets/fonts/bootstrap'}.merge(save_to)
-  end
-    
-        # Returns true if a file has been assigned.
-    def file?
-      original_filename.present?
-    end
-    
-        def type_from_mime_magic
-      @type_from_mime_magic ||= File.open(@filepath) do |file|
-        MimeMagic.by_magic(file).try(:type)
-      end
-    end
-    
-            attachment_names.each do |attachment_name|
-          COLUMNS.keys.each do |column_name|
-            remove_column(table_name, '#{attachment_name}_#{column_name}')
-          end
+            def index
+          authorize! :read, StockMovement
+          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@stock_movements)
         end
-      end
-    
-      TYPES = [ 'input', 'filter', 'output', 'codec' ]
-    
-              def plugins
-            @plugins ||= find_plugins_gem_specs.map do |spec|
-              { :name => spec.name, :version => spec.version.to_s }
-            end.sort_by do |spec|
-              spec[:name]
-            end
-          end
-    
-          def initialize(agent)
-        @agent = agent
-        logger.debug('[api-service] start') if logger.debug?
-      end
-    
-          origin = caller[1]
-      if origin =~ /rubygems\/custom_require/
-        origin = caller[3]
-        if origin.nil?
-          STDERR.puts 'Unknown origin'
-          STDERR.puts caller.join('\n')
-        end
-      end
-      origin = origin.gsub(/:[0-9]+:in .*/, '') if origin
