@@ -1,53 +1,41 @@
 
         
-        # (c) 2015, Marc Abramowitz <marca@surveymonkey.com>
-#
-# This file is part of Ansible.
-#
-# Ansible is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Ansible is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Ansible. If not, see <http://www.gnu.org/licenses/>.
+        
+@pytest.mark.functional
+def test_without_confirmation(proc, TIMEOUT):
+    without_confirmation(proc, TIMEOUT)
     
-        jobs = sorted(response.json(), key=lambda job: int(job['jobNumber']))
     
-        terminal_stderr_re = [
-        re.compile(br'Error:'),
-    ]
+@pytest.mark.functional
+def test_refuse_with_confirmation(proc, TIMEOUT):
+    refuse_with_confirmation(proc, TIMEOUT)
     
-    from sklearn.utils import check_random_state
-from sklearn.metrics.pairwise import pairwise_distances
-from sklearn.metrics.pairwise import pairwise_kernels
+        def test_text_response(self):
+        '''the text_response_server sends the given text'''
+        server = Server.text_response_server(
+            'HTTP/1.1 200 OK\r\n' +
+            'Content-Length: 6\r\n' +
+            '\r\nroflol'
+        )
     
-    import time
+    Compatibility code to be able to use `cookielib.CookieJar` with requests.
     
-        print('Benchmarks')
-    print('===========================')
+    # HTML files that should be inserted before the pages created by sphinx.
+# The format is a list of tuples containing the path and title.
+#epub_pre_files = []
     
-            controller.coef0 = Tk.StringVar()
-        controller.coef0.set('0')
-        r = Tk.Frame(valbox)
-        Tk.Label(r, text='coef0:', anchor='e', width=7).pack(side=Tk.LEFT)
-        Tk.Entry(r, width=6, textvariable=controller.coef0).pack(side=Tk.LEFT)
-        r.pack()
-        valbox.pack(side=Tk.LEFT)
+        kwargs.setdefault('allow_redirects', True)
+    return request('options', url, **kwargs)
     
-        When fixed_n_classes is not None the first labeling is considered a ground
-    truth class assignment with fixed number of classes.
-    '''
-    random_labels = np.random.RandomState(seed).randint
-    scores = np.zeros((len(n_clusters_range), n_runs))
+        def __init__(self):
+        Resource.__init__(self)
+        self.concurrent = 0
+        self.tail = deque(maxlen=100)
+        self._reset_stats()
     
-    The example is engineered to show the effect of the choice of different
-metrics. It is applied to waveforms, which can be seen as
-high-dimensional vector. Indeed, the difference between metrics is
-usually more pronounced in high dimension (in particular for euclidean
-and cityblock).
+    # Apply monkey patches to fix issues in external libraries
+from . import _monkeypatches
+del _monkeypatches
+    
+        if results.overwrite and os.path.exists(output_directory):
+        shutil.rmtree(output_directory)
