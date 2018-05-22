@@ -1,111 +1,214 @@
 
         
-        #ifndef BOOST_ASIO_DETAIL_BASE_FROM_COMPLETION_COND_HPP
-#define BOOST_ASIO_DETAIL_BASE_FROM_COMPLETION_COND_HPP
+         protected:
+  explicit GlobalShortcut(v8::Isolate* isolate);
+  ~GlobalShortcut() override;
     
-      static bool all_empty(const boost::asio::const_buffers_1& buffer_sequence)
-  {
-    return boost::asio::buffer_size(buffer_sequence) == 0;
-  }
+    #ifndef ATOM_BROWSER_UI_X_EVENT_DISABLER_H_
+#define ATOM_BROWSER_UI_X_EVENT_DISABLER_H_
     
-    namespace boost {
-namespace asio {
-namespace detail {
-    }
-    }
-    }
+      // Sent when a renderer process is notified of new v8 heap statistics. The
+  // source is the ID of the renderer process, and the details are a
+  // V8HeapStatsDetails object.
+  NOTIFICATION_RENDERER_V8_HEAP_STATS_COMPUTED,
     
-        // Make a copy of the handler so that the memory can be deallocated before
-    // the upcall is made. Even if we're not about to make an upcall, a
-    // sub-object of the handler may be the true owner of the memory associated
-    // with the handler. Consequently, a local copy of the handler is required
-    // to ensure that any owning sub-object remains valid until after we have
-    // deallocated the memory here.
-    detail::binder2<Handler, boost::system::error_code, std::size_t>
-      handler(o->handler_, o->ec_, o->bytes_transferred_);
-    p.h = boost::asio::detail::addressof(handler.handler_);
-    p.reset();
+      // Keeps track of whether shortcut handling is currently suspended.
+  bool shortcut_handling_suspended_;
     
-    #ifndef BOOST_ASIO_DETAIL_GCC_ARM_FENCED_BLOCK_HPP
-#define BOOST_ASIO_DETAIL_GCC_ARM_FENCED_BLOCK_HPP
+      // Whether this object is listening for global shortcuts.
+  bool is_listening_;
     
-    #endif // BOOST_ASIO_DETAIL_HANDLER_INVOKE_HELPERS_HPP
-
+    #ifndef CHROME_BROWSER_PRINTING_PRINT_VIEW_MANAGER_OBSERVER_H_
+#define CHROME_BROWSER_PRINTING_PRINT_VIEW_MANAGER_OBSERVER_H_
     
-    # else // defined(BOOST_ASIO_ENABLE_HANDLER_TYPE_REQUIREMENTS_ASSERT)
+      // Return the parent NativeView of the observed WebContents.
+  gfx::NativeView GetParentView();
     
-      STDMETHODIMP get_Length(UINT32 *value)
-  {
-    *value = length_;
-    return S_OK;
-  }
+      // A copy of the custom colors for the current dialog to display and modify.
+  // This allows us to safely access the colors even if multiple windows are
+  // simultaneously showing color choosers (which would cause thread safety
+  // problems if we gave them direct handles to |g_custom_colors|).
+  COLORREF custom_colors_[16];
     
-    void AppendInternalKey(std::string* result, const ParsedInternalKey& key) {
-  result->append(key.user_key.data(), key.user_key.size());
-  PutFixed64(result, PackSequenceAndType(key.sequence, key.type));
-}
     
-    #endif  // STORAGE_LEVELDB_DB_LOG_WRITER_H_
-
-    
-      bool AddFeature(size_t Idx, uint32_t NewSize, bool Shrink) {
-    assert(NewSize);
-    Idx = Idx % kFeatureSetSize;
-    uint32_t OldSize = GetFeature(Idx);
-    if (OldSize == 0 || (Shrink && OldSize > NewSize)) {
-      if (OldSize > 0) {
-        size_t OldIdx = SmallestElementPerFeature[Idx];
-        InputInfo &II = *Inputs[OldIdx];
-        assert(II.NumFeatures > 0);
-        II.NumFeatures--;
-        if (II.NumFeatures == 0)
-          DeleteInput(OldIdx);
-      }
-      if (FeatureDebug)
-        Printf('ADD FEATURE %zd sz %d\n', Idx, NewSize);
-      SmallestElementPerFeature[Idx] = Inputs.size();
-      InputSizesPerFeature[Idx] = NewSize;
-      CountingFeatures = true;
-      return true;
-    }
-    return false;
-  }
-    
-      UnitVector InitialCorpus;
-  for (auto &Inp : *Inputs) {
-    Printf('Loading corpus dir: %s\n', Inp.c_str());
-    ReadDirToVectorOfUnits(Inp.c_str(), &InitialCorpus, nullptr,
-                           TemporaryMaxLen, /*ExitOnError=*/false);
-  }
-    
-    #ifndef LLVM_FUZZER_EXT_FUNCTIONS_H
-#define LLVM_FUZZER_EXT_FUNCTIONS_H
-    
-    namespace fuzzer {
-    }
-    
-    size_t MutationDispatcher::Mutate_Custom(uint8_t *Data, size_t Size,
-                                         size_t MaxSize) {
-  return EF->LLVMFuzzerCustomMutator(Data, Size, MaxSize, Rand.Rand());
-}
-    
-      if (Options.Verbosity >= 3)
-    Printf('TraceSwitch: %p %zd # %zd; TryShort %d\n', PC, Val, NumCases,
-           TryShort);
+    {} // namespace swift
     
     
     {
-    {      (void)sigemptyset(&BlockedSignalsSet);
-      (void)sigaddset(&BlockedSignalsSet, SIGCHLD);
-      if (sigprocmask(SIG_BLOCK, &BlockedSignalsSet, &OldBlockedSignalsSet) ==
-          -1) {
-        Printf('Failed to block SIGCHLD\n');
-        // Try our best to restore the signal handlers.
-        (void)sigaction(SIGQUIT, &OldSigQuitAction, NULL);
-        (void)sigaction(SIGINT, &OldSigIntAction, NULL);
-        (void)posix_spawnattr_destroy(&SpawnAttributes);
-        return -1;
-      }
-    }
-    ++ActiveThreadCount;
+    {    C[0] = C[1];
+    TargetStart = C + 1;
+    GCBForC0 = GCBForC1;
   }
+}
+    
+    SILDebugScope::SILDebugScope(SILLocation Loc, SILFunction *SILFn,
+                             const SILDebugScope *ParentScope ,
+                             const SILDebugScope *InlinedCallSite)
+    : Loc(Loc), InlinedCallSite(InlinedCallSite) {
+  if (ParentScope)
+    Parent = ParentScope;
+  else {
+    assert(SILFn && 'no parent provided');
+    Parent = SILFn;
+  }
+}
+    
+    
+    {
+    {}
+}
+#endif
+
+    
+    using clang::index::printSymbolProperties;
+    
+    #ifdef __APPLE__
+    
+      virtual bool enableWarnings() { return false; }
+  virtual bool indexLocals() { return false; }
+    
+    
+    {    if (s.ok()) {
+      // Verify that the table is usable
+      Iterator* it = table_cache->NewIterator(ReadOptions(),
+                                              meta->number,
+                                              meta->file_size);
+      s = it->status();
+      delete it;
+    }
+  }
+    
+    const char* leveldb_iter_value(const leveldb_iterator_t* iter, size_t* vlen) {
+  Slice s = iter->rep->value();
+  *vlen = s.size();
+  return s.data();
+}
+    
+      ValueType value_type = kTypeDeletion;
+  if (iter_->Valid()) {
+    do {
+      ParsedInternalKey ikey;
+      if (ParseKey(&ikey) && ikey.sequence <= sequence_) {
+        if ((value_type != kTypeDeletion) &&
+            user_comparator_->Compare(ikey.user_key, saved_key_) < 0) {
+          // We encountered a non-deleted value in entries for previous keys,
+          break;
+        }
+        value_type = ikey.type;
+        if (value_type == kTypeDeletion) {
+          saved_key_.clear();
+          ClearSavedValue();
+        } else {
+          Slice raw_value = iter_->value();
+          if (saved_value_.capacity() > raw_value.size() + 1048576) {
+            std::string empty;
+            swap(empty, saved_value_);
+          }
+          SaveKey(ExtractUserKey(iter_->key()), &saved_key_);
+          saved_value_.assign(raw_value.data(), raw_value.size());
+        }
+      }
+      iter_->Prev();
+    } while (iter_->Valid());
+  }
+    
+    // Return a new iterator that converts internal keys (yielded by
+// '*internal_iter') that were live at the specified 'sequence' number
+// into appropriate user keys.
+extern Iterator* NewDBIterator(
+    DBImpl* db,
+    const Comparator* user_key_comparator,
+    Iterator* internal_iter,
+    SequenceNumber sequence,
+    uint32_t seed);
+    
+    class FormatTest { };
+    
+    TableCache::TableCache(const std::string& dbname,
+                       const Options* options,
+                       int entries)
+    : env_(options->env),
+      dbname_(dbname),
+      options_(options),
+      cache_(NewLRUCache(entries)) {
+}
+    
+    namespace leveldb {
+    }
+    
+    // Return a builtin comparator that uses lexicographic byte-wise
+// ordering.  The result remains the property of this module and
+// must not be deleted.
+extern const Comparator* BytewiseComparator();
+    
+      WritableFile* writable_file;
+  ASSERT_OK(env_->NewWritableFile('/a/b', &writable_file));
+    
+    
+    {}  // namespace leveldb
+    
+    Status Footer::DecodeFrom(Slice* input) {
+  const char* magic_ptr = input->data() + kEncodedLength - 8;
+  const uint32_t magic_lo = DecodeFixed32(magic_ptr);
+  const uint32_t magic_hi = DecodeFixed32(magic_ptr + 4);
+  const uint64_t magic = ((static_cast<uint64_t>(magic_hi) << 32) |
+                          (static_cast<uint64_t>(magic_lo)));
+  if (magic != kTableMagicNumber) {
+    return Status::Corruption('not an sstable (bad magic number)');
+  }
+    }
+    
+    void Histogram::Add(double value) {
+  // Linear search is fast enough for our usage in db_bench
+  int b = 0;
+  while (b < kNumBuckets - 1 && kBucketLimit[b] <= value) {
+    b++;
+  }
+  buckets_[b] += 1.0;
+  if (min_ > value) min_ = value;
+  if (max_ < value) max_ = value;
+  num_++;
+  sum_ += value;
+  sum_squares_ += (value * value);
+}
+    
+    
+    {  // Skewed: pick 'base' uniformly from range [0,max_log] and then
+  // return 'base' random bits.  The effect is to pick a number in the
+  // range [0,2^max_log-1] with exponential bias towards smaller numbers.
+  uint32_t Skewed(int max_log) {
+    return Uniform(1 << Uniform(max_log + 1));
+  }
+};
+    
+    TEST(FormatTest, InternalKeyShortestSuccessor) {
+  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
+            ShortSuccessor(IKey('foo', 100, kTypeValue)));
+  ASSERT_EQ(IKey('\xff\xff', 100, kTypeValue),
+            ShortSuccessor(IKey('\xff\xff', 100, kTypeValue)));
+}
+    
+    #include <stdio.h>
+#include 'leveldb/dumpfile.h'
+#include 'leveldb/env.h'
+#include 'leveldb/status.h'
+    
+    TEST(Metric, RMSE) {
+  xgboost::Metric * metric = xgboost::Metric::Create('rmse');
+  ASSERT_STREQ(metric->Name(), 'rmse');
+  EXPECT_NEAR(GetMetricEval(metric, {0, 1}, {0, 1}), 0, 1e-10);
+  EXPECT_NEAR(GetMetricEval(metric,
+                            {0.1f, 0.9f, 0.1f, 0.9f},
+                            {  0,   0,   1,   1}),
+              0.6403f, 0.001f);
+}
+    
+      std::vector<std::string> DumpModel(const FeatureMap& fmap,
+                                     bool with_stats,
+                                     std::string format) const override {
+    return model_.DumpModel(fmap, with_stats, format);
+  }
+    
+      // Copy constructor if of same value type
+  XGBOOST_DEVICE GradientPairInternal(const GradientPairInternal<T> &g)
+      : grad_(g.grad_), hess_(g.hess_) {}  // NOLINT
