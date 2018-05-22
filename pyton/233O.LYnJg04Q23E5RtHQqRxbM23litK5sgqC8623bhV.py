@@ -1,111 +1,101 @@
 
         
-            s.register(Tag1, index=-1)
-    assert isinstance(s.order[-2], Tag1)
+        # Declare top-level shortcuts
+from scrapy.spiders import Spider
+from scrapy.http import Request, FormRequest
+from scrapy.selector import Selector
+from scrapy.item import Item, Field
     
-        def __init__(self, app, **options):
-        if 'loader' not in options:
-            options['loader'] = app.create_global_jinja_loader()
-        BaseEnvironment.__init__(self, **options)
-        self.app = app
+            writeln(self.separator2)
+        writeln('Ran %d contract%s in %.3fs' % (run, plural, stop - start))
+        writeln()
     
-        app.testing = False
-    stream = StringIO()
-    rv = client.get('/', errors_stream=stream)
-    assert rv.status_code == 500
-    assert rv.data
-    err = stream.getvalue()
-    assert 'Exception on / [GET]' in err
-    assert 'Exception: test' in err
-
+        def test_conflicts(self):
+        # Note: Defined IP is more important than defined port in match
+        self.assertTrue(self.addr.conflicts(self.addr1))
+        self.assertTrue(self.addr.conflicts(self.addr2))
+        self.assertTrue(self.addr.conflicts(self.addr_defined))
+        self.assertFalse(self.addr.conflicts(self.addr_default))
     
-        Tests regressions.
+    # The name of an image file (within the static path) to use as favicon of the
+# docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
+# pixels large.
+#html_favicon = None
     
-            # because special names such as Name.Class, Name.Function, etc.
-        # are not recognized as such later in the parsing, we choose them
-        # to look the same as ordinary variables.
-        Name:                      '#000000',        # class: 'n'
-        Name.Attribute:            '#c4a000',        # class: 'na' - to be revised
-        Name.Builtin:              '#004461',        # class: 'nb'
-        Name.Builtin.Pseudo:       '#3465a4',        # class: 'bp'
-        Name.Class:                '#000000',        # class: 'nc' - to be revised
-        Name.Constant:             '#000000',        # class: 'no' - to be revised
-        Name.Decorator:            '#888',           # class: 'nd' - to be revised
-        Name.Entity:               '#ce5c00',        # class: 'ni'
-        Name.Exception:            'bold #cc0000',   # class: 'ne'
-        Name.Function:             '#000000',        # class: 'nf'
-        Name.Property:             '#000000',        # class: 'py'
-        Name.Label:                '#f57900',        # class: 'nl'
-        Name.Namespace:            '#000000',        # class: 'nn' - to be revised
-        Name.Other:                '#000000',        # class: 'nx'
-        Name.Tag:                  'bold #004461',   # class: 'nt' - like a keyword
-        Name.Variable:             '#000000',        # class: 'nv' - to be revised
-        Name.Variable.Class:       '#000000',        # class: 'vc' - to be revised
-        Name.Variable.Global:      '#000000',        # class: 'vg' - to be revised
-        Name.Variable.Instance:    '#000000',        # class: 'vi' - to be revised
+        @mock.patch('certbot_compatibility_test.validator.requests.get')
+    def test_hsts_empty(self, mock_get_request):
+        mock_get_request.return_value = create_response(
+            headers={'strict-transport-security': ''})
+        self.assertFalse(self.validator.hsts('test.com'))
     
+    # If false, no module index is generated.
+#latex_domain_indices = True
     
-def default_hooks():
-    return dict((event, []) for event in HOOKS)
+        @classmethod
+    def fromfile(cls, fileobj):
+        if fileobj.read(4).decode() != 'TZif':
+            raise ValueError('not a zoneinfo file')
+        fileobj.seek(20)
+        header = fileobj.read(24)
+        tzh = (tzh_ttisgmtcnt, tzh_ttisstdcnt, tzh_leapcnt,
+               tzh_timecnt, tzh_typecnt, tzh_charcnt) = struct.unpack('>6l', header)
+        transitions = array('i')
+        transitions.fromfile(fileobj, tzh_timecnt)
+        if sys.byteorder != 'big':
+            transitions.byteswap()
     
-        def __repr__(self):
-        return str(dict(self.items()))
+    # maximal line length when calling readline(). This is to prevent
+# reading arbitrary length lines. RFC 3977 limits NNTP line length to
+# 512 characters, including CRLF. We have selected 2048 just to be on
+# the safe side.
+_MAXLINE = 2048
     
-    requires = [
-    'chardet>=3.0.2,<3.1.0',
-    'idna>=2.5,<2.7',
-    'urllib3>=1.21.1,<1.23',
-    'certifi>=2017.4.17'
+        def handle_get(self):
+        '''Handles the HTTP GET request.
     
+        def assertAlmostEqual(self, a, b):
+        if isinstance(a, complex):
+            if isinstance(b, complex):
+                unittest.TestCase.assertAlmostEqual(self, a.real, b.real)
+                unittest.TestCase.assertAlmostEqual(self, a.imag, b.imag)
+            else:
+                unittest.TestCase.assertAlmostEqual(self, a.real, b)
+                unittest.TestCase.assertAlmostEqual(self, a.imag, 0.)
+        else:
+            if isinstance(b, complex):
+                unittest.TestCase.assertAlmostEqual(self, a, b.real)
+                unittest.TestCase.assertAlmostEqual(self, 0., b.imag)
+            else:
+                unittest.TestCase.assertAlmostEqual(self, a, b)
     
-@pytest.mark.parametrize(
-    'value, expected', (
-        ('example.com/path', 'http://example.com/path'),
-        ('//example.com/path', 'http://example.com/path'),
-    ))
-def test_prepend_scheme_if_needed(value, expected):
-    assert prepend_scheme_if_needed(value, 'http') == expected
+            for fn in (posix.lchflags, chflags_nofollow):
+            # ZFS returns EOPNOTSUPP when attempting to set flag UF_IMMUTABLE.
+            flags = dummy_symlink_st.st_flags | stat.UF_IMMUTABLE
+            try:
+                fn(_DUMMY_SYMLINK, flags)
+            except OSError as err:
+                if err.errno != errno.EOPNOTSUPP:
+                    raise
+                msg = 'chflag UF_IMMUTABLE not supported by underlying fs'
+                self.skipTest(msg)
+            try:
+                new_testfn_st = os.stat(support.TESTFN)
+                new_dummy_symlink_st = os.lstat(_DUMMY_SYMLINK)
     
-            def mako_module_path(filename, uri):
-            filename = filename.lstrip('/').replace('/', '-')
-            path = os.path.join(module_directory, filename + '.py')
-            return os.path.abspath(path)
-    else:
-        # disable caching templates since we don't know where they should go.
-        module_directory = mako_module_path = None
+        exception = ['<p>%s: %s' % (strong(pydoc.html.escape(str(etype))),
+                                pydoc.html.escape(str(evalue)))]
+    for name in dir(evalue):
+        if name[:1] == '_': continue
+        value = pydoc.html.repr(getattr(evalue, name))
+        exception.append('\n<br>%s%s&nbsp;=\n%s' % (indent, name, value))
     
-    def set_extension(environ, ext):
-    environ['extension'] = ext
-    environ['render_style'], environ['content_type'] = extension_mapping[ext]
-
-    
-        def pre(self):
-        super(APIv1LoginController, self).pre()
-        c.extension = 'json'
-        set_extension(request.environ, 'json')
-    
-        @require_oauth2_scope('account')
-    @validate(
-        VUser(),
-        validated_prefs=PREFS_JSON_VALIDATOR,
-    )
-    @api_doc(api_section.account, json_model=PREFS_JSON_VALIDATOR,
-             uri='/api/v1/me/prefs')
-    def PATCH_prefs(self, validated_prefs):
-        user_prefs = c.user.preferences()
-        for short_name, new_value in validated_prefs.iteritems():
-            pref_name = 'pref_' + short_name
-            user_prefs[pref_name] = new_value
-        vprefs.filter_prefs(user_prefs, c.user)
-        vprefs.set_prefs(c.user, user_prefs)
-        c.user._commit()
-        return self.api_wrapper(PrefsJsonTemplate().data(c.user))
-    
-            res = AdminPage(content = AdminAwardGive(award, recipient, desc,
-                                                 url, hours),
-                        title='give an award').render()
-        return res
-    
-        def GET_blog(self):
-        return self.redirect('https://blog.%s/' %
-                             get_domain(subreddit=False, no_www=True))
+    class StructFieldsTestCase(unittest.TestCase):
+    # Structure/Union classes must get 'finalized' sooner or
+    # later, when one of these things happen:
+    #
+    # 1. _fields_ is set.
+    # 2. An instance is created.
+    # 3. The type is used as field of another Structure/Union.
+    # 4. The type is subclassed
+    #
+    # When they are finalized, assigning _fields_ is no longer allowed.
