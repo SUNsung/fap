@@ -1,131 +1,54 @@
 
         
-            cmd = cmd.split()
-    
-        old_layer = keras.layers.GlobalAveragePooling2D(dim_ordering='default', name='global_avgpool2d')
-    new_layer = keras.layers.GlobalAvgPool2D(name='global_avgpool2d')
-    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
-    
-        # Block 5
-    x = Conv2D(512, (3, 3), activation='relu', padding='same', name='block5_conv1')(x)
-    x = Conv2D(512, (3, 3), activation='relu', padding='same', name='block5_conv2')(x)
-    x = Conv2D(512, (3, 3), activation='relu', padding='same', name='block5_conv3')(x)
-    x = Conv2D(512, (3, 3), activation='relu', padding='same', name='block5_conv4')(x)
-    x = MaxPooling2D((2, 2), strides=(2, 2), name='block5_pool')(x)
-    
-            model.add(Lambda(antirectifier,
-                         output_shape=antirectifier_output_shape))
-    ```
-    
-            loaded_im = image.load_img(filename)
-        loaded_im_array = image.img_to_array(loaded_im)
-        assert loaded_im_array.shape == original_im_array.shape
-        assert np.all(loaded_im_array == original_im_array)
-    
-        # Zero-center by mean pixel
-    if data_format == 'channels_first':
-        if x.ndim == 3:
-            x[0, :, :] -= mean[0]
-            x[1, :, :] -= mean[1]
-            x[2, :, :] -= mean[2]
-            if std is not None:
-                x[0, :, :] /= std[0]
-                x[1, :, :] /= std[1]
-                x[2, :, :] /= std[2]
-        else:
-            x[:, 0, :, :] -= mean[0]
-            x[:, 1, :, :] -= mean[1]
-            x[:, 2, :, :] -= mean[2]
-            if std is not None:
-                x[:, 0, :, :] /= std[0]
-                x[:, 1, :, :] /= std[1]
-                x[:, 2, :, :] /= std[2]
-    else:
-        x[..., 0] -= mean[0]
-        x[..., 1] -= mean[1]
-        x[..., 2] -= mean[2]
-        if std is not None:
-            x[..., 0] /= std[0]
-            x[..., 1] /= std[1]
-            x[..., 2] /= std[2]
-    return x
-    
-    Tests comparing this model to the existing Tensorflow model can be
-found at [mobilenet_v2_keras](https://github.com/JonathanCMitchell/mobilenet_v2_keras)
-'''
-from __future__ import print_function
-from __future__ import absolute_import
-from __future__ import division
-    
-    The VAE has a modular design. The encoder, decoder and VAE
-are 3 models that share weights. After training the VAE model,
-the encoder can be used to  generate latent vectors.
-The decoder can be used to generate MNIST digits by sampling the
-latent vector from a Gaussian distribution with mean=0 and std=1.
+        In the second benchmark, we increase the number of dimensions of the
+training set. Then we plot the computation time as function of
+the number of dimensions.
     
     
-if __name__ == '__main__':
-    unittest.main()  # pragma: no cover
-
+def plot_results(X, y, label):
+    plt.plot(X, y, label=label, marker='o')
     
-        @mock.patch('certbot.notify.smtplib.LMTP')
-    @mock.patch('certbot.notify.subprocess.Popen')
-    def test_everything_fails(self, mock_popen, mock_lmtp):
-        from certbot.notify import notify
-        lmtp_obj = mock.MagicMock()
-        mock_lmtp.return_value = lmtp_obj
-        lmtp_obj.sendmail.side_effect = socket.error(17)
-        proc = mock.MagicMock()
-        mock_popen.return_value = proc
-        proc.communicate.side_effect = OSError('What we have here is a '
-                                               'failure to communicate.')
-        self.assertFalse(notify('Goose', 'auntrhody@example.com',
-                                'The old grey goose is dead.'))
-        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
-        self.assertEqual(proc.communicate.call_count, 1)
+        # start time
+    t_start = datetime.now()
+    clf.transform(X)
+    delta = (datetime.now() - t_start)
+    # stop time
+    time_to_transform = compute_time(t_start, delta)
     
-        html = get_content(url)
-    pid = match1(html, r'video\.settings\.pid\s*=\s*\'([^\']+)\'')
-    title = match1(html, r'video\.settings\.title\s*=\s*\'([^\']+)\'')
+        ###########################################################################
+    # Set Python core input
+    sampling_algorithm['python-core-sample'] = \
+        lambda n_population, n_sample: \
+            random.sample(xrange(n_population), n_sample)
     
-    from ..common import *
+        scikit_classifier_results.append(
+        delta.seconds + delta.microseconds / mu_second)
     
-        def test_b_observers_shall_be_attachable(cls):
-        cls.s.attach(cls.dec_obs)
-        cls.assertEqual(isinstance(cls.s._observers[0], DecimalViewer), True)
-        cls.assertEqual(len(cls.s._observers), 1)
-        cls.s.attach(cls.hex_obs)
-        cls.assertEqual(isinstance(cls.s._observers[1], HexViewer), True)
-        cls.assertEqual(len(cls.s._observers), 2)
+        text_lang_folder = os.path.join(text_folder, lang)
+    if not os.path.exists(text_lang_folder):
+        os.makedirs(text_lang_folder)
     
     
-def check_ref_out(ref):
-    '''Ask git to check out the specified ref.'''
-    try:
-        subprocess.check_call(
-            ['git', 'checkout', ref],
-            stdout=DEVNULL,
-            stderr=DEVNULL,
-        )
-    except subprocess.CalledProcessError:
-        logging.error('failed to check out %s', ref)
-        sys.exit(1)
+n_train = 20  # samples for training
+n_test = 200  # samples for testing
+n_averages = 50  # how often to repeat classification
+n_features_max = 75  # maximum number of features
+step = 4  # step size for the calculation
     
-        def current_subdomain(self):
-        return self.stacked_proxy_safe_get(c, 'subdomain')
+    X = np.array(X)
+y = np.array(y)
     
-    from reddit_base import RedditController
-import StringIO
-import r2.lib.captcha as captcha
-from pylons import response
+            oa = OAS(store_precision=False, assume_centered=True)
+        oa.fit(X)
+        oa_mse[i, j] = oa.error_norm(real_cov, scaling=False)
+        oa_shrinkage[i, j] = oa.shrinkage_
     
-    @memoize('renderurl_cached', time=60)
-def renderurl_cached(path):
-    # Needed so http://reddit.com/help/ works
-    fp = path.rstrip('/')
-    u = 'https://code.reddit.com/wiki' + fp + '?stripped=1'
+        def test_repr(self):
+        self.assertEqual('PollError(exhausted=%s, updated={sentinel.AR: '
+                         'sentinel.AR2})' % repr(set()), repr(self.invalid))
     
-    
-class HealthController(MinimalController):
-    def pre(self):
-        pass
+        @mock.patch('certbot_compatibility_test.validator.requests.get')
+    def test_redirect_wrong_redirect_code(self, mock_get_request):
+        mock_get_request.return_value = create_response(
+            303, {'location': 'https://test.com'})
+        self.assertFalse(self.validator.redirect('test.com'))
