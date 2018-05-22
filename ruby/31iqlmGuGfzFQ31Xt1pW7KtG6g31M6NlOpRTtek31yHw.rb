@@ -1,105 +1,79 @@
 
         
-                adapter = adapter.camelize
-        adapter = 'PostgreSQL' if adapter == 'Postgresql'
-        'ActionCable::SubscriptionAdapter::#{adapter}'.constantize
-      end
+            attr_accessor :name, :type, :path
+    
+      it 'does not decode a float when fewer bytes than a float remain and the '*' modifier is passed' do
+    [ ['\xff', []],
+      ['\xff\x00', []],
+      ['\xff\x00\xff', []]
+    ].should be_computed_by(:unpack, unpack_format('*'))
+  end
+    
+      it 'decodes past whitespace bytes when passed the '*' modifier' do
+    [ ['a b c',    ['a b c']],
+      ['a\fb c',   ['a\fb c']],
+      ['a\nb c',   ['a\nb c']],
+      ['a\rb c',   ['a\rb c']],
+      ['a\tb c',   ['a\tb c']],
+      ['a\vb c',   ['a\vb c']],
+    ].should be_computed_by(:unpack, unpack_format('*'))
+  end
+end
+    
+    describe :string_unpack_unicode, shared: true do
+  it 'decodes Unicode codepoints as ASCII values' do
+    [ ['\x00',      [0]],
+      ['\x01',      [1]],
+      ['\x08',      [8]],
+      ['\x0f',      [15]],
+      ['\x18',      [24]],
+      ['\x1f',      [31]],
+      ['\x7f',      [127]],
+      ['\xc2\x80',  [128]],
+      ['\xc2\x81',  [129]],
+      ['\xc3\xbf',  [255]]
+    ].should be_computed_by(:unpack, 'U')
+  end
+    
+      # This spec is a mess. It fails randomly, it hangs on MRI, it needs to be removed
+  quarantine! do
+  it 'killing dying running does nothing' do
+    in_ensure_clause = false
+    exit_loop = true
+    t = ThreadSpecs.dying_thread_ensures do
+      in_ensure_clause = true
+      loop { if exit_loop then break end }
+      ScratchPad.record :after_stop
     end
+    
+        ScratchPad.recorded.should == nil
   end
 end
 
     
-            def test_url_host_no_db
-          spec = resolve 'abstract://foo?encoding=utf8'
-          assert_equal({
-            'adapter'  => 'abstract',
-            'host'     => 'foo',
-            'encoding' => 'utf8' }, spec)
-        end
-    
-        response = ActionDispatch::TestResponse.create(200, { 'Content-Type' => 'application/json' }, '{ 'foo': 'fighters' }')
-    assert_equal({ 'foo' => 'fighters' }, response.parsed_body)
+        t.status.should == false
+    t.join
   end
     
-    module MiddlewareTest
-  class MyMiddleware
-    def initialize(app)
-      @app = app
+      class RateLimitExceededError < Error
+    def initialize(reset, error)
+      super <<~EOS
+        GitHub API Error: #{error}
+        Try again in #{pretty_ratelimit_reset(reset)}, or create a personal access token:
+          #{ALL_SCOPES_URL}
+        and then set the token as: export HOMEBREW_GITHUB_API_TOKEN='your_new_token'
+      EOS
     end
     
-    module ActionMailer
-  # This module handles everything related to mail delivery, from registering
-  # new delivery methods to configuring the mail object to be sent.
-  module DeliveryMethods
-    extend ActiveSupport::Concern
-    
-        include Behavior
-  end
-end
-
-    
-        assert_equal(2, @logger.logged(:debug).size)
-    assert_match(/BaseMailer#welcome: processed outbound mail in [\d.]+ms/, @logger.logged(:debug).first)
-    assert_match(/Welcome/, @logger.logged(:debug).second)
-  ensure
-    BaseMailer.deliveries.clear
+      def send_sinatra_file(path, &missing_file_block)
+    file_path = File.join(File.dirname(__FILE__), 'public',  path)
+    file_path = File.join(file_path, 'index.html') unless file_path =~ /\.[a-z]+$/i
+    File.exist?(file_path) ? send_file(file_path) : missing_file_block.call
   end
     
-    class MailerHelperTest < ActionMailer::TestCase
-  def test_use_mail_helper
-    mail = HelperMailer.use_mail_helper
-    assert_match %r{  But soft!}, mail.body.encoded
-    assert_match %r{east, and\r\n  Juliet}, mail.body.encoded
-  end
+        def render(context)
+      code_dir = (context.registers[:site].config['code_dir'].sub(/^\//,'') || 'downloads/code')
+      code_path = (Pathname.new(context.registers[:site].source) + code_dir).expand_path
+      file = code_path + @file
     
-        def execute(args)
-      topic_id = args[:topic_id]
-      raise Discourse::InvalidParameters.new(:topic_id) unless topic_id.present?
-    
-    map = {}
-dups = []
-    
-    # puts '\nDone.'
-
-    
-          def initialize(*args, &block)
-        @bypass_confirmation_postpone = false
-        @skip_reconfirmation_in_callback = false
-        @reconfirmation_required = false
-        @skip_confirmation_notification = false
-        @raw_confirmation_token = nil
-        super
-      end
-    
-    class Devise::UnlocksController < DeviseController
-  prepend_before_action :require_no_authentication
-    
-          def remember_cookie_values(resource)
-        options = { httponly: true }
-        options.merge!(forget_cookie_values(resource))
-        options.merge!(
-          value: resource.class.serialize_into_cookie(resource),
-          expires: resource.remember_expires_at
-        )
-      end
-    
-            routes.each do |module_name, actions|
-          [:path, :url].each do |path_or_url|
-            actions.each do |action|
-              action = action ? '#{action}_' : ''
-              method = :'#{action}#{module_name}_#{path_or_url}'
-    
-        def push(*names)
-      @filters.push *filter_const(names)
-    end
-    
-    module Docs
-  class Entry
-    class Invalid < StandardError; end
-    
-              # Method
-          name = node.at_css('.header').content.split.first
-    
-    ###
-### methods
-###
+    Liquid::Template.register_tag('video', Jekyll::VideoTag)
