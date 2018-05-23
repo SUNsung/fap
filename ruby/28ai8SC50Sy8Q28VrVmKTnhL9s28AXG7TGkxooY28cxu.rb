@@ -1,54 +1,31 @@
 
         
-          def evernote_consumer_secret
-    (config = Devise.omniauth_configs[:evernote]) && config.strategy.consumer_secret
-  end
-    
-        def setup!(scheduler, mutex)
-      @scheduler = scheduler
-      @mutex = mutex
-      setup if respond_to?(:setup)
-    end
-    
-      def tumblr_oauth_token
+          def tumblr_oauth_token
     service.token
   end
     
-    require 'rubygems'  # install rubygems
-require 'hpricot'   # gem install hpricot
-require 'timeout'
+      included do
+    helper SortableTableHelper
+  end
     
-      File.unlink(out) if (File.size(out) == 0)
+      def type
+    'Emoji'
+  end
     
-            when :err
-          case s[:last]
-            when :pass
-              # Oops got a -ERR after a pass so its crap ignore the pass
-              # But report it, might be helpfull for guessing :-)
+        existence_maps.each do |group|
+      existing_one = group.key(true)
     
+      def perform(user_id)
+    @user = User.find(user_id)
+    deliver_digest if @user.allows_digest_emails?
+  end
     
-    {	if ln =~ /;(read|write)_(handle|filename)=/
-		parts = ln.split(' ')
-		if (parts[0] == 'mov')
-			parts2 = parts[2].split('=')
-			label = parts2[0]
-			label.slice!(0,1)
-			old = parts2[1]
-			new = addrs[label]
-			#puts '%32s: %s -> %x' % [label, old, new]
-			replaces << [label, old, new.to_s(16)]
-		end
-	end
-}
+    class ManifestSerializer < ActiveModel::Serializer
+  include RoutingHelper
+  include ActionView::Helpers::TextHelper
     
-          def core_gem_names
-        %w(capistrano airbrussh rake sshkit net-ssh) & Gem.loaded_specs.keys
-      end
-    
-            def <<(value)
-          values << value
-        end
-    
-      desc 'Update server(s) by setting up a new release.'
-  task :updating do
+      # Preview this email at http://localhost:3000/rails/mailers/notification_mailer/follow
+  def follow
+    f = Follow.last
+    NotificationMailer.follow(f.target_account, Notification.find_by(activity: f))
   end
