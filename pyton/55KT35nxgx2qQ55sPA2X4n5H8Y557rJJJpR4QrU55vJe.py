@@ -1,228 +1,183 @@
 
         
-                swf_class = swfi.extract_class(test_id)
-        func = swfi.extract_function(swf_class, 'main')
-        res = func(input_args)
-        self.assertEqual(res, output)
-    
-        return sorted(
-        filter(lambda ie: ie.is_suitable(age_limit), gen_extractors()),
-        key=lambda ie: ie.IE_NAME.lower())
-    
-            video_url = self._html_search_regex(r'video_url\s*:\s*'([^']+)'', webpage, 'video URL')
-    
-                return {
-                'id': video_id,
-                'title': json_data['title'],
-                'description': json_data.get('subtitle'),
-                'thumbnail': json_data.get('thumbnail_image', {}).get('file'),
-                'timestamp': parse_iso8601(json_data.get('publication_date')),
-                'duration': int_or_none(json_data.get('duration')),
-                'view_count': int_or_none(json_data.get('view_count')),
-                'formats': formats,
-            }
-
-    
-    
-def get_new_command(command):
-    dir = shell.quote(_tar_file(command.script_parts)[1])
-    return shell.and_('mkdir -p {dir}', '{cmd} -C {dir}') \
-        .format(dir=dir, cmd=command.script)
-    
-        # a Model inside a Model
-    x = Input(shape=(1,))
-    y = Dense(2)(x)
-    inner_model = Model(x, y)
-    x = Input(shape=(1,))
-    y = inner_model(x)
-    outer_model = Model(x, y)
-    assert outer_model.trainable_weights == inner_model.trainable_weights
-    inner_model.trainable = False
-    assert outer_model.trainable_weights == []
-    inner_model.trainable = True
-    inner_model.layers[-1].trainable = False
-    assert outer_model.trainable_weights == []
-    
-        if weights == 'imagenet' and include_top and classes != 1000:
-        raise ValueError('If using `weights` as imagenet with `include_top`'
-                         ' as true, `classes` should be 1000')
-    # Determine proper input shape
-    input_shape = _obtain_input_shape(input_shape,
-                                      default_size=224,
-                                      min_size=48,
-                                      data_format=K.image_data_format(),
-                                      require_flatten=include_top,
-                                      weights=weights)
-    
-        a = Input(shape=(32,), name='input_a')
-    b = Input(shape=(32,), name='input_b')
-    
-            # check if input and output have the same shape
-        assert(batch[0].shape == batch[1].shape)
-        # check if the input and output images are not the same numpy array
-        input_img = batch[0][0]
-        output_img = batch[1][0]
-        output_img[0][0][0] += 1
-        assert(input_img[0][0][0] != output_img[0][0][0])
-    
-                def step(inputs, states):
-                constants = states[-self._num_constants:]
-                states = states[:-self._num_constants]
-                return self.cell.call(inputs, states, constants=constants,
-                                      **kwargs)
-        else:
-            def step(inputs, states):
-                return self.cell.call(inputs, states, **kwargs)
-    
-        z_mean, z_log_var = args
-    batch = K.shape(z_mean)[0]
-    dim = K.int_shape(z_mean)[1]
-    # by default, random_normal has mean=0 and std=1.0
-    epsilon = K.random_normal(shape=(batch, dim))
-    return z_mean + K.exp(0.5 * z_log_var) * epsilon
-    
-        for strides in [(1, 1), (2, 2)]:
-        layer_test(local.LocallyConnected2D,
-                   kwargs={'filters': filters,
-                           'kernel_size': 3,
-                           'padding': padding,
-                           'kernel_regularizer': 'l2',
-                           'bias_regularizer': 'l2',
-                           'activity_regularizer': 'l2',
-                           'strides': strides,
-                           'data_format': 'channels_last'},
-                   input_shape=(num_samples, num_row, num_col, stack_size))
-    
-            try:
-            # use repr so that we can distinguish between -0.0 and 0.0
-            expected = repr(truediv(a, b))
-        except OverflowError:
-            expected = 'overflow'
-        except ZeroDivisionError:
-            expected = 'zerodivision'
-    
-    
-Exceptions
-----------
-    
-    to_benchmark = [pi_float, pi_decimal]
-if C is not None:
-    to_benchmark.insert(1, pi_cdecimal)
-    
-            if self.closed:
-            raise ValueError('I/O operation on closed file')
-        if self.seekable:
-            try:
-                n = self.chunksize - self.size_read
-                # maybe fix alignment
-                if self.align and (self.chunksize & 1):
-                    n = n + 1
-                self.file.seek(n, 1)
-                self.size_read = self.size_read + n
-                return
-            except OSError:
-                pass
-        while self.size_read < self.chunksize:
-            n = min(8192, self.chunksize - self.size_read)
-            dummy = self.read(n)
-            if not dummy:
-                raise EOFError
-
-    
-        print('$(target)$(debug_suffix)%s: $(temp_dir) $(OBJS)' % (target_ext))
-    print('\tlink -out:$(target)$(debug_suffix)%s %s' %
-          (target_ext, target_link_flags), '@<<')
-    print('\t$(OBJS)')
-    print('\t$(LIBS)')
-    print('\t$(ADDN_LINK_FILES)')
-    print('\t$(pythonlib) $(lcustom) $(l_debug)')
-    print('\t$(resources)')
-    print('<<')
-    print()
-    print('clean:')
-    print('\t-del /f *.obj')
-    print('\t-del /f $(target).exe')
-
-    
-        def test_varargs0(self):
-        msg = r'__contains__\(\) takes exactly one argument \(0 given\)'
-        self.assertRaisesRegex(TypeError, msg, {}.__contains__)
-    
-            # Now test range() with longs
-        for x in [range(-2**100),
-                  range(0, -2**100),
-                  range(0, 2**100, -1)]:
-            self.assertEqual(list(x), [])
-            self.assertFalse(x)
-    
-            x = X(func)
-        self.assertEqual(x.restype, c_int)
-        self.assertEqual(x.argtypes, (c_int, c_int))
-        self.assertEqual(sizeof(x), sizeof(c_voidp))
-        self.assertEqual(sizeof(X), sizeof(c_voidp))
-    
-        def test_basics(self):
-        from operator import delitem
-        for ct, pt in zip(ctype_types, python_types):
-            i = ct(42)
-            p = pointer(i)
-##            print type(p.contents), ct
-            self.assertIs(type(p.contents), ct)
-            # p.contents is the same as p[0]
-##            print p.contents
-##            self.assertEqual(p.contents, 42)
-##            self.assertEqual(p[0], 42)
-    
-    import tornado.httpserver
-import tornado.ioloop
-import tornado.options
-import tornado.web
-    
-            # It would be better to run the wsgiref server implementation in
-        # another thread instead of using our own WSGIContainer, but this
-        # fits better in our async testing framework and the wsgiref
-        # validator should keep us honest
-        with ignore_deprecation():
-            return WSGIContainer(validator(WSGIAdapter(
-                Application([
-                    ('/', HelloHandler),
-                    ('/path/(.*)', PathQuotingHandler),
-                    ('/typecheck', TypeCheckHandler),
-                ]))))
-    
-        * ``_OPENID_ENDPOINT``: the identity provider's URI.
+            Models: `flatpages.flatpages`
+    Templates: Uses the template defined by the ``template_name`` field,
+        or :template:`flatpages/default.html` if template_name is not defined.
+    Context:
+        flatpage
+            `flatpages.flatpages` object
     '''
-    @_non_deprecated_return_future
-    def authenticate_redirect(self, callback_uri=None,
-                              ax_attrs=['name', 'email', 'language', 'username'],
-                              callback=None):
-        '''Redirects to the authentication URL for this service.
+    if not url.startswith('/'):
+        url = '/' + url
+    site_id = get_current_site(request).id
+    try:
+        f = get_object_or_404(FlatPage, url=url, sites=site_id)
+    except Http404:
+        if not url.endswith('/') and settings.APPEND_SLASH:
+            url += '/'
+            f = get_object_or_404(FlatPage, url=url, sites=site_id)
+            return HttpResponsePermanentRedirect('%s/' % request.path)
+        else:
+            raise
+    return render_flatpage(request, f)
     
-        .. versionchanged:: 5.0
-       Always uses the current IOLoop instead of ``self.io_loop``.
+    from sklearn.cluster import AgglomerativeClustering
     
+        # decode the payload explicitly as UTF-8 since lxml is confused for some
+    # reason
+    with codecs.open(html_filename,'r','utf-8') as html_file:
+        html_content = html_file.read()
+    tree = ElementTree(lxml.html.document_fromstring(html_content))
+    i = 0
+    j = 0
+    for p in tree.findall('//p'):
+        content = p.text_content()
+        if len(content) < 100:
+            # skip paragraphs that are too short - probably too noisy and not
+            # representative of the actual language
+            continue
     
-class Queue(object):
-    '''Coordinate producer and consumer coroutines.
+            if not in_exercise_region or linestrip.startswith('#'):
+            output_file.write(line)
     
-          class EchoServer(TCPServer):
-          async def handle_stream(self, stream, address):
-              while True:
-                  try:
-                      data = await stream.read_until(b'\n')
-                      await stream.write(data)
-                  except StreamClosedError:
-                      break
+    plt.show()
+
     
-        # Use our overridden copy method for the copy.copy module.
-    # This makes shallow copies one level deeper, but preserves
-    # the appearance that HTTPHeaders is a single container.
-    __copy__ = copy
+    '''
+print(__doc__)
     
-            :info string key: More detailed timeout information.
+    # One entry per manual page. List of tuples
+# (source start file, name, description, authors, manual section).
+man_pages = [
+    (master_doc, 'certbot-compatibility-test',
+     u'certbot-compatibility-test Documentation',
+     [author], 1)
+]
+    
+        def entry_ok(self):
+        'Return sensible ConfigParser section name or None.'
+        self.entry_error['text'] = ''
+        name = self.entry.get().strip()
+        if not name:
+            self.showerror('no name specified.')
+            return None
+        elif len(name)>30:
+            self.showerror('name is longer than 30 characters.')
+            return None
+        elif name in self.used_names:
+            self.showerror('name is already in use.')
+            return None
+        return name
+    
+        >>> median_grouped([1, 3, 3, 5, 7], interval=1)
+    3.25
+    >>> median_grouped([1, 3, 3, 5, 7], interval=2)
+    3.5
+    
+    if C is not None:
+    c = C.getcontext()
+    c.prec = C.MAX_PREC
+    c.Emax = C.MAX_EMAX
+    c.Emin = C.MIN_EMIN
+    
+    def _unparse_datetime(dt, legacy=False):
+    '''Format a date or datetime object as a pair of (date, time) strings
+    in the format required by the NEWNEWS and NEWGROUPS commands.  If a
+    date object is passed, the time is assumed to be midnight (00h00).
+    
+        def test_oldargs0_2_ext(self):
+        try:
+            {}.keys(*(1, 2))
+        except TypeError:
+            pass
+        else:
+            raise RuntimeError
+    
+        def testRecv(self):
+        # Testing non-blocking recv
+        conn, addr = self.serv.accept()
+        conn.setblocking(0)
+        try:
+            msg = conn.recv(len(MSG))
+        except OSError:
+            pass
+        else:
+            self.fail('Error trying to do non-blocking recv.')
+        read, write, err = select.select([conn], [], [])
+        if conn in read:
+            msg = conn.recv(len(MSG))
+            conn.close()
+            self.assertEqual(msg, MSG)
+        else:
+            self.fail('Error during select call to non-blocking socket.')
+    
         '''
-        self._timeout = None
-        error_message = 'Timeout {0}'.format(info) if info else 'Timeout'
-        if self.final_callback is not None:
-            self._handle_exception(HTTPTimeoutError, HTTPTimeoutError(error_message),
-                                   None)
+    good = ['/', '/test.html']
+    bad = ['/cyberworld/map/index.html']
+    site_maps = ['http://www.gstatic.com/s2/sitemaps/profiles-sitemap.xml',
+                 'http://www.google.com/hostednews/sitemap_index.xml']
+    
+        def test_processor(self):
+        res = platform.processor()
+    
+        router = RuleRouter([
+        Rule(PathMatches('/handler'), ConnectionDelegate()),
+        # ... more rules
+    ])
+    
+    from tornado.http1connection import HTTP1Connection
+from tornado.httputil import HTTPMessageDelegate
+from tornado.iostream import IOStream
+from tornado.locks import Event
+from tornado.netutil import add_accept_handler
+from tornado.testing import AsyncTestCase, bind_unused_port, gen_test
+    
+    from tornado.escape import json_decode
+from tornado.test.httpserver_test import TypeCheckHandler
+from tornado.test.util import ignore_deprecation
+from tornado.testing import AsyncHTTPTestCase
+from tornado.web import RequestHandler, Application
+from tornado.wsgi import WSGIApplication, WSGIContainer, WSGIAdapter
+    
+        In WSGI mode asynchronous methods are not supported.  This means
+    that it is not possible to use `.AsyncHTTPClient`, or the
+    `tornado.auth` or `tornado.websocket` modules.
+    
+    
+@implementer(IDelayedCall)
+class TornadoDelayedCall(object):
+    '''DelayedCall object for Tornado.'''
+    def __init__(self, reactor, seconds, f, *args, **kw):
+        self._reactor = reactor
+        self._func = functools.partial(f, *args, **kw)
+        self._time = self._reactor.seconds() + seconds
+        self._timeout = self._reactor._io_loop.add_timeout(self._time,
+                                                           self._called)
+        self._active = True
+    
+        if not cap_contexts[0][0] and not cap_contexts[0][1]:
+        # Fast path when there are no active contexts.
+        def null_wrapper(*args, **kwargs):
+            try:
+                current_state = _state.contexts
+                _state.contexts = cap_contexts[0]
+                return fn(*args, **kwargs)
+            finally:
+                _state.contexts = current_state
+        null_wrapper._wrapped = True
+        return null_wrapper
+    
+            # Timeout passed to wait()
+        self.io_loop.add_timeout(time() + 1, self.stop)
+        with self.assertRaises(self.failureException):
+            self.wait(timeout=0.01)
+    
+                sockets = bind_sockets(0, address='127.0.0.1')
+            fork_processes(3)
+            server = TCPServer()
+            server.add_sockets(sockets)
+            IOLoop.current().run_sync(lambda: None)
+            print(task_id(), end='')
+        ''')
+        out = self.run_subproc(code)
+        self.assertEqual(''.join(sorted(out)), '012')
