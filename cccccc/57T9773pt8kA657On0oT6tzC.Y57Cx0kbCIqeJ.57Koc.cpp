@@ -1,182 +1,368 @@
 
         
-        Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+         private:
+  // The following methods are implemented by platform-specific implementations
+  // of this class.
+  //
+  // Start/StopListening are called when transitioning between zero and nonzero
+  // registered accelerators. StartListening will be called after
+  // RegisterAcceleratorImpl and StopListening will be called after
+  // UnregisterAcceleratorImpl.
+  //
+  // For RegisterAcceleratorImpl, implementations return false if registration
+  // did not complete successfully.
+  virtual void StartListening() = 0;
+  virtual void StopListening() = 0;
+  virtual bool RegisterAcceleratorImpl(const ui::Accelerator& accelerator) = 0;
+  virtual void UnregisterAcceleratorImpl(
+      const ui::Accelerator& accelerator) = 0;
     
-      double PrimalLossDerivative(const double wx, const double label,
-                              const double example_weight) const final {
-    if (label * wx >= 1) {
-      return 0;
+    // filenames
+const base::FilePath::CharType kCacheDirname[] = FPL('Cache');
+const base::FilePath::CharType kChannelIDFilename[] = FPL('Origin Bound Certs');
+const base::FilePath::CharType kCookieFilename[] = FPL('Cookies');
+const base::FilePath::CharType kCRLSetFilename[] =
+    FPL('Certificate Revocation Lists');
+const base::FilePath::CharType kCustomDictionaryFileName[] =
+    FPL('Custom Dictionary.txt');
+const base::FilePath::CharType kExtensionActivityLogFilename[] =
+    FPL('Extension Activity');
+const base::FilePath::CharType kExtensionsCookieFilename[] =
+    FPL('Extension Cookies');
+const base::FilePath::CharType kFirstRunSentinel[] = FPL('First Run');
+const base::FilePath::CharType kGCMStoreDirname[] = FPL('GCM Store');
+const base::FilePath::CharType kLocalStateFilename[] = FPL('Local State');
+const base::FilePath::CharType kLocalStorePoolName[] = FPL('LocalStorePool');
+const base::FilePath::CharType kMediaCacheDirname[] = FPL('Media Cache');
+const base::FilePath::CharType kNetworkPersistentStateFilename[] =
+    FPL('Network Persistent State');
+const base::FilePath::CharType kOfflinePageArchviesDirname[] =
+    FPL('Offline Pages/archives');
+const base::FilePath::CharType kOfflinePageMetadataDirname[] =
+    FPL('Offline Pages/metadata');
+const base::FilePath::CharType kPreferencesFilename[] = FPL('Preferences');
+const base::FilePath::CharType kProtectedPreferencesFilenameDeprecated[] =
+    FPL('Protected Preferences');
+const base::FilePath::CharType kReadmeFilename[] = FPL('README');
+const base::FilePath::CharType kResetPromptMementoFilename[] =
+    FPL('Reset Prompt Memento');
+const base::FilePath::CharType kSafeBrowsingBaseFilename[] =
+    FPL('Safe Browsing');
+const base::FilePath::CharType kSecurePreferencesFilename[] =
+    FPL('Secure Preferences');
+const base::FilePath::CharType kServiceStateFileName[] = FPL('Service State');
+const base::FilePath::CharType kSingletonCookieFilename[] =
+    FPL('SingletonCookie');
+const base::FilePath::CharType kSingletonLockFilename[] = FPL('SingletonLock');
+const base::FilePath::CharType kSingletonSocketFilename[] =
+    FPL('SingletonSocket');
+const base::FilePath::CharType kSupervisedUserSettingsFilename[] =
+    FPL('Managed Mode Settings');
+const base::FilePath::CharType kThemePackFilename[] = FPL('Cached Theme.pak');
+const base::FilePath::CharType kThemePackMaterialDesignFilename[] =
+    FPL('Cached Theme Material Design.pak');
+const base::FilePath::CharType kWebAppDirname[] = FPL('Web Applications');
+    
+    bool TessUnlvRenderer::AddImageHandler(TessBaseAPI* api) {
+  const std::unique_ptr<const char[]> unlv(api->GetUNLVText());
+  if (unlv == nullptr) return false;
     }
-    if (label * wx <= 1 - gamma) {
-      return -label;
-    }
-    return (wx - label) / gamma;
+    
+      // Compute the number of unichars in the label.
+  GenericVector<UNICHAR_ID> encoding;
+  if (!unicharset.encode_string(label, true, &encoding, nullptr, nullptr)) {
+    tprintf('Not outputting illegal unichar %s\n', label);
+    return;
   }
     
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    #include 'tensorflow/core/common_runtime/device.h'
-#include 'tensorflow/core/framework/device_base.h'
-    
-    REGISTER_KERNEL_BUILDER(Name('TextLineReader').Device(DEVICE_CPU),
-                        TextLineReaderOp);
-REGISTER_KERNEL_BUILDER(Name('TextLineReaderV2').Device(DEVICE_CPU),
-                        TextLineReaderOp);
-    
-      // If instruction is part of inputs, don't reset the bit_vector.
-  if (std::find(inputs.begin(), inputs.end(), instruction) == inputs.end()) {
-    bit_vector.SetToZero();
-  }
-  bit_vector.Set(GetIndex(instruction));
-  for (const HloInstruction* input : inputs) {
-    bit_vector.OrWith(GetBitVector(input));
-  }
-    
-    #undef REGISTER_GPU
-    
-    Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an 'AS IS' BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-    
-    #include <d3d11.h>
-#pragma comment (lib, 'd3d11.lib')
-    
-                        for (int testPointIndex = 0; testPointIndex < usedPointsCount && isGeneralPosition; testPointIndex++)
-                    {
-                        if (testPointIndex == startPointIndex || testPointIndex == endPointIndex)
-                        {
-                            continue;
-                        }
+      // Counts here are of blobs in the rebuild_word / unichars in best_choice.
+  *leading_pos = *trailing_pos = SP_NORMAL;
+  int leading_outliers = 0;
+  int trailing_outliers = 0;
+  int num_normal = 0;
+  float normal_certainty_total = 0.0f;
+  float worst_normal_certainty = 0.0f;
+  ScriptPos last_pos = SP_NORMAL;
+  int num_blobs = word->rebuild_word->NumBlobs();
+  for (int b = 0; b < num_blobs; ++b) {
+    TBOX box = word->rebuild_word->blobs[b]->bounding_box();
+    ScriptPos pos = SP_NORMAL;
+    if (box.bottom() >= super_y_bottom) {
+      pos = SP_SUPERSCRIPT;
+    } else if (box.top() <= sub_y_top) {
+      pos = SP_SUBSCRIPT;
     }
-    
-                template<typename T>
-            static __device__ __forceinline__ T atomicMin(T* address, T val)
-            {
-#if defined (__CUDA_ARCH__) && (__CUDA_ARCH__ < 120)
-                T count = ::min(*address, val);
-                do
-                {
-                    *address = count;
-                } while (*address > count);
-    }
-    
-        // Extension: ARB_map_buffer_range
-    extern GLvoid* (CODEGEN_FUNCPTR *MapBufferRange)(GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access);
-    extern void (CODEGEN_FUNCPTR *FlushMappedBufferRange)(GLenum target, GLintptr offset, GLsizeiptr length);
-    
-        static void* GetProcAddress (const char* name)
-    {
-        static void* h = NULL;
-        if (!h)
-        {
-            h = dlopen('libclAmdFft.Runtime.so', RTLD_LAZY | RTLD_GLOBAL);
-            if (!h)
-                return NULL;
+    if (pos == SP_NORMAL) {
+      if (word->best_choice->unichar_id(b) != 0) {
+        float char_certainty = word->best_choice->certainty(b);
+        if (char_certainty < worst_normal_certainty) {
+          worst_normal_certainty = char_certainty;
         }
+        num_normal++;
+        normal_certainty_total += char_certainty;
+      }
+      if (trailing_outliers == b) {
+        leading_outliers = trailing_outliers;
+        *leading_pos = last_pos;
+      }
+      trailing_outliers = 0;
+    } else {
+      if (last_pos == pos) {
+        trailing_outliers++;
+      } else {
+        trailing_outliers = 1;
+      }
     }
+    last_pos = pos;
+  }
+  *trailing_pos = last_pos;
+  if (num_normal >= 3) {  // throw out the worst as an outlier.
+    num_normal--;
+    normal_certainty_total -= worst_normal_certainty;
+  }
+  if (num_normal > 0) {
+    *avg_certainty = normal_certainty_total / num_normal;
+    *unlikely_threshold = superscript_worse_certainty * (*avg_certainty);
+  }
+  if (num_normal == 0 ||
+      (leading_outliers == 0 && trailing_outliers == 0)) {
+    return;
+  }
     
-    /* [-255..255].^2 */
-const ushort g_8x16uSqrTab[] =
-{
-    65025, 64516, 64009, 63504, 63001, 62500, 62001, 61504, 61009, 60516, 60025, 59536,
-    59049, 58564, 58081, 57600, 57121, 56644, 56169, 55696, 55225, 54756, 54289, 53824,
-    53361, 52900, 52441, 51984, 51529, 51076, 50625, 50176, 49729, 49284, 48841, 48400,
-    47961, 47524, 47089, 46656, 46225, 45796, 45369, 44944, 44521, 44100, 43681, 43264,
-    42849, 42436, 42025, 41616, 41209, 40804, 40401, 40000, 39601, 39204, 38809, 38416,
-    38025, 37636, 37249, 36864, 36481, 36100, 35721, 35344, 34969, 34596, 34225, 33856,
-    33489, 33124, 32761, 32400, 32041, 31684, 31329, 30976, 30625, 30276, 29929, 29584,
-    29241, 28900, 28561, 28224, 27889, 27556, 27225, 26896, 26569, 26244, 25921, 25600,
-    25281, 24964, 24649, 24336, 24025, 23716, 23409, 23104, 22801, 22500, 22201, 21904,
-    21609, 21316, 21025, 20736, 20449, 20164, 19881, 19600, 19321, 19044, 18769, 18496,
-    18225, 17956, 17689, 17424, 17161, 16900, 16641, 16384, 16129, 15876, 15625, 15376,
-    15129, 14884, 14641, 14400, 14161, 13924, 13689, 13456, 13225, 12996, 12769, 12544,
-    12321, 12100, 11881, 11664, 11449, 11236, 11025, 10816, 10609, 10404, 10201, 10000,
-     9801,  9604,  9409,  9216,  9025,  8836,  8649,  8464,  8281,  8100,  7921,  7744,
-     7569,  7396,  7225,  7056,  6889,  6724,  6561,  6400,  6241,  6084,  5929,  5776,
-     5625,  5476,  5329,  5184,  5041,  4900,  4761,  4624,  4489,  4356,  4225,  4096,
-     3969,  3844,  3721,  3600,  3481,  3364,  3249,  3136,  3025,  2916,  2809,  2704,
-     2601,  2500,  2401,  2304,  2209,  2116,  2025,  1936,  1849,  1764,  1681,  1600,
-     1521,  1444,  1369,  1296,  1225,  1156,  1089,  1024,   961,   900,   841,   784,
-      729,   676,   625,   576,   529,   484,   441,   400,   361,   324,   289,   256,
-      225,   196,   169,   144,   121,   100,    81,    64,    49,    36,    25,    16,
-        9,     4,     1,     0,     1,     4,     9,    16,    25,    36,    49,    64,
-       81,   100,   121,   144,   169,   196,   225,   256,   289,   324,   361,   400,
-      441,   484,   529,   576,   625,   676,   729,   784,   841,   900,   961,  1024,
-     1089,  1156,  1225,  1296,  1369,  1444,  1521,  1600,  1681,  1764,  1849,  1936,
-     2025,  2116,  2209,  2304,  2401,  2500,  2601,  2704,  2809,  2916,  3025,  3136,
-     3249,  3364,  3481,  3600,  3721,  3844,  3969,  4096,  4225,  4356,  4489,  4624,
-     4761,  4900,  5041,  5184,  5329,  5476,  5625,  5776,  5929,  6084,  6241,  6400,
-     6561,  6724,  6889,  7056,  7225,  7396,  7569,  7744,  7921,  8100,  8281,  8464,
-     8649,  8836,  9025,  9216,  9409,  9604,  9801, 10000, 10201, 10404, 10609, 10816,
-    11025, 11236, 11449, 11664, 11881, 12100, 12321, 12544, 12769, 12996, 13225, 13456,
-    13689, 13924, 14161, 14400, 14641, 14884, 15129, 15376, 15625, 15876, 16129, 16384,
-    16641, 16900, 17161, 17424, 17689, 17956, 18225, 18496, 18769, 19044, 19321, 19600,
-    19881, 20164, 20449, 20736, 21025, 21316, 21609, 21904, 22201, 22500, 22801, 23104,
-    23409, 23716, 24025, 24336, 24649, 24964, 25281, 25600, 25921, 26244, 26569, 26896,
-    27225, 27556, 27889, 28224, 28561, 28900, 29241, 29584, 29929, 30276, 30625, 30976,
-    31329, 31684, 32041, 32400, 32761, 33124, 33489, 33856, 34225, 34596, 34969, 35344,
-    35721, 36100, 36481, 36864, 37249, 37636, 38025, 38416, 38809, 39204, 39601, 40000,
-    40401, 40804, 41209, 41616, 42025, 42436, 42849, 43264, 43681, 44100, 44521, 44944,
-    45369, 45796, 46225, 46656, 47089, 47524, 47961, 48400, 48841, 49284, 49729, 50176,
-    50625, 51076, 51529, 51984, 52441, 52900, 53361, 53824, 54289, 54756, 55225, 55696,
-    56169, 56644, 57121, 57600, 58081, 58564, 59049, 59536, 60025, 60516, 61009, 61504,
-    62001, 62500, 63001, 63504, 64009, 64516, 65025
+    
+// Returns the median value of the vector, given that the values are
+// circular, with the given modulus. Values may be signed or unsigned,
+// eg range from -pi to pi (modulus 2pi) or from 0 to 2pi (modulus 2pi).
+// NOTE that the array is shuffled, but the time taken is linear.
+// An assumption is made that most of the values are spread over no more than
+// half the range, but wrap-around is accounted for if the median is near
+// the wrap-around point.
+// Cannot be a member of GenericVector, as it makes heavy used of LLSQ.
+// T must be an integer or float/double type.
+template<typename T> T MedianOfCircularValues(T modulus, GenericVector<T>* v) {
+  LLSQ stats;
+  T halfrange = static_cast<T>(modulus / 2);
+  int num_elements = v->size();
+  for (int i = 0; i < num_elements; ++i) {
+    stats.add((*v)[i], (*v)[i] + halfrange);
+  }
+  bool offset_needed = stats.y_variance() < stats.x_variance();
+  if (offset_needed) {
+    for (int i = 0; i < num_elements; ++i) {
+      (*v)[i] += halfrange;
+    }
+  }
+  int median_index = v->choose_nth_item(num_elements / 2);
+  if (offset_needed) {
+    for (int i = 0; i < num_elements; ++i) {
+      (*v)[i] -= halfrange;
+    }
+  }
+  return (*v)[median_index];
+}
+    
+    const int16_t idirtab[] = {
+  1000, 0, 998, 49, 995, 98, 989, 146,
+  980, 195, 970, 242, 956, 290, 941, 336,
+  923, 382, 903, 427, 881, 471, 857, 514,
+  831, 555, 803, 595, 773, 634, 740, 671,
+  707, 707, 671, 740, 634, 773, 595, 803,
+  555, 831, 514, 857, 471, 881, 427, 903,
+  382, 923, 336, 941, 290, 956, 242, 970,
+  195, 980, 146, 989, 98, 995, 49, 998,
+  0, 1000, -49, 998, -98, 995, -146, 989,
+  -195, 980, -242, 970, -290, 956, -336, 941,
+  -382, 923, -427, 903, -471, 881, -514, 857,
+  -555, 831, -595, 803, -634, 773, -671, 740,
+  -707, 707, -740, 671, -773, 634, -803, 595,
+  -831, 555, -857, 514, -881, 471, -903, 427,
+  -923, 382, -941, 336, -956, 290, -970, 242,
+  -980, 195, -989, 146, -995, 98, -998, 49,
+  -1000, 0, -998, -49, -995, -98, -989, -146,
+  -980, -195, -970, -242, -956, -290, -941, -336,
+  -923, -382, -903, -427, -881, -471, -857, -514,
+  -831, -555, -803, -595, -773, -634, -740, -671,
+  -707, -707, -671, -740, -634, -773, -595, -803,
+  -555, -831, -514, -857, -471, -881, -427, -903,
+  -382, -923, -336, -941, -290, -956, -242, -970,
+  -195, -980, -146, -989, -98, -995, -49, -998,
+  0, -1000, 49, -998, 98, -995, 146, -989,
+  195, -980, 242, -970, 290, -956, 336, -941,
+  382, -923, 427, -903, 471, -881, 514, -857,
+  555, -831, 595, -803, 634, -773, 671, -740,
+  707, -707, 740, -671, 773, -634, 803, -595,
+  831, -555, 857, -514, 881, -471, 903, -427,
+  923, -382, 941, -336, 956, -290, 970, -242,
+  980, -195, 989, -146, 995, -98, 998, -49
 };
     
-    #include <nbind/api.h>
-#include <nbind/BindDefiner.h>
+      r['sycall_addr_modified'] = syscall_addr_modified;
+  r['text_segment_hash'] = text_segment_hash;
+  results.push_back(r);
     
-    // Class that lets you declare a global but does not add a static constructor
-// to the binary. Eventually I'd like to have this auto-initialize in a
-// multithreaded environment but for now it's easiest just to use manual
-// initialization.
-template <typename T>
-class StaticInitialized {
-public:
-  constexpr StaticInitialized() :
-    m_instance(nullptr)
-  {}
+      /**
+   * @brief Return all events added by this EventSubscriber within start, stop.
+   *
+   * This is used internally (for the most part) by EventSubscriber::genTable.
+   *
+   * @param yield The Row yield method.
+   * @param start Inclusive lower bound time limit.
+   * @param stop Inclusive upper bound time limit.
+   * @return Set of event rows matching time limits.
+   */
+  virtual void get(RowYield& yield, EventTime start, EventTime stop) final;
+    
+      /**
+   * @brief A constructor which can be used to concisely express the status of
+   * an operation.
+   *
+   * @param c a status code. The idiom is that a zero status code indicates a
+   * successful operation and a non-zero status code indicates a failed
+   * operation.
+   * @param m a message indicating some extra detail regarding the operation.
+   * If all operations were successful, this message should be 'OK'.
+   * Otherwise, it doesn't matter what the string is, as long as both the
+   * setter and caller agree.
+   */
+  Status(int c, std::string m) : code_(c), message_(std::move(m)) {}
+    
+      char* buffer = (char*)malloc(range.length + 1);
+  if (buffer == nullptr) {
+    return '';
+  }
+  memset(buffer, 0, range.length + 1);
+    
+    #include <gtest/gtest.h>
+    
+      auto status = ::strerror_s(buffer.data(), buffer.size(), errnum);
+  if (status != 0) {
+    return '';
+  }
+    
+    extern JSClass  *jsb_cocos2d_Physics3DHingeConstraint_class;
+extern JSObject *jsb_cocos2d_Physics3DHingeConstraint_prototype;
+    
+    bool js_cocos2dx_studio_ProcessBase_constructor(JSContext *cx, uint32_t argc, jsval *vp);
+void js_cocos2dx_studio_ProcessBase_finalize(JSContext *cx, JSObject *obj);
+void js_register_cocos2dx_studio_ProcessBase(JSContext *cx, JS::HandleObject global);
+void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
+bool js_cocos2dx_studio_ProcessBase_play(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ProcessBase_pause(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ProcessBase_getRawDuration(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ProcessBase_resume(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ProcessBase_setIsComplete(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ProcessBase_stop(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ProcessBase_update(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ProcessBase_getCurrentFrameIndex(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ProcessBase_isComplete(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ProcessBase_getCurrentPercent(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ProcessBase_setIsPause(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ProcessBase_getProcessScale(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ProcessBase_isPause(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ProcessBase_isPlaying(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ProcessBase_setProcessScale(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ProcessBase_setIsPlaying(JSContext *cx, uint32_t argc, jsval *vp);
+bool js_cocos2dx_studio_ProcessBase_ProcessBase(JSContext *cx, uint32_t argc, jsval *vp);
+    
+    
+    
+    
+#endif // __cocos2dx_experimental_h__
+
+    
+        cobj = (cocos2d::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    
+    
+#endif
+
+    
+    	AddPair()
+	{
+		m_world->SetGravity(b2Vec2(0.0f,0.0f));
+		{
+			b2CircleShape shape;
+			shape.m_p.SetZero();
+			shape.m_radius = 0.1f;
+    }
     }
     
-    // This allows storing the assert message before the current process terminates due to a crash
-typedef void (*AssertHandler)(const char* message);
-void setAssertHandler(AssertHandler assertHandler);
     
-      bool isDirect() const;
+    {
+    {		case 'd':
+			{
+				m_body->ApplyTorque(-50.0f, true);
+			}
+			break;
+		}
+	}
     
-      void seek(int64_t offset);
     
-      virtual bool getChangeOption() const CXX11_OVERRIDE;
+    {		Test::Step(settings);
+		m_debugDraw.DrawString(5, m_textLine, 'Keys: (d) dynamic, (s) static, (k) kinematic');
+		m_textLine += DRAW_STRING_NEW_LINE;
+	}
     
-    AdaptiveFileAllocationIterator::AdaptiveFileAllocationIterator(
-    BinaryStream* stream, int64_t offset, int64_t totalLength)
-    : stream_(stream), offset_(offset), totalLength_(totalLength)
-{
+    			b2PolygonShape shape;
+			shape.Set(vertices, 3);
+    
+    TEST(IOBuf, QueueAppenderInsertClone) {
+  IOBuf buf{IOBuf::CREATE, 100};
+  folly::IOBufQueue queue;
+  QueueAppender appender{&queue, 100};
+  // Buffer is shared, so we create a new buffer to write to
+  appender.insert(buf);
+  uint8_t x = 42;
+  appender.pushAtMost(&x, 1);
+  EXPECT_EQ(2, queue.front()->countChainElements());
+  EXPECT_EQ(0, queue.front()->length());
+  EXPECT_LT(0, queue.front()->tailroom());
+  EXPECT_EQ(1, queue.front()->next()->length());
+  EXPECT_EQ(x, queue.front()->next()->data()[0]);
 }
     
-    class BinaryStream;
+      EXPECT_EQ(hash(*empty), hash(empty));
+  EXPECT_NE(0, hash(empty));
     
-    class ApiCallbackDownloadEventListener : public DownloadEventListener {
-public:
-  ApiCallbackDownloadEventListener(Session* session,
-                                   DownloadEventCallback callback,
-                                   void* userData);
-  virtual ~ApiCallbackDownloadEventListener();
-  virtual void onEvent(DownloadEvent event,
-                       const RequestGroup* group) CXX11_OVERRIDE;
+    TEST_F(OrderingTest, ordering) {
+  EXPECT_EQ(-1, int(ordering::lt));
+  EXPECT_EQ(0, int(ordering::eq));
+  EXPECT_EQ(+1, int(ordering::gt));
+}
+    
+    
+    {} // namespace folly
+
+    
+      folly::Optional<T> try_take_for(std::chrono::milliseconds time) override {
+    T item;
+    while (!queue_.try_dequeue(item)) {
+      if (!sem_.try_wait_for(time)) {
+        return folly::none;
+      }
+    }
+    return std::move(item);
+  }
+    
+      struct Node : public hazptr_obj_base<Node, Atom> {
+    T value_;
+    Node* next_;
     }
     
-    AuthConfig::AuthConfig(std::string user, std::string password)
-    : user_(std::move(user)), password_(std::move(password))
-{
-}
+    /** Set implemented as an ordered singly-linked list.
+ *
+ *  A single writer thread may add or remove elements. Multiple reader
+ *  threads may search the set concurrently with each other and with
+ *  the writer's operations.
+ */
+template <typename T, template <typename> class Atom = std::atomic>
+class HazptrSWMRSet {
+  template <typename Node>
+  struct Reclaimer {
+    void operator()(Node* p) {
+      delete p;
+    }
+  };
+    }
+    
+    #include <folly/Utility.h>
+#include <folly/portability/GTest.h>
