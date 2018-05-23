@@ -1,275 +1,312 @@
 
         
-        
-    {PyObject* NewFileDependencies(const FileDescriptor* descriptor);
-PyObject* NewFilePublicDependencies(const FileDescriptor* descriptor);
-}  // namespace file_descriptor
+        #if defined(OS_LINUX) || defined(OS_WIN)
+#include 'content/nw/src/browser/menubar_view.h'
+#include 'content/nw/src/browser/browser_view_layout.h'
+using nw::BrowserViewLayout;
+#endif
     
-    TEST(AnyTest, TestIs) {
-  protobuf_unittest::TestAny submessage;
-  submessage.set_int32_value(12345);
-  google::protobuf::Any any;
-  any.PackFrom(submessage);
-  ASSERT_TRUE(any.ParseFromString(any.SerializeAsString()));
-  EXPECT_TRUE(any.Is<protobuf_unittest::TestAny>());
-  EXPECT_FALSE(any.Is<google::protobuf::Any>());
-    }
-    
-      virtual void Generate(io::Printer* printer);
-    
-    // Tucks all generator state in an anonymous namespace away from
-// PythonGrpcGenerator and the header file, mostly to encourage future changes
-// to not require updates to the grpcio-tools C++ code part. Assumes that it is
-// only ever used from a single thread.
-struct PrivateGenerator {
-  const GeneratorConfiguration& config;
-  const grpc_generator::File* file;
-    }
-    
-    static void sigint_handler(int x) {
-  gpr_atm_no_barrier_store(&grpc::testing::interop::g_got_sigint, true);
-}
-    
-    namespace grpc {
-    }
-    
-    QueryData genKernelIntegrity(QueryContext &context) {
-  QueryData results;
-  Row r;
-  std::string content;
-  std::string text_segment_hash;
-  std::string syscall_addr_modified;
-    }
+      virtual void Call(const std::string& method,
+                    const base::ListValue& arguments,
+                    content::RenderFrameHost* rvh = nullptr);
+  virtual void CallSync(const std::string& method,
+                        const base::ListValue& arguments,
+                        base::ListValue* result);
     
     
-    {  if (osquery.buffer) {
-    IOFreeAligned(osquery.buffer, osquery.buf_size);
-    osquery.buffer = NULL;
+    {  gfx::Image originImage;
+  nw::Package* package = nw::InitNWPackage();
+  if (nw::GetImage(package, base::FilePath::FromUTF8Unsafe(icon), &originImage)) {
+    const gfx::ImageSkia* originImageSkia = originImage.ToImageSkia();
+    gfx::ImageSkia resizedImageSkia = gfx::ImageSkiaOperations::CreateResizedImage(*originImageSkia,
+                                                                                   skia::ImageOperations::RESIZE_GOOD,
+                                                                                   gfx::Size(kIconWidth, kIconHeight));
+    icon_ = gfx::Image(resizedImageSkia);
   }
 }
     
     
-    {  c.reset();
+    {  remover->AddObserver(this);
+  remover->RemoveAndReply(base::Time(), base::Time::Max(),
+                          content::BrowsingDataRemover::DATA_TYPE_CACHE,
+                          content::BrowsingDataRemover::ORIGIN_TYPE_UNPROTECTED_WEB,
+                          this);
+  // BrowsingDataRemover deletes itself.
+  base::MessageLoop::ScopedNestableTaskAllower allow(
+        base::MessageLoop::current());
+  run_loop_.Run();
+  remover->RemoveObserver(this);
+  return true;
+}
+    
+     protected:
+  ~NwAppClearCacheFunction() override;
+    
+    #include 'chrome/browser/devtools/devtools_window.h'
+#include 'chrome/browser/extensions/devtools_util.h'
+#include 'chrome/browser/extensions/extension_service.h'
+#include 'content/nw/src/api/menuitem/menuitem.h'
+#include 'content/nw/src/api/object_manager.h'
+#include 'content/public/browser/render_view_host.h'
+#include 'content/public/browser/web_contents.h'
+#include 'extensions/browser/extension_system.h'
+#include 'extensions/common/error_utils.h'
+    
+     protected:
+  ~NwObjDestroyFunction() override;
+    
+    namespace oneof_descriptor {
+PyObject* NewOneofFieldsSeq(const OneofDescriptor* descriptor);
+}  // namespace oneof_descriptor
+    
+    
+    {  ASSERT_TRUE(message.ParseFromString(data));
+  EXPECT_TRUE(message.has_any_value());
+  ASSERT_TRUE(message.any_value().UnpackTo(&any));
+  ASSERT_TRUE(any.UnpackTo(&submessage));
+  EXPECT_EQ(12345, submessage.int32_value());
 }
     
     
-    {  // Cleanup allocations.
-  free(buffer);
-  return result.str();
-}
-    
-    #include 'osquery/core/utils.h'
-    
-    #include <gtest/gtest.h>
-    
-      EXPECT_FALSE(cl3.matches(1001));
-  EXPECT_TRUE(cl3.matches(1000));
     
     
     {
-    {  EXPECT_EQ(expected, toAsciiTimeUTC(&result));
-}
-}
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+    
+    
+    {}  // namespace google
+#endif  // GOOGLE_PROTOBUF_COMPILER_JAVA_EXTENSION_LITE_H__
 
     
-     public:
-  /// Data retrieval method.
-  Status get(const std::string& domain,
-             const std::string& key,
-             std::string& value) const override;
-    
-        // Helper methods
-    static bool HasFamilyNamed(std::string& name, DBWrapper* db);
-    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
-        Handle<Array> array);
-    static bool AddToBatch(rocksdb::WriteBatch& batch, bool del,
-        Handle<Array> array, DBWrapper* db_wrapper, std::string cf);
-    static Handle<Value> CompactRangeDefault(const v8::Arguments& args);
-    static Handle<Value> CompactColumnFamily(const Arguments& args);
-    static Handle<Value> CompactOptions(const Arguments& args);
-    static Handle<Value> CompactAll(const Arguments& args);
-    
-      virtual const char* Name() const override;
+      // Builder addAllRepeatedField(Iterable<Field> values)
+  WriteFieldDocComment(printer, descriptor_);
+  PrintNestedBuilderFunction(printer,
+    '$deprecation$public Builder addAll$capitalized_name$(\n'
+    '    java.lang.Iterable<? extends $type$> values)',
     
     
-    {  ASSERT_TRUE(status);
-  ASSERT_EQ(res, 'v1,v2,v3');
-}
+    {}  // namespace testing
     
-    namespace log {
-    }
     
-    void JniCallback::releaseJniEnv(jboolean& attached) const {
-  JniUtil::releaseJniEnv(m_jvm, attached);
-}
+    {  // The name of the source file where the test part took place, or
+  // '' if the source file is unknown.
+  std::string file_name_;
+  // The line in the source file where the test part took place, or -1
+  // if the line number is unknown.
+  int line_number_;
+  std::string summary_;  // The test failure summary.
+  std::string message_;  // The test failure message.
+};
     
-      bool StatisticsJni::HistEnabledForType(uint32_t type) const {
-    if (type >= HISTOGRAM_ENUM_MAX) {
-      return false;
-    }
+    // If *pstr starts with the given prefix, modifies *pstr to be right
+// past the prefix and returns true; otherwise leaves *pstr unchanged
+// and returns false.  None of pstr, *pstr, and prefix can be NULL.
+GTEST_API_ bool SkipPrefix(const char* prefix, const char** pstr);
     
-    if (m_ignore_histograms.count(type) > 0) {
-        return false;
-    }
-    }
+      // Compares two wide C strings, ignoring case.  Returns true iff they
+  // have the same content.
+  //
+  // Unlike wcscasecmp(), this function can handle NULL argument(s).
+  // A NULL C string is considered different to any non-NULL wide C string,
+  // including the empty string.
+  // NB: The implementations on different platforms slightly differ.
+  // On windows, this method uses _wcsicmp which compares according to LC_CTYPE
+  // environment variable. On GNU platform this method uses wcscasecmp
+  // which compares according to LC_CTYPE category of the current locale.
+  // On MacOS X, it uses towlower, which also uses LC_CTYPE category of the
+  // current locale.
+  static bool CaseInsensitiveWideCStringEquals(const wchar_t* lhs,
+                                               const wchar_t* rhs);
     
-      /**
-   * @brief append data to file
-   * @details
-   *  Append will save all written data in buffer util buffer size
-   *  reaches buffer max size. Then, it will write buffer into rados
-   *
-   * @param data [description]
-   * @return [description]
-   */
-  Status Append(const Slice& data) {
-    // append buffer
-    LOG_DEBUG('[IN] %i | %s\n', (int)data.size(), data.data());
-    int r = 0;
-    }
-    
-      virtual MemTableRep* CreateMemTableRep(const MemTableRep::KeyComparator&,
-                                         Allocator*, const SliceTransform*,
-                                         Logger* logger) = 0;
-  virtual MemTableRep* CreateMemTableRep(
-      const MemTableRep::KeyComparator& key_cmp, Allocator* allocator,
-      const SliceTransform* slice_transform, Logger* logger,
-      uint32_t /* column_family_id */) {
-    return CreateMemTableRep(key_cmp, allocator, slice_transform, logger);
+    // Implementation #2 pre-calculates the primes and stores the result
+// in an array.
+class PreCalculatedPrimeTable : public PrimeTable {
+ public:
+  // 'max' specifies the maximum number the prime table holds.
+  explicit PreCalculatedPrimeTable(int max)
+      : is_prime_size_(max + 1), is_prime_(new bool[max + 1]) {
+    CalculatePrimesUpTo(max);
   }
+  virtual ~PreCalculatedPrimeTable() { delete[] is_prime_; }
+    }
     
-    void SyncPoint::SetCallBack(const std::string& point,
-  const std::function<void(void*)>& callback) {
-  impl_->SetCallBack(point, callback);
-}
+    int main(int argc, char **argv) {
+  InitGoogleTest(&argc, argv);
+    }
     
-      void Clear() { rep_.clear(); }
+        // Attempts to compute the error signal for the whole utterance, which will
+    // be fed to the neural network as features. Currently it is a workaround
+    // for the two-forward-pass sequence and ctc training, which allows
+    // processing more utterances at the same time. Only used in Kaldi2Reader.
+    // TODO: move the two-forward-pass support out of the reader.
+    void AttemptUtteranceDerivativeFeatures(ComputationNetworkPtr net,
+                                            IDataReader* trainSetDataReader,
+                                            const std::vector<ComputationNodeBasePtr>& featureNodes,
+                                            StreamMinibatchInputs* inputMatrices);
     
+        OperatorSchemaSetter& OperatorSchemaSetter::FillUsing(std::function<void(OperatorSchemaSetter&)> populator)
+    {
+        if (populator) {
+            populator(*this);
+        }
+        return *this;
+    }
     
-    {  return _URC_NO_REASON;
-}
-    
-    NBIND_CLASS(Value)
+    namespace ONNXIR
 {
-    construct<>();
-    construct<int, double>();
-}
+    namespace Common
+    {
+        Status::Status(StatusCategory p_category, int p_code, const std::string& p_msg)
+        {
+            m_state.reset(new State());
+            m_state->m_category = p_category;
+            m_state->m_code = p_code;
+            m_state->m_msg = p_msg;
+        }
+    }
+    }
     
-    namespace facebook {
+                    if (IsLittleEndianOrder())
+                {
+                    memcpy((void*)p_data, (void*)buff, raw_data.size() * sizeof(char));
+                }
+                else
+                {
+                    for (size_t i = 0; i < raw_data.size(); i += typeSize, buff += typeSize)
+                    {
+                        T result;
+                        const char* tempBytes = reinterpret_cast<char*>(&result);
+                        for (size_t j = 0; j < typeSize; ++j)
+                        {
+                            memcpy((void*)&tempBytes[j], (void*)&buff[typeSize - 1 - i], sizeof(char));
+                        }
+                        p_data[i] = result;
+                    }
+                }
+    
+    
+    {        const size_t ts = m_firstFrames[index];
+        const size_t n = m_utterances[index].GetNumberOfFrames();
+        return msra::dbn::matrixstripe(m_frames, ts, n);
     }
     
     
-    {  // There are subtle issues with calling the next functions directly. It is
-  // much better to always use a ThreadScope to manage attaching/detaching for
-  // you.
-  FBEXPORT static JNIEnv* ensureCurrentThreadIsAttached();
-  FBEXPORT static void detachCurrentThread();
+// Represents a chunk data in memory. Given up to the randomizer.
+// It is up to the randomizer to decide when to release a particular chunk.
+class HTKDeserializer::HTKChunk : public Chunk, boost::noncopyable
+{
+public:
+    HTKChunk(HTKDeserializer* parent, ChunkIdType chunkId) : m_parent(parent), m_chunkId(chunkId)
+    {
+        auto& chunkInfo = m_parent->m_chunks[chunkId];
+    }
+    }
+    
+        // regular matrix product
+    // Avoid this, not efficient either way.
+    void matprod(const ssematrixbase &A, const ssematrixbase &B)
+    {
+        // ... TODO: put a resize() here and all matmul, so we don't need to set size upfront
+        auto &us = *this;
+        assert(us.rows() == A.rows() && B.cols() == us.cols());
+        size_t K = A.cols();
+        assert(K == B.rows());
+        foreach_coord (i, j, us)
+        {
+            float sum = 0.0;
+            for (size_t k = 0; k < K; k++)
+                sum += A(i, k) * B(k, j);
+            us(i, j) = sum;
+        }
+    }
+    
+    
+    {    // copy mD to dense and compare
+    Matrix<float> mE = Matrix<float>::Zeros(dim1, dim1, c_deviceIdZero);
+    Matrix<float>::ScaleAndAdd(1, mD, mE);
+    BOOST_CHECK(mE.IsEqualTo(mC, c_epsilonFloatE4));
+}
+    
+        bnNodes = m_net->SortByGlobalEvalOrder(bnNodes);
+    for (auto& node : bnNodes)
+    {
+        let bnNode = static_pointer_cast<BatchNormalizationNode<ElemType>>(node);
+        size_t actualMBSize = 0;
+    }
+    
+    #include <algorithm>
+#include <cmath>
+    
+          // The sentinel node becomes the parent node.
+      size_t j_end = 2 * n - k;
+      tree[j_end].total_count_ =
+          tree[left].total_count_ + tree[right].total_count_;
+      tree[j_end].index_left_ = static_cast<int16_t>(left);
+      tree[j_end].index_right_or_value_ = static_cast<int16_t>(right);
+    
+    #include <stddef.h>
+#include <stdint.h>
+    
+    // Creates a JPEG from the rgb pixel data. Returns true on success. The given
+// quantization table must have 3 * kDCTBlockSize values.
+bool EncodeRGBToJpeg(const std::vector<uint8_t>& rgb, int w, int h,
+                     const int* quant, JPEGData* jpg);
+    
+    enum JPEGReadError {
+  JPEG_OK = 0,
+  JPEG_SOI_NOT_FOUND,
+  JPEG_SOF_NOT_FOUND,
+  JPEG_UNEXPECTED_EOF,
+  JPEG_MARKER_BYTE_NOT_FOUND,
+  JPEG_UNSUPPORTED_MARKER,
+  JPEG_WRONG_MARKER_SIZE,
+  JPEG_INVALID_PRECISION,
+  JPEG_INVALID_WIDTH,
+  JPEG_INVALID_HEIGHT,
+  JPEG_INVALID_NUMCOMP,
+  JPEG_INVALID_SAMP_FACTOR,
+  JPEG_INVALID_START_OF_SCAN,
+  JPEG_INVALID_END_OF_SCAN,
+  JPEG_INVALID_SCAN_BIT_POSITION,
+  JPEG_INVALID_COMPS_IN_SCAN,
+  JPEG_INVALID_HUFFMAN_INDEX,
+  JPEG_INVALID_QUANT_TBL_INDEX,
+  JPEG_INVALID_QUANT_VAL,
+  JPEG_INVALID_MARKER_LEN,
+  JPEG_INVALID_SAMPLING_FACTORS,
+  JPEG_INVALID_HUFFMAN_CODE,
+  JPEG_INVALID_SYMBOL,
+  JPEG_NON_REPRESENTABLE_DC_COEFF,
+  JPEG_NON_REPRESENTABLE_AC_COEFF,
+  JPEG_INVALID_SCAN,
+  JPEG_OVERLAPPING_SCANS,
+  JPEG_INVALID_SCAN_ORDER,
+  JPEG_EXTRA_ZERO_RUN,
+  JPEG_DUPLICATE_DRI,
+  JPEG_DUPLICATE_SOF,
+  JPEG_WRONG_RESTART_MARKER,
+  JPEG_DUPLICATE_COMPONENT_ID,
+  JPEG_COMPONENT_NOT_FOUND,
+  JPEG_HUFFMAN_TABLE_NOT_FOUND,
+  JPEG_HUFFMAN_TABLE_ERROR,
+  JPEG_QUANT_TABLE_NOT_FOUND,
+  JPEG_EMPTY_DHT,
+  JPEG_EMPTY_DQT,
+  JPEG_OUT_OF_BAND_COEFF,
+  JPEG_EOB_RUN_TOO_LONG,
+  JPEG_IMAGE_TOO_LARGE,
 };
     
-    private:
-  void initialize() {
-    int ret = pthread_key_create(&m_key, m_cleanup);
-    if (ret != 0) {
-      const char *msg = '(unknown error)';
-      switch (ret) {
-      case EAGAIN:
-        msg = 'PTHREAD_KEYS_MAX (1024) is exceeded';
-        break;
-      case ENOMEM:
-        msg = 'Out-of-memory';
-        break;
-      }
-      (void) msg;
-      FBASSERTMSGF(0, 'pthread_key_create failed: %d %s', ret, msg);
-    }
-  }
-    
-    int RunOneTest(Fuzzer *F, const char *InputFilePath, size_t MaxLen) {
-  Unit U = FileToVector(InputFilePath);
-  if (MaxLen && MaxLen < U.size())
-    U.resize(MaxLen);
-  F->RunOne(U.data(), U.size());
-  F->TryDetectingAMemoryLeak(U.data(), U.size(), true);
-  return 0;
+    double ButteraugliScoreForQuality(double quality) {
+  if (quality < kLowestQuality) quality = kLowestQuality;
+  if (quality > kHighestQuality) quality = kHighestQuality;
+  int index = static_cast<int>(quality);
+  double mix = quality - index;
+  return kScoreForQuality[index - kLowestQuality] * (1 - mix) +
+      kScoreForQuality[index - kLowestQuality + 1] * mix;
 }
-    
-    #endif // LIBFUZZER_APPLE
-
-    
-    ExternalFunctions::ExternalFunctions() {
-#define EXT_FUNC(NAME, RETURN_TYPE, FUNC_SIG, WARN)                            \
-  this->NAME = ::NAME;                                                         \
-  CheckFnPtr((void *)::NAME, #NAME, WARN);
-    }
-    
-    int DuplicateFile(int Fd) {
-  return dup(Fd);
-}
-    
-      DWORD LastError = GetLastError();
-  if (LastError != ERROR_NO_MORE_FILES)
-    Printf('FindNextFileA failed (Error code: %lu).\n', LastError);
-    
-      bool HasMoreMallocsThanFrees = false;
-  size_t NumberOfLeakDetectionAttempts = 0;
-    
-    struct FuzzingOptions {
-  int Verbosity = 1;
-  size_t MaxLen = 0;
-  int UnitTimeoutSec = 300;
-  int TimeoutExitCode = 77;
-  int ErrorExitCode = 77;
-  int MaxTotalTimeSec = 0;
-  int RssLimitMb = 0;
-  bool DoCrossOver = true;
-  int MutateDepth = 5;
-  bool UseCounters = false;
-  bool UseIndirCalls = true;
-  bool UseMemcmp = true;
-  bool UseMemmem = true;
-  bool UseCmp = false;
-  bool UseValueProfile = false;
-  bool Shrink = false;
-  int ReloadIntervalSec = 1;
-  bool ShuffleAtStartUp = true;
-  bool PreferSmall = true;
-  size_t MaxNumberOfRuns = -1L;
-  int ReportSlowUnits = 10;
-  bool OnlyASCII = false;
-  std::string OutputCorpus;
-  std::string ArtifactPrefix = './';
-  std::string ExactArtifactPath;
-  std::string ExitOnSrcPos;
-  std::string ExitOnItem;
-  bool SaveArtifacts = true;
-  bool PrintNEW = true; // Print a status line when new units are found;
-  bool OutputCSV = false;
-  bool PrintNewCovPcs = false;
-  bool PrintFinalStats = false;
-  bool PrintCorpusStats = false;
-  bool PrintCoverage = false;
-  bool DumpCoverage = false;
-  bool DetectLeaks = true;
-  int  TraceMalloc = 0;
-  bool HandleAbrt = false;
-  bool HandleBus = false;
-  bool HandleFpe = false;
-  bool HandleIll = false;
-  bool HandleInt = false;
-  bool HandleSegv = false;
-  bool HandleTerm = false;
-};
-    
-      std::string CoveredDirsStr;
-  for (auto &Dir : CoveredDirs) {
-    if (!CoveredDirsStr.empty())
-      CoveredDirsStr += ',';
-    CoveredDirsStr += Dir;
-  }
-  Printf('COVERED_DIRS: %s\n', CoveredDirsStr.c_str());
-    
-    void Print(const Unit &v, const char *PrintAfter) {
-  PrintHexArray(v.data(), v.size(), PrintAfter);
-}
-    
-    FILE *OpenProcessPipe(const char *Command, const char *Mode);
