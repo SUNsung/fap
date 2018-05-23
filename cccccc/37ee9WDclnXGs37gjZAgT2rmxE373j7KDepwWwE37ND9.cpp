@@ -1,196 +1,422 @@
 
         
-        void dls::compute_eigenvec(const cv::Mat& Mtilde, cv::Mat& eigenval_real, cv::Mat& eigenval_imag,
-                                                  cv::Mat& eigenvec_real, cv::Mat& eigenvec_imag)
-{
-#ifdef HAVE_EIGEN
-    Eigen::MatrixXd Mtilde_eig, zeros_eig;
-    cv::cv2eigen(Mtilde, Mtilde_eig);
-    cv::cv2eigen(cv::Mat::zeros(27, 27, CV_64F), zeros_eig);
-    }
+        Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
     
-    #ifndef GL_VERSION_2_0
-    // GL type for program/shader text
-    typedef char GLchar;
-#endif
     
-    /* [-255..255].^2 */
-const ushort g_8x16uSqrTab[] =
-{
-    65025, 64516, 64009, 63504, 63001, 62500, 62001, 61504, 61009, 60516, 60025, 59536,
-    59049, 58564, 58081, 57600, 57121, 56644, 56169, 55696, 55225, 54756, 54289, 53824,
-    53361, 52900, 52441, 51984, 51529, 51076, 50625, 50176, 49729, 49284, 48841, 48400,
-    47961, 47524, 47089, 46656, 46225, 45796, 45369, 44944, 44521, 44100, 43681, 43264,
-    42849, 42436, 42025, 41616, 41209, 40804, 40401, 40000, 39601, 39204, 38809, 38416,
-    38025, 37636, 37249, 36864, 36481, 36100, 35721, 35344, 34969, 34596, 34225, 33856,
-    33489, 33124, 32761, 32400, 32041, 31684, 31329, 30976, 30625, 30276, 29929, 29584,
-    29241, 28900, 28561, 28224, 27889, 27556, 27225, 26896, 26569, 26244, 25921, 25600,
-    25281, 24964, 24649, 24336, 24025, 23716, 23409, 23104, 22801, 22500, 22201, 21904,
-    21609, 21316, 21025, 20736, 20449, 20164, 19881, 19600, 19321, 19044, 18769, 18496,
-    18225, 17956, 17689, 17424, 17161, 16900, 16641, 16384, 16129, 15876, 15625, 15376,
-    15129, 14884, 14641, 14400, 14161, 13924, 13689, 13456, 13225, 12996, 12769, 12544,
-    12321, 12100, 11881, 11664, 11449, 11236, 11025, 10816, 10609, 10404, 10201, 10000,
-     9801,  9604,  9409,  9216,  9025,  8836,  8649,  8464,  8281,  8100,  7921,  7744,
-     7569,  7396,  7225,  7056,  6889,  6724,  6561,  6400,  6241,  6084,  5929,  5776,
-     5625,  5476,  5329,  5184,  5041,  4900,  4761,  4624,  4489,  4356,  4225,  4096,
-     3969,  3844,  3721,  3600,  3481,  3364,  3249,  3136,  3025,  2916,  2809,  2704,
-     2601,  2500,  2401,  2304,  2209,  2116,  2025,  1936,  1849,  1764,  1681,  1600,
-     1521,  1444,  1369,  1296,  1225,  1156,  1089,  1024,   961,   900,   841,   784,
-      729,   676,   625,   576,   529,   484,   441,   400,   361,   324,   289,   256,
-      225,   196,   169,   144,   121,   100,    81,    64,    49,    36,    25,    16,
-        9,     4,     1,     0,     1,     4,     9,    16,    25,    36,    49,    64,
-       81,   100,   121,   144,   169,   196,   225,   256,   289,   324,   361,   400,
-      441,   484,   529,   576,   625,   676,   729,   784,   841,   900,   961,  1024,
-     1089,  1156,  1225,  1296,  1369,  1444,  1521,  1600,  1681,  1764,  1849,  1936,
-     2025,  2116,  2209,  2304,  2401,  2500,  2601,  2704,  2809,  2916,  3025,  3136,
-     3249,  3364,  3481,  3600,  3721,  3844,  3969,  4096,  4225,  4356,  4489,  4624,
-     4761,  4900,  5041,  5184,  5329,  5476,  5625,  5776,  5929,  6084,  6241,  6400,
-     6561,  6724,  6889,  7056,  7225,  7396,  7569,  7744,  7921,  8100,  8281,  8464,
-     8649,  8836,  9025,  9216,  9409,  9604,  9801, 10000, 10201, 10404, 10609, 10816,
-    11025, 11236, 11449, 11664, 11881, 12100, 12321, 12544, 12769, 12996, 13225, 13456,
-    13689, 13924, 14161, 14400, 14641, 14884, 15129, 15376, 15625, 15876, 16129, 16384,
-    16641, 16900, 17161, 17424, 17689, 17956, 18225, 18496, 18769, 19044, 19321, 19600,
-    19881, 20164, 20449, 20736, 21025, 21316, 21609, 21904, 22201, 22500, 22801, 23104,
-    23409, 23716, 24025, 24336, 24649, 24964, 25281, 25600, 25921, 26244, 26569, 26896,
-    27225, 27556, 27889, 28224, 28561, 28900, 29241, 29584, 29929, 30276, 30625, 30976,
-    31329, 31684, 32041, 32400, 32761, 33124, 33489, 33856, 34225, 34596, 34969, 35344,
-    35721, 36100, 36481, 36864, 37249, 37636, 38025, 38416, 38809, 39204, 39601, 40000,
-    40401, 40804, 41209, 41616, 42025, 42436, 42849, 43264, 43681, 44100, 44521, 44944,
-    45369, 45796, 46225, 46656, 47089, 47524, 47961, 48400, 48841, 49284, 49729, 50176,
-    50625, 51076, 51529, 51984, 52441, 52900, 53361, 53824, 54289, 54756, 55225, 55696,
-    56169, 56644, 57121, 57600, 58081, 58564, 59049, 59536, 60025, 60516, 61009, 61504,
-    62001, 62500, 63001, 63504, 64009, 64516, 65025
+    {  TF_DISALLOW_COPY_AND_ASSIGN(RecordWriter);
 };
     
-    Classifier::Classifier(const string& model_file,
-                       const string& trained_file,
-                       const string& mean_file,
-                       const string& label_file) {
-#ifdef CPU_ONLY
-  Caffe::set_mode(Caffe::CPU);
-#else
-  Caffe::set_mode(Caffe::GPU);
-#endif
+    /** scalar_tanh_fast_derivative_op
+  * \ingroup CXX11_NeuralNetworks_Module
+  * \brief Template functor to compute the fast derivative of a tanh
+  *
+  * Input should be the backpropagated gradient.
+  *
+  * \sa class CwiseUnaryOp, Cwise::tanh_fast_derivative()
+  */
+template <typename T>
+struct scalar_tanh_fast_derivative_op {
+  EIGEN_EMPTY_STRUCT_CTOR(scalar_tanh_fast_derivative_op)
+  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE T operator()(const T& y) const {
+    const T one = T(1);
+    return one - (y * y);
+  }
     }
     
-    void convert_dataset(const char* image_filename, const char* label_filename,
-        const char* db_path, const string& db_backend) {
-  // Open files
-  std::ifstream image_file(image_filename, std::ios::in | std::ios::binary);
-  std::ifstream label_file(label_filename, std::ios::in | std::ios::binary);
-  CHECK(image_file) << 'Unable to open file ' << image_filename;
-  CHECK(label_file) << 'Unable to open file ' << label_filename;
-  // Read the magic and the meta data
-  uint32_t magic;
-  uint32_t num_items;
-  uint32_t num_labels;
-  uint32_t rows;
-  uint32_t cols;
+    void SYCLDeviceContext::CopyCPUTensorToDevice(const Tensor *cpu_tensor,
+                                              Device *device,
+                                              Tensor *device_tensor,
+                                              StatusCallback done) const {
+  const int64 total_bytes = cpu_tensor->TotalBytes();
+  if (total_bytes > 0) {
+    const void *src_ptr = DMAHelper::base(cpu_tensor);
+    void *dst_ptr = DMAHelper::base(device_tensor);
+    switch (cpu_tensor->dtype()) {
+      case DT_FLOAT:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<float *>(dst_ptr), static_cast<const float *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_DOUBLE:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<double *>(dst_ptr),
+            static_cast<const double *>(src_ptr), total_bytes);
+        break;
+      case DT_INT32:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<int32 *>(dst_ptr), static_cast<const int32 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_INT64:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<int64 *>(dst_ptr), static_cast<const int64 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_HALF:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<Eigen::half *>(dst_ptr),
+            static_cast<const Eigen::half *>(src_ptr), total_bytes);
+        break;
+      case DT_COMPLEX64:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<std::complex<float> *>(dst_ptr),
+            static_cast<const std::complex<float> *>(src_ptr), total_bytes);
+        break;
+      case DT_COMPLEX128:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<std::complex<double> *>(dst_ptr),
+            static_cast<const std::complex<double> *>(src_ptr), total_bytes);
+        break;
+      case DT_INT8:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<int8 *>(dst_ptr), static_cast<const int8 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_INT16:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<int16 *>(dst_ptr), static_cast<const int16 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_UINT8:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<uint8 *>(dst_ptr), static_cast<const uint8 *>(src_ptr),
+            total_bytes);
+        break;
+      case DT_UINT16:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<uint16 *>(dst_ptr),
+            static_cast<const uint16 *>(src_ptr), total_bytes);
+        break;
+      case DT_BOOL:
+        device->eigen_sycl_device()->memcpyHostToDevice(
+            static_cast<bool *>(dst_ptr), static_cast<const bool *>(src_ptr),
+            total_bytes);
+        break;
+      default:
+        assert(false && 'unsupported type');
     }
-    
-    void read_image(std::ifstream* image_file, std::ifstream* label_file,
-        uint32_t index, uint32_t rows, uint32_t cols,
-        char* pixels, char* label) {
-  image_file->seekg(index * rows * cols + 16);
-  image_file->read(pixels, rows * cols);
-  label_file->seekg(index + 8);
-  label_file->read(label, 1);
+  }
+  device->eigen_sycl_device()->synchronize();
+  done(Status::OK());
 }
     
-    namespace caffe {
-    }
-    
-      virtual inline const char* type() const { return 'BatchReindex'; }
-  virtual inline int ExactNumBottomBlobs() const { return 2; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
-    
-    /**
- * @brief Takes at least two Blob%s and concatenates them along either the num
- *        or channel dimension, outputting the result.
- */
-template <typename Dtype>
-class ConcatLayer : public Layer<Dtype> {
+    class TextLineReader : public ReaderBase {
  public:
-  explicit ConcatLayer(const LayerParameter& param)
-      : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+  TextLineReader(const string& node_name, int skip_header_lines, Env* env)
+      : ReaderBase(strings::StrCat('TextLineReader '', node_name, ''')),
+        skip_header_lines_(skip_header_lines),
+        env_(env),
+        line_number_(0) {}
     }
     
     
-    { protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual inline bool reverse_dimensions() { return false; }
-  virtual void compute_output_shape();
-};
+    {
+    {}  // namespace ffmpeg
+}  // namespace tensorflow
+
     
-      bool handles_setup_;
-  cudnnHandle_t             handle_;
-  cudnnLRNDescriptor_t norm_desc_;
-  cudnnTensorDescriptor_t bottom_desc_, top_desc_;
+        EXPECT_EQ(a_1_1.get(), a_1_2.get());
+    EXPECT_EQ(d_4_1.get(), d_4_2.get());
+    EXPECT_EQ(e_5_1.get(), e_5_2.get());
     
-     protected:
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+    void MPIUtils::InitMPI() {
+  // Initialize the MPI environment if that hasn't been done
+  int flag = 0;
+  MPI_CHECK(MPI_Initialized(&flag));
+  if (!flag) {
+    int proc_id = 0, number_of_procs = 1, len = -1;
+    char my_host_name[max_worker_name_length];
+    // MPI_CHECK(MPI_Init_thread(0, 0, MPI_THREAD_MULTIPLE, &flag));
+    MPI_CHECK(MPI_Init(0, 0));
+    MPI_CHECK(MPI_Comm_rank(MPI_COMM_WORLD, &proc_id));
+    MPI_CHECK(MPI_Comm_size(MPI_COMM_WORLD, &number_of_procs));
+    MPI_CHECK(MPI_Get_processor_name(my_host_name, &len));
+    fprintf(stderr,
+            'MPI Environment initialized. Process id: %d Total processes: %d '
+            '|| Hostname: %s \n',
+            proc_id, number_of_procs, my_host_name);
+  }
+}
+    
+      // Slices a shape and stores the result into *result_shape.
+  // Requires that the shape and *this have the same rank.
+  // For example, given a tensor shape of {3, 4, 5}, and a slice of
+  // 1,2:-:0,2, the result shape is {2, 4, 2}.
+  Status SliceTensorShape(const TensorShape& shape,
+                          TensorShape* result_shape) const;
+    
+    #ifndef ATOM_BROWSER_API_ATOM_API_GLOBAL_SHORTCUT_H_
+#define ATOM_BROWSER_API_ATOM_API_GLOBAL_SHORTCUT_H_
+    
+    #endif  // ATOM_COMMON_API_REMOTE_CALLBACK_FREER_H_
+
+    
+    #endif  // ATOM_COMMON_DRAGGABLE_REGION_H_
+
+    
+      std::unique_ptr<base::ListValue> preferences_;
+    
+    // An interface the PrintViewManager uses to notify an observer when the print
+// dialog is shown. Register the observer via PrintViewManager::set_observer.
+class PrintViewManagerObserver {
+ public:
+  // Notifies the observer that the print dialog was shown.
+  virtual void OnPrintDialogShown() = 0;
+    }
+    
+      base::WeakPtrFactory<PepperFlashDRMHost> weak_factory_;
+    
+      // Called on the dialog thread to show the actual color chooser.  This is
+  // shown modal to |params.owner|.  Once it's closed, calls back to
+  // DidCloseDialog() on the UI thread.
+  void ExecuteOpen(const ExecuteOpenParams& params);
+    
+    // filenames
+const base::FilePath::CharType kCacheDirname[] = FPL('Cache');
+const base::FilePath::CharType kChannelIDFilename[] = FPL('Origin Bound Certs');
+const base::FilePath::CharType kCookieFilename[] = FPL('Cookies');
+const base::FilePath::CharType kCRLSetFilename[] =
+    FPL('Certificate Revocation Lists');
+const base::FilePath::CharType kCustomDictionaryFileName[] =
+    FPL('Custom Dictionary.txt');
+const base::FilePath::CharType kExtensionActivityLogFilename[] =
+    FPL('Extension Activity');
+const base::FilePath::CharType kExtensionsCookieFilename[] =
+    FPL('Extension Cookies');
+const base::FilePath::CharType kFirstRunSentinel[] = FPL('First Run');
+const base::FilePath::CharType kGCMStoreDirname[] = FPL('GCM Store');
+const base::FilePath::CharType kLocalStateFilename[] = FPL('Local State');
+const base::FilePath::CharType kLocalStorePoolName[] = FPL('LocalStorePool');
+const base::FilePath::CharType kMediaCacheDirname[] = FPL('Media Cache');
+const base::FilePath::CharType kNetworkPersistentStateFilename[] =
+    FPL('Network Persistent State');
+const base::FilePath::CharType kOfflinePageArchviesDirname[] =
+    FPL('Offline Pages/archives');
+const base::FilePath::CharType kOfflinePageMetadataDirname[] =
+    FPL('Offline Pages/metadata');
+const base::FilePath::CharType kPreferencesFilename[] = FPL('Preferences');
+const base::FilePath::CharType kProtectedPreferencesFilenameDeprecated[] =
+    FPL('Protected Preferences');
+const base::FilePath::CharType kReadmeFilename[] = FPL('README');
+const base::FilePath::CharType kResetPromptMementoFilename[] =
+    FPL('Reset Prompt Memento');
+const base::FilePath::CharType kSafeBrowsingBaseFilename[] =
+    FPL('Safe Browsing');
+const base::FilePath::CharType kSecurePreferencesFilename[] =
+    FPL('Secure Preferences');
+const base::FilePath::CharType kServiceStateFileName[] = FPL('Service State');
+const base::FilePath::CharType kSingletonCookieFilename[] =
+    FPL('SingletonCookie');
+const base::FilePath::CharType kSingletonLockFilename[] = FPL('SingletonLock');
+const base::FilePath::CharType kSingletonSocketFilename[] =
+    FPL('SingletonSocket');
+const base::FilePath::CharType kSupervisedUserSettingsFilename[] =
+    FPL('Managed Mode Settings');
+const base::FilePath::CharType kThemePackFilename[] = FPL('Cached Theme.pak');
+const base::FilePath::CharType kThemePackMaterialDesignFilename[] =
+    FPL('Cached Theme Material Design.pak');
+const base::FilePath::CharType kWebAppDirname[] = FPL('Web Applications');
+    
+        // pass address (value interface)
+    iterator find(const K& key)                     { return m.find(&key); }
+    const_iterator find(const K& key) const         { return m.find(&key); }
+    iterator lower_bound(const K& key)              { return m.lower_bound(&key); }
+    const_iterator lower_bound(const K& key) const  { return m.lower_bound(&key); }
+    size_type erase(const K& key)                   { return m.erase(&key); }
+    size_type count(const K& key) const             { return m.count(&key); }
+    
+    void AppendInternalKey(std::string* result, const ParsedInternalKey& key) {
+  result->append(key.user_key.data(), key.user_key.size());
+  PutFixed64(result, PackSequenceAndType(key.sequence, key.type));
+}
+    
+      // Return an iterator for the specified file number (the corresponding
+  // file length must be exactly 'file_size' bytes).  If 'tableptr' is
+  // non-NULL, also sets '*tableptr' to point to the Table object
+  // underlying the returned iterator, or NULL if no Table object underlies
+  // the returned iterator.  The returned '*tableptr' object is owned by
+  // the cache and should not be deleted, and is valid for as long as the
+  // returned iterator is live.
+  Iterator* NewIterator(const ReadOptions& options,
+                        uint64_t file_number,
+                        uint64_t file_size,
+                        Table** tableptr = NULL);
+    
+    #endif  // STORAGE_LEVELDB_INCLUDE_DUMPFILE_H_
+
+    
+      bool TryParseOne(Feature* feature) {
+    if (failed_ || Finished() || !Match('{')) {
+      return SetFailedAndReturnFalse();
+    }
+    if (!Match(location_) || !Match('{') || !Match(latitude_)) {
+      return SetFailedAndReturnFalse();
+    }
+    long temp = 0;
+    ReadLong(&temp);
+    feature->mutable_location()->set_latitude(temp);
+    if (!Match(',') || !Match(longitude_)) {
+      return SetFailedAndReturnFalse();
+    }
+    ReadLong(&temp);
+    feature->mutable_location()->set_longitude(temp);
+    if (!Match('},') || !Match(name_) || !Match('\'')) {
+      return SetFailedAndReturnFalse();
+    }
+    size_t name_start = current_;
+    while (current_ != db_.size() && db_[current_++] != ''') {
+    }
+    if (current_ == db_.size()) {
+      return SetFailedAndReturnFalse();
+    }
+    feature->set_name(db_.substr(name_start, current_-name_start-1));
+    if (!Match('},')) {
+      if (db_[current_ - 1] == ']' && current_ == db_.size()) {
+        return true;
+      }
+      return SetFailedAndReturnFalse();
+    }
+    return true;
+  }
+    
+    namespace grpc_node_generator {
+    }
+    
+    // Tucks all generator state in an anonymous namespace away from
+// PythonGrpcGenerator and the header file, mostly to encourage future changes
+// to not require updates to the grpcio-tools C++ code part. Assumes that it is
+// only ever used from a single thread.
+struct PrivateGenerator {
+  const GeneratorConfiguration& config;
+  const grpc_generator::File* file;
+    }
+    
+    class CodegenTestMinimal : public ::testing::Test {};
     
     
-    { protected:
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual inline bool reverse_dimensions() { return true; }
-  virtual void compute_output_shape();
-};
+    {  return 0;
+}
+
     
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
+    grpc::string DescribeServiceList(std::vector<grpc::string> service_list,
+                                 grpc::protobuf::DescriptorPool& desc_pool) {
+  std::stringstream result;
+  for (auto it = service_list.begin(); it != service_list.end(); it++) {
+    auto const& service = *it;
+    const grpc::protobuf::ServiceDescriptor* service_desc =
+        desc_pool.FindServiceByName(service);
+    if (service_desc != nullptr) {
+      result << DescribeService(service_desc);
+    }
+  }
+  return result.str();
+}
     
-    DEFINE_FIND_STATIC_METHOD(KXlog_appenderOpenWithMultipathWithLevel, KXlog, 'appenderOpen', '(IILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V')
-JNIEXPORT void JNICALL Java_com_tencent_mars_xlog_Xlog_appenderOpen
-	(JNIEnv *env, jclass, jint level, jint mode, jstring _cache_dir, jstring _log_dir, jstring _nameprefix, jstring _pubkey) {
-	if (NULL == _log_dir || NULL == _nameprefix) {
-		return;
+        if (EXPECTS_CRASH_DUMP_HEADER == _state) {
+        _state = EXPECTS_CRASH_DUMP_CONTENT;
+        strout += _strcache;
+    }
+    
+    #ifdef ANDROID
+    
+    
+    {    void throw_exception( std::exception const & e ) {
+        xfatal2(TSF'boost exception:%_', e.what());
+        
+#ifdef ANDROID
+        char stack[4096] = {0};
+        android_callstack(stack, sizeof(stack));
+        xfatal2(TSF'%_', stack);
+#endif
+    }
+}
+
+    
+    class Spy {
+  public:
+    Spy(void* _this): m_this(_this) {}
+    virtual ~Spy() {}
+    }
+    
+    
+#define SPY_DEF_CLASS_NAME TSpy
+#define SPY_DEF_XLOGGER_HOOK TSpy::SpyHookLogFunc
+    
+    #endif
+
+    
+    #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <cstring>
+#include <string>
+#include <vector>
+    
+    // Parses one dictionary entry.
+// If successfull, write the enty to Unit and returns true,
+// otherwise returns false.
+bool ParseOneDictionaryEntry(const std::string &Str, Unit *U);
+// Parses the dictionary file, fills Units, returns true iff all lines
+// were parsed succesfully.
+bool ParseDictionaryFile(const std::string &Text, std::vector<Unit> *Units);
+    
+    template <typename T>
+static T *GetFnPtr(T *Fun, T *FunDef, const char *FnName, bool WarnIfMissing) {
+  if (Fun == FunDef) {
+    if (WarnIfMissing)
+      Printf('WARNING: Failed to find function \'%s\'.\n', FnName);
+    return nullptr;
+  }
+  return Fun;
+}
+    
+      /// Tries to find an ASCII integer in Data, changes it to another ASCII int.
+  size_t Mutate_ChangeASCIIInteger(uint8_t *Data, size_t Size, size_t MaxSize);
+  /// Change a 1-, 2-, 4-, or 8-byte integer in interesting ways.
+  size_t Mutate_ChangeBinaryInteger(uint8_t *Data, size_t Size, size_t MaxSize);
+    
+    
+    {	a=s->state[0];
+	b=s->state[1];
+	c=s->state[2];
+	d=s->state[3];
+	e=s->state[4];
+	for (i=0; i<80; i++) {
+		if (i>=16) {
+			t = s->buffer[(i+13)&15] ^ s->buffer[(i+8)&15] ^ s->buffer[(i+2)&15] ^ s->buffer[i&15];
+			s->buffer[i&15] = sha1_rol32(t,1);
+		}
+		if (i<20) {
+			t = (d ^ (b & (c ^ d))) + SHA1_K0;
+		} else if (i<40) {
+			t = (b ^ c ^ d) + SHA1_K20;
+		} else if (i<60) {
+			t = ((b & c) | (d & (b | c))) + SHA1_K40;
+		} else {
+			t = (b ^ c ^ d) + SHA1_K60;
+		}
+		t+=sha1_rol32(a,5) + e + s->buffer[i&15];
+		e=d;
+		d=c;
+		c=sha1_rol32(b,30);
+		b=a;
+		a=t;
 	}
-    }
+	s->state[0] += a;
+	s->state[1] += b;
+	s->state[2] += c;
+	s->state[3] += d;
+	s->state[4] += e;
+}
     
-    #include 'wakeuplock.h'
-#include 'assert/__assert.h'
-#include 'xlogger/xlogger.h'
-    
-        _packlen = ntoh(*(T*)_rawbuf);
-    
-    
-    {  private:
-    size_t count_;
-    uint64_t time_span_;
-    std::list<uint64_t> touch_times_;
-};
-    
-      private:
-    SpyCore() {}
-    ~SpyCore() {}
-    
-    // Unless required by applicable law or agreed to in writing, software distributed under the License is
-// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing permissions and
-// limitations under the License.
-    
-    #ifndef COMM_HAS_MEMBER_H_
-#define COMM_HAS_MEMBER_H_
+    void TracePC::HandleTrace(uint32_t *Guard, uintptr_t PC) {
+  uint32_t Idx = *Guard;
+  if (!Idx) return;
+  PCs[Idx % kNumPCs] = PC;
+  Counters[Idx % kNumCounters]++;
+}
