@@ -1,131 +1,134 @@
 
         
-        
-def prepare_url(value):
-    # Issue #1483: Make sure the URL always has a trailing slash
-    httpbin_url = value.url.rstrip('/') + '/'
+        '''TensorFlow ops for maximum spanning tree problems.'''
     
-        def __exit__(self, exc_type, exc_value, traceback):
-        if exc_type is None:
-            self.stop_event.wait(self.WAIT_EVENT_TIMEOUT)
-        else:
-            if self.wait_to_close_event:
-                # avoid server from waiting for event timeouts
-                # if an exception is found in the main thread
-                self.wait_to_close_event.set()
+    '''Tests for maximum spanning tree ops.'''
     
-                sock2.connect(address)
-            sock2.sendall(second_request)
-            sock2.close()
+      Args:
+    component: Component that the hook node belongs to.
+    variable_name: Variable that the hook node name is based on.
+    suffix: Suffix to append to the variable name.
     
     
-class CookieConflictError(RuntimeError):
-    '''There are two cookies that meet the criteria specified in the cookie jar.
-    Use .get and .set and include domain and path args in order to be more specific.
-    '''
-    
-    import sys
-    
-        # Redirection.
-    300: ('multiple_choices',),
-    301: ('moved_permanently', 'moved', '\\o-'),
-    302: ('found',),
-    303: ('see_other', 'other'),
-    304: ('not_modified',),
-    305: ('use_proxy',),
-    306: ('switch_proxy',),
-    307: ('temporary_redirect', 'temporary_moved', 'temporary'),
-    308: ('permanent_redirect',
-          'resume_incomplete', 'resume',),  # These 2 to be removed in 3.0
-    
-    def test_fragment_not_sent_with_request():
-    '''Verify that the fragment portion of a URI isn't sent to the server.'''
-    def response_handler(sock):
-        req = consume_socket_content(sock, timeout=0.5)
-        sock.send(
-            b'HTTP/1.1 200 OK\r\n'
-            b'Content-Length: '+bytes(len(req))+b'\r\n'
-            b'\r\n'+req
-        )
-    
-        tokens = header.split(';')
-    content_type, params = tokens[0].strip(), tokens[1:]
-    params_dict = {}
-    items_to_strip = '\'' '
+import tensorflow as tf
     
     
 if __name__ == '__main__':
-    SalesRanker.run()
+  googletest.main()
 
     
-        def remove_from_tail(self):
-        pass
+      def create(self,
+             fixed_embeddings,
+             linked_embeddings,
+             context_tensor_arrays,
+             attention_tensor,
+             during_training,
+             stride=None):
+    '''See base class.'''
+    # NB: This cell pulls the lstm's h and c vectors from context_tensor_arrays
+    # instead of through linked features.
+    check.Eq(
+        len(context_tensor_arrays), 2 * len(self._hidden_layer_sizes),
+        'require two context tensors per hidden layer')
     
-    - tree.CommonTreeNodeStream: A basic and most commonly used tree.TreeNodeStream
-  implementation.
-  
+    flags.DEFINE_string('master_spec', None, 'Path to task context with '
+                    'inputs and parameters for feature extractors.')
+flags.DEFINE_string('params_path', None, 'Path to trained model parameters.')
+flags.DEFINE_string('export_path', '', 'Output path for exported servo model.')
+flags.DEFINE_string('resource_path', '',
+                    'Base directory for resources in the master spec.')
+flags.DEFINE_bool('export_moving_averages', True,
+                  'Whether to export the moving average parameters.')
     
-    ##
-# imaginary tree navigation type; traverse 'get child' link
-DOWN = 2
-##
-#imaginary tree navigation type; finish with a child list
-UP = 3
+        tf.logging.info('Processed %d documents in %.2f seconds.',
+                    len(input_corpus), time.time() - start_time)
+    _, uas, las = evaluation.calculate_parse_metrics(input_corpus, processed)
+    tf.logging.info('UAS: %.2f', uas)
+    tf.logging.info('LAS: %.2f', las)
     
-                        s = snext
-                    input.consume()
-                    continue
+      tf.logging.info('Reading documents...')
+  input_corpus = sentence_io.ConllSentenceReader(FLAGS.input_file).corpus()
+  with tf.Session(graph=tf.Graph()) as tmp_session:
+    char_input = gen_parser_ops.char_token_generator(input_corpus)
+    char_corpus = tmp_session.run(char_input)
+  check.Eq(len(input_corpus), len(char_corpus))
     
-            matchedSymbol = self.recoverFromMismatchedToken(input, ttype, follow)
-        return matchedSymbol
+      # Construct the 'lookahead' ComponentSpec. This is a simple right-to-left RNN
+  # sequence model, which encodes the context to the right of each token. It has
+  # no loss except for the downstream components.
+  lookahead = spec_builder.ComponentSpecBuilder('lookahead')
+  lookahead.set_network_unit(
+      name='wrapped_units.LayerNormBasicLSTMNetwork', hidden_layer_sizes='256')
+  lookahead.set_transition_system(name='shift-only', left_to_right='false')
+  lookahead.add_fixed_feature(name='char',
+                              fml='input(-1).char input.char input(1).char',
+                              embedding_dim=32)
+  lookahead.add_fixed_feature(name='char-bigram',
+                              fml='input.char-bigram',
+                              embedding_dim=32)
+  lookahead.fill_from_resources(FLAGS.resource_path, FLAGS.tf_master)
     
+    from dragnn.python import evaluation
+from dragnn.python import graph_builder
+from dragnn.python import lexicon
+from dragnn.python import spec_builder
+from dragnn.python import trainer_lib
+    
+        .. versionchanged:: 5.0:
+       Unified ``tornado.gen.TimeoutError`` and
+       ``tornado.ioloop.TimeoutError`` as ``tornado.util.TimeoutError``.
+       Both former names remain as aliases.
+    '''
+    
+           This class is deprecated and will be removed in Tornado 6.0.
+       Use Tornado's `.HTTPServer` instead of a WSGI container.
+    '''
+    def __init__(self, application):
+        warnings.warn('WSGIAdapter is deprecated, use Tornado's HTTPServer instead',
+                      DeprecationWarning)
+        if isinstance(application, WSGIApplication):
+            self.application = lambda request: web.Application.__call__(
+                application, request)
+        else:
+            self.application = application
+    
+    
+class FacebookGraphMixin(OAuth2Mixin):
+    '''Facebook authentication using the new Graph API and OAuth2.'''
+    _OAUTH_ACCESS_TOKEN_URL = 'https://graph.facebook.com/oauth/access_token?'
+    _OAUTH_AUTHORIZE_URL = 'https://www.facebook.com/dialog/oauth?'
+    _OAUTH_NO_CALLBACKS = False
+    _FACEBOOK_BASE_URL = 'https://graph.facebook.com'
+    
+            .. versionchanged:: 4.0
+           Now passes through ``*args`` and ``**kwargs`` to the callback.
+        '''
+        if isinstance(deadline, numbers.Real):
+            return self.call_at(deadline, callback, *args, **kwargs)
+        elif isinstance(deadline, datetime.timedelta):
+            return self.call_at(self.time() + timedelta_to_seconds(deadline),
+                                callback, *args, **kwargs)
+        else:
+            raise TypeError('Unsupported deadline %r' % deadline)
+    
+            self.http_client.fetch(self.get_url('/'), self.stop)
+        response = self.wait()
+    
+    
+class TwitterClientShowUserHandlerLegacy(TwitterClientHandler):
+    with ignore_deprecation():
+        @asynchronous
+        @gen.engine
+        def get(self):
+            # TODO: would be nice to go through the login flow instead of
+            # cheating with a hard-coded access token.
+            with warnings.catch_warnings():
+                warnings.simplefilter('ignore', DeprecationWarning)
+                response = yield gen.Task(self.twitter_request,
+                                          '/users/show/%s' % self.get_argument('name'),
+                                          access_token=dict(key='hjkl', secret='vbnm'))
+            if response is None:
+                self.set_status(500)
+                self.finish('error from twitter request')
             else:
-            raise TypeError('Invalid arguments')
-    
-    
-    def __str__(self):
-        return 'NoViableAltException(%r!=[%r])' % (
-            self.unexpectedType, self.grammarDecisionDescription
-            )
-    __repr__ = __str__
-    
-        sqrt_n = int(math.floor(math.sqrt(n)))
-    for i in range(3, sqrt_n + 1, 2):
-        if n % i == 0:
-            return False
-    return True
-    
-        def test_done(self):
-        self.assertFalse(PENDING_FUTURE.done())
-        self.assertFalse(RUNNING_FUTURE.done())
-        self.assertTrue(CANCELLED_FUTURE.done())
-        self.assertTrue(CANCELLED_AND_NOTIFIED_FUTURE.done())
-        self.assertTrue(EXCEPTION_FUTURE.done())
-        self.assertTrue(SUCCESSFUL_FUTURE.done())
-    
-      for filter_type in iterkeys( config ):
-    compiler = FILTER_COMPILERS.get( filter_type )
-    
-        @require_oauth2_scope('mysubreddits')
-    @validate(
-        VUser(),
-    )
-    @api_doc(
-        section=api_section.account,
-        uri='/api/v1/me/karma',
-    )
-    def GET_karma(self):
-        '''Return a breakdown of subreddit karma.'''
-        karmas = c.oauth_user.all_karmas(include_old=False)
-        resp = KarmaListJsonTemplate().render(karmas)
-        return self.api_wrapper(resp.finalize())
-    
-    from reddit_base import RedditController, UnloggedUser
-from r2.lib.pages import (ButtonLite, ButtonDemoPanel, WidgetDemoPanel,
-                          BoringPage)
-from r2.lib.pages.things import wrap_links
-from r2.models import *
-from r2.lib.validator import *
-from pylons import request, response
-from pylons import tmpl_context as c
-from pylons.i18n import _
+                self.finish(response)
