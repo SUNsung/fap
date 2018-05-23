@@ -1,85 +1,178 @@
 
         
-            def _migrate_implicit_content_type(self):
-        '''Migrate the removed implicit_content_type config option'''
+        
+@pytest.mark.functional
+def test_with_confirmation(proc, TIMEOUT):
+    with_confirmation(proc, TIMEOUT)
+    
+            headers = [
+            '%s: %s' % (
+                name,
+                value if isinstance(value, str) else value.decode('utf8')
+            )
+            for name, value in headers.items()
+        ]
+    
+        if include_debug_info:
+        print_debug_info(env)
+        if args == ['--debug']:
+            return ExitStatus.OK
+    
+    
+CLIENT_CERT = os.path.join(TESTS_ROOT, 'client_certs', 'client.crt')
+CLIENT_KEY = os.path.join(TESTS_ROOT, 'client_certs', 'client.key')
+CLIENT_PEM = os.path.join(TESTS_ROOT, 'client_certs', 'client.pem')
+    
+    
+SSL_VERSION_ARG_MAPPING = {
+    'ssl2.3': 'PROTOCOL_SSLv23',
+    'ssl3': 'PROTOCOL_SSLv3',
+    'tls1': 'PROTOCOL_TLSv1',
+    'tls1.1': 'PROTOCOL_TLSv1_1',
+    'tls1.2': 'PROTOCOL_TLSv1_2',
+}
+SSL_VERSION_ARG_MAPPING = {
+    cli_arg: getattr(ssl, ssl_constant)
+    for cli_arg, ssl_constant in SSL_VERSION_ARG_MAPPING.items()
+    if hasattr(ssl, ssl_constant)
+}
+    
+        def get_auth_plugin(self, auth_type):
+        return self.get_auth_plugin_mapping()[auth_type]
+    
+            for i in html_json['sources']:
+            if 'src' in i:  #to avoid KeyError
+                if i['src'].startswith('https'):
+                    link_list.append((str(i['height']), i['src']))
+    
+        def prepare(self, **kwargs):
+        content = get_content(self.url)
+        self.title = match1(content, r'<title>([^<]+)</title>')
+        s = match1(content, r'P\.s\s*=\s*\'([^\']+)\'')
+        scp = match1(content, r'InfoQConstants\.scp\s*=\s*\'([^\']+)\'')
+        scs = match1(content, r'InfoQConstants\.scs\s*=\s*\'([^\']+)\'')
+        sck = match1(content, r'InfoQConstants\.sck\s*=\s*\'([^\']+)\'')
+    
+        for i in range(10, 30):
+        url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
+            i = i,
+            p = preview
+        )
         try:
-            implicit_content_type = self.pop('implicit_content_type')
-        except KeyError:
-            self.save()
-        else:
-            if implicit_content_type == 'form':
-                self['default_options'].insert(0, '--form')
-            self.save()
-            self.load()
+            mime, ext, size = url_info(url)
+            break
+        except: continue
+    
+    
+@click.command()
+@click.argument('catalog_file', type=click.Path())
+def cli(catalog_file):
+    # Read the old ones back.  Once we are in, we will never go.
+    with open(catalog_file) as f:
+        rv = json.load(f)['supported_locales']
+    
+    if __name__ == '__main__':
+    main()
 
     
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
-class ExitStatus:
-    '''Exit status code constants.'''
-    OK = 0
-    ERROR = 1
-    PLUGIN_ERROR = 7
+    from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+# Not installing aliases from python-future; it's unreliable and slow.
+from builtins import *  # noqa
     
-    ratio = scikits_time / scipy_time
     
-    import gc
-import sys
-import optparse
-from datetime import datetime
-import operator
+def KeywordsFromSyntaxListOutput_JavaSyntax_test():
+  expected_keywords = (
+    'code', 'text', 'cols', 'datetime', 'disabled', 'shape', 'codetype', 'alt',
+    'compact', 'style', 'valuetype', 'short', 'finally', 'continue', 'extends',
+    'valign', 'bordercolor', 'do', 'return', 'rel', 'rules', 'void',
+    'nohref', 'abbr', 'background', 'scrolling', 'instanceof', 'name',
+    'summary', 'try', 'default', 'noshade', 'coords', 'dir', 'frame', 'usemap',
+    'ismap', 'static', 'hspace', 'vlink', 'for', 'selected', 'rev', 'vspace',
+    'content', 'method', 'version', 'volatile', 'above', 'new', 'charoff',
+    'public', 'alink', 'enum', 'codebase', 'if', 'noresize', 'interface',
+    'checked', 'byte', 'super', 'throw', 'src', 'language', 'package',
+    'standby', 'script', 'longdesc', 'maxlength', 'cellpadding', 'throws',
+    'tabindex', 'color', 'colspan', 'accesskey', 'float', 'while', 'private',
+    'height', 'boolean', 'wrap', 'prompt', 'nowrap', 'size', 'rows', 'span',
+    'clip', 'bgcolor', 'top', 'long', 'start', 'scope', 'scheme', 'type',
+    'final', 'lang', 'visibility', 'else', 'assert', 'transient', 'link',
+    'catch', 'true', 'serializable', 'target', 'lowsrc', 'this', 'double',
+    'align', 'value', 'cite', 'headers', 'below', 'protected', 'declare',
+    'classid', 'defer', 'false', 'synchronized', 'int', 'abstract', 'accept',
+    'hreflang', 'char', 'border', 'id', 'native', 'rowspan', 'charset',
+    'archive', 'strictfp', 'readonly', 'axis', 'cellspacing', 'profile',
+    'multiple', 'object', 'action', 'pagex', 'pagey', 'marginheight', 'data',
+    'class', 'frameborder', 'enctype', 'implements', 'break', 'gutter', 'url',
+    'clear', 'face', 'switch', 'marginwidth', 'width', 'left' )
     
-        if not os.path.exists(ARCHIVE_NAME):
-        print('Downloading dataset from %s (3 MB)' % URL)
-        opener = urlopen(URL)
-        with open(ARCHIVE_NAME, 'wb') as archive:
-            archive.write(opener.read())
     
-    ARCHIVE_NAME = URL.rsplit('/', 1)[1]
-TRAIN_FOLDER = '20news-bydate-train'
-TEST_FOLDER = '20news-bydate-test'
+def Response_FromOmniCompleter_test():
+  results = [ { 'word': 'test' } ]
+  request = BuildOmnicompletionRequest( results )
     
-    '''
-# Author: Olivier Grisel <olivier.grisel@ensta.org>
-# License: Simplified BSD
+        with patch.object( ycm._message_poll_request,
+                       '_response_future',
+                       new = MockAsyncServerResponseDone( [] ) ) as mock_future:
+      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
+  '''
+  return mock.MagicMock( wraps = FakeFuture( True, response ) )
     
-            if event == 'clear':
-            self.ax.clear()
-            self.ax.set_xticks([])
-            self.ax.set_yticks([])
-            self.contours = []
-            self.c_labels = None
-            self.plot_kernels()
+    js.load_plugin_modules(plugins)
+modules = dict((k, m) for k, m in js.module.iteritems())
+print 'JS_MODULES := ' + ' '.join(modules.iterkeys())
+outputs = []
+for name, module in modules.iteritems():
+    outputs.extend(module.outputs)
+    print 'JS_MODULE_OUTPUTS_%s := %s' % (name, ' '.join(module.outputs))
+    print 'JS_MODULE_DEPS_%s := %s' % (name, ' '.join(module.dependencies))
     
-    from sklearn.datasets import make_biclusters
-from sklearn.datasets import samples_generator as sg
-from sklearn.cluster.bicluster import SpectralCoclustering
-from sklearn.metrics import consensus_score
+    import os
+import mimetypes
     
-    plt.title('Change of predicted probabilities after sigmoid calibration')
-plt.xlabel('Probability class 1')
-plt.ylabel('Probability class 2')
-plt.xlim(-0.05, 1.05)
-plt.ylim(-0.05, 1.05)
-plt.legend(loc='best')
+    class CaptchaController(RedditController):
+    @allow_oauth2_access
+    @api_doc(api_section.captcha, uri='/captcha/{iden}')
+    def GET_captchaimg(self, iden):
+        '''
+        Request a CAPTCHA image given an `iden`.
     
-    n_classifiers = len(classifiers)
     
-    def kugou_download_by_hash(title,hash_val,output_dir = '.', merge = True, info_only = False):
-    #sample
-    #url_sample:http://www.kugou.com/yy/album/single/536957.html
-    #hash ->key  md5(hash+kgcloud')->key  decompile swf
-    #cmd 4 for mp3 cmd 3 for m4a
-    key=hashlib.new('md5',(hash_val+'kgcloud').encode('utf-8')).hexdigest()
-    html=get_html('http://trackercdn.kugou.com/i/?pid=6&key=%s&acceptMp3=1&cmd=4&hash=%s'%(key,hash_val))
-    j=loads(html)
-    url=j['url']
-    songtype, ext, size = url_info(url)
-    print_info(site_info, title, songtype, size)
-    if not info_only:
-        download_urls([url], title, ext, size, output_dir, merge=merge)
-    
-            print_info(site_info, title, type_, size_full)
-        if not info_only:
-            download_urls(url_list, title, ext, total_size=size_full, output_dir=output_dir, merge=merge, headers=fake_headers)
+try:
+    # place all r2 specific imports in here.  If there is a code error, it'll
+    # get caught and the stack trace won't be presented to the user in
+    # production
+    from r2.config import extensions
+    from r2.controllers.reddit_base import RedditController, UnloggedUser
+    from r2.lib.cookies import Cookies
+    from r2.lib.errors import ErrorSet
+    from r2.lib.filters import (
+        safemarkdown,
+        scriptsafe_dumps,
+        websafe,
+        websafe_json,
+    )
+    from r2.lib import log, pages
+    from r2.lib.strings import get_funny_translated_string
+    from r2.lib.template_helpers import static
+    from r2.lib.base import abort
+    from r2.models.link import Link
+    from r2.models.subreddit import DefaultSR, Subreddit
+except Exception, e:
+    if g.debug:
+        # if debug mode, let the error filter up to pylons to be handled
+        raise e
     else:
-        raise NotImplementedError(flashvars)
+        # production environment: protect the code integrity!
+        print 'HuffmanEncodingError: make sure your python compiles before deploying, stupid!'
+        # kill this app
+        os._exit(1)
