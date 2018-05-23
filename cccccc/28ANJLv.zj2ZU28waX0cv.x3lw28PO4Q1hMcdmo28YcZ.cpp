@@ -1,236 +1,240 @@
 
         
-        /*! \internal Default constructor initialization must be equivalent to:
- * memset( this, 0, sizeof(Value) )
- * This optimization is used in ValueInternalMap fast allocator.
- */
-Value::Value(ValueType vtype) {
-  initBasic(vtype);
-  switch (vtype) {
-  case nullValue:
-    break;
-  case intValue:
-  case uintValue:
-    value_.int_ = 0;
-    break;
-  case realValue:
-    value_.real_ = 0.0;
-    break;
-  case stringValue:
-    value_.string_ = 0;
-    break;
-  case arrayValue:
-  case objectValue:
-    value_.map_ = new ObjectValues();
-    break;
-  case booleanValue:
-    value_.bool_ = false;
-    break;
-  default:
-    JSON_ASSERT_UNREACHABLE;
-  }
-}
+        #ifndef ATOM_BROWSER_UI_DRAG_UTIL_H_
+#define ATOM_BROWSER_UI_DRAG_UTIL_H_
     
-    #ifndef GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
-#define GOOGLE_PROTOBUF_COMPILER_CSHARP_OPTIONS_H__
-    
-    class RepeatedMessageFieldGenerator : public FieldGeneratorBase {
+    class EventDisabler : public ui::EventRewriter {
  public:
-  RepeatedMessageFieldGenerator(const FieldDescriptor* descriptor,
-                                int fieldOrdinal,
-                                const Options *options);
-  ~RepeatedMessageFieldGenerator();
+  EventDisabler();
+  ~EventDisabler() override;
     }
     
-    #include <google/protobuf/compiler/code_generator.h>
-#include <google/protobuf/compiler/plugin.h>
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
-#include <google/protobuf/io/printer.h>
-#include <google/protobuf/io/zero_copy_stream.h>
-#include <google/protobuf/wire_format.h>
-    
-      virtual MessageGenerator* NewMessageGenerator(
-      const Descriptor* descriptor) const;
-    
-      // Gets the time of the test program start, in ms from the start of the
-  // UNIX epoch.
-  TimeInMillis start_timestamp() const;
+     private:
+  void* operator new(size_t size);
+  void operator delete(void*, size_t);
     
     
-    {  return AssertionFailure() << pred_text << '('
-                            << e1 << ', '
-                            << e2 << ') evaluates to false, where'
-                            << '\n' << e1 << ' evaluates to ' << v1
-                            << '\n' << e2 << ' evaluates to ' << v2;
+    {}  // namespace atom
+    
+     protected:
+  GlobalShortcutListener();
+    
+      // Whether this object is listening for global shortcuts.
+  bool is_listening_;
+    
+    // An interface the PrintViewManager uses to notify an observer when the print
+// dialog is shown. Register the observer via PrintViewManager::set_observer.
+class PrintViewManagerObserver {
+ public:
+  // Notifies the observer that the print dialog was shown.
+  virtual void OnPrintDialogShown() = 0;
+    }
+    
+    
+    {  DISALLOW_COPY_AND_ASSIGN(ChromeBrowserPepperHostFactory);
+};
+    
+    #include 'leveldb/db.h'
+#include 'db/db_impl.h'
+#include 'leveldb/cache.h'
+#include 'util/testharness.h'
+#include 'util/testutil.h'
+    
+    // Build a Table file from the contents of *iter.  The generated file
+// will be named according to meta->number.  On success, the rest of
+// *meta will be filled with metadata about the generated table.
+// If no data is present in *iter, meta->file_size will be set to
+// zero, and no Table file will be produced.
+extern Status BuildTable(const std::string& dbname,
+                         Env* env,
+                         const Options& options,
+                         TableCache* table_cache,
+                         Iterator* iter,
+                         FileMetaData* meta);
+    
+    
+    {  // No copying allowed
+  DBIter(const DBIter&);
+  void operator=(const DBIter&);
+};
+    
+    static std::string ShortSuccessor(const std::string& s) {
+  std::string result = s;
+  InternalKeyComparator(BytewiseComparator()).FindShortSuccessor(&result);
+  return result;
 }
     
-      // Creates directories so that path exists. Returns true if successful or if
-  // the directories already exist; returns false if unable to create
-  // directories for any reason. Will also return false if the FilePath does
-  // not represent a directory (that is, it doesn't end with a path separator).
-  bool CreateDirectoriesRecursively() const;
+    // Return the name of the old info log file for 'dbname'.
+std::string OldInfoLogFileName(const std::string& dbname) {
+  return dbname + '/LOG.old';
+}
     
-      template <typename T>
-  operator ParamGenerator<T>() const {
-    const T array[] = {static_cast<T>(v1_), static_cast<T>(v2_),
-        static_cast<T>(v3_), static_cast<T>(v4_), static_cast<T>(v5_),
-        static_cast<T>(v6_), static_cast<T>(v7_), static_cast<T>(v8_),
-        static_cast<T>(v9_), static_cast<T>(v10_), static_cast<T>(v11_),
-        static_cast<T>(v12_), static_cast<T>(v13_), static_cast<T>(v14_)};
-    return ValuesIn(array);
+    #include <stdint.h>
+#include <string>
+#include 'leveldb/slice.h'
+#include 'leveldb/status.h'
+#include 'port/port.h'
+    
+    #include 'db/filename.h'
+    
+          case kNewFile:
+        if (GetLevel(&input, &level) &&
+            GetVarint64(&input, &f.number) &&
+            GetVarint64(&input, &f.file_size) &&
+            GetInternalKey(&input, &f.smallest) &&
+            GetInternalKey(&input, &f.largest)) {
+          new_files_.push_back(std::make_pair(level, f));
+        } else {
+          msg = 'new-file entry';
+        }
+        break;
+    
+    static void TestEncodeDecode(const VersionEdit& edit) {
+  std::string encoded, encoded2;
+  edit.EncodeTo(&encoded);
+  VersionEdit parsed;
+  Status s = parsed.DecodeFrom(encoded);
+  ASSERT_TRUE(s.ok()) << s.ToString();
+  parsed.EncodeTo(&encoded2);
+  ASSERT_EQ(encoded, encoded2);
+}
+    
+    void WriteBatch::Clear() {
+  rep_.clear();
+  rep_.resize(kHeader);
+}
+    
+        sqlite3_stmt *replace_stmt, *begin_trans_stmt, *end_trans_stmt;
+    std::string replace_str = 'REPLACE INTO test (key, value) VALUES (?, ?)';
+    std::string begin_trans_str = 'BEGIN TRANSACTION;';
+    std::string end_trans_str = 'END TRANSACTION;';
+    
+    struct SSATmp;
+struct Type;
+    
+    std::string read_embedded_data(const embedded_data& desc);
+    
+    #include 'hphp/runtime/ext/extension.h'
+#include 'hphp/util/type-scan.h'
+#include <curl/curl.h>
+    
+    
+    {}  // namespace leveldb
+    
+    #ifndef STORAGE_LEVELDB_DB_WRITE_BATCH_INTERNAL_H_
+#define STORAGE_LEVELDB_DB_WRITE_BATCH_INTERNAL_H_
+    
+      for (size_t i = 0; i < 3; ++i) {
+    std::string res;
+    ASSERT_OK(db->Get(ReadOptions(), keys[i], &res));
+    ASSERT_TRUE(res == vals[i]);
   }
     
-    // The compiler used in Symbian has a bug that prevents us from declaring the
-// tuple template as a friend (it complains that tuple is redefined).  This
-// hack bypasses the bug by declaring the members that should otherwise be
-// private as public.
-// Sun Studio versions < 12 also have the above bug.
-#if defined(__SYMBIAN32__) || (defined(__SUNPRO_CC) && __SUNPRO_CC < 0x590)
-# define GTEST_DECLARE_TUPLE_AS_FRIEND_ public:
-#else
-# define GTEST_DECLARE_TUPLE_AS_FRIEND_ \
-    template <GTEST_10_TYPENAMES_(U)> friend class tuple; \
-   private:
-#endif
     
+    {  // close database
+  delete db;
+  DestroyDB(dbpath, leveldb::Options());
+}
     
-    {    // Now, we have i <= n/i < n.
-    // If n is divisible by i, n is not prime.
-    if (n % i == 0) return false;
+      bool Matches(const Slice& s) {
+    if (!keys_.empty()) {
+      Build();
+    }
+    return policy_->KeyMayMatch(s, filter_);
   }
     
-    extern JSClass  *jsb_cocostudio_timeline_ActionTimelineData_class;
-extern JSObject *jsb_cocostudio_timeline_ActionTimelineData_prototype;
     
-    
-    
-    
-    
-    
-    
-    				b2FrictionJointDef jd;
-				jd.localAnchorA.SetZero();
-				jd.localAnchorB.SetZero();
-				jd.bodyA = ground;
-				jd.bodyB = body;
-				jd.collideConnected = true;
-				jd.maxForce = mass * gravity;
-				jd.maxTorque = mass * radius * gravity;
-    
-    		for (int32 i = 0; i < 2; ++i)
-		{
-			b2Vec2 vertices[3];
-			vertices[0].Set(-0.5f, 0.0f);
-			vertices[1].Set(0.5f, 0.0f);
-			vertices[2].Set(0.0f, 1.5f);
-    }
-    
-    		// Boxes
-		{
-			b2PolygonShape box;
-			box.SetAsBox(0.5f, 0.5f);
-    }
-    
-    #endif
+    {
+}  // namespace leveldb
 
     
-    private:
-  void AlarmCallback();
-  void CrashCallback();
-  void InterruptCallback();
-  void MutateAndTestOne();
-  void ReportNewCoverage(InputInfo *II, const Unit &U);
-  size_t RunOne(const Unit &U) { return RunOne(U.data(), U.size()); }
-  void WriteToOutputCorpus(const Unit &U);
-  void WriteUnitToFileWithPrefix(const Unit &U, const char *Prefix);
-  void PrintStats(const char *Where, const char *End = '\n', size_t Units = 0);
-  void PrintStatusForNewUnit(const Unit &U);
-  void ShuffleCorpus(UnitVector *V);
-  void AddToCorpus(const Unit &U);
-  void CheckExitOnSrcPosOrItem();
     
-    // Leak detection is expensive, so we first check if there were more mallocs
-// than frees (using the sanitizer malloc hooks) and only then try to call lsan.
-struct MallocFreeTracer {
-  void Start(int TraceLevel) {
-    this->TraceLevel = TraceLevel;
-    if (TraceLevel)
-      Printf('MallocFreeTracer: START\n');
-    Mallocs = 0;
-    Frees = 0;
-  }
-  // Returns true if there were more mallocs than frees.
-  bool Stop() {
-    if (TraceLevel)
-      Printf('MallocFreeTracer: STOP %zd %zd (%s)\n', Mallocs.load(),
-             Frees.load(), Mallocs == Frees ? 'same' : 'DIFFERENT');
-    bool Result = Mallocs > Frees;
-    Mallocs = 0;
-    Frees = 0;
-    TraceLevel = 0;
-    return Result;
-  }
-  std::atomic<size_t> Mallocs;
-  std::atomic<size_t> Frees;
-  int TraceLevel = 0;
+    {  double Median() const;
+  double Percentile(double p) const;
+  double Average() const;
+  double StandardDeviation() const;
 };
     
-    struct FuzzingOptions {
-  int Verbosity = 1;
-  size_t MaxLen = 0;
-  int UnitTimeoutSec = 300;
-  int TimeoutExitCode = 77;
-  int ErrorExitCode = 77;
-  int MaxTotalTimeSec = 0;
-  int RssLimitMb = 0;
-  bool DoCrossOver = true;
-  int MutateDepth = 5;
-  bool UseCounters = false;
-  bool UseIndirCalls = true;
-  bool UseMemcmp = true;
-  bool UseMemmem = true;
-  bool UseCmp = false;
-  bool UseValueProfile = false;
-  bool Shrink = false;
-  int ReloadIntervalSec = 1;
-  bool ShuffleAtStartUp = true;
-  bool PreferSmall = true;
-  size_t MaxNumberOfRuns = -1L;
-  int ReportSlowUnits = 10;
-  bool OnlyASCII = false;
-  std::string OutputCorpus;
-  std::string ArtifactPrefix = './';
-  std::string ExactArtifactPath;
-  std::string ExitOnSrcPos;
-  std::string ExitOnItem;
-  bool SaveArtifacts = true;
-  bool PrintNEW = true; // Print a status line when new units are found;
-  bool OutputCSV = false;
-  bool PrintNewCovPcs = false;
-  bool PrintFinalStats = false;
-  bool PrintCorpusStats = false;
-  bool PrintCoverage = false;
-  bool DumpCoverage = false;
-  bool DetectLeaks = true;
-  int  TraceMalloc = 0;
-  bool HandleAbrt = false;
-  bool HandleBus = false;
-  bool HandleFpe = false;
-  bool HandleIll = false;
-  bool HandleInt = false;
-  bool HandleSegv = false;
-  bool HandleTerm = false;
-};
+    // Read through the first n keys repeatedly and check that they get
+// compacted (verified by checking the size of the key space).
+void AutoCompactTest::DoReads(int n) {
+  std::string value(kValueSize, 'x');
+  DBImpl* dbi = reinterpret_cast<DBImpl*>(db_);
+    }
     
-    void sha1_init(sha1nfo *s) {
-	s->state[0] = 0x67452301;
-	s->state[1] = 0xefcdab89;
-	s->state[2] = 0x98badcfe;
-	s->state[3] = 0x10325476;
-	s->state[4] = 0xc3d2e1f0;
-	s->byteCount = 0;
-	s->bufferOffset = 0;
+    
+    {
+    {}  // namespace
+}  // namespace leveldb
+    
+    
+    {  // Write the header and the payload
+  Status s = dest_->Append(Slice(buf, kHeaderSize));
+  if (s.ok()) {
+    s = dest_->Append(Slice(ptr, n));
+    if (s.ok()) {
+      s = dest_->Flush();
+    }
+  }
+  block_offset_ += kHeaderSize + n;
+  return s;
 }
     
-    void SleepSeconds(int Seconds);
+    namespace leveldb {
+    }
+    
+    #include <cstdint>
+#include <iosfwd>
+#include <typeinfo>
+#include <vector>
+    
+      /**
+   * Creates a new string by appending a string literal to a string,
+   *   which is left unmodified.
+   * \note Equivalent to `*this + that`
+   */
+  template <std::size_t M>
+  constexpr BasicFixedString<Char, N + M - 1u> cappend(
+      const Char (&that)[M]) const noexcept {
+    return creplace(size_, 0u, that);
+  }
+    
+      uint64_t fullLength = (iob1->length() + iob2ptr->length() +
+                         iob3ptr->length() + iob4ptr->length() +
+                        iob5ptr->length());
+  EXPECT_EQ(5, iob1->countChainElements());
+  EXPECT_EQ(fullLength, iob1->computeChainDataLength());
+    
+    namespace folly {
+    }
+    
+      /**
+   * then
+   */
+  template <class... Fns FOLLY_REQUIRES_TRAILING(sizeof...(Fns) >= 1)>
+  auto then(Fns&&... fns) const& -> decltype(
+      expected_detail::ExpectedHelper::then_(
+          std::declval<const Base&>(),
+          std::declval<Fns>()...)) {
+    if (this->uninitializedByException()) {
+      throw_exception<BadExpectedAccess>();
+    }
+    return expected_detail::ExpectedHelper::then_(
+        base(), static_cast<Fns&&>(fns)...);
+  }
+    
+    // When a and b are equivalent objects, we return a to
+// make sorting stable.
+template <typename T>
+constexpr T constexpr_min(T a) {
+  return a;
+}
+template <typename T, typename... Ts>
+constexpr T constexpr_min(T a, T b, Ts... ts) {
+  return b < a ? constexpr_min(b, ts...) : constexpr_min(a, ts...);
+}
+    
+        // int -> int
+    if (std::is_signed<Src>::value && std::is_signed<Dst>::value) {
+      EXPECT_EQ(kDstMin, folly::constexpr_clamp_cast<Dst>(kSrcMin));
+    }
