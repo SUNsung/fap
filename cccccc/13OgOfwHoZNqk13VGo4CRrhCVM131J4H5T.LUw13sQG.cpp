@@ -1,346 +1,167 @@
 
         
-        // Here's what happens when an ASSERT_DEATH* or EXPECT_DEATH* is
-// executed:
-//
-//   1. It generates a warning if there is more than one active
-//   thread.  This is because it's safe to fork() or clone() only
-//   when there is a single thread.
-//
-//   2. The parent process clone()s a sub-process and runs the death
-//   test in it; the sub-process exits with code 0 at the end of the
-//   death test, if it hasn't exited already.
-//
-//   3. The parent process waits for the sub-process to terminate.
-//
-//   4. The parent process checks the exit code and error message of
-//   the sub-process.
-//
-// Examples:
-//
-//   ASSERT_DEATH(server.SendMessage(56, 'Hello'), 'Invalid port number');
-//   for (int i = 0; i < 5; i++) {
-//     EXPECT_DEATH(server.ProcessRequest(i),
-//                  'Invalid request .* in ProcessRequest()')
-//                  << 'Failed to die on request ' << i;
-//   }
-//
-//   ASSERT_EXIT(server.ExitNow(), ::testing::ExitedWithCode(0), 'Exiting');
-//
-//   bool KilledBySIGHUP(int exit_code) {
-//     return WIFSIGNALED(exit_code) && WTERMSIG(exit_code) == SIGHUP;
-//   }
-//
-//   ASSERT_EXIT(client.HangUpServer(), KilledBySIGHUP, 'Hanging up!');
-//
-// On the regular expressions used in death tests:
-//
-//   On POSIX-compliant systems (*nix), we use the <regex.h> library,
-//   which uses the POSIX extended regex syntax.
-//
-//   On other platforms (e.g. Windows), we only support a simple regex
-//   syntax implemented as part of Google Test.  This limited
-//   implementation should be enough most of the time when writing
-//   death tests; though it lacks many features you can find in PCRE
-//   or POSIX extended regex syntax.  For example, we don't support
-//   union ('x|y'), grouping ('(xy)'), brackets ('[xy]'), and
-//   repetition count ('x{5,7}'), among others.
-//
-//   Below is the syntax that we do support.  We chose it to be a
-//   subset of both PCRE and POSIX extended regex, so it's easy to
-//   learn wherever you come from.  In the following: 'A' denotes a
-//   literal character, period (.), or a single \\ escape sequence;
-//   'x' and 'y' denote regular expressions; 'm' and 'n' are for
-//   natural numbers.
-//
-//     c     matches any literal character c
-//     \\d   matches any decimal digit
-//     \\D   matches any character that's not a decimal digit
-//     \\f   matches \f
-//     \\n   matches \n
-//     \\r   matches \r
-//     \\s   matches any ASCII whitespace, including \n
-//     \\S   matches any character that's not a whitespace
-//     \\t   matches \t
-//     \\v   matches \v
-//     \\w   matches any letter, _, or decimal digit
-//     \\W   matches any character that \\w doesn't match
-//     \\c   matches any literal character c, which must be a punctuation
-//     .     matches any single character except \n
-//     A?    matches 0 or 1 occurrences of A
-//     A*    matches 0 or many occurrences of A
-//     A+    matches 1 or many occurrences of A
-//     ^     matches the beginning of a string (not that of each line)
-//     $     matches the end of a string (not that of each line)
-//     xy    matches x followed by y
-//
-//   If you accidentally use PCRE or POSIX extended regex features
-//   not implemented by us, you will get a run-time failure.  In that
-//   case, please try to rewrite your regular expression within the
-//   above syntax.
-//
-//   This implementation is *not* meant to be as highly tuned or robust
-//   as a compiled regex library, but should perform well enough for a
-//   death test, which already incurs significant overhead by launching
-//   a child process.
-//
-// Known caveats:
-//
-//   A 'threadsafe' style death test obtains the path to the test
-//   program from argv[0] and re-executes it in the sub-process.  For
-//   simplicity, the current implementation doesn't search the PATH
-//   when launching the sub-process.  This means that the user must
-//   invoke the test program via a path that contains at least one
-//   path separator (e.g. path/to/foo_test and
-//   /absolute/path/to/bar_test are fine, but foo_test is not).  This
-//   is rarely a problem as people usually don't put the test binary
-//   directory in PATH.
-//
-// TODO(wan@google.com): make thread-safe death tests search the PATH.
-    
-    namespace testing {
-    }
-    
-    // Overloads for ::wstring and ::std::wstring.
-#if GTEST_HAS_GLOBAL_WSTRING
-GTEST_API_ void PrintWideStringTo(const ::wstring&s, ::std::ostream* os);
-inline void PrintTo(const ::wstring& s, ::std::ostream* os) {
-  PrintWideStringTo(s, os);
-}
-#endif  // GTEST_HAS_GLOBAL_WSTRING
-    
-    
-    {  // Override this to define how to tear down the environment.
-  virtual void TearDown() {}
- private:
-  // If you see an error about overriding the following function or
-  // about it being private, you have mis-spelled SetUp() as Setup().
-  struct Setup_should_be_spelled_SetUp {};
-  virtual Setup_should_be_spelled_SetUp* Setup() { return NULL; }
+          {1,0,32,  &_residue_44_mid_un,
+   &_huff_book__16u1__long,&_huff_book__16u1__long,
+   &_resbook_16u_1,&_resbook_16u_1}
 };
+static const vorbis_residue_template _res_16u_2[]={
+  {1,0,32,  &_residue_44_hi_un,
+   &_huff_book__16u2__short,&_huff_book__16u2__short,
+   &_resbook_16u_2,&_resbook_16u_2},
     
-    #include 'gtest/internal/gtest-string.h'
+      {2,0,32,  &_residue_44_mid,
+   &_huff_book__44c3_s_long,&_huff_book__44c3_s_long,
+   &_resbook_44s_3,&_resbook_44s_3}
+};
+static const vorbis_residue_template _res_44s_4[]={
+  {2,0,16,  &_residue_44_mid,
+   &_huff_book__44c4_s_short,&_huff_book__44c4_s_short,
+   &_resbook_44s_4,&_resbook_44s_4},
     
-      class Iterator : public ParamIteratorInterface<T> {
-   public:
-    Iterator(const ParamGeneratorInterface<T>* base,
-             typename ContainerType::const_iterator iterator)
-        : base_(base), iterator_(iterator) {}
-    virtual ~Iterator() {}
+       - Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+    
+        intargvector m_mbSize;
+    bool m_truncated; // do BPTT
+    // BUGBUG: The 'Truncated' option is duplicated in the reader and must be set to the same there (e.g. by defining in the config on an outer enclosing level, like current samples).
+    //         We really should only read it in SGD and pass it ourselves on to the Reader, instead of it being a Reader parameter.
+    // BUGBUG: If m_truncated, then m_mbSize is interpreted as truncation length; the actual MB size is a combination of that and the #parallel sequences specified in the reader.
+    // TODO: do not specify 'Truncated' but 'TruncatedLength', set m_truncated so given, and let m_mbSize control how many #parallel sequences the reader is allowed to pack into an MB.
+    size_t m_maxSamplesInRAM;
+    // This is related with subminibatch implementation
+    // maxSamplesInRAM denotes how many samples we used in forward-backward on net.
+    // Due to the GPU memory limitations, it is sometime not possible to hold the m_mbSize in RAM.
+    // To mitigate this issue, we adopt the sub-minibatch implementation, where
+    // each m_mbSize[epoch] is divided by a few sub-minibatch of which size will be no more than m_maxSamplesInRAM
+    // a forward-backward is performed for each sub-minibatch; a model update is performed after each minibatch
+    size_t m_numSubminiBatches;
+    // alternative method to specify how to split minibatches into subminibatches
+    // default is 1, which means no subminibatch is used
+    // if m_maxTempMemSizeInSamples = SIZE_MAX (which means users do not specify the option) and m_numSubminiBatches > 1
+    // we divide one minibatch to m_numSubminiBatches subMinibatches
+    
+        REGISTER_OPERATOR_SCHEMA(RNN)
+        .Description(R'DOC(
+            Computes an one-layer simple RNN. This operator is usually supported
+            via some custom implementation such as CuDNN.
+    
+        // Taken from ONNX
+    REGISTER_OPERATOR_SCHEMA(Flatten)
+        .Description('Flattens the input tensor into a 2D matrix, '
+            'keeping the first dimension unchanged.')
+        .Input('input', 'A tensor of rank >= 2.', 'T')
+        .Output('output', 'A tensor of rank 2 with the contents of the input tensor, '
+            'with first dimension equal first dimension of input, and remaining '
+            'input dimensions flatenned into the inner dimension of the output.', 'T')
+        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
+            'Constrain input and output types to float tensors.');
+    
+    
+    REGISTER_OPERATOR_SCHEMA(Normalizer)
+        .SetDomain(c_mlDomain)
+        .Input('X', 'Data to be encoded', 'T')
+        .Output('Y', 'encoded output data', 'tensor(float)')
+        .Description(R'DOC(
+            Normalize the input.  There are three normalization modes,
+            which have the corresponding formulas:
+            Max .. math::     max(x_i)
+            L1  .. math::  z = ||x||_1 = \sum_{i=1}^{n} |x_i|
+            L2  .. math::  z = ||x||_2 = \sqrt{\sum_{i=1}^{n} x_i^2}
+            )DOC')
+        .TypeConstraint('T', { 'tensor(float)', 'tensor(double)', 'tensor(int64)', 'tensor(int32)' }, ' allowed types.')
+        .Attr('norm', 'enum 'MAX', 'L1', 'L2'', AttrType::AttributeProto_AttributeType_STRING);
+    
+        // Returns all frames of a given utterance.
+    msra::dbn::matrixstripe GetUtteranceFrames(size_t index) const
+    {
+        if (!IsInRam())
+        {
+            LogicError('GetUtteranceFrames was called when data have not yet been paged in.');
+        }
     }
     
-    # ifdef __BORLANDC__
-inline int IsATTY(int fd) { return isatty(fd); }
-inline int StrCaseCmp(const char* s1, const char* s2) {
-  return stricmp(s1, s2);
+    LatticeDeserializer::LatticeDeserializer(
+    CorpusDescriptorPtr corpus,
+    const ConfigParameters& cfg,
+    bool primary)
+    : DataDeserializerBase(primary),
+      m_verbosity(0),
+      m_corpus(corpus)
+{
+    if (primary)
+        LogicError('Lattice deserializer does not support primary mode, it cannot control chunking. '
+            'Please specify HTK deserializer as the first deserializer in your config file.');
+    }
+    
+            size_t cachesizeV = 54096;                                     // this was tuned--smaller is better (50k is quite little!!)
+        const size_t colsizeV = colstride * sizeof(float);             // stored bytes per column of V
+        size_t cacheablecolsV = (cachesizeV - 1) / colsizeV + (1 - 1); // #cols of V that fit into cache; -1 = space for row of M
+        cacheablecolsV = (cacheablecolsV + 3) & ~3;                    // align (round up to multiples of 4)
+    
+    // SectionStats - section to hold statistics for a featureSet
+class SectionStats : public Section
+{
+private:
+    // single pass measures
+    size_t m_count; // number of elements
+    double m_max;   // maximum value we have seen
+    double m_min;   // minimum value we have seen
+    double m_sum;   // sum of all numbers we have seen
+    double m_sum2;  // sum of the squares of all numbers we have seen
+    }
+    
+    void GranularGPUDataTransferer::WaitForSyncPointOnAssignStreamAsync()
+{
+    PrepareDevice(m_deviceId);
+    cudaStreamWaitEvent(GetAssignStream(), m_syncEvent, 0 /*flags 'must be 0'*/) || 'cudaStreamWaitEvent failed';
 }
-inline char* StrDup(const char* src) { return strdup(src); }
-# else  // !__BORLANDC__
-#  if GTEST_OS_WINDOWS_MOBILE
-inline int IsATTY(int /* fd */) { return 0; }
-#  else
-inline int IsATTY(int fd) { return _isatty(fd); }
-#  endif  // GTEST_OS_WINDOWS_MOBILE
-inline int StrCaseCmp(const char* s1, const char* s2) {
-  return _stricmp(s1, s2);
-}
-inline char* StrDup(const char* src) { return _strdup(src); }
-# endif  // __BORLANDC__
     
-      explicit tuple(GTEST_BY_REF_(T0) f0, GTEST_BY_REF_(T1) f1,
-      GTEST_BY_REF_(T2) f2, GTEST_BY_REF_(T3) f3, GTEST_BY_REF_(T4) f4,
-      GTEST_BY_REF_(T5) f5, GTEST_BY_REF_(T6) f6) : f0_(f0), f1_(f1), f2_(f2),
-      f3_(f3), f4_(f4), f5_(f5), f6_(f6) {}
+    #include <yoga/Yoga.h>
     
-    // A handy wrapper for ByRef.
-#define GTEST_BY_REF_(T) typename ::std::tr1::gtest_internal::ByRef<T>::type
+    using InstructionPointer = const void*;
     
-    // Implementation #1 calculates the primes on-the-fly.
-class OnTheFlyPrimeTable : public PrimeTable {
- public:
-  virtual bool IsPrime(int n) const {
-    if (n <= 1) return false;
-    }
+    _Unwind_Reason_Code unwindCallback(struct _Unwind_Context* context, void* arg) {
+  BacktraceState* state = reinterpret_cast<BacktraceState*>(arg);
+  auto absoluteProgramCounter =
+      reinterpret_cast<InstructionPointer>(_Unwind_GetIP(context));
     }
     
-      // Trivial case 2: even numbers
-  if (n % 2 == 0) return n == 2;
+     public: // Setters
     
-      bool m_done;
-  HeaderMap m_responseHeaders;
-  std::string m_response;
-  int m_code;
+        double getAspectRatio(void) const;
     
-      /////////////////////////////////////////////////////////////////////////////
-  // Data members.
-    
-      if (mpz_sgn(gmpDataB) == 0) {
-    mpz_clear(gmpDataA);
-    mpz_clear(gmpDataB);
+    class ProgramLocation {
+public:
+  ProgramLocation() : m_functionName('Unspecified'), m_fileName('Unspecified'), m_lineNumber(0) {}
     }
     
-      LdSSwitchData data;
-  data.numCases   = numCases;
-  data.cases      = &cases[0];
-  data.defaultSk  = SrcKey{curSrcKey(env),
-                           bcOff(env) + iv.strvec()[iv.size() - 1].dest};
-  data.bcSPOff    = spOffBCFromFP(env);
-    
-    TCA OfflineCode::collectJmpTargets(FILE *file,
-                                   TCA fileStartAddr,
-                                   TCA codeStartAddr,
-                                   uint64_t codeLen,
-                                   vector<TCA> *jmpTargets) {
-  return 0;
-}
-    
-    bool CurlShareResource::setOption(int option, const Variant& value) {
-  if (m_share == nullptr) {
-    raise_warning('curl_share_setopt():'
-                  ' curl share not created or is already closed');
-    return false;
-  }
-    }
-    
-    /**
- * A Synchronizable object that has multiple conditional variables. The benefit
- * is, notify() can choose to wake up a thread that is more favorable (e.g.,
- * one with stack/heap mapped on huge pages, or one that is recently active).
- */
-struct SynchronizableMulti {
-  explicit SynchronizableMulti(int size);
-  virtual ~SynchronizableMulti() {}
-    }
-    
-      irgen::emitFuncBodyDispatch(env, dvs);
-  irgen::sealUnit(env);
-    
-    bool simplify(Env& env, const ldimmq& inst, Vlabel b, size_t i) {
-  return if_inst<Vinstr::lea>(env, b, i + 1, [&] (const lea& ea) {
-    // ldimmq{s, index}; lea{base[index], d} -> lea{base[s],d}
-    if (!(env.use_counts[inst.d] == 1 &&
-          inst.s.q() <= 4095  &&
-          inst.s.q() >= -4095 &&
-          inst.d == ea.s.index &&
-          ea.s.disp == 0 &&
-          ea.s.base.isValid())) return false;
-    }
-    }
-    
-    bool js_cocos2dx_builder_CCBAnimationManager_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_builder_CCBAnimationManager_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_builder_CCBAnimationManager(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_builder(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_builder_CCBAnimationManager_moveAnimationsFromNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setAutoPlaySequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_actionForSoundChannel(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setBaseValue(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentOutletNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getLastCompletedSequenceName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setRootNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceNamedTweenDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentOutletName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRootContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setDocumentControllerName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setObject(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_actionForCallbackChannel(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentOutletNames(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_init(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getKeyframeCallbacks(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackControlEvents(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setRootContainerSize(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceIdTweenDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRunningSequenceName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getAutoPlaySequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getRootNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentOutletNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setDelegate(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getSequenceDuration(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_addDocumentCallbackNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_runAnimationsForSequenceNamed(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getSequenceId(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setCallFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentCallbackNodes(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_setSequences(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_debug(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_getDocumentControllerName(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_builder_CCBAnimationManager_CCBAnimationManager(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    bool js_cocos2dx_physics3d_Physics3DObject_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_physics3d_Physics3DObject_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_physics3d_Physics3DObject(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_physics3d(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_physics3d_Physics3DObject_setUserData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getUserData(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getObjType(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_setPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getWorldTransform(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getPhysicsWorld(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_setMask(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getCollisionCallback(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_getMask(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_physics3d_Physics3DObject_needCollisionCallback(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    bool js_cocos2dx_studio_BoneNode_constructor(JSContext *cx, uint32_t argc, jsval *vp);
-void js_cocos2dx_studio_BoneNode_finalize(JSContext *cx, JSObject *obj);
-void js_register_cocos2dx_studio_BoneNode(JSContext *cx, JS::HandleObject global);
-void register_all_cocos2dx_studio(JSContext* cx, JS::HandleObject obj);
-bool js_cocos2dx_studio_BoneNode_getDebugDrawWidth(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getChildBones(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getBlendFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getAllSubBones(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_setBlendFunc(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_setDebugDrawEnabled(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getVisibleSkinsRect(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getAllSubSkins(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_displaySkin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_isDebugDrawEnabled(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_addSkin(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getRootSkeletonNode(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_setDebugDrawLength(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getSkins(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getVisibleSkins(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_setDebugDrawWidth(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getDebugDrawLength(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_setDebugDrawColor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_getDebugDrawColor(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_create(JSContext *cx, uint32_t argc, jsval *vp);
-bool js_cocos2dx_studio_BoneNode_BoneNode(JSContext *cx, uint32_t argc, jsval *vp);
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    {} // namespace aria2
-
-    
-    #include 'BtMessage.h'
-#include 'Command.h'
-    
-      virtual void openExistingFile(int64_t totalLength = 0) CXX11_OVERRIDE;
-    
-    protected:
-  DownloadEngine* getDownloadEngine() { return e_; }
-  // Called after content body is completely sent.
-  virtual void afterSend(const std::shared_ptr<HttpServer>& httpServer,
-                         DownloadEngine* e) = 0;
-    
-      const std::shared_ptr<Request>& getProxyRequest() const
-  {
-    return proxyRequest_;
+      // The STL assumes rvalue references are unique and for simplicity's sake, we
+  // make the same assumption here, that &ref != this.
+  RefPtr<T>& operator=(RefPtr<T>&& ref) {
+    unrefIfNecessary(m_ptr);
+    m_ptr = ref.m_ptr;
+    ref.m_ptr = nullptr;
+    return *this;
   }
     
-    #include 'DiskWriterFactory.h'
-#include 'a2functional.h'
+    #include <fb/visibility.h>
     
-    
-    {} // namespace aria2
+    namespace detail {
+template <typename T, typename jprim>
+struct JPrimitive : JavaClass<T> {
+  using typename JavaClass<T>::javaobject;
+  using JavaClass<T>::javaClassStatic;
+  static local_ref<javaobject> valueOf(jprim val) {
+    static auto cls = javaClassStatic();
+    static auto method =
+      cls->template getStaticMethod<javaobject(jprim)>('valueOf');
+    return method(cls, val);
+  }
+  jprim value() const {
+    static auto method =
+      javaClassStatic()->template getMethod<jprim()>(T::kValueMethod);
+    return method(this->self());
+  }
+};
+    }
