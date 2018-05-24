@@ -1,83 +1,124 @@
 
         
-            tag = to_json
-    
-        class Tag2(JSONTag):
-        key = ' 2'
-    
-        def from_object(self, obj):
-        '''Updates the values from the given object.  An object can be of one
-        of the following two types:
-    
-            if not current.propagate:
-            break
-    
-            def __init__(self, name, doc=None):
-            self.name = name
-            self.__doc__ = doc
-        def _fail(self, *args, **kwargs):
-            raise RuntimeError('signalling support is unavailable '
-                               'because the blinker library is '
-                               'not installed.')
-        send = lambda *a, **kw: None
-        connect = disconnect = has_receivers_for = receivers_for = \
-            temporarily_connected_to = connected_to = _fail
-        del _fail
-    
-        if not git_is_clean():
-        fail('You have uncommitted changes in git')
-    
-        from config_package_app import app
-    assert app.instance_path == str(modules_tmpdir.join('instance'))
+        
+def test_custom_tag():
+    class Foo(object):
+        def __init__(self, data):
+            self.data = data
     
     
-def test_logger_debug(app):
-    app.debug = True
-    assert app.logger.level == logging.DEBUG
-    assert app.logger.handlers == [default_handler]
+def _dump_loader_info(loader):
+    yield 'class: %s.%s' % (type(loader).__module__, type(loader).__name__)
+    for key, value in sorted(loader.__dict__.items()):
+        if key.startswith('_'):
+            continue
+        if isinstance(value, (tuple, list)):
+            if not all(isinstance(x, (str, text_type)) for x in value):
+                continue
+            yield '%s:' % key
+            for item in value:
+                yield '  - %s' % item
+            continue
+        elif not isinstance(value, (str, text_type, int, float, bool)):
+            continue
+        yield '%s: %r' % (key, value)
     
-        # Parse and validate the field names.  Validation serves two purposes,
-    # generating informative error messages and preventing template injection attacks.
-    if isinstance(field_names, basestring):
-        field_names = field_names.replace(',', ' ').split() # names separated by whitespace and/or commas
-    field_names = tuple(map(str, field_names))
-    for name in (typename,) + field_names:
-        if not all(c.isalnum() or c=='_' for c in name):
-            raise ValueError('Type names and field names can only contain alphanumeric characters and underscores: %r' % name)
-        if _iskeyword(name):
-            raise ValueError('Type names and field names cannot be a keyword: %r' % name)
-        if name[0].isdigit():
-            raise ValueError('Type names and field names cannot start with a number: %r' % name)
-    seen_names = set()
-    for name in field_names:
-        if name.startswith('_'):
-            raise ValueError('Field names cannot start with an underscore: %r' % name)
-        if name in seen_names:
-            raise ValueError('Encountered duplicate field name: %r' % name)
-        seen_names.add(name)
+        If you configure your own :class:`logging.StreamHandler`, you may want to
+    use this for the stream. If you are using file or dict configuration and
+    can't import this directly, you can refer to it as
+    ``ext://flask.logging.wsgi_errors_stream``.
+    '''
+    return request.environ['wsgi.errors'] if request else sys.stderr
     
-    +----------+     +----------+       +--------+     +-----------+    +---------+
-|          |  => | Work Ids |    => |        |  => | Call Q    | => |         |
-|          |     +----------+       |        |     +-----------+    |         |
-|          |     | ...      |       |        |     | ...       |    |         |
-|          |     | 6        |       |        |     | 5, call() |    |         |
-|          |     | 7        |       |        |     | ...       |    |         |
-| Process  |     | ...      |       | Local  |     +-----------+    | Process |
-|  Pool    |     +----------+       | Worker |                      |  #1..n  |
-| Executor |                        | Thread |                      |         |
-|          |     +----------- +     |        |     +-----------+    |         |
-|          | <=> | Work Items | <=> |        | <=  | Result Q  | <= |         |
-|          |     +------------+     |        |     +-----------+    |         |
-|          |     | 6: call()  |     |        |     | ...       |    |         |
-|          |     |    future  |     |        |     | 4, result |    |         |
-|          |     | ...        |     |        |     | 3, except |    |         |
-+----------+     +------------+     +--------+     +-----------+    +---------+
+        Implements signals based on blinker if available, otherwise
+    falls silently back to a noop.
     
-        return _MasterDiagnosticFilter( compiled_by_type )
+            rv = client.get('/?foo=bar')
+        assert rv.data == b'Hello World!'
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+        recorded = []
+    
+        def get_converter(self, mime):
+        if is_valid_mime(mime):
+            for converter_class in plugin_manager.get_converters():
+                if converter_class.supports(mime):
+                    return converter_class(mime)
+    
+    
+@pytest.mark.skipif(not has_docutils(), reason='docutils not installed')
+@pytest.mark.parametrize('filename', filenames)
+def test_rst_file_syntax(filename):
+    p = subprocess.Popen(
+        ['rst2pseudoxml.py', '--report=1', '--exit-status=1', filename],
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE
+    )
+    err = p.communicate()[1]
+    assert p.returncode == 0, err.decode('utf8')
+
+    
+                write_stream_kwargs = {
+                'stream': build_output_stream(
+                    args=args,
+                    env=env,
+                    request=response.request,
+                    response=response,
+                    output_options=(
+                        args.output_options
+                        if response is final_response
+                        else args.output_options_history
+                    )
+                ),
+                # NOTE: `env.stdout` will in fact be `stderr` with `--download`
+                'outfile': env.stdout,
+                'flush': env.stdout_isatty or args.stream
+            }
+            try:
+                if env.is_windows and is_py3 and 'colors' in args.prettify:
+                    write_stream_with_colors_win_py3(**write_stream_kwargs)
+                else:
+                    write_stream(**write_stream_kwargs)
+            except IOError as e:
+                if not show_traceback and e.errno == errno.EPIPE:
+                    # Ignore broken pipes unless --traceback.
+                    env.stderr.write('\n')
+                else:
+                    raise
+    
+    
+class FormatterPlugin(object):
+    
+    network.add_argument(
+    '--timeout',
+    type=float,
+    default=30,
+    metavar='SECONDS',
+    help='''
+    The connection timeout of the request in seconds. The default value is
+    30 seconds.
+    
+    
+DEFAULT_CONFIG_DIR = str(os.environ.get(
+    'HTTPIE_CONFIG_DIR',
+    os.path.expanduser('~/.httpie') if not is_windows else
+    os.path.expandvars(r'%APPDATA%\\httpie')
+))
+    
+                if isinstance(token, Escaped):
+                continue
+    
+    ] + _py_files('scrapy/contrib') + _py_files('scrapy/contrib_exp')
+    
+        def add_options(self, parser):
+        ScrapyCommand.add_options(self, parser)
+        parser.add_option('-a', dest='spargs', action='append', default=[], metavar='NAME=VALUE',
+                          help='set spider argument (may be repeated)')
+        parser.add_option('-o', '--output', metavar='FILE',
+                          help='dump scraped items into FILE (use - for stdout)')
+        parser.add_option('-t', '--output-format', metavar='FORMAT',
+                          help='format to use for dumping items with -o')
+    
+        def __init__(self, method, *args):
+        self.testcase_pre = _create_testcase(method, '@%s pre-hook' % self.name)
+        self.testcase_post = _create_testcase(method, '@%s post-hook' % self.name)
+        self.args = args
