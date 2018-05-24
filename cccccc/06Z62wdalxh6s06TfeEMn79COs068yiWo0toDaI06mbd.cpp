@@ -1,279 +1,71 @@
 
         
-        #endif  // ATOM_COMMON_API_LOCKER_H_
-
-    
-     protected:
-  RemoteCallbackFreer(v8::Isolate* isolate,
-                      v8::Local<v8::Object> target,
-                      int object_id,
-                      content::WebContents* web_conents);
-  ~RemoteCallbackFreer() override;
-    
-    #ifndef ATOM_COMMON_DRAGGABLE_REGION_H_
-#define ATOM_COMMON_DRAGGABLE_REGION_H_
-    
-      // Sent when one or more URLs are deleted.
-  //
-  // The source is the profile owning the history service that changed, and
-  // the details is history::URLsDeletedDetails that lists the deleted URLs.
-  NOTIFICATION_HISTORY_URLS_DELETED,
-    
-      // Returns whether shortcut handling is currently suspended.
-  bool IsShortcutHandlingSuspended() const;
-    
-    #include 'content/public/browser/web_contents_observer.h'
-#include 'ui/gfx/native_widget_types.h'
-    
-     private:
-  friend class base::RefCountedThreadSafe<MonitorFinder>;
-  ~MonitorFinder();
-    
-    #include 'base/memory/ref_counted.h'
-#include 'chrome/browser/ui/views/color_chooser_dialog.h'
-#include 'third_party/skia/include/core/SkColor.h'
-#include 'ui/shell_dialogs/base_shell_dialog.h'
-#include 'ui/shell_dialogs/base_shell_dialog_win.h'
-    
-      assert(peekType(msg) == thpp::Type::LONG_STORAGE);
-  THLongStorage *storage2 = unpackTHLongStorage(msg);
-  assert(storage2->size == STORAGE_SIZE);
-  for (int64_t i = 0; i < STORAGE_SIZE; i++)
-    assert(storage2->data[i] == i);
-  
-  int vec_size = unpackInteger(msg);
-  assert(vec_size == VEC_SIZE);
-  for (int i = 0; i < VEC_SIZE; i++)
-    assert(unpackInteger(msg) == 7);
-    
-    #undef THStoragePtr
-#undef THPStoragePtr
-#undef THTensorPtr
-#undef THPTensorPtr
-    
-    #define THPStorage TH_CONCAT_3(THP,Real,Storage)
-#define THPStorageStr TH_CONCAT_STRING_3(torch.,Real,Storage)
-#define THPStorageClass TH_CONCAT_3(THP,Real,StorageClass)
-#define THPStorage_(NAME) TH_CONCAT_4(THP,Real,Storage_,NAME)
-    
-    using THDGeneratorTypes = std::tuple<THDGenerator>;
-    
-    /** Returns the benchmark Reporter instance.
- *
- * The returned instance will take care of generating reports for all the actual
- * reporters configured via the 'enable_*_reporter' command line flags (see
- * benchmark_config.cc). */
-std::shared_ptr<Reporter> GetReporter();
-    
-    void ParseDb(const std::string& db, std::vector<Feature>* feature_list) {
-  feature_list->clear();
-  std::string db_content(db);
-  db_content.erase(
-      std::remove_if(db_content.begin(), db_content.end(), isspace),
-      db_content.end());
-    }
-    
-    // Get leading or trailing comments in a string. Comment lines start with '// '.
-// Leading detached comments are put in in front of leading comments.
-template <typename DescriptorType>
-inline grpc::string GetNodeComments(const DescriptorType* desc, bool leading) {
-  return grpc_generator::GetPrefixedComments(desc, leading, '//');
-}
-    
-    std::vector<grpc::string_ref> SecureAuthContext::GetPeerIdentity() const {
-  if (!ctx_) {
-    return std::vector<grpc::string_ref>();
-  }
-  grpc_auth_property_iterator iter = grpc_auth_context_peer_identity(ctx_);
-  std::vector<grpc::string_ref> identity;
-  const grpc_auth_property* property = nullptr;
-  while ((property = grpc_auth_property_iterator_next(&iter))) {
-    identity.push_back(
-        grpc::string_ref(property->value, property->value_length));
-  }
-  return identity;
-}
-    
-    
-    {  grpc::string package = service->full_name();
-  size_t pos = package.rfind('.' + service->name());
-  if (pos != grpc::string::npos) {
-    package.erase(pos);
-    result.append('package: ' + package + ';\n');
-  }
-  result.append('service ' + service->name() + ' {\n');
-  for (int i = 0; i < service->method_count(); ++i) {
-    result.append(DescribeMethod(service->method(i)));
-  }
-  result.append('}\n\n');
-  return result;
-}
-    
-    int protoc_main(int argc, char* argv[]) {
-  google::protobuf::compiler::CommandLineInterface cli;
-  cli.AllowPlugins('protoc-');
-    }
-    
-    
-    {    get_bits_no_markers(8 + (23 - ofs));
-  }
-  else
-    get_bits_no_markers(pH->code_size[symbol]);
-    
-    #ifndef M_PI
-#  define M_PI (3.1415926536f)
-#endif
-    
-    
-/** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
-#undef MULT16_32_Q15
-static OPUS_INLINE opus_val32 MULT16_32_Q15_armv4(opus_val16 a, opus_val32 b)
-{
-  unsigned rd_lo;
-  int rd_hi;
-  __asm__(
-      '#MULT16_32_Q15\n\t'
-      'smull %0, %1, %2, %3\n\t'
-      : '=&r'(rd_lo), '=&r'(rd_hi)
-      : '%r'(b), 'r'(a<<16)
-  );
-  /*We intentionally don't OR in the high bit of rd_lo for speed.*/
-  return rd_hi<<1;
-}
-#define MULT16_32_Q15(a, b) (MULT16_32_Q15_armv4(a, b))
-    
-        // return true if precomputation is executed.
-    bool PreCompute(ComputationNetworkPtr net,
-                    IDataReader* trainSetDataReader,
-                    const std::vector<ComputationNodeBasePtr>& featureNodes,
-                    const std::vector<ComputationNodeBasePtr>& labelNodes,
-                    StreamMinibatchInputs* inputMatrices);
-    
-        const std::unordered_map<std::string, std::pair<int, int>>&
-        OpSchemaRegistry::DomainToVersionRange::Map() const
-    {
-        return m_map;
-    }
-    
-        // Taken from ONNX
-    REGISTER_OPERATOR_SCHEMA(PRelu)
-        .Description('PRelu takes input data (Tensor<T>) and slope tensor as input, '
-            'and produces one output data (Tensor<T>) where the function '
-            '`f(x) = slope * x for x < 0`, `f(x) = x for x >= 0`., is applied to the '
-            'data tensor elementwise.')
-        .Input('X', 'Input tensor', 'T')
-        .Input('Slope', 'Slope tensor. If `Slope` is of size 1, the value is shared'
-            'across different channels', 'T')
-        .Output('Y', 'The PRelu value of the input tensor computed element-wise', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.');
-    
-        //‘GREATER’, ‘LESS’, ‘EQUALS,
-    REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Greater)
-        REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Less)
-        REGISTER_BINARY_COMPARISON_OPERATOR_SCHEMA(Equal)
-    
-                Equations (GRU with default activations):
-              - zt = sigmoid(Wz*Xt + Rz*Ht-1 + Wbz + Rbz)
-              - rt = sigmoid(Wr*Xt + Rr*Ht-1 + Wbr + Rbr)
-              - ht = tanh(Wh*Xt + rt*(Rh*Ht-1 + Rbh) + Wbh)
-              - H = (1 - zt) (.) ht + it (.) Ht-1
-            )DOC')
-        .FillUsing(RNNDocGeneratorInputX())
-        .Input('W',
-            'The weight tensor for the gates. Concatenation of `W[zrh]` and `WB[zrh]` '
-            '(if bidirectional) along dimension 0. This tensor has shape '
-            '`[num_directions, 3*hidden_size, input_size]`.', 'T')
-        .Input('R',
-            'The recurrence weight tensor. Concatenation of `R[zrh]` and `RB[zrh]` '
-            '(if bidirectional) along dimension 0. This tensor has shape '
-            '`[num_directions, 3*hidden_size, hidden_size]`.', 'T')
-        .Input('B',
-            'The bias tensor for the gates. Concatenation of `[Wb[zrh], Rb[zrh]]` and '
-            '`[WBb[zrh], RBb[zrh]]` (if bidirectional) along dimension 0. This tensor '
-            'has shape `[num_directions, 6*hidden_size]`. Optional: If not specified '
-            '- assumed to be 0', 'T',
-            true /*optional*/)
-        .FillUsing(RNNDocGeneratorInputSeqLen())
-        .FillUsing(RNNDocGeneratorInputInitialH())
-        .Attr('activations', 'A list of 3 (or 6 if bidirectional) activation functions '
-            'for update, reset, and hidden gates. The activation functions must be '
-            'one of sigmoid and tanh. See the equations for default.',
-            AttrType::AttributeProto_AttributeType_STRINGS)
-        .FillUsing(RNNDocGeneratorActivationArgs())
-        .FillUsing(RNNDocGeneratorAttrOutput());
-    
-        // Taken from ONNX
-    REGISTER_OPERATOR_SCHEMA(Split)
-        .Description('Split a tensor into a list of tensors, along the specified 'axis'. '
-            'The lengths of the split can be specified using argument 'axis' or '
-            'optional second input blob to the operator. Otherwise, the tensor is split '
-            'to equal sized parts.')
-        .Input('input', 'The tensor to split', 'T')
-        .Input('split', 'Optional list of output lengths (see also arg 'split')', 'T')
-        .Output('output', 'A list of output tensors', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.')
-        .Attr('axis', 'Which axis to split on', AttrType::AttributeProto_AttributeType_INT)
-        .Attr('split', 'Number of tensors to output.', AttrType::AttributeProto_AttributeType_INTS);
-    
-            try
-        {
-            // feature reader (we reinstantiate it for each block, i.e. we reopen the file actually)
-            // if this is the first feature read ever, we explicitly open the first file to get the information such as feature dimension
-            htkfeatreader reader;
-    }
-    
-    // Gets sequences for a particular chunk.
-// This information is used by the randomizer to fill in current windows of sequences.
-void LatticeDeserializer::SequenceInfosForChunk(ChunkIdType, vector<SequenceInfo>& result)
-{
-    UNUSED(result);
-    LogicError('Lattice deserializer does not support primary mode, it cannot control chunking. '
-        'Please specify HTK deserializer as the first deserializer in your config file.');
-    }
-    
-    
-    {    RemoveNodeFromNet(node);        // take it out remporarily
-    node->SetNodeName(newNodeName); // change the name
-    AddNodeToNet(node);             // and put it back
-}
-    
-      /// Perform an IO control command on the acceptor.
+          /// Set an option on the acceptor.
   /**
-   * This function is used to execute an IO control command on the acceptor.
+   * This function is used to set an option on the acceptor.
    *
-   * @param command The IO control command to be performed on the acceptor.
+   * @param option The new option value to be set on the acceptor.
    *
    * @param ec Set to indicate what error occurred, if any.
    *
-   * @sa IoControlCommand @n
-   * boost::asio::socket_base::non_blocking_io
+   * @sa SettableSocketOption @n
+   * boost::asio::socket_base::reuse_address
+   * boost::asio::socket_base::enable_connection_aborted
    *
    * @par Example
-   * Getting the number of bytes ready to read:
+   * Setting the SOL_SOCKET/SO_REUSEADDR option:
    * @code
    * boost::asio::ip::tcp::acceptor acceptor(io_service);
    * ...
-   * boost::asio::ip::tcp::acceptor::non_blocking_io command(true);
+   * boost::asio::ip::tcp::acceptor::reuse_address option(true);
    * boost::system::error_code ec;
-   * socket.io_control(command, ec);
+   * acceptor.set_option(option, ec);
    * if (ec)
    * {
    *   // An error occurred.
    * }
    * @endcode
    */
-  template <typename IoControlCommand>
-  boost::system::error_code io_control(IoControlCommand& command,
+  template <typename SettableSocketOption>
+  boost::system::error_code set_option(const SettableSocketOption& option,
       boost::system::error_code& ec)
   {
-    return this->get_service().io_control(
-        this->get_implementation(), command, ec);
+    return this->get_service().set_option(
+        this->get_implementation(), option, ec);
   }
     
-    #ifndef BOOST_ASIO_DETAIL_FENCED_BLOCK_HPP
-#define BOOST_ASIO_DETAIL_FENCED_BLOCK_HPP
+    #ifndef BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
+#define BOOST_ASIO_BUFFERED_READ_STREAM_FWD_HPP
+    
+    template <typename Stream>
+class buffered_write_stream;
+    
+    
+    {private:
+  // The top of the stack of calls for the current thread.
+  static tss_ptr<context> top_;
+};
+    
+      static void do_complete(io_service_impl* owner, operation* base,
+      const boost::system::error_code& /*ec*/,
+      std::size_t /*bytes_transferred*/)
+  {
+    // Take ownership of the handler object.
+    descriptor_read_op* o(static_cast<descriptor_read_op*>(base));
+    ptr p = { boost::asio::detail::addressof(o->handler_), o, o };
+    }
+    
+    #if !defined(BOOST_ASIO_HAS_THREADS)
+# include <boost/asio/detail/null_event.hpp>
+#elif defined(BOOST_ASIO_WINDOWS)
+# include <boost/asio/detail/win_event.hpp>
+#elif defined(BOOST_ASIO_HAS_PTHREADS)
+# include <boost/asio/detail/posix_event.hpp>
+#elif defined(BOOST_ASIO_HAS_STD_MUTEX_AND_CONDVAR)
+# include <boost/asio/detail/std_event.hpp>
+#else
+# error Only Windows, POSIX and std::condition_variable are supported!
+#endif
     
     namespace boost {
 namespace asio {
@@ -282,76 +74,234 @@ namespace detail {
     }
     }
     
-    template <typename Function, typename Context>
-inline void invoke(const Function& function, Context& context)
+    #include <boost/asio/detail/config.hpp>
+    
+    template <typename Handler>
+inline void* allocate(std::size_t s, Handler& h)
 {
 #if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
-  Function tmp(function);
-  tmp();
+  return ::operator new(s);
 #else
-  using boost::asio::asio_handler_invoke;
-  asio_handler_invoke(function, boost::asio::detail::addressof(context));
+  using boost::asio::asio_handler_allocate;
+  return asio_handler_allocate(s, boost::asio::detail::addressof(h));
 #endif
 }
     
     
-    {  // Returns a heuristic cutoff on block errors in the sense that we won't
-  // consider distortions where a block error is greater than this.
-  virtual float BlockErrorLimit() const = 0;
-  // Given the search direction (+1 for upwards and -1 for downwards) and the
-  // current distance map, fills in *block_weight image with the relative block
-  // error adjustment weights.
-  // The target_mul param has the same semantics as in DistanceOK().
-  // Note that this is essentially a static function in the sense that it does
-  // not depend on the last Compare() call.
-  virtual void ComputeBlockErrorAdjustmentWeights(
-      int direction, int max_block_dist, double target_mul, int factor_x,
-      int factor_y, const std::vector<float>& distmap,
-      std::vector<float>* block_weight) = 0;
-};
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
     
-    void OutputImage::ToLinearRGB(int xmin, int ymin, int xsize, int ysize,
-                              std::vector<std::vector<float> >* rgb) const {
-  const double* lut = Srgb8ToLinearTable();
-  std::vector<uint8_t> rgb_pixels = ToSRGB(xmin, ymin, xsize, ysize);
-  for (int p = 0; p < xsize * ysize; ++p) {
-    for (int i = 0; i < 3; ++i) {
-      (*rgb)[i][p] = static_cast<float>(lut[rgb_pixels[3 * p + i]]);
+    
+    
+    
+    
+    
+    
+    
+    {		m_debugDraw.DrawString(5, m_textLine, 'step [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.step, aveProfile.step, m_maxProfile.step);
+		m_textLine += DRAW_STRING_NEW_LINE;
+		m_debugDraw.DrawString(5, m_textLine, 'collide [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.collide, aveProfile.collide, m_maxProfile.collide);
+		m_textLine += DRAW_STRING_NEW_LINE;
+		m_debugDraw.DrawString(5, m_textLine, 'solve [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solve, aveProfile.solve, m_maxProfile.solve);
+		m_textLine += DRAW_STRING_NEW_LINE;
+		m_debugDraw.DrawString(5, m_textLine, 'solve init [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solveInit, aveProfile.solveInit, m_maxProfile.solveInit);
+		m_textLine += DRAW_STRING_NEW_LINE;
+		m_debugDraw.DrawString(5, m_textLine, 'solve velocity [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solveVelocity, aveProfile.solveVelocity, m_maxProfile.solveVelocity);
+		m_textLine += DRAW_STRING_NEW_LINE;
+		m_debugDraw.DrawString(5, m_textLine, 'solve position [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solvePosition, aveProfile.solvePosition, m_maxProfile.solvePosition);
+		m_textLine += DRAW_STRING_NEW_LINE;
+		m_debugDraw.DrawString(5, m_textLine, 'solveTOI [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.solveTOI, aveProfile.solveTOI, m_maxProfile.solveTOI);
+		m_textLine += DRAW_STRING_NEW_LINE;
+		m_debugDraw.DrawString(5, m_textLine, 'broad-phase [ave] (max) = %5.2f [%6.2f] (%6.2f)', p.broadphase, aveProfile.broadphase, m_maxProfile.broadphase);
+		m_textLine += DRAW_STRING_NEW_LINE;
+	}
+    
+    		for (int32 i = 0; i < 2; ++i)
+		{
+			b2Vec2 vertices[3];
+			vertices[0].Set(-0.5f, 0.0f);
+			vertices[1].Set(0.5f, 0.0f);
+			vertices[2].Set(0.0f, 1.5f);
     }
-  }
-}
     
-    void ComputeBlockDCTDouble(double block[64]) {
-  TransformBlock(block, DCT1d);
-}
+    	void Launch()
+	{
+		m_body->SetTransform(b2Vec2(0.0f, 4.0f), 0.0f);
+		m_body->SetLinearVelocity(b2Vec2_zero);
+		m_body->SetAngularVelocity(0.0f);
+    }
     
-    // Performs in-place floating point 8x8 DCT on block[0..63].
-// Note that the DCT used here is the DCT-2 with the first term multiplied by
-// 1/sqrt(2) and the result scaled by 1/2.
-void ComputeBlockDCTDouble(double block[64]);
-    
-    // This function will create a Huffman tree.
-//
-// The (data,length) contains the population counts.
-// The tree_limit is the maximum bit depth of the Huffman codes.
-//
-// The depth contains the tree, i.e., how many bits are used for
-// the symbol.
-//
-// The actual Huffman tree is constructed in the tree[] array, which has to
-// be at least 2 * length + 1 long.
-//
-// See http://en.wikipedia.org/wiki/Huffman_coding
-void CreateHuffmanTree(const uint32_t *data,
-                       const size_t length,
-                       const int tree_limit,
-                       HuffmanTree* tree,
-                       uint8_t *depth);
-    
-    #include <math.h>
-    
-    #endif  // GUETZLI_FDCT_H_
+    // Handler for Win32 messages, update mouse/keyboard data.
+// You may or not need this for your implementation, but it can serve as reference for handling inputs.
+// Commented out to avoid dragging dependencies on <windows.h> types. You can copy the extern declaration in your code.
+/*
+IMGUI_API LRESULT   ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+*/
 
     
-    #ifndef GUETZLI_JPEG_DATA_DECODER_H_
-#define GUETZLI_JPEG_DATA_DECODER_H_
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_API void        ImGui_Marmalade_InvalidateDeviceObjects();
+IMGUI_API bool        ImGui_Marmalade_CreateDeviceObjects();
+    
+    // Render function.
+// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
+void ImGui_ImplA5_RenderDrawData(ImDrawData* draw_data)
+{
+    int op, src, dst;
+    al_get_blender(&op, &src, &dst);
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
+    }
+    
+    
+    {    switch (msg)
+    {
+    case WM_SIZE:
+        if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
+        {
+            ImGui_ImplDX10_InvalidateDeviceObjects();
+            CleanupRenderTarget();
+            g_pSwapChain->ResizeBuffers(0, (UINT)LOWORD(lParam), (UINT)HIWORD(lParam), DXGI_FORMAT_UNKNOWN, 0);
+            CreateRenderTarget();
+            ImGui_ImplDX10_CreateDeviceObjects();
+        }
+        return 0;
+    case WM_SYSCOMMAND:
+        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
+            return 0;
+        break;
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        return 0;
+    }
+    return DefWindowProc(hWnd, msg, wParam, lParam);
+}
+    
+    void WaitForLastSubmittedFrame()
+{
+    FrameContext* frameCtxt = &g_frameContext[g_frameIndex % NUM_FRAMES_IN_FLIGHT];
+    }
+    
+            // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        s3eKeyboardUpdate();
+        s3ePointerUpdate();
+        ImGui_Marmalade_NewFrame();
+    
+    int main(int, char**)
+{
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    }
+    
+    // CHANGELOG 
+// (minor and older changes stripped away, please see git history for details)
+//  2018-05-07: Render: Saving/restoring Transform because they don't seem to be included in the StateBlock. Setting shading mode to Gouraud.
+//  2018-03-20: Misc: Setup io.BackendFlags ImGuiBackendFlags_HasMouseCursors and ImGuiBackendFlags_HasSetMousePos flags + honor ImGuiConfigFlags_NoMouseCursorChange flag.
+//  2018-02-20: Inputs: Added support for mouse cursors (ImGui::GetMouseCursor() value and WM_SETCURSOR message handling).
+//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplDX9_RenderDrawData() in the .h file so you can call it yourself.
+//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
+//  2018-02-06: Inputs: Honoring the io.WantSetMousePos by repositioning the mouse (when using navigation and ImGuiConfigFlags_NavEnableSetMousePos is set).
+//  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
+    
+      InstructionPointer libraryBase() const noexcept { return libraryBase_; }
+    
+    TEST_F(YogaTest_HadOverflowTests, children_overflow_no_wrap_and_no_flex_children) {
+  const YGNodeRef child0 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child0, 80);
+  YGNodeStyleSetHeight(child0, 40);
+  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
+  YGNodeStyleSetMargin(child0, YGEdgeBottom, 15);
+  YGNodeInsertChild(root, child0, 0);
+  const YGNodeRef child1 = YGNodeNewWithConfig(config);
+  YGNodeStyleSetWidth(child1, 80);
+  YGNodeStyleSetHeight(child1, 40);
+  YGNodeStyleSetMargin(child1, YGEdgeBottom, 5);
+  YGNodeInsertChild(root, child1, 1);
+    }
+    
+    struct Layout
+{
+    double left;
+    double right;
+    }
+    
+    void Node::setAspectRatio(double aspectRatio)
+{
+    YGNodeStyleSetAspectRatio(m_node, aspectRatio);
+}
+    
+    NBIND_CLASS(Size)
+{
+    construct<>();
+    construct<double, double>();
+}
+    
+    class Countable : public noncopyable, public nonmovable {
+public:
+  // RefPtr expects refcount to start at 0
+  Countable() : m_refcount(0) {}
+  virtual ~Countable()
+  {
+    FBASSERT(m_refcount == 0);
+  }
+    }
+    
+    #pragma once
+#include <fb/assert.h>
+#include <utility>
+    
+    ///////////////////////////////////////////////////////////////////////////////
+    
+      // Return a C++ type for any type (scalar/pointer) specifically for
+  // building a flatbuffer.
+  std::string GenTypeWire(const Type &type, const char *postfix,
+                          bool user_facing_type) const {
+    if (IsScalar(type.base_type)) {
+      return GenTypeBasic(type, user_facing_type) + postfix;
+    } else if (IsStruct(type)) {
+      return 'const ' + GenTypePointer(type) + ' *';
+    } else {
+      return 'flatbuffers::Offset<' + GenTypePointer(type) + '>' + postfix;
+    }
+  }
+    
+      // Similar to Parse(), but now only accepts JSON to be parsed into a
+  // FlexBuffer.
+  bool ParseFlexBuffer(const char *source, const char *source_filename,
+                       flexbuffers::Builder *builder);
+    
+    // Iterate through all definitions we haven't generate code for (enums, structs,
+// and tables) and output them to a single file.
+class DartGenerator : public BaseGenerator {
+ public:
+  typedef std::unordered_map<std::string, std::string> namespace_code_map;
+    }
+    
+    #ifndef GRPC_INTERNAL_COMPILER_GO_GENERATOR_H
+#define GRPC_INTERNAL_COMPILER_GO_GENERATOR_H
+    
+    #include <iostream>
+#include <memory>
+#include <string>
+    
+      if (!file->package().empty()) {
+    std::vector<grpc::string> parts = file->package_parts();
+    }
+    
+    
+    {  std::cout << 'Server listening on ' << server_address << std::endl;
+  // This will block the thread and serve requests.
+  server_instance->Wait();
+}
+    
+    
+    { private:
+  std::map<std::string, std::string> value_map_;
+  std::stringstream stream_;
+};
