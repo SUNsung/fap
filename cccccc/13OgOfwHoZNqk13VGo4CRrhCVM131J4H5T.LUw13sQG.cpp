@@ -1,167 +1,252 @@
 
         
-          {1,0,32,  &_residue_44_mid_un,
-   &_huff_book__16u1__long,&_huff_book__16u1__long,
-   &_resbook_16u_1,&_resbook_16u_1}
-};
-static const vorbis_residue_template _res_16u_2[]={
-  {1,0,32,  &_residue_44_hi_un,
-   &_huff_book__16u2__short,&_huff_book__16u2__short,
-   &_resbook_16u_2,&_resbook_16u_2},
-    
-      {2,0,32,  &_residue_44_mid,
-   &_huff_book__44c3_s_long,&_huff_book__44c3_s_long,
-   &_resbook_44s_3,&_resbook_44s_3}
-};
-static const vorbis_residue_template _res_44s_4[]={
-  {2,0,16,  &_residue_44_mid,
-   &_huff_book__44c4_s_short,&_huff_book__44c4_s_short,
-   &_resbook_44s_4,&_resbook_44s_4},
-    
-       - Redistributions in binary form must reproduce the above copyright
-   notice, this list of conditions and the following disclaimer in the
-   documentation and/or other materials provided with the distribution.
-    
-        intargvector m_mbSize;
-    bool m_truncated; // do BPTT
-    // BUGBUG: The 'Truncated' option is duplicated in the reader and must be set to the same there (e.g. by defining in the config on an outer enclosing level, like current samples).
-    //         We really should only read it in SGD and pass it ourselves on to the Reader, instead of it being a Reader parameter.
-    // BUGBUG: If m_truncated, then m_mbSize is interpreted as truncation length; the actual MB size is a combination of that and the #parallel sequences specified in the reader.
-    // TODO: do not specify 'Truncated' but 'TruncatedLength', set m_truncated so given, and let m_mbSize control how many #parallel sequences the reader is allowed to pack into an MB.
-    size_t m_maxSamplesInRAM;
-    // This is related with subminibatch implementation
-    // maxSamplesInRAM denotes how many samples we used in forward-backward on net.
-    // Due to the GPU memory limitations, it is sometime not possible to hold the m_mbSize in RAM.
-    // To mitigate this issue, we adopt the sub-minibatch implementation, where
-    // each m_mbSize[epoch] is divided by a few sub-minibatch of which size will be no more than m_maxSamplesInRAM
-    // a forward-backward is performed for each sub-minibatch; a model update is performed after each minibatch
-    size_t m_numSubminiBatches;
-    // alternative method to specify how to split minibatches into subminibatches
-    // default is 1, which means no subminibatch is used
-    // if m_maxTempMemSizeInSamples = SIZE_MAX (which means users do not specify the option) and m_numSubminiBatches > 1
-    // we divide one minibatch to m_numSubminiBatches subMinibatches
-    
-        REGISTER_OPERATOR_SCHEMA(RNN)
-        .Description(R'DOC(
-            Computes an one-layer simple RNN. This operator is usually supported
-            via some custom implementation such as CuDNN.
-    
-        // Taken from ONNX
-    REGISTER_OPERATOR_SCHEMA(Flatten)
-        .Description('Flattens the input tensor into a 2D matrix, '
-            'keeping the first dimension unchanged.')
-        .Input('input', 'A tensor of rank >= 2.', 'T')
-        .Output('output', 'A tensor of rank 2 with the contents of the input tensor, '
-            'with first dimension equal first dimension of input, and remaining '
-            'input dimensions flatenned into the inner dimension of the output.', 'T')
-        .TypeConstraint('T', { 'tensor(float16)', 'tensor(float)', 'tensor(double)' },
-            'Constrain input and output types to float tensors.');
-    
-    
-    REGISTER_OPERATOR_SCHEMA(Normalizer)
-        .SetDomain(c_mlDomain)
-        .Input('X', 'Data to be encoded', 'T')
-        .Output('Y', 'encoded output data', 'tensor(float)')
-        .Description(R'DOC(
-            Normalize the input.  There are three normalization modes,
-            which have the corresponding formulas:
-            Max .. math::     max(x_i)
-            L1  .. math::  z = ||x||_1 = \sum_{i=1}^{n} |x_i|
-            L2  .. math::  z = ||x||_2 = \sqrt{\sum_{i=1}^{n} x_i^2}
-            )DOC')
-        .TypeConstraint('T', { 'tensor(float)', 'tensor(double)', 'tensor(int64)', 'tensor(int32)' }, ' allowed types.')
-        .Attr('norm', 'enum 'MAX', 'L1', 'L2'', AttrType::AttributeProto_AttributeType_STRING);
-    
-        // Returns all frames of a given utterance.
-    msra::dbn::matrixstripe GetUtteranceFrames(size_t index) const
-    {
-        if (!IsInRam())
-        {
-            LogicError('GetUtteranceFrames was called when data have not yet been paged in.');
-        }
-    }
-    
-    LatticeDeserializer::LatticeDeserializer(
-    CorpusDescriptorPtr corpus,
-    const ConfigParameters& cfg,
-    bool primary)
-    : DataDeserializerBase(primary),
-      m_verbosity(0),
-      m_corpus(corpus)
+        TESS_API void TESS_CALL TessBaseGetBlockTextOrientations(TessBaseAPI* handle, int** block_orientation, bool** vertical_writing)
 {
-    if (primary)
-        LogicError('Lattice deserializer does not support primary mode, it cannot control chunking. '
-            'Please specify HTK deserializer as the first deserializer in your config file.');
-    }
-    
-            size_t cachesizeV = 54096;                                     // this was tuned--smaller is better (50k is quite little!!)
-        const size_t colsizeV = colstride * sizeof(float);             // stored bytes per column of V
-        size_t cacheablecolsV = (cachesizeV - 1) / colsizeV + (1 - 1); // #cols of V that fit into cache; -1 = space for row of M
-        cacheablecolsV = (cacheablecolsV + 3) & ~3;                    // align (round up to multiples of 4)
-    
-    // SectionStats - section to hold statistics for a featureSet
-class SectionStats : public Section
-{
-private:
-    // single pass measures
-    size_t m_count; // number of elements
-    double m_max;   // maximum value we have seen
-    double m_min;   // minimum value we have seen
-    double m_sum;   // sum of all numbers we have seen
-    double m_sum2;  // sum of the squares of all numbers we have seen
-    }
-    
-    void GranularGPUDataTransferer::WaitForSyncPointOnAssignStreamAsync()
-{
-    PrepareDevice(m_deviceId);
-    cudaStreamWaitEvent(GetAssignStream(), m_syncEvent, 0 /*flags 'must be 0'*/) || 'cudaStreamWaitEvent failed';
+    handle->GetBlockTextOrientations(block_orientation, vertical_writing);
 }
     
-    #include <yoga/Yoga.h>
+    TessTsvRenderer::TessTsvRenderer(const char* outputbase, bool font_info)
+    : TessResultRenderer(outputbase, 'tsv') {
+  font_info_ = font_info;
+}
     
-    using InstructionPointer = const void*;
+      /**
+   * Returns true if the iterator is at the start of an object at the given
+   * level.
+   *
+   * For instance, suppose an iterator it is pointed to the first symbol of the
+   * first word of the third line of the second paragraph of the first block in
+   * a page, then:
+   *   it.IsAtBeginningOf(RIL_BLOCK) = false
+   *   it.IsAtBeginningOf(RIL_PARA) = false
+   *   it.IsAtBeginningOf(RIL_TEXTLINE) = true
+   *   it.IsAtBeginningOf(RIL_WORD) = true
+   *   it.IsAtBeginningOf(RIL_SYMBOL) = true
+   */
+  virtual bool IsAtBeginningOf(PageIteratorLevel level) const;
     
-    _Unwind_Reason_Code unwindCallback(struct _Unwind_Context* context, void* arg) {
-  BacktraceState* state = reinterpret_cast<BacktraceState*>(arg);
-  auto absoluteProgramCounter =
-      reinterpret_cast<InstructionPointer>(_Unwind_GetIP(context));
+    // Copies the bounding box from page_res_it->word() to the given TBOX.
+bool read_t(PAGE_RES_IT *page_res_it, TBOX *tbox) {
+  while (page_res_it->block() != nullptr && page_res_it->word() == nullptr)
+    page_res_it->forward();
     }
     
-     public: // Setters
+      // Now paste the results together into core.
+  if (suffix) {
+    suffix->SetAllScriptPositions(trailing_pos);
+    join_words(core, suffix, bb1);
+  }
+  if (prefix) {
+    prefix->SetAllScriptPositions(leading_pos);
+    join_words(prefix, core, bb0);
+    core = prefix;
+    prefix = nullptr;
+  }
     
-        double getAspectRatio(void) const;
+    double LLSQ::m() const {  // get gradient
+  double covar = covariance();
+  double x_var = x_variance();
+  if (x_var != 0.0)
+    return covar / x_var;
+  else
+    return 0.0;                    // too little
+}
     
-    class ProgramLocation {
-public:
-  ProgramLocation() : m_functionName('Unspecified'), m_fileName('Unspecified'), m_lineNumber(0) {}
+      /// Sets the non-blocking mode of the acceptor.
+  /**
+   * @param mode If @c true, the acceptor's synchronous operations will fail
+   * with boost::asio::error::would_block if they are unable to perform the
+   * requested operation immediately. If @c false, synchronous operations will
+   * block until complete.
+   *
+   * @throws boost::system::system_error Thrown on failure.
+   *
+   * @note The non-blocking mode has no effect on the behaviour of asynchronous
+   * operations. Asynchronous operations will never fail with the error
+   * boost::asio::error::would_block.
+   */
+  void non_blocking(bool mode)
+  {
+    boost::system::error_code ec;
+    this->get_service().non_blocking(this->get_implementation(), mode, ec);
+    boost::asio::detail::throw_error(ec, 'non_blocking');
+  }
+    
+    template <typename Key, typename Value>
+tss_ptr<typename call_stack<Key, Value>::context>
+call_stack<Key, Value>::top_;
+    
+    #ifndef BOOST_ASIO_DETAIL_DATE_TIME_FWD_HPP
+#define BOOST_ASIO_DETAIL_DATE_TIME_FWD_HPP
+    
+    #if defined(BOOST_ASIO_HAS_STD_FUNCTION)
+using std::function;
+#else // defined(BOOST_ASIO_HAS_STD_FUNCTION)
+using boost::function;
+#endif // defined(BOOST_ASIO_HAS_STD_FUNCTION)
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    template <typename Handler>
+inline void* allocate(std::size_t s, Handler& h)
+{
+#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
+  return ::operator new(s);
+#else
+  using boost::asio::asio_handler_allocate;
+  return asio_handler_allocate(s, boost::asio::detail::addressof(h));
+#endif
+}
+    
+    
+    {
+    {
+    {} // namespace detail
+} // namespace asio
+} // namespace boost
+    
+      errno = 0;
+  int result = error_wrapper(::ioctl(d, cmd, arg), ec);
+    
+      // Start looping through starting at the first options
+  // (so skip the exports)
+  for (auto iter = line.begin() + options_index; iter != line.end(); ++iter) {
+    if (iter->compare('-ro') == 0 || iter->compare('-o') == 0) {
+      readonly = 1;
+    }
+  }
+    
+      // Get the hash value for the kernel's .text memory segment
+  auto f2 = osquery::readFile(kKernelTextHashPath, content);
+  if (f2.ok()) {
+    boost::trim(content);
+    text_segment_hash = content;
+  } else {
+    VLOG(1) << 'Cannot read file: ' << kKernelTextHashPath;
+    return results;
+  }
+    
+    /**
+ * @brief A utility class which is used to express the state of operations.
+ *
+ * @code{.cpp}
+ *   osquery::Status foobar() {
+ *     auto na = doSomeWork();
+ *     if (na->itWorked()) {
+ *       return osquery::Status(0, 'OK');
+ *     } else {
+ *       return osquery::Status(1, na->getErrorString());
+ *     }
+ *   }
+ * @endcode
+ */
+class Status {
+ public:
+  /**
+   * @brief Default constructor
+   *
+   * Note that the default constructor initialized an osquery::Status instance
+   * to a state such that a successful operation is indicated.
+   */
+  explicit Status(int c = 0) : code_(c), message_('OK') {}
     }
     
-      // The STL assumes rvalue references are unique and for simplicity's sake, we
-  // make the same assumption here, that &ref != this.
-  RefPtr<T>& operator=(RefPtr<T>&& ref) {
-    unrefIfNecessary(m_ptr);
-    m_ptr = ref.m_ptr;
-    ref.m_ptr = nullptr;
-    return *this;
-  }
+    TEST_F(ViewsConfigParserPluginTests, test_swap_view) {
+  Config c;
+  std::vector<std::string> old_views_vec;
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  old_views_vec.clear();
+  auto s = c.update(getTestConfigMap('view_test.conf'));
+  EXPECT_TRUE(s.ok());
+  scanDatabaseKeys(kQueries, old_views_vec, 'config_views.');
+  EXPECT_EQ(old_views_vec.size(), 1U);
+  EXPECT_EQ(old_views_vec[0], 'config_views.kernel_hashes_new');
+    }
     
-    #include <fb/visibility.h>
-    
-    namespace detail {
-template <typename T, typename jprim>
-struct JPrimitive : JavaClass<T> {
-  using typename JavaClass<T>::javaobject;
-  using JavaClass<T>::javaClassStatic;
-  static local_ref<javaobject> valueOf(jprim val) {
-    static auto cls = javaClassStatic();
-    static auto method =
-      cls->template getStaticMethod<javaobject(jprim)>('valueOf');
-    return method(cls, val);
-  }
-  jprim value() const {
-    static auto method =
-      javaClassStatic()->template getMethod<jprim()>(T::kValueMethod);
-    return method(this->self());
-  }
+    class FilesystemConfigPlugin : public ConfigPlugin {
+ public:
+  Status genConfig(std::map<std::string, std::string>& config);
+  Status genPack(const std::string& name,
+                 const std::string& value,
+                 std::string& pack);
 };
+    
+        auto process = PlatformProcess::launchWorker(
+        kProcessTestExecPath.c_str(),
+        static_cast<int>(kExpectedWorkerArgsCount),
+        &argv[0]);
+    for (size_t i = 0; i < argv.size(); i++) {
+      delete[] argv[i];
     }
+    
+    namespace osquery {
+    }
+    
+    
+    {
+    {  // Set the time at now to 2.
+  TablePlugin::kCacheStep = 2;
+  test.testSetCache(TablePlugin::kCacheStep, TablePlugin::kCacheInterval);
+  EXPECT_TRUE(test.testIsCached(5));
+  // Now 6 is within the freshness of 2 + 5.
+  EXPECT_TRUE(test.testIsCached(6));
+  EXPECT_FALSE(test.testIsCached(7));
+}
+}
+
+    
+    
+    { private:
+  FRIEND_TEST(WatcherTests, test_watcher);
+};
+    
+    #include <string>
+    
+    
+    {  return std::string(buffer.data());
+}
+    
+    
+    {            _state = EXPECTS_CRASH_DUMP_CONTENT;
+        } else if (EXPECTS_CRASH_DUMP == _state) {
+            continue;
+        }
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    class Spy {
+  public:
+    Spy(void* _this): m_this(_this) {}
+    virtual ~Spy() {}
+    }
+    
+    #include 'comm/debugger/test_spy_sample.h'
+#include 'comm/xlogger/xlogger.h'
+    
+    // Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an 'AS IS' basis, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing permissions and
+// limitations under the License.
+    
+    // Licensed under the MIT License (the 'License'); you may not use this file except in 
+// compliance with the License. You may obtain a copy of the License at
+// http://opensource.org/licenses/MIT
+    
+    
+/*
+ * scop_jenv.h
+ *
+ *  Created on: 2012-8-21
+ *      Author: yanguoyue
+ */
