@@ -1,58 +1,52 @@
 
         
-            # Get the hash of the last commit
-    def self.last_git_commit_hash(short)
-      format_specifier = short ? '%h' : '%H'
-      string = last_git_commit_formatted_with(format_specifier).to_s
-      return string unless string.empty?
-      return nil
+        namespace :db do
+  namespace :migrate do
+    desc 'Setup the db or migrate depending on state of db'
+    task setup: :environment do
+      begin
+        if ActiveRecord::Migrator.current_version.zero?
+          Rake::Task['db:migrate'].invoke
+          Rake::Task['db:seed'].invoke
+        end
+      rescue ActiveRecord::NoDatabaseError
+        Rake::Task['db:setup'].invoke
+      else
+        Rake::Task['db:migrate'].invoke
+      end
     end
-    
-      protected
-    
-      def destroy_all
-    Delayed::Job.where(locked_at: nil).delete_all
-    
-      def background_color
-    '#191b22'
   end
     
-            # Removes the specified cache
-        #
-        # @param [Array<Hash>] cache_descriptors
-        #        An array of caches to remove, each specified with the same
-        #        hash as cache_descriptors_per_pod especially :spec_file and :slug
-        #
-        def remove_caches(cache_descriptors)
-          cache_descriptors.each do |desc|
-            UI.message('Removing spec #{desc[:spec_file]} (v#{desc[:version]})') do
-              FileUtils.rm(desc[:spec_file])
-            end
-            UI.message('Removing cache #{desc[:slug]}') do
-              FileUtils.rm_rf(desc[:slug])
-            end
-          end
-        end
+      def observe_file_removal(path)
+    path.extend(ObserverPathnameExtension).unlink if path.exist?
+  end
     
-    ```
-#{plugins_string}
-```
-#{markdown_podfile}
-EOS
+          def dmg_metadata?(path)
+        relative_root = path.sub(%r{/.*}, '')
+        DMG_METADATA_FILES.include?(relative_root.basename.to_s)
       end
     
-            # Checks if a template URL is given else returns the TEMPLATE_REPO URL
-        #
-        # @return String
-        #
-        def template_repo_url
-          @template_url || TEMPLATE_REPO
+        def define
+      define_flush_errors
+      define_getters
+      define_setter
+      define_query
+      register_new_attachment
+      add_active_record_callbacks
+      add_paperclip_callbacks
+      add_required_validations
+    end
+    
+            def error_when_not_valid?
+          @subject.send(@attachment_name).assign(nil)
+          @subject.valid?
+          @subject.errors[:'#{@attachment_name}'].present?
         end
+    
+          if defined?(ActiveRecord)
+        Paperclip.options[:logger] = ActiveRecord::Base.logger
+        ActiveRecord::Base.send(:include, Paperclip::Glue)
       end
     end
   end
 end
-
-    
-          def run
-        update_if_necessary!
