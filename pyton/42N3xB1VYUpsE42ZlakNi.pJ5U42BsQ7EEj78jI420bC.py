@@ -1,221 +1,104 @@
 
         
-            Models: `flatpages.flatpages`
-    Templates: Uses the template defined by the ``template_name`` field,
-        or :template:`flatpages/default.html` if template_name is not defined.
-    Context:
-        flatpage
-            `flatpages.flatpages` object
-    '''
-    if not url.startswith('/'):
-        url = '/' + url
-    site_id = get_current_site(request).id
-    try:
-        f = get_object_or_404(FlatPage, url=url, sites=site_id)
-    except Http404:
-        if not url.endswith('/') and settings.APPEND_SLASH:
-            url += '/'
-            f = get_object_or_404(FlatPage, url=url, sites=site_id)
-            return HttpResponsePermanentRedirect('%s/' % request.path)
-        else:
-            raise
-    return render_flatpage(request, f)
+        cc_test(
+    name = 'spanning_tree_iterator_test',
+    size = 'small',
+    srcs = ['spanning_tree_iterator_test.cc'],
+    deps = [
+        ':spanning_tree_iterator',
+        '//syntaxnet:test_main',
+        '@org_tensorflow//tensorflow/core:lib',
+        '@org_tensorflow//tensorflow/core:test',
+    ],
+)
     
-    # Dynamic inventory script which lets you use nodes discovered by Canonical's
-# Landscape (http://www.ubuntu.com/management/landscape-features).
-#
-# Requires the `landscape_api` Python module
-# See:
-#   - https://landscape.canonical.com/static/doc/api/api-client-package.html
-#   - https://landscape.canonical.com/static/doc/api/python-api.html
-#
-# Environment variables
-# ---------------------
-#   - `LANDSCAPE_API_URI`
-#   - `LANDSCAPE_API_KEY`
-#   - `LANDSCAPE_API_SECRET`
-#   - `LANDSCAPE_API_SSL_CA_FILE` (optional)
+      # All arguments must share the same type.
+  check.Same([
+      weights_arc.dtype.base_dtype, weights_source.dtype.base_dtype,
+      root.dtype.base_dtype, tokens.dtype.base_dtype
+  ], 'dtype mismatch')
     
-        parser.add_argument('--job-number',
-                        metavar='N',
-                        action='append',
-                        type=int,
-                        help='limit downloads to the given job number')
+      Returns:
+    1. None, since the op is not differentiable w.r.t. its |num_nodes| input.
+    2. [B,M,M] tensor where entry b,t,s is a subgradient of the network loss
+       w.r.t. entry b,t,s of the |scores| input, with the same dtype as
+       |d_loss_d_max_scores|.
+  '''
+  dtype = d_loss_d_max_scores.dtype.base_dtype
+  check.NotNone(dtype)
     
-        terminal_stderr_re = [
-        re.compile(r'% ?Error: '),
-        re.compile(r'^% \w+', re.M),
-        re.compile(r'% ?Bad secret'),
-        re.compile(r'invalid input', re.I),
-        re.compile(r'(?:incomplete|ambiguous) command', re.I),
-        re.compile(r'connection timed out', re.I),
-        re.compile(r'[^\r\n]+ not found', re.I),
-        re.compile(r''[^']' +returned error code: ?\d+'),
-        re.compile(r'syntax error'),
-        re.compile(r'unknown command'),
-        re.compile(r'Error\[\d+\]: ', re.I),
-        re.compile(r'Error:', re.I)
-    ]
     
-        def test_max_delay(self):
-        strategy = _exponential_backoff(retries=7, delay=1, backoff=2, max_delay=60)
-        result = list(strategy())
-        self.assertEquals(result, [1, 2, 4, 8, 16, 32, 60])
+@mock.patch('httpie.input.AuthCredentials._getpass',
+            new=lambda self, prompt: 'UNEXPECTED_PROMPT_RESPONSE')
+def test_auth_plugin_prompt_password_false(httpbin):
     
-    from ..models import Model
-from ..layers import Flatten
-from ..layers import Dense
-from ..layers import Input
-from ..layers import Conv2D
-from ..layers import MaxPooling2D
-from ..layers import GlobalAveragePooling2D
-from ..layers import GlobalMaxPooling2D
-from ..engine import get_source_inputs
-from ..utils import layer_utils
-from ..utils.data_utils import get_file
-from .. import backend as K
-from .imagenet_utils import decode_predictions
-from .imagenet_utils import preprocess_input
-from .imagenet_utils import _obtain_input_shape
+        def format_headers(self, headers):
+        for p in self.enabled_plugins:
+            headers = p.format_headers(headers)
+        return headers
     
-        # Returns
-        A Keras model instance.
+        def __init__(self, **kwargs):
+        '''
+        :param env: an class:`Environment` instance
+        :param kwargs: additional keyword argument that some
+                       processor might require.
     
-        # test stacked bidirectional layers
-    model = keras.Sequential()
-    model.add(keras.layers.Bidirectional(rnn(output_dim,
-                                             return_sequences=True),
-                                         merge_mode=mode,
-                                         input_shape=(None, dim)))
-    model.add(keras.layers.Bidirectional(rnn(output_dim), merge_mode=mode))
-    model.compile(loss='mse', optimizer='sgd')
-    model.fit(x, y, epochs=1, batch_size=1)
+    {available}
     
-        # Load the manually-saved binary data, and make sure the model is intact.
-    with h5py.File(fname, mode='r') as h5file:
-        loaded_model = load_model(h5file)
-        out2 = loaded_model.predict(x)
-    
-        filename = os.path.join(model_name, 'digits_over_latent.png')
-    # display a 30x30 2D manifold of digits
-    n = 30
-    digit_size = 28
-    figure = np.zeros((digit_size * n, digit_size * n))
-    # linearly spaced coordinates corresponding to the 2D plot
-    # of digit classes in the latent space
-    grid_x = np.linspace(-4, 4, n)
-    grid_y = np.linspace(-4, 4, n)[::-1]
-    
-    import numpy as np
-import keras
-from keras.datasets import reuters
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation
-from keras.preprocessing.text import Tokenizer
-    
-            try:
-            spidercls = self.crawler_process.spider_loader.load(name)
+        def _migrate_implicit_content_type(self):
+        '''Migrate the removed implicit_content_type config option'''
+        try:
+            implicit_content_type = self.pop('implicit_content_type')
         except KeyError:
-            pass
+            self.save()
         else:
-            # if spider already exists and not --force then halt
-            if not opts.force:
-                print('Spider %r already exists in module:' % name)
-                print('  %s' % spidercls.__module__)
-                return
-        template_file = self._find_template(opts.template)
-        if template_file:
-            self._genspider(module, name, domain, opts.template, template_file)
-            if opts.edit:
-                self.exitcode = os.system('scrapy edit '%s'' % name)
-    
-        html = get_content(url)
-    pid = match1(html, r'video\.settings\.pid\s*=\s*\'([^\']+)\'')
-    title = match1(html, r'video\.settings\.title\s*=\s*\'([^\']+)\'')
-    
-    #----------------------------------------------------------------------
-def fc2video_download(url, output_dir = '.', merge = True, info_only = False, **kwargs):
-    '''wrapper'''
-    #'http://video.fc2.com/en/content/20151021bTVKnbEw'
-    #'http://xiaojiadianvideo.asia/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/ja/content/20151021bTVKnbEw'
-    #'http://video.fc2.com/tw/content/20151021bTVKnbEw'
-    hostname = urlparse(url).hostname
-    if not ('fc2.com' in hostname or 'xiaojiadianvideo.asia' in hostname):
-        return False
-    upid = match1(url, r'.+/content/(\w+)')
-    
-        def __init__(self, pin_json):
-        img_file = pin_json['file']
-        self.id = str(pin_json['pin_id'])
-        self.url = urlparse.urljoin(self.host, img_file['key'])
-        self.ext = img_file['type'].split('/')[-1]
-    
-    
-    
-    #----------------------------------------------------------------------
-def showroom_get_roomid_by_room_url_key(room_url_key):
-    '''str->str'''
-    fake_headers_mobile = {
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Charset': 'UTF-8,*;q=0.5',
-        'Accept-Encoding': 'gzip,deflate,sdch',
-        'Accept-Language': 'en-US,en;q=0.8',
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36'
-    }
-    webpage_url = 'https://www.showroom-live.com/' + room_url_key
-    html = get_content(webpage_url, headers = fake_headers_mobile)
-    roomid = match1(html, r'room\?room_id\=(\d+)')
-    assert roomid
-    return roomid
-    
-            def accept_callback(conn, addr):
-            self.server_stream = IOStream(conn)
-            self.addCleanup(self.server_stream.close)
-            event.set()
-    
-    
-@unittest.skipIf(pycurl is None, 'pycurl module not present')
-class CurlHTTPClientTestCase(AsyncHTTPTestCase):
-    def setUp(self):
-        super(CurlHTTPClientTestCase, self).setUp()
-        self.http_client = self.create_client()
-    
-        def test_multiple_errors(self):
-        with ignore_deprecation():
-            def fail(message):
-                raise Exception(message)
-            self.io_loop.add_callback(lambda: fail('error one'))
-            self.io_loop.add_callback(lambda: fail('error two'))
-            # The first error gets raised; the second gets logged.
-            with ExpectLog(app_log, 'multiple unhandled exceptions'):
-                with self.assertRaises(Exception) as cm:
-                    self.wait()
-            self.assertEqual(str(cm.exception), 'error one')
-    
-    plugins = PluginLoader()
-print 'PLUGINS := ' + ' '.join(plugin.name for plugin in plugins
-                               if plugin.needs_static_build)
-    
-    def set_extension(environ, ext):
-    environ['extension'] = ext
-    environ['render_style'], environ['content_type'] = extension_mapping[ext]
+            if implicit_content_type == 'form':
+                self['default_options'].insert(0, '--form')
+            self.save()
+            self.load()
 
     
-        def has_gold(self, user):
-        if not user:
-            return False
     
-        @require_oauth2_scope('mysubreddits')
-    @validate(
-        VUser(),
-        friend_rel=VFriendOfMine('username'),
+def repr_dict_nice(d):
+    def prepare_dict(d):
+        for k, v in d.items():
+            if isinstance(v, dict):
+                v = dict(prepare_dict(v))
+            elif isinstance(v, bytes):
+                v = v.decode('utf8')
+            elif not isinstance(v, (int, str)):
+                v = repr(v)
+            yield k, v
+    return json.dumps(
+        dict(prepare_dict(d)),
+        indent=4, sort_keys=True,
     )
-    @api_doc(api_section.users, uri='/api/v1/me/friends/{username}')
-    def GET_friends(self, friend_rel):
-        '''Get information about a specific 'friend', such as notes.'''
-        rel_view = FriendTableItem(friend_rel)
-        return self.api_wrapper(FriendTableItemJsonTemplate().data(rel_view))
     
-            Responds with a 120x50 `image/png` which should be displayed
-        to the user.
+        def __call__(self, value):
+        # Session name can be a path or just a name.
+        if (os.path.sep not in value and
+                not VALID_SESSION_NAME_PATTERN.search(value)):
+            raise ArgumentError(None, self.error_message)
+        return value
+    
+    from httpie.compat import urlsplit
+from httpie.config import BaseConfigDict, DEFAULT_CONFIG_DIR
+from httpie.plugins import plugin_manager
+    
+    # How to display URL addresses: 'footnote', 'no', or 'inline'.
+#texinfo_show_urls = 'footnote'
+    
+    from certbot import constants
+from certbot_compatibility_test import errors
+from certbot_compatibility_test import util
+    
+        @mock.patch('certbot.display.enhancements.util')
+    def test_redirect(self, mock_util):
+        mock_util().menu.return_value = (display_util.OK, 1)
+        self.assertTrue(self._call('redirect'))
+    
+        description = 'Example Installer plugin'
+    
+    
+if __name__ == '__main__':
+    cli()
