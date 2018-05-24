@@ -1,70 +1,83 @@
-  setup do
-    @old_escape_html_entities_in_json = ActiveSupport.escape_html_entities_in_json
-    ActiveSupport.escape_html_entities_in_json = true
-    @template = self
-    @request = Class.new do
-      def send_early_hints(links) end
-    end.new
-  end
+
+        
+              html_filters.push 'bootstrap/entries_v4', 'bootstrap/clean_html_v4'
     
-    module ActionCable
-  module Server
-    # An instance of this configuration object is available via ActionCable.server.config, which allows you to tweak Action Cable configuration
-    # in a Rails config initializer.
-    class Configuration
-      attr_accessor :logger, :log_tags
-      attr_accessor :connection_class, :worker_pool_size
-      attr_accessor :disable_request_forgery_protection, :allowed_request_origins, :allow_same_origin_as_host
-      attr_accessor :cable, :url, :mount_path
+        version '1.4' do
+      self.release = '1.4.5'
+      self.base_urls = [
+        'https://hexdocs.pm/elixir/#{release}/',
+        'https://hexdocs.pm/eex/#{release}/',
+        'https://hexdocs.pm/ex_unit/#{release}/',
+        'https://hexdocs.pm/iex/#{release}/',
+        'https://hexdocs.pm/logger/#{release}/',
+        'https://hexdocs.pm/mix/#{release}/',
+        'https://elixir-lang.org/getting-started/'
+      ]
+    end
     
-      class TestInheritedMiddleware < TestMiddleware
-    def setup
-      @app = InheritedController.action(:index)
+        def add(path, content)
+      @pages[path] = content
+    end
+    
+          # This gets the value of the block with the given key.
+      def get(key)
+        key    = Regexp.quote(key)
+        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$\r?\n?(.*?)\r?\n?^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
+        match  = regexp.match(@value)
+        return nil if !match
+        match[1]
+      end
+    
+              if argv.length == 2
+            # @deprecated
+            @env.ui.warn('WARNING: The second argument to `vagrant box remove`')
+            @env.ui.warn('is deprecated. Please use the --provider flag. This')
+            @env.ui.warn('feature will stop working in the next version.')
+            options[:provider] = argv[1]
+          end
+    
+      module DSL
+    def env(*settings)
+      @env ||= BuildEnvironment.new
+      @env.merge(settings)
     end
   end
 end
-
     
-          # Adds a new delivery method through the given class using the given
-      # symbol as alias and the default options supplied.
-      #
-      #   add_delivery_method :sendmail, Mail::Sendmail,
-      #     location:  '/usr/sbin/sendmail',
-      #     arguments: '-i'
-      def add_delivery_method(symbol, klass, default_options = {})
-        class_attribute(:'#{symbol}_settings') unless respond_to?(:'#{symbol}_settings')
-        send(:'#{symbol}_settings=', default_options)
-        self.delivery_methods = delivery_methods.merge(symbol.to_sym => klass).freeze
+          def warn_for_unknown_directives(directives)
+        unknown_keys = directives.keys - ORDERED_DIRECTIVES
+        return if unknown_keys.empty?
+        opoo %Q(Unknown arguments to #{stanza} -- #{unknown_keys.inspect}. Running 'brew update; brew cleanup; brew cask cleanup' will likely fix it.)
       end
     
-      test 'does not perform deliveries if requested' do
-    old_perform_deliveries = DeliveryMailer.perform_deliveries
-    begin
-      DeliveryMailer.perform_deliveries = false
-      stub_any_instance(Mail::Message) do |instance|
-        assert_not_called(instance, :deliver!) do
-          DeliveryMailer.welcome.deliver_now
-        end
-      end
-    ensure
-      DeliveryMailer.perform_deliveries = old_perform_deliveries
-    end
+      def as_boolean(string)
+    return true   if string == true   || string =~ (/(true|t|yes|y|1)$/i)
+    return false  if string == false  || string.blank? || string =~ (/(false|f|no|n|0)$/i)
+    raise ArgumentError.new('invalid value for Boolean: \'#{string}\'')
   end
     
-      if ''.respond_to?(:encoding)  # Ruby 1.9+ M17N
-    context 'PATH_INFO's encoding' do
-      before do
-        @app = Rack::Protection::PathTraversal.new(proc { |e| [200, {'Content-Type' => 'text/plain'}, [e['PATH_INFO'].encoding.to_s]] })
+        outpath = file.gsub('.gz', '')
+    tgz = Zlib::GzipReader.new(File.open(file))
+    begin
+      File.open(outpath, 'w') do |out|
+        IO::copy_stream(tgz, out)
+      end
+      File.unlink(file)
+    rescue
+      File.unlink(outpath) if File.file?(outpath)
+     raise
+    end
+    tgz.close
+  end
+    
+          def create_worker_test
+        template_file = File.join(
+            'test/workers',
+            class_path,
+            '#{file_name}_worker_test.rb'
+        )
+        template 'worker_test.rb.erb', template_file
       end
     
-    
-  it 'should allow changing the nosniff-mode off' do
-    mock_app do
-      use Rack::Protection::XSSHeader, :nosniff => false
-      run DummyApp
-    end
-    
-      # Print the 10 slowest examples and example groups at the
-  # end of the spec run, to help surface which specs are running
-  # particularly slow.
-  config.profile_examples = 10
+      end
+end
