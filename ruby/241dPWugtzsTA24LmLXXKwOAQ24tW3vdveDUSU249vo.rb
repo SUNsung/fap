@@ -1,40 +1,59 @@
 
         
-          def all_projects(current_user)
-    projects = []
-    
-      def validate_type
-    errors.add(:type, 'cannot be changed once an instance has been created') if type_changed? && !new_record?
-    errors.add(:type, 'is not a valid type') unless self.class.valid_type?(type)
+          def remote_url
+    object.remote_url.presence
   end
     
-          if options[:type] == :array
-        options[:roles] << :completable
-        class_eval <<-EOF
-          def complete_#{name}
-            #{options[:values]}.map { |v| {text: v, id: v} }
-          end
-        EOF
+      def as_json(options={})
+    {
+      poll_id:             id,
+      post_id:             status_message.id,
+      question:            question,
+      poll_answers:        poll_answers,
+      participation_count: participation_count
+    }
+  end
+    
+          def http_error_page_as_json(e)
+        render json: {error: :invalid_request, error_description: e.message}, status: 400
       end
     
-      def tumblr
-    Tumblr.configure do |config|
-      config.consumer_key = tumblr_consumer_key
-      config.consumer_secret = tumblr_consumer_secret
-      config.oauth_token = tumblr_oauth_token
-      config.oauth_token_secret = tumblr_oauth_token_secret
+        def each_definition
+      @attachments.each do |klass, attachments|
+        attachments.each do |name, options|
+          yield klass, name, options
+        end
+      end
     end
     
-    Tumblr::Client.new
+          class ValidateAttachmentContentTypeMatcher
+        def initialize attachment_name
+          @attachment_name = attachment_name
+          @allowed_types = []
+          @rejected_types = []
+        end
+    
+            def lower_than_low?
+          @low.nil? || !passes_validation_with_size(@low - 1)
+        end
+    
+    module Paperclip
+  class << self
+    attr_writer :registered_attachments_styles_path
+    def registered_attachments_styles_path
+      @registered_attachments_styles_path ||= Rails.root.join('public/system/paperclip_attachments.yml').to_s
+    end
+  end
+    
+          def remove_attachment(table_name, *attachment_names)
+        raise ArgumentError, 'Please specify attachment name in your remove_attachment call in your migration.' if attachment_names.empty?
+    
+      def create_scaffold(source, target)
+    transform_r(source, target)
+  end
+    
+            end
+      end
+    end
   end
 end
-    
-    require 'rubygems'  # install rubygems
-require 'hpricot'   # gem install hpricot
-require 'uri'
-require 'timeout'
-    
-          when :login_pass
-    
-        super(filename)
-  end
