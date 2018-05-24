@@ -1,69 +1,83 @@
 
         
-              unless root?
-        raise Invalid, 'missing name' if !name || name.empty?
-        raise Invalid, 'missing path' if !path || path.empty?
-        raise Invalid, 'missing type' if !type || type.empty?
-      end
+          def self.expire_cache_fragment!(name)
+    fragment_cache.delete(name)
+  end
+    
+        def form_configurable_fields
+      self._form_configurable_fields
     end
     
-          if options && options[:ignore_case]
-        base = base.downcase
-        dest = dest.downcase
-      end
+      before_action :upgrade_warning, only: :index
     
-          def get_type
-        case slug
-        when 'api'
-          'Reference'
-        when 'configuration'
-          'Reference: Configuration'
-        when 'stpl'
-          'Reference: SimpleTemplate'
-        when 'plugindev'
-          'Reference: Plugin'
+      private
+    
+      def test_gets_para_extended_file
+    [nil, {:textmode=>true}, {:binmode=>true}].each do |mode|
+      Tempfile.create('test-extended-file', mode) {|f|
+        assert_nil(f.getc)
+        f.print '\na'
+        f.rewind
+        assert_equal('a', f.gets(''), 'mode = <#{mode}>')
+      }
+    end
+  end
+    
+      it 'decodes the remaining doubles when passed the '*' modifier after another directive' do
+    array = '333333\x15@ffffff\x22@'.unpack(unpack_format()+unpack_format('*'))
+    array.should == [5.3, 9.2]
+  end
+    
+        it 'propagates inner exception to Thread.join if there is an outer ensure clause' do
+      thread = ThreadSpecs.dying_thread_with_outer_ensure(@method) { }
+      lambda { thread.join }.should raise_error(RuntimeError, 'In dying thread')
+    end
+    
+        # Merges this query with another. The returned query queries for
+    # the intersection between the two inputs.
+    #
+    # Both queries should be resolved.
+    #
+    # @param other [Query]
+    # @return [Query?] The merged query, or nil if there is no intersection.
+    def merge(other)
+      m1, t1 = resolved_modifier.downcase, resolved_type.downcase
+      m2, t2 = other.resolved_modifier.downcase, other.resolved_type.downcase
+      t1 = t2 if t1.empty?
+      t2 = t1 if t2.empty?
+      if (m1 == 'not') ^ (m2 == 'not')
+        return if t1 == t2
+        type = m1 == 'not' ? t2 : t1
+        mod = m1 == 'not' ? m2 : m1
+      elsif m1 == 'not' && m2 == 'not'
+        # CSS has no way of representing 'neither screen nor print'
+        return unless t1 == t2
+        type = t1
+        mod = 'not'
+      elsif t1 != t2
+        return
+      else # t1 == t2, neither m1 nor m2 are 'not'
+        type = t1
+        mod = m1.empty? ? m2 : m1
+      end
+      Query.new([mod], [type], other.expressions + expressions)
+    end
+    
+      module Sass::Plugin::Configuration
+    # Different default options in a m environment.
+    def default_options
+      @default_options ||= begin
+        version = Merb::VERSION.split('.').map {|n| n.to_i}
+        if version[0] <= 0 && version[1] < 5
+          root = MERB_ROOT
+          env  = MERB_ENV
         else
-          'Manual'
+          root = Merb.root.to_s
+          env  = Merb.environment
         end
-      end
     
-      def setup
-    tmp_dir = File.join GEM_PATH, 'tmp/node-mincer'
-    success = Dir.chdir DUMMY_PATH do
-      silence_stdout_if !ENV['VERBOSE'] do
-        system 'node', 'manifest.js', tmp_dir
-      end
+        def script_url_for(gist_id, filename)
+      url = 'https://gist.github.com/#{gist_id}.js'
+      url = '#{url}?file=#{filename}' unless filename.nil? or filename.empty?
+      url
     end
-    assert success, 'Node.js Mincer compilation failed'
-    manifest = JSON.parse(File.read('#{tmp_dir}/manifest.json'))
-    css_name = manifest['assets']['application.css']
-    @css = File.read('#{tmp_dir}/#{css_name}')
-  end
-end
-
-    
-        if run? && ARGV.any?
-      require 'optparse'
-      OptionParser.new { |op|
-        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
-        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
-        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
-        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
-        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
-        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
-      }.parse!(ARGV.dup)
-    end
-  end
-    
-    
-  it 'should allow changing the protection mode to a string' do
-    # I have no clue what other modes are available
-    mock_app do
-      use Rack::Protection::FrameOptions, :frame_options => 'ALLOW-FROM foo'
-      run DummyApp
-    end
-    
-    
-  it 'should set the X-Content-Type-Options for other content types' do
-    expect(get('/', {}, 'wants' => 'application/foo').header['X-Content-Type-Options']).to eq('nosniff')
-  end
