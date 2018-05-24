@@ -1,116 +1,60 @@
-    def valid_type?(type)
-      const_get(:TYPES).include?(type)
-    end
+
+        
+            You can read more about this change at:
+      https://www.playframework.com/documentation/2.3.x/Migration23
+      https://www.playframework.com/documentation/2.3.x/Highlights23
+    EOS
+  when 'haskell-platform' then <<-EOS.undent
+    We no longer package haskell-platform. Consider installing ghc
+    and cabal-install instead:
+      brew install ghc cabal-install
     
-          if options[:type] == :array && (options[:values].blank? || !options[:values].is_a?(Array))
-        raise ArgumentError.new('When using :array as :type you need to provide the :values as an Array')
-      end
+      # True if a {Formula} is being built with a specific option.
+  # <pre>args << '--i-want-spam' if build.with? 'spam'
+  #
+  # args << '--qt-gui' if build.with? 'qt' # '--with-qt' ==> build.with? 'qt'
+  #
+  # # If a formula presents a user with a choice, but the choice must be fulfilled:
+  # if build.with? 'example2'
+  #   args << '--with-example2'
+  # else
+  #   args << '--with-example1'
+  # end</pre>
+  def with?(val)
+    option_names = val.respond_to?(:option_names) ? val.option_names : [val]
     
-      def retry_queued
-    @jobs = Delayed::Job.awaiting_retry.update_all(run_at: Time.zone.now)
+            file_is_stale = if PkgVersion === version
+          f.pkg_version > version
+        else
+          f.version > version
+        end
     
-    respond_to do |format|
-      format.html { redirect_to jobs_path, notice: 'Queued jobs getting retried.' }
-      format.json { head :no_content }
-    end
+    module Homebrew
+  def config
+    dump_verbose_config
   end
     
-      before_action :upgrade_warning, only: :index
-    
-      def user_credential_params
-    params.require(:user_credential).permit(:credential_name, :credential_value, :mode)
+        puts 'Your system is ready to brew.' unless Homebrew.failed?
   end
 end
 
     
-        def to_a
-      @filters.dup
+      def patches
+    {}
+  end
+    
+        let(:key) { Spaceship::Portal::Key.new(key_attributes) }
+    
+      def all_groups(current_user)
+    groups = []
+    
+    require 'open-uri'
+require 'json'
+require 'strscan'
+require 'forwardable'
+require 'term/ansicolor'
+require 'fileutils'
+    
+        def puts(*args)
+      STDERR.puts *args unless @silence
     end
-    
-        def initialize
-      @pages = {}
-    end
-    
-          if options && options[:ignore_case]
-        base = base.downcase
-        dest = dest.downcase
-      end
-    
-          def get_type
-        case slug
-        when 'api'
-          'Reference'
-        when 'configuration'
-          'Reference: Configuration'
-        when 'stpl'
-          'Reference: SimpleTemplate'
-        when 'plugindev'
-          'Reference: Plugin'
-        else
-          'Manual'
-        end
-      end
-    
-      def test_untainted_path
-    bug5374 = '[ruby-core:39745]'
-    cwd = ('./'*40+'.'.taint).dup.untaint
-    in_safe = proc {|safe| $SAFE = safe; File.stat(cwd)}
-    assert_not_send([cwd, :tainted?])
-    (0..1).each do |level|
-      assert_nothing_raised(SecurityError, bug5374) {in_safe[level]}
-    end
-  ensure
-    $SAFE = 0
-  end
-    
-      it 'decodes positive Infinity' do
-    '\x00\x00\x00\x00\x00\x00\xf0\x7f'.unpack(unpack_format).should == [infinity_value]
-  end
-    
-      it 'decodes past whitespace bytes when passed the '*' modifier' do
-    [ ['a b c',    ['a b c']],
-      ['a\fb c',   ['a\fb c']],
-      ['a\nb c',   ['a\nb c']],
-      ['a\rb c',   ['a\rb c']],
-      ['a\tb c',   ['a\tb c']],
-      ['a\vb c',   ['a\vb c']],
-    ].should be_computed_by(:unpack, unpack_format('*'))
-  end
-end
-    
-      class SubclassX < Struct
-  end
-    
-      def self.dying_thread_with_outer_ensure(kill_method_name=:kill)
-    Thread.new do
-      Thread.current.report_on_exception = false
-      begin
-        begin
-          Thread.current.send(kill_method_name)
-        ensure
-          raise 'In dying thread'
-        end
-      ensure
-        yield
-      end
-    end
-  end
-    
-      guard -> {
-    with_timezone 'right/UTC' do
-      (Time.gm(1972, 6, 30, 23, 59, 59) + 1).sec == 60
-    end
-  } do
-    it 'handles real leap seconds in zone 'right/UTC'' do
-      with_timezone 'right/UTC' do
-        time = Time.send(@method, 1972, 6, 30, 23, 59, 60)
-    
-    namespace :gem do
-  def version
-    require 'spree/core/version'
-    Spree.version
-  end
-    
-            def update
-          authorize! :update, @order, order_token
-          @address = find_address
