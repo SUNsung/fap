@@ -1,126 +1,107 @@
 
         
-          def dump_build_env(env, f = $stdout)
-    keys = build_env_keys(env)
-    keys -= %w[CC CXX OBJC OBJCXX] if env['CC'] == env['HOMEBREW_CC']
+            # Gets the path to this layout.
+    attr_reader :path
     
-          # we readlink because this path probably doesn't exist since caveats
-      # occurs before the link step of installation
-      # Yosemite security measures mildly tighter rules:
-      # https://github.com/Homebrew/homebrew/issues/33815
-      if !plist_path.file? || !plist_path.symlink?
-        if f.plist_startup
-          s << 'To have launchd start #{f.full_name} at startup:'
-          s << '  sudo mkdir -p #{destination}' unless destination_path.directory?
-          s << '  sudo cp -fv #{f.opt_prefix}/*.plist #{destination}'
-          s << '  sudo chown root #{plist_link}'
-        else
-          s << 'To have launchd start #{f.full_name} at login:'
-          s << '  mkdir -p #{destination}' unless destination_path.directory?
-          s << '  ln -sfv #{f.opt_prefix}/*.plist #{destination}'
+        def self.catch_inheritance(const)
+      const.define_singleton_method :inherited do |const_|
+        (@children ||= Set.new).add const_
+        if block_given?
+          yield const_
         end
-        s << 'Then to load #{f.full_name} now:'
-        if f.plist_startup
-          s << '  sudo launchctl load #{plist_link}'
-        else
-          s << '  launchctl load #{plist_link}'
-        end
-      # For startup plists, we cannot tell whether it's running on launchd,
-      # as it requires for `sudo launchctl list` to get real result.
-      elsif f.plist_startup
-        s << 'To reload #{f.full_name} after an upgrade:'
-        s << '  sudo launchctl unload #{plist_link}'
-        s << '  sudo cp -fv #{f.opt_prefix}/*.plist #{destination}'
-        s << '  sudo chown root #{plist_link}'
-        s << '  sudo launchctl load #{plist_link}'
-      elsif Kernel.system '/bin/launchctl list #{plist_domain} &>/dev/null'
-        s << 'To reload #{f.full_name} after an upgrade:'
-        s << '  launchctl unload #{plist_link}'
-        s << '  launchctl load #{plist_link}'
-      else
-        s << 'To load #{f.full_name}:'
-        s << '  launchctl load #{plist_link}'
       end
+    end
     
-          if path.symlink? || path.directory?
-        next
-      elsif path.extname == '.la'
-        path.unlink
-      else
-        # Set permissions for executables and non-executables
-        perms = if path.mach_o_executable? || path.text_executable?
-          0555
-        else
-          0444
+      def observe_file_removal(path)
+    path.extend(ObserverPathnameExtension).unlink if path.exist?
+  end
+    
+        previous_tag = ARGV.named.first
+    previous_tag ||= Utils.popen_read(
+      'git', '-C', HOMEBREW_REPOSITORY, 'tag', '--list', '--sort=-version:refname'
+    ).lines.first.chomp
+    odie 'Could not find any previous tags!' unless previous_tag
+    
+          def import_key
+        if @cask.gpg.nil?
+          raise CaskError, 'Expected to find gpg public key in formula. Cask '#{@cask}' must add: 'gpg :embedded, key_id: [Public Key ID]' or 'gpg :embedded, key_url: [Public Key URL]''
         end
-        if ARGV.debug?
-          old_perms = path.stat.mode & 0777
-          if perms != old_perms
-            puts 'Fixing #{path} permissions from #{old_perms.to_s(8)} to #{perms.to_s(8)}'
+    
+        def render(context)
+      quote = paragraphize(super)
+      author = '<strong>#{@by.strip}</strong>' if @by
+      if @source
+        url = @source.match(/https?:\/\/(.+)/)[1].split('/')
+        parts = []
+        url.each do |part|
+          if (parts + [part]).join('/').length < 32
+            parts << part
           end
         end
-        path.chmod perms
+        source = parts.join('/')
+        source << '/&hellip;' unless source == @source
+      end
+      if !@source.nil?
+        cite = ' <cite><a href='#{@source}'>#{(@title || source)}</a></cite>'
+      elsif !@title.nil?
+        cite = ' <cite>#{@title}</cite>'
+      end
+      blockquote = if @by.nil?
+        quote
+      elsif cite
+        '#{quote}<footer>#{author + cite}</footer>'
+      else
+        '#{quote}<footer>#{author}</footer>'
+      end
+      '<blockquote>#{blockquote}</blockquote>'
+    end
+    
+        # Outputs a list of categories as comma-separated <a> links. This is used
+    # to output the category list for each post on a category page.
+    #
+    #  +categories+ is the list of categories to format.
+    #
+    # Returns string
+    #
+    def category_links(categories)
+      categories.sort.map { |c| category_link c }.join(', ')
+    end
+    
+          locations = Array.new
+      while (data.code.to_i == 301 || data.code.to_i == 302)
+        data = handle_gist_redirecting(data)
+        break if locations.include? data.header['Location']
+        locations << data.header['Location']
+      end
+    
+        def render(context)
+      if @img
+        '<img #{@img.collect {|k,v| '#{k}=\'#{v}\'' if v}.join(' ')}>'
+      else
+        'Error processing input, expected syntax: {% img [class name(s)] [http[s]:/]/path/to/image [width [height]] [title text | \'title text\' [\'alt text\']] %}'
       end
     end
   end
 end
-
     
-          begin
-        migrator = Migrator.new(f)
-        migrator.migrate
-      rescue Migrator::MigratorDifferentTapsError
-      rescue Exception => e
-        onoe e
-      end
+        def define_class_getter
+      @klass.extend(ClassMethods)
     end
-  end
     
-    # This formula serves as the base class for several very similar
-# formulae for Amazon Web Services related tools.
-class AmazonWebServicesFormula < Formula
-  # Use this method to peform a standard install for Java-based tools,
-  # keeping the .jars out of HOMEBREW_PREFIX/lib
-  def install
-    rm Dir['bin/*.cmd'] # Remove Windows versions
-    libexec.install Dir['*']
-    bin.install_symlink Dir['#{libexec}/bin/*'] - ['#{libexec}/bin/service']
-  end
-  alias_method :standard_install, :install
-    
-            %w(modals dropdowns scrollspy tabs tooltips popovers alerts buttons collapse carousel affix).each do |dom_id|
-          css('##{dom_id}-options + p + div tbody td:first-child').each do |node|
-            name = node.content.strip
-            id = node.parent['id'] = '#{dom_id}-#{name.parameterize}-option'
-            name.prepend '#{dom_id.singularize.titleize}: '
-            name << ' (option)'
-            entries << [name, id]
-          end
-    
-            css('h6').each do |node|
-          node.name = 'h4'
+            def matches? subject
+          @subject = subject
+          @subject = subject.new if subject.class == Class
+          error_when_not_valid? && no_error_when_valid?
         end
     
-    module Clamp
-  module Attribute
-    class Instance
-      def default_from_environment
-        # we don't want uncontrolled var injection from the environment
-        # since we're establishing that settings can be pulled from only three places:
-        # 1. default settings
-        # 2. yaml file
-        # 3. cli arguments
+        def processor(name) #:nodoc:
+      @known_processors ||= {}
+      if @known_processors[name.to_s]
+        @known_processors[name.to_s]
+      else
+        name = name.to_s.camelize
+        load_processor(name) unless Paperclip.const_defined?(name)
+        processor = Paperclip.const_get(name)
+        @known_processors[name.to_s] = processor
       end
     end
-  end
-    
-        execute 'ensure-sidekiq-is-setup-with-monit' do 
-      command %Q{ 
-        monit reload 
-      } 
-    end
-    
-      # puts '\n== Copying sample files =='
-  # unless File.exist?('config/database.yml')
-  #   system 'cp config/database.yml.sample config/database.yml'
-  # end
