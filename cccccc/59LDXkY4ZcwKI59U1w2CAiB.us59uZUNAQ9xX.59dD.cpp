@@ -1,264 +1,203 @@
 
         
-        // ResourceOpKernel<T> is a virtual base class for resource op implementing
-// interface type T. The inherited op looks up the resource name (determined by
-// ContainerInfo), and creates a new resource if necessary.
-//
-// Requirements:
-//  - Op must be marked as stateful.
-//  - Op must have `container` and `shared_name` attributes. Empty `container`
-//  means using the default container. Empty `shared_name` means private
-//  resource.
-//  - Subclass must override CreateResource().
-//  - Subclass is encouraged to override VerifyResource().
-template <typename T>
-class ResourceOpKernel : public OpKernel {
- public:
-  explicit ResourceOpKernel(OpKernelConstruction* context) : OpKernel(context) {
-    OP_REQUIRES_OK(context,
-                   context->allocate_persistent(DT_STRING, TensorShape({2}),
-                                                &handle_, nullptr));
-  }
-    }
-    
-    /** scalar_tanh_fast_derivative_op
-  * \ingroup CXX11_NeuralNetworks_Module
-  * \brief Template functor to compute the fast derivative of a tanh
-  *
-  * Input should be the backpropagated gradient.
-  *
-  * \sa class CwiseUnaryOp, Cwise::tanh_fast_derivative()
-  */
-template <typename T>
-struct scalar_tanh_fast_derivative_op {
-  EIGEN_EMPTY_STRUCT_CTOR(scalar_tanh_fast_derivative_op)
-  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE T operator()(const T& y) const {
-    const T one = T(1);
-    return one - (y * y);
-  }
-    }
-    
-    // ---------------------------------------------------------------------------
-// Inline implementation
-// ---------------------------------------------------------------------------
-template <PrefetchHint hint>
-inline void prefetch(const void* x) {
-// Check of COMPILER_GCC macro below is kept only for backward-compatibility
-// reasons. COMPILER_GCC3 is the macro that actually enables prefetch.
-#if defined(__llvm__) || defined(COMPILER_GCC) || defined(COMPILER_GCC3)
-  __builtin_prefetch(x, 0, hint);
-#else
-// You get no effect.  Feel free to add more sections above.
-#endif
-}
-    
-    
-    {  void CopyDeviceTensorToCPU(const Tensor *device_tensor, StringPiece edge_name,
-                             Device *device, Tensor *cpu_tensor,
-                             StatusCallback done) override;
-};
-    
-    TEST(GrpcChannelTest, SparseHostPorts) {
-  GrpcChannelSpec spec;
-  TF_EXPECT_OK(
-      spec.AddHostPortsJob('mnist', {{0, 'a:1'}, {3, 'd:4'}, {4, 'e:5'}}));
-  ChannelCreationFunction channel_func =
-      ConvertToChannelCreationFunction(NewHostPortGrpcChannel);
-  std::unique_ptr<GrpcChannelCache> cc(NewGrpcChannelCache(spec, channel_func));
-    }
-    
-      // Equals iff '*this' and 'other' are logically equivalent.
-  bool operator==(const TensorSlice& other) const;
-  bool operator!=(const TensorSlice& other) const { return !(*this == other); }
-    
-    namespace tensorflow {
-namespace functor {
-DEFINE_UNARY2(get_angle, complex64, complex128);
-}  // namespace functor
-}  // namespace tensorflow
-    
-    inline ZlibCompressionOptions ZlibCompressionOptions::RAW() {
-  ZlibCompressionOptions options = ZlibCompressionOptions();
-  options.window_bits = -options.window_bits;
-  return options;
-}
-    
-        DXGI_SWAP_CHAIN_DESC sd;
-    ZeroMemory( &sd, sizeof( sd ) );
-    sd.BufferCount = 1;
-    sd.BufferDesc.Width = width;
-    sd.BufferDesc.Height = height;
-#ifdef CHECK_NV12
-    sd.BufferDesc.Format = DXGI_FORMAT_NV12;
-#else
-    sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-#endif
-    sd.BufferDesc.RefreshRate.Numerator = 60;
-    sd.BufferDesc.RefreshRate.Denominator = 1;
-    sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    sd.OutputWindow = NULL; //g_hWnd;
-    sd.SampleDesc.Count = 1;
-    sd.SampleDesc.Quality = 0;
-    sd.Windowed = TRUE;
-    
-    void compose_motion(InputArray _om1, InputArray _T1, InputArray _om2, InputArray _T2,
-                    Mat& om3, Mat& T3, Mat& dom3dom1, Mat& dom3dT1, Mat& dom3dom2,
-                    Mat& dom3dT2, Mat& dT3dom1, Mat& dT3dT1, Mat& dT3dom2, Mat& dT3dT2);
-    
-            RNG &rng = ts->get_rng();
-        int startPointIndex, endPointIndex, modifiedPointIndex;
-        do
-        {
-            startPointIndex = cvtest::randInt(rng) % usedPointsCount;
-            endPointIndex = cvtest::randInt(rng) % usedPointsCount;
-            modifiedPointIndex = checkPartialSubsets ? usedPointsCount - 1 : cvtest::randInt(rng) % usedPointsCount;
-        }
-        while (startPointIndex == endPointIndex || startPointIndex == modifiedPointIndex || endPointIndex == modifiedPointIndex);
-    
-            struct smem
-        {
-            enum { TAG_MASK = (1U << ( (sizeof(unsigned int) << 3) - 5U)) - 1U };
-    }
-    
-    CV_EXPORTS_W void multiply(InputArray src1, Scalar src2, OutputArray dst, double scale=1, int dtype=-1);
-    
-    namespace cv { namespace ocl { namespace runtime {
-    }
-    }
-    }
-    
-      caffe::Datum datum;
-  datum.set_channels(2);  // one channel for each image in the pair
-  datum.set_height(rows);
-  datum.set_width(cols);
-  LOG(INFO) << 'A total of ' << num_items << ' items.';
-  LOG(INFO) << 'Rows: ' << rows << ' Cols: ' << cols;
-  for (int itemid = 0; itemid < num_items; ++itemid) {
-    int i = caffe::caffe_rng_rand() % num_items;  // pick a random  pair
-    int j = caffe::caffe_rng_rand() % num_items;
-    read_image(&image_file, &label_file, i, rows, cols,
-        pixels, &label_i);
-    read_image(&image_file, &label_file, j, rows, cols,
-        pixels + (rows * cols), &label_j);
-    datum.set_data(pixels, 2*rows*cols);
-    if (label_i  == label_j) {
-      datum.set_label(1);
-    } else {
-      datum.set_label(0);
-    }
-    datum.SerializeToString(&value);
-    std::string key_str = caffe::format_int(itemid, 8);
-    db->Put(leveldb::WriteOptions(), key_str, value);
-  }
-    
-    #include 'caffe/blob.hpp'
-#include 'caffe/layer.hpp'
-#include 'caffe/proto/caffe.pb.h'
-    
-     protected:
-  /// @copydoc ContrastiveLossLayer
-  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
-    
-      vector<cudnnTensorDescriptor_t> bottom_descs_, top_descs_;
-  cudnnTensorDescriptor_t    bias_desc_;
-  cudnnFilterDescriptor_t      filter_desc_;
-  vector<cudnnConvolutionDescriptor_t> conv_descs_;
-  int bottom_offset_, top_offset_, bias_offset_;
-    
-    #include 'caffe/layers/pooling_layer.hpp'
-    
-    #endif  // CAFFE_ELU_LAYER_HPP_
-
-    
-    namespace HPHP {
-///////////////////////////////////////////////////////////////////////////////
-    }
-    
-    
-    {}
-    
-      if (name == NULL)
-    return;
-    
-    
-    {   private:
-    using CondVarIList =
-      folly::IntrusiveList<CondVarNode, &CondVarNode::m_listHook>;
-    CondVarIList m_highPriList;
-    CondVarIList m_midLowPriList;
+        
+    {  // Errors
+  static const char* errors[] = {
+    '',
+    'foo',
+    'foo-dx-100.log',
+    '.log',
+    '',
+    'manifest',
+    'CURREN',
+    'CURRENTX',
+    'MANIFES',
+    'MANIFEST',
+    'MANIFEST-',
+    'XMANIFEST-3',
+    'MANIFEST-3x',
+    'LOC',
+    'LOCKx',
+    'LO',
+    'LOGx',
+    '18446744073709551616.log',
+    '184467440737095516150.log',
+    '100',
+    '100.',
+    '100.lop'
   };
-  std::vector<CondVarList> m_cond_list_vec;
-    
-      void check(std::unique_ptr<IOBuf>& buf) {
-    fbstring str = buf->moveToFbString();
-    EXPECT_EQ(elementCount_ * elementSize_, str.size());
-    EXPECT_EQ(elementCount_ * elementSize_, strspn(str.c_str(), 'x'));
-    EXPECT_EQ(0, buf->length());
-    EXPECT_EQ(1, buf->countChainElements());
-    EXPECT_EQ(0, buf->computeChainDataLength());
-    EXPECT_FALSE(buf->isChained());
+  for (int i = 0; i < sizeof(errors) / sizeof(errors[0]); i++) {
+    std::string f = errors[i];
+    ASSERT_TRUE(!ParseFileName(f, &number, &type)) << f;
   }
-    
-    SerialExecutor::UniquePtr SerialExecutor::createUnique(
-    std::shared_ptr<Executor> parent) {
-  auto executor = new SerialExecutor(getKeepAliveToken(parent.get()));
-  return {executor, Deleter{std::move(parent)}};
 }
     
-      KeepAlive<Executor> parent_;
-  std::mutex mutex_;
-  std::size_t scheduled_{0};
-  std::queue<Func> queue_;
+    TableCache::TableCache(const std::string& dbname,
+                       const Options* options,
+                       int entries)
+    : env_(options->env),
+      dbname_(dbname),
+      options_(options),
+      cache_(NewLRUCache(entries)) {
+}
     
-    ssize_t read(int fh, void* buf, size_t count) {
-  if (folly::portability::sockets::is_fh_socket(fh)) {
-    SOCKET s = (SOCKET)_get_osfhandle(fh);
-    if (s != INVALID_SOCKET) {
-      auto r = folly::portability::sockets::recv(fh, buf, count, 0);
-      if (r == -1 && WSAGetLastError() == WSAEWOULDBLOCK) {
-        errno = EAGAIN;
+      // Delete the specified 'file' from the specified 'level'.
+  void DeleteFile(int level, uint64_t file) {
+    deleted_files_.insert(std::make_pair(level, file));
+  }
+    
+    
+    {}  // namespace leveldb
+    
+      Benchmark()
+  : db_(NULL),
+    num_(FLAGS_num),
+    reads_(FLAGS_reads < 0 ? FLAGS_num : FLAGS_reads),
+    bytes_(0),
+    rand_(301) {
+    std::vector<std::string> files;
+    std::string test_dir;
+    Env::Default()->GetTestDirectory(&test_dir);
+    Env::Default()->GetChildren(test_dir.c_str(), &files);
+    if (!FLAGS_use_existing_db) {
+      for (int i = 0; i < files.size(); i++) {
+        if (Slice(files[i]).starts_with('dbbench_polyDB')) {
+          std::string file_name(test_dir);
+          file_name += '/';
+          file_name += files[i];
+          Env::Default()->DeleteFile(file_name.c_str());
+        }
       }
-      return r;
     }
   }
-  auto r = _read(fh, buf, static_cast<unsigned int>(count));
-  if (r == -1 && GetLastError() == ERROR_NO_DATA) {
-    // This only happens if the file was non-blocking and
-    // no data was present. We have to translate the error
-    // to a form that the rest of the world is expecting.
-    errno = EAGAIN;
+    
+    // Dump the contents of the file named by fname in text format to
+// *dst.  Makes a sequence of dst->Append() calls; each call is passed
+// the newline-terminated text corresponding to a single item found
+// in the file.
+//
+// Returns a non-OK result if fname does not name a leveldb storage
+// file, or if the file cannot be read.
+Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
+    
+      // Return the ith byte in the referenced data.
+  // REQUIRES: n < size()
+  char operator[](size_t n) const {
+    assert(n < size());
+    return data_[n];
   }
-  return r;
+    
+    #undef THPTensor_
+#undef THPTensor_stateless_
+#undef THPTensor
+#undef THPTensorStr
+#undef THPTensorBaseStr
+#undef THPTensorClass
+    
+    #define THPStorage TH_CONCAT_3(THP,Real,Storage)
+#define THPStorageStr TH_CONCAT_STRING_3(torch.,Real,Storage)
+#define THPStorageClass TH_CONCAT_3(THP,Real,StorageClass)
+#define THPStorage_(NAME) TH_CONCAT_4(THP,Real,Storage_,NAME)
+    
+      ByteArray();
+  ByteArray(std::size_t size);
+  ByteArray(const char* arr, std::size_t size);
+  ByteArray(ByteArray&& arr);
+  ByteArray(const ByteArray& arr);
+  ~ByteArray();
+    
+    #include 'test/cpp/qps/report.h'
+    
+    #include 'test/core/util/test_config.h'
+#include 'test/cpp/qps/benchmark_config.h'
+#include 'test/cpp/qps/driver.h'
+#include 'test/cpp/qps/report.h'
+#include 'test/cpp/qps/server.h'
+#include 'test/cpp/util/test_config.h'
+#include 'test/cpp/util/test_credentials_provider.h'
+    
+      bool Generate(const grpc::protobuf::FileDescriptor* file,
+                const grpc::string& parameter,
+                grpc::protobuf::compiler::GeneratorContext* context,
+                grpc::string* error) const;
+    
+    TEST_F(CodegenTestMinimal, Build) {}
+    
+    class UsageTimer {
+ public:
+  UsageTimer();
+    }
+    
+    grpc::string DescribeMethod(const grpc::protobuf::MethodDescriptor* method) {
+  std::stringstream result;
+  result << '  rpc ' << method->name()
+         << (method->client_streaming() ? '(stream ' : '(')
+         << method->input_type()->full_name() << ') returns '
+         << (method->server_streaming() ? '(stream ' : '(')
+         << method->output_type()->full_name() << ') {}\n';
+  if (method->options().deprecated()) {
+    result << ' DEPRECATED';
+  }
+  return result.str();
 }
     
-    /// Sugar for the most common case
-template <class Collection>
-auto collectN(Collection&& c, size_t n)
-    -> decltype(collectN(c.begin(), c.end(), n)) {
-  return collectN(c.begin(), c.end(), n);
-}
-    
-    
-    {}
+    #include <initializer_list>
+#include <string>
+#include <vector>
     
     /**
- * operator> through conversion for Range<const char*>
+ * @brief Superclass for the pluggable logging facilities.
+ *
+ * In order to make the logging of osquery results and inline debug, warning,
+ * error status easy to integrate into your environment, we take advantage of
+ * a plugin interface which allows you to integrate osquery with your internal
+ * large-scale logging infrastructure.
+ *
+ * You may use flume, splunk, syslog, scribe, etc. In order to use your
+ * specific upstream logging systems, one simply needs to create a custom
+ * subclass of LoggerPlugin. That subclass should at least implement the
+ * LoggerPlugin::logString method.
+ *
+ * Consider the following example:
+ *
+ * @code{.cpp}
+ *   class TestLoggerPlugin : public LoggerPlugin {
+ *    public:
+ *     osquery::Status logString(const std::string& s) {
+ *       int i = 0;
+ *       internal::logStringToFlume(s, i);
+ *       std::string message;
+ *       if (i == 0) {
+ *         message = 'OK';
+ *       } else {
+ *         message = 'Failed';
+ *       }
+ *       return osquery::Status(i, message);
+ *     }
+ *  };
+ *
+ *  REGISTER(TestLoggerPlugin, 'logger', 'test');
+ * @endcode
  */
-template <class T, class U>
-_t<std::enable_if<detail::ComparableAsStringPiece<T, U>::value, bool>>
-operator>(const T& lhs, const U& rhs) {
-  return StringPiece(lhs) > StringPiece(rhs);
-}
+class LoggerPlugin : public Plugin {
+ public:
+  /// The LoggerPlugin PluginRequest action router.
+  Status call(const PluginRequest& request, PluginResponse& response) override;
+    }
     
-      using pointer = typename Alloc::pointer;
-  using const_pointer = typename Alloc::const_pointer;
-  using reference = typename Alloc::reference;
-  using const_reference = typename Alloc::const_reference;
-  using size_type = typename Alloc::size_type;
-    
-      key_equal key_eq() const {
-    return table_.keyEqual();
+      // This buffer will be shared, create a descriptor.
+  osquery.md =
+      IOMemoryDescriptor::withAddressRange((mach_vm_address_t)osquery.buffer,
+                                           osquery.buf_size,
+                                           kIODirectionInOut,
+                                           kernel_task);
+  if (osquery.md == NULL) {
+    err = -EINVAL;
+    goto error_exit;
   }
+    
+    std::string wstringToString(const wchar_t* src) {
+  if (src == nullptr) {
+    return std::string('');
+  }
+    }
