@@ -1,282 +1,111 @@
 
         
-        Licensed under the Apache License, Version 2.0 (the 'License');
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    
-      // Converts binary example labels from 0.0 or 1.0 to -1.0 or 1.0 respectively
-  // as expected by smooth hinge loss.
-  Status ConvertLabel(float* const example_label) const final {
-    if (*example_label == 0.0) {
-      *example_label = -1;
-      return Status::OK();
-    }
-    if (*example_label == 1.0) {
-      return Status::OK();
-    }
-    return errors::InvalidArgument(
-        'Only labels of 0.0 or 1.0 are supported right now. '
-        'Found example with label: ',
-        *example_label);
-  }
-    
-    // TODO(zongheng): this should be a general functor that powers SparseAdd and
-// ScatterNd ops.  It should be moved to its own head file, once the other ops
-// are implemented.
-template <typename Device, typename T, typename Index, int NDIMS,
-          scatter_op::UpdateOp op>
-struct ScatterNdFunctor {
-  // Returns -1 on success or a nonnegative i s.t. indices[i] is a bad index.
-  Index operator()(const Device& d, typename TTypes<Index>::ConstMatrix indices,
-                   typename TTypes<T>::ConstFlat updates,
-                   typename TTypes<T, NDIMS>::Tensor out);
-};
-    
-    #include 'tensorflow/core/lib/core/status.h'
-#include 'tensorflow/core/lib/core/stringpiece.h'
-#if !defined(IS_SLIM_BUILD)
-#include 'tensorflow/core/lib/io/zlib_compression_options.h'
-#include 'tensorflow/core/lib/io/zlib_outputbuffer.h'
-#endif  // IS_SLIM_BUILD
-#include 'tensorflow/core/platform/macros.h'
-#include 'tensorflow/core/platform/types.h'
-    
-    /** scalar_tanh_fast_derivative_op
-  * \ingroup CXX11_NeuralNetworks_Module
-  * \brief Template functor to compute the fast derivative of a tanh
-  *
-  * Input should be the backpropagated gradient.
-  *
-  * \sa class CwiseUnaryOp, Cwise::tanh_fast_derivative()
-  */
-template <typename T>
-struct scalar_tanh_fast_derivative_op {
-  EIGEN_EMPTY_STRUCT_CTOR(scalar_tanh_fast_derivative_op)
-  EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE T operator()(const T& y) const {
-    const T one = T(1);
-    return one - (y * y);
-  }
-    }
-    
-    
+        
     {
-    {}  // namespace port
-}  // namespace tensorflow
-    
-    void SYCLDeviceContext::CopyDeviceTensorToCPU(const Tensor *device_tensor,
-                                              StringPiece edge_name,
-                                              Device *device,
-                                              Tensor *cpu_tensor,
-                                              StatusCallback done) {
-  const int64 total_bytes = device_tensor->TotalBytes();
-  if (total_bytes > 0) {
-    const void *src_ptr = DMAHelper::base(device_tensor);
-    void *dst_ptr = DMAHelper::base(cpu_tensor);
-    switch (device_tensor->dtype()) {
-      case DT_FLOAT:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<float *>(dst_ptr), static_cast<const float *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_DOUBLE:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<double *>(dst_ptr),
-            static_cast<const double *>(src_ptr), total_bytes);
-        break;
-      case DT_INT32:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<int32 *>(dst_ptr), static_cast<const int32 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT64:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<int64 *>(dst_ptr), static_cast<const int64 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_HALF:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<Eigen::half *>(dst_ptr),
-            static_cast<const Eigen::half *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX64:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<std::complex<float> *>(dst_ptr),
-            static_cast<const std::complex<float> *>(src_ptr), total_bytes);
-        break;
-      case DT_COMPLEX128:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<std::complex<double> *>(dst_ptr),
-            static_cast<const std::complex<double> *>(src_ptr), total_bytes);
-        break;
-      case DT_INT8:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<int8 *>(dst_ptr), static_cast<const int8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_INT16:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<int16 *>(dst_ptr), static_cast<const int16 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT8:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<uint8 *>(dst_ptr), static_cast<const uint8 *>(src_ptr),
-            total_bytes);
-        break;
-      case DT_UINT16:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<uint16 *>(dst_ptr),
-            static_cast<const uint16 *>(src_ptr), total_bytes);
-        break;
-      case DT_BOOL:
-        device->eigen_sycl_device()->memcpyDeviceToHost(
-            static_cast<bool *>(dst_ptr), static_cast<const bool *>(src_ptr),
-            total_bytes);
-        break;
-      default:
-        assert(false && 'unsupported type');
-    }
-  }
-  device->eigen_sycl_device()->synchronize();
-  done(Status::OK());
-}
-    
-    // See docs in ../ops/io_ops.cc.
-    
-        string compression_type;
-    OP_REQUIRES_OK(context,
-                   context->GetAttr('compression_type', &compression_type));
-    
-    
-    {}  // namespace
-    
-    // NOTE: this class is NOT meant to be used in threaded contexts.
-@interface ObjectBehaviorVerifier : NSObject
-@property (readonly) BOOL wasRetained;
-@property (readonly) BOOL wasCopied;
-@property (readonly) BOOL wasMutableCopied;
-    
-    /// \brief Diagnostic consumer that displays diagnostics to standard error.
-class PrintingDiagnosticConsumer : public DiagnosticConsumer {
-  llvm::raw_ostream &Stream;
-  bool ForceColors = false;
-  bool DidErrorOccur = false;
-public:
-  PrintingDiagnosticConsumer(llvm::raw_ostream &stream = llvm::errs()) :
-    Stream(stream) { }
-    }
-    
-    
-    {    cvReleaseMat( &(*state)->preFilteredImg0 );
-    cvReleaseMat( &(*state)->preFilteredImg1 );
-    cvReleaseMat( &(*state)->slidingSumBuf );
-    cvReleaseMat( &(*state)->disp );
-    cvReleaseMat( &(*state)->cost );
-    cvFree( state );
-}
-    
-    void dAB(cv::InputArray A, InputArray B, OutputArray dABdA, OutputArray dABdB);
-    
-    namespace cv { namespace cuda { namespace device
-{
-    struct Emulation
     {
-    }
-    }
+    {}}}
+    
+    #include <functional>
+#include <type_traits>
+    
+      // We lower Switch to a series of comparisons if any of the successors are in
+  // included in the region.
+  auto const shouldLower =
+    std::any_of(offsets.begin(), offsets.end(), [&](Offset o) {
+      SrcKey sk(curSrcKey(env), bcOff(env) + o);
+      return env.irb->hasBlock(sk);
+    });
+  if (shouldLower && profile.optimizing()) {
+    auto const values = sortedSwitchProfile(profile, iv.size());
+    FTRACE(2, 'Switch profile data for Switch @ {}\n', bcOff(env));
+    for (UNUSED auto const& val : values) {
+      FTRACE(2, '  case {} hit {} times\n', val.caseIdx, val.count);
     }
     }
     
-    #endif /* OPENCV_CUDA_WARP_REDUCE_HPP__ */
+    // The number of pages to reserve for the functions with highest
+// density (samples / size).  The functions put in these pages are not
+// considered for clustering.
+constexpr uint32_t kFrozenPages = 0;
+    
+      /**
+   * When running a CLI server, the requests executed on behalf of local
+   * processes will delegate to a light process pool run by the client.
+   */
+  static int createDelegate();
+    
+    IMGUI_API bool        ImGui_ImplDX10_Init(void* hwnd, ID3D10Device* device);
+IMGUI_API void        ImGui_ImplDX10_Shutdown();
+IMGUI_API void        ImGui_ImplDX10_NewFrame();
+IMGUI_API void        ImGui_ImplDX10_RenderDrawData(ImDrawData* draw_data);
+    
+    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
+// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
+// https://github.com/ocornut/imgui
+    
+    // Data
+static double       g_Time = 0.0f;
+static bool         g_MousePressed[3] = { false, false, false };
+static CIwTexture*  g_FontTexture = NULL;
+static char*        g_ClipboardText = NULL;
+static bool         g_osdKeyboardEnabled = false;
+    
+    // Use if you want to reset your rendering device without losing ImGui state.
+IMGUI_API void        ImGui_ImplSdlGL2_InvalidateDeviceObjects();
+IMGUI_API bool        ImGui_ImplSdlGL2_CreateDeviceObjects();
 
     
-    #if 0
+        // By using D3DCompile() from <d3dcompiler.h> / d3dcompiler.lib, we introduce a dependency to a given version of d3dcompiler_XX.dll (see D3DCOMPILER_DLL_A)
+    // If you would like to use this DX11 sample code but remove this dependency you can: 
+    //  1) compile once, save the compiled shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
+    //  2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL. 
+    // See https://github.com/ocornut/imgui/pull/638 for sources and details.
     
-    /// Create a new modifiable buffer that represents the given POD array.
-/**
- * @returns A mutable_buffers_1 value equivalent to:
- * @code mutable_buffers_1(
- *     data.data(),
- *     min(data.size() * sizeof(PodType), max_size_in_bytes)); @endcode
- */
-template <typename PodType, std::size_t N>
-inline mutable_buffers_1 buffer(boost::array<PodType, N>& data,
-    std::size_t max_size_in_bytes)
-{
-  return mutable_buffers_1(
-      mutable_buffer(data.c_array(),
-        data.size() * sizeof(PodType) < max_size_in_bytes
-        ? data.size() * sizeof(PodType) : max_size_in_bytes));
-}
-    
-    
+        for (int n = 0; n < 50; n++)
     {
-    {} // namespace asio
-} // namespace boost
+        printf('NewFrame() %d\n', n);
+        io.DisplaySize = ImVec2(1920, 1080);
+        io.DeltaTime = 1.0f / 60.0f;
+        ImGui::NewFrame();
+    }
     
-    // Standard library components can't be forward declared, so we'll have to
-// include the array header. Fortunately, it's fairly lightweight and doesn't
-// add significantly to the compile time.
-#if defined(BOOST_ASIO_HAS_STD_ARRAY)
-# include <array>
-#endif // defined(BOOST_ASIO_HAS_STD_ARRAY)
-    
-    // Helper class to determine whether or not the current thread is inside an
-// invocation of io_service::run() for a specified io_service object.
-template <typename Key, typename Value = unsigned char>
-class call_stack
+    int main(int, char**)
 {
-public:
-  // Context class automatically pushes the key/value pair on to the stack.
-  class context
-    : private noncopyable
-  {
-  public:
-    // Push the key on to the stack.
-    explicit context(Key* k)
-      : key_(k),
-        next_(call_stack<Key, Value>::top_)
-    {
-      value_ = reinterpret_cast<unsigned char*>(this);
-      call_stack<Key, Value>::top_ = this;
-    }
-    }
-    }
-    
-    } // namespace date_time
-namespace posix_time {
-    
-    #if !defined(BOOST_ASIO_HAS_THREADS) \
-  || defined(BOOST_ASIO_DISABLE_FENCED_BLOCK)
-typedef null_fenced_block fenced_block;
-#elif defined(__MACH__) && defined(__APPLE__)
-typedef macos_fenced_block fenced_block;
-#elif defined(__sun)
-typedef solaris_fenced_block fenced_block;
-#elif defined(__GNUC__) && defined(__arm__) \
-  && !defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4)
-typedef gcc_arm_fenced_block fenced_block;
-#elif defined(__GNUC__) && (defined(__hppa) || defined(__hppa__))
-typedef gcc_hppa_fenced_block fenced_block;
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-typedef gcc_x86_fenced_block fenced_block;
-#elif defined(__GNUC__) \
-  && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)) \
-  && !defined(__INTEL_COMPILER) && !defined(__ICL) \
-  && !defined(__ICC) && !defined(__ECC) && !defined(__PATHSCALE__)
-typedef gcc_sync_fenced_block fenced_block;
-#elif defined(BOOST_ASIO_WINDOWS) && !defined(UNDER_CE)
-typedef win_fenced_block fenced_block;
-#else
-typedef null_fenced_block fenced_block;
+    // Setup window
+    glfwSetErrorCallback(glfw_error_callback);
+    if (!glfwInit())
+        return 1;
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#if __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
+    GLFWwindow* window = glfwCreateWindow(1280, 720, 'ImGui GLFW+OpenGL3 example', NULL, NULL);
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(1); // Enable vsync
+    gl3wInit();
+    }
     
-    template <typename Handler>
-inline void deallocate(void* p, std::size_t s, Handler& h)
-{
-#if !defined(BOOST_ASIO_HAS_HANDLER_HOOKS)
-  ::operator delete(p);
-#else
-  using boost::asio::asio_handler_deallocate;
-  asio_handler_deallocate(p, s, boost::asio::detail::addressof(h));
-#endif
-}
+        // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
+    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Read 'misc/fonts/README.txt' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
+    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
+    
+    //---- Avoid multiple STB libraries implementations, or redefine path/filenames to prioritize another version
+// By default the embedded implementations are declared static and not available outside of imgui cpp files.
+//#define IMGUI_STB_TRUETYPE_FILENAME   'my_folder/stb_truetype.h'
+//#define IMGUI_STB_RECT_PACK_FILENAME  'my_folder/stb_rect_pack.h'
+//#define IMGUI_DISABLE_STB_TRUETYPE_IMPLEMENTATION
+//#define IMGUI_DISABLE_STB_RECT_PACK_IMPLEMENTATION
