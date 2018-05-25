@@ -1,169 +1,142 @@
 
         
-          def replicate_states(self, state_coll_name):
-    state_list = self._metagraph.collection_def[state_coll_name]
-    num_states = len(state_list.node_list.value)
-    for replica_id in range(1, FLAGS.num_gpus):
-      for i in range(num_states):
-        state_list.node_list.value.append(state_list.node_list.value[i])
-    for replica_id in range(FLAGS.num_gpus):
-      for i in range(num_states):
-        index = replica_id * num_states + i
-        state_list.node_list.value[index] = with_autoparallel_prefix(
-            replica_id, state_list.node_list.value[index])
+        First, we fix a training set, increase the number of
+samples to classify and plot number of classified samples as a
+function of time.
     
-      def setUp(self):
-    FLAGS.train_data = os.path.join(self.get_temp_dir() + 'test-text.txt')
-    FLAGS.eval_data = os.path.join(self.get_temp_dir() + 'eval-text.txt')
-    FLAGS.save_path = self.get_temp_dir()
-    with open(FLAGS.train_data, 'w') as f:
-      f.write(
-          '''alice was beginning to get very tired of sitting by her sister on
-          the bank, and of having nothing to do: once or twice she had peeped
-          into the book her sister was reading, but it had no pictures or
-          conversations in it, 'and what is the use of a book,' thought alice
-          'without pictures or conversations?' So she was considering in her own
-          mind (as well as she could, for the hot day made her feel very sleepy
-          and stupid), whether the pleasure of making a daisy-chain would be
-          worth the trouble of getting up and picking the daisies, when suddenly
-          a White rabbit with pink eyes ran close by her.\n''')
-      with open(FLAGS.eval_data, 'w') as f:
-        f.write('alice she rabbit once\n')
+        package is the name of the root module of the package
+    
+        if not os.path.exists(ARCHIVE_NAME):
+        print('Downloading dataset from %s (14 MB)' % URL)
+        opener = urlopen(URL)
+        with open(ARCHIVE_NAME, 'wb') as archive:
+            archive.write(opener.read())
+    
+        # TASK: print the mean and std for each candidate along with the parameter
+    # settings for all the candidates explored by grid search.
+    n_candidates = len(grid_search.cv_results_['params'])
+    for i in range(n_candidates):
+        print(i, 'params - %s; mean - %0.2f; std - %0.2f'
+                 % (grid_search.cv_results_['params'][i],
+                    grid_search.cv_results_['mean_test_score'][i],
+                    grid_search.cv_results_['std_test_score'][i]))
+    
+        input_file = open(os.path.join(exercise_dir, f))
+    output_file = open(os.path.join(skeleton_dir, f), 'w')
+    
+        def plot_decision_surface(self, surface, type):
+        X1, X2, Z = surface
+        if type == 0:
+            levels = [-1.0, 0.0, 1.0]
+            linestyles = ['dashed', 'solid', 'dashed']
+            colors = 'k'
+            self.contours.append(self.ax.contour(X1, X2, Z, levels,
+                                                 colors=colors,
+                                                 linestyles=linestyles))
+        elif type == 1:
+            self.contours.append(self.ax.contourf(X1, X2, Z, 10,
+                                                  cmap=matplotlib.cm.bone,
+                                                  origin='lower', alpha=0.85))
+            self.contours.append(self.ax.contour(X1, X2, Z, [0.0], colors='k',
+                                                 linestyles=['solid']))
+        else:
+            raise ValueError('surface type unknown')
+    
+    The data is generated with the ``make_checkerboard`` function, then
+shuffled and passed to the Spectral Biclustering algorithm. The rows
+and columns of the shuffled matrix are rearranged to show the
+biclusters found by the algorithm.
     
     
-def from_pygtp(board_size, pygtpc):
-  '''Converts from a pygtp coordinate to a MiniGo coordinate.'''
-  # GTP has a notion of both a Pass and a Resign, both of which are mapped to
-  # None, so the conversion is not precisely bijective.
-  if pygtpc in (gtp.PASS, gtp.RESIGN):
-    return None
-  return board_size - pygtpc[1], pygtpc[0] - 1
+def uniform_labelings_scores(score_func, n_samples, n_clusters_range,
+                             fixed_n_classes=None, n_runs=5, seed=42):
+    '''Compute score for 2 random uniform cluster labelings.
     
-        self.assertEqual(coords.to_sgf((0, 8)), 'ia')
-    self.assertEqual(coords.to_flat(utils_test.BOARD_SIZE, (0, 8)), 8)
-    self.assertEqual(coords.to_kgs(utils_test.BOARD_SIZE, (0, 8)), 'J9')
-    self.assertEqual(coords.to_pygtp(utils_test.BOARD_SIZE, (0, 8)), (9, 9))
     
-      def is_done(self):
-    return self.result != 0 or self.root.is_done()
+# Plot the distances
+for index, metric in enumerate(['cosine', 'euclidean', 'cityblock']):
+    avg_dist = np.zeros((n_clusters, n_clusters))
+    plt.figure(figsize=(5, 4.5))
+    for i in range(n_clusters):
+        for j in range(n_clusters):
+            avg_dist[i, j] = pairwise_distances(X[y == i], X[y == j],
+                                                metric=metric).mean()
+    avg_dist /= avg_dist.max()
+    for i in range(n_clusters):
+        for j in range(n_clusters):
+            plt.text(i, j, '%5.3f' % avg_dist[i, j],
+                     verticalalignment='center',
+                     horizontalalignment='center')
     
-        'ipv6': re.compile(
-        r'''^
-            (?:{0}:){{7}}{0}|           # uncompressed: 1:2:3:4:5:6:7:8
-            (?:{0}:){{1,6}}:|           # compressed variants, which are all
-            (?:{0}:)(?::{0}){{1,6}}|    # a::b for various lengths of a,b
-            (?:{0}:){{2}}(?::{0}){{1,5}}|
-            (?:{0}:){{3}}(?::{0}){{1,4}}|
-            (?:{0}:){{4}}(?::{0}){{1,3}}|
-            (?:{0}:){{5}}(?::{0}){{1,2}}|
-            (?:{0}:){{6}}(?::{0})|      # ...all with 2 <= a+b <= 7
-            :(?::{0}){{1,6}}|           # ::ffff(:ffff...)
-            {0}?::|                     # ffff::, ::
-                                        # ipv4-in-ipv6 variants
-            (?:0:){{6}}(?:{0}\.){{3}}{0}|
-            ::(?:ffff:)?(?:{0}\.){{3}}{0}|
-            (?:0:){{5}}ffff:(?:{0}\.){{3}}{0}
-            $
-        '''.format(ipv6_component), re.X | re.I
-    ),
+        return (major, minor, patch, beta)
     
-            try:
-            url = '%s/roles/%d/%s/?page_size=50' % (self.baseurl, int(role_id), related)
-            data = self.__call_galaxy(url)
-            results = data['results']
-            done = (data.get('next_link', None) is None)
-            while not done:
-                url = '%s%s' % (self._api_server, data['next_link'])
-                data = self.__call_galaxy(url)
-                results += data['results']
-                done = (data.get('next_link', None) is None)
-            return results
-        except:
-            return None
+    # begin[licence]
+#
+# [The 'BSD licence']
+# Copyright (c) 2005-2008 Terence Parr
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+# 3. The name of the author may not be used to endorse or promote products
+#    derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+# IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+# NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+# THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# end[licence]
     
-            params1 = {'three': 3, 'two': 2, 'one': 1}
-        params2 = {'one': 1, 'two': 2, 'three': 3}
-        actual = GCPUtils.are_params_equal(params1, params2)
-        self.assertTrue(actual)
     
-        terminal_stdout_re = [
-        re.compile(r'[\r\n]?<.+>(?:\s*)$'),
-        re.compile(r'[\r\n]?\[.+\](?:\s*)$'),
-    ]
+    def error(self, nvae):
+        '''A hook for debugging interface'''
+        pass
     
-        dimensions = 500 * np.arange(1, n_iter + 1)
+    In Blackboard pattern several specialised sub-systems (knowledge sources)
+assemble their knowledge to build a possibly partial or approximate solution.
+In this way, the sub-systems work together to solve the problem,
+where the solution is the sum of its parts.
     
-        return delta.seconds + delta.microseconds / mu_second
+        def test_sequential_undo(self):
+        self.command_stack = list(reversed(self.command_stack))
+        self.command_stack[0].undo()
+        output_after_first_undo = os.listdir(self.test_dir)
+        self.assertEqual(output_after_first_undo[0], 'bar.txt')
+        self.command_stack[1].undo()
+        output_after_second_undo = os.listdir(self.test_dir)
+        self.assertEqual(output_after_second_undo[0], 'foo.txt')
     
-    URL = ('http://people.csail.mit.edu/jrennie/'
-       '20Newsgroups/20news-bydate.tar.gz')
     
-    from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import Perceptron
-from sklearn.pipeline import Pipeline
-from sklearn.datasets import load_files
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
+class BaseRegisteredClass(object):
+    __metaclass__ = RegistryHolder
+    '''
+        Any class that will inherits from BaseRegisteredClass will be included
+        inside the dict RegistryHolder.REGISTRY, the key being the name of the
+        class and the associated value, the class itself.
+    '''
+    pass
     
-    import sys
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import LinearSVC
-from sklearn.pipeline import Pipeline
-from sklearn.model_selection import GridSearchCV
-from sklearn.datasets import load_files
-from sklearn.model_selection import train_test_split
-from sklearn import metrics
+        def test_cat_eng_localization(self):
+        self.assertEqual(self.e.get('cat'), 'cat')
     
-        in_exercise_region = False
+    class MidnightTimeProvider(object):
+    '''
+    Class implemented as hard-coded stub (in contrast to configurable stub).
+    '''
     
-    Second example
---------------
-The second example shows the ability of the Minimum Covariance Determinant
-robust estimator of covariance to concentrate on the main mode of the data
-distribution: the location seems to be well estimated, although the covariance
-is hard to estimate due to the banana-shaped distribution. Anyway, we can
-get rid of some outlying observations.
-The One-Class SVM is able to capture the real data structure, but the
-difficulty is to adjust its kernel bandwidth parameter so as to obtain
-a good compromise between the shape of the data scatter matrix and the
-risk of over-fitting the data.
     
-            cmap_group = Tk.Frame(fm)
-        Tk.Radiobutton(cmap_group, text='Hyperplanes',
-                       variable=controller.surface_type, value=0,
-                       command=controller.refit).pack(anchor=Tk.W)
-        Tk.Radiobutton(cmap_group, text='Surface',
-                       variable=controller.surface_type, value=1,
-                       command=controller.refit).pack(anchor=Tk.W)
-    
-    The dataset is generated using the ``make_biclusters`` function, which
-creates a matrix of small values and implants bicluster with large
-values. The rows and columns are then shuffled and passed to the
-Spectral Co-Clustering algorithm. Rearranging the shuffled matrix to
-make biclusters contiguous shows how accurately the algorithm found
-the biclusters.
-    
-    # Plot boundaries of unit simplex
-plt.plot([0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], 'k', label='Simplex')
-    
-        print('n = %d\n' % n)
-    
-            def c_string(init):
-            size = len(init) + 1
-            return (c_char*size)(*init)
-    
-            pt = pointer(Table(1, 2, 3))
-    
-        # __set__ and __get__ should raise a TypeError in case their self
-    # argument is not a ctype instance.
-    def test___set__(self):
-        class MyCStruct(Structure):
-            _fields_ = (('field', c_int),)
-        self.assertRaises(TypeError,
-                          MyCStruct.field.__set__, 'wrong type self', 42)
-    
-        parser = argparse.ArgumentParser(description = 'Download all the PDF/HTML links into README.md')
-    parser.add_argument('-d', action='store', dest='directory')
-    parser.add_argument('--no-html', action='store_true', dest='nohtml', default = False)
-    parser.add_argument('--overwrite', action='store_true', default = False)    
-    results = parser.parse_args()
+class Transactional(object):
+    '''Adds transactional semantics to methods. Methods decorated  with
