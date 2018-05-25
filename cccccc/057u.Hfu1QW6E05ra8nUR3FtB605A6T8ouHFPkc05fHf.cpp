@@ -1,147 +1,246 @@
 
         
-          /// Keep emitting subsequent diagnostics after a fatal error.
-  bool ShowDiagnosticsAfterFatalError = false;
+        #endif  // ATOM_COMMON_DRAGGABLE_REGION_H_
+
     
-    #include 'swift/Basic/LLVM.h'
-#include 'swift/AST/DiagnosticConsumer.h'
+      // Gets the native display ID for the <process_id, render_frame_id> tuple.
+  int64_t GetMonitor();
     
-      /// Returns the buffer ID for the specified *valid* location.
-  ///
-  /// Because a valid source location always corresponds to a source buffer,
-  /// this routine always returns a valid buffer ID.
-  unsigned findBufferContainingLoc(SourceLoc Loc) const;
+     private:
+  struct ExecuteOpenParams {
+    ExecuteOpenParams(SkColor color, RunState run_state, HWND owner);
+    SkColor color;
+    RunState run_state;
+    HWND owner;
+  };
+    
+    #undef FPL
+
+    
+    void Base::CallSync(const std::string& method,
+                    const base::ListValue& arguments,
+                    base::ListValue* result) {
+  NOTREACHED() << 'Uncatched callAsync in Base'
+               << ' method:' << method
+               << ' arguments:' << arguments;
+}
+    
+    
+    {  RenderView* render_view = RenderView::FromWebView(view);
+  return render_view;
+}
+    
+    #include 'base/compiler_specific.h'
+#include 'content/nw/src/api/base/base.h'
     
     
     {
-    {}  // namespace
-}  // namespace tesseract
+    {    if (zoom_controller) {
+      double zoom_factor = content::ZoomLevelToZoomFactor(zoom_controller->GetZoomLevel());
+      if (zoom_factor > content::kMaximumZoomFactor) {
+        zoom_factor = content::kMaximumZoomFactor;
+      }
+      if (zoom_factor < content::kMinimumZoomFactor) {
+        zoom_factor = content::kMinimumZoomFactor;
+      }
+      x *= zoom_factor;
+      y *= zoom_factor;
+    }
+    
+    Popup(x, y, rvh);
+  } else if (method == 'EnableShowEvent') {
+    arguments.GetBoolean(0, &enable_show_event_);
+  } else {
+    NOTREACHED() << 'Invalid call to Menu method:' << method
+                 << ' arguments:' << arguments;
+  }
+}
+    
+    ui::KeyboardCode GetKeycodeFromText(std::string text){
+  ui::KeyboardCode retval = ui::VKEY_UNKNOWN;
+  if (text.size() != 0){
+    std::string upperText = base::ToUpperASCII(text);
+    std::string keyName = text;
+    bool found = false;
+    if (upperText.size() == 1){
+      char key = upperText[0];
+      if (key>='0' && key<='9'){//handle digital
+        keyName = 'Digit' + upperText;
+        found = true;
+      } else if (key>='A'&&key<='Z'){//handle alphabet
+        keyName = 'Key' + upperText;
+        found = true;
+      }
+    }
+    }
+    }
+    
+    bool NwClipboardReadAvailableTypesFunction::RunNWSync(base::ListValue* response, std::string* error) {
+  ui::Clipboard* clipboard = ui::Clipboard::GetForCurrentThread();
+  bool contains_filenames;
+  std::vector<base::string16> types;
+  clipboard->ReadAvailableTypes(ui::CLIPBOARD_TYPE_COPY_PASTE, &types, &contains_filenames);
+  for(std::vector<base::string16>::iterator it = types.begin(); it != types.end(); it++) {
+    if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypeText)) {
+      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_TEXT))));
+    } else if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypeHTML)) {
+      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_HTML))));
+    } else if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypeRTF)) {
+      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_RTF))));
+    } else if (base::EqualsASCII(*it, ui::Clipboard::kMimeTypePNG)) {
+      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_PNG))));
+      response->Append(base::WrapUnique(new base::Value(ToString(TYPE_JPEG))));
+    }
+  }
+  return true;
+}
+    
+      /* rb_ is currently ldb by nrhs; resize it to n by nrhs */
+  rb_->size[0] = n;
+  if (rb_ != rb)
+    THDTensor_(resize2d)(rb, n, nrhs);
+    
+      // Returns the distance map between the baseline image and the image in the
+  // last Compare() call (or the baseline image, if Compare() was not called
+  // yet).
+  // The dimensions of the distance map are the same as the baseline image.
+  // The interpretation of the distance values depend on the comparator used.
+  virtual const std::vector<float> distmap() const = 0;
+    
+    void OutputImageComponent::ToFloatPixels(float* out, int stride) const {
+  assert(factor_x_ == 1);
+  assert(factor_y_ == 1);
+  for (int block_y = 0; block_y < height_in_blocks_; ++block_y) {
+    for (int block_x = 0; block_x < width_in_blocks_; ++block_x) {
+      coeff_t block[kDCTBlockSize];
+      GetCoeffBlock(block_x, block_y, block);
+      double blockd[kDCTBlockSize];
+      for (int k = 0; k < kDCTBlockSize; ++k) {
+        blockd[k] = block[k];
+      }
+      ComputeBlockIDCTDouble(blockd);
+      for (int iy = 0; iy < 8; ++iy) {
+        for (int ix = 0; ix < 8; ++ix) {
+          int y = block_y * 8 + iy;
+          int x = block_x * 8 + ix;
+          if (y >= height_ || x >= width_) continue;
+          out[(y * width_ + x) * stride] = static_cast<float>(blockd[8 * iy + ix] + 128.0);
+        }
+      }
+    }
+  }
+}
+    
+    void TransformBlock(double block[64], Transform1d f) {
+  double tmp[64];
+  for (int x = 0; x < 8; ++x) {
+    f(&block[x], 8, &tmp[x]);
+  }
+  for (int y = 0; y < 8; ++y) {
+    f(&tmp[8 * y], 1, &block[8 * y]);
+  }
+}
+    
+    // Performs in-place floating point 8x8 DCT on block[0..63].
+// Note that the DCT used here is the DCT-2 with the first term multiplied by
+// 1/sqrt(2) and the result scaled by 1/2.
+void ComputeBlockDCTDouble(double block[64]);
+    
+        // The nodes are:
+    // [0, n): the sorted leaf nodes that we start with.
+    // [n]: we add a sentinel here.
+    // [n + 1, 2n): new parent nodes are added here, starting from
+    //              (n+1). These are naturally in ascending order.
+    // [2n]: we add a sentinel at the end as well.
+    // There will be (2n+1) elements at the end.
+    const HuffmanTree sentinel(~static_cast<uint32_t>(0), -1, -1);
+    tree[n] = sentinel;
+    tree[n + 1] = sentinel;
+    
+    // A node of a Huffman tree.
+struct HuffmanTree {
+  HuffmanTree() {}
+  HuffmanTree(uint32_t count, int16_t left, int16_t right)
+      : total_count_(count),
+        index_left_(left),
+        index_right_or_value_(right) {
+  }
+  uint32_t total_count_;
+  int16_t index_left_;
+  int16_t index_right_or_value_;
+};
+    
+    #include 'guetzli/jpeg_data.h'
+    
+    #include 'guetzli/output_image.h'
+    
+    #include <algorithm>
+#include <string.h>
+    
+    namespace guetzli {
+    }
+    
+    #include <string>
+    
+    // Functions for writing a JPEGData object into a jpeg byte stream.
+    
+    
+    {}  // namespace guetzli
 
     
-      // Suspends/Enables training by setting the training_ flag. Serialize and
-  // DeSerialize only operate on the run-time data if state is false.
-  void SetEnableTraining(TrainingState state) override;
+    class Dictionary {
+ public:
+  static const size_t kMaxDictSize = 1 << 14;
+    }
     
-      // Writes to the given file. Returns false in case of error.
-  bool Serialize(TFile* fp) const override;
-  // Reads from the given file. Returns false in case of error.
-  bool DeSerialize(TFile* fp) override;
+    ExternalFunctions::ExternalFunctions() {
+#define EXT_FUNC(NAME, RETURN_TYPE, FUNC_SIG, WARN)                            \
+  this->NAME = ::NAME;                                                         \
+  CheckFnPtr((void *)::NAME, #NAME, WARN);
+    }
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
     
-    // You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
-// If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
-// https://github.com/ocornut/imgui
-    
-    // Implemented features:
-//  [X] User texture binding. Cast 'GLuint' OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
-// Missing features:
-//  [ ] SDL2 handling of IME under Windows appears to be broken and it explicitly disable the regular Windows IME. You can restore Windows IME by compiling SDL with SDL_DISABLE_WINDOWS_IME.
-    
-    #if defined(__GNUC__)
-#pragma GCC diagnostic ignored '-Wunused-function'          // warning: 'xxxx' defined but not used
-#endif
-    
-    //---- Use 32-bit vertex indices (default is 16-bit) to allow meshes with more than 64K vertices. Render function needs to support it.
-//#define ImDrawIdx unsigned int
-    
-        // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them. 
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple. 
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'misc/fonts/README.txt' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Roboto-Medium.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/Cousine-Regular.ttf', 15.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/DroidSans.ttf', 16.0f);
-    //io.Fonts->AddFontFromFileTTF('../../misc/fonts/ProggyTiny.ttf', 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF('c:\\Windows\\Fonts\\ArialUni.ttf', 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
-    
-    void CleanupDeviceD3D()
-{
-    CleanupRenderTarget();
-    if (g_pSwapChain) { g_pSwapChain->Release(); g_pSwapChain = NULL; }
-    if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = NULL; }
+    {  auto TimeOfUnit =
+      duration_cast<seconds>(UnitStopTime - UnitStartTime).count();
+  if (!(TotalNumberOfRuns & (TotalNumberOfRuns - 1)) &&
+      secondsSinceProcessStartUp() >= 2)
+    PrintStats('pulse ');
+  if (TimeOfUnit > TimeOfLongestUnitInSeconds * 1.1 &&
+      TimeOfUnit >= Options.ReportSlowUnits) {
+    TimeOfLongestUnitInSeconds = TimeOfUnit;
+    Printf('Slowest unit: %zd s:\n', TimeOfLongestUnitInSeconds);
+    WriteUnitToFileWithPrefix({Data, Data + Size}, 'slow-unit-');
+  }
+  return Res;
 }
     
-        // Setup Dear ImGui binding
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    ImGui_ImplDX12_Init(hwnd, NUM_FRAMES_IN_FLIGHT, g_pd3dDevice,
-        DXGI_FORMAT_R8G8B8A8_UNORM,
-        g_pd3dSrvDescHeap->GetCPUDescriptorHandleForHeapStart(),
-        g_pd3dSrvDescHeap->GetGPUDescriptorHandleForHeapStart());
     
-            // Rendering
-        IwGxSetColClear(clear_color.x * 255, clear_color.y * 255, clear_color.z * 255, clear_color.w * 255);
-        IwGxClear();
-        ImGui::Render();
-        ImGui_Marmalade_RenderDrawData(ImGui::GetDrawData());
-        IwGxSwapBuffers();
-    
-    int main(int, char**)
-{
-    // Setup window
-    glfwSetErrorCallback(glfw_error_callback);
-    if (!glfwInit())
-        return 1;
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-#if __APPLE__
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
-    GLFWwindow* window = glfwCreateWindow(1280, 720, 'ImGui GLFW+OpenGL3 example', NULL, NULL);
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync
-    gl3wInit();
-    }
-    
-    TEST_F(YogaTest_HadOverflowTests, spacing_overflow_in_nested_nodes) {
-  const YGNodeRef child0 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child0, 80);
-  YGNodeStyleSetHeight(child0, 40);
-  YGNodeStyleSetMargin(child0, YGEdgeTop, 10);
-  YGNodeStyleSetMargin(child0, YGEdgeBottom, 10);
-  YGNodeInsertChild(root, child0, 0);
-  const YGNodeRef child1 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child1, 80);
-  YGNodeStyleSetHeight(child1, 40);
-  YGNodeInsertChild(root, child1, 1);
-  const YGNodeRef child1_1 = YGNodeNewWithConfig(config);
-  YGNodeStyleSetWidth(child1_1, 80);
-  YGNodeStyleSetHeight(child1_1, 40);
-  YGNodeStyleSetMargin(child1_1, YGEdgeBottom, 5);
-  YGNodeInsertChild(child1, child1_1, 0);
-    }
-    
-    void setAssertHandler(AssertHandler assertHandler) {
-    gAssertHandler = assertHandler;
+    {  // Mutate the integer value.
+  switch(Rand(5)) {
+    case 0: Val++; break;
+    case 1: Val--; break;
+    case 2: Val /= 2; break;
+    case 3: Val *= 2; break;
+    case 4: Val = Rand(Val * Val); break;
+    default: assert(0);
+  }
+  // Just replace the bytes with the new ones, don't bother moving bytes.
+  for (size_t i = B; i < E; i++) {
+    size_t Idx = E + B - i - 1;
+    assert(Idx >= B && Idx < E);
+    Data[Idx] = (Val % 10) + '0';
+    Val /= 10;
+  }
+  return Size;
 }
     
-      bool hasOnlyOneRef() const {
-    return m_refcount == 1;
-  }
+      /// Applies one of the configured mutations.
+  /// Returns the new size of data which could be up to MaxSize.
+  size_t Mutate(uint8_t *Data, size_t Size, size_t MaxSize);
+  /// Applies one of the default mutations. Provided as a service
+  /// to mutation authors.
+  size_t DefaultMutate(uint8_t *Data, size_t Size, size_t MaxSize);
     
-    namespace facebook {
-namespace jni {
-    }
-    }
+    std::string Hash(const Unit &U);
     
-    namespace facebook {
-    }
-    
-      T* release() {
-    T* obj = get();
-    pthread_setspecific(m_key, NULL);
-    return obj;
-  }
+    void PrintASCII(const uint8_t *Data, size_t Size, const char *PrintAfter = '');
