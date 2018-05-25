@@ -1,83 +1,116 @@
 
         
-            All keys are expected to be strings. The structure remembers the
-    case of the last key to be set, and ``iter(instance)``,
-    ``keys()``, ``items()``, ``iterkeys()``, and ``iteritems()``
-    will contain case-sensitive keys. However, querying and contains
-    testing is case insensitive::
+            # Then we cluster the lines together as blocks
+    # Each block represents a collection of lines that should be sorted
+    # This was done by assuming only links ([...](...)) are meant to be sorted
+    # Clustering is done by indentation
+    blocks = []
+    last_indent = None
+    for line in read_me:
+        s_line = line.lstrip()
+        indent = len(line) - len(s_line)
+    
+    import datetime
+import io
+import json
+import textwrap
+    
+        infile, outfile = args
+    
+    import youtube_dl.extractor
+from youtube_dl import YoutubeDL
+from youtube_dl.compat import (
+    compat_os_name,
+    compat_str,
+)
+from youtube_dl.utils import (
+    preferredencoding,
+    write_string,
+)
+    
+        def _real_extract(self, url):
+        video_id = self._match_id(url)
+    
+    from .common import InfoExtractor
+from ..utils import js_to_json
     
     
-class TestCaseInsensitiveDict:
+class CloserToTruthIE(InfoExtractor):
+    _VALID_URL = r'https?://(?:www\.)?closertotruth\.com/(?:[^/]+/)*(?P<id>[^/?#&]+)'
+    _TESTS = [{
+        'url': 'http://closertotruth.com/series/solutions-the-mind-body-problem#video-3688',
+        'info_dict': {
+            'id': '0_zof1ktre',
+            'display_id': 'solutions-the-mind-body-problem',
+            'ext': 'mov',
+            'title': 'Solutions to the Mind-Body Problem?',
+            'upload_date': '20140221',
+            'timestamp': 1392956007,
+            'uploader_id': 'CTTXML'
+        },
+        'params': {
+            'skip_download': True,
+        },
+    }, {
+        'url': 'http://closertotruth.com/episodes/how-do-brains-work',
+        'info_dict': {
+            'id': '0_iuxai6g6',
+            'display_id': 'how-do-brains-work',
+            'ext': 'mov',
+            'title': 'How do Brains Work?',
+            'upload_date': '20140221',
+            'timestamp': 1392956024,
+            'uploader_id': 'CTTXML'
+        },
+        'params': {
+            'skip_download': True,
+        },
+    }, {
+        'url': 'http://closertotruth.com/interviews/1725',
+        'info_dict': {
+            'id': '1725',
+            'title': 'AyaFr-002',
+        },
+        'playlist_mincount': 2,
+    }]
     
-    if is_py2:
-    from urllib import (
-        quote, unquote, quote_plus, unquote_plus, urlencode, getproxies,
-        proxy_bypass, proxy_bypass_environment, getproxies_environment)
-    from urlparse import urlparse, urlunparse, urljoin, urlsplit, urldefrag
-    from urllib2 import parse_http_list
-    import cookielib
-    from Cookie import Morsel
-    from StringIO import StringIO
+        def test_cert_file_not_found(self, httpbin_secure):
+        r = http(httpbin_secure + '/get',
+                 '--cert', '/__not_found__',
+                 error_exit_ok=True)
+        assert r.exit_status == ExitStatus.ERROR
+        assert 'No such file or directory' in r.stderr
     
-            This method also replaces the Proxy-Authorization header where
-        necessary.
+        def reducer(self, key, values):
+        '''Sum values for each key.
     
-        :param content: bytestring to extract encodings from.
-    '''
-    warnings.warn((
-        'In requests 3.0, get_encodings_from_content will be removed. For '
-        'more information, please see the discussion on issue #2266. (This'
-        ' warning should only appear once.)'),
-        DeprecationWarning)
+        # when accessing non-existent attributes on c, return '' instead of dying
+    config['pylons.strict_tmpl_context'] = False
     
-        m = re.match(r'(\d+)\.(\d+)(\.(\d+))?(b(\d+))?', version_str)
-    if m is None:
-        raise ValueError('Bad version string %r' % version_str)
+    from r2.controllers.api_docs import api_doc, api_section
+from r2.controllers.oauth2 import require_oauth2_scope
+from r2.controllers.reddit_base import OAuth2OnlyController
+from r2.lib.jsontemplates import (
+    FriendTableItemJsonTemplate,
+    get_usertrophies,
+    IdentityJsonTemplate,
+    KarmaListJsonTemplate,
+    PrefsJsonTemplate,
+)
+from r2.lib.pages import FriendTableItem
+from r2.lib.validator import (
+    validate,
+    VAccountByName,
+    VFriendOfMine,
+    VLength,
+    VList,
+    VUser,
+    VValidatedJSON,
+)
+from r2.models import Account, Trophy
+import r2.lib.errors as errors
+import r2.lib.validator.preferences as vprefs
     
-    
-    def __str__(self):
-        return 'MismatchedRangeException(%r not in [%r..%r])' % (
-            self.getUnexpectedType(), self.a, self.b
-            )
-    __repr__ = __str__
-    
-        if len(sys.argv) == 2:
-        main(sys.argv[1])
-    else:
-        print('Choose one path as argument one')
-
-    
-    
-class QueueBasicTest(AsyncTestCase):
-    def test_repr_and_str(self):
-        q = queues.Queue(maxsize=1)
-        self.assertIn(hex(id(q)), repr(q))
-        self.assertNotIn(hex(id(q)), str(q))
-        q.get()
-    
-        def test_simple(self):
-        response = self.fetch('/')
-        self.assertEqual(response.body, b'Hello world!')
-    
-                # Generator coroutines and with-statements with non-local
-            # effects interact badly.  Check here for signs of
-            # the stack getting out of sync.
-            # Note that this check comes after restoring _state.context
-            # so that if it fails things are left in a (relatively)
-            # consistent state.
-            if final_contexts is not self.new_contexts:
-                raise StackContextInconsistentError(
-                    'stack_context inconsistency (may be caused by yield '
-                    'within a 'with StackContext' block)')
-    
-    
-# It is impossible to quickly and consistently generate an error in name
-# resolution, so test this case separately, using mocks as needed.
-class _ResolverErrorTestMixin(object):
-    def test_bad_host(self):
-        def handler(exc_typ, exc_val, exc_tb):
-            self.stop(exc_val)
-            return True  # Halt propagation.
-    
-        def write_fileno(self):
-        return self.writer.fileno()
+            return HelpPage(_('help'),
+                        content = Embed(content=output),
+                        show_sidebar = None).render()
