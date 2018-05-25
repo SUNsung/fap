@@ -1,235 +1,429 @@
 
         
-        // Generate constructors.
-#include 'ipc/struct_constructor_macros.h'
-#include 'content/nw/src/common/common_message_generator.h'
-    
-    void Base::CallSync(const std::string& method,
-                    const base::ListValue& arguments,
-                    base::ListValue* result) {
-  NOTREACHED() << 'Uncatched callAsync in Base'
-               << ' method:' << method
-               << ' arguments:' << arguments;
-}
-    
-    #include 'base/files/file_path.h'
-#include 'base/strings/string_util.h'
-#include 'base/strings/utf_string_conversions.h'
-#include 'base/threading/thread_restrictions.h'
-#include 'base/values.h'
-#include 'content/nw/src/api/object_manager.h'
-#include 'content/nw/src/api/menu/menu.h'
-#include 'content/nw/src/nw_base.h'
-#include 'content/nw/src/nw_content.h'
-#include 'content/nw/src/nw_package.h'
-#include 'ui/base/accelerators/accelerator.h'
-#include 'ui/gfx/image/image_skia_operations.h'
-#include 'ui/events/event_constants.h'//for modifier key code
-#include 'base/logging.h'
-    
-    class NwClipboardSetListSyncFunction : public NWSyncExtensionFunction {
+        class DebuggerState : public DebuggerStateInterface {
  public:
-  NwClipboardSetListSyncFunction();
-  bool RunNWSync(base::ListValue* response, std::string* error) override;
+  DebuggerState(const DebugOptions& debug_options);
+  virtual ~DebuggerState();
     }
     
+     private:
+  // Must return a T descendant allocated with new that ResourceOpKernel will
+  // take ownership of.
+  virtual Status CreateResource(T** resource) EXCLUSIVE_LOCKS_REQUIRED(mu_) = 0;
     
-    {} // namespace thd
+    #endif  // TENSORFLOW_COMMON_RUNTIME_SESSION_FACTORY_H_
 
     
-    template <typename T, typename U>
-struct is_any_of : std::false_type {};
     
-    static void RunSynchronousUnaryPingPong() {
-  gpr_log(GPR_INFO, 'Running Synchronous Unary Ping Pong');
-    }
-    
-    #endif  // GRPC_INTERNAL_COMPILER_NODE_GENERATOR_HELPERS_H
-
-    
-    #endif  // GRPC_INTERNAL_COMPILER_PYTHON_GENERATOR_H
-
-    
-    #endif  // TEST_QPS_TIMER_H
-
-    
-    grpc::string DescribeService(const grpc::protobuf::ServiceDescriptor* service) {
-  grpc::string result;
-  if (service->options().deprecated()) {
-    result.append('DEPRECATED\n');
-  }
-  result.append('filename: ' + service->file()->name() + '\n');
-    }
-    
-    class Issue178 { };
-    
-    BlockBuilder::BlockBuilder(const Options* options)
-    : options_(options),
-      restarts_(),
-      counter_(0),
-      finished_(false) {
-  assert(options->block_restart_interval >= 1);
-  restarts_.push_back(0);       // First restart point is at offset 0
-}
-    
-    
-    { private:
-  const FilterPolicy* policy_;
-  const char* data_;    // Pointer to filter data (at block-start)
-  const char* offset_;  // Pointer to beginning of offset array (at block-end)
-  size_t num_;          // Number of entries in offset array
-  size_t base_lg_;      // Encoding parameter (see kFilterBaseLg in .cc file)
-};
-    
-    
-    {}  // namespace leveldb
-
-    
-    #ifndef STORAGE_LEVELDB_UTIL_HISTOGRAM_H_
-#define STORAGE_LEVELDB_UTIL_HISTOGRAM_H_
-    
-    int InternalKeyComparator::Compare(const Slice& akey, const Slice& bkey) const {
-  // Order by:
-  //    increasing user key (according to user-supplied comparator)
-  //    decreasing sequence number
-  //    decreasing type (though sequence# should be enough to disambiguate)
-  int r = user_comparator_->Compare(ExtractUserKey(akey), ExtractUserKey(bkey));
-  if (r == 0) {
-    const uint64_t anum = DecodeFixed64(akey.data() + akey.size() - 8);
-    const uint64_t bnum = DecodeFixed64(bkey.data() + bkey.size() - 8);
-    if (anum > bnum) {
-      r = -1;
-    } else if (anum < bnum) {
-      r = +1;
-    }
-  }
-  return r;
-}
-    
-    
-    {  // When limit user key is prefix of start user key
-  ASSERT_EQ(IKey('foobar', 100, kTypeValue),
-            Shorten(IKey('foobar', 100, kTypeValue),
-                    IKey('foo', 200, kTypeValue)));
-}
-    
-    bool HandleDumpCommand(Env* env, char** files, int num) {
-  StdoutPrinter printer;
-  bool ok = true;
-  for (int i = 0; i < num; i++) {
-    Status s = DumpFile(env, files[i], &printer);
-    if (!s.ok()) {
-      fprintf(stderr, '%s\n', s.ToString().c_str());
-      ok = false;
-    }
-  }
-  return ok;
-}
-    
-    
-    
-        argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
     {
-        cocos2d::Vec2 arg0;
+    {}  // namespace graph_transforms
+}  // namespace tensorflow
+
+    
+    
+    {  if (proc_id == 0) LOG(INFO) << 'MPI process-ID to gRPC server name map: \n';
+  for (int i = 0; i < number_of_procs; i++) {
+    name_to_id_[std::string(&worker_names[i * 128])] = i;
+    if (proc_id == 0)
+      LOG(INFO) << 'Process: ' << i
+                << '\tgRPC-name: ' << std::string(&worker_names[i * 128])
+                << std::endl;
+  }
+}
+    
+     private:
+  // a length value of kFullExtent (-1) means we have a full slice at this
+  // dimension. It's defined in tensor_slice.cc.
+  static const int64 kFullExtent;
+    
+      std::vector<string> debug_metadata_strings;
+  std::vector<string> encoded_graph_defs;
+  std::vector<string> device_names;
+  std::vector<string> node_names;
+  std::vector<int32> output_slots;
+  std::vector<string> debug_ops;
+  std::vector<Tensor> debug_tensors;
+    
+    #ifndef GOOGLE_PROTOBUF_COMPILER_CPP_GENERATOR_H__
+#define GOOGLE_PROTOBUF_COMPILER_CPP_GENERATOR_H__
+    
+    
+    {
+    {
+    {
+    {}  // namespace csharp
+}  // namespace compiler
+}  // namespace protobuf
+}  // namespace google
+    
+    RepeatedEnumFieldGenerator::RepeatedEnumFieldGenerator(
+    const FieldDescriptor* descriptor, int fieldOrdinal, const Options *options)
+    : FieldGeneratorBase(descriptor, fieldOrdinal, options) {
+}
+    
+    namespace google {
+namespace protobuf {
+namespace compiler {
+namespace java {
+namespace {
+    }
+    }
+    }
+    }
     }
     
-    void GLESDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
+      printer->Print(variables_,
+    '$deprecation$public $type$ get$capitalized_name$() {\n'
+    '  if ($has_oneof_case_message$) {\n'
+    '    return ($type$) (($lazy_type$) $oneof_name$_).getValue(\n'
+    '        $type$.getDefaultInstance());\n'
+    '  }\n'
+    '  return $type$.getDefaultInstance();\n'
+    '}\n');
+    
+    TESS_API void TESS_CALL TessBaseAPISetPageSegMode(TessBaseAPI* handle, TessPageSegMode mode)
 {
-    mShaderProgram->use();
-    mShaderProgram->setUniformsForBuiltins();
+    handle->SetPageSegMode(mode);
+}
+    
+    // Computes a reshaped copy of the weight matrix w. If there are no
+// partial_funcs_, it does nothing.
+void IntSimdMatrix::Init(const GENERIC_2D_ARRAY<int8_t>& w) {
+  if (partial_funcs_.empty()) return;
+  int num_out = w.dim1();
+  int num_in = w.dim2() - 1;
+  // The rounded-up sizes of the reshaped weight matrix, excluding biases.
+  int rounded_num_in = Roundup(num_in, num_inputs_per_group_);
+  int rounded_num_out = RoundOutputs(num_out);
+  // Add the bias and compute the required size.
+  shaped_w_.resize((rounded_num_in + 1) * rounded_num_out, 0);
+  int shaped_index = 0;
+  int output = 0;
+  // Each number of registers needs a different format! Iterates over the
+  // different numbers of registers (each a power of 2).
+  for (int num_registers = max_output_registers_; num_registers >= 1;
+       num_registers /= 2) {
+    // The number of outputs that we will generate with this many registers.
+    int num_outputs_per_register_set =
+        num_registers * num_outputs_per_register_;
+    // Use the max number of registers until we have to go fewer.
+    while (output + num_outputs_per_register_set <= rounded_num_out) {
+      // Accumulating outputs in registers saves iterating over the inputs, so
+      // we only have to do it once per output register set.
+      for (int input = 0; input < num_in; input += num_inputs_per_group_) {
+        // Iterate over the number of outputs in a register set.
+        for (int j = 0; j < num_outputs_per_register_set; ++j) {
+          // Inner-most loop corresponds to the number of inputs in an input
+          // group.
+          for (int i = 0; i < num_inputs_per_group_; ++i) {
+            int8_t weight = 0;
+            if (output + j < num_out && input + i < num_in)
+              weight = w(output + j, input + i);
+            shaped_w_[shaped_index++] = weight;
+          }
+        }
+      }
+      // Append the bias weights for the register set.
+      for (int j = 0; j < num_outputs_per_register_set; ++j) {
+        int8_t weight = 0;
+        if (output + j < num_out) weight = w(output + j, num_in);
+        shaped_w_[shaped_index++] = weight;
+      }
+      output += num_outputs_per_register_set;
+    }
+  }
+}
+    
+      // We've now calculated the number of rebuilt blobs we want to carve off.
+  // However, split_word() works from TBLOBs in chopped_word, so we need to
+  // convert to those.
+  int num_chopped_leading =
+      LeadingUnicharsToChopped(word, num_leading) + num_remainder_leading;
+  int num_chopped_trailing =
+      TrailingUnicharsToChopped(word, num_trailing) + num_remainder_trailing;
+    
+    
+void Tesseract::Clear() {
+  STRING debug_name = imagebasename + '_debug.pdf';
+  pixa_debug_.WritePDF(debug_name.string());
+  pixDestroy(&pix_binary_);
+  pixDestroy(&pix_grey_);
+  pixDestroy(&pix_thresholds_);
+  pixDestroy(&scaled_color_);
+  deskew_ = FCOORD(1.0f, 0.0f);
+  reskew_ = FCOORD(1.0f, 0.0f);
+  splitter_.Clear();
+  scaled_factor_ = -1;
+  for (int i = 0; i < sub_langs_.size(); ++i)
+    sub_langs_[i]->Clear();
+}
+    
+      // Accessors.
+  int total_cost() const {
+    return total_cost_;
+  }
+  int Pathlength() const {
+    return total_steps_;
+  }
+  const DPPoint* best_prev() const {
+    return best_prev_;
+  }
+  void AddLocalCost(int new_cost) {
+    local_cost_ += new_cost;
+  }
+    
+      // Adds an element with a weight of 1.
+  void add(double x, double y);
+  // Adds an element with a specified weight.
+  void add(double x, double y, double weight);
+  // Adds a whole LLSQ.
+  void add(const LLSQ& other);
+  // Deletes an element with a weight of 1.
+  void remove(double x, double y);
+  int32_t count() const {  // no of elements
+    return static_cast<int>(total_weight + 0.5);
+  }
+    
+    // A geometric model of paragraph indentation and alignment.
+//
+// Measurements are in pixels. The meaning of the integer arguments changes
+// depending upon the value of justification.  Distances less than or equal
+// to tolerance apart we take as 'equivalent' for the purpose of model
+// matching, and in the examples below, we assume tolerance is zero.
+//
+// justification = LEFT:
+//   margin       the 'ignored' margin to the left block edge.
+//   first_indent indent from the left margin to a typical first text line.
+//   body_indent  indent from the left margin of a typical body text line.
+//
+// justification = RIGHT:
+//   margin       the 'ignored' margin to the right block edge.
+//   first_indent indent from the right margin to a typical first text line.
+//   body_indent  indent from the right margin of a typical body text line.
+//
+// justification = CENTER:
+//   margin       ignored
+//   first_indent ignored
+//   body_indent  ignored
+//
+//  ====== Extended example, assuming each letter is ten pixels wide: =======
+//
+// +--------------------------------+
+// |      Awesome                   | ParagraphModel(CENTER, 0, 0, 0)
+// |   Centered Title               |
+// | Paragraph Detection            |
+// |      OCR TEAM                  |
+// |  10 November 2010              |
+// |                                |
+// |  Look here, I have a paragraph.| ParagraphModel(LEFT, 0, 20, 0)
+// |This paragraph starts at the top|
+// |of the page and takes 3 lines.  |
+// |  Here I have a second paragraph| ParagraphModel(LEFT, 0, 20, 0)
+// |which indicates that the first  |
+// |paragraph is not a continuation |
+// |from a previous page, as it is  |
+// |indented just like this second  |
+// |paragraph.                      |
+// |   Here is a block quote. It    | ParagraphModel(LEFT, 30, 0, 0)
+// |   looks like the prior text    |
+// |   but it  is indented  more    |
+// |   and is fully justified.      |
+// |  So how does one deal with     | ParagraphModel(LEFT, 0, 20, 0)
+// |centered text, block quotes,    |
+// |normal paragraphs, and lists    |
+// |like what follows?              |
+// |1. Make a plan.                 | ParagraphModel(LEFT, 0, 0, 30)
+// |2. Use a heuristic, for example,| ParagraphModel(LEFT, 0, 0, 30)
+// |   looking for lines where the  |
+// |   first word of the next line  |
+// |   would fit on the previous    |
+// |   line.                        |
+// |8. Try to implement the plan in | ParagraphModel(LEFT, 0, 0, 30)
+// |   Python and try it out.       |
+// |4. Determine how to fix the     | ParagraphModel(LEFT, 0, 0, 30)
+// |   mistakes.                    |
+// |5. Repeat.                      | ParagraphModel(LEFT, 0, 0, 30)
+// |  For extra painful penalty work| ParagraphModel(LEFT, 0, 20, 0)
+// |you can try to identify source  |
+// |code.  Ouch!                    |
+// +--------------------------------+
+class ParagraphModel {
+ public:
+  ParagraphModel(tesseract::ParagraphJustification justification,
+                 int margin,
+                 int first_indent,
+                 int body_indent,
+                 int tolerance)
+      : justification_(justification),
+        margin_(margin),
+        first_indent_(first_indent),
+        body_indent_(body_indent),
+        tolerance_(tolerance) {
+    // Make one of {first_indent, body_indent} is 0.
+    int added_margin = first_indent;
+    if (body_indent < added_margin)
+      added_margin = body_indent;
+    margin_ += added_margin;
+    first_indent_ -= added_margin;
+    body_indent_ -= added_margin;
+  }
     }
     
-    		b2Color c;
-		c.Set(0.0f, 1.0f, 0.0f);
-		m_debugDraw.DrawPoint(p1, 4.0f, c);
-		m_debugDraw.DrawPoint(p2, 4.0f, c);
+    int gettime(clockid_t, struct timespec*);
+int64_t gettime_ns(clockid_t);
     
-    #ifndef AddPair_H
-#define AddPair_H
+    template<typename T>
+inline void
+emitTLSLoad(Vout& v, TLSDatum<ThreadLocalNoCheck<T>> datum, Vreg d) {
+  auto const off = ThreadLocalNoCheck<T>::node_ptr_offset();
+  v << load{emitTLSAddr(v, datum) + safe_cast<int32_t>(off), d};
+}
     
-    		// Car
-		{
-			b2PolygonShape chassis;
-			b2Vec2 vertices[8];
-			vertices[0].Set(-1.5f, -0.5f);
-			vertices[1].Set(1.5f, -0.5f);
-			vertices[2].Set(1.5f, 0.0f);
-			vertices[3].Set(0.0f, 0.9f);
-			vertices[4].Set(-1.15f, 0.9f);
-			vertices[5].Set(-1.5f, 0.2f);
-			chassis.Set(vertices, 6);
+      bool ret = true;
+  bitmask* run_nodes = numa_get_run_node_mask();
+  bitmask* mem_nodes = numa_get_mems_allowed();
+  for (int i = 0; i <= max_node; i++) {
+    if (!numa_bitmask_isbitset(run_nodes, i) ||
+        !numa_bitmask_isbitset(mem_nodes, i)) {
+      // Only deal with the case of a contiguous set of nodes where we can
+      // run/allocate memory on each node.
+      ret = false;
+      break;
+    }
+    numa_node_set |= (uint32_t)1 << i;
+    numa_num_nodes++;
+  }
+  numa_bitmask_free(run_nodes);
+  numa_bitmask_free(mem_nodes);
+    
+      auto const dataSize = iv.size() * sizeof(SwitchProfile::cases[0]);
+  TargetProfile<SwitchProfile> profile(
+    env.unit.context(), env.irb->curMarker(), s_switchProfile.get(),
+    dataSize
+  );
+    
+    bool CurlShareResource::setLongOption(long option, long value) {
+  CURLSHcode error = CURLSHE_OK;
+  error = curl_share_setopt(m_share,
+                            (CURLSHoption)option,
+                            value);
+  return error == CURLSHE_OK;
+}
+    
+    #ifndef incl_HPHP_CURL_SHARE_RESOURCE_H
+#define incl_HPHP_CURL_SHARE_RESOURCE_H
+    
+        bool empty() const {
+      return m_highPriList.empty() && m_midLowPriList.empty();
+    }
+    CondVarNode& front() {
+      if (!m_highPriList.empty()) return m_highPriList.front();
+      return m_midLowPriList.front();
+    }
+    void pop_front() {
+      if (!m_highPriList.empty()) m_highPriList.pop_front();
+      else m_midLowPriList.pop_front();
     }
     
-        if (install_callbacks)
-    {
-        s3ePointerRegister(S3E_POINTER_BUTTON_EVENT, ImGui_Marmalade_PointerButtonEventCallback, 0);
-        s3eKeyboardRegister(S3E_KEYBOARD_KEY_EVENT, ImGui_Marmalade_KeyCallback, 0);
-        s3eKeyboardRegister(S3E_KEYBOARD_CHAR_EVENT, ImGui_Marmalade_CharCallback, 0);
+    // This function will create a Huffman tree.
+//
+// The (data,length) contains the population counts.
+// The tree_limit is the maximum bit depth of the Huffman codes.
+//
+// The depth contains the tree, i.e., how many bits are used for
+// the symbol.
+//
+// The actual Huffman tree is constructed in the tree[] array, which has to
+// be at least 2 * length + 1 long.
+//
+// See http://en.wikipedia.org/wiki/Huffman_coding
+void CreateHuffmanTree(const uint32_t *data,
+                       const size_t length,
+                       const int tree_limit,
+                       HuffmanTree* tree,
+                       uint8_t *depth);
+    
+    // Library to decode jpeg coefficients into an RGB image.
+    
+    namespace guetzli {
     }
     
-        // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array that we will update during the application lifetime.
-    io.KeyMap[ImGuiKey_Tab] = VK_TAB;
-    io.KeyMap[ImGuiKey_LeftArrow] = VK_LEFT;
-    io.KeyMap[ImGuiKey_RightArrow] = VK_RIGHT;
-    io.KeyMap[ImGuiKey_UpArrow] = VK_UP;
-    io.KeyMap[ImGuiKey_DownArrow] = VK_DOWN;
-    io.KeyMap[ImGuiKey_PageUp] = VK_PRIOR;
-    io.KeyMap[ImGuiKey_PageDown] = VK_NEXT;
-    io.KeyMap[ImGuiKey_Home] = VK_HOME;
-    io.KeyMap[ImGuiKey_End] = VK_END;
-    io.KeyMap[ImGuiKey_Insert] = VK_INSERT;
-    io.KeyMap[ImGuiKey_Delete] = VK_DELETE;
-    io.KeyMap[ImGuiKey_Backspace] = VK_BACK;
-    io.KeyMap[ImGuiKey_Space] = VK_SPACE;
-    io.KeyMap[ImGuiKey_Enter] = VK_RETURN;
-    io.KeyMap[ImGuiKey_Escape] = VK_ESCAPE;
-    io.KeyMap[ImGuiKey_A] = 'A';
-    io.KeyMap[ImGuiKey_C] = 'C';
-    io.KeyMap[ImGuiKey_V] = 'V';
-    io.KeyMap[ImGuiKey_X] = 'X';
-    io.KeyMap[ImGuiKey_Y] = 'Y';
-    io.KeyMap[ImGuiKey_Z] = 'Z';
+    // Implemented features:
+//  [X] User texture binding. Use 'ID3D10ShaderResourceView*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
     
-    // OpenGL2 Render function.
-// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
-// Note that this implementation is little overcomplicated because we are saving/setting up/restoring every OpenGL state explicitly, in order to be able to run within any OpenGL engine that doesn't do so. 
-void ImGui_ImplGlfwGL2_RenderDrawData(ImDrawData* draw_data)
+    // Process Win32 mouse/keyboard inputs. 
+// You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+// - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
+// - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
+// Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+// PS: In this Win32 handler, we use the capture API (GetCapture/SetCapture/ReleaseCapture) to be able to read mouse coordinations when dragging mouse outside of our window bounds.
+// PS: We treat DBLCLK messages as regular mouse down messages, so this code will work on windows classes that have the CS_DBLCLKS flag set. Our own example app code doesn't set this flag.
+IMGUI_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    // Avoid rendering when minimized, scale coordinates for retina displays (screen coordinates != framebuffer coordinates)
-    ImGuiIO& io = ImGui::GetIO();
-    int fb_width = (int)(io.DisplaySize.x * io.DisplayFramebufferScale.x);
-    int fb_height = (int)(io.DisplaySize.y * io.DisplayFramebufferScale.y);
-    if (fb_width == 0 || fb_height == 0)
-        return;
-    draw_data->ScaleClipRects(io.DisplayFramebufferScale);
+    if (ImGui::GetCurrentContext() == NULL)
+        return 0;
     }
     
-        for (int i = 0; i < IMGUI_VK_QUEUED_FRAMES; i++)
-    {
-        if (g_VertexBuffer[i])          { vkDestroyBuffer(g_Device, g_VertexBuffer[i], g_Allocator); g_VertexBuffer[i] = VK_NULL_HANDLE; }
-        if (g_VertexBufferMemory[i])    { vkFreeMemory(g_Device, g_VertexBufferMemory[i], g_Allocator); g_VertexBufferMemory[i] = VK_NULL_HANDLE; }
-        if (g_IndexBuffer[i])           { vkDestroyBuffer(g_Device, g_IndexBuffer[i], g_Allocator); g_IndexBuffer[i] = VK_NULL_HANDLE; }
-        if (g_IndexBufferMemory[i])     { vkFreeMemory(g_Device, g_IndexBufferMemory[i], g_Allocator); g_IndexBufferMemory[i] = VK_NULL_HANDLE; }
+    // DirectX data
+static LPDIRECT3DDEVICE9        g_pd3dDevice = NULL;
+static LPDIRECT3DVERTEXBUFFER9  g_pVB = NULL;
+static LPDIRECT3DINDEXBUFFER9   g_pIB = NULL;
+static LPDIRECT3DTEXTURE9       g_FontTexture = NULL;
+static int                      g_VertexBufferSize = 5000, g_IndexBufferSize = 10000;
+    
+        // Setup Dear ImGui binding
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    ImGui_ImplDX10_Init(hwnd, g_pd3dDevice);
+    
+    
+    {    g_fence->SetEventOnCompletion(fenceValue, g_fenceEvent);
+    WaitForSingleObject(g_fenceEvent, INFINITE);
+}
+    
+    // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
+// **Prefer using the code in the sdl_opengl3_example/ folder**
+// See imgui_impl_sdl.cpp for details.
+    
+    static int                      fb_width = 0, fb_height = 0;
+static bool                     g_ResizeWanted = false;
+static int                      g_ResizeWidth = 0, g_ResizeHeight = 0;
+static uint32_t                 g_BackbufferIndices[IMGUI_VK_QUEUED_FRAMES];    // keep track of recently rendered swapchain frame indices
+static uint32_t                 g_BackBufferCount = 0;
+static VkImage                  g_BackBuffer[IMGUI_MAX_POSSIBLE_BACK_BUFFERS] = {};
+static VkImageView              g_BackBufferView[IMGUI_MAX_POSSIBLE_BACK_BUFFERS] = {};
+static VkFramebuffer            g_Framebuffer[IMGUI_MAX_POSSIBLE_BACK_BUFFERS] = {};
+    
+    // All draw data to render an ImGui frame
+// (NB: the style and the naming convention here is a little inconsistent but we preserve them for backward compatibility purpose)
+struct ImDrawData
+{
+    bool            Valid;                  // Only valid after Render() is called and before the next NewFrame() is called.
+    ImDrawList**    CmdLists;               // Array of ImDrawList* to render. The ImDrawList are owned by ImGuiContext and only pointed to from here.
+    int             CmdListsCount;          // Number of ImDrawList* to render
+    int             TotalIdxCount;          // For convenience, sum of all ImDrawList's IdxBuffer.Size
+    int             TotalVtxCount;          // For convenience, sum of all ImDrawList's VtxBuffer.Size
     }
     
-        CreateRenderTarget();
-    
-            static float f = 0.0f;
-        ImGui::Text('Hello, world!');
-        ImGui::SliderFloat('float', &f, 0.0f, 1.0f);
-        ImGui::Text('Application average %.3f ms/frame (%.1f FPS)', 1000.0f / io.Framerate, io.Framerate);
-        ImGui::ShowDemoWindow(NULL);
-    
-    
-    {        // Rendering
-        int display_w, display_h;
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
-        glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-        //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound, but prefer using the GL3+ code.
-        ImGui::Render();
-        ImGui_ImplGlfwGL2_RenderDrawData(ImGui::GetDrawData());
-        glfwSwapBuffers(window);
-    }
+            if (ImGui::TreeNode('Horizontal Scrolling'))
+        {
+            ImGui::SetNextWindowContentSize(ImVec2(1500.0f, 0.0f));
+            ImGui::BeginChild('##ScrollingRegion', ImVec2(0, ImGui::GetFontSize() * 20), false, ImGuiWindowFlags_HorizontalScrollbar);
+            ImGui::Columns(10);
+            int ITEMS_COUNT = 2000;
+            ImGuiListClipper clipper(ITEMS_COUNT);  // Also demonstrate using the clipper for large list
+            while (clipper.Step())
+            {
+                for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
+                    for (int j = 0; j < 10; j++)
+                    {
+                        ImGui::Text('Line %d Column %d...', i, j);
+                        ImGui::NextColumn();
+                    }
+            }
+            ImGui::Columns(1);
+            ImGui::EndChild();
+            ImGui::TreePop();
+        }
