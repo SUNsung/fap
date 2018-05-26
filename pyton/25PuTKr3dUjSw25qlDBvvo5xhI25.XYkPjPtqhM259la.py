@@ -1,118 +1,112 @@
 
         
-        
-tar_extensions = ('.tar', '.tar.Z', '.tar.bz2', '.tar.gz', '.tar.lz',
-                  '.tar.lzma', '.tar.xz', '.taz', '.tb2', '.tbz', '.tbz2',
-                  '.tgz', '.tlz', '.txz', '.tz')
+                def get_auth(self, username=None, password=None):
+            assert self.raw_auth is None
+            assert username is None
+            assert password is None
+            return basic_auth()
     
-        old_layer = keras.layers.MaxPooling3D((2, 2, 2), padding='valid', dim_ordering='th', name='maxpool3d')
-    new_layer = keras.layers.MaxPool3D(pool_size=(2, 2, 2), padding='valid', data_format='channels_first', name='maxpool3d')
-    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
     
-        # Ensure that the model takes into account
-    # any potential predecessors of `input_tensor`
-    if input_tensor is not None:
-        inputs = get_source_inputs(input_tensor)
+def get_info(package_name):
+    api_url = 'https://pypi.python.org/pypi/{}/json'.format(package_name)
+    resp = requests.get(api_url).json()
+    hasher = hashlib.sha256()
+    for release in resp['urls']:
+        download_url = release['url']
+        if download_url.endswith('.tar.gz'):
+            hasher.update(requests.get(download_url).content)
+            return {
+                'name': package_name,
+                'url': download_url,
+                'sha256': hasher.hexdigest(),
+            }
     else:
-        inputs = img_input
+        raise RuntimeError(
+            '{}: download not found: {}'.format(package_name, resp))
     
-        # Arguments
-        x: input tensor.
-        filters: filters in `Conv2D`.
-        num_row: height of the convolution kernel.
-        num_col: width of the convolution kernel.
-        padding: padding mode in `Conv2D`.
-        strides: strides in `Conv2D`.
-        name: name of the ops; will become `name + '_conv'`
-            for the convolution and `name + '_bn'` for the
-            batch norm layer.
+            status_line = 'HTTP/{version} {status} {reason}'.format(
+            version=version,
+            status=original.status,
+            reason=original.reason
+        )
+        headers = [status_line]
+        try:
+            # `original.msg` is a `http.client.HTTPMessage` on Python 3
+            # `_headers` is a 2-tuple
+            headers.extend(
+                '%s: %s' % header for header in original.msg._headers)
+        except AttributeError:
+            # and a `httplib.HTTPMessage` on Python 2.x
+            # `headers` is a list of `name: val<CRLF>`.
+            headers.extend(h.strip() for h in original.msg.headers)
     
-        out = model.predict(x)
-    _, fname = tempfile.mkstemp('.h5')
-    with h5py.File(fname, mode='r+') as h5file:
-        save_model(model, h5file)
-        loaded_model = load_model(h5file)
-        out2 = loaded_model.predict(x)
-    assert_allclose(out, out2, atol=1e-05)
-    
-        def call(self, inputs, states, training=None):
-        if 0 < self.dropout < 1 and self._dropout_mask is None:
-            self._dropout_mask = _generate_dropout_mask(
-                K.ones_like(inputs),
-                self.dropout,
-                training=training,
-                count=4)
-        if (0 < self.recurrent_dropout < 1 and
-                self._recurrent_dropout_mask is None):
-            self._recurrent_dropout_mask = _generate_dropout_mask(
-                K.ones_like(states[1]),
-                self.recurrent_dropout,
-                training=training,
-                count=4)
-    
-                if do_validation:
-                val_outs = test_loop(model, val_f, val_ins,
-                                     steps=validation_steps,
-                                     verbose=0)
-                if not isinstance(val_outs, list):
-                    val_outs = [val_outs]
-                # Same labels assumed.
-                for l, o in zip(out_labels, val_outs):
-                    epoch_logs['val_' + l] = o
-        else:
-            if shuffle == 'batch':
-                index_array = batch_shuffle(index_array, batch_size)
-            elif shuffle:
-                np.random.shuffle(index_array)
-    
-        z_mean, z_log_var = args
-    batch = K.shape(z_mean)[0]
-    dim = K.int_shape(z_mean)[1]
-    # by default, random_normal has mean=0 and std=1.0
-    epsilon = K.random_normal(shape=(batch, dim))
-    return z_mean + K.exp(0.5 * z_log_var) * epsilon
-    
-            Accessing a node updates its position to the front of the LRU list.
+        def __init__(self, msg, with_headers=True, with_body=True,
+                 on_body_chunk_downloaded=None):
         '''
-        node = self.lookup.get(query)
-        if node is None:
-            return None
-        self.linked_list.move_to_front(node)
-        return node.results
+        :param msg: a :class:`models.HTTPMessage` subclass
+        :param with_headers: if `True`, headers will be included
+        :param with_body: if `True`, body will be included
     
-        def _find_available_spot(self, vehicle):
-        '''Find an available spot where vehicle can fit, or return None'''
-        pass
     
-    Test code which will almost always fail (if not exactly 12:01) when untestable
-production code (have a look into constructor_injection.py) is used:
+def test_max_redirects(httpbin):
+    r = http('--max-redirects=1', '--follow', httpbin.url + '/redirect/3',
+             error_exit_ok=True)
+    assert r.exit_status == ExitStatus.ERROR_TOO_MANY_REDIRECTS
+
     
-        def test_display_current_time_at_midnight(self):
+    
+def test_unicode_form_item(httpbin):
+    r = http('--form', 'POST', httpbin.url + '/post', u'test=%s' % UNICODE)
+    assert HTTP_OK in r
+    assert r.json['form'] == {'test': UNICODE}
+    
+    Invocation flow:
+    
         '''
-        Will almost always fail (despite of right at/after midnight).
-        '''
-        time_provider_stub = MidnightTimeProvider()
-        class_under_test = TimeDisplay(time_provider_stub)
-        expected_time = '<span class=\'tinyBoldText\'>24:01</span>'
-        self.assertEqual(class_under_test.get_current_time_as_html_fragment(), expected_time)
+    # The value that should be passed to --auth-type
+    # to use this auth plugin. Eg. 'my-auth'
+    auth_type = None
     
-    class TimeDisplay(object):
+        code_block_index = 0
+    last_header = ''
+    linenum = 0
+    with io.open(args.sourcefile, 'r') as read_filehandle:
+        with io.open(args.targetfile, 'w') as text_filehandle:
+            for line in read_filehandle:
+                linenum += 1
+                indent_depth = is_code(line)
+                if indent_depth:
+                    (line, linenum) = process_code(read_filehandle,
+                                                    text_filehandle,
+                                                    line, linenum,
+                                                    args.sourcefile, args.codedir,
+                                                    last_header, code_block_index,
+                                                    indent_depth)
+                    code_block_index += 1
+                # reach here either line was not code, or was code
+                # and we dealt with n code lines
+                if indent_depth < 4 or not is_code(line, indent_depth):
+                    # store header id for codeblock
+                    section_id = get_marker(line)
+                    if section_id is not None:
+                        code_block_index = 0
+                        last_header = section_id
+                    sline = stripped(line)
+                    text_filehandle.write(sline)
     
-        def __init__(self, successor=None):
-        self._successor = successor
+    def is_api(subtype = ''):
+    return c.render_style and c.render_style.startswith(api_type(subtype))
     
+            return user.name in self.stacked_proxy_safe_get(g, 'admins', [])
+    
+    
+class LimitUploadSize(object):
     '''
-http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
-Implementation of the iterator pattern with a generator
+    Middleware for restricting the size of uploaded files (such as
+    image files for the CSS editing capability).
+    '''
+    def __init__(self, app, max_size=1024*500):
+        self.app = app
+        self.max_size = max_size
     
-    
-# Example usage...
-def main():
-    data1 = Data('Data 1')
-    data2 = Data('Data 2')
-    view1 = DecimalViewer()
-    view2 = HexViewer()
-    data1.attach(view1)
-    data1.attach(view2)
-    data2.attach(view2)
-    data2.attach(view1)
+    tpm = tp_manager.tp_manager()
