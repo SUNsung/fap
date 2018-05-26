@@ -1,83 +1,132 @@
 
         
-              html_filters.push 'bootstrap/entries_v4', 'bootstrap/clean_html_v4'
+            version '1.8' do
+      self.release = '1.8.18'
+      self.dir = '/Users/Thibaut/DevDocs/Docs/Django18'
+      self.base_url = 'https://docs.djangoproject.com/en/1.8/'
+    end
+  end
+end
+
     
-        version '1.4' do
-      self.release = '1.4.5'
-      self.base_urls = [
-        'https://hexdocs.pm/elixir/#{release}/',
-        'https://hexdocs.pm/eex/#{release}/',
-        'https://hexdocs.pm/ex_unit/#{release}/',
-        'https://hexdocs.pm/iex/#{release}/',
-        'https://hexdocs.pm/logger/#{release}/',
-        'https://hexdocs.pm/mix/#{release}/',
-        'https://elixir-lang.org/getting-started/'
-      ]
+        options[:attribution] = <<-HTML
+      &copy; Joyent, Inc. and other Node contributors<br>
+      Licensed under the MIT License.<br>
+      Node.js is a trademark of Joyent, Inc. and is used with its permission.<br>
+      We are not endorsed by or affiliated with Joyent.
+    HTML
+    
+        def type=(value)
+      @type = value.try :strip
     end
     
-        def add(path, content)
-      @pages[path] = content
-    end
+          # This inserts a block with the given key and value.
+      #
+      # @param [String] key
+      # @param [String] value
+      def insert(key, value)
+        # Insert the new block into the value
+        new_block = <<BLOCK
+# VAGRANT-BEGIN: #{key}
+#{value.strip}
+# VAGRANT-END: #{key}
+BLOCK
     
-          # This gets the value of the block with the given key.
-      def get(key)
-        key    = Regexp.quote(key)
-        regexp = /^#\s*VAGRANT-BEGIN:\s*#{key}$\r?\n?(.*?)\r?\n?^#\s*VAGRANT-END:\s*#{key}$\r?\n?/m
-        match  = regexp.match(@value)
-        return nil if !match
-        match[1]
-      end
-    
-              if argv.length == 2
-            # @deprecated
-            @env.ui.warn('WARNING: The second argument to `vagrant box remove`')
-            @env.ui.warn('is deprecated. Please use the --provider flag. This')
-            @env.ui.warn('feature will stop working in the next version.')
-            options[:provider] = argv[1]
+              # Verify the box exists that we want to repackage
+          box = @env.boxes.find(box_name, box_provider, '= #{box_version}')
+          if !box
+            raise Vagrant::Errors::BoxNotFoundWithProviderAndVersion,
+              name: box_name,
+              provider: box_provider.to_s,
+              version: box_version
           end
     
-      module DSL
-    def env(*settings)
-      @env ||= BuildEnvironment.new
-      @env.merge(settings)
+            # If we're just checking, then just return exit codes
+        if options[:check]
+          return 0 if cap_host.capability?(name)
+          return 1
+        end
+    
+      # Strip out the value
+  form.search('//input') do |inp|
+    
+    File.readlines(sitelist).each do |site|
+  site.strip!
+  next if site.length == 0
+  next if site =~ /^#/
+    
+    
+# extract label addresses
+addrs = {}
+dtrans.each_line { |ln|
+	if ln =~ /;[^ ].*:/
+		parts = ln.split(' ')
+		label = parts[1]
+		label = label.slice(1,label.index(':')-1)
+		addr = parts[0].split(':')[1].to_i(16)
+		#puts '%s => %x' % [label, addr]
+		one = { label => addr }
+		addrs.merge!(one)
+	end
+}
+#puts addrs.inspect
+    
+    clsJavaCompile 	= Rjb::import('javaCompile.CompileSourceInMemory')
+clsCreateJar	= Rjb::import('javaCompile.CreateJarFile')
+clsFile			= Rjb::import('java.io.File')
+system			= Rjb::import('java.lang.System')
+#clsString	= Rjb::import('java.lang.String')
+    
+      @src.ver = ver
+  @src.parse
+end
+  end
+    
+        def index
+      pods_json = PodPresenter.as_collection(Pod.all)
+    
+        unless user
+      EmailInviter.new(email, inviter).send!
+      flash[:notice] = 'invitation sent to #{email}'
+    else
+      flash[:notice]= 'error sending invite to #{email}'
+    end
+    redirect_to user_search_path, :notice => flash[:notice]
+  end
+    
+          def request_authorization_consent_form
+        add_claims_to_scopes
+        endpoint = Api::OpenidConnect::AuthorizationPoint::EndpointStartPoint.new(current_user)
+        handle_start_point_response(endpoint)
+      end
+    
+            def multiple_assignment_node
+          grandparent_node = node.parent ? node.parent.parent : nil
+          return nil unless grandparent_node
+          return nil unless grandparent_node.type == MULTIPLE_ASSIGNMENT_TYPE
+          return nil unless node.parent.type == MULTIPLE_LEFT_HAND_SIDE_TYPE
+          grandparent_node
+        end
+      end
     end
   end
 end
+
     
-          def warn_for_unknown_directives(directives)
-        unknown_keys = directives.keys - ORDERED_DIRECTIVES
-        return if unknown_keys.empty?
-        opoo %Q(Unknown arguments to #{stanza} -- #{unknown_keys.inspect}. Running 'brew update; brew cleanup; brew cask cleanup' will likely fix it.)
-      end
+            def initialize(name, declaration_node, scope)
+          unless VARIABLE_DECLARATION_TYPES.include?(declaration_node.type)
+            raise ArgumentError,
+                  'Node type must be any of #{VARIABLE_DECLARATION_TYPES}, ' \
+                  'passed #{declaration_node.type}'
+          end
     
-      def as_boolean(string)
-    return true   if string == true   || string =~ (/(true|t|yes|y|1)$/i)
-    return false  if string == false  || string.blank? || string =~ (/(false|f|no|n|0)$/i)
-    raise ArgumentError.new('invalid value for Boolean: \'#{string}\'')
-  end
+              new_source =
+            node.receiver.source + ' =~ ' + node.first_argument.source
     
-        outpath = file.gsub('.gz', '')
-    tgz = Zlib::GzipReader.new(File.open(file))
-    begin
-      File.open(outpath, 'w') do |out|
-        IO::copy_stream(tgz, out)
-      end
-      File.unlink(file)
-    rescue
-      File.unlink(outpath) if File.file?(outpath)
-     raise
-    end
-    tgz.close
-  end
+              annotations.reverse_each do |line_number, annotation|
+            reconstructed.insert(line_number, annotation)
+          end
     
-          def create_worker_test
-        template_file = File.join(
-            'test/workers',
-            class_path,
-            '#{file_name}_worker_test.rb'
-        )
-        template 'worker_test.rb.erb', template_file
-      end
-    
-      end
-end
+        expect(cop.offenses.size).to eq(1)
+    expect(cop.messages).to eq(['Prefer `to_sym` over `intern`.'])
+    expect(cop.highlights).to eq(%w[intern])
