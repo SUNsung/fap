@@ -1,50 +1,74 @@
 
         
-            # @include and @extend from LESS:
-    #  .mixin()             -> @include mixin()
-    #  #scope > .mixin()    -> @include scope-mixin()
-    #  &:extend(.mixin all) -> @include mixin()
-    def replace_mixins(less, mixin_names)
-      mixin_pattern = /(?<=^|\s)((?:[#|\.][\w-]+\s*>\s*)*)\.([\w-]+)\((.*)\)(?!\s\{)/
-    }
+                def test_url_from_environment
+          spec = resolve :production, 'production' => 'abstract://foo?encoding=utf8'
+          assert_equal({
+            'adapter'  =>  'abstract',
+            'host'     =>  'foo',
+            'encoding' => 'utf8',
+            'name'     => 'production' }, spec)
+        end
     
-        def log_http_get_file(url, cached = false)
-      s = '  #{'CACHED ' if cached}GET #{url}...'
-      if cached
-        puts dark green s
-      else
-        puts dark cyan s
-      end
-    end
-    
-      # Do not eager load code on boot. This avoids loading your whole application
-  # just for the purpose of running a single test. If you are using a tool that
-  # preloads Rails for running tests, you may have to set it to true.
-  config.eager_load = false
-    
-    desc 'Compile bootstrap-sass to tmp/ (or first arg)'
-task :compile, :css_path do |t, args|
-  require 'sass'
-  require 'term/ansicolor'
-    
-        it 'Reads referrer from Host header when Referer header is relative' do
-      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => '/valid'}
-      expect(subject.referrer(env)).to eq('foo.com')
-    end
-    
-      it 'should not override the header if already set' do
-    mock_app with_headers('X-Frame-Options' => 'allow')
-    expect(get('/', {}, 'wants' => 'text/html').headers['X-Frame-Options']).to eq('allow')
+        # fun/pdf_helper.rb
+    assert_includes methods, :foobar
   end
-end
-
     
-      # These two settings work together to allow you to limit a spec run
-  # to individual examples or groups you care about by tagging them with
-  # `:focus` metadata. When nothing is tagged with `:focus`, all examples
-  # get run.
-  config.filter_run :focus
-  config.run_all_when_everything_filtered = true
+            def enqueue_delivery(delivery_method, options = {})
+          if processed?
+            super
+          else
+            args = @mailer_class.name, @action.to_s, delivery_method.to_s, @params, *@args
+            ActionMailer::Parameterized::DeliveryJob.set(options).perform_later(*args)
+          end
+        end
+    end
     
+    # Show backtraces for deprecated behavior for quicker cleanup.
+ActiveSupport::Deprecation.debug = true
+    
+      APP = RoutedRackApp.new(Routes)
+    
+      def setup
+    super
+    ActionMailer::LogSubscriber.attach_to :action_mailer
+  end
+    
+        mail_with_defaults do |format|
+      format.html { render(inline: '<%= block_format @text %>') }
+    end
+  end
+    
+          # Returns the time the given Sass file was last modified.
+      #
+      # If the given file has been deleted or the time can't be accessed
+      # for some other reason, this should return nil.
+      #
+      # @param uri [String] The URI of the file to check.
+      #   Comes from a `:filename` option set on an engine returned by this importer.
+      # @param options [{Symbol => Object}] Options for the Sass file
+      #   containing the `@import` currently being checked.
+      # @return [Time, nil]
+      def mtime(uri, options)
+        Sass::Util.abstract(self)
       end
-end
+    
+      # Flushes all queued logs to the wrapped logger.
+  def flush
+    @messages.each {|(l, m)| @inner.log(l, m)}
+  end
+    
+        # Returns the CSS for the media query list.
+    #
+    # @return [String]
+    def to_css
+      queries.map {|q| q.to_css}.join(', ')
+    end
+    
+            self.description = <<-DESC
+          Shows the content of the pods cache as a YAML tree output, organized by pod.
+          If `NAME` is given, only the caches for that pod will be included in the output.
+        DESC
+    
+          def markdown_podfile
+        UI::ErrorReport.markdown_podfile
+      end
