@@ -1,203 +1,245 @@
 
         
-        
-    {  // Errors
-  static const char* errors[] = {
-    '',
-    'foo',
-    'foo-dx-100.log',
-    '.log',
-    '',
-    'manifest',
-    'CURREN',
-    'CURRENTX',
-    'MANIFES',
-    'MANIFEST',
-    'MANIFEST-',
-    'XMANIFEST-3',
-    'MANIFEST-3x',
-    'LOC',
-    'LOCKx',
-    'LO',
-    'LOGx',
-    '18446744073709551616.log',
-    '184467440737095516150.log',
-    '100',
-    '100.',
-    '100.lop'
+        #include <string>
+    
+    
+    {} // namespace nwapi
+
+    
+       bool IsItemForCommandIdDynamic(int command_id) const override;
+   base::string16 GetLabelForCommandId(int command_id) const override;
+   bool GetIconForCommandId(int command_id,
+                                   gfx::Image* icon) const override;
+    
+    namespace extensions {
+NwAppQuitFunction::NwAppQuitFunction() {
+    }
+    }
+    
+        D3D_FEATURE_LEVEL featureLevels[] =
+    {
+        D3D_FEATURE_LEVEL_11_0,
+        D3D_FEATURE_LEVEL_10_1,
+        D3D_FEATURE_LEVEL_10_0,
+    };
+    UINT numFeatureLevels = ARRAYSIZE(featureLevels);
+    
+    CV_EXPORTS void  EstimateUncertainties(InputArrayOfArrays objectPoints, InputArrayOfArrays imagePoints,
+                           const IntrinsicParams& params, InputArray omc, InputArray Tc,
+                           IntrinsicParams& errors, Vec2d& std_err, double thresh_cond, int check_cond, double& rms);
+    
+    
+    {}
+    
+    #define CUSTOM_FUNCTION_ID 1000
+    
+      vector<int64_t> sizes = {2, 2};
+  tensor2->resize(sizes);
+  tensor2->fill(4);
+  tensor->add(*tensor2, 1);
+  assert(tensor->nDim() == 2);
+    
+        for (int fd: to_add)
+      register_fd(fd);
+    to_add.clear();
+    
+      void ForceError() {
+    source_.force_error_ = true;
+  }
+    
+    #include 'db/dbformat.h'
+#include 'leveldb/write_batch.h'
+    
+    static int NextLength(int length) {
+  if (length < 10) {
+    length += 1;
+  } else if (length < 100) {
+    length += 10;
+  } else if (length < 1000) {
+    length += 100;
+  } else {
+    length += 1000;
+  }
+  return length;
+}
+    
+    #include 'util/crc32c.h'
+#include 'util/testharness.h'
+    
+    // The FALLTHROUGH_INTENDED macro can be used to annotate implicit fall-through
+// between switch labels. The real definition should be provided externally.
+// This one is a fallback version for unsupported compilers.
+#ifndef FALLTHROUGH_INTENDED
+#define FALLTHROUGH_INTENDED do { } while (0)
+#endif
+    
+    
+    {  ASSERT_EQ(Hash(0, 0, 0xbc9f1d34), 0xbc9f1d34);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data1), sizeof(data1), 0xbc9f1d34),
+      0xef1345c4);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data2), sizeof(data2), 0xbc9f1d34),
+      0x5b663814);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data3), sizeof(data3), 0xbc9f1d34),
+      0x323c078f);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data4), sizeof(data4), 0xbc9f1d34),
+      0xed21633a);
+  ASSERT_EQ(
+      Hash(reinterpret_cast<const char*>(data5), sizeof(data5), 0x12345678),
+      0xf333dabb);
+}
+    
+    class AutoCompactTest {
+ public:
+  std::string dbname_;
+  Cache* tiny_cache_;
+  Options options_;
+  DB* db_;
+    }
+    
+     private:
+  WritableFile* dest_;
+  int block_offset_;       // Current offset in block
+    
+    #if defined(_MSC_VER) && (_MSC_VER >= 1200)
+# pragma once
+#endif // defined(_MSC_VER) && (_MSC_VER >= 1200)
+    
+    template <typename MutableBufferSequence>
+class descriptor_read_op_base : public reactor_op
+{
+public:
+  descriptor_read_op_base(int descriptor,
+      const MutableBufferSequence& buffers, func_type complete_func)
+    : reactor_op(&descriptor_read_op_base::do_perform, complete_func),
+      descriptor_(descriptor),
+      buffers_(buffers)
+  {
+  }
+    }
+    
+    namespace boost {
+namespace asio {
+namespace detail {
+    }
+    }
+    }
+    
+    namespace xgboost {
+namespace tree {
+// List of files that will be force linked in static links.
+DMLC_REGISTRY_LINK_TAG(updater_colmaker);
+DMLC_REGISTRY_LINK_TAG(updater_skmaker);
+DMLC_REGISTRY_LINK_TAG(updater_refresh);
+DMLC_REGISTRY_LINK_TAG(updater_prune);
+DMLC_REGISTRY_LINK_TAG(updater_fast_hist);
+DMLC_REGISTRY_LINK_TAG(updater_histmaker);
+DMLC_REGISTRY_LINK_TAG(updater_sync);
+#ifdef XGBOOST_USE_CUDA
+DMLC_REGISTRY_LINK_TAG(updater_gpu);
+DMLC_REGISTRY_LINK_TAG(updater_gpu_hist);
+#endif
+}  // namespace tree
+}  // namespace xgboost
+
+    
+    #ifndef GUETZLI_DCT_DOUBLE_H_
+#define GUETZLI_DCT_DOUBLE_H_
+    
+    #ifndef GUETZLI_FDCT_H_
+#define GUETZLI_FDCT_H_
+    
+    void AddApp0Data(JPEGData* jpg) {
+  const unsigned char kApp0Data[] = {
+      0xe0, 0x00, 0x10,              // APP0
+      0x4a, 0x46, 0x49, 0x46, 0x00,  // 'JFIF'
+      0x01, 0x01,                    // v1.01
+      0x00, 0x00, 0x01, 0x00, 0x01,  // aspect ratio = 1:1
+      0x00, 0x00                     // thumbnail width/height
   };
-  for (int i = 0; i < sizeof(errors) / sizeof(errors[0]); i++) {
-    std::string f = errors[i];
-    ASSERT_TRUE(!ParseFileName(f, &number, &type)) << f;
-  }
+  jpg->app_data.push_back(
+      std::string(reinterpret_cast<const char*>(kApp0Data),
+                                 sizeof(kApp0Data)));
 }
     
-    TableCache::TableCache(const std::string& dbname,
-                       const Options* options,
-                       int entries)
-    : env_(options->env),
-      dbname_(dbname),
-      options_(options),
-      cache_(NewLRUCache(entries)) {
-}
-    
-      // Delete the specified 'file' from the specified 'level'.
-  void DeleteFile(int level, uint64_t file) {
-    deleted_files_.insert(std::make_pair(level, file));
-  }
-    
-    
-    {}  // namespace leveldb
-    
-      Benchmark()
-  : db_(NULL),
-    num_(FLAGS_num),
-    reads_(FLAGS_reads < 0 ? FLAGS_num : FLAGS_reads),
-    bytes_(0),
-    rand_(301) {
-    std::vector<std::string> files;
-    std::string test_dir;
-    Env::Default()->GetTestDirectory(&test_dir);
-    Env::Default()->GetChildren(test_dir.c_str(), &files);
-    if (!FLAGS_use_existing_db) {
-      for (int i = 0; i < files.size(); i++) {
-        if (Slice(files[i]).starts_with('dbbench_polyDB')) {
-          std::string file_name(test_dir);
-          file_name += '/';
-          file_name += files[i];
-          Env::Default()->DeleteFile(file_name.c_str());
-        }
-      }
-    }
-  }
-    
-    // Dump the contents of the file named by fname in text format to
-// *dst.  Makes a sequence of dst->Append() calls; each call is passed
-// the newline-terminated text corresponding to a single item found
-// in the file.
-//
-// Returns a non-OK result if fname does not name a leveldb storage
-// file, or if the file cannot be read.
-Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
-    
-      // Return the ith byte in the referenced data.
-  // REQUIRES: n < size()
-  char operator[](size_t n) const {
-    assert(n < size());
-    return data_[n];
-  }
-    
-    #undef THPTensor_
-#undef THPTensor_stateless_
-#undef THPTensor
-#undef THPTensorStr
-#undef THPTensorBaseStr
-#undef THPTensorClass
-    
-    #define THPStorage TH_CONCAT_3(THP,Real,Storage)
-#define THPStorageStr TH_CONCAT_STRING_3(torch.,Real,Storage)
-#define THPStorageClass TH_CONCAT_3(THP,Real,StorageClass)
-#define THPStorage_(NAME) TH_CONCAT_4(THP,Real,Storage_,NAME)
-    
-      ByteArray();
-  ByteArray(std::size_t size);
-  ByteArray(const char* arr, std::size_t size);
-  ByteArray(ByteArray&& arr);
-  ByteArray(const ByteArray& arr);
-  ~ByteArray();
-    
-    #include 'test/cpp/qps/report.h'
-    
-    #include 'test/core/util/test_config.h'
-#include 'test/cpp/qps/benchmark_config.h'
-#include 'test/cpp/qps/driver.h'
-#include 'test/cpp/qps/report.h'
-#include 'test/cpp/qps/server.h'
-#include 'test/cpp/util/test_config.h'
-#include 'test/cpp/util/test_credentials_provider.h'
-    
-      bool Generate(const grpc::protobuf::FileDescriptor* file,
-                const grpc::string& parameter,
-                grpc::protobuf::compiler::GeneratorContext* context,
-                grpc::string* error) const;
-    
-    TEST_F(CodegenTestMinimal, Build) {}
-    
-    class UsageTimer {
- public:
-  UsageTimer();
+    namespace guetzli {
     }
     
-    grpc::string DescribeMethod(const grpc::protobuf::MethodDescriptor* method) {
-  std::stringstream result;
-  result << '  rpc ' << method->name()
-         << (method->client_streaming() ? '(stream ' : '(')
-         << method->input_type()->full_name() << ') returns '
-         << (method->server_streaming() ? '(stream ' : '(')
-         << method->output_type()->full_name() << ') {}\n';
-  if (method->options().deprecated()) {
-    result << ' DEPRECATED';
-  }
-  return result.str();
-}
+      // Fills in out[] array with the 8-bit pixel view of this component cropped
+  // to the specified window. The window's upper-left corner, (xmin, ymin) must
+  // be within the image, but the window may extend past the image. In that
+  // case the edge pixels are duplicated.
+  void ToPixels(int xmin, int ymin, int xsize, int ysize,
+                uint8_t* out, int stride) const;
     
-    #include <initializer_list>
+    public:
+  AbstractBtMessage(uint8_t id, const char* name);
+    
+    #include 'DiskWriter.h'
 #include <string>
-#include <vector>
     
-    /**
- * @brief Superclass for the pluggable logging facilities.
- *
- * In order to make the logging of osquery results and inline debug, warning,
- * error status easy to integrate into your environment, we take advantage of
- * a plugin interface which allows you to integrate osquery with your internal
- * large-scale logging infrastructure.
- *
- * You may use flume, splunk, syslog, scribe, etc. In order to use your
- * specific upstream logging systems, one simply needs to create a custom
- * subclass of LoggerPlugin. That subclass should at least implement the
- * LoggerPlugin::logString method.
- *
- * Consider the following example:
- *
- * @code{.cpp}
- *   class TestLoggerPlugin : public LoggerPlugin {
- *    public:
- *     osquery::Status logString(const std::string& s) {
- *       int i = 0;
- *       internal::logStringToFlume(s, i);
- *       std::string message;
- *       if (i == 0) {
- *         message = 'OK';
- *       } else {
- *         message = 'Failed';
- *       }
- *       return osquery::Status(i, message);
- *     }
- *  };
- *
- *  REGISTER(TestLoggerPlugin, 'logger', 'test');
- * @endcode
- */
-class LoggerPlugin : public Plugin {
- public:
-  /// The LoggerPlugin PluginRequest action router.
-  Status call(const PluginRequest& request, PluginResponse& response) override;
+    void AdaptiveFileAllocationIterator::allocateChunk()
+{
+  if (!allocator_) {
+#ifdef HAVE_FALLOCATE
+    try {
+      A2_LOG_DEBUG('Testing file system supports fallocate.');
+      if (offset_ < totalLength_) {
+        int64_t len =
+            std::min(totalLength_ - offset_, static_cast<int64_t>(4_k));
+        stream_->allocate(offset_, len, false);
+        offset_ += len;
+      }
+      A2_LOG_DEBUG('File system supports fallocate.');
+      allocator_ = make_unique<FallocFileAllocationIterator>(stream_, offset_,
+                                                             totalLength_);
     }
-    
-      // This buffer will be shared, create a descriptor.
-  osquery.md =
-      IOMemoryDescriptor::withAddressRange((mach_vm_address_t)osquery.buffer,
-                                           osquery.buf_size,
-                                           kIODirectionInOut,
-                                           kernel_task);
-  if (osquery.md == NULL) {
-    err = -EINVAL;
-    goto error_exit;
-  }
-    
-    std::string wstringToString(const wchar_t* src) {
-  if (src == nullptr) {
-    return std::string('');
-  }
+    catch (RecoverableException& e) {
+      A2_LOG_DEBUG('File system does not support fallocate.');
+      auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
+                                                              totalLength_);
+      salloc->init();
+      allocator_ = std::move(salloc);
     }
+#else  // !HAVE_FALLOCATE
+    auto salloc = make_unique<SingleFileAllocationIterator>(stream_, offset_,
+                                                            totalLength_);
+    salloc->init();
+    allocator_ = std::move(salloc);
+#endif // !HAVE_FALLOCATE
+    allocator_->allocateChunk();
+  }
+  else {
+    allocator_->allocateChunk();
+  }
+}
+    
+    void AnnounceTier::nextEvent()
+{
+  switch (event) {
+  case STARTED:
+    event = DOWNLOADING;
+    break;
+  case STARTED_AFTER_COMPLETION:
+    event = SEEDING;
+    break;
+  case STOPPED:
+    event = HALTED;
+    break;
+  case COMPLETED:
+    event = SEEDING;
+    break;
+  default:
+    break;
+  }
+}
+    
+    static inline std::string stripWhitespace(std::string str)
+{
+  str.erase(std::remove_if(std::begin(str), std::end(str), isWhitespace),
+            std::end(str));
+  return str;
+}
