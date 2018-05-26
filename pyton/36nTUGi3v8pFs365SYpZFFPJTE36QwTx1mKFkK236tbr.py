@@ -1,131 +1,75 @@
 
         
-        
-def side_effect(old_cmd, command):
-    with tarfile.TarFile(_tar_file(old_cmd.script_parts)[0]) as archive:
-        for file in archive.getnames():
-            try:
-                os.remove(file)
-            except OSError:
-                # does not try to remove directories as we cannot know if they
-                # already existed before
-                pass
-
+        class CancelledError(Error):
+    '''The Future was cancelled.'''
+    pass
+    
+        def submit(self, fn, *args, **kwargs):
+        with self._shutdown_lock:
+            if self._shutdown:
+                raise RuntimeError('cannot schedule new futures after shutdown')
     
     
-@pytest.mark.functional
-def test_without_confirmation(proc, TIMEOUT):
-    without_confirmation(proc, TIMEOUT)
+def KeywordsFromSyntaxListOutput_CppSyntax_test():
+  expected_keywords = (
+    'int_fast32_t', 'FILE', 'size_t', 'bitor', 'typedef', 'const', 'struct',
+    'uint8_t', 'fpos_t', 'thread_local', 'unsigned', 'uint_least16_t', 'do',
+    'intptr_t', 'uint_least64_t', 'return', 'auto', 'void', '_Complex',
+    'break', '_Alignof', 'not', 'using', '_Static_assert', '_Thread_local',
+    'public', 'uint_fast16_t', 'this', 'continue', 'char32_t', 'int16_t',
+    'intmax_t', 'static', 'clock_t', 'sizeof', 'int_fast64_t', 'mbstate_t',
+    'try', 'xor', 'uint_fast32_t', 'int_least8_t', 'div_t', 'volatile',
+    'template', 'char16_t', 'new', 'ldiv_t', 'int_least16_t', 'va_list',
+    'uint_least8_t', 'goto', 'noreturn', 'enum', 'static_assert', 'bitand',
+    'compl', 'imaginary', 'jmp_buf', 'throw', 'asm', 'ptrdiff_t', 'uint16_t',
+    'or', 'uint_fast8_t', '_Bool', 'int32_t', 'float', 'private', 'restrict',
+    'wint_t', 'operator', 'not_eq', '_Imaginary', 'alignas', 'union', 'long',
+    'uint_least32_t', 'int_least64_t', 'friend', 'uintptr_t', 'int8_t', 'else',
+    'export', 'int_fast8_t', 'catch', 'true', 'case', 'default', 'double',
+    '_Noreturn', 'signed', 'typename', 'while', 'protected', 'wchar_t',
+    'wctrans_t', 'uint64_t', 'delete', 'and', 'register', 'false', 'int',
+    'uintmax_t', 'off_t', 'char', 'int64_t', 'int_fast16_t', 'DIR', '_Atomic',
+    'time_t', 'xor_eq', 'namespace', 'virtual', 'complex', 'bool', 'mutable',
+    'if', 'int_least32_t', 'sig_atomic_t', 'and_eq', 'ssize_t', 'alignof',
+    '_Alignas', '_Generic', 'extern', 'class', 'typeid', 'short', 'for',
+    'uint_fast64_t', 'wctype_t', 'explicit', 'or_eq', 'switch', 'uint32_t',
+    'inline' )
+    
+    
+def OverlapLength_BasicWithUnicode_test():
+  eq_( 3, base.OverlapLength( u'bar fäö', u'fäö bar' ) )
+  eq_( 3, base.OverlapLength( u'zoofäö', u'fäözoo' ) )
+    
+    
+  def tearDown( self ):
+    self._request = None
+    
+    
+class UnsupportedTransition(BaseException):
+    pass
+    
+        class ClassRegistree(BaseRegisteredClass):
+    
+        def get_current_time_as_html_fragment(self, time_provider):
+        current_time = time_provider.now()
+        current_time_as_html_fragment = '<span class=\'tinyBoldText\'>{}</span>'.format(current_time)
+        return current_time_as_html_fragment
+    
+    '''
+Port of the Java example of 'Parameter Injection' in
+'xUnit Test Patterns - Refactoring Test Code' by Gerard Meszaros
+(ISBN-10: 0131495054, ISBN-13: 978-0131495050) accessible in outdated version on
+http://xunitpatterns.com/Dependency%20Injection.html.
+    
+        def main_method(self):
+        '''will execute either _static_method_1 or _static_method_2
     
         def __init__(self):
-        self.downloaded = 0
-        self.total_size = None
-        self.resumed_from = 0
-        self.time_started = None
-        self.time_finished = None
+        self._tm = None
     
-    ssl.add_argument(
-    '--cert-key',
-    default=None,
-    type=readable_file_arg,
-    help='''
-    The private key to use with SSL. Only needed if --cert is given and the
-    certificate file does not contain the private key.
+        def attach(self, observer):
+        if observer not in self._observers:
+            self._observers.append(observer)
     
-        def test_cert_file_not_found(self, httpbin_secure):
-        r = http(httpbin_secure + '/get',
-                 '--cert', '/__not_found__',
-                 error_exit_ok=True)
-        assert r.exit_status == ExitStatus.ERROR
-        assert 'No such file or directory' in r.stderr
-    
-        def __getattr__(self, item):
-        return self[item]
-    
-            if self.args.output_options is None:
-            if self.args.verbose:
-                self.args.output_options = ''.join(OUTPUT_OPTIONS)
-            else:
-                self.args.output_options = (
-                    OUTPUT_OPTIONS_DEFAULT
-                    if self.env.stdout_isatty
-                    else OUTPUT_OPTIONS_DEFAULT_STDOUT_REDIRECTED
-                )
-    
-        assert_almost_equal(unweighted_metric * weight, weighted_metric, decimal=decimal)
-    
-        Optionally loads weights pre-trained
-    on ImageNet. Note that when using TensorFlow,
-    for best performance you should set
-    `image_data_format='channels_last'` in your Keras config
-    at ~/.keras/keras.json.
-    The model and the weights are compatible with both
-    TensorFlow and Theano. The data format
-    convention used by the model is the one
-    specified in your Keras config file.
-    Note that the default input image size for this model is 299x299.
-    
-        def call(self, inputs):
-        return K.repeat(inputs, self.n)
-    
-    
-MOBILENET_LIST = [(applications.MobileNet, 1024),
-                  (applications.MobileNetV2, 1280)]
-DENSENET_LIST = [(applications.DenseNet121, 1024),
-                 (applications.DenseNet169, 1664),
-                 (applications.DenseNet201, 1920)]
-NASNET_LIST = [(applications.NASNetMobile, 1056),
-               (applications.NASNetLarge, 4032)]
-    
-                    if batch_index == len(batches) - 1:  # Last batch.
-                    if do_validation:
-                        val_outs = test_loop(model, val_f, val_ins,
-                                             batch_size=batch_size,
-                                             verbose=0)
-                        if not isinstance(val_outs, list):
-                            val_outs = [val_outs]
-                        # Same labels assumed.
-                        for l, o in zip(out_labels, val_outs):
-                            epoch_logs['val_' + l] = o
-        callbacks.on_epoch_end(epoch, epoch_logs)
-        if callback_model.stop_training:
-            break
-    callbacks.on_train_end()
-    return model.history
-    
-    from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-    
-        # VAE loss = mse_loss or xent_loss + kl_loss
-    if args.mse:
-        reconstruction_loss = mse(K.flatten(inputs), K.flatten(outputs))
-    else:
-        reconstruction_loss = binary_crossentropy(K.flatten(inputs),
-                                                  K.flatten(outputs))
-    
-    
-class PollErrorTest(unittest.TestCase):
-    '''Tests for acme.errors.PollError.'''
-    
-    # If true, `todo` and `todoList` produce output, else they produce nothing.
-todo_include_todos = True
-    
-    # http://docs.readthedocs.org/en/latest/theme.html#how-do-i-use-this-locally-and-on-read-the-docs
-# on_rtd is whether we are on readthedocs.org
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-if not on_rtd:  # only import and set the theme if we're building docs locally
-    import sphinx_rtd_theme
-    html_theme = 'sphinx_rtd_theme'
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-# otherwise, readthedocs.org uses their theme by default, so no need to specify it
-    
-        @mock.patch('certbot.notify.smtplib.LMTP')
-    def test_smtp_success(self, mock_lmtp):
-        from certbot.notify import notify
-        lmtp_obj = mock.MagicMock()
-        mock_lmtp.return_value = lmtp_obj
-        self.assertTrue(notify('Goose', 'auntrhody@example.com',
-                               'The old grey goose is dead.'))
-        self.assertEqual(lmtp_obj.connect.call_count, 1)
-        self.assertEqual(lmtp_obj.sendmail.call_count, 1)
+        def and_specification(self, candidate):
+        return AndSpecification(self, candidate)
