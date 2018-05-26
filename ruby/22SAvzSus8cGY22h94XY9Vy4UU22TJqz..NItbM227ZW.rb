@@ -1,133 +1,133 @@
-    A binary installer is available:
-      https://www.haskell.org/platform/mac.html
-    EOS
-  when 'mysqldump-secure' then <<-EOS.undent
-    The creator of mysqldump-secure tried to game our popularity metrics.
-    EOS
-  when 'ngrok' then <<-EOS.undent
-    Upstream sunsetted 1.x in March 2016 and 2.x is not open-source.
+
+        
+          attr_accessor :output_buffer
+  attr_reader :request
     
-      # True if a {Formula} is being built with {Formula.stable} instead of {Formula.devel} or {Formula.head}. This is the default.
-  # <pre>args << '--some-beta' if build.devel?</pre>
-  def stable?
-    !(head? || devel?)
+            if routes &&
+           (routes.named_routes.route_defined?(selector) ||
+             routes.mounted_helpers.method_defined?(selector))
+          @controller.__send__(selector, *args)
+        else
+          super
+        end
+      end
+    
+      def persisted?
+    id.present?
   end
     
-      def self.canonical_name(name)
-    Formulary.canonical_name(name)
+    module ActionMailer
+  # This module handles everything related to mail delivery, from registering
+  # new delivery methods to configuring the mail object to be sent.
+  module DeliveryMethods
+    extend ActiveSupport::Concern
+    
+        # An email was generated.
+    def process(event)
+      debug do
+        mailer = event.payload[:mailer]
+        action = event.payload[:action]
+        '#{mailer}##{action}: processed outbound mail in #{event.duration.round(1)}ms'
+      end
+    end
+    
+    module ActionMailer
+  class NonInferrableMailerError < ::StandardError
+    def initialize(name)
+      super 'Unable to determine the mailer to test from #{name}. ' \
+        'You'll need to specify it using tests YourMailer in your ' \
+        'test case definition'
+    end
   end
     
-          if valid_type?(type)
-        type.constantize.new(attributes).tap do |instance|
-          instance.user = user if instance.respond_to?(:user=)
-        end
-      else
-        const_get(:BASE_CLASS_NAME).constantize.new(attributes).tap do |instance|
-          instance.type = type
-          instance.user = user if instance.respond_to?(:user=)
-        end
+      def test_assert_select_email_multipart
+    AssertMultipartSelectMailer.test(html: '<div><p>foo</p><p>bar</p></div>', text: 'foo bar').deliver_now
+    assert_select_email do
+      assert_select 'div:root' do
+        assert_select 'p:first-child', 'foo'
+        assert_select 'p:last-child', 'bar'
       end
     end
   end
 end
+
     
-      included do
-    self.validate :validate_email_options
+    class I18nTestMailer < ActionMailer::Base
+  configure do |c|
+    c.assets_dir = ''
   end
     
-      module ClassMethods
-    def setup_worker
-      active.map do |agent|
-        next unless agent.start_worker?
-        self::Worker.new(id: agent.worker_id, agent: agent)
-      end.compact
-    end
-  end
+    require 'pry'
+$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
+require 'jekyll'
     
-      def set_table_sort(sort_options)
-    valid_sorts = sort_options[:sorts] or raise ArgumentError.new('You must specify :sorts as an array of valid sort attributes.')
-    default = sort_options[:default] || { valid_sorts.first.to_sym => :desc }
+    #
     
-      def destroy_all
-    Delayed::Job.where(locked_at: nil).delete_all
+    class Jekyll::Commands::NewTheme < Jekyll::Command
+  class << self
+    def init_with_program(prog)
+      prog.command(:'new-theme') do |c|
+        c.syntax 'new-theme NAME'
+        c.description 'Creates a new Jekyll theme scaffold'
+        c.option 'code_of_conduct', \
+          '-c', '--code-of-conduct', \
+          'Include a Code of Conduct. (defaults to false)'
     
-      before_action :upgrade_warning, only: :index
-    
-          respond_to do |format|
-        if new_credentials.map(&:save).all?
-          format.html { redirect_to user_credentials_path, notice: 'The file was successfully uploaded.'}
-        else
-          format.html { redirect_to user_credentials_path, notice: 'One or more of the uploaded credentials was not imported due to an error. Perhaps an existing credential had the same name?'}
-        end
-      end
-    else
-      redirect_to user_credentials_path, notice: 'No file was chosen to be uploaded.' 
-    end
-  end
-    
-            # With reconfirmable, notify the original email when the user first
-        # requests the email change, instead of when the change is confirmed.
-        def send_email_changed_notification?
-          if self.class.reconfirmable
-            self.class.send_email_changed_notification && reconfirmation_required?
-          else
-            super
+            # Removes the specified cache
+        #
+        # @param [Array<Hash>] cache_descriptors
+        #        An array of caches to remove, each specified with the same
+        #        hash as cache_descriptors_per_pod especially :spec_file and :slug
+        #
+        def remove_caches(cache_descriptors)
+          cache_descriptors.each do |desc|
+            UI.message('Removing spec #{desc[:spec_file]} (v#{desc[:version]})') do
+              FileUtils.rm(desc[:spec_file])
+            end
+            UI.message('Removing cache #{desc[:slug]}') do
+              FileUtils.rm_rf(desc[:slug])
+            end
           end
         end
     
-        def translation_scope
-      'devise.passwords'
-    end
-end
-
-    
-          # Set up a subject doing an I18n lookup. At first, it attempts to set a subject
-      # based on the current mapping:
-      #
-      #   en:
-      #     devise:
-      #       mailer:
-      #         confirmation_instructions:
-      #           user_subject: '...'
-      #
-      # If one does not exist, it fallbacks to ActionMailer default:
-      #
-      #   en:
-      #     devise:
-      #       mailer:
-      #         confirmation_instructions:
-      #           subject: '...'
-      #
-      def subject_for(key)
-        I18n.t(:'#{devise_mapping.name}_subject', scope: [:devise, :mailer, key],
-          default: [:subject, key.to_s.humanize])
+          def plugins_string
+        UI::ErrorReport.plugins_string
       end
+    
+          #-----------------------------------------------------------------------#
     end
   end
 end
 
     
-      def ambient_occlusion(isect)
-    basis = Array.new
-    otherBasis(basis, isect.n)
+            def create
+          authorize! :create, StockMovement
+          @stock_movement = scope.new(stock_movement_params)
+          if @stock_movement.save
+            respond_with(@stock_movement, status: 201, default_template: :show)
+          else
+            invalid_resource!(@stock_movement)
+          end
+        end
     
-        # @abstract
-    #
-    # Your implementation should check the existence of a cache repository on
-    # the deployment target
-    #
-    # @return [Boolean]
-    #
-    def test
-      raise NotImplementedError, 'Your SCM strategy module should provide a #test method'
+        def calculated_type_matches
+      possible_types.select do |content_type|
+        content_type == type_from_file_contents
+      end
     end
     
-      mkdir_p tasks_dir
-    
-          it 'filters by roles from the :filter variable' do
-        hosts = dsl.roles(:web)
-        all = dsl.roles(:all)
-        SSHKit::Coordinator.expects(:new).with(hosts).returns(@coordinator)
-        dsl.set :filter, roles: 'web'
-        dsl.on(all)
-      end
+        module ClassMethods
+      # This method is a shortcut to validator classes that is in
+      # 'Attachment...Validator' format. It is almost the same thing as the
+      # +validates+ method that shipped with Rails, but this is customized to
+      # be using with attachment validators. This is helpful when you're using
+      # multiple attachment validators on a single attachment.
+      #
+      # Example of using the validator:
+      #
+      #   validates_attachment :avatar, :presence => true,
+      #      :content_type => { :content_type => 'image/jpg' },
+      #      :size => { :in => 0..10.kilobytes }
+      #
+      def validates_attachment(*attributes)
+        options = attributes.extract_options!.dup
