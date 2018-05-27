@@ -1,74 +1,55 @@
 
         
-                def test_url_from_environment
-          spec = resolve :production, 'production' => 'abstract://foo?encoding=utf8'
-          assert_equal({
-            'adapter'  =>  'abstract',
-            'host'     =>  'foo',
-            'encoding' => 'utf8',
-            'name'     => 'production' }, spec)
-        end
-    
-        # fun/pdf_helper.rb
-    assert_includes methods, :foobar
+            find_union(segments, Project).includes(:namespace).order_id_desc
   end
     
-            def enqueue_delivery(delivery_method, options = {})
-          if processed?
-            super
-          else
-            args = @mailer_class.name, @action.to_s, delivery_method.to_s, @params, *@args
-            ActionMailer::Parameterized::DeliveryJob.set(options).perform_later(*args)
+    puts '\nDone.'
+
+    
+      def dry_run!(event = nil)
+    @dry_run = true
+    
+        # Optional
+    #   Use this method the gracefully stop your agent but make sure the run method return, or
+    #   terminate the thread.
+    def stop; end
+  end
+end
+=end
+module LongRunnable
+  extend ActiveSupport::Concern
+    
+    describe ApplicationController, type: :controller do
+  controller do
+    include UserTrackingConcern
+    
+        export LANG=en_US.UTF-8
+    DOC
+  else
+    STDERR.puts <<-DOC
+    \e[33mWARNING: CocoaPods requires your terminal to be using UTF-8 encoding.
+    Consider adding the following to ~/.profile:
+    
+            def clear_cache
+          UI.message('Removing the whole cache dir #{@cache.root}') do
+            FileUtils.rm_rf(@cache.root)
           end
         end
-    end
-    
-    # Show backtraces for deprecated behavior for quicker cleanup.
-ActiveSupport::Deprecation.debug = true
-    
-      APP = RoutedRackApp.new(Routes)
-    
-      def setup
-    super
-    ActionMailer::LogSubscriber.attach_to :action_mailer
-  end
-    
-        mail_with_defaults do |format|
-      format.html { render(inline: '<%= block_format @text %>') }
+      end
     end
   end
+end
+
     
-          # Returns the time the given Sass file was last modified.
-      #
-      # If the given file has been deleted or the time can't be accessed
-      # for some other reason, this should return nil.
-      #
-      # @param uri [String] The URI of the file to check.
-      #   Comes from a `:filename` option set on an engine returned by this importer.
-      # @param options [{Symbol => Object}] Options for the Sass file
-      #   containing the `@import` currently being checked.
-      # @return [Time, nil]
-      def mtime(uri, options)
-        Sass::Util.abstract(self)
+            private
+    
+          def self.options
+        options = []
+        options.concat(super.reject { |option, _| option == '--silent' })
       end
     
-      # Flushes all queued logs to the wrapped logger.
-  def flush
-    @messages.each {|(l, m)| @inner.log(l, m)}
-  end
-    
-        # Returns the CSS for the media query list.
-    #
-    # @return [String]
-    def to_css
-      queries.map {|q| q.to_css}.join(', ')
-    end
-    
-            self.description = <<-DESC
-          Shows the content of the pods cache as a YAML tree output, organized by pod.
-          If `NAME` is given, only the caches for that pod will be included in the output.
-        DESC
-    
-          def markdown_podfile
-        UI::ErrorReport.markdown_podfile
+          def initialize(argv)
+        @update = argv.flag?('update')
+        @stats  = argv.flag?('stats')
+        super
       end
