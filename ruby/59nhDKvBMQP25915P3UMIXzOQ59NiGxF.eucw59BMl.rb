@@ -1,88 +1,82 @@
 
         
-            We recommend using a MacTeX distribution: https://www.tug.org/mactex/
+            options[:title] = false
+    options[:root_title] = 'Node.js'
+    options[:container] = '#apicontent'
+    options[:skip] = %w(index.html all.html documentation.html synopsis.html)
     
-    module Homebrew
-  def build_env_keys(env)
-    %w[
-      CC CXX LD OBJC OBJCXX
-      HOMEBREW_CC HOMEBREW_CXX
-      CFLAGS CXXFLAGS CPPFLAGS LDFLAGS SDKROOT MAKEFLAGS
-      CMAKE_PREFIX_PATH CMAKE_INCLUDE_PATH CMAKE_LIBRARY_PATH CMAKE_FRAMEWORK_PATH
-      MACOSX_DEPLOYMENT_TARGET PKG_CONFIG_PATH PKG_CONFIG_LIBDIR
-      HOMEBREW_DEBUG HOMEBREW_MAKE_JOBS HOMEBREW_VERBOSE
-      HOMEBREW_SVN HOMEBREW_GIT
-      HOMEBREW_SDKROOT HOMEBREW_BUILD_FROM_SOURCE
-      MAKE GIT CPP
-      ACLOCAL_PATH PATH CPATH].select { |key| env.key?(key) }
-  end
-    
-      # True if a {Formula} is being built in 32-bit/x86 mode.
-  # This is needed for some use-cases though we prefer to build Universal
-  # when a 32-bit version is needed.
-  def build_32_bit?
-    include?('32-bit') && option_defined?('32-bit')
-  end
-    
-        s = nil
-    homebrew_site_packages = Language::Python.homebrew_site_packages
-    user_site_packages = Language::Python.user_site_packages 'python'
-    pth_file = user_site_packages/'homebrew.pth'
-    instructions = <<-EOS.undent.gsub(/^/, '  ')
-      mkdir -p #{user_site_packages}
-      echo 'import site; site.addsitedir('#{homebrew_site_packages}')' >> #{pth_file}
-    EOS
-    
-        if ARGV.include? '--list-checks'
-      puts checks.all.sort
-      exit
+        def length
+      @entries.length
     end
     
-      def patches
-    {}
-  end
-    
-        if block
-      do_with_enum(enum) { |o| add(block[o]) }
-    else
-      merge(enum)
+        def as_json
+      { name: name, path: path, type: type }
     end
-  end
-    
-      def test_tainted_string_key
-    str = 'str'.taint
-    h = {}
-    h[str] = nil
-    key = h.keys.first
-    assert_predicate str, :tainted?
-    assert_not_predicate str, :frozen?
-    assert_predicate key, :tainted?
-    assert_predicate key, :frozen?
-  end
-    
-        t = c.send(@method) { }
-    t.join
-    
-      it 'raises a ThreadError when trying to wake up a dead thread' do
-    t = Thread.new { 1 }
-    t.join
-    lambda { t.send @method }.should raise_error(ThreadError)
   end
 end
 
     
-    puts 'DONE: #{blogs.count} written to #{OUTPUT_FILENAME}'
-    
-      def percent_change(today, yesterday)
-    sprintf( '%0.02f', ((today-yesterday) / yesterday.to_f)*100).to_f
+      def test_truncate_beyond_eof
+    Tempfile.create('test-truncate') {|f|
+      f.print 'abc'
+      f.truncate 10
+      assert_equal('\0' * 7, f.read(100), '[ruby-dev:24532]')
+    }
   end
     
-            def stock_location
-          @stock_location ||= StockLocation.accessible_by(current_ability, :read).find(params[:id])
-        end
+      it 'interprets Julian-Gregorian gap dates using Gregorian proleptic calendar' do
+    Time.send(@method, 1582, 10, 14, 12).to_i.should == -12219336000 # 2299160j
+  end
     
-        # Never trust parameters from the scary internet, only allow the white list through.
-    def book_params
-      params.require(:book).permit(:name)
+          def handle_jwt_bearer(req)
+        jwt_string = req['client_assertion']
+        jwt = JSON::JWT.decode jwt_string, :skip_verification
+        o_auth_app = Api::OpenidConnect::OAuthApplication.find_by(client_id: jwt['iss'])
+        raise Rack::OAuth2::Server::Authorize::BadRequest(:invalid_request) unless o_auth_app
+        public_key = fetch_public_key(o_auth_app, jwt)
+        JSON::JWT.decode(jwt_string, JSON::JWK.new(public_key).to_key)
+        req.update_param('client_id', o_auth_app.client_id)
+        req.update_param('client_secret', o_auth_app.client_secret)
+      end
+    
+            on roles(target_roles) do
+          unless test '[ -f #{file.to_s.shellescape} ]'
+            info 'Uploading #{prerequisite_file} to #{file}'
+            upload! File.open(prerequisite_file), file
+          end
+        end
+      end
     end
+    
+      desc 'Publish the release.'
+  task :publishing do
+  end
+    
+          it 'sets the variable as the default' do
+        expect(dsl.fetch(:scm)).to eq :svn
+      end
+    end
+  end
+    
+    module Sinatra
+  class Application < Base
+    
+        it 'Returns nil when Referer header is invalid' do
+      env = {'HTTP_HOST' => 'foo.com', 'HTTP_REFERER' => 'http://bar.com/bad|uri'}
+      expect(subject.referrer(env)).to be_nil
+    end
+  end
 end
+
+    
+        it 'denies requests with sneaky encoded session cookies' do
+      get '/', {}, 'HTTP_COOKIE' => 'rack.session=EVIL_SESSION_TOKEN; rack.%73ession=SESSION_TOKEN'
+      expect(last_response).not_to be_ok
+    end
+    
+      it 'denies requests with a changing Accept-Language header' do
+    session = {:foo => :bar}
+    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'a'
+    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_LANGUAGE' => 'b'
+    expect(session).to be_empty
+  end
