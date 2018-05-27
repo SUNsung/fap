@@ -1,99 +1,83 @@
 
         
-            def defaults_deprecate_type(old, current)
-      Jekyll.logger.warn 'Defaults:', 'The '#{old}' type has become '#{current}'.'
-      Jekyll.logger.warn 'Defaults:', 'Please update your front-matter defaults to use \
-                        'type: #{current}'.'
+              https://pip.readthedocs.org/en/stable/installing/#install-pip
+    EOS
+  when 'pil' then <<-EOS.undent
+    Instead of PIL, consider `pip install pillow` or `brew install Homebrew/python/pillow`.
+    EOS
+  when 'macruby' then <<-EOS.undent
+    MacRuby works better when you install their package:
+      http://www.macruby.org/
+    EOS
+  when /(lib)?lzma/
+    'lzma is now part of the xz formula.'
+  when 'xcode'
+    if MacOS.version >= :lion
+      <<-EOS.undent
+      Xcode can be installed from the App Store.
+      EOS
+    else
+      <<-EOS.undent
+      Xcode can be installed from https://developer.apple.com/xcode/downloads/
+      EOS
     end
+  when 'gtest', 'googletest', 'google-test' then <<-EOS.undent
+    Installing gtest system-wide is not recommended; it should be vendored
+    in your projects that use it.
+    EOS
+  when 'gmock', 'googlemock', 'google-mock' then <<-EOS.undent
+    Installing gmock system-wide is not recommended; it should be vendored
+    in your projects that use it.
+    EOS
+  when 'sshpass' then <<-EOS.undent
+    We won't add sshpass because it makes it too easy for novice SSH users to
+    ruin SSH's security.
+    EOS
+  when 'gsutil' then <<-EOS.undent
+    Install gsutil with `pip install gsutil`
+    EOS
+  when 'clojure' then <<-EOS.undent
+    Clojure isn't really a program but a library managed as part of a
+    project and Leiningen is the user interface to that library.
+    
+            formula.install
+    
+      def elisp_caveats
+    return if f.keg_only?
+    if keg && keg.elisp_installed?
+      <<-EOS.undent
+        Emacs Lisp files have been installed to:
+          #{HOMEBREW_PREFIX}/share/emacs/site-lisp/#{f.name}
+      EOS
+    end
+  end
+    
+          export JAVA_HOME='$(/usr/libexec/java_home)'
+      export AWS_ACCESS_KEY='<Your AWS Access ID>'
+      export AWS_SECRET_KEY='<Your AWS Secret Key>'
+      export #{home_name}='#{home_value}'
+    EOS
   end
 end
 
     
-          topic = Topic.find_by(id: topic_id)
+    class ApplicationSerializer < ActiveModel::Serializer
+  embed :ids, include: true
     
-      def revoke_moderation!
-    set_permission('moderator', false)
-  end
+            while true
+          begin
+            if Platform.windows?
+              # Windows doesn't support non-blocking reads on
+              # file descriptors or pipes so we have to get
+              # a bit more creative.
     
-        it 'adds the correct Set-Cookie header' do
-      get '/some/path', {}, 'HTTP_COOKIE' => 'rack.%73ession=EVIL_SESSION_TOKEN; rack.session=EVIL_SESSION_TOKEN; rack.session=SESSION_TOKEN'
+              # Repackage the box
+          output_name = @env.vagrantfile.config.package.name || 'package.box'
+          output_path = Pathname.new(File.expand_path(output_name, FileUtils.pwd))
+          box.repackage(output_path)
     
-      %w(GET HEAD POST PUT DELETE).each do |method|
-    it 'accepts #{method} requests when allow_if is true' do
-      mock_app do
-        use Rack::Protection::HttpOrigin, :allow_if => lambda{|env| env.has_key?('HTTP_ORIGIN') }
-        run DummyApp
-      end
-      expect(send(method.downcase, '/', {}, 'HTTP_ORIGIN' => 'http://any.domain.com')).to be_ok
-    end
-  end
-    
-      it 'accepts a session without changes to tracked parameters' do
-    session = {:foo => :bar}
-    get '/', {}, 'rack.session' => session
-    get '/', {}, 'rack.session' => session
-    expect(session[:foo]).to eq(:bar)
-  end
-    
-      it 'allows passing on values in env' do
-    klass    = described_class
-    changer  = Struct.new(:app) do
-      def call(env)
-        env['foo.bar'] = 42
-        app.call(env)
-      end
-    end
-    detector = Struct.new(:app) do
-      def call(env)
-        app.call(env)
-      end
-    end
-    
-      def _nt_plugin
-    start_index = index
-    if node_cache[:plugin].has_key?(index)
-      cached = node_cache[:plugin][index]
-      if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
-        @index = cached.interval.end
-      end
-      return cached
-    end
-    
-          def define_deprecated_accessors_for(option, opts, &block)
-        define_deprecated_writer_for(option, opts, &block)
-      end
-    
-    # These drivers are only used for testing driver switching.
-# They don't actually need to process javascript so use RackTest
-    
-    Before do
-  Capybara.use_default_driver
-end
-    
-    module Capybara
-  class Selector
-    module Filters
-      class Base
-        def initialize(name, block, **options)
-          @name = name
-          @block = block
-          @options = options
-          @options[:valid_values] = [true, false] if options[:boolean]
+            def index
+          authorize! :read, StockMovement
+          @stock_movements = scope.ransack(params[:q]).result.page(params[:page]).per(params[:per_page])
+          respond_with(@stock_movements)
         end
-    
-      it 'should not accept the alert if the text doesnt match' do
-    expect do
-      @session.accept_alert 'Incorrect Text' do
-        @session.click_link('Open alert')
-      end
-    end.to raise_error(Capybara::ModalNotFound)
-  end
-    
-      it 'should return the message presented' do
-    message = @session.accept_prompt with: 'the response' do
-      @session.click_link('Open prompt')
-    end
-    expect(message).to eq('Prompt opened')
-  end
-end
