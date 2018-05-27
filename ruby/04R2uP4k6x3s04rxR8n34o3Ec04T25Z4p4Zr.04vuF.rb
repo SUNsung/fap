@@ -1,164 +1,113 @@
 
         
-                  assert_match 'Could not load the 'ridiculous' Active Record adapter. Ensure that the adapter is spelled correctly in config/database.yml and that you've added the necessary adapter gem to your Gemfile.', error.message
-        end
+          def working?
+    last_receive_at && last_receive_at > options['expected_receive_period_in_days'].to_i.days.ago && !recent_error_logs?
+  end
     
-    module ActiveSupport
-  # Abstract super class that provides a thread-isolated attributes singleton, which resets automatically
-  # before and after each request. This allows you to keep all the per-request attributes easily
-  # available to the whole system.
-  #
-  # The following full app-like example demonstrates how to use a Current class to
-  # facilitate easy access to the global, per-request attributes without passing them deeply
-  # around everywhere:
-  #
-  #   # app/models/current.rb
-  #   class Current < ActiveSupport::CurrentAttributes
-  #     attribute :account, :user
-  #     attribute :request_id, :user_agent, :ip_address
-  #
-  #     resets { Time.zone = nil }
-  #
-  #     def user=(user)
-  #       super
-  #       self.account = user.account
-  #       Time.zone    = user.time_zone
-  #     end
-  #   end
-  #
-  #   # app/controllers/concerns/authentication.rb
-  #   module Authentication
-  #     extend ActiveSupport::Concern
-  #
-  #     included do
-  #       before_action :authenticate
-  #     end
-  #
-  #     private
-  #       def authenticate
-  #         if authenticated_user = User.find_by(id: cookies.encrypted[:user_id])
-  #           Current.user = authenticated_user
-  #         else
-  #           redirect_to new_session_url
-  #         end
-  #       end
-  #   end
-  #
-  #   # app/controllers/concerns/set_current_request_details.rb
-  #   module SetCurrentRequestDetails
-  #     extend ActiveSupport::Concern
-  #
-  #     included do
-  #       before_action do
-  #         Current.request_id = request.uuid
-  #         Current.user_agent = request.user_agent
-  #         Current.ip_address = request.ip
-  #       end
-  #     end
-  #   end
-  #
-  #   class ApplicationController < ActionController::Base
-  #     include Authentication
-  #     include SetCurrentRequestDetails
-  #   end
-  #
-  #   class MessagesController < ApplicationController
-  #     def create
-  #       Current.account.messages.create(message_params)
-  #     end
-  #   end
-  #
-  #   class Message < ApplicationRecord
-  #     belongs_to :creator, default: -> { Current.user }
-  #     after_create { |message| Event.create(record: message) }
-  #   end
-  #
-  #   class Event < ApplicationRecord
-  #     before_create do
-  #       self.request_id = Current.request_id
-  #       self.user_agent = Current.user_agent
-  #       self.ip_address = Current.ip_address
-  #     end
-  #   end
-  #
-  # A word of caution: It's easy to overdo a global singleton like Current and tangle your model as a result.
-  # Current should only be used for a few, top-level globals, like account, user, and request details.
-  # The attributes stuck in Current should be used by more or less all actions on all requests. If you start
-  # sticking controller-specific attributes in there, you're going to create a mess.
-  class CurrentAttributes
-    include ActiveSupport::Callbacks
-    define_callbacks :reset
+      def set_table_sort(sort_options)
+    valid_sorts = sort_options[:sorts] or raise ArgumentError.new('You must specify :sorts as an array of valid sort attributes.')
+    default = sort_options[:default] || { valid_sorts.first.to_sym => :desc }
     
-    module Fun
-  class GamesController < ActionController::Base
-    def render_hello_world
-      render inline: 'hello: <%= stratego %>'
+        if run? && ARGV.any?
+      require 'optparse'
+      OptionParser.new { |op|
+        op.on('-p port',   'set the port (default is 4567)')                { |val| set :port, Integer(val) }
+        op.on('-o addr',   'set the host (default is #{bind})')             { |val| set :bind, val }
+        op.on('-e env',    'set the environment (default is development)')  { |val| set :environment, val.to_sym }
+        op.on('-s server', 'specify rack server/handler (default is thin)') { |val| set :server, val }
+        op.on('-q',        'turn on quiet mode (default is off)')           {       set :quiet, true }
+        op.on('-x',        'turn on the mutex lock (default is off)')       {       set :lock, true }
+      }.parse!(ARGV.dup)
     end
   end
     
-      test 'token_and_options returns correct token with quotes' do
-    token = '\'quote\' pretty'
-    actual = ActionController::HttpAuthentication::Token.token_and_options(sample_request(token)).first
-    expected = token
-    assert_equal(expected, actual)
+      it 'accepts requests with a changing Accept-Encoding header' do
+    # this is tested because previously it led to clearing the session
+    session = {:foo => :bar}
+    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_ENCODING' => 'a'
+    get '/', {}, 'rack.session' => session, 'HTTP_ACCEPT_ENCODING' => 'b'
+    expect(session).not_to be_empty
   end
     
-        test 'head :reset_content (205) does not return any content' do
-      content = body(HeadController.action(:reset_content).call(Rack::MockRequest.env_for('/')))
-      assert_empty content
     end
     
-      test 'default delivery options can be overridden per mail instance' do
-    settings = {
-      address: 'localhost',
-      port: 25,
-      domain: 'localhost.localdomain',
-      user_name: nil,
-      password: nil,
-      authentication: nil,
-      enable_starttls_auto: true
-    }
-    assert_equal settings, ActionMailer::Base.smtp_settings
-    overridden_options = { user_name: 'overridden', password: 'somethingobtuse' }
-    mail_instance = DeliveryMailer.welcome(delivery_method_options: overridden_options)
-    delivery_method_instance = mail_instance.delivery_method
-    assert_equal 'overridden', delivery_method_instance.settings[:user_name]
-    assert_equal 'somethingobtuse', delivery_method_instance.settings[:password]
-    assert_equal delivery_method_instance.settings.merge(overridden_options), delivery_method_instance.settings
-    
-        def unlock_instructions(record, token, opts={})
-      @token = token
-      devise_mail(record, :unlock_instructions, opts)
+        # Outputs the post.date as formatted html, with hooks for CSS styling.
+    #
+    #  +date+ is the date object to format as HTML.
+    #
+    # Returns string
+    def date_to_html_string(date)
+      result = '<span class='month'>' + date.strftime('%b').upcase + '</span> '
+      result << date.strftime('<span class='day'>%d</span> ')
+      result << date.strftime('<span class='year'>%Y</span> ')
+      result
     end
     
-        def fullpath
-      '/#{@path_prefix}/#{@path}'.squeeze('/')
+    require 'cgi'
+require 'digest/md5'
+require 'net/https'
+require 'uri'
+    
+          if File.symlink?(code_path)
+        return 'Code directory '#{code_path}' cannot be a symlink'
+      end
+    
+            def scope
+          @variable.scope
+        end
+    
+    module RuboCop
+  module Cop
+    class VariableForce
+      # A Variable represents existence of a local variable.
+      # This holds a variable declaration node,
+      # and some states of the variable.
+      class Variable
+        VARIABLE_DECLARATION_TYPES =
+          (VARIABLE_ASSIGNMENT_TYPES + ARGUMENT_DECLARATION_TYPES).freeze
+    
+            def each_unnecessary_space_match(node, &blk)
+          each_match_range(
+            contents_range(node),
+            MULTIPLE_SPACES_BETWEEN_ITEMS_REGEX,
+            &blk
+          )
+        end
+      end
     end
+  end
+end
+
     
-            def update
-          authorize! :update, stock_location
-          if stock_location.update_attributes(stock_location_params)
-            respond_with(stock_location, status: 200, default_template: :show)
-          else
-            invalid_resource!(stock_location)
-          end
-        end
+    module RuboCop
+  module Cop
+    module Performance
+      # This cop identifies the use of `Regexp#match` or `String#match`, which
+      # returns `#<MatchData>`/`nil`. The return value of `=~` is an integral
+      # index/`nil` and is more performant.
+      #
+      # @example
+      #   # bad
+      #   do_something if str.match(/regex/)
+      #   while regex.match('str')
+      #     do_something
+      #   end
+      #
+      #   # good
+      #   method(str =~ /regex/)
+      #   return value unless regex =~ 'str'
+      class RedundantMatch < Cop
+        MSG = 'Use `=~` in places where the `MatchData` returned by ' \
+              '`#match` will not be used.'.freeze
     
-            def on_percent_literal(node)
-          each_unnecessary_space_match(node) do |range|
-            add_offense(node, location: range)
-          end
+            def parent_block_node(node)
+          node.each_ancestor(:block).first
         end
-    
-            def variables_in_node(node)
-          if node.or_type?
-            node.node_parts
-                .flat_map { |node_part| variables_in_node(node_part) }
-                .uniq
-          else
-            variables_in_simple_node(node)
-          end
-        end
+      end
+    end
+  end
+end
+
     
     module RuboCop
   module Cop
@@ -174,15 +123,11 @@
       class RedundantFreeze < Cop
         include FrozenStringLiteral
     
-              def plugins
-            @plugins ||= find_plugins_gem_specs.map do |spec|
-              { :name => spec.name, :version => spec.version.to_s }
-            end.sort_by do |spec|
-              spec[:name]
-            end
-          end
+    RSpec.describe RuboCop::Cop::Style::StringMethods, :config do
+  subject(:cop) { described_class.new(config) }
     
-    describe 'modular-scale' do
-  before(:all) do
-    ParserSupport.parse_file('library/modular-scale')
-  end
+        context '#{type} with empty body' do
+      context 'with empty line' do
+        let(:source) do
+          <<-RUBY.strip_indent
+            #{type} SomeObject
