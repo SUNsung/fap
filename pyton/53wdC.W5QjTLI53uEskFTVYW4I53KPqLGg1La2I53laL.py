@@ -1,178 +1,117 @@
 
         
-        
-@pytest.mark.functional
-def test_with_confirmation(proc, TIMEOUT):
-    with_confirmation(proc, TIMEOUT)
+            from inspect import getargspec
+    from cStringIO import StringIO
     
-            headers = [
-            '%s: %s' % (
-                name,
-                value if isinstance(value, str) else value.decode('utf8')
-            )
-            for name, value in headers.items()
-        ]
+                app.config['IMAGE_STORE_TYPE'] = 'fs'
+            app.config['IMAGE_STORE_PATH'] = '/var/app/images'
+            app.config['IMAGE_STORE_BASE_URL'] = 'http://img.website.com'
+            image_store_config = app.config.get_namespace('IMAGE_STORE_')
     
-        if include_debug_info:
-        print_debug_info(env)
-        if args == ['--debug']:
-            return ExitStatus.OK
+        if not changed:
+        fail('Could not find %s in %s', pattern, filename)
+    
+        import site_package
+    assert site_package.app.instance_path == \
+        modules_tmpdir.join('var').join('site_package-instance')
     
     
-CLIENT_CERT = os.path.join(TESTS_ROOT, 'client_certs', 'client.crt')
-CLIENT_KEY = os.path.join(TESTS_ROOT, 'client_certs', 'client.key')
-CLIENT_PEM = os.path.join(TESTS_ROOT, 'client_certs', 'client.pem')
+def test_logger(app):
+    assert app.logger.name == 'flask.app'
+    assert app.logger.level == logging.NOTSET
+    assert app.logger.handlers == [default_handler]
     
-    
-SSL_VERSION_ARG_MAPPING = {
-    'ssl2.3': 'PROTOCOL_SSLv23',
-    'ssl3': 'PROTOCOL_SSLv3',
-    'tls1': 'PROTOCOL_TLSv1',
-    'tls1.1': 'PROTOCOL_TLSv1_1',
-    'tls1.2': 'PROTOCOL_TLSv1_2',
-}
-SSL_VERSION_ARG_MAPPING = {
-    cli_arg: getattr(ssl, ssl_constant)
-    for cli_arg, ssl_constant in SSL_VERSION_ARG_MAPPING.items()
-    if hasattr(ssl, ssl_constant)
-}
-    
-        def get_auth_plugin(self, auth_type):
-        return self.get_auth_plugin_mapping()[auth_type]
-    
-            for i in html_json['sources']:
-            if 'src' in i:  #to avoid KeyError
-                if i['src'].startswith('https'):
-                    link_list.append((str(i['height']), i['src']))
-    
-        def prepare(self, **kwargs):
-        content = get_content(self.url)
-        self.title = match1(content, r'<title>([^<]+)</title>')
-        s = match1(content, r'P\.s\s*=\s*\'([^\']+)\'')
-        scp = match1(content, r'InfoQConstants\.scp\s*=\s*\'([^\']+)\'')
-        scs = match1(content, r'InfoQConstants\.scs\s*=\s*\'([^\']+)\'')
-        sck = match1(content, r'InfoQConstants\.sck\s*=\s*\'([^\']+)\'')
-    
-        for i in range(10, 30):
-        url = 'https://stream{i}.mixcloud.com/c/m4a/64{p}.m4a'.format(
-            i = i,
-            p = preview
-        )
-        try:
-            mime, ext, size = url_info(url)
-            break
-        except: continue
-    
-    
-@click.command()
-@click.argument('catalog_file', type=click.Path())
-def cli(catalog_file):
-    # Read the old ones back.  Once we are in, we will never go.
-    with open(catalog_file) as f:
-        rv = json.load(f)['supported_locales']
-    
-    if __name__ == '__main__':
-    main()
+        with app.test_client() as c:
+        rv = c.get('/')
+        assert rv.headers['Location'] == 'http://localhost/test'
+        rv = c.get('/test')
+        assert rv.data == b'42'
 
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+        @app.route('/')
+    def index():
+        1 // 0
     
-    from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
+        rv = client.get('/')
+    assert rv.data == b'dcba'
     
     
-def KeywordsFromSyntaxListOutput_JavaSyntax_test():
-  expected_keywords = (
-    'code', 'text', 'cols', 'datetime', 'disabled', 'shape', 'codetype', 'alt',
-    'compact', 'style', 'valuetype', 'short', 'finally', 'continue', 'extends',
-    'valign', 'bordercolor', 'do', 'return', 'rel', 'rules', 'void',
-    'nohref', 'abbr', 'background', 'scrolling', 'instanceof', 'name',
-    'summary', 'try', 'default', 'noshade', 'coords', 'dir', 'frame', 'usemap',
-    'ismap', 'static', 'hspace', 'vlink', 'for', 'selected', 'rev', 'vspace',
-    'content', 'method', 'version', 'volatile', 'above', 'new', 'charoff',
-    'public', 'alink', 'enum', 'codebase', 'if', 'noresize', 'interface',
-    'checked', 'byte', 'super', 'throw', 'src', 'language', 'package',
-    'standby', 'script', 'longdesc', 'maxlength', 'cellpadding', 'throws',
-    'tabindex', 'color', 'colspan', 'accesskey', 'float', 'while', 'private',
-    'height', 'boolean', 'wrap', 'prompt', 'nowrap', 'size', 'rows', 'span',
-    'clip', 'bgcolor', 'top', 'long', 'start', 'scope', 'scheme', 'type',
-    'final', 'lang', 'visibility', 'else', 'assert', 'transient', 'link',
-    'catch', 'true', 'serializable', 'target', 'lowsrc', 'this', 'double',
-    'align', 'value', 'cite', 'headers', 'below', 'protected', 'declare',
-    'classid', 'defer', 'false', 'synchronized', 'int', 'abstract', 'accept',
-    'hreflang', 'char', 'border', 'id', 'native', 'rowspan', 'charset',
-    'archive', 'strictfp', 'readonly', 'axis', 'cellspacing', 'profile',
-    'multiple', 'object', 'action', 'pagex', 'pagey', 'marginheight', 'data',
-    'class', 'frameborder', 'enctype', 'implements', 'break', 'gutter', 'url',
-    'clear', 'face', 'switch', 'marginwidth', 'width', 'left' )
+@pytest.mark.functional
+def test_select_command_with_arrows(proc, TIMEOUT):
+    select_command_with_arrows(proc, TIMEOUT)
     
+    num_classes = 10
+batch_size = 128
+epochs = 15
+weighted_class = 5
+high_weight = 10
+train_samples = 5000
+test_samples = 1000
+timesteps = 3
+input_dim = 10
+loss = 'mse'
+loss_full_name = 'mean_squared_error'
+standard_weight = 1
+standard_score_sequential = 0.5
     
-def Response_FromOmniCompleter_test():
-  results = [ { 'word': 'test' } ]
-  request = BuildOmnicompletionRequest( results )
+        old_layer = keras.layers.Deconvolution2D(5, nb_row=3, nb_col=3, output_shape=(6, 7, 5), name='deconv')
+    new_layer = keras.layers.Conv2DTranspose(5, (3, 3), name='deconv')
+    assert json.dumps(old_layer.get_config()) == json.dumps(new_layer.get_config())
     
-        with patch.object( ycm._message_poll_request,
-                       '_response_future',
-                       new = MockAsyncServerResponseDone( [] ) ) as mock_future:
-      ycm.OnPeriodicTick() # Uses ycm._message_poll_request ...
-  '''
-  return mock.MagicMock( wraps = FakeFuture( True, response ) )
+        # Create model
+    model = Model(inputs, x, name='inception_resnet_v2')
     
-    js.load_plugin_modules(plugins)
-modules = dict((k, m) for k, m in js.module.iteritems())
-print 'JS_MODULES := ' + ' '.join(modules.iterkeys())
-outputs = []
-for name, module in modules.iteritems():
-    outputs.extend(module.outputs)
-    print 'JS_MODULE_OUTPUTS_%s := %s' % (name, ' '.join(module.outputs))
-    print 'JS_MODULE_DEPS_%s := %s' % (name, ' '.join(module.dependencies))
-    
-    import os
-import mimetypes
-    
-    class CaptchaController(RedditController):
-    @allow_oauth2_access
-    @api_doc(api_section.captcha, uri='/captcha/{iden}')
-    def GET_captchaimg(self, iden):
-        '''
-        Request a CAPTCHA image given an `iden`.
-    
-    
-try:
-    # place all r2 specific imports in here.  If there is a code error, it'll
-    # get caught and the stack trace won't be presented to the user in
-    # production
-    from r2.config import extensions
-    from r2.controllers.reddit_base import RedditController, UnloggedUser
-    from r2.lib.cookies import Cookies
-    from r2.lib.errors import ErrorSet
-    from r2.lib.filters import (
-        safemarkdown,
-        scriptsafe_dumps,
-        websafe,
-        websafe_json,
-    )
-    from r2.lib import log, pages
-    from r2.lib.strings import get_funny_translated_string
-    from r2.lib.template_helpers import static
-    from r2.lib.base import abort
-    from r2.models.link import Link
-    from r2.models.subreddit import DefaultSR, Subreddit
-except Exception, e:
-    if g.debug:
-        # if debug mode, let the error filter up to pylons to be handled
-        raise e
+        if input_tensor is None:
+        img_input = Input(shape=input_shape)
     else:
-        # production environment: protect the code integrity!
-        print 'HuffmanEncodingError: make sure your python compiles before deploying, stupid!'
-        # kill this app
-        os._exit(1)
+        if not K.is_keras_tensor(input_tensor):
+            img_input = Input(tensor=input_tensor, shape=input_shape)
+        else:
+            img_input = input_tensor
+    # Block 1
+    x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block1_conv1')(img_input)
+    x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block1_conv2')(x)
+    x = MaxPooling2D((2, 2), strides=(2, 2), name='block1_pool')(x)
+    
+        ```python
+        model = Sequential()
+        model.add(Conv2D(64, 3, 3,
+                         border_mode='same',
+                         input_shape=(3, 32, 32)))
+        # now: model.output_shape == (None, 64, 32, 32)
+    
+        output_val = M.predict(x_val)
+    
+    
+@keras_test
+def test_saving_recurrent_layer_with_init_state():
+    vector_size = 8
+    input_length = 20
+    
+        outputs1 = Lambda(lambda x: utils.preprocess_input(x, 'channels_last'),
+                      output_shape=x.shape)(inputs)
+    model1 = Model(inputs, outputs1)
+    out1 = model1.predict(x[np.newaxis])[0]
+    x2 = np.transpose(x, (2, 0, 1))
+    inputs2 = Input(shape=x2.shape)
+    outputs2 = Lambda(lambda x: utils.preprocess_input(x, 'channels_first'),
+                      output_shape=x2.shape)(inputs2)
+    model2 = Model(inputs2, outputs2)
+    out2 = model2.predict(x2[np.newaxis])[0]
+    assert_allclose(out1, out2.transpose(1, 2, 0))
+    
+        reconstruction_loss *= original_dim
+    kl_loss = 1 + z_log_var - K.square(z_mean) - K.exp(z_log_var)
+    kl_loss = K.sum(kl_loss, axis=-1)
+    kl_loss *= -0.5
+    vae_loss = K.mean(reconstruction_loss + kl_loss)
+    vae.add_loss(vae_loss)
+    vae.compile(optimizer='adam')
+    vae.summary()
+    plot_model(vae,
+               to_file='vae_mlp.png',
+               show_shapes=True)
+    
+        def test_timeout(self):
+        self.assertTrue(self.timeout.timeout)
+        self.assertFalse(self.invalid.timeout)
