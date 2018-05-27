@@ -1,42 +1,95 @@
 
         
-                  @env.action_runner.run(Vagrant::Action.action_box_remove, {
-            box_name:     argv[0],
-            box_provider: options[:provider],
-            box_version:  options[:version],
-            force_confirm_box_remove: options[:force],
-            box_remove_all_versions: options[:all],
-          })
-    
-              tries     += 1
-          record.id += rand(100)
-    
-          it 'processes payload with actor if valid signature exists' do
-        payload['signature'] = {'type' => 'RsaSignature2017'}
-    
-      def url
-    if object.needs_redownload?
-      media_proxy_url(object.id, :original)
-    else
-      full_asset_url(object.file.url(:original))
-    end
+          # True if a {Formula} is being built with {Formula.head} instead of {Formula.stable}.
+  # <pre>args << '--some-new-stuff' if build.head?</pre>
+  # <pre># If there are multiple conditional arguments use a block instead of lines.
+  #  if build.head?
+  #    args << '--i-want-pizza'
+  #    args << '--and-a-cold-beer' if build.with? 'cold-beer'
+  #  end</pre>
+  def head?
+    include? 'HEAD'
   end
     
-        # Setup GitHub environment variables
-    %w[GITHUB_USER GITHUB_PASSWORD GITHUB_TOKEN].each do |env|
-      homebrew_env = ENV['HOMEBREW_#{env}']
-      next unless homebrew_env
-      next if homebrew_env.empty?
-      ENV[env] = homebrew_env
+        def self.cleanup_lockfiles
+      return unless HOMEBREW_CACHE_FORMULA.directory?
+      candidates = HOMEBREW_CACHE_FORMULA.children
+      lockfiles  = candidates.select { |f| f.file? && f.extname == '.brewing' }
+      lockfiles.each do |file|
+        next unless file.readable?
+        file.open.flock(File::LOCK_EX | File::LOCK_NB) && file.unlink
+      end
     end
     
-          rtn = ''
-      (context.environments.first['site'][@array_name] || []).each do |file|
-        if file !~ /^[a-zA-Z0-9_\/\.-]+$/ || file =~ /\.\// || file =~ /\/\./
-          rtn = rtn + 'Include file '#{file}' contains invalid characters or sequences'
+          out = checks.send(method)
+      unless out.nil? || out.empty?
+        if first_warning
+          $stderr.puts <<-EOS.undent
+            #{Tty.white}Please note that these warnings are just used to help the Homebrew maintainers
+            with debugging if you file an issue. If everything you use Homebrew for is
+            working fine: please don't worry and just ignore them. Thanks!#{Tty.reset}
+          EOS
         end
     
-      # Checks for excerpts (helpful for template conditionals)
-  def has_excerpt(input)
-    input =~ /<!--\s*more\s*-->/i ? true : false
+        if ARGV.include?('--pinned') || ARGV.include?('--versions')
+      filtered_list
+    elsif ARGV.named.empty?
+      if ARGV.include? '--full-name'
+        full_names = Formula.installed.map(&:full_name).sort do |a, b|
+          if a.include?('/') && !b.include?('/')
+            1
+          elsif !a.include?('/') && b.include?('/')
+            -1
+          else
+            a <=> b
+          end
+        end
+        puts_columns full_names
+      else
+        ENV['CLICOLOR'] = nil
+        exec 'ls', *ARGV.options_only << HOMEBREW_CELLAR
+      end
+    elsif ARGV.verbose? || !$stdout.tty?
+      exec 'find', *ARGV.kegs.map(&:to_s) + %w[-not -type d -print]
+    else
+      ARGV.kegs.each { |keg| PrettyListing.new keg }
+    end
   end
+    
+          puts_columns Array(result)
+    else
+      query = ARGV.first
+      rx = query_regexp(query)
+      local_results = search_formulae(rx)
+      puts_columns(local_results)
+      tap_results = search_taps(rx)
+      puts_columns(tap_results)
+    
+    invalids = []
+Parallel.each(links, in_threads: 4) do |link|
+  href = link.attribute('href').to_s
+  begin
+    case check_link(URI.join(BASE_URI, href))
+    when (200...300)
+      putc('.')
+    when (300..302)
+      putc('w')
+    end
+  rescue => e
+    putc('F')
+    invalids << '#{href} (reason: #{e.message})'
+  end
+end
+    
+        # Environment detection helpers
+    def sprockets?
+      defined?(::Sprockets)
+    end
+    
+    require_relative 'converter/fonts_conversion'
+require_relative 'converter/less_conversion'
+require_relative 'converter/js_conversion'
+require_relative 'converter/logger'
+require_relative 'converter/network'
+    
+          spec['version'] = Bootstrap::VERSION
