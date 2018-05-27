@@ -1,102 +1,171 @@
 
         
-            cv::eigen2cv(eigval_real, eigenval_real);
-    cv::eigen2cv(eigval_imag, eigenval_imag);
-    cv::eigen2cv(eigvec_real, eigenvec_real);
-    cv::eigen2cv(eigvec_imag, eigenvec_imag);
-#else
-    EigenvalueDecomposition es(Mtilde);
-    eigenval_real = es.eigenvalues();
-    eigenvec_real = es.eigenvectors();
-    eigenval_imag = eigenvec_imag = cv::Mat();
-#endif
+        TEST(PartialRunMgrFindOrCreate, Create) {
+  // Basic test of PartialRunMgr CancellationManager creation.
+  PartialRunMgr partial_run_mgr;
+  int step_id = 1;
+  CancellationManager* cancellation_manager;
+  partial_run_mgr.FindOrCreate(step_id, &cancellation_manager);
+  EXPECT_TRUE(cancellation_manager != nullptr);
+}
     
-                //a simple check that the position is general:
-            //  for each line check that all other points don't belong to it
-            isGeneralPosition = true;
-            for (int startPointIndex = 0; startPointIndex < usedPointsCount && isGeneralPosition; startPointIndex++)
-            {
-                for (int endPointIndex = startPointIndex + 1; endPointIndex < usedPointsCount && isGeneralPosition; endPointIndex++)
-                {
-    }
+    
+    {}  // namespace xla
+    
+    namespace tensorflow {
     }
     
-    #undef cv_hal_gemm32f
-#define cv_hal_gemm32f lapack_gemm32f
-#undef cv_hal_gemm64f
-#define cv_hal_gemm64f lapack_gemm64f
-#undef cv_hal_gemm32fc
-#define cv_hal_gemm32fc lapack_gemm32fc
-#undef cv_hal_gemm64fc
-#define cv_hal_gemm64fc lapack_gemm64fc
     
-    #include <vector>
-    
-    void OutputImage::SaveToJpegData(JPEGData* jpg) const {
-  assert(components_[0].factor_x() == 1);
-  assert(components_[0].factor_y() == 1);
-  jpg->width = width_;
-  jpg->height = height_;
-  jpg->max_h_samp_factor = 1;
-  jpg->max_v_samp_factor = 1;
-  jpg->MCU_cols = components_[0].width_in_blocks();
-  jpg->MCU_rows = components_[0].height_in_blocks();
-  int ncomp = components_[1].IsAllZero() && components_[2].IsAllZero() ? 1 : 3;
-  for (int i = 1; i < ncomp; ++i) {
-    jpg->max_h_samp_factor = std::max(jpg->max_h_samp_factor,
-                                      components_[i].factor_x());
-    jpg->max_v_samp_factor = std::max(jpg->max_h_samp_factor,
-                                      components_[i].factor_y());
-    jpg->MCU_cols = std::min(jpg->MCU_cols, components_[i].width_in_blocks());
-    jpg->MCU_rows = std::min(jpg->MCU_rows, components_[i].height_in_blocks());
+    {  template <typename Packet>
+  inline Packet packetOp(const Packet& y) const {
+    const Packet one = internal::pset1<Packet>(1);
+    return internal::psub(one, internal::pmul(y, y));
   }
-  jpg->components.resize(ncomp);
-  int q[3][kDCTBlockSize];
-  for (int c = 0; c < 3; ++c) {
-    memcpy(&q[c][0], components_[c].quant(), kDCTBlockSize * sizeof(q[0][0]));
+};
+    
+      ~SYCLDeviceContext() override {}
+    
+    REGISTER_KERNEL_BUILDER(Name('TFRecordReader').Device(DEVICE_CPU),
+                        TFRecordReaderOp);
+REGISTER_KERNEL_BUILDER(Name('TFRecordReaderV2').Device(DEVICE_CPU),
+                        TFRecordReaderOp);
+    
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an 'AS IS' BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+    
+    #ifdef TENSORFLOW_USE_MPI
+    
+    Status RealGrad(const AttrSlice& attrs, FunctionDef* g) {
+  // clang-format off
+  return GradForUnaryCwise(g, {
+      FDH::Const('zero', 0.f),
+      {{'dx'}, 'Complex', {'dy', 'zero'}},
+  });
+  // clang-format on
+}
+REGISTER_OP_GRADIENT('Real', RealGrad);
+    
+      ::grpc::Status SendEvents(
+      ::grpc::ServerContext* context,
+      ::grpc::ServerReaderWriter< ::tensorflow::EventReply,
+                                  ::tensorflow::Event>* stream);
+    
+    #include 'db/filename.h'
+#include 'db/dbformat.h'
+#include 'db/table_cache.h'
+#include 'db/version_edit.h'
+#include 'leveldb/db.h'
+#include 'leveldb/env.h'
+#include 'leveldb/iterator.h'
+    
+    #include <stdlib.h>
+#include <unistd.h>
+#include 'leveldb/cache.h'
+#include 'leveldb/comparator.h'
+#include 'leveldb/db.h'
+#include 'leveldb/env.h'
+#include 'leveldb/filter_policy.h'
+#include 'leveldb/iterator.h'
+#include 'leveldb/options.h'
+#include 'leveldb/status.h'
+#include 'leveldb/write_batch.h'
+    
+    Iterator* TableCache::NewIterator(const ReadOptions& options,
+                                  uint64_t file_number,
+                                  uint64_t file_size,
+                                  Table** tableptr) {
+  if (tableptr != NULL) {
+    *tableptr = NULL;
   }
-  for (int c = 0; c < ncomp; ++c) {
-    JPEGComponent* comp = &jpg->components[c];
-    assert(jpg->max_h_samp_factor % components_[c].factor_x() == 0);
-    assert(jpg->max_v_samp_factor % components_[c].factor_y() == 0);
-    comp->id = c;
-    comp->h_samp_factor = jpg->max_h_samp_factor / components_[c].factor_x();
-    comp->v_samp_factor = jpg->max_v_samp_factor / components_[c].factor_y();
-    comp->width_in_blocks = jpg->MCU_cols * comp->h_samp_factor;
-    comp->height_in_blocks = jpg->MCU_rows * comp->v_samp_factor;
-    comp->num_blocks = comp->width_in_blocks * comp->height_in_blocks;
-    comp->coeffs.resize(kDCTBlockSize * comp->num_blocks);
-    }
     }
     
-    // This function will create a Huffman tree.
-//
-// The (data,length) contains the population counts.
-// The tree_limit is the maximum bit depth of the Huffman codes.
-//
-// The depth contains the tree, i.e., how many bits are used for
-// the symbol.
-//
-// The actual Huffman tree is constructed in the tree[] array, which has to
-// be at least 2 * length + 1 long.
-//
-// See http://en.wikipedia.org/wiki/Huffman_coding
-void CreateHuffmanTree(const uint32_t *data,
-                       const size_t length,
-                       const int tree_limit,
-                       HuffmanTree* tree,
-                       uint8_t *depth);
+      // If a seek to internal key 'k' in specified file finds an entry,
+  // call (*handle_result)(arg, found_key, found_value).
+  Status Get(const ReadOptions& options,
+             uint64_t file_number,
+             uint64_t file_size,
+             const Slice& k,
+             void* arg,
+             void (*handle_result)(void*, const Slice&, const Slice&));
     
     
-    {}  // namespace guetzli
+    {  // Changes *key to a short string >= *key.
+  // Simple comparator implementations may return with *key unchanged,
+  // i.e., an implementation of this method that does nothing is correct.
+  virtual void FindShortSuccessor(std::string* key) const = 0;
+};
+    
+    // Dump the contents of the file named by fname in text format to
+// *dst.  Makes a sequence of dst->Append() calls; each call is passed
+// the newline-terminated text corresponding to a single item found
+// in the file.
+//
+// Returns a non-OK result if fname does not name a leveldb storage
+// file, or if the file cannot be read.
+Status DumpFile(Env* env, const std::string& fname, WritableFile* dst);
+    
+    
+    {  GTEST_DISALLOW_COPY_AND_ASSIGN_(SingleFailureChecker);
+};
+    
+    // The 'Types' template argument below must have spaces around it
+// since some compilers may choke on '>>' when passing a template
+// instance (e.g. Types<int>)
+# define INSTANTIATE_TYPED_TEST_CASE_P(Prefix, CaseName, Types) \
+  bool gtest_##Prefix##_##CaseName GTEST_ATTRIBUTE_UNUSED_ = \
+      ::testing::internal::TypeParameterizedTestCase<CaseName, \
+          GTEST_CASE_NAMESPACE_(CaseName)::gtest_AllTests_, \
+          ::testing::internal::TypeList< Types >::type>::Register(\
+              #Prefix, #CaseName, GTEST_REGISTERED_TEST_NAMES_(CaseName))
+    
+    #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_LINKED_PTR_H_
 
     
+    // Gets the content of the stringstream's buffer as an std::string.  Each '\0'
+// character in the buffer is replaced with '\\0'.
+GTEST_API_ std::string StringStreamToString(::std::stringstream* stream);
     
-    {}  // namespace guetzli
+      // Trivial case 2: even numbers
+  if (n % 2 == 0) return n == 2;
     
-    #include 'guetzli/jpeg_data.h'
     
-    #endif  // GUETZLI_JPEG_DATA_ENCODER_H_
-
+    {  EXPECT_FALSE(IsPrime(-1));
+  EXPECT_FALSE(IsPrime(-2));
+  EXPECT_FALSE(IsPrime(INT_MIN));
+}
     
-    #include <string>
+    enum RecordType {
+  // Zero is reserved for preallocated files
+  kZeroType = 0,
+    }
+    
+    
+    {}  // namespace leveldb
+    
+    void InternalKeyComparator::FindShortestSeparator(
+      std::string* start,
+      const Slice& limit) const {
+  // Attempt to shorten the user portion of the key
+  Slice user_start = ExtractUserKey(*start);
+  Slice user_limit = ExtractUserKey(limit);
+  std::string tmp(user_start.data(), user_start.size());
+  user_comparator_->FindShortestSeparator(&tmp, user_limit);
+  if (tmp.size() < user_start.size() &&
+      user_comparator_->Compare(user_start, tmp) < 0) {
+    // User key has become shorter physically, but larger logically.
+    // Tack on the earliest possible number to the shortened user key.
+    PutFixed64(&tmp, PackSequenceAndType(kMaxSequenceNumber,kValueTypeForSeek));
+    assert(this->Compare(*start, tmp) < 0);
+    assert(this->Compare(tmp, limit) < 0);
+    start->swap(tmp);
+  }
+}
+    
+      // When user keys are different, but correctly ordered
+  ASSERT_EQ(IKey('g', kMaxSequenceNumber, kValueTypeForSeek),
+            Shorten(IKey('foo', 100, kTypeValue),
+                    IKey('hello', 200, kTypeValue)));
